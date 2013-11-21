@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+	
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="AtualizarTipoRetornoOrdemServicoReferidaActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.AtualizarTipoRetornoOrdemServicoReferidaActionForm" />
+		<form-bean name="FiltrarTipoRetornoOrdemServicoReferidaActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.FiltrarTipoRetornoOrdemServicoReferidaActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0218] MANTER TIPO DE RETORNO DA OS_REFERIDA Auhtor: Thiago Tenório Data:01/11/2006-->
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirManterTipoRetornoOrdemServicoReferidaAction"
+			validate="false" scope="session"
+			path="/exibirManterTipoRetornoOrdemServicoReferidaAction">
+			<forward name="exibirManterTipoRetornoOrdemServicoReferida"
+				path="/jsp/atendimentopublico/ordemservico/tipo_retorno_osreferida_manter.jsp" />
+			<forward name="exibirAtualizarTipoRetornoOrdemServicoReferida"
+				path="/exibirAtualizarTipoRetornoOrdemServicoReferidaAction.do" />
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.RemoverTipoRetornoOrdemServicoReferidaAction" scope="request"
+			path="/removerTipoRetornoOrdemServicoReferidaAction">
+		</action>
+		
+		<action name="AtualizarTipoRetornoOrdemServicoReferidaActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirAtualizarTipoRetornoOrdemServicoReferidaAction"
+			validate="true" scope="session"
+			path="/exibirAtualizarTipoRetornoOrdemServicoReferidaAction">
+			<forward name="atualizarTipoRetornoOrdemServicoReferida"
+				path="/jsp/atendimentopublico/ordemservico/tipo_retorno_osreferida_atualizar.jsp" />
+		</action>
+		<action name="AtualizarTipoRetornoOrdemServicoReferidaActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.AtualizarTipoRetornoOrdemServicoReferidaAction"
+			validate="true" scope="request"
+			path="/atualizarTipoRetornoOrdemServicoReferidaAction">
+		</action>
+
+	</action-mappings>
+
+</struts-config>

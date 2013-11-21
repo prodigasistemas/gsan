@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="ManutencaoRegistroActionForm" type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="AtualizarOperacaoActionForm" type="gcom.gui.seguranca.acesso.AtualizarOperacaoActionForm" />
+		<form-bean name="AdicionarOperacaoTabelaActionForm" type="gcom.gui.seguranca.acesso.AdicionarOperacaoTabelaActionForm" />
+
+	</form-beans>
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="ManutencaoRegistroActionForm"
+						type="gcom.gui.seguranca.acesso.ExibirManterOperacaoAction"
+						validate="false" 
+						scope="session"
+						path="/exibirManterOperacaoAction">
+			<forward name="exibirManterOperacao" path="/jsp/seguranca/acesso/operacao_manter.jsp" />
+			<forward name="atualizarOperacao" path="/exibirAtualizarOperacaoAction.do?filtrar=sim" />
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+						type="gcom.gui.seguranca.acesso.RemoverOperacaoAction"
+						validate="false" 
+						input="/exibirManterOperacaoAction.do"
+						scope="request" 
+						path="/removerOperacaoAction">
+		</action>
+
+		<action name="AtualizarOperacaoActionForm"
+						type="gcom.gui.seguranca.acesso.ExibirAtualizarOperacaoAction"
+						validate="false" 
+						scope="session"
+						path="/exibirAtualizarOperacaoAction">
+			<forward name="atualizarOperacao" path="/jsp/seguranca/acesso/operacao_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarOperacaoActionForm"
+						type="gcom.gui.seguranca.acesso.AtualizarOperacaoAction"
+						validate="true" 
+						scope="request"
+						path="/atualizarOperacaoAction">
+		</action>
+
+		<action name="AdicionarOperacaoTabelaActionForm"
+			      type="gcom.gui.seguranca.acesso.ExibirAdicionarOperacaoTabelaAction"
+			      scope="session" 
+			      validate="true"
+			      path="/exibirAdicionarOperacaoTabelaAction">
+
+			<forward name="exibirAdicionarOperacaoTabela"
+				       path="/jsp/seguranca/acesso/operacao_tabela_adicionar_popup.jsp" />
+		
+		</action>
+
+		<action name="AdicionarOperacaoTabelaActionForm"
+			      type="gcom.gui.seguranca.acesso.AdicionarOperacaoTabelaAction"
+			      scope="session" 
+			      validate="true"
+			      path="/adicionarOperacaoTabelaAction">
+
+			<forward name="adicionarOperacaoTabela"
+				       path="/jsp/seguranca/acesso/operacao_tabela_adicionar_popup.jsp" />
+		</action>
+				
+		<action name="FiltrarOperacaoActionForm"
+			type="gcom.gui.relatorio.seguranca.GerarRelatorioOperacaoManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioOperacaoManterAction" />
+
+	</action-mappings>
+	
+	<message-resources null="false" parameter="gcom.properties.application" />
+	
+</struts-config>

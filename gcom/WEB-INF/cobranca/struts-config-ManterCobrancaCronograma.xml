@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+
+		<form-bean name="CobrancaActionForm" type="gcom.gui.cobranca.CobrancaActionForm" />
+<!-- 		<form-bean name="ManutencaoRegistroActionForm" type="gcom.gui.ManutencaoRegistroActionForm" />  -->
+
+	</form-beans>
+
+	<global-forwards/>
+
+	<action-mappings>
+	
+		<action name="CobrancaActionForm" 
+			type="gcom.gui.cobranca.ExibirManterCobrancaCronogramaAction" 
+			scope="session" validate="false"
+			path="/exibirManterCobrancaCronogramaAction">
+			<forward name="manterCobrancaCronograma" path="/jsp/cobranca/cobranca_cronograma_manter.jsp" />
+ 			<forward name="atualizarCobrancaCronograma" path="/exibirAtualizarCobrancaCronogramaAction.do" />  
+		</action>
+		
+		<action name="CobrancaActionForm"
+			type="gcom.gui.relatorio.cobranca.GerarRelatorioCronogramaCobrancaManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioCronogramaCobrancaManterAction" />
+
+		<action name="CobrancaActionForm"
+	      	type="gcom.gui.cobranca.ExibirAtualizarCobrancaCronogramaAction"
+	      	validate="false" scope="session"
+	      	path="/exibirAtualizarCobrancaCronogramaAction">
+			<forward name="atualizarCobrancaCronograma"
+		  		path="/jsp/cobranca/cobranca_cronograma_atualizar.jsp" />
+		</action>
+		
+		<action name="CobrancaActionForm" 
+			type="gcom.gui.cobranca.AtualizarCobrancaCronogramaAction"
+			validate="false" scope="session"
+			path="/atualizarCobrancaCronogramaAction">
+		</action> 
+
+<!-- 	[SB0004] Adicionar Ação	 -->
+		<action name="CobrancaActionForm"
+	      	type="gcom.gui.cobranca.ExibirAdicionarAcaoCobrancaCronogramaPopupAction"
+	      	validate="false" scope="session"
+	      	path="/exibirAdicionarAcaoCobrancaCronogramaPopupAction">
+			<forward name="adicionarAcaoCobrancaCronogramaPopup"
+		  		path="/jsp/cobranca/cobranca_cronograma_adicionar_acao_popup.jsp" />
+		</action>
+		
+		<action name="CobrancaActionForm" 
+			type="gcom.gui.cobranca.AtualizarCobrancaCronogramaAction"
+			validate="false" scope="session"
+			path="/atualizarCobrancaCronogramaAction">
+		</action>
+		
+		<action name="CobrancaActionForm" 
+			type="gcom.gui.cobranca.RemoverCobrancaCronogramaAction"
+			validate="false" scope="session"
+			path="/removerCobrancaCronogramaAction">
+		</action>
+	
+	</action-mappings>
+	<!--******************* ARQUIVO DE PROPRIEDADES *******************-->
+	<message-resources null="false" parameter="gcom.properties.application" />
+	
+</struts-config>

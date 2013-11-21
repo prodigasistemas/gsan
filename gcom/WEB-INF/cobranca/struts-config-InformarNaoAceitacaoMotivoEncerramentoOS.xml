@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="ComandosAcaoCobrancaFiltrarActionForm"
+			type="gcom.gui.cobranca.ComandosAcaoCobrancaFiltrarActionForm" />			
+			
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC1098] Informar Não Aceitação de Motivo de Encerramento Ordem de Serviço Autor: Mariana Victor Data:10/12/2010 -->
+		<action name="ComandosAcaoCobrancaFiltrarActionForm"
+			type="gcom.gui.cobranca.ExibirFiltrarComandosAcaoCobrancaAction"
+			validate="false" scope="session"
+			path="/exibirFiltrarComandosAcaoCobrancaAction">
+			<forward name="exibirFiltrarComandosAcaoCobranca"
+				path="/jsp/cobranca/comando_acao_cobranca_filtrar.jsp" />
+		</action>
+		
+		<action name="ComandosAcaoCobrancaFiltrarActionForm"
+			type="gcom.gui.cobranca.ComandosAcaoCobrancaFiltrarAction"
+			validate="false" scope="session"
+			path="/comandosAcaoCobrancaFiltrarAction">
+			<forward name="retornarComandosAcaoCobranca"
+				path="/jsp/cobranca/comando_acao_cobranca_consulta.jsp" />
+		</action>
+
+	</action-mappings>
+
+</struts-config>

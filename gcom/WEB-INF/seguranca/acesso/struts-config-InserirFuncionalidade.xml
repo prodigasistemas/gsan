@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="InserirFuncionalidadeActionForm"
+			type="gcom.gui.seguranca.acesso.InserirFuncionalidadeActionForm" />
+
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="InserirFuncionalidadeActionForm"
+			type="gcom.gui.seguranca.acesso.ExibirInserirFuncionalidadeAction"
+			validate="false" scope="session"
+			path="/exibirInserirFuncionalidadeAction">
+			<forward name="funcionalidadeInserir"
+				path="/jsp/seguranca/acesso/funcionalidade_inserir.jsp" />
+		</action>
+
+		<action name="InserirFuncionalidadeActionForm"
+			type="gcom.gui.seguranca.acesso.InserirFuncionalidadeAction"
+			validate="false" scope="session"
+			path="/inserirFuncionalidadeAction">
+		</action>
+
+
+		<action
+			type="gcom.gui.seguranca.acesso.RemoverAdicionarFuncionalidadeDependenciaAction"
+			validate="false" scope="request"
+			path="/removerAdicionarFuncionalidadeDependenciaAction">
+			<forward name="inserirRemoverFuncionalidadeDependencia"
+				path="/exibirInserirFuncionalidadeAction.do?reloadPage=OK" />
+		</action>
+
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

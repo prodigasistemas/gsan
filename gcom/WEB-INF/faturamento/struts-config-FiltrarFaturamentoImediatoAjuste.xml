@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="FiltrarFaturamentoImediatoAjusteActionForm"
+			type="gcom.gui.faturamento.FiltrarFaturamentoImediatoAjusteActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	
+	<action-mappings>
+		<action name="FiltrarFaturamentoImediatoAjusteActionForm"
+			type="gcom.gui.faturamento.ExibirFiltrarFaturamentoImediatoAjusteAction"
+			validate="true" scope="session" path="/exibirFiltrarFaturamentoImediatoAjusteAction">
+			<forward name="filtrarFaturamentoImediatoAjuste"
+				path="/jsp/faturamento/faturamento_imediato_ajuste_filtrar.jsp" />
+		</action>
+		
+		<action name="FiltrarFaturamentoImediatoAjusteActionForm"
+			type="gcom.gui.faturamento.FiltrarFaturamentoImediatoAjusteAction" 
+			scope="session"
+			validate="false" path="/filtrarFaturamentoImediatoAjusteAction">
+			
+			<forward name="consultarFaturamentoImediatoAjuste"
+				path="/exibirConsultarFaturamentoImediatoAjusteAction.do" />
+		</action>
+		
+		
+		<action name="FiltrarFaturamentoImediatoAjusteActionForm"
+			type="gcom.gui.faturamento.ExibirConsultarFaturamentoImediatoAjusteAction" 
+			scope="session"
+			validate="false" path="/exibirConsultarFaturamentoImediatoAjusteAction">
+			
+			<forward name="exibirConsultarFaturamentoImediatoAjuste"
+				path="/jsp/faturamento/faturamento_imediato_ajuste_consultar.jsp" />
+		</action>
+		
+		
+	</action-mappings>
+
+</struts-config>

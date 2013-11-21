@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean
+			name="CadastrarMensagemAcompanhamentoServicoPopupActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.CadastrarMensagemAcompanhamentoServicoPopupActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<action name="CadastrarMensagemAcompanhamentoServicoPopupActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirCadastrarMensagemAcompanhamentoServicoPopupAction"
+			validate="true" scope="session"
+			path="/exibirCadastrarMensagemAcompanhamentoServicoAction">
+
+			<forward name="exibirCadastrarMensagemAcompanhamentoServico"
+				path="/jsp/atendimentopublico/ordemservico/cadastrar_msg_acompanhamento_servico_popup.jsp" />
+		</action>
+
+		<action name="CadastrarMensagemAcompanhamentoServicoPopupActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.CadastrarMensagemAcompanhamentoServicoPopupAction"
+			validate="true" scope="session"
+			path="/cadastrarMensagemAcompanhamentoServicoAction">
+
+			<forward name="validarDados"
+				path="/jsp/atendimentopublico/ordemservico/cadastrar_msg_acompanhamento_servico_popup.jsp" />
+		</action>
+
+		<action name="CadastrarMensagemAcompanhamentoServicoPopupActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.RemoverMensagemAcompanhamentoServicoPopupAction"
+			scope="request" path="/removerMensagemAcompanhamentoServicoAction">
+		</action>
+	</action-mappings>
+</struts-config>

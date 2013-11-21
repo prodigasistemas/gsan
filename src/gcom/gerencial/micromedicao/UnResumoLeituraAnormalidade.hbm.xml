@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.gerencial.micromedicao.UnResumoLeituraAnormalidade" table="micromedicao.un_res_lt_anorm">
+		<id name="id" type="java.lang.Integer" column="relt_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_un_res_lt_anorm</param>
+			</generator>
+		</id>
+		<property name="referencia" type="int" column="relt_amreferencia" not-null="true" length="4"/>
+		<property name="setorcomercial" type="int" column="relt_cdsetorcomercial" not-null="true" length="4"/>
+		<property name="quadra" type="int" column="relt_nnquadra" not-null="true" length="4"/>
+		<property name="quantidadeLeituras" type="int" column="relt_qtleituras" not-null="true" length="4"/>
+		<property name="idLeituraAnormalidade" type="int" column="ltan_id" not-null="true" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="relt_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="quantidadeLeiturasInformada" type="int" column="relt_qtleituraseanorminformada" not-null="false" length="4"/>
+		<property name="idLeituraAnormalidadeInformada" type="int" column="ltan_idanormalidadeinformada" not-null="false" length="4"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to GGerenciaRegional -->
+		<many-to-one name="gerGerenciaRegional" class="gcom.gerencial.cadastro.localidade.GGerenciaRegional" not-null="true">
+			<column name="greg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GSetorComercial -->
+		<many-to-one name="gerSetorComercial" class="gcom.gerencial.cadastro.localidade.GSetorComercial" not-null="true">
+			<column name="stcm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GSubcategoria -->
+		<many-to-one name="gerSubcategoria" class="gcom.gerencial.cadastro.imovel.GSubcategoria" not-null="true">
+			<column name="scat_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoAguaPerfil -->
+		<many-to-one name="gerLigacaoAguaPerfil" class="gcom.gerencial.atendimentopublico.ligacaoagua.GLigacaoAguaPerfil" not-null="true">
+			<column name="lapf_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GEsferaPoder -->
+		<many-to-one name="gerEsferaPoder" class="gcom.gerencial.cadastro.cliente.GEsferaPoder" not-null="true">
+			<column name="epod_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GClienteTipo -->
+		<many-to-one name="gerClienteTipo" class="gcom.gerencial.cadastro.cliente.GClienteTipo" not-null="true">
+			<column name="cltp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GUnidadeNegocio -->
+		<many-to-one name="gerUnidadeNegocio" class="gcom.gerencial.cadastro.localidade.GUnidadeNegocio" not-null="true">
+			<column name="uneg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoAguaSituacao -->
+		<many-to-one name="gerLigacaoAguaSituacao" class="gcom.gerencial.atendimentopublico.ligacaoagua.GLigacaoAguaSituacao" not-null="true">
+			<column name="last_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GMedicaoTipo -->
+		<many-to-one name="gerMedicaoTipo" class="gcom.gerencial.micromedicao.medicao.GMedicaoTipo" not-null="true">
+			<column name="medt_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GCategoria -->
+		<many-to-one name="gerCategoria" class="gcom.gerencial.cadastro.imovel.GCategoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLocalidade -->
+		<many-to-one name="gerLocalidadeElo" class="gcom.gerencial.cadastro.localidade.GLocalidade" not-null="true">
+			<column name="loca_cdelo"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLocalidade -->
+		<many-to-one name="gerLocalidade" class="gcom.gerencial.cadastro.localidade.GLocalidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GImovelPerfil -->
+		<many-to-one name="gerImovelPerfil" class="gcom.gerencial.cadastro.imovel.GImovelPerfil" not-null="true">
+			<column name="iper_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GRota -->
+		<many-to-one name="gerRota" class="gcom.gerencial.micromedicao.GRota" not-null="true">
+			<column name="rota_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GQuadra -->
+		<many-to-one name="gerQuadra" class="gcom.gerencial.cadastro.localidade.GQuadra" not-null="true">
+			<column name="qdra_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoEsgotoSituacao -->
+		<many-to-one name="gerLigacaoEsgotoSituacao" class="gcom.gerencial.atendimentopublico.ligacaoesgoto.GLigacaoEsgotoSituacao" not-null="true">
+			<column name="lest_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoEsgotoPerfil -->
+		<many-to-one name="gerLigacaoEsgotoPerfil" class="gcom.gerencial.atendimentopublico.ligacaoesgoto.GLigacaoEsgotoPerfil" not-null="true">
+			<column name="lepf_id"/>
+		</many-to-one>
+		<many-to-one name="gerEmpresa" class="gcom.gerencial.cadastro.GEmpresa" not-null="true">
+			<column name="empr_id"/>
+		</many-to-one>
+		<many-to-one name="gerLeituraSituacao" class="gcom.gerencial.micromedicao.leitura.GLeituraSituacao" not-null="true">
+			<column name="ltst_id"/>
+		</many-to-one>
+		<many-to-one name="gerConsumoTarifa" class="gcom.gerencial.faturamento.GConsumoTarifa" not-null="true">
+			<column name="cstf_id"/>
+		</many-to-one>
+		<many-to-one name="gerFaturamentoGrupo" class="gcom.gerencial.faturamento.GFaturamentoGrupo" not-null="true">
+			<column name="ftgr_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

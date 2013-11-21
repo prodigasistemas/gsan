@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="MotivoNaoAceitacaoEncerramentoOSFiltrarActionForm"
+			type="gcom.gui.cobranca.MotivoNaoAceitacaoEncerramentoOSFiltrarActionForm" />
+		<form-bean name="MotivoNaoAceitacaoEncerramentoOSAtualizarActionForm"
+			type="gcom.gui.cobranca.MotivoNaoAceitacaoEncerramentoOSAtualizarActionForm" />	
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		<action name="MotivoNaoAceitacaoEncerramentoOSFiltrarActionForm"
+			type="gcom.gui.cobranca.ExibirManterMotivoNaoAceitacaoEncerramentoOSAction"
+			validate="false" scope="session" path="/exibirManterMotivoNaoAceitacaoEncerramentoOSAction">
+			<forward name="manterMotivoNaoAceitacao" path="/jsp/cobranca/motivo_nao_aceitacao_encerramento_os_manter.jsp" />
+		</action>	
+			
+		 <action name="MotivoNaoAceitacaoEncerramentoOSAtualizarActionForm" 
+			type="gcom.gui.cobranca.ExibirAtualizarMotivoNaoAceitacaoEncerramentoOSAction" 
+			scope="session" validate="false"
+			path="/exibirAtualizarMotivoNaoAceitacaoEncerramentoOSAction">
+			<forward name="atualizarMotivoNaoAceitacao" path="/jsp/cobranca/motivo_nao_aceitacao_encerramento_os_atualizar.jsp" />
+	</action>
+	 		
+	<action name="MotivoNaoAceitacaoEncerramentoOSFiltrarActionForm"
+			type="gcom.gui.cobranca.RemoverMotivoNaoAceitacaoEncerramentoOSAction"
+			validate="false" scope="session" path="/removerMotivoNaoAceitacaoEncerramentoOSAction"/>
+			
+	<action name="MotivoNaoAceitacaoEncerramentoOSAtualizarActionForm"
+			type="gcom.gui.cobranca.AtualizarMotivoNaoAceitacaoEncerramentoOSAction"
+			validate="false" scope="session" path="/atualizarMotivoNaoAceitacaoEncerramentoOSAction"/>
+			
+			
+		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

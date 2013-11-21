@@ -1,0 +1,1131 @@
+/* CSS Document - Compesa
+
+@author : Sérgio Hampel
+@email: rhampel22@gmail.com
+@company: Quarta Dimensão | Design & Tecnologia.
+@date: 11/05/2011
+
+*/ /* Serviços - Start */
+#barra-servicos,#barra-servicos h2 {
+	float: left;
+	height: 40px
+}
+
+#barra-servicos {
+	background: url(/gsan/imagens/portal/general/barra-servicos.png)
+		no-repeat 0 0;
+	margin: 50px 0 0 38px;
+	position: relative;
+	width: 865px
+}
+
+#barra-servicos h2 {
+	background: url(/gsan/imagens/portal/general/tit-servicos.png) no-repeat
+		0 0;
+	text-indent: -9000px;
+	width: 112px
+}
+
+#barra-servicos h3 {
+	background: url(/gsan/imagens/portal/general/nome-cliente.gif) no-repeat
+		right 0;
+	color: #fff;
+	height: 40px;
+	line-height: 3em;
+	padding: 0 30px 0 20px;
+	right: 260px;
+	top: 0;
+	text-align: right
+}
+
+#barra-servicos h4 {
+	color: #006bbb;
+	font-weight: 400;
+	right: 100px;
+	top: 10px
+}
+
+#barra-servicos h4 span {
+	font-weight: 700
+}
+
+#barra-servicos h3,#barra-servicos h4 {
+	font-size: 12px;
+	position: absolute
+}
+
+#barra-servicos a {
+	float: right;
+	height: 38px;
+	width: 81px
+}
+
+/* Botão download Adobe Reader - Start */
+.adobe-reader {
+	position: absolute;
+	right: 47px;
+	top: 12px
+}
+
+/* Botão download Adobe Reader - End */ /* Links Serviços - Start */
+#lista-servicos {
+	float: left;
+	padding: 80px 0 100px 35px;
+	width: 360px
+}
+
+#lista-servicos li {
+	float: left;
+	height: 40px;
+	padding-bottom: 5px;
+	position: relative;
+	width: 100%
+}
+
+#lista-servicos li a {
+	background: url(/gsan/imagens/portal/general/lista-servicos.gif)
+		no-repeat;
+	display: block;
+	height: 40px;
+	text-indent: -9000px;
+	width: 360px
+}
+
+#lista-servicos li#serv-1 a {
+	background-position: 0 0
+}
+
+#lista-servicos li#serv-2 a {
+	background-position: 0 -50px
+}
+
+#lista-servicos li#serv-3 a {
+	background-position: 0 -100px
+}
+
+#lista-servicos li#serv-4 a {
+	background-position: 0 -150px
+}
+
+#lista-servicos li#serv-5 a {
+	background-position: 0 -200px
+}
+
+#lista-servicos li#serv-6 a {
+	background-position: 0 -250px
+}
+
+#lista-servicos li#serv-1 a:hover,#lista-servicos li#serv-1 a.ativo {
+	background-position: -380px 0
+}
+
+#lista-servicos li#serv-2 a:hover,#lista-servicos li#serv-2 a.ativo {
+	background-position: -380px -50px
+}
+
+#lista-servicos li#serv-3 a:hover,#lista-servicos li#serv-3 a.ativo {
+	background-position: -380px -100px
+}
+
+#lista-servicos li#serv-4 a:hover,#lista-servicos li#serv-4 a.ativo {
+	background-position: -380px -150px
+}
+
+#lista-servicos li#serv-5 a:hover,#lista-servicos li#serv-5 a.ativo {
+	background-position: -380px -200px
+}
+
+#lista-servicos li#serv-6 a:hover,#lista-servicos li#serv-6 a.ativo {
+	background-position: -380px -250px
+}
+
+/* Links Serviços - End */ /* Info Serviços - Start */
+.info-serv {
+	background: url(/gsan/imagens/portal/general/info-servico-top.gif)
+		no-repeat 0 0 #f5f6f6;
+	display: none;
+	padding-top: 15px;
+	position: absolute;
+	right: -508px;
+	top: -30px;
+	width: 470px
+}
+
+.info-serv span#bottom {
+	background: url(/gsan/imagens/portal/general/info-servico-bottom.gif)
+		no-repeat 0 0;
+	float: left;
+	height: 10px;
+	width: 470px
+}
+
+.info-serv img {
+	left: -38px;
+	position: absolute;
+	top: 30px
+}
+
+.info-serv p {
+	float: left;
+	padding: 0 20px 15px;
+	width: 430px
+}
+
+#lista-servicos li#serv-1 :hover .info-serv,#lista-servicos li#serv-2
+	:hover .info-serv,#lista-servicos li#serv-3 :hover .info-serv,#lista-servicos li#serv-4
+	:hover .info-serv,#lista-servicos li#serv-5 :hover .info-serv,#lista-servicos li#serv-6
+	:hover .info-serv {
+	display: block
+}
+
+/* Info Serviços - End */ /* Descrição dos Serviços - Start */
+.serv-int {
+	float: left;
+	margin: 25px 0 0 38px;
+	width: 915px
+}
+
+.serv-int .btn-voltar-servicos {
+	left: 38px;
+	position: absolute;
+	top: 15px
+}
+
+.serv-int h3 {
+	background: url(/gsan/imagens/portal/general/tit-servicos-int.gif)
+		no-repeat 0 0 #008fd6;
+	color: #fff;
+	float: left;
+	font-size: 12px;
+	height: 27px;
+	line-height: 2.3em;
+	padding: 0 15px;
+	position: relative
+}
+
+.serv-int h3 span,.serv-int .protocolo span {
+	height: 27px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 10px
+}
+
+.serv-int h3 span {
+	background: url(/gsan/imagens/portal/general/tit-servicos-int-right.gif)
+		no-repeat 0 0
+}
+
+.serv-int #desc-debito {
+	float: left;
+	margin: 20px 0 35px;
+	width: 100%
+}
+
+.serv-int #desc-debito li {
+	color: #2f2f2f;
+	float: left;
+	font-weight: 700;
+	margin-right: 20px;
+	padding-right: 25px;
+	position: relative
+}
+
+.serv-int #desc-debito li em {
+	color: #008fd6
+}
+
+.serv-int #desc-debito li span {
+	position: absolute;
+	right: 0;
+	top: 0
+}
+
+#links {
+	padding-top: 15px;
+	width: 100%;
+}
+
+#links span {
+	width: 40%;
+}
+
+#links em {
+	color: #008FD6;
+	font-style: normal;
+	font-weight: 700;
+	padding-right: 5px;
+}
+
+#links div {
+	display: inline;
+	float: left;
+	width: 45%;
+}
+
+.subTopicos {
+	border-bottom: 1px dashed #C9C9C9;
+	float: left;
+	width: 100%;
+	padding-bottom: 15px;
+	margin-top: 30px;
+}
+
+.subTopicosSemBorda {
+	float: left;
+	width: 100%;
+	padding-bottom: 15px;
+	margin-top: 30px;
+}
+
+.subTopicos h3, .subTopicosSemBorda h3{
+	background: url("/gsan/imagens/portal/general/tit-servicos-int2.gif")
+		no-repeat scroll 0 0 #332B33;
+	color: #FFFFFF;
+	float: left;
+	font-size: 12px;
+	height: 27px;
+	line-height: 2.3em;
+	padding: 0 15px;
+	position: relative;
+}
+
+.subTopicos h3 span, .subTopicosSemBorda h3 span {
+	background:
+		url("/gsan/imagens/portal/general/tit-servicos-int-right2.gif")
+		no-repeat scroll 0 0 transparent;
+	height: 27px;
+	position: absolute;
+	right: 0;
+	top: 0;
+	width: 10px;
+	margin-top: 0;
+}
+
+.subTopicos em, .subTopicosSemBorda h3 em{
+	float: left;
+}
+
+.subTopicos table, .subTopicosSemBorda table{
+	margin-top: 5px;
+}
+
+.pontilhada h3 {
+	background: url("/gsan/imagens/portal/general/left3.png") no-repeat
+		scroll 0 0 #E8E8E8;
+	color: #000;
+	float: left;
+	font-size: 12px;
+	height: 27px;
+	line-height: 2.3em;
+	padding: 0 15px;
+	position: relative;
+	font-weight: normal;
+	margin-top: 15px;
+	width: 375px;
+}
+
+#atualizacao h3 span {
+	background: url("/gsan/imagens/portal/general/right3.png") no-repeat
+		scroll 0 0 transparent;
+	padding: 0pt 0pt 10px;
+	width: auto;
+}
+
+
+
+.serv-int table {
+	border-collapse: collapse;
+	color: #2f2f2f;
+	float: left;
+	font-weight: 700;
+	width: 635px
+}
+
+.serv-int table th,.serv-int table td {
+	text-align: center
+}
+
+.serv-int table th {
+	color: #fff
+}
+
+.serv-int table thead tr {
+	background: url(/gsan/imagens/portal/general/thead.png) no-repeat 0 0;
+	height: 40px;
+	width: 635px
+}
+
+.serv-int table tbody tr {
+	height: 31px
+}
+
+.serv-int table tbody tr.last-tr {
+	height: 37px
+}
+
+.serv-int table tbody tr.tr-1 {
+	background: url(/gsan/imagens/portal/general/tr-1.png) no-repeat 0 0
+}
+
+.serv-int table tbody tr.tr-2 {
+	background: url(/gsan/imagens/portal/general/tr-2.png) no-repeat 0 0
+}
+
+#tr-2-2{
+	background: url("/gsan/imagens/portal/general/tr-2(2).png") no-repeat 0 0 !important;
+}
+
+#tr-1-2{
+	background: url("/gsan/imagens/portal/general/tr-1(2).png") no-repeat 0 0 !important;
+}
+
+.serv-int table tr th,.serv-int table tr td {
+	background-position: expression(-this .     offsetLeft)
+}
+
+.serv-int table tbody tr td a {
+	color: #2f2f2f;
+	text-decoration: underline
+}
+
+.serv-int table tbody tr td a:hover,.serv-int table tbody tr td a.ativo
+	{
+	color: #008fd6;
+	text-decoration: none
+}
+
+.serv-int table tbody tr td div {
+	position: relative
+}
+
+.serv-int table tbody ul {
+	background: url(/gsan/imagens/portal/general/bancos.png) no-repeat 0 0;
+	display: none;
+	height: 241px;
+	position: absolute;
+	right: -230px;
+	top: -43px;
+	width: 230px;
+	z-index: 10
+}
+
+.serv-int table tbody ul li {
+	float: left;
+	padding-top: 31px;
+	width: 230px
+}
+
+.serv-int table tbody ul li.close {
+	cursor: pointer;
+	padding: 0;
+	position: absolute;
+	right: 5px;
+	top: -27px;
+	width: auto
+}
+
+.serv-int table tbody ul li a {
+	margin: 0 auto;
+	width: 102px
+}
+
+.serv-int h5 {
+	clear: left;
+	float: left;
+	font-size: 12px;
+	padding: 15px 0 5px
+}
+
+.serv-int h5 em {
+	color: #008fd6
+}
+
+.serv-int p.obs {
+	clear: left;
+	font-size: 11px
+}
+
+.serv-int table tbody tr td:hover ul {
+	display: block
+}
+
+/* Formulário serviços - Start */
+.serv-int form {
+	clear: left;
+	width: 605px;
+}
+
+.serv-int form span,#solicitacao-serv form span {
+	float: left;
+	padding: 0 30px 10px 0
+}
+
+.serv-int form span.cmp-text-1,.serv-int form span {
+	width: 287px;
+	padding-left: 10px;
+}
+
+.serv-int form span.cmp-text-2 {
+	width: 157px
+}
+
+.serv-int form span.cmp-text-3 {
+	width: 127px
+}
+
+.serv-int form span.cmp-text-4 {
+	width: 117px
+}
+
+.serv-int form span.cmp-text-5 {
+	position: relative;
+	width: 129px
+}
+
+.serv-int form span.cmp-text-6 {
+	width: 387px
+}
+
+.serv-int form span.cmp-text-7 {
+	width: 245px
+}
+
+.serv-int form span.select-2 {
+	width: 84px
+}
+
+.serv-int form span.select-3,.serv-int form span.cmp-text-none {
+	width: 389px
+}
+
+.serv-int form span.cmp-textarea {
+	width: 441px
+}
+
+.serv-int form span label {
+	color: #008fd6;
+	cursor: pointer;
+	display: block
+}
+
+.serv-int form input,.serv-int form span textarea {
+	background-position: 0 0;
+	background-repeat: no-repeat;
+	border: none;
+	float: left
+}
+
+.serv-int form span input {
+	height: 32px;
+	padding: 0 10px
+}
+
+.serv-int form span textarea {
+	height: 77px;
+	padding: 6px 10px
+}
+
+.serv-int form span div {
+	float: left;
+	height: 24px;
+	padding: 9px 0 0 5px
+}
+
+.serv-int form span div select { /*background: none;
+	border: none*/
+	
+}
+
+.serv-int form span.cmp-text-1 input {
+	background-image: url(/gsan/imagens/portal/forms/cmp-texto.gif);
+	width: 267px
+}
+
+.serv-int form span.cmp-text-2 input {
+	background-image: url(/gsan/imagens/portal/forms/cmp-texto-2.gif);
+	width: 137px
+}
+
+.serv-int form span.cmp-text-3 input {
+	background-image: url(/gsan/imagens/portal/forms/cmp-texto-3.gif);
+	width: 107px
+}
+
+.serv-int form span.cmp-text-4 input {
+	background-image: url(/gsan/imagens/portal/forms/cmp-texto-4.gif);
+	width: 97px
+}
+
+.serv-int form span.cmp-text-5 input {
+	background-image: url(/gsan/imagens/portal/forms/cmp-texto-5.gif);
+	width: 109px
+}
+
+.serv-int form span.cmp-text-6 input {
+	background-image: url(/gsan/imagens/portal/forms/cmp-texto-6.gif);
+	width: 367px
+}
+
+.serv-int form span.cmp-text-7 input {
+	background-image: url(/gsan/imagens/portal/forms/cmp-texto-7.gif);
+	width: 225px
+}
+
+.serv-int form span.cmp-text-5 img {
+	position: absolute;
+	right: 6px;
+	top: 23px
+}
+
+.serv-int form span.select-2 div {
+	/* background: url(/gsan/imagens/portal/forms/select-2.gif) no-repeat 0 0; */
+	width: 79px
+}
+
+.serv-int form span.select-2 select {
+	width: 70px
+}
+
+.serv-int form span.select-3 div {
+	/* background: url(/gsan/imagens/portal/forms/select-3.gif) no-repeat 0 0; */
+	width: 384px
+}
+
+.serv-int form span.select-3 select {
+	width: 375px
+}
+
+.serv-int form span.cmp-textarea textarea {
+	background-image: url(/gsan/imagens/portal/forms/cmp-textarea.gif);
+	width: 421px
+}
+
+.serv-int form input.btn-enviar {
+	background-image: url(/gsan/imagens/portal/forms/btn-enviar.png);
+	cursor: pointer;
+	float: right;
+	height: 29px;
+	margin-right: 35px;
+	width: 84px
+}
+
+.serv-int form span.confirm {
+	background: url(/gsan/imagens/portal/general/confirm.gif) no-repeat 0 0;
+	clear: right;
+	float: right;
+	height: 27px;
+	margin: 10px 35px 0 0;
+	padding: 25px 15px 0;
+	width: 365px
+}
+
+/* Formulário serviços - End */ /* Emissão da 2ª via de conta - Start */
+#seg-via-declaracao form {
+	clear: left;
+	margin-top: 20px;
+	width: 220px
+}
+
+#seg-via-declaracao form legend {
+	color: #008fd6;
+	float: none;
+	margin: 0;
+	padding-bottom: 10px;
+	text-indent: 0
+}
+
+#seg-via-declaracao form select {
+	float: left;
+	height: 25px;
+	margin-right: 15px;
+	width: 85px
+}
+
+#seg-via-declaracao form input {
+	background: url(/gsan/imagens/portal/forms/btn-emitir.png) no-repeat 0 0;
+	border: none;
+	cursor: pointer;
+	float: right;
+	height: 29px;
+	width: 84px;
+	margin-right: 26px;
+	margin-top: -2px;
+}
+
+/* Emissão da 2ª via de conta - End */
+/* Recebimento de fatura por e-mail, Solicitação de serviços - Start */
+#fatura-email p,#solicitacao-serv p,#parc-debito p {
+	clear: left;
+	color: #008fd6;
+	float: left;
+	padding: 20px 0;
+	width: 865px
+}
+
+#fatura-email p em,#solicitacao-serv p em,#parc-debito p em {
+	color: #2f2f2f
+}
+
+/* Recebimento de fatura por e-mail, Solicitação de serviços - End */
+	/* Parcelamento de débitos - Start */
+#parc-debito form {
+	width: 100%
+}
+
+/* Parcelamento de débitos - Start */
+#parc-debito form {
+	width: 100%
+}
+
+#parc-debito form table {
+	clear: left;
+	margin-top: 15px
+}
+
+#parc-debito form span.cmp-text-2 {
+	padding-right: 0
+}
+
+#parc-debito form .btn-pesquisar,#parc-debito form .btn-calcular,#parc-debito .btn-confirmar
+	{
+	cursor: pointer;
+	float: left;
+	height: 29px;
+	margin: 21px 0 0 15px
+}
+
+#parc-debito form .btn-pesquisar {
+	background: url(/gsan/imagens/portal/forms/btn-pesquisar.gif) no-repeat
+		0 0;
+	width: 112px
+}
+
+#parc-debito form .btn-calcular {
+	background: url(/gsan/imagens/portal/forms/btn-calcular.gif) no-repeat 0
+		0;
+	width: 98px
+}
+
+#parc-debito .btn-confirmar {
+	background: url(/gsan/imagens/portal/forms/btn-confirmar.gif) no-repeat
+		0 0;
+	clear: left;
+	float: left;
+	margin-left: 298px;
+	width: 112px
+}
+
+#parc-debito .nome-cliente {
+	background: url(/gsan/imagens/portal/icons/seta.gif) no-repeat 0 center;
+	clear: none;
+	color: #000;
+	font-weight: 700;
+	margin: 25px 0 0 20px;
+	padding: 0 0 0 25px;
+	width: auto
+}
+
+#parc-debito .resumo {
+	clear: left;
+	font-size: 12px;
+	margin: 30px 0 0 0;
+	width: auto
+}
+
+#parc-debito .resumo span {
+	float: none;
+	padding: 0
+}
+
+#parc-debito .lista-resumo {
+	float: left;
+	width: 100%
+}
+
+#parc-debito .lista-resumo li {
+	float: left;
+	font-weight: 700;
+	padding-top: 20px;
+	width: 250px
+}
+
+#parc-debito .lista-resumo li h6 {
+	color: #008fd6;
+	font-size: 12px;
+	width: 100%
+}
+
+#parc-debito .lista-resumo li span {
+	color: #989898;
+	float: left;
+	padding: 0 5px 0 0;
+	width: auto
+}
+
+#pagto {
+	border-top: 1px dashed #dedede;
+	float: left;
+	margin-top: 30px;
+	width: 865px
+}
+
+#pagto h5 {
+	background: url(/gsan/imagens/portal/icons/seta-tit.gif) no-repeat 0 4px;
+	color: #008fd6;
+	float: left;
+	font-size: 12px;
+	padding: 0 0 20px 15px;
+	text-transform: uppercase;
+	width: 95%
+}
+
+#pagto .cmp-text-2 {
+	clear: left
+}
+
+#pagto-parc {
+	border-right: 1px dashed #dedede;
+	float: left;
+	margin-right: 20px;
+	padding-top: 25px;
+	width: 430px
+}
+
+#pagto-parc .btn-confirmar {
+	margin-right: 20px
+}
+
+#pagto table thead tr {
+	background: url(/gsan/imagens/portal/general/thead-2.png) no-repeat 0 0
+}
+
+#esgotamentoSanitario table tr td table thead tr {
+	background: url(/gsan/imagens/portal/general/thead-3.png) no-repeat 0 0
+}
+
+#parc-debito #pagto table {
+	width: 410px
+}
+
+#parc-debito #pagto table tr.tr-3 {
+	background: url(/gsan/imagens/portal/general/tr-3.png) no-repeat 0 0
+}
+
+#parc-debito #pagto table tr.tr-4 {
+	background: url(/gsan/imagens/portal/general/tr-4.png) no-repeat 0 0
+}
+
+#parc-debito #pagto table td.first-td {
+	text-align: left
+}
+
+#parc-debito #pagto table input {
+	margin: 2px 10px 0 25px
+}
+
+#pagto-vista {
+	float: left;
+	padding-top: 25px;
+	width: 410px
+}
+
+#pagto-vista h5 {
+	padding-bottom: 0
+}
+/* Parcelamento de débitos - End */
+/* Serviços - End */
+
+#parc-debito form span.cmp-text-2 {
+	padding-right: 0
+}
+
+#parc-debito form .btn-pesquisar,#parc-debito form .btn-calcular,#parc-debito .btn-confirmar
+	{
+	cursor: pointer;
+	float: left;
+	height: 29px;
+	margin: 21px 0 0 15px
+}
+
+#parc-debito form .btn-pesquisar {
+	background: url(/gsan/imagens/portal/forms/btn-pesquisar.gif) no-repeat
+		0 0;
+	width: 112px
+}
+
+#parc-debito form .btn-calcular {
+	background: url(/gsan/imagens/portal/forms/btn-calcular.gif) no-repeat 0
+		0;
+	width: 98px
+}
+
+#parc-debito .btn-confirmar {
+	background: url(/gsan/imagens/portal/forms/btn-confirmar.gif) no-repeat
+		0 0;
+	clear: left;
+	float: left;
+	margin-left: 298px;
+	width: 112px
+}
+
+#parc-debito .nome-cliente {
+	background: url(/gsan/imagens/portal/icons/seta.gif) no-repeat 0 center;
+	clear: none;
+	color: #000;
+	font-weight: 700;
+	margin: 25px 0 0 20px;
+	padding: 0 0 0 25px;
+	width: auto
+}
+
+#parc-debito .resumo {
+	clear: left;
+	font-size: 12px;
+	margin: 30px 0 0 0;
+	width: auto
+}
+
+#parc-debito .resumo span {
+	float: none;
+	padding: 0
+}
+
+#parc-debito .lista-resumo {
+	float: left;
+	width: 100%
+}
+
+#parc-debito .lista-resumo li {
+	float: left;
+	font-weight: 700;
+	padding-top: 20px;
+	width: 250px
+}
+
+#parc-debito .lista-resumo li h6 {
+	color: #008fd6;
+	font-size: 12px;
+	width: 100%
+}
+
+#parc-debito .lista-resumo li span {
+	color: #989898;
+	float: left;
+	padding: 0 5px 0 0;
+	width: auto
+}
+
+#pagto {
+	border-top: 1px dashed #dedede;
+	float: left;
+	margin-top: 30px;
+	width: 865px
+}
+
+#pagto h5 {
+	background: url(/gsan/imagens/portal/icons/seta-tit.gif) no-repeat 0 4px
+		;
+	color: #008fd6;
+	float: left;
+	font-size: 12px;
+	padding: 0 0 20px 15px;
+	text-transform: uppercase;
+	width: 95%
+}
+
+#pagto .cmp-text-2 {
+	clear: left
+}
+
+#pagto-parc {
+	border-right: 1px dashed #dedede;
+	float: left;
+	margin-right: 20px;
+	padding-top: 25px;
+	width: 430px
+}
+
+#pagto-parc .btn-confirmar {
+	margin-right: 20px
+}
+
+#pagto table thead tr {
+	background: url(/gsan/imagens/portal/general/thead-2.png) no-repeat 0 0
+}
+
+#parc-debito #pagto table {
+	width: 410px
+}
+
+#parc-debito #pagto table tr.tr-3 {
+	background: url(/gsan/imagens/portal/general/tr-3.png) no-repeat 0 0
+}
+
+#parc-debito #pagto table tr.tr-4 {
+	background: url(/gsan/imagens/portal/general/tr-4.png) no-repeat 0 0
+}
+
+#parc-debito #pagto table td.first-td {
+	text-align: left
+}
+
+#parc-debito #pagto table input {
+	margin: 2px 10px 0 25px
+}
+
+#pagto-vista {
+	float: left;
+	padding-top: 25px;
+	width: 410px
+}
+
+#pagto-vista h5 {
+	padding-bottom: 0
+}
+
+/* Parcelamento de débitos - End */ /* Serviços - End */
+	/* Solicitação de serviços - Start */
+#solicitacao-serv p.protocolo {
+	background: url(/gsan/imagens/portal/general/protocolo-gerado.gif)
+		no-repeat 0 0 #737373;
+	clear: none;
+	color: #fff;
+	font-weight: 700;
+	height: 27px;
+	line-height: 2.2em;
+	margin-left: 20px;
+	padding: 0 20px 0 10px;
+	position: relative;
+	width: 634px
+}
+
+#solicitacao-serv p.protocolo em {
+	color: #fff;
+	font-size: 14px
+}
+
+#solicitacao-serv p.protocolo span {
+	background: url(/gsan/imagens/portal/general/protocolo-gerado-int.gif)
+		no-repeat 0 0
+}
+
+#solicitacao-serv p.info {
+	background: url(/gsan/imagens/portal/general/info.gif) no-repeat 0 0;
+	color: #2f2f2f;
+	height: 53px;
+	line-height: 2.6em;
+	margin-bottom: 10px;
+	padding: 0;
+	text-align: center;
+	width: 442px
+}
+
+#solicitacao-serv form {
+	width: 865px
+}
+
+#solicitacao-serv form span.cmp-text-2 {
+	padding-right: 41px
+}
+
+#solicitacao-serv form span.cmp-text-6,#solicitacao-serv form span.select-3,#solicitacao-serv form span.cmp-text-none
+	{
+	padding-right: 35px
+}
+
+#solicitacao-serv form span.cmp-text-7,#solicitacao-serv form span.cmp-textarea
+	{
+	padding-right: 0
+}
+
+#solicitacao-serv form span.margin-top {
+	margin-top: -63px
+}
+
+#solicitacao-serv form span.select-3 div.select-um {
+	padding-bottom: 23px
+}
+
+#solicitacao-serv form span.cmp-text-none {
+	padding-top: 5px
+}
+
+#solicitacao-serv form span.cmp-text-none label {
+	float: left;
+	width: 126px
+}
+
+#solicitacao-serv form span.cmp-text-none input {
+	height: 20px;
+	margin-bottom: 10px;;
+	margin-top: -7px !important;
+	width: 50%;
+}
+
+#solicitacao-serv form .btn-enviar {
+	float: left;
+	margin-top: -45px
+}
+
+#btn-a-vista{
+	margin: 2px 0 0;	
+}
+
+/* Descrição dos Serviços - End */
+/* Serviços - End */ /*Serviços*/
+#lista-informacoes {
+	float: left;
+	padding: 80px 0 100px 35px;
+	width: 360px;;
+}
+
+#lista-informacoes li {
+	background: url("/gsan/imagens/portal/general/arrow-link.gif") no-repeat
+		scroll 0 0 transparent;
+	float: left;
+	height: 39px;
+	display: block;
+	margin-bottom: 5px;
+	position: relative;
+	width: 100%;
+}
+
+#lista-informacoes li a {
+	color: #008FD6;
+	font-size: 15px;
+	font-weight: bold;
+	height: 100%;
+	position: absolute;
+	width: 100%;
+}
+
+#lista-informacoes li:hover {
+	background: url(/gsan/imagens/portal/general/arrow-link-hover.gif)
+		no-repeat;
+}
+
+#lista-informacoes li a:hover,a.ativo {
+	color: #FFF;
+}
+
+#lista-informacoes li a span {
+	margin-left: 50px;
+	position: absolute;
+	margin-top: 9px;
+}
+
+font {
+	color: #F00;
+}
+
+span#utilizado,span#limite,span#utilizado1,span#limite1 {
+	width: auto !important;
+	padding: 0 !important;
+	float: none !important;
+	font-size: 12px !important;
+}
+
+input[type=text], textarea {
+	text-transform: uppercase;
+}

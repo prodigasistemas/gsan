@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+
+		<form-bean name="FiltrarQuadraActionForm"
+	   		type="gcom.gui.cadastro.localidade.FiltrarQuadraActionForm" />
+		<form-bean name="ManutencaoRegistroActionForm" type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="AtualizarQuadraActionForm"
+			type="gcom.gui.cadastro.localidade.AtualizarQuadraActionForm" />
+	</form-beans>
+
+	<global-forwards/>
+
+	<action-mappings>
+	
+		<action name="FiltrarQuadraActionForm" 
+			type="gcom.gui.cadastro.localidade.ExibirManterQuadraAction" 
+			scope="session" validate="false"
+			path="/exibirManterQuadraAction">
+			<forward name="manterQuadra" path="/jsp/cadastro/localidade/quadra_manter.jsp" />
+			<forward name="atualizarQuadra" path="/exibirAtualizarQuadraAction.do" />
+		</action>
+
+		<action name="FiltrarQuadraActionForm"
+			type="gcom.gui.cadastro.localidade.RemoverQuadraAction"
+			scope="request" path="/removerQuadraAction" />			
+		
+		<action name="AtualizarQuadraActionForm"
+	      	type="gcom.gui.cadastro.localidade.ExibirAtualizarQuadraAction"
+	      	validate="false" scope="session"
+	      	path="/exibirAtualizarQuadraAction">
+			<forward name="atualizarQuadra"
+		  		path="/jsp/cadastro/localidade/quadra_atualizar.jsp" />
+		</action>
+		
+		<action name="AtualizarQuadraActionForm" 
+			type="gcom.gui.cadastro.localidade.AtualizarQuadraAction"
+			validate="false" scope="session"
+			path="/atualizarQuadraAction">
+		</action>
+		
+	</action-mappings>
+	<!--******************* ARQUIVO DE PROPRIEDADES *******************-->
+	<message-resources null="false" parameter="gcom.properties.application" />
+	
+</struts-config>

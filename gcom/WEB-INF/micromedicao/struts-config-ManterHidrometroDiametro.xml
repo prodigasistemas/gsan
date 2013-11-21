@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="ManterHidrometroDiametroActionForm"
+			type="gcom.gui.micromedicao.hidrometro.ManterHidrometroDiametroActionForm" />
+		<form-bean name="AtualizarHidrometroDiametroActionForm"
+			type="gcom.gui.micromedicao.hidrometro.AtualizarHidrometroDiametroActionForm" />
+		<form-bean name="FiltrarHidrometroDiametroActionForm"
+			type="gcom.gui.micromedicao.hidrometro.FiltrarHidrometroDiametroActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.micromedicao.hidrometro.ExibirManterHidrometroDiametroAction"
+			validate="false" scope="session"
+			path="/exibirManterHidrometroDiametroAction">
+
+			<forward name="exibirManterHidrometroDiametro"
+				path="/jsp/micromedicao/hidrometro/hidrometro_diametro_manter.jsp" />
+
+			<forward name="exibirAtualizarHidrometroDiametro"
+				path="/exibirAtualizarHidrometroDiametroAction.do" />
+		</action>
+
+		<action name="AtualizarHidrometroDiametroActionForm"
+			type="gcom.gui.micromedicao.hidrometro.ExibirAtualizarHidrometroDiametroAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarHidrometroDiametroAction">
+
+			<forward name="HidrometroDiametroAtualizar"
+				path="/jsp/micromedicao/hidrometro/hidrometro_diametro_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarHidrometroDiametroActionForm"
+			type="gcom.gui.micromedicao.hidrometro.AtualizarHidrometroDiametroAction"
+			validate="true" scope="session"
+			path="/atualizarHidrometroDiametroAction">
+
+		</action>
+		
+		<action name="FiltrarHidrometroDiametroActionForm"
+			type="gcom.gui.relatorio.micromedicao.hidrometro.GerarRelatorioHidrometroDiametroManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioHidrometroDiametroManterAction" />
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.micromedicao.hidrometro.RemoverHidrometroDiametroAction"
+			 scope="request" path="/removerHidrometroDiametroAction">
+
+		</action>
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

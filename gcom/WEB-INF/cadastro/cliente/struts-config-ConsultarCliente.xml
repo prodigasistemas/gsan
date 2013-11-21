@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="ConsultarClienteActionForm"
+			type="gcom.gui.cadastro.cliente.ConsultarClienteActionForm" />			
+			
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0472] CONSULTAR IMOVEL Auhtor: Rafael Santos Data:07/09/2006-->
+		<action name="ConsultarClienteActionForm"
+			type="gcom.gui.cadastro.cliente.ExibirConsultarClienteAction"
+			validate="false" input="/exibirConsultarClienteAction.do"
+			scope="session" path="/exibirConsultarClienteAction">
+			<forward name="exibirConsultarCliente"
+				path="/jsp/cadastro/cliente/cliente_consultar.jsp" />
+		</action>
+		
+	</action-mappings>
+
+</struts-config>

@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.micromedicao.medicao.MedicaoTipo" table="micromedicao.medicao_tipo">
+		<id name="id" type="java.lang.Integer" column="medt_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_medicao_tipo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="medt_dsmedicaotipo" length="25"/>
+		<property name="indicadorUso" type="java.lang.Short" column="medt_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="medt_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to MedicaoHistorico
+    <set
+        name="medicaoHistoricos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="medt_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.MedicaoHistorico"
+        />
+    </set>
+     bi-directional one-to-many association to HidrometroInstalacaoHistorico
+    <set
+        name="hidrometroInstalacaoHistoricos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="medt_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.HidrometroInstalacaoHistorico"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

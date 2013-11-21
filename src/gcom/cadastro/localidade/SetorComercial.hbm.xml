@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.localidade.SetorComercial" table="cadastro.setor_comercial">
+		<id name="id" type="java.lang.Integer" column="stcm_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_setor_comercial</param>
+			</generator>
+		</id>
+		<property name="codigo" type="int" column="stcm_cdsetorcomercial" not-null="true" length="4"/>
+		<property name="descricao" type="java.lang.String" column="stcm_nmsetorcomercial" not-null="true" length="30"/>
+		<property name="indicadorSetorAlternativo" type="java.lang.Short" column="stcm_icalternativo" length="2"/>
+		<property name="indicadorUso" type="java.lang.Short" column="stcm_icuso" length="2"/>
+		<property name="indicadorBloqueio" type="java.lang.Short" column="stcm_icbloqueio" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="stcm_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to Quadra 
+    <set
+        name="quadras"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="stcm_id" />
+        </key>
+        <one-to-many 
+            class="gcom.cadastro.Quadra"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to Imovel 
+    <set
+        name="imovels"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="stcm_id" />
+        </key>
+        <one-to-many 
+            class="gcom.cadastro.Imovel"
+        />
+    </set>
+    -->
+		<!-- bi-directional many-to-one association to Municipio -->
+		<many-to-one name="municipio" class="gcom.cadastro.geografico.Municipio" not-null="true">
+			<column name="muni_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

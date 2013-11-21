@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="FiltrarDevolucaoActionForm"
+			type="gcom.gui.arrecadacao.FiltrarDevolucaoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		<action name="FiltrarDevolucaoActionForm"
+			type="gcom.gui.arrecadacao.ExibirFiltrarDevolucaoAction"
+			validate="true" scope="session"
+			path="/exibirFiltrarDevolucaoAction">
+			<forward name="filtrarDevolucoes"
+				path="/jsp/arrecadacao/devolucoes_filtrar.jsp" />
+		</action>
+		<action name="FiltrarDevolucaoActionForm"
+			type="gcom.gui.arrecadacao.FiltrarDevolucaoAction" validate="true"
+			path="/filtrarDevolucaoAction" scope="session">
+			<forward name="consultarDevolucao"
+				path="/exibirConsultarDevolucaoAction.do" />
+			<forward name="manterDevolucao"
+				path="/exibirManterDevolucaoAction.do" />
+			<forward name="exibirAtualizarDevolucao"
+				path="/exibirAtualizarDevolucaoAction.do" />	
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

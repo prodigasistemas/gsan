@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+	
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+			
+		<form-bean name="AtualizarFaturamentoGrupoActionForm"
+			type="gcom.gui.faturamento.AtualizarFaturamentoGrupoActionForm" />
+
+		<form-bean name="FiltrarFaturamentoGrupoActionForm"
+			type="gcom.gui.faturamento.FiltrarFaturamentoGrupoActionForm" />
+			
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.faturamento.ExibirManterFaturamentoGrupoAction"
+			validate="false" 
+			scope="session"
+			path="/exibirManterFaturamentoGrupoAction">
+			
+			<forward name="exibirManterFaturamentoGrupo"
+				path="/jsp/faturamento/faturamento_grupo_manter.jsp" />
+			
+			<forward name="exibirAtualizarFaturamentoGrupo"
+				path="/exibirAtualizarFaturamentoGrupoAction.do" />
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.faturamento.RemoverFaturamentoGrupoAction" 
+			scope="request"
+			path="/removerFaturamentoGrupoAction" />
+		
+		<action name="FiltrarFaturamentoGrupoActionForm"
+			type="gcom.gui.relatorio.faturamento.GerarRelatorioFaturamentoGrupoManterAction"
+			validate="false" 
+			scope="session"
+			path="/gerarRelatorioFaturamentoGrupoManterAction" />
+		
+		<action name="AtualizarFaturamentoGrupoActionForm"
+			type="gcom.gui.faturamento.ExibirAtualizarFaturamentoGrupoAction"
+			validate="false" 
+			scope="session"
+			path="/exibirAtualizarFaturamentoGrupoAction">
+			
+			<forward name="atualizarFaturamentoGrupo"
+				path="/jsp/faturamento/faturamento_grupo_atualizar.jsp" />
+		</action>
+		
+		<action name="AtualizarFaturamentoGrupoActionForm"
+			type="gcom.gui.faturamento.AtualizarFaturamentoGrupoAction"
+			validate="true" 
+			scope="session"
+			path="/atualizarFaturamentoGrupoAction" />
+
+	</action-mappings>
+
+</struts-config>

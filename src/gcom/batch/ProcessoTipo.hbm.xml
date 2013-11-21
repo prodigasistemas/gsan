@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.batch.ProcessoTipo" table="batch.processo_tipo">
+		<id name="id" type="java.lang.Integer" column="prtp_id">
+			<generator class="sequence">
+				<param name="sequence">batch.seq_processo_tipo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="prtp_dsprocessotipo" not-null="true" length="40"/>
+		<property name="indicadorUso" type="short" column="prtp_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="prtp_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to Processo -->
+		<set name="processos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="prtp_id"/>
+			</key>
+			<one-to-many class="gcom.batch.Processo"/>
+		</set>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="ExibirManterControleLiberacaoPMEPActionForm"
+			type="gcom.gui.seguranca.acesso.ExibirManterControleLiberacaoPMEPActionForm" />
+			
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="ExibirManterControleLiberacaoPMEPActionForm"
+			type="gcom.gui.seguranca.acesso.ExibirManterControleLiberacaoPMEPAction"
+			validate="true" 
+			path="/exibirManterControleLiberacaoPMEPAction">
+			
+			<forward name="exibirManterControleLiberacaoPMEP" 
+				path="/jsp/seguranca/acesso/controle_liberacao_PMEP_manter.jsp" />
+				
+		</action>
+		
+		<action name="ExibirManterControleLiberacaoPMEPActionForm"
+			type="gcom.gui.seguranca.acesso.ManterControleLiberacaoPMEPAction"
+			validate="false" scope="session"
+			path="/manterControleLiberacaoPMEPAction">
+		</action>
+		
+		
+	</action-mappings>
+
+</struts-config>

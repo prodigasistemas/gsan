@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.faturamento.ConsumoFaixaLigacao" table="faturamento.consumo_faixa_ligacao">
+		<id name="id" type="java.lang.Integer" column="cflg_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="indicadorHidrometro" type="short" column="cflg_ichidrometro" not-null="true" unique="true" length="2"/>
+		<property name="numeroFaixaInicio" type="int" column="cflg_nnfaixainicio" not-null="true" length="4"/>
+		<property name="numeroFaixaFim" type="int" column="cflg_nnfaixafim" not-null="true" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cflg_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+	</class>
+</hibernate-mapping>

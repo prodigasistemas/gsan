@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.parcelamento.ParcelamentoQuantidadePrestacao" table="cobranca.parcel_qtde_prestacao">
+		<id name="id" type="java.lang.Integer" column="pqtp_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_parcel_qtde_prestacao</param>
+			</generator>
+		</id>
+		<property name="quantidadeMaximaPrestacao" type="java.lang.Short" column="pqtp_qtmaximaprestacao" length="2"/>
+		<property name="taxaJuros" type="java.math.BigDecimal" column="pqtp_txjuros" length="5"/>
+		<property name="percentualMinimoEntrada" type="java.math.BigDecimal" column="pqtp_pcminimoentrada" length="5"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="pqtp_tmultimaalteracao" length="8"/>
+		<property name="percentualTarifaMinimaImovel" type="java.math.BigDecimal" column="pqtp_pctarifaminimaimovel" length="5"/>
+		<property name="percentualValorReparcelado" type="java.math.BigDecimal" column="pqtp_pcvlrreparcelado" length="2"/>
+		<property name="quantidadeMaxPrestacaoEspecial" type="java.lang.Short" column="pqtp_qtmaxprestacaoespecial" length="2"/>
+		<property name="percentualEntradaSugerida" type="java.math.BigDecimal" column="pqtp_pcentradasugerida" length="8"/>
+		<property name="fatorQuantidadePrestacoes" type="java.lang.Integer" column="pqtp_nnfatorqtdprestacoes" length="4"/>
+		<property name="indicadorMediaValorContas" type="short" column="pqtp_icmediavalorcontas" length="2" not-null="true"/>
+		<property name="indicadorValorUltimaContaEmAtraso" type="java.lang.Short" column="pqtp_icentultcontaatraso" length="2" not-null="true"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to ParcelamentoQtdeReparcel -->
+		<many-to-one name="parcelamentoQuantidadeReparcelamento" class="gcom.cobranca.parcelamento.ParcelamentoQuantidadeReparcelamento" not-null="true">
+			<column name="pqtr_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

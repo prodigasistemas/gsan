@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.cliente.RamoAtividade" table="cadastro.ramo_atividade">
+		<id name="id" type="java.lang.Integer" column="ratv_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_ramo_atividade</param>
+			</generator>
+		</id>
+		<property name="codigo" type="short" column="ratv_cdramoatividade" not-null="true" length="5"/>
+		<property name="descricao" type="java.lang.String" column="ratv_dsramoatividade" length="20"/>
+		<property name="indicadorUso" type="java.lang.Short" column="ratv_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ratv_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to Cliente
+    <set
+        name="clientes"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="ratv_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Cliente"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

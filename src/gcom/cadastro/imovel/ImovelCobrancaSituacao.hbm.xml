@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.imovel.ImovelCobrancaSituacao" table="cadastro.imovel_cobranca_situacao">
+		<id name="id" type="java.lang.Integer" column="iscb_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_imovel_cobranca_situacao</param>
+			</generator>
+		</id>
+		<property name="dataImplantacaoCobranca" type="java.sql.Date" column="iscb_dtimplantacaocobranca" not-null="true" length="4"/>
+		<property name="dataRetiradaCobranca" type="java.sql.Date" column="iscb_dtretiradacobranca" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="iscb_tmultimaalteracao" length="8"/>
+		<property name="anoMesReferenciaInicio" type="java.lang.Integer" column="iscb_amreferenciainicio" length="4"/>
+		<property name="anoMesReferenciaFinal" type="java.lang.Integer" column="iscb_amreferenciafinal" length="4"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaSituacao -->
+		<many-to-one name="cobrancaSituacao" class="gcom.cobranca.CobrancaSituacao" not-null="true">
+			<column name="cbst_id"/>
+		</many-to-one>
+		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="true">
+			<column name="clie_id"/>
+		</many-to-one>
+		<many-to-one name="contaMotivoRevisao" class="gcom.faturamento.conta.ContaMotivoRevisao">
+			<column name="cmrv_id"/>
+		</many-to-one>
+		<many-to-one name="escritorio" class="gcom.cadastro.cliente.Cliente">
+			<column name="clie_idescritorio"/>
+		</many-to-one>
+		<many-to-one name="advogado" class="gcom.cadastro.cliente.Cliente">
+			<column name="clie_idadvogado"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

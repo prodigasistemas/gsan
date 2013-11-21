@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="EmissaoRelatorioQuadroMetasExercicioActionForm"
+			type="gcom.gui.relatorio.gerencial.faturamento.EmissaoRelatorioQuadroMetasExercicioActionForm" />
+	</form-beans>
+
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="EmissaoRelatorioQuadroMetasExercicioActionForm"
+			type="gcom.gui.relatorio.gerencial.faturamento.EmissaoRelatorioQuadroMetasExercicioAction"
+			validate="true" 
+			path="/exibirGerarQuadroMetasExercicioAction">
+			
+			<forward name="exibirGerarQuadroMetasExercicio" 
+				path="/jsp/relatorio/gerencial/emissao_relatorio_quadro_metas_exercicio.jsp" />
+				
+		</action>
+		
+		<action name="EmissaoRelatorioQuadroMetasExercicioActionForm"
+			type="gcom.gui.relatorio.gerencial.faturamento.GerarRelatorioQuadroMetasExercicioAction"
+			validate="true" 
+			path="/gerarRelatorioQuadroMetasExercicioAction" />
+			
+		
+	</action-mappings>
+
+</struts-config>

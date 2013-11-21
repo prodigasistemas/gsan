@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="InserirParametrosSistemaActionForm"
+			type="gcom.gui.cadastro.sistemaparametro.InserirParametrosSistemaActionForm" />
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0060] Inserir Parâmetros Sistema Auhtor: Rômulo Aurélio Data:04/01/2007-->
+
+		<action name="InserirParametrosSistemaActionForm"
+			type="gcom.gui.cadastro.sistemaparametro.ExibirInserirParametrosSistemaAction"
+			validate="false" input="/exibirInserirParametrosSistemaAction.do"
+			scope="session" path="/exibirInserirParametrosSistemaAction">
+			<forward name="inserirParametrosSistemaDadosGeraisEmpresaAction"
+				path="/inserirParametrosSistemaWizardAction.do?action=exibirInserirParametrosSistemaDadosGeraisEmpresaAction" />
+		</action>
+
+		<action name="InserirParametrosSistemaActionForm"
+			type="gcom.gui.cadastro.sistemaparametro.InserirParametrosSistemaWizardAction"
+			validate="false" parameter="action" scope="session"
+			path="/inserirParametrosSistemaWizardAction">
+			<forward
+				name="inserirParametrosSistemaDadosGeraisEmpresaAction"
+				path="/jsp/cadastro/sistemaparametro/sistema_parametro_inserir_dados_gerais_empresa.jsp" />
+
+			<!--<forward name="inserirClientePessoaFisica"
+				path="/jsp/cadastro/cliente/cliente_inserir_pessoa_fisica.jsp" />
+				<forward name="inserirClientePessoaJuridica"
+				path="/jsp/cadastro/cliente/cliente_inserir_pessoa_juridica.jsp" />
+				<forward name="inserirClienteEndereco"
+				path="/jsp/cadastro/cliente/cliente_inserir_endereco.jsp" />
+				<forward name="inserirClienteTelefone"
+				path="/jsp/cadastro/cliente/cliente_inserir_telefone.jsp" /> -->
+
+		</action>
+
+	</action-mappings>
+
+</struts-config>

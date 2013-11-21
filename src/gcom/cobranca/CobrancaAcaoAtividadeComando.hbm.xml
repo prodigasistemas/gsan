@@ -1,0 +1,143 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.CobrancaAcaoAtividadeComando" table="cobranca.cobranca_acao_ativ_cmd">
+		<id name="id" type="java.lang.Integer" column="cacm_id">
+			<generator class="sequence">
+				<param name="sequence">
+				cobranca.seq_cobranca_acao_ativ_cmd</param>
+			</generator>
+		</id>
+		<property name="comando" type="java.sql.Timestamp" column="cacm_tmcomando" length="8"/>
+		<property name="realizacao" type="java.sql.Timestamp" column="cacm_tmrealizacao" length="8"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cacm_tmultimaalteracao" length="8"/>
+		<property name="codigoSetorComercialInicial" type="java.lang.Integer" column="cacm_cdsetorcomercialinicial" length="4"/>
+		<property name="codigoSetorComercialFinal" type="java.lang.Integer" column="cacm_cdsetorcomercialfinal" length="4"/>
+		<property name="anoMesReferenciaContaInicial" type="java.lang.Integer" column="cacm_amreferenciacontainicial" length="4"/>
+		<property name="anoMesReferenciaContaFinal" type="java.lang.Integer" column="cacm_amreferenciacontafinal" length="4"/>
+		<property name="dataVencimentoContaInicial" type="java.sql.Date" column="cacm_dtvencimentocontainicial" length="4"/>
+		<property name="dataVencimentoContaFinal" type="java.sql.Date" column="cacm_dtvencimentocontafinal" length="4"/>
+		<property name="indicadorCriterio" type="java.lang.Short" column="cacm_iccriterio" length="2"/>
+		<property name="quantidadeDocumentos" type="java.lang.Integer" column="cacm_qtdocumentos" length="4"/>
+		<property name="valorDocumentos" type="java.math.BigDecimal" column="cacm_vldocumentos" length="13"/>
+		<property name="quantidadeItensCobrados" type="java.lang.Integer" column="cacm_qtitenscobrados" length="4"/>
+		<property name="descricaoTitulo" type="java.lang.String" column="cacm_dstitulo" length="100"/>
+		<property name="descricaoSolicitacao" type="text" column="cacm_dssolicitacao"/>
+		<property name="dataEncerramentoPrevista" type="java.sql.Date" column="cacm_dtencerramentoprevista" length="4"/>
+		<property name="dataEncerramentoRealizada" type="java.sql.Date" column="cacm_dtencerramentorealizada" length="4"/>
+		<property name="quantidadeDiasRealizacao" type="java.lang.Short" column="cacm_qtdiasrealizacao" length="2"/>
+		<property name="indicadorDebito" type="java.lang.Short" column="cacm_icdebito" length="2"/>
+		<property name="indicadorBoletim" type="java.lang.Short" column="cacm_icboletim" length="2"/>
+		<property name="quantidadeMaximaDocumentos" type="java.lang.Integer" column="cacm_qtmaximadocumentos" length="4"/>
+		<property name="valorLimiteObrigatoria" type="java.math.BigDecimal" column="cacm_vllimite" length="9"/>
+		<property name="consumoMedioInicial" type="java.lang.Integer" column="cacm_nmconsmedioinicial"/>
+		<property name="consumoMedioFinal" type="java.lang.Integer" column="cacm_nmconsmediofinal"/>
+		<property name="tipoConsumo" type="java.lang.Short" column="cacm_ictipoconsumo" length="2"/>
+		<property name="periodoInicialFiscalizacao" type="java.sql.Date" column="cacm_dtfiscalizacaoinicial" length="4"/>
+		<property name="periodoFinalFiscalizacao" type="java.sql.Date" column="cacm_dtfiscalizacaofinal" length="4"/>
+		
+		<property name="numeroQuadraInicial" type="java.lang.Integer" column="cacm_nnquadrainicial" length="5"/>
+		<property name="numeroQuadraFinal" type="java.lang.Integer" column="cacm_nnquadrafinal" length="5"/>
+		
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Rota -->
+		<many-to-one name="rotaFinal" class="gcom.micromedicao.Rota" not-null="true">
+			<column name="rota_idfinal"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Rota -->
+		<many-to-one name="rotaInicial" class="gcom.micromedicao.Rota" not-null="true">
+			<column name="rota_idinicial"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaCriterio -->
+		<many-to-one name="cobrancaCriterio" class="gcom.cobranca.CobrancaCriterio" not-null="true">
+			<column name="cbct_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to CobrancaDocumento -->
+		<!--  
+	<set
+        name="cobrancaDocumentos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="cacm_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CobrancaDocumento"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to CobrancaAtividadeComandRota -->
+		<!-- 
+    <set
+        name="cobrancaAtividadeComandRotas"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="cacm_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CobrancaAtividadeComandRota"
+        />
+    </set>
+	-->
+		<!-- bi-directional many-to-one association to Cliente -->
+		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="false">
+			<column name="clie_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaAcao -->
+		<many-to-one name="cobrancaAcao" class="gcom.cobranca.CobrancaAcao" not-null="true">
+			<column name="cbac_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Usuario -->
+		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario" not-null="true">
+			<column name="usur_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Empresa -->
+		<many-to-one name="empresa" class="gcom.cadastro.empresa.Empresa" not-null="false">
+			<column name="empr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ClienteRelacaoTipo -->
+		<many-to-one name="clienteRelacaoTipo" class="gcom.cadastro.cliente.ClienteRelacaoTipo" not-null="false">
+			<column name="crtp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaAtividade -->
+		<many-to-one name="cobrancaAtividade" class="gcom.cobranca.CobrancaAtividade" not-null="true">
+			<column name="cbat_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GerenciaRegional -->
+		<many-to-one name="gerenciaRegional" class="gcom.cadastro.localidade.GerenciaRegional" not-null="false">
+			<column name="greg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidadeInicial" class="gcom.cadastro.localidade.Localidade" not-null="false">
+			<column name="loca_idinicial"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidadeFinal" class="gcom.cadastro.localidade.Localidade" not-null="false">
+			<column name="loca_idfinal"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaGrupo -->
+		<many-to-one name="cobrancaGrupo" class="gcom.cobranca.CobrancaGrupo" not-null="false">
+			<column name="cbgr_id"/>
+		</many-to-one>
+		<many-to-one name="unidadeNegocio" class="gcom.cadastro.localidade.UnidadeNegocio" not-null="false">
+			<column name="uneg_id"/>
+		</many-to-one>
+		<many-to-one name="superior" class="gcom.cadastro.cliente.Cliente" not-null="false">
+			<column name="clie_idsuperior"/>
+		</many-to-one>
+		<many-to-one name="logradouro" class="gcom.cadastro.endereco.Logradouro" not-null="false">
+			<column name="logr_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

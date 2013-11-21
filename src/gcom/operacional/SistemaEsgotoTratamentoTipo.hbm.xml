@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.operacional.SistemaEsgotoTratamentoTipo" table="operacional.sistema_esgoto_trat_tipo">
+		<id name="id" type="java.lang.Integer" column="sett_id">
+			<generator class="sequence">
+				<param name="sequence">operacional.seq_sistema_esgoto_trat_tipo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="sett_dssistesgtrattipo" length="30"/>
+		<property name="indicadorUso" type="java.lang.Short" column="sett_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="sett_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to SistemaEsgoto
+    <set
+        name="sistemaEsgotos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="sett_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.SistemaEsgoto"
+        />
+    </set>
+  -->
+	</class>
+</hibernate-mapping>

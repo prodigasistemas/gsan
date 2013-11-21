@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.faturamento.conta.ContaMotivoRetificacao" table="faturamento.conta_motivo_retificacao">
+		<id name="id" type="java.lang.Integer" column="cmrt_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_conta_motivo_retificacao</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="cmrt_dsmotivoretificacaoconta" length="35"/>
+		<property name="indicadorUso" type="java.lang.Short" column="cmrt_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cmrt_tmultimaalteracao" length="8"/>
+		<property name="numeroOcorrenciasNoAno" type="java.lang.Integer" column="cmrt_nnocorrmesmomotivonoano" />
+		<property name="indicadorCompetenciaConsumo" type="java.lang.Short" column="cmrt_iccompetenciaconsumo" length="2" not-null="true"/>
+		
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to Refaturamento -->
+		<!--
+    <set
+        name="refaturamentos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="cmrt_id" />
+        </key>
+        <one-to-many 
+            class="gcom.Refaturamento"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to ContaHistorico -->
+		<!--
+    <set
+        name="contaHistoricos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="cmrt_id" />
+        </key>
+        <one-to-many 
+            class="gcom.ContaHistorico"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to Conta -->
+		<!--
+    <set
+        name="contas"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="cmrt_id" />
+        </key>
+        <one-to-many 
+            class="gcom.Conta"
+        />
+    </set>
+	-->
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.arrecadacao.DeducaoTipo" table="arrecadacao.deducao_tipo">
+		<id name="id" type="java.lang.Integer" column="ddtp_id">
+			<generator class="sequence">
+				<param name="sequence">
+				arrecadacao.seq_deducao_tipo</param>
+			</generator>
+		</id>
+		<property name="descricaoDeducaoTipo" type="java.lang.String" column="ddtp_dsdeducaotipo" length="30"/>
+		<property name="descricaoAbreviado" type="java.lang.String" column="ddtp_dsabreviado" length="10"/>
+		<property name="indicadorUso" type="java.lang.Short" column="ddtp_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ddtp_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to AvisoDeducoe -->
+		<!-- 
+    <set
+        name="avisoDeducoes"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="ddtp_id" />
+        </key>
+        <one-to-many 
+            class="gcom.AvisoDeducoe"
+        />
+    </set>
+	-->
+	</class>
+</hibernate-mapping>

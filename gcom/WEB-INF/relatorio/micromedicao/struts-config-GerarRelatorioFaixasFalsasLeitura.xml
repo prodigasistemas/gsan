@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="GerarRelatorioFaixasFalsasLeituraActionForm"
+			type="gcom.gui.relatorio.micromedicao.GerarRelatorioFaixasFalsasLeituraActionForm" />					
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0613] Gerar Relatório de Faixas Falsas de Leitura Auhtor: Rafael Corrêa Data:19/06/2007-->
+		<action name="GerarRelatorioFaixasFalsasLeituraActionForm"
+			type="gcom.gui.relatorio.micromedicao.ExibirGerarRelatorioFaixasFalsasLeituraAction"
+			validate="true" scope="session"
+			path="/exibirGerarRelatorioFaixasFalsasLeituraAction">
+			<forward name="exibirGerarRelatorioFaixasFalsasLeitura"
+				path="/jsp/relatorio/micromedicao/faixas_falsas_leitura_relatorio_gerar.jsp" />
+		</action>
+		<action name="GerarRelatorioFaixasFalsasLeituraActionForm"
+			type="gcom.gui.relatorio.micromedicao.GerarRelatorioFaixasFalsasLeituraAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioFaixasFalsasLeituraAction">
+		</action>
+
+	</action-mappings>
+
+</struts-config>

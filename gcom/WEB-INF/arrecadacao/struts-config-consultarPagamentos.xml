@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="ConsultarPagamentoActionForm"
+			type="gcom.gui.arrecadacao.pagamento.ConsultarPagamentoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		<action name="ConsultarPagamentoActionForm"
+			type="gcom.gui.arrecadacao.pagamento.ExibirConsultarPagamentoAction"
+			validate="false" path="/exibirConsultarPagamentoAction">
+			<forward name="consultarClientePagamentos"
+				path="/jsp/arrecadacao/pagamento/pagamento_consultar_cliente.jsp" />
+			<forward name="consultarImovelPagamentos"
+				path="/jsp/arrecadacao/pagamento/pagamento_consultar_imovel.jsp" />
+			<forward name="consultarAvisoBancarioPagamentos"
+				path="/jsp/arrecadacao/pagamento/pagamento_consultar_aviso_bancario.jsp" />
+			<forward name="consultarMovimentoArrecadadorPagamentos"
+				path="/jsp/arrecadacao/pagamento/pagamento_consultar_movimento_arrecadador.jsp" />
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

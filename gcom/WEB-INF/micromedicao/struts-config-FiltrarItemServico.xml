@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="FiltrarItemServicoActionForm"
+			type="gcom.micromedicao.FiltrarItemServicoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		<action name="FiltrarItemServicoActionForm" 
+			type="gcom.gui.micromedicao.ExibirFiltrarItemServicoAction" 
+			validate="false" 
+			scope="session" 
+			path="/exibirFiltrarItemServicoAction">
+			
+			<forward name="filtrarItemServico"
+				path="/jsp/micromedicao/item_servico_filtrar.jsp" />
+		</action>
+		
+		<action name="FiltrarItemServicoActionForm" 
+			type="gcom.gui.micromedicao.FiltrarItemServicoAction" 
+			validate="true" 
+			scope="session" 
+			path="/filtrarItemServicoAction">
+			<forward name="exibirManterItemServico" 
+			path="/exibirManterItemServicoAction.do" />
+		</action>
+		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

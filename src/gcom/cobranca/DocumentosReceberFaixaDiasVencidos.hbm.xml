@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.DocumentosReceberFaixaDiasVencidos" table="cobranca.docs_a_rec_fx_dias_vcdos">
+		<id name="id" type="java.lang.Integer" column="drfx_id">
+			<generator class="sequence">
+				<param name="sequence">
+				cobranca.seq_docs_a_rec_fx_dias_vcdos</param>
+			</generator>
+		</id>
+		<property name="descricaoFaixa" type="java.lang.String" column="drfx_dsfaixa" length="10" not-null="true"/>
+		<property name="valorInicialFaixa" type="java.lang.Integer" column="drfx_vlfaixainicio" length="5" not-null="true"/>
+		<property name="valorFinalFaixa" type="java.lang.Integer" column="drfx_vlfaixafim" length="5" not-null="true"/>
+		<property name="indicadorUso" type="java.lang.Short" column="drfx_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="drfx_tmultimaalteracao" length="8"/>
+	</class>
+</hibernate-mapping>

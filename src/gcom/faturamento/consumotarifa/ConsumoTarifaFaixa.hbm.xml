@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.consumotarifa.ConsumoTarifaFaixa" table="faturamento.consumo_tarifa_faixa">
+		<id name="id" type="java.lang.Integer" column="ctfx_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_consumo_tarifa_faixa</param>
+			</generator>
+		</id>
+		<property name="numeroConsumoFaixaInicio" type="java.lang.Integer" column="ctfx_nncosumofaixainicio" length="4"/>
+		<property name="numeroConsumoFaixaFim" type="java.lang.Integer" column="ctfx_nnconsumofaixafim" length="4"/>
+		<property name="valorConsumoTarifa" type="java.math.BigDecimal" column="ctfx_vlconsumotarifa" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ctfx_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to ConsumoTarifaCategoria -->
+		<many-to-one name="consumoTarifaCategoria" class="gcom.faturamento.consumotarifa.ConsumoTarifaCategoria" not-null="true">
+			<column name="cstc_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

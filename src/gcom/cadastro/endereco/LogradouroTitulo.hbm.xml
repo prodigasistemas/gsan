@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.endereco.LogradouroTitulo" table="cadastro.logradouro_titulo">
+		<id name="id" type="java.lang.Integer" column="lgtt_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_logradouro_titulo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="lgtt_dslogradourotitulo" not-null="true" length="25"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="lgtt_dsabreviado" length="5"/>
+		<property name="indicadorUso" type="java.lang.Short" column="lgtt_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="lgtt_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to Logradouro
+    <set
+        name="logradouros"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="lgtt_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Logradouro"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.seguranca.acesso.CasoDeUso" table="seguranca.caso_de_uso">
+		<id name="id" type="java.lang.Integer" column="csus_id">
+			<generator class="sequence">
+				<param name="sequence">seguranca.sequence_caso_de_uso</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="csus_dscasouso" length="50"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="csus_dsabreviado" length="6"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="csus_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to CasoDeUsoTipo -->
+		<many-to-one name="casoDeUsoTipo" class="gcom.seguranca.acesso.CasoDeUsoTipo" not-null="true">
+			<column name="uctp_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to TabelaCasoDeUso -->
+		<!-- <set
+        name="tabelaCasoDeUsos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="csus_id" />
+        </key>
+        <one-to-many 
+            class="gcom.TabelaCasoDeUso"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

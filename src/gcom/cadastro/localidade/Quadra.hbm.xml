@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.localidade.Quadra" table="cadastro.quadra">
+		<id name="id" type="java.lang.Integer" column="qdra_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_quadra</param>
+			</generator>
+		</id>
+		<property name="numeroQuadra" type="int" column="qdra_nnquadra" not-null="true" length="4"/>
+		<property name="indicadorRedeAgua" type="java.lang.Short" column="qdra_icredeagua" length="2"/>
+		<property name="indicadorRedeEsgoto" type="java.lang.Short" column="qdra_icredeesgoto" length="2"/>
+		<property name="numeroRotaSequencia" type="java.lang.Short" column="qdra_nnrotasequencia" length="2"/>
+		<property name="dataImplantacao" type="java.sql.Date" column="qdra_dtimplantacao" length="4"/>
+		<property name="indicadorUso" type="java.lang.Short" column="qdra_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="qdra_tmultimaalteracao" length="8"/>
+		<property name="indicadorIncrementoLote" type="java.lang.Short" column="qdra_icautoincrementolote" length="2"/>
+		<property name="indicadorBloqueio" type="java.lang.Short" column="qdra_icbloqueio" length="2"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to Rota -->
+		<many-to-one name="rota" class="gcom.micromedicao.Rota" not-null="true">
+			<column name="rota_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to IbgeSetorCensitario -->
+		<many-to-one name="ibgeSetorCensitario" class="gcom.cadastro.dadocensitario.IbgeSetorCensitario" not-null="true">
+			<column name="istc_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to SetorComercial -->
+		<many-to-one name="setorComercial" class="gcom.cadastro.localidade.SetorComercial" not-null="true">
+			<column name="stcm_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to Imovel
+    <set
+        name="imovels"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="qdra_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Imovel"
+        />
+    </set>
+    -->
+		<!-- bi-directional many-to-one association to DistritoOperacional -->
+		<many-to-one name="distritoOperacional" class="gcom.operacional.DistritoOperacional" not-null="true">
+			<column name="diop_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Bacia -->
+		<many-to-one name="bacia" class="gcom.operacional.Bacia" not-null="true">
+			<column name="baci_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Zei -->
+		<many-to-one name="zeis" class="gcom.cadastro.localidade.Zeis" not-null="true">
+			<column name="zeis_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to QuadraPerfil -->
+		<many-to-one name="quadraPerfil" class="gcom.cadastro.localidade.QuadraPerfil" not-null="true">
+			<column name="qdpf_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to AreaTipo -->
+		<many-to-one name="areaTipo" class="gcom.cadastro.localidade.AreaTipo" not-null="true">
+			<column name="arti_id"/>
+		</many-to-one>
+		<many-to-one name="roteiroEmpresa" class="gcom.micromedicao.RoteiroEmpresa" not-null="true">
+			<column name="roem_id"/>
+		</many-to-one>
+		  
+		<many-to-one name="bairro" class="gcom.cadastro.geografico.Bairro" not-null="false">
+			<column name="bair_id"/>
+		</many-to-one>
+		
+	</class>
+</hibernate-mapping>

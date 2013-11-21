@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.seguranca.transacao.TabelaLinhaColunaAlteracao" table="seguranca.tab_linha_col_alteracao">
+		<id name="id" type="java.lang.Integer" column="tbca_id">
+			<generator class="sequence">
+				<param name="sequence">seguranca.seq_tab_linha_col_alteracao</param>
+			</generator>
+		</id>
+		<property name="conteudoColunaAnterior" type="java.lang.String" column="tbca_cncolunaanterior" length="100"/>
+		<property name="conteudoColunaAtual" type="java.lang.String" column="tbca_cncolunaatual" length="100"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="tbca_tmultimaalteracao" length="8"/>
+		<property name="indicadorAtualizada" type="short" column="tbca_icatualizada"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to TabelaColuna -->
+		<many-to-one name="tabelaColuna" class="gcom.seguranca.transacao.TabelaColuna" not-null="true">
+			<column name="tbco_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to TabelaLinhaAlteracao -->
+		<many-to-one name="tabelaLinhaAlteracao" class="gcom.seguranca.transacao.TabelaLinhaAlteracao" not-null="true">
+			<column name="tbla_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

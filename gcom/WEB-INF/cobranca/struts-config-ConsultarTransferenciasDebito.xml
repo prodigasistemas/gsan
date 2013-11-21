@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="ConsultarTransferenciasDebitoActionForm"
+			type="gcom.gui.cobranca.ConsultarTransferenciasDebitoActionForm" />					
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0204] CONSULTAR TRANSFERÊNCIAS Auhtor: Rafael Corrêa Data:22/08/2008-->
+		<action name="ConsultarTransferenciasDebitoActionForm"
+			type="gcom.gui.cobranca.ExibirConsultarTransferenciasDebitoAction"
+			validate="true" 
+			scope="session"
+			path="/exibirConsultarTransferenciasDebitoAction">
+			
+			<forward name="exibirConsultarTransferenciasDebito"
+				path="/jsp/cobranca/transferencias_debito_consultar.jsp" />
+		</action>
+		
+		<action name="ConsultarTransferenciasDebitoActionForm"
+			type="gcom.gui.cobranca.ConsultarTransferenciasDebitoAction"
+			validate="true" 
+			scope="session"
+			path="/consultarTransferenciasDebitoAction">
+			
+			<forward name="exibirTransferenciasDebito"
+				path="/jsp/cobranca/transferencias_debito_resultado_consulta.jsp" />
+		</action>
+		
+		<action name="ConsultarTransferenciasDebitoActionForm"
+			type="gcom.gui.relatorio.cobranca.GerarRelatorioTransferenciasConsultarAction"
+			validate="false" scope="session"
+			path="/gerarRelatorioTransferenciasConsultarAction" />
+
+	</action-mappings>
+
+</struts-config>

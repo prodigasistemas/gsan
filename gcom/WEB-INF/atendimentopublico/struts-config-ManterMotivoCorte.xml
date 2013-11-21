@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+	
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="AtualizarMotivoCorteActionForm"
+			type="gcom.gui.atendimentopublico.AtualizarMotivoCorteActionForm" />
+		<form-bean name="FiltrarMotivoCorteActionForm"
+			type="gcom.gui.atendimentopublico.FiltrarMotivoCorteActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.atendimentopublico.ExibirManterMotivoCorteAction"
+			validate="false" scope="session"
+			path="/exibirManterMotivoCorteAction">
+			<forward name="exibirManterMotivoCorte"
+				path="/jsp/atendimentopublico/motivo_corte_manter.jsp" />
+			<forward name="exibirAtualizarMotivoCorte"
+				path="/exibirAtualizarMotivoCorteAction.do" />
+		</action>
+		
+		<action name="FiltrarMotivoCorteActionForm"
+			type="gcom.gui.relatorio.atendimentopublico.GerarRelatorioMotivoCorteManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioMotivoCorteManterAction" />
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.atendimentopublico.RemoverMotivoCorteAction" scope="request"
+			path="/removerMotivoCorteAction">
+		</action>
+		
+		<action name="AtualizarMotivoCorteActionForm"
+			type="gcom.gui.atendimentopublico.ExibirAtualizarMotivoCorteAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarMotivoCorteAction">
+			<forward name="atualizarMotivoCorte"
+				path="/jsp/atendimentopublico/motivo_corte_atualizar.jsp" />
+		</action>
+		<action name="AtualizarMotivoCorteActionForm"
+			type="gcom.gui.atendimentopublico.AtualizarMotivoCorteAction"
+			validate="true" scope="session"
+			path="/atualizarMotivoCorteAction">
+		</action>
+
+	</action-mappings>
+
+</struts-config>

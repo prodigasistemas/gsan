@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cadastro.sistemaparametro.SistemaAlteracaoHistorico" table="cadastro.sistema_alteracao_hist">
+		<id name="id" type="java.lang.Integer" column="siah_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_sistema_alteracao_hist</param>
+			</generator>
+		</id>
+		<property name="nome" type="java.lang.String" column="siah_nmalteracao" not-null="true" length="70"/>
+		<property name="descricao" type="java.lang.String" column="siah_dsalteracao" not-null="true" length="300"/>
+		<property name="data" type="java.sql.Date" column="siah_dtalteracao" not-null="true" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="siah_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Funcionalidade -->
+		<many-to-one name="funcionalidade" class="gcom.seguranca.acesso.Funcionalidade" not-null="true">
+			<column name="fncd_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

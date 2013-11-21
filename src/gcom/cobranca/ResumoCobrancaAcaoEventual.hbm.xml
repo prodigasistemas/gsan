@@ -1,0 +1,107 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.ResumoCobrancaAcaoEventual" table="cobranca.resumo_cobr_acao_event">
+		<id name="Id" type="java.lang.Integer" column="rcbe_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_resumo_cobr_acao_event</param>
+			</generator>
+		</id>
+		<property name="tempoRealizacaoEmitir" type="java.sql.Timestamp" column="rcbe_tmrealizacaoemitir" not-null="true" length="8"/>
+		<property name="tempoRealizacaoEncerrar" type="java.sql.Timestamp" column="rcbe_tmrealizacaoencerrar" not-null="true" length="8"/>
+		<property name="codigoSetorcomercial" type="int" column="rcbe_cdsetorcomercial" not-null="true" length="4"/>
+		<property name="numeroQuadra" type="int" column="rcbe_nnquadra" not-null="true" length="4"/>
+		<property name="indicadorAntesApos" type="java.lang.Short" column="rcbe_icantesapos" length="2"/>
+		<property name="indicadorAcimaLimite" type="java.lang.Short" column="rcbe_icacimalimite" length="2"/>
+		<property name="quantidadeDocumentos" type="int" column="rcbe_qtdocumentos" not-null="true" length="4"/>
+		<property name="valorDocumentos" type="java.math.BigDecimal" column="rcbe_vldocumentos" not-null="true" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="rcbe_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="indicadorDefinitivo" type="java.lang.Short" column="rcbe_icdefinitivo" length="2"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Quadra -->
+		<many-to-one name="quadra" class="gcom.cadastro.localidade.Quadra" not-null="true">
+			<column name="qdra_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GerenciaRegional -->
+		<many-to-one name="gerenciaRegional" class="gcom.cadastro.localidade.GerenciaRegional" not-null="true">
+			<column name="greg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ImovelPerfil -->
+		<many-to-one name="imovelPerfil" class="gcom.cadastro.imovel.ImovelPerfil" not-null="true">
+			<column name="iper_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LigacaoEsgotoSituacao -->
+		<many-to-one name="ligacaoEsgotoSituacao" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao" not-null="true">
+			<column name="lest_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Rota -->
+		<many-to-one name="rota" class="gcom.micromedicao.Rota" not-null="true">
+			<column name="rota_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to SetorComercial -->
+		<many-to-one name="setorComercial" class="gcom.cadastro.localidade.SetorComercial" not-null="true">
+			<column name="stcm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaGrupo -->
+		<many-to-one name="cobrancaGrupo" class="gcom.cobranca.CobrancaGrupo" not-null="true">
+			<column name="cbgr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LigacaoAguaSituacao -->
+		<many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="true">
+			<column name="last_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to EsferaPoder -->
+		<many-to-one name="esferaPoder" class="gcom.cadastro.cliente.EsferaPoder" not-null="true">
+			<column name="epod_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Empresa -->
+		<many-to-one name="empresa" class="gcom.cadastro.empresa.Empresa" not-null="true">
+			<column name="empr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Categoria -->
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaAcaoSituacao -->
+		<many-to-one name="cobrancaAcaoSituacao" class="gcom.cobranca.CobrancaAcaoSituacao" not-null="true">
+			<column name="cast_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaCriterio -->
+		<many-to-one name="cobrancaCriterio" class="gcom.cobranca.CobrancaCriterio" not-null="true">
+			<column name="cbct_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaAcaoAtividadeComand -->
+		<many-to-one name="cobrancaAcaoAtividadeComando" class="gcom.cobranca.CobrancaAcaoAtividadeComando" not-null="true">
+			<column name="cacm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaAcao -->
+		<many-to-one name="cobrancaAcao" class="gcom.cobranca.CobrancaAcao" not-null="true">
+			<column name="cbac_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaDebitoSituacao -->
+		<many-to-one name="cobrancaDebitoSituacao" class="gcom.cobranca.CobrancaDebitoSituacao" not-null="true">
+			<column name="cdst_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to FiscalizacaoSituacao -->
+		<many-to-one name="fiscalizacaoSituacao" class="gcom.atendimentopublico.ordemservico.FiscalizacaoSituacao" not-null="true">
+			<column name="fzst_id"/>
+		</many-to-one>
+		<many-to-one name="motivoEncerramento" class="gcom.atendimentopublico.registroatendimento.AtendimentoMotivoEncerramento" not-null="false">
+			<column name="amen_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Unidade de Negocio-->
+		<many-to-one name="unidadeNegocio" class="gcom.cadastro.localidade.UnidadeNegocio" not-null="false">
+			<column name="uneg_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

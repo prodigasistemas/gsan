@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.tarifasocial.TarifaSocialCarta" table="cadastro.tar_social_carta">
+	
+		<composite-id name="comp_id" class="gcom.cadastro.tarifasocial.TarifaSocialCartaPK">
+			<key-property name="imovelId" column="imov_id"
+				type="java.lang.Integer" length="4"/>
+			<key-property name="clienteId" column="clie_id"
+				type="java.lang.Integer" length="4"/>
+			<key-property name="tarifaSocialComandoCartaID" column="tscc_id"
+				type="java.lang.Integer" length="4"/>
+		</composite-id>
+		
+		<property name="codigoMotivo" type="java.lang.Integer" column="tscr_cdmotivo" length="10" not-null="true"/>
+		<property name="indicadorExcluidoTarifaSocial" type="java.lang.Short" column="tscr_icexcluidotarifasocial" length="2" not-null="true"/>
+		<property name="dataComparecimento" type="java.sql.Date" column="tscr_dtcomparecimento" length="8"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="tscr_tmultimaalteracao" length="8" not-null="true"/>
+		
+		<!-- associations -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true" update="false" insert="false">
+			<column name="imov_id"/>
+		</many-to-one>
+		
+		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="true" update="false" insert="false">
+			<column name="clie_id"/>
+		</many-to-one>
+				
+		<many-to-one name="tarifaSocialComandoCarta" class="gcom.cadastro.tarifasocial.TarifaSocialComandoCarta" not-null="true" update="false" insert="false">
+			<column name="tscc_id"/>
+		</many-to-one>
+		
+		<many-to-one name="gerenciaRegional" class="gcom.cadastro.localidade.GerenciaRegional" >
+			<column name="greg_id"/>
+		</many-to-one>
+		
+		<many-to-one name="unidadeNegocio" class="gcom.cadastro.localidade.UnidadeNegocio" >
+			<column name="uneg_id"/>
+		</many-to-one>
+		
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" >
+			<column name="loca_id"/>
+		</many-to-one>
+		
+	</class>
+</hibernate-mapping>

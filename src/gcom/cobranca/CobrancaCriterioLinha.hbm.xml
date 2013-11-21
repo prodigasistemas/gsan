@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.CobrancaCriterioLinha" table="cobranca.cobranca_criterio_linha">
+		<id name="id" type="java.lang.Integer" column="cbcl_id">
+			<generator class="sequence">
+				<param name="sequence">
+				cobranca.seq_cobranca_criterio_linha</param>
+			</generator>
+		</id>
+		<property name="valorMinimoDebito" type="java.math.BigDecimal" column="cbcl_vlminimodebito" length="13"/>
+		<property name="quantidadeMinimaContas" type="java.lang.Short" column="cbcl_qtminimacontas" length="2"/>
+		<property name="valorMaximoDebito" type="java.math.BigDecimal" column="cbcl_vlmaximodebito" length="13"/>
+		<property name="valorMinimoDebitoDebitoAutomatico" type="java.math.BigDecimal" column="cbcl_vlmindebdebaut" length="13"/>
+		<property name="quantidadeMaximaContas" type="java.lang.Short" column="cbcl_qtmaximacontas" length="2"/>
+		<property name="quantidadeMinimaContasDebitoAutomatico" type="java.lang.Short" column="cbcl_qtmincontasdebaut" length="2"/>
+		<property name="valorMinimoContaMes" type="java.math.BigDecimal" column="cbcl_vlminimocontames" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cbcl_tmultimaalteracao" length="8"/>
+		<property name="quantidadeMinimaContasParcelamento" type="java.lang.Short" column="cbcl_qtmincontasparcmt" not-null="true" length="2"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to CobrancaCriterio -->
+		<many-to-one name="cobrancaCriterio" class="gcom.cobranca.CobrancaCriterio" not-null="true">
+			<column name="cbct_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ImovelPerfil -->
+		<many-to-one name="imovelPerfil" class="gcom.cadastro.imovel.ImovelPerfil" not-null="true">
+			<column name="iper_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Categoria -->
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

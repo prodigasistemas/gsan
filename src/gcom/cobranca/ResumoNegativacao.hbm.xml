@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.cobranca.ResumoNegativacao" table="cobranca.resumo_negativacao">
+		<id name="id" type="java.lang.Integer" column="rneg_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_resumo_negativacao</param>
+			</generator>
+		</id>
+		<property name="indicadorNegativacaoConfirmada" type="short" column="rneg_icnegativconfirmada" not-null="true" length="2"/>
+		<property name="codigoSetorcomercial" type="int" column="rneg_cdsetorcomercial" not-null="true" length="4"/>
+		<property name="numeroQuadra" type="int" column="rneg_nnquadra" not-null="true" length="4"/>
+		<property name="quantidadeInclusoes" type="int" column="rneg_qtinclusoes" not-null="true" length="4"/>
+		<property name="valorDebito" type="java.math.BigDecimal" column="rneg_vldebito" not-null="true" length="15"/>
+		<property name="valorPendente" type="java.math.BigDecimal" column="rneg_vlpendente" length="15"/>
+		<property name="valorPago" type="java.math.BigDecimal" column="rneg_vlpago" length="15"/>
+		<property name="valorParcelado" type="java.math.BigDecimal" column="rneg_vlparcelado" length="15"/>
+		<property name="valorCancelado" type="java.math.BigDecimal" column="rneg_vlcancelado" length="15"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="rneg_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="dataProcessamentoEnvio" type="java.sql.Timestamp" column="rneg_dtprocessamentoenvio" not-null="true" length="8"/>
+		<property name="numeroExecucaoResumoNegativacao" type="java.lang.Integer" column="rneg_nnexecresumonegat" not-null="true" length="4"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to GerenciaRegional -->
+		<many-to-one name="gerenciaRegional" class="gcom.cadastro.localidade.GerenciaRegional" not-null="true">
+			<column name="greg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Quadra -->
+		<many-to-one name="quadra" class="gcom.cadastro.localidade.Quadra" not-null="true">
+			<column name="qdra_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ImovelPerfil -->
+		<many-to-one name="imovelPerfil" class="gcom.cadastro.imovel.ImovelPerfil" not-null="true">
+			<column name="iper_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaDebitoSituacao -->
+		<many-to-one name="cobrancaDebitoSituacao" class="gcom.cobranca.CobrancaDebitoSituacao" not-null="true">
+			<column name="cdst_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to SetorComercial -->
+		<many-to-one name="setorComercial" class="gcom.cadastro.localidade.SetorComercial" not-null="true">
+			<column name="stcm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaGrupo -->
+		<many-to-one name="cobrancaGrupo" class="gcom.cobranca.CobrancaGrupo" not-null="true">
+			<column name="cbgr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to NegativacaoComando -->
+		<many-to-one name="negativacaoComando" class="gcom.cobranca.NegativacaoComando" not-null="true">
+			<column name="ngcm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ClienteTipo -->
+		<many-to-one name="clienteTipo" class="gcom.cadastro.cliente.ClienteTipo" not-null="true">
+			<column name="cltp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to UnidadeNegocio -->
+		<many-to-one name="unidadeNegocio" class="gcom.cadastro.localidade.UnidadeNegocio" not-null="true">
+			<column name="uneg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to EsferaPoder -->
+		<many-to-one name="esferaPoder" class="gcom.cadastro.cliente.EsferaPoder" not-null="true">
+			<column name="epod_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Categoria -->
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+		<many-to-one name="localidadeElo" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_cdelo"/>
+		</many-to-one>
+		<many-to-one name="negativador" class="gcom.cobranca.Negativador" not-null="true">
+			<column name="negt_id"/>
+		</many-to-one>
+		
+		<many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="false">
+			<column name="last_id"/>
+		</many-to-one>
+		<many-to-one name="ligacaoEsgotoSituacao" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao" not-null="false">
+			<column name="lest_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

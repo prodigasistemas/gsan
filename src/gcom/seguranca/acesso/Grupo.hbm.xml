@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.seguranca.acesso.Grupo" table="seguranca.grupo">
+		
+		<id name="id" type="java.lang.Integer" column="grup_id">
+			<generator class="sequence">
+				<param name="sequence">seguranca.seq_grupo</param>
+			</generator>
+		</id>
+		
+		<property
+			name="descricao" 
+			type="java.lang.String" 
+			column="grup_dsgrupo" 
+			length="40"
+		/>
+		
+		<property
+			name="descricaoAbreviada" 
+			type="java.lang.String" 
+			column="grup_dsabreviado" 
+			length="10"
+		/>
+		
+		<property
+			name="indicadorUso"
+			type="java.lang.Short" 
+			column="grup_icuso" 
+			length="2"
+		/>
+		
+		<property 
+			name="ultimaAlteracao" 
+			type="java.sql.Timestamp" 
+			column="grup_tmultimaalteracao" 
+			length="8"
+		/>
+		
+		<property 
+			name="numDiasExpiracaoSenha" 
+			type="java.lang.Integer" 
+			column="grup_nndiasexpiracaosenha"
+		/>
+		
+		<property 
+			name="mensagem" 
+			type="java.lang.String" 
+			column="grup_dsmensagemusuarios" 
+			length="100"
+		/>
+		
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to IndicadorSuperintendencia -->
+	    <property
+    	    name="indicadorSuperintendencia"
+        	type="java.lang.Short"
+	        column="grup_icsuperintendencia"
+    	    not-null="true"
+        	length="2"
+	    />
+		
+		<property 
+			name="competenciaRetificacao" 
+			type="java.math.BigDecimal" length="5"
+			column="grup_nncompetenciaretificacao"
+		/>
+
+    <!-- Associations -->
+  
+    <!-- bi-directional one-to-many association to GrupoFuncionalidadeOperacao -->
+		<!-- <set
+			name="grupoFuncionalidadeOperacaos"
+			lazy="true"
+			inverse="true"
+			cascade="all"
+	    >
+    	    <key>
+        	    <column name="grup_id" />
+	        </key>
+    	    <one-to-many 
+        	    class="gcom.GrupoFuncionalidadeOperacao"
+			/>
+		</set> -->
+
+		<!-- bi-directional one-to-many association to UsuarioGrupo -->
+		<!--
+    <set
+        name="usuarioGrupos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="grup_id" />
+        </key>
+        <one-to-many 
+            class="gcom.UsuarioGrupo"
+        />
+    </set>
+	-->
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="InformarDadosGeracaoRelatorioConsultaActionForm"
+			type="gcom.gui.gerencial.InformarDadosGeracaoRelatorioConsultaActionForm" />
+	</form-beans>
+
+	<!--******************* P?GINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="InformarDadosGeracaoRelatorioConsultaActionForm" 
+			type="gcom.gui.gerencial.ExibirInformarDadosGeracaoRelatorioConsultaAction"
+			validate="true" path="/exibirInformarDadosGeracaoRelatorioConsultaAction">
+			<forward name="exibirInformarDadosGeracaoRelatorioConsulta"
+				path="/jsp/gerencial/dados_geracao_relatorio_consulta_informar.jsp" />
+		</action>
+
+		<action name="InformarDadosGeracaoRelatorioConsultaActionForm" 
+			type="gcom.gui.gerencial.InformarDadosGeracaoRelatorioConsultaAction"
+			validate="false" path="/informarDadosGeracaoRelatorioConsultaAction">
+			<forward name="exibirInformarDadosGeracaoRelatorioConsulta"
+				path="/jsp/gerencial/dados_geracao_relatorio_consulta_informar.jsp" />
+			<forward name="informarConsultarResumoAnormalidade"
+				path="/consultarResumoAnormalidadeAction.do" />
+			<forward name="informarConsultarResumoPendencia"
+				path="/consultarResumoPendenciaAction.do" />
+			<forward name="informarConsultarResumoLigacoesEconomia"
+				path="/consultarResumoLigacoesEconomiasAction.do" />
+			<forward name="informarConsultarResumoAnaliseFaturamento"
+				path="/consultarResumoAnaliseFaturamentoAction.do" />				
+			<forward name="consultarComparativoResumosFaturamentoArrecadacaoPendencia"
+				path="/consultarComparativoResumosFaturamentoArrecadacaoPendenciaAction.do" />
+			<forward name="consultarResumoAcaoCobrancaParametros"
+				path="/consultarResumoAcaoCobrancaWizardAction.do?action=exibirDadosGeracaoConsultaAction" />					
+		</action>
+		
+		<action name="" type="gcom.gui.gerencial.cadastro.ConsultarResumoLigacoesEconomiasAction"
+			validate="false" path="/consultarResumoLigacoesEconomiasAction">
+
+		</action>
+
+	</action-mappings>
+
+	
+</struts-config>

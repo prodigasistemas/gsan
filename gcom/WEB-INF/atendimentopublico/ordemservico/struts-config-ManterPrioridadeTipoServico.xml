@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+	
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="AtualizarPrioridadeTipoServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.AtualizarPrioridadeTipoServicoActionForm" />
+		<form-bean name="FiltrarPrioridadeTipoServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.FiltrarPrioridadeTipoServicoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0218] MANTER TIPO DE RETORNO DA OS_REFERIDA Auhtor: Thiago Tenório Data:01/11/2006-->
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirManterPrioridadeTipoServicoAction"
+			validate="false" scope="session"
+			path="/exibirManterPrioridadeTipoServicoAction">
+			<forward name="exibirManterPrioridadeTipoServico"
+				path="/jsp/atendimentopublico/ordemservico/servico_tipo_prioridade_manter.jsp" />
+			<forward name="exibirAtualizarPrioridadeTipoServico"
+				path="/exibirAtualizarPrioridadeTipoServicoAction.do" />
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.RemoverPrioridadeTipoServicoAction" scope="request"
+			path="/removerPrioridadeTipoServicoAction">
+		</action>
+		
+		<action name="AtualizarPrioridadeTipoServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirAtualizarPrioridadeTipoServicoAction"
+			validate="true" scope="session"
+			path="/exibirAtualizarPrioridadeTipoServicoAction">
+			<forward name="atualizarPrioridadeTipoServico"
+				path="/jsp/atendimentopublico/ordemservico/servico_tipo_prioridade_atualizar.jsp" />
+		</action>
+		<action name="AtualizarPrioridadeTipoServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.AtualizarPrioridadeTipoServicoAction"
+			validate="true" scope="session"
+			path="/atualizarPrioridadeTipoServicoAction">
+		</action>
+
+	</action-mappings>
+
+</struts-config>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<action-mappings>
+
+		<action
+			type="gcom.gui.batch.relatorio.ExibirStatusGeracaoAction"
+			path="/exibirStatusGeracaoAction">
+			<forward name="statusGeracao"
+				path="/jsp/batch/relatorio/relatorio_status_geracao.jsp" />
+		</action>
+
+		<action
+			type="gcom.gui.batch.relatorio.ExibirStatusGeracaoUsuarioAction"
+			path="/exibirStatusGeracaoUsuarioAction">
+			<forward name="statusGeracaoUsuario"
+				path="/jsp/batch/relatorio/relatorio_status_geracao_usuario.jsp" />
+		</action>
+
+		<action
+			type="gcom.gui.batch.relatorio.ExibirRelatorioBatchAction"
+			path="/exibirRelatorioBatchAction">
+		</action>
+
+
+
+	</action-mappings>
+
+
+</struts-config>

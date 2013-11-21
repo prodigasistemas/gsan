@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+		Created by the Middlegen Hibernate plugin 2.1
+		
+		http://boss.bekk.no/boss/middlegen/
+		http://www.hibernate.org/
+	-->
+	<class name="gcom.seguranca.acesso.usuario.UsuarioSenhaHistorico" table="seguranca.usuario_senha_historico">
+		<id name="id" type="java.lang.Integer" column="ushi_id">
+			<generator class="sequence">
+				<param name="sequence">seguranca.seq_usuario_senha_historico</param>
+			</generator>
+		</id>
+		<property name="senha" type="java.lang.String" column="ushi_nmsenha" not-null="false" length="40"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ushi_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Cliente -->
+		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario" not-null="false">
+			<column name="usur_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

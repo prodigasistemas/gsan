@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="ManterPagamentoSituacaoActionForm"
+			type="gcom.gui.arrecadacao.ManterPagamentoSituacaoActionForm" />
+		<form-bean name="AtualizarPagamentoSituacaoActionForm"
+			type="gcom.gui.arrecadacao.AtualizarPagamentoSituacaoActionForm" />
+		<form-bean name="FiltrarPagamentoSituacaoActionForm"
+			type="gcom.gui.arrecadacao.FiltrarPagamentoSituacaoActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.arrecadacao.ExibirManterPagamentoSituacaoAction"
+			validate="false" scope="session"
+			path="/exibirManterPagamentoSituacaoAction">
+
+			<forward name="exibirManterPagamentoSituacao"
+				path="/jsp/arrecadacao/pagamento_situacao_manter.jsp" />
+
+			<forward name="exibirAtualizarPagamentoSituacao"
+				path="/exibirAtualizarPagamentoSituacaoAction.do" />
+		</action>
+
+		<action name="AtualizarPagamentoSituacaoActionForm"
+			type="gcom.gui.arrecadacao.ExibirAtualizarPagamentoSituacaoAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarPagamentoSituacaoAction">
+
+			<forward name="pagamentoSituacaoAtualizar"
+				path="/jsp/arrecadacao/pagamento_situacao_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarPagamentoSituacaoActionForm"
+			type="gcom.gui.arrecadacao.AtualizarPagamentoSituacaoAction"
+			validate="true" scope="session"
+			path="/atualizarPagamentoSituacaoAction">
+
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.arrecadacao.RemoverPagamentoSituacaoAction"
+			 scope="request" path="/removerPagamentoSituacaoAction">
+
+		</action>
+		
+		<action name="FiltrarPagamentoSituacaoActionForm"
+			type="gcom.gui.relatorio.arrecadacao.pagamento.GerarRelatorioSituacaoPagamentoManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioSituacaoPagamentoManterAction" />
+		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

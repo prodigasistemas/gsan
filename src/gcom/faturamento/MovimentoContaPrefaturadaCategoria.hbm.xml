@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.faturamento.MovimentoContaPrefaturadaCategoria" table="faturamento.mov_conta_prefat_catg">
+		<composite-id name="comp_id" class="gcom.faturamento.MovimentoContaPrefaturadaCategoriaPK">
+			<!-- bi-directional many-to-one association to ContaHistorico -->
+			<key-many-to-one name="movimentoContaPrefaturada" class="gcom.faturamento.MovimentoContaPrefaturada">
+				<column name="mcpf_id"/>
+			</key-many-to-one>
+			<!-- bi-directional many-to-one association to Categoria -->
+			<key-many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria">
+				<column name="catg_id"/>
+			</key-many-to-one>
+			<key-many-to-one name="subcategoria" class="gcom.cadastro.imovel.Subcategoria">
+				<column name="scat_id"/>
+			</key-many-to-one>
+		</composite-id>
+		<property name="valorFaturadoAgua" type="java.math.BigDecimal" column="mcpc_vlagua" length="13"/>
+		<property name="consumoFaturadoAgua" type="java.lang.Integer" column="mcpc_nnconsumoagua" length="4"/>
+		<property name="valorTarifaMinimaAgua" type="java.math.BigDecimal" column="mcpc_vltarifaminimaagua" length="13"/>
+		<property name="consumoMinimoAgua" type="java.lang.Integer" column="mcpc_nnconsumominimoagua" length="4"/>
+		<property name="valorFaturadoEsgoto" type="java.math.BigDecimal" column="mcpc_vlesgoto" length="13"/>
+		<property name="consumoFaturadoEsgoto" type="java.lang.Integer" column="mcpc_nnconsumoesgoto" length="4"/>
+		<property name="valorTarifaMinimaEsgoto" type="java.math.BigDecimal" column="mcpc_vltarifaminimaesgoto" length="13"/>
+		<property name="consumoMinimoEsgoto" type="java.lang.Integer" column="mcpc_nnconsumominimoesgoto" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="mcpc_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- bi-directional one-to-many association to MovimentoContaCategoriaConsumoFaixa -->
+		<set name="movimentoContaCategoriaConsumoFaixas" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="mcpf_id"/>
+				<column name="catg_id"/>
+				<column name="scat_id"/>
+			</key>
+			<one-to-many class="gcom.faturamento.MovimentoContaCategoriaConsumoFaixa"/>
+		</set>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="ManterDistritoOperacionalActionForm"
+			type="gcom.gui.operacional.ManterDistritoOperacionalActionForm" />
+
+		<form-bean name="AtualizarDistritoOperacionalActionForm"
+			type="gcom.gui.operacional.AtualizarDistritoOperacionalActionForm" />
+
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+
+
+	<action-mappings>
+		<action name="ManterDistritoOperacionalActionForm"
+			type="gcom.gui.operacional.ExibirManterDistritoOperacionalAction"
+			validate="false" scope="session"
+			path="/exibirManterDistritoOperacionalAction">
+
+			<forward name="manterDistritoOperacional"
+				path="/jsp/operacional/distrito_operacional_manter.jsp" />
+
+			<forward name="exibirAtualizarDistritoOperacional"
+				path="/exibirAtualizarDistritoOperacionalAction.do" />
+		</action>
+
+		<action name="AtualizarDistritoOperacionalActionForm"
+			type="gcom.gui.operacional.ExibirAtualizarDistritoOperacionalAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarDistritoOperacionalAction">
+
+			<forward name="atualizarDistritoOperacional"
+				path="/jsp/operacional/distrito_operacional_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarDistritoOperacionalActionForm"
+			type="gcom.gui.operacional.AtualizarDistritoOperacionalAction"
+			validate="false" scope="session" path="/atualizarDistritoOperacionalAction">
+
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.operacional.RemoverDistritoOperacionalAction"
+			validate="false" scope="session" path="/removerDistritoOperacionalAction">
+
+		</action>
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

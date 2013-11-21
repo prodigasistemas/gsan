@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="FiltrarValorCobrancaServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.FiltrarValorCobrancaServicoActionForm" />
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+
+		<action name="FiltrarValorCobrancaServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirFiltrarValorCobrancaServicoAction"
+			validate="true" scope="session"
+			path="/exibirFiltrarValorCobrancaServicoAction">
+			<forward name="filtrarValorCobrancaServico"
+				path="/jsp/atendimentopublico/ordemservico/valor_cobranca_servico_filtrar.jsp" />
+		</action>
+
+		<action name="FiltrarValorCobrancaServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.FiltrarValorCobrancaServicoAction"
+			validate="true" scope="session"
+			path="/filtrarValorCobrancaServicoAction">
+			<forward name="exibirManterValorCobrancaServicoAction"
+				path="/exibirManterValorCobrancaServicoAction.do" />
+		</action>
+
+
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

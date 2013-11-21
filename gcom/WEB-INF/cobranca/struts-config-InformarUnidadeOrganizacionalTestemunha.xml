@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="InformarUnidadeOrganizacionalTestemunhaActionForm"
+			type="gcom.gui.cobranca.InformarUnidadeOrganizacionalTestemunhaActionForm" />					
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0796] INFORMAR UNIDADE NEGÓCIO TESTEMUNHA Auhtor: Rafael Corrêa Data:16/05/2008-->
+		<action name="InformarUnidadeOrganizacionalTestemunhaActionForm"
+			type="gcom.gui.cobranca.ExibirInformarUnidadeOrganizacionalTestemunhaAction"
+			validate="true" 
+			scope="session"
+			path="/exibirInformarUnidadeOrganizacionalTestemunhaAction">
+			
+			<forward name="exibirInformarUnidadeOrganizacionalTestemunha"
+				path="/jsp/cobranca/unidade_organizacional_testemunha_informar.jsp" />
+		</action>
+		
+		<action name="InformarUnidadeOrganizacionalTestemunhaActionForm"
+			type="gcom.gui.cobranca.InformarUnidadeOrganizacionalTestemunhaAction"
+			validate="true" 
+			scope="request"
+			path="/informarUnidadeOrganizacionalTestemunhaAction">
+		</action>
+
+	</action-mappings>
+
+</struts-config>

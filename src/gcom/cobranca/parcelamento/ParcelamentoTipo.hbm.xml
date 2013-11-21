@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.parcelamento.ParcelamentoTipo" table="cobranca.parcelamento_tipo">
+		<id name="id" type="java.lang.Integer" column="pctp_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_parcelamento_tipo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="pctp_dsparcelamentotipo" length="30"/>
+		<property name="indicadorUso" type="java.lang.Short" column="pctp_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="pctp_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to Parcelamento -->
+		<!--
+    <set
+        name="parcelamentos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="pctp_id" />
+        </key>
+        <one-to-many 
+            class="gcom.Parcelamento"
+        />
+    </set>
+	-->
+	</class>
+</hibernate-mapping>

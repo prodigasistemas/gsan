@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="GerarRelatorioAnaliseImovelCorporativoGrandeActionForm"
+			type="gcom.gui.relatorio.cadastro.imovel.GerarRelatorioAnaliseImovelCorporativoGrandeActionForm" />
+
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="GerarRelatorioAnaliseImovelCorporativoGrandeActionForm"
+			type="gcom.gui.relatorio.cadastro.imovel.ExibirGerarRelatorioAnaliseImovelCorporativoGrandeAction"
+			validate="false" scope="session" path="/exibirGerarRelatorioAnaliseImovelCorporativoGrandeAction">
+			
+			<forward name="gerarRelatorioAnaliseImovelCorporativoGrande"
+				path="/jsp/relatorio/cadastro/relatorio_analise_imovel_corporativo_grande_gerar.jsp" />
+		</action>
+
+		<action name="GerarRelatorioAnaliseImovelCorporativoGrandeActionForm"
+			type="gcom.gui.relatorio.cadastro.imovel.GerarRelatorioAnaliseImovelCorporativoGrandeAction"
+			validate="false" scope="session" path="/gerarRelatorioAnaliseImovelCorporativoGrandeAction">
+		</action>
+
+	</action-mappings>
+	<message-resources null="false" parameter="gcom.properties.application" />
+</struts-config>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="AcompanharRoteiroProgramacaoOrdemServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.AcompanharRoteiroProgramacaoOrdemServicoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		
+		<action name="AcompanharRoteiroProgramacaoOrdemServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirAcompanharRoteiroProgramacaoOrdemServicoAction"
+			validate="true" 
+			scope="session" 
+			path="/exibirAcompanharRoteiroProgramacaoOrdemServicoAction">
+			
+			<forward name="acompanharOrdemServico"
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_roteiro_acompanhamento.jsp" />
+		</action>
+
+		<action name="AcompanharRoteiroProgramacaoOrdemServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirAcompanharRoteiroProgramacaoOrdemServicoIncluirAction"
+			validate="true" 
+			scope="session" 
+			path="/exibirAcompanharRoteiroProgramacaoOrdemServicoIncluirAction">
+			
+			<forward name="incluirOrdemServico"
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_roteiro_acompanhamento_servico_inclui_popup.jsp" />
+		</action>
+
+		<action name="AcompanharRoteiroProgramacaoOrdemServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirAcompanharRoteiroProgramacaoOrdemServicoAlocaEquipeAction"
+			validate="true" 
+			scope="session" 
+			path="/exibirAcompanharRoteiroProgramacaoOrdemServicoAlocaEquipeAction">
+			
+			<forward name="alocaOrdemServico"
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_roteiro_acompanhamento_equipe_aloca_popup.jsp" />
+		</action>
+		
+		<action name="AcompanharRoteiroProgramacaoOrdemServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirAcompanharRoteiroProgramacaoOrdemServicoRemanejarEquipeAction"
+			validate="true" 
+			scope="session" 
+			path="/exibirAcompanharRoteiroProgramacaoOrdemServicoRemanejarEquipeAction">
+			
+			<forward name="remanejarEquipe"
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_roteiro_acompanhamento_equipe_remaneja_popup.jsp" />
+		</action>
+
+		<action name="AcompanharRoteiroProgramacaoOrdemServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirAcompanharRoteiroProgramacaoOrdemServicoInformarSituacaoAction"
+			validate="true" 
+			scope="session" 
+			path="/exibirAcompanharRoteiroProgramacaoOrdemServicoInformarSituacaoAction">
+			
+			<forward name="situacaoOs"
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_roteiro_acompanhamento_situacao_informa_popup.jsp" />
+		</action>
+		
+		<action name="AcompanharRoteiroProgramacaoOrdemServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirAcompanharRoteiroProgramacaoOrdemServicoAlertaAction"
+			validate="true" 
+			scope="session" 
+			path="/exibirAcompanharRoteiroProgramacaoOrdemServicoAlertaAction">
+			
+			<forward name="alertaOs"
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_roteiro_acompanhamento_alerta.jsp" />
+		</action>
+		
+		<action name="AcompanharRoteiroProgramacaoOrdemServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirAcompanharRoteiroProgramacaoOrdemServicoReordenarAction"
+			validate="true" 
+			scope="session" 
+			path="/exibirAcompanharRoteiroProgramacaoOrdemServicoReordenarAction">
+			
+			<forward name="reordenarProgramacao"
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_roteiro_acompanhamento_reordena_programacao_popup.jsp" />
+		</action>
+		
+		<action name="AcompanharRoteiroProgramacaoOrdemServicoActionForm"
+			type="gcom.gui.relatorio.atendimentopublico.GerarRelatorioRoteiroProgramacaoAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioRoteiroProgramacaoAction" />
+
+	</action-mappings>
+	
+</struts-config>

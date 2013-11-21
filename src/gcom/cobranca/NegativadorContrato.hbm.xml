@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.cobranca.NegativadorContrato" table="cobranca.negativador_contrato">
+		<id name="id" type="java.lang.Integer" column="ngcn_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_negativador_contrato</param>
+			</generator>
+		</id>
+		<property name="numeroContrato" type="java.lang.String" column="ngcn_nncontrato" not-null="true" length="10"/>
+		<property name="codigoConvenio" type="java.lang.String" column="ngcn_cdconvenio" length="20"/>
+		<property name="dataContratoInicio" type="java.sql.Date" column="ngcn_dtcontratoinicio" length="4"/>
+		<property name="dataContratoFim" type="java.sql.Date" column="ngcn_dtcontratofim" length="4"/>
+		<property name="dataContratoEncerramento" type="java.sql.Date" column="ngcn_dtcontratoencerramento" length="4"/>
+		<property name="descricaoEmailEnvioArquivo" type="java.lang.String" column="ngcn_dsemailenvioarquivo" length="40"/>
+		<property name="numeroSequencialEnvio" type="int" column="ngcn_nnnsaenvio" not-null="true" length="4"/>
+		<property name="numeroSequencialRetorno" type="int" column="ngcn_nnnsaretorno" not-null="true" length="4"/>
+		<property name="valorContrato" type="java.math.BigDecimal" column="ngcn_vlcontrato" not-null="true" length="15"/>
+		<property name="valorTarifaInclusao" type="java.math.BigDecimal" column="ngcn_vltarifainclusao" length="15"/>
+		<property name="numeroInclusoesContratadas" type="java.lang.Integer" column="ngcn_nninclusoescontratadas" length="4"/>
+		<property name="numeroInclusoesEnviadas" type="java.lang.Integer" column="ngcn_nninclusoesenviadas" length="4"/>
+		<property name="numeroExclusoesEnviadas" type="java.lang.Integer" column="ngcn_nnexclusoesenviadas" length="4"/>
+		<property name="numeroTamanhoRegistroMovimento" type="int" column="ngcn_nntamregmovimento" not-null="true" length="4"/>
+		<property name="numeroPrazoInclusao" type="short" column="ngcn_nnprazoinclusao" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ngcn_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Negativador -->
+		<many-to-one name="negativador" class="gcom.cobranca.Negativador" not-null="true">
+			<column name="negt_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ContratoMotivoCancelamento -->
+		<many-to-one name="contratoMotivoCancelamento" class="gcom.arrecadacao.ContratoMotivoCancelamento" not-null="false">
+			<column name="ctcn_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

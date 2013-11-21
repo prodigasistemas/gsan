@@ -1,0 +1,124 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.ordemservico.ComandoOrdemSeletiva" table="atendimentopublico.comando_ordem_seletiva">
+		<id name="id" type="java.lang.Integer" column="coss_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_comando_ordem_seletiva</param>
+			</generator>
+		</id>
+		<property name="situacaoComando" type="java.lang.Short" column="coss_cdsituacao" not-null="true" length="2"/>
+		<property name="descricaoComando" type="java.lang.String" column="coss_dscomando" not-null="true" length="50"/>
+		<property name="dataGeracao" type="java.sql.Timestamp" column="coss_dtgeracao" not-null="true" length="8"/>
+		<property name="dataEncerramento" type="java.sql.Timestamp" column="coss_dtencerramento" length="8"/>
+		<property name="quantidadeOrdemServico" type="java.lang.Integer" column="coss_qtordemservico"/>
+		<property name="quantidadeMaximaOrdemServico" type="java.lang.Integer" column="coss_qtmaximaordemservico"/>
+		<property name="sequencialRotaInicial" type="java.lang.Integer" column="coss_nnsequencialrotainicial" length="4"/>
+		<property name="sequencialRotaFinal" type="java.lang.Integer" column="coss_nnsequencialrotafinal" length="4"/>
+		<property name="quantidadeConsecutivaAnormalidade" type="java.lang.Integer" column="coss_qtconsecutivaanormalidade"/>
+		<property name="anoMesHidrometroInstInicial" type="java.lang.Integer" column="coss_amhidrometroinstinicial"/>
+		<property name="anoMesHidrometroInstFinal" type="java.lang.Integer" column="coss_amhidrometroinstfinal"/>
+		<property name="quantidadeEconomiaInicial" type="java.lang.Integer" column="coss_qteconomiainicial"/>
+		<property name="quantidadeEconomiaFinal" type="java.lang.Integer" column="coss_qteconomiafinal"/>
+		<property name="quantidadeDocumentoInicial" type="java.lang.Integer" column="coss_qtdocumentoinicial"/>
+		<property name="quantidadeDocumentoFinal" type="java.lang.Integer" column="coss_qtdocumentofinal"/>
+		<property name="quantidadeMoradoresInicial" type="java.lang.Integer" column="coss_qtmoradoresinicial"/>
+		<property name="quantidadeMoradoresFinal" type="java.lang.Integer" column="coss_qtmoradoresfinal"/>
+		<property name="areaConstruidaInicial" type="java.math.BigDecimal" column="coss_nnareaconstruidainicial"/>
+		<property name="areaConstruidaFinal" type="java.math.BigDecimal" column="coss_nnareaconstruidafinal"/>
+		<property name="indicadorImovelCondominio" type="java.lang.Short" column="coss_icimovlecondominio" length="2"/>
+		<property name="mediaConsumo" type="java.lang.Integer" column="coss_nnmediaconsumo"/>
+		<property name="consumoEconomiaInicial" type="java.lang.Integer" column="coss_nnconsumoeconomiainicial"/>
+		<property name="consumoEconomiaFinal" type="java.lang.Integer" column="coss_nnconsumoeconomiafinal"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="coss_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="indicadorGeracaoTxt" type="java.lang.Short" column="coss_icgeracaotxt" length="2"/>
+		<!-- Associations -->
+		
+		<many-to-one name="servicoTipo" class="gcom.atendimentopublico.ordemservico.ServicoTipo" not-null="true">
+			<column name="svtp_id"/>
+		</many-to-one>
+		
+		<many-to-one name="imovelPerfil" class="gcom.cadastro.imovel.ImovelPerfil">
+			<column name="iper_id"/>
+		</many-to-one>
+
+		<many-to-one name="localidadeInicial" class="gcom.cadastro.localidade.Localidade">
+			<column name="loca_idinicial"/>
+		</many-to-one>
+		
+		<many-to-one name="localidadeFinal" class="gcom.cadastro.localidade.Localidade">
+			<column name="loca_idfinal"/>
+		</many-to-one>
+		
+		<many-to-one name="quadraInicial" class="gcom.cadastro.localidade.Quadra">
+			<column name="qdra_idinicial"/>
+		</many-to-one>
+		
+		<many-to-one name="quadraFinal" class="gcom.cadastro.localidade.Quadra">
+			<column name="qdra_idfinal"/>
+		</many-to-one>
+		
+		<many-to-one name="setorComercialInicial" class="gcom.cadastro.localidade.SetorComercial">
+			<column name="stcm_idinicial"/>
+		</many-to-one>
+		
+		<many-to-one name="setorComercialFinal" class="gcom.cadastro.localidade.SetorComercial">
+			<column name="stcm_idfinal"/>
+		</many-to-one>
+		
+		<many-to-one name="rotaInicial" class="gcom.micromedicao.Rota">
+			<column name="rota_idinicial"/>
+		</many-to-one>
+		
+		<many-to-one name="rotaFinal" class="gcom.micromedicao.Rota">
+			<column name="rota_idfinal"/>
+		</many-to-one>
+		
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel">
+			<column name="imov_id"/>
+		</many-to-one>
+		
+		<many-to-one name="gerenciaRegional" class="gcom.cadastro.localidade.GerenciaRegional">
+			<column name="greg_id"/>
+		</many-to-one>
+		
+		<many-to-one name="unidadeNegocio" class="gcom.cadastro.localidade.UnidadeNegocio">
+			<column name="uneg_id"/>
+		</many-to-one>
+		
+		<many-to-one name="empresa" class="gcom.cadastro.empresa.Empresa">
+			<column name="empr_id"/>
+		</many-to-one>
+		
+		<many-to-one name="localidadePolo" class="gcom.cadastro.localidade.Localidade">
+			<column name="loca_idpolo"/>
+		</many-to-one>
+		
+		<many-to-one name="logradouro" class="gcom.cadastro.endereco.Logradouro">
+			<column name="logr_id"/>
+		</many-to-one>
+		
+		<many-to-one name="hidrometroLocalInstalacao" class="gcom.micromedicao.hidrometro.HidrometroLocalInstalacao">
+			<column name="hili_id"/>
+		</many-to-one>
+		
+		<many-to-one name="hidrometroMarca" class="gcom.micromedicao.hidrometro.HidrometroMarca">
+			<column name="himc_id"/>
+		</many-to-one>
+		
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" >
+			<column name="catg_id"/>
+		</many-to-one>
+		
+		<many-to-one name="subcategoria" class="gcom.cadastro.imovel.Subcategoria" not-null="true">
+			<column name="scat_id"/>
+		</many-to-one>
+		
+	</class>
+</hibernate-mapping>

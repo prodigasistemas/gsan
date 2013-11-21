@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+	<form-bean name="GerarArquivoTextoAtualizacaoCadastralDispositivoMovelActionForm"
+   type="gcom.gui.cadastro.imovel.GerarArquivoTextoAtualizacaoCadastralDispositivoMovelActionForm" />
+ </form-beans>
+  <!--******************* PÁGINAS GLOBAIS *******************-->
+ <global-forwards />
+ <action-mappings>
+ 
+ 	<!--INICIO FILTRAR ATUALIZACAO CADASTRAL-->
+ 	
+		<action name="GerarArquivoTextoAtualizacaoCadastralDispositivoMovelActionForm"
+			type="gcom.gui.cadastro.imovel.ExibirFiltrarImovelAtualizacaoCadastralDispositivoMovelAction"
+			path="/exibirFiltrarImovelAtualizacaoCadastralDispositivoMovelAction"
+			scope="session" >
+			<forward name="exibirFiltrarImovelAtualizacaoCadastralDispositivoMovel"
+				path="/jsp/cadastro/imovel/imovel_atualizacao_dispositivo_movel_filtrar.jsp" />
+		</action>
+		<action name="GerarArquivoTextoAtualizacaoCadastralDispositivoMovelActionForm"
+			type="gcom.gui.cadastro.imovel.FiltrarImovelAtualizacaoCadastralDispositivoMovelAction"
+			path="/filtrarImovelAtualizacaoCadastralDispositivoMovelAction"	>	
+		<forward name="gerarArquivoTextoAtualizacaoCadastralDispositivoMovel"
+				path="/exibirGerarArquivoTextoAtualizacaoCadastralDispositivoMovelAction.do" />		
+		</action>
+		
+		<action name="GerarArquivoTextoAtualizacaoCadastralDispositivoMovelActionForm"
+			type="gcom.gui.cadastro.imovel.ExibirGerarArquivoTextoAtualizacaoCadastralDispositivoMovelAction"
+			validate="true" 
+			path="/exibirGerarArquivoTextoAtualizacaoCadastralDispositivoMovelAction">
+			
+			<forward name="exibirGerarArquivoTextoAtualizacaoCadastralDispositivoMovel" 
+				path="/jsp/cadastro/imovel/arquivo_texto_atualizacao_dispositivo_movel_gerar.jsp" />
+				
+		</action>
+		<action name="GerarArquivoTextoAtualizacaoCadastralDispositivoMovelActionForm"
+			type="gcom.gui.cadastro.imovel.GerarArquivoTextoAtualizacaoCadastralDispositivoMovelAction"
+			path="/gerarArquivoTextoAtualizacaoCadastralDispositivoMovelAction"	>		
+		</action>
+		
+	<!--FIM FILTRAR ATUALIZACAO CADASTRAL-->
+
+</action-mappings>
+ <message-resources null="false"
+  parameter="gcom.properties.application" />
+</struts-config>

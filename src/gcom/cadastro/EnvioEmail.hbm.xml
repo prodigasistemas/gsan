@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.cadastro.EnvioEmail" table="cadastro.envio_email">
+		<id name="id" type="java.lang.Integer" column="enem_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_envio_email</param>
+			</generator>
+		</id>
+		<property name="emailRemetente" type="java.lang.String" column="enem_dsemailremetente" not-null="true" length="80"/>
+		<property name="emailReceptor" type="java.lang.String" column="enem_dsemailreceptor" not-null="true" length="80"/>
+		<property name="tituloMensagem" type="java.lang.String" column="enem_dstitulomensagem" not-null="true" length="80"/>
+		<property name="corpoMensagem" type="java.lang.String" column="enem_dscorpomensagem" not-null="true" length="200"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="enem_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Funcionalidade -->
+		<many-to-one name="funcionalidade" class="gcom.seguranca.acesso.Funcionalidade" not-null="true">
+			<column name="fncd_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

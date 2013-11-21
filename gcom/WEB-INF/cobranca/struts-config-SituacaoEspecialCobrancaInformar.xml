@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="SituacaoEspecialCobrancaActionForm"
+			type="gcom.gui.cobranca.SituacaoEspecialCobrancaActionForm" />
+	</form-beans>
+<!-- struts-config-SituacaoEspecialCobrancaInformar.xml -->
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	
+	<action-mappings>
+		<action name="SituacaoEspecialCobrancaActionForm"
+			type="gcom.gui.cobranca.ExibirSituacaoEspecialCobrancaInformarAction"
+			validate="false" scope="session"
+			path="/exibirSituacaoEspecialCobrancaInformarAction">
+
+			<forward name="exibirSituacaoEspecialCobrancaInformar"
+				path="/jsp/cobranca/situacao_especial_cobranca_informar.jsp" />
+		</action>
+		
+		<action name="SituacaoEspecialCobrancaActionForm"
+			type="gcom.gui.cobranca.ExibirSituacaoEspecialCobrancaInserirAction"
+			validate="true" scope="session"
+			path="/exibirSituacaoEspecialCobrancaInserirAction">
+
+			<forward
+				name="exibirSituacaoEspecialCobrancaInserir"
+				path="/jsp/cobranca/situacao_especial_cobranca_inserir.jsp" />
+
+		</action>
+		
+		<action name="SituacaoEspecialCobrancaActionForm"
+			type="gcom.gui.cobranca.ExibirSituacaoEspecialCobrancaRetirarAction"
+			validate="true" scope="session"
+			path="/exibirSituacaoEspecialCobrancaRetirarAction">
+
+			<forward name="situacaoEspecialRetirar"
+				path="/jsp/cobranca/situacao_especial_cobranca_retirar.jsp" />
+
+		</action>
+
+		<action name="SituacaoEspecialCobrancaActionForm"
+			type="gcom.gui.cobranca.ValidarRetirarSituacaoEspecialCobrancaAction"
+			validate="true" scope="session"
+			path="/validarRetirarSituacaoEspecialCobrancaAction"/>
+
+
+		<action name="SituacaoEspecialCobrancaActionForm"
+			type="gcom.gui.cobranca.ValidarSituacaoEspecialCobrancaInserirAction"
+			validate="true" scope="session"
+			path="/validarSituacaoEspecialCobrancaInserirAction"/>
+		
+				
+
+		
+
+	</action-mappings>
+	
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

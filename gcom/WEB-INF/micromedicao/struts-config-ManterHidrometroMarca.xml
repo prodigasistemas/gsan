@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="ManterHidrometroMarcaActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+			
+		<form-bean name="FiltrarHidrometroMarcaActionForm"
+			type="gcom.gui.micromedicao.hidrometro.FiltrarHidrometroMarcaActionForm" />						
+			
+		<form-bean name="AtualizarHidrometroMarcaActionForm"
+			type="gcom.gui.micromedicao.hidrometro.AtualizarHidrometroMarcaActionForm" />			
+			
+			
+	</form-beans>
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+	
+		<action name="FiltrarHidrometroMarcaActionForm"
+			type="gcom.gui.micromedicao.hidrometro.ExibirFiltrarHidrometroMarcaAction" validate="true" scope="session" 
+			path="/exibirFiltrarHidrometroMarcaAction">
+			<forward name="exibirFiltrarHidrometroMarca"
+				path="/jsp/micromedicao/hidrometro/hidrometro_marca_filtrar.jsp" />
+		</action>	
+		
+		<action name="ManterHidrometroMarcaActionForm"
+			type="gcom.gui.micromedicao.hidrometro.ExibirManterHidrometroMarcaAction" validate="true" scope="session" 
+			path="/exibirManterHidrometroMarcaAction">
+			<forward name="exibirManterHidrometroMarca"
+				path="/jsp/micromedicao/hidrometro/hidrometro_marca_manter.jsp" />
+			<forward name="exibirAtualizarHidrometroMarca"	
+					 path="/exibirAtualizarHidrometroMarcaAction.do" />
+		</action>
+		
+		<action name="ManterHidrometroMarcaActionForm" 
+			type="gcom.gui.micromedicao.hidrometro.ExibirAtualizarHidrometroMarcaAction" validate="true" scope="session" 
+			path="/exibirAtualizarHidrometroMarcaAction">
+			<forward name="exibirAtualizarHidrometroMarca" path="/exibirAtualizarHidrometroMarcaAction.do" /> 
+		</action>
+
+		<action  name="ManterHidrometroMarcaActionForm"  
+			type="gcom.gui.micromedicao.hidrometro.RemoverHidrometroMarcaAction"
+			validate="false" scope="session" path="/removerHidrometroMarcaAction">
+		</action>
+		
+		<action name="AtualizarHidrometroMarcaActionForm"  
+			type="gcom.gui.micromedicao.hidrometro.ExibirAtualizarHidrometroMarcaAction"
+			validate="false" scope="session" path="/exibirAtualizarHidrometroMarcaAction">
+			
+			<forward name="atualizarHidrometroMarca"	
+					 path="/jsp/micromedicao/hidrometro/hidrometro_marca_atualizar.jsp" />
+		</action>	
+		
+		<action name="AtualizarHidrometroMarcaActionForm"  
+			type="gcom.gui.micromedicao.hidrometro.AtualizarHidrometroMarcaAction"
+			validate="false" scope="session" path="/atualizarHidrometroMarcaAction">
+		</action>				
+				
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

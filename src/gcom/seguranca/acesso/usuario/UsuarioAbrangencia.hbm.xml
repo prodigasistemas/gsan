@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.seguranca.acesso.usuario.UsuarioAbrangencia" table="seguranca.usuario_abrangencia">
+		<id name="id" type="java.lang.Integer" column="usab_id">
+			<generator class="sequence">
+				<param name="sequence">seguranca.seq_usuario_abrangencia</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="usab_dsusuarioabrangencia" length="30"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="usab_dsabreviado" length="6"/>
+		<property name="indicadorUso" type="java.lang.Short" column="usab_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="usab_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to Usuario -->
+		<!-- 
+    <set
+        name="usuarios"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="usab_id" />
+        </key>
+        <one-to-many 
+            class="gcom.Usuario"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to UsuarioAbrangencia -->
+		<!-- 
+    <set
+        name="usuarioAbrangencias"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="usab_idsuperior" />
+        </key>
+        <one-to-many 
+            class="gcom.UsuarioAbrangencia"
+        />
+    </set>
+    -->
+		<!-- bi-directional many-to-one association to UsuarioAbrangencia -->
+		<many-to-one name="usuarioAbrangenciaSuperior" 
+			class="gcom.seguranca.acesso.usuario.UsuarioAbrangencia" 
+			not-null="true"
+ 			lazy="false">
+			<column name="usab_idsuperior"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

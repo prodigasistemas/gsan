@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.arrecadacao.banco.Agencia" table="arrecadacao.agencia">
+		<id name="id" type="java.lang.Integer" column="agen_id">
+			<generator class="sequence">
+				<param name="sequence">arrecadacao.seq_agencia</param>
+			</generator>
+		</id>
+		<property name="codigoAgencia" type="java.lang.String" column="agen_cdagencia" length="5"/>
+		<property name="nomeAgencia" type="java.lang.String" column="agen_nmagencia" not-null="true" length="40"/>
+		<property name="numeroTelefone" type="java.lang.String" column="agen_nnfone" length="9"/>
+		<property name="numeroRamal" type="java.lang.String" column="agen_nnfoneramal" not-null="false" length="4"/>
+		<property name="numeroImovel" type="java.lang.String" column="agen_nnimovel" length="5"/>
+		<property name="complementoEndereco" type="java.lang.String" column="agen_dscomplementondereco" length="25"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="agen_tmultimaalteracao" length="8"/>
+		<property name="numeroFax" type="java.lang.String" column="agen_nnfax" length="9"/>
+		<property name="email" type="java.lang.String" column="agen_dsemail" length="40"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to Bairro -->
+		<many-to-one name="bairro" class="gcom.cadastro.geografico.Bairro" not-null="true">
+			<column name="bair_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Banco -->
+		<many-to-one name="banco" class="gcom.arrecadacao.banco.Banco" not-null="true">
+			<column name="bnco_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to DebitoAutomatico -->
+		<!--<set
+        name="debitoAutomaticos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="agen_id" />
+        </key>
+        <one-to-many
+            class="mapeamentohibernate.DebitoAutomatico"
+        />
+    </set> -->
+		<!-- bi-directional many-to-one association to Logradouro -->
+		<many-to-one name="logradouro" class="gcom.cadastro.endereco.Logradouro" not-null="true">
+			<column name="logr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to EnderecoReferencia -->
+		<many-to-one name="enderecoReferencia" class="gcom.cadastro.endereco.EnderecoReferencia" not-null="true">
+			<column name="edrf_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Cep -->
+		<many-to-one name="cep" class="gcom.cadastro.endereco.Cep" not-null="true">
+			<column name="cep_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LogradouroCep -->
+		<many-to-one name="logradouroCep" class="gcom.cadastro.endereco.LogradouroCep" not-null="true">
+			<column name="lgcp_id"/>
+		</many-to-one>
+		<many-to-one name="logradouroBairro" class="gcom.cadastro.endereco.LogradouroBairro" not-null="true">
+			<column name="lgbr_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

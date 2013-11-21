@@ -1,0 +1,271 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.financeiro.lancamento.LancamentoItemContabil" table="financeiro.lancamento_item_contabil">
+		<id name="id" type="java.lang.Integer" column="lict_id">
+			<generator class="sequence">
+				<param name="sequence">financeiro.seq_lancamento_item_contabil</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="lict_dsitemlancamentocontabil" not-null="true" length="35"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="lict_dsabreviado" not-null="true" length="5"/>
+		<property name="sequenciaImpressao" type="java.lang.Short" column="lict_nnsequenciaimpressao" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="lict_tmultimaalteracao" length="8"/>
+		<property name="indicadorUso" type="java.lang.Short" column="lict_icuso" not-null="true" length="2"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to CreditoRealizadoHistorico -->
+		<!--
+    <set
+        name="creditoRealizadoHistoricosByLictId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="lict_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CreditoRealizadoHistorico"
+        />
+    </set>
+    <set
+        name="creditoRealizadoHistoricosByLictId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="lict_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CreditoRealizadoHistorico"
+        />
+    </set>
+    <set
+        name="creditoRealizadoHistoricosByLictId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="lict_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CreditoRealizadoHistorico"
+        />
+    </set>
+    <set
+        name="creditoRealizadoHistoricosByLictId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="lict_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CreditoRealizadoHistorico"
+        />
+    </set>
+    <set
+        name="creditoARealizarHistoricosByLictId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="lict_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CreditoARealizarHistorico"
+        />
+    </set>
+    <set
+        name="creditoARealizarHistoricosByLictId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="lict_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CreditoARealizarHistorico"
+        />
+    </set>
+    <set
+        name="debitoACobrarHistoricos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="lict_id" />
+        </key>
+        <one-to-many 
+            class="gcom.DebitoACobrarHistorico"
+        />
+    </set>
+    <set
+        name="guiaPagamentos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="lict_id" />
+        </key>
+        <one-to-many 
+            class="gcom.GuiaPagamento"
+        />
+    </set>
+    <set
+        name="debitoCobradoHistoricosByLictId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="lict_id" />
+        </key>
+        <one-to-many 
+            class="gcom.DebitoCobradoHistorico"
+        />
+    </set>
+    <set
+        name="debitoCobradoHistoricosByLictId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="lict_id" />
+        </key>
+        <one-to-many 
+            class="gcom.DebitoCobradoHistorico"
+        />
+    </set>
+    <set
+        name="debitoCobradoHistoricosByLictId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="lict_id" />
+        </key>
+        <one-to-many 
+            class="gcom.DebitoCobradoHistorico"
+        />
+    </set>
+    <set
+        name="debitoCobradoHistoricosByLictId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="lict_id" />
+        </key>
+        <one-to-many 
+            class="gcom.DebitoCobradoHistorico"
+        />
+    </set>
+    <set
+        name="creditoARealizars"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="lict_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CreditoARealizar"
+        />
+    </set>
+    <set
+        name="debitoACobrars"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="lict_id" />
+        </key>
+        <one-to-many 
+            class="gcom.DebitoACobrar"
+        />
+    </set>
+    <set
+        name="resumoFaturamentos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="lict_id" />
+        </key>
+        <one-to-many 
+            class="gcom.ResumoFaturamento"
+        />
+    </set>
+    <set
+        name="creditoRealizadosByLictId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="lict_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CreditoRealizado"
+        />
+    </set>
+    <set
+        name="creditoRealizadosByLictId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="lict_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CreditoRealizado"
+        />
+    </set>
+    <set
+        name="creditoRealizadosByLictId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="lict_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CreditoRealizado"
+        />
+    </set> -->
+		<many-to-one name="lancamentoItem" class="gcom.financeiro.lancamento.LancamentoItem" not-null="true">
+			<column name="lcit_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ContaContabil -->
+		<!--<many-to-one
+        name="contaContabil"
+        class="gcom.financeiro.ContaContabil"
+        not-null="true"
+    >
+        <column name="cnct_id" />
+    </many-to-one>
+
+--></class>
+</hibernate-mapping>

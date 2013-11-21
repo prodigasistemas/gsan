@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="ExcluirNegativacaoOnLineActionForm"
+			type="gcom.gui.cobranca.spcserasa.ExcluirNegativacaoOnLineActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+		<action name="ExcluirNegativacaoOnLineActionForm"
+			type="gcom.gui.cobranca.spcserasa.ExibirExcluirNegativacaoOnLineAction"
+			validate="false" scope="session"
+			path="/exibirExcluirNegativacaoOnLineAction">
+
+			<forward name="exibirExcluirNegativacaoOnLine"
+				path="/jsp/cobranca/negativacao_excluir_online.jsp" />
+
+		</action>
+
+		<action name="ExcluirNegativacaoOnLineActionForm"
+			type="gcom.gui.cobranca.spcserasa.ExcluirNegativacaoOnLineAction"
+			validate="false" scope="session"
+			path="/excluirNegativacaoOnLineAction">
+
+			<forward name="exibirExcluirNegativacaoOnLine"
+				path="/jsp/cobranca/negativacao_excluir_online.jsp" />
+
+		</action>
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

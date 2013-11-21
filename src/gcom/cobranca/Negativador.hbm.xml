@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.cobranca.Negativador" table="cobranca.negativador">
+		<id name="id" type="java.lang.Integer" column="negt_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_negativador</param>
+			</generator>
+		</id>
+		<property name="codigoAgente" type="java.lang.Short" column="negt_cdagente" length="2"/>
+		<property name="numeroInscricaoEstadual" type="java.lang.String" column="negt_nninscricaoestadual" length="20"/>
+		<property name="indicadorUso" type="java.lang.Short" column="negt_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="negt_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to NegativacaoComando -->
+		<set name="negativacaoComandos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="negt_id"/>
+			</key>
+			<one-to-many class="gcom.cobranca.NegativacaoComando"/>
+		</set>
+		<!-- bi-directional one-to-many association to NegativadorExclusaoMotivo -->
+		<set name="negativadorExclusaoMotivos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="negt_id"/>
+			</key>
+			<one-to-many class="gcom.cobranca.NegativadorExclusaoMotivo"/>
+		</set>
+		<!-- bi-directional one-to-many association to NegativadorContrato -->
+		<set name="negativadorContratos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="negt_id"/>
+			</key>
+			<one-to-many class="gcom.cobranca.NegativadorContrato"/>
+		</set>
+		<!-- bi-directional one-to-many association to NegativadorRegistroTipo -->
+		<set name="negativadorRegistroTipos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="negt_id"/>
+			</key>
+			<one-to-many class="gcom.cobranca.NegativadorRegistroTipo"/>
+		</set>
+		<!-- bi-directional one-to-many association to NegativadorMovimento -->
+		<set name="negativadorMovimentos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="negt_id"/>
+			</key>
+			<one-to-many class="gcom.cobranca.NegativadorMovimento"/>
+		</set>
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Cliente -->
+		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="true">
+			<column name="clie_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

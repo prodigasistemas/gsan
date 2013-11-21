@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="PesquisarCepActionForm"
+			type="gcom.gui.cadastro.endereco.PesquisarCepActionForm" />
+	</form-beans>
+
+	<!--******************* P?GINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="PesquisarCepActionForm" 
+			type="gcom.gui.cadastro.endereco.ExibirPesquisarCepAction"
+			validate="true" path="/exibirPesquisarCepAction" scope="session">
+			<forward name="exibirPesquisarCep"
+				path="/jsp/cadastro/endereco/cep_pesquisar.jsp" />
+		</action>
+
+		<action name="PesquisarCepActionForm" 
+			type="gcom.gui.cadastro.endereco.PesquisarCepAction"
+			validate="false" path="/pesquisarCepAction" scope="session">
+			<forward name="pesquisarCep"
+				path="/jsp/cadastro/endereco/cep_resultado_pesquisar.jsp" />
+		</action>
+
+	</action-mappings>
+
+	
+</struts-config>

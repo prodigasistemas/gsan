@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="FiltrarLigacaoEsgotoSituacaoActionForm"
+			type="gcom.gui.atendimentopublico.ligacaoesgoto.FiltrarLigacaoEsgotoSituacaoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	
+	<action-mappings>
+		<action name="FiltrarLigacaoEsgotoSituacaoActionForm"  
+			type="gcom.gui.atendimentopublico.ligacaoesgoto.ExibirFiltrarLigacaoEsgotoSituacaoAction" 
+			validate="true"	
+			scope="session"	
+			path="/exibirFiltrarLigacaoEsgotoSituacaoAction">
+			
+			<forward name="exibirFiltrarLigacaoEsgotoSituacao" path="/jsp/atendimentopublico/ligacaoesgoto/ligacao_esgoto_situacao_filtrar.jsp" />
+		</action>
+
+		<action name="FiltrarLigacaoEsgotoSituacaoActionForm"
+			type="gcom.gui.atendimentopublico.ligacaoesgoto.FiltrarLigacaoEsgotoSituacaoAction"
+			validate="true" 
+			scope="session"	
+			path="/filtrarLigacaoEsgotoSituacaoAction">
+			
+			
+			<forward name="exibirManterLigacaoEsgotoSituacao"
+				path="/exibirManterLigacaoEsgotoSituacaoAction.do" />			
+		</action>
+	</action-mappings>
+</struts-config>

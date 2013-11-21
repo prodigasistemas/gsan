@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.registroatendimento.RAReiteracaoFone" table="atendimentopublico.ra_reiteracao_fone">
+		<id name="id" type="java.lang.Integer" column="rtfo_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_ra_reiteracao_fone</param>
+			</generator>
+		</id>
+		<property name="ddd" type="java.lang.String" column="rtfo_cdddd" not-null="true" length="2"/>
+		<property name="fone" type="java.lang.String" column="rtfo_nnfone" not-null="true" length="9"/>
+		<property name="ramal" type="java.lang.String" column="rtfo_nnfoneramal" length="4"/>
+		<property name="indicadorPadrao" type="java.lang.Short" column="rtfo_icfonepadrao" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="rtfo_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to FoneTipo -->
+		<many-to-one name="foneTipo" class="gcom.cadastro.cliente.FoneTipo" not-null="true">
+			<column name="fnet_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to RegistroAtendimentoSolicitante -->
+		<many-to-one name="raReiteracao" class="gcom.atendimentopublico.registroatendimento.RAReiteracao" not-null="true">
+			<column name="rart_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="InserirQualidadeAguaActionForm"
+			type="gcom.gui.faturamento.InserirQualidadeAguaActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+
+
+	<action-mappings>
+
+		<action name="InserirQualidadeAguaActionForm"
+			type="gcom.gui.faturamento.ExibirInserirQualidadeAguaAction"
+			validate="false" input="/exibirInserirQualidadeAguaAction.do"
+			scope="session" path="/exibirInserirQualidadeAguaAction">
+			<forward name="inserirQualidadeAguaActionDadosAction"
+				path="/inserirQualidadeAguaWizardAction.do?action=exibirInserirQualidadeAguaDadosAction" />
+		</action>
+
+
+		<action name="InserirQualidadeAguaActionForm"
+			type="gcom.gui.faturamento.InserirQualidadeAguaWizardAction"
+			validate="false" parameter="action" scope="session"
+			path="/inserirQualidadeAguaWizardAction">
+			
+			<forward name="exibirInserirQualidadeAguaDadosAction"
+				path="/jsp/faturamento/qualidade_agua_dados_inserir.jsp" />
+			
+			<forward name="exibirInserirQualidadeAguaAnaliseAction"
+				path="/jsp/faturamento/qualidade_agua_analise_inserir.jsp" />
+
+		</action>
+
+		<action
+			type="gcom.gui.faturamento.CancelarInserirQualidadeAguaAction"
+			validate="false" path="/cancelarInserirQualidadeAguaAction" />
+
+		
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

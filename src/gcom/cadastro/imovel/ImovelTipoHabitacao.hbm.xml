@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.imovel.ImovelTipoHabitacao" table="cadastro.imovel_tipo_habitacao">
+		<id name="id" type="java.lang.Integer" column="imha_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_imovel_tipo_habitacao</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="imha_dstipohabitacao" length="20"/>
+		<property name="indicadorUso" type="java.lang.Short" column="imha_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="imha_tmultimaalteracao" length="8"/>
+	</class>
+</hibernate-mapping>

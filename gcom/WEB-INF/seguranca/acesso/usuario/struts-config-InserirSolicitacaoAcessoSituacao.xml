@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="InserirSolicitacaoAcessoSituacaoActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.InserirSolicitacaoAcessoSituacaoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+
+<action name="InserirSolicitacaoAcessoSituacaoActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.ExibirInserirSolicitacaoAcessoSituacaoAction"
+			validate="false" scope="session"
+			path="/exibirInserirSolicitacaoAcessoSituacaoAction">
+			<forward name="exibirInserirSolicitacaoAcessoSituacao"
+				path="/jsp/seguranca/acesso/usuario/solicitacao_acesso_situacao_inserir.jsp" />
+		</action>
+
+		<action name="InserirSolicitacaoAcessoSituacaoActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.InserirSolicitacaoAcessoSituacaoAction"
+			validate="false" scope="session"
+			path="/inserirSolicitacaoAcessoSituacaoAction">
+		</action>
+
+
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

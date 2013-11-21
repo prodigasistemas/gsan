@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="GerarArquivoTextoContasCobrancaEmpresaActionForm"
+			type="gcom.gui.cobranca.GerarArquivoTextoContasCobrancaEmpresaActionForm" />					
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0869] Gerar Arquivo Texto das Contas em Cobrança por Empresa Auhtor: Rômulo Aurélio Data:30/10/2008-->
+		<action name="GerarArquivoTextoContasCobrancaEmpresaActionForm"
+			type="gcom.gui.cobranca.ExibirGerarArquivoTextoContasCobrancaEmpresaAction"
+			validate="true" 
+			scope="session"
+			path="/exibirGerarArquivoTextoContasCobrancaEmpresaAction">
+			
+			<forward name="exibirGerarArquivoTextoContasCobrancaEmpresaAction"
+				path="/jsp/cobranca/contas_cobranca_empresa_arquivo_txt_gerar.jsp" />
+		</action>
+		
+		<action name="GerarArquivoTextoContasCobrancaEmpresaActionForm"
+				type="gcom.gui.cobranca.GerarArquivoTextoContasCobrancaEmpresaAction"
+				validate="true" scope="session"
+				path="/gerarArquivoTextoContasCobrancaEmpresaAction">
+		</action>
+		
+		<action name="GerarArquivoTextoContasCobrancaEmpresaActionForm"
+			type="gcom.gui.cobranca.ExibirConsultarContasComandoCobrancaPopupAction"
+			validate="true" 
+			scope="session"
+			path="/exibirConsultarContasComandoCobrancaPopupAction">
+			
+			<forward name="exibirConsultarContasComandoCobrancaPopupAction"
+				path="/jsp/cobranca/comando_contas_cobranca_consultar_popup.jsp" />
+		</action>
+		
+		
+	</action-mappings>
+
+</struts-config>

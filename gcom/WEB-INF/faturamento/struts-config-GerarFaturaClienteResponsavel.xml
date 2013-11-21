@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		
+		<action
+			type="gcom.gui.faturamento.ExibirGerarFaturaClienteResponsavelAction"
+			scope="request"
+			validate="true" 
+			path="/exibirGerarFaturaClienteResponsavelAction">
+
+			<forward name="exibirGerarFatura" 
+				path="/jsp/faturamento/gerar_fatura_cliente_responsavel.jsp" />
+
+		</action>
+		
+		<action
+			type="gcom.gui.faturamento.GerarFaturaClienteResponsavelAction"
+			validate="true" 
+			path="/gerarFaturaClienteResponsavelAction" />
+		
+		
+	</action-mappings>
+
+</struts-config>

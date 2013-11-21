@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+		Created by the Middlegen Hibernate plugin
+		
+		http://boss.bekk.no/boss/middlegen/
+		http://hibernate.sourceforge.net/
+	-->
+	<class name="gcom.cobranca.CobrancaSituacaoComando" table="cobranca.cobranca_sit_comando">
+		<id name="id" type="java.lang.Integer" column="cbsc_id">
+			<generator class="sequence">
+				<param name="sequence">
+					cobranca.seq_cobranca_sit_comando</param>
+			</generator>
+		</id>
+		<property name="codigoSetorComercialInicial" type="java.lang.Integer" column="cbsc_cdsetorcomercialinicial"/>
+		<property name="codigoSetorComercialFinal" type="java.lang.Integer" column="cbsc_cdsetorcomercialfinal"/>
+		<property name="numeroQuadraInicial" type="java.lang.Integer" column="cbsc_nnquadrainicial"/>
+		<property name="numeroQuadraFinal" type="java.lang.Integer" column="cbsc_nnquadrafinal"/>
+		<property name="numeroLoteInicial" type="java.lang.Integer" column="cbsc_nnloteinicial"/>
+		<property name="numeroLoteFinal" type="java.lang.Integer" column="cbsc_nnlotefinal"/>
+		<property name="numeroSubLoteInicial" type="java.lang.Integer" column="cbsc_nnsubloteinicial"/>
+		<property name="numeroSubLoteFinal" type="java.lang.Integer" column="cbsc_nnsublotefinal"/>
+		<property name="codigoRotaInicial" type="java.lang.Integer" column="cbsc_cdrotainicial"/>
+		<property name="codigoRotaFinal" type="java.lang.Integer" column="cbsc_cdrotafinal"/>
+		<property name="sequencialRotaInicial" type="java.lang.Integer" column="cbsc_nnsequencialrotainicial"/>
+		<property name="sequencialRotaFinal" type="java.lang.Integer" column="cbsc_nnsequencialrotafinal"/>
+		<property name="quantidadeImoveis" type="java.lang.Integer" column="cbsc_qtdimoveis"/>
+		<property name="indicadorComando" type="java.lang.Short" column="cbsc_iccomando" length="2" not-null="true"/>
+		<property name="anoMesInicialSituacaoCobranca" type="java.lang.Integer" column="cbsc_amcobrancasituacaoinicio"/>
+		<property name="anoMesFinalSituacaoCobranca" type="java.lang.Integer" column="cbsc_amcobrancasituacaofim"/>
+		<property name="observacao" type="java.lang.String" column="cbsc_dsobservacao" length="100"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cbsc_tmultimaalteracao" length="8"/>
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id"/>
+		</many-to-one>
+		<many-to-one name="localidadeInicial" class="gcom.cadastro.localidade.Localidade" not-null="false">
+			<column name="loca_idinicial"/>
+		</many-to-one>
+		<many-to-one name="localidadeFinal" class="gcom.cadastro.localidade.Localidade" not-null="false">
+			<column name="loca_idfinal"/>
+		</many-to-one>
+		<many-to-one name="categoria1" class="gcom.cadastro.imovel.Categoria" not-null="false">
+			<column name="catg_id1"/>
+		</many-to-one>
+		<many-to-one name="categoria2" class="gcom.cadastro.imovel.Categoria" not-null="false">
+			<column name="catg_id2"/>
+		</many-to-one>
+		<many-to-one name="categoria3" class="gcom.cadastro.imovel.Categoria" not-null="false">
+			<column name="catg_id3"/>
+		</many-to-one>
+		<many-to-one name="categoria4" class="gcom.cadastro.imovel.Categoria" not-null="false">
+			<column name="catg_id4"/>
+		</many-to-one>
+		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario" not-null="true">
+			<column name="usur_id"/>
+		</many-to-one>
+		<many-to-one name="cobrancaSituacaoTipo" class="gcom.cobranca.CobrancaSituacaoTipo" not-null="false">
+			<column name="cbsp_id"/>
+		</many-to-one>
+		<many-to-one name="cobrancaSituacaoMotivo" class="gcom.cobranca.CobrancaSituacaoMotivo" not-null="false">
+			<column name="cbsm_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

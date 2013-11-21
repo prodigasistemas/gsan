@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+    
+<hibernate-mapping>
+<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+
+<class 
+    name="gcom.atendimentopublico.registroatendimento.LocalidadeEspecificacaoUnidade" 
+    table="atendimentopublico.local_espec_unidade"
+>
+    
+    <composite-id name="comp_id" class="gcom.atendimentopublico.registroatendimento.LocalidadeEspecificacaoUnidadePK">
+        
+        <!-- bi-directional many-to-one association to Localidade -->
+        <key-many-to-one
+        	name="localidade"
+	        class="gcom.cadastro.localidade.Localidade"
+	    >
+    	    <column name="loca_id" />
+    	</key-many-to-one>
+        
+        <!-- bi-directional many-to-one association to Solicitacao Tipo Especificacao -->
+        <key-many-to-one
+        	name="solicitacaoTipoEspecificacao"
+	        class="gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao"
+	    >
+    	    <column name="step_id" />
+    	</key-many-to-one>
+    	
+    	<!-- bi-directional many-to-one association to Unidade Organizacional -->
+    	<key-many-to-one
+        	name="unidadeOrganizacional"
+	        class="gcom.cadastro.unidade.UnidadeOrganizacional"
+	    >
+    	    <column name="unid_id" />
+    	</key-many-to-one>
+    	
+    </composite-id> 
+    
+    <property
+        name="ultimaAlteracao"
+        type="java.sql.Timestamp"
+        column="loes_tmultimaalteracao"
+        not-null="true"
+        length="8"
+    />
+	
+</class>
+</hibernate-mapping>

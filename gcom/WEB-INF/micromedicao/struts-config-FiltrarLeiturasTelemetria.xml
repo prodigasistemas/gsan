@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarLeiturasTelemetriaForm"
+			type="gcom.gui.micromedicao.FiltrarLeiturasTelemetriaForm" />			
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC1070] Filtrar Leituras Telemetria Auhtor: Hugo Amorim Data:27/09/2010-->
+		<action name="FiltrarLeiturasTelemetriaForm"
+			type="gcom.gui.micromedicao.ExibirFiltrarLeiturasTelemetriaAction"
+			validate="true" 
+			scope="session"
+			path="/exibirFiltrarLeiturasTelemetriaAction">
+			
+			<forward name="exibirFiltrarLeiturasTelemetriaAction"
+				path="/jsp/micromedicao/leituras_telemetria_filtrar.jsp" />
+		</action>
+		
+		<action name="FiltrarLeiturasTelemetriaForm"
+				type="gcom.gui.micromedicao.FiltrarLeiturasTelemetriaAction"
+				validate="true" scope="session"
+				path="/filtrarLeiturasTelemetriaAction">
+			<forward name="exibirManterLeiturasTemeletriaAction"
+				path="/exibirManterLeiturasTemeletriaAction.do" />	
+		</action>	
+
+	</action-mappings>
+	
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

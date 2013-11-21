@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="PesquisarResolucaoDiretoriaActionForm"
+			type="gcom.gui.cobranca.PesquisarResolucaoDiretoriaActionForm" />					
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0223] PESQUISAR RESOLUÇÃO DE DIRETOTIA Auhtor: Vivianne Sousa Data:24/04/2006-->
+		<action name="PesquisarResolucaoDiretoriaActionForm"
+			type="gcom.gui.cobranca.ExibirPesquisarResolucaoDiretoriaAction"
+			validate="false" 
+			scope="session"
+			path="/exibirPesquisarResolucaoDiretoriaAction">
+			<forward name="exibirPesquisarResolucaoDiretoria"
+				path="/jsp/cobranca/resolucao_diretoria_pesquisar_popup.jsp" />
+		</action>
+		
+		<action name="PesquisarResolucaoDiretoriaActionForm"
+			type="gcom.gui.cobranca.PesquisarResolucaoDiretoriaAction"
+			validate="false" 
+			scope="session"
+			path="/pesquisarResolucaoDiretoriaAction">
+			<forward name="pesquisarResolucaoDiretoriaAction"
+		    path="/jsp/cobranca/resolucao_diretoria_resultado_pesquisa.jsp" />
+		</action>
+
+	</action-mappings>
+
+</struts-config>

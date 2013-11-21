@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.faturamento.conta.ContaGeral" table="faturamento.conta_geral">
+		<id name="id" type="java.lang.Integer" column="cnta_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_conta_geral</param>
+			</generator>
+		</id>
+		<property name="indicadorHistorico" type="short" column="cntg_ichistorico" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cntg_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-one association to ContaImpressao -->
+		<one-to-one name="contaImpressao" class="gcom.faturamento.conta.ContaImpressao" outer-join="auto"/>
+		<!-- bi-directional one-to-one association to ContaImpressao -->
+		<one-to-one name="conta" class="gcom.faturamento.conta.Conta" outer-join="auto"/>
+		<!-- bi-directional one-to-one association to ContaHistorico -->
+		<one-to-one name="contaHistorico" class="gcom.faturamento.conta.ContaHistorico" outer-join="auto"/>
+		<!-- bi-directional one-to-many association to DebitoAutomaticoMovimento -->
+		<set name="debitoAutomaticoMovimentos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="cnta_id"/>
+			</key>
+			<one-to-many class="gcom.arrecadacao.debitoautomatico.DebitoAutomaticoMovimento"/>
+		</set>
+	</class>
+</hibernate-mapping>

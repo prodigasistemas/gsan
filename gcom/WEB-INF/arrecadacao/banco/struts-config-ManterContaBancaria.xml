@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+	
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="AtualizarContaBancariaActionForm"
+			type="gcom.gui.arrecadacao.banco.AtualizarContaBancariaActionForm" />
+		<form-bean name="FiltrarContaBancariaActionForm"
+			type="gcom.gui.arrecadacao.banco.FiltrarContaBancariaActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0218] MANTER TIPO DE RETORNO DA OS_REFERIDA Auhtor: Thiago Tenório Data:01/11/2006-->
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.arrecadacao.banco.ExibirManterContaBancariaAction"
+			validate="false" scope="session"
+			path="/exibirManterContaBancariaAction">
+			<forward name="exibirManterContaBancaria"
+				path="/jsp/arrecadacao/banco/conta_bancaria_manter.jsp" />
+			<forward name="exibirAtualizarContaBancaria"
+				path="/exibirAtualizarContaBancariaAction.do" />
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.arrecadacao.banco.RemoverContaBancariaAction" scope="request"
+			path="/removerContaBancariaAction">
+		</action>
+		
+		<action name="AtualizarContaBancariaActionForm"
+			type="gcom.gui.arrecadacao.banco.ExibirAtualizarContaBancariaAction"
+			validate="true" scope="session"
+			path="/exibirAtualizarContaBancariaAction">
+			<forward name="atualizarContaBancaria"
+				path="/jsp/arrecadacao/banco/conta_bancaria_atualizar.jsp" />
+		</action>
+		<action name="AtualizarContaBancariaActionForm"
+			type="gcom.gui.arrecadacao.banco.AtualizarContaBancariaAction"
+			validate="true" scope="request"
+			path="/atualizarContaBancariaAction">
+		</action>
+
+	</action-mappings>
+
+</struts-config>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean 
+		    name="FiltrarResolucaoDiretoriaContratoParcelamentoActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.FiltrarResolucaoDiretoriaContratoParcelamentoActionForm" /> 
+		
+		
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+				
+				
+		<!-- INICIO [UC1134] Manter Resolução de Diretoria (RD) para Contratos de Parcelamento por cliente -->
+		<action name="ExibirFiltrarResolucaoDiretoriaContratoParcelamentoAction"
+			type="gcom.gui.cobranca.contratoparcelamento.ExibirFiltrarResolucaoDiretoriaContratoParcelamentoAction"
+			path="/exibirFiltrarResolucaoDiretoriaContratoParcelamentoAction">
+			<forward name="exibirFiltrar"
+				path="/jsp/cobranca/contratoparcelamento/contrato_parcelamento_resolucao_diretoria_filtrar.jsp" />
+		</action>
+		
+		
+		<action name="FiltrarResolucaoDiretoriaContratoParcelamentoActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.FiltrarResolucaoDiretoriaContratoParcelamentoAction"
+			path="/filtrarResolucaoDiretoriaContratoParcelamentoAction">
+			<forward name="exibirFiltrar"
+				path="/exibirFiltrarResolucaoDiretoriaContratoParcelamentoAction.do" />
+			<forward name="exibirManter"
+				path="/exibirManterResolucaoDiretoriaContratoParcelamentoAction.do" />
+				
+		</action>		
+		
+		<!-- FIM [UC1134] Manter Resolução de Diretoria (RD) para Contratos de Parcelamento por cliente -->
+		
+	
+ 
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

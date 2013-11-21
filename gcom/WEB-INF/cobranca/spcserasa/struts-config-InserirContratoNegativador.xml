@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="InserirContratoNegativadorActionForm"
+			type="gcom.gui.cobranca.spcserasa.InserirContratoNegativadorActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		<action  name="InserirContratoNegativadorActionForm"
+			type="gcom.gui.cobranca.spcserasa.ExibirInserirContratoNegativadorAction"
+			validate="false" scope="session" path="/exibirInserirContratoNegativadorAction">
+			<forward name="inserirContratoNegativador"
+				path="/jsp/cobranca/spcserasa/contrato_negativador_inserir.jsp" />
+		</action>
+				
+		<action name="InserirContratoNegativadorActionForm"
+			type="gcom.gui.cobranca.spcserasa.InserirContratoNegativadorAction"
+			validate="false" scope="session" path="/inserirContratoNegativadorAction"/>			
+		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

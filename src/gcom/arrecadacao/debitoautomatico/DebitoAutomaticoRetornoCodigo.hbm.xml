@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.arrecadacao.debitoautomatico.DebitoAutomaticoRetornoCodigo" table="arrecadacao.debito_auto_retorno_cod">
+		<id name="id" type="java.lang.Integer" column="durc_id">
+			<generator class="sequence">
+				<param name="sequence">arrecadacao.sequence_debito_automatico_retorno_codigo</param>
+			</generator>
+		</id>
+		<property name="descricaoDebitoAutomaticoRetornoCodigo" type="java.lang.String" column="durc_dsdebitoautomatico" length="50"/>
+		<property name="indicadorUso" type="java.lang.Short" column="durc_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="durc_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to DebitoAutomaticoMovimento -->
+		<!--
+    <set
+        name="debitoAutomaticoMovimentos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="durc_id" />
+        </key>
+        <one-to-many
+            class="mapeamentohibernate.DebitoAutomaticoMovimento"
+        />
+    </set>
+    -->
+	</class>
+</hibernate-mapping>

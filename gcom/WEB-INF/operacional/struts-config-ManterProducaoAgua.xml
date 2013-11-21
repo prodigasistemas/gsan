@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="ManterProducaoAguaActionForm"
+			type="gcom.gui.operacional.ManterProducaoAguaActionForm" />
+		<form-bean name="AtualizarProducaoAguaActionForm"
+			type="gcom.gui.operacional.AtualizarProducaoAguaActionForm" />
+		<form-bean name="FiltrarProducaoAguaActionForm"
+			type="gcom.gui.operacional.FiltrarProducaoAguaActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.operacional.ExibirManterProducaoAguaAction"
+			validate="false" scope="session"
+			path="/exibirManterProducaoAguaAction">
+
+			<forward name="exibirManterProducaoAgua"
+				path="/jsp/operacional/producao_agua_manter.jsp" />
+
+			<forward name="exibirAtualizarProducaoAgua"
+				path="/exibirAtualizarProducaoAguaAction.do" />
+		</action>
+
+		<action name="FiltrarProducaoAguaActionForm"
+			type="gcom.gui.relatorio.operacional.GerarRelatorioProducaoAguaManterAction"
+			validate="false" scope="session"
+			path="/gerarRelatorioProducaoAguaManterAction" />
+
+		<action name="AtualizarProducaoAguaActionForm"
+			type="gcom.gui.operacional.ExibirAtualizarProducaoAguaAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarProducaoAguaAction">
+
+			<forward name="producaoAguaAtualizar"
+				path="/jsp/operacional/producao_agua_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarProducaoAguaActionForm"
+			type="gcom.gui.operacional.AtualizarProducaoAguaAction"
+			validate="true" scope="session"
+			path="/atualizarProducaoAguaAction">
+
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.operacional.RemoverProducaoAguaAction"
+			 scope="request" path="/removerProducaoAguaAction">
+
+		</action>
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean 
+		    name="EfetuarRestabelecimentoLigacaoAguaComInstalacaoHidrometroActionForm"
+			type="gcom.gui.atendimentopublico.EfetuarRestabelecimentoLigacaoAguaComInstalacaoHidrometroActionForm" /> 
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+				
+			
+		<action name="EfetuarRestabelecimentoLigacaoAguaComInstalacaoHidrometroActionForm"  
+			type="gcom.gui.atendimentopublico.ExibirEfetuarRestabelecimentoLigacaoAguaComInstalacaoHidrometroAction" 
+			validate="true"
+			scope="session"
+			path="/exibirEfetuarRestabelecimentoLigacaoAguaComInstalacaoHidrometroAction">
+			<forward name="efetuarRestabelecimentoLigacaoAguaComInstalacaoHidrometro"
+			path="/jsp/atendimentopublico/ligacaoagua/ligacao_agua_com_instalacao_hidrometro_restabelecimento_efetuar.jsp" />
+		</action>
+
+		<action name="EfetuarRestabelecimentoLigacaoAguaComInstalacaoHidrometroActionForm"
+			type="gcom.gui.atendimentopublico.EfetuarRestabelecimentoLigacaoAguaComInstalacaoHidrometroAction"
+			validate="true" scope="session"
+			path="/efetuarRestabelecimentoLigacaoAguaComInstalacaoHidrometroAction">
+			
+			<forward name="encerrarOrdemServicoAction"
+				path="/encerrarOrdemServicoAction.do" />
+				
+			<forward name="encerrarOrdemServicoPopupAction"
+				path="/encerrarOrdemServicoPopupAction.do" />
+		</action> 
+ 
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+		Created by the Middlegen Hibernate plugin
+		
+		http://boss.bekk.no/boss/middlegen/
+		http://hibernate.sourceforge.net/
+	-->
+	<class name="gcom.atendimentopublico.EspecificacaoUnidadeCobranca" table="atendimentopublico.espec_unid_cobr">
+		<composite-id name="comp_id" class="gcom.atendimentopublico.EspecificacaoUnidadeCobrancaPK">
+			<key-property name="solicitacaoTipoEspecificacaoId" column="step_id" type="java.lang.Integer" length="4"/>
+			<key-property name="cobrancaSituacaoId" column="cbst_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" not-null="true" column="esuc_tmultimaalteracao" length="8"/>
+		
+		<many-to-one name="unidadeOrganizacional" class="gcom.cadastro.unidade.UnidadeOrganizacional" not-null="true">
+			<column name="unid_id"/>
+		</many-to-one>
+		
+		<many-to-one name="solicitacaoTipoEspecificacao" class="gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao" not-null="true"
+			 insert="false" update="false">
+			<column name="step_id"/>
+		</many-to-one>
+		
+		<many-to-one name="cobrancaSituacao" class="gcom.cobranca.CobrancaSituacao" not-null="true"
+			 insert="false" update="false">
+			<column name="cbst_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

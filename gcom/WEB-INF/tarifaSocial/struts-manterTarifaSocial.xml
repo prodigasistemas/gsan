@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="ManterTarifaSocialActionForm"
+			type="gcom.gui.cadastro.tarifasocial.ManterTarifaSocialActionForm" />
+		<form-bean name="RemoverTarifaSocialActionForm"
+			type="gcom.gui.cadastro.tarifasocial.RemoverTarifaSocialActionForm" />
+		<form-bean name="RemoverTarifaSocialImovelAnteriorActionForm"
+			type="gcom.gui.cadastro.tarifasocial.RemoverTarifaSocialImovelAnteriorActionForm" />
+		<form-bean name="AtualizarDadosTarifaSocialActionForm"
+			type="gcom.gui.cadastro.tarifasocial.AtualizarDadosTarifaSocialActionForm" />
+		<form-bean name="AtualizarDadosTarifaSocialClienteActionForm"
+			type="gcom.gui.cadastro.tarifasocial.AtualizarDadosTarifaSocialClienteActionForm" />
+		<form-bean name="InserirMotivoRevisaoTarifaSocialActionForm"
+			type="gcom.gui.cadastro.tarifasocial.InserirMotivoRevisaoTarifaSocialActionForm" />
+	</form-beans>
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0069] Manter Dados Tarifa Social Auhtor: Rafael Corrêa Data:10/01/2007-->
+
+		<action name="ManterTarifaSocialActionForm"
+			type="gcom.gui.cadastro.tarifasocial.ExibirManterTarifaSocialAction"
+			validate="false" input="/exibirManterTarifaSocialAction.do"
+			scope="session" path="/exibirManterTarifaSocialAction">
+			<forward name="exibirManterTarifaSocial"
+				path="/manterTarifaSocialWizardAction.do?action=exibirManterTarifaSocialImovelAction" />
+		</action>
+		<action name="ManterTarifaSocialActionForm"
+			type="gcom.gui.cadastro.tarifasocial.ManterTarifaSocialWizardAction"
+			validate="true" parameter="action" scope="session"
+			path="/manterTarifaSocialWizardAction">
+
+			<forward name="manterTarifaSocialImovel"
+				path="/jsp/cadastro/tarifasocial/tarifa_social_filtrar_imovel.jsp" />
+			<forward name="manterTarifaSocialDadosUmaEconomia"
+				path="/manterTarifaSocialWizardAction.do?action=exibirManterTarifaSocialDadosUmaEconomiaAction" />
+			<forward name="manterTarifaSocialDadosMultiplasEconomias"
+				path="/manterTarifaSocialWizardAction.do?action=exibirManterTarifaSocialDadosMultiplasEconomiasAction" />
+			<forward name="manterTarifaSocialUmaEconomia"
+				path="/jsp/cadastro/tarifasocial/tarifasocial_manter_dados_uma_economia.jsp" />
+			<forward name="manterTarifaSocialMultiplasEconomias"
+				path="/jsp/cadastro/tarifasocial/tarifasocial_manter_dados_multiplas_economias.jsp" />
+
+		</action>
+		
+		<action name="ManterTarifaSocialActionForm"
+			type="gcom.gui.cadastro.tarifasocial.ExibirManterTarifaSocialDadosUmaEconomiaAction"
+			validate="true" scope="session"
+			path="/exibirManterTarifaSocialDadosUmaEconomiaAction">
+			<forward name="manterTarifaSocialUmaEconomia"
+				path="/jsp/cadastro/tarifasocial/tarifasocial_manter_dados_uma_economia.jsp" />
+		</action>
+		
+		<action name="ManterTarifaSocialActionForm"
+			type="gcom.gui.cadastro.tarifasocial.ExibirManterTarifaSocialDadosMultiplasEconomiasAction"
+			validate="true" scope="session"
+			path="/exibirManterTarifaSocialDadosMultiplasEconomiasAction">
+			<forward name="manterTarifaSocialMultiplasEconomias"
+				path="/jsp/cadastro/tarifasocial/tarifasocial_manter_dados_multiplas_economias.jsp" />
+		</action>
+
+		<action name="RemoverTarifaSocialActionForm"
+			type="gcom.gui.cadastro.tarifasocial.ExibirRemoverTarifaSocialAction"
+			scope="session" path="/exibirRemoverTarifaSocialAction">
+			<forward name="exibir"
+				path="/exibirFiltrarImovelAction.do?redirecionar=ManterDadosTarifaSocial" />
+			<forward name="processar"
+				path="/jsp/cadastro/tarifasocial/tarifa_social_manter.jsp" />
+			<forward name="remover"
+				path="/jsp/cadastro/tarifasocial/remover_tarifa_social_dados.jsp" />
+			<forward name="concluir"
+				path="/jsp/util/popup_concluir.jsp" />
+		</action>
+		
+		<action name="InserirMotivoRevisaoTarifaSocialActionForm"
+			type="gcom.gui.cadastro.tarifasocial.ExibirMotivoRevisaoTarifaSocialAction"
+			scope="session" path="/exibirMotivoRevisaoTarifaSocialAction">
+			<forward name="exibirMotivoRevisao"
+				path="/jsp/cadastro/tarifasocial/tarifa_social_motivo_revisao_inserir.jsp" />
+		</action>
+		
+		<action name="InserirMotivoRevisaoTarifaSocialActionForm"
+			type="gcom.gui.cadastro.tarifasocial.InserirMotivoRevisaoTarifaSocialAction"
+			scope="session" path="/inserirMotivoRevisaoTarifaSocialAction">
+			<forward name="inserir"
+				path="/jsp/cadastro/tarifasocial/tarifa_social_motivo_revisao_inserir.jsp" />
+		</action>
+		
+		<action name="FiltrarImovelActionForm"
+			type="gcom.gui.cadastro.imovel.ExibirFiltrarImovelAction"
+			validate="false" scope="session" path="/exibirFiltrarImovelActionTarifaSocial">
+			<forward name="filtrarImovel"
+				path="/jsp/cadastro/imovel/imovel_filtrar.jsp" />
+		</action>
+		
+		<action name="RemoverTarifaSocialImovelAnteriorActionForm"
+			type="gcom.gui.cadastro.tarifasocial.ExibirRemoverTarifaSocialImovelAnteriorAction"
+			scope="session" path="/exibirRemoverTarifaSocialImovelAnteriorAction">
+			<forward name="remover"
+				path="/jsp/cadastro/tarifasocial/tarifa_social_remover_imovel_anterior_popup.jsp" />
+		</action>
+		
+		<action name="RemoverTarifaSocialImovelAnteriorActionForm"
+			type="gcom.gui.cadastro.tarifasocial.RemoverTarifaSocialImovelAnteriorAction"
+			scope="session" path="/removerTarifaSocialImovelAnteriorAction">
+			<forward name="remover"
+				path="/exibirAtualizarDadosTarifaSocialClienteAction.do" />
+			<forward name="exibirRemover"
+				path="/jsp/cadastro/tarifasocial/tarifa_social_remover_imovel_anterior_popup.jsp" />
+		</action>
+		
+		<action name="AtualizarDadosTarifaSocialActionForm" type="gcom.gui.cadastro.tarifasocial.ExibirAtualizarTarifaSocialAction" scope="session" path="/exibirAtualizarDadosTarifaSocialAction">
+		   <forward name="exibirAtualizar" path="/jsp/cadastro/tarifasocial/tarifa_social_dados_atualizar_popup1.jsp" />
+		</action>
+		
+		<action name="AtualizarDadosTarifaSocialActionForm" type="gcom.gui.cadastro.tarifasocial.AtualizarTarifaSocialAction" scope="session" path="/atualizarDadosTarifaSocialAction">
+		   <forward name="avancar" path="/exibirAtualizarDadosTarifaSocialClienteAction.do" />
+		   <forward name="concluir" path="/concluirAlteracaoDadosTarifaSocialAction.do" />
+		</action>
+		
+		<action name="AtualizarDadosTarifaSocialClienteActionForm" type="gcom.gui.cadastro.tarifasocial.ExibirAtualizarTarifaSocialClienteAction" scope="session" path="/exibirAtualizarDadosTarifaSocialClienteAction">
+			<forward name="exibirCliente" path="/jsp/cadastro/tarifasocial/tarifa_social_dados_atualizar_popup2.jsp" />
+			<forward name="exibirRemoverImovelAnteriorTarifaSocial" path="/exibirRemoverTarifaSocialImovelAnteriorAction.do" />
+		</action>
+		
+		<action name="AtualizarDadosTarifaSocialClienteActionForm" type="gcom.gui.cadastro.tarifasocial.AtualizarTarifaSocialClienteAction" scope="session" path="/atualizarDadosTarifaSocialClienteAction">
+			<forward name="voltar" path="/exibirAtualizarDadosTarifaSocialAction.do" />
+			<forward name="concluir" path="/concluirAlteracaoDadosTarifaSocialAction.do" />
+		</action>
+		
+		<action name="RemoverTarifaSocialActionForm"
+			type="gcom.gui.cadastro.tarifasocial.RemoverTarifaSocialAction"
+			scope="session" path="/removerTarifaSocialAction">
+			<forward name="remover"
+				path="/jsp/cadastro/tarifasocial/remover_tarifa_social_dados.jsp" />
+		</action>
+		
+		<action name="AtualizarDadosTarifaSocialClienteActionForm"
+			type="gcom.gui.cadastro.tarifasocial.ExibirRemoverClienteImovelTarifaSocialAction"
+			scope="session" path="/exibirRemoverClienteImovelTarifaSocialAction">
+			<forward name="remover"
+				path="/jsp/cadastro/tarifasocial/popup_motivo.jsp" />
+			<forward name="exibirDadosCliente"
+				path="/exibirAtualizarDadosTarifaSocialClienteAction.do" />
+		</action>
+		
+		<action name="AtualizarDadosTarifaSocialClienteActionForm"
+			type="gcom.gui.cadastro.tarifasocial.RemoverClienteImovelTarifaSocialAction"
+			scope="session" path="/removerClienteImovelTarifaSocialAction">
+			<forward name="exibirDadosCliente"
+				path="/exibirAtualizarDadosTarifaSocialClienteAction.do" />
+		</action>
+		
+		<action name="AtualizarDadosTarifaSocialClienteActionForm"
+			type="gcom.gui.cadastro.tarifasocial.ConcluirAlteracaoDadosTarifaSocialAction"
+			scope="session" path="/concluirAlteracaoDadosTarifaSocialAction">
+			<forward name="exibirAtualizarDadosTarifaSocial"
+				path="/jsp/cadastro/tarifasocial/tarifa_social_dados_atualizar_popup1.jsp" />
+		</action>
+
+		<action
+			type="gcom.gui.cadastro.tarifasocial.CancelarManterTarifaSocialAction"
+			validate="false" path="/cancelarManterTarifaSocialAction" />
+		<!-- FIM NOVO PROCESSO =================================================================================================== -->
+		<action
+			type="gcom.gui.cadastro.tarifasocial.RemoverInserirTarifaSocialColecaoAction"
+			path="/removerInserirTarifaSocialColecaoAction">
+			<forward name="inserirTarifaSocialDadosUmaEconomia"
+				path="/inserirTarifaSocialWizardAction.do?action=exibirInserirTarifaSocialDadosUmaEconomiaAction" />
+			<forward name="inserirTarifaSocialDadosMultiplasEconomias"
+				path="/inserirTarifaSocialWizardAction.do?action=exibirInserirTarifaSocialDadosMultiplasEconomiasAction" />
+		</action>
+
+	</action-mappings>
+
+	<!--********************************************************************************-->
+	<!--******************* ARQUIVO DE PROPRIEDADES *******************-->
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

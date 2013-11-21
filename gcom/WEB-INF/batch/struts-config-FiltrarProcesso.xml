@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="FiltrarProcessoActionForm"
+			type="gcom.gui.batch.FiltrarProcessoActionForm" />
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarProcessoActionForm"
+			type="gcom.gui.batch.ExibirFiltrarProcessoAction" validate="false"
+			scope="session" path="/exibirFiltrarProcessoAction">
+			<forward name="filtrarProcesso"
+				path="/jsp/batch/processo_iniciado_filtrar.jsp" />
+		</action>
+
+		<action name="FiltrarProcessoActionForm"
+			type="gcom.gui.batch.FiltrarProcessoAction" validate="false"
+			scope="session" path="/filtrarProcessoAction">
+			<forward name="resultadoFiltrarProcesso"
+				path="/jsp/batch/processo_iniciado_consultar.jsp" />
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.batch.RemoverProcessoIniciadoAction" scope="request"
+			path="/removerProcessoIniciadoAction" />
+			
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.batch.AutorizarProcessoIniciadoAction" scope="request"
+			path="/autorizarProcessoIniciadoAction" />
+
+
+
+	</action-mappings>
+
+
+</struts-config>

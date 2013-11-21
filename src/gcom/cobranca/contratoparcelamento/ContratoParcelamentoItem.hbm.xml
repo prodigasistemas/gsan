@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.contratoparcelamento.ContratoParcelamentoItem" table="cobranca.contrato_parcel_item" >
+		<id name="id" type="java.lang.Integer" column="cpit_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_contrato_parcel_item</param>
+			</generator>
+		</id>
+		
+		<property name="valorItem" type="java.math.BigDecimal" column="cpit_vlitem" length="4"/>
+		
+		<property name="valarAcrescImpont" type="java.math.BigDecimal" column="cpit_vlacrescimosimpont" length="40"/>
+		
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cpit_tmultimaalteracao" length="8"/>
+		
+		<property name="indicadorItemCancelado" type="java.lang.Short" column="cpit_icitemcancelado" length="2"/>
+		
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to ContratoParcelamentoRD -->
+		<many-to-one name="contrato" class="gcom.cobranca.contratoparcelamento.ContratoParcelamento" not-null="true">
+			<column name="cpar_id"/>
+		</many-to-one>
+		
+		<many-to-one name="documentoTipo" class="gcom.cobranca.DocumentoTipo" not-null="true">
+			<column name="dotp_id"/>
+		</many-to-one>
+		
+		<many-to-one name="contaGeral" class="gcom.faturamento.conta.ContaGeral" not-null="false">
+			<column name="cnta_id"/>
+		</many-to-one>
+		
+		<many-to-one name="debitoACobrarGeral" class="gcom.faturamento.debito.DebitoACobrarGeral" not-null="false">
+			<column name="dbac_id"/>
+		</many-to-one>
+		
+		<many-to-one name="guiaPagamentoGeral" class="gcom.faturamento.GuiaPagamentoGeral" not-null="false">
+			<column name="gpag_id"/>
+		</many-to-one>
+		
+		<many-to-one name="creditoARealizarGeral" class="gcom.faturamento.credito.CreditoARealizarGeral" not-null="false">
+			<column name="crar_id"/>
+		</many-to-one>
+		
+	</class>
+</hibernate-mapping>

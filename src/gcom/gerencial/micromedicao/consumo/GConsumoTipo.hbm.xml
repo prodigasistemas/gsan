@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.gerencial.micromedicao.consumo.GConsumoTipo" table="micromedicao.g_consumo_tipo">
+		<id name="id" type="java.lang.Integer" column="cstp_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="descricao" type="java.lang.String" column="cstp_dsconsumotipo" length="20"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="cstp_dsabreviadaconsumotipo" length="10"/>
+		<property name="indicadorUso" type="java.lang.Short" column="cstp_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cstp_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.gerencial.financeiro.lancamento.GLancamentoItem" table="financeiro.g_lancamento_item">
+		<id name="id" type="java.lang.Integer" column="lcit_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="descricao" type="java.lang.String" column="lcit_dsitemlancamento" length="40"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="lcit_dsabreviado" length="10"/>
+		<property name="indicadorItemContabil" type="java.lang.Short" column="lcit_icitemcontabil" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="lcit_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+	</class>
+</hibernate-mapping>

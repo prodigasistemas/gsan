@@ -1,0 +1,281 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.conta.Conta" table="faturamento.conta">
+		<id name="id" type="java.lang.Integer" column="cnta_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="referenciaContabil" type="java.lang.Integer" column="cnta_amreferenciacontabil" not-null="true" length="4"/>
+		<property name="referencia" type="int" column="cnta_amreferenciaconta" not-null="true" length="4"/>
+		<property name="lote" type="java.lang.Short" column="cnta_nnlote" length="2"/>
+		<property name="subLote" type="java.lang.Short" column="cnta_nnsublote" length="2"/>
+		<property name="codigoSetorComercial" type="java.lang.Integer" column="cnta_cdsetorcomercial" length="4"/>
+		<property name="quadra" type="java.lang.Integer" column="cnta_nnquadra" length="4"/>
+		<property name="digitoVerificadorConta" type="short" column="cnta_dgverificadorconta" not-null="true" length="2"/>
+		<property name="indicadorCobrancaMulta" type="short" column="cnta_iccobrancamulta" not-null="true" length="2"/>
+		<property name="indicadorAlteracaoVencimento" type="java.lang.Short" column="cnta_icalteracaovencimento" length="2"/>
+		<property name="consumoAgua" type="java.lang.Integer" column="cnta_nnconsumoagua" length="4"/>
+		<property name="consumoEsgoto" type="java.lang.Integer" column="cnta_nnconsumoesgoto" length="4"/>
+		<property name="consumoRateioAgua" type="java.lang.Integer" column="cnta_nnconsumorateioagua" length="4"/>
+		<property name="consumoRateioEsgoto" type="java.lang.Integer" column="cnta_nnconsumorateioesgoto" length="4"/>
+		<property name="valorAgua" type="java.math.BigDecimal" column="cnta_vlagua" not-null="true" length="13"/>
+		<property name="valorImposto" type="java.math.BigDecimal" column="cnta_vlimpostos" not-null="false" length="13"/>
+		<property name="valorEsgoto" type="java.math.BigDecimal" column="cnta_vlesgoto" not-null="true" length="13"/>
+		<property name="debitos" type="java.math.BigDecimal" column="cnta_vldebitos" not-null="true" length="13"/>
+		<property name="valorCreditos" type="java.math.BigDecimal" column="cnta_vlcreditos" length="13" not-null="true"/>
+		<property name="percentualEsgoto" type="java.math.BigDecimal" column="cnta_pcesgoto" not-null="true" length="5"/>
+		<property name="dataVencimentoConta" type="java.sql.Date" column="cnta_dtvencimentoconta" not-null="true" length="4"/>
+		<property name="dataValidadeConta" type="java.sql.Date" column="cnta_dtvalidadeconta" length="4"/>
+		<property name="dataInclusao" type="java.sql.Date" column="cnta_dtinclusao" length="4"/>
+		<property name="dataRevisao" type="java.sql.Date" column="cnta_dtrevisao" length="4"/>
+		<property name="dataRetificacao" type="java.sql.Date" column="cnta_dtretificacao" length="4"/>
+		<property name="dataCancelamento" type="java.sql.Date" column="cnta_dtcancelamento" length="4"/>
+		<property name="dataEmissao" type="java.sql.Date" column="cnta_dtemissao" length="4"/>
+		<property name="referenciaBaixaContabil" type="java.lang.Integer" column="cnta_amreferenciabaixacontabil" length="4"/>
+		<property name="indicadorDebitoConta" type="java.lang.Short" column="cnta_icdebitoconta" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cnta_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="dataVencimentoOriginal" type="java.sql.Date" column="cnta_dtvencimentooriginal" not-null="true" length="4"/>
+		<property name="numeroRetificacoes" type="java.lang.Integer" column="cnta_nnretificacao" length="4"/>
+		<property name="numeroFatura" type="java.lang.String" column="cnta_nncontafatura" not-null="false" length="14"/>
+		<property name="numeroAlteracoesVencimento" type="java.lang.Integer" column="cnta_nnalteracoesvencimento" length="9" not-null="false"/>
+		<property name="anoMesReferenciaBaixaSocial" type="java.lang.Integer" column="cnta_amreferenciabaixasocial" not-null="false" length="4"/>
+		<property name="numeroLeituraAtual" type="java.lang.Integer" column="cnta_nnleituraatual" length="9" not-null="false"/>
+		<property name="numeroLeituraAnterior" type="java.lang.Integer" column="cnta_nnleituraanterior" length="9" not-null="false"/>
+		<property name="percentualColeta" type="java.math.BigDecimal" column="cnta_pccoleta" length="5" not-null="false"/>
+		<property name="numeroLeituraAtualPoco" type="java.lang.Integer" column="cnta_nnleituraatualpoco" length="9" not-null="false"/>
+		<property name="numeroLeituraAnteriorPoco" type="java.lang.Integer" column="cnta_nnleituraanteriorpoco" length="9" not-null="false"/>
+		<property name="numeroVolumePoco" type="java.lang.Integer" column="cnta_nnvolumepoco" length="9" not-null="false"/>
+		<property name="numeroBoleto" type="java.lang.Integer" column="cnta_nnboleto" length="9" not-null="false"/>
+		<property name="dataEnvioEmailConta" type="java.sql.Date" column="cnta_dtenvioemailconta" length="4"/>
+		<property name="valorRateioAgua" type="java.math.BigDecimal" column="cnta_vlrateioagua" not-null="false" length="13"/>
+    	<property name="valorRateioEsgoto" type="java.math.BigDecimal" column="cnta_vlrateioesgoto" not-null="false" length="13"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to ContaMotivoCancelamento -->
+		<many-to-one name="contaMotivoCancelamento" class="gcom.faturamento.conta.ContaMotivoCancelamento" not-null="false">
+			<column name="cmcn_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ContaMotivoInclusao -->
+		<many-to-one name="contaMotivoInclusao" class="gcom.faturamento.conta.ContaMotivoInclusao" not-null="false">
+			<column name="cmic_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DocumentoTipo -->
+		<many-to-one name="documentoTipo" class="gcom.cobranca.DocumentoTipo" not-null="false">
+			<column name="dotp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ContaBancaria -->
+		<many-to-one name="contaBancaria" class="gcom.arrecadacao.banco.ContaBancaria" not-null="false">
+			<column name="ctbc_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to FaturamentoTipo -->
+		<many-to-one name="faturamentoTipo" class="gcom.faturamento.FaturamentoTipo" not-null="false">
+			<column name="fttp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to RegistroAtendimento -->
+		<many-to-one name="registroAtendimento" class="gcom.atendimentopublico.registroatendimento.RegistroAtendimento" not-null="false">
+			<column name="rgat_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LigacaoEsgotoSituacao -->
+		<many-to-one name="ligacaoEsgotoSituacao" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao" not-null="true">
+			<column name="lest_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to Refaturamento
+		<set
+			name="refaturamentos"
+			lazy="true"
+			inverse="true"
+		>
+			<key>
+				<column name="cnta_id" />
+			</key>
+			<one-to-many
+				class="mapeamentohibernate.Refaturamento"
+			/>
+		</set>
+		-->
+			<!-- bi-directional one-to-many association to FaturaItem
+		<set
+			name="faturaItens"
+			lazy="true"
+			inverse="true"
+		>
+			<key>
+				<column name="cnta_id" />
+			</key>
+			<one-to-many
+				class="mapeamentohibernate.FaturaItem"
+			/>
+		</set>
+		-->
+			<!-- bi-directional one-to-many association to ContaCategoria -->
+			<set name="contaCategorias" lazy="true" inverse="true" cascade="delete">
+				<key>
+					<column name="cnta_id"/>
+				</key>
+				<one-to-many class="gcom.faturamento.conta.ContaCategoria"/>
+			</set>
+			<!-- bi-directional one-to-many association to Pagamento
+		<set
+			name="pagamentos"
+			lazy="true"
+			inverse="true"
+		>
+			<key>
+				<column name="cnta_id" />
+			</key>
+			<one-to-many
+				class="mapeamentohibernate.Pagamento"
+			/>
+		</set>
+		-->
+			<!-- bi-directional one-to-many association to ClienteConta -->
+			<set name="clienteContas" lazy="true" inverse="true" cascade="delete">
+				<key>
+					<column name="cnta_id"/>
+				</key>
+				<one-to-many class="gcom.cadastro.cliente.ClienteConta"/>
+			</set>
+			<!-- bi-directional one-to-many association to FaturamentoImediatoAjuste
+		<set
+			name="faturamentoImediatoAjustes"
+			lazy="true"
+			inverse="true"
+		>
+			<key>
+				<column name="cnta_id" />
+			</key>
+			<one-to-many
+				class="mapeamentohibernate.FaturamentoImediatoAjuste"
+			/>
+		</set>
+		-->
+			<!-- bi-directional one-to-many association to DebitoCobrado -->
+			<set name="debitoCobrados" lazy="true" inverse="true" cascade="delete">
+				<key>
+					<column name="cnta_id"/>
+				</key>
+				<one-to-many class="gcom.faturamento.debito.DebitoCobrado"/>
+			</set>
+			<!-- bi-directional one-to-many association to DebitoAutomaticoMovimento
+		<set
+			name="debitoAutomaticoMovimentos"
+			lazy="true"
+			inverse="true"
+		>
+			<key>
+				<column name="cnta_id" />
+			</key>
+			<one-to-many
+				class="mapeamentohibernate.DebitoAutomaticoMovimento"
+			/>
+		</set> -->
+			<!-- bi-directional one-to-many association to CreditoRealizado -->
+			<set name="creditoRealizados" lazy="true" inverse="true" cascade="delete">
+				<key>
+					<column name="cnta_id"/>
+				</key>
+				<one-to-many class="gcom.faturamento.credito.CreditoRealizado"/>
+			</set>
+			<!-- bi-directional one-to-many association to LancamentoResumoConta
+		<set
+			name="lancamentoResumoContas"
+			lazy="true"
+			inverse="true"
+		>
+			<key>
+				<column name="cnta_id" />
+			</key>
+			<one-to-many
+				class="mapeamentohibernate.LancamentoResumoConta"
+			/>
+		</set>
+		-->
+			<set name="contaImpostosDeduzidos" lazy="true" inverse="true" cascade="delete">
+				<key>
+					<column name="cnta_id"/>
+				</key>
+				<one-to-many class="gcom.faturamento.conta.ContaImpostosDeduzidos"/>
+			</set>
+			<!-- bi-directional many-to-one association to ConsumoTarifa -->
+			<many-to-one name="consumoTarifa" class="gcom.faturamento.consumotarifa.ConsumoTarifa" not-null="true">
+				<column name="cstf_id"/>
+			</many-to-one>
+			<!-- bi-directional many-to-one association to ImovelPerfil -->
+			<many-to-one name="imovelPerfil" class="gcom.cadastro.imovel.ImovelPerfil" not-null="false">
+				<column name="iper_id"/>
+			</many-to-one>
+			<!-- bi-directional many-to-one association to Quadra -->
+			<many-to-one name="quadraConta" class="gcom.cadastro.localidade.Quadra" not-null="true">
+				<column name="qdra_id"/>
+			</many-to-one>
+			<!-- bi-directional many-to-one association to Localidade -->
+			<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+				<column name="loca_id"/>
+			</many-to-one>
+			<!-- bi-directional many-to-one association to MotivoNaoEntregaDocumento -->
+			<many-to-one name="motivoNaoEntregaDocumento" class="gcom.faturamento.conta.MotivoNaoEntregaDocumento" not-null="false">
+				<column name="mned_id"/>
+			</many-to-one>
+			<!-- bi-directional many-to-one association to LigacaoAguaSituacao -->
+			<many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="true">
+				<column name="last_id"/>
+			</many-to-one>
+			<!-- bi-directional many-to-one association to ContaMotivoRevisao -->
+			<many-to-one name="contaMotivoRevisao" class="gcom.faturamento.conta.ContaMotivoRevisao" not-null="false">
+				<column name="cmrv_id"/>
+			</many-to-one>
+			<!-- bi-directional many-to-one association to ContaMotivoRetificacao -->
+			<many-to-one name="contaMotivoRetificacao" class="gcom.faturamento.conta.ContaMotivoRetificacao" not-null="false">
+				<column name="cmrt_id"/>
+			</many-to-one>
+			<!-- bi-directional many-to-one association to DebitoCreditoSituacao -->
+			<many-to-one name="debitoCreditoSituacaoAtual" class="gcom.faturamento.debito.DebitoCreditoSituacao" not-null="true">
+				<column name="dcst_idatual"/>
+			</many-to-one>
+			<!-- bi-directional many-to-one association to DebitoCreditoSituacao -->
+			<many-to-one name="debitoCreditoSituacaoAnterior" class="gcom.faturamento.debito.DebitoCreditoSituacao" not-null="false">
+				<column name="dcst_idanterior"/>
+			</many-to-one>
+			<!-- bi-directional many-to-one association to Funcionario -->
+			<many-to-one name="funcionarioLeitura" class="gcom.cadastro.funcionario.Funcionario" not-null="false">
+				<column name="func_idfuncionarioleitura"/>
+			</many-to-one>
+			<!-- bi-directional many-to-one association to Funcionario -->
+			<many-to-one name="funcionarioEntrega" class="gcom.cadastro.funcionario.Funcionario" not-null="false">
+				<column name="func_idfuncionarioentrega"/>
+			</many-to-one>
+			<!-- bi-directional one-to-one association to ContaGeral -->
+			<one-to-one name="contaGeral" class="gcom.faturamento.conta.ContaGeral" outer-join="auto" constrained="true"/>
+			<!-- bi-directional many-to-one association to Funcionario -->
+			<many-to-one name="parcelamento" class="gcom.cobranca.parcelamento.Parcelamento" not-null="false">
+				<column name="parc_id"/>
+			</many-to-one>
+			<many-to-one name="origem" class="gcom.faturamento.conta.ContaGeral" not-null="false">
+				<column name="cnta_idorigem"/>
+			</many-to-one>
+			<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario" not-null="false">
+				<column name="usur_id"/>
+			</many-to-one>
+			<many-to-one name="faturamentoGrupo" class="gcom.faturamento.FaturamentoGrupo" not-null="false">
+				<column name="ftgr_id"/>
+			</many-to-one>
+			<many-to-one name="rota" class="gcom.micromedicao.Rota" not-null="false">
+				<column name="rota_id"/>
+			</many-to-one>
+			<set name="debitoAutomaticoMovimento" lazy="true" inverse="true" cascade="delete">
+				<key>
+					<column name="cnta_id"/>
+				</key>
+				<one-to-many class="gcom.arrecadacao.debitoautomatico.DebitoAutomaticoMovimento"/>
+			</set>
+	</class>
+</hibernate-mapping>

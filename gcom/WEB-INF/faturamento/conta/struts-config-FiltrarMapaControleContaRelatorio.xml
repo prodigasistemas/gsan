@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarMapaControleContaRelatorioActionForm"
+			type="gcom.gui.faturamento.conta.FiltrarMapaControleContaRelatorioActionForm" />
+
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarMapaControleContaRelatorioActionForm"
+			type="gcom.gui.faturamento.conta.ExibirFiltrarMapaControleContaRelatorioAction"
+			validate="true" scope="session"
+			path="/exibirMapaControContalaRelatorioAction">
+			<forward name="filtrarMapaControleContaRelatorio"
+				path="/jsp/faturamento/conta/filtrar_mapa_controle_conta_relatorio.jsp" />
+			<forward name="filtrarResumoContaLocalidadeRelatorio"
+				path="/jsp/faturamento/conta/filtrar_resumo_conta_localidade_relatorio.jsp" />
+		</action>
+
+		<action name="FiltrarMapaControleContaRelatorioActionForm"
+			type="gcom.gui.faturamento.conta.FiltrarMapaControleContaRelatorioAction"
+			validate="true" scope="session"
+			path="/filtrarMapaControleContaRelatorioAction">
+			<forward name="gerarRelatorioMapaControleConta"
+				path="/gerarRelatorioMapaControleContaAction.do" />
+		</action>
+		
+		<action name="FiltrarMapaControleContaRelatorioActionForm"
+			type="gcom.gui.faturamento.conta.FiltrarResumoContaLocalidadeAction"
+			validate="true" scope="session"
+			path="/filtrarResumoContaLocalidadeRelatorioAction">
+			<forward name="gerarResumoContaLocalidade"
+				path="/gerarRelatorioResumoContaLocalidadeAction.do" />
+		</action>
+		
+		<action name="FiltrarMapaControleContaRelatorioActionForm"
+			type="gcom.gui.relatorio.faturamento.conta.GerarRelatorioMapaControleContaAction"
+			input="/filtrarMapaControleContaRelatorioAction.do"
+			path="/gerarRelatorioMapaControleContaAction" />
+			
+		<action name="FiltrarMapaControleContaRelatorioActionForm"
+			type="gcom.gui.relatorio.faturamento.conta.GerarRelatorioResumoContaLocalidadeAction"
+			input="/filtrarResumoContaLocalidadeAction.do"
+			path="/gerarRelatorioResumoContaLocalidadeAction" />
+
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

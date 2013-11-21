@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="gcom.cobranca.parcelamento.ParcelamentoPagamentoCartaoCredito" table="cobranca.parcel_pagto_cartao_cred">
+		<id name="id" type="java.lang.Integer" column="pacc_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_parcel_pagto_cartao_cred</param>
+			</generator>
+		</id>
+		<property name="documentoCartaoCredito" type="java.lang.String" column="pacc_nndoctocartaocredito" not-null="true"/>
+		<property name="numeroAutorizacao" type="java.lang.String" column="pacc_nnautorzcartaocredito" not-null="true"/>
+		<property name="numeroCartaoCredito" type="java.lang.String" column="pacc_nnnumerocartaocredito" not-null="true"/>
+		<property name="anoMesValidade" type="java.lang.Integer" column="pacc_amvalidadecartaocredito" not-null="true"/>
+		<property name="identificacaoTransacao" type="java.lang.String" column="pacc_nnidentificadortransacao" not-null="true"/>
+		<property name="valorParcelado" type="java.math.BigDecimal" column="pacc_vlparcelado" not-null="true"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="pacc_tmultimaalteracao" not-null="true"/>
+		<property name="quantidadeParcelas" type="java.lang.Integer" column="pacc_qtparcela" not-null="true"/>
+		<property name="dataConfirmacao" type="java.sql.Date" column="pacc_dtconfirmacao" not-null="false"/>
+		<property name="indicadorConfirmadoOperadora" type="java.lang.Short" column="pacc_icconfirmadooperadora" length="2" not-null="true"/>
+		<property name="dataConfirmadoOperadora" type="java.sql.Date" column="pacc_dtconfirmadooperadora" not-null="false"/>
+		<property name="valorConfirmadoOperadora" type="java.math.BigDecimal" column="pacc_vlconfirmadooperadora" not-null="false"/>
+		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="true">
+			<column name="clie_idtitularcartaocredito"/>
+		</many-to-one>
+		<many-to-one name="arrecadador" class="gcom.arrecadacao.Arrecadador" not-null="true">
+			<column name="arrc_id"/>
+		</many-to-one>
+		<many-to-one name="usuarioConfirmacao" class="gcom.seguranca.acesso.usuario.Usuario" not-null="true">
+			<column name="usur_idconfirmacao"/>
+		</many-to-one>
+		<many-to-one name="parcelamento" class="gcom.cobranca.parcelamento.Parcelamento" not-null="true">
+			<column name="parc_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

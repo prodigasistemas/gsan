@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.CobrancaAtividade" table="cobranca.cobranca_atividade">
+		<id name="id" type="java.lang.Integer" column="cbat_id">
+			<generator class="sequence">
+				<param name="sequence">
+				cobranca.seq_cobranca_atividade</param>
+			</generator>
+		</id>
+		<property name="descricaoCobrancaAtividade" type="java.lang.String" column="cbat_dscobrancaatividade" length="30"/>
+		<property name="indicadorComando" type="java.lang.Short" column="cbat_iccomando" length="2"/>
+		<property name="indicadorExecucao" type="java.lang.Short" column="cbat_icexecucao" length="2"/>
+		<property name="indicadorCronograma" type="java.lang.Short" column="cbat_iccronograma" length="2"/>
+		<property name="indicadorUso" type="java.lang.Short" column="cbat_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cbat_tmultimaalteracao" length="8"/>
+		<property name="ordemRealizacao" type="java.lang.Short" column="cbat_nnordemrealizacao" length="2"/>
+		<property name="indicadorObrigatoriedade" type="java.lang.Short" column="cbat_icobrigatoriedade" length="2"/>
+        <property name="numeroDiasExecucao" type="java.lang.Integer" column="cbat_nndiasexecucao" length="4"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to CobrancaAcaoAtividadeCronog -->
+		<!--  
+    <set
+        name="cobrancaAcaoAtividadeCronogs"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="cbat_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CobrancaAcaoAtividadeCronog"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to CobrancaAcaoAtividadeComand -->
+		<!--  
+    <set
+        name="cobrancaAcaoAtividadeComands"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="cbat_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CobrancaAcaoAtividadeComand"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to CobrancaAtividade -->
+		<!--  
+    <set
+        name="cobrancaAtividades"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="cbat_idatividadeprecedente" />
+        </key>
+        <one-to-many 
+            class="gcom.CobrancaAtividade"
+        />
+    </set>
+    -->
+		<!-- bi-directional many-to-one association to CobrancaAtividade -->
+		<many-to-one name="cobrancaAtividadePredecessora" class="gcom.cobranca.CobrancaAtividade" not-null="false">
+			<column name="cbat_idatividadeprecedente"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Processo -->
+		<many-to-one name="processo" class="gcom.batch.Processo" not-null="false">
+			<column name="proc_id"/>
+		</many-to-one>
+		
+		<many-to-one
+        	name="cobrancaAcao"
+	        class="gcom.cobranca.CobrancaAcao"
+    	    not-null="false"
+	    >
+        	<column name="cbac_id" />
+    	</many-to-one>
+	</class>
+</hibernate-mapping>

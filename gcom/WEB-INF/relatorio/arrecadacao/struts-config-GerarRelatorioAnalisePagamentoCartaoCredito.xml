@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="RelatorioAnalisePagamentoCartaoDebitoForm"
+			type="gcom.gui.relatorio.arrecadacao.RelatorioAnalisePagamentoCartaoDebitoForm" />					
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC1043] Gerar Relatório Análise Pagamento Cartão Débito Auhtor: Hugo Amorim Data:21/07/2010-->
+		<action name="RelatorioAnalisePagamentoCartaoDebitoForm"
+			type="gcom.gui.relatorio.arrecadacao.ExibirGerarRelatorioAnalisePagamentoCartaoDebitoAction"
+			validate="true" 
+			scope="session"
+			path="/exibirGerarRelatorioAnalisePagamentoCartaoDebitoAction">
+			
+			<forward name="exibirGerarRelatorioAnalisePagamentoCartaoDebitoAction"
+				path="/jsp/relatorio/arrecadacao/relatorio_analise_pagamentos_cartao_debito.jsp" />
+		</action>
+		
+		<action name="RelatorioAnalisePagamentoCartaoDebitoForm"
+				type="gcom.gui.relatorio.arrecadacao.GerarRelatorioAnalisePagamentoCartaoDebitoAction"
+				validate="true" scope="session"
+				path="/gerarRelatorioAnalisePagamentoCartaoDebitoAction">
+		</action>
+
+	</action-mappings>
+
+</struts-config>

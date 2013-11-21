@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.seguranca.acesso.OperacaoTabela" table="seguranca.operacao_tabela">
+		<composite-id name="comp_id" class="gcom.seguranca.acesso.OperacaoTabelaPK">
+			<key-property name="operacaoId" column="oper_id" type="java.lang.Integer" length="4"/>
+			<key-property name="tabelaId" column="tabe_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to Tabela -->
+		<many-to-one name="tabela" class="gcom.seguranca.transacao.Tabela" not-null="true" update="false" insert="false">
+			<column name="tabe_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Operacao -->
+		<many-to-one name="operacao" class="gcom.seguranca.acesso.Operacao" not-null="true" update="false" insert="false">
+			<column name="oper_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

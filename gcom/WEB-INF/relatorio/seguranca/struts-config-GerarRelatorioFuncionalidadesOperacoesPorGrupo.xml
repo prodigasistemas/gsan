@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="GerarRelatorioFuncionalidadesOperacoesPorGrupoActionForm"
+			type="gcom.gui.relatorio.seguranca.GerarRelatorioFuncionalidadesOperacoesPorGrupoActionForm" />
+	</form-beans>
+
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="GerarRelatorioFuncionalidadesOperacoesPorGrupoActionForm"
+			type="gcom.gui.relatorio.seguranca.ExibirGerarRelatorioFuncionalidadesOperacoesPorGrupoAction"
+			validate="false" 
+			scope="session"
+			path="/exibirGerarRelatorioFuncionalidadesOperacoesPorGrupoAction">
+			
+			<forward name="exibirGerarRelatorioFuncionalidadesOperacoesPorGrupoAction" 
+				path="/jsp/relatorio/seguranca/relatorio_funcionalidades_operacoes_por_grupo.jsp" />
+				
+		</action>
+		
+		<action name="GerarRelatorioFuncionalidadesOperacoesPorGrupoActionForm"
+			type="gcom.gui.relatorio.seguranca.GerarRelatorioFuncionalidadesOperacoesPorGrupoAction"
+			validate="true" 
+			path="/gerarRelatorioFuncionalidadesOperacoesPorGrupoAction" />		
+		
+	</action-mappings>
+
+</struts-config>

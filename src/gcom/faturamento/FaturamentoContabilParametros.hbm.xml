@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.FaturamentoContabilParametros" table="faturamento.fatur_contb_parametros">
+		<id name="id" type="java.lang.Integer" column="plcf_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_fatur_contb_parametros</param>
+			</generator>
+		</id>
+		<property name="descricaoHistoricoCredito" type="java.lang.String" column="plcf_dshistoricocre" length="60" not-null="true"/>
+		<property name="descricaoHistoricoDebito" type="java.lang.String" column="plcf_dshistoricodeb" length="60" not-null="true"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="plcf_tmultimaalteracao" length="8" not-null="true"/>
+		<!-- bi-directional many-to-one association to LancamentoTipo -->
+		<many-to-one name="lancamentoTipo" class="gcom.financeiro.lancamento.LancamentoTipo" not-null="true">
+			<column name="lctp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LancamentoItem -->
+		<many-to-one name="lancamentoItem" class="gcom.financeiro.lancamento.LancamentoItem" not-null="true">
+			<column name="lcit_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LancamentoItemContabil -->
+		<many-to-one name="lancamentoItemContabil" class="gcom.financeiro.lancamento.LancamentoItemContabil" not-null="false">
+			<column name="lict_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Categoria -->
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ContaContabil -->
+		<many-to-one name="contaContabilDebito" class="gcom.financeiro.ContaContabil" not-null="true">
+			<column name="cnct_iddebito"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ContaContabil -->
+		<many-to-one name="contaContabilCredito" class="gcom.financeiro.ContaContabil" not-null="true">
+			<column name="cnct_idcredito"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

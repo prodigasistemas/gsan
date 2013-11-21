@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="GerarSupressoesReligacoesReestabelecimentosActionForm"
+			type="gcom.gui.relatorio.cobranca.GerarSupressoesReligacoesReestabelecimentosActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	
+	<action-mappings>
+		<action name="GerarSupressoesReligacoesReestabelecimentosActionForm"  
+			type="gcom.gui.relatorio.cobranca.ExibirFiltroSupressoesReligacoesReestabelecimentosAction" 	
+			validate="false"
+			scope="session"	
+			path="/exibirFiltroSupressoesReligacoesReestabelecimentosAction">
+			
+			<forward name="filtroSupresoesReligacoesReestabelecimentos" path="/jsp/cobranca/reestabelecimento_religacoes_supressoes_acompanhamento_filtrar.jsp" />
+		</action>
+		<action name="GerarSupressoesReligacoesReestabelecimentosActionForm"  
+			type="gcom.gui.relatorio.cobranca.GerarRelatorioSupressoesReligacoesRestabelecimentosAction" 	
+			validate="false"
+			scope="session"	
+			path="/gerarRelatorioSupressoesReligacoesRestabelecimentosAction">
+		</action>
+	</action-mappings>
+</struts-config>

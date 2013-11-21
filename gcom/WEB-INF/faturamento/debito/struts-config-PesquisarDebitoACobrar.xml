@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="PesquisarDebitoACobrarActionForm" type="gcom.gui.faturamento.debito.PesquisarDebitoACobrarActionForm" />						
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<action name="PesquisarDebitoACobrarActionForm" 
+        scope="session"
+		type="gcom.gui.faturamento.debito.ExibirPesquisarDebitoACobrarAction" 
+		path="/exibirPesquisarDebitoACobrarAction">
+			<forward name="pesquisarDebitoACobrar"	path="/jsp/faturamento/debito/debito_a_cobrar_pesquisar.jsp" />
+		</action>
+		
+		<action name="PesquisarDebitoACobrarActionForm" type="gcom.gui.faturamento.debito.PesquisarDebitoACobrarAction" scope="session" validate="true" input="/exibirPesquisarDebitoACobrarAction.do" path="/pesquisarDebitoACobrarAction">
+			<forward name="listaDebitoACobrar" path="/jsp/faturamento/debito/debito_a_cobrar_resultado_pesquisa.jsp" />
+		</action>
+		
+	</action-mappings>
+
+
+</struts-config>

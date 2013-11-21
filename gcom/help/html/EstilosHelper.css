@@ -1,0 +1,53 @@
+body {
+	background: #E9F7FE;
+}
+
+.cabecalho {
+	color: #000000;
+	text-align: center;
+	font-weight: bold;
+	font-family: Verdana, Helvetica, sans-serif;
+	font-size: 25px;
+}
+
+.item {
+	color: #000000;
+	font-weight: bold;
+	font-family: Verdana, Helvetica, sans-serif;
+	font-size: 13px;
+}
+
+.textoNormal {
+	color: #000000;
+	font-family: Verdana, Helvetica, sans-serif;
+	font-size: 12px;
+}
+
+.textoNormalNegrito {
+	color: #000000;
+	font-weight: bold;
+	font-family: Verdana, Helvetica, sans-serif;
+	font-size: 12px;
+}
+
+.textoObservação {
+	font-family: Verdana, Helvetica, sans-serif;
+	font-size: 12px;	
+	font-style: italic; 
+	text-decoration: underline; 
+	color: rgb(255, 0, 0);
+}
+
+
+
+.table{
+	border: 0px;
+	background-color: #90c7fc;
+	border-spacing: 0px;
+	padding: 0px;
+}
+
+td{
+	background-color: #E9F7FE;
+}
+

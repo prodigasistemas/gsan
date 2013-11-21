@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>  
+
+	<form-beans>
+	
+		<form-bean name="ManterTipoPerfilServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ManterTipoPerfilServicoActionForm" />
+			
+		<form-bean name="AtualizarTipoPerfilServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.AtualizarTipoPerfilServicoActionForm" />
+	
+		<form-bean name="ManutencaoRegistroActionForm" 
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+			
+	</form-beans>
+
+	<global-forwards />
+	
+	
+	<action-mappings> 	
+		<action  name="ManterTipoPerfilServicoActionForm"  
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirManterServicoTipoPerfilAction"
+			validate="false" 
+			scope="session" 
+			path="/exibirManterServicoTipoPerfilAction">
+			
+			<forward name="manterTipoPerfilServico"
+				path="/jsp/atendimentopublico/ordemservico/servico_perfil_tipo_manter.jsp" />
+			
+			<forward name="exibirAtualizarTipoPerfilServico"
+				path="/exibirAtualizarTipoPerfilServicoAction.do" /> 
+		</action>
+		
+		<action name="AtualizarTipoPerfilServicoActionForm"  
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirAtualizarTipoPerfilServicoAction"
+			validate="false" 
+			scope="session" 
+			path="/exibirAtualizarTipoPerfilServicoAction">
+			
+			<forward name="atualizarTipoPerfilServico"
+				path="/jsp/atendimentopublico/ordemservico/servico_perfil_tipo_atualizar.jsp" />
+		</action>
+		
+		<action name="AtualizarTipoPerfilServicoActionForm"  
+			type="gcom.gui.atendimentopublico.ordemservico.AtualizarTipoPerfilServicoAction"
+			validate="false" 
+			scope="session" 
+			path="/atualizarTipoPerfilServicoAction">
+			
+		</action>		
+		
+		<action  name="ManutencaoRegistroActionForm"  
+			type="gcom.gui.atendimentopublico.ordemservico.RemoverTipoPerfilServicoAction"
+			validate="false" 
+			scope="session" 
+			path="/removerTipoPerfilServicoAction">
+
+		</action>		
+		<action name="FiltrarTipoPerfilServicoActionForm"
+			type="gcom.gui.relatorio.atendimentopublico.ordemservico.GerarRelatorioTipoPerfilServicoManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioTipoPerfilServicoManterAction" />
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

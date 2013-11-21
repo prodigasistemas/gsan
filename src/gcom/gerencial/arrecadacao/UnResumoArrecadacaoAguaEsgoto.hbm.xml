@@ -1,0 +1,142 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.gerencial.arrecadacao.UnResumoArrecadacaoAguaEsgoto" table="arrecadacao.un_resumo_arrec_agua_esgoto">
+		<id name="id" type="java.lang.Integer" column="rear_id">
+			<generator class="sequence">
+				<param name="sequence">arrecadacao.sequence_un_resumo_arrecadacao_agua_esgoto</param>
+			</generator>
+		</id>
+		<property name="referencia" type="int" column="rear_amreferencia" not-null="true" length="4"/>
+		<property name="codigoSetorComercial" type="int" column="rear_cdsetorcomercial" not-null="true" length="4"/>
+		<property name="numeroQuadra" type="int" column="rear_nnquadra" not-null="true" length="4"/>
+		<property name="quantidadeContas" type="int" column="rear_qtcontas" not-null="true" length="4"/>
+		<property name="indicadorRecebidasNomes" type="short" column="rear_icrecebidasnomes" not-null="true" length="2"/>
+		<property name="volumeAgua" type="java.math.BigDecimal" column="rear_vlagua" not-null="true" length="13"/>
+		<property name="volumeEgoto" type="java.math.BigDecimal" column="rear_vlesgoto" not-null="true" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="rear_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="volumeNaoIdentificado" type="java.math.BigDecimal" column="rear_vlnaoidentificado" not-null="true" length="13"/>
+		<property name="valorDocumentosRecebidosCredito" type="java.math.BigDecimal" column="rear_vldocumentosrecebidoscredito" not-null="true" length="13"/>
+		<property name="valorDocumentosRecebidosOutros" type="java.math.BigDecimal" column="rear_vldocumentosrecebidosoutros" not-null="true" length="13"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to GSubcategoria -->
+		<many-to-one name="gersubCategoria" class="gcom.gerencial.cadastro.imovel.GSubcategoria" not-null="true">
+			<column name="scat_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GClienteTipo -->
+		<many-to-one name="gerClienteTipo" class="gcom.gerencial.cadastro.cliente.GClienteTipo" not-null="true">
+			<column name="cltp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoAguaSituacao -->
+		<many-to-one name="gerLigacaoAguaSituacao" class="gcom.gerencial.atendimentopublico.ligacaoagua.GLigacaoAguaSituacao" not-null="true">
+			<column name="last_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GUnidadeNegocio -->
+		<many-to-one name="gerUnidadeNegocio" class="gcom.gerencial.cadastro.localidade.GUnidadeNegocio" not-null="true">
+			<column name="uneg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLocalidade -->
+		<many-to-one name="gerLocalidade" class="gcom.gerencial.cadastro.localidade.GLocalidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLocalidade -->
+		<many-to-one name="gerLocalidadeElo" class="gcom.gerencial.cadastro.localidade.GLocalidade" not-null="true">
+			<column name="loca_cdelo"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GQuadra -->
+		<many-to-one name="gerQuadra" class="gcom.gerencial.cadastro.localidade.GQuadra" not-null="true">
+			<column name="qdra_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoEsgotoSituacao -->
+		<many-to-one name="gerLigacaoEsgotoSituacao" class="gcom.gerencial.atendimentopublico.ligacaoesgoto.GLigacaoEsgotoSituacao" not-null="true">
+			<column name="lest_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoEsgotoPerfil -->
+		<many-to-one name="gerLigacaoEsgotoPerfil" class="gcom.gerencial.atendimentopublico.ligacaoesgoto.GLigacaoEsgotoPerfil" not-null="true">
+			<column name="lepf_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to UnResumoArrecadacaoCredito -->
+		<set name="unResumoArrecadacaoCreditos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="rear_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.arrecadacao.UnResumoArrecadacaoCredito"/>
+		</set>
+		<!-- bi-directional one-to-many association to UnResumoArrecadacaoOutro -->
+		<set name="unResumoArrecadacaoOutros" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="rear_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.arrecadacao.UnResumoArrecadacaoOutro"/>
+		</set>
+		<!-- bi-directional many-to-one association to GGerenciaRegional -->
+		<many-to-one name="gerGerenciaRegional" class="gcom.gerencial.cadastro.localidade.GGerenciaRegional" not-null="true">
+			<column name="greg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GSetorComercial -->
+		<many-to-one name="gerSetorComercial" class="gcom.gerencial.cadastro.localidade.GSetorComercial" not-null="true">
+			<column name="stcm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GDocumentoTipo -->
+		<many-to-one name="gerDocumentoTipo" class="gcom.gerencial.cobranca.GDocumentoTipo" not-null="true">
+			<column name="dotp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GPagamentoSituacao -->
+		<many-to-one name="gerPagamentoSituacao" class="gcom.gerencial.arrecadacao.pagamento.GPagamentoSituacao" not-null="true">
+			<column name="pgst_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoAguaPerfil -->
+		<many-to-one name="gerLigacaoAguaPerfil" class="gcom.gerencial.atendimentopublico.ligacaoagua.GLigacaoAguaPerfil" not-null="true">
+			<column name="lapf_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GEpocaPagamento -->
+		<many-to-one name="gerEpocaPagamento" class="gcom.gerencial.arrecadacao.pagamento.GEpocaPagamento" not-null="true">
+			<column name="eppa_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GEsferaPoder -->
+		<many-to-one name="gerEsferaPoder" class="gcom.gerencial.cadastro.cliente.GEsferaPoder" not-null="true">
+			<column name="epod_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GCategoria -->
+		<many-to-one name="gerCategoria" class="gcom.gerencial.cadastro.imovel.GCategoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GImovelPerfil -->
+		<many-to-one name="gerImovelPerfil" class="gcom.gerencial.cadastro.imovel.GImovelPerfil" not-null="true">
+			<column name="iper_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GRota -->
+		<many-to-one name="gerRota" class="gcom.gerencial.micromedicao.GRota" not-null="true">
+			<column name="rota_id"/>
+		</many-to-one>
+		<many-to-one name="gerCreditoOrigem" class="gcom.gerencial.faturamento.credito.GCreditoOrigem" not-null="true">
+			<column name="crog_idcredito"/>
+		</many-to-one>
+		<many-to-one name="gerLancamentoItemContabilCredito" class="gcom.gerencial.financeiro.lancamento.GLancamentoItemContabil" not-null="true">
+			<column name="lict_idcredito"/>
+		</many-to-one>
+		<many-to-one name="gerLancamentoItemContabilOutros" class="gcom.gerencial.financeiro.lancamento.GLancamentoItemContabil" not-null="true">
+			<column name="lict_idoutros"/>
+		</many-to-one>
+		<many-to-one name="gerFinanciamentoTipoOutros" class="gcom.gerencial.financeiro.GFinanciamentoTipo" not-null="true">
+			<column name="fntp_idoutros"/>
+		</many-to-one>
+		<many-to-one name="gerArrecadacaoForma" class="gcom.gerencial.arrecadacao.GArrecadacaoForma" not-null="true">
+			<column name="arfm_id"/>
+		</many-to-one>
+		<many-to-one name="gerArrecadador" class="gcom.gerencial.arrecadacao.GArrecadador" not-null="true">
+			<column name="arrc_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

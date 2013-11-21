@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.batch.FuncionalidadeIniciada" table="batch.funcionalidade_iniciada">
+		<id name="id" type="java.lang.Integer" column="fuin_id">
+			<generator class="sequence">
+				<param name="sequence">batch.seq_funcionalidade_iniciada</param>
+			</generator>
+		</id>
+		<property name="dataHoraInicio" type="java.sql.Timestamp" column="fuin_tminicio" length="8"/>
+		<property name="dataHoraTermino" type="java.sql.Timestamp" column="fuin_tmtermino" length="8"/>
+		<property name="tarefaBatch" type="binary" column="fuin_parametros"/>
+		<property name="descricaoExcecao" type="java.lang.String" column="fuin_dserro"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to FuncionalidadeSituacao -->
+		<many-to-one name="funcionalidadeSituacao" class="gcom.batch.FuncionalidadeSituacao" not-null="true">
+			<column name="fnst_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ProcessoIniciado -->
+		<many-to-one name="processoIniciado" class="gcom.batch.ProcessoIniciado" not-null="true">
+			<column name="proi_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ProcessoFuncionalidade -->
+		<many-to-one name="processoFuncionalidade" class="gcom.batch.ProcessoFuncionalidade" not-null="true">
+			<column name="prfn_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to UnidadeIniciada -->
+		<set name="unidadesIniciadas" lazy="true" inverse="true" cascade="delete">
+			<key>
+				<column name="fuin_id"/>
+			</key>
+			<one-to-many class="gcom.batch.UnidadeIniciada"/>
+		</set>
+		<!-- bi-directional one-to-many association to RelatorioGerado -->
+		<set name="relatoriosGerados" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="fuin_id"/>
+			</key>
+			<one-to-many class="gcom.batch.RelatorioGerado"/>
+		</set>
+	</class>
+</hibernate-mapping>

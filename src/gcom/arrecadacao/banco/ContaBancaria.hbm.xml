@@ -1,0 +1,122 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.arrecadacao.banco.ContaBancaria" table="arrecadacao.conta_bancaria">
+		<id name="id" type="java.lang.Integer" column="ctbc_id">
+			<generator class="sequence">
+				<param name="sequence">
+				arrecadacao.seq_conta_bancaria</param>
+			</generator>
+		</id>
+		<property name="numeroConta" type="java.lang.String" column="ctbc_nnconta" not-null="true" length="20"/>
+		<property name="numeroContaContabil" type="java.lang.Integer" column="ctbc_nncontacontabil" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ctbc_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to ContaHistorico -->
+		<!--  
+    <set
+        name="contaHistoricos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="ctbc_id" />
+        </key>
+        <one-to-many 
+            class="gcom.ContaHistorico"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to ArrecadadorContrato -->
+		<!-- 
+    <set
+        name="arrecadadorContratosByCtbcIddepositotarifa"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="ctbc_iddepositotarifa" />
+        </key>
+        <one-to-many 
+            class="gcom.ArrecadadorContrato"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to ArrecadadorContrato -->
+		<!-- 
+    <set
+        name="arrecadadorContratosByCtbcIddepositoarrecadacao"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="ctbc_iddepositoarrecadacao" />
+        </key>
+        <one-to-many 
+            class="gcom.ArrecadadorContrato"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to Conta -->
+		<!--  
+    <set
+        name="contas"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="ctbc_id" />
+        </key>
+        <one-to-many 
+            class="gcom.Conta"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to AvisoBancario -->
+		<!-- 
+    <set
+        name="avisoBancarios"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="ctbc_id" />
+        </key>
+        <one-to-many 
+            class="gcom.AvisoBancario"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to AvisoAcerto -->
+		<!-- 
+    <set
+        name="avisoAcertos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="ctbc_id" />
+        </key>
+        <one-to-many 
+            class="gcom.AvisoAcerto"
+        />
+    </set>
+    -->
+		<!-- bi-directional many-to-one association to Agencia -->
+		<many-to-one name="agencia" class="gcom.arrecadacao.banco.Agencia" not-null="true">
+			<column name="agen_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

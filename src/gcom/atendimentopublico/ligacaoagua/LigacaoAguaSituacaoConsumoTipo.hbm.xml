@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacaoConsumoTipo" table="atendimentopublico.lig_agua_sit_cons_tipo">
+		<id name="id" type="java.lang.Integer" column="lact_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_lig_agua_sit_cons_tipo</param>
+			</generator>
+		</id>
+		<!-- bi-directional many-to-one association to LigacaoAguaSituacao -->
+		<many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="true">
+			<column name="last_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ConsumoTipo -->
+		<many-to-one name="consumoTipo" class="gcom.micromedicao.consumo.ConsumoTipo" not-null="true">
+			<column name="cstp_id"/>
+		</many-to-one>
+		<property name="indicadorUso" type="java.lang.Short" column="lact_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="lact_tmultimaalteracao" length="8"/>
+	</class>
+</hibernate-mapping>

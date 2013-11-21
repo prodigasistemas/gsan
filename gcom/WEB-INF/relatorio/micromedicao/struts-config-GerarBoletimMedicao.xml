@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="GerarRelatorioBoletimMedicaoForm"
+			type="gcom.gui.relatorio.micromedicao.GerarRelatorioBoletimMedicaoForm" />
+	</form-beans>
+
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="GerarRelatorioBoletimMedicaoForm"
+			type="gcom.gui.relatorio.micromedicao.ExibirGerarRelatorioBoletimMedicaoAction"
+			validate="false" 
+			scope="session"
+			path="/exibirGerarRelatorioBoletimMedicaoAction">
+			
+			<forward name="exibirGerarRelatorioBoletimMedicao" 
+				path="/jsp/relatorio/micromedicao/relatorio_boletim_medicao.jsp" />
+				
+		</action>
+		
+		<action name="GerarRelatorioBoletimMedicaoForm"
+			type="gcom.gui.relatorio.micromedicao.GerarRelatorioBoletimMedicaoAction"
+			validate="true" 
+			path="/gerarRelatorioBoletimMedicaoAction" />		
+		
+	</action-mappings>
+
+</struts-config>

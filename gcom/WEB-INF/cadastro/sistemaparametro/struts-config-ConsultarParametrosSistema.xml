@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean 
+		    name="ConsultarParametrosSistemaActionForm"
+			type="gcom.gui.cadastro.sistemaparametro.ConsultarParametrosSistemaActionForm" /> 
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+				
+			
+		<action name="ConsultarParametrosSistemaActionForm"  
+			type="gcom.gui.cadastro.sistemaparametro.ExibirConsultarParametrosSistemaAction" 
+			validate="true"
+			scope="session"
+			path="/exibirConsultarParametrosSistemaAction">
+
+			<forward name="consultarParametrosSistema"
+			path="/jsp/cadastro/sistemaparametro/sistema_parametro_consultar.jsp" />
+		</action>
+
+		<action name="ConsultarParametrosSistemaActionForm"
+			type="gcom.gui.relatorio.cadastro.GerarRelatorioParametrosSistemaConsultarAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioParametrosSistemaConsultarAction" />
+			
+		<action name="ConsultarParametrosSistemaActionForm"
+			type="gcom.gui.relatorio.cadastro.GerarRelatorioParametrosSistemaViaClienteConsultarAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioParametrosSistemaViaClienteConsultarAction" />
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.ordemservico.ServicoCobrancaValor" table="atendimentopublico.servico_cobranca_valor">
+		<id name="id" type="java.lang.Integer" column="scbv_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_servico_cobranca_valor</param>
+			</generator>
+		</id>
+		<property name="valor" type="java.math.BigDecimal" column="scbv_vlservico" not-null="true" length="11"/>
+		<property name="indicadorMedido" type="short" column="scbv_icmedido" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="scbv_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="dataVigenciaInicial" type="java.sql.Date" column="scbv_dtvigenciainicial" length="4"/>
+		<property name="dataVigenciaFinal" type="java.sql.Date" column="scbv_dtvigenciafinal" length="4"/>
+		<property name="quantidadeEconomiasInicial" type="java.lang.Integer" column="scbv_qteconomiasinicial" length="4"/>
+		<property name="quantidadeEconomiasFinal" type="java.lang.Integer" column="scbv_qteconomiasfinal" length="4"/>
+		<property name="indicadorConsideraEconomias" type="short" column="scbv_icconsideraeconomias" not-null="true" length="2"/>
+		<property name="indicadorGeracaoDebito" type="java.lang.Short" column="scbv_icgerardebito" not-null="true" length="2"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to HidrometroCapacidade -->
+		<many-to-one name="hidrometroCapacidade" class="gcom.micromedicao.hidrometro.HidrometroCapacidade" not-null="true">
+			<column name="hicp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ImovelPerfil -->
+		<many-to-one name="imovelPerfil" class="gcom.cadastro.imovel.ImovelPerfil" not-null="true">
+			<column name="iper_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ServicoTipo -->
+		<many-to-one name="servicoTipo" class="gcom.atendimentopublico.ordemservico.ServicoTipo" not-null="true">
+			<column name="svtp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to subCategoria -->
+		<many-to-one name="subCategoria" class="gcom.cadastro.imovel.Subcategoria" not-null="true">
+			<column name="scat_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to categoria -->
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

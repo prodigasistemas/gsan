@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.CobrancaBoletimExecutado" table="cobranca.cobr_boletim_exec">
+		<composite-id name="comp_id" class="gcom.cobranca.CobrancaBoletimExecutadoPK">
+			<key-property name="cobrancaBoletimMedicaoId" column="cobm_id" type="java.lang.Integer" length="4"/>
+			<key-property name="ordemServicoId" column="orse_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		
+		<property name="valorServico" type="java.math.BigDecimal" column="cbex_vlservico" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cbex_tmultimaalteracao" length="8"/>
+   
+		<!-- bi-directional many-to-one association to CobrancaGrupo -->
+		<many-to-one name="cobrancaBoletimMedicao" class="gcom.cobranca.CobrancaBoletimMedicao"
+			insert="false" update="false">
+			<column name="cobm_id"/>
+		</many-to-one>
+		
+		<!-- bi-directional many-to-one association to CobrancaGrupo -->
+		<many-to-one name="ordemServico" class="gcom.atendimentopublico.ordemservico.OrdemServico"
+			insert="false" update="false">
+			<column name="orse_id"/>
+		</many-to-one>
+		
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade"
+			not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		
+	</class>
+</hibernate-mapping>

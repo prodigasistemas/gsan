@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.parcelamento.ParcelamentoDescontoAntiguidade" table="cobranca.parcel_desconto_antiguid">
+		<id name="id" type="java.lang.Integer" column="pdan_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_parcel_desconto_antiguid</param>
+			</generator>
+		</id>
+		<property name="quantidadeMinimaMesesDebito" type="java.lang.Integer" column="pdan_qtminimamesesdebito" not-null="true" length="4"/>
+		<property name="percentualDescontoSemRestabelecimento" type="java.math.BigDecimal" column="pdan_pcdescsemrestblc" not-null="true" length="5"/>
+		<property name="percentualDescontoComRestabelecimento" type="java.math.BigDecimal" column="pdan_pcdesccomrestblc" not-null="true" length="5"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="pdan_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="percentualDescontoAtivo" type="java.math.BigDecimal" column="pdan_pcdescontoativo" not-null="true" length="5"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to ParcelamentoPerfil -->
+		<many-to-one name="parcelamentoPerfil" class="gcom.cobranca.parcelamento.ParcelamentoPerfil" not-null="true">
+			<column name="pcpf_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ContaMotivoRevisao -->
+		<many-to-one name="contaMotivoRevisao" class="gcom.faturamento.conta.ContaMotivoRevisao" not-null="false">
+			<column name="cmrv_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

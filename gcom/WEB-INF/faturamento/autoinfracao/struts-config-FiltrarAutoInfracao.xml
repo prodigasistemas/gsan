@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarAutoInfracaoActionForm"
+			type="gcom.gui.faturamento.autoinfracao.FiltrarAutoInfracaoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<action name="FiltrarAutoInfracaoActionForm"
+			type="gcom.gui.faturamento.autoinfracao.ExibirFiltrarAutoInfracaoAction"
+			validate="true" scope="session"
+			path="/exibirFiltrarAutoInfracaoAction">
+			<forward name="exibirFiltrarAutoInfracaoAction"
+				path="/jsp/faturamento/autoinfracao/auto_infracao_filtrar.jsp" />
+		</action>
+
+		<action name="FiltrarAutoInfracaoActionForm"
+			type="gcom.gui.faturamento.autoinfracao.FiltrarAutoInfracaoAction"
+			validate="true" scope="session" path="/filtrarAutoInfracaoAction">
+			<forward name="exibirManterAutoInfracaoAction"
+				path="/exibirManterAutoInfracaoAction.do" />
+
+		</action>
+
+
+	</action-mappings>
+
+</struts-config>

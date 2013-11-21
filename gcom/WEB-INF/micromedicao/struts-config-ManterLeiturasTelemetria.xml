@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+<form-beans>
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="FiltrarLeiturasTelemetriaForm"
+			type="gcom.gui.micromedicao.FiltrarLeiturasTelemetriaForm" />
+</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+	
+			<action name="ManutencaoRegistroActionForm" 
+			type="gcom.gui.micromedicao.ExibirManterLeiturasTelemetriaAction"
+			validate="false" scope="session" path="/exibirManterLeiturasTemeletriaAction">
+				<forward name="exibirManterLeiturasTemeletriaAction"
+					path="/jsp/micromedicao/leituras_telemetria_manter.jsp"/>
+			</action>
+			
+			<action name="ManutencaoRegistroActionForm" 
+				type="gcom.gui.micromedicao.ManterLeiturasTelemetriaAction"
+				validate="false" scope="session" path="/manterLeiturasTelemetriaAction">
+			</action>
+			
+			<action name="FiltrarLeiturasTelemetriaForm"
+				type="gcom.gui.micromedicao.GerarRelatorioLeiturasTelemetriaAction"
+				scope="session" validate="false"
+				path="/gerarRelatorioLeiturasTelemetriaAction" />
+				
+			<action type="gcom.gui.micromedicao.ExibirExcecaoTelemetriaIniciadaAction"
+				scope="session" path="/exibirExcecaoTelemetriaIniciadaAction">
+			<forward name="exibirExcecao"
+				path="/jsp/micromedicao/exibir_excecao_telemetria.jsp" />
+		</action>
+		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.ResumoFaturamentoSimulacaoCredito" table="faturamento.res_fatu_simulacao_cred">
+		<composite-id name="comp_id" class="gcom.faturamento.ResumoFaturamentoSimulacaoCreditoPK">
+			<!-- bi-directional many-to-one association to Resumo Faturamento Simulacao -->
+			<key-many-to-one name="resumoFaturamentoSimulacao" class="gcom.faturamento.ResumoFaturamentoSimulacao">
+				<column name="rfts_id"/>
+			</key-many-to-one>
+			<!-- bi-directional many-to-one association to Credito Tipo -->
+			<key-many-to-one name="creditoTipo" class="gcom.faturamento.credito.CreditoTipo">
+				<column name="crti_id"/>
+			</key-many-to-one>
+		</composite-id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="rsdc_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="valor" type="java.math.BigDecimal" column="rsdc_vlcredito" length="13"/>
+	</class>
+</hibernate-mapping>

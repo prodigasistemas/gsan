@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.registroatendimento.RaEncerramentoComando" table="atendimentopublico.ra_encerramento_comando">
+		<id name="id" type="java.lang.Integer" column="raec_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_ra_encerramento_comando</param>
+			</generator>
+		</id>
+		<property name="dataAtendimentoInicial" type="java.sql.Date" column="raec_dtatendimentoinicial" not-null="true" length="4"/>
+		<property name="dataAtendimentoFinal" type="java.sql.Date" column="raec_dtatendimentofinal" not-null="true" length="4"/>
+		<property name="tempoComando" type="java.sql.Timestamp" column="raec_tmcomando" not-null="true" length="8"/>
+		<property name="tempoRealizacao" type="java.sql.Timestamp" column="raec_tmrealizacao" length="8"/>
+		<property name="quantidadeRasEncerradas" type="java.lang.Integer" column="raec_qtraencerradas" length="4"/>
+		<property name="quantidadeOsEncerradas" type="java.lang.Integer" column="raec_qtosencerradas" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="raec_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Usuario -->
+		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario" not-null="true">
+			<column name="usur_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to AtendimentoMotivoEncerramento -->
+		<many-to-one name="atendimentoMotivoEncerramento" class="gcom.atendimentopublico.registroatendimento.AtendimentoMotivoEncerramento" not-null="true">
+			<column name="amen_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to UnidadeOrganizacional -->
+		<many-to-one name="unidadeOrganizacionalAtual" class="gcom.cadastro.unidade.UnidadeOrganizacional" not-null="true">
+			<column name="unid_idatual"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to UnidadeOrganizacional -->
+		<many-to-one name="unidadeOrganizacionalSuperior" class="gcom.cadastro.unidade.UnidadeOrganizacional" not-null="true">
+			<column name="unid_idsuperior"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to UnidadeOrganizacional -->
+		<many-to-one name="unidadeOrganizacionalAtendimento" class="gcom.cadastro.unidade.UnidadeOrganizacional" not-null="true">
+			<column name="unid_idatendimento"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

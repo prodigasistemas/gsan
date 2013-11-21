@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="Emitir2viaDeclaracaoAnualQuitacaoDebitosActionForm"
+			type="gcom.gui.faturamento.Emitir2viaDeclaracaoAnualQuitacaoDebitosActionForm" />				
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC1010] Emitir 2ª via de declaração anual de quitação de débitos Auhtor: Hugo Amorim Data:26/03/2010-->
+		<action name="Emitir2viaDeclaracaoAnualQuitacaoDebitosActionForm"
+			type="gcom.gui.faturamento.ExibirEmitir2viaDeclaracaoAnualQuitacaoDebitosAction"
+			validate="true" 
+			scope="session"
+			path="/exibirEmitir2viaDeclaracaoAnualQuitacaoDebitosAction">
+			
+			<forward name="exibirEmitir2viaDeclaracaoAnualQuitacaoDebitosAction"
+				path="/jsp/faturamento/emitir_segunda_via_declaracao_anual_quitacao_debitos.jsp" />
+		</action>
+		
+		<action name="Emitir2viaDeclaracaoAnualQuitacaoDebitosActionForm"
+				type="gcom.gui.faturamento.Emitir2viaDeclaracaoAnualQuitacaoDebitosAction"
+				validate="true" scope="session"
+				path="/emitir2viaDeclaracaoAnualQuitacaoDebitosAction">
+		</action>
+	
+
+	</action-mappings>
+
+</struts-config>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="InformarDescricaoGenericaActionForm"
+			type="gcom.gui.cadastro.cliente.InformarDescricaoGenericaActionForm" />
+	</form-beans>
+	<global-forwards />
+	<action-mappings>
+
+		<action name="InformarDescricaoGenericaActionForm"
+				type="gcom.gui.cadastro.cliente.ExibirInformarDescricaoGenericaAction"
+				validate="true" 
+				scope="session"
+				path="/exibirInformarDescricaoGenericaAction">
+			<forward name="informarDescricaoGenerica"
+					 path="/jsp/cadastro/cliente/descricao_generica_informar.jsp" />
+		</action>
+		<action name="InformarDescricaoGenericaActionForm"
+				type="gcom.gui.cadastro.cliente.InformarDescricaoGenericaAction"
+				validate="true" 
+				scope="session"
+				path="/informarDescricaoGenericaAction">
+		</action>
+
+	</action-mappings>
+	<message-resources null="false" parameter="gcom.properties.application" />
+</struts-config>

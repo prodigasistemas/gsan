@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="InformarImovelSituacaoCobrancaActionForm"
+			type="gcom.gui.cadastro.imovel.InformarImovelSituacaoCobrancaActionForm" />			
+			
+		<form-bean name="InserirImovelSituacaoCobrancaActionForm"
+			type="gcom.gui.cadastro.imovel.InserirImovelSituacaoCobrancaActionForm" />						
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- Auhtor: Tiago Moreno -->
+		<action name="InformarImovelSituacaoCobrancaActionForm"
+			type="gcom.gui.cadastro.imovel.ExibirInformarImovelSituacaoCobrancaAction"
+			validate="true" scope="session"
+			path="/exibirInformarImovelSituacaoCobrancaAction">
+			<forward name="exibirInformarImovelSituacaoCobranca"
+				path="/jsp/cadastro/imovel/imovel_situacao_cobranca_informar.jsp" />
+		</action>
+		
+		<action name="InserirImovelSituacaoCobrancaActionForm"
+			type="gcom.gui.cadastro.imovel.InformarImovelSituacaoCobrancaAction"
+			validate="true" scope="session"
+			path="/informarImovelSituacaoCobrancaAction">
+		</action>
+		
+		<action name="InserirImovelSituacaoCobrancaActionForm"
+			type="gcom.gui.cadastro.imovel.ExibirInserirImovelSituacaoCobrancaAction"
+			validate="true" scope="session"
+			path="/exibirInserirImovelSituacaoCobrancaAction">
+			<forward name="exibirInserirImovelSituacaoCobranca"
+				path="/jsp/cadastro/imovel/imovel_situacao_cobranca_inserir.jsp" />
+		</action>
+		
+		<action name="InformarImovelSituacaoCobrancaActionForm"
+			type="gcom.gui.cadastro.imovel.RemoverImovelSituacaoCobrancaAction"
+			validate="true" scope="session"
+			path="/removerImovelSituacaoCobrancaAction">
+		</action>
+
+	</action-mappings>
+
+</struts-config>

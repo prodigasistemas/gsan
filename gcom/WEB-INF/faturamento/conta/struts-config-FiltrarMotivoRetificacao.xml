@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarMotivoRetificacaoActionForm" type="gcom.gui.faturamento.conta.FiltrarMotivoRetificacaoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+  <action-mappings>
+	   <action name="FiltrarMotivoRetificacaoActionForm"
+			type="gcom.gui.faturamento.conta.ExibirFiltrarMotivoRetificacaoAction"
+			scope="session" validate="true"
+			path="/exibirFiltrarMotivoRetificacaoAction">
+			<forward name="filtrarMotivoRetificacao"
+				path="/jsp/faturamento/conta/filtrar_motivo_retificacao.jsp" />
+		</action>
+		<action name="FiltrarMotivoRetificacaoActionForm"
+			type="gcom.gui.faturamento.conta.FiltrarMotivoRetificacaoAction"
+			scope="session" validate="true"
+			path="/filtrarMotivoRetificacaoAction" >
+			<forward
+				name="exibirManterMotivoRetificacaoAction"
+				path="/exibirManterMotivoRetificacaoAction.do" />
+		</action>
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

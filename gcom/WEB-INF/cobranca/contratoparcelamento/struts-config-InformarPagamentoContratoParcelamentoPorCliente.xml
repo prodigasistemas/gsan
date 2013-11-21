@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="InformarPagamentoContratoParcelamentoPorClienteActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.InformarPagamentoContratoParcelamentoPorClienteActionForm" />	
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC1146] Informar Pagamento Contrato de Parcelamento por Cliente - Autor: Mariana Victor Data:27/05/2011 -->
+		<action name="InformarPagamentoContratoParcelamentoPorClienteActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.ExibirInformarPagamentoContratoParcelamentoPorClienteAction"
+			validate="true" 
+			scope="session"
+			path="/exibirInformarPagamentoContratoParcelamentoPorClienteAction">
+			
+			<forward name="exibirInformarPagamentoContratoParcelamentoPorCliente"
+				path="/jsp/cobranca/contratoparcelamento/contrato_parcelamento_informar_pagamento.jsp" />
+		</action>
+		
+		<action name="InformarPagamentoContratoParcelamentoPorClienteActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.InformarPagamentoContratoParcelamentoPorClienteAction"
+			validate="true" scope="session"
+			path="/informarPagamentoContratoParcelamentoPorClienteAction">
+		</action>
+		
+	</action-mappings>
+
+</struts-config>

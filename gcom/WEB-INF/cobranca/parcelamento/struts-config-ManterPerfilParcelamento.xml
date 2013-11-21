@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+
+		<form-bean name="FiltrarPerfilParcelamentoActionForm"
+			type="gcom.gui.cobranca.parcelamento.FiltrarPerfilParcelamentoActionForm" />
+		<form-bean name="ManutencaoRegistroActionForm" type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="AtualizarParcelamentoPerfilActionForm"
+			type="gcom.gui.cobranca.parcelamento.AtualizarParcelamentoPerfilActionForm" />
+
+	</form-beans>
+
+	<global-forwards/>
+
+	<action-mappings>
+	
+		<action name="FiltrarPerfilParcelamentoActionForm" 
+			type="gcom.gui.cobranca.parcelamento.ExibirManterPerfilParcelamentoAction" 
+			scope="session" validate="false"
+			path="/exibirManterPerfilParcelamentoAction">
+			<forward name="manterPerfilParcelamento" path="/jsp/cobranca/parcelamento/perfil_parcelamento_manter.jsp" />
+			<forward name="atualizarPerfilParcelamento" path="/exibirAtualizarPerfilParcelamentoAction.do" />
+		</action>
+		
+		<action name="FiltrarPerfilParcelamentoActionForm"
+			type="gcom.gui.relatorio.cobranca.GerarRelatorioPerfilParcelamentoManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioPerfilParcelamentoManterAction" />
+		
+		<action name="ManutencaoRegistroActionForm" 
+			type="gcom.gui.cobranca.parcelamento.RemoverPerfilParcelamentoAction" 
+			scope="request" path="/removerPerfilParcelamentoAction"/>
+			
+		
+		<action name="AtualizarParcelamentoPerfilActionForm"
+	      	type="gcom.gui.cobranca.parcelamento.ExibirAtualizarPerfilParcelamentoAction"
+	      	validate="false" scope="session"
+	      	path="/exibirAtualizarPerfilParcelamentoAction">
+			<forward name="atualizarPerfilParcelamento"
+		  		path="/jsp/cobranca/parcelamento/perfil_parcelamento_atualizar.jsp" />
+		</action>
+		
+		<action name="AtualizarParcelamentoPerfilActionForm" 
+			type="gcom.gui.cobranca.parcelamento.AtualizarPerfilParcelamentoAction"
+			validate="false" scope="session"
+			path="/atualizarPerfilParcelamentoAction">
+		</action>
+		
+		<action name="AtualizarParcelamentoPerfilActionForm"
+			type="gcom.gui.cobranca.parcelamento.RemoverParcelamentoQuantidadeReparcelamentoHelperAction"
+			validate="false" scope="session"
+			path="/removerParcelamentoQuantidadeReparcelamentoHelperActionAtualizar">
+			<forward name="atualizarPerfilRemoverParcelamentoQuantidadeReparcelamentoHelper"
+				path="/jsp/cobranca/parcelamento/perfil_parcelamento_atualizar.jsp" />
+		</action>
+		
+		<action name="AtualizarParcelamentoPerfilActionForm"
+			type="gcom.gui.cobranca.parcelamento.RemoverParcelamentoDescontoAntiguidadeAction"
+			validate="false" scope="session"
+			path="/removerParcelamentoDescontoAntiguidadeActionAtualizar">
+			<forward name="atualizarPerfilRemoverParcelamentoDescontoAntiguidade"
+				path="/jsp/cobranca/parcelamento/perfil_parcelamento_atualizar.jsp" />
+		</action>
+		
+		<action name="AtualizarParcelamentoPerfilActionForm"
+			type="gcom.gui.cobranca.parcelamento.RemoverParcelamentoDescontoInatividadeAction"
+			validate="false" scope="session"
+			path="/removerParcelamentoDescontoInatividadeActionAtualizar">
+			<forward name="atualizarPerfilRemoverParcelamentoDescontoInatividade"
+				path="/jsp/cobranca/parcelamento/perfil_parcelamento_atualizar.jsp" />
+		</action>	
+		
+		<action name="AtualizarParcelamentoPerfilActionForm"
+			type="gcom.gui.cobranca.parcelamento.RemoverParcelamentoDescontoInatividadeAVistaAction"
+			validate="false" scope="session"
+			path="/removerParcelamentoDescontoInatividadeAVistaActionAtualizar">
+			<forward name="atualizarPerfilRemoverParcelamentoDescontoInatividadeAVista"
+				path="/jsp/cobranca/parcelamento/perfil_parcelamento_atualizar.jsp" />
+		</action>				
+	
+	</action-mappings>
+	<!--******************* ARQUIVO DE PROPRIEDADES *******************-->
+	<message-resources null="false" parameter="gcom.properties.application" />
+	
+</struts-config>

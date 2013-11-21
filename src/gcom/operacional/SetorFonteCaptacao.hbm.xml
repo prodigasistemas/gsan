@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="gcom.operacional.SetorFonteCaptacao" table="operacional.setor_fonte_captacao">
+		<composite-id name="comp_id" class="gcom.operacional.SetorFonteCaptacaoPK">
+			<!-- bi-directional many-to-one association to Setor Comercial -->
+			<key-many-to-one name="setorComercial" class="gcom.cadastro.localidade.SetorComercial">
+				<column name="stcm_id"/>
+			</key-many-to-one>
+			<!-- bi-directional many-to-one association to Fonte de Captacao -->
+			<key-many-to-one name="fonteCaptacao" class="gcom.operacional.FonteCaptacao">
+				<column name="ftcp_id"/>
+			</key-many-to-one>
+		</composite-id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="stfo_tmultimaalteracao" length="8" not-null="true"/>
+	</class>
+</hibernate-mapping>

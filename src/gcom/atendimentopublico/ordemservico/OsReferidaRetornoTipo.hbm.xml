@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+		Created by the Middlegen Hibernate plugin 2.1
+		
+		http://boss.bekk.no/boss/middlegen/
+		http://www.hibernate.org/
+	-->
+	<class name="gcom.atendimentopublico.ordemservico.OsReferidaRetornoTipo" table="atendimentopublico.os_referida_retorno_tipo">
+		<id name="id" type="java.lang.Integer" column="orrt_id">
+			<generator class="sequence">
+				<param name="sequence">
+					atendimentopublico.seq_os_referida_retorno_tipo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="orrt_dsosreferenciaretornotipo" not-null="true" length="50"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="orrt_dsabreviado" length="8"/>
+		<property name="indicadorDeferimento" type="short" column="orrt_icdeferimento" not-null="true" length="2"/>
+		<property name="situacaoOsReferencia" type="java.lang.Short" column="orrt_cdsituacaoosreferencia" length="2"/>
+		<property name="indicadorTrocaServico" type="short" column="orrt_ictrocaservico" not-null="true" length="2"/>
+		<property name="indicadorUso" type="short" column="orrt_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="orrt_tmultimaalteracao" not-null="true" length="8"/>
+		<!--  <property
+			name="codigoPenalidade"
+			type="java.lang.Integer"
+			column="orrt_cdpenalidade"
+			length="4"
+			/>
+			<property
+			name="penaSemInfracao"
+			type="java.math.BigDecimal"
+			column="orrt_pcpenaseminfracao"
+			length="5"
+			/> -->
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to AtendimentoMotivoEncerramento -->
+		<many-to-one name="atendimentoMotivoEncerramento" class="gcom.atendimentopublico.registroatendimento.AtendimentoMotivoEncerramento" not-null="true">
+			<column name="amen_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ServicoTipoReferencia -->
+		<many-to-one name="servicoTipoReferencia" class="gcom.atendimentopublico.ordemservico.ServicoTipoReferencia" not-null="true">
+			<column name="strf_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to OrdemServico 
+			<set
+			name="ordemServicos"
+			lazy="true"
+			inverse="true"
+			cascade="all"
+			>
+			<key>
+			<column name="orrt_id" />
+			</key>
+			<one-to-many 
+			class="gcom.OrdemServico"
+			/>
+			</set> -->
+	</class>
+</hibernate-mapping>

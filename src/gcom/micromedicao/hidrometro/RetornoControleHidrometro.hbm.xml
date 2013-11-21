@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.micromedicao.hidrometro.RetornoControleHidrometro" table="micromedicao.retorno_controle_hidr">
+		<id name="id" type="java.lang.Integer" column="rchi_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_retorno_controle_hidr</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="rchi_dscontrolehidrometro" length="50"/>
+		<property name="indicadorGeracao" type="java.lang.Short" column="rchi_icgeraros" length="2"/>
+		<property name="dataCorrente" type="java.sql.Timestamp" column="rchi_tmultimaalteracao" length="8"/>
+		<property name="indicadorUso" type="java.lang.Short" column="rchi_icuso" length="2"/>
+	</class>
+</hibernate-mapping>

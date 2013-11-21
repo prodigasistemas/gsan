@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.registroatendimento.AtendimentoRelacaoTipo" table="atendimentopublico.atendimento_relacao_tipo">
+		<id name="id" type="java.lang.Integer" column="attp_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_atendimento_relacao_tipo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="attp_dsatendimentorelacaotipo" not-null="true" length="30"/>
+		<property name="indicadorUso" type="java.lang.Short" column="attp_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="attp_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to RegistroAtendimentoUnidade 
+    <set
+        name="registroAtendimentoUnidades"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="attp_id" />
+        </key>
+        <one-to-many 
+            class="gcom.RegistroAtendimentoUnidade"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to OrdemServicoUnidade 
+    <set
+        name="ordemServicoUnidades"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="attp_id" />
+        </key>
+        <one-to-many 
+            class="gcom.OrdemServicoUnidade"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

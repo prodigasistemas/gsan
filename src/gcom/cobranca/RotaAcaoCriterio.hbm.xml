@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.RotaAcaoCriterio" table="cobranca.rota_acao_criterio">
+		<composite-id name="comp_id" class="gcom.cobranca.RotaAcaoCriterioPK">
+			<key-property name="rotaId" column="rota_id" type="java.lang.Integer" length="4"/>
+			<key-property name="cobrancaAcaoId" column="cbac_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="racc_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to Tabela -->
+		<many-to-one name="rota" class="gcom.micromedicao.Rota" not-null="true" update="false" insert="false">
+			<column name="rota_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Operacao -->
+		<many-to-one name="cobrancaAcao" class="gcom.cobranca.CobrancaAcao" not-null="true" update="false" insert="false">
+			<column name="cbac_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Operacao -->
+		<many-to-one name="cobrancaCriterio" class="gcom.cobranca.CobrancaCriterio" not-null="true">
+			<column name="cbct_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

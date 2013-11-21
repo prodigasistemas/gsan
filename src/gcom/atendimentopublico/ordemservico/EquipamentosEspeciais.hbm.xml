@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.ordemservico.EquipamentosEspeciais" table="atendimentopublico.equipamentos_especiais">
+		<id name="id" type="java.lang.Integer" column="eqes_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_equipamentos_especiais</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="eqes_dsequipamentosespeciais" not-null="true" length="40"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="eqes_dsabreviado" length="8"/>
+		<property name="indicadorUso" type="short" column="eqes_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="eqes_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to ServicoPerfilTipo 
+    <set
+        name="servicoPerfilTipos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="eqes_id" />
+        </key>
+        <one-to-many 
+            class="gcom.ServicoPerfilTipo"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

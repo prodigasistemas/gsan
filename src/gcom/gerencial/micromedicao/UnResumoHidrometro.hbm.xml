@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.gerencial.micromedicao.UnResumoHidrometro" table="micromedicao.un_resumo_hidrometro">
+		<id name="id" type="java.lang.Integer" column="rehi_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_un_resumo_hidrometro</param>
+			</generator>
+		</id>
+		<property name="anoMesReferencia" type="int" column="rehi_amreferencia" not-null="true" length="4"/>
+		<property name="numeroAnoFabricacao" type="short" column="rehi_nnanofabricacao" not-null="true" length="2"/>
+		<property name="indicadorMacro" type="java.lang.Short" column="rehi_icmacro" length="2"/>
+		<property name="quantidadeHidrometro" type="int" column="rehi_qthidrometro" not-null="true" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="rehi_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to GHidrometroMarca -->
+		<many-to-one name="gerHidrometroMarca" class="gcom.gerencial.micromedicao.hidrometro.GHidrometroMarca" not-null="true">
+			<column name="himc_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GHidrometroSituacao -->
+		<many-to-one name="gerHidrometroSituacao" class="gcom.gerencial.micromedicao.hidrometro.GHidrometroSituacao" not-null="true">
+			<column name="hist_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GHidrometroLocalArmazenagem -->
+		<many-to-one name="gerHidrometroLocalArmazenagem" class="gcom.gerencial.micromedicao.hidrometro.GHidrometroLocalArmazenagem" not-null="true">
+			<column name="hila_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GHidrometroTipo -->
+		<many-to-one name="gerHidrometroTipo" class="gcom.gerencial.micromedicao.hidrometro.GHidrometroTipo" not-null="true">
+			<column name="hitp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GHidrometroDiametro -->
+		<many-to-one name="gerHidrometroDiametro" class="gcom.gerencial.micromedicao.hidrometro.GHidrometroDiametro" not-null="true">
+			<column name="hidm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GHidrometroCapacidade -->
+		<many-to-one name="gerHidrometroCapacidade" class="gcom.gerencial.micromedicao.hidrometro.GHidrometroCapacidade" not-null="true">
+			<column name="hicp_id"/>
+		</many-to-one>
+		<many-to-one name="gerHidrometroMotivoBaixa" class="gcom.gerencial.micromedicao.hidrometro.GHidrometroMotivoBaixa" not-null="true">
+			<column name="himb_id"/>
+		</many-to-one>
+		<many-to-one name="gerHidrometroClasseMetrologica" class="gcom.gerencial.micromedicao.hidrometro.GHidrometroClasseMetrologica" not-null="true">
+			<column name="hicm_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

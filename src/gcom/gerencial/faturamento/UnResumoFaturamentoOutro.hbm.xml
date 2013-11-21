@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.gerencial.faturamento.UnResumoFaturamentoOutro" table="faturamento.un_resumo_faturamento_outros">
+		<composite-id name="comp_id" class="gcom.gerencial.faturamento.UnResumoFaturamentoOutroPK">
+			<key-property name="resumoFaturamento" column="refa_id" type="java.lang.Integer" length="4"/>
+			<key-property name="documentoTipo" column="dotp_id" type="java.lang.Integer" length="4"/>
+			<key-property name="financiamentoTipo" column="fntp_id" type="java.lang.Integer" length="4"/>
+			<key-property name="lancamentoItemContabil" column="lict_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<property name="valorDocumentosFaturados" type="java.math.BigDecimal" column="refo_vldocumentosfaturados" not-null="true" length="13"/>
+		<property name="quantidadeDocumentosFaturados" type="int" column="refo_qtdocumentosfaturados" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="refo_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to GLancamentoItemContabil -->
+		<many-to-one name="gerLancamentoItemContabil" class="gcom.gerencial.financeiro.lancamento.GLancamentoItemContabil" update="false" insert="false">
+			<column name="lict_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to UnResumoFaturamento -->
+		<many-to-one name="unResumoFaturamento" class="gcom.gerencial.faturamento.UnResumoFaturamento" update="false" insert="false">
+			<column name="refa_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GDocumentoTipo -->
+		<many-to-one name="gerDocumentoTipo" class="gcom.gerencial.cobranca.GDocumentoTipo" update="false" insert="false">
+			<column name="dotp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GFinanciamentoTipo -->
+		<many-to-one name="gerFinanciamentoTipo" class="gcom.gerencial.financeiro.GFinanciamentoTipo" update="false" insert="false">
+			<column name="fntp_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

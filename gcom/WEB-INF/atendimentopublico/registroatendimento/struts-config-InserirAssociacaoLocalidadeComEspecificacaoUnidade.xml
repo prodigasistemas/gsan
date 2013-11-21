@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="ExibirInserirAssociacaoLocalidadeComEspecificacaoUnidadeActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirInserirAssociacaoLocalidadeComEspecificacaoUnidadeActionForm" />
+	</form-beans>
+
+	<global-forwards/>
+
+	<action-mappings>
+
+		<action name="ExibirInserirAssociacaoLocalidadeComEspecificacaoUnidadeActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirInserirAssociacaoLocalidadeComEspecificacaoUnidadeAction"
+			validate="true" scope="session"
+			path="/exibirInserirAssociacaoLocalidadeComEspecificacaoUnidadeAction">
+			
+			<forward name="exibirInserirAssociacaoLocalidadeComEspecificacaoUnidadeAction"
+				path="/jsp/atendimentopublico/registroatendimento/associacao_localidade_com_especificacao_unidade.jsp"/>
+				
+			<forward name="exibirAssociarLocalidadeComEspecificacaoUnidadePopUpAction"  
+				path="/exibirAssociarLocalidadeComEspecificacaoUnidadePopUpAction.do" />
+				
+		</action>
+
+		<action name="ExibirInserirAssociacaoLocalidadeComEspecificacaoUnidadeActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.InserirAssociacaoLocalidadeComEspecificacaoUnidadeAction"
+			validate="false" scope="session"
+			path="/inserirAssociacaoLocalidadeComEspecificacaoUnidadeAction">
+		</action>
+		
+		<action name="ExibirInserirAssociacaoLocalidadeComEspecificacaoUnidadeActionForm" 
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirAssociarLocalidadeComEspecificacaoUnidadePopUpAction" 
+			scope="session" validate="false"
+			path="/exibirAssociarLocalidadeComEspecificacaoUnidadePopUpAction">		
+			
+			<forward name="exibirAssociarLocalidadeComEspecificacaoUnidadePopUpAction" 
+				path="/jsp/atendimentopublico/registroatendimento/associacao_localidade_com_especificacao_unidade_poupup.jsp" />
+				
+			<forward name="associarLocalidadeComEspecificacaoUnidadePopUp" 
+		   		path="/associarLocalidadeComEspecificacaoUnidadePopUpAction.do" />
+		</action>
+		
+		<action name="ExibirInserirAssociacaoLocalidadeComEspecificacaoUnidadeActionForm" 
+			type="gcom.gui.atendimentopublico.registroatendimento.AssociarLocalidadeComEspecificacaoUnidadePopUpAction" 
+			scope="session" validate="false"
+			path="/associarLocalidadeComEspecificacaoUnidadePopUpAction">	
+			
+		   <forward name="associarLocalidadeComEspecificacaoUnidadePopUp" 
+		   		path="/jsp/atendimentopublico/registroatendimento/associacao_localidade_com_especificacao_unidade_poupup.jsp" />
+		   		
+		</action>
+		
+	</action-mappings>
+
+	<message-resources null="false" parameter="gcom.properties.application" />
+
+</struts-config>

@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.micromedicao.leitura.LeituraTipo" table="micromedicao.leitura_tipo">
+		<id name="id" type="java.lang.Integer" column="lttp_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_leitura_tipo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="lttp_dsleituratipo" length="20"/>
+		<property name="indicadorUso" type="java.lang.Short" column="lttp_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="lttp_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to Rota 
+    <set
+        name="rotas"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="lttp_id" />
+        </key>
+        <one-to-many 
+            class="gcom.cadastro.Rota"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

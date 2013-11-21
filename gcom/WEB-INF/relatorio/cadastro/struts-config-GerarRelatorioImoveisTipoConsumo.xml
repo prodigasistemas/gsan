@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="GerarRelatorioImoveisTipoConsumoActionForm"
+			type="gcom.gui.relatorio.cadastro.imovel.GerarRelatorioImoveisTipoConsumoActionForm" />
+	</form-beans>
+
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="GerarRelatorioImoveisTipoConsumoActionForm"
+			type="gcom.gui.relatorio.cadastro.imovel.ExibirGerarRelatorioImoveisTipoConsumoAction"
+			validate="true" 
+			path="/exibirGerarRelatorioImoveisTipoConsumoAction">
+			
+			<forward name="exibirGerarRelatorioImoveisTipoConsumo" 
+				path="/jsp/relatorio/cadastro/relatorio_imoveis_tipo_consumo_gerar.jsp" />
+				
+		</action>
+		
+		<action name="GerarRelatorioImoveisTipoConsumoActionForm"
+			type="gcom.gui.relatorio.cadastro.imovel.GerarRelatorioImoveisTipoConsumoAction"
+			validate="true" 
+			path="/gerarRelatorioImoveisTipoConsumoAction" />		
+		
+	</action-mappings>
+
+</struts-config>

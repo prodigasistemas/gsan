@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.faturamento.HistogramaEsgotoLigacao" table="faturamento.histograma_esg_ligacao">
+		<id name="id" type="java.lang.Integer" column="hegl_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="referencia" type="int" column="hegl_amreferencia" not-null="true" length="4"/>
+		<property name="codigoSetorComercial" type="int" column="hegl_cdsetorcomercial" not-null="true" length="4"/>
+		<property name="numeroQuadra" type="int" column="hegl_nnquadra" not-null="true" length="4"/>
+		<property name="indicadorLigacaoMista" type="short" column="hegl_icligacaomista" not-null="true" length="2"/>
+		<property name="indicadorConsumoReal" type="short" column="hegl_icconsumoreal" not-null="true" length="2"/>
+		<property name="indicadorHidrometro" type="short" column="hegl_ichidrometro" not-null="true" length="2"/>
+		<property name="indicadorPoco" type="short" column="hegl_icpoco" not-null="true" length="2"/>
+		<property name="indicadorVolumeFixadoEsgoto" type="short" column="hegl_icvolfixadoesgoto" not-null="true" length="2"/>
+		<property name="percentualEsgoto" type="short" column="hegl_nnpercentualesgoto" not-null="true" length="2"/>
+		<property name="quantidadeConsumo" type="int" column="hegl_qtconsumo" not-null="true" length="4"/>
+		<property name="quantidadeLigacao" type="int" column="hegl_qtligacao" not-null="true" length="4"/>
+		<property name="quantidadeEconomiaLigacao" type="int" column="hegl_qteconomialigacao" not-null="true" length="4"/>
+		<property name="valorFaturadoLigacao" type="java.math.BigDecimal" column="hegl_vlfaturadoligacao" not-null="true" length="15"/>
+		<property name="volumeFaturadoLigacao" type="int" column="hegl_vofaturadoligacao" not-null="true" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="hegl_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to GerenciaRegional -->
+		<many-to-one name="gerenciaRegional" class="gcom.cadastro.localidade.GerenciaRegional" not-null="true">
+			<column name="greg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidadeElo" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_cdelo"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Quadra -->
+		<many-to-one name="quadra" class="gcom.cadastro.localidade.Quadra" not-null="true">
+			<column name="qdra_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ConsumoTarifa -->
+		<many-to-one name="consumoTarifa" class="gcom.faturamento.consumotarifa.ConsumoTarifa" not-null="true">
+			<column name="cstf_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ImovelPerfil -->
+		<many-to-one name="imovelPerfil" class="gcom.cadastro.imovel.ImovelPerfil" not-null="true">
+			<column name="iper_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LigacaoEsgotoSituacao -->
+		<many-to-one name="ligacaoEsgotoSituacao" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao" not-null="true">
+			<column name="lest_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to SetorComercial -->
+		<many-to-one name="setorComercial" class="gcom.cadastro.localidade.SetorComercial" not-null="true">
+			<column name="stcm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to UnidadeNegocio -->
+		<many-to-one name="unidadeNegocio" class="gcom.cadastro.localidade.UnidadeNegocio" not-null="true">
+			<column name="uneg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to EsferaPoder -->
+		<many-to-one name="esferaPoder" class="gcom.cadastro.cliente.EsferaPoder" not-null="true">
+			<column name="epod_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Categoria -->
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CategoriaTipo -->
+		<many-to-one name="categoriaTipo" class="gcom.cadastro.imovel.CategoriaTipo" not-null="true">
+			<column name="cgtp_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="GerarRelatorioTransacaoActionForm" type="gcom.gui.relatorio.transacao.GerarRelatorioTransacaoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+	<!--******************* PÁGINA PRINCIPAL *******************-->
+
+		<action name="FiltrarTransacaoActionForm" type="gcom.gui.seguranca.acesso.transacao.FiltrarTransacaoAction" 
+		scope="session" path="/FiltrarTransacaoAction">
+			<forward name="exibirConsultaTransacao" path="/ExibirConsultaTransacaoAction.do" />
+		</action>
+
+
+	<!--
+	
+		<action name="GerarRelatorioTransacaoActionForm" type="gcom.gui.seguranca.acesso.transacao.ExibirGerarRelatorioTransacaoAction" 
+			scope="session" path="/ExibirConsultaTransacaoAction">
+				<forward name="consultaTransacao" path="/jsp/seguranca/acesso/transacao/gerar_relatorio_transacao.jsp" />
+		</action>
+
+Lixo 	
+		<action
+			type="gcom.gui.relatorio.faturamento.ExibirGerarRelatorioResumoFaturamentoAction"
+			input="/exibirGerarRelatorioResumoFaturamentoAction.do"
+			path="/exibirGerarRelatorioResumoFaturamentoAction">
+			<forward name="exibirGerarRelatorioResumoFaturamento"
+				path="/jsp/relatorio/faturamento/resumo_faturamento_gerar_relatorio.jsp" />
+		</action>
+		<action name="GerarRelatorioTransacaoActionForm"
+			type="gcom.gui.relatorio.transacao.GerarRelatorioTransacaoAction"
+			input="/exibirGerarRelatorioResumoFaturamentoAction.do"
+			path="/GerarRelatorioTransacaoAction" />
+-->
+	</action-mappings>
+
+
+</struts-config>

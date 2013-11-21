@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="FiltrarConsumoTarifaActionForm"
+			type="gcom.gui.faturamento.consumotarifa.FiltrarConsumoTarifaActionForm" />
+		<form-bean name="ManterConsumoTarifaActionForm"
+			type="gcom.gui.faturamento.consumotarifa.ManterConsumoTarifaActionForm" />
+		<form-bean name="InserirCategoriaFaixaConsumoTarifaActionForm"
+			type="gcom.gui.faturamento.consumotarifa.InserirCategoriaFaixaConsumoTarifaActionForm" />
+		<form-bean name="InserirCategoriaConsumoTarifaActionForm"
+			type="gcom.gui.faturamento.consumotarifa.InserirCategoriaConsumoTarifaActionForm" />
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarConsumoTarifaActionForm"
+			type="gcom.gui.faturamento.consumotarifa.ExibirFiltrarConsumoTarifaSubCategoriaAction"
+			validate="false" path="/exibirFiltrarConsumoTarifaSubCategoriaAction">
+			<forward name="filtrarConsumoTarifaSubCategoria"
+				path="/jsp/faturamento/consumotarifa/consumo_tarifa_subcategoria_filtrar.jsp" />
+		</action>
+		<action name="FiltrarConsumoTarifaActionForm"
+			type="gcom.gui.faturamento.consumotarifa.FiltrarConsumoTarifaSubCategoriaAction"
+			validate="true" scope="session" path="/filtrarConsumoTarifaSubCategoriaAction">
+			<forward name="exibirManterConsumoTarifaSubCategoria"
+				path="/jsp/faturamento/consumotarifa/consumo_tarifa_subcategoria_manter.jsp" />
+			<forward name="atualizarConsumoTarifaVigenciaSubCategoria"
+				path="/exibirManterConsumoTarifaExistenteSubCategoriaAction.do" />
+
+		</action>
+		
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.faturamento.consumotarifa.RemoverConsumoTarifaSubCategoriaAction"
+			validate="false" input="/exibirManterConsumoTarifaSubCategoriaAction.do"
+			scope="session" path="/removerConsumoTarifaSubCategoriaAction" />
+
+		<action
+			type="gcom.gui.faturamento.consumotarifa.ExibirManterConsumoTarifaSubCategoriaAction"
+			validate="false" path="/exibirManterConsumoTarifaSubCategoriaAction.do">
+			<forward name="manterConsumoTarifaSubCategoria"
+				path="/jsp/faturamento/consumotarifa/consumo_tarifa_subcategoria_manter.jsp" />
+		</action>
+
+		<action name="ManterConsumoTarifaActionForm"
+			type="gcom.gui.faturamento.consumotarifa.ManterConsumoTarifaSubCategoriaAction"
+			validate="false" input="/exibirManterConsumoTarifaSubCategoriaAction.do"
+			scope="session" path="/manterConsumoTarifaSubCategoriaAction" />
+		
+		<action name="ExcluirCategoriaFaixaConsumoTarifaActionForm"
+			type="gcom.gui.faturamento.consumotarifa.ExcluirCategoriaFaixaConsumoTarifaSubCategoriaAction"
+			validate="false" scope="session"
+			path="/excluirCategoriaFaixaConsumoTarifaSubCategoriaAction">
+			<forward name="inserirCategoriaConsumoTarifaSubCategoria"
+				path="/jsp/faturamento/consumotarifa/consumo_tarifa_categoria_subcategoria_adicionar.jsp" />
+			<forward name="manterCategoriaConsumoTarifaSubCategoria"
+				path="/jsp/faturamento/consumotarifa/consumo_tarifa_categoria_subcategoria_manter.jsp" />
+		</action>
+
+		<action name="ExcluirCategoriaConsumoTarifaActionForm"
+			type="gcom.gui.faturamento.consumotarifa.ExcluirCategoriaConsumoTarifaSubCategoriaAction"
+			validate="false" scope="session"
+			path="/excluirCategoriaConsumoTarifaSubCategoriaAction">
+			<forward name="inserirConsumoTarifaSubCategoria"
+				path="/jsp/faturamento/consumotarifa/consumo_tarifa_subcategoria_inserir.jsp" />
+			<forward name="manterConsumoTarifaExistenteAction"
+				path="/jsp/faturamento/consumotarifa/consumo_tarifa_existente_subcategoria_manter.jsp" />
+
+		</action>
+
+
+		<action
+			type="gcom.gui.faturamento.consumotarifa.ExibirManterConsumoTarifaExistenteSubCategoriaAction"
+			validate="false" path="/exibirManterConsumoTarifaExistenteSubCategoriaAction">
+			<forward name="manterConsumoTarifaExistenteSubCategoriaAction"
+				path="/jsp/faturamento/consumotarifa/consumo_tarifa_existente_subcategoria_manter.jsp" />
+		</action>
+		
+		<action name="InserirConsumoTarifaActionForm"
+			type="gcom.gui.faturamento.consumotarifa.ManterConsumoTarifaExistenteSubCategoriaAction"
+			validate="true" input="/exibirManterConsumoTarifaExistenteSubCategoriaAction.do"
+			scope="session" path="/manterConsumoTarifaExistenteSubCategoriaAction" />
+
+		<action name="InserirCategoriaFaixaConsumoTarifaActionForm"
+			scope="session"
+			type="gcom.gui.faturamento.consumotarifa.ManterCategoriaFaixaConsumoTarifaSubCategoriaAction"
+			validate="true" path="/manterCategoriaFaixaConsumoTarifaSubCategoriaAction">
+			<forward name="manterCategoriaConsumoTarifaSubCategoria"
+				path="/jsp/faturamento/consumotarifa/consumo_tarifa_categoria_subcategoria_manter.jsp" />
+
+		</action>
+		<action
+			type="gcom.gui.faturamento.consumotarifa.ExibirManterCategoriaConsumoTarifaSubCategoriaAction"
+			validate="false" path="/exibirManterCategoriaConsumoTarifaSubCategoriaAction">
+			<forward name="manterCategoriaConsumoTarifaSubCategoria"
+				path="/jsp/faturamento/consumotarifa/consumo_tarifa_categoria_subcategoria_manter.jsp" />
+		</action>
+		<action name="InserirCategoriaConsumoTarifaActionForm"
+			type="gcom.gui.faturamento.consumotarifa.ManterCategoriaConsumoTarifaSubCategoriaAction"
+			validate="true" scope="session"
+			path="/manterCategoriaConsumoTarifaSubCategoriaAction">
+			<forward name="exibirManterCategoriaConsumoTarifaSubCategoria"
+				path="/exibirManterCategoriaConsumoTarifaSubCategoriaAction.do" />
+		</action>
+
+
+		<action name="InserirCategoriaFaixaConsumoTarifaActionForm"
+			type="gcom.gui.faturamento.consumotarifa.ExibirManterCategoriaFaixaConsumoTarifaSubCategoriaAction"
+			validate="false"
+			path="/exibirManterCategoriaFaixaConsumoTarifaSubCategoriaAction">
+			<forward name="manterCategoriaFaixaConsumoTarifaSubCategoria"
+				path="/jsp/faturamento/consumotarifa/consumo_tarifa_categoria_faixa_subcategoria_manter.jsp" />
+		</action>
+
+		<action name="InserirCategoriaFaixaConsumoTarifaActionForm"
+			type="gcom.gui.faturamento.consumotarifa.ManterCategoriaFaixaConsumoTarifaSubCategoriaAction"
+			validate="true" scope="session"
+			path="/manterCategoriaFaixaConsumoTarifaSubCategoriaAction">
+			<forward name="manterCategoriaConsumoTarifaSubCategoria"
+				path="/exibirManterCategoriaConsumoTarifaSubCategoriaAction.do" />
+			<forward name="exibirManterCategoriaFaixaConsumoTarifaSubCategoria"
+				path="/exibirManterCategoriaFaixaConsumoTarifaSubCategoriaAction.do?limpaForm=sim" />
+
+
+		</action>
+		<action name="ExcluirCategoriaFaixaConsumoTarifaActionForm"
+			type="gcom.gui.faturamento.consumotarifa.ExcluirCategoriaFaixaConsumoTarifaSubCategoriaAction"
+			validate="false" scope="session"
+			path="/excluirManter2CategoriaFaixaConsumoTarifaSubCategoriaAction">
+			<forward name="manterManterCategoriaConsumoTarifaSubCategoria"
+				path="/jsp/faturamento/consumotarifa/consumo_tarifa_categoria_subcategoria_manter.jsp" />
+		</action>
+
+		<action name="ExcluirCategoriaConsumoTarifaActionForm"
+			type="gcom.gui.faturamento.consumotarifa.ExcluirCategoriaConsumoTarifaSubCategoriaAction"
+			validate="false" scope="session"
+			path="/excluirManter2CategoriaConsumoTarifaSubCategoriaAction">
+			<forward name="manterConsumoTarifaExistenteSubCategoriaAction"
+				path="/jsp/faturamento/consumotarifa/consumo_tarifa_existente_subcategoria_manter.jsp" />
+		</action>
+		
+		
+		
+		
+		
+		
+		<!-- #### COLOCAR ISSO PARA FUNCIONAR DEPOIS
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.faturamento.consumotarifa.ExibirInserirReajusteConsumoTarifaAction"
+			validate="false" path="/exibirInserirReajusteConsumoTarifaAction">
+			<forward name="inserirReajusteConsumoTarifa"
+				path="/jsp/faturamento/consumotarifa/consumo_tarifa_reajustar.jsp" />
+		</action>
+		<action name="InserirReajusteConsumoTarifaActionForm"
+			type="gcom.gui.faturamento.consumotarifa.InserirReajusteConsumoTarifaAction"
+			validate="true" input="/exibirInserirReajusteConsumoTarifaAction.do"
+			scope="session" path="/inserirReajusteConsumoTarifaAction" /> -->
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

@@ -1,0 +1,193 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">        
+<hibernate-mapping>
+<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+
+	<class name="gcom.atendimentopublico.ordemservico.OSProgramacaoAcompanhamentoServico" table="atendimentopublico.os_prg_acomp_servico">
+		<id name="id" type="java.lang.Integer" column="osas_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_os_prg_acomp_servico</param>
+			</generator>
+		</id>
+
+    <property
+        name="dataProgramacao"
+        type="java.sql.Date"
+        column="osas_dtprogramacao"
+        not-null="true"
+        length="13"
+    />
+    <property
+        name="sequencialProgramacao"
+        type="int"
+        column="osas_nnseqprogramacao"
+        not-null="true"
+        length="10"
+    />
+    <property
+        name="descricaoPontoReferencia"
+        type="java.lang.String"
+        column="osas_dspontoreferencia"
+        length="60"
+    />
+    <property
+        name="numeroImovel"
+        type="java.lang.String"
+        column="osas_nnimovel"
+        length="5"
+    />
+    <property
+        name="nomeSolicitante"
+        type="java.lang.String"
+        column="osas_nmsolicitante"
+        not-null="true"
+        length="60"
+    />
+    <property
+        name="numeroTelefone"
+        type="java.lang.String"
+        column="osas_nnfone"
+        length="15"
+    />
+    <property
+        name="descricaoEndereco"
+        type="java.lang.String"
+        column="osas_dsendereco"
+        not-null="true"
+        length="70"
+    />
+    <property
+        name="descricaoLigacaoAguaSituacao"
+        type="java.lang.String"
+        column="osas_dsligaguasituacao"
+        length="20"
+    />
+    <property
+        name="descricaoLigacaoEsgotoSituacao"
+        type="java.lang.String"
+        column="osas_dsligesgotosituacao"
+        length="20"
+    />
+    <property
+        name="inscricaoImovel"
+        type="java.lang.String"
+        column="osas_inscricaoimovel"
+        length="20"
+    />
+    <property
+        name="numeroHidrometro"
+        type="java.lang.String"
+        column="osas_nnhidrometro"
+        length="11"
+    />
+    <property
+        name="descricaoHidrometroCapacidade"
+        type="java.lang.String"
+        column="osas_dshidrometrocapacidade"
+        length="20"
+    />
+    <property
+        name="indicadorAtualizacaoOS"
+        type="short"
+        column="osas_icatualizaos"
+        not-null="true"
+        length="5"
+    />
+    <property
+        name="indicadorTrasmissaoOS"
+        type="short"
+        column="osas_ictransmissao"
+        not-null="true"
+        length="5"
+    />
+    <property
+        name="dataUltimaAlteracao"
+        type="java.sql.Timestamp"
+        column="osas_tmultimaalteracao"
+        not-null="true"
+        length="29"
+    />
+     <property
+        name="indicadorExcluido"
+        type="short"
+        column="osas_icexcluido"
+        not-null="true"
+        length="5"
+    />
+    
+    <!-- Associations -->
+  
+    <!-- bi-directional many-to-one association to ServicoTipo -->
+    <many-to-one
+        name="servicoTipo"
+        class="gcom.atendimentopublico.ordemservico.ServicoTipo"
+        not-null="true"
+    >
+        <column name="svtp_id" />
+    </many-to-one>
+    <!-- bi-directional many-to-one association to OrdemServicoSituacao -->
+    <many-to-one
+        name="ordemServicoSituacao"
+        class="gcom.atendimentopublico.ordemservico.OrdemServicoSituacao"
+        not-null="true"
+    >
+        <column name="osst_id" />
+    </many-to-one>
+    <!-- bi-directional many-to-one association to OrdemServico -->
+    <many-to-one
+        name="ordemServico"
+        class="gcom.atendimentopublico.ordemservico.OrdemServico"
+        not-null="true"
+    >
+        <column name="orse_id" />
+    </many-to-one>
+    <!-- bi-directional many-to-one association to Imovel -->
+    <many-to-one
+        name="imovel"
+        class="gcom.cadastro.imovel.Imovel"
+        not-null="false"
+    >
+        <column name="imov_id" />
+    </many-to-one>
+    
+    
+    <!-- bi-directional many-to-one association to Equipe -->
+    <many-to-one
+        name="equipe"
+        class="gcom.atendimentopublico.ordemservico.Equipe"
+        not-null="true"
+    >
+        <column name="eqpe_id" />
+    </many-to-one>
+    <!-- bi-directional many-to-one association to ArqTxtAcompServico -->
+    <many-to-one
+        name="arquivoTextoAcompanhamentoServico"
+        class="gcom.atendimentopublico.ordemservico.ArquivoTextoAcompanhamentoServico"
+        not-null="true"
+    >
+        <column name="txac_id" />
+    </many-to-one>
+    <!-- bi-directional many-to-one association to OsProgNaoEncerMotivo -->
+    <many-to-one
+        name="osProgramacaoNaoEncerramentoMotivo"
+        class="gcom.atendimentopublico.ordemservico.OsProgramNaoEncerMotivo"
+        not-null="true"
+    >
+        <column name="opne_id" />
+    </many-to-one>
+    
+    <many-to-one name="equipamentosEspeciaisFaltante" 
+                 class="gcom.atendimentopublico.ordemservico.EquipamentosEspeciais" 
+                 not-null="false">
+			<column name="eqes_idfaltante"/>
+	</many-to-one>
+    
+    
+
+</class>
+</hibernate-mapping>

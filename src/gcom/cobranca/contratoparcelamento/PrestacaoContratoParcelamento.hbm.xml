@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.contratoparcelamento.PrestacaoContratoParcelamento" table="cobranca.CONTRATO_PARCEL_PREST" >
+		<id name="id" type="java.lang.Integer" column="CPPR_ID">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_CONTRATO_PARCEL_PREST</param>
+			</generator>
+		</id>
+		
+		<property name="numero" type="java.lang.Integer" column="CPPR_NNPRESTACAO" length="4"/>
+		
+		<property name="valor" type="java.math.BigDecimal" column="CPPR_VLPRESTACAO" length="40"/>
+		
+		<property name="valorPagamento" type="java.math.BigDecimal" column="CPPR_VLPAGAMENTO" length="40"/>
+		
+		<property name="dataVencimento" type="java.sql.Timestamp" column="CPPR_DTVENCIMENTO" length="8"/>
+		
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="CPPR_TMULTIMAALTERACAO" length="8"/>
+		
+		<property name="dataPagamento" type="java.sql.Timestamp" column="CPPR_DTPAGAMENTO" length="8" not-null="false"/>
+		
+		
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to ContratoParcelamentoRD -->
+		<many-to-one name="contratoParcelamento" class="gcom.cobranca.contratoparcelamento.ContratoParcelamento" not-null="true">
+			<column name="CPAR_ID"/>
+		</many-to-one>
+		
+	</class>
+</hibernate-mapping>

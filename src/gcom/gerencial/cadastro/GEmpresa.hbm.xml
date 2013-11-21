@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.gerencial.cadastro.GEmpresa" table="cadastro.g_empresa">
+		<id name="id" type="java.lang.Integer" column="empr_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="nomeEmpresa" type="java.lang.String" column="empr_nmempresa" length="50"/>
+		<property name="descricaoEmail" type="java.lang.String" column="empr_dsemail" length="80"/>
+		<property name="indicadorUso" type="java.lang.Short" column="empr_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="empr_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="indicadorEmpresaPrincipal" type="short" column="empr_icempresaprincipal" not-null="true" length="2"/>
+		<property name="nomeAbreviadoEmpresa" type="java.lang.String" column="empr_nmabreviadoempresa" length="10"/>
+		<!-- Associations -->
+	</class>
+</hibernate-mapping>

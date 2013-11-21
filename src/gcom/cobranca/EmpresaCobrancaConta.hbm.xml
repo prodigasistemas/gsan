@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+		Created by the Middlegen Hibernate plugin
+		
+		http://boss.bekk.no/boss/middlegen/
+		http://hibernate.sourceforge.net/
+	-->
+	<class name="gcom.cobranca.EmpresaCobrancaConta" table="cobranca.empresa_cobranca_conta">
+		<id name="id" type="java.lang.Integer" column="ecco_id">
+			<generator class="sequence">
+				<param name="sequence">
+					cobranca.seq_empresa_cobranca_conta</param>
+			</generator>
+		</id>
+		<many-to-one name="empresa" class="gcom.cadastro.empresa.Empresa" not-null="true">
+			<column name="empr_id"/>
+		</many-to-one>
+		<many-to-one name="contaGeral" class="gcom.faturamento.conta.ContaGeral" not-null="true">
+			<column name="cnta_id"/>
+		</many-to-one>
+		<many-to-one name="comandoEmpresaCobrancaConta" class="gcom.cobranca.ComandoEmpresaCobrancaConta" not-null="true">
+			<column name="cecc_id"/>
+		</many-to-one>
+		<many-to-one name="comandoEmpresaCobrancaContaExtensao" class="gcom.cobranca.ComandoEmpresaCobrancaContaExtensao" not-null="false">
+			<column name="ccce_id"/>
+		</many-to-one>
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="false">
+			<column name="imov_id"/>
+		</many-to-one>
+		<many-to-one name="ordemServico" class="gcom.atendimentopublico.ordemservico.OrdemServico" not-null="false">
+			<column name="orse_id"/>
+		</many-to-one>
+		<property name="valorOriginalConta" type="java.math.BigDecimal" column="ecco_vloriginalconta" length="13"/>
+		<property name="percentualEmpresaConta" type="java.math.BigDecimal" column="ecco_pcempresaconta" length="5"/>
+		<property name="indicadorPagamentoValido" type="java.lang.Short" column="ecco_icpagamentovalido" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ecco_tmultimaalteracao" length="8"/>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="InserirPrestacoesParcelamentoPerfilActionForm"
+			type="gcom.gui.cobranca.parcelamento.InserirPrestacoesParcelamentoPerfilActionForm" />
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+	
+		<action name="InserirPrestacoesParcelamentoPerfilActionForm" 
+			type="gcom.gui.cobranca.parcelamento.ExibirInserirPrestacoesParcelamentoPerfilAction"
+			validate="false" scope="session" 
+			path="/exibirInserirPrestacoesParcelamentoPerfilAction">
+			<forward name="inserirPrestacoesParcelamentoPerfil"
+				path="/jsp/cobranca/parcelamento/parcelamento_perfil_inserir_prestacoes_popup.jsp" />
+		</action>
+		
+		<action name="InserirPrestacoesParcelamentoPerfilActionForm" 
+			type="gcom.gui.cobranca.parcelamento.InserirPrestacoesParcelamentoPerfilAction"
+			validate="false" scope="session"
+			path="/inserirPrestacoesParcelamentoPerfilAction">
+			<forward name="inserirPrestacoesParcelamentoPerfilAction"
+				path="/exibirInserirPrestacoesParcelamentoPerfilAction.do?desfazer=S" />
+		</action>
+		
+		<action
+			type="gcom.gui.cobranca.parcelamento.RemoverParcelamentoQuantidadePrestacaoAction"
+			validate="false" scope="request"
+			path="/removerParcelamentoQuantidadePrestacaoAction">
+			<forward name="inserirPerfilRemoverParcelamentoQuantidadePrestacao"
+				path="/exibirInserirPrestacoesParcelamentoPerfilAction.do?reloadPage=OK" />
+		</action>
+		
+		<action name="InserirPrestacoesParcelamentoPerfilActionForm" 
+			type="gcom.gui.cobranca.parcelamento.ExibirAdicionarPercentualFaixaValorPopupAction"
+			validate="false" scope="session" 
+			path="/exibirAdicionarPercentualFaixaValorPopupAction">
+			<forward name="adicionarPercentualFaixaValorPopup"
+				path="/jsp/cobranca/parcelamento/percentual_faixa_valor_adicionar_popup.jsp" />
+		</action>
+		
+		<action name="InserirPrestacoesParcelamentoPerfilActionForm" 
+			type="gcom.gui.cobranca.parcelamento.AdicionarPercentualFaixaValorPopupAction"
+			validate="false" scope="session"
+			path="/adicionarPercentualFaixaValorPopupAction">
+			<forward name="inserirPrestacoesParcelamentoPerfilPercentualFaixaValorPopup"
+				path="/jsp/cobranca/parcelamento/parcelamento_perfil_inserir_prestacoes_popup.jsp" />
+		</action>
+		
+		<action
+			type="gcom.gui.cobranca.parcelamento.RemoverPercentualFaixaValorAction"
+			validate="false" scope="request"
+			path="/removerPercentualFaixaValorAction">
+			<forward name="inserirPerfilRemoverPercentualFaixaValor"
+				path="/exibirInserirPrestacoesParcelamentoPerfilAction.do?reloadPage=OK" />
+		</action>
+		
+		<action name="InserirPrestacoesParcelamentoPerfilActionForm" 
+			type="gcom.gui.cobranca.parcelamento.ExibirConsultarPercentualFaixaValorPopupAction"
+			validate="false" scope="session" 
+			path="/exibirConsultarPercentualFaixaValorPopupAction">
+			<forward name="consultarPercentualFaixaValor"
+				path="/jsp/cobranca/parcelamento/parcelamento_faixa_valor_consultar.jsp" />
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

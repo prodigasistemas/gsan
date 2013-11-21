@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="AcaoCobrancaFiltrarActionForm"
+			type="gcom.gui.cobranca.AcaoCobrancaFiltrarActionForm" />
+		<form-bean name="AcaoCobrancaAtualizarActionForm"
+			type="gcom.gui.cobranca.AcaoCobrancaAtualizarActionForm" />	
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		<action  name="AcaoCobrancaFiltrarActionForm"
+			type="gcom.gui.cobranca.ExibirFiltrarAcaoCobrancaAction"
+			validate="false" scope="session" path="/exibirFiltrarAcaoCobrancaAction">
+			<forward name="filtrarAcaoCobranca"
+				path="/jsp/cobranca/cobranca_acao_filtrar.jsp" />
+		</action>
+		
+		<action name="AcaoCobrancaFiltrarActionForm"
+			type="gcom.gui.cobranca.FiltrarAcaoCobrancaAction"
+			validate="false" scope="session" path="/filtrarAcaoCobrancaAction">
+			<forward name="manterCobrancaAcao" path="/exibirManterAcaoCobrancaAction.do" />
+		</action>	
+			
+		<action name="AcaoCobrancaFiltrarActionForm" 
+			type="gcom.gui.cobranca.ExibirManterAcaoCobrancaAction" 
+			scope="session" validate="false"
+			path="/exibirManterAcaoCobrancaAction">
+			<forward name="manterAcaoCobranca" path="/jsp/cobranca/cobranca_acao_manter.jsp" />
+			<forward name="atualizarAcaoCobranca" path="/exibirAtualizarAcaoCobrancaAction.do" />
+	</action>
+			
+	<action  name="AcaoCobrancaAtualizarActionForm"
+			type="gcom.gui.cobranca.ExibirAtualizarAcaoCobrancaAction"
+			validate="false" scope="session" path="/exibirAtualizarAcaoCobrancaAction">
+			<forward name="atualizarAcaoCobranca" path="/jsp/cobranca/cobranca_acao_atualizar.jsp" />
+	</action>	
+	<action name="AcaoCobrancaAtualizarActionForm"
+			type="gcom.gui.cobranca.AtualizarAcaoCobrancaAction"
+			validate="false" scope="session" path="/atualizarAcaoCobrancaAction"/>
+			
+	<action  name="AcaoCobrancaFiltrarActionForm"
+			type="gcom.gui.cobranca.RemoverAcaoCobrancaAction"
+			validate="false" scope="session" path="/removerAcaoCobrancaAction"/>
+			
+			
+		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

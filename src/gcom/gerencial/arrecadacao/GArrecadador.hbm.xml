@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.gerencial.arrecadacao.GArrecadador" table="arrecadacao.g_arrecadador">
+		<id name="id" type="java.lang.Integer" column="arrc_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="numeroInscricaoEstadual" type="java.lang.String" column="arrc_nninscricaoestadual" length="20"/>
+		<property name="codigoAgente" type="short" column="arrc_cdagente" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="arrc_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="indicadorUso" type="short" column="arrc_icuso" not-null="true" length="2"/>
+		<!-- Associations -->
+	</class>
+</hibernate-mapping>

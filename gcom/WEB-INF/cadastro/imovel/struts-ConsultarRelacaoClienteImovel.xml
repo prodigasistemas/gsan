@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+
+		<form-bean name="ExibirConsultarRelacaoClienteImovelActionForm" type="gcom.gui.cadastro.imovel.ExibirConsultarRelacaoClienteImovelActionForm" />
+		<form-bean name="ConsultarRelacaoClienteImovelActionForm" type="gcom.gui.cadastro.imovel.ConsultarRelacaoClienteImovelActionForm" />
+
+	</form-beans>
+
+	<global-forwards/>
+
+	<action-mappings>
+
+		<action name="ExibirConsultarRelacaoClienteImovelActionForm" type="gcom.gui.cadastro.imovel.ExibirConsultarRelacaoClienteImovelAction" scope="session" path="/ExibirConsultarRelacaoClienteImovelAction" parameter="acao">
+			<forward name="exibir" path="/jsp/cadastro/imovel/relacao_cliente_imovel_consulta.jsp" />
+		</action>
+
+		<action name="ConsultarRelacaoClienteImovelActionForm" type="gcom.gui.cadastro.imovel.ConsultarRelacaoClienteImovelAction" scope="session" path="/ConsultarRelacaoClienteImovelAction" parameter="acao">
+			<forward name="cliente" path="/ExibirClienteRelacaoClienteImovelAction.do" />
+			<forward name="imovel" path="/ExibirImovelRelacaoClienteImovelAction.do" />
+		</action>
+
+		<action name="ConsultarRelacaoClienteImovelActionForm" type="gcom.gui.cadastro.imovel.ExibirImovelRelacaoClienteImovelAction" scope="session" path="/ExibirImovelRelacaoClienteImovelAction" parameter="acao">
+			<forward name="exibir" path="/jsp/cadastro/imovel/relacao_cliente_imovel_imovel.jsp" />
+		</action>
+
+		<action name="ConsultarRelacaoClienteImovelActionForm" type="gcom.gui.cadastro.imovel.ExibirClienteRelacaoClienteImovelAction" scope="session" path="/ExibirClienteRelacaoClienteImovelAction" parameter="acao">
+			<forward name="exibir" path="/jsp/cadastro/imovel/relacao_cliente_imovel_cliente.jsp" />
+		</action>
+
+		<action name="ConsultarRelacaoClienteImovelActionForm" type="gcom.gui.cadastro.imovel.ExibirImovelEconomiaRelacaoClienteImovelAction" scope="session" path="/ExibirImovelEconomiaRelacaoClienteImovelAction" parameter="acao">
+			<forward name="exibir" path="/jsp/cadastro/imovel/relacao_cliente_imovel_imovel_economia.jsp" />
+		</action>
+
+		<action name="ConsultarRelacaoClienteImovelActionForm"
+			type="gcom.gui.relatorio.cadastro.imovel.GerarRelatorioClientesRelacionadosImovelAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioClientesRelacionadosImovelAction"/>
+
+		<action name="ConsultarRelacaoClienteImovelActionForm"
+			type="gcom.gui.relatorio.cadastro.imovel.GerarRelatorioImoveisRelacionadosClienteAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioImoveisRelacionadosClienteAction"/>
+
+	</action-mappings>
+	<!--********************************************************************************-->
+	<!--******************* ARQUIVO DE PROPRIEDADES *******************-->
+	<message-resources null="false" parameter="gcom.properties.application" />
+
+</struts-config>

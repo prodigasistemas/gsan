@@ -1,0 +1,354 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+
+
+  
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=windows-1252">
+
+  
+
+
+  
+  <title>Movimentar Hidr&ocirc;metro</title>
+  <meta name="GENERATOR" content="BrOffice.org 2.0 (Win32)">
+
+
+  
+  <meta name="CREATED" content="20060820;22241317">
+
+
+  
+  <meta name="CHANGEDBY" content="Homero Sampaio Cavalcanti">
+
+
+  
+  <meta name="CHANGED" content="20060821;23412687">
+
+
+  
+  <link rel="stylesheet" href="EstilosHelper.css" type="text/css">
+</head>
+
+
+<body style="direction: ltr;" lang="pt-BR" link="#0000ee" vlink="#551a8b">
+
+
+<p class="cabecalho">Movimentar Hidr&ocirc;metro</p>
+
+
+<p class="textoNormal">Esta
+op&ccedil;&atilde;o do sistema permite que seja efetuada a
+movimenta&ccedil;&atilde;o de hidr&ocirc;metros para outro
+local de armazenagem.</p>
+
+
+<p class="textoNormal">Inicialmente, o sistema
+apresenta a tela "<a href="hidrometroFiltrar.html">Filtrar
+Hidr&ocirc;metro</a>" para que seja efetuado o filtro do(s)
+hidr&ocirc;metros(s) para a movimenta&ccedil;&atilde;o do
+local de armazenagem.&nbsp;</p>
+
+
+<p class="textoNormal">Ap&oacute;s a
+execu&ccedil;&atilde;o do
+filtro, o sistema ir&aacute; apresentar a tela "<a href="#manter">Movimentar
+Hidr&ocirc;metro</a>", com
+a rela&ccedil;&atilde;o dos hidr&ocirc;metros pesquisados;
+ou
+ir&aacute;, direto, para a tela "<a href="hidrometroMovimentacao.html">Movimenta&ccedil;&atilde;o
+de
+Hidr&ocirc;metro(s)</a>".</p>
+
+
+<p class="textoNormal">O sistema ir&aacute;
+para a tela "<a href="#manter">Movimentar
+Hidr&ocirc;metro</a>", com a
+rela&ccedil;&atilde;o dos hidr&ocirc;metros pesquisados,
+quando o campo (check-box) "Atualizar" estiver desmarcado, ou quando a
+quantidade de registros selecionados na pesquisa for maior do que
+1.&nbsp;</p>
+
+
+<p class="textoNormal">O sistema ir&aacute;,
+direto, para a tela
+"<a href="hidrometroMovimentacao.html">Movimenta&ccedil;&atilde;o
+de
+Hidr&ocirc;metro(s)</a>",
+quando houver a nega&ccedil;&atilde;o da
+condi&ccedil;&atilde;o relatada acima. Ou seja, quando o campo
+"Atualizar" &nbsp;estiver marcado e a quantidade de registros
+selecionados for igual a 1.&nbsp;</p>
+
+
+<p class="textoNormal">O quadro, abaixo,
+apresenta as
+condi&ccedil;&otilde;es poss&iacute;veis e a tela a ser
+apresentada.&nbsp;</p>
+
+
+<table style="width: 584px; height: 106px;" class="table">
+
+
+  <col width="10*"> <col width="100*"> <col width="100*"> <thead> <tr valign="top">
+
+
+    <th style="width: 154px;" class="textoNormal">
+    
+    <p>Campo
+Atualizar</p>
+
+
+    </th>
+
+
+    <th style="width: 200px;" class="textoNormal">
+    
+    <p class="textoNormal">Qtd.
+Registros Selecionados</p>
+
+
+    </th>
+
+
+    <th style="width: 180px; background-color: rgb(255, 255, 204);" class="textoNormal">
+    
+    <p style="background-color: rgb(255, 153, 0);" class="textoNormal">Tela
+Apresentada </p>
+
+
+    </th>
+
+
+  </tr>
+
+
+  </thead><tbody>
+
+
+    <tr>
+
+
+      <td style="width: 154px;" class="textoNormal">Marcado</td>
+
+
+      <td style="width: 200px;" class="textoNormal">1
+registro</td>
+
+
+      <td style="width: 180px; background-color: rgb(255, 255, 204);" class="textoNormal">Movimenta&ccedil;&atilde;o
+de&nbsp; Hidr&ocirc;metro</td>
+
+
+    </tr>
+
+
+    <tr>
+
+
+      <td style="width: 154px;" class="textoNormal">Marcado</td>
+
+
+      <td style="width: 200px;" class="textoNormal">mais
+de
+1 registro</td>
+
+
+      <td style="width: 180px; background-color: rgb(255, 255, 204);" class="textoNormal">Movimentar Hidr&ocirc;metro</td>
+
+
+    </tr>
+
+
+    <tr>
+
+
+      <td style="width: 154px;" class="textoNormal">Desmarcado</td>
+
+
+      <td style="width: 200px;" class="textoNormal">1
+registro</td>
+
+
+      <td style="width: 180px; background-color: rgb(255, 255, 204);" class="textoNormal">Movimentar&nbsp;Hidr&ocirc;metro</td>
+
+
+    </tr>
+
+
+    <tr>
+
+
+      <td style="width: 154px;" class="textoNormal">Desmarcado</td>
+
+
+      <td style="width: 200px;" class="textoNormal">mais
+de
+um registro</td>
+
+
+      <td style="width: 180px; background-color: rgb(255, 255, 204);" class="textoNormal">Movimentar&nbsp;Hidr&ocirc;metro</td>
+
+
+    </tr>
+
+
+  
+  </tbody>
+</table>
+
+
+<br>
+
+
+<hr style="width: 100%; height: 2px;"><a class="item" name="manter"></a><span class="item">Tela
+Movimentar Hidr&ocirc;metro</span><br>
+
+
+<br>
+
+
+<span class="textoNormal">O sistema apresenta uma tabela
+com a rela&ccedil;&atilde;o dos hidr&ocirc;metros
+selecionados, de acordo com os argumentos de pesquisa informados na
+tela <a href="hidrometroFiltrar.html">Filtrar
+Hidr&ocirc;metro</a>.</span><br>
+
+
+<span class="textoNormal">A
+rela&ccedil;&atilde;o dos hidr&ocirc;metros
+selecionados estar&aacute; classificada pelo n&uacute;mero do
+hidr&ocirc;metro, e tem uma coluna na esquerda para voc&ecirc;
+selecionar os hidr&ocirc;metros, para os quais, deseja efetuar a
+movimenta&ccedil;&atilde;o de local de armazenagem. <br>
+
+
+Caso deseje selecionar todos os hidr&ocirc;metros de uma
+&uacute;nica vez, clique no&nbsp; "<span style="font-style: italic;">hyperlink</span>" "<span style="font-weight: bold; text-decoration: underline;">Todos</span>"
+existente no cabe&ccedil;alho da tabela. Se clicar, novamente, no
+"hyperlink", o sistema ir&aacute; desmarcar todos os
+hidr&ocirc;metros, e, assim, sucessivamente. <br>
+
+
+</span><span class="textoNormal"></span><span class="textoNormal"></span><span class="textoNormal" style="font-family: Verdana,Helvetica,sans-serif;">Ap&oacute;s
+selecionar na tabela os hidr&ocirc;metros que mudar&atilde;o de
+local de armazenagem, clique no bot&atilde;o&nbsp;<img style="width: 98px; height: 24px;" alt="Movimentar" title="Movimentar" src="../imagens/movimentar.JPG">,
+para ativar a tela "<a href="hidrometroMovimentacao.html">Movimenta&ccedil;&atilde;o
+de Hidr&ocirc;metro(s)</a>", onde voc&ecirc;
+ir&aacute; informar os dados da movimenta&ccedil;&atilde;o
+e concluir o processo. <br>
+
+
+</span><br class="item">
+
+
+<span class="item">Funcionalidade dos bot&otilde;es</span><br>
+
+
+<table class="table">
+
+
+  <col width="13*"> <col width="243*"> <thead>
+  <tr valign="top">
+
+
+    <th class="textoNormal" width="5%">
+    
+    <p>Bot&atilde;o</p>
+
+
+    </th>
+
+
+    <th class="textoNormal" width="95%">
+    
+    <p class="textoNormal">Funcionalidade</p>
+
+
+    </th>
+
+
+  </tr>
+
+
+  </thead> <tbody>
+
+
+    <tr>
+
+
+      <td style="text-align: center;" ;="" class="textoNormal"><img alt="Movimentar" title="Movimentar" src="../imagens/movimentar.JPG"></td>
+
+
+      <td class="textoNormal">Ativar a
+tela "<a href="hidrometroMovimentacao.html">Movimenta&ccedil;&atilde;o
+de Hidr&ocirc;metro(s)</a>", onde voc&ecirc;
+ir&aacute; informar os dados da movimenta&ccedil;&atilde;o
+e concluir o processo. </td>
+
+
+    </tr>
+
+
+    <tr>
+
+
+      <td style="text-align: center;"><img style="width: 82px; height: 23px;" alt="Voltar Filtro" title="Voltar Filtro" src="../imagens/voltarFiltro.JPG"></td>
+
+
+      <td class="textoNormal">Retornar
+para a tela de
+filtro. O sistema ir&aacute; manter&nbsp;os
+argumentos de pesquisa informados anteriormente.</td>
+
+
+    </tr>
+
+
+
+
+  
+  </tbody>
+</table>
+
+
+<br class="item">
+
+
+<hr class="item" style="width: 100%; height: 2px;"><a class="item" name="atualizar"></a><span class="item">T&oacute;picos
+Relacionados:
+</span>
+<br>
+<ul class="textoNormal">
+
+
+  
+  <li><a href="hidrometroInserir.html">Inserir
+Hidr&ocirc;metro</a></li>
+
+  <li class="textoNormal"><a href="hidrometroFiltrar.html">Filtrar Hidr&ocirc;metro</a></li>
+
+  <li class="textoNormal"><a href="hidrometroManter.html">Manter Hidr&ocirc;metro</a></li>
+
+  <li class="textoNormal"><a href="hidrometroMovimentacao.html">Movimenta&ccedil;&atilde;o de
+Hidr&ocirc;metro(s)</a></li>
+
+  <li class="textoNormal">Consultar
+Movimenta&ccedil;&atilde;o de Hidr&ocirc;metro</li>
+
+  <li class="textoNormal">Consultar Hist&oacute;rico
+de Instala&ccedil;&atilde;o de Hidr&ocirc;metro</li>
+
+  <li class="textoNormal"><a href="calendario.html">Calend&aacute;rio</a></li>
+
+  <li class="textoNormal"><a href="localArmazenagemPesquisar.html">Pesquisar Local de
+Armazenagem de Hidr&ocirc;metro</a></li>
+
+  <li><a href="layoutTelaSistema.html">Layout
+da tela do sistema</a></li>
+
+</ul>
+
+
+</body>
+</html>

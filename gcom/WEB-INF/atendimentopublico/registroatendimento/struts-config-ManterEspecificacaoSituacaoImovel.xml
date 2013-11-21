@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+
+		<form-bean name="FiltrarEspecificacaoSituacaoImovelActionForm" 
+			type="gcom.gui.atendimentopublico.registroatendimento.FiltrarEspecificacaoSituacaoImovelActionForm" />
+
+		<form-bean name="ManutencaoRegistroActionForm" 
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+		
+		<form-bean name="AtualizarEspecificacaoSituacaoImovelActionForm" 
+			type="gcom.gui.atendimentopublico.registroatendimento.AtualizarEspecificacaoSituacaoImovelActionForm" />			
+	</form-beans>
+
+	<global-forwards/>
+
+	<action-mappings>
+	
+		<action name="FiltrarEspecificacaoSituacaoImovelActionForm" 
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirManterEspecificacaoSituacaoImovelAction" 
+			scope="session" 
+			validate="false"
+			path="/exibirManterEspecificacaoSituacaoImovelAction">
+			
+			<forward name="manterEspecificacaoSituacaoImovel" 
+				path="/jsp/atendimentopublico/registroatendimento/especificacao_situacao_imovel_manter.jsp" />
+			
+			<forward name="atualizarEspecificacaoSituacaoImovel" 
+				path="/exibirAtualizarEspecificacaoSituacaoImovelAction.do" />
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.RemoverEspecificacaoSituacaoImovelAction"
+			scope="request" 
+			path="/removerEspecificacaoSituacaoImovelAction" />			
+		
+		<action name="AtualizarEspecificacaoSituacaoImovelActionForm"
+	      	type="gcom.gui.atendimentopublico.registroatendimento.ExibirAtualizarEspecificacaoSituacaoImovelAction"
+	      	validate="false" 
+	      	scope="session"
+	      	path="/exibirAtualizarEspecificacaoSituacaoImovelAction">
+
+			<forward name="atualizarEspecificacaoSituacaoImovel"
+		  		path="/jsp/atendimentopublico/registroatendimento/especificacao_situacao_imovel_atualizar.jsp" />
+		  		
+		</action>
+		
+		<action name="AtualizarEspecificacaoSituacaoImovelActionForm" 
+			type="gcom.gui.atendimentopublico.registroatendimento.AtualizarEspecificacaoSituacaoImovelAction"
+			validate="false" 
+			scope="session"
+			path="/atualizarEspecificacaoSituacaoImovelAction">
+		</action>
+
+		<action name="AtualizarEspecificacaoSituacaoImovelActionForm"
+	      	type="gcom.gui.atendimentopublico.registroatendimento.ExibirAtualizarEspecificacaoSituacaoCriterioImovelAction"
+	      	validate="false" 
+	      	scope="session"
+	      	path="/exibirAtualizarEspecificacaoSituacaoCriterioImovelAction">
+
+			<forward name="atualizarEspecificacaoSituacaoCriterioImovel"
+		  		path="/jsp/atendimentopublico/registroatendimento/especificacao_situacao_imovel_criterio_atualizar.jsp" />
+		  		
+		</action>
+		
+		<action name="AtualizarEspecificacaoSituacaoImovelActionForm"
+	      	type="gcom.gui.atendimentopublico.registroatendimento.ExibirInserirEspecificacaoSituacaoCriterioImovelAction"
+	      	validate="false" 
+	      	scope="session"
+	      	path="/exibirInserirEspecificacaoSituacaoCriterioImovelAction">
+
+			<forward name="inserirEspecificacaoSituacaoImovelCriterio"
+		  		path="/jsp/atendimentopublico/registroatendimento/especificacao_situacao_imovel_criterio_atualizar_adicionar_popup.jsp" />
+		  		
+		</action>
+		
+		
+	</action-mappings>
+
+	<message-resources null="false" parameter="gcom.properties.application" />
+	
+</struts-config>

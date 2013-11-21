@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="GerarRelatorioAnormalidadeLeituraPeriodoActionForm"
+			type="gcom.gui.micromedicao.GerarRelatorioAnormalidadeLeituraPeriodoActionForm" />					
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+	
+		<action name="GerarRelatorioAnormalidadeLeituraPeriodoActionForm"
+			type="gcom.gui.micromedicao.ExibirGerarRelatorioAnormalidadeLeituraPeriodoAction"
+			validate="true" scope="session"
+			path="/exibirGerarRelatorioAnormalidadeLeituraPeriodoAction">
+			<forward name="exibirGerarRelatorioAnormalidadeLeituraPeriodo"
+				path="/jsp/micromedicao/anormalidade_leitura_periodo_relatorio_gerar.jsp" />
+		</action>
+		
+		<action name="GerarRelatorioAnormalidadeLeituraPeriodoActionForm"
+			type="gcom.gui.relatorio.micromedicao.GerarRelatorioAnormalidadeLeituraPeriodoAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioAnormalidadeLeituraPeriodoAction">
+		</action>
+	
+	</action-mappings>
+
+</struts-config>

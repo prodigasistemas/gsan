@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>	
+		<form-bean name="ManutencaoRegistroActionForm" type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="FiltrarDebitoAutomaticoActionForm" type="gcom.gui.arrecadacao.FiltrarDebitoAutomaticoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!-- [UC00803] Manter Debito Automatico, Autor: Bruno Barros-->
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.arrecadacao.ExibirManterDebitoAutomaticoAction"
+			validate="false" scope="session"
+			path="/exibirManterDebitoAutomaticoAction">
+			<forward name="exibirManterDebitoAutomatico"
+				path="/jsp/arrecadacao/debito_automatico_manter.jsp" />
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.arrecadacao.RemoverDebitoAutomaticoAction" scope="request"
+			path="/removerDebitoAutomaticoAction">
+		</action>
+		
+		<action name="FiltrarDebitoAutomaticoActionForm"
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioDebitoAutomaticoManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioDebitoAutomaticoManterAction"/>
+		
+	</action-mappings>
+</struts-config>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.tarifasocial.TarifaSocialRevisaoMotivo" table="cadastro.tar_social_rev_motivo">
+		<id name="id" type="java.lang.Integer" column="rtsm_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="descricao" type="java.lang.String" column="rtsm_dstarsocrevisaomotivo" length="40"/>
+		<property name="indicadorUso" type="java.lang.Short" column="rtsm_icuso" length="2"/>
+		<property name="indicadorPermiteRecadastramento" type="java.lang.Integer" column="rtsm_icpermiterecadastramento" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="rtsm_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to TarifaSocialDadoEconomia -->
+		<set name="tarifaSocialDadoEconomias" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="rtsm_id"/>
+			</key>
+			<one-to-many class="gcom.cadastro.tarifasocial.TarifaSocialDadoEconomia"/>
+		</set>
+	</class>
+</hibernate-mapping>

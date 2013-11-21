@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.FaturamentoTipo" table="faturamento.faturamento_tipo">
+		<id name="id" type="java.lang.Integer" column="fttp_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_faturamento_tipo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="fttp_dsfaturamentotipo" length="30"/>
+		<property name="indicadorUso" type="java.lang.Short" column="fttp_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="fttp_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to ContaHistorico
+    <set
+        name="contaHistoricos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="fttp_id" />
+        </key>
+        <one-to-many
+            class="mapeamentohibernate.ContaHistorico"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to Conta
+    <set
+        name="contas"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="fttp_id" />
+        </key>
+        <one-to-many
+            class="mapeamentohibernate.Conta"
+        />
+    </set>
+  -->
+	</class>
+</hibernate-mapping>

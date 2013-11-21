@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="GerarCertidaoNegativaActionForm"
+			type="gcom.gui.atendimentopublico.GerarCertidaoNegativaActionForm" />
+	</form-beans>
+
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="GerarCertidaoNegativaActionForm"
+			type="gcom.gui.atendimentopublico.ExibirGerarCertidaoNegativaAction"
+			validate="true" 
+			path="/exibirGerarCertidaoNegativaAction">
+			
+			<forward name="exibirGerarCertidaoNegativa" 
+				path="/jsp/atendimentopublico/gerar_certidao_negativa.jsp" />
+				
+		</action>
+		
+		<action name="GerarCertidaoNegativaActionForm"
+			type="gcom.gui.relatorio.atendimentopublico.GerarCertidaoNegativaAction"
+			validate="true" 
+			path="/gerarCertidaoNegativaAction" />		
+		
+	</action-mappings>
+
+</struts-config>

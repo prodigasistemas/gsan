@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.arrecadacao.ArrecadadorContrato" table="arrecadacao.arrecadador_contrato">
+		<id name="id" type="java.lang.Integer" column="arct_id">
+			<generator class="sequence">
+				<param name="sequence">arrecadacao.seq_arrecadador_contrato</param>
+			</generator>
+		</id>
+		<property name="numeroContrato" type="java.lang.String" column="arct_nncontrato" not-null="true" length="10"/>
+		<property name="dataContratoInicio" type="java.sql.Date" column="arct_dtcontratoinicio" length="4"/>
+		<property name="codigoConvenio" type="java.lang.String" column="arct_cdconvenio" length="20"/>
+		<property name="dataContratoFim" type="java.sql.Date" column="arct_dtcontratofim" length="4"/>
+		<property name="dataContratoEncerramento" type="java.sql.Date" column="arct_dtcontratoencerramento" length="4"/>
+		<property name="indicadorCobrancaIss" type="java.lang.Short" column="arct_iccobrancaiss" length="2"/>
+		<property name="numeroSequecialArquivoRetornoCodigoBarras" type="java.lang.Integer" column="arct_nnnsaretornocdbarras" length="4"/>
+		<property name="numeroSequencialArquivoRetornoDebitoAutomatico" type="java.lang.Integer" column="arct_nnnsaretornodebaut" length="4"/>
+		<property name="numeroSequencialArquivoEnvioDebitoAutomatico" type="java.lang.Integer" column="arct_nnnsaenviodebaut" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="arct_tmultimaalteracao" length="8"/>
+		<property name="descricaoEmail" type="java.lang.String" column="arct_dsmail" length="40"/>
+		<property name="numeroSequencialArquivoRetornoFichaCompensacao" type="java.lang.Integer" column="arct_nnnsaretornofichacomp" length="4"/>
+		<property name="tamanhoMaximoIdentificacaoImovel" type="java.lang.Short" column="arct_nntamidentificarimv" length="2"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to ContaBancaria -->
+		<many-to-one name="contaBancariaDepositoTarifa" class="gcom.arrecadacao.banco.ContaBancaria" not-null="true">
+			<column name="ctbc_iddepositotarifa"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ContaBancaria -->
+		<many-to-one name="contaBancariaDepositoArrecadacao" class="gcom.arrecadacao.banco.ContaBancaria" not-null="true">
+			<column name="ctbc_iddepositoarrecadacao"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Arrecadador -->
+		<many-to-one name="arrecadador" class="gcom.arrecadacao.Arrecadador" not-null="true">
+			<column name="arrc_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ContratoMotivoCancelamento -->
+		<many-to-one name="contratoMotivoCancelamento" class="gcom.arrecadacao.ContratoMotivoCancelamento" not-null="true">
+			<column name="ctcn_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Cliente -->
+		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="true">
+			<column name="clie_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to ArrecadadorContratoTarifa -->
+		<!--
+    <set
+        name="arrecadadorContratoTarifas"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="arct_id" />
+        </key>
+        <one-to-many 
+            class="gcom.ArrecadadorContratoTarifa"
+        />
+    </set>
+	-->
+	</class>
+</hibernate-mapping>

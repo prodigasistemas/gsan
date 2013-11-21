@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.micromedicao.leitura.LeituraFiscalizacao" table="micromedicao.leitura_fiscalizacao">
+		<id name="id" type="java.lang.Integer" column="mdhi_id">
+			<!--<generator class="sequence">
+        	<param name="sequence">micromedicao.sequence_leitura_fiscalizacao</param>
+     	</generator>-->
+		</id>
+		<!-- 
+    <property
+        name="numeroLedituraCompesa"
+        type="int"
+        column="ltfz_nnleituracompesa"
+        not-null="true"
+        length="4"
+    />
+ -->
+		<property name="numeroLeituraEmpresa" type="int" column="ltfz_nnleituraempresa" not-null="true" length="4"/>
+		<property name="dataLeituraEmpresa" type="java.sql.Date" column="ltfz_dtleituraempresa" not-null="true" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ltfz_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-one association to MedicaoHistorico -->
+		<one-to-one name="medicaoHistorico" class="gcom.micromedicao.medicao.MedicaoHistorico" outer-join="auto" constrained="true"/>
+		<!-- bi-directional many-to-one association to LeituraAnormalidade -->
+		<many-to-one name="leituraAnormalidade" class="gcom.micromedicao.leitura.LeituraAnormalidade" not-null="true">
+			<column name="ltan_idanormalidadeleitemp"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Funcionario -->
+		<many-to-one name="funcionario" class="gcom.cadastro.funcionario.Funcionario" not-null="true">
+			<column name="func_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

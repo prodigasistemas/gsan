@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="AtualizarEntidadeBeneficenteActionForm" type="gcom.gui.cadastro.entidadebeneficente.AtualizarEntidadeBeneficenteActionForm" />
+		<form-bean name="ManutencaoRegistroActionForm" type="gcom.gui.ManutencaoRegistroActionForm" />
+		
+	</form-beans>
+
+	<action-mappings>
+		
+		
+		<action name="ManutencaoRegistroActionForm" 
+				path="/exibirManterEntidadeBeneficenteAction"
+				type="gcom.gui.cadastro.entidadebeneficente.ExibirManterEntidadeBeneficenteAction">
+				
+				<forward name="manterEntidadeBeneficente"
+				path="/jsp/cadastro/entidadebeneficente/entidade_beneficente_manter.jsp" />
+				
+				<forward name="exibirAtualizar"
+				path="/exibirAtualizarEntidadeBeneficenteAction.do?filtrar=sim" />
+		</action>
+		
+		
+		
+		<action name="AtualizarEntidadeBeneficenteActionForm"
+			type="gcom.gui.cadastro.entidadebeneficente.ExibirAtualizarEntidadeBeneficenteAction"
+			path="/exibirAtualizarEntidadeBeneficenteAction">
+			<forward name="atualizarEntidadeBeneficente"
+				path="/jsp/cadastro/entidadebeneficente/entidade_beneficente_atualizar.jsp" />
+		</action>
+		
+		
+		<action name="AtualizarEntidadeBeneficenteActionForm"
+			type="gcom.gui.cadastro.entidadebeneficente.AtualizarEntidadeBeneficenteAction"
+			validate="true" scope="request"
+			path="/atualizarEntidadeBeneficenteAction">
+		</action>
+		
+		
+		
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.cadastro.entidadebeneficente.RemoverEntidadeBeneficenteAction"
+			validate="false" 
+			input="/exibirManterFuncionarioAction.do"
+			scope="request" path="/removerEntidadeBeneficenteAction">
+		</action>
+		
+		
+	</action-mappings>
+	
+		<message-resources null="false"
+		parameter="gcom.properties.application" />
+	
+</struts-config>

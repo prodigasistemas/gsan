@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="EfetuarInstalacaoHidrometroActionForm"
+			type="gcom.gui.atendimentopublico.hidrometro.EfetuarInstalacaoHidrometroActionForm" />
+	</form-beans>
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="EfetuarInstalacaoHidrometroActionForm"
+			type="gcom.gui.atendimentopublico.hidrometro.ExibirEfetuarInstalacaoHidrometroAction"
+			validate="true" scope="session"
+			path="/exibirEfetuarInstalacaoHidrometroAction">
+			<forward name="efetuarInstalacaoHidrometro"
+				path="/jsp/atendimentopublico/hidrometro/instalacao_hidrometro_efetuar.jsp" />
+		</action>
+
+		<action name="EfetuarInstalacaoHidrometroActionForm"
+			type="gcom.gui.atendimentopublico.hidrometro.EfetuarInstalacaoHidrometroAction"
+			validate="true" scope="session"
+			path="/efetuarInstalacaoHidrometroAction">
+			
+			<forward name="encerrarOrdemServicoAction"
+				path="/encerrarOrdemServicoAction.do" />
+				
+			<forward name="encerrarOrdemServicoPopupAction"
+				path="/encerrarOrdemServicoPopupAction.do" />
+		</action>
+
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

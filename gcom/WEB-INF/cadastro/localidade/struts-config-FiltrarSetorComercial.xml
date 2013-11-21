@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+	<form-bean name="PesquisarFiltrarSetorComercialActionForm"
+   type="gcom.gui.cadastro.localidade.PesquisarFiltrarSetorComercialActionForm" />
+ </form-beans>
+  <!--******************* PÁGINAS GLOBAIS *******************-->
+ <global-forwards />
+ <action-mappings>
+ 
+ 			<!--INICIO MANTER SETOR COMERCIAL-->
+		<action name="PesquisarFiltrarSetorComercialActionForm"
+			type="gcom.gui.cadastro.localidade.ExibirFiltrarSetorComercialAction"
+			path="/exibirFiltrarSetorComercialAction"
+			scope="session" >
+			<forward name="exibirFiltrarSetorComercial"
+				path="/jsp/cadastro/localidade/setor_comercial_filtrar.jsp" />
+		</action>
+		<action name="PesquisarFiltrarSetorComercialActionForm"
+			type="gcom.gui.cadastro.localidade.FiltrarSetorComercialAction"
+			path="/filtrarSetorComercialAction"	>
+			
+			<forward name="retornarFiltroSetorComercial" 
+				path="/exibirManterSetorComercialAction.do" />
+		</action>
+		
+	<!--FIM MANTER SETOR COMERCIAL-->
+
+</action-mappings>
+ <message-resources null="false"
+  parameter="gcom.properties.application" />
+</struts-config>

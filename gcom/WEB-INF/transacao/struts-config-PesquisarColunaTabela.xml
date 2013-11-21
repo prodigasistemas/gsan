@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="PesquisarColunaTabelaActionForm"
+			type="gcom.gui.seguranca.acesso.transacao.PesquisarColunaTabelaActionForm" />
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="PesquisarColunaTabelaActionForm"
+			type="gcom.gui.seguranca.acesso.transacao.ExibirPesquisarColunaTabelaAction"
+			validate="false" scope="session"
+			path="/exibirPesquisarColunaTabelaAction">
+			<forward name="colunaTabelaPesquisar"
+				path="/jsp/seguranca/acesso/transacao/tabela_coluna_pesquisar.jsp" />
+		</action>
+
+		<action name="PesquisarColunaTabelaActionForm"
+			type="gcom.gui.seguranca.acesso.transacao.PesquisarColunaTabelaAction"
+			validate="false" scope="session" path="/pesquisarColunaTabelaAction">
+			<forward name="exibirResultadoPesquisaColunaTabelaAction"
+				path="/jsp/seguranca/acesso/transacao/tabela_coluna_resultado_pesquisa.jsp" />
+		</action>
+
+
+
+
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

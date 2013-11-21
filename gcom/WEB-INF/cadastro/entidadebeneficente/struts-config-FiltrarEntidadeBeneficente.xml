@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="filtrarEntidadeBeneficenteActionForm" 
+		type="gcom.gui.cadastro.entidadebeneficente.FiltrarEntidadeBeneficenteActionForm" />
+	</form-beans>
+
+	<action-mappings>
+		
+		<action name="filtrarEntidadeBeneficenteActionForm"
+				type="gcom.gui.cadastro.entidadebeneficente.ExibirFiltrarEntidadeBeneficenteAction" 
+				path="/exibirFiltrarEntidadeBeneficenteAction">
+				
+				<forward name="filtrarEntidadeBeneficente"
+				path="/jsp/cadastro/entidadebeneficente/entidade_beneficente_filtrar.jsp" />
+		</action>	
+		
+	
+		<action name="filtrarEntidadeBeneficenteActionForm" 
+				path="/filtrarEntidadeBeneficenteAction"
+				type="gcom.gui.cadastro.entidadebeneficente.FiltrarEntidadeBeneficenteAction">
+				
+				<forward name="filtrarEntidadeBeneficente"
+				path="/exibirManterEntidadeBeneficenteAction.do" />
+		</action>
+		
+		
+	</action-mappings>
+	
+		<message-resources null="false"
+		parameter="gcom.properties.application" />
+	
+</struts-config>

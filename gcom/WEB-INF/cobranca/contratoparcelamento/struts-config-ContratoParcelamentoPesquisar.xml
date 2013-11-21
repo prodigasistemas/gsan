@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="PesquisarContratoParcelamentoActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.PesquisarContratoParcelamentoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	
+	<action-mappings>
+		<action name="PesquisarContratoParcelamentoActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.ContratoParcelamentoPesquisarAction"
+			validate="false" 
+			scope="session"
+			path="/exibirContratoParcelamentoPesquisar">
+			<forward name="contratoParcelamentoPesquisar"
+				path="/jsp/cobranca/contratoparcelamento/contrato_parcelamento_pesquisar.jsp" />
+		</action>
+
+		<action name="PesquisarContratoParcelamentoActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.RetornarContratoParcelamentoPesquisarAction"
+			validate="false" 
+			scope="session"
+			path="/retornarContratoParcelamentoPesquisar">
+			<forward name="retornoPesquisa"
+				path="/jsp/cobranca/contratoparcelamento/contrato_parcelamento_resultado_pesquisa.jsp" />
+		</action>		
+		
+</action-mappings>	
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="GerarRelatorioAlteracoesSistemaColunaForm"
+			type="gcom.gui.relatorio.seguranca.GerarRelatorioAlteracoesSistemaColunaForm" />			
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC1074] Gerar Relatório Alterações no Sistema por Coluna Auhtor: Hugo Amorim Data:08/09/2010-->
+		<action name="GerarRelatorioAlteracoesSistemaColunaForm"
+			type="gcom.gui.relatorio.seguranca.ExibirGerarRelatorioAlteracoesSistemaColunaAction"
+			validate="true" 
+			scope="session"
+			path="/exibirGerarRelatorioAlteracoesSistemaColunaAction">
+			
+			<forward name="exibirGerarRelatorioAlteracoesSistemaColunaAction"
+				path="/jsp/relatorio/seguranca/relatorio_alteracoes_sistema_coluna.jsp" />
+		</action>
+		
+		<action name="GerarRelatorioAlteracoesSistemaColunaForm"
+				type="gcom.gui.relatorio.seguranca.GerarRelatorioAlteracoesSistemaColunaAction"
+				validate="true" scope="session"
+				path="/gerarRelatorioAlteracoesSistemaColunaAction">
+		</action>
+		
+		<action name="GerarRelatorioAlteracoesSistemaColunaForm"
+				type="gcom.gui.relatorio.seguranca.AdicionarUnidadeOrganizacionalAction"
+				validate="true" scope="session"
+				path="/adicionarUnidadeOrganizacionalAction">
+				
+				<forward name="exibirGerarRelatorioAlteracoesSistemaColunaAction"
+					path="/exibirGerarRelatorioAlteracoesSistemaColunaAction.do" />
+		</action>
+		
+		<action name="GerarRelatorioAlteracoesSistemaColunaForm"
+				type="gcom.gui.relatorio.seguranca.RemoverUnidadeOrganizacionalAction"
+				validate="true" scope="session"
+				path="/removerUnidadeOrganizacionalAction">
+				
+				<forward name="exibirGerarRelatorioAlteracoesSistemaColunaAction"
+					path="/exibirGerarRelatorioAlteracoesSistemaColunaAction.do" />
+		</action>
+
+	</action-mappings>
+
+</struts-config>

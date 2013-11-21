@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoCriticaTipo" table="cadastro.atlz_cad_simp_crit_tipo">
+		<id name="id" type="java.lang.Integer" column="asct_id" unsaved-value="null">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_atlz_cad_simp_crit_tipo</param>
+			</generator>
+		</id>
+		<property name="descricao" column="asct_dstipocritica" type="java.lang.String" length="40"/>
+		<property name="indicadorUso" type="short" column="asct_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="asct_tmultimaalteracao" length="8" insert="false"/>
+	</class>
+</hibernate-mapping>

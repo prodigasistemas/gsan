@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.micromedicao.hidrometro.HidrometroMovimentacao" table="micromedicao.hidrometro_movimentacao">
+		<id name="id" type="java.lang.Integer" column="himv_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_hidrometro_movimentacao</param>
+			</generator>
+		</id>
+		<property name="data" type="java.sql.Date" column="himv_dtmovimentacao" length="4"/>
+		<property name="hora" type="java.sql.Time" column="himv_hrmovimentacao" length="8"/>
+		<property name="parecer" type="java.lang.String" column="himv_dsparecer" length="200"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="himv_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to HidrometroMotivoMovimentacao -->
+		<many-to-one name="hidrometroMotivoMovimentacao" class="gcom.micromedicao.hidrometro.HidrometroMotivoMovimentacao" not-null="true">
+			<column name="himm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to HidrometroLocalArmazenagem -->
+		<many-to-one name="hidrometroLocalArmazenagemDestino" class="gcom.micromedicao.hidrometro.HidrometroLocalArmazenagem" not-null="true">
+			<column name="hila_idhidmtlocalarmzdest"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to HidrometroLocalArmazenagem -->
+		<many-to-one name="hidrometroLocalArmazenagemOrigem" class="gcom.micromedicao.hidrometro.HidrometroLocalArmazenagem" not-null="true">
+			<column name="hila_idhidmtlocalarmzorigem"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Funcionario -->
+		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario" not-null="true">
+			<column name="usur_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to HidrometroMovimentado -->
+		<set name="hidrometroMovimentados" lazy="true" inverse="true">
+			<key>
+				<column name="himv_id"/>
+			</key>
+			<one-to-many class="gcom.micromedicao.hidrometro.HidrometroMovimentado"/>
+		</set>
+	</class>
+</hibernate-mapping>

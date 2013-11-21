@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.gerencial.micromedicao.hidrometro.GHidrometroClasseMetrologica" table="micromedicao.g_hidr_classe_metrlg">
+		<id name="id" type="java.lang.Integer" column="hicm_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="descricaoHidrometroClasseMetrologica" type="java.lang.String" column="hicm_dshidrclassemetrologica" length="20"/>
+		<property name="descricaoAbreviadaHidrometroClasseMetrologica" type="java.lang.String" column="hicm_dsabrvhidmtclassemetl" length="5"/>
+		<property name="indicadorUso" type="java.lang.Short" column="hicm_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="hicm_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+	</class>
+</hibernate-mapping>

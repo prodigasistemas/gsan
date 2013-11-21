@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.micromedicao.TelemetriaRetMot" table="micromedicao.telemetria_ret_mot">
+		<id name="id" type="java.lang.Integer" column="trmt_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_telemetria_ret_mot</param>
+			</generator>
+		</id>
+		<property name="descricaoRetorno" type="java.lang.String" column="trmt_dsretorno" not-null="true" length="50"/>
+		<property name="indicadorUso" type="java.lang.Short" column="trmt_icuso" not-null="true" length="2"/>
+		<property name="indicadorMovAceito" type="java.lang.Short" column="trmt_icmovaceito" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="trmt_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+	</class>
+</hibernate-mapping>

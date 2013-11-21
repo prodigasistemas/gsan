@@ -1,0 +1,585 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+
+
+
+  
+  
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=windows-1252">
+
+
+  
+
+
+  
+  
+  
+  <title>Manter Quadra</title>
+  <meta name="GENERATOR" content="BrOffice.org 2.0 (Win32)">
+
+
+
+  
+  
+  <meta name="CREATED" content="20060820;22241317">
+
+
+
+  
+  
+  <meta name="CHANGEDBY" content="Homero Sampaio Cavalcanti">
+
+
+
+  
+  
+  <meta name="CHANGED" content="20060821;23412687">
+
+
+
+  
+  
+  <link rel="stylesheet" href="EstilosHelper.css" type="text/css">
+</head>
+
+
+<body style="direction: ltr;" lang="pt-BR" link="#0000ee" vlink="#551a8b">
+
+
+
+<p class="cabecalho">Manter Quadra</p>
+
+
+
+<p class="textoNormal">Esta
+op&ccedil;&atilde;o do sistema permite que seja efetuada a
+manuten&ccedil;&atilde;o (altera&ccedil;&atilde;o ou
+exclus&atilde;o) de&nbsp;quadras j&aacute;
+existentes&nbsp;na base de dados.</p>
+
+
+
+<p class="textoNormal">Al&eacute;m da
+altera&ccedil;&atilde;o
+e exclus&atilde;o de quadras, esta op&ccedil;&atilde;o
+tamb&eacute;m permite a emiss&atilde;o de um
+relat&oacute;rio com o resultado do filtro informado.</p>
+
+
+
+<p class="textoNormal">Inicialmente, o sistema
+apresenta a tela "<a href="quadraFiltrar.html">Filtrar
+Quadra</a>" para que seja efetuado o filtro da(s) quadra(s) que
+se deseja
+efetuar a manuten&ccedil;&atilde;o.&nbsp;</p>
+
+
+
+<p class="textoNormal">Ap&oacute;s a
+execu&ccedil;&atilde;o do
+filtro, o sistema ir&aacute; apresentar a tela "<a href="#manter">Manter
+Quadra</a>", com
+a rela&ccedil;&atilde;o das quadras pesquisadas; ou
+ir&aacute;, direto, para a tela "<a href="quadraAtualizar.html">Atualizar
+Quadra</a>".</p>
+
+
+
+<p class="textoNormal">O sistema ir&aacute;
+para a tela "<a href="quadraManter.html#manter">Manter
+Quadra</a>", com a
+rela&ccedil;&atilde;o das quadras pesquisadas,
+quando o campo (check-box) "Atualizar" estiver desmarcado, ou quando a
+quantidade de registros selecionados na pesquisa for maior do que
+1.&nbsp;</p>
+
+
+
+<p class="textoNormal">O sistema ir&aacute;,
+direto, para a tela
+"<a href="quadraAtualizar.html">Atualizar
+Quadra</a>", quando houver a nega&ccedil;&atilde;o da
+condi&ccedil;&atilde;o relatada acima. Ou seja, quando o campo
+"Atualizar" &nbsp;estiver marcado e a quantidade de registros
+selecionados for igual a 1.&nbsp;</p>
+
+
+
+<p class="textoNormal">O quadro, abaixo,
+apresenta as
+condi&ccedil;&otilde;es poss&iacute;veis e a tela a ser
+apresentada.&nbsp;</p>
+
+
+
+<table style="width: 541px;" class="table">
+
+
+
+  <col width="10*"> <col width="100*"> <col width="100*"> <thead> <tr valign="top">
+
+
+
+    <th style="width: 154px;" class="textoNormal">
+    
+    
+    <p>Campo
+Atualizar</p>
+
+
+
+    </th>
+
+
+
+    <th style="width: 200px;" class="textoNormal">
+    
+    
+    <p class="textoNormal">Qtd.
+Registros Selecionados</p>
+
+
+
+    </th>
+
+
+
+    <th style="width: 180px; background-color: rgb(255, 255, 204);" class="textoNormal">
+    
+    
+    <p style="background-color: rgb(255, 153, 0);" class="textoNormal">Tela
+Apresentada
+    </p>
+
+
+
+    </th>
+
+
+
+  </tr>
+
+
+
+  </thead><tbody>
+
+
+
+    <tr>
+
+
+
+      <td style="width: 154px;" class="textoNormal">Marcado</td>
+
+
+
+      <td style="width: 200px;" class="textoNormal">1
+registro</td>
+
+
+
+      <td style="width: 180px; background-color: rgb(255, 255, 204);" class="textoNormal">Atualizar
+Quadra</td>
+
+
+
+    </tr>
+
+
+
+    <tr>
+
+
+
+      <td style="width: 154px;" class="textoNormal">Marcado</td>
+
+
+
+      <td style="width: 200px;" class="textoNormal">mais
+de
+1 registro</td>
+
+
+
+      <td style="width: 180px; background-color: rgb(255, 255, 204);" class="textoNormal">Manter
+Quadra</td>
+
+
+
+    </tr>
+
+
+
+    <tr>
+
+
+
+      <td style="width: 154px;" class="textoNormal">Desmarcado</td>
+
+
+
+      <td style="width: 200px;" class="textoNormal">1
+registro</td>
+
+
+
+      <td style="width: 180px; background-color: rgb(255, 255, 204);" class="textoNormal">Manter
+Quadra</td>
+
+
+
+    </tr>
+
+
+
+    <tr>
+
+
+
+      <td style="width: 154px;" class="textoNormal">Desmarcado</td>
+
+
+
+      <td style="width: 200px;" class="textoNormal">mais
+de
+um registro</td>
+
+
+
+      <td style="width: 180px; background-color: rgb(255, 255, 204);" class="textoNormal">Manter
+Quadra</td>
+
+
+
+    </tr>
+
+
+
+  
+  
+  </tbody>
+</table>
+
+
+
+<p class="textoNormal">Portanto, caso
+voc&ecirc; deseje alterar as
+informa&ccedil;&otilde;es de uma quadra j&aacute; existente
+na base de dados, ent&atilde;o mantenha o campo "Atualizar"
+marcado, pois, caso o resultado da pesquisa retorne apenas um registro,
+se evitar&aacute; a apresenta&ccedil;&atilde;o de uma tela
+intermedi&aacute;ria.&nbsp;</p>
+
+
+
+<p class="textoNormal">Caso a sua
+op&ccedil;&atilde;o seja pela
+exclus&atilde;o de&nbsp;quadras j&aacute; existentes,
+ent&atilde;o o campo "Atualizar" dever&aacute; ser desmarcado,
+pois, obrigar&aacute; que o sistema apresente a tela "Manter
+Quadra", independentemente da quantidade de registros
+selecionados.&nbsp;</p>
+
+
+
+<hr style="width: 100%; height: 2px;"><a class="item" name="manter"></a><span class="item">Tela
+Manter Quadra</span><br>
+
+
+
+<br>
+
+
+
+<span class="textoNormal">O sistema apresenta uma tabela
+com a rela&ccedil;&atilde;o de
+quadras
+selecionadas, de acordo com os argumentos de pesquisa informados na
+tela "<a href="quadraFiltrar.html">Filtrar Quadra</a>"</span><span class="textoNormal">.</span><br class="textoNormal">
+
+
+
+<span class="textoNormal">A
+rela&ccedil;&atilde;o das quadras
+selecionadas estar&aacute; classificada pelo n&uacute;mero da
+quadra,
+que, tamb&eacute;m, tem um link para que voc&ecirc; possa
+selecionar a
+quadra que deseja alterar. Caso, para o crit&eacute;rio
+de
+pesquisa informado, tenham sido selecionadas mais de 10 quadras, o
+sistema ir&aacute; montar um mecanismos de
+pagina&ccedil;&atilde;o no final da p&aacute;gina.</span><br class="textoNormal">
+
+
+
+<span class="textoNormal">Clicando sobre o
+n&uacute;mero da p&aacute;gina, voc&ecirc;
+poder&aacute; navegar para as demais p&aacute;ginas. </span><br class="textoNormal">
+
+
+
+<br class="textoNormal">
+
+
+
+<span class="textoNormal">Esta tela permite que voc&ecirc; escolha a op&ccedil;&atilde;o
+de manuten&ccedil;&atilde;o que deseja fazer:&nbsp;
+</span>
+<ul class="textoNormal">
+
+
+
+  <li>Alterar uma quadra j&aacute; existente;</li>
+
+
+
+  <li>Excluir uma, ou mais,&nbsp;quadras;</li>
+
+
+
+  <li>Emitir o relat&oacute;rio das quadras
+selecionadas&nbsp;</li>
+
+
+
+</ul>
+
+
+
+<span class="textoNormal">Para <span style="font-weight: bold;">alterar</span>
+uma quadra, clique sobre o link existente no n&uacute;mero da
+quadra,
+que o sistema ir&aacute; apresentar a tela para que voc&ecirc;
+efetue a
+atualiza&ccedil;&atilde;o das
+informa&ccedil;&otilde;es&nbsp;da quadra
+que voc&ecirc; selecionou. </span><br class="textoNormal">
+
+
+
+<br class="textoNormal">
+
+
+
+<span class="textoNormal">Para efetuar a <span style="font-weight: bold;">exclus&atilde;o</span>
+de&nbsp;quadras da base de dados, voc&ecirc; deve efetuar dois
+procedimentos: </span><br class="textoNormal">
+
+
+
+<ol class="textoNormal">
+
+
+
+  <li>Selecionar
+as quadras que
+deseja excluir, clicando sobre o campo (ckeck-box) existente na coluna
+mais &agrave; esquerda da tabela; e&nbsp;</li>
+
+
+
+  <li>Clicar
+no bot&atilde;o "Remover" para solicitar ao sistema que
+efetue&nbsp;a remo&ccedil;&atilde;o das quadras
+selecionadas. </li>
+
+
+
+</ol>
+
+
+
+<span class="textoNormal">Voc&ecirc; pode selecionar
+mais de uma quadra para
+exclus&atilde;o, ou todas as quadras da tela, clicando sobre o link
+"<span style="font-weight: bold; text-decoration: underline;">Todas</span>",
+existente no cabe&ccedil;alho da tabela. Se clicar mais de uma vez
+sobre o link, o sistema ir&aacute; selecionar, e desmarcar a
+sele&ccedil;&atilde;o das quadras sucessivamente. </span><br class="textoNormal">
+
+
+
+<span class="textoNormal">Para solicitar a
+gera&ccedil;&atilde;o de um
+relat&oacute;rio com as
+informa&ccedil;&otilde;es das quadras selecionadas, clique
+sobre o
+bot&atilde;o com a imagem de uma impressora </span><img class="textoNormal" style="width: 32px; height: 29px;" alt="Relat&oacute;rio" title="Relat&oacute;rio" src="../imagens/botaoRelatorio.JPG"><span class="textoNormal">,
+que fica no canto inferior direito da tela. O sistema
+apresentar&aacute; uma tela solicitando que voc&ecirc; escolha
+o
+formato de sa&iacute;da do relat&oacute;rio. Escolha o formato
+e clique
+no bot&atilde;o "Gerar". Para instru&ccedil;&otilde;es mais
+detalhadas
+de como gerar o relat&oacute;rio, clique <a href="gerarRelatorio.html">aqui</a>.</span><span class="textoNormal"></span><br>
+
+
+
+<br class="item">
+
+
+
+<span class="item">Funcionalidade dos bot&otilde;es</span><br>
+
+
+
+<table class="table">
+
+
+
+  <col width="13*"> <col width="243*"> <thead>
+  <tr valign="top">
+
+
+
+    <th class="textoNormal" width="5%">
+    
+    
+    <p>Bot&atilde;o</p>
+
+
+
+    </th>
+
+
+
+    <th class="textoNormal" width="95%">
+    
+    
+    <p class="textoNormal">Funcionalidade</p>
+
+
+
+    </th>
+
+
+
+  </tr>
+
+
+
+  </thead> <tbody>
+
+
+
+    <tr>
+
+
+
+      <td><img style="width: 72px; height: 20px;" alt="Remover" title="Remover" src="../imagens/remover.JPG"></td>
+
+
+
+      <td style="height: 58px;" class="textoNormal">Solicitar
+ao sistema a remo&ccedil;&atilde;o das quadras selecionadas
+para remo&ccedil;&atilde;o na tabela. <br>
+
+
+
+S&oacute; ser&atilde;o removidas as quadras que n&atilde;o
+tiverem
+v&iacute;nculo com outras informa&ccedil;&otilde;es no
+sistema, como,
+por exemplo, im&oacute;veis vinculados. </td>
+
+
+
+    </tr>
+
+
+
+    <tr>
+
+
+
+      <td><img style="width: 82px; height: 23px;" alt="Voltar Filtro" title="Voltar Filtro" src="../imagens/voltarFiltro.JPG"></td>
+
+
+
+      <td class="textoNormal">Retornar
+para a tela de
+filtro. O sistema ir&aacute; manter a
+informa&ccedil;&atilde;o dos
+argumentos de pesquisa informados anteriormente.</td>
+
+
+
+    </tr>
+
+
+
+    <tr>
+
+
+
+      <td><a href="../../Geral/gerarRelatorio.html"><img style="border: 0px solid ; width: 32px; height: 29px;" alt="Relat&oacute;rio" title="Relat&oacute;rio" src="../imagens/botaoRelatorio.JPG"></a></td>
+
+
+
+      <td class="textoNormal">Solicitar
+a gera&ccedil;&atilde;o de um relat&oacute;rio com as
+informa&ccedil;&otilde;es das quadras selecionadas. </td>
+
+
+
+    </tr>
+
+
+
+  
+  
+  </tbody>
+</table>
+
+
+
+<br class="item">
+
+
+
+<hr class="item" style="width: 100%; height: 2px;"><a class="item" name="atualizar"></a><span class="item">T&oacute;picos
+Relacionados:</span>
+<ul>
+
+
+
+  <li class="textoNormal">
+    
+    
+    <p><a href="quadraInserir.html">Inserir Quadra</a></p>
+
+
+
+  </li>
+
+
+
+  <li class="textoNormal">
+    
+    
+    <p><a href="quadraFiltrar.html">Filtrar Quadra</a></p>
+
+
+
+  </li>
+
+
+
+  <li class="textoNormal">
+    
+    
+    <p><a href="quadraAtualizar.html">Atualizar
+Quadra</a></p>
+
+
+
+  </li>
+</ul>
+
+
+
+</body>
+</html>

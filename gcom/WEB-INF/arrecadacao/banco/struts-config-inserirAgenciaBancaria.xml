@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="InserirAgenciaBancariaActionForm"
+			type="gcom.gui.arrecadacao.banco.InserirAgenciaBancariaActionForm" />
+
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="InserirAgenciaBancariaActionForm"
+			type="gcom.gui.arrecadacao.banco.ExibirInserirAgenciaBancariaAction"
+			validate="false" scope="session"
+			path="/exibirInserirAgenciaBancariaAction">
+			<forward name="exibirInserirAgenciaBancaria"
+				path="/jsp/arrecadacao/banco/agencia_bancaria_inserir.jsp" />
+		</action>
+
+		<action name="InserirAgenciaBancariaActionForm"
+			type="gcom.gui.arrecadacao.banco.InserirAgenciaBancariaAction"
+			validate="false" scope="session"
+			path="/inserirAgenciaBancariaAction">
+		</action>
+
+
+		<action
+			type="gcom.gui.arrecadacao.banco.RemoverInformarEnderecoAction"
+			validate="false" scope="request"
+			path="/removerInformarEnderecoAction">
+			<forward name="inserirRemoverFuncionalidadeDependencia"
+				path="/exibirInserirFuncionalidadeAction.do?reloadPage=OK" />
+		</action>
+
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

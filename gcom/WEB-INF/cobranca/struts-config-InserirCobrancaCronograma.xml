@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="CobrancaActionForm"
+			type="gcom.gui.cobranca.CobrancaActionForm" />
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="CobrancaActionForm" 
+			type="gcom.gui.cobranca.ExibirInserirCronogramaCobrancaAction"
+			validate="false" scope="session" path="/exibirInserirCronogramaCobrancaAction">
+			<forward name="inserirCronogramaCobranca"
+				path="/jsp/cobranca/cobranca_cronograma_inserir.jsp" />
+		</action>
+		
+		<action name="CobrancaActionForm" 
+			type="gcom.gui.cobranca.InserirCobrancaCronogramaAction"
+			validate="false" scope="session"
+			path="/inserirCobrancaCronogramaAction">
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

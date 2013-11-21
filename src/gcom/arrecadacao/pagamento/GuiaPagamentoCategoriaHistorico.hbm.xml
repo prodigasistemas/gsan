@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+ 
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.arrecadacao.pagamento.GuiaPagamentoCategoriaHistorico" table="faturamento.guia_pagto_catg_hist">
+		<composite-id name="comp_id" class="gcom.arrecadacao.pagamento.GuiaPagamentoCategoriaHistoricoPK">
+			<key-property name="idGuiaPagamentoHistorico" column="gpag_id" type="java.lang.Integer" length="4"/>
+			<key-property name="idCategoria" column="catg_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<property name="quantidadeEconomia" type="java.lang.Integer" column="gpch_qteconomia" length="4"/>
+		<property name="valorCategoria" type="java.math.BigDecimal" column="gpch_vlcategoria" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="gpch_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to GuiaPagamentoHistorico -->
+		<many-to-one name="guiaPagamentoHistorico" class="gcom.arrecadacao.pagamento.GuiaPagamentoHistorico" update="false" insert="false">
+			<column name="gpag_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Categoria -->
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" update="false" insert="false">
+			<column name="catg_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

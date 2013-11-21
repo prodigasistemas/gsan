@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.ordemservico.FiscalizacaoSituacao" table="atendimentopublico.fiscalizacao_situacao">
+		<id name="id" type="java.lang.Integer" column="fzst_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="descricaoFiscalizacaoSituacao" type="java.lang.String" column="fzst_dsfiscalizacaosituacao" not-null="true" length="50"/>
+		<property name="indicadorMedido" type="short" column="fzst_icmedido" not-null="true" length="2"/>
+		<property name="indicadorAguaSituacao" type="short" column="fzst_icaguasituacao" not-null="true" length="2"/>
+		<property name="indicadorEsgotoSituacao" type="short" column="fzst_icesgotosituacao" not-null="true" length="2"/>
+		<property name="indicadorHidrometroCapacidade" type="short" column="fzst_ichidrometrocapacidade" not-null="true" length="2"/>
+
+		<property name="indicadorConsumoCalculo" type="short" column="fzst_icconsumocalculo" not-null="true" length="2"/>
+		<property name="indicadorLigacaoDataAtualiza" type="short" column="fzst_icligacaodataatualiza" not-null="true" length="2"/>
+
+		<property name="indicadorOpcaoMedicao" type="short" column="fzst_icopcaomedicao" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="fzst_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="indicadorAtualizacaoAutosInfracao" type="java.lang.Short" column="fzst_icatualizaautosinfracao" not-null="true" length="2"/>
+		<property name="indicadorVerificarReincidencia" type="java.lang.Short" column="fzst_icverificarreincidencia" not-null="true" length="2"/>
+		<property name="indicadorNotificacaoEsgoto" type="java.lang.Short" column="fzst_icnotificacaoesgoto" not-null="true" length="2"/>
+		
+		
+		<property
+	        name="indicadorExibirFormulario"
+	        type="java.lang.Short"
+	        column="fzst_icform"
+	        not-null="true"
+	        length="2"
+    	/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to ResumoCobrancaAcao -->
+		<set name="resumoCobrancaAcaos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="fzst_id"/>
+			</key>
+			<one-to-many class="gcom.cobranca.ResumoCobrancaAcao"/>
+		</set>
+		<!-- bi-directional one-to-many association to FiscalizacaoSituacaoEsgoto -->
+		<set name="fiscalizacaoSituacaoEsgotos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="fzst_id"/>
+			</key>
+			<one-to-many class="gcom.atendimentopublico.ordemservico.FiscalizacaoSituacaoEsgoto"/>
+		</set>
+		<!-- bi-directional one-to-many association to FiscalizacaoSituacaoAgua -->
+		<set name="fiscalizacaoSituacaoAguas" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="fzst_id"/>
+			</key>
+			<one-to-many class="gcom.atendimentopublico.ordemservico.FiscalizacaoSituacaoAgua"/>
+		</set>
+		<!-- bi-directional one-to-many association to OrdemServico -->
+		<set name="ordemServicos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="fzst_id"/>
+			</key>
+			<one-to-many class="gcom.atendimentopublico.ordemservico.OrdemServico"/>
+		</set>
+		<!-- bi-directional one-to-many association to FiscalizacaoSituacaoHidrometroCapacidade -->
+		<set name="fiscalizacaoSituacaoHidrometroCapacidades" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="fzst_id"/>
+			</key>
+			<one-to-many class="gcom.atendimentopublico.ordemservico.FiscalizacaoSituacaoHidrometroCapacidade"/>
+		</set>
+		<!-- bi-directional one-to-many association to FiscalizacaoSituacaoServicoACobrar -->
+		<set name="fiscalizacaoSituacaoServicoACobrars" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="fzst_id"/>
+			</key>
+			<one-to-many class="gcom.atendimentopublico.ordemservico.FiscalizacaoSituacaoServicoACobrar"/>
+		</set>
+
+    <many-to-one
+        name="cobrancaSituacao"
+	    class="gcom.cobranca.CobrancaSituacao"
+	    update="false"
+	    insert="false"
+	>
+    	<column name="cbst_id" />
+	</many-to-one>
+	
+	<many-to-one
+        name="atendimentoMotivoEncerramento"
+	    class="gcom.atendimentopublico.registroatendimento.AtendimentoMotivoEncerramento"
+	    update="false"
+	    insert="false"
+	>
+    	<column name="amen_id" />
+	</many-to-one>
+	
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="AtualizarResolucaoDiretoriaActionForm"
+			type="gcom.gui.cobranca.AtualizarResolucaoDiretoriaActionForm" />
+		<form-bean name="FiltrarResolucaoDiretoriaActionForm"
+			type="gcom.gui.cobranca.FiltrarResolucaoDiretoriaActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0218] MANTER RESOLUÇÃO DE DIRETORIA Auhtor: Rafael Corrêa Data:31/03/2006-->
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.cobranca.ExibirManterResolucaoDiretoriaAction"
+			validate="false" scope="session"
+			path="/exibirManterResolucaoDiretoriaAction">
+			<forward name="exibirManterResolucaoDiretoria"
+				path="/jsp/cobranca/resolucao_diretoria_manter.jsp" />
+			<forward name="exibirAtualizarResolucaoDiretoria"
+				path="/exibirAtualizarResolucaoDiretoriaAction.do" />
+		</action>
+
+		<action name="FiltrarResolucaoDiretoriaActionForm"
+			type="gcom.gui.relatorio.cobranca.GerarRelatorioResolucaoDiretoriaManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioResolucaoDiretoriaManterAction" />
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.cobranca.ManterResolucaoDiretoriaAction"
+			validate="true" scope="request"
+			path="/manterResolucaoDiretoriaAction">
+		</action>
+		<action name="AtualizarResolucaoDiretoriaActionForm"
+			type="gcom.gui.cobranca.ExibirAtualizarResolucaoDiretoriaAction"
+			validate="true" scope="session"
+			path="/exibirAtualizarResolucaoDiretoriaAction">
+			<forward name="exibirAtualizarResolucaoDiretoria"
+				path="/jsp/cobranca/resolucao_diretoria_atualizar.jsp" />
+		</action>
+		<action name="AtualizarResolucaoDiretoriaActionForm"
+			type="gcom.gui.cobranca.AtualizarResolucaoDiretoriaAction"
+			validate="true" scope="request"
+			path="/atualizarResolucaoDiretoriaAction">
+		</action>
+
+	</action-mappings>
+
+</struts-config>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+	
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="AtualizarAnormalidadeLeituraActionForm"
+			type="gcom.gui.micromedicao.leitura.AtualizarAnormalidadeLeituraActionForm" />
+		<form-bean name="FiltrarAnormalidadeLeituraActionForm"
+			type="gcom.gui.micromedicao.leitura.FiltrarAnormalidadeLeituraActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0218] MANTER TIPO DE RETORNO DA OS_REFERIDA Auhtor: Thiago Tenório Data:01/11/2006-->
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.micromedicao.leitura.ExibirManterAnormalidadeLeituraAction"
+			validate="false" scope="session"
+			path="/exibirManterAnormalidadeLeituraAction">
+			<forward name="exibirManterAnormalidadeLeitura"
+				path="/jsp/micromedicao/leitura/anormalidade_leitura_manter.jsp" />
+			<forward name="exibirAtualizarAnormalidadeLeitura"
+				path="/exibirAtualizarAnormalidadeLeituraAction.do" />
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.micromedicao.leitura.RemoverAnormalidadeLeituraAction" scope="request"
+			path="/removerAnormalidadeLeituraAction">
+		</action>
+		
+		<action name="AtualizarAnormalidadeLeituraActionForm"
+			type="gcom.gui.micromedicao.leitura.ExibirAtualizarAnormalidadeLeituraAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarAnormalidadeLeituraAction">
+			<forward name="atualizarAnormalidadeLeitura"
+				path="/jsp/micromedicao/leitura/anormalidade_leitura_atualizar.jsp" />
+		</action>
+		<action name="AtualizarAnormalidadeLeituraActionForm"
+			type="gcom.gui.micromedicao.leitura.AtualizarAnormalidadeLeituraAction"
+			validate="true" scope="session"
+			path="/atualizarAnormalidadeLeituraAction">
+		</action>
+
+	</action-mappings>
+
+</struts-config>

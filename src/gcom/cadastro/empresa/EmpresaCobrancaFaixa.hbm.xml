@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+		Created by the Middlegen Hibernate plugin
+		
+		http://boss.bekk.no/boss/middlegen/
+		http://hibernate.sourceforge.net/
+	-->
+	<class name="gcom.cadastro.empresa.EmpresaCobrancaFaixa" table="cadastro.empr_cobr_faixa">
+		<id name="id" type="java.lang.Integer" column="emcf_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_empr_cobr_faixa</param>
+			</generator>
+		</id>
+		<property name="percentualFaixa" type="java.math.BigDecimal" column="emcf_pcfaixa" length="5" not-null="true"/>
+		<property name="numeroMinimoContasFaixa" type="java.lang.Integer" column="emcf_nncontasmin" not-null="true"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="emcf_tmultimaalteracao" length="8" not-null="true"/>
+		<many-to-one name="empresaContratoCobranca" class="gcom.cadastro.empresa.EmpresaContratoCobranca" not-null="true">
+			<column name="emco_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

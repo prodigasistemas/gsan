@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<!--Action Form Dinâmico que serve para inserir os Pagamentos -->
+		<form-bean name="PagamentoActionForm" type="org.apache.struts.validator.DynaValidatorActionForm" dynamic="true">
+			<form-property name="idAvisoBancario" type="java.lang.String" />
+			<form-property name="codigoAgenteArrecadador" type="java.lang.String" />
+			<form-property name="dataLancamentoAviso" type="java.lang.String" />
+			<form-property name="numeroSequencialAviso" type="java.lang.String" />
+			
+			<form-property name="dataPagamento" type="java.lang.String" />
+			<form-property name="idFormaArrecadacao" type="java.lang.String" />
+			<form-property name="descricaoFormaArrecadacao" type="java.lang.String" />
+			<form-property name="tipoInclusao" type="java.lang.String" initial=""/>
+			<form-property name="tipoLeitura" type="java.lang.String" initial=""/>			
+			<form-property name="valorPagamento" type="java.lang.String"/>
+			<form-property name="idTipoDocumento" type="java.lang.String" />
+			
+			<form-property name="idImovel" type="java.lang.String" />
+			<form-property name="descricaoImovel" type="java.lang.String" />
+								
+			<form-property name="idGuiaPagamento" type="java.lang.String" />
+			<form-property name="descricaoGuiaPagamento" type="java.lang.String" />
+			<form-property name="valorGuiaPagamento" type="java.lang.String" />
+			
+			<form-property name="idDebitoACobrar" type="java.lang.String" />
+			<form-property name="descricaoDebitoACobrar" type="java.lang.String" />
+			<form-property name="valorDebitoACobrar" type="java.lang.String" />
+						
+			<form-property name="idLocalidade" type="java.lang.String" />
+			<form-property name="descricaoLocalidade" type="java.lang.String" />
+			
+			<form-property name="referenciaConta" type="java.lang.String"/>
+			<form-property name="descricaoReferenciaConta" type="java.lang.String"/>
+			
+			<form-property name="idCliente" type="java.lang.String" />			
+			<form-property name="nomeCliente" type="java.lang.String" />
+			
+			<form-property name="idTipoDebito" type="java.lang.String" />
+			<form-property name="descricaoTipoDebito" type="java.lang.String" />
+			
+			<form-property name="codigoBarraPorLeituraOtica" type="java.lang.String"/>			
+			<form-property name="codigoBarraDigitadoCampo1" type="java.lang.String"/>
+			<form-property name="codigoBarraDigitadoDigitoVerificadorCampo1" type="java.lang.String"/>
+			<form-property name="codigoBarraDigitadoCampo2" type="java.lang.String"/>
+			<form-property name="codigoBarraDigitadoDigitoVerificadorCampo2" type="java.lang.String"/>
+			<form-property name="codigoBarraDigitadoCampo3" type="java.lang.String"/>
+			<form-property name="codigoBarraDigitadoDigitoVerificadorCampo3" type="java.lang.String"/>
+			<form-property name="codigoBarraDigitadoCampo4" type="java.lang.String"/>
+			<form-property name="codigoBarraDigitadoDigitoVerificadorCampo4" type="java.lang.String"/>
+			
+			<form-property name="codigoBarraDigitadoCampo1Parte1" type="java.lang.String"/>
+			<form-property name="codigoBarraDigitadoCampo1Parte2" type="java.lang.String"/>
+			<form-property name="codigoBarraDigitadoCampo2Parte1" type="java.lang.String"/>
+			<form-property name="codigoBarraDigitadoCampo2Parte2" type="java.lang.String"/>
+			<form-property name="codigoBarraDigitadoCampo3Parte1" type="java.lang.String"/>
+			<form-property name="codigoBarraDigitadoCampo3Parte2" type="java.lang.String"/>
+			<form-property name="codigoBarraDigitadoDigitoVerificador" type="java.lang.String"/>
+		</form-bean> 
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	
+	<global-forwards/>
+
+	<action-mappings>
+	
+	
+	<action	type="gcom.gui.arrecadacao.pagamento.ExibirInserirPagamentosAction"
+			validate="false" 
+			input="/exibirInserirPagamentosAction.do"
+			scope="session" 
+			path="/exibirInserirPagamentosAction">
+			
+			<forward name="inserirPagamentosAvisoBancario"
+				     path="/inserirPagamentosWizardAction.do?action=exibirInserirPagamentosAvisoBancarioAction" />
+				
+		</action>
+		
+		<action name="PagamentoActionForm"
+			    type="gcom.gui.arrecadacao.pagamento.InserirPagamentosWizardAction"
+			    validate="true" 
+			    parameter="action" 
+			    scope="session"
+			    path="/inserirPagamentosWizardAction">
+			
+			<forward name="inserirPagamentosAvisoBancario"
+				     path="/jsp/arrecadacao/pagamento/pagamento_inserir_aviso_bancario.jsp" />
+				
+			<forward name="inserirPagamentosTipoInclusaoCaneta"
+				     path="/jsp/arrecadacao/pagamento/pagamento_inserir_tipo_inclusao_caneta.jsp" />
+				
+			<forward name="inserirPagamentosTipoInclusaoManual"
+				     path="/jsp/arrecadacao/pagamento/pagamento_inserir_tipo_inclusao_manual.jsp" />
+				     
+			<forward name="inserirPagamentosTipoInclusaoFichaCompensacao"
+				     path="/jsp/arrecadacao/pagamento/pagamento_inserir_tipo_inclusao_ficha_compensacao.jsp" />
+				
+		</action>
+		
+		<action
+			type="gcom.gui.arrecadacao.pagamento.CancelarInserirPagamentosAction"
+			validate="false" 
+			path="/cancelarInserirPagamentosAction" />
+	
+	</action-mappings>
+	
+</struts-config>

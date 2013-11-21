@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoLinha" table="cadastro.atlz_cad_simp_linha">
+		<id name="id" type="java.lang.Integer" column="acsl_id" unsaved-value="null">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_atlz_cad_simp_linha</param>
+			</generator>
+		</id>
+		<property name="numeroLinha" column="acsl_nnlinha" type="java.lang.Integer"/>
+		<property name="situacaoNova" column="acsl_dssituacaonova" type="java.lang.String" length="1"/>
+		<property name="nomeMunicipio" column="acsl_nmmunicipio" type="java.lang.String" length="20"/>
+		<property name="nomeLogradouro" column="acsl_nmlogradouro" type="java.lang.String" length="19"/>
+		<property name="nomeBairro" column="acsl_nmbairro" type="java.lang.String" length="20"/>
+		<property name="numeroImovel" column="acsl_nnimovel" type="java.lang.String" length="5"/>
+		<property name="descricaoComplemento" column="acsl_dscomplemento" type="java.lang.String" length="10"/>
+		<property name="nomeCliente" column="acsl_nmcliente" type="java.lang.String" length="28"/>
+		<property name="numeroCPF" column="acsl_nncpf" type="java.lang.String" length="14"/>
+		<property name="numeroCNPJ" column="acsl_nncnpj" type="java.lang.String" length="28"/>
+		<property name="numeroRG" column="acsl_nnrg" type="java.lang.String" length="12"/>
+		<property name="numeroTelefone" column="acsl_nmtelefone" type="java.lang.String" length="10"/>
+		<property name="situacaoAgua" column="acsl_dssituacaoagua" type="java.lang.Integer"/>
+		<property name="situacaoImovel" column="acsl_dssituacaoimovel" type="java.lang.Integer"/>
+		<property name="situacaoEsgoto" column="acsl_dssituacaoesgoto" type="java.lang.Integer"/>
+		<property name="descricaoEconomia" column="acsl_dseconomia" type="java.lang.String" length="30"/>
+		<property name="tipoLocalizacaoCavelete" column="acsl_tplocalizacaocavelete" type="java.lang.Integer"/>
+		<property name="numeroMedidor" column="acsl_nmmedidor" type="java.lang.String" length="10"/>
+		<property name="tipoCapacidadeMedidor" column="acsl_tpcapacidademedidor" type="java.lang.Integer"/>
+		<property name="situacaoMedidor" column="acsl_dssituacaomedidor" type="java.lang.Integer"/>
+		<property name="descricaoZonaInfluencia" column="acsl_dszonainfluencia" type="java.lang.String" length="28"/>
+		<property name="descricaoBaciaColetora" column="acsl_dsbaciacoletora" type="java.lang.String" length="28"/>
+		<property name="codigoCEP" column="acsl_cdcep" type="java.lang.Integer"/>
+		<property name="numeroInscricao" column="acsl_nminscricao" type="java.lang.String" length="16"/>
+		<property name="recadastroRealizado" column="acsl_dsrecadastrorealizado" type="java.lang.String" length="1"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="acsl_tmultimaalteracao" length="8" insert="false"/>
+		<many-to-one name="imovel" column="imov_id" class="gcom.cadastro.imovel.Imovel"/>
+		<many-to-one name="arquivo" column="acsi_id" class="gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificado" unique="true"/>
+		<set name="criticas" table="cadastro.atlz_cad_simp_linha_crit">
+			<key>
+				<column name="acsl_id"/>
+			</key>
+			<many-to-many column="acsc_id" class="gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoCritica"/>
+		</set>
+	</class>
+</hibernate-mapping>

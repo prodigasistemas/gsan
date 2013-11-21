@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoBinario" table="cadastro.atlz_cad_simp_binario">
+		<id name="id" type="java.lang.Integer" column="acsb_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_atlz_cad_simp_binario</param>
+			</generator>
+		</id>
+		<property name="binario" type="binary" column="acsb_arquivo" length="-1"/>
+		<many-to-one name="arquivo" column="acsi_id" class="gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificado" unique="true"/>
+	</class>
+</hibernate-mapping>

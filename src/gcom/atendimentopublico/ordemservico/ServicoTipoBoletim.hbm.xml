@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+    
+<hibernate-mapping>
+<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+
+<class 
+    name="gcom.atendimentopublico.ordemservico.ServicoTipoBoletim" 
+    table="atendimentopublico.servico_tipo_boletim"
+>
+    
+    <id name="id" type="java.lang.Integer" column="svtp_id">
+		<generator class="assigned" />
+	</id>
+
+    <property
+        name="indicadorPavimento"
+        type="java.lang.Short"
+        column="svbo_icpavimento"
+        not-null="true"
+        length="2"
+    />
+    <property
+        name="indicadorReposicaoAsfalto"
+        type="java.lang.Short"
+        column="svbo_icrepasfaltom2"
+        not-null="true"
+        length="2"
+    />
+    <property
+        name="indicadorReposicaoParalelo"
+        type="java.lang.Short"
+        column="svbo_icrepparalelom2"
+        not-null="true"
+        length="2"
+    />
+ 	<property
+        name="indicadorReposicaoCalcada"
+        type="java.lang.Short"
+        column="svbo_icrepcalcadam2"
+        not-null="true"
+        length="2"
+    />
+    <property
+        name="ultimaAlteracao"
+        type="java.sql.Timestamp"
+        column="svbo_tmultimaalteracao"
+        not-null="true"
+        length="8"
+    />
+
+    <!-- Associations -->
+  
+      <one-to-one
+        name="servicoTipo"
+        class="gcom.atendimentopublico.ordemservico.ServicoTipo"
+        outer-join="auto"
+        constrained="true"
+    />
+
+</class>
+</hibernate-mapping>

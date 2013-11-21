@@ -1,0 +1,9 @@
+.classpath
+.project
+.svn
+**/.svn
+bin
+.sonar
+sonar-project.properties
+reports
+build.properties

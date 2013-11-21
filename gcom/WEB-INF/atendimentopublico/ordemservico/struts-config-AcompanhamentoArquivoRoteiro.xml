@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>	
+	<form-beans>
+		<form-bean name="AcompanharRoteiroProgramacaoOrdemServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.AcompanharRoteiroProgramacaoOrdemServicoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	
+	<action-mappings>
+		<action name="AcompanharRoteiroProgramacaoOrdemServicoActionForm"  
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirAcompanhamentoArquivosRoteiroAction" 
+			validate="true"	
+			scope="session"	
+			path="/exibirAcompanhamentoArquivosRoteiroAction">
+			
+			<forward name="exibirAcompanhamentoArquivosRoteiro" 
+				path="/jsp/atendimentopublico/ordemservico/acompanhamento_arquivo_roteiro.jsp" />
+		</action>
+		
+		<action name="AcompanharRoteiroProgramacaoOrdemServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.SelecionarAcompanhamentoArquivosRoteiroAction"
+			validate="true" 
+			scope="session"	
+			path="/selecionarAcompanhamentoArquivosRoteiroAction">
+			
+			<forward name="fotos" path="/jsp/atendimentopublico/ordemservico/acompanhamento_arquivo_roteiro_fotos_popup.jsp" />
+			
+			<forward name="exibirAcompanhamentoArquivosRoteiro" 
+				path="/jsp/atendimentopublico/ordemservico/acompanhamento_arquivo_roteiro.jsp" />
+			
+		</action>
+		
+		<action name="AcompanharRoteiroProgramacaoOrdemServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.AtualizarAcompanhamentoArqRoteiroAction"
+			validate="true" scope="session"
+			path="/atualizarAcompanhamentoArqRoteiroAction">
+			<forward name="exibirAcompanhamentoArquivosRoteiro"
+				path="/jsp/atendimentopublico/ordemservico/acompanhamento_arquivo_roteiro.jsp" />
+		</action>
+		
+		<action name="AcompanharRoteiroProgramacaoOrdemServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirConsultarPercursoAcompanhamentoArqRoteiroPopupAction"
+			validate="true" scope="session"
+			path="/exibirConsultarPercursoAcompanhamentoArqRoteiroPopupAction">
+
+			<forward name="exibirConsultarPercursoAcompanhamentoArqRoteiro"
+				path="/jsp/atendimentopublico/ordemservico/consultar_percurso_acomp_arq_roteiro.jsp" />	
+		</action>
+		
+		<action type="gcom.gui.atendimentopublico.ordemservico.RetornarArquivoTxtAcompanhamentoArqRoteiroAction"
+			path="/retornarArquivoTxtAcompanhamentoArqRoteiroAction">
+		</action>
+		
+		<action name="AcompanharRoteiroProgramacaoOrdemServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirAcompanhamentoArquivosRoteiroIncluirOrdemServicoAction"
+			validate="true" 
+			scope="session" 
+			path="/exibirAcompanhamentoArquivosRoteiroIncluirOrdemServicoAction">
+			
+			<forward name="exibirIncluirOrdemServicoAcompanhamentoArqRoteiro"
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_roteiro_acompanhamento_servico_inclui_popup.jsp" />
+		</action>
+		
+		<action name="AcompanharRoteiroProgramacaoOrdemServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.AcompanhamentoArquivosRoteiroIncluirOrdemServicoAction"
+			validate="true" 
+			scope="session" 
+			path="/acompanhamentoArquivosRoteiroIncluirOrdemServicoAction">
+			
+			<forward name="incluirOrdemServicoAcompanhamentoArquivosRoteiro"
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_roteiro_acompanhamento_servico_inclui_popup.jsp" />
+		</action>
+		
+		<action name="AcompanharRoteiroProgramacaoOrdemServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirAcompanhamentoArquivosRoteiroRemanejarEquipeOSAction"
+			validate="true"
+			scope="session"
+			path="/exibirAcompanhamentoArquivosRoteiroRemanejarOrdemServicoAction">
+			
+			<forward name="exibirRemanejarEquipeOSAction" 
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_roteiro_acompanhamento_equipe_remaneja_popup.jsp"/>
+		</action>
+		
+		<action name="AcompanharRoteiroProgramacaoOrdemServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.AcompanhamentoArquivosRoteiroRemanejarOrdemServicoAction"
+			validate="true"
+			scope="session"
+			path="/acompanhamentoArquivosRoteiroRemanejarOrdemServicoAction">
+			
+			<forward name="remanejarEquipeOSAction" 
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_roteiro_acompanhamento_equipe_remaneja_popup.jsp"/>
+		</action>
+		
+		<action name="AcompanharRoteiroProgramacaoOrdemServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirInformarSituacaoOSAcompanhamentoArquivosRoteiroAction"
+			validate="true"
+			scope="session"
+			path="/exibirInformarSituacaoOSAcompanhamentoArquivosRoteiroAction">
+			
+			<forward name="exibirInformarSituacaoOS" 
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_roteiro_acompanhamento_situacao_informa_popup.jsp" />
+		</action>
+		
+		<action name="AcompanharRoteiroProgramacaoOrdemServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.InformarSituacaoOSAcompanhamentoArquivosRoteiroAction"
+			validate="true"
+			scope="session"
+			path="/informarSituacaoOSAcompanhamentoArquivosRoteiroAction">
+			
+			<forward name="informarSituacaoOS" 
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_roteiro_acompanhamento_situacao_informa_popup.jsp" />
+		</action>
+		
+		<action name="AcompanharRoteiroProgramacaoOrdemServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirAcompanhamentoArqRoteiroReordenarSequencialAction"
+			validate="true" 
+			scope="session" 
+			path="/exibirAcompanhamentoArquivosRoteiroReordenarSequencialAction">
+			
+			<forward name="exibirReordenarSequencialOS"
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_roteiro_acompanhamento_reordena_programacao_popup.jsp" />
+		</action>
+		
+		<action name="AcompanharRoteiroProgramacaoOrdemServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.AcompanhamentoArqRoteiroReordenarSequencialAction"
+			validate="true" 
+			scope="session" 
+			path="/acompanhamentoArquivosRoteiroReordenarSequencialAction">
+			
+			<forward name="reordenarSequencialOS"
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_roteiro_acompanhamento_reordena_programacao_popup.jsp" />
+		</action>
+	</action-mappings>
+</struts-config>

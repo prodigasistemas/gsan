@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.gerencial.micromedicao.hidrometro.GHidrometroSituacao" table="micromedicao.g_hidrometro_situacao">
+		<id name="id" type="java.lang.Integer" column="hist_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="descricaoHidrometroSituacao" type="java.lang.String" column="hist_dshidrometrosituacao" length="20"/>
+		<property name="indicadorUso" type="java.lang.Short" column="hist_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="hist_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to UnResumoHidrometro -->
+		<set name="resumoHidrometros" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="hist_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.micromedicao.UnResumoHidrometro"/>
+		</set>
+	</class>
+</hibernate-mapping>

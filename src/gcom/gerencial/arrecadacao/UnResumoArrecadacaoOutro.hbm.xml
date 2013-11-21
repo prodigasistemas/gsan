@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.gerencial.arrecadacao.UnResumoArrecadacaoOutro" table="arrecadacao.un_resumo_arrecadacao_outros">
+		<composite-id name="comp_id" class="gcom.gerencial.arrecadacao.UnResumoArrecadacaoOutroPK">
+			<key-property name="resumoArrecadacao" column="rear_id" type="java.lang.Integer" length="4"/>
+			<key-property name="financiamentoTipo" column="fntp_id" type="java.lang.Integer" length="4"/>
+			<key-property name="lancamentoItemContabil" column="lict_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<property name="volumeDocumentosRecebidos" type="java.math.BigDecimal" column="reao_vldocumentosrecebidos" not-null="true" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="reao_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to GLancamentoItemContabil -->
+		<many-to-one name="gerLancamentoItemContabil" class="gcom.gerencial.financeiro.lancamento.GLancamentoItemContabil" update="false" insert="false">
+			<column name="lict_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to UnResumoArrecadacaoAguaEsgoto -->
+		<many-to-one name="unResumoArrecadacaoAguaEsgoto" class="gcom.gerencial.arrecadacao.UnResumoArrecadacaoAguaEsgoto" update="false" insert="false">
+			<column name="rear_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GFinanciamentoTipo -->
+		<many-to-one name="gerFinanciamentoTipo" class="gcom.gerencial.financeiro.GFinanciamentoTipo" update="false" insert="false">
+			<column name="fntp_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

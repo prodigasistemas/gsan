@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.faturamento.FaturamentoAtivCronRota" table="faturamento.fatur_ativ_cron_rota">
+		<composite-id name="comp_id" class="gcom.faturamento.FaturamentoAtivCronRotaPK">
+			<key-property name="faturamentoAtividadeCronogramaId" column="ftac_id" type="java.lang.Integer" length="4"/>
+			<key-property name="rotaId" column="rota_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<property name="dataContaVencimento" type="java.sql.Date" column="facr_dtcontavencimento" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="facr_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to Rota -->
+		<many-to-one name="rota" class="gcom.micromedicao.Rota" update="false" insert="false">
+			<column name="rota_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to FaturamentoAtividadeCronograma -->
+		<many-to-one name="faturamentoAtividadeCronograma" class="gcom.faturamento.FaturamentoAtividadeCronograma" update="false" insert="false">
+			<column name="ftac_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

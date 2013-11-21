@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="RegistrarLeiturasAnormalidadesRelatorioActionForm"
+			type="gcom.gui.micromedicao.RegistrarLeiturasAnormalidadesRelatorioActionForm" />					
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0XXX] GERAR RELATÓRIO REGISTRAR ANORMALIDADES E LEITURAS Auhtor: Rafael Corrêa Data:22/05/2007-->
+		<action name="RegistrarLeiturasAnormalidadesRelatorioActionForm"
+			type="gcom.gui.micromedicao.ExibirRegistrarLeiturasAnormalidadesRelatorioAction"
+			validate="true" scope="session"
+			path="/exibirRegistrarLeiturasAnormalidadesRelatorioAction">
+			<forward name="registrarLeiturasAnormalidadesRelatorio"
+				path="/jsp/micromedicao/registrar_leitura_anormalidade_relatorio_gerar.jsp" />
+		</action>
+		<action name="RegistrarLeiturasAnormalidadesRelatorioActionForm"
+			type="gcom.gui.relatorio.micromedicao.GerarRelatorioRegistrarLeiturasAnormalidadesAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioRegistrarLeiturasAnormalidadesAction" />
+
+	</action-mappings>
+
+</struts-config>

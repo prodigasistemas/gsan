@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="PrescreverImoveisPublicosActionForm"
+			type="gcom.gui.faturamento.PrescreverImoveisPublicosActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	
+	<action-mappings>
+		<action name="PrescreverImoveisPublicosActionForm"  
+			type="gcom.gui.faturamento.ExibirPrescreverImoveisPublicosAction" 
+			validate="true"	
+			scope="session"	
+			path="/exibirPrescreverImoveisPublicosAction">
+			
+			<forward name="exibirPrescreverImoveisPublicos" 
+					 path="/jsp/faturamento/prescrever_imoveis_publicos_filtrar.jsp" />
+		</action>
+
+		<action name="PrescreverImoveisPublicosActionForm"
+			type="gcom.gui.faturamento.PrescreverImoveisPublicosAction"
+			validate="true" scope="session"	
+			path="/prescreverImoveisPublicosAction">
+		</action>
+		
+	</action-mappings>
+</struts-config>

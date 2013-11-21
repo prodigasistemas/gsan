@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="ManterEmpresaActionForm"
+			type="gcom.gui.cadastro.ManterEmpresaActionForm" />
+		<form-bean name="AtualizarEmpresaActionForm"
+			type="gcom.gui.cadastro.AtualizarEmpresaActionForm" />
+		<form-bean name="FiltrarEmpresaActionForm"
+			type="gcom.gui.cadastro.FiltrarEmpresaActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.cadastro.ExibirManterEmpresaAction"
+			validate="true" scope="session"
+			path="/exibirManterEmpresaAction">
+
+			<forward name="exibirManterEmpresa"
+				path="/jsp/cadastro/empresa_manter.jsp" />
+
+			<forward name="exibirAtualizarEmpresa"
+				path="/exibirAtualizarEmpresaAction.do" />
+		</action>
+
+		<action name="AtualizarEmpresaActionForm"
+			type="gcom.gui.cadastro.ExibirAtualizarEmpresaAction"
+			validate="true" scope="session"
+			path="/exibirAtualizarEmpresaAction">
+
+			<forward name="empresaAtualizar"
+				path="/jsp/cadastro/empresa_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarEmpresaActionForm"
+			type="gcom.gui.cadastro.AtualizarEmpresaAction"
+			validate="true" scope="session"
+			path="/atualizarEmpresaAction">
+
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.cadastro.RemoverEmpresaAction"
+			 scope="request" path="/removerEmpresaAction">
+
+		</action>
+		<action name="FiltrarEmpresaActionForm"
+			type="gcom.gui.relatorio.cadastro.GerarRelatorioEmpresaManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioEmpresaManterAction" />
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

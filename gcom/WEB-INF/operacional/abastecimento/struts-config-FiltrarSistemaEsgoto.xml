@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarSistemaEsgotoActionForm"
+			type="gcom.gui.operacional.abastecimento.FiltrarSistemaEsgotoActionForm" />
+			
+			
+			
+	</form-beans>
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarSistemaEsgotoActionForm"
+			type="gcom.gui.operacional.abastecimento.ExibirFiltrarSistemaEsgotoAction" validate="true" scope="session" 
+			path="/exibirFiltrarSistemaEsgotoAction">
+			<forward name="filtrarSistemaEsgoto"
+				path="/jsp/operacional/abastecimento/sistema_esgoto_filtrar.jsp" />
+		</action>
+		
+		<action name="FiltrarSistemaEsgotoActionForm" 
+			type="gcom.gui.operacional.abastecimento.FiltrarSistemaEsgotoAction" validate="true" scope="session" 
+			path="/filtrarSistemaEsgotoAction">
+			<forward name="exibirManterSistemaEsgoto" path="/exibirManterSistemaEsgotoAction.do" /> 
+		</action>
+		
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

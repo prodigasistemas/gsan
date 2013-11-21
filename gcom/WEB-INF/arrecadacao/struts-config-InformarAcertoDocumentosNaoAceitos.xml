@@ -1,0 +1,78 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<!--Action Form Dinâmico que serve para inserir os Pagamentos -->
+		
+		<form-bean name="InformarAcertoDocumentosNaoAceitosActionForm"
+			type="gcom.gui.arrecadacao.InformarAcertoDocumentosNaoAceitosActionForm" /> 
+			
+		<form-bean name="SelecionarDebitosPagosPopupActionForm"
+			type="gcom.gui.arrecadacao.SelecionarDebitosPagosPopupActionForm" /> 
+			
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	
+	<global-forwards/>
+
+	<action-mappings>
+	
+	
+	<action	name="InformarAcertoDocumentosNaoAceitosActionForm"
+			type="gcom.gui.arrecadacao.ExibirInformarAcertoDocumentosNaoAceitosAction"
+			validate="false" 
+			input="/exibirInformarAcertoDocumentosNaoAceitosAction.do"
+			scope="session" 
+			path="/exibirInformarAcertoDocumentosNaoAceitosAction">
+			
+			<forward name="informarAcertoDocumentosNaoAceitos"
+				     path="/informarAcertoDocumentosNaoAceitosWizardAction.do?action=exibirInformarAcertoDocumentosNaoAceitosPagamentoAction" />
+				
+		</action>
+		
+		<action name="InformarAcertoDocumentosNaoAceitosActionForm"
+			    type="gcom.gui.arrecadacao.InformarAcertoDocumentosNaoAceitosWizardAction"
+			    validate="true" 
+			    parameter="action" 
+			    scope="session"
+			    path="/informarAcertoDocumentosNaoAceitosWizardAction">
+			
+			<forward name="informarAcertoDocumentosNaoAceitosPagamento"
+				     path="/jsp/arrecadacao/informar_acerto_documentos_nao_aceitos_pagamento.jsp" />
+				
+			<forward name="informarAcertoDocumentosNaoAceitosDebitos"
+				     path="/jsp/arrecadacao/informar_acerto_documentos_nao_aceitos_debitos.jsp" />
+				
+		</action>
+		
+		<action name="InformarAcertoDocumentosNaoAceitosActionForm"
+			type="gcom.gui.arrecadacao.CancelarInformarAcertoDocumentosNaoAceitosAction"
+			validate="false" 
+			path="/cancelarInformarAcertoDocumentosNaoAceitosAction" />
+			
+		<action name="SelecionarDebitosPagosPopupActionForm"
+		    type="gcom.gui.arrecadacao.ExibirSelecionarDebitosPagosPopupAction"
+		    validate="true" 
+		    parameter="action" 
+		    scope="session"
+		    path="/exibirSelecionarDebitosPagosPopupAction">
+		
+			<forward name="selecionarDebitosPagosPopup"
+				     path="/jsp/arrecadacao/selecionar_debitos_pagos_popup.jsp" />
+				
+		</action>
+		
+		<action name="SelecionarDebitosPagosPopupActionForm"
+			type="gcom.gui.arrecadacao.SelecionarDebitosPagosPopupAction"
+			validate="false" 
+			path="/selecionarDebitosPagosPopupAction" >
+		
+			<forward name="exibirSelecionarDebitosPagosPopup"
+				     path="/exibirSelecionarDebitosPagosPopupAction.do" />
+				
+		</action>
+	
+	</action-mappings>
+	
+</struts-config>

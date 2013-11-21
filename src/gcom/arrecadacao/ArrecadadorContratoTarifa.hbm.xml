@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.arrecadacao.ArrecadadorContratoTarifa" table="arrecadacao.arrecadador_contrato_tar">
+		<composite-id name="comp_id" class="gcom.arrecadacao.ArrecadadorContratoTarifaPK">
+			<key-property name="arrecadadorContratoId" column="arct_id" type="java.lang.Integer" length="4"/>
+			<key-property name="arrecadacaoFormaId" column="arfm_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<property name="valorTarifa" type="java.math.BigDecimal" column="actf_vltarifa" length="13"/>
+		<property name="numeroDiaFloat" type="java.lang.Short" column="actf_nndiafloat" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="actf_tmultimaalteracao" length="8"/>
+		<property name="valorTarifaPercentual" type="java.math.BigDecimal" column="actf_pctarifa" length="5"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to ArrecadacaoForma -->
+		<many-to-one name="arrecadacaoForma" class="gcom.arrecadacao.ArrecadacaoForma" update="false" insert="false">
+			<column name="arfm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ArrecadadorContrato -->
+		<many-to-one name="arrecadadorContrato" class="gcom.arrecadacao.ArrecadadorContrato" update="false" insert="false">
+			<column name="arct_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

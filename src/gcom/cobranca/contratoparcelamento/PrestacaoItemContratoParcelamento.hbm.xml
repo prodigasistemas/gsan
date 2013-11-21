@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.contratoparcelamento.PrestacaoItemContratoParcelamento" table="Cobranca.CONTRATO_PARCEL_PRE_ITEM" >
+		<id name="id" type="java.lang.Integer" column="CPPI_ID">
+			<generator class="sequence">
+				<param name="sequence">COBRANCA.SEQ_CONTRATO_PARCEL_PRE_ITEM</param>
+			</generator>
+		</id>
+		
+		<property name="valorPago" type="java.math.BigDecimal" column="CPPI_VLPAGO" length="40"/>
+		
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="CPPI_TMULTIMAALTERACAO" length="8"/>
+		
+		
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to ContratoParcelamentoRD -->
+		<many-to-one name="prestacao" class="gcom.cobranca.contratoparcelamento.PrestacaoContratoParcelamento" not-null="true">
+			<column name="CPPR_ID"/>
+		</many-to-one>
+		
+		<many-to-one name="item" class="gcom.cobranca.contratoparcelamento.ContratoParcelamentoItem" not-null="true">
+			<column name="CPIT_ID"/>
+		</many-to-one>
+		
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="GerarRelatorioVolumesFaturadosActionForm"
+			type="gcom.gui.faturamento.GerarRelatorioVolumesFaturadosActionForm" />					
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0637] Gerar Relatórios Volumes Faturados Auhtor: Rafael Corrêa Data:12/09/2007-->
+		<action name="GerarRelatorioVolumesFaturadosActionForm"
+			type="gcom.gui.faturamento.ExibirGerarRelatorioVolumesFaturadosAction"
+			validate="true" scope="session"
+			path="/exibirGerarRelatorioVolumesFaturadosAction">
+			<forward name="exibirGerarRelatorioVolumesFaturados"
+				path="/jsp/faturamento/volumes_faturados_relatorio_gerar.jsp" />
+		</action>
+		<action name="GerarRelatorioVolumesFaturadosActionForm"
+			type="gcom.gui.relatorio.faturamento.GerarRelatorioVolumesFaturadosAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioVolumesFaturadosAction">
+		</action>
+
+	</action-mappings>
+
+</struts-config>

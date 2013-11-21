@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.IndicesAcrescimosImpontualidade" table="cobranca.indices_acresc_impont">
+		<id name="id" type="java.lang.Integer" column="iaci_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_indices_acresc_impont</param>
+			</generator>
+		</id>
+		<property name="anoMesReferencia" type="java.lang.Integer" column="iaci_amreferencia" length="4"/>
+		<property name="percentualMulta" type="java.math.BigDecimal" column="iaci_pcmulta" length="5"/>
+		<property name="percentualJurosMora" type="java.math.BigDecimal" column="iaci_pcjurosmora" length="5"/>
+		<property name="fatorAtualizacaoMonetaria" type="java.math.BigDecimal" column="iaci_nnfatoratlzcmonetaria" length="6"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="iaci_tmultimaalteracao" length="8"/>
+		<property name="percentualLimiteJuros" type="java.math.BigDecimal" column="iaci_pclimitejuros" length="5"/>
+		<property name="percentualLimiteMulta" type="java.math.BigDecimal" column="iaci_pclimitemulta" length="5"/>
+		<property name="indicadorJurosMensal" type="java.lang.Short" column="iaci_icjurosmensal" length="2"/>
+		<property name="indicadorMultaMensal" type="java.lang.Short" column="iaci_icmultamensal" length="2"/>
+		<!-- Associations -->
+	</class>
+</hibernate-mapping>

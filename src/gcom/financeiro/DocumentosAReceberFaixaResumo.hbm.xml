@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.financeiro.DocumentosAReceberFaixaResumo" table="financeiro.doc_receber_faixa_resumo">
+		<id name="id" type="java.lang.Integer" column="drfx_id">
+			<generator class="sequence">
+				<param name="sequence">financeiro.seq_doc_receber_faixa_resumo</param>
+			</generator>
+		</id>
+		<property name="quantidadeDocumentos" type="java.lang.Integer" column="drfx_qtdocumentos" not-null="true" length="4"/>
+		<property name="valorDocumentos" type="java.math.BigDecimal" column="drfx_vldocumentos" not-null="true" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="drfx_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to GerenciaRegional -->
+		<many-to-one name="faixaDocumentosAReceber" class="gcom.financeiro.FaixaDocumentosAReceber" not-null="true">
+			<column name="fdrc_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to UnidadeNegocio -->
+		<many-to-one name="documentosAReceberResumo" class="gcom.financeiro.DocumentosAReceberResumo" not-null="true">
+			<column name="drrs_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="PesquisarLocalArmazenagemHidrometroActionForm"
+	   		type="gcom.gui.micromedicao.PesquisarLocalArmazenagemHidrometroActionForm" /> 
+ 	</form-beans>
+  <!--******************* PÁGINAS GLOBAIS *******************-->
+ <global-forwards />
+ <action-mappings>
+	  <action name="PesquisarLocalArmazenagemHidrometroActionForm"
+	   type="gcom.gui.micromedicao.ExibirPesquisarLocalArmazenagemHidrometroAction"
+	   validate="true"
+	   scope="session"
+	   path="/exibirPesquisarLocalArmazenagemHidrometroAction">
+	   <forward name="exibirPesquisarLocalArmazenagemHidrometro"
+	    path="/jsp/micromedicao/hidrometro_local_armazenagem_pesquisar.jsp" />
+	  </action>
+ 
+	<action name="PesquisarLocalArmazenagemHidrometroActionForm" 
+		type="gcom.gui.micromedicao.PesquisarLocalArmazenagemHidrometroAction"
+		validate="true" scope="session"
+		path="/pesquisarLocalArmazenagemHidrometroAction">
+		<forward name="exibirResultadoPesquisaLocalArmazenagemHidrometroAction" 
+			path="/exibirResultadoPesquisaLocalArmazenagemHidrometroAction.do" />
+		<forward name="resultadoPesquisaLocalArmazenagemHidrometroJSP"
+			path="/jsp/micromedicao/hidrometro_local_armazenagem_resultado_pesquisar.jsp" />
+	</action>
+	
+	<action 
+		type="gcom.gui.micromedicao.ExibirResultadoPesquisaLocalArmazenagemHidrometroAction"
+		validate="false" scope="session"
+		path="/exibirResultadoPesquisaLocalArmazenagemHidrometroAction">
+		<forward name="resultadoPesquisaLocalArmazenagemHidrometro"
+			path="/jsp/micromedicao/hidrometro_local_armazenagem_resultado_pesquisar.jsp" />
+	</action>
+	
+</action-mappings>
+ <message-resources null="false"
+  parameter="gcom.properties.application" />
+</struts-config>

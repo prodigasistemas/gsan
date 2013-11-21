@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+	<form-bean name="InformarTelefoneActionForm" 
+	type="gcom.gui.cadastro.InformarTelefoneActionForm" />
+	
+	<form-bean name="ExibirAtualizarDadosClientesPopupActionForm" 
+	type="gcom.gui.atendimentopublico.ExibirAtualizarDadosClientesPopupActionForm" />
+	
+   
+ </form-beans>
+ 
+  <!--******************* PÃGINAS GLOBAIS *******************-->
+ <global-forwards />
+ <action-mappings>
+ 
+  <action name="InformarTelefoneActionForm"
+   type="gcom.gui.cadastro.ExibirInformarTelefoneAction"
+   validate="false"
+   scope="session"
+   path="/exibirInformarTelefoneAction">
+   <forward name="informarTelefone"
+    path="/jsp/cadastro/informar_telefone_popup.jsp" />
+  </action>
+ 
+<action name="InformarTelefoneActionForm" 
+	type="gcom.gui.cadastro.InformarTelefoneAction"
+	validate="false" scope="session"
+	path="/informarTelefoneAction">
+	<forward name="informarTelefoneAction"
+    path="/exibirInformarTelefoneAction.do" />
+
+</action>
+
+
+</action-mappings>
+ <message-resources null="false"
+  parameter="gcom.properties.application" />
+</struts-config>

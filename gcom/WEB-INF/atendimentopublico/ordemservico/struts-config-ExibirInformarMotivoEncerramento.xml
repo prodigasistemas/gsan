@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="PesquisarMotivoDeEncerramentoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.PesquisarMotivoDeEncerramentoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>		
+		
+		<action name="PesquisarMotivoDeEncerramentoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirPesquisarMotivoDeEncerramentoAction"
+			validate="true" 
+			scope="session" 
+			path="/exibirPesquisarMotivoDeEncerramentoAction">
+			
+			<forward name="exibirMotivoEncerramentoPopup"
+				path="/jsp/atendimentopublico/ordemservico/motivo_encerramento_pesquisar.jsp" />
+			<forward name="atualizarTipoServico"
+				path="/jsp/atendimentopublico/ordemservico/servico_tipo_atualizar.jsp" />
+		</action>
+	</action-mappings>
+	
+</struts-config>

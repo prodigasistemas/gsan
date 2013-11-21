@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+
+		<form-bean name="AtualizarRegistroAtendimentoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.AtualizarRegistroAtendimentoActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+
+		<action name="AtualizarRegistroAtendimentoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirAtualizarRegistroAtendimentoAction"
+			validate="false" input="/exibirAtualizarRegistroAtendimentoAction.do"
+			scope="session" path="/exibirAtualizarRegistroAtendimentoAction">
+			<forward name="atualizarRegistroAtendimento"
+				path="/atualizarRegistroAtendimentoWizardAction.do?action=exibirAtualizarRegistroAtendimentoDadosGeraisAction" />
+		</action>
+		
+		<action name="AtualizarRegistroAtendimentoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.AtualizarRegistroAtendimentoWizardAction"
+			validate="false" input="/exibirAtualizarRegistroAtendimentoAction.do" parameter="action" scope="session"
+			path="/atualizarRegistroAtendimentoWizardAction" 
+			>
+			<forward name="atualizarRegistroAtendimentoDadosGerais"
+				path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_atualizar_dados_gerais.jsp" />
+			<forward name="atualizarRegistroAtendimentoDadosLocalOcorrencia"
+				path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_atualizar_dados_local_ocorrencia.jsp" />
+			<forward name="atualizarRegistroAtendimentoDadosSolicitante"
+				path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_atualizar_solicitante.jsp" />
+			<forward name="atualizarRegistroAtendimentoAnexos"
+				path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_atualizar_anexos.jsp" />
+			<forward name="informarEndereco" 
+				path="/exibirInserirEnderecoAction.do" />
+		</action>
+		<action
+			type="gcom.gui.atendimentopublico.registroatendimento.CancelarAtualizarRegistroAtendimentoAction"
+			validate="false" scope="session" path="/cancelarAtualizarRegistroAtendimentoAction" />
+			
+		<action 
+			type="gcom.gui.atendimentopublico.registroatendimento.ConcluirAtualizarRegistroAtendimentoAction"
+			scope="session" path="/concluirAtualizarRegistroAtendimentoAction">
+		</action>
+		
+		<!-- Pesquisar RAs pendentes para um mesmo local de ocorrência -->
+		<action name="PesquisarRegistrosAtendimentoPendentesLocalOcorrenciaActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.PesquisarRegitrosAtendimentoPendentesLocalOcorrenciaAction"
+			validate="false" scope="session" path="/pesquisarRegitrosAtendimentoPendentesLocalOcorrenciaAction">
+			<forward name="pesquisarRAsPendentesLocalOcorrencia"
+				path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_pendentes_local_ocorrencia_popup.jsp" />
+		</action>
+		<action name="AtualizarRegistroAtendimentoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.PesquisarRegitrosAtendimentoFaltaAguaImovelLocalOcorrenciaAction"
+			validate="false" scope="session" path="/pesquisarRegitrosAtendimentoFaltaAguaImovelLocalOcorrenciaAction">
+			<forward name="pesquisarRAsFaltaAguaOcorrencia"
+				path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_pendente_falta_agua_imovel_popup.jsp" />
+		</action>
+		
+		
+		<action name="PesquisarRegistrosAtendimentoPendentesLocalOcorrenciaActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.PesquisarRegitrosAtendimentoPendentesLocalOcorrenciaAction"
+			validate="false" scope="session" path="/pesquisarRegitrosAtendimentoPendentesLocalOcorrenciaAction">
+			<forward name="pesquisarRAsPendentesLocalOcorrencia"
+				path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_pendentes_local_ocorrencia_popup.jsp" />
+		</action>
+		
+		<action 
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirAtualizarRegistroAtendimentoAnexosAction"
+			validate="false" 
+			path="/exibirAtualizarRegistroAtendimentoAnexosAction">
+			<forward name="atualizarRegistroAtendimentoAnexos"
+				path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_atualizar_anexos.jsp" />
+		</action>
+			
+			
+	</action-mappings>
+
+</struts-config>

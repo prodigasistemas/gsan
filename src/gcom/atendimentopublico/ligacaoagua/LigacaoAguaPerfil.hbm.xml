@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.atendimentopublico.ligacaoagua.LigacaoAguaPerfil" table="atendimentopublico.ligacao_agua_perfil">
+		<id name="id" type="java.lang.Integer" column="lapf_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_ligacao_agua_perfil</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="lapf_dsligacaoaguaperfil" length="20"/>
+		<property name="indicadorUso" type="java.lang.Integer" column="lapf_icuso" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="lapf_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to LigacaoAgua
+    <set
+        name="ligacaoAguas"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="lapf_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.LigacaoAgua"
+        />
+    </set>-->
+	</class>
+</hibernate-mapping>

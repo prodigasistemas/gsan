@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="entidadeBeneficenteActionForm" type="gcom.gui.cadastro.entidadebeneficente.EntidadeBeneficenteActionForm" />
+	</form-beans>
+
+	<action-mappings>
+		
+		<action name="entidadeBeneficenteActionForm"
+				type="gcom.gui.cadastro.entidadebeneficente.ExibirInserirEntidadeBeneficenteAction" 
+				path="/exibirInserirEntidadeBeneficenteAction">
+				<forward name="inserirEntidadeBeneficente"
+				path="/jsp/cadastro/entidadebeneficente/entidade_beneficente_inserir.jsp" />
+		</action>	
+				
+		<action name="entidadeBeneficenteActionForm" 
+				path="/inserirEntidadeBeneficenteAction"
+				type="gcom.gui.cadastro.entidadebeneficente.InserirEntidadeBeneficenteAction">
+		</action>
+	
+	</action-mappings>
+	
+</struts-config>

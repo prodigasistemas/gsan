@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="GerarRelatorioFaturasAgrupadasActionForm"
+			type="gcom.gui.relatorio.faturamento.GerarRelatorioFaturasAgrupadasActionForm" />					
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<action name="GerarRelatorioFaturasAgrupadasActionForm"
+			type="gcom.gui.relatorio.faturamento.ExibirGerarRelatorioFaturasAgrupadasAction"
+			validate="false" scope="session"
+			path="/exibirGerarRelatorioFaturasAgrupadasAction">
+			<forward name="exibirGerarRelatorioFaturasAgrupadas"
+				path="/jsp/relatorio/faturamento/faturas_agrupadas_relatorio_gerar.jsp" />
+		</action>
+		
+		<action name="GerarRelatorioFaturasAgrupadasActionForm"
+			type="gcom.gui.relatorio.faturamento.GerarRelatorioFaturasAgrupadasAction"
+			validate="false" scope="session"
+			path="/gerarRelatorioFaturasAgrupadasAction" />
+			
+		<action name="GerarRelatorioFaturasAgrupadasActionForm"
+			type="gcom.gui.relatorio.faturamento.GerarRelatorioProtocoloEntregaFaturaAction"
+			validate="false" scope="session"
+			path="/gerarRelatorioProtocoloEntregaFaturaAction" />
+
+	</action-mappings>
+
+</struts-config>

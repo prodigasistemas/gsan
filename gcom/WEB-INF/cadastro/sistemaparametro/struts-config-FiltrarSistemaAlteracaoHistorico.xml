@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+	
+		<form-bean name="FiltrarSistemaAlteracaoHistoricoActionForm"
+			type="gcom.gui.cadastro.sistemaparametro.FiltrarSistemaAlteracaoHistoricoActionForm" />
+			
+			<form-bean name="SistemaHistoricoAlteracaoDetalharPopupActionForm"
+			type="gcom.gui.cadastro.sistemaparametro.SistemaHistoricoAlteracaoDetalharPopupActionForm" />
+			
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+			<action name="FiltrarSistemaAlteracaoHistoricoActionForm" 
+			type="gcom.gui.cadastro.sistemaparametro.ExibirFiltrarSistemaAlteracaoHistoricoAction"
+			validate="false" scope="session" path="/exibirFiltrarSistemaAlteracaoHistoricoAction">
+			<forward name="filtrarSistemaAlteracaoHistorico"
+				path="/jsp/cadastro/sistemaparametro/sistema_alteracao_historico_filtrar.jsp" />
+		</action>
+		
+		<action name="FiltrarSistemaAlteracaoHistoricoActionForm" 
+			type="gcom.gui.cadastro.sistemaparametro.FiltrarSistemaAlteracaoHistoricoAction"
+			validate="true" scope="session" path="/filtrarSistemaAlteracaoHistoricoAction">
+			<forward name="exibirConsultarSistemaAlteracaoHistorico"
+				path="/exibirConsultarSistemaAlteracaoHistoricoAction.do" />
+		</action>
+		
+		<action name="FiltrarSistemaAlteracaoHistoricoActionForm" 
+			type="gcom.gui.cadastro.sistemaparametro.ExibirConsultarSistemaAlteracaoHistoricoAction"
+			validate="true" scope="session" path="/exibirConsultarSistemaAlteracaoHistoricoAction">
+			<forward name="consultarSistemaAlteracaoHistorico"
+				path="/jsp/cadastro/sistemaparametro/sistema_alteracao_historico_consultar.jsp" />
+		</action>
+		
+		<action name="SistemaHistoricoAlteracaoDetalharPopupActionForm" 
+			type="gcom.gui.cadastro.sistemaparametro.ExibirSistemaHistAlteracaoDetalharPopupAction"
+			validate="true" scope="session" path="/exibirSistemaHistAlteracaoDetalharPopupAction">
+			<forward name="sistemaHistAlteracaoDetalharPopup"
+				path="/jsp/cadastro/sistemaparametro/sistema_historico_alteracao_detalhar_popup.jsp" />
+		</action>
+		
+		
+		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

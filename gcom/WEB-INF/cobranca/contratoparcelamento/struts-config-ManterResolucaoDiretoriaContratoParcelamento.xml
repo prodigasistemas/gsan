@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="FiltrarResolucaoDiretoriaContratoParcelamentoActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.FiltrarResolucaoDiretoriaContratoParcelamentoActionForm" />		
+		
+		<form-bean name="ExcluirResolucaoDiretoriaContratoParcelamentoActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.ExcluirResolucaoDiretoriaContratoParcelamentoActionForm" />		
+		
+		<form-bean 
+		    name="AtualizarResolucaoDiretoriaContratoParcelamentoActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.AtualizarResolucaoDiretoriaContratoParcelamentoActionForm" /> 
+			
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+				
+				
+		<!-- INICIO [UC1134] Manter Resolução de Diretoria (RD) para Contratos de Parcelamento por cliente -->
+		<action name="ManterResolucaoDiretoriaContratoParcelamentoActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.ManterResolucaoDiretoriaContratoParcelamentoAction"
+			path="/exibirManterResolucaoDiretoriaContratoParcelamentoAction">
+			
+			<forward name="manterResolucaoDiretoria"
+				path="/jsp/cobranca/contratoparcelamento/contrato_parcelamento_resolucao_diretoria_manter.jsp" />
+			<forward name="atualizarResolucaoDiretoria"
+				path="/exibirAtualizarResolucaoDiretoriaContratoParcelamentoAction.do" />
+				
+		</action>	
+		
+		<action name="AtualizarResolucaoDiretoriaContratoParcelamentoActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.ExibirAtualizarResolucaoDiretoriaContratoParcelamentoAction"
+			path="/exibirAtualizarResolucaoDiretoriaContratoParcelamentoAction">
+			
+			<forward name="exibirAtualizar"
+				path="/jsp/cobranca/contratoparcelamento/contrato_parcelamento_resolucao_diretoria_atualizar.jsp" />
+			
+			<forward name="exibirError"
+				path="/jsp/cobranca/contratoparcelamento/contrato_parcelamento_resolucao_diretoria_error.jsp" />
+			
+		</action>	
+		
+		<action name="AtualizarResolucaoDiretoriaContratoParcelamentoActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.AtualizarResolucaoDiretoriaContratoParcelamentoAction"
+			path="/atualizarResolucaoDiretoriaContratoParcelamentoAction">
+			<forward name="exibirAtualizar"
+				path="/exibirAtualizarResolucaoDiretoriaContratoParcelamentoAction.do" />
+			<forward name="exibirPaginaAtualizar"
+				path="/jsp/cobranca/contratoparcelamento/contrato_parcelamento_resolucao_diretoria_atualizar.jsp" />
+			<forward name="exibirError"
+				path="/jsp/cobranca/contratoparcelamento/contrato_parcelamento_resolucao_diretoria_error.jsp" />
+				
+		</action>	
+		
+		
+		<action name="ExcluirResolucaoDiretoriaContratoParcelamentoActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.ExcluirResolucaoDiretoriaContratoParcelamentoAction"
+			path="/removerResolucaoDiretoriaContratoParcelamentoAction">
+		</action>	
+		
+		<action name="ExcluirResolucaoDiretoriaContratoParcelamentoActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.GerarRelatorioResolucaoDiretoriaContratoParcelamentoAction"
+			path="/gerarRelatorioResolucaoDiretoriaContratoParcelamentoAction">
+		</action>
+		<!-- FIM [UC1134] Manter Resolução de Diretoria (RD) para Contratos de Parcelamento por cliente -->
+		
+	
+ 
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

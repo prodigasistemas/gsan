@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.endereco.Cep" table="cadastro.cep">
+		<id name="cepId" type="java.lang.Integer" column="cep_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_cep</param>
+			</generator>
+		</id>
+		<property name="codigo" type="java.lang.Integer" column="cep_cdcep" length="4"/>
+		<property name="sigla" type="java.lang.String" column="cep_dsufsigla" length="2"/>
+		<property name="municipio" type="java.lang.String" column="cep_nmmunicipio" length="30"/>
+		<property name="bairro" type="java.lang.String" column="cep_nmbairro" length="30"/>
+		<property name="logradouro" type="java.lang.String" column="cep_nmlogradouro" length="50"/>
+		<property name="descricaoTipoLogradouro" type="java.lang.String" column="cep_dslogradourotipo" length="20"/>
+		<property name="indicadorUso" type="java.lang.Short" column="cep_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cep_tmultimaalteracao" length="8"/>
+		<property name="descricaoIntervaloNumeracao" type="java.lang.String" column="cep_dsintervalonumeracao" length="30" not-null="false"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to CepTipo -->
+		<many-to-one name="cepTipo" class="gcom.cadastro.endereco.CepTipo" not-null="true">
+			<column name="cept_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to SistemaParametro
+    <set
+        name="sistemaParametros"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="cep_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.SistemaParametro"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to Localidade
+    <set
+        name="localidades"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="cep_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Localidade"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to GerenciaRegional
+    <set
+        name="gerenciaRegionals"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="cep_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.GerenciaRegional"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to Imovel
+    <set
+        name="imovels"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="cep_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Imovel"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to ClienteEndereco
+    <set
+        name="clienteEnderecos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="cep_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.ClienteEndereco"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

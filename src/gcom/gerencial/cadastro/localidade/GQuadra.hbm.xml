@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.gerencial.cadastro.localidade.GQuadra" table="cadastro.g_quadra">
+		<id name="id" type="java.lang.Integer" column="qdra_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.sequence_g_quadra</param>
+			</generator>
+		</id>
+		<property name="numeroQuadra" type="int" column="qdra_nnquadra" not-null="true" length="4"/>
+		<property name="indicadorRedeAgua" type="java.lang.Short" column="qdra_icredeagua" length="2"/>
+		<property name="indicadorRedeEsgoto" type="java.lang.Short" column="qdra_icredeesgoto" length="2"/>
+		<property name="numeroRotaSequencia" type="java.lang.Short" column="qdra_nnrotasequencia" length="2"/>
+		<property name="dataImplantacao" type="java.sql.Date" column="qdra_dtimplantacao" length="4"/>
+		<property name="indicadorUso" type="java.lang.Short" column="qdra_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="qdra_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to UnResumoColetaEsgoto -->
+		<set name="unResumoColetaEsgotos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="qdra_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.micromedicao.UnResumoColetaEsgoto"/>
+		</set>
+		<!-- bi-directional one-to-many association to UnResumoConsumoAgua -->
+		<set name="unResumoConsumoAguas" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="qdra_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.cadastro.UnResumoConsumoAgua"/>
+		</set>
+		<!-- bi-directional one-to-many association to UnResumoFaturamento -->
+		<set name="unResumoFaturamentos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="qdra_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.faturamento.UnResumoFaturamento"/>
+		</set>
+		<!-- bi-directional one-to-many association to UnResumoArrecadacao -->
+		<set name="unResumoArrecadacao" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="qdra_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.arrecadacao.UnResumoArrecadacao"/>
+		</set>
+		<!-- bi-directional one-to-many association to UnResumoLigacaoEconomia -->
+		<set name="unResumoLigacaoEconomias" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="qdra_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.cadastro.UnResumoLigacaoEconomia"/>
+		</set>
+		<!-- bi-directional many-to-one association to GSetorComercial -->
+		<many-to-one name="gerSetorComercial" class="gcom.gerencial.cadastro.localidade.GSetorComercial" not-null="true">
+			<column name="stcm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GRota -->
+		<many-to-one name="gerRota" class="gcom.gerencial.micromedicao.GRota" not-null="true">
+			<column name="rota_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to UnResumoIndicadorDesempenhoMicromedicao -->
+		<set name="unResumoIndicadorDesempenhoMicromedicaos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="qdra_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.micromedicao.UnResumoIndicadorDesempenhoMicromedicao"/>
+		</set>
+		<many-to-one name="gerDistritoOperacional" class="gcom.gerencial.operacional.GDistritoOperacional" not-null="false">
+			<column name="diop_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

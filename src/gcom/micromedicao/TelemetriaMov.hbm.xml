@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.micromedicao.TelemetriaMov" table="micromedicao.telemetria_mov">
+		<id name="id" type="java.lang.Integer" column="tmov_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_telemetria_mov</param>
+			</generator>
+		</id>
+		<property name="quantidadeConsumidores" type="java.lang.Integer" column="tmov_qtconsumidores" not-null="true"/>
+		<property name="envio" type="java.sql.Timestamp" column="tmov_tmenvio" not-null="true" length="8"/>
+		<property name="codigoEmpresa" type="java.lang.Integer" column="tmov_cdempresa" not-null="true"/>
+		<property name="indicadorConsistenciaLeit" type="java.lang.Short" column="tmov_icconsistencialeit" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="tmov_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to TelemetriaLog -->
+		<many-to-one name="telemetriaLog" class="gcom.micromedicao.TelemetriaLog" not-null="true">
+			<column name="tlog_id"></column>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

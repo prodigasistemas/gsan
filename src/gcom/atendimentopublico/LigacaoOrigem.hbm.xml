@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.atendimentopublico.LigacaoOrigem" table="atendimentopublico.ligacao_origem">
+		<id name="id" type="java.lang.Integer" column="lgor_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_ligacao_origem</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="lgor_dsligacaoorigem" length="20"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="lgor_dsabreviado" length="3"/>
+		<property name="indicadorUso" type="java.lang.Short" column="lgor_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="lgor_tmultimaalteracao" length="8"/>
+	</class>
+</hibernate-mapping>

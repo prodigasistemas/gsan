@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- ===================================================================== -->
+<!--                                                                       -->
+<!--  JBoss Server Configuration                                           -->
+<!--                                                                       -->
+<!-- ===================================================================== -->
+
+<!-- $Id: postgres-ds.xml,v 1.2 2006/01/05 20:55:39 rodrigo Exp $ -->
+<!-- ==================================================================== -->
+<!--  Datasource config for Postgres                                      -->
+<!-- ==================================================================== -->
+
+
+<datasources> 
+    <local-tx-datasource>
+        <jndi-name>PostgresDS</jndi-name>
+
+     	<!-- CAEMA
+        <connection-url>jdbc:postgresql://192.168.64.244:5432/gsan_comercial_caema</connection-url>
+         -->
+
+     	<!-- CAER 
+        <connection-url>jdbc:postgresql://192.168.64.245:5432/gsan_comercial_caer</connection-url>
+         -->
+
+         <!-- CAERN  
+        <connection-url>jdbc:postgresql://192.168.64.245:5432/gsan_comercial_caern</connection-url>
+		-->
+
+        <!-- COSANPA
+        <connection-url>jdbc:postgresql://192.168.64.244:5432/gsan_comercial_cosanpa</connection-url>
+         -->
+
+        <!-- SAAE  
+        <connection-url>jdbc:postgresql://192.168.64.245:5432/gsan_comercial_saae</connection-url>
+	       -->
+
+        <!-- SAAE 
+        <connection-url>jdbc:postgresql://localhost:5432/comercial_saae</connection-url>
+		-->
+        
+        <!-- COMPESA -->  
+        <connection-url>jdbc:postgresql://192.168.64.243:5432/gsan_comercial_compesa</connection-url>
+         
+
+        <driver-class>org.postgresql.Driver</driver-class>
+        <user-name>postgres</user-name><!-- gsan_batch -->
+        <password>postgres</password><!-- b@tch -->
+        <min-pool-size>5</min-pool-size>
+        <max-pool-size>200</max-pool-size>
+    </local-tx-datasource>
+
+    <local-tx-datasource>
+        <jndi-name>PostgresGerencialDS</jndi-name>
+        
+        <!--
+        <connection-url>jdbc:postgresql://192.168.64.244:5432/gsan_gerencial_cosanpa</connection-url>
+        -->
+
+        <connection-url>jdbc:postgresql://192.168.64.245:5432/gsan_gerencial_caern</connection-url>
+
+        <driver-class>org.postgresql.Driver</driver-class>
+        <!-- Use the security domain defined in conf/login-config.xml -->
+        <user-name>gsan_batch</user-name>
+        <password>b@tch</password>
+        <!--<security-domain>EncryptDBPassword</security-domain>-->
+    </local-tx-datasource>
+
+    <local-tx-datasource>
+        <jndi-name>OracleDS</jndi-name>
+
+        <connection-url>
+            <!-- PRODUCAO - COMPESA - Quando estiver no IPAD
+            jdbc:oracle:thin:@(DESCRIPTION = (ADDRESS = (PROTOCOL = TCP)(HOST = 10.10.0.49)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)
+            (SERVICE_NAME = USERS)))
+			 -->
+                        
+             <!-- DESENVILVIMENTO - COMPESA
+            jdbc:oracle:thin:@(DESCRIPTION =(ADDRESS_LIST =(ADDRESS = (PROTOCOL = TCP)(HOST = 10.10.0.61)(PORT = 1521)))(CONNECT_DATA=(SERVICE_NAME = compprod)))
+            -->
+
+            <!-- PRODUCAO - COMPESA - Quando estiver na Compesa
+            jdbc:oracle:thin:@(DESCRIPTION =(ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.64.240)(PORT = 1521))(CONNECT_DATA =(SERVER = DEDICATED)(SERVICE_NAME = gsan240)))
+            -->
+
+            <!-- DESENV - 240 
+            jdbc:oracle:thin:@(DESCRIPTION =(ADDRESS_LIST =(ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.64.240)(PORT = 1521)))(CONNECT_DATA=(SERVICE_NAME = gsan240)))
+              -->
+              
+            <!-- DESENV - 241B -->
+            jdbc:oracle:thin:@(DESCRIPTION =(ADDRESS_LIST =(ADDRESS = (PROTOCOL = TCP)(HOST = 192.168.64.241)(PORT = 1521)))(CONNECT_DATA=(SERVICE_NAME = gsan241B)))
+
+        </connection-url>
+
+        <driver-class>oracle.jdbc.driver.OracleDriver</driver-class>
+        <!-- Use the security domain defined in conf/login-config.xml -->
+        <user-name>system</user-name>
+        <password>oracle</password>
+        <min-pool-size>5</min-pool-size>
+        <max-pool-size>200</max-pool-size>
+        <idle-timeout-minutes>2</idle-timeout-minutes>
+        <prepared-statement-cache-size>40</prepared-statement-cache-size>
+
+        <new-connection-sql>
+            begin
+                EXECUTE IMMEDIATE  'ALTER SESSION SET NLS_TIMESTAMP_FORMAT = ''YYYY/MM/DD HH24:MI:SS''' ;
+                EXECUTE IMMEDIATE  'ALTER SESSION SET NLS_DATE_FORMAT = ''YYYY/MM/DD''' ;
+            end;
+        </new-connection-sql>
+        <!--<security-domain>EncryptDBPassword</security-domain>-->
+        </local-tx-datasource>
+
+</datasources>
+
+
+

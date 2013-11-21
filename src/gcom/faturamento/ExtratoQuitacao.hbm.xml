@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.faturamento.ExtratoQuitacao" table="faturamento.extrato_quitacao">
+		<id name="id" type="java.lang.Integer" column="extq_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_extrato_quitacao</param>
+			</generator>
+		</id>
+		<property name="anoReferencia" type="java.lang.Integer" column="extq_aareferenciaarrecadacao" not-null="true"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="extq_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="indicadorImpressao" type="java.lang.Integer" column="extq_icimpressao" not-null="true"/>
+		<property name="valorTotalDasContas" type="java.math.BigDecimal" column="exqi_vltotal" not-null="true" length="13"/>
+		<property name="anoMesMensagemConta" type="java.lang.Integer" column="extq_ammensagemconta" not-null="true"/>
+		<property name="indicadorImpressaoNaConta" type="java.lang.Integer" column="extq_icimpressaoconta" not-null="true"/>
+    
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

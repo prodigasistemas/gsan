@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+	
+		<form-bean name="FiltrarEquipeActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.FiltrarEquipeActionForm" />
+	
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+			<action name="FiltrarEquipeActionForm" 
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirFiltrarEquipeAction"
+			validate="false" scope="session" path="/exibirFiltrarEquipeAction">
+			<forward name="exibirFiltrarEquipe"
+				path="/jsp/atendimentopublico/ordemservico/equipe_filtrar.jsp" />
+		</action>
+		
+	<action name="FiltrarEquipeActionForm" 
+			type="gcom.gui.atendimentopublico.ordemservico.FiltrarEquipeAction"
+			validate="false" scope="session" path="/filtrarEquipeAction">
+			<forward name="exibirManterEquipe"
+				path="/exibirManterEquipeAction.do" /> 
+		</action>
+		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

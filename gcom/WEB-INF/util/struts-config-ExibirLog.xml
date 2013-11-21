@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="ExibirLogActionForm"
+			type="gcom.gui.util.log.ExibirLogActionForm" />
+	</form-beans>
+
+	<!--******************* P?GINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="ExibirLogActionForm"
+			type="gcom.gui.util.log.ExibirLogTelaInicialAction"
+			validate="true" 
+			path="/exibirLogTelaInicialAction">
+			
+			<forward name="exibirLogTelaInicial" path="/jsp/util/log/log_exibir_inicial.jsp" />
+		</action>
+		
+		<action name="ExibirLogActionForm"
+			type="gcom.gui.util.log.ExibirLogTelaFinalAction"
+			validate="true" 
+			path="/exibirLogTelaFinalAction">
+			
+			<forward name="exibirLogTelaFinal" path="/jsp/util/log/log_exibir_final.jsp" />
+			
+		</action>
+	</action-mappings>
+
+</struts-config>

@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.ordemservico.OsExecucaoEquipe" table="atendimentopublico.os_execucao_equipe">
+		<composite-id name="comp_id" class="gcom.atendimentopublico.ordemservico.OsExecucaoEquipePK">
+			<key-property name="idOsAtividadePeriodoExecucao" column="oape_id" type="java.lang.Integer" length="4"/>
+			<key-property name="idEquipe" column="eqpe_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to Equipe -->
+		<many-to-one name="equipe" class="gcom.atendimentopublico.ordemservico.Equipe" update="false" insert="false">
+			<column name="eqpe_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to OsAtividadePeriodoExecucao -->
+		<many-to-one name="osAtividadePeriodoExecucao" class="gcom.atendimentopublico.ordemservico.OsAtividadePeriodoExecucao" update="false" insert="false">
+			<column name="oape_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+		<!-- bi-directional many-to-one association to OrdemServicoProgramacao -->
+		<many-to-one name="ordemServicoProgramacao" class="gcom.atendimentopublico.ordemservico.OrdemServicoProgramacao" not-null="true">
+			<column name="ospg_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

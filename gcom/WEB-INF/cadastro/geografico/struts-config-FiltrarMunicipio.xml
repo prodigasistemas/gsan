@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarMunicipioActionForm"
+			type="gcom.gui.cadastro.geografico.FiltrarMunicipioActionForm" />
+			
+			
+	</form-beans>
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarMunicipioActionForm"
+			type="gcom.gui.cadastro.geografico.ExibirFiltrarMunicipioAction" validate="true" scope="session" 
+			path="/exibirFiltrarMunicipioAction">
+			<forward name="filtrarMunicipio"
+				path="/jsp/cadastro/geografico/municipio_filtrar.jsp" />
+		</action>
+		
+		<action name="FiltrarMunicipioActionForm" 
+			type="gcom.gui.cadastro.geografico.FiltrarMunicipioAction" validate="true" scope="session" 
+			path="/filtrarMunicipioAction">
+			<forward name="exibirManterMunicipio" path="/exibirManterMunicipioAction.do" /> 
+		</action>
+		
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

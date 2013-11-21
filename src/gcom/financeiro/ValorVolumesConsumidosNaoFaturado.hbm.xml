@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.financeiro.ValorVolumesConsumidosNaoFaturado" table="financeiro.valor_vol_cons_nao_fatur">
+		<id name="id" type="java.lang.Integer" column="vcnf_id">
+			<generator class="sequence">
+				<param name="sequence">financeiro.seq_valor_vol_cons_nao_fatur</param>
+			</generator>
+		</id>
+		<property name="anoMesReferencia" type="int" column="vcnf_amreferencia" not-null="true" length="4"/>
+		<property name="numeroSequenciaTipoLancamento" type="int" column="vcnf_nnsequenciatipolancamento" not-null="true" length="4"/>
+		<property name="numeroSequenciaItemTipoLancamento" type="int" column="vcnf_nnseqitemtplanc" not-null="true" length="4"/>
+		<property name="valorItemLancamento" type="java.math.BigDecimal" column="vcnf_vlitemlancamento" not-null="true" length="13"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to LancamentoItem -->
+		<many-to-one name="lancamentoItem" class="gcom.financeiro.lancamento.LancamentoItem" not-null="true">
+			<column name="lcit_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GerenciaRegional -->
+		<many-to-one name="gerenciaRegional" class="gcom.cadastro.localidade.GerenciaRegional" not-null="true">
+			<column name="greg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LancamentoTipo -->
+		<many-to-one name="lancamentoTipo" class="gcom.financeiro.lancamento.LancamentoTipo" not-null="true">
+			<column name="lctp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to UnidadeNegocio -->
+		<many-to-one name="unidadeNegocio" class="gcom.cadastro.localidade.UnidadeNegocio" not-null="true">
+			<column name="uneg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Categoria -->
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

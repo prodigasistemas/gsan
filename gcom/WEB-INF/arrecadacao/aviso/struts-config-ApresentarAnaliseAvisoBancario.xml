@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="ApresentarAnaliseAvisoBancarioActionForm"
+			type="gcom.gui.arrecadacao.aviso.ApresentarAnaliseAvisoBancarioActionForm" />
+	</form-beans>
+
+	<!--******************* P?GINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="ApresentarAnaliseAvisoBancarioActionForm" 
+			type="gcom.gui.arrecadacao.aviso.ExibirApresentarAnaliseAvisoBancarioAction"
+			validate="false" path="/exibirApresentarAnaliseAvisoBancarioAction">
+			<forward name="exibirApresentarAnaliseAvisoBancario"
+				path="/jsp/arrecadacao/aviso/aviso_bancario_apresentar_analise.jsp" />
+		</action>
+		
+		<action name="FiltrarAvisoBancarioActionForm" 
+			type="gcom.gui.arrecadacao.aviso.ExibirFiltrarAvisoBancarioAction"
+			validate="false" scope="session" path="/exibirFiltrarAvisoBancarioActionAnaliseAvisoBancario">
+			<forward name="filtrarAvisoBancario"
+				path="/jsp/arrecadacao/aviso/aviso_bancario_filtrar.jsp" />
+		</action>
+		
+		<action 
+			type="gcom.gui.arrecadacao.aviso.ExibirConsultarDeducoesAvisoBancarioPopupAction"
+			validate="false" path="/exibirConsultarDeducoesAvisoBancarioPopupAction">
+			<forward name="exibirConsultarDeducoesAvisoBancarioPopup"
+				path="/jsp/arrecadacao/aviso/aviso_bancario_deducoes_consultar_popup.jsp" />
+		</action>
+		
+		<action 
+			type="gcom.gui.arrecadacao.aviso.ExibirConsultarAcertosArrecadacaoAvisoBancarioPopupAction"
+			validate="false" path="/exibirConsultarAcertosArrecadacaoAvisoBancarioPopupAction">
+			<forward name="exibirConsultarAcertosArrecadacaoAvisoBancarioPopup"
+				path="/jsp/arrecadacao/aviso/aviso_bancario_acertos_arrecadacao_consultar_popup.jsp" />
+		</action>
+		
+		<action 
+			type="gcom.gui.arrecadacao.aviso.ExibirConsultarAcertosDevolucaoAvisoBancarioPopupAction"
+			validate="false" path="/exibirConsultarAcertosDevolucaoAvisoBancarioPopupAction">
+			<forward name="exibirConsultarAcertosDevolucaoAvisoBancarioPopup"
+				path="/jsp/arrecadacao/aviso/aviso_bancario_acertos_devolucao_consultar_popup.jsp" />
+		</action>
+
+	</action-mappings>
+
+	
+</struts-config>

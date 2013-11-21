@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.gerencial.cadastro.imovel.GSubcategoria" table="cadastro.g_subcategoria">
+		<id name="id" type="java.lang.Integer" column="scat_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.sequence_g_subcategoria</param>
+			</generator>
+		</id>
+		<property name="codigo" type="int" column="scat_cdsubcategoria" not-null="true" length="4"/>
+		<property name="descricao" type="java.lang.String" column="scat_dssubcategoria" not-null="true" length="50"/>
+		<property name="indicadorUso" type="java.lang.Short" column="scat_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="scat_tmultimaalteracao" length="8"/>
+		<property name="codigoGrupoSubcategoria" type="int" column="scat_cdgruposubcategoria" not-null="true" length="4"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to UnResumoColetaEsgoto -->
+		<set name="unResumoColetaEsgotos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="scat_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.micromedicao.UnResumoColetaEsgoto"/>
+		</set>
+		<!-- bi-directional one-to-many association to UnResumoConsumoAgua -->
+		<set name="unResumoConsumoAguas" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="scat_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.cadastro.UnResumoConsumoAgua"/>
+		</set>
+		<!-- bi-directional one-to-many association to UnResumoFaturamento -->
+		<set name="unResumoFaturamentos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="scat_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.faturamento.UnResumoFaturamento"/>
+		</set>
+		<!-- bi-directional one-to-many association to UnResumoArrecadacao -->
+		<set name="unResumoArrecadacao" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="scat_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.arrecadacao.UnResumoArrecadacao"/>
+		</set>
+		<!-- bi-directional one-to-many association to UnResumoLigacaoEconomia -->
+		<set name="unResumoLigacaoEconomias" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="scat_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.cadastro.UnResumoLigacaoEconomia"/>
+		</set>
+		<!-- bi-directional one-to-many association to RgResumoLigacaoEconomia -->
+		<set name="rgResumoLigacaoEconomias" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="scat_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.cadastro.RgResumoLigacaoEconomia"/>
+		</set>
+		<!-- bi-directional many-to-one association to GCategoria -->
+		<many-to-one name="gerCategoria" class="gcom.gerencial.cadastro.imovel.GCategoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to UnResumoIndicadorDesempenhoMicromedicao -->
+		<set name="unResumoIndicadorDesempenhoMicromedicaos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="scat_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.micromedicao.UnResumoIndicadorDesempenhoMicromedicao"/>
+		</set>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="ApresentarItensDocumentoCobrancaActionForm"
+			type="gcom.gui.cobranca.ApresentarItensDocumentoCobrancaActionForm" />
+	</form-beans>
+
+	<!--******************* P?GINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="ApresentarItensDocumentoCobrancaActionForm" 
+			type="gcom.gui.cobranca.ExibirApresentarItensDocumentoCobrancaAction"
+			validate="false" path="/exibirApresentarItensDocumentoCobrancaAction">
+			<forward name="exibirApresentarItensDocumentoCobranca"
+				path="/jsp/cobranca/cobranca_documento_apresentar_itens.jsp" />
+		</action>
+
+	</action-mappings>
+
+	
+</struts-config>

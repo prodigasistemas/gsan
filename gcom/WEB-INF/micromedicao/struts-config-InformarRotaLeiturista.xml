@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="InformarRotaLeituristaActionForm"
+			type="gcom.gui.micromedicao.InformarRotaLeituristaActionForm" />
+			<form-bean name="PesquisarRotaActionForm"
+			type="gcom.gui.micromedicao.PesquisarRotaActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<action name="InformarRotaLeituristaActionForm"
+			type="gcom.gui.micromedicao.ExibirInformarRotaLeituristaAction"
+			validate="true" scope="session"
+			path="/exibirInformarRotaLeituristaAction">
+
+			<forward name="InformarRotaLeituristaAction"
+				path="/jsp/micromedicao/rota_leiturista.jsp" />
+		</action>
+
+		<action name="InformarRotaLeituristaActionForm"
+			type="gcom.gui.micromedicao.InformarRotaLeituristaAction"
+			validate="false" scope="session"
+			path="/informarRotaLeituristaAction">
+			
+		</action>
+				
+		<action name="PesquisarRotaActionForm"
+			type="gcom.gui.micromedicao.ExibirPesquisarInformarRotaLeituraAction"
+			validate="false" scope="session"
+			path="/exibirPesquisarInformarRotaLeituraAction">
+			<forward name="ExibirPesquisarRotaAction"
+				path="/jsp/micromedicao/rota_pesquisar.jsp" />
+		</action>
+		
+		<action name="PesquisarRotaActionForm"
+			type="gcom.gui.micromedicao.PesquisarRotaAction"
+			validate="false" scope="session"
+			path="/pesquisarRotaAction">
+			<forward name="PesquisarRotaAction"
+				path="/jsp/micromedicao/resultado_rota_pesquisar.jsp" />
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

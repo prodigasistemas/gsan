@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="FiltrarColetaMedidorEnergiaActionForm"
+			type="gcom.gui.micromedicao.FiltrarColetaMedidorEnergiaActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	
+	<action-mappings>
+		<action name="FiltrarColetaMedidorEnergiaActionForm"
+			type="gcom.gui.micromedicao.ExibirInformarMedidorEnergiaRotaAction"
+			validate="true" scope="session" path="/exibirInformarMedidorEnergiaRotaAction">
+			<forward name="filtrarColetaMedidorEnergia"
+				path="/jsp/micromedicao/coleta_medidor_energia_filtrar.jsp" />
+		</action>
+		
+		<action name="FiltrarColetaMedidorEnergiaActionForm"
+			type="gcom.gui.micromedicao.FiltrarColetaMedidorEnergiaAction" 
+			scope="session"
+			validate="false" path="/filtrarColetaMedidorEnergiaAction">
+			
+			<forward name="consultarColetaMedidorEnergia"
+				path="/exibirConsultarColetaMedidorEnergiaAction.do" />
+		</action>
+		
+		<action name="FiltrarColetaMedidorEnergiaActionForm"
+			type="gcom.gui.micromedicao.ExibirConsultarColetaMedidorEnergiaAction" 
+			scope="session"
+			validate="false" path="/exibirConsultarColetaMedidorEnergiaAction">
+			
+			<forward name="exibirConsultarColetaMedidorEnergia"
+				path="/jsp/micromedicao/coleta_medidor_energia_manter.jsp" />
+		</action>
+		
+		<action name="FiltrarColetaMedidorEnergiaActionForm"
+			type="gcom.gui.micromedicao.AtualizarMedidorEnergiaRotaAction" 
+			scope="session"
+			validate="false" path="/atualizarMedidorEnergiaRotaAction">
+			
+		</action>
+		
+		
+	</action-mappings>
+
+</struts-config>

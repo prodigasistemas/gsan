@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="InserirOperacaoActionForm"
+			         type="gcom.gui.seguranca.acesso.InserirOperacaoActionForm" />
+			         
+		<form-bean name="AdicionarOperacaoTabelaActionForm"
+			         type="gcom.gui.seguranca.acesso.AdicionarOperacaoTabelaActionForm" />
+	</form-beans>
+	
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="InserirOperacaoActionForm"
+			      type="gcom.gui.seguranca.acesso.ExibirInserirOperacaoAction"
+			      validate="false" 
+			      scope="session"
+			      path="/exibirInserirOperacaoAction">
+			      
+			<forward name="operacaoInserir"
+				       path="/jsp/seguranca/acesso/operacao_inserir.jsp" />
+		</action>
+
+		<action name="InserirOperacaoActionForm"
+			      type="gcom.gui.seguranca.acesso.InserirOperacaoAction"
+			      validate="false" 
+			      scope="session"
+			      path="/inserirOperacaoAction">
+		</action>
+
+		<action name="AdicionarOperacaoTabelaActionForm"
+			      type="gcom.gui.seguranca.acesso.ExibirAdicionarOperacaoTabelaAction"
+			      scope="session" 
+			      validate="true"
+			      path="/exibirAdicionarOperacaoTabelaAction">
+
+			<forward name="exibirAdicionarOperacaoTabela"
+				       path="/jsp/seguranca/acesso/operacao_tabela_adicionar_popup.jsp" />
+		</action>
+
+		<action name="AdicionarOperacaoTabelaActionForm"
+			      type="gcom.gui.seguranca.acesso.AdicionarOperacaoTabelaAction"
+			      scope="session" 
+			      validate="true"
+			      path="/adicionarOperacaoTabelaAction">
+
+			<forward name="adicionarOperacaoTabela"
+				       path="/jsp/seguranca/acesso/operacao_tabela_adicionar_popup.jsp" />
+		</action>
+
+
+		<action type="gcom.gui.seguranca.acesso.RemoverOperacaoTabelaAction"
+						validate="false" 
+						scope="session" 
+						path="/removerOperacaoTabelaAction">
+						
+			<forward name="operacaoInserir"
+				       path="/jsp/seguranca/acesso/operacao_inserir.jsp" />
+				       
+			<forward name="operacaoAtualizar"
+				       path="/jsp/seguranca/acesso/operacao_atualizar.jsp" />				       
+		</action>
+
+
+	</action-mappings>
+	
+	<message-resources null="false"	parameter="gcom.properties.application" />
+	
+</struts-config>

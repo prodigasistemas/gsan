@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.imovel.ReservatorioVolumeFaixa" table="cadastro.reservatorio_volume_fx">
+		<id name="id" type="java.lang.Integer" column="resv_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_reservatorio_volume_fx</param>
+			</generator>
+		</id>
+		<property name="volumeMenorFaixa" type="java.math.BigDecimal" column="resv_vomenorfaixa" not-null="true" length="5"/>
+		<property name="volumeMaiorFaixa" type="java.math.BigDecimal" column="resv_vomaiorfaixa" length="5"/>
+		<property name="indicadorUso" type="java.lang.Short" column="resv_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="resv_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to Imovel 
+    <set
+        name="imovelsByResvCdreservatoriosuperior"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="resv_cdreservatoriosuperior" />
+        </key>
+        <one-to-many 
+            class="gcom.cadastro.Imovel"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to Imovel 
+    <set
+        name="imovelsByResvCdreservatorioinferior"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="resv_cdreservatorioinferior" />
+        </key>
+        <one-to-many 
+            class="gcom.cadastro.Imovel"
+        />
+    </set>
+    -->
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="GerarRelatorioAnaliseArrecadacaoActionForm"
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioAnaliseArrecadacaoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	
+	<action-mappings>
+		<action name="GerarRelatorioAnaliseArrecadacaoActionForm"  
+			type="gcom.gui.relatorio.arrecadacao.ExibirGerarRelatorioAnaliseArrecadacaoAction" 
+			validate="true"	
+			scope="request"	
+			path="/exibirGerarRelatorioAnaliseArrecadacaoAction">
+			<forward name="exibirGerarRelatorioAnaliseArrecadacaoAction" path="/jsp/relatorio/arrecadacao/analise_arrecadacao_gerar_relatorio.jsp" />
+		</action>
+		
+		<action name="GerarRelatorioAnaliseArrecadacaoActionForm" 
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioAnaliseArrecadacaoAction" 
+			validate="true"	
+			scope="request"	
+			path="/gerarRelatorioAnaliseArrecadacaoAction">
+		</action>
+	</action-mappings>
+	
+</struts-config>

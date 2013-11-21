@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean 
+		    name="ConsultarRegistroAtendimentoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ConsultarRegistroAtendimentoActionForm" /> 
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+				
+			
+		<action name="ConsultarRegistroAtendimentoActionForm"  
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirConsultarRegistroAtendimentoAction" 
+			validate="true"
+			scope="session"
+			path="/exibirConsultarRegistroAtendimentoAction">
+
+			<forward name="consultarRegistroAtendimento"
+			path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_consultar.jsp" />
+		</action>
+
+		<action name="ConsultarRegistroAtendimentoActionForm"
+			type="gcom.gui.relatorio.atendimentopublico.GerarRelatorioRegistroAtendimentoConsultarAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioRegistroAtendimentoConsultarAction" />
+			
+		<action name="ConsultarRegistroAtendimentoActionForm"
+			type="gcom.gui.relatorio.atendimentopublico.GerarRelatorioRegistroAtendimentoViaClienteConsultarAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioRegistroAtendimentoViaClienteConsultarAction" />
+
+		<!-- CONSULTAR DADOS REITERAÇÃO -->
+		<action
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirConsultarDadosReiteracaoRAAction"
+			path="/exibirConsultarDadosReiteracaoRAAction">
+			<forward name="exibirConsultarDadosReiteracaoRA"
+				path="/jsp/atendimentopublico/registroatendimento/dados_reiteracao_ra_consultar.jsp" />
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

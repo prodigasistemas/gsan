@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="InserirAlteracaoTipoActionForm"
+			type="gcom.gui.seguranca.acesso.InserirAlteracaoTipoActionForm" />
+
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="InserirAlteracaoTipoActionForm"
+			type="gcom.gui.seguranca.acesso.ExibirInserirAlteracaoTipoAction"
+			validate="false" scope="session"
+			path="/exibirInserirAlteracaoTipoAction">
+			<forward name="inserirAlteracaoTipo"
+				path="/jsp/seguranca/acesso/alteracao_tipo_inserir.jsp" />
+		</action>
+
+		<action name="InserirAlteracaoTipoActionForm"
+			type="gcom.gui.seguranca.acesso.InserirAlteracaoTipoAction"
+			validate="false" scope="session"
+			path="/inserirAlteracaoTipoAction">
+		</action>
+
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean 
+			name="InserirContratoParcelamentoPorClienteActionForm" 
+			type="gcom.gui.cobranca.contratoparcelamento.InserirContratoParcelamentoPorClienteActionForm" /> 
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+				
+				
+		<action name="ManterContratoParcelamentoClienteActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.ExibirManterContratoParcelamentoClienteAction"
+			path="/exibirManterContratoParcelamentoClienteAction">
+			<forward name="exibirManter"
+				path="/jsp/cobranca/contratoparcelamento/contrato_parcelamento_manter.jsp" />
+		</action>
+		
+		<action name="ManterContratoParcelamentoClienteActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.ManterContratoParcelamentoClienteAction"
+			path="/manterContratoParcelamentoClienteAction">
+			<forward name="exibirManter"
+				path="/jsp/cobranca/contratoparcelamento/contrato_parcelamento_manter_geral.jsp" />
+		</action>
+		
+		<action name="InserirContratoParcelamentoPorClienteActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.GerarRelatorioManterContratoParcelamentoPorClienteAction"
+			path="/gerarRelatorioManterContratoParcelamentoPorClienteAction">
+		</action>
+		<!-- FIM [UC1137] Manter Contrato de Parcelamento por Cliente -->
+		
+		<!-- INICIO [UC1141] Emitir Contrato de Parcelamento por Cliente -->
+		<action name="InserirContratoParcelamentoPorClienteActionForm"
+			type="gcom.gui.relatorio.cobranca.contratoparcelamento.GerarRelatorioEmitirContratoParcelamentoPorClienteAction"
+			path="/gerarRelatorioEmitirContratoParcelamentoPorClienteAction">
+		</action>
+		<!-- FIM [UC1141] Emitir Contrato de Parcelamento por Cliente -->
+		
+		
+	</action-mappings>
+	
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

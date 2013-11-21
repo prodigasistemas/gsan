@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.debito.DebitoACobrar" table="faturamento.debito_a_cobrar">
+		<id name="id" type="java.lang.Integer" column="dbac_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="geracaoDebito" type="java.sql.Timestamp" column="dbac_tmatudebito" not-null="true" length="8"/>
+		<property name="anoMesReferenciaDebito" type="java.lang.Integer" column="dbac_amreferenciadebito" length="4"/>
+		<property name="anoMesCobrancaDebito" type="java.lang.Integer" column="dbac_amcobrancadebito" length="4"/>
+		<property name="valorDebito" type="java.math.BigDecimal" column="dbac_vldebito" not-null="true" length="13"/>
+		<property name="numeroPrestacaoDebito" type="short" column="dbac_nnprestacaodebito" not-null="true" length="2"/>
+		<property name="numeroPrestacaoCobradas" type="short" column="dbac_nnprestacaocobradas" not-null="true" length="2"/>
+		<property name="codigoSetorComercial" type="java.lang.Integer" column="dbac_cdsetorcomercial" length="4"/>
+		<property name="numeroQuadra" type="java.lang.Integer" column="dbac_nnquadra" length="4"/>
+		<property name="numeroLote" type="java.lang.Short" column="dbac_nnlote" length="2"/>
+		<property name="numeroSubLote" type="java.lang.Short" column="dbac_nnsublote" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="dbac_tmultimaalteracao" length="8"/>
+		<property name="anoMesReferenciaContabil" type="java.lang.Integer" column="dbac_amreferenciacontabil" not-null="true" length="4"/>
+		<property name="percentualTaxaJurosFinanciamento" type="java.math.BigDecimal" column="dbac_pctaxajurosfinanciamento" length="5"/>
+		<property name="numeroParcelaBonus" type="java.lang.Short" column="dbac_nnparcelabonus" length="2"/>
+		<property name="anoMesReferenciaPrestacao" type="java.lang.Integer" column="dbac_amreferenciaprestacao" length="4"/>
+		<property name="numeroParcelasAntecipadas" type="java.lang.Integer" column="dbac_nnparcelasantecipadas" length="4"/>
+		<property name="dataRevisao" type="java.sql.Date" column="dbac_dtrevisao" length="4"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to DebitoACobrarCategoria -->
+		<set name="debitoACobrarCategorias" lazy="true" inverse="true" cascade="delete">
+			<key>
+				<column name="dbac_id"/>
+			</key>
+			<one-to-many class="gcom.faturamento.debito.DebitoACobrarCategoria"/>
+		</set>
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DocumentoTipo -->
+		<many-to-one name="documentoTipo" class="gcom.cobranca.DocumentoTipo" not-null="true">
+			<column name="dotp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Parcelamento -->
+		<many-to-one name="parcelamento" class="gcom.cobranca.parcelamento.Parcelamento" not-null="true">
+			<column name="parc_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to FinanciamentoTipo -->
+		<many-to-one name="financiamentoTipo" class="gcom.financeiro.FinanciamentoTipo" not-null="true">
+			<column name="fntp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to OrdemServico -->
+		<many-to-one name="ordemServico" class="gcom.atendimentopublico.ordemservico.OrdemServico" not-null="true">
+			<column name="orse_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Quadra -->
+		<many-to-one name="quadra" class="gcom.cadastro.localidade.Quadra" not-null="true">
+			<column name="qdra_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DebitoTipo -->
+		<many-to-one name="debitoTipo" class="gcom.faturamento.debito.DebitoTipo" not-null="true">
+			<column name="dbtp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to RegistroAtendimento -->
+		<many-to-one name="registroAtendimento" class="gcom.atendimentopublico.registroatendimento.RegistroAtendimento" not-null="false">
+			<column name="rgat_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LancamentoItemContabil -->
+		<many-to-one name="lancamentoItemContabil" class="gcom.financeiro.lancamento.LancamentoItemContabil" not-null="true">
+			<column name="lict_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DebitoCreditoSituacao -->
+		<many-to-one name="debitoCreditoSituacaoAnterior" class="gcom.faturamento.debito.DebitoCreditoSituacao" not-null="true">
+			<column name="dcst_idanterior"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DebitoCreditoSituacao -->
+		<many-to-one name="debitoCreditoSituacaoAtual" class="gcom.faturamento.debito.DebitoCreditoSituacao" not-null="true">
+			<column name="dcst_idatual"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ParcelamentoGrupo -->
+		<many-to-one name="parcelamentoGrupo" class="gcom.cobranca.ParcelamentoGrupo" not-null="true">
+			<column name="pcgr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaForma -->
+		<many-to-one name="cobrancaForma" class="gcom.cobranca.CobrancaForma" not-null="true">
+			<column name="cbfm_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-one association to DebitoACobrarGeral -->
+		<one-to-one name="debitoACobrarGeral" class="gcom.faturamento.debito.DebitoACobrarGeral" outer-join="auto" constrained="true"/>
+		<many-to-one name="debitoACobrarGeralOrigem" class="gcom.faturamento.debito.DebitoACobrarGeral" not-null="false">
+			<column name="dbac_idorigem"/>
+		</many-to-one>
+		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario" not-null="false">
+			<column name="usur_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ContaMotivoRevisao -->
+		<many-to-one name="contaMotivoRevisao" class="gcom.faturamento.conta.ContaMotivoRevisao" not-null="false">
+			<column name="cmrv_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

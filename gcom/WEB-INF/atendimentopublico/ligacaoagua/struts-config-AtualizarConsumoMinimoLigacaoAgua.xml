@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean 
+		    name="AtualizarConsumoMinimoLigacaoAguaActionForm"
+			type="gcom.gui.atendimentopublico.ligacaoagua.AtualizarConsumoMinimoLigacaoAguaActionForm"/> 
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+				
+			
+		<action name="AtualizarConsumoMinimoLigacaoAguaActionForm"  
+			type="gcom.gui.atendimentopublico.ligacaoagua.ExibirAtualizarConsumoMinimoLigacaoAguaAction" 
+			validate="true"
+			scope="session"
+			path="/exibirAtualizarConsumoMinimoLigacaoAguaAction">
+			<forward name="atualizarConsumoMinimoLigacaoAgua"
+			path="/jsp/atendimentopublico/ligacaoagua/ligacao_agua_consumo_minimo_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarConsumoMinimoLigacaoAguaActionForm"
+			type="gcom.gui.atendimentopublico.ligacaoagua.AtualizarConsumoMinimoLigacaoAguaAction"
+			validate="true" scope="session"
+			path="/atualizarConsumoMinimoLigacaoAguaAction">
+			
+			<forward name="encerrarOrdemServicoAction"
+				path="/encerrarOrdemServicoAction.do" />
+				
+			<forward name="encerrarOrdemServicoPopupAction"
+				path="/encerrarOrdemServicoPopupAction.do" />
+		</action>
+ 
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

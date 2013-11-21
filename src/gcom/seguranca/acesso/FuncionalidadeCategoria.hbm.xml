@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+		Created by the Middlegen Hibernate plugin 2.1
+		
+		http://boss.bekk.no/boss/middlegen/
+		http://www.hibernate.org/
+	-->
+	<class name="gcom.seguranca.acesso.FuncionalidadeCategoria" table="seguranca.funcionalidade_categoria">
+		<id name="id" type="java.lang.Integer" column="fncg_id">
+			<generator class="sequence">
+				<param name="sequence">
+					seguranca.seq_funcionalidade_categoria</param>
+			</generator>
+		</id>
+		<property name="nome" type="java.lang.String" column="fncg_dsfuncionalidadecategoria" length="40"/>
+		<property name="numeroOrdemMenu" type="java.lang.Long" column="fncg_nnordem" length="2"/>
+		<property name="indicadorUso" type="java.lang.Short" column="fncg_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="fncg_tmultimaalteracao" length="8"/>
+		<many-to-one name="funcionalidadeCategoriaSuperior" class="gcom.seguranca.acesso.FuncionalidadeCategoria" not-null="true">
+			<column name="fncg_idsuperior"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Modulo -->
+		<many-to-one name="modulo" class="gcom.seguranca.acesso.Modulo" not-null="true" lazy="false">
+			<column name="modu_id"/>
+		</many-to-one>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to Funcionalidade -->
+		<set name="elementos" lazy="false" inverse="true" cascade="all">
+			<key>
+				<column name="fncg_idsuperior"/>
+			</key>
+			<one-to-many class="gcom.seguranca.acesso.FuncionalidadeCategoria"/>
+		</set>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="AlterarTipoCorteActionForm"
+			type="gcom.gui.atendimentopublico.AlterarTipoCorteActionForm" />
+	</form-beans>
+
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="AlterarTipoCorteActionForm"
+			type="gcom.gui.atendimentopublico.ExibirAlterarTipoCorteAction"
+			validate="true" 
+			path="/exibirAlterarTipoCorteAction">
+			
+			<forward name="exibirAlterarTipoCorteAction" 
+				path="/jsp/atendimentopublico/ligacaoagua/ligacao_agua_cortar_atualizar.jsp"/>
+				
+		</action>
+		
+		<action name="AlterarTipoCorteActionForm"
+			type="gcom.gui.atendimentopublico.AlterarTipoCorteAction"
+			validate="true" 
+			path="/alterarTipoCorteAction">
+			
+			<forward name="encerrarOrdemServicoAction"
+				path="/encerrarOrdemServicoAction.do" />
+				
+			<forward name="encerrarOrdemServicoPopupAction"
+				path="/encerrarOrdemServicoPopupAction.do" />
+			
+			
+		</action>		
+		 
+	</action-mappings>
+
+</struts-config>

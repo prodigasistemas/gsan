@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarContratoDemandaActionForm"
+			type="gcom.gui.faturamento.FiltrarContratoDemandaActionForm" />
+			
+		
+			
+	</form-beans>
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+			<action name="FiltrarContratoDemandaActionForm" 
+			type="gcom.gui.faturamento.ExibirFiltrarContratoDemandaAction"
+			validate="false" scope="session" path="/exibirFiltrarContratoDemandaAction">
+			<forward name="exibirFiltrarContratoDemanda"
+				path="/jsp/faturamento/contrato_demanda_filtrar.jsp" />
+		</action>
+		
+	<action name="FiltrarContratoDemandaActionForm" 
+			type="gcom.gui.faturamento.FiltrarContratoDemandaAction"
+			validate="false" scope="session" path="/filtrarContratoDemandaAction">
+			<forward name="exibirManterContratoDemanda"
+				path="/exibirManterContratoDemandaAction.do" /> 
+		</action>
+		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

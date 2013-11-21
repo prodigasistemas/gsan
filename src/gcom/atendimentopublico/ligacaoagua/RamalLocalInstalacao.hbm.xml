@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+        Auto-generated mapping file from
+        the hibernate.org cfg2hbm engine
+-->
+	<class name="gcom.atendimentopublico.ligacaoagua.RamalLocalInstalacao" table="ramal_local_instalacao" schema="atendimentopublico">
+		<id name="id" type="java.lang.Integer" column="rlin_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_ramal_local_instalacao</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="rlin_dsramallocalinstalcao" length="30"/>
+		<property name="descricaoAbreviado" type="java.lang.String" column="rlin_dsabreviado" length="10"/>
+		<property name="indicadorUso" type="short" column="rlin_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="rlin_tmultimaalteracao" length="8" not-null="true"/>
+	</class>
+</hibernate-mapping>

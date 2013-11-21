@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarHidrometroMarcaActionForm"
+			type="gcom.gui.micromedicao.hidrometro.FiltrarHidrometroMarcaActionForm" />
+			
+			
+			
+	</form-beans>
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarHidrometroMarcaActionForm"
+			type="gcom.gui.micromedicao.hidrometro.ExibirFiltrarHidrometroMarcaAction" validate="true" scope="session" 
+			path="/exibirFiltrarHidrometroMarcaAction">
+			<forward name="filtrarHidrometroMarca"
+				path="/jsp/micromedicao/hidrometro/hidrometro_marca_filtrar.jsp" />
+		</action>
+		
+		<action name="FiltrarHidrometroMarcaActionForm" 
+			type="gcom.gui.micromedicao.hidrometro.FiltrarHidrometroMarcaAction" validate="true" scope="session" 
+			path="/filtrarHidrometroMarcaAction">
+			<forward name="exibirManterHidrometroMarca" path="/exibirManterHidrometroMarcaAction.do" /> 
+		</action>
+		
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

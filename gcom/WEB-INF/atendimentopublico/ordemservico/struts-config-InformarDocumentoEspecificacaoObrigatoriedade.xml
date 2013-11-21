@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="ExibirInformarSolicitacaoDocumentoObrigatorioActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirInformarSolicitacaoDocumentoObrigatorioActionForm" />
+			
+	</form-beans>
+
+	<global-forwards/>
+
+	<action-mappings>
+
+		<action name="ExibirInformarSolicitacaoDocumentoObrigatorioActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirInformarSolicitacaoDocumentoObrigatorioAction"
+			validate="true" scope="session"
+			path="/exibirInformarSolicitacaoDocumentoObrigatorioAction">
+			<forward name="exibirInformarSolicitacaoDocumentoObrigatorioAction"
+				path="/jsp/atendimentopublico/ordemservico/documento_especificacao_obrigatoriedade_informar.jsp"/>
+		</action>
+
+		<action name="ExibirInformarSolicitacaoDocumentoObrigatorioActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.InformarSolicitacaoDocumentoObrigatorioAction"
+			validate="false" scope="session"
+			path="/informarSolicitacaoDocumentoObrigatorioAction">
+
+		</action>
+		
+	</action-mappings>
+
+	<message-resources null="false" parameter="gcom.properties.application" />
+
+</struts-config>

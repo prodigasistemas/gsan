@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="ManterCobrancaSituacaoActionForm"
+			type="gcom.gui.cobranca.ManterCobrancaSituacaoActionForm" />
+		<form-bean name="AtualizarCobrancaSituacaoActionForm"
+			type="gcom.gui.cobranca.AtualizarCobrancaSituacaoActionForm" />
+		<form-bean name="FiltrarCobrancaSituacaoActionForm"
+			type="gcom.gui.cobranca.FiltrarCobrancaSituacaoActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.cobranca.ExibirManterCobrancaSituacaoAction"
+			validate="false" scope="session"
+			path="/exibirManterCobrancaSituacaoAction">
+
+			<forward name="exibirManterCobrancaSituacao"
+				path="/jsp/cobranca/cobranca_situacao_manter.jsp" />
+
+			<forward name="exibirAtualizarCobrancaSituacao"
+				path="/exibirAtualizarCobrancaSituacaoAction.do" />
+		</action>
+
+		<action name="AtualizarCobrancaSituacaoActionForm"
+			type="gcom.gui.cobranca.ExibirAtualizarCobrancaSituacaoAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarCobrancaSituacaoAction">
+
+			<forward name="cobrancaSituacaoAtualizar"
+				path="/jsp/cobranca/cobranca_situacao_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarCobrancaSituacaoActionForm"
+			type="gcom.gui.cobranca.AtualizarCobrancaSituacaoAction"
+			validate="true" scope="session"
+			path="/atualizarCobrancaSituacaoAction">
+
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.cobranca.RemoverCobrancaSituacaoAction"
+			 scope="request" path="/removerCobrancaSituacaoAction">
+
+		</action>
+		
+		<action name="FiltrarCobrancaSituacaoActionForm"
+			type="gcom.gui.relatorio.cobranca.GerarRelatorioCobrancaSituacaoManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioCobrancaSituacaoManterAction" />
+		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

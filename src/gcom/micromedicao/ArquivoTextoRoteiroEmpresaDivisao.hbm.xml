@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.micromedicao.ArquivoTextoRoteiroEmpresaDivisao" table="micromedicao.arq_txt_roteiro_emp_div">
+		<id name="id" type="java.lang.Integer" column="tred_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_arq_txt_roteiro_emp_div</param>
+			</generator>
+		</id>
+		<property name="quantidadeImovel" type="java.lang.Integer" column="tred_qtimovel" not-null="true" length="4"/>
+		<property name="arquivoTexto" type="binary" column="tred_artextoparte" not-null="true" length="-1"/>
+		<property name="nomeArquivo" type="java.lang.String" column="tred_nmarquivo" not-null="true" length="40"/>
+		<property name="numeroSequenciaArquivo" type="java.lang.Integer" column="tred_nnsequencialarq" not-null="true" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="tred_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="numeroImei" type="java.lang.Long" column="tred_nnimei" not-null="false" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to SituacaoTransmissaoLeitura -->
+		<many-to-one name="situacaoTransmissaoLeitura" class="gcom.micromedicao.SituacaoTransmissaoLeitura" not-null="true">
+			<column name="sitl_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ArquivoTextoRoteiroEmpresa -->
+		<many-to-one name="arquivoTextoRoteiroEmpresa" class="gcom.micromedicao.ArquivoTextoRoteiroEmpresa" not-null="true">
+			<column name="txre_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Leiturista -->
+		<many-to-one name="leiturista" class="gcom.micromedicao.Leiturista" not-null="false">
+			<column name="leit_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

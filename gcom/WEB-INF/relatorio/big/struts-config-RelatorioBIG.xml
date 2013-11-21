@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="RelatorioBIGActionForm"
+			type="gcom.gui.relatorio.big.RelatorioBIGActionForm" />					
+	</form-beans>
+
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+
+		<action name="RelatorioBIGActionForm"
+			type="gcom.gui.relatorio.big.ExibirGerarRelatorioBIGAction"
+			validate="false"
+			scope="session"
+			path="/exibirGerarRelatorioBIG">
+			<forward name="exibirGerarRelatorioBIG"
+				path="/jsp/relatorio/big/gerar_relatorio_big.jsp" />
+		</action>
+		
+		<action name="RelatorioBIGActionForm"
+				type="gcom.gui.relatorio.big.GerarRelatorioBIGAction"
+				validate="false" 
+				scope="session"
+				path="/gerarRelatorioBIGAction">
+		</action>
+
+	</action-mappings>
+
+</struts-config>

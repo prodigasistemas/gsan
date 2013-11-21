@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="ManterFonteAbastecimentoActionForm"
+			type="gcom.gui.cadastro.ManterFonteAbastecimentoActionForm" />
+		<form-bean name="AtualizarFonteAbastecimentoActionForm"
+			type="gcom.gui.cadastro.AtualizarFonteAbastecimentoActionForm" />
+		<form-bean name="FiltrarFonteAbastecimentoActionForm"
+			type="gcom.gui.cadastro.FiltrarFonteAbastecimentoActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.cadastro.ExibirManterFonteAbastecimentoAction"
+			validate="false" scope="session"
+			path="/exibirManterFonteAbastecimentoAction">
+
+			<forward name="exibirManterFonteAbastecimento"
+				path="/jsp/cadastro/fonte_abastecimento_manter.jsp" />
+
+			<forward name="exibirAtualizarFonteAbastecimento"
+				path="/exibirAtualizarFonteAbastecimentoAction.do" />
+		</action>
+
+		<action name="AtualizarFonteAbastecimentoActionForm"
+			type="gcom.gui.cadastro.ExibirAtualizarFonteAbastecimentoAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarFonteAbastecimentoAction">
+
+			<forward name="fonteAbastecimentoAtualizar"
+				path="/jsp/cadastro/fonte_abastecimento_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarFonteAbastecimentoActionForm"
+			type="gcom.gui.cadastro.AtualizarFonteAbastecimentoAction"
+			validate="true" scope="session"
+			path="/atualizarFonteAbastecimentoAction">
+
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.cadastro.RemoverFonteAbastecimentoAction"
+			 scope="request" path="/removerFonteAbastecimentoAction">
+
+		</action>
+		
+		<action name="FiltrarFonteAbastecimentoActionForm"
+			type="gcom.gui.relatorio.cadastro.GerarRelatorioFonteAbastecimentoManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioFonteAbastecimentoManterAction" />
+		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

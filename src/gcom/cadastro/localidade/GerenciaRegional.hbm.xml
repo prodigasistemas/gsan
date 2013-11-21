@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.localidade.GerenciaRegional" table="cadastro.gerencia_regional">
+		<id name="id" type="java.lang.Integer" column="greg_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_gerencia_regional</param>
+			</generator>
+		</id>
+		<property name="nome" type="java.lang.String" column="greg_nmregional" not-null="true" length="25"/>
+		<property name="nomeAbreviado" type="java.lang.String" column="greg_nmabreviado" not-null="true" length="3"/>
+		<property name="numeroImovel" type="java.lang.String" column="greg_nnimovel" length="5"/>
+		<property name="complementoEndereco" type="java.lang.String" column="greg_dscomplementoendereco" length="25"/>
+		<property name="fone" type="java.lang.String" column="greg_nnfone" length="9"/>
+		<property name="ramalFone" type="java.lang.String" column="greg_nnfoneramal" length="4"/>
+		<property name="fax" type="java.lang.String" column="greg_nnfax" length="9"/>
+		<property name="email" type="java.lang.String" column="greg_dsemail" length="40"/>
+		<property name="indicadorUso" type="java.lang.Short" column="greg_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="greg_tmultimaalteracao" length="8"/>
+		<property name="cnpjGerenciaRegional" type="java.lang.String" column="greg_nncnpj" length="14"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to Logradouro -->
+		<many-to-one name="logradouro" class="gcom.cadastro.endereco.Logradouro" not-null="false">
+			<column name="logr_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to Localidade
+    <set
+        name="localidades"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="greg_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Localidade"
+        />
+    </set>
+    -->
+		<!-- bi-directional many-to-one association to Bairro -->
+		<many-to-one name="bairro" class="gcom.cadastro.geografico.Bairro" not-null="true">
+			<column name="bair_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to EnderecoReferencia -->
+		<many-to-one name="enderecoReferencia" class="gcom.cadastro.endereco.EnderecoReferencia" not-null="true">
+			<column name="edrf_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Cep -->
+		<many-to-one name="cep" class="gcom.cadastro.endereco.Cep" not-null="true">
+			<column name="cep_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LogradouroCep -->
+		<many-to-one name="logradouroCep" class="gcom.cadastro.endereco.LogradouroCep" not-null="true">
+			<column name="lgcp_id"/>
+		</many-to-one>
+		<many-to-one name="logradouroBairro" class="gcom.cadastro.endereco.LogradouroBairro" not-null="true">
+			<column name="lgbr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Cliente -->
+		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="true">
+			<column name="clie_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

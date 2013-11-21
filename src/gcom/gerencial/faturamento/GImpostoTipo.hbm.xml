@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.gerencial.faturamento.GImpostoTipo" table="faturamento.g_imposto_tipo">
+		<id name="id" type="java.lang.Integer" column="imtp_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="descricaoImposto" type="java.lang.String" column="imtp_dsimposto" not-null="true" length="50"/>
+		<property name="descricaoAbreviadaImposto" type="java.lang.String" column="imtp_dsabreviadaimposto" not-null="true" length="10"/>
+		<property name="indicadorUso" type="short" column="imtp_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="imtp_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="GerarRelatorioImoveisUltimosConsumosAguaActionForm"
+			type="gcom.gui.relatorio.cadastro.imovel.GerarRelatorioImoveisUltimosConsumosAguaActionForm" />
+	</form-beans>
+
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="GerarRelatorioImoveisUltimosConsumosAguaActionForm"
+			type="gcom.gui.relatorio.cadastro.imovel.ExibirGerarRelatorioImoveisUltimosConsumosAguaAction"
+			validate="true" 
+			path="/exibirGerarRelatorioImoveisUltimosConsumosAguaAction">
+			
+			<forward name="exibirGerarRelatorioImoveisUltimosConsumosAgua" 
+				path="/jsp/relatorio/cadastro/relatorio_imoveis_ultimos_consumos_agua_gerar.jsp" />
+				
+		</action>
+		
+		<action name="GerarRelatorioImoveisUltimosConsumosAguaActionForm"
+			type="gcom.gui.relatorio.cadastro.imovel.GerarRelatorioImoveisUltimosConsumosAguaAction"
+			validate="true" 
+			path="/gerarRelatorioImoveisUltimosConsumosAguaAction" />		
+		
+	</action-mappings>
+
+</struts-config>

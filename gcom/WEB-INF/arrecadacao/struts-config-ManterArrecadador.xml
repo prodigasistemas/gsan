@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="ManterArrecadadorActionForm"
+			type="gcom.gui.arrecadacao.ManterArrecadadorActionForm" />
+
+		<form-bean name="AtualizarArrecadadorActionForm"
+			type="gcom.gui.arrecadacao.AtualizarArrecadadorActionForm" />
+
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+		<action name="ManterArrecadadorActionForm"
+			type="gcom.gui.arrecadacao.ExibirManterArrecadadorAction"
+			validate="false" scope="session"
+			path="/exibirManterArrecadadorAction">
+
+			<forward name="manterArrecadador"
+				path="/jsp/arrecadacao/arrecadador_manter.jsp" />
+
+			<forward name="exibirAtualizarArrecadador"
+				path="/exibirAtualizarArrecadadorAction.do" />
+		</action>
+
+		<action name="AtualizarArrecadadorActionForm"
+			type="gcom.gui.arrecadacao.ExibirAtualizarArrecadadorAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarArrecadadorAction">
+
+			<forward name="atualizarArrecadador"
+				path="/jsp/arrecadacao/arrecadador_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarArrecadadorActionForm"
+			type="gcom.gui.arrecadacao.AtualizarArrecadadorAction"
+			validate="false" scope="session"
+			path="/atualizarArrecadadorAction">
+
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.arrecadacao.RemoverArrecadadorAction"
+			validate="false" scope="session" path="/removerArrecadadorAction">
+
+		</action>
+		
+		<action name="FiltrarArrecadadorActionForm"
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioManterArrecadadorAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioManterArrecadadorAction" />
+			
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

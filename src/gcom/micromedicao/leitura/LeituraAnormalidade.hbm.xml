@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.micromedicao.leitura.LeituraAnormalidade" table="micromedicao.leitura_anormalidade">
+		<id name="id" type="java.lang.Integer" column="ltan_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_leitura_anormalidade</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="ltan_dsleituraanormalidade" not-null="true" length="25"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="ltan_dsabrevleituraanormalidad" not-null="true" length="5"/>
+		<property name="indicadorRelativoHidrometro" type="short" column="ltan_icrelativohidrometro" not-null="true" length="2"/>
+		<property name="indicadorImovelSemHidrometro" type="java.lang.Short" column="ltan_icimovelsemhidrometro" length="2"/>
+		<property name="indicadorSistema" type="java.lang.Short" column="ltan_icusosistema" length="2"/>
+		<property name="indicadorEmissaoOrdemServico" type="short" column="ltan_icemissaoordemservico" not-null="true" length="2"/>
+		<property name="indicadorUso" type="java.lang.Short" column="ltan_icuso" length="2"/>
+		<property name="numeroFatorSemLeitura" type="java.math.BigDecimal" column="ltan_nnfatorsemleitura" length="3"/>
+		<property name="numeroFatorComLeitura" type="java.math.BigDecimal" column="ltan_nnfatorcomleitura" not-null="true" length="3"/>
+		<property name="indicadorLeitura" type="java.lang.Short" column="ltan_icleitura" not-null="true" length="2"/>
+		<property name="numeroMesesLeituraSuspensa" type="java.lang.Integer" column="ltan_nnmesesleiturasuspensa" length="2" />
+		<property name="numeroVezesSuspendeLeitura" type="java.lang.Integer" column="ltan_nnvezessuspendeleitura" length="2" />
+		
+		<!--
+    <property
+        name="servCdservico"
+        type="java.lang.Short"
+        column="serv_cdservico"
+        length="2"
+    />
+ -->
+		<property name="indicadorPerdaTarifaSocial" type="java.lang.Short" column="ltan_icperdatarifasocial" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ltan_tmultimaalteracao" length="8"/>
+		
+		<property name="indicadorImpressaoSimultanea" type="java.lang.Short" column="ltan_icimpressaosimultanea" not-null="true" length="2"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to Imovel
+    <set
+        name="imovels"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="ltan_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Imovel"
+        />
+    </set>
+     bi-directional one-to-many association to MedicaoHistorico
+    <set
+        name="medicaoHistoricosByLtanCdleituraanormalidadefaturamento"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="ltan_cdleituraanormalidadefaturamento" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.MedicaoHistorico"
+        />
+    </set>
+     bi-directional one-to-many association to MedicaoHistorico
+    <set
+        name="medicaoHistoricosByLtanCdleituraanormalidadeinformada"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="ltan_cdleituraanormalidadeinformada" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.MedicaoHistorico"
+        />
+    </set>
+     bi-directional one-to-many association to LeituraFiscalizacao
+    <set
+        name="leituraFiscalizacaos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="anlt_cdanormalidadeleituracompesa" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.LeituraFiscalizacao"
+        />
+    </set>
+     bi-directional many-to-one association to LeituraAnormalidadeLeitura -->
+		<many-to-one name="leituraAnormalidadeLeituraComleitura" class="gcom.micromedicao.leitura.LeituraAnormalidadeLeitura" not-null="true">
+			<column name="lalt_idleitafaturarcomleit"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LeituraAnormalidadeLeitura -->
+		<many-to-one name="leituraAnormalidadeLeituraSemleitura" class="gcom.micromedicao.leitura.LeituraAnormalidadeLeitura" not-null="true">
+			<column name="lalt_idleitafaturarsemleit"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LeituraAnormalidadeConsumo -->
+		<many-to-one name="leituraAnormalidadeConsumoComleitura" class="gcom.micromedicao.leitura.LeituraAnormalidadeConsumo" not-null="true">
+			<column name="lacs_idconsacobrarcomleit"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LeituraAnormalidadeConsumo -->
+		<many-to-one name="leituraAnormalidadeConsumoSemleitura" class="gcom.micromedicao.leitura.LeituraAnormalidadeConsumo" not-null="true">
+			<column name="lacs_idconsacobrarsemleit"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LeituraAnormalidadeConsumo -->
+		<many-to-one name="servicoTipo" class="gcom.atendimentopublico.ordemservico.ServicoTipo" not-null="false">
+			<column name="svtp_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

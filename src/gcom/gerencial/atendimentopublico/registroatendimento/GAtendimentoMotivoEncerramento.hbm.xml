@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.gerencial.atendimentopublico.registroatendimento.GAtendimentoMotivoEncerramento" table="atendimentopublico.g_atend_motivo_encmt">
+		<id name="id" type="java.lang.Integer" column="amen_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="descricao" type="java.lang.String" column="amen_dsmotivoencerramento" length="50"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="amen_dsabreviado" length="8"/>
+		<property name="indicadorUso" type="short" column="amen_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="amen_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="indicadorExecucao" type="short" column="amen_icexecucao" not-null="true" length="2"/>
+		<property name="indicadorDuplicidade" type="short" column="amen_icduplicidade" not-null="true" length="2"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to UnResumoRegistroAtendimento -->
+		<set name="unResumoRegistroAtendimentos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="amen_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.atendimentopublico.registroatendimento.UnResumoRegistroAtendimento"/>
+		</set>
+	</class>
+</hibernate-mapping>

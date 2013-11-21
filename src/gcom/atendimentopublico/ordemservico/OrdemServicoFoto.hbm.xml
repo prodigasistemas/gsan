@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="gcom.atendimentopublico.ordemservico.OrdemServicoFoto" table="atendimentopublico.ordem_servico_foto">
+		<id name="id" type="java.lang.Integer" column="osft_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_ordem_servico_foto</param>
+			</generator>
+		</id>
+		
+		<many-to-one name="ordemServico" class="gcom.atendimentopublico.ordemservico.OrdemServico" not-null="true">
+			<column name="orse_id"/>
+		</many-to-one>
+		
+		<many-to-one name="fotoSituacao" class="gcom.atendimentopublico.ordemservico.FotoSituacaoOrdemServico">
+			<column name="fsos_id"/>
+		</many-to-one>
+		
+		<property name="dataFoto" type="java.sql.Timestamp" column="osft_dtfoto" not-null="false" length="6"/>
+		<property name="descricaoFoto" type="java.lang.String" column="osft_dsfoto" length="90"/>
+		<property name="fotoOrdemServico" type="binary" column="osft_imfoto" length="-1" not-null="true"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="osft_tmultimaalteracao" not-null="true" length="6"/>
+	</class>
+</hibernate-mapping>

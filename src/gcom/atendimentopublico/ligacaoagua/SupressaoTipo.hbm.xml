@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.atendimentopublico.ligacaoagua.SupressaoTipo" table="atendimentopublico.supressao_tipo">
+		<id name="id" type="java.lang.Integer" column="stip_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_supressao_tipo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="stip_dssupressaotipo" length="30"/>
+		<property name="indicadorUso" type="java.lang.Short" column="stip_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="stip_tmultimaalteracao" length="8"/>
+		<property name="indicadorTotal" type="short" column="stip_ictotal" not-null="true" length="2"/>
+		<property name="indicadorParcial" type="short" column="stip_icparcial" not-null="true" length="2"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to LigacaoAgua
+    <set
+        name="ligacaoAguas"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="stip_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.LigacaoAgua"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

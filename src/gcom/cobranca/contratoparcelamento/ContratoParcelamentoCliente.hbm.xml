@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.contratoparcelamento.ContratoParcelamentoCliente" table="cobranca.contrato_parcel_cliente" >
+		<id name="id" type="java.lang.Integer" column="cpcl_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_contrato_parcel_cliente</param>
+			</generator>
+		</id>
+		
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cpcl_TMULTIMAALTERACAO" length="8"/>
+		
+		<property name="indicadorClienteSuperior" type="java.lang.Short" column="cpcl_icclientesuperior" length="2"/>
+		
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to FormaPagamento -->
+		<many-to-one name="contrato" class="gcom.cobranca.contratoparcelamento.ContratoParcelamento" not-null="true">
+			<column name="cpar_id"/>
+		</many-to-one>
+		
+		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="true">
+			<column name="clie_id"/>
+		</many-to-one>
+		
+		<many-to-one name="clienteSuperior" class="gcom.cobranca.contratoparcelamento.ContratoParcelamentoCliente" not-null="false">
+			<column name="cpcl_idsuperior"/>
+		</many-to-one>
+		
+		
+	</class>
+</hibernate-mapping>

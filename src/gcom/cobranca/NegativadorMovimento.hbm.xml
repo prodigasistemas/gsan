@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.cobranca.NegativadorMovimento" table="cobranca.negativador_movimento">
+		<id name="id" type="java.lang.Integer" column="ngmv_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_negativador_movimento</param>
+			</generator>
+		</id>
+		<property name="codigoMovimento" type="short" column="ngmv_cdmovimento" not-null="true" length="2"/>
+		<property name="dataEnvio" type="java.sql.Date" column="ngmv_dtenvio" length="4"/>
+		<property name="dataProcessamentoEnvio" type="java.sql.Date" column="ngmv_dtprocessamentoenvio" not-null="true" length="4"/>
+		<property name="dataRetorno" type="java.sql.Date" column="ngmv_dtretorno" length="4"/>
+		<property name="dataProcessamentoRetorno" type="java.sql.Date" column="ngmv_dtprocessamentoretorno" length="4"/>
+		<property name="numeroSequencialEnvio" type="java.lang.Integer" column="ngmv_nnnsaenvio" length="4"/>
+		<property name="numeroSequencialRetorno" type="java.lang.Integer" column="ngmv_nnnsaretorno" length="4"/>
+		<property name="numeroRegistrosEnvio" type="java.lang.Integer" column="ngmv_nnregistrosenvio" length="4"/>
+		<property name="numeroRegistrosRetorno" type="java.lang.Integer" column="ngmv_nnregistrosretorno" length="4"/>
+		<property name="valorTotalEnvio" type="java.math.BigDecimal" column="ngmv_vltotalenvio" length="15"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ngmv_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Negativador -->
+		<many-to-one name="negativador" class="gcom.cobranca.Negativador" not-null="true">
+			<column name="negt_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to NegativacaoComando -->
+		<many-to-one name="negativacaoComando" class="gcom.cobranca.NegativacaoComando" not-null="false">
+			<column name="ngcm_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to NegativadorMovimentoReg -->
+		<set name="negativadorMovimentoReg" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="ngmv_id"/>
+			</key>
+			<one-to-many class="gcom.cobranca.NegativadorMovimentoReg"/>
+		</set>
+	</class>
+</hibernate-mapping>

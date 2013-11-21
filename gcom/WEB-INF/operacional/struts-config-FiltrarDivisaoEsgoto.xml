@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarDivisaoEsgotoActionForm"
+			type="gcom.gui.operacional.FiltrarDivisaoEsgotoActionForm" />
+
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarDivisaoEsgotoActionForm"  
+			type="gcom.gui.operacional.ExibirFiltrarDivisaoEsgotoAction" 
+			validate="false"
+			scope="session"
+			path="/exibirFiltrarDivisaoEsgotoAction">
+
+			<forward name="filtrarDivisaoEsgoto"
+			path="/jsp/operacional/divisao_esgoto_filtrar.jsp" />
+
+		</action>
+
+		<action name="FiltrarDivisaoEsgotoActionForm"
+			type="gcom.gui.operacional.FiltrarDivisaoEsgotoAction"
+			validate="true" 
+			scope="session"
+			path="/filtrarDivisaoEsgotoAction">
+			
+			<forward name="exibirManterDivisaoEsgoto"
+				path="/exibirManterDivisaoEsgotoAction.do" />
+			
+			
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>
+

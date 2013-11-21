@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="GerarRelatorioBoletimOrdensServicoConcluidasActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.GerarRelatorioBoletimOrdensServicoConcluidasActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	
+	<action-mappings>
+		<action name="GerarRelatorioBoletimOrdensServicoConcluidasActionForm"  
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirFiltrarRelatorioBoletimOrdensServicoConcluidasAction" 
+			validate="true"	
+			scope="session"	
+			path="/exibirFiltrarRelatorioBoletimOrdensServicoConcluidasAction">
+			
+			<forward
+				name="exibirFiltrarRelatorioBoletimOrdensServicoConcluidasAction"
+				path="/jsp/atendimentopublico/ordemservico/filtro_relatorio_boletim_ordens_servico_concluidas.jsp" />
+		</action>
+		
+		<action name="GerarRelatorioBoletimOrdensServicoConcluidasActionForm"  
+			type="gcom.gui.relatorio.atendimentopublico.GerarRelatorioBoletimOrdensServicoConcluidasAction" 
+			validate="true"	
+			scope="session"	
+			path="/gerarRelatorioBoletimOrdensServicoConcluidasAction">
+		</action>
+	</action-mappings>
+</struts-config>

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.debito.DebitoACobrarCategoria" table="faturamento.deb_a_cobrar_catg">
+		<composite-id name="comp_id" class="gcom.faturamento.debito.DebitoACobrarCategoriaPK">
+			<!-- bi-directional many-to-one association to DebitoACobrar -->
+			<key-many-to-one name="debitoACobrar" class="gcom.faturamento.debito.DebitoACobrar">
+				<column name="dbac_id"/>
+			</key-many-to-one>
+			<!-- bi-directional many-to-one association to Categoria -->
+			<key-many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria">
+				<column name="catg_id"/>
+			</key-many-to-one>
+		</composite-id>
+		<property name="quantidadeEconomia" type="java.lang.Integer" column="dbcg_qteconomia" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="dbcg_tmultimaalteracao" length="8"/>
+		<property name="valorCategoria" type="java.math.BigDecimal" column="dbcg_vlcategoria" length="13"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to DebitoACobrar -->
+		<many-to-one name="debitoACobrar" class="gcom.faturamento.debito.DebitoACobrar" update="false" insert="false">
+			<column name="dbac_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Categoria -->
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" update="false" insert="false">
+			<column name="catg_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

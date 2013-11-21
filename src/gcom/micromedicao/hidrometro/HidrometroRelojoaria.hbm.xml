@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.micromedicao.hidrometro.HidrometroRelojoaria" table="micromedicao.hidrometro_relojoaria">
+		<id name="id" type="java.lang.Integer" column="hire_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_hidrometro_relojoaria</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="hire_dsrelojoaria" length="20"/>
+		<property name="indicadorUso" type="java.lang.Short" column="hire_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="hire_tmultimaalteracao" length="8"/>
+	</class>
+</hibernate-mapping>

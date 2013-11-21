@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.micromedicao.RoteiroEmpresa" table="micromedicao.roteiro_empresa">
+		<id name="id" type="java.lang.Integer" column="roem_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_roteiro_empresa</param>
+			</generator>
+		</id>
+		<property name="indicadorUso" type="java.lang.Short" column="roem_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="roem_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Empresa -->
+		<many-to-one name="empresa" class="gcom.cadastro.empresa.Empresa" not-null="true">
+			<column name="empr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Leiturista -->
+		<many-to-one name="leiturista" class="gcom.micromedicao.Leiturista" not-null="true">
+			<column name="leit_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="GerarRelatorioGestaoServicosUPAActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.GerarRelatorioGestaoServicosUPAActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	
+	<action-mappings>
+		<action name="GerarRelatorioGestaoServicosUPAActionForm"  
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirGerarRelatorioGestaoServicosUPAAction" 
+			validate="true"	
+			scope="session"	
+			path="/exibirGerarRelatorioGestaoServicosUPAAction">
+			<forward name="exibirGerarRelatorioGestaoServicosUPAAction" path="/jsp/atendimentopublico/ordemservico/ordem_servico_gestao_servicos_upa.jsp" />
+		</action>
+		
+		<action name="GerarRelatorioGestaoServicosUPAActionForm" 
+			type="gcom.gui.relatorio.atendimentopublico.GerarRelatorioGestaoServicosUPAAction" 
+			validate="true"	
+			scope="session"	
+			path="/gerarRelatorioGestaoServicosUPAAction">
+		</action>
+	</action-mappings>
+	
+</struts-config>

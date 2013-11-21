@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.ordemservico.ProgramacaoRoteiro" table="atendimentopublico.programacao_roteiro">
+		<id name="id" type="java.lang.Integer" column="pgrt_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_programacao_roteiro</param>
+			</generator>
+		</id>
+		<property name="dataRoteiro" type="java.sql.Timestamp" column="pgrt_tmroteiro" not-null="true" length="8"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="pgrt_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Unidade Organizacional -->
+		<many-to-one name="unidadeOrganizacional" class="gcom.cadastro.unidade.UnidadeOrganizacional" not-null="true">
+			<column name="unid_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Usuario 
+    <many-to-one
+        name="usuarioFechamento"
+        class="gcom.seguranca.acesso.usuario.Usuario"
+        not-null="true"
+    >
+        <column name="usur_idfechamento" />
+    </many-to-one>
+    -->
+		<!-- bi-directional many-to-one association to Usuario 
+    <many-to-one
+        name="usuarioElaboracao"
+        class="gcom.seguranca.acesso.usuario.Usuario"
+        not-null="true"
+    >
+        <column name="usur_idelaboracao" />
+    </many-to-one>
+    -->
+		<!-- bi-directional one-to-many association to OsAtividadeProgramacaoRoteiro 
+    <set
+        name="osAtividadeProgramacaoRoteiros"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="pgrt_id" />
+        </key>
+        <one-to-many 
+            class="gcom.OsAtividadeProgramacaoRoteiro"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

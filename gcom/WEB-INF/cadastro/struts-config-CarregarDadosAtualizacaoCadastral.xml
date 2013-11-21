@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action 
+			type="gcom.gui.cadastro.ExibirCarregarDadosAtualizacaoCadastralAction"
+			scope="request" 
+			path="/exibirCarregarDadosAtualizacaoCadastralAction">
+			<forward name="CarregarDadosAtualizacaoCadastralAction"
+				path="/jsp/cadastro/carregar_dados_atualizacao_cadastral.jsp" />
+		</action>
+		
+		<action
+			type="gcom.gui.cadastro.CarregarDadosAtualizacaoCadastralAction"
+			validate="true" 
+			path="/carregarDadosAtualizacaoCadastralAction" />
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

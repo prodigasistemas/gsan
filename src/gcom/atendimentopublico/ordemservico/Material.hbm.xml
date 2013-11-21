@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.ordemservico.Material" table="atendimentopublico.material">
+		<id name="id" type="java.lang.Integer" column="mate_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_material</param>
+			</generator>
+		</id>
+		<property name="codigo" type="java.lang.Integer" column="mate_cdmaterial" not-null="false" />
+		<property name="descricao" type="java.lang.String" column="mate_dsmaterial" not-null="true" length="40"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="mate_dsabreviado" length="5"/>
+		<property name="indicadorUso" type="short" column="mate_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="mate_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- bi-directional many-to-one association to MaterialUnidade -->
+		<many-to-one name="materialUnidade" class="gcom.atendimentopublico.ordemservico.MaterialUnidade" not-null="true">
+			<column name="mtun_id"/>
+		</many-to-one>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to OsAtividadeMaterialExecucao 
+    <set
+        name="osAtividadeMaterialExecucaos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="mate_id" />
+        </key>
+        <one-to-many 
+            class="gcom.OsAtividadeMaterialExecucao"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to ServicoTipoMaterial 
+    <set
+        name="servicoTipoMaterials"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="mate_id" />
+        </key>
+        <one-to-many 
+            class="gcom.ServicoTipoMaterial"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

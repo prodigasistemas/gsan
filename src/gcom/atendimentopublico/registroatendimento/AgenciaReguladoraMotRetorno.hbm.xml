@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.registroatendimento.AgenciaReguladoraMotRetorno" table="atendimentopublico.agen_reg_mot_retorno">
+		<id name="id" type="java.lang.Integer" column="arrt_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_agen_reg_mot_retorno</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="arrt_dsmotivoretornoagenreg" not-null="true" length="50"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="arrt_dsabreviado" length="8"/>
+		<property name="indicadorUso" type="short" column="arrt_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="arrt_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to RaDadosAgenciaReguladora 
+    <set
+        name="raDadosAgenciaReguladoras"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="arrt_id" />
+        </key>
+        <one-to-many 
+            class="gcom.RaDadosAgenciaReguladora"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+
+		<form-bean name="ControlarAcessoUsuarioActionForm" type="gcom.gui.seguranca.acesso.usuario.ControlarAcessoUsuarioActionForm" />
+
+	</form-beans>
+
+	<global-forwards/>
+
+	<action-mappings>
+
+		
+
+		
+		<action name="ControlarAcessoUsuarioActionForm" type="gcom.gui.seguranca.acesso.usuario.ExibirControlarRestrincoesAcessoUsuarioAction"
+			scope="session" path="/exibirControlarRestrincoesAcessoUsuarioAction">
+			<forward name="controlarRestrincoesAcessoUsuario" path="/jsp/seguranca/acesso/usuario/usuario_controlar_restrincoes_acesso.jsp" />
+		</action>
+		<action name="ControlarAcessoUsuarioActionForm" type="gcom.gui.seguranca.acesso.usuario.ControlarRestrincoesAcessoUsuarioAction"
+			scope="session" path="/controlarRestrincoesAcessoUsuarioAction">
+		</action>
+
+		<action name="ControlarAcessoUsuarioActionForm" type="gcom.gui.seguranca.acesso.usuario.ExibirControlarPermissoesEspeciaisUsuarioAction"
+			scope="session" path="/exibirControlarPermissoesEspeciaisUsuarioAction">
+			<forward name="controlarPermissoesEspeciaisUsuario" path="/jsp/seguranca/acesso/usuario/usuario_controlar_permissoes_especiais_usuario.jsp" />
+		</action>
+		<action name="ControlarAcessoUsuarioActionForm" type="gcom.gui.seguranca.acesso.usuario.ControlarPremissoesEspeciaisUsuarioAction"
+			scope="session" path="/controlarPremissoesEspeciaisUsuarioAction">
+		</action>
+
+		<action type="gcom.gui.seguranca.acesso.usuario.ConcluirControlarAcessosUsuarioAction"
+			scope="session" path="/concluirControlarAcessosUsuarioAction">
+		</action>
+
+	    <action name="ControlarAcessoUsuarioActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.ControlarAcessosUsuarioWizardAction"
+			validate="false" parameter="action" scope="session"
+			path="/controlarAcessosUsuarioWizardAction">
+			<forward name="controlarRestrincoesAcessoUsuario"
+				path="/jsp/seguranca/acesso/usuario/usuario_controlar_restrincoes_acesso.jsp" />
+			<forward name="controlarPermissoesEspeciaisUsuario" 
+			     path="/jsp/seguranca/acesso/usuario/usuario_controlar_permissoes_especiais_usuario.jsp" />
+		</action>
+		<action
+			type="gcom.gui.seguranca.acesso.usuario.CancelarControlarAcessoUsuarioAction"
+			validate="false" scope="session" path="/cancelarControlarAcessoUsuarioAction" />
+			
+		<action name="ControlarAcessoUsuarioActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.ExibirControleAcessoUsuarioAction"
+			validate="false" input="/exibirAtualizarUsuarioAction.do"
+			scope="session" path="/exibirControleAcessoUsuarioAction">
+			<forward name="controlarAcessosUsuario"
+				path="/controlarAcessosUsuarioWizardAction.do?action=exibirControlarRestrincoesAcessoUsuarioAction" />
+		</action>
+		
+	    
+
+	</action-mappings>
+	<!--********************************************************************************-->
+	<!--******************* ARQUIVO DE PROPRIEDADES *******************-->
+	<message-resources null="false" parameter="gcom.properties.application" />
+
+</struts-config>

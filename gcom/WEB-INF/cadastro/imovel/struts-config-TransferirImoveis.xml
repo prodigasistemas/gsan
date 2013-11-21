@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="TransferirImovelLogradouroActionForm"
+			type="gcom.gui.cadastro.imovel.TransferirImovelLogradouroActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	
+	<action-mappings>
+		<action name="TransferirImovelLogradouroActionForm"
+			type="gcom.gui.cadastro.imovel.ExibirTransferirImovelLogradouroAction"
+			validate="false" scope="session" path="/exibirTransferirImovelLogradouroAction">
+			<forward name="transferirImovel" path="/jsp/cadastro/imovel/imovel_transferir_logradouro.jsp" />
+		</action>
+		<action name="TransferirImovelLogradouroActionForm"
+			type="gcom.gui.cadastro.imovel.TransferirImovelLogradouroAction"
+			validate="false" scope="session" path="/transferirImovelLogradouroAction">
+			<forward name="telaSucesso" path="/jsp/util/sucesso.jsp" />
+		</action>
+		<action name="TransferirImovelLogradouroActionForm"
+			type="gcom.gui.cadastro.imovel.PesquisarImovelLogradouroAction"
+			validate="false" scope="session" path="/pesquisarImovelLogradouroAction">
+			<forward name="transferirImovel" path="/jsp/cadastro/imovel/imovel_transferir_logradouro.jsp" />
+		</action>
+	</action-mappings>
+
+</struts-config>

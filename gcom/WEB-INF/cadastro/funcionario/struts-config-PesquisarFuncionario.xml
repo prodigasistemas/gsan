@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts 
+Configuration 1.1//EN" 
+"http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+ <form-beans>
+  <form-bean name="PesquisarFuncionarioActionForm"
+   type="gcom.gui.cadastro.funcionario.PesquisarFuncionarioActionForm" />
+ </form-beans>
+ <!--******************* PÁGINAS GLOBAIS *******************-->
+ <global-forwards />
+ <action-mappings>
+ 
+  <action name="PesquisarFuncionarioActionForm"
+   type="gcom.gui.cadastro.funcionario.ExibirPesquisarFuncionarioAction"
+   validate="false"
+   scope="session"
+   path="/exibirFuncionarioPesquisar">
+   <forward name="funcionarioPesquisar"
+    path="/jsp/cadastro/funcionario/funcionario_pesquisar.jsp" />
+  </action>
+ 
+  <action name="PesquisarFuncionarioActionForm"
+   type="gcom.gui.cadastro.funcionario.PesquisarFuncionarioAction"
+   validate="false" 
+   scope="session"
+   path="/retornarFuncionarioPesquisar">
+   <forward name="retornoPesquisa"
+    path="/jsp/cadastro/funcionario/funcionario_resultado_pesquisa.jsp" />
+  </action>
+  
+</action-mappings>
+ <message-resources null="false"
+  parameter="gcom.properties.application" />
+</struts-config>

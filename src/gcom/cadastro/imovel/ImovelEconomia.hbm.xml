@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.imovel.ImovelEconomia" table="cadastro.imovel_economia">
+		<id name="id" type="java.lang.Integer" column="imec_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_imovel_economia</param>
+			</generator>
+		</id>
+		<property name="complementoEndereco" type="java.lang.String" column="imec_dscomplementoendereco" length="25"/>
+		<property name="numeroMorador" type="java.lang.Short" column="imec_nnmorador" length="2"/>
+		<property name="numeroPontosUtilizacao" type="java.lang.Short" column="imec_nnpontosutilizacao" length="2"/>
+		<property name="numeroIptu" type="java.math.BigDecimal" column="imec_nniptu" length="20"/>
+		<property name="numeroCelpe" type="java.lang.Long" column="imec_nncontratoenergia" length="10"/>
+		<property name="areaConstruida" type="java.math.BigDecimal" column="imec_nnareaconstruida" length="8" unique="false" optimistic-lock="true" lazy="false" generated="never"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="imec_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to AreaConstruidaFaixa -->
+		<many-to-one name="areaConstruidaFaixa" class="gcom.cadastro.imovel.AreaConstruidaFaixa" not-null="true">
+			<column name="acon_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ImovelSubcategoria -->
+		<many-to-one name="imovelSubcategoria" class="gcom.cadastro.imovel.ImovelSubcategoria" not-null="true">
+			<column name="imov_id"/>
+			<column name="scat_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to TarifaSocialDadoEconomia -->
+		<set name="tarifaSocialDadoEconomias" lazy="true" inverse="true">
+			<key>
+				<column name="imec_id"/>
+			</key>
+			<one-to-many class="gcom.cadastro.tarifasocial.TarifaSocialDadoEconomia"/>
+		</set>
+		<!-- bi-directional one-to-many association to ClienteImovelEconomia -->
+		<set name="clienteImovelEconomias" lazy="false" inverse="true" cascade="delete">
+			<key>
+				<column name="imec_id"/>
+			</key>
+			<one-to-many class="gcom.cadastro.cliente.ClienteImovelEconomia"/>
+		</set>
+	</class>
+</hibernate-mapping>

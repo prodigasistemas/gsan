@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="ProcessarLeiturasNaoRegistradasActionForm"
+			type="gcom.gui.micromedicao.ProcessarLeiturasNaoRegistradasActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<action name="ProcessarLeiturasNaoRegistradasActionForm"
+			type="gcom.gui.micromedicao.ExibirProcessarLeiturasNaoRegistradasAction"
+			validate="true" scope="session"
+			path="/exibirProcessarLeiturasNaoRegistradasAction">
+
+			<forward name="processarLeiturasNaoRealizadas"
+				path="/jsp/micromedicao/processar_leituras_nao_registradas.jsp" />
+		</action>
+
+		<action name="ProcessarLeiturasNaoRegistradasActionForm"
+			type="gcom.gui.micromedicao.ProcessarLeiturasNaoRegistradasAction"
+			validate="true" scope="session"
+			path="/processarLeiturasNaoRegistradasAction">			
+		</action>
+		
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

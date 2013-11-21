@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="GerarResumoDevedoresDuvidososActionForm" type="gcom.gui.financeiro.GerarResumoDevedoresDuvidososActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		<action name="GerarResumoDevedoresDuvidososActionForm"
+				type="gcom.gui.financeiro.ExibirGerarResumoDevedoresDuvidososAction"
+				validate="false" 
+				scope="session"
+				path="/exibirGerarResumoDevedoresDuvidososAction">
+			<forward name="exibirGerarResumoDevedoresDuvidosos" path="/jsp/finaceiro/gerar_resumo_devedores_duvidosos.jsp" />
+		</action>		
+		<action name="GerarResumoDevedoresDuvidososActionForm"
+				type="gcom.gui.financeiro.GerarResumoDevedoresDuvidososAction"
+				validate="false" 
+				scope="session"
+				path="/gerarResumoDevedoresDuvidososAction">
+		</action>
+	</action-mappings>
+	<message-resources null="false" parameter="gcom.properties.application" />
+</struts-config>

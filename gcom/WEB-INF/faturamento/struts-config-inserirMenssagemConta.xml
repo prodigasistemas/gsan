@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="InserirMensagemContaActionForm"
+			type="gcom.gui.faturamento.conta.InserirMensagemContaActionForm" />					
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0217] INSERIR RESOLUÇÃO DE DIRETORIA Auhtor: Rafael Corrêa Data:30/03/2006-->
+		<action name="InserirMensagemContaActionForm"
+			type="gcom.gui.faturamento.conta.ExibirInserirMensagemContaAction"
+			validate="true" scope="session"
+			path="/exibirInserirMensagemContaAction">
+			<forward name="exibirInserirMensagemContaAction"
+				path="/jsp/faturamento/conta/mensagem_conta_inserir.jsp" />
+		</action>
+		<action name="InserirMensagemContaActionForm"
+			type="gcom.gui.faturamento.conta.InserirMensagemContaAction"
+			validate="true" scope="request"
+			path="/inserirMensagemContaAction">
+		</action>
+
+	</action-mappings>
+
+</struts-config>

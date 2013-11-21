@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="EmitirSegundaViaContaInternetActionForm"
+			type="gcom.gui.atendimentopublico.EmitirSegundaViaContaInternetActionForm" />
+	</form-beans>
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="EmitirSegundaViaContaInternetActionForm"
+			type="gcom.gui.atendimentopublico.ExibirEmitirSegundaViaContaInternetAction"
+			validate="false" scope="session"
+			path="/exibirEmitirSegundaViaContaInternetAction">
+			<forward name="exibirEmitirSegundaViaContaInternetAction"
+				path="/jsp/atendimentopublico/segunda_via_conta_internet_emitir.jsp" />
+		</action>
+		
+		<action name="EmitirSegundaViaContaInternetActionForm"
+			type="gcom.gui.atendimentopublico.ExibirEmitirSegundaViaContaInternetAction"
+			validate="false" scope="session"
+			path="/exibirEmitirSegundaViaContaInternetAcessoGeralAction">
+			<forward name="exibirEmitirSegundaViaContaInternetAcessoGeralAction"
+				path="/jsp/atendimentopublico/segunda_via_conta_internet_emitir.jsp" />
+		</action>
+		
+
+		<action name="EmitirSegundaViaContaInternetActionForm"
+			type="gcom.gui.atendimentopublico.EmitirSegundaViaContaInternetAction"
+			validate="false" scope="session"
+			path="/emitirSegundaViaContaInternetAction">
+			<forward
+				name="exibirResultadoEmitirSegundaViaContaInternetAction"
+				path="/jsp/atendimentopublico/segunda_via_conta_internet_resultado_emitir.jsp" />
+		</action>
+		
+		<action name="EmitirSegundaViaContaInternetActionForm"
+			type="gcom.gui.atendimentopublico.EmitirSegundaViaContaInternetAction"
+			validate="false" scope="session"
+			path="/emitirSegundaViaContaInternetAcessoGeralAction">
+			<forward
+				name="exibirResultadoEmitirSegundaViaContaInternetAcessoGeralAction"
+				path="/jsp/atendimentopublico/segunda_via_conta_internet_resultado_emitir.jsp" />
+		</action>
+		
+		
+		<action name="EmitirSegundaViaContaInternetActionForm"
+			type="gcom.gui.atendimentopublico.ExibirSelecionarBancoAction"
+			validate="false" scope="session"
+			path="/exibirSelecionarBancoAction">
+			<forward name="exibirSelecionarBancoAction"
+				path="/jsp/atendimentopublico/banco_selecionar.jsp" />
+		</action>
+		
+		<action name="EmitirSegundaViaContaInternetActionForm"
+			type="gcom.gui.atendimentopublico.ExibirSelecionarBancoAction"
+			validate="false" scope="session"
+			path="/exibirSelecionarBancoAcessoGeralAction">
+			<forward name="exibirSelecionarBancoAcessoGeralAction"
+				path="/jsp/atendimentopublico/banco_selecionar.jsp" />
+		</action>
+
+		<action name="EmitirSegundaViaContaInternetActionForm"
+			type="gcom.gui.atendimentopublico.EnviarDadosBancosAction"
+			validate="false" scope="request" path="/enviarDadosBancosAction">
+			<forward name="enviarDadosBancoBrasilAction"
+				path="/jsp/atendimentopublico/dados_banco_brasil_enviar.jsp" />
+		</action>
+		<action name="EmitirSegundaViaContaInternetActionForm"
+			type="gcom.gui.atendimentopublico.EnviarDadosBancosAction"
+			validate="false" scope="request" path="/enviarDadosBancosAcessoGeralAction">
+			<forward name="enviarDadosBancoBrasilAction"
+				path="/jsp/atendimentopublico/dados_banco_brasil_enviar.jsp" />
+		</action>
+
+
+		<!--<action name=""
+			type="gcom.gui.atendimentopublico.ExibirSelecionarBancoAction"
+			validate="false" scope="session" path="/enviarDadosBancosAction">
+			<forward name="enviarDadosBancosAction"
+			path="/jsp/atendimentopublico/banco_selecionar.jsp" />
+			</action>-->
+
+
+
+
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>
+

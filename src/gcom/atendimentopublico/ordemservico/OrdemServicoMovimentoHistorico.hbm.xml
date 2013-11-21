@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.atendimentopublico.ordemservico.OrdemServicoMovimentoHistorico" table="atendimentopublico.os_movimento_hist">
+		<id name="id" type="java.lang.Integer" column="orse_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="dataGeracao" type="java.sql.Timestamp" column="osmh_tmgeracao" not-null="true" length="8"/>
+		<property name="loginUsuario" type="java.lang.String" column="osmh_nmlogin" length="11"/>
+		<property name="dataTramite" type="java.sql.Timestamp" column="osmh_tmtramite" not-null="true" length="8"/>
+		<property name="dataExecucao" type="java.sql.Timestamp" column="osmh_tmexecucao" length="8"/>
+		<property name="inscricaoImovel" type="java.lang.String" column="osmh_dsinscricao" length="22"/>
+		<property name="nomeSolicitante" type="java.lang.String" column="osmh_nmsolicitante" length="70"/>
+		<property name="telefoneSolicitante" type="java.lang.String" column="osmh_nnfonesolicitante" length="20"/>
+		<property name="endereco" type="java.lang.String" column="osmh_dsendereco" length="100"/>
+		<property name="pontoReferencia" type="java.lang.String" column="osmh_dsreferencia" length="60"/>
+		<property name="bairro" type="java.lang.String" column="osmh_nmbairro" length="50"/>
+		<property name="nomeLocalidade" type="java.lang.String" column="osmh_dslocalidade" length="50"/>
+		<property name="codigoElo" type="java.lang.Integer" column="osmh_cdelo" length="4"/>
+		<property name="codigoSetor" type="java.lang.Integer" column="osmh_cdsetor" length="4"/>
+		<property name="numeroQuadra" type="java.lang.Integer" column="osmh_nnquadra" length="4"/>
+		<property name="observacao" type="java.lang.String" column="osmh_dsobservacao" length="200"/>
+		<property name="parecer" type="java.lang.String" column="osmh_dsparecer" not-null="true" length="400"/>
+		<property name="areaPavimentoRua" type="java.math.BigDecimal" column="osmh_nnareaprua" length="6"/>
+		<property name="areaPavimentoCalcada" type="java.math.BigDecimal" column="osmh_nnareapcal" length="6"/>
+		<property name="indicadorMovimento" type="short" column="osmh_icmovimento" not-null="true" length="2"/>
+		<property name="dataHoraGeracaoHistorico" type="java.sql.Timestamp" column="osmh_tmgeracaohistorico" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to UnidadeOrganizacional -->
+		<many-to-one name="unidadeOrganizacionalExecutora" class="gcom.cadastro.unidade.UnidadeOrganizacional" not-null="true">
+			<column name="unid_idexecutora"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to UnidadeOrganizacional -->
+		<many-to-one name="unidadeOrganizacionalCentralizadora" class="gcom.cadastro.unidade.UnidadeOrganizacional" not-null="true">
+			<column name="unid_idcentral"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ServicoTipo -->
+		<many-to-one name="servicoTipo" class="gcom.atendimentopublico.ordemservico.ServicoTipo" not-null="true">
+			<column name="svtp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to RegistroAtendimento -->
+		<many-to-one name="registroAtendimento" class="gcom.atendimentopublico.registroatendimento.RegistroAtendimento" not-null="true">
+			<column name="rgat_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="false">
+			<column name="imov_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ServicoTipoPrioridade -->
+		<many-to-one name="servicoTipoPrioridadeAtual" class="gcom.atendimentopublico.ordemservico.ServicoTipoPrioridade" not-null="true">
+			<column name="stpr_idatual"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to PavimentoRua -->
+		<many-to-one name="pavimentoRua" class="gcom.cadastro.imovel.PavimentoRua" not-null="false">
+			<column name="prua_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to PavimentoCalcada -->
+		<many-to-one name="pavimentoCalcada" class="gcom.cadastro.imovel.PavimentoCalcada" not-null="false">
+			<column name="pcal_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to PavimentoCalcada -->
+		<many-to-one name="atendimentoMotivoEncerramento" class="gcom.atendimentopublico.registroatendimento.AtendimentoMotivoEncerramento" not-null="false">
+			<column name="amen_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

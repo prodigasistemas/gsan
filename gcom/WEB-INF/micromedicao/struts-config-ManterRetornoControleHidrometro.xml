@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="ManterRetornoControleHidrometroForm"
+			type="gcom.gui.micromedicao.hidrometro.ManterRetornoControleHidrometroActionForm" />
+		<form-bean name="AtualizarRetornoControleHidrometroActionForm"
+			type="gcom.gui.micromedicao.hidrometro.AtualizarRetornoControleHidrometroActionForm" />
+		<form-bean name="FiltrarRetornoControleHidrometroActionForm"
+			type="gcom.gui.micromedicao.hidrometro.FiltrarRetornoControleHidrometroActionForm" />
+	</form-beans>
+
+<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards/>
+
+	<action-mappings>
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.micromedicao.hidrometro.ExibirManterRetornoControleHidrometroAction"
+			validate="false" scope="session"
+			path="/exibirManterRetornoControleHidrometroAction">
+
+			<forward name="exibirManterRetornoControleHidrometro"
+				path="/jsp/micromedicao/hidrometro/retorno_controle_hidrometro_manter.jsp" />
+
+			<forward name="exibirAtualizarRetornoControleHidrometro"
+				path="/exibirAtualizarRetornoControleHidrometroAction.do" />
+		</action>
+
+		<action name="AtualizarRetornoControleHidrometroActionForm"
+			type="gcom.gui.micromedicao.hidrometro.ExibirAtualizarRetornoControleHidrometroAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarRetornoControleHidrometroAction">
+
+			<forward name="RetornoControleHidrometroAtualizar"
+				path="/jsp/micromedicao/hidrometro/retorno_controle_hidrometro_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarRetornoControleHidrometroActionForm"
+			type="gcom.gui.micromedicao.hidrometro.AtualizarRetornoControleHidrometroAction"
+			validate="true" scope="session"
+			path="/atualizarRetornoControleHidrometroAction">
+		</action>
+		
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.micromedicao.hidrometro.RemoverRetornoControleHidrometroAction"
+			 scope="request" path="/removerRetornoControleHidrometroAction">
+
+		</action>
+		
+		<action name="FiltrarRetornoControleHidrometroActionForm"
+			type="gcom.gui.relatorio.micromedicao.hidrometro.GerarRelatorioRetornoControleHidrometroManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioRetornoControleHidrometroManterAction" />
+		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

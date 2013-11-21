@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+	
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="AtualizarClienteTipoActionForm"
+			type="gcom.gui.cadastro.cliente.AtualizarClienteTipoActionForm" />
+		<form-bean name="FiltrarClienteTipoActionForm"
+			type="gcom.gui.cadastro.cliente.FiltrarClienteTipoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0218] MANTER TIPO DE RETORNO DA OS_REFERIDA Auhtor: Thiago Tenório Data:01/11/2006-->
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.cadastro.cliente.ExibirManterClienteTipoAction"
+			validate="false" scope="session"
+			path="/exibirManterClienteTipoAction">
+			<forward name="exibirManterClienteTipo"
+				path="/jsp/cadastro/cliente/cliente_tipo_manter.jsp" />
+			<forward name="exibirAtualizarClienteTipo"
+				path="/exibirAtualizarClienteTipoAction.do" />
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.cadastro.cliente.RemoverClienteTipoAction" scope="request"
+			path="/removerClienteTipoAction">
+		</action>
+		
+		<action name="AtualizarClienteTipoActionForm"
+			type="gcom.gui.cadastro.cliente.ExibirAtualizarClienteTipoAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarClienteTipoAction">
+			<forward name="atualizarClienteTipo"
+				path="/jsp/cadastro/cliente/cliente_tipo_atualizar.jsp" />
+		</action>
+		<action name="AtualizarClienteTipoActionForm"
+			type="gcom.gui.cadastro.cliente.AtualizarClienteTipoAction"
+			validate="true" scope="session"
+			path="/atualizarClienteTipoAction">
+		</action>
+
+	</action-mappings>
+
+</struts-config>

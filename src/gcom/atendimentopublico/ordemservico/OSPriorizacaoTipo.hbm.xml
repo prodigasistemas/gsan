@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+	-->
+	<class name="gcom.atendimentopublico.ordemservico.OSPriorizacaoTipo" table="atendimentopublico.priorizacao_tipo">
+		<id name="id" type="java.lang.Integer" column="pztp_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_priorizacao_tipo</param>
+			</generator>
+		</id>
+		<property name="descricaoPriorizacao" type="java.lang.String" column="pztp_dspriorizacao" length="30"/>
+		<property name="descricaoAbreviado" type="java.lang.String" column="pztp_dsabreviado" length="18"/>
+		
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to Rota -->
+	</class>
+</hibernate-mapping>

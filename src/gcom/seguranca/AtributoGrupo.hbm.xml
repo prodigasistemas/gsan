@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.seguranca.AtributoGrupo" table="seguranca.atributo_grupo">
+		<id name="id" type="java.lang.Integer" column="atgr_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="descricaoAtributoGrupo" type="java.lang.String" column="atgr_dsatributogrupo" not-null="true" length="50"/>
+		<property name="numeroOrdemEmissao" type="java.lang.Short" column="atgr_nnordememissao" not-null="true" length="2"/>
+		<property name="indicadorImovel" type="java.lang.Short" column="atgr_icimovel" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="atgr_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to Atributo -->
+		<set name="atributos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="atgr_id"/>
+			</key>
+			<one-to-many class="gcom.seguranca.Atributo"/>
+		</set>
+	</class>
+</hibernate-mapping>

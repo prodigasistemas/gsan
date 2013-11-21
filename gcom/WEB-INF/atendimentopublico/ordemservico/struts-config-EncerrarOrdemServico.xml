@@ -1,0 +1,217 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean 
+			name="EncerrarOrdemServicoActionForm" 
+			type="gcom.gui.atendimentopublico.ordemservico.EncerrarOrdemServicoActionForm" /> 
+	</form-beans>
+	<global-forwards />
+	<action-mappings>
+		<action 
+			name="EncerrarOrdemServicoActionForm"  
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirEncerrarOrdemServicoPopupAction" 
+			validate="true"
+			scope="session"
+			path="/exibirEncerrarOrdemServicoPopupAction">
+			<forward 
+				name="encerrarOrdemServicoPopup"
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_encerrar_popup.jsp" />
+			<forward 
+				name="exibirManterDadosAtividades"
+				path="/exibirManterDadosAtividadesOrdemServicoAction.do?caminhoRetornoDadosAtividadesOS=exibirEncerrarOrdemServicoPopupAction.do?retornoConsulta=1"/>
+			<forward 
+				name="exibirGerarOSInserirRA"
+				path="/exibirGerarOrdemServicoInserirRAAction.do?caminhoRetornoOS=exibirEncerrarOrdemServicoPopupAction.do?retornoConsulta=1"/>
+		</action>
+		<action 
+			name="EncerrarOrdemServicoActionForm"  
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirEncerrarOrdemServicoAction" 
+			validate="true"
+			scope="session"
+			path="/exibirEncerrarOrdemServicoAction">
+			<forward 
+				name="encerrarOrdemServico"
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_encerrar.jsp" />
+		</action>
+		<action 
+			name="EncerrarOrdemServicoActionForm"  
+			type="gcom.gui.atendimentopublico.ordemservico.RecuperarPesquisarDadosEncerrarPopupOSAction" 
+			validate="true"
+			scope="session"
+			path="/recuperarPesquisarDadosEncerrarPopupOSAction">
+			<forward name="exibirPesquisarServicoTipo"
+				path="/exibirPesquisarTipoServicoAction.do" />
+		</action>
+		
+		<action 
+			name="EncerrarOrdemServicoActionForm"  
+			type="gcom.gui.atendimentopublico.ordemservico.EncerrarOrdemServicoPopupAction" 
+			validate="true"
+			scope="session"
+			path="/encerrarOrdemServicoPopupAction">
+			<!-- TABELA SERVIÇO TIPO OPERACAO -->
+			<!-- SERVIÇO_TIPO_ID=1 -->
+			<forward 
+				name="encerrarOrdemServicoPopup"
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_encerrar_popup.jsp" />
+			<!-- SERVIÇO_TIPO_ID=1 -->	
+			<forward 
+				name="efetuarLigacaoAguaAction"
+				path="/exibirEfetuarLigacaoAguaAction.do" />				
+			<!-- SERVIÇO_TIPO_ID=2 -->	
+			<forward 
+				name="efetuarLigacaoEsgotoAction"
+				path="/exibirEfetuarLigacaoEsgotoAction.do" />	
+			<!-- SERVIÇO_TIPO_ID=6 -->
+			<forward 
+				name="efetuarCorteLigacaoAguaAction"
+				path="/exibirEfetuarCorteLigacaoAguaAction.do" />
+			<!-- SERVIÇO_TIPO_ID=8 -->
+			<forward 
+				name="efetuarSupressaoLigacaoAguaAction"
+				path="/exibirEfetuarSupressaoLigacaoAguaAction.do" />
+			<!-- SERVIÇO_TIPO_ID=9 -->
+			<forward 
+				name="efetuarRestabelecimentoLigacaoAguaAction"
+				path="/exibirEfetuarRestabelecimentoLigacaoAguaAction.do" />
+			<!-- SERVIÇO_TIPO_ID=10 -->
+			<forward 
+				name="efetuarReligacaoAguaAction"
+				path="/exibirEfetuarReligacaoAguaAction.do" />
+			<!-- SERVIÇO_TIPO_ID=11 -->
+			<forward 
+				name="efetuarCorteAdministrativoLigacaoAguaAction"
+				path="/exibirEfetuarCorteAdministrativoLigacaoAguaAction.do" />
+			<!-- SERVIÇO_TIPO_ID=15 -->
+			<forward 
+				name="efetuarRetiradaHidrometroAction"
+				path="/exibirEfetuarRetiradaHidrometroAction.do" />
+			<!-- SERVIÇO_TIPO_ID=17 -->
+			<forward 
+				name="efetuarRemanejamentoHidrometroAction"
+				path="/exibirEfetuarRemanejamentoHidrometroAction.do" />
+			<!-- SERVIÇO_TIPO_ID=21 -->
+			<forward 
+				name="efetuarInstalacaoHidrometroAction"
+				path="/exibirEfetuarInstalacaoHidrometroAction.do" />
+			<!-- SERVIÇO_TIPO_ID=23 -->
+			<forward 
+				name="efetuarSubstituicaoHidrometroAction"
+				path="/exibirEfetuarSubstituicaoHidrometroAction.do" />
+			<!-- SERVIÇO_TIPO_ID=26,27,28,29 -->
+			<forward 
+				name="efetuarMudancaSituacaoFaturamentoLigacaoEsgotoAction"
+				path="/exibirEfetuarMudancaSituacaoFaturamentoLigacaoEsgotoAction.do" />
+			<!-- SERVIÇO_TIPO_ID=12 -->
+			<forward 
+				name="atualizarConsumoMinimoLigacaoAguaAction"
+				path="/exibirAtualizarConsumoMinimoLigacaoAguaAction.do" />
+			<!-- SERVIÇO_TIPO_ID=25 -->
+			<forward 
+				name="alterarTipoCorteAction"
+				path="/exibirAlterarTipoCorteAction.do" />
+			<!-- SERVIÇO_TIPO=Alterar Tipo de Corte -->	
+			<forward 
+				name="atualizarVolumeMinimoLigacaoEsgotoAction"
+				path="/exibirAtualizarVolumeMinimoLigacaoEsgotoAction.do" />
+			<!-- SERVIÇO_TIPO-->	
+			<forward 
+				name="efetuarLigacaoAguaComInstalacaoHidrometroAction"
+				path="/exibirEfetuarLigacaoAguaComInstalacaoHidrometroAction.do" />
+			<forward 
+				name="efetuarRestabelecimentoLigacaoAguaComInstalacaoHidrometroAction"
+				path="/exibirEfetuarRestabelecimentoLigacaoAguaComInstalacaoHidrometroAction.do" />			
+			<forward 
+				name="exibirEncerrarOrdemPopupServico"
+				path="/exibirEncerrarOrdemServicoPopupAction.do?retornoConsulta=informarOS" />
+					
+				
+				
+		</action>
+		
+		<action 
+			name="EncerrarOrdemServicoActionForm"  
+			type="gcom.gui.atendimentopublico.ordemservico.EncerrarOrdemServicoAction" 
+			validate="true"
+			scope="session"
+			path="/encerrarOrdemServicoAction">
+			<!-- TABELA SERVIÇO TIPO OPERACAO -->
+			<forward 
+				name="encerrarOrdemServicoPopup"
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_encerrar_popup.jsp" />
+			<!-- SERVIÇO_TIPO_ID=1 -->	
+			<forward 
+				name="efetuarLigacaoAguaAction"
+				path="/exibirEfetuarLigacaoAguaAction.do" />				
+			<!-- SERVIÇO_TIPO_ID=2 -->	
+			<forward 
+				name="efetuarLigacaoEsgotoAction"
+				path="/exibirEfetuarLigacaoEsgotoAction.do" />	
+			<!-- SERVIÇO_TIPO_ID=6 -->
+			<forward 
+				name="efetuarCorteLigacaoAguaAction"
+				path="/exibirEfetuarCorteLigacaoAguaAction.do" />
+			<!-- SERVIÇO_TIPO_ID=8 -->
+			<forward 
+				name="efetuarSupressaoLigacaoAguaAction"
+				path="/exibirEfetuarSupressaoLigacaoAguaAction.do" />
+			<!-- SERVIÇO_TIPO_ID=9 -->
+			<forward 
+				name="efetuarRestabelecimentoLigacaoAguaAction"
+				path="/exibirEfetuarRestabelecimentoLigacaoAguaAction.do" />
+			<!-- SERVIÇO_TIPO_ID=10 -->
+			<forward 
+				name="efetuarReligacaoAguaAction"
+				path="/exibirEfetuarReligacaoAguaAction.do" />
+			<!-- SERVIÇO_TIPO_ID=11 -->
+			<forward 
+				name="efetuarCorteAdministrativoLigacaoAguaAction"
+				path="/exibirEfetuarCorteAdministrativoLigacaoAguaAction.do" />
+			<!-- SERVIÇO_TIPO_ID=15 -->
+			<forward 
+				name="efetuarRetiradaHidrometroAction"
+				path="/exibirEfetuarRetiradaHidrometroAction.do" />
+			<!-- SERVIÇO_TIPO_ID=17 -->
+			<forward 
+				name="efetuarRemanejamentoHidrometroAction"
+				path="/exibirEfetuarRemanejamentoHidrometroAction.do" />
+			<!-- SERVIÇO_TIPO_ID=21 -->
+			<forward 
+				name="efetuarInstalacaoHidrometroAction"
+				path="/exibirEfetuarInstalacaoHidrometroAction.do" />
+			<!-- SERVIÇO_TIPO_ID=23 -->
+			<forward 
+				name="efetuarSubstituicaoHidrometroAction"
+				path="/exibirEfetuarSubstituicaoHidrometroAction.do" />
+			<!-- SERVIÇO_TIPO_ID=26,27,28,29 -->
+			<forward 
+				name="efetuarMudancaSituacaoFaturamentoLigacaoEsgotoAction"
+				path="/exibirEfetuarMudancaSituacaoFaturamentoLigacaoEsgotoAction.do" />
+			
+			<forward 
+				name="atualizarConsumoMinimoLigacaoAguaAction"
+				path="/exibirAtualizarConsumoMinimoLigacaoAguaAction.do" />
+			<!-- SERVIÇO_TIPO_ID=25 -->
+			<forward 
+				name="atualizarVolumeMinimoLigacaoEsgotoAction"
+				path="/exibirAtualizarVolumeMinimoLigacaoEsgotoAction.do" />
+			<!-- SERVIÇO_TIPO-->	
+			<forward 
+				name="efetuarLigacaoAguaComInstalacaoHidrometroAction"
+				path="/exibirEfetuarLigacaoAguaComInstalacaoHidrometroAction.do" />
+			<forward 
+				name="efetuarRestabelecimentoLigacaoAguaComInstalacaoHidrometroAction"
+				path="/exibirEfetuarRestabelecimentoLigacaoAguaComInstalacaoHidrometroAction.do" />				
+			<forward 
+				name="alterarTipoCorteAction"
+				path="/exibirAlterarTipoCorteAction.do" />
+			<!-- SERVIÇO_TIPO=Alterar Tipo de Corte -->	
+			<forward 
+				name="exibirEncerrarOrdemServico"
+				path="/exibirEncerrarOrdemServicoAction.do?retornoConsulta=informarOS" />
+				
+		</action>
+	</action-mappings>
+	<message-resources null="false" parameter="gcom.properties.application" />		
+</struts-config>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="InserirSolicitacaoServicosPortalActionForm"
+			type="gcom.gui.portal.InserirSolicitacaoServicosPortalActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+	
+		<action name="InserirSolicitacaoServicosPortalActionForm"
+			type="gcom.gui.portal.ExibirInserirSolicitacaoServicosPortalAction"
+			validate="false" scope="session"
+			path="/exibirInserirSolicitacaoServicosPortalAction">
+			
+			<forward name="exibirInserirSolicitacaoServicosPortal"
+				path="/jsp/portal/cadastro_solicitacao_servicos_portal.jsp" />
+		</action>
+
+		<action name="InserirSolicitacaoServicosPortalActionForm"
+			type="gcom.gui.portal.InserirSolicitacaoServicosPortalAction"
+			validate="false" scope="session"
+			path="/inserirSolicitacaoServicosPortalAction">
+			<forward name="validarDados"
+				path="/jsp/portal/cadastro_solicitacao_servicos_portal.jsp" />
+			<forward name="RASolicitadaComSucesso"
+				path="/jsp/portal/cadastro_solicitacao_servicos_portal.jsp" />
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

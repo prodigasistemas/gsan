@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="ConsultarArquivoTextoLeituraActionForm"
+			type="gcom.gui.micromedicao.ConsultarArquivoTextoLeituraActionForm" />
+			
+		<form-bean name="ConsultarArquivoTextoLeituraDivisaoPopupActionForm"
+			type="gcom.gui.micromedicao.ConsultarArquivoTextoLeituraDivisaoPopupActionForm" />
+			
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<action name="ConsultarArquivoTextoLeituraActionForm"
+			type="gcom.gui.micromedicao.ExibirConsultarArquivoTextoLeituraAction"
+			validate="true" scope="session"
+			path="/exibirConsultarArquivoTextoLeituraAction">
+
+			<forward name="consultarArquivoTextoLeitura"
+				path="/jsp/micromedicao/arquivo_texto_Leitura_consultar.jsp" />
+				
+		</action>
+		
+		<action name="ConsultarArquivoTextoLeituraActionForm"
+			type="gcom.gui.micromedicao.GerarArquivosImoveisNaoEnviadosAction"
+			validate="true" scope="request"
+			path="/gerarArquivosImoveisNaoEnviadosAction">
+
+			<forward name="gerarArquivosImoveisNaoEnviadosAction"
+				path="/jsp/micromedicao/arquivo_texto_Leitura_consultar.jsp" />
+				
+		</action>
+		
+		
+		
+		
+		
+		<action name="ConsultarArquivoTextoLeituraDivisaoPopupActionForm"
+			type="gcom.gui.micromedicao.ExibirConsultarArquivoTextoLeituraDivisaoPopupAction"
+			validate="true" scope="session"
+			path="/exibirConsultarArquivoTextoLeituraDivisaoPopupAction">
+
+			<forward name="exibirConsultarArquivoTextoLeituraDivisaoPopupAction"
+				path="/jsp/micromedicao/arquivo_texto_Leitura_divisao_popup_consultar.jsp" />	
+		</action>
+		
+
+		<action name="ConsultarArquivoTextoLeituraActionForm"
+			type="gcom.micromedicao.ConsultarArquivoTextoLeituraAction"
+			validate="true" scope="session"
+			path="/consultarArquivoTextoLeituraAction">
+			<forward name="consultarArquivoTextoLeitura"
+				path="/jsp/micromedicao/arquivo_texto_Leitura_consultar.jsp" />
+		</action>
+
+		<action type="gcom.micromedicao.RetornarArquivoTxtLeituraAction"
+			path="/retornarArquivoTxtLeituraAction">
+		</action>
+		
+		<action type="gcom.micromedicao.RetornarArquivoTxtLeituraDivisaoAction"
+			path="/retornarArquivoTxtLeituraDivisaoAction">
+		</action>
+		
+		<action name="ConsultarArquivoTextoLeituraActionForm"
+			type="gcom.gui.micromedicao.RetornarArquivoZipLeituraAction"
+			path="/retornarArquivoZipLeituraAction">
+		</action>		
+		
+<!--	Action criada para gerar arquivo zip para imóveis com situação PF	-->
+		<action name="ConsultarArquivoTextoLeituraActionForm"
+			type="gcom.gui.micromedicao.RetornarArquivoZipLeituraImoveisPFAction"
+			path="/retornarArquivoZipLeituraImoveisPFAction">
+		</action>
+		
+		<action name="ConsultarArquivoTextoLeituraActionForm"
+			type="gcom.gui.micromedicao.LiberarArquivoTextoLeituraAction"
+			validate="true" scope="session"
+			path="/liberarArquivoLeituraAction">
+			<forward name="consultarArquivoTextoLeitura"
+				path="/consultarArquivoTextoLeituraAction.do" />
+		</action>
+		
+		<action name="ConsultarArquivoTextoLeituraDivisaoPopupActionForm"
+			type="gcom.gui.micromedicao.LiberarArquivoTextoLeituraDivisaoAction"
+			validate="true" scope="session"
+			path="/liberarArquivoTextoLeituraDivisaoAction">
+			<forward name="exibirConsultarArquivoTextoLeituraDivisao"
+				path="/exibirConsultarArquivoTextoLeituraDivisaoPopupAction.do" />
+		</action>
+		
+		<action name="ConsultarArquivoTextoLeituraActionForm"
+			type="gcom.gui.micromedicao.ExibirConsultarSituacaoLeituraPopupAction"
+			validate="true" scope="session"
+			path="/exibirConsultarSituacaoLeituraPopupAction">
+
+			<forward name="exibirConsultarSituacaoLeituraPopupAction"
+				path="/jsp/micromedicao/situacao_leitura_consultar.jsp" />	
+		</action>
+		
+		<action name="ConsultarArquivoTextoLeituraActionForm"
+			type="gcom.gui.micromedicao.ExibirInformarMotivoFinalizacaoPopupAction"
+			validate="true" scope="session"
+			path="/exibirInformarMotivoFinalizacaoPopupAction">
+
+			<forward name="exibirInformarMotivoFinalizacaoPopupAction"
+				path="/jsp/micromedicao/motivo_finalizacao_inserir.jsp" />	
+		</action>
+		
+		<action name="ConsultarArquivoTextoLeituraActionForm"
+			type="gcom.gui.micromedicao.ExibirMonitorarLeituraMobilePopupAction"
+			validate="true" scope="session"
+			path="/exibirMonitorarLeituraMobilePopupAction">
+
+			<forward name="exibirMonitorarLeituraMobilePopupAction"
+				path="/jsp/micromedicao/monitorar_leitura_mobile_pop_up.jsp" />	
+		</action>
+		
+		<action name="ConsultarArquivoTextoLeituraActionForm"
+			type="gcom.gui.micromedicao.MonitorarLeituraMobilePopupAction"
+			validate="true" scope="session"
+			path="/monitorarLeituraMobilePopupAction">
+		</action>
+		
+		<action name="ConsultarArquivoTextoLeituraActionForm"
+			type="gcom.gui.relatorio.faturamento.GerarRelatorioMonitorarLeituraMobileAction"
+			scope="session" path="/gerarRelatorioMonitorarLeituraMobileAction" />
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

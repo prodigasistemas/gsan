@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="GerarRelatorioAutoInfracaoActionForm"
+			type="gcom.gui.faturamento.autoinfracao.GerarRelatorioAutoInfracaoActionForm" />					
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+	
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0857] Gerar Relatório de Arrecadação das Multas de Autos de Infração Auhtor: Rafael Corrêa Data:10/09/2008-->
+		<action name="GerarRelatorioAutoInfracaoActionForm"
+			type="gcom.gui.faturamento.autoinfracao.ExibirGerarRelatorioAutoInfracaoAction"
+			validate="true" scope="session"
+			path="/exibirGerarRelatorioAutoInfracaoAction">
+			<forward name="exibirGerarRelatorioAutoInfracao"
+				path="/jsp/faturamento/autoinfracao/auto_infracao_relatorio_gerar.jsp" />
+		</action>
+		
+		<action name="GerarRelatorioAutoInfracaoActionForm"
+			type="gcom.gui.relatorio.faturamento.GerarRelatorioAutoInfracaoAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioAutoInfracaoAction" />
+
+	</action-mappings>
+
+</struts-config>

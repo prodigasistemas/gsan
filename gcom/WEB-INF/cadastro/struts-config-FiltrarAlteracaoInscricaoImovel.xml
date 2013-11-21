@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarAlteracaoInscricaoImovelActionForm"
+			type="gcom.gui.cadastro.FiltrarAlteracaoInscricaoImovelActionForm" />
+			
+			
+	</form-beans>
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarAlteracaoInscricaoImovelActionForm"
+			type="gcom.gui.cadastro.ExibirFiltrarAlteracaoInscricaoImovelAction" validate="true" scope="session" 
+			path="/exibirFiltrarAlteracaoInscricaoImovelAction">
+			<forward name="filtrarAlteracaoInscricaoImovel"
+				path="/jsp/cadastro/alteracao_inscricao_imovel_filtrar.jsp" />
+		</action>
+		
+		<action name="FiltrarAlteracaoInscricaoImovelActionForm" 
+			type="gcom.gui.cadastro.FiltrarAlteracaoInscricaoImovelAction" validate="true" scope="session" 
+			path="/filtrarAlteracaoInscricaoImovelAction">
+			<forward name="autorizarAlteracaoInscricaoImovel" 
+			path="/exibirAutorizarAlteracaoInscricaoImovelAction.do" /> 
+		</action>
+		
+		<action name="FiltrarAlteracaoInscricaoImovelActionForm"
+			type="gcom.gui.cadastro.ExibirAutorizarAlteracaoInscricaoImovelAction"
+			validate="false" scope="session"
+			path="/exibirAutorizarAlteracaoInscricaoImovelAction">
+			<forward name="exibirAutorizarAlteracaoInscricaoImovel"
+				path="/jsp/cadastro/alteracao_inscricao_imovel_autorizar.jsp" />
+		</action>
+		
+		<action name="FiltrarAlteracaoInscricaoImovelActionForm" 
+			type="gcom.gui.cadastro.AutorizarAlteracaoInscricaoImovelAction"
+			validate="false" scope="session"
+			path="/autorizarAlteracaoInscricaoImovelAction">
+		</action>
+		
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

@@ -1,0 +1,313 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ejb-jar PUBLIC "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN" "http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+<ejb-jar>
+	<enterprise-beans>
+		<session>
+			<display-name>ControladorBatchGCOM</display-name>
+			<ejb-name>ControladorBatchGCOM</ejb-name>
+			<local-home>
+				gcom.batch.ControladorBatchLocalHome
+			</local-home>
+			<local>gcom.batch.ControladorBatchLocal</local>
+			<ejb-class>gcom.batch.ControladorBatchSEJB</ejb-class>
+			<session-type>Stateless</session-type>
+			<transaction-type>Container</transaction-type>
+		</session>
+	</enterprise-beans>
+	<assembly-descriptor>
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>*</method-name>
+			</method>
+			<trans-attribute>Required</trans-attribute>
+		</container-transaction>
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					iniciarUnidadeProcessamentoBatch
+				</method-name>
+			</method>
+			<trans-attribute>RequiresNew</trans-attribute>
+		</container-transaction>
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					encerrarUnidadeProcessamentoBatch
+				</method-name>
+			</method>
+			<trans-attribute>RequiresNew</trans-attribute>
+		</container-transaction>
+
+
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					removerColecaoObjetoParaBatch
+				</method-name>
+			</method>
+			<trans-attribute>Required</trans-attribute>
+		</container-transaction>
+		
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					inserirColecaoObjetoParaBatch
+				</method-name>
+			</method>
+			<trans-attribute>Required</trans-attribute>
+		</container-transaction>
+
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					inserirColecaoObjetoParaBatchTransacao
+				</method-name>
+			</method>
+			<trans-attribute>Required</trans-attribute>
+		</container-transaction>
+		
+		
+
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					inserirObjetoParaBatchGerencial
+				</method-name>
+			</method>
+			<trans-attribute>NotSupported</trans-attribute>
+		</container-transaction>
+		
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					removerColecaoGuiaPagamentoCategoriaParaBatch
+				</method-name>
+			</method>
+			<trans-attribute>Required</trans-attribute>
+		</container-transaction>
+		
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					removerColecaoClienteGuiaPagamentoParaBatch
+				</method-name>
+			</method>
+			<trans-attribute>Required</trans-attribute>
+		</container-transaction>
+		
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					removerColecaoGuiaPagamentoParaBatch
+				</method-name>
+			</method>
+			<trans-attribute>Required</trans-attribute>
+		</container-transaction>
+		
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					removerColecaoDebitoACobrarParaBatch
+				</method-name>
+			</method>
+			<trans-attribute>Required</trans-attribute>
+		</container-transaction>
+		
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					removerColecaoPagamentoParaBatch
+				</method-name>
+			</method>
+			<trans-attribute>Required</trans-attribute>
+		</container-transaction>
+		
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					removerColecaoDevolucaoParaBatch
+				</method-name>
+			</method>
+			<trans-attribute>Required</trans-attribute>
+		</container-transaction>
+		
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					removerColecaoContaParaBatch
+				</method-name>
+			</method>
+			<trans-attribute>Required</trans-attribute>
+		</container-transaction>
+		
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					removerColecaoContaCategoriaParaBatch
+				</method-name>
+			</method>
+			<trans-attribute>Required</trans-attribute>
+		</container-transaction>
+		
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					removerColecaoContaCategoriaConsumoFaixaParaBatch
+				</method-name>
+			</method>
+			<trans-attribute>Required</trans-attribute>
+		</container-transaction>
+		
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					removerColecaoCreditoRealizadoParaBatch
+				</method-name>
+			</method>
+			<trans-attribute>Required</trans-attribute>
+		</container-transaction>
+		
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					removerColecaoDebitoCobradoParaBatch
+				</method-name>
+			</method>
+			<trans-attribute>Required</trans-attribute>
+		</container-transaction>
+		
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					removerColecaoDebitoCobradoCategoriaParaBatch
+				</method-name>
+			</method>
+			<trans-attribute>Required</trans-attribute>
+		</container-transaction>
+		
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					removerColecaoCreditoRealizadoCategoriaParaBatch
+				</method-name>
+			</method>
+			<trans-attribute>Required</trans-attribute>
+		</container-transaction>
+		
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					removerColecaoContaImpostosDeduzidosParaBatch
+				</method-name>
+			</method>
+			<trans-attribute>Required</trans-attribute>
+		</container-transaction>
+		
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					removerColecaoClienteContaParaBatch
+				</method-name>
+			</method>
+			<trans-attribute>Required</trans-attribute>
+		</container-transaction>
+		
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					removerColecaoDebitoACobrarCategoriaParaBatch
+				</method-name>
+			</method>
+			<trans-attribute>Required</trans-attribute>
+		</container-transaction>
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					verificadorProcessosSistema
+				</method-name>
+			</method>
+			<trans-attribute>NotSupported</trans-attribute>
+		</container-transaction>
+		
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					atualizarObjetoParaBatch
+				</method-name>
+			</method>
+			<trans-attribute>NotSupported</trans-attribute>
+		</container-transaction>
+		
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					inserirObjetoParaBatch
+				</method-name>
+			</method>
+			<trans-attribute>NotSupported</trans-attribute>
+		</container-transaction>
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					removerColecaoObjetoParaBatchSemTransacao
+				</method-name>
+			</method>
+			<trans-attribute>NotSupported</trans-attribute>
+		</container-transaction>
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					removerObjetoParaBatchSemTransacao
+				</method-name>
+			</method>
+			<trans-attribute>NotSupported</trans-attribute>
+		</container-transaction>
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					inserirColecaoObjetoParaBatchSemTransacao
+				</method-name>
+			</method>
+			<trans-attribute>Required</trans-attribute>
+		</container-transaction>
+		<container-transaction>
+			<method>
+				<ejb-name>ControladorBatchGCOM</ejb-name>
+				<method-name>
+					atualizarColecaoObjetoParaBatchSemTransacao
+				</method-name>
+			</method>
+			<trans-attribute>Required</trans-attribute>
+		</container-transaction>
+		
+	</assembly-descriptor>
+</ejb-jar>

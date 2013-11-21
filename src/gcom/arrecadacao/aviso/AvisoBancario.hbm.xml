@@ -1,0 +1,178 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.arrecadacao.aviso.AvisoBancario" table="arrecadacao.aviso_bancario">
+		<id name="id" type="java.lang.Integer" column="avbc_id">
+			<generator class="sequence">
+				<param name="sequence">arrecadacao.seq_aviso_bancario</param>
+			</generator>
+		</id>
+		<property name="dataLancamento" type="java.sql.Date" column="avbc_dtlancamento" not-null="true" length="4"/>
+		<property name="valorContabilizado" type="java.math.BigDecimal" column="avbc_vlcontabilizado" not-null="true" length="13"/>
+		<property name="anoMesReferenciaArrecadacao" type="int" column="avbc_amreferenciaarrecadacao" not-null="true" length="4"/>
+		<property name="indicadorCreditoDebito" type="java.lang.Short" column="avbc_iccreditodebito" not-null="true" length="2"/>
+		<property name="numeroDocumento" type="int" column="avbc_nndocumento" not-null="true" length="4"/>
+		<!--  <property
+        name="valorDevolucao"
+        type="java.math.BigDecimal"
+        column="avbc_vldevolucao"
+        length="13"
+    />
+    <property
+        name="valorArrecadacao"
+        type="java.math.BigDecimal"
+        column="avbc_vlarrecadacao"
+        length="13"
+    />-->
+		<property name="numeroSequencial" type="java.lang.Short" column="avbc_nnsequencial" length="2"/>
+		<property name="valorRealizado" type="java.math.BigDecimal" column="avbc_vlrealizado" length="13"/>
+		<property name="dataPrevista" type="java.sql.Date" column="avbc_dtprevista" length="4"/>
+		<property name="dataRealizada" type="java.sql.Date" column="avbc_dtrealizada" length="4"/>
+		<property name="valorArrecadacaoCalculado" type="java.math.BigDecimal" column="avbc_vlarrecadacaocalculado" length="4"/>
+		<property name="valorDevolucaoCalculado" type="java.math.BigDecimal" column="avbc_vldevolucaocalculado" length="4"/>
+		<property name="valorArrecadacaoInformado" type="java.math.BigDecimal" column="avbc_vlarrecadacaoinformado" length="4"/>
+		<property name="valorDevolucaoInformado" type="java.math.BigDecimal" column="avbc_vldevolucaoinformado" length="4"/>
+		<!--  <property
+        name="valorPrevisto"
+        type="java.math.BigDecimal"
+        column="avbc_vlprevisto"
+        length="13"
+    />-->
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="avbc_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to ContaBancaria -->
+		<many-to-one name="contaBancaria" class="gcom.arrecadacao.banco.ContaBancaria" not-null="true">
+			<column name="ctbc_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Arrecadador -->
+		<many-to-one name="arrecadador" class="gcom.arrecadacao.Arrecadador" not-null="true">
+			<column name="arrc_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ArrecadadorMovimento -->
+		<many-to-one name="arrecadadorMovimento" class="gcom.arrecadacao.ArrecadadorMovimento" not-null="true">
+			<column name="armv_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ArrecadacaoForma -->
+		<many-to-one name="arrecadacaoForma" class="gcom.arrecadacao.ArrecadacaoForma" not-null="true">
+			<column name="arfm_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to PagamentoHistorico -->
+		<!--
+    <set
+        name="pagamentoHistoricosByAvbcId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="avbc_id" />
+        </key>
+        <one-to-many 
+            class="gcom.arrecadacao.pagamento.PagamentoHistorico"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to PagamentoHistorico -->
+		<!--
+    <set
+        name="pagamentoHistoricosByAvbcId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="avbc_id" />
+        </key>
+        <one-to-many 
+            class="gcom.PagamentoHistorico"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to Pagamento -->
+		<!--
+    <set
+        name="pagamentosByAvbcId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="avbc_id" />
+        </key>
+        <one-to-many 
+            class="gcom.Pagamento"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to Pagamento -->
+		<!--
+    <set
+        name="pagamentosByAvbcId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="avbc_id" />
+        </key>
+        <one-to-many 
+            class="gcom.Pagamento"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to AvisoDeducoe -->
+		<!--
+    <set
+        name="avisoDeducoes"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="avbc_id" />
+        </key>
+        <one-to-many 
+            class="gcom.AvisoDeducoe"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to Devolucao -->
+		<!--
+    <set
+        name="devolucaos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="avbc_id" />
+        </key>
+        <one-to-many 
+            class="gcom.Devolucao"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to AvisoAcerto -->
+		<!--
+    <set
+        name="avisoAcertos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="avbc_id" />
+        </key>
+        <one-to-many 
+            class="gcom.AvisoAcerto"
+        />
+    </set>
+	-->
+	</class>
+</hibernate-mapping>

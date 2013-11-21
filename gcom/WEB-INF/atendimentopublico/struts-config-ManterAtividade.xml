@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="ManterAtividadeActionForm"
+			type="gcom.gui.atendimentopublico.ManterAtividadeActionForm" />
+		<form-bean name="AtualizarAtividadeActionForm"
+			type="gcom.gui.atendimentopublico.AtualizarAtividadeActionForm" />
+		<form-bean name="FiltrarAtividadeActionForm"
+			type="gcom.gui.atendimentopublico.FiltrarAtividadeActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.atendimentopublico.ExibirManterAtividadeAction"
+			validate="false" scope="session"
+			path="/exibirManterAtividadeAction">
+
+			<forward name="exibirManterAtividade"
+				path="/jsp/atendimentopublico/atividade_manter.jsp" />
+
+			<forward name="exibirAtualizarAtividade"
+				path="/exibirAtualizarAtividadeAction.do" />
+		</action>
+
+		<action name="FiltrarAtividadeActionForm"
+			type="gcom.gui.relatorio.atendimentopublico.GerarRelatorioAtividadeManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioAtividadeManterAction" />
+
+		<action name="AtualizarAtividadeActionForm"
+			type="gcom.gui.atendimentopublico.ExibirAtualizarAtividadeAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarAtividadeAction">
+
+			<forward name="atividadeAtualizar"
+				path="/jsp/atendimentopublico/atividade_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarAtividadeActionForm"
+			type="gcom.gui.atendimentopublico.AtualizarAtividadeAction"
+			validate="true" scope="session"
+			path="/atualizarAtividadeAction">
+
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.atendimentopublico.RemoverAtividadeAction"
+			 scope="request" path="/removerAtividadeAction">
+
+		</action>
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

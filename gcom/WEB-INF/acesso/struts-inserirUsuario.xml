@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+
+		<form-bean name="InserirUsuarioDadosGeraisActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.InserirUsuarioDadosGeraisActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+
+		<action name="InserirUsuarioDadosGeraisActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.ExibirInserirUsuarioDadosGeraisAction"
+			scope="session" path="/exibirInserirUsuarioDadosGeraisAction">
+			<forward name="inserirDadosGerais"
+				path="/jsp/seguranca/acesso/usuario/usuario_inserir_dados_gerais.jsp" />
+		</action>
+		<action name="InserirUsuarioDadosGeraisActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.InserirUsuarioDadosGeraisAction"
+			scope="session" path="/inserirUsuarioDadosGeraisAction">
+		</action>
+
+		<action name="InserirUsuarioDadosGeraisActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.ExibirInserirUsuarioAcessosUsuarioAction"
+			scope="session" path="/exibirInserirUsuarioAcessosUsuarioAction">
+			<forward name="inserirUsuarioAcessoUsuario"
+				path="/jsp/seguranca/acesso/usuario/usuario_inserir_acessos_usuario.jsp" />
+		</action>
+		<action name="InserirUsuarioDadosGeraisActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.InserirUsuarioAcessosUsuarioAction"
+			scope="session" path="/inserirUsuarioAcessosUsuarioAction">
+			<forward name="voltar"
+				path="/exibirInserirUsuarioDadosGeraisAction.do" />
+			<forward name="concluir"
+				path="/concluirInserirUsuarioAction.do" />
+		</action>
+
+		<action 
+			type="gcom.gui.seguranca.acesso.usuario.ConcluirInserirUsuarioAction"
+			scope="session" path="/concluirInserirUsuarioAction">
+		</action>
+
+		<action name="InserirUsuarioDadosGeraisActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.InserirUsuarioWizardAction"
+			validate="true" parameter="action" scope="session"
+			path="/inserirUsuarioWizardAction"
+			input="/exibirInserirUsuarioAction.do">
+			<forward name="inserirDadosGerais"
+				path="/jsp/seguranca/acesso/usuario/usuario_inserir_dados_gerais.jsp" />
+			<forward name="inserirUsuarioAcessoUsuario"
+				path="/jsp/seguranca/acesso/usuario/usuario_inserir_acessos_usuario.jsp" />
+		</action>
+		<action
+			type="gcom.gui.seguranca.acesso.usuario.CancelarInserirUsuarioAction"
+			validate="false" scope="session" path="/cancelarInserirUsuarioAction" />
+			
+		<action
+			type="gcom.gui.seguranca.acesso.usuario.ExibirInserirUsuarioAction"
+			validate="false" input="/exibirInserirUsuarioAction.do"
+			scope="session" path="/exibirInserirUsuarioAction">
+			<forward name="inserirUsuario"
+				path="/inserirUsuarioWizardAction.do?action=exibirInserirUsuarioDadosGeraisAction" />
+		</action>
+
+
+	</action-mappings>
+	<!--********************************************************************************-->
+	<!--******************* ARQUIVO DE PROPRIEDADES *******************-->
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

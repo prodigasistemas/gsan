@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarImovelPerfilActionForm"
+			type="gcom.gui.cadastro.imovel.FiltrarImovelPerfilActionForm" />
+
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarImovelPerfilActionForm"  
+			type="gcom.gui.cadastro.imovel.ExibirFiltrarImovelPerfilAction" 
+			validate="false"
+			scope="session"
+			path="/exibirFiltrarImovelPerfilAction">
+
+			<forward name="filtrarImovelPerfil"
+			path="/jsp/cadastro/imovel/imovel_perfil_filtrar.jsp" />
+
+		</action>
+
+		<action name="FiltrarImovelPerfilActionForm"
+			type="gcom.gui.cadastro.imovel.FiltrarImovelPerfilAction"
+			validate="true" 
+			scope="session"
+			path="/filtrarImovelPerfilAction">
+			
+			<forward name="exibirManterImovelPerfil"
+				path="/exibirManterImovelPerfilAction.do" />
+			
+			
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

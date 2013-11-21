@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="GerarRelatorioGestaoSolicitacoesRAPorChefiaActionForm"
+			type="gcom.gui.relatorio.atendimentopublico.GerarRelatorioGestaoSolicitacoesRAPorChefiaActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	
+	<action-mappings>
+		<action name="GerarRelatorioGestaoSolicitacoesRAPorChefiaActionForm"  
+			type="gcom.gui.relatorio.atendimentopublico.ExibirGerarRelatorioGestaoSolicitacoesRAPorChefiaAction" 
+			validate="true"	
+			scope="session"	
+			path="/exibirGerarRelatorioGestaoSolicitacoesRAPorChefiaAction">
+			<forward name="exibirGerarRelatorioGestaoSolicitacoesRAPorChefiaAction" path="/jsp/relatorio/atendimentopublico/gestao_solicitacoes_ra_por_chefia_gerar_relatorio.jsp" />
+		</action>
+		
+		<action name="GerarRelatorioGestaoSolicitacoesRAPorChefiaActionForm" 
+			type="gcom.gui.relatorio.atendimentopublico.GerarRelatorioGestaoSolicitacoesRAPorChefiaAction" 
+			validate="true"	
+			scope="session"	
+			path="/gerarRelatorioGestaoSolicitacoesRAPorChefiaAction">
+		</action>
+	</action-mappings>
+	
+</struts-config>

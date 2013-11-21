@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.operacional.Bacia" table="operacional.bacia">
+		<id name="id" type="java.lang.Integer" column="baci_id">
+			<generator class="sequence">
+				<param name="sequence">operacional.seq_bacia</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="baci_dsbacia" length="30"/>
+		<property name="indicadorUso" type="java.lang.Short" column="baci_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="baci_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to SistemaEsgoto -->
+		<many-to-one name="sistemaEsgoto" class="gcom.operacional.SistemaEsgoto" not-null="true">
+			<column name="sesg_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to Quadra
+    <set
+        name="quadras"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="baci_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Quadra"
+        />
+    </set>
+  -->
+	</class>
+</hibernate-mapping>

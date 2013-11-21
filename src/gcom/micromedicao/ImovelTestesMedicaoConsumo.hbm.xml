@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.micromedicao.ImovelTestesMedicaoConsumo" table="cadastro.imovel_testes_medicao_consumo">
+		<id name="id" type="java.lang.Integer" column="imov_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="idLigacaoAguaSituacao" type="java.lang.Integer" column="last_id" not-null="true" length="2"/>
+		<property name="idLigacaoEsgotoSituacao" type="java.lang.Integer" column="lest_id" not-null="true" length="2"/>
+		<property name="indicadorHidrometroAgua" type="java.lang.Integer" column="tmdc_idhidrometroagua" not-null="true" length="2"/>
+		<property name="indicadorHidrometroPoco" type="java.lang.Integer" column="tmdc_idhidrometropoco" not-null="true" length="2"/>
+		<property name="quantidadeEconomias" type="int" column="tmdc_qteconomias" not-null="true" length="4"/>
+		<property name="numeroLeituraAnteriorAgua" type="java.lang.Integer" column="tmdc_nnleituraanterioragua" length="4"/>
+		<property name="numeroLeituraAnteriorPoco" type="java.lang.Integer" column="tmdc_nnleituraanteriorpoco" length="4"/>
+		<property name="numeroLeituraAnteriorInformadaAgua" type="java.lang.Integer" column="tmdc_nnleituraanteriorinformadaagua" length="4"/>
+		<property name="numeroLeituraAnteriorInformadaPoco" type="java.lang.Integer" column="tmdc_nnleituraanteriorinformadapoco" length="4"/>
+		<property name="idLeituraSituacaoAnteriorAgua" type="java.lang.Integer" column="ltst_idleiturasituacaoanterioragua" length="4"/>
+		<property name="idLeituraSituacaoAnteriorPoco" type="java.lang.Integer" column="ltst_idleiturasituacaoanteriorpoco" length="4"/>
+		<property name="numeroLeituraAtualAgua" type="java.lang.Integer" column="tmdc_nnleituraatualagua" length="4"/>
+		<property name="numeroLeituraAtualPoco" type="java.lang.Integer" column="tmdc_nnleituraatualpoco" length="4"/>
+		<property name="idLeituraSituacaoAtualAgua" type="java.lang.Integer" column="ltst_idleiturasituacaoatualagua" length="4"/>
+		<property name="idLeituraSituacaoAtualPoco" type="java.lang.Integer" column="ltst_idleiturasituacaoatualpoco" length="4"/>
+		<property name="idLeituraAnormalidadeAgua" type="java.lang.Integer" column="ltan_idleituraanormalidadeagua" length="4"/>
+		<property name="idLeituraAnormalidadePoco" type="java.lang.Integer" column="ltan_idleituraanormalidadepoco" length="4"/>
+		<property name="idFaturamentoSituacaoTipo" type="java.lang.Integer" column="ftst_id" length="4"/>
+		<property name="numeroMedioConsumoHidrometroAgua" type="java.lang.Integer" column="tmdc_nnmediahidrometroagua" length="4"/>
+		<property name="numeroMedioConsumoHidrometroPoco" type="java.lang.Integer" column="tmdc_nnmediahidrometropoco" length="4"/>
+		<property name="numeroMedioConsumoImovel" type="java.lang.Integer" column="tmdc_nnmediaimovel" length="4"/>
+		<property name="numeroFaixaIncialAgua" type="java.lang.Integer" column="tmdc_nnfaixainicialagua" length="4"/>
+		<property name="numeroFaixaFinalAgua" type="java.lang.Integer" column="tmdc_nnfaixafinalagua" length="4"/>
+		<property name="numeroFaixaInicialPoco" type="java.lang.Integer" column="tmdc_nnfaixainicialpoco" length="4"/>
+		<property name="numeroFaixaFinalPoco" type="java.lang.Integer" column="tmdc_nnfaixafinalpoco" length="4"/>
+		<property name="numeroConsumoMinimoAgua" type="java.lang.Integer" column="tmdc_nnconsumominimoagua" length="4"/>
+		<property name="numeroConsumoMinimoEsgoto" type="java.lang.Integer" column="tmdc_nnconsumominimoesgoto" length="4"/>
+		<property name="idPoco" type="java.lang.Integer" column="poco_id" length="4"/>
+		<property name="numeroDigitosLeituraAgua" type="java.lang.Short" column="tmdc_nndigitosleituraagua" length="2"/>
+		<property name="numeroDigitosLeituraPoco" type="java.lang.Short" column="tmdc_nndigitosleiturapoco" length="2"/>
+		<property name="idHidrometroAgua" type="java.lang.Integer" column="hicp_idagua" length="4"/>
+		<property name="idHidrometroPoco" type="java.lang.Integer" column="hicp_idpoco" length="4"/>
+		<property name="percentualColetaLigacaoEsgoto" type="java.math.BigDecimal" column="tmdc_pccoleta" length="5"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="tmdc_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+	</class>
+</hibernate-mapping>

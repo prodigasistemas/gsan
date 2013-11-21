@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.arrecadacao.pagamento.GuiaPagamentoItem" table="faturamento.guia_pagamento_item">
+		<composite-id name="comp_id" class="gcom.arrecadacao.pagamento.GuiaPagamentoItemPK">
+			<key-property name="debitoTipoId" column="dbtp_id" type="java.lang.Integer"/>
+			<key-property name="guiaPagamentoId" column="gpag_id" type="java.lang.Integer"/>
+		</composite-id>
+		<property name="valorDebito" type="java.math.BigDecimal" column="gpai_vldebito" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="gpai_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to Guia Pagamento Geral -->
+		<many-to-one name="guiaPagamentoGeral" class="gcom.faturamento.GuiaPagamentoGeral" update="false" insert="false">
+			<column name="gpag_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Debito Tipo -->
+		<many-to-one name="debitoTipo" class="gcom.faturamento.debito.DebitoTipo" update="false" insert="false">
+			<column name="dbtp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Conta Geral -->
+		<many-to-one name="contaGeral" class="gcom.faturamento.conta.ContaGeral" update="false" insert="true">
+			<column name="cnta_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

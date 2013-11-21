@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC1015] Upload nova versão GSAN Dispositivo Móvel Auhtor: Hugo Amorim Data:11/05/2010-->
+		<action 
+			type="gcom.gui.cadastro.dispositivomovel.ExibirUploadVersaoDispositivoMovelAction"
+			validate="true" 
+			scope="session"
+			path="/exibirUploadVersaoDispositivoMovelAction">
+			
+			<forward name="exibirUploadVersaoDispositivoMovelAction"
+				path="/jsp/cadastro/dispositivomovel/upload_versao_dispositivo_movel.jsp" />
+		</action>
+		
+		<action 
+				type="gcom.gui.cadastro.dispositivomovel.UploadVersaoDispositivoMovelAction"
+				validate="true" scope="session"
+				path="/uploadVersaoDispositivoMovelAction">
+		</action>
+
+	</action-mappings>
+
+</struts-config>

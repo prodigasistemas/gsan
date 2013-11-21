@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.micromedicao.TelemetriaMovReg" table="micromedicao.telemetria_mov_reg">
+		<id name="id" type="java.lang.Integer" column="tmrg_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_telemetria_mov_reg</param>
+			</generator>
+		</id>
+		<property name="dataLeitura" type="java.sql.Timestamp" column="tmrg_tmleitura" not-null="true" length="8"/>
+		<property name="inscricao" type="java.lang.String" column="tmrg_nninscricao" not-null="true"/>
+		<property name="leitura" type="java.lang.Integer" column="tmrg_nnleitura" not-null="true"/>
+		<property name="numeroHidrometro" type="java.lang.Integer" column="tmrg_nnhidrometro" not-null="true"/>
+		<property name="indicadorProcessado" type="java.lang.Short" column="tmrg_icprocessado" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="tmrg_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="descricaoErro" type="binary" column="tmrg_dserro" length="-1"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to TelemetriaMov -->
+		<many-to-one name="telemetriaMov" class="gcom.micromedicao.TelemetriaMov" not-null="true">
+			<column name="tmov_id"></column>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id"></column>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to MedicaoTipo -->
+		<many-to-one name="medicaoTipo" class="gcom.micromedicao.medicao.MedicaoTipo" not-null="true">
+			<column name="medt_id"></column>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

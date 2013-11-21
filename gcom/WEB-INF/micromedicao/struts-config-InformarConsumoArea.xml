@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="InformarConsumoAreaActionForm"
+			type="gcom.gui.micromedicao.InformarConsumoAreaActionForm" />
+
+		<form-bean name="AdicionarConsumoAreaActionForm"
+			type="gcom.gui.micromedicao.AdicionarConsumoAreaActionForm" />
+
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="InformarConsumoAreaActionForm"
+			type="gcom.gui.micromedicao.ExibirInformarConsumoAreaAction"
+			validate="true" scope="session" 
+			path="/exibirInformarConsumoAreaAction">
+			<forward name="exibirInformarConsumoArea"
+				path="/jsp/micromedicao/consumo_area_informar.jsp" />
+		</action>
+
+		<action name="InformarConsumoAreaActionForm"
+			type="gcom.gui.micromedicao.InformarConsumoAreaAction"
+			validate="false" scope="session" path="/informarConsumoAreaAction">
+		</action>
+
+
+		<action name="AdicionarConsumoAreaActionForm"
+			type="gcom.gui.micromedicao.ExibirAdicionarConsumoAreaAction"
+			validate="false" scope="session"
+			path="/exibirAdicionarConsumoAreaAction">
+			
+			<forward name="exibirAdicionarConsumoArea"
+				path="/jsp/micromedicao/consumo_area_adicionar.jsp" />
+		</action>
+
+		<action name="AdicionarConsumoAreaActionForm"
+			type="gcom.gui.micromedicao.AdicionarConsumoAreaAction"
+			scope="session" validate="true" path="/adicionarConsumoAreaAction">
+
+			<forward name="exibirAdicionarConsumoArea"
+				path="/jsp/micromedicao/consumo_area_adicionar.jsp" />
+
+		</action>
+
+
+
+		<!--<action name="AdicionarFuncionalidadeDependenciaActionForm"
+			type="gcom.gui.seguranca.acesso.ExibirAdicionarFuncionalidadeDependenciaAction"
+			scope="session" validate="true"
+			path="/exibirAdicionarFuncionalidadeDependenciaAction">
+			
+			<forward
+			name="inserirAdicionarFuncionalidadeDependenciaAction"
+			path="/jsp/seguranca/acesso/funcionalidade_dependencia_adicionar_popup.jsp" />
+			
+			<forward
+			name="atualizarAdicionarFuncionalidadeDependenciaAction"
+			path="/jsp/seguranca/acesso/funcionalidade_dependencia_atualizar_adicionar_popup.jsp" />
+			</action>
+			
+			<action name="AdicionarFuncionalidadeDependenciaActionForm"
+			type="gcom.gui.seguranca.acesso.AdicionarFuncionalidadeDependenciaAction"
+			scope="session" validate="true"
+			path="/adicionarFuncionalidadeDependenciaAction">
+			
+			<forward name="inserirFuncionalidadeDependenciaAction"
+			path="/exibirAdicionarFuncionalidadeDependenciaAction.do" />
+			
+			<forward name="atualizarFuncionalidadeDependenciaAction"
+			path="/exibirAdicionarFuncionalidadeDependenciaAction.do" />
+			
+			</action>
+			
+			
+			
+			
+			
+		-->
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

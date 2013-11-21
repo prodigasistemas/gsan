@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="InformarSistemaParametrosActionForm"
+			type="gcom.gui.cadastro.sistemaparametro.InformarSistemaParametrosActionForm" />
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0060] Informar Parâmetros Sistema Auhtor: Rômulo Aurélio Data:04/01/2007-->
+
+		<action name="InformarSistemaParametrosActionForm"
+			type="gcom.gui.cadastro.sistemaparametro.ExibirInformarParametrosSistemaAction"
+			validate="false" input="/exibirInformarParametrosSistemaAction.do"
+			scope="session" path="/exibirInformarParametrosSistemaAction">
+			<forward
+				name="informarParametrosSistemaDadosGeraisEmpresaAction"
+				path="/informarParametrosSistemaWizardAction.do?action=exibirInformarParametrosSistemaDadosGeraisEmpresaAction" />
+		</action>
+
+		<action name="InformarSistemaParametrosActionForm"
+			type="gcom.gui.cadastro.sistemaparametro.InformarParametrosSistemaWizardAction"
+			validate="false" parameter="action" scope="session"
+			path="/informarParametrosSistemaWizardAction">
+			<forward
+				name="exibirInformarParametrosSistemaDadosGeraisEmpresa"
+				path="/jsp/cadastro/sistemaparametro/sistema_parametro_informar_dados_gerais_empresa.jsp" />
+			<forward
+				name="exibirInformarParametrosSistemaFaturamentoTarifaSocial"
+				path="/jsp/cadastro/sistemaparametro/sistema_parametro_informar_faturamento_tarifa_social.jsp" />
+			<forward
+				name="exibirInformarParametrosSistemaArrecadacaoFinanceiro"
+				path="/jsp/cadastro/sistemaparametro/sistema_parametro_informar_arrecadacao_financeiro.jsp" />
+			<forward
+				name="exibirInformarParametrosSistemaMicromedicaoCobranca"
+				path="/jsp/cadastro/sistemaparametro/sistema_parametro_informar_micromedicao_cobranca.jsp" />
+			<forward
+				name="exibirInformarParametrosSistemaAtendimentoPublicoSeguranca"
+				path="/jsp/cadastro/sistemaparametro/sistema_parametro_informar_atendimento_publico_seguranca.jsp" />
+
+		</action>
+		
+		<action
+			type="gcom.gui.cadastro.sistemaparametro.CancelarInformarParametrosSistemaAction"
+			validate="false" path="/cancelarInformarParametrosSistemaAction" />
+
+	</action-mappings>
+<!-- [UC0060] Fim Informar Parâmetros Sistema Auhtor: Rômulo Aurélio Data:04/01/2007-->
+</struts-config>

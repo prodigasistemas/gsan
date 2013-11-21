@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>  
+
+	<form-beans>
+			
+		<form-bean name="InformarRaDadosAgenciaReguladoraActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.InformarRaDadosAgenciaReguladoraActionForm" />
+		<form-bean name="AdicionarRaDadosAgenciaReguladoraFonePopupActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.AdicionarRaDadosAgenciaReguladoraFonePopupActionForm" />
+	
+			
+	</form-beans>
+
+	<global-forwards />
+	
+	
+	<action-mappings> 	
+		
+		<action name="InformarRaDadosAgenciaReguladoraActionForm"  
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirInformarRaDadosAgenciaReguladoraAction"
+			validate="false" scope="session" path="/exibirInformarRaDadosAgenciaReguladoraAction">
+			
+			<forward name="informarRaDadosAgenciaReguladora"	
+					 path="/jsp/atendimentopublico/registroatendimento/ra_dados_agencia_reguladora_informar.jsp" />
+		</action>
+		
+		<action name="InformarRaDadosAgenciaReguladoraActionForm"  
+			type="gcom.gui.atendimentopublico.registroatendimento.InformarRaDadosAgenciaReguladoraAction"
+			validate="true" scope="session" path="/informarRaDadosAgenciaReguladoraAction">
+		</action>	
+		
+		<action name="AdicionarRaDadosAgenciaReguladoraFonePopupActionForm" 
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirAdicionarRaDadosAgenciaReguladoraFonePopupAction"
+			validate="true" scope="session" path="/exibirAdicionarRaDadosAgenciaReguladoraFonePopupAction">
+			
+			<forward name="exibirAdicionarRaDadosAgenciaReguladoraFonePopup"
+					 path="/jsp/atendimentopublico/registroatendimento/ra_dados_agencia_reguladora_fone_popup_adicionar.jsp" />
+		</action>
+		
+		<action name="AdicionarRaDadosAgenciaReguladoraFonePopupActionForm" 
+			type="gcom.gui.atendimentopublico.registroatendimento.AdicionarRaDadosAgenciaReguladoraFonePopupAction"
+			validate="true" scope="session" path="/adicionarRaDadosAgenciaReguladoraFonePopupAction">
+			
+			<forward name="adicionarRaDadosAgenciaReguladoraFonePopup"	
+					 path="/exibirAdicionarRaDadosAgenciaReguladoraFonePopupAction.do" />
+		</action>	
+		
+		<action name="AdicionarRaDadosAgenciaReguladoraFonePopupActionForm" 
+			type="gcom.gui.atendimentopublico.registroatendimento.RemoverRaDadosAgenciaReguladoraFonePopupAction"
+			validate="true" scope="session" path="/removerRaDadosAgenciaReguladoraFonePopupAction">
+			
+			 <forward name="removerRaDadosAgenciaReguladoraFonePopup" path="/exibirInformarRaDadosAgenciaReguladoraAction.do" /> 
+		</action>
+		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

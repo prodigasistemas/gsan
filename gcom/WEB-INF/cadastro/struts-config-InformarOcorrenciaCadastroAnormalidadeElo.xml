@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+	 </form-beans>
+  <!--******************* PÁGINAS GLOBAIS *******************-->
+ <global-forwards />
+ <action-mappings>
+ 
+ 			<!--INICIO MANTER SETOR COMERCIAL-->
+		<action 
+			type="gcom.gui.cadastro.ExibirInformarOcorrenciaCadastroAnormalidadeEloAction"
+			path="/exibirInformarOcorrenciaCadastroAnormalidadeEloAction"
+			validate="false"
+			scope="session" >
+			<forward name="exibirInformarOcorrenciaCadastroAnormalidadeElo"
+				path="/jsp/cadastro/ocorrencia_cadastro_anormalidade_elo_informar.jsp" />
+		</action>
+		<action
+			type="gcom.gui.cadastro.InformarOcorrenciaCadastroAnormalidadeEloAction"
+			validate="false" 
+			path="/informarOcorrenciaCadastroAnormalidadeEloAction"	>
+		</action>
+		
+		<action 
+			type="gcom.gui.cadastro.ExibirFotoOcorrenciaCadastroAction"
+			path="/exibirFotoOcorrenciaCadastroAction"
+			validate="false"
+			scope="session" >
+			<forward name="exibirFotoOcorrenciaCadastro"
+				path="/jsp/cadastro/ocorrencia_cadastro_foto.jsp" />
+		</action>
+		
+		<action 
+			type="gcom.gui.cadastro.ExibirFotoAnormalidadeEloAction"
+			path="/exibirFotoAnormalidadeEloAction"
+			validate="false"
+			scope="session" >
+			<forward name="exibirFotoAnormalidadeElo"
+				path="/jsp/cadastro/anormalidade_elo_foto.jsp" />
+		</action>
+		
+	<!--FIM MANTER SETOR COMERCIAL-->
+
+</action-mappings>
+ <message-resources null="false"
+  parameter="gcom.properties.application" />
+</struts-config>

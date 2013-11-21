@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.debito.DebitoCobradoHistorico" table="faturamento.debito_cobrado_historico">
+		<id name="id" type="java.lang.Integer" column="dbhi_id">
+			<generator class="assigned"/>
+			<!--  <generator class="sequence">
+          <param name="sequence">faturamento.sequence_debito_cobrado_historico</param>
+      	</generator> -->
+		</id>
+		<property name="debitoCobrado" type="java.sql.Date" column="dbhi_tmdebitocobrado" length="4"/>
+		<!--  <property
+        name="debitoCobradoHistorico"
+        type="java.sql.Date"
+        column="dbhi_tmdebitocobradohistorico"
+        not-null="true"
+        length="4"
+    /> -->
+		<property name="codigoSetorComercial" type="java.lang.Integer" column="dbhi_cdsetorcomercial" length="4"/>
+		<property name="numeroQuadra" type="java.lang.Integer" column="dbhi_nnquadra" length="4"/>
+		<property name="numeroLote" type="java.lang.Short" column="dbhi_nnlote" length="2"/>
+		<property name="numeroSubLote" type="java.lang.Short" column="dbhi_nnsublote" length="2"/>
+		<property name="anoMesReferenciaDebito" type="java.lang.Integer" column="dbhi_amreferenciadebito" length="4"/>
+		<property name="anoMesCobrancaDebito" type="java.lang.Integer" column="dbhi_amcobrancadebito" length="4"/>
+		<property name="valorPrestacao" type="java.math.BigDecimal" column="dbhi_vlprestacao" not-null="true" length="13"/>
+		<property name="numeroPrestacao" type="java.lang.Short" column="dbhi_nnprestacao" not-null="true" length="2"/>
+		<property name="numeroPrestacaoDebito" type="java.lang.Short" column="dbhi_nnprestacaodebito" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="dbhi_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="numeroParcelaBonus" type="java.lang.Short" column="dbhi_nnparcelabonus" length="2"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to FinanciamentoTipo -->
+		<many-to-one name="financiamentoTipo" class="gcom.financeiro.FinanciamentoTipo" not-null="true">
+			<column name="fntp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Quadra -->
+		<many-to-one name="quadra" class="gcom.cadastro.localidade.Quadra" not-null="false">
+			<column name="qdra_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="false">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ContaHistorico -->
+		<many-to-one name="contaHistorico" class="gcom.faturamento.conta.ContaHistorico" not-null="true">
+			<column name="cnta_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DebitoTipo -->
+		<many-to-one name="debitoTipo" class="gcom.faturamento.debito.DebitoTipo" not-null="true">
+			<column name="dbtp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LancamentoItemContabil -->
+		<many-to-one name="lancamentoItemContabil" class="gcom.financeiro.lancamento.LancamentoItemContabil" not-null="true">
+			<column name="lict_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ParcelamentoGrupo -->
+		<many-to-one name="parcelamentoGrupo" class="gcom.cobranca.ParcelamentoGrupo" not-null="false">
+			<column name="pcgr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DebitoACobrar -->
+		<many-to-one name="debitoACobrarGeral" class="gcom.faturamento.debito.DebitoACobrarGeral">
+			<column name="dbac_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

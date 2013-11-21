@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+	
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="AtualizarGerenciaRegionalActionForm"
+			type="gcom.gui.cadastro.localidade.AtualizarGerenciaRegionalActionForm" />
+		<form-bean name="FiltrarGerenciaRegionalActionForm"
+			type="gcom.gui.cadastro.localidade.FiltrarGerenciaRegionalActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0218] MANTER TIPO DE RETORNO DA OS_REFERIDA Auhtor: Thiago Tenório Data:01/11/2006-->
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.cadastro.localidade.ExibirManterGerenciaRegionalAction"
+			validate="false" scope="session"
+			path="/exibirManterGerenciaRegionalAction">
+			<forward name="exibirManterGerenciaRegional"
+				path="/jsp/cadastro/localidade/gerenciaregional_manter.jsp" />
+			<forward name="exibirAtualizarGerenciaRegional"
+				path="/exibirAtualizarGerenciaRegionalAction.do" />
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.cadastro.localidade.RemoverGerenciaRegionalAction" scope="request"
+			path="/removerGerenciaRegionalAction">
+		</action>
+		
+		<action name="AtualizarGerenciaRegionalActionForm"
+			type="gcom.gui.cadastro.localidade.ExibirAtualizarGerenciaRegionalAction"
+			validate="true" scope="session"
+			path="/exibirAtualizarGerenciaRegionalAction">
+			<forward name="atualizarGerenciaRegional"
+				path="/jsp/cadastro/localidade/gerenciaregional_atualizar.jsp" />
+		</action>
+		<action name="AtualizarGerenciaRegionalActionForm"
+			type="gcom.gui.cadastro.localidade.AtualizarGerenciaRegionalAction"
+			validate="true" scope="request"
+			path="/atualizarGerenciaRegionalAction">
+		</action>
+		<action name="FiltrarGerenciaRegionalActionForm"
+			type="gcom.gui.relatorio.cadastro.endereco.GerarRelatorioGerenciaRegionalManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioGerenciaRegionalManterAction" />
+
+	</action-mappings>
+
+</struts-config>

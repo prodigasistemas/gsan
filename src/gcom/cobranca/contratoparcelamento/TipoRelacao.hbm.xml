@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.contratoparcelamento.TipoRelacao" table="cobranca.CONTRATO_PARCEL_REL_TIPO">
+		<id name="id" type="java.lang.Integer" column="CPTR_ID">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_CONTRATO_PARCEL_REL_TIPO</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="CPTR_DSRELACAOTIPO" length="50"/>
+		<property name="indicadorUso" type="java.lang.Short" column="CPTR_ICUSO" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="CPTR_TMULTIMAALTERACAO" length="8"/>
+		
+	</class>
+</hibernate-mapping>

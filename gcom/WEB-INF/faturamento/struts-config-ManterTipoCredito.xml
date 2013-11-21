@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+	
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="AtualizarTipoCreditoActionForm"
+			type="gcom.gui.faturamento.credito.AtualizarTipoCreditoActionForm" />
+		<form-bean name="FiltrarTipoCreditoActionForm"
+			type="gcom.gui.faturamento.credito.FiltrarTipoCreditoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0218] MANTER TIPO DE RETORNO DA OS_REFERIDA Auhtor: Thiago Tenório Data:01/11/2006-->
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.faturamento.credito.ExibirManterTipoCreditoAction"
+			validate="false" scope="session"
+			path="/exibirManterTipoCreditoAction">
+			<forward name="exibirManterTipoCredito"
+				path="/jsp/faturamento/credito/credito_tipo_manter.jsp" />
+			<forward name="exibirAtualizarTipoCredito"
+				path="/exibirAtualizarTipoCreditoAction.do" />
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.faturamento.credito.RemoverTipoCreditoAction" scope="request"
+			path="/removerTipoCreditoAction">
+		</action>
+		
+		<action name="AtualizarTipoCreditoActionForm"
+			type="gcom.gui.faturamento.credito.ExibirAtualizarTipoCreditoAction"
+			validate="true" scope="session"
+			path="/exibirAtualizarTipoCreditoAction">
+			<forward name="atualizarTipoCredito"
+				path="/jsp/faturamento/credito/credito_tipo_atualizar.jsp" />
+		</action>
+		<action name="AtualizarTipoCreditoActionForm"
+			type="gcom.gui.faturamento.credito.AtualizarTipoCreditoAction"
+			validate="true" scope="request"
+			path="/atualizarTipoCreditoAction">
+		</action>
+
+	</action-mappings>
+
+</struts-config>

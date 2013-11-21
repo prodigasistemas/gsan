@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+
+		<!--******************* PAGINA PRINCIPAL *******************-->
+		<!-- [UC0811] Processar Requisição do Dispositivo Movel Impressao Simultanea Author: Bruno Barros Data:13/09/2009-->
+
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0811]Processar Requisição do Dispositivo Movel Impressao Simultanea Author: Bruno Barros Data:13/09/2009-->
+
+		<action 
+			type="gcom.gui.micromedicao.ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction"
+			validate="false" scope="session" path="/processarRequisicaoDipositivoMovelImpressaoSimultaneaAction" />
+		
+	</action-mappings>
+
+</struts-config>

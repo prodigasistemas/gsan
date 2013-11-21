@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.consumotarifa.ConsumoTarifaCategoria" table="faturamento.consumo_tarifa_categoria">
+		<id name="id" type="java.lang.Integer" column="cstc_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_consumo_tarifa_categoria</param>
+			</generator>
+		</id>
+		<property name="numeroConsumoMinimo" type="java.lang.Integer" column="cstc_nnconsumominimo" length="4"/>
+		<property name="valorTarifaMinima" type="java.math.BigDecimal" column="cstc_vltarifaminima" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cstc_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to ConsumoTarifaVigencia -->
+		<many-to-one name="consumoTarifaVigencia" class="gcom.faturamento.consumotarifa.ConsumoTarifaVigencia" not-null="true">
+			<column name="cstv_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to ConsumoTarifaFaixa -->
+		<set name="consumoTarifaFaixas" lazy="true" inverse="true" cascade="delete">
+			<key>
+				<column name="cstc_id"/>
+			</key>
+			<one-to-many class="gcom.faturamento.consumotarifa.ConsumoTarifaFaixa"/>
+		</set>
+		<!-- bi-directional many-to-one association to Categoria -->
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+		<many-to-one name="subCategoria" class="gcom.cadastro.imovel.Subcategoria" not-null="false">
+			<column name="scat_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

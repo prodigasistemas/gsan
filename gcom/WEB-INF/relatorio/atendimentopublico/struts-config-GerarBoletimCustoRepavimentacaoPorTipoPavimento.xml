@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="GerarRelatorioBoletimCustoRepavimentacaoPorTipoPavimentoForm"
+			type="gcom.gui.relatorio.atendimentopublico.ordemservico.GerarRelatorioBoletimCustoRepavimentacaoPorTipoPavimentoForm" />
+	</form-beans>
+
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="GerarRelatorioBoletimCustoRepavimentacaoPorTipoPavimentoForm"
+			type="gcom.gui.relatorio.atendimentopublico.ordemservico.ExibirGerarRelatorioBoletimCustoRepavimentacaoPorTipoPavimentoAction"
+			validate="false" 
+			scope="session"
+			path="/exibirGerarRelatorioBoletimCustoRepavimentacaoPorTipoPavimentoAction">
+			
+			<forward name="exibirGerarRelatorioBoletimCustoRepavimentacaoPorTipoPavimento" 
+				path="/jsp/relatorio/atendimentopublico/relatorio_boletim_custo_repavimentacao_por_tipo_pavimento.jsp" />
+				
+		</action>
+		
+		<action name="GerarRelatorioBoletimCustoRepavimentacaoPorTipoPavimentoForm"
+			type="gcom.gui.relatorio.atendimentopublico.ordemservico.GerarRelatorioBoletimCustoRepavimentacaoPorTipoPavimentoAction"
+			validate="true" 
+			path="/gerarRelatorioBoletimCustoRepavimentacaoPorTipoPavimentoAction" />		
+		
+	</action-mappings>
+
+</struts-config>

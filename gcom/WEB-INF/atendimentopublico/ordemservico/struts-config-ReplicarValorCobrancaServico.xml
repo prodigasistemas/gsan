@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean 
+		    name="ReplicarValorCobrancaServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ReplicarValorCobrancaServicoActionForm" /> 
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+				
+			
+		<action name="ReplicarValorCobrancaServicoActionForm"  
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirReplicarValorCobrancaServicoAction" 
+			validate="true"
+			scope="session"
+			path="/exibirReplicarValorCobrancaServicoAction">
+			<forward name="replicarValorCobrancaServico"
+			path="/jsp/atendimentopublico/ordemservico/valor_cobranca_servico_replicar.jsp" />
+		</action>
+
+		<action name="ReplicarValorCobrancaServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ReplicarValorCobrancaServicoAction"
+			validate="true" scope="session"
+			path="/replicarValorCobrancaServicoAction">
+		</action>
+ 
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

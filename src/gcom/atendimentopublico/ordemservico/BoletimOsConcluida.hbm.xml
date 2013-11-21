@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.atendimentopublico.ordemservico.BoletimOsConcluida" table="atendimentopublico.boletim_os_concluida">
+		<id name="id" type="java.lang.Integer" column="orse_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="anoMesReferenciaBoletim" type="int" column="bosc_amreferenciaboletim" not-null="true" length="4"/>
+		<property name="codigoFiscalizacao" type="short" column="bosc_cdfiscalizacao" not-null="true" length="2"/>
+		<property name="dataFiscalizacao" type="java.sql.Date" column="bosc_dtfiscalizacao" length="4"/>
+		<property name="dataEncerramentoBoletim" type="java.sql.Date" column="bosc_dtencerramentoboletim" length="4"/>
+		<property name="indicadorTrocaProtecaoHidrometro" type="java.lang.Short" column="bosc_ictrocaprotecao" length="2"/>
+		<property name="indicadorTrocaRegistroHidrometro" type="java.lang.Short" column="bosc_ictrocaregistro" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="bosc_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-one association to OrdemServico -->
+		<one-to-one name="ordemServico" class="gcom.atendimentopublico.ordemservico.OrdemServico" outer-join="auto" constrained="true"/>
+		<!-- bi-directional many-to-one association to HidrometroLocalInstalacao -->
+		<many-to-one name="hidrometroLocalInstalacao" class="gcom.micromedicao.hidrometro.HidrometroLocalInstalacao" not-null="true">
+			<column name="hili_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to OrdemServicoUnidade -->
+		<set name="dataFiscalizacaoOsSeletivas" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="orse_id"/>
+			</key>
+			<one-to-many class="gcom.atendimentopublico.ordemservico.DataFiscalizacaoOsSeletiva"/>
+		</set>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Usuario -->
+		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario" not-null="false">
+			<column name="usur_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.arrecadacao.ArrecadadorMovimento" table="arrecadacao.arrecadador_movimento">
+		<id name="id" type="java.lang.Integer" column="armv_id">
+			<generator class="sequence">
+				<param name="sequence">arrecadacao.seq_arrecadador_movimento</param>
+			</generator>
+		</id>
+		<property name="dataGeracao" type="java.sql.Date" column="armv_dtgeracao" length="4"/>
+		<property name="numeroSequencialArquivo" type="java.lang.Integer" column="armv_nnnsa" length="4"/>
+		<property name="codigoConvenio" type="java.lang.String" column="armv_cdconvenio" length="20"/>
+		<property name="nomeEmpresa" type="java.lang.String" column="armv_nmempresa" length="20"/>
+		<property name="codigoBanco" type="java.lang.Short" column="armv_cdbanco" length="2"/>
+		<property name="numeroVersaoLayout" type="java.lang.Integer" column="armv_nnversaolayout" length="4"/>
+		<property name="codigoRemessa" type="java.lang.Short" column="armv_cdremessa" length="2"/>
+		<property name="nomeBanco" type="java.lang.String" column="armv_nmbanco" length="40"/>
+		<property name="descricaoIdentificacaoServico" type="java.lang.String" column="armv_dsidentificacaoservico" length="17"/>
+		<property name="numeroRegistrosMovimento" type="java.lang.Integer" column="armv_nnregistrosmovimento" length="4"/>
+		<property name="valorTotalMovimento" type="java.math.BigDecimal" column="armv_vltotalmovimento" length="15"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="armv_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to AvisoBancario -->
+		<set name="avisoBancarios" lazy="true" inverse="true">
+			<key>
+				<column name="armv_id"/>
+			</key>
+			<one-to-many class="gcom.arrecadacao.aviso.AvisoBancario"/>
+		</set>
+		<!-- bi-directional one-to-many association to ArrecadadorMovimentoItem -->
+		<set name="arrecadadorMovimentoItens" lazy="true" inverse="true">
+			<key>
+				<column name="armv_id"/>
+			</key>
+			<one-to-many class="gcom.arrecadacao.ArrecadadorMovimentoItem"/>
+		</set>
+	</class>
+</hibernate-mapping>

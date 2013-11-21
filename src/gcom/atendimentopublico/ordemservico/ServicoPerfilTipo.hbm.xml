@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.ordemservico.ServicoPerfilTipo" table="atendimentopublico.servico_perfil_tipo">
+		<id name="id" type="java.lang.Integer" column="sptp_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_servico_perfil_tipo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="sptp_dsservicoperfiltipo" not-null="true" length="30"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="sptp_dsabreviado" length="5"/>
+		<property name="componentesEquipe" type="java.lang.Short" column="sptp_nncomponentesequipe" length="2"/>
+		<property name="indicadorVeiculoProprio" type="short" column="sptp_icveiculoproprio" not-null="true" length="2"/>
+		<property name="indicadorUso" type="short" column="sptp_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="sptp_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to EquipamentosEspeciai -->
+		<many-to-one name="equipamentosEspeciais" class="gcom.atendimentopublico.ordemservico.EquipamentosEspeciais" not-null="true">
+			<column name="eqes_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to ServicoTipo 
+    <set
+        name="servicoTipos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="sptp_id" />
+        </key>
+        <one-to-many 
+            class="gcom.ServicoTipo"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to Equipe 
+    <set
+        name="equipes"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="sptp_id" />
+        </key>
+        <one-to-many 
+            class="gcom.Equipe"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	
+	<form-beans>
+		<form-bean name="ImovelGeracaoTabelasTemporariasCadastroActionForm"
+			type="gcom.gui.cadastro.atualizacaocadastral.ImovelGeracaoTabelasTemporariasCadastroActionForm" />
+
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action
+			type="gcom.gui.cadastro.atualizacaocadastral.ExibirFiltrarImovelGeracaoTabelasTemporariasCadastro" 
+			scope="request"
+			path="/exibirFiltrarImovelGeracaoTabelasTemporariasCadastro">
+
+			<forward name="filtrarImovelGeracaoTabelasTemporariasCadastro"
+			path="/jsp/cadastro/atualizacaocadastral/geracao_tabelas_temporarias_cadastro.jsp" />
+
+		</action>
+		
+		<action
+			type="gcom.gui.cadastro.atualizacaocadastral.FiltrarImovelGeracaoTabelasTemporariasCadastroAction"
+			scope="request" path="/filtrarImovelGeracaoTabelasTemporariasCadastroAction">
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

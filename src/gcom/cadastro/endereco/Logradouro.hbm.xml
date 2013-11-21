@@ -1,0 +1,117 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.endereco.Logradouro" table="cadastro.logradouro">
+		<id name="id" type="java.lang.Integer" column="logr_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_logradouro</param>
+			</generator>
+		</id>
+		<property name="nome" type="java.lang.String" column="logr_nmlogradouro" not-null="true" length="40" access="field"/>
+		<property name="nomePopular" type="java.lang.String" column="logr_nmpopular" length="30" not-null="false"/>
+		<property name="indicadorUso" type="java.lang.Short" column="logr_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="logr_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to SistemaParametro
+    <set
+        name="sistemaParametros"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="logr_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.SistemaParametro"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to Localidade
+    <set
+        name="localidades"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="logr_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Localidade"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to GerenciaRegional
+    <set
+        name="gerenciaRegionals"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="logr_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.GerenciaRegional"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to Imovel
+    <set
+        name="imovels"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="logr_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Imovel"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to LogradouroBairro -->
+		<set name="logradouroBairros" lazy="false" inverse="true" cascade="delete">
+			<key>
+				<column name="logr_id"/>
+			</key>
+			<one-to-many class="gcom.cadastro.endereco.LogradouroBairro"/>
+		</set>
+		<!-- bi-directional one-to-many association to LogradouroCep -->
+		<set name="logradouroCeps" lazy="false" inverse="true" cascade="delete">
+			<key>
+				<column name="logr_id"/>
+			</key>
+			<one-to-many class="gcom.cadastro.endereco.LogradouroCep"/>
+		</set>
+		<!-- bi-directional one-to-many association to ClienteEndereco
+    <set
+        name="clienteEnderecos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="logr_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.ClienteEndereco"
+        />
+    </set> -->
+		<!-- bi-directional many-to-one association to Municipio -->
+		<many-to-one name="municipio" class="gcom.cadastro.geografico.Municipio" not-null="true">
+			<column name="muni_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Municipio -->
+		<many-to-one name="programaCalibragem" class="gcom.atendimentopublico.ordemservico.OSProgramacaoCalibragem" not-null="false">
+			<column name="ospc_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LogradouroTitulo -->
+		<many-to-one name="logradouroTitulo" class="gcom.cadastro.endereco.LogradouroTitulo" not-null="true">
+			<column name="lgtt_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LogradouroTipo -->
+		<many-to-one name="logradouroTipo" class="gcom.cadastro.endereco.LogradouroTipo" not-null="true">
+			<column name="lgtp_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.seguranca.acesso.usuario.UsuarioPermissaoEspecial" table="seguranca.usuario_permissao_espec">
+		<composite-id name="comp_id" class="gcom.seguranca.acesso.usuario.UsuarioPermissaoEspecialPK">
+			<key-property name="usuarioId" column="usur_id" type="java.lang.Integer" length="4"/>
+			<key-property name="permissaoEspecialId" column="pmep_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="upes_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to Usuario -->
+		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario" update="false" insert="false">
+			<column name="usur_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to PermissaoEspecial -->
+		<many-to-one name="permissaoEspecial" class="gcom.seguranca.acesso.PermissaoEspecial" update="false" insert="false">
+			<column name="pmep_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

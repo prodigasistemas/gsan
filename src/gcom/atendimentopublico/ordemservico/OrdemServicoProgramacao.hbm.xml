@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.ordemservico.OrdemServicoProgramacao" table="atendimentopublico.os_programacao">
+		<id name="id" type="java.lang.Integer" column="ospg_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_os_programacao</param>
+			</generator>
+		</id>
+		<property name="nnSequencialProgramacao" type="short" column="ospg_nnseqprogramacao" not-null="true" length="2"/>
+		<property name="indicadorAtivo" type="short" column="ospg_icativo" not-null="true" length="2"/>
+		<property name="indicadorEquipePrincipal" type="short" column="ospg_icequipeprincipal" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ospg_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="situacaoFechamento" type="java.lang.Short" column="ospg_cdsituacaofechamento" not-null="false" length="2"/>
+		<property name="indicadorAcompanhamentoServico" type="short" column="ospg_icacompservico" not-null="true" length="2" />
+		
+		<!-- bi-directional many-to-one association to Equipe -->
+		<many-to-one name="equipe" class="gcom.atendimentopublico.ordemservico.Equipe" not-null="true">
+			<column name="eqpe_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Usuario -->
+		<many-to-one name="usuarioProgramacao" class="gcom.seguranca.acesso.usuario.Usuario" not-null="true">
+			<column name="usur_idprogramacao"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Usuario -->
+		<many-to-one name="usuarioFechamento" class="gcom.seguranca.acesso.usuario.Usuario" not-null="true">
+			<column name="usur_idfechamento"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ProgramacaoRoteiro -->
+		<many-to-one name="programacaoRoteiro" class="gcom.atendimentopublico.ordemservico.ProgramacaoRoteiro" not-null="true">
+			<column name="pgrt_id"/>
+		</many-to-one>
+		<many-to-one name="equipamentoEspecialFaltante" class="gcom.atendimentopublico.ordemservico.EquipamentosEspeciais" not-null="false">
+			<column name="EQES_IDFALTANTE"/>
+		</many-to-one> 
+		<!-- bi-directional one-to-many association to OsExecucaoEquipe 
+    <set
+        name="osExecucaoEquipes"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="ospg_id" />
+        </key>
+        <one-to-many 
+            class="gcom.OsExecucaoEquipe"
+        />
+    </set>
+    -->
+		<!-- bi-directional many-to-one association to OsProgramNaoEncerMotivo -->
+		<many-to-one name="osProgramNaoEncerMotivo" class="gcom.atendimentopublico.ordemservico.OsProgramNaoEncerMotivo" not-null="true">
+			<column name="opne_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to OrdemServico -->
+		<many-to-one name="ordemServico" class="gcom.atendimentopublico.ordemservico.OrdemServico" not-null="true">
+			<column name="orse_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

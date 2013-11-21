@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.arrecadacao.MetasArrecadacao" table="arrecadacao.arrecadacao.metas_arrecadacao">
+		<id name="id" type="java.lang.Integer" column="mtar_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="metaFaturamento" type="java.math.BigDecimal" column="mtar_pcmetafaturamento" not-null="true" length="5"/>
+		<property name="metaPendencia" type="java.math.BigDecimal" column="mtar_pcmetapendencia" not-null="true" length="5"/>
+		<property name="valorArrecadacaoGlobal" type="java.math.BigDecimal" column="mtar_vlarrecadacaoglobal" not-null="true" length="11"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="mtar_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to UnidadeNegocio -->
+		<many-to-one name="unidadeNegocio" class="gcom.cadastro.localidade.UnidadeNegocio" not-null="true">
+			<column name="uneg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GerenciaRegional -->
+		<many-to-one name="gerenciaRegional" class="gcom.cadastro.localidade.GerenciaRegional" not-null="true">
+			<column name="greg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

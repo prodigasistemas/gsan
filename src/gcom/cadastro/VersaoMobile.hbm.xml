@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.cadastro.VersaoMobile" table="cadastro.versao_mobile">
+		<id name="id" type="java.lang.Integer" column="vemo_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_versao_mobile</param>
+			</generator>
+		</id>
+		<property name="numeroVersao" type="java.lang.String" column="vemo_nnversao" length="10"/>
+		<property name="arquivoJad" type="binary" column="vemo_arquivojad" not-null="true" length="-1"/>
+		<property name="arquivoJar" type="binary" column="vemo_arquivojar" not-null="true" length="-1"/>
+		<property name="dataEnvio" type="java.sql.Timestamp" column="vemo_dtenvio" not-null="true" length="8"/>
+	</class>
+</hibernate-mapping>

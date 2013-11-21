@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="PesquisarGuiaPagamentoActionForm" type="gcom.gui.arrecadacao.pagamento.PesquisarGuiaPagamentoActionForm" />						
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<action name="PesquisarGuiaPagamentoActionForm" type="gcom.gui.arrecadacao.pagamento.ExibirPesquisarGuiaPagamentoAction" scope="session" path="/exibirPesquisarGuiaPagamentoAction">
+			<forward name="pesquisarGuiaPagamento"	path="/jsp/arrecadacao/pagamento/guia_pagamento_pesquisar.jsp" />
+		</action>
+		
+		<action name="PesquisarGuiaPagamentoActionForm" type="gcom.gui.arrecadacao.pagamento.PesquisarGuiaPagamentoAction" scope="session" validate="true" input="/exibirPesquisarGuiaPagamentoAction.do" path="/pesquisarGuiaPagamentoAction">
+			<forward name="listaGuiaPagamentoImovel" path="/jsp/arrecadacao/pagamento/guia_pagamento_imovel_resultado_pesquisa.jsp" />
+			<forward name="listaGuiaPagamentoCliente" path="/jsp/arrecadacao/pagamento/guia_pagamento_cliente_resultado_pesquisa.jsp" />
+		</action>
+		
+	</action-mappings>
+
+
+</struts-config>

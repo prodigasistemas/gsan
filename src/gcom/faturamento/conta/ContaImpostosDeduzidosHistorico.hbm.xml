@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.faturamento.conta.ContaImpostosDeduzidosHistorico" table="faturamento.conta_impostos_dedz_hist">
+		<id name="id" type="java.lang.Integer" column="cidh_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="valorImposto" type="java.math.BigDecimal" column="cidh_vlimposto" not-null="true" length="13"/>
+		<property name="percentualAliquota" type="java.math.BigDecimal" column="cidh_pcaliquota" not-null="true" length="5"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cidh_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="valorBaseCalculo" type="java.math.BigDecimal" column="cidh_vlbasecalculo" not-null="true" length="13"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to ImpostoTipo -->
+		<many-to-one name="impostoTipo" class="gcom.faturamento.ImpostoTipo" not-null="true">
+			<column name="imtp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ContaHistorico -->
+		<many-to-one name="contaHistorico" class="gcom.faturamento.conta.ContaHistorico" not-null="true">
+			<column name="cnta_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

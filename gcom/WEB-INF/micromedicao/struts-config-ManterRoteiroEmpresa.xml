@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+	
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="InserirRoteiroEmpresaActionForm"
+			type="gcom.gui.micromedicao.InserirRoteiroEmpresaActionForm" />
+		<form-bean name="FiltrarRoteiroEmpresaActionForm"
+			type="gcom.gui.micromedicao.FiltrarRoteiroEmpresaActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0218] MANTER TIPO DE RETORNO DA OS_REFERIDA Auhtor: Thiago Tenório Data:23/08/2007-->
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.micromedicao.ExibirManterRoteiroEmpresaAction"
+			validate="false" scope="session"
+			path="/exibirManterRoteiroEmpresaAction">
+			<forward name="exibirManterRoteiroEmpresa"
+				path="/jsp/micromedicao/roteiro_empresa_manter.jsp" />
+			<forward name="exibirAtualizarRoteiroEmpresa"
+				path="/exibirAtualizarRoteiroEmpresaAction.do" />
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.micromedicao.RemoverRoteiroEmpresaAction" scope="request"
+			path="/removerRoteiroEmpresaAction">
+		</action>
+		
+		<action name="InserirRoteiroEmpresaActionForm"
+			type="gcom.gui.micromedicao.ExibirAtualizarRoteiroEmpresaAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarRoteiroEmpresaAction">
+			<forward name="atualizarRoteiroEmpresa"
+				path="/jsp/micromedicao/roteiro_empresa_atualizar.jsp" />
+		</action>
+		<action name="InserirRoteiroEmpresaActionForm"
+			type="gcom.gui.micromedicao.AtualizarRoteiroEmpresaAction"
+			validate="true" scope="session"
+			path="/atualizarRoteiroEmpresaAction">
+		</action>
+
+	</action-mappings>
+
+</struts-config>

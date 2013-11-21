@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.dadocensitario.MunicipioDadosCensitario" table="cadastro.municipio_dados_censit">
+		<id name="id" type="java.lang.Integer" column="mudc_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_municipio_dados_censit</param>
+			</generator>
+		</id>
+		<property name="anoMesReferencia" type="int" column="mudc_amreferencia" not-null="true" length="4"/>
+		<property name="numeroPopulacaoUrbana" type="java.lang.Integer" column="mudc_nnpopulacaourbana" length="4"/>
+		<property name="taxaAnualCrescimentoPopulacaoUrbana" type="java.math.BigDecimal" column="mudc_txanualcrescpopurbana" length="5"/>
+		<property name="taxaOcupacaoUrbana" type="java.math.BigDecimal" column="mudc_txocupacaourbana" length="5"/>
+		<property name="numeroPopulacaoRural" type="java.lang.Integer" column="mudc_nnpopulacaorural" length="4"/>
+		<property name="taxaCrescimentoPopulacaoRural" type="java.math.BigDecimal" column="mudc_txanualcrescpoprural" length="5"/>
+		<property name="taxaOcupacaoRural" type="java.math.BigDecimal" column="mudc_txocupacaorurral" length="5"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="mudc_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to Municipio -->
+		<many-to-one name="municipio" class="gcom.cadastro.geografico.Municipio" not-null="true">
+			<column name="muni_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to FonteDadosCensitario -->
+		<many-to-one name="fonteDadosCensitario" class="gcom.cadastro.dadocensitario.FonteDadosCensitario" not-null="true">
+			<column name="ftdc_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

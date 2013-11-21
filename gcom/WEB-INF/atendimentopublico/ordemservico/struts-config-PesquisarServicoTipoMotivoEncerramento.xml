@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="PesquisarServicoTipoMotivoEncerramentoActionForm"
+				   type="gcom.gui.atendimentopublico.ordemservico.PesquisarServicoTipoMotivoEncerramentoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		<action name="PesquisarServicoTipoMotivoEncerramentoActionForm"
+				type="gcom.gui.atendimentopublico.ordemservico.ExibirPesquisarServicoTipoMotivoEncerramentoAction"
+				validate="false" 
+				scope="session"
+			    path="/exibirPesquisarServicoTipoMotivoEncerramentoAction">
+			<forward name="exibirServicoTipoMotivoEncerramentoPopup" path="/jsp/atendimentopublico/ordemservico/servico_tipo_motivo_encerramento_adicionar_popup.jsp" />
+		</action>
+		
+		<action name="PesquisarServicoTipoMotivoEncerramentoActionForm"
+				type="gcom.gui.atendimentopublico.ordemservico.PesquisarServicoTipoMotivoEncerramentoAction"
+				validate="false" 
+				scope="session"
+			    path="/pesquisarServicoTipoMotivoEncerramentoAction">
+			<forward name="exibirPesquisarServicoTipoMotivoEncerramentoAction" path="/jsp/atendimentopublico/ordemservico/servico_tipo_motivo_encerramento_adicionar_popup.jsp" />
+			<forward name="inserirServicoTipoReload"
+					 path="/jsp/atendimentopublico/ordemservico/servico_tipo_inserir.jsp" />
+		</action>
+	</action-mappings>
+	
+	
+	
+	<message-resources null="false" parameter="gcom.properties.application" />
+</struts-config>

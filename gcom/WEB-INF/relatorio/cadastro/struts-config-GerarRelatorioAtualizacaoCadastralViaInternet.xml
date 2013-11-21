@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="GerarRelatorioAtualizacaoCadastralViaInternetActionForm"
+			type="gcom.gui.relatorio.cadastro.GerarRelatorioAtualizacaoCadastralViaInternetActionForm" />
+	</form-beans>
+
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		
+		<action 
+		    name="GerarRelatorioAtualizacaoCadastralViaInternetActionForm"
+			type="gcom.gui.relatorio.cadastro.ExibirGerarRelatorioAtualizacaoCadastralViaInternetAction"
+			scope="request"
+			validate="true" 
+			path="/exibirGerarRelatorioAtualizacaoCadastralViaInternetAction">
+
+			<forward name="exibirGerarRelatorioAtualizacaoCadastralViaInternet" 
+				path="/jsp/relatorio/cadastro/relatorio_atualizacao_cadastral_via_internet_gerar.jsp" />
+
+		</action>
+		
+		<action name="GerarRelatorioAtualizacaoCadastralViaInternetActionForm"
+			type="gcom.gui.relatorio.cadastro.GerarRelatorioAtualizacaoCadastralViaInternetAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioAtualizacaoCadastralViaInternetAction"/>
+		
+		
+	</action-mappings>
+
+</struts-config>

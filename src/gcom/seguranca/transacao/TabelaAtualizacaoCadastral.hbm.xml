@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.seguranca.transacao.TabelaAtualizacaoCadastral" table="seguranca.tab_atlz_cadastral">
+		<id name="id" type="java.lang.Integer" column="tatc_id">
+			<generator class="sequence">
+				<param name="sequence">seguranca.seq_tab_atlz_cadastral</param>
+			</generator>
+		</id>
+		<property name="idRegistroAlterado" type="java.lang.Integer" column="tatc_idregistroalterado" length="100"/>
+		<property name="indicadorPrincipal" type="java.lang.Short" column="tatc_icprincipal" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="tatc_ultimaalteracao" length="8"/>
+		<property name="indicadorAutorizado" type="java.lang.Short" column="tatc_icautorizado" length="2"/>
+		<property name="codigoImovel" type="java.lang.Integer" column="tatc_cdimovel" length="4"/>
+		<property name="codigoCliente" type="java.lang.Integer" column="tatc_cdcliente" length="4"/>
+		<property name="dataProcessamento" type="java.sql.Timestamp" column="tatc_dtprocessamento" length="8"/>
+		<many-to-one name="tabela" class="gcom.seguranca.transacao.Tabela" not-null="true">
+			<column name="tabe_id"/>
+		</many-to-one>
+		<many-to-one name="operacaoEfetuada" class="gcom.seguranca.acesso.OperacaoEfetuada" not-null="true">
+			<column name="opef_id"/>
+		</many-to-one>
+		<many-to-one name="leiturista" class="gcom.micromedicao.Leiturista" not-null="true">
+			<column name="leit_id"/>
+		</many-to-one>
+		<many-to-one name="alteracaoTipo" class="gcom.seguranca.transacao.AlteracaoTipo" not-null="true">
+			<column name="altp_id"/>
+		</many-to-one>
+		<many-to-one name="arquivoTextoAtualizacaoCadastral" class="gcom.cadastro.ArquivoTextoAtualizacaoCadastral" not-null="false">
+			<column name="txac_id"/>
+		</many-to-one>
+		<many-to-one name="tabelaAtualizacaoCadastralSituacao" class="gcom.seguranca.transacao.TabelaAtualizacaoCadastralSituacao" not-null="false">
+			<column name="tacs_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,233 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.DocumentoTipo" table="cobranca.documento_tipo">
+		<id name="id" type="java.lang.Integer" column="dotp_id">
+			<generator class="sequence">
+				<param name="sequence">
+				cobranca.seq_documento_tipo</param>
+			</generator>
+		</id>
+		<property name="descricaoDocumentoTipo" type="java.lang.String" column="dotp_dsdocumentotipo" length="30"/>
+		<property name="descricaoAbreviado" type="java.lang.String" column="dotp_dsabreviado" length="10"/>
+		<property name="indicadorPagavel" type="java.lang.Short" column="dotp_icpagavel" length="2"/>
+		<property name="indicadorUso" type="java.lang.Short" column="dotp_icuso" length="2"/>
+		<property name="indicadorAgregador" type="java.lang.Short" column="dotp_icagregador" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="dotp_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to CobrancaDocumentoItem -->
+		<!--  
+    <set
+        name="cobrancaDocumentoItems"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="dotp_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CobrancaDocumentoItem"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to ContaHistorico -->
+		<!--
+    <set
+        name="contaHistoricos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="dotp_id" />
+        </key>
+        <one-to-many 
+            class="gcom.ContaHistorico"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to GuiaPagamento -->
+		<!--
+    <set
+        name="guiaPagamentos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="dotp_id" />
+        </key>
+        <one-to-many 
+            class="gcom.GuiaPagamento"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to CreditoARealizar -->
+		<!--
+    <set
+        name="creditoARealizars"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="dotp_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CreditoARealizar"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to ParcelamentoItem -->
+		<!--
+    <set
+        name="parcelamentoItems"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="dotp_id" />
+        </key>
+        <one-to-many 
+            class="gcom.ParcelamentoItem"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to PagamentoHistorico -->
+		<!--
+    <set
+        name="pagamentoHistoricos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="dotp_id" />
+        </key>
+        <one-to-many 
+            class="gcom.PagamentoHistorico"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to Pagamento -->
+		<!--
+    <set
+        name="pagamentos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="dotp_id" />
+        </key>
+        <one-to-many 
+            class="gcom.Pagamento"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to GuiaDevolucao -->
+		<!--
+    <set
+        name="guiaDevolucaos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="dotp_id" />
+        </key>
+        <one-to-many 
+            class="gcom.GuiaDevolucao"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to CobrancaDocumento -->
+		<!--
+    <set
+        name="cobrancaDocumentos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="dotp_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CobrancaDocumento"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to Conta -->
+		<!--
+    <set
+        name="contas"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="dotp_id" />
+        </key>
+        <one-to-many 
+            class="gcom.Conta"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to DebitoACobrarHistorico -->
+		<!--
+    <set
+        name="debitoACobrarHistoricos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="dotp_id" />
+        </key>
+        <one-to-many 
+            class="gcom.DebitoACobrarHistorico"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to DebitoACobrar -->
+		<!--
+    <set
+        name="debitoACobrars"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="dotp_id" />
+        </key>
+        <one-to-many 
+            class="gcom.DebitoACobrar"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to CobrancaAcao -->
+		<!--
+    <set
+        name="cobrancaAcaos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="dotp_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CobrancaAcao"
+        />
+    </set>
+	-->
+	</class>
+</hibernate-mapping>

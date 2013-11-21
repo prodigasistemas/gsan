@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean 
+		    name="EncerrarRegistroAtendimentoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.EncerrarRegistroAtendimentoActionForm" /> 
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+				
+			
+		<action name="EncerrarRegistroAtendimentoActionForm"  
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirEncerrarRegistroAtendimentoAction" 
+			validate="true"
+			scope="session"
+			path="/exibirEncerrarRegistroAtendimentoAction">
+			<forward name="encerrarRegistroAtendimento"
+			path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_encerrar.jsp" />
+		</action>
+
+		<action name="EncerrarRegistroAtendimentoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.EncerrarRegistroAtendimentoAction"
+			validate="true" scope="session"
+			path="/encerrarRegistroAtendimentoAction">
+		</action>
+ 
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

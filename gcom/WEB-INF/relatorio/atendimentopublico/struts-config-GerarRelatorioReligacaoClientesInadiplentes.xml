@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="GerarRelatorioReligacaoClientesInadiplentesForm"
+			type="gcom.gui.relatorio.atendimentopublico.ordemservico.GerarRelatorioReligacaoClientesInadiplentesForm" />
+	</form-beans>
+
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="GerarRelatorioReligacaoClientesInadiplentesForm"
+			type="gcom.gui.relatorio.atendimentopublico.ordemservico.ExibirGerarRelatorioReligacaoClientesInadiplentesAction"
+			validate="false" 
+			scope="session"
+			path="/exibirGerarRelatorioReligacaoClientesInadiplentesAction">
+			
+			<forward name="exibirGerarRelatorioReligacaoClientesInadiplentes" 
+				path="/jsp/relatorio/atendimentopublico/relatorio_religacao_clientes_inadiplentes.jsp" />
+				
+		</action>
+		
+		<action name="GerarRelatorioReligacaoClientesInadiplentesForm"
+			type="gcom.gui.relatorio.atendimentopublico.ordemservico.GerarRelatorioReligacaoClientesInadiplentesAction"
+			validate="true" 
+			path="/gerarRelatorioReligacaoClientesInadiplentesAction" />		
+	
+	</action-mappings>
+
+</struts-config>

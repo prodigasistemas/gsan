@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ejb-jar PUBLIC "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN" "http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+<ejb-jar>
+    <enterprise-beans>
+        <session>
+            <display-name>ControladorLocalidadeGCOM</display-name>
+            <ejb-name>ControladorLocalidadeGCOM</ejb-name>
+            <local-home>gcom.cadastro.localidade.ControladorLocalidadeLocalHome</local-home>
+            <local>gcom.cadastro.localidade.ControladorLocalidadeLocal</local>
+            <ejb-class>gcom.cadastro.localidade.ControladorLocalidadeSEJB</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+        </session>
+    </enterprise-beans>
+    <assembly-descriptor>
+        <container-transaction>
+            <method>
+                <ejb-name>ControladorLocalidadeGCOM</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <trans-attribute>Required</trans-attribute>
+        </container-transaction>
+        
+         <container-transaction>
+            <method>
+                <ejb-name>ControladorLocalidadeGCOM</ejb-name>
+                <method-name>pesquisarIdGerenciaParaLocalidade</method-name>
+            </method>
+            <trans-attribute>NotSupported</trans-attribute>
+        </container-transaction>
+        
+        
+        
+    </assembly-descriptor>
+</ejb-jar>

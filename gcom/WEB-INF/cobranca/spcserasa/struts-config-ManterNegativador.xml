@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+
+		<form-bean name="FiltrarNegativadorActionForm"
+			type="gcom.gui.cobranca.spcserasa.FiltrarNegativadorActionForm" />
+
+		<form-bean name="ManutencaoRegistroActionForm" type="gcom.gui.ManutencaoRegistroActionForm" />
+
+		<form-bean name="AtualizarNegativadorActionForm"
+			type="gcom.gui.cobranca.spcserasa.AtualizarNegativadorActionForm" />
+
+		
+        
+	</form-beans>
+
+	<global-forwards/>
+
+	<action-mappings>
+	
+		<action name="FiltrarNegativadorActionForm" 
+			type="gcom.gui.cobranca.spcserasa.ExibirManterNegativadorAction" 
+			scope="session" validate="false"
+			path="/exibirManterNegativadorAction">
+			<forward name="manterNegativador" path="/jsp/cobranca/spcserasa/negativador_manter.jsp" />
+			<forward name="atualizarNegativador" path="/exibirAtualizarNegativadorAction.do" />				
+		</action>
+		
+		
+	   <action name="FiltrarNegativadorActionForm"
+			type="gcom.gui.relatorio.cobranca.spcserasa.GerarRelatorioNegativadorManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioNegativadorManterAction" />
+		
+		
+		
+		<action name="ManutencaoRegistroActionForm" 
+			type="gcom.gui.cobranca.spcserasa.RemoverNegativadorAction" 
+			scope="request" path="/removerNegativadorAction"/>
+
+		<action name="AtualizarNegativadorActionForm" 
+			type="gcom.gui.cobranca.spcserasa.ExibirAtualizarNegativadorAction" 
+			scope="session" validate="false"
+			path="/exibirAtualizarNegativadorAction">
+			<forward name="atualizarNegativador" path="/jsp/cobranca/spcserasa/negativador_atualizar.jsp" />			
+		</action>
+			
+		<action name="AtualizarNegativadorActionForm" 
+			type="gcom.gui.cobranca.spcserasa.AtualizarNegativadorAction" 
+			scope="request" path="/atualizarNegativadorAction"/>
+			  
+	</action-mappings>
+	<!--******************* ARQUIVO DE PROPRIEDADES *******************-->
+	<message-resources null="false" parameter="gcom.properties.application" />
+	
+</struts-config>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.financeiro.lancamento.LancamentoTipoItem" table="financeiro.lancamento_tipo_item">
+		<composite-id name="comp_id" class="gcom.financeiro.lancamento.LancamentoTipoItemPK">
+			<key-property name="lancamentoTipoId" column="lctp_id" type="java.lang.Integer" length="4"/>
+			<key-property name="lancamentoItemId" column="lcit_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to LancamentoTipo -->
+		<many-to-one name="lancamentoTipo" class="gcom.financeiro.lancamento.LancamentoTipo" update="false" insert="false">
+			<column name="lctp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LancamentoItem -->
+		<many-to-one name="lancamentoItem" class="gcom.financeiro.lancamento.LancamentoItem" update="false" insert="false">
+			<column name="lcit_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

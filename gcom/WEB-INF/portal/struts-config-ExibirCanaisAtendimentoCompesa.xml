@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="ExibirCanaisAtendimentoCompesaActionForm"
+			type="gcom.gui.portal.ExibirCanaisAtendimentoCompesaActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="ExibirCanaisAtendimentoCompesaActionForm"
+			type="gcom.gui.portal.ExibirCanaisAtendimentoCompesaAction"
+			validate="false" scope="session"
+			path="/exibirCanaisAtendimentoCompesaAction">			
+			<forward name="exibirTeleAtendimentoCompesaAction"
+				path="/jsp/portal/portal_teleatendimento.jsp" />		
+				
+			<forward name="exibirAutoAtendimentoCompesaAction"
+				path="/jsp/portal/portal_autoatendimento.jsp" />	
+			
+		</action>
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>
+

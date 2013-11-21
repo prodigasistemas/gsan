@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.atendimentopublico.ordemservico.OSProgramacaoCalibragem" table="atendimentopublico.os_programa_calibragem">
+		<id name="id" type="java.lang.Integer" column="ospc_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_os_programa_calibragem</param>
+			</generator>
+		</id>
+		<property name="grauImportancia" type="java.lang.Integer" column="ospc_nngrauimportancia"/>
+		<property name="faixaInicial" type="java.lang.Integer" column="ospc_nnfaixainicio"/>
+		<property name="faixaFinal" type="java.lang.Integer" column="ospc_nnfaixafim"/>
+		<property name="peso" type="java.lang.Integer" column="ospc_nnpeso" not-null="true"/>
+		<property name="fator" type="java.lang.Integer" column="ospc_nnfator" not-null="true"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ospc_tmultimaalteracao" length="8"/>
+		
+		<many-to-one name="priorizacaoTipo" class="gcom.atendimentopublico.ordemservico.OSPriorizacaoTipo" not-null="true">
+			<column name="pztp_id"/>
+		</many-to-one>
+		
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to Rota -->
+	</class>
+</hibernate-mapping>

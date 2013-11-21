@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.registroatendimento.LocalidadeSolicTipoGrupo" table="atendimentopublico.localid_solic_tipo_grupo">
+		<composite-id name="comp_id" class="gcom.atendimentopublico.registroatendimento.LocalidadeSolicTipoGrupoPK">
+			<key-property name="idLocalidade" column="loca_id" type="java.lang.Integer" length="4"/>
+			<key-property name="idSolicitacaoTipoGrupo" column="sotg_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="lstg_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to SolicitacaoTipoGrupo -->
+		<many-to-one name="solicitacaoTipoGrupo" class="gcom.atendimentopublico.registroatendimento.SolicitacaoTipoGrupo" update="false" insert="false">
+			<column name="sotg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" update="false" insert="false">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+		<!-- bi-directional many-to-one association to UnidadeOrganizacional -->
+		<many-to-one name="unidadeOrganizacional" class="gcom.cadastro.unidade.UnidadeOrganizacional" not-null="true">
+			<column name="unid_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

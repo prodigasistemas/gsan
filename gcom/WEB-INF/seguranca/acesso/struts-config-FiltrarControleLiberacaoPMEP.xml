@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+	<form-bean name="FiltrarControleLiberacaoPMEPActionForm"
+            type="gcom.gui.seguranca.acesso.FiltrarControleLiberacaoPMEPActionForm" />
+   <form-bean name="ResultadoPesquisaControleLiberacaoPMEPActionForm"
+			type="gcom.gui.seguranca.acesso.ResultadoPesquisaControleLiberacaoPMEPActionForm" />
+ </form-beans>
+  <!--******************* PÁGINAS GLOBAIS *******************-->
+ <global-forwards />
+ <action-mappings>
+ 
+  <action name="FiltrarControleLiberacaoPMEPActionForm"
+   type="gcom.gui.seguranca.acesso.ExibirFiltrarControleLiberacaoPMEPAction"
+   validate="false"
+   scope="session"
+   path="/exibirFiltrarControleLiberacaoPMEPAction">
+   <forward name="controleLiberacaoPMEPFiltrar"
+    path="/jsp/seguranca/acesso/controle_liberacao_PMEP_filtrar.jsp" />
+  </action>
+ 
+<action name="FiltrarControleLiberacaoPMEPActionForm" 
+	type="gcom.gui.seguranca.acesso.FiltrarControleLiberacaoPMEPAction"
+	validate="false" scope="session"
+	path="/filtrarControleLiberacaoPMEPAction">
+	
+	<forward name="exibirResultadoPesquisaControleLiberacaoPMEPAction" 
+	path="/exibirResultadoPesquisaControleLiberacaoPMEPAction.do" /> 
+	<forward name="exibirManterControleLiberacaoPMEPAction" 
+	path="/exibirManterControleLiberacaoPMEPAction.do" />
+</action>
+
+
+
+</action-mappings>
+ <message-resources null="false"
+  parameter="gcom.properties.application" />
+</struts-config>

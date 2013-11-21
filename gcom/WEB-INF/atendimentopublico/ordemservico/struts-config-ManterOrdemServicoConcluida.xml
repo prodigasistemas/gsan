@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="ManterOrdemServicoConcluidaActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ManterOrdemServicoConcluidaActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	
+	<action-mappings>
+		<action name="ManterOrdemServicoConcluidaActionForm"  
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirAtualizarOrdemServicoConcluidaAction" 
+			validate="true"	
+			scope="session"	
+			path="/exibirAtualizarOrdemServicoConcluidaAction">
+			
+			<forward
+				name="exibirAtualizarOrdemServicoConcluidaAction"
+				path="/jsp/atendimentopublico/ordemservico/manter_ordem_servico_concluida.jsp" />
+		</action>
+		
+		<action name="ManterOrdemServicoConcluidaActionForm"  
+			type="gcom.gui.atendimentopublico.ordemservico.ManterOrdemServicoConcluidaAction" 
+			validate="true"	
+			scope="session"	
+			path="/manterOrdemServicoConcluidaAction">
+		</action>
+	</action-mappings>
+</struts-config>

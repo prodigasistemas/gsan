@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.financeiro.lancamento.LancamentoItem" table="financeiro.lancamento_item">
+		<id name="id" type="java.lang.Integer" column="lcit_id">
+			<generator class="sequence">
+				<param name="sequence">financeiro.seq_lancamento_item</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="lcit_dsitemlancamento" length="40"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="lcit_dsabreviado" length="10"/>
+		<property name="indicadorItemContabil" type="java.lang.Short" column="lcit_icitemcontabil" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="lcit_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to LancamentoTipoItem -->
+		<!--
+    <set
+        name="lancamentoTipoItems"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="lcit_id" />
+        </key>
+        <one-to-many 
+            class="gcom.LancamentoTipoItem"
+        />
+    </set>
+    <set
+        name="resumoFaturamentos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="lcit_id" />
+        </key>
+        <one-to-many 
+            class="gcom.ResumoFaturamento"
+        />
+    </set>
+    <set
+        name="lancamentoItemContabils"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="lcit_id" />
+        </key>
+        <one-to-many 
+            class="gcom.LancamentoItemContabil"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

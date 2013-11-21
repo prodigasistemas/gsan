@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="PesquisarRegistroAtendimentoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.PesquisarRegistroAtendimentoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="PesquisarRegistroAtendimentoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirPesquisarRegistroAtendimentoAction"
+			validate="true" scope="session"
+			path="/exibirPesquisarRegistroAtendimentoAction">
+			<forward name="registroAtendimentoPesquisar"
+				path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_pesquisar.jsp" />
+				
+			<forward name="pesquisarImovel"
+				path="/exibirPesquisarImovelAction.do?caminhoRetornoTelaPesquisaImovel=exibirPesquisarRegistroAtendimentoAction" />
+			<forward name="pesquisarUnidadeAtendimento"
+				path="/exibirPesquisarUnidadeOrganizacionalAction.do?caminhoRetornoTelaPesquisaUnidadeOrganizacional=exibirPesquisarRegistroAtendimentoAction&amp;tipoUnidade=unidadeAtendimento" />
+			<forward name="pesquisarUnidadeAtual"
+				path="/exibirPesquisarUnidadeOrganizacionalAction.do?caminhoRetornoTelaPesquisaUnidadeOrganizacional=exibirPesquisarRegistroAtendimentoAction&amp;tipoUnidade=unidadeAtual" />
+			<forward name="pesquisarMunicipio"
+				path="/exibirPesquisarMunicipioAction.do?caminhoRetornoTelaPesquisaMunicipio=exibirPesquisarRegistroAtendimentoAction" />
+		</action>
+
+		<action name="PesquisarRegistroAtendimentoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.PesquisarRegistroAtendimentoAction"
+			validate="true" scope="session" path="/pesquisarRegistroAtendimentoAction">
+			<forward name="exibirResultadoPesquisaRegistroAtendimento"
+				path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_resultado_pesquisa.jsp" />
+		</action>
+
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

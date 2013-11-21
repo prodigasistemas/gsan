@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="EfetuarReligacaoAguaActionForm"
+			type="gcom.gui.atendimentopublico.EfetuarReligacaoAguaActionForm" />
+	</form-beans>
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="EfetuarReligacaoAguaActionForm"
+			type="gcom.gui.atendimentopublico.ExibirEfetuarReligacaoAguaAction"
+			validate="true" scope="session"
+			path="/exibirEfetuarReligacaoAguaAction">
+			<forward name="efetuarReligacaoAgua"
+				path="/jsp/atendimentopublico/ligacaoagua/religacao_agua_efetuar.jsp" />
+		</action>
+
+		<action name="EfetuarReligacaoAguaActionForm"
+			type="gcom.gui.atendimentopublico.EfetuarReligacaoAguaAction"
+			validate="true" scope="session"
+			path="/efetuarReligacaoAguaAction">
+			
+			<forward name="encerrarOrdemServicoAction"
+				path="/encerrarOrdemServicoAction.do" />
+				
+			<forward name="encerrarOrdemServicoPopupAction"
+				path="/encerrarOrdemServicoPopupAction.do" />
+		</action>
+
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

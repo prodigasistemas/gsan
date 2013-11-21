@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="GerarRelatorioDocumentosNaoAceitosActionForm"
+
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioDocumentosNaoAceitosActionForm" />
+
+	</form-beans>
+
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+
+	<global-forwards />
+
+	
+
+	<action-mappings>
+
+		<action name="GerarRelatorioDocumentosNaoAceitosActionForm"  
+
+			type="gcom.gui.relatorio.arrecadacao.ExibirGerarRelatorioDocumentosNaoAceitosAction" 
+
+			validate="true"	
+
+			scope="session"	
+
+			path="/exibirGerarRelatorioDocumentosNaoAceitosAction">
+
+			<forward name="exibirGerarRelatorioDocumentosNaoAceitos" path="/jsp/relatorio/arrecadacao/gerar_relatorio_documentos_nao_aceitos.jsp" />
+
+		</action>
+		<action name="GerarRelatorioDocumentosNaoAceitosActionForm"  
+
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioDocumentosNaoAceitosAction" 
+
+			validate="true"	
+
+			scope="session"	
+
+			path="/gerarRelatorioDocumentosNaoAceitosAction">
+		</action>
+		
+	</action-mappings>
+
+	
+
+</struts-config>

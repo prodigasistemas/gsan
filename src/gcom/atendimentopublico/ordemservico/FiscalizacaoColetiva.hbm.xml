@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.ordemservico.FiscalizacaoColetiva" table="atendimentopublico.fiscalizacao_coletiva">
+		<id name="id" type="java.lang.Integer" column="fzcl_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_fiscalizacao_coletiva</param>
+			</generator>
+		</id>
+		<property name="dataGeracao" type="java.sql.Timestamp" column="fzcl_tmgeracao" not-null="true" length="8"/>
+		<property name="comentario" type="java.lang.String" column="fzcl_dscomentario" not-null="true" length="200"/>
+		<property name="dataEncerramento" type="java.sql.Timestamp" column="fzcl_tmencerramento" length="8"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="fzcl_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="nomeFiscalizacaoColetiva" type="java.lang.String" column="fzcl_nmfiscalizacaocoletiva" not-null="true" length="50"/>
+		<!-- Associations -->
+		<many-to-one name="unidadeOrganizacionalAbertura" class="gcom.cadastro.unidade.UnidadeOrganizacional" not-null="true">
+			<column name="unid_idabertura"/>
+		</many-to-one>
+		<many-to-one name="unidadeOrganizacionalEncerramento" class="gcom.cadastro.unidade.UnidadeOrganizacional" not-null="false">
+			<column name="unid_idencerramento"/>
+		</many-to-one>
+		<many-to-one name="usuarioDaAbertura" class="gcom.seguranca.acesso.usuario.Usuario" not-null="true">
+			<column name="usur_idabertura"/>
+		</many-to-one>
+		<many-to-one name="usuarioDeEncerramento" class="gcom.seguranca.acesso.usuario.Usuario" not-null="false">
+			<column name="usur_idencerramento"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to OrdemServico 
+    <set
+        name="ordemServicos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="fzcl_id" />
+        </key>
+        <one-to-many 
+            class="gcom.OrdemServico"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

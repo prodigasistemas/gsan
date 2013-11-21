@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="AcaoCobrancaActionForm"
+			type="gcom.gui.cobranca.AcaoCobrancaActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		<action  name="AcaoCobrancaActionForm"
+			type="gcom.gui.cobranca.ExibirInserirAcaoCobrancaAction"
+			validate="false" scope="session" path="/exibirInserirAcaoCobrancaAction">
+			<forward name="inserirAcaoCobranca"
+				path="/jsp/cobranca/cobranca_acao_inserir.jsp" />
+		</action>
+		
+		<action name="AcaoCobrancaActionForm"
+			type="gcom.gui.cobranca.InserirAcaoCobrancaAction"
+			validate="false" scope="session" path="/inserirAcaoCobrancaAction"/>
+			
+		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

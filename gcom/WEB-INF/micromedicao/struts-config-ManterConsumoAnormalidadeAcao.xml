@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+	
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="AtualizarConsumoAnormalidadeAcaoActionForm"
+			type="gcom.gui.micromedicao.AtualizarConsumoAnormalidadeAcaoActionForm" />
+		<form-bean name="FiltrarConsumoAnormalidadeAcaoActionForm"
+			type="gcom.gui.micromedicao.FiltrarConsumoAnormalidadeAcaoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.micromedicao.ExibirManterConsumoAnormalidadeAcaoAction"
+			validate="false" scope="session"
+			path="/exibirManterConsumoAnormalidadeAcaoAction">
+			<forward name="exibirManterConsumoAnormalidadeAcao"
+				path="/jsp/micromedicao/consumo_anormalidade_acao_manter.jsp" />
+			<forward name="exibirAtualizarConsumoAnormalidadeAcao"
+				path="/exibirAtualizarConsumoAnormalidadeAcaoAction.do?filtrar=sim" />
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.micromedicao.RemoverConsumoAnormalidadeAcaoAction" scope="request"
+			path="/removerConsumoAnormalidadeAcaoAction">
+		</action>
+		
+		<action name="AtualizarConsumoAnormalidadeAcaoActionForm"
+			type="gcom.gui.micromedicao.ExibirAtualizarConsumoAnormalidadeAcaoAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarConsumoAnormalidadeAcaoAction">
+			<forward name="atualizarConsumoAnormalidadeAcao"
+				path="/jsp/micromedicao/consumo_anormalidade_acao_atualizar.jsp" />
+		</action>
+		<action name="AtualizarConsumoAnormalidadeAcaoActionForm"
+			type="gcom.gui.micromedicao.AtualizarConsumoAnormalidadeAcaoAction"
+			validate="true" scope="session"
+			path="/atualizarConsumoAnormalidadeAcaoAction">
+		</action>
+
+		<action name="FiltrarConsumoAnormalidadeAcaoActionForm"
+			type="gcom.micromedicao.GerarRelatorioConsumoAnormalidadeAcaoManterAction"
+			validate="false" scope="session"
+			path="/gerarRelatorioConsumoAnormalidadeAcaoManterAction" />
+		
+			
+	</action-mappings>
+
+</struts-config>

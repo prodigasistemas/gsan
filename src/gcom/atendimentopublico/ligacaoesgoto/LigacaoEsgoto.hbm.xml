@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgoto" table="atendimentopublico.ligacao_esgoto">
+		<id name="id" type="java.lang.Integer" column="lesg_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="dataLigacao" type="java.sql.Date" column="lesg_dtligacao" length="4"/>
+		<property name="consumoMinimo" type="java.lang.Integer" column="lesg_nnconsumominimoesgoto" length="4"/>
+		<property name="percentual" type="java.math.BigDecimal" column="lesg_pcesgoto" length="5" not-null="true"/>
+		<property name="percentualAguaConsumidaColetada" type="java.math.BigDecimal" column="lesg_pccoleta" length="5"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="lesg_tmultimaalteracao" length="8"/>
+		<property name="indicadorCaixaGordura" type="java.lang.Short" column="lesg_iccaixagordura" not-null="true" length="2"/>
+		<property name="indicadorLigacaoEsgoto" type="java.lang.Short" column="lesg_icligacaoesgoto" not-null="true" length="2"/>
+		
+		<property name="percentualAlternativo" type="java.math.BigDecimal" column="lesg_pcalternativo" length="5"/>
+		<property name="numeroConsumoPercentualAlternativo" type="java.lang.Integer" column="lesg_nnconsumopcalternativo" length="4"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-one association to Imovel -->
+		<one-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" outer-join="auto" constrained="true"/>
+		<!-- bi-directional many-to-one association to LigacaoEsgotoPerfil -->
+		<many-to-one name="ligacaoEsgotoPerfil" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoPerfil" not-null="true">
+			<column name="lepf_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LigacaoEsgotoDiametro -->
+		<many-to-one name="ligacaoEsgotoDiametro" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoDiametro" not-null="true">
+			<column name="legd_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LigacaoEsgotoMaterial -->
+		<many-to-one name="ligacaoEsgotoMaterial" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoMaterial" not-null="true">
+			<column name="legm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LigacaoEsgotoEsgotamento -->
+		<many-to-one name="ligacaoEsgotoEsgotamento" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoEsgotamento" not-null="false">
+			<column name="lees_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LigacaoEsgotoDestinoDejetos -->
+		<many-to-one name="ligacaoEsgotoDestinoDejetos" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoDestinoDejetos" not-null="false">
+			<column name="ledd_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LigacaoEsgotoCaixaInspecao -->
+		<many-to-one name="ligacaoEsgotoCaixaInspecao" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoCaixaInspecao" not-null="false">
+			<column name="leci_id"/>
+		</many-to-one>
+		<!--bi-directional many-to-one association to LigacaoEsgotoDestinoAguasPluviais -->
+		<many-to-one name="ligacaoEsgotoDestinoAguasPluviais" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoDestinoAguasPluviais" not-null="false">
+			<column name="leda_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LigacaoOrigem -->
+		<many-to-one name="ligacaoOrigem" class="gcom.atendimentopublico.LigacaoOrigem" not-null="false">
+			<column name="lgor_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LigacaoEsgotoSituacao 
+    <many-to-one
+        name="ligacaoEsgotoSituacao"
+        class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao"
+        not-null="true"
+    >
+        <column name="lest_id" />
+    </many-to-one> -->
+		<!-- bi-directional one-to-many association to ConsumoHistorico
+    <set
+        name="consumoHistoricos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="lesg_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.ConsumoHistorico"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

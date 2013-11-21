@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.faturamento.debito.DebitoCobradoCategoriaHistorico" table="faturamento.deb_cobrado_catg_hist">
+		<composite-id name="comp_id" class="gcom.faturamento.debito.DebitoCobradoCategoriaHistoricoPK">
+			<key-property name="debitoCobradoHistoricoId" column="dbhi_id" type="java.lang.Integer" length="4"/>
+			<key-property name="categoriaId" column="catg_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<property name="quantidadeEconomia" type="java.lang.Integer" column="dcch_qteconomia" length="4"/>
+		<property name="valorCategoria" type="java.math.BigDecimal" column="dcch_vlcategoria" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="dcch_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to DebitoCobradoHistorico -->
+		<many-to-one name="debitoCobradoHistorico" class="gcom.faturamento.debito.DebitoCobradoHistorico" update="false" insert="false">
+			<column name="dbhi_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Categoria -->
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" update="false" insert="false">
+			<column name="catg_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

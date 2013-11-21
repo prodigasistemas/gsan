@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cobranca.CobrancaGrupo" table="cobranca.cobranca_grupo">
+		<id name="id" type="java.lang.Integer" column="cbgr_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_cobranca_grupo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="cbgr_dscobrancagrupo" not-null="true" length="25"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="cbgr_dsabreviado" not-null="true" length="3"/>
+		<property name="indicadorUso" type="java.lang.Short" column="cbgr_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cbgr_tmultimaalteracao" length="8"/>
+		<property name="anoMesReferencia" type="java.lang.Integer" column="cbgr_amreferencia" length="4"/>
+        <property name="indicadorExecucaoAutomatica" type="java.lang.Short" column="cbgr_icexecautomatica" length="2"/>
+   		<property name="emailResponsavel" type="java.lang.String" column="cbgr_dsemail" length="50"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to Rota
+    <set
+        name="rotas"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="gcob_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Rota"
+        />
+    </set> -->
+
+
+   <!-- bi-directional one-to-many association to ContratoEmpresaServico -->
+    <many-to-one
+        name="contratoEmpresaServico"
+        class="gcom.micromedicao.ContratoEmpresaServico"
+        not-null="true"
+        lazy="false"
+    >
+        <column name="cese_id" />
+    </many-to-one>
+	</class>
+</hibernate-mapping>

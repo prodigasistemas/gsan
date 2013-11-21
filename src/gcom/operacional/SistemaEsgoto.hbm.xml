@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.operacional.SistemaEsgoto" table="operacional.sistema_esgoto">
+		<id name="id" type="java.lang.Integer" column="sesg_id">
+			<generator class="sequence">
+				<param name="sequence">operacional.seq_sistema_esgoto</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="sesg_dssistemaesgoto" not-null="true" length="20"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="sesg_dsabreviado" not-null="true" length="6"/>
+		<property name="indicadorUso" type="java.lang.Short" column="sesg_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="sesg_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to SistemaEsgotoTratamentoTipo -->
+		<many-to-one name="sistemaEsgotoTratamentoTipo" class="gcom.operacional.SistemaEsgotoTratamentoTipo" not-null="true">
+			<column name="sett_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to Bacia
+    <set
+        name="bacias"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="sesg_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Bacia"
+        />
+    </set>
+   -->
+		<!-- bi-directional many-to-one association to DivisaoEsgoto -->
+		<many-to-one name="divisaoEsgoto" class="gcom.operacional.DivisaoEsgoto" not-null="true">
+			<column name="dves_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

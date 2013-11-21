@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.gerencial.atendimentopublico.registroatendimento.GMeioSolicitacao" table="atendimentopublico.g_meio_solicitacao">
+		<id name="id" type="java.lang.Integer" column="meso_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="descricao" type="java.lang.String" column="meso_dsmeiosolicitacao" not-null="true" length="50"/>
+		<property name="descricaoAbreviado" type="java.lang.String" column="meso_dsabreviado" length="8"/>
+		<property name="indicador" type="short" column="meso_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="meso_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to UnResumoRegistroAtendimento -->
+		<set name="unResumoRegistroAtendimentos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="meso_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.atendimentopublico.registroatendimento.UnResumoRegistroAtendimento"/>
+		</set>
+	</class>
+</hibernate-mapping>

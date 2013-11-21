@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="GerarRelatorioTranferenciaCreditoActionForm"
+
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioTranferenciaCreditoActionForm" />
+
+	</form-beans>
+
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+
+	<global-forwards />
+
+	
+
+	<action-mappings>
+
+		<action name="GerarRelatorioTranferenciaCreditoActionForm"  
+
+			type="gcom.gui.relatorio.arrecadacao.ExibirGerarRelatorioTransferenciaCreditoAction" 
+
+			validate="true"	
+
+			scope="session"	
+
+			path="/exibirGerarRelatorioTransferenciaCreditoAction">
+
+			<forward name="exibirGerarRelatorioTransferenciaCredito" path="/jsp/relatorio/arrecadacao/gerar_relatorio_transferencia_credito.jsp" />
+
+		</action>
+	</action-mappings>
+
+	
+
+</struts-config>

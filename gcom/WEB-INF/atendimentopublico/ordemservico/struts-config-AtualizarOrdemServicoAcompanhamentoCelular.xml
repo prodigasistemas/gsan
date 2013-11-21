@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean
+			name="AtualizarOrdemServicoAcompanhamentoCelularActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.AtualizarOrdemServicoAcompanhamentoCelularActionForm" />
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="AtualizarOrdemServicoAcompanhamentoCelularActionForm" 
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirAtualizarOrdemServicoAcompanhamentoCelularAction"
+			validate="false" scope="session" 
+			path="/exibirAtualizarOrdemServicoAcompanhamentoCelularAction">
+			
+			<forward name="atualizarOrdemServicoAcompanhamentoCelularAction"
+				path="/jsp/atendimentopublico/ordemservico/atualizar_ordem_servico_acompanhamento_celular.jsp" />
+		</action>
+		
+		<action 
+			type="gcom.gui.atendimentopublico.ordemservico.AtualizarOrdemServicoAcompanhamentoCelularAction"
+			path="/atualizarOrdemServicoAcompanhamentoCelularAction">
+		</action>
+	</action-mappings>
+</struts-config>

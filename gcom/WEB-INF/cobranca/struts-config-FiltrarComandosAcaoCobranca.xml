@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarComandosAcaoCobrancaCronogramaActionForm"
+			type="gcom.gui.cobranca.FiltrarComandosAcaoCobrancaCronogramaActionForm" />			
+		<form-bean name="FiltrarComandosAcaoCobrancaEventualActionForm"
+			type="gcom.gui.cobranca.FiltrarComandosAcaoCobrancaEventualActionForm" />			
+			
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0326] FILTRAR COMANDOS DE AÇÃO DE COBRANÇA Auhtor: Rafael Santos Data:08/05/2006-->
+		<action name="FiltrarComandosAcaoCobrancaCronogramaActionForm"
+			type="gcom.gui.cobranca.ExibirFiltrarComandosAcaoCobrancaCronogramaAction"
+			validate="false" scope="session"
+			path="/exibirFiltrarComandosAcaoCobrancaCronogramaAction">
+			<forward name="exibirFiltrarComandosAcaoCobrancaCronograma"
+				path="/jsp/cobranca/comando_acao_cobranca_filtrar_comando_cronograma.jsp" />
+		</action>
+
+		<action name="FiltrarComandosAcaoCobrancaCronogramaActionForm"
+			type="gcom.gui.cobranca.FiltrarComandosAcaoCobrancaCronogramaAction"
+			validate="false" scope="session"
+			path="/filtrarComandosAcaoCobrancaCronogramaAction">
+			<forward name="retornarComandosAcaoCobrancaCronograma"
+				path="/exibirComandosAcaoCobrancaCronogramaAction.do" />
+		</action>
+
+		<action name="FiltrarComandosAcaoCobrancaEventualActionForm"
+			type="gcom.gui.cobranca.ExibirFiltrarComandosAcaoCobrancaEventualAction"
+			validate="false" scope="session"
+			path="/exibirFiltrarComandosAcaoCobrancaEventualAction">
+			<forward name="exibirFiltrarComandosAcaoCobrancaEventual"
+				path="/jsp/cobranca/comando_acao_cobranca_filtrar_comando_eventual.jsp" />
+		</action>
+
+		<action name="FiltrarComandosAcaoCobrancaEventualActionForm"
+			type="gcom.gui.cobranca.FiltrarComandosAcaoCobrancaEventualAction"
+			validate="false" scope="session"
+			path="/filtrarComandosAcaoCobrancaEventualAction">
+			<forward name="retornarComandosAcaoCobrancaEventual"
+				path="/exibirComandosAcaoCobrancaEventualAction.do" />
+		</action>
+
+	</action-mappings>
+
+</struts-config>

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.arrecadacao.RecebimentoTipo" table="arrecadacao.recebimento_tipo">
+		<id name="id" type="java.lang.Integer" column="rctp_id">
+			<generator class="sequence">
+				<param name="sequence">arrecadacao.seq_recebimento_tipo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="rctp_dsrecebimentotipo" length="60" not-null="true"/>
+		<property name="indicadorUso" type="java.lang.Short" column="rctp_icuso" length="2" not-null="true"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="rctp_tmultimaalteracao" length="8" not-null="true"/>
+		<property name="numeroSequencia" type="java.lang.Short" column="rctp_nnsequencia" length="2"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to UsuarioSistema
+    <set
+        name="usuarioSistemas"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="rctp_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.UsuarioSistema"
+        />
+    </set>
+  -->
+	</class>
+</hibernate-mapping>

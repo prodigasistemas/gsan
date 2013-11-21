@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.cliente.ClienteImovelFimRelacaoMotivo" table="cadastro.clim_fim_relacao_motivo">
+		<id name="id" type="java.lang.Integer" column="cifr_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_clim_fim_relacao_motivo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="cifr_dsfimrelacaomotivo" length="20"/>
+		<property name="indicadorUso" type="java.lang.Short" column="cifr_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cifr_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to ClienteImovel
+    <set
+        name="clienteImovels"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="cifr_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.ClienteImovel"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to ClienteImovelEconomia
+    <set
+        name="clienteImovelEconomias"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="cifr_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.ClienteImovelEconomia"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

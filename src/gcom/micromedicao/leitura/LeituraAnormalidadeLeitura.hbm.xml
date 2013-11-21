@@ -1,0 +1,75 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.micromedicao.leitura.LeituraAnormalidadeLeitura" table="micromedicao.leitura_anorm_leitura">
+		<id name="id" type="java.lang.Integer" column="lalt_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_leitura_anorm_leitura</param>
+			</generator>
+		</id>
+		<property name="descricaoFaturamento" type="java.lang.String" column="lalt_dsleituraafaturar" length="30"/>
+		<property name="indicadorSemLeitura" type="java.lang.Short" column="lalt_icsemleitura" length="2"/>
+		<property name="indicadorComLeitura" type="java.lang.Short" column="lalt_iccomleitura" length="2"/>
+		<property name="indicadorUso" type="java.lang.Short" column="lalt_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="lalt_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to LeituraAnormalidade
+    <set
+        name="leituraAnormalidadesByLaltCdleituraafaturarcomleitura"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="lalt_cdleituraafaturarcomleitura" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.LeituraAnormalidade"
+        />
+    </set>
+     bi-directional one-to-many association to LeituraAnormalidade
+    <set
+        name="leituraAnormalidadesByLaltCdleituraafaturarsemleitura"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="lalt_cdleituraafaturarsemleitura" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.LeituraAnormalidade"
+        />
+    </set>
+     bi-directional one-to-many association to FaturamentoSituacaoTipo
+    <set
+        name="faturamentoSituacaoTiposByLaltIdleituraafaturarcomleitura"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="lalt_idleituraafaturarcomleitura" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.FaturamentoSituacaoTipo"
+        />
+    </set>
+     bi-directional one-to-many association to FaturamentoSituacaoTipo
+    <set
+        name="faturamentoSituacaoTiposByLaltIdleituraafaturarsemleitura"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="lalt_idleituraafaturarsemleitura" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.FaturamentoSituacaoTipo"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

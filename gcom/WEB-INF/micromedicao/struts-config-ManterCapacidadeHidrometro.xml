@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+	
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="AtualizarCapacidadeHidrometroActionForm"
+			type="gcom.gui.micromedicao.hidrometro.AtualizarCapacidadeHidrometroActionForm" />
+		<form-bean name="FiltrarCapacidadeHidrometroActionForm"
+			type="gcom.gui.micromedicao.hidrometro.FiltrarCapacidadeHidrometroActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0218] MANTER TIPO DE RETORNO DA OS_REFERIDA Auhtor: Thiago Tenório Data:01/11/2006-->
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.micromedicao.hidrometro.ExibirManterCapacidadeHidrometroAction"
+			validate="false" scope="session"
+			path="/exibirManterCapacidadeHidrometroAction">
+			<forward name="exibirManterCapacidadeHidrometro"
+				path="/jsp/micromedicao/hidrometro/hidrometro_capacidade_manter.jsp" />
+			<forward name="exibirAtualizarCapacidadeHidrometro"
+				path="/exibirAtualizarCapacidadeHidrometroAction.do" />
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.micromedicao.hidrometro.RemoverCapacidadeHidrometroAction" scope="request"
+			path="/removerCapacidadeHidrometroAction">
+		</action>
+		
+		<action name="AtualizarCapacidadeHidrometroActionForm"
+			type="gcom.gui.micromedicao.hidrometro.ExibirAtualizarCapacidadeHidrometroAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarCapacidadeHidrometroAction">
+			<forward name="atualizarCapacidadeHidrometro"
+				path="/jsp/micromedicao/hidrometro/hidrometro_capacidade_atualizar.jsp" />
+		</action>
+		<action name="AtualizarCapacidadeHidrometroActionForm"
+			type="gcom.gui.micromedicao.hidrometro.AtualizarCapacidadeHidrometroAction"
+			validate="true" scope="session"
+			path="/atualizarCapacidadeHidrometroAction">
+		</action>
+
+	</action-mappings>
+
+</struts-config>

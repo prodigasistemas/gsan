@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.imovel.ImovelInscricaoAlterada" table="cadastro.imovel_inscr_alterada">
+		<id name="id" type="java.lang.Integer" column="imia_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_imovel_inscr_alterada</param>
+			</generator>
+		</id>
+		<property name="loteAtual" type="short" column="imia_nnloteatual" not-null="true" length="2"/>
+		<property name="subLoteAtual" type="short" column="imia_nnsubloteatual" not-null="true" length="2"/>
+		<property name="loteAnterior" type="short" column="imia_nnloteanterior" not-null="true" length="2"/>
+		<property name="subLoteAnterior" type="short" column="imia_nnsubloteanterior" not-null="true" length="2"/>
+		<property name="indicadorAtualizado" type="java.lang.Short" column="imia_icatualizado" length="2"/>
+		<property name="indicadorAtualizacaoExcluida" type="java.lang.Short" column="imia_icalteracaoexcluida" length="2"/>
+		<property name="indicadorImovelExcluido" type="java.lang.Short" column="imia_icimovelexcluido" length="2"/>
+		<property name="indicadorErroAlteracao" type="java.lang.Short" column="imia_icerroalteracao" length="2"/>
+		<property name="dataAlteracaoOnline" type="java.sql.Timestamp" column="imia_tmalteracaoonline" length="8"/>
+		<property name="dataAlteracaoBatch" type="java.sql.Timestamp" column="imia_tmalteracaobatch" length="8"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="imia_tmultimaalteracao" length="8"/>
+		<property name="indicadorAutorizado" type="java.lang.Short" column="imia_icautorizado" length="2"/>
+		
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidadeAtual" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_idatual"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to SetorComercial -->
+		<many-to-one name="setorComercialAtual" class="gcom.cadastro.localidade.SetorComercial" not-null="true">
+			<column name="stcm_idatual"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Quadra -->
+		<many-to-one name="quadraAtual" class="gcom.cadastro.localidade.Quadra" not-null="true">
+			<column name="qdra_idatual"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to QuadraFace -->
+		<many-to-one name="quadraFaceAtual" class="gcom.cadastro.localidade.QuadraFace" not-null="false">
+			<column name="qdfa_idatual"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidadeAnterior" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_idanterior"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to SetorComercial -->
+		<many-to-one name="setorComercialAnterior" class="gcom.cadastro.localidade.SetorComercial" not-null="true">
+			<column name="stcm_idanterior"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Quadra -->
+		<many-to-one name="quadraAnterior" class="gcom.cadastro.localidade.Quadra" not-null="true">
+			<column name="qdra_idanterior"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to QuadraFace -->
+		<many-to-one name="quadraFaceAnterior" class="gcom.cadastro.localidade.QuadraFace" not-null="false">
+			<column name="qdfa_idanterior"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Faturamento Grupo-->
+		<many-to-one name="faturamentoGrupo" class="gcom.faturamento.FaturamentoGrupo" not-null="false">
+			<column name="ftgr_id"/>
+		</many-to-one>
+		
+		<many-to-one name="usuarioAlteracao" class="gcom.seguranca.acesso.usuario.Usuario" not-null="false">
+			<column name="usur_idalteracao"/>
+		</many-to-one>
+		
+		<many-to-one name="usuarioAutorizacao" class="gcom.seguranca.acesso.usuario.Usuario" not-null="false">
+			<column name="usur_idautorizacao"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

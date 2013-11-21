@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="GerarRelatorioAcompanhamentoExecucaoOSActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.GerarRelatorioAcompanhamentoExecucaoOSActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	
+	<action-mappings>
+		<action name="GerarRelatorioAcompanhamentoExecucaoOSActionForm"  
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirGerarRelatorioAcompanhamentoExecucaoOSAction" 
+			validate="true"	
+			scope="session"	
+			path="/exibirGerarRelatorioAcompanhamentoExecucaoOSAction">
+			
+			<forward name="exibirAcompanhamentoExecucaoOS" path="/jsp/atendimentopublico/ordemservico/ordem_servico_acompanhamento_execucao.jsp" />
+		</action>
+		
+		<action name="GerarRelatorioAcompanhamentoExecucaoOSActionForm"  
+			type="gcom.gui.relatorio.atendimentopublico.GerarRelatorioAcompanhamentoExecucaoOSAction" 
+			validate="true"	
+			scope="session"	
+			path="/gerarRelatorioAcompanhamentoExecucaoOSAction">
+		</action>
+	</action-mappings>
+</struts-config>

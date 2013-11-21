@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		
+		<form-bean name="ManterAtividadeCobrancaActionForm"
+			type="gcom.gui.cobranca.ManterAtividadeCobrancaActionForm" />
+
+		<form-bean name="AtualizarAtividadeCobrancaActionForm"
+			type="gcom.gui.cobranca.AtualizarAtividadeCobrancaActionForm" />
+
+	</form-beans>
+
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="ManterAtividadeCobrancaActionForm" 
+			type="gcom.gui.cobranca.ExibirManterAtividadeCobrancaAction"
+			path="/exibirManterAtividadeCobrancaAction">
+			<forward name="manterAtividadeCobranca"
+				path="/jsp/cobranca/cobranca_atividade_manter.jsp" />
+		</action>
+
+		<action name="ManterAtividadeCobrancaActionForm"
+			type="gcom.gui.cobranca.RemoverAtividadeCobrancaAction"
+			scope="request" path="/removerAtividadeCobrancaAction" />
+
+		<action name="AtualizarAtividadeCobrancaActionForm"
+	      	type="gcom.gui.cobranca.ExibirAtualizarAtividadeCobrancaAction"
+	      	validate="true" scope="session"
+	      	path="/exibirAtualizarAtividadeCobrancaAction">
+			<forward name="atualizarAtividadeCobranca"
+		  		path="/jsp/cobranca/cobranca_atividade_atualizar.jsp" />
+		</action>
+		
+		<action name="AtualizarAtividadeCobrancaActionForm" 
+			type="gcom.gui.cobranca.AtualizarAtividadeCobrancaAction"
+			validate="true" scope="session"
+			path="/atualizarAtividadeCobrancaAction"/>
+
+	</action-mappings>
+
+	
+</struts-config>

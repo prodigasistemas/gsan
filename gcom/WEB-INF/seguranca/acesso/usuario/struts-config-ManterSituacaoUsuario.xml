@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+				<form-bean name="AtualizarSituacaoUsuarioActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.AtualizarSituacaoUsuarioActionForm" />
+				
+	</form-beans>
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.ExibirManterSituacaoUsuarioAction"
+			validate="false" scope="session"
+			path="/exibirManterSituacaoUsuarioAction">
+			<forward name="manterSituacaoUsuario"
+				path="/jsp/seguranca/acesso/usuario/situacao_manter_usuario.jsp" />
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.ExcluirSituacaoUsuarioAction"
+			validate="false" input="/exibirManterSituacaoUsuarioAction.do"
+			scope="request" path="/excluirSituacaoUsuarioAction" >
+		</action>
+		
+		<action name="AtualizarSituacaoUsuarioActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.ExibirAtualizarSituacaoUsuarioAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarSituacaoUsuarioAction">
+			<forward name="atualizarSituacaoUsuario"
+				path="/jsp/seguranca/acesso/usuario/usuario_situacao_atualizar.jsp" />
+		</action>
+		
+		<action name="AtualizarSituacaoUsuarioActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.AtualizarSituacaoUsuarioAction"
+			validate="true" scope="request"
+			path="/atualizarSituacaoUsuarioAction">
+		</action>
+		
+		
+		
+
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

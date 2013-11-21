@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 4.0//EN" "http://www.jboss.org/j2ee/dtd/jboss_4_0.dtd">
+<jboss>
+	<enterprise-beans>
+		<message-driven>
+			<ejb-name>
+				BatchGerarDadosArquivoAcompanhamentoServicoMDB
+			</ejb-name>
+			<destination-jndi-name>
+				BatchGerarDadosArquivoAcompanhamentoServicoMDB
+			</destination-jndi-name>
+			<invoker-bindings>
+				<invoker>
+					<invoker-proxy-binding-name>
+					message-driven-bean-limite10
+					</invoker-proxy-binding-name>
+				</invoker>
+			</invoker-bindings>
+		</message-driven>
+	</enterprise-beans>
+</jboss>

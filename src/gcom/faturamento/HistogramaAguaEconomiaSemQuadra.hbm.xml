@@ -1,0 +1,399 @@
+<?xml version="1.0"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC
+
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+    
+
+<hibernate-mapping>
+
+<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+
+
+
+<class 
+
+    name="gcom.faturamento.HistogramaAguaEconomiaSemQuadra" 
+
+    table="faturamento.histo_agua_econ_sqdra"
+
+>
+
+
+
+    <id
+
+        name="id"
+
+        type="java.lang.Integer"
+
+        column="haes_id"
+
+    >
+
+        <generator class="assigned" />
+
+    </id>
+
+
+
+    <property
+
+        name="anoMesReferencia"
+
+        type="int"
+
+        column="haes_amreferencia"
+
+        not-null="true"
+
+        length="4"
+
+    />
+
+    <property
+
+        name="codigoSetorComercial"
+
+        type="int"
+
+        column="haes_cdsetorcomercial"
+
+        not-null="true"
+
+        length="4"
+
+    />
+
+    <property
+
+        name="indicadorConsumoReal"
+
+        type="short"
+
+        column="haes_icconsumoreal"
+
+        not-null="true"
+
+        length="2"
+
+    />
+
+    <property
+
+        name="indicadorHidrometro"
+
+        type="short"
+
+        column="haes_ichidrometro"
+
+        not-null="true"
+
+        length="2"
+
+    />
+
+    <property
+
+        name="indicadorPoco"
+
+        type="short"
+
+        column="haes_icpoco"
+
+        not-null="true"
+
+        length="2"
+
+    />
+
+    <property
+
+        name="indicadorVolFixadoAgua"
+
+        type="short"
+
+        column="haes_icvolfixadoagua"
+
+        not-null="true"
+
+        length="2"
+
+    />
+
+    <property
+
+        name="quantidadeConsumo"
+
+        type="int"
+
+        column="haes_qtconsumo"
+
+        not-null="true"
+
+        length="4"
+
+    />
+
+    <property
+
+        name="quantidadeEconomia"
+
+        type="int"
+
+        column="haes_qteconomia"
+
+        not-null="true"
+
+        length="4"
+
+    />
+
+    <property
+
+        name="valorFaturadoEconomia"
+
+        type="java.math.BigDecimal"
+
+        column="haes_vlfaturadoeconomia"
+
+        not-null="true"
+
+        length="15"
+
+    />
+
+    <property
+
+        name="volumeFaturadoEconomia"
+
+        type="int"
+
+        column="haes_vofaturadoeconomia"
+
+        not-null="true"
+
+        length="4"
+
+    />
+
+    <property
+
+        name="ultimaAlteracao"
+
+        type="java.sql.Timestamp"
+
+        column="haes_tmultimaalteracao"
+
+        not-null="true"
+
+        length="8"
+
+    />
+    <property
+        name="quantidadeLigacao"
+        type="int"
+        column="haes_qtligacao"
+        not-null="false"
+        length="4"
+    />
+
+    <!-- Associations -->
+
+  
+
+    <!-- bi-directional many-to-one association to GerenciaRegional -->
+
+    <many-to-one
+
+        name="gerenciaRegional"
+
+        class="gcom.cadastro.localidade.GerenciaRegional"
+
+        not-null="true"
+
+    >
+
+        <column name="greg_id" />
+
+    </many-to-one>
+
+    <!-- bi-directional many-to-one association to Localidade -->
+
+    <many-to-one
+
+        name="localidade"
+
+        class="gcom.cadastro.localidade.Localidade"
+
+        not-null="true"
+
+    >
+
+        <column name="loca_id" />
+
+    </many-to-one>
+
+    <!-- bi-directional many-to-one association to Localidade -->
+
+    <many-to-one
+
+        name="localidadeElo"
+
+        class="gcom.cadastro.localidade.Localidade"
+
+        not-null="true"
+
+    >
+
+        <column name="loca_cdelo" />
+
+    </many-to-one>
+
+    <!-- bi-directional many-to-one association to ConsumoTarifa -->
+
+    <many-to-one
+
+        name="consumoTarifa"
+
+        class="gcom.faturamento.consumotarifa.ConsumoTarifa"
+
+        not-null="true"
+
+    >
+
+        <column name="cstf_id" />
+
+    </many-to-one>
+    <!-- bi-directional many-to-one association to LigacaoAguaSituacao -->
+
+    <many-to-one
+
+        name="ligacaoAguaSituacao"
+
+        class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao"
+
+        not-null="true"
+
+    >
+
+        <column name="last_id" />
+
+    </many-to-one>
+
+    <!-- bi-directional many-to-one association to UnidadeNegocio -->
+
+    <many-to-one
+
+        name="unidadeNegocio"
+
+        class="gcom.cadastro.localidade.UnidadeNegocio"
+
+        not-null="true"
+
+    >
+
+        <column name="uneg_id" />
+
+    </many-to-one>
+
+    <!-- bi-directional many-to-one association to EsferaPoder -->
+
+    <many-to-one
+
+        name="esferaPoder"
+
+        class="gcom.cadastro.cliente.EsferaPoder"
+
+        not-null="true"
+
+    >
+
+        <column name="epod_id" />
+
+    </many-to-one>
+
+    <!-- bi-directional many-to-one association to Categoria -->
+
+    <many-to-one
+
+        name="categoria"
+
+        class="gcom.cadastro.imovel.Categoria"
+
+        not-null="true"
+
+    >
+
+        <column name="catg_id" />
+
+    </many-to-one>
+    
+    <!-- bi-directional many-to-one association to Subcategoria -->
+
+    <many-to-one
+
+        name="subcategoria"
+
+        class="gcom.cadastro.imovel.Subcategoria"
+
+        not-null="true"
+
+    >
+
+        <column name="scat_id" />
+
+    </many-to-one>
+    
+
+    <!-- bi-directional many-to-one association to CategoriaTipo -->
+
+    <many-to-one
+
+        name="categoriaTipo"
+
+        class="gcom.cadastro.imovel.CategoriaTipo"
+
+        not-null="true"
+
+    >
+
+        <column name="cgtp_id" />
+
+    </many-to-one>
+
+    <!-- bi-directional many-to-one association to SetorComercial -->
+
+    <many-to-one
+
+        name="setorComercial"
+
+        class="gcom.cadastro.localidade.SetorComercial"
+
+        not-null="true"
+
+    >
+
+        <column name="stcm_id" />
+
+    </many-to-one>
+
+
+
+</class>
+
+</hibernate-mapping>
+

@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.imovel.ImovelSubcategoria" table="cadastro.imovel_subcategoria">
+		<composite-id name="comp_id" class="gcom.cadastro.imovel.ImovelSubcategoriaPK">
+			<!-- bi-directional many-to-one association to Imovel -->
+			<key-many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel">
+				<column name="imov_id"/>
+			</key-many-to-one>
+			<!-- bi-directional many-to-one association to Subcategoria -->
+			<key-many-to-one name="subcategoria" class="gcom.cadastro.imovel.Subcategoria">
+				<column name="scat_id"/>
+			</key-many-to-one>
+		</composite-id>
+		<property name="quantidadeEconomias" type="short" column="imsb_qteconomia" not-null="true" length="2"/>
+		<property name="quantidadeUnidadesPrivativas" type="java.lang.Short" column="imsb_qtunidadeprivativa" not-null="false" length="2"/>
+		<property name="quantidadeUnidadesColetivas" type="java.lang.Short" column="imsb_qtunidadecoletiva" not-null="false" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="imsb_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to ImovelEconomia -->
+		<set name="imovelEconomias" inverse="false" lazy="true">
+			<key>
+				<column name="imov_id"/>
+				<column name="scat_id"/>
+			</key>
+			<one-to-many class="gcom.cadastro.imovel.ImovelEconomia"/>
+		</set>
+	</class>
+</hibernate-mapping>

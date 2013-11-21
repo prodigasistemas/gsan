@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="PesquisarAtividadeActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.PesquisarAtividadeActionForm" />
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="PesquisarAtividadeActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirPesquisarAtividadeAction"
+			validate="false" scope="session"
+			path="/exibirPesquisarAtividadeAction">
+			<forward name="atividadePesquisar"
+				path="/jsp/atendimentopublico/ordemservico/atividade_pesquisar.jsp" />
+		</action>
+
+		<action name="PesquisarAtividadeActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.PesquisarAtividadeAction"
+			validate="false" scope="session" path="/pesquisarAtividadeAction">
+			<forward name="listaAtividade"
+				path="/jsp/atendimentopublico/ordemservico/atividade_resultado_pesquisa.jsp" />
+		</action>
+
+
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

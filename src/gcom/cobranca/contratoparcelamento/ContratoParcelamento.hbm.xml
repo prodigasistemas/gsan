@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.contratoparcelamento.ContratoParcelamento" table="cobranca.contrato_parcel" >
+		<id name="id" type="java.lang.Integer" column="cpar_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_contrato_parcel</param>
+			</generator>
+		</id>
+		
+		<property name="numero" type="java.lang.String" column="cpar_nncontrato" length="15"/>
+		<property name="dataContrato" type="java.sql.Timestamp" column="cpar_dtcontrato" length="8"/>
+		
+		<property name="indicadorResponsavel" type="java.lang.Short" column="cpar_cdresponsavel" length="2"/>
+		
+		<property name="anoMesDebitoInicio" type="java.lang.Integer" column="cpar_amreferenciadebitoini" length="6"/>
+		<property name="anoMesDebitoFinal" type="java.lang.Integer" column="cpar_amreferenciadebitofim" length="6"/>
+		
+		<property name="dataVencimentoInicio" type="java.sql.Timestamp" column="cpar_dtvencimentodebitoini" length="8"/>
+		<property name="dataVencimentoFinal" type="java.sql.Timestamp" column="cpar_dtvencimentodebitofim" length="8"/>
+		
+		<property name="observacao" type="java.lang.String" column="cpar_dsobservacao" />
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cpar_tmultimaalteracao" length="8"/>
+		
+		<property name="indicadorDebitosAcrescimos" type="java.lang.Short" column="cpar_icdebitocomacrescimo" length="2"/>
+		<property name="indicadorParcelamentoJuros" type="java.lang.Short" column="cpar_icparcelamentocomjuros" length="2"/>
+		<property name="indicadorPermiteInformarValorParcel" type="java.lang.Short" column="cpar_icinformarvalorparcela" length="2"/>
+		
+		<property name="dataVencimentoPrimParcela" type="java.sql.Timestamp" column="cpar_dtvencimento" length="8"/>
+		
+		<property name="numeroDiasEntreVencimentoParcel" type="java.lang.Integer" column="cpar_nndiasentrevencimentoparc" length="6"/>
+		
+		<property name="qtdFaturasParceladas" type="java.lang.Integer" column="cpar_qtfaturasparceladas" length="6"/>
+		
+		<property name="valorTotalConta" type="java.math.BigDecimal" column="cpar_vlconta" length="40"/>
+		
+		<property name="valorTotalDebitosCobrar" type="java.math.BigDecimal" column="cpar_vldebitoacobrar" length="50"/>
+		
+		<property name="valorTotalAcrescImpontualidade" type="java.math.BigDecimal" column="cpar_vlacrescimosimpont" length="50"/>
+		
+		<property name="indicadorContasRevisao" type="java.lang.Short" column="cpar_iccontasrevisao" length="2"/>
+		
+		<property name="indicadorDebitoACobrar" type="java.lang.Short" column="cpar_icdebitoacobrar" length="2"/>
+		
+		<property name="indicadorCreditoARealizar" type="java.lang.Short" column="cpar_iccreditoarealizar" length="2"/>
+		
+		<property name="numeroPrestacoes" type="java.lang.Integer" column="cpar_nnprestacoes" length="6"/>
+		
+		<property name="taxaJuros" type="java.math.BigDecimal" column="cpar_txjuros" length="50"/>
+		
+		<property name="valorJurosMora" type="java.math.BigDecimal" column="cpar_vljurosmora" length="50"/>
+		
+		<property name="valorJurosParcelamento" type="java.math.BigDecimal" column="cpar_vljurosparcelamento" length="50"/>
+		
+		<property name="valorTotalParcelado" type="java.math.BigDecimal" column="cpar_vlparcelado" length="50"/>
+		
+		<property name="valorDebitoAtualizado" type="java.math.BigDecimal" column="cpar_vldebitoatualizado" length="50"/>
+		
+		<property name="valorParcelamentoACobrar" type="java.math.BigDecimal" column="cpar_vlparcelamentoacobrar" length="50"/>
+		
+		<property name="anoMesReferenciaFaturamento" type="java.lang.Integer" column="cpar_amreferenciafaturamento" length="6"/>
+		
+		<property name="dataImplantacao" type="java.sql.Timestamp" column="cpar_tmimplantacao" length="8"/>
+		
+		<property name="dataCancelamento" type="java.sql.Timestamp" column="cpar_tmcancelamento" length="8"/>
+		
+		<property name="indicadorParcelaInformadaPeloUsuario" type="java.lang.Short" column="cpar_icvlparcelainformadausur" length="2"/>
+		
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to FormaPagamento -->
+		<many-to-one name="contratoAnterior" class="gcom.cobranca.contratoparcelamento.ContratoParcelamento" not-null="false">
+			<column name="cpar_idanterior"/>
+		</many-to-one>
+		
+		<many-to-one name="relacaoAnterior" class="gcom.cobranca.contratoparcelamento.TipoRelacao" not-null="false">
+			<column name="cptr_id"/>
+		</many-to-one>
+		
+		<many-to-one name="parcelamentoSituacao" class="gcom.cobranca.parcelamento.ParcelamentoSituacao" not-null="true">
+			<column name="pcst_id"/>
+		</many-to-one>
+		
+		<many-to-one name="usuarioResponsavel" class="gcom.seguranca.acesso.usuario.Usuario" not-null="true">
+			<column name="usur_id"/>
+		</many-to-one>
+		
+		<many-to-one name="relacaoCliente" class="gcom.cadastro.cliente.ClienteRelacaoTipo" not-null="false">
+			<column name="crtp_id"/>
+		</many-to-one>
+		
+		<many-to-one name="resolucaoDiretoria" class="gcom.cobranca.contratoparcelamento.ContratoParcelamentoRD" not-null="false">
+			<column name="cprd_id"/>
+		</many-to-one>
+		
+		<many-to-one name="cobrancaForma" class="gcom.cobranca.CobrancaForma" not-null="false">
+			<column name="cbfm_id"/>
+		</many-to-one>
+		
+		<many-to-one name="motivoDesfazer" class="gcom.cobranca.parcelamento.ParcelamentoMotivoDesfazer" not-null="false">
+			<column name="pmdz_id"/>
+		</many-to-one>
+		
+		<many-to-one name="qtdPrestacoesDaRDEscolhida" class="gcom.cobranca.contratoparcelamento.QuantidadePrestacoes" not-null="false">
+			<column name="crqp_id"/>
+		</many-to-one>
+		
+		
+	</class>
+</hibernate-mapping>

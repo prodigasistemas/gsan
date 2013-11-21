@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="ManterPagamentoActionForm"	
+		           type="gcom.gui.arrecadacao.pagamento.ManterPagamentoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		<action name="ManterPagamentoActionForm"
+			      type="gcom.gui.arrecadacao.pagamento.ExibirManterPagamentoAction"
+			      validate="false" path="/exibirManterPagamentoAction">
+			<forward name="manterPagamento"
+				       path="/jsp/arrecadacao/pagamento/pagamento_manter.jsp" />
+	       <forward name="atualizarPagamentoFiltrar"
+				path="/exibirAtualizarPagamentosAction.do" />
+		</action>
+		
+		<action name="ManterPagamentoActionForm"
+			      type="gcom.gui.arrecadacao.pagamento.RemoverPagamentoAction"
+			      validate="false" input="/exibirManterPagamentoActionAction.do"
+			      scope="request" path="/removerPagamentoAction" />
+			      
+		<action name="ManterPagamentoActionForm"
+			      type="gcom.gui.arrecadacao.pagamento.ExibirAtualizarPagamentosAction"
+			      validate="false" scope="session"
+			      path="/exibirAtualizarPagamentosAction">
+			<forward name="atualizarPagamento"
+				       path="/jsp/arrecadacao/pagamento/pagamento_atualizar.jsp" />
+		</action>
+		
+		<action name="ManterPagamentoActionForm"
+			      type="gcom.gui.arrecadacao.pagamento.AtualizarPagamentosAction"
+			      validate="true" input="/exibirAtualizarPagamentosAction.do"
+			      scope="session" path="/atualizarPagamentosAction" />
+	</action-mappings>
+
+	<message-resources null="false" parameter="gcom.properties.application" />
+</struts-config>

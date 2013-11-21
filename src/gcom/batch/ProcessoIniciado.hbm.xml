@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.batch.ProcessoIniciado" table="batch.processo_iniciado">
+		<id name="id" type="java.lang.Integer" column="proi_id">
+			<generator class="sequence">
+				<param name="sequence">batch.seq_processo_iniciado</param>
+			</generator>
+		</id>
+		<property name="dataHoraAgendamento" type="java.sql.Timestamp" column="proi_tmagendamento" length="8"/>
+		<property name="dataHoraInicio" type="java.sql.Timestamp" column="proi_tminicio" length="8"/>
+		<property name="dataHoraTermino" type="java.sql.Timestamp" column="proi_tmtermino" length="8"/>
+		<property name="dataHoraComando" type="java.sql.Timestamp" column="proi_tmcomando" length="8"/>
+		<property name="codigoGrupoProcesso" type="java.lang.Integer" column="proi_nngrupo"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Processo -->
+		<many-to-one name="processo" class="gcom.batch.Processo" not-null="true">
+			<column name="proc_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Usuario -->
+		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario" not-null="true">
+			<column name="usur_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to FuncionalidadeIniciada -->
+		<set name="funcionalidadesIniciadas" lazy="true" inverse="true" cascade="delete">
+			<key>
+				<column name="proi_id"/>
+			</key>
+			<one-to-many class="gcom.batch.FuncionalidadeIniciada"/>
+		</set>
+		<!-- bi-directional one-to-many association to ProcessoIniciado -->
+		<!--  <set
+        name="processosIniciados"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="proi_idprecedente" />
+        </key>
+        <one-to-many 
+            class="gcom.batch.ProcessoIniciado"
+        />
+    </set>
+-->
+		<!-- bi-directional many-to-one association to ProcessoIniciado -->
+		<many-to-one name="processoIniciadoPrecedente" class="gcom.batch.ProcessoIniciado" not-null="true">
+			<column name="proi_idprecedente"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ProcessoSituacao -->
+		<many-to-one name="processoSituacao" class="gcom.batch.ProcessoSituacao" not-null="true">
+			<column name="prst_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

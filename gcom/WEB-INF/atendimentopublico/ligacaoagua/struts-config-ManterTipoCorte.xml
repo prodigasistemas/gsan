@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>  
+
+	<form-beans>
+	
+		<form-bean name="AtualizarTipoCorteActionForm"
+			type="gcom.gui.atendimentopublico.ligacaoagua.AtualizarTipoCorteActionForm" />
+	
+		<form-bean name="ManutencaoRegistroActionForm" 
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+			
+	</form-beans>
+
+	<global-forwards />
+	
+	
+	<action-mappings> 	
+		<action  name="ManutencaoRegistroActionForm"  
+			type="gcom.gui.atendimentopublico.ligacaoagua.ExibirManterTipoCorteAction"
+			validate="false" 
+			scope="session" 
+			path="/exibirManterTipoCorteAction">
+			<forward name="manterTipoCorte"
+				path="/jsp/atendimentopublico/ligacaoagua/tipo_corte_manter.jsp" />
+			
+			<forward name="exibirAtualizarTipoCorte"
+				path="/exibirAtualizarTipoCorteAction.do" /> 
+		</action>
+		
+		<action name="AtualizarTipoCorteActionForm"  
+			type="gcom.gui.atendimentopublico.ligacaoagua.ExibirAtualizarTipoCorteAction"
+			validate="false" 
+			scope="session" 
+			path="/exibirAtualizarTipoCorteAction">
+			<forward name="atualizarTipoCorte"
+				path="/jsp/atendimentopublico/ligacaoagua/tipo_corte_atualizar.jsp" />
+		</action>
+		
+		<action name="AtualizarTipoCorteActionForm"  
+			type="gcom.gui.atendimentopublico.ligacaoagua.AtualizarTipoCorteAction"
+			validate="false" 
+			scope="session" 
+			path="/atualizarTipoCorteAction">
+		</action>		
+		
+		<action  name="ManutencaoRegistroActionForm"  
+			type="gcom.gui.atendimentopublico.ligacaoagua.RemoverTipoCorteAction"
+			validate="false" 
+			scope="session" 
+			path="/removerTipoCorteAction">
+		</action>	
+			
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

@@ -1,0 +1,777 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+		Created by the Middlegen Hibernate plugin
+		
+		http://boss.bekk.no/boss/middlegen/
+		http://hibernate.sourceforge.net/
+	-->
+	<class name="gcom.cadastro.sistemaparametro.SistemaParametro"
+		table="cadastro.sistema_parametros">
+		<id name="parmId" type="java.lang.Integer" column="parm_id">
+			<generator class="sequence">
+				<param name="sequence">
+					cadastro.seq_sistema_parametros
+				</param>
+			</generator>
+		</id>
+
+		<property name="anoMesFaturamento"
+			column="parm_amreferenciafaturamento" type="int" length="4" />
+
+		<property name="anoMesArrecadacao"
+			column="parm_amreferenciaarrecadacao" type="int" length="4" />
+
+		<property name="nomeEstado" column="parm_nmestado"
+			type="java.lang.String" length="25" />
+
+		<property name="nomeEmpresa" column="parm_nmempresa"
+			type="java.lang.String" length="45" />
+
+		<property name="nomeAbreviadoEmpresa"
+			column="parm_nmabreviadoempresa" type="java.lang.String" length="10" />
+
+		<property name="cnpjEmpresa" column="parm_nncnpjempresa"
+			type="java.lang.String" length="14" />
+
+		<property name="numeroImovel" column="parm_nnimovel"
+			type="java.lang.String" length="5" />
+
+		<property name="complementoEndereco"
+			column="parm_dscomplementoendereco" type="java.lang.String"
+			length="25" />
+
+		<property name="numeroTelefone" type="java.lang.String"
+			column="parm_nnfone" length="9" />
+
+		<property name="numeroRamal" type="java.lang.String"
+			column="parm_nnfoneramal" length="4" />
+
+		<property name="numeroFax" type="java.lang.String"
+			column="parm_nnfax" length="9" />
+
+		<property name="descricaoEmail" column="parm_dsemail"
+			type="java.lang.String" length="40" />
+
+		<property name="menorConsumoGrandeUsuario"
+			column="parm_nnconsumograndeusuario" type="int" length="4" />
+
+		<property name="areaMaximaTarifaSocial"
+			column="parm_nnareamaximatarifasocial" type="int" length="4" />
+
+		<property name="consumoEnergiaMaximoTarifaSocial"
+			column="parm_nnconsenergiamaxtarsoc" type="int" length="4" />
+
+		<property name="valorMinimoEmissaoConta"
+			column="parm_vlminimoemissaoconta" type="java.math.BigDecimal"
+			length="13" />
+
+		<property name="valorSalarioMinimo"
+			column="parm_vlsalariominimo" type="java.math.BigDecimal"
+			length="13" />
+
+		<property name="menorEconomiasGrandeUsuario"
+			column="parm_qteconomiasgrandeusuario" type="short" length="2" />
+
+		<property name="mesesMediaConsumo"
+			column="parm_nnmesescalcmediacons" type="java.lang.Short" length="2" />
+
+		<property name="indicadorFaixaFalsa"
+			column="parm_icgeracaofaixafalsa" type="java.lang.Short" length="2" />
+
+		<property name="percentualFaixaFalsa" column="parm_pcfaixafalsa"
+			type="java.math.BigDecimal" length="5" />
+
+		<property name="indicadorUsoFaixaFalsa"
+			column="parm_icusopercentualfaixafalsa" type="java.lang.Short"
+			length="2" />
+
+		<property name="indicadorCertidaoNegativaEfeitoPositivo"
+			column="parm_icgeracndcomefeiposit" type="java.lang.Short"
+			length="2" />
+
+		<property name="indicadorUsoFiscalizadorLeitura"
+			column="parm_icgerfisclzleit" type="java.lang.Short" length="2" />
+
+		<property name="percentualFiscalizacaoLeitura"
+			column="parm_pcfiscalizacaoleitura" type="java.math.BigDecimal"
+			length="5" />
+
+		<property name="indicadorPercentualFiscalizacaoLeitura"
+			column="parm_icusopercentualfisclzleit" type="java.lang.Short"
+			length="2" />
+
+		<property name="incrementoMaximoConsumoRateio"
+			column="parm_nnconsrateioincrementomax" type="java.lang.Integer"
+			length="4" />
+
+		<property name="decrementoMaximoConsumoRateio"
+			column="parm_nnconsrateiodecrementomax" type="java.lang.Integer"
+			length="4" />
+
+		<property name="numeroMinimoDiasEmissaoVencimento"
+			type="java.lang.Short" column="parm_nnmindiasemsvcmto" length="2" />
+
+		<property name="numeroDiasAdicionaisCorreios"
+			column="parm_nndiasadicionaiscorreios" type="java.lang.Short"
+			length="2" />
+
+		<property name="numeroMesesValidadeConta"
+			column="parm_nnmesesvalidadeconta" type="java.lang.Short" length="2" />
+
+		<property name="ultimaAlteracao" column="parm_tmultimaalteracao"
+			type="java.sql.Timestamp" length="8" />
+
+		<property name="numeroMaximoParcelasFinanciamento"
+			column="parm_nnmaxparcelasfinanc" type="java.lang.Short" length="2" />
+
+		<property name="numeroMaximoParcelaCredito"
+			column="parm_nnmaximoparcelredito" type="java.lang.Short" length="2" />
+
+		<property name="percentualTaxaJurosFinanciamento"
+			column="parm_pctaxajurosfinanciamento" type="java.math.BigDecimal"
+			length="5" />
+
+		<property name="percentualMaximoAbatimento"
+			column="parm_pcmaximoabatimento" type="java.math.BigDecimal"
+			length="5" />
+
+		<property name="percentualFinanciamentoEntradaMinima"
+			column="parm_pcfinancentmin" type="java.math.BigDecimal" length="5" />
+
+		<property name="numeroMesesMinimoAlteracaoVencimento"
+			type="java.lang.Short" column="parm_nnmesesminaltvcmto" length="2" />
+
+		<property name="numeroDiasExpiracaoAcesso"
+			type="java.lang.Short" column="parm_nndiasexpiracaoacesso"
+			length="2" />
+
+		<property name="numeroDiasMensagemExpiracao"
+			type="java.lang.Short" column="parm_nndiasmsgexpiracao" length="2" />
+
+		<property name="numeroMaximoLoginFalho" type="java.lang.Short"
+			column="parm_nnmaximologinfalho" length="2" />
+
+		<property name="numeroLayoutFebraban" type="java.lang.Short"
+			column="parm_nnlayoutfebraban" length="2" />
+
+		<property name="numeroDiasVencimentoCobranca"
+			type="java.lang.Short" column="parm_nndiasvenctocobranca"
+			not-null="true" length="2" />
+
+		<property name="codigoEmpresaFebraban" type="java.lang.Short"
+			column="parm_cdempresafebraban" length="2" />
+
+		<property name="numeroMaximoFavorito"
+			column="parm_nnmaximofavorito" type="int" length="4" />
+
+		<property name="indicadorSugestaoTramite" type="java.lang.Short"
+			column="parm_icsugestaotramite" length="2" />
+
+		<property name="diasReativacao" type="java.lang.Short"
+			column="parm_nndiasreativacao" length="2" />
+
+		<property name="diasMaximoAlterarOS"
+			column="parm_nnmaximodiasaltdadosos" type="java.lang.Integer"
+			length="4" />
+
+		<property name="imagemLogomarca" type="java.lang.String"
+			column="parm_nmimagemlogomarca" length="30" />
+
+		<property name="imagemRelatorio" type="java.lang.String"
+			column="parm_nmimagemrelatorio" length="30" />
+
+		<property name="imagemConta" type="java.lang.String"
+			column="parm_nmimagemconta" length="30" />
+
+		<property name="percentualMediaIndice"
+			column="parm_pcmediaindice" type="java.math.BigDecimal" length="5" />
+
+		<property name="ultimoRAManual" type="java.lang.Integer"
+			column="parm_idultimoramanual" not-null="true" length="4" />
+
+		<property name="tituloPagina" column="parm_dstitulopagina"
+			type="java.lang.String" not-null="true" length="40" />
+
+		<property name="mensagemSistema" column="parm_dsmensagemsistema"
+			type="java.lang.String" not-null="false" length="200" />
+
+		<property name="numeroMaximoMesesSancoes" type="java.lang.Short"
+			column="parm_nnmaximomesessancoes" length="2" />
+
+		<property name="ipServidorSmtp" type="java.lang.String"
+			column="parm_ipservidorsmtp" not-null="true" length="15" />
+
+		<property name="ipServidorModuloGerencial"
+			type="java.lang.String" column="parm_ipservidormodulogerencial"
+			not-null="false" length="30" />
+
+		<property name="percentualToleranciaRateio"
+			column="parm_pctoleranciarateio" type="java.math.BigDecimal"
+			length="3" />
+
+		<property name="dsEmailResponsavel" type="java.lang.String"
+			column="parm_dsemailresponsavel" not-null="true" length="80" />
+
+		<property name="valorSegundaVia" column="parm_vlsegundavia"
+			type="java.math.BigDecimal" length="13" />
+
+		<property name="numeroContratoPrestacaoServico"
+			column="parm_nncontratoprestacaoserv" type="java.lang.String"
+			length="20" />
+
+		<property name="indicadorAtualizacaoTarifaria"
+			column="parm_icatualizacaotarifaria" type="short" not-null="true"
+			length="4" />
+
+		<property name="indicadorCobrarTaxaExtrato"
+			column="parm_iccobrartaxaextrato" type="short" not-null="true"
+			length="4" />
+
+		<property name="anoMesAtualizacaoTarifaria"
+			column="parm_amatualizacaotarifaria" type="java.lang.Integer"
+			length="4" />
+
+		<property name="indicadorRoteiroEmpresa" type="java.lang.Short"
+			column="parm_icroteiroempresa" length="2" not-null="false" />
+
+		<property name="indicadorFaturamentoAntecipado"
+			type="java.lang.Short" column="parm_icfaturamentoantecipado"
+			length="2" not-null="true" />
+
+		<property name="dataHoraDadosDiariosArrecadacao"
+			column="parm_tmdadosdiariosarrecadacao" type="java.sql.Timestamp"
+			length="8" />
+
+		<property name="dataHoraResumoAcoesCobranca"
+			column="parm_tmresumoacoescobranca" type="java.sql.Timestamp"
+			length="8" />
+
+		<property name="codigoPeriodicidadeNegativacao"
+			type="java.lang.Short" column="parm_cdperiodicidadenegat" length="2"
+			not-null="false" />
+
+		<property name="nomeSiteEmpresa" type="java.lang.String"
+			column="parm_nmsiteempresa" length="150" />
+
+		<property name="numero0800Empresa" type="java.lang.String"
+			column="parm_nn0800empresa" length="12" />
+
+		<property name="numeroDiasCalculoAcrescimos" type="short"
+			column="parm_nndiascalculoacrescimos" length="2" not-null="true" />
+
+		<property name="numeroMesesCalculoCorrecao"
+			type="java.lang.Short" column="parm_nnmesescalculocorrecao"
+			length="2" not-null="false" />
+			
+		<property name="inscricaoEstadual" type="java.lang.String"
+			column="parm_nninscricaoestadual" length="20" not-null="false" />
+
+		<property name="inscricaoMunicipal" type="java.lang.String"
+			column="parm_nninscricaomunicipal" length="20" not-null="false" />
+
+		<property name="indicadorTarifaCategoria" type="java.lang.Short"
+			column="parm_ictarifacategoria" length="2" not-null="true" />
+
+		<property name="numeroMesesMaximoCalculoMedia"
+			type="java.lang.Short" column="parm_nnmesesmaximocalculomedia"
+			length="2" not-null="true" />
+
+		<property name="numeroDiasEncerramentoOrdemServico"
+			type="java.lang.Short" column="parm_nndiasencmtordemserv" length="2"
+			not-null="true" />
+
+		<property name="numeroDiasEncerramentoOSSeletiva"
+			type="java.lang.Short" column="parm_nndiasencmtosseletiva" length="2"
+			not-null="true" />
+
+		<property name="numeroDiasAlteracaoVencimentoPosterior"
+			type="java.lang.Short" column="parm_nndiasaltvcmtoposterior"
+			length="2" not-null="true" />
+
+		<property name="indicadorLoginUnico" type="java.lang.Short"
+			column="parm_icloginunico" length="2" not-null="true" />
+
+		<property name="indicadorRetificacaoValorMenor"
+			type="java.lang.Short" column="parm_icretificacaovalormenor"
+			length="2" not-null="true" />
+
+		<property name="indicadorLimiteAlteracaoVencimento"
+			type="java.lang.Short" column="parm_iclimitealtvcmto" length="2"
+			not-null="true" />
+
+		<property name="indicadorCalculaVencimento"
+			type="java.lang.Short" column="parm_iccalculavencimento" length="2"
+			not-null="true" />
+
+		<property name="numeroExecucaoResumoNegativacao"
+			column="parm_nnexecresumonegat" type="java.lang.Integer" length="4"
+			not-null="true" />
+
+		<property name="indicadorParcelamentoConfirmado" type="short"
+			column="parm_icparcelamentoconfirmado" length="2" not-null="true" />
+
+		<property name="indicadorTransferenciaComDebito"
+			type="java.lang.Short" column="parm_ictransferenciacomdebito"
+			length="2" not-null="true" />
+
+		<property name="indicadorControlaAutoInfracao" type="short"
+			column="parm_iccontrolaautosinfracao" length="2" not-null="true" />
+
+		<property name="numeroDiasValidadeExtrato"
+			type="java.lang.Short" column="parm_nndiasvalidadeextrato" length="2"
+			not-null="true" />
+
+		<property name="numeroDiasValidadeExtratoPermissaoEspecial"
+			type="java.lang.Short" column="parm_nndiasvalidadeextpermesp"
+			length="2" />
+
+		<property
+			name="numeroDiasVencimentoDebitoGeracaoCertidaoNegativaDebitos"
+			type="java.lang.Short" column="parm_nndiasvenctodebgercnd"
+			length="2" />
+
+		<property name="indicadorExibeMensagemNaoReceberPagamento"
+			type="java.lang.Short" column="parm_icexibemsgnaorecpagmt" length="2"
+			not-null="true" />
+
+		<property name="indicadorControleTramitacaoRA"
+			type="java.lang.Short" column="parm_iccontroletramitacaora"
+			length="2" not-null="true" />
+
+		<property name="indicadorDocumentoValido" type="java.lang.Short"
+			column="parm_icdocumentovalido" length="2" not-null="true" />
+
+		<property name="indicadorNaoMedidoTarifa" type="java.lang.Short"
+			column="parm_icnaomedidotarifa" length="2" not-null="true" />
+
+		<property name="indicadorDebitoACobrarValidoCertidaoNegativa"
+			type="java.lang.Short" column="parm_icdebacobvalidocertidao"
+			length="2" not-null="true" />
+
+		<property name="indicadorUsaRota" type="java.lang.Short"
+			column="parm_icusarota" length="2" not-null="true" />
+
+		<property name="indicadorCalculoPrevisaoRADiasUteis"
+			column="parm_iccalcprevradiasuteis" type="java.lang.Short" length="2"
+			not-null="true" />
+
+		<property name="numeroDiasVariacaoConsumo"
+			column="parm_nndiasvariacaoconsumo" type="java.lang.Short" length="2"
+			not-null="true" />
+
+		<property name="indicadorSupressao" column="parm_icsupressao"
+			type="java.lang.Short" length="2" not-null="true" />
+
+		<property name="indicadorQuadraFace" column="parm_icquadraface"
+			type="java.lang.Short" length="2" not-null="true" />
+
+		<property name="indicadorEmissaoExtratoNaConsulta"
+			column="parm_icemsextnaconsulta" type="java.lang.Short" length="2"
+			not-null="true" />
+
+		<property name="numeroDiasPrazoRecursoAutoInfracao"
+			column="parm_nndiasprazorecursoautoinf" type="java.lang.Integer"
+			length="4" not-null="true" />
+
+		<property name="indicadorImprimeUsuarioSegundaVia"
+			column="parm_icimprimeusuario2via" type="java.lang.Short" length="2" />
+
+		<property name="numeroDigitosQuadra" type="short"
+			column="parm_nndigitosquadra" length="2" not-null="true" />
+
+		<property name="numeroMaximoParcelasAutoInfracao"
+			type="java.lang.Integer" column="parm_nnmaxparcelasautoinf"
+			length="8" not-null="true" />
+
+		<property name="numeroMaximoMesesCalculoConsumoAutoInfracao"
+			type="java.lang.Integer" column="parm_nnmaxmesescalcconsautoinf"
+			length="8" not-null="true" />
+
+		<property name="qtdMaxContasRetificadas" type="int"
+			column="parm_qtmaxcontasretificadas" length="2" not-null="true" />
+
+		<property name="urlhelp" type="java.lang.String"
+			column="parm_urlhelp" length="60" not-null="false" />
+
+		<property name="indicadorAutorizacaoRelatorio"
+			type="java.lang.Short" column="parm_icautorizacaorelatorio"
+			not-null="true" />
+
+		<property name="percentualBonusSocial"
+			type="java.math.BigDecimal" column="parm_pcbonussocial" length="5" />
+
+		<property name="indicadorDividaAtiva" type="java.lang.Short"
+			column="parm_icdividaativa" not-null="true" />
+
+		<property name="nomeControlador" type="java.lang.String"
+			column="parm_nmcontrolador" length="20" not-null="true" />
+
+		<property name="diasVencimentoAlternativo"
+			column="parm_dsdiasvcmtoalternativo" type="java.lang.String"
+			length="83" />
+
+		<property name="horaInicioProcesso" type="java.lang.Integer"
+			column="parm_nnhorainicioprocesso" length="20" not-null="false" />
+
+		<property name="intervaloHorasProcesso" type="java.lang.Integer"
+			column="parm_nnintervalohorasprocesso" length="20" not-null="false" />
+
+		<property name="indicadorValidarLocalizacaoEncerramentoOS"
+			type="java.lang.Short" column="parm_icvalidarlocalzencmtos"
+			length="2" />
+
+		<property name="indicadorControleExpiracaoSenhaPorGrupo"
+			type="java.lang.Integer" column="parm_icdiasexpiracaosenhagrupo"
+			not-null="true" />
+
+		<property name="indicadorControleBloqueioSenhaAnterior"
+			type="java.lang.Integer" column="parm_icbloqueiosenhasantes"
+			not-null="true" />
+
+		<property name="indicadorSenhaForte" type="java.lang.Integer"
+			column="parm_icsenhaforte" not-null="true" />
+
+		<property name="versaoCelular" column="parm_nmversaocelular"
+			type="java.lang.String" length="10" />
+
+		<property name="url2ViaConta" type="java.lang.String"
+			column="parm_dsurl2viaconta" length="300" not-null="false" />
+
+		<property name="numeroMesesPesquisaImoveisRamaisSuprimidos"
+			type="java.lang.Integer" column="parm_nnmesesbatchimoveissup"
+			not-null="false" />
+
+		<property name="numeroModuloDigitoVerificador"
+			type="java.lang.Short" column="parm_nnmodulodigitoverif"
+			not-null="false" />
+
+		<property name="numeroAnoQuitacao" type="java.lang.Integer"
+			column="parm_nnanoquitacao" />
+
+		<property name="indicadorContaParcelada" type="java.lang.Short"
+			column="parm_iccontaparcelada" not-null="true" />
+
+		<property name="indicadorCobrancaJudical" type="java.lang.Short"
+			column="parm_iccobrancajudicial" not-null="true" />
+
+		<property name="numeroMesesAnterioresParaDeclaracaoQuitacao"
+			type="java.lang.Integer" column="parm_nnmesesanteriores" />
+
+		<property name="indicadorValorMovimentoArrecadador"
+			type="java.lang.Integer" column="parm_icvlmovarrec" not-null="true" />
+
+		<property name="numeroDiasVencimentoEntradaParcelamento"
+			type="java.lang.Short" column="parm_nndiasvcmtoentparcmt" length="2"
+			not-null="true" />
+
+		<property name="indicadorBloqueioContaMobile"
+			type="java.lang.Short" column="parm_icbloqueiocontamobile"
+			not-null="true" />
+
+		<property name="dataImplantacaoSistema" type="java.sql.Date"
+			column="parm_dtimplantacaosistem" not-null="false" length="4" />
+
+		<property name="percentualConvergenciaRepavimentacao"
+			column="parm_pcconvergenciarepav" type="java.math.BigDecimal"
+			length="5" />
+
+		<property name="numeroDiasRevisaoComPermEspecial"
+			type="java.lang.Integer" column="parm_nndiasrevcompermespecial"
+			length="2" not-null="false" />
+
+		<property name="urlAcessoInternet" type="java.lang.String"
+			column="parm_dsurlacessointernet" length="300" not-null="false" />
+
+		<property name="indicadorDocumentoObrigatorio"
+			type="java.lang.Short" column="parm_icdocobrigatorio"
+			not-null="true" />
+			
+		<property name="indicadorDocumentoObrigatorioManterCliente"
+			type="java.lang.Short" column="parm_icdocobrigamantercliente"
+			length="2" not-null="true" />
+
+		<property name="indicadorConsultaDocumentoReceita"
+			type="java.lang.Short" column="parm_icconsultadocumento"
+			not-null="true" />
+
+		<property name="loginSenhaCdl" type="java.lang.String"
+			column="parm_nmsenhacdl" not-null="false" />
+
+		<property name="numeroLimiteAlteracaoVencimento"
+			type="java.lang.Integer" column="parm_nnlimitealtvencimento"
+			length="3" not-null="false" />
+
+		<property name="valorExtratoFichaComp"
+			column="parm_vlextratofichacomp" type="java.math.BigDecimal"
+			length="13" />
+
+		<property name="mensagemContaBraile" column="parm_dsmsgbraile"
+			type="java.lang.String" not-null="false" length="500" />
+
+		<property name="indicadorPopupAtualizacaoCadastral"
+			column="parm_icpopupatualizcadastral" type="short" length="2"
+			not-null="true" />
+
+		<property name="valorContaFichaComp"
+			column="parm_vlcontafichacomp" type="java.math.BigDecimal"
+			length="13" />
+
+		<property name="numeroDiasBloqueioCelular"
+			type="java.lang.Integer" column="parm_nndiascelular" length="2"
+			not-null="false" />
+
+		<property name="ultimoDiaVencimentoAlternativo"
+			type="java.lang.Short" column="parm_nndiasultimvencaltern"
+			length="2" />
+
+		<property name="indicadorDuplicidadeCliente"
+			type="java.lang.Short" column="parm_icduplicidadecliente"
+			not-null="false" />
+
+		<property name="indicadorNomeMenorDez" type="java.lang.Short"
+			column="parm_icnomemenordez" not-null="false" />
+
+		<property name="indicadorNomeClienteGenerico"
+			type="java.lang.Short" column="parm_icnomeclientegenerico"
+			not-null="false" />
+
+		<property name="indicadorVariaHierarquiaUnidade"
+			type="java.lang.Short" column="parm_icvariahierarquiaunidade"
+			not-null="false" />
+
+		<property name="indicadorAlteracaoInscricaoImovel"
+			type="java.lang.Short" column="parm_icalteracaoinscrimovel"
+			not-null="true" />
+
+		<property name="numeroMesesRetificarConta"
+			type="java.lang.Integer" column="parm_nnmesesvencidacontara" />
+
+		<property name="indicadorNormaRetificacao"
+			column="parm_icestananormaretificacao" type="java.lang.Short"
+			length="2" />
+
+		<property name="valorGuiaFichaComp"
+			column="parm_vlguiafichacomp" type="java.math.BigDecimal" length="13"
+			not-null="false" />
+
+		<property name="valorDemonstrativoParcelamentoFichaComp"
+			column="parm_vldemonstparcelmfichacomp" type="java.math.BigDecimal"
+			length="13" not-null="false" />
+
+		<property name="indicadorUsoNMCliReceitaFantasia"
+			column="parm_icusonmclireceitafantasia" type="java.lang.Short"
+			not-null="false" length="2" />
+
+		<property name="indicadorTabelaPrice"
+			column="parm_ictabelaprice" type="java.lang.Short" not-null="false"
+			length="2" />
+
+		<property name="indicadorBloqueioContasContratoParcelDebitos"
+			column="parm_icbloqctasctrparceldebito" type="java.lang.Short"
+			not-null="true" length="2" />
+
+		<property
+			name="indicadorBloqueioContasContratoParcelManterConta"
+			column="parm_icbloqctasctrparcelmntcta" type="java.lang.Short"
+			not-null="true" length="2" />
+			
+		<property
+			name="indicadorBloqueioDebitoACobrarContratoParcelDebito"
+			column="parm_icbloqdacctrparceldebito" type="java.lang.Short"
+			not-null="true" length="2" />
+
+
+		<property
+			name="indicadorBloqueioGuiasOuAcresContratoParcelManterConta"
+			column="parm_icbloqguiactrparcelmntgui" type="java.lang.Short"
+			not-null="true" length="2" />
+
+		<property
+			name="indicadorBloqueioGuiasOuAcresContratoParcelDebito"
+			column="parm_icbloqguiactrparceldebito" type="java.lang.Short"
+			not-null="true" length="2" />
+		
+		<property
+			name="indicadorBloqueioDebitoACobrarContratoParcelManterDebito"
+			column="parm_icbloqdacctrparcelmntdac" type="java.lang.Short"
+			not-null="true" length="2" />
+
+		<property name="numeroMaximoParcelasContratosParcelamento"
+			type="java.lang.Integer" column="parm_nnmaxparcelascontrparcel"
+			length="4" />
+
+		<property name="qtdeDiasEncerraOSFiscalizacao"
+			type="java.lang.Integer" column="parm_qtdiasencerraordservfisc"
+			length="4" />
+
+		<property name="codigoTipoCalculoNaoMedido"
+			type="java.lang.Integer" column="parm_cdtipocalcnaomedido"
+			not-null="true" />
+
+		<property name="qtdeDiasValidadeOSFiscalizacao"
+			type="java.lang.Integer" column="parm_qtdiasvalidadeordservfisc"
+			length="4" />
+
+		<property name="qtdeDiasEnvioEmailConta"
+			type="java.lang.Integer" column="parm_qtdiaenvioemailconta"
+			length="2" />
+
+		<property name="descricaoDecreto" column="parm_dsdecretoloja"
+			type="java.lang.String" length="30" />
+
+		<property name="arquivoDecreto" type="binary"
+			column="parm_ardecretoloja" length="-1" />
+
+		<property name="descricaoLeiEstTarif"
+			column="parm_dsleitarifaloja" type="java.lang.String" length="30" />
+
+		<property name="arquivoLeiEstTarif" type="binary"
+			column="parm_arleitarifaloja" length="-1" />
+
+		<property name="descricaoLeiIndividualizacao"
+			column="parm_dsleinormamedicaoloja" type="java.lang.String"
+			length="30" />
+
+		<property
+		name="ipServidorModuloOperacional"
+		type="java.lang.String"
+		column="parm_ipservidormodulooperacional"
+		not-null="false"
+		length="30"
+	    />
+
+		<property name="arquivoLeiIndividualizacao" type="binary"
+			column="parm_arleinormamedicaoloja" length="-1" />
+
+		<property name="descricaoNormaCO" column="parm_dsnormacoloja"
+			type="java.lang.String" length="30" />
+
+		<property name="arquivoNormaCO" type="binary"
+			column="parm_arnormacoloja" length="-1" />
+
+		<property name="descricaoNormaCM" column="parm_dsnormacmloja"
+			type="java.lang.String" length="30" />
+
+		<property name="arquivoNormaCM" type="binary"
+			column="parm_arnormacmloja" length="-1" />
+			
+		<!--<property name="qtdeDiasValidadeOSAnormalidadeFiscalizacao"
+			type="java.lang.Integer" 
+			column="parm_qtdiasvalidadeosanormfisc" />	-->
+
+		<property name= "cdDadosDiarios" type="java.lang.Integer"
+			column="parm_cddadosdiarios" length="2" />
+			
+		<property name="numeroDiasEncerrarOsFiscalizacaoDecursoPrazo"
+			type="java.lang.Short" column="parm_nndiasencosfiscdecprazo" length="2"/>
+			
+		<property name="numeroVezesSuspendeLeitura"
+			type="java.lang.Integer" column="parm_nnvezessuspendeleitura" length="2" not-null="false" />
+		<property name="numeroMesesLeituraSuspensa"
+			type="java.lang.Integer" column="parm_nnmesesleiturasuspensa" length="2" not-null="false" />
+		<property name="numeroMesesReinicioSitEspFaturamento"
+			type="java.lang.Integer" column="parm_nnmesesreiniciositespfatu" length="2" not-null="false" />
+
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to Logradouro -->
+		<many-to-one name="logradouro"
+			class="gcom.cadastro.endereco.Logradouro" not-null="false">
+			<column name="logr_id" />
+		</many-to-one>
+
+		<!-- bi-directional many-to-one association to Bairro -->
+		<many-to-one name="bairro"
+			class="gcom.cadastro.geografico.Bairro" not-null="false">
+			<column name="bair_id" />
+		</many-to-one>
+
+		<!-- bi-directional many-to-one association to EnderecoImovelReferencia -->
+		<many-to-one name="enderecoReferencia"
+			class="gcom.cadastro.endereco.EnderecoReferencia" not-null="false">
+			<column name="edrf_id" />
+		</many-to-one>
+
+		<!-- bi-directional many-to-one association to HidrometroCapacidade -->
+		<many-to-one name="hidrometroCapacidade"
+			class="gcom.micromedicao.hidrometro.HidrometroCapacidade"
+			not-null="false">
+			<column name="hicp_id" />
+		</many-to-one>
+
+		<!-- bi-directional many-to-one association to Cep -->
+		<many-to-one name="cep" class="gcom.cadastro.endereco.Cep"
+			not-null="true">
+			<column name="cep_id" />
+		</many-to-one>
+
+		<many-to-one name="contaBancaria"
+			class="gcom.arrecadacao.banco.ContaBancaria" not-null="false">
+			<column name="ctbc_iddevolucao" />
+		</many-to-one>
+
+		<many-to-one name="clientePresidenteCompesa"
+			class="gcom.cadastro.cliente.Cliente" not-null="false">
+			<column name="clie_idpresidente" />
+		</many-to-one>
+
+		<many-to-one name="clienteDiretorComercialCompesa"
+			class="gcom.cadastro.cliente.Cliente" not-null="false">
+			<column name="clie_iddiretorcom" />
+		</many-to-one>
+
+		<many-to-one name="unidadeOrganizacionalIdPresidencia"
+			class="gcom.cadastro.unidade.UnidadeOrganizacional"
+			not-null="false">
+			<column name="unid_idpresidencia" />
+		</many-to-one>
+
+		<!-- bi-directional many-to-one association to Logradouro -->
+		<many-to-one name="logradouroBairro"
+			class="gcom.cadastro.endereco.LogradouroBairro" not-null="false">
+			<column name="lgbr_id" />
+		</many-to-one>
+
+		<!-- bi-directional many-to-one association to Logradouro -->
+		<many-to-one name="logradouroCep"
+			class="gcom.cadastro.endereco.LogradouroCep" not-null="false">
+			<column name="lgcp_id" />
+		</many-to-one>
+
+		<!-- bi-directional many-to-one association to ContaMotivoRetificacao -->
+		<many-to-one name="contaMotivoRetificacaoPagamentoAntecipado"
+			class="gcom.faturamento.conta.ContaMotivoRetificacao"
+			not-null="false">
+			<column name="cmrt_idantecipado" />
+		</many-to-one>
+
+		<many-to-one name="clienteResponsavelProgramaEspecial"
+			class="gcom.cadastro.cliente.Cliente" not-null="false">
+			<column name="clie_idprogramaespecial" />
+		</many-to-one>
+
+		<many-to-one name="perfilProgramaEspecial"
+			class="gcom.cadastro.imovel.ImovelPerfil" not-null="false">
+			<column name="iper_idprogramaespecial" />
+		</many-to-one>
+
+		<many-to-one name="unidadeOrganizacionalTramiteGrandeConsumidor"
+			class="gcom.cadastro.unidade.UnidadeOrganizacional"
+			not-null="false">
+			<column name="unid_idtramitegrandeconsumidor" />
+		</many-to-one>
+
+		<many-to-one name="resolucaoDiretoria"
+			class="gcom.cobranca.ResolucaoDiretoria" not-null="false">
+			<column name="rdir_id" />
+		</many-to-one>
+		
+		<many-to-one name="clienteFicticioParaAssociarOsPagamentosNaoIdentificados"
+			class="gcom.cadastro.cliente.Cliente" not-null="false">
+			<column name="clie_iddocnaoidentificado" />
+		</many-to-one>
+		
+	</class>
+</hibernate-mapping>
+

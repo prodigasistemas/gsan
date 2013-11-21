@@ -1,0 +1,226 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.ordemservico.OrdemServico" table="atendimentopublico.ordem_servico">
+		<id name="id" type="java.lang.Integer" column="orse_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_ordem_servico</param>
+			</generator>
+		</id>
+		<property name="situacao" type="short" column="orse_cdsituacao" not-null="true" length="2"/>
+		<property name="dataGeracao" type="java.sql.Timestamp" column="orse_tmgeracao" not-null="true" length="8"/>
+		<property name="dataEmissao" type="java.sql.Timestamp" column="orse_tmemissao" length="8"/>
+		<property name="dataEncerramento" type="java.sql.Timestamp" column="orse_tmencerramento" length="8"/>
+		<property name="descricaoParecerEncerramento" type="java.lang.String" column="orse_dsparecerencerramento" length="400"/>
+		<property name="observacao" type="java.lang.String" column="orse_dsobservacao" length="200"/>
+		<property name="areaPavimento" type="java.math.BigDecimal" column="orse_nnareapavimento" length="6"/>
+		<property name="valorOriginal" type="java.math.BigDecimal" column="orse_vlservicooriginal" length="13"/>
+		<property name="valorAtual" type="java.math.BigDecimal" column="orse_vlservicoatual" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="orse_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="indicadorComercialAtualizado" type="short" column="orse_iccomercialatualizado" not-null="true" length="2"/>
+		<property name="percentualCobranca" type="java.math.BigDecimal" column="orse_pcvalorcobranca" length="5"/>
+		<property name="indicadorServicoDiagnosticado" type="short" column="orse_icdiagnostico" not-null="true" length="2"/>
+		<property name="dataFiscalizacaoSituacao" type="java.sql.Timestamp" column="orse_dtfiscalizacaosituacao" not-null="false" length="8"/>
+		<property name="codigoRetornoVistoria" type="java.lang.Short" column="orse_cdretornovistoria" not-null="false" length="2"/>
+		<property name="codigoTipoRecebimento" type="java.lang.Short" column="orse_cdtiporecebimento" not-null="false" length="2"/>
+		<property name="codigoRetornoFiscalizacaoColetiva" type="java.lang.Short" column="orse_cdretornofisclzcoltv" not-null="false" length="2"/>
+		<property name="parecerFiscalizacaoColetiva" type="java.lang.String" column="orse_dsparecerfisclzcoltv" not-null="false" length="100"/>
+		<property name="indicadorProgramada" type="short" column="orse_icprogramada" not-null="true" length="2"/>
+		<property name="indicadorEncerramentoAutomatico" type="java.lang.Short" column="orse_icencerramentoautomatico" length="2"/>
+		<property name="indicadorAtualizaAgua" type="java.lang.Short" column="orse_icatualizaagua" length="2"/>
+		<property name="indicadorAtualizaEsgoto" type="java.lang.Short" column="orse_icatualizaesgoto" length="2"/>
+		<property name="indicadorBoletim" type="java.lang.Short" column="orse_icboletim" length="2"/>
+		<property name="numeroFatorPrioridade" type="java.lang.Integer" column="orse_nnfatorprioridade" not-null="false" />
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to AtendimentoMotivoEncerramento -->
+		<many-to-one name="atendimentoMotivoEncerramento" class="gcom.atendimentopublico.registroatendimento.AtendimentoMotivoEncerramento" not-null="true">
+			<column name="amen_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ServicoNaoCobrancaMotivo -->
+		<many-to-one name="servicoNaoCobrancaMotivo" class="gcom.atendimentopublico.ordemservico.ServicoNaoCobrancaMotivo" not-null="true">
+			<column name="sncm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to RegistroAtendimento -->
+		<many-to-one name="registroAtendimento" class="gcom.atendimentopublico.registroatendimento.RegistroAtendimento" not-null="true">
+			<column name="rgat_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaDocumento -->
+		<many-to-one name="cobrancaDocumento" class="gcom.cobranca.CobrancaDocumento" not-null="true">
+			<column name="cbdo_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to FiscalizacaoColetiva -->
+		<many-to-one name="fiscalizacaoColetiva" class="gcom.atendimentopublico.ordemservico.FiscalizacaoColetiva" not-null="true">
+			<column name="fzcl_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to OrdemServico -->
+		<many-to-one name="osReferencia" class="gcom.atendimentopublico.ordemservico.OrdemServico" not-null="true">
+			<column name="orse_idreferencia"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ServicoTipoPrioridade -->
+		<many-to-one name="servicoTipoPrioridadeOriginal" class="gcom.atendimentopublico.ordemservico.ServicoTipoPrioridade" not-null="true">
+			<column name="stpr_idoriginal"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ServicoTipoPrioridade -->
+		<many-to-one name="servicoTipoPrioridadeAtual" class="gcom.atendimentopublico.ordemservico.ServicoTipoPrioridade" not-null="true">
+			<column name="stpr_idatual"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to OsReferidaRetornoTipo -->
+		<many-to-one name="osReferidaRetornoTipo" class="gcom.atendimentopublico.ordemservico.OsReferidaRetornoTipo" not-null="true">
+			<column name="orrt_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ServicoTipo -->
+		<many-to-one name="servicoTipo" class="gcom.atendimentopublico.ordemservico.ServicoTipo" not-null="true">
+			<column name="svtp_id"/>
+		</many-to-one>
+		<many-to-one name="unidadeAtual" class="gcom.cadastro.unidade.UnidadeOrganizacional" not-null="false">
+			<column name="unid_idatual"></column>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ServicoTipo -->
+		<many-to-one name="servicoTipoReferencia" class="gcom.atendimentopublico.ordemservico.ServicoTipo" not-null="true">
+			<column name="svtp_idreferencia"/>
+		</many-to-one>
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to CreditoARealizarHistorico 
+    <set
+        name="creditoARealizarHistoricos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="orse_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CreditoARealizarHistorico"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to OrdemServico 
+    <set
+        name="ordemServicos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="orse_idreferencia" />
+        </key>
+        <one-to-many 
+            class="gcom.OrdemServico"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to GuiaDevolucao 
+    <set
+        name="guiaDevolucaos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="orse_id" />
+        </key>
+        <one-to-many 
+            class="gcom.GuiaDevolucao"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to DebitoACobrarHistorico 
+    <set
+        name="debitoACobrarHistoricos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="orse_id" />
+        </key>
+        <one-to-many 
+            class="gcom.DebitoACobrarHistorico"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to GuiaPagamento 
+    <set
+        name="guiaPagamentos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="orse_id" />
+        </key>
+        <one-to-many 
+            class="gcom.GuiaPagamento"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to CreditoARealizar 
+    <set
+        name="creditoARealizars"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="orse_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CreditoARealizar"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to OrdemServicoUnidade -->
+		<set name="ordemServicoUnidades" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="orse_id"/>
+			</key>
+			<one-to-many class="gcom.atendimentopublico.ordemservico.OrdemServicoUnidade"/>
+		</set>
+		<!-- bi-directional one-to-many association to DebitoACobrar 
+    <set
+        name="debitoACobrars"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="orse_id" />
+        </key>
+        <one-to-many 
+            class="gcom.DebitoACobrar"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to OrdemServicoAtividade 
+    <set
+        name="ordemServicoAtividades"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="orse_id" />
+        </key>
+        <one-to-many 
+            class="gcom.OrdemServicoAtividade"
+        />
+    </set> -->
+		<!-- bi-directional many-to-one association to FiscalizacaoColetiva -->
+		<many-to-one name="fiscalizacaoSituacao" class="gcom.atendimentopublico.ordemservico.FiscalizacaoSituacao" not-null="true">
+			<column name="fzst_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Projeto -->
+		<many-to-one name="projeto" class="gcom.cadastro.projeto.Projeto">
+			<column name="proj_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-one association to BoletimOsConcluida -->
+		<one-to-one name="boletimOsConcluida" class="gcom.atendimentopublico.ordemservico.BoletimOsConcluida" outer-join="auto"/>
+		
+		<many-to-one name="comandoOrdemSeletiva" class="gcom.atendimentopublico.ordemservico.ComandoOrdemSeletiva" not-null="false">
+			<column name="coss_id"></column>
+		</many-to-one>
+		
+	</class>
+</hibernate-mapping>

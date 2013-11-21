@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="InformarDadosConsultaNegativacaoActionForm"
+			type="gcom.gui.cobranca.spcserasa.InformarDadosConsultaNegativacaoActionForm" />
+		
+	</form-beans>
+	<global-forwards />
+	<action-mappings>
+
+		<action name="InformarDadosConsultaNegativacaoActionForm"
+				type="gcom.gui.cobranca.spcserasa.ExibirInformarDadosConsultaNegativacaoAction"
+				validate="true" scope="session"	path="/exibirInformarDadosConsultaNegativacaoAction">
+			<forward name="exibirInformarDadosConsultaNegativacao"	
+			path="/jsp/cobranca/spcserasa/negativacao_resumo_informar_dados.jsp" />
+		</action>
+		
+ 		<action name="InformarDadosConsultaNegativacaoActionForm"
+				type="gcom.gui.cobranca.spcserasa.InformarDadosConsultaNegativacaoAction"
+				validate="true" 
+				scope="session"
+				path="/informarDadosConsultaNegativacaoAction">
+			<forward name="exibirResumoNegativacaoParametros" path="/informarDadosParaConsultaNegativacaoAction.do"/>	
+			 <forward name="gerarRelatorioAcompanhamentoClientesNegativados" path="/gerarRelatorioAcompanhamentoClientesNegativadosAction.do" />		
+			 <forward name="gerarRelatorioNegativacoesExcluidas" path="/gerarRelatorioNegativacoesExcluidasAction.do" />		
+		</action>
+		
+		<action name="InformarDadosConsultaNegativacaoActionForm" 
+		        type="gcom.gui.cobranca.spcserasa.InformarDadosParaConsultaNegativacaoAction" 
+		        validate="false" path="/informarDadosParaConsultaNegativacaoAction">
+            <forward name="consultarResumoNegativacaoParametros" 
+            path="/consultaNegativacaoWizardAction.do?action=exibirDadosGeracaoConsultaNegativacaoAction"/>
+        </action>
+        
+        <action name="InformarDadosConsultaNegativacaoActionForm" 
+                type="gcom.gui.cobranca.spcserasa.ConsultaNegativacaoWizardAction" 
+                validate="true" parameter="action" 
+                path="/consultaNegativacaoWizardAction">
+            <forward name="exibirDadosGeracaoConsultaNegativacao" 
+                path="/jsp/cobranca/spcserasa/negativacao_resumo_parametros_consultar.jsp"/>
+			<forward name="exibirConsultarResumoNegativacao" 
+				path="/jsp/cobranca/spcserasa/negativacao_resumo_consultar_recolhido.jsp"/>
+		</action>
+		
+		
+
+
+		<action name="InformarDadosConsultaNegativacaoActionForm"
+			type="gcom.gui.cobranca.spcserasa.ExibirConsultarResumoNegativacaoPopupAction"
+			validate="false" scope="session" path="/exibirConsultarResumoNegativacaoPopupAction">
+			<forward name="consultarResumoNegativacaoPopup"
+				path="/jsp/cobranca/spcserasa/negativacao_resumo_consultar_popup.jsp" />
+		</action>
+
+
+		
+		
+        <action type="gcom.gui.cobranca.spcserasa.CancelarConsultarResumoNegativacaoAction" 
+                validate="false" 
+                path="/cancelarConsultarResumoNegativacaoAction">
+		</action>
+		
+		
+	<action name="InformarDadosConsultaNegativacaoActionForm"
+			type="gcom.gui.relatorio.cobranca.spcserasa.GerarRelatorioAcompanhamentoClientesNegativadosAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioAcompanhamentoClientesNegativadosAction" />
+		
+	  
+	 	<action name="InformarDadosConsultaNegativacaoActionForm"
+			type="gcom.gui.relatorio.cobranca.spcserasa.GerarRelatorioNegativacoesExcluidasAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioNegativacoesExcluidasAction" /> 
+	  
+	  
+		
+	</action-mappings>
+	<message-resources null="false" parameter="gcom.properties.application" />
+</struts-config>

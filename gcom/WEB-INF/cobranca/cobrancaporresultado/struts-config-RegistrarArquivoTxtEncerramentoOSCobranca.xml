@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>			
+			
+		<!-- INÍCIO [UC1182] Recepcionar Arquivo TXT Encerramento OS Cobrança Autor: Mariana Victor Data:17/06/2011 -->
+		<action 
+			type="gcom.gui.cobranca.cobrancaporresultado.ExibirRegistrarArquivoTxtEncerramentoOSCobrancaAction"
+			scope="request"
+			path="/exibirRegistrarArquivoTxtEncerramentoOSCobrancaAction">
+			<forward name="registrarArquivoTxtEncerramentoOSCobranca"
+				path="/jsp/cobranca/cobrancaporresultado/registrar_arquivo_encerramento_ordem_servico_cobranca.jsp" />
+
+		</action>		
+
+		<action 
+			type="gcom.gui.cobranca.cobrancaporresultado.RegistrarArquivoTxtEncerramentoOSCobrancaAction"
+			scope="request"
+			path="/registrarArquivoTxtEncerramentoOSCobrancaAction">
+		</action>
+			
+		<!-- FIM [UC1182] Recepcionar Arquivo TXT Encerramento OS Cobrança Autor: Mariana Victor Data:17/06/2011 -->
+			
+				
+
+	</action-mappings>
+
+</struts-config>

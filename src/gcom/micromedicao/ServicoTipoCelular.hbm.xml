@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.micromedicao.ServicoTipoCelular" table="micromedicao.servico_tipo_celular">
+		<id name="id" type="java.lang.Integer" column="stce_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_servico_tipo_celular</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="stce_dsservicotipocelular" length="30"/>
+		<property name="indicadorUso" type="java.lang.Short" column="stce_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="stce_tmultimaalteracao" not-null="true" length="8"/>
+	</class>
+</hibernate-mapping>

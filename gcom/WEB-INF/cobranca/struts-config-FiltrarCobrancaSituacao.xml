@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarCobrancaSituacaoActionForm"
+			type="gcom.gui.cobranca.FiltrarCobrancaSituacaoActionForm" />
+
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarCobrancaSituacaoActionForm"  
+			type="gcom.gui.cobranca.ExibirFiltrarCobrancaSituacaoAction" 
+			validate="false"
+			scope="session"
+			path="/exibirFiltrarCobrancaSituacaoAction">
+
+			<forward name="filtrarCobrancaSituacao"
+			path="/jsp/cobranca/cobranca_situacao_filtrar.jsp" />
+
+		</action>
+
+		<action name="FiltrarCobrancaSituacaoActionForm"
+			type="gcom.gui.cobranca.FiltrarCobrancaSituacaoAction"
+			validate="true" 
+			scope="session"
+			path="/filtrarCobrancaSituacaoAction">
+			
+			<forward name="exibirManterCobrancaSituacao"
+				path="/exibirManterCobrancaSituacaoAction.do" />
+			
+			
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>
+

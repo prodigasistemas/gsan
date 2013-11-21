@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="DebitoCreditoDadosSelecaoExtratoActionForm"
+			type="gcom.gui.cobranca.DebitoCreditoDadosSelecaoExtratoActionForm" />
+		<form-bean name="InserirDebitoACobrarPopupActionForm"
+			type="gcom.gui.faturamento.debito.InserirDebitoACobrarPopupActionForm" />
+	</form-beans>
+
+	<!--******************* P?GINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="DebitoCreditoDadosSelecaoExtratoActionForm" 
+			type="gcom.gui.cobranca.ExibirDebitoCreditoDadosSelecaoExtratoAction"
+			validate="true" path="/exibirDebitoCreditoDadosSelecaoExtratoAction">
+			<forward name="debitoCreditoDadosSelecaoExtrato"
+				path="/jsp/cobranca/debito_credito_selecionar_dados_extrato.jsp" />
+		</action>
+
+
+		<action name="DebitoCreditoDadosSelecaoExtratoActionForm" 
+			type="gcom.gui.cobranca.EmissaoExtratoDebitoAction"
+			validate="true" path="/emissaoExtratoDebitoAction">
+			<forward name="emissaoExtratoDebito"
+				path="/gerarRelatorioExtratoDebitoAction.do" />
+		</action>
+		
+		<action name="InserirDebitoACobrarPopupActionForm" 
+			type="gcom.gui.faturamento.debito.ExibirInserirDebitoACobrarPopupAction"
+			validate="false" scope="session" 
+			path="/exibirInserirDebitoACobrarPopupAction">
+			<forward name="inserirDebitoACobrarPopup"
+				path="/jsp/faturamento/debito/debito_a_cobrar_inserir_popup.jsp" />
+		</action>
+		
+		<action name="InserirDebitoACobrarPopupActionForm" 
+			type="gcom.gui.faturamento.debito.InserirDebitoACobrarPopupAction"
+			validate="false" scope="session"
+			path="/inserirDebitoACobrarPopupAction">
+			<forward name="inserirDebitoACobrar"
+				path="/jsp/faturamento/debito/debito_a_cobrar_inserir_popup.jsp" />
+		</action>
+		
+		
+		
+	</action-mappings>
+
+	
+</struts-config>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ejb-jar PUBLIC "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN" "http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+<ejb-jar>
+    <enterprise-beans>
+        <session>
+            <display-name>ControladorGerencialeImovelGCOM</display-name>
+            <ejb-name>ControladorGerencialImovelGCOM</ejb-name>
+            <local-home>gcom.gerencial.cadastro.imovel.ControladorGerencialImovelLocalHome</local-home>
+            <local>gcom.gerencial.cadastro.imovel.ControladorGerencialImovelLocal</local>
+            <ejb-class>gcom.gerencial.cadastro.imovel.ControladorGerencialImovelSEJB</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+        </session>
+    </enterprise-beans>
+    <assembly-descriptor>
+        <container-transaction>
+            <method>
+                <ejb-name>ControladorGerencialImovelGCOM</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <trans-attribute>Required</trans-attribute>
+        </container-transaction>
+        
+       <!-- <container-transaction>
+          <method>
+              <ejb-name>ControladorGerencialMicromedicaoGCOM</ejb-name>
+              <method-name>gerarResumoInstalacoesHidrometros</method-name>
+          </method>
+            <trans-attribute>NotSupported</trans-attribute>
+        </container-transaction> -->
+        
+    </assembly-descriptor>
+</ejb-jar>

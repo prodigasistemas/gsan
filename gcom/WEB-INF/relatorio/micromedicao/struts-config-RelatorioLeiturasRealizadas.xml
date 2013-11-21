@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="RelatorioLeiturasRealizadasActionForm"
+			type="gcom.gui.relatorio.micromedicao.RelatorioLeiturasRealizadasActionForm" />					
+	</form-beans>
+
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+
+		<action name="RelatorioLeiturasRealizadasActionForm"
+			type="gcom.gui.relatorio.micromedicao.ExibirFiltrarRelatorioLeiturasRealizadasAction"
+			      
+			validate="true" scope="session"
+			path="/exibirFiltrarRelatorioLeiturasRealizadas">
+			<forward name="exibirFiltrarRelatorioLeiturasRealizadas"
+				path="/jsp/relatorio/micromedicao/relatorio_leituras_realizadas.jsp" />
+		</action>
+		
+		<action name="RelatorioLeiturasRealizadasActionForm"
+				type="gcom.gui.relatorio.micromedicao.GerarRelatorioLeiturasRealizadasAction"
+				validate="false" 
+				scope="session"
+				path="/gerarRelatorioLeiturasRealizadasAction">
+		</action>
+
+	</action-mappings>
+
+</struts-config>

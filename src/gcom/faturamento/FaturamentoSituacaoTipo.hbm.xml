@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.FaturamentoSituacaoTipo" table="faturamento.fatur_situacao_tipo">
+		<id name="id" type="java.lang.Integer" column="ftst_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_fatur_situacao_tipo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="ftst_dsfaturamentosituacaotipo" length="50"/>
+		<property name="indicadorParalisacaoFaturamento" type="java.lang.Short" column="ftst_icfaturamentoparalisacao" length="2"/>
+		<property name="indicadorParalisacaoLeitura" type="java.lang.Short" column="ftst_icleituraparalisacao" length="2"/>
+		<property name="indicadorUso" type="java.lang.Short" column="ftst_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ftst_tmultimaalteracao" length="8"/>
+		<property name="indicadorValidoAgua" type="java.lang.Short" column="ftst_icvalidoagua" length="2"/>
+		<property name="indicadorValidoEsgoto" type="java.lang.Short" column="ftst_icvalidoesgoto" length="2"/>
+		<!--  <property
+        name="indicadorFaturamentoParalisacaoEsgoto"
+        type="java.lang.Short"
+        column="ftst_icfaturamentoparalisacaoesgoto"
+        not-null="true"
+        length="2"
+    />-->
+		<property name="indicadorInformarConsumo" type="java.lang.Short" column="ftst_icinformarconsumo" length="2"/>
+		<property name="indicadorInformarVolume" type="java.lang.Short" column="ftst_icinformarvolume" length="2"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to LeituraAnormalidadeLeitura -->
+		<many-to-one name="leituraAnormalidadeLeituraComLeitura" class="gcom.micromedicao.leitura.LeituraAnormalidadeLeitura" not-null="true">
+			<column name="lalt_idleitafaturarcomleit"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LeituraAnormalidadeLeitura -->
+		<many-to-one name="leituraAnormalidadeLeituraSemLeitura" class="gcom.micromedicao.leitura.LeituraAnormalidadeLeitura" not-null="true">
+			<column name="lalt_idleitafaturarsemleit"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to Imovel
+    <set
+        name="imovels"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="ftst_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Imovel"
+        />
+    </set>-->
+		<!-- bi-directional one-to-many association to ConsumoHistorico
+    <set
+        name="consumoHistoricos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="ftst_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.ConsumoHistorico"
+        />
+    </set>-->
+		<!-- bi-directional one-to-many association to FaturamentoSituacaoHistorico
+    <set
+        name="faturamentoSituacaoHistoricos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="ftst_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.FaturamentoSituacaoHistorico"
+        />
+    </set>-->
+		<!-- bi-directional many-to-one association to LeituraAnormalidadeConsumo -->
+		<many-to-one name="leituraAnormalidadeConsumoComLeitura" class="gcom.micromedicao.leitura.LeituraAnormalidadeConsumo" not-null="true">
+			<column name="lacs_idconsacobrarcomleit"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LeituraAnormalidadeConsumo -->
+		<many-to-one name="leituraAnormalidadeConsumoSemLeitura" class="gcom.micromedicao.leitura.LeituraAnormalidadeConsumo" not-null="true">
+			<column name="lacs_idconsacobrarsemleit"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

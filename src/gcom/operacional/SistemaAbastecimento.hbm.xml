@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.operacional.SistemaAbastecimento" table="operacional.sistema_abastecimento">
+		<id name="id" type="java.lang.Integer" column="sabs_id">
+			<generator class="sequence">
+				<param name="sequence">operacional.seq_sistema_abastecimento</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="sabs_dssistemaabastecimento" length="20"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="sabs_dsabreviado" length="6"/>
+		<property name="indicadorUso" type="java.lang.Short" column="sabs_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="sabs_tmultimaalteracao" length="8"/>
+		<many-to-one name="fonteCaptacao" class="gcom.operacional.FonteCaptacao" not-null="false">
+			<column name="ftcp_id"/>
+		</many-to-one>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to DistritoOperacional
+    <set
+        name="distritoOperacionals"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="sabs_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.DistritoOperacional"
+        />
+    </set>
+  -->
+	</class>
+</hibernate-mapping>

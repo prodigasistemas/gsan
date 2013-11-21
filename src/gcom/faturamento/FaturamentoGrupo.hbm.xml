@@ -1,0 +1,63 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.FaturamentoGrupo" table="faturamento.faturamento_grupo">
+		<id name="id" type="java.lang.Integer" column="ftgr_id"/>
+		<!--   <generator class="sequence">
+        	<param name="sequence">faturamento.sequence_faturamento_grupo</param>
+     	</generator> </id> -->
+		<property name="descricao" type="java.lang.String" column="ftgr_dsfaturamentogrupo" not-null="true" length="25"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="ftgr_dsabreviado" not-null="true" length="3"/>
+		<property name="indicadorUso" type="java.lang.Short" column="ftgr_icuso" length="2"/>
+		<property name="anoMesReferencia" type="java.lang.Integer" column="ftgr_amreferencia" length="4"/>
+		<property name="diaVencimento" type="java.lang.Short" column="ftgr_nndiavencimento" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ftgr_tmultimaalteracao" length="8"/>
+		<property name="indicadorVencimentoMesFatura" type="java.lang.Short" column="ftgr_icvencimentomesfatura" not-null="true" length="2"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to FaturamentoGrupoCronogramaMensal
+    <set
+        name="faturamentoGrupoCronogramaMensais"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="ftgr_id" />
+        </key>
+        <one-to-many
+            class="gcom.faturamento.FaturamentoGrupoCronogramaMensal"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to Rota
+    <set
+        name="rotas"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="ftgr_id" />
+        </key>
+        <one-to-many
+            class="gcom.micromedicao.Rota"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to DebitoAutomaticoMovimento
+    <set
+        name="debitoAutomaticoMovimentos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="ftgr_id" />
+        </key>
+        <one-to-many
+            class="gcom.faturamento.debitoautomatico.DebitoAutomaticoMovimento"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

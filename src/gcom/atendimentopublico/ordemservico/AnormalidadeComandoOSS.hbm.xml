@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.atendimentopublico.ordemservico.AnormalidadeComandoOSS" table="atendimentopublico.anormalidade_comando_oss">
+		<composite-id name="comp_id" class="gcom.atendimentopublico.ordemservico.AnormalidadeComandoOSSPK">
+			<key-property name="comandoOrdemSeletivaId" column="coss_id"
+				type="java.lang.Integer" length="4"/>
+			<key-property name="leituraAnormalidadeId" column="ltan_id"
+				type="java.lang.Integer" length="4"/>
+		</composite-id>
+
+		<property name="ultimaAlteracao" type="java.sql.Timestamp"
+			column="acos_tmultimaalteracao" not-null="true" length="8"/>
+
+		<!-- bi-directional many-to-one association to RegistroAtendimento -->
+		<many-to-one name="comandoOrdemSeletiva" class="gcom.atendimentopublico.ordemservico.ComandoOrdemSeletiva"
+			update="false" insert="false">
+			<column name="coss_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Conta -->
+		<many-to-one name="leituraAnormalidade" class="gcom.micromedicao.leitura.LeituraAnormalidade"
+			update="false" insert="false">
+			<column name="ltan_id"/>
+		</many-to-one>
+		
+	</class>
+</hibernate-mapping>

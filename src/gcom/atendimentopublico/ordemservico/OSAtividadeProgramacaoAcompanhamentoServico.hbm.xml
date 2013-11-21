@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">        
+<hibernate-mapping>
+<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+
+	<class name="gcom.atendimentopublico.ordemservico.OSAtividadeProgramacaoAcompanhamentoServico" table="atendimentopublico.os_at_prg_acomp_servico">
+		<id name="id" type="java.lang.Integer" column="oats_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_os_at_prg_acomp_servico</param>
+			</generator>
+		</id>
+		
+		
+    <property
+        name="indicadorAtualizacaoOS"
+        type="short"
+        column="oats_icatualizaos"
+        not-null="true"
+        length="5"
+    />
+    <property
+        name="indicadorTransmissaoOS"
+        type="short"
+        column="oats_ictransmissao"
+        not-null="true"
+        length="5"
+    />
+    <property
+        name="dataUltimaAlteracao"
+        type="java.sql.Timestamp"
+        column="oats_tmultimaalteracao"
+        not-null="true"
+        length="29"
+    />
+    
+    <property
+        name="indicadorExcluido"
+        type="short"
+        column="oats_icexcluido"
+        not-null="true"
+        length="5"
+    />
+    
+    <property
+        name="qtdMaterialExedente"
+        type="java.math.BigDecimal"
+        column="oats_qtmaterialexedente"
+        not-null="false"
+        length="6"
+    />
+    
+    <!-- Associations -->
+  
+    <!-- bi-directional many-to-one association to OrdemServicoSituacao -->
+    <many-to-one
+        name="ordemServicoSituacao"
+        class="gcom.atendimentopublico.ordemservico.OrdemServicoSituacao"
+        not-null="true"
+    >
+        <column name="osst_id" />
+    </many-to-one>
+    <many-to-one
+        name="osProgramacaoAcompanhamentoServico"
+        class="gcom.atendimentopublico.ordemservico.OSProgramacaoAcompanhamentoServico"
+        not-null="true"
+    >
+        <column name="OSAS_ID" />
+    </many-to-one>
+    
+    <many-to-one
+        name="equipamentoFaltante"
+        class="gcom.atendimentopublico.ordemservico.EquipamentosEspeciais"
+        not-null="true"
+    >
+        <column name="EQES_IDFALTANTE" />
+    </many-to-one>
+    
+    <many-to-one
+        name="atividade"
+        class="gcom.atendimentopublico.ordemservico.Atividade"
+        not-null="true"
+    >
+        <column name="ativ_id" />
+    </many-to-one>
+    
+    <many-to-one
+        name="servicoTerceiroAcompanhamentoServico"
+        class="gcom.integracao.ServicoTerceiroAcompanhamentoServico"
+        not-null="false"
+    >
+        <column name="stas_id" />
+    </many-to-one>
+    
+</class>
+</hibernate-mapping>

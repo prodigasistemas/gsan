@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.atendimentopublico.registroatendimento.RegistroAtendimentoPagamentoDuplicidade" table="atendimentopublico.ra_pagto_duplicidade">
+		<composite-id name="comp_id" class="gcom.atendimentopublico.registroatendimento.RegistroAtendimentoPagamentoDuplicidadePK">
+			<key-property name="registroAtendimentoId" column="rgat_id"
+				type="java.lang.Integer" length="4"/>
+			<key-property name="pagamentoId" column="pgmt_id"
+				type="java.lang.Integer" length="4"/>
+		</composite-id>
+		
+		<property name="referenciaConta" type="int" column="rapd_amreferenciaconta" not-null="true" length="6"/>
+		
+		
+		<property name="dataPagamento" 
+			type="java.sql.Date" 
+			column="rapd_dtpagamento" 
+			not-null="false"/>
+			
+		<property name="anoMesReferenciaPagamento" 
+			type="java.lang.Integer" 
+			column="rapd_amreferenciapagamento"
+			not-null="false"
+			length="6"/>
+			
+		<property name="valorPagamento" 
+			type="java.math.BigDecimal" 
+			column="rapd_vlpagamento" 
+			not-null="false" 
+			length="13"/>
+
+		<property name="ultimaAlteracao" 
+			type="java.sql.Timestamp"
+			column="rapd_tmultimaalteracao" 
+			not-null="true" 
+			length="8"/>
+			
+		<property name="indicadorPagamentoDevolvido" type="java.lang.Short" column="rapd_icpagtodevolvido" not-null="true" length="2"/>
+
+		<!-- bi-directional many-to-one association to RegistroAtendimento -->
+		<many-to-one name="registroAtendimento" class="gcom.atendimentopublico.registroatendimento.RegistroAtendimento"
+			update="false" insert="false">
+			<column name="rgat_id"/>
+		</many-to-one>
+		
+		<!-- bi-directional many-to-one association to Conta -->
+
+		<many-to-one name="contaGeral" class="gcom.faturamento.conta.ContaGeral" not-null="true">
+			<column name="cnta_id"/>
+		</many-to-one>
+		
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id"/>
+		</many-to-one>
+		
+		<!-- bi-directional many-to-one association to Pagamento -->
+		<many-to-one name="pagamento" class="gcom.arrecadacao.pagamento.Pagamento"
+			update="false" insert="false">
+			<column name="pgmt_id"/>
+		</many-to-one>
+		
+	</class>
+</hibernate-mapping>

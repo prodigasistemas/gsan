@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="ManterLigacaoEsgotoEsgotamentoActionForm"
+			type="gcom.gui.atendimentopublico.ManterLigacaoEsgotoEsgotamentoActionForm" />
+		<form-bean name="AtualizarLigacaoEsgotoEsgotamentoActionForm"
+			type="gcom.gui.atendimentopublico.AtualizarLigacaoEsgotoEsgotamentoActionForm" />
+		<form-bean name="FiltrarLigacaoEsgotoEsgotamentoActionForm"
+			type="gcom.gui.atendimentopublico.FiltrarLigacaoEsgotoEsgotamentoActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.atendimentopublico.ExibirManterLigacaoEsgotoEsgotamentoAction"
+			validate="false" scope="session"
+			path="/exibirManterLigacaoEsgotoEsgotamentoAction">
+
+			<forward name="exibirManterLigacaoEsgotoEsgotamento"
+				path="/jsp/atendimentopublico/ligacao_esgoto_esgotamento_manter.jsp" />
+
+			<forward name="exibirAtualizarLigacaoEsgotoEsgotamento"
+				path="/exibirAtualizarLigacaoEsgotoEsgotamentoAction.do" />
+		</action>
+
+		<action name="AtualizarLigacaoEsgotoEsgotamentoActionForm"
+			type="gcom.gui.atendimentopublico.ExibirAtualizarLigacaoEsgotoEsgotamentoAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarLigacaoEsgotoEsgotamentoAction">
+
+			<forward name="ligacaoEsgotoEsgotamentoAtualizar"
+				path="/jsp/atendimentopublico/ligacao_esgoto_esgotamento_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarLigacaoEsgotoEsgotamentoActionForm"
+			type="gcom.gui.atendimentopublico.AtualizarLigacaoEsgotoEsgotamentoAction"
+			validate="true" scope="session"
+			path="/atualizarLigacaoEsgotoEsgotamentoAction">
+
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.atendimentopublico.RemoverLigacaoEsgotoEsgotamentoAction"
+			 scope="request" path="/removerLigacaoEsgotoEsgotamentoAction">
+
+		</action>
+		
+		<action name="FiltrarLigacaoEsgotoEsgotamentoActionForm"
+			type="gcom.gui.relatorio.atendimentopublico.GerarRelatorioLigacaoEsgotoEsgotamentoManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioLigacaoEsgotoEsgotamentoManterAction" />
+		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

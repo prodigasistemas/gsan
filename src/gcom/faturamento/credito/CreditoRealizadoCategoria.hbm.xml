@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.credito.CreditoRealizadoCategoria" table="faturamento.cred_realizado_catg">
+		<composite-id name="comp_id" class="gcom.faturamento.credito.CreditoRealizadoCategoriaPK">
+			<!-- bi-directional many-to-one association to CreditoRealizado -->
+			<key-many-to-one name="creditoRealizado" class="gcom.faturamento.credito.CreditoRealizado">
+				<column name="crrz_id"/>
+			</key-many-to-one>
+			<!-- bi-directional many-to-one association to Categoria -->
+			<key-many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria">
+				<column name="catg_id"/>
+			</key-many-to-one>
+		</composite-id>
+		<property name="quantidadeEconomia" type="java.lang.Integer" column="crcg_qteconomia" length="4"/>
+		<property name="valorCategoria" type="java.math.BigDecimal" column="crcg_vlcategoria" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="crcg_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to CreditoRealizado -->
+		<many-to-one name="creditoRealizado" class="gcom.faturamento.credito.CreditoRealizado" update="false" insert="false">
+			<column name="crrz_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Categoria -->
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" update="false" insert="false">
+			<column name="catg_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0227] GERAR RELAÇÃO DE ACOMPANHAMENTO FATURAMENTO Auhtor: Fernanda Paiva Data:25/05/2006-->
+		<!--INICIO RELATÓRIO GERAR RELAÇÃO DE ACOMPANHAMENTO FATURAMENTO-->
+		<action name="ImovelOutrosCriteriosActionForm"
+			type="gcom.gui.relatorio.faturamento.GerarRelatorioAcompanhamentoFaturamentoAction"
+			scope="session" path="/gerarRelatorioAcompanhamentoFaturamentoAction" />
+		<!--FIM RELATÓRIO GERAR RELAÇÃO DE ACOMPANHAMENTO FATURAMENTO-->
+
+	</action-mappings>
+
+</struts-config>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean 
+			name="AtualizarOrdemServicoActionForm" 
+			type="gcom.gui.atendimentopublico.ordemservico.AtualizarOrdemServicoActionForm" /> 
+	</form-beans>
+	<global-forwards />
+	<action-mappings>
+		<action 
+			name="AtualizarOrdemServicoActionForm"  
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirAtualizarOrdemServicoAction" 
+			validate="true"
+			scope="session"
+			path="/exibirAtualizarOrdemServicoAction">
+			<forward 
+				name="exibirAtualizarOrdemServico"
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_atualizar.jsp" />
+		</action>
+		<action name="AtualizarOrdemServicoActionForm"
+				type="gcom.gui.atendimentopublico.ordemservico.AtualizarOrdemServicoAction"
+				validate="false" 
+				scope="session"
+				path="/atualizarOrdemServicoAction">
+				<forward 
+				name="exibirAtualizarOrdemServico"
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_atualizar.jsp" />
+		</action>
+	</action-mappings>
+	<message-resources null="false" parameter="gcom.properties.application" />		
+</struts-config>

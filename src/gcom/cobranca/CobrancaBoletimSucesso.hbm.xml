@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.CobrancaBoletimSucesso" table="cobranca.cobr_boletim_sucesso">
+		<composite-id name="comp_id" class="gcom.cobranca.CobrancaBoletimSucessoPK">
+			<key-property name="cobrancaBoletimMedicaoId" column="cobm_id" type="java.lang.Integer" length="4"/>
+			<key-property name="imovelId" column="imov_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		
+		<property name="valorTaxaSucesso" type="java.math.BigDecimal" column="cbsu_vltxsucesso" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cbsu_tmultimaalteracao" length="8"/>
+		
+		<property name="valorRecuperado" type="java.math.BigDecimal" column="cbsu_vlrecuperado" length="13"/>
+   
+		<!-- bi-directional many-to-one association to CobrancaGrupo -->
+		<many-to-one name="cobrancaBoletimMedicao" class="gcom.cobranca.CobrancaBoletimMedicao"
+			not-null="false" insert="false" update="false">
+			<column name="cobm_id"/>
+		</many-to-one>
+		
+		<!-- bi-directional many-to-one association to CobrancaGrupo -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel"
+			not-null="false" insert="false" update="false">
+			<column name="imov_id"/>
+		</many-to-one>
+		
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade"
+			not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.consumotarifa.ConsumoTarifa" table="faturamento.consumo_tarifa">
+		<id name="id" type="java.lang.Integer" column="cstf_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_consumo_tarifa</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="cstf_dsconsumotarifa" length="30"/>
+		<property name="indicadorUso" type="java.lang.Short" column="cstf_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cstf_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to ConsumoTarifaVigencia -->
+		<set name="consumoTarifaVigencias" lazy="true" inverse="true">
+			<key>
+				<column name="cstf_id"/>
+			</key>
+			<one-to-many class="gcom.faturamento.consumotarifa.ConsumoTarifaVigencia"/>
+		</set>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to LigacaoAguaPerfil -->
+		<many-to-one name="ligacaoAguaPerfil" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaPerfil" not-null="false">
+			<column name="lapf_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to TarifaTipoCalculo -->
+		<many-to-one name="tarifaTipoCalculo" class="gcom.faturamento.TarifaTipoCalculo" not-null="true">
+			<column name="ttpc_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to ContaHistorico -->
+		<!--
+    <set
+        name="contaHistoricos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="cstf_id" />
+        </key>
+        <one-to-many
+            class="mapeamentohibernate.ContaHistorico"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to Conta -->
+		<!--
+    <set
+        name="contas"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="cstf_id" />
+        </key>
+        <one-to-many
+            class="mapeamentohibernate.Conta"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

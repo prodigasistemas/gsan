@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.faturamento.ResumoFaturamentoSituacaoEspecial" table="faturamento.res_fatur_sit_especial">
+		<id name="id" type="java.lang.Integer" column="rfse_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_res_fatur_sit_especial</param>
+			</generator>
+		</id>
+		<property name="codigoSetorComercial" type="java.lang.Integer" column="rfse_cdsetorcomercial" not-null="true" length="4"/>
+		<property name="numeroQuadra" type="java.lang.Integer" column="rfse_nnquadra" not-null="true" length="4"/>
+		<property name="anoMesInicioSituacaoEspecial" type="java.lang.Integer" column="rfse_amfatmtsitinicio" not-null="true" length="4"/>
+		<property name="anoMesFinalSituacaoEspecial" type="java.lang.Integer" column="rfse_amfaturamentosituacaofim" not-null="true" length="4"/>
+		<property name="quantidadeImovel" type="java.lang.Integer" column="rfse_qtimoveis" not-null="true" length="9"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="rfse_tmultimaalteracao" length="8"/>
+		<!-- bi-directional many-to-one association to GerenciaRegional -->
+		<many-to-one name="gerenciaRegional" class="gcom.cadastro.localidade.GerenciaRegional" not-null="true">
+			<column name="greg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to SetorComercial -->
+		<many-to-one name="setorComercial" class="gcom.cadastro.localidade.SetorComercial" not-null="true">
+			<column name="stcm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Rota -->
+		<many-to-one name="rota" class="gcom.micromedicao.Rota" not-null="true">
+			<column name="rota_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Quadra -->
+		<many-to-one name="quadra" class="gcom.cadastro.localidade.Quadra" not-null="true">
+			<column name="qdra_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ImovelPerfil -->
+		<many-to-one name="imovelPerfil" class="gcom.cadastro.imovel.ImovelPerfil" not-null="true">
+			<column name="iper_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LigacaoAguaSituacao -->
+		<many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="true">
+			<column name="last_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LigacaoAguaSituacao -->
+		<many-to-one name="ligacaoEsgotoSituacao" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao" not-null="true">
+			<column name="lest_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Categoria -->
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to EsferaPoder -->
+		<many-to-one name="esferaPoder" class="gcom.cadastro.cliente.EsferaPoder" not-null="false">
+			<column name="epod_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to FaturamentoSituacaoTipo -->
+		<many-to-one name="faturamentoSituacaoTipo" class="gcom.faturamento.FaturamentoSituacaoTipo" not-null="true">
+			<column name="ftst_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to FaturamentoSituacaoTipo -->
+		<many-to-one name="faturamentoSituacaoMotivo" class="gcom.faturamento.FaturamentoSituacaoMotivo" not-null="true">
+			<column name="ftsm_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

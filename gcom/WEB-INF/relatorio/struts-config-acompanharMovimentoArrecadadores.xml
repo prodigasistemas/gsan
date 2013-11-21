@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="AcompanharMovimentoArrecadadoresActionForm"
+			type="gcom.gui.relatorio.AcompanharMovimentoArrecadadoresActionForm" />					
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UCXXXX] ACOMPANHAR MOVIMENTO DOS ARRECADADORES Auhtor: Rafael Corrêa Data:02/04/2007-->
+		<action name="AcompanharMovimentoArrecadadoresActionForm"
+			type="gcom.gui.relatorio.ExibirAcompanharMovimentoArrecadadoresAction"
+			validate="true" scope="session"
+			path="/exibirAcompanharMovimentoArrecadadoresAction">
+			<forward name="exibirAcompanharMovimentoArrecadadores"
+				path="/jsp/relatorio/movimento_arrecadadores_acompanhar.jsp" />
+		</action>
+		
+		<action name="AcompanharMovimentoArrecadadoresActionForm"
+			type="gcom.gui.relatorio.GerarRelatorioAcompanhamentoMovimentoArrecadadoresAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioAcompanhamentoMovimentoArrecadadoresAction" />
+
+	</action-mappings>
+
+</struts-config>

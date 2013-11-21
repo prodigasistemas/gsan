@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.tarifasocial.TarifaSocialExclusaoMotivo" table="cadastro.tar_social_excl_motivo">
+		<id name="id" type="java.lang.Integer" column="etsm_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.tarifa_social_exclusao_motivo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="etsm_dstarsocexclusaomotivo" length="40"/>
+		<property name="indicadorUso" type="java.lang.Short" column="etsm_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="etsm_tmultimaalteracao" length="8"/>
+		<property name="indicadorPermiteRecadastramentoImovel" type="java.lang.Short" column="etsm_icpermiterecadmtimv" length="2"/>
+		<property name="indicadorPermiteRecadastramentoCliente" type="java.lang.Short" column="etsm_icpermiterecadmtclt" length="2"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to TarifaSocialDado -->
+		<!--
+   <set
+        name="tarifaSocialDados"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="etsm_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.TarifaSocialDado"
+        />
+    </set>
+-->
+	</class>
+</hibernate-mapping>

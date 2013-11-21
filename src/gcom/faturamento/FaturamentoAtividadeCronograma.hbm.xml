@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.FaturamentoAtividadeCronograma" table="faturamento.fatur_ativ_cronograma">
+		<id name="id" type="java.lang.Integer" column="ftac_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_fatur_ativ_cronograma</param>
+			</generator>
+		</id>
+		<property name="dataPrevista" type="java.sql.Date" column="ftac_dtprevista" length="4"/>
+		<property name="dataRealizacao" type="java.sql.Timestamp" column="ftac_tmrealizacao" length="4"/>
+		<property name="comando" type="java.sql.Timestamp" column="ftac_tmcomando" length="8"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ftac_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to FaturamentoAtivCronRota -->
+		<set name="faturamentoAtividadeCronogramaRotas" lazy="true" inverse="true" cascade="delete">
+			<key>
+				<column name="ftac_id"/>
+			</key>
+			<one-to-many class="gcom.faturamento.FaturamentoAtivCronRota"/>
+		</set>
+		<!-- bi-directional many-to-one association to FaturamentoAtividade -->
+		<many-to-one name="faturamentoAtividade" class="gcom.faturamento.FaturamentoAtividade" not-null="true">
+			<column name="ftat_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to FaturamentoGrupoCronogramaMensal -->
+		<many-to-one name="faturamentoGrupoCronogramaMensal" class="gcom.faturamento.FaturamentoGrupoCronogramaMensal" not-null="true">
+			<column name="ftcm_id"/>
+		</many-to-one>
+		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario" not-null="false">
+			<column name="usur_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

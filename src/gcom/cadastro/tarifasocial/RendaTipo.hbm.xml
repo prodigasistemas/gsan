@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.tarifasocial.RendaTipo" table="cadastro.renda_tipo">
+		<id name="id" type="java.lang.Integer" column="retp_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_renda_tipo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="retp_dsrendatipo" length="20"/>
+		<property name="indicadorUso" type="java.lang.Short" column="retp_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="retp_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to TarifaSocialDadoEconomia -->
+		<!--
+    <set
+        name="tarifaSocialDadoEconomias"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="retp_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.TarifaSocialDadoEconomia"
+        />
+    </set>
+-->
+	</class>
+</hibernate-mapping>

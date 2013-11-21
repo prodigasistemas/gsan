@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="AtualizarCepActionForm"
+			type="gcom.gui.cadastro.AtualizarCepActionForm" />
+		<form-bean name="FiltrarCepActionForm"
+			type="gcom.gui.cadastro.FiltrarCepActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+
+
+		<action name="FiltrarCepActionForm"  
+			type="gcom.gui.cadastro.ExibirFiltrarCepAction" 
+			validate="false"
+			scope="session"
+			path="/exibirFiltrarCepAction">
+
+			<forward name="filtrarCep"
+			path="/jsp/cadastro/cep_filtrar.jsp" />
+		</action>
+
+		<action name="FiltrarCepActionForm"
+			type="gcom.gui.cadastro.FiltrarCepAction"
+			validate="true" 
+			scope="session"
+			path="/filtrarCepAction">
+			
+			<forward name="exibirAtualizarCep"
+				path="/exibirAtualizarCepAction.do" />
+		</action>
+
+		<action name="AtualizarCepActionForm"
+			type="gcom.gui.cadastro.ExibirAtualizarCepAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarCepAction">
+
+			<forward name="cepAtualizar"
+				path="/jsp/cadastro/cep_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarCepActionForm"
+			type="gcom.gui.cadastro.AtualizarCepAction"
+			validate="true" scope="session"
+			path="/atualizarCepAction">
+		</action>
+	
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

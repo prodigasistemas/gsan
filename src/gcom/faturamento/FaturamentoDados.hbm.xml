@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.faturamento.FaturamentoDados" table="faturamento.faturamento_dados">
+		<id name="id" type="java.lang.Integer" column="fatd_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_faturamento_dados</param>
+			</generator>
+		</id>
+		<property name="anoMesReferencia" type="java.lang.Integer" column="fatd_amreferencia" length="4"/>
+		<property name="indicadorDebitoConta" type="java.lang.Short" column="fatd_icdebitoconta" length="2"/>
+		<property name="codigoSetorComercial" type="java.lang.Short" column="fatd_cdsetorcomercial" length="2"/>
+		<property name="numeroQuadra" type="java.lang.Short" column="fatd_nnquadra" length="2"/>
+		<property name="indicadorSimulacao" type="java.lang.Short" column="fatd_icsimulacao" length="2"/>
+		<property name="quantidadeEconomia" type="java.lang.Integer" column="fatd_qteconomia" length="4"/>
+		<property name="valorAgua" type="java.math.BigDecimal" column="fatd_vlagua" length="13"/>
+		<property name="consumoAgua" type="java.lang.Integer" column="fatd_nnconsumoagua" length="4"/>
+		<property name="valorEsgoto" type="java.math.BigDecimal" column="fatd_vlesgoto" length="13"/>
+		<property name="consumoEsgoto" type="java.lang.Integer" column="fatd_nnconsumoesgoto" length="4"/>
+		<property name="valorDebitos" type="java.math.BigDecimal" column="fatd_vldebitos" length="13"/>
+		<property name="valorCreditos" type="java.math.BigDecimal" column="fatd_vlcreditos" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="fatd_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to FaturamentoGrupo -->
+		<many-to-one name="faturamentoGrupo" class="gcom.faturamento.FaturamentoGrupo" not-null="true">
+			<column name="ftgr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LigacaoEsgotoSituacao -->
+		<many-to-one name="ligacaoEsgotoSituacao" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao" not-null="true">
+			<column name="lest_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ImovelPerfil -->
+		<many-to-one name="imovelPerfil" class="gcom.cadastro.imovel.ImovelPerfil" not-null="true">
+			<column name="iper_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Quadra -->
+		<many-to-one name="quadra" class="gcom.cadastro.localidade.Quadra" not-null="true">
+			<column name="qdra_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LigacaoAguaSituacao -->
+		<many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="true">
+			<column name="last_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Categoria -->
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

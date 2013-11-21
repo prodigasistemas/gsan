@@ -1,0 +1,602 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<head>
+<html>
+<title>GCOM - Sistema de Gestão Comercial</title>
+
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+<link rel="stylesheet"
+	href="EstilosCompesa.css"
+	type="text/css">
+
+
+
+<script language="JavaScript"
+	src="/gsan/javascript/util.js"></script>
+<script language="JavaScript"
+	src="/gsan/javascript/validacao/ManutencaoRegistro.js"></script>
+<script language="JavaScript">
+<!--
+function voltar(){
+    var form = document.forms[0];
+  	form.action = 'exibirConsultarDebitoAction.do';
+    form.submit();		
+}
+ 
+//-->
+</script>
+
+</head>
+
+<body leftmargin="5" topmargin="5">
+<form name="ConsultarDebitoImovelActionForm" method="post" action="/gsan/exibirConsultarDebitoImovelAction.do">
+
+	<table width="770" border="0" cellspacing="5" cellpadding="0">
+  <tr>
+    <td height="0" valign="top" class="topstrip">
+      <table width="100%" height="0" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+          <td height="0" colspan="2" valign="top" class="topstrip"><img src="imagens/logo.gif" border="0"></td>
+
+          <td valign="top" align="right"><img src="imagens/logocht.gif" border="0" width="192" height="51"></td>
+        </tr>
+
+      </table></td>
+  </tr>
+</table>
+
+
+	<link rel="StyleSheet" href="/gsan/css/dtree.css"
+	type="text/css" />
+<script type="text/javascript"
+	src="/gsan/javascript/dtree.js"></script>
+<table border="0" class="layerMenu">
+	<tr>
+		<td>
+
+		<div class="dtree"><script><!-- -
+          d = new dTree('d');
+          d.add(0,-1,'Menu GCOM');
+          d.add(1,0,'GCOM','#');
+          d.add(2,1,'Cadastro','#');
+          d.add(3,2,'Cliente','#');
+          d.add(4,2,'Imóvel','#');
+          d.add(5,3,'Inserir Cliente','exibirInserirClienteAction.do?menu=sim');
+          d.add(6,3,'Manter Cliente','exibirManterClienteAction.do?menu=sim');
+          d.add(7,4,'Inserir Imóvel','exibirInserirImovelAction.do?menu=sim');
+          d.add(8,4,'Informar Economia','exibirInformarEconomiaAction.do?menu=sim');
+          d.add(9,1,'Micromedição','#');
+          d.add(10,2,'Localidade','#');
+          d.add(11,10,'Inserir Localidade','exibirInserirLocalidadeAction.do?menu=sim');
+          d.add(12,10,'Manter Localidade','exibirFiltrarLocalidadeAction.do?menu=sim');
+          d.add(13,10,'Inserir Setor Comercial','exibirInserirSetorComercialAction.do?menu=sim');
+          d.add(14,10,'Manter Setor Comercial','exibirFiltrarSetorComercialAction.do?menu=sim');
+          d.add(15,10,'Inserir Quadra','exibirInserirQuadraAction.do?menu=sim');
+          d.add(16,9,'Consistir Leituras e Calcular Consumos', '');
+          d.add(17,4,'Alterar Inscrição Imóvel','exibirAlterarImovelInscricaoAction.do?menu=sim');
+          d.add(18,2,'Geográfico','#');
+          d.add(19,22,'Inserir Bairro','exibirInserirBairroAction.do?menu=sim');
+          d.add(20,22,'Manter Bairro','exibirManterBairroAction.do?menu=sim');
+          d.add(21,10,'Manter Quadra','exibirFiltrarQuadraAction.do?menu=sim');
+          d.add(22,2,'Endereço','#');
+          d.add(23,22,'Inserir Logradouro','exibirInserirLogradouroAction.do?menu=sim');
+          d.add(24,22,'Manter Logradouro','exibirManterLogradouroAction.do?menu=sim');
+		  d.add(25,4,'Manter Imóvel','exibirFiltrarImovelAction.do?menu=sim');
+		  d.add(26,2,'Tarifa Social','#');
+		  d.add(27,26,'Inserir Tipo de Cartão da Tarifa Social','exibirInserirTarifaSocialCartaoTipoAction.do?menu=sim');
+          d.add(28,26,'Manter Tipo de Cartão da Tarifa Social','filtrarTarifaSocialCartaoTipoAction.do?menu=sim');
+          d.add(29,9,'Hidrômetro','#')
+          d.add(30,29,'Inserir Hidrômetro','exibirInserirHidrometroAction.do?menu=sim');
+          d.add(31,29,'Manter Hidrômetro','exibirManterHidrometroAction.do?menu=sim');
+          d.add(32,29,'Movimentar Hidrômetro','exibirFiltrarHidrometroAction.do?menu=sim&tela=movimentarHidrometro');
+		  d.add(33,35,'Inserir Comando de Atividade de Faturamento','exibirInserirComandoAtividadeFaturamentoAction.do?menu=sim');
+		  d.add(34,35,'Manter Comando de Atividade de Faturamento','filtrarComandoAtividadeFaturamentoAction.do?menu=sim');		  
+		  d.add(35,1,'Faturamento','#');
+		  d.add(36,37,'Inserir Conta','exibirInserirContaAction.do?menu=sim');
+		  d.add(37,35,'Conta','#');
+		  d.add(38,29,'Consultar Movimentação de Hidrômetro','exibirFiltrarMovimentacaoHidrometroAction.do?menu=sim&tela=consultarMovimentacaoHidrometro');
+		  d.add(39,26,'Inserir Dados Tarifa Social','exibirInserirTarifaSocialAction.do?menu=sim');		  
+		  d.add(40,26,'Manter Dados Tarifa Social','exibirFiltrarImovelAction.do?menu=sim&acao=exibir&redirecionar=ManterDadosTarifaSocial');
+		  d.add(41,37,'Informar Vencimento Alternativo','exibirInformarVencimentoAlternativoAction.do?menu=sim');
+		  d.add(42,37,'Manter Conta','exibirManterContaAction.do?menu=sim');
+ 		  d.add(43,37,'Simular Cálculo da Conta','exibirSimularCalculoContaAction.do?menu=sim');
+		  d.add(43,22,'Importar Cep Correios','exibirImportarCepAction.do?menu=sim');
+		  d.add(44,111,'Inserir Débito a Cobrar','exibirInserirDebitoACobrarAction.do?menu=sim');
+		  d.add(45,111,'Cancelar Débito a Cobrar','exibirManterDebitoACobrarAction.do?menu=sim');
+          d.add(46,109,'Inserir Categoria','exibirInserirCategoriaAction.do?menu=sim'); 
+          d.add(47,35, 'Tarifa de Consumo', '#');
+          d.add(48,47, 'Inserir Tarifa de Consumo', 'exibirInserirConsumoTarifaAction.do?menu=sim');
+          d.add(49,109, 'Manter Categoria', 'exibirManterCategoriaAction.do?menu=sim');
+          d.add(50,109, 'Inserir Subcategoria', 'exibirInserirSubcategoriaAction.do?menu=sim');
+          d.add(51,109, 'Manter Subcategoria', 'exibirManterSubcategoriaAction.do?menu=sim');
+          d.add(52,35,'Consultar Histórico de Faturamento','exibirConsultarHistoricoFaturamentoAction.do?menu=sim');
+		  d.add(53,1,'Relatório','#');
+		  d.add(54,53,'Cadastro','#');
+		  d.add(55,54,'Relatório de Imóveis','exibirFiltrarImovelOutrosCriterios.do?menu=sim&gerarRelatorio=RelatorioImoveis&limpar=S');
+		  d.add(56,54,'Relatório dos Dados das Economias dos Imóveis','exibirFiltrarImovelOutrosCriterios.do?menu=sim&gerarRelatorio=RelatorioEconomia&limpar=S');
+		  d.add(57,54,'Relatório Dados Tarifa Social','exibirFiltrarImovelOutrosCriterios.do?menu=sim&gerarRelatorio=RelatorioTarifaSocial&limpar=S');
+		  d.add(58,35,'Inserir Cronograma Faturamento','exibirInserirFaturamentoCronogramaAction.do?menu=sim');
+		  d.add(59,35,'Manter Cronograma Faturamento','exibirFiltrarFaturamentoCronogramaAction.do?menu=sim');
+		  d.add(60,54,'Gerar Relatório de Clientes','exibirFiltrarClienteOutrosCriteriosAction.do?menu=sim');
+		  d.add(61,35,'Alterar Dados para Faturamento','exibirDadosFaturamentoAction.do?menu=sim');
+		  d.add(62,1,'Cobrança','#');
+		  d.add(63,62,'Consultar Débitos','exibirConsultarDebitoAction.do?menu=sim');
+		  d.add(64,9,'Manter Vínculos de Imóveis para Rateio de Consumo','exibirFiltrarImovelAction.do?menu=sim&redirecionar=ManterVinculoImoveisRateioConsumo');		  
+		  d.add(65,35,'Crédito','#');
+		  d.add(66,65,'Inserir Crédito a Realizar','exibirInserirCreditoARealizarAction.do?menu=sim');		  
+		  d.add(67,47, 'Manter Tarifa de Consumo', 'exibirFiltrarConsumoTarifaAction.do?menu=sim');
+		  d.add(68,65,'Cancelar Crédito a Realizar','exibirManterCreditoARealizarAction.do?menu=sim');
+		  d.add(69,35,'Inserir Guia de Pagamento', 'exibirInserirGuiaPagamentoAction.do?menu=sim');
+		  d.add(70,35,'Cancelar Guia de Pagamento', 'exibirManterGuiaPagamentoAction.do?menu=sim');
+  		  d.add(71,9,'Consultar Histórico de Medição Individualizada', 'exibirConsultarHistoricoMedicaoIndividualizadaAction.do?menu=sim');
+  		  d.add(72,9,'Analisar Exceções de Leituras e Consumos','exibirFiltrarExcecoesLeiturasConsumosAction.do?nomeCaminhoMapping=efetuarAnaliseExcecoesLeiturasConsumos&menu=sim');
+		  d.add(73,35, 'Informar Situação Especial de Faturamento', 'exibirSituacaoEspecialFaturamentoInformarAction.do?menu=sim' );	
+		  d.add(74,29,'Consultar Histórico de Instalação','exibirConsultarHistoricoInstalacaoHidrometroInformarAction.do?menu=sim');
+		  d.add(75,9,'Registrar Leituras e Anormalidades','exibirRegistrarLeiturasAnormalidadesAction.do?menu=sim');
+		  d.add(76,199,'Inserir Comando de Ação de Cobrança','exibirInserirComandoAcaoCobrancaAction.do?menu=sim');		  
+		  d.add(77,53,'Faturamento','#');		  
+		  d.add(78,77,'Relatório Resumo Faturamento','exibirGerarRelatorioResumoFaturamentoAction.do?menu=sim');		  		  
+		  d.add(79,199,'Executar Atividade de Ação de Cobrança','exibirExecutarAtividadeAcaoCobrancaAction.do?menu=sim');
+		  d.add(80,201,'Efetuar Parcelamento de Débitos','exibirEfetuarParcelamentoDebitosAction.do?menu=sim');
+		  d.add(81,201,'Consultar Parcelamento de Débitos','exibirConsultarListaParcelamentoDebitoAction.do?menu=sim');
+		  d.add(82,1,'Arrecadação','#');
+		  d.add(83,82,'Aviso Bancário','#');
+		  d.add(84,82,'Pagamento','#');		  		  		  
+		  d.add(85,84,'Inserir Pagamentos','exibirInserirPagamentosAction.do?menu=sim');
+		  d.add(86,1,'Segurança','#');
+		  d.add(87,86,'Transação','#');
+		  d.add(88,87,'Consultar Operação','ExibirFiltrarOperacaoEfetuadaAction.do?acao=consulta&menu=sim');
+		  d.add(89,137,'Inserir Devoluções','exibirInserirDevolucoesAction.do?menu=sim');
+		  d.add(90,137,'Manter Devoluções','exibirFiltrarDevolucaoAction.do?tela=manterDevolucao&menu=sim');
+		  d.add(91,53,'Transação','#');		  
+		  d.add(92,91,'Relatório Tranções Efetuada','ExibirFiltrarOperacaoAction.do?acao=relatorio&menu=sim');
+		  d.add(93,9,'Consultar Imóveis Medição Individualizada','exibirConsultarImoveisMedicaoIndividualizadaAction.do?menu=sim');
+		  d.add(94,82,'Registrar Movimento Arrecadadores','exibirRegistrarMovimentoArredadadoresAction.do?menu=sim');
+		  d.add(95,83,'Inserir Aviso Bancário','exibirInserirAvisoBancarioAction.do?menu=sim');	          
+          d.add(96,62, 'Informar Situação Especial de Cobrança', 'exibirSituacaoEspecialCobrancaInformarAction.do?menu=sim' );
+          d.add(97,84,'Manter Pagamentos','exibirFiltrarPagamentoAction.do?tela=manterPagamento&menu=sim');
+          d.add(98,82,'Efetuar Análise do Movimento dos Arrecadadores','exibirFiltrarMovimentoArrecadadoresAction.do?menu=sim');
+          d.add(99,83,'Manter Aviso Bancario','exibirFiltrarAvisoBancarioAction.do?menu=sim');
+          d.add(100,199,'Manter Comando de Ação de Cobrança','exibirManterComandoAcaoCobrancaAction.do?menu=sim');
+          d.add(101,26,'Consultar Imóveis Excluídos da Tarifa Social','exibirFiltrarImovelOutrosCriterios.do?menu=sim&gerarRelatorio=consultarTarifaExcluida&limpar=S');
+          d.add(102,83,'Efetuar Análise Aviso Bancário','exibirFiltrarAvisoBancarioAction.do?menu=sim&acao=efetuar');
+          d.add(103,137,'Consultar Devoluções','exibirFiltrarDevolucaoAction.do?menu=sim');
+          d.add(104,35,'Consultar Posição Faturamento','PesquisarPosicaoFaturamentoAction.do?menu=sim');
+          d.add(105,4,'Relação Cliente e Imóvel','ExibirConsultarRelacaoClienteImovelAction.do?menu=sim');
+          d.add(106,35,'Executar Atividade do Faturamento','exibirExecutarAtividadeFaturamentoAction.do?menu=sim');
+          d.add(107,62,'Inserir Resolução de Diretoria','exibirInserirResolucaoDiretoriaAction.do?menu=sim');
+          d.add(108,62,'Consultar Documentos de Cobrança','exibirFiltrarDocumentosCobrancaAction.do?menu=sim');
+          d.add(109,2,'Categoria','#');
+          d.add(110,84,'Consultar Pagamentos','exibirFiltrarPagamentoAction.do?menu=sim');		  
+          d.add(111,35,'Débito','#');
+          d.add(112,62,'Manter Resolução de Diretoria','exibirFiltrarResolucaoDiretoriaAction.do?menu=sim');	  
+          d.add(113,9,'Rota','#');
+          d.add(114,113,'Inserir Rota','exibirInserirRotaAction.do?menu=sim');
+          d.add(115,113,'Manter Rota','exibirFiltrarRotaAction.do?menu=sim');
+          d.add(116,4,'Inserir Situação do Imóvel ','exibirInserirImovelSituacaoAction.do?menu=sim');
+          d.add(117,4,'Consultar Situação do Imóvel ','exibirFiltrarImovelSituacaoAction.do?menu=sim');
+          d.add(118,82,'Gerar Movimento do Débito Automático para os Bancos','exibirGerarMovimentoDebitoAutomaticoBancoAction.do?menu=sim');
+          d.add(119,62,'Inserir Cronograma de Cobrança ','exibirInserirCronogramaCobrancaAction.do?menu=sim');
+          d.add(120,62,'Inserir Critério de Cobrança ','exibirInserirCriterioCobrancaAction.do?menu=sim');
+          d.add(121,137,'Inserir Guia de Devolução ','exibirInserirGuiaDevolucaoAction.do?menu=sim');
+		  d.add(122,37,'Desfazer Cancelamento e/ou Retificação','exibirManterDesfazerCancelamentoRetificacaoContaAction.do?menu=sim');
+          d.add(123,86,'Acesso','#');
+          d.add(124,123,'Inserir Grupo','exibirInserirGrupoAction.do?menu=sim');
+          d.add(125,123,'Manter Grupo','exibirManterGrupoAction.do?menu=sim');
+          d.add(126,37,'Inserir Mensagem da Conta','exibirInserirMensagemContaAction.do?menu=sim');
+          d.add(127,37,'Manter Mensagem da Conta','exibirFiltrarMensagemContaAction.do?menu=sim');
+          d.add(128,62,'Manter Critério de Cobrança ','exibirFiltrarCriterioCobrancaAction.do?menu=sim');
+          d.add(129,77,'Relatório de Acompanhamento de Faturamento','exibirFiltrarImovelOutrosCriterios.do?menu=sim&gerarRelatorio=GerarRelatorioAcompanhamentoFaturamento&limpar=S');		  		  
+          d.add(130,199,'Consultar Comandos de Ação de Cobrança','exibirConsultarComandosAcaoCobrancaAction.do?menu=sim');		  		  
+          d.add(131,123,'Inserir Funcionalidade','exibirInserirFuncionalidadeAction.do?menu=sim');
+          d.add(132,123,'Usuário','#');
+          d.add(133,132,'Inserir Usuário','exibirInserirUsuarioAction.do?menu=sim');
+          d.add(134,132,'Manter Usuário','exibirFiltrarUsuarioAction.do?menu=sim');
+          d.add(135,201,'Inserir Perfil de Parcelamento','exibirInserirPerfilParcelamentoAction.do?menu=sim');
+          d.add(136,137,'Manter Guia de Devolução','exibirFiltrarGuiaDevolucaoAction.do?menu=sim');
+          d.add(137,82,'Devolução','#');
+          d.add(138,123,'Inserir Operação','exibirInserirOperacaoAction.do?menu=sim');
+          d.add(139,201,'Manter Perfil de Parcelamento','exibirFiltrarPerfilParcelamentoAction.do?menu=sim');
+		  d.add(140,123,'Manter Funcionalidade','exibirFiltrarFuncionalidadeAction.do?menu=sim');	
+	  	  d.add(141,62,'Manter Cronograma de Cobrança','exibirFiltrarCobrancaCronogramaAction.do?menu=sim');
+	  	  d.add(142,82,'Consultar Dados Diários da Arrecadação','exibirFiltrarDadosDiariosArrecadacaoAction.do?menu=sim');
+	  	  d.add(143,171,'Consultar Resumo das Anormalidades','exibirInformarDadosGeracaoRelatorioConsultaAction.do?menu=sim&tipoResumo=ANORMALIDADE');
+          d.add(144,53,'Cobrança','#');
+	  	  d.add(145,144,'Gerar Relação de Débitos','exibirFiltrarImovelOutrosCriterios.do?menu=sim&gerarRelatorio=GerarRelacaoDebito&limpar=S');	  	  
+	  	  d.add(146,148,'Consultar Resumo de Pendência','exibirInformarDadosGeracaoRelatorioConsultaAction.do?menu=sim&tipoResumo=PENDENCIA');
+	  	  d.add(147,1,'Gerencial','#');
+	  	  d.add(148,147,'Cobranca','#');
+	  	  d.add(149,147,'Arrecadação','#');
+	  	  d.add(151,147,'Faturamento');
+	  	  d.add(152,151,'Consultar Resumo das Situações Especiais de Faturamento','exibirInformarResumoSituacaoEspecialFaturamentoAction.do?menu=sim');
+          d.add(153,147,'Cadastro');
+	  	  d.add(154,153,'Consultar Resumo das Ligacoes / Economias','exibirInformarDadosGeracaoRelatorioConsultaAction.do?menu=sim&tipoResumo=LIGACAO_EC0NOMIA');
+	  	  d.add(155,1,'Execução Batch','#');
+	  	  d.add(156,155,'UC0302 - Gerar Débitos a Cobrar de Acréscimos por Impontualidade', '');
+	  	  d.add(157,155,'UC0275 - Gerar Resumo das Ligações/Economias', '');
+	  	  d.add(158,155,'UC0209 - Gerar Taxa de Entrega em Outro Endereço', '');
+	  	  d.add(159,155,'UC0341 - Gerar Resumo da Situação Especial de Faturamento', '');
+	  	  d.add(160,155,'UC0346 - Gerar Resumo da Situação Especial de Cobrança', '');
+	  	  d.add(161,155,'UC0335 - Gerar Resumo da Pendência', '');
+	  	  d.add(162,155,'UC0276 - Encerrar a Arrecadação do Mês', '');
+	  	  d.add(163,155,'UC0348 - Gerar Lançamentos Contábeis da Arrecadação', '');
+	  	  d.add(164,155,'UC0300 - Classificar Pagamentos e Devoluções', '');
+	  	  d.add(165,155,'UC0301 - Gerar Dados Diários da Arrecadação', '');
+	  	  d.add(166,155,'UC0343 - Gerar Resumo das Anormalidades', '');
+	  	  d.add(167,155,'UC0352 - Emitir Contas', '');
+	  	  d.add(168,155,'UC0349 - Emitir Documento de Cobrança', '');
+	  	  d.add(169,155,'UC0320 - Gerar Fatura de Cliente Responsável', '');
+	  	  d.add(170,155,'UC0321 - Emitir Fatura de Cliente Responsável', '');
+	  	  d.add(171,147,'Micromedição');
+	  	  d.add(173,155,'UC0343 - Gerar Resumo de Anormalidades', '');
+          d.add(174,148,'Consultar Resumo das Situações Especiais de Cobrança','exibirInformarResumoSituacaoEspecialCobrancaAction.do?menu=sim');
+          d.add(175,151,'Consultar Resumo da Análise do Faturamento','exibirInformarDadosGeracaoRelatorioConsultaAction.do?menu=sim&analiseFaturamento=ok&tipoResumo=ANALISE');
+          d.add(176,155,'UC0343 - Gerar Resumo Anormalidade Consumo', '');
+          d.add(177,53,'Arrecadação','#');
+          d.add(178,177,'Relatório Resumo Arrecadação','exibirGerarRelatorioResumoArrecadacaoAction.do?menu=sim');
+          d.add(179,132,'Inserir Situação do Usuário','exibirInserirSituacaoUsuarioAction.do?menu=sim');
+          d.add(180,132,'Manter Situação do Usuário','exibirManterSituacaoUsuarioAction.do?menu=sim');
+          d.add(181,132,'Inserir Abrangência do Usuário','exibirInserirAbrangenciaUsuarioAction.do?menu=sim');
+          d.add(182,132,'Manter Abrangência do Usuário','exibirManterAbrangenciaUsuarioAction.do?menu=sim');
+          d.add(183,149,'Consultar Comparativo entre os Resumos do Faturamento, Arrecadação e da Pendência','exibirInformarDadosGeracaoRelatorioConsultaAction.do?menu=sim&tipoResumo=COMPARATIVORESUMOS');
+          d.add(184,1,'Atendimento ao Público','#');
+          d.add(185,184,'Ligação Água','#');
+          d.add(186,185,'Efetuar Ligação de Água','exibirEfetuarLigacaoAguaAction.do?menu=sim');
+          d.add(187,185,'Efetuar Corte de Ligação de Água','exibirEfetuarCorteLigacaoAguaAction.do?menu=sim');
+          d.add(188,184,'Ligação Esgoto','#');
+          d.add(189,188,'Efetuar Ligação de Esgoto','exibirEfetuarLigacaoEsgotoAction.do?menu=sim');
+          d.add(190,155,'UC0213 - Desfazer Parcelamentos Por Entrada Não Paga','execucaoBatchAction.do?casoUso=UC0213');
+          d.add(191,132,'Bloquear Desbloquear Acesso','exibirBloquearDesbloquearAcessoUsuarioAction.do?menu=sim');
+          d.add(192,184,'Hidrômetro','#');
+          d.add(193,192,'Efetuar Instalação de Hidrômetro','exibirEfetuarInstalacaoHidrometroAction.do?menu=sim');
+	      d.add(194,192,'Efetuar Retirada de Hidrômetro','exibirEfetuarRetiradaHidrometroAction.do?menu=sim');
+	      d.add(195,192,'Efetuar Remanejamento de Hidrômetro','exibirEfetuarRemanejamentoHidrometroAction.do?menu=sim');
+	      d.add(196,185,'Efetuar Religação de Água','exibirEfetuarReligacaoAguaAction.do?menu=sim');
+	      d.add(196,185,'Efetuar Restabelecimento da Ligação de Água','exibirEfetuarRestabelecimentoLigacaoAguaAction.do?menu=sim');
+	      d.add(197,188,'Efetuar Mudança de Situação de Faturamento da Ligação de Esgoto','exibirEfetuarMudancaSituacaoFaturamentoLigacaoEsgotoAction.do?menu=sim');		
+	      d.add(198,188,'Atualizar Ligação de Esgoto','exibirAtualizarLigacaoEsgotoAction.do?menu=sim');			 
+	      d.add(199,62,'Comando de Ação de Cobrança','#');	
+   	      d.add(200,9,'Substituir Consumos Anteriores','exibirSubstituirConsumoAnteriorAction.do?menu=sim&peloMenu=true');
+   	      d.add(201,62,'Parcelamento','#');	
+		  d.draw();
+          
+          
+
+     //-->     </script></div>
+		</td>
+	</tr>
+</table>
+
+
+
+
+	<table width="770" border="0" cellspacing="5" cellpadding="0">
+		<tr>
+			<td width="120" valign="top" class="leftcoltext">
+
+			<div align="center">
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+
+			<div align="center">
+  <p align="left">&nbsp;</p>
+  <p align="left">&nbsp;</p>
+
+  <p align="left">&nbsp;</p>
+
+<table width="100%" border="0" class="tableinlayerusuario">
+	<tr>
+    <td>
+		---
+  		<strong>Data:</strong>
+	  </td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+
+  </tr>
+  <tr>
+    <td>
+  		<strong>Usu&aacute;rio</strong>:
+	  </td>
+    </tr>
+    <tr>
+      <td>---
+	  </td>
+
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>
+      <strong>&Uacute;ltimo Acesso:</strong>
+    </td>
+
+  </tr>
+  <tr>
+    <td>---</td>
+  </tr>
+</table>
+</div>
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+
+			
+
+
+
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+
+			</div>
+
+			</td>
+
+			<td valign="top" class="centercoltext">
+			<!--Início Tabela Reference a Páginação da Tela de Processo-->
+				<p>&nbsp;</p>
+				<table width="100%" border="0" align="center" cellpadding="0"
+					cellspacing="0">
+					<tr>
+						<td width="11"><img border="0" src="imagens/parahead_left.gif" /></td>
+						
+            <td class="parabg">Informar Ocorr&ecirc;ncia de Cadastro e/ou Anormalidade de Elo </td>
+
+						<td width="11" valign="top"><img border="0"
+							src="imagens/parahead_right.gif" /></td>
+					</tr>
+				</table>
+				<!--Fim Tabela Reference a Páginação da Tela de Processo-->
+				<p>&nbsp;</p>
+				<table width="100%" border="0">
+					<tr>
+						<td colspan="4">
+							<table width="100%" align="center" bgcolor="#99CCFF" border="0">
+
+								<tr>
+									<td align="center"><strong>Dados do Imóvel</strong></td>
+								</tr>
+								<tr bgcolor="#cbe5fe">
+									<td width="100%" align="center">
+										<table width="100%" border="0">
+                      <tr> 
+                        <td bordercolor="#000000"><strong>Im&oacute;vel:<font color="#FF0000">*</font></strong></td>
+                        <td colspan="3" bordercolor="#000000"><input type="text" name="idMunicipio" maxlength="9" size="10" tabindex="1" value="54265190" onkeyup="javascript:limpaNomeMunicipio(event);" onkeypress="javascript:return validaEnter(event, 'exibirInserirBairroAction.do', 'idMunicipio');"> 
+                          <a
+						href="javascript:abrirPopup('exibirPesquisarMunicipioAction.do');"> 
+                          <img width="23" height="21" border="0"
+						src="imagens/pesquisa.gif"
+						title="Pesquisar Municipio" /></a> <input type="text" name="nomeMunicipio" maxlength="25" size="25" value="339.601.145.3454.333" readonly="readonly" style="background-color:#EFEFEF; border:0; color: #000000"> 
+                          <a href="javascript:limpaMunicipio();"><img
+						src="imagens/limparcampo.gif" border="0" height="21" width="23"></a> 
+                        </td>
+                      </tr>
+                      <tr> 
+                        <td height="10"> <div class="style9"> <strong>Situação 
+                            de Água:</strong> </div></td>
+                        <td> <input name="ligacaoAgua" type="text" style="background-color:#EFEFEF; border:0; font-size:9px" value="LIGADO" size="15" maxlength="15" readonly="readonly"></td>
+                        <td width="146"><strong>Situação de Esgoto:</strong></td>
+                        <td width="123"><input name="ligacaoAgua2" type="text" style="background-color:#EFEFEF; border:0; font-size:9px" value="POTENCIAL" size="15" maxlength="15" readonly="readonly"></td>
+                      </tr>
+                    </table>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+
+					<tr>
+						<td colspan="4">
+							<table width="100%" align="center" bgcolor="#99CCFF" border="0">
+								<tr>
+									<td align="center">
+										<div class="style9">
+											<strong>Endere&ccedil;o </strong>
+										</div>
+
+									</td>
+								</tr>
+								<tr bgcolor="#cbe5fe">
+									<td align="center" bgcolor="#FFFFFF">
+										<div class="style9">
+								        	RUA ALMIRANTE TAMANDARE - 222 - BOA VIAGEM RECIFE PE 51030-090 &nbsp;
+										</div>
+								  </td>
+
+								</tr>
+							</table>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="4">
+							<table width="100%" border="0">
+                <tr> 
+                  <td colspan="4"> <table width="100%" align="center" bgcolor="#90c7fc" border="0">
+                      <tr bordercolor="#79bbfd"> 
+                        <td colspan="3" align="center" bgcolor="#79bbfd"><strong>Ocorr&ecirc;ncias de Cadastro</strong></td>
+                      </tr>
+                      <tr bordercolor="#000000"> 
+                        <td width="65%" bgcolor="#90c7fc" align="center"> <div class="style9"> 
+                            <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+                            <strong>Ocorr&ecirc;ncia</strong></font> </div></td>
+                        <td width="17%" align="center" bgcolor="#90c7fc"> <div class="style9"> 
+                            <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+                            <strong>Data </strong></font></div> <div class="style9"> 
+                          <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">                            </font> </div>                          </td>
+                        <td width="18%" align="center" bgcolor="#90c7fc"><span class="style9"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><strong>Foto</strong></font></span></td>
+                      </tr>
+                      <tr bgcolor="#FFFFFF"> 
+                        <td bordercolor="#90c7fc" align="left"> <div class="style9"> 
+                            <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+                            CLIENTE N PERMITIU ACESSO</font> </div></td>
+                        <td align="right"> <div align="center" class="style9"> 
+                            <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">02/08/1993 </font> </div></td>
+                        <td align="right"><div align="center">
+                          <input name="imageField" type="image" src="Imagens/imgfolder.gif" width="18" height="18" border="0">
+                        </div></td>
+                      </tr>
+                      <tr bgcolor="#cbe5fe"> 
+                        <td bordercolor="#90c7fc" align="left"> <div class="style9"> 
+                            <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+                            ANIMAL BRAVO</font> </div></td>
+                        <td align="right"> <div align="center" class="style9"> 
+                            <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">12/03/2003 
+                            </font> </div> <div class="style9"> </div></td>
+                        <td align="right"><div align="center">
+                          <input name="imageField" type="image" src="Imagens/imgfolder.gif" width="18" height="18" border="0">
+                        </div></td>
+                      </tr>
+                      <tr bgcolor="#FFFFFF"> 
+                        <td bordercolor="#90c7fc" align="left"> <div class="style9"> 
+                            <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+                            CLIENTE NAO ATENDEU</font> </div></td>
+                        <td align="right"> <div align="center" class="style9"> 
+                            <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">02/08/2006</font></div> <div class="style9"> </div></td>
+                        <td align="right"><div align="center">
+                          <input name="imageField" type="image" src="Imagens/imgfolder.gif" width="18" height="18" border="0">
+                        </div></td>
+                      </tr>
+                    </table></td>
+                </tr>
+                <tr> 
+                  <td colspan="4"> <table width="100%" align="center" bgcolor="#90c7fc" border="0">
+                      <tr bordercolor="#79bbfd"> 
+                        <td colspan="3" align="center" bgcolor="#79bbfd"><strong>Anormalidades de Elo </strong></td>
+                      </tr>
+                      <tr bordercolor="#000000"> 
+                        <td width="65%" bgcolor="#90c7fc" align="center"> <div class="style9"> 
+                            <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+                            <strong>Anormalidade</strong></font></div></td>
+                        <td width="17%" bgcolor="#90c7fc" align="center"> <div class="style9"> 
+                            <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+                            <strong>Data</strong></font></div></td>
+                        <td width="18%" bgcolor="#90c7fc" align="center"><span class="style9"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><strong>Foto</strong></font></span></td>
+                      </tr>
+                      <tr bgcolor="#FFFFFF"> 
+                        <td align="left">MOSTROU DOCUMENTO DE REGULARIZA&Ccedil;&Atilde;O</td>
+                        <td align="right"><div align="center" class="style9"> <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">07/08/1994</font> </div></td>
+                        <td align="right"><div align="center">
+                          <input name="imageField" type="image" src="Imagens/imgfolder.gif" width="18" height="18" border="0">
+                        </div></td>
+                      </tr>
+                      <tr bgcolor="#cbe5fe"> 
+                        <td align="left">HIDR&Ocirc;METRO COM MOSTRADOR SUJO</td>
+                        <td align="right"><div align="center" class="style9"> <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">16/01/2004</font> </div>
+                            <div class="style9"> </div></td>
+                        <td align="right"><div align="center">
+                          <input name="imageField" type="image" src="Imagens/imgfolder.gif" width="18" height="18" border="0">
+                        </div></td>
+                      </tr>
+                      <tr bgcolor="#FFFFFF"> 
+                        <td bgcolor="#FFFFFF" align="center"><div align="left">LEITURA N&Atilde;O PERMITIDA</div></td>
+                        <td align="right"><div align="center" class="style9"> <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif">02/04/2005</font></div>
+                            <div class="style9"> </div></td>
+                        <td align="right"><div align="center">
+                          <input name="imageField" type="image" src="Imagens/imgfolder.gif" width="18" height="18" border="0">
+                        </div></td>
+                      </tr>
+                    </table></td>
+                </tr>
+                <tr>
+                  <td height="10" colspan="4" align="left">&nbsp;</td>
+                </tr>
+                <tr> 
+                  <td height="10" colspan="4" align="left"> <div class="style9">Para informar uma Ocorr&ecirc;ncia de Cadastro preencha os dados abaixo: </div> </td>
+                  </tr>
+                <tr> 
+                  <td width="27%" align="left"><strong>Ocorr&ecirc;ncia:</strong></td>
+                  <td colspan="3" align="left"><select name="select">
+                    <option value="1">CLIENTE NAO ATENDEU</option>
+                    <option value="2">IMOVEL DESOCUPADO</option>
+                    <option value="3">IMOVEL NAO LOCALIZADO</option>
+                    <option value="4">IMOVEL ABANDONADO</option>
+                  </select></td>
+                  </tr>
+                <tr> 
+                  <td height="10"> <div class="style9"> <strong>Data da Ocorr&ecirc;nciar: </strong> </div></td>
+                  <td colspan="3"><input name="textfield" type="text" size="9">
+                    dd/mm/aaaa </td>
+                  </tr>
+                <tr> 
+                  <td height="10" align="left"> <div class="style9"> <strong>Foto da Ocorr&ecirc;ncia: </strong></div></td>
+                  <td colspan="3" align="left"><input name="textfield" type="text" size="40">                  
+                  <input name="adicionar" class="bottonRightCol" value="Procurar..." type="button" onclick="window.location.href='/gsan/'"></td>
+                  </tr>
+                <tr>
+                  <td colspan="4" align="left">&nbsp;</td>
+                </tr>
+                <tr> 
+                  <td colspan="4" align="left"><span class="style9">Para informar uma Anormalidade de Elo preencha os dados abaixo: </span></td>
+                  </tr>
+                <tr>
+                  <td align="left"><strong>Anormalidade:</strong></td>
+                  <td colspan="3" align="left"><select name="select">
+                    <option value="1">LEITURA N&Atilde;O PERMITIDA</option>
+                    <option value="2">BOMBA LIGADA A REDE</option>
+                    <option value="3">CORTADO LIGADO A REVELIA</option>
+                    <option value="4">HIDR&Ocirc;METRO COM MOSTRADOR EMBA&Ccedil;ADO</option>
+                                    </select></td>
+                </tr>
+                <tr>
+                  <td align="left"><strong>Data da Anormalidade:</strong></td>
+                  <td colspan="3" align="left"><input name="textfield" type="text" size="9">
+dd/mm/aaaa </td>
+                </tr>
+                <tr>
+                  <td align="left"><strong>Foto da Anormalidade: </strong></td>
+                  <td colspan="3" align="left"><input name="textfield" type="text" size="40">                    <input name="adicionar" class="bottonRightCol" value="Procurar..." type="button" onClick="window.location.href='/gsan/'"></td>
+                </tr>
+                <tr> 
+                  <td align="left" colspan="4">&nbsp;</td>
+                </tr>
+                <tr> 
+                  <td align="left" colspan="3"> &nbsp; <input name="adicionar" class="bottonRightCol" value="Cancelar" type="button" onclick="window.location.href='/gsan/'"> 
+                  </td>
+                  <td width="53%" align="left"><div align="right">
+                    <input name="adicionar" class="bottonRightCol" value="Inserir" type="button" onclick="window.location.href='/gsan/'">
+                  </div></td>
+                </tr>
+              </table>
+						</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+	</table>
+	<table width="770" cellspacing="4" cellpadding="0">
+
+  <tr>
+    <td  >
+      <table width="100%" cellpadding="2" class="footer">
+        <tr>
+          <td  align="left">PMSS</td>
+          <td align="right">Desenvolvido pelo IPAD - Versão: 18:10 18/08/2006 </td>
+        </tr>
+      </table>
+
+	</td>
+  </tr>
+</table>
+	<p>&nbsp;</p>
+<!-- Fim do Corpo - Fernanda Paiva -->
+</form>
+</body>
+</html>
+

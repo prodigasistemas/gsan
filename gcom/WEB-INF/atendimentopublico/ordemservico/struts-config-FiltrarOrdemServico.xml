@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="FiltrarOrdemServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.FiltrarOrdemServicoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	
+	<action-mappings>
+		<action name="FiltrarOrdemServicoActionForm"  
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirFiltrarOrdemServicoAction" 
+			validate="true"	
+			scope="session"	
+			path="/exibirFiltrarOrdemServicoAction">
+			
+			<forward name="filtrarOrdemServico" path="/jsp/atendimentopublico/ordemservico/ordem_servico_filtrar.jsp" />
+		</action>
+
+		<action name="FiltrarOrdemServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.FiltrarOrdemServicoAction"
+			validate="true" 
+			scope="session"	
+			path="/filtrarOrdemServicoAction">
+			
+			<forward name="resultadoPesquisa" 
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_manter.jsp" />
+			
+			<forward name="manterOrdemServico" 
+				path="/exibirConsultarDadosOrdemServicoAction.do" />
+			
+		</action>
+		
+		<action name="FiltrarOrdemServicoActionForm"
+			type="gcom.gui.relatorio.atendimentopublico.GerarRelatorioFiltrarOrdemServicoAction"
+			validate="true" scope="session"	path="/gerarRelatorioFiltrarOrdemServicoAction">
+		</action>
+		
+	</action-mappings>
+</struts-config>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="GerarRelatorioParametrosContabeisActionForm"
+			type="gcom.gui.relatorio.financeiro.GerarRelatorioParametrosContabeisActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	
+	<action-mappings>
+		
+		<action name="GerarRelatorioParametrosContabeisActionForm"  
+			type="gcom.gui.relatorio.financeiro.ExibirGerarRelatorioParametrosContabeisAction" 
+			validate="true"	
+			scope="session"	
+			path="/exibirGerarRelatorioParametrosContabeisAction">
+			<forward name="exibirGerarRelatorioParametrosContabeis" path="/jsp/relatorio/financeiro/parametros_contabeis_gerar_relatorio.jsp" />
+		</action>
+		
+		<action name="GerarRelatorioParametrosContabeisActionForm"  
+			type="gcom.gui.relatorio.financeiro.GerarRelatorioParametrosContabeisAction" 
+			validate="true"	
+			scope="session"	
+			path="/gerarRelatorioParametrosContabeisAction">
+		</action>
+	</action-mappings>
+	
+</struts-config>

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cadastro.imovel.ImovelSituacao" table="cadastro.imovel_situacao">
+		<id name="id" type="java.lang.Integer" column="imst_id">
+			<generator class="sequence">
+				<param name="sequence">
+				cadastro.seq_imovel_situacao</param>
+			</generator>
+		</id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="imst_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to LigacaoEsgotoSituacao -->
+		<many-to-one name="ligacaoEsgotoSituacao" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao" not-null="true">
+			<column name="lest_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ImovelSituacaoTipo -->
+		<many-to-one name="imovelSituacaoTipo" class="gcom.cadastro.imovel.ImovelSituacaoTipo" not-null="true">
+			<column name="istp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LigacaoAguaSituacao -->
+		<many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="true">
+			<column name="last_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

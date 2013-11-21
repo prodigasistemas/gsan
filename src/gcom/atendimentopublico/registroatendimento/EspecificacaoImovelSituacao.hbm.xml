@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.registroatendimento.EspecificacaoImovelSituacao" table="atendimentopublico.espec_imovel_situacao">
+		<id name="id" type="java.lang.Integer" column="esim_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_espec_imovel_situacao</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="esim_dsespecimvsit" not-null="true" length="30"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="esim_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to EspecificacaoImovSitCriterio 
+    <set
+        name="especificacaoImovSitCriterios"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="esim_id" />
+        </key>
+        <one-to-many 
+            class="gcom.EspecificacaoImovSitCriterio"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to SolicitacaoTipoEspecificacao 
+    <set
+        name="solicitacaoTipoEspecificacaos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="esim_id" />
+        </key>
+        <one-to-many 
+            class="gcom.SolicitacaoTipoEspecificacao"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

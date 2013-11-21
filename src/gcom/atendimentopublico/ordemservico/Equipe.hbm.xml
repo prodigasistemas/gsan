@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.ordemservico.Equipe" table="atendimentopublico.equipe">
+		<id name="id" type="java.lang.Integer" column="eqpe_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_equipe</param>
+			</generator>
+		</id>
+		<property name="nome" type="java.lang.String" column="eqpe_nmequipe" not-null="true" length="20"/>
+		<property name="placaVeiculo" type="java.lang.String" column="eqpe_nnplacaveiculo" length="8"/>
+		<property name="cargaTrabalho" type="java.lang.Integer" column="eqpe_nncargatrabalhodia" length="4"/>
+		<property name="codigoDdd" type="java.lang.String" column="eqpe_cdddd" length="2"/>
+		<property name="numeroTelefone" type="java.lang.String" column="eqpe_nnfone" not-null="true" length="8"/>
+		<property name="numeroImei" type="java.math.BigDecimal" column="eqpe_nnimei" not-null="true" length="15"/>
+		<property name="indicadorUso" type="short" column="eqpe_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="eqpe_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="indicadorProgramacaoAutomatica" type="short" column="eqpe_icprogramacaoautomatica" not-null="true" length="2"/>
+		
+		<!-- bi-directional many-to-one association to UnidadeOrganizaci onal -->
+		<many-to-one name="unidadeOrganizacional" class="gcom.cadastro.unidade.UnidadeOrganizacional" not-null="true">
+			<column name="unid_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ServicoPerfilTipo -->
+		<many-to-one name="servicoPerfilTipo" class="gcom.atendimentopublico.ordemservico.ServicoPerfilTipo" not-null="false">
+			<column name="sptp_id"/>
+		</many-to-one>
+		
+		<!---Erivan- Id do usuario responsável pela execussão do acompanhamento do serviço em campo -->
+		<many-to-one name="usuarioRespExecServico" class="gcom.seguranca.acesso.usuario.Usuario" not-null="false">
+			<column name="usur_id"/>
+		</many-to-one>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to OsAtividadeExecucaoEquipe 
+    <set
+        name="osAtividadeExecucaoEquipes"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="eqpe_id" />
+        </key>
+        <one-to-many 
+            class="gcom.OsAtividadeExecucaoEquipe"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to OsAtividadeProgramacaoEquipe 
+    <set
+        name="osAtividadeProgramacaoEquipes"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="eqpe_id" />
+        </key>
+        <one-to-many 
+            class="gcom.OsAtividadeProgramacaoEquipe"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to EquipeComponente
+    <set name="equipeComponentes" cascade="all" inverse="true">
+    	<key column="eqpe_id" not-null="true"/>
+    	<one-to-many class="gcom.atendimentopublico.ordemservico.EquipeComponentes"/>
+    </set> -->
+	</class>
+</hibernate-mapping>

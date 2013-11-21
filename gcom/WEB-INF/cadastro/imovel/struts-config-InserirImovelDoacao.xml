@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="ImovelDoacaoActionForm"
+    	           type="gcom.gui.cadastro.imovel.ImovelDoacaoActionForm" />	         
+	</form-beans>
+	
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		<action name="ImovelDoacaoActionForm"
+			      type="gcom.gui.cadastro.imovel.ExibirInserirImovelDoacaoAction"
+			      validate="false" 
+			      scope="session"
+			      path="/exibirInserirImovelDoacaoAction">
+			      
+			<forward name="inserirImovelDoacao" path="/jsp/cadastro/imovel/imovel_doacao_inserir.jsp" />
+		</action>
+
+		<action name="ImovelDoacaoActionForm"
+			      type="gcom.gui.cadastro.imovel.InserirImovelDoacaoAction"
+			      validate="false" 
+			      scope="session"
+			      path="/inserirImovelDoacaoAction">
+		</action>
+
+	</action-mappings>
+	
+	<message-resources null="false"	parameter="gcom.properties.application" />
+	
+</struts-config>

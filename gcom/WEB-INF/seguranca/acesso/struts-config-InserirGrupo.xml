@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<!--Action Form Dinâmico que serve para inserir os Grupos de acesso -->
+		<form-bean name="InserirGrupoActionForm" type="org.apache.struts.validator.DynaValidatorForm" dynamic="true">
+			<form-property name="descricao" type="java.lang.String" />
+			<form-property name="descricaoAbreviada" type="java.lang.String" />
+			<form-property name="cadastrarOperacao" type="java.lang.String" />
+			<form-property name="operacoes" type="java.lang.String[]" />
+			<form-property name="diasExpiracaoSenha" type="java.lang.Integer" />
+			<form-property name="mensagem" type="java.lang.String" />
+			<form-property name="indicadorSuperintendencia" type="java.lang.Short" />
+			<form-property name="competenciaRetificacao" type="java.lang.String" />
+		</form-bean> 
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	
+	<global-forwards/>
+
+	<action-mappings>
+	
+	
+	<action	type="gcom.gui.seguranca.acesso.ExibirInserirGrupoAction"
+			validate="false" 
+			input="/exibirInserirGrupoAction.do"
+			scope="session" 
+			path="/exibirInserirGrupoAction">
+			
+			<forward name="inserirGrupoDadosGerais"
+				     path="/inserirGrupoWizardAction.do?action=exibirInserirGrupoDadosGeraisAction" />
+				
+		</action>
+		
+		<action name="InserirGrupoActionForm"
+			    type="gcom.gui.seguranca.acesso.InserirGrupoWizardAction"
+			    validate="false" 
+			    parameter="action" 
+			    scope="session"
+			    path="/inserirGrupoWizardAction">
+			
+			<forward name="inserirGrupoDadosGerais"
+				     path="/jsp/seguranca/acesso/grupo_inserir_dados_gerais.jsp" />
+				
+			<forward name="inserirGrupoAcessosGrupo"
+				     path="/jsp/seguranca/acesso/grupo_inserir_acessos_grupo.jsp" />
+				
+		</action>
+		
+		<action
+			type="gcom.gui.seguranca.acesso.CancelarInserirGrupoAction"
+			validate="false" 
+			path="/cancelarInserirGrupoAction" />
+	
+	</action-mappings>
+	
+</struts-config>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="EmitirOrdemCorteForm"
+			type="gcom.gui.atendimentopublico.ordemservico.EmitirOrdemCorteForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards/>
+	
+	<action-mappings>
+
+		<action name="EmitirOrdemCorteForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirEmitirOrdemCorteAction"
+			validate="true" scope="session"
+			path="/exibirEmitirOrdemCorteAction">
+			<forward name="exibirEmitirOrdemCorteAction"
+				path="/jsp/atendimentopublico/ordemservico/ordem_corte_emitir.jsp"/>
+		</action>
+
+		<action name="EmitirOrdemCorteForm"
+			type="gcom.gui.atendimentopublico.ordemservico.EmitirOrdemServicoCorteAction"
+			validate="false" scope="session"
+			path="/emitirOrdemServicoCorteAction">
+		</action>
+		
+		<action name="EmitirOrdemCorteForm"
+			type="gcom.gui.atendimentopublico.ordemservico.EmitirOrdemCorteAction"
+			validate="false" scope="session"
+			path="/emitirOrdemCorteAction">
+		</action>
+
+	</action-mappings>
+	
+	<message-resources null="false" parameter="gcom.properties.application"/>
+	
+</struts-config>

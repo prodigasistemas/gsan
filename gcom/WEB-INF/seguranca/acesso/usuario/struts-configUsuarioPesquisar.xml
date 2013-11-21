@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="PesquisarUsuarioActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.PesquisarUsuarioActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	
+	<action-mappings>
+		<action name="PesquisarUsuarioActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.UsuarioPesquisarAction"
+			validate="false" 
+			scope="session"
+			path="/exibirUsuarioPesquisar">
+
+			<forward name="usuarioPesquisar"
+				path="/jsp/seguranca/acesso/usuario/usuario_pesquisar.jsp" />
+		</action>
+
+		<action name="PesquisarUsuarioActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.RetornarUsuarioPesquisarAction"
+			validate="false" 
+			
+			scope="session"
+			path="/retornarUsuarioPesquisar">
+
+			<forward name="retornoPesquisa"
+				path="/jsp/seguranca/acesso/usuario/usuario_resultado_pesquisa.jsp" />
+		</action>		
+		
+</action-mappings>	
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

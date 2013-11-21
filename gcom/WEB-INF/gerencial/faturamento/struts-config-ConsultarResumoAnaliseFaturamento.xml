@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="ResumoAnaliseFaturamentoActionForm"
+			type="gcom.gui.gerencial.faturamento.ResumoAnaliseFaturamentoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		<action name="ResumoAnaliseFaturamentoActionForm"
+			type="gcom.gui.gerencial.faturamento.ConsultarResumoAnaliseFaturamentoAction"
+			validate="true" path="/consultarResumoAnaliseFaturamentoAction">
+			<forward name="consultarResumoAnaliseFaturamento"
+				path="/jsp/gerencial/faturamento/resumo_analise_faturamento_consultar.jsp" />
+			<!--  <forward name="consultarResumoAnaliseFaturamento"
+				path="/jsp/gerencial/faturamento/resumo_analise_faturamento_consultar.jsp" />	-->
+		</action>
+		<action name="ResumoAnaliseFaturamentoActionForm"
+			type="gcom.gui.gerencial.faturamento.ExibirResultadoConsultaResumoAnaliseFaturamentoAction"
+			validate="true"
+			input="/consultarResumoAnaliseFaturamentoAction.do" scope="session"
+			path="/resultadoResumoAnaliseFaturamentoAction">
+			<forward name="resultadoResumoAnaliseFaturamento"
+				path="/jsp/gerencial/faturamento/resumo_analise_faturamento_consultar.jsp" />
+		</action>
+		
+		<action name="ResumoAnaliseFaturamentoActionForm"
+			type="gcom.gui.gerencial.faturamento.ExibirResumoAnaliseFaturamentoDetalheAction"
+			validate="true" path="/exibirResumoAnaliseFaturamentoDetalheAction">
+			<forward name="exibirResumoAnaliseFaturamentoDetalheAction"
+				path="/jsp/gerencial/faturamento/resumo_analise_faturamento_consultar_detalhe.jsp" />
+		</action>
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

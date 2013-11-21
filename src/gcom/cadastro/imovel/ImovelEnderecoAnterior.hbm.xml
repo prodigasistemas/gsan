@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.imovel.ImovelEnderecoAnterior" table="cadastro.imovel_endereco_anterior">
+		<id name="id" type="java.lang.Integer" column="imov_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="enderecoAnterior" type="java.lang.String" column="ieda_dsenderecoanterior" length="50"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ieda_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-one association to Imovel -->
+		<one-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" outer-join="auto" constrained="true"/>
+	</class>
+</hibernate-mapping>

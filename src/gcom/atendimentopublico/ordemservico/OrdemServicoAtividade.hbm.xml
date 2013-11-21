@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.ordemservico.OrdemServicoAtividade" table="atendimentopublico.ordem_servico_atividade">
+		<id name="id" type="java.lang.Integer" column="osat_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_ordem_servico_atividade</param>
+			</generator>
+		</id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="osat_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- bi-directional many-to-one association to OrdemServico -->
+		<many-to-one name="ordemServico" class="gcom.atendimentopublico.ordemservico.OrdemServico" not-null="true">
+			<column name="orse_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Atividade -->
+		<many-to-one name="atividade" class="gcom.atendimentopublico.ordemservico.Atividade" not-null="true">
+			<column name="ativ_id"/>
+		</many-to-one>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to OsAtividadePeriodoExecucao 
+    <set
+        name="osAtividadePeriodoExecucaos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="osat_id" />
+        </key>
+        <one-to-many 
+            class="gcom.OsAtividadePeriodoExecucao"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to OsAtividadeMaterialExecucao 
+    <set
+        name="osAtividadeMaterialExecucaos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="osat_id" />
+        </key>
+        <one-to-many 
+            class="gcom.OsAtividadeMaterialExecucao"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to OsAtividadeProgramacao 
+    <set
+        name="osAtividadeProgramacaos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="osat_id" />
+        </key>
+        <one-to-many 
+            class="gcom.OsAtividadeProgramacao"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

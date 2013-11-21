@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.faturamento.conta.ContaCategoriaHistorico" table="faturamento.conta_catg_hist">
+		<composite-id name="comp_id" class="gcom.faturamento.conta.ContaCategoriaHistoricoPK">
+			<!-- bi-directional many-to-one association to ContaHistorico -->
+			<key-many-to-one name="contaHistorico" class="gcom.faturamento.conta.ContaHistorico">
+				<column name="cnta_id"/>
+			</key-many-to-one>
+			<!-- bi-directional many-to-one association to Categoria -->
+			<key-many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria">
+				<column name="catg_id"/>
+			</key-many-to-one>
+			<key-many-to-one name="subcategoria" class="gcom.cadastro.imovel.Subcategoria">
+				<column name="scat_id"/>
+			</key-many-to-one>
+		</composite-id>
+		<property name="quantidadeEconomia" type="short" column="ctch_qteconomia" not-null="true" length="2"/>
+		<property name="valorAgua" type="java.math.BigDecimal" column="ctch_vlagua" length="13"/>
+		<property name="consumoAgua" type="java.lang.Integer" column="ctch_nnconsumoagua" length="4"/>
+		<property name="valorEsgoto" type="java.math.BigDecimal" column="ctch_vlesgoto" length="13"/>
+		<property name="consumoEsgoto" type="java.lang.Integer" column="ctch_nnconsumoesgoto" length="4"/>
+		<property name="valorTarifaMinimaAgua" type="java.math.BigDecimal" column="ctch_vltarifaminimaagua" length="13"/>
+		<property name="consumoMinimoAgua" type="java.lang.Integer" column="ctch_nnconsumominimoagua" length="4"/>
+		<property name="valorTarifaMinimaEsgoto" type="java.math.BigDecimal" column="ctch_vltarifaminimaesgoto" length="13"/>
+		<property name="consumoMinimoEsgoto" type="java.lang.Integer" column="ctch_nnconsumominimoesgoto" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ctch_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to Categoria -->
+		<!--  <many-to-one
+        name="categoria"
+	    class="gcom.cadastro.imovel.Categoria"
+	    update="false"
+	    insert="false"
+	>
+    	<column name="catg_id" />
+	</many-to-one> -->
+		<!-- end of derived association(s) -->
+		<!-- bi-directional one-to-many association to ContaCategoriaConsumoFaixaHistorico -->
+		<set name="contaCategoriaConsumoFaixasHistorico" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="cnta_id"/>
+				<column name="catg_id"/>
+				<column name="scat_id"/>
+			</key>
+			<one-to-many class="gcom.faturamento.conta.ContaCategoriaConsumoFaixaHistorico"/>
+		</set>
+	</class>
+</hibernate-mapping>

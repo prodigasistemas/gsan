@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarComandoNegativacaoActionForm"
+			type="gcom.gui.cobranca.spcserasa.FiltrarComandoNegativacaoActionForm" />
+			
+		<form-bean name="FiltrarComandoNegativacaoTipoCriterioActionForm"
+			type="gcom.gui.cobranca.spcserasa.FiltrarComandoNegativacaoTipoCriterioActionForm" />
+			
+		<form-bean name="FiltrarComandoNegativacaoTipoMatriculaActionForm"
+			type="gcom.gui.cobranca.spcserasa.FiltrarComandoNegativacaoTipoMatriculaActionForm" />
+			
+	</form-beans>
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarComandoNegativacaoActionForm"
+				type="gcom.gui.cobranca.spcserasa.ExibirFiltrarComandoNegativacaoAction"
+				validate="true" 
+				scope="session"
+				path="/exibirFiltrarComandoNegativacaoAction">
+			<forward name="filtrarComandoNegativacao"	path="/jsp/cobranca/spcserasa/comando_negativacao_comando_tipo_filtrar.jsp" />
+			<forward name="exibirFiltrarComandoNegativacaoTipoCriterio"	path="/exibirFiltrarComandoNegativacaoTipoCriterioAction.do?primeiraVez=1" />
+			<forward name="exibirFiltrarComandoNegativacaoTipoMatricula" path="/exibirFiltrarComandoNegativacaoTipoMatriculaAction.do" />
+		</action>
+		
+		<action name="FiltrarComandoNegativacaoTipoCriterioActionForm"
+				type="gcom.gui.cobranca.spcserasa.ExibirFiltrarComandoNegativacaoTipoCriterioAction"
+				validate="true" 
+				scope="session"
+				path="/exibirFiltrarComandoNegativacaoTipoCriterioAction">
+			<forward name="exibirFiltrarComandoNegativacaoTipoCriterio"	path="/jsp/cobranca/spcserasa/comando_negativacao_criterio_filtrar.jsp" />
+		</action>
+ 		
+ 		<action name="FiltrarComandoNegativacaoTipoCriterioActionForm"
+				type="gcom.gui.cobranca.spcserasa.FiltrarComandoNegativacaoTipoCriterioAction"
+				validate="true" 
+				scope="session"
+				path="/filtrarComandoNegativacaoTipoCriterioAction">
+			<forward name="exibirResultadoConsultarCriterio" path="/exibirResultadoConsultaComandoNegativacaoCriterioAction.do" />
+		</action>
+ 
+ 		<action name="FiltrarComandoNegativacaoTipoMatriculaActionForm"
+				type="gcom.gui.cobranca.spcserasa.ExibirFiltrarComandoNegativacaoTipoMatriculaAction"
+				validate="true" 
+				scope="session"
+				path="/exibirFiltrarComandoNegativacaoTipoMatriculaAction">
+			<forward name="exibirFiltrarComandoNegativacaoTipoMatricula" path="/jsp/cobranca/spcserasa/comando_negativacao_matricula_filtrar.jsp" />
+		</action>
+ 		
+ 		<action name="FiltrarComandoNegativacaoTipoMatriculaActionForm"
+				type="gcom.gui.cobranca.spcserasa.FiltrarComandoNegativacaoTipoMatriculaAction"
+				validate="true" 
+				scope="session"
+				path="/filtrarComandoNegativacaoTipoMatriculaAction">
+			<forward name="exibirResultadoConsultaMatricula" path="/exibirResultadoConsultaComandoNegativacaoMatriculaAction.do" />
+		</action>
+ 
+	</action-mappings>
+	<message-resources null="false" parameter="gcom.properties.application" />
+</struts-config>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="PesquisarCriterioCobrancaActionForm"
+			type="gcom.gui.cobranca.PesquisarCriterioCobrancaActionForm" />
+			<form-bean name="PesquisarCriterioCobrancaLinhaActionForm"
+			type="gcom.gui.cobranca.PesquisarCriterioCobrancaLinhaActionForm" />	
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0217] INSERIR RESOLUÇÃO DE DIRETORIA Auhtor: Rafael Corrêa Data:30/03/2006-->
+		<action name="PesquisarCriterioCobrancaActionForm"
+			type="gcom.gui.cobranca.ExibirPesquisarCriterioCobrancaAction"
+			validate="true" scope="session"
+			path="/exibirPesquisarCriterioCobrancaAction">
+			<forward name="exibirPesquisarCriterioCobrancaAction"
+				path="/jsp/cobranca/criterio_cobranca_pesquisar.jsp" />
+		</action>
+		<action name="PesquisarCriterioCobrancaActionForm"
+			type="gcom.gui.cobranca.PesquisarCriterioCobrancaAction"
+			validate="true" scope="session"
+			path="/pesquisarCriterioCobrancaAction">
+			<forward name="pesquisarCriterioCobrancaResultado"
+				path="/jsp/cobranca/criterio_cobranca_pesquisar_resultado.jsp" />
+		</action>
+		
+		<action name="PesquisarCriterioCobrancaLinhaActionForm"
+			type="gcom.gui.cobranca.ExibirPesquisarCriterioCobrancaLinhaAction"
+			validate="true" path="/exibirPesquisarCriterioCobrancaLinhaAction">
+			<forward name="pesquisarCriterioCobrancaLinha"
+				path="/jsp/cobranca/criterio_cobranca_pesquisar_linha.jsp" />
+		</action>
+		
+		<action
+			type="gcom.gui.cobranca.ExibirPesquisarCriterioCobrancaResultadoAction"
+			validate="true" path="/exibirPesquisarCriterioCobrancaResultadoAction">
+		</action>
+	</action-mappings>
+</struts-config>

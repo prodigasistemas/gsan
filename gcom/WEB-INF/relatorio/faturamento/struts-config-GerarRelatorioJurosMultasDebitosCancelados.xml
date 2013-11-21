@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="GerarRelatorioJurosMultasDebitosCanceladosActionForm"
+			type="gcom.gui.relatorio.faturamento.GerarRelatorioJurosMultasDebitosCanceladosActionForm" />
+	</form-beans>
+
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="GerarRelatorioJurosMultasDebitosCanceladosActionForm"
+			type="gcom.gui.relatorio.faturamento.ExibirGerarRelatorioJurosMultasDebitosCanceladosAction"
+			validate="true" 
+			path="/exibirGerarRelatorioJurosMultasDebitosCanceladosAction">
+			
+			<forward name="exibirGerarRelatorioJurosMultasDebitosCancelados" 
+				path="/jsp/relatorio/faturamento/relatorio_juros_multas_debitos_cancelados_gerar.jsp" />
+				
+		</action>
+		
+		<action name="GerarRelatorioJurosMultasDebitosCanceladosActionForm"
+			type="gcom.gui.relatorio.faturamento.GerarRelatorioJurosMultasDebitosCanceladosAction"
+			validate="true" 
+			path="/gerarRelatorioJurosMultasDebitosCanceladosAction" />		
+		
+	</action-mappings>
+
+</struts-config>

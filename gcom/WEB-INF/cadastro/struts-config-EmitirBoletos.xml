@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="EmitirBoletosActionForm"
+			type="gcom.gui.cadastro.EmitirBoletosActionForm" />
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<action name="EmitirBoletosActionForm"
+			type="gcom.gui.cadastro.ExibirEmitirBoletosAction"
+			validate="true" scope="session"
+			path="/exibirEmitirBoletosAction">
+			<forward name="exibirEmitirBoletos"
+				path="/jsp/cadastro/boletos_emitir.jsp" />
+		</action>
+		<action name="EmitirBoletosActionForm"
+			type="gcom.gui.cadastro.EmitirBoletosAction"
+			validate="true" scope="session"
+			path="/emitirBoletosAction" />
+
+	</action-mappings>
+
+
+</struts-config>

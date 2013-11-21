@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="InserirRoteiroEmpresaActionForm"
+			type="gcom.gui.micromedicao.InserirRoteiroEmpresaActionForm" />
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="InserirRoteiroEmpresaActionForm" 
+			type="gcom.gui.micromedicao.ExibirInserirRoteiroEmpresaAction"
+			validate="false" scope="session" path="/exibirInserirRoteiroEmpresaAction">
+			<forward name="inserirRoteiroEmpresa" 
+				path="/jsp/micromedicao/roteiro_empresa_inserir.jsp" />  
+		</action>
+		<action name="InserirRoteiroEmpresaActionForm" 
+			type="gcom.gui.micromedicao.InserirRoteiroEmpresaAction"
+			validate="false" scope="session"
+			path="/inserirRoteiroEmpresaAction">
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

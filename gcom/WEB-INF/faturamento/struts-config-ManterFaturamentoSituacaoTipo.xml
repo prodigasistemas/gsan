@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="ManterFaturamentoSituacaoTipoActionForm"
+			type="gcom.gui.faturamento.ManterFaturamentoSituacaoTipoActionForm" />
+		<form-bean name="AtualizarFaturamentoSituacaoTipoActionForm"
+			type="gcom.gui.faturamento.AtualizarFaturamentoSituacaoTipoActionForm" />
+		<form-bean name="FiltrarFaturamentoSituacaoTipoActionForm"
+			type="gcom.gui.faturamento.FiltrarFaturamentoSituacaoTipoActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.faturamento.ExibirManterFaturamentoSituacaoTipoAction"
+			validate="false" scope="session"
+			path="/exibirManterFaturamentoSituacaoTipoAction">
+
+			<forward name="exibirManterFaturamentoSituacaoTipo"
+				path="/jsp/faturamento/faturamento_situacao_tipo_manter.jsp" />
+
+			<forward name="exibirAtualizarFaturamentoSituacaoTipo"
+				path="/exibirAtualizarFaturamentoSituacaoTipoAction.do" />
+		</action>
+
+		<action name="AtualizarFaturamentoSituacaoTipoActionForm"
+			type="gcom.gui.faturamento.ExibirAtualizarFaturamentoSituacaoTipoAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarFaturamentoSituacaoTipoAction">
+
+			<forward name="faturamentoSituacaoTipoAtualizar"
+				path="/jsp/faturamento/faturamento_situacao_tipo_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarFaturamentoSituacaoTipoActionForm"
+			type="gcom.gui.faturamento.AtualizarFaturamentoSituacaoTipoAction"
+			validate="true" scope="session"
+			path="/atualizarFaturamentoSituacaoTipoAction">
+
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.faturamento.RemoverFaturamentoSituacaoTipoAction"
+			 scope="request" path="/removerFaturamentoSituacaoTipoAction">
+
+		</action>
+		
+		<action name="FiltrarFaturamentoSituacaoTipoActionForm"
+			type="gcom.gui.relatorio.faturamento.GerarRelatorioFaturamentoSituacaoTipoManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioFaturamentoSituacaoTipoManterAction" />
+		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

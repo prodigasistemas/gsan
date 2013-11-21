@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="PesquisarComandoAcaoCobrancaActionForm"
+			type="gcom.gui.cobranca.PesquisarComandoAcaoCobrancaActionForm" />			
+			
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0253] PESQUISAR COMANDO DE AÇÃO DE COBRANÇA Auhtor: Rafael Santos Data:08/03/2006-->
+		<action name="PesquisarComandoAcaoCobrancaActionForm"
+			type="gcom.gui.cobranca.ExibirPesquisarComandoAcaoCobrancaAction"
+			validate="false" scope="session"
+			path="/exibirPesquisarComandoAcaoCobrancaAction">
+			<forward name="exibirPesquisarComandoAcaoCobrancaAction"
+				path="/jsp/cobranca/comandar_acao_cobranca_pesquisar.jsp" />
+		</action>
+		<action name="PesquisarComandoAcaoCobrancaActionForm"
+			type="gcom.gui.cobranca.PesquisarComandoAcaoCobrancaAction" scope="session"
+			path="/pesquisarComandoAcaoCobrancaAction">
+			<forward name="retornarPesquisarComandoAcaoCobranca"
+				path="/exibirResultadoPesquisaComandoAcaoCobrancaAction.do" />
+		</action>
+		<action type="gcom.gui.cobranca.ExibirResultadoPesquisaComandoAcaoCobrancaAction"
+			path="/exibirResultadoPesquisaComandoAcaoCobrancaAction">
+			<forward name="exibirResultadoPesquisaComandoAcaoCobrancaAction"
+				path="/jsp/cobranca/comandar_acao_cobranca_resultado_pesquisa.jsp" />
+		</action>		
+		<action type="gcom.gui.cobranca.ExibirResultadoPesquisaComandoAcaoCobrancaParametrosAction"
+			path="/exibirResultadoPesquisaComandoAcaoCobrancaParametros">
+			<forward name="exibirResultadoPesquisaComandoAcaoCobrancaParametros"
+				path="/jsp/cobranca/comandar_acao_cobranca_parametros_popup.jsp" />
+		</action>		
+		<action type="gcom.gui.cobranca.ExibirResultadoPesquisaComandoAcaoCobrancaCriteriosAction"
+			path="/exibirResultadoPesquisaComandoAcaoCobrancaCriteriosAction">
+			<forward name="exibirResultadoPesquisaComandoAcaoCobrancaCriteriosAction"
+				path="/jsp/cobranca/comandar_acao_cobranca_criterio_popup.jsp" />
+		</action>		
+	</action-mappings>
+
+</struts-config>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="FiltrarRegistroAtendimentoDevolucaoValoresActionForm"
+			type="gcom.gui.atendimentopublico.FiltrarRegistroAtendimentoDevolucaoValoresActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		<action name="FiltrarRegistroAtendimentoDevolucaoValoresActionForm"
+			type="gcom.gui.atendimentopublico.ExibirFiltrarRegistroAtendimentoDevolucaoValoresAction"
+			validate="true" scope="session"
+			path="/exibirFiltrarRegistroAtendimentoDevolucaoValoresAction">
+			<forward name="filtrarRegistroAtendimentoDevolucaoValores"
+				path="/jsp/atendimentopublico/registro_atendimento_devolucao_valores_filtrar.jsp" />
+		</action>
+		
+		<action name="FiltrarRegistroAtendimentoDevolucaoValoresActionForm"
+			type="gcom.gui.atendimentopublico.FiltrarRegistroAtendimentoDevolucaoValoresAction" validate="true"
+			path="/filtrarRegistroAtendimentoDevolucaoValoresAction" scope="session">
+			<forward name="manterRegistroAtendimentoDevolucaoValores"
+				path="/exibirManterRegistroAtendimentoDevolucaoValoresAction.do" />
+		</action>
+		
+		<action name="FiltrarRegistroAtendimentoDevolucaoValoresActionForm"
+			type="gcom.gui.atendimentopublico.ExibirManterRegistroAtendimentoDevolucaoValoresAction"
+			validate="false" scope="session"
+			path="/exibirManterRegistroAtendimentoDevolucaoValoresAction">
+			<forward name="exibirManterRegistroAtendimentoDevolucaoValores"
+				path="/jsp/atendimentopublico/registro_atendimento_devolucao_valores_manter.jsp" />
+		</action>
+		
+		<action name="FiltrarRegistroAtendimentoDevolucaoValoresActionForm" 
+			type="gcom.gui.atendimentopublico.ExibirEfetuarDevolucaoValoresPagosDuplicidadeAction"
+			validate="true" path="/exibirEfetuarDevolucaoValoresPagosDuplicidadeAction">
+			<forward name="exibirEfetuarDevolucaoValoresPagosDuplicidade"
+				path="/jsp/atendimentopublico/valores_pagos_duplicidade_devolucao.jsp" />
+		</action>
+		
+		<action name="FiltrarRegistroAtendimentoDevolucaoValoresActionForm" 
+			type="gcom.gui.atendimentopublico.TransferirDevolucaoValoresPagosDuplicidadeAction"
+			validate="false" scope="session"
+			path="/transferirDevolucaoValoresPagosDuplicidadeAction">
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

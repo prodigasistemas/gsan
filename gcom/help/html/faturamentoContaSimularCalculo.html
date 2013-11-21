@@ -1,0 +1,651 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+
+
+  
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=windows-1252">
+
+  
+
+
+  
+  <title>Simular C&aacute;lculo da Conta</title>
+  <meta name="GENERATOR" content="BrOffice.org 2.0 (Win32)">
+
+
+  
+  <meta name="CREATED" content="20060820;22241317">
+
+
+  
+  <meta name="CHANGEDBY" content="Homero Sampaio Cavalcanti">
+
+
+  
+  <meta name="CHANGED" content="20060821;23412687">
+
+
+  
+  <link rel="stylesheet" href="EstilosHelper.css" type="text/css">
+</head>
+
+
+<body>
+
+
+<p class="cabecalho">Simular C&aacute;lculo da Conta</p>
+
+
+<p class="textoNormal">Esta
+op&ccedil;&atilde;o do sistema permite a
+simula&ccedil;&atilde;o do c&aacute;lculo dos valores de
+&aacute;gua e esgoto&nbsp;de&nbsp;uma conta, de acordo com
+os par&acirc;metros informados na tela.&nbsp;</p>
+
+
+<p class="textoNormal">O acesso a esta funcionalidade deve
+ser realizada pelo "<span style="font-style: italic;">menu</span>"
+do sistema: "Gcom --&gt; Faturamento --&gt; Conta --&gt;
+Simular C&aacute;lculo da Conta".</p>
+
+
+<p class="textoNormal">Inicialmente voc&ecirc;
+dever&aacute; informar os par&acirc;metros
+necess&aacute;rios para o c&aacute;lculo da conta e, depois,
+clicar no bot&atilde;o&nbsp;<img style="width: 82px; height: 23px;" alt="Calcular" title="Calcular" src="../imagens/calcular.JPG">, para
+solicitar ao sistema a execu&ccedil;&atilde;o do
+c&aacute;lculo dos valores de &aacute;gua e esgoto,
+considerando os par&acirc;mtros informados .</p>
+
+
+<p class="item">Preenchimento
+dos campos</p>
+
+
+<span class="textoNormalNegrito"></span>
+<ul>
+
+
+  <li class="textoNormal"><span class="textoNormalNegrito">M&ecirc;s e Ano
+da Conta</span>(<font face="Arial"><font size="2"><b class="textoNormal"><font color="#ff3333">*</font></b></font></font>):
+Informe o m&ecirc;s e ano de
+refer&ecirc;ncia da conta.&nbsp;&nbsp;
+    
+    <ul>
+
+
+      <li><span class="textoNormal">Ao digitar
+a informa&ccedil;&atilde;o no
+campo voc&ecirc;&nbsp;n&atilde;o
+precisa&nbsp;preocupar-se com a barra
+de separa&ccedil;&atilde;o, pois o sistema a coloca
+automaticamente.&nbsp;</span>
+        
+        <ul>
+
+
+          <li><span class="textoNormal">O
+m&ecirc;s e ano da conta deve ser informado no
+formato:&nbsp;MM/AAAA, onde&nbsp;MM corresponde ao
+m&ecirc;s e AAAA, ao
+ano.&nbsp;</span></li>
+
+
+          <li><span class="textoNormal">O
+m&ecirc;s deve ser informado, <span style="font-weight: bold;">obrigatoriamente</span>,
+com dois d&iacute;gitos e o ano com quatro.&nbsp;</span></li>
+
+
+        
+        </ul>
+
+
+      </li>
+
+
+    
+    </ul>
+
+
+  </li>
+
+
+  <li><span class="textoNormalNegrito">Dados de
+&Aacute;gua</span><span class="textoNormal textoNormalNegrito"></span>
+    
+    <ul>
+
+
+      <li><span class="textoNormal textoNormalNegrito">Situa&ccedil;&atilde;o
+de &Aacute;gua</span><font face="Arial"><font size="2"><span class="textoNormal">(</span><b class="textoNormal"><font color="#ff3333">*</font></b><span class="textoNormal">): Selecione a
+situa&ccedil;&atilde;o de &aacute;gua desejada, na lista
+apresentada ao
+lado do campo.&nbsp;</span></font></font>
+        
+        <ul>
+
+
+          <li><font face="Arial"><font size="2"><span class="textoNormal">No
+caso da situa&ccedil;&atilde;o de &aacute;gua ser igual a
+"Ligado" ou "Cortado",
+ser&aacute;
+obrigat&oacute;rio informar o campo "Consumo de &Aacute;gua".</span></font></font></li>
+
+
+        
+        </ul>
+
+
+      </li>
+
+
+      <li><font face="Arial"><font size="2"><span class="textoNormal"><span class="textoNormalNegrito">Consumo
+de &Aacute;gua</span>:
+Voc&ecirc; deve informar a quantidade de &aacute;gua consumida
+pelo
+usu&aacute;rio no m&ecirc;s/ano de refer&ecirc;ncia da
+conta.</span></font></font>
+        
+        <ul>
+
+
+          <li><font face="Arial"><font size="2"><span class="textoNormal">Conforme
+j&aacute; vimos anteriormente, este campo ser&aacute;
+obrigat&oacute;rio, caso a situa&ccedil;&atilde;o de
+&aacute;gua seja
+igual a "Ligado" ou "Cortado".</span></font></font></li>
+
+
+          <li><font face="Arial"><font size="2"><span class="textoNormal">Nas demais
+situa&ccedil;&otilde;es, com exce&ccedil;&atilde;o para
+"Ligado" e "Cortado", este campo n&atilde;o deve
+ser informado. Portanto, nestes casos, o sistema ir&aacute;
+proteg&ecirc;-lo contra
+atualiza&ccedil;&otilde;es. </span></font></font></li>
+
+
+        
+        </ul>
+
+
+      </li>
+
+
+    
+    </ul>
+
+
+  </li>
+
+
+  <li><span class="textoNormalNegrito">Dados de
+Esgoto</span><span class="textoNormal textoNormalNegrito"></span>
+    
+    <ul>
+
+
+      <li><span class="textoNormal textoNormalNegrito">Situa&ccedil;&atilde;o
+de Esgoto</span><font face="Arial"><font size="2"><span class="textoNormal">(</span><b class="textoNormal"><font color="#ff3333">*</font></b><span class="textoNormal">): Selecione a
+situa&ccedil;&atilde;o de esgoto desejada,
+na lista apresentada ao
+lado do campo.&nbsp;</span></font></font>
+        
+        <ul>
+
+
+          <li><font face="Arial"><font size="2"><span class="textoNormal">No
+caso da situa&ccedil;&atilde;o de esgoto ser igual a "Ligado",
+ser&aacute;
+obrigat&oacute;rio informar os campos "Consumo de Esgoto" e
+"Percentual
+de Esgoto".</span></font></font></li>
+
+
+        
+        </ul>
+
+
+      </li>
+
+
+      <li><font face="Arial"><font size="2"><span class="textoNormal"><span class="textoNormalNegrito">Consumo
+de Esgoto</span>:
+Voc&ecirc; deve informar o volume de esgoto coletado pelo sistema
+de
+saneamento, no m&ecirc;s/ano de refer&ecirc;ncia da conta.</span></font></font>
+        
+        <ul>
+
+
+          <li><font face="Arial"><font size="2"><span class="textoNormal">Conforme
+j&aacute; vimos anteriormente, este campo ser&aacute;
+obrigat&oacute;rio, caso a situa&ccedil;&atilde;o de esgoto
+seja igual
+a "Ligado".</span></font></font></li>
+
+
+          <li><font face="Arial"><font size="2"><span class="textoNormal">Nas demais
+situa&ccedil;&otilde;es, com exce&ccedil;&atilde;o para
+"Ligado", este campo n&atilde;o deve
+ser informado. Portanto, nestes casos, o sistema ir&aacute;
+proteg&ecirc;-lo contra
+atualiza&ccedil;&otilde;es.</span></font></font></li>
+
+
+        
+        </ul>
+
+
+      </li>
+
+
+      <li><font face="Arial"><font size="2"><span class="textoNormal"><span class="textoNormalNegrito">Percentual
+de Esgoto</span>:
+Voc&ecirc; deve informar o percentual de esgoto coletado pelo
+sistema
+de saneamento, no m&ecirc;s/ano de refer&ecirc;ncia da conta.</span></font></font>
+        
+        <ul>
+
+
+          <li><font face="Arial"><font size="2"><span class="textoNormal">Conforme
+j&aacute; vimos anteriormente, este campo ser&aacute;
+obrigat&oacute;rio, caso a situa&ccedil;&atilde;o de esgoto
+seja igual
+a "Ligado".</span></font></font></li>
+
+
+          <li><font face="Arial"><font size="2"><span class="textoNormal">Nas demais
+situa&ccedil;&otilde;es, com exce&ccedil;&atilde;o para
+"Ligado", este campo n&atilde;o deve
+ser informado. Portanto, nestes casos, o sistema ir&aacute;
+proteg&ecirc;-lo contra
+atualiza&ccedil;&otilde;es.</span></font></font><span class="textoNormalNegrito"></span></li>
+
+
+        
+        </ul>
+
+
+      </li>
+
+
+    
+    </ul>
+
+
+  </li>
+
+
+  <li><span class="textoNormalNegrito">Tarifa</span>(<font face="Arial"><font size="2"><b class="textoNormal"><font color="#ff3333">*</font></b></font></font>):<span class="textoNormal">&nbsp;</span><font face="Arial"><font size="2"><span class="textoNormal">Selecione a tarifa a ser aplicada no
+c&aacute;lculo da conta, na lista
+apresentada ao
+lado do campo.</span></font></font></li>
+
+
+  <li><font face="Arial"><font size="2"><span class="textoNormal"></span></font></font><span class="textoNormal"><span class="textoNormalNegrito">Grupo
+de Faturamento</span>(<span style="font-weight: bold; color: rgb(255, 0, 0);">*</span>):
+Selecione o grupo de faturamento a ser utilizado, na lista de grupos
+apresentada ao lado do campo. &nbsp;
+    </span></li>
+
+
+  <li><span class="textoNormal textoNormalNegrito">Categorias
+e Economias</span><font face="Arial"><font size="2"><span class="textoNormal">:&nbsp;</span></font></font>
+    
+    <ul>
+
+
+      <li><span class="textoNormal">Este campo
+&eacute; composto por uma tabela
+com a rela&ccedil;&atilde;o das categorias, e as quantidades de
+economias por
+categoria.&nbsp;</span></li>
+
+
+      <li><span class="textoNormal">Seguem, abaixo,
+as
+opera&ccedil;&otilde;es que voc&ecirc; pode realizar:<br>
+
+
+        </span></li>
+
+
+      
+      <ul>
+
+
+        <li><span class="textoNormal">Adicionar
+uma&nbsp;categoria</span>
+          
+          <ul>
+
+
+            <li><span class="textoNormal">Para
+efetuar
+esta opera&ccedil;&atilde;o voc&ecirc; dever&aacute;
+clicar no bot&atilde;o <img style="width: 81px; height: 24px;" alt="Adicionar" title="Adicionar" src="../imagens/adicionar.JPG">, que o sistema
+ir&aacute; ativar a tela de popup "<a href="faturamentoConta-AdicionarCategoria.html">Adicionar
+Categoria</a>", onde voc&ecirc; dever&aacute; selecionar
+a categoria e a quantidade de economias da categoria. </span></li>
+
+
+          
+          </ul>
+
+
+        </li>
+
+
+        <li><span class="textoNormal">Alterar a
+quantidade de economias das
+categorias</span>
+          
+          <ul>
+
+
+            <li><span class="textoNormal">A
+altera&ccedil;&atilde;o da quantidade de economias de uma
+categoria
+dever&aacute; ser realizada diretamente no campo existente na
+coluna
+correspondente da tabela. </span></li>
+
+
+          
+          </ul>
+
+
+        </li>
+
+
+        <li><span class="textoNormal">Remover uma
+categoria</span>
+          
+          <ul>
+
+
+            <li><span class="textoNormal">Para
+remover
+uma categoria, da simula&ccedil;&atilde;o do calculo da conta,
+basta clicar no bot&atilde;o
+"Remover"<img style="width: 15px; height: 14px;" alt="Remover" title="Remover" src="../imagens/removerTabela.JPG">,
+que fica ao lado da categoria, na primeira coluna da tabela.&nbsp;</span></li>
+
+
+            <li><span class="textoNormal">O
+sistema ir&aacute; abrir uma janela de di&aacute;logo
+solicitando&nbsp;a confirma&ccedil;&atilde;o da
+remo&ccedil;&atilde;o.
+Voc&ecirc; dever&aacute; "Confirmar" ou "Desistir" da
+remo&ccedil;&atilde;o. </span></li>
+
+
+          
+          </ul>
+
+
+        </li>
+
+
+      
+      </ul>
+
+
+    
+    </ul>
+
+
+  </li>
+
+
+  <li><span class="textoNormal textoNormalNegrito">Valores
+Calculados de &Aacute;gua e Esgoto por Categoria</span><font face="Arial"><font size="2"><span class="textoNormal">:&nbsp;</span></font></font>
+    
+    <ul>
+
+
+      <li><font face="Arial"><font size="2"><span class="textoNormal">Estes campos s&oacute;
+ser&atilde;o
+apresentados na tela ap&oacute;s voc&ecirc; ter&nbsp;</span></font></font><font face="Arial"><font size="2"><span class="textoNormal">informado, corretamente, os
+par&acirc;metros da simula&ccedil;&atilde;o, e pressionar o
+bot&atilde;o </span></font></font><img style="width: 82px; height: 23px;" alt="Calcular" title="Calcular" src="../imagens/calcular.JPG"><font face="Arial"><font size="2"><span class="textoNormal">.</span></font></font></li>
+
+
+      <li><font face="Arial"><font size="2"><span class="textoNormal">&Eacute;&nbsp;composto por uma
+tabela por categoria e seus respectivos valores de &aacute;gua e
+esgoto</span></font></font><font face="Arial"><font size="2"><span class="textoNormal">:</span></font></font>
+        
+        <ul>
+
+
+          <li><font face="Arial"><font size="2"><span class="textoNormal">Categoria</span></font></font></li>
+
+
+          <li><font face="Arial"><font size="2"><span class="textoNormal">Valor de &Aacute;gua<br>
+
+
+            </span></font></font></li>
+
+
+          <span style="font-family: Verdana,Helvetica,sans-serif;"></span><li><font face="Arial"><font size="2"><span class="textoNormal">Valor de ESgoto</span></font></font></li>
+
+
+          <li><font face="Arial"><font size="2"><span class="textoNormal">Valor Total&nbsp;</span></font></font></li>
+
+
+        
+        </ul>
+
+
+      </li>
+
+
+      <li><font face="Arial"><font size="2"><span class="textoNormal">No final &eacute; apresentada uma
+linha com o valor total de &aacute;gua e esgoto da
+simula&ccedil;&atilde;o da conta.</span></font></font></li>
+
+
+    
+    </ul>
+
+
+  </li>
+
+
+</ul>
+
+
+<p class="textoNormal"><u style="color: rgb(255, 0, 0);"><i>Observa&ccedil;&atilde;o</i></u><span style="color: rgb(255, 0, 0);">:</span> Os campos
+obrigat&oacute;rios est&atilde;o marcados um um asterisco
+vermelho (<b><font color="#ff3333">*</font></b>)</p>
+
+
+<p class="item"><b>Funcionalidade
+dos bot&otilde;es:</b></p>
+
+
+<table class="table textoNormal">
+
+
+  <col width="13*"> <col width="243*"> <thead>
+  <tr valign="top">
+
+
+    <th class="textoNormal" width="5%">
+    
+    <p>Bot&atilde;o</p>
+
+
+    </th>
+
+
+    <th class="textoNormal" width="95%">
+    
+    <p class="textoNormal">Descri&ccedil;&atilde;o</p>
+
+
+    </th>
+
+
+  </tr>
+
+
+  </thead> <tbody>
+
+
+    <tr>
+
+
+      <td><font face="Arial"><font size="2"><span class="textoNormal"><img style="width: 81px; height: 24px;" alt="Adicionar" title="Adicionar" src="../imagens/adicionar.JPG"></span></font></font></td>
+
+
+      <td>Este bot&atilde;o deve ser utilizado para adicionar
+uma categoria no campo "<span class="textoNormalNegrito">Categorias
+e Economias</span>" --&gt; Ativa a tela "<a href="faturamentoConta-AdicionarCategoria.html">Adicionar
+Categoria</a>"
+      </td>
+
+
+    </tr>
+
+
+    <tr>
+
+
+      <td style="text-align: center;"><font face="Arial"><font size="2"><span class="textoNormal"><img style="width: 15px; height: 14px;" alt="Remover" title="Remover" src="../imagens/removerTabela.JPG"></span></font></font></td>
+
+
+      <td>Este bot&atilde;o aparece ao lado de cada linha do campo "<span class="textoNormalNegrito">Categorias
+e Economias</span>".<br>
+
+Deve ser utilizado para remover a linha&nbsp;da tabela.</td>
+
+
+    </tr>
+
+
+    <tr>
+
+
+      <td><font face="Arial"><font size="2"><span class="textoNormal"><img style="width: 82px; height: 23px;" alt="Calcular" title="Calcular" src="../imagens/calcular.JPG"></span></font></font></td>
+
+
+      <td>Este bot&atilde;o deve ser utilizado para solicitar
+ao
+sistema o c&aacute;lculo dos valores de &aacute;gua e esgoto, de acordo com os par&acirc;metros informados.</td>
+
+
+    </tr>
+
+
+    <tr>
+
+
+      <td><img style="width: 76px; height: 24px;" alt="Desfazer" title="Desfazer" src="../imagens/desfazer.JPG"></td>
+
+
+      <td>Utilize
+este bot&atilde;o para fazer com que a tela volte ao seu estado
+inicial de exibi&ccedil;&atilde;o.&nbsp;</td>
+
+
+    </tr>
+
+
+    <tr>
+
+
+      <td><img style="width: 73px; height: 24px;" alt="Cancelar" title="Cancelar" src="../imagens/cancelar.JPG"></td>
+
+
+      <td>Utilize
+este
+bot&atilde;o para fazer com que o sistema encerre a opera&ccedil;&atilde;o e volte para a tela principal.</td>
+
+
+    </tr>
+
+
+
+  
+  </tbody>
+</table>
+
+
+<br>
+
+
+<p class="item"><b>Tela
+de Sucesso:</b>
+</p>
+
+
+<p class="textoNormal">A tela de sucesso desta op&ccedil;&atilde;o do
+sistema, corresponde &agrave; apresenta&ccedil;&atilde;o do
+c&aacute;lculo dos valores de &aacute;gua e esgoto de acordo com os
+par&acirc;metros informados na tela, e ap&oacute;s clicar no
+bot&atilde;o&nbsp;<font face="Arial"><font size="2"><span class="textoNormal"><img style="width: 82px; height: 23px;" alt="Calcular" title="Calcular" src="../imagens/calcular.JPG">.</span></font></font></p>
+
+<p class="item"><b>T&oacute;picos
+Relacionados:<a href="logradouroManter.html"> </a></b>
+</p>
+
+
+<ul>
+
+
+  <span style="font-family: Verdana,Helvetica,sans-serif;"><span style="text-decoration: underline;"></span></span>
+  <li class="textoNormal"><a href="faturamentoConta-AdicionarCategoria.html">Adicionar
+Categoria</a></li>
+
+  <li class="textoNormal"><a href="faturamento.html">Faturamento</a>
+    
+    <ul>
+
+
+      <li class="textoNormal"><a href="faturamentoConta.html">Conta</a>
+        
+        <ul>
+
+
+          <li class="textoNormal"><a href="faturamentoContaInserir.html">Inserir Conta</a></li>
+
+          <li class="textoNormal"><a href="faturamentoContaManter.html">Manter Conta</a></li>
+
+
+          <li class="textoNormal"><a href="faturamentoContaDesfazerCancelamentoRetificacao.html">Desfazer Cancelamento ou
+Retifica&ccedil;&atilde;o</a></li>
+
+
+
+          <li class="textoNormal"><a href="faturamentoContaInformarVencimentoAlternativo.html">Informar
+Vencimento Alternativo</a></li>
+          <li class="textoNormal">Mensagem da Conta</li>
+          <ul>
+            <li class="textoNormal"><a href="faturamentoContaMensagemInserir.html">Inserir Mensagem da Conta</a></li>
+            <li class="textoNormal"><a href="faturamentoContaMensagemManter.html">Manter Mensagem da Conta</a></li>
+          </ul>
+        </ul>
+
+
+      </li>
+
+
+    
+    </ul>
+
+
+  </li>
+
+
+  <li class="textoNormal"><a href="layoutTelaSistema.html">Layout padr&atilde;o das
+telas do sistema</a></li>
+
+
+</ul>
+
+
+</body>
+</html>

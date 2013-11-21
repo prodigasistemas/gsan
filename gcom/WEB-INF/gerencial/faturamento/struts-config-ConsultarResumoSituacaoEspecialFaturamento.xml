@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="InformarResumoSituacaoEspecialFaturamentoActionForm"
+			type="gcom.gui.gerencial.faturamento.InformarResumoSituacaoEspecialFaturamentoActionForm" />			
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<action name="InformarResumoSituacaoEspecialFaturamentoActionForm"
+			type="gcom.gui.gerencial.faturamento.ExibirInformarResumoSituacaoEspecialFaturamentoAction"
+			validate="true" scope="session"
+			path="/exibirInformarResumoSituacaoEspecialFaturamentoAction">
+			<forward name="exibirInformarResumoSituacaoEspecialFaturamentoAction"
+				path="/jsp/gerencial/faturamento/situacao_especial_faturamento_informar.jsp" />
+		</action>
+		<action name="InformarResumoSituacaoEspecialFaturamentoActionForm"
+			type="gcom.gui.gerencial.faturamento.InformarResumoSituacaoEspecialFaturamentoAction"
+			validate="true" scope="session"
+			path="/informarResumoSituacaoEspecialFaturamentoAction">
+			<forward name="exibirConsultarResumoSituacaoEspecialFaturamento"
+				path="/jsp/gerencial/faturamento/situacao_especial_faturamento_consultar.jsp" />
+		</action>
+		
+		<action
+			type="gcom.gui.gerencial.faturamento.ExibirConsultarResumoSituacaoEspecialFaturamentoAction"
+			validate="false" path="/exibirConsultarResumoSituacaoEspecialFaturamentoAction">
+			<forward name="manterMensagemConta"
+				path="/jsp/gerencial/faturamento/situacao_especial_faturamento_consultar.jsp" />
+		</action>
+	</action-mappings>
+
+</struts-config>

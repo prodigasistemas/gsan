@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarFuncionarioActionForm"
+			type="gcom.gui.cadastro.funcionario.FiltrarFuncionarioActionForm" />
+
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarFuncionarioActionForm"
+			type="gcom.gui.cadastro.funcionario.ExibirFiltrarFuncionarioAction"
+			validate="false" scope="session"
+			path="/exibirFiltrarFuncionarioAction">
+			<forward name="filtrarFuncionario"
+				path="/jsp/cadastro/funcionario/funcionario_filtrar.jsp" />
+		</action>
+
+		<action name="FiltrarFuncionarioActionForm"
+			type="gcom.gui.cadastro.funcionario.FiltrarFuncionarioAction"
+			validate="false" scope="session"
+			path="/filtrarFuncionarioAction">
+			<forward name="exibirManterFuncionarioAction" 
+			path="/exibirManterFuncionarioAction.do" />
+		</action>
+
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

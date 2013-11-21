@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.seguranca.acesso.PermissaoEspecial" table="seguranca.permissao_especial">
+		<id name="id" type="java.lang.Integer" column="pmep_id">
+			<generator class="sequence">
+				<param name="sequence">seguranca.seq_permissao_especial</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="pmep_dspermissaoespecial" length="60"/>
+		<property name="indicadorUso" type="java.lang.Short" column="pmep_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="pmep_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Operacao -->
+		<many-to-one name="operacao" class="gcom.seguranca.acesso.Operacao" not-null="true">
+			<column name="oper_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to UsuarioPermissaoEspecial -->
+		<!--
+    <set
+        name="usuarioPermissaoEspecials"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="pmep_id" />
+        </key>
+        <one-to-many 
+            class="gcom.UsuarioPermissaoEspecial"
+        />
+    </set>
+	-->
+	</class>
+</hibernate-mapping>

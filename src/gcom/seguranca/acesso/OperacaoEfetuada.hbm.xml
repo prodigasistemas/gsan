@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.seguranca.acesso.OperacaoEfetuada" table="seguranca.operacao_efetuada">
+		<id name="id" type="java.lang.Integer" column="opef_id">
+			<generator class="sequence">
+				<param name="sequence">seguranca.seq_operacao_efetuada</param>
+			</generator>
+		</id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="opef_tmultimaalteracao" length="8"/>
+		<property name="argumentoValor" type="java.lang.Integer" column="opef_cnargumento" length="4"/>
+		<property name="dadosAdicionais" type="java.lang.String" column="opef_dsdadosadicionais" length="200"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to UsuarioAlteracao -->
+		<set name="usuarioAlteracoes" lazy="true" inverse="true">
+			<key>
+				<column name="tref_id"/>
+			</key>
+			<one-to-many class="gcom.seguranca.acesso.usuario.UsuarioAlteracao"/>
+		</set>
+		<!-- bi-directional one-to-many association to TabelaLinhaAlteracao -->
+		<set name="tabelaLinhaAlteracoes" lazy="true" inverse="true">
+			<key>
+				<column name="tref_id"/>
+			</key>
+			<one-to-many class="gcom.seguranca.transacao.TabelaLinhaAlteracao"/>
+		</set>
+		<!-- bi-directional many-to-one association to Operacao -->
+		<many-to-one name="operacao" class="gcom.seguranca.acesso.Operacao" not-null="true">
+			<column name="oper_id"/>
+		</many-to-one>
+		<many-to-one name="atributoGrupo" class="gcom.seguranca.AtributoGrupo">
+			<column name="atgr_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

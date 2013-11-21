@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.micromedicao.consumo.ConsumoHistorico" table="micromedicao.consumo_historico">
+		<id name="id" type="java.lang.Integer" column="cshi_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_consumo_historico</param>
+			</generator>
+		</id>
+		<property name="referenciaFaturamento" type="int" column="cshi_amfaturamento" not-null="true" length="4"/>
+		<property name="indicadorAlteracaoUltimosConsumos" type="java.lang.Short" column="cshi_icaltultimosconss" length="2"/>
+		<property name="indicadorAjuste" type="java.lang.Short" column="cshi_icajuste" length="2"/>
+		<property name="numeroConsumoFaturadoMes" type="java.lang.Integer" column="cshi_nnconsumofaturadomes" length="4"/>
+		<property name="consumoRateio" type="java.lang.Integer" column="cshi_nnconsumorateio" length="4"/>
+		<property name="indicadorImovelCondominio" type="java.lang.Short" column="cshi_icimovelcondominio" length="2"/>
+		<property name="consumoMedio" type="java.lang.Integer" column="cshi_nnconsumomedio" length="4"/>
+		<property name="consumoMinimo" type="java.lang.Integer" column="cshi_nnconsumominimo" length="4"/>
+		<property name="indicadorFaturamento" type="java.lang.Short" column="cshi_icfaturamento" length="2"/>
+		<property name="percentualColeta" type="java.math.BigDecimal" column="cshi_pccoleta" length="5"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cshi_tmultimaalteracao" length="8"/>
+		<property name="consumoImovelCondominio" type="java.lang.Integer" column="cshi_idconsumoimovelcondominio" length="4"/>
+		<property name="consumoImovelVinculadosCondominio" type="java.lang.Integer" column="cshi_nnconsimoveisvinculados" not-null="false" length="4"/>
+		<property name="numeroConsumoCalculoMedia" type="java.lang.Integer" column="cshi_nnconsumocalculomedia" length="4"/>
+		<!-- associations -->
+		<many-to-one name="consumoHistoricoCondominio" class="gcom.micromedicao.consumo.ConsumoHistorico" not-null="false" insert="false" update="false">
+			<column name="cshi_idconsumoimovelcondominio"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ConsumoTipo -->
+		<many-to-one name="consumoTipo" class="gcom.micromedicao.consumo.ConsumoTipo" not-null="true">
+			<column name="cstp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to RateioTipo -->
+		<many-to-one name="rateioTipo" class="gcom.micromedicao.RateioTipo" not-null="true">
+			<column name="rttp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LigacaoTipo -->
+		<many-to-one name="ligacaoTipo" class="gcom.micromedicao.consumo.LigacaoTipo" not-null="true">
+			<column name="lgti_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ConsumoAnormalidade -->
+		<many-to-one name="consumoAnormalidade" class="gcom.micromedicao.consumo.ConsumoAnormalidade" not-null="true">
+			<column name="csan_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to PocoTipo -->
+		<many-to-one name="pocoTipo" class="gcom.cadastro.imovel.PocoTipo" not-null="true">
+			<column name="poco_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to FaturamentoSituacaoTipo -->
+		<many-to-one name="faturamentoSituacaoTipo" class="gcom.faturamento.FaturamentoSituacaoTipo" not-null="true">
+			<column name="ftst_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Rota -->
+		<many-to-one name="rota" class="gcom.micromedicao.Rota" not-null="false">
+			<column name="rota_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

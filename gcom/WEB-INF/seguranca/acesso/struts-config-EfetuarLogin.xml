@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="EfetuarLoginActionForm" type="gcom.gui.seguranca.acesso.EfetuarLoginActionForm" />
+		<form-bean name="LembrarSenhaActionForm" type="gcom.gui.seguranca.acesso.LembrarSenhaActionForm" />
+		<form-bean name="EfetuarAlteracaoSenhaActionForm" type="gcom.gui.seguranca.acesso.EfetuarAlteracaoSenhaActionForm" />
+		<form-bean name="EfetuarAlteracaoSenhaSimplificadaActionForm" type="gcom.gui.seguranca.acesso.EfetuarAlteracaoSenhaSimplificadaActionForm" />
+		<form-bean name="EfetuarAlteracaoSenhaPorMatriculaActionForm" type="gcom.gui.seguranca.acesso.EfetuarAlteracaoSenhaPorMatriculaActionForm" />
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards/>
+	  
+	<action-mappings>
+
+		<!--Action que faz o login do usuário-->
+    <action name="EfetuarLoginActionForm" 
+    			  type="gcom.gui.seguranca.acesso.EfetuarLoginAction" 
+    			  validate="true" 
+    			  input="/jsp/seguranca/acesso/login.jsp" 
+    			  scope="request" 
+    			  path="/efetuarLoginAction">
+    			  
+      <forward name="paginaPrincipal" path="/telaPrincipal.do" redirect="false" />
+      <forward name="alterarSenha" path="/exibirEfetuarAlteracaoSenhaAction.do" />
+    </action>
+    <!--Action que redireciona para a página de login -->
+    <action type="org.apache.struts.actions.ForwardAction" validate="false" parameter="/jsp/seguranca/acesso/login.jsp" scope="request" path="/telaLoginInicial" />
+    <!--Action que redireciona para a página principal -->
+    <action type="org.apache.struts.actions.ForwardAction" validate="false" parameter="/jsp/acesso/principal.jsp" scope="request" path="/telaPrincipal" />
+    <!--Action que redireciona para a página que mostra o erro para o usuário -->
+    <action type="org.apache.struts.actions.ForwardAction" validate="false" parameter="/jsp/util/exibicao_erro.jsp" scope="request" path="/telaExibicaoErro" />
+    
+    <action type="gcom.gui.seguranca.acesso.ExibirLembrarSenhaAction" 
+    			  path="/exibirLembrarSenhaAction">    			  
+      <forward name="lembrarSenha" path="/jsp/seguranca/acesso/senha_lembrar.jsp" />
+    </action>
+    
+    <action name="LembrarSenhaActionForm" 
+    			  type="gcom.gui.seguranca.acesso.LembrarSenhaAction" 
+    			  validate="true" 
+    			  scope="request" 
+    			  input="/exibirLembrarSenhaAction.do"
+    			  path="/lembrarSenhaAction">    	      
+    </action>
+    
+    <action type="gcom.gui.seguranca.acesso.EfetuarLogoffAction" 
+    			  validate="false" 
+    			  scope="request" 
+    			  path="/efetuarLogoffAction">    	      
+    </action>
+    
+    <action type="gcom.gui.seguranca.acesso.ExibirEfetuarAlteracaoSenhaAction" 
+    			  path="/exibirEfetuarAlteracaoSenhaAction">    			  
+      <forward name="efetuarAlteracaoSenha" path="/jsp/seguranca/acesso/senha_alterar.jsp" />
+    </action>
+    
+    <action name="EfetuarAlteracaoSenhaActionForm" 
+    			  type="gcom.gui.seguranca.acesso.EfetuarAlteracaoSenhaAction" 
+    			  validate="true" 
+    			  scope="request" 
+    			  path="/efetuarAlteracaoSenhaAction">    	      
+    </action>
+    
+    <action type="gcom.gui.seguranca.acesso.ExibirEfetuarAlteracaoSenhaSimplificadaAction" 
+    			  path="/exibirEfetuarAlteracaoSenhaSimplificadaAction">    			  
+      <forward name="efetuarAlteracaoSenhaSimplificada" path="/jsp/seguranca/acesso/senha_alterar_simplificada.jsp"/>
+    </action>
+    
+    <action name="EfetuarAlteracaoSenhaSimplificadaActionForm" 
+    			  type="gcom.gui.seguranca.acesso.EfetuarAlteracaoSenhaSimplificadaAction" 
+    			  validate="true" 
+    			  scope="request" 
+    			  path="/efetuarAlteracaoSenhaSimplificadaAction">    	      
+    </action>
+    
+    <action name="EfetuarAlteracaoSenhaPorMatriculaActionForm" 
+    			  type="gcom.gui.seguranca.acesso.ExibirEfetuarAlteracaoSenhaPorMatriculaAction" 
+    			  validate="false"
+    			  scope ="session" 
+    			  path="/exibirEfetuarAlteracaoSenhaPorMatriculaAction">    			  
+      <forward name="efetuarAlteracaoSenhaPorMatricula" 
+      			  path="/jsp/seguranca/acesso/senha_alterar_por_matricula.jsp"/>
+    </action>
+    
+    <action name="EfetuarAlteracaoSenhaPorMatriculaActionForm" 
+    			  type="gcom.gui.seguranca.acesso.EfetuarAlteracaoSenhaPorMatriculaAction" 
+    			  validate="true" 
+    			  scope="request" 
+    			  path="/efetuarAlteracaoSenhaPorMatriculaAction">    	      
+    </action>
+	</action-mappings>
+
+	<message-resources null="false" parameter="gcom.properties.application" />
+		
+</struts-config>

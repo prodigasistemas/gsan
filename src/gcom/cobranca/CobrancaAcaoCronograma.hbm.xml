@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.CobrancaAcaoCronograma" table="cobranca.cobranca_acao_cronograma">
+		<id name="id" type="java.lang.Integer" column="cbcr_id">
+			<generator class="sequence">
+				<param name="sequence">
+				cobranca.seq_cobranca_acao_cronograma</param>
+			</generator>
+		</id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cbcr_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to CobrancaAcaoAtividadeCronog -->
+		<!--  
+    <set
+        name="cobrancaAcaoAtividadeCronogs"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="cbcr_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CobrancaAcaoAtividadeCronog"
+        />
+    </set>
+    -->
+		<!-- bi-directional many-to-one association to CobrancaAcao -->
+		<many-to-one name="cobrancaAcao" class="gcom.cobranca.CobrancaAcao" not-null="true">
+			<column name="cbac_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaGrupoCronogramaMe -->
+		<many-to-one name="cobrancaGrupoCronogramaMes" class="gcom.cobranca.CobrancaGrupoCronogramaMes" not-null="true">
+			<column name="cbcm_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

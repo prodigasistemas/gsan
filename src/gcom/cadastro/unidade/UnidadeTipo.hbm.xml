@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cadastro.unidade.UnidadeTipo" table="cadastro.unidade_tipo">
+		<id name="id" type="java.lang.Integer" column="untp_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_unidade_tipo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="untp_dsunidadetipo" not-null="true" length="40"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="untp_dsabreviado" length="5"/>
+		<property name="indicadorUso" type="short" column="untp_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="untp_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="nivel" type="java.lang.Short" column="untp_nnnivel" length="2"/>
+		<property name="codigoTipo" type="java.lang.String" column="untp_cdtipo" length="1"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to UnidadeOrganizacional 
+    <set
+        name="unidadeOrganizacionals"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="untp_id" />
+        </key>
+        <one-to-many 
+            class="gcom.UnidadeOrganizacional"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

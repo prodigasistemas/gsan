@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarAlteracaoAtualizacaoCadastralActionForm"
+	   			type="gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionForm" />
+	   	<form-bean name="ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm"
+	   			type="gcom.gui.cadastro.atualizacaocadastral.ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm" />
+ </form-beans>
+  <!--******************* PÁGINAS GLOBAIS *******************-->
+ <global-forwards />
+ <action-mappings>
+ 
+ 	<!--INICIO FILTRAR ATUALIZACAO CADASTRAL-->
+ 	
+		<action name="FiltrarAlteracaoAtualizacaoCadastralActionForm"
+			type="gcom.gui.cadastro.atualizacaocadastral.ExibirFiltrarAlteracaoAtualizacaoCadastralAction"
+			path="/exibirFiltrarAlteracaoAtualizacaoCadastralAction"
+			scope="session" >
+			<forward name="exibirFiltrarAlteracaoAtualizacaoCadastral"
+				path="/jsp/cadastro/atualizacaocadastral/atualizacao_cadastral_alteracoes_filtrar.jsp" />
+		</action>
+		<action name="FiltrarAlteracaoAtualizacaoCadastralActionForm"
+			type="gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralAction"
+			path="/filtrarAlteracaoAtualizacaoCadastralAction"	>	
+		<forward name="filtrarAlteracaoAtualizacaoCadastral"
+				path="/exibirConsultarMovimentoAtualizacaoCadastralAction.do" />		
+		</action>
+		
+		<action name="FiltrarAlteracaoAtualizacaoCadastralActionForm"
+			type="gcom.gui.cadastro.atualizacaocadastral.ExibirConsultarMovimentoAtualizacaoCadastralAction"
+			validate="true" 
+			path="/exibirConsultarMovimentoAtualizacaoCadastralAction">
+			
+			<forward name="exibirConsultarMovimentoAtualizacaoCadastral" 
+				path="/jsp/cadastro/atualizacaocadastral/atualizacao_cadastral_movimento_consultar.jsp" />
+		</action>
+		<action name="FiltrarAlteracaoAtualizacaoCadastralActionForm"
+			type="gcom.gui.cadastro.atualizacaocadastral.AtualizarDadosCadastraisViaMovimentoAction"
+			path="/atualizarDadosCadastraisViaMovimentoAction"	>	
+		<forward name="atualizarDadosCadastraisViaMovimentoAction"
+				path="/atualizarDadosCadastraisViaMovimentoAction.do" />		
+		</action>
+		
+		<action name="ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm"
+			type="gcom.gui.cadastro.atualizacaocadastral.ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction"
+			validate="true" 
+			path="/exibirAtualizarDadosImovelAtualizacaoCadastralPopupAction">
+			
+			<forward name="exibirAtualizarDadosImovelAtualizacaoCadastralPopup" 
+				path="/jsp/cadastro/atualizacaocadastral/atualizar_dados_imovel_atualizacao_cadastral_popup.jsp" />
+		</action>
+		<action name="ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm"
+			type="gcom.gui.cadastro.atualizacaocadastral.AtualizarDadosImovelAtualizacaoCadastralAction"
+			validate="true" 
+			path="/atualizarDadosImovelAtualizacaoCadastralAction"	>	
+		<forward name="exibirAtualizarDadosImovelAtualizacaoCadastralPopup" 
+				path="/jsp/cadastro/atualizacaocadastral/atualizar_dados_imovel_atualizacao_cadastral_popup.jsp" />		
+		</action>
+		
+	<!--FIM FILTRAR ATUALIZACAO CADASTRAL-->
+
+</action-mappings>
+ <message-resources null="false"
+  parameter="gcom.properties.application" />
+</struts-config>

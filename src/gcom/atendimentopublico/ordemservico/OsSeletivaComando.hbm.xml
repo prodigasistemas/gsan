@@ -1,0 +1,116 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.atendimentopublico.ordemservico.OsSeletivaComando" table="atendimentopublico.os_seletiva_comando">
+		<id name="id" type="java.lang.Integer" column="ossc_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="tempoComando" type="java.sql.Timestamp" column="ossc_tmcomando" not-null="true" length="8"/>
+		<property name="tempoRealizacao" type="java.sql.Timestamp" column="ossc_tmrealizacao" length="8"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ossc_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="quantidadeMaximaOrdens" type="java.lang.Short" column="ossc_qtmaximaordens" length="2"/>
+		<property name="codigoElo" type="java.lang.Integer" column="loca_cdelo" length="4"/>
+		<property name="codigoSetorComercialInicial" type="java.lang.Integer" column="ossc_cdsetorcomercialinicial" length="4"/>
+		<property name="codigoSetorComercialFinal" type="java.lang.Integer" column="ossc_cdsetorcomercialfinal" length="4"/>
+		<property name="numeroQuadraInicial" type="java.lang.Integer" column="ossc_nnquadrainicial" length="4"/>
+		<property name="numeroQuadraFinal" type="java.lang.Integer" column="ossc_nnquadrafinal" length="4"/>
+		<property name="indicadorImovelCondominio" type="java.lang.Short" column="ossc_icimovelcondominio" length="2"/>
+		<property name="anoMesInstalacaoHidrometro" type="java.lang.Integer" column="ossc_aminstalacaohidrometro" length="4"/>
+		<property name="quantidadeGerada" type="java.lang.Short" column="ossc_qtgerada" length="2"/>
+		<property name="numeroConsumoMedio" type="java.lang.Integer" column="ossc_nnconsumomedio" length="4"/>
+		<property name="numeroConsumoEconomia" type="java.lang.Integer" column="ossc_nnconsumoeconomia" length="4"/>
+		<property name="quantidadeEconomiasInicial" type="java.lang.Short" column="ossc_qteconomiasinicial" length="2"/>
+		<property name="quantidadeEconomiasFinal" type="java.lang.Short" column="ossc_qteconomiasfinal" length="2"/>
+		<property name="quantidadeDocumentosInicial" type="java.lang.Short" column="ossc_qtdoctosinicial" length="2"/>
+		<property name="quantidadeDocumentosFinal" type="java.lang.Short" column="ossc_qtdoctosfinal" length="2"/>
+		<property name="quantidadeOcorrenciasConsecutivas" type="java.lang.Short" column="ossc_qtocorrenciasconsecutivas" length="2"/>
+		<property name="numeroAreaConstruidaInicial" type="java.math.BigDecimal" column="ossc_nnareaconstruidainicial" length="8"/>
+		<property name="numeroAreaConstruidaFinal" type="java.math.BigDecimal" column="ossc_nnareaconstruidafinal" length="8"/>
+		<property name="numeroMoradoresInicial" type="java.lang.Short" column="ossc_nnmoradoresinicial" length="2"/>
+		<property name="numeroMoradoresFinal" type="java.lang.Short" column="ossc_nnmoradoresfinal" length="2"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to LeituraAnormalidade -->
+		<many-to-one name="leituraAnormalidade" class="gcom.micromedicao.leitura.LeituraAnormalidade" not-null="true">
+			<column name="ltan_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidadeFinal" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_idfinal"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidadeInicial" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_idinicial"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Quadra -->
+		<many-to-one name="quadraInicial" class="gcom.cadastro.localidade.Quadra" not-null="true">
+			<column name="qdra_idinicial"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Quadra -->
+		<many-to-one name="quadraFinal" class="gcom.cadastro.localidade.Quadra" not-null="true">
+			<column name="qdra_idfinal"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ImovelPerfil -->
+		<many-to-one name="imovelPerfil" class="gcom.cadastro.imovel.ImovelPerfil" not-null="true">
+			<column name="iper_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to HidrometroMarca -->
+		<many-to-one name="hidrometroMarca" class="gcom.micromedicao.hidrometro.HidrometroMarca" not-null="true">
+			<column name="himc_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Rota -->
+		<many-to-one name="rotaFinal" class="gcom.micromedicao.Rota" not-null="true">
+			<column name="rota_idfinal"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Rota -->
+		<many-to-one name="rotaInicial" class="gcom.micromedicao.Rota" not-null="true">
+			<column name="rota_idinicial"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to SetorComercial -->
+		<many-to-one name="setorComercialFinal" class="gcom.cadastro.localidade.SetorComercial" not-null="true">
+			<column name="stcm_idfinal"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to SetorComercial -->
+		<many-to-one name="setorComercialInicial" class="gcom.cadastro.localidade.SetorComercial" not-null="true">
+			<column name="stcm_idinicial"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Usuario -->
+		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario" not-null="true">
+			<column name="usur_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Empresa -->
+		<many-to-one name="empresa" class="gcom.cadastro.empresa.Empresa" not-null="true">
+			<column name="empr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Categoria -->
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to HidrometroCapacidade -->
+		<many-to-one name="hidrometroCapacidade" class="gcom.micromedicao.hidrometro.HidrometroCapacidade" not-null="true">
+			<column name="hicp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to MedicaoTipo -->
+		<many-to-one name="medicaoTipo" class="gcom.micromedicao.medicao.MedicaoTipo" not-null="true">
+			<column name="medt_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Subcategoria -->
+		<many-to-one name="subcategoria" class="gcom.cadastro.imovel.Subcategoria" not-null="true">
+			<column name="scat_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ServicoTipo -->
+		<many-to-one name="servicoTipo" class="gcom.atendimentopublico.ordemservico.ServicoTipo" not-null="true">
+			<column name="svtp_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

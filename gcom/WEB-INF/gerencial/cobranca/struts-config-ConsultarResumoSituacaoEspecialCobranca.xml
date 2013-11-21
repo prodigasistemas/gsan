@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="InformarResumoSituacaoEspecialCobrancaActionForm"
+			type="gcom.gui.gerencial.cobranca.InformarResumoSituacaoEspecialCobrancaActionForm" />			
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<action name="InformarResumoSituacaoEspecialCobrancaActionForm"
+			type="gcom.gui.gerencial.cobranca.ExibirInformarResumoSituacaoEspecialCobrancaAction"
+			validate="true" scope="session"
+			path="/exibirInformarResumoSituacaoEspecialCobrancaAction">
+			<forward name="exibirInformarResumoSituacaoEspecialCobrancaAction"
+				path="/jsp/gerencial/cobranca/situacao_especial_cobranca_informar.jsp" />
+		</action>
+		<action name="InformarResumoSituacaoEspecialCobrancaActionForm"
+			type="gcom.gui.gerencial.cobranca.InformarResumoSituacaoEspecialCobrancaAction"
+			validate="true" scope="session"
+			path="/informarResumoSituacaoEspecialCobrancaAction">
+			<forward name="exibirConsultarResumoSituacaoEspecialCobranca"
+				path="/jsp/gerencial/cobranca/situacao_especial_cobranca_consultar.jsp" />
+		</action>
+		
+		<action
+			type="gcom.gui.gerencial.cobranca.ExibirConsultarResumoSituacaoEspecialCobrancaAction"
+			validate="false" path="/exibirConsultarResumoSituacaoEspecialCobrancaAction">
+			<forward name="manterMensagemConta"
+				path="/jsp/gerencial/cobranca/situacao_especial_cobranca_consultar.jsp" />
+		</action>
+	</action-mappings>
+
+</struts-config>

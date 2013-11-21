@@ -1,0 +1,72 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.seguranca.acesso.Funcionalidade" table="seguranca.funcionalidade">
+		<id name="id" type="java.lang.Integer" column="fncd_id">
+			<generator class="sequence">
+				<param name="sequence">seguranca.seq_funcionalidade</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="fncd_dsfuncionalidade" length="60"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="fncd_dsabreviado" length="10"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="fncd_tmultimaalteracao" length="8"/>
+		<property name="caminhoMenu" type="java.lang.String" column="fncd_dscaminhomenu" length="300"/>
+		<property name="caminhoUrl" type="java.lang.String" column="fncd_dscaminhourl" length="100"/>
+		<property name="indicadorPontoEntrada" type="java.lang.Short" column="fncd_icpontoentrada" length="2"/>
+		<property name="indicadorOlap" type="java.lang.Short" column="fncd_icolap" length="2"/>
+		<property name="numeroOrdemMenu" type="java.lang.Long" column="fncd_nnordemmenu" length="14"/>
+		<property name="indicadorNovaJanela" type="java.lang.Short" column="fncd_icnovajanela" not-null="true" length="2"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to Operacao -->
+		<set name="operacoes" lazy="true" inverse="true">
+			<key>
+				<column name="fncd_id"/>
+			</key>
+			<one-to-many class="gcom.seguranca.acesso.Operacao"/>
+		</set>
+		<!-- bi-directional one-to-many association to GrupoFuncionalidadeOperacao -->
+		<!--
+    <set
+        name="grupoFuncionalidadeOperacaos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="fncd_id" />
+        </key>
+        <one-to-many 
+            class="gcom.GrupoFuncionalidadeOperacao"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to FuncionalidadeDependencia -->
+		<set name="funcionalidadeDependencias" lazy="true" inverse="true">
+			<key>
+				<column name="fncd_id"/>
+			</key>
+			<one-to-many class="gcom.seguranca.acesso.FuncionalidadeDependencia"/>
+		</set>
+		<!-- bi-directional one-to-many association to FuncionalidadeDependencia -->
+		<set name="funcionalidadeDependenciasByFncdIddependencia" lazy="true" inverse="true">
+			<key>
+				<column name="fncd_iddependencia"/>
+			</key>
+			<one-to-many class="gcom.seguranca.acesso.FuncionalidadeDependencia"/>
+		</set>
+		<!-- bi-directional many-to-one association to Modulo -->
+		<many-to-one name="modulo" class="gcom.seguranca.acesso.Modulo" not-null="true">
+			<column name="modu_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Modulo -->
+		<many-to-one name="funcionalidadeCategoria" class="gcom.seguranca.acesso.FuncionalidadeCategoria" not-null="false">
+			<column name="fncg_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

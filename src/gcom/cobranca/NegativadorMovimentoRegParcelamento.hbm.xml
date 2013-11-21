@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.NegativadorMovimentoRegParcelamento" table="cobranca.negatd_mov_reg_parcel">
+		<id name="id" type="java.lang.Integer" column="nmrp_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_negatd_mov_reg_parcel</param>
+			</generator>
+		</id>
+		<property name="valorParcelado" type="java.math.BigDecimal" column="nmrp_vlparcelado" length="15" not-null="true"/>
+		<property name="valorParceladoEntrada" type="java.math.BigDecimal" column="nmrp_vlparceladoentrada" length="15"/>
+		<property name="valorParceladoEntradaPago" type="java.math.BigDecimal" column="nmrp_vlparceladoentradapago" length="15"/>
+		<property name="valorParceladoCancelado" type="java.math.BigDecimal" column="nmrp_vlparceladocancelado" length="15"/>
+		<property name="valorParceladoNaoCobrado" type="java.math.BigDecimal" column="nmrp_vlparceladonaocobrado" length="15"/>
+		<property name="valorParceladoCobradoPago" type="java.math.BigDecimal" column="nmrp_vlparceladocobradopago" length="15"/>
+		<property name="valorParceladoCobradoNaoPago" type="java.math.BigDecimal" column="nmrp_vlparceladocobradonaopago" length="15"/>
+		<property name="numeroPrestacoes" type="java.lang.Short" column="nmrp_nnprestacoes" length="2" not-null="true"/>
+		<property name="numeroPrestacoesNaoCobradas" type="java.lang.Short" column="nmrp_nnprestacoesnaocobradas" length="2"/>
+		<property name="numeroPrestacoesCobradasPagas" type="java.lang.Short" column="nmrp_nnprestacoescobradaspagas" length="2"/>
+		<property name="numeroPrestacoesCobradasNaoPagas" type="java.lang.Short" column="nmrp_nnprestcobradasnaopagas" length="2"/>
+		<property name="indicadorParcelamentoAtivo" type="java.lang.Short" column="nmrp_icparcelamentoativo" length="2" not-null="true"/>
+		<property name="ultimaAlteracao" column="nmrp_tmultimaalteracao" type="java.sql.Timestamp" length="8" not-null="true"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to NegativadorMovimentoReg -->
+		<many-to-one name="negativadorMovimentoReg" class="gcom.cobranca.NegativadorMovimentoReg" not-null="true">
+			<column name="nmrg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Parcelamento -->
+		<many-to-one name="parcelamento" class="gcom.cobranca.parcelamento.Parcelamento" not-null="true">
+			<column name="parc_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

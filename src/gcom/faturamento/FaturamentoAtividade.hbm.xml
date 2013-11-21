@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.FaturamentoAtividade" table="faturamento.faturamento_atividade">
+		<id name="id" type="java.lang.Integer" column="ftat_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_faturamento_atividade</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="ftat_dsfaturamentoatividade" length="20"/>
+		<property name="indicadorUso" type="java.lang.Short" column="ftat_icuso" length="2"/>
+		<property name="indicadorObrigatoriedadeAtividade" type="java.lang.Short" column="ftat_icobrigatoriedade" length="2"/>
+		<property name="indicadorPossibilidadeRepeticaoAtividade" type="java.lang.Short" column="ftat_icrepeticao" length="2"/>
+		<property name="indicadorPossibilidadeComandoAtividade" type="java.lang.Short" column="ftat_iccomando" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ftat_tmultimaalteracao" length="8"/>
+		<property name="ordemRealizacao" type="java.lang.Short" column="ftat_nnordemrealizacao" not-null="true" length="2"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to FaturamentoAtividade
+
+    <set
+        name="faturamentoAtividades"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="ftat_idatividadeprecedente" />
+        </key>
+        <one-to-many
+            class="mapeamentohibernate.FaturamentoAtividade"
+        />
+    </set> -->
+		<!-- bi-directional many-to-one association to FaturamentoAtividade -->
+		<many-to-one name="faturamentoAtividadePrecedente" class="gcom.faturamento.FaturamentoAtividade" not-null="false">
+			<column name="ftat_idatividadeprecedente"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Processo -->
+		<many-to-one name="processo" class="gcom.batch.Processo" not-null="false">
+			<column name="proc_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to FaturamentoAtividadeCronograma
+    <set
+        name="faturamentoAtividadeCronogramas"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="ftat_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.FaturamentoAtividadeCronograma"
+        />
+    </set>-->
+	</class>
+</hibernate-mapping>

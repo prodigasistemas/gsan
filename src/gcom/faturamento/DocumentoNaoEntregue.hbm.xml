@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.faturamento.DocumentoNaoEntregue" table="faturamento.documento_nao_entregue">
+		<id name="id" type="java.lang.Integer" column="done_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_documento_nao_entregue</param>
+			</generator>
+		</id>
+		<property name="dataTentativaEntrega" type="java.sql.Date" column="done_dttentativaentrega" not-null="true" length="4"/>
+		<property name="numeroTentativa" type="short" column="done_nntentativa" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="done_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Cliente -->
+		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="false">
+			<column name="clie_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Fatura -->
+		<many-to-one name="fatura" class="gcom.faturamento.conta.Fatura" not-null="false">
+			<column name="fatu_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaDocumento -->
+		<many-to-one name="cobrancaDocumento" class="gcom.cobranca.CobrancaDocumento" not-null="false">
+			<column name="cbdo_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DocumentoTipo -->
+		<many-to-one name="documentoTipo" class="gcom.cobranca.DocumentoTipo" not-null="true">
+			<column name="dotp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to MotivoNaoEntregaDocumento -->
+		<many-to-one name="motivoNaoEntregaDocumento" class="gcom.faturamento.conta.MotivoNaoEntregaDocumento" not-null="true">
+			<column name="mned_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GuiaPagamentoGeral -->
+		<many-to-one name="guiaPagamentoGeral" class="gcom.faturamento.GuiaPagamentoGeral" not-null="false">
+			<column name="gpag_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ContaGeral -->
+		<many-to-one name="contaGeral" class="gcom.faturamento.conta.ContaGeral" not-null="false">
+			<column name="cnta_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

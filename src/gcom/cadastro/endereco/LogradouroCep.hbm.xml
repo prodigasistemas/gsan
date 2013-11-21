@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cadastro.endereco.LogradouroCep" table="cadastro.logradouro_cep">
+		<id name="id" type="java.lang.Integer" column="lgcp_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_logradouro_cep</param>
+			</generator>
+		</id>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to Tabela -->
+		<many-to-one name="logradouro" class="gcom.cadastro.endereco.Logradouro" not-null="true">
+			<column name="logr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Operacao -->
+		<many-to-one name="cep" class="gcom.cadastro.endereco.Cep" not-null="true">
+			<column name="cep_id"/>
+		</many-to-one>
+		<property name="indicadorUso" type="java.lang.Short" column="lgcp_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="lgcp_tmultimaalteracao" length="8"/>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

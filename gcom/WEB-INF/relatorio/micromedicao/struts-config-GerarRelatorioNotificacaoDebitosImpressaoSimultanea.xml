@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="FiltrarRelatorioNotificacaoDebitosImpressaoSimultaneaActionForm"
+			type="gcom.gui.relatorio.micromedicao.FiltrarRelatorioNotificacaoDebitosImpressaoSimultaneaActionForm" />
+	</form-beans>
+
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="FiltrarRelatorioNotificacaoDebitosImpressaoSimultaneaActionForm"
+			type="gcom.gui.relatorio.micromedicao.ExibirFiltrarRelatorioNotificacaoDebitosImpressaoSimultaneaAction"
+			validate="true" 
+			path="/exibirFiltrarRelatorioNotificacaoDebitosImpressaoSimultaneaAction">
+			
+			<forward name="exibirFiltrarRelatorioNotificacaoDebitosImpressaoSimultanea" 
+				path="/jsp/relatorio/micromedicao/relatorio_notificacao_debitos_impressao_simultanea_filtrar.jsp" />
+				
+		</action>
+		
+		<action name="FiltrarRelatorioNotificacaoDebitosImpressaoSimultaneaActionForm"
+			type="gcom.gui.relatorio.micromedicao.GerarRelatorioNotificacaoDebitosImpressaoSimultaneaAction"
+			validate="true" 
+			path="/gerarRelatorioNotificacaoDebitosImpressaoSimultaneaAction" />
+			
+		
+	</action-mappings>
+
+</struts-config>

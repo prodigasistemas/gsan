@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.registroatendimento.RegistroAtendimentoSolicitante" table="atendimentopublico.ra_solicitante">
+		<id name="ID" type="java.lang.Integer" column="raso_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_ra_solicitante</param>
+			</generator>
+		</id>
+		<property name="numeroImovel" type="java.lang.String" column="raso_nnimovel" length="5"/>
+		<property name="pontoReferencia" type="java.lang.String" column="raso_dspontoreferencia" length="60"/>
+		<property name="complementoEndereco" type="java.lang.String" column="raso_dscomplementondereco" length="25"/>
+		<property name="solicitante" type="java.lang.String" column="raso_nmsolicitante" length="60"/>
+		<property name="indicadorSolicitantePrincipal" type="short" column="raso_icsolicitanteprincipal" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="raso_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="numeroProtocoloAtendimento" type="java.lang.String" column="raso_nnprotocoloatendimento" not-null="false" length="14"/>
+		
+		<property name="indicadorEnvioEmailPesquisa" type="short" column="RASO_ICENVIOEMAILPESQUISA" not-null="false" length="2"/>
+		<property name="enderecoEmail" type="java.lang.String" column="RASO_DSEMAIL" not-null="false" length="14"/>
+		
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to LogradouroBairro -->
+		<many-to-one name="logradouroBairro" class="gcom.cadastro.endereco.LogradouroBairro" not-null="true">
+			<column name="lgbr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Cliente -->
+		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="true">
+			<column name="clie_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LogradouroCep -->
+		<many-to-one name="logradouroCep" class="gcom.cadastro.endereco.LogradouroCep" not-null="true">
+			<column name="lgcp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to RegistroAtendimento -->
+		<many-to-one name="registroAtendimento" class="gcom.atendimentopublico.registroatendimento.RegistroAtendimento" not-null="true">
+			<column name="rgat_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to UnidadeOrganizacional -->
+		<many-to-one name="unidadeOrganizacional" class="gcom.cadastro.unidade.UnidadeOrganizacional" not-null="true">
+			<column name="unid_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Funcionario -->
+		<many-to-one name="funcionario" class="gcom.cadastro.funcionario.Funcionario" not-null="true">
+			<column name="func_id"/>
+		</many-to-one>
+		<many-to-one name="perimetroInicial" class="gcom.cadastro.endereco.Logradouro" not-null="false">
+			<column name="logr_idinicioperimetro"/>
+		</many-to-one>
+		<many-to-one name="perimetroFinal" class="gcom.cadastro.endereco.Logradouro" not-null="false">
+			<column name="logr_idfimperimetro"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to SolicitanteFone -->
+		<set name="solicitanteFones" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="raso_id"/>
+			</key>
+			<one-to-many class="gcom.atendimentopublico.registroatendimento.SolicitanteFone"/>
+		</set>
+	</class>
+</hibernate-mapping>

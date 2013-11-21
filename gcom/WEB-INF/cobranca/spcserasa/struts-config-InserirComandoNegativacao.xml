@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+
+		<form-bean name="InserirComandoNegativacaoActionForm"
+			type="gcom.gui.cobranca.spcserasa.InserirComandoNegativacaoActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+	
+	   <action name="InserirComandoNegativacaoActionForm" 
+			type="gcom.gui.cobranca.spcserasa.ExibirInserirComandoNegativacaoTipoComandoAction"
+			validate="false" scope="session" 
+			path="/exibirInserirComandoNegativacaoTipoComandoAction">
+			<forward name="exibirInserirComandoNegativacaoTipoComando"
+				path="/jsp/cobranca/spcserasa/comando_negativacao_inserir_comando_tipo.jsp" />
+		</action>
+		
+		<action name="InserirComandoNegativacaoActionForm"
+			type="gcom.gui.cobranca.spcserasa.ExibirInserirComandoNegativacaoMatriculaImovelAction"
+			validate="false" scope="session"
+			path="/exibirInserirComandoNegativacaoMatriculaImovelAction">
+			<forward
+				name="exibirInserirComandoNegativacaoMatriculaImovelAction"
+				path="/jsp/cobranca/spcserasa/comando_negativacao_inserir_imovel.jsp" />
+		</action>
+		
+		<action name="InserirComandoNegativacaoActionForm"
+			type="gcom.gui.cobranca.spcserasa.ExibirAdicionarMatriculaImovelNegativacaoAction"
+			validate="false" scope="session"
+			path="/exibirAdicionarMatriculaImovelNegativacaoAction">
+			<forward
+				name="exibirAdicionarMatriculaImovelNegativacao"
+				path="/jsp/cobranca/spcserasa/comandar_negativacao_inserir_imovel_matricula_popup.jsp" />
+		</action>
+		
+		<action name="InserirComandoNegativacaoActionForm" 
+			type="gcom.gui.cobranca.spcserasa.AdicionarMatriculaImovelNegativacaoAction"
+			validate="false" scope="session"
+			path="/adicionarMatriculaImovelNegativacaoAction">
+			<forward name="adicionarComandoNegativacaPorMatricula"
+				path="/jsp/cobranca/spcserasa/comandar_negativacao_inserir_imovel_matricula_popup.jsp" />
+		</action>
+		
+		<action name="InserirComandoNegativacaoActionForm"
+			type="gcom.gui.cobranca.spcserasa.InserirComandoNegativacaoMatriculaImovelAction"
+			validate="true" input="/inserirComandoNegativacaoMatriculaImovelAction.do"
+			scope="session" path="/inserirComandoNegativacaoMatriculaImovelAction" />
+			
+		<action
+			type="gcom.gui.cobranca.spcserasa.ExibirInserirComandoNegativacaoPorCriterioAction"
+			validate="false" input="/exibirInserirComandoNegativacaoPorCriterioAction.do"
+			scope="session" path="/exibirInserirComandoNegativacaoPorCriterioAction">
+			<forward name="inserirComandoNegativacaoPorCriterio"
+				path="/inserirComandoNegativacaPorCriterioWizardAction.do?action=exibirInserirComandoNegativacaoDadosGeraisAction" />
+		</action>
+		
+		<action name="InserirComandoNegativacaoActionForm"
+			type="gcom.gui.cobranca.spcserasa.InserirComandoNegativacaPorCriterioWizardAction"
+			validate="true" parameter="action" scope="session"
+			path="/inserirComandoNegativacaPorCriterioWizardAction"
+			input="/exibirInserirComandoNegativacaoPorCriterioAction.do">
+			<forward name="inserirComandoNegativacaoDadosGerais"
+				path="/jsp/cobranca/spcserasa/comandar_negativacao_inserir_criterio_dados_gerais.jsp" />
+			<forward name="inserirComandoNegativacaoDadosDebito"
+				path="/jsp/cobranca/spcserasa/comandar_negativacao_inserir_criterio_dados_debito.jsp" />
+			<forward name="inserirComandoNegativacaoDadosImovel"
+				path="/jsp/cobranca/spcserasa/comandar_negativacao_inserir_criterio_dados_imovel.jsp" />
+			<forward name="inserirComandoNegativacaoLocalizacao" 
+				path="/jsp/cobranca/spcserasa/comandar_negativacao_inserir_criterio_dados_localizacao.jsp" />
+			<forward name="inserirComandoNegativacaoExclusao" 
+				path="/jsp/cobranca/spcserasa/comandar_negativacao_inserir_criterio_dados_exclusao.jsp" />
+		</action>			
+			
+		<action 
+			type="gcom.gui.cobranca.spcserasa.ConcluirInserirComandoNegativacaoPorCriterioAction"
+			scope="session" path="/concluirInserirComandoNegativacaoPorCriterioAction">
+		</action>
+		
+		<action
+			type="gcom.gui.cobranca.spcserasa.CancelarInserirComandoNegativacaoAction"
+			validate="false" scope="session" path="/cancelarInserirComandoNegativacaoAction" />			
+			
+	</action-mappings>
+	<!--********************************************************************************-->
+	<!--******************* ARQUIVO DE PROPRIEDADES *******************-->
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

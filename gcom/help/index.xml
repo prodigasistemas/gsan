@@ -1,0 +1,207 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<!DOCTYPE index PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp Index Version 2.0//EN"
+                       "http://java.sun.com/products/javahelp/index_2_0.dtd">
+
+<index version="2.0">
+	<indexitem text="Adicionar Categoria na Conta" target="faturamentoContaAdicionarCategoria" />
+	<indexitem text="Adicionar Crédito na Conta" target="faturamentoConta_AdicionarCredito" />
+	<indexitem text="Adicionar Critério de Cobrança à Rota" target="faturamentoRota_AdicionarCriterioCobranca" />
+	<indexitem text="Adicionar Débito na Conta" target="faturamentoConta_AdicionarDebito" />
+	<indexitem text="Alterar Inscrição de Imóvel" target="imovelAlterarInscricao" />
+	<indexitem text="Alterar Vencimento da Conta" target="faturamentoContaAlterarVencimento" />
+	<indexitem text="Analisar Exceções de Leituras e Consumos" target="faturamentoLeiturasEConsumosEfetuarAnaliseExcecoes" />
+	<indexitem text="Analistar Medição e Consumo do Mês" target="faturamentoAnaliseMedicaoConsumoApresentarDados" />
+	<indexitem text="Apresentação do Sistema" target="gcom" />
+	<indexitem text="Associar Tarifa de Consumo a Imóveis" target="faturamentoTarifaConsumoAssociarImoveis" />
+	<indexitem text="Atualizar Bairro" target="bairroAtualizar" />
+	<indexitem text="Atualizar Categoria" target="categoriaAtualizar" />
+	<indexitem text="Atualizar Cliente - Aba Endereço" target="clienteAtualizarAbaEndereco" />
+	<indexitem text="Atualizar Cliente - Aba Nome e Tipo" target="clienteAtualizarAbaNomeTipo" />
+	<indexitem text="Atualizar Cliente - Aba Pessoa" target="clienteAtualizarAbaPessoa" />
+	<indexitem text="Atualizar Cliente - Aba Telefone " target="clienteAtualizarAbaTelefone" />
+	<indexitem text="Atualizar Comando de Atividade - Aba Comando" target="faturamentoComandoAtividadeAtualizarAbaComando" />
+	<indexitem text="Atualizar Comando de Atividade - Aba Conclusão" target="faturamentoComandoAtividadeAtualizarAbaConclusao" />
+	<indexitem text="Atualizar Comando de Atividade - Aba Rotas" target="faturamentoComandoAtividadeAtualizarAbaRotas" />
+	<indexitem text="Atualizar Conjunto de Hidrômetros" target="hidrometroAtualizarConjunto" />
+	<indexitem text="Atualizar Cronograma de Faturamento" target="faturamentoCronogramaAtualizar" />
+	<indexitem text="Atualizar Dados do Faturamento" target="faturamentoAlterarDados" />
+	<indexitem text="Atualizar Hidrômetro" target="hidrometroAtualizar" />
+	<indexitem text="Atualizar Imóvel - Aba Característica" target="imovelAtualizarAbaCaracteristica" />
+	<indexitem text="Atualizar Imóvel - Aba Cliente" target="imovelAtualizarAbaCliente" />
+	<indexitem text="Atualizar Imóvel - Aba Conclusão" target="imovelAtualizarAbaConclusao" />
+	<indexitem text="Atualizar Imóvel - Aba Endereço" target="imovelAtualizarAbaEndereco" />
+	<indexitem text="Atualizar Imóvel - Aba Localidade" target="imovelAtualizarAbaLocalidade" />
+	<indexitem text="Atualizar Imóvel - Aba Subcategoria e Economias" target="imovelAtualizarAbaSubcategoria" />
+	<indexitem text="Atualizar Localidade" target="localidadeAtualizar" />
+	<indexitem text="Atualizar Logradouro" target="logradouroAtualizar" />
+	<indexitem text="Atualizar Mensagem da Conta" target="faturamentoContaMensagemAtualizar" />
+	<indexitem text="Atualizar Quadra" target="quadraAtualizar" />
+	<indexitem text="Atualizar Rota" target="faturamentoRotaAtualizar" />
+	<indexitem text="Atualizar Setor Comercial" target="setorComercialAtualizar" />
+	<indexitem text="Atualizar Subcategoria" target="subcategoriaAtualizar" />
+	<indexitem text="Atualizar Tarifa de Consumo" target="faturamentoTarifaConsumoAtualizar" />
+	<indexitem text="Calendário" target="calendario" />
+	<indexitem text="Cancelar Conta" target="faturamentoContaCancelar" />
+	<indexitem text="Cancelar Crédito a Realizar" target="faturamentoCreditoRealizarCancelar" />
+	<indexitem text="Cancelar Débito a Cobrar" target="faturamentoDebitoCobrarCancelar" />
+	<indexitem text="Cancelar Guia de Pagamento" target="faturamentoGuiaPagamentoCancelar" />
+	<indexitem text="Colocar Conta em Revisão" target="faturamentoContaColocarEmRevisao" />
+	<indexitem text="Consultar Conta" target="faturamentoContaConsultar" />
+	<indexitem text="Consultar Crédito Realizado na Conta" target="faturamentoCreditoRealizadoConsultar" />
+	<indexitem text="Consultar Débito Cobrado" target="faturamentoDebitoCobradoConsultar" />
+	<indexitem text="Consultar Histórico de Instalação de Hidrômetro" target="hidrometroConsultarHistoricoInstalacao" />
+	<indexitem text="Consultar Histórico de Medição Individualizada" target="imovelConsultarHistoricoMedicaoIndividualizada" />
+	<indexitem text="Consultar Histórico do Faturamento" target="faturamentoHistoricoConsultar" />
+	<indexitem text="Consultar Imóveis com Medição Individualizada" target="imovelConsultarMedicaoIndividualizada" />
+	<indexitem text="Consultar Movimentação de Hidrômetro - Tela 1 - Filtro" target="hidrometroMovimentacaoConsultar-1-filtro" />
+	<indexitem text="Consultar Movimentação de Hidrômetro - Tela 2 - Lista" target="hidrometroMovimentacaoConsultar-2-lista" />
+	<indexitem text="Consultar Movimentação de Hidrômetro - Tela 3 - Dados" target="hidrometroMovimentacaoConsultar-3-dados" />
+	<indexitem text="Consultar Posição do Faturamento" target="faturamentoPosicaoConsultar" />
+	<indexitem text="Consultar Relação Cliente e Imóvel" target="imovelConsultarRelacaoCliente" />
+	<indexitem text="Consultar Situação do Imóvel" target="imovelSituacaoConsultar" />
+	<indexitem text="Desfazer Cancelamento ou Retificação da Conta" target="faturamentoContaDesfazerCancelamentoRetificacao" />
+	<indexitem text="Filtrar Bairro" target="bairroFiltrar" />
+	<indexitem text="Filtrar Categoria" target="categoriaFiltrar" />
+	<indexitem text="Filtrar Cliente" target="clienteFiltrar" />
+	<indexitem text="Filtrar Comando de Atividade" target="faturamentoComandoAtividadeFiltrar" />
+	<indexitem text="Filtrar Cronograma de Faturamento" target="faturamentoCronogramaFiltrar" />
+	<indexitem text="Filtrar Exceções de Leituras e Consumos - Aba Característica" target="faturamentoLeiturasEConsumosFiltrarExcecoes-abaCaracteristica" />
+	<indexitem text="Filtrar Exceções de Leituras e Consumos - Aba Ligações e Consumo" target="faturamentoLeiturasEConsumosFiltrarExcecoes-abaLigacoesConsumo" />
+	<indexitem text="Filtrar Exceções de Leituras e Consumos - Aba Localidade" target="faturamentoLeiturasEConsumosFiltrarExcecoes-abaLocalidade" />
+	<indexitem text="Filtrar Hidrômetro" target="hidrometroFiltrar" />
+	<indexitem text="Filtrar Imóvel" target="imovelFiltrar" />
+	<indexitem text="Filtrar Localidade" target="localidadeFiltrar" />
+	<indexitem text="Filtrar Logradouro" target="logradouroFiltrar" />
+	<indexitem text="Filtrar Mensagem da Conta" target="faturamentoContaMensagemFiltrar" />
+	<indexitem text="Filtrar Quadra" target="quadraFiltrar" />
+	<indexitem text="Filtrar Rota" target="faturamentoRotaFiltrar" />
+	<indexitem text="Filtrar Setor Comercial" target="setorComercialFiltrar" />
+	<indexitem text="Filtrar Subcategoria" target="subcategoriaFiltrar" />
+	<indexitem text="Filtrar Tarifa de Consumo" target="faturamentoTarifaConsumoFiltrar" />
+	<indexitem text="Gerar Relatório" target="gerarRelatorio" />
+	<indexitem text="Informar Categoria na Tarifa de Consumo" target="faturamentoTarifaConsumo-InformarCategoria" />
+	<indexitem text="Informar Economia" target="imovelInformarEconomia" />
+	<indexitem text="Informar Economia - Atualizar Dados de uma Economia" target="imovelInformarEconomia-Atualizar" />
+	<indexitem text="Informar Economia - Inserir Dados do Imóvel por Economia" target="imovelInformarEconomia-Inserir" />
+	<indexitem text="Informar Endereço" target="enderecoInformar" />
+	<indexitem text="Informar Endereço - Opção Atualização" target="enderecoAtualizar" />
+	<indexitem text="Informar Faixa de Consumo na Tarifa de Consumo" target="faturamentoTarifaConsumoAssociarImoveis" />
+	<indexitem text="Informar Situação Especial de Faturamento" target="faturamentoSituacaoEspecialInformar" />
+	<indexitem text="Informar Vencimento Alternativo para a Conta" target="faturamentoContaInformarVencimentoAlternativo" />
+	<indexitem text="Inserir Autorização para Doação Mensal" target="imovelAutorizacaoDoacaoMensalInserir" />
+	<indexitem text="Inserir Bairro" target="bairroInserir" />
+	<indexitem text="Inserir Categoria" target="categoriaInserir" />
+	<indexitem text="Inserir Cliente - Aba Endereço" target="clienteInserirAbaEndereco" />
+	<indexitem text="Inserir Cliente - Aba Nome e Tipo" target="clienteInserirAbaNomeTipo" />
+	<indexitem text="Inserir Cliente - Aba Pessoa" target="clienteInserirAbaPessoa" />
+	<indexitem text="Inserir Cliente - Aba Telefone" target="clienteInserirAbaTelefone" />
+	<indexitem text="Inserir Comando de Atividade" target="faturamentoComandoAtividadeInserir" />
+	<indexitem text="Inserir Conta" target="faturamentoContaInserir" />
+	<indexitem text="Inserir Crédito a Realizar" target="faturamentoCreditoRealizarInserir" />
+	<indexitem text="Inserir Cronograma de Faturamento" target="faturamentoCronogramaInserir" />
+	<indexitem text="Inserir Débito a Cobrar" target="faturamentoDebitoCobrarInserir" />
+	<indexitem text="Inserir Guia de Pagamento" target="faturamentoGuiaPagamentoInserir" />
+	<indexitem text="Inserir Hidrômetro" target="hidrometroInserir" />
+	<indexitem text="Inserir Imóvel - Aba Característica" target="imovelInserirAbaCaracteristica" />
+	<indexitem text="Inserir Imóvel - Aba Cliente" target="imovelInserirAbaCliente" />
+	<indexitem text="Inserir Imóvel - Aba Conclusão" target="imovelInserirAbaConclusao" />
+	<indexitem text="Inserir Imóvel - Aba Endereço" target="imovelInserirAbaEndereco" />
+	<indexitem text="Inserir Imóvel - Aba Localidade" target="imovelInserirAbaLocalidade" />
+	<indexitem text="Inserir Imóvel - Aba Subcategoria e Economias" target="imovelInserirAbaSubcategoria" />
+	<indexitem text="Inserir Localidade" target="localidadeInserir" />
+	<indexitem text="Inserir Logradouro" target="logradouroInserir" />
+	<indexitem text="Inserir Mensagem da Conta" target="faturamentoContaMensagemInserir" />
+	<indexitem text="Inserir Quadra" target="quadraInserir" />
+	<indexitem text="Inserir Rota" target="faturamentoRotaInserir" />
+	<indexitem text="Inserir Setor Comercial" target="setorComercialInserir" />
+	<indexitem text="Inserir Situação do Imóvel" target="imovelSituacaoInserir" />
+	<indexitem text="Inserir Situação Especial de Faturamento" target="faturamentoSituacaoEspecialInserir" />
+	<indexitem text="Inserir Subcategoria" target="subcategoriaInserir" />
+	<indexitem text="Inserir Tarifa de Consumo" target="faturamentoTarifaConsumoInserir" />
+	<indexitem text="Inserir Tarifa Social" target="tarifaSocialInserirAbaImovel" />
+	<indexitem text="Layout da Tela do Sistema" target="layoutTelaSistema" />
+	<indexitem text="Lembrar Senha" target="lembrarSenha" />
+	<indexitem text="Manter Autorização para Doação Mensal" target="imovelAutorizacaoDoacaoMensalManter" />
+	<indexitem text="Manter Bairro" target="bairroManter" />
+	<indexitem text="Manter Categoria" target="categoriaManter" />
+	<indexitem text="Manter Cliente" target="clienteManter" />
+	<indexitem text="Manter Comando de Atividade" target="faturamentoComandoAtividadeManter" />
+	<indexitem text="Manter Conta" target="faturamentoContaManter" />
+	<indexitem text="Manter Cronograma de Faturamento" target="faturamentoCronogramaManter" />
+	<indexitem text="Manter Hidrômetro" target="hidrometroManter" />
+	<indexitem text="Manter Imóvel" target="imovelManter" />
+	<indexitem text="Manter Localidade" target="localidadeManter" />
+	<indexitem text="Manter Logradouro" target="logradouroManter" />
+	<indexitem text="Manter Mensagem da Conta" target="faturamentoContaMensagemManter" />
+	<indexitem text="Manter Quadra" target="quadraManter" />
+	<indexitem text="Manter Rota" target="faturamentoRotaManter" />
+	<indexitem text="Manter Setor Comercial" target="setorComercialManter" />
+	<indexitem text="Manter Subcategoria" target="subcategoriaManter" />
+	<indexitem text="Manter Tarifa de Consumo" target="faturamentoTarifaConsumoManter" />
+	<indexitem text="Manter Vínculos de Imóveis para Rateio de Consumo" target="imovelManterVinculoParaRateioConsumo" />
+	<indexitem text="Manter Vínculos de Imóveis para Rateio de Consumo - Atualizar Tipo de Rateio" target="imovelManterVinculo-AtualizarTipoRateio" />
+	<indexitem text="Manter Vínculos de Imóveis para Rateio de Consumo - Desfazer Vínculo" target="imovelManterVinculo-DesfazerVinculo" />
+	<indexitem text="Manter Vínculos de Imóveis para Rateio de Consumo - Estabelecer Vínculo" target="imovelManterVinculo-EstabelecerVinculo" />
+	<indexitem text="Módulo Atendimento" target="atendimento" />
+	<indexitem text="Módulo Atendimento - Ordem de Serviço" target="atendimentoOrdemServico" />
+	<indexitem text="Módulo Atendimento - Registro de Atendimento" target="atendimentoRegistro" />
+	<indexitem text="Módulo Cadastro" target="cadastro" />
+	<indexitem text="Módulo Cadastro - Categoria e Subcategoria" target="cadastroCategoriaSubcategoria" />
+	<indexitem text="Módulo Cadastro - Cliente" target="cadastroCliente" />
+	<indexitem text="Módulo Cadastro - Endereço" target="cadastroEndereco" />
+	<indexitem text="Módulo Cadastro - Imóvel" target="cadastroImovel" />
+	<indexitem text="Módulo Cadastro - Localização" target="cadastroLocalizacao" />
+	<indexitem text="Módulo Cadastro - Tarifa Social" target="cadastroTarifaSocial" />
+	<indexitem text="Módulo Cadastro - Unidade Organizacional" target="cadastroUnidadeOrganizacional" />
+	<indexitem text="Módulo - Cobrança" target="cobranca" />
+	<indexitem text="Módulo Cobrança - Critério de Cobrança" target="cobrancaCriterio" />
+	<indexitem text="Módulo Faturamento" target="faturamento" />
+	<indexitem text="Módulo Faturamento - Comando  de Atividade" target="faturamentoComandoAtividade" />
+	<indexitem text="Módulo Faturamento - Conta" target="faturamentoConta" />
+	<indexitem text="Módulo Faturamento - Crédito a Realizar" target="faturamentoCreditoRealizar" />
+	<indexitem text="Módulo Faturamento - Cronograma de Faturamento" target="faturamento" />
+	<indexitem text="Módulo Faturamento - Débito a Cobrar" target="faturamentoDebitoCobrar" />
+	<indexitem text="Módulo Faturamento - Guia de Pagamento" target="faturamentoGuiaPagamento" />
+	<indexitem text="Módulo Faturamento - Leituras e Consumo" target="faturamentoLeiturasEConsumo" />
+	<indexitem text="Módulo Faturamento - Rota" target="faturamentoRota" />
+	<indexitem text="Módulo Faturamento - Tarifa de Consumo" target="faturamentoTarifaConsumo" />
+	<indexitem text="Módulo Micromedição" target="micromedicao" />
+	<indexitem text="Módulo Micromedição - Hidrômetro" target="micromedicaoHidrometro" />
+	<indexitem text="Módulo Micromedição - Medição Individualizada" target="micromedicaoMedicaoIndividualizada" />
+	<indexitem text="Movimentação de Hidrômetro" target="hidrometroMovimentacao" />
+	<indexitem text="Movimentar Hidrômetro" target="hidrometroMovimentar" />
+	<indexitem text="Padrão da Tela do Tipo Aba" target="padraoTelaTipoAba" />
+	<indexitem text="Pesquisar Anormalidades de Leitura" target="faturamentoAnormalidadesLeituraPesquisar" />
+	<indexitem text="Pesquisar Bairro" target="bairroPesquisar" />
+	<indexitem text="Pesquisar CEP" target="cepPesquisar" />
+	<indexitem text="Pesquisar Cliente" target="clientePesquisar" />
+	<indexitem text="Pesquisar Critério de Cobrança" target="cobrancaCriterioPesquisar" />
+	<indexitem text="Pesquisar Documento de Cobrança" target="cobrancaDocumentoPesquisar" />
+	<indexitem text="Pesquisar Funcionário" target="funcionarioPesquisar" />
+	<indexitem text="Pesquisar Imóvel" target="imovelPesquisar" />
+	<indexitem text="Pesquisar Local de Armazenagem" target="hidrometroLocalArmazenagem" />
+	<indexitem text="Pesquisar Localidade" target="localidadePesquisar" />
+	<indexitem text="Pesquisar Logradouro" target="logradouroPesquisar" />
+	<indexitem text="Pesquisar Município" target="municípioPesquisar" />
+	<indexitem text="Pesquisar Ordem de Serviço" target="atendimentoOrdemServicoPesquisar" />
+	<indexitem text="Pesquisar Registro de Atendimento" target="atendimentoRegistroPesquisar" />
+	<indexitem text="Pesquisar Responsável Superior" target="responsavelSuperiorPesquisar" />
+	<indexitem text="Pesquisar Setor Comercial" target="setorComercialPesquisar" />
+	<indexitem text="Pesquisar Tipo do Débito" target="faturamentoDebitoCobrarTipoDebitoPesquisar" />
+	<indexitem text="Pesquisar Unidade de Lotação" target="unidadeLotacaoPesquisar" />
+	<indexitem text="Pesquisar Unidade Organizacional" target="cadastroUnidadePesquisar" />
+	<indexitem text="Pesquisar Usuário" target="usuarioPesquisar" />
+	<indexitem text="Reajustar Tarifa de Consumo" target="faturamentoTarifaConsumoReajustar" />
+	<indexitem text="Resumo da Análise da Medição e Consumo do Mês" target="faturamentoAnaliseMedicaoConsumoApresentarResumoDados" />
+	<indexitem text="Retificar Conta" target="faturamentoContaRetificar" />
+	<indexitem text="Retirar Conta de Revisão" target="faturamentoContaRetirarRevisao" />
+	<indexitem text="Retirar Situação Especial de Faturamento" target="faturamentoSituacaoEspecialRetirar" />
+	<indexitem text="Selecionar Bairros" target="bairroSelecionar" />
+	<indexitem text="Selecionar CEPs" target="cepSelecionar" />
+	<indexitem text="Simular Cálculo da Conta" target="faturamentoContaSimularCalculo" />
+	<indexitem text="Sistema GCOM" target="gcom" />
+	<indexitem text="Substituir Consumos Anteriores" target="faturamentoConsumosAnterioresSubstituir" />
+	<indexitem text="Tela - Consultar Ordem de Serviço" target="atendimentoOrdemServicoConsultar" />
+	<indexitem text="Tela - Consultar Registro de Atendimento" target="atendimentoRegistroConsultar" />
+	<indexitem text="Tela - Linhas do Critério de Cobrança" target="cobrancaCriterioLinhas" />
+</index>

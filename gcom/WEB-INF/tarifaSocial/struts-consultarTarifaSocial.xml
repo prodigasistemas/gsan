@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="ConsultarTarifaSocialActionForm"
+			type="gcom.gui.cadastro.tarifasocial.ConsultarTarifaSocialActionForm" />
+	</form-beans>
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC00XX] Consultar Dados Tarifa Social Auhtor: Rafael Corrêa Data:01/03/2007 -->
+
+		<action name="ConsultarTarifaSocialActionForm"
+			type="gcom.gui.cadastro.tarifasocial.ExibirConsultarTarifaSocialAction"
+			validate="false" input="/exibirConsultarTarifaSocialAction.do"
+			scope="session" path="/exibirConsultarTarifaSocialAction">
+			<forward name="consultarTarifaSocial"
+				path="/jsp/cadastro/tarifasocial/tarifa_social_consultar.jsp" />
+		</action>
+
+	</action-mappings>
+
+	<!--********************************************************************************-->
+	<!--******************* ARQUIVO DE PROPRIEDADES *******************-->
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

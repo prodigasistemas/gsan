@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="ApresentarAnaliseMovimentoArrecadadoresActionForm"
+			type="gcom.gui.arrecadacao.ApresentarAnaliseMovimentoArrecadadoresActionForm" />
+		<form-bean name="ApresentarDadosConteudoRegistroMovimentoArrecadadorActionForm"
+			type="gcom.gui.arrecadacao.ApresentarDadosConteudoRegistroMovimentoArrecadadorActionForm" />
+		<form-bean name="PesquisarItensMovimentoArrecadadorActionForm"
+			type="gcom.gui.arrecadacao.PesquisarItensMovimentoArrecadadorActionForm" />
+			
+			
+	</form-beans>
+
+	<!--******************* P?GINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="ApresentarAnaliseMovimentoArrecadadoresActionForm" 
+			type="gcom.gui.arrecadacao.ExibirApresentarAnaliseMovimentoArrecadadoresAction"
+			validate="true" path="/exibirApresentarAnaliseMovimentoArrecadadoresAction">
+			<forward name="exibirApresentarAnaliseMovimentoArrecadadores"
+				path="/jsp/arrecadacao/movimento_arrecadadores_apresentar_analise.jsp" />
+		</action>
+
+		<action  name="PesquisarItensMovimentoArrecadadorActionForm" 
+			type="gcom.gui.arrecadacao.ExibirPesquisarItensMovimentoArrecadadorAction"
+			validate="false" path="/exibirPesquisarItensMovimentoArrecadadorAction">
+			<forward name="exibirPesquisarItensMovimentoArrecadador"
+				path="/jsp/arrecadacao/movimento_arrecadadores_itens_pesquisar.jsp" />
+		</action>
+
+		<action  name="PesquisarItensMovimentoArrecadadorActionForm"
+			type="gcom.gui.arrecadacao.ExibirConsultarItensMovimentoArrecadadorAction"
+			validate="false" path="/exibirConsultarItensMovimentoArrecadadorAction">
+			<forward name="exibirConsultarItensMovimentoArrecadador"
+				path="/jsp/arrecadacao/movimento_arrecadadores_consultar_itens.jsp" />
+		</action>
+
+		<action name="ApresentarDadosConteudoRegistroMovimentoArrecadadorActionForm"
+			type="gcom.gui.arrecadacao.ExibirApresentarDadosConteudoRegistroMovimentoArrecadadorAction"
+			validate="false" path="/exibirApresentarDadosConteudoRegistroMovimentoArrecadadorAction">
+			<forward name="exibirApresentarDadosConteudoRegistroMovimentoArrecadador"
+				path="/jsp/arrecadacao/movimento_arrecadadores_apresentar_dados_conteudo_registro.jsp" />
+		</action>
+		
+		<action name="PesquisarItensMovimentoArrecadadorActionForm"
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioMovimentoArrecadadoresItensAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioMovimentoArrecadadoresItensAction" />
+		
+	</action-mappings>
+
+	
+</struts-config>

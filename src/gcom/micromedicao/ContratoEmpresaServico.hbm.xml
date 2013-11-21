@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.micromedicao.ContratoEmpresaServico" table="micromedicao.contrato_empresa_servico">
+		<id name="id" type="java.lang.Integer" column="cese_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_contrato_empresa_servico</param>
+			</generator>
+		</id>
+		<property name="descricaoContrato" type="java.lang.String" column="cese_dsnumerocontrato" not-null="false" length="15"/>
+		<property name="dataInicioContrato" type="java.sql.Date" column="cese_dtiniciocontrato" not-null="true" length="4"/>
+		<property name="dataFimContrato" type="java.sql.Date" column="cese_dtfimcontrato" not-null="false" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cese_tmultimaalteracao" not-null="true" length="8"/>
+  		<property name="valorGlobalContrato" type="java.math.BigDecimal" column="cese_vlglobalcontrato" not-null="false" length="11"/>
+        <property name="observacao" type="java.lang.String" column="cese_dsobservacao" not-null="false" length="400"/>
+		<property name="percentualTaxaSucesso" type="java.math.BigDecimal" column="cese_pctaxasucesso" not-null="false" length="5"/>
+		
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to Empresa -->
+		<many-to-one name="empresa" class="gcom.cadastro.empresa.Empresa" not-null="true">
+			<column name="empr_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to ItemServicoContrato -->
+		<set name="itemServicoContratos" lazy="true" inverse="true" cascade="delete">
+			<key>
+				<column name="cese_id"/>
+			</key>
+			<one-to-many class="gcom.micromedicao.ItemServicoContrato"/>
+		</set>
+	</class>
+</hibernate-mapping>

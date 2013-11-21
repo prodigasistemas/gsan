@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="InserirAvisoBancarioActionForm"
+			type="gcom.gui.arrecadacao.banco.InserirAvisoBancarioActionForm" />
+		<form-bean name="PesquisarAvisoDeducoesActionForm"
+			type="gcom.gui.arrecadacao.banco.PesquisarAvisoDeducoesActionForm" />			
+	</form-beans>
+	
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		<action name="InserirAvisoBancarioActionForm"
+			type="gcom.gui.arrecadacao.banco.ExibirInserirAvisoBancarioAction"
+			validate="false" scope="session"
+			path="/exibirInserirAvisoBancarioAction">
+
+			<forward name="exibirInserirAvisoBancarioAction"
+				path="/exibirInserirAvisoBancarioWizardAction.do?action=exibirProcessoUmInserirAvisoBancarioAction" />
+		</action>
+
+		<action name="InserirAvisoBancarioActionForm"
+			type="gcom.gui.arrecadacao.banco.ExibirInserirAvisoBancarioWizardAction"
+			validate="true" parameter="action" scope="session"
+			path="/exibirInserirAvisoBancarioWizardAction">
+
+			<forward name="exibirInserirAvisoBancarioProcessoUm"
+				path="/jsp/arrecadacao/banco/aviso_bancario_inserir_arrecadador.jsp" />
+			<forward name="exibirInserirAvisoBancarioProcessoDois"
+				path="/jsp/arrecadacao/banco/aviso_bancario_inserir_avisos_bancarios.jsp" />
+			<forward name="exibirInserirAvisoBancarioProcessoDoisParaTres"
+				path="/exibirInserirAvisoBancarioWizardAction.do?action=exibirProcessoTresInserirAvisoBancarioAction" />
+			<forward name="exibirInserirAvisoBancarioProcessoDoisParaUm"
+				path="/exibirInserirAvisoBancarioWizardAction.do?action=exibirProcessoUmInserirAvisoBancarioAction" />
+			<forward name="exibirInserirAvisoBancarioProcessoTres"
+				path="/jsp/arrecadacao/banco/aviso_bancario_inserir_conclusao.jsp" />
+		</action>
+		
+
+		<action
+			type="gcom.gui.arrecadacao.banco.CancelarInserirAvisoBancarioAction"
+			validate="false" path="/cancelarInserirAvisoBancarioAction" />
+
+		<action name="InserirAvisoBancarioActionForm"
+			type="gcom.gui.arrecadacao.banco.FiltrarInserirAvisoBancarioAction"
+			validate="false" path="/filtrarInserirAvisoBancarioAction">
+			<forward name="sucessoInserirAvisoBancario"
+				path="/jsp/util/sucesso.jsp" />
+		</action>
+
+		<!-- PESQUISAR AVISO DEDUCOES -->
+		<action name="PesquisarAvisoDeducoesActionForm"
+			type="gcom.gui.arrecadacao.banco.ExibirPesquisarAvisoDeducoesAction"
+			validate="true" parameter="action" scope="session"
+			path="/exibirPesquisarAvisoDeducoesAction">
+
+			<forward name="exibirAvisoBancarioDeducoesPopup"
+				path="/jsp/arrecadacao/banco/aviso_bancario_deducoes_adicionar_popup.jsp" />
+		</action>
+		
+		<action name="PesquisarAvisoDeducoesActionForm"
+			type="gcom.gui.arrecadacao.banco.AdicionarAvisoDeducoesAction"
+			scope="session" validate="true"
+			path="/exibirAdicionarAvisoDeducoesAction">
+			
+			<forward name="exibirAvisoBancarioDeducoesPopup"
+				path="/jsp/arrecadacao/banco/aviso_bancario_deducoes_adicionar_popup.jsp" />	
+				
+			<forward name="exibirInserirAvisoBancarioProcessoDoisParaTres"
+				path="/exibirInserirAvisoBancarioWizardAction.do?action=exibirProcessoTresInserirAvisoBancarioAction" />		
+				
+			</action>		
+		<!-- PESQUISAR AVISO DEDUCOES -->
+
+
+	</action-mappings>
+	
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

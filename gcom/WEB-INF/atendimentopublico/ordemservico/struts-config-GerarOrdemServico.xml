@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="GerarOrdemServicoActionForm"
+				   type="gcom.gui.atendimentopublico.ordemservico.GerarOrdemServicoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		<action name="GerarOrdemServicoActionForm"
+				type="gcom.gui.atendimentopublico.ordemservico.ExibirGerarOrdemServicoAction"
+				validate="false" 
+				scope="session"
+				path="/exibirGerarOrdemServicoAction">
+			<forward name="exibirGerarOrdemServico" path="/jsp/atendimentopublico/ordemservico/ordem_servico_gerar.jsp" />
+			<forward name="exibirGerarOrdemServicoPopup" path="/jsp/atendimentopublico/ordemservico/ordem_servico_gerar_popup.jsp" />
+		</action>		
+
+		<action name="GerarOrdemServicoActionForm"
+				type="gcom.gui.atendimentopublico.ordemservico.ExibirGerarOrdemServicoInserirRAAction"
+				validate="false" 
+				scope="session"
+				path="/exibirGerarOrdemServicoInserirRAAction">
+
+			<forward name="exibirGerarOrdemServicoInserirRAPopup" path="/jsp/atendimentopublico/ordemservico/ordem_servico_gerar_inserir_ra_popup.jsp" />
+
+		</action>		
+
+		<action name="GerarOrdemServicoActionForm"
+				type="gcom.gui.atendimentopublico.ordemservico.GerarOrdemServicoAction"
+				validate="false" 
+				scope="session"
+				path="/gerarOrdemServicoAction">
+
+			<forward name="incluirOrdemServicoAcompanharRoteiroProgramacao" 
+				path="/exibirAcompanharRoteiroProgramacaoOrdemServicoIncluirAction.do" />
+				
+			<forward name="incluirOrdemServicoAcompanhamentoArqRoteiro"
+				path="/exibirAcompanhamentoArquivosRoteiroIncluirOrdemServicoAction.do" />
+
+		</action>
+		
+	</action-mappings>
+	<message-resources null="false" parameter="gcom.properties.application" />
+</struts-config>

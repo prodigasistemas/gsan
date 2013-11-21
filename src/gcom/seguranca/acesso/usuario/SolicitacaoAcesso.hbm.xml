@@ -1,0 +1,184 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+    
+<hibernate-mapping>
+<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+
+<class 
+    name="gcom.seguranca.acesso.usuario.SolicitacaoAcesso" 
+    table="seguranca.solicitacao_acesso"
+>
+    
+	<id
+        name="id"
+        type="java.lang.Integer"
+        column="soac_id"
+    >
+
+        <generator class="sequence">
+          <param name="sequence">seguranca.seq_solicitacao_acesso</param>
+      	</generator>
+
+	</id>
+    
+    <property
+        name="indicadorNotificarResponsavel"
+        type="java.lang.Short"
+        column="soac_icnotificarresponsavel"
+        length="2"
+    />
+    
+    <property
+        name="nomeUsuario"
+        type="java.lang.String"
+        column="soac_nmusuario"
+        not-null="true"
+        length="50"
+    />
+    
+    <property
+        name="cpf"
+        type="java.lang.String"
+        column="soac_nncpf"
+        length="11"
+    />
+    
+    <property
+        name="dataNascimento"
+        type="java.sql.Date"
+        column="soac_dtnascimento"
+        length="4"
+    />
+    
+    <property
+        name="login"
+        type="java.lang.String"
+        column="soac_nmlogin"
+        not-null="true"
+        length="11"
+    />
+    
+    <property
+        name="email"
+        type="java.lang.String"
+        column="soac_email"
+        not-null="true"
+        length="70"
+    />
+    
+    <property
+        name="periodoInicial"
+        type="java.sql.Date"
+        column="soac_dtinicioperiodo"
+        length="4"
+    />
+    
+    <property
+        name="periodoFinal"
+        type="java.sql.Date"
+        column="soac_dtfimperiodo"
+        length="4"
+    />
+    
+    <property
+        name="ultimaAlteracao"
+        type="java.sql.Timestamp"
+        column="soac_tmultimaalteracao"
+        not-null="true"
+        length="8"
+    />
+    
+    <property
+        name="dataAutorizacao"
+        type="java.sql.Date"
+        column="soac_dtautorizacao"
+        length="4"
+    />
+    
+    <property
+        name="dataCadastramento"
+        type="java.sql.Date"
+        column="soac_dtcadastramento"
+        length="4"
+    />
+    
+    <property
+        name="dataSolicitacao"
+        type="java.sql.Date"
+        column="soac_dtsolicitacao"
+        not-null="true"
+        length="4"
+    />
+    
+    <!-- bi-directional many-to-one association to Funcionario -->
+    <many-to-one
+        name="funcionarioSolicitante"
+        class="gcom.cadastro.funcionario.Funcionario"
+        not-null="true"
+    >
+        <column name="func_idsolicitante" />
+    </many-to-one>
+    
+    <!-- bi-directional many-to-one association to Funcionario -->
+    <many-to-one
+        name="funcionarioResponsavel"
+        class="gcom.cadastro.funcionario.Funcionario"
+        not-null="true"
+    >
+        <column name="func_idresponsavel" />
+    </many-to-one>
+    
+    <!-- bi-directional many-to-one association to Funcionario -->
+    <many-to-one
+        name="funcionario"
+        class="gcom.cadastro.funcionario.Funcionario"
+        not-null="true"
+    >
+        <column name="func_id" />
+    </many-to-one>
+    
+    <!-- bi-directional many-to-one association to UsuarioTipo -->
+    <many-to-one
+        name="usuarioTipo"
+        class="gcom.seguranca.acesso.usuario.UsuarioTipo"
+        not-null="true"
+    >
+        <column name="utip_id" />
+    </many-to-one>
+    
+    <!-- bi-directional many-to-one association to Empresa -->
+    <many-to-one
+        name="empresa"
+        class="gcom.cadastro.empresa.Empresa"
+        not-null="true"
+    >
+        <column name="empr_id" />
+    </many-to-one>
+    
+    <!-- bi-directional many-to-one association to UnidadeOrganizacional -->
+    <many-to-one
+        name="unidadeOrganizacional"
+        class="gcom.cadastro.unidade.UnidadeOrganizacional"
+        not-null="true"
+    >
+        <column name="unid_id" />
+    </many-to-one>
+    
+    <!-- bi-directional many-to-one association to SolicitacaoAcessoSituacao -->
+    <many-to-one
+        name="solicitacaoAcessoSituacao"
+        class="gcom.seguranca.acesso.usuario.SolicitacaoAcessoSituacao"
+        not-null="true"
+    >
+        <column name="sast_id" />
+    </many-to-one>
+	
+</class>
+</hibernate-mapping>

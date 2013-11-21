@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="MonitorarLeituraMobileActionForm"
+			type="gcom.gui.micromedicao.MonitorarLeituraMobileActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<action name="MonitorarLeituraMobileActionForm"
+			type="gcom.gui.micromedicao.ExibirMonitorarLeituraMobileAction"
+			validate="true" scope="session"
+			path="/exibirMonitorarLeituraMobileAction">
+
+			<forward name="monitorarLeitura"
+				path="/jsp/micromedicao/monitorar_leitura_mobile.jsp" />
+		</action>
+
+		<action name="MonitorarLeituraMobileActionForm"
+			type="gcom.gui.micromedicao.MonitorarLeituraMobileAction"
+			validate="true" scope="session"
+			path="/monitorarLeituraMobileAction">
+			<forward name="monitorarLeitura"
+				path="/jsp/micromedicao/monitorar_leitura_mobile.jsp" />
+		</action>
+		
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

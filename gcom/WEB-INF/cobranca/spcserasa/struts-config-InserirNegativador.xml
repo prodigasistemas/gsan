@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="InserirNegativadorActionForm"
+			type="gcom.gui.cobranca.spcserasa.InserirNegativadorActionForm" />
+	</form-beans>
+	<global-forwards />
+	<action-mappings>
+
+		<action name="InserirNegativadorActionForm"
+				type="gcom.gui.cobranca.spcserasa.ExibirInserirNegativadorAction"
+				validate="true" 
+				scope="session"
+				path="/exibirInserirNegativadorAction">
+			<forward name="inserirNegativador"	path="/jsp/cobranca/spcserasa/negativador_inserir.jsp" />
+		</action>
+		<action name="InserirNegativadorActionForm"
+				type="gcom.gui.cobranca.spcserasa.InserirNegativadorAction"
+				validate="true" 
+				scope="session"
+				path="/inserirNegativadorAction">
+		</action>
+
+	</action-mappings>
+	<message-resources null="false" parameter="gcom.properties.application" />
+</struts-config>

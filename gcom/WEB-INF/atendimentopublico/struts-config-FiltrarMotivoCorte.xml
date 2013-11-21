@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarMotivoCorteActionForm"
+			type="gcom.gui.atendimentopublico.FiltrarMotivoCorteActionForm" />
+
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarMotivoCorteActionForm"  
+			type="gcom.gui.atendimentopublico.ExibirFiltrarMotivoCorteAction" 
+			validate="false"
+			scope="session"
+			path="/exibirFiltrarMotivoCorteAction">
+
+			<forward name="filtrarMotivoCorte"
+			path="/jsp/atendimentopublico/motivo_corte_filtrar.jsp" />
+
+		</action>
+
+		<action name="FiltrarMotivoCorteActionForm"
+			type="gcom.gui.atendimentopublico.FiltrarMotivoCorteAction"
+			validate="false" 
+			scope="session"
+			path="/filtrarMotivoCorteAction">
+			
+			<forward name="exibirManterMotivoCorte"
+				path="/exibirManterMotivoCorteAction.do" />
+			
+			
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

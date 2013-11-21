@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.faturamento.credito.CreditoOrigem" table="faturamento.credito_origem">
+		<id name="id" type="java.lang.Integer" column="crog_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_credito_origem</param>
+			</generator>
+		</id>
+		<property name="descricaoCreditoOrigem" type="java.lang.String" column="crog_dscreditoorigem" length="40"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="crog_dsabreviado" length="10"/>
+		<property name="indicadorUso" type="java.lang.Short" column="crog_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="crog_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to CreditoARealizar -->
+		<!-- 
+    <set
+        name="creditoARealizars"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="crog_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CreditoARealizar"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to CreditoRealizado -->
+		<!--
+    <set
+        name="creditoRealizadosByCrogId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="crog_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CreditoRealizado"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to CreditoRealizado -->
+		<!--
+    <set
+        name="creditoRealizadosByCrogId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="crog_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CreditoRealizado"
+        />
+    </set>
+    -->
+	</class>
+</hibernate-mapping>

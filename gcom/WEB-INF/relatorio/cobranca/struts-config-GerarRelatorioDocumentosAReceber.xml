@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="RelatorioDocumentosAReceberForm"
+			type="gcom.gui.relatorio.cobranca.RelatorioDocumentosAReceberForm" />
+		<form-bean name="FaixaForm"
+			type="gcom.gui.relatorio.cobranca.FaixaForm" />						
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0990] Gerar Relatorio de Documentos a Receber Auhtor: Hugo Amorim Data:22/02/2010-->
+		<action name="RelatorioDocumentosAReceberForm"
+			type="gcom.gui.relatorio.cobranca.ExibirGerarRelatorioDocumentosAReceberAction"
+			validate="true" 
+			scope="session"
+			path="/exibirGerarRelatorioDocumentosAReceberAction">
+			
+			<forward name="exibirGerarRelatorioDocumentosAReceberAction"
+				path="/jsp/relatorio/cobranca/relatorio_documentos_a_receber.jsp" />
+		</action>
+		
+		<action name="RelatorioDocumentosAReceberForm"
+				type="gcom.gui.relatorio.cobranca.GerarRelatorioDocumentosAReceberAction"
+				validate="true" scope="session"
+				path="/gerarRelatorioDocumentosAReceberAction">
+		</action>
+		
+		<action name="FaixaForm"
+			type="gcom.gui.relatorio.cobranca.ExibirAdicionarFaixaAction"
+			validate="true" 
+			scope="request"
+			path="/exibirAdicionarFaixaAction">
+			
+			<forward name="exibirAdicionarFaixaAction"
+				path="/jsp/relatorio/cobranca/faixa_adicionar.jsp" />
+		</action>
+		
+		<action name="FaixaForm"
+				type="gcom.gui.relatorio.cobranca.AdicionarFaixaAction"
+				validate="true" scope="request"
+				path="/adicionarFaixaAction">
+				
+				<forward name="adicionarFaixaAction"
+					path="/exibirAdicionarFaixaAction.do" />
+				
+		</action>
+		
+		<action name="RelatorioDocumentosAReceberForm"
+				type="gcom.gui.relatorio.cobranca.RemoverFaixaAction"
+				validate="true" scope="session"
+				path="/removerFaixaAction">
+				
+				<forward name="exibirGerarRelatorioDocumentosAReceberAction"
+					path="/jsp/relatorio/cobranca/relatorio_documentos_a_receber.jsp" />
+					
+		</action>
+
+	</action-mappings>
+
+</struts-config>

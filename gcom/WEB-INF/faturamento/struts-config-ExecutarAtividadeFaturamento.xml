@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="ExecutarAtividadeFaturamentoActionForm"
+			type="gcom.gui.faturamento.ExecutarAtividadeFaturamentoActionForm" />
+	</form-beans>
+
+	<!--******************* P?GINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		<action name="ExecutarAtividadeFaturamentoActionForm"
+			type="gcom.gui.faturamento.ExibirExecutarAtividadeFaturamentoAction"
+			validate="true" path="/exibirExecutarAtividadeFaturamentoAction">
+			<forward name="exibirExecutarAtividadeFaturamento"
+				path="/jsp/faturamento/faturamento_atividade_executar.jsp" />
+		</action>
+		<action name="ExecutarAtividadeFaturamentoActionForm"
+			type="gcom.gui.faturamento.ExecutarAtividadeFaturamentoAction"
+			validate="true" path="/executarAtividadeFaturamentoAction"/>
+	</action-mappings>
+
+</struts-config>

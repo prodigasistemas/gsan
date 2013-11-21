@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+	
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="AtualizarArrecadacaoFormaActionForm"
+			type="gcom.gui.arrecadacao.AtualizarArrecadacaoFormaActionForm" />
+		<form-bean name="FiltrarArrecadacaoFormaActionForm"
+			type="gcom.gui.arrecadacao.FiltrarArrecadacaoFormaActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.arrecadacao.ExibirManterArrecadacaoFormaAction"
+			validate="false" scope="session"
+			path="/exibirManterArrecadacaoFormaAction">
+			<forward name="exibirManterArrecadacaoForma"
+				path="/jsp/arrecadacao/arrecadacao_forma_manter.jsp" />
+			<forward name="exibirAtualizarArrecadacaoForma"
+				path="/exibirAtualizarArrecadacaoFormaAction.do?filtrar=sim" />
+		</action>
+		
+		<action name="FiltrarArrecadacaoFormaActionForm"
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioArrecadacaoFormaManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioArrecadacaoFormaManterAction" />
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.arrecadacao.RemoverArrecadacaoFormaAction" scope="request"
+			path="/removerArrecadacaoFormaAction">
+		</action>
+		
+		<action name="AtualizarArrecadacaoFormaActionForm"
+			type="gcom.gui.arrecadacao.ExibirAtualizarArrecadacaoFormaAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarArrecadacaoFormaAction">
+			<forward name="atualizarArrecadacaoForma"
+				path="/jsp/arrecadacao/arrecadacao_forma_atualizar.jsp" />
+		</action>
+		<action name="AtualizarArrecadacaoFormaActionForm"
+			type="gcom.gui.arrecadacao.AtualizarArrecadacaoFormaAction"
+			validate="true" scope="session"
+			path="/atualizarArrecadacaoFormaAction">
+		</action>
+
+	</action-mappings>
+
+</struts-config>

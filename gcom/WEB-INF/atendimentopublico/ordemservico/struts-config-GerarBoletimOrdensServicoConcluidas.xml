@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="GerarBoletimOrdensServicoConcluidasActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.GerarBoletimOrdensServicoConcluidasActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	
+	<action-mappings>
+		<action name="GerarBoletimOrdensServicoConcluidasActionForm"  
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirFiltrarBoletimOrdensServicoConcluidasAction" 
+			validate="true"	
+			scope="session"	
+			path="/exibirFiltrarBoletimOrdensServicoConcluidasAction">
+			
+			<forward
+				name="exibirFiltrarBoletimOrdensServicoConcluidasAction"
+				path="/jsp/atendimentopublico/ordemservico/filtro_gerar_boletim_ordens_servico_concluidas.jsp" />
+		</action>
+		
+		<action name="GerarBoletimOrdensServicoConcluidasActionForm"  
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirResumoBoletimOrdensServicoConcluidasAction" 
+			validate="true"	
+			scope="session"	
+			path="/exibirResumoBoletimOrdensServicoConcluidasAction">
+			
+			<forward
+				name="exibirResumoBoletimOrdensServicoConcluidasAction"
+				path="/jsp/atendimentopublico/ordemservico/resumo_boletim_ordens_servico_concluidas.jsp" />
+		</action>
+	</action-mappings>
+</struts-config>

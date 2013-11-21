@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.faturamento.MovimentoContaImpostoDeduzido" table="faturamento.mov_conta_imposto_dedz">
+		<id name="id" type="java.lang.Integer" column="mcir_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_mov_conta_imposto_dedz</param>
+			</generator>
+		</id>
+		<property name="descricaoImposto" type="java.lang.String" column="mcir_dsimposto" not-null="true" length="30"/>
+		<property name="percentualAliquota" type="java.math.BigDecimal" column="mcir_pcaliquota" not-null="true" length="3"/>
+		<property name="valorImposto" type="java.math.BigDecimal" column="mcir_vlimposto" not-null="true" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="mcir_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to MovimentoContaPrefaturada -->
+		<many-to-one name="movimentoContaPrefaturada" class="gcom.faturamento.MovimentoContaPrefaturada" not-null="true">
+			<column name="mcpf_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to MovimentoContaPrefaturada -->
+		<many-to-one name="impostoTipo" class="gcom.faturamento.ImpostoTipo" not-null="true">
+			<column name="imtp_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

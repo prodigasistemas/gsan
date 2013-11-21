@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.unidade.UnidadeRepavimentadoraCustoPavimentoCalcada" table="cadastro.unid_repav_custo_pav_cal">
+		<id name="id" type="java.lang.Integer" column="urcc_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_unid_repav_custo_pav_cal</param>
+			</generator>
+		</id>
+		
+		<property name="dataVigenciaInicial" type="java.sql.Date" column="urcc_dtvigenciacalinicio" length="4"/>
+		
+		<property name="dataVigenciaFinal" type="java.sql.Date" column="urcc_dtvigenciacalfim" length="4"/>
+		
+		<property name="valorPavimento" type="java.math.BigDecimal" column="urcc_vlpavcal" length="13" not-null="true"/>
+		
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="urcc_tmultimaalteracao" length="8" not-null="true"/>
+		
+		<!-- bi-directional many-to-one association to UnidadeOrganizacional -->
+		<many-to-one name="unidadeRepavimentadora" class="gcom.cadastro.unidade.UnidadeOrganizacional" not-null="true">
+			<column name="unid_idrepavimentadora"/>
+		</many-to-one>
+		
+		<!-- bi-directional many-to-one association to PavimentoCalcada -->
+		<many-to-one name="pavimentoCalcada" class="gcom.cadastro.imovel.PavimentoCalcada" not-null="true">
+			<column name="pcal_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

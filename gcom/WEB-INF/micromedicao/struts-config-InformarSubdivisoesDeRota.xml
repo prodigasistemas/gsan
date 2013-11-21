@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="InformarSubdivisoesDeRotaActionForm"
+			type="gcom.gui.micromedicao.InformarSubdivisoesDeRotaActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	
+	<action-mappings>
+		<action name="InformarSubdivisoesDeRotaActionForm"  
+			type="gcom.gui.micromedicao.ExibirInformarSubdivisoesDeRotaAction" 
+			validate="true"	
+			scope="session"	
+			path="/exibirInformarSubdivisoesDeRotaAction">
+			<forward name="exibirInformarSubdivisoesDeRotaAction" path="/jsp/micromedicao/rota_informar_subdivisao.jsp" />
+		</action>
+		
+		<action name="InformarSubdivisoesDeRotaActionForm" 
+			type="gcom.gui.micromedicao.InformarSubdivisoesDeRotaAction" 
+			validate="true"	
+			scope="session"	
+			path="/informarSubdivisoesDeRotaAction">
+		</action>
+		
+		<action name="InformarSubdivisoesDeRotaActionForm"  
+			type="gcom.gui.micromedicao.ExibirAlterarSubdivisoesDeRotaAction" 
+			validate="true"	
+			scope="session"	
+			path="/exibirAlterarSubdivisoesDeRotaAction">
+			<forward name="exibirAlterarSubdivisoesDeRotaAction" path="/jsp/micromedicao/rota_alterar_subdivisao.jsp" />
+		</action>
+		
+		<action name="InformarSubdivisoesDeRotaActionForm" 
+			type="gcom.gui.micromedicao.AlterarSubdivisoesDeRotaAction" 
+			validate="true"	
+			scope="session"	
+			path="/alterarSubdivisoesDeRotaAction">
+		</action>
+	</action-mappings>
+	
+</struts-config>

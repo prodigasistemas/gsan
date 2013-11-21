@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cadastro.EmpresaContratoCadastroAtributo" table="cadastro.empr_contrato_cad_atrib">
+		<id name="id" type="java.lang.Integer" column="ecca_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="valorAtualizacaoAtributo" type="java.math.BigDecimal" column="ecca_vlatualizacao" not-null="true" length="15"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ecca_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Atributo -->
+		<many-to-one name="atributo" class="gcom.seguranca.Atributo" not-null="true">
+			<column name="atrb_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to EmpresaContratoCadastro -->
+		<many-to-one name="empresaContratoCadastro" class="gcom.cadastro.EmpresaContratoCadastro" not-null="true">
+			<column name="eccd_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

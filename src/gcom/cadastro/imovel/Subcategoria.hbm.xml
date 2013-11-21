@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.imovel.Subcategoria" table="cadastro.subcategoria">
+		<id name="id" type="java.lang.Integer" column="scat_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_subcategoria</param>
+			</generator>
+		</id>
+		<property name="codigo" type="int" column="scat_cdsubcategoria" not-null="true" length="4"/>
+		<property name="descricao" type="java.lang.String" column="scat_dssubcategoria" not-null="true" length="50"/>
+		<property name="indicadorUso" type="java.lang.Short" column="scat_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="scat_tmultimaalteracao" length="8"/>
+		<property name="codigoTarifaSocial" type="java.lang.String" column="scat_cdtarifasocial" length="1"/>
+		<property name="numeroFatorFiscalizacao" type="short" column="scat_nnfatorfiscalizacao" not-null="true" length="2"/>
+		<property name="indicadorTarifaConsumo" type="java.lang.Short" column="scat_ictarifaconsumo" not-null="false" length="2"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="scat_dsabreviada" length="20"/>
+		<property name="codigoGrupoSubcategoria" type="int" column="scat_cdgruposubcategoria" length="4"/>
+		<property name="indicadorSazonalidade" type="java.lang.Short" column="scat_icsazonalidade" not-null="true" length="2"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to ImovelSubcategoria 
+    <set
+        name="imovelSubcategorias"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="scat_id" />
+        </key>
+        <one-to-many 
+            class="gcom.cadastro.ImovelSubcategoria"
+        />
+    </set>
+    -->
+		<!-- bi-directional many-to-one association to Categoria -->
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

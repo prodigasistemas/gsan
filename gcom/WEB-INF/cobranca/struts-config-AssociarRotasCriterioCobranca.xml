@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="AssociarConjuntoRotasCriterioCobrancaActionForm"
+			type="gcom.gui.cobranca.AssociarConjuntoRotasCriterioCobrancaActionForm" />
+	</form-beans>
+	<global-forwards />
+	<action-mappings>
+
+		<action name="AssociarConjuntoRotasCriterioCobrancaActionForm"
+				type="gcom.gui.cobranca.ExibirAssociarRotasCriterioCobrancaAction"
+				validate="true" 
+				scope="request"
+				path="/exibirAssociarRotasCriterioCobrancaAction">
+			<forward name="exibirAssociarRotasCriterioCobranca"
+					 path="/jsp/cobranca/associar_rota_criterio_cobranca.jsp" />
+		</action>
+		<action name="AssociarConjuntoRotasCriterioCobrancaActionForm"
+				type="gcom.gui.cobranca.SelecionarAssociarConjuntoRotasCriterioCobrancaAction"
+				validate="true" 
+				scope="request"
+				path="/selecionarAssociarConjuntoRotasCriterioCobrancaAction">
+				
+				<forward name="exibirAssociarRotasCriterioCobrancaSelecionar"
+					 path="/exibirAssociarRotasCriterioCobrancaAction.do?atualizarQtd=OK" />
+		</action>
+		<action name="AssociarConjuntoRotasCriterioCobrancaActionForm"
+				type="gcom.gui.cobranca.DesassociarConjuntoRotasCriterioCobrancaAction"
+				validate="true" 
+				scope="request"
+				path="/desassociarConjuntoRotasCriterioCobrancaAction">
+				
+		</action>
+		<action name="AssociarConjuntoRotasCriterioCobrancaActionForm"
+				type="gcom.gui.cobranca.AssociarConjuntoRotasCriterioCobrancaAction"
+				validate="true" 
+				scope="request"
+				path="/associarConjuntoRotasCriterioCobrancaAction">
+		</action>
+
+	</action-mappings>
+	<message-resources null="false" parameter="gcom.properties.application" />
+</struts-config>

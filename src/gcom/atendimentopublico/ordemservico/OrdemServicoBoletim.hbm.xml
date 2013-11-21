@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+    
+<hibernate-mapping>
+<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+
+<class 
+    name="gcom.atendimentopublico.ordemservico.OrdemServicoBoletim" 
+    table="atendimentopublico.ordem_servico_boletim"
+>
+    
+    <id name="id" type="java.lang.Integer" column="orse_id">
+		<generator class="assigned" />
+	</id>
+
+    <property
+        name="indicadorPavimento"
+        type="java.lang.Short"
+        column="orbo_icpavimento"
+        not-null="true"
+        length="2"
+    />
+    <property
+        name="numeroReposicaoAsfalto"
+        type="java.math.BigDecimal"
+        column="orbo_nnrepasfalto"
+        length="13"
+    />
+    <property
+        name="numeroReposicaoParalelo"
+        type="java.math.BigDecimal"
+        column="orbo_nnrepparalelo"
+        length="13"
+    />
+ 	<property
+        name="numeroReposicaoCalcada"
+        type="java.math.BigDecimal"
+        column="orbo_nnrepcalcada"
+        length="13"
+    />
+    <property
+        name="ultimaAlteracao"
+        type="java.sql.Timestamp"
+        column="orbo_tmultimaalteracao"
+        not-null="true"
+        length="8"
+    />
+
+    <!-- Associations -->
+  
+      <one-to-one
+        name="ordemServico"
+        class="gcom.atendimentopublico.ordemservico.OrdemServico"
+        outer-join="auto"
+        constrained="true"
+    />
+
+</class>
+</hibernate-mapping>

@@ -1,0 +1,123 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.gerencial.cadastro.UnResumoIndicadorLigacaoEconomia" table="cadastro.un_resi_lig_eco">
+		<composite-id name="comp_id" class="gcom.gerencial.cadastro.UnResumoIndicadorLigacaoEconomiaPK">
+			<key-property name="id" column="rele_id" type="java.lang.Integer" length="4"/>
+			<key-property name="idMesAno" column="rele_idma" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<property name="anoMesReferencia" type="int" column="rele_amreferencia" not-null="true" length="4"/>
+		<property name="anoReferencia" type="java.lang.String" column="rele_anoreferencia" not-null="true" length="-1"/>
+		<property name="mesReferencia" type="java.lang.String" column="rele_mesreferencia" not-null="true" length="-1"/>
+		<property name="codigoSetorComercial" type="int" column="rele_cdsetorcomercial" not-null="true" length="4"/>
+		<property name="numeroQuadra" type="int" column="rele_nnquadra" not-null="true" length="4"/>
+		<property name="indicadorHidrometro" type="short" column="rele_ichidrometro" not-null="true" length="2"/>
+		<property name="indicadorVolumeFixadoAgua" type="short" column="rele_icvolumefixadoagua" not-null="true" length="2"/>
+		<property name="indicadorVolumeFixadoEsgoto" type="short" column="rele_icvolumefixadoesgoto" not-null="true" length="2"/>
+		<property name="indicadorPoco" type="short" column="rele_icpoco" not-null="true" length="2"/>
+		<property name="indicadorHidrometroPoco" type="short" column="rele_ichidrometropoco" not-null="true" length="2"/>
+		<property name="quantidadeLigacoesAtivasAgua" type="int" column="rele_qtligacoesativasagua" not-null="true" length="4"/>
+		<property name="quantidadeLigacoesAtivasAguaMesAno" type="int" column="rele_qtligacoesativasaguama" not-null="true" length="4"/>
+		<property name="quantidadeLigacoesAtivasEsgoto" type="int" column="rele_qtligacoesativasesgoto" not-null="true" length="4"/>
+		<property name="quantidadeLigacoesAtivasEsgotoMesAno" type="int" column="rele_qtligacoesativasesgotoma" not-null="true" length="4"/>
+		<property name="quantidadeEconomiasTotaisAgua" type="int" column="rele_qteconomiastotaisagua" not-null="true" length="4"/>
+		<property name="quantidadeEconomiasTotaisAguaMesAno" type="int" column="rele_qteconomiastotaisaguama" not-null="true" length="4"/>
+		<property name="quantidadeEconomiasTotaisEsgoto" type="int" column="rele_qteconomiastotaisesgoto" not-null="true" length="4"/>
+		<property name="quantidadeEconomiasTotaisEsgotoMesAno" type="int" column="rele_qteconomiastotaisesgotoma" not-null="true" length="4"/>
+		<property name="quantidadeClientesAguaPotenciaisFactiveis" type="int" column="rele_qtcliaguapotenciaisfact" not-null="true" length="4"/>
+		<property name="quantidadeClientesAguaLigadosCortados" type="int" column="rele_qtcliagualigadoscortados" not-null="true" length="4"/>
+		<property name="quantidadeClientesAguaSuprimidos" type="int" column="rele_qtclientesaguasuprimidos" not-null="true" length="4"/>
+		<property name="quantidadeEconomiasAguaPotenciaisFactiveis" type="int" column="rele_qteconaguapotenciaisfact" not-null="true" length="4"/>
+		<property name="quantidadeEconomiasAguaLigadosCortados" type="int" column="rele_qteconagualigadoscortados" not-null="true" length="4"/>
+		<property name="quantidadeEconomiasAguaSuprimidos" type="int" column="rele_qteconomiasaguasuprimidos" not-null="true" length="4"/>
+		<property name="quantidadeClientesEsgotoPotenciaisFactiveis" type="int" column="rele_qtcliesgotopotenciaisfact" not-null="true" length="4"/>
+		<property name="quantidadeClientesEsgotoLigados" type="int" column="rele_qtclientesesgotoligados" not-null="true" length="4"/>
+		<property name="quantidadeClientesEsgotoLigadosForaUso" type="int" column="rele_qtcliesgotoligadosforauso" not-null="true" length="4"/>
+		<property name="quantidadeEconomiasEsgotoPotenciaisFactiveis" type="int" column="rele_qteconesgpotenciaisfact" not-null="true" length="4"/>
+		<property name="quantidadeEconomiasEsgotoLigados" type="int" column="rele_qteconomiasesgotoligados" not-null="true" length="4"/>
+		<property name="quantidadeEconomiasEsgotoLigadosForaUso" type="int" column="rele_qteconesgligadosforauso" not-null="true" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="rele_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- end of derived association(s) -->
+		<!-- bi-directional many-to-one association to GSubcategoria -->
+		<many-to-one name="gerSubCategoria" class="gcom.gerencial.cadastro.imovel.GSubcategoria" not-null="true">
+			<column name="scat_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GClienteTipo -->
+		<many-to-one name="gerClienteTipo" class="gcom.gerencial.cadastro.cliente.GClienteTipo" not-null="true">
+			<column name="cltp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoAguaSituacao -->
+		<many-to-one name="gerLigacaoAguaSituacao" class="gcom.gerencial.atendimentopublico.ligacaoagua.GLigacaoAguaSituacao" not-null="true">
+			<column name="last_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GQuadra -->
+		<many-to-one name="gerQuadra" class="gcom.gerencial.cadastro.localidade.GQuadra" not-null="true">
+			<column name="qdra_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoEsgotoSituacao -->
+		<many-to-one name="gerLigacaoEsgotoSituacao" class="gcom.gerencial.atendimentopublico.ligacaoesgoto.GLigacaoEsgotoSituacao" not-null="true">
+			<column name="lest_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GGerenciaRegional -->
+		<many-to-one name="gerGerenciaRegional" class="gcom.gerencial.cadastro.localidade.GGerenciaRegional" not-null="true">
+			<column name="greg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GSetorComercial -->
+		<many-to-one name="gerSetorComercial" class="gcom.gerencial.cadastro.localidade.GSetorComercial" not-null="true">
+			<column name="stcm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoAguaPerfil -->
+		<many-to-one name="gerLigacaoAguaPerfil" class="gcom.gerencial.atendimentopublico.ligacaoagua.GLigacaoAguaPerfil" not-null="true">
+			<column name="lapf_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GImovelPerfil -->
+		<many-to-one name="gerImovelPerfil" class="gcom.gerencial.cadastro.imovel.GImovelPerfil" not-null="true">
+			<column name="iper_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GUnidadeNegocio -->
+		<many-to-one name="gerUnidadeNegocio" class="gcom.gerencial.cadastro.localidade.GUnidadeNegocio" not-null="true">
+			<column name="uneg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLocalidade -->
+		<many-to-one name="gerLocalidadeElo" class="gcom.gerencial.cadastro.localidade.GLocalidade" not-null="true">
+			<column name="loca_cdelo"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLocalidade -->
+		<many-to-one name="gerLocalidade" class="gcom.gerencial.cadastro.localidade.GLocalidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoEsgotoPerfil -->
+		<many-to-one name="gerLigacaoEsgotoPerfil" class="gcom.gerencial.atendimentopublico.ligacaoesgoto.GLigacaoEsgotoPerfil" not-null="true">
+			<column name="lepf_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GConsumoTarifa -->
+		<many-to-one name="gerConsumoTarifa" class="gcom.gerencial.faturamento.GConsumoTarifa" not-null="true">
+			<column name="cstf_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GEsferaPoder -->
+		<many-to-one name="gerEsferaPoder" class="gcom.gerencial.cadastro.cliente.GEsferaPoder" not-null="true">
+			<column name="epod_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GCategoria -->
+		<many-to-one name="gerCategoria" class="gcom.gerencial.cadastro.imovel.GCategoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GRota -->
+		<many-to-one name="gerRota" class="gcom.gerencial.micromedicao.GRota" not-null="true">
+			<column name="rota_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

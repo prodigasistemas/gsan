@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.ContaRevisaoFaixaValor" table="faturamento.conta_revisao_fx_valor">
+		<id name="id" type="java.lang.Integer" column="crfv_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_conta_revisao_fx_valor</param>
+			</generator>
+		</id>
+		<property name="valorFaixaInicio" type="java.math.BigDecimal" column="crfv_vlfaixainicio" not-null="true" length="8"/>
+		<property name="valorFaixaFim" type="java.math.BigDecimal" column="crfv_vlfaixafim" not-null="true" length="8"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="crfv_tmultimaalteracao" length="8"/>
+	</class>
+</hibernate-mapping>

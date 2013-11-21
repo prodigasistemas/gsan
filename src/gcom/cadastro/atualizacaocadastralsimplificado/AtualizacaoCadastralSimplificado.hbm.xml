@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificado" table="cadastro.atlz_cad_simplificado">
+		<id name="id" type="java.lang.Integer" column="acsi_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_atlz_cad_simplificado</param>
+			</generator>
+		</id>
+		<property name="nome" column="acsi_nmarquivo" type="java.lang.String" length="50"/>
+		<property name="comentario" column="acsi_dscomentario" type="java.lang.String" length="100"/>
+		<property name="qtdeTotalImoveis" column="acsi_qttotalimoveis" type="java.lang.Integer"/>
+		<property name="qtdeImoveisComHidrometro" column="acsi_qtimoveiscomhidrometro" type="java.lang.Integer"/>
+		<property name="qtdeImoveisComHidrometroAtualizados" column="acsi_qtimoveiscomhidmtatlz" type="java.lang.Integer"/>
+		<property name="qtdeImoveisSemHidrometro" column="acsi_qtimoveissemhidrometro" type="java.lang.Integer"/>
+		<property name="qtdeImoveisComEconomiasAtualizados" column="acsi_qtimoveiscomeconsatlz" type="java.lang.Integer"/>
+		<property name="qtdeImoveisComMedidorEnergiaAtualizados" column="acsi_qtimoveiscommedenergatual" type="java.lang.Integer"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="acsi_tmultimaalteracao" length="8" insert="false"/>
+		<many-to-one name="usuario" column="usur_id" class="gcom.seguranca.acesso.usuario.Usuario"/>
+		<one-to-one name="binario" class="gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoBinario" outer-join="auto"/>
+		<set name="linhas" order-by="acsl_nnlinha">
+			<key>
+				<column name="acsi_id"/>
+			</key>
+			<one-to-many class="gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoLinha"/>
+		</set>
+	</class>
+</hibernate-mapping>

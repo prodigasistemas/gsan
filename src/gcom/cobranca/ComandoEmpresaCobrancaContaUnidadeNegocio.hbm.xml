@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+		Created by the Middlegen Hibernate plugin
+		
+		http://boss.bekk.no/boss/middlegen/
+		http://hibernate.sourceforge.net/
+	-->
+	<class name="gcom.cobranca.ComandoEmpresaCobrancaContaUnidadeNegocio" table="cobranca.cmd_empr_cobr_conta_uneg">
+		<composite-id name="comp_id" class="gcom.cobranca.ComandoEmpresaCobrancaContaUnidadeNegocioPK">
+			<key-property name="comandoEmpresaCobrancaContaId" column="cecc_id" type="java.lang.Integer" length="4"/>
+			<key-property name="unidadeNegocioId" column="uneg_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" not-null="true" column="ceun_tmultimaalteracao" length="8"/>
+		
+		<many-to-one name="unidadeNegocio" class="gcom.cadastro.localidade.UnidadeNegocio" not-null="true"
+			 insert="false" update="false">
+			<column name="uneg_id"/>
+		</many-to-one>
+		
+		<many-to-one name="comandoEmpresaCobrancaConta" class="gcom.cobranca.ComandoEmpresaCobrancaConta" not-null="true"
+			 insert="false" update="false">
+			<column name="cecc_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

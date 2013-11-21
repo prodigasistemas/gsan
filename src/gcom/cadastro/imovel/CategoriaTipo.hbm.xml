@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.imovel.CategoriaTipo" table="cadastro.categoria_tipo">
+		<id name="id" type="java.lang.Integer" column="cgtp_id">
+			<generator class="sequence">
+				<param name="sequence">seguranca.sequence_categoria_tipo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="cgtp_dscategoriatipo" length="20"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="cgtp_dsabreviado" length="5"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cgtp_tmultimaalteracao" length="8"/>
+	</class>
+</hibernate-mapping>

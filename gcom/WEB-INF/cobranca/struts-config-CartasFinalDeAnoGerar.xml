@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="GerarCartasFinalDeAnoActionForm"
+			type="gcom.gui.cobranca.GerarCartasFinalDeAnoActionForm" />
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<action name="GerarCartasFinalDeAnoActionForm"
+			type="gcom.gui.cobranca.ExibirGerarCartasFinalDeAnoAction"
+			validate="true" scope="session"
+			path="/exibirGerarCartasFinalDeAnoAction">
+			<forward name="exibirGerarCartasFinalDeAno"
+				path="/jsp/cobranca/cartas_final_de_ano_gerar.jsp" />
+		</action>
+		<action name="GerarCartasFinalDeAnoActionForm"
+			type="gcom.gui.cobranca.GerarCartasFinalDeAnoAction"
+			validate="true" scope="session"
+			path="/gerarCartasFinalDeAnoAction" />
+
+	</action-mappings>
+
+
+</struts-config>

@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.seguranca.acesso.Operacao" table="seguranca.operacao">
+		<id name="id" type="java.lang.Integer" column="oper_id">
+			<generator class="sequence">
+				<param name="sequence">seguranca.seq_operacao</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="oper_dsoperacao" length="60"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="oper_dsabreviado" length="10"/>
+		<property name="caminhoUrl" type="java.lang.String" column="oper_dscaminhourl" length="100"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="oper_tmultimaalteracao" length="8"/>
+   		<property
+        	name="indicadorRegistraTransacao"
+	        type="java.lang.Short"
+    	    column="oper_icregistratransacao"
+        	length="2"
+	        not-null="true"
+    	/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Funcionalidade -->
+		<many-to-one name="funcionalidade" class="gcom.seguranca.acesso.Funcionalidade" not-null="true">
+			<column name="fncd_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Funcionalidade -->
+		<many-to-one name="operacaoTipo" class="gcom.seguranca.acesso.OperacaoTipo" not-null="true">
+			<column name="optp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Funcionalidade -->
+		<many-to-one name="idOperacaoPesquisa" class="gcom.seguranca.acesso.Operacao" not-null="true">
+			<column name="oper_idoperacaopesquisa"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Funcionalidade -->
+		<many-to-one name="tabelaColuna" class="gcom.seguranca.transacao.TabelaColuna" not-null="true">
+			<column name="tbco_id"/>
+		</many-to-one>
+		<many-to-one name="argumentoPesquisa" class="gcom.seguranca.transacao.TabelaColuna" not-null="true">
+			<column name="tbco_idargumento"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to OperacaoEfetuada -->
+		<!-- 
+    <set
+        name="operacaoEfetuadas"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="oper_id" />
+        </key>
+        <one-to-many 
+            class="gcom.OperacaoEfetuada"
+        />
+    </set>
+     -->
+		<!-- bi-directional one-to-many association to GrupoFuncionalidadeOperacao -->
+		<!--
+    <set
+        name="grupoFuncionalidadeOperacaos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="oper_id" />
+        </key>
+        <one-to-many 
+            class="gcom.GrupoFuncionalidadeOperacao"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to PermissaoEspecial -->
+		<!--
+    <set
+        name="permissaoEspecials"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="oper_id" />
+        </key>
+        <one-to-many 
+            class="gcom.PermissaoEspecial"
+        />
+    </set>
+	-->
+	</class>
+</hibernate-mapping>

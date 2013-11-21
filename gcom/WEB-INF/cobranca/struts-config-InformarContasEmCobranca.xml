@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="InformarContasEmCobrancaActionForm"
+			type="gcom.gui.cobranca.InformarContasEmCobrancaActionForm" />					
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0796] INFORMAR UNIDADE NEGÓCIO TESTEMUNHA Auhtor: Rafael Corrêa Data:16/05/2008-->
+		<action name="InformarContasEmCobrancaActionForm"
+			type="gcom.gui.cobranca.ExibirInformarContasEmCobrancaAction"
+			validate="true" 
+			scope="session"
+			path="/exibirInformarContasEmCobrancaAction">
+			
+			<forward name="exibirInformarContasEmCobranca"
+				path="/jsp/cobranca/contas_em_cobranca_informar.jsp" />
+		</action>
+		
+		<action name="InformarContasEmCobrancaActionForm"
+			type="gcom.gui.cobranca.InformarContasEmCobrancaAction"
+			validate="true" scope="request"
+			path="/informarContasEmCobrancaAction">
+		</action>
+		
+	</action-mappings>
+
+</struts-config>

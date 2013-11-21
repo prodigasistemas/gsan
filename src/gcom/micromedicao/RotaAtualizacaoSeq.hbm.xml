@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+		Created by the Middlegen Hibernate plugin
+		
+		http://boss.bekk.no/boss/middlegen/
+		http://hibernate.sourceforge.net/
+	-->
+	<class name="gcom.micromedicao.RotaAtualizacaoSeq" table="micromedicao.rota_atualizacao_seq">
+		<id name="id" type="java.lang.Integer" column="rasq_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_rota_atualizacao_seq</param>
+			</generator>
+		</id>
+		<property name="amFaturamento" type="java.lang.Integer" column="rasq_amfaturamento" not-null="true" length="10"/>
+		<property name="sequencialRota" type="java.lang.Integer" column="rasq_seqrota" not-null="true" length="10"/>
+		<property name="dtUltimaAlteracao" type="java.sql.Timestamp" column="rasq_tmultimaalteracao" not-null="true" length="29"/>
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Rota -->
+		<many-to-one name="rota" class="gcom.micromedicao.Rota" not-null="true">
+			<column name="rota_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

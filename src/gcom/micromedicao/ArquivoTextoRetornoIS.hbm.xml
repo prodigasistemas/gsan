@@ -1,0 +1,111 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+    
+<hibernate-mapping>
+<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+
+<class 
+    name="gcom.micromedicao.ArquivoTextoRetornoIS" 
+    table="micromedicao.arquivo_texto_retorno_is"
+>
+
+    <id
+        name="id"
+        type="java.lang.Integer"
+        column="txis_id"
+    >
+        <generator class="sequence">
+        	<param name="sequence">micromedicao.seq_arquivo_texto_retorno_is</param>
+    	</generator>
+    </id>
+
+    <property
+        name="anoMesReferencia"
+        type="java.lang.Integer"
+        column="txis_amreferencia"
+        not-null="true"
+        length="4"
+    />
+    <property
+        name="codigoSetorComercial"
+        type="java.lang.Integer"
+        column="txis_cdsetorcomercial"
+        not-null="true"
+        length="4"
+    />
+    <property
+        name="codigoRota"
+        type="java.lang.Integer"
+        column="txis_cdrota"
+        not-null="true"
+        length="4"
+    />
+
+    <property
+        name="nomeArquivo"
+        type="java.lang.String"
+        column="txis_nmarquivo"
+        not-null="true"
+        length="40"
+    />
+    
+    <property
+        name="tempoRetornoArquivo"
+        type="java.sql.Timestamp"
+        column="txis_tmretornoarquivo"
+        length="8"
+    />
+    <property
+        name="arquivoTexto"
+        type="java.lang.String"
+        column="txis_artexto"
+        not-null="true"
+        length="-1"
+    />
+    
+	<property
+        name="tipoFinalizacao"
+        type="short"
+        column="tipo_finalizacao"
+        not-null="true"
+        length="2"
+    />
+    
+    <!-- property
+        name="ultimaAlteracao"
+        type="java.sql.Timestamp"
+        column="txre_tmultimaalteracao"
+        not-null="false"
+        length="8"
+    / -->
+    
+
+    <!-- Associations -->
+  
+    <!-- bi-directional many-to-one association to Localidade -->
+    <many-to-one
+        name="localidade"
+        class="gcom.cadastro.localidade.Localidade"
+        not-null="true"
+    >
+        <column name="loca_id" />
+    </many-to-one>
+    <!-- bi-directional many-to-one association to FaturamentoGrupo -->
+    <many-to-one
+        name="faturamentoGrupo"
+        class="gcom.faturamento.FaturamentoGrupo"
+        not-null="true"
+    >
+        <column name="ftgr_id" />
+    </many-to-one>
+	
+</class>
+</hibernate-mapping>
+

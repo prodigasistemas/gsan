@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cobranca.CriterioSituacaoLigacaoEsgoto" table="cobranca.crit_situacao_lig_esgoto">
+		<composite-id name="comp_id" class="gcom.cobranca.CriterioSituacaoLigacaoEsgotoPK">
+			<!-- bi-directional many-to-one association to CobrancaCriterio -->
+			<key-many-to-one name="cobrancaCriterio" class="gcom.cobranca.CobrancaCriterio">
+				<column name="cbct_id"/>
+			</key-many-to-one>
+			<!-- bi-directional many-to-one association to LigacaoEsgotoSituacao -->
+			<key-many-to-one name="ligacaoEsgotoSituacao" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao">
+				<column name="lest_id"/>
+			</key-many-to-one>
+		</composite-id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="csle_tmultimaalteracao" length="8"/>
+	</class>
+</hibernate-mapping>

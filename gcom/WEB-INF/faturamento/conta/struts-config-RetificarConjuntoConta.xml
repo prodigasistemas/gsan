@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="RetificarConjuntoContaActionForm" type="gcom.gui.faturamento.conta.RetificarConjuntoContaActionForm" />						
+		<form-bean name="RetificarContasPagasSemDebitoCreditoActionForm" type="gcom.gui.faturamento.conta.RetificarContasPagasSemDebitoCreditoActionForm" />	
+		<form-bean name="InserirDebitosContasComValorFaixasErradasActionForm" type="gcom.gui.faturamento.conta.InserirDebitosContasComValorFaixasErradasActionForm" />											
+	</form-beans>
+
+	<!--******************* P�GINAS GLOBAIS *******************-->
+	<global-forwards />
+  <action-mappings>
+	   <action name="RetificarConjuntoContaActionForm"
+			type="gcom.gui.faturamento.conta.ExibirRetificarConjuntoContaAction"
+			scope="session" validate="true"
+			path="/exibirRetificarConjuntoContaAction">
+			<forward name="exibirRetificarConjuntoConta"
+				path="/jsp/faturamento/conta/retificar_conjunto_conta.jsp" />
+		</action>
+		<action name="RetificarConjuntoContaActionForm"
+			type="gcom.gui.faturamento.conta.RetificarConjuntoContaAction" scope="session"
+			validate="true" path="/retificarConjuntoContaAction">
+			<forward name="exibirManterConta"
+				path="/jsp/faturamento/conta/retificar_conjunto_conta.jsp" />
+		</action>
+		
+		<action name="RetificarContasPagasSemDebitoCreditoActionForm"
+			type="gcom.gui.faturamento.conta.ExibirRetificarContasPagasSemDebitoCreditoAction"
+			scope="session" validate="true"
+			path="/exibirRetificarContasPagasSemDebitoCreditoAction">
+			<forward name="exibirRetificarContasPagas"
+				path="/jsp/faturamento/conta/retificar_contas_pagas_sem_debito_credito.jsp" />
+		</action>
+		<action name="RetificarContasPagasSemDebitoCreditoActionForm"
+			type="gcom.gui.faturamento.conta.RetificarContasPagasSemDebitoCreditoAction" scope="session"
+			validate="true" path="/retificarContasPagasSemDebitoCreditoAction">
+		</action>
+		
+		<action name="InserirDebitosContasComValorFaixasErradasActionForm"
+			type="gcom.gui.faturamento.conta.ExibirInserirDebitosContasComValorFaixasErradasAction"
+			scope="session" validate="true"
+			path="/exibirInserirDebitosContasComValorFaixasErradasAction">
+			<forward name="exibirInserirDebitosContas"
+				path="/jsp/faturamento/conta/inserir_debitos_contas_valor_faixas_erradas.jsp" />
+		</action>
+		<action name="InserirDebitosContasComValorFaixasErradasActionForm"
+			type="gcom.gui.faturamento.conta.InserirDebitosContasComValorFaixasErradasAction" scope="session"
+			validate="true" path="/inserirDebitosContasComValorFaixasErradasAction">
+		</action>
+		
+		
+		
+		</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

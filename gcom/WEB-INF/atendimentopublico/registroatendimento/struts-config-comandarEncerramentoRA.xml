@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="ComandarEncerramentoRegistroAtendimentoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ComandarEncerramentoRegistroAtendimentoActionForm" />					
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0735] Comandar Encerramento de Registros de Atendimento Auhtor: Rafael Corrêa Data:25/01/2008-->
+		<action name="ComandarEncerramentoRegistroAtendimentoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirComandarEncerramentoRegistroAtendimentoAction"
+			validate="true" scope="session"
+			path="/exibirComandarEncerramentoRegistroAtendimentoAction">
+			<forward name="exibirComandarEncerramentoRA"
+				path="/jsp/atendimentopublico/registroatendimento/encerramento_registro_atendimento_comandar.jsp" />
+		</action>
+		<action name="ComandarEncerramentoRegistroAtendimentoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ComandarEncerramentoRegistroAtendimentoAction"
+			validate="true" scope="request"
+			path="/comandarEncerramentoRegistroAtendimentoAction">
+		</action>
+
+	</action-mappings>
+
+</struts-config>

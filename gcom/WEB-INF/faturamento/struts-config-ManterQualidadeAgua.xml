@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="AtualizarQualidadeAguaActionForm"
+			type="gcom.gui.faturamento.AtualizarQualidadeAguaActionForm" />
+
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+
+		<form-bean name="FiltrarQualidadeAguaActionForm"
+			type="gcom.gui.faturamento.FiltrarQualidadeAguaActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+
+		<action name="AtualizarQualidadeAguaActionForm"
+			type="gcom.gui.faturamento.ExibirAtualizarQualidadeAguaAction"
+			validate="false" input="/exibirAtualizarQualidadeAguaAction.do"
+			scope="session" path="/exibirAtualizarQualidadeAguaAction">
+			<forward name="atualizarQualidadeAguaActionDadosAction"
+				path="/atualizarQualidadeAguaWizardAction.do?action=exibirAtualizarQualidadeAguaDadosAction" />
+		</action>
+
+		<action name="AtualizarQualidadeAguaActionForm"
+			type="gcom.gui.faturamento.AtualizarQualidadeAguaWizardAction"
+			validate="false" parameter="action" scope="session"
+			path="/atualizarQualidadeAguaWizardAction">
+
+			<forward name="exibirAtualizarQualidadeAguaDadosAction"
+				path="/jsp/faturamento/qualidade_agua_dados_atualizar.jsp" />
+
+			<forward name="exibirAtualizarQualidadeAguaAnaliseAction"
+				path="/jsp/faturamento/qualidade_agua_analise_atualizar.jsp" />
+
+		</action>
+
+		<action
+			type="gcom.gui.faturamento.CancelarAtualizarQualidadeAguaAction"
+			validate="false" path="/cancelarAtualizarQualidadeAguaAction" />
+
+		<action name="AtualizarQualidadeAguaActionForm"
+			type="gcom.gui.faturamento.ExibirManterQualidadeAguaAction"
+			validate="false" scope="session"
+			path="/exibirManterQualidadeAguaAction">
+
+			<forward name="manterQualidadeAgua"
+				path="/jsp/faturamento/qualidade_agua_manter.jsp" />
+
+			<forward name="exibirAtualizarQualidadeAgua"
+				path="/exibirAtualizarQualidadeAguaAction.do" />
+		</action>
+
+		<action
+			type="gcom.gui.faturamento.CancelarAtualizarQualidadeAguaAction"
+			validate="false" path="/cancelarAtualizarQualidadeAguaAction" />
+			
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.faturamento.RemoverQualidadeAguaAction"
+			validate="false" scope="session"
+			path="/removerQualidadeAguaAction">
+
+		</action>
+
+		<action name="FiltrarQualidadeAguaActionForm"
+			type="gcom.gui.relatorio.faturamento.GerarRelatorioQualidadeAguaAction"
+			validate="false" scope="session"
+			path="/gerarRelatorioQualidadeAguaAction" />
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

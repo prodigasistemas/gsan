@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.seguranca.Atributo" table="seguranca.atributo">
+		<id name="id" type="java.lang.Integer" column="atrb_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="nomeAtributo" type="java.lang.String" column="atrb_nmatributo" not-null="true" length="50"/>
+		<property name="indicadorVisita" type="java.lang.Short" column="atrb_icvisita" not-null="true" length="2"/>
+		<property name="numeroOrdemEmissao" type="java.lang.Short" column="atrb_nnordememissao" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="atrb_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to FuncionalidadeAtributo -->
+		<set name="funcionalidadeAtributos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="atrb_id"/>
+			</key>
+			<one-to-many class="gcom.seguranca.FuncionalidadeAtributo"/>
+		</set>
+		<!-- bi-directional many-to-one association to AtributoGrupo -->
+		<many-to-one name="atributoGrupo" class="gcom.seguranca.AtributoGrupo" not-null="true">
+			<column name="atgr_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<!--<form-bean name="RelatorioAnalisePerdasCreditosForm"
+			type="gcom.gui.relatorio.cobranca.GerarRelatorioAnalisePerdasCreditosActionForm" />
+		-->
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+
+		<action name="ExibirGerarRelatorioAnalisePerdasCreditosActionForm"
+			type="gcom.gui.relatorio.cobranca.ExibirGerarRelatorioAnalisePerdasCreditosAction"
+			validate="true" 
+			path="/exibirRelatorioAnalisePerdasCreditoAction">
+			<forward name="exibirGerarRelatorio"
+				path="/jsp/relatorio/cobranca/relatorio_analise_perdas_creditos.jsp" />
+		</action>
+		
+		<action name="GerarRelatorioAnalisePerdasCreditosActionForm"
+			type="gcom.gui.relatorio.cobranca.GerarRelatorioAnalisePerdasCreditosAction"
+			path="/gerarRelatorioAnalisePerdasCreditoAction">
+		</action>
+		
+	</action-mappings>
+
+</struts-config>

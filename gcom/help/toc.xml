@@ -1,0 +1,132 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<!DOCTYPE toc PUBLIC "-//Sun Microsystems Inc.//DTD JavaHelp TOC Version 2.0//EN"
+                     "http://java.sun.com/products/javahelp/toc_2_0.dtd">
+
+<toc version="2.0">
+	<tocitem text="Menu GCOM" target="gcom">
+		<tocitem text="Cadastro" target="cadastro">
+			<tocitem text="Cliente" target="cadastroCliente">
+				<tocitem text="Inserir Cliente" target="clienteInserirAbaNomeTipo" />
+				<tocitem text="Manter Cliente" target="clienteManter" />
+			</tocitem>
+			<tocitem text="Imóvel" target="cadastroImovel">
+				<tocitem text="Inserir Imóvel" target="imovelInserirAbaLocalidade" />
+				<tocitem text="Imóvel Manter" target="imovelManter" />
+				<tocitem text="Informar Economia" target="imovelInformarEconomia" />
+				<tocitem text="Alterar Inscrição de Imóvel" target="imovelAlterarInscricao" />
+				<tocitem text="Consultar Relação Cliente e Imóvel" target="imovelConsultarRelacaoCliente" />
+				<tocitem text="Situação do Imóvel" target="cadastroImovel">
+					<tocitem text="Inserir Situação do Imóvel" target="imovelSituacaoInserir" />
+					<tocitem text="Consultar Situação do Imóvel" target="imovelSituacaoConsultar" />
+				</tocitem>
+				<tocitem text="Autorização para Doação Mensal" target="cadastroImovel">
+					<tocitem text="Inserir Autorização para Doação Mensal" target="imovelAutorizacaoDoacaoMensalInserir" />
+					<tocitem text="Manter Autorização para Doação Mensal" target="imovelAutorizacaoDoacaoMensalManter" />
+				</tocitem>
+			</tocitem>
+			<tocitem text="Localização" target="cadastroLocalizacao">
+				<tocitem text="Localidade" target="cadastroLocalizacao">
+					<tocitem text="Localidade Inserir" target="localidadeInserir" />
+					<tocitem text="Localidade Manter" target="localidadeManter" />
+				</tocitem>
+				<tocitem text="Setor Comercial" target="cadastroLocalizacao">
+					<tocitem text="Inserir Setor Comercial" target="setorComercialInserir" />
+					<tocitem text="Manter Setor Comercial" target="setorComercialManter" />
+				</tocitem>
+				<tocitem text="Quadra" target="cadastroLocalizacao">
+					<tocitem text="Inserir Quadra" target="quadraInserir" />
+					<tocitem text="Manter Quadra" target="quadraManter" />
+				</tocitem>
+			</tocitem>
+			<tocitem text="Endereço" target="cadastroEndereco">
+				<tocitem text="Bairro" target="cadastroEndereco">
+					<tocitem text="Inserir Bairro" target="bairroInserir" />
+					<tocitem text="Manter Bairro" target="bairroManter" />
+				</tocitem>
+				<tocitem text="Logradouro" target="cadastroEndereco">
+					<tocitem text="Inserir Logradouro" target="logradouroInserir" />
+					<tocitem text="Manter Logradouro" target="logradouroManter" />
+				</tocitem>
+			</tocitem>
+			<tocitem text="Categoria e Subcategoria" target="cadastroCategoriaSubcategoria">
+				<tocitem text="Categoria" target="cadastroCategoriaSubcategoria">
+					<tocitem text="Inserir Categoria" target="categoriaInserir" />
+					<tocitem text="Manter Categoria" target="categoriaManter" />
+				</tocitem>
+				<tocitem text="Subcategoria" target="cadastroCategoriaSubcategoria">
+					<tocitem text="Inserir Subcategoria" target="subcategoriaInserir" />
+					<tocitem text="Manter Subcategoria" target="subcategoriaManter" />
+				</tocitem>
+			</tocitem>
+			<tocitem text="Tarifa Social" target="cadastroTarifaSocial">
+				<tocitem text="Inserir Tarifa Social" target="tarifaSocialInserirAbaImovel" />
+				<tocitem text="Manter Tarifa Social" target="tarifaSocialInserirAbaImovel" />
+			</tocitem>
+		</tocitem>
+		<tocitem text="Micromedição" target="micromedicao">
+			<tocitem text="Hidrômetro" target="micromedicaoHidrometro">
+				<tocitem text="Inserir Hidrômetro" target="hidrometroInserir" />
+				<tocitem text="Manter Hidrômetro" target="hidrometroManter" />
+				<tocitem text="Movimentar Hidrômetro" target="hidrometroMovimentar" />
+				<tocitem text="Consultar Movimentação de Hidrômetro" target="hidrometroMovimentacaoConsultar-1-filtro" />
+				<tocitem text="Consultar Histórico Instalação de Hidrômetro" target="hidrometroConsultarHistoricoInstalacao" />
+			</tocitem>
+			<tocitem text="Medição Individualizada" target="micromedicaoMedicaoIndividualizada">
+				<tocitem text="Manter Vínculos de Imóveis para Reteio de Consumo" target="imovelManterVinculoParaRateioConsumo" />
+				<tocitem text="Consultar Imóveis com Medição Individualizada" target="imovelConsultarMedicaoIndividualizada" />
+				<tocitem text="Consultar Histórico de Medição Individualizada" target="imovelConsultarHistoricoMedicaoIndividualizada" />
+			</tocitem>
+		</tocitem>
+		<tocitem text="Faturamento" target="faturamento">
+			<tocitem text="Cronograma de Faturamento" target="faturamentoCronograma">
+				<tocitem text="Inserir Cronograma de Faturamento" target="faturamentoCronogramaInserir" />
+				<tocitem text="Manter Cronograma de Faturamento" target="faturamentoCronogramaManter" />
+			</tocitem>
+			<tocitem text="Comando de Atividade de Faturamento" target="faturamentoComandoAtividade">
+				<tocitem text="Inserir Comando de Atividade de Faturamento" target="faturamentoComandoAtividadeInserir" />
+				<tocitem text="Manter Comando de Atividade de Faturamento" target="faturamentoComandoAtividadeManter" />
+			</tocitem>
+			<tocitem text="Leituras e Consumo" target="faturamentoLeiturasEConsumo">
+				<tocitem text="Analisar Exceções de Leituras e Consumos" target="faturamentoLeiturasEConsumosEfetuarAnaliseExcecoes" />
+				<tocitem text="Alterar Dados para Faturamento" target="faturamentoAlterarDados" />
+				<tocitem text="Substituir Consumos Anteriores" target="faturamentoConsumosAnterioresSubstituir" />
+				<tocitem text="Registrar Leituras e Anormalidades" />
+			</tocitem>
+			<tocitem text="Consultar Histórico de Faturamento" target="faturamentoHistoricoConsultar" />
+			<tocitem text="Consultar Posição do Faturamento" target="faturamentoPosicaoConsultar" />
+			<tocitem text="Informar Situação Especial de Faturamento" target="faturamentoSituacaoEspecialInformar" />
+			<tocitem text="Tarifa de Consumo" target="faturamentoTarifaConsumo">
+				<tocitem text="Inserir Tarifa de Consumo" target="faturamentoTarifaConsumoInserir" />
+				<tocitem text="Manter Tarifa de Consumo" target="faturamentoTarifaConsumoManter" />
+				<tocitem text="Associar Tarifa de Consumo a Imóveis" target="faturamentoTarifaConsumoAssociarImoveis" />
+			</tocitem>
+			<tocitem text="Conta" target="faturamentoConta">
+				<tocitem text="Inserir Conta" target="faturamentoContaInserir" />
+				<tocitem text="Manter Conta" target="faturamentoContaManter" />
+				<tocitem text="Desfazer Cancelamento ou Retificação" target="faturamentoContaDesfazerCancelamentoRetificacao" />
+				<tocitem text="Simular Cálculo da Conta" target="faturamentoContaSimularCalculo" />
+				<tocitem text="Informar Vencimento Alternativo" target="faturamentoContaInformarVencimentoAlternativo" />
+				<tocitem text="Mensagem da Conta" target="faturamentoConta">
+					<tocitem text="Inserir Mensagem da Conta" target="faturamentoContaMensagemInserir" />
+					<tocitem text="Manter Mensagem da Conta" target="faturamentoContaMensagemManter" />
+				</tocitem>
+			</tocitem>
+			<tocitem text="Crédito a Realizar" target="faturamentoCreditoRealizar">
+				<tocitem text="Inserir Crédito a Realizar" target="faturamentoCreditoRealizarInserir" />
+				<tocitem text="Cancelar Crédito a Realizar" target="faturamentoCreditoRealizarCancelar" />
+			</tocitem>
+			<tocitem text="Débito a Cobrar" target="faturamentoDebitoCobrar">
+				<tocitem text="Inserir Débito a Cobrar" target="faturamentoDebitoCobrarInserir" />
+				<tocitem text="Cancelar Débito a Cobrar" target="faturamentoDebitoCobrarCancelar" />
+			</tocitem>
+			<tocitem text="Guia de Pagamento" target="faturamentoGuiaPagamento">
+				<tocitem text="Inserir Guia de Pagamento" target="faturamentoGuiaPagamentoInserir" />
+				<tocitem text="Cancelar Guia de Pagamento" target="faturamentoGuiaPagamentoCancelar" />
+			</tocitem>
+			<tocitem text="Rota" target="faturamentoRota">
+				<tocitem text="Inserir Rota" target="faturamentoRotaInserir" />
+				<tocitem text="Manter Rota" target="faturamentoRotaManter" />
+			</tocitem>
+		</tocitem>
+	</tocitem>
+</toc>

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.faturamento.ConsumoMinimoParametro" table="micromedicao.consumo_minimo_parametro">
+		<id name="id" type="java.lang.Integer" column="cmpc_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_consumo_minimo_parametro</param>
+			</generator>
+		</id>
+		<property name="anoMesReferencia" type="int" column="cmpc_amreferencia" not-null="true" length="4"/>
+		<property name="numeroParametroFinal" type="java.math.BigDecimal" column="cmpc_nnfinparametro" not-null="true" length="7"/>
+		<property name="numeroConsumo" type="java.lang.Integer" column="cmpc_nnconsumo" not-null="true" length="7"/>
+		<property name="indicadorUso" type="short" column="cmpc_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cmpc_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+		<many-to-one name="subCategoria" class="gcom.cadastro.imovel.Subcategoria">
+			<column name="scat_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

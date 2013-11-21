@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="TransferenciaDebitoCreditoDadosImovelActionForm"
+			type="gcom.gui.cobranca.TransferenciaDebitoCreditoDadosImovelActionForm" />
+	</form-beans>
+
+	<!--******************* P?GINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="TransferenciaDebitoCreditoDadosImovelActionForm" 
+			type="gcom.gui.cobranca.ExibirTransferenciaDebitoCreditoDadosImovelAction"
+			validate="true" path="/exibirTransferenciaDebitoCreditoDadosImovelAction">
+			<forward name="transferenciaDebitoCreditoDadosImovel"
+				path="/jsp/cobranca/debito_credito_transferir_dados_imovel.jsp" />
+		</action>
+
+		<action name="TransferenciaDebitoCreditoDadosImovelActionForm" 
+			type="gcom.gui.cobranca.ExibirTransferenciaDebitoCreditoDadosSelecaoAction"
+			validate="true" path="/exibirTransferenciaDebitoCreditoDadosSelecaoAction">
+			<forward name="transferenciaDebitoCreditoDadosSelecao"
+				path="/jsp/cobranca/debito_credito_transferir_dados_selecao.jsp" />
+		</action>
+
+		<action name="TransferenciaDebitoCreditoDadosImovelActionForm" 
+			type="gcom.gui.cobranca.TransferirDebitoCreditoAction"
+			validate="true" path="/transferirDebitoCreditoAction"/>
+
+	</action-mappings>
+
+	
+</struts-config>

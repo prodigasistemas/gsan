@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="GerarRelatorioAcessosUsuariosActionForm"
+			type="gcom.gui.relatorio.seguranca.GerarRelatorioAcessosUsuariosActionForm" />
+	</form-beans>
+
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="GerarRelatorioAcessosUsuariosActionForm"
+			type="gcom.gui.relatorio.seguranca.ExibirGerarRelatorioAcessosUsuariosAction"
+			validate="false" 
+			scope="session"
+			path="/exibirGerarRelatorioAcessosUsuariosAction">
+			
+			<forward name="exibirGerarRelatorioAcessosUsuariosAction" 
+				path="/jsp/relatorio/seguranca/relatorio_acessos_por_usuarios.jsp" />
+				
+		</action>
+		
+		<action name="GerarRelatorioAcessosUsuariosActionForm"
+			type="gcom.gui.relatorio.seguranca.GerarRelatorioAcessosUsuariosAction"
+			validate="true" 
+			path="/gerarRelatorioAcessosUsuariosAction" />		
+		
+	</action-mappings>
+
+</struts-config>

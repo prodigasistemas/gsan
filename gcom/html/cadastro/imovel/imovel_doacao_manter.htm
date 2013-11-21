@@ -1,0 +1,2214 @@
+
+
+
+
+
+
+
+
+
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+
+<title>GCOM - Sistema de Gestão Comercial</title>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<link rel="stylesheet" href="EstilosCompesa.css" type="text/css">
+<script type="text/javascript" language="Javascript1.1"> 
+
+<!-- Begin 
+
+     var bCancel = false; 
+
+    function validateManterCreditoARealizarActionForm(form) {                                                                   
+        if (bCancel) 
+      return true; 
+        else 
+       return validateCaracterEspecial(form) && validateRequired(form) && validateLong(form); 
+   } 
+
+    function caracteresespeciais () { 
+     this.aa = new Array("matriculaImovel", "Matrícula do Imóvel possui caracteres especiais.", new Function ("varName", " return this[varName];"));
+    } 
+
+    function required () { 
+     this.aa = new Array("matriculaImovel", "Informe Matrícula do Imóvel.", new Function ("varName", " return this[varName];"));
+    } 
+
+    function IntegerValidations () { 
+     this.aa = new Array("matriculaImovel", "Matrícula do Imóvel deve somente conter números positivos.", new Function ("varName", " return this[varName];"));
+    } 
+
+
+
+function validateByte(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oByte = new ByteValidations();
+                for (x in oByte) {
+                	var field = form[oByte[x][0]];
+
+                    if (field.type == 'text' ||
+                        field.type == 'textarea' ||
+                        field.type == 'select-one' ||
+						field.type == 'radio') {
+
+						var value;
+
+						if (field.type == "select-one") {
+							var si = field.selectedIndex;
+							value = field.options[si].value;
+						} else {
+							value = field.value;
+						}
+
+                        if (value.length > 0) {
+
+	                        var iValue = parseInt(value);
+	                        if (isNaN(iValue) || !(iValue >= 0 && iValue <= 127)) {
+	                            if (i == 0) {
+	                                focusField = field;
+	                            }
+	                            fields[i++] = oByte[x][1];
+	                            bValid = false;
+	                        }
+						}
+
+                    }
+                }
+                if (fields.length > 0) {
+                   focusField.focus();
+                   alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+function validateDate(form) {
+               var bValid = true;
+               var focusField = null;
+               var i = 0;
+               var fields = new Array();
+               oDate = new DateValidations();
+               for (x in oDate) {
+                   var value = form[oDate[x][0]].value;
+                   var datePattern = oDate[x][2]("datePattern");
+                   if ((form[oDate[x][0]].type == 'text' ||
+                        form[oDate[x][0]].type == 'textarea') &&
+                       (value.length > 0) &&
+                       (datePattern.length > 0)) {
+                     var MONTH = "MM";
+                     var DAY = "dd";
+                     var YEAR = "yyyy";
+                     var orderMonth = datePattern.indexOf(MONTH);
+                     var orderDay = datePattern.indexOf(DAY);
+                     var orderYear = datePattern.indexOf(YEAR);
+                     if ((orderDay < orderYear && orderDay > orderMonth)) {
+                         var iDelim1 = orderMonth + MONTH.length;
+                         var iDelim2 = orderDay + DAY.length;
+                         var delim1 = datePattern.substring(iDelim1, iDelim1 + 1);
+                         var delim2 = datePattern.substring(iDelim2, iDelim2 + 1);
+                         if (iDelim1 == orderDay && iDelim2 == orderYear) {
+                            dateRegexp = new RegExp("^(\\d{2})(\\d{2})(\\d{4})$");
+                         } else if (iDelim1 == orderDay) {
+                            dateRegexp = new RegExp("^(\\d{2})(\\d{2})[" + delim2 + "](\\d{4})$");
+                         } else if (iDelim2 == orderYear) {
+                            dateRegexp = new RegExp("^(\\d{2})[" + delim1 + "](\\d{2})(\\d{4})$");
+                         } else {
+                            dateRegexp = new RegExp("^(\\d{2})[" + delim1 + "](\\d{2})[" + delim2 + "](\\d{4})$");
+                         }
+                         var matched = dateRegexp.exec(value);
+                         if(matched != null) {
+                            if (!isValidDate(matched[2], matched[1], matched[3])) {
+                               if (i == 0) {
+                                   focusField = form[oDate[x][0]];
+                               }
+                               fields[i++] = oDate[x][1];
+                               bValid =  false;
+                            }
+                         } else {
+                            if (i == 0) {
+                                focusField = form[oDate[x][0]];
+                            }
+                            fields[i++] = oDate[x][1];
+                            bValid =  false;
+                         }
+                     } else if ((orderMonth < orderYear && orderMonth > orderDay)) {
+                         var iDelim1 = orderDay + DAY.length;
+                         var iDelim2 = orderMonth + MONTH.length;
+                         var delim1 = datePattern.substring(iDelim1, iDelim1 + 1);
+                         var delim2 = datePattern.substring(iDelim2, iDelim2 + 1);
+                         if (iDelim1 == orderMonth && iDelim2 == orderYear) {
+                             dateRegexp = new RegExp("^(\\d{2})(\\d{2})(\\d{4})$");
+                         } else if (iDelim1 == orderMonth) {
+                             dateRegexp = new RegExp("^(\\d{2})(\\d{2})[" + delim2 + "](\\d{4})$");
+                         } else if (iDelim2 == orderYear) {
+                             dateRegexp = new RegExp("^(\\d{2})[" + delim1 + "](\\d{2})(\\d{4})$");
+                         } else {
+                             dateRegexp = new RegExp("^(\\d{2})[" + delim1 + "](\\d{2})[" + delim2 + "](\\d{4})$");
+                         }
+                         var matched = dateRegexp.exec(value);
+                         if(matched != null) {
+                             if (!isValidDate(matched[1], matched[2], matched[3])) {
+                                 if (i == 0) {
+                                     focusField = form[oDate[x][0]];
+                                 }
+                                 fields[i++] = oDate[x][1];
+                                 bValid =  false;
+                              }
+                         } else {
+                             if (i == 0) {
+                                 focusField = form[oDate[x][0]];
+                             }
+                             fields[i++] = oDate[x][1];
+                             bValid =  false;
+                         }
+                     } else if ((orderMonth > orderYear && orderMonth < orderDay)) {
+                         var iDelim1 = orderYear + YEAR.length;
+                         var iDelim2 = orderMonth + MONTH.length;
+                         var delim1 = datePattern.substring(iDelim1, iDelim1 + 1);
+                         var delim2 = datePattern.substring(iDelim2, iDelim2 + 1);
+                         if (iDelim1 == orderMonth && iDelim2 == orderDay) {
+                             dateRegexp = new RegExp("^(\\d{4})(\\d{2})(\\d{2})$");
+                         } else if (iDelim1 == orderMonth) {
+                             dateRegexp = new RegExp("^(\\d{4})(\\d{2})[" + delim2 + "](\\d{2})$");
+                         } else if (iDelim2 == orderDay) {
+                             dateRegexp = new RegExp("^(\\d{4})[" + delim1 + "](\\d{2})(\\d{2})$");
+                         } else {
+
+                             dateRegexp = new RegExp("^(\\d{4})[" + delim1 + "](\\d{2})[" + delim2 + "](\\d{2})$");
+                         }
+                         var matched = dateRegexp.exec(value);
+                         if(matched != null) {
+                             if (!isValidDate(matched[3], matched[2], matched[1])) {
+                                 if (i == 0) {
+                                     focusField = form[oDate[x][0]];
+                                  }
+                                  fields[i++] = oDate[x][1];
+                                  bValid =  false;
+                              }
+                          } else {
+                              if (i == 0) {
+                                  focusField = form[oDate[x][0]];
+                              }
+                              fields[i++] = oDate[x][1];
+                              bValid =  false;
+                          }
+                     } else {
+                         if (i == 0) {
+                             focusField = form[oDate[x][0]];
+                         }
+                         fields[i++] = oDate[x][1];
+                         bValid =  false;
+                     }
+                  }
+               }
+               if (fields.length > 0) {
+                  focusField.focus();
+                  alert(fields.join('\n'));
+               }
+               return bValid;
+            }
+
+	    function isValidDate(day, month, year) {
+	        if (month < 1 || month > 12) {
+                    return false;
+                }
+                if (day < 1 || day > 31) {
+                    return false;
+                }
+                if ((month == 4 || month == 6 || month == 9 || month == 11) &&
+                    (day == 31)) {
+                    return false;
+                }
+                if (month == 2) {
+                    var leap = (year % 4 == 0 &&
+                               (year % 100 != 0 || year % 400 == 0));
+                    if (day>29 || (day == 29 && !leap)) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+function validateCreditCard(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oCreditCard = new creditCard();
+                for (x in oCreditCard) {
+                    if ((form[oCreditCard[x][0]].type == 'text' ||
+                         form[oCreditCard[x][0]].type == 'textarea') &&
+                        (form[oCreditCard[x][0]].value.length > 0)) {
+                        if (!luhnCheck(form[oCreditCard[x][0]].value)) {
+                            if (i == 0) {
+                                focusField = form[oCreditCard[x][0]];
+                            }
+                            fields[i++] = oCreditCard[x][1];
+                            bValid = false;
+                        }
+                    }
+                }
+                if (fields.length > 0) {
+                    focusField.focus();
+                    alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+
+            /**
+             * Reference: http://www.ling.nwu.edu/~sburke/pub/luhn_lib.pl
+             */
+            function luhnCheck(cardNumber) {
+                if (isLuhnNum(cardNumber)) {
+                    var no_digit = cardNumber.length;
+                    var oddoeven = no_digit & 1;
+                    var sum = 0;
+                    for (var count = 0; count < no_digit; count++) {
+                        var digit = parseInt(cardNumber.charAt(count));
+                        if (!((count & 1) ^ oddoeven)) {
+                            digit *= 2;
+                            if (digit > 9) digit -= 9;
+                        };
+                        sum += digit;
+                    };
+                    if (sum == 0) return false;
+                    if (sum % 10 == 0) return true;
+                };
+                return false;
+            }
+
+            function isLuhnNum(argvalue) {
+                argvalue = argvalue.toString();
+                if (argvalue.length == 0) {
+                    return false;
+                }
+                for (var n = 0; n < argvalue.length; n++) {
+                    if ((argvalue.substring(n, n+1) < "0") ||
+                        (argvalue.substring(n,n+1) > "9")) {
+                        return false;
+                    }
+                }
+                return true;
+            }
+function validateCnpj(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oCnpj = new cnpj();
+                for (x in oCnpj) {
+                    if ((form[oCnpj[x][0]].type == 'text' ||
+                         form[oCnpj[x][0]].type == 'textarea') &&
+                        (form[oCnpj[x][0]].value.length > 0)) {
+                        if (!validacaoCnpj(form[oCnpj[x][0]].value)) {
+                            if (i == 0) {
+                                focusField = form[oCnpj[x][0]];
+                            }
+                            fields[i++] = oCnpj[x][1];
+                            bValid = false;
+                        }
+                    }
+                }
+                if (fields.length > 0) {
+                    focusField.focus();
+                    alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+
+
+	function validacaoCnpj(s){
+		var i;
+		var c = s.substr(0,12);
+		var dv = s.substr(12,2);
+		var d1 = 0;
+		for (i = 0; i < 12; i++)
+		{
+			d1 += c.charAt(11-i)*(2+(i % 8));
+		}
+        	if (d1 == 0) return false;
+        	d1 = 11 - (d1 % 11);
+		if (d1 > 9) d1 = 0;
+		if (dv.charAt(0) != d1)
+      		{
+		return false;
+		}
+
+		d1 *= 2;
+		for (i = 0; i < 12; i++)
+		{
+			d1 += c.charAt(11-i)*(2+((i+1) % 8));
+		}
+		d1 = 11 - (d1 % 11);
+		if (d1 > 9) d1 = 0;
+		if (dv.charAt(1) != d1)
+		{
+			return false;
+		}
+		return true;
+	}
+function validateDecimal(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oFloat = new FloatValidations();
+                for (x in oFloat) {
+                	var field = form[oFloat[x][0]];
+
+                    if (field.type == 'text' ||
+                        field.type == 'textarea' ||
+                        field.type == 'select-one' ||
+                        field.type == 'radio') {
+
+                    	var value;
+
+                        if (field.type == "select-one") {
+                                var si = field.selectedIndex;
+                                value = field.options[si].value;
+                        } else {
+                                
+                                value = field.value;
+								value = value.replace(/\./g, '');
+								value = value.replace(/,/g, '.');
+                        }
+
+                        if (value.length > 0) {
+
+	                        var iValue = parseFloat(value);
+	                    //    if (isNaN(iValue)) {
+        				if (isNaN(value) || value < 0) {
+	                            if (i == 0) {
+	                                focusField = field;
+	                            }
+	                            fields[i++] = oFloat[x][1];
+	                            bValid = false;
+	                        }
+                        }
+                    }
+                }
+                if (fields.length > 0) {
+                   focusField.focus();
+                   alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+function validateMatricula(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oMatricula = new matricula();
+                for (x in oMatricula) {
+                    if ((form[oMatricula[x][0]].type == 'text' ||
+                         form[oMatricula[x][0]].type == 'textarea') &&
+                        (form[oMatricula[x][0]].value.length > 0)) {
+                        if (!validacaoMatricula(form[oMatricula[x][0]].value)) {
+                            if (i == 0) {
+                                focusField = form[oMatricula[x][0]];
+                            }
+                            fields[i++] = oMatricula[x][1];
+                            bValid = false;
+                        }
+                    }
+                }
+                if (fields.length > 0) {
+                    focusField.focus();
+                    alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+
+	function validacaoMatricula(c){
+		s = c;
+		var c = s.substr(0,7);
+		var dv = s.substr(7,1);
+		var soma = 0;
+		var resto = 0;
+		var digito = 0;
+
+		if (s.length != 8) {
+                 return false;
+                }
+	        else {
+
+		  soma = (c.charAt(0)* 2) + (c.charAt(1)* 7) + (c.charAt(2)* 6) + (c.charAt(3) * 5) + (c.charAt(4) * 4) + (c.charAt(5) * 3) + (c.charAt(6) * 2);
+		  soma = soma * 10;
+		  resto = (soma % 11);
+
+		  if (resto == 10){
+		    digito = 0;
+		  }
+		  else {
+		    digito = resto;
+		  }
+
+		  if (dv != digito) {
+		    return false;
+		  }
+		  else {
+      		    return true;
+		  }
+	        }
+	}
+function validateMesAno(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oMesAno = new MesAnoValidations();
+                for (x in oMesAno) {
+                	var field = form[oMesAno[x][0]];
+                    if (field.type == 'text' ||
+                        field.type == 'textarea' ||
+                        field.type == 'select-one' ||
+                        field.type == 'radio') {
+					
+                        var value;
+
+						if (field.type == "select-one") {
+							var si = field.selectedIndex;
+							value = field.options[si].value;
+						} else {
+							value = trim(field.value);
+							field.value = value;
+						}	
+						if (field.value.length > 0) {
+
+							if (field.value.length == 7) {
+								dia = 1;
+						    	mes = value.substring(0,2); 
+						    	ano = value.substring(3,7); 
+						
+						    	if ((!isNaN(mes) || !isNaN(ano)) && (mes.indexOf('.') == -1 && mes.indexOf(',') == -1 && mes.indexOf('/') == -1) &&
+									(ano.indexOf('.') == -1 && ano.indexOf(',') == -1 && ano.indexOf('/') == -1)) {
+						    	
+						    		// verifica se o mes e valido 
+							    	if ((mes * 1) >= 1 && (mes * 1) <= 12 ) { 
+							        
+							        	// verifica se o ano e valido
+							        	if ((ano * 1) != 0 && (ano * 1) >= 1980) {
+							        	
+							        		// verifica se e ano bissexto 
+							    			if ((mes * 1) == 2 && ((dia * 1) < 1 || (dia * 1) > 29 
+							    				|| ((dia * 1) > 28 && (((ano * 1) / 4) != (ano * 1) / 4)))) { 
+							       				 
+					                            if (i == 0) {
+					                                focusField = field;
+					                            }
+					                            
+					                            fields[i++] = oMesAno[x][1];
+					                            bValid = false;					       				
+							    			}
+							        	}else{
+				                            if (i == 0) {
+				                                focusField = field;
+				                            }
+				                            
+				                            fields[i++] = oMesAno[x][1];
+				                            bValid = false;					        		
+							        	}
+							    	}else{
+			                            if (i == 0) {
+			                                focusField = field;
+			                            }
+			                            
+			                            fields[i++] = oMesAno[x][1];
+			                            bValid = false;					    		
+							    	} 
+								}else{
+		                            if (i == 0) {
+		                                focusField = field;
+		                            }
+		                            
+		                            fields[i++] = oMesAno[x][1];
+		                            bValid = false;							
+								}
+						    }else{
+		                        if (i == 0) {
+		                            focusField = field;
+		                        }
+		                        
+		                        fields[i++] = oMesAno[x][1];
+		                        bValid = false;				    	
+						    }//fim do if (field.length == 7) 
+					    }//fim do if (field.length > 0) 
+					}//fim if do tipo de campo
+				    
+				}//fim do for
+				if (fields.length > 0) {
+                	focusField.focus();
+
+	                alert(fields.join('\n'));
+    	        }
+    	        
+            	return bValid;				    
+            }
+            
+	       function trim(inputString) {
+					   // Removes leading and trailing spaces from the passed string. Also removes
+				   	   // consecutive spaces and replaces it with one space. If something besides
+					   // a string is passed in (null, custom object, etc.) then return the input.
+	
+					   if (typeof inputString != "string") { return inputString; }
+				   	      var retValue = inputString;
+						var ch = retValue.substring(0, 1);
+					   while (ch == " ") { // Check for spaces at the beginning of the string
+						retValue = retValue.substring(1, retValue.length);
+				        ch = retValue.substring(0, 1);
+			   	   }
+	
+				   ch = retValue.substring(retValue.length-1, retValue.length);
+	
+				   while (ch == " ") { // Check for spaces at the end of the string
+			      retValue = retValue.substring(0, retValue.length-1);
+	    	  	      ch = retValue.substring(retValue.length-1, retValue.length);
+	   	   	}
+	
+		   		while (retValue.indexOf("  ") != -1) { // Note that there are two spaces in the string - look for multiple spaces within the string
+		      	retValue = retValue.substring(0, retValue.indexOf("  ")) + retValue.substring(retValue.indexOf("  ")+1, retValue.length); // Again, there are two spaces in each of the strings
+	   	   }
+	
+		   	return retValue; // Return the trimmed string back to the user
+		} // Ends the "trim" function
+function validateFloat(form) {
+                alert('entrou');
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oFloat = new FloatValidations();
+                for (x in oFloat) {
+                	var field = form[oFloat[x][0]];
+
+                    if (field.type == 'text' ||
+                        field.type == 'textarea' ||
+                        field.type == 'select-one' ||
+                        field.type == 'radio') {
+
+                    	var value;
+
+                        if (field.type == "select-one") {
+                                var si = field.selectedIndex;
+                                value = field.options[si].value;
+                                alert('if');
+                        } else {
+                                value = field.replace(/,/g, '.');
+                                value = trim(value);
+                                field.value = value;
+                                alert('else');
+                        }
+
+                        if (value.length > 0) {
+
+	                        var iValue = parseFloat(value);
+	                        if (isNaN(iValue)) {
+	                            if (i == 0) {
+	                                focusField = field;
+	                            }
+	                            fields[i++] = oFloat[x][1];
+	                            bValid = false;
+	                        }
+                        }
+                    }
+                }
+                if (fields.length > 0) {
+                   focusField.focus();
+                   alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+            
+                   function trim(inputString) {
+					   // Removes leading and trailing spaces from the passed string. Also removes
+				   	   // consecutive spaces and replaces it with one space. If something besides
+					   // a string is passed in (null, custom object, etc.) then return the input.
+
+					   if (typeof inputString != "string") { return inputString; }
+				   	      var retValue = inputString;
+		      			  var ch = retValue.substring(0, 1);
+						   while (ch == " ") { // Check for spaces at the beginning of the string
+							retValue = retValue.substring(1, retValue.length);
+					        ch = retValue.substring(0, 1);
+				   	   }
+
+					   ch = retValue.substring(retValue.length-1, retValue.length);
+
+					   while (ch == " ") { // Check for spaces at the end of the string
+					      retValue = retValue.substring(0, retValue.length-1);
+		    	  	      ch = retValue.substring(retValue.length-1, retValue.length);
+	   	   	}
+
+	   		while (retValue.indexOf("  ") != -1) { // Note that there are two spaces in the string - look for multiple spaces within the string
+	      	retValue = retValue.substring(0, retValue.indexOf("  ")) + retValue.substring(retValue.indexOf("  ")+1, retValue.length); // Again, there are two spaces in each of the strings
+   	   }
+
+	   	return retValue; // Return the trimmed string back to the user
+	} // Ends the "trim" function
+function validateInteiroNegativoZeroPositivo(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oInteger = new InteiroNegativoZeroPositivoValidations();
+                for (x in oInteger) {
+                	var field = form[oInteger[x][0]];
+
+                    if (field.type == 'text' ||
+                        field.type == 'textarea' ||
+                        field.type == 'select-one' ||
+                        field.type == 'radio') {
+
+                        var value;
+
+						if (field.type == "select-one") {
+							var si = field.selectedIndex;
+							value = field.options[si].value;
+						} else {
+							value = trim(field.value);
+							field.value = value;
+						}
+
+                        if (value.length > 0) {
+
+	                        var iValue = parseInt(value);
+	                        if (isNaN(iValue) || !(iValue >=-2147483647  && iValue <= 2147483647)) {
+	                            if (i == 0) {
+	                                focusField = field;
+	                            }
+	                            
+	                            fields[i++] = oInteger[x][1];
+	                            bValid = false;
+	                       }
+                       }
+                    }
+                }
+                if (fields.length > 0) {
+                   focusField.focus();
+                   alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+            
+       function trim(inputString) {
+				   // Removes leading and trailing spaces from the passed string. Also removes
+			   	   // consecutive spaces and replaces it with one space. If something besides
+				   // a string is passed in (null, custom object, etc.) then return the input.
+
+				   if (typeof inputString != "string") { return inputString; }
+			   	      var retValue = inputString;
+					var ch = retValue.substring(0, 1);
+				   while (ch == " ") { // Check for spaces at the beginning of the string
+					retValue = retValue.substring(1, retValue.length);
+			        ch = retValue.substring(0, 1);
+		   	   }
+
+			   ch = retValue.substring(retValue.length-1, retValue.length);
+
+			   while (ch == " ") { // Check for spaces at the end of the string
+		      retValue = retValue.substring(0, retValue.length-1);
+    	  	      ch = retValue.substring(retValue.length-1, retValue.length);
+   	   	}
+
+	   		while (retValue.indexOf("  ") != -1) { // Note that there are two spaces in the string - look for multiple spaces within the string
+	      	retValue = retValue.substring(0, retValue.indexOf("  ")) + retValue.substring(retValue.indexOf("  ")+1, retValue.length); // Again, there are two spaces in each of the strings
+   	   }
+
+	   	return retValue; // Return the trimmed string back to the user
+	} // Ends the "trim" function
+function validateMinLength(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oMinLength = new minlength();
+                for (x in oMinLength) {
+                    if (form[oMinLength[x][0]].type == 'text' ||
+                        form[oMinLength[x][0]].type == 'textarea') {
+                        var iMin = parseInt(oMinLength[x][2]("minlength"));
+                        if (form[oMinLength[x][0]].value.length < iMin) {
+                            if (i == 0) {
+                                focusField = form[oMinLength[x][0]];
+                            }
+                            fields[i++] = oMinLength[x][1];
+                            bValid = false;
+                        }
+                    }
+                }
+                if (fields.length > 0) {
+                   focusField.focus();
+                   alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+function validateFloatRange(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oRange = new floatRange();
+                for (x in oRange) {
+                    if ((form[oRange[x][0]].type == 'text' ||
+                         form[oRange[x][0]].type == 'textarea') &&
+                        (form[oRange[x][0]].value.length > 0)) {
+                        var fMin = parseFloat(oRange[x][2]("min"));
+                        var fMax = parseFloat(oRange[x][2]("max"));
+                        var fValue = parseFloat(form[oRange[x][0]].value);
+                        if (!(fValue >= fMin && fValue <= fMax)) {
+                            if (i == 0) {
+                                focusField = form[oRange[x][0]];
+                            }
+                            fields[i++] = oRange[x][1];
+                            bValid = false;
+                        }
+                    }
+                }
+                if (fields.length > 0) {
+                    focusField.focus();
+                    alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+function validateMaxLength(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oMaxLength = new maxlength();
+                for (x in oMaxLength) {
+                    if (form[oMaxLength[x][0]].type == 'text' ||
+                        form[oMaxLength[x][0]].type == 'textarea') {
+                        var iMax = parseInt(oMaxLength[x][2]("maxlength"));
+                        if (form[oMaxLength[x][0]].value.length > iMax) {
+                            if (i == 0) {
+                                focusField = form[oMaxLength[x][0]];
+                            }
+                            fields[i++] = oMaxLength[x][1];
+                            bValid = false;
+                        }
+                    }
+                }
+                if (fields.length > 0) {
+                   focusField.focus();
+                   alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+function validateCheckRequired(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oCheckRequired = new CheckRequiredValidations();
+				alert("entrou validateCheckRequired1");
+                for (x in oCheckRequired) {
+
+                	var field = form[oCheckRequired[x][0]];
+					var indice;
+					   
+				    var selecionado = false;
+				    alert("form.elements.length="+form.elements.length);
+				    for(indice = 0; indice < form.elements.length; indice++){
+				   	   alert("indice="+indice);
+					   if (form.elements[indice].type == 'checkbox' && form.elements[indice].checked == true 
+					   && form.elements[indice].name == oCheckRequired[x][0]) {
+
+					    	selecionado = true;
+					    	indice = form.elements.length;
+				 	  		alert("entrou="+selecionado);
+					   }
+				    }    
+				    alert("selecionado="+selecionado);
+				    if(!selecionado){
+                         if (i == 0) {
+                             focusField = field;
+                         }
+                         
+                         fields[i++] = oCheckRequired[x][1];
+                         alert("oCheckRequired[x][1]="+oCheckRequired[x][1]);
+                         bValid = false;					    		
+				    }	
+				}// fim do for
+				alert("fields.length="+fields.length);
+				alert("fields.length > 0="+fields.length > 0);
+				if (fields.length > 0) {
+                	//focusField.focus();
+
+	                alert(fields.join('\n'));
+    	        }
+    	        
+            	return bValid;				    
+            }
+function validateRequired(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oRequired = new required();
+                for (x in oRequired) {
+                	var field = form[oRequired[x][0]];
+
+                    if (field.type == 'text' ||
+                        field.type == 'textarea' ||
+                        field.type == 'select-one' ||
+                        field.type == 'radio' ||
+                        field.type == 'password' ||
+			field.type == 'hidden') {
+
+                        var value;
+
+                      if (field.type == "select-one") {
+                              var si = field.selectedIndex;
+                              value = field.options[si].value;
+							  if (value == -1) {
+							    focusField = field;
+								fields[i++] = oRequired[x][1];
+		                        bValid = false;
+															  	
+							  }	
+								                              
+                              //value = field.value;
+                      } else {
+                      		
+                              value = field.value;
+                              //if (value == -1) {
+							   // focusField = field;
+								//fields[i++] = oRequired[x][1];
+		                        //bValid = false;
+															  	
+							  //}	
+                              
+                      }
+
+                        if (trim(value) == '') {
+
+	                        if (i == 0) {
+	                            focusField = field;
+	                        }
+	                        fields[i++] = oRequired[x][1];
+	                        bValid = false;
+                        }
+                    }
+                }
+                if (fields.length > 0) {
+		  if (focusField.type != 'hidden') {
+                   focusField.focus();
+		  }
+                   alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+
+	function trim(inputString) {
+	   // Removes leading and trailing spaces from the passed string. Also removes
+   	   // consecutive spaces and replaces it with one space. If something besides
+	   // a string is passed in (null, custom object, etc.) then return the input.
+
+	   if (typeof inputString != "string") { return inputString; }
+   		var retValue = inputString;
+		var ch = retValue.substring(0, 1);
+	   while (ch == " ") { // Check for spaces at the beginning of the string
+		retValue = retValue.substring(1, retValue.length);
+	        ch = retValue.substring(0, 1);
+   	   }
+
+	   ch = retValue.substring(retValue.length-1, retValue.length);
+
+	   while (ch == " ") { // Check for spaces at the end of the string
+	      retValue = retValue.substring(0, retValue.length-1);
+      	      ch = retValue.substring(retValue.length-1, retValue.length);
+   	   }
+
+	   while (retValue.indexOf("  ") != -1) { // Note that there are two spaces in the string - look for multiple spaces within the string
+	      retValue = retValue.substring(0, retValue.indexOf("  ")) + retValue.substring(retValue.indexOf("  ")+1, retValue.length); // Again, there are two spaces in each of the strings
+   	   }
+
+	   return retValue; // Return the trimmed string back to the user
+	} // Ends the "trim" function
+function validateInteger(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oInteger = new IntegerValidations();
+                for (x in oInteger) {
+                	var field = form[oInteger[x][0]];
+
+                    if (field.type == 'text' ||
+                        field.type == 'textarea' ||
+                        field.type == 'select-one' ||
+                        field.type == 'radio') {
+
+                        var value;
+
+						if (field.type == "select-one") {
+							var si = field.selectedIndex;
+							value = field.options[si].value;
+						} else {
+							value = trim(field.value);
+							field.value = value;
+						}
+
+                        if (value.length > 0) {
+
+	                        var iValue = parseInt(value);
+	                        if (isNaN(iValue) || !(iValue >= 0 && iValue <= 2147483647)) {
+	                            if (i == 0) {
+	                                focusField = field;
+	                            }
+	                            fields[i++] = oInteger[x][1];
+	                            bValid = false;
+	                       }
+                       }
+                    }
+                }
+                if (fields.length > 0) {
+                   focusField.focus();
+                   alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+            
+       function trim(inputString) {
+				   // Removes leading and trailing spaces from the passed string. Also removes
+			   	   // consecutive spaces and replaces it with one space. If something besides
+				   // a string is passed in (null, custom object, etc.) then return the input.
+
+				   if (typeof inputString != "string") { return inputString; }
+			   	      var retValue = inputString;
+					var ch = retValue.substring(0, 1);
+				   while (ch == " ") { // Check for spaces at the beginning of the string
+					retValue = retValue.substring(1, retValue.length);
+			        ch = retValue.substring(0, 1);
+		   	   }
+
+			   ch = retValue.substring(retValue.length-1, retValue.length);
+
+			   while (ch == " ") { // Check for spaces at the end of the string
+		      retValue = retValue.substring(0, retValue.length-1);
+    	  	      ch = retValue.substring(retValue.length-1, retValue.length);
+   	   	}
+
+	   		while (retValue.indexOf("  ") != -1) { // Note that there are two spaces in the string - look for multiple spaces within the string
+	      	retValue = retValue.substring(0, retValue.indexOf("  ")) + retValue.substring(retValue.indexOf("  ")+1, retValue.length); // Again, there are two spaces in each of the strings
+   	   }
+
+	   	return retValue; // Return the trimmed string back to the user
+	} // Ends the "trim" function
+function validateRange(form) {
+                return validateIntRange(form);
+            }
+function validateRadioRequired(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oRadioRequired = new RadioRequiredValidations();
+                for (x in oRadioRequired) {
+
+                   var field = form[oRadioRequired[x][0]];
+				   var indice;
+				   var selecionado = false;
+				   alert("form.elements.length="+form.elements.length);
+
+				   for(indice = 0; indice < form.elements.length; indice++){
+				   	  alert("indice="+indice+" form.elements[indice].name="+form.elements[indice].name+" oRadioRequired[x][0]="+oRadioRequired[x][0]+" form.elements[indice].checked="+form.elements[indice].checked);
+
+					  if (form.elements[indice].type == 'radio' && form.elements[indice].checked == true
+					  && form.elements[indice].name == oRadioRequired[x][0]) {
+					    	selecionado = true;
+					    	indice = form.elements.length;
+				 	  		alert("entrou="+selecionado);
+					  }
+				   }    
+				   alert("selecionado="+selecionado);
+				   if(!selecionado){
+			           if (i == 0) {
+                              focusField = field;
+                          }
+                          fields[i++] = oRadioRequired[x][1];
+                          alert("oRadioRequired[x][1]="+oRadioRequired[x][1]);
+                          bValid = false;					    		
+				   }	
+				}// fim do for
+				alert("fields.length="+fields.length);
+				alert("fields.length > 0="+fields.length > 0);
+                if (fields.length > 0) {
+                    //focusField.focus();
+                    alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+function validateInteiroZeroPositivo(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oInteger = new InteiroZeroPositivoValidations();
+                for (x in oInteger) {
+                	var field = form[oInteger[x][0]];
+
+                    if (field.type == 'text' ||
+                        field.type == 'textarea' ||
+                        field.type == 'select-one' ||
+                        field.type == 'radio') {
+
+                        var value;
+
+						if (field.type == "select-one") {
+							var si = field.selectedIndex;
+							value = field.options[si].value;
+						} else {
+							value = trim(field.value);
+							field.value = value;
+						}
+
+                        if (value.length > 0) {
+
+	                        var iValue = parseInt(value);
+	                        if (isNaN(iValue) || !(iValue >= 0 && iValue <= 2147483647)) {
+	                            if (i == 0) {
+	                                focusField = field;
+	                            }
+	                            
+	                            fields[i++] = oInteger[x][1];
+	                            bValid = false;
+	                       }
+                       }
+                    }
+                }
+                if (fields.length > 0) {
+                   focusField.focus();
+                   alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+            
+       function trim(inputString) {
+				   // Removes leading and trailing spaces from the passed string. Also removes
+			   	   // consecutive spaces and replaces it with one space. If something besides
+				   // a string is passed in (null, custom object, etc.) then return the input.
+
+				   if (typeof inputString != "string") { return inputString; }
+			   	      var retValue = inputString;
+					var ch = retValue.substring(0, 1);
+				   while (ch == " ") { // Check for spaces at the beginning of the string
+					retValue = retValue.substring(1, retValue.length);
+			        ch = retValue.substring(0, 1);
+		   	   }
+
+			   ch = retValue.substring(retValue.length-1, retValue.length);
+
+			   while (ch == " ") { // Check for spaces at the end of the string
+		      retValue = retValue.substring(0, retValue.length-1);
+    	  	      ch = retValue.substring(retValue.length-1, retValue.length);
+   	   	}
+
+	   		while (retValue.indexOf("  ") != -1) { // Note that there are two spaces in the string - look for multiple spaces within the string
+	      	retValue = retValue.substring(0, retValue.indexOf("  ")) + retValue.substring(retValue.indexOf("  ")+1, retValue.length); // Again, there are two spaces in each of the strings
+   	   }
+
+	   	return retValue; // Return the trimmed string back to the user
+	} // Ends the "trim" function
+function validateIntRange(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oRange = new intRange();
+                for (x in oRange) {
+                    if ((form[oRange[x][0]].type == 'text' ||
+                         form[oRange[x][0]].type == 'textarea') &&
+                        (form[oRange[x][0]].value.length > 0)) {
+                        var iMin = parseInt(oRange[x][2]("min"));
+                        var iMax = parseInt(oRange[x][2]("max"));
+                        var iValue = parseInt(form[oRange[x][0]].value);
+                        if (!(iValue >= iMin && iValue <= iMax)) {
+                            if (i == 0) {
+                                focusField = form[oRange[x][0]];
+                            }
+                            fields[i++] = oRange[x][1];
+                            bValid = false;
+                        }
+                    }
+                }
+                if (fields.length > 0) {
+                    focusField.focus();
+                    alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+function validateCpf(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oCpf = new cpf();
+                for (x in oCpf) {
+                    if ((form[oCpf[x][0]].type == 'text' ||
+                         form[oCpf[x][0]].type == 'textarea') &&
+                        (form[oCpf[x][0]].value.length > 0)) {
+                        if (!validacaoCpf(form[oCpf[x][0]].value)) {
+                            if (i == 0) {
+                                focusField = form[oCpf[x][0]];
+                            }
+                            fields[i++] = oCpf[x][1];
+                            bValid = false;
+                        }
+                    }
+                }
+                if (fields.length > 0) {
+                    focusField.focus();
+                    alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+
+	function validacaoCpf(c){
+		var i;
+		s = c;
+		var c = s.substr(0,9);
+		var dv = s.substr(9,2);
+		var d1 = 0;
+		var v = false;
+		for (i = 0; i < 9; i++) {
+			d1 += c.charAt(i)*(10-i);
+		}
+		if (d1 == 0){
+		v = true;
+		return false;
+		}
+		d1 = 11 - (d1 % 11);
+		if (d1 > 9) d1 = 0;
+		if (dv.charAt(0) != d1) {
+		v = true;
+		return false;
+		}
+
+		d1 *= 2;
+		for (i = 0; i < 9; i++) {
+			d1 += c.charAt(i)*(11-i);
+		}
+		d1 = 11 - (d1 % 11);
+		if (d1 > 9) d1 = 0;
+		if (dv.charAt(1) != d1) {
+			v = true;
+		return false;
+		}
+		if (!v) {
+			return true;
+		}
+
+	}
+function validateLong(form) {
+                        var bValid = true;
+                        var focusField = null;
+                        var i = 0;
+                        var fields = new Array();
+                        oInteger = new IntegerValidations();
+                        for (x in oInteger) {
+                                var field = form[oInteger[x][0]];
+
+                            if (field.type == 'text' ||
+                                field.type == 'textarea' ||
+                                field.type == 'select-one' ||
+                                field.type == 'radio') {
+
+                                var value;
+
+                                if (field.type == "select-one") {
+                                        var si = field.selectedIndex;
+                                        value = field.options[si].value;
+                                } else {
+                                        value = trim(field.value);
+                                        field.value = value;
+                                }
+
+                                if (value.length > 0) {
+
+                                        //var iValue = parseInt(value);
+                                        if (isNaN(value) || value.indexOf('.') != -1 || !(value > 0 && value <= 9223372036854775807)) {   
+                                        
+                                            if (i == 0) {
+                                                focusField = field;
+                                            }
+                                            fields[i++] = oInteger[x][1];
+                                            bValid = false;
+                                       }
+
+                               }
+                            }
+                        }
+                        if (fields.length > 0) {
+                           focusField.focus();
+                           alert(fields.join('\n'));
+                        }
+                        return bValid;
+                    }
+                    
+       function trim(inputString) {
+					   // Removes leading and trailing spaces from the passed string. Also removes
+				   	   // consecutive spaces and replaces it with one space. If something besides
+					   // a string is passed in (null, custom object, etc.) then return the input.
+
+					   if (typeof inputString != "string") { return inputString; }
+				   	      var retValue = inputString;
+		      			  var ch = retValue.substring(0, 1);
+						   while (ch == " ") { // Check for spaces at the beginning of the string
+							retValue = retValue.substring(1, retValue.length);
+					        ch = retValue.substring(0, 1);
+				   	   }
+
+					   ch = retValue.substring(retValue.length-1, retValue.length);
+
+					   while (ch == " ") { // Check for spaces at the end of the string
+					      retValue = retValue.substring(0, retValue.length-1);
+		    	  	      ch = retValue.substring(retValue.length-1, retValue.length);
+	   	   	}
+
+	   		while (retValue.indexOf("  ") != -1) { // Note that there are two spaces in the string - look for multiple spaces within the string
+	      	retValue = retValue.substring(0, retValue.indexOf("  ")) + retValue.substring(retValue.indexOf("  ")+1, retValue.length); // Again, there are two spaces in each of the strings
+   	   }
+
+	   	return retValue; // Return the trimmed string back to the user
+	} // Ends the "trim" function
+function validateDecimalZeroPositivo(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oDecimalZeroPositivo = new DecimalZeroPositivoValidations();
+                for (x in oDecimalZeroPositivo) {
+                	var field = form[oDecimalZeroPositivo[x][0]];
+
+                    if (field.type == 'text' ||
+                        field.type == 'textarea' ||
+                        field.type == 'select-one' ||
+                        field.type == 'radio') {
+
+                    	var value;
+
+                        if (field.type == "select-one") {
+                                var si = field.selectedIndex;
+                                value = field.options[si].value;
+                        } else {
+                                
+                                value = field.value;
+				value = value.replace(/\./g, '');
+				value = value.replace(/,/g, '.');
+                        }
+
+						
+                        if (value.length > 0) {
+
+	                        var iValue = parseFloat(value);
+	                    //    if (isNaN(iValue)) {
+        			if (isNaN(value) || value < 0) {
+	                            if (i == 0) {
+	                                focusField = field;
+	                            }
+	                            fields[i++] = oDecimalZeroPositivo[x][1];
+	                            
+	                            bValid = false;
+	                        }
+                        }
+                    }
+                }
+                if (fields.length > 0) {
+                   focusField.focus();
+                   alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+function validateCaracterEspecial(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oCaracterEspecial = new caracteresespeciais();
+                for (x in oCaracterEspecial) {
+                    if ((form[oCaracterEspecial[x][0]].type == 'text' ||
+                         form[oCaracterEspecial[x][0]].type == 'textarea' ||
+                         form[oCaracterEspecial[x][0]].type == 'password') &&
+                        (form[oCaracterEspecial[x][0]].value.length > 0)) {
+                        if (validacaoCaracterEspecial(form[oCaracterEspecial[x][0]].value)) {
+                            if (i == 0) {
+                                focusField = form[oCaracterEspecial[x][0]];
+                            }
+                            fields[i++] = oCaracterEspecial[x][1];
+                            bValid = false;
+                        }
+                    }
+                }
+                if (fields.length > 0) {
+                    focusField.focus();
+                    alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+
+    	function validacaoCaracterEspecial(c){
+        	var achou = false;
+
+		var indesejaveis = "~{}^%$[]@|`\\<¨\#?!;*>\"\'";
+
+		for (var i=0; i<indesejaveis.length; i++) {
+			if ((c.indexOf(indesejaveis.charAt(i))) != -1 ){
+				achou = true;
+			}
+      		}
+
+		return achou;
+	}
+function validateDecimalNegativoZeroPositivo(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oDecimalNegativoZeroPositivo = new DecimalNegativoZeroPositivoValidations();
+                
+                for (x in oDecimalNegativoZeroPositivo) {
+                	var field = form[oDecimalNegativoZeroPositivo[x][0]];
+
+                    if (field.type == 'text' ||
+                        field.type == 'textarea' ||
+                        field.type == 'select-one' ||
+                        field.type == 'radio') {
+
+                    	var value;
+
+                        if (field.type == "select-one") {
+                                var si = field.selectedIndex;
+                                value = field.options[si].value;
+                        } else {
+                                
+                                value = field.value;
+								value = value.replace(/\./g, '');
+								value = value.replace(/,/g, '.');
+                        }
+
+						
+                        if (value.length > 0) {
+
+	                        var iValue = parseFloat(value);
+        					if (isNaN(value)) {
+	                            if (i == 0) {
+	                                focusField = field;
+	                            }
+	                            fields[i++] = oDecimalNegativoZeroPositivo[x][1];
+	                            
+	                            bValid = false;
+	                        }
+                        }
+                    }
+                }
+                if (fields.length > 0) {
+                   focusField.focus();
+                   alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+function validateShort(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oShort = new ShortValidations();
+                for (x in oShort) {
+                	var field = form[oShort[x][0]];
+
+                    if (field.type == 'text' ||
+                        field.type == 'textarea' ||
+                        field.type == 'select-one' ||
+                        field.type == 'radio') {
+
+                        var value;
+
+						if (field.type == "select-one") {
+							var si = field.selectedIndex;
+							value = field.options[si].value;
+						} else {
+							value = field.value;
+						}
+
+                        if (value.length > 0) {
+
+	                        var iValue = parseInt(value);
+	                        if (isNaN(iValue) || !(iValue >= 0 && iValue <= 32767)) {
+	                            if (i == 0) {
+	                                focusField = field;
+	                            }
+	                            fields[i++] = oShort[x][1];
+	                            bValid = false;
+	                       }
+                       }
+                    }
+                }
+                if (fields.length > 0) {
+                   focusField.focus();
+                   alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+function validateEmail(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oEmail = new email();
+                for (x in oEmail) {
+                    if ((form[oEmail[x][0]].type == 'text' ||
+                         form[oEmail[x][0]].type == 'textarea') &&
+                        (form[oEmail[x][0]].value.length > 0)) {
+                        if (!checkEmail(form[oEmail[x][0]].value)) {
+                            if (i == 0) {
+                                focusField = form[oEmail[x][0]];
+                            }
+                            fields[i++] = oEmail[x][1];
+                            bValid = false;
+                        }
+                    }
+                }
+                if (fields.length > 0) {
+                    focusField.focus();
+                    alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+
+            /**
+             * Reference: Sandeep V. Tamhankar (stamhankar@hotmail.com),
+             * http://javascript.internet.com
+             */
+            function checkEmail(emailStr) {
+               if (emailStr.length == 0) {
+                   return true;
+               }
+               var emailPat=/^(.+)@(.+)$/;
+               var specialChars="\\(\\)<>@,;:\\\\\\\"\\.\\[\\]";
+               var validChars="\[^\\s" + specialChars + "\]";
+               var quotedUser="(\"[^\"]*\")";
+               var ipDomainPat=/^(\d{1,3})[.](\d{1,3})[.](\d{1,3})[.](\d{1,3})$/;
+               var atom=validChars + '+';
+               var word="(" + atom + "|" + quotedUser + ")";
+               var userPat=new RegExp("^" + word + "(\\." + word + ")*$");
+               var domainPat=new RegExp("^" + atom + "(\\." + atom + ")*$");
+               var matchArray=emailStr.match(emailPat);
+               if (matchArray == null) {
+                   return false;
+               }
+               var user=matchArray[1];
+               var domain=matchArray[2];
+               if (user.match(userPat) == null) {
+                   return false;
+               }
+               var IPArray = domain.match(ipDomainPat);
+               if (IPArray != null) {
+                   for (var i = 1; i <= 4; i++) {
+                      if (IPArray[i] > 255) {
+                         return false;
+                      }
+                   }
+                   return true;
+               }
+               var domainArray=domain.match(domainPat);
+               if (domainArray == null) {
+                   return false;
+               }
+               var atomPat=new RegExp(atom,"g");
+               var domArr=domain.match(atomPat);
+               var len=domArr.length;
+               if ((domArr[domArr.length-1].length < 2) ||
+                   (domArr[domArr.length-1].length > 3)) {
+                   return false;
+               }
+               if (len < 2) {
+                   return false;
+               }
+               return true;
+            }
+function validateMask(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oMasked = new mask();
+                for (x in oMasked) {
+                    if ((form[oMasked[x][0]].type == 'text' ||
+                         form[oMasked[x][0]].type == 'textarea' ||
+                         form[oMasked[x][0]].type == 'password') &&
+                        (form[oMasked[x][0]].value.length > 0)) {
+                        if (!matchPattern(form[oMasked[x][0]].value, oMasked[x][2]("mask"))) {
+                            if (i == 0) {
+                                focusField = form[oMasked[x][0]];
+                            }
+                            fields[i++] = oMasked[x][1];
+                            bValid = false;
+                        }
+                    }
+                }
+                if (fields.length > 0) {
+                   focusField.focus();
+                   alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+
+            function matchPattern(value, mask) {
+               var bMatched = mask.exec(value);
+               if (!bMatched) {
+                   return false;
+               }
+               return true;
+            }
+
+//End --> 
+</script>
+
+
+<script language="JavaScript" src="/gsan/javascript/util.js" ></script>
+<script language="JavaScript" src="/gsan/javascript/validacao/ManutencaoRegistro.js" ></script>
+<script language="JavaScript">
+<!--
+function recuperarDadosPopup(codigoRegistro, descricaoRegistro, tipoConsulta) {
+    var form = document.forms[0];
+
+    if(tipoConsulta == 'imovel'){
+      limparForm();      
+      form.matriculaImovel.value = codigoRegistro;
+      form.action = 'exibirManterCreditoARealizarAction.do'
+      form.submit();
+    }
+}
+ 
+function limparForm()
+{
+    window.location.href="exibirManterCreditoARealizarAction.do?menu=sim";
+}
+ 
+function facilitador(objeto){
+	if (objeto.value == "0"){
+		objeto.value = "1";
+		marcarTodos();
+	}
+	else{
+		objeto.value = "0";
+		desmarcarTodos();
+	}
+}
+function verficarSelecao(objeto, tipoObjeto){
+
+	var indice;
+	var array = new Array(objeto.length);
+	var selecionado = "";
+	var formulario = document.forms[0]; 
+
+	for(indice = 0; indice < formulario.elements.length; indice++){
+		if (formulario.elements[indice].type == tipoObjeto && formulario.elements[indice].checked == true) {
+			selecionado = formulario.elements[indice].value;
+			break;
+		}
+	}
+
+	if (selecionado.length < 1) {
+		alert('Não há nenhum registro selecionado.');
+	}else{
+		if (confirm ("Deseja realmente cancelar o(s) Crédito(s) do sistema?")) {
+			redirecionarSubmit("/gsan/manterCreditoARealizarAction.do");
+		}
+	}
+}
+//-->
+</script>
+</head>
+<body leftmargin="5" topmargin="5">
+<form name="ManterCreditoARealizarActionForm" method="post" action="/gsan/exibirManterCreditoARealizarAction.do">
+	<table width="770" border="0" cellspacing="5" cellpadding="0">
+  <tr>
+
+    <td height="0" valign="top" class="topstrip">
+      <table width="100%" height="0" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+            <td height="0" colspan="2" valign="top" class="topstrip"><img src="imagens/logo.gif" border="0"></td>
+
+          <td valign="top" align="right"><img src="imagens/logocht.gif" border="0" width="192" height="51"></td>
+        </tr>
+
+      </table></td>
+  </tr>
+
+</table>
+
+
+	<link rel="StyleSheet" href="/gsan/css/dtree.css"
+	type="text/css" />
+<script type="text/javascript"
+	src="/gsan/javascript/dtree.js"></script>
+<table border="0" class="layerMenu">
+	<tr>
+		<td>
+		<div class="dtree"><script><!-- -
+          d = new dTree('d');
+          d.add(0,-1,'Menu GCOM');
+          d.add(1,0,'GCOM','#');
+          d.add(2,1,'Cadastro','#');
+          d.add(3,2,'Cliente','#');
+          d.add(4,2,'Imóvel','#');
+          d.add(5,3,'Inserir Cliente','exibirInserirClienteAction.do?menu=sim');
+          d.add(6,3,'Manter Cliente','exibirManterClienteAction.do?menu=sim');
+          d.add(7,4,'Inserir Imóvel','exibirInserirImovelAction.do?menu=sim');
+          d.add(8,4,'Informar Economia','exibirInformarEconomiaAction.do?menu=sim');
+          d.add(9,1,'Micromedição','#');
+          d.add(10,2,'Localidade','#');
+          d.add(11,10,'Inserir Localidade','exibirInserirLocalidadeAction.do?menu=sim');
+          d.add(12,10,'Manter Localidade','exibirFiltrarLocalidadeAction.do?menu=sim');
+          d.add(13,10,'Inserir Setor Comercial','exibirInserirSetorComercialAction.do?menu=sim');
+          d.add(14,10,'Manter Setor Comercial','exibirFiltrarSetorComercialAction.do?menu=sim');
+          d.add(15,10,'Inserir Quadra','exibirInserirQuadraAction.do?menu=sim');
+          d.add(16,9,'Consistir Leituras e Calcular Consumos','exibirConsistirLeiturasCalcularConsumosAction.do?menu=sim');
+          d.add(17,4,'Alterar Inscrição Imóvel','exibirAlterarImovelInscricaoAction.do?menu=sim');
+          d.add(18,2,'Geográfico','#');
+          d.add(19,22,'Inserir Bairro','exibirInserirBairroAction.do?menu=sim');
+          d.add(20,22,'Manter Bairro','exibirManterBairroAction.do?menu=sim');
+          d.add(21,10,'Manter Quadra','exibirFiltrarQuadraAction.do?menu=sim');
+          d.add(22,2,'Endereço','#');
+          d.add(23,22,'Inserir Logradouro','exibirInserirLogradouroAction.do?menu=sim');
+          d.add(24,22,'Manter Logradouro','exibirManterLogradouroAction.do?menu=sim');
+		  d.add(25,4,'Manter Imóvel','exibirFiltrarImovelAction.do?menu=sim');
+		  d.add(26,2,'Tarifa Social','#');
+		  d.add(27,26,'Inserir Tipo de Cartão da Tarifa Social','exibirInserirTarifaSocialCartaoTipoAction.do?menu=sim');
+          d.add(28,26,'Manter Tipo de Cartão da Tarifa Social','filtrarTarifaSocialCartaoTipoAction.do?menu=sim');
+          d.add(29,9,'Hidrômetro','#')
+          d.add(30,29,'Inserir Hidrômetro','exibirInserirHidrometroAction.do?menu=sim');
+          d.add(31,29,'Manter Hidrômetro','exibirManterHidrometroAction.do?menu=sim');
+          d.add(32,29,'Movimentar Hidrômetro','exibirFiltrarHidrometroAction.do?menu=sim&tela=movimentarHidrometro');
+		  d.add(33,35,'Inserir Comando de Atividade de Faturamento','exibirInserirComandoAtividadeFaturamentoAction.do?menu=sim');
+		  d.add(34,35,'Manter Comando de Atividade de Faturamento','filtrarComandoAtividadeFaturamentoAction.do?menu=sim');		  
+		  d.add(35,1,'Faturamento','#');
+		  d.add(36,37,'Inserir Conta','exibirInserirContaAction.do?menu=sim');
+		  d.add(37,35,'Conta','#');
+		  d.add(38,29,'Consultar Movimentação de Hidrômetro','exibirFiltrarMovimentacaoHidrometroAction.do?menu=sim&tela=consultarMovimentacaoHidrometro');
+		  d.add(39,26,'Inserir Dados Tarifa Social','exibirInserirTarifaSocialAction.do?menu=sim');		  
+		  d.add(40,26,'Manter Dados Tarifa Social','exibirFiltrarImovelAction.do?menu=sim&acao=exibir&redirecionar=ManterDadosTarifaSocial');
+		  d.add(41,37,'Informar Vencimento Alternativo','exibirInformarVencimentoAlternativoAction.do?menu=sim');
+		  d.add(42,37,'Manter Conta','exibirManterContaAction.do?menu=sim');
+ 		  d.add(43,37,'Simular Cálculo da Conta','exibirSimularCalculoContaAction.do?menu=sim');
+		  d.add(43,22,'Importar Cep Correios','exibirImportarCepAction.do?menu=sim');
+		  d.add(44,111,'Inserir Débito A Cobrar','exibirInserirDebitoACobrarAction.do?menu=sim');
+		  d.add(45,111,'Cancelar Débito A Cobrar','exibirManterDebitoACobrarAction.do?menu=sim');
+          d.add(46,109,'Inserir Categoria','exibirInserirCategoriaAction.do?menu=sim'); 
+          d.add(47,35, 'Tarifa de Consumo', '#');
+          d.add(48,47, 'Inserir Tarifa de Consumo', 'exibirInserirConsumoTarifaAction.do?menu=sim');
+          d.add(49,109, 'Manter Categoria', 'exibirManterCategoriaAction.do?menu=sim');
+          d.add(50,109, 'Inserir Subcategoria', 'exibirInserirSubcategoriaAction.do?menu=sim');
+          d.add(51,109, 'Manter Subcategoria', 'exibirManterSubcategoriaAction.do?menu=sim');
+          d.add(52,35,'Consultar Histórico de Faturamento','exibirConsultarHistoricoFaturamentoAction.do?menu=sim');
+		  d.add(53,1,'Relatório','#');
+		  d.add(54,53,'Cadastro','#');
+		  d.add(55,54,'Relatório de Imóveis','exibirFiltrarImovelOutrosCriterios.do?menu=sim&gerarRelatorio=RelatorioImoveis&limpar=S');
+		  d.add(56,54,'Relatório dos Dados das Economias dos Imóveis','exibirFiltrarImovelOutrosCriterios.do?menu=sim&gerarRelatorio=RelatorioEconomia&limpar=S');
+		  d.add(57,54,'Relatório Dados Tarifa Social','exibirFiltrarImovelOutrosCriterios.do?menu=sim&gerarRelatorio=RelatorioTarifaSocial&limpar=S');
+		  d.add(58,35,'Inserir Cronograma Faturamento','exibirInserirFaturamentoCronogramaAction.do?menu=sim');
+		  d.add(59,35,'Manter Cronograma Faturamento','exibirFiltrarFaturamentoCronogramaAction.do?menu=sim');
+		  d.add(60,54,'Gerar Relatório de Clientes','exibirFiltrarClienteOutrosCriteriosAction.do?menu=sim');
+		  d.add(61,35,'Alterar Dados para Faturamento','exibirDadosFaturamentoAction.do?menu=sim');
+		  d.add(62,1,'Cobrança','#');
+		  d.add(63,62,'Consultar Débitos','exibirConsultarDebitoAction.do?menu=sim');
+		  d.add(64,9,'Manter Vínculos de Imóveis para Rateio de Consumo','exibirFiltrarImovelAction.do?menu=sim&redirecionar=ManterVinculoImoveisRateioConsumo');		  
+		  d.add(65,35,'Crédito','#');
+		  d.add(66,65,'Inserir Crédito a Realizar','exibirInserirCreditoARealizarAction.do?menu=sim');		  
+		  d.add(67,47, 'Manter Tarifa de Consumo', 'exibirFiltrarConsumoTarifaAction.do?menu=sim');
+		  d.add(68,65,'Cancelar Crédito a Realizar','exibirManterCreditoARealizarAction.do?menu=sim');
+		  d.add(69,35,'Inserir Guia de Pagamento', 'exibirInserirGuiaPagamentoAction.do?menu=sim');
+		  d.add(70,35,'Cancelar Guia de Pagamento', 'exibirManterGuiaPagamentoAction.do?menu=sim');
+  		  d.add(71,9,'Consultar Histórico de Medição Individualizada', 'exibirConsultarHistoricoMedicaoIndividualizadaAction.do?menu=sim');
+  		  d.add(72,9,'Analisar Exceções de Leituras e Consumos','exibirFiltrarExcecoesLeiturasConsumosAction.do?nomeCaminhoMapping=efetuarAnaliseExcecoesLeiturasConsumos&menu=sim');
+		  d.add(73,35, 'Informar Situação Especial de Faturamento', 'exibirSituacaoEspecialFaturamentoInformarAction.do?menu=sim' );	
+		  d.add(74,29,'Consultar Histórico de Instalação','exibirConsultarHistoricoInstalacaoHidrometroInformarAction.do?menu=sim');
+		  d.add(75,9,'Registrar Leituras e Anormalidades','exibirRegistrarLeiturasAnormalidadesAction.do?menu=sim');
+		  d.add(76,62,'Inserir Comando de Ação de Cobrança','exibirInserirComandoAcaoCobrancaAction.do?menu=sim');		  
+		  d.add(77,53,'Faturamento','#');		  
+		  d.add(78,77,'Relatório Resumo Faturamento','exibirGerarRelatorioResumoFaturamentoAction.do?menu=sim');		  		  
+		  d.add(79,62,'Executar Atividade de Ação de Cobrança','exibirExecutarAtividadeAcaoCobrancaAction.do?menu=sim');
+		  d.add(80,62,'Efetuar Parcelamento de Débitos','exibirEfetuarParcelamentoDebitosAction.do?menu=sim');
+		  d.add(81,62,'Consultar Parcelamento de Débitos','exibirConsultarListaParcelamentoDebitoAction.do?menu=sim');
+		  d.add(82,1,'Arrecadação','#');
+		  d.add(83,82,'Aviso Bancário','#');
+		  d.add(84,82,'Pagamento','#');		  		  		  
+		  d.add(85,84,'Inserir Pagamentos','exibirInserirPagamentosAction.do?menu=sim');
+		  d.add(86,1,'Segurança','#');
+		  d.add(87,86,'Transação','#');
+		  d.add(88,87,'Consultar Operação','ExibirFiltrarOperacaoEfetuadaAction.do?acao=consulta&menu=sim');
+		  d.add(89,137,'Inserir Devoluções','exibirInserirDevolucoesAction.do?menu=sim');
+		  d.add(90,137,'Manter Devoluções','exibirFiltrarDevolucaoAction.do?tela=manterDevolucao&menu=sim');
+		  d.add(91,53,'Transação','#');		  
+		  d.add(92,91,'Relatório Tranções Efetuada','ExibirFiltrarOperacaoAction.do?acao=relatorio&menu=sim');
+		  d.add(93,9,'Consultar Imóveis Medição Individualizada','exibirConsultarImoveisMedicaoIndividualizadaAction.do?menu=sim');
+		  d.add(94,82,'Registrar Movimento Arrecadadores','exibirRegistrarMovimentoArredadadoresAction.do?menu=sim');
+          d.add(95,83,'Manter Aviso Bancario','exibirFiltrarAvisoBancarioAction.do?menu=sim');
+          d.add(96,62, 'Informar Situação Especial de Cobrança', 'exibirSituacaoEspecialCobrancaInformarAction.do?menu=sim' );
+          d.add(97,84,'Manter Pagamentos','exibirFiltrarPagamentoAction.do?tela=manterPagamento&menu=sim');
+          d.add(98,82,'Efetuar Análise do Movimento dos Arrecadadores','exibirFiltrarMovimentoArrecadadoresAction.do?menu=sim');
+          d.add(99,83,'Efetuar Análise Aviso Bancário','exibirFiltrarAvisoBancarioAction.do?menu=sim&acao=efetuar');
+          d.add(100,62,'Manter Comando de Ação de Cobrança','exibirManterComandoAcaoCobrancaAction.do?menu=sim');
+          d.add(101,26,'Consultar Imóveis Excluídos da Tarifa Social','exibirFiltrarImovelOutrosCriterios.do?menu=sim&gerarRelatorio=consultarTarifaExcluida&limpar=S');
+          d.add(102,83,'Inserir Aviso Bancário','exibirInserirAvisoBancarioAction.do?menu=sim');
+          d.add(103,137,'Consultar Devoluções','exibirFiltrarDevolucaoAction.do?menu=sim');
+          d.add(104,35,'Consultar Posição Faturamento','PesquisarPosicaoFaturamentoAction.do?menu=sim');
+          d.add(105,4,'Relação Cliente e Imóvel','ExibirConsultarRelacaoClienteImovelAction.do?menu=sim');
+          d.add(106,35,'Executar Atividade do Faturamento','exibirExecutarAtividadeFaturamentoAction.do?menu=sim');
+          d.add(107,62,'Inserir Resolução de Diretoria','exibirInserirResolucaoDiretoriaAction.do?menu=sim');
+          d.add(108,62,'Consultar Documentos de Cobrança','exibirFiltrarDocumentosCobrancaAction.do?menu=sim');
+          d.add(109,2,'Categoria','#');
+          d.add(110,84,'Consultar Pagamentos','exibirFiltrarPagamentoAction.do?menu=sim');		  
+          d.add(111,35,'Débito','#');
+          d.add(112,62,'Manter Resolução de Diretoria','exibirFiltrarResolucaoDiretoriaAction.do?menu=sim');	  
+          d.add(113,9,'Rota','#');
+          d.add(114,113,'Inserir Rota','exibirInserirRotaAction.do?menu=sim');
+          d.add(115,113,'Manter Rota','exibirFiltrarRotaAction.do?menu=sim');
+          d.add(116,4,'Inserir Situação do Imóvel ','exibirInserirImovelSituacaoAction.do?menu=sim');
+          d.add(117,4,'Consultar Situação do Imóvel ','exibirFiltrarImovelSituacaoAction.do?menu=sim');
+          d.add(118,82,'Gerar Movimento do Débito Automático para os Bancos','exibirGerarMovimentoDebitoAutomaticoBancoAction.do?menu=sim');
+          d.add(119,62,'Inserir Cronograma de Cobrança ','exibirInserirCronogramaCobrancaAction.do?menu=sim');
+          d.add(120,62,'Inserir Critério de Cobrança ','exibirInserirCriterioCobrancaAction.do?menu=sim');
+          d.add(121,137,'Inserir Guia de Devolução ','exibirInserirGuiaDevolucaoAction.do?menu=sim');
+		  d.add(122,37,'Desfazer Cancelamento e/ou Retificação','exibirManterDesfazerCancelamentoRetificacaoContaAction.do?menu=sim');
+          d.add(123,86,'Acesso','#');
+          d.add(124,123,'Inserir Grupo','exibirInserirGrupoAction.do?menu=sim');
+          d.add(125,123,'Manter Grupo','exibirManterGrupoAction.do?menu=sim');
+          d.add(126,37,'Inserir Mensagem da Conta','exibirInserirMensagemContaAction.do?menu=sim');
+          d.add(127,37,'Manter Mensagem da Conta','exibirFiltrarMensagemContaAction.do?menu=sim');
+          d.add(128,62,'Manter Critério de Cobrança ','exibirFiltrarCriterioCobrancaAction.do?menu=sim');
+          d.add(129,77,'Relatório de Acompanhamento de Faturamento','exibirFiltrarImovelOutrosCriterios.do?menu=sim&gerarRelatorio=GerarRelatorioAcompanhamentoFaturamento&limpar=S');		  		  
+          d.add(130,62,'Consultar Comandos de Ação de Cobrança','exibirConsultarComandosAcaoCobrancaAction.do?menu=sim');		  		  
+          d.add(131,123,'Inserir Funcionalidade','exibirInserirFuncionalidadeAction.do?menu=sim');
+          d.add(132,123,'Usuário','#');
+          d.add(133,132,'Inserir Usuário','exibirInserirUsuarioAction.do?menu=sim');
+          d.add(134,132,'Manter Usuário','exibirFiltrarUsuarioAction.do?menu=sim');
+          d.add(135,62,'Inserir Perfil de Parcelamento','exibirInserirPerfilParcelamentoAction.do?menu=sim');
+          d.add(136,137,'Manter Guia de Devolução','exibirFiltrarGuiaDevolucaoAction.do?menu=sim');
+          d.add(137,82,'Devolução','#');
+          d.add(138,123,'Inserir Operação','exibirInserirOperacaoAction.do?menu=sim');
+          d.add(139,62,'Manter Perfil de Parcelamento','exibirFiltrarPerfilParcelamentoAction.do?menu=sim');
+		  d.add(140,123,'Manter Funcionalidade','exibirFiltrarFuncionalidadeAction.do?menu=sim');	
+	  	  d.add(141,62,'Manter Cronograma de Cobrança','exibirFiltrarCobrancaCronogramaAction.do?menu=sim');
+	  	  d.add(142,82,'Consultar Dados Diários da Arrecadação','exibirFiltrarDadosDiariosArrecadacaoAction.do?menu=sim');
+	  	  d.add(143,171,'Consultar Resumo das Anormalidades','exibirInformarDadosGeracaoRelatorioConsultaAction.do?menu=sim&tipoResumo=ANORMALIDADE');
+          d.add(144,53,'Cobrança','#');
+	  	  d.add(145,144,'Gerar Relação de Débitos','exibirFiltrarImovelOutrosCriterios.do?menu=sim&gerarRelatorio=GerarRelacaoDebito&limpar=S');	  	  
+	  	  d.add(146,148,'Consultar Resumo de Pendência','exibirInformarDadosGeracaoRelatorioConsultaAction.do?menu=sim&tipoResumo=PENDENCIA');
+	  	  d.add(147,1,'Gerencial','#');
+	  	  d.add(148,147,'Cobranca','#');
+	  	  d.add(149,147,'Arrecadação','#');
+	  	  d.add(151,147,'Faturamento');
+	  	  d.add(152,151,'Consultar Resumo das Situações Especiais de Faturamento','exibirInformarResumoSituacaoEspecialFaturamentoAction.do?menu=sim');
+          d.add(153,147,'Cadastro');
+	  	  d.add(154,153,'Consultar Resumo das Ligacoes / Economias','exibirInformarDadosGeracaoRelatorioConsultaAction.do?menu=sim&tipoResumo=LIGACAO_EC0NOMIA');
+	  	  d.add(155,1,'Execução Batch','#');
+	  	  d.add(156,155,'UC0302 - Gerar Débitos a Cobrar de Acréscimos por Impontualidade','execucaoBatchAction.do?casoUso=UC0302');
+	  	  d.add(157,155,'UC0275 - Gerar Resumo das Ligações/Economias','execucaoBatchAction.do?casoUso=UC0275');
+	  	  d.add(158,155,'UC0209 - Gerar Taxa de Entrega em Outro Endereço','execucaoBatchAction.do?casoUso=UC0209&idRotas=3,984&anoMes=20045');
+	  	  d.add(159,155,'UC0341 - Gerar Resumo da Situação Especial de Faturamento','execucaoBatchAction.do?casoUso=UC0341');
+	  	  d.add(160,155,'UC0346 - Gerar Resumo da Situação Especial de Cobrança','execucaoBatchAction.do?casoUso=UC0346');
+	  	  d.add(161,155,'UC0335 - Gerar Resumo da Pendência','execucaoBatchAction.do?casoUso=UC0335');
+	  	  d.add(162,155,'UC0276 - Encerrar a Arrecadação do Mês','execucaoBatchAction.do?casoUso=UC0276');
+	  	  d.add(163,155,'UC0348 - Gerar Lançamentos Contábeis da Arrecadação','execucaoBatchAction.do?casoUso=UC0348&anoMes=200601');
+	  	  d.add(164,155,'UC0300 - Classificar Pagamentos e Devoluções','execucaoBatchAction.do?casoUso=UC0300');
+	  	  d.add(165,155,'UC0301 - Gerar Dados Diários da Arrecadação','execucaoBatchAction.do?casoUso=UC0301');
+	  	  d.add(166,155,'UC0343 - Gerar Resumo das Anormalidades','execucaoBatchAction.do?casoUso=UC0343');
+	  	  d.add(167,155,'UC0352 - Emitir Contas','execucaoBatchAction.do?casoUso=UC0352&idContas=1,2,3,4,5,6,7,8,9,10,11,12,13,14,15');
+	  	  d.add(168,155,'UC0349 - Emitir Documento de Cobrança','execucaoBatchAction.do?casoUso=UC0349');
+	  	  d.add(169,155,'UC0320 - Gerar Fatura de Cliente Responsável','execucaoBatchAction.do?casoUso=UC0320');
+	  	  d.add(170,155,'UC0321 - Emitir Fatura de Cliente Responsável','execucaoBatchAction.do?casoUso=UC0321');
+	  	  d.add(171,147,'Micromedição');
+	  	  d.add(173,155,'UC0343 - Gerar Resumo de Anormalidades','execucaoBatchAction.do?casoUso=UC0343');
+          d.add(174,148,'Consultar Resumo das Situações Especiais de Cobrança','exibirInformarResumoSituacaoEspecialCobrancaAction.do?menu=sim');
+          d.add(175,151,'Consultar Resumo da Análise do Faturamento','exibirInformarDadosGeracaoRelatorioConsultaAction.do?menu=sim&analiseFaturamento=ok&tipoResumo=ANALISE');
+          d.add(176,155,'UC0343 - Gerar Resumo Anormalidade Consumo','execucaoBatchAction.do?casoUso=UC0343C');
+          d.add(177,53,'Arrecadação','#');
+          d.add(178,177,'Relatório Resumo Arrecadação','exibirGerarRelatorioResumoArrecadacaoAction.do?menu=sim');
+          d.add(179,132,'Inserir Situação do Usuário','exibirInserirSituacaoUsuarioAction.do?menu=sim');
+          d.add(180,132,'Manter Situação do Usuário','exibirManterSituacaoUsuarioAction.do?menu=sim');
+          d.add(181,132,'Inserir Abrangência do Usuário','exibirInserirAbrangenciaUsuarioAction.do?menu=sim');
+          d.add(182,132,'Manter Abrangência do Usuário','exibirManterAbrangenciaUsuarioAction.do?menu=sim');
+          d.add(183,149,'Consultar Comparativo entre os Resumos do Faturamento, Arrecadação e da Pendência','exibirInformarDadosGeracaoRelatorioConsultaAction.do?menu=sim&tipoResumo=COMPARATIVORESUMOS');
+          d.add(184,1,'Atendimento ao Público','#');
+          d.add(185,184,'Ligação Água','#');
+          d.add(186,185,'Efetuar Ligação de Água','exibirEfetuarLigacaoAguaAction.do?menu=sim');
+          d.add(187,185,'Efetuar Corte de Ligação de Água','exibirEfetuarCorteLigacaoAguaAction.do?menu=sim');
+          d.add(188,184,'Ligação Esgoto','#');
+          d.add(189,188,'Efetuar Ligação de Esgoto','exibirEfetuarLigacaoEsgotoAction.do?menu=sim');
+          d.add(190,155,'UC0213 - Desfazer Parcelamentos Por Entrada Não Paga','execucaoBatchAction.do?casoUso=UC0213');
+          d.add(191,132,'Bloquear Desbloquear Acesso','exibirBloquearDesbloquearAcessoUsuarioAction.do?menu=sim');
+          d.add(192,184,'Hidrômetro','#');
+          d.add(193,192,'Efetuar Instalação de Hidrômetro','exibirEfetuarInstalacaoHidrometroAction.do?menu=sim');
+	  d.add(194,192,'Efetuar Retirada de Hidrômetro','exibirEfetuarRetiradaHidrometroAction.do?menu=sim');
+	  d.add(195,192,'Efetuar Remanejamento de Hidrômetro','exibirEfetuarRemanejamentoHidrometroAction.do?menu=sim');
+	  d.add(196,185,'Efetuar Religação de Água','exibirEfetuarReligacaoAguaAction.do?menu=sim');
+	 d.add(196,185,'Efetuar Restabelecimento da Ligação de Água','exibirEfetuarRestabelecimentoLigacaoAguaAction.do?menu=sim');
+	 d.add(197,188,'Efetuar Mudança de Situação de Faturamento da Ligação de Esgoto','exibirEfetuarMudancaSituacaoFaturamentoLigacaoEsgotoAction.do?menu=sim');		
+	 d.add(198,188,'Atualizar Ligação de Esgoto','exibirAtualizarLigacaoEsgotoAction.do?menu=sim');			 
+d.draw();
+          
+          
+
+     //-->     </script></div>
+		</td>
+
+	</tr>
+</table>
+
+
+
+
+	<table width="770" border="0" cellspacing="5" cellpadding="0">
+		<tr>
+			<td width="130" valign="top" class="leftcoltext">
+			<div align="center">
+			<p align="left">&nbsp;</p>
+
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+
+			<div align="center">
+  <p align="left">&nbsp;</p>
+  <p align="left">&nbsp;</p>
+  <p align="left">&nbsp;</p>
+<table width="100%" border="0" class="tableinlayerusuario">
+	<tr>
+    <td>
+
+		---
+  		<strong>Data:</strong>
+	  </td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+  </tr>
+  <tr>
+    <td>
+
+  		<strong>Usu&aacute;rio</strong>:
+	  </td>
+    </tr>
+    <tr>
+      <td>---
+	  </td>
+  </tr>
+  <tr>
+    <td>&nbsp;</td>
+
+  </tr>
+  <tr>
+    <td>
+      <strong>&Uacute;ltimo Acesso:</strong>
+    </td>
+  </tr>
+  <tr>
+    <td>---</td>
+
+  </tr>
+</table>
+</div>
+
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+
+			
+
+
+
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+			<p align="left">&nbsp;</p>
+			</div>
+			</td>
+
+			<td width="625" valign="top" class="centercoltext">
+
+			<table height="100%">
+				<tr>
+					<td></td>
+				</tr>
+			</table>
+
+			<table width="100%" border="0" align="center" cellpadding="0"
+				cellspacing="0">
+				<tr>
+					<td width="11"><img border="0"
+						src="imagens/parahead_left.gif" /></td>
+
+					
+            <td class="parabg">Cancelar Doa&ccedil;&otilde;es de Im&oacute;vel 
+              a Entidade Beneficente</td>
+					<td width="11"><img border="0"
+						src="imagens/parahead_right.gif" /></td>
+				</tr>
+			</table>
+			<p>&nbsp;</p>
+
+			<!-- Início do Corpo - Roberta Costa  16/01/2006  -->
+
+			<table width="100%" border="0">
+
+				<tr>
+					
+            <td>Para cancelar as doa&ccedil;&otilde;es a entidades beneficentes, 
+              informe o imóvel:</td>
+					<td colspan="3">&nbsp;</td>
+				</tr>
+			</table>
+
+			<table width="100%" border="0">
+				<tr>
+					<td height="10" width="160">
+
+						<strong>Matrícula do Imóvel:<font color="#FF0000">*</font></strong>
+					</td>
+					<td width="403">
+						<input type="text" name="matriculaImovel" maxlength="9" size="9" value="55000111" onkeyup="validaEnterComMensagem(event, 'exibirManterCreditoARealizarAction.do', 'matriculaImovel', 'Matrícula do imóvel');">
+						<img src="imagens/pesquisa.gif" width="23"
+							height="21" style="cursor:hand;" name="imagem" onclick="abrirPopup('exibirPesquisarImovelAction.do', 'imovel', null, null, 275, 480, '',document.forms[0].matriculaImovel);" alt="Pesquisar">
+						 
+						
+							
+							
+								<input type="text" name="inscricaoImovel" size="25" value="339.104.330.0001.001" readonly="readonly" style="background-color:#EFEFEF; border:0; color: #000000">
+							
+						
+						<img border="0"
+							src="imagens/limparcampo.gif"
+							onclick="limparForm('imovel'); " style="cursor: hand;" />
+					</td>
+
+					<td width="43">&nbsp;</td>
+				</tr>
+				<tr>
+					<td colspan="3">
+						<table width="100%" align="center" bgcolor="#99CCFF" border="0">
+							<tr>
+								<td><strong>Dados do Imóvel:</strong></td>
+							</tr>
+
+							<tr bgcolor="#cbe5fe">
+								<td width="100%" align="center">
+									<table width="100%" border="0">
+										<tr>
+											<td height="10"><strong>Nome do Cliente Usuário:</strong></td>
+											<td><input type="text" name="nomeCliente" size="45" value="ROSA AMELIA DA SILVA" readonly="readonly" style="background-color:#EFEFEF; border:0">
+											</td>
+										</tr>
+
+										<tr>
+											<td height="10"><strong>Situação de Água:</strong></td>
+											<td><input type="text" name="situacaoAgua" size="45" value="SUPRIMIDO" readonly="readonly" style="background-color:#EFEFEF; border:0">
+											</td>
+										</tr>
+										<tr>
+											<td height="10"><strong>Situação de Esgoto:</strong></td>
+											<td><input type="text" name="situacaoEsgoto" size="45" value="LIGADO" readonly="readonly" style="background-color:#EFEFEF; border:0">
+
+											</td>
+										</tr>
+									</table>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+
+					<td height="10">&nbsp;</td>
+					<td><strong><font color="#FF0000">*</font></strong> Campos
+					obrigat&oacute;rios</td>
+					<td>&nbsp;</td>
+				</tr>
+			</table>
+			
+			<table width="100%" border="0">
+				<tr>
+
+					
+            <td colspan="8" height="23"> <strong>Doa&ccedil;&otilde;es a Enitades 
+              Beneficentes:</strong> </td>
+				</tr>
+				<tr>
+					<td colspan="8"></td>
+				</tr>
+				
+				<tr>
+
+					<td colspan="5">
+						<table width="100%" bgcolor="#99CCFF">
+                <tr bordercolor="#000000"> 
+                  <td width="7%" bgcolor="#90c7fc" align="center"> <strong><a href="javascript:facilitador(this);">Todos</a></strong> 
+                  </td>
+                  <td width="13%" bgcolor="#90c7fc" align="center"> <strong>Entidade 
+                    Beneficente </strong> </td>
+                  <td width="10%" bgcolor="#90c7fc" align="center"> <strong>&nbsp;Valor 
+                    da Doa&ccedil;&atilde;o Mensal</strong> </td>
+                  <td width="14%" bgcolor="#90c7fc"> <div align="center"><strong>Data 
+                      de Ades&atilde;o</strong> </div></td>
+                  <td width="24%" bgcolor="#90c7fc" align="center"> <strong>&nbsp;Usu&aacute;rio 
+                    Ades&atilde;o</strong></td>
+                  <td width="15%" bgcolor="#90c7fc" align="center"> <strong>Data 
+                    Cancelamento </strong></td>
+                  <td width="17%" bgcolor="#90c7fc" align="center"> <strong>Usu&aacute;rio 
+                    Cancel. </strong></td>
+                </tr>
+                <tr bgcolor="#cbe5fe"> 
+                  <td width="7%" align="center"> <div> 
+                      <input type="checkbox" name="idCreditoARealizar" value="53" disabled="disable"/>
+                    </div></td>
+                  <td width="13%"  align="center"> <font color="#000000"> HOSPITAL 
+                    DO C&Acirc;NCER</font></td>
+                  <td width="10%"> <div align="center"><font color="#000000"> 
+                      1,00</font> </div></td>
+                  <td width="14%"> <div align="center"><font color="#000000"> 
+                      15/02/2006&nbsp; </font> </div></td>
+                  <td width="24%" align="center"> <font color="#000000"> MANOEL 
+                    BATISTA DA SILVA&nbsp; </font> </td>
+                  <td width="15%" bgcolor="#FFFFFF"> <div align="center"><font color="#000000"> 
+                      15/03/2006&nbsp; </font> </div></td>
+                  <td width="17%" align="center" bgcolor="#FFFFFF"> <font color="#000000"> 
+                    GILBERTO SOUZA </font></td>
+                </tr>
+                <tr bgcolor="#FFFFFF"> 
+                  <td width="7%" align="center"> <div> 
+                      <input type="checkbox" name="idCreditoARealizar" value="56" disabled="disable"/>
+                    </div></td>
+                  <td width="13%"  align="center"> <font color="#000000"> HOSPITAL 
+                    DO C&Acirc;NCER</font> </td>
+                  <td width="10%"> <div align="center"><font color="#000000"> 
+                      1,00. &nbsp; </font> </div></td>
+                  <td width="14%"> <div align="center"><font color="#000000"> 
+                      15/03/2006&nbsp; </font> </div></td>
+                  <td width="24%" align="center"> <font color="#000000"> GILBERTO 
+                    SOUZA </font></td>
+                  <td width="15%" bgcolor="#cbe5fe"> <div align="center"><font color="#000000"> 
+                      15/04/2006&nbsp; </font> </div></td>
+                  <td width="17%" align="center" bgcolor="#cbe5fe"> <font color="#000000"> 
+                    MARIA JOSE DA SILVA ALBUQUERQUE&nbsp; </font> </td>
+                </tr>
+                <tr bgcolor="#cbe5fe"> 
+                  <td width="7%" align="center"> <div> 
+                      <input type="checkbox" name="idCreditoARealizar" value="54" disabled="disable"/>
+                    </div></td>
+                  <td width="13%"  align="center"> <font color="#000000">&nbsp; </font><font color="#000000">HOSPITAL 
+                    DO C&Acirc;NCER</font></td>
+                  <td width="10%"> <div align="center"><font color="#000000"> 
+                      1,00. &nbsp; </font> </div></td>
+                  <td width="14%"> <div align="center"><font color="#000000"> 
+                      15/04/2006&nbsp; </font> </div></td>
+                  <td width="24%" align="center"> <font color="#000000"> MARIA 
+                    JOSE DA SILVA ALBUQUERQUE&nbsp; </font> </td>
+                  <td width="15%" bgcolor="#FFFFFF"> <div align="center"><font color="#000000"> 
+                      15/05/2006&nbsp; </font> </div></td>
+                  <td width="17%" align="center" bgcolor="#FFFFFF"> <font color="#000000"> 
+                    MANOEL BATISTA DA SILVA&nbsp; </font> <font color="#000000">&nbsp; 
+                    </font> </td>
+                </tr>
+                <tr bgcolor="#FFFFFF"> 
+                  <td width="7%" align="center"> <div> 
+                      <input type="checkbox" name="idCreditoARealizar" value="55" disabled="disable"/>
+                    </div></td>
+                  <td width="13%"  align="center"> <font color="#000000"> HOSPITAL 
+                    DO C&Acirc;NCER</font> </td>
+                  <td width="10%"> <div align="center"><font color="#000000"> 
+                      1,00&nbsp; </font> </div></td>
+                  <td width="14%"> <div align="center"><font color="#000000"> 
+                      15/05/2006&nbsp; </font> </div></td>
+                  <td width="24%" align="center"> <font color="#000000"> MANOEL 
+                    BATISTA DA SILVA&nbsp; </font> <font color="#000000">&nbsp; </font> 
+                  </td>
+                  <td width="15%" bgcolor="#cbe5fe"> <div align="center"><font color="#000000"> 
+                      15/06/2006&nbsp; </font> </div></td>
+                  <td width="17%" align="center" bgcolor="#cbe5fe"> <font color="#000000"> 
+                    MANOEL BATISTA DA SILVA&nbsp; </font> <font color="#000000">&nbsp; 
+                    </font> </td>
+                </tr>
+                <tr bgcolor="#cbe5fe"> 
+                  <td width="7%" align="center"> <div> 
+                      <input type="checkbox" name="idCreditoARealizar" value="147" disabled="disable"/>
+                    </div></td>
+                  <td width="13%"  align="center"> <font color="#000000"> HOSPITAL 
+                    DO C&Acirc;NCER</font> </td>
+                  <td width="10%"> <div align="center"><font color="#000000"> 
+                      1,00. &nbsp; </font> </div></td>
+                  <td width="14%"> <div align="center"><font color="#000000"> 
+                      15/06/2006&nbsp; </font> </div></td>
+                  <td width="24%" align="center"> <font color="#000000"> MANOEL 
+                    BATISTA DA SILVA&nbsp; </font> <font color="#000000">&nbsp; </font> 
+                  </td>
+                  <td width="15%" bgcolor="#FFFFFF"> <div align="center"><font color="#000000"> 
+                      15/07/2006&nbsp; </font> </div></td>
+                  <td width="17%" align="center" bgcolor="#FFFFFF"> <font color="#000000">&nbsp; 
+                    </font><font color="#000000">MANOEL BATISTA DA SILVA&nbsp; 
+                    </font> </td>
+                </tr>
+                <tr bgcolor="#FFFFFF"> 
+                  <td width="7%" align="center"> <div> 
+                      <input type="checkbox" name="idCreditoARealizar" value="52"/>
+                    </div></td>
+                  <td width="13%"  align="center"> <font color="#000000"> HOSPITAL 
+                    DO C&Acirc;NCER</font> </td>
+                  <td width="10%"> <div align="center"><font color="#000000"> 
+                      1,00. &nbsp; </font> </div></td>
+                  <td width="14%"> <div align="center"><font color="#000000"> 
+                      15/07/2006&nbsp; </font> </div></td>
+                  <td width="24%" align="center"> <font color="#000000">&nbsp; </font><font color="#000000">MANOEL 
+                    BATISTA DA SILVA&nbsp; </font> </td>
+                  <td width="15%" align="right">&nbsp;</td>
+                  <td width="17%" align="center">&nbsp;</td>
+                </tr>
+              </table>
+					</td>
+				</tr>	
+				<tr>
+	                <td align="left">
+	                	<input type="button" name="cancelar" class="bottonRightCol" value="Cancelar" onclick="verficarSelecao(idCreditoARealizar, 'checkbox')">
+	                </td>
+				</tr>
+				<!-- Fim do Corpo - Roberta Costa  16/01/2006  -->
+
+			</table>
+			
+			<p>&nbsp;</p>
+			</td>
+		</tr>
+	</table>
+	<table width="770" cellspacing="4" cellpadding="0">
+  <tr>
+    <td  >
+
+      <table width="100%" cellpadding="2" class="footer">
+        <tr>
+          <td  align="left">PMSS</td>
+          <td align="right">Desenvolvido pelo IPAD - Versão: 16:24 18/05/2006 </td>
+        </tr>
+      </table>
+	</td>
+  </tr>
+
+</table>
+</form>
+</body>
+</html>

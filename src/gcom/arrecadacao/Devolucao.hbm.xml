@@ -1,0 +1,69 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.arrecadacao.Devolucao" table="arrecadacao.devolucao">
+		<id name="id" type="java.lang.Integer" column="devl_id">
+			<generator class="sequence">
+				<param name="sequence">arrecadacao.seq_devolucao</param>
+			</generator>
+		</id>
+		<property name="valorDevolucao" type="java.math.BigDecimal" column="devl_vldevolucao" not-null="true" length="13"/>
+		<property name="anoMesReferenciaArrecadacao" type="int" column="devl_amreferenciaarrecadacao" not-null="true" length="4"/>
+		<property name="dataDevolucao" type="java.sql.Date" column="devl_dtdevolucao" not-null="true" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="devl_tmultimaalteracao" length="8"/>
+		<property name="anoMesReferenciaDevolucao" type="java.lang.Integer" column="devl_amreferenciadevolucao" length="4" not-null="false"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Cliente -->
+		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="false">
+			<column name="clie_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DevolucaoSituacao -->
+		<many-to-one name="devolucaoSituacaoAnterior" class="gcom.arrecadacao.DevolucaoSituacao" not-null="false">
+			<column name="dvst_idanterior"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DevolucaoSituacao -->
+		<many-to-one name="devolucaoSituacaoAtual" class="gcom.arrecadacao.DevolucaoSituacao" not-null="false">
+			<column name="dvst_idatual"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="false">
+			<column name="imov_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GuiaDevolucao -->
+		<many-to-one name="guiaDevolucao" class="gcom.arrecadacao.GuiaDevolucao" not-null="false">
+			<column name="gdev_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to AvisoBancario -->
+		<many-to-one name="avisoBancario" class="gcom.arrecadacao.aviso.AvisoBancario" not-null="true">
+			<column name="avbc_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DebitoTipo -->
+		<many-to-one name="debitoTipo" class="gcom.faturamento.debito.DebitoTipo" not-null="false">
+			<column name="dbtp_id"/>
+		</many-to-one>
+		<many-to-one name="creditoARealizarGeral" class="gcom.faturamento.credito.CreditoARealizarGeral">
+			<column name="crar_id"/>
+		</many-to-one>
+		<many-to-one name="arrecadadorMovimentoItem" class="gcom.arrecadacao.ArrecadadorMovimentoItem">
+			<column name="amit_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaDocumento -->
+		<many-to-one name="cobrancaDocumento" class="gcom.cobranca.CobrancaDocumento" not-null="false">
+			<column name="cbdo_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Documento tipo -->
+		<many-to-one name="documentoTipoAgregador" class="gcom.cobranca.DocumentoTipo" not-null="false">
+			<column name="dotp_idagregador"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

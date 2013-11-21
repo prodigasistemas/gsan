@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="ManterBaciaActionForm"
+			type="gcom.gui.operacional.ManterBaciaActionForm" />
+		<form-bean name="AtualizarBaciaActionForm"
+			type="gcom.gui.operacional.AtualizarBaciaActionForm" />
+		<form-bean name="FiltrarBaciaActionForm"
+			type="gcom.gui.operacional.FiltrarBaciaActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.operacional.ExibirManterBaciaAction"
+			validate="false" scope="session"
+			path="/exibirManterBaciaAction">
+
+			<forward name="exibirManterBacia"
+				path="/jsp/operacional/bacia_manter.jsp" />
+
+			<forward name="exibirAtualizarBacia"
+				path="/exibirAtualizarBaciaAction.do" />
+		</action>
+
+		<action name="AtualizarBaciaActionForm"
+			type="gcom.gui.operacional.ExibirAtualizarBaciaAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarBaciaAction">
+
+			<forward name="baciaAtualizar"
+				path="/jsp/operacional/bacia_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarBaciaActionForm"
+			type="gcom.gui.operacional.AtualizarBaciaAction"
+			validate="true" scope="session"
+			path="/atualizarBaciaAction">
+
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.operacional.RemoverBaciaAction"
+			 scope="request" path="/removerBaciaAction">
+
+		</action>
+		
+		<action name="FiltrarBaciaActionForm"
+			type="gcom.gui.relatorio.operacional.GerarRelatorioBaciaManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioBaciaManterAction" />
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

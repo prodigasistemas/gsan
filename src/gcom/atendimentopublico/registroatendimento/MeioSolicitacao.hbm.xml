@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.registroatendimento.MeioSolicitacao" table="atendimentopublico.meio_solicitacao">
+		<id name="id" type="java.lang.Integer" column="meso_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_meio_solicitacao</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="meso_dsmeiosolicitacao" not-null="true" length="50"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="meso_dsabreviado" length="8"/>
+		<property name="indicadorUso" type="short" column="meso_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="meso_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to UnidadeOrganizacional 
+    <set
+        name="unidadeOrganizacionals"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="meso_id" />
+        </key>
+        <one-to-many 
+            class="gcom.UnidadeOrganizacional"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to RegistroAtendimento 
+    <set
+        name="registroAtendimentos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="meso_id" />
+        </key>
+        <one-to-many 
+            class="gcom.RegistroAtendimento"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

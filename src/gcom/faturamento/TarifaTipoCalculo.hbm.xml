@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.TarifaTipoCalculo" table="faturamento.tarifa_tipo_calculo">
+		<id name="id" type="java.lang.Integer" column="ttpc_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_tarifa_tipo_calculo</param>
+			</generator>
+		</id>
+		<property name="descricaoTarifaTipoCalculo" type="java.lang.String" column="ttpc_dstarifatipocalculo" length="50" not-null="true"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="ttpc_dsabreviado" length="5" not-null="true"/>
+		<property name="indicadorUso" type="java.lang.Short" column="ttpc_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ttpc_tmultimaalteracao" length="8"/>
+	</class>
+</hibernate-mapping>

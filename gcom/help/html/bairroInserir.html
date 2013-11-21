@@ -1,0 +1,504 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html>
+<head>
+
+
+
+  
+  
+  <meta http-equiv="CONTENT-TYPE" content="text/html; charset=windows-1252">
+
+
+  
+
+
+  
+  
+  
+  <title>Inserir Bairro</title>
+  <meta name="GENERATOR" content="BrOffice.org 2.0 (Win32)">
+
+
+
+  
+  
+  <meta name="CREATED" content="20060820;22241317">
+
+
+
+  
+  
+  <meta name="CHANGEDBY" content="Homero Sampaio Cavalcanti">
+
+
+
+  
+  
+  <meta name="CHANGED" content="20060821;23412687">
+
+
+
+  
+  
+  <link rel="stylesheet" href="EstilosHelper.css" type="text/css">
+</head>
+
+
+<body>
+
+
+
+<p class="cabecalho">Inserir Bairro</p>
+
+
+
+<p class="textoNormal">Esta
+op&ccedil;&atilde;o do sistema permite a
+inser&ccedil;&atilde;o de
+um bairro na base de dados.</p>
+
+
+
+<p class="item">Preenchimento
+dos campos</p>
+
+
+
+<ul>
+
+
+
+  <li><font face="Arial"><font size="2"><b class="textoNormal">Munic&iacute;pio</b><span class="textoNormal">(</span><b class="textoNormal"><font color="#ff3333">*</font></b><span class="textoNormal">):
+Informe o
+c&oacute;digo de um munic&iacute;pio existente e tecle "Enter",
+ou
+clique no
+bot&atilde;o "Pesquisar" </span></font></font><img style="width: 23px; height: 21px;" alt="Bot&atilde;o Pesquisar" title="Bot&atilde;o Pesquisar" src="../imagens/pesquisa.gif"><font face="Arial"><font size="2"><span class="textoNormal">, que fica ao lado do
+campo. Neste caso ser&aacute; apresentada&nbsp;a tela "<a href="municipioPesquisar.html">Pesquisar Munic&iacute;pio</a>",
+onde ser&aacute; poss&iacute;vel
+efetuar a pesquisa de munic&iacute;pios no cadastro.
+Ap&oacute;s a
+informa&ccedil;&atilde;o do c&oacute;digo de um
+munic&iacute;pio
+existente, ou da sele&ccedil;&atilde;o de um
+munic&iacute;pio na tela
+de pesquisa, o sistema apresentar&aacute; o nome
+do munic&iacute;pio no campo correspondente.</span></font></font><span class="textoNormal"></span>&nbsp;<span class="textoNormal"></span><span class="textoNormal"></span></li>
+
+
+
+  
+  
+  <ul>
+
+
+
+    <li><span class="textoNormal">No caso de se
+informar um c&oacute;digo de munic&iacute;pio inexistente, o
+sistema
+apresentar&aacute; a mensagem: "Munic&iacute;pio Inexistente".</span></li>
+
+
+
+  
+  
+  </ul>
+
+
+
+</ul>
+
+
+
+<ul>
+
+
+
+  <li>
+    
+    
+    <p><b class="textoNormal">C&oacute;digo do
+Bairro</b>(<b><font color="#ff3333">*</font></b>):
+    <span class="textoNormal">Informe o c&oacute;digo
+do bairro que deseja inserir</span><span class="textoNormal">.
+Voc&ecirc;
+pode, tamb&eacute;m, verificar se o bairro</span><span class="textoNormal"> que voc&ecirc; est&aacute;
+pretendendo
+cadastrar j&aacute; existe na base de dados. Clique no
+bot&atilde;o
+"Pesquisar"&nbsp;</span><img style="width: 28px; height: 25px;" alt="Pesquisar para inclus&atilde;o" title="Pesquisar para inclus&atilde;o" src="../imagens/pesquisarInclusao.JPG"><span class="textoNormal"> que fica ao lado do campo,
+que ser&aacute;
+apresentada a tela "<a href="bairroPesquisar.html">Pesquisar
+Bairro</a>".
+Caso voc&ecirc; encontre o bairro que est&aacute; pretendendo
+cadastrar, e deseje atualiz&aacute;-lo,&nbsp; clique
+sobre
+o link existente no nome do bairro, que o sistema ir&aacute;
+transferir
+o controle&nbsp; para a op&ccedil;&atilde;o "<a href="bairroAtualizar.html">Atualizar Bairro</a>".</span></p>
+
+
+
+  </li>
+
+
+
+  <li>
+    
+    
+    <p><b class="textoNormal">Nome do Bairro</b>(<b><font color="#ff3333">*</font></b>): <span class="textoNormal">Informe o nome do Bairro.</span><span class="textoNormal"></span></p>
+
+
+
+  </li>
+
+
+
+  <li>
+    
+    
+    <p style="margin-bottom: 0.5cm;"><b class="textoNormal">C&oacute;digo do Bairro na Prefeitura</b><span class="textoNormal">: Informe o c&oacute;digo que a
+Prefeitura local utiliza para identificar o Bairro. Este procedimento
+facilitar&aacute; a troca de informa&ccedil;&otilde;es com
+a &nbsp;Prefeitura. &nbsp;</span></p>
+
+
+
+  </li>
+
+
+
+</ul>
+
+
+
+<p class="textoNormal"><u style="color: rgb(255, 0, 0);"><i>Observa&ccedil;&atilde;o</i></u><span style="color: rgb(255, 0, 0);">:</span> Os campos
+obrigat&oacute;rios est&atilde;o marcados um um asterisco
+vermelho (<b><font color="#ff3333">*</font></b>)</p>
+
+
+
+<p class="item"><b>Funcionalidade
+dos bot&otilde;es:</b></p>
+
+
+
+<table class="table textoNormal">
+
+
+
+  <col width="13*"> <col width="243*"> <thead>
+  <tr valign="top">
+
+
+
+    <th class="textoNormal" width="5%">
+    
+    
+    <p>Bot&atilde;o</p>
+
+
+
+    </th>
+
+
+
+    <th class="textoNormal" width="95%">
+    
+    
+    <p class="textoNormal">Descri&ccedil;&atilde;o</p>
+
+
+
+    </th>
+
+
+
+  </tr>
+
+
+
+  </thead> <tbody>
+
+
+
+    <tr valign="top">
+
+
+
+      <td width="5%">
+      
+      
+      <p style="text-align: center;"><img style="width: 23px; height: 21px;" alt="Bot&atilde;o Pesquisar" title="Bot&atilde;o Pesquisar" src="../imagens/pesquisa.gif"></p>
+
+
+
+      </td>
+
+
+
+      <td width="95%">
+      
+      
+      <p>Utilize
+este bot&atilde;o
+para ativar a funcionalidade "Pesquisar Munic&iacute;pio". Deve ser
+utilizado quando
+voc&ecirc; n&atilde;o souber qual &eacute; o
+c&oacute;digo do munic&iacute;pio para o qual deseja
+inserir o bairro.</p>
+
+
+
+      
+      
+      <p>Ao
+clicar no bot&atilde;o, o sistema apresentar&aacute; a tela
+"Pesquisar Munic&iacute;pio". </p>
+
+
+
+      </td>
+
+
+
+    </tr>
+
+
+
+    <tr valign="top">
+
+
+
+      <td style="text-align: center;" width="5%"><img style="width: 28px; height: 21px;" alt="Limpar Campo" title="Limpar Campo" src="../imagens/limparcampo.gif">
+      </td>
+
+
+
+      <td>
+Utilize este bot&atilde;o para limpar
+as
+informa&ccedil;&otilde;es existentes no campo "Munic&iacute;pio". Ao limpar o
+campo "Munic&iacute;pio", o sistema limpar&aacute;,
+automaticamente, o campo "C&oacute;digo do Bairro".
+      </td>
+
+
+
+    </tr>
+
+
+
+    <tr>
+
+
+
+      <td style="text-align: center;"><img style="width: 28px; height: 25px;" alt="Pesquisar para inclus&atilde;o" title="Pesquisar para inclus&atilde;o" src="../imagens/pesquisarInclusao.JPG"></td>
+
+
+
+      <td>Utilize
+este
+bot&atilde;o para pesquisar os Bairros j&aacute;
+existentes na base de dados,
+quando voc&ecirc; tiver d&uacute;vidas se o Bairro que&nbsp;est&aacute; querendo incluir j&aacute; est&aacute;
+cadastrado, ou
+n&atilde;o, na base dados. Ao clicar no
+bot&atilde;o o
+sistema ir&aacute; apresentar a tela "<a href="bairroPesquisar.html">Pesquisar Bairro</a>".
+Ap&oacute;s a realiza&ccedil;&atilde;o da pesquisa,
+ser&aacute;
+apresentada a rela&ccedil;&atilde;o de Bairros
+selecionados. Caso
+voc&ecirc; clique no link
+existente no nome do Bairro, o sistema ir&aacute;
+transerir o
+controle para a funcionalidade "<a href="bairroAtualizar.html">Atualizar
+Bairro</a>".</td>
+
+
+
+    </tr>
+
+
+
+    <tr>
+
+
+
+      <td><img style="width: 71px; height: 22px;" alt="Inserir" title="Inserir" src="../imagens/inserir.JPG"></td>
+
+
+
+      <td>Utilize
+este bot&atilde;o
+para solicitar ao sistema a inser&ccedil;&atilde;o do bairro na
+base de
+dados. Neste caso, &eacute; necess&aacute;rio que todos os
+campos
+estejam preenchidos corretamente. Caso exista alguma
+inconsist&ecirc;ncia, o sistema emitir&aacute; a mensagem de
+cr&iacute;tica correspondente.&nbsp;</td>
+
+
+
+    </tr>
+
+
+
+    <tr>
+
+
+
+      <td><img style="width: 76px; height: 24px;" alt="Desfazer" title="Desfazer" src="../imagens/desfazer.JPG"></td>
+
+
+
+      <td>Utilize
+este bot&atilde;o para fazer com que a tela volte ao seu estado
+inicial de exibi&ccedil;&atilde;o.&nbsp;</td>
+
+
+
+    </tr>
+
+
+
+    <tr>
+
+
+
+      <td><img style="width: 73px; height: 24px;" alt="Cancelar" title="Cancelar" src="../imagens/cancelar.JPG"></td>
+
+
+
+      <td>Utilize
+este
+bot&atilde;o para fazer com que o sistema encerre, sem salvar, o
+que
+est&aacute; sendo feito, e volte para a tela principal.</td>
+
+
+
+    </tr>
+
+
+
+  
+  
+  </tbody>
+</table>
+
+
+
+<br>
+
+
+
+<p class="item"><b>Tela
+de Sucesso:</b>
+</p>
+
+
+
+<p class="textoNormal">A tela de sucesso ser&aacute;
+apresentada
+ap&oacute;s clicar no bot&atilde;o&nbsp;<img style="width: 71px; height: 22px;" alt="Inserir" title="Inserir" src="../imagens/inserir.JPG">, e
+n&atilde;o houver nenhuma
+inconsist&ecirc;ncia no conte&uacute;do dos campos da tela.<br>
+
+
+
+O sistema&nbsp;apresentar&aacute; a&nbsp; mensagem abaixo,
+quando a inclus&atilde;o do Bairro tiver sido realizada com
+sucesso.&nbsp;</p>
+
+
+
+<p class="textoNormal">"Bairro de c&oacute;digo
+&lt;&lt;<i>c&oacute;digo do bairro</i>&gt;&gt;<span style="font-style: italic;"></span>, do munic&iacute;pio &lt;&lt;<span style="font-style: italic;">nome do munic&iacute;pio</span>&gt;&gt;,
+inserido com sucesso."</p>
+
+
+
+<p class="textoNormal">O sistema apresentar&aacute;
+tres
+op&ccedil;&otilde;es ap&oacute;s a
+inse&ccedil;&atilde;o do bairro. Escolha a
+op&ccedil;&atilde;o desejada clicando em
+algum dos "<i>links</i>" existentes na
+tela de sucesso: </p>
+
+
+
+<ul class="textoNormal">
+
+
+
+  <li>Menu
+Principal &nbsp;--&gt; Para voltar &agrave; tela principal
+do sistema.</li>
+
+
+
+  <li>Inserir
+outro Bairro --&gt; Para inserir outro bairro na base de
+dados.</li>
+
+
+
+  <li>Atualizar Bairro Inserido --&gt; Para efetuar a
+atualiza&ccedil;&atilde;o do bairro, recentemente, inserido</li>
+
+
+
+</ul>
+
+
+
+<p class="item"><b>T&oacute;picos
+Relacionados:<a href="logradouroManter.html"> </a></b>
+</p>
+
+
+
+<ul>
+
+
+
+  <li class="textoNormal"><a href="bairroManter.html">Manter Bairro</a> </li>
+
+
+
+  <li>
+    
+    
+    <p class="textoNormal"><a href="bairroAtualizar.html">Atualizar Bairro</a><span class="textoNormal"></span></p>
+
+
+
+  </li>
+
+
+
+  <li>
+    
+    
+    <p class="textoNormal"><a href="quadraManter.html"><span class="textoNormal"></span></a><a href="bairroPesquisar.html">Pesquisar Bairro</a></p>
+
+
+
+  </li>
+
+
+
+  <li><font face="Arial"><font size="2"><span class="textoNormal"><a href="municipioPesquisar.html">Pesquisar
+Munic&iacute;pio</a></span></font></font></li>
+
+
+</ul>
+
+
+
+</body>
+</html>

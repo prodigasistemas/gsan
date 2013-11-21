@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarPrioridadeTipoServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.FiltrarPrioridadeTipoServicoActionForm" />
+
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarPrioridadeTipoServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirFiltrarPrioridadeTipoServicoAction"
+			validate="true" scope="session"
+			path="/exibirFiltrarPrioridadeTipoServicoAction">
+			<forward name="filtrarPrioridadeTipoServico"
+				path="/jsp/atendimentopublico/ordemservico/servico_tipo_prioridade_filtrar.jsp" />
+		</action>
+
+		<action name="FiltrarPrioridadeTipoServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.FiltrarPrioridadeTipoServicoAction"
+			validate="true" scope="session"
+			path="/filtrarPrioridadeTipoServicoAction">
+			<forward name="exibirManterPrioridadeTipoServico"
+				path="/exibirManterPrioridadeTipoServicoAction.do" />
+		</action>
+
+
+
+
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

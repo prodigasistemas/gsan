@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="EmitirComprovantePagamentoContratoParcelamentoClienteActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.EmitirComprovantePagamentoContratoParcelamentoClienteActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	
+	<action-mappings>
+		<action name="EmitirComprovantePagamentoContratoParcelamentoClienteActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.ExibirEmitirComprovantePagamentoContratoParcelamentoClienteAction"
+			validate="false" 
+			scope="session"
+			path="/exibirEmitirComprovantePagamentoContratoParcelamentoClienteAction">
+			<forward name="emitirComprovante"
+				path="/jsp/cobranca/contratoparcelamento/contrato_parcelamento_emitir_comprovante_pagamento.jsp" />
+		</action>
+
+		<action name="EmitirComprovantePagamentoContratoParcelamentoClienteActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.GerarRelatorioEmitirComprovantePagContratoParcelamentoAction"
+			validate="false" 
+			scope="session"
+			path="/gerarRelatorioEmitirComprovantePagContratoParcelamentoAction">
+		</action>
+		
+</action-mappings>	
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

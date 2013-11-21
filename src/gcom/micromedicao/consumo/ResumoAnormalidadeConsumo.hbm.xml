@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.micromedicao.consumo.ResumoAnormalidadeConsumo" table="micromedicao.resumo_anorm_consumo">
+		<id name="id" type="java.lang.Integer" column="reac_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_resumo_anorm_consumo</param>
+			</generator>
+		</id>
+		<property name="anoMesReferencia" type="java.lang.Integer" column="reac_amreferencia" length="4"/>
+		<property name="codigoSetorComercial" type="java.lang.Integer" column="reac_cdsetorcomercial" not-null="true" length="4"/>
+		<property name="numeroQuadra" type="java.lang.Integer" column="reac_nnquadra" not-null="true" length="4"/>
+		<property name="quantidadeLigacoes" type="java.lang.Integer" column="reac_qtdligacao" not-null="true" length="4"/>
+		<many-to-one name="gerenciaRegional" class="gcom.cadastro.localidade.GerenciaRegional" not-null="true">
+			<column name="greg_id"/>
+		</many-to-one>
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<many-to-one name="setorComercial" class="gcom.cadastro.localidade.SetorComercial" not-null="true">
+			<column name="stcm_id"/>
+		</many-to-one>
+		<many-to-one name="rota" class="gcom.micromedicao.Rota" not-null="true">
+			<column name="rota_id"/>
+		</many-to-one>
+		<many-to-one name="quadra" class="gcom.cadastro.localidade.Quadra" not-null="true">
+			<column name="qdra_id"/>
+		</many-to-one>
+		<many-to-one name="imovelPerfil" class="gcom.cadastro.imovel.ImovelPerfil" not-null="true">
+			<column name="iper_id"/>
+		</many-to-one>
+		<many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="true">
+			<column name="last_id"/>
+		</many-to-one>
+		<many-to-one name="ligacaoEsgotoSituacao" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao" not-null="true">
+			<column name="lest_id"/>
+		</many-to-one>
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+		<many-to-one name="esferaPoder" class="gcom.cadastro.cliente.EsferaPoder" not-null="false">
+			<column name="epod_id"/>
+		</many-to-one>
+		<many-to-one name="consumoAnormalidade" class="gcom.micromedicao.consumo.ConsumoAnormalidade" not-null="true">
+			<column name="csan_id"/>
+		</many-to-one>
+		<many-to-one name="ligacaoTipo" class="gcom.micromedicao.consumo.LigacaoTipo" not-null="true">
+			<column name="lgti_id"/>
+		</many-to-one>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="reac_tmultimaalteracao" length="8"/>
+	</class>
+</hibernate-mapping>

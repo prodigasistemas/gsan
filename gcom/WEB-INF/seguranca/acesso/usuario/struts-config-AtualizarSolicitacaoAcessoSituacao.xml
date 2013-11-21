@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="AtualizarSolicitacaoAcessoSituacaoActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.AtualizarSolicitacaoAcessoSituacaoActionForm" />
+	</form-beans>
+	<global-forwards />
+	<action-mappings>
+
+		<action name="AtualizarSolicitacaoAcessoSituacaoActionForm"
+				type="gcom.gui.seguranca.acesso.usuario.ExibirAtualizarSolicitacaoAcessoSituacaoAction"
+				validate="true" 
+				scope="session"
+				path="/exibirAtualizarSolicitacaoAcessoSituacaoAction">
+			<forward name="AtualizarSolicitacaoAcessoSituacao"
+					 path="/jsp/seguranca/acesso/usuario/solicitacao_acesso_situacao_atualizar.jsp" />
+		</action>
+		<action name="AtualizarSolicitacaoAcessoSituacaoActionForm"
+				type="gcom.gui.seguranca.acesso.usuario.AtualizarSolicitacaoAcessoSituacaoAction"
+				validate="true" 
+				scope="session"
+				path="/atualizarSolicitacaoAcessoSituacaoAction">
+		</action>
+
+	</action-mappings>
+	<message-resources null="false" parameter="gcom.properties.application" />
+</struts-config>

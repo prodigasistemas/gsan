@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/ 
+-->
+	<class name="gcom.cobranca.CicloMetaGrupo" table="cobranca.ciclo_meta_grupo">
+		<id name="id" type="java.lang.Integer" column="clmg_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_ciclo_meta_grupo</param>
+			</generator>
+		</id>
+		<property name="quantidadeImoveisSituacaoAgua" type="java.lang.Integer" column="clmg_qtimoveissituiacaoagua" length="4"/>
+		<property name="metaCalculada" type="java.lang.Integer" column="clmg_qtmetacalculada" length="4"/>
+		<property name="metaAjustada" type="java.lang.Integer" column="clmg_qtmetaajustada" length="4"/>
+		<property name="quantidadeRealizada" type="java.lang.Integer" column="clmg_qtmetarealizada" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="clmg_ultimaalteracao" not-null="true" length="8"/>
+		<property name="quantidadeDocumentosRestantes" type="java.lang.Integer" column="clmg_qtrestantes" length="4"/>
+		<property name="valorTotalDocumentosRestantes" type="java.math.BigDecimal" column="clmg_vlrestantes" length="13"/>
+		<property name="valorRealizado" type="java.math.BigDecimal" column="clmg_vlrealizado" length="13"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to CicloMeta -->
+		<many-to-one name="cicloMeta" class="gcom.cobranca.CicloMeta" not-null="true">
+			<column name="clmt_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CicloMeta -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CicloMeta -->
+		<many-to-one name="cobrancaGrupo" class="gcom.cobranca.CobrancaGrupo" not-null="true">
+			<column name="cbgr_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

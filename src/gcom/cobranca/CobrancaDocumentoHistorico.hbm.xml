@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="gcom.cobranca.CobrancaDocumentoHistorico" table="cobranca.cobranca_documento_hist">
+		<id name="id" type="java.lang.Integer" column="cbdo_id">
+			<generator class="sequence">
+				<param name="sequence">
+				cobranca.sequence_cobranca_documento_historico
+			</param>
+			</generator>
+		</id>
+		<property name="numeroSequenciaDocumento" type="int" column="cdhi_nnsequenciadocumento" not-null="true"/>
+		<property name="emissao" type="java.sql.Timestamp" column="cdhi_tmemissao" length="8"/>
+		<property name="valorDesconto" type="java.math.BigDecimal" column="cdhi_vldesconto" length="13"/>
+		<property name="numeroQuadra" type="java.lang.Integer" column="cdhi_nnquadra"/>
+		<property name="valorDocumento" type="java.math.BigDecimal" column="cdhi_vldocumento" length="13"/>
+		<property name="valorTaxa" type="java.math.BigDecimal" column="cdhi_vltaxa" length="13"/>
+		<property name="codigoSetorComercial" type="java.lang.Integer" column="cdhi_cdsetorcomercial"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cdhi_tmultimaalteracao" length="8" not-null="true"/>
+		<property name="valorAcrescimos" type="java.math.BigDecimal" column="cdhi_vlacrescimos" length="13" not-null="true"/>
+		<property name="dataSituacaoAcao" type="java.sql.Date" column="cdhi_dtsituacaoacao" length="4"/>
+		<property name="dataSituacaoDebito" type="java.sql.Date" column="cdhi_dtsituacaodebito" length="4"/>
+		<property name="numeroSequencialImpressao" type="java.lang.Short" column="cdhi_nnsequencialimpressao" not-null="false" length="4"/>
+		<property name="indicadorAntesApos" type="java.lang.Short" column="cdhi_icantesapos" not-null="false" length="2"/>
+		<property name="indicadorAcimaLimite" type="java.lang.Short" column="cdhi_icacimalimite" not-null="false" length="2"/>
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel">
+			<column name="imov_id"/>
+		</many-to-one>
+		<many-to-one name="cobrancaAcaoAtividadeComando" class="gcom.cobranca.CobrancaAcaoAtividadeComando">
+			<column name="cacm_id"/>
+		</many-to-one>
+		<many-to-one name="empresa" class="gcom.cadastro.empresa.Empresa">
+			<column name="empr_id"/>
+		</many-to-one>
+		<many-to-one name="cobrancaAcaoAtividadeCronograma" class="gcom.cobranca.CobrancaAcaoAtividadeCronograma">
+			<column name="caac_id"/>
+		</many-to-one>
+		<many-to-one name="documentoTipo" class="gcom.cobranca.DocumentoTipo" not-null="true">
+			<column name="dotp_id"/>
+		</many-to-one>
+		<many-to-one name="quadra" class="gcom.cadastro.localidade.Quadra">
+			<column name="qdra_id"/>
+		</many-to-one>
+		<many-to-one name="documentoEmissaoForma" class="gcom.cobranca.DocumentoEmissaoForma" not-null="true">
+			<column name="demf_id"/>
+		</many-to-one>
+		<many-to-one name="imovelPerfil" class="gcom.cadastro.imovel.ImovelPerfil">
+			<column name="iper_id"/>
+		</many-to-one>
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade">
+			<column name="loca_id"/>
+		</many-to-one>
+		<many-to-one name="motivoNaoEntregaDocumento" class="gcom.faturamento.conta.MotivoNaoEntregaDocumento">
+			<column name="mned_id"/>
+		</many-to-one>
+		<many-to-one name="cobrancaAcao" class="gcom.cobranca.CobrancaAcao">
+			<column name="cbac_id"/>
+		</many-to-one>
+		<many-to-one name="cobrancaCriterio" class="gcom.cobranca.CobrancaCriterio">
+			<column name="cbct_id"/>
+		</many-to-one>
+		<many-to-one name="cobrancaAcaoSituacao" class="gcom.cobranca.CobrancaAcaoSituacao">
+			<column name="cast_id"/>
+		</many-to-one>
+		<many-to-one name="cobrancaDebitoSituacao" class="gcom.cobranca.CobrancaDebitoSituacao">
+			<column name="cdst_id"/>
+		</many-to-one>
+		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente">
+			<column name="clie_id"/>
+		</many-to-one>
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria">
+			<column name="catg_id"/>
+		</many-to-one>
+		<many-to-one name="esferaPoder" class="gcom.cadastro.cliente.EsferaPoder">
+			<column name="epod_id"/>
+		</many-to-one>
+		<many-to-one name="fiscalizacaoSituacao" class="gcom.atendimentopublico.ordemservico.FiscalizacaoSituacao">
+			<column name="fzst_id"/>
+		</many-to-one>
+		<many-to-one name="resolucaoDiretoria" class="gcom.cobranca.ResolucaoDiretoria" not-null="false">
+			<column name="rdir_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.ordemservico.EspecificacaoServicoTipo" table="atendimentopublico.espec_servico_tipo">
+		<composite-id name="comp_id" class="gcom.atendimentopublico.ordemservico.EspecificacaoServicoTipoPK">
+			<key-property name="idSolicitacaoTipoEspecificacao" column="step_id" type="java.lang.Integer" length="4"/>
+			<key-property name="idServicoTipo" column="svtp_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="epsv_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="ordemExecucao" type="java.lang.Short" column="epsv_nnordemexecucao" length="2"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to SolicitacaoTipoEspecificacao -->
+		<many-to-one name="solicitacaoTipoEspecificacao" class="gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao" update="false" insert="false">
+			<column name="step_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ServicoTipo -->
+		<many-to-one name="servicoTipo" class="gcom.atendimentopublico.ordemservico.ServicoTipo" lazy="false" update="false" insert="false">
+			<column name="svtp_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

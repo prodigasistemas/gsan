@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.cobranca.NegativacaoCriterio" table="cobranca.negativacao_criterio">
+		<id name="id" type="java.lang.Integer" column="ngct_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_negativacao_criterio</param>
+			</generator>
+		</id>
+		<property name="descricaoTitulo" type="java.lang.String" column="ngct_dstitulo" not-null="true" length="100"/>
+		<property name="descricaoSolicitacao" type="java.lang.String" column="ngct_dssolicitacao" not-null="true" length="-1"/>
+		<property name="codigoSetorComercialInicial" type="java.lang.Integer" column="ngct_cdsetorcomercialinicial" length="4"/>
+		<property name="codigoSetorComercialFinal" type="java.lang.Integer" column="ngct_cdsetorcomercialfinal" length="4"/>
+		<property name="anoMesReferenciaContaInicial" type="java.lang.Integer" column="ngct_amreferenciacontainicial" length="4"/>
+		<property name="anoMesReferenciaContaFinal" type="java.lang.Integer" column="ngct_amreferenciacontafinal" length="4"/>
+		<property name="dataVencimentoDebitoInicial" type="java.sql.Date" column="ngct_dtvencimentodebitoinicial" length="4"/>
+		<property name="dataVencimentoDebitoFinal" type="java.sql.Date" column="ngct_dtvencimentodebitofinal" length="4"/>
+		<property name="quantidadeMaximaInclusoes" type="java.lang.Integer" column="ngct_qtmaximainclusoes" length="4"/>
+		<property name="indicadorNegativacaoImovelParalisacao" type="short" column="ngct_icnegativimvparalisacao" not-null="true" length="2"/>
+		<property name="indicadorNegativacaoImovelSituacaoCobranca" type="short" column="ngct_icnegativimvsitcob" not-null="true" length="2"/>
+		<property name="indicadorNegativacaoContaRevisao" type="short" column="ngct_icnegativcontarevisao" not-null="true" length="2"/>
+		<property name="indicadorNegativacaoGuiaPagamento" type="short" column="ngct_icnegativguiapagamento" not-null="true" length="2"/>
+		<property name="indicadorNegativacaoRecebimentoCartaParcelamento" type="short" column="ngct_icnegativrecbmtoctparcel" not-null="true" length="2"/>
+		<property name="numeroDiasAtrasoRecebimentoCartaParcelamento" type="java.lang.Short" column="ngct_nndiasatrasorecbctparcel" length="2"/>
+		<property name="indicadorUso" type="short" column="ngct_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ngct_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="valorMinimoDebito" type="java.math.BigDecimal" column="ngct_vlminimodebito" not-null="true" length="13"/>
+		<property name="quantidadeMinimaContas" type="int" column="ngct_qtminimacontas" not-null="true" length="4"/>
+		<property name="valorMaximoDebito" type="java.math.BigDecimal" column="ngct_vlmaximodebito" not-null="true" length="13"/>
+		<property name="quantidadeMaximaContas" type="int" column="ngct_qtmaximacontas" not-null="true" length="4"/>
+		<property name="indicadorParcelamentoAtraso" type="short" column="ngct_icparcelamentoatraso" not-null="true" length="2"/>
+		<property name="numeroDiasParcelamentoAtraso" type="java.lang.Integer" column="ngct_nndiasparcelamentoatraso" length="4"/>
+		<property name="numeroDiasRetorno" type="java.lang.Integer" column="ngct_nndiasretorno" length="4"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidadeFinal" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_idfinal"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to NegativacaoComando -->
+		<many-to-one name="negativacaoComando" class="gcom.cobranca.NegativacaoComando" not-null="true">
+			<column name="ngcm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Cliente -->
+		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="true">
+			<column name="clie_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Categoria -->
+		<!-- bi-directional many-to-one association to ClienteRelacaoTipo -->
+		<many-to-one name="clienteRelacaoTipo" class="gcom.cadastro.cliente.ClienteRelacaoTipo" not-null="false">
+			<column name="crtp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidadeInicial" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_idinicial"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

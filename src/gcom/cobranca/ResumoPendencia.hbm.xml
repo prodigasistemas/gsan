@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.ResumoPendencia" table="cobranca.resumo_pendencia">
+		<id name="id" type="java.lang.Integer" column="rpen_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_resumo_pendencia</param>
+			</generator>
+		</id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="rpen_tmultimaalteracao" length="8"/>
+		<property name="anoMesReferencia" type="java.lang.Integer" column="rpen_amreferencia" length="4"/>
+		<property name="codigoSetorComercial" type="java.lang.Integer" column="rpen_cdsetorcomercial" not-null="false" length="4"/>
+		<property name="numeroQuadra" type="java.lang.Integer" column="rpen_nnquadra" not-null="true" length="4"/>
+		<property name="indicadorHidrometro" type="java.lang.Short" column="rpen_ichidrometro" length="2" not-null="false"/>
+		<property name="anoMesReferenciaDocumento" type="java.lang.Integer" column="rpen_amreferenciadocumento" length="4"/>
+		<property name="quantidadeLigacoes" type="java.lang.Integer" column="rpen_qtligacoes" not-null="true" length="4"/>
+		<property name="quantidadeDocumentos" type="java.lang.Integer" column="rpen_qtdocumentos" not-null="true" length="4"/>
+		<property name="valorDebito" type="java.math.BigDecimal" column="rpen_vldebito" not-null="true" length="13"/>
+		<property name="indicadorVencido" type="java.lang.Short" column="rpen_icvencido" not-null="false" length="2"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to Tabela -->
+		<many-to-one name="gerenciaRegional" class="gcom.cadastro.localidade.GerenciaRegional" not-null="true">
+			<column name="greg_id"/>
+		</many-to-one>
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<many-to-one name="setorComercial" class="gcom.cadastro.localidade.SetorComercial" not-null="false">
+			<column name="stcm_id"/>
+		</many-to-one>
+		<many-to-one name="rota" class="gcom.micromedicao.Rota" not-null="false">
+			<column name="rota_id"/>
+		</many-to-one>
+		<many-to-one name="quadra" class="gcom.cadastro.localidade.Quadra" not-null="false">
+			<column name="qdra_id"/>
+		</many-to-one>
+		<many-to-one name="imovelPerfil" class="gcom.cadastro.imovel.ImovelPerfil" not-null="false">
+			<column name="iper_id"/>
+		</many-to-one>
+		<many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="false">
+			<column name="last_id"/>
+		</many-to-one>
+		<many-to-one name="ligacaoEsgotoSituacao" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao" not-null="false">
+			<column name="lest_id"/>
+		</many-to-one>
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" not-null="false">
+			<column name="catg_id"/>
+		</many-to-one>
+		<many-to-one name="esferaPoder" class="gcom.cadastro.cliente.EsferaPoder" not-null="false">
+			<column name="epod_id"/>
+		</many-to-one>
+		<many-to-one name="documentoTipo" class="gcom.cobranca.DocumentoTipo" not-null="true">
+			<column name="dotp_id"/>
+		</many-to-one>
+		<many-to-one name="financiamentoTipo" class="gcom.financeiro.FinanciamentoTipo" not-null="false">
+			<column name="fntp_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

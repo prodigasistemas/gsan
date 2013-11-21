@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.conta.ContaMotivoRetificacaoColuna" table="faturamento.conta_mot_retific_coluna">
+		<composite-id name="comp_id" class="gcom.faturamento.conta.ContaMotivoRetificacaoColunaPK">
+			<key-property name="contaMotivoRetificacaoId" column="cmrt_id"
+				type="java.lang.Integer" length="4"/>
+			<key-property name="tabelaColunaId" column="tbco_id"
+				type="java.lang.Integer" length="4"/>
+		</composite-id>
+
+		<property name="ultimaAlteracao" type="java.sql.Timestamp"
+			column="cmrc_tmultimaalteracao" not-null="true" length="8"/>
+
+		<!-- bi-directional many-to-one association to ContaMotivoRetificacao -->
+		<many-to-one name="contaMotivoRetificacao" class="gcom.faturamento.conta.ContaMotivoRetificacao"
+			update="false" insert="false">
+			<column name="cmrt_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to TabelaColuna -->
+		<many-to-one name="tabelaColuna" class="gcom.seguranca.transacao.TabelaColuna"
+			update="false" insert="false">
+			<column name="tbco_id"/>
+		</many-to-one>
+		
+	</class>
+</hibernate-mapping>

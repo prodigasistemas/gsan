@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="InserirCadastroContaBrailePortalActionForm"
+			type="gcom.gui.portal.InserirCadastroContaBrailePortalActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="InserirCadastroContaBrailePortalActionForm"
+			type="gcom.gui.portal.ExibirInserirCadastroContaBrailePortalAction"
+			validate="false" scope="session"
+			path="/exibirInserirCadastroContaBrailePortalAction">
+
+			<forward name="exibirInserirCadastroContaBrailePortal"
+				path="/jsp/portal/cadastro_conta_braile_portal_inserir.jsp" />
+			<forward name="voltarParaServicos"
+				path="/exibirServicosPortalCompesaAction" />
+		</action>
+
+		<action name="InserirCadastroContaBrailePortalActionForm"
+			type="gcom.gui.portal.InserirCadastroContaBrailePortalAction"
+			validate="false" scope="session"
+			path="/inserirCadastroContaBrailePortalAction">
+			<forward name="validarDados"
+				path="/jsp/portal/cadastro_conta_braile_portal_inserir.jsp" />
+			<forward name="contaBraileSolicitadaComSucesso"
+				path="/jsp/portal/cadastro_conta_braile_portal_inserir.jsp" />
+		</action>
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

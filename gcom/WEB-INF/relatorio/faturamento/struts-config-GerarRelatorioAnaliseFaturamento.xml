@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+			<form-bean name="ResumoAnaliseFaturamentoActionForm"
+			type="gcom.gui.gerencial.faturamento.ResumoAnaliseFaturamentoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0227] GERAR RELATORIO ANALISE FATURAMENTO Auhtor: Fernanda Paiva Data:07/06/2006-->
+		<!--INICIO RELATÓRIO GERAR RELATORIO ANALISE FATURAMENTO-->
+		<action name="resumoAnaliseFaturamentoActionForm"
+			type="gcom.gui.relatorio.faturamento.GerarRelatorioAnaliseFaturamentoAction"
+			scope="session" path="/gerarRelatorioAnaliseFaturamentoAction" />
+		<!--FIM RELATÓRIO GERAR RELATORIO ANALISE FATURAMENTO-->
+
+	</action-mappings>
+
+</struts-config>

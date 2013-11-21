@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="ManutencaoRegistroActionForm" type="gcom.gui.ManutencaoRegistroActionForm" />
+		
+		<form-bean name="AtualizarComandoNegativacaoPorCriterioActionForm"
+			type="gcom.gui.cobranca.spcserasa.AtualizarComandoNegativacaoPorCriterioActionForm" />
+		    
+	</form-beans>
+
+	<global-forwards/>
+
+	<action-mappings>
+	
+		<action name="AtualizarComandoNegativacaoPorCriterioActionForm" 
+			type="gcom.gui.cobranca.spcserasa.ExibirManterComandoNegativacaoAction" 
+			scope="session" validate="false"
+			path="/exibirManterComandoNegativacaoAction">
+			<forward name="manterComandoNegativacao" path="/jsp/cobranca/spcserasa/comando_negativacao_manter.jsp" />
+ 			<forward name="atualizarComandoNegativador" path="/exibirAtualizarComandoNegativacaoPorCriterioAction.do" />			
+		</action>		
+		
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.cobranca.spcserasa.RemoverComandoNegativacaoPorCriterioAction" scope="request"
+			path="/removerComandoNegativacaoPorCriterioAction">
+		</action>
+		
+		<action name="AtualizarComandoNegativacaoPorCriterioActionForm"
+			type="gcom.gui.cobranca.spcserasa.ExibirAtualizarComandoNegativacaoPorCriterioAction"
+			validate="false" input="/exibirAtualizarComandoNegativacaoPorCriterioAction.do"
+			scope="session" path="/exibirAtualizarComandoNegativacaoPorCriterioAction">
+			<forward name="atualizarComandoNegativacaoPorCriterio"
+				path="/atualizarComandoNegativacaPorCriterioWizardAction.do?action=exibirAtualizarComandoNegativacaoDadosGeraisAction" />
+		</action>
+		<action name="AtualizarComandoNegativacaoPorCriterioActionForm"
+			type="gcom.gui.cobranca.spcserasa.AtualizarComandoNegativacaPorCriterioWizardAction"
+			validate="false" parameter="action" scope="session"
+			path="/atualizarComandoNegativacaPorCriterioWizardAction">
+			<forward name="atualizarComandoNegativacaoDadosGerais"
+				path="/jsp/cobranca/spcserasa/comandar_negativacao_atualizar_criterio_dados_gerais.jsp" />
+			<forward name="atualizarComandoNegativacaoDadosDebito"
+				path="/jsp/cobranca/spcserasa/comandar_negativacao_atualizar_criterio_dados_debito.jsp" />
+			<forward name="atualizarComandoNegativacaoDadosImovel"
+				path="/jsp/cobranca/spcserasa/comandar_negativacao_atualizar_criterio_dados_imovel.jsp" />
+			<forward name="atualizarComandoNegativacaoLocalizacao" 
+				path="/jsp/cobranca/spcserasa/comandar_negativacao_atualizar_criterio_dados_localizacao.jsp" />
+			<forward name="atualizarComandoNegativacaoExclusao" 
+				path="/jsp/cobranca/spcserasa/comandar_negativacao_atualizar_criterio_dados_exclusao.jsp" />
+		</action>
+		<action
+			type="gcom.gui.cobranca.spcserasa.CancelarAtualizarComandoNegativacaoAction"
+			validate="false" path="/cancelarAtualizarComandoNegativacaoAction" />
+			  
+	</action-mappings>
+	<!--******************* ARQUIVO DE PROPRIEDADES *******************-->
+	<message-resources null="false" parameter="gcom.properties.application" />
+	
+</struts-config>

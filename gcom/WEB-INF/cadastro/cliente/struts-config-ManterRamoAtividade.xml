@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="ManterRamoAtividadeActionForm"
+			type="gcom.gui.cadastro.cliente.ManterRamoAtividadeActionForm" />
+		<form-bean name="AtualizarRamoAtividadeActionForm"
+			type="gcom.gui.cadastro.cliente.AtualizarRamoAtividadeActionForm" />
+		<form-bean name="FiltrarRamoAtividadeActionForm"
+			type="gcom.gui.cadastro.cliente.FiltrarRamoAtividadeActionForm" />
+		
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.cadastro.cliente.ExibirManterRamoAtividadeAction"
+			validate="false" scope="session"
+			path="/exibirManterRamoAtividadeAction">
+
+			<forward name="exibirManterRamoAtividade"
+				path="/jsp/cadastro/cliente/ramo_atividade_manter.jsp" />
+
+			<forward name="exibirAtualizarRamoAtividade"
+				path="/exibirAtualizarRamoAtividadeAction.do" />
+		</action>
+
+		<action name="AtualizarRamoAtividadeActionForm"
+			type="gcom.gui.cadastro.cliente.ExibirAtualizarRamoAtividadeAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarRamoAtividadeAction">
+
+			<forward name="ramoAtividadeAtualizar"
+				path="/jsp/cadastro/cliente/ramo_atividade_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarRamoAtividadeActionForm"
+			type="gcom.gui.cadastro.cliente.AtualizarRamoAtividadeAction"
+			validate="true" scope="session"
+			path="/atualizarRamoAtividadeAction">
+
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.cadastro.cliente.RemoverRamoAtividadeAction"
+			 scope="request" path="/removerRamoAtividadeAction">
+
+		</action>
+		<action name="FiltrarRamoAtividadeActionForm"
+			type="gcom.gui.relatorio.cadastro.cliente.GerarRelatorioRamoAtividadeManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioRamoAtividadeManterAction" />
+	
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

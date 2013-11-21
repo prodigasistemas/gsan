@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.gerencial.cadastro.geografico.GMunicipio" table="cadastro.g_municipio">
+		<id name="id" type="java.lang.Integer" column="muni_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="nome" type="java.lang.String" column="muni_nmmunicipio" length="30"/>
+		<property name="cepInicio" type="java.lang.Integer" column="muni_cdcepinicio" length="4"/>
+		<property name="cepFim" type="java.lang.Integer" column="muni_cdcepfim" length="4"/>
+		<property name="ddd" type="java.lang.Short" column="muni_cdddd" length="2"/>
+		<property name="indicadorUso" type="java.lang.Short" column="muni_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="muni_tmultimaalteracao" length="8"/>
+		<property name="dataConcessaoInicio" type="java.sql.Date" column="muni_dtconcessaoinicio" not-null="false" length="4"/>
+		<property name="dataConcessaoFim" type="java.sql.Date" column="muni_dtconcessaofim" not-null="false" length="4"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to GBairro -->
+		<set name="gerBairros" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="muni_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.cadastro.geografico.GBairro"/>
+		</set>
+		<!-- bi-directional one-to-many association to RgResumoLigacaoEconomia -->
+		<set name="rgResumoLigacaoEconomias" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="muni_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.cadastro.RgResumoLigacaoEconomia"/>
+		</set>
+		<!-- bi-directional many-to-one association to GMicrorregiao -->
+		<many-to-one name="gerMicrorregiao" class="gcom.gerencial.cadastro.geografico.GMicrorregiao" not-null="true">
+			<column name="mreg_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.gerencial.financeiro.lancamento.GLancamentoItemContabil" table="financeiro.g_lancamento_item_contb">
+		<id name="id" type="java.lang.Integer" column="lict_id">
+			<generator class="sequence">
+				<param name="sequence">financeiro.lancamento.sequence_g_lancamento_item_contabil</param>
+			</generator>
+		</id>
+		<property name="grupocontabil" type="java.lang.String" column="lict_dsgrupocontabil" not-null="true" length="35"/>
+		<property name="descricaoAbreviado" type="java.lang.String" column="lict_dsabreviado" not-null="true" length="5"/>
+		<property name="sequenciaImpressao" type="java.lang.Short" column="lict_nnsequenciaimpressao" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="lict_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+	</class>
+</hibernate-mapping>

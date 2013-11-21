@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="ImovelPerfilForm"
+			type="gcom.gui.cadastro.imovel.ManterImovelPerfilActionForm" />
+		<form-bean name="AtualizarImovelPerfilActionForm"
+			type="gcom.gui.cadastro.imovel.AtualizarImovelPerfilActionForm" />
+		<form-bean name="FiltrarImovelPerfilActionForm"
+			type="gcom.gui.cadastro.imovel.FiltrarImovelPerfilActionForm" />
+	</form-beans>
+
+<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards/>
+
+	<action-mappings>
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.cadastro.imovel.ExibirManterImovelPerfilAction"
+			validate="false" scope="session"
+			path="/exibirManterImovelPerfilAction">
+
+			<forward name="exibirManterImovelPerfil"
+				path="/jsp/cadastro/imovel/imovel_perfil_manter.jsp" />
+
+			<forward name="exibirAtualizarImovelPerfil"
+				path="/exibirAtualizarImovelPerfilAction.do" />
+		</action>
+
+		<action name="AtualizarImovelPerfilActionForm"
+			type="gcom.gui.cadastro.imovel.ExibirAtualizarImovelPerfilAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarImovelPerfilAction">
+
+			<forward name="ImovelPerfilAtualizar"
+				path="/jsp/cadastro/imovel/imovel_perfil_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarImovelPerfilActionForm"
+			type="gcom.gui.cadastro.imovel.AtualizarImovelPerfilAction"
+			validate="true" scope="session"
+			path="/atualizarImovelPerfilAction">
+		</action>
+		
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.cadastro.imovel.RemoverImovelPerfilAction"
+			 scope="request" path="/removerImovelPerfilAction">
+
+		</action>
+		
+		<action name="FiltrarImovelPerfilActionForm"
+			type="gcom.gui.relatorio.cadastro.imovel.GerarRelatorioImovelPerfilManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioImovelPerfilManterAction" />
+		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

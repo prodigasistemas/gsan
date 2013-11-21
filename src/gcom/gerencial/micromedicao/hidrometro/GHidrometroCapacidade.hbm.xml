@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.gerencial.micromedicao.hidrometro.GHidrometroCapacidade" table="micromedicao.g_hidrometro_capacidade">
+		<id name="id" type="java.lang.Integer" column="hicp_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="descricaoHidrometroCapacidade" type="java.lang.String" column="hicp_dshidrometrocapacidade" length="20"/>
+		<property name="descricaoAbreviadaHidrometroCapacidade" type="java.lang.String" column="hicp_dsabreviadahidrcapacidade" length="6"/>
+		<property name="numeroDigitosLeituraMinimo" type="java.lang.Short" column="hicp_nndigitosleituraminimo" length="2"/>
+		<property name="numeroDigitosLeituraMaximo" type="java.lang.Short" column="hicp_nndigitosleituramaximo" length="2"/>
+		<property name="indicadorUso" type="java.lang.Short" column="hicp_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="hicp_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="numeroOrdem" type="java.lang.Short" column="hicp_nnordem" length="2"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to UnResumoHidrometro -->
+		<set name="resumoHidrometros" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="hicp_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.micromedicao.UnResumoHidrometro"/>
+		</set>
+	</class>
+</hibernate-mapping>

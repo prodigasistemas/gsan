@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="ManterCargoFuncionarioActionForm"
+			type="gcom.gui.cadastro.ManterCargoFuncionarioActionForm" />
+		<form-bean name="AtualizarCargoFuncionarioActionForm"
+			type="gcom.gui.cadastro.AtualizarCargoFuncionarioActionForm" />
+		<form-bean name="FiltrarCargoFuncionarioActionForm"
+			type="gcom.gui.cadastro.FiltrarCargoFuncionarioActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.cadastro.ExibirManterCargoFuncionarioAction"
+			validate="false" scope="session"
+			path="/exibirManterCargoFuncionarioAction">
+
+			<forward name="exibirManterCargoFuncionario"
+				path="/jsp/cadastro/funcionario_cargo_manter.jsp" />
+
+			<forward name="exibirAtualizarCargoFuncionario"
+				path="/exibirAtualizarCargoFuncionarioAction.do" />
+		</action>
+
+		<action name="AtualizarCargoFuncionarioActionForm"
+			type="gcom.gui.cadastro.ExibirAtualizarCargoFuncionarioAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarCargoFuncionarioAction">
+
+			<forward name="cargoFuncionarioAtualizar"
+				path="/jsp/cadastro/funcionario_cargo_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarCargoFuncionarioActionForm"
+			type="gcom.gui.cadastro.AtualizarCargoFuncionarioAction"
+			validate="true" scope="session"
+			path="/atualizarCargoFuncionarioAction">
+
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.cadastro.RemoverCargoFuncionarioAction"
+			 scope="request" path="/removerCargoFuncionarioAction">
+
+		</action>
+		
+		<action name="FiltrarCargoFuncionarioActionForm"
+			type="gcom.gui.relatorio.cadastro.GerarRelatorioCargoFuncionarioManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioCargoFuncionarioManterAction" />
+		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

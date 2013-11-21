@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="FiltrarProgramacaoAbastecimentoManutencaoActionForm"
+			type="gcom.gui.operacional.abastecimento.FiltrarProgramacaoAbastecimentoManutencaoActionForm" />
+	</form-beans>
+
+	<global-forwards />
+	
+	<action-mappings>
+		<action name="FiltrarProgramacaoAbastecimentoManutencaoActionForm"
+			type="gcom.gui.operacional.abastecimento.ExibirFiltrarProgramacaoAbastecimentoManutencaoAction"
+			validate="false" 
+			scope="session" 
+			path="/exibirFiltrarProgramacaoAbastecimentoManutencaoAction">
+			
+			<forward name="filtrarProgramacaoAbastecimentoManutencao" 
+				path="/jsp/operacional/abastecimento/programacao_abastecimento_manutencao_filtrar.jsp" />
+		</action>
+		
+		<action name="FiltrarProgramacaoAbastecimentoManutencaoActionForm"
+			type="gcom.gui.operacional.abastecimento.FiltrarProgramacaoAbastecimentoManutencaoAction"
+			validate="true" 
+			scope="session"
+			path="/filtrarProgramacaoAbastecimentoManutencaoAction">
+			
+			<forward name="exibirInformarProgramacaoAbastecimentoManutencaoAction"
+				path="/exibirInformarProgramacaoAbastecimentoManutencaoAction.do" />
+		</action>
+		
+	</action-mappings>
+
+</struts-config>

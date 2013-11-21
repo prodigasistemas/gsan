@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.seguranca.transacao.TabelaColuna" table="seguranca.tabela_coluna">
+		<id name="id" type="java.lang.Integer" column="tbco_id">
+			<generator class="sequence">
+				<param name="sequence">seguranca.seq_tabela_coluna</param>
+			</generator>
+		</id>
+		<property name="coluna" type="java.lang.String" column="tbco_nmcoluna" length="50"/>
+		<property name="descricaoColuna" type="java.lang.String" column="tbco_dscoluna" length="100"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="tbco_tmultimaalteracao" length="8"/>
+		<property name="indicadorPrimaryKey" type="java.lang.Short" column="tbco_icprimarykey" length="4"/>
+		<property name="nomeAbreviado" type="java.lang.String" column="tbco_nmabreviado" length="25"/>
+		<property name="indicadorPodeRetificarConta" type="java.lang.Integer" column="tbco_icpoderetificarconta" length="2"/>
+		<property name="indicadorAtualizacaoCadastral" type="java.lang.Short" column="tbco_icatucadastral" length="2"/>
+		
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to TabelaLinhaColunaAlteracao -->
+		<!-- <set
+        name="tabelaLinhaColunaAlteracaos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="tbco_id" />
+        </key>
+        <one-to-many 
+            class="gcom.TabelaLinhaColunaAlteracao"
+        />
+    </set> -->
+		<!-- bi-directional many-to-one association to Tabela -->
+		<many-to-one name="tabela" class="gcom.seguranca.transacao.Tabela" not-null="true">
+			<column name="tabe_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

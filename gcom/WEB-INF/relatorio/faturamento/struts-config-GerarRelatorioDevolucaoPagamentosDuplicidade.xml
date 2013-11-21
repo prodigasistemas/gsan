@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="GerarRelatorioDevolucaoPagamentosDuplicidadeActionForm"
+			type="gcom.gui.relatorio.faturamento.GerarRelatorioDevolucaoPagamentosDuplicidadeActionForm" />
+	</form-beans>
+
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="GerarRelatorioDevolucaoPagamentosDuplicidadeActionForm"
+			type="gcom.gui.relatorio.faturamento.ExibirGerarRelatorioDevolucaoPagamentosDuplicidadeAction"
+			validate="false" 
+			scope="session"
+			path="/exibirGerarRelatorioDevolucaoPagamentosDuplicidadeAction">
+			
+			<forward name="exibirGerarRelatorioDevolucaoPagamentosDuplicidadeAction" 
+				path="/jsp/relatorio/faturamento/relatorio_devolucao_pagamentos_duplicidade.jsp" />
+				
+		</action>
+		
+		<action name="GerarRelatorioDevolucaoPagamentosDuplicidadeActionForm"
+			type="gcom.gui.relatorio.faturamento.GerarRelatorioDevolucaoPagamentosDuplicidadeAction"
+			validate="true" 
+			path="/gerarRelatorioDevolucaoPagamentosDuplicidadeAction" />		
+		
+	</action-mappings>
+
+</struts-config>

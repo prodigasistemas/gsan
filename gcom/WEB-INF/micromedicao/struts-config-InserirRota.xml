@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="InserirRotaActionForm"
+			type="gcom.gui.micromedicao.InserirRotaActionForm" />
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="InserirRotaActionForm" 
+			type="gcom.gui.micromedicao.ExibirInserirRotaAction"
+			validate="false" scope="session" path="/exibirInserirRotaAction">
+			<forward name="inserirRota"
+				path="/jsp/micromedicao/rota_inserir.jsp" />
+		</action>
+		
+		<action name="InserirRotaActionForm" 
+			type="gcom.gui.micromedicao.InserirRotaAction"
+			validate="false" scope="session"
+			path="/inserirRotaAction">
+		</action>
+
+		<action name="InserirRotaActionForm" 
+			type="gcom.gui.micromedicao.RemoverAdicionarCriterioCobrancaRotaAction"
+			validate="false" scope="session"
+			path="/removerAdicionarCriterioCobrancaRotaAction">
+			<forward name="inserirRotaRemoverCriterioCobrancaRota"
+				path="/jsp/micromedicao/rota_inserir.jsp" />
+			<forward name="atualizarRotaRemoverCriterioCobrancaRota"
+				path="/jsp/micromedicao/rota_atualizar.jsp" />
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.batch.ProcessoFuncionalidade" table="batch.processo_funcionalidade">
+		<id name="id" type="java.lang.Integer" column="prfn_id">
+			<generator class="sequence">
+				<param name="sequence">batch.seq_processo_funcionalidade</param>
+			</generator>
+		</id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="prfn_tmultimaalteracao" length="8"/>
+		<property name="sequencialExecucao" type="short" column="prfn_nnsequencialexecucao" not-null="true" length="2"/>
+		<property name="indicadorUso" type="short" column="prfn_icuso" not-null="true" length="2"/>
+		<property name="orientacao" type="java.lang.String" column="prfn_dsorientacao" length="400"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to UnidadeProcessamento -->
+		<many-to-one name="unidadeProcessamento" class="gcom.batch.UnidadeProcessamento" not-null="true">
+			<column name="unpr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Funcionalidade -->
+		<many-to-one name="funcionalidade" class="gcom.seguranca.acesso.Funcionalidade" not-null="true">
+			<column name="fncd_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Processo -->
+		<many-to-one name="processo" class="gcom.batch.Processo" not-null="true">
+			<column name="proc_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to FuncionalidadeIniciada -->
+		<set name="funcionalidadesIniciadas" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="prfn_id"/>
+			</key>
+			<one-to-many class="gcom.batch.FuncionalidadeIniciada"/>
+		</set>
+	</class>
+</hibernate-mapping>

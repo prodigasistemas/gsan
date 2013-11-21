@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.geografico.UnidadeFederacao" table="cadastro.unidade_federacao">
+		<id name="id" type="java.lang.Integer" column="unfe_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_unidade_federacao</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="unfe_dsuf" length="35"/>
+		<property name="sigla" type="java.lang.String" column="unfe_dsufsigla" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="unfe_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to Cliente -->
+		<!--
+   <set
+        name="clientes"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="unfe_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Cliente"
+        />
+    </set>
+-->
+		<!-- bi-directional one-to-many association to Municipio -->
+		<!--
+    <set
+        name="municipios"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="unfe_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Municipio"
+        />
+    </set>
+-->
+	</class>
+</hibernate-mapping>

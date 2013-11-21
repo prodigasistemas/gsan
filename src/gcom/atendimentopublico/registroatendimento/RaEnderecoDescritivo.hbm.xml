@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.registroatendimento.RaEnderecoDescritivo" table="atendimentopublico.ra_endereco_descritivo">
+		<id name="id" type="java.lang.Integer" column="ende_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_ra_endereco_descritivo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="ende_dsendereco" not-null="true" length="50"/>
+		<property name="descricaoBairro" type="java.lang.String" column="ende_dsbairro" length="20"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to RegistroAtendimento -->
+		<many-to-one name="registroAtendimento" class="gcom.atendimentopublico.registroatendimento.RegistroAtendimento" not-null="true">
+			<column name="rgat_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

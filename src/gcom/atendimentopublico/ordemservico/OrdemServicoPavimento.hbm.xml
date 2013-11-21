@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.atendimentopublico.ordemservico.OrdemServicoPavimento" table="atendimentopublico.ordem_servico_pavimento">
+		<id name="id" type="java.lang.Integer" column="ospv_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_ordem_servico_pavimento</param>
+			</generator>
+		</id>
+		<property name="areaPavimentoRua" type="java.math.BigDecimal" column="ospv_nnareapvtorua" length="6"/>
+		<property name="areaPavimentoCalcada" type="java.math.BigDecimal" column="ospv_nnareapvtocal" length="6"/>
+		<property name="areaPavimentoRuaRetorno" type="java.math.BigDecimal" column="ospv_nnareapvtoruaret" length="6"/>
+		<property name="areaPavimentoCalcadaRetorno" type="java.math.BigDecimal" column="ospv_nnareapvtocalret" length="6"/>
+		<property name="dataGeracao" type="java.sql.Timestamp" column="ospv_tmgeracao" length="8"/>
+		<property name="dataExecucao" type="java.sql.Timestamp" column="ospv_tmrepavretorno" length="8"/>
+		<property name="dataAceite" type="java.sql.Date" column="ospv_dtaceite" length="8"/>
+		<property name="indicadorAceite" type="java.lang.Short" column="ospv_icaceite" length="2"/>
+		<property name="descricaoMotivoAceite" type="java.lang.String" column="ospv_dsmotivoaceite" length="50000"/>
+		<property name="observacao" type="java.lang.String" column="ospv_dsobservacao"/>
+		<property name="descricaoRejeicao" type="java.lang.String" column="ospv_dsrejeicao" length="250"/>
+		<property name="dataRejeicao" type="java.sql.Timestamp" column="ospv_tmrejeicao" length="8"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ospv_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to OrdemServico -->
+		<many-to-one name="ordemServico" class="gcom.atendimentopublico.ordemservico.OrdemServico" not-null="true">
+			<column name="orse_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to PavimentoRua -->
+		<many-to-one name="pavimentoRua" class="gcom.cadastro.imovel.PavimentoRua" not-null="false">
+			<column name="prua_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to PavimentoCalcada -->
+		<many-to-one name="pavimentoCalcada" class="gcom.cadastro.imovel.PavimentoCalcada" not-null="false">
+			<column name="pcal_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to PavimentoRuaRetorno -->
+		<many-to-one name="pavimentoRuaRetorno" class="gcom.cadastro.imovel.PavimentoRua" not-null="false">
+			<column name="prua_idret"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to PavimentoCalcadaRetorno -->
+		<many-to-one name="pavimentoCalcadaRetorno" class="gcom.cadastro.imovel.PavimentoCalcada" not-null="false">
+			<column name="pcal_idret"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Unidade Organizacional -->
+		<many-to-one name="unidadeRepavimentadora" class="gcom.cadastro.unidade.UnidadeOrganizacional" not-null="false">
+			<column name="unid_idrepavimentadora"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Usuario -->
+		<many-to-one name="usuarioAceite" class="gcom.seguranca.acesso.usuario.Usuario" not-null="false">
+			<column name="usur_idaceite"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Usuario -->
+		<many-to-one name="usuarioRejeicao" class="gcom.seguranca.acesso.usuario.Usuario" not-null="false">
+			<column name="usur_idrejeicao"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Motivo Rejeicao -->
+		<many-to-one name="motivoRejeicao" class="gcom.atendimentopublico.ordemservico.MotivoRejeicao" not-null="false">
+			<column name="rpmr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one -->
+	</class>
+</hibernate-mapping>

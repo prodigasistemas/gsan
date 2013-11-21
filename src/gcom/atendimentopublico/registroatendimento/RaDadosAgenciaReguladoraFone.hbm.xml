@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.registroatendimento.RaDadosAgenciaReguladoraFone" table="atendimentopublico.ra_dados_agen_reg_fone">
+		<id name="id" type="java.lang.Integer" column="raaf_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_ra_dados_agen_reg_fone</param>
+			</generator>
+		</id>
+		<property name="ddd" type="java.lang.Short" column="raaf_cdddd" length="2"/>
+		<property name="fone" type="java.lang.String" column="raaf_nnfone" length="9"/>
+		<property name="ramal" type="java.lang.String" column="raaf_nnfoneramal" length="4"/>
+		<property name="indicadoFonePadrao" type="java.lang.Short" column="raaf_icfonepadrao" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="raaf_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to FoneTipo -->
+		<many-to-one name="foneTipo" class="gcom.cadastro.cliente.FoneTipo" not-null="true">
+			<column name="fnet_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to RaDadosAgenciaReguladora -->
+		<many-to-one name="raDadosAgenciaReguladora" class="gcom.atendimentopublico.registroatendimento.RaDadosAgenciaReguladora" not-null="true">
+			<column name="raar_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

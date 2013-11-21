@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="ParcelamentoPerfilActionForm"
+			type="gcom.gui.cobranca.parcelamento.ParcelamentoPerfilActionForm" />
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="ParcelamentoPerfilActionForm" 
+			type="gcom.gui.cobranca.parcelamento.ExibirInserirPerfilParcelamentoAction"
+			validate="false" scope="session" path="/exibirInserirPerfilParcelamentoAction">
+			<forward name="inserirPerfilParcelamento"
+				path="/jsp/cobranca/parcelamento/perfil_parcelamento_inserir.jsp" />
+
+		</action>
+		
+		<action name="ParcelamentoPerfilActionForm" 
+			type="gcom.gui.cobranca.parcelamento.InserirPerfilParcelamentoAction"
+			validate="false" scope="session"
+			path="/inserirPerfilParcelamentoAction">
+		</action>
+		
+		<action
+			type="gcom.gui.cobranca.parcelamento.RemoverParcelamentoDescontoAntiguidadeAction"
+			validate="false" scope="session"
+			path="/removerParcelamentoDescontoAntiguidadeActionInserir">
+			<forward name="inserirPerfilRemoverParcelamentoDescontoAntiguidade"
+				path="/jsp/cobranca/parcelamento/perfil_parcelamento_inserir.jsp" />
+		</action>
+		
+		<action
+			type="gcom.gui.cobranca.parcelamento.RemoverParcelamentoDescontoInatividadeAction"
+			validate="false" scope="session"
+			path="/removerParcelamentoDescontoInatividadeActionInserir">
+			<forward name="inserirPerfilRemoverParcelamentoDescontoInatividade"
+				path="/jsp/cobranca/parcelamento/perfil_parcelamento_inserir.jsp" />
+		</action>
+		
+		<action name="ParcelamentoPerfilActionForm"
+			type="gcom.gui.cobranca.parcelamento.RemoverParcelamentoQuantidadeReparcelamentoHelperAction"
+			validate="false" scope="session"
+			path="/removerParcelamentoQuantidadeReparcelamentoHelperActionInserir">
+			<forward name="inserirPerfilRemoverParcelamentoQuantidadeReparcelamentoHelper"
+				path="/jsp/cobranca/parcelamento/perfil_parcelamento_inserir.jsp" />
+		</action>
+		
+		<action
+			type="gcom.gui.cobranca.parcelamento.RemoverParcelamentoDescontoInatividadeAVistaAction"
+			validate="false" scope="session"
+			path="/removerParcelamentoDescontoInatividadeAVistaActionInserir">
+			<forward name="inserirPerfilRemoverParcelamentoDescontoInatividadeAVista"
+				path="/jsp/cobranca/parcelamento/perfil_parcelamento_inserir.jsp" />
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

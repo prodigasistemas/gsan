@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="GerarContratoPrestacaoServicoJuridicoActionForm"
+			type="gcom.gui.atendimentopublico.GerarContratoPrestacaoServicoJuridicoActionForm" />
+		<form-bean name="GerarContratoPrestacaoServicoActionForm"
+			type="gcom.gui.atendimentopublico.GerarContratoPrestacaoServicoActionForm" />					
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+	
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0XXX] GERAR CONTRATO PRESTAÇÃO SERVIÇO Auhtor: Rafael Corrêa Data:31/03/2006-->
+		<action name="GerarContratoPrestacaoServicoJuridicoActionForm"
+			type="gcom.gui.atendimentopublico.ExibirGerarContratoPrestacaoServicoJuridicoAction"
+			validate="true" scope="session"
+			path="/exibirGerarContratoPrestacaoServicoJuridicoAction">
+			<forward name="exibirGerarContratoPrestacaoServicoJuridico"
+				path="/jsp/atendimentopublico/contrato_prestacao_servico_juridico_gerar.jsp" />
+		</action>
+		<action name="GerarContratoPrestacaoServicoJuridicoActionForm"
+			type="gcom.gui.relatorio.atendimentopublico.GerarRelatorioContratoPrestacaoServicoJuridicoAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioContratoPrestacaoServicoJuridicoAction" >
+			
+			<forward name="gerarRelatorioContratoPrestacao"
+				path="/gerarRelatorioContratoPrestacaoServicoAction.do" />
+		</action>
+			
+		<action name="GerarContratoPrestacaoServicoActionForm"
+			type="gcom.gui.atendimentopublico.ExibirGerarContratoPrestacaoServicoAction"
+			validate="true" scope="session"
+			path="/exibirGerarContratoPrestacaoServicoAction">
+			<forward name="exibirGerarContratoPrestacaoServico"
+				path="/jsp/atendimentopublico/contrato_prestacao_servico_gerar.jsp" />
+		</action>
+		<action name="GerarContratoPrestacaoServicoActionForm"
+			type="gcom.gui.relatorio.atendimentopublico.GerarRelatorioContratoPrestacaoServicoAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioContratoPrestacaoServicoAction" />
+
+	</action-mappings>
+
+</struts-config>

@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.faturamento.ConsumoFaixaCategoria" table="faturamento.consumo_faixa_categoria">
+		<id name="id" type="java.lang.Integer" column="cfcg_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="numeroFaixaInicio" type="int" column="cfcg_nnfaixainicio" not-null="true" length="4"/>
+		<property name="numeroFaixaFim" type="int" column="cfcg_nnfaixafim" not-null="true" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cfcg_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

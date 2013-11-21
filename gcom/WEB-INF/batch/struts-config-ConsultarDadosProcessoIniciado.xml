@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+<form-beans>
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+</form-beans>
+
+	<global-forwards />
+	<action-mappings>
+
+		<action
+			type="gcom.gui.batch.ExibirConsultarDadosProcessoIniciadoAction"
+			scope="session" path="/exibirConsultarDadosProcessoIniciadoAction">
+			<forward name="consultarDadosProcessoIniciado"
+				path="/jsp/batch/processo_iniciado_dados_consultar.jsp" />
+		</action>
+
+
+		<action
+			type="gcom.gui.batch.ExibirConsultarUnidadeProcessamentoProcessoInseridoAction"
+			scope="session"
+			path="/exibirConsultarUnidadeProcessamentoProcessoInseridoAction">
+			<forward
+				name="consultarDadosUnidadeProcessamentoProcessoIniciado"
+				path="/jsp/batch/processo_iniciado_funcionalidade_iniciada_unidade_processamento_popup.jsp" />
+		</action>
+		
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.batch.ReiniciarFuncionalidadeIniciadaAction"
+			scope="session" path="/reiniciarFuncionalidadeIniciadaAction">
+			<forward name="consultarDadosProcessoIniciado"
+				path="/jsp/batch/processo_iniciado_dados_consultar.jsp" />
+		</action>
+		
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.batch.ContinuarFuncionalidadeIniciadaAction"
+			scope="session" path="/continuarFuncionalidadeIniciadaAction">
+			<forward name="consultarDadosProcessoIniciado"
+				path="/jsp/batch/processo_iniciado_dados_consultar.jsp" />
+		</action>
+		
+		
+		<action type="gcom.gui.batch.ExibirExcecaoFuncionalidadeIniciadaAction"
+			scope="session" path="/exibirExcecaoFuncionalidadeIniciadaAction">
+			<forward name="exibirExcecao"
+				path="/jsp/batch/exibir_excecao_funcionalidade_iniciada.jsp" />
+		</action>
+
+
+	</action-mappings>
+
+
+</struts-config>

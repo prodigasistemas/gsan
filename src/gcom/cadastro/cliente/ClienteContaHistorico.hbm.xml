@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cadastro.cliente.ClienteContaHistorico" table="cadastro.cliente_conta_historico">
+		<id name="id" type="java.lang.Integer" column="clch_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="indicadorNomeConta" type="short" column="clch_icnomeconta" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="clch_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Cliente -->
+		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="true">
+			<column name="clie_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ClienteRelacaoTipo -->
+		<many-to-one name="clienteRelacaoTipo" class="gcom.cadastro.cliente.ClienteRelacaoTipo" not-null="true">
+			<column name="crtp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ContaHistorico -->
+		<many-to-one name="contaHistorico" class="gcom.faturamento.conta.ContaHistorico" not-null="true">
+			<column name="cnta_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

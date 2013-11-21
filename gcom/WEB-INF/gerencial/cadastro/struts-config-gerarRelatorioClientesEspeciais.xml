@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="GerarRelatorioClientesEspeciaisActionForm"
+			type="gcom.gui.gerencial.cadastro.GerarRelatorioClientesEspeciaisActionForm" />					
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0591] Gerar Relatório de Clientes Especiais Auhtor: Rafael Corrêa Data:01/06/2007-->
+		<action name="GerarRelatorioClientesEspeciaisActionForm"
+			type="gcom.gui.gerencial.cadastro.ExibirGerarRelatorioClientesEspeciaisAction"
+			validate="true" scope="session"
+			path="/exibirGerarRelatorioClientesEspeciaisAction">
+			<forward name="exibirGerarRelatorioClientesEspeciais"
+				path="/jsp/gerencial/cadastro/clientes_especiais_relatorio_gerar.jsp" />
+		</action>
+		<action name="GerarRelatorioClientesEspeciaisActionForm"
+			type="gcom.gui.relatorio.cadastro.imovel.GerarRelatorioClientesEspeciaisAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioClientesEspeciaisAction">
+		</action>
+
+	</action-mappings>
+
+</struts-config>

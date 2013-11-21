@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="GerarRelatorioPagamentosContasCobrancaEmpresaActionForm"
+			type="gcom.gui.relatorio.cobranca.GerarRelatorioPagamentosContasCobrancaEmpresaActionForm" />					
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0868] Gerar Relatorio de Pagamentos das Contas em Cobrança por Empresa Auhtor: Rômulo Aurélio Data:08/01/2009-->
+		<action name="GerarRelatorioPagamentosContasCobrancaEmpresaActionForm"
+			type="gcom.gui.relatorio.cobranca.ExibirGerarRelatorioPagamentosContasCobrancaEmpresaAction"
+			validate="true" 
+			scope="session"
+			path="/exibirGerarRelatorioPagamentosContasCobrancaEmpresaAction">
+			
+			<forward name="exibirGerarRelatorioPagamentosContasCobrancaEmpresaAction"
+				path="/jsp/relatorio/cobranca/pagamentos_contas_cobranca_empresa_relatorio_gerar.jsp" />
+		</action>
+		
+		<action name="GerarRelatorioPagamentosContasCobrancaEmpresaActionForm"
+				type="gcom.gui.relatorio.cobranca.GerarRelatorioPagamentosContasCobrancaEmpresaAction"
+				validate="true" scope="session"
+				path="/gerarRelatorioPagamentosContasCobrancaEmpresaAction">
+		</action>
+		
+		
+		
+		
+	</action-mappings>
+
+</struts-config>

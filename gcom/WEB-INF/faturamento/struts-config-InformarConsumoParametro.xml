@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+
+		<form-bean name="InformarConsumoParametroActionForm"
+			type="gcom.gui.faturamento.InformarConsumoParametroActionForm" />
+
+		<form-bean name="AdicionarConsumoParametroActionForm"
+			type="gcom.gui.faturamento.AdicionarConsumoParametroActionForm" />
+	</form-beans>
+	<!--******************* PÁGINAS GLOBAIS *******************-->	<global-forwards />
+	<action-mappings>
+		<action name="InformarConsumoParametroActionForm"			type="gcom.gui.faturamento.ExibirInformarConsumoParametroAction"			validate="true" scope="session" 			path="/exibirInformarConsumoParametroAction">
+						<forward name="exibirInformarConsumoParametro"				path="/jsp/faturamento/consumo_parametro_informar.jsp" />
+						</action>
+
+		<action name="InformarConsumoParametroActionForm"			type="gcom.gui.faturamento.InformarConsumoParametroAction"			validate="false" scope="session" path="/informarConsumoParametroAction">		</action>
+		<action name="AdicionarConsumoParametroActionForm"
+			type="gcom.gui.faturamento.ExibirAdicionarConsumoParametroAction"
+			validate="false" scope="session"
+			path="/exibirAdicionarConsumoParametroAction">
+
+			<forward name="exibirAdicionarConsumoParametro"
+				path="/jsp/faturamento/consumo_parametro_adicionar.jsp" />
+
+		</action>
+
+		<action name="AdicionarConsumoParametroActionForm"
+			type="gcom.gui.faturamento.AdicionarConsumoParametroAction"
+			scope="session" validate="true" path="/adicionarConsumoParametroAction">
+
+			<forward name="exibirAdicionarConsumoParametro"
+				path="/jsp/faturamento/consumo_parametro_adicionar.jsp" />
+
+		</action>
+	</action-mappings>
+	<message-resources null="false"		parameter="gcom.properties.application" />
+</struts-config>

@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.dadocensitario.FonteDadosCensitario" table="cadastro.fonte_dados_censitarios">
+		<id name="id" type="java.lang.Integer" column="ftdc_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_fonte_dados_censitarios</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="ftdc_nmfonteinformacao" length="20"/>
+		<property name="indicadorUso" type="java.lang.Short" column="ftdc_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ftdc_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to MunicipioDadosCensitario
+    <set
+        name="municipioDadosCensitarios"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="ftdc_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.MunicipioDadosCensitario"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to LocalidadeDadosCensitario
+    <set
+        name="localidadeDadosCensitarios"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="ftdc_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.LocalidadeDadosCensitario"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to IbgeSetorCensitarioDado
+    <set
+        name="ibgeSetorCensitarioDados"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="ftdc_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.IbgeSetorCensitarioDado"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

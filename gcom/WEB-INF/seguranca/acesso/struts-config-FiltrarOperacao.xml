@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="FiltrarOperacaoActionForm"	type="gcom.gui.seguranca.acesso.FiltrarOperacaoActionForm" />
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarOperacaoActionForm" 
+						type="gcom.gui.seguranca.acesso.ExibirFiltrarOperacaoAction"
+						validate="false" 
+						scope="session" 
+						path="/exibirFiltrarOperacaoAction">
+						
+			<forward name="filtrarOperacao" path="/jsp/seguranca/acesso/operacao_filtrar.jsp" />
+		</action>
+		
+		<action name="FiltrarOperacaoActionForm" 
+						type="gcom.gui.seguranca.acesso.FiltrarOperacaoAction"
+						validate="false" 
+						scope="session"
+						path="/filtrarOperacaoAction">
+			
+			<forward name="retornarFiltroOperacao" path="/exibirManterOperacaoAction.do" />
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false" parameter="gcom.properties.application" />
+		
+</struts-config>

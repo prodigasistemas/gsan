@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.DocumentoEmissaoForma" table="cobranca.documento_emissao_forma">
+		<id name="id" type="java.lang.Integer" column="demf_id">
+			<generator class="sequence">
+				<param name="sequence">
+				cobranca.seq_documento_emissao_forma</param>
+			</generator>
+		</id>
+		<property name="descricaoDocumentoEmissaoForma" type="java.lang.String" column="demf_dsdocumentoemissaoforma" length="40"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="demf_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to CobrancaDocumento -->
+		<!--  
+    <set
+        name="cobrancaDocumentos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="demf_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CobrancaDocumento"
+        />
+    </set>
+	-->
+	</class>
+</hibernate-mapping>

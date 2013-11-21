@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.batch.ProcessoSituacao" table="batch.processo_situacao">
+		<id name="id" type="java.lang.Integer" column="prst_id">
+			<generator class="sequence">
+				<param name="sequence">batch.seq_processo_situacao</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="prst_dsprocessosituacao" length="50"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="prst_dsabreviado" length="6"/>
+		<property name="indicadorUso" type="short" column="prst_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="prst_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- end of derived association(s) -->
+		<!-- bi-directional one-to-many association to ProcessoIniciado -->
+		<set name="processosIniciados" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="prst_id"/>
+			</key>
+			<one-to-many class="gcom.batch.ProcessoIniciado"/>
+		</set>
+	</class>
+</hibernate-mapping>

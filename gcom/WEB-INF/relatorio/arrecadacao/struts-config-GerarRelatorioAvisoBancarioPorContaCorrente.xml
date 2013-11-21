@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="GerarRelatorioAvisoBancarioPorContaCorrenteActionForm"
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioAvisoBancarioPorContaCorrenteActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	
+	<action-mappings>
+		<action name="GerarRelatorioAvisoBancarioPorContaCorrenteActionForm"  
+			type="gcom.gui.relatorio.arrecadacao.ExibirGerarRelatorioAvisoBancarioPorContaCorrenteAction" 
+			validate="true"	
+			scope="request"	
+			path="/exibirGerarRelatorioAvisoBancarioPorContaCorrenteAction">
+			<forward name="exibirGerarRelatorioAvisoBancarioPorContaCorrenteAction" path="/jsp/relatorio/arrecadacao/aviso_bancario_por_conta_corrente_gerar_relatorio.jsp" />
+		</action>
+		
+		<action name="GerarRelatorioAvisoBancarioPorContaCorrenteActionForm" 
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioAvisoBancarioPorContaCorrenteAction" 
+			validate="true"	
+			scope="request"	
+			path="/gerarRelatorioAvisoBancarioPorContaCorrenteAction">
+		</action>
+	</action-mappings>
+	
+</struts-config>

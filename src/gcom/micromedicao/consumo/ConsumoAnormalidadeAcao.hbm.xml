@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.micromedicao.consumo.ConsumoAnormalidadeAcao" table="micromedicao.consumo_anorm_acao">
+		<id name="id" type="java.lang.Integer" column="csaa_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_consumo_anorm_acao</param>
+			</generator>
+		</id>
+		<property name="numerofatorConsumoMes1" type="java.math.BigDecimal" column="csaa_nnfatorconsumomes1" length="5"/>
+		<property name="numerofatorConsumoMes2" type="java.math.BigDecimal" column="csaa_nnfatorconsumomes2" length="5"/>
+		<property name="numerofatorConsumoMes3" type="java.math.BigDecimal" column="csaa_nnfatorconsumomes3" length="5"/>
+		<property name="indicadorGeracaoCartaMes1" type="java.lang.Short" column="csaa_icgeracaocartames1" length="2" not-null="true"/>
+		<property name="indicadorGeracaoCartaMes2" type="java.lang.Short" column="csaa_icgeracaocartames2" length="2" not-null="true"/>
+		<property name="indicadorGeracaoCartaMes3" type="java.lang.Short" column="csaa_icgeracaocartames3" length="2" not-null="true"/>
+		<property name="indicadorUso" type="java.lang.Short" column="csaa_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="csaa_tmultimaalteracao" length="8"/>
+		<property name="descricaoContaMensagemMes1" type="java.lang.String" column="csaa_dsmensagemcontames1" length="120" not-null="false"/>
+		<property name="descricaoContaMensagemMes2" type="java.lang.String" column="csaa_dsmensagemcontames2" length="120" not-null="false"/>
+		<property name="descricaoContaMensagemMes3" type="java.lang.String" column="csaa_dsmensagemcontames3" length="120" not-null="false"/>
+		<!-- associations -->
+		<many-to-one name="consumoAnormalidade" class="gcom.micromedicao.consumo.ConsumoAnormalidade" not-null="false">
+			<column name="csan_id"/>
+		</many-to-one>
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" not-null="false">
+			<column name="catg_id"/>
+		</many-to-one>
+		<many-to-one name="imovelPerfil" class="gcom.cadastro.imovel.ImovelPerfil">
+			<column name="iper_id"/>
+		</many-to-one>
+		<many-to-one name="leituraAnormalidadeConsumoMes1" class="gcom.micromedicao.leitura.LeituraAnormalidadeConsumo" not-null="true">
+			<column name="lacs_idmes1"/>
+		</many-to-one>
+		<many-to-one name="leituraAnormalidadeConsumoMes2" class="gcom.micromedicao.leitura.LeituraAnormalidadeConsumo" not-null="true">
+			<column name="lacs_idmes2"/>
+		</many-to-one>
+		<many-to-one name="leituraAnormalidadeConsumoMes3" class="gcom.micromedicao.leitura.LeituraAnormalidadeConsumo" not-null="true">
+			<column name="lacs_idmes3"/>
+		</many-to-one>
+		<many-to-one name="servicoTipoMes1" class="gcom.atendimentopublico.ordemservico.ServicoTipo">
+			<column name="svtp_idmes1"/>
+		</many-to-one>
+		<many-to-one name="servicoTipoMes2" class="gcom.atendimentopublico.ordemservico.ServicoTipo">
+			<column name="svtp_idmes2"/>
+		</many-to-one>
+		<many-to-one name="servicoTipoMes3" class="gcom.atendimentopublico.ordemservico.ServicoTipo">
+			<column name="svtp_idmes3"/>
+		</many-to-one>
+		<many-to-one name="solicitacaoTipoEspecificacaoMes1" class="gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao">
+			<column name="step_idmes1"/>
+		</many-to-one>
+		<many-to-one name="solicitacaoTipoEspecificacaoMes2" class="gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao">
+			<column name="step_idmes2"/>
+		</many-to-one>
+		<many-to-one name="solicitacaoTipoEspecificacaoMes3" class="gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao">
+			<column name="step_idmes3"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

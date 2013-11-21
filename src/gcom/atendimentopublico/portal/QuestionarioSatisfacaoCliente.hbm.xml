@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.portal.QuestionarioSatisfacaoCliente" table="atendimentopublico.PESQUISA_SATISFACAO">
+		<id name="id" type="java.lang.Integer" column="PQSA_ID">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.SEQ_PESQUISA_SATISFACAO</param>
+			</generator>
+		</id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="PQSA_TMULTIMAALTERACAO" length="8"/>
+
+		<property name="indicadorBemAtendido" type="java.lang.Short" column="PQSA_ICBEMATENDRELPROB" length="2"/>
+		<property name="comentarioBemAtendido" type="java.lang.String" column="PQSA_DSBEMATENDRELPROB" length="400"/>
+		<property name="indicadorSolicitacaoResolvida" type="java.lang.Short" column="PQSA_ICSOLICITRESOLVIDA" length="2"/>
+		<property name="comentarioSolicitacaoResolvida" type="java.lang.String" column="PQSA_DSOLICITRESOLVIDA" length="400"/>
+		<property name="indicadorContatoEquipeCampo" type="java.lang.Short" column="PQSA_ICBEMATENDEQPCAMPO" length="2"/>
+		<property name="comentarioContatoEquipeCampo" type="java.lang.String" column="PQSA_DSBEMATENDEQPCAMPO" length="400"/>
+		<property name="nota" type="java.lang.Short" column="PQSA_NNNOTAATENDIMENTO" length="2"/>
+		<property name="comentarioGeral" type="java.lang.String" column="PQSA_DSCOMENTARIO" length="400"/>
+		
+		<many-to-one name="registroAtendimento" class="gcom.atendimentopublico.registroatendimento.RegistroAtendimento" not-null="true">
+			<column name="RGAT_ID"/>
+		</many-to-one>
+		
+	</class>
+</hibernate-mapping>

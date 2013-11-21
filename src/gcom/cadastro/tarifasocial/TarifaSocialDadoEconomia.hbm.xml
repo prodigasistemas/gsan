@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.tarifasocial.TarifaSocialDadoEconomia" table="cadastro.tar_social_dado_economia">
+		<id name="id" type="java.lang.Integer" column="tsde_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_tar_social_dado_economia</param>
+			</generator>
+		</id>
+		<property name="numeroCartaoProgramaSocial" type="java.lang.Long" column="tsde_nncartaoprogramasocial" length="11"/>
+		<property name="numeroMesesAdesao" type="java.lang.Short" column="tsde_nnmesesadesao" length="2"/>
+		<property name="consumoCelpe" type="java.lang.Integer" column="tsde_nnconsumoenergia" length="4"/>
+		<property name="valorRendaFamiliar" type="java.math.BigDecimal" column="tsde_vlrendafamiliar" length="7"/>
+		<property name="dataValidadeCartao" type="java.sql.Date" column="tsde_dtvalidadecartao" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="tsde_tmultimaalteracao" length="8"/>
+		<property name="dataImplantacao" type="java.sql.Date" column="tsde_dtimplantacao" length="4"/>
+		<property name="dataExclusao" type="java.sql.Date" column="tsde_dtexclusao" length="4"/>
+		<property name="dataRevisao" type="java.sql.Date" column="tsde_dtrevisao" length="4"/>
+		<property name="quantidadeRecadastramento" type="java.lang.Short" column="tsde_qtrecadastramento" length="2"/>
+		<property name="dataRecadastramento" type="java.sql.Date" column="tsde_dtrecadastramento" length="4"/>
+		<!-- bi-directional many-to-one association to RendaTipo -->
+		<many-to-one name="rendaTipo" class="gcom.cadastro.tarifasocial.RendaTipo" not-null="true">
+			<column name="retp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to TarifaSocialCartaoTipo -->
+		<many-to-one name="tarifaSocialCartaoTipo" class="gcom.cadastro.tarifasocial.TarifaSocialCartaoTipo" not-null="true">
+			<column name="ctst_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ImovelEconomia -->
+		<many-to-one name="imovelEconomia" class="gcom.cadastro.imovel.ImovelEconomia" not-null="true">
+			<column name="imec_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to TarifaSocialRevisaoMotivo -->
+		<many-to-one name="tarifaSocialRevisaoMotivo" class="gcom.cadastro.tarifasocial.TarifaSocialRevisaoMotivo" not-null="true">
+			<column name="rtsm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to TarifaSocialExclusaoMotivo -->
+		<many-to-one name="tarifaSocialExclusaoMotivo" class="gcom.cadastro.tarifasocial.TarifaSocialExclusaoMotivo" not-null="true">
+			<column name="etsm_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

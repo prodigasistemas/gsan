@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.ordemservico.OsAtividadePeriodoExecucao" table="atendimentopublico.os_ativ_periodo_execucao">
+		<id name="id" type="java.lang.Integer" column="oape_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_os_ativ_periodo_execucao</param>
+			</generator>
+		</id>
+		<property name="dataInicio" type="java.sql.Timestamp" column="oape_tmexecucaoinicio" not-null="true" length="8"/>
+		<property name="dataFim" type="java.sql.Timestamp" column="oape_tmexecucaofim" not-null="true" length="8"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="oape_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to OrdemServicoAtividade -->
+		<many-to-one name="ordemServicoAtividade" class="gcom.atendimentopublico.ordemservico.OrdemServicoAtividade" not-null="true">
+			<column name="osat_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to OsAtividadeExecucaoEquipe 
+    <set
+        name="osAtividadeExecucaoEquipes"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="oape_id" />
+        </key>
+        <one-to-many 
+            class="gcom.OsAtividadeExecucaoEquipe"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.seguranca.acesso.FuncionalidadeDependencia" table="seguranca.funcionalidade_depend">
+		<composite-id name="comp_id" class="gcom.seguranca.acesso.FuncionalidadeDependenciaPK">
+			<key-property name="funcionalidadeDependenciaId" column="fncd_iddependencia" type="java.lang.Integer" length="4"/>
+			<key-property name="funcionalidadeId" column="fncd_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to Funcionalidade -->
+		<many-to-one name="funcionalidade" class="gcom.seguranca.acesso.Funcionalidade" update="false" insert="false">
+			<column name="fncd_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Funcionalidade -->
+		<many-to-one name="funcionalidadeDependencia" class="gcom.seguranca.acesso.Funcionalidade" update="false" insert="false">
+			<column name="fncd_iddependencia"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

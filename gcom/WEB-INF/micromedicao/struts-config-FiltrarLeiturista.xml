@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarLeituristaActionForm"
+			type="gcom.gui.micromedicao.leitura.FiltrarLeituristaActionForm" />
+
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarLeituristaActionForm"
+			type="gcom.gui.micromedicao.leitura.ExibirFiltrarLeituristaAction"
+			validate="true" scope="session"
+			path="/exibirFiltrarLeituristaAction">
+			<forward name="filtrarLeiturista"
+				path="/jsp/micromedicao/leitura/leiturista_filtrar.jsp" />
+		</action>
+		
+		
+		<action name="FiltrarLeituristaActionForm"
+			type="gcom.gui.micromedicao.leitura.FiltrarLeituristaAction"
+			validate="true" scope="session"
+			path="/filtrarLeituristaAction">
+			<forward name="exibirManterLeiturista"
+				path="/exibirManterLeituristaAction.do" />
+		</action>
+
+
+
+
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

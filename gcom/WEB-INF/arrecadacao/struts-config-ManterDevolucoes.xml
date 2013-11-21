@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="ManterDevolucaoActionForm"
+			type="gcom.gui.arrecadacao.ManterDevolucaoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		<action name="ManterDevolucaoActionForm"
+			type="gcom.gui.arrecadacao.ExibirManterDevolucaoAction"
+			validate="false" path="/exibirManterDevolucaoAction">
+			<forward name="exibirManterDevolucao"
+				path="/jsp/arrecadacao/devolucoes_manter.jsp" />
+		</action>
+		
+		<action name="FiltrarDevolucaoActionForm"
+			type="gcom.gui.arrecadacao.ExibirFiltrarDevolucaoAction"
+			validate="true" scope="session"
+			path="/exibirFiltrarDevolucaoActionManterDevolucao">
+			<forward name="filtrarDevolucoes"
+				path="/jsp/arrecadacao/devolucoes_filtrar.jsp" />
+		</action>
+		
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.arrecadacao.RemoverDevolucaoAction"
+			validate="false" input="/exibirManterDevolucaoActionAction.do"
+			scope="request" path="/removerDevolucaoAction" />
+		<action name="ManterDevolucaoActionForm"
+			type="gcom.gui.arrecadacao.ExibirAtualizarDevolucaoAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarDevolucaoAction">
+			<forward name="atualizarDevolucao"
+				path="/jsp/arrecadacao/devolucao_atualizar.jsp" />
+		</action>
+		<action name="ManterDevolucaoActionForm"
+			type="gcom.gui.arrecadacao.AtualizarDevolucaoAction"
+			validate="true" input="/exibirAtualizarDevolucaoAction.do"
+			scope="session" path="/atualizarDevolucaoAction" />
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

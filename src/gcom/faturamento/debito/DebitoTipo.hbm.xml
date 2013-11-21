@@ -1,0 +1,175 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+
+    Created by the Middlegen Hibernate plugin
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://hibernate.sourceforge.net/
+
+-->
+	<class name="gcom.faturamento.debito.DebitoTipo" table="faturamento.debito_tipo">
+		<id name="id" type="java.lang.Integer" column="dbtp_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_debito_tipo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="dbtp_dsdebitotipo" length="30"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="dbtp_dsabreviado" length="18"/>
+		<property name="indicadorUso" type="java.lang.Short" column="dbtp_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="dbtp_tmultimaalteracao" length="8"/>
+		<property name="valorLimite" type="java.math.BigDecimal" column="dbtp_vllimite" length="13"/>
+		<property name="valorSugerido" type="java.math.BigDecimal" column="dbtp_vlsugerido" length="13"/>
+		<property name="indicadorGeracaoAutomatica" type="java.lang.Short" column="dbtp_icgeracaoautomatica" length="2"/>
+		<property name="indicadorGeracaoConta" type="java.lang.Short" column="dbtp_icgeracaoconta" length="2"/>
+		<property name="valorLimiteInferior" type="java.math.BigDecimal" column="dbtp_valorlimiteinferior" length="13"/>
+		<property name="codigoConstante" type="java.lang.Integer" column="dbtp_nncodigoconstante" length="9" not-null="false"/>
+		<property name="indicadorDebitoCartaoCredito" type="java.lang.Short" column="dbtp_iccartaocredito" length="2"/>
+
+		<property name="indicadorJurosParCliente" type="java.lang.Short" column="dbtp_icguiajurosctrparcel" length="2"/>
+
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to FinanciamentoTipo -->
+		<many-to-one name="financiamentoTipo" class="gcom.financeiro.FinanciamentoTipo" not-null="true">
+			<column name="fntp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LancamentoItemContabil -->
+		<many-to-one name="lancamentoItemContabil" class="gcom.financeiro.lancamento.LancamentoItemContabil" not-null="true">
+			<column name="lict_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to Pagamento -->
+		<!--
+
+    <set
+
+        name="pagamentos"
+
+        lazy="true"
+
+        inverse="true"
+
+    >
+
+        <key>
+
+            <column name="dbtp_id" />
+
+        </key>
+
+        <one-to-many
+
+            class="mapeamentohibernate.Pagamento"
+
+        />
+
+    </set> -->
+		<!-- bi-directional one-to-many association to DebitoCobradoHistorico -->
+		<!--
+
+    <set
+
+        name="debitoCobradoHistoricos"
+
+        lazy="true"
+
+        inverse="true"
+
+    >
+
+        <key>
+
+            <column name="dbtp_id" />
+
+        </key>
+
+        <one-to-many
+
+            class="mapeamentohibernate.DebitoCobradoHistorico"
+
+        />
+
+    </set> -->
+		<!-- bi-directional one-to-many association to DebitoCobrado -->
+		<!--
+
+    <set
+
+        name="debitoCobrados"
+
+        lazy="true"
+
+        inverse="true"
+
+    >
+
+        <key>
+
+            <column name="dbtp_id" />
+
+        </key>
+
+        <one-to-many
+
+            class="mapeamentohibernate.DebitoCobrado"
+
+        />
+
+    </set> -->
+		<!-- bi-directional one-to-many association to DebitoACobrar -->
+		<!--
+
+    <set
+
+        name="debitoACobrars"
+
+        lazy="true"
+
+        inverse="true"
+
+    >
+
+        <key>
+
+            <column name="dbtp_id" />
+
+        </key>
+
+        <one-to-many
+
+            class="mapeamentohibernate.DebitoACobrar"
+
+        />
+
+    </set> -->
+		<!-- bi-directional one-to-many association to GuiaPagamentoItem -->
+		<!--
+
+    <set
+
+        name="guiaPagamentoItems"
+
+        lazy="true"
+
+        inverse="true"
+
+    >
+
+        <key>
+
+            <column name="dbtp_id" />
+
+        </key>
+
+        <one-to-many
+
+            class="mapeamentohibernate.GuiaPagamentoItem"
+
+        />
+
+    </set> -->
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.cliente.PessoaSexo" table="cadastro.pessoa_sexo">
+		<id name="id" type="java.lang.Integer" column="psex_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_pessoa_sexo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="psex_dspessoasexo" length="20"/>
+		<property name="indicadorUso" type="java.lang.Short" column="psex_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="psex_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to Cliente
+    <set
+        name="clientes"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="psex_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Cliente"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

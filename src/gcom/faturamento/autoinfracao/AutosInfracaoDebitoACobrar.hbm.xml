@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.autoinfracao.AutosInfracaoDebitoACobrar" table="faturamento.autos_infr_deb_a_cobrar">
+		<id name="id" type="java.lang.Integer" column="aida_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_autos_infr_deb_a_cobrar</param>
+			</generator>
+		</id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="aida_tmultimaalteracao" length="8"/>
+		<property name="indicadorMultaInfracao" type="short" column="aida_icmultaautoinfracao" not-null="true" length="2"/>
+		<!-- bi-directional many-to-one association to AutoInfracaoSituacao -->
+		<many-to-one name="autosInfracao" class="gcom.faturamento.autoinfracao.AutosInfracao" not-null="true">
+			<column name="auif_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DebitoACobrar -->
+		<many-to-one name="debitoACobrarGeral" class="gcom.faturamento.debito.DebitoACobrarGeral" not-null="true">
+			<column name="dbac_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

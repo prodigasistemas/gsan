@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="InserirContaBancariaActionForm"
+			type="gcom.gui.arrecadacao.banco.InserirContaBancariaActionForm" />
+	</form-beans>
+	<global-forwards />
+	<action-mappings>
+
+		<action name="InserirContaBancariaActionForm"
+				type="gcom.gui.arrecadacao.banco.ExibirInserirContaBancariaAction"
+				validate="true" 
+				scope="session"
+				path="/exibirInserirContaBancariaAction">
+			<forward name="inserirContaBancaria"
+					 path="/jsp/arrecadacao/banco/conta_bancaria_inserir.jsp" />
+		</action>
+		<action name="InserirContaBancariaActionForm"
+				type="gcom.gui.arrecadacao.banco.InserirContaBancariaAction"
+				validate="true" 
+				scope="session"
+				path="/inserirContaBancariaAction">
+		</action>
+
+	</action-mappings>
+	<message-resources null="false" parameter="gcom.properties.application" />
+</struts-config>

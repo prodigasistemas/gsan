@@ -1,0 +1,91 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.financeiro.LancamentoResumo" table="financeiro.lancamento_resumo">
+		<id name="id" type="java.lang.Integer" column="lcre_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="anoMesReferencia" type="int" column="lcre_amreferencia" not-null="true" length="4"/>
+		<property name="valorResumo" type="java.math.BigDecimal" column="lcre_vlresumolancamento" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="lcre_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to SetorComercial -->
+		<many-to-one name="setorComercial" class="gcom.cadastro.localidade.SetorComercial" not-null="true">
+			<column name="stcm_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to LancamentoResumoContaHistorico -->
+		<!--    <set
+        name="lancamentoResumoContaHistoricos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="lcre_id" />
+        </key>
+        <one-to-many
+            class="mapeamentohibernate.LancamentoResumoContaHistorico"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to GuiaPagamento -->
+		<!-- <set
+        name="guiaPagamentos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="lcre_id" />
+        </key>
+        <one-to-many
+            class="mapeamentohibernate.GuiaPagamento"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to LancamentoContabil -->
+		<!--    <set
+        name="lancamentoContabils"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="lcre_id" />
+        </key>
+        <one-to-many
+            class="mapeamentohibernate.LancamentoContabil"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to LancamentoResumoConta -->
+		<!--    <set
+        name="lancamentoResumoContas"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="lcre_id" />
+        </key>
+        <one-to-many
+            class="mapeamentohibernate.LancamentoResumoConta"
+        />
+    </set> -->
+		<!-- bi-directional many-to-one association to LancamentoResumoValorTipo -->
+		<many-to-one name="lancamentoResumoValorTipo" class="gcom.financeiro.LancamentoResumoValorTipo" not-null="true">
+			<column name="lrvt_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GerenciaRegional -->
+		<many-to-one name="gerenciaRegional" class="gcom.cadastro.localidade.GerenciaRegional" not-null="true">
+			<column name="greg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Categoria -->
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

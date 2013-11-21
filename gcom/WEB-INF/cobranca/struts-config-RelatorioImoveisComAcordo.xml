@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="GerarRelatorioImoveisComAcordoActionForm"
+			type="gcom.gui.relatorio.cobranca.GerarRelatorioImoveisComAcordoActionForm" />					
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0868] Gerar Relatorio de Pagamentos das Contas em Cobrança por Empresa Auhtor: Rômulo Aurélio Data:08/01/2009-->
+		<action name="GerarRelatorioImoveisComAcordoActionForm"
+			type="gcom.gui.relatorio.cobranca.ExibirGerarRelatorioImoveisComAcordoAction"
+			validate="true" 
+			scope="session"
+			path="/exibirGerarRelatorioImoveisComAcordoAction">
+			
+			<forward name="exibirGerarRelatorioImoveisComAcordoAction"
+				path="/jsp/relatorio/cobranca/imoveis_com_acordo_relatorio_gerar.jsp" />
+		</action>
+		
+		<action name="GerarRelatorioImoveisComAcordoActionForm"
+				type="gcom.gui.relatorio.cobranca.GerarRelatorioImoveisComAcordoAction"
+				validate="true" scope="session"
+				path="/gerarRelatorioImoveisComAcordoAction">
+		</action>
+		
+		
+		
+		
+	</action-mappings>
+
+</struts-config>

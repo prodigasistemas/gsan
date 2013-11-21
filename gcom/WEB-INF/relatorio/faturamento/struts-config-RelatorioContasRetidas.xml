@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="RelatorioContasRetidasActionForm"
+			type="gcom.gui.relatorio.faturamento.RelatorioContasRetidasActionForm" />					
+	</form-beans>
+
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+
+		<action name="RelatorioContasRetidasActionForm"
+			type="gcom.gui.relatorio.faturamento.ExibirFiltrarRelatorioContasRetidasAction"
+			      
+			validate="true" scope="session"
+			path="/exibirFiltrarRelatorioContasRetidas">
+			<forward name="exibirFiltrarRelatorioContasRetidas"
+				path="/jsp/relatorio/faturamento/relatorio_contas_retidas.jsp" />
+		</action>
+		
+		<action name="RelatorioContasRetidasActionForm"
+				type="gcom.gui.relatorio.faturamento.GerarRelatorioContasRetidasAction"
+				validate="false" 
+				scope="session"
+				path="/gerarRelatorioContasRetidasAction">
+		</action>
+
+	</action-mappings>
+
+</struts-config>

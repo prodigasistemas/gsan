@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.micromedicao.consumo.ConsumoAnormalidade" table="micromedicao.consumo_anormalidade">
+		<id name="id" type="java.lang.Integer" column="csan_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_consumo_anormalidade</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="csan_dsconsumoanormalidade" length="25"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="csan_dsabrvconsanormalidade" length="5"/>
+		<property name="mensagemConta" type="java.lang.String" column="csan_dsmensagemconta" length="100"/>
+		<property name="indicadorUso" type="java.lang.Short" column="csan_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="csan_tmultimaalteracao" length="8"/>
+		<property name="indicadorRevisaoPermissaoEspecial" type="java.lang.Short" column="csan_icrevcompermissaoespecial" length="2"/>
+		<property name="indicadorCalcularMedia" type="short" column="csan_iccalcularmedia" length="2"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to ConsumoHistorico 
+    <set
+        name="consumoHistoricos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="csan_id" />
+        </key>
+        <one-to-many 
+            class="gcom.cadastro.ConsumoHistorico"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

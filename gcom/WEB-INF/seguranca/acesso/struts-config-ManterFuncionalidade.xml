@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="AtualizarFuncionalidadeActionForm"
+			type="gcom.gui.seguranca.acesso.AtualizarFuncionalidadeActionForm" />
+		<form-bean
+			name="AtualizarAdicionarFuncionalidadeDependenciaActionForm"
+			type="gcom.gui.seguranca.acesso.AtualizarAdicionarFuncionalidadeDependenciaActionForm" />
+
+	</form-beans>
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.seguranca.acesso.ExibirManterFuncionalidadeAction"
+			validate="false" scope="session"
+			path="/exibirManterFuncionalidadeAction">
+			<forward name="exibirManterFuncionalidadeAction"
+				path="/jsp/seguranca/acesso/funcionalidade_manter.jsp" />
+			<forward name="atualizarFuncionalidade"
+				path="/exibirAtualizarFuncionalidadeAction.do?filtrar=sim" />
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.seguranca.acesso.RemoverFuncionalidadeAction"
+			validate="false" input="/exibirManterFuncionalidadeAction.do"
+			scope="request" path="/removerFuncionalidadeAction">
+		</action>
+
+		<action name="AtualizarFuncionalidadeActionForm"
+			type="gcom.gui.seguranca.acesso.ExibirAtualizarFuncionalidadeAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarFuncionalidadeAction">
+			<forward name="atualizarFuncionalidade"
+				path="/jsp/seguranca/acesso/funcionalidade_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarFuncionalidadeActionForm"
+			type="gcom.gui.seguranca.acesso.AtualizarFuncionalidadeAction"
+			validate="true" scope="request"
+			path="/atualizarFuncionalidadeAction">
+		</action>
+
+		<action
+			type="gcom.gui.seguranca.acesso.RemoverAtualizarAdicionarFuncionalidadeDependenciaAction"
+			validate="false"
+			path="/removerAtualizarAdicionarFuncionalidadeDependenciaAction">
+			<forward name="atualizarRemoverFuncionalidadeDependencia"
+				path="/exibirAtualizarFuncionalidadeAction.do?reloadPage=OK" />
+		</action>
+
+
+
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

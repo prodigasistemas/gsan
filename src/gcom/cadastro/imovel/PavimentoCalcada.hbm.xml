@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.imovel.PavimentoCalcada" table="cadastro.pavimento_calcada">
+		<id name="id" type="java.lang.Integer" column="pcal_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_pavimento_calcada</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="pcal_dspavimentocalcada" not-null="true" length="25"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="pcal_dsabreviado" not-null="true" length="5"/>
+		<property name="indicadorUso" type="java.lang.Short" column="pcal_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="pcal_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to Imovel
+    <set
+        name="imovels"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="pcal_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Imovel"
+        />
+    </set>
+    -->
+	</class>
+</hibernate-mapping>

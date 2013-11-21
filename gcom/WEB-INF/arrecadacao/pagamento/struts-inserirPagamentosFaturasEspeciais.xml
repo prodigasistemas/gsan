@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	
+	<form-beans>
+		<form-bean name="PagamentosFaturasEspeciaisActionForm"
+			type="gcom.gui.arrecadacao.pagamento.PagamentosFaturasEspeciaisActionForm" />
+	</form-beans>
+	
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	
+	<global-forwards/>
+
+	<action-mappings>
+	
+	
+		<action	name="PagamentosFaturasEspeciaisActionForm"
+			type="gcom.gui.arrecadacao.pagamento.ExibirInserirPagamentosFaturasEspeciaisAction"
+			validate="false" 
+			input="/exibirInserirPagamentosFaturasEspeciaisAction.do"
+			scope="session" 
+			path="/exibirInserirPagamentosFaturasEspeciaisAction">
+			
+			<forward name="inserirPagamentosFaturasEspeciaisAvisoBancario"
+				     path="/inserirPagamentosFaturasEspeciaisWizardAction.do?action=exibirInserirPagamentosFaturasEspeciaisAvisoBancarioAction" />
+				
+		</action>
+		
+		<action name="PagamentosFaturasEspeciaisActionForm"
+			    type="gcom.gui.arrecadacao.pagamento.InserirPagamentosFaturasEspeciaisWizardAction"
+			    validate="true" 
+			    parameter="action" 
+			    scope="session"
+			    path="/inserirPagamentosFaturasEspeciaisWizardAction">
+			
+			<forward name="inserirPagamentosFaturasEspeciaisAvisoBancario"
+				     path="/jsp/arrecadacao/pagamento/pagamento_faturas_especiais_inserir_aviso_bancario.jsp" />
+				
+			<forward name="inserirPagamentosFaturasEspeciaisTipoInclusaoCaneta"
+				     path="/jsp/arrecadacao/pagamento/pagamento_faturas_especiais_inserir_tipo_inclusao_caneta.jsp" />
+				
+		</action>
+		
+		<action
+			type="gcom.gui.arrecadacao.pagamento.CancelarInserirPagamentosFaturasEspeciaisAction"
+			validate="false" 
+			path="/cancelarInserirPagamentosFaturasEspeciaisAction" />
+	
+	</action-mappings>
+	
+</struts-config>

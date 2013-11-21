@@ -1,0 +1,100 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.CobrancaCriterio" table="cobranca.cobranca_criterio">
+		<id name="id" type="java.lang.Integer" column="cbct_id">
+			<generator class="sequence">
+				<param name="sequence">
+				cobranca.seq_cobranca_criterio</param>
+			</generator>
+		</id>
+		<property name="descricaoCobrancaCriterio" type="java.lang.String" column="cbct_dscobrancacriterio" length="30"/>
+		<property name="dataInicioVigencia" type="java.sql.Date" column="cbct_dtiniciovigencia" length="4"/>
+		<property name="indicadorUso" type="java.lang.Short" column="cbct_icuso" length="2"/>
+		<property name="numeroContaAntiga" type="java.lang.Short" column="cbct_nncontaantiga" length="2"/>
+		<property name="indicadorEmissaoImovelParalisacao" type="java.lang.Short" column="cbct_icemsimvparalisacao" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cbct_tmultimaalteracao" length="8"/>
+		<property name="indicadorEmissaoImovelSituacaoCobranca" type="java.lang.Short" column="cbct_icemsimvsitcob" length="2"/>
+		<property name="indicadorEmissaoDebitoContaMes" type="java.lang.Short" column="cbct_icemissaodebitocontames" length="2"/>
+		<property name="indicadorEmissaoContaRevisao" type="java.lang.Short" column="cbct_icemissaocontarevisao" length="2"/>
+		<property name="indicadorEmissaoInquilinoDebitoContaMes" type="java.lang.Short" column="cbct_icemsinqdebcontames" length="2"/>
+		<property name="indicadorEmissaoDebitoContaAntiga" type="java.lang.Short" column="cbct_icemsdebcontaantiga" length="2"/>
+		<property name="percentualValorMinimoPagoParceladoCancelado" type="java.math.BigDecimal" column="cbct_pcvlminimopgparccanc" not-null="true" length="5"/>
+		<property name="percentualQuantidadeMinimoPagoParceladoCancelado" type="java.math.BigDecimal" column="cbct_pcqtminimopgparccanc" not-null="true" length="5"/>
+		<property name="valorLimitePrioridade" type="java.math.BigDecimal" column="cbct_vllimiteprioridade" not-null="true" length="13"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to CobrancaCriterioLinha -->
+		<set name="cobrancaCriterioLinhas" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="cbct_id"/>
+			</key>
+			<one-to-many class="gcom.cobranca.CobrancaCriterioLinha"/>
+		</set>
+		<set name="criteriosSituacaoCobranca" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="cbct_id"/>
+			</key>
+			<one-to-many class="gcom.cobranca.CriterioSituacaoCobranca"/>
+		</set>
+		<set name="criteriosSituacaoLigacaoAgua" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="cbct_id"/>
+			</key>
+			<one-to-many class="gcom.cobranca.CriterioSituacaoLigacaoAgua"/>
+		</set>
+		<set name="criteriosSituacaoLigacaoEsgoto" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="cbct_id"/>
+			</key>
+			<one-to-many class="gcom.cobranca.CriterioSituacaoLigacaoEsgoto"/>
+		</set>
+		<!-- bi-directional one-to-many association to Rota -->
+		<!-- 
+    <set
+        name="rotas"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="cbct_id" />
+        </key>
+        <one-to-many 
+            class="gcom.Rota"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to CobrancaAcaoAtividadeComand -->
+		<!-- 
+    <set
+        name="cobrancaAcaoAtividadeComands"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="cbct_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CobrancaAcaoAtividadeComand"
+        />
+    </set>
+	-->
+		<!-- bi-directional many-to-one association to CobrancaAcao -->
+		<!-- 
+    <many-to-one
+        name="cobrancaAcao"
+        class="gcom.cobranca.CobrancaAcao"
+        not-null="true"
+    >
+        <column name="cbac_id" />
+    </many-to-one>
+-->
+	</class>
+</hibernate-mapping>

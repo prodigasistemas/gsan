@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="FiltrarContratoNegativadorActionForm"
+			type="gcom.gui.cobranca.spcserasa.FiltrarContratoNegativadorActionForm" />
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarContratoNegativadorActionForm" 
+			type="gcom.gui.cobranca.spcserasa.ExibirFiltrarContratoNegativadorAction"
+			validate="false" scope="session" path="/exibirFiltrarContratoNegativadorAction">
+			<forward name="filtrarContratoNegativador"
+				path="/jsp/cobranca/spcserasa/contrato_negativador_filtrar.jsp" />
+		</action>
+		
+		<action name="FiltrarContratoNegativadorActionForm" 
+			type="gcom.gui.cobranca.spcserasa.FiltrarContratoNegativadorAction"
+			validate="false" scope="session"
+			path="/filtrarContratoNegativadorAction">
+			
+			
+		
+			<forward name="retornarFiltroContratoNegativador" 
+				path="/exibirManterContratoNegativadorAction.do" />
+			
+				
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

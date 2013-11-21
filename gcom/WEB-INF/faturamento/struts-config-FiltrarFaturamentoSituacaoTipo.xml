@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarFaturamentoSituacaoTipoActionForm"
+			type="gcom.gui.faturamento.FiltrarFaturamentoSituacaoTipoActionForm" />
+
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarFaturamentoSituacaoTipoActionForm"  
+			type="gcom.gui.faturamento.ExibirFiltrarFaturamentoSituacaoTipoAction" 
+			validate="false"
+			scope="session"
+			path="/exibirFiltrarFaturamentoSituacaoTipoAction">
+
+			<forward name="filtrarFaturamentoSituacaoTipo"
+			path="/jsp/faturamento/faturamento_situacao_tipo_filtrar.jsp" />
+
+		</action>
+
+		<action name="FiltrarFaturamentoSituacaoTipoActionForm"
+			type="gcom.gui.faturamento.FiltrarFaturamentoSituacaoTipoAction"
+			validate="true" 
+			scope="session"
+			path="/filtrarFaturamentoSituacaoTipoAction">
+			
+			<forward name="exibirManterFaturamentoSituacaoTipo"
+				path="/exibirManterFaturamentoSituacaoTipoAction.do" />
+			
+			
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>
+

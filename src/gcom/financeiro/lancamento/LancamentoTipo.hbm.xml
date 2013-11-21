@@ -1,0 +1,84 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.financeiro.lancamento.LancamentoTipo" table="financeiro.lancamento_tipo">
+		<id name="id" type="java.lang.Integer" column="lctp_id">
+			<generator class="sequence">
+				<param name="sequence">financeiro.seq_lancamento_tipo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="lctp_dstipolancamento" length="40"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="lctp_dsabreviado" length="10"/>
+		<property name="indicadorImpressao" type="java.lang.Short" column="lctp_icimpressao" length="2"/>
+		<property name="codigoTipoContabil" type="java.lang.Short" column="lctp_cdtipocontabil" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="lctp_tmultimaalteracao" length="8"/>
+		<property name="indicadorTotal" type="java.lang.Short" column="lctp_ictotal" length="2"/>
+		<property name="indicadorResumido" type="java.lang.Short" column="lctp_icresumido" length="2"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to LancamentoTipo -->
+		<!--
+    <set
+        name="lancamentoTipos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="lctp_idlancamentosuperior" />
+        </key>
+        <one-to-many 
+            class="gcom.LancamentoTipo"
+        />
+    </set> -->
+		<many-to-one name="lancamentoTipo" class="gcom.financeiro.lancamento.LancamentoTipo" not-null="true">
+			<column name="lctp_idlancamentosuperior"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to LancamentoContabil -->
+		<!--
+    <set
+        name="lancamentoContabils"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="lctp_id" />
+        </key>
+        <one-to-many 
+            class="gcom.LancamentoContabil"
+        />
+    </set>
+    <set
+        name="lancamentoTipoItems"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="lctp_id" />
+        </key>
+        <one-to-many 
+            class="gcom.LancamentoTipoItem"
+        />
+    </set>
+    <set
+        name="resumoFaturamentos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="lctp_id" />
+        </key>
+        <one-to-many 
+            class="gcom.ResumoFaturamento"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

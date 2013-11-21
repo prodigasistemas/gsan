@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="InserirProjetoForm"
+			type="gcom.gui.cadastro.projeto.InserirProjetoForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards/>
+	
+	<action-mappings>
+
+		<action name="InserirProjetoForm"
+			type="gcom.gui.cadastro.projeto.ExibirInserirProjetoAction"
+			validate="true" scope="session"
+			path="/exibirInserirProjetoAction">
+			<forward name="exibirInserirProjetoAction"
+				path="/jsp/cadastro/projeto/projeto_inserir.jsp"/>
+		</action>
+
+		<action name="InserirProjetoForm"
+			type="gcom.gui.cadastro.projeto.InserirProjetoAction"
+			validate="false" scope="session"
+			path="/inserirProjetoAction">
+		</action>
+
+	</action-mappings>
+	
+	<message-resources null="false" parameter="gcom.properties.application"/>
+	
+</struts-config>

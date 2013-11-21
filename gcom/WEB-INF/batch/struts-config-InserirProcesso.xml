@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="InserirProcessoActionForm"
+			type="gcom.gui.batch.InserirProcessoActionForm" />
+		<form-bean name="InserirProcessoMensalEventualActionForm"
+			type="gcom.gui.batch.InserirProcessoMensalEventualActionForm" />
+
+	</form-beans>
+
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="InserirProcessoActionForm"
+			type="gcom.gui.batch.ExibirInserirProcessoAction" validate="false"
+			scope="session" path="/exibirInserirProcessoAction">
+			<forward name="inserirProcesso"
+				path="/jsp/batch/processo_inserir.jsp" />
+		</action>
+
+		<action name="InserirProcessoActionForm"
+			type="gcom.gui.batch.InserirProcessoAction" validate="false"
+			scope="session" path="/inserirProcessoAction">
+			<forward name="inserirProcessoMensalEventual"
+				path="/exibirInserirProcessoMensalEventualAction.do" />
+			<forward name="inserirProcessoFaturamentoComandado"
+				path="/exibirInserirProcessoFaturamentoComandadoAction.do" />
+			<forward name="inserirProcessoCobrancaComandado"
+				path="/exibirInserirProcessoCobrancaComandadoAction.do" />
+		</action>
+
+
+		<action name="InserirProcessoMensalEventualActionForm"
+			type="gcom.gui.batch.ExibirInserirProcessoMensalEventualAction"
+			validate="false" scope="session"
+			path="/exibirInserirProcessoMensalEventualAction">
+			<forward name="inserirProcessoMensalEventual"
+				path="/jsp/batch/processo_inserir_mensal_eventual.jsp" />
+		</action>
+
+		<action name="InserirProcessoMensalEventualActionForm"
+			type="gcom.gui.batch.InserirProcessoMensalEventualAction"
+			validate="false" scope="session"
+			path="/inserirProcessoMensalEventualAction">
+		</action>
+
+		<action
+			type="gcom.gui.batch.ExibirInserirProcessoFaturamentoComandadoAction"
+			path="/exibirInserirProcessoFaturamentoComandadoAction">
+			<forward name="inserirProcessoFaturamentoComandado"
+				path="/jsp/batch/processo_inserir_faturamento.jsp" />
+		</action>
+
+		<action
+			type="gcom.gui.batch.InserirProcessoFaturamentoComandadoAction"
+			path="/inserirProcessoFaturamentoComandadoAction">
+		</action>
+		
+		<action
+			type="gcom.gui.batch.ExibirInserirProcessoCobrancaComandadoAction"
+			path="/exibirInserirProcessoCobrancaComandadoAction">
+			<forward name="inserirProcessoCobrancaComandado"
+				path="/jsp/batch/processo_inserir_cobranca.jsp" />
+		</action>
+
+		<action
+			type="gcom.gui.batch.InserirProcessoCobrancaComandadoAction"
+			path="/inserirProcessoCobrancaComandadoAction">
+		</action>
+		
+	</action-mappings>
+
+
+</struts-config>

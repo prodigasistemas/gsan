@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarConsumoAnormalidadeActionForm"
+			type="gcom.gui.micromedicao.FiltrarConsumoAnormalidadeActionForm" />
+
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarConsumoAnormalidadeActionForm"  
+			type="gcom.gui.micromedicao.ExibirFiltrarConsumoAnormalidadeAction" 
+			validate="false"
+			scope="session"
+			path="/exibirFiltrarConsumoAnormalidadeAction">
+
+			<forward name="filtrarConsumoAnormalidade"
+			path="/jsp/micromedicao/consumo_anormalidade_filtrar.jsp" />
+
+		</action>
+
+		<action name="FiltrarConsumoAnormalidadeActionForm"
+			type="gcom.gui.micromedicao.FiltrarConsumoAnormalidadeAction"
+			validate="true" 
+			scope="session"
+			path="/filtrarConsumoAnormalidadeAction">
+			
+			<forward name="exibirManterConsumoAnormalidade"
+				path="/exibirManterConsumoAnormalidadeAction.do" />
+			
+			
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

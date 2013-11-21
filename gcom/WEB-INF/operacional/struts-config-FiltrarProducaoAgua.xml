@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarProducaoAguaActionForm"
+			type="gcom.gui.operacional.FiltrarProducaoAguaActionForm" />
+
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarProducaoAguaActionForm"  
+			type="gcom.gui.operacional.ExibirFiltrarProducaoAguaAction" 
+			validate="false"
+			scope="session"
+			path="/exibirFiltrarProducaoAguaAction">
+
+			<forward name="filtrarProducaoAgua"
+			path="/jsp/operacional/producao_agua_filtrar.jsp" />
+
+		</action>
+
+		<action name="FiltrarProducaoAguaActionForm"
+			type="gcom.gui.operacional.FiltrarProducaoAguaAction"
+			validate="false" 
+			scope="session"
+			path="/filtrarProducaoAguaAction">
+			
+			<forward name="exibirManterProducaoAgua"
+				path="/exibirManterProducaoAguaAction.do" />
+			
+			
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

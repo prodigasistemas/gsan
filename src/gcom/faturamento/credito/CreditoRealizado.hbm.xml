@@ -1,0 +1,70 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.credito.CreditoRealizado" table="faturamento.credito_realizado">
+		<id name="id" type="java.lang.Integer" column="crrz_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_credito_realizado</param>
+			</generator>
+		</id>
+		<property name="creditoRealizado" type="java.sql.Timestamp" column="crrz_tmcreditorealizado" not-null="true" length="8"/>
+		<property name="codigoSetorComercial" type="java.lang.Integer" column="crrz_cdsetorcomercial" length="4"/>
+		<property name="numeroQuadra" type="java.lang.Integer" column="crrz_nnquadra" length="4"/>
+		<property name="numeroLote" type="java.lang.Short" column="crrz_nnlote" length="2"/>
+		<property name="numeroSubLote" type="java.lang.Short" column="crrz_nnsublote" length="2"/>
+		<property name="anoMesReferenciaCredito" type="java.lang.Integer" column="crrz_amreferenciacredito" length="4"/>
+		<property name="anoMesCobrancaCredito" type="java.lang.Integer" column="crrz_amcobrancacredito" length="4"/>
+		<property name="valorCredito" type="java.math.BigDecimal" column="crrz_vlcredito" length="13"/>
+		<property name="numeroPrestacao" type="java.lang.Short" column="crrz_nnprestacao" length="2"/>
+		<property name="numeroPrestacaoCredito" type="java.lang.Short" column="crrz_nnprestacaocredito" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="crrz_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="numeroParcelaBonus" type="java.lang.Short" column="crrz_nnparcelabonus" length="2"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to CreditoRealizadoCategoria -->
+		<set name="creditoRealizadoCategorias" lazy="true" inverse="true" cascade="delete">
+			<key>
+				<column name="crrz_id"/>
+			</key>
+			<one-to-many class="gcom.faturamento.credito.CreditoRealizadoCategoria"/>
+		</set>
+		<!-- bi-directional many-to-one association to Conta -->
+		<many-to-one name="conta" class="gcom.faturamento.conta.Conta" not-null="true">
+			<column name="cnta_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Quadra -->
+		<many-to-one name="quadra" class="gcom.cadastro.localidade.Quadra" not-null="false">
+			<column name="qdra_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="false">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CreditoTipo -->
+		<many-to-one name="creditoTipo" class="gcom.faturamento.credito.CreditoTipo" not-null="false">
+			<column name="crti_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LancamentoItemContabil -->
+		<many-to-one name="lancamentoItemContabil" class="gcom.financeiro.lancamento.LancamentoItemContabil" not-null="true">
+			<column name="lict_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CreditoOrigem -->
+		<many-to-one name="creditoOrigem" class="gcom.faturamento.credito.CreditoOrigem" not-null="true">
+			<column name="crog_id"/>
+		</many-to-one>
+
+    <!-- bi-directional many-to-one association to CreditoARealizar -->
+    <many-to-one
+        name="creditoARealizarGeral"
+        class="gcom.faturamento.credito.CreditoARealizarGeral"
+        not-null="false"
+    >
+        <column name="crar_id" />
+    </many-to-one>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="InserirHistoricoAlteracaoSistemaActionForm"
+			type="gcom.gui.cadastro.sistemaparametro.InserirHistoricoAlteracaoSistemaActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0217] INSERIR Historico Altedações do Sistema Auhtor: Thiago Tenório Data:30/03/2006-->
+		<action name="InserirHistoricoAlteracaoSistemaActionForm"
+			type="gcom.gui.cadastro.sistemaparametro.ExibirInserirHistoricoAlteracaoSistemaAction"
+			validate="false" scope="session"
+			path="/exibirInserirHistoricoAlteracaoSistemaAction">
+			<forward name="exibirInserirHistoricoAlteracaoSistema"
+				path="/jsp/cadastro/sistemaparametro/sistema_alteracao_historico_inserir.jsp" />
+		</action>
+		<action name="InserirHistoricoAlteracaoSistemaActionForm"
+			type="gcom.gui.cadastro.sistemaparametro.InserirHistoricoAlteracaoSistemaAction"
+			validate="false" scope="request"
+			path="/inserirHistoricoAlteracaoSistemaAction">
+		</action>
+
+	</action-mappings>
+
+</struts-config>

@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="ConsultarComandosOSSeletivaInspecaoAnormalidadeActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ConsultarComandosOSSeletivaInspecaoAnormalidadeActionForm" />	
+		<form-bean name="MovimentarOSSeletivaInspecaoAnormalidadeActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.MovimentarOSSeletivaInspecaoAnormalidadeActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC1193] Consultar Comandos de OS Seletiva de Inspeção de Anormalidade - Autor: Vivianne Sousa Data:11/07/2011 -->
+		<action name="ConsultarComandosOSSeletivaInspecaoAnormalidadeActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirConsultarComandosOSSeletivaInspecaoAnormalidadeAction"
+			validate="true" 
+			scope="session"
+			path="/exibirConsultarComandosOSSeletivaInspecaoAnormalidadeAction">
+			
+			<forward name="exibirConsultarComandosOSSeletivaInspecaoAnormalidade"
+				path="/jsp/atendimentopublico/ordemservico/comandos_os_seletiva_inspecao_anormalidade_consultar.jsp" />
+		</action>
+		
+		<action name="ConsultarComandosOSSeletivaInspecaoAnormalidadeActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.EncerrarComandoOSSeletivaInspecaoAnormalidadeAction"
+			validate="true" scope="session"
+			path="/encerrarComandoOSSeletivaInspecaoAnormalidadeAction">
+		</action>
+		<action
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirConsultarComandosOSSeletivaInspecaoAnormalidadePopupAction"
+			path="/exibirConsultarComandosOSSeletivaInspecaoAnormalidadePopupAction">
+			<forward name="exibirConsultarComandosOSSeletivaInspecaoAnormalidadePopup"
+				path="/jsp/atendimentopublico/ordemservico/comandos_os_seletiva_inspecao_anormalidade_consultar_popup.jsp" />
+		</action>
+		
+		<action	name="MovimentarOSSeletivaInspecaoAnormalidadeActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirMovimentarOSSeletivaInspecaoAnormalidadeAction"
+			validate="false" scope="session" 
+			path="/exibirMovimentarOSSeletivaInspecaoAnormalidadeAction">
+			
+			<forward name="movimentarOSSeletivaInspecaoAnormalidadeEmitirOS"
+				     path="/movimentarOSSeletivaInspecaoAnormalidadeWizardAction.do?action=exibirMovimentarOSSeletivaInspecaoAnormalidadeEmitirOSAction" />
+			
+			<forward name="emitirOSSeletivaInspecaoAnormalidadeAction"
+				     path="/movimentarOSSeletivaInspecaoAnormalidadeWizardAction.do?action=movimentarOSSeletivaInspecaoAnormalidadeEmitirOSAction" />
+			
+			<forward name="gerarOSSeletivaInspecaoAnormalidadeAction"
+				     path="/movimentarOSSeletivaInspecaoAnormalidadeWizardAction.do?action=movimentarOSSeletivaInspecaoAnormalidadeGerarOSAction" />
+				     
+			<forward name="movimentarOSSeletivaInspecaoAnormalidadeAction"
+				     path="/movimentarOSSeletivaInspecaoAnormalidadeAction" />
+				     
+		</action>
+		
+		<action	name="MovimentarOSSeletivaInspecaoAnormalidadeActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirMovimentarOSSeletivaInspecaoAnormalidadeEmitirOSAction"
+			validate="false" scope="session" 
+			path="/exibirMovimentarOSSeletivaInspecaoAnormalidadeEmitirOSAction">
+			
+			<forward name="emitirOSSeletivaInspecaoAnormalidadeAction"
+				     path="/movimentarOSSeletivaInspecaoAnormalidadeWizardAction.do?action=movimentarOrdemServicoEmitirOSAction" />
+				
+		</action>
+		
+		<action	name="MovimentarOSSeletivaInspecaoAnormalidadeActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirMovimentarOSSeletivaInspecaoAnormalidadeGerarOSAction"
+			validate="false" scope="session" 
+			path="/exibirMovimentarOSSeletivaInspecaoAnormalidadeGerarOSAction">
+			
+			<forward name="gerarOSSeletivaInspecaoAnormalidadeAction"
+				     path="/movimentarOSSeletivaInspecaoAnormalidadeWizardAction.do?action=movimentarOrdemServicoGerarOSAction" />
+				     
+			<forward name="movimentarOSSeletivaInspecaoAnormalidadeAction"
+				     path="/movimentarOSSeletivaInspecaoAnormalidadeAction" />
+				
+		</action>
+		
+		<action name="MovimentarOSSeletivaInspecaoAnormalidadeActionForm"
+			    type="gcom.gui.atendimentopublico.ordemservico.MovimentarOSSeletivaInspecaoAnormalidadeWizardAction"
+			    validate="false" 
+			    parameter="action" 
+			    scope="session"
+			    path="/movimentarOSSeletivaInspecaoAnormalidadeWizardAction">
+			
+			<forward name="movimentarOSSeletivaInspecaoAnormalidadeEmitirOS"
+				     path="/jsp/atendimentopublico/ordemservico/movimentar_os_seletiva_inspecao_anormalidade_emitir.jsp" />
+				
+			<forward name="movimentarOSSeletivaInspecaoAnormalidadeGerarOS"
+				     path="/jsp/atendimentopublico/ordemservico/movimentar_os_seletiva_inspecao_anormalidade_gerar.jsp" />
+				
+			<forward name="movimentarOSSeletivaInspecaoAnormalidadeEncerrarOS"
+				     path="/jsp/atendimentopublico/ordemservico/movimentar_os_seletiva_inspecao_anormalidade_encerrar.jsp" />
+			
+			<forward name="emitirOSSeletivaInspecaoAnormalidadeAction"
+				     path="/movimentarOSSeletivaInspecaoAnormalidadeWizardAction.do?action=movimentarOSSeletivaInspecaoAnormalidadeEmitirOSAction" />
+			
+			<forward name="gerarOSSeletivaInspecaoAnormalidadeAction"
+				     path="/movimentarOSSeletivaInspecaoAnormalidadeWizardAction.do?action=movimentarOSSeletivaInspecaoAnormalidadeGerarOSAction" />
+				     
+			<forward name="movimentarOSSeletivaInspecaoAnormalidadeAction"
+				     path="/movimentarOSSeletivaInspecaoAnormalidadeAction" />
+				
+		</action>
+		
+		<action
+			type="gcom.gui.atendimentopublico.ordemservico.CancelarMovimentarOSSeletivaInspecaoAnormalidadeAction"
+			validate="false" 
+			path="/cancelarMovimentarOSSeletivaInspecaoAnormalidadeAction" />
+			
+		
+		<action	name="MovimentarOSSeletivaInspecaoAnormalidadeActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.MovimentarOSSeletivaInspecaoAnormalidadeEncerrarOSAction"
+			validate="false" scope="session" 
+			path="/movimentarOSSeletivaInspecaoAnormalidadeEncerrarOSAction">
+			
+			<forward name="movimentarOSSeletivaInspecaoAnormalidadeAction"
+				     path="/movimentarOSSeletivaInspecaoAnormalidadeAction" />
+				
+		</action>
+		
+		<action	name="MovimentarOSSeletivaInspecaoAnormalidadeActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.MovimentarOSSeletivaInspecaoAnormalidadeEmitirOSAction"
+			validate="false" scope="session" 
+			path="/movimentarOSSeletivaInspecaoAnormalidadeEmitirOSAction">
+				     
+			<forward name="movimentarOSSeletivaInspecaoAnormalidadeAction"
+				     path="/movimentarOSSeletivaInspecaoAnormalidadeAction" />
+		
+		</action>
+		
+		<action	name="MovimentarOSSeletivaInspecaoAnormalidadeActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.MovimentarOSSeletivaInspecaoAnormalidadeGerarOSAction"
+			validate="false" scope="session" 
+			path="/movimentarOSSeletivaInspecaoAnormalidadeGerarOSAction">
+				     
+			<forward name="movimentarOSSeletivaInspecaoAnormalidadeAction"
+				     path="/movimentarOSSeletivaInspecaoAnormalidadeAction" />
+				
+		</action>
+		
+		<action	name="MovimentarOSSeletivaInspecaoAnormalidadeActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.MovimentarOSSeletivaInspecaoAnormalidadeAction"
+			validate="false" scope="session" 
+			path="/movimentarOSSeletivaInspecaoAnormalidadeAction">
+				     
+		
+			<forward name="emitirOSSeletivaInspecaoAnormalidadeAction"
+				     path="/movimentarOSSeletivaInspecaoAnormalidadeWizardAction.do?action=movimentarOSSeletivaInspecaoAnormalidadeEmitirOSAction" />
+			
+			<forward name="gerarOSAction"
+				     path="/movimentarOSSeletivaInspecaoAnormalidadeWizardAction.do?action=movimentarOSSeletivaInspecaoAnormalidadeGerarOSAction" />
+				     
+			<forward name="movimentarOSSeletivaInspecaoAnormalidadeAction"
+				     path="/movimentarOSSeletivaInspecaoAnormalidadeAction" />
+				
+		</action>
+		
+	</action-mappings>
+
+</struts-config>

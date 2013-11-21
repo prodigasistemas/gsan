@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+		Created by the Middlegen Hibernate plugin
+		
+		http://boss.bekk.no/boss/middlegen/
+		http://hibernate.sourceforge.net/
+	-->
+	<class name="gcom.cadastro.cliente.ClienteImovelEconomia" table="cadastro.cliente_imovel_economia">
+		<id name="id" type="java.lang.Integer" column="cime_id">
+			<generator class="sequence">
+				<param name="sequence">
+					cadastro.seq_cliente_imovel_economia</param>
+			</generator>
+		</id>
+		<property name="dataInicioRelacao" type="java.sql.Date" column="cime_dtrelacaoinicio" not-null="true" length="4"/>
+		<property name="dataFimRelacao" type="java.sql.Date" column="cime_dtrelacaofim" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cime_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to ClienteImovelFimRelacaoMotivo -->
+		<many-to-one name="clienteImovelFimRelacaoMotivo" class="gcom.cadastro.cliente.ClienteImovelFimRelacaoMotivo" not-null="true">
+			<column name="cifr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Cliente -->
+		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="true" lazy="false">
+			<column name="clie_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ClienteImovelTipo -->
+		<many-to-one name="clienteRelacaoTipo" class="gcom.cadastro.cliente.ClienteRelacaoTipo" lazy="false" not-null="true">
+			<column name="crtp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ImovelEconomia -->
+		<many-to-one name="imovelEconomia" class="gcom.cadastro.imovel.ImovelEconomia" not-null="true">
+			<column name="imec_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

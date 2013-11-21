@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+<form-beans>
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="AtualizarEquipeActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.AtualizarEquipeActionForm" />
+</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+	
+			<action name="ManutencaoRegistroActionForm" 
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirManterEquipeAction"
+			validate="false" scope="session" path="/exibirManterEquipeAction">
+				<forward name="exibirManterEquipe"
+					path="/jsp/atendimentopublico/ordemservico/equipe_manter.jsp" />
+				<forward name="exibirAtualizarEquipe"
+					path="/exibirAtualizarEquipeAction.do" />	
+			</action>
+			<action name="ManutencaoRegistroActionForm" 
+			type="gcom.gui.atendimentopublico.ordemservico.RemoverEquipeAction"
+			validate="false" scope="session" path="/removerEquipeAction" />
+			
+			<action name="AtualizarEquipeActionForm" 
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirAtualizarEquipeAction"
+			validate="true" scope="session" path="/exibirAtualizarEquipeAction">
+				<forward name="exibirAtualizarEquipe"
+					path="/jsp/atendimentopublico/ordemservico/equipe_atualizar.jsp" />
+				<forward name="inserirEquipeComponente"
+					path="/jsp/atendimentopublico/ordemservico/equipe_componentes_atualizar_adicionar_popup.jsp" />
+				<forward name="inserirEquipamentosEspeciais"
+					path="/jsp/atendimentopublico/ordemservico/equipamentos_especiais_adicionar_atualizar_popup.jsp" />
+			</action>
+				<action name="AtualizarEquipeActionForm" 
+				type="gcom.gui.atendimentopublico.ordemservico.AtualizarEquipeAction"
+				validate="true" scope="session" path="/atualizarEquipeAction">
+			</action>
+		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

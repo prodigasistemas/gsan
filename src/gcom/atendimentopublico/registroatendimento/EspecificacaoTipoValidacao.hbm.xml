@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.registroatendimento.EspecificacaoTipoValidacao" table="atendimentopublico.espec_tipo_validacao">
+		<id name="id" type="java.lang.Integer" column="estv_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.especificacao_tipo_validadacao</param>
+			</generator>
+		</id>
+		<property name="descricaoEspecificacaoTipoValidacao" type="java.lang.String" column="estv_dsespecificaotipvalidacao" length="30"/>
+		<property name="codigoConstante" type="char" column="estv_cdconstante" not-null="true" length="2"/>
+		<property name="indicadorUso" type="short" column="estv_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="estv_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Solicitacao Tipo Especificacao -->
+		<many-to-one name="solicitacaoTipoEspecificacao" class="gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao" not-null="true">
+			<column name="step_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

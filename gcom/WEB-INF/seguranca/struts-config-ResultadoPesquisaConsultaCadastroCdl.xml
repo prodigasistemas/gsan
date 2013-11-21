@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="FiltrarConsultaCadastroCdlActionForm"
+			type="gcom.seguranca.FiltrarConsultaCadastroCdlActionForm" />
+		<form-bean name="ConsultaCadastroCdlInformacoesArmazenadasActionForm"
+			type="gcom.seguranca.ConsultaCadastroCdlInformacoesArmazenadasActionForm" />
+	</form-beans>
+		
+
+
+	<!--******************* PÃGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarConsultaCadastroCdlActionForm"
+			type="gcom.gui.seguranca.ExibirFiltrarConsultaCadastroCdlAction" validate="false"
+			scope="session" path="/exibirFiltrarConsultaCadastroCdlAction">
+			<forward name="filtrarConsultaCadastroCdl"
+				path="/jsp/seguranca/consulta_cadastro_cdl_filtrar.jsp" />
+		</action>
+
+		<action name="FiltrarConsultaCadastroCdlActionForm"
+			type="gcom.gui.seguranca.FiltrarConsultaCadastroCdlAction" validate="false"
+			scope="session" path="/filtrarConsultaCadastroCdlAction">
+			
+			<forward name="resultadoPesquisaConsultaCadastroCdl"
+				path="/jsp/seguranca/consulta_cadastro_cdl_resultado_pesquisa.jsp" />
+				
+			<forward name="exibirConsultaCadastroCdlInformacoesArmazenadas"
+				path="/exibirConsultaCadastroCdlInformacoesArmazenadasAction.do" />
+		</action>
+		
+		<action name="ConsultaCadastroCdlInformacoesArmazenadasActionForm"
+			type="gcom.gui.seguranca.ExibirConsultaCadastroCdlInformacoesArmazenadasAction"
+			validate="false" scope="session"
+			path="/exibirConsultaCadastroCdlInformacoesArmazenadasAction">
+
+			<forward name="consultaCadastroCdlInformacoesArmazenadas"
+				path="/jsp/seguranca/consulta_cadastro_cdl_informacoes_armazenadas.jsp" />
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.seguranca.RemoverConsultaCadastroCdlAction" scope="request"
+			path="/removerConsultaCadastroCdlAction" />
+			
+		<action name="FiltrarConsultaCadastroCdlActionForm"
+			type="gcom.seguranca.GerarRelatorioResultadoPesquisaConsultaCadastroCdlAction"
+			validate="false" scope="session"
+			path="/gerarRelatorioResultadoPesquisaConsultaCadastroCdlAction" />
+			
+	</action-mappings>
+
+
+</struts-config>

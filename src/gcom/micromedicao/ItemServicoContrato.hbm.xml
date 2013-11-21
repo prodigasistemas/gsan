@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.micromedicao.ItemServicoContrato" table="micromedicao.item_servico_contrato">
+		<id name="id" type="java.lang.Integer" column="itsc_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_item_servico_contrato</param>
+			</generator>
+		</id>
+		<property name="valor" type="java.math.BigDecimal" column="itsc_vlitemservcontr" not-null="true" length="10"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="itsc_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to ItemServico -->
+		<many-to-one name="itemServico" class="gcom.micromedicao.ItemServico" not-null="true">
+			<column name="itse_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to ContratoEmpresaServico -->
+		<many-to-one name="contratoEmpresaServico" class="gcom.micromedicao.ContratoEmpresaServico" not-null="true">
+			<column name="cese_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ServicoTipo -->
+		<many-to-one name="servicoTipo" class="gcom.atendimentopublico.ordemservico.ServicoTipo" not-null="true">
+			<column name="svtp_id"/>
+		</many-to-one>
+		
+		<property name="percentualServicosNaoExecutados" type="java.math.BigDecimal" column="itsc_pcservnaoexecaceito" not-null="false" length="5"/>
+		<property name="percentualMultaSerAplicada" type="java.math.BigDecimal" column="itsc_pcmultaitemservico" not-null="false" length="5"/>
+		<property name="quantidadeOrcadaItemContrato" type="java.math.BigDecimal" column="itsc_qtorcadaitemservico" not-null="false" length="10"/>
+		<property name="valorOrcadoItemContrato" type="java.math.BigDecimal" column="itsc_vlorcadoitemservico" not-null="false" length="13"/>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+    
+<hibernate-mapping>
+<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+
+<class 
+    name="gcom.integracao.ServicoTerceiroAcompanhamentoServico" 
+    table="integracao.serv_terceiro_acomp_serv"
+>
+
+    <id
+        name="id"
+        type="java.lang.Integer"
+        column="STAS_ID"
+    >
+        <generator class="sequence">				<param name="sequence">integracao.seq_serv_terceiro_acomp_serv</param>		</generator>
+    </id>
+
+    <property
+        name="codigoServico"
+        type="java.lang.String"
+        column="STAS_CDSERVICO"        not-null="true"
+        length="10"
+    />
+    <property
+        name="descricaoServico"
+        type="java.lang.String"
+        column="STAS_DSSERVICO"        not-null="true"
+        length="300"
+    />        <property         name="indicadorUso"         type="short"         column="STAS_ICUSO"         not-null="true"         length="2"/>            <property         name="indicadorExcedente"         type="short"         column="STAS_ICEXCEDENTE"         not-null="true"         length="2"/>
+    <property
+        name="ultimaAlteracao"
+        type="java.sql.Timestamp"
+        column="STAS_TMULTIMAALTERACAO"
+        not-null="true"
+        length="23"
+    />        <!-- Associations -->		<many-to-one name="servicoTerceiroExcedente" class="gcom.integracao.ServicoTerceiroAcompanhamentoServico" not-null="false">			<column name="STAS_IDEXCEDENTE"/>		</many-to-one>
+</class>
+</hibernate-mapping>

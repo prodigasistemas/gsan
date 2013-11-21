@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<action type="gcom.gui.cadastro.ExibirTesteCelularAction"
+			validate="true" scope="request"
+			path="/exibirTesteCelularAction">
+			<forward name="exibirTesteCelularAction"
+				path="/jsp/cadastro/teste_celular.jsp" />
+		</action>
+		
+		<action type="gcom.gui.cadastro.TesteCelularAction"
+			validate="true" scope="request"
+			path="/testeCelularAction" />
+
+	</action-mappings>
+
+</struts-config>

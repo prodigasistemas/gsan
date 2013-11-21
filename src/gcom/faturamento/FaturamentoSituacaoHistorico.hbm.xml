@@ -1,0 +1,56 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.FaturamentoSituacaoHistorico" table="faturamento.fatur_situacao_hist">
+		<id name="id" type="java.lang.Integer" column="ftsh_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_fatur_situacao_hist</param>
+			</generator>
+		</id>
+		<property name="anoMesFaturamentoSituacaoInicio" type="java.lang.Integer" column="ftsh_amfatmtsitinicio" not-null="true" length="6"/>
+		<property name="anoMesFaturamentoSituacaoFim" type="java.lang.Integer" column="ftsh_amfaturamentosituacaofim" not-null="true" length="6"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ftsh_tmultimaalteracao" length="8"/>
+		<property name="anoMesFaturamentoRetirada" type="java.lang.Integer" column="ftsh_amfaturamentoretirada" length="6"/>
+		<property name="numeroConsumoAguaMedido" type="java.lang.Integer" column="ftsh_nnconsumoaguamedido" length="4"/>
+		<property name="numeroConsumoAguaNaoMedido" type="java.lang.Integer" column="ftsh_nnconsumoaguanaomedido" length="4"/>
+		<property name="numeroVolumeEsgotoMedido" type="java.lang.Integer" column="ftsh_nnvolumeesgotomedido" length="4"/>
+		<property name="numeroVolumeEsgotoNaoMedido" type="java.lang.Integer" column="ftsh_nnvolumeesgotonaomedido" length="4"/>
+		<property name="observacaoInforma" type="java.lang.String" column="ftsh_dsobservacaoinforma" length="100"/>
+		<property name="observacaoRetira" type="java.lang.String" column="ftsh_dsobservacaoretira" length="100"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to FaturamentoSituacaoMotivo -->
+		<many-to-one name="faturamentoSituacaoMotivo" class="gcom.faturamento.FaturamentoSituacaoMotivo" not-null="true">
+			<column name="ftsm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to FaturamentoSituacaoTipo -->
+		<many-to-one name="faturamentoSituacaoTipo" class="gcom.faturamento.FaturamentoSituacaoTipo" not-null="true">
+			<column name="ftst_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Usuario -->
+		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario" not-null="true">
+			<column name="usur_id"/>
+		</many-to-one>
+		<many-to-one name="usuarioInforma" class="gcom.seguranca.acesso.usuario.Usuario" not-null="false">
+			<column name="usur_idinforma"/>
+		</many-to-one>
+		<many-to-one name="usuarioRetira" class="gcom.seguranca.acesso.usuario.Usuario" not-null="false">
+			<column name="usur_idretira"/>
+		</many-to-one>
+		<many-to-one name="faturamentoSituacaoComandoInforma" class="gcom.faturamento.FaturamentoSituacaoComando" not-null="false">
+			<column name="ftsc_idinforma"/>
+		</many-to-one>
+		<many-to-one name="faturamentoSituacaoComandoRetirada" class="gcom.faturamento.FaturamentoSituacaoComando" not-null="false">
+			<column name="ftsc_idretirada"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

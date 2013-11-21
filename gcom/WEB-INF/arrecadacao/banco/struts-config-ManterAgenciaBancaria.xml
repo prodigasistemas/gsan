@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+	
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="AtualizarAgenciaBancariaActionForm"
+			type="gcom.gui.arrecadacao.banco.AtualizarAgenciaBancariaActionForm" />
+		<form-bean name="FiltrarAgenciaBancariaActionForm"
+			type="gcom.gui.arrecadacao.banco.FiltrarAgenciaBancariaActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0218] MANTER TIPO DE RETORNO DA OS_REFERIDA Auhtor: Thiago Tenório Data:01/11/2006-->
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.arrecadacao.banco.ExibirManterAgenciaBancariaAction"
+			validate="false" scope="session"
+			path="/exibirManterAgenciaBancariaAction">
+			<forward name="exibirManterAgenciaBancaria"
+				path="/jsp/arrecadacao/banco/agencia_bancaria_manter.jsp" />
+			<forward name="exibirAtualizarAgenciaBancaria"
+				path="/exibirAtualizarAgenciaBancariaAction.do" />
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.arrecadacao.banco.RemoverAgenciaBancariaAction" scope="request"
+			path="/removerAgenciaBancariaAction">
+		</action>
+		
+		<action name="AtualizarAgenciaBancariaActionForm"
+			type="gcom.gui.arrecadacao.banco.ExibirAtualizarAgenciaBancariaAction"
+			validate="true" scope="session"
+			path="/exibirAtualizarAgenciaBancariaAction">
+			<forward name="atualizarAgenciaBancaria"
+				path="/jsp/arrecadacao/banco/agencia_bancaria_atualizar.jsp" />
+		</action>
+		<action name="AtualizarAgenciaBancariaActionForm"
+			type="gcom.gui.arrecadacao.banco.AtualizarAgenciaBancariaAction"
+			validate="true" scope="request"
+			path="/atualizarAgenciaBancariaAction">
+		</action>
+		<action name="FiltrarAgenciaBancariaActionForm"
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioManterAgenciaBancariaAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioManterAgenciaBancariaAction" />
+	</action-mappings>
+
+</struts-config>

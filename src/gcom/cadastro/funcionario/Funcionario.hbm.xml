@@ -1,0 +1,248 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+<hibernate-mapping>
+	<class name="gcom.cadastro.funcionario.Funcionario" table="cadastro.funcionario">
+		<id name="id" type="java.lang.Integer" column="func_id">
+			<!-- <generator class="sequence">
+       <param name="sequence">cadastro.sequence_funcionario</param>
+    </generator>
+	 -->
+		</id>
+		<property name="nome" type="java.lang.String" column="func_nmfuncionario" not-null="true" length="70"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="func_tmultimaalteracao" length="8"/>
+		<property name="numeroCpf" type="java.lang.String" column="func_nncpf" length="11"/>
+		<property name="dataNascimento" type="java.sql.Date" column="func_dtnascimento" length="4"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to Empresa -->
+		<many-to-one name="empresa" class="gcom.cadastro.empresa.Empresa" not-null="true">
+			<column name="empr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to UnidadeEmpresa -->
+		<many-to-one name="unidadeOrganizacional" class="gcom.cadastro.unidade.UnidadeOrganizacional" not-null="true">
+			<column name="unid_id"/>
+		</many-to-one>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to Empresa -->
+		<many-to-one name="funcionarioCargo" class="gcom.cadastro.funcionario.FuncionarioCargo" not-null="true">
+			<column name="fuca_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to HidrometroMovimentacao -->
+		<!--  <set
+        name="hidrometroMovimentacaos"
+        lazy="true"
+        inverse="true"
+    >
+
+
+        <key>
+            <column name="func_idresponsavel" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.HidrometroMovimentacao"
+        />
+    </set>
+  -->
+		<!-- bi-directional one-to-many association to Refaturamento -->
+		<!--<set
+        name="refaturamentos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="func_id" />
+        </key>
+        <one-to-many 
+            class="gcom.Refaturamento"
+        />
+    </set>-->
+		<!-- bi-directional one-to-many association to ContaHistorico -->
+		<!--<set
+        name="contaHistoricosByCnhiIdfuncionarioentrega"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="cnhi_idfuncionarioentrega" />
+        </key>
+        <one-to-many 
+            class="gcom.ContaHistorico"
+        />
+    </set>-->
+		<!-- bi-directional one-to-many association to ContaHistorico -->
+		<!-- <set
+        name="contaHistoricosByCnhiIdfuncionarioleitura"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="cnhi_idfuncionarioleitura" />
+        </key>
+        <one-to-many 
+            class="gcom.ContaHistorico"
+        />
+    </set>-->
+		<!-- bi-directional one-to-many association to Conta -->
+		<!-- <set
+        name="contasByFuncId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="func_id" />
+        </key>
+        <one-to-many 
+            class="gcom.Conta"
+        />
+    </set>-->
+		<!-- bi-directional one-to-many association to Conta -->
+		<!-- <set
+        name="contasByFuncId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="func_id" />
+        </key>
+        <one-to-many 
+            class="gcom.Conta"
+        />
+    </set>-->
+		<!-- bi-directional one-to-many association to Conta -->
+		<!-- <set
+        name="contasByCntaIdfuncionarioentrega"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="cnta_idfuncionarioentrega" />
+        </key>
+        <one-to-many 
+            class="gcom.Conta"
+        />
+    </set>-->
+		<!-- bi-directional one-to-many association to MedicaoHistorico -->
+		<!-- <set
+        name="medicaoHistoricosByFuncId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="func_id" />
+        </key>
+        <one-to-many 
+            class="gcom.MedicaoHistorico"
+        />
+    </set>-->
+		<!-- bi-directional one-to-many association to MedicaoHistorico -->
+		<!-- <set
+        name="medicaoHistoricosByFuncId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="func_id" />
+        </key>
+        <one-to-many 
+            class="gcom.MedicaoHistorico"
+        />
+    </set>-->
+		<!-- bi-directional one-to-many association to MedicaoHistorico -->
+		<!-- <set
+        name="medicaoHistoricosByFuncId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="func_id" />
+        </key>
+        <one-to-many 
+            class="gcom.MedicaoHistorico"
+        />
+    </set>-->
+		<!-- bi-directional one-to-many association to MedicaoHistorico -->
+		<!-- <set
+        name="medicaoHistoricosByFuncId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="func_id" />
+        </key>
+        <one-to-many 
+            class="gcom.MedicaoHistorico"
+        />
+    </set>-->
+		<!-- bi-directional one-to-many association to FaturamentoSuspensaoHistorico -->
+		<!-- <set
+        name="faturamentoSuspensaoHistoricos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="func_id" />
+        </key>
+        <one-to-many 
+            class="gcom.FaturamentoSuspensaoHistorico"
+        />
+    </set>-->
+		<!-- bi-directional one-to-many association to LeituraFiscalizacao -->
+		<!-- <set
+        name="leituraFiscalizacaosByFuncId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="func_id" />
+        </key>
+        <one-to-many 
+            class="gcom.LeituraFiscalizacao"
+        />
+    </set>-->
+		<!-- bi-directional one-to-many association to LeituraFiscalizacao -->
+		<!-- <set
+        name="leituraFiscalizacaosByFuncId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="func_id" />
+        </key>
+        <one-to-many 
+            class="gcom.LeituraFiscalizacao"
+        />
+    </set>-->
+		<!-- bi-directional one-to-many association to LeituraFiscalizacao -->
+		<!-- <set
+        name="leituraFiscalizacaosByFuncId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="func_id" />
+        </key>
+        <one-to-many 
+            class="gcom.LeituraFiscalizacao"
+        />
+    </set>-->
+	</class>
+</hibernate-mapping>

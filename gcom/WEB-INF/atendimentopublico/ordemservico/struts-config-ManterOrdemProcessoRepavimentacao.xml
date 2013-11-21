@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+
+		<form-bean name="FiltrarOrdemProcessoRepavimentacaoActionForm" type="gcom.gui.atendimentopublico.ordemservico.FiltrarOrdemProcessoRepavimentacaoActionForm" />
+		<form-bean name="ManutencaoRegistroActionForm" type="gcom.gui.ManutencaoRegistroActionForm" />	
+	    <form-bean name="AtualizarOrdemProcessoRepavimentacaoPopUpActionForm" type="gcom.gui.atendimentopublico.ordemservico.AtualizarOrdemProcessoRepavimentacaoPopUpActionForm" />
+
+	</form-beans>
+
+	<global-forwards/>
+
+	<action-mappings>
+	
+		<action name="FiltrarOrdemProcessoRepavimentacaoActionForm" 
+				type="gcom.gui.atendimentopublico.ordemservico.ExibirManterOrdemProcessoRepavimentacaoAction" 
+				scope="session" validate="false"
+				path="/exibirManterOrdemProcessoRepavimentacaoAction">		
+			
+			<forward name="manterOrdemProcessoRepavimentacao" path="/jsp/atendimentopublico/ordemservico/ordem_processo_repavimentacao_manter.jsp" />			
+			
+			<forward name="exibirAtualizarOrdemProcessoRepavimentacaoPopUp"  path="/exibirAtualizarOrdemProcessoRepavimentacaoPopupAction.do" />
+			
+			<forward name="exibirAtualizarOrdemProcessoRepavimentacaoPopup"  path="/exibirAtualizarOrdemProcessoRepavimentacaoPopupAction.do" />
+			
+		</action>		
+		
+		
+	
+	    <action name="AtualizarOrdemProcessoRepavimentacaoPopUpActionForm" 
+				type="gcom.gui.atendimentopublico.ordemservico.ExibirAtualizarOrdemProcessoRepavimentacaoPopupAction" 
+				scope="session" validate="false"
+				path="/exibirAtualizarOrdemProcessoRepavimentacaoPopupAction">		
+			
+			<forward name="exibirAtualizarOrdemProcessoRepavimentacaoPopUp" path="/jsp/atendimentopublico/ordemservico/ordem_processo_repavimentacao_atualizar_popup.jsp" />
+						
+			<forward name="atualizarOrdemProcessoRepavimentacaoPopUp"  path="/atualizarOrdemProcessoRepavimentacaoPopUpAction.do" />
+		 </action>	
+		
+		 <!-- Hugo -->
+		 <action name="AtualizarOrdemProcessoRepavimentacaoPopUpActionForm" 
+				 type="gcom.gui.atendimentopublico.ordemservico.ExibirRejeitarOrdemProcessoRepavimentacaoPopupAction" 
+				 scope="session" validate="false"
+				 path="/exibirRejeitarOrdemProcessoRepavimentacaoPopupAction">		
+			
+		 	<forward name="exibirRejeitarOrdemProcessoRepavimentacaoPopup" path="/jsp/atendimentopublico/ordemservico/ordem_servico_repavimentacao_rejeicao_popup.jsp" />
+						
+			<forward name="exibirManterOrdemProcessoRepavimentacaoAction"  path="/exibirManterOrdemProcessoRepavimentacaoAction.do" />
+		 </action>
+		 
+		 <action name="AtualizarOrdemProcessoRepavimentacaoPopUpActionForm" 
+			     type="gcom.gui.atendimentopublico.ordemservico.RejeitarOrdemProcessoRepavimentacaoPopupAction" 
+			     scope="session" validate="false"
+			     path="/rejeitarOrdemProcessoRepavimentacaoPopupAction">	
+			
+		 	<forward name="rejeitarOrdemProcessoRepavimentacaoPopup" path="/jsp/atendimentopublico/ordemservico/ordem_servico_repavimentacao_rejeicao_popup.jsp" />				
+		 </action>
+		 <!-- Fim -->	
+	
+		 <action name="AtualizarOrdemProcessoRepavimentacaoPopUpActionForm" 
+			     type="gcom.gui.atendimentopublico.ordemservico.AtualizarOrdemProcessoRepavimentacaoPopUpAction" 
+			     scope="session" validate="false"
+			     path="/atualizarOrdemProcessoRepavimentacaoPopUpAction">	
+			
+		 	<forward name="atualizarOrdemProcessoRepavimentacaoPopUp" path="/jsp/atendimentopublico/ordemservico/ordem_processo_repavimentacao_atualizar_popup.jsp" />
+		 </action>		
+		
+		 <action name="FiltrarOrdemProcessoRepavimentacaoActionForm"
+				 type="gcom.gui.relatorio.atendimentopublico.ordemservico.GerarRelacaoServicosAcompanhamentoRepavimentacaoAction"
+				 validate="true" scope="session"
+				 path="/gerarRelacaoServicosAcompanhamentoRepavimentacaoAction" />
+				 
+	 	<action  name="FiltrarOrdemProcessoRepavimentacaoActionForm"
+			 type="gcom.gui.relatorio.atendimentopublico.ordemservico.ExibirImprimirRelacaoOrdemServicoRepavimentacaoAction"
+			 validate="true" 
+			 scope="session"
+			 path="/exibirImprimirRelacaoOrdemServicoRepavimentacaoAction">
+			 
+			<forward name="exibirImprimirRelacao" path="/jsp/atendimentopublico/ordemservico/ordem_servico_repavimentacao_impressao_popup.jsp" />
+		</action>				 			 
+		
+	</action-mappings>
+	<!--******************* ARQUIVO DE PROPRIEDADES *******************-->
+	<message-resources null="false" parameter="gcom.properties.application" />
+	
+</struts-config>

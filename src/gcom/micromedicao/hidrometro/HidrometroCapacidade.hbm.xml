@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.micromedicao.hidrometro.HidrometroCapacidade" table="micromedicao.hidrometro_capacidade">
+		<id name="id" type="java.lang.Integer" column="hicp_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_hidrometro_capacidade</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="hicp_dshidrometrocapacidade" length="20"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="hicp_dsabreviadahidrcapacidade" length="6"/>
+		<property name="leituraMinimo" type="java.lang.Short" column="hicp_nndigitosleituraminimo" length="2"/>
+		<property name="leituraMaximo" type="java.lang.Short" column="hicp_nndigitosleituramaximo" length="2"/>
+		<property name="indicadorUso" type="java.lang.Short" column="hicp_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="hicp_tmultimaalteracao" length="8"/>
+		<property name="numeroOrdem" type="java.lang.Short" column="hicp_nnordem" not-null="true" length="2"/>
+		<property name="codigoHidrometroCapacidade" type="java.lang.String" column="hicp_cdhidrometrocapacidade" not-null="true" length="1"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to SistemaParametro
+    <set
+        name="sistemaParametros"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="hicp_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.SistemaParametro"
+        />
+    </set>
+     bi-directional one-to-many association to Hidrometro
+    <set
+        name="hidrometros"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="hicp_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Hidrometro"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

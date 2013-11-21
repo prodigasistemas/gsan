@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.gerencial.arrecadacao.GDevolucaoSituacao" table="arrecadacao.g_devolucao_situacao">
+		<id name="id" type="java.lang.Integer" column="dvst_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="descricao" type="java.lang.String" column="dvst_dsdevolucaosituacao" length="20"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="dvst_dsabreviado" length="8"/>
+		<property name="indicadorUso" type="java.lang.Short" column="dvst_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="dvst_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to UnResumoArrecadacao -->
+		<set name="UnResumoArrecadacao" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="dvst_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.arrecadacao.UnResumoArrecadacao"/>
+		</set>
+	</class>
+</hibernate-mapping>

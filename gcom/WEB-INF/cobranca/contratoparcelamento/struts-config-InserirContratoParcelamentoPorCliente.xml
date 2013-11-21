@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean 
+		    name="InserirContratoParcelamentoPorClienteActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.InserirContratoParcelamentoPorClienteActionForm" /> 
+		
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+				
+				
+		<!-- INICIO [UC1136] Inserir Contrato de Parcelamento por Cliente -->
+		<action name="InserirContratoParcelamentoPorClienteActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.ExibirInserirContratoParcelamentoPorClienteAction"
+			path="/exibirInserirContratoParcelamentoClienteAction">
+			<forward name="exibirInserir"
+				path="/jsp/cobranca/contratoparcelamento/contrato_parcelamento_inserir.jsp" />
+			
+		</action>
+		
+		
+		<action name="InserirContratoParcelamentoPorClienteActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.InserirContratoParcelamentoPorClienteAction"
+			path="/inserirContratoParcelamentoClienteAction">
+			<forward name="exibirInserir"
+				path="/exibirInserirContratoParcelamentoClienteAction.do" />
+		</action>
+		
+		<!-- FIM [UC1136] Inserir Contrato de Parcelamento por Cliente -->
+		
+		
+	</action-mappings>
+	
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

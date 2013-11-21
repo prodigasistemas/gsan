@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.operacional.ZonaAbastecimento" table="operacional.zona_abastecimento">
+		<id name="id" type="java.lang.Integer" column="zabs_id">
+			<generator class="sequence">
+				<param name="sequence">operacional.seq_zona_abastecimento</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="zabs_dszonaabastecimento" not-null="true" length="20"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="zabs_dsabreviado" length="6"/>
+		<property name="indicadorUso" type="java.lang.Short" column="zabs_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="zabs_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to SistemaAbastecimento -->
+		<many-to-one name="sistemaAbastecimento" class="gcom.operacional.SistemaAbastecimento" not-null="true">
+			<column name="sabs_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to ManutencaoProgramacao 
+    <set
+        name="manutencaoProgramacaos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="zabs_id" />
+        </key>
+        <one-to-many 
+            class="gcom.ManutencaoProgramacao"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to DistritoOperacional 
+    <set
+        name="distritoOperacionals"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="zabs_id" />
+        </key>
+        <one-to-many 
+            class="gcom.DistritoOperacional"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to AbastecimentoProgramacao 
+    <set
+        name="abastecimentoProgramacaos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="zabs_id" />
+        </key>
+        <one-to-many 
+            class="gcom.AbastecimentoProgramacao"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

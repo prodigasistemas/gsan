@@ -1,0 +1,375 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+    
+<hibernate-mapping>
+<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+
+<class 
+    name="gcom.seguranca.ConsultaCdl" 
+    table="seguranca.consulta_cdl"
+>
+
+    <id
+        name="id"
+        type="java.lang.Integer"
+        column="ccdl_id"
+        
+    >
+        <generator class="sequence">
+        	<param name="sequence">seguranca.seq_consulta_cdl</param>
+     	</generator>
+    </id>
+
+
+    <property
+        name="codigoDddComercial"
+        type="java.lang.String"
+        column="ccdl_nndddcom"
+        length="2"
+    />
+
+    <property
+        name="telefoneComercialCliente"
+        type="java.lang.String"
+        column="ccdl_nnfonecom"
+        length="9"
+    />
+
+    <property
+        name="codigoDddFax"
+        type="java.lang.String"
+        column="ccdl_nndddfax"
+        length="2"
+    />
+
+    <property
+        name="numeroFaxCliente"
+        type="java.lang.String"
+        column="ccdl_nnfonefax"
+        length="9"
+    />
+
+    <property
+        name="logradouroCliente"
+        type="java.lang.String"
+        column="ccdl_nmlogradouro"
+        length="50"
+	  
+    />
+
+    <property
+        name="numeroImovelCliente"
+        type="java.lang.String"
+        column="ccdl_nnimovel"
+        length="5"
+    />
+
+   
+    <property
+        name="complementoEnderecoCliente"
+        type="java.lang.String"
+        column="ccdl_dscomplemento"
+        length="50"
+    />
+
+	<property
+        name="bairroCliente"
+        type="java.lang.String"
+        column="ccdl_dsbairro"
+        length="30"
+    />
+	
+    <property
+        name="cidadeCliente"
+        type="java.lang.String"
+        column="ccdl_dscidade"
+        length="30"
+    />
+    
+    <property
+        name="cepCliente"
+        type="java.lang.Integer"
+        column="ccdl_cdcep"
+        length="9"
+    />
+    
+        <property
+        name="uf"
+        type="java.lang.String"
+        column="ccdl_dsuf"
+        length="2"
+    />
+    
+        <property
+        name="codigoAcaoOperador"
+        type="java.lang.Short"
+        column="ccdl_cdacao"
+        length="3"
+        not-null="true"
+    />
+    
+     <property
+        name="ultimaAlteracao"
+        type="java.sql.Timestamp"
+        column="ccdl_tmultimaalteracao"
+        length="8"
+    />
+
+	<property
+        name="situacaoCpf"
+        type="java.lang.String"
+        column="ccdl_dssituacaocpf"
+        length="50"
+    />
+    
+    <property
+        name="situacaoRg"
+        type="java.lang.String"
+        column="ccdl_dssituacaorg"
+        length="50"
+    />
+    
+    <property
+        name="dataNascimento"
+        type="java.sql.Timestamp"
+        column="ccdl_dtnascimento"
+        length="8"
+    />
+    
+    <property
+        name="estadoCivil"
+        type="java.lang.String"
+        column="ccdl_dsestadocivil"
+        length="20"
+    />
+    
+    <property
+        name="idadeCliente"
+        type="java.lang.Integer"
+        column="ccdl_nnidade"
+        length="3"
+    />
+    
+    <property
+        name="nomeMae"
+        type="java.lang.String"
+        column="ccdl_nmmae"
+        length="50"
+    />
+    
+    <property
+        name="nomePai"
+        type="java.lang.String"
+        column="ccdl_nmpai"
+        length="50"
+    />
+    
+    <property
+        name="numeroRg"
+        type="java.lang.String"
+        column="ccdl_nnrg"
+        length="13"
+    />
+    
+    <property
+        name="tituloEleitor"
+        type="java.lang.String"
+        column="ccdl_nntitulo"
+        length="20"
+    />
+    
+    <property
+        name="sexoCliente"
+        type="java.lang.String"
+        column="ccdl_dssexo"
+        length="20"
+    />
+    
+    <property
+        name="signoCliente"
+        type="java.lang.String"
+        column="ccdl_dssigno"
+        length="50"
+    />
+    
+    <property
+        name="cpfCliente"
+        type="java.lang.String"
+        column="ccdl_nncpf"
+        length="11"
+    />
+    
+    <property
+        name="nomeCliente"
+        type="java.lang.String"
+        column="ccdl_nmcliente"
+        length="50"
+        not-null="true"
+    />
+    
+    <property
+        name="codigoDddResidencial"
+        type="java.lang.String"
+        column="ccdl_nndddres"
+        length="2"
+    />
+    
+    <property
+        name="telefoneResidencialCliente"
+        type="java.lang.String"
+        column="ccdl_nnfoneres"
+        length="9"
+    />
+    
+    <property
+        name="codigoDddCelular"
+        type="java.lang.String"
+        column="ccdl_nndddcel"
+        length="2"
+    />
+    
+    <property
+        name="telefoneCelularCliente"
+        type="java.lang.String"
+        column="ccdl_nnfonecel"
+        length="9"
+    />
+    
+    <property
+        name="cnpjCliente"
+        type="java.lang.String"
+        column="ccdl_nncnpj"
+        length="14"
+    />
+    
+    <property
+        name="situacaoCnpj"
+        type="java.lang.String"
+        column="ccdl_dssituacaocnpj"
+        length="50"
+    />
+    
+    <property
+        name="situacaoInscricaoEstadual"
+        type="java.lang.String"
+        column="ccdl_dssituacaoinscestadual"
+        length="50"
+    />
+    
+    <property
+        name="naturezaJuridica"
+        type="java.lang.String"
+        column="ccdl_dsnaturezajuridica"
+        length="50"
+    />
+    
+    <property
+        name="atividadeEconomicaPrincipal"
+        type="java.lang.String"
+        column="ccdl_dsativprincipal"
+        length="50"
+    />
+    
+    <property
+        name="atividadeEconomicaSecundaria"
+        type="java.lang.String"
+        column="ccdl_dsativsecundaria"
+        length="50"
+    />
+    
+    <property
+        name="dataFundacao"
+        type="java.sql.Timestamp"
+        column="ccdl_dtfundacao"
+        length="8"
+    />
+    
+    <property
+        name="inscricaoEstadual"
+        type="java.lang.String"
+        column="ccdl_nninscricaoestadual"
+        length="20"
+    />
+    
+    <property
+        name="nomeComercial"
+        type="java.lang.String"
+        column="ccdl_nmcomercial"
+        length="50"
+    />
+    
+    <property
+        name="numeroNireniec"
+        type="java.lang.String"
+        column="ccdl_nnnireniec"
+        length="30"
+    />
+    
+    <property
+        name="razaoSocial"
+        type="java.lang.String"
+        column="ccdl_dsrazaosocial"
+        length="50"
+    />
+    
+    <property
+        name="razaoSocialAnterior"
+        type="java.lang.String"
+        column="ccdl_dsrazaosocialant"
+        length="50"
+    />
+    
+    <property
+        name="valorCapitalSocial"
+        type="java.math.BigDecimal"
+        column="ccdl_vlcapitalsocial"
+    />
+    
+    <property
+        name="cpfUsuario"
+        type="java.lang.String"
+        column="usur_nncpf"
+        length="11"
+    />
+    
+    <property
+        name="loginUsuario"
+        type="java.lang.String"
+        column="usur_nmlogin"
+        length="11"
+    />
+    
+    <!-- associations -->
+    
+    <many-to-one name="usuario" 
+    	class="gcom.seguranca.acesso.usuario.Usuario" 
+    	not-null="false">
+		<column name="usur_id"/>
+	</many-to-one>
+    
+
+    <many-to-one
+        name="codigoCliente"
+	    class="gcom.cadastro.cliente.Cliente"
+	  not-null="true"
+    >
+    	  <column name="clie_id" />
+    </many-to-one>
+    
+    <many-to-one
+        name="idFuncionario"
+        class="gcom.cadastro.funcionario.Funcionario"
+        not-null="false"
+    >
+        <column name="func_id" />
+    </many-to-one>
+    
+</class>
+</hibernate-mapping>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="InformarProgramacaoAbastecimentoManutencaoActionForm" 
+			type="gcom.gui.operacional.abastecimento.InformarProgramacaoAbastecimentoManutencaoActionForm" />
+	</form-beans>
+
+	<global-forwards/>
+
+	<action-mappings>
+	
+		<action name="InformarProgramacaoAbastecimentoManutencaoActionForm" 
+			type="gcom.gui.operacional.abastecimento.ExibirInformarProgramacaoAbastecimentoManutencaoAction" 
+			scope="session" 
+			validate="false"
+			path="/exibirInformarProgramacaoAbastecimentoManutencaoAction">
+			
+			<forward name="informarProgramacaoAbastecimentoManutencao" 
+				path="/jsp/operacional/abastecimento/programacao_abastecimento_manutencao_informar.jsp" />
+			
+		</action>
+
+		<action name="InformarProgramacaoAbastecimentoManutencaoActionForm"
+	      	type="gcom.gui.operacional.abastecimento.ExibirInserirProgramacaoAbastecimentoManutencaoAction"
+	      	validate="false" 
+	      	scope="session"
+	      	path="/exibirInserirProgramacaoAbastecimentoManutencaoAction">
+
+			<forward name="inserirProgramacaoAbastecimentoManutencao"
+		  		path="/jsp/operacional/abastecimento/programacao_abastecimento_manutencao_inserir_popup.jsp" />
+		  		
+		</action>
+
+		<action name="InformarProgramacaoAbastecimentoManutencaoActionForm"
+	      	type="gcom.gui.operacional.abastecimento.ExibirAtualizarProgramacaoAbastecimentoManutencaoAction"
+	      	validate="false" 
+	      	scope="session"
+	      	path="/exibirAtualizarProgramacaoAbastecimentoManutencaoAction">
+
+			<forward name="atualizarProgramacaoAbastecimentoManutencao"
+		  		path="/jsp/operacional/abastecimento/programacao_abastecimento_manutencao_atualizar_popup.jsp" />
+		  		
+		</action>
+
+		<action name="InformarProgramacaoAbastecimentoManutencaoActionForm"
+	      	type="gcom.gui.operacional.abastecimento.ExibirCopiarProgramacaoAbastecimentoManutencaoAction"
+	      	validate="false" 
+	      	scope="session"
+	      	path="/exibirCopiarProgramacaoAbastecimentoManutencaoAction">
+
+			<forward name="copiarProgramacaoAbastecimentoManutencao"
+		  		path="/jsp/operacional/abastecimento/programacao_abastecimento_manutencao_copiar_popup.jsp" />
+		  		
+		</action>
+
+		<action name="InformarProgramacaoAbastecimentoManutencaoActionForm" 
+			type="gcom.gui.operacional.abastecimento.AtualizarProgramacaoAbastecimentoManutencaoAction"
+			validate="false" 
+			scope="session"
+			path="/atualizarProgramacaoAbastecimentoManutencaoAction">
+		</action>		
+		
+	</action-mappings>
+
+	<message-resources null="false" parameter="gcom.properties.application" />
+	
+</struts-config>

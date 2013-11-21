@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.faturamento.ExtratoQuitacaoItem" table="faturamento.extrato_quitacao_item">
+		<id name="id" type="java.lang.Integer" column="exqi_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_extrato_quitacao_item</param>
+			</generator>
+		</id>
+		<property name="dataSituacao" type="java.sql.Date" column="exqi_dtsituacao"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="exqi_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="anoMesReferenciaConta" type="java.lang.Integer" column="exqi_amreferenciaconta" not-null="true"/>
+		<property name="descricaoSituacao" type="java.lang.String" column="exqi_dsdebitocreditosituacao" not-null="true" length="30"/>
+		<property name="valorConta" type="java.math.BigDecimal" column="exqi_vlconta" not-null="true" length="13"/>
+		<many-to-one name="contaGeral" class="gcom.faturamento.conta.ContaGeral" not-null="true">
+			<column name="cnta_id"/>
+		</many-to-one>
+		<many-to-one name="extratoQuitacao" class="gcom.faturamento.ExtratoQuitacao" not-null="true">
+			<column name="extq_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

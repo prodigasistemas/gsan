@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="PesquisarGuiaDevolucaoActionForm"
+			type="gcom.gui.arrecadacao.PesquisarGuiaDevolucaoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		<action  name="PesquisarGuiaDevolucaoActionForm"
+			type="gcom.gui.arrecadacao.ExibirPesquisarGuiaDevolucaoAction"
+			validate="true" path="/exibirPesquisarGuiaDevolucaoAction">
+			<forward name="pesquisarGuiaDevolucao"
+				path="/jsp/arrecadacao/guia_devolucao_pesquisar.jsp" />
+		</action>
+		<action name="PesquisarGuiaDevolucaoActionForm"
+			type="gcom.gui.arrecadacao.PesquisarGuiaDevolucaoAction"
+			validate="true"
+			input="/exibirPesquisarGuiaDevolucaoAction.do" scope="session"
+			path="/pesquisarGuiaDevolucaoAction">
+			<forward name="pesquisarGuiaDevolucaoResultadoImovel"
+				path="/jsp/arrecadacao/guia_devolucao_pesquisar_resultado_imovel.jsp" />
+			<forward name="pesquisarGuiaDevolucaoResultadoCliente"
+				path="/jsp/arrecadacao/guia_devolucao_pesquisar_resultado_cliente.jsp" />
+		</action>
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

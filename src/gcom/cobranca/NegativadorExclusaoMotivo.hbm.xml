@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.cobranca.NegativadorExclusaoMotivo" table="cobranca.negatd_exclusao_motivo">
+		<id name="id" type="java.lang.Integer" column="nemt_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_negatd_exclusao_motivo</param>
+			</generator>
+		</id>
+		<property name="codigoExclusaoMotivo" type="java.lang.Short" column="nemt_cdexclusaomotivo" length="3"/>
+		<property name="descricaoExclusaoMotivo" type="java.lang.String" column="nemt_dsexclusaomotivo" not-null="true" length="40"/>
+		<property name="indicadorUso" type="java.lang.Short" column="nemt_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="nemt_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Negativador -->
+		<many-to-one name="negativador" class="gcom.cobranca.Negativador" not-null="true">
+			<column name="negt_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to NegativadorMovimentoReg -->
+		<set name="negativadorMovimentoReg" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="nemt_id"/>
+			</key>
+			<one-to-many class="gcom.cobranca.NegativadorMovimentoReg"/>
+		</set>
+		<many-to-one name="cobrancaDebitoSituacao" class="gcom.cobranca.CobrancaDebitoSituacao" not-null="true">
+			<column name="cdst_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="FiltrarOrdemRepavimentacaoProcessoAceiteActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.FiltrarOrdemRepavimentacaoProcessoAceiteActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarOrdemRepavimentacaoProcessoAceiteActionForm" 
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirFiltrarOrdemRepavimentacaoProcessoAceiteAction"
+			validate="false" scope="session" path="/exibirFiltrarOrdemRepavimentacaoProcessoAceiteAction">
+			<forward name="filtrarOrdemRepavimentacaoProcessoAceite"
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_aceite_repavimentacao_filtrar.jsp" />
+		</action>
+		
+		<action name="FiltrarOrdemRepavimentacaoProcessoAceiteActionForm" 
+			type="gcom.gui.atendimentopublico.ordemservico.FiltrarOrdemRepavimentacaoProcessoAceiteAction"
+			validate="false" scope="session"
+			path="/filtrarOrdemRepavimentacaoProcessoAceiteAction">
+		
+			<forward name="retornarFiltroOrdemRepavimentacaoProcessoAceite" 
+				path="/exibirManterOrdemRepavimentacaoProcessoAceiteAction.do" />
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

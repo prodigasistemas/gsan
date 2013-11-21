@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="ManutencaoRegistroActionForm" type="gcom.gui.ManutencaoRegistroActionForm" />
+	</form-beans>
+
+	<global-forwards/>
+
+	<action-mappings>
+	
+		<action name="ManutencaoRegistroActionForm"
+ 	      	    type="gcom.gui.cadastro.imovel.ExibirManterImovelDoacaoAction"
+	      	    validate="false" 
+	      	    scope="session"
+	      	    path="/exibirManterImovelDoacaoAction">
+		  <forward name="manterImovelDoacao" path="/jsp/cadastro/imovel/imovel_doacao_manter.jsp" />
+		</action>
+		
+		<action name="ManutencaoRegistroActionForm"
+  		        type="gcom.gui.cadastro.imovel.CancelarImovelDoacaoAction"
+			    validate="false" 
+			    input="/exibirManterImovelDoacaoAction.do"
+			    scope="session" 
+			    path="/cancelarImovelDoacaoAction" />		
+
+	</action-mappings>
+
+	<message-resources null="false" parameter="gcom.properties.application" />
+	
+</struts-config>

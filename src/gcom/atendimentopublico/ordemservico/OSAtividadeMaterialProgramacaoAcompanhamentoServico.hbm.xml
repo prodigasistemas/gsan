@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">    
+<hibernate-mapping>
+<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+
+	<class name="gcom.atendimentopublico.ordemservico.OSAtividadeMaterialProgramacaoAcompanhamentoServico" table="atendimentopublico.os_at_mat_prg_acomp_serv">
+		<id name="id" type="java.lang.Integer" column="oams_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_os_at_mat_prg_acomp_serv</param>
+			</generator>
+		</id>
+
+    <property
+        name="quantidadeMaterial"
+        type="java.math.BigDecimal"
+        column="oats_qtmaterial"
+        length="6"
+    />
+    <property
+        name="dataUltimaAlteracao"
+        type="java.sql.Timestamp"
+        column="oams_tmultimaalteracao"
+        not-null="true"
+        length="29"
+    />
+
+    <!-- Associations -->
+  
+    <!-- bi-directional many-to-one association to OrdemServico -->
+    <many-to-one
+        name="osAtividadeProgramacaoAcompanhamentoServico"
+        class="gcom.atendimentopublico.ordemservico.OSAtividadeProgramacaoAcompanhamentoServico"
+        not-null="true"
+    >
+        <column name="oats_id" />
+    </many-to-one>
+    <!-- bi-directional many-to-one association to Material -->
+    <many-to-one
+        name="material"
+        class="gcom.atendimentopublico.ordemservico.Material"
+        not-null="true"
+    >
+        <column name="mate_id" />
+    </many-to-one>
+
+</class>
+</hibernate-mapping>

@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+		Created by the Middlegen Hibernate plugin
+		
+		http://boss.bekk.no/boss/middlegen/
+		http://hibernate.sourceforge.net/
+	-->
+	<class name="gcom.atendimentopublico.ordemservico.FiscalizacaoSituacaoAgua" table="atendimentopublico.fiscaliz_situacao_agua">
+		<composite-id name="comp_id" class="gcom.atendimentopublico.ordemservico.FiscalizacaoSituacaoAguaPK">
+			<key-property name="idFiscalizacaoSituacao" column="fzst_id" type="java.lang.Integer" length="4"/>
+			<key-property name="idLigacaoAguaSituacao" column="last_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="fsag_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="indicadorConsumoFixado" type="short" column="fsag_icconsumofixado" not-null="true" length="2"/>
+		<property name="numeroMesesFatura" type="java.lang.Short" column="fsag_nnmesesfatura" length="2"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to LigacaoAguaSituacao -->
+		<many-to-one name="ligacaoAguaSituacaoByLastId" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" update="false" insert="false">
+			<column name="last_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to FiscalizacaoSituacao -->
+		<many-to-one name="fiscalizacaoSituacao" class="gcom.atendimentopublico.ordemservico.FiscalizacaoSituacao" update="false" insert="false">
+			<column name="fzst_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+		<!-- bi-directional many-to-one association to LigacaoAguaSituacao -->
+		<many-to-one name="ligacaoAguaSituacaoByLastIdnova" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="true">
+			<column name="last_idnova"/>
+		</many-to-one>
+		<many-to-one name="solicitacaoTipoEspecificacao" class="gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao" not-null="false">
+			<column name="step_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

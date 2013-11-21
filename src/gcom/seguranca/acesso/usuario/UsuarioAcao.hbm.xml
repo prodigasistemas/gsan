@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.seguranca.acesso.usuario.UsuarioAcao" table="seguranca.usuario_acao">
+		<id name="id" type="java.lang.Integer" column="usac_id">
+			<generator class="sequence">
+				<param name="sequence">seguranca.seq_usuario_acao</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="usac_dsusuarioacao" length="30"/>
+		<property name="indicadorUso" type="java.lang.Short" column="usac_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="usac_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to UsuarioAlteracao
+    <set
+        name="usuarioAlteracaos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="usac_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.UsuarioAlteracao"
+        />
+    </set>
+  -->
+	</class>
+</hibernate-mapping>

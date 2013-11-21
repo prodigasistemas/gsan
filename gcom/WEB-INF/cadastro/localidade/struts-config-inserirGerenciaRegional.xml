@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="InserirGerenciaRegionalActionForm"
+			type="gcom.gui.cadastro.localidade.InserirGerenciaRegionalActionForm" />
+
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="InserirGerenciaRegionalActionForm"
+			type="gcom.gui.cadastro.localidade.ExibirInserirGerenciaRegionalAction"
+			validate="false" scope="session"
+			path="/exibirInserirGerenciaRegionalAction">
+			<forward name="exibirInserirGerenciaRegional"
+				path="/jsp/cadastro/localidade/gerenciaregional_inserir.jsp" />
+		</action>
+
+		<action name="InserirGerenciaRegionalActionForm"
+			type="gcom.gui.cadastro.localidade.InserirGerenciaRegionalAction"
+			validate="false" scope="session"
+			path="/inserirGerenciaRegionalAction">
+		</action>
+
+
+		<action
+			type="gcom.gui.cadastro.localidade.RemoverInformarEnderecoAction"
+			validate="false" scope="request"
+			path="/removerInformarEnderecoAction">
+			<forward name="inserirRemoverFuncionalidadeDependencia"
+				path="/exibirInserirFuncionalidadeAction.do?reloadPage=OK" />
+		</action>
+
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

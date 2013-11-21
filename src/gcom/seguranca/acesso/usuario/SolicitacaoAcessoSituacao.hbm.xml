@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+    
+<hibernate-mapping>
+<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+
+<class 
+    name="gcom.seguranca.acesso.usuario.SolicitacaoAcessoSituacao" 
+    table="seguranca.sol_acesso_situacao"
+>
+    
+	<id
+        name="id"
+        type="java.lang.Integer"
+        column="sast_id"
+    >
+        <generator class="sequence">
+            <param name="sequence">seguranca.seq_sol_acesso_situacao</param>
+      	</generator>
+
+	</id>
+	
+	<property
+        name="descricao"
+        type="java.lang.String"
+        column="sast_dssituacao"
+        not-null="true"
+        length="30"
+    />
+    
+    <property
+        name="indicadorUso"
+        type="java.lang.Short"
+        column="sast_icuso"
+        length="2"
+    />
+    
+    <property
+        name="ultimaAlteracao"
+        type="java.sql.Timestamp"
+        column="soac_tmultimaalteracao"
+        not-null="true"
+        length="8"
+    />
+    
+    <property
+        name="codigoSituacao"
+        type="java.lang.Short"
+        column="sast_cdsituacao"
+        length="2"
+    />
+	
+</class>
+</hibernate-mapping>

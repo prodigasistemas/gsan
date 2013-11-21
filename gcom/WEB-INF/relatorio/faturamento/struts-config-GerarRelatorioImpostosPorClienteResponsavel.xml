@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="RelatorioImpostosPorClienteResponsavelActionForm"
+			type="gcom.gui.relatorio.faturamento.RelatorioImpostosPorClienteResponsavelActionForm" />
+
+	</form-beans>
+
+	<!-- ******************* PÁGINAS GLOBAIS ******************* -->
+	<global-forwards />
+
+	<action-mappings>
+	
+		<!--******************* PÁGINA PRINCIPAL ******************* --> 
+		
+		<!-- 
+		   Mapeamento dos Actions do 
+		   
+		   ExibirFiltrarRelatorioImpostosPorClienteResponsavel
+		   
+		   do UC0919
+		   
+		   Tela de Filtragem
+		 -->
+		 <action name="RelatorioImpostosPorClienteResponsavelActionForm"
+			type="gcom.gui.relatorio.faturamento.ExibirGerarRelatorioImpostosPorClienteResponsavelAction"
+			validate="false" 
+			path="/exibirGerarRelatorioImpostosPorClienteResponsavelAction">
+			<forward name="exibirGerarRelatorioImpostosPorClienteResponsavel" 
+			path="/jsp/relatorio/faturamento/relatorio_impostos_por_cliente_responsavel_gerar.jsp" />
+	    </action>
+	    
+	    <!--  
+		    Mapeamento do Action que faz a geração do relatorio de acordo com o UC919    
+	     -->
+		<action name="RelatorioImpostosPorClienteResponsavelActionForm"
+				type="gcom.gui.relatorio.faturamento.GerarRelatorioImpostosPorClienteResponsavelAction"
+				validate="true" 
+				path="/gerarRelatorioImpostosPorClienteResponsavelAction">
+		</action>
+	</action-mappings>
+</struts-config>

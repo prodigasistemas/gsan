@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="gcom.seguranca.acesso.GrupoAcesso" table="seguranca.grupo_acesso">
+		<composite-id name="comp_id" class="gcom.seguranca.acesso.GrupoAcessoPK">
+			<key-property name="grupId" column="grup_id" type="java.lang.Integer" length="4"/>
+			<key-property name="grupIdacesso" column="grup_idacesso" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to Grupo -->
+		<many-to-one name="grupo" class="gcom.seguranca.acesso.Grupo" update="false" insert="false">
+			<column name="grup_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

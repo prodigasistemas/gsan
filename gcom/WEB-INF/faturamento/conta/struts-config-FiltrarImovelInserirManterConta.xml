@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="FiltrarImovelContaActionForm"
+			type="gcom.gui.faturamento.conta.FiltrarImovelContaActionForm" />			
+		<form-bean name="ManterContaConjuntoImovelActionForm"
+			type="gcom.gui.faturamento.conta.ManterContaConjuntoImovelActionForm" />
+		<form-bean name="CancelarContaActionForm"
+			type="gcom.gui.faturamento.conta.CancelarContaActionForm" />
+		<form-bean name="AlterarVencimentoContaActionForm"
+			type="gcom.gui.faturamento.conta.AlterarVencimentoContaActionForm" />	
+		<form-bean name="InserirConjuntoQuadraActionForm"
+			type="gcom.gui.faturamento.conta.InserirConjuntoQuadraActionForm" />	
+		<form-bean name="RetirarDebitoCobradoActionForm"
+			type="gcom.gui.faturamento.conta.RetirarDebitoCobradoActionForm" />								
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarImovelContaActionForm"
+			type="gcom.gui.faturamento.conta.ExibirFiltrarImovelInserirManterContaAction"
+			validate="true" scope="session" path="/exibirFiltrarImovelInserirManterContaAction">
+			<forward name="filtrarImovelInserirManterConta"
+				path="/jsp/faturamento/conta/inserir_manter_conta_imoveis_filtrar.jsp" />
+		</action>
+		<action name="FiltrarImovelContaActionForm" type="gcom.gui.faturamento.conta.FiltrarImovelInserirManterContaAction" scope="session" path="/filtrarImovelInserirManterContaAction">
+			<forward name="exibirManterContaConjuntoImovel" path="/exibirManterContaConjuntoImovelAction.do" />
+		</action>
+
+		<action  name="ManterContaConjuntoImovelActionForm"  
+			type="gcom.gui.faturamento.conta.ExibirManterContaConjuntoImovelAction"
+			validate="true" scope="session" path="/exibirManterContaConjuntoImovelAction">
+			<forward name="manterContaConjuntoImovel" path="/jsp/faturamento/conta/conta_conjunto_imoveis_manter.jsp" />
+		</action>
+		
+		<!-- CANCELAR CONJUNTO CONTA -->
+		<action name="CancelarContaActionForm"
+			type="gcom.gui.faturamento.conta.ExibirCancelarConjuntoContaAction"
+			validate="false" scope="request" path="/exibirCancelarConjuntoContaAction">
+			<forward name="exibirCancelarConjuntoConta"
+				path="/jsp/faturamento/conta/cancelar_conjunto_conta.jsp" />
+		</action>
+		<action name="CancelarContaActionForm"
+			type="gcom.gui.faturamento.conta.CancelarConjuntoContaAction"
+			validate="false" scope="request" path="/cancelarConjuntoContaAction">
+			<forward name="exibirCancelarConjuntoConta"
+				path="/jsp/faturamento/conta/cancelar_conjunto_conta.jsp" />
+		</action>
+		
+		<!-- ALTERAR VENCIMENTO DO CONJUNTO CONTA -->
+		<action name="AlterarVencimentoContaActionForm"
+			type="gcom.gui.faturamento.conta.ExibirAlterarVencimentoConjuntoContaAction"
+			validate="true" scope="request"
+			path="/exibirAlterarVencimentoConjuntoContaAction">
+			<forward name="exibirAlterarVencimentoConjuntoConta"
+				path="/jsp/faturamento/conta/alterar_vencimento_conjunto_conta.jsp" />
+		</action>
+		<action name="AlterarVencimentoContaActionForm"
+			type="gcom.gui.faturamento.conta.AlterarVencimentoConjuntoContaAction"
+			validate="true" scope="request"
+			path="/alterarVencimentoConjuntoContaAction">
+			<forward name="exibirManterConjuntoConta"
+				path="/jsp/faturamento/conta/alterar_vencimento_conjunto_conta.jsp" />
+		</action>
+		
+		<!-- SELECIONAR QUADRA	 -->
+		<action name="InserirConjuntoQuadraActionForm"
+			type="gcom.gui.faturamento.conta.ExibirSelecionarQuadraImovelInserirManterContaAction"
+			validate="true" scope="session"
+			path="/exibirSelecionarQuadraImovelInserirManterContaAction">
+			<forward name="exibirSelecionarQuadraImovelInserirManterConta"
+				path="/jsp/faturamento/conta/inserir_manter_conta_imoveis_filtrar_quadras_popup.jsp" />
+		</action>
+		<action name="InserirConjuntoQuadraActionForm"
+			type="gcom.gui.faturamento.conta.SelecionarQuadraImovelInserirManterContaAction"
+			validate="true" scope="session"
+			path="/selecionarQuadraImovelInserirManterContaAction">
+			<forward name="selecionarQuadraImovelInserirManterConta"
+				path="/jsp/faturamento/conta/inserir_manter_conta_imoveis_filtrar_quadras_popup.jsp" />
+		</action>
+		
+		<!-- CANCELAR CONJUNTO CONTA -->
+		<action name="RetirarDebitoCobradoActionForm"
+			type="gcom.gui.faturamento.conta.ExibirRetirarDebitoCobradoConjuntoContaAction"
+			validate="false" scope="session" path="/exibirRetirarDebitoCobradoConjuntoContaAction">
+			<forward name="exibirRetirarDebitoCobradoConjuntoConta"
+				path="/jsp/faturamento/conta/retirar_debito_cobrado_conjunto_conta.jsp" />
+		</action>
+		<action name="RetirarDebitoCobradoActionForm"
+			type="gcom.gui.faturamento.conta.RetirarDebitoCobradoConjuntoContaAction"
+			validate="false" scope="session" path="/retirarDebitoCobradoConjuntoContaAction">
+			<forward name="exibirRetirarDebitoCobradoConjuntoConta"
+				path="/jsp/faturamento/conta/retirar_debito_cobrado_conjunto_conta.jsp" />
+		</action>
+		
+	</action-mappings>
+
+	<message-resources null="false" parameter="gcom.properties.application" />
+		
+</struts-config>

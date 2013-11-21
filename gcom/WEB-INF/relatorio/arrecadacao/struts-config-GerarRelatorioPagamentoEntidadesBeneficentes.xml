@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>	
+		<form-bean name="GerarRelatorioPagamentoEntidadesBeneficentesActionForm"
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioPagamentoEntidadesBeneficentesActionForm" >			
+		</form-bean>
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<action name="GerarRelatorioPagamentoEntidadesBeneficentesActionForm"
+			type="gcom.gui.relatorio.arrecadacao.ExibirGerarRelatorioPagamentoEntidadesBeneficentesAction"			
+			validate="true"	
+			path="/exibirGerarRelatorioPagamentoEntidadesBeneficentesAction">			
+			<forward name="exibirGerarRelatorioPagamentoEntidadesBeneficentes"
+				path="/jsp/relatorio/arrecadacao/relatorio_pagamento_entidades_beneficentes.jsp" />
+		</action>
+		<action name="GerarRelatorioPagamentoEntidadesBeneficentesActionForm"
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioPagamentoEntidadesBeneficentesAction"
+			validate="true"						
+			path="/gerarRelatorioPagamentoEntidadesBeneficentesAction" />				
+
+	</action-mappings>
+
+
+</struts-config>

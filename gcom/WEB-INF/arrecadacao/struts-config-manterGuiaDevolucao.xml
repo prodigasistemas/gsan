@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="ManterGuiaDevolucaoActionForm"
+			type="gcom.gui.arrecadacao.ManterGuiaDevolucaoActionForm" />	
+ 		<form-bean name="AtualizarGuiaDevolucaoActionForm"
+			type="gcom.gui.arrecadacao.AtualizarGuiaDevolucaoActionForm" />				
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0218] MANTER GUIA DE DEVOLUÇÃO Auhtor: Rafael Corrêa Data:05/05/2006-->
+		<action name="ManterGuiaDevolucaoActionForm"
+			type="gcom.gui.arrecadacao.ExibirManterGuiaDevolucaoAction"
+			validate="false" scope="session"
+			path="/exibirManterGuiaDevolucaoAction">
+			<forward name="exibirManterGuiaDevolucaoCliente"
+				path="/jsp/arrecadacao/guia_devolucao_manter_cliente.jsp" />
+			<forward name="exibirManterGuiaDevolucaoImovel"
+				path="/jsp/arrecadacao/guia_devolucao_manter_imovel.jsp" />
+ 			<forward name="exibirAtualizarGuiaDevolucao"
+				path="/exibirAtualizarGuiaDevolucaoAction.do?filtrar=sim" />
+		</action>
+		<action name="ManterGuiaDevolucaoActionForm"
+			type="gcom.gui.arrecadacao.ManterGuiaDevolucaoAction"
+			validate="true" scope="session"
+			path="/manterGuiaDevolucaoAction">
+		</action>
+		<action name="AtualizarGuiaDevolucaoActionForm"
+			type="gcom.gui.arrecadacao.ExibirAtualizarGuiaDevolucaoAction"
+			validate="true" scope="session"
+			path="/exibirAtualizarGuiaDevolucaoAction">
+			<forward name="exibirAtualizarGuiaDevolucao"
+				path="/jsp/arrecadacao/guia_devolucao_atualizar.jsp" />
+		</action>
+		<action name="AtualizarGuiaDevolucaoActionForm"
+			type="gcom.gui.arrecadacao.AtualizarGuiaDevolucaoAction"
+			validate="true" scope="session"
+			path="/atualizarGuiaDevolucaoAction">
+		</action>		
+
+		<action name="ManterGuiaDevolucaoActionForm"
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioGuiaDevolucaoAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioGuiaDevolucaoAction">
+		</action>
+
+	</action-mappings>
+
+</struts-config>

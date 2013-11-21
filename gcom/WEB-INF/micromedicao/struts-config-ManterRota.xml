@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+
+		<form-bean name="RotaActionForm"
+			type="gcom.gui.micromedicao.RotaActionForm" />
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="InserirRotaActionForm"
+			type="gcom.gui.micromedicao.InserirRotaActionForm" />
+
+
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+
+		<action name="RotaActionForm"
+			type="gcom.gui.micromedicao.ExibirManterRotaAction" scope="session"
+			validate="false" path="/exibirManterRotaAction">
+			<forward name="manterRota"
+				path="/jsp/micromedicao/rota_manter.jsp" />
+			<forward name="atualizarRota"
+				path="/exibirAtualizarRotaAction.do" />
+		</action>
+
+		<action name="RotaActionForm"
+			type="gcom.gui.relatorio.micromedicao.rota.GerarRelatorioRotaManterAction"
+			scope="session" validate="false"
+			path="/gerarRelatorioRotaManterAction" />
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.micromedicao.RemoverRotaAction" scope="request"
+			path="/removerRotaAction" />
+
+		<action name="InserirRotaActionForm"
+			type="gcom.gui.micromedicao.ExibirAtualizarRotaAction"
+			validate="false" scope="session" path="/exibirAtualizarRotaAction">
+			<forward name="atualizarRota"
+				path="/jsp/micromedicao/rota_atualizar.jsp" />
+		</action>
+
+		<action name="InserirRotaActionForm"
+			type="gcom.gui.micromedicao.AtualizarRotaAction" validate="false"
+			scope="session" path="/atualizarRotaAction">
+		</action>
+
+
+	</action-mappings>
+	<!--******************* ARQUIVO DE PROPRIEDADES *******************-->
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

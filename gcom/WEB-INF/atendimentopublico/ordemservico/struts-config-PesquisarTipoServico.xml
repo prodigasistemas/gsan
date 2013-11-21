@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="PesquisarTipoServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.PesquisarTipoServicoActionForm" />
+		<form-bean name="ConsultarTipoServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ConsultarTipoServicoActionForm" />	
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="PesquisarTipoServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirPesquisarTipoServicoAction"
+			validate="true"
+			scope="session"
+			path="/exibirPesquisarTipoServicoAction">
+		
+			<forward name="tipoServicoPesquisar"
+				     path="/jsp/atendimentopublico/ordemservico/tipo_servico_pesquisar.jsp" />
+		</action>
+
+		<action name="PesquisarTipoServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.PesquisarTipoServicoAction"
+			validate="true"
+			scope="session"
+			path="/pesquisarTipoServicoAction">
+			<forward name="listarResultadoPesquisarTipoServico"
+			         path="/jsp/atendimentopublico/ordemservico/tipo_servico_resultado_pesquisa.jsp" />
+		</action>
+		
+		<action name="ConsultarTipoServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirPesquisarConsultarTipoServicoAction"
+			validate="true"
+			scope="session"
+			path="/exibirPesquisarConsultarTipoServicoAction">
+			<forward name="detalharConsultarTipoServicoAction"
+			         path="/jsp/atendimentopublico/ordemservico/tipo_servico_linha_pesquisar.jsp" />
+		</action>
+				
+		<action name="PesquisarTipoServicoActionForm"
+			    type="gcom.gui.atendimentopublico.ordemservico.RecuperarDadosPesquisarTipoServico"
+			    validate="true"
+			    scope="session"
+			    path="/recuperarDadosPesquisarTipoServico">
+		
+			<forward name="exibirPesquisarTipoDebito"
+				path="/exibirPesquisarTipoDebitoAction.do" />
+			
+			<forward name="exibirPesquisarPerfilServico"
+				path="/exibirPesquisarTipoPerfilServicoAction.do" />
+			
+			<forward name="exibirPesquisarServicoReferencia"
+				path="/exibirPesquisarTipoServicoReferenciaAction.do" />	
+			
+			<forward name="exibirPesquisarServicoAtividade"
+				path="/exibirPesquisarAtividadeAction.do" />	
+			
+			<forward name="exibirPesquisarServicoMaterial"
+				path="/exibirPesquisarMaterialAction.do" />
+			
+	
+		</action>
+		
+
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

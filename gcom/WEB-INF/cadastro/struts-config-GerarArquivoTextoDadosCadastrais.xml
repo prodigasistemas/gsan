@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="GerarArquivoTextoDadosCadastraisActionForm"
+			type="gcom.gui.cadastro.GerarArquivoTextoDadosCadastraisActionForm" />
+			
+		<form-bean name="GerarArquivoTextoLigacoesHidrometroActionForm"
+			type="gcom.gui.micromedicao.GerarArquivoTextoLigacoesHidrometroActionForm" />
+	</form-beans>
+
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="GerarArquivoTextoDadosCadastraisActionForm"
+			type="gcom.gui.cadastro.ExibirGerarArquivoTextoDadosCadastraisAction"
+			validate="true" 
+			path="/exibirGerarArquivoTextoDadosCadastraisAction">
+			
+			<forward name="exibirGerarArquivoTextoDadosCadastrais" 
+				path="/jsp/cadastro/arquivo_texto_dados_cadastrais_gerar.jsp" />
+				
+		</action>
+		
+		<action name="GerarArquivoTextoDadosCadastraisActionForm"
+			type="gcom.gui.cadastro.GerarArquivoTextoDadosCadastraisAction"
+			validate="true" 
+			path="/gerarArquivoTextoDadosCadastraisAction" />	
+			
+		
+		<action name="GerarArquivoTextoLigacoesHidrometroActionForm"
+			type="gcom.gui.micromedicao.ExibirGerarArquivoTextoLigacoesHidrometroAction"
+			validate="true" 
+			path="/exibirGerarArquivoTextoLigacoesHidrometroAction">
+			
+			<forward name="exibirGerarArquivoTextoLigacoesHidrometro" 
+				path="/jsp/micromedicao/arquivo_texto_ligacoes_hidrometro_gerar.jsp" />
+				
+		</action>
+		
+		<action name="GerarArquivoTextoLigacoesHidrometroActionForm"
+			type="gcom.gui.micromedicao.GerarArquivoTextoLigacoesHidrometroAction"
+			validate="true" 
+			path="/gerarArquivoTextoLigacoesHidrometroAction" />	
+		
+	</action-mappings>
+
+</struts-config>

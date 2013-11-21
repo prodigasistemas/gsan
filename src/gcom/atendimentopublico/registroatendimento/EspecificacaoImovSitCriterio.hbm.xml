@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.registroatendimento.EspecificacaoImovSitCriterio" table="atendimentopublico.espec_imovel_sit_crit">
+		<id name="id" type="java.lang.Integer" column="eisc_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_espec_imovel_sit_crit</param>
+			</generator>
+		</id>
+		<property name="indicadorHidrometroLigacaoAgua" type="java.lang.Short" column="eisc_ichidrometroligagua" length="2"/>
+		<property name="indicadorHidrometroPoco" type="java.lang.Short" column="eisc_ichidrometropoco" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="eisc_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to EspecificacaoImovelSituacao -->
+		<many-to-one name="especificacaoImovelSituacao" class="gcom.atendimentopublico.registroatendimento.EspecificacaoImovelSituacao" not-null="true">
+			<column name="esim_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LigacaoEsgotoSituacao -->
+		<many-to-one name="ligacaoEsgotoSituacao" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao" not-null="true">
+			<column name="lest_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LigacaoAguaSituacao -->
+		<many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="true">
+			<column name="last_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

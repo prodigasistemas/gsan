@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+<form-beans>
+			<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />		
+			<form-bean name="AtualizarFaixaDiasVencidosDocumentosReceberActionForm"
+			type="gcom.gui.cobranca.AtualizarFaixaDiasVencidosDocumentosReceberActionForm" />
+		
+</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+	
+			<action name="ManutencaoRegistroActionForm" 
+			type="gcom.gui.cobranca.ExibirManterFaixaDiasVencidosDocumentosReceberAction"
+			validate="true" scope="session" path="/exibirManterFaixaDiasVencidosDocumentosReceberAction">
+				<forward name="exibirManterFaixaDiasVencidosDocumentosReceberAction"
+					path="/jsp/cobranca/faixa_dias_vencidos_documentos_receber_manter.jsp"/>
+				<forward name="exibirAtualizarFaixaDiasVencidosDocumentosReceber"
+					path="/exibirAtualizarFaixaDiasVencidosDocumentosReceberAction.do"/>	
+			</action>
+			
+			<action name="ManutencaoRegistroActionForm" 
+			type="gcom.gui.cobranca.RemoverFaixaDiasVencidosDocumentosReceberAction"
+			validate="false" scope="session" path="/removerFaixaDiasVencidosDocumentosReceberAction"/>
+			
+			<action name="AtualizarFaixaDiasVencidosDocumentosReceberActionForm" 
+			type="gcom.gui.cobranca.ExibirAtualizarFaixaDiasVencidosDocumentosReceberAction"
+			validate="false" scope="session" path="/exibirAtualizarFaixaDiasVencidosDocumentosReceberAction">
+				<forward name="exibirAtualizarFaixaDiasVencidosDocumentosReceber"
+					path="/jsp/cobranca/faixa_dias_vencidos_documentos_receber_atualizar.jsp" />
+
+			</action>
+				<action name="AtualizarFaixaDiasVencidosDocumentosReceberActionForm" 
+				type="gcom.gui.cobranca.AtualizarFaixaDiasVencidosDocumentosReceberAction"
+				validate="false" scope="session" path="/atualizarFaixaDiasVencidosDocumentosReceberAction">
+			</action>
+		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

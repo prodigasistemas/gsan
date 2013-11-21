@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="GerarMovimentoExclusaoNegativacaoActionForm"
+			type="gcom.gui.cobranca.spcserasa.GerarMovimentoExclusaoNegativacaoActionForm" />
+
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+
+		<action name="GerarMovimentoExclusaoNegativacaoActionForm"
+		
+			type="gcom.gui.cobranca.spcserasa.ExibirGerarMovimentoExclusaoNegativacaoAction"
+			input="/exibirGerarMovimentoExclusaoNegativacaoAction.do"
+			path="/exibirGerarMovimentoExclusaoNegativacaoAction" >
+
+	<forward name="exibirGerarMovimentoExclusaoNegativacao"
+				path="/jsp/cobranca/spcserasa/negativador_movimento_exclusao_gerar.jsp" />
+
+	<forward name="gerarMovimentoExclusaoNegativacao"
+				path="/jsp/cobranca/spcserasa/negativador_movimento_exclusao_resumo.jsp" />
+		
+		</action>
+
+		<action name="GerarMovimentoExclusaoNegativacaoActionForm"
+		
+			type="gcom.gui.cobranca.spcserasa.GerarMovimentoExclusaoNegativacaoAction"
+			input="/gerarMovimentoExclusaoNegativacaoAction.do"
+			path="/gerarMovimentoExclusaoNegativacaoAction" >
+
+	<forward name="exibirGerarMovimentoExclusaoNegativacao"
+				path="/jsp/cobranca/spcserasa/negativador_movimento_exclusao_gerar.jsp" />
+
+	<forward name="gerarMovimentoExclusaoNegativacao"
+				path="/jsp/cobranca/spcserasa/negativador_movimento_exclusao_resumo.jsp" />
+		</action>
+
+	</action-mappings>
+
+</struts-config>

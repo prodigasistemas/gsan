@@ -1,0 +1,31 @@
+.dtree {
+	position: relative;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 11px;
+	color: black;
+	white-space: nowrap;
+}
+.dtree img {
+	border: 0px;
+	vertical-align: text-bottom;
+}
+.dtree a {
+	text-decoration: none;
+}
+.dtree a:hover {
+	color: black;
+	text-decoration: underline;
+}
+.dtree .node {
+	position: relative;
+	top: -2px;
+	padding: 1px;
+	color: black;
+}
+.dtree .nodeSel {
+	position: relative;
+	top: -2px;
+	padding: 1px;
+	color: black;
+	background-color: #c0d2ec;
+}

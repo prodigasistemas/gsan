@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="gcom.operacional.FonteCaptacao" table="operacional.fonte_captacao">
+		<id name="id" type="java.lang.Integer" column="ftcp_id">
+			<generator class="sequence">
+				<param name="sequence">operacional.seq_fonte_captacao</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="ftcp_dsfontecaptacao" not-null="true" length="20"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="ftcp_dsabreviado" length="6"/>
+		<property name="indicadorUso" type="java.lang.Short" column="ftcp_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ftcp_tmultimaalteracao" not-null="true" length="8"/>
+		<many-to-one name="tipoCaptacao" class="gcom.operacional.TipoCaptacao" not-null="false">
+			<column name="tpcp_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

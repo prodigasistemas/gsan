@@ -1,0 +1,864 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE application PUBLIC "-//Sun Microsystems, Inc.//DTD J2EE Application 1.3//EN" "http://java.sun.com/dtd/application_1_3.dtd">
+<application>
+	<display-name>gcom</display-name>
+	<module>
+		<ejb>ControladorAtendimentoPublicoGCOM.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>ControladorUtilGCOM.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorTabelaAuxiliarGCOM.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorClienteGCOM.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorImovelGCOM.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorEnderecoGCOM.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorMicromedicaoCAER.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorMicromedicaoCAEMA.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorMicromedicaoCAERN.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorMicromedicaoCOMPESA.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorMicromedicaoCOSANPA.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorMicromedicaoJUAZEIRO.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorMicromedicaoCOSAMA.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorLocalidadeGCOM.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorGeograficoGCOM.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorTarifaSocialGCOM.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorBatchFaturamentoGCOM.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorAcessoGCOM.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>ControladorUsuarioGCOM.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>ControladorTransacaoGCOM.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorGerencialCadastroGCOM.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorGerencialCobrancaGCOM.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorContratoParcelamentoGCOM.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorGerencialFaturamentoGCOM.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorUsuarioGCOM.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorGerencialGCOM.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorGerencialMicromedicaoGCOM.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorBatchGCOM.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorUnidadeGCOM.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorRegistroAtendimentoGCOM.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorOrdemServicoGCOM.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorLigacaoEsgotoGCOM.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorLigacaoAguaGCOM.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorPermissaoEspecialGCOM.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>ControladorOperacionalGCOM.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>BatchConsistirLeiturasCalcularConsumosMDB.jar</ejb>
+	</module>
+	<module>
+		<ejb>BatchGerarDadosParaLeituraMDB.jar</ejb>
+	</module>
+	<module>
+		<ejb>BatchFaturarGrupoFaturamentoMDB.jar</ejb>
+	</module>
+	<module>
+		<ejb>BatchEfetuarRateioConsumoMDB.jar</ejb>
+	</module>
+	<module>
+		<ejb>
+			BatchGerarDebitoACobrarDeAcrescimoPorImpontualidadeMDB.jar
+		</ejb>
+	</module>
+	<module>
+		<ejb>BatchGerarTaxaEntregaOutroEnderecoMDB.jar</ejb>
+	</module>
+	<module>
+		<ejb>BatchGerarDadosDiariosArrecadacaoMDB.jar</ejb>
+	</module>
+	<module>
+		<ejb>BatchGerarDebitoACobrarDoacaoMDB.jar</ejb>
+	</module>
+	<module>
+		<ejb>BatchClassificarPagamentosDevolucoesMDB.jar</ejb>
+	</module>
+	<module>
+		<ejb>BatchEncerrarArrecadacaoMesMDB.jar</ejb>
+	</module>
+	<module>
+		<ejb>BatchEncerrarFaturamentoMesMDB.jar</ejb>
+	</module>
+	<module>
+		<ejb>BatchGerarAtividadeAcaoCobrancaMDB.jar</ejb>
+	</module>
+	<module>
+		<ejb>BatchEmitirContasMDB.jar</ejb>
+	</module>
+	<module>
+		<ejb>BatchGerarResumoLigacoesEconomiasMDB.jar</ejb>
+	</module>
+	<module>
+		<ejb>BatchGerarResumoLeituraAnormalidadeMDB.jar</ejb>
+	</module>
+	<module>
+		<ejb>BatchGerarResumoArrecadacaoMDB.jar</ejb>
+	</module>
+	<module>
+		<ejb>BatchInserirResumoAcoesCobrancaCronogramaMDB.jar</ejb>
+	</module>
+	<module>
+		<ejb>BatchGerarResumoAcoesCobrancaCronogramaMDB.jar</ejb>
+	</module>
+	<module>
+		<ejb>BatchInserirResumoAcoesCobrancaEventualMDB.jar</ejb>
+	</module>
+	<module>
+		<ejb>BatchGerarResumoAcoesCobrancaEventualMDB.jar</ejb>
+	</module>
+	<module>
+		<ejb>BatchGerarResumoPendenciaMDB.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorBatchArrecadacaoGCOM.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorBatchMicromedicaoGCOM.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>ControladorFaturamentoCAER.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>ControladorFaturamentoCAERN.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>ControladorFaturamentoCOMPESA.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>ControladorFaturamentoCAEMA.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>ControladorFaturamentoCOSANPA.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>ControladorFaturamentoJUAZEIRO.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorFaturamentoCOSAMA.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>ControladorCadastroCOMPESA.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>ControladorCadastroCAERN.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>ControladorCadastroCAER.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>ControladorCadastroCAEMA.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>ControladorCadastroCOSANPA.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>ControladorCadastroJUAZEIRO.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorCadastroCOSAMA.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoAnormalidadesMDB.jar</ejb>
+	</module>
+	<module>
+		<ejb>BatchGerarResumoSituacaoEspecialCobrancaMDB.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>BatchEmitirExtratoConsumoImovelCondominioMDB.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>BatchGerarFaturaClienteResponsavelMDB.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>BatchGerarHistoricoParaEncerrarArrecadacaoMesMDB.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>BatchGerarHistoricoParaEncerrarFaturamentoMesMDB.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>BatchDesfazerParcelamentoPorEntradaNaoPagaMDB.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>BatchGerarHistoricoContaMDB.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorArrecadacaoCAER.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>ControladorArrecadacaoCAERN.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>ControladorArrecadacaoCOMPESA.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>ControladorArrecadacaoCAEMA.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>ControladorArrecadacaoCOSANPA.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>ControladorArrecadacaoJUAZEIRO.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorArrecadacaoCOSAMA.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoConsumoAguaMDB.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>BatchGerarResumoColetaEsgotoMDB.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>ControladorGerencialImovelGCOM.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorGerencialArrecadacaoGCOM.jar</ejb>
+	</module>
+	<!-- <module>
+		<ejb>BatchGerarResumoLigacoesHidrometrosMDB.jar</ejb>
+		</module> -->
+
+	<module>
+		<ejb>BatchGerarResumoInstalacoesHidrometrosMDB.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>BatchGerarResumoParcelamentoMDB.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>BatchGerarLancamentosContabeisFaturamentoMDB.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>BatchGerarLancamentosContabeisArrecadacaoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarLancamentosContabeisAvisosBancariosMDB.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>BatchGerarResumoFaturamentoAguaEsgotoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoFaturamentoMDB.jar</ejb>
+	</module>	
+
+    <module>
+		<ejb>BatchGerarResumoReFaturamentoMDB.jar</ejb>
+	</module>
+	
+    <module>
+		<ejb>BatchGerarResumoReFaturamentoOlapMDB.jar</ejb>
+	</module>	
+
+	<module>
+		<ejb>BatchGerarResumoHidrometroMDB.jar</ejb>
+
+	</module>
+
+	<module>
+		<ejb>BatchGerarResumoRegistroAtendimentoMDB.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>BatchGerarResumoHistogramaAguaEsgotoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarContasAReceberContabilMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchExecutarComandoEncerramentoRAMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoIndicadoresComercializacaoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoIndicadoresMicromedicaoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoIndicadoresFaturamentoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoIndicadoresCobrancaMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchEmitirBoletimCadastroMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchApagarResumoDevedoresDuvidososMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoDevedoresDuvidososMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchAtualizarResumoDevedoresDuvidososMDB.jar</ejb>
+	</module>
+	
+
+
+	<module>
+		<ejb>ControladorRelatorioFaturamentoGCOM.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>BatchGerarLancamentosContabeisDevedoresDuvidososMDB.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>ControladorCobrancaCAER.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>ControladorCobrancaCAERN.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>ControladorCobrancaCOMPESA.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>ControladorCobrancaCAEMA.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>ControladorCobrancaCOSANPA.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>ControladorCobrancaJUAZEIRO.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>ControladorCobrancaCOSAMA.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>ControladorFinanceiroCAER.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>ControladorFinanceiroCAERN.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>ControladorFinanceiroCOMPESA.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>ControladorFinanceiroCAEMA.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>ControladorFinanceiroCOSANPA.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>ControladorFinanceiroJUAZEIRO.jar</ejb>
+	</module>
+	<module>
+		<ejb>ControladorFinanceiroCOSAMA.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>ControladorSpcSerasaGCOM.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoMetasMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoMetasAcumuladoMDB.jar</ejb>
+	</module>
+	<module>
+		<ejb>BatchEmitirContasOrgaoPublicoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarArquivoTextoParaLeituristaMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>ControladorIntegracaoGCOM.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>BatchGerarResumoSituacaoEspecialFaturamentoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchAtualizaQuantidadeParcelaPagaConsecutivaParcelaBonusMDB.jar</ejb>
+	</module>
+
+	<!--<module>
+		<ejb>BatchProcessarCobrancaDocumentosItensMDB.jar</ejb>
+	</module>
+	-->
+	<module>
+		<ejb>BatchExecutarComandoNegativacaoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoDiarioNegativacaoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchAtualizarLigacaoAguaLigadoAnaliseParaLigadoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchAtualizarNumeroExecucaoResumoNegativacaoMDB.jar</ejb>
+	</module>
+	
+    <module>
+		<ejb>BatchGerarMovimentoExclusaoNegativacaoMDB.jar</ejb>
+	</module>
+	
+	 <module>
+		<ejb>BatchGerarMovimentoRetornoNegativacaoMDB.jar</ejb>
+	</module>
+	
+	
+	<module>
+		<ejb>BatchGerarResumoAcoesCobrancaCronogramaEncerrarOSMDB.jar</ejb>
+	</module>
+	<module>
+		<ejb>BatchRelatorioContasBaixadasContabilmenteMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarValorVolumesConsumidosNaoFaturadosMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchIncluirDebitoACobrarEntradaParcelamentoNaoPagaMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchAtualizarPagamentosContasCobrancaMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarMovimentoContasCobrancaPorEmpresaMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarArquivoTextoContasCobrancaEmpresaMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarCreditoSituacaoEspecialFaturamentoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarMovimentoExtensaoContasCobrancaPorEmpresaMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchAtualizarAutosInfracaoPrazoRecursoVencidoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarMovimentoHidrometroMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchAtualizarConjuntoHidrometroMDB.jar</ejb>
+	</module>	
+	
+	<module>
+		<ejb>BatchGerarCartasCampanhaSolidariedadeCriancaParaNegociacaoAVistaMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchEmitirCartasCampanhaSolidariedadeCriancaParaNegociacaoAVistaMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarTabelasTemporariasAtualizacaoCadastralMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarArquivoTextoAtualizacaoCadastralMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchEmitirBoletosMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchRetificarConjuntoContaConsumosMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarBonusTarifaSocialMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchExcluirImoveisDaTarifaSocialMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarArquivoTextoPagamentosContasCobrancaEmpresaMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoNegativacaoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchAcompanharPagamentoDoParcelamentoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarCartasDeFinalDeAnoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchEmitirCartasDeFinalDeAnoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarArquivoTextoContasProjetosEspeciaisMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchInserirPagamentosFaturasEspeciaisMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchSuspenderImovelEmProgramaEspecialMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoSimulacaoFaturamentoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoDocumentosAReceberMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchEmitirOrdemDeFiscalizacaoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarArquivoOrdemDeFiscalizacaoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchDeterminarConfirmacaoDaNegativacaoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchEnvioEmailContaParaClienteMDB.jar</ejb>
+	</module>
+
+	<module>
+		<ejb>BatchAtualizarComandoAtividadeAcaoCobrancaMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarDadosDeclaracaoQuitacaoAnualDebitosMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarArquivoTextoDeclaracaoQuitacaoAnualDebitosMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoPendenciaPorAnoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchAtualizarCodigoDebitoAutomaticoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchEmitirDocumentoCobrancaMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoLigacoesEconomiasPorAnoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoFaturamentoPorAnoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoReceitaMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoIndicadoresMicromedicaoPorAnoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoArrecadacaoPorAnoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoColetaEsgotoPorAnoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoRegistroAtendimentoPorAnoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoInstalacoesHidrometrosPorAnoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoParcelamentoPorAnoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchAlterarInscricaoImovelMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarPrescreverDebitosDeImoveisMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarTaxaPercentualTarifaMinimaCortadoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoReFaturamentoNovoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchVerificarFaturamentoImoveisCortadosMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoReFaturamentoNovoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarTaxaPercentualTarifaMinimaCortadoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoReFaturamentoNovoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchVerificarFaturamentoImoveisCortadosMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarGuiaPagamentoPorClienteResumoPendenciaMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarResumoHistogramaAguaEsgotoSemQuadraMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchReligarImoveisCortadosComConsumoRealMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchPrescreverDebitosImoveisPublicosManualMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchPrescreverDebitosImoveisPublicosAutomaticoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchProcessarEncerramentoOSAcaoCobrancaMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchAutomatizarPerfisDeGrandesConsumidoresMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarRAOSAnormalidadeConsumoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchProcessarComandoGeradoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarCartaTarifaSocialMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchRetirarImovelTarifaSocialMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarTxtImpressaoContasBrailleMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchEncerrarComandosDeCobrancaPorEmpresaMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarTxtOsInspecaoAnormalidadeMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchProcessarArquivoTxtEncerramentoOSCobrancaMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarArquivoTextoOSContasPagasParceladasMDB.jar</ejb>
+	</module>
+		
+	<module>
+		<ejb>BatchEncerrarComandoOSSeletivaInspecaoAnormalidadeMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchProgramacaoAutoRoteiroAcompServicoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarDadosArquivoAcompanhamentoServicoMDB.jar</ejb>
+	</module>	
+	
+	<module>
+		<ejb>BatchProcessarEncerramentoOSFiscalizacaoDecursoPrazoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchSuspenderLeituraParaImovelComHidrometroRetiradoMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchSuspenderLeituraParaImovelComConsumoRealNaoSuperiorA10MDB.jar</ejb>
+	</module>
+	
+	<module>
+		<ejb>BatchGerarDadosRelatorioBIGMDB.jar</ejb>
+	</module>
+	
+	<module>
+		<java>gcom.jar</java>
+	</module>
+	
+	<module>
+		<web>
+			<web-uri>gcom.war</web-uri>
+			<context-root>gsan</context-root>
+		</web>
+	</module>
+
+</application>

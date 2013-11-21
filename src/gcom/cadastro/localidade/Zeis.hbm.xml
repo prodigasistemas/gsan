@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.localidade.Zeis" table="cadastro.zeis">
+		<id name="id" type="java.lang.Integer" column="zeis_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_zeis</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="zeis_dszeis" length="20"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="zeis_dsabreviado" length="6"/>
+		<property name="indicadorUso" type="java.lang.Short" column="zeis_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="zeis_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to Quadra 
+    <set
+        name="quadras"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="zeis_id" />
+        </key>
+        <one-to-many 
+            class="gcom.cadastro.Quadra"
+        />
+    </set>
+    -->
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+		Created by the Middlegen Hibernate plugin 2.1
+		
+		http://boss.bekk.no/boss/middlegen/
+		http://www.hibernate.org/
+	-->
+	<class name="gcom.seguranca.acesso.usuario.UsuarioGrupoRestricao" table="seguranca.usuario_grupo_restricao">
+		<composite-id name="comp_id" class="gcom.seguranca.acesso.usuario.UsuarioGrupoRestricaoPK">
+			<key-property name="grupoId" column="grup_id" type="java.lang.Integer" length="4"/>
+			<key-property name="usuarioId" column="usur_id" type="java.lang.Integer" length="4"/>
+			<key-property name="funcionalidadeId" column="fncd_id" type="java.lang.Integer" length="4"/>
+			<key-property name="operacaoId" column="oper_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ugrt_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to GrupoFuncionalidadeOperacao -->
+		<many-to-one name="grupoFuncionalidadeOperacao" class="gcom.seguranca.acesso.GrupoFuncionalidadeOperacao" update="false" insert="false">
+			<column name="grup_id"/>
+			<column name="oper_id"/>
+			<column name="fncd_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to UsuarioGrupo -->
+		<many-to-one name="usuarioGrupo" class="gcom.seguranca.acesso.usuario.UsuarioGrupo" update="false" insert="false">
+			<column name="grup_id"/>
+			<column name="usur_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

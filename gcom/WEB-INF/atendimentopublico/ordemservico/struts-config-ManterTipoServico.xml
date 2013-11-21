@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>  
+
+	<form-beans>
+	
+		<form-bean name="ManterTipoServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ManterTipoServicoActionForm" />
+			
+ 	<form-bean name="AtualizarTipoServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.AtualizarTipoServicoActionForm" />
+			
+	<form-bean name="FiltrarTipoServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.FiltrarTipoServicoActionForm" />			
+	
+	<form-bean name="ManutencaoRegistroActionForm" 
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+			
+	</form-beans>
+
+	<global-forwards />
+	
+	
+	<action-mappings> 	
+		<action  name="ManterTipoServicoActionForm"  
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirManterTipoServicoAction"
+			validate="false" 
+			scope="session" 
+			path="/exibirManterServicoTipoAction">
+			
+			<forward name="manterTipoServico"
+				path="/jsp/atendimentopublico/ordemservico/tipo_servico_manter.jsp" />
+			
+			<forward name="exibirAtualizarTipoServico"
+				path="/exibirAtualizarTipoServicoAction.do" /> 
+		</action>
+		
+
+		<action name="AtualizarTipoServicoActionForm"  
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirAtualizarTipoServicoAction"
+			validate="false" 
+			scope="session" 
+			path="/exibirAtualizarTipoServicoAction">
+			
+			<forward name="atualizarTipoServico"
+				path="/jsp/atendimentopublico/ordemservico/servico_tipo_atualizar.jsp" />
+		</action>
+		
+		<action name="AtualizarTipoServicoActionForm"  
+			type="gcom.gui.atendimentopublico.ordemservico.AtualizarTipoServicoAction"
+			validate="true" 
+			scope="session" 
+			path="/atualizarTipoServicoAction">
+			
+		</action>		
+		
+		<action name="FiltrarTipoServicoActionForm"
+			type="gcom.gui.relatorio.atendimentopublico.GerarRelatorioServicoTipoManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioServicoTipoManterAction" />
+		
+		
+		<action  name="ManutencaoRegistroActionForm"  
+			type="gcom.gui.atendimentopublico.ordemservico.RemoverTipoServicoAction"
+			validate="false" 
+			scope="session" 
+			path="/removerTipoServicoAction">
+
+		</action>		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

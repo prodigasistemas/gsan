@@ -1,0 +1,286 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+		Created by the Middlegen Hibernate plugin 2.1
+		
+		http://boss.bekk.no/boss/middlegen/
+		http://www.hibernate.org/
+	-->
+	<class name="gcom.atendimentopublico.ordemservico.ServicoTipo"
+		table="atendimentopublico.servico_tipo">
+		<id name="id" type="java.lang.Integer" column="svtp_id">
+			<generator class="sequence">
+				<param name="sequence">
+					atendimentopublico.seq_servico_tipo
+				</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String"
+			column="svtp_dsservicotipo" not-null="true" length="50" />
+		<property name="descricaoAbreviada" type="java.lang.String"
+			column="svtp_dsabreviado" not-null="false" length="20" />
+		<property name="valor" type="java.math.BigDecimal"
+			column="svtp_vlservico" not-null="true" length="13" />
+		<!--  property
+			name="prioridade"
+			type="short"
+			column="svtp_nnprioridade"
+			not-null="true"
+			length="2"
+			/> -->
+		<property name="indicadorPavimento" type="short"
+			column="svtp_icpavimento" not-null="true" length="2" />
+		<property name="indicadorAtualizaComercial" type="short"
+			column="svtp_icatualizacomercial" not-null="true" length="2" />
+		<property name="indicadorTerceirizado" type="short"
+			column="svtp_icterceirizado" not-null="true" length="2" />
+		<property name="codigoServicoTipo" type="java.lang.String"
+			column="svtp_cdservicotipo" not-null="true" length="1" />
+		<property name="tempoMedioExecucao" type="short"
+			column="svtp_nntempomedioexecucao" not-null="true" length="2" />
+		<property name="ultimaAlteracao" type="java.sql.Timestamp"
+			column="svtp_tmultimaalteracao" not-null="true" length="8" />
+		<property name="indicadorUso" type="short" column="svtp_icuso"
+			not-null="true" length="2" />
+		<property name="indicadorFiscalizacaoInfracao" type="short"
+			column="svtp_icfiscalizacaoinfracao" not-null="true" length="2" />
+		<property name="indicadorVistoria" type="short"
+			column="svtp_icvistoria" not-null="true" length="2" />
+		<property name="indicadorPermiteAlterarValor" type="short"
+			column="svtp_icpermitealterarvalor" not-null="true" length="2" />
+		<property name="indicadorIncluirDebito" type="short"
+			column="svtp_icincluirdebito" not-null="true" length="2" />
+		<property name="indicadorCobrarJuros" type="short"
+			column="svtp_iccobrarjuros" not-null="true" length="2" />
+		<property name="indicadorPavimentoRua" type="java.lang.Short"
+			column="svtp_icpvtorua" not-null="false" length="2" />
+		<property name="indicadorPavimentoCalcada"
+			type="java.lang.Short" column="svtp_icpvtocal" not-null="false"
+			length="2" />
+		<property name="indicadorEmpresaCobranca"
+			type="java.lang.Short" column="svtp_icemcobranca" not-null="false"
+			length="2" />
+		<property name="indicadorProgramacaoAutomatica"
+			type="java.lang.Short" column="svtp_icprogramacaoautomatica" not-null="false"
+			length="2" /> 			
+		<property name="constanteFuncionalidadeTipoServico"
+			type="java.lang.Integer" column="svtp_nncodigoconstante"
+			not-null="false" length="4" />
+		<property name="indicativoTipoSevicoEconomias"
+			type="java.lang.Short" column="svtp_icconsideraeconomias"
+			not-null="false" length="2" />
+		<property name="indicadorBoletim" type="java.lang.Short"
+			column="svtp_icboletim" not-null="true" length="2" />
+		<property name="indicadorAtividade" type="java.lang.Short"
+			column="svtp_icatividade" not-null="true" length="2" />
+		<property name="indicadorServicoOrdemSeletiva" type="java.lang.Short"
+			column="svtp_icservicoordemseletiva" not-null="true" length="2" />
+			
+		<property name="indicadorEnvioPesquisaSatisfacao" type="java.lang.Short"
+			column="SVTP_ICENVIOEMAILPESQUISA" not-null="true" length="2" />
+		<property name="indicadorInspecaoAnormalidade" type="java.lang.Short"
+			column="svtp_icgerarosinspanormalidade" not-null="true" length="2" />
+		<property name="indicadorEncAutomaticoRAQndEncOS" type="java.lang.Short"
+			column="svtp_icencautomaticoraqdoencos" not-null="true" length="2" />	
+		<property name="indicadorPermiteAlteracaoImovelEmCampo" type="java.lang.Short"
+			column="svtp_icpermitealteracaoimovelemcampo" not-null="true" length="2" />
+			
+			
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to ServicoTipoReferencia -->
+		<many-to-one name="servicoTipoReferencia"
+			class="gcom.atendimentopublico.ordemservico.ServicoTipoReferencia"
+			not-null="false">
+			<column name="strf_id" />
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CreditoTipo -->
+		<many-to-one name="creditoTipo"
+			class="gcom.faturamento.credito.CreditoTipo" not-null="false">
+			<column name="crti_id" />
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ServicoPerfilTipo -->
+		<many-to-one name="servicoPerfilTipo"
+			class="gcom.atendimentopublico.ordemservico.ServicoPerfilTipo"
+			not-null="true">
+			<column name="sptp_id" />
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ServicoTipoSubgrupo -->
+		<many-to-one name="servicoTipoSubgrupo"
+			class="gcom.atendimentopublico.ordemservico.ServicoTipoSubgrupo"
+			not-null="true">
+			<column name="stsg_id" />
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ServicoTipoPrioridade -->
+		<many-to-one name="servicoTipoPrioridade"
+			class="gcom.atendimentopublico.ordemservico.ServicoTipoPrioridade"
+			not-null="true">
+			<column name="stpr_id" />
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DebitoTipo -->
+		<many-to-one name="debitoTipo"
+			class="gcom.faturamento.debito.DebitoTipo" not-null="false">
+			<column name="dbtp_id" />
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Municipio -->
+		<many-to-one name="programaCalibragem" class="gcom.atendimentopublico.ordemservico.OSProgramacaoCalibragem" not-null="false">
+			<column name="ospc_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to LeituraAnormalidade 
+			<set
+			name="leituraAnormalidades"
+			lazy="true"
+			inverse="true"
+			cascade="all"
+			>
+			<key>
+			<column name="svtp_id" />
+			</key>
+			<one-to-many 
+			class="gcom.LeituraAnormalidade"
+			/>
+			</set> -->
+		<!-- bi-directional one-to-many association to SolicitacaoTipoEspecificacao 
+			<set
+			name="solicitacaoTipoEspecificacaos"
+			lazy="true"
+			inverse="true"
+			cascade="all"
+			>
+			<key>
+			<column name="svtp_id" />
+			</key>
+			<one-to-many 
+			class="gcom.SolicitacaoTipoEspecificacao"
+			/>
+			</set> -->
+		<!-- bi-directional one-to-many association to ServicoTipoAtividade -->
+		<set name="servicoTipoAtividades" lazy="true" inverse="true">
+			<key>
+				<column name="svtp_id" />
+			</key>
+			<one-to-many
+				class="gcom.atendimentopublico.ordemservico.ServicoTipoAtividade" />
+		</set>
+		<!-- bi-directional one-to-many association to ServicoTipoReferencia 
+			<set
+			name="servicoTipoReferencias"
+			lazy="true"
+			inverse="true"
+			cascade="all"
+			>
+			<key>
+			<column name="svtp_id" />
+			</key>
+			<one-to-many 
+			class="gcom.ServicoTipoReferencia"
+			/>
+			</set> -->
+		<!-- bi-directional one-to-many association to OrdemServico 
+			<set
+			name="ordemServicosBySvtpId"
+			lazy="true"
+			inverse="true"
+			cascade="all"
+			>
+			<key>
+			<column name="svtp_id" />
+			</key>
+			<one-to-many 
+			class="gcom.OrdemServico"
+			/>
+			</set> -->
+		<!-- bi-directional one-to-many association to OrdemServico 
+			<set
+			name="ordemServicosBySvtpId"
+			lazy="true"
+			inverse="true"
+			cascade="all"
+			>
+			<key>
+			<column name="svtp_id" />
+			</key>
+			<one-to-many 
+			class="gcom.OrdemServico"
+			/>
+			</set> -->
+		<!-- bi-directional one-to-many association to OrdemServico 
+			<set
+			name="ordemServicosBySvtpIdreferencia"
+			lazy="true"
+			inverse="true"
+			cascade="all"
+			>
+			<key>
+			<column name="svtp_idreferencia" />
+			</key>
+			<one-to-many 
+			class="gcom.OrdemServico"
+			/>
+			</set> -->
+		<!-- bi-directional one-to-many association to ServicoCobrancaValor 
+			<set
+			name="servicoCobrancaValors"
+			lazy="true"
+			inverse="true"
+			cascade="all"
+			>
+			<key>
+			<column name="svtp_id" />
+			</key>
+			<one-to-many 
+			class="gcom.ServicoCobrancaValor"
+			/>
+			</set> -->
+		<!-- bi-directional one-to-many association to EspecificacaoServicoTipo 
+			<set
+			name="especificacaoServicoTipos"
+			lazy="true"
+			inverse="true"
+			cascade="all"
+			>
+			<key>
+			<column name="svtp_id" />
+			</key>
+			<one-to-many 
+			class="gcom.EspecificacaoServicoTipo"
+			/>
+			</set> -->
+		<!-- bi-directional one-to-many association to CobrancaAcao 
+			<set
+			name="cobrancaAcaos"
+			lazy="true"
+			inverse="true"
+			cascade="all"
+			>
+			<key>
+			<column name="svtp_id" />
+			</key>
+			<one-to-many 
+			class="gcom.CobrancaAcao"
+			/>
+			</set> -->
+		<!-- bi-directional one-to-many association to ServicoTipoOperacao 
+			<set
+			name="servicoTipoOperacaos"
+			lazy="true"
+			inverse="true"
+			cascade="all"
+			>
+			<key>
+			<column name="svtp_id" />
+			</key>
+			<one-to-many 
+			class="gcom.ServicoTipoOperacao"
+			/>
+			</set> -->
+		<!-- bi-directional one-to-many association to ServicoTipoMaterial -->
+		<set name="servicoTipoMateriais" lazy="true" inverse="true">
+			<key>
+				<column name="svtp_id" />
+			</key>
+			<one-to-many
+				class="gcom.atendimentopublico.ordemservico.ServicoTipoMaterial" />
+		</set>
+	</class>
+</hibernate-mapping>

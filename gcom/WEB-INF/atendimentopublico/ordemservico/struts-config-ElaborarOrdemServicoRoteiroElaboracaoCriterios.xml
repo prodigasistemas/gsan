@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="ElaborarOrdemServicoRoteiroCriteriosActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ElaborarOrdemServicoRoteiroCriteriosActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="ElaborarOrdemServicoRoteiroCriteriosActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirElaborarOrdemServicoRoteiroCriteriosAction"
+			validate="true" 
+			scope="session"
+			path="/exibirElaborarOrdemServicoRoteiroCriteriosAction">
+			
+			<forward name="exibirElaborarOrdemServico"
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_roteiro_elaboracao_criterios.jsp" />
+				
+		</action>
+		
+		<action name="ElaborarOrdemServicoRoteiroCriteriosActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ElaborarOrdemServicoRoteiroCriteriosAction"
+			validate="true" 
+			scope="session" 
+			path="/elaborarOrdemServicoRoteiroCriteriosAction">
+			
+			<forward name="elaborarOrdemServico"
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_roteiro_elaboracao_programacao.jsp" />
+		</action>
+
+		<action name="ElaborarOrdemServicoRoteiroCriteriosActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ProgramarOrdemServicoRoteiroCriteriosAction"
+			validate="true" 
+			scope="session" 
+			path="/programarOrdemServicoRoteiroCriteriosAction">
+			
+			<forward name="programarOrdemServico"
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_roteiro_elaboracao_programacao.jsp" />
+
+			<forward name="alertaOrdemServico"
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_roteiro_programacao_alerta.jsp" />
+				
+		</action>
+
+		<action name="ElaborarOrdemServicoRoteiroCriteriosActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ConcluirElaborarOrdemServicoRoteiroCriteriosAction"
+			validate="true" 
+			scope="session" 
+			path="/concluirElaborarOrdemServicoRoteiroCriteriosAction">
+		
+		</action>
+
+	</action-mappings>
+	
+</struts-config>

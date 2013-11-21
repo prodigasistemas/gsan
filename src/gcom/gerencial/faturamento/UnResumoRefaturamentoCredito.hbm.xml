@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.gerencial.faturamento.UnResumoRefaturamentoCredito" table="faturamento.un_resumo_refaturamento_credito">
+		<composite-id name="comp_id" class="gcom.gerencial.faturamento.UnResumoRefaturamentoCreditoPK">
+			<key-property name="IdResumoRefaturamentoAguaEsgoto" column="rerf_id" type="java.lang.Integer" length="4"/>
+			<key-property name="IdCreditoOrigem" column="crog_id" type="java.lang.Integer" length="4"/>
+			<key-property name="idLancamentoItemContabil" column="lict_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<property name="valorDocumentosRefaturados" type="java.math.BigDecimal" column="rrcr_vldocumentosrefaturados" not-null="true" length="13"/>
+		<property name="quantidadeDocumentosRefaturados" type="short" column="rrcr_qtdocumentosrefaturados" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="rrcr_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to GLancamentoItemContabil -->
+		<many-to-one name="gerLancamentoItemContabil" class="gcom.gerencial.financeiro.lancamento.GLancamentoItemContabil" update="false" insert="false">
+			<column name="lict_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GCreditoOrigem -->
+		<many-to-one name="gerCreditoOrigem" class="gcom.gerencial.faturamento.credito.GCreditoOrigem" update="false" insert="false">
+			<column name="crog_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to UnResumoRefaturamentoAguaEsgoto -->
+		<many-to-one name="unResumoRefaturamentoAguaEsgoto" class="gcom.gerencial.faturamento.UnResumoRefaturamentoAguaEsgoto" update="false" insert="false">
+			<column name="rerf_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

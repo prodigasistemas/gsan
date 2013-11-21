@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.micromedicao.hidrometro.HidrometroDiametro" table="micromedicao.hidrometro_diametro">
+		<id name="id" type="java.lang.Integer" column="hidm_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_hidrometro_diametro</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="hidm_dshidrometrodiametro" not-null="true" length="20"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="hidm_dsabreviadahidrdiametro" not-null="true" length="5"/>
+		<property name="indicadorUso" type="java.lang.Short" column="hidm_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="hidm_tmultimaalteracao" length="8"/>
+		<property name="numeroOrdem" type="java.lang.Short" column="hidm_nnordem" not-null="true" length="2"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to Hidrometro 
+    <set
+        name="hidrometros"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="hidm_id" />
+        </key>
+        <one-to-many 
+            class="gcom.cadastro.Hidrometro"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

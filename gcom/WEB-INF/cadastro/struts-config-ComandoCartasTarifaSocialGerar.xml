@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="GerarComandoCartasTarifaSocialActionForm"
+			type="gcom.gui.cadastro.GerarComandoCartasTarifaSocialActionForm" />
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<action name="GerarComandoCartasTarifaSocialActionForm"
+			type="gcom.gui.cadastro.ExibirGerarComandoCartasTarifaSocialAction"
+			validate="true" scope="session"
+			path="/exibirGerarComandoCartasTarifaSocialAction">
+			<forward name="exibirGerarComandoCartasTarifaSocial"
+				path="/jsp/cadastro/comando_cartas_tarifa_social_gerar.jsp" />
+		</action>
+		<action name="GerarComandoCartasTarifaSocialActionForm"
+			type="gcom.gui.cadastro.GerarComandoCartasTarifaSocialAction"
+			validate="true" scope="session"
+			path="/gerarComandoCartasTarifaSocialAction" />
+
+	</action-mappings>
+
+
+</struts-config>

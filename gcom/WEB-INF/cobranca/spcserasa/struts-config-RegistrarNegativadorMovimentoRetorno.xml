@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+						
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>			
+			
+			<!-- INICIO [UC0672] REGISTRAR MOVIMENTO DE RETORNO DO NEGATIVADOR Auhtor: Yara Taciane Data:09/01/2008 -->
+		<action
+			type="gcom.gui.cobranca.spcserasa.ExibirRegistrarNegativadorMovimentoRetornoAction"
+			scope="request"
+			path="/exibirRegistrarNegativadorMovimentoRetornoAction">
+			<forward name="registrarNegativadorMovimentoRetorno"
+				path="/jsp/cobranca/spcserasa/registrar_negativador_movimento_retorno.jsp" />
+
+		</action>		
+
+		<action
+			type="gcom.gui.cobranca.spcserasa.RegistrarNegativadorMovimentoRetornoAction"
+			scope="request"
+			path="/registrarNegativadorMovimentoRetornoAction">
+			
+			<forward name="registrarNegativadorMovimentoRetornoResumo"
+				path="/jsp/cobranca/spcserasa/registrar_negativador_movimento_retorno_resumo.jsp" />
+		
+
+		</action>
+			
+			
+		<!-- INICIO [UC0672] REGISTRAR MOVIMENTO DE RETORNO DO NEGATIVADOR Auhtor: Yara Taciane Data:09/01/2008 -->
+			
+				
+
+	</action-mappings>
+
+</struts-config>

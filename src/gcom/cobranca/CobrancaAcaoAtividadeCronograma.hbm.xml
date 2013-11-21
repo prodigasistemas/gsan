@@ -1,0 +1,50 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.CobrancaAcaoAtividadeCronograma" table="cobranca.cobranca_acao_ativ_crg">
+		<id name="id" type="java.lang.Integer" column="caac_id">
+			<generator class="sequence">
+				<param name="sequence">
+				cobranca.seq_cobranca_acao_ativ_crg</param>
+			</generator>
+		</id>
+		<property name="dataPrevista" type="java.sql.Date" column="caac_dtprevista" length="4"/>
+		<property name="realizacao" type="java.sql.Timestamp" column="caac_tmrealizacao" length="8"/>
+		<property name="comando" type="java.sql.Timestamp" column="caac_tmcomando" length="8"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="caac_tmultimaalteracao" length="8"/>
+		<property name="quantidadeDocumentos" type="java.lang.Integer" column="caac_qtdocumentos" length="4"/>
+		<property name="valorDocumentos" type="java.math.BigDecimal" column="caac_vldocumentos" length="13"/>
+		<property name="quantidadeItensCobrados" type="java.lang.Integer" column="caac_qtitenscobrados" length="4"/>
+		<property name="quantidadeMaximaDocumentos" type="java.lang.Integer" column="caac_qtmaximadocumentos" length="4"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to CobrancaAcaoCronograma -->
+		<many-to-one name="cobrancaAcaoCronograma" class="gcom.cobranca.CobrancaAcaoCronograma" not-null="true">
+			<column name="cbcr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaAtividade -->
+		<many-to-one name="cobrancaAtividade" class="gcom.cobranca.CobrancaAtividade" not-null="true">
+			<column name="cbat_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to CobrancaDocumento -->
+		<!--  <set
+        name="cobrancaDocumentos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="caac_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CobrancaDocumento"
+        />
+    </set>
+	-->
+	</class>
+</hibernate-mapping>

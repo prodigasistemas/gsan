@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.tarifasocial.TarifaSocialDado" table="cadastro.tarifa_social_dado">
+		<id name="id" type="java.lang.Integer" column="imov_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="dataImplantacao" type="java.sql.Date" column="tsda_dtimplantacao" length="4"/>
+		<property name="dataExclusao" type="java.sql.Date" column="tsda_dtexclusao" length="4"/>
+		<property name="quantidadeRecadastramento" type="java.lang.Short" column="tsda_qtrecadastramento" length="2"/>
+		<property name="dataRecadastramento" type="java.sql.Date" column="tsda_dtrecadastramento" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="tsda_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-one association to Imovel -->
+		<one-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" outer-join="auto" constrained="true"/>
+		<!-- bi-directional one-to-many association to TarifaSocialDadoEconomia -->
+		<set name="tarifaSocialDadoEconomias" lazy="false" inverse="true">
+			<key>
+				<column name="imov_id"/>
+			</key>
+			<one-to-many class="gcom.cadastro.tarifasocial.TarifaSocialDadoEconomia"/>
+		</set>
+		<!-- bi-directional many-to-one association to TarifaSocialExclusaoMotivo -->
+		<many-to-one name="tarifaSocialExclusaoMotivo" class="gcom.cadastro.tarifasocial.TarifaSocialExclusaoMotivo" not-null="true">
+			<column name="etsm_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

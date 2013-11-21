@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="FiltrarTipoServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.FiltrarTipoServicoActionForm" />
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarTipoServicoActionForm" 
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirFiltrarTipoServicoAction"
+			validate="false" scope="session" path="/exibirFiltrarTipoServicoAction">
+			<forward name="filtrarTipoServico"
+				path="/jsp/atendimentopublico/ordemservico/tipo_servico_filtrar.jsp" />
+			<forward name="exibirPesquisarAtividade"
+				path="/exibirPesquisarAtividadeAction.do?caminhoRetornoAtividadeTipoServico=exibirFiltrarTipoServicoAction" />
+			<forward name="exibirPesquisarMaterial"
+				path="/exibirPesquisarMaterialAction.do?caminhoRetornoMaterialTipoServico=exibirFiltrarTipoServicoAction" />		
+		</action>
+		
+		<action name="FiltrarTipoServicoActionForm" 
+			type="gcom.gui.atendimentopublico.ordemservico.FiltrarTipoServicoAction"
+			validate="false" scope="session"
+			path="/filtrarTipoServicoAction">
+			
+			<forward name="retornarFiltroTipoServico" path="/exibirManterServicoTipoAction.do" /> 
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="ConsultarComparativoResumosFaturamentoArrecadacaoPendenciaActionForm"
+			type="gcom.gui.gerencial.ConsultarComparativoResumosFaturamentoArrecadacaoPendenciaActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="ConsultarComparativoResumosFaturamentoArrecadacaoPendenciaActionForm"
+						type="gcom.gui.gerencial.ConsultarComparativoResumosFaturamentoArrecadacaoPendenciaAction"
+						validate="false" 
+						path="/consultarComparativoResumosFaturamentoArrecadacaoPendenciaAction">
+						
+			<forward name="consultarComparativoResumoFaturamentoArrecadacaoPendenciaJsp"	path="/exibirResultadoConsultarComparativoResumoArrecadacaoFaturamentoPendenciaAction.do" />
+			<forward name="consultarComparativoResumoFaturamentoArrecadacaoPendenciaRelatorio"	path="/gerarRelatorioConsultarComparativoResumosFaturamentoArrecadacaoPendenciaAction.do" />
+		</action>
+		
+		<action name="ConsultarComparativoResumosFaturamentoArrecadacaoPendenciaActionForm"
+						type="gcom.gui.gerencial.ExibirResultadoConsultarComparativoResumoArrecadacaoFaturamentoPendenciaAction"
+						validate="false"
+						input="/consultarComparativoResumosFaturamentoArrecadacaoPendenciaAction.do" 
+						scope="session"
+						path="/exibirResultadoConsultarComparativoResumoArrecadacaoFaturamentoPendenciaAction">
+						
+			<forward name="resultadoComparativoResumosFaturamentoArrecadacaoPendencia" path="/jsp/gerencial/comparativo_resumos_faturamento_arrecadacao_pendencia_consultar.jsp" />						
+		</action>
+		
+		<action name="ConsultarComparativoResumosFaturamentoArrecadacaoPendenciaActionForm"
+						type="gcom.gui.relatorio.gerencial.GerarRelatorioConsultarComparativoResumosFaturamentoArrecadacaoPendenciaAction"
+						validate="true"
+						input="/consultarComparativoResumosFaturamentoArrecadacaoPendenciaAction.do" 
+						scope="session"
+						path="/gerarRelatorioConsultarComparativoResumosFaturamentoArrecadacaoPendenciaAction">
+									
+		</action>
+		
+	</action-mappings>
+
+	<message-resources null="false"	parameter="gcom.properties.application" />
+</struts-config>

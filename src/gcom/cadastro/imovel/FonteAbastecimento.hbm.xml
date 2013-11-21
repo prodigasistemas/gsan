@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.imovel.FonteAbastecimento" table="cadastro.fonte_abastecimento">
+		<id name="id" type="java.lang.Integer" column="ftab_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_fonte_abastecimento</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="ftab_dsfonteabastecimento" not-null="true" length="20"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="ftab_dsabreviado" not-null="true" length="5"/>
+		<property name="indicadorUso" type="java.lang.Short" column="ftab_icuso" length="2"/>
+		<property name="indicadorCalcularVolumeFixo" type="java.lang.Short" column="ftab_iccalcularvolumefixo" not-null="true" length="2"/>
+		<property name="indicadorPermitePoco" type="java.lang.Short" column="ftab_icpermitepoco" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ftab_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to Imovel 
+    <set
+        name="imovels"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="ftab_id" />
+        </key>
+        <one-to-many 
+            class="gcom.cadastro.Imovel"
+        />
+    </set>
+    -->
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="ManterComandoAcaoCobrancaActionForm"
+			type="gcom.gui.cobranca.ManterComandoAcaoCobrancaActionForm" />			
+		<form-bean name="ManterComandoAcaoCobrancaDetalhesActionForm"
+			type="gcom.gui.cobranca.ManterComandoAcaoCobrancaDetalhesActionForm" />			
+		<form-bean name="ManterComandoAcaoCobrancaEventualCriterioComandoActionForm"
+			type="gcom.gui.cobranca.ManterComandoAcaoCobrancaEventualCriterioComandoActionForm" />			
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0244] MANTER COMANDO DE ACAO DE COBRANCA Auhtor: Rafael Santos Data:22/03/2006-->
+		<action name="ManterComandoAcaoCobrancaActionForm"
+			type="gcom.gui.cobranca.ExibirManterComandoAcaoCobrancaAction"
+			validate="false" scope="session"
+			path="/exibirManterComandoAcaoCobrancaAction">
+			<forward name="exibirManterComandoAcaoCobranca"
+				path="/jsp/cobranca/comandar_acao_cobranca_manter.jsp" />
+		</action>
+		
+		<action name="ManterComandoAcaoCobrancaActionForm"
+			type="gcom.gui.cobranca.ExcluirComandoAtividadeCronogramaAcaoCobrancaAction"
+			validate="true" input="/excluirComandoAtividadeCronogramaAcaoCobrancaAction.do"
+			scope="session" path="/excluirComandoAtividadeCronogramaAcaoCobrancaAction" />
+
+		<action name="ManterComandoAcaoCobrancaActionForm"
+			type="gcom.gui.cobranca.ExcluirComandoAtividadeEventualAcaoCobrancaAction"
+			validate="true" input="/excluirComandoAtividadeEventualAcaoCobrancaAction.do"
+			scope="session" path="/excluirComandoAtividadeEventualAcaoCobrancaAction" />
+		<action name="ManterComandoAcaoCobrancaDetalhesActionForm"
+			type="gcom.gui.cobranca.ExibirManterComandoAcaoCobrancaDetalhesAction"
+			validate="false" scope="session"
+			path="/exibirManterComandoAcaoCobrancaDetalhesAction">
+			<forward name="exibirManterComandoAcaoCobrancaDetalhes"
+				path="/jsp/cobranca/comandar_acao_cobranca_eventual_manter_processo2.jsp" />
+		</action>
+		
+		<!-- Excutar Comando Ao clicar no botão estando na tela de comandar_acao_cobranca_cronograma_manter_processo2.jsp-->
+		<action name="ManterComandoAcaoCobrancaDetalhesActionForm"
+			type="gcom.gui.cobranca.ManterComandoAcaoCobrancaEventualExecutarComandoAction"
+			validate="true" input="/manterComandoAcaoCobrancaEventualExecutarComandoAction.do"
+			scope="session" path="/manterComandoAcaoCobrancaEventualExecutarComandoAction" />
+			
+		<!-- Concluir Ao clicar no botão estando na tela de comandar_acao_cobranca_cronograma_manter_processo2.jsp-->		
+		<action name="ManterComandoAcaoCobrancaDetalhesActionForm"
+			type="gcom.gui.cobranca.ManterComandoAcaoCobrancaEventualConcluirAction"
+			validate="true" input="/manterComandoAcaoCobrancaEventualConcluirAction.do"
+			scope="session" path="/manterComandoAcaoCobrancaEventualConcluirAction" />
+
+		<!-- Exibir a Tela de Criterios do Comando -->
+		<action name="ManterComandoAcaoCobrancaDetalhesActionForm"
+			type="gcom.gui.cobranca.ExibirManterComandoAcaoCobrancaEventualCriterioComandoAction"
+			validate="false" scope="session"
+			path="/exibirManterComandoAcaoCobrancaEventualCriterioComandoAction">
+			<forward name="exibirManterComandoAcaoCobrancaEventualCriterioComando"
+				path="/jsp/cobranca/comandar_acao_cobranca_eventual_manter_processo3.jsp" />
+		</action>
+
+		<!-- Excutar Comando Ao clicar no botão estando na tela de comandar_acao_cobranca_cronograma_manter_processo3.jsp-->
+		<action name="ManterComandoAcaoCobrancaEventualCriterioComandoActionForm"
+			type="gcom.gui.cobranca.ManterComandoAcaoCobrancaEventualCriterioComandoExecutarComandoAction"
+			validate="true" input="/manterComandoAcaoCobrancaEventualCriterioComandoExecutarComandoAction.do"
+			scope="session" path="/manterComandoAcaoCobrancaEventualCriterioComandoExecutarComandoAction" />
+
+		<!-- Concluir Ao clicar no botão estando na tela de comandar_acao_cobranca_cronograma_manter_processo3.jsp-->		
+		<action name=""
+			type="gcom.gui.cobranca.ManterComandoAcaoCobrancaEventualCriterioComandoConcluirAction"
+			validate="true" input="/manterComandoAcaoCobrancaEventualCriterioComandoConcluirAction.do"
+			scope="session" path="/manterComandoAcaoCobrancaEventualCriterioComandoConcluirAction" />
+
+		
+		
+	</action-mappings>
+
+</struts-config>

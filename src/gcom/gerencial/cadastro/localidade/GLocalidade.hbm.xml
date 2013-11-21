@@ -1,0 +1,127 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.gerencial.cadastro.localidade.GLocalidade" table="cadastro.g_localidade">
+		<id name="id" type="java.lang.Integer" column="loca_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="nomelocalidade" type="java.lang.String" column="loca_nmlocalidade" not-null="true" length="30"/>
+		<property name="ultimaalteracao" type="java.sql.Timestamp" column="loca_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="codigoCentroCusto" type="java.lang.String" column="loca_cdcentrocusto" not-null="false" length="10"/>
+		<property name="indicadorUso" type="java.lang.Short" column="loca_icuso" length="2"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to GUnidadeNegocio -->
+		<many-to-one name="gerUnidadeNegocio" class="gcom.gerencial.cadastro.localidade.GUnidadeNegocio" not-null="true">
+			<column name="uneg_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to UnResumoColetaEsgoto -->
+		<set name="unResumoColetaEsgotosByLocaId" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="loca_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.micromedicao.UnResumoColetaEsgoto"/>
+		</set>
+		<!-- bi-directional one-to-many association to UnResumoColetaEsgoto -->
+		<set name="unResumoColetaEsgotosElo" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="loca_cdelo"/>
+			</key>
+			<one-to-many class="gcom.gerencial.micromedicao.UnResumoColetaEsgoto"/>
+		</set>
+		<!-- bi-directional one-to-many association to UnResumoConsumoAgua -->
+		<set name="unResumoConsumoAguasElo" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="loca_cdelo"/>
+			</key>
+			<one-to-many class="gcom.gerencial.cadastro.UnResumoConsumoAgua"/>
+		</set>
+		<!-- bi-directional one-to-many association to UnResumoConsumoAgua -->
+		<set name="unResumoConsumoAguaslocalidade" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="loca_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.cadastro.UnResumoConsumoAgua"/>
+		</set>
+		<!-- bi-directional one-to-many association to UnResumoFaturamento -->
+		<set name="unResumoFaturamentosLocalidade" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="loca_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.faturamento.UnResumoFaturamento"/>
+		</set>
+		<!-- bi-directional one-to-many association to UnResumoFaturamento -->
+		<set name="unResumoFaturamentosElo" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="loca_cdelo"/>
+			</key>
+			<one-to-many class="gcom.gerencial.faturamento.UnResumoFaturamento"/>
+		</set>
+		<!-- bi-directional one-to-many association to UnResumoArrecadacao -->
+		<set name="unResumoArrecadacaoByLocaId" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="loca_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.arrecadacao.UnResumoArrecadacao"/>
+		</set>
+		<!-- bi-directional one-to-many association to UnResumoArrecadacaoAguaEsgoto -->
+		<set name="unResumoArrecadacaoByLocaCdelo" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="loca_cdelo"/>
+			</key>
+			<one-to-many class="gcom.gerencial.arrecadacao.UnResumoArrecadacao"/>
+		</set>
+		<!-- bi-directional one-to-many association to UnResumoLigacaoEconomia -->
+		<set name="unResumoLigacaoEconomiasByLocaId" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="loca_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.cadastro.UnResumoLigacaoEconomia"/>
+		</set>
+		<!-- bi-directional one-to-many association to UnResumoLigacaoEconomia -->
+		<set name="unResumoLigacaoEconomiasByLocaCdelo" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="loca_cdelo"/>
+			</key>
+			<one-to-many class="gcom.gerencial.cadastro.UnResumoLigacaoEconomia"/>
+		</set>
+		<!-- bi-directional one-to-many association to GSetorComercial -->
+		<set name="gerSetorComercials" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="loca_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.cadastro.localidade.GSetorComercial"/>
+		</set>
+		<!-- bi-directional one-to-many association to GLocalidade -->
+		<set name="gerLocalidadeElo" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="loca_cdelo"/>
+			</key>
+			<one-to-many class="gcom.gerencial.cadastro.localidade.GLocalidade"/>
+		</set>
+		<!-- bi-directional many-to-one association to GLocalidade -->
+		<many-to-one name="gerLocalidade" class="gcom.gerencial.cadastro.localidade.GLocalidade" not-null="true">
+			<column name="loca_cdelo"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GGerenciaRegional -->
+		<many-to-one name="gerGerenciaRegional" class="gcom.gerencial.cadastro.localidade.GGerenciaRegional" not-null="true">
+			<column name="greg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GMunicipio -->
+		<many-to-one name="gerMunicipio" class="gcom.gerencial.cadastro.geografico.GMunicipio" not-null="true">
+			<column name="muni_idprincipal"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to UnResumoIndicadorDesempenhoMicromedicao -->
+		<set name="unResumoIndicadorDesempenhoMicromedicaosByLocaId" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="loca_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.micromedicao.UnResumoIndicadorDesempenhoMicromedicao"/>
+		</set>
+	</class>
+</hibernate-mapping>

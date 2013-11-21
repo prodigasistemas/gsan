@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.micromedicao.hidrometro.HidrometroProtecao" table="micromedicao.hidrometro_protecao">
+		<id name="id" type="java.lang.Integer" column="hipr_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_hidrometro_protecao</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="hipr_dshidrometroprotecao" not-null="true" length="50"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="hipr_dsabrvhidmtprotecao" not-null="true" length="6"/>
+		<property name="indicadorUso" type="java.lang.Short" column="hipr_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="hipr_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to HidrometroInstalacaoHistorico
+    <set
+        name="hidrometroInstalacaoHistoricos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="hipr_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.HidrometroInstalacaoHistorico"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

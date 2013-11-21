@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.CobrancaAtividadeComandoRota" table="cobranca.cobranca_ativ_cmd_rota">
+		<composite-id name="comp_id" class="gcom.cobranca.CobrancaAtividadeComandoRotaPK">
+			<key-property name="cobrancaAcaoAtividadeComandoId" column="cacm_id" type="java.lang.Integer" length="4"/>
+			<key-property name="rotaId" column="rota_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cacr_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to Rota -->
+		<many-to-one name="rota" class="gcom.micromedicao.Rota" update="false" insert="false">
+			<column name="rota_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaAcaoAtividadeComand -->
+		<many-to-one name="cobrancaAcaoAtividadeComando" class="gcom.cobranca.CobrancaAcaoAtividadeComando" update="false" insert="false">
+			<column name="cacm_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

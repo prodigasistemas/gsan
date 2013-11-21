@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.financeiro.FinanciamentoTipo" table="financeiro.financiamento_tipo">
+		<id name="id" type="java.lang.Integer" column="fntp_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.sequence_financiamento_tipo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="fntp_dsfinanciamentotipo" length="40"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="fntp_dsabreviado" length="10"/>
+		<property name="indicadorUso" type="java.lang.Short" column="fntp_icuso" length="2"/>
+		<property name="indicadorInclusao" type="java.lang.Short" column="fntp_icinclusao" length="2" not-null="true"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="fntp_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to DebitoCobradoHistorico -->
+		<!--    <set
+        name="debitoCobradoHistoricos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="fntp_id" />
+        </key>
+        <one-to-many
+            class="mapeamentohibernate.DebitoCobradoHistorico"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to DebitoCobrado -->
+		<!--    <set
+        name="debitoCobrados"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="fntp_id" />
+        </key>
+        <one-to-many
+            class="mapeamentohibernate.DebitoCobrado"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to DebitoACobrar -->
+		<!--    <set
+        name="debitoACobrars"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="fntp_id" />
+        </key>
+        <one-to-many
+            class="mapeamentohibernate.DebitoACobrar"
+        />
+    </set>-->
+	</class>
+</hibernate-mapping>

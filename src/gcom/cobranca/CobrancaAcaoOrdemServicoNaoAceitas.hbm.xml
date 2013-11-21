@@ -1,0 +1,96 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+    
+<hibernate-mapping>
+<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+
+<class 
+    name="gcom.cobranca.CobrancaAcaoOrdemServicoNaoAceitas" 
+    table="cobranca.cob_ac_os_nao_aceitas"
+>
+	  
+    <composite-id name="comp_id" class="gcom.cobranca.CobrancaAcaoOrdemServicoNaoAceitasPK">
+        <key-property 
+            name="ordemServicoId" 
+            column="orse_id" 
+            type="java.lang.Integer"
+            length="4"
+        />
+        <!--
+        <key-property 
+            name="cobrancaAcaoId" 
+            column="caac_id" 
+            type="java.lang.Integer"
+            length="4"
+        />
+        -->
+	</composite-id>    
+
+    <property
+        name="indicadorNaoAceitacao"
+        type="short"
+        column="caon_icaceita"
+        not-null="true"
+        length="2"
+    />
+    <property
+        name="indicadorDescontoEfetuado"
+        type="short"
+        column="caon_icdescontado"
+        not-null="true"
+        length="2"
+    />
+    <property
+        name="observacao"
+        type="java.lang.String"
+        column="caon_dsobservacao"
+        length="400"
+    />
+    
+    <property
+        name="ultimaAlteracao"
+        type="java.sql.Timestamp"
+        column="caon_tmultimaltarecao"
+        length="8"
+    />
+
+    <!-- Associations -->
+    <!-- derived association(s) for compound key -->
+    <!-- bi-directional many-to-one association to Rota -->
+    <many-to-one
+        name="ordemServico"
+	    class="gcom.atendimentopublico.ordemservico.OrdemServico"
+	    update="false"
+	    insert="false"
+	>
+    	<column name="orse_id" />
+	</many-to-one>
+	
+    <!-- bi-directional many-to-one association to CobrancaAcaoAtividadeComand -->
+    <many-to-one
+        name="cobrancaAcao"
+	    class="gcom.cobranca.CobrancaAcao"
+	>
+    	<column name="caac_id" />
+	</many-to-one>
+	
+    <!-- bi-directional many-to-one association to MotivoNaoAceitacaoEncerramentoOS -->
+    <many-to-one
+        name="motivoNaoAceitacao"
+	    class="gcom.cobranca.MotivoNaoAceitacaoEncerramentoOS"
+	>
+    	<column name="mnac_id" />
+	</many-to-one>
+	
+    <!-- end of derived association(s) -->
+  
+
+</class>
+</hibernate-mapping>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="PesquisarDistritoOperacionalActionForm"
+	   		type="gcom.gui.operacional.PesquisarDistritoOperacionalActionForm" /> 
+ 	</form-beans>
+  <!--******************* PÁGINAS GLOBAIS *******************-->
+ <global-forwards />
+ <action-mappings>
+	  <action name="PesquisarDistritoOperacionalActionForm"
+	   type="gcom.gui.operacional.ExibirPesquisarDistritoOperacionalAction"
+	   validate="true"
+	   scope="session"
+	   path="/exibirPesquisarDistritoOperacionalAction">
+	   <forward name="exibirPesquisarDistritoOperacional"
+	    path="/jsp/operacional/distrito_operacional_pesquisar.jsp" />
+	  </action>
+ 
+	<action name="PesquisarDistritoOperacionalActionForm" 
+		type="gcom.gui.operacional.PesquisarDistritoOperacionalAction"
+		validate="true" scope="session"
+		path="/pesquisarDistritoOperacionalAction">
+		<forward name="exibirResultadoPesquisaDistritoOperacionalAction" 
+			path="/exibirResultadoPesquisaDistritoOperacionalAction.do" />
+		<forward name="resultadoPesquisaDistritoOperacionalJSP"
+			path="/jsp/operacional/distrito_operacional_resultado_pesquisar.jsp" />
+	</action>
+	
+	<action 
+		type="gcom.gui.operacional.ExibirResultadoPesquisaDistritoOperacionalAction"
+		validate="false" scope="session"
+		path="/exibirResultadoPesquisaDistritoOperacionalAction">
+		<forward name="resultadoPesquisaDistritoOperacional"
+			path="/jsp/operacional/distrito_operacional_resultado_pesquisar.jsp" />
+	</action>
+	
+</action-mappings>
+ <message-resources null="false"
+  parameter="gcom.properties.application" />
+</struts-config>

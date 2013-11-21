@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarRelatorioGestaoRAActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.FiltrarRelatorioGestaoRAActionForm" />					
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0496] Filtrar Relatório de Gestão do Registro de Atendimento Auhtor: Rafael Corrêa Data:14/11/2006-->
+		<action name="FiltrarRelatorioGestaoRAActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirFiltrarRelatorioGestaoRAAction"
+			validate="true" scope="session"
+			path="/exibirFiltrarRelatorioGestaoRAAction">
+			<forward name="exibirFiltrarRelatorioGestaoRA"
+				path="/jsp/atendimentopublico/registroatendimento/relatorio_gestao_registro_atendimento_filtrar.jsp" />
+		</action>
+<!-- 		<action name="FiltrarResolucaoDiretoriaActionForm"
+			type="gcom.gui.cobranca.FiltrarResolucaoDiretoriaAction"
+			validate="true" scope="session"
+			path="/filtrarResolucaoDiretoriaAction" />  -->
+
+	</action-mappings>
+
+</struts-config>

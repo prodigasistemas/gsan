@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.credito.CreditoARealizarCategoria" table="faturamento.cred_a_realiz_catg">
+		<composite-id name="comp_id" class="gcom.faturamento.credito.CreditoARealizarCategoriaPK">
+			<key-property name="creditoARealizarId" column="crar_id" type="java.lang.Integer" length="4"/>
+			<key-property name="categoriaId" column="catg_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<property name="quantidadeEconomia" type="java.lang.Integer" column="cacg_qteconomia" length="4"/>
+		<property name="valorCategoria" type="java.math.BigDecimal" column="cacg_vlcategoria" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cacg_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to CreditoARealizar -->
+		<many-to-one name="creditoARealizar" class="gcom.faturamento.credito.CreditoARealizar" update="false" insert="false">
+			<column name="crar_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Categoria -->
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" update="false" insert="false">
+			<column name="catg_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

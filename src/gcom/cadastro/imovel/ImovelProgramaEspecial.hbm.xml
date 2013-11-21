@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.imovel.ImovelProgramaEspecial" table="cadastro.imovel_programa_especial">
+		<id name="id" type="java.lang.Integer" column="impe_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_imovel_programa_especial</param>
+			</generator>
+		</id>
+		<property name="descricaoDocumentos" type="java.lang.String" column="impe_dsdocumentos" length="20"/>
+		<property name="dataApresentacaoDocumentos" type="java.sql.Date" not-null="true" column="impe_dtapresentacaodocumentos" length="4"/>
+		<property name="dataInclusao" type="java.sql.Date" not-null="true" column="impe_dtinclusao" length="4"/>
+		<property name="dataSuspensao" type="java.sql.Date" not-null="false" column="impe_dtsuspensao" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="impe_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="mesAnoInicioPrograma" type="java.lang.Integer" column="impe_amreferenciainicio" not-null="true"/>
+		<property name="mesAnoSaidaPrograma" type="java.lang.Integer" column="impe_amreferenciasaida" not-null="false"/>
+		<property name="formaSuspensao" type="java.lang.Short" column="impe_icformasuspensao" not-null="false" length="2"/>
+		<property name="numeroBolsaFamilia" type="java.lang.String" column="impe_nnbolsafamilia" not-null="false" length="11"/>
+		<!-- bi-directional many-to-one association to Usuario -->
+		<many-to-one name="usuarioResponsavel" class="gcom.seguranca.acesso.usuario.Usuario" not-null="true">
+			<column name="usur_idinclusao"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Usuario -->
+		<many-to-one name="usuarioSuspensao" class="gcom.seguranca.acesso.usuario.Usuario" not-null="false">
+			<column name="usur_idsuspensao"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ImovelPerfil -->
+		<many-to-one name="imovelPerfil" class="gcom.cadastro.imovel.ImovelPerfil" not-null="true">
+			<column name="iper_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

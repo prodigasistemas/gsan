@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="AtualizarSolicitacaoAcessoActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.AtualizarSolicitacaoAcessoActionForm" />
+
+	</form-beans>
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.ExibirManterSolicitacaoAcessoAction"
+			validate="false" scope="session"
+			path="/exibirManterSolicitacaoAcessoAction">
+			
+			<forward name="exibirManterSolicitacaoAcessoAction"
+				path="/jsp/seguranca/acesso/usuario/solicitacao_acesso_manter.jsp" />
+			
+			<forward name="atualizarSolicitacaoAcesso"
+				path="/exibirAtualizarSolicitacaoAcessoAction.do?filtrar=sim" />
+				
+			<forward name="exibirManterAutorizarSolicitacaoAcessoAction"
+				path="/jsp/seguranca/acesso/usuario/solicitacao_acesso_autorizar_manter.jsp" />
+			
+			<forward name="exibirManterCadastrarSolicitacaoAcessoAction"
+				path="/jsp/seguranca/acesso/usuario/solicitacao_acesso_cadastrar_manter.jsp" />
+				
+			<forward name="exibirGerarRelatorioSolicitacaoAcessoAction" 
+				path="/jsp/relatorio/seguranca/relatorio_solicitacao_acesso.jsp" />
+				
+		</action>
+		
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.AutorizarSolicitacaoAcessoAction" scope="session"
+			path="/autorizarSolicitacaoAcessoAction" />
+			
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.RemoverSolicitacaoAcessoAction" scope="session"
+			path="/removerSolicitacaoAcessoAction" />
+		
+		<action name="AtualizarSolicitacaoAcessoActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.ExibirAtualizarSolicitacaoAcessoAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarSolicitacaoAcessoAction">
+			<forward name="atualizarSolicitacaoAcesso"
+				path="/jsp/seguranca/acesso/usuario/solicitacao_acesso_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarSolicitacaoAcessoActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.AtualizarSolicitacaoAcessoAction"
+			validate="true" scope="request"
+			path="/atualizarSolicitacaoAcessoAction">
+		</action>
+		
+		<action name="AtualizarSolicitacaoAcessoActionForm"
+			type="gcom.gui.relatorio.seguranca.GerarRelatorioSolicitacaoAcessoAction"
+			validate="true" 
+			path="/gerarRelatorioSolicitacaoAcessoAction" />	
+
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

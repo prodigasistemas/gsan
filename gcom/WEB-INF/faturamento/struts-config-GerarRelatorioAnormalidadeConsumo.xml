@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="GerarRelatorioAnormalidadeConsumoActionForm"
+			type="gcom.gui.faturamento.GerarRelatorioAnormalidadeConsumoActionForm" />
+
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="GerarRelatorioAnormalidadeConsumoActionForm"
+			type="gcom.gui.faturamento.ExibirGerarRelatorioAnormalidadeConsumoAction"
+			validate="false" scope="session" path="/exibirGerarRelatorioAnormalidadeConsumoAction">
+			
+			<forward name="gerarRelatorioAnormalidadeConsumo"
+				path="/jsp/faturamento/relatorio_anormalidade_consumo_gerar.jsp" />
+		</action>
+
+		<action name="GerarRelatorioAnormalidadeConsumoActionForm"
+			type="gcom.gui.relatorio.faturamento.GerarRelatorioAnormalidadeConsumoAction"
+			validate="false" scope="session" path="/gerarRelatorioAnormalidadeConsumoAction">
+		</action>
+
+
+
+
+	</action-mappings>
+	<message-resources null="false" parameter="gcom.properties.application" />
+</struts-config>

@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.financeiro.lancamento.LancamentoContabilItem" table="financeiro.lancamento_contabil_item">
+		<id name="id" type="java.lang.Integer" column="lcti_id">
+			<generator class="sequence">
+				<param name="sequence">financeiro.seq_lancamento_contabil_item</param>
+			</generator>
+		</id>
+		<property name="indicadorDebitoCredito" type="java.lang.Short" column="lcti_icdebitocredito" length="2"/>
+		<property name="valorLancamento" type="java.math.BigDecimal" column="lcti_vllancamento" length="13"/>
+		<property name="descricaoHistorico" type="java.lang.String" column="lcti_dshistorico" length="60"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="lcti_tmultimaalteracao" length="8"/>
+		<property name="codigoTerceiro" type="java.lang.Integer" column="lcti_cdterceiro" length="4"/>
+		<property name="dataLancamento" type="java.sql.Date" column="lcti_dtlancamento" length="4"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to LancamentoContabil -->
+		<many-to-one name="lancamentoContabil" class="gcom.financeiro.lancamento.LancamentoContabil" not-null="true">
+			<column name="lcnb_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ContaContabil -->
+		<many-to-one name="contaContabil" class="gcom.financeiro.ContaContabil" not-null="true">
+			<column name="cnct_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

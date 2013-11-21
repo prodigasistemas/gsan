@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean
+			name="ConsultarProgramacaoAbastecimentoManutencaoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ConsultarProgramacaoAbastecimentoManutencaoActionForm" />
+		<form-bean
+			name="ResultadoConsultarProgramacaoAbastecimentoManutencaoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ResultadoConsultarProgramacaoAbastecimentoManutencaoActionForm" />
+		<form-bean
+			name="ResultadoDetalhadoProgramacaoAbastecimentoManutencaoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ResultadoDetalhadoProgramacaoAbastecimentoManutencaoActionForm" />
+
+	</form-beans>
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action
+			name="ConsultarProgramacaoAbastecimentoManutencaoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirConsultarProgramacaoAbastecimentoManutencaoAction"
+			validate="false" scope="session"
+			path="/exibirConsultarProgramacaoAbastecimentoManutencaoAction">
+			<forward name="programacaoAbastecimentoManutencaoConsultar"
+				path="/jsp/atendimentopublico/registroatendimento/programacao_abastecimento_manutencao_consultar.jsp" />
+		</action>
+
+		<action
+			name="ConsultarProgramacaoAbastecimentoManutencaoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ConsultarProgramacaoAbastecimentoManutencaoAction"
+			validate="false" scope="session"
+			path="/consultarProgramacaoAbastecimentoManutencaoAction">
+			<forward
+				name="exibirResultadoConsultarProgramacaoAbastecimentoManutencaoAction"
+				path="/exibirResultadoConsultarProgramacaoAbastecimentoManutencaoAction.do" />
+		</action>
+
+
+		<action
+			name="ResultadoConsultarProgramacaoAbastecimentoManutencaoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirResultadoConsultarProgramacaoAbastecimentoManutencaoAction"
+			validate="false" scope="session"
+			path="/exibirResultadoConsultarProgramacaoAbastecimentoManutencaoAction">
+			<forward
+				name="programacaoAbastecimentoManutencaoResultadoConsultar"
+				path="/jsp/atendimentopublico/registroatendimento/programacao_abastecimento_manutencao_resultado_consultar.jsp" />
+
+		</action>
+		<action
+			name="ResultadoDetalhadoProgramacaoAbastecimentoManutencaoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirResultadoDetalhadoProgramacaoAbastecimentoManutencaoAction"
+			validate="false" scope="session"
+			path="/exibirResultadoDetalhadoProgramacaoAbastecimentoManutencaoAction">
+			<forward name="resultadoDetalhado"
+				path="/jsp/atendimentopublico/registroatendimento/programacao_abastecimento_manutencao_resultado_detalhado.jsp" />
+
+		</action>
+
+
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>
+

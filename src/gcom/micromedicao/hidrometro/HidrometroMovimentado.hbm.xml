@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.micromedicao.hidrometro.HidrometroMovimentado" table="micromedicao.hidrometro_movimentado">
+		<composite-id name="comp_id" class="gcom.micromedicao.hidrometro.HidrometroMovimentadoPK">
+			<key-property name="hidrometroMovimentacaoId" column="himv_id" type="java.lang.Integer" length="4"/>
+			<key-property name="hidrometroId" column="hidr_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to Hidrometro -->
+		<many-to-one name="hidrometro" class="gcom.micromedicao.hidrometro.Hidrometro" update="false" insert="false">
+			<column name="hidr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to HidrometroMovimentacao -->
+		<many-to-one name="hidrometroMovimentacao" class="gcom.micromedicao.hidrometro.HidrometroMovimentacao" update="false" insert="false">
+			<column name="himv_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

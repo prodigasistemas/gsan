@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="FiltrarRegistroAtendimentoTramitacaoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.FiltrarRegistroAtendimentoTramitacaoActionForm" />	
+		<form-bean name="ConjuntoTramitacaoRaActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ConjuntoTramitacaoRaActionForm" />				
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarRegistroAtendimentoTramitacaoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirFiltrarRegistroAtendimentoTramitacaoAction"
+			validate="true" scope="session" path="/exibirFiltrarRegistroAtendimentoTramitacaoAction">
+			<forward name="filtrarRegistroAtendimentoTramitacao"
+				path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_tramitacao_filtrar.jsp" />
+		</action>
+		<action name="FiltrarRegistroAtendimentoTramitacaoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.FiltrarRegistroAtendimentoTramitacaoAction"
+			scope="session" path="/filtrarRegistroAtendimentoTramitacaoAction">
+			<forward name="tramitacaoRegistroAtendimento" 
+			path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_tramitar_conjunto.jsp" />
+		</action>
+			
+		<action name="ConjuntoTramitacaoRaActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirRegistroAtendimentoTramitacaoPopupAction"
+			validate="true" scope="session" path="/exibirRegistroAtendimentoTramitacaoPopupAction">
+			<forward name="registroAtendimentoTramitacaoPopup"
+				path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_tramitar_conjunto_popup.jsp" />
+		</action>
+		<action name="ConjuntoTramitacaoRaActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.RegistroAtendimentoTramitacaoPopupAction"
+			scope="session" path="/registroAtendimentoTramitacaoPopupAction">
+			<forward name="registroAtendimentoTramitacaoPopupFechar" 
+			path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_tramitar_conjunto_popup.jsp" />
+		</action>
+		
+		<action name="ConjuntoTramitacaoRaActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.LimparRegistroAtendimentoTramitacaoAction"
+			scope="session" path="/limparRegistroAtendimentoTramitacaoAction">
+			<forward name="tramitacaoRegistroAtendimento" 
+			path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_tramitar_conjunto.jsp" />
+		</action>
+		
+		<action name="ConjuntoTramitacaoRaActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.RegistroAtendimentoTramitacaoAction"
+			scope="session" path="/registroAtendimentoTramitacaoAction">
+			
+		</action>			
+		
+		<action name="ConjuntoTramitacaoRaActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.RegistroAtendimentoTramitacaoAction"
+			scope="session" path="/registroAtendimentoTramitacaoAction">
+			<forward name="registroAtendimentoTramitacaoAction" path="/registroAtendimentoTramitacaoAction.do" />
+			<forward name="exibirInserirDadosPavimentoOrdemServicoPopupAction" path="/exibirInserirDadosPavimentoOrdemServicoPopupAction.do" />
+			<forward name="tramitacaoRegistroAtendimento" path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_tramitar_conjunto.jsp" />
+		</action>		
+		
+		<action name="ConjuntoTramitacaoRaActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirInserirDadosPavimentoOrdemServicoPopupAction"
+			scope="session" path="/exibirInserirDadosPavimentoOrdemServicoPopupAction">			
+			<forward name="dadosPavimentoOrdemServicoPopup" path="/jsp/atendimentopublico/ordemservico/ordem_servico_inserir_dados_pavimento_popup.jsp"  />
+		</action>	
+		
+		<action name="ConjuntoTramitacaoRaActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.InserirDadosPavimentoOrdemServicoPopupAction"
+			scope="session" path="/inserirDadosPavimentoOrdemServicoPopupAction">			
+			<forward name="registroAtendimentoTramitacaoConjuntoAction" path="/registroAtendimentoTramitacaoAction.do" />
+			<forward name="registroAtendimentoTramitacaoAction" path="/tramitarRegistroAtendimentoAction.do" />
+		</action>		
+		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

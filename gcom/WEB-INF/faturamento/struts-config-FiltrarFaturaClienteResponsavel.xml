@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarFaturaClienteResponsavelActionForm"
+			type="gcom.gui.faturamento.FiltrarFaturaClienteResponsavelActionForm" />
+
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarFaturaClienteResponsavelActionForm"  
+			type="gcom.gui.faturamento.ExibirFiltrarFaturaClienteResponsavelAction" 
+			validate="false"
+			scope="session"
+			path="/exibirFiltrarFaturaClienteResponsavelAction">
+
+			<forward name="filtrarFaturaClienteResponsavel"
+			path="/jsp/faturamento/fatura_cliente_responsavel_filtrar.jsp" />
+
+		</action>
+
+		<action name="FiltrarFaturaClienteResponsavelActionForm"
+			type="gcom.gui.faturamento.FiltrarFaturaClienteResponsavelAction"
+			validate="true" 
+			scope="session"
+			path="/filtrarFaturaClienteResponsavelAction">
+			
+			<forward name="exibirAtualizarFaturaClienteResponsavel"
+				path="/exibirAtualizarFaturaClienteResponsavelAction.do" />
+			
+			
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

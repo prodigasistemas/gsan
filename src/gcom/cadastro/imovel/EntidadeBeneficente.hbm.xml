@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cadastro.imovel.EntidadeBeneficente" table="cadastro.entidade_beneficente">
+		<id name="id" type="java.lang.Integer" column="eben_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_entidade_beneficente</param>
+			</generator>
+		</id>
+		<property name="indicadorUso" type="short" column="eben_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="eben_tmultimaalteracao" length="8" insert="false"/>
+		<property name="anoMesContratoInicial" type="java.lang.Integer" column="eben_amcontratoinicial" length="6" not-null="false"/>
+		<property name="anoMesContratoFinal" type="java.lang.Integer" column="eben_amcontratofinal" length="6" not-null="false"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to ImovelDoacoe -->
+		<set name="imovelDoacoes" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="eben_id"/>
+			</key>
+			<one-to-many class="gcom.cadastro.imovel.ImovelDoacao"/>
+		</set>
+		<!-- bi-directional many-to-one association to Cliente -->
+		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="true">
+			<column name="clie_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DebitoTipo -->
+		<many-to-one name="debitoTipo" class="gcom.faturamento.debito.DebitoTipo" not-null="true">
+			<column name="dbtp_id"/>
+		</many-to-one>
+		<many-to-one name="empresa" class="gcom.cadastro.empresa.Empresa">
+			<column name="empr_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

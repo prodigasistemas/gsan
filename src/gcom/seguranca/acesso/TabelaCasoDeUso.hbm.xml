@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.seguranca.acesso.TabelaCasoDeUso" table="seguranca.tabela_caso_de_uso">
+		<composite-id name="comp_id" class="gcom.seguranca.acesso.TabelaCasoDeUsoPK">
+			<key-property name="tabelaId" column="tabe_id" type="java.lang.Integer" length="4"/>
+			<key-property name="casoDeUsoId" column="csus_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to Tabela -->
+		<many-to-one name="tabela" class="gcom.seguranca.transacao.Tabela" update="false" insert="false">
+			<column name="tabe_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CasoDeUso -->
+		<many-to-one name="casoDeUso" class="gcom.seguranca.acesso.CasoDeUso" update="false" insert="false">
+			<column name="csus_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

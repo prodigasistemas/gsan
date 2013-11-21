@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>  
+
+	<form-beans>
+			
+		<form-bean name="ConsultarDadosPagamentoActionForm"
+			type="gcom.gui.cadastro.imovel.ConsultarDadosPagamentoActionForm" />
+	
+			
+	</form-beans>
+
+	<global-forwards />
+	
+	
+	<action-mappings> 	
+		
+		<action name="ConsultarDadosPagamentoActionForm"  
+			type="gcom.gui.cadastro.imovel.ExibirConsultarDadosPagamentoAction"
+			validate="false" scope="session" path="/exibirConsultarDadosPagamentoAction">
+			
+			<forward name="exibirConsultarDadosPagamentoAction"	
+					 path="/jsp/cadastro/imovel/dados_pagamento_consultar.jsp" />
+		</action>
+		
+		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

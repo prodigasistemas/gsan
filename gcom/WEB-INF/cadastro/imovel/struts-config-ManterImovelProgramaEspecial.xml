@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+<form-beans>
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="AtualizarImovelProgramaEspecialActionForm"
+			type="gcom.gui.cadastro.imovel.AtualizarImovelProgramaEspecialActionForm" />
+		<form-bean name="FiltrarImovelProgramaEspecialActionForm"
+			type="gcom.gui.cadastro.imovel.FiltrarImovelProgramaEspecialActionForm" />	
+</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+	
+			<action name="ManutencaoRegistroActionForm" 
+			type="gcom.gui.cadastro.imovel.ExibirManterImovelProgramaEspecialAction"
+			validate="false" scope="session" path="/exibirManterImovelProgramaEspecialAction">
+				<forward name="exibirManterImovelProgramaEspecialAction"
+					path="/jsp/cadastro/imovel/imovel_programa_especial_manter.jsp"/>
+				<forward name="exibirAtualizarImovelProgramaEspecialAction"
+					path="/exibirAtualizarImovelProgramaEspecialAction.do"/>	
+			</action>
+						
+			<action name="AtualizarImovelProgramaEspecialActionForm" 
+			type="gcom.gui.cadastro.imovel.ExibirAtualizarImovelProgramaEspecialAction"
+			validate="false" scope="session" path="/exibirAtualizarImovelProgramaEspecialAction">
+				<forward name="exibirAtualizarImovelProgramaEspecialAction"
+					path="/jsp/cadastro/imovel/imovel_programa_especial_atualizar.jsp" />
+
+			</action>
+				<action name="AtualizarImovelProgramaEspecialActionForm" 
+				type="gcom.gui.cadastro.imovel.AtualizarImovelProgramaEspecialAction"
+				validate="false" scope="session" path="/atualizarImovelProgramaEspecialAction">
+			</action>
+			
+			<action name="FiltrarImovelProgramaEspecialActionForm"
+				type="gcom.gui.cadastro.imovel.GerarRelatorioManterImovelProgramaEspecialAction"
+				scope="session" validate="false"
+				path="/gerarRelatorioManterImovelProgramaEspecialAction" />
+		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

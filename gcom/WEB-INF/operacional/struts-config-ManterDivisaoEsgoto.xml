@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="ManterDivisaoEsgotoActionForm"
+			type="gcom.gui.operacional.ManterDivisaoEsgotoActionForm" />
+		<form-bean name="AtualizarDivisaoEsgotoActionForm"
+			type="gcom.gui.operacional.AtualizarDivisaoEsgotoActionForm" />
+		<form-bean name="FiltrarDivisaoEsgotoActionForm"
+			type="gcom.gui.operacional.FiltrarDivisaoEsgotoActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.operacional.ExibirManterDivisaoEsgotoAction"
+			validate="false" scope="session"
+			path="/exibirManterDivisaoEsgotoAction">
+
+			<forward name="exibirManterDivisaoEsgoto"
+				path="/jsp/operacional/divisao_esgoto_manter.jsp" />
+
+			<forward name="exibirAtualizarDivisaoEsgoto"
+				path="/exibirAtualizarDivisaoEsgotoAction.do" />
+		</action>
+
+		<action name="AtualizarDivisaoEsgotoActionForm"
+			type="gcom.gui.operacional.ExibirAtualizarDivisaoEsgotoAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarDivisaoEsgotoAction">
+
+			<forward name="divisaoEsgotoAtualizar"
+				path="/jsp/operacional/divisao_esgoto_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarDivisaoEsgotoActionForm"
+			type="gcom.gui.operacional.AtualizarDivisaoEsgotoAction"
+			validate="true" scope="session"
+			path="/atualizarDivisaoEsgotoAction">
+
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.operacional.RemoverDivisaoEsgotoAction"
+			 scope="request" path="/removerDivisaoEsgotoAction">
+
+		</action>
+		<action name="FiltrarDivisaoEsgotoActionForm"
+			type="gcom.gui.relatorio.operacional.GerarRelatorioDivisaoEsgotoManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioDivisaoEsgotoManterAction" />
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

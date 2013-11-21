@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="CancelarContratoParcelamentoClienteActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.CancelarContratoParcelamentoClienteActionForm" />
+	</form-beans>
+
+	<!--******************* PAGINAS GLOBAIS ******************* -->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="CancelarContratoParcelamentoClienteActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.ExibirCancelarContratoParcelamentoClienteAction"
+			scope="session" validate="true"
+			path="/exibirCancelarContratoParcelamentoClienteAction">
+			<forward name="exibirCancelarContratoParcelamentoClienteAction"
+				path="/jsp/cobranca/contratoparcelamento/contrato_parcelamento_cancelar_pop_up.jsp" />
+		</action>
+
+		<action name="CancelarContratoParcelamentoClienteActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.CancelarContratoParcelamentoClienteAction"
+			validate="true" path="/cancelarContratoParcelamentoClienteAction" >
+			<forward name="voltarExibirCancelarContratoParcelamentoClienteAction"
+				path="/exibirCancelarContratoParcelamentoClienteAction.do" />
+		</action>
+
+
+
+	</action-mappings>
+
+</struts-config>

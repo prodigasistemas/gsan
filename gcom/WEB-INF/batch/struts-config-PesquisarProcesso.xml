@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="PesquisarProcessoActionForm"
+	   		type="gcom.gui.batch.PesquisarProcessoActionForm" /> 
+ 	</form-beans>
+  <!--******************* PÁGINAS GLOBAIS *******************-->
+ <global-forwards />
+ <action-mappings>
+	  <action name="PesquisarProcessoActionForm"
+	   type="gcom.gui.batch.ExibirPesquisarProcessoAction"
+	   validate="true"
+	   scope="session"
+	   path="/exibirPesquisarProcessoAction">
+	   <forward name="exibirPesquisarProcesso"
+	    path="/jsp/batch/processo_pesquisar.jsp" />
+	  </action>
+ 
+	<action name="PesquisarProcessoActionForm" 
+		type="gcom.gui.batch.PesquisarProcessoAction"
+		validate="true" scope="session"
+		path="/pesquisarProcessoAction">
+		<forward name="exibirResultadoPesquisaProcessoAction" 
+			path="/exibirResultadoPesquisaProcessoAction.do" />
+		<forward name="resultadoPesquisaProcessoJSP"
+			path="/jsp/batch/processo_resultado_pesquisar.jsp" />
+	</action>
+	
+	<action 
+		type="gcom.gui.batch.ExibirResultadoPesquisaProcessoAction"
+		validate="false" scope="session"
+		path="/exibirResultadoPesquisaProcessoAction">
+		<forward name="resultadoPesquisaProcesso"
+			path="/jsp/batch/processo_resultado_pesquisar.jsp" />
+	</action>
+	
+</action-mappings>
+ <message-resources null="false"
+  parameter="gcom.properties.application" />
+</struts-config>

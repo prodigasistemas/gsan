@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="MotivoNaoGeracaoDocumentoActionForm"
+			type="gcom.gui.cobranca.MotivoNaoGeracaoDocumentoActionForm" />
+
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="MotivoNaoGeracaoDocumentoActionForm"  
+			type="gcom.gui.cobranca.ExibirMotivoNaoGeracaoDocumentoTipoComandoAction" 
+			validate="false"
+			scope="session"
+			path="/exibirMotivoNaoGeracaoDocumentoTipoComandoAction">
+
+			<forward name="motivoNaoGeracaoDocumentoTipoComando"
+			path="/jsp/cobranca/motivo_nao_geracao_documento_tipo_comando.jsp" />
+			
+		</action>
+		
+		<action name="MotivoNaoGeracaoDocumentoActionForm"  
+			type="gcom.gui.cobranca.ExibirMotivoNaoGeracaoDocumentoTipoComandoCronogramaAction" 
+			validate="false"
+			scope="session"
+			path="/exibirMotivoNaoGeracaoDocumentoTipoComandoCronogramaAction">
+
+			<forward name="motivoNaoGeracaoDocumentoTipoComandoCronograma"
+			path="/jsp/cobranca/motivo_nao_geracao_documento_tipo_comando_cronograma.jsp" />
+			
+		</action>
+		
+		<action name="MotivoNaoGeracaoDocumentoActionForm"  
+			type="gcom.gui.relatorio.cobranca.GerarRelatorioMotivoNaoGeracaoDocumentoCronogramaAction" 	
+			validate="false"
+			scope="session"	
+			path="/gerarRelatorioMotivoNaoGeracaoDocumentoCronogramaAction">
+		</action>
+		
+		<action name="MotivoNaoGeracaoDocumentoActionForm"  
+			type="gcom.gui.cobranca.ExibirMotivoNaoGeracaoDocumentoTipoComandoEventualAction" 
+			validate="false"
+			scope="session"
+			path="/exibirMotivoNaoGeracaoDocumentoTipoComandoEventualAction">
+
+			<forward name="motivoNaoGeracaoDocumentoTipoComandoEventual"
+			path="/jsp/cobranca/motivo_nao_geracao_documento_tipo_comando_eventual.jsp" />
+			
+		</action>
+		
+		<action name="MotivoNaoGeracaoDocumentoActionForm"  
+			type="gcom.gui.relatorio.cobranca.GerarRelatorioMotivoNaoGeracaoDocumentoEventualAction" 	
+			validate="false"
+			scope="session"	
+			path="/gerarRelatorioMotivoNaoGeracaoDocumentoEventualAction">
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>
+

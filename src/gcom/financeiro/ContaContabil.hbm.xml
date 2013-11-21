@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.financeiro.ContaContabil" table="financeiro.conta_contabil">
+		<id name="id" type="java.lang.Integer" column="cnct_id">
+			<generator class="sequence">
+				<param name="sequence">financeiro.seq_conta_contabil</param>
+			</generator>
+		</id>
+		<property name="prefixoContabil" type="java.lang.String" column="cnct_nnprefixocontabil" length="3"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cnct_tmultimaalteracao" length="8"/>
+		<property name="numeroDigito" type="java.lang.String" column="cnct_nndigito" not-null="true" length="1"/>
+		<property name="indicadorLinha" type="java.lang.Short" column="cnct_iclinha" not-null="true" length="2"/>
+		<property name="numeroTerceiros" type="java.lang.String" column="cnct_nnterceiros" length="7"/>
+		<property name="numeroConta" type="java.lang.String" column="cnct_nnconta" not-null="true" length="20"/>
+		<property name="nomeConta" type="java.lang.String" column="cnct_nmconta" length="40"/>
+		<property name="indicadorCentroCusto" type="java.lang.Short" column="cnct_iccusto" not-null="true" length="2"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to LancamentoContabilItem -->
+		<!--
+    <set
+        name="lancamentoContabilItems"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="cnct_id" />
+        </key>
+        <one-to-many 
+            class="gcom.LancamentoContabilItem"
+        />
+    </set>
+    <set
+        name="lancamentoItemContabils"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="cnct_id" />
+        </key>
+        <one-to-many 
+            class="gcom.LancamentoItemContabil"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,51 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.CobrancaDocumentoItemHistorico" table="cobranca.cobranca_doc_item_hist">
+		<id name="id" type="java.lang.Integer" column="cdit_id">
+			<generator class="sequence">
+				<param name="sequence">
+				cobranca.sequence_cobranca_documento_item_historico
+			</param>
+			</generator>
+		</id>
+		<property name="valorItemCobrado" type="java.math.BigDecimal" column="cihi_vlitemcobrado" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cihi_tmultimaalteracao" length="8" not-null="true"/>
+		<property name="dataSituacaoDebito" type="java.sql.Date" column="cihi_dtsituacaodebito" length="4"/>
+		<property name="valorAcrescimos" type="java.math.BigDecimal" column="cihi_vlacrescimos" not-null="false" length="13"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to DebitoACobrar -->
+		<many-to-one name="debitoACobrarGeral" class="gcom.faturamento.debito.DebitoACobrarGeral">
+			<column name="dbac_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaDocumento -->
+		<many-to-one name="cobrancaDocumento" class="gcom.cobranca.CobrancaDocumento" not-null="true">
+			<column name="cbdo_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DocumentoTipo -->
+		<many-to-one name="documentoTipo" class="gcom.cobranca.DocumentoTipo" not-null="true">
+			<column name="dotp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Conta -->
+		<many-to-one name="contaGeral" class="gcom.faturamento.conta.ContaGeral">
+			<column name="cnta_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GuiaPagamento -->
+		<many-to-one name="guiaPagamentoGeral" class="gcom.faturamento.GuiaPagamentoGeral">
+			<column name="gpag_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaDebitoSituacao -->
+		<many-to-one name="cobrancaDebitoSituacao" class="gcom.cobranca.CobrancaDebitoSituacao">
+			<column name="cdst_id"/>
+		</many-to-one>
+		<many-to-one name="creditoARealizarGeral" class="gcom.faturamento.credito.CreditoARealizarGeral">
+			<column name="crar_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

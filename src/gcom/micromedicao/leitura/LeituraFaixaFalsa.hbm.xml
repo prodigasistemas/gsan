@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.micromedicao.leitura.LeituraFaixaFalsa" table="micromedicao.leitura_faixa_falsa">
+		<id name="id" type="java.lang.Integer" column="mdhi_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="numeroFalsaInferior" type="java.lang.Integer" column="fxer_nnleiturafalsainferior" length="4"/>
+		<property name="numeroFalsaSuperior" type="java.lang.Integer" column="fxer_nnleiturafalsasuperior" length="4"/>
+		<property name="numeroCorretaInferior" type="java.lang.Integer" column="fxer_nnleituracorretainferior" length="4"/>
+		<property name="numeroCorretaSuperior" type="java.lang.Integer" column="fxer_nnleituracorretasuperior" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="fxer_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-one association to MedicaoHistorico -->
+		<one-to-one name="medicaoHistorico" class="gcom.micromedicao.medicao.MedicaoHistorico" outer-join="auto" constrained="true"/>
+	</class>
+</hibernate-mapping>

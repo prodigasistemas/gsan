@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="ConsultarComandosAcaoCobrancaActionForm"
+			type="gcom.gui.cobranca.ConsultarComandosAcaoCobrancaActionForm" />			
+			
+		<form-bean name="ExibirResultadoConsultarComandosAcaoCobrancaCronogramaDadosComandoActionForm"
+			type="gcom.gui.cobranca.ExibirResultadoConsultarComandosAcaoCobrancaCronogramaDadosComandoActionForm" />			
+			
+		<form-bean name="ExibirResultadoConsultarComandosAcaoCobrancaEventualDadosComandoActionForm"
+			type="gcom.gui.cobranca.ExibirResultadoConsultarComandosAcaoCobrancaEventualDadosComandoActionForm" />			
+
+		<form-bean name="ConsultarComandosAcaoCobrancaCronogramaActionForm"
+			type="gcom.gui.cobranca.ConsultarComandosAcaoCobrancaCronogramaActionForm" />			
+
+			
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0325] CONSULTAR COMANDOS DE AÇÃO DE COBRANÇA Auhtor: Rafael Santos Data:08/05/2006-->
+		<action name="ConsultarComandosAcaoCobrancaCronogramaActionForm"
+			type="gcom.gui.cobranca.ExibirConsultarComandosAcaoCobrancaAction"
+			validate="false" scope="session"
+			path="/exibirConsultarComandosAcaoCobrancaAction">
+			<forward name="exibirConsultarComandosAcaoCobranca"
+				path="/jsp/cobranca/comando_acao_cobranca_filtrar_comando_tipo.jsp" />
+		</action>
+		
+		<action name=""
+			type="gcom.gui.cobranca.ExibirResultadoConsultarComandosAcaoCobrancaCronogramaAction"
+			validate="false" scope="request"
+			path="/exibirComandosAcaoCobrancaCronogramaAction">
+			<forward name="exibirComandosAcaoCobrancaCronograma"
+				path="/jsp/cobranca/comando_acao_cobranca_consulta_comando_cronograma.jsp" />
+		</action>
+		
+		<action name="ExibirResultadoConsultarComandosAcaoCobrancaCronogramaDadosComandoActionForm"
+			type="gcom.gui.cobranca.ExibirResultadoConsultarComandosAcaoCobrancaCronogramaDadosComandoAction"
+			validate="false" scope="request"
+			path="/exibirComandosAcaoCobrancaCronogramaDadosComandoAction">
+			<forward name="exibirComandosAcaoCobrancaCronogramaDadosComando"
+				path="/jsp/cobranca/comando_acao_cobranca_cronograma_dados_popup.jsp" />
+		</action>
+
+		<action name=""
+			type="gcom.gui.cobranca.ExibirResultadoConsultarComandosAcaoCobrancaEventualAction"
+			validate="false" scope="request"
+			path="/exibirComandosAcaoCobrancaEventualAction">
+			<forward name="exibirComandosAcaoCobrancaEventual"
+				path="/jsp/cobranca/comando_acao_cobranca_consulta_comando_eventual.jsp" />
+		</action>
+		
+		<action name="ExibirResultadoConsultarComandosAcaoCobrancaEventualDadosComandoActionForm"
+			type="gcom.gui.cobranca.ExibirResultadoConsultarComandosAcaoCobrancaEventualDadosComandoAction"
+			validate="false" scope="session"
+			path="/exibirComandosAcaoCobrancaEventualDadosComandoAction">
+			<forward name="exibirComandosAcaoCobrancaEventualDadosComando"
+				path="/jsp/cobranca/comando_acao_cobranca_eventual_dados_popup.jsp" />
+		</action>
+
+		<action name="ExibirResultadoConsultarComandosAcaoCobrancaEventualDadosComandoActionForm"
+			type="gcom.gui.relatorio.cobranca.GerarRelatorioEmitirProtocoloDocumentoCobrancaAction"
+			validate="false" scope="session"
+			path="/gerarRelatorioEmitirProtocoloDocumentoCobranca">
+		</action>
+		
+		<action name="ExibirResultadoConsultarComandosAcaoCobrancaEventualDadosComandoActionForm"
+			type="gcom.gui.relatorio.cobranca.GerarRelatorioNotificacaoDebitoAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioNotificacaoDebitoAction" />
+			
+		<action name="ExibirResultadoConsultarComandosAcaoCobrancaEventualDadosComandoActionForm"  
+			type="gcom.gui.relatorio.cobranca.GerarRelatorioFiltrarComandoAcaoCobranca" 	
+			validate="false"
+			scope="session"	
+			path="/gerarRelatorioFiltrarComandoAcaoCobranca">
+		</action>
+
+		<action name="ExibirResultadoConsultarComandosAcaoCobrancaEventualDadosComandoActionForm"
+			type="gcom.gui.cobranca.GerarRelatorioComandoDocumentoCobrancaAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioComandoDocumentoCobrancaAction" />
+
+	</action-mappings>
+
+</struts-config>

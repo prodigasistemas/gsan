@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarTabelaColunaActionForm"
+			type="gcom.gui.seguranca.acesso.transacao.FiltrarTabelaColunaActionForm" />
+		<form-bean name="AtualizarTabelaColunaActionForm"
+			type="gcom.gui.seguranca.acesso.transacao.AtualizarTabelaColunaActionForm" />
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarTabelaColunaActionForm"
+			type="gcom.gui.seguranca.acesso.transacao.ExibirFiltrarTabelaColunaAction"
+			validate="false" scope="session"
+			path="/exibirFiltrarTabelaColunaAction">
+			<forward name="filtrarTabelaColuna"
+				path="/jsp/seguranca/acesso/transacao/tabela_coluna_filtrar.jsp" />
+		</action>
+
+		<action name="FiltrarTabelaColunaActionForm"
+			type="gcom.gui.seguranca.acesso.transacao.ExibirManterTabelaColunaAction"
+			validate="false" scope="session"
+			path="/exibirManterTabelaColunaAction">
+			<forward name="manterTabelaColuna"
+				path="/jsp/seguranca/acesso/transacao/tabela_coluna_manter.jsp" />
+		</action>
+		
+		<action name="FiltrarTabelaColunaActionForm"
+			type="gcom.gui.seguranca.acesso.transacao.ExibirManterOperacaoOrdemExibicaoAction"
+			validate="false" scope="session"
+			path="/exibirManterOperacaoOrdemExibicaoAction">
+			<forward name="manterOperacaoOrdemExibicao"
+				path="/jsp/seguranca/acesso/transacao/operacao_ordem_exibicao_manter.jsp" />							
+		</action>
+		
+		
+		<action name="FiltrarTabelaColunaActionForm"
+			type="gcom.gui.seguranca.acesso.transacao.AtualizarTabelaColunaAction"
+			validate="false" scope="session" path="/atualizarTabelaColunaAction">
+			<forward name="manterTabelaColunaSucesso"
+				path="/exibirManterTabelaColunaAction.do" />
+		</action>
+
+		<action name="FiltrarTabelaColunaActionForm"
+			type="gcom.gui.seguranca.acesso.transacao.AtualizarOperacaoOrdemExibicaoAction"
+			validate="false" scope="session" path="/atualizarOperacaoOrdemExibicaoAction">
+ 			<forward name="exibirManterOperacaoOrdemExibicao"
+				path="/exibirManterOperacaoOrdemExibicaoAction.do" />				 
+		</action>
+
+
+
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

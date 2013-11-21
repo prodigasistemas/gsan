@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cobranca.CobrancaSituacaoTipo" table="cobranca.cobranca_situacao_tipo">
+		<id name="id" type="java.lang.Integer" column="cbsp_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.sequence_cobranca_situacao_</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="cbsp_dscobrancasituacaotipo" length="20"/>
+		<property name="indicadorUso" type="java.lang.Short" column="cbsp_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cbsp_tmultimaalteracao" length="8"/>
+		<property name="indicadorInformarDataFinal" type="java.lang.Short" not-null="true" column="cbsp_icinformadata" length="2"/>
+		<property name="indicadorEmitirDocumentoCobranca" type="java.lang.Short" not-null="true" column="cbsp_icemitedoccobranca" length="2"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to Imovel
+    <set
+        name="imovels"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="cbst_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Imovel"
+        />
+    </set>-->
+		<!-- bi-directional one-to-many association to CobrancaSituacaoHistorico
+    <set
+        name="cobrancaSituacaoHistoricos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="cbst_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.CobrancaSituacaoHistorico"
+        />
+    </set>-->
+	</class>
+</hibernate-mapping>

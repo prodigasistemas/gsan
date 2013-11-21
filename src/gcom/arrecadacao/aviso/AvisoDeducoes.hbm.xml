@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.arrecadacao.aviso.AvisoDeducoes" table="arrecadacao.aviso_deducoes">
+		<composite-id name="comp_id" class="gcom.arrecadacao.aviso.AvisoDeducoesPK">
+			<key-property name="deducaoTipoId" column="ddtp_id" type="java.lang.Integer" length="4"/>
+			<key-property name="avisoBancarioId" column="avbc_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<property name="valorDeducao" type="java.math.BigDecimal" column="avdd_vldeducao" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="avdd_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to DeducaoTipo -->
+		<many-to-one name="deducaoTipo" class="gcom.arrecadacao.DeducaoTipo" update="false" insert="false">
+			<column name="ddtp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to AvisoBancario -->
+		<many-to-one name="avisoBancario" class="gcom.arrecadacao.aviso.AvisoBancario" update="false" insert="false">
+			<column name="avbc_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

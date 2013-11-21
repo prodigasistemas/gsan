@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="FiltrarDadosDiariosArrecadacaoActionForm"
+			type="gcom.gui.arrecadacao.FiltrarDadosDiariosArrecadacaoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		<action name="FiltrarDadosDiariosArrecadacaoActionForm"
+			type="gcom.gui.arrecadacao.ExibirFiltrarDadosDiariosArrecadacaoAction"
+			validate="false" path="/exibirFiltrarDadosDiariosArrecadacaoAction">
+			<forward name="filtrarDadosDiariosArrecadacao"
+				path="/jsp/arrecadacao/dados_diarios_arrecadacao_filtrar.jsp" />
+		</action>
+		
+		<action name="FiltrarDadosDiariosArrecadacaoActionForm" 
+			type="gcom.gui.arrecadacao.FiltrarDadosDiariosArrecadacaoAction"
+			validate="false" scope="session"
+			path="/filtrarDadosDiariosArrecadacaoAction">
+			<forward name="consultarDadosDiariosParametros"
+				path="/consultarDadosDiariosArrecadacaoWizardAction.do?action=exibirConsultarDadosDiariosParametrosAction" />
+		</action>
+
+		<action name="FiltrarDadosDiariosArrecadacaoActionForm"
+			type="gcom.gui.arrecadacao.ConsultarDadosDiariosArrecadacaoWizardAction"
+			validate="true" parameter="action" scope="session"
+			path="/consultarDadosDiariosArrecadacaoWizardAction">
+			<forward name="exibirConsultarDadosDiariosParametros"
+				path="/jsp/arrecadacao/arrecadacao_dados_diarios_parametros_consultar.jsp" />
+			<forward name="exibirConsultarDadosDiariosGerencia"
+				path="/jsp/arrecadacao/arrecadacao_dados_diarios_gerencia_consultar.jsp" />
+			<forward name="exibirConsultarDadosDiariosArrecadador"
+				path="/jsp/arrecadacao/arrecadacao_dados_diarios_arrecadador_consultar.jsp" />
+			<forward name="exibirConsultarDadosDiariosCategoria"
+				path="/jsp/arrecadacao/arrecadacao_dados_diarios_categoria_consultar.jsp" />
+			<forward name="exibirConsultarDadosDiariosPerfil"
+				path="/jsp/arrecadacao/arrecadacao_dados_diarios_perfil_consultar.jsp" />
+			<forward name="exibirConsultarDadosDiariosDocumento"
+				path="/jsp/arrecadacao/arrecadacao_dados_diarios_documento_consultar.jsp" />
+		</action>
+
+		<action name="FiltrarDadosDiariosArrecadacaoActionForm"
+			type="gcom.gui.arrecadacao.ExibirConsultarDadosDiariosValoresDiariosAction"
+			validate="false" path="/exibirConsultarDadosDiariosValoresDiariosAction">
+			<forward name="exibirConsultarDadosDiariosValoresDiarios"
+				path="/jsp/arrecadacao/arrecadacao_dados_diarios_valores_diarios_popup.jsp" />
+		</action>
+		
+		<action name="FiltrarDadosDiariosArrecadacaoActionForm"
+			type="gcom.gui.arrecadacao.ExibirConsultarDadosDiariosValoresDiariosAnaliticoAction"
+			validate="false" path="/exibirConsultarDadosDiariosValoresDiariosAnaliticoAction">
+			<forward name="exibirConsultarDadosDiariosValoresDiariosAnalitico"
+				path="/jsp/arrecadacao/arrecadacao_dados_diarios_valores_diarios_analitico_popup.jsp" />
+		</action>
+		
+		<action name="FiltrarDadosDiariosArrecadacaoActionForm"
+			type="gcom.gui.arrecadacao.ExibirConsultarDadosDiariosFormasArrecadacaoComTarifaAction"
+			validate="false" path="/exibirConsultarDadosDiariosFormasArrecadacaoComTarifaAction">
+			<forward name="exibirConsultarDadosDiariosFormasArrecadacaoComTarifa"
+				path="/jsp/arrecadacao/arrecadacao_dados_diarios_formas_arrecadacao_com_tarifa_popup.jsp" />
+		</action>
+		
+		<action name="FiltrarDadosDiariosArrecadacaoActionForm"
+			type="gcom.gui.arrecadacao.ExibirConsultarDadosDiariosUnidadeNegocioAction"
+			validate="false" path="/exibirConsultarDadosDiariosUnidadeNegocioAction">
+			<forward name="exibirConsultarDadosDiariosUnidadeNegocio"
+				path="/jsp/arrecadacao/arrecadacao_dados_diarios_unidade_negocio_popup.jsp" />
+		</action>
+
+		<action name="FiltrarDadosDiariosArrecadacaoActionForm"
+			type="gcom.gui.arrecadacao.ExibirConsultarDadosDiariosEloAction"
+			validate="false" path="/exibirConsultarDadosDiariosEloAction">
+			<forward name="exibirConsultarDadosDiariosElo"
+				path="/jsp/arrecadacao/arrecadacao_dados_diarios_elo_popup.jsp" />
+		</action>
+		<action name="FiltrarDadosDiariosArrecadacaoActionForm"
+			type="gcom.gui.arrecadacao.ExibirConsultarDadosDiariosLocalidadeAction"
+			validate="false" path="/exibirConsultarDadosDiariosLocalidadeAction">
+			<forward name="exibirConsultarDadosDiariosLocalidade"
+				path="/jsp/arrecadacao/arrecadacao_dados_diarios_localidade_popup.jsp" />
+		</action>
+		<action name="FiltrarDadosDiariosArrecadacaoActionForm"
+			type="gcom.gui.arrecadacao.ExibirConsultarDadosDiariosAgenteArrecadadorAction"
+			validate="false" path="/exibirConsultarDadosDiariosAgenteArrecadadorAction">
+			<forward name="exibirConsultarDadosDiariosAgente"
+				path="/jsp/arrecadacao/arrecadacao_dados_diarios_agente_popup.jsp" />
+		</action>
+		<action name="FiltrarDadosDiariosArrecadacaoActionForm"
+			type="gcom.gui.arrecadacao.ExibirConsultarDadosDiariosArrecadacaoFormaAction"
+			validate="false" path="/exibirConsultarDadosDiariosArrecadacaoFormaAction">
+			<forward name="exibirConsultarDadosDiariosArrecadacaoForma"
+				path="/jsp/arrecadacao/arrecadacao_dados_diarios_arrecadacao_forma_popup.jsp" />
+		</action>
+		<action name="FiltrarDadosDiariosArrecadacaoActionForm"
+			type="gcom.gui.arrecadacao.ExibirConsultarDadosDiariosDocumentoAgregadorAction"
+			validate="false" path="/exibirConsultarDadosDiariosDocumentoAgregadorAction">
+			<forward name="exibirConsultarDadosDiariosDocumentoAgregador"
+				path="/jsp/arrecadacao/arrecadacao_dados_diarios_documento_popup.jsp" />
+		</action>
+		<action 
+			type="gcom.gui.arrecadacao.CancelarConsultarDadosDiariosArrecadacaoAction"
+			validate="false"
+			path="/cancelarConsultarDadosDiariosArrecadacaoAction" >
+		</action>
+		
+		<action name="FiltrarDadosDiariosArrecadacaoActionForm"
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioDadosDiariosArrecadacaoGerenciaAction"
+			scope="session" path="/gerarRelatorioDadosDiariosArrecadacaoGerenciaAction" />
+			
+		<action name="FiltrarDadosDiariosArrecadacaoActionForm"
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioDadosDiariosArrecadacaoArrecadadorAction"
+			scope="session" path="/gerarRelatorioDadosDiariosArrecadacaoArrecadadorAction" />
+			
+		<action name="FiltrarDadosDiariosArrecadacaoActionForm"
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioDadosDiariosArrecadacaoCategoriaAction"
+			scope="session" path="/gerarRelatorioDadosDiariosArrecadacaoCategoriaAction" />
+			
+		<action name="FiltrarDadosDiariosArrecadacaoActionForm"
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioDadosDiariosArrecadacaoPerfilAction"
+			scope="session" path="/gerarRelatorioDadosDiariosArrecadacaoPerfilAction" />
+			
+		<action name="FiltrarDadosDiariosArrecadacaoActionForm"
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioDadosDiariosArrecadacaoDocumentoAgregadorAction"
+			scope="session" path="/gerarRelatorioDadosDiariosArrecadacaoDocumentoAgregadorAction" />
+			
+		<action name="FiltrarDadosDiariosArrecadacaoActionForm"
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioDadosDiariosArrecadacaoParametrosAction"
+			scope="session" path="/gerarRelatorioDadosDiariosArrecadacaoParametrosAction" />
+			
+		<action name="FiltrarDadosDiariosArrecadacaoActionForm"
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioDadosDiariosUnidadeNegocioAction"
+			scope="session" path="/gerarRelatorioDadosDiariosUnidadeNegocioAction" />
+			
+		<action name="FiltrarDadosDiariosArrecadacaoActionForm"
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioDadosDiariosEloAction"
+			scope="session" path="/gerarRelatorioDadosDiariosEloAction" />
+			
+		<action name="FiltrarDadosDiariosArrecadacaoActionForm"
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioDadosDiariosLocalidadeAction"
+			scope="session" path="/gerarRelatorioDadosDiariosLocalidadeAction" />
+			
+		<action name="FiltrarDadosDiariosArrecadacaoActionForm"
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioDadosDiariosValoresDiariosAction"
+			scope="session" path="/gerarRelatorioDadosDiariosValoresDiariosAction" />
+			
+		<action name="FiltrarDadosDiariosArrecadacaoActionForm"
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioDadosDiariosAgenteAction"
+			scope="session" path="/gerarRelatorioDadosDiariosAgenteAction" />
+			
+		<action name="FiltrarDadosDiariosArrecadacaoActionForm"
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioDadosDiariosArrecadacaoFormaAction"
+			scope="session" path="/gerarRelatorioDadosDiariosArrecadacaoFormaAction" />
+			
+		<action name="FiltrarDadosDiariosArrecadacaoActionForm"
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioDadosDiariosDocumentoAgregadorAction"
+			scope="session" path="/gerarRelatorioDadosDiariosDocumentoAgregadorAction" />
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

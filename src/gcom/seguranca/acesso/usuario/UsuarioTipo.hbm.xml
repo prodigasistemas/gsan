@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.seguranca.acesso.usuario.UsuarioTipo" table="seguranca.usuario_tipo">
+		<id name="id" type="java.lang.Integer" column="utip_id">
+			<generator class="sequence">
+				<param name="sequence">seguranca.seq_usuario_tipo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="utip_dsusuariotipo" length="20"/>
+		<property name="indicadorUso" type="java.lang.Short" column="utip_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="utip_tmultimaalteracao" length="8"/>
+		<property name="indicadorFuncionario" type="short" column="utip_icfuncionario" length="2"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to UsuarioSistema
+    <set
+        name="usuarioSistemas"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="utip_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.UsuarioSistema"
+        />
+    </set>
+  -->
+	</class>
+</hibernate-mapping>

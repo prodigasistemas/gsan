@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="ManterZonaPressaoActionForm"
+			type="gcom.gui.operacional.ManterZonaPressaoActionForm" />
+		<form-bean name="AtualizarZonaPressaoActionForm"
+			type="gcom.gui.operacional.AtualizarZonaPressaoActionForm" />
+		<form-bean name="FiltrarZonaPressaoActionForm"
+			type="gcom.gui.operacional.FiltrarZonaPressaoActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.operacional.ExibirManterZonaPressaoAction"
+			validate="false" scope="session"
+			path="/exibirManterZonaPressaoAction">
+
+			<forward name="exibirManterZonaPressao"
+				path="/jsp/operacional/zona_pressao_manter.jsp" />
+
+			<forward name="exibirAtualizarZonaPressao"
+				path="/exibirAtualizarZonaPressaoAction.do" />
+		</action>
+
+		<action name="AtualizarZonaPressaoActionForm"
+			type="gcom.gui.operacional.ExibirAtualizarZonaPressaoAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarZonaPressaoAction">
+
+			<forward name="zonaPressaoAtualizar"
+				path="/jsp/operacional/zona_pressao_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarZonaPressaoActionForm"
+			type="gcom.gui.operacional.AtualizarZonaPressaoAction"
+			validate="true" scope="session"
+			path="/atualizarZonaPressaoAction">
+		</action>
+		
+		<action name="FiltrarZonaPressaoActionForm"
+			type="gcom.gui.relatorio.operacional.GerarRelatorioZonaPressaoManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioZonaPressaoManterAction" />
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.operacional.RemoverZonaPressaoAction"
+			 scope="request" path="/removerZonaPressaoAction">
+
+		</action>
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

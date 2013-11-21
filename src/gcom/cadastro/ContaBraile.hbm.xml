@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.ContaBraile" table="atendimentopublico.conta_braile">
+		<id name="id" type="java.lang.Integer" column="cobr_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_conta_braile</param>
+			</generator>
+		</id>
+		
+		<property name="nomeCliente" type="java.lang.String" column="cobr_nmcliente" not-null="true" length="50"/>
+		<property name="cpfCliente" type="java.lang.String" column="cobr_nncpf" not-null="false" length="11"/>
+		<property name="cnpjCliente" type="java.lang.String" column="cobr_nncnpj" not-null="false" length="14"/>
+		<property name="email" type="java.lang.String" column="cobr_dsemail" not-null="true" length="40"/>
+		<property name="nomeSolicitante" type="java.lang.String" column="cobr_nmsolicitante" not-null="true" length="50"/>
+		<property name="cpfSolicitante" type="java.lang.String" column="cobr_nncpfsolicitante" not-null="true" length="14"/>
+		<property name="rg" type="java.lang.String" column="cobr_nnrgsolicitante" not-null="true" length="13"/>
+		<property name="telefoneContato" type="java.lang.String" column="cobr_nntelefone" not-null="false" length="11"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cobr_tmultimaalteracao" length="8"/>
+		<property name="dataExpedicao" type="java.sql.Date" column="cobr_dtrgexpedicao" not-null="true" length="8"/>
+		
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to RegistroAtendimento -->
+		<many-to-one name="registroAtendimento" class="gcom.atendimentopublico.registroatendimento.RegistroAtendimento" not-null="false">
+			<column name="rgat_id"/>
+		</many-to-one>
+		
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id"/>
+		</many-to-one>
+		
+		<!-- bi-directional many-to-one association to OrgaoExpedidorRg -->
+		<many-to-one name="orgaoExpeditor" class="gcom.cadastro.cliente.OrgaoExpedidorRg" not-null="true">
+			<column name="oerg_id"/>
+		</many-to-one>
+		
+		<!-- bi-directional many-to-one association to UnidadeFederacao -->
+		<many-to-one name="unidadeFederacao" class="gcom.cadastro.geografico.UnidadeFederacao" not-null="true">
+			<column name="unfe_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

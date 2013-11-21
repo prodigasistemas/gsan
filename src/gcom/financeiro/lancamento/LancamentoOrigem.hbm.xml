@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.financeiro.lancamento.LancamentoOrigem" table="financeiro.lancamento_origem">
+		<id name="id" type="java.lang.Integer" column="lcor_id">
+			<generator class="sequence">
+				<param name="sequence">financeiro.seq_lancamento_origem</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="lcor_dslancamentoorigem" length="30"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="lcor_dsabreviado" length="10"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="lcor_tmultimaalteracao" length="8"/>
+		<property name="numeroCartao" type="java.lang.Short" column="lcor_nncartao" not-null="true" length="2"/>
+		<property name="codigoTipo" type="java.lang.Short" column="lcor_cdtipo" not-null="true" length="2"/>
+		<property name="numeroFolha" type="java.lang.Short" column="lcor_nnfolha" not-null="true" length="2"/>
+		<property name="codigoReferencia" type="java.lang.String" column="lcor_cdreferencia" not-null="true" length="3"/>
+		<property name="numeroVersao" type="java.lang.Short" column="lcor_nnversao" not-null="true" length="2"/>
+		<property name="numeroCartao2" type="java.lang.Short" column="lcor_nncartao2" not-null="true" length="2"/>
+		<property name="numeroHistoricoDebito" type="java.lang.Integer" column="lcor_nnhist_deb" not-null="true" length="2"/>
+		<property name="numeroHistoricoCredito" type="java.lang.Integer" column="lcor_nnhist_cre" not-null="true" length="2"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to LancamentoContabil -->
+		<!--
+    <set
+        name="lancamentoContabils"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="lcor_id" />
+        </key>
+        <one-to-many 
+            class="gcom.LancamentoContabil"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

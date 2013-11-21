@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="ConsultarComandosContasCobrancaEmpresaActionForm"
+			type="gcom.gui.cobranca.cobrancaporresultado.ConsultarComandosContasCobrancaEmpresaActionForm" />	
+		<form-bean name="MovimentarOrdemServicoActionForm"
+			type="gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC1167] Consultar Comandos de Cobrança por Empresa - Autor: Mariana Victor Data:03/05/2011 -->
+		<action name="ConsultarComandosContasCobrancaEmpresaActionForm"
+			type="gcom.gui.cobranca.cobrancaporresultado.ExibirConsultarComandosContasCobrancaEmpresaAction"
+			validate="true" 
+			scope="session"
+			path="/exibirConsultarComandosContasCobrancaEmpresaAction">
+			
+			<forward name="exibirConsultarComandosContasCobrancaEmpresa"
+				path="/jsp/cobranca/cobrancaporresultado/comandos_contas_em_cobranca_consultar.jsp" />
+		</action>
+		
+		<action name="ConsultarComandosContasCobrancaEmpresaActionForm"
+			type="gcom.gui.cobranca.cobrancaporresultado.ConsultarComandosContasCobrancaEmpresaAction"
+			validate="true" scope="session"
+			path="/consultarComandosContasCobrancaEmpresaAction">
+		</action>
+		
+		<action name="ConsultarComandosContasCobrancaEmpresaActionForm"
+			type="gcom.gui.cobranca.cobrancaporresultado.ExibirConsultarComandosContasCobrancaEmpresaPopupAction"
+			validate="true" scope="session"
+			path="/exibirConsultarComandosContasCobrancaEmpresaPopupAction">
+			
+			<forward name="exibirConsultarComandosContasCobrancaEmpresaPopupAction"
+				path="/jsp/cobranca/cobrancaporresultado/comandos_contas_em_cobranca_consultar_popup.jsp" />
+		</action>
+		
+		<action	name="MovimentarOrdemServicoActionForm"
+			type="gcom.gui.cobranca.cobrancaporresultado.ExibirMovimentarOrdemServicoAction"
+			validate="false" scope="session" 
+			path="/exibirMovimentarOrdemServicoAction">
+			
+			<forward name="movimentarOrdemServicoEmitirOS"
+				     path="/movimentarOrdemServicoWizardAction.do?action=exibirMovimentarOrdemServicoEmitirOSAction" />
+			
+			<forward name="emitirOSAction"
+				     path="/movimentarOrdemServicoWizardAction.do?action=movimentarOrdemServicoEmitirOSAction" />
+			
+			<forward name="gerarOSAction"
+				     path="/movimentarOrdemServicoWizardAction.do?action=movimentarOrdemServicoGerarOSAction" />
+				     
+			<forward name="movimentarOrdemServicoAction"
+				     path="/movimentarOrdemServicoAction" />
+				     
+		</action>
+		
+		<action	name="MovimentarOrdemServicoActionForm"
+			type="gcom.gui.cobranca.cobrancaporresultado.ExibirMovimentarOrdemServicoEmitirOSAction"
+			validate="false" scope="session" 
+			path="/exibirMovimentarOrdemServicoEmitirOSAction">
+			
+			<forward name="emitirOSAction"
+				     path="/movimentarOrdemServicoWizardAction.do?action=movimentarOrdemServicoEmitirOSAction" />
+				
+		</action>
+		
+		<action	name="MovimentarOrdemServicoActionForm"
+			type="gcom.gui.cobranca.cobrancaporresultado.ExibirMovimentarOrdemServicoGerarOSAction"
+			validate="false" scope="session" 
+			path="/exibirMovimentarOrdemServicoGerarOSAction">
+			
+			<forward name="gerarOSAction"
+				     path="/movimentarOrdemServicoWizardAction.do?action=movimentarOrdemServicoGerarOSAction" />
+				     
+			<forward name="movimentarOrdemServicoAction"
+				     path="/movimentarOrdemServicoAction" />
+				
+		</action>
+		
+		<action name="MovimentarOrdemServicoActionForm"
+			    type="gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoWizardAction"
+			    validate="false" 
+			    parameter="action" 
+			    scope="session"
+			    path="/movimentarOrdemServicoWizardAction">
+			
+			<forward name="movimentarOrdemServicoEmitirOS"
+				     path="/jsp/cobranca/cobrancaporresultado/movimentar_ordem_servico_emitir.jsp" />
+				
+			<forward name="movimentarOrdemServicoGerarOS"
+				     path="/jsp/cobranca/cobrancaporresultado/movimentar_ordem_servico_gerar.jsp" />
+				
+			<forward name="movimentarOrdemServicoEncerrarOS"
+				     path="/jsp/cobranca/cobrancaporresultado/movimentar_ordem_servico_encerrar.jsp" />
+			
+			<forward name="emitirOSAction"
+				     path="/movimentarOrdemServicoWizardAction.do?action=movimentarOrdemServicoEmitirOSAction" />
+			
+			<forward name="gerarOSAction"
+				     path="/movimentarOrdemServicoWizardAction.do?action=movimentarOrdemServicoGerarOSAction" />
+				     
+			<forward name="movimentarOrdemServicoAction"
+				     path="/movimentarOrdemServicoAction" />
+				
+		</action>
+		
+		<action
+			type="gcom.gui.cobranca.cobrancaporresultado.CancelarMovimentarOrdemServicoAction"
+			validate="false" 
+			path="/cancelarMovimentarOrdemServicoAction" />
+			
+		
+		<action	name="MovimentarOrdemServicoActionForm"
+			type="gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoEncerrarOSAction"
+			validate="false" scope="session" 
+			path="/movimentarOrdemServicoEncerrarOSAction">
+			
+			<forward name="movimentarOrdemServicoAction"
+				     path="/movimentarOrdemServicoAction" />
+				
+		</action>
+		
+		<action	name="MovimentarOrdemServicoActionForm"
+			type="gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoEmitirOSAction"
+			validate="false" scope="session" 
+			path="/movimentarOrdemServicoEmitirOSAction">
+				     
+			<forward name="movimentarOrdemServicoAction"
+				     path="/movimentarOrdemServicoAction" />
+		
+		</action>
+		
+		<action	name="MovimentarOrdemServicoActionForm"
+			type="gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoGerarOSAction"
+			validate="false" scope="session" 
+			path="/movimentarOrdemServicoGerarOSAction">
+				     
+			<forward name="movimentarOrdemServicoAction"
+				     path="/movimentarOrdemServicoAction" />
+				
+		</action>
+		
+		<action	name="MovimentarOrdemServicoActionForm"
+			type="gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoAction"
+			validate="false" scope="session" 
+			path="/movimentarOrdemServicoAction">
+				     
+			<forward name="gerarRelatorioEmitirDocumentoVisitaCobranca"
+				     path="/gerarRelatorioEmitirDocumentoVisitaCobrancaAction.do" />
+			
+			<forward name="emitirOSAction"
+				     path="/movimentarOrdemServicoWizardAction.do?action=movimentarOrdemServicoEmitirOSAction" />
+			
+			<forward name="gerarOSAction"
+				     path="/movimentarOrdemServicoWizardAction.do?action=movimentarOrdemServicoGerarOSAction" />
+				     
+			<forward name="movimentarOrdemServicoAction"
+				     path="/movimentarOrdemServicoAction" />
+				
+		</action>
+		
+	</action-mappings>
+
+</struts-config>

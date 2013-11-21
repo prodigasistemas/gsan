@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.cobranca.NegativadorMovimentoReg" table="cobranca.negatd_movimento_reg">
+		<id name="id" type="java.lang.Integer" column="nmrg_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_negatd_movimento_reg</param>
+			</generator>
+		</id>
+		<property name="conteudoRegistro" type="java.lang.String" column="nmrg_cnregistro" length="600"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="nmrg_tmultimaalteracao" length="8"/>
+		<property name="codigoExclusaoTipo" type="java.lang.Integer" column="nmrg_cdexclusaotipo" length="4"/>
+		<property name="indicadorAceito" type="java.lang.Short" column="nmrg_icaceito" not-null="false" length="2"/>
+		<property name="indicadorCorrecao" type="java.lang.Short" column="nmrg_iccorrecao" length="2"/>
+		<property name="valorDebito" type="java.math.BigDecimal" column="nmrg_vldebito" length="11"/>
+		<property name="dataSituacaoDebito" type="java.sql.Date" column="nmrg_dtsituacaodebito" length="4"/>
+		<property name="codigoSetorComercial" type="java.lang.Integer" column="nmrg_cdsetorcomercial" length="4"/>
+		<property name="numeroQuadra" type="java.lang.Integer" column="nmrg_nnquadra" length="4"/>
+		<property name="numeroCpf" type="java.lang.String" column="nmrg_nncpf" length="11"/>
+		<property name="numeroCnpj" type="java.lang.String" column="nmrg_nncnpj" length="14"/>
+		<property name="indicadorSituacaoDefinitiva" type="short" column="nmrg_icsitdefinitiva" not-null="true" length="2"/>
+		<property name="numeroRegistro" type="java.lang.Integer" column="nmrg_nnregistro" not-null="true" length="4"/>
+		<property name="indicadorItemAtualizado" type="java.lang.Short" column="nmrg_icitematualizado" not-null="true" length="2"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Quadra -->
+		<many-to-one name="quadra" class="gcom.cadastro.localidade.Quadra" not-null="true">
+			<column name="qdra_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to NegativadorExclusaoMotivo -->
+		<many-to-one name="negativadorExclusaoMotivo" class="gcom.cobranca.NegativadorExclusaoMotivo" not-null="true">
+			<column name="nemt_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ImovelPerfil -->
+		<many-to-one name="imovelPerfil" class="gcom.cadastro.imovel.ImovelPerfil" not-null="true">
+			<column name="iper_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaDebitoSituacao -->
+		<many-to-one name="cobrancaDebitoSituacao" class="gcom.cobranca.CobrancaDebitoSituacao" not-null="true">
+			<column name="cdst_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to NegativadorMovimentoReg -->
+		<set name="negativadorMovimentoReg" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="nmrg_idreginclusao"/>
+			</key>
+			<one-to-many class="gcom.cobranca.NegativadorMovimentoReg"/>
+		</set>
+		<!-- bi-directional many-to-one association to NegativadorMovimentoReg -->
+		<many-to-one name="negativadorMovimentoRegInclusao" class="gcom.cobranca.NegativadorMovimentoReg" not-null="true">
+			<column name="nmrg_idreginclusao"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to NegativacaoCriterio -->
+		<many-to-one name="negativacaoCriterio" class="gcom.cobranca.NegativacaoCriterio" not-null="true">
+			<column name="ngct_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Usuario -->
+		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario" not-null="true">
+			<column name="usur_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Cliente -->
+		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="true">
+			<column name="clie_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Categoria -->
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to NegativadorRegistroTipo -->
+		<many-to-one name="negativadorRegistroTipo" class="gcom.cobranca.NegativadorRegistroTipo" not-null="true">
+			<column name="nrtp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to NegativadorMovimento -->
+		<many-to-one name="cpfTipo" class="gcom.cadastro.CpfTipo" not-null="true">
+			<column name="cpft_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to NegativadorMovimento -->
+		<many-to-one name="negativadorMovimento" class="gcom.cobranca.NegativadorMovimento" not-null="true">
+			<column name="ngmv_id"/>
+		</many-to-one>
+		<many-to-one name="cobrancaSituacao" class="gcom.cobranca.CobrancaSituacao">
+			<column name="cbst_id"/>
+		</many-to-one>
+		
+		<many-to-one name="usuarioCorrecao" class="gcom.seguranca.acesso.usuario.Usuario">
+			<column name="usur_idcorrecao"/>
+		</many-to-one>
+		
+		<many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="false">
+			<column name="last_id"/>
+		</many-to-one>
+		<many-to-one name="ligacaoEsgotoSituacao" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao" not-null="false">
+			<column name="lest_id"/>
+		</many-to-one>
+		
+	</class>
+</hibernate-mapping>

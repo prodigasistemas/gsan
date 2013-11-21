@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.registroatendimento.RAReiteracao" table="atendimentopublico.ra_reiteracao">
+		<id name="id" type="java.lang.Integer" column="rart_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_ra_reiteracao</param>
+			</generator>
+		</id>
+		
+		<property name="pontoReferencia" type="java.lang.String" column="rart_dspontoreferencia" length="60"/>
+		<property name="complementoEndereco" type="java.lang.String" column="rart_dscomplementondereco" length="25"/>
+		<property name="indicadorEnderecoCorrespondencia" type="java.lang.Short" column="rart_icenderecocorrespondencia" length="2"/>
+		<property name="numeroImovel" type="java.lang.Integer" column="rart_nnimovel" length="5"/>
+		<property name="solicitante" type="java.lang.String" column="rart_nmsolicitante" length="60"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="rart_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="numeroProtocoloAtendimento" type="java.lang.String" column="rart_nnprotocoloatendimento" not-null="false" length="14"/>
+		<property name="observacao" type="java.lang.String" column="rart_dsobservacao" length="200"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to LogradouroBairro -->
+		<many-to-one name="logradouroBairro" class="gcom.cadastro.endereco.LogradouroBairro" >
+			<column name="lgbr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Cliente -->
+		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" >
+			<column name="clie_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LogradouroCep -->
+		<many-to-one name="logradouroCep" class="gcom.cadastro.endereco.LogradouroCep" >
+			<column name="lgcp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to RegistroAtendimento -->
+		<many-to-one name="registroAtendimento" class="gcom.atendimentopublico.registroatendimento.RegistroAtendimento" not-null="true">
+			<column name="rgat_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to UnidadeOrganizacional -->
+		<many-to-one name="unidadeOrganizacional" class="gcom.cadastro.unidade.UnidadeOrganizacional">
+			<column name="unid_id"/>
+		</many-to-one>
+		<many-to-one name="perimetroInicial" class="gcom.cadastro.endereco.Logradouro" not-null="false">
+			<column name="logr_idinicioperimetro"/>
+		</many-to-one>
+		<many-to-one name="perimetroFinal" class="gcom.cadastro.endereco.Logradouro" not-null="false">
+			<column name="logr_idfimperimetro"/>
+		</many-to-one>
+
+	</class>
+</hibernate-mapping>

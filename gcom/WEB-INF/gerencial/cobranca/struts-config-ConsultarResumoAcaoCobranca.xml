@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+ 
+	<form-beans>
+		<form-bean name="ResumoAcaoCobrancaActionForm"
+			type="gcom.gui.gerencial.cobranca.ResumoAcaoCobrancaActionForm" />
+		<form-bean name="InformarDadosGeracaoResumoAcaoConsultaActionForm"
+			type="gcom.gui.gerencial.cobranca.InformarDadosGeracaoResumoAcaoConsultaActionForm" />
+	</form-beans>
+	
+	
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+	
+	   	<action name="InformarDadosGeracaoResumoAcaoConsultaActionForm" 
+			type="gcom.gui.gerencial.cobranca.ExibirInformarDadosGeracaoResumoAcaoConsultaAction"
+			validate="true" path="/exibirInformarDadosGeracaoResumoAcaoConsultaAction">
+			<forward name="exibirInformarDadosGeracaoResumoAcaoConsulta"
+				path="/jsp/cobranca/dados_geracao_resummo_acao_consulta_informar.jsp" />
+		</action>
+		
+		<action name="InformarDadosGeracaoResumoAcaoConsultaActionForm" 
+			type="gcom.gui.gerencial.cobranca.InformarDadosGeracaoResumoAcaoConsultaAction"
+			validate="false" path="/informarDadosGeracaoResumoAcaoConsultaAction">
+			<forward name="consultarResumoAcaoCobrancaParametros"
+				path="/consultarResumoAcaoCobrancaWizardAction.do?action=exibirDadosGeracaoConsultaAction" />					
+		</action>
+		
+	
+	   <action name="InformarDadosGeracaoResumoAcaoConsultaActionForm"
+			type="gcom.gui.gerencial.cobranca.ConsultarResumoAcaoCobrancaWizardAction"
+			validate="true" parameter="action" scope="session"
+			path="/consultarResumoAcaoCobrancaWizardAction">
+			<forward name="exibirDadosGeracaoConsulta"
+				path="/jsp/gerencial/cobranca/cobranca_acoes_resumo_parametros_consultar.jsp" />
+			<forward name="exibirConsultarResumoAcaoCobranca"
+				path="/jsp/gerencial/cobranca/cobranca_acoes_resumo_consultar.jsp" />		
+		</action>
+		
+		<action name="ResumoAcaoCobrancaActionForm"
+			type="gcom.gui.gerencial.cobranca.ExibirConsultarResumoAcaoCobrancaPopupAction"
+			validate="false" scope="session" path="/exibirConsultarResumoAcaoCobrancaPopupAction">
+			<forward name="consultarResumoAcaoCobrancaPopup"
+				path="/jsp/gerencial/cobranca/cobranca_acoes_resumo_consultar_popup.jsp" />
+		</action>
+		
+		<action name="ResumoAcaoCobrancaActionForm"
+			type="gcom.gui.gerencial.cobranca.ExibirConsultarResumoAcaoCobrancaSituacaoPagoPopupAction"
+			validate="false" scope="session" path="/exibirConsultarResumoAcaoCobrancaSituacaoPagoPopupAction">
+			<forward name="consultarResumoAcaoCobrancaSituacaoPagoPopup"
+				path="/jsp/gerencial/cobranca/cobranca_acoes_resumo_consultar_situacao_pago_popup.jsp" />
+		</action>
+
+		<action name="ResumoAcaoCobrancaActionForm"
+			type="gcom.gui.gerencial.cobranca.ExibirConsultarResumoAcaoCobrancaSituacaoAcaoDetalhesPopupAction"
+			validate="false" scope="session" path="/exibirConsultarResumoAcaoCobrancaSituacaoAcaoDetalhesPopupAction">
+			<forward name="consultarResumoAcaoCobrancaSituacaoAcaoDetalhesPopup"
+				path="/jsp/gerencial/cobranca/cobranca_acoes_resumo_consultar_situacao_acao_detalhes_popup.jsp" />
+		</action>
+		
+		<action name="ResumoAcaoCobrancaActionForm"
+			type="gcom.gui.gerencial.cobranca.ExibirConsultarResumoAcaoCobrancaTipoCorteDetalhesPopupAction"
+			validate="false" scope="session" path="/exibirConsultarResumoAcaoCobrancaTipoCorteDetalhesPopupAction">
+			<forward name="consultarResumoAcaoCobrancaTipoCorteDetalhesPopup"
+				path="/jsp/gerencial/cobranca/cobranca_acoes_resumo_consultar_tipo_corte_detalhes_popup.jsp" />
+		</action>
+		
+		<action 
+			type="gcom.gui.gerencial.cobranca.CancelarConsultarResumoAcaoCobrancaAction"
+			validate="false"
+			path="/cancelarConsultarResumoAcaoCobrancaAction" >
+		</action>
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

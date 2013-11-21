@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.gerencial.cadastro.geografico.GRegiao" table="cadastro.geografico.GRegiao">
+		<id name="id" type="java.lang.Integer" column="regi_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.sequence_g_regiao</param>
+			</generator>
+		</id>
+		<property name="nome" type="java.lang.String" column="regi_nmregiao" length="20"/>
+		<property name="indicadorUso" type="java.lang.Short" column="regi_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="regi_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to GMicrorregiao -->
+		<set name="gerMicrorregiaos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="regi_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.cadastro.geografico.GMicrorregiao"/>
+		</set>
+		<!-- bi-directional one-to-many association to RgResumoLigacaoEconomia -->
+		<set name="rgResumoLigacaoEconomias" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="regi_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.cadastro.RgResumoLigacaoEconomia"/>
+		</set>
+	</class>
+</hibernate-mapping>

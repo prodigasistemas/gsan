@@ -1,0 +1,86 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.credito.CreditoTipo" table="faturamento.credito_tipo">
+		<id name="id" type="java.lang.Integer" column="crti_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_credito_tipo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="crti_dscreditotipo" length="20"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="crti_dsabreviado" length="18"/>
+		<property name="indicadorUso" type="java.lang.Integer" column="crti_icuso" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="crti_tmultimaalteracao" length="8"/>
+		<property name="valorLimite" type="java.math.BigDecimal" column="crti_vllimite" length="13"/>
+		<property name="indicadorGeracaoAutomatica" type="java.lang.Short" column="crti_icgeracaoautomatica" length="2"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to LancamentoItemContabil -->
+		<many-to-one name="lancamentoItemContabil" class="gcom.financeiro.lancamento.LancamentoItemContabil" not-null="false">
+			<column name="lict_id"/>
+		</many-to-one>
+		<property name="codigoConstante" type="java.lang.Integer" column="crtp_nncodigoconstante" length="9" not-null="false"/>
+		<!-- bi-directional one-to-many association to CreditoRealizadoHistorico -->
+		<!-- 
+    <set
+        name="lancamentoItemContabil"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="lict_id" />
+        </key>
+        <one-to-many
+            class="mapeamentohibernate.CreditoTipo"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to CreditoRealizadoHistorico -->
+		<!--
+    <set
+        name="creditoRealizadoHistoricos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="crtp_id" />
+        </key>
+        <one-to-many
+            class="mapeamentohibernate.CreditoRealizadoHistorico"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to CreditoARealizar -->
+		<!--
+    <set
+        name="creditoARealizars"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="crtp_id" />
+        </key>
+        <one-to-many
+            class="mapeamentohibernate.CreditoARealizar"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to CreditoRealizado -->
+		<!--
+    <set
+        name="creditoRealizados"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="crtp_id" />
+        </key>
+        <one-to-many
+            class="mapeamentohibernate.CreditoRealizado"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

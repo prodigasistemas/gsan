@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.endereco.EnderecoReferencia" table="cadastro.endereco_referencia">
+		<id name="id" type="java.lang.Integer" column="edrf_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_endereco_referencia</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="edrf_dsenderecoreferencia" not-null="true" length="20"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="edrf_dsabreviado" length="18"/>
+		<property name="indicadorUso" type="java.lang.Short" column="edrf_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="edrf_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to SistemaParametro
+    <set
+        name="sistemaParametros"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="edrf_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.SistemaParametro"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to Localidade
+    <set
+        name="localidades"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="edrf_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Localidade"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to GerenciaRegional
+    <set
+        name="gerenciaRegionals"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="edrf_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.GerenciaRegional"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to Imovel
+    <set
+        name="imovels"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="edrf_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Imovel"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to ClienteEndereco
+    <set
+        name="clienteEnderecos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="edrf_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.ClienteEndereco"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

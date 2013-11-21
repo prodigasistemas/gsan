@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean
+			name="ConsultarRegistroAtendimentoPendentesImovelActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ConsultarRegistroAtendimentoPendentesImovelActionForm" />
+	</form-beans>
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="ConsultarRegistroAtendimentoPendentesImovelActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirConsultarRegistroAtendimentoPendentesImovelAction"
+			validate="true" scope="session"
+			path="/exibirConsultarRegistroAtendimentoPendentesImovelAction">
+			<forward name="consultarRegistroAtendimentoPendentesImovel"
+				path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_pendentes_imovel_consultar_popup.jsp" />
+		</action>
+
+		<action name="ConsultarRegistroAtendimentoPendentesImovelActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ConsultarRegistroAtendimentoPendentesImovelAction"
+			validate="true" scope="session"
+			path="/consultarRegistroAtendimentoPendentesImovelAction">
+		</action>
+
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

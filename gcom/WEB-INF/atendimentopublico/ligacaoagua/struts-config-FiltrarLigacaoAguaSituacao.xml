@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarLigacaoAguaSituacaoActionForm"
+			type="gcom.gui.atendimentopublico.ligacaoagua.FiltrarLigacaoAguaSituacaoActionForm" />
+
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarLigacaoAguaSituacaoActionForm"  
+			type="gcom.gui.atendimentopublico.ligacaoagua.ExibirFiltrarLigacaoAguaSituacaoAction" 
+			validate="false"
+			scope="session"
+			path="/exibirFiltrarLigacaoAguaSituacaoAction">
+
+			<forward name="filtrarLigacaoAguaSituacao"
+			path="/jsp/atendimentopublico/ligacaoagua/ligacao_agua_situacao_filtrar.jsp" />
+
+		</action>
+
+		<action name="FiltrarLigacaoAguaSituacaoActionForm"
+			type="gcom.gui.atendimentopublico.ligacaoagua.FiltrarLigacaoAguaSituacaoAction"
+			validate="true" 
+			scope="session"
+			path="/filtrarLigacaoAguaSituacaoAction">
+			
+			<forward name="exibirManterLigacaoAguaSituacao"
+				path="/exibirManterLigacaoAguaSituacaoAction.do" />
+			
+			
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

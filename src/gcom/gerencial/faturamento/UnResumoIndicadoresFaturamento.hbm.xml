@@ -1,0 +1,165 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.gerencial.faturamento.UnResumoIndicadoresFaturamento" table="faturamento.un_res_ind_fat">
+		<id name="id" type="java.lang.Integer" column="refa_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="anoMesReferencia" type="int" column="refa_amreferencia" not-null="true" length="4"/>
+		<property name="anoReferencia" type="java.lang.String" column="refa_anoreferencia" not-null="true" length="-1"/>
+		<property name="mesReferencia" type="java.lang.String" column="refa_mesreferencia" not-null="true" length="-1"/>
+		<property name="codigoSetorComercial" type="int" column="refa_cdsetorcomercial" not-null="true" length="4"/>
+		<property name="numeroQuadra" type="int" column="refa_nnquadra" not-null="true" length="4"/>
+		<property name="quantidadeContasEmitidas" type="int" column="refa_qtcontasemitidas" not-null="true" length="4"/>
+		<property name="quantidadeContasRetificadas" type="int" column="rerf_qtcontasretificadas" not-null="true" length="4"/>
+		<property name="quantidadeContasCanceladas" type="int" column="rerf_qtcontascanceladas" not-null="true" length="4"/>
+		<property name="quantidadeContasIncluidas" type="int" column="rerf_qtcontasincluidas" not-null="true" length="4"/>
+		<property name="quantidadeEconomiasFaturadas" type="int" column="refa_qteconomiasfaturadas" not-null="true" length="4"/>
+		<property name="volumeFaturadoAgua" type="int" column="refa_vofaturadoagua" not-null="true" length="4"/>
+		<property name="volumeCanceladoAgua" type="int" column="rerf_vocanceladoagua" not-null="true" length="4"/>
+		<property name="volumeIncluidoAgua" type="int" column="rerf_voincluidoagua" not-null="true" length="4"/>
+		<property name="volumeFaturadoEsgoto" type="int" column="refa_vofaturadoesgoto" not-null="true" length="4"/>
+		<property name="volumeCanceladoEsgoto" type="int" column="rerf_vocanceladoesgoto" not-null="true" length="4"/>
+		<property name="volumeIncluidoEsgoto" type="int" column="rerf_voincluidoesgoto" not-null="true" length="4"/>
+		<property name="valorFaturadoAgua" type="java.math.BigDecimal" column="refa_vlfaturadoagua" not-null="true" length="65535"/>
+		<property name="valorCanceladoAgua" type="java.math.BigDecimal" column="rerf_vlcanceladoagua" not-null="true" length="65535"/>
+		<property name="valorIncluidoAgua" type="java.math.BigDecimal" column="rerf_vlincluidoagua" not-null="true" length="65535"/>
+		<property name="valorFaturadoEsgoto" type="java.math.BigDecimal" column="refa_vlfaturadoesgoto" not-null="true" length="65535"/>
+		<property name="valorCanceladoEsgoto" type="java.math.BigDecimal" column="rerf_vlcanceladoesgoto" not-null="true" length="65535"/>
+		<property name="valorIncluidoEsgoto" type="java.math.BigDecimal" column="rerf_vlincluidoesgoto" not-null="true" length="65535"/>
+		<property name="valorDocumentosFaturadosCredito" type="java.math.BigDecimal" column="refa_vldocsfaturadoscredito" not-null="true" length="65535"/>
+		<property name="valorCanceladoCredito" type="java.math.BigDecimal" column="rerf_vlcanceladocredito" not-null="true" length="65535"/>
+		<property name="valorIncluidoCredito" type="java.math.BigDecimal" column="rerf_vlincluidocredito" not-null="true" length="65535"/>
+		<property name="valorDocumentosFaturadosOutros" type="java.math.BigDecimal" column="refa_vldocsfaturadosoutros" not-null="true" length="65535"/>
+		<property name="valorCanceladoOutros" type="java.math.BigDecimal" column="rerf_vlcanceladooutros" not-null="true" length="65535"/>
+		<property name="valorIncluidoOutros" type="java.math.BigDecimal" column="rerf_vlincluidooutros" not-null="true" length="65535"/>
+		<property name="valorAcrescimoImpontualidade" type="java.math.BigDecimal" column="refa_vlacrescimoimpontualidade" not-null="true" length="65535"/>
+		<property name="quantidadeContasEmitidasMesAno" type="int" column="refa_qtcontasemitidasma" not-null="true" length="4"/>
+		<property name="quantidadeContasRetificadasMesAno" type="int" column="rerf_qtcontasretificadasma" not-null="true" length="4"/>
+		<property name="quantidadeContasCanceladasMesAno" type="int" column="rerf_qtcontascanceladasma" not-null="true" length="4"/>
+		<property name="quantidadeContasIncluidasMesAno" type="int" column="rerf_qtcontasincluidasma" not-null="true" length="4"/>
+		<property name="quantidadeEconomiasFaturadasMesAno" type="int" column="refa_qteconomiasfaturadasma" not-null="true" length="4"/>
+		<property name="volumeFaturadoAguaMesAno" type="int" column="refa_vofaturadoaguama" not-null="true" length="4"/>
+		<property name="volumeCanceladoAguaMesAno" type="int" column="rerf_vocanceladoaguama" not-null="true" length="4"/>
+		<property name="volumeIncluidoAguaMesAno" type="int" column="rerf_voincluidoaguama" not-null="true" length="4"/>
+		<property name="volumeFaturadoEsgotoMesAno" type="int" column="refa_vofaturadoesgotoma" not-null="true" length="4"/>
+		<property name="volumeCanceladoEsgotoMesAno" type="int" column="rerf_vocanceladoesgotoma" not-null="true" length="4"/>
+		<property name="volumeIncluidoEsgotoMesAno" type="int" column="rerf_voincluidoesgotoma" not-null="true" length="4"/>
+		<property name="valorFaturadoAguaMesAno" type="java.math.BigDecimal" column="refa_vlfaturadoaguama" not-null="true" length="65535"/>
+		<property name="valorCanceladoAguaMesAno" type="java.math.BigDecimal" column="rerf_vlcanceladoaguama" not-null="true" length="65535"/>
+		<property name="valorIncluidoAguaMesAno" type="java.math.BigDecimal" column="rerf_vlincluidoaguama" not-null="true" length="65535"/>
+		<property name="valorFaturadoEsgotoMesAno" type="java.math.BigDecimal" column="refa_vlfaturadoesgotoma" not-null="true" length="65535"/>
+		<property name="valorCanceladoEsgotoMesAno" type="java.math.BigDecimal" column="rerf_vlcanceladoesgotoma" not-null="true" length="65535"/>
+		<property name="valorIncluidoEsgotoMesAno" type="java.math.BigDecimal" column="rerf_vlincluidoesgotoma" not-null="true" length="65535"/>
+		<property name="valorDocumentosFaturadosCreditoMesAno" type="java.math.BigDecimal" column="refa_vldocsfaturadoscreditoma" not-null="true" length="65535"/>
+		<property name="valorCanceladoCreditoMesAno" type="java.math.BigDecimal" column="rerf_vlcanceladocreditoma" not-null="true" length="65535"/>
+		<property name="valorIncluidoCreditoMesAno" type="java.math.BigDecimal" column="rerf_vlincluidocreditoma" not-null="true" length="65535"/>
+		<property name="valorDocumentosFaturadosOutrosMesAno" type="java.math.BigDecimal" column="refa_vldocsfaturadosoutrosma" not-null="true" length="65535"/>
+		<property name="valorCanceladoOutrosMesAno" type="java.math.BigDecimal" column="rerf_vlcanceladooutrosma" not-null="true" length="65535"/>
+		<property name="valorIncluidoOutrosMesAno" type="java.math.BigDecimal" column="rerf_vlincluidooutrosma" not-null="true" length="65535"/>
+		<property name="valorArrastos" type="java.math.BigDecimal" column="refa_vlarrastos" not-null="true" length="65535"/>
+		<property name="valorParcelamento" type="java.math.BigDecimal" column="refa_vlparcelamento" not-null="true" length="65535"/>
+		<property name="quantidadeGuiasCanceladas" type="int" column="rerf_qtguiascanceladas" not-null="true" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="refa_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to GSubcategoria -->
+		<many-to-one name="gerSubcategoria" class="gcom.gerencial.cadastro.imovel.GSubcategoria" not-null="true">
+			<column name="scat_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GClienteTipo -->
+		<many-to-one name="gerClienteTipo" class="gcom.gerencial.cadastro.cliente.GClienteTipo" not-null="true">
+			<column name="cltp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoAguaSituacao -->
+		<many-to-one name="gerLigacaoAguaSituacao" class="gcom.gerencial.atendimentopublico.ligacaoagua.GLigacaoAguaSituacao" not-null="true">
+			<column name="last_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GCreditoOrigem -->
+		<many-to-one name="gerCreditoOrigem" class="gcom.gerencial.faturamento.credito.GCreditoOrigem" not-null="true">
+			<column name="crog_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GQuadra -->
+		<many-to-one name="gerQuadra" class="gcom.gerencial.cadastro.localidade.GQuadra" not-null="true">
+			<column name="qdra_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoEsgotoSituacao -->
+		<many-to-one name="gerLigacaoEsgotoSituacao" class="gcom.gerencial.atendimentopublico.ligacaoesgoto.GLigacaoEsgotoSituacao" not-null="true">
+			<column name="lest_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GGerenciaRegional -->
+		<many-to-one name="gerGerenciaRegional" class="gcom.gerencial.cadastro.localidade.GGerenciaRegional" not-null="true">
+			<column name="greg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GSetorComercial -->
+		<many-to-one name="gerSetorComercial" class="gcom.gerencial.cadastro.localidade.GSetorComercial" not-null="true">
+			<column name="stcm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoAguaPerfil -->
+		<many-to-one name="gerLigacaoAguaPerfil" class="gcom.gerencial.atendimentopublico.ligacaoagua.GLigacaoAguaPerfil" not-null="true">
+			<column name="lapf_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GFinanciamentoTipo -->
+		<many-to-one name="gerFinanciamentoTipo" class="gcom.gerencial.financeiro.GFinanciamentoTipo" not-null="true">
+			<column name="fntp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GImovelPerfil -->
+		<many-to-one name="gerImovelPerfil" class="gcom.gerencial.cadastro.imovel.GImovelPerfil" not-null="true">
+			<column name="iper_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLancamentoItemContabil -->
+		<many-to-one name="gerLancamentoItemContabil" class="gcom.gerencial.financeiro.lancamento.GLancamentoItemContabil" not-null="true">
+			<column name="lict_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GUnidadeNegocio -->
+		<many-to-one name="gerUnidadeNegocio" class="gcom.gerencial.cadastro.localidade.GUnidadeNegocio" not-null="true">
+			<column name="uneg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GCreditoTipo -->
+		<many-to-one name="gerCreditoTipo" class="gcom.gerencial.faturamento.credito.GCreditoTipo" not-null="true">
+			<column name="crti_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLocalidade -->
+		<many-to-one name="gerLocalidade" class="gcom.gerencial.cadastro.localidade.GLocalidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLocalidade -->
+		<many-to-one name="gerLocalidadeElo" class="gcom.gerencial.cadastro.localidade.GLocalidade" not-null="true">
+			<column name="loca_cdelo"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoEsgotoPerfil -->
+		<many-to-one name="gerLigacaoEsgotoPerfil" class="gcom.gerencial.atendimentopublico.ligacaoesgoto.GLigacaoEsgotoPerfil" not-null="true">
+			<column name="lepf_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GDocumentoTipo -->
+		<many-to-one name="gerDocumentoTipo" class="gcom.gerencial.cobranca.GDocumentoTipo" not-null="true">
+			<column name="dotp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GEsferaPoder -->
+		<many-to-one name="gerEsferaPoder" class="gcom.gerencial.cadastro.cliente.GEsferaPoder" not-null="true">
+			<column name="epod_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GDebitoTipo -->
+		<many-to-one name="gerDebitoTipo" class="gcom.gerencial.faturamento.debito.GDebitoTipo" not-null="true">
+			<column name="dbtp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GCategoria -->
+		<many-to-one name="gerCategoria" class="gcom.gerencial.cadastro.imovel.GCategoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GRota -->
+		<many-to-one name="gerRota" class="gcom.gerencial.micromedicao.GRota" not-null="true">
+			<column name="rota_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

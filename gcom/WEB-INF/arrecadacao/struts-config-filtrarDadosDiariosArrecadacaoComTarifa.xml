@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="FiltrarDadosDiariosArrecadacaoComTarifaActionForm"
+			type="gcom.gui.arrecadacao.FiltrarDadosDiariosArrecadacaoComTarifaActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+	
+		<action name="FiltrarDadosDiariosArrecadacaoComTarifaActionForm"
+			type="gcom.gui.arrecadacao.ExibirFiltrarDadosDiariosArrecadacaoComTarifaAction"
+			validate="false" path="/exibirFiltrarDadosDiariosArrecadacaoComTarifaAction">
+			<forward name="filtrarDadosDiariosArrecadacaoComTarifa"
+				path="/jsp/arrecadacao/dados_diarios_arrecadacao_com_tarifa_filtrar.jsp" />
+		</action>
+		
+		<action name="FiltrarDadosDiariosArrecadacaoComTarifaActionForm" 
+			type="gcom.gui.arrecadacao.FiltrarDadosDiariosArrecadacaoComTarifaAction"
+			validate="false" scope="session"
+			path="/filtrarDadosDiariosArrecadacaoComTarifaAction">
+			<forward name="consultarDadosDiariosArrecadacaoComTarifa"
+				path="/jsp/arrecadacao/arrecadacao_dados_diarios_com_tarifa_consultar.jsp" />
+		</action>
+		
+		<action name="FiltrarDadosDiariosArrecadacaoComTarifaActionForm" 
+			type="gcom.gui.arrecadacao.ExibirConsultarDadosDiariosAgenteArrecadadorComTarifaAction"
+			validate="false" path="/exibirConsultarDadosDiariosAgenteArrecadadorComTarifaAction">
+			<forward name="exibirConsultarDadosDiariosAgenteComTarifa"
+				path="/jsp/arrecadacao/arrecadacao_dados_diarios_agente_com_tarifa_popup.jsp" />
+		</action>
+		
+		<action name="FiltrarDadosDiariosArrecadacaoComTarifaActionForm"
+			type="gcom.gui.arrecadacao.ExibirConsultarDadosDiariosValoresDiariosComTarifaAction"
+			validate="false" path="/exibirConsultarDadosDiariosValoresDiariosComTarifaAction">
+			<forward name="exibirConsultarDadosDiariosValoresDiariosComTarifa"
+				path="/jsp/arrecadacao/arrecadacao_dados_diarios_valores_diarios_com_tarifa_popup.jsp" />
+		</action>
+		
+		<action name="FiltrarDadosDiariosArrecadacaoComTarifaActionForm"
+			type="gcom.gui.arrecadacao.ExibirConsultarDadosDiariosValoresDiariosAnaliticoComTarifaAction"
+			validate="false" path="/exibirConsultarDadosDiariosValoresDiariosAnaliticoComTarifaAction">
+			<forward name="exibirConsultarDadosDiariosValoresDiariosAnaliticoComTarifa"
+				path="/jsp/arrecadacao/arrecadacao_dados_diarios_valores_diarios_analitico_com_tarifa_popup.jsp" />
+		</action>
+		
+		<action name="FiltrarDadosDiariosArrecadacaoComTarifaActionForm"
+			type="gcom.gui.arrecadacao.ExibirConsultarDadosDiariosArrecadacaoFormaComTarifaAction"
+			validate="false" path="/exibirConsultarDadosDiariosArrecadacaoFormaComTarifaAction">
+			<forward name="exibirConsultarDadosDiariosArrecadacaoFormaComTarifa"
+				path="/jsp/arrecadacao/arrecadacao_dados_diarios_arrecadacao_forma_com_tarifa_popup.jsp" />
+		</action>
+		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

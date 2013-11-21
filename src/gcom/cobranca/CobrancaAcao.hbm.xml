@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.CobrancaAcao" table="cobranca.cobranca_acao">
+		<id name="id" type="java.lang.Integer" column="cbac_id">
+			<generator class="sequence">
+				<param name="sequence">
+				cobranca.seq_cobranca_acao</param>
+			</generator>
+		</id>
+		<property name="descricaoCobrancaAcao" type="java.lang.String" column="cbac_dscobrancaacao" length="40"/>
+		<property name="indicadorObrigatoriedade" type="java.lang.Short" column="cbac_icobrigatoriedade" length="2"/>
+		<property name="indicadorRepeticao" type="java.lang.Short" column="cbac_icrepeticao" length="2"/>
+		<property name="indicadorSuspensaoAbastecimento" type="java.lang.Short" column="cbac_icsuspensaoabastecimento" length="2"/>
+		<property name="numeroDiasValidade" type="java.lang.Short" column="cbac_nndiasvalidade" length="2"/>
+		<property name="numeroDiasMinimoAcaoPrecedente" type="java.lang.Short" column="cbac_nndiasminacaoprecedente" length="2"/>
+		<property name="indicadorUso" type="java.lang.Short" column="cbac_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cbac_tmultimaalteracao" length="8"/>
+		<property name="indicadorCobrancaDebACobrar" type="java.lang.Short" column="cbac_iccobrancadebacobrar" length="2"/>
+		<property name="indicadorGeracaoTaxa" type="java.lang.Short" column="cbac_icgeracaotaxa" length="2"/>
+		<property name="indicadorAcrescimoImpontualidade" type="java.lang.Short" column="cbac_icacrescimoimpontualidade" length="2"/>
+		<property name="ordemRealizacao" type="java.lang.Short" column="cbac_nnordemrealizacao" length="2"/>
+		<property name="indicadorCronograma" type="java.lang.Short" column="cbac_iccronograma" length="2"/>
+		<property name="indicadorBoletim" type="java.lang.Short" column="cbac_icboletim" length="2"/>
+		<property name="indicadorDebito" type="java.lang.Short" column="cbac_icdebito" length="2"/>
+		<property name="numeroDiasVencimento" type="java.lang.Integer" column="cbac_nndiasvencimento" length="4"/>
+		<property name="indicadorMetasCronograma" type="java.lang.Integer" column="cbac_icusametas" length="4"/>
+		<property name="indicadorOrdenamentoCronograma" type="java.lang.Integer" column="cbac_icusaordenamentocron" length="4"/>
+		<property name="indicadorOrdenamentoEventual" type="java.lang.Integer" column="cbac_icusaordenamentoeven" length="4"/>
+		<property name="indicadorDebitoInterfereAcao" type="java.lang.Integer" column="cbac_icdebitointerfereacao" length="4"/>
+		<property name="numeroDiasRemuneracaoTerceiro" type="java.lang.Integer" column="cbac_qtdiaslimitepagamento" length="4"/>
+		<property name="indicadorCreditosARealizar" type="java.lang.Short" column="cbac_iccreditoarealizar" length="2" not-null="true"/>
+		<property name="indicadorNotasPromissoria" type="java.lang.Short" column="cbac_icnotapromissoria" length="2" not-null="true"/>
+    <property
+        name="indicadorOrdenarMaiorValor"
+        type="java.lang.Short"
+        column="cbac_icordmaiorvlr"
+        length="2"
+		not-null="true"
+    />
+    <property
+        name="indicadorValidarItem"
+        type="java.lang.Short"
+        column="cbac_icvalitemcobrado"
+        length="2"
+		not-null="true"
+    />
+    <property name="numerodiasEncerrarAtividade" type="java.lang.Integer" column="cbac_nndiasencatividade" length="2"/>
+    <property name="numerodiasEncerrarOSAtividade" type="java.lang.Integer" column="cbac_nndiasencosatividade" length="2"/>
+    
+    
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to CobrancaAcaoCronograma -->
+		<!--  
+	    <set
+        name="cobrancaAcaoCronogramas"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="cbac_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CobrancaAcaoCronograma"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to CobrancaCriterio -->
+		<!-- 
+    <set
+        name="cobrancaCriterios"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="cbac_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CobrancaCriterio"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to CobrancaAcaoAtividadeComand -->
+		<!--  
+    <set
+        name="cobrancaAcaoAtividadeComands"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="cbac_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CobrancaAcaoAtividadeComand"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to CobrancaAcao -->
+		<!-- 
+    <set
+        name="cobrancaAcaos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="cbac_idacaoprecedente" />
+        </key>
+        <one-to-many 
+            class="gcom.CobrancaAcao"
+        />
+    </set>
+    -->
+		<!-- bi-directional many-to-one association to CobrancaAcao -->
+		<many-to-one name="cobrancaAcaoPredecessora" class="gcom.cobranca.CobrancaAcao" not-null="false">
+			<column name="cbac_idacaoprecedente"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LigacaoEsgotoSituacao -->
+		<many-to-one name="ligacaoEsgotoSituacao" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao" not-null="true">
+			<column name="lest_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DocumentoTipo -->
+		<many-to-one name="documentoTipo" class="gcom.cobranca.DocumentoTipo" not-null="true">
+			<column name="dotp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LigacaoAguaSituacao -->
+		<many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="true">
+			<column name="last_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ServicoTipo -->
+		<many-to-one name="servicoTipo" class="gcom.atendimentopublico.ordemservico.ServicoTipo" not-null="true">
+			<column name="svtp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaAcao -->
+		<many-to-one name="cobrancaCriterio" class="gcom.cobranca.CobrancaCriterio" not-null="true">
+			<column name="cbct_id"/>
+		</many-to-one>
+		<many-to-one name="cobrancaAcaoPredecessoraAlternativa" class="gcom.cobranca.CobrancaAcao" not-null="false">
+			<column name="cbac_idpredalter"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

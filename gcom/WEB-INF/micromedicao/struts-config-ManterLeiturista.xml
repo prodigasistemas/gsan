@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+	
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="AtualizarLeituristaActionForm"
+			type="gcom.gui.micromedicao.leitura.AtualizarLeituristaActionForm" />
+		<form-bean name="FiltrarLeituristaActionForm"
+			type="gcom.gui.micromedicao.leitura.FiltrarLeituristaActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0589] MANTER LEITURISTA Auhtor: Thiago Tenório e Thiago Nascimento Data:11/06/2008-->
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.micromedicao.leitura.ExibirManterLeituristaAction"
+			validate="true" scope="session"
+			path="/exibirManterLeituristaAction">
+			<forward name="exibirManterLeiturista"
+				path="/jsp/micromedicao/leitura/leiturista_manter.jsp" />
+			<forward name="exibirAtualizarLeiturista"
+				path="/exibirAtualizarLeituristaManterAction.do" />
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.micromedicao.leitura.RemoverLeituristaAction" scope="request"
+			path="/removerLeituristaAction">
+		</action>
+		
+		<action name="AtualizarLeituristaActionForm"
+			type="gcom.gui.micromedicao.leitura.ExibirAtualizarLeituristaAction"
+			validate="true" scope="session"
+			path="/exibirAtualizarLeituristaManterAction">
+			<forward name="atualizarLeiturista"
+				path="/jsp/micromedicao/leitura/leiturista_atualizar.jsp" />
+		</action>
+		<action name="AtualizarLeituristaActionForm"
+			type="gcom.gui.micromedicao.leitura.AtualizarLeituristaAction"
+			validate="true" scope="session"
+			path="/atualizarLeituristaAction">
+		</action>
+		<action name="FiltrarLeituristaActionForm"
+			type="gcom.gui.relatorio.micromedicao.GerarRelatorioLeituristaAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioLeituristaAction" />
+
+	</action-mappings>
+
+</struts-config>

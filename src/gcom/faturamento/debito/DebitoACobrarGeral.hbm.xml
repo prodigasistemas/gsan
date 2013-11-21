@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.debito.DebitoACobrarGeral" table="faturamento.debito_a_cobrar_geral">
+		<id name="id" type="java.lang.Integer" column="dbac_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_debito_a_cobrar_geral</param>
+			</generator>
+		</id>
+		<property name="indicadorHistorico" type="short" column="dage_ichistorico" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="dage_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-one association to CreditoARealizarHistorico -->
+		<one-to-one name="debitoACobrarHistorico" class="gcom.faturamento.debito.DebitoACobrarHistorico" outer-join="auto"/>
+		<!-- bi-directional one-to-one association to CreditoARealizar -->
+		<one-to-one name="debitoACobrar" class="gcom.faturamento.debito.DebitoACobrar" outer-join="auto"/>
+	</class>
+</hibernate-mapping>

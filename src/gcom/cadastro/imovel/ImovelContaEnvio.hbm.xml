@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cadastro.imovel.ImovelContaEnvio" table="cadastro.imovel_conta_envio">
+		<id name="id" type="java.lang.Integer" column="icte_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_imovel_conta_envio</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="icte_dscontaenvio" not-null="true" length="70"/>
+		<property name="indicadorUso" type="short" column="icte_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="icte_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="indicadorClienteResponsavel" type="short" column="icte_icclienteresponsavel" not-null="true" length="2"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to Imovel -->
+		<set name="imovels" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="icte_id"/>
+			</key>
+			<one-to-many class="gcom.cadastro.imovel.Imovel"/>
+		</set>
+	</class>
+</hibernate-mapping>

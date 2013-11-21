@@ -1,0 +1,68 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+		Created by the Middlegen Hibernate plugin 2.1
+		
+		http://boss.bekk.no/boss/middlegen/
+		http://www.hibernate.org/
+	-->
+	<class name="gcom.atendimentopublico.ordemservico.ServicoTipoPrioridade" table="atendimentopublico.servico_tipo_prioridade">
+		<id name="id" type="java.lang.Integer" column="stpr_id">
+			<generator class="sequence">
+				<param name="sequence">
+					atendimentopublico.seq_servico_tipo_prioridade</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="stpr_dsservicotipoprioridade" not-null="true" length="30"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="stpr_dsabreviado" length="5"/>
+		<property name="indicadorUso" type="short" column="stpr_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="stpr_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="prazoExecucaoInicio" type="java.lang.Short" column="stpr_nnprazoexecucaoini" length="4"/>
+		<property name="prazoExecucaoFim" type="java.lang.Short" column="stpr_nnprazoexecucaofim" length="4"/>
+		<property name="tmCadastramento" type="java.sql.Timestamp" column="stpr_tmcadastramento" length="4"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to OrdemServico 
+			<set
+			name="ordemServicosByStprIdoriginal"
+			lazy="true"
+			inverse="true"
+			cascade="all"
+			>
+			<key>
+			<column name="stpr_idoriginal" />
+			</key>
+			<one-to-many 
+			class="gcom.OrdemServico"
+			/>
+			</set> -->
+		<!-- bi-directional one-to-many association to OrdemServico 
+			<set
+			name="ordemServicosByStprIdatual"
+			lazy="true"
+			inverse="true"
+			cascade="all"
+			>
+			<key>
+			<column name="stpr_idatual" />
+			</key>
+			<one-to-many 
+			class="gcom.OrdemServico"
+			/>
+			</set> -->
+		<!-- bi-directional one-to-many association to ServicoTipo 
+			<set
+			name="servicoTipos"
+			lazy="true"
+			inverse="true"
+			cascade="all"
+			>
+			<key>
+			<column name="stpr_id" />
+			</key>
+			<one-to-many 
+			class="gcom.ServicoTipo"
+			/>
+			</set> -->
+	</class>
+</hibernate-mapping>

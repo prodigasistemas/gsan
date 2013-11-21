@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.batch.UnidadeIniciada" table="batch.unidade_iniciada">
+		<id name="id" type="java.lang.Integer" column="undi_id">
+			<generator class="sequence">
+				<param name="sequence">batch.seq_unidade_iniciada</param>
+			</generator>
+		</id>
+		<property name="dataHoraInicio" type="java.sql.Timestamp" column="undi_tminicio" length="8"/>
+		<property name="dataHoraTermino" type="java.sql.Timestamp" column="undi_tmtermino" length="8"/>
+		<property name="codigoRealUnidadeProcessamento" type="java.lang.Integer" column="undi_cdidunidadeprocessamento" not-null="false" length="4"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to UnidadeProcessamento -->
+		<many-to-one name="unidadeProcessamento" class="gcom.batch.UnidadeProcessamento" not-null="true">
+			<column name="unpr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to UnidadeSituacao -->
+		<many-to-one name="unidadeSituacao" class="gcom.batch.UnidadeSituacao" not-null="true">
+			<column name="unst_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to FuncionalidadeIniciada -->
+		<many-to-one name="funcionalidadeIniciada" class="gcom.batch.FuncionalidadeIniciada" not-null="true">
+			<column name="fuin_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

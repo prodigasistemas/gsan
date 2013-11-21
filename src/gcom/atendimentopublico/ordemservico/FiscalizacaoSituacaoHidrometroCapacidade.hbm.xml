@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.ordemservico.FiscalizacaoSituacaoHidrometroCapacidade" table="atendimentopublico.fiscaliz_sit_hidr_capac">
+		<composite-id name="comp_id" class="gcom.atendimentopublico.ordemservico.FiscalizacaoSituacaoHidrometroCapacidadePK">
+			<key-property name="idFiscalizacaoSituacao" column="fzst_id" type="java.lang.Integer" length="4"/>
+			<key-property name="idHidrometroCapacidade" column="hicp_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="fshc_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to HidrometroCapacidade -->
+		<many-to-one name="hidrometroCapacidade" class="gcom.micromedicao.hidrometro.HidrometroCapacidade" update="false" insert="false">
+			<column name="hicp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to FiscalizacaoSituacao -->
+		<many-to-one name="fiscalizacaoSituacao" class="gcom.atendimentopublico.ordemservico.FiscalizacaoSituacao" update="false" insert="false">
+			<column name="fzst_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

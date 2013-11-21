@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean 
+		    name="InserirEspecificacaoSituacaoImovelActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.InserirEspecificacaoSituacaoImovelActionForm" /> 
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+				
+			
+		<action name="InserirEspecificacaoSituacaoImovelActionForm"  
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirInserirEspecificacaoSituacaoImovelAction" 
+			validate="true"
+			scope="session"
+			path="/exibirInserirEspecificacaoSituacaoImovelAction">
+
+			<forward name="inserirEspecificacaoSituacaoImovel"
+			path="/jsp/atendimentopublico/registroatendimento/especificacao_situacao_imovel_inserir.jsp" />
+			
+			<forward name="inserirEspecificacaoSituacaoCriterioImovel"
+			path="/jsp/atendimentopublico/registroatendimento/especificacao_situacao_imovel_criterio_adicionar_popup.jsp" />
+		</action>
+
+		<action name="InserirEspecificacaoSituacaoImovelActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.InserirEspecificacaoSituacaoImovelAction"
+			validate="true" scope="session"
+			path="/inserirEspecificacaoSituacaoImovelAction">
+		</action>
+ 
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

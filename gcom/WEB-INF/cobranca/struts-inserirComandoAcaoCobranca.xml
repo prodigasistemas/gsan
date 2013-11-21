@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="InserirComandoAcaoCobrancaActionForm"
+			type="gcom.gui.cobranca.InserirComandoAcaoCobrancaActionForm" />			
+		<form-bean name="InserirComandoAcaoCobrancaCronogramaActionForm"
+			type="gcom.gui.cobranca.InserirComandoAcaoCobrancaCronogramaActionForm" />			
+		<form-bean name="InserirComandoAcaoCobrancaEventualCriterioRotaActionForm"
+			type="gcom.gui.cobranca.InserirComandoAcaoCobrancaEventualCriterioRotaActionForm" />			
+		<form-bean name="InserirComandoAcaoCobrancaEventualCriterioComandoActionForm"
+			type="gcom.gui.cobranca.InserirComandoAcaoCobrancaEventualCriterioComandoActionForm" />			
+		<form-bean name="InserirCriterioCobrancaLinhaConsultarPopupActionForm"
+			type="gcom.gui.cobranca.InserirCriterioCobrancaLinhaConsultarPopupActionForm" />			
+			
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0243] INSERIR COMANDO DE ACAO DE COBRANCA Auhtor: Rafael Santos Data:24/01/2006-->
+		<action name="InserirComandoAcaoCobrancaActionForm"
+			type="gcom.gui.cobranca.ExibirInserirComandoAcaoCobrancaAction"
+			validate="false" scope="session"
+			path="/exibirInserirComandoAcaoCobrancaAction">
+			<forward name="exibirInserirComandoAcaoCobranca"
+				path="/jsp/cobranca/comandar_acao_cobranca_inserir_processo1.jsp" />
+		</action>
+		<action name="InserirComandoAcaoCobrancaCronogramaActionForm"
+			type="gcom.gui.cobranca.ExibirInserirComandoAcaoCobrancaCronogramaAction"
+			validate="false" scope="session"
+			path="/exibirInserirComandoAcaoCobrancaCronogramaAction">
+			<forward name="exibirInserirComandoAcaoCobrancaCronograma"
+				path="/jsp/cobranca/comandar_acao_cobranca_cronograma_inserir_processo2.jsp" />
+		</action>
+		<action name="InserirComandoAcaoCobrancaCronogramaActionForm"
+			type="gcom.gui.cobranca.InserirComandoAcaoCobrancaCronogramaAction"
+			validate="true" input="/inserirComandoAcaoCobrancaCronogramaAction.do"
+			scope="session" path="/inserirComandoAcaoCobrancaCronogramaAction" />
+		<action name="InserirComandoAcaoCobrancaEventualCriterioRotaActionForm"
+			type="gcom.gui.cobranca.ExibirInserirComandoAcaoCobrancaEventualCriterioRotaAction"
+			validate="false" scope="session"
+			path="/exibirInserirComandoAcaoCobrancaEventualCriterioRotaAction">
+			<forward name="exibirInserirComandoAcaoCobrancaEventualCriterioRota"
+				path="/jsp/cobranca/comandar_acao_cobranca_eventual_inserir_processo2.jsp" />
+		</action>
+		<!-- Excutar Comando Ao clicar no botão estando na tela de comandar_acao_cobranca_cronograma_inserir_processo2.jsp-->
+		<action name="InserirComandoAcaoCobrancaEventualCriterioRotaActionForm"
+			type="gcom.gui.cobranca.InserirComandoAcaoCobrancaEventualExecutarComandoAction"
+			validate="true" input="/inserirComandoAcaoCobrancaEventualExecutarComandoAction.do"
+			scope="session" path="/inserirComandoAcaoCobrancaEventualExecutarComandoAction" />
+		<!-- Comando Ao clicar no botão estando na tela de comandar_acao_cobranca_cronograma_inserir_processo2.jsp-->		
+		<action name="InserirComandoAcaoCobrancaEventualCriterioRotaActionForm"
+			type="gcom.gui.cobranca.InserirComandoAcaoCobrancaEventualConcluirAction"
+			validate="true" input="/inserirComandoAcaoCobrancaEventualConcluirAction.do"
+			scope="session" path="/inserirComandoAcaoCobrancaEventualConcluirAction" />
+		
+		<action name="InserirComandoAcaoCobrancaEventualCriterioComandoActionForm"
+			type="gcom.gui.cobranca.ExibirInserirComandoAcaoCobrancaEventualCriterioComandoAction"
+			validate="false" scope="session"
+			path="/exibirInserirComandoAcaoCobrancaEventualCriterioComandoAction">
+			<forward name="exibirInserirComandoAcaoCobrancaEventualCriterioComando"
+				path="/jsp/cobranca/comandar_acao_cobranca_eventual_inserir_processo3.jsp" />
+		</action>
+		
+		<!-- Excutar Comando Ao clicar no botão estando na tela de comandar_acao_cobranca_cronograma_inserir_processo3.jsp-->
+		<action name="InserirComandoAcaoCobrancaEventualCriterioComandoActionForm"
+			type="gcom.gui.cobranca.InserirComandoAcaoCobrancaEventualCriterioComandoExecutarComandoAction"
+			validate="true" input="/inserirComandoAcaoCobrancaEventualCriterioComandoExecutarComandoAction.do"
+			scope="session" path="/inserirComandoAcaoCobrancaEventualCriterioComandoExecutarComandoAction" />
+		<!-- Comando Ao clicar no botão estando na tela de comandar_acao_cobranca_cronograma_inserir_processo3.jsp-->		
+		<action name=""
+			type="gcom.gui.cobranca.InserirComandoAcaoCobrancaEventualCriterioComandoConcluirAction"
+			validate="true" input="/inserirComandoAcaoCobrancaEventualCriterioComandoConcluirAction.do"
+			scope="session" path="/inserirComandoAcaoCobrancaEventualCriterioComandoConcluirAction" />
+				
+		<!-- Popup  -->
+		<action name="InserirCriterioCobrancaLinhaConsultarPopupActionForm"
+			type="gcom.gui.cobranca.ExibirInserirCriterioCobrancaLinhaConsultarPopupAction"
+			validate="false" scope="session"
+			path="/exibirInserirCriterioCobrancaLinhaConsultarPopupAction">
+			<forward name="exibirInserirCriterioCobrancaLinhaConsultarPopupAction"
+				path="/jsp/cobranca/criterio_cobranca_linha_consultar_popup.jsp" />
+		</action>
+
+		<!--INICIO PESQUISAR ROTA-->
+		<action name="PesquisarActionForm"
+			type="gcom.gui.micromedicao.ExibirPesquisarRotaAction"
+			path="/exibirPesquisarRotaAction">
+			<forward name="pesquisarRota"
+				path="/jsp/micromedicao/rota_resultado_pesquisa.jsp" />
+		</action>
+
+		
+	</action-mappings>
+
+</struts-config>

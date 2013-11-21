@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean 
+		    name="InserirEquipeActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.InserirEquipeActionForm" />
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+				
+			
+		<action name="InserirEquipeActionForm"  
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirInserirEquipeAction" 
+			validate="true"
+			scope="session"
+			path="/exibirInserirEquipeAction">
+			<forward name="inserirEquipe"
+			path="/jsp/atendimentopublico/ordemservico/equipe_inserir.jsp" />
+			
+			<forward name="inserirEquipeComponente"
+			path="/jsp/atendimentopublico/ordemservico/equipe_componentes_adicionar_popup.jsp" />
+
+			<forward name="inserirEquipamentosEspeciais"
+			path="/jsp/atendimentopublico/ordemservico/equipamentos_especiais_adicionar_popup.jsp" />
+			
+		</action>
+
+		<action name="InserirEquipeActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.InserirEquipeAction"
+			validate="true" scope="session"
+			path="/inserirEquipeAction">
+		</action>
+		
+		
+ 
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

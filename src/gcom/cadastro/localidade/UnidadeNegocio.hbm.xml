@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.localidade.UnidadeNegocio" table="cadastro.unidade_negocio">
+		<id name="id" type="java.lang.Integer" column="uneg_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_unidade_negocio</param>
+			</generator>
+		</id>
+		<property name="nome" type="java.lang.String" column="uneg_nmunidadenegocio" not-null="true" length="50"/>
+		<property name="nomeAbreviado" type="java.lang.String" column="uneg_nmabreviado" not-null="true" length="4"/>
+		<property name="indicadorUso" type="java.lang.Short" column="uneg_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="uneg_tmultimaalteracao" length="8"/>
+		<!-- bi-directional many-to-one association to GerenciaRegional -->
+		<many-to-one name="gerenciaRegional" class="gcom.cadastro.localidade.GerenciaRegional" not-null="true">
+			<column name="greg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Cliente -->
+		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="false">
+			<column name="clie_id"/>
+		</many-to-one>
+		<property name="cnpj" type="java.lang.String" column="uneg_nncnpj" length="14"/>
+	</class>
+</hibernate-mapping>

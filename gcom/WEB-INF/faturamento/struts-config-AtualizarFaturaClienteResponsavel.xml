@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarFaturaClienteResponsavelActionForm"
+			type="gcom.gui.faturamento.FiltrarFaturaClienteResponsavelActionForm" />
+
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarFaturaClienteResponsavelActionForm"  
+			type="gcom.gui.faturamento.ExibirAtualizarFaturaClienteResponsavelAction" 
+			validate="false"
+			scope="session"
+			path="/exibirAtualizarFaturaClienteResponsavelAction">
+
+			<forward name="atualizarFaturaClienteResponsavel"
+			path="/jsp/faturamento/fatura_cliente_responsavel_manter.jsp" />
+
+		</action>
+
+		<action name="FiltrarFaturaClienteResponsavelActionForm"
+			type="gcom.gui.faturamento.AtualizarFaturaClienteResponsavelAction"
+			validate="true" 
+			scope="session"
+			path="/atualizarFaturaClienteResponsavelAction">
+		</action>
+		
+		<action name="FiltrarFaturaClienteResponsavelActionForm"  
+			type="gcom.gui.faturamento.ExibirAdicionarFaturaClienteResponsavelContaPopupAction" 
+			validate="false"
+			scope="session"
+			path="/exibirAdicionarFaturaClienteResponsavelContaPopupAction">
+
+			<forward name="adicionarFaturaClienteResponsavelContaPopup"
+			path="/jsp/faturamento/fatura_cliente_responsavel_conta_adicionar_popup.jsp" />
+
+		</action>
+		
+		<action name="FiltrarFaturaClienteResponsavelActionForm"
+			type="gcom.gui.faturamento.AdicionarFaturaClienteResponsavelContaPopupAction"
+			validate="false" 
+			scope="session"
+			path="/adicionarFaturaClienteResponsavelContaPopupAction">
+			
+			<forward name="exibirAdicionar"
+				path="/exibirAdicionarFaturaClienteResponsavelContaPopupAction.do" />
+			
+		</action>
+		
+		<action name="FiltrarFaturaClienteResponsavelActionForm"
+			type="gcom.gui.faturamento.ExibirConsultarFaturaItemHistoricoPopupAction"
+			validate="false" 
+			scope="session"
+			path="/exibirConsultarFaturaItemHistoricoPopupAction">
+			
+			<forward name="exibirConsultarFaturaItemHistoricoPopup"
+				path="/jsp/faturamento/fatura_item_consultar_atualizacoes_popup.jsp" />
+			
+		</action>
+		
+		
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

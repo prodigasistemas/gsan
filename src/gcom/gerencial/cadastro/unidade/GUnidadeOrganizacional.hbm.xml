@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.gerencial.cadastro.unidade.GUnidadeOrganizacional" table="cadastro.g_unidade_organizacional">
+		<id name="id" type="java.lang.Integer" column="unid_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.sequence_g_unidade_organizacional</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="unid_dsunidade" not-null="true" length="80"/>
+		<property name="descricaoSiglaUnidade" type="java.lang.String" column="unid_dssiglaunidade" not-null="false" length="5"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="unid_tmultimaalteracao" not-null="true" length="8"/>
+	</class>
+</hibernate-mapping>

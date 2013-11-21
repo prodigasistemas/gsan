@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarMensagemContaActionForm"
+			type="gcom.gui.faturamento.conta.FiltrarMensagemContaActionForm" />	
+		<form-bean name="AtualizarMensagemContaActionForm"
+			type="gcom.gui.faturamento.conta.AtualizarMensagemContaActionForm" />
+		<form-bean name="VisualizarMensagemContaActionForm"
+			type="gcom.gui.faturamento.conta.VisualizarMensagemContaActionForm" />			
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0217] INSERIR RESOLUÇÃO DE DIRETORIA Auhtor: Rafael Corrêa Data:30/03/2006-->
+		<action name="FiltrarMensagemContaActionForm"
+			type="gcom.gui.faturamento.conta.ExibirFiltrarMensagemContaAction"
+			validate="true" scope="session"
+			path="/exibirFiltrarMensagemContaAction">
+			<forward name="exibirFiltrarMensagemContaAction"
+				path="/jsp/faturamento/conta/mensagem_conta_filtrar.jsp" />
+		</action>
+		<action name="FiltrarMensagemContaActionForm"
+			type="gcom.gui.faturamento.conta.FiltrarMensagemContaAction"
+			validate="true" scope="session"
+			path="/filtrarMensagemContaAction">
+			<forward name="exibirManterMensagemConta"
+				path="/jsp/faturamento/conta/mensagem_conta_manter.jsp" />
+			<forward name="exibirAtualizarMensagemConta"
+				path="/exibirAtualizarMensagemContaAction.do" />
+		</action>
+		
+		<action name="FiltrarMensagemContaActionForm"
+			type="gcom.gui.relatorio.faturamento.conta.GerarRelatorioMensagemContaManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioMensagemContaManterAction" />
+		
+		<action
+			type="gcom.gui.faturamento.conta.ExibirManterMensagemContaAction"
+			validate="false" path="/exibirManterMensagemContaAction">
+			<forward name="manterMensagemConta"
+				path="/jsp/faturamento/conta/mensagem_conta_manter.jsp" />
+		</action>
+		
+		<action name="AtualizarMensagemContaActionForm"
+			type="gcom.gui.faturamento.conta.ExibirAtualizarMensagemContaAction"
+			validate="true" scope="session"
+			path="/exibirAtualizarMensagemContaAction">
+			<forward name="exibirAtualizarMensagemContaAction"
+				path="/jsp/faturamento/conta/mensagem_conta_atualizar.jsp" />
+		</action>
+		<action name="AtualizarMensagemContaActionForm"
+			type="gcom.gui.faturamento.conta.AtualizarMensagemContaAction"
+			validate="true" scope="session"
+			path="/atualizarMensagemContaAction">
+		</action>
+
+		<action name="VisualizarMensagemContaActionForm"
+			type="gcom.gui.faturamento.conta.ExibirVisualizarMensagemContaAction"
+			validate="false" path="/exibirVisualizarMensagemContaAction">
+			<forward name="visualizarMensagemConta"
+				path="/jsp/faturamento/conta/mensagem_conta_visualizar.jsp" />
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.faturamento.conta.RemoverMensagemContaAction"
+			validate="false" input="/exibirManterMensagemContaAction.do"
+			scope="session" path="/removerMensagemContaAction" />
+
+
+
+
+	</action-mappings>
+
+</struts-config>

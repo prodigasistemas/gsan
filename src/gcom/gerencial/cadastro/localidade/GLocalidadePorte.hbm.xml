@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.gerencial.cadastro.localidade.GLocalidadePorte" table="cadastro.localidade.g_localidade_porte">
+		<id name="id" type="java.lang.Integer" column="lpor_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="descricao" type="java.lang.String" column="lpor_dslocalidadeporte" length="20"/>
+		<property name="indicadorUso" type="java.lang.Short" column="lpor_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="lpor_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+	</class>
+</hibernate-mapping>

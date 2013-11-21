@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.gerencial.arrecadacao.pagamento.GEpocaPagamento" table="arrecadacao.g_epoca_pagamento">
+		<id name="id" type="java.lang.Integer" column="eppa_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.sequence_g_epoca_pagamento</param>
+			</generator>
+		</id>
+		<property name="epocaPagemento" type="java.lang.String" column="eppa_dsepocapagemento" length="25"/>
+		<property name="ultimaalteracao" type="java.sql.Timestamp" column="eppa_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to UnResumoArrecadacao -->
+		<set name="unResumoArrecadacao" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="eppa_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.arrecadacao.UnResumoArrecadacao"/>
+		</set>
+		<set name="unResumoArrecadacaoPorAno" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="eppa_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.arrecadacao.UnResumoArrecadacaoPorAno"/>
+		</set>
+	</class>
+</hibernate-mapping>

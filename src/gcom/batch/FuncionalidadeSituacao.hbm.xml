@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.batch.FuncionalidadeSituacao" table="batch.funcionalidade_situacao">
+		<id name="id" type="java.lang.Integer" column="fnst_id">
+			<generator class="sequence">
+				<param name="sequence">batch.seq_funcionalidade_situacao</param>
+			</generator>
+		</id>
+		<property name="descricaoOperacaoSituacao" type="java.lang.String" column="fnst_dsoperacaosituacao" length="20"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="fnst_dsabreviado" length="6"/>
+		<property name="indicadorUso" type="short" column="fnst_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="fnst_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to FuncionalidadeIniciada -->
+		<set name="funcionalidadesIniciadas" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="fnst_id"/>
+			</key>
+			<one-to-many class="gcom.batch.FuncionalidadeIniciada"/>
+		</set>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="GerarRelatorioImoveisComLeiturasActionForm"
+			type="gcom.gui.relatorio.micromedicao.GerarRelatorioImoveisComLeiturasActionForm" />
+	</form-beans>
+
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="GerarRelatorioImoveisComLeiturasActionForm"
+			type="gcom.gui.relatorio.micromedicao.ExibirGerarRelatorioImoveisComLeiturasAction"
+			validate="true" 
+			path="/exibirGerarRelatorioImoveisComLeiturasAction">
+			
+			<forward name="exibirGerarRelatorioImoveisComLeituras" 
+				path="/jsp/relatorio/micromedicao/relatorio_imoveis_com_leituras_gerar.jsp" />
+				
+		</action>
+		
+		<action name="GerarRelatorioImoveisComLeiturasActionForm"
+			type="gcom.gui.relatorio.micromedicao.GerarRelatorioImoveisComLeiturasAction"
+			validate="true" 
+			path="/gerarRelatorioImoveisComLeiturasAction" />
+			
+		
+	</action-mappings>
+
+</struts-config>

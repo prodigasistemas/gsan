@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE jboss PUBLIC "-//JBoss//DTD JBOSS 4.0//EN" "http://www.jboss.org/j2ee/dtd/jboss_4_0.dtd">
+<jboss>
+    <enterprise-beans>
+        <session>
+            <ejb-name>ControladorGerencialGCOM</ejb-name>
+            <jndi-name>ControladorGerencialGCOM2</jndi-name>
+            <local-jndi-name>ControladorGerencialGCOM</local-jndi-name>            
+        </session>
+    </enterprise-beans>
+</jboss>

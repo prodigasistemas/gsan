@@ -1,0 +1,61 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.tarifasocial.TarifaSocialComandoCarta" table="cadastro.tar_social_comando_carta">
+	<id name="id" type="java.lang.Integer" column="tscc_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_tar_social_comando_carta</param>
+			</generator>
+		</id>
+		
+		
+		<property name="codigoTipoCarta" type="java.lang.Integer" column="tscc_cdtipocarta" length="10" not-null="true"/>
+		<property name="quantidadeDiasComparecimento" type="java.lang.Integer" column="tscc_qtdiascomparecimento" length="10" not-null="true"/>
+		<property name="quantidadeCartasGeradas" type="java.lang.Integer" column="tscc_qtcartasgeradas" length="10" not-null="true"/>
+		<property name="quantidadeDiasDebitoVencimento" type="java.lang.Integer" column="tscc_qtdiasdebitovencido" length="10"/>
+		<property name="anoMesInicialImplantacao" type="java.lang.Integer" column="tscc_anomesinicialimplantacao" length="10"/>
+		<property name="anoMesFinalImplantacao" type="java.lang.Integer" column="tscc_anomesfinalimplantacao" length="10"/>
+
+		<property name="indicadorCriterioCpf" type="java.lang.Short" column="tscc_iccriteriocpf" length="2" not-null="true"/>
+		<property name="indicadorCriterioIdentidade" type="java.lang.Short" column="tscc_iccriterioidentidade" length="2" not-null="true"/>
+		<property name="indicadorCriterioContratoEnergia" type="java.lang.Short" column="tscc_iccriteriocontratoenergia" length="2" not-null="true"/>
+		<property name="indicadorCriterioDadosEnergia" type="java.lang.Short" column="tscc_iccriteriodadosenergia" length="2" not-null="true"/>
+		<property name="indicadorCriterioProgramaSocial" type="java.lang.Short" column="tscc_iccriterioprogramasocial" length="2" not-null="true"/>
+		<property name="indicadorCriterioSeguroDesemprego" type="java.lang.Short" column="tscc_iccriteriosegdesemprego" length="2" not-null="true"/>
+		<property name="indicadorCriterioRendaComprovada" type="java.lang.Short" column="tscc_iccriteriorendacomprovad" length="2" not-null="true"/>
+		<property name="indicadorCriterioRendaDeclarada" type="java.lang.Short" column="tscc_iccriteriorendadeclarada" length="2" not-null="true"/>
+		<property name="indicadorCriterioQtdeEconomia" type="java.lang.Short" column="tscc_iccriterioqteconomia" length="2" not-null="true"/>
+		<property name="indicadorCriterioRecadastramento" type="java.lang.Short" column="tscc_iccriteriorecadastramento" length="2" not-null="true"/>
+
+		<property name="dataSimulacao" type="java.sql.Timestamp" column="tscc_dtsimulacao" length="8"/>
+		<property name="dataGeracao" type="java.sql.Timestamp" column="tscc_dtgeracao" length="8"/>
+		<property name="dataProcessamento" type="java.sql.Timestamp" column="tscc_dtprocessamento" length="8"/>
+		<property name="dataExecucao" type="java.sql.Timestamp" column="tscc_dtexecucao" length="8"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="tscc_tmultimaalteracao" length="8" not-null="true"/>
+		
+		<!-- associations -->
+
+		<many-to-one name="gerenciaRegional" class="gcom.cadastro.localidade.GerenciaRegional" >
+			<column name="greg_id"/>
+		</many-to-one>
+		
+		<many-to-one name="unidadeNegocio" class="gcom.cadastro.localidade.UnidadeNegocio" >
+			<column name="uneg_id"/>
+		</many-to-one>
+		
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" >
+			<column name="loca_id"/>
+		</many-to-one>
+		
+		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario" not-null="true">
+			<column name="usur_id"/>
+		</many-to-one>
+		
+	</class>
+</hibernate-mapping>

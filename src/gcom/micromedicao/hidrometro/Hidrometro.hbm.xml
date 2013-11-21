@@ -1,0 +1,88 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.micromedicao.hidrometro.Hidrometro" table="micromedicao.hidrometro">
+		<id name="id" type="java.lang.Integer" column="hidr_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_hidrometro</param>
+			</generator>
+		</id>
+		<property name="numero" type="java.lang.String" column="hidr_nnhidrometro" not-null="true" length="10"/>
+		<property name="dataAquisicao" type="java.sql.Date" column="hidr_dtaquisicao" not-null="true" length="4"/>
+		<property name="anoFabricacao" type="java.lang.Short" column="hidr_nnanofabricacao" not-null="true" length="2"/>
+		<property name="indicadorMacromedidor" type="java.lang.Short" column="hidr_icmacro" length="2"/>
+		<property name="dataUltimaRevisao" type="java.sql.Date" column="hidr_dtultimarevisao" length="4"/>
+		<property name="dataBaixa" type="java.sql.Date" column="hidr_dtbaixa" length="4"/>
+		<property name="numeroLeituraAcumulada" type="java.lang.Integer" column="hidr_nnleituraacumulada" not-null="true" length="4"/>
+		<property name="numeroDigitosLeitura" type="java.lang.Short" column="hidr_nndigitosleitura" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="hidr_tmultimaalteracao" length="8"/>
+		<property name="vazaoTransicao" type="java.math.BigDecimal" column="hidr_vztransicao" not-null="false" length="6"/>
+		<property name="vazaoNominal" type="java.math.BigDecimal" column="hidr_vznominal" not-null="false" length="6"/>
+		<property name="vazaoMinima" type="java.math.BigDecimal" column="hidr_vzminima" length="6"/>
+		<property name="notaFiscal" type="java.lang.Integer" column="hidr_nnnotafiscal" not-null="false" length="12"/>
+		<property name="tempoGarantiaAnos" type="java.lang.Short" column="hidr_nntempogarantia" not-null="false" length="4"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to HidrometroMovimentado -->
+		<set name="hidrometroMovimentados" lazy="true" inverse="true">
+			<key>
+				<column name="hidr_id"/>
+			</key>
+			<one-to-many class="gcom.micromedicao.hidrometro.HidrometroMovimentado"/>
+		</set>
+		<!-- bi-directional one-to-many association to HidrometroInstalacaoHistorico 
+    <set
+        name="hidrometroInstalacaoHistoricos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="hidr_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.HidrometroInstalacaoHistorico"
+        />
+    </set>
+     bi-directional many-to-one association to HidrometroTipo -->
+		<many-to-one name="hidrometroTipo" class="gcom.micromedicao.hidrometro.HidrometroTipo" not-null="true">
+			<column name="hitp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to HidrometroSituacao -->
+		<many-to-one name="hidrometroSituacao" class="gcom.micromedicao.hidrometro.HidrometroSituacao" not-null="true">
+			<column name="hist_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to HidrometroMarca -->
+		<many-to-one name="hidrometroMarca" class="gcom.micromedicao.hidrometro.HidrometroMarca" not-null="true">
+			<column name="himc_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to HidrometroCapacidade -->
+		<many-to-one name="hidrometroCapacidade" class="gcom.micromedicao.hidrometro.HidrometroCapacidade" not-null="true">
+			<column name="hicp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to HidrometroMotivoBaixa -->
+		<many-to-one name="hidrometroMotivoBaixa" class="gcom.micromedicao.hidrometro.HidrometroMotivoBaixa" not-null="true">
+			<column name="himb_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to HidrometroLocalArmazenagem -->
+		<many-to-one name="hidrometroLocalArmazenagem" class="gcom.micromedicao.hidrometro.HidrometroLocalArmazenagem" not-null="true">
+			<column name="hila_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to HidrometroClasseMetrologica -->
+		<many-to-one name="hidrometroClasseMetrologica" class="gcom.micromedicao.hidrometro.HidrometroClasseMetrologica" not-null="true">
+			<column name="hicm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to HidrometroDiametro -->
+		<many-to-one name="hidrometroDiametro" class="gcom.micromedicao.hidrometro.HidrometroDiametro" not-null="true">
+			<column name="hidm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to HidrometroRelojoaria -->
+		<many-to-one name="hidrometroRelojoaria" class="gcom.micromedicao.hidrometro.HidrometroRelojoaria" not-null="false">
+			<column name="hire_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+
+		<form-bean name="ManterDadosAtividadesOrdemServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ManterDadosAtividadesOrdemServicoActionForm" />
+
+		<form-bean name="ManterHorasExecucaoEquipeOSActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ManterHorasExecucaoEquipeOSActionForm" />
+			
+		<form-bean name="ManterMaterialExecucaoOSActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ManterMaterialExecucaoOSActionForm" />
+			
+		<form-bean name="ManterComponenteExecucaoOSActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ManterComponenteExecucaoOSActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+
+		<action name="ManterDadosAtividadesOrdemServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirManterDadosAtividadesOrdemServicoAction"
+			validate="true" input="/exibirManterDadosAtividadesOrdemServicoAction.do"
+			scope="session" path="/exibirManterDadosAtividadesOrdemServicoAction">
+			<forward name="manterDadosAtividadesOrdemServico"
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_manter_dados_atividades.jsp" />
+			<forward name="pesquisarAtividade"
+				path="/exibirPesquisarAtividadeAction.do?caminhoRetornoTelaPesquisaAtividade=exibirManterDadosAtividadesOrdemServicoAction" />
+		</action>
+
+		<action name="ManterHorasExecucaoEquipeOSActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirManterHorasExecucaoEquipeOSAction"
+			validate="true" input="/exibirManterHorasExecucaoEquipeOSAction.do"
+			scope="session" path="/exibirManterHorasExecucaoEquipeOSAction">
+			<forward name="manterHorasExecucaoEquipeOS"
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_manter_horas_execucao_equipe.jsp" />
+			<forward name="pesquisarEquipe"
+				path="/exibirPesquisarEquipeAction.do?caminhoRetornoTelaPesquisa=exibirManterHorasExecucaoEquipeOSAction" />
+		</action>
+		
+		<action name="ManterMaterialExecucaoOSActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirManterMaterialExecucaoOSAction"
+			validate="true" input="/exibirManterMaterialExecucaoOSAction.do"
+			scope="session" path="/exibirManterMaterialExecucaoOSAction">
+			<forward name="manterMaterialExecucaoOS"
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_manter_material_execucao.jsp" />
+			<forward name="pesquisarMaterial"
+				path="/exibirPesquisarMaterialAction.do?caminhoRetornoTelaPesquisaMaterial=exibirManterMaterialExecucaoOSAction" />
+		</action>
+		
+		<action name="ManterComponenteExecucaoOSActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirManterComponenteExecucaoOSAction"
+			validate="true" input="/exibirManterComponenteExecucaoOSAction.do"
+			scope="session" path="/exibirManterComponenteExecucaoOSAction">
+			<forward name="manterComponenteExecucaoOS"
+				path="/jsp/atendimentopublico/ordemservico/ordem_servico_manter_componente_execucao.jsp" />
+			<forward name="pesquisarFuncionario"
+				path="/exibirPesquisarFuncionarioAction.do?caminhoRetornoTelaPesquisaMaterial=exibirManterComponenteExecucaoOSAction" />
+		</action>
+		
+			
+	</action-mappings>
+	<!--********************************************************************************-->
+	<!--******************* ARQUIVO DE PROPRIEDADES *******************-->
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

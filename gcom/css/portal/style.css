@@ -1,0 +1,107 @@
+/* CSS Document - Compesa
+
+@author: Sérgio Hampel
+@email: rhampel22@gmail.com
+@company: Quarta Dimensão | Design & Tecnologia | www.4dimensao.com.br
+@date: 11/05/2011
+
+*/
+
+@import url(internal.css);
+@import url(datas.css);
+@import url(jquery.theme.css);
+
+* {margin:0; padding:0}
+a {cursor:pointer; outline:none; text-decoration:none}
+li {list-style:none}
+em {font-style:normal; font-weight:700; padding-right:5px}
+img {border:none}
+
+body {background:url(/gsan/imagens/portal/general/body.gif) repeat-x 0 0; color:#2f2f2f; font:12px/1.6em Verdana, Geneva, sans-serif;}
+
+/* Class / Important - Start */
+/* Class / Important - End */
+
+/* Formulários - Start */
+form {float:left}
+fieldset {border:none}
+fieldset legend {float:left; margin-top:-20px; text-indent:-9000px}
+/* Formulários - End */
+
+/* Container - Start */
+#container {background:url(/gsan/imagens/portal/general/content.png) repeat-y 0 0; display:table; margin:35px auto 0; padding:0 5px; width:950px}
+/* Container - End */
+
+/* Top - Start */
+#top {background:url(/gsan/imagens/portal/general/border-top.png) repeat-x 0 0; border-bottom:1px dashed #dedede; float:left; height:168px; width:950px}
+
+	/* Logo - Start */
+	#top h1 {margin:56px 0 0 56px}
+	#top h1, #top h1 a, #top h1 a img {float:left; height:43px; width:240px}
+	#top h1 a {text-indent:-9000px}
+	/* Logo - End */
+	
+	#top img {float:right; height:145px; margin-top:18px; width:607px}
+
+/* Top - End */
+
+/* Content - Start */
+#content {float:left; position:relative; width:950px}
+
+	/* Texto "O que é a loja virtual" - Start */
+	#text-top {background:url(/gsan/imagens/portal/general/img-text-top.gif) no-repeat 0 0; float:left; height:64px; margin:35px 0 35px 56px; padding:4px 0 0 105px; width:740px}
+	/* Texto "O que é a loja virtual" - End */
+	
+	/* Box - Start */
+	.box {float:left; height:360px; margin-left:33px; width:424px}
+	.box span {color:#2f2f2f; padding:270px 0 0 36px; float:left; width:330px}
+	.box span.title-box {text-indent:-9000px}
+	
+		#info-index {background:url(/gsan/imagens/portal/general/link-info.jpg) no-repeat 0 0}
+		#servicos-index {background:url(/gsan/imagens/portal/general/link-servicos.jpg) no-repeat 0 0}
+		#info-index a {height:90px}
+		#servicos-index a {height:35px}
+		
+		/* Formulário de matrícula - Start */
+		#form-matricula {padding:8px 0 0 36px; width:360px}
+		#form-matricula input, #form-matricula span {background:url(/gsan/imagens/portal/forms/matricula.png) no-repeat; float:left; text-indent:-9000px}
+		#form-matricula label {color:#737373; cursor:pointer; float:left; font-weight:700; height:25px; margin:8px 5px 0 0; width:67px}
+		#form-matricula input {border:none}
+
+		/* NÃO ALTERAR */
+		#form-matricula input.campo-text {background-position:-72px -4px; color:#008fd6; font:700 12px/1.6em Verdana; text-indent:0; width:93px;}
+		#form-matricula input.btn-ok {background-position:-195px -7px; cursor:pointer; height:29px; margin:6px 5px 0; width:50px;}
+		input[type=text]{ height:16px !important; padding:8px 12px !important; margin-top: 3.5px !important; }
+		/* FIM NÃO ALTERAR */
+		
+		#form-matricula span {background-position:-252px 0; display:none; height:39px; width:89px}
+		/* Formulário de matrícula - End */
+	
+	/* Box - End */
+
+/* Content - End */
+
+/* Footer - Start */
+#footer {background:url(/gsan/imagens/portal/general/footer.png) repeat-x 0 0; border-top:1px solid #003d98; float:left; height:200px; margin-top:50px; width:950px}
+#footer h4 {background:url(/gsan/imagens/portal/general/canais-atendimento.png) no-repeat 0 0; float:left; height:58px; margin:85px 15px 0 0; text-indent:-9000px; width:159px}
+#footer ul {float:right; margin-top:29px; /*width:776px*/}
+#footer ul li {float:left; margin-right:45px}
+#footer ul li a {background:url(/gsan/imagens/portal/general/links-canais-atendimento.png) no-repeat; float:left; height:115px; text-indent:-9000px; width:107px}
+#footer ul li#link-1 a {background-position:0 0}
+#footer ul li#link-2 a {background-position:-157px 0}
+#footer ul li#link-3 a {background-position:-313px 0}
+#footer ul li#link-4 a {background-position:-469px 0}
+#footer ul li#link-5 a {background-position:-626px 0}
+
+#footer ul li#link-1 a:hover {background-position:0 -120px}
+#footer ul li#link-2 a:hover {background-position:-157px -120px}
+#footer ul li#link-3 a:hover {background-position:-313px -120px}
+#footer ul li#link-4 a:hover {background-position:-469px -120px}
+#footer ul li#link-5 a:hover {background-position:-626px -120px}
+
+
+#footer p {float:left; padding:25px 0 0 45px; width:350px}
+#footer span {background:url(/gsan/imagens/portal/general/border-visit.png) no-repeat 0 0 #4d79b8; color:#fff; float:left; height:24px; line-height:2em; padding-left:10px}
+#footer em {background:url(/gsan/imagens/portal/general/border-visit-2.png) no-repeat right 0 #4d79b8; color:#001c39; float:left; height:24px; line-height:2em; padding:0 10px 0 5px}
+#footer address {color:#fff; float:right; font-size:11px; font-style:normal; margin:30px 45px 0 0; width:470px}           
+/* Footer - End */

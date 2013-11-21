@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.empresa.Empresa" table="cadastro.empresa">
+		<id name="id" type="java.lang.Integer" column="empr_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_empresa</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="empr_nmempresa" length="20"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="empr_nmabreviadoempresa" length="10"/>
+		<property name="indicadorUso" type="java.lang.Short" column="empr_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="empr_tmultimaalteracao" length="8"/>
+		<property name="email" type="java.lang.String" column="empr_dsemail" length="40"/>
+		<property name="indicadorEmpresaPrincipal" type="java.lang.Short" column="empr_icempresaprincipal" length="2"/>
+		<property name="indicadorEmpresaContratadaCobranca" type="java.lang.Short" column="empr_iccobranca" length="2"/>
+		<property name="indicadorLeitura" type="java.lang.Short" column="empr_icleitura" length="2"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to Rota
+    <set
+        name="rotas"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="empr_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Rota"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to Funcionario
+    <set
+        name="funcionarios"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="empr_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Funcionario"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

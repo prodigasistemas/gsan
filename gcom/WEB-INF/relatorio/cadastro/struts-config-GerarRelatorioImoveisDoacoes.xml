@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="GerarRelatorioImoveisDoacoesActionForm"
+			type="gcom.gui.relatorio.cadastro.GerarRelatorioImoveisDoacoesActionForm" />
+	</form-beans>
+
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		
+		<action 
+		    name="GerarRelatorioImoveisDoacoesActionForm"
+			type="gcom.gui.relatorio.cadastro.ExibirGerarRelatorioImoveisDoacoesAction"
+			scope="request"
+			validate="true" 
+			path="/exibirGerarRelatorioImoveisDoacoesAction">
+
+			<forward name="exibirGerarRelatorioImoveisDoacoes" 
+				path="/jsp/relatorio/cadastro/relatorio_imoveis_doacoes_gerar.jsp" />
+
+		</action>
+		
+		<action name="GerarRelatorioImoveisDoacoesActionForm"
+			type="gcom.gui.relatorio.cadastro.GerarRelatorioImoveisDoacoesAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioImoveisDoacoesAction"/>
+		
+		
+	</action-mappings>
+
+</struts-config>

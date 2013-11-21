@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="GerarRelatorioVolumesConsumidosNaoFaturadosActionForm"
+			type="gcom.gui.relatorio.financeiro.GerarRelatorioVolumesConsumidosNaoFaturadosActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	
+	<action-mappings>
+		
+		<action name="GerarRelatorioVolumesConsumidosNaoFaturadosActionForm"  
+			type="gcom.gui.relatorio.financeiro.ExibirGerarRelatorioVolumesConsumidosNaoFaturadosAction" 
+			validate="true"	
+			scope="session"	
+			path="/exibirGerarRelatorioVolumesConsumidosNaoFaturadosAction">
+			<forward name="exibirGerarRelatorioVolumesConsumidosNaoFaturadosAction" path="/jsp/relatorio/financeiro/volumes_consumidos_nao_faturados_gerar_relatorio.jsp" />
+		</action>
+		
+		<action name="GerarRelatorioVolumesConsumidosNaoFaturadosActionForm"  
+			type="gcom.gui.relatorio.financeiro.GerarRelatorioVolumesConsumidosNaoFaturadosAction" 
+			validate="true"	
+			scope="session"	
+			path="/gerarRelatorioVolumesConsumidosNaoFaturadosAction">
+		</action>
+	</action-mappings>
+	
+</struts-config>

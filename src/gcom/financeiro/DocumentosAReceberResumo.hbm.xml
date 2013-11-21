@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.financeiro.DocumentosAReceberResumo" table="financeiro.docs_a_rec_resumo">
+		<id name="id" type="java.lang.Integer" column="drrs_id">
+			<generator class="sequence">
+				<param name="sequence">financeiro.seq_docs_a_rec_resumo</param>
+			</generator>
+		</id>
+		<property name="anoMesReferenciaRecebimentos" type="java.lang.Integer" column="drrs_amreferenciarecebimentos" not-null="true" length="4"/>
+		<property name="indicadorSituacaoDocumentos" type="java.lang.Short" column="drrs_icsituacaodocumentos" not-null="true" length="2"/>
+		<property name="quantidadeDiasVencidos" type="java.lang.Integer" column="drrs_qtdiasvencidos" not-null="true" length="4"/>
+		<property name="quantidadeDocumentos" type="java.lang.Integer" column="drrs_qtdocumentos" not-null="true" length="4"/>
+		<property name="valorDocumentos" type="java.math.BigDecimal" column="drrs_vldocumentos" not-null="true" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="drrs_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to GerenciaRegional -->
+		<many-to-one name="gerenciaRegional" class="gcom.cadastro.localidade.GerenciaRegional" not-null="true">
+			<column name="greg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to UnidadeNegocio -->
+		<many-to-one name="unidadeNegocio" class="gcom.cadastro.localidade.UnidadeNegocio" not-null="true">
+			<column name="uneg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ImovelPerfil -->
+		<many-to-one name="imovelPerfil" class="gcom.cadastro.imovel.ImovelPerfil" not-null="false">
+			<column name="iper_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to EsferaPoder -->
+		<many-to-one name="esferaPoder" class="gcom.cadastro.cliente.EsferaPoder" not-null="false">
+			<column name="epod_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Categoria -->
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DocumentoTipo -->
+		<many-to-one name="documentoTipo" class="gcom.cobranca.DocumentoTipo" not-null="false">
+			<column name="dotp_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.seguranca.acesso.usuario.UsuarioSituacao" table="seguranca.usuario_situacao">
+		<id name="id" type="java.lang.Integer" column="usst_id">
+			<generator class="sequence">
+				<param name="sequence">seguranca.seq_usuario_situacao</param>
+			</generator>
+		</id>
+		<property name="descricaoUsuarioSituacao" type="java.lang.String" column="usst_dsusuariosituacao" length="30"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="usst_dsabreviado" length="6"/>
+		<property name="indicadorUso" type="java.lang.Short" column="usst_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="usst_tmultimaalteracao" length="8"/>
+		<property name="indicadorUsoSistema" type="java.lang.Short" column="usst_icusosistema" length="2"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to Usuario -->
+		<!-- 
+    <set
+        name="usuarios"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="usst_id" />
+        </key>
+        <one-to-many 
+            class="gcom.Usuario"
+        />
+    </set>
+    -->
+	</class>
+</hibernate-mapping>

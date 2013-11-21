@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.atendimentopublico.ordemservico.MotivoRejeicao" 
+		   table="atendimentopublico.repavimento_mot_rejeicao">
+		
+		<id name="id" type="java.lang.Integer" column="rpmr_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_repavimento_mot_rejeicao</param>
+			</generator>
+		</id>
+		
+		<property name="descricao" 
+				  type="java.lang.String" 
+				  column="rpmr_dsmotivorejeicao" 
+				  not-null="true" 
+				  length="60" />
+		
+		<property name="ultimaAlteracao" 
+		          type="java.sql.Timestamp" 
+		          column="rpmr_tmultimaalteracao" 
+		          not-null="true" 
+		          length="8" />
+		
+	</class>
+</hibernate-mapping>

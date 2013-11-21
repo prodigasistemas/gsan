@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.operacional.DistritoOperacional" table="operacional.distrito_operacional">
+		<id name="id" type="java.lang.Integer" column="diop_id">
+			<generator class="sequence">
+				<param name="sequence">operacional.seq_distrito_operacional</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="diop_dsdistritooperacional" length="30"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="diop_dsabreviado" length="3"/>
+		<property name="indicadorUso" type="java.lang.Short" column="diop_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="diop_tmultimaalteracao" length="8"/>
+		<!-- bi-directional many-to-one association to ZonaAbastecimento -->
+		<many-to-one name="zonaAbastecimento" class="gcom.operacional.ZonaAbastecimento">
+			<column name="zabs_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ZonaAbastecimento -->
+		<many-to-one name="setorAbastecimento" class="gcom.operacional.SetorAbastecimento">
+			<column name="stab_id"/>
+		</many-to-one>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to SistemaAbastecimento -->
+		<!--  <many-to-one
+        name="sistemaAbastecimento"
+        class="gcom.operacional.SistemaAbastecimento"
+        not-null="true"
+    >
+        <column name="sabs_id" />
+    </many-to-one> -->
+		<!-- bi-directional one-to-many association to Quadra
+    <set
+        name="quadras"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="diop_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Quadra"
+        />
+    </set>
+
+  -->
+	</class>
+</hibernate-mapping>

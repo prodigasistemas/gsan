@@ -1,0 +1,67 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+		Created by the Middlegen Hibernate plugin
+		
+		http://boss.bekk.no/boss/middlegen/
+		http://hibernate.sourceforge.net/
+	-->
+	<class name="gcom.faturamento.FaturamentoSituacaoComando" table="faturamento.fatur_situacao_comando">
+		<id name="id" type="java.lang.Integer" column="ftsc_id">
+			<generator class="sequence">
+				<param name="sequence">
+					faturamento.seq_fatur_situacao_comando</param>
+			</generator>
+		</id>
+		<property name="codigoSetorComercialInicial" type="java.lang.Integer" column="ftsc_cdsetorcomercialinicial"/>
+		<property name="codigoSetorComercialFinal" type="java.lang.Integer" column="ftsc_cdsetorcomercialfinal"/>
+		<property name="numeroQuadraInicial" type="java.lang.Integer" column="ftsc_nnquadrainicial"/>
+		<property name="numeroQuadraFinal" type="java.lang.Integer" column="ftsc_nnquadrafinal"/>
+		<property name="numeroLoteInicial" type="java.lang.Integer" column="ftsc_nnloteinicial"/>
+		<property name="numeroLoteFinal" type="java.lang.Integer" column="ftsc_nnlotefinal"/>
+		<property name="numeroSubLoteInicial" type="java.lang.Integer" column="ftsc_nnsubloteinicial"/>
+		<property name="numeroSubLoteFinal" type="java.lang.Integer" column="ftsc_nnsublotefinal"/>
+		<property name="codigoRotaInicial" type="java.lang.Integer" column="ftsc_cdrotainicial"/>
+		<property name="codigoRotaFinal" type="java.lang.Integer" column="ftsc_cdrotafinal"/>
+		<property name="sequencialRotaInicial" type="java.lang.Integer" column="ftsc_nnsequencialrotainicial"/>
+		<property name="sequencialRotaFinal" type="java.lang.Integer" column="ftsc_nnsequencialrotafinal"/>
+		<property name="indicadorConsumo" type="java.lang.Short" column="ftsc_icconsumo" length="2" not-null="true"/>
+		<property name="quantidadeImoveis" type="java.lang.Integer" column="ftsc_qtdimoveis"/>
+		<property name="indicadorComando" type="java.lang.Short" column="ftsc_iccomando" length="2" not-null="true"/>
+		<property name="anoMesInicialSituacaoFaturamento" type="java.lang.Integer" column="ftsc_amfatmtsitinicio"/>
+		<property name="anoMesFinalSituacaoFaturamento" type="java.lang.Integer" column="ftsc_amfaturamentosituacaofim"/>
+		<property name="observacao" type="java.lang.String" column="ftsc_dsobservacao" length="100"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ftsc_tmultimaalteracao" length="8"/>
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id"/>
+		</many-to-one>
+		<many-to-one name="localidadeInicial" class="gcom.cadastro.localidade.Localidade" not-null="false">
+			<column name="loca_idinicial"/>
+		</many-to-one>
+		<many-to-one name="localidadeFinal" class="gcom.cadastro.localidade.Localidade" not-null="false">
+			<column name="loca_idfinal"/>
+		</many-to-one>
+		<many-to-one name="categoria1" class="gcom.cadastro.imovel.Categoria" not-null="false">
+			<column name="catg_id1"/>
+		</many-to-one>
+		<many-to-one name="categoria2" class="gcom.cadastro.imovel.Categoria" not-null="false">
+			<column name="catg_id2"/>
+		</many-to-one>
+		<many-to-one name="categoria3" class="gcom.cadastro.imovel.Categoria" not-null="false">
+			<column name="catg_id3"/>
+		</many-to-one>
+		<many-to-one name="categoria4" class="gcom.cadastro.imovel.Categoria" not-null="false">
+			<column name="catg_id4"/>
+		</many-to-one>
+		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario" not-null="true">
+			<column name="usur_id"/>
+		</many-to-one>
+		<many-to-one name="faturamentoSituacaoTipo" class="gcom.faturamento.FaturamentoSituacaoTipo" not-null="false">
+			<column name="ftst_id"/>
+		</many-to-one>
+		<many-to-one name="faturamentoSituacaoMotivo" class="gcom.faturamento.FaturamentoSituacaoMotivo" not-null="false">
+			<column name="ftsm_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

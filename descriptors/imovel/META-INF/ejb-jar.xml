@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE ejb-jar PUBLIC "-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN" "http://java.sun.com/dtd/ejb-jar_2_0.dtd">
+<ejb-jar>
+    <enterprise-beans>
+        <session>
+            <display-name>ControladorImovelGCOM</display-name>
+            <ejb-name>ControladorImovelGCOM</ejb-name>
+            <local-home>gcom.cadastro.imovel.ControladorImovelLocalHome</local-home>
+            <local>gcom.cadastro.imovel.ControladorImovelLocal</local>
+            <ejb-class>gcom.cadastro.imovel.ControladorImovelSEJB</ejb-class>
+            <session-type>Stateless</session-type>
+            <transaction-type>Container</transaction-type>
+        </session>
+    </enterprise-beans>
+    <assembly-descriptor>
+        <container-transaction>
+            <method>
+                <ejb-name>ControladorImovelGCOM</ejb-name>
+                <method-name>*</method-name>
+            </method>
+            <trans-attribute>Required</trans-attribute>
+        </container-transaction>
+        <container-transaction>
+            <method>
+                <ejb-name>ControladorImovelGCOM</ejb-name>
+                <method-name>pesquisarImovelClientesEspeciaisRelatorio</method-name>
+            </method>
+            <trans-attribute>NotSupported</trans-attribute>
+        </container-transaction>
+        <container-transaction>
+            <method>
+                <ejb-name>ControladorImovelGCOM</ejb-name>
+                <method-name>gerarRelatorioCadastroConsumidoresInscricao</method-name>
+            </method>
+            <trans-attribute>NotSupported</trans-attribute>
+        </container-transaction>
+        <container-transaction>
+            <method>
+                <ejb-name>ControladorImovelGCOM</ejb-name>
+                <method-name>pesquisarImovelIdComConta</method-name>
+            </method>
+            <trans-attribute>NotSupported</trans-attribute>
+        </container-transaction>
+        <container-transaction>
+            <method>
+                <ejb-name>ControladorImovelGCOM</ejb-name>
+                <method-name>verificaExistenciaImovelAtualizacaoCadastral</method-name>
+            </method>
+            <trans-attribute>NotSupported</trans-attribute>
+        </container-transaction>
+
+        <container-transaction>
+            <method>
+                <ejb-name>ControladorImovelGCOM</ejb-name>
+                <method-name>gerarRelatorioImovelOutrosCriterios</method-name>
+            </method>
+            <trans-attribute>NotSupported</trans-attribute>
+        </container-transaction>
+                
+        <container-transaction>
+            <method>
+                <ejb-name>ControladorImovelGCOM</ejb-name>
+                <method-name>pesquisarImovelIdComConta</method-name>
+            </method>
+            <trans-attribute>NotSupported</trans-attribute>
+        </container-transaction>
+        
+
+        <container-transaction>
+            <method>
+                <ejb-name>ControladorImovelGCOM</ejb-name>
+                <method-name>obterQuantidadeEconomiasVirtuais</method-name>
+            </method>
+            <trans-attribute>NotSupported</trans-attribute>
+        </container-transaction>
+        
+        <container-transaction>
+            <method>
+                <ejb-name>ControladorImovelGCOM</ejb-name>
+                <method-name>pesquisarImoveisPorRotaComPaginacao</method-name>
+            </method>
+            <trans-attribute>NotSupported</trans-attribute>
+        </container-transaction>
+        
+        
+        
+        
+    </assembly-descriptor>
+    
+    
+</ejb-jar>

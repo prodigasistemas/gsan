@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.autoinfracao.AutosInfracao" table="faturamento.autos_infracao">
+		<id name="id" type="java.lang.Integer" column="auif_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_autos_infracao</param>
+			</generator>
+		</id>
+		<property name="dataEmissao" type="java.sql.Date" column="auif_dtemissao" not-null="false" length="4"/>
+		<property name="dataInicioRecurso" type="java.sql.Date" column="auif_dtiniciorecurso" not-null="false" length="4"/>
+		<property name="dataTerminoRecurso" type="java.sql.Date" column="auif_dtterminorecurso" not-null="false" length="4"/>
+		<property name="anoMesReferenciaGerada" type="java.lang.Integer" column="auif_amreferenciagerada" not-null="false" length="4"/>
+		<property name="observacao" type="java.lang.String" column="auif_dsobservacao" not-null="false" length="100"/>
+		<property name="numeroParcelasDebito" type="java.lang.Integer" column="auif_nnparcelasdebito" not-null="false" length="8"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="auif_tmultimaalteracao" length="8"/>
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to OrdemServico -->
+		<many-to-one name="ordemServico" class="gcom.atendimentopublico.ordemservico.OrdemServico" not-null="true">
+			<column name="orse_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Funcionario -->
+		<many-to-one name="funcionario" class="gcom.cadastro.funcionario.Funcionario" not-null="true">
+			<column name="func_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to FiscalizacaoSituacao -->
+		<many-to-one name="fiscalizacaoSituacao" class="gcom.atendimentopublico.ordemservico.FiscalizacaoSituacao" not-null="true">
+			<column name="fzst_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to AutoInfracaoSituacao -->
+		<many-to-one name="autoInfracaoSituacao" class="gcom.faturamento.autoinfracao.AutoInfracaoSituacao" not-null="true">
+			<column name="aist_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DebitoTipo -->
+		<many-to-one name="debitoTipo" class="gcom.faturamento.debito.DebitoTipo" not-null="true">
+			<column name="dbtp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DebitoTipo -->
+		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario" not-null="false">
+			<column name="usur_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

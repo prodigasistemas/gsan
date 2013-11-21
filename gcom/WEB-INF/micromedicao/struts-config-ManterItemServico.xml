@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+	
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="AtualizarItemServicoActionForm"
+			type="gcom.micromedicao.AtualizarItemServicoActionForm" />
+		<form-bean name="FiltrarItemServicoActionForm"
+			type="gcom.gui.micromedicao.FiltrarItemServicoActionForm" />
+		
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.micromedicao.ExibirManterItemServicoAction"
+			validate="false" scope="session"
+			path="/exibirManterItemServicoAction">
+
+			<forward name="exibirManterItemServico"
+				path="/jsp/micromedicao/item_servico_manter.jsp" />
+
+			<forward name="exibirAtualizarItemServico"
+				path="/exibirAtualizarItemServicoAction.do" />
+		</action>
+
+		<action name="AtualizarItemServicoActionForm"
+			type="gcom.gui.micromedicao.ExibirAtualizarItemServicoAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarItemServicoAction">
+
+			<forward name="itemServicoAtualizar"
+				path="/jsp/micromedicao/item_servico_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarItemServicoActionForm"
+			type="gcom.gui.micromedicao.AtualizarItemServicoAction"
+			validate="true" scope="session"
+			path="/atualizarItemServicoAction">
+
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.micromedicao.RemoverItemServicoAction"
+			 scope="request" path="/removerItemServicoAction">
+
+		</action>
+		<action name="FiltrarItemServicoActionForm"
+			type="gcom.micromedicao.GerarRelatorioItemServicoManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioItemServicoManterAction" />
+	
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

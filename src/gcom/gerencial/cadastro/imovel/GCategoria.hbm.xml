@@ -1,0 +1,85 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.gerencial.cadastro.imovel.GCategoria" table="cadastro.Gcategoria">
+		<id name="id" type="java.lang.Integer" column="catg_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.sequence_Gcategoria</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="catg_dscategoria" not-null="true" length="15"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="catg_dsabreviado" not-null="true" length="3"/>
+		<property name="consumoMinimo" type="java.lang.Integer" column="catg_nnconsumominimo" length="4"/>
+		<property name="consumoEstouro" type="java.lang.Integer" column="catg_nnconsumoestouro" length="4"/>
+		<property name="vezesMediaEstouro" type="java.math.BigDecimal" column="catg_nnvezesmediaestouro" length="3"/>
+		<property name="mediaBaixoConsumo" type="java.lang.Integer" column="catg_nnmediabaixoconsumo" length="4"/>
+		<property name="porcentagemMediaBaixoConsumo" type="java.math.BigDecimal" column="catg_pcmediabaixoconsumo" length="5"/>
+		<property name="consumoAlto" type="java.lang.Integer" column="catg_nnconsumoalto" length="4"/>
+		<property name="vezesMediaAltoConsumo" type="java.math.BigDecimal" column="catg_nnvezesmediaaltoconsumo" length="3"/>
+		<property name="indicadorUso" type="java.lang.Short" column="catg_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="catg_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to UnResumoColetaEsgoto -->
+		<set name="unResumoColetaEsgotos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="epod_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.micromedicao.UnResumoColetaEsgoto"/>
+		</set>
+		<!-- bi-directional one-to-many association to UnResumoConsumoAgua -->
+		<set name="unResumoConsumoAguas" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="epod_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.cadastro.UnResumoConsumoAgua"/>
+		</set>
+		<!-- bi-directional one-to-many association to UnResumoFaturamento -->
+		<set name="unResumoFaturamentos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="epod_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.faturamento.UnResumoFaturamento"/>
+		</set>
+		<!-- bi-directional one-to-many association to UnResumoArrecadacao -->
+		<set name="unResumoArrecadacao" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="epod_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.arrecadacao.UnResumoArrecadacao"/>
+		</set>
+		<!-- bi-directional one-to-many association to UnResumoLigacaoEconomia -->
+		<set name="unResumoLigacaoEconomias" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="catg_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.cadastro.UnResumoLigacaoEconomia"/>
+		</set>
+		<!-- bi-directional one-to-many association to GSubcategoria -->
+		<set name="gerSubcategorias" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="catg_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.cadastro.imovel.GSubcategoria"/>
+		</set>
+		<!-- bi-directional one-to-many association to RgResumoLigacaoEconomia -->
+		<set name="rgResumoLigacaoEconomias" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="catg_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.cadastro.RgResumoLigacaoEconomia"/>
+		</set>
+		<!-- bi-directional one-to-many association to UnResumoIndicadorDesempenhoMicromedicao -->
+		<set name="unResumoIndicadorDesempenhoMicromedicaos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="catg_id"/>
+			</key>
+			<one-to-many class="gcom.gerencial.micromedicao.UnResumoIndicadorDesempenhoMicromedicao"/>
+		</set>
+	</class>
+</hibernate-mapping>

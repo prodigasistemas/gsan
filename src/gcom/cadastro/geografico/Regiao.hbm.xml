@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.geografico.Regiao" table="cadastro.regiao">
+		<id name="id" type="java.lang.Integer" column="regi_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_regiao</param>
+			</generator>
+		</id>
+		<property name="nome" type="java.lang.String" column="regi_nmregiao" length="20"/>
+		<property name="indicadorUso" type="java.lang.Short" column="regi_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="regi_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to Microrregiao -->
+		<!--
+    <set
+        name="microrregiaos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="regi_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Microrregiao"
+        />
+    </set>
+-->
+	</class>
+</hibernate-mapping>

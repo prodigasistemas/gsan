@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.cobranca.NegativadorRetornoMotivo" table="cobranca.negatd_retorno_motivo">
+		<id name="id" type="java.lang.Integer" column="nrmt_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_negatd_retorno_motivo</param>
+			</generator>
+		</id>
+		<property name="descricaoRetornocodigo" type="java.lang.String" column="nrmt_dsretornocod" length="50"/>
+		<property name="indicadorUso" type="java.lang.Short" column="nrmt_icuso" length="2"/>
+		<property name="indicadorRegistroAceito" type="java.lang.Short" column="nrmt_icregistroaceito" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="nrmt_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="codigoRetornoMotivo" type="java.lang.Short" column="nrmt_cdretornomotivo" length="3"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Negativador -->
+		<many-to-one name="negativador" class="gcom.cobranca.Negativador" not-null="true">
+			<column name="negt_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to NegativadorMovimentoRegRetMot -->
+		<set name="negativadorMovimentoRegRetMot" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="nrmt_id"/>
+			</key>
+			<one-to-many class="gcom.cobranca.NegativadorMovimentoRegRetMot"/>
+		</set>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.FaturamentoImediatoAjuste" table="faturamento.fatur_imediato_ajuste">
+		<id name="id" type="java.lang.Integer" column="ftia_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_fatur_imediato_ajuste</param>
+			</generator>
+		</id>
+		<property name="valorCobradoAgua" type="java.math.BigDecimal" column="ftia_vlagua" length="13"/>
+		<property name="valorCobradoEsgoto" type="java.math.BigDecimal" column="ftia_vlesgoto" length="13"/>
+		<property name="numeroConsumoAgua" type="java.lang.Integer" column="ftia_nnconsumoagua" length="4"/>
+		<property name="numeroConsumoEsgoto" type="java.lang.Integer" column="ftia_nnconsumoesgoto" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ftia_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to Conta -->
+		<many-to-one name="conta" class="gcom.faturamento.conta.Conta" not-null="true">
+			<column name="cnta_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

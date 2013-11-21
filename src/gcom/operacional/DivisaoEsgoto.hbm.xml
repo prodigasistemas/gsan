@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.operacional.DivisaoEsgoto" table="operacional.divisao_esgoto">
+		<id name="id" type="java.lang.Integer" column="dves_id">
+			<generator class="sequence">
+				<param name="sequence">operacional.seq_divisao_esgoto</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="dves_dsdivisaoesgoto" length="30"/>
+		<property name="indicadorUso" type="java.lang.Short" column="dves_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="dves_tmultimaalteracao" length="8"/>
+		<!-- bi-directional many-to-one association to UnidadeOrganizacional -->
+		<many-to-one name="unidadeOrganizacional" class="gcom.cadastro.unidade.UnidadeOrganizacional">
+			<column name="unid_id"/>
+		</many-to-one>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to SistemaEsgoto
+    <set
+        name="sistemaEsgotos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="dves_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.SistemaEsgoto"
+        />
+    </set>
+
+  -->
+	</class>
+</hibernate-mapping>

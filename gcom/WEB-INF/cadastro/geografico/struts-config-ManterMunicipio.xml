@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>  
+
+	<form-beans>
+	
+		<form-bean name="ManterMunicipioActionForm"
+			type="gcom.gui.cadastro.geografico.ManterMunicipioActionForm" />
+			
+		<form-bean name="AtualizarMunicipioActionForm"
+			type="gcom.gui.cadastro.geografico.AtualizarMunicipioActionForm" />
+	
+		<form-bean name="ManutencaoRegistroActionForm" 
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+			
+	</form-beans>
+
+	<global-forwards />
+	
+	
+	<action-mappings> 	
+		<action  name="ManterMunicipioActionForm"  
+			type="gcom.gui.cadastro.geografico.ExibirManterMunicipioAction"
+			validate="false" 
+			scope="session" 
+			path="/exibirManterMunicipioAction">
+			
+			<forward name="manterMunicipio"
+				path="/jsp/cadastro/geografico/municipio_manter.jsp" />
+			
+			<forward name="exibirAtualizarMunicipio"
+				path="/exibirAtualizarMunicipioAction.do" /> 
+		</action>
+		
+		<action name="AtualizarMunicipioActionForm"  
+			type="gcom.gui.cadastro.geografico.ExibirAtualizarMunicipioAction"
+			validate="false" 
+			scope="session" 
+			path="/exibirAtualizarMunicipioAction">
+			
+			<forward name="atualizarMunicipio"
+				path="/jsp/cadastro/geografico/municipio_atualizar.jsp" />
+		</action>
+		
+		<action name="AtualizarMunicipioActionForm"  
+			type="gcom.gui.cadastro.geografico.AtualizarMunicipioAction"
+			validate="false" 
+			scope="session" 
+			path="/atualizarMunicipioAction">
+			
+		</action>		
+		
+		<action  name="ManutencaoRegistroActionForm"  
+			type="gcom.gui.cadastro.geografico.RemoverMunicipioAction"
+			validate="false" 
+			scope="session" 
+			path="/removerMunicipioAction">
+
+		</action>	
+		<action name="FiltrarMunicipioActionForm"
+			type="gcom.gui.relatorio.cadastro.GerarRelatorioMunicipioManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioMunicipioManterAction" />	
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

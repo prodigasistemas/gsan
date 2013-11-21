@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+    <!--Action Form Dinâmico que serve para inserir os Grupos de acesso -->
+		<form-bean name="AtualizarGrupoActionForm" type="org.apache.struts.validator.DynaValidatorActionForm" dynamic="true">
+		  <form-property name="indicadorUso" type="java.lang.String" />
+			<form-property name="descricao" type="java.lang.String" />
+			<form-property name="descricaoAbreviada" type="java.lang.String" />
+			<form-property name="cadastrarOperacao" type="java.lang.String" initial="false" />
+			<form-property name="operacoes" type="java.lang.String[]" />
+			<form-property name="diasExpiracaoSenha" type="java.lang.Integer" />
+			<form-property name="mensagem" type="java.lang.String" />
+			<form-property name="indicadorSuperintendencia" type="java.lang.Short" />
+			<form-property name="competenciaRetificacao" type="java.lang.String" />
+		</form-bean> 
+
+				
+		<!--<form-bean name="AtualizarGrupoDadosGeraisActionForm" type="gcom.gui.seguranca.acesso.AtualizarGrupoDadosGeraisActionForm" />
+		<form-bean name="AtualizarGrupoAcessosGrupoActionForm" type="gcom.gui.seguranca.acesso.AtualizarGrupoAcessosGrupoActionForm" />
+		<form-bean name="ExcluirGrupoActionForm" type="gcom.gui.seguranca.acesso.ExcluirGrupoActionForm" />
+		-->
+	</form-beans>
+
+	<global-forwards/>
+
+	<action-mappings>
+
+		<action type="gcom.gui.seguranca.acesso.ExibirManterGrupoAction"
+						path="/exibirManterGrupoAction">
+						
+			<forward name="exibirManterGrupo" path="/jsp/seguranca/acesso/grupo_manter.jsp" />
+		</action>
+
+		<action  name="ManutencaoRegistroActionForm" 
+		 				 type="gcom.gui.seguranca.acesso.RemoverGrupoAction"
+						 scope="request" 
+						 path="/removerGrupoAction">
+		</action>
+
+		<action	 name="AtualizarGrupoActionForm"
+		         type="gcom.gui.seguranca.acesso.ExibirAtualizarGrupoAction"
+			       validate="false" 
+			       input="/exibirAtualizarGrupoAction.do"
+			       scope="session" 
+			       path="/exibirAtualizarGrupoAction">
+			
+			<forward name="atualizarGrupoDadosGerais"
+				     path="/atualizarGrupoWizardAction.do?action=exibirAtualizarGrupoDadosGeraisAction" />
+				
+		</action>
+		
+		<action name="AtualizarGrupoActionForm"
+			    type="gcom.gui.seguranca.acesso.AtualizarGrupoWizardAction"
+			    validate="true" 
+			    parameter="action" 
+			    scope="session"
+			    path="/atualizarGrupoWizardAction">
+			
+			<forward name="atualizarGrupoDadosGerais"
+				     path="/jsp/seguranca/acesso/grupo_atualizar_dados_gerais.jsp" />
+				
+			<forward name="atualizarGrupoAcessosGrupo"
+				     path="/jsp/seguranca/acesso/grupo_atualizar_acessos_grupo.jsp" />
+				
+		</action>
+
+		<action	 type="gcom.gui.seguranca.acesso.CancelarAtualizarGrupoAction"
+			validate="false" 
+			path="/cancelarAtualizarGrupoAction" />
+		
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.relatorio.seguranca.GerarRelatorioGrupoManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioGrupoManterAction" />
+			
+	</action-mappings>
+	<!--********************************************************************************-->
+	<!--******************* ARQUIVO DE PROPRIEDADES *******************-->
+	<message-resources null="false" parameter="gcom.properties.application" />
+
+</struts-config>

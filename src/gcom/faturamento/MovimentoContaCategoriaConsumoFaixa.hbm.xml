@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.faturamento.MovimentoContaCategoriaConsumoFaixa" table="faturamento.mov_conta_catg_cons_fx">
+		<id name="id" type="java.lang.Integer" column="mccc_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_mov_conta_catg_cons_fx</param>
+			</generator>
+		</id>
+		<property name="consumoFaturadoAguaNaFaixa" type="int" column="mccc_nnconsumoaguafaixa" not-null="true" length="4"/>
+		<property name="valorFaturadoAguaNaFaixa" type="java.math.BigDecimal" column="mccc_vlaguafaixa" length="13"/>
+		<property name="limiteInicialConsumoNaFaixa" type="java.lang.Integer" column="mccc_nnlimiteinicial" length="4"/>
+		<property name="limiteFinalConsumoNaFaixa" type="java.lang.Integer" column="mccc_nnlimitefinal" length="4"/>
+		<property name="consumoFaturadoEsgotoNaFaixa" type="java.lang.Integer" column="mccc_nnconsumoesgotofaixa" length="4"/>
+		<property name="valorFaturadoEsgotoNaFaixa" type="java.math.BigDecimal" column="mccc_vlesgotofaixa" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="mccc_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="valorTarifaNaFaixa" type="java.math.BigDecimal" column="mccc_vltarifafaixa" length="13"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to MovimentoContaPrefaturadaCategoria -->
+		<many-to-one name="movimentoContaPrefaturadaCategoria" class="gcom.faturamento.MovimentoContaPrefaturadaCategoria" not-null="true">
+			<column name="mcpf_id"/>
+			<column name="catg_id"/>
+			<column name="scat_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

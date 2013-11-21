@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cadastro.imovel.ImovelEloAnormalidade" table="cadastro.imovel_elo_anormalidade">
+		<id name="id" type="java.lang.Integer" column="iean_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_imovel_elo_anormalidade</param>
+			</generator>
+		</id>
+		<property name="dataAnormalidade" type="java.sql.Date" column="iean_dtanormalidadeelo" not-null="true" length="4"/>
+		<property name="fotoAnormalidade" type="binary" column="iean_fotoanormalidadeelo" length="-1"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="iean_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to EloAnormalidade -->
+		<many-to-one name="eloAnormalidade" class="gcom.cadastro.imovel.EloAnormalidade" not-null="true">
+			<column name="eanm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

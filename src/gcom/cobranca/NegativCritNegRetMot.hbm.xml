@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.cobranca.NegativCritNegRetMot" table="cobranca.negativ_crit_neg_ret_mot">
+		<id name="id" type="java.lang.Integer" column="ncnr_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_negativ_crit_neg_ret_mot</param>
+			</generator>
+		</id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="nrmt_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to CobrancaGrupo -->
+		<many-to-one name="negativacaoCriterio" class="gcom.cobranca.NegativacaoCriterio" not-null="true">
+			<column name="ngct_id"/>
+		</many-to-one>
+		<many-to-one name="negativadorRetornoMotivo" class="gcom.cobranca.NegativadorRetornoMotivo" not-null="true">
+			<column name="nrmt_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

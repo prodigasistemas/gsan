@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="CicloMetaGrupoActionForm"
+			type="gcom.gui.cobranca.CicloMetaGrupoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		<action  name="CicloMetaGrupoActionForm"
+			type="gcom.gui.cobranca.ExibirInformarCicloMetaGrupoAction"
+			validate="false" scope="session" path="/exibirInformarCicloMetaGrupoAction">
+			<forward name="informarCicloMetaGrupo"
+				path="/jsp/cobranca/ciclo_meta_grupo_informar.jsp" />
+		</action>
+		
+		<action  name="CicloMetaGrupoActionForm"
+			type="gcom.gui.cobranca.InformarCicloMetaGrupoContinuarAction"
+			validate="false" scope="session" path="/informarCicloMetaGrupoContinuarAction">
+			<forward name="informarCicloMetaGrupo"
+				path="/jsp/cobranca/ciclo_meta_grupo_informar.jsp" />
+		</action>
+		
+		<action  name="CicloMetaGrupoActionForm"
+			type="gcom.gui.cobranca.InformarCicloMetaGrupoSalvarAction"
+			validate="false" scope="session" path="/informarCicloMetaGrupoSalvarAction">
+		</action>
+		
+	</action-mappings>
+	
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

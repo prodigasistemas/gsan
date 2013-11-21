@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="InformarTramiteSituacaoCobrancaActionForm"
+			type="gcom.gui.atendimentopublico.InformarTramiteSituacaoCobrancaActionForm" />
+		<form-bean name="InformarTramiteAssociacaoSituacaoCobrancaActionForm"
+			type="gcom.gui.atendimentopublico.InformarTramiteAssociacaoSituacaoCobrancaActionForm" />
+	</form-beans>
+
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		<action name="InformarTramiteSituacaoCobrancaActionForm"
+			type="gcom.gui.atendimentopublico.ExibirInformarTramiteSituacaoCobrancaAction"
+			validate="false" scope="session"
+			path="/exibirInformarTramiteSituacaoCobrancaAction">
+			<forward name="informarTramiteSituacaoCobranca"
+				path="/jsp/atendimentopublico/tramite_situacao_cobranca_informar.jsp" />
+		</action>
+		
+		<action name="InformarTramiteSituacaoCobrancaActionForm"
+			type="gcom.gui.atendimentopublico.InformarTramiteSituacaoCobrancaAction"
+			validate="false" scope="session"
+			path="/informarTramiteSituacaoCobrancaAction" />
+			
+		<action name="InformarTramiteAssociacaoSituacaoCobrancaActionForm"
+			type="gcom.gui.atendimentopublico.ExibirInformarAssociacaoSituacaoCobrancaAction"
+			validate="false" scope="session"
+			path="/exibirInformarAssociacaoSituacaoCobrancaAction">
+			<forward name="exibirInformarAssociacaoSituacaoCobranca"
+				path="/jsp/atendimentopublico/tramite_situacao_cobranca_informar_associacao.jsp" />
+		</action>
+			
+		<action name="InformarTramiteAssociacaoSituacaoCobrancaActionForm"
+			type="gcom.gui.atendimentopublico.InformarAssociacaoSituacaoCobrancaAction"
+			validate="false" scope="session"
+			path="/informarAssociacaoSituacaoCobrancaAction">
+			<forward name="exibirInformarAssociacaoSituacaoCobranca"
+				path="/jsp/atendimentopublico/tramite_situacao_cobranca_informar_associacao.jsp" />
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

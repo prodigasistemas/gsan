@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.imovel.ImovelSuprimido" table="cadastro.imoveis_suprimidos">
+		<id name="id" type="java.lang.Integer" column="imsu_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_imoveis_suprimidos</param>
+			</generator>
+		</id>
+		<property name="sequencialImpressao" type="java.lang.Integer" column="imsu_sqimpressao"/>
+		<property name="linhaTxt" type="java.lang.String" column="imsu_dstxtgerado" length="500" not-null="true"/>
+		<property name="dataExecucao" type="java.sql.Timestamp" column="imsu_tmexecucao" length="8"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="imsu_tmultimaalteracao" length="8"/>
+		<property name="idLocalidade" type="java.lang.Integer" column="loca_id"/>
+		<property name="idSetorComercial" type="java.lang.Integer" column="stcm_id"/>
+		<property name="codigoSetorComercial" type="java.lang.Integer" column="stcm_cdsetorcomercial"/>
+		<property name="idQuadra" type="java.lang.Integer" column="qdra_id"/>
+		<property name="numeroQuadra" type="java.lang.Integer" column="qdra_nnquadra"/>
+		<property name="numeroLote" type="java.lang.Integer" column="imsu_nnlote"/>
+		<property name="numeroSubLote" type="java.lang.Integer" column="imsu_nnsublote"/>
+		<many-to-one name="ordemServico" class="gcom.atendimentopublico.ordemservico.OrdemServico" not-null="true">
+			<column name="orse_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

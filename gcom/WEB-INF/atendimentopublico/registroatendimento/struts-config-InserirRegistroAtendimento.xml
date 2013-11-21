@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+
+		<form-bean name="InserirRegistroAtendimentoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.InserirRegistroAtendimentoActionForm" />
+			
+		<form-bean name="PesquisarRegistrosAtendimentoPendentesLocalOcorrenciaActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.PesquisarRegistrosAtendimentoPendentesLocalOcorrenciaActionForm" />
+		
+		<form-bean name="AdicionarSolicitanteRegistroAtendimentoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.AdicionarSolicitanteRegistroAtendimentoActionForm" />
+			
+		<form-bean name="PesquisarRegistrosAtendimentoPendentesFaltaAguaEncerrarActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.PesquisarRegistrosAtendimentoPendentesFaltaAguaEncerrarActionForm" />
+			
+		<form-bean name="PesquisarRegistrosAtendimentoEncerradosLocalOcorrenciaActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.PesquisarRegistrosAtendimentoEncerradosLocalOcorrenciaActionForm" />
+			
+		<form-bean name="PesquisarRegistrosAtendimentoFaltaAguaImovelLocalOcorrenciaActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.PesquisarRegistrosAtendimentoFaltaAguaImovelLocalOcorrenciaActionForm" />
+		
+		<form-bean name="AtualizarRegistroAtendimentoObservacaoArquivoAnexoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.AtualizarRegistroAtendimentoObservacaoArquivoAnexoActionForm" />
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+
+		<action 
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirInserirRegistroAtendimentoAction"
+			validate="false" input="/exibirInserirRegistroAtendimentoAction.do"
+			scope="session" path="/exibirInserirRegistroAtendimentoAction">
+			<forward name="inserirRegistroAtendimento"
+				path="/inserirRegistroAtendimentoWizardAction.do?action=exibirInserirRegistroAtendimentoDadosGeraisAction" />
+		</action>
+		
+		<action name="InserirRegistroAtendimentoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.InserirRegistroAtendimentoWizardAction"
+			validate="true" parameter="action" scope="session"
+			path="/inserirRegistroAtendimentoWizardAction"
+			input="/exibirInserirRegistroAtendimentoAction.do">
+			<forward name="inserirRegistroAtendimentoDadosGerais"
+				path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_inserir_dados_gerais.jsp" />
+			<forward name="inserirRegistroAtendimentoDadosLocalOcorrencia"
+				path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_inserir_dados_local_ocorrencia.jsp" />
+			<forward name="inserirRegistroAtendimentoDadosSolicitante"
+				path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_inserir_dados_solicitante.jsp" />
+			<forward name="inserirRegistroAtendimentoAnexos"
+				path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_inserir_anexos.jsp" />
+			<forward name="informarEndereco" 
+				path="/exibirInserirEnderecoAction.do" />
+			<forward name="informarFone" 
+				path="/exibirAdicionarSolicitanteFoneAction.do" />
+		</action>
+		<action
+			type="gcom.gui.atendimentopublico.registroatendimento.CancelarInserirRegistroAtendimentoAction"
+			validate="false" scope="session" path="/cancelarInserirRegistroAtendimentoAction" />
+			
+		<action 
+			type="gcom.gui.atendimentopublico.registroatendimento.ConcluirInserirRegistroAtendimentoAction"
+			scope="session" path="/concluirInserirRegistroAtendimentoAction">
+		</action>
+			
+		<!-- Pesquisar RAs pendentes para um mesmo local de ocorrência -->
+		<action name="PesquisarRegistrosAtendimentoPendentesLocalOcorrenciaActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.PesquisarRegistrosAtendimentoPendentesLocalOcorrenciaAction"
+			validate="false" scope="session" path="/pesquisarRegistrosAtendimentoPendentesLocalOcorrenciaAction">
+			<forward name="pesquisarRAsPendentesLocalOcorrencia"
+				path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_pendentes_local_ocorrencia_popup.jsp" />
+		</action>
+		
+		<!-- Pesquisar RAs pendentes para falta de água generalizada -->
+		<action name="PesquisarRegistrosAtendimentoPendentesFaltaAguaEncerrarActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.PesquisarRegistrosAtendimentoPendentesFaltaAguaEncerrarAction"
+			validate="false" scope="session" path="/pesquisarRegistrosAtendimentoPendentesFaltaAguaEncerrarAction">
+			<forward name="pesquisarRegistrosAtendimentoPendentesFaltaAguaEncerrar"
+				path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_pendente_falta_agua_imovel_encerrar_popup.jsp" />
+		</action>
+		
+		<!-- Pesquisar RAs encerrados -->
+		<action name="PesquisarRegistrosAtendimentoEncerradosLocalOcorrenciaActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.PesquisarRegistrosAtendimentoEncerradosLocalOcorrenciaAction"
+			validate="false" scope="session" path="/pesquisarRegistrosAtendimentoEncerradosLocalOcorrenciaAction">
+			<forward name="pesquisarRegistrosAtendimentoEncerradosLocalOcorrencia"
+				path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_encerrado_local_ocorrencia_popup.jsp" />
+		</action>
+		
+		<!-- Pesquisar RAs em aberto para mesma area do bairro -->
+		<action name="PesquisarRegistrosAtendimentoFaltaAguaImovelLocalOcorrenciaActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.PesquisarRegistrosAtendimentoFaltaAguaImovelLocalOcorrenciaAction"
+			validate="false" scope="session" path="/pesquisarRegistrosAtendimentoFaltaAguaImovelLocalOcorrenciaAction">
+			<forward name="pesquisarRAsFaltaAguaOcorrencia"
+				path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_pendente_falta_agua_imovel_popup.jsp" />
+		</action>
+		
+		<!-- Adicionar um solicitante em um RA já existente -->
+		<action name="AdicionarSolicitanteRegistroAtendimentoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirAdicionarSolicitanteRegistroAtendimentoAction"
+			validate="true" scope="session" path="/exibirAdicionarSolicitanteRegistroAtendimentoAction">
+			<forward name="adicionarSolicitanteRegistroAtendimento"
+				path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_adicionar_solicitante_popup.jsp" />
+			<forward name="exibirInserirEncereco"
+				path="/exibirInserirEnderecoAction.do?tipoPesquisaEndereco=registroAtendimento&amp;operacao=4&amp;caminhoRetornoTelaAdicionarSolicitante=exibirAdicionarSolicitanteRegistroAtendimentoAction" />
+			<forward name="exibirAdicionarSolicitanteFone"
+				path="/exibirAdicionarSolicitanteFoneAction.do?telaRetornoPopUp=exibirAdicionarSolicitanteRegistroAtendimentoAction.do"/>
+			<forward name="exibirPesquisarCliente"
+				path="/exibirPesquisarClienteAction.do?caminhoRetornoTelaPesquisaCliente=exibirAdicionarSolicitanteRegistroAtendimentoAction"/>
+			<forward name="exibirPesquisarUnidadeOrganizacional"
+				path="/exibirPesquisarUnidadeOrganizacionalAction.do?caminhoRetornoTelaPesquisaUnidadeOrganizacional=exibirAdicionarSolicitanteRegistroAtendimentoAction"/>
+			<forward name="exibirPesquisarFuncionario"
+				path="/exibirFuncionarioPesquisar.do?caminhoRetornoTelaPesquisaFuncionario=exibirAdicionarSolicitanteRegistroAtendimentoAction"/>
+				
+				
+			
+		</action>
+
+		<action name="AdicionarSolicitanteRegistroAtendimentoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.AdicionarSolicitanteRegistroAtendimentoAction"
+			validate="true" scope="session" path="/adicionarSolicitanteRegistroAtendimentoAction">
+			<forward name="adicionarSolicitanteRegistroAtendimento"
+				path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_adicionar_solicitante_popup.jsp" />
+		</action>
+		<!-- Solicitante Fone  -->
+		<action name="AdicionarSolicitanteRegistroAtendimentoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirAdicionarSolicitanteFoneAction"
+			validate="true" scope="session" path="/exibirAdicionarSolicitanteFoneAction">
+			<forward name="adicionarSolicitanteFone"
+				path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_solicitante_fone_popup.jsp" />
+		</action>
+
+		<action name="AdicionarSolicitanteRegistroAtendimentoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.AdicionarSolicitanteFoneAction"
+			validate="true" scope="session" path="/adicionarSolicitanteFoneAction">
+			<forward name="exibirAdicionarSolicitante"
+				path="/exibirAdicionarSolicitanteRegistroAtendimentoAction.do" />
+			<forward name="exibirAdicionarSolicitanteProcessoRA"
+				path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_solicitante_fone_popup.jsp" />
+		</action>
+		
+		<action
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirInserirRegistroAtendimentoAnexosAction"
+			validate="false" 
+			path="/exibirInserirRegistroAtendimentoAnexosAction">
+			<forward name="inserirRegistroAtendimentoAnexos"
+				path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_inserir_anexos.jsp" />
+		</action>
+		
+		<action name="AtualizarRegistroAtendimentoObservacaoArquivoAnexoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirAtualizarRegistroAtendimentoObservacaoArquivoAnexoAction"
+			validate="true" 
+			path="/exibirAtualizarRegistroAtendimentoObservacaoArquivoAnexoAction">
+			<forward name="atualizarRegistroAtendimentoObservacaoArquivoAnexoAction"
+				path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_atualizar_observacao_arquivo_anexos.jsp" />
+		</action>
+			
+	</action-mappings>
+	<!--********************************************************************************-->
+	<!--******************* ARQUIVO DE PROPRIEDADES *******************-->
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

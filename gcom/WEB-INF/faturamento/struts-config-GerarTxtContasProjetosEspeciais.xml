@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="GerarTxtContasProjetosEspeciaisForm"
+			type="gcom.gui.faturamento.GerarTxtContasProjetosEspeciaisForm" />
+	</form-beans>
+
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="GerarTxtContasProjetosEspeciaisForm"
+			type="gcom.gui.faturamento.ExibirGerarTxtContasProjetosEspeciaisAction"
+			validate="true" 
+			path="/exibirGerarTxtContasProjetosEspeciaisAction">
+			
+			<forward name="exibirGerarTxtContasProjetosEspeciaisAction" 
+				path="/jsp/faturamento/gerar_txt_contas_projetos_especiais.jsp" />
+				
+		</action>
+		
+		<action name="GerarTxtContasProjetosEspeciaisForm"
+			type="gcom.gui.faturamento.GerarTxtContasProjetosEspeciaisAction"
+			validate="true" 
+			path="/gerarTxtContasProjetosEspeciaisAction" />		
+		
+	</action-mappings>
+
+</struts-config>

@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.cliente.FoneTipo" table="cadastro.fone_tipo">
+		<id name="id" type="java.lang.Integer" column="fnet_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_fone_tipo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="fnet_dsfonetipo" length="20"/>
+		<property name="indicadorUso" type="java.lang.Short" column="fnet_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="fnet_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to ClienteFone
+    <set
+        name="clienteFones"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="fnet_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.ClienteFone"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

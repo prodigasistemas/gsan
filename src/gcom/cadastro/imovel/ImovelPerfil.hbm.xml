@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.imovel.ImovelPerfil" table="cadastro.imovel_perfil">
+		<id name="id" type="java.lang.Integer" column="iper_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_imovel_perfil</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="iper_dsimovelperfil" length="20"/>
+		<property name="indicadorUso" type="java.lang.Short" column="iper_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="iper_tmultimaalteracao" length="8"/>
+		<property name="indicadorGeracaoAutomatica" type="java.lang.Short" column="iper_icgeracaoautomatica" not-null="true" length="4"/>
+		<property name="indicadorGerarDadosLeitura" type="java.lang.Short" column="iper_icgerardadosleitura" not-null="true" length="2"/>
+		<property name="indicadorBloquearRetificacao" type="java.lang.Short" column="iper_icbloquearetificacao" not-null="true" length="2"/>
+		<property name="indicadorInserirManterPerfil" type="java.lang.Short" column="iper_icinserirmanterperfil" not-null="true" length="2"/>
+		<property name="indicadorGrandeConsumidor" type="java.lang.Short" column="iper_icgrandeconsumidor" not-null="true" length="2"/>
+		<property name="indicadorBloqueaDadosSocial" type="java.lang.Short" column="iper_icbloqueadadossocial" not-null="true" length="2"/>
+		<property name="indicadorGeraDebitoSegundaViaConta" type="java.lang.Short" column="iper_icgerardeb2aviaconta" not-null="true" length="2"/>
+		<!-- bi-directional many-to-one association to Subcategoria -->
+		<many-to-one name="subcategoria" class="gcom.cadastro.imovel.Subcategoria" not-null="false">
+			<column name="scat_id"/>
+		</many-to-one>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to Imovel 
+    <set
+        name="imovels"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="iper_id" />
+        </key>
+        <one-to-many 
+            class="gcom.cadastro.Imovel"
+        />
+    </set>
+    -->
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,112 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.financeiro.GrupoContabil" table="financeiro.grupo_contabil">
+		<id name="id" type="java.lang.Integer" column="grct_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.sequence_grupo_contabil</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="grct_dsgrupocontabil" not-null="true" length="35"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="grct_dsabreviado" not-null="true" length="5"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="grct_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to LancamentoResumo -->
+		<!--<set
+        name="lancamentoResumos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="grct_id" />
+        </key>
+        <one-to-many
+            class="mapeamentohibernate.LancamentoResumo"
+        />
+    </set>-->
+		<!-- bi-directional one-to-many association to CreditoTipo -->
+		<!-- <set
+        name="creditoTipos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="grct_id" />
+        </key>
+        <one-to-many
+            class="mapeamentohibernate.CreditoTipo"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to CreditoRealizadoHistorico -->
+		<!--<set
+        name="creditoRealizadoHistoricos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="grct_id" />
+        </key>
+        <one-to-many
+            class="mapeamentohibernate.CreditoRealizadoHistorico"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to DebitoCobradoHistorico -->
+		<!-- <set
+        name="debitoCobradoHistoricos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="grct_id" />
+        </key>
+        <one-to-many
+            class="mapeamentohibernate.DebitoCobradoHistorico"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to DebitoCobrado -->
+		<!-- <set
+        name="debitoCobrados"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="grct_id" />
+        </key>
+        <one-to-many
+            class="mapeamentohibernate.DebitoCobrado"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to DebitoTipo -->
+		<!-- <set
+        name="debitoTipos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="grct_id" />
+        </key>
+        <one-to-many
+            class="mapeamentohibernate.DebitoTipo"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to CreditoRealizado -->
+		<!-- <set
+        name="creditoRealizados"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="grct_id" />
+        </key>
+        <one-to-many
+            class="mapeamentohibernate.CreditoRealizado"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

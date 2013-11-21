@@ -1,0 +1,242 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	
+	<class name="gcom.faturamento.MovimentoContaPrefaturada" table="faturamento.mov_conta_prefaturada">
+		<id name="id" type="java.lang.Integer" column="mcpf_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_mov_conta_prefaturada</param>
+			</generator>
+		</id>
+		
+		<property 
+			name="anoMesReferenciaPreFaturamento" 
+			type="int" 
+			column="mcpf_ammovimento" 
+			length="4"
+		/>
+		
+		<property 
+			name="leituraHidrometro" 
+			type="java.lang.Integer" 
+			column="mcpf_nnleiturahidrometro" 
+			length="4"
+		/>
+		
+		<property 
+			name="dataHoraLeitura" 
+			type="java.sql.Timestamp" 
+			column="mcpf_tmleitura" 
+			length="8"
+		/>
+		
+		<property 
+			name="indicadorSituacaoLeitura" 
+			type="short" 
+			column="mcpf_icsituacaoleitura" 
+			length="2"
+		/>
+		
+		<property 
+			name="leituraFaturamento" 
+			type="java.lang.Integer" 
+			column="mcpf_nnleiturafaturamento" 
+			length="4"
+		/>
+		
+		<property 
+			name="consumoMedido" 
+			type="java.lang.Integer" 
+			column="mcpf_nnconsumomedido" 
+			length="4"
+		/>
+		
+		<property 
+			name="consumoCobrado" 
+			type="java.lang.Integer" 
+			column="mcpf_nnconsumocobrado" 
+			length="4"
+		/>
+		
+		<property 
+			name="dataHoraGeracaoMovimento" 
+			type="java.sql.Timestamp" 
+			column="mcpf_tmgeracao" 
+			length="8"
+		/>
+		
+		<property 
+			name="indicadorAtualizacaoFaturamento" 
+			type="short" 
+			column="mcpf_icatualizarfaturamento" 
+			length="2"
+		/>
+		<property 
+			name="utlimaAlteracao" 
+			type="java.sql.Timestamp" 
+			column="mcpf_tmultimaalteracao" 
+			length="8"
+		/>
+		
+		<property 
+			name="indicadorEmissaoConta" 
+			type="short" 
+			column="mcpf_icemissaoconta" 
+			length="2"
+		/>
+		
+		<property 
+			name="consumoRateioAgua" 
+			type="java.lang.Integer" 
+			column="mcpf_nnconsumorateioagua" 
+			length="4"
+		/>
+		
+		<property 
+			name="consumoRateioEsgoto" 
+			type="java.lang.Integer" 
+			column="mcpf_nnconsumorateioesgoto" 
+			length="4"
+		/>
+		
+		<property 
+			name="indicadorGeracaoConta" 
+			type="short" 
+			column="mcpf_icgeracaoconta" 
+			length="2"
+		/>
+		
+		<property 
+			name="consumoImoveisVinculados" 
+			type="java.lang.Integer" 
+			column="mcpf_nnconsimoveisvinculados" 
+			length="4"
+		/>
+		
+		<property 
+			name="leituraHidrometroAnterior" 
+			type="java.lang.Integer" 
+			column="mcpf_nnleituraanterior" 
+			length="4"
+		/>
+		
+		<property
+			name="valorRateioAgua"
+			type="java.math.BigDecimal"
+			column="mcpf_vlrateioagua"
+			not-null="true"
+			length="13"
+		/>
+		
+		<property
+			name="valorRateioEsgoto"
+			type="java.math.BigDecimal"
+			column="mcpf_vlrateioesgoto"
+			not-null="true"
+			length="13"
+		/>
+		
+		<property
+			name="latitude"
+			type="java.lang.String"
+			column="mcpf_latitude"
+			not-null="false"
+			length="20"
+		/>
+		
+		<property
+			name="longitude"
+			type="java.lang.String"
+			column="mcpf_longitude"
+			not-null="false"
+			length="20"
+		/>
+
+		<property
+			name="indicadorRetransmissao"
+			type="short"
+			column="mcpf_icretransmissao"
+			length="2"
+		/>
+		<property
+        	name="indicadorAlteracao"
+	        type="short"
+	        column="mcpf_icalteracao"
+    	    length="2"
+	    />
+		
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to MovimentoContaPrefaturadaCategoria -->
+		<set name="movimentoContaPrefaturadaCategorias" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="mcpf_id"/>
+			</key>
+			<one-to-many class="gcom.faturamento.MovimentoContaPrefaturadaCategoria"/>
+		</set>
+		
+		<!-- bi-directional one-to-many association to MovimentoContaImpostoDeduzido -->
+		<set name="movimentoContaImpostoDeduzidos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="mcpf_id"/>
+			</key>
+			<one-to-many class="gcom.faturamento.MovimentoContaImpostoDeduzido"/>
+		</set>
+		
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel">
+			<column name="imov_id"/>
+		</many-to-one>
+		
+		<!-- bi-directional many-to-one association to MedicaoTipo -->
+		<many-to-one name="medicaoTipo" class="gcom.micromedicao.medicao.MedicaoTipo">
+			<column name="medt_id"/>
+		</many-to-one>
+		
+		<!-- bi-directional many-to-one association to FaturamentoGrupo -->
+		<many-to-one name="faturamentoGrupo" class="gcom.faturamento.FaturamentoGrupo">
+			<column name="ftgr_id"/>
+		</many-to-one>
+		
+		<!-- bi-directional many-to-one association to Tabela -->
+		<many-to-one name="rota" class="gcom.micromedicao.Rota">
+			<column name="rota_id"/>
+		</many-to-one>
+		
+		<!-- bi-directional many-to-one association to LeituraAnormalidade -->
+		<many-to-one name="leituraAnormalidadeLeitura" class="gcom.micromedicao.leitura.LeituraAnormalidade">
+			<column name="ltan_id"/>
+		</many-to-one>
+		
+		<!-- bi-directional many-to-one association to LeituraAnormalidade -->
+		<many-to-one name="leituraAnormalidadeFaturamento" class="gcom.micromedicao.leitura.LeituraAnormalidade">
+			<column name="ltan_idleitanormfatmt"/>
+		</many-to-one>
+		
+		<!-- bi-directional many-to-one association to ConsumoTipo -->
+		<many-to-one name="consumoTipo" class="gcom.micromedicao.consumo.ConsumoTipo">
+			<column name="cstp_id"/>
+		</many-to-one>
+		
+		<!-- bi-directional many-to-one association to ConsumoAnormalidade -->
+		<many-to-one name="consumoAnormalidade" class="gcom.micromedicao.consumo.ConsumoAnormalidade">
+			<column name="csan_id"/>
+		</many-to-one>
+		
+		<!-- bi-directional many-to-one association to ConsumoAnormalidade -->
+		<many-to-one name="conta" class="gcom.faturamento.conta.Conta">
+			<column name="cnta_id"/>
+		</many-to-one>
+		
+		<!-- bi-directional many-to-one association to ConsumoAnormalidade -->
+		<many-to-one name="cobrancaDocumento" class="gcom.cobranca.CobrancaDocumento">
+			<column name="cbdo_id"/>
+		</many-to-one>
+	</class>
+
+</hibernate-mapping>

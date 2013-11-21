@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.arrecadacao.debitoautomatico.DebitoAutomatico" table="arrecadacao.debito_automatico">
+		<id name="id" type="java.lang.Integer" column="deba_id">
+			<generator class="sequence">
+				<param name="sequence">arrecadacao.seq_debito_automatico</param>
+			</generator>
+		</id>
+		<property name="identificacaoClienteBanco" type="java.lang.String" column="deba_dsidentificacaoclientebco" length="14"/>
+		<property name="dataOpcaoDebitoContaCorrente" type="java.sql.Date" column="deba_dtopcao" length="4"/>
+		<property name="dataInclusaoNovoDebitoAutomatico" type="java.sql.Date" column="deba_dtinclusao" length="4"/>
+		<property name="dataExclusao" type="java.sql.Date" column="deba_dtexclusao" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="deba_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to DebitoAutomaticoMovimento -->
+		<!--
+   <set
+        name="debitoAutomaticoMovimentos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="deba_id" />
+        </key>
+        <one-to-many
+            class="mapeamentohibernate.DebitoAutomaticoMovimento"
+        />
+    </set>
+  -->
+		<!-- bi-directional many-to-one association to Agencia -->
+		<many-to-one name="agencia" class="gcom.arrecadacao.banco.Agencia" not-null="true">
+			<column name="agen_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

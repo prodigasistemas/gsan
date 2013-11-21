@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="DesfazerCancelamentoRetificacaoContaActionForm" type="gcom.gui.faturamento.conta.DesfazerCancelamentoRetificacaoContaActionForm" />						
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+  <action-mappings>
+	   <action name="DesfazerCancelamentoRetificacaoContaActionForm"
+			type="gcom.gui.faturamento.conta.ExibirManterDesfazerCancelamentoRetificacaoContaAction"
+			scope="session" validate="true"
+			path="/exibirManterDesfazerCancelamentoRetificacaoContaAction">
+			<forward name="desfazerCancelamentoRetificacaoConta"
+				path="/jsp/faturamento/conta/conta_desfazer_cancelamento_retificacao.jsp" />
+		</action>
+		<action name="DesfazerCancelamentoRetificacaoContaActionForm"
+			type="gcom.gui.faturamento.conta.ManterDesfazerCancelamentoRetificacaoContaAction" scope="session"
+			validate="true" path="/manterDesfazerCancelamentoRetificacaoContaAction" />
+			
+			</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

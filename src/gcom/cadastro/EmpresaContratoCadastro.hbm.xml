@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cadastro.EmpresaContratoCadastro" table="cadastro.empr_contrato_cadastro">
+		<id name="id" type="java.lang.Integer" column="eccd_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="dataInicioContrato" type="java.sql.Date" column="eccd_dtiniciocontrato" not-null="true" length="4"/>
+		<property name="dataFinalContrato" type="java.sql.Date" column="eccd_dtfinalcontrato" not-null="true" length="4"/>
+		<property name="dataCancelamentoContrato" type="java.sql.Date" column="eccd_dtcancelcontrato" length="4"/>
+		<property name="valorVisita" type="java.math.BigDecimal" column="eccd_vlvisita" not-null="true" length="15"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="eccd_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<many-to-one name="empresa" class="gcom.cadastro.empresa.Empresa">
+			<column name="empr_id"/>
+		</many-to-one>
+		<many-to-one name="contratoMotivoCancelamento" class="gcom.arrecadacao.ContratoMotivoCancelamento">
+			<column name="ctcn_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to EmpresaContratoCadastroAtributo -->
+		<set name="empresaContratoCadastroAtributos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="eccd_id"/>
+			</key>
+			<one-to-many class="gcom.cadastro.EmpresaContratoCadastroAtributo"/>
+		</set>
+	</class>
+</hibernate-mapping>

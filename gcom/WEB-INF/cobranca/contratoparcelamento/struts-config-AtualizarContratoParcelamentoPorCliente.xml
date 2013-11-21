@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean 
+		    name="AtualizarContratoParcelamentoPorClienteActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.AtualizarContratoParcelamentoPorClienteActionForm" /> 
+		
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+				
+				
+		<!-- INICIO [UC1139] Atualizar Contrato de Parcelamento por Cliente -->
+		<action name="AtualizarContratoParcelamentoPorClienteActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.ExibirAtualizarContratoParcelamentoPorClienteAction"
+			path="/exibirAtualizarContratoParcelamentoClienteAction" scope="session">
+			<forward name="exibirAtualizar"
+				path="/jsp/cobranca/contratoparcelamento/contrato_parcelamento_atualizar.jsp" />
+			
+		</action>
+		
+		
+		<action name="AtualizarContratoParcelamentoPorClienteActionForm"
+			type="gcom.gui.cobranca.contratoparcelamento.AtualizarContratoParcelamentoPorClienteAction"
+			path="/atualizarContratoParcelamentoClienteAction">
+			<forward name="exibirAtualizar"
+				path="/exibirAtualizarContratoParcelamentoClienteAction.do" />
+		</action>
+		
+		<!-- FIM [UC1139] Atualizar Contrato de Parcelamento por Cliente -->
+		
+		
+	</action-mappings>
+	
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

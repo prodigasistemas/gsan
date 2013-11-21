@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.tarifasocial.TarifaSocialCartaDebito" table="cadastro.tar_social_carta_debito">
+	
+		<composite-id name="comp_id" class="gcom.cadastro.tarifasocial.TarifaSocialCartaDebitoPK">
+			<key-property name="imovelId" column="imov_id"
+				type="java.lang.Integer" length="4"/>
+			<key-property name="contaId" column="cnta_id"
+				type="java.lang.Integer" length="4"/>
+			<key-property name="tarifaSocialComandoCartaID" column="tscc_id"
+				type="java.lang.Integer" length="4"/>
+		</composite-id>
+		
+		<property name="referenciaConta" type="java.lang.Integer" column="cnta_amreferenciaconta" length="10" not-null="true"/>
+		<property name="dataVencimentoConta" type="java.sql.Date" column="cnta_dtvencimentoconta" length="8" not-null="true"/>
+		<property name="valorConta" type="java.math.BigDecimal" column="tscd_vlconta" length="13" not-null="true"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="tscd_tmultimaalteracao" length="8" not-null="true"/>
+		
+		<!-- associations -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true" update="false" insert="false">
+			<column name="imov_id"/>
+		</many-to-one>
+		
+		<many-to-one name="conta" class="gcom.faturamento.conta.Conta" not-null="true" update="false" insert="false">
+			<column name="cnta_id"/>
+		</many-to-one>
+				
+		<many-to-one name="tarifaSocialComandoCarta" class="gcom.cadastro.tarifasocial.TarifaSocialComandoCarta" not-null="true" update="false" insert="false">
+			<column name="tscc_id"/>
+		</many-to-one>
+		
+	</class>
+</hibernate-mapping>

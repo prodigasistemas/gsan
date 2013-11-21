@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cobranca.CobrancaSituacao" table="cobranca.cobranca_situacao">
+		<id name="id" type="java.lang.Integer" column="cbst_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_cobranca_situacao</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="cbst_dscobrancasituacao" length="50"/>
+		<property name="indicadorUso" type="java.lang.Short" column="cbst_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cbst_tmultimaalteracao" length="8"/>
+		<property name="indicadorExigenciaAdvogado" type="java.lang.Short" column="cbst_icexigenciaadvogado" length="2"/>
+		<property name="indicadorBloqueioParcelamento" type="java.lang.Short" column="cbst_icbloqueioparcel" length="2"/>
+		<property name="indicadorBloqueioInclusao" type="java.lang.Short" column="cbst_icbloqueioinclusao" length="2"/>
+		<property name="indicadorBloqueioRetirada" type="java.lang.Short" column="cbst_icbloqueioretirada" length="2"/>
+		<property name="indicadorSelecaoApenasComPermissao" type="java.lang.Short" column="cbst_icselecaopermesp" not-null="true" length="2"/>
+		<property name="indicadorPrescricaoImoveisParticulares" type="java.lang.Integer" column="cbst_icprescreveparticular" not-null="true" length="2"/>
+		<property name="indicadorNaoIncluirImoveisEmCobrancaResultado" type="java.lang.Integer" column="cbst_icnaocobranca" not-null="true" length="2"/>
+		
+		<many-to-one name="contaMotivoRevisao" class="gcom.faturamento.conta.ContaMotivoRevisao" not-null="false">
+			<column name="cmrv_id"/>
+		</many-to-one>
+		<many-to-one name="profissao" class="gcom.cadastro.cliente.Profissao" not-null="false">
+			<column name="prof_id"/>
+		</many-to-one>
+		<many-to-one name="ramoAtividade" class="gcom.cadastro.cliente.RamoAtividade" not-null="false">
+			<column name="ratv_id"/>
+		</many-to-one>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to Imovel
+    <set
+        name="imovels"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="stcb_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Imovel"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to ImovelCobrancaSituacao
+    <set
+        name="imovelCobrancaSituacaos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="stcb_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.ImovelCobrancaSituacao"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

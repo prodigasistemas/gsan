@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+
+		<form-bean name="FiltrarNegativadorRetornoMotivoActionForm"
+			type="gcom.gui.cobranca.spcserasa.FiltrarNegativadorRetornoMotivoActionForm" />
+
+		<form-bean name="ManutencaoRegistroActionForm" type="gcom.gui.ManutencaoRegistroActionForm" />
+
+ 		<form-bean name="AtualizarNegativadorRetornoMotivoActionForm"
+			type="gcom.gui.cobranca.spcserasa.AtualizarNegativadorRetornoMotivoActionForm" />
+        
+	</form-beans>
+
+	<global-forwards/>
+
+	<action-mappings>
+	
+		<action name="FiltrarNegativadorRetornoMotivoActionForm" 
+			type="gcom.gui.cobranca.spcserasa.ExibirManterNegativadorRetornoMotivoAction" 
+			scope="session" validate="false"
+			path="/exibirManterNegativadorRetornoMotivoAction">
+			<forward name="manterNegativadorRetornoMotivo" path="/jsp/cobranca/spcserasa/negativador_motivo_retorno_manter.jsp" />
+			<forward name="atualizarNegativadorRetornoMotivo" path="/exibirAtualizarNegativadorRetornoMotivoAction.do" />				
+		</action>
+		
+		
+			  
+		<action name="FiltrarNegativadorRetornoMotivoActionForm"
+			type="gcom.gui.relatorio.cobranca.spcserasa.GerarRelatorioNegativadorRetornoMotivoManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioNegativadorRetornoMotivoManterAction" />
+		
+		
+		
+		<action name="AtualizarNegativadorRetornoMotivoActionForm" 
+			type="gcom.gui.cobranca.spcserasa.ExibirAtualizarNegativadorRetornoMotivoAction" 
+			scope="session" validate="false"
+			path="/exibirAtualizarNegativadorRetornoMotivoAction">
+			<forward name="exibirAtualizarNegativadorRetornoMotivo" path="/jsp/cobranca/spcserasa/negativador_motivo_retorno_atualizar.jsp" />			
+		</action>
+		
+		<action name="ManutencaoRegistroActionForm" 
+			type="gcom.gui.cobranca.spcserasa.RemoverNegativadorRetornoMotivoAction" 
+			scope="request" path="/removerNegativadorRetornoMotivoAction"/>
+		
+		<action name="AtualizarNegativadorRetornoMotivoActionForm" 
+			type="gcom.gui.cobranca.spcserasa.AtualizarNegativadorRetornoMotivoAction" 
+			scope="request" path="/atualizarNegativadorRetornoMotivoAction"/>
+
+	</action-mappings>
+	<!--******************* ARQUIVO DE PROPRIEDADES *******************-->
+	<message-resources null="false" parameter="gcom.properties.application" />
+	
+</struts-config>

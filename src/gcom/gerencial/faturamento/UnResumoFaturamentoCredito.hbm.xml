@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.gerencial.faturamento.UnResumoFaturamentoCredito" table="faturamento.un_resumo_faturamento_credito">
+		<composite-id name="comp_id" class="gcom.gerencial.faturamento.UnResumoFaturamentoCreditoPK">
+			<key-property name="resumoFaturamento" column="refa_id" type="java.lang.Integer" length="4"/>
+			<key-property name="creditoOrigem" column="crog_id" type="java.lang.Integer" length="4"/>
+			<key-property name="lancamentoItemContabil" column="lict_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<property name="volumeDocumentosFaturados" type="java.math.BigDecimal" column="rfcr_vldocumentosfaturados" not-null="true" length="13"/>
+		<property name="quantidadeDocumentosFaturados" type="java.lang.Integer" column="rfcr_qtdocumentosfaturados" not-null="true" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="rfcr_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to GLancamentoItemContabil -->
+		<many-to-one name="gerLancamentoItemContabil" class="gcom.gerencial.financeiro.lancamento.GLancamentoItemContabil" update="false" insert="false">
+			<column name="lict_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GCreditoOrigem -->
+		<many-to-one name="gerCreditoOrigem" class="gcom.gerencial.faturamento.credito.GCreditoOrigem" update="false" insert="false">
+			<column name="crog_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to UnResumoFaturamento -->
+		<many-to-one name="unResumoFaturamento" class="gcom.gerencial.faturamento.UnResumoFaturamento" update="false" insert="false">
+			<column name="refa_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

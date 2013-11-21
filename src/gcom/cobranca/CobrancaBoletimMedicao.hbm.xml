@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.CobrancaBoletimMedicao" table="cobranca.cobr_boletim_medicao">
+		<id name="id" type="java.lang.Integer" column="cobm_id">
+			<generator class="sequence">
+				<param name="sequence">
+				cobranca.seq_cobr_boletim_medicao</param>
+			</generator>
+		</id>
+		<property name="anoMesReferencia" type="java.lang.Integer" column="cobm_amreferencia" length="4"/>
+		<property name="dataGeracaoBoletim" type="java.sql.Date" column="cobm_dtgeracao" length="4"/>
+		<property name="valorDescontos" type="java.math.BigDecimal" column="cobm_vldescontos" length="13"/>
+		<property name="valorTaxaSucesso" type="java.math.BigDecimal" column="cobm_vltxsucesso" length="13"/>
+		<property name="valorServicosExecutados" type="java.math.BigDecimal" column="cobm_vlservexec" length="13"/>
+		<property name="valorTotal" type="java.math.BigDecimal" column="cobm_vltotal" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cobm_tmultimaalteracao" length="8"/>
+   
+		<!-- bi-directional many-to-one association to CobrancaGrupo -->
+		<many-to-one name="cobrancaGrupo" class="gcom.cobranca.CobrancaGrupo" not-null="false">
+			<column name="cbgr_id"/>
+		</many-to-one>
+		
+		<!-- bi-directional many-to-one association to CobrancaGrupo -->
+		<many-to-one name="contratoEmpresaServico" class="gcom.micromedicao.ContratoEmpresaServico" not-null="false">
+			<column name="cese_id"/>
+		</many-to-one>
+		
+	</class>
+</hibernate-mapping>

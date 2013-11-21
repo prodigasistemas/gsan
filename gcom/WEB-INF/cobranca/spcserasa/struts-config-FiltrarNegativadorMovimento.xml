@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="FiltrarNegativadorMovimentoActionForm"
+			type="gcom.gui.cobranca.spcserasa.FiltrarNegativadorMovimentoActionForm" />
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarNegativadorMovimentoActionForm" 
+			type="gcom.gui.cobranca.spcserasa.ExibirFiltrarNegativadorMovimentoAction"
+			validate="false" scope="session" path="/exibirFiltrarNegativadorMovimentoAction">
+			<forward name="filtrarNegativadorMovimento"
+				path="/jsp/cobranca/spcserasa/negativador_movimento_filtrar.jsp" />
+		</action>
+		
+		<action name="FiltrarNegativadorMovimentoActionForm" 
+			type="gcom.gui.cobranca.spcserasa.FiltrarNegativadorMovimentoAction"
+			validate="false" scope="session"
+			path="/filtrarNegativadorMovimentoAction">
+			
+			
+
+			<forward name="retornarFiltroNegativadorMovimento" 
+				path="/exibirConsultarNegativadorMovimentoAction.do" />
+	 		
+				
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="GerarCartasCampanhaSolidariedadeCriancaNegociacaoAVistaActionForm"
+			type="gcom.gui.cobranca.GerarCartasCampanhaSolidariedadeCriancaNegociacaoAVistaActionForm" />
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<action name="GerarCartasCampanhaSolidariedadeCriancaNegociacaoAVistaActionForm"
+			type="gcom.gui.cobranca.ExibirGerarCartasCampanhaSolidariedadeCriancaNegociacaoAVistaAction"
+			validate="true" scope="session"
+			path="/exibirGerarCartasCampanhaSolidariedadeCriancaNegociacaoAVistaAction">
+			<forward name="exibirGerarCartasCampanhaSolidariedadeCriancaNegociacaoAVista"
+				path="/jsp/cobranca/cartas_campanha_solidariedade_crianca_gerar.jsp" />
+		</action>
+		<action name="GerarCartasCampanhaSolidariedadeCriancaNegociacaoAVistaActionForm"
+			type="gcom.gui.cobranca.GerarCartasCampanhaSolidariedadeCriancaNegociacaoAVistaAction"
+			validate="true" scope="session"
+			path="/gerarCartasCampanhaSolidariedadeCriancaNegociacaoAVistaAction" />
+
+	</action-mappings>
+
+
+</struts-config>

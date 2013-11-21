@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarLocalArmazenagemHidrometroActionForm"
+			type="gcom.gui.micromedicao.FiltrarLocalArmazenagemHidrometroActionForm" />
+
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarLocalArmazenagemHidrometroActionForm"  
+			type="gcom.gui.micromedicao.ExibirFiltrarLocalArmazenagemHidrometroAction" 
+			validate="false"
+			scope="session"
+			path="/exibirFiltrarLocalArmazenagemHidrometroAction">
+
+			<forward name="filtrarLocalArmazenagemHidrometro"
+			path="/jsp/micromedicao/hidrometro_local_armazenagem_filtrar.jsp" />
+
+		</action>
+
+		<action name="FiltrarLocalArmazenagemHidrometroActionForm"
+			type="gcom.gui.micromedicao.FiltrarLocalArmazenagemHidrometroAction"
+			validate="true" 
+			scope="session"
+			path="/filtrarLocalArmazenagemHidrometroAction">
+			
+			<forward name="exibirManterLocalArmazenagemHidrometro"
+				path="/exibirManterLocalArmazenagemHidrometroAction.do" />
+			
+			
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>
+

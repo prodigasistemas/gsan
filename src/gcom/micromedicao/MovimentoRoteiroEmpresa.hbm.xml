@@ -1,0 +1,173 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.micromedicao.MovimentoRoteiroEmpresa" table="micromedicao.movimento_roteiro_empr">
+		<id name="id" type="java.lang.Integer" column="mrem_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_movimento_roteiro_empr</param>
+			</generator>
+		</id>
+		<property name="anoMesMovimento" type="java.lang.Integer" column="mrem_ammovimento" not-null="true" length="4"/>
+		<property name="codigoSetorComercial" type="java.lang.Integer" column="mrem_cdsetorcomercial" not-null="true" length="4"/>
+		<property name="nomeCliente" type="java.lang.String" column="mrem_nmcliente" length="50"/>
+		<property name="numeroQuadra" type="java.lang.Integer" column="mrem_nnquadra" not-null="true" length="4"/>
+		<property name="numeroLoteImovel" type="java.lang.String" column="mrem_nnloteimovel" not-null="true" length="4"/>
+		<property name="numeroSubloteImovel" type="java.lang.String" column="mrem_nnsubloteimovel" not-null="true" length="3"/>
+		<property name="enderecoImovel" type="java.lang.String" column="mrem_enderecoimovel" length="100"/>
+		<property name="descricaoAbreviadaCategoriaImovel" type="java.lang.String" column="mrem_dsabrevcatgimovel" length="3"/>
+		<property name="numeroHidrometro" type="java.lang.String" column="mrem_nnhidrometro" length="10"/>
+		<property name="quantidadeEconomias" type="java.lang.Short" column="mrem_qteconomias" length="2"/>
+		<property name="numeroLeituraAnterior" type="java.lang.Integer" column="mrem_nnleituraanterior" length="4"/>
+		<property name="numeroFaixaLeituraEsperadaInicial" type="java.lang.Integer" column="mrem_nnfaixaleitespinicial" length="4"/>
+		<property name="numeroFaixaLeituraEsperadaFinal" type="java.lang.Integer" column="mrem_nnfaixaleitespfinal" length="4"/>
+		<property name="numeroLeituraHidrometro" type="java.lang.Integer" column="mrem_nnleiturahidrometro" length="4"/>
+		<property name="indicadorConfirmacaoLeitura" type="java.lang.Short" column="mrem_icconfirmacaoleitura" length="2"/>
+		<property name="indicadorAtualizacaoLeitura" type="java.lang.Integer" column="mrem_icatualizarleitura" length="2"/>
+		<property name="tempoLeitura" type="java.sql.Timestamp" column="mrem_tmleitura" length="8"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="mrem_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="dataInstalacaoHidrometro" type="java.sql.Date" column="mrem_dtinstalacaohidrometro" length="4"/>
+		<property name="dataHoraProcessamento" type="java.sql.Timestamp" column="mrem_tmprocessamento" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to LeituraAnormalidade -->
+		<many-to-one name="leituraAnormalidade" class="gcom.micromedicao.leitura.LeituraAnormalidade" not-null="true">
+			<column name="ltan_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LigacaoEsgotoSituacao -->
+		<many-to-one name="ligacaoEsgotoSituacao" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao" not-null="true">
+			<column name="lest_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ImovelPerfil -->
+		<many-to-one name="imovelPerfil" class="gcom.cadastro.imovel.ImovelPerfil" not-null="true">
+			<column name="iper_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to FaturamentoGrupo -->
+		<many-to-one name="faturamentoGrupo" class="gcom.faturamento.FaturamentoGrupo" not-null="true">
+			<column name="ftgr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to HidrometroProtecao -->
+		<many-to-one name="hidrometroProtecao" class="gcom.micromedicao.hidrometro.HidrometroProtecao" not-null="true">
+			<column name="hipr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to HidrometroMarca -->
+		<many-to-one name="hidrometroMarca" class="gcom.micromedicao.hidrometro.HidrometroMarca" not-null="true">
+			<column name="himc_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to HidrometroLocalInstalacao -->
+		<many-to-one name="hidrometroLocalInstalacao" class="gcom.micromedicao.hidrometro.HidrometroLocalInstalacao" not-null="true">
+			<column name="hili_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to RoteiroEmpresa -->
+		<many-to-one name="roteiroEmpresa" class="gcom.micromedicao.RoteiroEmpresa" not-null="false">
+			<column name="roem_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LigacaoAguaSituacao -->
+		<many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="true">
+			<column name="last_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Empresa -->
+		<many-to-one name="empresa" class="gcom.cadastro.empresa.Empresa" not-null="true">
+			<column name="empr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to HidrometroCapacidade -->
+		<many-to-one name="hidrometroCapacidade" class="gcom.micromedicao.hidrometro.HidrometroCapacidade" not-null="true">
+			<column name="hicp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to MedicaoTipo -->
+		<many-to-one name="medicaoTipo" class="gcom.micromedicao.medicao.MedicaoTipo" not-null="true">
+			<column name="medt_id"/>
+		</many-to-one>
+		<many-to-one name="rota" class="gcom.micromedicao.Rota" not-null="false">
+			<column name="rota_id"/>
+		</many-to-one>
+		<property name="codigoSubcategoria1" type="java.lang.Integer" column="mrem_cdsubcategoria" not-null="false" length="4"/>
+		<!--   <property
+        name="idCategoriaImovel2"
+        type="java.lang.Integer"
+        column="mrem_idcatgimovel2"
+        not-null="false"
+        length="4"
+    />-->
+		<many-to-one name="categoria2" class="gcom.cadastro.imovel.Categoria" not-null="false">
+			<column name="catg_id"/>
+		</many-to-one>
+		<property name="quantidadeEconomias2" type="java.lang.Short" column="mrem_qteconomias2" not-null="false" length="2"/>
+		<property name="codigoSubcategoria2" type="java.lang.Integer" column="mrem_cdsubcategoria2" not-null="false" length="4"/>
+		<property name="numeroConsumoFaturadoMenos1Mes" type="java.lang.Integer" column="mrem_nnconsumofaturado1" not-null="false" length="4"/>
+		<property name="numeroConsumoFaturadoMenos2Meses" type="java.lang.Integer" column="mrem_nnconsumofaturado2" not-null="false" length="4"/>
+		<property name="numeroConsumoFaturadoMenos3Meses" type="java.lang.Integer" column="mrem_nnconsumofaturado3" not-null="false" length="4"/>
+		<property name="descricaoConsumoTipo" type="java.lang.String" column="mrem_dsconsumotipo" length="20"/>
+		<property name="numeroLacreLigacaoAgua" type="java.lang.String" column="mrem_nnlacre" length="10"/>
+		<property name="numeroSequencialRota" type="java.lang.Integer" column="mrem_nnsequencialrota" not-null="false" length="4"/>
+		<property name="numeroConsumoFaturadoMenos4Meses" type="java.lang.Integer" column="mrem_nnconsumofaturado4" not-null="false" length="4"/>
+		<property name="numeroConsumoFaturadoMenos5Meses" type="java.lang.Integer" column="mrem_nnconsumofaturado5" not-null="false" length="4"/>
+		<property name="numeroConsumoFaturadoMenos6Meses" type="java.lang.Integer" column="mrem_nnconsumofaturado6" not-null="false" length="4"/>
+		<property name="numeroConsumoMedio" type="java.lang.Integer" column="mrem_nnconsumomedio" not-null="false" length="4"/>
+		<property name="codigoRota" type="java.lang.Short" column="mrem_cdrota" not-null="false" length="2"/>
+		<!--  <property
+        name="idLogradouro"
+        type="java.lang.Integer"
+        column="mrem_idlogradouro"
+        not-null="false"
+        length="4"
+    />-->
+		<many-to-one name="logradouro" class="gcom.cadastro.endereco.Logradouro" not-null="false">
+			<column name="logr_id"/>
+		</many-to-one>
+		<property name="nomeLogradouro" type="java.lang.String" column="mrem_nmlogradouro" length="10"/>
+		<property name="numeroImovel" type="java.lang.String" column="mrem_nnimovel" length="5"/>
+		<property name="complementoEndereco" type="java.lang.String" column="mrem_dscomplementoendereco" length="100"/>
+		<property name="inscricaoImovel" type="java.lang.String" column="mrem_inscricaoimovel" length="21"/>
+		<property name="nomeLeiturista" type="java.lang.String" column="mrem_nmleiturista" length="20"/>
+		<!--   <property
+        name="idGereciaRegional"
+        type="java.lang.Integer"
+        column="mrem_idgerenciaregional"
+        not-null="false"
+        length="4"
+    />-->
+		<many-to-one name="gerenciaRegional" class="gcom.cadastro.localidade.GerenciaRegional" not-null="false">
+			<column name="greg_id"/>
+		</many-to-one>
+		<property name="nomeBairro" type="java.lang.String" column="mrem_nmbairro" length="30"/>
+		<!--  <property
+        name="idCategoriaImovel"
+        type="java.lang.Integer"
+        column="mrem_idcatgimovel"
+        not-null="false"
+        length="4"
+    />-->
+		<many-to-one name="categoriaPrincipal" class="gcom.cadastro.imovel.Categoria" not-null="true">
+			<column name="catg_idprincipal"/>
+		</many-to-one>
+		<many-to-one name="leituraTipo" class="gcom.micromedicao.leitura.LeituraTipo" not-null="true">
+			<column name="lttp_id"/>
+		</many-to-one>
+		<property name="descricaoAbreviadaLogradouroTitulo" type="java.lang.String" column="mrem_dsabrevlogradourotitulo" length="5"/>
+		<property name="descricaoAbreviadaLogradouroTipo" type="java.lang.String" column="mrem_dsabrevlogradourotipo" length="5"/>
+		<property name="codigoQuadraFace" type="java.lang.Integer" column="mrem_cdfacequadra" length="4"/>
+		<property name="descricaoLigacaoAguaSituacao" type="java.lang.String" column="mrem_dssituacaoligacaoagua" length="20"/>
+		<property name="numeroMoradores" type="java.lang.Integer" column="mrem_nnmoradores" length="4"/>
+		<property name="codigoAnormalidadeAnterior" type="java.lang.Integer" column="mrem_cdanormalidadeanterior" length="4"/>
+		<property name="descricaoAnormalidadeAnterior" type="java.lang.String" column="mrem_dsanormalidadeanterior"/>
+		<property name="nomeLocalidade" type="java.lang.String" column="mrem_nmlocalidade" length="30"/>
+		<property name="descricaoHidrometroMarca" type="java.lang.String" column="mrem_dsmarcahidrometro" length="30"/>
+		<property name="dataLeituraAnterior" type="java.sql.Date" column="mrem_dtleituraanterior" not-null="false" length="4"/>
+		<many-to-one name="leiturista" class="gcom.micromedicao.Leiturista" not-null="false">
+			<column name="leit_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

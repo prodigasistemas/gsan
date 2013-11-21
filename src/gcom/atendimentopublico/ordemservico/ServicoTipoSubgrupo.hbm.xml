@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.ordemservico.ServicoTipoSubgrupo" table="atendimentopublico.servico_tipo_subgrupo">
+		<id name="id" type="java.lang.Integer" column="stsg_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_servico_tipo_subgrupo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="stsg_dsservicotiposubgrupo" not-null="true" length="50"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="stsg_dsabreviado" length="8"/>
+		<property name="dataCadastramento" type="java.sql.Timestamp" column="stsg_tmcadastramento" not-null="true" length="8"/>
+		<property name="indicadorUso" type="short" column="stsg_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="stsg_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to ServicoTipoGrupo -->
+		<many-to-one name="servicoTipoGrupo" class="gcom.atendimentopublico.ordemservico.ServicoTipoGrupo" not-null="true">
+			<column name="stgr_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to ServicoTipo 
+    <set
+        name="servicoTipos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="stsg_id" />
+        </key>
+        <one-to-many 
+            class="gcom.ServicoTipo"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

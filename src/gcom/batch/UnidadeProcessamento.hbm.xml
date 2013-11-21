@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.batch.UnidadeProcessamento" table="batch.unidade_processamento">
+		<id name="id" type="java.lang.Integer" column="unpr_id">
+			<generator class="sequence">
+				<param name="sequence">batch.seq_unidade_processamento</param>
+			</generator>
+		</id>
+		<property name="descricaoUnidadeProcessamento" type="java.lang.String" column="unpr_dsunidadeprocessamento" length="20"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="unpr_tmultimaalteracao" length="8"/>
+		<property name="indicadorUso" type="short" column="unpr_icuso" not-null="true" length="2"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="unpr_dsabreviada" length="6"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to UnidadeIniciada -->
+		<set name="unidadesIniciadas" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="unpr_id"/>
+			</key>
+			<one-to-many class="gcom.batch.UnidadeIniciada"/>
+		</set>
+		<!-- bi-directional one-to-many association to ProcessoFuncionalidade -->
+		<set name="processosFuncionalidades" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="unpr_id"/>
+			</key>
+			<one-to-many class="gcom.batch.ProcessoFuncionalidade"/>
+		</set>
+	</class>
+</hibernate-mapping>

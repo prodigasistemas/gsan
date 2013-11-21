@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="ManterLigacaoEsgotoSituacaoActionForm"
+			type="gcom.gui.atendimentopublico.ligacaoesgoto.ManterLigacaoEsgotoSituacaoActionForm" />
+		<form-bean name="AtualizarLigacaoEsgotoSituacaoActionForm"
+			type="gcom.gui.atendimentopublico.ligacaoesgoto.AtualizarLigacaoEsgotoSituacaoActionForm" />
+		<form-bean name="FiltrarLigacaoEsgotoSituacaoActionForm"
+			type="gcom.gui.atendimentopublico.ligacaoesgoto.FiltrarLigacaoEsgotoSituacaoActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.atendimentopublico.ligacaoesgoto.ExibirManterLigacaoEsgotoSituacaoAction"
+			validate="false" scope="session"
+			path="/exibirManterLigacaoEsgotoSituacaoAction">
+
+			<forward name="exibirManterLigacaoEsgotoSituacao"
+				path="/jsp/atendimentopublico/ligacaoesgoto/ligacao_esgoto_situacao_manter.jsp" />
+
+			<forward name="exibirAtualizarLigacaoEsgotoSituacao"
+				path="/exibirAtualizarLigacaoEsgotoSituacaoAction.do" />
+		</action>
+
+		<action name="AtualizarLigacaoEsgotoSituacaoActionForm"
+			type="gcom.gui.atendimentopublico.ligacaoesgoto.ExibirAtualizarLigacaoEsgotoSituacaoAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarLigacaoEsgotoSituacaoAction">
+
+			<forward name="ligacaoEsgotoSituacaoAtualizar"
+				path="/jsp/atendimentopublico/ligacaoesgoto/ligacao_esgoto_situacao_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarLigacaoEsgotoSituacaoActionForm"
+			type="gcom.gui.atendimentopublico.ligacaoesgoto.AtualizarLigacaoEsgotoSituacaoAction"
+			validate="true" scope="session"
+			path="/atualizarLigacaoEsgotoSituacaoAction">
+
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.atendimentopublico.ligacaoesgoto.RemoverLigacaoEsgotoSituacaoAction"
+			 scope="request" path="/removerLigacaoEsgotoSituacaoAction">
+
+		</action>
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

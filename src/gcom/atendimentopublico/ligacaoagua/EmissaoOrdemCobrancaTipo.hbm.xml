@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.atendimentopublico.ligacaoagua.EmissaoOrdemCobrancaTipo" table="atendimentopublico.emissao_ordem_cobr_tipo">
+		<id name="id" type="java.lang.Integer" column="eoct_id">
+			<generator class="sequence">
+				<param name="sequence">atedimentopublico.sequence_emissao_ordem_cobranca_tipo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="eoct_dsemsordemcobtipo" length="20"/>
+		<property name="indicadorUso" type="java.lang.Short" column="eoct_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="eoct_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to LigacaoAgua
+    <set
+        name="ligacaoAguas"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="eoct_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.LigacaoAgua"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

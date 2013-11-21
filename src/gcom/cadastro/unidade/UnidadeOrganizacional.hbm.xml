@@ -1,0 +1,250 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cadastro.unidade.UnidadeOrganizacional" table="cadastro.unidade_organizacional">
+		<id name="id" type="java.lang.Integer" column="unid_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_unidade_organizacional</param>
+			</generator>
+		</id>
+		<property name="indicadorEsgoto" type="short" column="unid_icesgoto" not-null="true" length="2"/>
+		<property name="indicadorTramite" type="short" column="unid_ictramite" not-null="true" length="2"/>
+		<property name="descricao" type="java.lang.String" column="unid_dsunidade" not-null="true" length="40"/>
+		<property name="sigla" type="java.lang.String" column="unid_dssiglaunidade" length="5"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="unid_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="indicadorAberturaRa" type="java.lang.Short" column="unid_icabertura" length="2"/>
+		<property name="indicadorUso" type="short" column="unid_icuso" not-null="true" length="2"/>
+		<property name="indicadorCentralAtendimento" type="java.lang.Short" column="unid_iccentralatendimento" length="2"/>
+		<property name="indicadorTarifaSocial" type="short" column="unid_ictarifasocial" not-null="true" length="2"/>
+		<property name="codigoConstante" type="java.lang.Integer" column="unid_nncodigoconstante" not-null="false" length="4" />
+		
+		<!--  
+	<property
+        name="indicadorRepavimentadora"
+        type="short"
+        column="unid_idrepavimentadora"
+        not-null="false"
+        length="2"
+    />
+-->
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to UnidadeNivel 
+    <many-to-one
+        name="unidadeNivel"
+        class="gcom.cadastro.unidade.UnidadeNivel"
+        not-null="true"
+    >
+        <column name="udnv_id" />
+    </many-to-one> -->
+		<!-- bi-directional many-to-one association to UnidadeTipo -->
+		<many-to-one name="unidadeTipo" class="gcom.cadastro.unidade.UnidadeTipo" not-null="true">
+			<column name="untp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to MeioSolicitacao -->
+		<many-to-one name="meioSolicitacao" class="gcom.atendimentopublico.registroatendimento.MeioSolicitacao" not-null="true">
+			<column name="meso_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Empresa -->
+		<many-to-one name="empresa" class="gcom.cadastro.empresa.Empresa" not-null="true">
+			<column name="empr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GerenciaRegional -->
+		<many-to-one name="gerenciaRegional" class="gcom.cadastro.localidade.GerenciaRegional" not-null="true">
+			<column name="greg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to UnidadeOrganizacional -->
+		<many-to-one name="unidadeCentralizadora" class="gcom.cadastro.unidade.UnidadeOrganizacional" not-null="true">
+			<column name="unid_idcentralizadora"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to UnidadeOrganizacional -->
+		<many-to-one name="unidadeRepavimentadora" class="gcom.cadastro.unidade.UnidadeOrganizacional" not-null="true">
+			<column name="unid_idrepavimentadora"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to UnidadeOrganizacional -->
+		<many-to-one name="unidadeSuperior" class="gcom.cadastro.unidade.UnidadeOrganizacional" not-null="true">
+			<column name="unid_idsuperior"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to UnidadeNegocio -->
+		<many-to-one name="unidadeNegocio" class="gcom.cadastro.localidade.UnidadeNegocio" not-null="true">
+			<column name="uneg_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to SolicitacaoTipoEspecificacao 
+    <set
+        name="solicitacaoTipoEspecificacaos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="unid_id" />
+        </key>
+        <one-to-many 
+            class="gcom.SolicitacaoTipoEspecificacao"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to Usuario 
+    <set
+        name="usuarios"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="unid_id" />
+        </key>
+        <one-to-many 
+            class="gcom.Usuario"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to Tramite 
+    <set
+        name="tramites"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="unid_id" />
+        </key>
+        <one-to-many 
+            class="gcom.Tramite"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to LocalidadeSolicTipoGrupo 
+    <set
+        name="localidadeSolicTipoGrupos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="unid_id" />
+        </key>
+        <one-to-many 
+            class="gcom.LocalidadeSolicTipoGrupo"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to DivisaoEsgoto 
+    <set
+        name="divisaoEsgotos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="unid_id" />
+        </key>
+        <one-to-many 
+            class="gcom.DivisaoEsgoto"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to UnidadeOrganizacional 
+    <set
+        name="unidadeOrganizacionalsByUnidIdcentralizadora"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="unid_idcentralizadora" />
+        </key>
+        <one-to-many 
+            class="gcom.UnidadeOrganizacional"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to UnidadeOrganizacional 
+    <set
+        name="unidadeOrganizacionalsByUnidIdsuperior"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="unid_idsuperior" />
+        </key>
+        <one-to-many 
+            class="gcom.UnidadeOrganizacional"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to RegistroAtendimentoUnidade 
+    <set
+        name="registroAtendimentoUnidades"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="unid_id" />
+        </key>
+        <one-to-many 
+            class="gcom.RegistroAtendimentoUnidade"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to OrdemServicoUnidade 
+    <set
+        name="ordemServicoUnidades"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="unid_id" />
+        </key>
+        <one-to-many 
+            class="gcom.OrdemServicoUnidade"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to RegistroAtendimentoSolicitante 
+    <set
+        name="registroAtendimentoSolicitantes"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="unid_id" />
+        </key>
+        <one-to-many 
+            class="gcom.RegistroAtendimentoSolicitante"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to Funcionario 
+    <set
+        name="funcionarios"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="unid_id" />
+        </key>
+        <one-to-many 
+            class="gcom.Funcionario"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to Equipe 
+    <set
+        name="equipes"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="unid_id" />
+        </key>
+        <one-to-many 
+            class="gcom.Equipe"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

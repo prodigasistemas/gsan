@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="FiltrarRaDadosAgenciaReguladoraActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.FiltrarRaDadosAgenciaReguladoraActionForm" />
+			
+			
+			
+	</form-beans>
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarRaDadosAgenciaReguladoraActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirFiltrarRaDadosAgenciaReguladoraAction" 
+			validate="true" scope="session" path="/exibirFiltrarRaDadosAgenciaReguladoraAction">
+			
+			<forward name="filtrarRaDadosAgenciaReguladora"
+					path="/jsp/atendimentopublico/registroatendimento/ra_dados_agencia_reguladora_filtrar.jsp" />
+		</action>
+		
+		<action name="FiltrarRaDadosAgenciaReguladoraActionForm" 
+			type="gcom.gui.atendimentopublico.registroatendimento.FiltrarRaDadosAgenciaReguladoraAction" 
+			validate="true" scope="session" path="/filtrarRaDadosAgenciaReguladoraAction">
+			
+			<forward name="exibirListarRaDadosAgenciaReguladora" 
+					path="/exibirListarRaDadosAgenciaReguladoraAction.do" /> 
+		</action>
+		
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

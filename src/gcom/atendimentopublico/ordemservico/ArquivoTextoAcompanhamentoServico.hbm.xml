@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">    
+<hibernate-mapping>
+<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+
+	<class name="gcom.atendimentopublico.ordemservico.ArquivoTextoAcompanhamentoServico" table="atendimentopublico.arq_txt_acomp_servico">
+		<id name="id" type="java.lang.Integer" column="txac_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_arq_txt_acomp_servico</param>
+			</generator>
+    	</id>
+
+    <property
+        name="dataProgramacao"
+        type="java.sql.Date"
+        column="txac_dtprogramacao"
+        not-null="true"
+        length="13"
+    />
+    <property
+        name="imei"
+        type="java.math.BigDecimal"
+        column="txac_nnimei"
+        length="38"
+    />
+    <property
+        name="dataUltimaAlteracao"
+        type="java.sql.Timestamp"
+        column="txac_tmultimaalteracao"
+        not-null="true"
+        length="29"
+    />
+
+    <!-- Associations -->
+  
+    <!-- bi-directional many-to-one association to Equipe -->
+    <many-to-one
+        name="equipe"
+        class="gcom.atendimentopublico.ordemservico.Equipe"
+        not-null="true"
+    >
+    <column name="eqpe_id" />
+    </many-to-one>
+    
+    <many-to-one
+        name="situacaoTransmissaoLeitura"
+        class="gcom.micromedicao.SituacaoTransmissaoLeitura"
+        not-null="true"
+    >
+    <column name="sitl_id" />    
+    </many-to-one>
+
+</class>
+</hibernate-mapping>

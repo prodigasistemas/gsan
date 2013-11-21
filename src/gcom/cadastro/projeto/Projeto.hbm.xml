@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.projeto.Projeto" table="cadastro.projeto">
+		<id name="id" type="java.lang.Integer" column="proj_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_projeto</param>
+			</generator>
+		</id>
+		<property name="nome" type="java.lang.String" column="proj_dsprojeto" not-null="true" length="50"/>
+		<property name="nomeAbreviado" type="java.lang.String" column="proj_dsabreviado" length="10"/>
+		<property name="dataInicio" type="java.sql.Date" column="proj_dtinicioprojeto" not-null="true" length="4"/>
+		<property name="dataFim" type="java.sql.Date" column="proj_dtfinalprojeto" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="proj_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="valorFinanciamento" type="java.math.BigDecimal" column="proj_vlfinanciado" length="12"/>
+		<property name="observacao" type="java.lang.String" column="proj_dsobservacao" length="300"/>
+		<!-- bi-directional many-to-one association to Cliente -->
+		<many-to-one name="orgaoFinanciador" class="gcom.cadastro.cliente.Cliente">
+			<column name="clie_idfinanciador"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.localidade.QuadraFace" table="cadastro.quadra_face">
+		<id name="id" type="java.lang.Integer" column="qdfa_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_quadra_face</param>
+			</generator>
+		</id>
+		<property name="numeroQuadraFace" type="java.lang.Integer" column="qdfa_nnfacequadra" not-null="true" length="4"/>
+		<property name="indicadorRedeAgua" type="java.lang.Short" column="qdfa_icredeagua" not-null="true" length="2"/>
+		<property name="indicadorRedeEsgoto" type="java.lang.Short" column="qdfa_icredeesgoto" not-null="true" length="2"/>
+		<property name="indicadorUso" type="java.lang.Short" column="qdfa_icuso" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="qdfa_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to DistritoOperacional -->
+		<many-to-one name="distritoOperacional" class="gcom.operacional.DistritoOperacional" not-null="false">
+			<column name="diop_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Bacia -->
+		<many-to-one name="bacia" class="gcom.operacional.Bacia" not-null="false">
+			<column name="baci_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Quadra -->
+		<many-to-one name="quadra" class="gcom.cadastro.localidade.Quadra" not-null="true">
+			<column name="qdra_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GrauDificuldadeExecucao -->
+		<many-to-one name="grauDificuldadeExecucao" class="gcom.cadastro.localidade.GrauDificuldadeExecucao" not-null="false">
+			<column name="gdex_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GrauRiscoSegurancaFisica -->
+		<many-to-one name="grauRiscoSegurancaFisica" class="gcom.cadastro.localidade.GrauRiscoSegurancaFisica" not-null="false">
+			<column name="grsf_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CondicaoAbastecimentoAgua -->
+		<many-to-one name="condicaoAbastecimentoAgua" class="gcom.cadastro.localidade.CondicaoAbastecimentoAgua" not-null="false">
+			<column name="coab_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

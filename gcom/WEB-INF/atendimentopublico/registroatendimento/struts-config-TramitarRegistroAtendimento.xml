@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean 
+		    name="TramitarRegistroAtendimentoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.TramitarRegistroAtendimentoActionForm" /> 
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+				
+			
+		<action name="TramitarRegistroAtendimentoActionForm"  
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirTramitarRegistroAtendimentoAction" 
+			validate="true"
+			scope="session"
+			path="/exibirTramitarRegistroAtendimentoAction">
+			<forward name="tramitarRegistroAtendimento"
+			path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_tramitar.jsp" />
+		</action>
+
+		<action name="TramitarRegistroAtendimentoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.TramitarRegistroAtendimentoAction"
+			validate="true" scope="session"
+			path="/tramitarRegistroAtendimentoAction">
+			
+			<forward name="tramitacaoRegistroAtendimento" path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_tramitar.jsp" />
+		</action>
+ 
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

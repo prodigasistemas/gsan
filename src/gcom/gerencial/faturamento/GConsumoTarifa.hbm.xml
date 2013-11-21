@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.gerencial.faturamento.GConsumoTarifa" table="faturamento.g_consumo_tarifa">
+		<id name="id" type="java.lang.Integer" column="cstf_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="descricaoConsumoTarifa" type="java.lang.String" column="cstf_dsconsumotarifa" length="30"/>
+		<property name="indicadorUso" type="java.lang.Short" column="cstf_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cstf_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+	</class>
+</hibernate-mapping>

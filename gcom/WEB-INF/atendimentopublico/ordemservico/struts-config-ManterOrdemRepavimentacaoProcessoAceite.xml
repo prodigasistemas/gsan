@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+
+		<form-bean name="FiltrarOrdemRepavimentacaoProcessoAceiteActionForm" type="gcom.gui.atendimentopublico.ordemservico.FiltrarOrdemRepavimentacaoProcessoAceiteActionForm" />
+		<form-bean name="ManutencaoRegistroActionForm" type="gcom.gui.ManutencaoRegistroActionForm" />	
+
+	</form-beans>
+
+	<global-forwards/>
+
+	<action-mappings>
+	
+		<action name="FiltrarOrdemRepavimentacaoProcessoAceiteActionForm" 
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirManterOrdemRepavimentacaoProcessoAceiteAction" 
+			scope="session" validate="false"
+			path="/exibirManterOrdemRepavimentacaoProcessoAceiteAction">		
+			
+			<forward name="manterOrdemRepavimentacaoProcessoAceite" path="/jsp/atendimentopublico/ordemservico/ordem_repavimentacao_processo_aceite_manter.jsp" />			
+			<forward name="exibirAtualizarOrdemRepavimentacaoProcessoAceitePopUp"  path="/exibirAtualizarOrdemRepavimentacaoProcessoAceitePopupAction.do" />
+			
+		</action>		
+	
+	   <action name="FiltrarOrdemRepavimentacaoProcessoAceiteActionForm" 
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirAtualizarOrdemRepavimentacaoProcessoAceitePopupAction" 
+			scope="session" validate="false"
+			path="/exibirAtualizarOrdemRepavimentacaoProcessoAceitePopupAction">		
+			
+			<forward name="exibirAtualizarOrdemRepavimentacaoProcessoAceitePopUp" path="/jsp/atendimentopublico/ordemservico/ordem_repavimentacao_processo_aceite_atualizar_popup.jsp" />
+						
+			<forward name="atualizarOrdemRepavimentacaoProcessoAceitePopUp"  path="/atualizarOrdemRepavimentacaoProcessoAceitePopUpAction.do" />
+		</action>		
+	
+		 <action name="FiltrarOrdemRepavimentacaoProcessoAceiteActionForm" 
+			type="gcom.gui.atendimentopublico.ordemservico.AtualizarOrdemRepavimentacaoProcessoAceitePopUpAction" 
+			scope="session" validate="false"
+			path="/atualizarOrdemRepavimentacaoProcessoAceitePopUpAction">	
+			
+		   <forward name="atualizarOrdemRepavimentacaoProcessoAceitePopUp" path="/jsp/atendimentopublico/ordemservico/ordem_repavimentacao_processo_aceite_atualizar_popup.jsp" />
+						
+		
+		</action>		
+		
+		
+		<action name="FiltrarOrdemRepavimentacaoProcessoAceiteActionForm"
+			type="gcom.gui.relatorio.atendimentopublico.ordemservico.GerarRelacaoOrdemRepavimentacaoProcessoAceiteAction"
+			validate="true" scope="session"
+			path="/gerarRelacaoOrdemRepavimentacaoProcessoAceiteAction" />
+		
+	</action-mappings>
+	<!--******************* ARQUIVO DE PROPRIEDADES *******************-->
+	<message-resources null="false" parameter="gcom.properties.application" />
+	
+</struts-config>

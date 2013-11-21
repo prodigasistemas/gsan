@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	
+	<class name="gcom.cobranca.MotivoNaoAceitacaoEncerramentoOS" table="cobranca.motivo_nao_aceit_enc_os">
+		<id name="id" type="java.lang.Integer" column="mnac_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_motivo_nao_aceit_enc_os</param>
+			</generator>
+		</id>
+		<property name="descricaoMotivoNaoAceitacaoEncerramentoOS" type="java.lang.String" column="mnac_dsmotivonaoaceitacao" length="40"/>
+		<property name="multiplicadorValorServicoDescontarCorteSupressao" type="java.lang.Short" column="mnac_nnmultdesccortesupindev" length="2"/>
+		<property name="multiplicadorValorServicoDescontarNaoExecutados" type="java.lang.Short" column="mnac_nnmultdescservnaoexec" length="2"/>
+		<property name="percentualMultaAplicar" type="java.math.BigDecimal" column="mnac_pcmultaservnaoexec" length="5"/>
+		<property name="indicadorUso" type="java.lang.Short" column="mnac_icuso" length="1"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="mnac_tmultimaalteracao" length="8"/>
+		<property name="indicadorMotivoFiscalizacao" type="java.lang.Short" column="mnac_icmotfiscalizacao" length="1" not-null="true"/>
+		
+	</class>
+</hibernate-mapping>

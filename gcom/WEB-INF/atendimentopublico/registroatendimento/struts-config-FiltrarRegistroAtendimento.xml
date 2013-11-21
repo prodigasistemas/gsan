@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="FiltrarRegistroAtendimentoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.FiltrarRegistroAtendimentoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	
+	<action-mappings>
+		<action name="FiltrarRegistroAtendimentoActionForm"  
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirFiltrarRegistroAtendimentoAction" 
+			validate="true"	scope="session"	path="/exibirFiltrarRegistroAtendimentoAction">
+			<forward name="filtrarRegistroAtendimento" path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_filtrar.jsp" />
+		</action>
+
+		<action name="FiltrarRegistroAtendimentoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.FiltrarRegistroAtendimentoAction"
+			validate="true" scope="session"	path="/filtrarRegistroAtendimentoAction">
+			<forward name="manterRegistroAtendimento" 
+			path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_manter.jsp" />
+			<forward name="consultarRegistroAtendimento" 
+			path="/exibirConsultarRegistroAtendimentoAction.do" />
+		</action>
+		
+		<action name="FiltrarRegistroAtendimentoActionForm"
+			type="gcom.gui.relatorio.atendimentopublico.GerarRelatorioFiltrarRegistroAtendimentoAction"
+			validate="true" scope="session"	path="/gerarRelatorioFiltrarRegistroAtendimentoAction">
+		</action>
+		
+	</action-mappings>
+</struts-config>

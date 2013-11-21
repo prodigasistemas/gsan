@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.ordemservico.ServicoTipoAtividade" table="atendimentopublico.servico_tipo_atividade">
+		<composite-id name="comp_id" class="gcom.atendimentopublico.ordemservico.ServicoTipoAtividadePK">
+			<key-property name="idServicoTipo" column="svtp_id" type="java.lang.Integer" length="4"/>
+			<key-property name="idAtividade" column="ativ_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="stat_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="numeroExecucao" type="java.lang.Short" column="stat_nnordemexecucao" length="2"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to Atividade -->
+		<many-to-one name="atividade" class="gcom.atendimentopublico.ordemservico.Atividade" update="false" insert="false">
+			<column name="ativ_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ServicoTipo -->
+		<many-to-one name="servicoTipo" class="gcom.atendimentopublico.ordemservico.ServicoTipo" update="false" insert="false">
+			<column name="svtp_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

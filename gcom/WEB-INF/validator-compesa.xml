@@ -1,0 +1,1164 @@
+
+<form-validation>
+
+   <global>
+
+	<validator name="cnpj"
+            classname="gcom.util.validacao.ValidarCampos"
+               method="validateCnpj"
+         methodParams="java.lang.Object,
+                       org.apache.commons.validator.ValidatorAction,
+                       org.apache.commons.validator.Field,
+                       org.apache.struts.action.ActionErrors,
+                       javax.servlet.http.HttpServletRequest"
+                  msg="atencao.invalido.cnpj">
+	<javascript><![CDATA[
+
+	function validateCnpj(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oCnpj = new cnpj();
+                for (x in oCnpj) {
+                    if ((form[oCnpj[x][0]].type == 'text' ||
+                         form[oCnpj[x][0]].type == 'textarea') &&
+                        (form[oCnpj[x][0]].value.length > 0)) {
+                        if (!validacaoCnpj(form[oCnpj[x][0]].value)) {
+                            if (i == 0) {
+                                focusField = form[oCnpj[x][0]];
+                            }
+                            fields[i++] = oCnpj[x][1];
+                            bValid = false;
+                        }
+                    }
+                }
+                if (fields.length > 0) {
+                    focusField.focus();
+                    alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+
+
+	function validacaoCnpj(s){
+		var i;
+		var c = s.substr(0,12);
+		var dv = s.substr(12,2);
+		var d1 = 0;
+		for (i = 0; i < 12; i++)
+		{
+			d1 += c.charAt(11-i)*(2+(i % 8));
+		}
+        	if (d1 == 0) return false;
+        	d1 = 11 - (d1 % 11);
+		if (d1 > 9) d1 = 0;
+		if (dv.charAt(0) != d1)
+      		{
+		return false;
+		}
+
+		d1 *= 2;
+		for (i = 0; i < 12; i++)
+		{
+			d1 += c.charAt(11-i)*(2+((i+1) % 8));
+		}
+		d1 = 11 - (d1 % 11);
+		if (d1 > 9) d1 = 0;
+		if (dv.charAt(1) != d1)
+		{
+			return false;
+		}
+		return true;
+	}
+	]]></javascript>
+	</validator>
+
+
+      <validator name="inteiroZeroPositivo"
+            classname="gcom.util.validacao.ValidarCampos"
+               method="validateInteiroZeroPositivo"
+         methodParams="java.lang.Object,
+                       org.apache.commons.validator.ValidatorAction,
+                       org.apache.commons.validator.Field,
+                       org.apache.struts.action.ActionErrors,
+                       javax.servlet.http.HttpServletRequest"
+              depends=""
+                  msg="atencao.inteiroZeroPositivo"
+       jsFunctionName="InteiroZeroPositivoValidations">
+
+         <javascript><![CDATA[
+            function validateInteiroZeroPositivo(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oInteger = new InteiroZeroPositivoValidations();
+                for (x in oInteger) {
+                	var field = form[oInteger[x][0]];
+
+                    if (field.type == 'text' ||
+                        field.type == 'textarea' ||
+                        field.type == 'select-one' ||
+                        field.type == 'radio') {
+
+                        var value;
+
+						if (field.type == "select-one") {
+							var si = field.selectedIndex;
+							value = field.options[si].value;
+						} else {
+							value = trim(field.value);
+							field.value = value;
+						}
+
+                        if (value.length > 0) {
+
+	                        var iValue = parseInt(value);
+	                        if (isNaN(iValue) || !(iValue >= 0 && iValue <= 2147483647)) {
+	                            if (i == 0) {
+	                                focusField = field;
+	                            }
+	                            
+	                            fields[i++] = oInteger[x][1];
+	                            bValid = false;
+	                       }
+                       }
+                    }
+                }
+                if (fields.length > 0) {
+                   focusField.focus();
+                   alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+            
+       function trim(inputString) {
+				   // Removes leading and trailing spaces from the passed string. Also removes
+			   	   // consecutive spaces and replaces it with one space. If something besides
+				   // a string is passed in (null, custom object, etc.) then return the input.
+
+				   if (typeof inputString != "string") { return inputString; }
+			   	      var retValue = inputString;
+					var ch = retValue.substring(0, 1);
+				   while (ch == " ") { // Check for spaces at the beginning of the string
+					retValue = retValue.substring(1, retValue.length);
+			        ch = retValue.substring(0, 1);
+		   	   }
+
+			   ch = retValue.substring(retValue.length-1, retValue.length);
+
+			   while (ch == " ") { // Check for spaces at the end of the string
+		      retValue = retValue.substring(0, retValue.length-1);
+    	  	      ch = retValue.substring(retValue.length-1, retValue.length);
+   	   	}
+
+	   		while (retValue.indexOf("  ") != -1) { // Note that there are two spaces in the string - look for multiple spaces within the string
+	      	retValue = retValue.substring(0, retValue.indexOf("  ")) + retValue.substring(retValue.indexOf("  ")+1, retValue.length); // Again, there are two spaces in each of the strings
+   	   }
+
+	   	return retValue; // Return the trimmed string back to the user
+	} // Ends the "trim" function
+            
+            
+            ]]>
+         </javascript>
+
+      </validator>
+
+
+      <validator name="inteiroNegativoZeroPositivo"
+            classname="gcom.util.validacao.ValidarCampos"
+               method="validateInteiroNegativoZeroPositivo"
+         methodParams="java.lang.Object,
+                       org.apache.commons.validator.ValidatorAction,
+                       org.apache.commons.validator.Field,
+                       org.apache.struts.action.ActionErrors,
+                       javax.servlet.http.HttpServletRequest"
+              depends=""
+                  msg="atencao.inteiroNegativoZeroPositivo"
+       jsFunctionName="InteiroNegativoZeroPositivoValidations">
+
+         <javascript><![CDATA[
+            function validateInteiroNegativoZeroPositivo(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oInteger = new InteiroNegativoZeroPositivoValidations();
+                for (x in oInteger) {
+                	var field = form[oInteger[x][0]];
+
+                    if (field.type == 'text' ||
+                        field.type == 'textarea' ||
+                        field.type == 'select-one' ||
+                        field.type == 'radio') {
+
+                        var value;
+
+						if (field.type == "select-one") {
+							var si = field.selectedIndex;
+							value = field.options[si].value;
+						} else {
+							value = trim(field.value);
+							field.value = value;
+						}
+
+                        if (value.length > 0) {
+
+	                        var iValue = parseInt(value);
+	                        if (isNaN(iValue) || !(iValue >=-2147483647  && iValue <= 2147483647)) {
+	                            if (i == 0) {
+	                                focusField = field;
+	                            }
+	                            
+	                            fields[i++] = oInteger[x][1];
+	                            bValid = false;
+	                       }
+                       }
+                    }
+                }
+                if (fields.length > 0) {
+                   focusField.focus();
+                   alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+            
+       function trim(inputString) {
+				   // Removes leading and trailing spaces from the passed string. Also removes
+			   	   // consecutive spaces and replaces it with one space. If something besides
+				   // a string is passed in (null, custom object, etc.) then return the input.
+
+				   if (typeof inputString != "string") { return inputString; }
+			   	      var retValue = inputString;
+					var ch = retValue.substring(0, 1);
+				   while (ch == " ") { // Check for spaces at the beginning of the string
+					retValue = retValue.substring(1, retValue.length);
+			        ch = retValue.substring(0, 1);
+		   	   }
+
+			   ch = retValue.substring(retValue.length-1, retValue.length);
+
+			   while (ch == " ") { // Check for spaces at the end of the string
+		      retValue = retValue.substring(0, retValue.length-1);
+    	  	      ch = retValue.substring(retValue.length-1, retValue.length);
+   	   	}
+
+	   		while (retValue.indexOf("  ") != -1) { // Note that there are two spaces in the string - look for multiple spaces within the string
+	      	retValue = retValue.substring(0, retValue.indexOf("  ")) + retValue.substring(retValue.indexOf("  ")+1, retValue.length); // Again, there are two spaces in each of the strings
+   	   }
+
+	   	return retValue; // Return the trimmed string back to the user
+	} // Ends the "trim" function
+            
+            
+            ]]>
+         </javascript>
+
+      </validator>
+
+
+      <validator name="mesAno"
+            classname="gcom.util.validacao.ValidarCampos"
+               method="validateMesAno"
+         methodParams="java.lang.Object,
+                       org.apache.commons.validator.ValidatorAction,
+                       org.apache.commons.validator.Field,
+                       org.apache.struts.action.ActionErrors,
+                       javax.servlet.http.HttpServletRequest"
+              depends=""
+                  msg="atencao.mesAno"
+       jsFunctionName="MesAnoValidations">
+
+         <javascript><![CDATA[
+            function validateMesAno(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oMesAno = new MesAnoValidations();
+                for (x in oMesAno) {
+                	var field = form[oMesAno[x][0]];
+                    if (field.type == 'text' ||
+                        field.type == 'textarea' ||
+                        field.type == 'select-one' ||
+                        field.type == 'radio') {
+					
+                        var value;
+
+						if (field.type == "select-one") {
+							var si = field.selectedIndex;
+							value = field.options[si].value;
+						} else {
+							value = trim(field.value);
+							field.value = value;
+						}	
+						if (field.value.length > 0) {
+
+							if (field.value.length == 7) {
+								dia = 1;
+						    	mes = value.substring(0,2); 
+						    	ano = value.substring(3,7); 
+						
+						    	if ((!isNaN(mes) || !isNaN(ano)) && (mes.indexOf('.') == -1 && mes.indexOf(',') == -1 && mes.indexOf('/') == -1) &&
+									(ano.indexOf('.') == -1 && ano.indexOf(',') == -1 && ano.indexOf('/') == -1)) {
+						    	
+						    		// verifica se o mes e valido 
+							    	if ((mes * 1) >= 1 && (mes * 1) <= 12 ) { 
+							        
+							        	// verifica se o ano e valido
+							        	if ((ano * 1) != 0 && (ano * 1) >= 1980) {
+							        	
+							        		// verifica se e ano bissexto 
+							    			if ((mes * 1) == 2 && ((dia * 1) < 1 || (dia * 1) > 29 
+							    				|| ((dia * 1) > 28 && (((ano * 1) / 4) != (ano * 1) / 4)))) { 
+							       				 
+					                            if (i == 0) {
+					                                focusField = field;
+					                            }
+					                            
+					                            fields[i++] = oMesAno[x][1];
+					                            bValid = false;					       				
+							    			}
+							        	}else{
+				                            if (i == 0) {
+				                                focusField = field;
+				                            }
+				                            
+				                            fields[i++] = oMesAno[x][1];
+				                            bValid = false;					        		
+							        	}
+							    	}else{
+			                            if (i == 0) {
+			                                focusField = field;
+			                            }
+			                            
+			                            fields[i++] = oMesAno[x][1];
+			                            bValid = false;					    		
+							    	} 
+								}else{
+		                            if (i == 0) {
+		                                focusField = field;
+		                            }
+		                            
+		                            fields[i++] = oMesAno[x][1];
+		                            bValid = false;							
+								}
+						    }else{
+		                        if (i == 0) {
+		                            focusField = field;
+		                        }
+		                        
+		                        fields[i++] = oMesAno[x][1];
+		                        bValid = false;				    	
+						    }//fim do if (field.length == 7) 
+					    }//fim do if (field.length > 0) 
+					}//fim if do tipo de campo
+				    
+				}//fim do for
+				if (fields.length > 0) {
+                	focusField.focus();
+
+	                alert(fields.join('\n'));
+    	        }
+    	        
+            	return bValid;				    
+            }
+            
+	       function trim(inputString) {
+					   // Removes leading and trailing spaces from the passed string. Also removes
+				   	   // consecutive spaces and replaces it with one space. If something besides
+					   // a string is passed in (null, custom object, etc.) then return the input.
+	
+					   if (typeof inputString != "string") { return inputString; }
+				   	      var retValue = inputString;
+						var ch = retValue.substring(0, 1);
+					   while (ch == " ") { // Check for spaces at the beginning of the string
+						retValue = retValue.substring(1, retValue.length);
+				        ch = retValue.substring(0, 1);
+			   	   }
+	
+				   ch = retValue.substring(retValue.length-1, retValue.length);
+	
+				   while (ch == " ") { // Check for spaces at the end of the string
+			      retValue = retValue.substring(0, retValue.length-1);
+	    	  	      ch = retValue.substring(retValue.length-1, retValue.length);
+	   	   	}
+	
+		   		while (retValue.indexOf("  ") != -1) { // Note that there are two spaces in the string - look for multiple spaces within the string
+		      	retValue = retValue.substring(0, retValue.indexOf("  ")) + retValue.substring(retValue.indexOf("  ")+1, retValue.length); // Again, there are two spaces in each of the strings
+	   	   }
+	
+		   	return retValue; // Return the trimmed string back to the user
+		} // Ends the "trim" function
+            
+            
+            ]]>
+         </javascript>
+
+      </validator>
+
+
+
+      <validator name="horaMinuto"
+            classname="gcom.util.validacao.ValidarCampos"
+               method="validateHoraMinuto"
+         methodParams="java.lang.Object,
+                       org.apache.commons.validator.ValidatorAction,
+                       org.apache.commons.validator.Field,
+                       org.apache.struts.action.ActionErrors,
+                       javax.servlet.http.HttpServletRequest"
+              depends=""
+                  msg="atencao.horaMinuto"
+       jsFunctionName="HoraMinutoValidations">
+
+         <javascript><![CDATA[
+            function validateHoraMinuto(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oHoraMinuto = new HoraMinutoValidations();
+                for (x in oHoraMinuto) {
+                	var field = form[oHoraMinuto[x][0]];
+                    if (field.type == 'text' ||
+                        field.type == 'textarea' ||
+                        field.type == 'select-one' ||
+                        field.type == 'radio') {
+					
+                        var value;
+
+						if (field.type == "select-one") {
+							var si = field.selectedIndex;
+							value = field.options[si].value;
+						} else {
+							value = trim(field.value);
+							field.value = value;
+						}	
+						if (field.value.length > 0) {
+							if (horaMinuto != "") {
+						    	var horaMinuto = field.value.split(':');
+						    	if (horaMinuto.length == 2) {
+						      		if(!(horaMinuto[0] <= 23 && horaMinuto[0] >= 0 && horaMinuto[1] <= 59 && horaMinuto[1] >= 0)){
+			                            if (i == 0) {
+			                                focusField = field;
+			                            }
+			                            
+			                            fields[i++] = oHoraMinuto[x][1];
+			                            bValid = false;					        		
+						      		}
+								}else {
+		                            if (i == 0) {
+		                                focusField = field;
+		                            }
+		                            
+		                            fields[i++] = oHoraMinuto[x][1];
+		                            bValid = false;					        		
+						    	}
+						    } else {
+	                            if (i == 0) {
+	                                focusField = field;
+	                            }
+	                            
+	                            fields[i++] = oHoraMinuto[x][1];
+	                            bValid = false;					        		
+						    }//fim do if (horaMinuto != "") 
+						}//fim do if (field.length > 0) 
+					}//fim if do tipo de campo
+				    
+				}//fim do for
+				if (fields.length > 0) {
+                	focusField.focus();
+
+	                alert(fields.join('\n'));
+    	        }
+    	        
+            	return bValid;				    
+            }
+            ]]>
+         </javascript>
+
+      </validator>
+
+
+      <validator name="radioRequired"
+               classname="gcom.util.validacao.ValidarCampos"
+               method="validateRadioRequired"
+         methodParams="java.lang.Object,
+                       org.apache.commons.validator.ValidatorAction,
+                       org.apache.commons.validator.Field,
+                       org.apache.struts.action.ActionErrors,
+                       javax.servlet.http.HttpServletRequest"
+              depends=""
+                  msg="atencao.required"
+       jsFunctionName="RadioRequiredValidations">
+
+         <javascript><![CDATA[
+            function validateRadioRequired(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oRadioRequired = new RadioRequiredValidations();
+                for (x in oRadioRequired) {
+
+                   var field = form[oRadioRequired[x][0]];
+				   var indice;
+				   var selecionado = false;
+				   alert("form.elements.length="+form.elements.length);
+
+				   for(indice = 0; indice < form.elements.length; indice++){
+				   	  alert("indice="+indice+" form.elements[indice].name="+form.elements[indice].name+" oRadioRequired[x][0]="+oRadioRequired[x][0]+" form.elements[indice].checked="+form.elements[indice].checked);
+
+					  if (form.elements[indice].type == 'radio' && form.elements[indice].checked == true
+					  && form.elements[indice].name == oRadioRequired[x][0]) {
+					    	selecionado = true;
+					    	indice = form.elements.length;
+				 	  		alert("entrou="+selecionado);
+					  }
+				   }    
+				   alert("selecionado="+selecionado);
+				   if(!selecionado){
+			           if (i == 0) {
+                              focusField = field;
+                          }
+                          fields[i++] = oRadioRequired[x][1];
+                          alert("oRadioRequired[x][1]="+oRadioRequired[x][1]);
+                          bValid = false;					    		
+				   }	
+				}// fim do for
+				alert("fields.length="+fields.length);
+				alert("fields.length > 0="+fields.length > 0);
+                if (fields.length > 0) {
+                    //focusField.focus();
+                    alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+            ]]>
+         </javascript>
+
+      </validator>
+
+      <validator name="checkRequired"
+               classname="gcom.util.validacao.ValidarCampos"
+               method="validateCheckRequired"
+         methodParams="java.lang.Object,
+                       org.apache.commons.validator.ValidatorAction,
+                       org.apache.commons.validator.Field,
+                       org.apache.struts.action.ActionErrors,
+                       javax.servlet.http.HttpServletRequest"
+              depends=""
+                  msg="atencao.required"
+       jsFunctionName="CheckRequiredValidations">
+
+         <javascript><![CDATA[
+            function validateCheckRequired(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oCheckRequired = new CheckRequiredValidations();
+				alert("entrou validateCheckRequired1");
+                for (x in oCheckRequired) {
+
+                	var field = form[oCheckRequired[x][0]];
+					var indice;
+					   
+				    var selecionado = false;
+				    alert("form.elements.length="+form.elements.length);
+				    for(indice = 0; indice < form.elements.length; indice++){
+				   	   alert("indice="+indice);
+					   if (form.elements[indice].type == 'checkbox' && form.elements[indice].checked == true 
+					   && form.elements[indice].name == oCheckRequired[x][0]) {
+
+					    	selecionado = true;
+					    	indice = form.elements.length;
+				 	  		alert("entrou="+selecionado);
+					   }
+				    }    
+				    alert("selecionado="+selecionado);
+				    if(!selecionado){
+                         if (i == 0) {
+                             focusField = field;
+                         }
+                         
+                         fields[i++] = oCheckRequired[x][1];
+                         alert("oCheckRequired[x][1]="+oCheckRequired[x][1]);
+                         bValid = false;					    		
+				    }	
+				}// fim do for
+				alert("fields.length="+fields.length);
+				alert("fields.length > 0="+fields.length > 0);
+				if (fields.length > 0) {
+                	//focusField.focus();
+
+	                alert(fields.join('\n'));
+    	        }
+    	        
+            	return bValid;				    
+            }
+            
+            ]]>
+         </javascript>
+
+      </validator>
+
+
+      <validator name="decimal"
+            classname="gcom.util.validacao.ValidarCampos"
+               method="validateDecimal"
+         methodParams="java.lang.Object,
+                       org.apache.commons.validator.ValidatorAction,
+                       org.apache.commons.validator.Field,
+                       org.apache.struts.action.ActionErrors,
+                       javax.servlet.http.HttpServletRequest"
+                  msg="atencao.float"
+                  jsFunctionName="FloatValidations">
+
+         <javascript><![CDATA[
+            function validateDecimal(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oFloat = new FloatValidations();
+                for (x in oFloat) {
+                	var field = form[oFloat[x][0]];
+
+                    if (field.type == 'text' ||
+                        field.type == 'textarea' ||
+                        field.type == 'select-one' ||
+                        field.type == 'radio') {
+
+                    	var value;
+
+                        if (field.type == "select-one") {
+                                var si = field.selectedIndex;
+                                value = field.options[si].value;
+                        } else {
+                                
+                                value = field.value;
+								value = value.replace(/\./g, '');
+								value = value.replace(/,/g, '.');
+                        }
+
+                        if (value.length > 0) {
+
+	                        var iValue = parseFloat(value);
+	                    //    if (isNaN(iValue)) {
+        				if (isNaN(value) || value <= parseFloat(0)) {
+	                            if (i == 0) {
+	                                focusField = field;
+	                            }
+	                            fields[i++] = oFloat[x][1];
+	                            bValid = false;
+	                        }
+                        }
+                    }
+                }
+                if (fields.length > 0) {
+                   focusField.focus();
+                   alert(fields.join('\n'));
+                }
+                return bValid;
+            }]]>
+         </javascript>
+
+      </validator>
+
+      <validator name="decimalZeroPositivo"
+            classname="gcom.util.validacao.ValidarCampos"
+               method="validateDecimalZeroPositivo"
+         methodParams="java.lang.Object,
+                       org.apache.commons.validator.ValidatorAction,
+                       org.apache.commons.validator.Field,
+                       org.apache.struts.action.ActionErrors,
+                       javax.servlet.http.HttpServletRequest"
+                  msg="atencao.decimalZeroPositivo"
+                  jsFunctionName="DecimalZeroPositivoValidations">
+
+         <javascript><![CDATA[
+            function validateDecimalZeroPositivo(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oDecimalZeroPositivo = new DecimalZeroPositivoValidations();
+                for (x in oDecimalZeroPositivo) {
+                	var field = form[oDecimalZeroPositivo[x][0]];
+
+                    if (field.type == 'text' ||
+                        field.type == 'textarea' ||
+                        field.type == 'select-one' ||
+                        field.type == 'radio') {
+
+                    	var value;
+
+                        if (field.type == "select-one") {
+                                var si = field.selectedIndex;
+                                value = field.options[si].value;
+                        } else {
+                                
+                                value = field.value;
+				value = value.replace(/\./g, '');
+				value = value.replace(/,/g, '.');
+                        }
+
+						
+                        if (value.length > 0) {
+
+	                        var iValue = parseFloat(value);
+	                    //    if (isNaN(iValue)) {
+        			if (isNaN(value) || value < parseFloat(0)) {
+	                            if (i == 0) {
+	                                focusField = field;
+	                            }
+	                            fields[i++] = oDecimalZeroPositivo[x][1];
+	                            
+	                            bValid = false;
+	                        }
+                        }
+                    }
+                }
+                if (fields.length > 0) {
+                   focusField.focus();
+                   alert(fields.join('\n'));
+                }
+                return bValid;
+            }]]>
+         </javascript>
+
+      </validator>
+
+      <validator name="decimalNegativoZeroPositivo"
+            classname="gcom.util.validacao.ValidarCampos"
+               method="validateDecimalNegativoZeroPositivo"
+         methodParams="java.lang.Object,
+                       org.apache.commons.validator.ValidatorAction,
+                       org.apache.commons.validator.Field,
+                       org.apache.struts.action.ActionErrors,
+                       javax.servlet.http.HttpServletRequest"
+                  msg="atencao.decimalNegativoZeroPositivo"
+                  jsFunctionName="DecimalNegativoZeroPositivoValidations">
+
+         <javascript><![CDATA[
+            function validateDecimalNegativoZeroPositivo(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oDecimalNegativoZeroPositivo = new DecimalNegativoZeroPositivoValidations();
+                
+                for (x in oDecimalNegativoZeroPositivo) {
+                	var field = form[oDecimalNegativoZeroPositivo[x][0]];
+
+                    if (field.type == 'text' ||
+                        field.type == 'textarea' ||
+                        field.type == 'select-one' ||
+                        field.type == 'radio') {
+
+                    	var value;
+
+                        if (field.type == "select-one") {
+                                var si = field.selectedIndex;
+                                value = field.options[si].value;
+                        } else {
+                                
+                                value = field.value;
+								value = value.replace(/\./g, '');
+								value = value.replace(/,/g, '.');
+                        }
+
+						
+                        if (value.length > 0) {
+
+	                        var iValue = parseFloat(value);
+        					if (isNaN(value)) {
+	                            if (i == 0) {
+	                                focusField = field;
+	                            }
+	                            fields[i++] = oDecimalNegativoZeroPositivo[x][1];
+	                            
+	                            bValid = false;
+	                        }
+                        }
+                    }
+                }
+                if (fields.length > 0) {
+                   focusField.focus();
+                   alert(fields.join('\n'));
+                }
+                return bValid;
+            }]]>
+         </javascript>
+
+      </validator>
+
+
+	<validator name="cpf"
+            classname="gcom.util.validacao.ValidarCampos"
+               method="validateCpf"
+         methodParams="java.lang.Object,
+                       org.apache.commons.validator.ValidatorAction,
+                       org.apache.commons.validator.Field,
+                       org.apache.struts.action.ActionErrors,
+                       javax.servlet.http.HttpServletRequest"
+                  msg="atencao.invalido.cpf">
+	<javascript><![CDATA[
+
+	function validateCpf(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oCpf = new cpf();
+                for (x in oCpf) {
+                    if ((form[oCpf[x][0]].type == 'text' ||
+                         form[oCpf[x][0]].type == 'textarea') &&
+                        (form[oCpf[x][0]].value.length > 0)) {
+                        if (!validacaoCpf(form[oCpf[x][0]].value)) {
+                            if (i == 0) {
+                                focusField = form[oCpf[x][0]];
+                            }
+                            fields[i++] = oCpf[x][1];
+                            bValid = false;
+                        }
+                    }
+                }
+                if (fields.length > 0) {
+                    focusField.focus();
+                    alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+
+	function validacaoCpf(c){
+		var i;
+		s = c;
+		var c = s.substr(0,9);
+		var dv = s.substr(9,2);
+		var d1 = 0;
+		var v = false;
+		for (i = 0; i < 9; i++) {
+			d1 += c.charAt(i)*(10-i);
+		}
+		if (d1 == 0){
+		v = true;
+		return false;
+		}
+		d1 = 11 - (d1 % 11);
+		if (d1 > 9) d1 = 0;
+		if (dv.charAt(0) != d1) {
+		v = true;
+		return false;
+		}
+
+		d1 *= 2;
+		for (i = 0; i < 9; i++) {
+			d1 += c.charAt(i)*(11-i);
+		}
+		d1 = 11 - (d1 % 11);
+		if (d1 > 9) d1 = 0;
+		if (dv.charAt(1) != d1) {
+			v = true;
+		return false;
+		}
+		if (!v) {
+			return true;
+		}
+
+	}
+	]]></javascript>
+
+
+
+        </validator>
+
+	<validator name="caracteresespeciais"
+            classname="gcom.util.validacao.ValidarCampos"
+               method="validateCaracterEspecial"
+         methodParams="java.lang.Object,
+                       org.apache.commons.validator.ValidatorAction,
+                       org.apache.commons.validator.Field,
+                       org.apache.struts.action.ActionErrors,
+                       javax.servlet.http.HttpServletRequest"
+                  msg="atencao.invalido.caracterespecial">
+	<javascript><![CDATA[
+	function validateCaracterEspecial(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oCaracterEspecial = new caracteresespeciais();
+                for (x in oCaracterEspecial) {
+                    if ((form[oCaracterEspecial[x][0]].type == 'text' ||
+                         form[oCaracterEspecial[x][0]].type == 'textarea' ||
+                         form[oCaracterEspecial[x][0]].type == 'password') &&
+                        (form[oCaracterEspecial[x][0]].value.length > 0)) {
+                        if (validacaoCaracterEspecial(form[oCaracterEspecial[x][0]].value)) {
+                            if (i == 0) {
+                                focusField = form[oCaracterEspecial[x][0]];
+                            }
+                            fields[i++] = oCaracterEspecial[x][1];
+                            bValid = false;
+                        }
+                    }
+                }
+                if (fields.length > 0) {
+                    focusField.focus();
+                    alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+
+    	function validacaoCaracterEspecial(c){
+        	var achou = false;
+
+		var indesejaveis = "~{}^%$[]@|`\\<¨\#?!;*>\"\'+()&";
+
+		for (var i=0; i<indesejaveis.length; i++) {
+			if ((c.indexOf(indesejaveis.charAt(i))) != -1 ){
+				achou = true;
+			}
+      		}
+
+		return achou;
+	}
+
+
+	]]></javascript>
+
+
+        </validator>
+        
+	<validator name="numeroSelo"
+            classname="gcom.util.validacao.ValidarCampos"
+               method="validateNumeroSelo"
+         methodParams="java.lang.Object,
+                       org.apache.commons.validator.ValidatorAction,
+                       org.apache.commons.validator.Field,
+                       org.apache.struts.action.ActionErrors,
+                       javax.servlet.http.HttpServletRequest"
+                  msg="atencao.invalido.numeroSelo">
+	<javascript><![CDATA[
+	
+	function validateNumeroSelo(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oNumeroSelo = new caracteresespeciais();
+                for (x in oNumeroSelo) {
+                    if ((form[oNumeroSelo[x][0]].type == 'text' ||
+                         form[oNumeroSelo[x][0]].type == 'textarea' ||
+                         form[oNumeroSelo[x][0]].type == 'password') &&
+                        (form[oNumeroSelo[x][0]].value.length > 0)) {
+                        if (validacaoNumeroSelo(form[oNumeroSelo[x][0]].value)) {
+                            if (i == 0) {
+                                focusField = form[oNumeroSelo[x][0]];
+                            }
+                            fields[i++] = oNumeroSelo[x][1];
+                            bValid = false;
+                        }
+                    }
+                }
+
+                if (fields.length > 0) {
+                    focusField.focus();
+                    alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+
+	    	function validacaoNumeroSelo(value){
+	        	var achou = false;
+	
+                if (value.length > 0) {
+
+                 	if (isNaN(value)) {
+		               	var iValue = parseInt(value);                 		
+		               	if(iValue == 0){
+		               		achou = true;
+		               	}
+                    }else{
+                    	achou = false;
+                    }
+                }
+				return achou;
+			}
+			]]></javascript>
+        </validator>
+        
+        
+	<validator name="matricula"
+            classname="gcom.util.validacao.ValidarCampos"
+               method="validateMatricula"
+         methodParams="java.lang.Object,
+                       org.apache.commons.validator.ValidatorAction,
+                       org.apache.commons.validator.Field,
+                       org.apache.struts.action.ActionErrors,
+                       javax.servlet.http.HttpServletRequest"
+                  msg="atencao.invalido.matricula">
+	<javascript><![CDATA[
+
+	function validateMatricula(form) {
+                var bValid = true;
+                var focusField = null;
+                var i = 0;
+                var fields = new Array();
+                oMatricula = new matricula();
+                for (x in oMatricula) {
+                    if ((form[oMatricula[x][0]].type == 'text' ||
+                         form[oMatricula[x][0]].type == 'textarea') &&
+                        (form[oMatricula[x][0]].value.length > 0)) {
+                        if (!validacaoMatricula(form[oMatricula[x][0]].value)) {
+                            if (i == 0) {
+                                focusField = form[oMatricula[x][0]];
+                            }
+                            fields[i++] = oMatricula[x][1];
+                            bValid = false;
+                        }
+                    }
+                }
+                if (fields.length > 0) {
+                    focusField.focus();
+                    alert(fields.join('\n'));
+                }
+                return bValid;
+            }
+
+	function validacaoMatricula(c){
+		s = c;
+		var c = s.substr(0,7);
+		var dv = s.substr(7,1);
+		var soma = 0;
+		var resto = 0;
+		var digito = 0;
+
+		if (s.length != 8) {
+                 return false;
+                }
+	        else {
+
+		  soma = (c.charAt(0)* 2) + (c.charAt(1)* 7) + (c.charAt(2)* 6) + (c.charAt(3) * 5) + (c.charAt(4) * 4) + (c.charAt(5) * 3) + (c.charAt(6) * 2);
+		  soma = soma * 10;
+		  resto = (soma % 11);
+
+		  if (resto == 10){
+		    digito = 0;
+		  }
+		  else {
+		    digito = resto;
+		  }
+
+		  if (dv != digito) {
+		    return false;
+		  }
+		  else {
+      		    return true;
+		  }
+	        }
+	}
+	]]></javascript>
+
+        </validator>
+
+
+
+
+      <validator name="bigInteger"
+            classname="gcom.util.validacao.ValidarCampos"
+               method="validateBigInteger"
+         methodParams="java.lang.Object,
+                       org.apache.commons.validator.ValidatorAction,
+                       org.apache.commons.validator.Field,
+                       org.apache.struts.action.ActionErrors,
+                       javax.servlet.http.HttpServletRequest"
+              depends=""
+                  msg="atencao.long"
+       jsFunctionName="BigIntegerValidations">
+
+	         <javascript><![CDATA[
+                    function validateBigInteger(form) {
+                        var bValid = true;
+                        var focusField = null;
+                        var i = 0;
+                        var fields = new Array();
+                        oBigInteger = new BigIntegerValidations();
+                        for (x in oBigInteger) {
+                                var field = form[oBigInteger[x][0]];
+
+                            if (field.type == 'text' ||
+                                field.type == 'textarea' ||
+                                field.type == 'select-one' ||
+                                field.type == 'radio') {
+
+                                var value;
+
+                                if (field.type == "select-one") {
+                                        var si = field.selectedIndex;
+                                        value = field.options[si].value;
+                                } else {
+                                        value = trim(field.value);
+                                        field.value = value;
+                                }
+
+                                if (value.length > 0) {
+
+                                        //var iValue = parseInt(value);
+                                        if (isNaN(value) || value.indexOf('.') != -1 || !(value > 0 && value <= 99999999999999999999)) {   
+                                        
+                                            if (i == 0) {
+                                                focusField = field;
+                                            }
+                                            fields[i++] = oBigInteger[x][1];
+                                            bValid = false;
+                                       }
+
+                               }
+                            }
+                        }
+                        if (fields.length > 0) {
+                           focusField.focus();
+                           alert(fields.join('\n'));
+                        }
+                        return bValid;
+                    }
+                    
+       function trim(inputString) {
+					   // Removes leading and trailing spaces from the passed string. Also removes
+				   	   // consecutive spaces and replaces it with one space. If something besides
+					   // a string is passed in (null, custom object, etc.) then return the input.
+
+					   if (typeof inputString != "string") { return inputString; }
+				   	      var retValue = inputString;
+		      			  var ch = retValue.substring(0, 1);
+						   while (ch == " ") { // Check for spaces at the beginning of the string
+							retValue = retValue.substring(1, retValue.length);
+					        ch = retValue.substring(0, 1);
+				   	   }
+
+					   ch = retValue.substring(retValue.length-1, retValue.length);
+
+					   while (ch == " ") { // Check for spaces at the end of the string
+					      retValue = retValue.substring(0, retValue.length-1);
+		    	  	      ch = retValue.substring(retValue.length-1, retValue.length);
+	   	   	}
+
+	   		while (retValue.indexOf("  ") != -1) { // Note that there are two spaces in the string - look for multiple spaces within the string
+	      	retValue = retValue.substring(0, retValue.indexOf("  ")) + retValue.substring(retValue.indexOf("  ")+1, retValue.length); // Again, there are two spaces in each of the strings
+   	   }
+
+	   	return retValue; // Return the trimmed string back to the user
+	} // Ends the "trim" function
+                    
+                    ]]>
+         </javascript>
+
+
+      </validator>
+
+   </global>
+</form-validation>

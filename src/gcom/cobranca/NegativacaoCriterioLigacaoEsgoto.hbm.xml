@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.cobranca.NegativacaoCriterioLigacaoEsgoto" table="cobranca.negatv_crit_lig_esgoto">
+		<composite-id name="comp_id" class="gcom.cobranca.NegativacaoCriterioLigacaoEsgotoPK">
+			<!-- bi-directional many-to-one association to NegativacaoCriterio -->
+			<key-many-to-one name="negativacaoCriterio" class="gcom.cobranca.NegativacaoCriterio">
+				<column name="ngct_id"/>
+			</key-many-to-one>
+			<!-- bi-directional many-to-one association to LigacaoEsgotoSituacao -->
+			<key-many-to-one name="ligacaoEsgotoSituacao" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao">
+				<column name="lest_id"/>
+			</key-many-to-one>
+		</composite-id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ncle_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to NegativacaoCriterio -->
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

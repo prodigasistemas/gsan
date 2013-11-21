@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+    
+<hibernate-mapping>
+<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+
+<class 
+    name="gcom.micromedicao.MovimentoArquivoTextoRetornoIS" 
+    table="micromedicao.mov_arq_texto_retorno_is"
+>
+
+    <id
+        name="id"
+        type="java.lang.Integer"
+        column="mris_id"
+    >
+        <generator class="sequence">
+        	<param name="sequence">micromedicao.seq_mov_arq_texto_retorno_is</param>
+    	</generator>
+    </id>
+
+    <property
+        name="anoMesMovimento"
+        type="java.lang.Integer"
+        column="mris_ammovimento"
+        not-null="true"
+        length="4"
+    />
+    <property
+        name="codigoSetorComercial"
+        type="java.lang.Integer"
+        column="mris_cdsetorcomercial"
+        not-null="true"
+        length="4"
+    />
+    <property
+        name="codigoRota"
+        type="java.lang.Integer"
+        column="mris_cdrota"
+        not-null="true"
+        length="4"
+    />
+
+    <property
+        name="nomeArquivo"
+        type="java.lang.String"
+        column="mris_nomearquivo"
+        not-null="false"
+        length="40"
+    />
+    
+    <property
+        name="tempoRetornoArquivo"
+        type="java.sql.Timestamp"
+        column="mris_tmretornoarquivo"
+        length="8"
+    />
+    <property
+        name="arquivoTexto"
+        type="java.lang.String"
+        column="mris_artexto"
+        not-null="false"
+        length="-1"
+    />
+    
+    <property 
+    		name="leituraHidrometro" 
+    		type="int"
+			column="mris_nnleiturahidrometro" not-null="true"
+			length="4" 
+	/>
+			
+
+    <!-- Associations -->
+  
+    <!-- bi-directional many-to-one association to Localidade -->
+    <many-to-one
+        name="localidade"
+        class="gcom.cadastro.localidade.Localidade"
+        not-null="true"
+    >
+        <column name="loca_id" />
+    </many-to-one>
+    
+    <!-- bi-directional many-to-one association to FaturamentoGrupo -->
+    <many-to-one
+        name="faturamentoGrupo"
+        class="gcom.faturamento.FaturamentoGrupo"
+        not-null="true"
+    >
+        <column name="ftgr_id" />
+    </many-to-one>
+	
+	<!-- bi-directional many-to-one association to Imovel -->
+	<many-to-one 
+		name="imovel" 
+		class="gcom.cadastro.imovel.Imovel"
+		not-null="false"
+	>
+		<column name="imov_id" />
+	</many-to-one>
+	
+	<!-- bi-directional many-to-one association to MedicaoTipo -->
+	<many-to-one 
+		name="medicaoTipo"
+		class="gcom.micromedicao.medicao.MedicaoTipo" 
+		not-null="true"
+	>
+		<column name="medt_id" />
+	</many-to-one>
+	
+	<!-- bi-directional many-to-one association to ArquivoTextoRetornoIS -->
+	<many-to-one 
+		name="arquivoTextoRetornoIS"
+		class="gcom.micromedicao.ArquivoTextoRetornoIS" 
+		not-null="true"
+	>
+		<column name="txis_id" />
+	</many-to-one>
+	
+	<!-- bi-directional many-to-one association to LeituraAnormalidade -->
+	<many-to-one 
+		name="leituraAnormalidade"
+		class="gcom.micromedicao.leitura.LeituraAnormalidade"
+		not-null="true">
+		<column name="ltan_id" />
+	</many-to-one>
+		
+	<!-- bi-directional many-to-one association to ConsumoAnormalidade -->
+    <many-to-one
+        name="consumoAnormalidade"
+        class="gcom.micromedicao.consumo.ConsumoAnormalidade"
+        not-null="true"
+    >    
+    	<column name="csan_id" />
+    </many-to-one>
+</class>
+</hibernate-mapping>

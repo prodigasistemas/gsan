@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+
+		<form-bean name="AtualizarUsuarioDadosGeraisActionForm" type="gcom.gui.seguranca.acesso.usuario.AtualizarUsuarioDadosGeraisActionForm" />
+		<form-bean name="ExcluirUsuarioActionForm" type="gcom.gui.seguranca.acesso.usuario.ExcluirUsuarioActionForm" />
+		<form-bean name="FiltrarUsuarioActionForm" type="gcom.gui.seguranca.acesso.usuario.FiltrarUsuarioActionForm" />
+
+	</form-beans>
+
+	<global-forwards/>
+
+	<action-mappings>
+
+		<action type="gcom.gui.seguranca.acesso.usuario.ExibirManterUsuarioAction"
+			scope="session" path="/exibirManterUsuarioAction">
+			<forward name="manterUsuario" path="/jsp/seguranca/acesso/usuario/usuario_manter.jsp" />
+			<forward name="atualizarUsuario" path="/exibirAtualizarUsuarioAction.do" />
+		</action>
+
+		<action name="ExcluirUsuarioActionForm" type="gcom.gui.seguranca.acesso.usuario.RemoverUsuarioAction"
+			scope="session" path="/removerUsuarioAction">
+		</action>
+
+		<action name="AtualizarUsuarioDadosGeraisActionForm" type="gcom.gui.seguranca.acesso.usuario.ExibirAtualizarUsuarioDadosGeraisAction"
+			scope="session" path="/exibirAtualizarUsuarioDadosGeraisAction">
+			<forward name="atualizarDadosGerais" path="/jsp/seguranca/acesso/usuario/usuario_atualizar_dados_gerais.jsp" />
+		</action>
+		<action name="AtualizarUsuarioDadosGeraisActionForm" type="gcom.gui.seguranca.acesso.usuario.AtualizarUsuarioDadosGeraisAction"
+			scope="session" path="/atualizarUsuarioDadosGeraisAction">
+		</action>
+
+		<action name="AtualizarUsuarioDadosGeraisActionForm" type="gcom.gui.seguranca.acesso.usuario.ExibirAtualizarUsuarioAcessosUsuarioAction"
+			scope="session" path="/exibirAtualizarUsuarioAcessosUsuarioAction">
+			<forward name="atualizarUsuarioAcessoUsuario" path="/jsp/seguranca/acesso/usuario/usuario_atualizar_acessos_usuario.jsp" />
+		</action>
+		<action name="AtualizarUsuarioDadosGeraisActionForm" type="gcom.gui.seguranca.acesso.usuario.AtualizarUsuarioAcessosUsuarioAction"
+			scope="session" path="/atualizarUsuarioAcessosUsuarioAction">
+		</action>
+
+		<action type="gcom.gui.seguranca.acesso.usuario.ConcluirAtualizarUsuarioAction"
+			scope="session" path="/concluirAtualizarUsuarioAction">
+		</action>
+
+	    <action name="AtualizarUsuarioDadosGeraisActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.AtualizarUsuarioWizardAction"
+			validate="false" parameter="action" scope="session"
+			path="/atualizarUsuarioWizardAction">
+			<forward name="atualizarDadosGerais"
+				path="/jsp/seguranca/acesso/usuario/usuario_atualizar_dados_gerais.jsp" />
+			<forward name="atualizarUsuarioAcessoUsuario"
+				path="/jsp/seguranca/acesso/usuario/usuario_atualizar_acessos_usuario.jsp" />
+		</action>
+		<action
+			type="gcom.gui.seguranca.acesso.usuario.CancelarAtualizarUsuarioAction"
+			validate="false" scope="session" path="/cancelarAtualizarUsuarioAction" />
+			
+		<action name="AtualizarUsuarioDadosGeraisActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.ExibirAtualizarUsuarioAction"
+			validate="false" input="/exibirAtualizarUsuarioAction.do"
+			scope="session" path="/exibirAtualizarUsuarioAction">
+			<forward name="atualizarUsuario"
+				path="/atualizarUsuarioWizardAction.do?action=exibirAtualizarUsuarioDadosGeraisAction" />
+		</action>
+		
+		 <action name="FiltrarUsuarioActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.ExibirFiltrarUsuarioAction"
+			validate="false" 
+			scope="session" path="/exibirFiltrarUsuarioAction">
+			<forward name="filtrarUsuario"
+				path="/jsp/seguranca/acesso/usuario/usuario_filtrar.jsp" />
+		</action>
+		 <action name="FiltrarUsuarioActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.FiltrarUsuarioAction"
+			validate="false" 
+			scope="session" path="/filtrarUsuarioAction">
+			<forward name="exibirManterUsuario"
+				path="/exibirManterUsuarioAction.do" />
+		</action>
+		
+		<action name="FiltrarUsuarioActionForm"
+			type="gcom.gui.relatorio.seguranca.GerarRelatorioUsuarioManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioUsuarioManterAction" />
+		
+	    
+
+	</action-mappings>
+	<!--********************************************************************************-->
+	<!--******************* ARQUIVO DE PROPRIEDADES *******************-->
+	<message-resources null="false" parameter="gcom.properties.application" />
+
+</struts-config>

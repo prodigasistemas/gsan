@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.faturamento.QualidadeAguaPadrao" table="faturamento.qualidade_agua_padrao">
+		<id name="id" type="java.lang.Integer" column="qlap_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="descricaoPadraoTurbidez" type="java.lang.String" column="qlap_dspadraoturbidez" length="20"/>
+		<property name="descricaoPadraoPh" type="java.lang.String" column="qlap_dspadraoph" length="20"/>
+		<property name="descricaoPadraoCor" type="java.lang.String" column="qlap_dspadraocor" length="20"/>
+		<property name="descricaoPadraoCloro" type="java.lang.String" column="qlap_dspadraocloro" length="20"/>
+		<property name="descricaoPadraoFluor" type="java.lang.String" column="qlap_dspadraofluor" length="20"/>
+		<property name="descricaoPadraoFerro" type="java.lang.String" column="qlap_dspadraoferro" length="20"/>
+		<property name="descricaoPadraoColiformesTotais" type="java.lang.String" column="qlap_dspadraocoliformestotais" length="20"/>
+		<property name="descricaoPadraoColiformesFecais" type="java.lang.String" column="qlap_dspadraocoliformesfecais" length="20"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="qlap_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="descricaoNitrato" type="java.lang.String" column="qlap_dspadraonitrato" length="20"/>
+		<property name="descricaoPadraoColiformesTermotolerantes" type="java.lang.String" column="qlap_dspadraocoliftermo" length="20"/>
+		<property name="descricaoPadraoAlcalinidade" type="java.lang.String" column="qlap_dspadraoalcalinidade" length="20"/>
+		<!-- Associations -->
+	</class>
+</hibernate-mapping>

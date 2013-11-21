@@ -1,0 +1,105 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.arrecadacao.GuiaDevolucao" table="arrecadacao.guia_devolucao">
+		<id name="id" type="java.lang.Integer" column="gdev_id">
+			<generator class="sequence">
+				<param name="sequence">arrecadacao.seq_guia_devolucao</param>
+			</generator>
+		</id>
+		<property name="dataEmissao" type="java.sql.Date" column="gdev_dtemissao" length="4"/>
+		<property name="dataValidade" type="java.sql.Date" column="gdev_dtvalidade" length="4"/>
+		<property name="valorDevolucao" type="java.math.BigDecimal" column="gdev_vldevolucao" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="gdev_tmultimaalteracao" length="8"/>
+		<property name="anoMesReferenciaContabil" type="java.lang.Integer" column="gdev_amreferenciacontabil" length="4"/>
+		<property name="anoMesReferenciaGuiaDevolucao" type="java.lang.Integer" column="gdev_amreferenciaguiadevolucao" length="6"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to LancamentoItemContabil -->
+		<many-to-one name="lancamentoItemContabil" class="gcom.financeiro.lancamento.LancamentoItemContabil" not-null="true">
+			<column name="lict_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Cliente -->
+		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="true">
+			<column name="clie_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DebitoCreditoSituacao -->
+		<many-to-one name="debitoCreditoSituacaoAnterior" class="gcom.faturamento.debito.DebitoCreditoSituacao" not-null="true">
+			<column name="dcst_idanterior"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DebitoCreditoSituacao -->
+		<many-to-one name="debitoCreditoSituacaoAtual" class="gcom.faturamento.debito.DebitoCreditoSituacao" not-null="true">
+			<column name="dcst_idatual"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to RegistroAtendimento -->
+		<many-to-one name="registroAtendimento" class="gcom.atendimentopublico.registroatendimento.RegistroAtendimento" not-null="false">
+			<column name="rgat_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel">
+			<column name="imov_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DocumentoTipo -->
+		<many-to-one name="documentoTipo" class="gcom.cobranca.DocumentoTipo" not-null="true">
+			<column name="dotp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Conta -->
+		<many-to-one name="conta" class="gcom.faturamento.conta.Conta" not-null="true">
+			<column name="cnta_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to OrdemServico -->
+		<many-to-one name="ordemServico" class="gcom.atendimentopublico.ordemservico.OrdemServico" not-null="true">
+			<column name="orse_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CreditoTipo -->
+		<many-to-one name="creditoTipo" class="gcom.faturamento.credito.CreditoTipo" not-null="true">
+			<column name="crti_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CreditoTipo -->
+		<many-to-one name="debitoTipo" class="gcom.faturamento.debito.DebitoTipo" not-null="false">
+			<column name="dbtp_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to Devolucao -->
+		<!--
+    <set
+        name="devolucaos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="gdev_id" />
+        </key>
+        <one-to-many 
+            class="gcom.Devolucao"
+        />
+    </set>
+    -->
+		<!-- bi-directional many-to-one association to GuiaPagamento -->
+		<many-to-one name="guiaPagamento" class="gcom.arrecadacao.pagamento.GuiaPagamento" not-null="true">
+			<column name="gpag_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DebitoACobrar -->
+		<many-to-one name="debitoACobrarGeral" class="gcom.faturamento.debito.DebitoACobrarGeral" not-null="false">
+			<column name="dbac_id"/>
+		</many-to-one>
+		<many-to-one name="funcionarioAnalista" class="gcom.cadastro.funcionario.Funcionario" not-null="false">
+			<column name="func_idanalista"/>
+		</many-to-one>
+		<many-to-one name="funcionarioAutorizador" class="gcom.cadastro.funcionario.Funcionario" not-null="false">
+			<column name="func_idautorizador"/>
+		</many-to-one>
+		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario" not-null="false">
+			<column name="usur_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

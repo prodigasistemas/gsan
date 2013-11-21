@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<!-- 
+UC0214] - Efetuar Parcelamento de Débitos
+Definição dos campos dos formulários, da página principal e das outras páginas das abas
+@author Rodrigo Avellar/Roberta Costa
+@date 11/02/2006 
+ -->
+<struts-config>
+	<form-beans>
+		<form-bean name="EfetuarParcelamentoDebitosActionForm"
+			type="org.apache.struts.validator.DynaValidatorActionForm"
+			dynamic="true">
+			<!-- Dados do Imóvel Processo: 1,2,3,4 -->
+			<form-property 
+				name="matriculaImovel" type="java.lang.String" />
+			<form-property 
+				name="codigoImovelAntes" type="java.lang.String" />
+			<form-property 
+				name="inscricaoImovel" type="java.lang.String" />
+			<form-property 
+				name="nomeCliente" type="java.lang.String" />
+			<form-property 
+				name="cpfCnpj" type="java.lang.String" />
+			<form-property 
+				name="situacaoAgua" type="java.lang.String" />
+			<form-property 
+				name="situacaoAguaId" type="java.lang.String" />
+			<form-property 
+				name="situacaoEsgoto" type="java.lang.String" />
+			<form-property 
+				name="situacaoEsgotoId" type="java.lang.String" />
+			<form-property 
+				name="perfilImovel" type="java.lang.String" />
+			<form-property 
+				name="descricaoPerfilImovel" type="java.lang.String" />
+			<form-property 
+				name="endereco" type="java.lang.String" />
+			<form-property 
+				name="valorAtualizacaoMonetaria" type="java.lang.String" />
+			<form-property 
+				name="valorJurosMora" type="java.lang.String" />
+			<form-property 
+				name="valorMulta" type="java.lang.String" />
+			<form-property 
+				name="numeroParcelamento" type="java.lang.String" />
+			<form-property 
+				name="numeroReparcelamento" type="java.lang.String" />
+			<form-property 
+				name="numeroReparcelamentoConsecutivos" type="java.lang.String" />
+			<form-property 
+				name="valorTotalContasImovel" type="java.lang.String" />
+			<form-property 
+				name="valorGuiasPagamentoImovel" type="java.lang.String" />
+			<form-property 
+				name="valorAcrescimosImpontualidadeImovel" type="java.lang.String" />
+			<form-property 
+				name="valorDebitoACobrarServicoImovel" type="java.lang.String" />
+			<form-property 
+				name="valorDebitoACobrarParcelamentoImovel" type="java.lang.String" />
+			<form-property 
+				name="valorCreditoARealizarImovel" type="java.lang.String" />
+			<form-property 
+				name="valorDebitoTotalAtualizadoImovel" type="java.lang.String" />
+			<form-property 
+				name="areaConstruidaImovel" type="java.lang.String" />	
+				
+			
+			<!-- Valor dos Débitos do Imóvel Processo: 1,2 -->
+			<form-property 
+				name="valorTotalContaValores" type="java.lang.String" />
+			<form-property 
+				name="valorGuiasPagamento" type="java.lang.String" />
+			<form-property 
+				name="valorAcrescimosImpontualidade" type="java.lang.String" />
+			<form-property 
+				name="valorDebitoACobrarServico" type="java.lang.String" />
+			<form-property 
+				name="valorDebitoACobrarServicoCurtoPrazo" type="java.lang.String" />
+			<form-property 
+				name="valorDebitoACobrarServicoLongoPrazo" type="java.lang.String" />
+			<form-property 
+				name="valorDebitoACobrarParcelamento" type="java.lang.String" />
+			<form-property 
+				name="valorDebitoACobrarParcelamentoCurtoPrazo" type="java.lang.String" />
+			<form-property 
+				name="valorDebitoACobrarParcelamentoLongoPrazo" type="java.lang.String" />
+			<form-property 
+				name="valorCreditoARealizar" type="java.lang.String" />
+			<form-property 
+				name="valorDebitoTotalAtualizado" type="java.lang.String" />
+
+			<!-- Informações para o Parcelamento - Processo: 1 -->	
+			<form-property 
+				name="dataParcelamento" type="java.lang.String" />
+			<form-property 
+				name="resolucaoDiretoria" type="java.lang.String" />
+			<form-property 
+				name="inicioIntervaloParcelamento" type="java.lang.String" />
+			<form-property 
+				name="fimIntervaloParcelamento" type="java.lang.String" />
+			<form-property 
+				name="valorAtualizacaoMonetariaImovel" type="java.lang.String" />
+			<form-property 
+				name="valorJurosMoraImovel" type="java.lang.String" />
+			<form-property 
+				name="valorMultaImovel" type="java.lang.String" />	
+			<form-property 
+				name="indicadorDividaAtiva" initial="1" type="java.lang.String" />	
+			
+			<!-- Perguntas - Processo: 1 -->
+			<form-property 
+				name="indicadorRestabelecimento" type="java.lang.String" />
+			<form-property 
+				name="indicadorContasRevisao" type="java.lang.String" />
+			<form-property 
+				name="indicadorGuiasPagamento" type="java.lang.String" />
+			<form-property 
+				name="indicadorAcrescimosImpotualidade" type="java.lang.String" />
+			<form-property 
+				name="indicadorDebitosACobrar" type="java.lang.String" />
+			<form-property 
+				name="indicadorCreditoARealizar" type="java.lang.String" />
+			<form-property 
+				name="idClienteParcelamento" type="java.lang.String" />
+			<form-property 
+				name="nomeClienteParcelamento" type="java.lang.String" />
+			<form-property 
+				name="foneClienteParcelamento" type="java.lang.String" />
+			<form-property 
+				name="cpfClienteParcelamento" type="java.lang.String" />
+			<form-property 
+				name="cpfClienteParcelamentoDigitado" type="java.lang.String" />	
+			<!-- Processo: 3,4 -->	
+			<form-property 
+				name="descontoAcrescimosImpontualidade" type="java.lang.String" />
+			<form-property 
+				name="descontoAntiguidadeDebito" type="java.lang.String" />
+			<form-property 
+				name="descontoInatividadeLigacaoAgua" type="java.lang.String" />
+			<form-property 
+				name="valorEntradaInformado" type="java.lang.String" />
+			<form-property 
+				name="valorEntradaInformadoAntes" type="java.lang.String" />
+			<form-property 
+				name="indicadorQuantidadeParcelas" type="java.lang.String" />
+			<form-property 
+				name="percentualDescontoAcrescimosImpontualidade" type="java.lang.String" />
+			<form-property 
+				name="percentualDescontoAntiguidadeDebito" type="java.lang.String" />
+			<form-property 
+				name="percentualDescontoInatividadeLigacaoAgua" type="java.lang.String" />
+			<form-property 
+				name="parcelamentoPerfilId" type="java.lang.String" />
+			<form-property 
+				name="valorTotalDescontos" type="java.lang.String" />
+			<form-property 
+				name="valorTotalImpostos" type="java.lang.String" />
+			<form-property 
+				name="valorDescontoPagamentoAVista" type="java.lang.String" />
+			<form-property 
+				name="valorPagamentoAVista" type="java.lang.String" />
+			<form-property 
+				name="valorMinimoPrestacao" type="java.lang.String" />	
+			<form-property 
+				name="descontoSancoesRDEspecial" type="java.lang.String" />				
+			<form-property 
+				name="descontoTarifaSocialRDEspecial" type="java.lang.String" />			
+				
+				
+			<!-- Processo: 4 -->	
+			<form-property 
+				name="valorDesconto" type="java.lang.String" />
+			<form-property 
+				name="valorNegociado" type="java.lang.String" />
+			<form-property 
+				name="valorASerParcelado" type="java.lang.String" />
+			<form-property 
+				name="parcelaEscolhida" type="java.lang.String" />
+			<form-property 
+				name="valorEntradaEscolhida" type="java.lang.String" />
+			<form-property 
+				name="valorParcelaEscolhida" type="java.lang.String" />
+			<form-property 
+				name="taxaJurosEscolhida" type="java.lang.String" />
+			<form-property 
+				name="indicadorConfirmacaoParcelamento" initial="1" type="java.lang.String" />	
+		</form-bean>
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<action name="EfetuarParcelamentoDebitosActionForm"
+			type="gcom.gui.cobranca.ExibirEfetuarParcelamentoDebitosAction"
+			validate="false" input="/exibirEfetuarParcelamentoDebitosAction.do"
+			scope="session" path="/exibirEfetuarParcelamentoDebitosAction">
+			<forward
+				name="exibirEfetuarParcelamentoDebitosProcesso1Action"
+				path="/efetuarParcelamentoDebitosWizardAction.do?action=exibirProcesso1Action" />
+		</action>
+		<action name="EfetuarParcelamentoDebitosActionForm"
+			type="gcom.gui.cobranca.EfetuarParcelamentoDebitosWizardAction"
+			validate="true" parameter="action" scope="session"
+			path="/efetuarParcelamentoDebitosWizardAction">
+			<forward name="processo1"
+				path="/jsp/cobranca/parcelamento_debito_efetuar_processo1.jsp" />
+			<forward name="processo2"
+				path="/jsp/cobranca/parcelamento_debito_efetuar_processo2.jsp" />
+			<forward name="processo3"
+				path="/jsp/cobranca/parcelamento_debito_efetuar_processo3.jsp" />
+			<forward name="processo4"
+				path="/jsp/cobranca/parcelamento_debito_efetuar_processo4.jsp" />
+		</action>
+
+		<action
+			type="gcom.gui.cobranca.CancelarEfetuarParcelamentoDebitosAction"
+			validate="false" path="/cancelarEfetuarParcelamentoDebitosAction" />
+			
+		<action name="EfetuarParcelamentoDebitosActionForm"
+			type="gcom.gui.relatorio.cobranca.parcelamento.GerarRelatorioExtratoDebitoAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioExtratoDebitoAction" />	
+
+	</action-mappings>
+
+
+</struts-config>

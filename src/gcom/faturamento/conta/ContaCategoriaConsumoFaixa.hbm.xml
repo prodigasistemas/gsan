@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.conta.ContaCategoriaConsumoFaixa" table="faturamento.conta_catg_cons_fx">
+		<id name="id" type="java.lang.Integer" column="cccf_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_conta_catg_cons_fx</param>
+			</generator>
+		</id>
+		<property name="valorAgua" type="java.math.BigDecimal" column="cccf_vlagua" length="13"/>
+		<property name="consumoAgua" type="java.lang.Integer" column="cccf_nnconsumoagua" length="4"/>
+		<property name="valorEsgoto" type="java.math.BigDecimal" column="cccf_vlesgoto" length="13"/>
+		<property name="consumoEsgoto" type="java.lang.Integer" column="cccf_nnconsumoesgoto" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cccf_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="consumoFaixaInicio" type="java.lang.Integer" column="cccf_nnconsumofaixainicio" length="4"/>
+		<property name="consumoFaixaFim" type="java.lang.Integer" column="cccf_nnconsumofaixafim" length="4"/>
+		<property name="valorTarifaFaixa" type="java.math.BigDecimal" column="cccf_vltarifafaixa" length="13"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to Categoria -->
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" not-null="true" insert="false" update="false">
+			<column name="catg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ContaCategoria -->
+		<many-to-one name="contaCategoria" class="gcom.faturamento.conta.ContaCategoria" not-null="true">
+			<column name="cnta_id"/>
+			<column name="catg_id"/>
+			<column name="scat_id"/>
+		</many-to-one>
+		<many-to-one name="subcategoria" class="gcom.cadastro.imovel.Subcategoria" not-null="true" insert="false" update="false">
+			<column name="scat_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

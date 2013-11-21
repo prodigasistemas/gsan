@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.localidade.CondicaoAbastecimentoAgua" table="cadastro.condicao_abast_agua">
+		<id name="id" type="java.lang.Integer" column="coab_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_condicao_abast_agua</param>
+			</generator>
+		</id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="coab_tmultimaalteracao" length="8" not-null="true"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to NivelPressao -->
+		<many-to-one name="nivelPressao" class="gcom.cadastro.localidade.NivelPressao" not-null="true">
+			<column name="nipr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GrauIntermitencia -->
+		<many-to-one name="grauIntermitencia" class="gcom.cadastro.localidade.GrauIntermitencia" not-null="true">
+			<column name="grin_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

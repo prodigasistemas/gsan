@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="gcom.arrecadacao.pagamento.PagamentoCartaoDebitoItem" table="arrecadacao.pagto_cartao_debito_item">
+		<id name="id" type="java.lang.Integer" column="paci_id">
+			<generator class="sequence">
+				<param name="sequence">arrecadacao.seq_pagto_cartao_debito_item</param>
+			</generator>
+		</id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="paci_tmultimaalteracao" not-null="true"/>
+		<many-to-one name="pagamentoCartaoDebito" class="gcom.arrecadacao.pagamento.PagamentoCartaoDebito" not-null="true">
+			<column name="pacd_id"/>
+		</many-to-one>
+		<many-to-one name="contaGeral" class="gcom.faturamento.conta.ContaGeral" not-null="false">
+			<column name="cnta_id"/>
+		</many-to-one>
+		<many-to-one name="guiaPagamentoGeral" class="gcom.faturamento.GuiaPagamentoGeral" not-null="false">
+			<column name="gpag_id"/>
+		</many-to-one>
+		<many-to-one name="debitoACobrarGeral" class="gcom.faturamento.debito.DebitoACobrarGeral" not-null="false">
+			<column name="dbac_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

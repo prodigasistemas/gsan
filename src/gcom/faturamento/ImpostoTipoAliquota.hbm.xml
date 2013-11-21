@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.ImpostoTipoAliquota" table="faturamento.imposto_tipo_aliquota">
+		<id name="id" type="java.lang.Integer" column="imta_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_imposto_tipo_aliquota</param>
+			</generator>
+		</id>
+		<property name="anoMesReferencia" type="java.lang.Integer" column="imta_amreferencia" not-null="true"/>
+		<property name="percentualAliquota" type="java.math.BigDecimal" column="imta_pcaliquota" not-null="true" length="5"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="imta_tmultimaalteracao" length="8"/>
+		<!-- bi-directional many-to-one association to Funcionario -->
+		<many-to-one name="impostoTipoAliquota" class="gcom.faturamento.ImpostoTipoAliquota" not-null="true">
+			<column name="imtp_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

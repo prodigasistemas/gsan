@@ -1,0 +1,83 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.gerencial.cadastro.RgResumoLigacaoEconomia" table="cadastro.rg_res_lig_econ">
+		<id name="id" type="java.lang.Integer" column="rele_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.sequence_rg_resumo_ligacao_economia</param>
+			</generator>
+		</id>
+		<property name="referencia" type="int" column="rele_amreferencia" not-null="true" length="4"/>
+		<property name="indicadorHidrometro" type="short" column="rele_ichidrometro" not-null="true" length="2"/>
+		<property name="volumeFixadoAgua" type="short" column="rele_icvolumefixadoagua" not-null="true" length="2"/>
+		<property name="indicadorVolumeFixadoEsgoto" type="short" column="rele_icvolumefixadoesgoto" not-null="true" length="2"/>
+		<property name="indicadorPoco" type="short" column="rele_icpoco" not-null="true" length="2"/>
+		<property name="quantidadeLigacoes" type="int" column="rele_qtligacoes" not-null="true" length="4"/>
+		<property name="quantidadeEconomias" type="int" column="rele_qteconomias" not-null="true" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="rele_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to GMunicipio -->
+		<many-to-one name="gerMunicipio" class="gcom.gerencial.cadastro.geografico.GMunicipio" not-null="true">
+			<column name="muni_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GSubcategoria -->
+		<many-to-one name="gerSubcategoria" class="gcom.gerencial.cadastro.imovel.GSubcategoria" not-null="true">
+			<column name="scat_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GClienteTipo -->
+		<many-to-one name="gerClienteTipo" class="gcom.gerencial.cadastro.cliente.GClienteTipo" not-null="true">
+			<column name="cltp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoAguaSituacao -->
+		<many-to-one name="gerLigacaoAguaSituacao" class="gcom.gerencial.atendimentopublico.ligacaoagua.GLigacaoAguaSituacao" not-null="true">
+			<column name="last_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoEsgotoSituacao -->
+		<many-to-one name="gerLigacaoEsgotoSituacao" class="gcom.gerencial.atendimentopublico.ligacaoesgoto.GLigacaoEsgotoSituacao" not-null="true">
+			<column name="lest_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoEsgotoPerfil -->
+		<many-to-one name="gerLigacaoEsgotoPerfil" class="gcom.gerencial.atendimentopublico.ligacaoesgoto.GLigacaoEsgotoPerfil" not-null="true">
+			<column name="lepf_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GRegiao -->
+		<many-to-one name="gerRegiao" class="gcom.gerencial.cadastro.geografico.GRegiao" not-null="true">
+			<column name="regi_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GBairro -->
+		<many-to-one name="gerBairro" class="gcom.gerencial.cadastro.geografico.GBairro" not-null="true">
+			<column name="bair_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoAguaPerfil -->
+		<many-to-one name="gerLigacaoAguaPerfil" class="gcom.gerencial.atendimentopublico.ligacaoagua.GLigacaoAguaPerfil" not-null="true">
+			<column name="lapf_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GEsferaPoder -->
+		<many-to-one name="gerEsferaPoder" class="gcom.gerencial.cadastro.cliente.GEsferaPoder" not-null="true">
+			<column name="epod_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GMicrorregiao -->
+		<many-to-one name="gerMicrorregiao" class="gcom.gerencial.cadastro.geografico.GMicrorregiao" not-null="true">
+			<column name="mreg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GCategoria -->
+		<many-to-one name="gerCategoria" class="gcom.gerencial.cadastro.imovel.GCategoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GImovelPerfil -->
+		<many-to-one name="gerImovelPerfil" class="gcom.gerencial.cadastro.imovel.GImovelPerfil" not-null="true">
+			<column name="iper_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+<form-beans>
+
+	<form-bean name="InserirMotivoNaoAceitacaoEncerramentoOSActionForm"
+			type="gcom.gui.cobranca.InserirMotivoNaoAceitacaoEncerramentoOSActionForm" />
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+		<action name="InserirMotivoNaoAceitacaoEncerramentoOSActionForm"
+			type="gcom.gui.cobranca.ExibirInserirMotivoNaoAceitacaoEncerramentoOSAction"
+			validate="false" scope="session"
+			path="/exibirInserirMotivoNaoAceitacaoEncerramentoOSAction">
+			<forward name="inserirMotivoNaoAceitacaoEncerramentoOS"
+				path="/jsp/cobranca/motivo_nao_aceitacao_encerramento_os_inserir.jsp" />
+		</action>
+		
+		<action name="InserirMotivoNaoAceitacaoEncerramentoOSActionForm"
+			type="gcom.gui.cobranca.InserirMotivoNaoAceitacaoEncerramentoOSAction"
+			validate="true" scope="session"
+			path="/inserirMotivoNaoAceitacaoEncerramentoOSAction">
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

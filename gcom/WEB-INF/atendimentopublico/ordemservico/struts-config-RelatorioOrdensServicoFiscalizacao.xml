@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="ExibirFiltrarRelatorioOrdensServicoFiscalizacaoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirFiltrarRelatorioOrdensServicoFiscalizacaoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	
+	<action-mappings>
+		<action name="ExibirFiltrarRelatorioOrdensServicoFiscalizacaoActionForm"  
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirFiltrarRelatorioOrdensServicoFiscalizacaoAction" 
+			validate="true"	
+			scope="session"	
+			path="/exibirFiltrarRelatorioOrdensServicoFiscalizacaoAction">
+			
+			<forward
+				name="exibirFiltrar"
+				path="/jsp/atendimentopublico/ordemservico/relatorio_ordem_servico_fiscalizacao.jsp" />
+		</action>
+		
+		<action name="ExibirFiltrarRelatorioOrdensServicoFiscalizacaoActionForm"  
+			type="gcom.gui.relatorio.atendimentopublico.ordemservico.GerarRelatorioOrdensServicoFiscalizacaoAction" 
+			validate="true"	
+			scope="session"	
+			path="/gerarRelatorioOrdensServicoFiscalizacaoAction">
+		</action>
+
+	</action-mappings>
+</struts-config>

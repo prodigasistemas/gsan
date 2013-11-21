@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="FiltrarDocumentosCobrancaActionForm"
+			type="gcom.gui.cobranca.FiltrarDocumentosCobrancaActionForm" />
+	</form-beans>
+
+	<!--******************* P�GINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name = "FiltrarDocumentosCobrancaActionForm"
+			type="gcom.gui.cobranca.ExibirFiltrarDocumentosCobrancaAction"
+			validate="true" path="/exibirFiltrarDocumentosCobrancaAction">
+			<forward name="filtrarDocumentosCobranca"
+				path="/jsp/cobranca/documento_cobranca_filtrar.jsp" />
+		</action>
+		<action
+			type="gcom.gui.cobranca.ExibirFiltrarDocumentosCobrancaResultadoAction"
+			validate="true" path="/exibirFiltrarDocumentosCobrancaResultadoAction">
+			<forward name="filtrarDocumentosCobrancaResultado"
+				path="/jsp/cobranca/documento_cobranca_filtrar_resultado.jsp" />
+		</action>
+		<action name="FiltrarDocumentosCobrancaActionForm"
+			type="gcom.gui.cobranca.FiltrarDocumentosCobrancaAction"
+			validate="true"
+			input="/exibirFiltrarDocumentosCobrancaAction.do" scope="session"
+			path="/filtrarDocumentosCobrancaAction">
+			<forward name="filtrarDocumentosCobrancaResultado"
+				path="/jsp/cobranca/documento_cobranca_filtrar_resultado.jsp" />
+		</action>
+		
+		<action
+			type="gcom.gui.cobranca.ExibirFiltrarDocumentosCobrancaResultadoAction"
+			validate="false" path="/exibirFiltrarDocumentosCobrancaResultadoAction">
+		</action>
+		<action
+			name="FiltrarDocumentosCobrancaActionForm"  	
+			type="gcom.gui.relatorio.cobranca.GerarRelatorioFiltrarDocumentoCobrancaAction"
+			validate="false" scope="session"	
+			path="/gerarRelatorioFiltrarDocumentoCobrancaAction">
+		</action>
+		
+	</action-mappings>
+</struts-config>

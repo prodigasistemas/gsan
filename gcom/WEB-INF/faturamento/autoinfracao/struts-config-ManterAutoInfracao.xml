@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="AtualizarAutoInfracaoActionForm"
+			type="gcom.gui.faturamento.autoinfracao.AtualizarAutoInfracaoActionForm" />
+		<form-bean name="FiltrarAutoInfracaoActionForm"
+			type="gcom.gui.faturamento.autoinfracao.FiltrarAutoInfracaoActionForm" />
+		
+
+	</form-beans>
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.faturamento.autoinfracao.ExibirManterAutoInfracaoAction"
+			validate="false" scope="session"
+			path="/exibirManterAutoInfracaoAction">
+			<forward name="exibirManterAutoInfracaoAction"
+				path="/jsp/faturamento/autoinfracao/auto_infracao_manter.jsp" />
+			<forward name="atualizarAutoInfracao"
+				path="/exibirAtualizarAutoInfracaoAction.do?filtrar=sim" />
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.faturamento.autoinfracao.RemoverAutoInfracaoAction"
+			validate="false" input="/exibirManterAutoInfracaoAction.do"
+			scope="request" path="/removerAutoInfracaoAction">
+		</action>
+
+		<action name="AtualizarAutoInfracaoActionForm"
+			type="gcom.gui.faturamento.autoinfracao.ExibirAtualizarAutoInfracaoAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarAutoInfracaoAction">
+			<forward name="atualizarAutoInfracao"
+				path="/jsp/faturamento/autoinfracao/auto_infracao_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarAutoInfracaoActionForm"
+			type="gcom.gui.faturamento.autoinfracao.AtualizarAutoInfracaoAction"
+			validate="true" scope="request"
+			path="/atualizarAutoInfracaoAction">
+		</action>
+		
+		<action name="FiltrarAutoInfracaoActionForm"
+			type="gcom.gui.faturamento.autoinfracao.GerarRelatorioManterAutoInfracaoAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioManterAutoInfracaoAction" />
+
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

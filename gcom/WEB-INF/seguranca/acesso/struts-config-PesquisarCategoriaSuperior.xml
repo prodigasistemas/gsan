@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="PesquisarCategoriaSuperiorActionForm"
+			type="gcom.gui.seguranca.acesso.PesquisarCategoriaSuperiorActionForm" />
+	</form-beans>
+
+	<!--******************* PaGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="PesquisarCategoriaSuperiorActionForm" 
+			type="gcom.gui.seguranca.acesso.ExibirPesquisarCategoriaSuperiorAction"
+			validate="true" path="/exibirPesquisarCategoriaSuperiorAction" scope="session">
+
+			<forward name="exibirPesquisarCategoriaSuperior"
+				path="/jsp/seguranca/acesso/categoria_funcionalidade_superior_pesquisar.jsp" />
+		</action>
+
+		<action name="PesquisarCategoriaSuperiorActionForm" 
+			type="gcom.gui.seguranca.acesso.PesquisarCategoriaSuperiorAction"
+			validate="false" path="/pesquisarCategoriaSuperiorAction" scope="session">
+
+			<forward name="listaCategoriaSuperiorResultado"
+				path="/jsp/seguranca/acesso/categoria_funcionalidade_superior_resultado_pesquisa.jsp" />
+		</action>
+
+	</action-mappings>
+
+	
+</struts-config>

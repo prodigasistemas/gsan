@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.faturamento.conta.ContaImpressao" table="faturamento.conta_impressao">
+		<id name="id" type="java.lang.Integer" column="cnta_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="referenciaConta" type="int" column="cnti_amreferenciaconta" not-null="true" length="4"/>
+		<property name="indicadorImpressao" type="short" column="cnti_icimpressao" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cnti_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="sequencialImpressao" type="java.lang.Integer" column="cnti_nnsequencialimpressao" not-null="false"/>
+		<property name="valorConta" type="java.math.BigDecimal" column="cnti_vlconta" length="13"/>
+		<property name="indicadorFichaCompensacao" type="java.lang.Short" column="cnti_icfichacompensacao" length="2"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-one association to ContaGeral -->
+		<one-to-one name="contaGeral" class="gcom.faturamento.conta.ContaGeral" outer-join="auto" constrained="true"/>
+		<!-- bi-directional many-to-one association to FaturamentoGrupo -->
+		<many-to-one name="faturamentoGrupo" class="gcom.faturamento.FaturamentoGrupo" not-null="true">
+			<column name="ftgr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Cliente -->
+		<many-to-one name="clienteResponsavel" class="gcom.cadastro.cliente.Cliente" not-null="false">
+			<column name="clie_idresponsavel"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ContaTipo -->
+		<many-to-one name="contaTipo" class="gcom.faturamento.conta.ContaTipo" not-null="true">
+			<column name="cttp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Empresa -->
+		<many-to-one name="empresa" class="gcom.cadastro.empresa.Empresa" not-null="true">
+			<column name="empr_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,34 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.micromedicao.hidrometro.HidrometroMotivoMovimentacao" table="micromedicao.hidrometro_motivo_movim">
+		<id name="id" type="java.lang.Integer" column="himm_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_hidrometro_motivo_movim</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="himm_dshidmtmotivomovimentacao" length="20"/>
+		<property name="indicadorUso" type="java.lang.Short" column="himm_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="himm_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to HidrometroMovimentacao 
+    <set
+        name="hidrometroMovimentacaos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="himm_id" />
+        </key>
+        <one-to-many 
+            class="gcom.cadastro.HidrometroMovimentacao"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

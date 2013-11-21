@@ -1,0 +1,65 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.registroatendimento.RaDadosAgenciaReguladora" table="atendimentopublico.ra_dados_agen_reguladora">
+		<id name="id" type="java.lang.Integer" column="raar_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_ra_dados_agen_reguladora</param>
+			</generator>
+		</id>
+		<property name="agenciaReguladora" type="java.lang.String" column="raar_nnagenciareguladora" not-null="true" length="20"/>
+		<property name="codigoSituacao" type="short" column="raar_cdsituacao" not-null="true" length="2"/>
+		<property name="codigoSituacaoArpe" type="short" column="raar_cdsitraregagenreg" not-null="true" length="2"/>
+		<property name="dataPrevisaoOriginal" type="java.sql.Date" column="raar_dtprevagenregoriginal" not-null="true" length="4"/>
+		<property name="dataPrevisaoAtual" type="java.sql.Date" column="raar_dtprevagenregatual" not-null="true" length="4"/>
+		<property name="dataReclamacao" type="java.sql.Timestamp" column="raar_tmreclamagenreg" not-null="true" length="8"/>
+		<property name="descricaoReclamacao" type="java.lang.String" column="raar_dsreclamagenreg" length="400"/>
+		<property name="dataRetorno" type="java.sql.Timestamp" column="raar_tmretornoagenreg" length="8"/>
+		<property name="descricaoRetorno" type="java.lang.String" column="raar_dsretornoagenreg" length="400"/>
+		<property name="contato" type="java.lang.String" column="raar_nmcontato" length="50"/>
+		<property name="emailContato" type="java.lang.String" column="raar_dsemailcontato" length="40"/>
+		<property name="orgaoContato" type="java.lang.String" column="raar_nmorgaocontato" length="40"/>
+		<property name="dddContato" type="java.lang.Short" column="raar_cddddcontato" length="2"/>
+		<property name="foneContato" type="java.lang.String" column="raar_nnfonecontato" length="9"/>
+		<property name="ramalContato" type="java.lang.String" column="raar_nnramalcontato" length="4"/>
+		<property name="faxContato" type="java.lang.String" column="raar_nnfaxcontato" length="9"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="raar_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to AtendimentoMotivoEncerramento -->
+		<many-to-one name="atendimentoMotivoEncerramento" class="gcom.atendimentopublico.registroatendimento.AtendimentoMotivoEncerramento" not-null="true">
+			<column name="amen_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to AgenciaReguladoraMotRetorno -->
+		<many-to-one name="agenciaReguladoraMotRetorno" class="gcom.atendimentopublico.registroatendimento.AgenciaReguladoraMotRetorno" not-null="true">
+			<column name="arrt_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to RegistroAtendimento -->
+		<many-to-one name="registroAtendimento" class="gcom.atendimentopublico.registroatendimento.RegistroAtendimento" not-null="true">
+			<column name="rgat_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to AgenciaReguladoraMotReclamacao -->
+		<many-to-one name="agenciaReguladoraMotReclamacao" class="gcom.atendimentopublico.registroatendimento.AgenciaReguladoraMotReclamacao" not-null="true">
+			<column name="amrc_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to RaDadosAgenciaReguladoraFone 
+    <set
+        name="raDadosAgenciaReguladoraFones"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="raar_id" />
+        </key>
+        <one-to-many 
+            class="gcom.RaDadosAgenciaReguladoraFone"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

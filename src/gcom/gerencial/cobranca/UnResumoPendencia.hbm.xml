@@ -1,0 +1,108 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.gerencial.cobranca.UnResumoPendencia" table="cobranca.un_resumo_pendencia">
+		<id name="id" type="java.lang.Integer" column="rpen_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="anoMesReferencia" type="int" column="rpen_amreferencia" not-null="false" length="4"/>
+		<property name="codigoSetorComercial" type="int" column="rpen_cdsetorcomercial" not-null="false" length="4"/>
+		<property name="numeroQuadra" type="int" column="rpen_nnquadra" not-null="false" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="rpen_tmultimaalteracao" not-null="false" length="8"/>
+		<property name="indicadorVolumeFixadoAgua" type="int" column="rpen_icvofixadoagua" not-null="false" length="4"/>
+		<property name="indicadorVolumeFixadoEsgoto" type="int" column="rpen_icvofixadoesgoto" not-null="false" length="4"/>
+		<property name="anoMesReferenciaDocumento" type="int" column="rpen_amreferenciadocumento" not-null="false" length="4"/>
+		<property name="indicadorHidrometro" type="short" column="rpen_ichidrometro" not-null="false" length="2"/>
+		<property name="indicadorVencido" type="short" column="rpen_icvencido" not-null="true" length="2"/>
+		<property name="quantidadeLigacoes" type="int" column="rpen_qtligacoes" not-null="false" length="4"/>
+		<property name="quantidadeDocumentos" type="int" column="rpen_qtdocumentos" not-null="false" length="4"/>
+		<property name="valorPendenteAgua" type="java.math.BigDecimal" column="rpen_vlpendente_agua" length="13"/>
+		<property name="valorPendenteEsgoto" type="java.math.BigDecimal" column="rpen_vlpendente_esgoto" length="13"/>
+		<property name="valorPendenteDebitos" type="java.math.BigDecimal" column="rpen_vlpendente_debitos" length="13"/>
+		<property name="valorPendenteCreditos" type="java.math.BigDecimal" column="rpen_vlpendente_creditos" length="13"/>
+		<property name="valorPendenteImpostos" type="java.math.BigDecimal" column="rpen_vlpendente_impostos" length="13"/>
+		<property name="codigoRota" type="java.lang.Short" column="rpen_cdrota"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to GGerenciaRegional -->
+		<many-to-one name="gerGerenciaRegional" class="gcom.gerencial.cadastro.localidade.GGerenciaRegional" not-null="false">
+			<column name="greg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GSetorComercial -->
+		<many-to-one name="gerSetorComercial" class="gcom.gerencial.cadastro.localidade.GSetorComercial" not-null="false">
+			<column name="stcm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GSubcategoria -->
+		<many-to-one name="gerSubcategoria" class="gcom.gerencial.cadastro.imovel.GSubcategoria" not-null="false">
+			<column name="scat_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoAguaPerfil -->
+		<many-to-one name="gerLigacaoAguaPerfil" class="gcom.gerencial.atendimentopublico.ligacaoagua.GLigacaoAguaPerfil" not-null="false">
+			<column name="lapf_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GEsferaPoder -->
+		<many-to-one name="gerEsferaPoder" class="gcom.gerencial.cadastro.cliente.GEsferaPoder" not-null="false">
+			<column name="epod_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GClienteTipo -->
+		<many-to-one name="gerClienteTipo" class="gcom.gerencial.cadastro.cliente.GClienteTipo" not-null="false">
+			<column name="cltp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoAguaSituacao -->
+		<many-to-one name="gerLigacaoAguaSituacao" class="gcom.gerencial.atendimentopublico.ligacaoagua.GLigacaoAguaSituacao" not-null="false">
+			<column name="last_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GUnidadeNegocio -->
+		<many-to-one name="gerUnidadeNegocio" class="gcom.gerencial.cadastro.localidade.GUnidadeNegocio" not-null="false">
+			<column name="uneg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLocalidade -->
+		<many-to-one name="gerLocalidade" class="gcom.gerencial.cadastro.localidade.GLocalidade" not-null="false">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLocalidade -->
+		<many-to-one name="GLocalidadeElo" class="gcom.gerencial.cadastro.localidade.GLocalidade" not-null="false">
+			<column name="loca_cdelo"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GCategoria -->
+		<many-to-one name="gerCategoria" class="gcom.gerencial.cadastro.imovel.GCategoria" not-null="false">
+			<column name="catg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GImovelPerfil -->
+		<many-to-one name="gerImovelPerfil" class="gcom.gerencial.cadastro.imovel.GImovelPerfil" not-null="false">
+			<column name="iper_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GRota -->
+		<many-to-one name="gerRota" class="gcom.gerencial.micromedicao.GRota" not-null="false">
+			<column name="rota_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GQuadra -->
+		<many-to-one name="gerQuadra" class="gcom.gerencial.cadastro.localidade.GQuadra" not-null="false">
+			<column name="qdra_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoEsgotoSituacao -->
+		<many-to-one name="gerLigacaoEsgotoSituacao" class="gcom.gerencial.atendimentopublico.ligacaoesgoto.GLigacaoEsgotoSituacao" not-null="false">
+			<column name="lest_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoEsgotoPerfil -->
+		<many-to-one name="gerLigacaoEsgotoPerfil" class="gcom.gerencial.atendimentopublico.ligacaoesgoto.GLigacaoEsgotoPerfil" not-null="false">
+			<column name="lepf_id"/>
+		</many-to-one>
+		<many-to-one name="gerConsumoTarifa" class="gcom.gerencial.faturamento.GConsumoTarifa" not-null="true">
+			<column name="cstf_id"/>
+		</many-to-one>
+		<many-to-one name="gerFaturamentoGrupo" class="gcom.gerencial.faturamento.GFaturamentoGrupo" not-null="true">
+			<column name="ftgr_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

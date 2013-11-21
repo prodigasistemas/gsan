@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+-->
+	<class name="gcom.gerencial.operacional.GDistritoOperacional" table="operacional.g_distrito_operacional">
+		<id name="id" type="java.lang.Integer" column="diop_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="descricao" type="java.lang.String" column="diop_dsdistritooperacional" length="30"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="diop_dsabreviado" length="3"/>
+		<property name="indicadorUso" type="java.lang.Short" column="diop_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="diop_tmultimaalteracao" not-null="true" length="8"/>
+	</class>
+</hibernate-mapping>

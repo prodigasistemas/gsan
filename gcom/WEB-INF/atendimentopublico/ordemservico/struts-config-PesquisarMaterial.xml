@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="PesquisarMaterialActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.PesquisarMaterialActionForm" />
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="PesquisarMaterialActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirPesquisarMaterialAction"
+			validate="false" scope="session"
+			path="/exibirPesquisarMaterialAction">
+			<forward name="materialPesquisar"
+				path="/jsp/atendimentopublico/ordemservico/material_pesquisar.jsp" />
+		</action>
+
+		<action name="PesquisarMaterialActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.PesquisarMaterialAction"
+			validate="false" scope="session" path="/pesquisarMaterialAction">
+			<forward name="exibirResultadoPesquisaMaterial"
+				path="/jsp/atendimentopublico/ordemservico/material_resultado_pesquisa.jsp" />
+		</action>
+
+
+
+
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

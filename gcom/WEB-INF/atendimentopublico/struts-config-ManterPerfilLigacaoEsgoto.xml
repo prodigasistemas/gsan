@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="ManterPerfilLigacaoEsgotoActionForm"
+			type="gcom.gui.atendimentopublico.ManterPerfilLigacaoEsgotoActionForm" />
+		<form-bean name="AtualizarPerfilLigacaoEsgotoActionForm"
+			type="gcom.gui.atendimentopublico.AtualizarPerfilLigacaoEsgotoActionForm" />
+		<form-bean name="FiltrarPerfilLigacaoEsgotoActionForm"
+			type="gcom.gui.atendimentopublico.FiltrarPerfilLigacaoEsgotoActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.atendimentopublico.ExibirManterPerfilLigacaoEsgotoAction"
+			validate="false" scope="session"
+			path="/exibirManterPerfilLigacaoEsgotoAction">
+
+			<forward name="exibirManterPerfilLigacaoEsgoto"
+				path="/jsp/atendimentopublico/ligacao_esgoto_perfil_manter.jsp" />
+
+			<forward name="exibirAtualizarPerfilLigacaoEsgoto"
+				path="/exibirAtualizarPerfilLigacaoEsgotoAction.do" />
+		</action>
+
+		<action name="AtualizarPerfilLigacaoEsgotoActionForm"
+			type="gcom.gui.atendimentopublico.ExibirAtualizarPerfilLigacaoEsgotoAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarPerfilLigacaoEsgotoAction">
+
+			<forward name="ligacaoEsgotoPerfilAtualizar"
+				path="/jsp/atendimentopublico/ligacao_esgoto_perfil_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarPerfilLigacaoEsgotoActionForm"
+			type="gcom.gui.atendimentopublico.AtualizarPerfilLigacaoEsgotoAction"
+			validate="true" scope="session"
+			path="/atualizarPerfilLigacaoEsgotoAction">
+
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.atendimentopublico.RemoverPerfilLigacaoEsgotoAction"
+			 scope="request" path="/removerPerfilLigacaoEsgotoAction">
+
+		</action>
+		<action name="FiltrarPerfilLigacaoEsgotoActionForm"
+			type="gcom.gui.relatorio.atendimentopublico.GerarRelatorioPerfilLigacaoEsgotoManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioPerfilLigacaoEsgotoManterAction" />
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

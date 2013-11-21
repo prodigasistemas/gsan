@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="PesquisarTipoPerfilServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.PesquisarTipoPerfilServicoActionForm" />
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="PesquisarTipoPerfilServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirPesquisarTipoPerfilServicoAction"
+			validate="false" scope="session"
+			path="/exibirPesquisarTipoPerfilServicoAction">
+			<forward name="tipoPerfilServicoPesquisar"
+				path="/jsp/atendimentopublico/ordemservico/servico_perfil_tipo_pesquisar.jsp" />
+		</action>
+
+		<action name="PesquisarTipoPerfilServicoActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.PesquisarTipoPerfilServicoAction"
+			validate="false" scope="session" path="/pesquisarTipoPerfilServicoAction">
+			<forward name="listaTipoPerfilServico"
+				path="/jsp/atendimentopublico/ordemservico/servico_perfil_tipo_resultado_pesquisa.jsp" />
+		</action>
+
+
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

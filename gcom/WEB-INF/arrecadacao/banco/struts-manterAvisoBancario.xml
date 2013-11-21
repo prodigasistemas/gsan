@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+
+		<form-bean name="AvisoBancarioActionForm" type="gcom.gui.arrecadacao.banco.AvisoBancarioActionForm" />
+		<form-bean name="AcertosAvisoBancarioActionForm" type="gcom.gui.arrecadacao.banco.AcertosAvisoBancarioActionForm" />
+		<form-bean name="ExcluirAvisoBancarioActionForm" type="gcom.gui.arrecadacao.banco.ExcluirAvisoBancarioActionForm" />
+		<form-bean name="FiltrarAvisoBancarioActionForm"
+			type="gcom.gui.arrecadacao.aviso.FiltrarAvisoBancarioActionForm" />
+
+	</form-beans>
+
+	<global-forwards/>
+
+	<action-mappings>
+		<action name="" type="gcom.gui.arrecadacao.banco.ExibirManterAvisoBancarioAction" scope="session" path="/ExibirManterAvisoBancarioAction">
+			<forward name="manter" path="/jsp/arrecadacao/banco/aviso_bancario_manter.jsp" />
+		</action>
+		
+		<action name="ExcluirAvisoBancarioActionForm" type="gcom.gui.arrecadacao.banco.ExcluirAvisoBancarioAction" scope="session" path="/ExcluirAvisoBancarioAction"/>
+		
+
+		<action name="AvisoBancarioActionForm" type="gcom.gui.arrecadacao.banco.ExibirAtualizarAvisoBancarioAction" scope="session" path="/ExibirAtualizarAvisoBancarioAction">
+			<forward name="exibir" path="/jsp/arrecadacao/banco/aviso_bancario_atualizar.jsp" />
+		</action>
+
+		<action name="AvisoBancarioActionForm" type="gcom.gui.arrecadacao.banco.AtualizarAvisoBancarioAction" scope="session" path="/AtualizarAvisoBancarioAction"/>
+
+   		<action name="AvisoBancarioActionForm" type="gcom.gui.arrecadacao.banco.ExibirPesquisarAvisoAcertoAction" scope="session" path="/ExibirPesquisarAvisoAcertoAction">
+			<forward name="exibirAvisoBancarioAcertoPopup" path="/jsp/arrecadacao/banco/aviso_bancario_acertos_popup.jsp" />
+		</action>
+		
+		<action name="FiltrarAvisoBancarioActionForm"
+			type="gcom.gui.relatorio.arrecadacao.GerarRelatorioAvisoBancarioManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioAvisoBancarioManterAction" />
+
+	</action-mappings>
+	<!--********************************************************************************-->
+	<!--******************* ARQUIVO DE PROPRIEDADES *******************-->
+	<message-resources null="false" parameter="gcom.properties.application" />
+
+</struts-config>

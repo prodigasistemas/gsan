@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" table="atendimentopublico.ligacao_agua_situacao">
+		<id name="id" type="java.lang.Integer" column="last_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_ligacao_agua_situacao</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="last_dsligacaoaguasituacao" length="20"/>
+		<property name="descricaoAbreviado" type="java.lang.String" column="last_dsabreviado" length="20" not-null="false"/>
+		<property name="indicadorUso" type="java.lang.Short" column="last_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="last_tmultimaalteracao" length="8"/>
+		<property name="indicadorFaturamentoSituacao" type="java.lang.Short" column="last_icfaturamento" not-null="true" length="2"/>
+		<property name="consumoMinimoFaturamento" type="java.lang.Integer" column="last_nnconsumominimo" not-null="true" length="4"/>
+		<property name="indicadorExistenciaRede" type="java.lang.Short" column="last_icexistenciarede" not-null="true" length="2"/>
+		<property name="indicadorExistenciaLigacao" type="java.lang.Short" column="last_icexistencialigacao" not-null="true" length="2"/>
+		<property name="indicadorAbastecimento" type="java.lang.Short" column="last_icabastecimento" not-null="true" length="2"/>
+		<property name="indicadorAguaAtiva" type="java.lang.Short" column="last_icativaagua" not-null="true" length="2"/>
+		<property name="indicadorAguaDesligada" type="java.lang.Short" column="last_icdesligadaagua" not-null="true" length="2"/>
+		<property name="indicadorAguaCadastrada" type="java.lang.Short" column="last_iccadastradaagua" not-null="true" length="2"/>
+		<property name="indicadorAnalizeAgua" type="java.lang.Short" column="last_icanaliseagua" not-null="true" length="2" />
+		<property name="indicadorConsumoReal" type="java.lang.Short" column="last_icconsumoreal" not-null="true" length="2" />
+		<property name="numeroDiasCorte" type="java.lang.Integer" column="last_nndiascorte" length="2" />
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to Imovel
+    <set
+        name="imoveis"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="last_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Imovel"
+        />
+    </set>-->
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="GerarRelatorioContasEmRevisaoActionForm"
+			type="gcom.gui.relatorio.faturamento.GerarRelatorioContasEmRevisaoActionForm" />					
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0637] Gerar Relatórios Volumes Faturados Auhtor: Rafael Corrêa Data:12/09/2007-->
+		<action name="GerarRelatorioContasEmRevisaoActionForm"
+			type="gcom.gui.relatorio.faturamento.ExibirGerarRelatorioContasEmRevisaoAction"
+			validate="true" scope="session"
+			path="/exibirGerarRelatorioContasEmRevisaoAction">
+			<forward name="exibirGerarRelatorioContasEmRevisao"
+				path="/jsp/relatorio/faturamento/contas_revisao_relatorio_gerar.jsp" />
+		</action>
+		<action name="GerarRelatorioContasEmRevisaoActionForm"
+			type="gcom.gui.relatorio.faturamento.GerarRelatorioContasEmRevisaoAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioContasEmRevisaoAction">
+		</action>
+
+	</action-mappings>
+
+</struts-config>

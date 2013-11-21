@@ -1,0 +1,149 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.CobrancaDocumento" table="cobranca.cobranca_documento">
+		<id name="id" type="java.lang.Integer" column="cbdo_id">
+			<generator class="sequence">
+				<param name="sequence">
+				cobranca.seq_cobranca_documento</param>
+			</generator>
+		</id>
+		<property name="numeroSequenciaDocumento" type="int" column="cbdo_nnsequenciadocumento" not-null="true" length="4"/>
+		<property name="emissao" type="java.sql.Timestamp" column="cbdo_tmemissao" length="8"/>
+		<property name="valorDesconto" type="java.math.BigDecimal" column="cbdo_vldesconto" length="13"/>
+		<property name="numeroQuadra" type="java.lang.Integer" column="cbdo_nnquadra" length="4"/>
+		<property name="valorDocumento" type="java.math.BigDecimal" column="cbdo_vldocumento" length="13"/>
+		<property name="valorTaxa" type="java.math.BigDecimal" column="cbdo_vltaxa" length="13"/>
+		<property name="codigoSetorComercial" type="java.lang.Integer" column="cbdo_cdsetorcomercial" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cbdo_tmultimaalteracao" length="8"/>
+		<property name="valorAcrescimos" type="java.math.BigDecimal" column="cbdo_vlacrescimos" length="13"/>
+		<property name="dataSituacaoAcao" type="java.sql.Date" column="cbdo_dtsituacaoacao" length="4"/>
+		<property name="dataSituacaoDebito" type="java.sql.Date" column="cbdo_dtsituacaodebito" length="4"/>
+		<property name="sequencialImpressao" type="java.lang.Integer" column="cbdo_nnsequencialimpressao" not-null="false" length="4"/>
+		<property name="indicadorAntesApos" type="java.lang.Short" column="cbdo_icantesapos" not-null="false" length="2"/>
+		<property name="indicadorLimite" type="java.lang.Short" column="cbdo_icacimalimite" not-null="false" length="2"/>
+		<property name="dataEmissaoPredecessor" type="java.sql.Timestamp" column="cbdo_tmemissaopred" length="8"/>
+		<property name="numeroDocumentoFatura" type="java.lang.String" column="cbdo_nndocumentofatura" not-null="false" length="14"/>
+		<property name="valorImpostos" type="java.math.BigDecimal" column="cbdo_vlimpostos" length="13"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to DocumentoEmissaoForma -->
+		<many-to-one name="documentoEmissaoForma" class="gcom.cobranca.DocumentoEmissaoForma" not-null="true">
+			<column name="demf_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaAcaoAtividadeComand -->
+		<many-to-one name="cobrancaAcaoAtividadeComando" class="gcom.cobranca.CobrancaAcaoAtividadeComando" not-null="true">
+			<column name="cacm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="false">
+			<column name="imov_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to CobrancaDocumentoItem -->
+		<!--  
+    <set
+        name="cobrancaDocumentoItems"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="cbdo_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CobrancaDocumentoItem"
+        />
+    </set>
+	-->
+		<!-- bi-directional one-to-many association to OrdemServico -->
+		<!--  
+    <set
+        name="ordemServicos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="cbdo_id" />
+        </key>
+        <one-to-many 
+            class="gcom.OrdemServico"
+        />
+    </set>
+    -->
+		<!-- bi-directional many-to-one association to Empresa -->
+		<many-to-one name="empresa" class="gcom.cadastro.empresa.Empresa" not-null="true">
+			<column name="empr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DocumentoTipo -->
+		<many-to-one name="documentoTipo" class="gcom.cobranca.DocumentoTipo" not-null="true">
+			<column name="dotp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ImovelPerfil -->
+		<many-to-one name="imovelPerfil" class="gcom.cadastro.imovel.ImovelPerfil" not-null="true">
+			<column name="iper_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Quadra -->
+		<many-to-one name="quadra" class="gcom.cadastro.localidade.Quadra" not-null="true">
+			<column name="qdra_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaAcaoAtividadeCronog -->
+		<many-to-one name="cobrancaAcaoAtividadeCronograma" class="gcom.cobranca.CobrancaAcaoAtividadeCronograma" not-null="true">
+			<column name="caac_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to MotivoNaoEntregaDocumento -->
+		<many-to-one name="motivoNaoEntregaDocumento" class="gcom.faturamento.conta.MotivoNaoEntregaDocumento" not-null="true">
+			<column name="mned_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaAcaoAtividadeCronog -->
+		<many-to-one name="cobrancaAcao" class="gcom.cobranca.CobrancaAcao" not-null="false">
+			<column name="cbac_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaAcaoSituacao -->
+		<many-to-one name="cobrancaAcaoSituacao" class="gcom.cobranca.CobrancaAcaoSituacao" not-null="true">
+			<column name="cast_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaCriterio -->
+		<many-to-one name="cobrancaCriterio" class="gcom.cobranca.CobrancaCriterio" not-null="true">
+			<column name="cbct_id"/>
+		</many-to-one>
+		<many-to-one name="cobrancaDebitoSituacao" class="gcom.cobranca.CobrancaDebitoSituacao" not-null="true">
+			<column name="cdst_id"/>
+		</many-to-one>
+		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="false">
+			<column name="clie_id"/>
+		</many-to-one>
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" not-null="false">
+			<column name="catg_id"/>
+		</many-to-one>
+		<many-to-one name="esferaPoder" class="gcom.cadastro.cliente.EsferaPoder" not-null="false">
+			<column name="epod_id"/>
+		</many-to-one>
+		<many-to-one name="fiscalizacaoSituacao" class="gcom.atendimentopublico.ordemservico.FiscalizacaoSituacao" not-null="false">
+			<column name="fzst_id"/>
+		</many-to-one>
+		<many-to-one name="motivoEncerramento" class="gcom.atendimentopublico.registroatendimento.AtendimentoMotivoEncerramento" not-null="false">
+			<column name="amen_id"/>
+		</many-to-one>
+		<many-to-one name="resolucaoDiretoria" class="gcom.cobranca.ResolucaoDiretoria" not-null="false">
+			<column name="rdir_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LigacaoAguaSituacao -->
+		<many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="true">
+			<column name="last_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LigacaoEsgotoSituacao -->
+		<many-to-one name="ligacaoEsgotoSituacao" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao" not-null="true">
+			<column name="lest_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

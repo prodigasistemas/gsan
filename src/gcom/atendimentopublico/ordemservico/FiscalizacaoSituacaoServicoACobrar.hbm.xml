@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.ordemservico.FiscalizacaoSituacaoServicoACobrar" table="atendimentopublico.fiscaliz_sit_serv_a_cob">
+		<composite-id name="comp_id" class="gcom.atendimentopublico.ordemservico.FiscalizacaoSituacaoServicoACobrarPK">
+			<key-property name="idFiscalizacaoSituacao" column="fzst_id" type="java.lang.Integer" length="4"/>
+			<key-property name="idDebitoTipo" column="dbtp_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<property name="indicadorHidrometroCapacidade" type="short" column="fscb_ichidrometrocapacidade" not-null="true" length="2"/>
+		<property name="numeroVezesServicoCalculadoValor" type="short" column="fscb_nnxservcalcvl" not-null="true" length="2"/>
+		<property name="consumoCalculo" type="java.lang.Short" column="fscb_cdconsumocalculo" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="fscb_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="valorMultaAutoInfracao" type="java.math.BigDecimal" column="fscb_vlmultaautoinfracao" length="13"/>
+		<property name="percentualParticipacaoMultaFuncionario" type="java.math.BigDecimal" column="fscb_pcmultafuncionario" not-null="false" length="5"/>
+		<property name="indicadorMultaInfracao" type="short" column="fscb_icmultaaltoinfracao" not-null="true" length="2"/>
+		<property name="numeroVezesServicoCalculadoValorReincidencia" type="java.lang.Short" column="fscb_nnxservcalcvlreincidencia"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to DebitoTipo -->
+		<many-to-one name="debitoTipo" class="gcom.faturamento.debito.DebitoTipo" update="false" insert="false">
+			<column name="dbtp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to FiscalizacaoSituacao -->
+		<many-to-one name="fiscalizacaoSituacao" class="gcom.atendimentopublico.ordemservico.FiscalizacaoSituacao" update="false" insert="false">
+			<column name="fzst_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

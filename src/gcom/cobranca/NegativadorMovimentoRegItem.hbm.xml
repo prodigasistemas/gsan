@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cobranca.NegativadorMovimentoRegItem" table="cobranca.negatd_mov_reg_item">
+		<id name="id" type="java.lang.Integer" column="nmri_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_negatd_mov_reg_item</param>
+			</generator>
+		</id>
+		<property name="valorDebito" type="java.math.BigDecimal" column="nmri_vldebito" length="15"/>
+		<property name="dataSituacaoDebitoAposExclusao" type="java.sql.Date" column="nmri_dtsitdebaposexclusao" length="4"/>
+		<property name="dataSituacaoDebito" type="java.sql.Date" column="nmri_dtsituacaodebito" not-null="true" length="4"/>
+		<property name="indicadorSituacaoDefinitiva" type="short" column="nmri_icsitdefinitiva" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="nmri_tmultimaalteracao" length="8"/>
+		<property name="valorPago" type="java.math.BigDecimal" column="nmri_vlpago" length="15"/>
+		<property name="valorCancelado" type="java.math.BigDecimal" column="nmri_vlcancelado" length="15"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to NegativadorMovimentoReg -->
+		<many-to-one name="negativadorMovimentoReg" class="gcom.cobranca.NegativadorMovimentoReg" not-null="true">
+			<column name="nmrg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GuiaPagamentoGeral -->
+		<many-to-one name="guiaPagamentoGeral" class="gcom.faturamento.GuiaPagamentoGeral" not-null="true">
+			<column name="gpag_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ContaGeral -->
+		<many-to-one name="contaGeral" class="gcom.faturamento.conta.ContaGeral" not-null="true">
+			<column name="cnta_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DocumentoTipo -->
+		<many-to-one name="documentoTipo" class="gcom.cobranca.DocumentoTipo" not-null="true">
+			<column name="dotp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DebitoACobrarGeral -->
+		<many-to-one name="debitoACobrarGeral" class="gcom.faturamento.debito.DebitoACobrarGeral" not-null="true">
+			<column name="dbac_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaDebitoSituacao -->
+		<many-to-one name="cobrancaDebitoSituacao" class="gcom.cobranca.CobrancaDebitoSituacao" not-null="true">
+			<column name="cdst_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaDebitoSituacao -->
+		<many-to-one name="cobrancaDebitoSituacaoAposExclusao" class="gcom.cobranca.CobrancaDebitoSituacao" not-null="true">
+			<column name="cdst_idaposexclusao"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

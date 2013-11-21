@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="InserirAbrangenciaUsuarioActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.InserirAbrangenciaUsuarioActionForm" />
+	</form-beans>
+
+
+	<global-forwards />
+	<action-mappings>
+
+
+<action name="InserirAbrangenciaUsuarioActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.ExibirInserirAbrangenciaUsuarioAction"
+			validate="false" scope="session"
+			path="/exibirInserirAbrangenciaUsuarioAction">
+			<forward name="inserirAbrangenciaUsuario"
+				path="/jsp/seguranca/acesso/usuario/usuario_abrangencia_inserir.jsp" />
+		</action>
+
+		<action name="InserirAbrangenciaUsuarioActionForm"
+			type="gcom.gui.seguranca.acesso.usuario.InserirAbrangenciaUsuarioAction"
+			validate="false" scope="session"
+			path="/inserirAbrangenciaUsuarioAction">
+		</action>
+
+
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

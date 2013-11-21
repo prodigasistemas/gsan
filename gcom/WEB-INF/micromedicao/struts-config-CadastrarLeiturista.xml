@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="CadastrarLeituristaActionForm"
+			type="gcom.gui.micromedicao.CadastrarLeituristaActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<action name="CadastrarLeituristaActionForm"
+			type="gcom.gui.micromedicao.ExibirCadastrarLeituristaAction"
+			validate="true" scope="session"
+			path="/exibirCadastrarLeituristaAction">
+
+			<forward name="cadastrarLeiturista"
+				path="/jsp/micromedicao/leiturista_cadastrar.jsp" />
+		</action>
+
+		<action name="CadastrarLeituristaActionForm"
+			type="gcom.gui.micromedicao.CadastrarLeituristaAction"
+			validate="true" scope="session"
+			path="/cadastrarLeituristaAction">			
+		</action>
+		
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

@@ -1,0 +1,59 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.ordemservico.ServicoTipoReferencia" table="atendimentopublico.servico_tipo_referencia">
+		<id name="id" type="java.lang.Integer" column="strf_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_servico_tipo_referencia</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="strf_dsservicotiporeferencia" not-null="true" length="50"/>
+		<property name="descricaoAbreviada" type="java.lang.String" column="strf_dsabreviado" length="8"/>
+		<property name="situacaoOsReferenciaAntes" type="java.lang.Integer" column="strf_cdsitosreferenciaantes" length="4"/>
+		<property name="indicadorUso" type="short" column="strf_icuso" not-null="true" length="2"/>
+		<property name="situacaoOsReferenciaApos" type="java.lang.Integer" column="strf_cdsitosreferenciaapos" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="strf_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="indicadorExistenciaOsReferencia" type="short" column="strf_icexistenciaosreferencia" not-null="true" length="2"/>
+		<property name="indicadorDiagnostico" type="short" column="strf_icdiagnostico" not-null="true" length="2"/>
+		<property name="indicadorFiscalizacao" type="short" column="strf_icfiscalizacao" not-null="true" length="2"/>
+		<!-- bi-directional many-to-one association to ServicoTipo -->
+		<many-to-one name="servicoTipo" class="gcom.atendimentopublico.ordemservico.ServicoTipo" not-null="true">
+			<column name="svtp_id"/>
+		</many-to-one>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to OsReferidaRetornoTipo 
+    <set
+        name="osReferidaRetornoTipos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="strf_id" />
+        </key>
+        <one-to-many 
+            class="gcom.OsReferidaRetornoTipo"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to ServicoTipo 
+    <set
+        name="servicoTipos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="strf_id" />
+        </key>
+        <one-to-many 
+            class="gcom.ServicoTipo"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

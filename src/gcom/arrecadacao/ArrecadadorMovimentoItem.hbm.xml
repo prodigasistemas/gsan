@@ -1,0 +1,81 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.arrecadacao.ArrecadadorMovimentoItem" table="arrecadacao.arrecadador_mov_item">
+		<id name="id" type="java.lang.Integer" column="amit_id">
+			<generator class="sequence">
+				<param name="sequence">arrecadacao.seq_arrecadador_mov_item</param>
+			</generator>
+		</id>
+		<property name="conteudoRegistro" type="java.lang.String" column="amit_cnregistro" length="150"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="amit_tmultimaalteracao" length="8"/>
+		<property name="descricaoOcorrencia" type="java.lang.String" column="amit_dsocorrencia" length="70"/>
+		<property name="indicadorAceitacao" type="java.lang.Short" column="amit_icaceitacao" length="2"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to ArrecadadorMovimento -->
+		<many-to-one name="arrecadadorMovimento" class="gcom.arrecadacao.ArrecadadorMovimento" not-null="true">
+			<column name="armv_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to RegistroCodigo -->
+		<many-to-one name="registroCodigo" class="gcom.arrecadacao.RegistroCodigo" not-null="true">
+			<column name="rgcd_id"/>
+		</many-to-one>
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel">
+			<column name="imov_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to PagamentoHistorico -->
+		<!--
+    <set
+        name="pagamentoHistoricos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="amit_id" />
+        </key>
+        <one-to-many 
+            class="gcom.PagamentoHistorico"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to Pagamento -->
+		<!--
+    <set
+        name="pagamentosByAmitId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="amit_id" />
+        </key>
+        <one-to-many 
+            class="gcom.Pagamento"
+        />
+    </set>
+    -->
+		<!-- bi-directional one-to-many association to Pagamento -->
+		<!--
+    <set
+        name="pagamentosByAmitId"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="amit_id" />
+        </key>
+        <one-to-many 
+            class="gcom.Pagamento"
+        />
+    </set>
+	-->
+	</class>
+</hibernate-mapping>

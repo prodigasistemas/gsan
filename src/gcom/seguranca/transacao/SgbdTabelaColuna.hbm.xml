@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.seguranca.transacao.SgbdTabelaColuna" table="seguranca.sgbd_tabela_coluna">
+		<id name="id" type="java.lang.Integer" column="sgdb_id">
+			<generator class="sequence">
+				<param name="sequence">seguranca.sequence_sgbd_tabela_coluna</param>
+			</generator>
+		</id>
+		<property name="nome" type="java.lang.String" column="sgbd_nmcoluna" length="30"/>
+		<property name="descricao" type="java.lang.String" column="sgbd_dscoluna" length="50"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="sgbd_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to ColunaAlteracao
+    <set
+        name="colunaAlteracaos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="sgdb_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.ColunaAlteracao"
+        />
+    </set>
+   -->
+		<!-- bi-directional many-to-one association to SgbdTabela -->
+		<many-to-one name="sgbdTabela" class="gcom.seguranca.transacao.SgbdTabela" not-null="true">
+			<column name="sgbd_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

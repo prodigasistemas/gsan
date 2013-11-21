@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.micromedicao.Rota" table="micromedicao.rota">
+		<id column="rota_id" name="id" type="java.lang.Integer">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_rota</param>
+			</generator>
+		</id>
+		<property column="rota_cdrota" generated="never" lazy="false" length="2" name="codigo" not-null="true" type="java.lang.Short"/>
+		<property column="rota_icconsumoajuste" generated="never" lazy="false" length="2" name="indicadorAjusteConsumo" type="java.lang.Short"/>
+		<property column="rota_icalternativa" generated="never" lazy="false" length="2" name="indicadorRotaAlternativa" type="java.lang.Short"/>
+		<property column="rota_dtleituraajuste" generated="never" lazy="false" length="4" name="dataAjusteLeitura" type="java.sql.Date"/>
+		<!-- <property
+        name="codigo"
+        type="java.lang.Short"
+        column="rota_cdrota"
+        not-null="true"
+        length="2"
+    />
+
+    <property
+        name="indicadorAjusteConsumo"
+        type="java.lang.Short"
+        column="rota_icconsumoajuste"
+        length="2"
+    />
+    
+    <property
+        name="indicadorRotaAlternativa"
+        type="java.lang.Short"
+        column="rota_icalternativa"
+        length="2"
+    />
+   <property
+        name="dataAjusteLeitura"
+        type="java.sql.Date"
+        column="rota_dtleituraajuste"
+        length="4"
+    />
+     -->
+		<property name="indicadorTransmissaoOffline" type="java.lang.Short" column="rota_ictransmissaooffline" length="2"/>
+		<property name="indicadorSequencialLeitura" type="java.lang.Integer" column="rota_icseqleitura" not-null="false" length="4"/>
+		<!--
+    <property
+        name="dataGeracaoMovimentoLeitura"
+        type="java.sql.Date"
+        column="rota_dtleiturageracaomovimento"
+        length="4"
+    />
+    <property
+        name="dataProcessamentoMovimentoLeitura"
+        type="java.sql.Date"
+        column="rota_dtleituraprocessamentomovimento"
+        length="4"
+    />
+    <property
+        name="dataUltimaConsistenciaLeitura"
+        type="java.sql.Date"
+        column="rota_dtleituraultimaconsistencia"
+        length="4"
+    />
+    <property
+        name="dataEmissaoConta"
+        type="java.sql.Date"
+        column="rota_dtcontasemissao"
+        length="4"
+    />
+    <property
+        name="dataVencimentoConta"
+        type="java.sql.Date"
+        column="rota_dtcontasvencimento"
+        length="4"
+    /> -->
+		<property column="rota_icleitfisclzcortado" generated="never" lazy="false" length="2" name="indicadorFiscalizarCortado" type="java.lang.Short"/>
+		<property column="rota_icleitfisclzsuprimido" generated="never" lazy="false" length="2" name="indicadorFiscalizarSuprimido" type="java.lang.Short"/>
+		<property column="rota_icfaixafalsageracao" generated="never" lazy="false" length="2" name="indicadorGerarFalsaFaixa" type="java.lang.Short"/>
+		<property column="rota_pcfaixafalsageracao" generated="never" lazy="false" length="5" name="percentualGeracaoFaixaFalsa" type="java.math.BigDecimal"/>
+		<property column="rota_icleitfisclzger" generated="never" lazy="false" length="2" name="indicadorGerarFiscalizacao" type="java.lang.Short"/>
+		<property column="rota_pcleitfisclzger" generated="never" lazy="false" length="5" name="percentualGeracaoFiscalizacao" type="java.math.BigDecimal"/>
+		<property column="rota_icuso" generated="never" lazy="false" length="2" name="indicadorUso" type="java.lang.Short"/>
+		<property column="rota_tmultimaalteracao" generated="never" lazy="false" length="8" name="ultimaAlteracao" type="java.sql.Timestamp"/>
+		<property column="rota_nnsequencialeiturista" generated="never" lazy="false" name="numeroSequenciaLeitura" type="java.lang.Integer"/>
+		<property column="rota_nnlimiteimoveis" generated="never" lazy="false" name="numeroLimiteImoveis" type="java.lang.Integer"/>
+		<property name="numeroDiasConsumoAjuste" type="java.lang.Integer" column="rota_nndiasconsumoajuste" length="2"/>
+		<property column="rota_icimpressaotermicafinalgrupo" generated="never" lazy="false" length="2" name="indicadorImpressaoTermicaFinalGrupo" type="java.lang.Short" not-null="true"/>
+		<!-- associations 
+ bi-directional one-to-many association to Quadra
+    <set
+        name="quadras"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="rota_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Quadra"
+        />
+    </set>
+     bi-directional many-to-one association to Empresa -->
+		<many-to-one class="gcom.cadastro.empresa.Empresa" name="empresa" not-null="true">
+			<column name="empr_id"/>
+		</many-to-one>
+		<many-to-one class="gcom.cadastro.empresa.Empresa" name="empresaEntregaContas" not-null="true">
+			<column name="empr_identregacontas"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to FaturamentoGrupo -->
+		<many-to-one class="gcom.faturamento.FaturamentoGrupo" name="faturamentoGrupo" not-null="true">
+			<column name="ftgr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LeituraTipo -->
+		<many-to-one class="gcom.micromedicao.leitura.LeituraTipo" name="leituraTipo" not-null="true">
+			<column name="lttp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to SetorComercial -->
+		<many-to-one class="gcom.cadastro.localidade.SetorComercial" name="setorComercial" not-null="true">
+			<column name="stcm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaGrupo -->
+		<many-to-one class="gcom.cobranca.CobrancaGrupo" name="cobrancaGrupo" not-null="true">
+			<column name="cbgr_id"/>
+		</many-to-one>
+		<many-to-one class="gcom.cadastro.empresa.Empresa" name="empresaCobranca" not-null="true">
+			<column name="empr_idcobranca"/>
+		</many-to-one>
+		<many-to-one class="gcom.micromedicao.Leiturista" name="leiturista" not-null="true">
+			<column name="leit_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to CobrancaCriterio 
+         
+    <many-to-one
+        name="cobrancaCriterio"
+        class="gcom.cobranca.CobrancaCriterio"
+        not-null="true"
+    >
+        <column name="cbct_id" />
+    </many-to-one>
+    -->
+	</class>
+</hibernate-mapping>

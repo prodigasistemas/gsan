@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="ConsultarImovelActionForm"
+			type="gcom.gui.cadastro.imovel.ConsultarImovelActionForm" />			
+
+		<form-bean name="DocumentoCobrancaItemActionForm"
+			type="gcom.gui.cadastro.imovel.DocumentoCobrancaItemActionForm" />
+			
+		<form-bean name="ConsultarSituacaoEspecialFaturamentoPopupActionForm"
+			type="gcom.gui.faturamento.ConsultarSituacaoEspecialFaturamentoPopupActionForm" />
+			
+		<form-bean name="ConsultarSituacaoEspecialCobrancaPopupActionForm"
+			type="gcom.gui.cobranca.ConsultarSituacaoEspecialCobrancaPopupActionForm" />			
+			
+		<form-bean name="ExibirAtualizarDadosClientesPopupActionForm"
+			type="gcom.gui.atendimentopublico.ExibirAtualizarDadosClientesPopupActionForm" />	
+				
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0472] CONSULTAR IMOVEL Auhtor: Rafael Santos Data:07/09/2006-->
+		<action name="ConsultarImovelActionForm"
+			type="gcom.gui.cadastro.imovel.ExibirConsultarImovelAction"
+			validate="false" input="/exibirConsultarImovelAction.do"
+			scope="session" path="/exibirConsultarImovelAction">
+			<forward name="exibirConsultarImovelAction"
+				path="/consultarImovelWizardAction.do?action=exibirConsultarImovelDebitosAction" />
+		</action>
+		
+		<!-- [UC0472] CONSULTAR IMOVEL Auhtor: Rafael Santos Data:07/09/2006-->		
+		<action name="ConsultarImovelActionForm"
+			type="gcom.gui.cadastro.imovel.ConsultarImovelWizardAction"
+			validate="false" parameter="action" scope="session"
+			path="/consultarImovelWizardAction">
+			<forward name="consultarImovelDadosCadastrais"
+				path="/jsp/cadastro/imovel/imovel_consultar_cadastro.jsp" />
+			<forward name="consultarImovelDadosComplementares"
+				path="/jsp/cadastro/imovel/imovel_consultar_dados_complementares.jsp" />
+			<forward name="consultarImovelAnaliseMedicaoConsumo"
+				path="/jsp/cadastro/imovel/imovel_consultar_analise_medicao_consumo.jsp" />
+			<forward name="consultarImovelHistoricoFaturamento"
+				path="/jsp/cadastro/imovel/imovel_consultar_historico_faturamento.jsp" />
+			<forward name="consultarImovelDebitos"
+				path="/jsp/cadastro/imovel/imovel_consultar_debitos.jsp" />
+			<forward name="consultarImovelPagamentos"
+				path="/jsp/cadastro/imovel/imovel_consultar_pagamentos.jsp" />
+			<forward name="consultarImovelDevolucoes"
+				path="/jsp/cadastro/imovel/imovel_consultar_devolucoes.jsp" />
+			<forward name="consultarImovelDocumentosCobranca"
+				path="/jsp/cadastro/imovel/imovel_consultar_documentos_cobranca.jsp" />
+			<forward name="consultarImovelParcelamentosDebitos"
+				path="/jsp/cadastro/imovel/imovel_consultar_parcelamentos_debitos.jsp" />
+			<forward name="consultarImovelRegistroAtendimento"
+				path="/jsp/cadastro/imovel/imovel_consultar_registro_atendimento.jsp" />
+
+		</action>
+
+		<!-- PopUp de Documentos de Cobranca -->		
+		<action name="DocumentoCobrancaItemActionForm" 
+			type="gcom.gui.cadastro.imovel.ExibirDocumentoCobrancaItemAction"
+			validate="false" path="/exibirDocumentoCobrancaItemAction">
+			<forward name="exibirDocumentoCobrancaItem"
+				path="/jsp/cadastro/imovel/imovel_consultar_documentos_cobranca_popup.jsp" />
+		</action>
+
+		<!-- PopUp de Parcelmento de Debito -->		
+		<action name="ParcelamentoDebitoActionForm"
+			type="gcom.gui.cadastro.imovel.ExibirConsultarParcelamentoDebitoPopupAction"
+			scope="request" path="/exibirConsultarParcelamentoDebitoPopupAction">
+			<forward name="exibirConsultarParcelamentoDebitoPopup"
+				path="/jsp/cadastro/imovel/imovel_consultar_parcelamento_debito_popup.jsp" />
+		</action>
+
+		<action 
+			type="gcom.gui.cadastro.imovel.CancelarConsultarImovelAction"
+			validate="false"
+			path="/cancelarConsultarImovelAction" >
+		</action>
+		
+		<!-- GERAR RELATORIO MEDIÇÃO E CONSULTA DA LIGAÇÃO DE ÁGUA -->
+		<action name="ConsultarImovelActionForm"
+			type="gcom.gui.relatorio.atendimentopublico.GerarRelatorioResumoImovelMicromedicaoAction"
+			scope="session" path="/gerarRelatorioResumoImovelMicromedicaoAction" />
+			
+		<action name="ConsultarImovelActionForm"
+			type="gcom.gui.relatorio.cobranca.GerarRelatorioDebitosConsultarAction"
+			scope="session" path="/gerarRelatorioDebitosConsultarAction" />
+			
+		<action name="ConsultarSituacaoEspecialFaturamentoPopupActionForm"
+			type="gcom.gui.faturamento.ExibirConsultarSituacaoEspecialFaturamentoPopupAction"
+			scope="session" path="/exibirConsultarSituacaoEspecialFaturamentoPopupAction">
+			<forward name="exibirConsultarSituacaoEspecialFaturamentoPopup"
+				path="/jsp/faturamento/situacao_especial_faturamento_consultar_popup.jsp" />
+		</action>
+		
+		<action name="ConsultarSituacaoEspecialCobrancaPopupActionForm"
+			type="gcom.gui.cobranca.ExibirConsultarSituacaoEspecialCobrancaPopupAction"
+			scope="session" path="/exibirConsultarSituacaoEspecialCobrancaPopupAction">
+			<forward name="exibirConsultarSituacaoEspecialCobrancaPopup"
+				path="/jsp/cobranca/situacao_especial_cobranca_consultar_popup.jsp" />
+		</action>
+
+		<action name="ConsultarImovelActionForm"
+			type="gcom.gui.relatorio.cadastro.imovel.GerarRelatorioDadosCadastraisImovelAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioDadosCadastraisImovelAction"/>
+
+		<action name="ConsultarImovelActionForm"
+			type="gcom.gui.relatorio.cadastro.imovel.GerarRelatorioDadosComplementaresImovelAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioDadosComplementaresImovelAction"/>
+		
+		<action name="ConsultarImovelActionForm"
+			type="gcom.gui.relatorio.cadastro.imovel.GerarRelatorioHistoricoFaturamentoImovelAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioHistoricoFaturamentoImovelAction"/>
+
+		<action name="ConsultarImovelActionForm"
+			type="gcom.gui.relatorio.cadastro.imovel.GerarRelatorioDadosAnaliseMedicaoConsumoImovelAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioDadosAnaliseMedicaoConsumoImovelAction"/>
+		
+		<!-- GERAR RELATORIO MEDIÇÃO POÇO -->
+		<action name="ConsultarImovelActionForm"
+			type="gcom.gui.relatorio.atendimentopublico.GerarRelatorioHistoricoMedicaoPocoAction"
+			scope="session" path="/gerarRelatorioHistoricoMedicaoPocoAction" />
+			
+		<!-- PopUp de foto da ocorrencia de cadastro -->		
+		<action 
+			type="gcom.gui.atendimentopublico.ExibirFotoOcorrenciaCadastroConsultarImovelAction"
+			path="/exibirFotoOcorrenciaCadastroConsultarImovelAction"
+			validate="false"
+			scope="session" >
+			<forward name="exibirFotoOcorrenciaCadastro"
+				path="/jsp/cadastro/ocorrencia_cadastro_foto.jsp" />
+		</action>
+		
+		<!-- PopUp Atualizar dados Cadastrais de Clientes - PROMAIS -->		
+		<action 
+		    name="ExibirAtualizarDadosClientesPopupActionForm"
+			type="gcom.gui.atendimentopublico.ExibirAtualizarDadosClientesPopupAction"
+			path="/exibirAtualizarDadosClientesPopupAction"
+			validate="false"
+			scope="session" >
+			<forward name="exibirAtualizarDadosClientes"
+				path="/jsp/atendimentopublico/atualizar_dados_clientes_popup.jsp" />				
+		</action>
+		
+		<action 
+		    name="ExibirAtualizarDadosClientesPopupActionForm"
+			type="gcom.gui.atendimentopublico.AtualizarDadosClientesPopupAction"
+			validate="false"
+			path="/atualizarDadosClientesPopupAction" 
+			scope="session">
+		</action>
+		
+		<action 
+		    name="ExibirAtualizarDadosClientesPopupActionForm"
+			type="gcom.gui.atendimentopublico.AtualizarDadosImovelPopupPROMAISAction"
+			validate="false"
+			path="/atualizarDadosImovelPopupPROMAISAction" 
+			scope="session">
+		</action>
+
+	</action-mappings>
+	
+</struts-config>

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+	
+		<form-bean name="FiltrarTipoCorteActionForm"
+			type="gcom.gui.atendimentopublico.ligacaoagua.FiltrarTipoCorteActionForm" />
+	
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+			<action name="FiltrarTipoCorteActionForm" 
+			type="gcom.gui.atendimentopublico.ligacaoagua.ExibirFiltrarTipoCorteAction"
+			validate="false" scope="session" path="/exibirFiltrarTipoCorteAction">
+			<forward name="filtrarTipoCorte"
+				path="/jsp/atendimentopublico/ligacaoagua/tipo_corte_filtrar.jsp" />
+		</action>
+		
+		<action name="FiltrarTipoCorteActionForm" 
+			type="gcom.gui.atendimentopublico.ligacaoagua.FiltrarTipoCorteAction"
+			validate="true" scope="session" path="/filtrarTipoCorteAction">
+			<forward name="exibirManterTipoCorte" path="/exibirManterTipoCorteAction.do" /> 
+		</action>
+		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

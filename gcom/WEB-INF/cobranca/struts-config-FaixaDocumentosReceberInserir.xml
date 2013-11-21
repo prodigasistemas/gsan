@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="InserirFaixaDiasVencidosDocumentosReceberActionForm"
+			type="gcom.gui.cobranca.InserirFaixaDiasVencidosDocumentosReceberActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="InserirFaixaDiasVencidosDocumentosReceberActionForm"
+			type="gcom.gui.cobranca.ExibirInserirFaixaDiasVencidosDocumentosReceberAction"
+			validate="true" scope="session"
+			path="/exibirInserirFaixaDiasVencidosDocumentosReceberAction">
+			<forward name="exibirInserirFaixaDiasVencidosDocumentosReceberAction"
+				path="/jsp/cobranca/faixa_dias_vencidos_documentos_receber_inserir.jsp"/>
+		</action>
+
+		<action name="InserirFaixaDiasVencidosDocumentosReceberActionForm"
+			type="gcom.gui.cobranca.InserirFaixaDiasVencidosDocumentosReceberAction"
+			validate="true" scope="session"
+			path="/inserirFaixaDiasVencidosDocumentosReceberAction">
+		</action>
+			
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

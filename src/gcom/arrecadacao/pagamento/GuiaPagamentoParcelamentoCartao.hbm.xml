@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.arrecadacao.pagamento.GuiaPagamentoParcelamentoCartao" table="faturamento.guia_pagto_parcel_cartao">
+		<composite-id name="comp_id" class="gcom.arrecadacao.pagamento.GuiaPagamentoParcelamentoCartaoPK">
+			<key-property name="parcelamentoId" column="parc_id" type="java.lang.Integer"/>
+			<key-property name="guiaPagamentoId" column="gpag_id" type="java.lang.Integer"/>
+		</composite-id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="gppc_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to Guia Pagamento Geral -->
+		<many-to-one name="guiaPagamentoGeral" class="gcom.faturamento.GuiaPagamentoGeral" update="false" insert="false">
+			<column name="gpag_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Parcelamento -->
+		<many-to-one name="parcelamento" class="gcom.cobranca.parcelamento.Parcelamento" update="false" insert="false">
+			<column name="parc_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+	</class>
+</hibernate-mapping>

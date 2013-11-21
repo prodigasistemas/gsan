@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral" table="seguranca.tab_col_atlz_cadastral">
+		<id name="id" type="java.lang.Integer" column="tcac_id">
+			<generator class="sequence">
+				<param name="sequence">seguranca.seq_tab_col_atlz_cadastral</param>
+			</generator>
+		</id>
+		<property name="colunaValorAnterior" type="java.lang.String" column="tcac_cnvaloranterior" length="100"/>
+		<property name="colunaValorAtual" type="java.lang.String" column="tcac_cnvaloratual" length="100"/>
+		<property name="indicadorAutorizado" type="java.lang.Short" column="tcac_icautorizado" length="2"/>
+		<property name="dataProcessamento" type="java.sql.Date" column="tcac_dtprocessamento" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="tcac_ultimaatualizacao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Tabela -->
+		<many-to-one name="tabelaAtualizacaoCadastral" class="gcom.seguranca.transacao.TabelaAtualizacaoCadastral" not-null="true">
+			<column name="tatc_id"/>
+		</many-to-one>
+		<many-to-one name="tabelaColuna" class="gcom.seguranca.transacao.TabelaColuna" not-null="true">
+			<column name="tbco_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

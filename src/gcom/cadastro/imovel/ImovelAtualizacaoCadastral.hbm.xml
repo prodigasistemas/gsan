@@ -1,0 +1,71 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.imovel.ImovelAtualizacaoCadastral" table="cadastro.imovel_atlz_cadastral">
+		<id name="idImovel" type="java.lang.Integer" column="imov_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="idLocalidade" type="java.lang.Integer" column="loca_id" length="4"/>
+		<property name="lote" type="short" column="imac_nnlote" not-null="true" length="2"/>
+		<property name="subLote" type="short" column="imac_nnsublote" not-null="true" length="2"/>
+		<property name="numeroImovel" type="java.lang.String" column="imac_nnimovel" not-null="true" length="5"/>
+		<property name="complementoEndereco" type="java.lang.String" column="imac_dscomplementoendereco" length="25"/>
+		<property name="idDespejo" type="java.lang.Integer" column="depj_id"/>
+		<property name="volumeReservatorioSuperior" type="java.math.BigDecimal" column="imac_voreservatoriosuperior" length="5"/>
+		<property name="volumeReservatorioInferior" type="java.math.BigDecimal" column="imac_voreservatorioinferior" length="5"/>
+		<property name="idPavimentoCalcada" type="java.lang.Integer" column="pcal_id"/>
+		<property name="idPavimentoRua" type="java.lang.Integer" column="prua_id"/>
+		<property name="idFonteAbastecimento" type="java.lang.Integer" column="ftab_id"/>
+		<property name="idLigacaoAguaSituacao" type="java.lang.Integer" column="last_id"/>
+		<property name="idLigacaoEsgotoSituacao" type="java.lang.Integer" column="lest_id"/>
+		<property name="idImovelPerfil" type="java.lang.Integer" column="iper_id"/>
+		<property name="volumePiscina" type="java.math.BigDecimal" column="imac_vopiscina" length="5"/>
+		<property name="idPocoTipo" type="java.lang.Integer" column="poco_id"/>
+		<property name="numeroPontosUtilizacao" type="java.lang.Short" column="imac_nnpontosutilizacao" length="2"/>
+		<property name="numeroMorador" type="java.lang.Short" column="imac_nnmorador" length="2"/>
+		<property name="numeroIptu" type="java.math.BigDecimal" column="imac_nniptu" length="20"/>
+		<property name="numeroContratoEnergia" type="java.lang.Long" column="imac_nncontratoenergia" length="10"/>
+		<property name="coordenadaX" type="java.math.BigDecimal" column="imac_nncoordenadax" length="5"/>
+		<property name="coordenadaY" type="java.math.BigDecimal" column="imac_nncoordenaday" length="5"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="imac_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="idEnderecoReferencia" type="java.lang.Integer" column="edrf_id" length="4"/>
+		<property name="idLogradouro" type="java.lang.Integer" column="logr_id" length="4"/>
+		<property name="areaConstruida" type="java.math.BigDecimal" column="imac_nnareaconstruida" length="8"/>
+		<property name="idBairro" type="java.lang.Integer" column="bair_id" length="4"/>
+		<property name="indicadorJardim" type="java.lang.Short" column="imac_icjardim" length="2"/>
+		<property name="numeroSequencialRota" type="java.lang.Integer" column="imac_nnsequencialrota" length="4"/>
+		<property name="codigoSetorComercial" type="int" column="imac_cdsetorcomercial" not-null="true" length="4"/>
+		<property name="numeroQuadra" type="int" column="imac_nnquadra" not-null="true" length="4"/>
+		<property name="descricaoLogradouro" type="java.lang.String" column="imac_dslogradouro" length="40"/>
+		<property name="codigoCep" type="java.lang.Integer" column="imac_cdcep" length="4"/>
+		<property name="nomeBairro" type="java.lang.String" column="imac_nmbairro" length="30"/>
+		<property name="numeroLeituraInstalacaoHidrometro" type="java.lang.Integer" column="imac_nnleitinstalacaohidmt" length="4"/>
+		<property name="idCapacidadeHidrometro" type="java.lang.Integer" column="hicp_id" length="4"/>
+		<property name="idMarcaHidrometro" type="java.lang.Integer" column="himc_id" length="4"/>
+		<property name="idLocalInstalacaoHidrometro" type="java.lang.Integer" column="hili_id" length="4"/>
+		<property name="idProtecaoHidrometro" type="java.lang.Integer" column="hipr_id" length="4"/>
+		<property name="numeroHidrometro" type="java.lang.String" column="imac_nnhidrometro" length="10"/>
+		<property name="indicadorCavalete" type="java.lang.Short" column="imac_iccavalete" length="2"/>
+		<property name="codigoImovelPrincipal" type="java.lang.Integer" column="imac_cdimovelprincipal" length="9"/>
+		<property name="idSituacaoAtualizacaoCadastral" type="java.lang.Integer" column="siac_id" length="9"/>
+		<property name="idEmpresa" type="java.lang.Integer" column="empr_id" length="9"/>
+		<property name="dsLogradouroTitulo" type="java.lang.String" column="imac_dslogradourotitulo" length="25"/>
+		<property name="dsLogradouroTipo" type="java.lang.String" column="imac_dslogradourotipo" length="20"/>
+		<property name="idLogradouroTitulo" type="java.lang.Integer" column="lgtt_id" length="9"/>
+		<property name="idLogradouroTipo" type="java.lang.Integer" column="lgtp_id" length="9"/>
+		<property name="idMunicipio" type="java.lang.Integer" column="muni_id" length="4"/>
+		<property name="nomeMunicipio" type="java.lang.String" column="imac_nmmunicipio" length="30"/>
+		<property name="idUinidadeFederacao" type="java.lang.Integer" column="unfe_id" length="4"/>
+		<property name="dsUFSiglaMunicipio" type="java.lang.String" column="imac_dsufsiglamunicipio" length="2"/>
+		<property name="numeroMedidirEnergia" type="java.lang.String" column="imac_nnmedidorenergia" length="10"/>
+		<property name="idCadastroOcorrencia" type="java.lang.Integer" column="cocr_id" length="4"/>
+		<property name="descricaoOutrasInformacoes" type="java.lang.String" column="imac_dsoutrasinformacoes" length="100"/>
+		<property name="nomeEntrevistado" type="java.lang.String" column="imac_nmentrevistado" length="50"/>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.gerencial.arrecadacao.GArrecadacaoForma" table="arrecadacao.g_arrecadacao_forma">
+		<id name="id" type="java.lang.Integer" column="arfm_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="codigoArrecadacaoForma" type="java.lang.String" column="arfm_cdarrecadacaoforma" length="1"/>
+		<property name="descricaoArrecadacaoForma" type="java.lang.String" column="arfm_dsarrecadacaoforma" length="60"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="arfm_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+	</class>
+</hibernate-mapping>

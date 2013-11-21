@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<class name="gcom.arrecadacao.big.BoletimInformacoesGerenciais"
+		table="arrecadacao.boletim_informacoes_gerenciais">
+
+		<id name="id" type="java.lang.Integer" column="boig_id">
+			<generator class="sequence">
+				<param name="sequence">arrecadacao.seq_boletim_informacoes_gerenciais</param>
+			</generator>
+		</id>
+		
+		<property name="anoMesReferencia" type="java.lang.Integer"
+			column="boig_amreferencia" not-null="true" length="6" />
+			
+		<property name="quantidadeContas" type="java.lang.Integer"
+			column="boig_qtdcontas" not-null="true" length="10" />
+		
+		<property name="valorFaturamento" type="java.math.BigDecimal"
+			column="boig_vlfaturamento" not-null="true" length="13" />
+			
+		<property name="valorArrecadacao" type="java.math.BigDecimal"
+			column="boig_vlarrecadacao" not-null="true" length="13" />
+		
+		<property name="eficienciaArrecadacao" type="java.math.BigDecimal"
+			column="boig_eficarrecadacao" not-null="true" length="13" />
+		
+		<property name="valorMedioFaturamento" type="java.math.BigDecimal"
+			column="boig_vlmediofaturamento" not-null="true" length="5" />
+			
+		<property name="indicadorQuantidadeErrosContas" type="java.math.BigDecimal"
+			column="boig_icqtderroscontas" not-null="true" length="13" />
+			
+		<property name="indicadorValorErrosContas" type="java.math.BigDecimal"
+			column="boig_icvlerroscontas" not-null="true" length="13" />
+			
+		<property name="indicadorRecebimentoMedio" type="java.math.BigDecimal"
+			column="boig_icrecebimentomedio" not-null="true" length="5" />
+			
+		<property name="indicadorQuantidadeInadimplenciaAte30" type="java.math.BigDecimal"
+			column="boig_icqtdinadimplenciaate30" not-null="true" length="13" />
+			
+		<property name="indicadorValorInadimplenciaAte30" type="java.math.BigDecimal"
+			column="boig_icvlinadimplenciaate30" not-null="true" length="13" />
+		
+		<property name="indicadorQuantidadeInadimplenciaAte90" type="java.math.BigDecimal"
+			column="boig_icqtdinadimplenciaate90" not-null="true" length="13" />
+			
+		<property name="indicadorValorInadimplenciaAte90" type="java.math.BigDecimal"
+			column="boig_icvlinadimplenciaate90" not-null="true" length="13" />
+			
+		<property name="indicadorQuantidadeInadimplenciaMaior90" type="java.math.BigDecimal"
+			column="boig_icqtdinadimplenciamaior90" not-null="true" length="13" />
+			
+		<property name="indicadorValorInadimplenciaMaior90" type="java.math.BigDecimal"
+			column="boig_icvlinadimplenciamaior90" not-null="true" length="13" />
+			
+		<property name="quantidadeFaturamentosComprometidos" type="java.math.BigDecimal"
+			column="boig_qtdfatcomprometidos" not-null="true" length="5" />
+			
+		<property name="indiceHidrometracao" type="java.math.BigDecimal"
+			column="boig_indicehidrometracao" not-null="true" length="13" />	
+			
+		<property name="quantidadeHidrometrosInstalados" type="java.lang.Integer"
+			column="boig_qtdhidrometrosinstalados" not-null="true" length="7" />
+			
+		<property name="quantidadeHidrometrosSubstituidos" type="java.lang.Integer"
+			column="boig_qtdhidrometrossubstituidos" not-null="true" length="7" />	
+			
+		<property name="prazoMedioAtendimentoOS" type="java.math.BigDecimal"
+			column="boig_prazomedioatendimentoos" not-null="true" length="5" />	
+			
+		<property name="quantidadeNovasLigacoesEsgoto" type="java.lang.Integer"
+			column="boig_qtdnovasligesgoto" length="7" />
+			
+		<property name="economiasNovasLigacoesEsgoto" type="java.lang.Integer"
+			column="boig_economiasnovasligesgoto" not-null="true" length="7" />
+			
+		<property name="quantidadeNovasLigacoesAgua" type="java.lang.Integer"
+			column="boig_qtdnovasligagua" not-null="true" length="7" />
+			
+		<property name="economiasNovasLigacoesAgua" type="java.lang.Integer"
+			column="boig_economiasnovasligagua" not-null="true" length="7" />
+			
+		<property name="quantidadeConsumidoresLigados" type="java.lang.Integer"
+			column="boig_qtdconsligados" not-null="true" length="7" />
+			
+		<property name="quantidadeConsumidoresCortados" type="java.lang.Integer"
+			column="boig_qtdconscortados" not-null="true" length="7" />
+			
+		<property name="quantidadeConsumidoresSuprimidos" type="java.lang.Integer"
+			column="boig_qtdconssuprimidos" not-null="true" length="7" />
+			
+		<property name="quantidadeConsumidoresFactiveis" type="java.lang.Integer"
+			column="boig_qtdconsfactiveis" not-null="true" length="7" />
+			
+		<property name="quantidadeConsumidoresTotal" type="java.lang.Integer"
+			column="boig_qtdconstotal" not-null="true" length="7" />	
+			
+		<property name="indiceCortados" type="java.math.BigDecimal"
+			column="boig_indicecortados" not-null="true" length="13" />
+			
+		<property name="indiceSuprimidos" type="java.math.BigDecimal"
+			column="boig_indicesuprimidos" not-null="true" length="13" />
+			
+		<property name="indiceFactiveis" type="java.math.BigDecimal"
+			column="boig_indicefactiveis" not-null="true" length="13" />
+			
+		<property name="ultimaAlteracao" type="java.sql.Timestamp"
+			column="boig_tmultimaalteracao" length="15" />
+
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade"
+			not-null="true">
+			<column name="loca_id" />
+		</many-to-one>
+	</class>
+</hibernate-mapping>

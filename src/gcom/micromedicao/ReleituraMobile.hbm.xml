@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.micromedicao.ReleituraMobile" table="releitura_mobile" schema="micromedicao">
+		<id name="id" type="java.lang.Integer" column="remo_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_releitura_mobile</param>
+			</generator>
+		</id>
+		<property name="indicadorReleitura" type="int" column="remo_icreleitura" not-null="true" length="10"/>
+		<property name="anoMesReferencia" type="int" column="remo_amreferencia" not-null="true" length="10"/>
+		<property name="indicadorMensagemRecebida" type="int" column="remo_icmsgrecebida" not-null="true" length="10"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="remo_tmultimaalteracao" not-null="true" length="29"/>
+		<property name="leituraAnteriorPoco" type="int" column="remo_nnleituraanteriorpoco" not-null="false" length="4"/>
+		<property name="leituraAtualPoco" type="int" column="remo_nnleituraatualpoco" not-null="false" length="4"/>
+		<property name="leituraAtualAgua" type="int" column="remo_nnleituraatualagua" not-null="false" length="4"/>
+		<property name="leituraAnteriorAgua" type="int" column="remo_nnleituraanterioragua" not-null="false" length="4"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id"/>
+		</many-to-one>
+		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario" not-null="false">
+			<column name="usur_id"/>
+		</many-to-one>
+		<many-to-one name="leituraAnormalidadeAnteriorAgua" class="gcom.micromedicao.leitura.LeituraAnormalidade" not-null="false">
+			<column name="ltan_idanterioragua"/>
+		</many-to-one>
+		<many-to-one name="leituraAnormalidadeAtualAgua" class="gcom.micromedicao.leitura.LeituraAnormalidade" not-null="false">
+			<column name="ltan_idatualagua"/>
+		</many-to-one>
+		<many-to-one name="leituraAnormalidadeAtualPoco" class="gcom.micromedicao.leitura.LeituraAnormalidade" not-null="false">
+			<column name="ltan_idatualpoco"/>
+		</many-to-one>
+		<many-to-one name="leituraAnormalidadeAnteriorPoco" class="gcom.micromedicao.leitura.LeituraAnormalidade" not-null="false">
+			<column name="ltan_idanteriorpoco"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

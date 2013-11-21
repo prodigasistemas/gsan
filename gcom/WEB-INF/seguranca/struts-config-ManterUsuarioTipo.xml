@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="ManterUsuarioTipoActionForm"
+			type="gcom.gui.seguranca.ManterUsuarioTipoActionForm" />
+		<form-bean name="AtualizarUsuarioTipoActionForm"
+			type="gcom.gui.seguranca.AtualizarUsuarioTipoActionForm" />
+		<form-bean name="FiltrarUsuarioTipoActionForm"
+			type="gcom.gui.seguranca.FiltrarUsuarioTipoActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.seguranca.ExibirManterUsuarioTipoAction"
+			validate="false" scope="session"
+			path="/exibirManterUsuarioTipoAction">
+
+			<forward name="exibirManterUsuarioTipo"
+				path="/jsp/seguranca/usuario_tipo_manter.jsp" />
+
+			<forward name="exibirAtualizarUsuarioTipo"
+				path="/exibirAtualizarUsuarioTipoAction.do" />
+		</action>
+
+		<action name="AtualizarUsuarioTipoActionForm"
+			type="gcom.gui.seguranca.ExibirAtualizarUsuarioTipoAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarUsuarioTipoAction">
+
+			<forward name="usuarioTipoAtualizar"
+				path="/jsp/seguranca/usuario_tipo_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarUsuarioTipoActionForm"
+			type="gcom.gui.seguranca.AtualizarUsuarioTipoAction"
+			validate="true" scope="session"
+			path="/atualizarUsuarioTipoAction">
+
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.seguranca.RemoverUsuarioTipoAction"
+			 scope="request" path="/removerUsuarioTipoAction">
+
+		</action>
+		
+		<action name="FiltrarUsuarioTipoActionForm"
+			type="gcom.gui.relatorio.seguranca.GerarRelatorioUsuarioTipoManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioUsuarioTipoManterAction" />
+		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

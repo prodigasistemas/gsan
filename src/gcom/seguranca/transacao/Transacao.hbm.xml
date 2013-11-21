@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.seguranca.transacao.Transacao" table="seguranca.transacao">
+		<id name="id" type="java.lang.Integer" column="tran_id">
+			<generator class="sequence">
+				<param name="sequence">seguranca.sequence_transacao</param>
+			</generator>
+		</id>
+		<!--  <property
+        name="ctstId"
+        type="int"
+        column="ctst_id"
+        not-null="true"
+        length="4"
+    />
+  -->
+		<property name="nome" type="java.lang.String" column="tran_nmtransacao" not-null="true" length="4"/>
+		<property name="descricao" type="java.lang.String" column="tran_dstransacao" length="30"/>
+		<property name="nomeAplicacao" type="java.lang.String" column="tran_nmaplicacao" length="10"/>
+		<property name="ltimaAlteracao" type="java.sql.Timestamp" column="tran_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to TransacaoEfetuada
+    <set
+        name="transacaoEfetuadas"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="tran_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.TransacaoEfetuada"
+        />
+    </set>
+   -->
+		<!-- bi-directional one-to-many association to Transacao
+    <set
+        name="transacaos"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="tran_idtransacaopai" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.Transacao"
+        />
+    </set>
+   -->
+		<!-- bi-directional many-to-one association to Transacao -->
+		<many-to-one name="transacao" class="gcom.seguranca.transacao.Transacao" not-null="true">
+			<column name="tran_idtransacaopai"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

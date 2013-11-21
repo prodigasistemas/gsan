@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		<action 
+			type="gcom.gui.gerencial.ExibirSelecionarRelatorioGerencialAction"
+			validate="false" scope="session" path="/exibirSelecionarRelatorioGerencialAction">
+			<forward name="selecionarRelatorioGerencial"
+				path="/jsp/gerencial/gerencial_selecionar_relatorios.jsp" />
+		</action>
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

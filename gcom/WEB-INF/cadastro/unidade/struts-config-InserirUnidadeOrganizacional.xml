@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="InserirUnidadeOrganizacionalActionForm"
+			type="gcom.gui.cadastro.unidade.InserirUnidadeOrganizacionalActionForm" />
+	</form-beans>
+
+	<!--******************* PaGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="InserirUnidadeOrganizacionalActionForm" 
+			type="gcom.gui.cadastro.unidade.ExibirInserirUnidadeOrganizacionalAction"
+			validate="true" 
+			path="/exibirInserirUnidadeOrganizacionalAction" scope="session">
+
+			<forward name="exibirInserirUnidadeOrganizacional"
+				path="/jsp/cadastro/unidade/unidade_organizacional_inserir.jsp" />
+
+		</action>
+		
+		<action name="InserirUnidadeOrganizacionalActionForm"
+			type="gcom.gui.cadastro.unidade.InserirUnidadeOrganizacionalAction"
+			validate="true" scope="session"
+			path="/inserirUnidadeOrganizacionalAction">
+		</action>
+		
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+	
+</struts-config>

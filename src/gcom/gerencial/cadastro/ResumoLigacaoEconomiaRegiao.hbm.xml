@@ -1,0 +1,73 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.gerencial.cadastro.ResumoLigacaoEconomiaRegiao" table="cadastro.resumo_ligacao_economia_regiao">
+		<id name="id" type="java.lang.Integer" column="rele_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.sequence_resumo_ligacao_economia_regiao</param>
+			</generator>
+		</id>
+		<property name="anoMesReferencia" type="java.lang.Integer" column="rele_amreferencia" not-null="true" length="4"/>
+		<!-- bi-directional many-to-one association to EsferaPoder -->
+		<many-to-one name="regiao" class="gcom.cadastro.geografico.Regiao" not-null="true">
+			<column name="regi_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to EsferaPoder -->
+		<many-to-one name="microrregiao" class="gcom.cadastro.geografico.Microrregiao" not-null="true">
+			<column name="mreg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to EsferaPoder -->
+		<many-to-one name="municipio" class="gcom.cadastro.geografico.Municipio" not-null="true">
+			<column name="muni_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to EsferaPoder -->
+		<many-to-one name="bairro" class="gcom.cadastro.geografico.Bairro" not-null="true">
+			<column name="bair_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to EsferaPoder -->
+		<many-to-one name="perfilImovel" class="gcom.cadastro.imovel.ImovelPerfil" not-null="true">
+			<column name="iper_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to EsferaPoder -->
+		<many-to-one name="esferaPoder" class="gcom.cadastro.cliente.EsferaPoder" not-null="true">
+			<column name="epod_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to EsferaPoder -->
+		<many-to-one name="clienteTipo" class="gcom.cadastro.cliente.ClienteTipo" not-null="true">
+			<column name="cltp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to EsferaPoder -->
+		<many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="true">
+			<column name="last_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to EsferaPoder -->
+		<many-to-one name="ligacaoEsgotoSituacao" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao" not-null="true">
+			<column name="lest_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to EsferaPoder -->
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to EsferaPoder -->
+		<many-to-one name="ligacaoAguaPerfil" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaPerfil" not-null="true">
+			<column name="lapf_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to EsferaPoder -->
+		<many-to-one name="ligacaoEsgotoPerfil" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoPerfil" not-null="true">
+			<column name="lepf_id"/>
+		</many-to-one>
+		<property name="indicadorHidrometro" type="short" column="rele_ichidrometro" not-null="true" length="2"/>
+		<property name="indicadorHidrometroPoco" type="short" column="rele_ichidrometropoco" not-null="true" length="2"/>
+		<property name="indicadorVolumeMinimoAguaFixado" type="short" column="rele_icvolfixadoagua" not-null="true" length="2"/>
+		<property name="indicadorVolumeMinimoEsgotoFixado" type="short" column="rele_icvolfixadoesgoto" not-null="true" length="2"/>
+		<property name="indicadorPoco" type="short" column="rele_icpoco" not-null="true" length="2"/>
+		<property name="quantidadeEconomias" type="java.lang.Integer" column="rele_economias" not-null="true" length="4"/>
+		<property name="quantidadeLigacoes" type="java.lang.Integer" column="rele_qtligacoes" not-null="true" length="4"/>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="ManterSistemaAbastecimentoActionForm"
+			type="gcom.gui.operacional.ManterSistemaAbastecimentoActionForm" />
+		<form-bean name="AtualizarSistemaAbastecimentoActionForm"
+			type="gcom.gui.operacional.AtualizarSistemaAbastecimentoActionForm" />
+		<form-bean name="FiltrarSistemaAbastecimentoActionForm"
+			type="gcom.gui.operacional.FiltrarSistemaAbastecimentoActionForm" />
+		
+		
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.operacional.ExibirManterSistemaAbastecimentoAction"
+			validate="false" scope="session"
+			path="/exibirManterSistemaAbastecimentoAction">
+
+			<forward name="exibirManterSistemaAbastecimento"
+				path="/jsp/operacional/sistema_abastecimento_manter.jsp" />
+
+			<forward name="exibirAtualizarSistemaAbastecimento"
+				path="/exibirAtualizarSistemaAbastecimentoAction.do" />
+		</action>
+
+		<action name="AtualizarSistemaAbastecimentoActionForm"
+			type="gcom.gui.operacional.ExibirAtualizarSistemaAbastecimentoAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarSistemaAbastecimentoAction">
+
+			<forward name="sistemaAbastecimentoAtualizar"
+				path="/jsp/operacional/sistema_abastecimento_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarSistemaAbastecimentoActionForm"
+			type="gcom.gui.operacional.AtualizarSistemaAbastecimentoAction"
+			validate="true" scope="session"
+			path="/atualizarSistemaAbastecimentoAction">
+
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.operacional.RemoverSistemaAbastecimentoAction"
+			 scope="request" path="/removerSistemaAbastecimentoAction">
+
+		</action>
+		<action name="FiltrarSistemaAbastecimentoActionForm"
+			type="gcom.gui.relatorio.operacional.GerarRelatorioSistemaAbastecimentoManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioSistemaAbastecimentoManterAction" />
+	
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

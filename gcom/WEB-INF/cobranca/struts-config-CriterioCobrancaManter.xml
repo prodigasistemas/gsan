@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="CriterioCobrancaActionForm"
+			type="gcom.gui.cobranca.CriterioCobrancaActionForm" />
+		<form-bean name="ManutencaoRegistroActionForm" type="gcom.gui.ManutencaoRegistroActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+	<action name="CriterioCobrancaFiltrarActionForm" 
+			type="gcom.gui.cobranca.ExibirManterCriterioCobrancaAction" 
+			scope="session" validate="false"
+			path="/exibirManterCriterioCobrancaAction">
+			<forward name="manterCriterioCobranca" path="/jsp/cobranca/cobranca_criterio_manter.jsp" />
+			<forward name="atualizarCriterioCobranca" path="/exibirAtualizarCriterioCobrancaAction.do" />
+	</action>
+	
+	<action name="CriterioCobrancaFiltrarActionForm"
+			type="gcom.gui.relatorio.cobranca.GerarRelatorioCriterioCobrancaManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioCriterioCobrancaManterAction" />
+			
+	<action  name="CriterioCobrancaActionForm"
+			type="gcom.gui.cobranca.ExibirAtualizarCriterioCobrancaAction"
+			validate="false" scope="session" path="/exibirAtualizarCriterioCobrancaAction">
+			<forward name="atualizarCriterioCobranca" path="/jsp/cobranca/cobranca_criterio_atualizar.jsp" />
+	</action>	
+	<action name="CriterioCobrancaActionForm"
+			type="gcom.gui.cobranca.AtualizarCriterioCobrancaAction"
+			validate="false" scope="session" path="/atualizarCriterioCobrancaAction"/>
+			
+	<action  name="ManutencaoRegistroActionForm"
+			type="gcom.gui.cobranca.RemoverCriterioCobrancaAction"
+			validate="false" scope="session" path="/removerCriterioCobrancaAction"/>
+			
+		
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean 
+		    name="InserirCargoFuncionarioActionForm"
+			type="gcom.gui.cadastro.InserirCargoFuncionarioActionForm" /> 
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+				
+			
+		<action name="InserirCargoFuncionarioActionForm"  
+			type="gcom.gui.cadastro.ExibirInserirCargoFuncionarioAction" 
+			validate="true"
+			scope="session"
+			path="/exibirInserirCargoFuncionarioAction">
+			<forward name="inserirCargoFuncionario"
+			path="/jsp/cadastro/funcionario_cargo_inserir.jsp" />
+		</action>
+
+		<action name="InserirCargoFuncionarioActionForm"
+			type="gcom.gui.cadastro.InserirCargoFuncionarioAction"
+			validate="true" scope="session"
+			path="/inserirCargoFuncionarioAction">
+		</action>
+ 
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="ManutencaoRegistroActionForm"
+			type="gcom.gui.ManutencaoRegistroActionForm" />
+		<form-bean name="AtualizarCustoPavimentoPorRepavimentadoraActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.AtualizarCustoPavimentoPorRepavimentadoraActionForm" />
+		<form-bean name="FiltrarCustoPavimentoPorRepavimentadoraActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.FiltrarCustoPavimentoPorRepavimentadoraActionForm" />
+
+	</form-beans>
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.ExibirManterCustoPavimentoPorRepavimentadoraAction"
+			validate="false" scope="session"
+			path="/exibirManterCustoPavimentoPorRepavimentadoraAction">
+			
+			<forward name="exibirManterCustoPavimentoPorRepavimentadora"
+				path="/jsp/atendimentopublico/ordemservico/custo_pavimento_por_repavimentadora_manter.jsp" />
+			 
+			<forward name="atualizarCustoPavimentoPorRepavimentadora"
+				path="/exibirAtualizarCustoPavimentoPorRepavimentadoraAction.do?filtrar=sim" />
+		</action>
+		
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.atendimentopublico.ordemservico.RemoverCustoPavimentoPorRepavimentadoraAction" scope="request"
+			path="/removerCustoPavimentoPorRepavimentadoraAction" />
+		  
+		<action name="AtualizarCustoPavimentoPorRepavimentadoraActionForm"
+			    type="gcom.gui.atendimentopublico.ordemservico.ExibirAtualizarCustoPavimentoPorRepavimentadoraAction"
+			    validate="false" scope="session"
+			    path="/exibirAtualizarCustoPavimentoPorRepavimentadoraAction">
+			
+			<forward name="exibirAtualizarCustoPavimentoPorRepavimentadoraAction"
+				path="/jsp/atendimentopublico/ordemservico/custo_pavimento_por_repavimentadora_atualizar.jsp" />
+				
+		</action>
+		
+		<action name="AtualizarCustoPavimentoPorRepavimentadoraActionForm"
+				type="gcom.gui.atendimentopublico.ordemservico.AtualizarCustoPavimentoPorRepavimentadoraAction"
+				validate="true" scope="session"
+				path="/atualizarCustoPavimentoPorRepavimentadoraAction">
+		</action>
+		
+		<action name="FiltrarCustoPavimentoPorRepavimentadoraActionForm"
+				type="gcom.gui.relatorio.atendimentopublico.ordemservico.GerarRelatorioCustoPavimentoPorRepavimentadoraManterAction"
+				scope="session"
+				path="/gerarRelatorioCustoPavimentoPorRepavimentadoraManterAction" />
+	 	
+	</action-mappings>
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

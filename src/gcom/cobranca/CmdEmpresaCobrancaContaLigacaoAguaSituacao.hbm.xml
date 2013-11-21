@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+		Created by the Middlegen Hibernate plugin
+		
+		http://boss.bekk.no/boss/middlegen/
+		http://hibernate.sourceforge.net/
+	-->
+	<class name="gcom.cobranca.CmdEmpresaCobrancaContaLigacaoAguaSituacao" table="COBRANCA.CMD_EMPR_COBR_CONTA_LAST">
+	
+		<composite-id name="cels_id" class="gcom.cobranca.CmdEmpresaCobrancaContaLigacaoAguaSituacaoPK">
+			<key-property name="comandoEmpresaCobrancaContaId" column="cecc_id" type="java.lang.Integer" length="4"/>
+			<key-property name="ligacaoAguaSituacaoId" column="LAST_ID" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="CELS_TMULTIMAALTERACAO" length="8"/>
+
+		<many-to-one name="comandoEmpresaCobrancaConta" class="gcom.cobranca.ComandoEmpresaCobrancaConta" not-null="true" insert="false" update="false">
+			<column name="CECC_ID"/>
+		</many-to-one>
+		<many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="true" insert="false" update="false">
+			<column name="LAST_ID"/>
+		</many-to-one>
+	
+	</class>
+</hibernate-mapping>

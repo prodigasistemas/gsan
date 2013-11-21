@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+
+		<form-bean name="FiltrarNegativadorRegistroTipoActionForm"
+			type="gcom.gui.cobranca.spcserasa.FiltrarNegativadorRegistroTipoActionForm" />
+		<form-bean name="ManutencaoRegistroActionForm" type="gcom.gui.ManutencaoRegistroActionForm" />	
+		
+
+		<form-bean name="AtualizarNegativadorRegistroTipoActionForm"
+			type="gcom.gui.cobranca.spcserasa.AtualizarNegativadorRegistroTipoActionForm" />
+		
+        
+	</form-beans>
+
+	<global-forwards/>
+
+	<action-mappings>
+	
+		<action name="FiltrarNegativadorRegistroTipoActionForm" 
+			type="gcom.gui.cobranca.spcserasa.ExibirManterNegativadorRegistroTipoAction" 
+			scope="session" validate="false"
+			path="/exibirManterNegativadorRegistroTipoAction">
+			<forward name="manterNegativadorRegistroTipo" path="/jsp/cobranca/spcserasa/negativador_registro_tipo_manter.jsp" />			
+			
+			<forward name="atualizarNegativadorRegistroTipo" path="/exibirAtualizarNegativadorRegistroTipoAction.do" />
+			
+		</action>
+		
+		  
+		<action name="FiltrarNegativadorRegistroTipoActionForm"
+			type="gcom.gui.relatorio.cobranca.spcserasa.GerarRelatorioNegativadorRegistroTipoManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioNegativadorRegistroTipoManterAction" />
+		
+		
+		<action name="ManutencaoRegistroActionForm" 
+			type="gcom.gui.cobranca.spcserasa.RemoverNegativadorRegistroTipoAction" 
+			scope="request" path="/removerNegativadorRegistroTipoAction"/>
+			
+		 
+		<action name="AtualizarNegativadorRegistroTipoActionForm"
+	      	type="gcom.gui.cobranca.spcserasa.ExibirAtualizarNegativadorRegistroTipoAction"
+	      	validate="false" scope="session"
+	      	path="/exibirAtualizarNegativadorRegistroTipoAction">
+			<forward name="atualizarNegativadorRegistroTipo"
+		  		path="/jsp/cobranca/spcserasa/negativador_registro_tipo_atualizar.jsp" />
+		</action>
+		 
+		
+		
+		<action name="AtualizarNegativadorRegistroTipoActionForm" 
+			type="gcom.gui.cobranca.spcserasa.AtualizarNegativadorRegistroTipoAction"
+			validate="false" scope="session"
+			path="/atualizarNegativadorRegistroTipoAction">
+		</action>
+	
+				
+	
+
+	
+	</action-mappings>
+	<!--******************* ARQUIVO DE PROPRIEDADES *******************-->
+	<message-resources null="false" parameter="gcom.properties.application" />
+	
+</struts-config>

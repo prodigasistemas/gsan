@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.financeiro.ParametrosDevedoresDuvidosos" table="financeiro.param_deved_duvid">
+		<id name="id" type="java.lang.Integer" column="pded_id">
+			<generator class="sequence">
+				<param name="sequence">financeiro.seq_param_deved_duvid</param>
+			</generator>
+		</id>
+		<property name="anoMesReferenciaContabil" type="int" column="pded_amreferenciacontabil" not-null="true" length="4"/>
+		<property name="valorABaixar" type="java.math.BigDecimal" column="pded_vlvalorabaixar" not-null="true" length="13"/>
+		<property name="anoMesReferenciaArrecadacao" type="java.lang.Integer" column="pded_amreferenciaarrecadacao" length="4"/>
+		<property name="dataProcessamento" type="java.sql.Timestamp" column="pded_tmprocessamento" length="8"/>
+		<property name="dataIntegracaoContabil" type="java.sql.Date" column="pded_dtintegracaocontabil" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="pded_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="valorBaixado" type="java.math.BigDecimal" column="pded_vlbaixado" not-null="true" length="13"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to ParametrosDevedoresDuvidososItem -->
+		<!-- <set
+        name="parametrosDevedoresDuvidososItem"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="pded_id" />
+        </key>
+        <one-to-many 
+            class="gcom.financeiro.ParametrosDevedoresDuvidososItem"
+        />
+    </set>-->
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="GerarRelatorioContasEmitidasActionForm"
+			type="gcom.gui.relatorio.faturamento.conta.GerarRelatorioContasEmitidasActionForm" />
+
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<action name="GerarRelatorioContasEmitidasActionForm"
+			type="gcom.gui.relatorio.faturamento.conta.ExibirGerarRelatorioContasEmitidasAction"
+			input="/exibirGerarRelatorioContasEmitidasAction.do"
+			path="/exibirGerarRelatorioContasEmitidasAction">
+			<forward name="exibirGerarRelatorioContasEmitidas"
+				path="/jsp/relatorio/faturamento/conta/contas_emitidas_gerar_relatorio.jsp" />
+		</action>
+		<action name="GerarRelatorioContasEmitidasActionForm"
+			type="gcom.gui.relatorio.faturamento.conta.GerarRelatorioContasEmitidasAction"
+			input="/exibirGerarRelatorioContasEmitidasAction.do"
+			path="/gerarRelatorioContasEmitidasAction" />
+
+	</action-mappings>
+
+
+</struts-config>

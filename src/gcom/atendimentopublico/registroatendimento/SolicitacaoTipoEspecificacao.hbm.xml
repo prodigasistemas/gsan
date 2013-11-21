@@ -1,0 +1,92 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao" table="atendimentopublico.solicitacao_tipo_espec">
+		<id name="id" type="java.lang.Integer" column="step_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_solicitacao_tipo_espec</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="step_dssolcttipoespec" not-null="true" length="50"/>
+		<property name="diasPrazo" type="java.lang.Integer" column="step_nndiaprazo" length="4"/>
+		<property name="indicadorPavimentoCalcada" type="short" column="step_icpavimentocalcada" not-null="true" length="2"/>
+		<property name="indicadorPavimentoRua" type="short" column="step_icpavimentorua" not-null="true" length="2"/>
+		<property name="indicadorCobrancaMaterial" type="java.lang.Integer" column="step_iccobrancamaterial" length="4"/>
+		<property name="indicadorMatricula" type="java.lang.Integer" column="step_icmatricula" length="4"/>
+		<property name="indicadorParecerEncerramento" type="java.lang.Integer" column="step_icparecerencerramento" length="4"/>
+		<property name="indicadorGeracaoDebito" type="java.lang.Integer" column="step_icgeracaodebito" length="4"/>
+		<property name="indicadorGeracaoCredito" type="java.lang.Integer" column="step_icgeracaocredito" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="step_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="indicadorUso" type="short" column="step_icuso" not-null="true" length="2"/>
+		<property name="indicadorGeracaoOrdemServico" type="short" column="step_icgeracaoordemservico" not-null="true" length="2"/>
+		<property name="indicadorCliente" type="java.lang.Short" column="step_iccliente" length="2"/>
+		<property name="indicadorLigacaoAgua" type="java.lang.Short" column="step_icligacaoagua" length="2"/>
+		<property name="indicadorSolicitante" type="java.lang.Short" column="step_icsolicitante" length="2"/>
+		<property name="indicadorVerificarDebito" type="java.lang.Short" column="step_icverificardebito" not-null="true" length="2"/>
+		<property name="valorDebito" type="java.math.BigDecimal" column="step_vldebito" not-null="false" length="13"/>
+		<property name="indicadorPermiteAlterarValor" type="short" column="step_icpermitealterarvalor" not-null="true" length="2"/>
+		<property name="indicadorCobrarJuros" type="short" column="step_iccobrarjuros" not-null="true" length="2"/>
+		<property name="indicadorDocumentoObrigatorio" type="java.lang.Short" column="step_icdocumentoobrigatorio" length="2"/>
+		<property name="indicadorUrgencia" type="java.lang.Short" column="step_icurgencia" length="2"/>
+		<property name="indicadorEncerramentoAutomatico" type="java.lang.Short" column="step_icencerramentoautomatico" length="2"/>
+		<property name="indicadorValidarDocResponsavel" type="java.lang.Short" column="step_icvaldocresponsavel" not-null="true" length="2"/>
+		<property name="indicadorInformarContaRA" type="java.lang.Short" column="step_icinformarcontara" not-null="true" length="2"/>
+		<property name="indicadorInformarPagamentoDuplicidade" type="java.lang.Short" column="step_icinformarpgtoduplicidade" not-null="true" length="2"/>
+		<property name="indicadorAlterarVencimentoAlternativo" type="java.lang.Short" column="step_icalterarvencimento" not-null="true" length="2"/>
+		<property name="indicadorLojaVirtual" type="java.lang.Short" column="step_iclojavirtual" not-null="true" length="2"/>
+		
+		<property name="codigoConstante" type="java.lang.Integer" column="step_nncodigoconstante" not-null="false" length="4" />
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to DebitoTipo -->
+		<many-to-one name="debitoTipo" class="gcom.faturamento.debito.DebitoTipo" not-null="false">
+			<column name="dbtp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to SolicitacaoTipo -->
+		<many-to-one name="solicitacaoTipo" class="gcom.atendimentopublico.registroatendimento.SolicitacaoTipo" not-null="true">
+			<column name="sotp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to UnidadeOrganizacional -->
+		<many-to-one name="unidadeOrganizacional" class="gcom.cadastro.unidade.UnidadeOrganizacional" not-null="true">
+			<column name="unid_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ServicoTipo -->
+		<many-to-one name="servicoTipo" class="gcom.atendimentopublico.ordemservico.ServicoTipo" not-null="true">
+			<column name="svtp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to EspecificacaoImovelSituacao -->
+		<many-to-one name="especificacaoImovelSituacao" class="gcom.atendimentopublico.registroatendimento.EspecificacaoImovelSituacao" not-null="false">
+			<column name="esim_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to EspecificacaoServicoTipo  -->
+		<set name="especificacaoServicoTipos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="step_id"/>
+			</key>
+			<one-to-many class="gcom.atendimentopublico.ordemservico.EspecificacaoServicoTipo"/>
+		</set>
+		<!-- bi-directional many-to-one association to SolicitacaoTipo -->
+		<many-to-one name="solicitacaoTipoEspecificacaoNovoRA" class="gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao" not-null="false">
+			<column name="step_idnovora"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to RegistroAtendimento 
+    <set
+        name="registroAtendimentos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="step_id" />
+        </key>
+        <one-to-many 
+            class="gcom.RegistroAtendimento"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

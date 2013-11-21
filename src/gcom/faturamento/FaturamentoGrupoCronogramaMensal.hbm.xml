@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.FaturamentoGrupoCronogramaMensal" table="faturamento.fatur_grupo_crg_mensal">
+		<id name="id" type="java.lang.Integer" column="ftcm_id">
+			<generator class="sequence">
+				<param name="sequence">faturamento.seq_fatur_grupo_crg_mensal</param>
+			</generator>
+		</id>
+		<property name="anoMesReferencia" type="int" column="ftcm_amreferencia" not-null="true" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ftcm_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to FaturamentoGrupo -->
+		<many-to-one name="faturamentoGrupo" class="gcom.faturamento.FaturamentoGrupo" not-null="true">
+			<column name="ftgr_id"/>
+		</many-to-one>
+		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario" not-null="false">
+			<column name="usur_id"/>
+		</many-to-one>
+		<set name="faturamentoAtividadeCronogramas" lazy="true" inverse="false" cascade="delete">
+			<key>
+				<column name="ftcm_id"/>
+			</key>
+			<one-to-many class="gcom.faturamento.FaturamentoAtividadeCronograma"/>
+		</set>
+		<!-- bi-directional one-to-many association to FaturamentoAtividadeCronograma
+-->
+	</class>
+</hibernate-mapping>

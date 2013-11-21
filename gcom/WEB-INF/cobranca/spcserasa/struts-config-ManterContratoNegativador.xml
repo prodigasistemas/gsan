@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+
+		<form-bean name="FiltrarContratoNegativadorActionForm"
+			type="gcom.gui.cobranca.spcserasa.FiltrarContratoNegativadorActionForm" />
+		<form-bean name="ManutencaoRegistroActionForm" type="gcom.gui.ManutencaoRegistroActionForm" />		
+		<form-bean name="AtualizarContratoNegativadorActionForm"
+			type="gcom.gui.cobranca.spcserasa.AtualizarContratoNegativadorActionForm" />
+        
+	</form-beans>
+
+	<global-forwards/>
+
+	<action-mappings>
+	
+		<action name="FiltrarContratoNegativadorActionForm" 
+			type="gcom.gui.cobranca.spcserasa.ExibirManterContratoNegativadorAction" 
+			scope="session" validate="false"
+			path="/exibirManterContratoNegativadorAction">
+			<forward name="manterContratoNegativador" path="/jsp/cobranca/spcserasa/contrato_negativador_manter.jsp" />			
+			<forward name="atualizarContratoNegativador" path="/exibirAtualizarContratoNegativadorAction.do" />
+			
+		</action>
+		
+		
+		<action name="FiltrarContratoNegativadorActionForm"
+			type="gcom.gui.relatorio.cobranca.spcserasa.GerarRelatorioNegativadorContratoManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioNegativadorContratoManterAction" />
+	
+		
+		<action name="ManutencaoRegistroActionForm" 
+			type="gcom.gui.cobranca.spcserasa.RemoverContratoNegativadorAction" 
+			scope="request" path="/removerContratoNegativadorAction"/>
+			
+		  
+		<action name="AtualizarContratoNegativadorActionForm"
+	      	type="gcom.gui.cobranca.spcserasa.ExibirAtualizarContratoNegativadorAction"
+	      	validate="false" scope="session"
+	      	path="/exibirAtualizarContratoNegativadorAction">
+			<forward name="atualizarContratoNegativador"
+		  		path="/jsp/cobranca/spcserasa/contrato_negativador_atualizar.jsp" />
+		</action>
+		
+		<action name="AtualizarContratoNegativadorActionForm" 
+			type="gcom.gui.cobranca.spcserasa.AtualizarContratoNegativadorAction"
+			validate="false" scope="session"
+			path="/atualizarContratoNegativadorAction">
+		</action>
+		
+				
+	
+
+	
+	</action-mappings>
+	<!--******************* ARQUIVO DE PROPRIEDADES *******************-->
+	<message-resources null="false" parameter="gcom.properties.application" />
+	
+</struts-config>

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="FiltrarAvisoBancarioActionForm"
+			type="gcom.gui.arrecadacao.aviso.FiltrarAvisoBancarioActionForm" />
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action name="FiltrarAvisoBancarioActionForm" 
+			type="gcom.gui.arrecadacao.aviso.ExibirFiltrarAvisoBancarioAction"
+			validate="false" scope="session" path="/exibirFiltrarAvisoBancarioAction">
+			<forward name="filtrarAvisoBancario"
+				path="/jsp/arrecadacao/aviso/aviso_bancario_filtrar.jsp" />
+		</action>
+		
+		<action name="FiltrarAvisoBancarioActionForm" 
+			type="gcom.gui.arrecadacao.aviso.FiltrarAvisoBancarioAction"
+			validate="false" scope="session"
+			path="/filtrarAvisoBancarioAction">
+		<forward name="manter" path="/ExibirManterAvisoBancarioAction.do" />
+		<forward name="efetuarAnaliseAvisoBancario" path="/exibirApresentarAnaliseAvisoBancarioAction.do" />
+		<forward name="atualizarAvisoBancario" path="/ExibirAtualizarAvisoBancarioAction.do" />
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

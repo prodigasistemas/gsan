@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+	
+		<form-bean name="ManutencaoRegistroActionForm"  type="gcom.gui.ManutencaoRegistroActionForm" />
+		
+		<form-bean name="InclusaoDadosComandoNegativacaoPopupActionForm"  
+						type="gcom.gui.cobranca.spcserasa.InclusaoDadosComandoNegativacaoPopupActionForm" />
+						
+		<form-bean name="ConsultarParametrosComandoNegativacaoActionForm"  
+						type="gcom.gui.cobranca.spcserasa.ConsultarParametrosComandoNegativacaoActionForm" />
+		
+		
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+
+		<action  name="ManutencaoRegistroActionForm"  validate="false"  scope="session"
+			type="gcom.gui.cobranca.spcserasa.ExibirResultadoPesquisaComandoNegativacaoAction"
+			path="/exibirResultadoPesquisaComandoNegativacaoAction">
+			
+			<forward name="resultadoPesquisaComandoNegativacao"
+					path="/jsp/cobranca/spcserasa/comando_negativacao_resultado_pesquisa.jsp" />
+		</action>
+		
+		<action name="InclusaoDadosComandoNegativacaoPopupActionForm" validate="false" scope="session" 
+			type="gcom.gui.cobranca.spcserasa.ExibirInclusaoDadosComandoNegativacaoPopupAction"
+			path="/exibirInclusaoDadosComandoNegativacaoPopupAction">
+			
+			<forward name="inclusaoDadosComandoNegativacaoPopup" 
+					path="/jsp/cobranca/spcserasa/comando_negativacao_inclusao_dados_popup.jsp" />
+		</action>
+		
+		<action name="ConsultarParametrosComandoNegativacaoActionForm" validate="false" scope="session" 
+			type="gcom.gui.cobranca.spcserasa.ExibirConsultarParametrosComandoNegativacaoPopupAction"
+			path="/exibirConsultarParametrosComandoNegativacaoPopupAction">
+			
+			<forward name="consultarParametrosComandoNegativacaoPopup" 
+					path="/jsp/cobranca/spcserasa/comando_negativacao_parametros_popup.jsp" />
+		</action>
+		
+	</action-mappings>
+	
+		<message-resources null="false" parameter="gcom.properties.application" />
+
+</struts-config>

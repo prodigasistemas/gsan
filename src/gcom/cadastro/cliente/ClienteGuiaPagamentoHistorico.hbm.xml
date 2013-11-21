@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cadastro.cliente.ClienteGuiaPagamentoHistorico" table="cadastro.cliente_guia_pagto_hist">
+		<id name="id" type="java.lang.Integer" column="cgph_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_cliente_guia_pagto_hist</param>
+			</generator>
+		</id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cgph_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Cliente -->
+		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="true">
+			<column name="clie_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GuiaPagamentoHistorico -->
+		<many-to-one name="guiaPagamentoHistorico" class="gcom.arrecadacao.pagamento.GuiaPagamentoHistorico" not-null="true">
+			<column name="gpag_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ClienteRelacaoTipo -->
+		<many-to-one name="clienteRelacaoTipo" class="gcom.cadastro.cliente.ClienteRelacaoTipo" not-null="true">
+			<column name="crtp_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

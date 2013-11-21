@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.seguranca.acesso.usuario.UsuarioGrupo" table="seguranca.usuario_grupo">
+		<composite-id name="comp_id" class="gcom.seguranca.acesso.usuario.UsuarioGrupoPK">
+			<key-property name="grupoId" column="grup_id" type="java.lang.Integer" length="4"/>
+			<key-property name="usuarioId" column="usur_id" type="java.lang.Integer" length="4"/>
+		</composite-id>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="usgr_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- derived association(s) for compound key -->
+		<!-- bi-directional many-to-one association to Usuario -->
+		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario" update="false" insert="false">
+			<column name="usur_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Grupo -->
+		<many-to-one name="grupo" class="gcom.seguranca.acesso.Grupo" update="false" insert="false">
+			<column name="grup_id"/>
+		</many-to-one>
+		<!-- end of derived association(s) -->
+		<!-- bi-directional one-to-many association to UsuarioGrupoRestricao -->
+		<!-- 
+    <set
+        name="usuarioGrupoRestricaos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="grup_id" />
+            <column name="usur_id" />
+        </key>
+        <one-to-many 
+            class="gcom.UsuarioGrupoRestricao"
+        />
+    </set>
+    -->
+	</class>
+</hibernate-mapping>

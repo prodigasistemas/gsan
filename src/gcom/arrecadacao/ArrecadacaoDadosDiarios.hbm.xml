@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.arrecadacao.ArrecadacaoDadosDiarios" table="arrecadacao.arrec_dados_diarios">
+		<id name="id" type="java.lang.Integer" column="ardd_id">
+			<generator class="sequence">
+				<param name="sequence">arrecadacao.seq_arrec_dados_diarios</param>
+			</generator>
+		</id>
+		<property name="anoMesReferenciaArrecadacao" type="java.lang.Integer" column="ardd_amreferenciaarrecadacao" length="4"/>
+		<property name="codigoSetorComercial" type="java.lang.Integer" column="ardd_cdsetorcomercial" length="4"/>
+		<property name="numeroQuadra" type="java.lang.Integer" column="ardd_nnquadra" length="4"/>
+		<property name="indicadorHidrometro" type="java.lang.Short" column="ardd_ichidrometro" length="2"/>
+		<property name="dataPagamento" type="java.sql.Date" column="ardd_dtpagamento" length="4"/>
+		<property name="quantidadePagamentos" type="java.lang.Integer" column="ardd_qtpagamentos" length="4"/>
+		<property name="valorPagamentos" type="java.math.BigDecimal" column="ardd_vlpagamentos" length="13"/>
+		<property name="quantidadeDocumentos" type="java.lang.Integer" column="ardd_qtdocumentos" length="4"/>
+		<property name="numeroDiasFloat" type="java.lang.Short" column="ardd_nndiafloat" length="2"/>
+		<property name="valorUnitarioTarifa" type="java.math.BigDecimal" column="ardd_vltarifaunitaria" length="13"/>
+		<property name="valorTotalTarifas" type="java.math.BigDecimal" column="ardd_vltarifa" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ardd_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Rota -->
+		<many-to-one name="rota" class="gcom.micromedicao.Rota" not-null="true">
+			<column name="rota_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Arrecadador -->
+		<many-to-one name="arrecadador" class="gcom.arrecadacao.Arrecadador" not-null="true">
+			<column name="arrc_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to SetorComercial -->
+		<many-to-one name="setorComercial" class="gcom.cadastro.localidade.SetorComercial" not-null="true">
+			<column name="stcm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ArrecadacaoForma -->
+		<many-to-one name="arrecadacaoForma" class="gcom.arrecadacao.ArrecadacaoForma" not-null="true">
+			<column name="arfm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LigacaoEsgotoSituacao -->
+		<many-to-one name="ligacaoEsgotoSituacao" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao" not-null="true">
+			<column name="lest_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DocumentoTipo -->
+		<many-to-one name="documentoTipo" class="gcom.cobranca.DocumentoTipo" not-null="true">
+			<column name="dotp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to EsferaPoder -->
+		<many-to-one name="esferaPoder" class="gcom.cadastro.cliente.EsferaPoder" not-null="true">
+			<column name="epod_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ImovelPerfil -->
+		<many-to-one name="imovelPerfil" class="gcom.cadastro.imovel.ImovelPerfil" not-null="true">
+			<column name="iper_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Quadra -->
+		<many-to-one name="quadra" class="gcom.cadastro.localidade.Quadra" not-null="true">
+			<column name="qdra_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GerenciaRegional -->
+		<many-to-one name="gerenciaRegional" class="gcom.cadastro.localidade.GerenciaRegional" not-null="true">
+			<column name="greg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LigacaoAguaSituacao -->
+		<many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="true">
+			<column name="last_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Categoria -->
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+		<many-to-one name="unidadeNegocio" class="gcom.cadastro.localidade.UnidadeNegocio" not-null="false">
+			<column name="uneg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DocumentoTipo -->
+		<many-to-one name="documentoTipoAgregador" class="gcom.cobranca.DocumentoTipo" not-null="false">
+			<column name="dotp_idagregador"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

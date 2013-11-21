@@ -1,0 +1,126 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.gerencial.micromedicao.UnResumoInstalacaoHidrometro" table="micromedicao.un_res_ins_hidr">
+		<id name="id" type="java.lang.Integer" column="reih_id">
+			<generator class="sequence">
+				<param name="sequence">micromedicao.seq_un_res_ins_hidr</param>
+			</generator>
+		</id>
+		<property name="referencia" type="int" column="reih_amreferencia" not-null="true" length="4"/>
+		<property name="codigoSetorComercial" type="int" column="reih_cdsetorcomercial" not-null="true" length="4"/>
+		<property name="numeroQuadra" type="int" column="reih_nnquadra" not-null="true" length="4"/>
+		<property name="quantidadeHidrometrosInstaladosRamal" type="int" column="reih_qthidr_instalado_ramal" not-null="true" length="4"/>
+		<property name="quantidadeHidrometrosInstaladosPoco" type="int" column="reih_qthidr_instalado_poco" not-null="true" length="4"/>
+		<property name="quantidadeHidrometrosSubstituidosPoco" type="int" column="reih_qthidr_substituido_poco" not-null="true" length="4"/>
+		<property name="quantidadeHidrometrosSubstituidosRamal" type="int" column="reih_qthidr_substituido_ramal" not-null="true" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="reih_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="quantidadeHidrometrosRemanejadosRamal" type="int" column="reih_qthidr_remanejado_ramal" not-null="true" length="4"/>
+		<property name="quantidadeHidrometrosRemanejadosPoco" type="int" column="reih_qthidr_remanejado_poco" not-null="true" length="4"/>
+		<property name="quantidadeHidrometrosRetiradosRamal" type="int" column="reih_qthidr_retirado_ramal" not-null="true" length="4"/>
+		<property name="quantidadeHidrometrosRetiradosPoco" type="int" column="reih_qthidr_retirado_poco" not-null="true" length="4"/>
+		<property name="quantidadeHidrometrosDadosAtualizados" type="java.lang.Integer" column="reih_qthidr_dadosatualizados" length="4"/>
+		<property name="quantidadeHidrometrosAtualInstaladoRamal" type="int" column="reih_qthidratualinstaladoramal" not-null="true" length="4"/>
+		<property name="quantidadeHidrometrosAtualInstaladoPoco" type="int" column="reih_qthidratualinstaladospoco" not-null="true" length="4"/>
+		<property name="codigoRota" type="java.lang.Short" column="reih_cdrota"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to GSubcategoria -->
+		<many-to-one name="gerSubcategoria" class="gcom.gerencial.cadastro.imovel.GSubcategoria" not-null="true">
+			<column name="scat_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GClienteTipo -->
+		<many-to-one name="gerClienteTipo" class="gcom.gerencial.cadastro.cliente.GClienteTipo" not-null="true">
+			<column name="cltp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoAguaSituacao -->
+		<many-to-one name="gerLigacaoAguaSituacao" class="gcom.gerencial.atendimentopublico.ligacaoagua.GLigacaoAguaSituacao" not-null="true">
+			<column name="last_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GUnidadeNegocio -->
+		<many-to-one name="gerUnidadeNegocio" class="gcom.gerencial.cadastro.localidade.GUnidadeNegocio" not-null="true">
+			<column name="uneg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLocalidade -->
+		<many-to-one name="gerLocalidade" class="gcom.gerencial.cadastro.localidade.GLocalidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLocalidade -->
+		<many-to-one name="gerLocalidadeElo" class="gcom.gerencial.cadastro.localidade.GLocalidade" not-null="true">
+			<column name="loca_cdelo"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GQuadra -->
+		<many-to-one name="gerQuadra" class="gcom.gerencial.cadastro.localidade.GQuadra" not-null="true">
+			<column name="qdra_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoEsgotoSituacao -->
+		<many-to-one name="gerLigacaoEsgotoSituacao" class="gcom.gerencial.atendimentopublico.ligacaoesgoto.GLigacaoEsgotoSituacao" not-null="true">
+			<column name="lest_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoEsgotoPerfil -->
+		<many-to-one name="gerLigacaoEsgotoPerfil" class="gcom.gerencial.atendimentopublico.ligacaoesgoto.GLigacaoEsgotoPerfil" not-null="true">
+			<column name="lepf_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GGerenciaRegional -->
+		<many-to-one name="gerGerenciaRegional" class="gcom.gerencial.cadastro.localidade.GGerenciaRegional" not-null="true">
+			<column name="greg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GSetorComercial -->
+		<many-to-one name="gerSetorComercial" class="gcom.gerencial.cadastro.localidade.GSetorComercial" not-null="true">
+			<column name="stcm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GLigacaoAguaPerfil -->
+		<many-to-one name="gerLigacaoAguaPerfil" class="gcom.gerencial.atendimentopublico.ligacaoagua.GLigacaoAguaPerfil" not-null="true">
+			<column name="lapf_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GEsferaPoder -->
+		<many-to-one name="gerEsferaPoder" class="gcom.gerencial.cadastro.cliente.GEsferaPoder" not-null="true">
+			<column name="epod_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GCategoria -->
+		<many-to-one name="gerCategoria" class="gcom.gerencial.cadastro.imovel.GCategoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GImovelPerfil -->
+		<many-to-one name="gerImovelPerfil" class="gcom.gerencial.cadastro.imovel.GImovelPerfil" not-null="true">
+			<column name="iper_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GRota -->
+		<many-to-one name="gerRota" class="gcom.gerencial.micromedicao.GRota" not-null="true">
+			<column name="rota_id"/>
+		</many-to-one>
+		<!--
+	# CRC556 - Adicionado os campos: GConsumoTarifa, GHidrometroMarca, GHidrometroTipo,
+	#  		   GHidrometroCapacidade, GHidrometroDiametro, GHidrometroClasseMetrologica
+	-->
+		<!-- bi-directional many-to-one association to GConsumoTarifa -->
+		<many-to-one name="gerConsumoTarifa" class="gcom.gerencial.faturamento.GConsumoTarifa" not-null="false">
+			<column name="cstf_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GHidrometroMarca -->
+		<many-to-one name="gerHidrometroMarca" class="gcom.gerencial.micromedicao.hidrometro.GHidrometroMarca" not-null="false">
+			<column name="himc_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GHidrometroTipo -->
+		<many-to-one name="gerHidrometroTipo" class="gcom.gerencial.micromedicao.hidrometro.GHidrometroTipo" not-null="false">
+			<column name="hitp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GHidrometroCapacidade -->
+		<many-to-one name="gerHidrometroCapacidade" class="gcom.gerencial.micromedicao.hidrometro.GHidrometroCapacidade" not-null="false">
+			<column name="hicp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GHidrometroDiametro -->
+		<many-to-one name="gerHidrometroDiametro" class="gcom.gerencial.micromedicao.hidrometro.GHidrometroDiametro" not-null="false">
+			<column name="hidm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to GHidrometroClasseMetrologica -->
+		<many-to-one name="gerHidrometroClasseMetrologica" class="gcom.gerencial.micromedicao.hidrometro.GHidrometroClasseMetrologica" not-null="false">
+			<column name="hicm_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

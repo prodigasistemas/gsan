@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="InformarLeituraRotaActionForm"
+			type="gcom.gui.micromedicao.InformarLeituraRotaActionForm" />
+		<form-bean name="PesquisarRotaActionForm"
+			type="gcom.gui.micromedicao.PesquisarRotaActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<action name="InformarLeituraRotaActionForm"
+			type="gcom.gui.micromedicao.ExibirInformarLeituraRotaAction"
+			validate="true" scope="session"
+			path="/exibirInformarLeituraRotaAction">
+
+			<forward name="InformarLeituraRotaAction"
+				path="/jsp/micromedicao/exibir_informar_leitura_rota.jsp" />
+		</action>
+
+		<action name="InformarLeituraRotaActionForm"
+			type="gcom.gui.micromedicao.InformarLeituraRotaAction"
+			validate="true" scope="session" path="/informarLeituraRotaAction">
+			<forward name="InformarLeituraRotaAction"
+				path="/jsp/micromedicao/informar_leitura_rota.jsp" />
+		</action>
+
+		<action name="InformarLeituraRotaActionForm"
+			type="gcom.gui.micromedicao.BuscarImoveisPorRotaAction"
+			validate="true" scope="session" path="/buscarImoveisPorRotaAction">
+			<forward name="InformarLeituraRotaAction"
+				path="/jsp/micromedicao/informar_leitura_rota.jsp" />
+		</action>
+
+		<action name="PesquisarRotaActionForm"
+			type="gcom.gui.micromedicao.ExibirPesquisarInformarRotaLeituraAction"
+			validate="false" scope="session"
+			path="/exibirPesquisarInformarRotaLeituraAction">
+			<forward name="ExibirPesquisarRotaAction"
+				path="/jsp/micromedicao/rota_pesquisar.jsp" />
+		</action>
+
+		<action name="PesquisarRotaActionForm"
+			type="gcom.gui.micromedicao.PesquisarRotaAction" validate="false"
+			scope="session" path="/pesquisarRotaAction">
+			<forward name="PesquisarRotaAction"
+				path="/jsp/micromedicao/resultado_rota_pesquisar.jsp" />
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

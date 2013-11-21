@@ -1,0 +1,90 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.arrecadacao.pagamento.GuiaPagamentoHistorico" table="faturamento.guia_pagamento_historico">
+		<id name="id" type="java.lang.Integer" column="gpag_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="anoMesReferenciaContabil" type="int" column="gphi_amreferenciacontabil" not-null="true" length="4"/>
+		<property name="dataEmissao" type="java.sql.Date" column="gphi_dtemissao" not-null="true" length="4"/>
+		<property name="dataVencimento" type="java.sql.Date" column="gphi_dtvencimento" not-null="true" length="4"/>
+		<property name="valorDebito" type="java.math.BigDecimal" column="gphi_vldebito" not-null="true" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="gphi_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="indicadorMulta" type="short" column="gphi_iccobrancamulta" not-null="true" length="2"/>
+		<property name="numeroPrestacaoDebito" type="short" column="gphi_nnprestacaodebito" length="2"/>
+		<property name="numeroPrestacaoTotal" type="short" column="gphi_nnprestacaototal" length="2"/>
+		<property name="observacao" type="java.lang.String" column="gphi_dsobservacao" length="200"/>
+		<property name="indicadorEmitirObservacao" type="java.lang.Short" column="gphi_icemitirobservacao" length="2"/>
+		<property name="numeroGuiaFatura" type="java.lang.String" column="gphi_nnguiafatura" not-null="false" length="14"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-one association to GuiaPagamentoGeral -->
+		<one-to-one name="guiaPagamentoGeral" class="gcom.faturamento.GuiaPagamentoGeral" outer-join="auto" constrained="true"/>
+		<!-- bi-directional many-to-one association to Cliente -->
+		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="false">
+			<column name="clie_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to GuiaPagamentoCategoriaHistorico -->
+		<set name="guiaPagamentoCategoriaHistoricos" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="gpag_id"/>
+			</key>
+			<one-to-many class="gcom.arrecadacao.pagamento.GuiaPagamentoCategoriaHistorico"/>
+		</set>
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="false">
+			<column name="imov_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to FinanciamentoTipo -->
+		<many-to-one name="financiamentoTipo" class="gcom.financeiro.FinanciamentoTipo" not-null="true">
+			<column name="fntp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DebitoTipo -->
+		<many-to-one name="debitoTipo" class="gcom.faturamento.debito.DebitoTipo" not-null="true">
+			<column name="dbtp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LancamentoItemContabil -->
+		<many-to-one name="lancamentoItemContabil" class="gcom.financeiro.lancamento.LancamentoItemContabil" not-null="true">
+			<column name="lict_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Parcelamento -->
+		<many-to-one name="parcelamento" class="gcom.cobranca.parcelamento.Parcelamento" not-null="false">
+			<column name="parc_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DebitoCreditoSituacao -->
+		<many-to-one name="debitoCreditoSituacaoByDcstIdanterior" class="gcom.faturamento.debito.DebitoCreditoSituacao" not-null="false">
+			<column name="dcst_idanterior"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DebitoCreditoSituacao -->
+		<many-to-one name="debitoCreditoSituacaoByDcstIdatual" class="gcom.faturamento.debito.DebitoCreditoSituacao" not-null="true">
+			<column name="dcst_idatual"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to RegistroAtendimento -->
+		<many-to-one name="registroAtendimento" class="gcom.atendimentopublico.registroatendimento.RegistroAtendimento" not-null="false">
+			<column name="rgat_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DocumentoTipo -->
+		<many-to-one name="documentoTipo" class="gcom.cobranca.DocumentoTipo" not-null="false">
+			<column name="dotp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to OrdemServico -->
+		<many-to-one name="ordemServico" class="gcom.atendimentopublico.ordemservico.OrdemServico" not-null="false">
+			<column name="orse_id"/>
+		</many-to-one>
+		<many-to-one name="origem" class="gcom.faturamento.GuiaPagamentoGeral" not-null="false">
+			<column name="gpag_idorigem"/>
+		</many-to-one>
+		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario" not-null="false">
+			<column name="usur_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

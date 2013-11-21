@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.cobranca.NegativadorRegistroTipo" table="cobranca.negatd_registro_tipo">
+		<id name="id" type="java.lang.Integer" column="nrtp_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_negatd_registro_tipo</param>
+			</generator>
+		</id>
+		<property name="descricaoRegistroTipo" type="java.lang.String" column="nrtp_dsregistrotipo" length="60"/>
+		<property name="codigoRegistro" type="java.lang.String" column="nrtp_cdregistro" length="1"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="nrtp_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Negativador -->
+		<many-to-one name="negativador" class="gcom.cobranca.Negativador" not-null="true">
+			<column name="negt_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to NegativadorMovimentoReg -->
+		<set name="negativadorMovimentoReg" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="nrtp_id"/>
+			</key>
+			<one-to-many class="gcom.cobranca.NegativadorMovimentoReg"/>
+		</set>
+	</class>
+</hibernate-mapping>

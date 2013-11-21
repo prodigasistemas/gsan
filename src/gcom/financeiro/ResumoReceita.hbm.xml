@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.financeiro.ResumoReceita" table="financeiro.resumo_receita">
+		<id name="id" type="java.lang.Integer" column="rrec_id">
+			<generator class="sequence">
+				<param name="sequence">financeiro.seq_resumo_receita</param>
+			</generator>
+		</id>
+		<property name="anoMesReferencia" type="java.lang.Integer" column="rrec_amreferencia" length="4"/>
+		<property name="dataRealizada" type="java.sql.Date" column="rrec_dtrealizada" length="4"/>
+		<property name="valorReceita" type="java.math.BigDecimal" column="rrec_vlreceita" length="13"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="rrec_tultimaalteracao" not-null="true" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to Banco -->
+		<many-to-one name="banco" class="gcom.arrecadacao.banco.Banco" not-null="true">
+			<column name="bnco_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Arrecadador -->
+		<many-to-one name="arrecadador" class="gcom.arrecadacao.Arrecadador" not-null="true">
+			<column name="arrc_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Conta Contabil -->
+		<many-to-one name="contaContabil" class="gcom.financeiro.ContaContabil" not-null="true">
+			<column name="cnct_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Gerencia Regional -->
+		<many-to-one name="gerenciaRegional" class="gcom.cadastro.localidade.GerenciaRegional" not-null="true">
+			<column name="greg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Categoria -->
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria" not-null="true">
+			<column name="catg_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to conta bancaria -->
+		<many-to-one name="contaBancaria" class="gcom.arrecadacao.banco.ContaBancaria" not-null="true">
+			<column name="ctbc_id"/>
+		</many-to-one>
+		<many-to-one name="unidadeNegocio" class="gcom.cadastro.localidade.UnidadeNegocio" not-null="true">
+			<column name="uneg_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

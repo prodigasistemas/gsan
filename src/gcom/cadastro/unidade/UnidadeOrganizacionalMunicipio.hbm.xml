@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.cadastro.unidade.UnidadeOrganizacionalMunicipio" table="cadastro.unidade_org_municipio">
+		<id name="id" type="java.lang.Integer" column="unmn_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_unidade_org_municipio</param>
+			</generator>
+		</id>
+		<property name="dataVinculacao" type="java.sql.Date" column="unmn_dtvinculacao" not-null="true" length="10"/>
+		<property name="dataDesvinculacao" type="java.sql.Date" column="unmn_dtdesvinculacao" length="10"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="unmn_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- bi-directional many-to-one association to Unidade Organizacional-->
+		<many-to-one name="idUnidadeRepavimentadora" class="gcom.cadastro.unidade.UnidadeOrganizacional" not-null="true">
+			<column name="unid_idrepavimentadora"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Municipio-->
+		<many-to-one name="idMunicipio" class="gcom.cadastro.geografico.Municipio" not-null="true">
+			<column name="muni_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

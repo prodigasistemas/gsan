@@ -1,0 +1,54 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.operacional.abastecimento.ManutencaoProgramacao" table="operacional.manutencao_programacao">
+		<id name="id" type="java.lang.Integer" column="mnpr_id">
+			<generator class="sequence">
+				<param name="sequence">operacional.seq_manutencao_programacao</param>
+			</generator>
+		</id>
+		<property name="dataInicio" type="java.sql.Date" column="mnpr_dtmanutencaoinicio" not-null="true" length="4"/>
+		<property name="dataFim" type="java.sql.Date" column="mnpr_dtmanutencaofim" not-null="true" length="4"/>
+		<property name="horaInicio" type="java.sql.Time" column="mnpr_hrmanutencaoinicio" not-null="true" length="8"/>
+		<property name="descricao" type="java.lang.String" column="mnpr_dsmanutencao" not-null="true" length="200"/>
+		<property name="situacao" type="short" column="mnpr_cdsituacao" not-null="true" length="2"/>
+		<property name="horaFim" type="java.sql.Time" column="mnpr_hrmanutencaofim" not-null="true" length="8"/>
+		<property name="anoMesReferencia" type="int" column="mnpr_amreferencia" not-null="true" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="mnpr_tmultimaalteracao" not-null="true" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to SistemaAbastecimento -->
+		<many-to-one name="sistemaAbastecimento" class="gcom.operacional.SistemaAbastecimento" not-null="false">
+			<column name="sabs_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Municipio -->
+		<many-to-one name="municipio" class="gcom.cadastro.geografico.Municipio" not-null="true">
+			<column name="muni_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Bairro -->
+		<many-to-one name="bairro" class="gcom.cadastro.geografico.Bairro" not-null="true">
+			<column name="bair_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to SetorAbastecimento -->
+		<many-to-one name="setorAbastecimento" class="gcom.operacional.SetorAbastecimento" not-null="true">
+			<column name="stab_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DistritoOperacional -->
+		<many-to-one name="distritoOperacional" class="gcom.operacional.DistritoOperacional" not-null="true">
+			<column name="diop_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ZonaAbastecimento -->
+		<many-to-one name="zonaAbastecimento" class="gcom.operacional.ZonaAbastecimento" not-null="true">
+			<column name="zabs_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to BairroArea -->
+		<many-to-one name="bairroArea" class="gcom.cadastro.geografico.BairroArea" not-null="true">
+			<column name="brar_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

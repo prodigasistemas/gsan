@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="InserirTipoSolicitacaoEspecificacaoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.InserirTipoSolicitacaoEspecificacaoActionForm" />
+		<form-bean name="AdicionarSolicitacaoEspecificacaoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.AdicionarSolicitacaoEspecificacaoActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		<action name="InserirTipoSolicitacaoEspecificacaoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirInserirTipoSolicitacaoEspecificacaoAction"
+			validate="false" scope="session"
+			path="/exibirInserirTipoSolicitacaoEspecificacaoAction">
+			<forward name="inserirTipoSolicitacaoEspecificacao"
+				path="/jsp/atendimentopublico/registroatendimento/solicitacao_tipo_inserir.jsp" />
+		</action>
+		<action name="InserirTipoSolicitacaoEspecificacaoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.InserirTipoSolicitacaoEspecificacaoAction"
+			validate="false" scope="session"
+			path="/inserirTipoSolicitacaoEspecificacaoAction" />
+
+		<action name="InserirTipoSolicitacaoEspecificacaoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.RecuperarDadosInserirTipoSolicitacaoEspecificacaoAction"
+			validate="false" scope="session"
+			path="/recuperarDadosInserirTipoSolicitacaoEspecificacaoAction">
+			<forward name="exibirAdicionarSolicitacaoEspecificacao"
+				path="/exibirAdicionarSolicitacaoEspecificacaoAction.do" />
+
+		</action>
+		<action name="InserirTipoSolicitacaoEspecificacaoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.RemoverTipoSolicitacaoEspecificacaoAction"
+			validate="false" scope="session"
+			path="/removerTipoSolicitacaoEspecificacaoAction">
+			<forward name="inserirTipoSolicitacaoEspecificacao"
+				path="/jsp/atendimentopublico/registroatendimento/solicitacao_tipo_inserir.jsp" />
+			<forward name="filtrarTipoSolicitacaoEspecificacao"
+				path="/jsp/atendimentopublico/registroatendimento/solicitacao_tipo_filtrar.jsp" />
+			<forward name="atualizarTipoSolicitacaoEspecificacao"
+				path="/jsp/atendimentopublico/registroatendimento/solicitacao_tipo_atualizar.jsp" />
+
+		</action>
+
+		<action name="AdicionarSolicitacaoEspecificacaoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirAdicionarSolicitacaoEspecificacaoAction"
+			validate="false" scope="session"
+			path="/exibirAdicionarSolicitacaoEspecificacaoAction">
+			<forward name="adicionarSolicitacaoEspecificacao"
+				path="/jsp/atendimentopublico/registroatendimento/solicitacao_especificacao_adicionar_popup.jsp" />
+		</action>
+		<action name="AdicionarSolicitacaoEspecificacaoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.AdicionarSolicitacaoEspecificacaoAction"
+			validate="false" scope="session"
+			path="/adicionarSolicitacaoEspecificacaoAction">
+			<forward name="adicionarSolicitacaoEspecificacao"
+				path="/jsp/atendimentopublico/registroatendimento/solicitacao_especificacao_adicionar_popup.jsp" />
+		</action>
+		<action name="AdicionarSolicitacaoEspecificacaoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.RecuperarDadosPesquisarAdicionarSolicitacaoEspecificacaoAction"
+			validate="false" scope="session"
+			path="/recuperarDadosPesquisarAdicionarSolicitacaoEspecificacaoAction">
+			<forward name="exibirPesquisarUnidadeOrganizacional"
+				path="/exibirPesquisarUnidadeOrganizacionalAction.do" />
+			<forward name="exibirPesquisarServicoTipo"
+				path="/exibirPesquisarTipoServicoAction.do" />
+			
+			<forward name="exibirPesquisarDebitoTipo"
+				path="/exibirPesquisarTipoDebitoAction.do" />
+
+		</action>
+
+		<action name="AdicionarSolicitacaoEspecificacaoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirAdicionarSolicitacaoEspecificacaoTipoServicoAction"
+			validate="false" scope="session"
+			path="/exibirAdicionarSolicitacaoEspecificacaoTipoServicoAction">
+			<forward name="adicionarSolicitacaoEspecificacaoTipoServico"
+				path="/jsp/atendimentopublico/registroatendimento/solicitacao_especificacao_tipo_servico_adicionar_popup.jsp" />
+		</action>
+
+		<action name="AdicionarSolicitacaoEspecificacaoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.AdicionarSolicitacaoEspecificacaoTipoServicoAction"
+			validate="false" scope="session"
+			path="/adicionarSolicitacaoEspecificacaoTipoServicoAction">
+			<forward name="exibirAdicionarSolicitacaoEspecificacao"
+				path="/exibirAdicionarSolicitacaoEspecificacaoAction.do" />
+		</action>
+
+		<action name="AdicionarSolicitacaoEspecificacaoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.RecuperarDadosPesquisarAdicionarSolicitacaoEspecificacaoTipoServicoAction"
+			validate="false" scope="session"
+			path="/recuperarDadosPesquisarAdicionarSolicitacaoEspecificacaoTipoServicoAction">
+			<forward name="exibirPesquisarServicoTipo"
+				path="/exibirPesquisarTipoServicoAction.do" />
+		</action>
+		<action name="AdicionarSolicitacaoEspecificacaoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.RemoverSolicitacaoEspecificacaoAction"
+			validate="false" scope="session"
+			path="/removerSolicitacaoEspecificacaoAction">
+			<forward name="adicionarSolicitacaoEspecificacao"
+				path="/jsp/atendimentopublico/registroatendimento/solicitacao_especificacao_adicionar_popup.jsp" />
+			<forward name="atualizarAdicionarSolicitacaoEspecificacao"
+				path="/jsp/atendimentopublico/registroatendimento/solicitacao_especificacao_atualizar_adicionar_popup.jsp" />
+		</action>
+
+
+		<action name="AdicionarSolicitacaoEspecificacaoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.RecuperarDadosPesquisarAdicionarSolicitacaoEspecificacaoTipoServicoAction"
+			validate="false" scope="session"
+			path="/recuperarDadosPesquisarAdicionarSolicitacaoEspecificacaoTipoServicoAction">
+			<forward name="exibirPesquisarServicoTipo"
+				path="/exibirPesquisarTipoServicoAction.do" />
+		</action>
+
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+</struts-config>

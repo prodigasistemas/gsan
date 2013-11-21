@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.cobranca.NegativacaoComando" table="cobranca.negativacao_comando">
+		<id name="id" type="java.lang.Integer" column="ngcm_id">
+			<generator class="sequence">
+				<param name="sequence">cobranca.seq_negativacao_comando</param>
+			</generator>
+		</id>
+		<property name="indicadorComandoCriterio" type="short" column="ngcm_iccomandocriterio" not-null="true" length="2"/>
+		<property name="dataPrevista" type="java.sql.Date" column="ngcm_dtprevista" not-null="true" length="4"/>
+		<property name="dataHoraComando" type="java.sql.Timestamp" column="ngcm_tmcomando" length="8"/>
+		<property name="dataHoraRealizacao" type="java.sql.Timestamp" column="ngcm_tmrealizacao" length="8"/>
+		<property name="quantidadeInclusoes" type="java.lang.Integer" column="ngcm_qtinclusoes" length="4"/>
+		<property name="valorDebito" type="java.math.BigDecimal" column="ngcm_vldebito" length="13"/>
+		<property name="quantidadeItensIncluidos" type="java.lang.Integer" column="ngcm_qtitensincluidos" length="4"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ngcm_tmultimaalteracao" length="8"/>
+		<property name="descricaoComunicacaoInterna" type="java.lang.String" column="ngcm_dsci" length="-1"/>
+		<property name="indicadorSimulacao" type="short" column="ngcm_icsimulacao" not-null="true" length="2"/>
+		<property name="indicadorBaixaRenda" type="java.lang.Short" column="ngcm_icbaixarenda" length="2"/>
+		<property name="indicadorContaNomeCliente" type="java.lang.Short" column="ngcm_icmincontasnomecliente" length="2"/>
+		<property name="indicadorOrgaoPublico" type="java.lang.Short" column="ngcm_icorgaopublico" length="2"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to Usuario -->
+		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario" not-null="true">
+			<column name="usur_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to NegativacaoCriterio -->
+		<set name="negativacaoCriterios" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="ngcm_id"/>
+			</key>
+			<one-to-many class="gcom.cobranca.NegativacaoCriterio"/>
+		</set>
+		<many-to-one name="negativador" class="gcom.cobranca.Negativador" not-null="true">
+			<column name="negt_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to UnidadeOrganizacional -->
+		<many-to-one name="comandoSimulacao" class="gcom.cobranca.NegativacaoComando" not-null="false">
+			<column name="ngcm_idcomandosimulacao"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to UnidadeOrganizacional -->
+	</class>
+</hibernate-mapping>

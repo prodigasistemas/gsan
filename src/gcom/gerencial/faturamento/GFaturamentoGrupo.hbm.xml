@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+
+    Created by the Middlegen Hibernate plugin 2.1
+
+
+
+    http://boss.bekk.no/boss/middlegen/
+
+    http://www.hibernate.org/
+
+-->
+	<class name="gcom.gerencial.faturamento.GFaturamentoGrupo" table="faturamento.g_faturamento_grupo">
+		<id name="id" type="java.lang.Integer" column="ftgr_id">
+			<generator class="assigned"/>
+		</id>
+		<property name="descricaoFaturamentoGrupo" type="java.lang.String" column="ftgr_dsfaturamentogrupo" not-null="true" length="25"/>
+		<property name="descricaoAbreviado" type="java.lang.String" column="ftgr_dsabreviado" not-null="true" length="3"/>
+		<property name="indicadorUso" type="java.lang.Short" column="ftgr_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ftgr_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="anoMesReferencia" type="java.lang.Integer" column="ftgr_amreferencia" length="4"/>
+		<property name="diaVencimento" type="java.lang.Short" column="ftgr_nndiavencimento" length="2"/>
+		<property name="indicadorVencimentoMesFatura" type="short" column="ftgr_icvencimentomesfatura" not-null="true" length="2"/>
+		<!-- Associations -->
+	</class>
+</hibernate-mapping>

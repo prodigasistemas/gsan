@@ -1,0 +1,74 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping>
+
+<class
+    name="gcom.micromedicao.ContratoEmpresaAditivo"
+    table="micromedicao.contrato_empresa_aditivo"
+>
+
+    <id
+        name="id"
+        type="java.lang.Integer"
+        column="cead_id"
+    >
+        <generator class="sequence">
+        	<param name="sequence">micromedicao.seq_contrato_empresa_aditivo</param>
+     	</generator>
+    </id>
+
+    <property
+        name="dataInicioContrato"
+        type="java.sql.Date"
+        column="cead_dtinicioaditivo"
+        not-null="true"
+        length="4"
+    />
+    <property
+        name="dataFimContrato"
+        type="java.sql.Date"
+        column="cead_dtfimaditivo"
+        not-null="false"
+        length="4"
+    />
+    
+    <property
+        name="valorAditivoContrato"
+        type="java.math.BigDecimal"
+        column="cead_vladitivocontrato"
+        length="11"
+    />
+    
+    <property
+        name="percentualTaxaSucesso"
+        type="java.math.BigDecimal"
+        column="cead_pctaxasucessoaditivo"
+        not-null="false"
+        length="5"
+    />
+    
+    <property
+        name="ultimaAlteracao"
+        type="java.sql.Timestamp"
+        column="cead_tmultimaalteracao"
+        not-null="true"
+        length="8"
+    />
+    
+    <!-- associations -->
+    <!-- bi-directional one-to-many association to ContratoEmpresaServico -->
+    <many-to-one
+        name="contratoEmpresaServico"
+        class="gcom.micromedicao.ContratoEmpresaServico"
+        not-null="true"
+        lazy="false"
+    >
+        <column name="cese_id" />
+    </many-to-one>
+    
+
+</class>
+</hibernate-mapping>

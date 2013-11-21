@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="GerarDadosLeituraActionForm"
+			type="gcom.gui.micromedicao.GerarDadosLeituraActionForm" />					
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+
+	<action-mappings>
+		<!--******************* PÁGINA PRINCIPAL *******************-->
+		<!-- [UC0217] INSERIR RESOLUÇÃO DE DIRETORIA Auhtor: Rafael Corrêa Data:30/03/2006-->
+		<action name="GerarDadosLeituraActionForm"
+			type="gcom.gui.micromedicao.ExibirGerarDadosLeituraAction"
+			validate="true" scope="session"
+			path="/exibirGerarDadosLeituraAction">
+			<forward name="exibirGerarDadosLeitura"
+				path="/jsp/relatorio/micromedicao/dados_leitura_gerar.jsp" />
+		</action>
+		
+		<action name="GerarDadosLeituraActionForm"
+			type="gcom.gui.relatorio.micromedicao.GerarRelatorioDadosLeituraAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioDadosLeituraAction" />
+
+	</action-mappings>
+
+</struts-config>

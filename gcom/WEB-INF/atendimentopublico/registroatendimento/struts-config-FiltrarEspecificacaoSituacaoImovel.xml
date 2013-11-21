@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="FiltrarEspecificacaoSituacaoImovelActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.FiltrarEspecificacaoSituacaoImovelActionForm" />
+	</form-beans>
+
+	<global-forwards />
+	
+	<action-mappings>
+		<action name="FiltrarEspecificacaoSituacaoImovelActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirFiltrarEspecificacaoSituacaoImovelAction"
+			validate="false" 
+			scope="session" 
+			path="/exibirFiltrarEspecificacaoSituacaoImovelAction">
+			
+			<forward name="filtrarEspecificacaoSituacaoImovel" 
+				path="/jsp/atendimentopublico/registroatendimento/especificacao_situacao_imovel_filtrar.jsp" />
+		</action>
+		
+		<action name="FiltrarEspecificacaoSituacaoImovelActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.FiltrarEspecificacaoSituacaoImovelAction"
+			validate="true" 
+			scope="session"
+			path="/filtrarEspecificacaoSituacaoImovelAction">
+			
+			<forward name="exibirManterEspecificacaoSituacaoImovelAction"
+				path="/exibirManterEspecificacaoSituacaoImovelAction.do" />
+		</action>
+		
+	</action-mappings>
+
+</struts-config>

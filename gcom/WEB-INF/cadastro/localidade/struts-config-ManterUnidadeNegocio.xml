@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="ManterUnidadeNegocioActionForm"
+			type="gcom.gui.cadastro.localidade.ManterUnidadeNegocioActionForm" />
+		<form-bean name="AtualizarUnidadeNegocioActionForm"
+			type="gcom.gui.cadastro.localidade.AtualizarUnidadeNegocioActionForm" />
+		<form-bean name="FiltrarUnidadeNegocioActionForm"
+			type="gcom.gui.cadastro.localidade.FiltrarUnidadeNegocioActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+<!--******************* PÁGINAS GLOBAIS *******************-->
+	<action-mappings>
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.cadastro.localidade.ExibirManterUnidadeNegocioAction"
+			validate="false" scope="session"
+			path="/exibirManterUnidadeNegocioAction">
+
+			<forward name="exibirManterUnidadeNegocio"
+				path="/jsp/cadastro/localidade/unidade_negocio_manter.jsp" />
+
+			<forward name="exibirAtualizarUnidadeNegocio"
+				path="/exibirAtualizarUnidadeNegocioAction.do" />
+		</action>
+
+		<action name="AtualizarUnidadeNegocioActionForm"
+			type="gcom.gui.cadastro.localidade.ExibirAtualizarUnidadeNegocioAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarUnidadeNegocioAction">
+
+			<forward name="unidadeNegocioAtualizar"
+				path="/jsp/cadastro/localidade/unidade_negocio_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarUnidadeNegocioActionForm"
+			type="gcom.gui.cadastro.localidade.AtualizarUnidadeNegocioAction"
+			validate="true" scope="session"
+			path="/atualizarUnidadeNegocioAction">
+
+		</action>
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.cadastro.localidade.RemoverUnidadeNegocioAction"
+			 scope="request" path="/removerUnidadeNegocioAction">
+
+		</action>
+		<action name="FiltrarUnidadeNegocioActionForm"
+			type="gcom.gui.relatorio.cadastro.localidade.GerarRelatorioUnidadeNegocioManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioUnidadeNegocioManterAction" />
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

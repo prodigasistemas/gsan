@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+
+		<form-bean name="ManterAlteracaoTipoActionForm"
+			type="gcom.gui.seguranca.acesso.ManterAlteracaoTipoActionForm" />
+		<form-bean name="AtualizarAlteracaoTipoActionForm"
+			type="gcom.gui.seguranca.acesso.AtualizarAlteracaoTipoActionForm" />
+		<form-bean name="FiltrarAlteracaoTipoActionForm"
+			type="gcom.gui.seguranca.acesso.FiltrarAlteracaoTipoActionForm" />
+
+	</form-beans>
+
+	<global-forwards />
+
+	<action-mappings>
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.seguranca.acesso.ExibirManterAlteracaoTipoAction"
+			validate="false" scope="session"
+			path="/exibirManterAlteracaoTipoAction">
+
+			<forward name="exibirManterAlteracaoTipo"
+				path="/jsp/seguranca/acesso/alteracao_tipo_manter.jsp" />
+
+			<forward name="exibirAtualizarAlteracaoTipo"
+				path="/exibirAtualizarAlteracaoTipoAction.do" />
+		</action>
+
+		<action name="AtualizarAlteracaoTipoActionForm"
+			type="gcom.gui.seguranca.acesso.ExibirAtualizarAlteracaoTipoAction"
+			validate="false" scope="session"
+			path="/exibirAtualizarAlteracaoTipoAction">
+
+			<forward name="AlteracaoTipoAtualizar"
+				path="/jsp/seguranca/acesso/alteracao_tipo_atualizar.jsp" />
+		</action>
+
+		<action name="AtualizarAlteracaoTipoActionForm"
+			type="gcom.gui.seguranca.acesso.AtualizarAlteracaoTipoAction"
+			validate="true" scope="session"
+			path="/atualizarAlteracaoTipoAction">
+
+		</action>
+		
+		<action name="FiltrarAlteracaoTipoActionForm"
+			type="gcom.gui.relatorio.seguranca.GerarRelatorioAlteracaoTipoManterAction"
+			validate="true" scope="session"
+			path="/gerarRelatorioAlteracaoTipoManterAction" />
+
+		<action name="ManutencaoRegistroActionForm"
+			type="gcom.gui.seguranca.acesso.RemoverAlteracaoTipoAction"
+			 scope="request" path="/removerAlteracaoTipoAction">
+
+		</action>
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+
+</struts-config>

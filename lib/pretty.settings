@@ -1,0 +1,462 @@
+#  Version
+version=3.8
+ 
+# This is the number of characters to indent for each block.
+indent=4
+
+# This is the number of characters to indent for each block.
+# The character used to indent each block
+# * tab - use tabs to indent
+# * space - use spaces to indent
+indent.char=space
+
+# The following parameter should be changed to true if you
+# like your parens to have a space before and after them
+# if ( x == y )    //expr.space=true
+# if (x == y)      //expr.space=false
+expr.space=false
+
+# The following parameter is the minimum number of blank lines
+# between methods, nested classes, and nested interfaces.
+# It is also the number of lines before and after
+# field declarations, though field declarations will have
+# what ever spacing you used.
+# Note that this is a minimum.  If your code already
+# has more space between methods, then it won't shrink
+# the number of blank lines.
+lines.between=1
+
+# Is there a space after the cast
+cast.space=true
+
+# Do we force a space after a cast?
+cast.force.nospace=true
+
+# What do you do when a newline is unexpectedly encountered?
+# * double - The pretty printer inserts 2 indents
+# * single - The pretty printer inserts 1 indent
+# * param - Like single, except method arguments are indented to the parens
+surprise.return=double
+
+# Should throws part of a method/constructor declaration always be
+# on its own line?
+throws.newline=false
+
+# When the catch.start.line setting is true, catch statements look like
+# try {
+# //  Something here
+# }
+# catch (IOException ioe) {
+# //  Something here
+# }
+# When the catch.start.line setting is false, catch statements look like
+# try {
+# //  Something here
+# } catch (IOException ioe) {
+# //  Something here
+# }
+catch.start.line=false
+
+# Should if/then/else statements look like
+# (true) is:
+# if (someTest()) {
+# //  Something here
+# }
+# else {
+# //  Something here
+# }
+# (false) is:
+# if (someTest()) {
+# //  Something here
+# } else {
+# //  Something here
+# }
+else.start.line=false
+
+# Indent the name of the field (instance variable or class
+# variable) to this column (-1 for just one space)
+field.name.indent=-1
+
+# End of line character(s) - either CR, CRNL, or NL
+# * CR - carriage return
+# * NL - newline
+# * CRNL - carriage return and newline
+end.line=CRNL
+
+# This features sprecifies how to space out a field or a local
+# variable declaration.
+# * single - a space between the modifiers, the type, the name and the initializer
+# * dynamic - determine the spacing between the modifiers, type, name, and initializers so everything lines up
+# * javadoc.dynamic - determine the spacing between the modifiers, type, name, and initializers so everything lines up, except when the field is prefixed by a javadoc comment
+# * align.equals - align the equals statements of field declaration, but nothing else
+variable.spacing=single
+
+# When a dynamic field spacing is used, this value specifies
+# the number of additional spaces to add between the modifiers,
+# type, name, and initializer.
+dynamic.variable.spacing=1
+
+# Should the local variables be aligned with the { and }
+# or should they be indented to align with the other code?
+# false means align with the code, true means align
+# with the { }
+variable.align.with.block=false
+
+# The amount to indent a case statement (in terms of indent.char)
+case.indent=4
+
+# This determines if there should be a space after keywords
+# such as if, while, or for.  When this value is true, you get:
+# if (true) {
+# //  Do something
+# }
+# When this value is false, you get:
+# if(true) {
+# //  Do something
+# }
+keyword.space=true
+
+# Do we force a blank line before and after local variable declarations?
+insert.space.around.local.variables=true
+
+# This is the number of lines to insert after a package statement.
+lines.after.package=1
+
+# Do we keep all the newlines around imports?
+maintain.newlines.around.imports=true
+
+# This is the number of lines to insert before a class.
+lines.before.class=2
+
+# Style for { and }
+# C style means that { is at the end of the line
+# and } is on a line by itself.  For example,
+# if (myTest) {
+#     //  This is c style
+# }
+# PASCAL style means both { and } are on lines
+# by themselves.  For example,
+# if (myTest)
+# {
+#     //  This is PASCAL style
+# }
+# EMACS style means both { and } are on lines
+# by themselves and indented one level.
+# For example,
+# if (myTest)
+#   {
+#     //  This is EMACS style
+#   }
+# * C - C style
+# * PASCAL - PASCAL style
+# * EMACS - EMACS style
+block.style=C
+
+# To handle sun's coding standard, you want the method to begin
+# with a PASCAL coding style and the {} beneath that to be C style.
+# This parameter allows you to set the method style different
+# from the rest.
+# * C - C style
+# * PASCAL - PASCAL style
+# * EMACS - EMACS style
+method.block.style=C
+
+# To handle sun's coding standard, you want the class to begin
+# with a PASCAL coding style and the {} beneath that to be C style.
+# This parameter allows you to set the class style different
+# from the rest.
+# * C - C style
+# * PASCAL - PASCAL style
+# * EMACS - EMACS style
+class.block.style=C
+
+# Do we force if and while and for statements to have a block?  { ... }
+force.block=true
+
+# Empty methods and constructors remain on a single line
+empty.block.single.line=true
+
+# Remove {} when they surround only 1 statement
+remove.excess.blocks=false
+
+# Should each single line comment be indented a certain number of spaces
+# from the margin?  For this to work right be sure to indent each line with
+# spaces.
+singleline.comment.ownline=true
+
+# Absolute indent before a single line comment.
+singleline.comment.absoluteindent=0
+
+# Space used before the start of a single line
+# from the end of the code.  This value is used
+# to determine the number of spaces and how these
+# spaces are used based on the next few settings.
+singleline.comment.incrementalindent=0
+
+# This feature describes how the pretty printer should
+# indent single line comments (//) that share the line
+# with source code.  The two choices are incremental and absolute.
+# * incremental - use an incremental indent
+# * absolute - use the absolute indent level
+singleline.comment.indentstyle.shared=incremental
+
+# This feature describes how the pretty printer should
+# indent single line comments (//) that are on their
+# own line.  The two choices are code and absolute.
+# * code - use the same indent as the current code
+# * absolute - use the absolute indent level
+singleline.comment.indentstyle.ownline=code
+
+# How to format C Style comments.  Valid values are:
+# * leave - leave alone
+# * maintain.space.star - there is a row of stars to the right, but we maintain the spaces after it
+# * align.star - place a row of stars to the right and align on those
+# * align.blank - just align the comments to the right (no star)
+c.style.format=align.star
+
+# For one of the methods above that use the align type, this is
+# the number of spaces to include after the * or blank
+c.style.indent=2
+
+# Limits the level that javadoc comments are forced
+# into the document.  The following are valid
+# levels:
+# method.minimum applies to constructors and methods
+# * all - all items must have javadoc
+# * private - same as all
+# * package - all items except private items must have javadoc
+# * default - same as package
+# * protected - protected and public items must have javadoc
+# * public - only public items must have javadoc
+# * none - nothing is required to have javadoc
+method.minimum=all
+
+# field.minimum applies to fields
+# * all - all items must have javadoc
+# * private - same as all
+# * package - all items except private items must have javadoc
+# * default - same as package
+# * protected - protected and public items must have javadoc
+# * public - only public items must have javadoc
+# * none - nothing is required to have javadoc
+field.minimum=protected
+
+# class.minimum applies to classes and interfaces
+# * all - all items must have javadoc
+# * private - same as all
+# * package - all items except private items must have javadoc
+# * default - same as package
+# * protected - protected and public items must have javadoc
+# * public - only public items must have javadoc
+# * none - nothing is required to have javadoc
+class.minimum=all
+
+# Star count for javadoc
+javadoc.star=2
+
+# Wordwrap length for javadoc.  If the sum of the number of
+# characters on the line exceeds this value, then the javadoc
+# comment will be wordwrapped.
+javadoc.wordwrap.max=80
+
+# This feature keeps a method that is deeply indented from
+# only having a few words on each line.  This feature requires
+# that there be this many characters after the comment starts
+# before the javadoc comment is wordwrapped.
+javadoc.wordwrap.min=40
+
+# Whether we put a space before the @
+space.before.javadoc=true
+
+# Do you want to lineup the names and descriptions
+# in javadoc comments?
+javadoc.id.lineup=true
+
+# How many spaces should javadoc comments be indented?
+javadoc.indent=1
+
+# Wordwrap the javadoc comments
+reformat.comments=true
+
+# What tag name should be used for exceptions
+exception.tag.name=@exception
+
+# Should inner classes be documented
+document.nested.classes=true
+
+# Are javadoc comments allowed to be a single line long
+allow.singleline.javadoc=false
+
+# Include javadoc comments where ever they appear.  Javadoc comments
+# were originally only allowed to occur at a few places:  immediately
+# before a method, immediately before a field, and immediately
+# before a class or interface.  Since it is also common for people
+# to include the /*** pattern at the beginning of a file, this will be
+# preserved as well.
+# This was the case until JBuilder pressed the javadoc style comment into
+# a new line of work - handling @todo tags.  Suddenly it was permissible
+# to include javadoc comments anywhere in the file.
+# With keep.all.javadoc set to false, you get the original behavior.  All
+# javadoc comments that were not in the correct place were cleaned up for
+# you.  With this set to true, you can place the @todo tags wherever you please.
+keep.all.javadoc=false
+
+# Default description of the class
+class.descr=<<Descrição da Classe>>
+
+# Default description of the interface
+interface.descr=<<Descrição da Interface>>
+
+# Default description of the constructor  {0} stands for the name
+# of the constructor
+constructor.descr=Construtor da classe {0}
+
+# Default description of the method
+method.descr=<<Descrição do método>>
+
+# Default description of the getter.  {0} is the name of the
+# attribute, {1} is the name of the class, {2} is 'class'
+# or 'object' depending on whether it is static or not,
+# {3} is the name of the attribute with the first letter lowercased
+# {4} is the name of the attribute broken into words
+getter.descr=Retorna o valor de {3}
+
+# Return description for getters.  {0} is the name of the attribute,
+# {3} is the name of the attribute with the first letter lowercased
+# {4} is the name of the attribute broken into words
+getter.return.descr=O valor de {3}
+
+# Default description of the setter.  {0} is the name of the
+# attribute, {1} is the name of the class, {2} is 'class'
+# or 'object' depending on whether it is static or not,
+# {3} is the name of the attribute with the first letter lowercased
+# {4} is the name of the attribute broken into words
+setter.descr=Seta o valor de {3}
+
+# Parameter description for setters.  {0} is the name of the attribute,
+# {3} is the name of the attribute with the first letter lowercased
+# {4} is the name of the attribute broken into words
+setter.param.descr=O novo valor de {3}
+
+# Default field description
+field.descr=Description of the Field
+
+# Default description of the run method.  {0} is not
+# applicable, {1} is the name of the class, {2} is 'class'
+# or 'object' depending on whether it is static or not
+run.descr=Método main da classe
+
+# Default description of the run method.  {0} is not
+# applicable, {1} is the name of the class, {2} is 'class'
+# or 'object' depending on whether it is static or not
+main.descr=The main program for the {1} {2}
+
+# Description of the main arguments
+main.param.descr=The command line arguments
+
+# Default description of the add method.  {0} is the name of the
+# attribute, {1} is the name of the class, {2} is 'class'
+# or 'object' depending on whether it is static or not,
+# {3} is the name of the attribute with the first letter lowercased
+adder.descr=Adds a feature to the {0} attribute of the {1} {2}
+
+# Description of the add argument
+adder.param.descr=The feature to be added to the {0} attribute
+
+# JUnit has a particular format for the names of methods.
+# These setup for the unit tests are done in a method named
+# setUp, the cleanup afterwards is done in tearDown, and
+# the unit tests all start with the word test.  The following
+# are the default descriptions of these methods.
+junit.setUp.descr=The JUnit setup method
+
+junit.test.descr=A unit test for JUnit
+
+junit.tearDown.descr=The teardown method for JUnit
+
+junit.suite.descr=A unit test suite for JUnit
+
+junit.suite.return.descr=The test suite
+
+#
+#  The following are the tags and the order
+#  that are required in javadocs.  If there is
+#  description, then they are not required and the
+#  system is only specifying the order in which they
+#  should appear.  If a description is provided, then
+#  the tag is required.
+#
+author.descr={0}
+
+param.descr=Descrição do parâmetro
+
+return.descr=Descrição do retorno
+
+exception.descr=Descrição da exceção
+
+class.tags=author
+method.tags=param,return,exception
+field.tags=
+ 
+# This feature describes what type of characters are used for
+# the java files.
+# * 1 - ASCII (1 byte characters)
+# * 2 - Unicode (2 byte characters - far east)
+# * 3 - ASCII full (2 byte characters - far east)
+char.stream.type=1
+
+# If you would like the pretty printer to make a backup
+# of the file before applying the pretty printer to the file,
+# add an extension here.
+pretty.printer.backup.ext=
+
+# Insert the header
+
+# Insert the footer
+
+# Should we sort the types and imports?
+sort.top=false
+
+# List the prefixes of imports that should be
+# sorted to the top.  For instance, 
+# java,javax,org.w3c
+import.sort.important=
+
+# If you want classes that are written by you to move to the end
+# of the list of imports change this value.
+# * 0 - Keep all the imports in alphabetical order
+# * 1 - If the package and the import start with the same value - com or org - put them at the end
+# * 2 - When package and import share 2 directory levels, the imports are listed last
+# * 3 - When package and import share 3 directory levels, the imports are listed last
+import.sort.neighbourhood=0
+
+# The following controls the order of methods, fields,
+# classes, etc inside a class.
+# This orders the items in the class by their type
+# The items to order are fields, constructors, methods,
+# nested classes, nested interfaces, and initializers
+#sort.1=Type(Field,Constructor,Method,NestedClass,NestedInterface,Initializer)
+
+# Order getters, setters, and other methods
+# Setters are methods that start with the word 'set'
+# Getters are methods that start with the word 'get' or 'is'
+#sort.2=Method(setter,getter,other)
+
+# How final methods and fields should be sorted
+# * Final(top) - Move to the top
+# * Final(bottom) - Move to the bottom
+#sort.3=Final(top)
+# How the protection should be used to sort fields and methods
+# * Protection(public) - Move public to the top
+# * Protection(private) - Move private to the top
+#sort.4=Protection(public)
+# How static methods and fields should be sorted
+# * Class(Static,Instance) - Move static to the top
+# * Class(Instance,Static) - Move static to the bottom
+#sort.5=Class(Static,Instance)
+# Order methods and fields in alphabetical order
+#sort.6=Alphabetical()
+
+# Maintain the order of fields with initializers
+#sort.7=FieldInitializers()
+

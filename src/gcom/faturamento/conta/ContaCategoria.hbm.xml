@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.faturamento.conta.ContaCategoria" table="faturamento.conta_categoria">
+		<composite-id name="comp_id" class="gcom.faturamento.conta.ContaCategoriaPK">
+			<!-- bi-directional many-to-one association to Conta -->
+			<key-many-to-one name="conta" class="gcom.faturamento.conta.Conta">
+				<column name="cnta_id"/>
+			</key-many-to-one>
+			<!-- bi-directional many-to-one association to Categoria -->
+			<key-many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria">
+				<column name="catg_id"/>
+			</key-many-to-one>
+			<key-many-to-one name="subcategoria" class="gcom.cadastro.imovel.Subcategoria">
+				<column name="scat_id"/>
+			</key-many-to-one>
+		</composite-id>
+		<property name="quantidadeEconomia" type="short" column="ctcg_qteconomia" not-null="true" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ctcg_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="valorAgua" type="java.math.BigDecimal" column="ctcg_vlagua" length="13"/>
+		<property name="consumoAgua" type="java.lang.Integer" column="ctcg_nnconsumoagua" length="4"/>
+		<property name="valorEsgoto" type="java.math.BigDecimal" column="ctcg_vlesgoto" length="13"/>
+		<property name="consumoEsgoto" type="java.lang.Integer" column="ctcg_nnconsumoesgoto" length="4"/>
+		<property name="valorTarifaMinimaAgua" type="java.math.BigDecimal" column="ctcg_vltarifaminimaagua" length="13"/>
+		<property name="consumoMinimoAgua" type="java.lang.Integer" column="ctcg_nnconsumominimoagua" length="4"/>
+		<property name="valorTarifaMinimaEsgoto" type="java.math.BigDecimal" column="ctcg_vltarifaminimaesgoto" length="13"/>
+		<property name="consumoMinimoEsgoto" type="java.lang.Integer" column="ctcg_nnconsumominimoesgoto" length="4"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to ContaCategoriaConsumoFaixa -->
+		<set name="contaCategoriaConsumoFaixas" lazy="true" inverse="true" cascade="delete">
+			<key>
+				<column name="cnta_id"/>
+				<column name="catg_id"/>
+				<column name="scat_id"/>
+			</key>
+			<one-to-many class="gcom.faturamento.conta.ContaCategoriaConsumoFaixa"/>
+		</set>
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.EmailClienteAlterado" table="cadastro.email_client_alterado">
+		<id name="id" type="java.lang.Integer" column="ecla_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_email_client_alterado</param>
+			</generator>
+		</id>
+		<property name="nomeClienteAnterior" type="java.lang.String" column="ecla_nmclienteanterior" not-null="true" length="50"/>
+		<property name="telefoneContato" type="java.lang.Integer" column="ecla_fonecontato" length="8"/>
+		<property name="cpfAnterior" type="java.lang.String" column="ecla_nncpfanterior" not-null="false" length="11"/>
+		<property name="cnpjAnterior" type="java.lang.String" column="ecla_nncnpjanterior" not-null="false" length="14"/>
+		<property name="emailAnterior" type="java.lang.String" column="ecla_dsemailanterior" not-null="false" length="40"/>
+		<property name="nomeSolicitante" type="java.lang.String" column="ecla_nmsolicitante" not-null="true" length="50"/>
+		<property name="cpfSolicitante" type="java.lang.String" column="ecla_nncpfsolicitante" not-null="true" length="11"/>
+		<property name="nomeClienteAtual" type="java.lang.String" column="ecla_nmclienteatual" not-null="true" length="50"/>
+		<property name="cpfAtual" type="java.lang.String" column="ecla_nncpfatual" not-null="false" length="11"/>
+		<property name="cnpjAtual" type="java.lang.String" column="ecla_nncnpjatual" not-null="false" length="14"/>
+		<property name="emailAtual" type="java.lang.String" column="ecla_dsemailatual" not-null="true" length="40"/>
+		<property name="confirmacaoOnline" type="java.sql.Timestamp" column="ecla_tmconfirmacaoonline" length="8"/>
+		<property name="solicitacaoOnline" type="java.sql.Timestamp" column="ecla_tmsolicitacaoonline" length="8"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ecla_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional many-to-one association to Quadra -->
+		<many-to-one name="idCliente" class="gcom.cadastro.cliente.Cliente" not-null="true">
+			<column name="clie_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>

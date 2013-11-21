@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<class name="gcom.atendimentopublico.EspecificacaoPavimentacaoServicoTipo" table="atendimentopublico.espec_pavi_servico_tipo">
+		
+		<id name="id" type="java.lang.Integer" column="epst_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_espec_pavi_servico_tipo</param>
+			</generator>
+		</id>
+		
+		<many-to-one name="solicitacaoTipoEspecificacao" class="gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao">
+			<column name="step_id"/>
+		</many-to-one>
+		
+		<many-to-one name="localOcorrencia" class="gcom.atendimentopublico.registroatendimento.LocalOcorrencia">
+			<column name="looc_id"/>
+		</many-to-one>	
+
+		<many-to-one name="pavimentoCalcada" class="gcom.cadastro.imovel.PavimentoCalcada">
+			<column name="pcal_id"/>
+		</many-to-one>
+
+		<many-to-one name="pavimentoRua" class="gcom.cadastro.imovel.PavimentoRua">
+			<column name="prua_id"/>
+		</many-to-one>
+		
+		<many-to-one name="servicoTipo" class="gcom.atendimentopublico.ordemservico.ServicoTipo">
+			<column name="svtp_id"/>
+		</many-to-one>
+		
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="epst_tmultimaalteracao" length="8"/>
+	</class>
+</hibernate-mapping>

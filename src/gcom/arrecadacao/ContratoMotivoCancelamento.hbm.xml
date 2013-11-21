@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+		Created by the Middlegen Hibernate plugin 2.1
+		
+		http://boss.bekk.no/boss/middlegen/
+		http://www.hibernate.org/
+	-->
+	<class name="gcom.arrecadacao.ContratoMotivoCancelamento" table="arrecadacao.contrato_motivo_cancel">
+		<id name="id" type="java.lang.Integer" column="ctcn_id">
+			<generator class="sequence">
+				<param name="sequence">
+				arrecadacao.seq_contrato_motivo_cancel</param>
+			</generator>
+		</id>
+		<property name="descricaoMotivoCancelContrato" type="java.lang.String" column="ctcn_dsmotivocancelcontrato" length="35"/>
+		<property name="indicadorUso" type="java.lang.Short" column="ctcn_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ctcn_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional one-to-many association to ArrecadadorContrato -->
+		<!--  
+		<set name="arrecadadorContratos" lazy="true" inverse="true"
+			cascade="all">
+			<key>
+				<column name="ctcn_id" />
+			</key>
+			<one-to-many class="gcom.ArrecadadorContrato" />
+		</set>
+		-->
+	</class>
+</hibernate-mapping>

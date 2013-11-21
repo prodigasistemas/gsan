@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+
+	<form-beans>
+		<form-bean name="GerarRelatorioImoveisProgramasEspeciaisActionForm"
+			type="gcom.gui.relatorio.cadastro.imovel.GerarRelatorioImoveisProgramasEspeciaisActionForm" />
+	</form-beans>
+
+	<!--******************* PAGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		
+		<action name="GerarRelatorioImoveisProgramasEspeciaisActionForm"
+			type="gcom.gui.relatorio.cadastro.imovel.ExibirGerarRelatorioImoveisProgramasEspeciaisAction"
+			validate="false" 
+			scope="session"
+			path="/exibirGerarRelatorioImoveisProgramasEspeciaisAction">
+			
+			<forward name="exibirGerarRelatorioImoveisProgramasEspeciaisAction" 
+				path="/jsp/relatorio/cadastro/relatorio_imoveis_programas_especiais_gerar.jsp" />
+				
+		</action>
+		
+		<action name="GerarRelatorioImoveisProgramasEspeciaisActionForm"
+			type="gcom.gui.relatorio.cadastro.imovel.GerarRelatorioImoveisProgramasEspeciaisAction"
+			validate="true" 
+			path="/gerarRelatorioImoveisProgramasEspeciaisAction" />		
+		
+	</action-mappings>
+
+</struts-config>

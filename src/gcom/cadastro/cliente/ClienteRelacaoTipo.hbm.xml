@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.cadastro.cliente.ClienteRelacaoTipo" table="cadastro.cliente_relacao_tipo">
+		<id name="id" type="java.lang.Integer" column="crtp_id">
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_cliente_relacao_tipo</param>
+			</generator>
+		</id>
+		<property name="descricao" type="java.lang.String" column="crtp_dsclienterelacaotipo" length="30"/>
+		<property name="indicadorUso" type="java.lang.Short" column="crtp_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="crtp_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to ClienteImovel
+    <set
+        name="clienteImoveis"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="crtp_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.cliente.ClienteImovel"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to ClienteConta
+    <set
+        name="clienteContas"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="crtp_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.cliente.ClienteConta"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to ClienteImovelEconomia
+    <set
+        name="clienteImovelEconomias"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="crtp_id" />
+        </key>
+        <one-to-many
+            class="gcom.cadastro.cliente.ClienteImovelEconomia"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

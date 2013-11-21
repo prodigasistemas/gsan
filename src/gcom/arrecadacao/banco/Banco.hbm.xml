@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.arrecadacao.banco.Banco" table="arrecadacao.banco">
+		<id name="id" type="java.lang.Integer" column="bnco_id">
+			<generator class="sequence">
+				<param name="sequence">arrecadacao.seq_banco</param>
+			</generator>
+		</id>
+		<property name="descricaoAbreviada" type="java.lang.String" column="bnco_nmabreviado" not-null="true" length="10"/>
+		<property name="descricao" type="java.lang.String" column="bnco_nmbanco" length="40"/>
+		<property name="indicadorUso" type="java.lang.Short" column="bnco_icuso" length="2"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="bnco_tmultimaalteracao" length="8"/>
+		<!-- associations -->
+		<!-- bi-directional one-to-many association to Agencia -->
+		<!--    <set
+        name="agencias"
+        lazy="true"
+        inverse="true"
+    >
+        <key>
+            <column name="bnco_id" />
+        </key>
+        <one-to-many
+            class="mapeamentohibernate.Agencia"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean 
+		    name="ReativarRegistroAtendimentoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ReativarRegistroAtendimentoActionForm" /> 
+	</form-beans>
+
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+							
+		<action name="ReativarRegistroAtendimentoActionForm"  
+			type="gcom.gui.atendimentopublico.registroatendimento.ExibirReativarRegistroAtendimentoAction" 
+			validate="false"
+			scope="session"
+			path="/exibirReativarRegistroAtendimentoAction">
+
+			<forward name="reativarRegistroAtendimento"
+			path="/jsp/atendimentopublico/registroatendimento/registro_atendimento_reativar.jsp" />
+		</action>
+
+		<action name="ReativarRegistroAtendimentoActionForm"
+			type="gcom.gui.atendimentopublico.registroatendimento.ReativarRegistroAtendimentoAction" 
+			validate="true" scope="session"
+			path="/reativarRegistroAtendimentoAction">
+		</action>
+
+	</action-mappings>
+
+	<message-resources null="false"
+		parameter="gcom.properties.application" />
+		
+</struts-config>

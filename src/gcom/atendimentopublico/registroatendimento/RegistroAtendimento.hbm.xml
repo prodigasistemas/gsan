@@ -1,0 +1,326 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.atendimentopublico.registroatendimento.RegistroAtendimento" table="atendimentopublico.registro_atendimento">
+		<id name="id" type="java.lang.Integer" column="rgat_id">
+			<generator class="sequence">
+				<param name="sequence">atendimentopublico.seq_registro_atendimento</param>
+			</generator>
+		</id>
+		<property name="codigoSituacao" type="short" column="rgat_cdsituacao" not-null="true" length="2"/>
+		<property name="registroAtendimento" type="java.sql.Timestamp" column="rgat_tmregistroatendimento" not-null="true" length="8"/>
+		<property name="dataPrevistaOriginal" type="java.sql.Date" column="rgat_dtprevistaoriginal" not-null="true" length="4"/>
+		<property name="dataPrevistaAtual" type="java.sql.Date" column="rgat_dtprevistaatual" not-null="true" length="4"/>
+		<property name="ultimaEmissao" type="java.sql.Timestamp" column="rgat_tmultimaemissao" length="4"/>
+		<property name="dataEncerramento" type="java.sql.Timestamp" column="rgat_tmencerramento" length="4"/>
+		<property name="quantidadeReiteracao" type="java.lang.Short" column="rgat_qtreiteracoes" length="2"/>
+		<property name="ultimaReiteracao" type="java.sql.Timestamp" column="rgat_tmultimareiteracao" length="8"/>
+		<property name="observacao" type="java.lang.String" column="rgat_dsobservacao" length="200"/>
+		<property name="descricaoLocalOcorrencia" type="java.lang.String" column="rgat_dslocalocorrencia" length="200"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="rgat_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="parecerEncerramento" type="java.lang.String" column="rgat_dsparecerencerramento" length="400"/>
+		<property name="pontoReferencia" type="java.lang.String" column="rgat_dspontoreferencia" length="60"/>
+		<property name="complementoEndereco" type="java.lang.String" column="rgat_dscomplementondereco" length="45"/>
+		<property name="indicadorAtendimentoOnline" type="short" column="rgat_icatendimentoonline" not-null="true" length="2"/>
+		<property name="dataInicioEspera" type="java.sql.Timestamp" column="rgat_tminicioespera" length="8"/>
+		<property name="dataFimEspera" type="java.sql.Timestamp" column="rgat_tmfimespera" length="8"/>
+		<property name="numeroImovel" type="java.lang.String" column="rgat_nnimovel" not-null="false" length="5"/>
+		<property name="manual" type="java.lang.Integer" column="rgat_idmanual" length="2"/>
+		<property name="nnCoordenadaNorte" type="java.math.BigDecimal" column="rgat_nncoordenadanorte" length="15"/>
+		<property name="nnCoordenadaLeste" type="java.math.BigDecimal" column="rgat_nncoordenadaleste" length="15"/>
+		<property name="indicadorCoordenadaSemLogradouro" type="java.lang.Short" column="rgat_iccorrdenadassemlogr" length="2"/>
+		<property name="nnDiametro" type="java.math.BigDecimal" column="rgat_nndiametro" length="7"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to LogradouroBairro -->
+		<many-to-one name="logradouroBairro" class="gcom.cadastro.endereco.LogradouroBairro" not-null="true">
+			<column name="lgbr_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to SetorComercial -->
+		<many-to-one name="setorComercial" class="gcom.cadastro.localidade.SetorComercial" not-null="true">
+			<column name="stcm_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to AtendimentoMotivoEncerramento -->
+		<many-to-one name="atendimentoMotivoEncerramento" class="gcom.atendimentopublico.registroatendimento.AtendimentoMotivoEncerramento" not-null="true">
+			<column name="amen_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to PavimentoCalcada -->
+		<many-to-one name="pavimentoCalcada" class="gcom.cadastro.imovel.PavimentoCalcada" not-null="true">
+			<column name="pcal_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LocalOcorrencia -->
+		<many-to-one name="localOcorrencia" class="gcom.atendimentopublico.registroatendimento.LocalOcorrencia" not-null="true">
+			<column name="looc_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to LogradouroCep -->
+		<many-to-one name="logradouroCep" class="gcom.cadastro.endereco.LogradouroCep" not-null="true">
+			<column name="lgcp_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to MeioSolicitacao -->
+		<many-to-one name="meioSolicitacao" class="gcom.atendimentopublico.registroatendimento.MeioSolicitacao" not-null="true">
+			<column name="meso_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to RaMotivoReativacao -->
+		<many-to-one name="raMotivoReativacao" class="gcom.atendimentopublico.registroatendimento.RaMotivoReativacao" not-null="true">
+			<column name="rmrv_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to RegistroAtendimento -->
+		<many-to-one name="registroAtendimentoReativacao" class="gcom.atendimentopublico.registroatendimento.RegistroAtendimento" not-null="true">
+			<column name="rgat_idreativacao"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to RegistroAtendimento -->
+		<many-to-one name="registroAtendimentoDuplicidade" class="gcom.atendimentopublico.registroatendimento.RegistroAtendimento" not-null="true">
+			<column name="rgat_idduplicidade"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Imovel -->
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
+			<column name="imov_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to BairroArea -->
+		<many-to-one name="bairroArea" class="gcom.cadastro.geografico.BairroArea" not-null="true">
+			<column name="brar_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to SolicitacaoTipoEspecificacao -->
+		<many-to-one name="solicitacaoTipoEspecificacao" class="gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao" not-null="true">
+			<column name="step_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Quadra -->
+		<many-to-one name="quadra" class="gcom.cadastro.localidade.Quadra" not-null="true">
+			<column name="qdra_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to Localidade -->
+		<many-to-one name="localidade" class="gcom.cadastro.localidade.Localidade" not-null="true">
+			<column name="loca_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to PavimentoRua -->
+		<many-to-one name="pavimentoRua" class="gcom.cadastro.imovel.PavimentoRua" not-null="true">
+			<column name="prua_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to DivisaoEsgoto -->
+		<many-to-one name="divisaoEsgoto" class="gcom.operacional.DivisaoEsgoto" not-null="true">
+			<column name="dves_id"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to UnidadeOrganizacional -->
+		<many-to-one name="unidadeAtual" class="gcom.cadastro.unidade.UnidadeOrganizacional" not-null="false">
+			<column name="unid_idatual"></column>
+		</many-to-one>
+		<many-to-one name="perimetroInicial" class="gcom.cadastro.endereco.Logradouro" not-null="false">
+			<column name="logr_idinicioperimetro"/>
+		</many-to-one>
+		<many-to-one name="perimetroFinal" class="gcom.cadastro.endereco.Logradouro" not-null="false">
+			<column name="logr_idfimperimetro"/>
+		</many-to-one>
+		<!-- bi-directional many-to-one association to ServicoNaoCobrancaMotivo-->
+		<many-to-one name="servicoNaoCobrancaMotivo" class="gcom.atendimentopublico.ordemservico.ServicoNaoCobrancaMotivo" not-null="true">
+			<column name="sncm_id"/>
+		</many-to-one>
+		<!-- bi-directional one-to-many association to Tramite -->
+		<set name="tramites" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="rgat_id"/>
+			</key>
+			<one-to-many class="gcom.atendimentopublico.registroatendimento.Tramite"/>
+		</set>
+		<!-- bi-directional one-to-many association to ContaHistorico 
+    <set
+        name="contaHistoricos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="rgat_id" />
+        </key>
+        <one-to-many 
+            class="gcom.ContaHistorico"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to CreditoARealizarHistorico 
+    <set
+        name="creditoARealizarHistoricos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="rgat_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CreditoARealizarHistorico"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to GuiaPagamento 
+    <set
+        name="guiaPagamentos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="rgat_id" />
+        </key>
+        <one-to-many 
+            class="gcom.GuiaPagamento"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to Parcelamento 
+    <set
+        name="parcelamentos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="rgat_id" />
+        </key>
+        <one-to-many 
+            class="gcom.Parcelamento"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to RegistroAtendimentoUnidade -->
+		<set name="registroAtendimentoUnidades" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="rgat_id"/>
+			</key>
+			<one-to-many class="gcom.atendimentopublico.registroatendimento.RegistroAtendimentoUnidade"/>
+		</set>
+		<!-- bi-directional one-to-many association to CreditoARealizar 
+    <set
+        name="creditoARealizars"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="rgat_id" />
+        </key>
+        <one-to-many 
+            class="gcom.CreditoARealizar"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to RaDadosAgenciaReguladora -->
+		<set name="raDadosAgenciaReguladoras" lazy="true" inverse="true" cascade="all">
+			<key>
+				<column name="rgat_id"/>
+			</key>
+			<one-to-many class="gcom.atendimentopublico.registroatendimento.RaDadosAgenciaReguladora"/>
+		</set>
+		<!-- bi-directional one-to-many association to RegistroAtendimentoSolicitante 
+    <set
+        name="registroAtendimentoSolicitantes"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="rgat_id" />
+        </key>
+        <one-to-many 
+            class="gcom.RegistroAtendimentoSolicitante"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to GuiaDevolucao 
+    <set
+        name="guiaDevolucaos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="rgat_id" />
+        </key>
+        <one-to-many 
+            class="gcom.GuiaDevolucao"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to OrdemServico 
+    <set
+        name="ordemServicos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="rgat_id" />
+        </key>
+        <one-to-many 
+            class="gcom.OrdemServico"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to RaEnderecoDescritivo 
+    <set
+        name="raEnderecoDescritivos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="rgat_id" />
+        </key>
+        <one-to-many 
+            class="gcom.RaEnderecoDescritivo"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to DebitoACobrarHistorico 
+    <set
+        name="debitoACobrarHistoricos"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="rgat_id" />
+        </key>
+        <one-to-many 
+            class="gcom.DebitoACobrarHistorico"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to DebitoACobrar 
+    <set
+        name="debitoACobrars"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="rgat_id" />
+        </key>
+        <one-to-many 
+            class="gcom.DebitoACobrar"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to RegistroAtendimento 
+    <set
+        name="registroAtendimentosByRgatIdreativacao"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="rgat_idreativacao" />
+        </key>
+        <one-to-many 
+            class="gcom.RegistroAtendimento"
+        />
+    </set> -->
+		<!-- bi-directional one-to-many association to RegistroAtendimento 
+    <set
+        name="registroAtendimentosByRgatIdduplicidade"
+        lazy="true"
+        inverse="true"
+		cascade="all"
+    >
+        <key>
+            <column name="rgat_idduplicidade" />
+        </key>
+        <one-to-many 
+            class="gcom.RegistroAtendimento"
+        />
+    </set> -->
+	</class>
+</hibernate-mapping>

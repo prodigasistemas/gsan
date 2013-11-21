@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PROCESS model-entity="StrutsProcess">
+ <PROCESS-ITEM
+  ID="#exibirGerarRelatorioPagamentoEntidadesBeneficentesAction"
+  NAME="action0"
+  PATH="/exibirGerarRelatorioPagamentoEntidadesBeneficentesAction"
+  SHAPE="32,17,0,0"
+  TITLE="GerarRelatorioPagamentoEntidadesBeneficentesActionForm"
+  TYPE="action" model-entity="StrutsProcessItem">
+  <PROCESS-ITEM-OUTPUT
+   ID="exibirGerarRelatorioPagamentoEntidadesBeneficentes"
+   NAME="forward0"
+   PATH="/jsp/relatorio/arrecadacao/relatorio_pagamento_entidades_beneficentes.jsp"
+   TARGET="page1"
+   TITLE="exibirGerarRelatorioPagamentoEntidadesBeneficentes"
+   TYPE="forward" model-entity="StrutsProcessItemOutput"/>
+ </PROCESS-ITEM>
+ <PROCESS-ITEM ID="#gerarRelatorioPagamentoEntidadesBeneficentesAction"
+  NAME="action1"
+  PATH="/gerarRelatorioPagamentoEntidadesBeneficentesAction"
+  SHAPE="32,129,0,0"
+  TITLE="GerarRelatorioPagamentoEntidadesBeneficentesActionForm"
+  TYPE="action" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page0"
+  PATH="/jsp/relatorio/arrecadacao/resumo_arrecadacao_gerar_relatorio.jsp"
+  SHAPE="240,34,0,0" SUBTYPE="jsp"
+  TITLE="resumo_arrecadacao_gerar_relatorio.jsp" TYPE="page" model-entity="StrutsProcessItem"/>
+ <PROCESS-ITEM NAME="page1"
+  PATH="/jsp/relatorio/arrecadacao/relatorio_pagamento_entidades_beneficentes.jsp"
+  SHAPE="240,129,0,0" SUBTYPE="jsp"
+  TITLE="relatorio_pagamento_entidades_beneficentes.jsp" TYPE="page" model-entity="StrutsProcessItem"/>
+</PROCESS>

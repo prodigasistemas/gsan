@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!-- 
+    Created by the Middlegen Hibernate plugin 2.1
+
+    http://boss.bekk.no/boss/middlegen/
+    http://www.hibernate.org/
+-->
+	<class name="gcom.arrecadacao.MovimentoCartaoRejeita" table="arrecadacao.movimento_cartao_rejeita">
+		<id name="id" type="java.lang.Integer" column="mcre_id">
+			<generator class="sequence">
+				<param name="sequence">arrecadacao.seq_movimento_cartao_rejeita</param>
+			</generator>
+		</id>
+		<property name="numeroCartao" type="java.lang.String" column="mcre_nncartao" not-null="true"/>
+		<property name="dataCompra" type="java.sql.Date" column="mcre_dtcompra" not-null="true"/>
+		<property name="valorVenda" type="java.math.BigDecimal" column="mcre_vlvenda" not-null="true"/>
+		<property name="numeroParcela" type="java.lang.Short" column="mcre_nnparcela" length="2" not-null="true"/>
+		<property name="numeroParcelaDebito" type="java.lang.Short" column="mcre_nnparceladebito" length="2" not-null="true"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="mcre_tmultimaalteracao" length="8"/>
+		<!-- Associations -->
+		<!-- bi-directional many-to-one association to ArrecadadorMovimento -->
+		<many-to-one name="arrecadadorMovimentoItem" class="gcom.arrecadacao.ArrecadadorMovimentoItem" not-null="true">
+			<column name="amit_id"/>
+		</many-to-one>
+	</class>
+</hibernate-mapping>
