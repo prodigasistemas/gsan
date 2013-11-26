@@ -5,3 +5,9 @@ O Sistema Integrado de Gestão de Serviços e Saneamento (GSAN)	tem como finalid
 analíticas ou consolidadas, resultando em mais agilidade na tomada de decisões e execução dos processos de negócio.
 
 O GSAN é um software é livre e foi desenvolvido e disponibilizado pelo Ministério das Cidades, com o seguinte objetivo: "Sistema integrado de gestão de serviços de saneamento, desenvolvido com o objetivo de elevar o nível de desempenho e eficiência das empresas nacionais de abastecimento de água e coleta de esgotos." (Fonte: Portal do Software Público Brasileiro).
+
+Mais Informações
+====
+
+Portal do Software Público - http://www.softwarepublico.gov.br
+Link para o espaço da comunidade GSAN - http://www.softwarepublico.gov.br/ver-comunidade?community_id=1593449
