@@ -10,4 +10,5 @@ Mais Informações
 ====
 
 Portal do Software Público - http://www.softwarepublico.gov.br
+
 Link para o espaço da comunidade GSAN - http://www.softwarepublico.gov.br/ver-comunidade?community_id=1593449
