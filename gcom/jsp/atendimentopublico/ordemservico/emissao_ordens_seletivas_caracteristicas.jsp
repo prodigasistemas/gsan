@@ -424,7 +424,7 @@
 				
 				<tr>
 					<td colspan="2">
-						<table widht="100%" border="0">
+						<table width="100%" border="0">
 							<tr>
 								<td width="175"><strong>Intervalo de Quantidade de Economias:</strong></td>
 								<td align="left">
@@ -448,7 +448,7 @@
 				
 				<tr>
 					<td colspan="2">
-						<table widht="100%" border="0">
+						<table width="100%" border="0">
 							<tr>
 								<td width="175"><strong>Intervalo de Quantidade de Documentos:</strong></td>
 								<td align="left">
@@ -473,7 +473,7 @@
 				
 				<tr>
 					<td colspan="2">
-						<table widht="100%" border="0">
+						<table width="100%" border="0">
 							<tr>
 								<td width="175"><strong>Intervalo de N&uacute;mero de Moradores:</strong></td>
 								<td align="left">
@@ -500,7 +500,7 @@
 				
 				<tr>
 					<td colspan="2">
-						<table widht="100%" border="0">
+						<table width="100%" border="0">
 							<tr>
 								<td width="175"><strong>Intervalo de &Aacute;rea Construida:</strong></td>
 								<td align="left">
@@ -597,7 +597,7 @@
 				
 				<tr>
 					<td colspan="2">
-					<table widht="100%" border="0">
+					<table width="100%" border="0">
 						<tr>
 							<td width="175"><strong>Intervalo de Consumo por Economia:</strong></td>
 							
