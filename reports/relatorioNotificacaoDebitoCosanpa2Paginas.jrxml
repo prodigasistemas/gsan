@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="RelatorioNotificacaoDebitoCosanpa2Paginas"
+		 columnCount="2"
+		 printOrder="Vertical"
+		 orientation="Landscape"
+		 pageWidth="842"
+		 pageHeight="625"
+		 columnWidth="392"
+		 columnSpacing="30"
+		 leftMargin="14"
+		 rightMargin="14"
+		 topMargin="14"
+		 bottomMargin="14"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="false"
+		 isSummaryNewPage="false">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="SUBREPORT_DIR" isForPrompting="true" class="java.lang.String">
+		<defaultValueExpression ><![CDATA["C:\\jboss-4.0.1sp1\\server\\default\\deploy\\gcom.ear\\gcom.war\\WEB-INF\\classes\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="imagem" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="cnpjEmpresa" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="enderecoEmpresa" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="cepEmpresa" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="foneFaxEmpresa" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="dataSource" isForPrompting="false" class="java.lang.Object"/>
+
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="554"  isSplitAllowed="true" >
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="0"
+						width="414"
+						height="554"
+						key="subreport-1"
+						isPrintRepeatedValues="false"/>
+					<subreportParameter  name="imagem">
+						<subreportParameterExpression><![CDATA[$P{imagem}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="cnpjEmpresa">
+						<subreportParameterExpression><![CDATA[$P{cnpjEmpresa}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="enderecoEmpresa">
+						<subreportParameterExpression><![CDATA[$P{enderecoEmpresa}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="cepEmpresa">
+						<subreportParameterExpression><![CDATA[$P{cepEmpresa}]]></subreportParameterExpression>
+					</subreportParameter>
+					<subreportParameter  name="foneFaxEmpresa">
+						<subreportParameterExpression><![CDATA[$P{foneFaxEmpresa}]]></subreportParameterExpression>
+					</subreportParameter>
+					<dataSourceExpression><![CDATA[$P{dataSource}]]></dataSourceExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA["relatorioNotificacaoDebitoCosanpaMini.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</summary>
+</jasperReport>

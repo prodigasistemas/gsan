@@ -1,0 +1,1110 @@
+<?xml version="1.0" encoding="UTF-8"  ?>
+<!-- Created with iReport - A designer for JasperReports -->
+<!DOCTYPE jasperReport PUBLIC "//JasperReports//DTD Report Design//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport
+		 name="relatorioParcelamentoCosanpa"
+		 columnCount="1"
+		 printOrder="Horizontal"
+		 orientation="Portrait"
+		 pageWidth="595"
+		 pageHeight="842"
+		 columnWidth="535"
+		 columnSpacing="0"
+		 leftMargin="30"
+		 rightMargin="30"
+		 topMargin="20"
+		 bottomMargin="20"
+		 whenNoDataType="NoPages"
+		 isTitleNewPage="true"
+		 isSummaryNewPage="true">
+	<property name="ireport.scriptlethandling" value="0" />
+	<property name="ireport.encoding" value="UTF-8" />
+	<import value="java.util.*" />
+	<import value="net.sf.jasperreports.engine.*" />
+	<import value="net.sf.jasperreports.engine.data.*" />
+
+	<parameter name="tipoFormatoRelatorio" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="cnpj" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="inscricaoEstadual" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="SUBREPORT_DIR" isForPrompting="true" class="java.lang.String">
+		<defaultValueExpression ><![CDATA["C:\\Implantacao\\CVSROOT\\Gcom\\reports\\"]]></defaultValueExpression>
+	</parameter>
+	<parameter name="empresa" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="qtdeParcelas" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="imagem" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="contrato" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="dividaAtiva" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="tituloPagina" isForPrompting="false" class="java.lang.String"/>
+
+	<field name="getMatriculaImovel" class="java.lang.String"/>
+	<field name="getNomeCliente" class="java.lang.String"/>
+	<field name="getEndereco" class="java.lang.String"/>
+	<field name="getCpfCnpj" class="java.lang.String"/>
+	<field name="getTelefone" class="java.lang.String"/>
+	<field name="getDataParcelamento" class="java.lang.String"/>
+	<field name="getFaturasEmAberto" class="java.lang.String"/>
+	<field name="getServicosACobrar" class="java.lang.String"/>
+	<field name="getAtualizacaoMonetaria" class="java.lang.String"/>
+	<field name="getJurosMora" class="java.lang.String"/>
+	<field name="getMulta" class="java.lang.String"/>
+	<field name="getGuiaPagamento" class="java.lang.String"/>
+	<field name="getParcelamentoACobrar" class="java.lang.String"/>
+	<field name="getTotalDebitos" class="java.lang.String"/>
+	<field name="getDescontoAcrescimo" class="java.lang.String"/>
+	<field name="getDescontosAntiguidade" class="java.lang.String"/>
+	<field name="getDescontoInatividade" class="java.lang.String"/>
+	<field name="getCreditosARealizar" class="java.lang.String"/>
+	<field name="getTotalDescontos" class="java.lang.String"/>
+	<field name="getValorEntrada" class="java.lang.String"/>
+	<field name="getNumeroParcelas" class="java.lang.String"/>
+	<field name="getValorParcela" class="java.lang.String"/>
+	<field name="getSolicitacaoRestabelecimento" class="java.lang.String"/>
+	<field name="getValorASerParcelado" class="java.lang.String"/>
+	<field name="getValorASerNegociado" class="java.lang.String"/>
+	<field name="getArrayJRDetalhamento" class="java.lang.Object"/>
+	<field name="getPagina" class="java.lang.String"/>
+	<field name="getIdFuncionario" class="java.lang.String"/>
+	<field name="getIdParcelamento" class="java.lang.String"/>
+	<field name="getUnidadeUsuario" class="java.lang.String"/>
+	<field name="getMunicipioData" class="java.lang.String"/>
+	<field name="getCpfClienteParcelamento" class="java.lang.String"/>
+	<field name="getNomeClienteParcelamento" class="java.lang.String"/>
+	<field name="getCodigoEmpresaFebraban" class="java.lang.String"/>
+	<field name="getRgCliente" class="java.lang.String"/>
+	<field name="getMatriculaUsuario" class="java.lang.String"/>
+	<field name="getNomeUsuario" class="java.lang.String"/>
+	<field name="getMunicipio" class="java.lang.String"/>
+	<field name="getMesAnoFinalParcelamento" class="java.lang.String"/>
+	<field name="getMesAnoInicioParcelamento" class="java.lang.String"/>
+	<field name="getValorJuros" class="java.lang.String"/>
+	<field name="getValorDescontoSancoesRegulamentares" class="java.lang.String"/>
+	<field name="getValorDescontoTarifaSocial" class="java.lang.String"/>
+	<field name="getNomeUsuarioParcelamento" class="java.lang.String"/>
+	<field name="getNomeFuncionario" class="java.lang.String"/>
+	<field name="getCargoFuncionario" class="java.lang.String"/>
+	<field name="getValorAserNegociadoPorExtenso" class="java.lang.String"/>
+	<field name="getValorDeEntradaProExtenso" class="java.lang.String"/>
+	<field name="getDataVencimentoGuiaPagamento" class="java.lang.String"/>
+	<field name="getNumeroDeParcelasPorExtenso" class="java.lang.String"/>
+	<field name="getValorTOTALDasParcelasPorExtenso" class="java.lang.String"/>
+	<field name="getValorDaParcelaPorExtenso" class="java.lang.String"/>
+	<field name="getDescontoNegociado" class="java.lang.String"/>
+	<field name="getValorDescontoPorExtenso" class="java.lang.String"/>
+	<field name="getCpfTestemunha1" class="java.lang.String"/>
+	<field name="getCpfTestemunha2" class="java.lang.String"/>
+	<field name="getNomeTestemunha1" class="java.lang.String"/>
+	<field name="getNomeTestemunha2" class="java.lang.String"/>
+	<field name="getCodigoRota" class="java.lang.String"/>
+	<field name="getSetorComercialDescricao" class="java.lang.String"/>
+	<field name="getLocalidadeDescricao" class="java.lang.String"/>
+	<field name="getDddTelefone" class="java.lang.String"/>
+	<field name="getMesExtenso" class="java.lang.String"/>
+	<field name="getAno" class="java.lang.String"/>
+	<field name="getDia" class="java.lang.String"/>
+	<field name="getMenorAnoMesReferenciaDocumentos" class="java.lang.String"/>
+	<field name="getMaiorAnoMesReferenciaDocumentos" class="java.lang.String"/>
+
+	<variable name="mensagemReferenciaDocumentos" class="java.lang.String" resetType="None" calculation="Nothing">
+		<variableExpression><![CDATA[( $F{getMenorAnoMesReferenciaDocumentos} != null && !$F{getMenorAnoMesReferenciaDocumentos}.equals( "0" ) ? ", no período de " + $F{getMenorAnoMesReferenciaDocumentos} +" a "+ $F{getMaiorAnoMesReferenciaDocumentos} : "" )]]></variableExpression>
+		<initialValueExpression><![CDATA[""]]></initialValueExpression>
+	</variable>
+
+		<group  name="Parcelamento" >
+			<groupExpression><![CDATA[$F{getPagina}]]></groupExpression>
+			<groupHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupHeader>
+			<groupFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+			</groupFooter>
+		</group>
+		<background>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</background>
+		<title>
+			<band height="802"  isSplitAllowed="true" >
+				<rectangle>
+					<reportElement
+						x="0"
+						y="4"
+						width="535"
+						height="63"
+						key="rectangle-13"/>
+					<graphicElement stretchType="NoStretch"/>
+				</rectangle>
+				<image  vAlign="Middle" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="6"
+						y="8"
+						width="67"
+						height="55"
+						key="image-4"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<graphicElement stretchType="NoStretch"/>
+					<imageExpression class="java.lang.String"><![CDATA[$P{imagem}]]></imageExpression>
+				</image>
+				<line direction="TopDown">
+					<reportElement
+						x="440"
+						y="4"
+						width="0"
+						height="63"
+						key="line-16"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="78"
+						y="4"
+						width="0"
+						height="63"
+						key="line-17"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="84"
+						y="6"
+						width="354"
+						height="59"
+						key="staticText-300"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Arial"/>
+					</textElement>
+				<text><![CDATA[COMPANHIA DE SANEAMENTO DO PARÁ
+
+
+ 
+]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="457"
+						y="16"
+						width="59"
+						height="16"
+						key="staticText-301"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Arial" size="10"/>
+					</textElement>
+				<text><![CDATA[CONTRATO]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="6"
+						y="86"
+						width="135"
+						height="10"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-348">
+							<printWhenExpression><![CDATA[new Boolean($F{getPagina}.equals("1"))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["LOCALIDADE: "+ $F{getLocalidadeDescricao}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="148"
+						y="71"
+						width="106"
+						height="10"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-350">
+							<printWhenExpression><![CDATA[new Boolean($F{getPagina}.equals("1"))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["SETOR: "+ $F{getSetorComercialDescricao}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="149"
+						y="86"
+						width="106"
+						height="10"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-351">
+							<printWhenExpression><![CDATA[new Boolean($F{getPagina}.equals("1"))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["ROTA: "+ $F{getCodigoRota}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="259"
+						y="71"
+						width="154"
+						height="10"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-353">
+							<printWhenExpression><![CDATA[new Boolean($F{getPagina}.equals("1"))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["DDD: "+ $F{getDddTelefone}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="259"
+						y="86"
+						width="276"
+						height="10"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-354">
+							<printWhenExpression><![CDATA[new Boolean($F{getPagina}.equals("1"))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["FONE DO CLIENTE RESPONSÁVEL POR PARCELAMENTO: "+$F{getTelefone}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="7"
+						y="619"
+						width="524"
+						height="0"
+						key="line-18">
+							<printWhenExpression><![CDATA[new Boolean($F{getPagina}.equals("1"))]]></printWhenExpression>
+						</reportElement>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="8"
+						y="694"
+						width="524"
+						height="0"
+						key="line-19">
+							<printWhenExpression><![CDATA[new Boolean($F{getPagina}.equals("1"))]]></printWhenExpression>
+						</reportElement>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="6"
+						y="764"
+						width="524"
+						height="0"
+						key="line-20">
+							<printWhenExpression><![CDATA[new Boolean($F{getPagina}.equals("1"))]]></printWhenExpression>
+						</reportElement>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="10"
+						y="524"
+						width="215"
+						height="0"
+						key="line-21">
+							<printWhenExpression><![CDATA[new Boolean($F{getPagina}.equals("1"))]]></printWhenExpression>
+						</reportElement>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<line direction="TopDown">
+					<reportElement
+						x="316"
+						y="524"
+						width="215"
+						height="0"
+						key="line-22">
+							<printWhenExpression><![CDATA[new Boolean($F{getPagina}.equals("1"))]]></printWhenExpression>
+						</reportElement>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						x="5"
+						y="749"
+						width="345"
+						height="12"
+						key="staticText-312">
+							<printWhenExpression><![CDATA[new Boolean($F{getPagina}.equals("1"))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Arial" size="8"/>
+					</textElement>
+				<text><![CDATA[Termo impresso em 02(duas) vias, sendo a 1º via do Cliente e a 2ª via da Cosanpa. ]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="5"
+						y="769"
+						width="528"
+						height="15"
+						key="staticText-313">
+							<printWhenExpression><![CDATA[new Boolean($F{getPagina}.equals("1"))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" isBold="true"/>
+					</textElement>
+				<text><![CDATA[DIRETORIA DE MERCADO - Av. Magalhães Barata, 1.201 - Belém - Pará - Brasil]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="5"
+						y="784"
+						width="528"
+						height="15"
+						key="staticText-314">
+							<printWhenExpression><![CDATA[new Boolean($F{getPagina}.equals("1"))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Fone: 0800 7071195 – FAX: (0xx91) 3202-8555 – E-mail: dmgab_cosanpa@yahoo.com.br]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="13"
+						y="675"
+						width="89"
+						height="12"
+						key="staticText-315">
+							<printWhenExpression><![CDATA[new Boolean($F{getPagina}.equals("1"))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
+				<text><![CDATA[TESTEMUNHA(2)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="13"
+						y="599"
+						width="89"
+						height="12"
+						key="staticText-316">
+							<printWhenExpression><![CDATA[new Boolean($F{getPagina}.equals("1"))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
+				<text><![CDATA[TESTEMUNHA(1)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="5"
+						y="529"
+						width="258"
+						height="12"
+						key="staticText-317">
+							<printWhenExpression><![CDATA[new Boolean($F{getPagina}.equals("1"))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
+				<text><![CDATA[COMPANHIA DE SANEAMENTO DO PARÁ - COSANPA]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="316"
+						y="529"
+						width="216"
+						height="12"
+						key="staticText-318">
+							<printWhenExpression><![CDATA[new Boolean($F{getPagina}.equals("1"))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
+				<text><![CDATA[DEVEDOR(A)]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="5"
+						y="477"
+						width="97"
+						height="12"
+						key="staticText-319">
+							<printWhenExpression><![CDATA[new Boolean($F{getPagina}.equals("1"))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Arial" pdfFontName="Helvetica-Bold" size="9" isBold="true"/>
+					</textElement>
+				<text><![CDATA[BÉLEM         (PA),]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="94"
+						y="477"
+						width="68"
+						height="13"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-360"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+						<font fontName="Arial" pdfFontName="Courier-Bold" size="10" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="CP1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="1"
+						y="150"
+						width="534"
+						height="296"
+						key="textField-365">
+							<printWhenExpression><![CDATA[new Boolean(!$F{getDescontoNegociado}.equals("relatorioDeveApresentarParagrafo2"))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Arial" size="9"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["           "+"Pela presente instrumento particular e na melhor forma de direito, o (a) Sr.(a) " + $F{getNomeCliente}+" Portador(a) do RG Nº " + $F{getRgCliente} + " CPF Nº " +$F{getCpfCnpj} +", residente  e  domiciliado  a "+ $F{getEndereco} +" doravante denominado (a) DEVEDOR (A) e a COMPANHIA DE SANEAMENTO DO PARÁ, doravante denominada CREDORA, representada pelo (a) Sr.(a), " + $F{getNomeFuncionario} + ", acupante do cargo de " + $F{getCargoFuncionario} + " têm  Justo  e  acertado  a assinatura do presente  Termo de Confissão e Assunção de Divida e de Acordo para Pagamento Parcelado, mediante as clausulas e condições seguintes:" 
++ "\n" + "CLÁUSULA PRIMEIRA: O(A) DEVEDOR(A) confessa e assume a divida de R$ " + $F{getValorASerNegociado} +" ("+ $F{getValorAserNegociadoPorExtenso} +"), perante a CREDORA, referente às faturas vencidas e não pagas"+ $V{mensagemReferenciaDocumentos} +".\n" + "CLÁUSULA SEGUNDA: O débito que alude a Clausula Primeira será reembolsado pelo (a) DEVEDOR, a favor da CREDORA da seguinte forma: \nParágrafo 1º - PARCELADO: Em 01 (uma) parcela, a titulo de entrada, no valor de R$ " + $F{getValorEntrada}  + " (" + $F{getValorDeEntradaProExtenso} + "),  vencível  em " + $F{getDataVencimentoGuiaPagamento} + "; e as demais em " + $F{getNumeroParcelas} +" ("   + $F{getNumeroDeParcelasPorExtenso} +") parcelas iguais, fixas e exigíveis mensalmente, no valor de R$ " + $F{getValorParcela} + " (" + $F{getValorDaParcelaPorExtenso} + ") cada, totalizando a importância de R$" +  $F{getValorASerParcelado} +" (" + $F{getValorTOTALDasParcelasPorExtenso} + "), sendo estas parcelas vencíveis nas datas das faturas de consumo mensal."+ "\n" + "CLÁUSULA TERCEIRA: Em garantia do pagamento do débito acima acordado, o (a) devedor (a) emite e entrega em caução, nesta data, uma Nota Promissária em favor da CREDORA, no valor de R$ "+ $F{getTotalDebitos}  + " (" + $F{getValorAserNegociadoPorExtenso} + "), exclusivamente vinculada ao presente Termo."+ "\n" + "CLÁUSULA QUARTA: Em caso de inadimplemento, implicará no vencimento antecipado da divida, abatendo-se apenas a (s) parcela (s) paga (s), pelo que este instrumento se constitui em titulo executivo extrajudicial, hábil para a cobrança da divida. Sobre o valor vencido incidirão juros de mora de 1% a.m. (um porcento ao mês) e multa de 2% (dois porcento), na forma legal." + "\n" + "CLÁUSULA QUINTA: Para dirimir quaisquer questões que direta ou indiretamente decorram do presente contrato, o foro competente é o do DEVEDOR." + "\n" + "                         "+"E por estarem assim justas e acordadas, as partes assinam o presente Termo de Confissão e Assunção de Divida e de Acordo para Pagamento Parcelado, em 02 (duas) vias de igual teor e forma, na presença das testemunhas abaixo, e que produza seus legais e jurídicos efeitos."]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="176"
+						y="105"
+						width="355"
+						height="43"
+						key="textField-369"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Arial" size="9"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["                "+"Termo de Confissão e Assunção de Dívida e de Acordo para Pagamento Parcelado que entre si fazem de um lado " +  $F{getNomeCliente} + " , na qualidade do devedor(a), e a Companhia de Saneamento do Pará - COSANPA, como credora."]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="6"
+						y="71"
+						width="135"
+						height="10"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-370">
+							<printWhenExpression><![CDATA[new Boolean($F{getPagina}.equals("1"))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["MATRICULA: "+$F{getMatriculaImovel}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="1"
+						y="154"
+						width="534"
+						height="318"
+						key="textField-372">
+							<printWhenExpression><![CDATA[new Boolean($F{getDescontoNegociado}.equals("relatorioDeveApresentarParagrafo2"))]]></printWhenExpression>
+						</reportElement>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Arial" size="9"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["           "+"Pela presente instrumento particular e na melhor forma de direito, o (a) Sr.(a) " + $F{getNomeCliente}+" Portador(a) do RG Nº " + $F{getRgCliente} + " CPF Nº " +$F{getCpfCnpj} +", residente  e  domiciliado  à "+ $F{getEndereco} +" doravante denominado (a) DEVEDOR (A) e a COMPANHIA DE SANEAMENTO DO PARÁ, doravante denominada CREDORA, representada pelo (a) Sr.(a), " + $F{getNomeFuncionario} + ", ocupante do cargo de " + $F{getCargoFuncionario} + " têm  justo  e  acertado  a assinatura do presente  Termo de Confissão e Assunção de Dívida e de Acordo para Pagamento Parcelado, mediante as clausulas e condições seguintes:" 
++ "\n" + "CLÁUSULA PRIMEIRA: O(A) DEVEDOR(A) confessa e assume a dívida de R$ " + $F{getValorASerNegociado} +" ("+ $F{getValorAserNegociadoPorExtenso} +"), perante a CREDORA, referente às faturas vencidas e não pagas" + $V{mensagemReferenciaDocumentos} + ".\n CLÁUSULA SEGUNDA: O débito que alude a Cláusula Primeira será reembolsado pelo (a) DEVEDOR, a favor da CREDORA da seguinte forma: \nPARÁGRAFO 1º - PARCELADO: Em 01 (uma) parcela, a titulo de entrada, no valor de R$ " + $F{getValorEntrada}  + " (" + $F{getValorDeEntradaProExtenso} + "),  vencível  em " + $F{getDataVencimentoGuiaPagamento} + "; e as demais em   " + $F{getNumeroParcelas} +" ("   + $F{getNumeroDeParcelasPorExtenso} +") parcelas iguais, fixas e exigíveis mensalmente, no valor de R$ " + $F{getValorParcela} + " (" + $F{getValorDaParcelaPorExtenso} + ") cada, totalizando a importância de R$ " +  $F{getValorASerParcelado} +" (" + $F{getValorTOTALDasParcelasPorExtenso} + "), sendo estas parcelas vencíveis nas datas das faturas de consumo mensal."+ "\n" +"PARAGRAFO 2º: O restante do débito, no valor de R$ "+$F{getTotalDescontos} +" (" +$F{getValorDescontoPorExtenso} +"), será quitado a título de desconto, de forma proporcional ao prazo de parcelamento e condicionada ao efetivo pagamento de cada uma das faturas de cobrança das parcelas antes referidas e conta-consumo mensal, que trata o parágrafo anterior."+"\n" + "CLÁUSULA TERCEIRA: Em garantia do pagamento do débito acima acordado, o (a) devedor (a) emite e entrega em caução, nesta data, uma Nota Promissória em favor da CREDORA, no valor de R$ "+ $F{getValorASerNegociado}  + " (" + $F{getValorAserNegociadoPorExtenso} + "), exclusivamente vinculada ao presente Termo."+ "\n" + "CLÁUSULA QUARTA: Em caso de inadimplemento, implicará no vencimento antecipado da dívida, abatendo-se apenas a (s) parcela (s) paga (s), pelo que este instrumento se constitui em titulo executivo extrajudicial, hábil para a cobrança da dívida. Sobre o valor vencido incidirão juros de mora de 1% a.m. (um porcento ao mês) e multa de 2% (dois porcento), na forma legal." + "\n" + "CLÁUSULA QUINTA: Para dirimir quaisquer questões que direta ou indiretamente decorram do presente contrato, o foro competente é o do DEVEDOR." + "\n" + "                         "+"E por estarem assim justas e acordadas, as partes assinam o presente Termo de Confissão e Assunção de Dívida e de Acordo para Pagamento Parcelado, em 02 (duas) vias de igual teor e forma, na presença das testemunhas abaixo, e que produza seus legais e jurídicos efeitos."]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="6"
+						y="646"
+						width="524"
+						height="21"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["CPF/MF: "+$F{getCpfTestemunha1}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="6"
+						y="621"
+						width="524"
+						height="20"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getNomeTestemunha1}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="6"
+						y="696"
+						width="525"
+						height="20"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getNomeTestemunha2}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="6"
+						y="721"
+						width="524"
+						height="18"
+						key="textField"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["CPF/MF: "+$F{getCpfTestemunha2}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="446"
+						y="31"
+						width="84"
+						height="14"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-373"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Arial" pdfFontName="Courier" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{contrato}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="91"
+						y="31"
+						width="148"
+						height="14"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-383"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Arial" pdfFontName="Courier" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["CGC: "+ $P{cnpj}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="91"
+						y="44"
+						width="212"
+						height="14"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-384"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Arial" pdfFontName="Courier" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["INSC. ESTADUAL: " + $P{inscricaoEstadual}]]></textFieldExpression>
+				</textField>
+			</band>
+		</title>
+		<pageHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageHeader>
+		<columnHeader>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnHeader>
+		<detail>
+			<band height="802"  isSplitAllowed="true" >
+				<rectangle>
+					<reportElement
+						x="0"
+						y="1"
+						width="535"
+						height="298"
+						key="rectangle-14"/>
+					<graphicElement stretchType="NoStretch"/>
+				</rectangle>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="212"
+						y="211"
+						width="318"
+						height="20"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-385"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Tahoma" pdfFontName="Helvetica" size="12" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Emitente: " +$F{getNomeCliente}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="212"
+						y="237"
+						width="318"
+						height="23"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-386"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Tahoma" pdfFontName="Helvetica" size="12" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Assinatura:_____________________________________"]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="212"
+						y="266"
+						width="318"
+						height="20"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-387"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Tahoma" pdfFontName="Helvetica" size="12" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["CNPJ / CPF: " + $F{getCpfCnpj}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="2"
+						y="91"
+						width="531"
+						height="80"
+						key="textField-388"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Tahoma" size="12"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["          "+"No dia _____ de _____________________ de __________ pagarei por esta NOTA PROMISSÓRIA à Companhia de Saneamento do Pará – COSANPA, CNPJ: "+ $P{cnpj}+" ou à sua ordem, na cidade de "+ $F{getLocalidadeDescricao} +", a quantia de " + $F{getValorAserNegociadoPorExtenso} +"  em moeda do país."]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="13"
+						y="185"
+						width="308"
+						height="16"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-389"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Tahoma" pdfFontName="Helvetica" size="12" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Belém (Pa), "+$F{getDia}+" de "+$F{getMesExtenso}+" de " +$F{getAno} + "."]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="11"
+						y="65"
+						width="123"
+						height="16"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-390"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Tahoma" pdfFontName="Helvetica" size="12" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["R$ " + $F{getTotalDebitos}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="11"
+						y="48"
+						width="65"
+						height="19"
+						key="staticText-320"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Tahoma" pdfFontName="Helvetica" size="12"/>
+					</textElement>
+				<text><![CDATA[VALOR]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="153"
+						y="65"
+						width="174"
+						height="16"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-391"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Tahoma" pdfFontName="Helvetica" size="12" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{contrato}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="153"
+						y="48"
+						width="198"
+						height="19"
+						key="staticText-321"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement>
+						<font fontName="Tahoma" pdfFontName="Helvetica" size="12"/>
+					</textElement>
+				<text><![CDATA[VINCULADA AO CONTRATO N°]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="405"
+						y="65"
+						width="109"
+						height="16"
+						key="staticText-322"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Tahoma" pdfFontName="Helvetica" size="12"/>
+					</textElement>
+				<text><![CDATA[____/____/____]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="405"
+						y="48"
+						width="109"
+						height="19"
+						key="staticText-323"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Tahoma" pdfFontName="Helvetica" size="12"/>
+					</textElement>
+				<text><![CDATA[VENCIMENTO]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="84"
+						y="11"
+						width="141"
+						height="17"
+						forecolor="#FFFFFF"
+						backcolor="#000000"
+						key="staticText-324"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center">
+						<font fontName="Tahoma" pdfFontName="Helvetica-Bold" size="12" isBold="true"/>
+					</textElement>
+				<text><![CDATA[NOTA PROMISSÓRIA]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="310"
+						y="11"
+						width="174"
+						height="17"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-392"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Tahoma" pdfFontName="Helvetica-Bold" size="12" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA["Nº "+$P{contrato}]]></textFieldExpression>
+				</textField>
+			</band>
+		</detail>
+		<columnFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</columnFooter>
+		<pageFooter>
+			<band height="0"  isSplitAllowed="true" >
+			</band>
+		</pageFooter>
+		<summary>
+			<band height="802"  isSplitAllowed="true" >
+				<rectangle>
+					<reportElement
+						x="0"
+						y="3"
+						width="535"
+						height="63"
+						key="rectangle-12"/>
+					<graphicElement stretchType="NoStretch"/>
+				</rectangle>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="80"
+						y="16"
+						width="358"
+						height="14"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="staticText-290"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="10" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<text><![CDATA[Parcelamento]]></text>
+				</staticText>
+				<image  vAlign="Middle" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="6"
+						y="7"
+						width="67"
+						height="55"
+						key="image-3"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<graphicElement stretchType="NoStretch"/>
+					<imageExpression class="java.lang.String"><![CDATA[$P{imagem}]]></imageExpression>
+				</image>
+				<line direction="TopDown">
+					<reportElement
+						x="440"
+						y="3"
+						width="0"
+						height="63"
+						key="line-14"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<textField isStretchWithOverflow="false" pattern="dd/MM/yyyy" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="451"
+						y="22"
+						width="68"
+						height="13"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-341"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+						<font fontName="Courier New" pdfFontName="Courier" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="CP1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="HH:mm:ss" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Transparent"
+						x="454"
+						y="36"
+						width="63"
+						height="13"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-342"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Top" rotation="None" lineSpacing="Single">
+						<font fontName="Courier New" pdfFontName="Courier" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="CP1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.util.Date"><![CDATA[new Date()]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="463"
+						y="51"
+						width="47"
+						height="13"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-343"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{tipoFormatoRelatorio}]]></textFieldExpression>
+				</textField>
+				<line direction="TopDown">
+					<reportElement
+						x="78"
+						y="3"
+						width="0"
+						height="63"
+						key="line-15"/>
+					<graphicElement stretchType="NoStretch"/>
+				</line>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="442"
+						y="6"
+						width="25"
+						height="13"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="staticText-291"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Courier New" pdfFontName="Courier" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<text><![CDATA[PAG]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="467"
+						y="6"
+						width="29"
+						height="13"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-344"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle" rotation="None" isStyledText="true" lineSpacing="Single">
+						<font fontName="Courier New" pdfFontName="Courier" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						x="496"
+						y="6"
+						width="7"
+						height="13"
+						key="staticText-292"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle">
+						<font fontName="Courier New" pdfFontName="Courier" size="10"/>
+					</textElement>
+				<text><![CDATA[/]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="503"
+						y="6"
+						width="29"
+						height="13"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-345"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Courier New" pdfFontName="Courier" size="10" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="113"
+						y="41"
+						width="108"
+						height="10"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-346"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{cnpj}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="83"
+						y="41"
+						width="30"
+						height="10"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="staticText-293"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<text><![CDATA[CNPJ:]]></text>
+				</staticText>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						mode="Opaque"
+						x="329"
+						y="41"
+						width="105"
+						height="10"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="textField-347"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Courier New" pdfFontName="Courier" size="8" isBold="false" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$P{inscricaoEstadual}]]></textFieldExpression>
+				</textField>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="229"
+						y="41"
+						width="100"
+						height="10"
+						forecolor="#000000"
+						backcolor="#FFFFFF"
+						key="staticText-294"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle" rotation="None" lineSpacing="Single">
+						<font fontName="Courier New" pdfFontName="Courier-Bold" size="8" isBold="true" isItalic="false" isUnderline="false" isPdfEmbedded ="false" pdfEncoding ="Cp1252" isStrikeThrough="false" />
+					</textElement>
+				<text><![CDATA[Inscrição Estadual:]]></text>
+				</staticText>
+				<subreport  isUsingCache="true">
+					<reportElement
+						x="0"
+						y="70"
+						width="535"
+						height="732"
+						key="subreport-1"
+						isPrintRepeatedValues="false"/>
+					<subreportParameter  name="arrayJRDetalhamento">
+						<subreportParameterExpression><![CDATA[$F{getArrayJRDetalhamento}]]></subreportParameterExpression>
+					</subreportParameter>
+					<dataSourceExpression><![CDATA[$F{getArrayJRDetalhamento}]]></dataSourceExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA["relatorioParcelamentoDetalhamentoDebitos.jasper"]]></subreportExpression>
+				</subreport>
+			</band>
+		</summary>
+</jasperReport>

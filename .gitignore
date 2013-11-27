@@ -3,5 +3,5 @@
 bin
 .sonar
 sonar-project.properties
-reports
+reports/*.jasper
 build.properties
