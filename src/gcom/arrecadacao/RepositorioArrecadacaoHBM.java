@@ -163,6 +163,7 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.StatelessSession;
+import org.hibernate.transform.Transformers;
 import org.hibernate.type.Type;
 
 
@@ -31431,5 +31432,105 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			}
 
 			return retorno;
+		}
+
+		@Override
+		public Collection<PagamentoHelper> pesquisarPagamentosPorSituacao(Integer pagamentoSituacao, Integer idLocalidade,
+				Integer anoMesReferenciaArrecadacao) throws ErroRepositorioException {
+			
+			
+			Collection<PagamentoHelper> retorno = new ArrayList();
+
+			Session session = HibernateUtil.getSession();
+			String consulta = null;
+
+			try {
+				consulta = "SELECT pgmt.id as idPagamento, pgmt.valorPagamento, pgmt.contaGeral.id as idConta, pgmt.debitoACobrarGeral.id as idDebitoACobrar, pgmt.guiaPagamento.id as idGuiaPagamento "
+						+ "FROM Pagamento as pgmt "
+						+ "LEFT JOIN pgmt.pagamentoSituacaoAtual as pgst "
+						+ "LEFT JOIN cadastro.localidade as loca ON loca.id = pgmt.localidade.id "
+						+ "WHERE pgmt.anoMesReferenciaArrecadacao <= :anoMesReferenciaArrecadacao "
+						+ "AND pgst.id = :pagamentoSituacao "
+						+ "AND loca.loca_id = :idLocalidade ";
+
+				retorno = session.createQuery(consulta)
+						.setInteger("anoMesReferenciaArrecadacao", anoMesReferenciaArrecadacao)
+						.setInteger("pagamentoSituacao", pagamentoSituacao)
+						.setInteger("idLocalidade", idLocalidade)
+						.setResultTransformer(Transformers.aliasToBean(PagamentoHelper.class))
+						.list();
+
+			} catch (HibernateException e) {
+				throw new ErroRepositorioException(e, "Erro no Hibernate");
+			} finally {
+				HibernateUtil.closeSession(session);
+			}
+
+			return retorno;
+		}
+		
+		@Override
+		public Collection<PagamentoHelper> pesquisarValoresPagamentos(Integer pagamentoSituacao, Integer idLocalidade,
+				Integer anoMesReferenciaArrecadacao) throws ErroRepositorioException {
+			
+			
+			Collection<PagamentoHelper> retorno = new ArrayList();
+
+			Session session = HibernateUtil.getSession();
+			StringBuilder consulta = new StringBuilder();
+
+			try {
+				consulta.append("select p.pgmt_id as idPagamento, p.dotp_id as tipoDocumento, p.pgmt_vlpagamento as valorPagamento,")
+						.append(" coalesce((c.cnta_vlagua + c.cnta_vlesgoto + c.cnta_vldebitos - c.cnta_vlcreditos - c.cnta_vlimpostos)") 
+						.append(", d.dbac_vldebito, g.gpag_vldebito) as valorDocumento") 
+						.append(" from arrecadacao.pagamento p")
+						.append(" inner join cadastro.localidade l on p.loca_id = l.loca_id") 
+						.append(" left join faturamento.conta c on p.cnta_id = c.cnta_id")
+						.append(" left join faturamento.debito_a_cobrar d on p.dbac_id = d.dbac_id")
+						.append(" left join faturamento.guia_pagamento g on p.gpag_id = g.gpag_id")
+						.append(" where p.pgmt_amreferenciaarrecadacao <= :anoMesReferenciaArrecadacao") 
+						.append(" and pgst_idatual = :pagamentoSituacao")
+						.append(" and p.loca_id = :idLocalidade");
+
+				retorno = session.createSQLQuery(consulta.toString())
+						.setInteger("anoMesReferenciaArrecadacao", anoMesReferenciaArrecadacao)
+						.setInteger("pagamentoSituacao", pagamentoSituacao)
+						.setInteger("idLocalidade", idLocalidade)
+						.setResultTransformer(Transformers.aliasToBean(PagamentoHelper.class))
+						.list();
+
+			} catch (HibernateException e) {
+				throw new ErroRepositorioException(e, "Erro no Hibernate");
+			} finally {
+				HibernateUtil.closeSession(session);
+			}
+
+			return retorno;
+		}
+		
+		@Override
+		public void atualizarSituacaoPagamento(Integer pagamentoSituacao, Integer idPagamento) throws ErroRepositorioException {
+			Session session = HibernateUtil.getSession();
+
+			StringBuilder sql = new StringBuilder();
+
+			try {
+
+				sql.append("UPDATE Pagamento")
+				   .append(" SET pgst_idatual = :pagamentoSituacao, pgmt_tmultimaalteracao = :dataAlteracao")
+				   .append(" WHERE pgmt_id = :idPagamento");
+
+				session.createQuery(sql.toString())
+						.setInteger("pagamentoSituacao", pagamentoSituacao)
+						.setInteger("idPagamento", idPagamento)
+						.setTimestamp("dataAlteracao", new Date()).executeUpdate();
+
+			} catch (HibernateException e) {
+
+				throw new ErroRepositorioException(e, "Erro no Hibernate");
+
+			} finally {
+				HibernateUtil.closeSession(session);
+			}
 		}
 }

@@ -14173,7 +14173,11 @@ public class ControladorArrecadacao implements SessionBean {
 							this.classificarDevolucoesDuplicidadeExcesso(colecaoDevolucoesDuplicidadeExcesso);
 							this.classificarDevolucoesCobradasIndevidamente(colecaoDevolucoesCobradasIndevidamente);
 						}
+
+						reclassificarPagamentosValorNaoConfere(anoMesArrecadacao, idLocalidade);
 					}
+					
+					
 				}// if localidade
 
 				// --------------------------------------------------------
@@ -14193,6 +14197,32 @@ public class ControladorArrecadacao implements SessionBean {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
 
 			throw new EJBException(e);
+		}
+	}
+
+	private void reclassificarPagamentosValorNaoConfere(Integer anoMesReferenciaArrecadacao, Integer idLocalidade) throws ErroRepositorioException {
+		Collection<PagamentoHelper> pagamentos = repositorioArrecadacao.pesquisarValoresPagamentos(PagamentoSituacao.VALOR_NAO_CONFERE, idLocalidade, 
+																									anoMesReferenciaArrecadacao);
+		for (PagamentoHelper pagamentoHelper : pagamentos) {
+			if(possuiDiferencaAte2(pagamentoHelper)){
+				repositorioArrecadacao.atualizarSituacaoPagamento(PagamentoSituacao.PAGAMENTO_CLASSIFICADO, pagamentoHelper.getIdPagamento());
+			}
+		}
+		
+		
+	}
+
+	private boolean possuiDiferencaAte2(PagamentoHelper pagamentoHelper) {
+		if(pagamentoHelper.getValorPagamento() == null || pagamentoHelper.getValorDocumento() == null){
+			return false;
+		}
+		
+		BigDecimal diferenca = pagamentoHelper.getValorPagamento().subtract(pagamentoHelper.getValorDocumento());
+		
+		if (diferenca.doubleValue() <= 2.00 && diferenca.doubleValue() >= -2.00){
+			return true;
+		}else{
+			return false;
 		}
 	}
 

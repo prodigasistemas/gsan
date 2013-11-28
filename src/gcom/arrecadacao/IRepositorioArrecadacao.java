@@ -91,6 +91,7 @@ import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.arrecadacao.pagamento.PagamentoCartaoDebito;
 import gcom.arrecadacao.pagamento.PagamentoHistorico;
+import gcom.arrecadacao.pagamento.PagamentoSituacao;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteEndereco;
 import gcom.cadastro.cliente.ClienteFone;
@@ -7119,4 +7120,12 @@ public interface IRepositorioArrecadacao {
 
 	public Collection pesquisarDadosRelatorioBIG(Integer anoMesReferencia)
 			throws ErroRepositorioException;
+	
+	public Collection<PagamentoHelper> pesquisarPagamentosPorSituacao(Integer pagamentoSituacao, Integer idLocalidade, 
+			Integer anoMesReferenciaArrecadacao) throws ErroRepositorioException;
+	
+	public Collection<PagamentoHelper> pesquisarValoresPagamentos(Integer pagamentoSituacao, Integer idLocalidade, 
+			Integer anoMesReferenciaArrecadacao) throws ErroRepositorioException;
+	
+	public void atualizarSituacaoPagamento(Integer pagamentoSituacao, Integer idPagamento) throws ErroRepositorioException;
 }
