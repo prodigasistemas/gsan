@@ -83,6 +83,7 @@ import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.FiltroClienteImovel;
+import gcom.cadastro.cliente.RamoAtividade;
 import gcom.cadastro.endereco.Cep;
 import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
@@ -3591,5 +3592,16 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	
 	public void atualizarImovel(Imovel imovel) throws ControladorException;
 
-
+	/**TODO: COSANPA
+	 * Mantis 494
+	 * 
+	 * Geração da Rota para recadastramento.
+	 * 
+	 * @author Wellington
+	 * @return Coleção de RamoAtividade
+	 * @exception ErroRepositorioException
+	 *                Erro no hibernate
+	 */
+	public Collection<RamoAtividade> pesquisarRamoAtividadeDoImovel(Integer idImovel)
+		throws ControladorException;
 }

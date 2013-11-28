@@ -477,8 +477,8 @@ public class InserirImovelAction extends GcomAction {
 		imovel.setNumeroMorador(naoVazio(numeroMoradores) ? new Short(numeroMoradores) : null);
 		imovel.setNumeroIptu(naoVazio(numeroIptu) ? new BigDecimal(numeroIptu) : null);
 		imovel.setNumeroCelpe(naoVazio(numeroContratoCelpe) ? new Long(numeroContratoCelpe) : null);
-		imovel.setCoordenadaX(naoVazio(cordenadasX) ? new BigDecimal(cordenadasX.replace(',','.')) : null);
-		imovel.setCoordenadaY(naoVazio(cordenadasY) ? new BigDecimal(cordenadasY.replace(',','.')) : null);
+		imovel.setCoordenadaX(naoVazio(cordenadasX) ? new String(cordenadasX.replace(',','.')) : null);
+		imovel.setCoordenadaY(naoVazio(cordenadasY) ? new String(cordenadasY.replace(',','.')) : null);
 		if (Util.verificarIdNaoVazio(idImovelPrincipal)) {
 			Imovel imovelPrincipal = new Imovel();
 			imovelPrincipal.setId(new Integer(idImovelPrincipal));

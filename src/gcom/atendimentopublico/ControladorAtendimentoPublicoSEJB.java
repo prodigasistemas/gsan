@@ -90,6 +90,7 @@ import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaDiametro;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaMaterial;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
+import gcom.atendimentopublico.ligacaoagua.RamalLocalInstalacao;
 import gcom.atendimentopublico.ligacaoesgoto.FiltroLigacaoEsgoto;
 import gcom.atendimentopublico.ligacaoesgoto.FiltroLigacaoEsgotoPerfil;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgoto;
@@ -13005,5 +13006,42 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 			throw new ControladorException("erro.sistema", e);
 		}
 		return fotos;
+	}
+	
+	/**
+	 * TODO: COSANPA
+	 * 
+	 * @autor: Wellington Rocha
+	 * @date: 03/07/2012
+	 * 
+	 *        Pesquisar Locais de Instação de Ramal Ativos
+	 * 
+	 *        Geração de rotas para recadastramento
+	 * 
+	 * @return Collection
+	 * @throws ControladorException
+	 * 
+	 */
+	public Collection<RamalLocalInstalacao> pesquisarRamalLocalInstalacao()
+			throws ControladorException {
+		try {
+			Collection<RamalLocalInstalacao> colecaoRamalLocalInstalacao = new ArrayList<RamalLocalInstalacao>();
+			Collection colecao = repositorioAtendimentoPublico.pesquisarRamalLocalInstalacao();
+
+			if (colecao != null && !colecao.isEmpty()) {
+				Iterator colecaoIterator = colecao.iterator();
+
+				while (colecaoIterator.hasNext()) {
+					RamalLocalInstalacao ramalLocalInstalacao = (RamalLocalInstalacao) colecaoIterator
+							.next();
+					colecaoRamalLocalInstalacao.add(ramalLocalInstalacao);
+				}
+			}
+
+			return colecaoRamalLocalInstalacao;
+		} catch (ErroRepositorioException e) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", e);
+		}
 	}
 }

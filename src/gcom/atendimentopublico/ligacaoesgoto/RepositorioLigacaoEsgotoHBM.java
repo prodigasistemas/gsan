@@ -75,14 +75,16 @@
 */  
 package gcom.atendimentopublico.ligacaoesgoto;
 
-import java.math.BigDecimal;
-
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
-
+import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
+
+import java.math.BigDecimal;
+import java.util.Collection;
+
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
 
 /**
  * Implementação do Repositório de Ligação de Esgoto
@@ -267,4 +269,39 @@ public class RepositorioLigacaoEsgotoHBM implements IRepositorioLigacaoEsgoto {
 		
 		return retorno;
 	}
+	
+	/**TODO: COSANPA
+	 * @author Wellington Rocha
+	 * Data: 21/03/2012
+	 * 
+	 * Pesquisar todas as situações de ligações de esgoto ativas
+	 * 
+	 * Geração de Rotas para Recadastramento
+	 * 
+	 * @return Collection
+	 * @throws ControladorException
+	 *  
+	 */
+ 	public Collection pesquisarLigacaoEsgotoSituacao() throws ErroRepositorioException {
+ 		Collection retorno = null;
+ 		
+ 		Session session = HibernateUtil.getSession();
+ 		String consulta = null;
+ 		
+ 		try{
+ 			consulta = "select ligacaoEsgotoSituacao " 
+ 					+ " from LigacaoEsgotoSituacao ligacaoEsgotoSituacao " 
+ 					+ " where ligacaoEsgotoSituacao.indicadorUso = :indicadorUso ";
+ 			
+ 			retorno = (Collection) session.createQuery(consulta)
+ 					.setInteger("indicadorUso", ConstantesSistema.SIM.intValue())
+ 					.list();
+ 			
+ 		}catch(HibernateException e) {
+ 			throw new ErroRepositorioException(e,"Erro no hibernate");
+ 		}finally {
+ 			HibernateUtil.closeSession(session);
+ 		}
+ 		return retorno;
+ 	}
 }

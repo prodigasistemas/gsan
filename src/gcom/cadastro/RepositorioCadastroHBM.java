@@ -82,10 +82,12 @@ import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.EsferaPoder;
 import gcom.cadastro.geografico.MunicipioFeriado;
+import gcom.cadastro.imovel.CadastroOcorrencia;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelContaEnvio;
 import gcom.cadastro.imovel.ImovelProgramaEspecial;
+import gcom.cadastro.imovel.ImovelRamoAtividadeAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.cadastro.imovel.bean.ImovelGeracaoTabelasTemporariasCadastroHelper;
 import gcom.cadastro.localidade.Localidade;
@@ -4363,76 +4365,42 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 		try {
 
-			consulta = "SELECT distinct (imov.imov_id) as idImovel, "
-					+ // 0
-					" imov.loca_id as idLocalidade, "
-					+ // 1
-					" stcm.stcm_cdsetorcomercial as codigoSetorComercial, "
-					+ // 2
-					" qdra.qdra_nnquadra as numeroQuadra, "
-					+ // 3
-					" imov_nnlote as lote, "
-					+ // 4
-					" imov_nnsublote as sublote, "
-					+ // 5
-					" imov_nnsequencialrota as numSequencialRota, "
-					+ // 6
-					" imov_nnmorador as numMorador, "
-					+ // 7
-					" lgcp.logr_id as cepLogradouro, "
-					+ // 8
-					" lgbr.logr_id as bairroLogradouro, "
-					+ // 9
-					" cep.cep_cdcep as codigoCep,"
-					+ // 10
-					" bairro.bair_id as idBairro,"
-					+ // 11
-					" bairro.bair_nmbairro as descricaoBairro,"
-					+ // 12
-					" imov.edrf_id as enderecoReferencia, "
-					+ // 13
-					" imov_nnimovel as numImovel, "
-					+ // 14
-					" imov_dscomplementoendereco as complementoEndereco, "
-					+ // 15
-					" imov_nnareaconstruida as areaConstruidaFaixa, "
-					+ // 16
-					" last_id as ligacaoAguaSituacao, "
-					+ // 17
-					" imov_voreservatorioinferior as volResInferior, "
-					+ // 18
-					" imov_voreservatoriosuperior as volResSuperior, "
-					+ // 19
-					" imov_vopiscina as volumePiscina, "
-					+ // 20
-					" imov_icjardim as indJardim, "
-					+ // 21
-					" pcal_id as pavimentoCalcada, "
-					+ // 22
-					" prua_id as pavimentoRua, "
-					+ // 23
-					" ftab_id as fonteAbastecimento, "
-					+ // 24
-					" poco_id as pocoTipo, "
-					+ // 25
-					" imov_nnpontosutilizacao as numPontosUtilizacao, "
-					+ // 26
-					" lest_id as ligacaoEsgotoSituacao, "
-					+ // 27
-					" iper_id  as imovelPerfil, "
-					+ // 28
-					" depj_id as despejo, "
-					+ // 29
-					" imov_nncoordenadax as coordenadaX, "
-					+ // 30
-					" imov_nncoordenaday as coordenadaY, "
-					+ // 31
-					" imov_idimovelprincipal as imovelPrincipal, "
-					+ // 32
-					" imov_nniptu as numIptu, "
-					+ // 33
-					" imov_nncontratoenergia as numCelpe "
-					+ // 34
+			consulta = "SELECT distinct (imov.imov_id) as idImovel, " + // 0
+					" imov.loca_id as idLocalidade, " + // 1
+					" stcm.stcm_cdsetorcomercial as codigoSetorComercial, " + // 2
+					" qdra.qdra_nnquadra as numeroQuadra, " + // 3
+					" imov_nnlote as lote, " + // 4
+					" imov_nnsublote as sublote, " + // 5
+					" imov_nnsequencialrota as numSequencialRota, " + // 6
+					" imov_nnmorador as numMorador, " + // 7
+					" lgcp.logr_id as cepLogradouro, " + // 8
+					" lgbr.logr_id as bairroLogradouro, " + // 9
+					" cep.cep_cdcep as codigoCep," + // 10
+					" bairro.bair_id as idBairro," + // 11
+					" bairro.bair_nmbairro as descricaoBairro," + // 12
+					" imov.edrf_id as enderecoReferencia, " + // 13
+					" imov_nnimovel as numImovel, " + // 14
+					" imov_dscomplementoendereco as complementoEndereco, " + // 15
+					" imov_nnareaconstruida as areaConstruidaFaixa, " + // 16
+					" last_id as ligacaoAguaSituacao, " + // 17
+					" imov_voreservatorioinferior as volResInferior, " + // 18
+					" imov_voreservatoriosuperior as volResSuperior, " + // 19
+					" imov_vopiscina as volumePiscina, " + // 20
+					" imov_icjardim as indJardim, " + // 21
+					" pcal_id as pavimentoCalcada, " + // 22
+					" prua_id as pavimentoRua, " + // 23
+					" ftab_id as fonteAbastecimento, " + // 24
+					" poco_id as pocoTipo, " + // 25
+					" imov_nnpontosutilizacao as numPontosUtilizacao, " + // 26
+					" lest_id as ligacaoEsgotoSituacao, " + // 27
+					" iper_id  as imovelPerfil, " + // 28
+					" depj_id as despejo, " + // 29
+					" imov_nncoordenadax as coordenadaX, " + // 30
+					" imov_nncoordenaday as coordenadaY, " + // 31
+					" imov_idimovelprincipal as imovelPrincipal, " + // 32
+					" imov_nniptu as numIptu, " + // 33
+					" imov_nncontratoenergia as numCelpe, " + // 34
+					" lagu.rlin_id as localInstalacoRamal " + // 35
 					" from cadastro.imovel imov "
 					+ " inner join cadastro.setor_comercial stcm on(imov.stcm_id = stcm.stcm_id)"
 					+ " inner join cadastro.quadra qdra on(imov.qdra_id = qdra.qdra_id)"
@@ -4440,44 +4408,47 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					+ " left join cadastro.cep cep on (lgcp.cep_id = cep.cep_id)"
 					+ " left join cadastro.logradouro_bairro lgbr on(imov.lgbr_id = lgbr.lgbr_id)"
 					+ " left join cadastro.bairro bairro on (lgbr.bair_id = bairro.bair_id)"
+					+ " left join atendimentopublico.ligacao_agua lagu on (lagu.lagu_id = imov.imov_id)"
 					+ " where imov.imov_id =:idImovel";
 
-			query = session.createSQLQuery(consulta).addScalar("idImovel",
-					Hibernate.INTEGER).addScalar("idLocalidade",
-					Hibernate.INTEGER).addScalar("codigoSetorComercial",
-					Hibernate.INTEGER).addScalar("numeroQuadra",
-					Hibernate.INTEGER).addScalar("lote", Hibernate.INTEGER)
-					.addScalar("sublote", Hibernate.INTEGER).addScalar(
-							"numSequencialRota", Hibernate.INTEGER).addScalar(
-							"numMorador", Hibernate.SHORT).addScalar(
-							"cepLogradouro", Hibernate.INTEGER).addScalar(
-							"bairroLogradouro", Hibernate.INTEGER).addScalar(
-							"codigoCep", Hibernate.INTEGER).addScalar(
-							"idBairro", Hibernate.INTEGER).addScalar(
-							"descricaoBairro", Hibernate.STRING).addScalar(
-							"enderecoReferencia", Hibernate.INTEGER).addScalar(
-							"numImovel", Hibernate.STRING).addScalar(
-							"complementoEndereco", Hibernate.STRING).addScalar(
-							"areaConstruidaFaixa", Hibernate.BIG_DECIMAL)
+			query = session.createSQLQuery(consulta)
+					.addScalar("idImovel", Hibernate.INTEGER)
+					.addScalar("idLocalidade", Hibernate.INTEGER)
+					.addScalar("codigoSetorComercial", Hibernate.INTEGER)
+					.addScalar("numeroQuadra", Hibernate.INTEGER)
+					.addScalar("lote", Hibernate.INTEGER)
+					.addScalar("sublote", Hibernate.INTEGER)
+					.addScalar("numSequencialRota", Hibernate.INTEGER)
+					.addScalar("numMorador", Hibernate.SHORT)
+					.addScalar("cepLogradouro", Hibernate.INTEGER)
+					.addScalar("bairroLogradouro", Hibernate.INTEGER)
+					.addScalar("codigoCep", Hibernate.INTEGER)
+					.addScalar("idBairro", Hibernate.INTEGER)
+					.addScalar("descricaoBairro", Hibernate.STRING)
+					.addScalar("enderecoReferencia", Hibernate.INTEGER)
+					.addScalar("numImovel", Hibernate.STRING)
+					.addScalar("complementoEndereco", Hibernate.STRING)
+					.addScalar("areaConstruidaFaixa", Hibernate.BIG_DECIMAL)
 					.addScalar("ligacaoAguaSituacao", Hibernate.INTEGER)
 					.addScalar("volResInferior", Hibernate.BIG_DECIMAL)
 					.addScalar("volResSuperior", Hibernate.BIG_DECIMAL)
 					.addScalar("volumePiscina", Hibernate.BIG_DECIMAL)
-					.addScalar("indJardim", Hibernate.SHORT).addScalar(
-							"pavimentoCalcada", Hibernate.INTEGER).addScalar(
-							"pavimentoRua", Hibernate.INTEGER).addScalar(
-							"fonteAbastecimento", Hibernate.INTEGER).addScalar(
-							"pocoTipo", Hibernate.INTEGER).addScalar(
-							"numPontosUtilizacao", Hibernate.SHORT).addScalar(
-							"ligacaoEsgotoSituacao", Hibernate.INTEGER)
-					.addScalar("imovelPerfil", Hibernate.INTEGER).addScalar(
-							"despejo", Hibernate.INTEGER).addScalar(
-							"coordenadaX", Hibernate.BIG_DECIMAL).addScalar(
-							"coordenadaY", Hibernate.BIG_DECIMAL).addScalar(
-							"imovelPrincipal", Hibernate.INTEGER).addScalar(
-							"numIptu", Hibernate.BIG_DECIMAL).addScalar(
-							"numCelpe", Hibernate.LONG).setInteger("idImovel",
-							idImovel);
+					.addScalar("indJardim", Hibernate.SHORT)
+					.addScalar("pavimentoCalcada", Hibernate.INTEGER)
+					.addScalar("pavimentoRua", Hibernate.INTEGER)
+					.addScalar("fonteAbastecimento", Hibernate.INTEGER)
+					.addScalar("pocoTipo", Hibernate.INTEGER)
+					.addScalar("numPontosUtilizacao", Hibernate.SHORT)
+					.addScalar("ligacaoEsgotoSituacao", Hibernate.INTEGER)
+					.addScalar("imovelPerfil", Hibernate.INTEGER)
+					.addScalar("despejo", Hibernate.INTEGER)
+					.addScalar("coordenadaX", Hibernate.STRING)
+					.addScalar("coordenadaY", Hibernate.STRING)
+					.addScalar("imovelPrincipal", Hibernate.INTEGER)
+					.addScalar("numIptu", Hibernate.BIG_DECIMAL)
+					.addScalar("numCelpe", Hibernate.LONG)
+					.addScalar("localInstalacoRamal", Hibernate.INTEGER)
+					.setInteger("idImovel", idImovel);
 
 			retorno = (Object[]) query.uniqueResult();
 
@@ -5377,6 +5348,38 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
+	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(
+			String inscricao, String anoMesReferencia)
+			throws ErroRepositorioException {
+
+		ArquivoTextoAtualizacaoCadastral retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
+		String localidade = inscricao.substring(0, 3);
+		String setor = inscricao.substring(3, 6);
+		String rota = inscricao.substring(6, 8);
+
+		String descricao = String.format("%s_%s_%s_%s", localidade, setor,
+				rota, anoMesReferencia);
+
+		try {
+			consulta = " select txac"// 2
+					+ " from ArquivoTextoAtualizacaoCadastral txac"
+					+ " inner join fetch txac.leiturista leit"
+					+ " where txac.descricaoArquivo = :descricao";
+
+			retorno = (ArquivoTextoAtualizacaoCadastral) session.createQuery(
+					consulta).setString("descricao", descricao).uniqueResult();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+	
 	/**
 	 * 
 	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral
@@ -6740,15 +6743,18 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 		try {
 
-			consulta = "select idImovel from ImovelAtualizacaoCadastral "
+			consulta = "SELECT imac.imov_id as idImovel "
+				+ "FROM cadastro.imovel_atlz_cadastral AS imac "
+				+ "INNER JOIN cadastro.imovel AS imov ON imov.imov_id = imac.imov_id "
+				+ "INNER JOIN cadastro.setor_comercial AS stcm ON imov.stcm_id = stcm.stcm_id "
+				+ "INNER JOIN cadastro.quadra AS qdra ON imov.qdra_id = qdra.qdra_id "
+				+ "WHERE imac.siac_id = " + ConstantesSistema.ZERO 
+				+ " AND imac.empr_id = :idEmpresaLeiturista "
+				+ " ORDER BY imov.imov_icimovelcondominio, imov.loca_id, stcm.stcm_cdsetorcomercial, qdra.qdra_nnquadra, imov.imov_nnlote, imov.imov_nnsublote ";
 
-			+ "where idSituacaoAtualizacaoCadastral = "
-					+ ConstantesSistema.ZERO
-
-					+ " and idEmpresa = :idEmpresaLeiturista ";
-
-			retorno = session.createQuery(consulta).setInteger(
-					"idEmpresaLeiturista", idEmpresaLeiturista.intValue())
+			retorno = session.createSQLQuery(consulta)
+					.addScalar("idImovel", Hibernate.INTEGER)
+					.setInteger("idEmpresaLeiturista", idEmpresaLeiturista.intValue())
 					.list();
 
 		} catch (HibernateException e) {
@@ -9816,5 +9822,190 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
+	/**TODO: COSANPA
+	 * @author Wellington Rocha
+	 * Data: 21/03/2012
+	 * 
+	 * Pesquisar todas as ocorrencias de cadastro ativas
+	 * 
+	 * Geração de Rotas para Recadastramento
+	 * 
+	 * @return Collection
+	 * @throws ControladorException
+	 *  
+	 */
+ 	public Collection<CadastroOcorrencia> pesquisarOcorrenciasCadastro() throws ErroRepositorioException {
+ 		Collection retorno = null;
+ 		
+ 		Session session = HibernateUtil.getSession();
+ 		String consulta = null;
+ 		
+ 		try{
+ 			consulta = " select ocorrencia " 
+ 					+ " from CadastroOcorrencia ocorrencia " 
+ 					+ " where ocorrencia.indicadorUso = :indicadorUso ";
+ 			
+ 			retorno = (Collection) session.createQuery(consulta)
+ 			.setInteger("indicadorUso", ConstantesSistema.SIM.intValue()).list();
+ 			
+ 		}catch(HibernateException e) {
+ 			throw new ErroRepositorioException(e,"Erro no hibernate");
+ 		}finally {
+ 			HibernateUtil.closeSession(session);
+ 		}
+ 		return retorno;
+ 	}
+ 	
+ 	/**TODO: COSANPA
+	 * @author Wellington Rocha
+	 * Data: 21/03/2012
+	 * 
+	 * Pesquisar todos os ramos de atividade ativos
+	 * 
+	 * Geração de Rotas para Recadastramento
+	 * 
+	 * @return Collection
+	 * @throws ControladorException
+	 *  
+	 */
+ 	public Collection pesquisarRamosAtividade() throws ErroRepositorioException {
+ 		Collection retorno = null;
+ 		
+ 		Session session = HibernateUtil.getSession();
+ 		String consulta = null;
+ 		
+ 		try{
+ 			consulta = " select ramoAtividade " 
+ 					+ " from RamoAtividade ramoAtividade " 
+ 					+ " where ramoAtividade.indicadorUso = :indicadorUso ";
+ 			
+ 			retorno = (Collection) session.createQuery(consulta)
+ 			.setInteger("indicadorUso", ConstantesSistema.SIM.intValue()).list();
+ 			
+ 		}catch(HibernateException e) {
+ 			throw new ErroRepositorioException(e,"Erro no hibernate");
+ 		}finally {
+ 			HibernateUtil.closeSession(session);
+ 		}
+ 		return retorno;
+ 	}
+ 
+ 	/**TODO: COSANPA
+	 * @author Wellington Rocha
+	 * Data: 21/03/2012
+	 * 
+	 * Pesquisar todos as fontes de abastecimento ativas
+	 * 
+	 * Geração de Rotas para Recadastramento
+	 * 
+	 * @return Collection
+	 * @throws ControladorException
+	 *  
+	 */
+ 	public Collection pesquisarFonteAbastecimento() throws ErroRepositorioException {
+ 		Collection retorno = null;
+ 		
+ 		Session session = HibernateUtil.getSession();
+ 		String consulta = null;
+ 		
+ 		try{
+ 			consulta = " select fonteAbastecimento " 
+ 					+ " from FonteAbastecimento fonteAbastecimento " 
+ 					+ " where fonteAbastecimento.indicadorUso = :indicadorUso ";
+ 			
+ 			retorno = (Collection) session.createQuery(consulta)
+ 			.setInteger("indicadorUso", ConstantesSistema.SIM.intValue()).list();
+ 			
+ 		}catch(HibernateException e) {
+ 			throw new ErroRepositorioException(e,"Erro no hibernate");
+ 		}finally {
+ 			HibernateUtil.closeSession(session);
+ 		}
+ 		return retorno;
+ 	}
+
+ 	/**
+ 	 * TODO: COSANPA
+ 	 * @author Matheus Souza
+ 	 * @param idImovel
+ 	 * @return Collection
+ 	 */
+	public Collection obterImovelRamoAtividadeAtualizacaoCadastral(
+			Integer idImovel) throws ErroRepositorioException {
+		
+		Session session = HibernateUtil.getSession();
+		String consulta;
+		Collection retornoConsulta = null;
+		Collection imovelRamoAtividade = new ArrayList();
+
+		try {
+			consulta = " select " +
+					   " ratv_id as idRamoAtividade "+// 0
+					   " from cadastro.imovel_ramo_atividade ratv"+
+					   " where imov_id = :idImovel";
+			
+			retornoConsulta = session.createSQLQuery(consulta)
+					.addScalar("idRamoAtividade", Hibernate.INTEGER)
+					.setInteger("idImovel",idImovel)
+					.list();
+
+			if (retornoConsulta.size() > 0) {
+				Iterator imovelRamoAtividadeIter = retornoConsulta.iterator();
+				while (imovelRamoAtividadeIter.hasNext()) {
 	
+					Integer element = (Integer) imovelRamoAtividadeIter.next();
+					
+					ImovelRamoAtividadeAtualizacaoCadastral imovRamoAtividadeAtual = new ImovelRamoAtividadeAtualizacaoCadastral(); 
+					
+					imovRamoAtividadeAtual.setIdImovel(idImovel);
+					
+					imovRamoAtividadeAtual.setIdRamoAtividade(element);
+					
+					imovelRamoAtividade.add(imovRamoAtividadeAtual);
+				}
+			}
+		} catch (HibernateException e) {
+			e.printStackTrace();
+			throw new ErroRepositorioException("Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return imovelRamoAtividade;
+	}
+
+	public boolean existeImovelRamoAtividadeAtualizacaoCadastral(
+			Integer idImovel, Integer idRamoAtividade)
+			throws ErroRepositorioException {
+		
+		Session session = HibernateUtil.getSession();
+		String consulta;
+		Collection retornoConsulta = null;
+		Collection imovelRamoAtividade = new ArrayList();
+
+		try {
+			consulta = " select " +
+					   " ratv_id as idRamoAtiv "+// 0
+					   " from cadastro.imovel_ramo_ativ_atlz_cad ratv"+
+					   " where imov_id = :idImovel AND" +
+					   " ratv_id = :idRamoAtividade";
+			
+			retornoConsulta = session.createSQLQuery(consulta)
+					.addScalar("idRamoAtiv", Hibernate.INTEGER)
+					.setInteger("idImovel",idImovel)
+					.setInteger("idRamoAtividade", idRamoAtividade)
+					.list();
+
+			if (retornoConsulta.size() > 0) {
+				return true;
+			}
+		} catch (HibernateException e) {
+			e.printStackTrace();
+			throw new ErroRepositorioException("Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return false;
+	}
 }

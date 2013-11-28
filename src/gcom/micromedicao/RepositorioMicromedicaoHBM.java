@@ -23908,4 +23908,76 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 		return retorno;
 	}
 	
+	/**TODO: COSANPA
+     * @author Wellington Rocha
+     * Data: 21/03/2012
+     * 
+     * Pesquisar todos os Hidrometro Protecao ativos
+     * 
+     * Geracao de Rotas para Recadastramento
+     * 
+     * @return Collection
+     * @throws ControladorException
+     *  
+     */
+     public Collection pesquisarHidrometroProtecao() throws ErroRepositorioException {
+             Collection retorno = null;
+             
+         Session session = HibernateUtil.getSession();
+         String consulta = null;
+         
+         try {
+             consulta = " select hidrometroProtecao " 
+            	 + " from HidrometroProtecao hidrometroProtecao "
+            	 + " where hidrometroProtecao.indicadorUso = :indicadorUso ";
+             
+             retorno = (Collection) session.createQuery(consulta)
+             		.setInteger("indicadorUso", ConstantesSistema.SIM.intValue())
+             		.list();
+                 
+         } catch(HibernateException e) {
+                 throw new ErroRepositorioException(e,"Erro no hibernate");
+         } finally {
+                 HibernateUtil.closeSession(session);
+         }
+         
+         return retorno;
+     }
+     
+     
+     /**TODO: COSANPA
+     * @author Wellington Rocha
+     * Data: 30/04/2012
+     * 
+     * Pesquisar todos os Hidrometro Marca ativos
+     * 
+     * Geracao de Rotas para Recadastramento
+     * 
+     * @return Collection
+     * @throws ControladorException
+     *  
+     */
+     public Collection pesquisarHidrometroMarca() throws ErroRepositorioException {
+             Collection retorno = null;
+             
+         Session session = HibernateUtil.getSession();
+         String consulta = null;
+         
+         try {
+             consulta = " select hidrometroMarca "
+            	 + " from HidrometroMarca hidrometroMarca "
+            	 + " where hidrometroMarca.indicadorUso = :indicadorUso ";
+             
+             retorno = (Collection) session.createQuery(consulta)
+             		.setInteger("indicadorUso", ConstantesSistema.SIM.intValue())
+             		.list();
+             
+         } catch(HibernateException e) {
+                 throw new ErroRepositorioException(e,"Erro no hibernate");
+         } finally {
+                 HibernateUtil.closeSession(session);
+         }
+         
+         return retorno;
+     }
 }

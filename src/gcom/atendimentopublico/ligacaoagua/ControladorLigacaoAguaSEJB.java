@@ -105,8 +105,10 @@ import gcom.util.SistemaException;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 
 import javax.ejb.CreateException;
 import javax.ejb.SessionBean;
@@ -901,7 +903,42 @@ public class ControladorLigacaoAguaSEJB implements SessionBean {
 			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
 		}
-
 	}
 
+	/**
+	 * TODO: COSANPA
+	 * 
+	 * @autor: Wellington Rocha
+	 * @date: 21/03/2012
+	 * 
+	 *        Pesquisar Situações de Ligação de Água ativas.
+	 * 
+	 *        Geração de rotas para recadastramento
+	 * 
+	 * @return Collection
+	 * @throws ControladorException
+	 * 
+	 */
+	public Collection<LigacaoAguaSituacao> pesquisarLigacaoAguaSituacao()
+			throws ControladorException {
+		try {
+			Collection<LigacaoAguaSituacao> colecaoLigacaoAguaSituacao = new ArrayList<LigacaoAguaSituacao>();
+			Collection colecao = repositorioLigacaoAgua.pesquisarLigacaoAguaSituacao();
+
+			if (colecao != null && !colecao.isEmpty()) {
+				Iterator colecaoIterator = colecao.iterator();
+
+				while (colecaoIterator.hasNext()) {
+					LigacaoAguaSituacao ligacaoAguaSituacao = (LigacaoAguaSituacao) colecaoIterator
+							.next();
+					colecaoLigacaoAguaSituacao.add(ligacaoAguaSituacao);
+				}
+			}
+
+			return colecaoLigacaoAguaSituacao;
+		} catch (ErroRepositorioException e) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
 }

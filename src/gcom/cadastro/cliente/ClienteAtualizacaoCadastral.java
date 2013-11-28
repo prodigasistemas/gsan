@@ -35,7 +35,7 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao {
     private Integer idClienteRelacaoTipo;
 
     /** nullable persistent field */
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+//	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idClienteTipo;
 	
     /** nullable persistent field */
@@ -64,7 +64,7 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao {
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idProfissao;
 	
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+//	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idRamoAtividade;
 
     /** nullable persistent field */

@@ -127,6 +127,46 @@ public class Subcategoria extends ObjetoTransacao {
      * da subcategoria do imovel, na geração do bonus social */
     public static final Integer SUBCATEGORIA_R1 = new Integer(1);
 
+    /**TODO: COSANPA
+     * 
+     * Mantis 494
+     * 
+     * Criação de constantes a serem utilizadas na geração 
+     * da rota para recadastramento
+     * 
+     * @author Wellington Rocha*/
+    public static final int RESIDENCIAL_R1 = 1;
+    
+    public static final int RESIDENCIAL_R2 = 2;
+    
+    public static final int RESIDENCIAL_R3 = 3;
+    
+    public static final int RESIDENCIAL_R4 = 4;
+    
+    public static final int COMERCIAL_C1 = 5;
+    
+    public static final int COMERCIAL_C2 = 6;
+    
+    public static final int COMERCIAL_C3 = 7;
+    
+    public static final int COMERCIAL_C4 = 8;
+    
+    public static final int INDUSTRIAL_I1 = 9;
+    
+    public static final int INDUSTRIAL_I2 = 10;
+    
+    public static final int INDUSTRIAL_I3 = 11;
+    
+    public static final int INDUSTRIAL_I4 = 12;
+    
+    public static final int PUBLICA_P1 = 13;
+    
+    public static final int PUBLICA_P2 = 14;
+    
+    public static final int PUBLICA_P3 = 15;
+    
+    public static final int PUBLICA_P4 = 16;
+    
     static {
     	SUBCATEGORIA_ZERO = new Subcategoria();
     	SUBCATEGORIA_ZERO.setId(new Integer(0));

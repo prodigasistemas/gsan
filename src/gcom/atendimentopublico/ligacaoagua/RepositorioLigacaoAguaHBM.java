@@ -77,6 +77,7 @@ package gcom.atendimentopublico.ligacaoagua;
 
 import gcom.atendimentopublico.bean.IntegracaoComercialHelper;
 import gcom.atendimentopublico.ligacaoagua.bean.DadosEfetuacaoCorteLigacaoAguaHelper;
+import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
@@ -542,6 +543,39 @@ public class RepositorioLigacaoAguaHBM implements IRepositorioLigacaoAgua {
 	     } finally {
 	            HibernateUtil.closeSession(session);
 	     }
-		
 	}
+	
+	/**TODO: COSANPA
+	 * @author Wellington Rocha
+	 * Data: 21/03/2012
+	 * 
+	 * Pesquisar todas as situações de ligações de água ativas
+	 * 
+	 * Geração de Rotas para Recadastramento
+	 * 
+	 * @return Collection
+	 * @throws ControladorException
+	 *  
+	 */
+ 	public Collection pesquisarLigacaoAguaSituacao() throws ErroRepositorioException {
+ 		Collection retorno = null;
+ 		
+ 		Session session = HibernateUtil.getSession();
+ 		String consulta = null;
+ 		
+ 		try{
+ 			consulta = " select ligacaoAguaSituacao " 
+ 					+ " from LigacaoAguaSituacao ligacaoAguaSituacao " 
+ 					+ " where ligacaoAguaSituacao.indicadorUso = :indicadorUso ";
+ 			
+ 			retorno = (Collection) session.createQuery(consulta)
+ 			.setInteger("indicadorUso", ConstantesSistema.SIM.intValue()).list();
+ 			
+ 		}catch(HibernateException e) {
+ 			throw new ErroRepositorioException(e,"Erro no hibernate");
+ 		}finally {
+ 			HibernateUtil.closeSession(session);
+ 		}
+ 		return retorno;
+ 	}
 }

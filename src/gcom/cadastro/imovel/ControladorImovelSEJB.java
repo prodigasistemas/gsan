@@ -6534,11 +6534,11 @@ public class ControladorImovelSEJB implements SessionBean {
 						
 			// CoordenadaX
 			if (arrayImovel[44] != null) {
-				imovel.setCoordenadaX((BigDecimal) arrayImovel[44]);
+				imovel.setCoordenadaX((String) arrayImovel[44]);
 			}
 			// Coordenada Y
 			if (arrayImovel[45] != null) {
-				imovel.setCoordenadaY((BigDecimal) arrayImovel[45]);
+				imovel.setCoordenadaY((String) arrayImovel[45]);
 			}
 		}
 
@@ -6904,11 +6904,11 @@ public class ControladorImovelSEJB implements SessionBean {
 
 			// Coordenada X- 24
 			if (arrayImovel[24] != null) {
-				imovel.setCoordenadaX((BigDecimal) arrayImovel[24]);
+				imovel.setCoordenadaX((String) arrayImovel[24]);
 			}
 			// Coordenada Y- 25
 			if (arrayImovel[25] != null) {
-				imovel.setCoordenadaY((BigDecimal) arrayImovel[25]);
+				imovel.setCoordenadaY((String) arrayImovel[25]);
 			}
 
 			// Cadastro Ocorrencia- 26
@@ -17169,4 +17169,29 @@ public class ControladorImovelSEJB implements SessionBean {
 			this.getControladorUtil().atualizar(imovel);
 	}
 	
+	/**TODO:COSANPA
+	 * MANTIS 494 
+	 * 
+	 *  Necessário para a geração do registro Tipo 3
+	 * 
+	 * @author Wellington Vernech Rocha
+	 * 
+	 * @return Ramo Atividade
+	 * @throws ControladorException
+	 */
+
+	public Collection pesquisarRamoAtividadeDoImovel(Integer idImovel)
+			throws ControladorException {
+	
+		try {
+
+			return this.repositorioImovel.pesquisarRamoAtividadeDoImovel(idImovel);
+
+		} catch (ErroRepositorioException ex) {
+			ex.printStackTrace();
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", ex);
+		}
+		
+	}
 }

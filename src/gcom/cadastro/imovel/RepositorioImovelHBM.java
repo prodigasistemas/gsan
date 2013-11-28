@@ -86,6 +86,7 @@ import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.FiltroClienteImovel;
+import gcom.cadastro.cliente.RamoAtividade;
 import gcom.cadastro.cliente.bean.ClienteImovelEconomiaHelper;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.endereco.Cep;
@@ -19701,6 +19702,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			 + " LEFT JOIN FETCH imov.imovelPerfil imovelPerfil "
 
 			 + " LEFT JOIN FETCH imov.localidade lo"
+			 + " LEFT JOIN FETCH lo.gerenciaRegional geRe"
 
 			 + " LEFT JOIN FETCH imov.setorComercial sc"
 
@@ -19719,10 +19721,15 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 			 + " LEFT JOIN FETCH imov.ligacaoAgua lagu"
 			 + " LEFT JOIN FETCH imov.ligacaoAguaSituacao last"
+			 
+			 + " LEFT JOIN FETCH imov.fonteAbastecimento ftab"
 
 			 + " LEFT JOIN FETCH lagu.hidrometroInstalacaoHistorico hih"
 			 + " LEFT JOIN FETCH hih.hidrometroLocalInstalacao hil"
 			 + " LEFT JOIN FETCH hih.hidrometroProtecao hip"
+			 + " LEFT JOIN FETCH hih.hidrometro hid" 
+			 + " LEFT JOIN FETCH hid.hidrometroMarca him"
+			 + " LEFT JOIN FETCH hid.hidrometroCapacidade hic"
 			 
 			 + " LEFT JOIN FETCH imov.cadastroOcorrencia co"
 			 
@@ -31543,4 +31550,53 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		}
 	}
 	
+	/**
+	 * TODO: COSANPA
+	 * 
+	 * Mantis 494
+	 * 
+	 * @param idImovel
+	 * 
+	 * @author Wellington Rocha
+     * @date 21/03/2012
+	 * @exception ErroRepositorioException
+	 */
+	public Collection pesquisarRamoAtividadeDoImovel(Integer idImovel)
+			throws ErroRepositorioException {
+
+		Session session = HibernateUtil.getSession();
+		String consulta;
+		Collection<RamoAtividade> colecaoRamoAtividadeImovel = new ArrayList<RamoAtividade>();
+		Collection retornoConsulta = null;
+
+		try {
+			consulta = "select ratv_id as ramoAtividade "
+					+ "from cadastro.imovel_ramo_atividade "
+					+ "where imov_id = :idImovel";
+
+			retornoConsulta = session.createSQLQuery(consulta)
+					.addScalar("ramoAtividade", Hibernate.INTEGER)
+					.setInteger("idImovel", idImovel)
+					.list();
+
+			if (retornoConsulta.size() > 0) {
+				Iterator imovelRamoAtividadeIter = retornoConsulta.iterator();
+				while (imovelRamoAtividadeIter.hasNext()) {
+					Integer idRamoAtividade = (Integer) imovelRamoAtividadeIter.next();
+
+					RamoAtividade ramoAtividade = new RamoAtividade();
+					ramoAtividade.setId(idRamoAtividade);
+
+					colecaoRamoAtividadeImovel.add(ramoAtividade);
+				}
+			}
+		} catch (HibernateException e) {
+			e.printStackTrace();
+			throw new ErroRepositorioException("Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return colecaoRamoAtividadeImovel;
+	}
 }

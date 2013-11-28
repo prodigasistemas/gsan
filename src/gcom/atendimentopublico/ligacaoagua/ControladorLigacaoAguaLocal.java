@@ -267,4 +267,21 @@ public interface ControladorLigacaoAguaLocal extends
 	 * Data: 18/05/2009
 	 */
 	public void atualizarTipoCorte(IntegracaoComercialHelper integracaoComercialHelper) throws ControladorException;
+	
+	/**
+	 * TODO: COSANPA
+	 * 
+	 * @autor: Wellington Rocha
+	 * @date: 21/03/2012
+	 * 
+	 *        Pesquisar Situações de Ligação de Água ativas.
+	 * 
+	 *        Geração de rotas para recadastramento
+	 * 
+	 * @return Collection
+	 * @throws ControladorException
+	 * 
+	 */
+	public Collection<LigacaoAguaSituacao> pesquisarLigacaoAguaSituacao()
+			throws ControladorException;
 }

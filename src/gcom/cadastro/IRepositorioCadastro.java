@@ -78,6 +78,7 @@ package gcom.cadastro;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoCritica;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.geografico.MunicipioFeriado;
+import gcom.cadastro.imovel.CadastroOcorrencia;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.bean.ImovelGeracaoTabelasTemporariasCadastroHelper;
 import gcom.cadastro.localidade.UnidadeNegocio;
@@ -107,6 +108,7 @@ import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
 import gcom.util.FachadaException;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
@@ -724,6 +726,9 @@ public interface IRepositorioCadastro {
 	 * @throws ErroRepositorioException
 	 */
 
+	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(String inscricao, String anoMesReferencia)
+	throws ErroRepositorioException;
+	
 	public Collection<Integer>  obterIdsImovelGeracaoTabelasTemporarias(Integer idSetor, ImovelGeracaoTabelasTemporariasCadastroHelper helper) 
 	throws ErroRepositorioException;
 	
@@ -1503,4 +1508,64 @@ public interface IRepositorioCadastro {
 	 * @throws ErroRepositorioException
 	 */
 	public  List<HidrometroInstalacaoHistorico> pesquisarHidrometroPeloIdImovel(Integer idImovel) throws ErroRepositorioException;
+	
+	/**TODO: COSANPA
+	 * @author Wellington Rocha
+	 * Data: 21/03/2012
+	 * 
+	 * Pesquisar todas as ocorrencias de cadastro ativas
+	 * 
+	 * Geração de Rotas para Recadastramento
+	 * 
+	 * @return Collection
+	 * @throws ControladorException
+	 *  
+	 */
+ 	public Collection<CadastroOcorrencia> pesquisarOcorrenciasCadastro() throws ErroRepositorioException;
+ 	
+ 	/**TODO: COSANPA
+	 * @author Wellington Rocha
+	 * Data: 21/03/2012
+	 * 
+	 * Pesquisar todos os ramos de atividades ativos
+	 * 
+	 * Geração de Rotas para Recadastramento
+	 * 
+	 * @return Collection
+	 * @throws ControladorException
+	 *  
+	 */
+ 	public Collection pesquisarRamosAtividade() throws ErroRepositorioException;
+ 	
+ 	/**TODO: COSANPA
+	 * @author Wellington Rocha
+	 * Data: 21/03/2012
+	 * 
+	 * Pesquisar todos as fontes de abastecimento ativas
+	 * 
+	 * Geração de Rotas para Recadastramento
+	 * 
+	 * @return Collection
+	 * @throws ControladorException
+	 *  
+	 */
+ 	public Collection pesquisarFonteAbastecimento() throws ErroRepositorioException;
+ 	
+ 	/**
+ 	 * TODO: COSANPA
+ 	 * @author Matheus Souza
+ 	 * @param idImovel
+ 	 * @return Collection
+ 	 * @throws ErroRepositorioException
+ 	 */
+ 	public Collection obterImovelRamoAtividadeAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException;
+ 	
+ 	/**
+ 	 * TODO: COSANPA
+ 	 * @author Matheus Souza
+ 	 * @param idImovel, idRamoAtividade
+ 	 * @return boolean
+ 	 * @throws ErroRepositorioException
+ 	 */
+ 	public boolean existeImovelRamoAtividadeAtualizacaoCadastral(Integer idImovel, Integer idRamoAtividade) throws ErroRepositorioException;
 }

@@ -568,4 +568,15 @@ public interface IRepositorioCliente {
 	 */
 	public Cliente pesquisarDadosCliente(Integer idCliente) 
 		throws ErroRepositorioException;
+	
+	/**
+     * Mantis 494
+     * 
+     * Pesquisar Tipo de Clientes pelo Id
+     * 
+     * @author Wellington Rocha
+     *                
+     */
+    public ClienteTipo pesquisarClienteTipo(Integer idClienteTipo)
+            throws ErroRepositorioException;
 }

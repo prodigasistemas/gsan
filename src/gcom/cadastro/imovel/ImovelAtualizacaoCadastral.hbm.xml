@@ -31,8 +31,8 @@
 		<property name="numeroMorador" type="java.lang.Short" column="imac_nnmorador" length="2"/>
 		<property name="numeroIptu" type="java.math.BigDecimal" column="imac_nniptu" length="20"/>
 		<property name="numeroContratoEnergia" type="java.lang.Long" column="imac_nncontratoenergia" length="10"/>
-		<property name="coordenadaX" type="java.math.BigDecimal" column="imac_nncoordenadax" length="5"/>
-		<property name="coordenadaY" type="java.math.BigDecimal" column="imac_nncoordenaday" length="5"/>
+		<property name="coordenadaX" type="java.lang.String" column="imac_nncoordenadax" length="20"/>
+		<property name="coordenadaY" type="java.lang.String" column="imac_nncoordenaday" length="20"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="imac_tmultimaalteracao" not-null="true" length="8"/>
 		<property name="idEnderecoReferencia" type="java.lang.Integer" column="edrf_id" length="4"/>
 		<property name="idLogradouro" type="java.lang.Integer" column="logr_id" length="4"/>
@@ -67,5 +67,6 @@
 		<property name="idCadastroOcorrencia" type="java.lang.Integer" column="cocr_id" length="4"/>
 		<property name="descricaoOutrasInformacoes" type="java.lang.String" column="imac_dsoutrasinformacoes" length="100"/>
 		<property name="nomeEntrevistado" type="java.lang.String" column="imac_nmentrevistado" length="50"/>
+		<property name="idLocalInstalacaoRamal" type="java.lang.Integer" column="rlin_id" length="2"/>
 	</class>
 </hibernate-mapping>

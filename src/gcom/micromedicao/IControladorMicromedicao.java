@@ -110,6 +110,7 @@ import gcom.micromedicao.hidrometro.Hidrometro;
 import gcom.micromedicao.hidrometro.HidrometroCapacidade;
 import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
 import gcom.micromedicao.hidrometro.HidrometroMarca;
+import gcom.micromedicao.hidrometro.HidrometroProtecao;
 import gcom.micromedicao.leitura.LeituraAnormalidade;
 import gcom.micromedicao.leitura.LeituraFiscalizacao;
 import gcom.micromedicao.leitura.LeituraSituacao;
@@ -4003,5 +4004,34 @@ public interface IControladorMicromedicao {
 	 * @throws ControladorException
 	 */
 	public void validarImovelEmCampo(Integer idImovel) throws ControladorException;
+	
+	/**
+     * TODO: COSANPA
+     * 
+     * @autor: Wellington Rocha
+     * @date: 21/03/2012
+     * 
+     * 
+     * @return Collection
+     * @throws ControladorException
+     * 
+     */
+    public Collection<HidrometroProtecao> pesquisarHidrometroProtecao()
+    		throws ControladorException;
+    
+    /**
+     * TODO: COSANPA
+     * 
+     * @autor: Wellington Rocha
+     * @date: 30/04/2012
+     * 
+     * 
+     * 
+     * @return Collection
+     * @throws ControladorException
+     * 
+     */
+    public Collection<HidrometroMarca> pesquisarHidrometroMarca()
+    		throws ControladorException;
 
 }

@@ -764,7 +764,7 @@ public interface ControladorClienteLocal extends javax.ejb.EJBLocalObject {
 	 * @throws ErroRepositorioException 
 	 */
 	public Collection<ClienteFoneAtualizacaoCadastral> pesquisarClienteFoneAtualizacaoCadastral(Integer idCliente, Integer idMatricula, 
-			Integer idTipoFone, Integer idClienteRelacaoTipo,String numeroFone)
+			Integer idTipoFone, Integer idClienteRelacaoTipo, String numeroFone)
 		throws ControladorException;
 	
 	/**
@@ -950,5 +950,16 @@ public interface ControladorClienteLocal extends javax.ejb.EJBLocalObject {
 	 */	
 	public ClienteImovel pesquisarClienteImovelOSFiscalizada(
 			Integer idImovel) throws ControladorException;
+	
+	/**
+	 * Mantis 494
+	 * 
+	 * @param idClienteTipo
+	 *            
+	 * @exception ErroRepositorioException
+	 *                Erro no BD
+	 * @author Wellington Rocha               
+	 */
+	public ClienteTipo pesquisarClienteTipo(Integer idClienteTipo) throws ControladorException;
 }
 

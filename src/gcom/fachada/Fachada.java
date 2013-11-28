@@ -39079,6 +39079,16 @@ public class Fachada {
 		}
 	}
 
+	public void carregarImovelAtualizacaoCadastral(BufferedReader buffer, ArrayList<String> nomesImagens) {
+		try {
+			this.getControladorCadastro().carregarImovelAtualizacaoCadastral(
+					buffer, nomesImagens);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex
+					.getParametroMensagem());
+		}
+	}
+	
 	/**
 	 * 
 	 * [UC0889] - Alterar datas das leituras

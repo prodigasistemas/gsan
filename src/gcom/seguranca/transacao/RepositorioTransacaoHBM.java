@@ -794,7 +794,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				consulta = " select tatc.altp_id as tipoAlteracao ,"//0
 					     + " tatc.tatc_cdimovel as idImovel,"//1
 					     + " tatc.tatc_cdcliente as idCliente,"//2
-					     + " sum(case when (tatc.tabe_id in(661,664)) then 1 else 0 end) as qtdImovel,"//3
+					     + " sum(case when (tatc.tabe_id in(661,664,665)) then 1 else 0 end) as qtdImovel,"//3
 					     + " sum(case when (tatc.tabe_id in(662,663)) then 1 else 0 end) as qtdCliente,"//4
 					     + " func.func_nmfuncionario as nomeFuncionario," //5
 					     + " clie.clie_nmcliente as nomeCliente,"//6

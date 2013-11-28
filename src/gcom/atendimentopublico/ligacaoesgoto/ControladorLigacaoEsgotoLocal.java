@@ -75,13 +75,14 @@
 */  
 package gcom.atendimentopublico.ligacaoesgoto;
 
-import java.math.BigDecimal;
-
 import gcom.atendimentopublico.bean.IntegracaoComercialHelper;
 import gcom.atendimentopublico.ordemservico.OrdemServico;
 import gcom.cadastro.imovel.Imovel;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorException;
+
+import java.math.BigDecimal;
+import java.util.Collection;
 
 /**
  * Declaração pública de serviços do Session Bean de ControladorLigacaoEsgoto
@@ -230,4 +231,21 @@ public interface ControladorLigacaoEsgotoLocal extends
 	 */
 	public LigacaoEsgotoSituacaoConsumoTipo pesquisarLigacaoEsgotoSituacaoConsumoTipo(Integer idLigacaoEsgotoSituacao,
 			Integer idConsumoTipo) throws ControladorException;
+	
+	/**
+	 * TODO: COSANPA
+	 * 
+	 * @autor: Wellington Rocha
+	 * @date: 21/03/2012
+	 * 
+	 *        Pesquisar Situações de Ligação de Esgoto ativas.
+	 * 
+	 *        Geração de rotas para recadastramento
+	 * 
+	 * @return Collection
+	 * @throws ControladorException
+	 * 
+	 */
+	public Collection<LigacaoEsgotoSituacao> pesquisarLigacaoEsgotoSituacao()
+			throws ControladorException;
 }

@@ -69,7 +69,9 @@ import gcom.util.ErroRepositorioException;
 import gcom.util.FachadaException;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -1667,5 +1669,7 @@ public interface IControladorCadastro {
 	 * @throws ControladorException
 	 */
 	public  List<HidrometroInstalacaoHistorico> pesquisarHidrometroPeloIdImovel(Integer idImovel) throws ControladorException;
+	
+	public void carregarImovelAtualizacaoCadastral(BufferedReader buffer, ArrayList<String> nomesImagens) throws ControladorException;
 
 }

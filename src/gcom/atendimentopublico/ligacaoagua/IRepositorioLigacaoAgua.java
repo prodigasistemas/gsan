@@ -220,4 +220,18 @@ public interface IRepositorioLigacaoAgua {
 	 * Data: 18/05/2009
 	 */
 	public void atualizarTipoCorte(IntegracaoComercialHelper integracaoComercialHelper) throws ErroRepositorioException;
+	
+	/**TODO: COSANPA
+	 * @author Wellington Rocha
+	 * Data: 21/03/2012
+	 * 
+	 * Pesquisar todas as situações de ligações de água ativas
+	 * 
+	 * Geração de Rotas para Recadastramento
+	 * 
+	 * @return Collection
+	 * @throws ControladorException
+	 *  
+	 */
+ 	public Collection pesquisarLigacaoAguaSituacao() throws ErroRepositorioException;
 }

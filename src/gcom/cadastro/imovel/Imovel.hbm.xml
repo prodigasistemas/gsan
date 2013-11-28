@@ -46,8 +46,8 @@
 		<property name="indicadorEmissaoExtratoFaturamento" type="java.lang.Short" column="imov_icemsextfatmt" length="2"/>
 		<property name="indicadorDebitoConta" type="java.lang.Short" column="imov_icdebitoconta" length="2" not-null="true"/>
 		<property name="indicadorExclusao" type="java.lang.Short" column="imov_icexclusao" length="2"/>
-		<property name="coordenadaX" type="java.math.BigDecimal" column="imov_nncoordenadax" length="5"/>
-		<property name="coordenadaY" type="java.math.BigDecimal" column="imov_nncoordenaday" length="5"/>
+		<property name="coordenadaX" type="java.lang.String" column="imov_nncoordenadax" length="50"/>
+		<property name="coordenadaY" type="java.lang.String" column="imov_nncoordenaday" length="50"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="imov_tmultimaalteracao" length="8"/>
 		<property name="indicadorSuspensaoAbastecimento" type="java.lang.Short" column="imov_icsuspensaoabastecimento" length="2"/>
 		<property name="quantidadeEconomias" type="java.lang.Short" column="imov_qteconomia" length="2"/>

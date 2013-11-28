@@ -175,7 +175,6 @@ import gcom.faturamento.conta.FiltroContaCategoria;
 import gcom.faturamento.conta.FiltroContaCategoriaConsumoFaixa;
 import gcom.faturamento.conta.FiltroContaImpressao;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
-import gcom.gui.ActionServletException;
 import gcom.gui.faturamento.bean.AnalisarImoveisReleituraHelper;
 import gcom.gui.micromedicao.ColetaMedidorEnergiaHelper;
 import gcom.gui.micromedicao.DadosMovimentacao;
@@ -223,6 +222,7 @@ import gcom.micromedicao.hidrometro.HidrometroMotivoMovimentacao;
 import gcom.micromedicao.hidrometro.HidrometroMovimentacao;
 import gcom.micromedicao.hidrometro.HidrometroMovimentado;
 import gcom.micromedicao.hidrometro.HidrometroMovimentadoPK;
+import gcom.micromedicao.hidrometro.HidrometroProtecao;
 import gcom.micromedicao.hidrometro.HidrometroSituacao;
 import gcom.micromedicao.hidrometro.HidrometroTipo;
 import gcom.micromedicao.hidrometro.IRepositorioHidrometro;
@@ -330,8 +330,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
-import java.util.Map.Entry;
 import java.util.Vector;
+import java.util.Map.Entry;
 import java.util.zip.ZipOutputStream;
 
 import javax.ejb.CreateException;
@@ -43199,7 +43199,75 @@ public class ControladorMicromedicao implements SessionBean {
 		} catch (Exception e) {
 			throw new ControladorException("erro.sistema");
 		}
-		
-		
+	}
+	
+	/**
+	 * TODO: COSANPA
+	 * 
+	 * @autor: Wellington Rocha
+	 * @date: 03/07/2012
+	 * 
+	 *        Pesquisar Hidrometro Protecao
+	 * 
+	 * @return Collection
+	 * @throws ControladorException
+	 * 
+	 */
+	public Collection<HidrometroProtecao> pesquisarHidrometroProtecao()
+			throws ControladorException {
+		try {
+			Collection<HidrometroProtecao> hidrometros = new ArrayList<HidrometroProtecao>();
+			Collection colecao = this.repositorioMicromedicao.pesquisarHidrometroProtecao();
+
+			if (colecao != null && !colecao.isEmpty()) {
+				Iterator colecaoIterator = colecao.iterator();
+
+				while (colecaoIterator.hasNext()) {
+					HidrometroProtecao hidrometroProtecao = (HidrometroProtecao) colecaoIterator
+							.next();
+					hidrometros.add(hidrometroProtecao);
+				}
+			}
+
+			return hidrometros;
+		} catch (ErroRepositorioException e) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
+	
+	/**
+	 * TODO: COSANPA
+	 * 
+	 * @autor: Wellington Rocha
+	 * @date: 03/07/2012
+	 * 
+	 *        Pesquisar Hidrometro Marca
+	 * 
+	 * @return Collection
+	 * @throws ControladorException
+	 * 
+	 */
+	public Collection<HidrometroMarca> pesquisarHidrometroMarca()
+			throws ControladorException {
+		try {
+			Collection<HidrometroMarca> hidrometros = new ArrayList<HidrometroMarca>();
+			Collection colecao = this.repositorioMicromedicao.pesquisarHidrometroMarca();
+
+			if (colecao != null && !colecao.isEmpty()) {
+				Iterator colecaoIterator = colecao.iterator();
+
+				while (colecaoIterator.hasNext()) {
+					HidrometroMarca hidrometroMarca = (HidrometroMarca) colecaoIterator
+							.next();
+					hidrometros.add(hidrometroMarca);
+				}
+			}
+
+			return hidrometros;
+		} catch (ErroRepositorioException e) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", e);
+		}
 	}
 }

@@ -2978,10 +2978,10 @@ public class ControladorClienteSEJB implements SessionBean {
 	 * @throws ErroRepositorioException 
 	 */
 	public Collection<ClienteFoneAtualizacaoCadastral> pesquisarClienteFoneAtualizacaoCadastral(Integer idCliente, Integer idMatricula, 
-			Integer idTipoFone, Integer idClienteRelacaoTipo,String numeroFone)
+			Integer idTipoFone, Integer idClienteRelacaoTipo, String numeroFone)
 		throws ControladorException {
 	    try {
-	        return repositorioCliente.pesquisarClienteFoneAtualizacaoCadastral(idCliente, idMatricula, idTipoFone, idClienteRelacaoTipo,numeroFone);
+	        return repositorioCliente.pesquisarClienteFoneAtualizacaoCadastral(idCliente, idMatricula, idTipoFone, idClienteRelacaoTipo, numeroFone);
 	    } catch (ErroRepositorioException ex) {
 	        throw new ControladorException("erro.sistema", ex);
 	    }
@@ -3296,4 +3296,21 @@ public class ControladorClienteSEJB implements SessionBean {
 		    }
 	}
 	
+	/**
+	 * Mantis 494
+	 * 
+	 * @param idClienteTipo
+	 *            
+	 * @exception ErroRepositorioException
+	 *                Erro no BD
+	 * @author Wellington Rocha               
+	 */
+	public ClienteTipo pesquisarClienteTipo(Integer idClienteTipo) throws ControladorException{			
+		try{			
+			return repositorioCliente.pesquisarClienteTipo(idClienteTipo);
+			
+		} catch (ErroRepositorioException ex) {
+	        throw new ControladorException("erro.sistema", ex);
+	    }
+	}
 }

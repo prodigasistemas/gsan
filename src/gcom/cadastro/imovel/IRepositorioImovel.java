@@ -3284,4 +3284,18 @@ public interface IRepositorioImovel {
 	 * @throws ErroRepositorioException
 	 */
 	public Imovel pesquisarImovelSituacaoEspecialFaturamento(Integer idImovel) throws ErroRepositorioException;
+	
+	/**
+	 * TODO: COSANPA
+	 * 
+	 * Mantis 494
+	 * 
+	 * @param idImovel
+	 * 
+	 * @author Wellington Rocha
+     * @date 21/03/2012
+	 * @exception ErroRepositorioException
+	 */
+	public Collection pesquisarRamoAtividadeDoImovel(Integer idImovel)
+		throws ErroRepositorioException;
 }

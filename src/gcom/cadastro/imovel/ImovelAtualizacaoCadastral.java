@@ -25,19 +25,19 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
     private Integer idImovel;
     
     /** identifier field */
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idLocalidade;
 	
     /** persistent field */
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private int codigoSetorComercial;
 
     /** persistent field */
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private int numeroQuadra;
 
     /** persistent field */
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private short lote;
 
     /** persistent field */
@@ -61,7 +61,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
     private String dsLogradouroTitulo;
     
     /** nullable persistent field */
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idLogradouro;
 	
     /** nullable persistent field */
@@ -89,7 +89,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
     private String complementoEndereco;
 	
     /** nullable persistent field */
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idEnderecoReferencia;
 
     /** nullable persistent field */
@@ -105,11 +105,11 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
     private BigDecimal volumeReservatorioInferior;
 
     /** nullable persistent field */
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idPavimentoCalcada;
 
     /** nullable persistent field */
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idPavimentoRua;
 
     /** nullable persistent field */
@@ -145,20 +145,20 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
     private Short numeroMorador;
 
     /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private BigDecimal numeroIptu;
 
     /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Long numeroContratoEnergia;
 
     /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private BigDecimal coordenadaX;
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+    private String coordenadaX;
 
     /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private BigDecimal coordenadaY;
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+    private String coordenadaY;
 
     /** persistent field */
     private Date ultimaAlteracao;
@@ -184,7 +184,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
     private Integer idMarcaHidrometro;
 
     /** nullable persistent field */
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idLocalInstalacaoHidrometro;
 
     /** nullable persistent field */
@@ -196,7 +196,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
     private String numeroHidrometro;
 
     /** nullable persistent field */
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Short indicadorCavalete;
 	
     /** nullable persistent field */
@@ -214,6 +214,9 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
     /** nullable persistent field */
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private String nomeEntrevistado;
+	
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+	private Integer idLocalInstalacaoRamal;
 	
     /** persistent field */
 	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
@@ -233,7 +236,34 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
 	
 	private String dsUFSiglaMunicipio;
 	
-	public ImovelAtualizacaoCadastral(Integer idImovel, Integer idLocalidade, int codigoSetorComercial, int numeroQuadra, short lote, short subLote, Integer numeroSequencialRota, Integer idLogradouroTipo, String dsLogradouroTipo, Integer idLogradouroTitulo, String dsLogradouroTitulo, Integer idLogradouro, String descricaoLogradouro, Integer idBairro, String nomeBairro, Integer codigoCep, String numeroImovel, String complementoEndereco, Integer idEnderecoReferencia, Integer idDespejo, BigDecimal volumeReservatorioSuperior, BigDecimal volumeReservatorioInferior, Integer idPavimentoCalcada, Integer idPavimentoRua, Integer idFonteAbastecimento, Integer idLigacaoAguaSituacao, Integer idLigacaoEsgotoSituacao, Integer idImovelPerfil, BigDecimal volumePiscina, Integer idPocoTipo, Short numeroPontosUtilizacao, Short numeroMorador, BigDecimal numeroIptu, Long numeroContratoEnergia, BigDecimal coordenadaX, BigDecimal coordenadaY, Date ultimaAlteracao, BigDecimal areaConstruida, Short indicadorJardim, Integer numeroLeituraInstalacaoHidrometro, Integer idCapacidadeHidrometro, Integer idMarcaHidrometro, Integer idLocalInstalacaoHidrometro, Integer idProtecaoHidrometro, String numeroHidrometro, Short indicadorCavalete, String numeroMedidirEnergia, Integer idCadastroOcorrencia, String descricaoOutrasInformacoes, String nomeEntrevistado, Integer codigoImovelPrincipal, Integer idSituacaoAtualizacaoCadastral, Integer idEmpresa, Integer idMunicipio, String nomeMunicipio, Integer idUinidadeFederacao, String dsUFSiglaMunicipio) {
+	public ImovelAtualizacaoCadastral(Integer idImovel, Integer idLocalidade,
+			int codigoSetorComercial, int numeroQuadra, short lote,
+			short subLote, Integer numeroSequencialRota,
+			Integer idLogradouroTipo, String dsLogradouroTipo,
+			Integer idLogradouroTitulo, String dsLogradouroTitulo,
+			Integer idLogradouro, String descricaoLogradouro, Integer idBairro,
+			String nomeBairro, Integer codigoCep, String numeroImovel,
+			String complementoEndereco, Integer idEnderecoReferencia,
+			Integer idDespejo, BigDecimal volumeReservatorioSuperior,
+			BigDecimal volumeReservatorioInferior, Integer idPavimentoCalcada,
+			Integer idPavimentoRua, Integer idFonteAbastecimento,
+			Integer idLigacaoAguaSituacao, Integer idLigacaoEsgotoSituacao,
+			Integer idImovelPerfil, BigDecimal volumePiscina,
+			Integer idPocoTipo, Short numeroPontosUtilizacao,
+			Short numeroMorador, BigDecimal numeroIptu,
+			Long numeroContratoEnergia, String coordenadaX,
+			String coordenadaY, Date ultimaAlteracao,
+			BigDecimal areaConstruida, Short indicadorJardim,
+			Integer numeroLeituraInstalacaoHidrometro,
+			Integer idCapacidadeHidrometro, Integer idMarcaHidrometro,
+			Integer idLocalInstalacaoHidrometro, Integer idProtecaoHidrometro,
+			String numeroHidrometro, Short indicadorCavalete,
+			String numeroMedidirEnergia, Integer idCadastroOcorrencia,
+			String descricaoOutrasInformacoes, String nomeEntrevistado,
+			Integer codigoImovelPrincipal,
+			Integer idSituacaoAtualizacaoCadastral, Integer idEmpresa,
+			Integer idMunicipio, String nomeMunicipio,
+			Integer idUinidadeFederacao, String dsUFSiglaMunicipio) {
 		this.idImovel = idImovel;
 		this.idLocalidade = idLocalidade;
 		this.codigoSetorComercial = codigoSetorComercial;
@@ -464,19 +494,19 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
         this.numeroContratoEnergia = numeroContratoEnergia;
     }
 
-    public BigDecimal getCoordenadaX() {
+    public String getCoordenadaX() {
         return this.coordenadaX;
     }
 
-    public void setCoordenadaX(BigDecimal coordenadaX) {
+    public void setCoordenadaX(String coordenadaX) {
         this.coordenadaX = coordenadaX;
     }
 
-    public BigDecimal getCoordenadaY() {
+    public String getCoordenadaY() {
         return this.coordenadaY;
     }
 
-    public void setCoordenadaY(BigDecimal coordenadaY) {
+    public void setCoordenadaY(String coordenadaY) {
         this.coordenadaY = coordenadaY;
     }
 
@@ -865,4 +895,11 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
 		this.numeroMedidirEnergia = numeroMedidirEnergia;
 	}
 
+	public Integer getIdLocalInstalacaoRamal() {
+		return idLocalInstalacaoRamal;
+	}
+
+	public void setIdLocalInstalacaoRamal(Integer idLocalInstalacaoRamal) {
+		this.idLocalInstalacaoRamal = idLocalInstalacaoRamal;
+	}
 }

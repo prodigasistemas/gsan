@@ -310,13 +310,13 @@ public class ExibirConsultarImovelDadosCadastraisAction extends GcomAction {
 		}
 
 		if(imovel.getCoordenadaX() != null){
-			consultarImovelActionForm.setCoordenadaXDadosCadastrais(Util.formatarMoedaReal(imovel.getCoordenadaX()));
+			consultarImovelActionForm.setCoordenadaXDadosCadastrais(imovel.getCoordenadaX());
 		} else {
 			consultarImovelActionForm.setCoordenadaXDadosCadastrais("");
 		}
 
 		if(imovel.getCoordenadaY() != null){
-			consultarImovelActionForm.setCoordenadaYDadosCadastrais(Util.formatarMoedaReal(imovel.getCoordenadaY()));
+			consultarImovelActionForm.setCoordenadaYDadosCadastrais(imovel.getCoordenadaY());
 		} else {
 			consultarImovelActionForm.setCoordenadaYDadosCadastrais("");
 		}

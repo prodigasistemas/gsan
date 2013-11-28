@@ -1,0 +1,52 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping>
+<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+
+<class 
+    name="gcom.cadastro.imovel.ImagemAtualizacaoCadastral" 
+    table="cadastro.imagem_atlz_cadastral"
+>
+
+    <id
+        name="id"
+        type="java.lang.Integer"
+        column="imgac_id">
+        
+		    <generator class="sequence">
+		        <param name="sequence">cadastro.sequence_imagem_atlz_cadastral</param>
+		    </generator>
+    </id>
+
+    <property
+        name="idImovel" 
+        column="imov_id" 
+        type="java.lang.Integer"
+        length="4"
+    />
+    <property
+        name="imagem"
+        type="binary"
+        column="imgac_imagem"
+		not-null="true"
+        length="-1"
+    />
+    <property
+        name="ultimaAlteracao"
+        type="java.sql.Timestamp"
+        column="imgac_tmultimaalteracao"
+        not-null="true"
+        length="8"
+    />
+
+
+</class>
+</hibernate-mapping>

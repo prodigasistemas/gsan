@@ -105,8 +105,10 @@ import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 
 import javax.ejb.CreateException;
 import javax.ejb.SessionBean;
@@ -717,4 +719,40 @@ public class ControladorLigacaoEsgotoSEJB implements SessionBean {
 		}
 	}
 
+	/**
+	 * TODO: COSANPA
+	 * 
+	 * @autor: Wellington Rocha
+	 * @date: 21/03/2012
+	 * 
+	 *        Pesquisar Situações de Ligação de Esgoto ativas.
+	 * 
+	 *        Geração de rotas para recadastramento
+	 * 
+	 * @return Collection
+	 * @throws ControladorException
+	 * 
+	 */
+	public Collection<LigacaoEsgotoSituacao> pesquisarLigacaoEsgotoSituacao()
+			throws ControladorException {
+		try {
+			Collection<LigacaoEsgotoSituacao> colecaoLigacaoEsgotoSituacao = new ArrayList<LigacaoEsgotoSituacao>();
+			Collection colecao = repositorioLigacaoEsgoto.pesquisarLigacaoEsgotoSituacao();
+
+			if (colecao != null && !colecao.isEmpty()) {
+				Iterator colecaoIterator = colecao.iterator();
+
+				while (colecaoIterator.hasNext()) {
+					LigacaoEsgotoSituacao ligacaoEsgotoSituacao = (LigacaoEsgotoSituacao) colecaoIterator
+							.next();
+					colecaoLigacaoEsgotoSituacao.add(ligacaoEsgotoSituacao);
+				}
+			}
+
+			return colecaoLigacaoEsgotoSituacao;
+		} catch (ErroRepositorioException e) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
 }

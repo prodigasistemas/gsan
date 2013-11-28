@@ -1236,4 +1236,18 @@ public interface IRepositorioAtendimentoPublico {
 	public Integer pesquisarQuantidadeConsumidoresRelatorioBIG(Integer idLocalidade,
 			Integer situacao) throws ErroRepositorioException;
 	
+	/**TODO: COSANPA
+	 * @author Wellington Rocha
+	 * Data: 03/07/2012
+	 * 
+	 * Pesquisar todas os Locais de Instalação de Ramal
+	 * 
+	 * Geração de Rotas para Recadastramento
+	 * 
+	 * @return Collection
+	 * @throws ControladorException
+	 *  
+	 */
+ 	public Collection pesquisarRamalLocalInstalacao() throws ErroRepositorioException;
+	
 }

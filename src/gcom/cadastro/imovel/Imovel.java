@@ -301,13 +301,13 @@ public class Imovel extends ObjetoTransacao {
 	 * nullable persistent field
 	 */
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
-	private BigDecimal coordenadaX;
+	private String coordenadaX;
 
 	/**
 	 * nullable persistent field
 	 */
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER})
-	private BigDecimal coordenadaY;
+	private String coordenadaY;
 
 	/**
 	 * nullable persistent field
@@ -689,8 +689,8 @@ public class Imovel extends ObjetoTransacao {
 			Short indicadorEmissaoExtratoFaturamento,
 			Short indicadorDebitoConta,
 			Short indicadorExclusao,
-			BigDecimal coordenadaX,
-			BigDecimal coordenadaY,
+			String coordenadaX,
+			String coordenadaY,
 			LigacaoEsgoto ligacaoEsgoto,
 			LigacaoAgua ligacaoAgua,
 			ImovelEnderecoAnterior imovelEnderecoAnterior,
@@ -997,8 +997,8 @@ public class Imovel extends ObjetoTransacao {
 			Short indicadorEmissaoExtratoFaturamento,
 			Short indicadorDebitoConta,
 			Short indicadorExclusao,
-			BigDecimal coordenadaX,
-			BigDecimal coordenadaY,
+			String coordenadaX,
+			String coordenadaY,
 			LigacaoEsgoto ligacaoEsgoto,
 			LigacaoAgua ligacaoAgua,
 			ImovelEnderecoAnterior imovelEnderecoAnterior,
@@ -1801,7 +1801,7 @@ public class Imovel extends ObjetoTransacao {
 	 * 
 	 * @return The coordenadaX value
 	 */
-	public BigDecimal getCoordenadaX() {
+	public String getCoordenadaX() {
 		return this.coordenadaX;
 	}
 
@@ -1811,7 +1811,7 @@ public class Imovel extends ObjetoTransacao {
 	 * @param coordenadaX
 	 *            The new coordenadaX value
 	 */
-	public void setCoordenadaX(BigDecimal coordenadaX) {
+	public void setCoordenadaX(String coordenadaX) {
 		this.coordenadaX = coordenadaX;
 	}
 
@@ -1820,7 +1820,7 @@ public class Imovel extends ObjetoTransacao {
 	 * 
 	 * @return The coordenadaY value
 	 */
-	public BigDecimal getCoordenadaY() {
+	public String getCoordenadaY() {
 		return this.coordenadaY;
 	}
 
@@ -1830,7 +1830,7 @@ public class Imovel extends ObjetoTransacao {
 	 * @param coordenadaY
 	 *            The new coordenadaY value
 	 */
-	public void setCoordenadaY(BigDecimal coordenadaY) {
+	public void setCoordenadaY(String coordenadaY) {
 		this.coordenadaY = coordenadaY;
 	}
 

@@ -107,23 +107,13 @@ public class TarefaBatchGerarArquivoTextoAtualizacaoCadastral extends TarefaBatc
 
 	public Object executar() throws TarefaException {
 
+		System.out.println("**********Gerar arquivo texto atualização cadastral**********");
 		Map parametros = (Map) getParametro(ConstantesSistema.PARAMETROS_BATCH);
 		GerarArquivoTextoAtualizacaoCadastralHelper helper = (GerarArquivoTextoAtualizacaoCadastralHelper)parametros.get("gerarArquivoTextoAtualizacaoCadastralHelper");
 		
-/*		Collection colecaoIdsSetor = (Collection) getParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH);
-		Iterator iterator = colecaoIdsSetor.iterator();*/
-
-/*		while (iterator.hasNext()) {
-
-			Integer idSetor = (Integer) iterator.next();
-
-			System.out.println("Setor " + idSetor + " *********************************************************");*/
-
-			enviarMensagemControladorBatch(
-					ConstantesJNDI.BATCH_GERAR_ARQUIVO_TEXTO_ATUALIZACAO_CADASTRAL_MDB,
-					new Object[]{this.getIdFuncionalidadeIniciada(), helper});//idSetor, 
-			
-		/*}*/
+		enviarMensagemControladorBatch(
+				ConstantesJNDI.BATCH_GERAR_ARQUIVO_TEXTO_ATUALIZACAO_CADASTRAL_MDB,
+				new Object[] { this.getIdFuncionalidadeIniciada(), helper });
 
 		return null;
 	}

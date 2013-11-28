@@ -2085,26 +2085,27 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 		try {
 			
 			consulta = " SELECT clienteFone" 
-					 + " FROM ClienteFoneAtualizacaoCadastral clienteFone "
-					 + " INNER JOIN clienteFone.clienteAtualizacaoCadastral clienteAtualizacaoCadastral " 
-					 + " WHERE clienteAtualizacaoCadastral.idCliente =:idCliente ";
-			
-					 if(idClienteRelacaoTipo != null){
-						 consulta = consulta + " AND clienteAtualizacaoCadastral.idClienteRelacaoTipo = "+ idClienteRelacaoTipo;
-					 }
-					 
-					 if(numeroFone != null){
-						 consulta = consulta + " AND clienteFone.telefone = "+ numeroFone;
-					 }
-					 
-			consulta = consulta + " AND clienteAtualizacaoCadastral.idImovel =:idMatricula) ";
+				 + " FROM ClienteFoneAtualizacaoCadastral clienteFone" 
+				 + " WHERE clienteFone.idClienteAtualizacaoCadastral in(SELECT clienteAtualizacaoCadastral.id" 
+				 + "												    FROM ClienteAtualizacaoCadastral clienteAtualizacaoCadastral" 
+				 + "												    WHERE clienteAtualizacaoCadastral.idCliente =:idCliente ";
+		
+				 if(idClienteRelacaoTipo != null){
+					 consulta = consulta + " AND clienteAtualizacaoCadastral.idClienteRelacaoTipo = "+ idClienteRelacaoTipo;
+				 }
+				 
+		consulta = consulta + " AND clienteAtualizacaoCadastral.idImovel =:idMatricula) ";
 
-			if(idTipoFone != null){
-				consulta = consulta + " AND clienteFone.idFoneTipo = "+ idTipoFone;
-			}		
+		if(idTipoFone != null){
+			consulta = consulta + " AND clienteFone.idFoneTipo = "+ idTipoFone;
+		}
+		
+		if(numeroFone != null){
+			 consulta = consulta + " AND clienteFone.telefone = "+ numeroFone;
+		 }
 
-			retorno = session.createQuery(consulta).setInteger("idCliente", idCliente.intValue())
-					.setInteger("idMatricula", idMatricula).list();
+		retorno = session.createQuery(consulta).setInteger("idCliente", idCliente.intValue())
+				.setInteger("idMatricula", idMatricula).list();
 			
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
@@ -2577,5 +2578,38 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 		
 		return retorno;
 		
+	}
+	
+	/**TODO: Cosanpa
+	 * 
+	 * Mantis 494
+	 * 
+	 * Pesquisando cliente tipo pelo id
+	 * 
+	 * @author Wellington Rocha*/
+	public ClienteTipo pesquisarClienteTipo(Integer idClienteTipo)
+			throws ErroRepositorioException {
+
+		ClienteTipo retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = null;
+
+		try {
+
+			consulta = "select cltp from ClienteTipo cltp "
+				+ "where cltp.id = :idClienteTipo ";
+	
+		retorno = (ClienteTipo) session.createQuery(consulta)
+				.setInteger("idClienteTipo", idClienteTipo)
+				.setMaxResults(1).uniqueResult();
+
+		} catch (HibernateException e) {
+
+			throw new ErroRepositorioException("Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
 	}
 }

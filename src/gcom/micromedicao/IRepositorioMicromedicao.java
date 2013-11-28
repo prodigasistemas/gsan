@@ -4576,4 +4576,33 @@ public interface IRepositorioMicromedicao {
 			Date dataFinal, Integer idLocalidade, Integer situacao)
 			throws ErroRepositorioException;
 	
+	/**TODO: COSANPA
+     * @author Wellington Rocha
+     * Data: 21/03/2012
+     * 
+     * Pesquisar todos os Hidrometro Protecao ativos
+     * 
+     * Geracao de Rotas para Recadastramento
+     * 
+     * @return Collection
+     * @throws ControladorException
+     *  
+     */
+     public Collection pesquisarHidrometroProtecao() throws ErroRepositorioException;
+    
+     
+     /**TODO: COSANPA
+     * @author Wellington Rocha
+     * Data: 30/04/2012
+     * 
+     * Pesquisar todos os Hidrometro Marca ativos
+     * 
+     * Geracao de Rotas para Recadastramento
+     * 
+     * @return Collection
+     * @throws ControladorException
+     *  
+     */
+     public Collection pesquisarHidrometroMarca() throws ErroRepositorioException;
+	
 }

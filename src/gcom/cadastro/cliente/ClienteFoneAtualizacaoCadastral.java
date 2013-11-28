@@ -22,8 +22,27 @@ public class ClienteFoneAtualizacaoCadastral  extends ObjetoTransacao {
 
     private Integer id;
     
-    private ClienteAtualizacaoCadastral clienteAtualizacaoCadastral;
+    private Integer idClienteAtualizacaoCadastral;
     
+    private Integer idCliente;
+    
+	public Integer getIdClienteAtualizacaoCadastral() {
+		return idClienteAtualizacaoCadastral;
+	}
+
+	public void setIdClienteAtualizacaoCadastral(
+			Integer idClienteAtualizacaoCadastral) {
+		this.idClienteAtualizacaoCadastral = idClienteAtualizacaoCadastral;
+	}
+
+	public Integer getIdCliente() {
+		return idCliente;
+	}
+
+	public void setIdCliente(Integer idCliente) {
+		this.idCliente = idCliente;
+	}
+
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idFoneTipo;
 
@@ -46,9 +65,9 @@ public class ClienteFoneAtualizacaoCadastral  extends ObjetoTransacao {
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Short indicadorFonePadrao;
 
-    public ClienteFoneAtualizacaoCadastral(Integer id, ClienteAtualizacaoCadastral clienteAtualizacaoCadastral, Integer idFoneTipo, String ddd, String telefone, String ramal, Date ultimaAlteracao) {
+    public ClienteFoneAtualizacaoCadastral(Integer id, Integer idClienteAtualizacaoCadastral, Integer idFoneTipo, String ddd, String telefone, String ramal, Date ultimaAlteracao) {
 		this.id = id;
-		this.clienteAtualizacaoCadastral = clienteAtualizacaoCadastral;
+		this.idClienteAtualizacaoCadastral = idClienteAtualizacaoCadastral;
 		this.idFoneTipo = idFoneTipo;
 		this.ddd = ddd;
 		this.telefone = telefone;
@@ -134,15 +153,6 @@ public class ClienteFoneAtualizacaoCadastral  extends ObjetoTransacao {
 
 	public void setIndicadorFonePadrao(Short indicadorFonePadrao) {
 		this.indicadorFonePadrao = indicadorFonePadrao;
-	}
-
-	public ClienteAtualizacaoCadastral getClienteAtualizacaoCadastral() {
-		return clienteAtualizacaoCadastral;
-	}
-
-	public void setClienteAtualizacaoCadastral(
-			ClienteAtualizacaoCadastral clienteAtualizacaoCadastral) {
-		this.clienteAtualizacaoCadastral = clienteAtualizacaoCadastral;
 	}
 
 	public Integer getIdFoneTipo() {

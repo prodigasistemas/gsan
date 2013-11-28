@@ -114,6 +114,18 @@ public class FonteAbastecimento extends ObjetoTransacao {
     private String descricaoComId;
     
     public final static Short INDICADOR_CALCULAR_VOLUME_FIXO = new Short("1");
+    
+    /**TODO: COSANPA
+     * 
+     * Mantis 494 - geração da rota para recadastramento
+     * @author Wellington Rocha*/
+    public final static Integer NAO_INFORMADO = new Integer (0);
+    
+    public final static Integer COSANPA = new Integer (1);
+    
+    public final static Integer PROPRIO = new Integer (2);
+    
+    public final static Integer MISTO = new Integer (3);
 
     /** full constructor */
     public FonteAbastecimento(String descricao, String descricaoAbreviada,

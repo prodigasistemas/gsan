@@ -19,11 +19,7 @@
 		<property name="ramal" type="java.lang.String" column="cfac_nnfoneramal" length="4"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cfac_tmultimaalteracao" not-null="true" length="8"/>
 		<property name="indicadorFonePadrao" type="java.lang.Short" column="cfac_icfonepadrao" length="2"/>
-		
-		<!-- bi-directional many-to-one association to Cliente -->
-		<many-to-one name="clienteAtualizacaoCadastral" class="gcom.cadastro.cliente.ClienteAtualizacaoCadastral" not-null="true">
-			<column name="clac_id"/>
-		</many-to-one>
+		<property name="idClienteAtualizacaoCadastral" column="clac_id" type="java.lang.Integer" length="4"/>
 		
 	</class>
 </hibernate-mapping>

@@ -75,10 +75,11 @@
 */  
 package gcom.atendimentopublico.ligacaoesgoto;
 
-import java.math.BigDecimal;
-
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
+
+import java.math.BigDecimal;
+import java.util.Collection;
 
 /**
  * Interface que disponibiliza os serviços do Repositório de Ligação de Esgoto
@@ -146,4 +147,18 @@ public interface IRepositorioLigacaoEsgoto {
 	 */
 	public LigacaoEsgotoSituacaoConsumoTipo pesquisarLigacaoEsgotoSituacaoConsumoTipo(Integer idLigacaoEsgotoSituacao,
 			Integer idConsumoTipo) throws ErroRepositorioException;
+	
+	/**TODO: COSANPA
+	 * @author Wellington Rocha
+	 * Data: 21/03/2012
+	 * 
+	 * Pesquisar todas as situações de ligações de esgoto ativas
+	 * 
+	 * Geração de Rotas para Recadastramento
+	 * 
+	 * @return Collection
+	 * @throws ControladorException
+	 *  
+	 */
+ 	public Collection pesquisarLigacaoEsgotoSituacao() throws ErroRepositorioException;
 }

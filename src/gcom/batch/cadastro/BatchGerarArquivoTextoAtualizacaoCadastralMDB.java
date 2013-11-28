@@ -120,6 +120,7 @@ public class BatchGerarArquivoTextoAtualizacaoCadastralMDB
 
 			ObjectMessage objectMessage = (ObjectMessage) message;
 			try {
+				System.out.println("À gerar arquivo texto de atualização cadastral via dispositivo móvel...");
 				this.getControladorCadastro().gerarArquivoTextoAtualizacaoCadastralDispositivoMovel(
 						(Integer) ((Object[]) objectMessage.getObject())[0],
 						(GerarArquivoTextoAtualizacaoCadastralHelper) ((Object[]) objectMessage.getObject())[1]);

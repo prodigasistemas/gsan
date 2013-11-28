@@ -81,6 +81,7 @@ import gcom.atendimentopublico.bean.IntegracaoComercialHelper;
 import gcom.atendimentopublico.bean.UnidadesFilhasHelper;
 import gcom.atendimentopublico.ligacaoagua.CorteTipo;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
+import gcom.atendimentopublico.ligacaoagua.RamalLocalInstalacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoPerfil;
 import gcom.atendimentopublico.ordemservico.Atividade;
 import gcom.atendimentopublico.ordemservico.Material;
@@ -1948,5 +1949,22 @@ public interface ControladorAtendimentoPublicoLocal extends
 	 * @throws ControladorException
 	 */
 	public Collection<OrdemServicoFoto> pesquisarFotosOrdemServico(Integer id, boolean idOS) throws ControladorException;
+	
+	/**
+	 * TODO: COSANPA
+	 * 
+	 * @autor: Wellington Rocha
+	 * @date: 03/07/2012
+	 * 
+	 *        Pesquisar Locais de Instação de Ramal Ativos
+	 * 
+	 *        Geração de rotas para recadastramento
+	 * 
+	 * @return Collection
+	 * @throws ControladorException
+	 * 
+	 */
+	public Collection<RamalLocalInstalacao> pesquisarRamalLocalInstalacao()
+			throws ControladorException;
 	
 }

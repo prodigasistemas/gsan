@@ -13585,17 +13585,13 @@ public class ControladorArrecadacao implements SessionBean {
 	 * @param idFuncionalidadeIniciada
 	 * @return void
 	 */
-	public void classificarPagamentosDevolucoes(
-			Collection<Integer> colecaoIdsLocalidades,
-			int idFuncionalidadeIniciada) throws ControladorException {
+	public void classificarPagamentosDevolucoes(Collection<Integer> colecaoIdsLocalidades, int idFuncionalidadeIniciada) throws ControladorException {
 
 		Imovel imovel = null;
 
 		int idUnidadeIniciada = 0;
-		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(
-														idFuncionalidadeIniciada,
-														UnidadeProcessamento.LOCALIDADE,
-														((Integer) Util.retonarObjetoDeColecao(colecaoIdsLocalidades)));
+		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.LOCALIDADE,
+				((Integer) Util.retonarObjetoDeColecao(colecaoIdsLocalidades)));
 
 		try {
 
@@ -13616,45 +13612,22 @@ public class ControladorArrecadacao implements SessionBean {
 				if (colecaoIdsLocalidades != null && !colecaoIdsLocalidades.isEmpty()) {
 
 					for (Integer idLocalidade : colecaoIdsLocalidades) {
-						Collection colecaoPagamentosConta = null;
-						Collection colecaoPagamentosGuiaPagamentoPreenchida = null;
-						Collection colecaoPagamentosGuiaPagamentoPreenchidaRefContabilMaiorIgualRefFaturamento = null;
-						Collection colecaoPagamentosGuiaPagamentoNaoPreenchida = null;
-						Collection colecaoPagamentosDebitoACobrarPreenchido = null;
-						Collection colecaoPagamentosDebitoACobrarPreenchidaRefContabilMaiorIgualRefFaturamento = null;
-                        Collection colecaoPagamentosDebitoACobrarHistoricoPreenchidaRefContabilMaiorIgualRefFaturamento = null;
-						Collection colecaoPagamentosDebitoACobrarNaoPreenchido = null;
-
-						Object[] arrayDadosProcessarPagamentosConta = null;
-						Map<Integer, Collection> mapPagamentosProcessados = null;
-						Map<Integer, Collection> mapPagamentosValorNaoConfere = null;
-						Collection colecaoPagamentoValorNaoConfereIdentificadorDocumentoNulo = null;
-						Collection colecaoPagamentoClassificado = null;
-						Collection colecaoPagamentoEmDuplicidade = null;
-						Collection colecaoPagamentoAtualizarValorExcedente = null;
-
 						boolean flagTerminou = false;
 						final int quantidadeRegistros = 500;
 						int numeroIndice = 0;
-						Collection<Integer> colecaoIdsImoveis = null;
 
-						Object[] arrayDadosProcessarContas = null;
-						Object[] arrayDadosProcessarGuiasPagamento = null;
-						Object[] arrayDadosProcessarDebitosACobrar = null;
-						Collection colecaoPagamentosAtualizar = new ArrayList();
-						Collection colecaoPagamentosDuplicidade = new ArrayList();
-						/**TODO: COSANPA
-						 * Mantis 615 - Detalhar classificação de documentos inexistentes
+						/**
+						 * TODO: COSANPA Mantis 615 - Detalhar classificação de
+						 * documentos inexistentes
 						 * 
 						 * @author Wellington Rocha
-						 * @date 01/08/2012*/
+						 * @date 01/08/2012
+						 */
 						Collection colecaoPagamentosDocumentoInexistenteDebitoPrescrito = new ArrayList();
 						Collection colecaoPagamentosDocumentoInexistenteContaParcelada = new ArrayList();
 						Collection colecaoPagamentosDocumentoInexistenteContaCancelada = new ArrayList();
 						Collection colecaoPagamentosDocumentoInexistenteErroProcessamento = new ArrayList();
-						
-						Collection colecaoPagamentosAtualizarSituacaoAnterior = new ArrayList();
-						
+
 						/**
 						 * Verifica se a flag que indica que a paginação
 						 * terminou
@@ -13668,21 +13641,24 @@ public class ControladorArrecadacao implements SessionBean {
 								 * Recupera os ids por páginação de 500
 								 * registros por pesquisa.
 								 */
-								colecaoIdsImoveis = repositorioArrecadacao.pesquisarIdsImovelPorLocalidade(idLocalidade, 
-																											numeroIndice, 
-																											quantidadeRegistros);
+								Collection<Integer> colecaoIdsImoveis = repositorioArrecadacao.pesquisarIdsImovelPorLocalidade(idLocalidade, numeroIndice,
+										quantidadeRegistros);
 
 								if (colecaoIdsImoveis != null && !colecaoIdsImoveis.isEmpty()) {
 
 									/**
 									 * Instância as variáveis
 									 */
-									mapPagamentosProcessados = new HashMap();
-									mapPagamentosValorNaoConfere = new HashMap();
-									colecaoPagamentoValorNaoConfereIdentificadorDocumentoNulo = new ArrayList();
-									colecaoPagamentoClassificado = new ArrayList();
-									colecaoPagamentoEmDuplicidade = new ArrayList();
-									colecaoPagamentoAtualizarValorExcedente = new ArrayList();
+									Collection colecaoPagamentosDuplicidade = new ArrayList();
+									Collection colecaoPagamentosAtualizar = new ArrayList();
+									Collection colecaoPagamentosConta = null;
+
+									Map<Integer, Collection> mapPagamentosProcessados = new HashMap();
+									Map<Integer, Collection> mapPagamentosValorNaoConfere = new HashMap();
+									Collection colecaoPagamentoValorNaoConfereIdentificadorDocumentoNulo = new ArrayList();
+									Collection colecaoPagamentoClassificado = new ArrayList();
+									Collection colecaoPagamentoEmDuplicidade = new ArrayList();
+									Collection colecaoPagamentoAtualizarValorExcedente = new ArrayList();
 
 									/**
 									 * Classifica os pagamentos por imóvel para
@@ -13695,105 +13671,80 @@ public class ControladorArrecadacao implements SessionBean {
 										Collection<Integer> colecaoAnoMesPagamento = null;
 
 										/**
-										* Pesquisa o ano/mês de
-										* referêcia de pagamento para o
-										* imóvel para o ano/mês da
-										* arrecadação e tipo de
-										* documento igual a conta.
-										*/
-									   colecaoAnoMesPagamento = repositorioArrecadacao.pesquisarAnoMesReferenciaPagamentoParaImovel(anoMesArrecadacao, 
-											   																						idImovel);
+										 * Pesquisa o ano/mês de referêcia de
+										 * pagamento para o imóvel para o
+										 * ano/mês da arrecadação e tipo de
+										 * documento igual a conta.
+										 */
+										colecaoAnoMesPagamento = repositorioArrecadacao.pesquisarAnoMesReferenciaPagamentoParaImovel(anoMesArrecadacao,
+												idImovel);
 
 										if (colecaoAnoMesPagamento != null && !colecaoAnoMesPagamento.isEmpty()) {
 
 											for (Integer anoMesReferenciaPagamento : colecaoAnoMesPagamento) {
 
 												/*
-												* O sistema seleciona
-												* os pagamentos com
-												* ano/mês de referência
-												* da arrecadação igual
-												* o ano/mês de
-												* referência da
-												* arrecadação corrente
-												* (seleciona a partir
-												* da tabela PAGAMENTO
-												* para
-												* PGMT_AMREFERENCIAARRECADACAO
-												* igual ou menor ao
-												* PARM_AMREFERENCIAARRECADACAO)
-												*/
-                                       			colecaoPagamentosConta = repositorioArrecadacao.pesquisarPagamentosPorConta(anoMesArrecadacao, 
-                                   																						idLocalidade,
-                                   																						idImovel, 
-                                   																						anoMesReferenciaPagamento);
-                                       
+												 * O sistema seleciona os
+												 * pagamentos com ano/mês de
+												 * referência da arrecadação
+												 * igual o ano/mês de referência
+												 * da arrecadação corrente
+												 * (seleciona a partir da tabela
+												 * PAGAMENTO para
+												 * PGMT_AMREFERENCIAARRECADACAO
+												 * igual ou menor ao
+												 * PARM_AMREFERENCIAARRECADACAO)
+												 */
+												colecaoPagamentosConta = repositorioArrecadacao.pesquisarPagamentosPorConta(anoMesArrecadacao, idLocalidade,
+														idImovel, anoMesReferenciaPagamento);
 
 												/**
-												* Caso a pesquisa de
-												* pagamentos para conta
-												* do imóvel informado e
-												* com o ano/mês de
-												* arrecadação do
-												* pagamento não esteja
-												* nula Classifica os
-												* pagamentos
-												* selecionados.
-												*/
+												 * Caso a pesquisa de pagamentos
+												 * para conta do imóvel
+												 * informado e com o ano/mês de
+												 * arrecadação do pagamento não
+												 * esteja nula Classifica os
+												 * pagamentos selecionados.
+												 */
 												if (colecaoPagamentosConta != null && !colecaoPagamentosConta.isEmpty()) {
 
 													/**
-													* Chama o metódo
-													* para classificar
-													* os pagamentos do
-													* imóvel para o
-													* tipo conta,
-													* retornando um
-													* array com os
-													* pagamentos
-													* classificados. 0 -
-													* Coleção de
-													* pagamentos para
-													* atualizar a
-													* situação e o
-													* valor excedente.
-													* 1 - Map com os
-													* pagamentos para
-													* ser processados
-													* junto com a
-													* respectiva conta.
-													* 2 - Array com 4
-													* coleções de
-													* pagamentos para
-													* atualizar.
-													*/
-													arrayDadosProcessarContas = this.classificarPagamentosConta(colecaoPagamentosConta,
-																									imovel, anoMesArrecadacao, anoMesFaturamento);
+													 * Chama o metódo para
+													 * classificar os pagamentos
+													 * do imóvel para o tipo
+													 * conta, retornando um
+													 * array com os pagamentos
+													 * classificados. 0 -
+													 * Coleção de pagamentos
+													 * para atualizar a situação
+													 * e o valor excedente. 1 -
+													 * Map com os pagamentos
+													 * para ser processados
+													 * junto com a respectiva
+													 * conta. 2 - Array com 4
+													 * coleções de pagamentos
+													 * para atualizar.
+													 */
+													Object[] arrayDadosProcessarContas = this.classificarPagamentosConta(colecaoPagamentosConta, imovel,
+															anoMesArrecadacao, anoMesFaturamento);
 
-													if (arrayDadosProcessarContas[4] != null) {
-														colecaoPagamentosAtualizarSituacaoAnterior.addAll((Collection) arrayDadosProcessarContas[4]);
-													}
-													
 													if (arrayDadosProcessarContas[5] != null) {
-														colecaoPagamentosDocumentoInexistenteDebitoPrescrito.addAll(
-																										(Collection) arrayDadosProcessarContas[5]);
+														colecaoPagamentosDocumentoInexistenteDebitoPrescrito.addAll((Collection) arrayDadosProcessarContas[5]);
 													}
-													
+
 													if (arrayDadosProcessarContas[6] != null) {
-														colecaoPagamentosDocumentoInexistenteContaCancelada.addAll(
-																										(Collection) arrayDadosProcessarContas[6]);
+														colecaoPagamentosDocumentoInexistenteContaCancelada.addAll((Collection) arrayDadosProcessarContas[6]);
 													}
-													
+
 													if (arrayDadosProcessarContas[7] != null) {
-														colecaoPagamentosDocumentoInexistenteContaParcelada.addAll(
-																										(Collection) arrayDadosProcessarContas[7]);
+														colecaoPagamentosDocumentoInexistenteContaParcelada.addAll((Collection) arrayDadosProcessarContas[7]);
 													}
-													
+
 													if (arrayDadosProcessarContas[8] != null) {
-														colecaoPagamentosDocumentoInexistenteErroProcessamento.addAll(
-																										(Collection) arrayDadosProcessarContas[8]);
+														colecaoPagamentosDocumentoInexistenteErroProcessamento
+																.addAll((Collection) arrayDadosProcessarContas[8]);
 													}
-															
+
 													if (arrayDadosProcessarContas[0] != null) {
 														colecaoPagamentosAtualizar.addAll((Collection) arrayDadosProcessarContas[0]);
 													}
@@ -13805,31 +13756,28 @@ public class ControladorArrecadacao implements SessionBean {
 													if (arrayDadosProcessarContas[1] != null) {
 														mapPagamentosProcessados.putAll((Map) arrayDadosProcessarContas[1]);
 													}
-													
+
 													if (arrayDadosProcessarContas[2] != null) {
-													
-														arrayDadosProcessarPagamentosConta = (Object[]) arrayDadosProcessarContas[2];
+
+														Object[] arrayDadosProcessarPagamentosConta = (Object[]) arrayDadosProcessarContas[2];
 
 														if (arrayDadosProcessarPagamentosConta != null) {
 															if (arrayDadosProcessarPagamentosConta[0] != null) {
-																mapPagamentosValorNaoConfere
-																	.putAll((Map) arrayDadosProcessarPagamentosConta[0]);
+																mapPagamentosValorNaoConfere.putAll((Map) arrayDadosProcessarPagamentosConta[0]);
 															}
 															if (arrayDadosProcessarPagamentosConta[1] != null) {
-																colecaoPagamentoClassificado
-																	.addAll((Collection) arrayDadosProcessarPagamentosConta[1]);
+																colecaoPagamentoClassificado.addAll((Collection) arrayDadosProcessarPagamentosConta[1]);
 															}
 															if (arrayDadosProcessarPagamentosConta[2] != null) {
-																colecaoPagamentoEmDuplicidade
-																	.addAll((Collection) arrayDadosProcessarPagamentosConta[2]);
+																colecaoPagamentoEmDuplicidade.addAll((Collection) arrayDadosProcessarPagamentosConta[2]);
 															}
 															if (arrayDadosProcessarPagamentosConta[3] != null) {
 																colecaoPagamentoAtualizarValorExcedente
-																	.addAll((Collection) arrayDadosProcessarPagamentosConta[3]);
+																		.addAll((Collection) arrayDadosProcessarPagamentosConta[3]);
 															}
 															if (arrayDadosProcessarPagamentosConta[4] != null) {
 																colecaoPagamentoValorNaoConfereIdentificadorDocumentoNulo
-																	.addAll((Collection) arrayDadosProcessarPagamentosConta[4]);
+																		.addAll((Collection) arrayDadosProcessarPagamentosConta[4]);
 															}
 														}
 													}
@@ -13838,65 +13786,59 @@ public class ControladorArrecadacao implements SessionBean {
 										}
 									}
 
-									colecaoPagamentosAtualizarSituacaoAnterior = new ArrayList();
-									
-									/**TODO: COSANPA
-									 * Mantis 615 - Detalhar classificação de documentos inexistentes
+									/**
+									 * TODO: COSANPA Mantis 615 - Detalhar
+									 * classificação de documentos inexistentes
 									 * 
 									 * @author Wellington Rocha
-									 * @date 01/08/2012*/
+									 * @date 01/08/2012
+									 */
 									if (colecaoPagamentosDocumentoInexistenteContaCancelada != null
 											&& !colecaoPagamentosDocumentoInexistenteContaCancelada.isEmpty()) {
-										repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(
-																						colecaoPagamentosDocumentoInexistenteContaCancelada,
-																						PagamentoSituacao.DOCUMENTO_INEXISTENTE_CONTA_CANCELADA);
+										repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(colecaoPagamentosDocumentoInexistenteContaCancelada,
+												PagamentoSituacao.DOCUMENTO_INEXISTENTE_CONTA_CANCELADA);
 									}
 									colecaoPagamentosDocumentoInexistenteContaCancelada = new ArrayList();
-									
+
 									if (colecaoPagamentosDocumentoInexistenteContaParcelada != null
 											&& !colecaoPagamentosDocumentoInexistenteContaParcelada.isEmpty()) {
-										repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(
-																						colecaoPagamentosDocumentoInexistenteContaParcelada,
-																						PagamentoSituacao.DOCUMENTO_INEXISTENTE_CONTA_PARCELADA);
+										repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(colecaoPagamentosDocumentoInexistenteContaParcelada,
+												PagamentoSituacao.DOCUMENTO_INEXISTENTE_CONTA_PARCELADA);
 									}
 									colecaoPagamentosDocumentoInexistenteContaParcelada = new ArrayList();
-									
+
 									if (colecaoPagamentosDocumentoInexistenteDebitoPrescrito != null
 											&& !colecaoPagamentosDocumentoInexistenteDebitoPrescrito.isEmpty()) {
-										repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(
-																						colecaoPagamentosDocumentoInexistenteDebitoPrescrito,
-																						PagamentoSituacao.DOCUMENTO_INEXISTENTE_DEBITO_PRESCRITO);
+										repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(colecaoPagamentosDocumentoInexistenteDebitoPrescrito,
+												PagamentoSituacao.DOCUMENTO_INEXISTENTE_DEBITO_PRESCRITO);
 									}
 									colecaoPagamentosDocumentoInexistenteDebitoPrescrito = new ArrayList();
-									
+
 									if (colecaoPagamentosDocumentoInexistenteErroProcessamento != null
 											&& !colecaoPagamentosDocumentoInexistenteErroProcessamento.isEmpty()) {
 										repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(
-																						colecaoPagamentosDocumentoInexistenteErroProcessamento,
-																						PagamentoSituacao.DOCUMENTO_INEXISTENTE_ERRO_PROCESSAMENTO);
+												colecaoPagamentosDocumentoInexistenteErroProcessamento,
+												PagamentoSituacao.DOCUMENTO_INEXISTENTE_ERRO_PROCESSAMENTO);
 									}
 									colecaoPagamentosDocumentoInexistenteErroProcessamento = new ArrayList();
-									
+
 									/**
 									 * Atualiza a situação e o valor excedente
 									 * dos pagamentos.
 									 */
 									if (colecaoPagamentosAtualizar != null && !colecaoPagamentosAtualizar.isEmpty()) {
 										repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(colecaoPagamentosAtualizar,
-																										PagamentoSituacao.DOCUMENTO_INEXISTENTE);
+												PagamentoSituacao.DOCUMENTO_INEXISTENTE);
 									}
-									colecaoPagamentosAtualizar = new ArrayList();
-									colecaoPagamentosConta = null;
 
 									/**
 									 * Atualiza a situação e o valor excedente
 									 * dos pagamentos em duplicidade.
 									 */
 									if (colecaoPagamentosDuplicidade != null && !colecaoPagamentosDuplicidade.isEmpty()) {
-										repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(
-																	colecaoPagamentosDuplicidade, PagamentoSituacao.PAGAMENTO_EM_DUPLICIDADE);
+										repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(colecaoPagamentosDuplicidade,
+												PagamentoSituacao.PAGAMENTO_EM_DUPLICIDADE);
 									}
-									colecaoPagamentosDuplicidade = new ArrayList();
 
 									/**
 									 * Processa os pagamentos e suas respectivas
@@ -13905,7 +13847,6 @@ public class ControladorArrecadacao implements SessionBean {
 									if (mapPagamentosProcessados != null && !mapPagamentosProcessados.isEmpty()) {
 										repositorioArrecadacao.processarPagamentoConta(mapPagamentosProcessados);
 									}
-									mapPagamentosProcessados = null;
 
 									/**
 									 * Atualiza a situação dos pagamentos com
@@ -13923,10 +13864,8 @@ public class ControladorArrecadacao implements SessionBean {
 									if (colecaoPagamentoValorNaoConfereIdentificadorDocumentoNulo != null
 											&& !colecaoPagamentoValorNaoConfereIdentificadorDocumentoNulo.isEmpty()) {
 										this.repositorioArrecadacao
-												.processarPagamentoValorNaoConfereIdentificadorDocumentoIgualANulo(
-																						colecaoPagamentoValorNaoConfereIdentificadorDocumentoNulo);
+												.processarPagamentoValorNaoConfereIdentificadorDocumentoIgualANulo(colecaoPagamentoValorNaoConfereIdentificadorDocumentoNulo);
 									}
-									colecaoPagamentoValorNaoConfereIdentificadorDocumentoNulo = null;
 
 									/**
 									 * Atualiza a situação dos pagamentos com
@@ -13935,7 +13874,6 @@ public class ControladorArrecadacao implements SessionBean {
 									if (colecaoPagamentoClassificado != null && !colecaoPagamentoClassificado.isEmpty()) {
 										this.repositorioArrecadacao.atualizarSituacaoPagamentoClassificado(colecaoPagamentoClassificado);
 									}
-									colecaoPagamentoClassificado = null;
 
 									/**
 									 * Atualiza a situação dos pagamentos com
@@ -13943,9 +13881,8 @@ public class ControladorArrecadacao implements SessionBean {
 									 */
 									if (colecaoPagamentoEmDuplicidade != null && !colecaoPagamentoEmDuplicidade.isEmpty()) {
 										this.repositorioArrecadacao.atualizarSituacaoPagamento(PagamentoSituacao.PAGAMENTO_EM_DUPLICIDADE,
-																								colecaoPagamentoEmDuplicidade);
+												colecaoPagamentoEmDuplicidade);
 									}
-									colecaoPagamentoEmDuplicidade = null;
 
 									/**
 									 * Atualiza o valor excedente dos
@@ -13954,7 +13891,6 @@ public class ControladorArrecadacao implements SessionBean {
 									if (colecaoPagamentoAtualizarValorExcedente != null && !colecaoPagamentoAtualizarValorExcedente.isEmpty()) {
 										repositorioArrecadacao.atualizarValorExcedentePagamento(colecaoPagamentoAtualizarValorExcedente);
 									}
-									colecaoPagamentoAtualizarValorExcedente = null;
 								}
 
 								/**
@@ -13982,30 +13918,25 @@ public class ControladorArrecadacao implements SessionBean {
 						 * pagamento e para pagamentos de débito a cobrar para
 						 * classificar.
 						 */
-						//alterado por Vivianne Sousa 25/11/2008
-						//analista: Aryed
-						colecaoPagamentosGuiaPagamentoPreenchidaRefContabilMaiorIgualRefFaturamento = repositorioArrecadacao.
-							pesquisarPagamentosPorGuiaPagamentoComGuiaInformadaRefContabilMaiorIgualRefFaturamento(anoMesArrecadacao, 
-																													idLocalidade,
-																													anoMesFaturamento);
+						// alterado por Vivianne Sousa 25/11/2008
+						// analista: Aryed
 
-						if(colecaoPagamentosGuiaPagamentoPreenchidaRefContabilMaiorIgualRefFaturamento != null && 
-								!colecaoPagamentosGuiaPagamentoPreenchidaRefContabilMaiorIgualRefFaturamento.isEmpty()){
-							
-							//atualizar a situação atual dos pagamentos (PGST_IDATUAL) 
-							//com o valor correspondente a documento a contabilizar (tabela PAGAMENTO_SITUACAO), 
-							//o valor excedente (PGMT_VLEXCEDENTE) com o valor do pagamento (PGMT_VLPAGAMENTO) e 
-							//a identificação da guia de pagamento (GPAG_ID) com a identificação da guia de pagamento(GPAG_ID)
-							
-							Iterator iteratorColecaoPagamentosGuiaPagamento = 
-								colecaoPagamentosGuiaPagamentoPreenchidaRefContabilMaiorIgualRefFaturamento.iterator();
-							
+						Collection colecaoPagamentosGuiaPagamentoPreenchidaRefContabilMaiorIgualRefFaturamento = repositorioArrecadacao
+								.pesquisarPagamentosPorGuiaPagamentoComGuiaInformadaRefContabilMaiorIgualRefFaturamento(anoMesArrecadacao, idLocalidade,
+										anoMesFaturamento);
+
+						if (colecaoPagamentosGuiaPagamentoPreenchidaRefContabilMaiorIgualRefFaturamento != null
+								&& !colecaoPagamentosGuiaPagamentoPreenchidaRefContabilMaiorIgualRefFaturamento.isEmpty()) {
+
+							Iterator iteratorColecaoPagamentosGuiaPagamento = colecaoPagamentosGuiaPagamentoPreenchidaRefContabilMaiorIgualRefFaturamento
+									.iterator();
+
 							GuiaPagamento guiaPagamento = null;
 							Integer idGuiaPagamento = null;
 							BigDecimal valorPagamento = null;
 							Pagamento pagamento = null;
 							Collection colecaoGuiaPagamentoAtualizarSituacaoEValorExcedentePagamento = new ArrayList();
-							
+
 							while (iteratorColecaoPagamentosGuiaPagamento.hasNext()) {
 								Object[] pagamentoArray = (Object[]) iteratorColecaoPagamentosGuiaPagamento.next();
 
@@ -14027,121 +13958,73 @@ public class ControladorArrecadacao implements SessionBean {
 								pagamento.setId((Integer) pagamentoArray[0]);
 								pagamento.setGuiaPagamento(guiaPagamento);
 								pagamento.setValorExcedente(valorPagamento);
-								
 								colecaoGuiaPagamentoAtualizarSituacaoEValorExcedentePagamento.add(pagamento);
 							}
-							//Mantis 615
+							// Mantis 615
 							if (colecaoGuiaPagamentoAtualizarSituacaoEValorExcedentePagamento != null
 									&& !colecaoGuiaPagamentoAtualizarSituacaoEValorExcedentePagamento.isEmpty()) {
-								repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(
-																						colecaoGuiaPagamentoAtualizarSituacaoEValorExcedentePagamento,
-																						PagamentoSituacao.DOCUMENTO_A_CONTABILIZAR);
+								repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(colecaoGuiaPagamentoAtualizarSituacaoEValorExcedentePagamento,
+										PagamentoSituacao.DOCUMENTO_A_CONTABILIZAR);
 							}
-							
+
 						}
-						
+
 						Integer anoMesArrecadaoMaisDois = Util.somaMesAnoMesReferencia(anoMesArrecadacao, 2);
-						
-						colecaoPagamentosGuiaPagamentoPreenchida = repositorioArrecadacao
-								.pesquisarPagamentosPorGuiaPagamentoComGuiaInformadaRefContabilMenorRefFaturamento(anoMesArrecadaoMaisDois, 
-																													idLocalidade,
-																													anoMesFaturamento);
-						
-						colecaoPagamentosGuiaPagamentoNaoPreenchida = repositorioArrecadacao.pesquisarPagamentosPorGuiaPagamentoSemGuiaInformada(
-																											anoMesArrecadaoMaisDois, idLocalidade);
-						
-						
+
+						Collection colecaoPagamentosGuiaPagamentoPreenchida = repositorioArrecadacao
+								.pesquisarPagamentosPorGuiaPagamentoComGuiaInformadaRefContabilMenorRefFaturamento(anoMesArrecadaoMaisDois, idLocalidade,
+										anoMesFaturamento);
+
+						Collection colecaoPagamentosGuiaPagamentoNaoPreenchida = repositorioArrecadacao.pesquisarPagamentosPorGuiaPagamentoSemGuiaInformada(
+								anoMesArrecadaoMaisDois, idLocalidade);
+
 						if ((colecaoPagamentosGuiaPagamentoPreenchida != null && !colecaoPagamentosGuiaPagamentoPreenchida.isEmpty())
 								|| (colecaoPagamentosGuiaPagamentoNaoPreenchida != null && !colecaoPagamentosGuiaPagamentoNaoPreenchida.isEmpty())) {
 
-							/*
-							 * ==============================================================================================
-							 * Para os pagamentos com tipo de documento
-							 * (DOPT_ID) com o valor correspondente a GUIA DE
-							 * PAGAMENTO:
-							 * ==============================================================================================
-							 */
-							/**
-							 * Chama o metódo de classificar pagamentos para
-							 * guia de pagamento o metódo retorna um array
-							 * contendo: 0 - Map com os pagamentos para ser
-							 * processados junto com a respectiva guia de
-							 * pagamento. 1 - Pagamentos com situação igual a
-							 * valor não confere. 2 - Pagamentos com situação
-							 * igual pagamentos classificados. 3 - Pagamentos
-							 * com situação igual pagamentos em duplicidade. 4 -
-							 * Pagamentos para atualizar valor execedente.
-							 */
-							arrayDadosProcessarGuiasPagamento = this.classificarPagamentosGuiaPagamento(colecaoPagamentosGuiaPagamentoPreenchida,
-																										colecaoPagamentosGuiaPagamentoNaoPreenchida,
-																										anoMesFaturamento);
+							Object[] arrayDadosProcessarGuiasPagamento = this.classificarPagamentosGuiaPagamento(colecaoPagamentosGuiaPagamentoPreenchida,
+									colecaoPagamentosGuiaPagamentoNaoPreenchida, anoMesFaturamento);
 
 							if (arrayDadosProcessarGuiasPagamento != null) {
 								if (arrayDadosProcessarGuiasPagamento[0] != null) {
 									this.repositorioArrecadacao.processarPagamentoGuiaPagamento((Map) arrayDadosProcessarGuiasPagamento[0]);
 								}
 								if (arrayDadosProcessarGuiasPagamento[1] != null) {
-									this.repositorioArrecadacao.processarPagamentoValorNaoConfereGuiaPagamento(
-																										(Map) arrayDadosProcessarGuiasPagamento[1]);
+									this.repositorioArrecadacao.processarPagamentoValorNaoConfereGuiaPagamento((Map) arrayDadosProcessarGuiasPagamento[1]);
 								}
 								if (arrayDadosProcessarGuiasPagamento[2] != null) {
-									this.repositorioArrecadacao.atualizarSituacaoPagamentoClassificado(
-																								(Collection) arrayDadosProcessarGuiasPagamento[2]);
+									this.repositorioArrecadacao.atualizarSituacaoPagamentoClassificado((Collection) arrayDadosProcessarGuiasPagamento[2]);
 								}
 								if (arrayDadosProcessarGuiasPagamento[3] != null) {
 									this.repositorioArrecadacao.atualizarSituacaoPagamento(PagamentoSituacao.PAGAMENTO_EM_DUPLICIDADE,
-																							(Collection) arrayDadosProcessarGuiasPagamento[3]);
+											(Collection) arrayDadosProcessarGuiasPagamento[3]);
 								}
 								if (arrayDadosProcessarGuiasPagamento[4] != null) {
 									this.repositorioArrecadacao.atualizarValorExcedentePagamento((Collection) arrayDadosProcessarGuiasPagamento[4]);
 								}
 
 								if (arrayDadosProcessarGuiasPagamento[5] != null) {
-									this.repositorioArrecadacao.processarPagamentoValorNaoConfereIdentificadorDocumentoIgualANulo(
-																								(Collection) arrayDadosProcessarGuiasPagamento[5]);
+									this.repositorioArrecadacao
+											.processarPagamentoValorNaoConfereIdentificadorDocumentoIgualANulo((Collection) arrayDadosProcessarGuiasPagamento[5]);
 								}
 							}
-							/*
-							 * ==============================================================================================
-							 * ==============================================================================================
-							 * FIM pagamentos com tipo de documento (DOPT_ID)
-							 * com valor correspondente a GUIA DE PAGAMENTO:
-							 * ==============================================================================================
-							 */
 						}
 
-						/*
-						 * ==============================================================================================
-						 * Para os pagamentos com tipo de documento (DOPT_ID)
-						 * com o valor correspondente a DÉBITO A COBRAR:
-						 * ==============================================================================================
-						 */
+						Collection colecaoPagamentosDebitoACobrarPreenchidaRefContabilMaiorIgualRefFaturamento = repositorioArrecadacao
+								.pesquisarPagamentosPorDebitoACobrarComDebitoInformadoRefContabilMaiorIgualRefFaturamento(anoMesArrecadacao, idLocalidade,
+										anoMesFaturamento);
 
-						colecaoPagamentosDebitoACobrarPreenchidaRefContabilMaiorIgualRefFaturamento = repositorioArrecadacao
-							.pesquisarPagamentosPorDebitoACobrarComDebitoInformadoRefContabilMaiorIgualRefFaturamento(
-									anoMesArrecadacao, idLocalidade, anoMesFaturamento);
-						
-						
-						
-											
-						
-						if(colecaoPagamentosDebitoACobrarPreenchidaRefContabilMaiorIgualRefFaturamento != null && 
-								!colecaoPagamentosDebitoACobrarPreenchidaRefContabilMaiorIgualRefFaturamento.isEmpty()){
-							
-							//atualizar a situação atual dos pagamentos (PGST_IDATUAL) 
-							//com o valor correspondente a documento inexistente (tabela PAGAMENTO_SITUACAO), 
-							//o valor excedente (PGMT_VLEXCEDENTE) com o valor do pagamento (PGMT_VLPAGAMENTO) e 
-							//a identificação do débito a cobrar no pagamento (DBAC_ID) com a identificação do débito a cobrar (DBAC_ID)
-							
-							Iterator iteratorColecaoPagamentosDebitoACobrar = 
-								colecaoPagamentosDebitoACobrarPreenchidaRefContabilMaiorIgualRefFaturamento.iterator();
-							
+						if (colecaoPagamentosDebitoACobrarPreenchidaRefContabilMaiorIgualRefFaturamento != null
+								&& !colecaoPagamentosDebitoACobrarPreenchidaRefContabilMaiorIgualRefFaturamento.isEmpty()) {
+
+							Iterator iteratorColecaoPagamentosDebitoACobrar = colecaoPagamentosDebitoACobrarPreenchidaRefContabilMaiorIgualRefFaturamento
+									.iterator();
+
 							DebitoACobrarGeral debitoACobrarGeral = null;
 							Integer idDebitoACobrar = null;
 							BigDecimal valorPagamento = null;
 							Pagamento pagamento = null;
 							Collection colecaoDebitoACobrarAtualizarSituacaoEValorExcedentePagamento = new ArrayList();
-							
+
 							while (iteratorColecaoPagamentosDebitoACobrar.hasNext()) {
 								Object[] pagamentoArray = (Object[]) iteratorColecaoPagamentosDebitoACobrar.next();
 
@@ -14163,96 +14046,84 @@ public class ControladorArrecadacao implements SessionBean {
 								pagamento.setId((Integer) pagamentoArray[0]);
 								pagamento.setDebitoACobrarGeral(debitoACobrarGeral);
 								pagamento.setValorExcedente(valorPagamento);
-								
+
 								colecaoDebitoACobrarAtualizarSituacaoEValorExcedentePagamento.add(pagamento);
 							}
-							//Mantis 615
+							// Mantis 615
 							if (colecaoDebitoACobrarAtualizarSituacaoEValorExcedentePagamento != null
 									&& !colecaoDebitoACobrarAtualizarSituacaoEValorExcedentePagamento.isEmpty()) {
-								repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(
-																						colecaoDebitoACobrarAtualizarSituacaoEValorExcedentePagamento,
-																						PagamentoSituacao.DOCUMENTO_A_CONTABILIZAR);
+								repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(colecaoDebitoACobrarAtualizarSituacaoEValorExcedentePagamento,
+										PagamentoSituacao.DOCUMENTO_A_CONTABILIZAR);
 								colecaoDebitoACobrarAtualizarSituacaoEValorExcedentePagamento.clear();
 							}
-							
+
 						}
-						
+
 						Integer anoMesArrecadacaoMaisDois = Util.somaMesAnoMesReferencia(anoMesArrecadacao, 2);
-						colecaoPagamentosDebitoACobrarPreenchido = repositorioArrecadacao
-								.pesquisarPagamentosPorDebitoACobrarComDebitoInformadoRefContabilMenorRefFaturamento(anoMesArrecadacaoMaisDois, 
-																													idLocalidade, anoMesFaturamento);
-						
-						colecaoPagamentosDebitoACobrarNaoPreenchido = repositorioArrecadacao
-													.pesquisarPagamentosPorDebitoACobrarSemDebitoInformada(anoMesArrecadacaoMaisDois, idLocalidade);	
-                        
-                        // 4.1.2.2.Caso o débito a cobrar tenha sido encontrado no histórico de débito a cobrar
-                        colecaoPagamentosDebitoACobrarHistoricoPreenchidaRefContabilMaiorIgualRefFaturamento = repositorioArrecadacao
-                        							.pesquisarPagamentosPorDebitoACobrarHistoricoComDebitoInformadoRefContabil(anoMesArrecadacao, 
-																			                                        			idLocalidade );
-                        
-                        
-                        // 4.1.2.2.1.Caso a situação atual (PGST_IDATUAL) 
-                        // do pagamento não corresponda a baixar valor excedente 
-                        // (tabela PAGAMENTO_SITUACAO), atualizar a situação 
-                        // atual dos pagamentos (PGST_IDATUAL) com o valor 
-                        // correspondente a pagamento em duplicidade 
-                        // (tabela PAGAMENTO_SITUACAO) e o valor excedente 
-                        // (PGMT_VLEXCEDENTE) com o valor do pagamento 
-                        // (PGMT_VLPAGAMENTO);		
-                        if(colecaoPagamentosDebitoACobrarHistoricoPreenchidaRefContabilMaiorIgualRefFaturamento != null && 
-                           !colecaoPagamentosDebitoACobrarHistoricoPreenchidaRefContabilMaiorIgualRefFaturamento.isEmpty()){                        
-                            Iterator iteratorColecaoPagamentosDebitoACobrarHistorico = 
-                                colecaoPagamentosDebitoACobrarHistoricoPreenchidaRefContabilMaiorIgualRefFaturamento.iterator();
-                            
-                            DebitoACobrarGeral debitoACobrarGeral = null;
-                            Integer idDebitoACobrar = null;
-                            BigDecimal valorPagamento = null;
-                            Pagamento pagamento = null;
-                            Collection colecaoDebitoACobrarAtualizarSituacaoEValorExcedentePagamento = new ArrayList();
-                            
-                            while (iteratorColecaoPagamentosDebitoACobrarHistorico.hasNext()) {
-                                Object[] pagamentoArray = (Object[]) iteratorColecaoPagamentosDebitoACobrarHistorico.next();
-                                
-                                // pagamento não corresponda a baixar valor excedente
-                                if ( !PagamentoSituacao.VALOR_A_BAIXAR.equals( 
-                                     ( pagamentoArray[3] != null ? ( Integer ) pagamentoArray[3] : -1  ) ) ){    
-                                    if (pagamentoArray[1] != null) {
-                                        idDebitoACobrar = (Integer) pagamentoArray[1];
-                                        debitoACobrarGeral = new DebitoACobrarGeral();
-                                        debitoACobrarGeral.setId(idDebitoACobrar);
-                                    } else {
-                                        idDebitoACobrar = null;
-                                    }
-        
-                                    if (pagamentoArray[2] != null) {
-                                        valorPagamento = (BigDecimal) pagamentoArray[2];
-                                    } else {
-                                        valorPagamento = null;
-                                    }
-        
-                                    pagamento = new Pagamento();
-                                    pagamento.setId((Integer) pagamentoArray[0]);
-                                    pagamento.setDebitoACobrarGeral(debitoACobrarGeral);
-                                    pagamento.setValorExcedente(valorPagamento);
-                                    
-                                    colecaoDebitoACobrarAtualizarSituacaoEValorExcedentePagamento.add(pagamento);
-                                }
-                            }
-                            
-                            if (colecaoDebitoACobrarAtualizarSituacaoEValorExcedentePagamento != null
-                                    && !colecaoDebitoACobrarAtualizarSituacaoEValorExcedentePagamento.isEmpty()) {
-                                repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(
-										                                                colecaoDebitoACobrarAtualizarSituacaoEValorExcedentePagamento,
-										                                                PagamentoSituacao.PAGAMENTO_EM_DUPLICIDADE );
-                            }                           
-                        }                        
+						Collection colecaoPagamentosDebitoACobrarPreenchido = repositorioArrecadacao
+								.pesquisarPagamentosPorDebitoACobrarComDebitoInformadoRefContabilMenorRefFaturamento(anoMesArrecadacaoMaisDois, idLocalidade,
+										anoMesFaturamento);
+
+						Collection colecaoPagamentosDebitoACobrarNaoPreenchido = repositorioArrecadacao.pesquisarPagamentosPorDebitoACobrarSemDebitoInformada(
+								anoMesArrecadacaoMaisDois, idLocalidade);
+
+						// 4.1.2.2.Caso o débito a cobrar tenha sido encontrado
+						// no histórico de débito a cobrar
+						Collection colecaoPagamentosDebitoACobrarHistoricoPreenchidaRefContabilMaiorIgualRefFaturamento = repositorioArrecadacao
+								.pesquisarPagamentosPorDebitoACobrarHistoricoComDebitoInformadoRefContabil(anoMesArrecadacao, idLocalidade);
+
+						if (colecaoPagamentosDebitoACobrarHistoricoPreenchidaRefContabilMaiorIgualRefFaturamento != null
+								&& !colecaoPagamentosDebitoACobrarHistoricoPreenchidaRefContabilMaiorIgualRefFaturamento.isEmpty()) {
+							Iterator iteratorColecaoPagamentosDebitoACobrarHistorico = colecaoPagamentosDebitoACobrarHistoricoPreenchidaRefContabilMaiorIgualRefFaturamento
+									.iterator();
+
+							DebitoACobrarGeral debitoACobrarGeral = null;
+							Integer idDebitoACobrar = null;
+							BigDecimal valorPagamento = null;
+							Pagamento pagamento = null;
+							Collection colecaoDebitoACobrarAtualizarSituacaoEValorExcedentePagamento = new ArrayList();
+
+							while (iteratorColecaoPagamentosDebitoACobrarHistorico.hasNext()) {
+								Object[] pagamentoArray = (Object[]) iteratorColecaoPagamentosDebitoACobrarHistorico.next();
+
+								// pagamento não corresponda a baixar valor
+								// excedente
+								if (!PagamentoSituacao.VALOR_A_BAIXAR.equals((pagamentoArray[3] != null ? (Integer) pagamentoArray[3] : -1))) {
+									if (pagamentoArray[1] != null) {
+										idDebitoACobrar = (Integer) pagamentoArray[1];
+										debitoACobrarGeral = new DebitoACobrarGeral();
+										debitoACobrarGeral.setId(idDebitoACobrar);
+									} else {
+										idDebitoACobrar = null;
+									}
+
+									if (pagamentoArray[2] != null) {
+										valorPagamento = (BigDecimal) pagamentoArray[2];
+									} else {
+										valorPagamento = null;
+									}
+
+									pagamento = new Pagamento();
+									pagamento.setId((Integer) pagamentoArray[0]);
+									pagamento.setDebitoACobrarGeral(debitoACobrarGeral);
+									pagamento.setValorExcedente(valorPagamento);
+
+									colecaoDebitoACobrarAtualizarSituacaoEValorExcedentePagamento.add(pagamento);
+								}
+							}
+
+							if (colecaoDebitoACobrarAtualizarSituacaoEValorExcedentePagamento != null
+									&& !colecaoDebitoACobrarAtualizarSituacaoEValorExcedentePagamento.isEmpty()) {
+								repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(colecaoDebitoACobrarAtualizarSituacaoEValorExcedentePagamento,
+										PagamentoSituacao.PAGAMENTO_EM_DUPLICIDADE);
+							}
+						}
 
 						if ((colecaoPagamentosDebitoACobrarPreenchido != null && !colecaoPagamentosDebitoACobrarPreenchido.isEmpty())
 								|| (colecaoPagamentosDebitoACobrarNaoPreenchido != null && !colecaoPagamentosDebitoACobrarNaoPreenchido.isEmpty())) {
 
-							arrayDadosProcessarDebitosACobrar = this.classificarPagamentosDebitoACobrar(colecaoPagamentosDebitoACobrarPreenchido,
-																										colecaoPagamentosDebitoACobrarNaoPreenchido,
-																										anoMesFaturamento);
+							Object[] arrayDadosProcessarDebitosACobrar = arrayDadosProcessarDebitosACobrar = this.classificarPagamentosDebitoACobrar(
+									colecaoPagamentosDebitoACobrarPreenchido, colecaoPagamentosDebitoACobrarNaoPreenchido, anoMesFaturamento);
 							/*
 							 * Chama o metódo de classificar pagamentos para
 							 * débito a cobrar o metódo retorna um array
@@ -14269,63 +14140,36 @@ public class ControladorArrecadacao implements SessionBean {
 									this.repositorioArrecadacao.processarPagamentoDebitoACobrar((Map) arrayDadosProcessarDebitosACobrar[0]);
 								}
 								if (arrayDadosProcessarDebitosACobrar[1] != null) {
-									this.repositorioArrecadacao.processarPagamentoValorNaoConfereDebitoACobrar(
-																										(Map) arrayDadosProcessarDebitosACobrar[1]);
+									this.repositorioArrecadacao.processarPagamentoValorNaoConfereDebitoACobrar((Map) arrayDadosProcessarDebitosACobrar[1]);
 								}
 								if (arrayDadosProcessarDebitosACobrar[2] != null) {
-									this.repositorioArrecadacao.atualizarSituacaoPagamentoClassificado(
-																								(Collection) arrayDadosProcessarDebitosACobrar[2]);
+									this.repositorioArrecadacao.atualizarSituacaoPagamentoClassificado((Collection) arrayDadosProcessarDebitosACobrar[2]);
 								}
 								if (arrayDadosProcessarDebitosACobrar[3] != null) {
-									this.repositorioArrecadacao.atualizarSituacaoPagamento(PagamentoSituacao.PAGAMENTO_EM_DUPLICIDADE, 
-																							(Collection) arrayDadosProcessarDebitosACobrar[3]);
+									this.repositorioArrecadacao.atualizarSituacaoPagamento(PagamentoSituacao.PAGAMENTO_EM_DUPLICIDADE,
+											(Collection) arrayDadosProcessarDebitosACobrar[3]);
 								}
 								if (arrayDadosProcessarDebitosACobrar[4] != null) {
 									this.repositorioArrecadacao.atualizarValorExcedentePagamento((Collection) arrayDadosProcessarDebitosACobrar[4]);
 								}
 
 								if (arrayDadosProcessarDebitosACobrar[5] != null) {
-									this.repositorioArrecadacao.processarPagamentoValorNaoConfereIdentificadorDocumentoIgualANulo(
-																								(Collection) arrayDadosProcessarDebitosACobrar[5]);
+									this.repositorioArrecadacao
+											.processarPagamentoValorNaoConfereIdentificadorDocumentoIgualANulo((Collection) arrayDadosProcessarDebitosACobrar[5]);
 								}
 							}
-
-							/*
-							 * ==============================================================================================
-							 * ==============================================================================================
-							 * FIM pagamentos com tipo de documento (DOPT_ID)
-							 * com valor correspondente a DÉBITO A COBRAR:
-							 * ==============================================================================================
-							 */
 						}
-
-						/*
-						 * O sistema seleciona as devoluções com ano/mês de
-						 * referência da arrecadação igual ou menor que o
-						 * ano/mês de referência da arrecadação corrente
-						 * (seleciona a partir da tabela DEVOLUCAO para
-						 * DEVL_AMREFERENCIAARRECADACAO igual ou menor ao
-						 * PARM_AMREFERENCIAARRECADACAO)
-						 */
 
 						Collection colecaoDevolucoesDuplicidadeExcesso = null;
 						Collection colecaoDevolucoesCobradasIndevidamente = null;
 
-						colecaoDevolucoesDuplicidadeExcesso = repositorioArrecadacao.pesquisarDevolucoesEmDuplicidadeOUExcesso(anoMesArrecadacao, 
-																																idLocalidade);
-						colecaoDevolucoesCobradasIndevidamente = repositorioArrecadacao.pesquisarDevolucoesCobradasIndevidamente(anoMesArrecadacao, 
-																																	idLocalidade);
+						colecaoDevolucoesDuplicidadeExcesso = repositorioArrecadacao.pesquisarDevolucoesEmDuplicidadeOUExcesso(anoMesArrecadacao, idLocalidade);
+						colecaoDevolucoesCobradasIndevidamente = repositorioArrecadacao.pesquisarDevolucoesCobradasIndevidamente(anoMesArrecadacao,
+								idLocalidade);
 
 						if ((colecaoDevolucoesDuplicidadeExcesso != null && !colecaoDevolucoesDuplicidadeExcesso.isEmpty())
 								|| (colecaoDevolucoesCobradasIndevidamente != null && !colecaoDevolucoesCobradasIndevidamente.isEmpty())) {
 
-							/*
-							 * Para as devoluções de contas pagas em duplicidade
-							 * ou em excesso, ou seja, aquelas com ano/mês de
-							 * referência preenchidos
-							 * (DEVL_AMREFERENCIADEVOLUCAO com valor diferente
-							 * de nulo)
-							 */
 							this.classificarDevolucoesDuplicidadeExcesso(colecaoDevolucoesDuplicidadeExcesso);
 							this.classificarDevolucoesCobradasIndevidamente(colecaoDevolucoesCobradasIndevidamente);
 						}
@@ -14337,8 +14181,7 @@ public class ControladorArrecadacao implements SessionBean {
 				// Registrar o fim da execução da Unidade de Processamento
 				//
 				// --------------------------------------------------------
-				getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
-						idUnidadeIniciada, false);
+				getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 
 			}// if sistema parametro
 		} catch (Exception e) {
@@ -14347,8 +14190,7 @@ public class ControladorArrecadacao implements SessionBean {
 			// batch será atualizada com o erro ocorrido
 			e.printStackTrace();
 
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(e,
-					idUnidadeIniciada, true);
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
 
 			throw new EJBException(e);
 		}
@@ -37381,7 +37223,6 @@ public class ControladorArrecadacao implements SessionBean {
 		Localidade localidadeAnterior = null;
 		Imovel imovelAnterior = null;
 		Integer anoMesReferenciaDevolucaoAnterior = null;
-		Collection<Pagamento> colecaoPagamentoNaoClassificados = null;
 		String[] idDevolucao = null;
 		Object[] devolucaoArray = null;
 		Localidade localidade = null;
@@ -37482,49 +37323,7 @@ public class ControladorArrecadacao implements SessionBean {
 
 				if (conjuntoFechado) {
 
-					/*
-					 * [SF0010] Selecionar Pagamentos não classificados de conta
-					 */
-					colecaoPagamentoNaoClassificados = this
-							.selecionarPagamentosNaoClassificadosConta(
-									imovelAnterior,
-									anoMesReferenciaDevolucaoAnterior);
-
-					if (colecaoPagamentoNaoClassificados == null
-							|| colecaoPagamentoNaoClassificados.isEmpty()) {
-
-						iteratorColecaoConjuntoDevolucoes = colecaoConjuntoDevolucoes
-								.iterator();
-
-						idDevolucao = new String[1];
-
-						while (iteratorColecaoConjuntoDevolucoes.hasNext()) {
-
-							devolucaoConjunto = (Devolucao) iteratorColecaoConjuntoDevolucoes
-									.next();
-
-							idDevolucao[0] = String.valueOf(devolucaoConjunto
-									.getId());
-
-							try {
-								repositorioArrecadacao
-										.atualizarSituacaoDevolucao(
-												idDevolucao,
-												DevolucaoSituacao.PAGAMENTO_DUPLICIDADE_NAO_ENCONTRADO);
-
-							} catch (ErroRepositorioException ex) {
-								ex.printStackTrace();
-								throw new ControladorException("erro.sistema",
-										ex);
-							}
-						}
-					} else {
-						// [SF0011] Processar Devoluções de Pagamentos
-						this.processarDevolucaoPagamento(
-								colecaoConjuntoDevolucoes,
-								colecaoPagamentoNaoClassificados);
-
-					}
+					processarDevolucoesDuplicidadeExcesso(colecaoConjuntoDevolucoes, imovelAnterior, anoMesReferenciaDevolucaoAnterior);
 
 					colecaoConjuntoDevolucoes.clear();
 					colecaoConjuntoDevolucoes.add(devolucao);
@@ -37540,51 +37339,8 @@ public class ControladorArrecadacao implements SessionBean {
 			 * Último registro
 			 */
 			if (!colecaoConjuntoDevolucoes.isEmpty()) {
-
-				/*
-				 * [SF0010] Selecionar Pagamentos não classificados de conta
-				 */
-				colecaoPagamentoNaoClassificados = this
-						.selecionarPagamentosNaoClassificadosConta(
-								imovelAnterior,
-								anoMesReferenciaDevolucaoAnterior);
-
-				if (colecaoPagamentoNaoClassificados == null
-						|| colecaoPagamentoNaoClassificados.isEmpty()) {
-
-					iteratorColecaoConjuntoDevolucoes = colecaoConjuntoDevolucoes
-							.iterator();
-
-					idDevolucao = new String[1];
-
-					while (iteratorColecaoConjuntoDevolucoes.hasNext()) {
-
-						devolucaoConjunto = (Devolucao) iteratorColecaoConjuntoDevolucoes
-								.next();
-
-						idDevolucao[0] = String.valueOf(devolucaoConjunto
-								.getId());
-
-						try {
-
-							repositorioArrecadacao
-									.atualizarSituacaoDevolucao(
-											idDevolucao,
-											DevolucaoSituacao.PAGAMENTO_DUPLICIDADE_NAO_ENCONTRADO);
-
-						} catch (ErroRepositorioException ex) {
-							ex.printStackTrace();
-							throw new ControladorException("erro.sistema", ex);
-						}
-					}
-				} else {
-					// [SF0011] Processar Devoluções de Pagamentos
-					this.processarDevolucaoPagamento(colecaoConjuntoDevolucoes,
-							colecaoPagamentoNaoClassificados);
-
-				}
+				processarDevolucoesDuplicidadeExcesso(colecaoConjuntoDevolucoes, imovelAnterior, anoMesReferenciaDevolucaoAnterior);
 			}
-
 		}
 	}
 
@@ -37617,7 +37373,6 @@ public class ControladorArrecadacao implements SessionBean {
 		CreditoARealizarGeral creditoARealizarGeral = null;
 		Cliente cliente = null;
 		Cliente clienteAnterior = null;
-		Collection<Pagamento> colecaoPagamentoNaoClassificados = null;
 
 		String[] idDevolucao = null;
 
@@ -37733,71 +37488,7 @@ public class ControladorArrecadacao implements SessionBean {
 
 				if (conjuntoFechado) {
 
-					/*
-					 * [SF0012] Selecionar Pagamentos não classificados de guia
-					 * de pagamento ou débito a cobrar
-					 */
-					colecaoPagamentoNaoClassificados = this
-							.selecionarPagamentosNaoClassificadosGuiaPagamentoDebitoACobrar(
-									imovelAnterior, clienteAnterior, debitoTipoAnterior);
-
-					if (colecaoPagamentoNaoClassificados == null
-							|| colecaoPagamentoNaoClassificados.isEmpty()) {
-
-						iteratorColecaoConjuntoDevolucoes = colecaoConjuntoDevolucoes
-								.iterator();
-
-						idDevolucao = new String[1];
-
-						while (iteratorColecaoConjuntoDevolucoes.hasNext()) {
-
-							devolucaoConjunto = (Devolucao) iteratorColecaoConjuntoDevolucoes
-									.next();
-
-							idDevolucao[0] = String.valueOf(devolucaoConjunto
-									.getId());
-
-							//alterado por Vivianne Sousa 27/08/2008
-							//analista Aryed Lins
-							if (devolucaoConjunto.getGuiaDevolucao() != null ||
-									devolucaoConjunto.getCreditoARealizarGeral() != null) {
-
-								try {
-									repositorioArrecadacao
-											.atualizarSituacaoDevolucao(
-													idDevolucao,
-													DevolucaoSituacao.DEVOLUCAO_OUTROS_VALORES);
-
-								} catch (ErroRepositorioException ex) {
-									ex.printStackTrace();
-									throw new ControladorException(
-											"erro.sistema", ex);
-								}
-
-							} else {
-
-								try {
-									repositorioArrecadacao
-											.atualizarSituacaoDevolucao(
-													idDevolucao,
-													DevolucaoSituacao.GUIA_DEVOLUCAO_NAO_INFORMADA);
-
-								} catch (ErroRepositorioException ex) {
-									ex.printStackTrace();
-									throw new ControladorException(
-											"erro.sistema", ex);
-								}
-							}
-						}
-					} else {
-
-						// [SF0011] Processar Devoluções de
-						// Pagamentos
-						this.processarDevolucaoPagamento(
-								colecaoConjuntoDevolucoes,
-								colecaoPagamentoNaoClassificados);
-
-					}
+					processarDevolucoesCobradasIndevidamente(colecaoConjuntoDevolucoes, imovelAnterior, debitoTipoAnterior, clienteAnterior);
 
 					colecaoConjuntoDevolucoes.clear();
 					colecaoConjuntoDevolucoes.add(devolucao);
@@ -37813,72 +37504,7 @@ public class ControladorArrecadacao implements SessionBean {
 			 * Último registro
 			 */
 			if (!colecaoConjuntoDevolucoes.isEmpty()) {
-
-				/*
-				 * [SF0012] Selecionar Pagamentos não classificados de guia de
-				 * pagamento ou débito a cobrar
-				 */
-				colecaoPagamentoNaoClassificados = this
-						.selecionarPagamentosNaoClassificadosGuiaPagamentoDebitoACobrar(
-								imovelAnterior, clienteAnterior,
-								debitoTipoAnterior);
-
-				if (colecaoPagamentoNaoClassificados == null
-						|| colecaoPagamentoNaoClassificados.isEmpty()) {
-
-					iteratorColecaoConjuntoDevolucoes = colecaoConjuntoDevolucoes
-							.iterator();
-
-					idDevolucao = new String[1];
-
-					while (iteratorColecaoConjuntoDevolucoes.hasNext()) {
-
-						devolucaoConjunto = (Devolucao) iteratorColecaoConjuntoDevolucoes
-								.next();
-
-						idDevolucao[0] = String.valueOf(devolucaoConjunto
-								.getId());
-
-						//alterado por Vivianne Sousa 27/08/2008
-						//analista Aryed Lins
-						if (devolucaoConjunto.getGuiaDevolucao() != null
-								|| devolucaoConjunto.getCreditoARealizarGeral() != null) {
-
-							try {
-								repositorioArrecadacao
-										.atualizarSituacaoDevolucao(
-												idDevolucao,
-												DevolucaoSituacao.DEVOLUCAO_OUTROS_VALORES);
-
-							} catch (ErroRepositorioException ex) {
-								ex.printStackTrace();
-								throw new ControladorException("erro.sistema",
-										ex);
-							}
-
-						} else {
-
-							try {
-								repositorioArrecadacao
-										.atualizarSituacaoDevolucao(
-												idDevolucao,
-												DevolucaoSituacao.GUIA_DEVOLUCAO_NAO_INFORMADA);
-
-							} catch (ErroRepositorioException ex) {
-								ex.printStackTrace();
-								throw new ControladorException("erro.sistema",
-										ex);
-							}
-						}
-					}
-				} else {
-
-					// [SF0011] Processar Devoluções de
-					// Pagamentos
-					this.processarDevolucaoPagamento(colecaoConjuntoDevolucoes,
-							colecaoPagamentoNaoClassificados);
-
-				}
+				processarDevolucoesCobradasIndevidamente(colecaoConjuntoDevolucoes, imovelAnterior, debitoTipoAnterior, clienteAnterior);
 			}
 		}
 	}
@@ -55622,4 +55248,59 @@ public class ControladorArrecadacao implements SessionBean {
 			throw new ControladorException("erro.sistema", e);
 		}
 	}
+
+	private void processarDevolucoesDuplicidadeExcesso(Collection colecaoConjuntoDevolucoes, Imovel imovelAnterior, Integer anoMesReferenciaDevolucaoAnterior)
+			throws ControladorException {
+		try {
+			Collection<Pagamento> colecaoPagamentoNaoClassificados = this.selecionarPagamentosNaoClassificadosConta(imovelAnterior,
+					anoMesReferenciaDevolucaoAnterior);
+
+			if (colecaoPagamentoNaoClassificados == null || colecaoPagamentoNaoClassificados.isEmpty()) {
+				Iterator iteratorColecaoConjuntoDevolucoes = colecaoConjuntoDevolucoes.iterator();
+				String[] idDevolucao = new String[1];
+
+				Devolucao devolucaoConjunto;
+				while (iteratorColecaoConjuntoDevolucoes.hasNext()) {
+					devolucaoConjunto = (Devolucao) iteratorColecaoConjuntoDevolucoes.next();
+					idDevolucao[0] = String.valueOf(devolucaoConjunto.getId());
+					repositorioArrecadacao.atualizarSituacaoDevolucao(idDevolucao, DevolucaoSituacao.PAGAMENTO_DUPLICIDADE_NAO_ENCONTRADO);
+				}
+			} else {
+				this.processarDevolucaoPagamento(colecaoConjuntoDevolucoes, colecaoPagamentoNaoClassificados);
+			}
+		} catch (ErroRepositorioException ex) {
+			ex.printStackTrace();
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+
+	private void processarDevolucoesCobradasIndevidamente(Collection colecaoConjuntoDevolucoes, Imovel imovel, DebitoTipo debitoTipo, Cliente cliente)
+			throws ControladorException {
+		try {
+			Collection<Pagamento> colecaoPagamentoNaoClassificados = this.selecionarPagamentosNaoClassificadosGuiaPagamentoDebitoACobrar(imovel, cliente,
+					debitoTipo);
+
+			if (colecaoPagamentoNaoClassificados == null || colecaoPagamentoNaoClassificados.isEmpty()) {
+				Iterator iteratorColecaoConjuntoDevolucoes = colecaoConjuntoDevolucoes.iterator();
+				String[] idDevolucao = new String[1];
+
+				Devolucao devolucaoConjunto;
+				while (iteratorColecaoConjuntoDevolucoes.hasNext()) {
+					devolucaoConjunto = (Devolucao) iteratorColecaoConjuntoDevolucoes.next();
+					idDevolucao[0] = String.valueOf(devolucaoConjunto.getId());
+
+					if (devolucaoConjunto.getGuiaDevolucao() != null || devolucaoConjunto.getCreditoARealizarGeral() != null) {
+						repositorioArrecadacao.atualizarSituacaoDevolucao(idDevolucao, DevolucaoSituacao.DEVOLUCAO_OUTROS_VALORES);
+					} else {
+						repositorioArrecadacao.atualizarSituacaoDevolucao(idDevolucao, DevolucaoSituacao.GUIA_DEVOLUCAO_NAO_INFORMADA);
+					}
+				}
+			} else {
+				this.processarDevolucaoPagamento(colecaoConjuntoDevolucoes, colecaoPagamentoNaoClassificados);
+			}
+		} catch (ErroRepositorioException ex) {
+			ex.printStackTrace();
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}	
 }

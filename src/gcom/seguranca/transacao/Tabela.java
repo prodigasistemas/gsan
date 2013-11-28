@@ -93,6 +93,7 @@ public class Tabela extends TabelaAuxiliarAbreviada {
 	public static final Integer CLIENTE_ATUALIZACAO_CADASTRAL = new Integer(662);
 	public static final Integer CLIENTE_FONE_ATUALIZACAO_CADASTRAL = new Integer(663);
 	public static final Integer IMOVEL_SUBCATEGORIA_ATUALIZACAO_CADASTRAL = new Integer(664);
+	public static final Integer IMOVEL_RAMO_ATIVIDADE_ATUALIZACAO_CADASTRAL = new Integer(665);
     
     /** nullable persistent field */
     private String nomeTabela;
