@@ -7121,9 +7121,6 @@ public interface IRepositorioArrecadacao {
 	public Collection pesquisarDadosRelatorioBIG(Integer anoMesReferencia)
 			throws ErroRepositorioException;
 	
-	public Collection<PagamentoHelper> pesquisarPagamentosPorSituacao(Integer pagamentoSituacao, Integer idLocalidade, 
-			Integer anoMesReferenciaArrecadacao) throws ErroRepositorioException;
-	
 	public Collection<PagamentoHelper> pesquisarValoresPagamentos(Integer pagamentoSituacao, Integer idLocalidade, 
 			Integer anoMesReferenciaArrecadacao) throws ErroRepositorioException;
 	

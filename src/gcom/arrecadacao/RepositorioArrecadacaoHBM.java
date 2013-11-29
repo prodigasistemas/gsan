@@ -163,7 +163,6 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.StatelessSession;
-import org.hibernate.transform.Transformers;
 import org.hibernate.type.Type;
 
 
@@ -31433,43 +31432,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 
 			return retorno;
 		}
-
-		@Override
-		public Collection<PagamentoHelper> pesquisarPagamentosPorSituacao(Integer pagamentoSituacao, Integer idLocalidade,
-				Integer anoMesReferenciaArrecadacao) throws ErroRepositorioException {
-			
-			
-			Collection<PagamentoHelper> retorno = new ArrayList();
-
-			Session session = HibernateUtil.getSession();
-			String consulta = null;
-
-			try {
-				consulta = "SELECT pgmt.id as idPagamento, pgmt.valorPagamento, pgmt.contaGeral.id as idConta, pgmt.debitoACobrarGeral.id as idDebitoACobrar, pgmt.guiaPagamento.id as idGuiaPagamento "
-						+ "FROM Pagamento as pgmt "
-						+ "LEFT JOIN pgmt.pagamentoSituacaoAtual as pgst "
-						+ "LEFT JOIN cadastro.localidade as loca ON loca.id = pgmt.localidade.id "
-						+ "WHERE pgmt.anoMesReferenciaArrecadacao <= :anoMesReferenciaArrecadacao "
-						+ "AND pgst.id = :pagamentoSituacao "
-						+ "AND loca.loca_id = :idLocalidade ";
-
-				retorno = session.createQuery(consulta)
-						.setInteger("anoMesReferenciaArrecadacao", anoMesReferenciaArrecadacao)
-						.setInteger("pagamentoSituacao", pagamentoSituacao)
-						.setInteger("idLocalidade", idLocalidade)
-						.setResultTransformer(Transformers.aliasToBean(PagamentoHelper.class))
-						.list();
-
-			} catch (HibernateException e) {
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				HibernateUtil.closeSession(session);
-			}
-
-			return retorno;
-		}
 		
-		@Override
 		public Collection<PagamentoHelper> pesquisarValoresPagamentos(Integer pagamentoSituacao, Integer idLocalidade,
 				Integer anoMesReferenciaArrecadacao) throws ErroRepositorioException {
 			
@@ -31492,13 +31455,25 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 						.append(" and pgst_idatual = :pagamentoSituacao")
 						.append(" and p.loca_id = :idLocalidade");
 
-				retorno = session.createSQLQuery(consulta.toString())
+				Collection result = session.createSQLQuery(consulta.toString())
+						.addScalar("idPagamento", Hibernate.INTEGER)
+						.addScalar("tipoDocumento", Hibernate.INTEGER)
+						.addScalar("valorPagamento", Hibernate.BIG_DECIMAL)
+						.addScalar("valorDocumento", Hibernate.BIG_DECIMAL)
 						.setInteger("anoMesReferenciaArrecadacao", anoMesReferenciaArrecadacao)
 						.setInteger("pagamentoSituacao", pagamentoSituacao)
 						.setInteger("idLocalidade", idLocalidade)
-						.setResultTransformer(Transformers.aliasToBean(PagamentoHelper.class))
 						.list();
-
+				
+				for (Object item : result) {
+					Object[] registro = (Object[]) item;
+					PagamentoHelper pagamento = new PagamentoHelper();
+					pagamento.setIdPagamento((Integer)registro[0]);
+					pagamento.setIdTipoDocumento((Integer)registro[1]);
+					pagamento.setValorPagamento((BigDecimal)registro[2]);
+					pagamento.setValorDocumento((BigDecimal)registro[3]);
+					retorno.add(pagamento);
+				}
 			} catch (HibernateException e) {
 				throw new ErroRepositorioException(e, "Erro no Hibernate");
 			} finally {
@@ -31508,7 +31483,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			return retorno;
 		}
 		
-		@Override
 		public void atualizarSituacaoPagamento(Integer pagamentoSituacao, Integer idPagamento) throws ErroRepositorioException {
 			Session session = HibernateUtil.getSession();
 
