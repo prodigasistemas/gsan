@@ -598,6 +598,10 @@ public class Conta extends ObjetoTransacao implements IConta {
 	public int getReferencia() {
 		return this.referencia;
 	}
+	
+	public int getAnoMesReferenciaConta() {
+		return this.referencia;
+	}
 
 	public void setReferencia(int referencia) {
 		this.referencia = referencia;

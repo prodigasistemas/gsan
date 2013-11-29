@@ -1,4 +1,6 @@
 .settings
+.DS_Store
+**/.DS_Store
 .classpath
 .svn
 **/.svn

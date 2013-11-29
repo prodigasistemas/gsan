@@ -228,7 +228,7 @@
 					<textElement>
 						<font fontName="Courier New" pdfFontName="Courier" size="7" isBold="false"/>
 					</textElement>
-				<text><![CDATA[EXT]]></text>
+				<text><![CDATA[DD]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -754,7 +754,7 @@
 					<textElement>
 						<font fontName="Courier New" pdfFontName="Courier" size="6" isBold="false"/>
 					</textElement>
-				<text><![CDATA[3234-4/2868-1]]></text>
+				<text><![CDATA[1674-8/11948-2]]></text>
 				</staticText>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement

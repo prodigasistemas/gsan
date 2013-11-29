@@ -16,7 +16,7 @@
 		<property name="dataGeracao" type="java.sql.Date" column="armv_dtgeracao" length="4"/>
 		<property name="numeroSequencialArquivo" type="java.lang.Integer" column="armv_nnnsa" length="4"/>
 		<property name="codigoConvenio" type="java.lang.String" column="armv_cdconvenio" length="20"/>
-		<property name="nomeEmpresa" type="java.lang.String" column="armv_nmempresa" length="20"/>
+		<property name="nomeEmpresa" type="java.lang.String" column="armv_nmempresa" length="30"/>
 		<property name="codigoBanco" type="java.lang.Short" column="armv_cdbanco" length="2"/>
 		<property name="numeroVersaoLayout" type="java.lang.Integer" column="armv_nnversaolayout" length="4"/>
 		<property name="codigoRemessa" type="java.lang.Short" column="armv_cdremessa" length="2"/>

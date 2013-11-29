@@ -4625,6 +4625,24 @@ public class Util {
         return retorno;
     }
     
+    /**
+     * Método que recebe uma data com string no formato DDMMAA e converte para
+     * o objeto Date.
+     */
+    public static Date converteStringSemBarraParaDateAnoSimples(String data) {
+        Date retorno = null;
+        String dataInvertida = data.substring(0, 2) + "/"
+                + data.substring(2, 4) + "/" + data.substring(4, 6);
+        SimpleDateFormat dataTxt = new SimpleDateFormat("dd/MM/yy");
+        try {
+            retorno = dataTxt.parse(dataInvertida);
+        } catch (ParseException e) {
+            throw new IllegalArgumentException(data
+                    + " não tem o formato dd/MM/yy.");
+        }
+        return retorno;
+    }
+    
     
     /**
 	 * Retorna o valor de cnpjFormatado
@@ -5756,6 +5774,73 @@ public class Util {
             String dia = diaMesAnoReferencia.substring(0, 2);
             String mes = diaMesAnoReferencia.substring(2, 4);
             String ano = diaMesAnoReferencia.substring(4, 8);
+
+            try {
+                int mesInt = Integer.parseInt(mes);
+                int anoInt = Integer.parseInt(ano);
+                int diaInt = Integer.parseInt(dia);
+
+                if (mesInt < 1 || mesInt > 12) {
+                    diaMesAnoValido = false;
+                }
+                if (diaInt < 1 || diaInt > 31) {
+                	diaMesAnoValido = false;
+                }
+                
+                //se fevereiro
+                if (mesInt == 2){
+                	
+                	boolean bissexto = false;
+                	
+                	//verifica se ano é bissexto
+                	if (anoInt % 400 == 0){
+                		//São bissextos todos os anos múltiplos de 400, p.ex: 1600, 2000, 2400, 2800
+                		bissexto = true;
+                	}else if ( (anoInt % 4 == 0) && (anoInt % 100 != 0)){
+                		//São bissextos todos os múltiplos de 4 e não múltiplos de 100, p.ex: 1996, 2004, 2008, 2012, 2016...
+                		bissexto = true;
+                	}
+                	
+                	if (bissexto){
+                		if (diaInt < 1 || diaInt > 29) {
+                        	diaMesAnoValido = false;
+                        }
+                	}else{
+                		if (diaInt < 1 || diaInt > 28) {
+                        	diaMesAnoValido = false;
+                        }
+                	}
+                }
+                
+                if (anoInt == 0){
+                	diaMesAnoValido = false;
+                }
+                
+            } catch (NumberFormatException e) {
+            	diaMesAnoValido = false;
+            }
+
+        } else {
+        	diaMesAnoValido = false;
+        }
+
+        return diaMesAnoValido;
+    }
+	
+	/**
+	 * Recebe uma string no formato ddmmaa e validar o dia, mês e ano, incluindo validação para
+	 * fevereiro em anos bissextos ou não.
+	 * 
+	 * @return true se a data for valida ou false se for inválida
+	 */
+	public static boolean validarDiaMesAnoSemBarraAnoSimples(String diaMesAnoReferencia) {
+        boolean diaMesAnoValido = true;
+
+        if (diaMesAnoReferencia.length() == 6) {
+
+            String dia = diaMesAnoReferencia.substring(0, 2);
+            String mes = diaMesAnoReferencia.substring(2, 4);
+            String ano = diaMesAnoReferencia.substring(4, 6);
 
             try {
                 int mesInt = Integer.parseInt(mes);

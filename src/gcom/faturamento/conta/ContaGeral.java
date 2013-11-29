@@ -193,6 +193,10 @@ public class ContaGeral implements Serializable {
 	public void setConta(gcom.faturamento.conta.Conta conta) {
 		this.conta = conta;
 	}
+	
+	public void setConta(gcom.faturamento.conta.IConta conta) {
+		this.conta = (Conta) conta;
+	}
 
 	public ContaHistorico getContaHistorico() {
 		return contaHistorico;
