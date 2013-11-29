@@ -6,6 +6,17 @@ analíticas ou consolidadas, resultando em mais agilidade na tomada de decisões
 
 O GSAN é um software é livre e foi desenvolvido e disponibilizado pelo Ministério das Cidades, com o seguinte objetivo: "Sistema integrado de gestão de serviços de saneamento, desenvolvido com o objetivo de elevar o nível de desempenho e eficiência das empresas nacionais de abastecimento de água e coleta de esgotos." (Fonte: Portal do Software Público Brasileiro).
 
+Módulos do GSAN
+====
+
+* Módulo de Segurança
+* Módulo de Cadastro
+* Módulo de Micromedição
+* Módulo de Faturamento
+* Módulo de Cobrança
+* Módulo de Arrecadação
+* Módulo de Atendimento ao Público
+
 Mais Informações
 ====
 
