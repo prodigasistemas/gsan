@@ -1,5 +1,6 @@
 package gcom.faturamento.conta;
 
+import gcom.cadastro.imovel.Imovel;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
 
 import java.io.Serializable;
@@ -15,4 +16,8 @@ public interface IConta extends Serializable {
 	public void setValorImposto(BigDecimal valorImposto);
 	public void setReferenciaContabil(Integer referenciaContabil);
 	public void setDebitoCreditoSituacaoAtual(DebitoCreditoSituacao debitoCreditoSituacaoAtual);
+	public int getReferencia();
+	public int getAnoMesReferenciaConta();
+	public Integer getId();
+	public Imovel getImovel();
 }

@@ -538,6 +538,10 @@ public class ContaHistorico implements IConta {
 	public int getAnoMesReferenciaConta() {
 		return anoMesReferenciaConta;
 	}
+	
+	public int getReferencia(){
+		return anoMesReferenciaConta;
+	}
 
 	/**
 	 * @param anoMesReferenciaConta The anoMesReferenciaConta to set.

@@ -75,6 +75,8 @@
 */  
 package gcom.arrecadacao;
 
+import gcom.util.Util;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -180,6 +182,10 @@ public class ArrecadadorMovimento implements Serializable {
 		this.dataGeracao = dataGeracao;
 	}
 
+	public void setDataGeracao(String dataGeracao) {
+		this.dataGeracao = Util.converteStringSemBarraParaDateAnoSimples(dataGeracao);
+	}
+	
 	public Integer getNumeroSequencialArquivo() {
 		return this.numeroSequencialArquivo;
 	}

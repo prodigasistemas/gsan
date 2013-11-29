@@ -64122,12 +64122,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					idDocumentoEmitido));
 		}
 
-		Integer digito = Util.obterDigitoVerificadorModulo11(nossoNumero
+/*		Integer digito = Util.obterDigitoVerificadorModulo11(nossoNumero
 				.toString());
 
 		nossoNumero.append("-");
 
-		nossoNumero.append(digito);
+		nossoNumero.append(digito);*/
 
 		return nossoNumero;
 	}

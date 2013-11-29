@@ -319,89 +319,56 @@ public class RegistrarMovimentoArrecadadoresAction extends GcomAction {
                              && idTipoMovimento.equals("FICHA DE COMPENSACAO") 
                              && nomeItem.endsWith(".BOL")){
                      
-                        // abre o arquivo
                         InputStreamReader reader = new InputStreamReader(item.getInputStream());
                         BufferedReader buffer = new BufferedReader(reader);
 
-                        // StringBuffer linha = new StringBuffer();
-                        // cria uma variavel do tipo boolean
                         boolean eof = false;
                         boolean primeiraLinha = true;
-                        // enquanto a variavel for false
                         while (!eof) {
 
-                            // pega a linha do arquivo
                             String linhaLida = buffer.readLine();
                             
-                            // se for a ultima linha do arquivo
                             if (linhaLida != null && linhaLida.length() > 0) {
                             		
-                            	String codigoRegistro = linhaLida.substring(0, 1).toUpperCase();
-                            	
-//                              Integer codigoRegistro = new Integer(linhaLida.substring(7, 8));
-//                                if (((int) codigoRegistro) >= 0 && ((int) codigoRegistro) <= 9) {
+			                    if (primeiraLinha) {
+			                    	
+			                    	FiltroArrecadador filtroArrecadador = new FiltroArrecadador();
 
-                                    // completa a string para o tamanho de 240 caso necessario.
-                                    String linhaCompleta = null;
-                                    if (linhaLida.length() != 240) {
-                                        linhaCompleta = Util.completaString(linhaLida, 240);
-                                    } else {
-                                        linhaCompleta = linhaLida;
-                                    }
-                                    
-                                    //[SF0011] - Validar Arquivo de Movimento de Arrecadador da Ficha de Compensação
-				                    if (primeiraLinha) {
-				                    	
-				                    	/*
-				                    	 * Colocado por Raphael Rossiter em 10/11/2008 Analista: Eduardo Borges
-				                    	 * [SF0011] - Validar Arquivo de Movimento de Arrecadador da Ficha de Compensação
-				                    	 */
-				                    	FiltroArrecadador filtroArrecadador = new FiltroArrecadador();
+			            			filtroArrecadador.adicionarParametro(new ParametroSimples(FiltroArrecadador.CODIGO_AGENTE, codigoAgente));
 
-				            			filtroArrecadador.adicionarParametro(
-				            				new ParametroSimples(FiltroArrecadador.CODIGO_AGENTE, codigoAgente));
+			            			filtroArrecadador.adicionarCaminhoParaCarregamentoEntidade("cliente");
 
-				            			filtroArrecadador.adicionarCaminhoParaCarregamentoEntidade("cliente");
+			            			Collection arrecadadorEncontrado = this.getFachada().pesquisar(filtroArrecadador, Arrecadador.class.getName());
+			            			
+			            			if (arrecadadorEncontrado != null && !arrecadadorEncontrado.isEmpty()) {
+			            				nomeArrecadador = ((Arrecadador) ((List) arrecadadorEncontrado).get(0)).getCliente().getNome();
+			            			}
+			            			
+			            			FiltroArrecadadorContrato filtroArrecadadorContrato = new FiltroArrecadadorContrato();
+			            			
+			            			filtroArrecadadorContrato.adicionarParametro(new ParametroSimples(
+			            					FiltroArrecadadorContrato.ID,idArrecadadorContrato));
+			            			filtroArrecadadorContrato.adicionarParametro(new ParametroNulo(
+			        						FiltroArrecadadorContrato.DATA_CONTRATO_ENCERRAMENTO));
+			            			
+			            			filtroArrecadadorContrato.adicionarCaminhoParaCarregamentoEntidade("arrecadador");
+			            			Collection colecaoArrecadadorContrato = Fachada.getInstancia().pesquisar(
+			            					filtroArrecadadorContrato,ArrecadadorContrato.class.getName());
+			            			
+			            			ArrecadadorContrato arrecadadorContrato = (ArrecadadorContrato)Util.retonarObjetoDeColecao(colecaoArrecadadorContrato);
+			            			
+			                    	primeiraLinha = false;
+			                    }
+			                    
+                                stringBuilderTxt.append(linhaLida);
+                                stringBuilderTxt.append("\n");
+                                quantidadeRegistros = quantidadeRegistros + 1;
 
-				            			Collection arrecadadorEncontrado = 
-				            				this.getFachada().pesquisar(filtroArrecadador, Arrecadador.class.getName());
-				            			
-				            			if (arrecadadorEncontrado != null && !arrecadadorEncontrado.isEmpty()) {
-				            				nomeArrecadador = ((Arrecadador) ((List) arrecadadorEncontrado).get(0)).getCliente().getNome();
-				            			}
-				            			
-				            			FiltroArrecadadorContrato filtroArrecadadorContrato = new FiltroArrecadadorContrato();
-				            			
-				            			filtroArrecadadorContrato.adicionarParametro(new ParametroSimples(
-				            					FiltroArrecadadorContrato.ID,idArrecadadorContrato));
-				            			filtroArrecadadorContrato.adicionarParametro(new ParametroNulo(
-				        						FiltroArrecadadorContrato.DATA_CONTRATO_ENCERRAMENTO));
-				            			
-				            			filtroArrecadadorContrato.adicionarCaminhoParaCarregamentoEntidade("arrecadador");
-				            			Collection colecaoArrecadadorContrato = Fachada.getInstancia().pesquisar(
-				            					filtroArrecadadorContrato,ArrecadadorContrato.class.getName());
-				            			
-				            			ArrecadadorContrato arrecadadorContrato = (ArrecadadorContrato)Util.retonarObjetoDeColecao(colecaoArrecadadorContrato);
-				            			
-				                    	Fachada.getInstancia().validarArquivoMovimentoArrecadadorFichaCompensacao(codigoRegistro, linhaCompleta, 
-				                    			codigoAgente, nomeArrecadador, idTipoMovimento, arrecadadorContrato, null, arrecadadorContrato.getArrecadador().getId());
-				                    	
-				                    	primeiraLinha = false;
-				                    }
-				                    
-                                    stringBuilderTxt.append(linhaCompleta);
-                                    stringBuilderTxt.append("\n");
-                                    quantidadeRegistros = quantidadeRegistros + 1;
-//                                } else {
-//                                    break;
-//                                }
                             } else {
                                 break;
                             }
-
                         }
 
-                        // fecha o arquivo
                         buffer.close();
                         reader.close();
                         item.getInputStream().close();
@@ -414,9 +381,7 @@ public class RegistrarMovimentoArrecadadoresAction extends GcomAction {
 						}else if(idTipoMovimento != null && idTipoMovimento.equals("FICHA DE COMPENSACAO")){
                             throw new ActionServletException("atencao.tipo_importacao.nao_ficha");
                         }
-                        
 					}
-
 				}
 			}
 
@@ -424,14 +389,11 @@ public class RegistrarMovimentoArrecadadoresAction extends GcomAction {
 				
 				FiltroArrecadadorContrato filtroArrecadadorContrato = new FiltroArrecadadorContrato();
     			
-    			filtroArrecadadorContrato.adicionarParametro(new ParametroSimples(
-    					FiltroArrecadadorContrato.ID,idArrecadadorContrato));
-    			filtroArrecadadorContrato.adicionarParametro(new ParametroNulo(
-						FiltroArrecadadorContrato.DATA_CONTRATO_ENCERRAMENTO));
+    			filtroArrecadadorContrato.adicionarParametro(new ParametroSimples(FiltroArrecadadorContrato.ID,idArrecadadorContrato));
+    			filtroArrecadadorContrato.adicionarParametro(new ParametroNulo(FiltroArrecadadorContrato.DATA_CONTRATO_ENCERRAMENTO));
     			
     			filtroArrecadadorContrato.adicionarCaminhoParaCarregamentoEntidade("arrecadador");
-    			Collection colecaoArrecadadorContrato = Fachada.getInstancia().pesquisar(
-    					filtroArrecadadorContrato,ArrecadadorContrato.class.getName());
+    			Collection colecaoArrecadadorContrato = Fachada.getInstancia().pesquisar(filtroArrecadadorContrato,ArrecadadorContrato.class.getName());
     			
     			ArrecadadorContrato arrecadadorContrato = (ArrecadadorContrato)Util.retonarObjetoDeColecao(colecaoArrecadadorContrato);
 				
@@ -453,7 +415,6 @@ public class RegistrarMovimentoArrecadadoresAction extends GcomAction {
 			throw new ActionServletException("erro.sistema", e);
 		}
 
-		// montando página de sucesso
 		montarPaginaSucesso(httpServletRequest,
 			"Movimento Arrecadadores Enviado para Processamento", 
 			"Voltar",
