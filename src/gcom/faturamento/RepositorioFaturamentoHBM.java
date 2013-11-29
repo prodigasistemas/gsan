@@ -60685,5 +60685,4 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		return retorno;
 	}
-	
 }

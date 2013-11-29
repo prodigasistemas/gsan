@@ -12170,5 +12170,4 @@ public interface IRepositorioFaturamento {
 
 	public Object[] pesquisarInadimplenciaEmitidasMaior90RelatorioBIG(Date dataFinal,
 			Integer idLocalidade) throws ErroRepositorioException;
-	
 }

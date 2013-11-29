@@ -31432,4 +31432,79 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 
 			return retorno;
 		}
+		
+		public Collection<PagamentoHelper> pesquisarValoresPagamentos(Integer pagamentoSituacao, Integer idLocalidade,
+				Integer anoMesReferenciaArrecadacao) throws ErroRepositorioException {
+			
+			
+			Collection<PagamentoHelper> retorno = new ArrayList();
+
+			Session session = HibernateUtil.getSession();
+			StringBuilder consulta = new StringBuilder();
+
+			try {
+				consulta.append("select p.pgmt_id as idPagamento, p.dotp_id as tipoDocumento, p.pgmt_vlpagamento as valorPagamento,")
+						.append(" coalesce((c.cnta_vlagua + c.cnta_vlesgoto + c.cnta_vldebitos - c.cnta_vlcreditos - c.cnta_vlimpostos)") 
+						.append(", d.dbac_vldebito, g.gpag_vldebito) as valorDocumento") 
+						.append(" from arrecadacao.pagamento p")
+						.append(" inner join cadastro.localidade l on p.loca_id = l.loca_id") 
+						.append(" left join faturamento.conta c on p.cnta_id = c.cnta_id")
+						.append(" left join faturamento.debito_a_cobrar d on p.dbac_id = d.dbac_id")
+						.append(" left join faturamento.guia_pagamento g on p.gpag_id = g.gpag_id")
+						.append(" where p.pgmt_amreferenciaarrecadacao <= :anoMesReferenciaArrecadacao") 
+						.append(" and pgst_idatual = :pagamentoSituacao")
+						.append(" and p.loca_id = :idLocalidade");
+
+				Collection result = session.createSQLQuery(consulta.toString())
+						.addScalar("idPagamento", Hibernate.INTEGER)
+						.addScalar("tipoDocumento", Hibernate.INTEGER)
+						.addScalar("valorPagamento", Hibernate.BIG_DECIMAL)
+						.addScalar("valorDocumento", Hibernate.BIG_DECIMAL)
+						.setInteger("anoMesReferenciaArrecadacao", anoMesReferenciaArrecadacao)
+						.setInteger("pagamentoSituacao", pagamentoSituacao)
+						.setInteger("idLocalidade", idLocalidade)
+						.list();
+				
+				for (Object item : result) {
+					Object[] registro = (Object[]) item;
+					PagamentoHelper pagamento = new PagamentoHelper();
+					pagamento.setIdPagamento((Integer)registro[0]);
+					pagamento.setIdTipoDocumento((Integer)registro[1]);
+					pagamento.setValorPagamento((BigDecimal)registro[2]);
+					pagamento.setValorDocumento((BigDecimal)registro[3]);
+					retorno.add(pagamento);
+				}
+			} catch (HibernateException e) {
+				throw new ErroRepositorioException(e, "Erro no Hibernate");
+			} finally {
+				HibernateUtil.closeSession(session);
+			}
+
+			return retorno;
+		}
+		
+		public void atualizarSituacaoPagamento(Integer pagamentoSituacao, Integer idPagamento) throws ErroRepositorioException {
+			Session session = HibernateUtil.getSession();
+
+			StringBuilder sql = new StringBuilder();
+
+			try {
+
+				sql.append("UPDATE Pagamento")
+				   .append(" SET pgst_idatual = :pagamentoSituacao, pgmt_tmultimaalteracao = :dataAlteracao")
+				   .append(" WHERE pgmt_id = :idPagamento");
+
+				session.createQuery(sql.toString())
+						.setInteger("pagamentoSituacao", pagamentoSituacao)
+						.setInteger("idPagamento", idPagamento)
+						.setTimestamp("dataAlteracao", new Date()).executeUpdate();
+
+			} catch (HibernateException e) {
+
+				throw new ErroRepositorioException(e, "Erro no Hibernate");
+
+			} finally {
+				HibernateUtil.closeSession(session);
+			}
+		}
 }
