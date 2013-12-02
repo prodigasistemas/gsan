@@ -325,6 +325,7 @@ import gcom.gui.GcomAction;
 import gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoEmitirOSHelper;
 import gcom.gui.faturamento.consumotarifa.bean.CategoriaFaixaConsumoTarifaHelper;
 import gcom.interceptor.Interceptador;
+import gcom.interceptor.ObjetoTransacao;
 import gcom.interceptor.RegistradorOperacao;
 import gcom.micromedicao.ArquivoTextoRoteiroEmpresa;
 import gcom.micromedicao.ArquivoTextoRoteiroEmpresaDivisao;
@@ -8318,131 +8319,78 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			BigDecimal valorEntrada, Usuario usuarioLogado,
 			boolean debitoParaPagamentoAntecipado) throws ControladorException {
 
-		// -----------------------------------------------------------
-		// Verificar permissão especial
-		boolean temPermissaoDebitoACobrar = getControladorPermissaoEspecial()
-				.verificarPermissaoInserirDebitoACobrarSemEntradaSemJuros(
-						usuarioLogado);
-		// -----------------------------------------------------------
+		boolean temPermissaoDebitoACobrar = getControladorPermissaoEspecial().verificarPermissaoInserirDebitoACobrarSemEntradaSemJuros(usuarioLogado);
 
-		// validar taxa de juros
 		if (!temPermissaoDebitoACobrar) {
 			if (debitoACobrar.getPercentualTaxaJurosFinanciamento() != null) {
-
-				BigDecimal percentualTaxaJurosFinanciamento = this
-						.getControladorUtil().pesquisarParametrosDoSistema()
-						.getPercentualTaxaJurosFinanciamento();
+				BigDecimal percentualTaxaJurosFinanciamento = this.getControladorUtil().pesquisarParametrosDoSistema()
+																											.getPercentualTaxaJurosFinanciamento();
 
 				// no caso de numero de prestacões == 1 , permitir juros = 0
-				if (numeroPrestacoes.intValue() != 1
-						|| (debitoACobrar.getPercentualTaxaJurosFinanciamento()
-								.compareTo(new BigDecimal(0)) != 0 && numeroPrestacoes
-								.intValue() == 1)) {
-					if (debitoACobrar.getPercentualTaxaJurosFinanciamento()
-							.compareTo(percentualTaxaJurosFinanciamento) == -1) {
-						// Taxa de Juros mínima permitida é de XX%
-						throw new ControladorException(
-								"atencao.taxa_juros.nao.permitida", null,
-								(this.getControladorUtil()
-										.pesquisarParametrosDoSistema()
-										.getPercentualTaxaJurosFinanciamento()
-										.toString()).replace(".", ","));
+				if (numeroPrestacoes.intValue() != 1 || (debitoACobrar.getPercentualTaxaJurosFinanciamento().compareTo(BigDecimal.ZERO) != 0
+															&& numeroPrestacoes.intValue() == 1)) {
+					if (debitoACobrar.getPercentualTaxaJurosFinanciamento().compareTo(percentualTaxaJurosFinanciamento) == -1) {
+						throw new ControladorException("atencao.taxa_juros.nao.permitida", null, (this.getControladorUtil().pesquisarParametrosDoSistema()
+																															.getPercentualTaxaJurosFinanciamento()
+																															.toString()).replace(".", ","));
 					}
 				}
 			}
 		}
 
-		// [FS0009] - Validar número de prestações
-		if (numeroPrestacoes.shortValue() > getControladorUtil()
-				.pesquisarParametrosDoSistema()
-				.getNumeroMaximoParcelasFinanciamento().shortValue()) {
-			throw new ControladorException("atencao.valor_prestacoes", null,
-					getControladorUtil().pesquisarParametrosDoSistema()
-							.getNumeroMaximoParcelasFinanciamento().toString());
+		if (numeroPrestacoes.shortValue() > getControladorUtil().pesquisarParametrosDoSistema().getNumeroMaximoParcelasFinanciamento().shortValue()) {
+			throw new ControladorException("atencao.valor_prestacoes", null, getControladorUtil().pesquisarParametrosDoSistema().getNumeroMaximoParcelasFinanciamento().toString());
 		}
-		// [FS0010] - Validar valor total do serviço
+
 		FiltroDebitoTipo filtroDebitoTipo = new FiltroDebitoTipo();
+		filtroDebitoTipo.adicionarParametro(new ParametroSimples(FiltroDebitoTipo.ID, debitoACobrar.getDebitoTipo().getId()));
+		
+		Collection colecaoDebitosTipos = getControladorUtil().pesquisar(filtroDebitoTipo, DebitoTipo.class.getName());
 
-		filtroDebitoTipo.adicionarParametro(new ParametroSimples(
+		DebitoTipo debitoTipo = (DebitoTipo) colecaoDebitosTipos.iterator().next();
 
-		FiltroDebitoTipo.ID, debitoACobrar.getDebitoTipo().getId()));
-		Collection colecaoDebitosTipos = getControladorUtil().pesquisar(
-				filtroDebitoTipo, DebitoTipo.class.getName());
-
-		DebitoTipo debitoTipo = (DebitoTipo) colecaoDebitosTipos.iterator()
-				.next();
-
-		if (debitoACobrar.getValorDebito().compareTo(
-				debitoTipo.getValorLimite()) == 1) {
-			throw new ControladorException(
-					"atencao.debito_a_cobrar.valor_total_servico", null,
-					debitoTipo.getValorLimite().toString().replace(".", ","));
+		if (debitoACobrar.getValorDebito().compareTo(debitoTipo.getValorLimite()) == 1) {
+			throw new ControladorException("atencao.debito_a_cobrar.valor_total_servico", null, debitoTipo.getValorLimite().toString().replace(".", ","));
 		}
 
-		if (percentualAbatimento != null
-				&& !(percentualAbatimento.compareTo(new BigDecimal("0.00")) == 0)) {
-			// [FS0011] - Validar percentual de abatimento
+		if (percentualAbatimento != null && !(percentualAbatimento.compareTo(new BigDecimal("0.00")) == 0)) {
 			if ((imovel.getLigacaoAguaSituacao().getId().intValue() == LigacaoAguaSituacao.SUPRIMIDO)
 					| (imovel.getLigacaoAguaSituacao().getId().intValue() == LigacaoAguaSituacao.SUPR_PARC)
 					| (imovel.getLigacaoAguaSituacao().getId().intValue() == LigacaoAguaSituacao.SUPR_PARC_PEDIDO)) {
 
-				// [UC0108] - Obter Quantidade de Economias por Categoria
-				Collection colecaoCategorias = getControladorImovel()
-						.obterQuantidadeEconomiasCategoria(imovel);
+				Collection colecaoCategorias = getControladorImovel().obterQuantidadeEconomiasCategoria(imovel);
 
-				Iterator colecaoCategoriasIterator = colecaoCategorias
-						.iterator();
+				Iterator colecaoCategoriasIterator = colecaoCategorias.iterator();
 
 				while (colecaoCategoriasIterator.hasNext()) {
-					Categoria categoria = (Categoria) colecaoCategoriasIterator
-							.next();
+					Categoria categoria = (Categoria) colecaoCategoriasIterator.next();
 					if (categoria.getId().compareTo(Categoria.RESIDENCIAL) != 0) {
-						throw new ControladorException(
-								"atencao.imovel.nao_suprimido.categoria.nao_residencial");
+						throw new ControladorException("atencao.imovel.nao_suprimido.categoria.nao_residencial");
 					}
 				}
 			} else {
-				throw new ControladorException(
-						"atencao.imovel.nao_suprimido.categoria.nao_residencial");
+				throw new ControladorException("atencao.imovel.nao_suprimido.categoria.nao_residencial");
 			}
 
-			// [FS0011] - Validar percentual de abatimento
-			if (percentualAbatimento.compareTo(getControladorUtil()
-					.pesquisarParametrosDoSistema()
-					.getPercentualMaximoAbatimento()) == 1) {
-				throw new ControladorException(
-						"atencao.imovel.percentual_abatimento", null,
-						getControladorUtil().pesquisarParametrosDoSistema()
-								.getPercentualMaximoAbatimento().toString()
-								.replace(".", ","));
+			if (percentualAbatimento.compareTo(getControladorUtil().pesquisarParametrosDoSistema().getPercentualMaximoAbatimento()) == 1) {
+				throw new ControladorException("atencao.imovel.percentual_abatimento", null, getControladorUtil().pesquisarParametrosDoSistema()
+																													.getPercentualMaximoAbatimento().toString()
+																													.replace(".", ","));
 			}
 		}
 
-		// [FS0012] - Verificar preenchimento dos campos
-		if (valorEntrada != null
-				&& valorEntrada.compareTo(valorTotalServico) == 1) {
-			throw new ControladorException(
-					"atencao.debito_a_cobrar.valor_entrada.valor_total_servico");
+		if (valorEntrada != null && valorEntrada.compareTo(valorTotalServico) == 1) {
+			throw new ControladorException("atencao.debito_a_cobrar.valor_entrada.valor_total_servico");
 		}
 
 		if (!temPermissaoDebitoACobrar) {
-			// [FS0012] - Verificar preenchimento dos campos
 			if (valorEntrada != null && numeroPrestacoes.intValue() > 1) {
-
-				BigDecimal parte1 = getControladorUtil()
-						.pesquisarParametrosDoSistema()
-						.getPercentualFinanciamentoEntradaMinima()
-						.divide(new BigDecimal(100));
+				BigDecimal parte1 = getControladorUtil().pesquisarParametrosDoSistema().getPercentualFinanciamentoEntradaMinima().divide(new BigDecimal(100));
 
 				if ((valorEntrada.compareTo(valorTotalServico.multiply(parte1)) == -1)) {
-					throw new ControladorException(
-							"atencao.debito_a_cobrar.valor_entrada", null,
-							getControladorUtil().pesquisarParametrosDoSistema()
-									.getPercentualFinanciamentoEntradaMinima()
-									.toString().replace(".", ",")
-									+ "");
+					throw new ControladorException("atencao.debito_a_cobrar.valor_entrada", null, getControladorUtil().pesquisarParametrosDoSistema()
+																		.getPercentualFinanciamentoEntradaMinima().toString().replace(".", ",") + "");
 				}
-
 			}
 		}
 
@@ -8453,30 +8401,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		 */
 		if (!debitoParaPagamentoAntecipado) {
 
-			SistemaParametro sistemaParametro = getControladorUtil()
-					.pesquisarParametrosDoSistema();
+			SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
-			/*
-			 * Alterado por: Vivianne Sousa 17/10/2007 Analista responsavel:
-			 * Aryed
-			 */
 			debitoACobrar.setAnoMesReferenciaDebito(null);
+			debitoACobrar.setAnoMesCobrancaDebito(sistemaParametro.getAnoMesArrecadacao());
 
-			debitoACobrar.setAnoMesCobrancaDebito(sistemaParametro
-					.getAnoMesArrecadacao());
-
-			/*
-			 * Alterado por: Vivianne Sousa 12/03/2008 Analista responsavel:
-			 * Aryed
-			 */
-			int anoMesReferenciaContabil = sistemaParametro
-					.getAnoMesFaturamento();
+			int anoMesReferenciaContabil = sistemaParametro.getAnoMesFaturamento();
 			int anoMesCorrente = Util.getAnoMesComoInt(new Date());
 
-			/*
-			 * anoMesReferenciaContabil receberá o maior valor entre ano/mes da
-			 * data corrente e o ano/mes de referencia do faturamento
-			 */
 			if (sistemaParametro.getAnoMesFaturamento() < anoMesCorrente) {
 				anoMesReferenciaContabil = anoMesCorrente;
 			}
@@ -8491,15 +8423,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			debitoACobrar.setUsuario(usuarioLogado);
 		}
 
-		// Inseri a DebitoACobrarGeral na tabela debito_a_cobrar_geral
 		DebitoACobrarGeral debitoACobrarGeral = new DebitoACobrarGeral();
-
-		// valor fixo
-		Short indicadorHistorico = 2;
-
-		debitoACobrarGeral.setIndicadorHistorico(indicadorHistorico);
-
-		// Ultima Alteração
+		debitoACobrarGeral.setIndicadorHistorico((short) 2);
 		debitoACobrarGeral.setUltimaAlteracao(new Date());
 
 		Integer idDebitoGerado = null;
@@ -8508,7 +8433,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		 * alterado por pedro alexandre dia 21/11/2006 alteração feita para
 		 * acoplar o controle de abrangência de usuário
 		 */
-		// ------------ CONTROLE DE ABRANGENCIA ----------------
 		Abrangencia abrangencia = new Abrangencia(usuarioLogado, imovel);
 
 		if (!getControladorAcesso().verificarAcessoAbrangencia(abrangencia)) {
@@ -8518,26 +8442,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			idDebitoGerado = (Integer) getControladorUtil().inserir(
 					debitoACobrarGeral);
 		}
-		// ------------ FIM CONTROLE DE ABRANGENCIA ----------------
 
 		debitoACobrarGeral.setId(idDebitoGerado);
 
 		debitoACobrar.setDebitoACobrarGeral(debitoACobrarGeral);
-
 		debitoACobrar.setId(idDebitoGerado);
 
-		// ------------ REGISTRAR TRANSAÇÃO ----------------
-		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-				Operacao.OPERACAO_DEBITO_A_COBRAR_INSERIR, imovel.getId(),
-				debitoACobrar.getId(), new UsuarioAcaoUsuarioHelper(
-						usuarioLogado,
-						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-
-		registradorOperacao.registrarOperacao(debitoACobrar);
-		// registradorOperacao.registrarOperacao(debitoACobrarGeral);
-
-		// ------------ REGISTRAR TRANSAÇÃO ----------------
-
+		registrarTransacao(debitoACobrar, Operacao.OPERACAO_DEBITO_A_COBRAR_INSERIR, imovel, usuarioLogado, debitoACobrar.getId());
+		
 		getControladorUtil().inserir(debitoACobrar);
 
 		inserirDebitoACobrarCategoria(debitoACobrar, imovel);
@@ -76516,7 +76428,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		creditoARealizar.setId(idGerado);
 
 		if(usuarioLogado != null){
-			registrarTransacao(creditoARealizar, imovel, usuarioLogado, idGerado);
+			registrarTransacao(creditoARealizar, Operacao.OPERACAO_CREDITO_A_REALIZAR_INSERIR, imovel, usuarioLogado, idGerado);
 		}
 
 		getControladorUtil().inserir(creditoARealizar);
@@ -76526,12 +76438,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		return idGerado;
 	}
 
-	private void registrarTransacao(CreditoARealizar creditoARealizar, Imovel imovel, Usuario usuarioLogado, Integer idGerado) {
-		UsuarioAcaoUsuarioHelper usuarioHelper = new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
-		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-				Operacao.OPERACAO_CREDITO_A_REALIZAR_INSERIR, imovel.getId(), idGerado, usuarioHelper);
+	private void registrarTransacao(ObjetoTransacao objetoTransacao, Integer operacao, Imovel imovel, Usuario usuarioLogado, Integer idGerado) {
 		
-		registradorOperacao.registrarOperacao(creditoARealizar);
+		UsuarioAcaoUsuarioHelper usuarioHelper = new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
+		
+		RegistradorOperacao registradorOperacao = new RegistradorOperacao(operacao, imovel.getId(), idGerado, usuarioHelper);
+		
+		registradorOperacao.registrarOperacao(objetoTransacao);
 	}
 
 	private void inserirCreditoARealizarCategoria(CreditoARealizar creditoARealizar, Imovel imovel) throws ControladorException {
