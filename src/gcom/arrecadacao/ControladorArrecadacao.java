@@ -1557,12 +1557,12 @@ public class ControladorArrecadacao implements SessionBean {
                                                 // caso o ano mes da data de dedito seja maior que o ano mes de
                                                 // arrecadação da tabela sistema parametro então
                                                 // seta o ano mes da data de debito
-                                                if (anoMesDebito > sistemaParametro.getAnoMesArrecadacao()) {
+                                                if (anoMesDebito > getSistemaParametro().getAnoMesArrecadacao()) {
                                                     pagamento.setAnoMesReferenciaArrecadacao(anoMesDebito);
                                                 } else {
                                                     // caso contrario seta o o ano mes
                                                     // arrecadação da tabela sistema parametro
-                                                    pagamento.setAnoMesReferenciaArrecadacao(sistemaParametro
+                                                    pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro()
                                                                     .getAnoMesArrecadacao());
                                                 }
                                                 // formata o valor debitado
@@ -1849,7 +1849,7 @@ public class ControladorArrecadacao implements SessionBean {
                                                                 dataPrevistaCredito,
                                                                 registroHelperCodigoZ
                                                                         .getValorTotalRegistrosArquivo(),
-                                                                sistemaParametro
+                                                                getSistemaParametro()
                                                                         .getAnoMesArrecadacao(),
                                                                 registroHelperCodigoA
                                                                         .getCodigoBanco(),
@@ -2028,7 +2028,7 @@ public class ControladorArrecadacao implements SessionBean {
                                         // Pagamento com Código de Barras
                                         PagamentoHelperCodigoBarras pagamentoHelperCodigoBarras = processarPagamentosCodigoBarras(
                                                 codigoBarras, dataDebito,
-                                                idFormaArrecadacao, sistemaParametro, usuario);
+                                                idFormaArrecadacao, getSistemaParametro(), usuario);
     
                                         // seta a descricao da occerencia do
                                         // caso de uso
@@ -2342,8 +2342,8 @@ public class ControladorArrecadacao implements SessionBean {
                                             
                                             // 3.5.	Caso contrário, ou seja, o Indicador de Aceitação do Registro do Movimento corresponda a 2 (NÃO):
                                             // 3.5.1. E caso exista cliente fictício para documento não identificado (CLIE_IDDOCNAOIDENTIFICADO da tabela SISTEMA_PARAMETRO com valor diferente de nulo).
-                                            if (sistemaParametro.getClienteFicticioParaAssociarOsPagamentosNaoIdentificados() != null
-                                            		&& sistemaParametro.getClienteFicticioParaAssociarOsPagamentosNaoIdentificados().getId() != null) {
+                                            if (getSistemaParametro().getClienteFicticioParaAssociarOsPagamentosNaoIdentificados() != null
+                                            		&& getSistemaParametro().getClienteFicticioParaAssociarOsPagamentosNaoIdentificados().getId() != null) {
                                         	  
 	                                        	  // 3.5.1.1. O sistema cria um pagamento para esse cliente [SB0019 ? Inserir pagamento para cliente fictício].
 	                                        	  Pagamento pagamentoCliente = this.inserirPagamentosClienteFicticio(
@@ -2647,7 +2647,7 @@ public class ControladorArrecadacao implements SessionBean {
                                                         dataPrevistaCredito,
                                                         registroHelperCodigoZ
                                                                 .getValorTotalRegistrosArquivo(),
-                                                        sistemaParametro
+                                                        getSistemaParametro()
                                                                 .getAnoMesArrecadacao(),
                                                         registroHelperCodigoA
                                                                 .getCodigoBanco(),
@@ -3514,7 +3514,7 @@ public class ControladorArrecadacao implements SessionBean {
                                          * Data: 27/11/2007
                                          */
                                         PagamentoHelperCodigoBarras pagamentoHelperCodigoBarras = processarPagamentosFichaCompensacao(
-                                                sistemaParametro, dataDebito, valorRecebido, nossoNumero, ArrecadacaoForma.FICHA_COMPENSACAO, usuario);
+                                                getSistemaParametro(), dataDebito, valorRecebido, nossoNumero, ArrecadacaoForma.FICHA_COMPENSACAO, usuario);
     
                                         // seta a descricao da ocorrencia do caso de uso
                                         // [UC0724] - Processar Pagamento com Ficha de Compensaçãos
@@ -3633,8 +3633,8 @@ public class ControladorArrecadacao implements SessionBean {
 
                                             // 6.	Caso contrário, ou seja, o Indicador de Aceitação do Registro do Movimento corresponda a 2 (NÃO):
                                         	// 6.1.	 E caso exista cliente fictício para documento não identificado (CLIE_IDDOCNAOIDENTIFICADO da tabela SISTEMA_PARAMETRO com valor diferente de nulo).
-                                            if (sistemaParametro.getClienteFicticioParaAssociarOsPagamentosNaoIdentificados() != null
-                                            		&& sistemaParametro.getClienteFicticioParaAssociarOsPagamentosNaoIdentificados().getId() != null) {
+                                            if (getSistemaParametro().getClienteFicticioParaAssociarOsPagamentosNaoIdentificados() != null
+                                            		&& getSistemaParametro().getClienteFicticioParaAssociarOsPagamentosNaoIdentificados().getId() != null) {
                                             	
                                             	// 6.1.1. O sistema cria um pagamento para esse cliente 
                                             	//  [SB0019 - Inserir pagamento para cliente fictício].
@@ -4427,7 +4427,7 @@ public class ControladorArrecadacao implements SessionBean {
 		// sistemaParematros
 		Short versaoLayoutTxt = new Short(registroHelperCodigoA
 				.getVersaoLayout().trim());
-		if (versaoLayoutTxt > sistemaParametro.getNumeroLayoutFebraban()) {
+		if (versaoLayoutTxt > getSistemaParametro().getNumeroLayoutFebraban()) {
 			throw new ControladorException("atencao.versao.arquivo.incalida");
 		}
 
@@ -5180,7 +5180,7 @@ public class ControladorArrecadacao implements SessionBean {
 			 * arrecadação da tabela sistema parametro então seta o ano mes da
 			 * data de debito
 			 */
-			if (anoMesPagamento > sistemaParametro.getAnoMesArrecadacao()) {
+			if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
 
 				pagamento.setAnoMesReferenciaArrecadacao(anoMesPagamento);
 
@@ -5190,7 +5190,7 @@ public class ControladorArrecadacao implements SessionBean {
 				 * caso contrario seta o o ano mes arrecadação da tabela sistema
 				 * parametro
 				 */
-				pagamento.setAnoMesReferenciaArrecadacao(sistemaParametro
+				pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro()
 						.getAnoMesArrecadacao());
 			}
 
@@ -5463,7 +5463,7 @@ public class ControladorArrecadacao implements SessionBean {
 			 * arrecadação da tabela sistema parametro então seta o ano mes da
 			 * data de debito
 			 */
-			if (anoMesPagamento > sistemaParametro.getAnoMesArrecadacao()) {
+			if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
 
 				pagamento.setAnoMesReferenciaArrecadacao(anoMesPagamento);
 
@@ -5473,7 +5473,7 @@ public class ControladorArrecadacao implements SessionBean {
 				 * caso contrario seta o o ano mes arrecadação da tabela sistema
 				 * parametro
 				 */
-				pagamento.setAnoMesReferenciaArrecadacao(sistemaParametro
+				pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro()
 						.getAnoMesArrecadacao());
 			}
 
@@ -5709,7 +5709,7 @@ public class ControladorArrecadacao implements SessionBean {
 			 * arrecadação da tabela sistema parametro então seta o ano mes da
 			 * data de debito
 			 */
-			if (anoMesPagamento > sistemaParametro.getAnoMesArrecadacao()) {
+			if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
 
 				pagamento.setAnoMesReferenciaArrecadacao(anoMesPagamento);
 
@@ -5719,7 +5719,7 @@ public class ControladorArrecadacao implements SessionBean {
 				 * caso contrario seta o o ano mes arrecadação da tabela sistema
 				 * parametro
 				 */
-				pagamento.setAnoMesReferenciaArrecadacao(sistemaParametro
+				pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro()
 						.getAnoMesArrecadacao());
 			}
 
@@ -5986,7 +5986,7 @@ public class ControladorArrecadacao implements SessionBean {
 
 					Pagamento pagamento = processarRecebimentoAcrescimosImpontualidade(
 							idCobrancaDocumento, dataPagamento, valorAcrescimo,
-							idImovelNaBase, idLocalidade, sistemaParametro,
+							idImovelNaBase, idLocalidade, getSistemaParametro(),
 							idFormaArrecadacao, idDocumentoTipo);
 
 					colecaoPagamentos.add(pagamento);
@@ -5999,7 +5999,7 @@ public class ControladorArrecadacao implements SessionBean {
 					// documento de cobrança]
 					Devolucao devolucao = processarDescontoConcedidoDocumentoCobranca(
 							idCobrancaDocumento, dataPagamento, valorDesconto,
-							idImovelNaBase, idLocalidade, sistemaParametro,
+							idImovelNaBase, idLocalidade, getSistemaParametro(),
 							idFormaArrecadacao, idDocumentoTipo);
 
 					colecaoDevolucoes.add(devolucao);
@@ -6013,7 +6013,7 @@ public class ControladorArrecadacao implements SessionBean {
 					// documento de cobrança]
 					Pagamento pagamento = processarTaxaDocumentoCobranca(
 							idCobrancaDocumento, dataPagamento, valorTaxa,
-							idImovelNaBase, idLocalidade, sistemaParametro,
+							idImovelNaBase, idLocalidade, getSistemaParametro(),
 							idFormaArrecadacao, idDocumentoTipo);
 
 					colecaoPagamentos.add(pagamento);
@@ -6244,14 +6244,14 @@ public class ControladorArrecadacao implements SessionBean {
 							 * Caso o ano mes da data de debito seja maior que o ano mes de arrecadação da
 							 * tabela sistema parametro então seta o ano mes da data de debito
 							 */
-							if (anoMesPagamento > sistemaParametro.getAnoMesArrecadacao()) {
+							if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
 								
 								pagamento.setAnoMesReferenciaArrecadacao(anoMesPagamento);
 							} 
 							//Caso contrario seta o o ano mes arrecadação da tabela sistema parametro
 							else {
 								
-								pagamento.setAnoMesReferenciaArrecadacao(sistemaParametro.getAnoMesArrecadacao());
+								pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro().getAnoMesArrecadacao());
 							}
 							
 							//VALOR DO PAGAMENTO
@@ -6526,13 +6526,13 @@ public class ControladorArrecadacao implements SessionBean {
 							 */
 							Integer anoMesDataDevolucao = Util.getAnoMesComoInteger(devolucao.getDataDevolucao());
 
-							if (anoMesDataDevolucao > sistemaParametro.getAnoMesArrecadacao()) {
+							if (anoMesDataDevolucao > getSistemaParametro().getAnoMesArrecadacao()) {
 								
 								devolucao.setAnoMesReferenciaArrecadacao(anoMesDataDevolucao);
 							} 
 							else {
 								
-								devolucao.setAnoMesReferenciaArrecadacao(sistemaParametro.getAnoMesArrecadacao());
+								devolucao.setAnoMesReferenciaArrecadacao(getSistemaParametro().getAnoMesArrecadacao());
 							}
 
 							// ValorDevolucao = ValorItemCobrado
@@ -6734,7 +6734,7 @@ public class ControladorArrecadacao implements SessionBean {
 					alterarVencimentoItensDocumentoCobranca(idCobrancaDocumento, dataEmissao);
 					Pagamento pagamento = processarRecebimentoAcrescimosImpontualidade(
 							idCobrancaDocumento, registroTipo7.getDataLiquidacaoFormatado(), valorAcrescimo,
-							idImovelNaBase, idLocalidade, sistemaParametro,
+							idImovelNaBase, idLocalidade, getSistemaParametro(),
 							idFormaArrecadacao, idDocumentoTipo);
 					
 					colecaoPagamentos.add(pagamento);
@@ -6750,7 +6750,7 @@ public class ControladorArrecadacao implements SessionBean {
 				if (valorDesconto.compareTo(new BigDecimal("0.00")) == 1) {
 					Devolucao devolucao = processarDescontoConcedidoDocumentoCobranca(
 							idCobrancaDocumento, registroTipo7.getDataLiquidacaoFormatado(), valorDesconto,
-							idImovelNaBase, idLocalidade, sistemaParametro,
+							idImovelNaBase, idLocalidade, getSistemaParametro(),
 							idFormaArrecadacao, idDocumentoTipo);
 
 					colecaoDevolucoes.add(devolucao);
@@ -6759,7 +6759,7 @@ public class ControladorArrecadacao implements SessionBean {
 				if (valorTaxa.compareTo(new BigDecimal("0.00")) == 1) {
 					Pagamento pagamento = processarTaxaDocumentoCobranca(
 							idCobrancaDocumento, registroTipo7.getDataLiquidacaoFormatado(), valorTaxa,
-							idImovelNaBase, idLocalidade, sistemaParametro,
+							idImovelNaBase, idLocalidade, getSistemaParametro(),
 							idFormaArrecadacao, idDocumentoTipo);
 
 					colecaoPagamentos.add(pagamento);
@@ -6866,10 +6866,10 @@ public class ControladorArrecadacao implements SessionBean {
 
 							int anoMesPagamento = Util.formataAnoMes(registroTipo7.getDataLiquidacaoFormatado()); 
 							
-							if (anoMesPagamento > sistemaParametro.getAnoMesArrecadacao()) {
+							if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
 								pagamento.setAnoMesReferenciaArrecadacao(anoMesPagamento);
 							} else {
-								pagamento.setAnoMesReferenciaArrecadacao(sistemaParametro.getAnoMesArrecadacao());
+								pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro().getAnoMesArrecadacao());
 							}
 							
 							pagamento.setValorPagamento(cobrancaDocumentoItem.getValorItemCobrado());
@@ -7076,10 +7076,10 @@ public class ControladorArrecadacao implements SessionBean {
 							devolucao.setDataDevolucao(registroTipo7.getDataLiquidacaoFormatado());
 
 							Integer anoMesDataDevolucao = Util.getAnoMesComoInteger(devolucao.getDataDevolucao());
-							if (anoMesDataDevolucao > sistemaParametro.getAnoMesArrecadacao()) {
+							if (anoMesDataDevolucao > getSistemaParametro().getAnoMesArrecadacao()) {
 								devolucao.setAnoMesReferenciaArrecadacao(anoMesDataDevolucao);
 							} else {
-								devolucao.setAnoMesReferenciaArrecadacao(sistemaParametro.getAnoMesArrecadacao());
+								devolucao.setAnoMesReferenciaArrecadacao(getSistemaParametro().getAnoMesArrecadacao());
 							}
 
 							devolucao.setValorDevolucao(cobrancaDocumentoItem.getValorItemCobrado());
@@ -7322,7 +7322,7 @@ public class ControladorArrecadacao implements SessionBean {
 					// maior que o ano mes de arrecadação da
 					// tabela sistema parametro então seta o ano
 					// mes da data de debito
-					if (anoMesPagamento > sistemaParametro
+					if (anoMesPagamento > getSistemaParametro()
 							.getAnoMesArrecadacao()) {
 						pagamento
 								.setAnoMesReferenciaArrecadacao(anoMesPagamento);
@@ -7331,7 +7331,7 @@ public class ControladorArrecadacao implements SessionBean {
 						// arrecadação da tabela sistema
 						// parametro
 						pagamento
-								.setAnoMesReferenciaArrecadacao(sistemaParametro
+								.setAnoMesReferenciaArrecadacao(getSistemaParametro()
 										.getAnoMesArrecadacao());
 					}
 					pagamento.setValorPagamento(valorConta);
@@ -7592,7 +7592,7 @@ public class ControladorArrecadacao implements SessionBean {
 						if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
 							pagamento.setAnoMesReferenciaArrecadacao(anoMesPagamento);
 						} else {
-							pagamento.setAnoMesReferenciaArrecadacao(sistemaParametro.getAnoMesArrecadacao());
+							pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro().getAnoMesArrecadacao());
 						}
 						
 						pagamento.setValorPagamento(valorItemCobrado);
@@ -7895,7 +7895,7 @@ public class ControladorArrecadacao implements SessionBean {
 						&& cobrancaDocumento.getValorAcrescimos().compareTo(new BigDecimal("0.00")) != 0) {
 					colecaoPagamentos.addAll(processarRecebimentoAcrescimosImpontualidadePorCliente(
 							numeroSequencialDocumento, dataPagamento, cobrancaDocumento.getValorAcrescimos(),
-							idClienteNaBase, null, sistemaParametro,
+							idClienteNaBase, null, getSistemaParametro(),
 							idFormaArrecadacao, cobrancaDocumento.getDocumentoTipo().getId()));
 				}
 				
@@ -8062,7 +8062,7 @@ public class ControladorArrecadacao implements SessionBean {
 						// maior que o ano mes de arrecadação da
 						// tabela sistema parametro então seta o ano
 						// mes da data de debito
-						if (anoMesPagamento > sistemaParametro
+						if (anoMesPagamento > getSistemaParametro()
 								.getAnoMesArrecadacao()) {
 							pagamento
 									.setAnoMesReferenciaArrecadacao(anoMesPagamento);
@@ -8071,7 +8071,7 @@ public class ControladorArrecadacao implements SessionBean {
 							// arrecadação da tabela sistema
 							// parametro
 							pagamento
-									.setAnoMesReferenciaArrecadacao(sistemaParametro
+									.setAnoMesReferenciaArrecadacao(getSistemaParametro()
 											.getAnoMesArrecadacao());
 						}
 						pagamento.setValorPagamento(valorItemCobrado);
@@ -8294,10 +8294,10 @@ public class ControladorArrecadacao implements SessionBean {
 						 */
 						Integer anoMesDataDevolucao = Util.getAnoMesComoInteger(devolucao.getDataDevolucao());
 
-						if (anoMesDataDevolucao > sistemaParametro.getAnoMesArrecadacao()) {
+						if (anoMesDataDevolucao > getSistemaParametro().getAnoMesArrecadacao()) {
 							devolucao.setAnoMesReferenciaArrecadacao(anoMesDataDevolucao);
 						} else {
-							devolucao.setAnoMesReferenciaArrecadacao(sistemaParametro.getAnoMesArrecadacao());
+							devolucao.setAnoMesReferenciaArrecadacao(getSistemaParametro().getAnoMesArrecadacao());
 						}
 
 						// ValorDevolucao = ValorItemCobrado
@@ -8417,14 +8417,14 @@ public class ControladorArrecadacao implements SessionBean {
 		 * Caso o identificador da empresa no txt não seja igual ao código da
 		 * empresa no sistemas parametro.
 		 */
-		if (!identificadorEmpresaCodigoBarras.equals(sistemaParametro
+		if (!identificadorEmpresaCodigoBarras.equals(getSistemaParametro()
 				.getCodigoEmpresaFebraban())) {
 
 			// Atribui o valor 2(NÃO) ao indicador aceitação registro
 			indicadorAceitacaoRegistro = "2";
 
 			descricaoOcorrencia = "CÓDIGO DE BARRAS NÃO PERTENCE A "
-			+ sistemaParametro.getNomeEmpresa();
+			+ getSistemaParametro().getNomeEmpresa();
 
 			// Seta os parametros que serão retornados
 			pagamentoHelperCodigoBarras.setColecaoPagamentos(colecaoPagamentos);
@@ -8436,7 +8436,7 @@ public class ControladorArrecadacao implements SessionBean {
 
 			//Processar Pagamentos com Código de Barras
 			pagamentoHelperCodigoBarras = this.processarPagamentosCodigoBarrasPorTipoPagamento(registroHelperCodigoBarras, 
-			dataPagamento, anoMesPagamento, valorPagamento, idFormaArrecadacao, sistemaParametro, usuarioLogado);
+			dataPagamento, anoMesPagamento, valorPagamento, idFormaArrecadacao, getSistemaParametro(), usuarioLogado);
 		}
 
 		return pagamentoHelperCodigoBarras;
@@ -8471,7 +8471,7 @@ public class ControladorArrecadacao implements SessionBean {
 			
 			pagamentoHelperCodigoBarras = this
 			.processarPagamentosCodigoBarrasGuiaPagamentoComIdentificacaoMatricula(
-					registroHelperCodigoBarras, sistemaParametro,
+					registroHelperCodigoBarras, getSistemaParametro(),
 					dataPagamento, anoMesPagamento, valorPagamento,
 					idFormaArrecadacao);
 
@@ -8482,7 +8482,7 @@ public class ControladorArrecadacao implements SessionBean {
 			
 			pagamentoHelperCodigoBarras = this
 				.processarPagamentosCodigoBarrasConta(
-					registroHelperCodigoBarras, sistemaParametro,
+					registroHelperCodigoBarras, getSistemaParametro(),
 					dataPagamento, anoMesPagamento, valorPagamento,
 					idFormaArrecadacao);
 
@@ -8493,7 +8493,7 @@ public class ControladorArrecadacao implements SessionBean {
 			
 			pagamentoHelperCodigoBarras = this
 				.processarPagamentosCodigoBarrasGuiaPagamento(
-					registroHelperCodigoBarras, sistemaParametro,
+					registroHelperCodigoBarras, getSistemaParametro(),
 					dataPagamento, anoMesPagamento, valorPagamento,
 					idFormaArrecadacao);
 
@@ -8504,7 +8504,7 @@ public class ControladorArrecadacao implements SessionBean {
 
 			pagamentoHelperCodigoBarras = this
 				.processarPagamentosCodigoBarrasDocumentoCobrancaTipo5(
-					registroHelperCodigoBarras, sistemaParametro,
+					registroHelperCodigoBarras, getSistemaParametro(),
 					dataPagamento, anoMesPagamento, valorPagamento,
 					idFormaArrecadacao, usuarioLogado);
 			
@@ -8516,7 +8516,7 @@ public class ControladorArrecadacao implements SessionBean {
 			
 			pagamentoHelperCodigoBarras = this
 				.processarPagamentosCodigoBarrasGuiaPagamentoCliente(
-					registroHelperCodigoBarras, sistemaParametro,
+					registroHelperCodigoBarras, getSistemaParametro(),
 					dataPagamento, anoMesPagamento, valorPagamento,
 					idFormaArrecadacao);
 			
@@ -8528,7 +8528,7 @@ public class ControladorArrecadacao implements SessionBean {
 			
 			pagamentoHelperCodigoBarras = this
 				.processarPagamentosCodigoBarrasClienteResponsavel(
-					registroHelperCodigoBarras, sistemaParametro,
+					registroHelperCodigoBarras, getSistemaParametro(),
 					dataPagamento, anoMesPagamento, valorPagamento,
 					idFormaArrecadacao);
 			
@@ -8542,13 +8542,13 @@ public class ControladorArrecadacao implements SessionBean {
 								DocumentoTipo.EXTRATO_CONTRATO_PARCELAMENTO.toString()) == 0) {
 				pagamentoHelperCodigoBarras = this
 					.processarPagamentosCodigoBarrasContratoParcelamento(
-						registroHelperCodigoBarras, sistemaParametro,
+						registroHelperCodigoBarras, getSistemaParametro(),
 						dataPagamento, anoMesPagamento, valorPagamento,
 						idFormaArrecadacao, usuarioLogado);
 			} else {
 				pagamentoHelperCodigoBarras = this
 					.processarPagamentosCodigoBarrasDocumentoCobrancaTipo8(
-						registroHelperCodigoBarras, sistemaParametro,
+						registroHelperCodigoBarras, getSistemaParametro(),
 						dataPagamento, anoMesPagamento, valorPagamento,
 						idFormaArrecadacao);
 			}
@@ -8559,7 +8559,7 @@ public class ControladorArrecadacao implements SessionBean {
 			
 			pagamentoHelperCodigoBarras = this
 				.processarPagamentosCodigoBarrasGuiaPagamentoComIdentificacaoCliente(
-					registroHelperCodigoBarras, sistemaParametro,
+					registroHelperCodigoBarras, getSistemaParametro(),
 					dataPagamento, anoMesPagamento, valorPagamento,
 					idFormaArrecadacao);
 			
@@ -8639,13 +8639,13 @@ public class ControladorArrecadacao implements SessionBean {
 		// maior que o ano mes de arrecadação da
 		// tabela sistema parametro então seta o ano
 		// mes da data de debito
-		if (anoMesPagamento > sistemaParametro.getAnoMesArrecadacao()) {
+		if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
 			pagamento.setAnoMesReferenciaArrecadacao(anoMesPagamento);
 		} else {
 			// caso contrario seta o o ano mes
 			// arrecadação da tabela sistema
 			// parametro
-			pagamento.setAnoMesReferenciaArrecadacao(sistemaParametro
+			pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro()
 					.getAnoMesArrecadacao());
 		}
 		pagamento.setValorPagamento(valorConta);
@@ -8755,13 +8755,13 @@ public class ControladorArrecadacao implements SessionBean {
 		// maior que o ano mes de arrecadação da
 		// tabela sistema parametro então seta o ano
 		// mes da data de debito
-		if (anoMesPagamento > sistemaParametro.getAnoMesArrecadacao()) {
+		if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
 			pagamento.setAnoMesReferenciaArrecadacao(anoMesPagamento);
 		} else {
 			// caso contrario seta o o ano mes
 			// arrecadação da tabela sistema
 			// parametro
-			pagamento.setAnoMesReferenciaArrecadacao(sistemaParametro
+			pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro()
 					.getAnoMesArrecadacao());
 		}
 
@@ -8902,13 +8902,13 @@ public class ControladorArrecadacao implements SessionBean {
 			// maior que o ano mes de arrecadação da
 			// tabela sistema parametro então seta o ano
 			// mes da data de debito
-			if (anoMesPagamento > sistemaParametro.getAnoMesArrecadacao()) {
+			if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
 				pagamento.setAnoMesReferenciaArrecadacao(anoMesPagamento);
 			} else {
 				// caso contrario seta o o ano mes
 				// arrecadação da tabela sistema
 				// parametro
-				pagamento.setAnoMesReferenciaArrecadacao(sistemaParametro
+				pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro()
 						.getAnoMesArrecadacao());
 			}
 
@@ -9005,7 +9005,7 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 		guiaDevolucao.setImovel(imovel);
 		guiaDevolucao.setCliente(null);
-		guiaDevolucao.setAnoMesReferenciaContabil(sistemaParametro
+		guiaDevolucao.setAnoMesReferenciaContabil(getSistemaParametro()
 				.getAnoMesArrecadacao());
 		guiaDevolucao.setAnoMesReferenciaGuiaDevolucao(null);
 		guiaDevolucao.setDataEmissao(new Date());
@@ -9061,13 +9061,13 @@ public class ControladorArrecadacao implements SessionBean {
 		// maior que o ano mes de arrecadação da
 		// tabela sistema parametro então seta o ano
 		// mes da data de debito
-		if (anoMesPagamento > sistemaParametro.getAnoMesArrecadacao()) {
+		if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
 			devolucao.setAnoMesReferenciaArrecadacao(anoMesPagamento);
 		} else {
 			// caso contrario seta o o ano mes
 			// arrecadação da tabela sistema
 			// parametro
-			devolucao.setAnoMesReferenciaArrecadacao(sistemaParametro
+			devolucao.setAnoMesReferenciaArrecadacao(getSistemaParametro()
 					.getAnoMesArrecadacao());
 		}
 
@@ -9153,13 +9153,13 @@ public class ControladorArrecadacao implements SessionBean {
 		// maior que o ano mes de arrecadação da
 		// tabela sistema parametro então seta o ano
 		// mes da data de debito
-		if (anoMesPagamento > sistemaParametro.getAnoMesArrecadacao()) {
+		if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
 			pagamento.setAnoMesReferenciaArrecadacao(anoMesPagamento);
 		} else {
 			// caso contrario seta o o ano mes
 			// arrecadação da tabela sistema
 			// parametro
-			pagamento.setAnoMesReferenciaArrecadacao(sistemaParametro
+			pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro()
 					.getAnoMesArrecadacao());
 		}
 
@@ -13945,7 +13945,7 @@ public class ControladorArrecadacao implements SessionBean {
 				.pesquisarParametrosDoSistema();
 
 		// recupera o ano/mês de referência da arrecadação int
-		int anoMesArrecadacaoSistemaParametro = sistemaParametros
+		int anoMesArrecadacaoSistemaParametro = getSistemaParametro()
 				.getAnoMesArrecadacao();
 
 		ArrecadacaoDadosDiarios arrecadacaoDadosDiarios = null;
@@ -14697,11 +14697,11 @@ public class ControladorArrecadacao implements SessionBean {
 			/**
 			 * Caso exista os parâmetros do sistema cadastrados.
 			 */
-			if (sistemaParametro != null) {
+			if (getSistemaParametro() != null) {
 
 				// Recupera o ano/mês de arrecadação atual.
-				Integer anoMesArrecadacao = sistemaParametro.getAnoMesArrecadacao();
-				Integer anoMesFaturamento = sistemaParametro.getAnoMesFaturamento();
+				Integer anoMesArrecadacao = getSistemaParametro().getAnoMesArrecadacao();
+				Integer anoMesFaturamento = getSistemaParametro().getAnoMesFaturamento();
 
 				/**
 				 * Caso a coleção de ids de localidade não esteja vazia
@@ -15990,7 +15990,7 @@ public class ControladorArrecadacao implements SessionBean {
 						throw new ControladorException("erro.sistema", ex);
 					}
 
-					if (pagamentoColecao.getAnoMesReferenciaArrecadacao() == sistemaParametro
+					if (pagamentoColecao.getAnoMesReferenciaArrecadacao() == getSistemaParametro()
 							.getAnoMesArrecadacao().intValue()) {
 
 						try {
@@ -16155,7 +16155,7 @@ public class ControladorArrecadacao implements SessionBean {
 						 * anterior do pagamento (PGST_IDANTERIOR) com o valor
 						 * correspondente a pagamento em duplicidade/excesso.
 						 */
-						if (pagamentoColecao.getAnoMesReferenciaArrecadacao() == sistemaParametro
+						if (pagamentoColecao.getAnoMesReferenciaArrecadacao() == getSistemaParametro()
 								.getAnoMesArrecadacao().intValue()) {
 							repositorioArrecadacao
 									.atualizarSituacaoAnteriorPagamento(
@@ -16895,12 +16895,12 @@ public class ControladorArrecadacao implements SessionBean {
 				
 				// Código do convênio do arrecadador contrato
 				arrecadadorMovimento.setCodigoConvenio(codigoConvenio);
-				arrecadadorMovimento.setNomeEmpresa(sistemaParametro.getNomeAbreviadoEmpresa());
+				arrecadadorMovimento.setNomeEmpresa(getSistemaParametro().getNomeAbreviadoEmpresa());
 				arrecadadorMovimento.setCodigoBanco(new Short(""+ banco.getId()));
 				arrecadadorMovimento.setNomeBanco(banco.getDescricao());
 				arrecadadorMovimento.setDataGeracao(new Date());
 				arrecadadorMovimento.setNumeroSequencialArquivo(numeroSequencialArquivoEnvio + 1);
-				arrecadadorMovimento.setNumeroVersaoLayout(new Integer(""+ sistemaParametro.getNumeroLayoutFebraban()));
+				arrecadadorMovimento.setNumeroVersaoLayout(new Integer(""+ getSistemaParametro().getNumeroLayoutFebraban()));
 				arrecadadorMovimento.setDescricaoIdentificacaoServico(ConstantesSistema.DEBITO_AUTOMATICO);
 				arrecadadorMovimento.setNumeroRegistrosMovimento(quantidadeRegistrosMap);
 				
@@ -17631,7 +17631,7 @@ public class ControladorArrecadacao implements SessionBean {
 		SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();
 
 		// recupera o ano/mês de referência da arrecadação
-		int anoMesArrecadacaoSistemaParametro = sistemaParametros.getAnoMesArrecadacao();
+		int anoMesArrecadacaoSistemaParametro = getSistemaParametro().getAnoMesArrecadacao();
 
 		DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 		debitoCreditoSituacao.setId(DebitoCreditoSituacao.NORMAL);
@@ -19834,7 +19834,7 @@ public class ControladorArrecadacao implements SessionBean {
 
 			// [FS0001] - Verificar existência de dados
 			// Caso não exista dados no sistema de parâmetros levantauma exceção
-			if (sistemaParametro == null) {
+			if (getSistemaParametro() == null) {
 				throw new ControladorException(
 						"atencao.entidade_sem_dados_para_selecao", null,
 						"Sistema Parâmetro");
@@ -19845,7 +19845,7 @@ public class ControladorArrecadacao implements SessionBean {
 
 			// Recupera o ano/mês de referência da arrecadação dos parâmetros de
 			// sistema
-			Integer anoMesReferenciaArrecadacao = sistemaParametro
+			Integer anoMesReferenciaArrecadacao = getSistemaParametro()
 					.getAnoMesArrecadacao();
 
 			// [FS0002 - Verificar ano/mês da data corrente maior que o ano/mês
@@ -34896,9 +34896,9 @@ public class ControladorArrecadacao implements SessionBean {
 				String representacaoNumericaCodBarraSemDigito = "";
 				String representacaoNumericaCodBarraFormatada = "";
 				
-				if( guiaPagamentoRelatorioHelper.getValorDebito()!= null && sistemaParametro.getValorGuiaFichaComp() != null
-						&& !sistemaParametro.getValorGuiaFichaComp().equals(new BigDecimal("0.00"))
-						&& guiaPagamentoRelatorioHelper.getValorDebito().compareTo(sistemaParametro.getValorGuiaFichaComp()) >= 0
+				if( guiaPagamentoRelatorioHelper.getValorDebito()!= null && getSistemaParametro().getValorGuiaFichaComp() != null
+						&& !getSistemaParametro().getValorGuiaFichaComp().equals(new BigDecimal("0.00"))
+						&& guiaPagamentoRelatorioHelper.getValorDebito().compareTo(getSistemaParametro().getValorGuiaFichaComp()) >= 0
 						&& guiaPagamentoRelatorioHelper.getIdTipoDebito().equals(DebitoTipo.ENTRADA_PARCELAMENTO)){
 					// [UC0716 – Obter Representação Numérica do Código de Barras da Ficha de Compensação]
 					
@@ -43010,8 +43010,8 @@ public class ControladorArrecadacao implements SessionBean {
 		Short moduloVerificador = ConstantesSistema.MODULO_VERIFICADOR_10;
 		String identificacaoValorRealOuReferencia = "6";
 		
-		if(sistemaParametro.getNumeroModuloDigitoVerificador()!=null
-				&& sistemaParametro.getNumeroModuloDigitoVerificador().compareTo(ConstantesSistema.MODULO_VERIFICADOR_11)==0){
+		if(getSistemaParametro().getNumeroModuloDigitoVerificador()!=null
+				&& getSistemaParametro().getNumeroModuloDigitoVerificador().compareTo(ConstantesSistema.MODULO_VERIFICADOR_11)==0){
 			// MODULO 11
 			moduloVerificador = ConstantesSistema.MODULO_VERIFICADOR_11;
 			identificacaoValorRealOuReferencia = "8";
@@ -43029,7 +43029,7 @@ public class ControladorArrecadacao implements SessionBean {
 				+ valorCodigoBarraFormatado;
 
 		// G.05.6 - Identificação da empresa
-		String identificacaoEmpresa = sistemaParametro
+		String identificacaoEmpresa = getSistemaParametro()
 				.getCodigoEmpresaFebraban().toString();
 		identificacaoEmpresa = Util.adicionarZerosEsquedaNumero(4,
 				identificacaoEmpresa);
@@ -44544,7 +44544,7 @@ public class ControladorArrecadacao implements SessionBean {
                      * arrecadação da tabela sistema parametro então seta o ano mes da
                      * data de debito
                      */
-                    if (anoMesPagamento > sistemaParametro.getAnoMesArrecadacao()) {
+                    if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
 
                         pagamento.setAnoMesReferenciaArrecadacao(anoMesPagamento);
 
@@ -44554,7 +44554,7 @@ public class ControladorArrecadacao implements SessionBean {
                          * caso contrario seta o o ano mes arrecadação da tabela sistema
                          * parametro
                          */
-                        pagamento.setAnoMesReferenciaArrecadacao(sistemaParametro
+                        pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro()
                                 .getAnoMesArrecadacao());
                     }
 
@@ -44661,7 +44661,7 @@ public class ControladorArrecadacao implements SessionBean {
             			 * [UC0259] - Processar Pagamento com Código de Barras
             			 * [SB0003] – Processar Pagamento de Documento de Cobrança - IMÓVEL
             			 */
-        				retorno = this.processarPagamentosCodigoBarrasDocumentoCobrancaTipo5(registroHelperCodigoBarras, sistemaParametro,
+        				retorno = this.processarPagamentosCodigoBarrasDocumentoCobrancaTipo5(registroHelperCodigoBarras, getSistemaParametro(),
             			dataPagamento, Util.recuperaAnoMesDaData(dataPagamento), valorPagamento, idFormaArrecadacao, usuarioLogado);
         				
         				colecaoPagamnetos.addAll(retorno.getColecaoPagamentos());
@@ -44685,7 +44685,7 @@ public class ControladorArrecadacao implements SessionBean {
             			 * [UC0259] - Processar Pagamento com Código de Barras
             			 * [SB0003] – Processar Pagamento de Documento de Cobrança - CLIENTE
             			 */
-        				retorno = this.processarPagamentosCodigoBarrasDocumentoCobrancaTipo8(registroHelperCodigoBarras, sistemaParametro,
+        				retorno = this.processarPagamentosCodigoBarrasDocumentoCobrancaTipo8(registroHelperCodigoBarras, getSistemaParametro(),
             			dataPagamento, Util.recuperaAnoMesDaData(dataPagamento), valorPagamento, idFormaArrecadacao);
         				
         				colecaoPagamnetos.addAll(retorno.getColecaoPagamentos());
@@ -44730,7 +44730,7 @@ public class ControladorArrecadacao implements SessionBean {
     				registroHelperCodigoBarras.setRegistroHelperCodigoBarrasTipoPagamento(registroHelperCodigoBarrasTipoPagamento);
     				
     				retorno = this.processarPagamentosCodigoBarrasContratoParcelamento(registroHelperCodigoBarras, 
-    						sistemaParametro, dataPagamento, Util.recuperaAnoMesDaData(dataPagamento), valorPagamento, 
+    						getSistemaParametro(), dataPagamento, Util.recuperaAnoMesDaData(dataPagamento), valorPagamento, 
     						ArrecadacaoForma.FICHA_COMPENSACAO, usuarioLogado);
     				
     				colecaoPagamnetos.addAll(retorno.getColecaoPagamentos());
@@ -44784,7 +44784,7 @@ public class ControladorArrecadacao implements SessionBean {
             			 * [UC0259] - Processar Pagamento com Código de Barras
             			 */
         				retorno = this.processarPagamentosCodigoBarrasGuiaPagamentoComIdentificacaoMatricula(
-        						registroHelperCodigoBarras, sistemaParametro, dataPagamento, Util.recuperaAnoMesDaData(dataPagamento), 
+        						registroHelperCodigoBarras, getSistemaParametro(), dataPagamento, Util.recuperaAnoMesDaData(dataPagamento), 
         						valorPagamento, idFormaArrecadacao);
         				
     				}
@@ -44800,7 +44800,7 @@ public class ControladorArrecadacao implements SessionBean {
             			 * [UC0259] - Processar Pagamento com Código de Barras
             			 */
         				retorno = this.processarPagamentosCodigoBarrasGuiaPagamentoComIdentificacaoCliente(
-        						registroHelperCodigoBarras, sistemaParametro, dataPagamento, Util.recuperaAnoMesDaData(dataPagamento), 
+        						registroHelperCodigoBarras, getSistemaParametro(), dataPagamento, Util.recuperaAnoMesDaData(dataPagamento), 
         						valorPagamento, idFormaArrecadacao);
     				}
         			
@@ -44866,7 +44866,7 @@ public class ControladorArrecadacao implements SessionBean {
                     if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
                         pagamento.setAnoMesReferenciaArrecadacao(anoMesPagamento);
                     } else {
-                        pagamento.setAnoMesReferenciaArrecadacao(sistemaParametro.getAnoMesArrecadacao());
+                        pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro().getAnoMesArrecadacao());
                     }
 
                     pagamento.setValorPagamento(registroTipo7.getValorRecebidoFormatado());
@@ -45519,8 +45519,8 @@ public class ControladorArrecadacao implements SessionBean {
 			
 			SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 			
-			if(anoMesReferencia >= sistemaParametro.getAnoMesArrecadacao()){
-				throw new ControladorException("atencao.mes_ano_arrecadacao.maior.mes_ano_escolhido", null,""+Util.formatarAnoMesParaMesAno(sistemaParametro.getAnoMesArrecadacao()));
+			if(anoMesReferencia >= getSistemaParametro().getAnoMesArrecadacao()){
+				throw new ControladorException("atencao.mes_ano_arrecadacao.maior.mes_ano_escolhido", null,""+Util.formatarAnoMesParaMesAno(getSistemaParametro().getAnoMesArrecadacao()));
 			}
 			
 			List colecaoDadosComparativos = (List)repositorioArrecadacao.pesquisarDadosComparativosFaturamentoArrecadacaoExpurgo(anoMesReferencia,
@@ -47394,7 +47394,7 @@ public class ControladorArrecadacao implements SessionBean {
 			  String periodoReferenciaDebitoFinal = "999912";			  
 			  Date periodoVencimentoDebitoInicial = Util.converteStringParaDate("01/01/0001");
 			  SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();			  
-			  Date periodoVencimentoDebitoFinal = Util.subtrairNumeroDiasDeUmaData(new Date(),sistemaParametros.getNumeroDiasVencimentoCobranca() );
+			  Date periodoVencimentoDebitoFinal = Util.subtrairNumeroDiasDeUmaData(new Date(),getSistemaParametro().getNumeroDiasVencimentoCobranca() );
 			  int indicadorPagamento = 2;
 			  int indicadorConta = 1;
 			  int indicadorDebitoACobrar = 1 ;
@@ -48717,7 +48717,7 @@ public class ControladorArrecadacao implements SessionBean {
 		SistemaParametro sistemaParametro = this.getControladorUtil().pesquisarParametrosDoSistema();
 		Collection colecaoCategoriaOUSubcategoria = null;
 		
-		if (sistemaParametro.getIndicadorTarifaCategoria().equals(SistemaParametro.INDICADOR_TARIFA_SUBCATEGORIA)){
+		if (getSistemaParametro().getIndicadorTarifaCategoria().equals(SistemaParametro.INDICADOR_TARIFA_SUBCATEGORIA)){
     		
 			// [UC0108] - Quantidade de economias por categoria
 			colecaoCategoriaOUSubcategoria = this.getControladorImovel()
@@ -48733,7 +48733,7 @@ public class ControladorArrecadacao implements SessionBean {
 		helper.setColecaoCategoriaOUSubcategoria(colecaoCategoriaOUSubcategoria);
 		
 		//Motivo da retificação (CMRT_IDANTECIPADO da tabela SISTEMA_PARAMETRO);
-		helper.setContaMotivoRetificacao(sistemaParametro.getContaMotivoRetificacaoPagamentoAntecipado());
+		helper.setContaMotivoRetificacao(getSistemaParametro().getContaMotivoRetificacaoPagamentoAntecipado());
 		
 		//DÉBITOS
 		Collection colecaoDebitoCobrado = this.getControladorFaturamento().obterDebitosCobradosConta(conta);
@@ -48763,7 +48763,7 @@ public class ControladorArrecadacao implements SessionBean {
 		 * 3. Mês e ano de referência da cobrança (Mês/Ano de referencia da arrecadação 
 		 * (PARM_AMREFERENCIAARRECADACAO  da tabela SISTEMA_PARAMETRO));
 		 */
-		creditoRealizado.setAnoMesCobrancaCredito(sistemaParametro.getAnoMesArrecadacao());
+		creditoRealizado.setAnoMesCobrancaCredito(getSistemaParametro().getAnoMesArrecadacao());
 		
 		//4. Valor do crédito realizado (Valor da guia de pagamento (GPAG_VLDEBITO da tabela GUIA_PAGAMENTO);
 		creditoRealizado.setValorCredito(valorGuiaPagamento);
@@ -48999,12 +48999,12 @@ public class ControladorArrecadacao implements SessionBean {
 		 * Caso o identificador da empresa no txt não seja igual ao código da
 		 * empresa no sistemas parametro.
 		 */
-		if (!identificadorEmpresaCodigoBarras.equals(sistemaParametro.getCodigoEmpresaFebraban())) {
+		if (!identificadorEmpresaCodigoBarras.equals(getSistemaParametro().getCodigoEmpresaFebraban())) {
 
 			// Atribui o valor 2(NÃO) ao indicador aceitação registro
 			indicadorAceitacaoRegistro = "2";
 
-			descricaoOcorrencia = "CÓDIGO DE BARRAS NÃO PERTENCE A "+ sistemaParametro.getNomeEmpresa();
+			descricaoOcorrencia = "CÓDIGO DE BARRAS NÃO PERTENCE A "+ getSistemaParametro().getNomeEmpresa();
 
 		} 
 		else {
@@ -49249,12 +49249,12 @@ public class ControladorArrecadacao implements SessionBean {
 								// caso o ano mes da data de pagamento seja maior que o ano mes de arrecadação da
 								// tabela sistema parametro então seta o ano mes da data de pagamento
 								Integer anoMesPagamento = Util.recuperaAnoMesDaData(dataPagamento);
-								if (anoMesPagamento > sistemaParametro.getAnoMesArrecadacao()) {
+								if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
 									pagamento.setAnoMesReferenciaArrecadacao(anoMesPagamento);
 								} else {
 									// caso contrario seta o o ano mes
 									// arrecadação da tabela sistema parametro
-									pagamento.setAnoMesReferenciaArrecadacao(sistemaParametro.getAnoMesArrecadacao());
+									pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro().getAnoMesArrecadacao());
 								}
 								pagamento.setValorPagamento(valorConta);
 								pagamento.setDataPagamento(dataPagamento);
@@ -49556,7 +49556,7 @@ public class ControladorArrecadacao implements SessionBean {
 			 * arrecadação da tabela sistema parametro então seta o ano mes da
 			 * data de debito
 			 */
-			if (anoMesPagamento > sistemaParametro.getAnoMesArrecadacao()) {
+			if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
 
 				pagamento.setAnoMesReferenciaArrecadacao(anoMesPagamento);
 
@@ -49566,7 +49566,7 @@ public class ControladorArrecadacao implements SessionBean {
 				 * caso contrario seta o o ano mes arrecadação da tabela sistema
 				 * parametro
 				 */
-				pagamento.setAnoMesReferenciaArrecadacao(sistemaParametro
+				pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro()
 						.getAnoMesArrecadacao());
 			}
 
@@ -49848,7 +49848,7 @@ public class ControladorArrecadacao implements SessionBean {
 				 * arrecadação da tabela sistema parametro então seta o ano mes da
 				 * data de debito
 				 */
-				if (anoMesPagamento > sistemaParametro.getAnoMesArrecadacao()) {
+				if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
 
 					pagamento.setAnoMesReferenciaArrecadacao(anoMesPagamento);
 
@@ -49859,7 +49859,7 @@ public class ControladorArrecadacao implements SessionBean {
 					 * caso contrario seta o o ano mes arrecadação da tabela sistema
 					 * parametro
 					 */
-					pagamento.setAnoMesReferenciaArrecadacao(sistemaParametro.getAnoMesArrecadacao());
+					pagamento.setAnoMesReferenciaArrecadacao(getSistemaParametro().getAnoMesArrecadacao());
 				}
 				
 
@@ -50205,7 +50205,7 @@ public class ControladorArrecadacao implements SessionBean {
                     	
                     	//[SB0005] – Processar Pagamento Cartão de Crédito
                     	pagamentoHelperCodigoBarras = this.processarPagamentosCartaoCreditoTipo1(
-                    	arrecadador, header, movimentoTipo1, sistemaParametro, usuarioLogado);
+                    	arrecadador, header, movimentoTipo1, getSistemaParametro(), usuarioLogado);
                     	
                     	descricaoOcorrenciaMovimento = pagamentoHelperCodigoBarras.getDescricaoOcorrencia();
                         
@@ -50218,7 +50218,7 @@ public class ControladorArrecadacao implements SessionBean {
                     	
                     	//[SB0005] – Processar Pagamento Cartão de Crédito
                     	pagamentoHelperCodigoBarras = this.processarPagamentosCartaoCreditoTipo2(
-                    	arrecadador, header, movimentoTipo2, sistemaParametro, usuarioLogado);
+                    	arrecadador, header, movimentoTipo2, getSistemaParametro(), usuarioLogado);
                     	
                     	descricaoOcorrenciaMovimento = pagamentoHelperCodigoBarras.getDescricaoOcorrencia();
                         
@@ -50418,7 +50418,7 @@ public class ControladorArrecadacao implements SessionBean {
     		                         registroHelperCodigoA, 
     		                         movimentoTipo1.getDataPrevistaPagamento(),
     		                         trailler.getTotalRegistros().toString(),
-    		                         sistemaParametro.getAnoMesArrecadacao(),
+    		                         getSistemaParametro().getAnoMesArrecadacao(),
     		                         arrecadador.getCodigoAgente().toString(),
     		                         pagamento.getValorPagamento(),
     		                         pagamento.getValorPagamento(),
@@ -51210,7 +51210,7 @@ public class ControladorArrecadacao implements SessionBean {
 		 * motivo da rejeição (“Transação efetuado no sistema anterior”).
 		 */
 		if (descricaoOcorrencia.equalsIgnoreCase("OK") && 
-			movimentoTipo1.getDataDeposito().compareTo(sistemaParametro.getDataImplantacaoSistema()) < 0){
+			movimentoTipo1.getDataDeposito().compareTo(getSistemaParametro().getDataImplantacaoSistema()) < 0){
 			
 			descricaoOcorrencia = "TRANSACAO EFETUADA NO SISTEMA ANTERIOR";
 		}
@@ -51303,7 +51303,7 @@ public class ControladorArrecadacao implements SessionBean {
 			
 			//[SB0005] – Processar Pagamento Cartão de Crédito
 			Pagamento pagamento = this.gerarPagamentoGuiaPagamentoCartaoCredito(guiaPagamento, movimentoTipo1,
-			sistemaParametro);
+			getSistemaParametro());
 			
 			colecaoPagamentos.add(pagamento);
 		}
@@ -51354,7 +51354,7 @@ public class ControladorArrecadacao implements SessionBean {
 		pagamento.setAnoMesReferenciaPagamento(null);
 		
 		Integer anoMesDataPrevistaPagamento = Util.getAnoMesComoInteger(movimentoTipo1.getDataPrevistaPagamento());
-		Integer anosMesArrecadacao = sistemaParametro.getAnoMesArrecadacao();
+		Integer anosMesArrecadacao = getSistemaParametro().getAnoMesArrecadacao();
 		
 		if (Util.compararAnoMesReferencia(anoMesDataPrevistaPagamento, anosMesArrecadacao, ">")){
 			pagamento.setAnoMesReferenciaArrecadacao(anoMesDataPrevistaPagamento);
@@ -52967,7 +52967,7 @@ public class ControladorArrecadacao implements SessionBean {
 		 * ocorrência a informação: (“Transação efetuado no sistema anterior”).
 		 */
 		if (descricaoOcorrencia.equalsIgnoreCase("OK") && 
-			movimentoTipo2.getDataCompraAjuste().compareTo(sistemaParametro.getDataImplantacaoSistema()) < 0){
+			movimentoTipo2.getDataCompraAjuste().compareTo(getSistemaParametro().getDataImplantacaoSistema()) < 0){
 			
 			descricaoOcorrencia = "TRANSACAO EFETUADA NO SISTEMA ANTERIOR";
 		}
@@ -53825,14 +53825,14 @@ public class ControladorArrecadacao implements SessionBean {
 		//   na tabela PAGAMENTO com os seguintes valores:
 
 		// Caso o ano/mês da data do pagamento seja maior que a PARM_AMREFERENCIAARRECADACAO da tabela SISTEMA_PARAMETROS
-		if (anoMes.compareTo(sistemaParametro.getAnoMesArrecadacao()) > 0) {
+		if (anoMes.compareTo(getSistemaParametro().getAnoMesArrecadacao()) > 0) {
 			// atribuir ano/mês da data do pagamento
 			pagamento.setAnoMesReferenciaArrecadacao(
 					anoMes);
 		} else {
 			// caso contrário atribuir o PARM_AMREFERENCIAARRECADACAO
 			pagamento.setAnoMesReferenciaArrecadacao(
-					sistemaParametro.getAnoMesArrecadacao());
+					getSistemaParametro().getAnoMesArrecadacao());
 		}
 		
 		// Campo G.05.5
@@ -53861,7 +53861,7 @@ public class ControladorArrecadacao implements SessionBean {
 		pagamento.setArrecadacaoForma(arrecadacaoForma);
 		
 		// CLIE_IDDOCNAOIDENTIFICADO da tabela SISTEMA_PARAMETRO
-		Cliente cliente = sistemaParametro.getClienteFicticioParaAssociarOsPagamentosNaoIdentificados();
+		Cliente cliente = getSistemaParametro().getClienteFicticioParaAssociarOsPagamentosNaoIdentificados();
 		pagamento.setCliente(cliente);
 		
 		// Data e hora correntes
