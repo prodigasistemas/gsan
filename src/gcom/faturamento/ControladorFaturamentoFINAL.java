@@ -76440,78 +76440,60 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @return Integer
 	 * @throws ControladorException
 	 */
-	public Integer gerarCreditoARealizar(CreditoARealizar creditoARealizar,
-			Imovel imovel, Usuario usuarioLogado) throws ControladorException {
+	public Integer gerarCreditoARealizar(CreditoARealizar creditoARealizar, Imovel imovel, Usuario usuarioLogado) throws ControladorException {
 
-		// Inseri a conta na tabela Conta_Geral
 		CreditoARealizarGeral creditoARealizarGeral = new CreditoARealizarGeral();
 
-		// valor fixo
-		Short indicadorHistorico = 2;
-
-		creditoARealizarGeral.setIndicadorHistorico(indicadorHistorico);
-
-		// Ultima Alteração
+		creditoARealizarGeral.setIndicadorHistorico((short) 2);
 		creditoARealizarGeral.setUltimaAlteracao(new Date());
 
-		// Inserindo no BD
-		Integer idGerado = (Integer) this.getControladorUtil().inserir(
-				creditoARealizarGeral);
+		Integer idGerado = (Integer) this.getControladorUtil().inserir(creditoARealizarGeral);
 
-		// seta o id da Conta Geral gerada no objeto contaGeral
 		creditoARealizarGeral.setId(idGerado);
 
 		creditoARealizar.setCreditoARealizarGeral(creditoARealizarGeral);
-
 		creditoARealizar.setId(idGerado);
 
-		// ------------ REGISTRAR TRANSAÇÃO ----------------
-		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-				Operacao.OPERACAO_CREDITO_A_REALIZAR_INSERIR, imovel.getId(),
-				idGerado, new UsuarioAcaoUsuarioHelper(usuarioLogado,
-						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-		registradorOperacao.registrarOperacao(creditoARealizar);
-		// ------------ REGISTRAR TRANSAÇÃO ----------------
+		if(usuarioLogado != null){
+			registrarTransacao(creditoARealizar, imovel, usuarioLogado, idGerado);
+		}
 
-		// Inserido o objeto Crédito a Realizar
 		getControladorUtil().inserir(creditoARealizar);
 
-		// [UC0108] - Obter Quantidade de Economias por Categoria
-		Collection colecaoCategoriasImovel = this.getControladorImovel()
-				.obterQuantidadeEconomiasCategoria(imovel);
+		inserirCreditoARealizarCategoria(creditoARealizar, imovel);
 
-		// [UC0185] - Obter Valor por Categoria
-		Collection colecaoValoresPorCategoria = getControladorImovel()
-				.obterValorPorCategoria(colecaoCategoriasImovel,
-						creditoARealizar.getValorCredito());
+		return idGerado;
+	}
+
+	private void registrarTransacao(CreditoARealizar creditoARealizar, Imovel imovel, Usuario usuarioLogado, Integer idGerado) {
+		UsuarioAcaoUsuarioHelper usuarioHelper = new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
+		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
+				Operacao.OPERACAO_CREDITO_A_REALIZAR_INSERIR, imovel.getId(), idGerado, usuarioHelper);
+		
+		registradorOperacao.registrarOperacao(creditoARealizar);
+	}
+
+	private void inserirCreditoARealizarCategoria(CreditoARealizar creditoARealizar, Imovel imovel) throws ControladorException {
+		Collection colecaoCategoriasImovel = this.getControladorImovel().obterQuantidadeEconomiasCategoria(imovel);
+
+		Collection colecaoValoresPorCategoria = getControladorImovel().obterValorPorCategoria(colecaoCategoriasImovel, creditoARealizar.getValorCredito());
 
 		Iterator icolecaoCategorias = colecaoCategoriasImovel.iterator();
-		Iterator icolecaoValoresPorCategoria = colecaoValoresPorCategoria
-				.iterator();
-		while (icolecaoValoresPorCategoria.hasNext()
-				&& icolecaoCategorias.hasNext()) {
-			// Criando um objeto creditoARealizarCategoria
+		Iterator icolecaoValoresPorCategoria = colecaoValoresPorCategoria.iterator();
+		
+		while (icolecaoValoresPorCategoria.hasNext() && icolecaoCategorias.hasNext()) {
 			CreditoARealizarCategoria creditoARealizarCategoria = new CreditoARealizarCategoria();
 
-			// Setando as variáveis de categoria e valor de acordo com as
-			// coleções
 			Categoria categoria = (Categoria) icolecaoCategorias.next();
 			BigDecimal valor = (BigDecimal) icolecaoValoresPorCategoria.next();
 
-			// Informando os campos da tabela
-			creditoARealizarCategoria
-					.setComp_id(new CreditoARealizarCategoriaPK(
-							creditoARealizar.getId(), categoria.getId()));
-			creditoARealizarCategoria.setQuantidadeEconomia(categoria
-					.getQuantidadeEconomiasCategoria());
+			creditoARealizarCategoria.setComp_id(new CreditoARealizarCategoriaPK(creditoARealizar.getId(), categoria.getId()));
+			creditoARealizarCategoria.setQuantidadeEconomia(categoria.getQuantidadeEconomiasCategoria());
 			creditoARealizarCategoria.setValorCategoria(valor);
 			creditoARealizarCategoria.setUltimaAlteracao(new Date());
 
-			// Inserindo os campos na tabela creditoARealizarCategoria
 			getControladorUtil().inserir(creditoARealizarCategoria);
 		}
-
-		return idGerado;
 	}
 
 	private Object[] gerarPassosFinais(
