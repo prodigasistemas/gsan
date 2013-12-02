@@ -67616,6 +67616,80 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
+	
+	protected DebitoACobrar gerarDebitoACobrar(Integer anoMesReferenciaArrecadacao, Integer anoMesReferenciaFaturamento, Imovel imovel, 
+			Short numeroPrestacaoDebito, Short numeroPrestacaoCobradas, Integer anoMesReferenciaDebito, BigDecimal valorDebito, 
+			DebitoTipo debitoTipo, Usuario usuario) throws ControladorException {
+
+		DebitoACobrar debitoACobrar;
+		DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
+		debitoCreditoSituacao.setId(DebitoCreditoSituacao.NORMAL);
+		
+		CobrancaForma cobrancaForma = new CobrancaForma();
+		cobrancaForma.setId(CobrancaForma.COBRANCA_EM_CONTA);
+		
+		Object[] obterDebitoTipo;
+		try {
+			obterDebitoTipo = repositorioFaturamento.obterDebitoTipo(debitoTipo.getId());
+
+			FinanciamentoTipo financiamentoTipo = new FinanciamentoTipo();
+			if (obterDebitoTipo[0] != null) {
+				financiamentoTipo.setId((Integer) obterDebitoTipo[0]);
+			}
+
+			LancamentoItemContabil lancamentoItemContabil = new LancamentoItemContabil();
+			if (obterDebitoTipo[1] != null) {
+				lancamentoItemContabil.setId((Integer) obterDebitoTipo[1]);
+			}
+
+			debitoACobrar = new DebitoACobrar();
+			debitoACobrar.setImovel(imovel);
+			debitoACobrar.setAnoMesCobrancaDebito(anoMesReferenciaArrecadacao);
+			debitoACobrar.setAnoMesReferenciaContabil(getAnoMesReferenciaContabil());
+			debitoACobrar.setNumeroPrestacaoDebito(numeroPrestacaoDebito);
+			debitoACobrar.setNumeroPrestacaoCobradas(numeroPrestacaoCobradas);
+			debitoACobrar.setLocalidade(imovel.getLocalidade());
+			debitoACobrar.setQuadra(imovel.getQuadra());
+			if(imovel.getSetorComercial() != null){
+				debitoACobrar.setCodigoSetorComercial(imovel.getSetorComercial().getCodigo());
+			}
+			if(imovel.getQuadra() != null){
+				debitoACobrar.setNumeroQuadra(imovel.getQuadra().getNumeroQuadra());
+			}
+			debitoACobrar.setNumeroLote(imovel.getLote());
+			debitoACobrar.setNumeroSubLote(imovel.getSubLote());
+			debitoACobrar.setPercentualTaxaJurosFinanciamento(BigDecimal.ZERO);
+			debitoACobrar.setRegistroAtendimento(null);
+			debitoACobrar.setOrdemServico(null);
+			debitoACobrar.setDebitoCreditoSituacaoAnterior(null);
+			debitoACobrar.setParcelamentoGrupo(null);
+			debitoACobrar.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
+			debitoACobrar.setCobrancaForma(cobrancaForma);
+			debitoACobrar.setDebitoTipo(debitoTipo);
+			debitoACobrar.setUltimaAlteracao(new Date());
+			debitoACobrar.setGeracaoDebito(new Date());
+			debitoACobrar.setAnoMesReferenciaDebito(anoMesReferenciaDebito);
+			debitoACobrar.setFinanciamentoTipo(financiamentoTipo);
+			debitoACobrar.setLancamentoItemContabil(lancamentoItemContabil);
+			debitoACobrar.setValorDebito(valorDebito);
+			debitoACobrar.setUsuario(usuario);
+
+			DebitoACobrarGeral debitoACobrarGeral = new DebitoACobrarGeral();
+			debitoACobrarGeral.setIndicadorHistorico(ConstantesSistema.NAO);
+			debitoACobrarGeral.setUltimaAlteracao(new Date());
+			
+			Integer idDebitoACobrarGeral = (Integer) getControladorUtil().inserir(debitoACobrarGeral);
+			debitoACobrarGeral.setId(idDebitoACobrarGeral);
+
+			debitoACobrar.setId(idDebitoACobrarGeral);
+			debitoACobrar.setDebitoACobrarGeral(debitoACobrarGeral);
+			
+		} catch (Exception e) {
+			throw new EJBException(e);
+		}
+
+		return debitoACobrar;
+	}
 
 	/**
 	 * [UC0302] - Gerar Débito a Cobrar de Acréscimos por Impontualidade
@@ -67649,7 +67723,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			Conta conta, BigDecimal valorDebito, DebitoTipo debitoTipo,
 			Usuario usuario) throws ControladorException {
 
-		// declaração de variáveis
 		DebitoACobrar debitoACobrar;
 		DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 		debitoCreditoSituacao.setId(DebitoCreditoSituacao.NORMAL);
@@ -67658,17 +67731,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		Object[] obterDebitoTipo;
 
 		try {
-			// obter os dadso do tipo de débito informado
-			obterDebitoTipo = repositorioFaturamento.obterDebitoTipo(debitoTipo
-					.getId());
+			obterDebitoTipo = repositorioFaturamento.obterDebitoTipo(debitoTipo.getId());
 
-			// recupera qual o tipo de financiamento
 			FinanciamentoTipo financiamentoTipo = new FinanciamentoTipo();
 			if (obterDebitoTipo[0] != null) {
 				financiamentoTipo.setId((Integer) obterDebitoTipo[0]);
 			}
 
-			// recupera qual o lançamento item contábil
 			LancamentoItemContabil lancamentoItemContabil = new LancamentoItemContabil();
 			if (obterDebitoTipo[1] != null) {
 				lancamentoItemContabil.setId((Integer) obterDebitoTipo[1]);
@@ -67677,25 +67746,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			debitoACobrar = new DebitoACobrar();
 			debitoACobrar.setImovel(imovel);
 			debitoACobrar.setAnoMesCobrancaDebito(anoMesReferenciaArrecadacao);
-			// alterado por: Rômulo Aurélio 17/03/2009
-			// analista responsavel: Rosana Carvalho
-			// debitoACobrar.setAnoMesReferenciaContabil(anoMesReferenciaFaturamento);
-			SistemaParametro sistemaParametro = getControladorUtil()
-					.pesquisarParametrosDoSistema();
-
-			int anoMesReferenciaContabil = sistemaParametro
-					.getAnoMesFaturamento();
-			int anoMesCorrente = Util.getAnoMesComoInt(new Date());
-
-			// anoMesReferenciaContabil recebe o maior valor entre ano/mes da
-			// data corrente
-			// e o ano/mes de referencia do faturamento
-			if (sistemaParametro.getAnoMesFaturamento() < anoMesCorrente) {
-				anoMesReferenciaContabil = anoMesCorrente;
-			}
-
-			debitoACobrar.setAnoMesReferenciaContabil(anoMesReferenciaContabil);
-
+			debitoACobrar.setAnoMesReferenciaContabil(getAnoMesReferenciaContabil());
 			debitoACobrar.setNumeroPrestacaoDebito(numeroPrestacaoDebito);
 			debitoACobrar.setNumeroPrestacaoCobradas(numeroPrestacaoCobradas);
 			debitoACobrar.setLocalidade(localidade);
@@ -67720,12 +67771,11 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			debitoACobrar.setValorDebito(valorDebito);
 			debitoACobrar.setUsuario(usuario);
 
-			// Inseri o débito a cobrar geral e recupera o id
 			DebitoACobrarGeral debitoACobrarGeral = new DebitoACobrarGeral();
 			debitoACobrarGeral.setIndicadorHistorico(ConstantesSistema.NAO);
 			debitoACobrarGeral.setUltimaAlteracao(new Date());
-			Integer idDebitoACobrarGeral = (Integer) getControladorUtil()
-					.inserir(debitoACobrarGeral);
+			
+			Integer idDebitoACobrarGeral = (Integer) getControladorUtil().inserir(debitoACobrarGeral);
 			debitoACobrarGeral.setId(idDebitoACobrarGeral);
 
 			debitoACobrar.setId(idDebitoACobrarGeral);
@@ -67736,6 +67786,17 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		// retorna o débito a cobrar gerado
 		return debitoACobrar;
+	}
+
+	private int getAnoMesReferenciaContabil() throws ControladorException {
+		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+		int anoMesReferenciaContabil = sistemaParametro.getAnoMesFaturamento();
+		int anoMesCorrente = Util.getAnoMesComoInt(new Date());
+
+		if (sistemaParametro.getAnoMesFaturamento() < anoMesCorrente) {
+			anoMesReferenciaContabil = anoMesCorrente;
+		}
+		return anoMesReferenciaContabil;
 	}
 
 	/**
