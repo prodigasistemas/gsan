@@ -8780,32 +8780,23 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @param debitoACobrar
 	 *            Debito A Cobrar
 	 */
-	public void inserirDebitoACobrarCategoria(DebitoACobrar debitoACobrar,
-			Imovel imovel) throws ControladorException {
+	public void inserirDebitoACobrarCategoria(DebitoACobrar debitoACobrar, Imovel imovel) throws ControladorException {
 
 		// [UC0108] - Obter Quantidade de Economias por Categoria
-		Collection colecaoCategorias = getControladorImovel()
-				.obterQuantidadeEconomiasCategoria(imovel);
+		Collection colecaoCategorias = getControladorImovel().obterQuantidadeEconomiasCategoria(imovel);
 
-		Collection colecaoValoresPorCategoria = getControladorImovel()
-				.obterValorPorCategoria(colecaoCategorias,
-						debitoACobrar.getValorDebito());
+		Collection colecaoValoresPorCategoria = getControladorImovel().obterValorPorCategoria(colecaoCategorias, debitoACobrar.getValorDebito());
 		Iterator icolecaoCategorias = colecaoCategorias.iterator();
-		Iterator icolecaoValoresPorCategoria = colecaoValoresPorCategoria
-				.iterator();
+		Iterator icolecaoValoresPorCategoria = colecaoValoresPorCategoria.iterator();
 
-		while (icolecaoValoresPorCategoria.hasNext()
-				&& icolecaoCategorias.hasNext()) {
+		while (icolecaoValoresPorCategoria.hasNext() && icolecaoCategorias.hasNext()) {
 
 			DebitoACobrarCategoria debitoACobrarCategoria = new DebitoACobrarCategoria();
 			Categoria categoria = (Categoria) icolecaoCategorias.next();
-			BigDecimal valorPorCategoria = (BigDecimal) icolecaoValoresPorCategoria
-					.next();
+			BigDecimal valorPorCategoria = (BigDecimal) icolecaoValoresPorCategoria.next();
 
-			debitoACobrarCategoria.setComp_id(new DebitoACobrarCategoriaPK(
-					debitoACobrar, categoria));
-			debitoACobrarCategoria.setQuantidadeEconomia(categoria
-					.getQuantidadeEconomiasCategoria());
+			debitoACobrarCategoria.setComp_id(new DebitoACobrarCategoriaPK(debitoACobrar, categoria));
+			debitoACobrarCategoria.setQuantidadeEconomia(categoria.getQuantidadeEconomiasCategoria());
 			debitoACobrarCategoria.setUltimaAlteracao(new Date());
 			debitoACobrarCategoria.setValorCategoria(valorPorCategoria);
 			getControladorUtil().inserir(debitoACobrarCategoria);
@@ -67617,7 +67608,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		}
 	}
 	
-	protected DebitoACobrar gerarDebitoACobrar(Integer anoMesReferenciaArrecadacao, Integer anoMesReferenciaFaturamento, Imovel imovel, 
+	public DebitoACobrar gerarDebitoACobrar(Integer anoMesReferenciaArrecadacao, Integer anoMesReferenciaFaturamento, Imovel imovel, 
 			Short numeroPrestacaoDebito, Short numeroPrestacaoCobradas, Integer anoMesReferenciaDebito, BigDecimal valorDebito, 
 			DebitoTipo debitoTipo, Usuario usuario) throws ControladorException {
 
@@ -67684,6 +67675,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			debitoACobrar.setId(idDebitoACobrarGeral);
 			debitoACobrar.setDebitoACobrarGeral(debitoACobrarGeral);
 			
+			inserirDebitoACobrarCategoria(debitoACobrar, imovel);
 		} catch (Exception e) {
 			throw new EJBException(e);
 		}

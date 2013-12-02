@@ -352,6 +352,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -30442,6 +30443,8 @@ public class ControladorArrecadacao implements SessionBean {
 						UnidadeProcessamento.LOCALIDADE, idLocalidade);
 
 		try {
+			gerarDebitoCreditoParaPagamentosClassificados(anoMesReferenciaArrecadacao, idLocalidade);
+			
 			/** GUIA PAGAMENTO */
 			gerarHistoricoParaEncerrarArrecadacaoGuiaPagamento(
 					anoMesReferenciaArrecadacao, idLocalidade);
@@ -30471,6 +30474,75 @@ public class ControladorArrecadacao implements SessionBean {
 					idUnidadeIniciada, true);
 			throw new EJBException(e);
 		}
+	}
+
+	private void gerarDebitoCreditoParaPagamentosClassificados(Integer anoMesReferenciaArrecadacao, Integer idLocalidade) throws Exception{
+		Collection<PagamentoHelper> pagamentos = repositorioArrecadacao.pesquisarValoresPagamentos(PagamentoSituacao.PAGAMENTO_CLASSIFICADO, 
+				idLocalidade,
+				anoMesReferenciaArrecadacao);
+		for (PagamentoHelper pagamentoHelper : pagamentos) {
+			if (possuiDiferencaAte2(pagamentoHelper)) {
+				BigDecimal diferenca = pagamentoHelper.getValorPagamento().subtract(pagamentoHelper.getValorDocumento());
+				
+				if (diferenca.doubleValue() > 0.0){
+					inserirCreditoARealizar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca);
+				}else if (diferenca.doubleValue() < 0.0){
+					inserirDebitoACobrar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca);
+				}				
+			}
+		}
+	}
+	
+	private void inserirDebitoACobrar(Integer anoMesReferenciaArrecadacao, PagamentoHelper pagamentoHelper, BigDecimal valor) throws Exception {
+		
+		Imovel imovel = null;
+		if (pagamentoHelper.getIdImovel() != null){
+			imovel = repositorioImovel.pesquisarDadosImovel(pagamentoHelper.getIdImovel());
+		}
+		
+		DebitoTipo tipo = new DebitoTipo();
+		tipo.setId(DebitoTipo.VALOR_NAO_CONFERE);
+		
+		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+
+		getControladorFaturamento().gerarDebitoACobrar(anoMesReferenciaArrecadacao
+				, sistemaParametro.getAnoMesFaturamento()
+				, imovel
+				, (short) 1, (short) 0
+				, Util.somaMesAnoMesReferencia(anoMesReferenciaArrecadacao, 1)
+				, valor, tipo, null);
+	}
+
+
+	private void inserirCreditoARealizar(Integer anoMesReferenciaArrecadacao, PagamentoHelper pagamentoHelper, BigDecimal valor) throws Exception {
+		CreditoARealizar credito = new CreditoARealizar();
+		credito.setGeracaoCredito(Calendar.getInstance().getTime());
+		credito.setAnoMesReferenciaCredito(pagamentoHelper.getDataPagamento());
+		credito.setAnoMesReferenciaContabil(anoMesReferenciaArrecadacao);
+		credito.setAnoMesCobrancaCredito(Util.somaMesAnoMesReferencia(anoMesReferenciaArrecadacao, 1));
+		credito.setValorResidualMesAnterior(BigDecimal.ZERO);
+		credito.setNumeroPrestacaoCredito((short) 1);
+		credito.setNumeroPrestacaoRealizada((short) 0);
+		credito.setValorCredito(valor);
+		
+		Imovel imovel = null;
+		if (pagamentoHelper.getIdImovel() != null){
+			imovel = repositorioImovel.pesquisarDadosImovel(pagamentoHelper.getIdImovel());
+			credito.setImovel(imovel);
+			credito.setLocalidade(imovel.getLocalidade());
+			credito.setCodigoSetorComercial(imovel.getSetorComercial().getCodigo());
+			credito.setNumeroLote(imovel.getLote());
+			credito.setNumeroSubLote(imovel.getSubLote());
+			credito.setQuadra(imovel.getQuadra());
+			if (imovel.getQuadra() != null){
+				credito.setNumeroQuadra(imovel.getQuadra().getNumeroQuadra());
+			}
+		}
+		
+		credito.setUltimaAlteracao(Calendar.getInstance().getTime());
+		credito.setAnoMesReferenciaPrestacao(Util.somaMesAnoMesReferencia(anoMesReferenciaArrecadacao, 1));
+		
+		getControladorFaturamento().gerarCreditoARealizar(credito, imovel, null);
 	}
 
 	/**
