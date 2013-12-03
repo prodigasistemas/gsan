@@ -15303,12 +15303,16 @@ public class ControladorArrecadacao implements SessionBean {
 		Collection<PagamentoHelper> pagamentos = repositorioArrecadacao.pesquisarValoresPagamentos(PagamentoSituacao.VALOR_NAO_CONFERE, idLocalidade, 
 																									anoMesReferenciaArrecadacao);
 		for (PagamentoHelper pagamentoHelper : pagamentos) {
-			if(possuiDiferencaAte2(pagamentoHelper)){
+			if(possuiDiferencaAte2(pagamentoHelper) && possuiImovel(pagamentoHelper)){
 				repositorioArrecadacao.atualizarSituacaoPagamento(PagamentoSituacao.PAGAMENTO_CLASSIFICADO, pagamentoHelper.getIdPagamento());
 			}
 		}
 		
 		
+	}
+
+	private boolean possuiImovel(PagamentoHelper pagamentoHelper) {
+		return pagamentoHelper.getIdImovel() != null; 
 	}
 
 	private boolean possuiDiferencaAte2(PagamentoHelper pagamentoHelper) {

@@ -67546,11 +67546,11 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			}
 
 			debitoACobrar = new DebitoACobrar();
-			debitoACobrar.setImovel(imovel);
 			debitoACobrar.setAnoMesCobrancaDebito(anoMesReferenciaArrecadacao);
 			debitoACobrar.setAnoMesReferenciaContabil(getAnoMesReferenciaContabil());
 			debitoACobrar.setNumeroPrestacaoDebito(numeroPrestacaoDebito);
 			debitoACobrar.setNumeroPrestacaoCobradas(numeroPrestacaoCobradas);
+			debitoACobrar.setImovel(imovel);
 			debitoACobrar.setLocalidade(imovel.getLocalidade());
 			debitoACobrar.setQuadra(imovel.getQuadra());
 			if(imovel.getSetorComercial() != null){
