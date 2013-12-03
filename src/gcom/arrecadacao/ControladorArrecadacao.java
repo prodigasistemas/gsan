@@ -30525,6 +30525,10 @@ public class ControladorArrecadacao implements SessionBean {
 		credito.setNumeroPrestacaoRealizada((short) 0);
 		credito.setValorCredito(valor);
 		
+		CreditoTipo tipo = new CreditoTipo();
+		tipo.setId(CreditoTipo.PAGAMENTO_NAO_CONFERE);
+		credito.setCreditoTipo(tipo);
+		
 		Imovel imovel = null;
 		if (pagamentoHelper.getIdImovel() != null){
 			imovel = repositorioImovel.pesquisarDadosImovel(pagamentoHelper.getIdImovel());
