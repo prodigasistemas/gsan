@@ -5880,4 +5880,9 @@ public interface IControladorFaturamento {
 	public Integer inserirGuiaPagamentoCodigoBarrasPorCliente(
 			GuiaPagamento guiaPagamento, Integer idDebitoTipo, Integer idLocalidade)
 			throws ControladorException;
+	
+	public DebitoACobrar gerarDebitoACobrar(Integer anoMesReferenciaArrecadacao, Integer anoMesReferenciaFaturamento, Imovel imovel, 
+			Short numeroPrestacaoDebito, Short numeroPrestacaoCobradas, Integer anoMesReferenciaDebito, BigDecimal valorDebito, 
+			DebitoTipo debitoTipo, Usuario usuario) throws ControladorException;
+
 }

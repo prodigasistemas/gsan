@@ -219,6 +219,7 @@ import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.CobrancaDebitoSituacao;
 import gcom.cobranca.CobrancaDocumento;
 import gcom.cobranca.CobrancaDocumentoItem;
+import gcom.cobranca.CobrancaForma;
 import gcom.cobranca.ControladorCobrancaLocal;
 import gcom.cobranca.ControladorCobrancaLocalHome;
 import gcom.cobranca.DocumentoTipo;
@@ -254,6 +255,8 @@ import gcom.faturamento.conta.FiltroConta;
 import gcom.faturamento.conta.FiltroContaHistorico;
 import gcom.faturamento.conta.IConta;
 import gcom.faturamento.credito.CreditoARealizar;
+import gcom.faturamento.credito.CreditoARealizarCategoria;
+import gcom.faturamento.credito.CreditoARealizarCategoriaPK;
 import gcom.faturamento.credito.CreditoARealizarGeral;
 import gcom.faturamento.credito.CreditoOrigem;
 import gcom.faturamento.credito.CreditoRealizado;
@@ -261,6 +264,8 @@ import gcom.faturamento.credito.CreditoTipo;
 import gcom.faturamento.credito.FiltroCreditoARealizar;
 import gcom.faturamento.credito.FiltroCreditoTipo;
 import gcom.faturamento.debito.DebitoACobrar;
+import gcom.faturamento.debito.DebitoACobrarCategoria;
+import gcom.faturamento.debito.DebitoACobrarCategoriaPK;
 import gcom.faturamento.debito.DebitoACobrarGeral;
 import gcom.faturamento.debito.DebitoACobrarHistorico;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
@@ -274,6 +279,7 @@ import gcom.financeiro.lancamento.LancamentoItemContabil;
 import gcom.financeiro.lancamento.LancamentoTipo;
 import gcom.gerencial.cadastro.IRepositorioGerencialCadastro;
 import gcom.gerencial.cadastro.RepositorioGerencialCadastroHBM;
+import gcom.interceptor.ObjetoTransacao;
 import gcom.interceptor.RegistradorOperacao;
 import gcom.micromedicao.ArquivoTextoRoteiroEmpresa;
 import gcom.micromedicao.ControladorMicromedicaoLocal;
@@ -352,6 +358,7 @@ import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
@@ -15302,12 +15309,16 @@ public class ControladorArrecadacao implements SessionBean {
 		Collection<PagamentoHelper> pagamentos = repositorioArrecadacao.pesquisarValoresPagamentos(PagamentoSituacao.VALOR_NAO_CONFERE, idLocalidade, 
 																									anoMesReferenciaArrecadacao);
 		for (PagamentoHelper pagamentoHelper : pagamentos) {
-			if(possuiDiferencaAte2(pagamentoHelper)){
+			if(possuiDiferencaAte2(pagamentoHelper) && possuiImovel(pagamentoHelper)){
 				repositorioArrecadacao.atualizarSituacaoPagamento(PagamentoSituacao.PAGAMENTO_CLASSIFICADO, pagamentoHelper.getIdPagamento());
 			}
 		}
 		
 		
+	}
+
+	private boolean possuiImovel(PagamentoHelper pagamentoHelper) {
+		return pagamentoHelper.getIdImovel() != null; 
 	}
 
 	private boolean possuiDiferencaAte2(PagamentoHelper pagamentoHelper) {
@@ -30442,6 +30453,8 @@ public class ControladorArrecadacao implements SessionBean {
 						UnidadeProcessamento.LOCALIDADE, idLocalidade);
 
 		try {
+			gerarDebitoCreditoParaPagamentosClassificados(anoMesReferenciaArrecadacao, idLocalidade);
+			
 			/** GUIA PAGAMENTO */
 			gerarHistoricoParaEncerrarArrecadacaoGuiaPagamento(
 					anoMesReferenciaArrecadacao, idLocalidade);
@@ -30471,6 +30484,101 @@ public class ControladorArrecadacao implements SessionBean {
 					idUnidadeIniciada, true);
 			throw new EJBException(e);
 		}
+	}
+
+	private void gerarDebitoCreditoParaPagamentosClassificados(Integer anoMesReferenciaArrecadacao, Integer idLocalidade) throws Exception{
+		Collection<PagamentoHelper> pagamentos = repositorioArrecadacao.pesquisarValoresPagamentos(PagamentoSituacao.PAGAMENTO_CLASSIFICADO, 
+				idLocalidade,
+				anoMesReferenciaArrecadacao);
+		for (PagamentoHelper pagamentoHelper : pagamentos) {
+			if (possuiDiferencaAte2(pagamentoHelper)) {
+				BigDecimal diferenca = pagamentoHelper.getValorPagamento().subtract(pagamentoHelper.getValorDocumento());
+				
+				if (diferenca.doubleValue() > 0.0){
+					inserirCreditoARealizar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca);
+				}else if (diferenca.doubleValue() < 0.0){
+					inserirDebitoACobrar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca.abs());
+				}				
+			}
+		}
+	}
+	
+	private void inserirDebitoACobrar(Integer anoMesReferenciaArrecadacao, PagamentoHelper pagamentoHelper, BigDecimal valor) throws Exception {
+		
+		Imovel imovel = null;
+		if (pagamentoHelper.getIdImovel() != null){
+			imovel = repositorioImovel.pesquisarDadosImovel(pagamentoHelper.getIdImovel());
+		}
+		
+		DebitoTipo tipo = new DebitoTipo();
+		tipo.setId(DebitoTipo.VALOR_NAO_CONFERE);
+		
+		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+
+		getControladorFaturamento().gerarDebitoACobrar(anoMesReferenciaArrecadacao
+				, sistemaParametro.getAnoMesFaturamento()
+				, imovel
+				, (short) 1, (short) 0
+				, Util.somaMesAnoMesReferencia(anoMesReferenciaArrecadacao, 1)
+				, valor, tipo, null);
+	}
+	
+	private int getAnoMesReferenciaContabil() throws ControladorException {
+		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+		int anoMesReferenciaContabil = sistemaParametro.getAnoMesFaturamento();
+		int anoMesCorrente = Util.getAnoMesComoInt(new Date());
+
+		if (sistemaParametro.getAnoMesFaturamento() < anoMesCorrente) {
+			anoMesReferenciaContabil = anoMesCorrente;
+		}
+		return anoMesReferenciaContabil;
+	}
+	
+	private void inserirCreditoARealizar(Integer anoMesReferenciaArrecadacao, PagamentoHelper pagamentoHelper, BigDecimal valor) throws Exception {
+		CreditoARealizar credito = new CreditoARealizar();
+		credito.setGeracaoCredito(Calendar.getInstance().getTime());
+		credito.setAnoMesReferenciaCredito(pagamentoHelper.getDataPagamento());
+		credito.setAnoMesReferenciaContabil(anoMesReferenciaArrecadacao);
+		credito.setAnoMesCobrancaCredito(Util.somaMesAnoMesReferencia(anoMesReferenciaArrecadacao, 1));
+		credito.setValorResidualMesAnterior(BigDecimal.ZERO);
+		credito.setNumeroPrestacaoCredito((short) 1);
+		credito.setNumeroPrestacaoRealizada((short) 0);
+		credito.setValorCredito(valor);
+		
+		CreditoTipo tipo = new CreditoTipo();
+		tipo.setId(CreditoTipo.PAGAMENTO_NAO_CONFERE);
+		credito.setCreditoTipo(tipo);
+		
+		LancamentoItemContabil lancamentoItemContabil = new LancamentoItemContabil();
+		lancamentoItemContabil.setId(LancamentoItemContabil.OUTROS_SERVICOS_AGUA);
+		credito.setLancamentoItemContabil(lancamentoItemContabil);
+		
+		CreditoOrigem creditoOrigem = new CreditoOrigem();
+		creditoOrigem.setId(CreditoOrigem.CONTAS_PAGAS_EM_DUPLICIDADE_EXCESSO);
+		credito.setCreditoOrigem(creditoOrigem);
+		
+		DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
+		debitoCreditoSituacao.setId(DebitoCreditoSituacao.NORMAL);
+		credito.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
+		
+		Imovel imovel = null;
+		if (pagamentoHelper.getIdImovel() != null){
+			imovel = repositorioImovel.pesquisarDadosImovel(pagamentoHelper.getIdImovel());
+			credito.setImovel(imovel);
+			credito.setLocalidade(imovel.getLocalidade());
+			credito.setCodigoSetorComercial(imovel.getSetorComercial().getCodigo());
+			credito.setNumeroLote(imovel.getLote());
+			credito.setNumeroSubLote(imovel.getSubLote());
+			credito.setQuadra(imovel.getQuadra());
+			if (imovel.getQuadra() != null){
+				credito.setNumeroQuadra(imovel.getQuadra().getNumeroQuadra());
+			}
+		}
+		
+		credito.setUltimaAlteracao(Calendar.getInstance().getTime());
+		credito.setAnoMesReferenciaPrestacao(Util.somaMesAnoMesReferencia(anoMesReferenciaArrecadacao, 1));
+		
+		getControladorFaturamento().gerarCreditoARealizar(credito, imovel, null);
 	}
 
 	/**

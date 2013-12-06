@@ -325,6 +325,7 @@ import gcom.gui.GcomAction;
 import gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoEmitirOSHelper;
 import gcom.gui.faturamento.consumotarifa.bean.CategoriaFaixaConsumoTarifaHelper;
 import gcom.interceptor.Interceptador;
+import gcom.interceptor.ObjetoTransacao;
 import gcom.interceptor.RegistradorOperacao;
 import gcom.micromedicao.ArquivoTextoRoteiroEmpresa;
 import gcom.micromedicao.ArquivoTextoRoteiroEmpresaDivisao;
@@ -8318,131 +8319,78 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			BigDecimal valorEntrada, Usuario usuarioLogado,
 			boolean debitoParaPagamentoAntecipado) throws ControladorException {
 
-		// -----------------------------------------------------------
-		// Verificar permissão especial
-		boolean temPermissaoDebitoACobrar = getControladorPermissaoEspecial()
-				.verificarPermissaoInserirDebitoACobrarSemEntradaSemJuros(
-						usuarioLogado);
-		// -----------------------------------------------------------
+		boolean temPermissaoDebitoACobrar = getControladorPermissaoEspecial().verificarPermissaoInserirDebitoACobrarSemEntradaSemJuros(usuarioLogado);
 
-		// validar taxa de juros
 		if (!temPermissaoDebitoACobrar) {
 			if (debitoACobrar.getPercentualTaxaJurosFinanciamento() != null) {
-
-				BigDecimal percentualTaxaJurosFinanciamento = this
-						.getControladorUtil().pesquisarParametrosDoSistema()
-						.getPercentualTaxaJurosFinanciamento();
+				BigDecimal percentualTaxaJurosFinanciamento = this.getControladorUtil().pesquisarParametrosDoSistema()
+																											.getPercentualTaxaJurosFinanciamento();
 
 				// no caso de numero de prestacões == 1 , permitir juros = 0
-				if (numeroPrestacoes.intValue() != 1
-						|| (debitoACobrar.getPercentualTaxaJurosFinanciamento()
-								.compareTo(new BigDecimal(0)) != 0 && numeroPrestacoes
-								.intValue() == 1)) {
-					if (debitoACobrar.getPercentualTaxaJurosFinanciamento()
-							.compareTo(percentualTaxaJurosFinanciamento) == -1) {
-						// Taxa de Juros mínima permitida é de XX%
-						throw new ControladorException(
-								"atencao.taxa_juros.nao.permitida", null,
-								(this.getControladorUtil()
-										.pesquisarParametrosDoSistema()
-										.getPercentualTaxaJurosFinanciamento()
-										.toString()).replace(".", ","));
+				if (numeroPrestacoes.intValue() != 1 || (debitoACobrar.getPercentualTaxaJurosFinanciamento().compareTo(BigDecimal.ZERO) != 0
+															&& numeroPrestacoes.intValue() == 1)) {
+					if (debitoACobrar.getPercentualTaxaJurosFinanciamento().compareTo(percentualTaxaJurosFinanciamento) == -1) {
+						throw new ControladorException("atencao.taxa_juros.nao.permitida", null, (this.getControladorUtil().pesquisarParametrosDoSistema()
+																															.getPercentualTaxaJurosFinanciamento()
+																															.toString()).replace(".", ","));
 					}
 				}
 			}
 		}
 
-		// [FS0009] - Validar número de prestações
-		if (numeroPrestacoes.shortValue() > getControladorUtil()
-				.pesquisarParametrosDoSistema()
-				.getNumeroMaximoParcelasFinanciamento().shortValue()) {
-			throw new ControladorException("atencao.valor_prestacoes", null,
-					getControladorUtil().pesquisarParametrosDoSistema()
-							.getNumeroMaximoParcelasFinanciamento().toString());
+		if (numeroPrestacoes.shortValue() > getControladorUtil().pesquisarParametrosDoSistema().getNumeroMaximoParcelasFinanciamento().shortValue()) {
+			throw new ControladorException("atencao.valor_prestacoes", null, getControladorUtil().pesquisarParametrosDoSistema().getNumeroMaximoParcelasFinanciamento().toString());
 		}
-		// [FS0010] - Validar valor total do serviço
+
 		FiltroDebitoTipo filtroDebitoTipo = new FiltroDebitoTipo();
+		filtroDebitoTipo.adicionarParametro(new ParametroSimples(FiltroDebitoTipo.ID, debitoACobrar.getDebitoTipo().getId()));
+		
+		Collection colecaoDebitosTipos = getControladorUtil().pesquisar(filtroDebitoTipo, DebitoTipo.class.getName());
 
-		filtroDebitoTipo.adicionarParametro(new ParametroSimples(
+		DebitoTipo debitoTipo = (DebitoTipo) colecaoDebitosTipos.iterator().next();
 
-		FiltroDebitoTipo.ID, debitoACobrar.getDebitoTipo().getId()));
-		Collection colecaoDebitosTipos = getControladorUtil().pesquisar(
-				filtroDebitoTipo, DebitoTipo.class.getName());
-
-		DebitoTipo debitoTipo = (DebitoTipo) colecaoDebitosTipos.iterator()
-				.next();
-
-		if (debitoACobrar.getValorDebito().compareTo(
-				debitoTipo.getValorLimite()) == 1) {
-			throw new ControladorException(
-					"atencao.debito_a_cobrar.valor_total_servico", null,
-					debitoTipo.getValorLimite().toString().replace(".", ","));
+		if (debitoACobrar.getValorDebito().compareTo(debitoTipo.getValorLimite()) == 1) {
+			throw new ControladorException("atencao.debito_a_cobrar.valor_total_servico", null, debitoTipo.getValorLimite().toString().replace(".", ","));
 		}
 
-		if (percentualAbatimento != null
-				&& !(percentualAbatimento.compareTo(new BigDecimal("0.00")) == 0)) {
-			// [FS0011] - Validar percentual de abatimento
+		if (percentualAbatimento != null && !(percentualAbatimento.compareTo(new BigDecimal("0.00")) == 0)) {
 			if ((imovel.getLigacaoAguaSituacao().getId().intValue() == LigacaoAguaSituacao.SUPRIMIDO)
 					| (imovel.getLigacaoAguaSituacao().getId().intValue() == LigacaoAguaSituacao.SUPR_PARC)
 					| (imovel.getLigacaoAguaSituacao().getId().intValue() == LigacaoAguaSituacao.SUPR_PARC_PEDIDO)) {
 
-				// [UC0108] - Obter Quantidade de Economias por Categoria
-				Collection colecaoCategorias = getControladorImovel()
-						.obterQuantidadeEconomiasCategoria(imovel);
+				Collection colecaoCategorias = getControladorImovel().obterQuantidadeEconomiasCategoria(imovel);
 
-				Iterator colecaoCategoriasIterator = colecaoCategorias
-						.iterator();
+				Iterator colecaoCategoriasIterator = colecaoCategorias.iterator();
 
 				while (colecaoCategoriasIterator.hasNext()) {
-					Categoria categoria = (Categoria) colecaoCategoriasIterator
-							.next();
+					Categoria categoria = (Categoria) colecaoCategoriasIterator.next();
 					if (categoria.getId().compareTo(Categoria.RESIDENCIAL) != 0) {
-						throw new ControladorException(
-								"atencao.imovel.nao_suprimido.categoria.nao_residencial");
+						throw new ControladorException("atencao.imovel.nao_suprimido.categoria.nao_residencial");
 					}
 				}
 			} else {
-				throw new ControladorException(
-						"atencao.imovel.nao_suprimido.categoria.nao_residencial");
+				throw new ControladorException("atencao.imovel.nao_suprimido.categoria.nao_residencial");
 			}
 
-			// [FS0011] - Validar percentual de abatimento
-			if (percentualAbatimento.compareTo(getControladorUtil()
-					.pesquisarParametrosDoSistema()
-					.getPercentualMaximoAbatimento()) == 1) {
-				throw new ControladorException(
-						"atencao.imovel.percentual_abatimento", null,
-						getControladorUtil().pesquisarParametrosDoSistema()
-								.getPercentualMaximoAbatimento().toString()
-								.replace(".", ","));
+			if (percentualAbatimento.compareTo(getControladorUtil().pesquisarParametrosDoSistema().getPercentualMaximoAbatimento()) == 1) {
+				throw new ControladorException("atencao.imovel.percentual_abatimento", null, getControladorUtil().pesquisarParametrosDoSistema()
+																													.getPercentualMaximoAbatimento().toString()
+																													.replace(".", ","));
 			}
 		}
 
-		// [FS0012] - Verificar preenchimento dos campos
-		if (valorEntrada != null
-				&& valorEntrada.compareTo(valorTotalServico) == 1) {
-			throw new ControladorException(
-					"atencao.debito_a_cobrar.valor_entrada.valor_total_servico");
+		if (valorEntrada != null && valorEntrada.compareTo(valorTotalServico) == 1) {
+			throw new ControladorException("atencao.debito_a_cobrar.valor_entrada.valor_total_servico");
 		}
 
 		if (!temPermissaoDebitoACobrar) {
-			// [FS0012] - Verificar preenchimento dos campos
 			if (valorEntrada != null && numeroPrestacoes.intValue() > 1) {
-
-				BigDecimal parte1 = getControladorUtil()
-						.pesquisarParametrosDoSistema()
-						.getPercentualFinanciamentoEntradaMinima()
-						.divide(new BigDecimal(100));
+				BigDecimal parte1 = getControladorUtil().pesquisarParametrosDoSistema().getPercentualFinanciamentoEntradaMinima().divide(new BigDecimal(100));
 
 				if ((valorEntrada.compareTo(valorTotalServico.multiply(parte1)) == -1)) {
-					throw new ControladorException(
-							"atencao.debito_a_cobrar.valor_entrada", null,
-							getControladorUtil().pesquisarParametrosDoSistema()
-									.getPercentualFinanciamentoEntradaMinima()
-									.toString().replace(".", ",")
-									+ "");
+					throw new ControladorException("atencao.debito_a_cobrar.valor_entrada", null, getControladorUtil().pesquisarParametrosDoSistema()
+																		.getPercentualFinanciamentoEntradaMinima().toString().replace(".", ",") + "");
 				}
-
 			}
 		}
 
@@ -8453,30 +8401,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		 */
 		if (!debitoParaPagamentoAntecipado) {
 
-			SistemaParametro sistemaParametro = getControladorUtil()
-					.pesquisarParametrosDoSistema();
+			SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
-			/*
-			 * Alterado por: Vivianne Sousa 17/10/2007 Analista responsavel:
-			 * Aryed
-			 */
 			debitoACobrar.setAnoMesReferenciaDebito(null);
+			debitoACobrar.setAnoMesCobrancaDebito(sistemaParametro.getAnoMesArrecadacao());
 
-			debitoACobrar.setAnoMesCobrancaDebito(sistemaParametro
-					.getAnoMesArrecadacao());
-
-			/*
-			 * Alterado por: Vivianne Sousa 12/03/2008 Analista responsavel:
-			 * Aryed
-			 */
-			int anoMesReferenciaContabil = sistemaParametro
-					.getAnoMesFaturamento();
+			int anoMesReferenciaContabil = sistemaParametro.getAnoMesFaturamento();
 			int anoMesCorrente = Util.getAnoMesComoInt(new Date());
 
-			/*
-			 * anoMesReferenciaContabil receberá o maior valor entre ano/mes da
-			 * data corrente e o ano/mes de referencia do faturamento
-			 */
 			if (sistemaParametro.getAnoMesFaturamento() < anoMesCorrente) {
 				anoMesReferenciaContabil = anoMesCorrente;
 			}
@@ -8491,15 +8423,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			debitoACobrar.setUsuario(usuarioLogado);
 		}
 
-		// Inseri a DebitoACobrarGeral na tabela debito_a_cobrar_geral
 		DebitoACobrarGeral debitoACobrarGeral = new DebitoACobrarGeral();
-
-		// valor fixo
-		Short indicadorHistorico = 2;
-
-		debitoACobrarGeral.setIndicadorHistorico(indicadorHistorico);
-
-		// Ultima Alteração
+		debitoACobrarGeral.setIndicadorHistorico((short) 2);
 		debitoACobrarGeral.setUltimaAlteracao(new Date());
 
 		Integer idDebitoGerado = null;
@@ -8508,7 +8433,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		 * alterado por pedro alexandre dia 21/11/2006 alteração feita para
 		 * acoplar o controle de abrangência de usuário
 		 */
-		// ------------ CONTROLE DE ABRANGENCIA ----------------
 		Abrangencia abrangencia = new Abrangencia(usuarioLogado, imovel);
 
 		if (!getControladorAcesso().verificarAcessoAbrangencia(abrangencia)) {
@@ -8518,26 +8442,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			idDebitoGerado = (Integer) getControladorUtil().inserir(
 					debitoACobrarGeral);
 		}
-		// ------------ FIM CONTROLE DE ABRANGENCIA ----------------
 
 		debitoACobrarGeral.setId(idDebitoGerado);
 
 		debitoACobrar.setDebitoACobrarGeral(debitoACobrarGeral);
-
 		debitoACobrar.setId(idDebitoGerado);
 
-		// ------------ REGISTRAR TRANSAÇÃO ----------------
-		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-				Operacao.OPERACAO_DEBITO_A_COBRAR_INSERIR, imovel.getId(),
-				debitoACobrar.getId(), new UsuarioAcaoUsuarioHelper(
-						usuarioLogado,
-						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-
-		registradorOperacao.registrarOperacao(debitoACobrar);
-		// registradorOperacao.registrarOperacao(debitoACobrarGeral);
-
-		// ------------ REGISTRAR TRANSAÇÃO ----------------
-
+		registrarTransacao(debitoACobrar, Operacao.OPERACAO_DEBITO_A_COBRAR_INSERIR, imovel, usuarioLogado, debitoACobrar.getId());
+		
 		getControladorUtil().inserir(debitoACobrar);
 
 		inserirDebitoACobrarCategoria(debitoACobrar, imovel);
@@ -8780,32 +8692,23 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @param debitoACobrar
 	 *            Debito A Cobrar
 	 */
-	public void inserirDebitoACobrarCategoria(DebitoACobrar debitoACobrar,
-			Imovel imovel) throws ControladorException {
+	public void inserirDebitoACobrarCategoria(DebitoACobrar debitoACobrar, Imovel imovel) throws ControladorException {
 
 		// [UC0108] - Obter Quantidade de Economias por Categoria
-		Collection colecaoCategorias = getControladorImovel()
-				.obterQuantidadeEconomiasCategoria(imovel);
+		Collection colecaoCategorias = getControladorImovel().obterQuantidadeEconomiasCategoria(imovel);
 
-		Collection colecaoValoresPorCategoria = getControladorImovel()
-				.obterValorPorCategoria(colecaoCategorias,
-						debitoACobrar.getValorDebito());
+		Collection colecaoValoresPorCategoria = getControladorImovel().obterValorPorCategoria(colecaoCategorias, debitoACobrar.getValorDebito());
 		Iterator icolecaoCategorias = colecaoCategorias.iterator();
-		Iterator icolecaoValoresPorCategoria = colecaoValoresPorCategoria
-				.iterator();
+		Iterator icolecaoValoresPorCategoria = colecaoValoresPorCategoria.iterator();
 
-		while (icolecaoValoresPorCategoria.hasNext()
-				&& icolecaoCategorias.hasNext()) {
+		while (icolecaoValoresPorCategoria.hasNext() && icolecaoCategorias.hasNext()) {
 
 			DebitoACobrarCategoria debitoACobrarCategoria = new DebitoACobrarCategoria();
 			Categoria categoria = (Categoria) icolecaoCategorias.next();
-			BigDecimal valorPorCategoria = (BigDecimal) icolecaoValoresPorCategoria
-					.next();
+			BigDecimal valorPorCategoria = (BigDecimal) icolecaoValoresPorCategoria.next();
 
-			debitoACobrarCategoria.setComp_id(new DebitoACobrarCategoriaPK(
-					debitoACobrar, categoria));
-			debitoACobrarCategoria.setQuantidadeEconomia(categoria
-					.getQuantidadeEconomiasCategoria());
+			debitoACobrarCategoria.setComp_id(new DebitoACobrarCategoriaPK(debitoACobrar, categoria));
+			debitoACobrarCategoria.setQuantidadeEconomia(categoria.getQuantidadeEconomiasCategoria());
 			debitoACobrarCategoria.setUltimaAlteracao(new Date());
 			debitoACobrarCategoria.setValorCategoria(valorPorCategoria);
 			getControladorUtil().inserir(debitoACobrarCategoria);
@@ -67616,6 +67519,83 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
+	
+	public DebitoACobrar gerarDebitoACobrar(Integer anoMesReferenciaArrecadacao, Integer anoMesReferenciaFaturamento, Imovel imovel, 
+			Short numeroPrestacaoDebito, Short numeroPrestacaoCobradas, Integer anoMesReferenciaDebito, BigDecimal valorDebito, 
+			DebitoTipo debitoTipo, Usuario usuario) throws ControladorException {
+
+		DebitoACobrar debitoACobrar;
+		DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
+		debitoCreditoSituacao.setId(DebitoCreditoSituacao.NORMAL);
+		
+		CobrancaForma cobrancaForma = new CobrancaForma();
+		cobrancaForma.setId(CobrancaForma.COBRANCA_EM_CONTA);
+		
+		Object[] obterDebitoTipo;
+		try {
+			obterDebitoTipo = repositorioFaturamento.obterDebitoTipo(debitoTipo.getId());
+
+			FinanciamentoTipo financiamentoTipo = new FinanciamentoTipo();
+			if (obterDebitoTipo[0] != null) {
+				financiamentoTipo.setId((Integer) obterDebitoTipo[0]);
+			}
+
+			LancamentoItemContabil lancamentoItemContabil = new LancamentoItemContabil();
+			if (obterDebitoTipo[1] != null) {
+				lancamentoItemContabil.setId((Integer) obterDebitoTipo[1]);
+			}
+
+			debitoACobrar = new DebitoACobrar();
+			debitoACobrar.setAnoMesCobrancaDebito(anoMesReferenciaArrecadacao);
+			debitoACobrar.setAnoMesReferenciaContabil(getAnoMesReferenciaContabil());
+			debitoACobrar.setNumeroPrestacaoDebito(numeroPrestacaoDebito);
+			debitoACobrar.setNumeroPrestacaoCobradas(numeroPrestacaoCobradas);
+			debitoACobrar.setImovel(imovel);
+			debitoACobrar.setLocalidade(imovel.getLocalidade());
+			debitoACobrar.setQuadra(imovel.getQuadra());
+			if(imovel.getSetorComercial() != null){
+				debitoACobrar.setCodigoSetorComercial(imovel.getSetorComercial().getCodigo());
+			}
+			if(imovel.getQuadra() != null){
+				debitoACobrar.setNumeroQuadra(imovel.getQuadra().getNumeroQuadra());
+			}
+			debitoACobrar.setNumeroLote(imovel.getLote());
+			debitoACobrar.setNumeroSubLote(imovel.getSubLote());
+			debitoACobrar.setPercentualTaxaJurosFinanciamento(BigDecimal.ZERO);
+			debitoACobrar.setRegistroAtendimento(null);
+			debitoACobrar.setOrdemServico(null);
+			debitoACobrar.setDebitoCreditoSituacaoAnterior(null);
+			debitoACobrar.setParcelamentoGrupo(null);
+			debitoACobrar.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
+			debitoACobrar.setCobrancaForma(cobrancaForma);
+			debitoACobrar.setDebitoTipo(debitoTipo);
+			debitoACobrar.setUltimaAlteracao(new Date());
+			debitoACobrar.setGeracaoDebito(new Date());
+			debitoACobrar.setAnoMesReferenciaDebito(anoMesReferenciaDebito);
+			debitoACobrar.setFinanciamentoTipo(financiamentoTipo);
+			debitoACobrar.setLancamentoItemContabil(lancamentoItemContabil);
+			debitoACobrar.setValorDebito(valorDebito);
+			debitoACobrar.setUsuario(usuario);
+
+			DebitoACobrarGeral debitoACobrarGeral = new DebitoACobrarGeral();
+			debitoACobrarGeral.setIndicadorHistorico(ConstantesSistema.NAO);
+			debitoACobrarGeral.setUltimaAlteracao(new Date());
+			
+			Integer idDebitoACobrarGeral = (Integer) getControladorUtil().inserir(debitoACobrarGeral);
+			debitoACobrarGeral.setId(idDebitoACobrarGeral);
+
+			debitoACobrar.setId(idDebitoACobrarGeral);
+			debitoACobrar.setDebitoACobrarGeral(debitoACobrarGeral);
+			
+			getControladorUtil().inserir(debitoACobrar);
+			
+			inserirDebitoACobrarCategoria(debitoACobrar, imovel);
+		} catch (Exception e) {
+			throw new EJBException(e);
+		}
+
+		return debitoACobrar;
+	}
 
 	/**
 	 * [UC0302] - Gerar Débito a Cobrar de Acréscimos por Impontualidade
@@ -67649,7 +67629,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			Conta conta, BigDecimal valorDebito, DebitoTipo debitoTipo,
 			Usuario usuario) throws ControladorException {
 
-		// declaração de variáveis
 		DebitoACobrar debitoACobrar;
 		DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 		debitoCreditoSituacao.setId(DebitoCreditoSituacao.NORMAL);
@@ -67658,17 +67637,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		Object[] obterDebitoTipo;
 
 		try {
-			// obter os dadso do tipo de débito informado
-			obterDebitoTipo = repositorioFaturamento.obterDebitoTipo(debitoTipo
-					.getId());
+			obterDebitoTipo = repositorioFaturamento.obterDebitoTipo(debitoTipo.getId());
 
-			// recupera qual o tipo de financiamento
 			FinanciamentoTipo financiamentoTipo = new FinanciamentoTipo();
 			if (obterDebitoTipo[0] != null) {
 				financiamentoTipo.setId((Integer) obterDebitoTipo[0]);
 			}
 
-			// recupera qual o lançamento item contábil
 			LancamentoItemContabil lancamentoItemContabil = new LancamentoItemContabil();
 			if (obterDebitoTipo[1] != null) {
 				lancamentoItemContabil.setId((Integer) obterDebitoTipo[1]);
@@ -67677,25 +67652,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			debitoACobrar = new DebitoACobrar();
 			debitoACobrar.setImovel(imovel);
 			debitoACobrar.setAnoMesCobrancaDebito(anoMesReferenciaArrecadacao);
-			// alterado por: Rômulo Aurélio 17/03/2009
-			// analista responsavel: Rosana Carvalho
-			// debitoACobrar.setAnoMesReferenciaContabil(anoMesReferenciaFaturamento);
-			SistemaParametro sistemaParametro = getControladorUtil()
-					.pesquisarParametrosDoSistema();
-
-			int anoMesReferenciaContabil = sistemaParametro
-					.getAnoMesFaturamento();
-			int anoMesCorrente = Util.getAnoMesComoInt(new Date());
-
-			// anoMesReferenciaContabil recebe o maior valor entre ano/mes da
-			// data corrente
-			// e o ano/mes de referencia do faturamento
-			if (sistemaParametro.getAnoMesFaturamento() < anoMesCorrente) {
-				anoMesReferenciaContabil = anoMesCorrente;
-			}
-
-			debitoACobrar.setAnoMesReferenciaContabil(anoMesReferenciaContabil);
-
+			debitoACobrar.setAnoMesReferenciaContabil(getAnoMesReferenciaContabil());
 			debitoACobrar.setNumeroPrestacaoDebito(numeroPrestacaoDebito);
 			debitoACobrar.setNumeroPrestacaoCobradas(numeroPrestacaoCobradas);
 			debitoACobrar.setLocalidade(localidade);
@@ -67720,12 +67677,11 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			debitoACobrar.setValorDebito(valorDebito);
 			debitoACobrar.setUsuario(usuario);
 
-			// Inseri o débito a cobrar geral e recupera o id
 			DebitoACobrarGeral debitoACobrarGeral = new DebitoACobrarGeral();
 			debitoACobrarGeral.setIndicadorHistorico(ConstantesSistema.NAO);
 			debitoACobrarGeral.setUltimaAlteracao(new Date());
-			Integer idDebitoACobrarGeral = (Integer) getControladorUtil()
-					.inserir(debitoACobrarGeral);
+			
+			Integer idDebitoACobrarGeral = (Integer) getControladorUtil().inserir(debitoACobrarGeral);
 			debitoACobrarGeral.setId(idDebitoACobrarGeral);
 
 			debitoACobrar.setId(idDebitoACobrarGeral);
@@ -67736,6 +67692,17 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		// retorna o débito a cobrar gerado
 		return debitoACobrar;
+	}
+
+	private int getAnoMesReferenciaContabil() throws ControladorException {
+		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+		int anoMesReferenciaContabil = sistemaParametro.getAnoMesFaturamento();
+		int anoMesCorrente = Util.getAnoMesComoInt(new Date());
+
+		if (sistemaParametro.getAnoMesFaturamento() < anoMesCorrente) {
+			anoMesReferenciaContabil = anoMesCorrente;
+		}
+		return anoMesReferenciaContabil;
 	}
 
 	/**
@@ -76440,78 +76407,63 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @return Integer
 	 * @throws ControladorException
 	 */
-	public Integer gerarCreditoARealizar(CreditoARealizar creditoARealizar,
-			Imovel imovel, Usuario usuarioLogado) throws ControladorException {
+	public Integer gerarCreditoARealizar(CreditoARealizar creditoARealizar, Imovel imovel, Usuario usuarioLogado) throws ControladorException {
 
-		// Inseri a conta na tabela Conta_Geral
 		CreditoARealizarGeral creditoARealizarGeral = new CreditoARealizarGeral();
 
-		// valor fixo
-		Short indicadorHistorico = 2;
-
-		creditoARealizarGeral.setIndicadorHistorico(indicadorHistorico);
-
-		// Ultima Alteração
+		creditoARealizarGeral.setIndicadorHistorico((short) 2);
 		creditoARealizarGeral.setUltimaAlteracao(new Date());
 
-		// Inserindo no BD
-		Integer idGerado = (Integer) this.getControladorUtil().inserir(
-				creditoARealizarGeral);
+		Integer idGerado = (Integer) this.getControladorUtil().inserir(creditoARealizarGeral);
 
-		// seta o id da Conta Geral gerada no objeto contaGeral
 		creditoARealizarGeral.setId(idGerado);
 
 		creditoARealizar.setCreditoARealizarGeral(creditoARealizarGeral);
-
 		creditoARealizar.setId(idGerado);
 
-		// ------------ REGISTRAR TRANSAÇÃO ----------------
-		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-				Operacao.OPERACAO_CREDITO_A_REALIZAR_INSERIR, imovel.getId(),
-				idGerado, new UsuarioAcaoUsuarioHelper(usuarioLogado,
-						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-		registradorOperacao.registrarOperacao(creditoARealizar);
-		// ------------ REGISTRAR TRANSAÇÃO ----------------
+		if(usuarioLogado != null){
+			registrarTransacao(creditoARealizar, Operacao.OPERACAO_CREDITO_A_REALIZAR_INSERIR, imovel, usuarioLogado, idGerado);
+		}
+		
+		System.out.println("Credito a realizar para o imovel: " + imovel.getId() + " no valor de " + creditoARealizar.getValorCredito().doubleValue());
 
-		// Inserido o objeto Crédito a Realizar
 		getControladorUtil().inserir(creditoARealizar);
 
-		// [UC0108] - Obter Quantidade de Economias por Categoria
-		Collection colecaoCategoriasImovel = this.getControladorImovel()
-				.obterQuantidadeEconomiasCategoria(imovel);
+		inserirCreditoARealizarCategoria(creditoARealizar, imovel);
 
-		// [UC0185] - Obter Valor por Categoria
-		Collection colecaoValoresPorCategoria = getControladorImovel()
-				.obterValorPorCategoria(colecaoCategoriasImovel,
-						creditoARealizar.getValorCredito());
+		return idGerado;
+	}
+
+	private void registrarTransacao(ObjetoTransacao objetoTransacao, Integer operacao, Imovel imovel, Usuario usuarioLogado, Integer idGerado) {
+		
+		UsuarioAcaoUsuarioHelper usuarioHelper = new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
+		
+		RegistradorOperacao registradorOperacao = new RegistradorOperacao(operacao, imovel.getId(), idGerado, usuarioHelper);
+		
+		registradorOperacao.registrarOperacao(objetoTransacao);
+	}
+
+	private void inserirCreditoARealizarCategoria(CreditoARealizar creditoARealizar, Imovel imovel) throws ControladorException {
+		Collection colecaoCategoriasImovel = this.getControladorImovel().obterQuantidadeEconomiasCategoria(imovel);
+
+		Collection colecaoValoresPorCategoria = getControladorImovel().obterValorPorCategoria(colecaoCategoriasImovel, creditoARealizar.getValorCredito());
 
 		Iterator icolecaoCategorias = colecaoCategoriasImovel.iterator();
-		Iterator icolecaoValoresPorCategoria = colecaoValoresPorCategoria
-				.iterator();
-		while (icolecaoValoresPorCategoria.hasNext()
-				&& icolecaoCategorias.hasNext()) {
-			// Criando um objeto creditoARealizarCategoria
+		Iterator icolecaoValoresPorCategoria = colecaoValoresPorCategoria.iterator();
+		
+		while (icolecaoValoresPorCategoria.hasNext() && icolecaoCategorias.hasNext()) {
 			CreditoARealizarCategoria creditoARealizarCategoria = new CreditoARealizarCategoria();
 
-			// Setando as variáveis de categoria e valor de acordo com as
-			// coleções
 			Categoria categoria = (Categoria) icolecaoCategorias.next();
 			BigDecimal valor = (BigDecimal) icolecaoValoresPorCategoria.next();
 
-			// Informando os campos da tabela
-			creditoARealizarCategoria
-					.setComp_id(new CreditoARealizarCategoriaPK(
-							creditoARealizar.getId(), categoria.getId()));
-			creditoARealizarCategoria.setQuantidadeEconomia(categoria
-					.getQuantidadeEconomiasCategoria());
+			creditoARealizarCategoria.setComp_id(new CreditoARealizarCategoriaPK(creditoARealizar.getId(), categoria.getId()));
+			creditoARealizarCategoria.setQuantidadeEconomia(categoria.getQuantidadeEconomiasCategoria());
 			creditoARealizarCategoria.setValorCategoria(valor);
 			creditoARealizarCategoria.setUltimaAlteracao(new Date());
 
-			// Inserindo os campos na tabela creditoARealizarCategoria
 			getControladorUtil().inserir(creditoARealizarCategoria);
 		}
-
-		return idGerado;
 	}
 
 	private Object[] gerarPassosFinais(

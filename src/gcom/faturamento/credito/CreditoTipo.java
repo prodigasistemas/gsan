@@ -113,6 +113,9 @@ public class CreditoTipo extends ObjetoTransacao {
 	
 	public final static Integer PAGAMENTO_PARCIAL = new Integer(856);
 
+	public final static Integer PAGAMENTO_NAO_CONFERE = new Integer(860);
+	
+
 	/** identifier field */
 	private Integer id;
 

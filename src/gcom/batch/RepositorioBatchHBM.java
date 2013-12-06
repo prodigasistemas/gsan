@@ -538,10 +538,10 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 			
 				session.save(objetoParaInserir);
 				
+				session.flush();
+				session.clear();
 			}
 			
-			session.flush();
-			session.clear();
 		} 
 		catch (HibernateException e) {
 			
@@ -613,13 +613,13 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 
 		try {
 			while (iteratorObjetos.hasNext()) {
-
 				Object objetoParaInserir = iteratorObjetos.next();
 				
 				session.save(objetoParaInserir);
-				session.flush();
-				session.clear();
 			}
+			
+			session.flush();
+			session.clear();
 		} catch (HibernateException e) {
 			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");

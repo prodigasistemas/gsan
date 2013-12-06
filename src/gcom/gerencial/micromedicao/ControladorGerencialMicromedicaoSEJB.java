@@ -2303,37 +2303,28 @@ public class ControladorGerencialMicromedicaoSEJB implements SessionBean {
 	 * @Alteracao: Dois campos adicionados a quebra: Motivo Baixa e Classe Metrologica;
 	 * 
 	 */
-	public void gerarResumoHidrometros(Integer idHidrometroMarca,
-			int idFuncionalidadeIniciada) throws ControladorException {
+	public void gerarResumoHidrometros(Integer idHidrometroMarca, int idFuncionalidadeIniciada) throws ControladorException {
 
 		int idUnidadeIniciada = 0;
 
-		// -------------------------
-		//
-		// Registrar o início do processamento da Unidade de
-		// Processamento
-		// do Batch
-		//
-		// -------------------------
-		idUnidadeIniciada = getControladorBatch()
-				.iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
-						UnidadeProcessamento.HIDROMETRO_MARCA,
-						idHidrometroMarca);
+		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.HIDROMETRO_MARCA,
+				idHidrometroMarca);
 
 		try {
 
 			int indice = 0;
 			int qtRegistros = 500;
 
-			//FS0001 - Verificar existencia de dados para o ano/mes referencia informado
-	   	    getControladorGerencialCadastro().excluirResumoGerencialC(getControladorUtil().pesquisarParametrosDoSistema().getAnoMesFaturamento(), "micromedicao.un_resumo_hidrometro", "rehi_amreferencia", "himc_id", idHidrometroMarca );				
+			// FS0001 - Verificar existencia de dados para o ano/mes referencia
+			// informado
+			getControladorGerencialCadastro().excluirResumoGerencialC(getControladorUtil().pesquisarParametrosDoSistema().getAnoMesFaturamento(),
+					"micromedicao.un_resumo_hidrometro", "rehi_amreferencia", "himc_id", idHidrometroMarca);
 
 			boolean flagTerminou = false;
 
 			while (!flagTerminou) {
 
-				Collection<Object[]> hidrometros = this.repositorioGerencialMicromedicao
-						.getHidrometrosResumoHidrometro(idHidrometroMarca,indice, qtRegistros);
+				Collection<Object[]> hidrometros = this.repositorioGerencialMicromedicao.getHidrometrosResumoHidrometro(idHidrometroMarca, indice, qtRegistros);
 
 				if (qtRegistros > hidrometros.size()) {
 					flagTerminou = true;
@@ -2356,8 +2347,7 @@ public class ControladorGerencialMicromedicaoSEJB implements SessionBean {
 
 						// Montamos um objeto de resumo, com as informacoes do
 						// retorno
-						ResumoHidrometroHelper helper = new ResumoHidrometroHelper(
-								(Integer) retorno[0], // idHidrometroMotivoBaixa
+						ResumoHidrometroHelper helper = new ResumoHidrometroHelper((Integer) retorno[0], // idHidrometroMotivoBaixa
 								(Integer) retorno[1], // idLocalArmazenagem
 								(Integer) retorno[2], // idHidrometroTipo
 								(Integer) retorno[3], // idHidrometroSituacao
@@ -2366,67 +2356,29 @@ public class ControladorGerencialMicromedicaoSEJB implements SessionBean {
 								(Integer) retorno[6], // idHidrometroDiametro
 								(Integer) retorno[7], // idHidrometroCapacidade
 								(Short) retorno[8],// indicadorMacro
-						        (Integer) retorno[9]);
-						
-						
+								(Integer) retorno[9]);
+
 						helper.setIdMotivoBaixa((Integer) retorno[10]);
 						helper.setIdClasseMetrologica((Integer) retorno[11]);
-						
+
 						// pesquisando a categoria
 						// [UC0306] - Obtter principal categoria do imóvel
 						// Integer idImovel = (Integer) retorno[0];
 
-						System.out.println("HidrometroMarca "
-								+ idHidrometroMarca);
-						// // Codigo do
-						// // imovel que
-						// // esta sendo
-						// // processado
-						// Categoria categoria = null;
-						// categoria = this.getControladorImovel()
-						// .obterPrincipalCategoriaImovel(idImovel);
-						// if (categoria != null) {
-						// helper.setIdCategoria(categoria.getId());
-						//
-						// // Pesquisando a principal subcategoria
-						// ImovelSubcategoria subcategoria = this
-						// .getControladorImovel()
-						// .obterPrincipalSubcategoria(categoria.getId(),
-						// idImovel);
-						//
-						// if (subcategoria != null) {
-						// helper.setIdSubCategoria(subcategoria.getComp_id()
-						// .getSubcategoria().getId());
-						// }
-						// }
 						listaSimplificada.add(helper);
-					
 
-					// Quantidade de Hidrometros Acumulados
+						/**
+						 * para todas os ImovelResumoHidrometroHelper cria
+						 * ResumoHidrometrocount
+						 */
 
-					//int countQtdHidrometros = 0;
+						Integer anoMesReferencia = Fachada.getInstancia().pesquisarParametrosDoSistema().getAnoMesFaturamento();
 
-					/**
-					 * para todas os ImovelResumoHidrometroHelper cria
-					 * ResumoHidrometrocount
-					 */
-
-//					for (int count = 0; count < listaSimplificada.size(); count++) {
-//						ResumoHidrometroHelper helper = (ResumoHidrometroHelper) listaSimplificada
-//								.get(count);
-
-
-						// Montamos todo o agrupamento necessario
-						// Mes ano de referencia
-						Integer anoMesReferencia = Fachada.getInstancia()
-							.pesquisarParametrosDoSistema().getAnoMesFaturamento();
-						
 						// Local Armazenagem
 						GHidrometroLocalArmazenagem hidrometroLocalArmazenagem = null;
 						if (helper.getIdLocalArmazenagem() != null) {
 							hidrometroLocalArmazenagem = new GHidrometroLocalArmazenagem();
-							hidrometroLocalArmazenagem.setId(helper
-									.getIdLocalArmazenagem());
+							hidrometroLocalArmazenagem.setId(helper.getIdLocalArmazenagem());
 						}
 
 						// Tipo de Hidrometro
@@ -2440,64 +2392,32 @@ public class ControladorGerencialMicromedicaoSEJB implements SessionBean {
 						GHidrometroSituacao hidrometroSituacao = null;
 						if (helper.getIdHidrometroSituacao() != null) {
 							hidrometroSituacao = new GHidrometroSituacao();
-							hidrometroSituacao.setId(helper
-									.getIdHidrometroSituacao());
+							hidrometroSituacao.setId(helper.getIdHidrometroSituacao());
 						}
 
 						// Ano de fabricação
 						Short numeroAnoFabricacao = 0;
 						if (helper.getNumeroAnoFabricacao() != 0) {
-							numeroAnoFabricacao = (helper
-									.getNumeroAnoFabricacao());
+							numeroAnoFabricacao = (helper.getNumeroAnoFabricacao());
 						}
 
-//						// Marca do Hidrometro
-//						GHidrometroMarca hidrometroMarca = null;
-//
-//						if (helper.getIdHidrometroMarca() != null) {
-//							hidrometroMarca = new GHidrometroMarca();
-//							hidrometroMarca.setId(helper.getIdHidrometroMarca());
-//
-//						} 
-//						else {
-//							hidrometroMarca = new GHidrometroMarca();
-//							hidrometroMarca
-//									.setId(helper.getIdHidrometroMarca());
-//
-//						}
-
-//						if (helper.getIdHidrometroMarca() != null) {
-//							hidrometroMarca = new GHidrometroMarca();
-//							hidrometroMarca.setId(helper
-//							.getIdHidrometroMarca());
-//
-//						}
-//							else {
-//							hidrometroMarca = new GHidrometroMarca();
-//							hidrometroMarca
-//									.setId(helper.getIdHidrometroMarca());
-//
-//						}
-						
 						GHidrometroMarca hidrometroMarcaG = new GHidrometroMarca();
-						hidrometroMarcaG
-								.setId(idHidrometroMarca);
-
+						hidrometroMarcaG.setId(idHidrometroMarca);
+						
+						
 
 						// Diametro do Hidrometro
 						GHidrometroDiametro hidrometroDiametro = null;
 						if (helper.getIdHidrometroDiametro() != null) {
 							hidrometroDiametro = new GHidrometroDiametro();
-							hidrometroDiametro.setId(helper
-									.getIdHidrometroDiametro());
+							hidrometroDiametro.setId(helper.getIdHidrometroDiametro());
 						}
 
 						// Capacidade do Hidrometro
 						GHidrometroCapacidade hidrometroCapacidade = null;
 						if (helper.getIdHidrometroCapacidade() != null) {
 							hidrometroCapacidade = new GHidrometroCapacidade();
-							hidrometroCapacidade.setId(helper
-									.getIdHidrometroCapacidade());
+							hidrometroCapacidade.setId(helper.getIdHidrometroCapacidade());
 						}
 
 						// Indicador de Macro
@@ -2506,76 +2426,54 @@ public class ControladorGerencialMicromedicaoSEJB implements SessionBean {
 							indicadorMacro = (helper.getIndicadorMacro());
 						}
 
-//						// Quantidade de Hidrometros Acumulada
-//
-//						countQtdHidrometros++;
-						
+						// // Quantidade de Hidrometros Acumulada
 						// Motivo Baixa
 						GHidrometroMotivoBaixa motivoBaixa = null;
-						if(helper.getIdMotivoBaixa() != null) {
+						if (helper.getIdMotivoBaixa() != null) {
 							motivoBaixa = new GHidrometroMotivoBaixa();
 							motivoBaixa.setId(helper.getIdMotivoBaixa());
 						}
-						
+
 						// Classe Metrologica
 						GHidrometroClasseMetrologica classeMetrologica = null;
 						if (helper.getIdClasseMetrologica() != null) {
 							classeMetrologica = new GHidrometroClasseMetrologica();
 							classeMetrologica.setId(helper.getIdClasseMetrologica());
 						}
-
-						// Criamos um resumo de Hidrometros (***UFA***)
-						UnResumoHidrometro resumoHidrometro = new UnResumoHidrometro(
-								null, anoMesReferencia.intValue(),
-								numeroAnoFabricacao, indicadorMacro,
-								helper.getCount(), new Date(),
-								hidrometroMarcaG, hidrometroSituacao,
-								hidrometroLocalArmazenagem, hidrometroTipo,
-								hidrometroDiametro, hidrometroCapacidade);
 						
+						// Criamos um resumo de Hidrometros (***UFA***)
+						UnResumoHidrometro resumoHidrometro = new UnResumoHidrometro(null, anoMesReferencia.intValue(), numeroAnoFabricacao, indicadorMacro,
+								helper.getCount(), new Date(), hidrometroMarcaG, hidrometroSituacao, hidrometroLocalArmazenagem, hidrometroTipo,
+								hidrometroDiametro, hidrometroCapacidade);
+
 						resumoHidrometro.setGerHidrometroMotivoBaixa(motivoBaixa);
 						resumoHidrometro.setGerHidrometroClasseMetrologica(classeMetrologica);
 
 						// Adicionamos a lista que deve ser inserida
 						listaResumoHidrometro.add(resumoHidrometro);
-						
-					}
-						
-					}
-				
 
-				if (listaResumoHidrometro != null
-						&& !listaResumoHidrometro.isEmpty()) {
-					getControladorBatch()
-							.inserirColecaoObjetoParaBatchGerencial(listaResumoHidrometro);
+					}
+
 				}
-				
+
+				if (listaResumoHidrometro != null && !listaResumoHidrometro.isEmpty()) {
+					getControladorBatch().inserirColecaoObjetoParaBatchGerencial(listaResumoHidrometro);
+				}
+
 				listaResumoHidrometro.clear();
 				listaSimplificada.clear();
 				listaResumoHidrometro = null;
 				listaSimplificada = null;
 			}
 
-			// --------------------------------------------------------
-			//
-			// Registrar o fim da execução da Unidade de Processamento
-			//
-			// --------------------------------------------------------
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
-					idUnidadeIniciada, false);
-			
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+
 			System.out.println("Finalizado");
 
 		} catch (Exception ex) {
-			// Este catch serve para interceptar qualquer exceção que o processo
-			// batch venha a lançar e garantir que a unidade de processamento do
-			// batch será atualizada com o erro ocorrido
-			
 			ex.printStackTrace();
-			//sessionContext.setRollbackOnly();
-			
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex,
-					idUnidadeIniciada, true);
+
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
 
 			throw new EJBException(ex);
 		}
