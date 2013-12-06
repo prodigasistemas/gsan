@@ -219,6 +219,7 @@ import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.CobrancaDebitoSituacao;
 import gcom.cobranca.CobrancaDocumento;
 import gcom.cobranca.CobrancaDocumentoItem;
+import gcom.cobranca.CobrancaForma;
 import gcom.cobranca.ControladorCobrancaLocal;
 import gcom.cobranca.ControladorCobrancaLocalHome;
 import gcom.cobranca.DocumentoTipo;
@@ -254,6 +255,8 @@ import gcom.faturamento.conta.FiltroConta;
 import gcom.faturamento.conta.FiltroContaHistorico;
 import gcom.faturamento.conta.IConta;
 import gcom.faturamento.credito.CreditoARealizar;
+import gcom.faturamento.credito.CreditoARealizarCategoria;
+import gcom.faturamento.credito.CreditoARealizarCategoriaPK;
 import gcom.faturamento.credito.CreditoARealizarGeral;
 import gcom.faturamento.credito.CreditoOrigem;
 import gcom.faturamento.credito.CreditoRealizado;
@@ -261,6 +264,8 @@ import gcom.faturamento.credito.CreditoTipo;
 import gcom.faturamento.credito.FiltroCreditoARealizar;
 import gcom.faturamento.credito.FiltroCreditoTipo;
 import gcom.faturamento.debito.DebitoACobrar;
+import gcom.faturamento.debito.DebitoACobrarCategoria;
+import gcom.faturamento.debito.DebitoACobrarCategoriaPK;
 import gcom.faturamento.debito.DebitoACobrarGeral;
 import gcom.faturamento.debito.DebitoACobrarHistorico;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
@@ -274,6 +279,7 @@ import gcom.financeiro.lancamento.LancamentoItemContabil;
 import gcom.financeiro.lancamento.LancamentoTipo;
 import gcom.gerencial.cadastro.IRepositorioGerencialCadastro;
 import gcom.gerencial.cadastro.RepositorioGerencialCadastroHBM;
+import gcom.interceptor.ObjetoTransacao;
 import gcom.interceptor.RegistradorOperacao;
 import gcom.micromedicao.ArquivoTextoRoteiroEmpresa;
 import gcom.micromedicao.ControladorMicromedicaoLocal;
@@ -30491,7 +30497,7 @@ public class ControladorArrecadacao implements SessionBean {
 				if (diferenca.doubleValue() > 0.0){
 					inserirCreditoARealizar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca);
 				}else if (diferenca.doubleValue() < 0.0){
-					inserirDebitoACobrar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca);
+					inserirDebitoACobrar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca.abs());
 				}				
 			}
 		}
@@ -30516,8 +30522,18 @@ public class ControladorArrecadacao implements SessionBean {
 				, Util.somaMesAnoMesReferencia(anoMesReferenciaArrecadacao, 1)
 				, valor, tipo, null);
 	}
+	
+	private int getAnoMesReferenciaContabil() throws ControladorException {
+		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+		int anoMesReferenciaContabil = sistemaParametro.getAnoMesFaturamento();
+		int anoMesCorrente = Util.getAnoMesComoInt(new Date());
 
-
+		if (sistemaParametro.getAnoMesFaturamento() < anoMesCorrente) {
+			anoMesReferenciaContabil = anoMesCorrente;
+		}
+		return anoMesReferenciaContabil;
+	}
+	
 	private void inserirCreditoARealizar(Integer anoMesReferenciaArrecadacao, PagamentoHelper pagamentoHelper, BigDecimal valor) throws Exception {
 		CreditoARealizar credito = new CreditoARealizar();
 		credito.setGeracaoCredito(Calendar.getInstance().getTime());
@@ -30532,6 +30548,18 @@ public class ControladorArrecadacao implements SessionBean {
 		CreditoTipo tipo = new CreditoTipo();
 		tipo.setId(CreditoTipo.PAGAMENTO_NAO_CONFERE);
 		credito.setCreditoTipo(tipo);
+		
+		LancamentoItemContabil lancamentoItemContabil = new LancamentoItemContabil();
+		lancamentoItemContabil.setId(LancamentoItemContabil.OUTROS_SERVICOS_AGUA);
+		credito.setLancamentoItemContabil(lancamentoItemContabil);
+		
+		CreditoOrigem creditoOrigem = new CreditoOrigem();
+		creditoOrigem.setId(CreditoOrigem.CONTAS_PAGAS_EM_DUPLICIDADE_EXCESSO);
+		credito.setCreditoOrigem(creditoOrigem);
+		
+		DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
+		debitoCreditoSituacao.setId(DebitoCreditoSituacao.NORMAL);
+		credito.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
 		
 		Imovel imovel = null;
 		if (pagamentoHelper.getIdImovel() != null){

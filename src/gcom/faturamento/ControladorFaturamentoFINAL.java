@@ -67587,6 +67587,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			debitoACobrar.setId(idDebitoACobrarGeral);
 			debitoACobrar.setDebitoACobrarGeral(debitoACobrarGeral);
 			
+			getControladorUtil().inserir(debitoACobrar);
+			
 			inserirDebitoACobrarCategoria(debitoACobrar, imovel);
 		} catch (Exception e) {
 			throw new EJBException(e);
@@ -76422,6 +76424,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		if(usuarioLogado != null){
 			registrarTransacao(creditoARealizar, Operacao.OPERACAO_CREDITO_A_REALIZAR_INSERIR, imovel, usuarioLogado, idGerado);
 		}
+		
+		System.out.println("Credito a realizar para o imovel: " + imovel.getId() + " no valor de " + creditoARealizar.getValorCredito().doubleValue());
 
 		getControladorUtil().inserir(creditoARealizar);
 
