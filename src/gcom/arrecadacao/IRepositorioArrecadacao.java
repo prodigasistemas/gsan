@@ -99,6 +99,7 @@ import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
 import gcom.cadastro.imovel.Imovel;
+import gcom.cadastro.localidade.Localidade;
 import gcom.cobranca.CobrancaDocumento;
 import gcom.cobranca.CobrancaDocumentoItem;
 import gcom.cobranca.DocumentoTipo;
@@ -7125,4 +7126,10 @@ public interface IRepositorioArrecadacao {
 			Integer anoMesReferenciaArrecadacao) throws ErroRepositorioException;
 	
 	public void atualizarSituacaoPagamento(Integer pagamentoSituacao, Integer idPagamento) throws ErroRepositorioException;
+	
+	public Collection<GuiaPagamento> obterGuiasPagamentoNaoPagasAtePeriodo(Integer financiamentoTipoServico, 
+			Date dataVencimentoLimite,  Localidade localidade) throws ErroRepositorioException;
+	
+	public Collection<Integer> pesquisarIdsLocalidadeComGuiasPagamentoNaoPagas(Integer financiamentoTipoServico, 
+			Date dataVencimentoLimite) throws ErroRepositorioException;
 }

@@ -102,6 +102,7 @@ import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
 import gcom.cadastro.imovel.Imovel;
+import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.CobrancaDocumento;
 import gcom.cobranca.CobrancaDocumentoItem;
@@ -31512,5 +31513,74 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			} finally {
 				HibernateUtil.closeSession(session);
 			}
+		}
+		
+		public Collection<GuiaPagamento> obterGuiasPagamentoNaoPagasAtePeriodo(Integer financiamentoTipoServico, 
+				Date dataVencimentoLimite,  Localidade localidade) throws ErroRepositorioException {
+			Session session = HibernateUtil.getSession();
+			
+			StringBuilder sql = new StringBuilder();
+			
+			Collection<GuiaPagamento> retorno = new ArrayList<GuiaPagamento>();
+			try {
+				sql.append("SELECT gpag ")
+		           .append(" FROM faturamento.guia_pagamento gpag ")
+		           .append(" LEFT JOIN arrecadacao.pagamento pgmt ON pgmt.gpag_id = gpag.gpag_id ")
+		           .append(" WHERE gpag_dtvencimento < :dataVencimentoLimite ")
+		           .append(" AND pgmt_id IS NULL ")
+		           //.append(" AND fntp_id = :financiamentoTipoServico ")
+		           .append(" AND loca_id = :localidade")
+		           .append(" AND dcst_idatual in (:situacaoNormal,:situacaoRetificada,:situacaoIncluida)");
+				
+				retorno = session.createQuery(sql.toString())
+					.setDate("dataVencimentoLimite", dataVencimentoLimite)
+					//.setInteger("financiamentoTipoServico", financiamentoTipoServico)
+					.setInteger("localidade", localidade.getId())
+					.setInteger("situacaoNormal", DebitoCreditoSituacao.NORMAL)
+					.setInteger("situacaoRetificada", DebitoCreditoSituacao.RETIFICADA)
+					.setInteger("situacaoIncluida", DebitoCreditoSituacao.INCLUIDA).list();
+				
+			} catch (HibernateException e) {
+
+				throw new ErroRepositorioException(e, "Erro no Hibernate");
+				
+			}
+			
+			return retorno;
+			
+		}
+		
+		public Collection<Integer> pesquisarIdsLocalidadeComGuiasPagamentoNaoPagas(Integer financiamentoTipoServico, 
+				Date dataVencimentoLimite) throws ErroRepositorioException {
+			Session session = HibernateUtil.getSession();
+			
+			StringBuilder sql = new StringBuilder();
+			
+			Collection<Integer> retorno = new ArrayList<Integer>();
+			try {
+				sql.append("SELECT gpag.loca_id ")
+		           .append(" FROM faturamento.guia_pagamento gpag ")
+		           .append(" LEFT JOIN arrecadacao.pagamento pgmt ON pgmt.gpag_id = gpag.gpag_id ")
+		           .append(" WHERE gpag_dtvencimento < :dataVencimentoLimite ")
+		           .append(" AND pgmt_id IS NULL ")
+		           //.append(" AND fntp_id = :financiamentoTipoServico ")
+		           .append(" AND loca_id = :localidade")
+		           .append(" AND dcst_idatual in (:situacaoNormal,:situacaoRetificada,:situacaoIncluida)");
+				
+				retorno = session.createQuery(sql.toString())
+					.setDate("dataVencimentoLimite", dataVencimentoLimite)
+					//.setInteger("financiamentoTipoServico", financiamentoTipoServico)
+					.setInteger("situacaoNormal", DebitoCreditoSituacao.NORMAL)
+					.setInteger("situacaoRetificada", DebitoCreditoSituacao.RETIFICADA)
+					.setInteger("situacaoIncluida", DebitoCreditoSituacao.INCLUIDA).list();
+				
+			} catch (HibernateException e) {
+
+				throw new ErroRepositorioException(e, "Erro no Hibernate");
+				
+			}
+			
+			return retorno;
+			
 		}
 }
