@@ -30453,8 +30453,6 @@ public class ControladorArrecadacao implements SessionBean {
 						UnidadeProcessamento.LOCALIDADE, idLocalidade);
 
 		try {
-			gerarDebitoCreditoParaPagamentosClassificados(anoMesReferenciaArrecadacao, idLocalidade);
-			
 			/** GUIA PAGAMENTO */
 			gerarHistoricoParaEncerrarArrecadacaoGuiaPagamento(
 					anoMesReferenciaArrecadacao, idLocalidade);
@@ -30614,6 +30612,8 @@ public class ControladorArrecadacao implements SessionBean {
 		try {
 			Integer idLocalidade = repositorioArrecadacao
 					.pesquisarIdLocalidadePorSetorComercial(idSetorComercial);
+			
+			gerarDebitoCreditoParaPagamentosClassificados(anoMesReferenciaArrecadacao, idLocalidade);
 
 			/** CONTA */
 			gerarHistoricoEncerrarArrecadacaoConta(anoMesReferenciaArrecadacao,
