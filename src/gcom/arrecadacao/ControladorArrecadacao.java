@@ -56595,5 +56595,47 @@ public class ControladorArrecadacao implements SessionBean {
 			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
 		}
-	}	
+	}
+	
+	public Collection<GuiaPagamento> obterGuiasPagamentoNaoPagasAtePeriodo(Integer idFuncionalidadeIniciada, Date dataVencimentoLimite, 
+			Integer financiamentoTipoServico, Localidade localidade) throws ControladorException {
+		
+		Integer idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,UnidadeProcessamento.FUNCIONALIDADE,0);
+
+		Collection<GuiaPagamento> colecaoGuiaPagamentos;
+		try {
+
+			colecaoGuiaPagamentos = repositorioArrecadacao
+					.obterGuiasPagamentoNaoPagasAtePeriodo(financiamentoTipoServico, dataVencimentoLimite, localidade);
+			
+			System.out.println("Quantidade de guias: " + colecaoGuiaPagamentos.size());
+			
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,idUnidadeIniciada, false);
+
+		} catch (ErroRepositorioException ex) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", ex);
+		}
+		
+		return colecaoGuiaPagamentos;
+		
+	}
+	
+	public Collection<Integer> pesquisarIdsLocalidadeComGuiasPagamentoNaoPagas(Date dataVencimentoLimite, 
+			Integer financiamentoTipoServico) throws ControladorException {
+		
+		Collection<Integer> colecaoGuiaPagamentos;
+		try {
+
+			colecaoGuiaPagamentos = repositorioArrecadacao
+					.pesquisarIdsLocalidadeComGuiasPagamentoNaoPagas(financiamentoTipoServico, dataVencimentoLimite);
+			
+		} catch (ErroRepositorioException ex) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", ex);
+		}
+		
+		return colecaoGuiaPagamentos;
+		
+	}
 }
