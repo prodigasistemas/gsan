@@ -87,6 +87,7 @@ import gcom.atendimentopublico.ordemservico.ControladorOrdemServicoLocalHome;
 import gcom.atendimentopublico.registroatendimento.FiltroRaEncerramentoComando;
 import gcom.atendimentopublico.registroatendimento.RaEncerramentoComando;
 import gcom.batch.arrecadacao.TarefaBatchAtualizarLigacaoAguaLigadoAnaliseParaLigado;
+import gcom.batch.arrecadacao.TarefaBatchCancelarGuiasPagamentoNaoPagas;
 import gcom.batch.arrecadacao.TarefaBatchClassificarPagamentosDevolucoes;
 import gcom.batch.arrecadacao.TarefaBatchEncerrarArrecadacaoMes;
 import gcom.batch.arrecadacao.TarefaBatchGerarDadosDiariosArrecadacao;
@@ -4012,6 +4013,28 @@ public class ControladorBatchSEJB implements SessionBean {
 								colecaoLocalidadesGerarDadosRelatorioBIG);
 
 						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(gerarDadosRelatorioBIG));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
+						
+					case Funcionalidade.CANCELAR_GUIAS_PAGAMENTO_NAO_PAGAS:
+
+						TarefaBatchCancelarGuiasPagamentoNaoPagas cancelarGuiasPagamentoNaoPagas = new TarefaBatchCancelarGuiasPagamentoNaoPagas(
+								processoIniciado.getUsuario(),
+								funcionalidadeIniciada.getId());
+
+						Date dataReferencia = new Date();
+						cancelarGuiasPagamentoNaoPagas.addParametro("dataReferencia", dataReferencia);
+
+						Collection<Integer> colecaoIdsLocalidadesComGuiasPagamentoNaoPagas = getControladorArrecadacao()
+								.pesquisarIdsLocalidadeComGuiasPagamentoNaoPagas(dataReferencia, null);
+						
+						cancelarGuiasPagamentoNaoPagas.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoIdsLocalidadesComGuiasPagamentoNaoPagas);
+
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(cancelarGuiasPagamentoNaoPagas));
 
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 
