@@ -219,7 +219,6 @@ import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.CobrancaDebitoSituacao;
 import gcom.cobranca.CobrancaDocumento;
 import gcom.cobranca.CobrancaDocumentoItem;
-import gcom.cobranca.CobrancaForma;
 import gcom.cobranca.ControladorCobrancaLocal;
 import gcom.cobranca.ControladorCobrancaLocalHome;
 import gcom.cobranca.DocumentoTipo;
@@ -255,8 +254,6 @@ import gcom.faturamento.conta.FiltroConta;
 import gcom.faturamento.conta.FiltroContaHistorico;
 import gcom.faturamento.conta.IConta;
 import gcom.faturamento.credito.CreditoARealizar;
-import gcom.faturamento.credito.CreditoARealizarCategoria;
-import gcom.faturamento.credito.CreditoARealizarCategoriaPK;
 import gcom.faturamento.credito.CreditoARealizarGeral;
 import gcom.faturamento.credito.CreditoOrigem;
 import gcom.faturamento.credito.CreditoRealizado;
@@ -264,8 +261,6 @@ import gcom.faturamento.credito.CreditoTipo;
 import gcom.faturamento.credito.FiltroCreditoARealizar;
 import gcom.faturamento.credito.FiltroCreditoTipo;
 import gcom.faturamento.debito.DebitoACobrar;
-import gcom.faturamento.debito.DebitoACobrarCategoria;
-import gcom.faturamento.debito.DebitoACobrarCategoriaPK;
 import gcom.faturamento.debito.DebitoACobrarGeral;
 import gcom.faturamento.debito.DebitoACobrarHistorico;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
@@ -279,7 +274,6 @@ import gcom.financeiro.lancamento.LancamentoItemContabil;
 import gcom.financeiro.lancamento.LancamentoTipo;
 import gcom.gerencial.cadastro.IRepositorioGerencialCadastro;
 import gcom.gerencial.cadastro.RepositorioGerencialCadastroHBM;
-import gcom.interceptor.ObjetoTransacao;
 import gcom.interceptor.RegistradorOperacao;
 import gcom.micromedicao.ArquivoTextoRoteiroEmpresa;
 import gcom.micromedicao.ControladorMicromedicaoLocal;
@@ -30487,20 +30481,39 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 
 	private void gerarDebitoCreditoParaPagamentosClassificados(Integer anoMesReferenciaArrecadacao, Integer idLocalidade) throws Exception{
+		System.out.println("Geracao de debito ou credito para pgtos classificados em " + anoMesReferenciaArrecadacao + " da localidade " + idLocalidade);
+		
 		Collection<PagamentoHelper> pagamentos = repositorioArrecadacao.pesquisarValoresPagamentos(PagamentoSituacao.PAGAMENTO_CLASSIFICADO, 
 				idLocalidade,
 				anoMesReferenciaArrecadacao);
+		
+		System.out.println("    Qtd de pagamentos: " + pagamentos.size());
+		
 		for (PagamentoHelper pagamentoHelper : pagamentos) {
 			if (possuiDiferencaAte2(pagamentoHelper)) {
 				BigDecimal diferenca = pagamentoHelper.getValorPagamento().subtract(pagamentoHelper.getValorDocumento());
 				
 				if (diferenca.doubleValue() > 0.0){
+					System.out.println("    Inserir credito a realizar no imovel: " + pagamentoHelper.getIdImovel() + " com valor: " + diferenca);
 					inserirCreditoARealizar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca);
 				}else if (diferenca.doubleValue() < 0.0){
+					System.out.println("    Inserir debito a cobrar no imovel: " + pagamentoHelper.getIdImovel() + " com valor: " + diferenca);
 					inserirDebitoACobrar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca.abs());
 				}				
 			}
 		}
+	}
+	
+	public static void main(String[] args) {
+		PagamentoHelper p = new PagamentoHelper();
+		ControladorArrecadacao c = new ControladorArrecadacao();
+		p.setValorPagamento(new BigDecimal(14.72));
+		p.setValorDocumento(new BigDecimal(14.00));
+		System.out.println(c.possuiDiferencaAte2(p));
+		BigDecimal diferenca = p.getValorPagamento().subtract(p.getValorDocumento());
+		System.out.println(diferenca.doubleValue() > 0.0);
+		System.out.println(diferenca.doubleValue() < 0.0);
+
 	}
 	
 	private void inserirDebitoACobrar(Integer anoMesReferenciaArrecadacao, PagamentoHelper pagamentoHelper, BigDecimal valor) throws Exception {
