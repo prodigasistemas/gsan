@@ -21,6 +21,8 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
 	
 	public static final int ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL = 1502;
 	
+	private Integer id;
+	
     /** identifier field */
     private Integer idImovel;
     
@@ -236,7 +238,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
 	
 	private String dsUFSiglaMunicipio;
 	
-	public ImovelAtualizacaoCadastral(Integer idImovel, Integer idLocalidade,
+	public ImovelAtualizacaoCadastral(Integer id, Integer idImovel, Integer idLocalidade,
 			int codigoSetorComercial, int numeroQuadra, short lote,
 			short subLote, Integer numeroSequencialRota,
 			Integer idLogradouroTipo, String dsLogradouroTipo,
@@ -264,6 +266,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
 			Integer idSituacaoAtualizacaoCadastral, Integer idEmpresa,
 			Integer idMunicipio, String nomeMunicipio,
 			Integer idUinidadeFederacao, String dsUFSiglaMunicipio) {
+		this.id = id;
 		this.idImovel = idImovel;
 		this.idLocalidade = idLocalidade;
 		this.codigoSetorComercial = codigoSetorComercial;
@@ -325,6 +328,14 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
 
 	public ImovelAtualizacaoCadastral(){    	
     }
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public Integer getIdImovel() {
         return this.idImovel;

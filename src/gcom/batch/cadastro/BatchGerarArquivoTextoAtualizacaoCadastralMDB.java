@@ -96,10 +96,8 @@ import javax.jms.ObjectMessage;
  * @author: Ana Maria
  * @date: 22/06/2009
  */
-public class BatchGerarArquivoTextoAtualizacaoCadastralMDB
-		implements
-			MessageDrivenBean,
-			MessageListener {
+public class BatchGerarArquivoTextoAtualizacaoCadastralMDB implements MessageDrivenBean, MessageListener {
+	
 	private static final long serialVersionUID = 1L;
 
 	public BatchGerarArquivoTextoAtualizacaoCadastralMDB() {
@@ -108,11 +106,9 @@ public class BatchGerarArquivoTextoAtualizacaoCadastralMDB
 
 	public void setMessageDrivenContext(MessageDrivenContext ctx)
 			throws EJBException {
-
 	}
 
 	public void ejbRemove() throws EJBException {
-
 	}
 
 	public void onMessage(Message message) {
@@ -120,10 +116,10 @@ public class BatchGerarArquivoTextoAtualizacaoCadastralMDB
 
 			ObjectMessage objectMessage = (ObjectMessage) message;
 			try {
-				System.out.println("À gerar arquivo texto de atualização cadastral via dispositivo móvel...");
 				this.getControladorCadastro().gerarArquivoTextoAtualizacaoCadastralDispositivoMovel(
 						(Integer) ((Object[]) objectMessage.getObject())[0],
-						(GerarArquivoTextoAtualizacaoCadastralHelper) ((Object[]) objectMessage.getObject())[1]);
+						(GerarArquivoTextoAtualizacaoCadastralHelper) ((Object[]) objectMessage.getObject())[1],
+						(Integer) ((Object[]) objectMessage.getObject())[2]);
 
 			} catch (JMSException e) {
 				System.out.println("Erro no MDB");

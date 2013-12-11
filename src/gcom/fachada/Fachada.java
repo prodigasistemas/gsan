@@ -285,6 +285,7 @@ import gcom.cadastro.imovel.ImovelProgramaEspecial;
 import gcom.cadastro.imovel.ImovelSituacao;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.Subcategoria;
+import gcom.cadastro.imovel.bean.GerarArquivoTextoAtualizacaoCadastralHelper;
 import gcom.cadastro.imovel.bean.ImovelAbaCaracteristicasHelper;
 import gcom.cadastro.imovel.bean.ImovelAbaCaracteristicasRetornoHelper;
 import gcom.cadastro.imovel.bean.ImovelAbaConclusaoHelper;
@@ -39199,6 +39200,25 @@ public class Fachada {
 					.getParametroMensagem());
 		}
 	}
+	
+	/**
+	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral
+	 * 
+	 * @author COSANPA - Felipe Santos
+	 * @date 04/12/2013
+	 * 
+	 * @return Collection
+	 */
+	public Collection<ArquivoTextoAtualizacaoCadastral> pesquisarArquivoTextoAtualizacaoCadastro(
+			String[] idsArquivoTxt) {
+		try {
+			return this.getControladorCadastro()
+					.pesquisarArquivoTextoAtualizacaoCadastro(idsArquivoTxt);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex
+					.getParametroMensagem());
+		}
+	}
 
 	/**
 	 * 
@@ -53777,4 +53797,11 @@ public class Fachada {
 		}
 	}
 	
+	public Collection<Integer> pesquisarRotasAtualizacaoCadastral(GerarArquivoTextoAtualizacaoCadastralHelper helper) {
+		try {
+			return this.getControladorCadastro().pesquisarRotasAtualizacaoCadastral(helper);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
 }

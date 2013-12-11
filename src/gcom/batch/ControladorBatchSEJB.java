@@ -8366,18 +8366,11 @@ public class ControladorBatchSEJB implements SessionBean {
 
 					case Funcionalidade.GERAR_ARQUIVO_TEXTO_ATUALIZACAO_CADASTRAL:
 						TarefaBatchGerarArquivoTextoAtualizacaoCadastral arquivoTexto = new TarefaBatchGerarArquivoTextoAtualizacaoCadastral(
-								processoIniciado.getUsuario(),
-								funcionalidadeIniciada.getId());
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
 
-						// Adicionar o conjunto de parametros informados pelo
-						// usuário através da interface do sistema
-						arquivoTexto.addParametro(
-								ConstantesSistema.PARAMETROS_BATCH, parametros);
-
-						// Seta o objeto para ser serializado no banco, onde
-						// depois sera executado por uma thread
-						funcionalidadeIniciada.setTarefaBatch(IoUtil
-								.transformarObjetoParaBytes(arquivoTexto));
+						arquivoTexto.addParametro(ConstantesSistema.PARAMETROS_BATCH, parametros);
+						
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(arquivoTexto));
 
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 

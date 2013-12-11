@@ -7689,134 +7689,87 @@ public class ControladorCadastro implements SessionBean {
 	 */
 	public void gerarArquivoTextoAtualizacaoCadastralDispositivoMovel(
 			Integer idFuncionalidadeIniciada,
-			GerarArquivoTextoAtualizacaoCadastralHelper helper)
-			throws ControladorException {
+			GerarArquivoTextoAtualizacaoCadastralHelper helper,
+			Integer idRota) throws ControladorException {
 
 		int idUnidadeIniciada = 0;
-
-		idUnidadeIniciada = getControladorBatch()
-				.iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
-						UnidadeProcessamento.SETOR_COMERCIAL, 0);
-
-		ArquivoTextoAtualizacaoCadastral arquivoTextoAtualizacaoCadastral = new ArquivoTextoAtualizacaoCadastral();
-
-		// Parâmetros
-		String localidadeString = "";
-		String setorString = "";
-		String rotaString = "";
-		String anoMesReferencia = "";
-
-		SistemaParametro parametroSistema = getControladorUtil()
-				.pesquisarParametrosDoSistema();
-		anoMesReferencia = parametroSistema.getAnoMesFaturamento().toString();
-
-		// Leiturista
-		if (helper.getIdLeiturista() != null
-				&& !helper.getIdLeiturista().equals("")) {
-			Leiturista leiturista = new Leiturista();
-			leiturista.setId(helper.getIdLeiturista());
-			arquivoTextoAtualizacaoCadastral.setLeiturista(leiturista);
-		}
-
-		// Situação do Arquivo
-		SituacaoTransmissaoLeitura situacaoTransmissaoLeitura = new SituacaoTransmissaoLeitura();
-		situacaoTransmissaoLeitura.setId(helper.getSituacao());
-		arquivoTextoAtualizacaoCadastral
-				.setSituacaoTransmissaoLeitura(situacaoTransmissaoLeitura);
-
-		// nenhum campo do filtro foi informado
-		Leiturista leiturista = null;
-		Collection<Leiturista> colecaoLeiturista = new ArrayList();
+		
 		Collection<Integer> idsImoveis = null;
-		if (helper.getColecaoImovel() == null
-				|| helper.getColecaoImovel().isEmpty()) {
+		Leiturista leiturista = null;
 
-			FiltroLeiturista filtroLeiturista = new FiltroLeiturista();
-			filtroLeiturista.adicionarParametro(new ParametroSimples(
-					FiltroLeiturista.ID, helper.getIdLeiturista()));
-			filtroLeiturista
-					.adicionarCaminhoParaCarregamentoEntidade("empresa");
+		try {
+			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(
+					idFuncionalidadeIniciada, UnidadeProcessamento.ROTA, idRota);
 
-			colecaoLeiturista = getControladorUtil().pesquisar(
-					filtroLeiturista, Leiturista.class.getName());
+			ArquivoTextoAtualizacaoCadastral arquivoTextoAtualizacaoCadastral = new ArquivoTextoAtualizacaoCadastral();
 
-			leiturista = (Leiturista) Util
-					.retonarObjetoDeColecao(colecaoLeiturista);
-			Integer idEmpresaLeiturista = leiturista.getEmpresa().getId();
+			SistemaParametro parametroSistema = getControladorUtil().pesquisarParametrosDoSistema();
+			String anoMesReferencia = parametroSistema.getAnoMesFaturamento().toString();
 
-			try {
-				idsImoveis = repositorioCadastro
-						.pesquisarIdsImoveisAtualizacaoCadastral(idEmpresaLeiturista);
+			// Situação do Arquivo
+			SituacaoTransmissaoLeitura situacaoTransmissaoLeitura = new SituacaoTransmissaoLeitura();
+			situacaoTransmissaoLeitura.setId(helper.getSituacao());
+			arquivoTextoAtualizacaoCadastral.setSituacaoTransmissaoLeitura(situacaoTransmissaoLeitura);
 
-			} catch (ErroRepositorioException e) {
-				getControladorBatch().encerrarUnidadeProcessamentoBatch(e,
-						idUnidadeIniciada, true);
+			if (helper.getColecaoImovel() == null
+					|| helper.getColecaoImovel().isEmpty()) {
+
+				leiturista = this.getLeituristaAtualizacaoCadastral(helper.getIdLeiturista());
+
+				idsImoveis = repositorioCadastro.pesquisarIdsImoveisAtualizacaoCadastral(
+						leiturista.getEmpresa().getId(), idRota);
 			}
 
-		}
-		
-		if (idsImoveis == null || idsImoveis.isEmpty()) {
-			// Nenhum Imovel cadastrado
-			System.out.println("Nenhum imóvel encontrado. ARQUIVO NÃO GERADO");
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
-					idUnidadeIniciada, false);
-		} else {
+			if (idsImoveis == null || idsImoveis.isEmpty()) {
+				System.out.println("Nenhum imóvel encontrado. ARQUIVO NÃO GERADO");
+				getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+			} else {
+				helper.setColecaoImovel(idsImoveis);
 
-			helper.setColecaoImovel(idsImoveis);
+				Rota rota = getControladorMicromedicao().pesquisarRota(idRota);
+				SetorComercial setor = rota.getSetorComercial();
+				Localidade localidade = setor.getLocalidade();
 
-			Object[] localidadeSetorRota = pesquisarLocalidadeSetorRotaDeImoveisParaRecadastramento(helper
-					.getColecaoImovel());
-			Localidade localidade = (Localidade) localidadeSetorRota[0];
-			SetorComercial setor = (SetorComercial) localidadeSetorRota[1];
-			Rota rota = (Rota) localidadeSetorRota[2];
+				arquivoTextoAtualizacaoCadastral.setLocalidade(localidade);
+				arquivoTextoAtualizacaoCadastral.setCodigoSetorComercial(new Integer(setor.getCodigo()));
+				arquivoTextoAtualizacaoCadastral.setRota(rota);
 
-			localidadeString = Util.adicionarZerosEsquedaNumero(3, localidade
-					.getId().toString());
-			setorString = Util.adicionarZerosEsquedaNumero(3, setor.getCodigo()
-					+ "");
-			rotaString = Util.adicionarZerosEsquedaNumero(2, rota.getCodigo() + "");
+				// Descrição do Arquivo
+				String descricaoArquivoTxt = Util.adicionarZerosEsquedaNumero(3, localidade.getId() + "")
+						+ "_"
+						+ Util.adicionarZerosEsquedaNumero(3, setor.getCodigo() + "")
+						+ "_"
+						+ Util.adicionarZerosEsquedaNumero(2, rota.getCodigo() + "")
+						+ "_" + anoMesReferencia;
+				arquivoTextoAtualizacaoCadastral.setDescricaoArquivo(descricaoArquivoTxt);
+				
+				// Leiturista
+				arquivoTextoAtualizacaoCadastral.setLeiturista(leiturista);
 
-			String descricaoArquivoTxt = localidadeString + "_" + setorString + "_"
-					+ rotaString + "_" + anoMesReferencia;
+				// Quatidade Imóvel
+				arquivoTextoAtualizacaoCadastral.setQuantidadeImovel(idsImoveis.size());
 
-			arquivoTextoAtualizacaoCadastral.setLocalidade(localidade);
-			arquivoTextoAtualizacaoCadastral.setCodigoSetorComercial(new Integer(
-					setor.getCodigo()));
-			arquivoTextoAtualizacaoCadastral.setCodigoRota(new Integer(rota
-					.getCodigo()));
+				// Arquivo texto
+				StringBuilder arquivoTexto = new StringBuilder();
 
-			// Descrição do Arquivo
-			arquivoTextoAtualizacaoCadastral
-			.setDescricaoArquivo(descricaoArquivoTxt);
+				byte[] arquivoTextoByte = null;
 
-			// Quatidade Imóvel
-			arquivoTextoAtualizacaoCadastral.setQuantidadeImovel(helper
-					.getQtdImovel());
-
-			// Arquivo texto
-			StringBuilder arquivoTexto = new StringBuilder();
-
-			byte[] arquivoTextoByte = null;
-
-			try {
 				arquivoTextoByte = IoUtil.transformarObjetoParaBytes(arquivoTexto);
 				arquivoTextoAtualizacaoCadastral.setArquivoTexto(arquivoTextoByte);
 
 				arquivoTextoAtualizacaoCadastral.setUltimaAlteracao(new Date());
 
-				Integer idArquivoTexto = (Integer) getControladorUtil().inserir(
-						arquivoTextoAtualizacaoCadastral);
-				arquivoTexto = this.gerarArquivoTxt(helper.getColecaoImovel(),
-						idArquivoTexto, leiturista);
+				Integer idArquivoTexto = (Integer) getControladorUtil().inserir(arquivoTextoAtualizacaoCadastral);
+				arquivoTexto = this.gerarArquivoTxt(helper.getColecaoImovel(), idArquivoTexto, leiturista, rota);
 
 				// -------------------------------------------------------------------------
 				ZipOutputStream zos = null;
 				BufferedWriter out = null;
 				File leituraTipo = new File(helper.getDescricao() + ".txt");
-				File compactado = new File(helper.getDescricao() + ".zip"); // nomeZip
+				File compactado = new File(helper.getDescricao() + ".zip");
 				zos = new ZipOutputStream(new FileOutputStream(compactado));
-				out = new BufferedWriter(new OutputStreamWriter(
-						new FileOutputStream(leituraTipo.getAbsolutePath())));
+				out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(
+						leituraTipo.getAbsolutePath())));
 				out.write(arquivoTexto.toString());
 				out.flush();
 				out.close();
@@ -7829,15 +7782,12 @@ public class ControladorCadastro implements SessionBean {
 
 				getControladorUtil().atualizar(arquivoTextoAtualizacaoCadastral);
 
-				getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
-						idUnidadeIniciada, false);
-
-			} catch (Exception ex) {
-				ex.printStackTrace();
-				getControladorBatch().encerrarUnidadeProcessamentoBatch(ex,
-						idUnidadeIniciada, true);
-				throw new EJBException(ex);
+				getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
+			throw new EJBException(ex);
 		}
 	}
 
@@ -7851,7 +7801,7 @@ public class ControladorCadastro implements SessionBean {
 	 * @exception ControladorException
 	 */
 	private StringBuilder gerarArquivoTxt(Collection colecaoImovelFiltrado,
-			Integer idArquivoTexto, Leiturista leiturista) throws ControladorException {
+			Integer idArquivoTexto, Leiturista leiturista, Rota rota) throws ControladorException {
 
 		try {
 
@@ -7911,12 +7861,9 @@ public class ControladorCadastro implements SessionBean {
 								SituacaoAtualizacaoCadastral.EM_CAMPO, null);
 			}
 
-			Object[] localidadeSetorRota = pesquisarLocalidadeSetorRotaDeImoveisParaRecadastramento(colecaoImovelFiltrado);
-
 			// Trailer
-			Object[] arquivoTrailerEQuantidadeTotalDeLinhas = this
-					.gerarArquivoTextoRegistroTipoTrailer(qtdRegistro,
-							localidadeSetorRota);
+			Object[] arquivoTrailerEQuantidadeTotalDeLinhas = this.gerarArquivoTextoRegistroTipoTrailer(
+					qtdRegistro, rota);
 			arquivoTexto
 					.append((StringBuilder) arquivoTrailerEQuantidadeTotalDeLinhas[0]);
 
@@ -10590,7 +10537,7 @@ public class ControladorCadastro implements SessionBean {
 	 * @author Wellington Rocha
 	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoGeral(
-			Object[] localidadeSetorRota) throws ControladorException {
+			Rota rota) throws ControladorException {
 
 		StringBuilder arquivoTextoRegistroTipoGeral = new StringBuilder();
 
@@ -10653,13 +10600,12 @@ public class ControladorCadastro implements SessionBean {
 		// Data Fim
 		arquivoTextoRegistroTipoGeral.append(Util.completaString("", 8));
 
-		Localidade localidade = (Localidade) localidadeSetorRota[0];
-		SetorComercial setor = (SetorComercial) localidadeSetorRota[1];
-		Rota rota = (Rota) localidadeSetorRota[2];
 		// Rota
 		arquivoTextoRegistroTipoGeral.append(Util.adicionarZerosEsquedaNumero(
 				4, rota.getId().toString()));
 
+		SetorComercial setor = rota.getSetorComercial();
+		Localidade localidade = setor.getLocalidade();
 		// Localidade
 		arquivoTextoRegistroTipoGeral.append(Util.adicionarZerosEsquedaNumero(
 				3, localidade.getId().toString()));
@@ -10993,13 +10939,13 @@ public class ControladorCadastro implements SessionBean {
 	 * @throws ControladorException
 	 */
 	public Object[] gerarArquivoTextoRegistroTipoTrailer(Integer qtdRegistro,
-			Object[] localidadeSetorRota) throws ControladorException {
+			Rota rota) throws ControladorException {
 
 		Object[] retorno = new Object[2];
 		StringBuilder arquivoTextoRegistroTipoTrailer = new StringBuilder();
 
 		arquivoTextoRegistroTipoTrailer.append(this
-				.gerarArquivoTextoRegistroTipoGeral(localidadeSetorRota));
+				.gerarArquivoTextoRegistroTipoGeral(rota));
 		qtdRegistro = qtdRegistro + 1;
 
 		Collection<CadastroOcorrencia> ocorrenciasCadastroCollection = this
@@ -11361,63 +11307,16 @@ public class ControladorCadastro implements SessionBean {
 	 * @return Collection
 	 * @throws ControladorException
 	 */
-	public Collection pesquisarArquivoTextoAtualizacaoCadastro(
+	public Collection<Rota> pesquisarArquivoTextoAtualizacaoCadastro(
 			String idEmpresa, String idLocalidade, String idAgenteComercial,
 			String idSituacaoTransmissao) throws ControladorException {
 
-		Collection retorno = new ArrayList();
-
-		Collection<Object[]> colecaoPesquisa = null;
-
 		try {
-			colecaoPesquisa = this.repositorioCadastro
-					.pesquisarArquivoTextoAtualizacaoCadastro(idEmpresa,
-							idLocalidade, idAgenteComercial,
-							idSituacaoTransmissao);
+			return this.repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(
+					idEmpresa, idLocalidade, idAgenteComercial, idSituacaoTransmissao);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
-
-		if (colecaoPesquisa != null && !colecaoPesquisa.isEmpty()) {
-
-			Iterator itera = colecaoPesquisa.iterator();
-
-			while (itera.hasNext()) {
-				Object[] objeto = (Object[]) itera.next();
-
-				ArquivoTextoAtualizacaoCadastral arquivoTexto = new ArquivoTextoAtualizacaoCadastral();
-
-				arquivoTexto.setId((Integer) objeto[0]);
-				if (objeto[1] != null) {
-					Localidade loc = new Localidade();
-					loc.setId((Integer) objeto[1]);
-					arquivoTexto.setLocalidade(loc);
-				}
-				arquivoTexto.setCodigoSetorComercial((Integer) objeto[2]);
-				arquivoTexto.setCodigoRota((Integer) objeto[3]);
-				arquivoTexto.setDescricaoArquivo((String) objeto[4]);
-				arquivoTexto.setQuantidadeImovel((Integer) objeto[5]);
-				Leiturista leit = new Leiturista();
-				if (objeto[6] != null) {
-					Cliente clie = new Cliente();
-					clie.setNome((String) objeto[6]);
-					leit.setCliente(clie);
-				}
-				if (objeto[7] != null) {
-					Funcionario funcionario = new Funcionario();
-					funcionario.setNome((String) objeto[7]);
-					leit.setFuncionario(funcionario);
-				}
-				SituacaoTransmissaoLeitura situacao = new SituacaoTransmissaoLeitura();
-				situacao.setDescricaoSituacao((String) objeto[8]);
-				arquivoTexto.setSituacaoTransmissaoLeitura(situacao);
-				arquivoTexto.setLeiturista(leit);
-
-				retorno.add(arquivoTexto);
-			}
-		}
-
-		return retorno;
 	}
 
 	/**
@@ -11442,6 +11341,25 @@ public class ControladorCadastro implements SessionBean {
 		}
 
 		return retorno;
+	}
+	
+	/**
+	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral
+	 * 
+	 * @author COSANPA - Felipe Santos
+	 * @date 04/12/2013
+	 * 
+	 * @return Collection
+	 * @throws ControladorException
+	 */
+	public Collection<ArquivoTextoAtualizacaoCadastral> pesquisarArquivoTextoAtualizacaoCadastro(
+			String[] idsArquivoTxt) throws ControladorException {
+
+		try {
+			return this.repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(idsArquivoTxt);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
 	}
 
 	/**
@@ -17260,30 +17178,30 @@ public class ControladorCadastro implements SessionBean {
 	 * @throws ControladorException
 	 * 
 	 */
-	public Object[] pesquisarLocalidadeSetorRotaDeImoveisParaRecadastramento(
-			Collection idsImoveis) throws ControladorException {
-		Object[] retorno = new Object[3];
-		Localidade localidade = null;
-		SetorComercial setor = null;
-		Rota rota = null;
-		Integer idImovel = null;
-
-		Iterator ite = idsImoveis.iterator();
-		if (ite.hasNext()) {
-			idImovel = (Integer) ite.next();
-		}
-
-		Imovel imovel = getControladorImovel().pesquisarImovel(idImovel);
-		rota = imovel.getQuadra().getRota();
-		localidade = imovel.getLocalidade();
-		setor = imovel.getSetorComercial();
-
-		retorno[0] = localidade;
-		retorno[1] = setor;
-		retorno[2] = rota;
-
-		return retorno;
-	}
+//	public Object[] pesquisarLocalidadeSetorRotaDeImoveisParaRecadastramento(
+//			Collection idsImoveis) throws ControladorException {
+//		Object[] retorno = new Object[3];
+//		Localidade localidade = null;
+//		SetorComercial setor = null;
+//		Rota rota = null;
+//		Integer idImovel = null;
+//
+//		Iterator ite = idsImoveis.iterator();
+//		if (ite.hasNext()) {
+//			idImovel = (Integer) ite.next();
+//		}
+//
+//		Imovel imovel = getControladorImovel().pesquisarImovel(idImovel);
+//		rota = imovel.getQuadra().getRota();
+//		localidade = imovel.getLocalidade();
+//		setor = imovel.getSetorComercial();
+//
+//		retorno[0] = localidade;
+//		retorno[1] = setor;
+//		retorno[2] = rota;
+//
+//		return retorno;
+//	}
 	
 	/**
 	 * TODO: COSANPA
@@ -18031,5 +17949,36 @@ public class ControladorCadastro implements SessionBean {
 
 	}
 	
+	public Collection<Integer> pesquisarRotasAtualizacaoCadastral(
+			GerarArquivoTextoAtualizacaoCadastralHelper helper) throws ControladorException {
+		
+		try {
+			Leiturista leiturista = getLeituristaAtualizacaoCadastral(helper.getIdLeiturista());
+			
+			return this.repositorioCadastro.pesquisarRotasAtualizacaoCadastral(leiturista.getEmpresa().getId());
+		} catch (ErroRepositorioException ex) {
+			ex.printStackTrace();
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
 	
+	public Leiturista getLeituristaAtualizacaoCadastral(
+			Integer idLeiturista) throws ControladorException {
+		try{
+			FiltroLeiturista filtroLeiturista = new FiltroLeiturista();
+			filtroLeiturista.adicionarParametro(new ParametroSimples(
+					FiltroLeiturista.ID, idLeiturista));
+			filtroLeiturista.adicionarCaminhoParaCarregamentoEntidade("empresa");
+			
+			Collection<Leiturista> colecaoLeiturista = getControladorUtil().pesquisar(
+					filtroLeiturista, Leiturista.class.getName());
+			
+			return (Leiturista) Util.retonarObjetoDeColecao(colecaoLeiturista);
+		} catch (ControladorException ex) {
+			ex.printStackTrace();
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
 }

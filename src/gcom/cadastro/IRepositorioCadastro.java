@@ -703,6 +703,18 @@ public interface IRepositorioCadastro {
 		throws ErroRepositorioException;
 	
 	/**
+	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral 
+	 * 
+	 * @author COSANPA - Felipe Santos
+	 * @date 04/12/2012
+	 * 
+	 * @return Collection
+	 * @throws ErroRepositorioException
+	 */
+	public Collection<ArquivoTextoAtualizacaoCadastral> pesquisarArquivoTextoAtualizacaoCadastro(String[] idsArquivoTxt)
+		throws ErroRepositorioException;
+	
+	/**
 	 * 
 	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral 
 	 * 
@@ -959,7 +971,11 @@ public interface IRepositorioCadastro {
 	 * @return quantidade de imoveis
 	 * @throws ErroRepositorioException
 	 */
-	public Collection<Integer> pesquisarIdsImoveisAtualizacaoCadastral(Integer idEmpresaLeiturista) throws ErroRepositorioException;
+	public Collection<Integer> pesquisarIdsImoveisAtualizacaoCadastral(Integer idEmpresaLeiturista, 
+			Integer idRota) throws ErroRepositorioException;
+	
+	public Collection<Integer> pesquisarRotasAtualizacaoCadastral(
+			Integer idEmpresaLeiturista) throws ErroRepositorioException;
 	
 	/**
 	 * Pesquisa as críticas existentes para um determinado arquivo importado da atualizacao cadastral simplificado.
