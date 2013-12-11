@@ -76,6 +76,7 @@
 package gcom.batch.cadastro;
 
 import gcom.cadastro.imovel.bean.GerarArquivoTextoAtualizacaoCadastralHelper;
+import gcom.fachada.Fachada;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.tarefa.TarefaBatch;
 import gcom.tarefa.TarefaException;
@@ -84,6 +85,7 @@ import gcom.util.ConstantesSistema;
 import gcom.util.agendadortarefas.AgendadorTarefas;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -107,13 +109,21 @@ public class TarefaBatchGerarArquivoTextoAtualizacaoCadastral extends TarefaBatc
 
 	public Object executar() throws TarefaException {
 
-		System.out.println("**********Gerar arquivo texto atualização cadastral**********");
 		Map parametros = (Map) getParametro(ConstantesSistema.PARAMETROS_BATCH);
-		GerarArquivoTextoAtualizacaoCadastralHelper helper = (GerarArquivoTextoAtualizacaoCadastralHelper)parametros.get("gerarArquivoTextoAtualizacaoCadastralHelper");
+		GerarArquivoTextoAtualizacaoCadastralHelper helper = (GerarArquivoTextoAtualizacaoCadastralHelper) 
+				parametros.get("gerarArquivoTextoAtualizacaoCadastralHelper");
 		
-		enviarMensagemControladorBatch(
-				ConstantesJNDI.BATCH_GERAR_ARQUIVO_TEXTO_ATUALIZACAO_CADASTRAL_MDB,
-				new Object[] { this.getIdFuncionalidadeIniciada(), helper });
+		Collection<Integer> colecaoRotas = Fachada.getInstancia().pesquisarRotasAtualizacaoCadastral(helper);
+		
+		Iterator iterator = colecaoRotas.iterator();
+		
+		while(iterator.hasNext()) {
+			Integer idRota = (Integer) iterator.next();
+			
+			enviarMensagemControladorBatch(
+					ConstantesJNDI.BATCH_GERAR_ARQUIVO_TEXTO_ATUALIZACAO_CADASTRAL_MDB,
+					new Object[] { this.getIdFuncionalidadeIniciada(), helper, idRota });
+		}
 
 		return null;
 	}
@@ -131,7 +141,7 @@ public class TarefaBatchGerarArquivoTextoAtualizacaoCadastral extends TarefaBatc
 
 	@Override
 	public void agendarTarefaBatch() {
-		AgendadorTarefas.agendarTarefa("GerarTabelasTemporariasAtualizacaoCadastralBatch", this);
+		AgendadorTarefas.agendarTarefa("GerarArquivoTextoAtualizacaoCadastralBatch", this);
 	}
 
 }
