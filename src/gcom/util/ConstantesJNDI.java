@@ -601,6 +601,9 @@ public class ConstantesJNDI {
 	
 	public static String BATCH_GERAR_DADOS_RELATORIO_BIG_MDB = "";
 	
+	public static String BATCH_CANCELAR_GUIAS_PAGAMENTO_NAO_PAGAS = "";
+
+	
 	static {
 
 		inicializarPropriedades();
@@ -1339,6 +1342,8 @@ public class ConstantesJNDI {
 			BATCH_GERAR_DADOS_RELATORIO_BIG_MDB = propriedades
 			.getProperty("QueueBatchGerarDadosRelatorioBIGMDB");
 			
+			BATCH_CANCELAR_GUIAS_PAGAMENTO_NAO_PAGAS = propriedades.getProperty("QueueBatchCancelarGuiasPagamentoNaoPagasMDB");
+
 			stream.close();
 
 		} catch (Exception ex) {

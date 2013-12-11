@@ -394,6 +394,9 @@ public class Funcionalidade extends TabelaAuxiliarAbreviada {
 	
 	public static final int TESTE_OPERACIONAL = 12000;
 	
+	public static final int CANCELAR_GUIAS_PAGAMENTO_NAO_PAGAS = 5007;
+
+	
 	/**
 	 * @author COSANPA - Felipe Santos
 	 * @date 25/10/2013
