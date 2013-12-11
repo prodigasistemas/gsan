@@ -9,3 +9,5 @@ bin
 sonar-project.properties
 reports/*.jasper
 build.properties
+src/gcom/gui/InicializadorSistema.java
+gcom/jsp/util/rodape.jsp
