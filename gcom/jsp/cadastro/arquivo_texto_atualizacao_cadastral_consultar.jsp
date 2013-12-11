@@ -95,6 +95,33 @@
 			desmarcarTodos();
 		}
 	}
+
+    function CheckboxNaoVazio(campo) {
+        form = document.forms[0];
+        retorno = false;
+
+        for(indice = 0; indice < form.elements.length; indice++) {
+            if (form.elements[indice].type == "checkbox" && form.elements[indice].checked == true) {
+                retorno = true;
+                break;
+            }
+  	    }
+
+  	    if (!retorno) {
+  	  	    alert('Informe o(s) arquivo(s) desejado(s).');
+  	    }
+  		
+  	    return retorno;
+    }
+    
+    function gerarZip(){
+		var form = document.forms[0];
+		
+		if(CheckboxNaoVazio(document.forms[0].idsRegistros)){
+			form.action = 'retornarZipArquivoTxtAtualizacaoCadastralAction.do';
+			form.submit();
+		}
+	}
 	
 </script>
 
@@ -195,7 +222,7 @@
 				</tr>
 				
 				<tr>
-					<td height="10" width="145"><strong>Agente Cadastral :</strong></td>
+					<td width="150"><strong>Agente Cadastral:</strong></td>
 					<td colspan="2" align="left"><html:select property="leituristaID"
 						tabindex="4">
 						<html:option value="-1">&nbsp;</html:option>
@@ -205,7 +232,7 @@
 				</tr>
 
 				<tr>
-					<td><strong>Localidade:</strong></td>
+					<td width="150"><strong>Localidade:</strong></td>
 					<td>
 						<html:text tabindex="8" maxlength="3" property="idLocalidade" size="5"
 							onkeypress="form.target=''; validaEnter(event, 'exibirConsultarArquivoTextoAtualizacaoCadastralAction.do?objetoConsulta=1', 'idLocalidade');"
@@ -215,25 +242,25 @@
 							title="Pesquisar" /></a>
 						<logic:present name="corLocalidadeOrigem">
 							<logic:equal name="corLocalidadeOrigem" value="exception">
-								<html:text property="nomeLocalidade" size="35" readonly="true"
+								<html:text property="nomeLocalidade" size="30" readonly="true"
 									style="background-color:#EFEFEF; border:0; color: #000000" />
 							</logic:equal>
 	
 							<logic:notEqual name="corLocalidadeOrigem" value="exception">
-								<html:text property="nomeLocalidade" size="35" readonly="true"
+								<html:text property="nomeLocalidade" size="30" readonly="true"
 									style="background-color:#EFEFEF; border:0; color: #000000" />
 							</logic:notEqual>
 						</logic:present>						
 						<logic:notPresent name="corLocalidadeOrigem">
 							<logic:empty name="ConsultarArquivoTextoAtualizacaoCadastralActionForm"
 								property="idLocalidade">
-								<html:text property="nomeLocalidade" value="" size="35" readonly="true"
+								<html:text property="nomeLocalidade" value="" size="30" readonly="true"
 									style="background-color:#EFEFEF; border:0; color: #000000" />
 							</logic:empty>
 
 							<logic:notEmpty name="ConsultarArquivoTextoAtualizacaoCadastralActionForm"
 								property="idLocalidade">
-								<html:text property="nomeLocalidade" size="35" readonly="true"
+								<html:text property="nomeLocalidade" size="30" readonly="true"
 									style="background-color:#EFEFEF; border:0; color: 	#000000" />
 							</logic:notEmpty>
 						</logic:notPresent>
@@ -246,7 +273,7 @@
 				</tr>			
 
 				<tr>
-					<td><strong>Situação Transmissão:</strong></td>
+					<td width="150"><strong>Situação Transmissão:</strong></td>
 					<td><!--<strong><html:radio property="idSituacaoTransmissao" value="1" />Disponível</strong>-->
 					    <strong><html:radio property="idSituacaoTransmissao" value="2" />Liberado</strong> 
 					    <strong><html:radio property="idSituacaoTransmissao" value="3" />Em Campo</strong> 
@@ -254,16 +281,7 @@
     					<strong><html:radio property="idSituacaoTransmissao" value="" />Todos</strong>
 					</td>
 				</tr>
-				<tr>
-					<td><strong> <font color="#ff0000"></font></strong></td>
-					<td align="right">
-					  <div align="left"><strong><font color="#ff0000">*</font></strong>
-					  Campos obrigatórios</div>
-					</td>
-				</tr>
-				<tr>
-					<td></td>
-				</tr>
+				
 				<tr>
 					<td><input name="Button" type="button" class="bottonRightCol"
 						value="Desfazer" align="left"
@@ -276,6 +294,21 @@
 					 <gsan:controleAcessoBotao name="Botao" value="Selecionar"
 						onclick="validaForm(document.forms[0]);"
 						url="consultarArquivoTextoAtualizacaoCadastralAction.do" tabindex="13" /></td>
+				</tr>
+
+				<td>
+					<font color="#000000" style="font-size: 10px"
+						face="Verdana, Arial, Helvetica, sans-serif">
+							<strong>Arquivos Texto para Atualização Cadastral:</strong>
+					</font>
+				</td>
+
+				<tr>
+					<td colspan="1" height="23"> 
+					 <gsan:controleAcessoBotao name="Button" value="Compactar Arquivos"
+						onclick="javascript:gerarZip();"
+						url="retornarZipArquivoTxtAtualizacaoCadastralAction.do" tabindex="13" />
+					</td>
 				</tr>
 
 				<tr>
@@ -360,7 +393,7 @@
 											</td>
 											
 											<td width="10%" align="center">
-												<div align="center">${arquivoTextoAtualizacaoCadastral.codigoRota}</div>													
+												<div align="center">${arquivoTextoAtualizacaoCadastral.rota.codigo}</div>													
 											</td>																							
 
 											<td width="15%">
