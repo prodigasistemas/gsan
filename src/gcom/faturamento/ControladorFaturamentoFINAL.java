@@ -76425,8 +76425,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			registrarTransacao(creditoARealizar, Operacao.OPERACAO_CREDITO_A_REALIZAR_INSERIR, imovel, usuarioLogado, idGerado);
 		}
 		
-		System.out.println("Credito a realizar para o imovel: " + imovel.getId() + " no valor de " + creditoARealizar.getValorCredito().doubleValue());
-
 		getControladorUtil().inserir(creditoARealizar);
 
 		inserirCreditoARealizarCategoria(creditoARealizar, imovel);

@@ -31465,10 +31465,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 						.addScalar("valorDocumento", Hibernate.BIG_DECIMAL)
 						.addScalar("dataPagamento", Hibernate.STRING)
 						.addScalar("idImovel", Hibernate.INTEGER)
-<<<<<<< HEAD
 						.setInteger("qtdPrestacoes", 1)
-=======
->>>>>>> master
 						.setInteger("anoMesReferenciaArrecadacao", anoMesReferenciaArrecadacao)
 						.setInteger("pagamentoSituacao", pagamentoSituacao)
 						.setInteger("idLocalidade", idLocalidade)
