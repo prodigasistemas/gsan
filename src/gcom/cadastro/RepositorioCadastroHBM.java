@@ -5267,41 +5267,33 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		String consulta = "";
 
 		try {
-			consulta = " select txac.id, "// 0
-					+ " loc.id,"// 1
-					+ " txac.codigoSetorComercial,"// 2
-					+ " txac.codigoRota,"// 3
-					+ " txac.descricaoArquivo,"// 4
-					+ " txac.quantidadeImovel,"// 5
-					+ " clie.nome,"// 6
-					+ " func.nome,"// 7
-					+ " sitTram.descricaoSituacao"// 8
-					+ " from ArquivoTextoAtualizacaoCadastral txac "
-					+ " inner join txac.leiturista leit"
-					+ " left join txac.localidade loc"
-					+ " left join txac.situacaoTransmissaoLeitura sitTram"
-					+ " left join leit.cliente clie"
-					+ " left join leit.funcionario func"
-					+ " where leit.empresa.id = " + idEmpresa;
+			consulta = "SELECT txac "
+				+ "FROM ArquivoTextoAtualizacaoCadastral txac "
+				+ "INNER JOIN FETCH txac.localidade localidade "
+				+ "INNER JOIN FETCH txac.rota rota "
+				+ "INNER JOIN FETCH rota.setorComercial setorComercial "
+				+ "INNER JOIN FETCH txac.situacaoTransmissaoLeitura situacao "
+				+ "INNER JOIN FETCH txac.leiturista leiturista "
+				+ "LEFT JOIN FETCH leiturista.cliente cliente "
+				+ "LEFT JOIN FETCH leiturista.funcionario funcionario "
+				+ "WHERE leiturista.empresa.id = " + idEmpresa;
 
 			if (idLocalidade != null && !idLocalidade.equals("")) {
-				consulta = consulta + " and txac.localidade.id = "
-						+ idLocalidade;
+				consulta = consulta + " and txac.localidade.id = " + idLocalidade;
 			}
 
 			if (idAgenteComercial != null
 					&& !idAgenteComercial.trim().equals(
 							"" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
-				consulta = consulta + " and leit.id = " + idAgenteComercial;
+				consulta = consulta + " and leiturista.id = " + idAgenteComercial;
 			}
 
 			if (idSituacaoTransmissao != null
 					&& !idSituacaoTransmissao.equals("")) {
-				consulta = consulta + " and sitTram.id = "
-						+ idSituacaoTransmissao;
+				consulta = consulta + " and situacao.id = " + idSituacaoTransmissao;
 			}
 
-			consulta = consulta + " order by txac.id";
+			consulta = consulta + " order by localidade.id, setorComercial.codigo, rota.codigo";
 
 			retorno = session.createQuery(consulta).list();
 
@@ -5370,6 +5362,41 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 			retorno = (ArquivoTextoAtualizacaoCadastral) session.createQuery(
 					consulta).setString("descricao", descricao).uniqueResult();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+	
+	/**
+	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral
+	 * 
+	 * @author COSANPA - Felipe Santos
+	 * @date 04/11/2013
+	 * 
+	 * @return Collection
+	 * @throws ErroRepositorioException
+	 */
+	public Collection<ArquivoTextoAtualizacaoCadastral> pesquisarArquivoTextoAtualizacaoCadastro(
+			String[] idsArquivoTxt) throws ErroRepositorioException {
+
+		Collection<ArquivoTextoAtualizacaoCadastral> retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
+
+		try {
+			consulta = " select txac"// 2
+					+ " from ArquivoTextoAtualizacaoCadastral txac"
+					+ " inner join fetch txac.leiturista leit"
+					+ " where txac.id in (:ids)";
+
+			retorno = (Collection<ArquivoTextoAtualizacaoCadastral>) session.createQuery(consulta)
+					.setParameterList("ids", idsArquivoTxt)
+					.list();
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
@@ -6731,48 +6758,70 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 	}
 
 	public Collection<Integer> pesquisarIdsImoveisAtualizacaoCadastral(
-			Integer idEmpresaLeiturista)
-
+			Integer idEmpresaLeiturista, Integer idRota)
 	throws ErroRepositorioException {
 
 		Collection retorno = null;
-
 		Session session = HibernateUtil.getSession();
-
 		String consulta = null;
 
 		try {
-
 			consulta = "SELECT imac.imov_id as idImovel "
 				+ "FROM cadastro.imovel_atlz_cadastral AS imac "
 				+ "INNER JOIN cadastro.imovel AS imov ON imov.imov_id = imac.imov_id "
 				+ "INNER JOIN cadastro.setor_comercial AS stcm ON imov.stcm_id = stcm.stcm_id "
 				+ "INNER JOIN cadastro.quadra AS qdra ON imov.qdra_id = qdra.qdra_id "
-				+ "WHERE imac.siac_id = " + ConstantesSistema.ZERO 
-				+ " AND imac.empr_id = :idEmpresaLeiturista "
-				+ " ORDER BY imov.imov_icimovelcondominio, imov.loca_id, stcm.stcm_cdsetorcomercial, qdra.qdra_nnquadra, imov.imov_nnlote, imov.imov_nnsublote ";
+				+ "INNER JOIN micromedicao.rota AS rota ON rota.rota_id = qdra.rota_id "
+				+ "WHERE imac.siac_id = :situacao "
+				+ "AND imac.empr_id = :idEmpresaLeiturista "
+				+ "AND rota.rota_id = :idRota "
+				+ "ORDER BY imov.imov_icimovelcondominio, imov.loca_id, stcm.stcm_cdsetorcomercial, qdra.qdra_nnquadra, "
+				+ "rota.rota_cdrota, imov.imov_nnlote, imov.imov_nnsublote ";
 
 			retorno = session.createSQLQuery(consulta)
 					.addScalar("idImovel", Hibernate.INTEGER)
-					.setInteger("idEmpresaLeiturista", idEmpresaLeiturista.intValue())
+					.setInteger("situacao", SituacaoAtualizacaoCadastral.DISPONIVEL)
+					.setInteger("idEmpresaLeiturista", idEmpresaLeiturista)
+					.setInteger("idRota", idRota)
 					.list();
-
 		} catch (HibernateException e) {
-
-			// levanta a exceção para a próxima camada
-
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-
 		} finally {
-
-			// fecha a sessão
-
 			HibernateUtil.closeSession(session);
-
 		}
 
 		return retorno;
+	}
+	
+	public Collection<Integer> pesquisarRotasAtualizacaoCadastral(
+			Integer idEmpresaLeiturista) throws ErroRepositorioException {
 
+		Collection<Integer> retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = null;
+
+		try {
+			consulta = "SELECT distinct(rota.rota_id) as idRota "
+				+ "FROM cadastro.imovel_atlz_cadastral AS imac "
+				+ "INNER JOIN cadastro.imovel AS imov ON imov.imov_id = imac.imov_id "
+				+ "INNER JOIN cadastro.setor_comercial AS stcm ON imov.stcm_id = stcm.stcm_id "
+				+ "INNER JOIN cadastro.quadra AS qdra ON imov.qdra_id = qdra.qdra_id "
+				+ "INNER JOIN micromedicao.rota AS rota ON rota.rota_id = qdra.rota_id "
+				+ "WHERE imac.siac_id = :situacao " 
+				+ "AND imac.empr_id = :idEmpresaLeiturista";
+
+			retorno = (Collection<Integer>) session.createSQLQuery(consulta)
+					.addScalar("idRota", Hibernate.INTEGER)
+					.setInteger("situacao", SituacaoAtualizacaoCadastral.DISPONIVEL)
+					.setInteger("idEmpresaLeiturista", idEmpresaLeiturista)
+					.list();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
 	}
 
 	/**

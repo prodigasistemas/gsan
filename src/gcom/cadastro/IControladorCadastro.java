@@ -827,7 +827,8 @@ public interface IControladorCadastro {
 	 * @exception ControladorException
 	 */
     
-	public void gerarArquivoTextoAtualizacaoCadastralDispositivoMovel(Integer idFuncionalidadeIniciada, GerarArquivoTextoAtualizacaoCadastralHelper helper)
+	public void gerarArquivoTextoAtualizacaoCadastralDispositivoMovel(Integer idFuncionalidadeIniciada,
+			GerarArquivoTextoAtualizacaoCadastralHelper helper, Integer idRota)
 		throws ControladorException;
     
     /**
@@ -883,6 +884,18 @@ public interface IControladorCadastro {
 	 * @throws ControladorException
 	 */
 	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(String idArquivoTxt)
+		throws ControladorException;
+	
+	/**
+	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral 
+	 * 
+	 * @author Ana Maria
+	 * @date 04/12/2013
+	 * 
+	 * @return Collection
+	 * @throws ControladorException
+	 */
+	public Collection<ArquivoTextoAtualizacaoCadastral> pesquisarArquivoTextoAtualizacaoCadastro(String[] idsArquivoTxt)
 		throws ControladorException;
 	
 	/**
@@ -1671,5 +1684,8 @@ public interface IControladorCadastro {
 	public  List<HidrometroInstalacaoHistorico> pesquisarHidrometroPeloIdImovel(Integer idImovel) throws ControladorException;
 	
 	public void carregarImovelAtualizacaoCadastral(BufferedReader buffer, ArrayList<String> nomesImagens) throws ControladorException;
+	
+	public Collection<Integer> pesquisarRotasAtualizacaoCadastral(
+			GerarArquivoTextoAtualizacaoCadastralHelper helper) throws ControladorException;
 
 }

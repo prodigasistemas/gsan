@@ -77,6 +77,7 @@ package gcom.cadastro;
 
 import gcom.cadastro.localidade.Localidade;
 import gcom.micromedicao.Leiturista;
+import gcom.micromedicao.Rota;
 import gcom.micromedicao.SituacaoTransmissaoLeitura;
 
 import java.io.Serializable;
@@ -96,7 +97,7 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable {
 
     private Integer numeroQuadraFinal;
     
-    private Integer codigoRota;
+    private Rota rota;
 
     private Integer quantidadeImovel;
 
@@ -127,15 +128,15 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable {
 	/**
 	 * @return Retorna o campo codigoRota.
 	 */
-	public Integer getCodigoRota() {
-		return codigoRota;
+	public Rota getRota() {
+		return rota;
 	}
 
 	/**
 	 * @param codigoRota O codigoRota a ser setado.
 	 */
-	public void setCodigoRota(Integer codigoRota) {
-		this.codigoRota = codigoRota;
+	public void setRota(Rota rota) {
+		this.rota = rota;
 	}
 
 	/**
@@ -283,7 +284,7 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable {
 	}
 	
 	public ArquivoTextoAtualizacaoCadastral(Integer id, String descricaoArquivo, Integer codigoSetorComercial, 
-			Integer numeroQuadraInicial, Integer numeroQuadraFinal, Integer codigoRota, Integer quantidadeImovel,
+			Integer numeroQuadraInicial, Integer numeroQuadraFinal, Rota rota, Integer quantidadeImovel,
 			byte[] arquivoTexto, Date ultimaAlteracao, Localidade localidade, Leiturista leiturista, 
 			SituacaoTransmissaoLeitura situacaoTransmissaoLeitura) {
 		this.id = id;
@@ -291,7 +292,7 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable {
 		this.codigoSetorComercial = codigoSetorComercial;
 		this.numeroQuadraInicial = numeroQuadraInicial;
 		this.numeroQuadraFinal = numeroQuadraFinal;
-		this.codigoRota = codigoRota;
+		this.rota = rota;
 		this.quantidadeImovel = quantidadeImovel;
 		this.arquivoTexto = arquivoTexto;
 		this.ultimaAlteracao = ultimaAlteracao;
