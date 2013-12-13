@@ -94,6 +94,7 @@ import gcom.batch.arrecadacao.TarefaBatchGerarDadosRelatorioBIG;
 import gcom.batch.arrecadacao.TarefaBatchGerarHistoricoConta;
 import gcom.batch.arrecadacao.TarefaBatchGerarHistoricoParaEncerrarArrecadacaoMes;
 import gcom.batch.arrecadacao.TarefaBatchInserirPagamentosFaturasEspeciais;
+import gcom.batch.arrecadacao.TarefaBatchProcessarPagamentosComDiferencaDoisReais;
 import gcom.batch.atendimentopublico.TarefaBatchAtualizarAutosInfracaoPrazoRecursoVencido;
 import gcom.batch.atendimentopublico.TarefaBatchEmitirOrdemDeFiscalizacao;
 import gcom.batch.atendimentopublico.TarefaBatchEncerrarComandoOSSeletivaInspecaoAnormalidade;
@@ -3993,7 +3994,7 @@ public class ControladorBatchSEJB implements SessionBean {
 						break;
 
 					
-					case Funcionalidade.GERAR_DADOS_RELATORIO_BIG:
+					case Funcionalidade.GERAR_DADOS_RELATORIO_BIG:{
 						TarefaBatchGerarDadosRelatorioBIG gerarDadosRelatorioBIG = new TarefaBatchGerarDadosRelatorioBIG(
 								processoIniciado.getUsuario(),
 								funcionalidadeIniciada.getId());
@@ -4016,7 +4017,29 @@ public class ControladorBatchSEJB implements SessionBean {
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 
 						break;
+					}
 						
+					case Funcionalidade.PROCESSAR_PAGAMENTOS_COM_DIFERENCA_DE_DOIS_REAIS:{
+						TarefaBatchProcessarPagamentosComDiferencaDoisReais batch = new TarefaBatchProcessarPagamentosComDiferencaDoisReais(
+								processoIniciado.getUsuario(),
+								funcionalidadeIniciada.getId());
+
+						batch.addParametro("anoMesReferencia", sistemaParametros.getAnoMesArrecadacao());
+
+						FiltroLocalidade filtroBatch = new FiltroLocalidade(FiltroLocalidade.ID);
+						filtroBatch.adicionarParametro(new ParametroSimples(FiltroLocalidade.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
+						filtroBatch.setCampoOrderBy(FiltroLocalidade.ID);
+
+						Collection<Localidade> localidades = getControladorUtil().pesquisar(filtroBatch, Localidade.class.getName());
+
+						batch.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, localidades);
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batch));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;		
+					}
 					default:
 
 					}
