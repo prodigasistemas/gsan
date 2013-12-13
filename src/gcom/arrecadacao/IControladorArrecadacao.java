@@ -4437,5 +4437,6 @@ public interface IControladorArrecadacao {
 		public Collection pesquisarDadosRelatorioBIG(
 				Integer anoMesReferencia) throws ControladorException;
 		
+		public void processarPagamentosDiferencaDoisReais(Integer anoMesReferenciaArrecadacao, Localidade localidade, Integer idFuncionalidadeIniciada) throws Exception;
 }	
 

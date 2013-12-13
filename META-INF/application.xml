@@ -851,6 +851,10 @@
 	</module>
 	
 	<module>
+		<ejb>BatchProcessarPagamentosDiferencaDoisReaisMDB.jar</ejb>
+	</module>
+	
+	<module>
 		<java>gcom.jar</java>
 	</module>
 	
