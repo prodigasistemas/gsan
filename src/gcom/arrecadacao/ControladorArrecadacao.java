@@ -30120,27 +30120,42 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 
-	private void gerarDebitoCreditoParaPagamentosClassificados(Integer anoMesReferenciaArrecadacao, Integer idLocalidade) throws Exception{
-		logger.info("Geracao de debito ou credito para pgtos classificados em " + anoMesReferenciaArrecadacao + " da localidade " + idLocalidade);
+	public void processarPagamentosDiferencaDoisReais(Integer anoMesReferenciaArrecadacao, Localidade localidade, Integer idFuncionalidadeIniciada) throws Exception{
 		
-		Collection<PagamentoHelper> pagamentos = repositorioArrecadacao.pesquisarValoresPagamentos(PagamentoSituacao.PAGAMENTO_CLASSIFICADO, 
-				idLocalidade,
-				anoMesReferenciaArrecadacao);
+		int idUnidadeIniciada = 0;
 		
-		logger.info("    Qtd de pagamentos: " + pagamentos.size());
+		Integer idLocalidade = localidade.getId();
+
+		try {
+			
+			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(
+					idFuncionalidadeIniciada, UnidadeProcessamento.LOCALIDADE, idLocalidade);
 		
-		for (PagamentoHelper pagamentoHelper : pagamentos) {
-			if (possuiDiferencaAte2(pagamentoHelper)) {
-				BigDecimal diferenca = pagamentoHelper.getValorPagamento().subtract(pagamentoHelper.getValorDocumento());
-				
-				if (diferenca.doubleValue() > 0.0){
-					logger.info("    Inserir credito a realizar no imovel: " + pagamentoHelper.getIdImovel() + " com valor: " + diferenca);					
-					inserirCreditoARealizar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca);
-				}else if (diferenca.doubleValue() < 0.0){
-					logger.info("    Inserir debito a cobrar no imovel: " + pagamentoHelper.getIdImovel() + " com valor: " + diferenca);
-					inserirDebitoACobrar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca.abs());
-				}				
+			logger.info("Geracao de debito ou credito para pgtos classificados em " + anoMesReferenciaArrecadacao + " da localidade " + idLocalidade);
+			
+			Collection<PagamentoHelper> pagamentos = repositorioArrecadacao.pesquisarValoresPagamentos(PagamentoSituacao.PAGAMENTO_CLASSIFICADO, 
+					idLocalidade,
+					anoMesReferenciaArrecadacao);
+			
+			logger.info("    Qtd de pagamentos: " + pagamentos.size() + " na localidade: " + idLocalidade);
+			
+			for (PagamentoHelper pagamentoHelper : pagamentos) {
+				if (possuiDiferencaAte2(pagamentoHelper)) {
+					BigDecimal diferenca = pagamentoHelper.getValorPagamento().subtract(pagamentoHelper.getValorDocumento());
+					
+					if (diferenca.doubleValue() > 0.0){
+						inserirCreditoARealizar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca);
+					}else if (diferenca.doubleValue() < 0.0){
+						inserirDebitoACobrar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca.abs());
+					}				
+				}
 			}
+			
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,idUnidadeIniciada, false);
+		} catch (Exception ex) {
+			logger.error("Erro no processamento da LOCALIDADE: " + idLocalidade + " - " + localidade.getDescricao(), ex);
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
+			throw new EJBException(ex);
 		}
 	}
 	

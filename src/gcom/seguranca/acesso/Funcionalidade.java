@@ -394,6 +394,7 @@ public class Funcionalidade extends TabelaAuxiliarAbreviada {
 	
 	public static final int TESTE_OPERACIONAL = 12000;
 	
+	
 	/**
 	 * @author COSANPA - Felipe Santos
 	 * @date 25/10/2013
@@ -402,6 +403,7 @@ public class Funcionalidade extends TabelaAuxiliarAbreviada {
 	 */
 	public static final int GERAR_DADOS_RELATORIO_BIG = 2000;
 	public static final int GERAR_RELATORIO_BIG = 2001;
+	public static final int PROCESSAR_PAGAMENTOS_COM_DIFERENCA_DE_DOIS_REAIS = 16004;
 	
 	
 	/** identifier field */

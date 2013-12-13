@@ -600,6 +600,8 @@ public class ConstantesJNDI {
 	public static String BATCH_SUSPENDER_LEITURA_PARA_IMOVEL_COM_CONSUMO_REAL_NAO_SUPERIOR_A_10_MDB = "";
 	
 	public static String BATCH_GERAR_DADOS_RELATORIO_BIG_MDB = "";
+
+	public static String BATCH_PROCESSAR_PAGAMENTOS_DIFERENCA_DOIS_REAIS = "";
 	
 	static {
 
@@ -1338,6 +1340,9 @@ public class ConstantesJNDI {
 			
 			BATCH_GERAR_DADOS_RELATORIO_BIG_MDB = propriedades
 			.getProperty("QueueBatchGerarDadosRelatorioBIGMDB");
+
+			BATCH_PROCESSAR_PAGAMENTOS_DIFERENCA_DOIS_REAIS = propriedades
+			.getProperty("QueueBatchProcessarPagamentosDiferencaDoisReaisMDB");
 			
 			stream.close();
 
