@@ -3807,11 +3807,9 @@ public class ControladorImovelSEJB implements SessionBean {
 			Integer idFaturamentoTipo, Usuario usuario) throws ControladorException {
 		try {
 			
-			this.repositorioImovel.atualizarFaturamentoSituacaoTipo(
-					colecaoIdsImoveis, idFaturamentoTipo);
+			this.repositorioImovel.atualizarFaturamentoSituacaoTipo(colecaoIdsImoveis, idFaturamentoTipo);
 
 		} catch (ErroRepositorioException ex) {
-			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}

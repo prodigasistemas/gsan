@@ -443,6 +443,7 @@ import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.log4j.Logger;
 
 import br.com.danhil.BarCode.Interleaved2of5;
 
@@ -475,6 +476,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	protected IRepositorioCadastro repositorioCadastro;
 
 	protected IRepositorioImovel repositorioImovel;
+	
+	private Logger logger = Logger.getLogger(ControladorFaturamentoFINAL.class);
 
 	/**
 	 * < <Descrição do método>>
@@ -75840,17 +75843,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			Integer anoMesReferenciaFinal) throws ControladorException {
 
 		try {
-			Integer idFaturamentoSituacaoComando = this
-					.inserirFaturamentoSituacaoComando(
-							situacaoEspecialFaturamentoHelper, retirar);
+			Integer idFaturamentoSituacaoComando = this.inserirFaturamentoSituacaoComando(situacaoEspecialFaturamentoHelper, retirar);
 
 			FaturamentoSituacaoComando faturamentoSituacaoComando = new FaturamentoSituacaoComando();
 
 			faturamentoSituacaoComando.setId(idFaturamentoSituacaoComando);
 
 			Collection colecaoImoveis = null;
-
-			// Incluir tabela faturamento situacao historico
 
 			Iterator iterator = colecaoDadosImoveisParaInserir.iterator();
 			Collection collectionFaturmentoSituaoHistorico = new ArrayList();
@@ -75865,111 +75864,54 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 					Date ultimaAlteracao = (Date) dadosImoveis[1];
 
-					Date ultimaAlteracaoImovel = getControladorImovel()
-							.pesquisarUltimaAlteracaoImovel(id);
-					// Controle de concorrencia
+					Date ultimaAlteracaoImovel = getControladorImovel().pesquisarUltimaAlteracaoImovel(id);
+
 					if (ultimaAlteracaoImovel.after(ultimaAlteracao)) {
-						throw new ControladorException(
-								"atencao.atualizacao.timestamp");
+						logger.error("Data da ultima alteracao do imovel é maior que a ultima alteracao enviada.");
+						throw new ControladorException("atencao.atualizacao.timestamp");
 					}
 
-					// Adiciona os imoveis
 					colecaoImoveis.add(id);
 
-					// Construindo as variaveis
 					FaturamentoSituacaoHistorico faturamentoSituacaoHistorico = new FaturamentoSituacaoHistorico();
 					Imovel imovel = new Imovel();
 
 					FiltroFaturamentoSituacaoTipo filtroFaturamentoSituacaoTipo = new FiltroFaturamentoSituacaoTipo();
 
-					filtroFaturamentoSituacaoTipo
-							.adicionarParametro(new ParametroSimples(
-									FiltroFaturamentoSituacaoTipo.ID,
-									situacaoEspecialFaturamentoHelper
-											.getIdFaturamentoSituacaoTipo()));
+					filtroFaturamentoSituacaoTipo.adicionarParametro(
+							new ParametroSimples(FiltroFaturamentoSituacaoTipo.ID, situacaoEspecialFaturamentoHelper.getIdFaturamentoSituacaoTipo()));
 
-					// Retorna tipo de situacao especial de faturamento
-					Collection colecaoFaturementoTipo = this
-							.getControladorUtil().pesquisar(
-									filtroFaturamentoSituacaoTipo,
-									FaturamentoSituacaoTipo.class.getName());
+					Collection colecaoFaturementoTipo = this.getControladorUtil().pesquisar(filtroFaturamentoSituacaoTipo, FaturamentoSituacaoTipo.class.getName());
 
-					FaturamentoSituacaoTipo faturamentoSituacaoTipo = (FaturamentoSituacaoTipo) colecaoFaturementoTipo
-							.iterator().next();
+					FaturamentoSituacaoTipo faturamentoSituacaoTipo = (FaturamentoSituacaoTipo) colecaoFaturementoTipo.iterator().next();
 
 					FiltroFaturamentoSituacaoMotivo filtroFaturamentoSituacaoMotivo = new FiltroFaturamentoSituacaoMotivo();
 
-					filtroFaturamentoSituacaoMotivo
-							.adicionarParametro(new ParametroSimples(
-									FiltroFaturamentoSituacaoMotivo.ID,
-									situacaoEspecialFaturamentoHelper
-											.getIdFaturamentoSituacaoMotivo()));
+					filtroFaturamentoSituacaoMotivo.adicionarParametro(
+							new ParametroSimples(FiltroFaturamentoSituacaoMotivo.ID, situacaoEspecialFaturamentoHelper.getIdFaturamentoSituacaoMotivo()));
 
-					// Retorna tipo de situacao especial de faturamento
-					Collection colecaoFaturementoMotivo = this
-							.getControladorUtil().pesquisar(
-									filtroFaturamentoSituacaoMotivo,
-									FaturamentoSituacaoMotivo.class.getName());
+					Collection colecaoFaturementoMotivo = this.getControladorUtil().pesquisar(filtroFaturamentoSituacaoMotivo, FaturamentoSituacaoMotivo.class.getName());
 
-					FaturamentoSituacaoMotivo faturamentoSituacaoMotivo = (FaturamentoSituacaoMotivo) colecaoFaturementoMotivo
-							.iterator().next();
+					FaturamentoSituacaoMotivo faturamentoSituacaoMotivo = (FaturamentoSituacaoMotivo) colecaoFaturementoMotivo.iterator().next();
 
-					// Construindo as variaveis
-					// Setando as Variaveis
 					imovel.setId(new Integer(id));
 					faturamentoSituacaoHistorico.setImovel(imovel);
-					faturamentoSituacaoHistorico
-							.setFaturamentoSituacaoMotivo(faturamentoSituacaoMotivo);
-					faturamentoSituacaoHistorico
-							.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
-					faturamentoSituacaoHistorico
-							.setAnoMesFaturamentoSituacaoInicio(anoMesReferenciaInicial);
-					faturamentoSituacaoHistorico
-							.setAnoMesFaturamentoSituacaoFim(anoMesReferenciaFinal);
+					faturamentoSituacaoHistorico.setFaturamentoSituacaoMotivo(faturamentoSituacaoMotivo);
+					faturamentoSituacaoHistorico.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
+					faturamentoSituacaoHistorico.setAnoMesFaturamentoSituacaoInicio(anoMesReferenciaInicial);
+					faturamentoSituacaoHistorico.setAnoMesFaturamentoSituacaoFim(anoMesReferenciaFinal);
+					faturamentoSituacaoHistorico.setAnoMesFaturamentoRetirada(null);
+					faturamentoSituacaoHistorico.setFaturamentoSituacaoMotivo(faturamentoSituacaoMotivo);
+					faturamentoSituacaoHistorico.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
+					faturamentoSituacaoHistorico.setObservacaoInforma(situacaoEspecialFaturamentoHelper.getObservacaoInforma());
+					faturamentoSituacaoHistorico.setUltimaAlteracao(Calendar.getInstance().getTime());
+					faturamentoSituacaoHistorico.setNumeroConsumoAguaMedido(situacaoEspecialFaturamentoHelper.getNumeroConsumoAguaMedido());
+					faturamentoSituacaoHistorico.setNumeroConsumoAguaNaoMedido(situacaoEspecialFaturamentoHelper.getNumeroConsumoAguaNaoMedido());
+					faturamentoSituacaoHistorico.setNumeroVolumeEsgotoMedido(situacaoEspecialFaturamentoHelper.getNumeroVolumeEsgotoMedido());
+					faturamentoSituacaoHistorico.setNumeroVolumeEsgotoNaoMedido(situacaoEspecialFaturamentoHelper.getNumeroVolumeEsgotoNaoMedido());
+					faturamentoSituacaoHistorico.setFaturamentoSituacaoComandoInforma(faturamentoSituacaoComando);
 
-					faturamentoSituacaoHistorico
-							.setAnoMesFaturamentoRetirada(null);
-					faturamentoSituacaoHistorico
-							.setFaturamentoSituacaoMotivo(faturamentoSituacaoMotivo);
-
-					faturamentoSituacaoHistorico
-							.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
-
-					faturamentoSituacaoHistorico
-							.setObservacaoInforma(situacaoEspecialFaturamentoHelper
-									.getObservacaoInforma());
-					faturamentoSituacaoHistorico.setUltimaAlteracao(Calendar
-							.getInstance().getTime());
-					// faturamentoSituacaoHistorico.setUsuario(usuarioLogado);
-
-					// Colocado por Raphael Rossiter em 11/08/2008 - Analista:
-					// Rosana Carvalho
-
-					// Consumo àgua medido
-					faturamentoSituacaoHistorico
-							.setNumeroConsumoAguaMedido(situacaoEspecialFaturamentoHelper
-									.getNumeroConsumoAguaMedido());
-
-					// Consumo àgua Não medido
-					faturamentoSituacaoHistorico
-							.setNumeroConsumoAguaNaoMedido(situacaoEspecialFaturamentoHelper
-									.getNumeroConsumoAguaNaoMedido());
-
-					// Volume esgoto medido
-					faturamentoSituacaoHistorico
-							.setNumeroVolumeEsgotoMedido(situacaoEspecialFaturamentoHelper
-									.getNumeroVolumeEsgotoMedido());
-
-					// Volume esgoto Não medido
-					faturamentoSituacaoHistorico
-							.setNumeroVolumeEsgotoNaoMedido(situacaoEspecialFaturamentoHelper
-									.getNumeroVolumeEsgotoNaoMedido());
-
-					faturamentoSituacaoHistorico
-							.setFaturamentoSituacaoComandoInforma(faturamentoSituacaoComando);
-
-					collectionFaturmentoSituaoHistorico
-							.add(faturamentoSituacaoHistorico);
+					collectionFaturmentoSituaoHistorico.add(faturamentoSituacaoHistorico);
 
 				}
 			}
@@ -75978,30 +75920,23 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// TRANSAÇÃO---------------------FATURAMENTO HISTORICO-----
 			Iterator itera = collectionFaturmentoSituaoHistorico.iterator();
 			while (itera.hasNext()) {
-				FaturamentoSituacaoHistorico fsh = (FaturamentoSituacaoHistorico) itera
-						.next();
+				FaturamentoSituacaoHistorico fsh = (FaturamentoSituacaoHistorico) itera.next();
 
 				RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 						Operacao.OPERACAO_INFORMAR_SITUACAO_ESPECIAL_FATURAMENTO,
 						fsh.getImovel().getId(), fsh.getImovel().getId(),
-						new UsuarioAcaoUsuarioHelper(
-								situacaoEspecialFaturamentoHelper
-										.getUsuarioLogado(),
-								UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+						new UsuarioAcaoUsuarioHelper(situacaoEspecialFaturamentoHelper.getUsuarioLogado(), UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 
 				registradorOperacao.registrarOperacao(fsh);
 			}
 			// ------------------------REGISTRAR
 			// TRANSAÇÃO---------------------FATURAMENTO HISTORICO-----
-			getControladorBatch().inserirColecaoObjetoParaBatch(
-					collectionFaturmentoSituaoHistorico);
+			getControladorBatch().inserirColecaoObjetoParaBatch(collectionFaturmentoSituaoHistorico);
 
-			// Atualizar Imoveis
-			getControladorImovel().atualizarFaturamentoSituacaoTipo(
-					colecaoImoveis, idFaturamentoSituacaoTipo,
-					situacaoEspecialFaturamentoHelper.getUsuarioLogado());
+			getControladorImovel().atualizarFaturamentoSituacaoTipo(colecaoImoveis, idFaturamentoSituacaoTipo, situacaoEspecialFaturamentoHelper.getUsuarioLogado());
 
 		} catch (ControladorException ex) {
+			logger.error("Erro ao ao inserir situacao especial de faturamento.");
 			sessionContext.setRollbackOnly();
 			throw new ControladorException(ex.getMessage(), ex);
 		}
