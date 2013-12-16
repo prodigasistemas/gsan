@@ -8055,6 +8055,15 @@ public class ControladorCadastro implements SessionBean {
 					String fonteAbastecimento = parserImovel.obterDadoParser(2).trim();
 					linha2.put("fonteAbastecimento", fonteAbastecimento);
 
+					String latitude = parserImovel.obterDadoParser(20).trim();
+					linha2.put("latitude", latitude);
+					
+					String longitude = parserImovel.obterDadoParser(20).trim();
+					linha2.put("longitude", longitude);
+					
+					String data = parserImovel.obterDadoParser(26).trim();
+					linha2.put("data", data);
+					
 					String tipoAlteracao = "A";
 
 				} else if ("01".equals(registroTipo) && !indicadorExcluido) {
