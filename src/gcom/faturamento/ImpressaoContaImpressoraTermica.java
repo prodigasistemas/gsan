@@ -1417,7 +1417,7 @@ public class ImpressaoContaImpressoraTermica {
 				
 				/**TODO: COSANPA
 				 * 
-				 * Mantis 775 - Alteração na emissão do extrato de quitação anula de débitos
+				 * Mantis 775 - Alteração na emissão do extrato de quitação anual de débitos
 				 * como mensagem nas contas impressas via impressão térmica
 				 * 
 				 * @author Wellington Rocha
@@ -1425,27 +1425,34 @@ public class ImpressaoContaImpressoraTermica {
 				if(emitirContaHelper.getMsgLinha1Conta() != null){
 					msgConta = emitirContaHelper.getMsgLinha1Conta();
 					if(emitirContaHelper.getMsgLinha2Conta() != null){
-						msgConta = msgConta + emitirContaHelper.getMsgLinha2Conta();
+						msgConta = msgConta + " " + emitirContaHelper.getMsgLinha2Conta();
 						if(emitirContaHelper.getMsgLinha3Conta() != null){
-							msgConta = msgConta + emitirContaHelper.getMsgLinha3Conta();
+							msgConta = msgConta + " " + emitirContaHelper.getMsgLinha3Conta();
 						}
 					}
+					
+					msgConta = msgConta.replace('!', '.');
 				}
 				
-				if(msgConta.length() > 45){
-					retorno.append(formarLinha(0, 3, 35, 1300,msgConta.substring(0, 45),0,0));
-					if (msgConta.length() > 90){
-						retorno.append(formarLinha(0, 3, 35, 1330,msgConta.substring(45, 90),0,0));
-						if(msgConta.length()> 135){
-							retorno.append(formarLinha(0, 3, 35, 1360,msgConta.substring(90, 135),0,0));
+				if(msgConta.length() > 60){
+					retorno.append(formarLinha(7, 0, 35, 1300,msgConta.substring(0, 60),0,0));
+					if (msgConta.length() > 120){
+						retorno.append(formarLinha(7, 0, 35, 1320,msgConta.substring(60, 120),0,0));
+						if(msgConta.length()> 180){
+							retorno.append(formarLinha(7, 0, 35, 1340,msgConta.substring(120, 180),0,0));
+							if(msgConta.length()> 240){
+								retorno.append(formarLinha(7, 0, 35, 1360,msgConta.substring(180, 240),0,0));
+							}else{
+								retorno.append(formarLinha(7, 0, 35, 1360,msgConta.substring(180),0,0));
+							}
 						}else{
-							retorno.append(formarLinha(0, 3, 35, 1360,msgConta.substring(90),0,0));
+							retorno.append(formarLinha(7, 0, 35, 1340,msgConta.substring(120),0,0));
 						}
 					}else{
-						retorno.append(formarLinha(0, 3, 35, 1330,msgConta.substring(45),0,0));
+						retorno.append(formarLinha(7, 0, 35, 1320,msgConta.substring(60),0,0));
 					}
 				}else{
-					retorno.append(formarLinha(0, 3, 35, 1300,msgConta,0,0));
+					retorno.append(formarLinha(7, 0, 35, 1300,msgConta,0,0));
 				}
 				
 				retorno.append(formarLinha(0, 2, 344, 1456, emitirContaHelper
