@@ -8633,13 +8633,13 @@ public class ControladorCadastro implements SessionBean {
 					linha2.put("fonteAbastecimento", fonteAbastecimento);
 					
 					String latitude = parserImovel.obterDadoParser(20).trim();
-					linha1.put("latitude", latitude);
+					linha2.put("latitude", latitude);
 					
 					String longitude = parserImovel.obterDadoParser(20).trim();
-					linha1.put("longitude", longitude);
+					linha2.put("longitude", longitude);
 					
 					String data = parserImovel.obterDadoParser(26).trim();
-					linha1.put("data", data);
+					linha2.put("data", data);
 
 					String tipoAlteracao = "A";
 

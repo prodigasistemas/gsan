@@ -135,7 +135,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
     private BigDecimal volumePiscina;
 
     /** nullable persistent field */
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idPocoTipo;
 
     /** nullable persistent field */
