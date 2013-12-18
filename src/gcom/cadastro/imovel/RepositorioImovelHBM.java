@@ -146,7 +146,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
-import org.apache.log4j.Logger;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.JDBCException;
@@ -154,6 +153,7 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.exception.DataException;
+import org.jboss.logging.Logger;
 
 public class RepositorioImovelHBM implements IRepositorioImovel {
 
@@ -6756,19 +6756,14 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 */
 
-	public void retirarSituacaoEspecialFaturamento(Collection colecaoIdsImoveis)
-
-	throws ErroRepositorioException {
-
-		String consulta = "";
+	public void retirarSituacaoEspecialFaturamento(Collection colecaoIdsImoveis) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
 
 		try {
-
 			if (colecaoIdsImoveis != null && !colecaoIdsImoveis.isEmpty()) {
 
-				consulta = "update gcom.cadastro.imovel.Imovel set "
+				String consulta = "update gcom.cadastro.imovel.Imovel set "
 						+ "ftst_id = null,ftsm_id = null,imov_tmultimaalteracao = :ultimaAlteracao " 
 						+ "where imov_id IN (:ids)";
 
@@ -6776,23 +6771,12 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				.setParameterList("ids",colecaoIdsImoveis)
 				.setTimestamp("ultimaAlteracao",	new Date())
 				.executeUpdate();
-
 			}
-
 		} catch (HibernateException e) {
-
-			// levanta a exceção para a próxima camada
-
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-
 		} finally {
-
-			// fecha a sessão
-
 			HibernateUtil.closeSession(session);
-
 		}
-
 	}
 
 	/**

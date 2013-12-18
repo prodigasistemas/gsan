@@ -443,7 +443,7 @@ import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
 
 import org.apache.commons.fileupload.FileItem;
-import org.apache.log4j.Logger;
+import org.jboss.logging.Logger;
 
 import br.com.danhil.BarCode.Interleaved2of5;
 
