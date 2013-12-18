@@ -78,12 +78,9 @@ package gcom.faturamento;
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
-import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
-import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
-import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelContaEnvio;
@@ -107,15 +104,12 @@ import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaCategoria;
 import gcom.faturamento.conta.ContaCategoriaConsumoFaixa;
 import gcom.faturamento.conta.ContaTipo;
-import gcom.faturamento.conta.FiltroConta;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.micromedicao.FiltroLeituraSituacao;
 import gcom.micromedicao.Rota;
-import gcom.micromedicao.consumo.LigacaoTipo;
 import gcom.micromedicao.leitura.LeituraSituacao;
-import gcom.micromedicao.leitura.LeituraTipo;
 import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesSistema;
@@ -123,13 +117,14 @@ import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
 import gcom.util.Util;
 import gcom.util.ZipUtil;
+import gcom.util.exception.BaseRuntimeException;
+import gcom.util.exception.EmitirContaException;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -147,6 +142,8 @@ import java.util.zip.ZipOutputStream;
 import javax.ejb.EJBException;
 import javax.ejb.SessionBean;
 
+import org.jboss.logging.Logger;
+
 /**
  * Controlador Faturamento COSANPA
  * 
@@ -157,6 +154,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		implements SessionBean {
 
 	private static final long serialVersionUID = 1L;
+	
+	private static Logger logger = Logger.getLogger(ControladorFaturamentoCOSANPASEJB.class);
 
 	// ==============================================================================================================
 	// MÉTODOS EXCLUSIVOS DA COSANPA
@@ -174,11 +173,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	 * @param faturamentoGrupo
 	 * @throws ControladorException
 	 */
-	public void emitirContas(Integer anoMesReferenciaFaturamento,
-			FaturamentoGrupo faturamentoGrupo, int idFuncionalidadeIniciada,
-			int tipoConta, Integer idEmpresa,
-			Short indicadorEmissaoExtratoFaturamento)
-			throws ControladorException {
+	public void emitirContas(Integer anoMesReferenciaFaturamento, FaturamentoGrupo faturamentoGrupo, int idFuncionalidadeIniciada, int tipoConta,
+			Integer idEmpresa, Short indicadorEmissaoExtratoFaturamento) throws ControladorException {
 
 		int idUnidadeIniciada = 0;
 
@@ -190,12 +186,9 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		 * @author Wellington Rocha
 		 * @date 01/11/2012
 		 */
-		Integer anoMesReferenciaFaturamentoSemAntecipacao = new Integer(
-				anoMesReferenciaFaturamento);
-		idUnidadeIniciada = getControladorBatch()
-				.iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
-						UnidadeProcessamento.FUNCIONALIDADE,
-						(idEmpresa == null ? 0 : idEmpresa));
+		Integer anoMesReferenciaFaturamentoSemAntecipacao = new Integer(anoMesReferenciaFaturamento);
+		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.FUNCIONALIDADE,
+				(idEmpresa == null ? 0 : idEmpresa));
 		ImpressaoContaImpressoraTermica impressaoContaImpressoraTermica = null;
 		Collection<Object[]> stringFormatadaImpressaoTermica = new ArrayList<Object[]>();
 		Collection<String> localidadesArquivo = new ArrayList<String>();
@@ -212,2486 +205,1465 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			int numeroIndice = 0;
 			int numeroIndiceAntecipado = 0;
 
-			try {
+			sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
-				sistemaParametro = getControladorUtil()
-						.pesquisarParametrosDoSistema();
+			boolean ehFaturamentoAntecipado = false;
 
-				boolean ehFaturamentoAntecipado = false;
+			Integer anoMesReferenciaFaturamentoAntecipado = null;
+			// anoMesReferenciaFaturamento = 200911;
+			if (Util.obterMes(anoMesReferenciaFaturamento) == 11) {
+				if (sistemaParametro.getIndicadorFaturamentoAntecipado().equals(ConstantesSistema.SIM)) {
 
-				Integer anoMesReferenciaFaturamentoAntecipado = null;
-				// anoMesReferenciaFaturamento = 200911;
-				if (Util.obterMes(anoMesReferenciaFaturamento) == 11) {
-					if (sistemaParametro.getIndicadorFaturamentoAntecipado()
-							.equals(ConstantesSistema.SIM)) {
+					ehFaturamentoAntecipado = true;
+					anoMesReferenciaFaturamentoAntecipado = Util.somarData(anoMesReferenciaFaturamento);
+				}
+			}
 
-						ehFaturamentoAntecipado = true;
-						anoMesReferenciaFaturamentoAntecipado = Util
-								.somarData(anoMesReferenciaFaturamento);
-					}
+			// recebe todos as contas da lista
+			StringBuilder contasTxtLista = null;
+			Map<Integer, Integer> mapAtualizaSequencial = null;
+
+			boolean flagTerminou = false;
+			numeroIndice = 0;
+			numeroIndiceAntecipado = 0;
+			Integer sequencialImpressao = 0;
+			Collection colecaoConta = null;
+			int cont = 1;
+
+			contasTxtLista = new StringBuilder();
+			// cartasTxtListaConta = new StringBuilder();
+
+			while (!flagTerminou) {
+				// map que armazena o sequencial e o numero da
+				// conta para no final atualizar todos os
+				// sequencias
+				mapAtualizaSequencial = new HashMap();
+				Collection colecaoContaParms = null;
+
+				if (anoMesReferenciaFaturamentoAntecipado != null && anoMesReferenciaFaturamento.intValue() == anoMesReferenciaFaturamentoAntecipado.intValue()) {
+
+					System.out.println("INDICE_ANTECIPADO_PESQUISA:" + numeroIndiceAntecipado);
+
+					numeroIndice = numeroIndiceAntecipado;
 				}
 
-				// recebe todos as contas da lista
-				StringBuilder contasTxtLista = null;
-				Map<Integer, Integer> mapAtualizaSequencial = null;
+				colecaoContaParms = repositorioFaturamento.pesquisarContasEmitirCOSANPA(ContaTipo.CONTA_NORMAL, idEmpresa, numeroIndice,
+						anoMesReferenciaFaturamento, faturamentoGrupo.getId());
+				colecaoConta = formatarEmitirContasHelper(colecaoContaParms, ContaTipo.CONTA_NORMAL);
 
-				try {
+				if (colecaoConta != null && !colecaoConta.isEmpty()) {
 
-					boolean flagTerminou = false;
-					numeroIndice = 0;
-					numeroIndiceAntecipado = 0;
-					Integer sequencialImpressao = 0;
-					Collection colecaoConta = null;
-					int cont = 1;
+					if (colecaoConta.size() < quantidadeRegistros) {
+						flagTerminou = true;
+					}
 
-					contasTxtLista = new StringBuilder();
-					// cartasTxtListaConta = new StringBuilder();
+					EmitirContaHelper emitirContaHelper = null;
+					Iterator iteratorConta = colecaoConta.iterator();
 
-					while (!flagTerminou) {
-						// map que armazena o sequencial e o numero da
-						// conta para no final atualizar todos os
-						// sequencias
-						mapAtualizaSequencial = new HashMap();
-						Collection colecaoContaParms = null;
+					// int count = 0;
+					while (iteratorConta.hasNext()) {
 
-						if (anoMesReferenciaFaturamentoAntecipado != null
-								&& anoMesReferenciaFaturamento.intValue() == anoMesReferenciaFaturamentoAntecipado
-										.intValue()) {
+						emitirContaHelper = null;
 
-							System.out.println("INDICE_ANTECIPADO_PESQUISA:"
-									+ numeroIndiceAntecipado);
+						emitirContaHelper = (EmitirContaHelper) iteratorConta.next();
+						sequencialImpressao += 1;
 
-							numeroIndice = numeroIndiceAntecipado;
-						}
+						quantidadeContas++;
 
-						colecaoContaParms = repositorioFaturamento
-								.pesquisarContasEmitirCOSANPA(
-										ContaTipo.CONTA_NORMAL, idEmpresa,
-										numeroIndice,
-										anoMesReferenciaFaturamento,
-										faturamentoGrupo.getId());
-						colecaoConta = formatarEmitirContasHelper(
-								colecaoContaParms, ContaTipo.CONTA_NORMAL);
+						try {
+							// So para exibir no console a quantidade de
+							// contas
 
-						if (colecaoConta != null && !colecaoConta.isEmpty()) {
+							StringBuilder contaTxt = new StringBuilder();
 
-							if (colecaoConta.size() < quantidadeRegistros) {
-								flagTerminou = true;
-							}
+							if (emitirContaHelper != null) {
 
-							EmitirContaHelper emitirContaHelper = null;
-							Iterator iteratorConta = colecaoConta.iterator();
+								// Item 1 - Numero Fatura
+								contaTxt.append(Util.completaString(
+										emitirContaHelper.getIdConta() + "/" + Util.formatarAnoMesParaMesAnoSemBarra(emitirContaHelper.getAmReferencia()), 16));
 
-							// int count = 0;
-							while (iteratorConta.hasNext()) {
+								// Item 2 - Data de Emissao da Fatura
+								contaTxt.append(Util.completaString(Util.formatarData(new Date()), 10));
 
-								emitirContaHelper = null;
+								FiltroLocalidade filtroLocalidade = new FiltroLocalidade();
 
-								emitirContaHelper = (EmitirContaHelper) iteratorConta
-										.next();
-								sequencialImpressao += 1;
+								filtroLocalidade.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, emitirContaHelper.getIdLocalidade()));
 
-								quantidadeContas++;
-								// So para exibir no console a quantidade de
-								// contas
+								filtroLocalidade.adicionarCaminhoParaCarregamentoEntidade("logradouroCep");
+								filtroLocalidade.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.cep");
+								filtroLocalidade.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.logradouro");
+								filtroLocalidade.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.logradouro.logradouroTipo");
+								filtroLocalidade.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.logradouro.logradouroTitulo");
+								filtroLocalidade.adicionarCaminhoParaCarregamentoEntidade("enderecoReferencia");
+								filtroLocalidade.adicionarCaminhoParaCarregamentoEntidade("logradouroBairro");
+								filtroLocalidade.adicionarCaminhoParaCarregamentoEntidade("logradouroBairro.bairro");
+								filtroLocalidade.adicionarCaminhoParaCarregamentoEntidade("logradouroBairro.bairro.municipio");
+								filtroLocalidade.adicionarCaminhoParaCarregamentoEntidade("logradouroBairro.bairro.municipio.unidadeFederacao");
+								filtroLocalidade.adicionarCaminhoParaCarregamentoEntidade("enderecoReferencia");
 
-								StringBuilder contaTxt = new StringBuilder();
+								filtroLocalidade.adicionarCaminhoParaCarregamentoEntidade("unidadeNegocio");
 
-								if (emitirContaHelper != null) {
+								Collection cLocalidade = (Collection) getControladorUtil().pesquisar(filtroLocalidade, Localidade.class.getName());
+								Localidade localidade = (Localidade) cLocalidade.iterator().next();
 
-									// Item 1 - Numero Fatura
-									contaTxt.append(Util.completaString(
-											emitirContaHelper.getIdConta()
-													+ "/"
-													+ Util.formatarAnoMesParaMesAnoSemBarra(emitirContaHelper
-															.getAmReferencia()),
-											16));
+								// Item 3 - Endereco do Escritorio
+								contaTxt.append(Util.completaString(localidade.getEnderecoFormatadoTituloAbreviado(), 120));
 
-									// Item 2 - Data de Emissao da Fatura
-									contaTxt.append(Util.completaString(
-											Util.formatarData(new Date()), 10));
+								// Item 4 - Telefone do Escritorio
+								contaTxt.append(Util.completaString(localidade.getFone(), 9));
 
-									FiltroLocalidade filtroLocalidade = new FiltroLocalidade();
+								contaTxt.append(Util.completaString("06.274.757/0001-50", 18));
 
-									filtroLocalidade
-											.adicionarParametro(new ParametroSimples(
-													FiltroLocalidade.ID,
-													emitirContaHelper
-															.getIdLocalidade()));
+								contaTxt.append(Util.completaString("12.050.537-1", 12));
 
-									filtroLocalidade
-											.adicionarCaminhoParaCarregamentoEntidade("logradouroCep");
-									filtroLocalidade
-											.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.cep");
-									filtroLocalidade
-											.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.logradouro");
-									filtroLocalidade
-											.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.logradouro.logradouroTipo");
-									filtroLocalidade
-											.adicionarCaminhoParaCarregamentoEntidade("logradouroCep.logradouro.logradouroTitulo");
-									filtroLocalidade
-											.adicionarCaminhoParaCarregamentoEntidade("enderecoReferencia");
-									filtroLocalidade
-											.adicionarCaminhoParaCarregamentoEntidade("logradouroBairro");
-									filtroLocalidade
-											.adicionarCaminhoParaCarregamentoEntidade("logradouroBairro.bairro");
-									filtroLocalidade
-											.adicionarCaminhoParaCarregamentoEntidade("logradouroBairro.bairro.municipio");
-									filtroLocalidade
-											.adicionarCaminhoParaCarregamentoEntidade("logradouroBairro.bairro.municipio.unidadeFederacao");
-									filtroLocalidade
-											.adicionarCaminhoParaCarregamentoEntidade("enderecoReferencia");
+								// Item 3
+								/*
+								 * FiltroUnidadeNegocio filtroUnidadeNegocio =
+								 * new FiltroUnidadeNegocio();
+								 * 
+								 * filtroUnidadeNegocio .adicionarParametro(new
+								 * ParametroSimples(
+								 * FiltroUnidadeNegocio.ID_GERENCIA,
+								 * emitirContaHelper .getIdGerenciaRegional()));
+								 * 
+								 * Collection cUnidade = getControladorUtil()
+								 * .pesquisar( filtroUnidadeNegocio,
+								 * UnidadeNegocio.class .getName());
+								 */
+								if (localidade.getUnidadeNegocio().getId() != null && !localidade.getUnidadeNegocio().getId().equals("")) {
 
-									filtroLocalidade
-											.adicionarCaminhoParaCarregamentoEntidade("unidadeNegocio");
+									contaTxt.append(Util.adicionarZerosEsquedaNumero(2, localidade.getUnidadeNegocio().getId().toString()));
+								} else {
+									contaTxt.append(Util.adicionarZerosEsquedaNumero(2, "00"));
+								}
 
-									Collection cLocalidade = (Collection) getControladorUtil()
-											.pesquisar(filtroLocalidade,
-													Localidade.class.getName());
-									Localidade localidade = (Localidade) cLocalidade
-											.iterator().next();
+								// Item 100
+								contaTxt.append(Util.adicionarZerosEsquedaNumero(4, emitirContaHelper.getCodigoSetorComercialConta().toString()));
 
-									// Item 3 - Endereco do Escritorio
-									contaTxt.append(Util.completaString(
-											localidade
-													.getEnderecoFormatadoTituloAbreviado(),
-											120));
+								// Item 2
+								contaTxt.append(Util.adicionarZerosEsquedaNumero(3, emitirContaHelper.getIdLocalidade().toString()));
 
-									// Item 4 - Telefone do Escritorio
-									contaTxt.append(Util.completaString(
-											localidade.getFone(), 9));
+								Imovel imovelEmitido = getControladorImovel().pesquisarImovel(emitirContaHelper.getIdImovel());
 
-									contaTxt.append(Util.completaString(
-											"06.274.757/0001-50", 18));
+								// Item 5
+								contaTxt.append(Util.adicionarZerosEsquedaNumero(4, new Integer(imovelEmitido.getQuadra().getNumeroQuadra()).toString()));
 
-									contaTxt.append(Util.completaString(
-											"12.050.537-1", 12));
+								// Item 6
+								contaTxt.append(Util.adicionarZerosEsquedaNumero(9, imovelEmitido.getNumeroSequencialRota().toString()));
 
-									// Item 3
-									/*
-									 * FiltroUnidadeNegocio filtroUnidadeNegocio
-									 * = new FiltroUnidadeNegocio();
-									 * 
-									 * filtroUnidadeNegocio
-									 * .adicionarParametro(new ParametroSimples(
-									 * FiltroUnidadeNegocio.ID_GERENCIA,
-									 * emitirContaHelper
-									 * .getIdGerenciaRegional()));
-									 * 
-									 * Collection cUnidade =
-									 * getControladorUtil() .pesquisar(
-									 * filtroUnidadeNegocio,
-									 * UnidadeNegocio.class .getName());
-									 */
-									if (localidade.getUnidadeNegocio().getId() != null
-											&& !localidade.getUnidadeNegocio()
-													.getId().equals("")) {
+								// Item 7
+								contaTxt.append(Util.adicionarZerosEsquedaNumero(1, imovelEmitido.getIndicadorDebitoConta().toString()));
 
-										contaTxt.append(Util
-												.adicionarZerosEsquedaNumero(
-														2,
-														localidade
-																.getUnidadeNegocio()
-																.getId()
-																.toString()));
+								// Item 9
+								contaTxt.append(Util.completaString(emitirContaHelper.getIdImovel().toString(), 9));
+
+								// Item 11
+								// Caso a colecao de contas seja de entrega
+								// para o cliente responsavel
+								if (tipoConta == 3 || tipoConta == 4) {
+									String nomeCliente = null;
+									if (emitirContaHelper.getNomeImovel() != null && !emitirContaHelper.getNomeImovel().equals("")) {
+
+										nomeCliente = emitirContaHelper.getNomeImovel();
+
 									} else {
-										contaTxt.append(Util
-												.adicionarZerosEsquedaNumero(2,
-														"00"));
+										nomeCliente = repositorioFaturamento.pesquisarNomeClienteUsuarioConta(emitirContaHelper.getIdConta());
+									}
+									contaTxt.append(Util.completaString(nomeCliente, 40));
+								} else {
+									contaTxt.append(Util.completaString(emitirContaHelper.getNomeCliente(), 40));
+								}
+
+								// Item 12
+
+								// String endereco =
+								// getControladorEndereco().pesquisarEnderecoFormatado(imovelEmitido.getId());
+
+								Collection colecaoClienteImovel = repositorioClienteImovel.pesquisarClienteImovelResponsavelConta(emitirContaHelper
+										.getIdImovel());
+
+								String endereco = "";
+								String municipioEntrega = "";
+								String bairroEntrega = "";
+								String cepEntrega = "";
+								String ufEntrega = "";
+								String logCepClie = "";
+								String logBairroClie = "";
+								boolean enderecoAlternativo = false;
+
+								if (colecaoClienteImovel != null && !colecaoClienteImovel.isEmpty()) {
+									ClienteImovel clienteImovelRespConta = (ClienteImovel) colecaoClienteImovel.iterator().next();
+
+									if (clienteImovelRespConta != null) {
+										Cliente cliente = clienteImovelRespConta.getCliente();
+
+										if (cliente != null && imovelEmitido.getImovelContaEnvio().getId().equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL)) {
+											String[] enderecoCliente = getControladorEndereco().pesquisarEnderecoClienteAbreviadoDivididoCosanpa(
+													cliente.getId());
+											bairroEntrega = enderecoCliente[3];
+											municipioEntrega = enderecoCliente[1];
+											ufEntrega = enderecoCliente[2];
+											cepEntrega = enderecoCliente[4];
+											logCepClie = enderecoCliente[5];
+											logBairroClie = enderecoCliente[6];
+											enderecoAlternativo = true;
+
+											endereco = enderecoCliente[0] + " - " + bairroEntrega + " " + municipioEntrega + " " + ufEntrega + " " + cepEntrega;
+
+										}
+									}
+								}
+
+								String[] enderecoImovel2 = getControladorEndereco().pesquisarEnderecoFormatadoDivididoCosanpa(emitirContaHelper.getIdImovel());
+
+								String municipioImovel = enderecoImovel2[1];
+								String logCepImovel = "";
+								String logBairroImovel = "";
+
+								logCepImovel = enderecoImovel2[5];
+								logBairroImovel = enderecoImovel2[6];
+
+								if (municipioEntrega.equalsIgnoreCase("")) {
+									municipioEntrega = municipioImovel;
+								}
+
+								if (logCepClie.trim().equalsIgnoreCase("")) {
+									logCepClie = logCepImovel;
+								}
+
+								if (logBairroClie.trim().equalsIgnoreCase("")) {
+									logBairroClie = logBairroImovel;
+								}
+
+								if (endereco == null || endereco.trim().equalsIgnoreCase("") || endereco.trim().equalsIgnoreCase("-")) {
+									endereco = getControladorEndereco().pesquisarEnderecoFormatado(imovelEmitido.getId());
+								}
+
+								contaTxt.append(Util.completaString(endereco, 120));
+
+								// Item 13
+								Categoria categoriaImovel = (Categoria) getControladorImovel().obterPrincipalCategoriaImovel(emitirContaHelper.getIdImovel());
+
+								contaTxt.append(Util.completaString(categoriaImovel.getDescricao(), 30));
+
+								Collection colecaoSubcategoria = getControladorImovel().obterQuantidadeEconomiasSubCategoria(imovelEmitido.getId());
+
+								String subCat = "";
+
+								for (Iterator iter = colecaoSubcategoria.iterator(); iter.hasNext();) {
+									Subcategoria subCategoria = (Subcategoria) iter.next();
+
+									subCat = subCat + subCategoria.getDescricaoAbreviada() + " ";
+								}
+
+								/*
+								 * Subcategoria subcategoria = (Subcategoria)
+								 * colecaoSubcategoria .iterator().next();
+								 */
+
+								contaTxt.append(Util.completaString(subCat, 30));
+
+								// Item 14
+								Collection cIS = getControladorImovel().pesquisarImovelSubcategoria(imovelEmitido);
+
+								boolean residencial = false;
+								boolean comercial = false;
+								boolean industrial = false;
+								boolean publico = false;
+
+								int economiaResidencial = 0;
+								int economiaComercial = 0;
+								int economiaIndustrial = 0;
+								int economiaPublica = 0;
+								int economiaTotal = 0;
+
+								// acumulando as economias por categoria
+								for (Iterator iter = cIS.iterator(); iter.hasNext();) {
+									ImovelSubcategoria iS = (ImovelSubcategoria) iter.next();
+
+									if (iS.getComp_id().getSubcategoria().getCategoria().getId().equals(1)) {
+										residencial = true;
+										economiaResidencial = economiaResidencial + iS.getQuantidadeEconomias();
+										economiaTotal = economiaTotal + iS.getQuantidadeEconomias();
 									}
 
-									// Item 100
-									contaTxt.append(Util
-											.adicionarZerosEsquedaNumero(
-													4,
-													emitirContaHelper
-															.getCodigoSetorComercialConta()
-															.toString()));
+									if (iS.getComp_id().getSubcategoria().getCategoria().getId().equals(2)) {
+										comercial = true;
+										economiaComercial = economiaComercial + iS.getQuantidadeEconomias();
+										economiaTotal = economiaTotal + iS.getQuantidadeEconomias();
+									}
 
-									// Item 2
-									contaTxt.append(Util
-											.adicionarZerosEsquedaNumero(3,
-													emitirContaHelper
-															.getIdLocalidade()
-															.toString()));
+									if (iS.getComp_id().getSubcategoria().getCategoria().getId().equals(3)) {
+										comercial = true;
+										economiaIndustrial = economiaIndustrial + iS.getQuantidadeEconomias();
+										economiaTotal = economiaTotal + iS.getQuantidadeEconomias();
+									}
 
-									Imovel imovelEmitido = getControladorImovel()
-											.pesquisarImovel(
-													emitirContaHelper
-															.getIdImovel());
+									if (iS.getComp_id().getSubcategoria().getCategoria().getId().equals(4)) {
+										publico = true;
+										economiaPublica = economiaPublica + iS.getQuantidadeEconomias();
+										economiaTotal = economiaTotal + iS.getQuantidadeEconomias();
+									}
+								}
 
-									// Item 5
-									contaTxt.append(Util
-											.adicionarZerosEsquedaNumero(4,
-													new Integer(imovelEmitido
-															.getQuadra()
-															.getNumeroQuadra())
-															.toString()));
+								String economiaPorCategoria = "";
 
-									// Item 6
-									contaTxt.append(Util
-											.adicionarZerosEsquedaNumero(
-													9,
-													imovelEmitido
-															.getNumeroSequencialRota()
-															.toString()));
+								if (residencial) {
+									economiaPorCategoria = "R" + Util.adicionarZerosEsquedaNumero(3, economiaResidencial + "") + " ";
+								}
 
-									// Item 7
-									contaTxt.append(Util
-											.adicionarZerosEsquedaNumero(
-													1,
-													imovelEmitido
-															.getIndicadorDebitoConta()
-															.toString()));
+								if (comercial) {
+									economiaPorCategoria = "C" + Util.adicionarZerosEsquedaNumero(3, economiaComercial + "") + " ";
+								}
 
-									// Item 9
-									contaTxt.append(Util.completaString(
-											emitirContaHelper.getIdImovel()
-													.toString(), 9));
+								if (industrial) {
+									economiaPorCategoria = "I" + Util.adicionarZerosEsquedaNumero(3, economiaIndustrial + "") + " ";
+								}
 
-									// Item 11
-									// Caso a colecao de contas seja de entrega
-									// para o cliente responsavel
-									if (tipoConta == 3 || tipoConta == 4) {
-										String nomeCliente = null;
-										if (emitirContaHelper.getNomeImovel() != null
-												&& !emitirContaHelper
-														.getNomeImovel()
-														.equals("")) {
+								if (publico) {
+									economiaPorCategoria = "P" + Util.adicionarZerosEsquedaNumero(3, economiaPublica + "") + " ";
+								}
 
-											nomeCliente = emitirContaHelper
-													.getNomeImovel();
+								contaTxt.append(Util.completaString(economiaPorCategoria, 50));
 
+								// Item 15
+								contaTxt.append(Util.adicionarZerosEsquedaNumero(4, economiaTotal + ""));
+
+								// Item 32
+								String dataVencimento = Util.formatarData(emitirContaHelper.getDataVencimentoConta());
+								contaTxt.append(Util.completaString(dataVencimento, 10));
+
+								boolean possuiHidrometro = false;
+
+								// Item 33
+								if (imovelEmitido.getLigacaoAgua() != null) {
+
+									if (imovelEmitido.getLigacaoAgua().getHidrometroInstalacaoHistorico() != null) {
+
+										if (imovelEmitido.getLigacaoAgua().getHidrometroInstalacaoHistorico().getHidrometro() != null) {
+
+											possuiHidrometro = true;
+											contaTxt.append(Util.completaString(imovelEmitido.getLigacaoAgua().getHidrometroInstalacaoHistorico()
+													.getHidrometro().getNumero(), 12));
 										} else {
-											try {
-												nomeCliente = repositorioFaturamento
-														.pesquisarNomeClienteUsuarioConta(emitirContaHelper
-																.getIdConta());
-
-											} catch (ErroRepositorioException e) {
-												throw new ControladorException(
-														"erro.sistema", e);
-											}
-										}
-										contaTxt.append(Util.completaString(
-												nomeCliente, 40));
-									} else {
-										contaTxt.append(Util.completaString(
-												emitirContaHelper
-														.getNomeCliente(), 40));
-									}
-
-									// Item 12
-
-									// String endereco =
-									// getControladorEndereco().pesquisarEnderecoFormatado(imovelEmitido.getId());
-
-									Collection colecaoClienteImovel = repositorioClienteImovel
-											.pesquisarClienteImovelResponsavelConta(emitirContaHelper
-													.getIdImovel());
-
-									String endereco = "";
-									String municipioEntrega = "";
-									String bairroEntrega = "";
-									String cepEntrega = "";
-									String ufEntrega = "";
-									String logCepClie = "";
-									String logBairroClie = "";
-									boolean enderecoAlternativo = false;
-
-									if (colecaoClienteImovel != null
-											&& !colecaoClienteImovel.isEmpty()) {
-										ClienteImovel clienteImovelRespConta = (ClienteImovel) colecaoClienteImovel
-												.iterator().next();
-
-										if (clienteImovelRespConta != null) {
-											Cliente cliente = clienteImovelRespConta
-													.getCliente();
-											
-											if (cliente != null
-													&& imovelEmitido.getImovelContaEnvio().getId()
-													.equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL)) {
-												String[] enderecoCliente = getControladorEndereco()
-														.pesquisarEnderecoClienteAbreviadoDivididoCosanpa(
-																cliente.getId());
-												bairroEntrega = enderecoCliente[3];
-												municipioEntrega = enderecoCliente[1];
-												ufEntrega = enderecoCliente[2];
-												cepEntrega = enderecoCliente[4];
-												logCepClie = enderecoCliente[5];
-												logBairroClie = enderecoCliente[6];
-												enderecoAlternativo = true;
-
-												endereco = enderecoCliente[0]
-														+ " - " + bairroEntrega
-														+ " "
-														+ municipioEntrega
-														+ " " + ufEntrega + " "
-														+ cepEntrega;
-											
-
-											}
-										}
-									}
-
-									String[] enderecoImovel2 = getControladorEndereco()
-											.pesquisarEnderecoFormatadoDivididoCosanpa(
-													emitirContaHelper
-															.getIdImovel());
-
-									String municipioImovel = enderecoImovel2[1];
-									String logCepImovel = "";
-									String logBairroImovel = "";
-
-									logCepImovel = enderecoImovel2[5];
-									logBairroImovel = enderecoImovel2[6];
-
-									if (municipioEntrega.equalsIgnoreCase("")) {
-										municipioEntrega = municipioImovel;
-									}
-
-									if (logCepClie.trim().equalsIgnoreCase("")) {
-										logCepClie = logCepImovel;
-									}
-
-									if (logBairroClie.trim().equalsIgnoreCase(
-											"")) {
-										logBairroClie = logBairroImovel;
-									}
-
-									if (endereco == null
-											|| endereco.trim()
-													.equalsIgnoreCase("")
-											|| endereco.trim()
-													.equalsIgnoreCase("-")) {
-										endereco = getControladorEndereco()
-												.pesquisarEnderecoFormatado(
-														imovelEmitido.getId());
-									}
-
-									contaTxt.append(Util.completaString(
-											endereco, 120));
-
-									// Item 13
-									Categoria categoriaImovel = (Categoria) getControladorImovel()
-											.obterPrincipalCategoriaImovel(
-													emitirContaHelper
-															.getIdImovel());
-
-									contaTxt.append(Util.completaString(
-											categoriaImovel.getDescricao(), 30));
-
-									Collection colecaoSubcategoria = getControladorImovel()
-											.obterQuantidadeEconomiasSubCategoria(
-													imovelEmitido.getId());
-
-									String subCat = "";
-
-									for (Iterator iter = colecaoSubcategoria
-											.iterator(); iter.hasNext();) {
-										Subcategoria subCategoria = (Subcategoria) iter
-												.next();
-
-										subCat = subCat
-												+ subCategoria
-														.getDescricaoAbreviada()
-												+ " ";
-									}
-
-									/*
-									 * Subcategoria subcategoria =
-									 * (Subcategoria) colecaoSubcategoria
-									 * .iterator().next();
-									 */
-
-									contaTxt.append(Util.completaString(subCat,
-											30));
-
-									// Item 14
-									Collection cIS = getControladorImovel()
-											.pesquisarImovelSubcategoria(
-													imovelEmitido);
-
-									boolean residencial = false;
-									boolean comercial = false;
-									boolean industrial = false;
-									boolean publico = false;
-
-									int economiaResidencial = 0;
-									int economiaComercial = 0;
-									int economiaIndustrial = 0;
-									int economiaPublica = 0;
-									int economiaTotal = 0;
-
-									// acumulando as economias por categoria
-									for (Iterator iter = cIS.iterator(); iter
-											.hasNext();) {
-										ImovelSubcategoria iS = (ImovelSubcategoria) iter
-												.next();
-
-										if (iS.getComp_id().getSubcategoria()
-												.getCategoria().getId()
-												.equals(1)) {
-											residencial = true;
-											economiaResidencial = economiaResidencial
-													+ iS.getQuantidadeEconomias();
-											economiaTotal = economiaTotal
-													+ iS.getQuantidadeEconomias();
-										}
-
-										if (iS.getComp_id().getSubcategoria()
-												.getCategoria().getId()
-												.equals(2)) {
-											comercial = true;
-											economiaComercial = economiaComercial
-													+ iS.getQuantidadeEconomias();
-											economiaTotal = economiaTotal
-													+ iS.getQuantidadeEconomias();
-										}
-
-										if (iS.getComp_id().getSubcategoria()
-												.getCategoria().getId()
-												.equals(3)) {
-											comercial = true;
-											economiaIndustrial = economiaIndustrial
-													+ iS.getQuantidadeEconomias();
-											economiaTotal = economiaTotal
-													+ iS.getQuantidadeEconomias();
-										}
-
-										if (iS.getComp_id().getSubcategoria()
-												.getCategoria().getId()
-												.equals(4)) {
-											publico = true;
-											economiaPublica = economiaPublica
-													+ iS.getQuantidadeEconomias();
-											economiaTotal = economiaTotal
-													+ iS.getQuantidadeEconomias();
-										}
-									}
-
-									String economiaPorCategoria = "";
-
-									if (residencial) {
-										economiaPorCategoria = "R"
-												+ Util.adicionarZerosEsquedaNumero(
-														3, economiaResidencial
-																+ "") + " ";
-									}
-
-									if (comercial) {
-										economiaPorCategoria = "C"
-												+ Util.adicionarZerosEsquedaNumero(
-														3, economiaComercial
-																+ "") + " ";
-									}
-
-									if (industrial) {
-										economiaPorCategoria = "I"
-												+ Util.adicionarZerosEsquedaNumero(
-														3, economiaIndustrial
-																+ "") + " ";
-									}
-
-									if (publico) {
-										economiaPorCategoria = "P"
-												+ Util.adicionarZerosEsquedaNumero(
-														3, economiaPublica + "")
-												+ " ";
-									}
-
-									contaTxt.append(Util.completaString(
-											economiaPorCategoria, 50));
-
-									// Item 15
-									contaTxt.append(Util
-											.adicionarZerosEsquedaNumero(4,
-													economiaTotal + ""));
-
-									// Item 32
-									String dataVencimento = Util
-											.formatarData(emitirContaHelper
-													.getDataVencimentoConta());
-									contaTxt.append(Util.completaString(
-											dataVencimento, 10));
-									
-									boolean possuiHidrometro = false;
-
-									// Item 33
-									if (imovelEmitido.getLigacaoAgua() != null) {
-
-										if (imovelEmitido
-												.getLigacaoAgua()
-												.getHidrometroInstalacaoHistorico() != null) {
-
-											if (imovelEmitido
-													.getLigacaoAgua()
-													.getHidrometroInstalacaoHistorico()
-													.getHidrometro() != null) {
-
-												possuiHidrometro = true;
-												contaTxt.append(Util
-														.completaString(
-																imovelEmitido
-																		.getLigacaoAgua()
-																		.getHidrometroInstalacaoHistorico()
-																		.getHidrometro()
-																		.getNumero(),
-																12));
-											} else {
-												contaTxt.append(Util
-														.completaString(" ", 12));
-											}
-
-										} else {
-											contaTxt.append(Util
-													.completaString(" ", 12));
+											contaTxt.append(Util.completaString(" ", 12));
 										}
 
 									} else {
-										contaTxt.append(Util.completaString(
-												" ", 12));
+										contaTxt.append(Util.completaString(" ", 12));
 									}
 
-									Integer[] parmSituacao = determinarTipoLigacaoMedicao(emitirContaHelper);
-									Integer tipoLigacao = parmSituacao[0];
-									Integer tipoMedicao = parmSituacao[1];
+								} else {
+									contaTxt.append(Util.completaString(" ", 12));
+								}
 
-									Object[] parmsMedicaoHistorico = obterDadosMedicaoConta(
-											emitirContaHelper, tipoMedicao);
-									// Leitura Anterior
-									String leituraAnterior = "0";
-									// Leitura Atual
-									String leituraAtual = "0";
-									// Data Leitura Anterior
-									String dataLeituraAnterior = "";
-									// Leitura Anterior
-									String dataLeituraAtual = "";
+								Integer[] parmSituacao = determinarTipoLigacaoMedicao(emitirContaHelper);
+								Integer tipoLigacao = parmSituacao[0];
+								Integer tipoMedicao = parmSituacao[1];
 
-									String idSituacaoLeituraAtual = "0";
-									
-									Integer idLeiturista = null;
-									
+								Object[] parmsMedicaoHistorico = obterDadosMedicaoConta(emitirContaHelper, tipoMedicao);
+								// Leitura Anterior
+								String leituraAnterior = "0";
+								// Leitura Atual
+								String leituraAtual = "0";
+								// Data Leitura Anterior
+								String dataLeituraAnterior = "";
+								// Leitura Anterior
+								String dataLeituraAtual = "";
 
-									// Date dtLeitura = new Date();
+								String idSituacaoLeituraAtual = "0";
 
-									if (parmsMedicaoHistorico != null) {
+								Integer idLeiturista = null;
 
-										if (parmsMedicaoHistorico[0] != null) {
-											leituraAnterior = ""
-													+ (Integer) parmsMedicaoHistorico[0];
-										}
+								// Date dtLeitura = new Date();
 
-										if (parmsMedicaoHistorico[1] != null) {
-											leituraAtual = ""
-													+ (Integer) parmsMedicaoHistorico[1];
-										}
+								if (parmsMedicaoHistorico != null) {
 
-										if (parmsMedicaoHistorico[3] != null) {
-											dataLeituraAnterior = Util
-													.formatarData((Date) parmsMedicaoHistorico[3]);
-										}
-
-										if (parmsMedicaoHistorico[2] != null) {
-											dataLeituraAtual = Util
-													.formatarData((Date) parmsMedicaoHistorico[2]);
-										}
-										if (parmsMedicaoHistorico[4] != null) {
-											idSituacaoLeituraAtual = ""
-													+ (Integer) parmsMedicaoHistorico[4];
-										}
-										if (parmsMedicaoHistorico[8] != null){											
-											idLeiturista = (Integer) parmsMedicaoHistorico[8];
-										}
-									}
-									Object[] parmsConsumoHistorico = null;
-									String consumoMedio = "0";
-									String mensagemContaAnormalidade = "";
-									if (tipoLigacao != null) {
-										try {
-											parmsConsumoHistorico = repositorioMicromedicao
-													.obterDadosConsumoConta(
-															emitirContaHelper
-																	.getIdImovel(),
-															emitirContaHelper
-																	.getAmReferencia(),
-															tipoLigacao);
-
-										} catch (ErroRepositorioException e) {
-											sessionContext.setRollbackOnly();
-											throw new ControladorException(
-													"erro.sistema", e);
-										}
-
-										if (parmsConsumoHistorico != null) {
-
-											// Consumo medio
-											if (parmsConsumoHistorico[2] != null) {
-												consumoMedio = ""
-														+ (Integer) parmsConsumoHistorico[2];
-											}
-
-											if (parmsConsumoHistorico[6] != null) {
-												mensagemContaAnormalidade = (String) parmsConsumoHistorico[6];
-											}
-										}
-									}
-									// Item 18
-									contaTxt.append(Util.completaString(
-											dataLeituraAnterior, 10));
-
-									// Item 16
-									contaTxt.append(Util.completaString(
-											dataLeituraAtual, 10));
-
-									// Item 25
-									contaTxt.append(Util
-											.adicionarZerosEsquedaNumero(6,
-													leituraAnterior));
-
-									// Item 22
-									contaTxt.append(Util
-											.adicionarZerosEsquedaNumero(6,
-													leituraAtual));
-
-									// Item 23
-									Integer consumoMedido = (new Integer(
-											leituraAtual)).intValue()
-											- (new Integer(leituraAnterior))
-													.intValue();
-
-									if (consumoMedido.intValue() < 0) {
-										consumoMedido = 0;
+									if (parmsMedicaoHistorico[0] != null) {
+										leituraAnterior = "" + (Integer) parmsMedicaoHistorico[0];
 									}
 
-									contaTxt.append(Util
-											.adicionarZerosEsquedaNumero(7,
-													consumoMedido.toString()));
-
-									String diasConsumo = "30";
-
-									if (!dataLeituraAnterior.equals("")
-											&& !dataLeituraAtual.equals("")) {
-										diasConsumo = ""
-												+ Util.obterQuantidadeDiasEntreDuasDatas(
-														(Date) parmsMedicaoHistorico[3],
-														(Date) parmsMedicaoHistorico[2]);
+									if (parmsMedicaoHistorico[1] != null) {
+										leituraAtual = "" + (Integer) parmsMedicaoHistorico[1];
 									}
 
-									// Item 78 a 82 - Correa
-
-									Collection colecaoContaCategoriaConsumoFaixa = null;
-
-									try {
-										colecaoContaCategoriaConsumoFaixa = repositorioFaturamento
-												.pesquisarContaCategoriaConsumoFaixa(emitirContaHelper
-														.getIdConta());
-
-									} catch (ErroRepositorioException e) {
-										throw new ControladorException(
-												"erro.sistema", e);
+									if (parmsMedicaoHistorico[3] != null) {
+										dataLeituraAnterior = Util.formatarData((Date) parmsMedicaoHistorico[3]);
 									}
 
-									// Item 77
-									Collection colecaoSubCategoria = getControladorImovel()
-											.obterQuantidadeEconomiasSubCategoria(
-													imovelEmitido.getId());
+									if (parmsMedicaoHistorico[2] != null) {
+										dataLeituraAtual = Util.formatarData((Date) parmsMedicaoHistorico[2]);
+									}
+									if (parmsMedicaoHistorico[4] != null) {
+										idSituacaoLeituraAtual = "" + (Integer) parmsMedicaoHistorico[4];
+									}
+									if (parmsMedicaoHistorico[8] != null) {
+										idLeiturista = (Integer) parmsMedicaoHistorico[8];
+									}
+								}
+								Object[] parmsConsumoHistorico = null;
+								String consumoMedio = "0";
+								String mensagemContaAnormalidade = "";
+								if (tipoLigacao != null) {
+									parmsConsumoHistorico = repositorioMicromedicao.obterDadosConsumoConta(emitirContaHelper.getIdImovel(),
+											emitirContaHelper.getAmReferencia(), tipoLigacao);
 
-									Integer consumoExcesso = 0;
-									Integer consumoMinimo = 0;
-									BigDecimal valorExcesso = new BigDecimal(
-											"0.0");
-									BigDecimal valorMinimo = new BigDecimal(
-											"0.0");
+									if (parmsConsumoHistorico != null) {
 
-									// Colocado por Rafael Correa em 14/11/2008
-									StringBuilder dadosContaCategoria = null;
+										// Consumo medio
+										if (parmsConsumoHistorico[2] != null) {
+											consumoMedio = "" + (Integer) parmsConsumoHistorico[2];
+										}
 
-									Collection<ContaCategoria> cContaCategoria = repositorioFaturamento
-											.pesquisarContaCategoria(emitirContaHelper
-													.getIdConta());
+										if (parmsConsumoHistorico[6] != null) {
+											mensagemContaAnormalidade = (String) parmsConsumoHistorico[6];
+										}
+									}
+								}
+								// Item 18
+								contaTxt.append(Util.completaString(dataLeituraAnterior, 10));
 
-									// Caso tenha mais de uma categoria (misto)
-									if (cContaCategoria.size() > 1) {
-										dadosContaCategoria = obterDadosContaCategoriaMisto(cContaCategoria);
+								// Item 16
+								contaTxt.append(Util.completaString(dataLeituraAtual, 10));
+
+								// Item 25
+								contaTxt.append(Util.adicionarZerosEsquedaNumero(6, leituraAnterior));
+
+								// Item 22
+								contaTxt.append(Util.adicionarZerosEsquedaNumero(6, leituraAtual));
+
+								// Item 23
+								Integer consumoMedido = (new Integer(leituraAtual)).intValue() - (new Integer(leituraAnterior)).intValue();
+
+								if (consumoMedido.intValue() < 0) {
+									consumoMedido = 0;
+								}
+
+								contaTxt.append(Util.adicionarZerosEsquedaNumero(7, consumoMedido.toString()));
+
+								String diasConsumo = "30";
+
+								if (!dataLeituraAnterior.equals("") && !dataLeituraAtual.equals("")) {
+									diasConsumo = "" + Util.obterQuantidadeDiasEntreDuasDatas((Date) parmsMedicaoHistorico[3], (Date) parmsMedicaoHistorico[2]);
+								}
+
+								// Item 78 a 82 - Correa
+
+								Collection colecaoContaCategoriaConsumoFaixa = null;
+
+								colecaoContaCategoriaConsumoFaixa = repositorioFaturamento.pesquisarContaCategoriaConsumoFaixa(emitirContaHelper.getIdConta());
+
+								// Item 77
+								Collection colecaoSubCategoria = getControladorImovel().obterQuantidadeEconomiasSubCategoria(imovelEmitido.getId());
+
+								Integer consumoExcesso = 0;
+								Integer consumoMinimo = 0;
+								BigDecimal valorExcesso = new BigDecimal("0.0");
+								BigDecimal valorMinimo = new BigDecimal("0.0");
+
+								// Colocado por Rafael Correa em 14/11/2008
+								StringBuilder dadosContaCategoria = null;
+
+								Collection<ContaCategoria> cContaCategoria = repositorioFaturamento.pesquisarContaCategoria(emitirContaHelper.getIdConta());
+
+								// Caso tenha mais de uma categoria (misto)
+								if (cContaCategoria.size() > 1) {
+									dadosContaCategoria = obterDadosContaCategoriaMisto(cContaCategoria);
+								} else {
+
+									if (colecaoContaCategoriaConsumoFaixa == null || colecaoContaCategoriaConsumoFaixa.isEmpty()) {
+
+										ContaCategoria contaCategoria = (ContaCategoria) cContaCategoria.iterator().next();
+
+										consumoMinimo = contaCategoria.getConsumoMinimoAgua();
+
+										if (consumoMinimo == null) {
+											consumoMinimo = contaCategoria.getConsumoMinimoEsgoto();
+										}
+
+										/*
+										 * consumoMinimo = emitirContaHelper
+										 * .getConsumoAgua();
+										 */
+
+										valorMinimo = emitirContaHelper.getValorAgua();
+
 									} else {
+										if (!emitirContaHelper.getConsumoAgua().equals(0)) {
+											for (Iterator iter = colecaoContaCategoriaConsumoFaixa.iterator(); iter.hasNext();) {
 
-										if (colecaoContaCategoriaConsumoFaixa == null
-												|| colecaoContaCategoriaConsumoFaixa
-														.isEmpty()) {
+												ContaCategoriaConsumoFaixa contaCategoriaConsumoFaixa = (ContaCategoriaConsumoFaixa) iter.next();
+												if (contaCategoriaConsumoFaixa.getConsumoAgua() != null) {
+													for (Iterator iteration = colecaoSubCategoria.iterator(); iteration.hasNext();) {
+														Subcategoria subCategoriaEmitir = (Subcategoria) iteration.next();
 
-											ContaCategoria contaCategoria = (ContaCategoria) cContaCategoria
-													.iterator().next();
+														Integer fatorEconomias = null;
+														if (subCategoriaEmitir.getCategoria() != null) {
+															if (subCategoriaEmitir.getCategoria().getFatorEconomias() != null
+																	&& !subCategoriaEmitir.getCategoria().getFatorEconomias().equals("")) {
 
-											consumoMinimo = contaCategoria
-													.getConsumoMinimoAgua();
-
-											if (consumoMinimo == null) {
-												consumoMinimo = contaCategoria
-														.getConsumoMinimoEsgoto();
-											}
-
-											/*
-											 * consumoMinimo = emitirContaHelper
-											 * .getConsumoAgua();
-											 */
-
-											valorMinimo = emitirContaHelper
-													.getValorAgua();
-
-										} else {
-											if (!emitirContaHelper
-													.getConsumoAgua().equals(0)) {
-												for (Iterator iter = colecaoContaCategoriaConsumoFaixa
-														.iterator(); iter
-														.hasNext();) {
-
-													ContaCategoriaConsumoFaixa contaCategoriaConsumoFaixa = (ContaCategoriaConsumoFaixa) iter
-															.next();
-													if (contaCategoriaConsumoFaixa
-															.getConsumoAgua() != null) {
-														for (Iterator iteration = colecaoSubCategoria
-																.iterator(); iteration
-																.hasNext();) {
-															Subcategoria subCategoriaEmitir = (Subcategoria) iteration
-																	.next();
-
-															Integer fatorEconomias = null;
-															if (subCategoriaEmitir
-																	.getCategoria() != null) {
-																if (subCategoriaEmitir
-																		.getCategoria()
-																		.getFatorEconomias() != null
-																		&& !subCategoriaEmitir
-																				.getCategoria()
-																				.getFatorEconomias()
-																				.equals("")) {
-
-																	fatorEconomias = subCategoriaEmitir
-																			.getCategoria()
-																			.getFatorEconomias()
-																			.intValue();
-																}
+																fatorEconomias = subCategoriaEmitir.getCategoria().getFatorEconomias().intValue();
 															}
-
-															if (contaCategoriaConsumoFaixa
-																	.getSubcategoria()
-																	.getId()
-																	.equals(subCategoriaEmitir
-																			.getId())) {
-																if (fatorEconomias != null
-																		&& !fatorEconomias
-																				.equals("")) {
-																	consumoExcesso = consumoExcesso
-																			+ contaCategoriaConsumoFaixa
-																					.getConsumoAgua()
-																			* fatorEconomias;
-
-																	valorExcesso = valorExcesso
-																			.add(contaCategoriaConsumoFaixa
-																					.getValorAgua()
-																					.multiply(
-																							new BigDecimal(
-																									fatorEconomias)));
-																} else {
-																	consumoExcesso = consumoExcesso
-																			+ contaCategoriaConsumoFaixa
-																					.getConsumoAgua()
-																			* subCategoriaEmitir
-																					.getQuantidadeEconomias();
-
-																	valorExcesso = valorExcesso
-																			.add(contaCategoriaConsumoFaixa
-																					.getValorAgua()
-																					.multiply(
-																							new BigDecimal(
-																									subCategoriaEmitir
-																											.getQuantidadeEconomias())));
-																}
-															}
-
 														}
+
+														if (contaCategoriaConsumoFaixa.getSubcategoria().getId().equals(subCategoriaEmitir.getId())) {
+															if (fatorEconomias != null && !fatorEconomias.equals("")) {
+																consumoExcesso = consumoExcesso + contaCategoriaConsumoFaixa.getConsumoAgua() * fatorEconomias;
+
+																valorExcesso = valorExcesso.add(contaCategoriaConsumoFaixa.getValorAgua().multiply(
+																		new BigDecimal(fatorEconomias)));
+															} else {
+																consumoExcesso = consumoExcesso + contaCategoriaConsumoFaixa.getConsumoAgua()
+																		* subCategoriaEmitir.getQuantidadeEconomias();
+
+																valorExcesso = valorExcesso.add(contaCategoriaConsumoFaixa.getValorAgua().multiply(
+																		new BigDecimal(subCategoriaEmitir.getQuantidadeEconomias())));
+															}
+														}
+
 													}
 												}
 											}
-
-											valorMinimo = emitirContaHelper
-													.getValorAgua().subtract(
-															valorExcesso);
-											consumoMinimo = emitirContaHelper
-													.getConsumoAgua()
-													- consumoExcesso;
-
 										}
 
-										if (consumoMinimo != null
-												&& consumoMinimo == 0) {
-											// Collection cContaCategoria =
-											// repositorioFaturamento
-											// .pesquisarContaCategoria(emitirContaHelper
-											// .getIdConta());
+										valorMinimo = emitirContaHelper.getValorAgua().subtract(valorExcesso);
+										consumoMinimo = emitirContaHelper.getConsumoAgua() - consumoExcesso;
 
-											ContaCategoria contaCategoria = (ContaCategoria) cContaCategoria
-													.iterator().next();
+									}
 
-											consumoMinimo = contaCategoria
-													.getConsumoMinimoAgua();
+									if (consumoMinimo != null && consumoMinimo == 0) {
+										// Collection cContaCategoria =
+										// repositorioFaturamento
+										// .pesquisarContaCategoria(emitirContaHelper
+										// .getIdConta());
 
-											if (consumoMinimo == null) {
-												consumoMinimo = contaCategoria
-														.getConsumoMinimoEsgoto();
-											}
+										ContaCategoria contaCategoria = (ContaCategoria) cContaCategoria.iterator().next();
+
+										consumoMinimo = contaCategoria.getConsumoMinimoAgua();
+
+										if (consumoMinimo == null) {
+											consumoMinimo = contaCategoria.getConsumoMinimoEsgoto();
 										}
-
 									}
 
-									// Item 24
-									String[] parmsConsumo = obterConsumoFaturadoConsumoMedioDiario(
-											emitirContaHelper, tipoMedicao,
-											diasConsumo);
+								}
 
-									String consumoFaturamento = parmsConsumo[0];
+								// Item 24
+								String[] parmsConsumo = obterConsumoFaturadoConsumoMedioDiario(emitirContaHelper, tipoMedicao, diasConsumo);
 
-									String consumo = "";
+								String consumoFaturamento = parmsConsumo[0];
 
-									if (consumoFaturamento == null
-											|| consumoFaturamento.trim()
-													.equals("")
-											|| new Integer(consumoFaturamento)
-													.intValue() >= consumoMinimo
-													.intValue()) {
+								String consumo = "";
 
-										contaTxt.append(Util
-												.adicionarZerosEsquedaNumero(6,
-														consumoFaturamento));
-										consumo = consumoFaturamento;
+								if (consumoFaturamento == null || consumoFaturamento.trim().equals("")
+										|| new Integer(consumoFaturamento).intValue() >= consumoMinimo.intValue()) {
+
+									contaTxt.append(Util.adicionarZerosEsquedaNumero(6, consumoFaturamento));
+									consumo = consumoFaturamento;
+								} else {
+									contaTxt.append(Util.adicionarZerosEsquedaNumero(6, consumoMinimo.toString()));
+									consumo = consumoMinimo.toString();
+								}
+
+								// Item 17
+								contaTxt.append(Util.adicionarZerosEsquedaNumero(6, consumoMedio));
+
+								// Item 19
+								contaTxt.append(Util.completaString(diasConsumo, 2));
+
+								// Item 20
+								contaTxt.append(Util.completaString(Util.formatarAnoMesParaMesAno(emitirContaHelper.getAmReferencia()), 7));
+
+								if (dadosContaCategoria != null) {
+									contaTxt.append(Util.completaString(dadosContaCategoria.toString(), 315));
+								} else {
+
+									if (emitirContaHelper.getValorAgua() != null && !emitirContaHelper.getValorAgua().equals(new BigDecimal("0.00"))) {
+										contaTxt.append(Util.completaString("AGUA ", 31));
+										contaTxt.append(Util.completaString(consumoMinimo + "", 6));
+										contaTxt.append(Util.completaString(
+												valorMinimo.divide(new BigDecimal(consumoMinimo.toString()), 2, BigDecimal.ROUND_DOWN) + "", 13));
+										contaTxt.append(Util.completaString(valorMinimo + "", 13));
 									} else {
-										contaTxt.append(Util
-												.adicionarZerosEsquedaNumero(6,
-														consumoMinimo
-																.toString()));
-										consumo = consumoMinimo.toString();
+										contaTxt.append(Util.completaString(" ", 63));
 									}
 
-									// Item 17
-									contaTxt.append(Util
-											.adicionarZerosEsquedaNumero(6,
-													consumoMedio));
-
-									// Item 19
-									contaTxt.append(Util.completaString(
-											diasConsumo, 2));
-
-									// Item 20
-									contaTxt.append(Util.completaString(
-											Util.formatarAnoMesParaMesAno(emitirContaHelper
-													.getAmReferencia()), 7));
-
-									if (dadosContaCategoria != null) {
-										contaTxt.append(Util.completaString(
-												dadosContaCategoria.toString(),
-												315));
-									} else {
-
-										if (emitirContaHelper.getValorAgua() != null
-												&& !emitirContaHelper
-														.getValorAgua()
-														.equals(new BigDecimal(
-																"0.00"))) {
-											contaTxt.append(Util
-													.completaString("AGUA ", 31));
-											contaTxt.append(Util
-													.completaString(
-															consumoMinimo + "",
-															6));
-											contaTxt.append(Util.completaString(
-													valorMinimo.divide(
-															new BigDecimal(
-																	consumoMinimo
-																			.toString()),
-															2,
-															BigDecimal.ROUND_DOWN)
-															+ "", 13));
-											contaTxt.append(Util
-													.completaString(valorMinimo
-															+ "", 13));
-										} else {
-											contaTxt.append(Util
-													.completaString(" ", 63));
-										}
-
-										try {
-											colecaoContaCategoriaConsumoFaixa = repositorioFaturamento
-													.pesquisarContaCategoriaConsumoFaixa(emitirContaHelper
-															.getIdConta());
-
-										} catch (ErroRepositorioException e) {
-											throw new ControladorException(
-													"erro.sistema", e);
-										}
-
-										/*
-										 * int quantidadesFaixas =
-										 * colecaoContaCategoriaConsumoFaixa
-										 * .size();
-										 */
-										int quantidadesFaixasRestantes = 4 - 0;
-										/*
-										 * int contadorFaixas = 0; for (Iterator
-										 * iter =
-										 * colecaoContaCategoriaConsumoFaixa
-										 * .iterator(); iter.hasNext();) {
-										 * 
-										 * ContaCategoriaConsumoFaixa cccf =
-										 * (ContaCategoriaConsumoFaixa) iter
-										 * .next();
-										 * 
-										 * Short fatorEconomias = null; if
-										 * (cccf.getCategoria() != null){
-										 * fatorEconomias =
-										 * getControladorImovel(
-										 * ).pesquisarFatorEconomiasCategoria
-										 * (cccf.getCategoria().getId()); }
-										 * 
-										 * if (cccf.getConsumoAgua() != null &&
-										 * !cccf.getConsumoAgua() .equals(0)) {
-										 * contaTxt.append(Util .completaString(
-										 * "AGUA ", 31)); if(fatorEconomias !=
-										 * null && !fatorEconomias.equals("")){
-										 * contaTxt .append(Util
-										 * .completaString(new BigDecimal(
-										 * cccf.getConsumoAgua()).multiply( new
-										 * BigDecimal(fatorEconomias)) + "",
-										 * 6)); }else{ contaTxt .append(Util
-										 * .completaString(new BigDecimal(
-										 * cccf.getConsumoAgua()).multiply( new
-										 * BigDecimal(cccf.getContaCategoria().
-										 * getQuantidadeEconomia())) + "", 6));
-										 * } } else { contaTxt .append(Util
-										 * .completaString( "", 37)); }
-										 * 
-										 * if (cccf.getValorTarifaFaixa() !=
-										 * null && !cccf .getValorTarifaFaixa()
-										 * .equals("0.00")) { contaTxt
-										 * .append(Util .completaString( cccf
-										 * .getValorTarifaFaixa() + "", 13)); }
-										 * else { contaTxt .append(Util
-										 * .completaString( "", 13)); }
-										 * 
-										 * if (cccf.getValorAgua() != null &&
-										 * !cccf.getValorAgua() .equals("0.00"))
-										 * {
-										 * 
-										 * 
-										 * if(fatorEconomias != null &&
-										 * !fatorEconomias.equals("")){
-										 * contaTxt.append(Util
-										 * .completaString(cccf
-										 * .getValorAgua().multiply( new
-										 * BigDecimal(fatorEconomias)) + "",
-										 * 13)); }else{ contaTxt.append(Util
-										 * .completaString(cccf
-										 * .getValorAgua().multiply( new
-										 * BigDecimal(cccf.getContaCategoria().
-										 * getQuantidadeEconomia())) + "", 13));
-										 * } } else { contaTxt .append(Util
-										 * .completaString( "", 13)); }
-										 * 
-										 * contadorFaixas++; if (contadorFaixas
-										 * >= 4) { break; } }
-										 */
-										contaTxt.append(Util
-												.completaString(
-														"",
-														63 * quantidadesFaixasRestantes));
-
-									}
-
-									// Item 26
-									if (emitirContaHelper.getValorAgua() != null) {
-										contaTxt.append(Util.completaString(
-												"TOTAL ÁGUA ", 50));
-										contaTxt.append(Util.completaString(
-												emitirContaHelper
-														.getValorAgua() + "",
-												13));
-									} else {
-										contaTxt.append(Util.completaString(
-												" ", 63));
-									}
-
-									// Item 27
-									if (emitirContaHelper.getValorEsgoto() != null
-											&& !emitirContaHelper
-													.getValorEsgoto().equals(
-															new BigDecimal(
-																	"0.00"))) {
-										/*
-										 * BigDecimal percentualEsgoto =
-										 * emitirContaHelper
-										 * .getPercentualEsgotoConta()
-										 * .divide(new BigDecimal("100"), 2,
-										 * BigDecimal.ROUND_DOWN);
-										 * 
-										 * BigDecimal valor100PorcentoEsgoto =
-										 * new BigDecimal ("0.00");
-										 * 
-										 * if (emitirContaHelper.getValorAgua()
-										 * != null &&
-										 * emitirContaHelper.getConsumoAgua
-										 * ().equals
-										 * (emitirContaHelper.getConsumoEsgoto
-										 * ())){ valor100PorcentoEsgoto =
-										 * emitirContaHelper.getValorAgua(); }
-										 * else { valor100PorcentoEsgoto =
-										 * emitirContaHelper
-										 * .getValorEsgoto().divide
-										 * (percentualEsgoto,2,
-										 * BigDecimal.ROUND_DOWN); }
-										 */
-
-										contaTxt.append(Util.completaString(
-												"ESGOTO ", 50));
-										/*
-										 * contaTxt.append(Util .completaString(
-										 * valor100PorcentoEsgoto + "", 13));
-										 */
-
-										contaTxt.append(Util.completaString(
-												emitirContaHelper
-														.getValorEsgoto() + "",
-												13));
-										contaTxt.append(Util.completaString(
-												" ", 63));
-										contaTxt.append(Util.completaString(
-												" ", 50));
-										contaTxt.append(Util.completaString(
-												" ", 13));
-									} else {
-										contaTxt.append(Util.completaString(
-												" ", 189));
-									}
-
-									// Item 30
-									if (emitirContaHelper.getValorCreditos() != null
-											&& !emitirContaHelper
-													.getValorCreditos().equals(
-															new BigDecimal(
-																	"0.00"))) {
-										contaTxt.append(Util.completaString(
-												"TOTAL DE CREDITOS ", 50));
-										contaTxt.append(Util.completaString(
-												emitirContaHelper
-														.getValorCreditos()
-														+ "", 13));
-									} else {
-										contaTxt.append(Util.completaString(
-												" ", 63));
-										// contaTxt.append(Util.completaString(emitirContaHelper.getValorCreditos()+"",
-										// 13));
-									}
-
-									// Item 57 ao Item 76
-									Conta contaId = new Conta();
-									contaId.setId(emitirContaHelper
+									colecaoContaCategoriaConsumoFaixa = repositorioFaturamento.pesquisarContaCategoriaConsumoFaixa(emitirContaHelper
 											.getIdConta());
 
-									Collection<DebitoCobradoAgrupadoHelper> cDebitoCobrado = this
-											.obterDebitosCobradosContaCAERN(contaId);
-
-									int quantidadeLinhasSobrando = 9;
-									int i = 0;
-
-									if (cDebitoCobrado != null
-											&& !cDebitoCobrado.isEmpty()) {
-
-										int quantidadeDebitos = cDebitoCobrado
-												.size();
-
-										if (quantidadeLinhasSobrando >= quantidadeDebitos) {
-
-											for (Iterator iter = cDebitoCobrado
-													.iterator(); iter.hasNext();) {
-												DebitoCobradoAgrupadoHelper debitoCobrado = (DebitoCobradoAgrupadoHelper) iter
-														.next();
-
-												contaTxt.append(Util.completaString(
-														debitoCobrado
-																.getDescricaoDebitoTipo(),
-														30)); // 30
-												contaTxt.append(Util.completaString(
-														debitoCobrado
-																.getNumeroPrestacaoDebito()
-																+ "/"
-																+ debitoCobrado
-																		.getNumeroPrestacao(),
-														20));
-												contaTxt.append(Util
-														.completaStringComEspacoAEsquerda(
-																Util.formatarMoedaReal(debitoCobrado
-																		.getValorDebito()),
-																13));
-
-												i++;
-											}
-
-										} else {
-											Iterator iter = cDebitoCobrado
-													.iterator();
-											int contador = 1;
-											BigDecimal valorAcumulado = new BigDecimal(
-													"0.00");
-											boolean temOutros = false;
-											while (iter.hasNext()) {
-												DebitoCobradoAgrupadoHelper debitoCobrado = (DebitoCobradoAgrupadoHelper) iter
-														.next();
-
-												if (quantidadeLinhasSobrando > contador) {
-													contaTxt.append(Util.completaString(
-															debitoCobrado
-																	.getDescricaoDebitoTipo(),
-															30)); // 30
-													contaTxt.append(Util.completaString(
-															debitoCobrado
-																	.getNumeroPrestacaoDebito()
-																	+ "/"
-																	+ debitoCobrado
-																			.getNumeroPrestacao(),
-															20));
-													contaTxt.append(Util
-															.completaStringComEspacoAEsquerda(
-																	Util.formatarMoedaReal(debitoCobrado
-																			.getValorDebito()),
-																	13));
-													i++;
-												} else {
-
-													valorAcumulado = valorAcumulado
-															.add(debitoCobrado
-																	.getValorDebito());
-													temOutros = true;
-												}
-
-												contador++;
-											}
-											if (temOutros) {
-												contaTxt.append("OUTROS SERVICOS               "); // 30
-												contaTxt.append(Util
-														.completaString(" ", 20));
-												contaTxt.append(Util
-														.completaStringComEspacoAEsquerda(
-																Util.formatarMoedaReal(valorAcumulado),
-																13));
-												i++;
-											}
-										}
-									}
-
-									if (emitirContaHelper.getValorImpostos() != null
-											&& !emitirContaHelper
-													.getValorImpostos().equals(
-															new BigDecimal(
-																	"0.00"))) {
-										contaTxt.append("TOTAL DE IMPOSTOS FEDERAIS "); // 27
-										contaTxt.append(Util.completaString(
-												" ", 23));
-										contaTxt.append(Util
-												.completaStringComEspacoAEsquerda(
-														Util.formatarMoedaReal(emitirContaHelper
-																.getValorImpostos()),
-														13));
-
-									} else {
-										contaTxt.append(Util.completaString(
-												" ", 63));
-									}
-
-									int quantidadeLinhasServicosSobraram = 9 - i;
-									contaTxt.append(Util
-											.completaString(
-													" ",
-													quantidadeLinhasServicosSobraram * 63));
-
-									// Item 28
-
-									/*FiltroConta filtroConta = new FiltroConta();
-
-									filtroConta
-											.adicionarParametro(new ParametroSimples(
-													FiltroConta.ID,
-													emitirContaHelper
-															.getIdConta() + ""));
-
-									Collection colecaoContaEmitida = (Collection) getControladorUtil()
-											.pesquisar(filtroConta,
-													Conta.class.getName());
-
-									Conta contaEmitida = (Conta) colecaoContaEmitida
-											.iterator().next();*/
-
-									contaTxt.append(Util.completaString(
-											emitirContaHelper.getValorTotalConta(),
-											13));
-
-									// Item 36
-									int mes1 = Util
-											.subtrairMesDoAnoMes(
-													emitirContaHelper
-															.getAmReferencia(),
-													1);
-									contaTxt.append(Util.completaString(
-											Util.formatarAnoMesParaMesAno(mes1),
-											7));
-
-									// Item 37
-									int mes2 = Util
-											.subtrairMesDoAnoMes(
-													emitirContaHelper
-															.getAmReferencia(),
-													2);
-									contaTxt.append(Util.completaString(
-											Util.formatarAnoMesParaMesAno(mes2),
-											7));
-
-									// Item 38
-									int mes3 = Util
-											.subtrairMesDoAnoMes(
-													emitirContaHelper
-															.getAmReferencia(),
-													3);
-									contaTxt.append(Util.completaString(
-											Util.formatarAnoMesParaMesAno(mes3),
-											7));
-
-									// Item 39
-									int mes4 = Util
-											.subtrairMesDoAnoMes(
-													emitirContaHelper
-															.getAmReferencia(),
-													4);
-									contaTxt.append(Util.completaString(
-											Util.formatarAnoMesParaMesAno(mes4),
-											7));
-
-									// Item 40
-									int mes5 = Util
-											.subtrairMesDoAnoMes(
-													emitirContaHelper
-															.getAmReferencia(),
-													5);
-									contaTxt.append(Util.completaString(
-											Util.formatarAnoMesParaMesAno(mes5),
-											7));
-
-									// Item 41
-									int mes6 = Util
-											.subtrairMesDoAnoMes(
-													emitirContaHelper
-															.getAmReferencia(),
-													6);
-									contaTxt.append(Util.completaString(
-											Util.formatarAnoMesParaMesAno(mes6),
-											7));
-
-									// Item 48
-									StringBuilder consumo1 = this
-											.obterConsumoAnterior(
-													emitirContaHelper
-															.getIdImovel(),
-													emitirContaHelper
-															.getAmReferencia(),
-													1, tipoLigacao, tipoMedicao);
-
-									String consumoM1 = consumo1.toString();
-
-									if (consumo.equalsIgnoreCase("")) {
-										consumo = consumo + "0";
-									}
-
-									if (consumoM1 != null
-											&& !consumoM1.trim()
-													.equalsIgnoreCase("")) {
-										contaTxt.append(Util.completaString(
-												consumo1 + "", 7));
-									} else {
-										contaTxt.append(Util.completaString(
-												consumo, 7));
-										consumoM1 = consumo;
-									}
-
-									// Item 49
-									StringBuilder consumo2 = this
-											.obterConsumoAnterior(
-													emitirContaHelper
-															.getIdImovel(),
-													emitirContaHelper
-															.getAmReferencia(),
-													2, tipoLigacao, tipoMedicao);
-
-									String consumoM2 = consumo2.toString();
-
-									if (consumoM2 != null
-											&& !consumoM2.trim()
-													.equalsIgnoreCase("")) {
-										contaTxt.append(Util.completaString(
-												consumo2 + "", 7));
-									} else {
-										contaTxt.append(Util.completaString(
-												consumo, 7));
-										consumoM2 = consumo;
-									}
-
-									// Item 50
-									StringBuilder consumo3 = this
-											.obterConsumoAnterior(
-													emitirContaHelper
-															.getIdImovel(),
-													emitirContaHelper
-															.getAmReferencia(),
-													3, tipoLigacao, tipoMedicao);
-
-									String consumoM3 = consumo3.toString();
-
-									if (consumoM3 != null
-											&& !consumoM3.trim()
-													.equalsIgnoreCase("")) {
-										contaTxt.append(Util.completaString(
-												consumo3 + "", 7));
-									} else {
-										contaTxt.append(Util.completaString(
-												consumo, 7));
-										consumoM3 = consumo;
-									}
-
-									// Item 51
-									StringBuilder consumo4 = this
-											.obterConsumoAnterior(
-													emitirContaHelper
-															.getIdImovel(),
-													emitirContaHelper
-															.getAmReferencia(),
-													4, tipoLigacao, tipoMedicao);
-
-									String consumoM4 = consumo4.toString();
-
-									if (consumoM4 != null
-											&& !consumoM4.trim()
-													.equalsIgnoreCase("")) {
-										contaTxt.append(Util.completaString(
-												consumo4 + "", 7));
-									} else {
-										contaTxt.append(Util.completaString(
-												consumo, 7));
-										consumoM4 = consumo;
-									}
-
-									// Item 52
-									StringBuilder consumo5 = this
-											.obterConsumoAnterior(
-													emitirContaHelper
-															.getIdImovel(),
-													emitirContaHelper
-															.getAmReferencia(),
-													5, tipoLigacao, tipoMedicao);
-
-									String consumoM5 = consumo5.toString();
-
-									if (consumoM5 != null
-											&& !consumoM5.trim()
-													.equalsIgnoreCase("")) {
-										contaTxt.append(Util.completaString(
-												consumo5 + "", 7));
-									} else {
-										contaTxt.append(Util.completaString(
-												consumo, 7));
-										consumoM5 = consumo;
-									}
-
-									// Item 53
-									StringBuilder consumo6 = this
-											.obterConsumoAnterior(
-													emitirContaHelper
-															.getIdImovel(),
-													emitirContaHelper
-															.getAmReferencia(),
-													6, tipoLigacao, tipoMedicao);
-
-									String consumoM6 = consumo6.toString();
-
-									if (consumoM6 != null
-											&& !consumoM6.trim()
-													.equalsIgnoreCase("")) {
-										contaTxt.append(Util.completaString(
-												consumo6 + "", 7));
-									} else {
-										contaTxt.append(Util.completaString(
-												consumo, 7));
-										consumoM6 = consumo;
-									}
-
-									// Item 54
-									String[] parmsPartesConta = obterMensagemDebitoConta3Partes(
-											emitirContaHelper, sistemaParametro);
-
-									contaTxt.append(Util.completaString(
-											parmsPartesConta[0], 100));
-
-									// Item 55
-									contaTxt.append(Util.completaString(
-											parmsPartesConta[1], 100));
-
-									// Item 56
-									contaTxt.append(Util.completaString(
-											parmsPartesConta[2], 100));
-
-									// Item 99
-									if (mensagemContaAnormalidade != null
-											&& !mensagemContaAnormalidade
-													.equalsIgnoreCase("")) {
-										contaTxt.append(Util.completaString(
-												mensagemContaAnormalidade, 100));
-									} else {
-										contaTxt.append(Util.completaString(
-												" ", 100));
-									}
-
-									// qt de faturas abertas 6 posicoes - total
-									// do debito 13 posicoes
-									ObterDebitoImovelOuClienteHelper obterDebitoImovelOuClienteHelper = this
-											.obterDebitoImovelOuClienteHelper(
-													emitirContaHelper,
-													sistemaParametro);
-
-									Collection colecaoContasValores = obterDebitoImovelOuClienteHelper
-											.getColecaoContasValores();
-
-									if (colecaoContasValores != null
-											&& !colecaoContasValores.isEmpty()) {
-										Integer qtContas = colecaoContasValores
-												.size();
-										contaTxt.append(Util.completaString(
-												qtContas + "", 6));
-
-										BigDecimal valorDebitoTotal = new BigDecimal(
-												"0.00");
-
-										for (Iterator iter = colecaoContasValores
-												.iterator(); iter.hasNext();) {
-											ContaValoresHelper contaValoresHelper = (ContaValoresHelper) iter
-													.next();
-
-											valorDebitoTotal = valorDebitoTotal
-													.add(contaValoresHelper
-															.getValorTotalConta());
-										}
-
-										contaTxt.append(Util.completaString(
-												Util.formatarMoedaReal(valorDebitoTotal),
-												13));
-									} else {
-										contaTxt.append(Util.completaString(
-												" ", 19));
-									}
-
-									// Item 83 e 84
-
-									Conta conta = new Conta();
-									conta.setValorAgua(emitirContaHelper
-											.getValorAgua());
-									conta.setValorEsgoto(emitirContaHelper
-											.getValorEsgoto());
-									conta.setValorCreditos(emitirContaHelper
-											.getValorCreditos());
-									conta.setDebitos(emitirContaHelper
-											.getDebitos());
-									conta.setValorImposto(emitirContaHelper
-											.getValorImpostos());
-
-									BigDecimal valorConta = conta
-											.getValorTotalContaBigDecimal();
-									emitirContaHelper.setValorConta(valorConta);
-
-									String anoMesString = ""
-											+ emitirContaHelper
-													.getAmReferencia();
-
-									String mesAnoFormatado = anoMesString
-											.substring(4, 6)
-											+ anoMesString.substring(0, 4);
-
-									Integer digitoVerificadorConta = new Integer(
-											""
-													+ emitirContaHelper
-															.getDigitoVerificadorConta());
-
-									String representacaoNumericaCodBarra = this
-											.getControladorArrecadacao()
-											.obterRepresentacaoNumericaCodigoBarra(
-													3,
-													valorConta,
-													emitirContaHelper
-															.getIdLocalidade(),
-													emitirContaHelper
-															.getIdImovel(),
-													mesAnoFormatado,
-													digitoVerificadorConta,
-													null, null, null, null,
-													null, null, null);
-
-									contaTxt.append(Util.completaString(
-											representacaoNumericaCodBarra, 50));
-
-									// Item 129
-									contaTxt.append(Util.completaString(cont
-											+ "", 8));
-
-									// #############################################
-									// PROXIMA PAGINA
-									// ################################################################
-									// Qualidade Agua
-
-									String[] qualidade = this
-											.obterDadosQualidadeAguaCosanpa(
-													localidade.getId(),
-													emitirContaHelper
-															.getIdSetorComercial(),
-													anoMesReferenciaFaturamento,
-													imovelEmitido
-															.getQuadraFace()
-															.getId());
-
-									contaTxt.append(Util.completaString(
-											qualidade[0], 10));
-
-									contaTxt.append(Util.completaString(
-											qualidade[1], 10));
-
-									contaTxt.append(Util.completaString(
-											qualidade[2], 10));
-
-									contaTxt.append(Util.completaString(
-											qualidade[3], 10));
-
-									contaTxt.append(Util.completaString(
-											qualidade[4], 10));
-
-									contaTxt.append(Util.completaString(
-											qualidade[5], 10));
-
-									contaTxt.append(Util.completaString(
-											qualidade[6], 10));
-
-									contaTxt.append(Util.completaString(
-											qualidade[7], 10));
-
-									contaTxt.append(Util.completaString(
-											qualidade[8], 10));
-
-									contaTxt.append(Util.completaString(
-											qualidade[9], 10));
-
-									contaTxt.append(Util.completaString(
-											qualidade[10], 10));
-
-									contaTxt.append(Util.completaString(
-											qualidade[11], 10));
-
-									contaTxt.append(Util.completaString(
-											qualidade[12], 10));
-
-									contaTxt.append(Util.completaString(
-											qualidade[13], 10));
-
-									contaTxt.append(Util.completaString(
-											qualidade[14], 10));
-
-									contaTxt.append(Util.completaString(
-											qualidade[15], 10));
-
-									contaTxt.append(Util.completaString(
-											qualidade[16], 10));
-
-									contaTxt.append(Util.completaString(
-											qualidade[17], 10));
-
-									contaTxt.append(Util.completaString(
-											qualidade[18], 10));
-
-									contaTxt.append(Util.completaString(
-											qualidade[19], 10));
-
-									contaTxt.append(Util.completaString(
-											qualidade[20], 10));
-
-									contaTxt.append(Util.completaString(
-											qualidade[21], 10));
-
-									contaTxt.append(Util.completaString(
-											qualidade[22], 10));
-
-									contaTxt.append(Util.completaString(
-											qualidade[23], 10));
-
-									// Item 87
-									String[] enderecoImovel = getControladorEndereco()
-											.pesquisarEnderecoFormatadoDividido(
-													emitirContaHelper
-															.getIdImovel());
-
-									contaTxt.append(Util.completaString(
-											enderecoImovel[1], 30));
-
-									// Item 88 a Item 90
-									contaTxt.append(Util.completaString(
-											enderecoImovel[0], 78));
-
-									// Item 92
-									contaTxt.append(Util.completaString(
-											enderecoImovel[3], 20));
-
-									// Item 93
-									contaTxt.append(Util.completaString(
-											enderecoImovel[4], 9));
-
-									// Item 94
-									contaTxt.append(Util.completaString(
-											enderecoImovel[2], 2));
-
 									/*
-									 * Cliente cliente =
-									 * getControladorCliente().
-									 * pesquisarCliente(emitirContaHelper
-									 * .getIdCliente());
+									 * int quantidadesFaixas =
+									 * colecaoContaCategoriaConsumoFaixa
+									 * .size();
+									 */
+									int quantidadesFaixasRestantes = 4 - 0;
+
+									contaTxt.append(Util.completaString("", 63 * quantidadesFaixasRestantes));
+
+								}
+
+								// Item 26
+								if (emitirContaHelper.getValorAgua() != null) {
+									contaTxt.append(Util.completaString("TOTAL ÁGUA ", 50));
+									contaTxt.append(Util.completaString(emitirContaHelper.getValorAgua() + "", 13));
+								} else {
+									contaTxt.append(Util.completaString(" ", 63));
+								}
+
+								// Item 27
+								if (emitirContaHelper.getValorEsgoto() != null && !emitirContaHelper.getValorEsgoto().equals(new BigDecimal("0.00"))) {
+									contaTxt.append(Util.completaString("ESGOTO ", 50));
+									/*
+									 * contaTxt.append(Util .completaString(
+									 * valor100PorcentoEsgoto + "", 13));
 									 */
 
-									String cnpjCpf = "";
+									contaTxt.append(Util.completaString(emitirContaHelper.getValorEsgoto() + "", 13));
+									contaTxt.append(Util.completaString(" ", 63));
+									contaTxt.append(Util.completaString(" ", 50));
+									contaTxt.append(Util.completaString(" ", 13));
+								} else {
+									contaTxt.append(Util.completaString(" ", 189));
+								}
 
-									Collection colecaoClienteImovel2 = repositorioClienteImovel
-											.pesquisarClienteImovelResponsavelConta(emitirContaHelper
-													.getIdImovel());
+								// Item 30
+								if (emitirContaHelper.getValorCreditos() != null && !emitirContaHelper.getValorCreditos().equals(new BigDecimal("0.00"))) {
+									contaTxt.append(Util.completaString("TOTAL DE CREDITOS ", 50));
+									contaTxt.append(Util.completaString(emitirContaHelper.getValorCreditos() + "", 13));
+								} else {
+									contaTxt.append(Util.completaString(" ", 63));
+									// contaTxt.append(Util.completaString(emitirContaHelper.getValorCreditos()+"",
+									// 13));
+								}
 
-									if (colecaoClienteImovel2 != null
-											&& !colecaoClienteImovel2.isEmpty()) {
-										ClienteImovel clienteImovelRespConta2 = (ClienteImovel) colecaoClienteImovel2
-												.iterator().next();
+								// Item 57 ao Item 76
+								Conta contaId = new Conta();
+								contaId.setId(emitirContaHelper.getIdConta());
 
-										if (clienteImovelRespConta2 != null) {
-											Cliente cliente2 = clienteImovelRespConta2
-													.getCliente();
+								Collection<DebitoCobradoAgrupadoHelper> cDebitoCobrado = this.obterDebitosCobradosContaCAERN(contaId);
 
-											if (cliente2.getCnpjFormatado() != null
-													&& !cliente2
-															.getCnpjFormatado()
-															.equalsIgnoreCase(
-																	"")) {
-												cnpjCpf = cliente2
-														.getCnpjFormatado();
-											} else if (cliente2
-													.getCpfFormatado() != null
-													&& !cliente2
-															.getCpfFormatado()
-															.equalsIgnoreCase(
-																	"")) {
-												cnpjCpf = cliente2
-														.getCpfFormatado();
-											}
+								int quantidadeLinhasSobrando = 9;
+								int i = 0;
 
+								if (cDebitoCobrado != null && !cDebitoCobrado.isEmpty()) {
+
+									int quantidadeDebitos = cDebitoCobrado.size();
+
+									if (quantidadeLinhasSobrando >= quantidadeDebitos) {
+
+										for (Iterator iter = cDebitoCobrado.iterator(); iter.hasNext();) {
+											DebitoCobradoAgrupadoHelper debitoCobrado = (DebitoCobradoAgrupadoHelper) iter.next();
+
+											contaTxt.append(Util.completaString(debitoCobrado.getDescricaoDebitoTipo(), 30)); // 30
+											contaTxt.append(Util.completaString(
+													debitoCobrado.getNumeroPrestacaoDebito() + "/" + debitoCobrado.getNumeroPrestacao(), 20));
+											contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal(debitoCobrado.getValorDebito()), 13));
+
+											i++;
 										}
-									}
-
-									contaTxt.append(Util.completaString(
-											cnpjCpf, 20));
-
-									FiltroConsumoTarifa filtroConsumoTarifa = new FiltroConsumoTarifa();
-
-									Collection colecaoConsumoTarifa = getControladorUtil()
-											.pesquisar(
-													filtroConsumoTarifa,
-													ConsumoTarifa.class
-															.getName());
-
-									ConsumoTarifa consumoTarifa = (ConsumoTarifa) colecaoConsumoTarifa
-											.iterator().next();
-
-									contaTxt.append(Util.completaString(
-											consumoTarifa.getDescricao(), 25));
-
-									Object[] dadosRota = getControladorMicromedicao()
-											.obterRotaESequencialRotaDoImovelSeparados(
-													imovelEmitido.getId());
-
-									contaTxt.append(Util.completaString(
-											Util.adicionarZerosEsquedaNumero(6,
-													dadosRota[0].toString())
-													+ "", 6));
-
-									contaTxt.append(Util.completaString(
-											Util.adicionarZerosEsquedaNumero(3,
-													faturamentoGrupo.getId()
-															.toString())
-													+ "", 3));
-
-									contaTxt.append(Util.completaString(
-											Util.adicionarZerosEsquedaNumero(4,
-													imovelEmitido.getLote()
-															+ "")
-													+ "", 4));
-
-									contaTxt.append(Util.completaString(
-											Util.adicionarZerosEsquedaNumero(3,
-													imovelEmitido.getSubLote()
-															+ "")
-													+ "", 3));
-
-									if (imovelEmitido.getAreaConstruida() != null) {
-										int area = imovelEmitido
-												.getAreaConstruida().intValue();
-										contaTxt.append(Util.completaString(
-												area + "", 5));
 
 									} else {
-										contaTxt.append(Util.completaString("",
-												5));
-									}
+										Iterator iter = cDebitoCobrado.iterator();
+										int contador = 1;
+										BigDecimal valorAcumulado = new BigDecimal("0.00");
+										boolean temOutros = false;
+										while (iter.hasNext()) {
+											DebitoCobradoAgrupadoHelper debitoCobrado = (DebitoCobradoAgrupadoHelper) iter.next();
 
-									contaTxt.append(Util.completaString(
-											emitirContaHelper.getIdLocalidade()
-													+ "", 10));
+											if (quantidadeLinhasSobrando > contador) {
+												contaTxt.append(Util.completaString(debitoCobrado.getDescricaoDebitoTipo(), 30)); // 30
+												contaTxt.append(Util.completaString(
+														debitoCobrado.getNumeroPrestacaoDebito() + "/" + debitoCobrado.getNumeroPrestacao(), 20));
+												contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal(debitoCobrado.getValorDebito()),
+														13));
+												i++;
+											} else {
 
-									contaTxt.append(Util.completaString(
-											endereco, 120));
-
-									contaTxt.append(Util
-											.completaString(imovelEmitido
-													.getQuadraFace()
-													.getNumeroQuadraFace()
-													+ "", 2));
-
-									contaTxt.append(Util.completaString(
-											localidade.getUnidadeNegocio()
-													.getNomeAbreviado(), 6));
-
-									Integer amRefMaisUm = Util
-											.somaMesAnoMesReferencia(
-													emitirContaHelper
-															.getAmReferencia(),
-													1);
-
-									FiltroFaturamentoAtividadeCronograma filtroFaturamentoAtividadeCronograma = new FiltroFaturamentoAtividadeCronograma();
-
-									filtroFaturamentoAtividadeCronograma
-											.adicionarParametro(new ParametroSimples(
-													FiltroFaturamentoAtividadeCronograma.FATURAMENTO_ATIVIDADE_ID,
-													"2"));
-									filtroFaturamentoAtividadeCronograma
-											.adicionarParametro(new ParametroSimples(
-													FiltroFaturamentoAtividadeCronograma.FATURAMENTO_GRUPO_CRONOGRAMA_MENSAL_ANO_MES_REFERENCIA,
-													amRefMaisUm + ""));
-									filtroFaturamentoAtividadeCronograma
-											.adicionarParametro(new ParametroSimples(
-													FiltroFaturamentoAtividadeCronograma.FATURAMENTO_GRUPO_CRONOGRAMA_MENSAL_FATURAMENTO_GRUPO_ID,
-													faturamentoGrupo.getId()
-															+ ""));
-
-									filtroFaturamentoAtividadeCronograma
-											.adicionarCaminhoParaCarregamentoEntidade("faturamentoAtividade");
-									filtroFaturamentoAtividadeCronograma
-											.adicionarCaminhoParaCarregamentoEntidade("faturamentoGrupoCronogramaMensal");
-									filtroFaturamentoAtividadeCronograma
-											.adicionarCaminhoParaCarregamentoEntidade("faturamentoGrupoCronogramaMensal.faturamentoGrupo");
-
-									Collection<FaturamentoAtividadeCronograma> cFaturamentoAtividadeCronograma = getControladorUtil()
-											.pesquisar(
-													filtroFaturamentoAtividadeCronograma,
-													FaturamentoAtividadeCronograma.class
-															.getName());
-									String dataPrevista = "";
-									if (cFaturamentoAtividadeCronograma != null
-											&& !cFaturamentoAtividadeCronograma
-													.isEmpty()) {
-										FaturamentoAtividadeCronograma faturamentoAtividadeCronograma = (FaturamentoAtividadeCronograma) Util
-												.retonarObjetoDeColecao(cFaturamentoAtividadeCronograma);
-										if (faturamentoAtividadeCronograma
-												.getDataPrevista() != null) {
-											dataPrevista = Util
-													.formatarData(faturamentoAtividadeCronograma
-															.getDataPrevista());
-										}
-									}
-
-									contaTxt.append(Util.completaString(
-											dataPrevista, 10));
-
-									String leituraSituacaoDescricao = "";
-
-									FiltroLeituraSituacao filtroLeituraSituacao = new FiltroLeituraSituacao();
-									filtroLeituraSituacao
-											.adicionarParametro(new ParametroSimples(
-													FiltroLeituraSituacao.ID,
-													idSituacaoLeituraAtual));
-
-									Collection<LeituraSituacao> colecaoLeituraSituacao = getControladorUtil()
-											.pesquisar(
-													filtroLeituraSituacao,
-													LeituraSituacao.class
-															.getName());
-									if (colecaoLeituraSituacao != null
-											&& !colecaoLeituraSituacao
-													.isEmpty()) {
-										LeituraSituacao LeituraSituacao = (LeituraSituacao) Util
-												.retonarObjetoDeColecao(colecaoLeituraSituacao);
-										if (LeituraSituacao != null) {
-											leituraSituacaoDescricao = LeituraSituacao
-													.getDescricao();
-										}
-									}
-
-									contaTxt.append(Util.completaString(
-											leituraSituacaoDescricao, 20));
-
-									// TipoCaptacao
-									if (!qualidade[24].trim().equalsIgnoreCase(
-											"")) {
-										contaTxt.append(Util.completaString(
-												qualidade[24].toString(), 1));
-									} else {
-										contaTxt.append(Util.completaString(
-												"1", 1));
-									}
-
-									String mensagemBonusSocial = "Para usufruir dos beneficios do Bonus Social e necessario "
-											.toUpperCase()
-											+ "efetuar o pagamento desta conta ate a data de vencimento"
-													.toUpperCase();
-
-									Integer idPerfilBonusSocial = new Integer(4);
-
-									if (imovelEmitido.getImovelPerfil().getId()
-											.equals(idPerfilBonusSocial)) {
-										contaTxt.append(Util.completaString(
-												mensagemBonusSocial, 150));
-									} else {
-										contaTxt.append(Util.completaString("",
-												150));
-									}
-
-									
-									
-									if (enderecoAlternativo) {
-										contaTxt.append(Util.completaString(
-												municipioEntrega, 40));
-									} else {
-										contaTxt.append(Util.completaString("",
-												40));
-									}
-
-									contaTxt.append(Util.completaString(
-											localidade.getUnidadeNegocio()
-													.getNome(), 30));
-
-									String[] parmsPartesContaMensagem = this
-											.obterMensagemConta3Partes(
-													emitirContaHelper,
-													sistemaParametro);
-
-									contaTxt.append(Util.completaString(
-											parmsPartesContaMensagem[0], 100));
-									emitirContaHelper
-											.setMsgLinha1Conta(parmsPartesContaMensagem[0]);
-
-									contaTxt.append(Util.completaString(
-											parmsPartesContaMensagem[1], 100));
-									emitirContaHelper
-											.setMsgLinha2Conta(parmsPartesContaMensagem[1]);
-
-									contaTxt.append(Util.completaString(
-											parmsPartesContaMensagem[2], 100));
-									emitirContaHelper
-											.setMsgLinha3Conta(parmsPartesContaMensagem[2]);
-
-									// Histórico de dias de consumo
-									String diasConsumo1 = "30";
-									String diasConsumo2 = "30";
-									String diasConsumo3 = "30";
-									String diasConsumo4 = "30";
-									String diasConsumo5 = "30";
-									String diasConsumo6 = "30";
-									String dataLeituraAnterior1 = "";
-									String dataLeituraAnterior2 = "";
-									String dataLeituraAnterior3 = "";
-									String dataLeituraAnterior4 = "";
-									String dataLeituraAnterior5 = "";
-									String dataLeituraAnterior6 = "";
-									String dataLeituraAtual1 = "";
-									String dataLeituraAtual2 = "";
-									String dataLeituraAtual3 = "";
-									String dataLeituraAtual4 = "";
-									String dataLeituraAtual5 = "";
-									String dataLeituraAtual6 = "";
-
-									Object[] parms1 = this
-											.obterLeituraAnteriorEAtual(
-													emitirContaHelper
-															.getIdImovel(),
-													mes1);
-
-									if (parms1 != null) {
-
-										if (parms1[0] != null) {
-											dataLeituraAnterior1 = Util
-													.formatarData((Date) parms1[0]);
-										}
-										if (parms1[1] != null) {
-											dataLeituraAtual1 = Util
-													.formatarData((Date) parms1[1]);
-										}
-
-										if (!dataLeituraAnterior1.equals("")
-												&& !dataLeituraAtual1
-														.equals("")) {
-											diasConsumo1 = ""
-													+ Util.obterQuantidadeDiasEntreDuasDatas(
-															(Date) parms1[0],
-															(Date) parms1[1]);
-											if (diasConsumo1
-													.equalsIgnoreCase("0")) {
-												diasConsumo1 = "30";
+												valorAcumulado = valorAcumulado.add(debitoCobrado.getValorDebito());
+												temOutros = true;
 											}
+
+											contador++;
 										}
-									}
-
-									Object[] parms2 = this
-											.obterLeituraAnteriorEAtual(
-													emitirContaHelper
-															.getIdImovel(),
-													mes2);
-									if (parms2 != null) {
-
-										if (parms2[0] != null) {
-											dataLeituraAnterior2 = Util
-													.formatarData((Date) parms2[0]);
-										}
-										if (parms2[1] != null) {
-											dataLeituraAtual2 = Util
-													.formatarData((Date) parms2[1]);
-										}
-
-										if (!dataLeituraAnterior2.equals("")
-												&& !dataLeituraAtual2
-														.equals("")) {
-											diasConsumo2 = ""
-													+ Util.obterQuantidadeDiasEntreDuasDatas(
-															(Date) parms2[0],
-															(Date) parms2[1]);
-											if (diasConsumo2
-													.equalsIgnoreCase("0")) {
-												diasConsumo2 = "30";
-											}
-										}
-									}
-
-									Object[] parms3 = this
-											.obterLeituraAnteriorEAtual(
-													emitirContaHelper
-															.getIdImovel(),
-													mes3);
-									if (parms3 != null) {
-
-										if (parms3[0] != null) {
-											dataLeituraAnterior3 = Util
-													.formatarData((Date) parms3[0]);
-										}
-										if (parms3[1] != null) {
-											dataLeituraAtual3 = Util
-													.formatarData((Date) parms3[1]);
-										}
-
-										if (!dataLeituraAnterior3.equals("")
-												&& !dataLeituraAtual3
-														.equals("")) {
-											diasConsumo3 = ""
-													+ Util.obterQuantidadeDiasEntreDuasDatas(
-															(Date) parms3[0],
-															(Date) parms3[1]);
-											if (diasConsumo3
-													.equalsIgnoreCase("0")) {
-												diasConsumo3 = "30";
-											}
-										}
-									}
-
-									Object[] parms4 = this
-											.obterLeituraAnteriorEAtual(
-													emitirContaHelper
-															.getIdImovel(),
-													mes4);
-									if (parms4 != null) {
-
-										if (parms4[0] != null) {
-											dataLeituraAnterior4 = Util
-													.formatarData((Date) parms4[0]);
-										}
-										if (parms4[1] != null) {
-											dataLeituraAtual4 = Util
-													.formatarData((Date) parms4[1]);
-										}
-
-										if (!dataLeituraAnterior4.equals("")
-												&& !dataLeituraAtual4
-														.equals("")) {
-											diasConsumo4 = ""
-													+ Util.obterQuantidadeDiasEntreDuasDatas(
-															(Date) parms4[0],
-															(Date) parms4[1]);
-											if (diasConsumo4
-													.equalsIgnoreCase("0")) {
-												diasConsumo4 = "30";
-											}
-										}
-									}
-
-									Object[] parms5 = this
-											.obterLeituraAnteriorEAtual(
-													emitirContaHelper
-															.getIdImovel(),
-													mes5);
-									if (parms5 != null) {
-
-										if (parms5[0] != null) {
-											dataLeituraAnterior5 = Util
-													.formatarData((Date) parms5[0]);
-										}
-										if (parms5[1] != null) {
-											dataLeituraAtual5 = Util
-													.formatarData((Date) parms5[1]);
-										}
-
-										if (!dataLeituraAnterior5.equals("")
-												&& !dataLeituraAtual5
-														.equals("")) {
-											diasConsumo5 = ""
-													+ Util.obterQuantidadeDiasEntreDuasDatas(
-															(Date) parms5[0],
-															(Date) parms5[1]);
-											if (diasConsumo5
-													.equalsIgnoreCase("0")) {
-												diasConsumo5 = "30";
-											}
-										}
-									}
-
-									Object[] parms6 = this
-											.obterLeituraAnteriorEAtual(
-													emitirContaHelper
-															.getIdImovel(),
-													mes6);
-									if (parms6 != null) {
-
-										if (parms6[0] != null) {
-											dataLeituraAnterior6 = Util
-													.formatarData((Date) parms6[0]);
-										}
-										if (parms6[1] != null) {
-											dataLeituraAtual6 = Util
-													.formatarData((Date) parms6[1]);
-										}
-
-										if (!dataLeituraAnterior6.equals("")
-												&& !dataLeituraAtual6
-														.equals("")) {
-											diasConsumo6 = ""
-													+ Util.obterQuantidadeDiasEntreDuasDatas(
-															(Date) parms6[0],
-															(Date) parms6[1]);
-											if (diasConsumo6
-													.equalsIgnoreCase("0")) {
-												diasConsumo6 = "30";
-											}
-										}
-									}
-
-									contaTxt.append(Util.completaString(
-											diasConsumo1, 2));
-									contaTxt.append(Util.completaString(
-											diasConsumo2, 2));
-									contaTxt.append(Util.completaString(
-											diasConsumo3, 2));
-									contaTxt.append(Util.completaString(
-											diasConsumo4, 2));
-									contaTxt.append(Util.completaString(
-											diasConsumo5, 2));
-									contaTxt.append(Util.completaString(
-											diasConsumo6, 2));
-
-									// Critério de apuração - cosumoTipo -
-									// ultimos 6 meses - Apenas ligacao de agua
-									String consumoTipo1 = getControladorMicromedicao()
-											.obterConsumoTipoImovel(
-													imovelEmitido.getId(),
-													mes1, 1);
-									contaTxt.append(Util.completaString(
-											consumoTipo1, 2));
-
-									String consumoTipo2 = getControladorMicromedicao()
-											.obterConsumoTipoImovel(
-													imovelEmitido.getId(),
-													mes2, 1);
-									contaTxt.append(Util.completaString(
-											consumoTipo2, 2));
-
-									String consumoTipo3 = getControladorMicromedicao()
-											.obterConsumoTipoImovel(
-													imovelEmitido.getId(),
-													mes3, 1);
-									contaTxt.append(Util.completaString(
-											consumoTipo3, 2));
-
-									String consumoTipo4 = getControladorMicromedicao()
-											.obterConsumoTipoImovel(
-													imovelEmitido.getId(),
-													mes4, 1);
-									contaTxt.append(Util.completaString(
-											consumoTipo4, 2));
-
-									String consumoTipo5 = getControladorMicromedicao()
-											.obterConsumoTipoImovel(
-													imovelEmitido.getId(),
-													mes5, 1);
-									contaTxt.append(Util.completaString(
-											consumoTipo5, 2));
-
-									String consumoTipo6 = getControladorMicromedicao()
-											.obterConsumoTipoImovel(
-													imovelEmitido.getId(),
-													mes6, 1);
-									contaTxt.append(Util.completaString(
-											consumoTipo6, 2));
-
-									// Historico da Média de consumo por dia
-									BigDecimal consumoDB1 = Util
-											.formatarMoedaRealparaBigDecimal(consumoM1);
-									BigDecimal consumoDB2 = Util
-											.formatarMoedaRealparaBigDecimal(consumoM2);
-									BigDecimal consumoDB3 = Util
-											.formatarMoedaRealparaBigDecimal(consumoM3);
-									BigDecimal consumoDB4 = Util
-											.formatarMoedaRealparaBigDecimal(consumoM4);
-									BigDecimal consumoDB5 = Util
-											.formatarMoedaRealparaBigDecimal(consumoM5);
-									BigDecimal consumoDB6 = Util
-											.formatarMoedaRealparaBigDecimal(consumoM6);
-
-									BigDecimal diasDB1 = Util
-											.formatarMoedaRealparaBigDecimal(diasConsumo1);
-									BigDecimal diasDB2 = Util
-											.formatarMoedaRealparaBigDecimal(diasConsumo2);
-									BigDecimal diasDB3 = Util
-											.formatarMoedaRealparaBigDecimal(diasConsumo3);
-									BigDecimal diasDB4 = Util
-											.formatarMoedaRealparaBigDecimal(diasConsumo4);
-									BigDecimal diasDB5 = Util
-											.formatarMoedaRealparaBigDecimal(diasConsumo5);
-									BigDecimal diasDB6 = Util
-											.formatarMoedaRealparaBigDecimal(diasConsumo6);
-
-									String mediaConsumo1 = Util
-											.formatarMoedaReal(consumoDB1
-													.divide(diasDB1,
-															2,
-															BigDecimal.ROUND_DOWN));
-									String mediaConsumo2 = Util
-											.formatarMoedaReal(consumoDB2
-													.divide(diasDB2,
-															2,
-															BigDecimal.ROUND_DOWN));
-									String mediaConsumo3 = Util
-											.formatarMoedaReal(consumoDB3
-													.divide(diasDB3,
-															2,
-															BigDecimal.ROUND_DOWN));
-									String mediaConsumo4 = Util
-											.formatarMoedaReal(consumoDB4
-													.divide(diasDB4,
-															2,
-															BigDecimal.ROUND_DOWN));
-									String mediaConsumo5 = Util
-											.formatarMoedaReal(consumoDB5
-													.divide(diasDB5,
-															2,
-															BigDecimal.ROUND_DOWN));
-									String mediaConsumo6 = Util
-											.formatarMoedaReal(consumoDB6
-													.divide(diasDB6,
-															2,
-															BigDecimal.ROUND_DOWN));
-
-									contaTxt.append(Util.completaString(
-											mediaConsumo1, 6));
-									contaTxt.append(Util.completaString(
-											mediaConsumo2, 6));
-									contaTxt.append(Util.completaString(
-											mediaConsumo3, 6));
-									contaTxt.append(Util.completaString(
-											mediaConsumo4, 6));
-									contaTxt.append(Util.completaString(
-											mediaConsumo5, 6));
-									contaTxt.append(Util.completaString(
-											mediaConsumo6, 6));
-
-									if (imovelEmitido.getQuadra().getRota().getIndicadorImpressaoTermicaFinalGrupo().equals(ConstantesSistema.SIM)
-											&& municipioEntrega.equals(municipioImovel)){
-
-										Object[] impressaoTermica = new Object[2];
-										// ----------------------------------------------------
-										/**
-										 * TODO: COSANPA Mantis 680 - Incluir
-										 * número sequencial nas contas
-										 * impressas em lote na impressão
-										 * térmica.
-										 * 
-										 * @author Wellington Rocha
-										 * @date 12/12/2012
-										 */
-										String localidadeArquivo = imovelEmitido
-												.getLocalidade().getId()
-												+ "parte"
-												+ qntArquivoLocalidadeImpressaoTermica;
-										if (!localidadesArquivo
-												.contains(localidadeArquivo)) {
-											if (qtdImovelArquivoImpressaoTermica != 1000) {
-												qntArquivoLocalidadeImpressaoTermica = 1;
-												qtdContasLocalidade = 0;
-												localidadeArquivo = imovelEmitido
-														.getLocalidade()
-														.getId()
-														+ "parte"
-														+ qntArquivoLocalidadeImpressaoTermica;
-											}
-											localidadesArquivo
-													.add(localidadeArquivo);
-											qtdImovelArquivoImpressaoTermica = 1;
-
-										} else if (qtdImovelArquivoImpressaoTermica < 1000) {
-											qtdImovelArquivoImpressaoTermica++;
-										}
-										if (qtdImovelArquivoImpressaoTermica == 1000) {
-											qntArquivoLocalidadeImpressaoTermica++;
-										}
-										qtdContasLocalidade++;
-										// ----------------------------------------------------
-										impressaoContaImpressoraTermica = ImpressaoContaImpressoraTermica
-												.getInstancia(
-														repositorioFaturamento,
-														repositorioClienteImovel,
-														sessionContext);
-										impressaoTermica[0] = impressaoContaImpressoraTermica
-												.gerarArquivoFormatadoImpressaoTermica(
-														emitirContaHelper,
-														sistemaParametro,
-														qualidade,
-														qtdContasLocalidade);
-										impressaoTermica[1] = localidadeArquivo;
-										stringFormatadaImpressaoTermica
-												.add(impressaoTermica);
-
-									} else {
-										contasTxtLista.append(contaTxt
-												.toString());
-										contasTxtLista.append(System
-												.getProperty("line.separator"));
-										mapAtualizaSequencial.put(
-												emitirContaHelper.getIdConta(),
-												sequencialImpressao);
-										cont++;
-									}
-
-									conta = null;
-									contaTxt = null;
-
-
-									System.out.println("ID_CONTA:"
-											+ emitirContaHelper.getIdConta()
-											+ " SEQUENCIAL:"
-											+ sequencialImpressao + " CONT:"
-											+ cont);
-									if (flagTerminou && ehFaturamentoAntecipado) {
-										if (anoMesReferenciaFaturamentoAntecipado != null
-												&& anoMesReferenciaFaturamento
-														.intValue() != anoMesReferenciaFaturamentoAntecipado
-														.intValue()) {
-
-											anoMesReferenciaFaturamento = anoMesReferenciaFaturamentoAntecipado;
-											flagTerminou = false;
-											numeroIndiceAntecipado = 0;
+										if (temOutros) {
+											contaTxt.append("OUTROS SERVICOS               "); // 30
+											contaTxt.append(Util.completaString(" ", 20));
+											contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal(valorAcumulado), 13));
+											i++;
 										}
 									}
 								}
-							}
 
-						} else {
-							flagTerminou = true;
-							if (ehFaturamentoAntecipado) {
-								if (anoMesReferenciaFaturamentoAntecipado != null
-										&& anoMesReferenciaFaturamento
-												.intValue() != anoMesReferenciaFaturamentoAntecipado
-												.intValue()) {
+								if (emitirContaHelper.getValorImpostos() != null && !emitirContaHelper.getValorImpostos().equals(new BigDecimal("0.00"))) {
+									contaTxt.append("TOTAL DE IMPOSTOS FEDERAIS "); // 27
+									contaTxt.append(Util.completaString(" ", 23));
+									contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal(emitirContaHelper.getValorImpostos()), 13));
 
-									anoMesReferenciaFaturamento = anoMesReferenciaFaturamentoAntecipado;
-									flagTerminou = false;
-									numeroIndiceAntecipado = 0;
+								} else {
+									contaTxt.append(Util.completaString(" ", 63));
+								}
+
+								int quantidadeLinhasServicosSobraram = 9 - i;
+								contaTxt.append(Util.completaString(" ", quantidadeLinhasServicosSobraram * 63));
+
+								// Item 28
+
+								contaTxt.append(Util.completaString(emitirContaHelper.getValorTotalConta(), 13));
+
+								// Item 36
+								int mes1 = Util.subtrairMesDoAnoMes(emitirContaHelper.getAmReferencia(), 1);
+								contaTxt.append(Util.completaString(Util.formatarAnoMesParaMesAno(mes1), 7));
+
+								// Item 37
+								int mes2 = Util.subtrairMesDoAnoMes(emitirContaHelper.getAmReferencia(), 2);
+								contaTxt.append(Util.completaString(Util.formatarAnoMesParaMesAno(mes2), 7));
+
+								// Item 38
+								int mes3 = Util.subtrairMesDoAnoMes(emitirContaHelper.getAmReferencia(), 3);
+								contaTxt.append(Util.completaString(Util.formatarAnoMesParaMesAno(mes3), 7));
+
+								// Item 39
+								int mes4 = Util.subtrairMesDoAnoMes(emitirContaHelper.getAmReferencia(), 4);
+								contaTxt.append(Util.completaString(Util.formatarAnoMesParaMesAno(mes4), 7));
+
+								// Item 40
+								int mes5 = Util.subtrairMesDoAnoMes(emitirContaHelper.getAmReferencia(), 5);
+								contaTxt.append(Util.completaString(Util.formatarAnoMesParaMesAno(mes5), 7));
+
+								// Item 41
+								int mes6 = Util.subtrairMesDoAnoMes(emitirContaHelper.getAmReferencia(), 6);
+								contaTxt.append(Util.completaString(Util.formatarAnoMesParaMesAno(mes6), 7));
+
+								// Item 48
+								StringBuilder consumo1 = this.obterConsumoAnterior(emitirContaHelper.getIdImovel(), emitirContaHelper.getAmReferencia(), 1,
+										tipoLigacao, tipoMedicao);
+
+								String consumoM1 = consumo1.toString();
+
+								if (consumo.equalsIgnoreCase("")) {
+									consumo = consumo + "0";
+								}
+
+								if (consumoM1 != null && !consumoM1.trim().equalsIgnoreCase("")) {
+									contaTxt.append(Util.completaString(consumo1 + "", 7));
+								} else {
+									contaTxt.append(Util.completaString(consumo, 7));
+									consumoM1 = consumo;
+								}
+
+								// Item 49
+								StringBuilder consumo2 = this.obterConsumoAnterior(emitirContaHelper.getIdImovel(), emitirContaHelper.getAmReferencia(), 2,
+										tipoLigacao, tipoMedicao);
+
+								String consumoM2 = consumo2.toString();
+
+								if (consumoM2 != null && !consumoM2.trim().equalsIgnoreCase("")) {
+									contaTxt.append(Util.completaString(consumo2 + "", 7));
+								} else {
+									contaTxt.append(Util.completaString(consumo, 7));
+									consumoM2 = consumo;
+								}
+
+								// Item 50
+								StringBuilder consumo3 = this.obterConsumoAnterior(emitirContaHelper.getIdImovel(), emitirContaHelper.getAmReferencia(), 3,
+										tipoLigacao, tipoMedicao);
+
+								String consumoM3 = consumo3.toString();
+
+								if (consumoM3 != null && !consumoM3.trim().equalsIgnoreCase("")) {
+									contaTxt.append(Util.completaString(consumo3 + "", 7));
+								} else {
+									contaTxt.append(Util.completaString(consumo, 7));
+									consumoM3 = consumo;
+								}
+
+								// Item 51
+								StringBuilder consumo4 = this.obterConsumoAnterior(emitirContaHelper.getIdImovel(), emitirContaHelper.getAmReferencia(), 4,
+										tipoLigacao, tipoMedicao);
+
+								String consumoM4 = consumo4.toString();
+
+								if (consumoM4 != null && !consumoM4.trim().equalsIgnoreCase("")) {
+									contaTxt.append(Util.completaString(consumo4 + "", 7));
+								} else {
+									contaTxt.append(Util.completaString(consumo, 7));
+									consumoM4 = consumo;
+								}
+
+								// Item 52
+								StringBuilder consumo5 = this.obterConsumoAnterior(emitirContaHelper.getIdImovel(), emitirContaHelper.getAmReferencia(), 5,
+										tipoLigacao, tipoMedicao);
+
+								String consumoM5 = consumo5.toString();
+
+								if (consumoM5 != null && !consumoM5.trim().equalsIgnoreCase("")) {
+									contaTxt.append(Util.completaString(consumo5 + "", 7));
+								} else {
+									contaTxt.append(Util.completaString(consumo, 7));
+									consumoM5 = consumo;
+								}
+
+								// Item 53
+								StringBuilder consumo6 = this.obterConsumoAnterior(emitirContaHelper.getIdImovel(), emitirContaHelper.getAmReferencia(), 6,
+										tipoLigacao, tipoMedicao);
+
+								String consumoM6 = consumo6.toString();
+
+								if (consumoM6 != null && !consumoM6.trim().equalsIgnoreCase("")) {
+									contaTxt.append(Util.completaString(consumo6 + "", 7));
+								} else {
+									contaTxt.append(Util.completaString(consumo, 7));
+									consumoM6 = consumo;
+								}
+
+								// Item 54
+								String[] parmsPartesConta = obterMensagemDebitoConta3Partes(emitirContaHelper, sistemaParametro);
+
+								contaTxt.append(Util.completaString(parmsPartesConta[0], 100));
+
+								// Item 55
+								contaTxt.append(Util.completaString(parmsPartesConta[1], 100));
+
+								// Item 56
+								contaTxt.append(Util.completaString(parmsPartesConta[2], 100));
+
+								// Item 99
+								if (mensagemContaAnormalidade != null && !mensagemContaAnormalidade.equalsIgnoreCase("")) {
+									contaTxt.append(Util.completaString(mensagemContaAnormalidade, 100));
+								} else {
+									contaTxt.append(Util.completaString(" ", 100));
+								}
+
+								// qt de faturas abertas 6 posicoes - total
+								// do debito 13 posicoes
+								ObterDebitoImovelOuClienteHelper obterDebitoImovelOuClienteHelper = this.obterDebitoImovelOuClienteHelper(emitirContaHelper,
+										sistemaParametro);
+
+								Collection colecaoContasValores = obterDebitoImovelOuClienteHelper.getColecaoContasValores();
+
+								if (colecaoContasValores != null && !colecaoContasValores.isEmpty()) {
+									Integer qtContas = colecaoContasValores.size();
+									contaTxt.append(Util.completaString(qtContas + "", 6));
+
+									BigDecimal valorDebitoTotal = new BigDecimal("0.00");
+
+									for (Iterator iter = colecaoContasValores.iterator(); iter.hasNext();) {
+										ContaValoresHelper contaValoresHelper = (ContaValoresHelper) iter.next();
+
+										valorDebitoTotal = valorDebitoTotal.add(contaValoresHelper.getValorTotalConta());
+									}
+
+									contaTxt.append(Util.completaString(Util.formatarMoedaReal(valorDebitoTotal), 13));
+								} else {
+									contaTxt.append(Util.completaString(" ", 19));
+								}
+
+								// Item 83 e 84
+
+								Conta conta = new Conta();
+								conta.setValorAgua(emitirContaHelper.getValorAgua());
+								conta.setValorEsgoto(emitirContaHelper.getValorEsgoto());
+								conta.setValorCreditos(emitirContaHelper.getValorCreditos());
+								conta.setDebitos(emitirContaHelper.getDebitos());
+								conta.setValorImposto(emitirContaHelper.getValorImpostos());
+
+								BigDecimal valorConta = conta.getValorTotalContaBigDecimal();
+								emitirContaHelper.setValorConta(valorConta);
+
+								String anoMesString = "" + emitirContaHelper.getAmReferencia();
+
+								String mesAnoFormatado = anoMesString.substring(4, 6) + anoMesString.substring(0, 4);
+
+								Integer digitoVerificadorConta = new Integer("" + emitirContaHelper.getDigitoVerificadorConta());
+
+								String representacaoNumericaCodBarra = this.getControladorArrecadacao().obterRepresentacaoNumericaCodigoBarra(3, valorConta,
+										emitirContaHelper.getIdLocalidade(), emitirContaHelper.getIdImovel(), mesAnoFormatado, digitoVerificadorConta, null,
+										null, null, null, null, null, null);
+
+								contaTxt.append(Util.completaString(representacaoNumericaCodBarra, 50));
+
+								// Item 129
+								contaTxt.append(Util.completaString(cont + "", 8));
+
+								// #############################################
+								// PROXIMA PAGINA
+								// ################################################################
+								// Qualidade Agua
+
+								String[] qualidade = this.obterDadosQualidadeAguaCosanpa(localidade.getId(), emitirContaHelper.getIdSetorComercial(),
+										anoMesReferenciaFaturamento, imovelEmitido.getQuadraFace().getId());
+
+								contaTxt.append(Util.completaString(qualidade[0], 10));
+
+								contaTxt.append(Util.completaString(qualidade[1], 10));
+
+								contaTxt.append(Util.completaString(qualidade[2], 10));
+
+								contaTxt.append(Util.completaString(qualidade[3], 10));
+
+								contaTxt.append(Util.completaString(qualidade[4], 10));
+
+								contaTxt.append(Util.completaString(qualidade[5], 10));
+
+								contaTxt.append(Util.completaString(qualidade[6], 10));
+
+								contaTxt.append(Util.completaString(qualidade[7], 10));
+
+								contaTxt.append(Util.completaString(qualidade[8], 10));
+
+								contaTxt.append(Util.completaString(qualidade[9], 10));
+
+								contaTxt.append(Util.completaString(qualidade[10], 10));
+
+								contaTxt.append(Util.completaString(qualidade[11], 10));
+
+								contaTxt.append(Util.completaString(qualidade[12], 10));
+
+								contaTxt.append(Util.completaString(qualidade[13], 10));
+
+								contaTxt.append(Util.completaString(qualidade[14], 10));
+
+								contaTxt.append(Util.completaString(qualidade[15], 10));
+
+								contaTxt.append(Util.completaString(qualidade[16], 10));
+
+								contaTxt.append(Util.completaString(qualidade[17], 10));
+
+								contaTxt.append(Util.completaString(qualidade[18], 10));
+
+								contaTxt.append(Util.completaString(qualidade[19], 10));
+
+								contaTxt.append(Util.completaString(qualidade[20], 10));
+
+								contaTxt.append(Util.completaString(qualidade[21], 10));
+
+								contaTxt.append(Util.completaString(qualidade[22], 10));
+
+								contaTxt.append(Util.completaString(qualidade[23], 10));
+
+								// Item 87
+								String[] enderecoImovel = getControladorEndereco().pesquisarEnderecoFormatadoDividido(emitirContaHelper.getIdImovel());
+
+								contaTxt.append(Util.completaString(enderecoImovel[1], 30));
+
+								// Item 88 a Item 90
+								contaTxt.append(Util.completaString(enderecoImovel[0], 78));
+
+								// Item 92
+								contaTxt.append(Util.completaString(enderecoImovel[3], 20));
+
+								// Item 93
+								contaTxt.append(Util.completaString(enderecoImovel[4], 9));
+
+								// Item 94
+								contaTxt.append(Util.completaString(enderecoImovel[2], 2));
+
+								/*
+								 * Cliente cliente = getControladorCliente().
+								 * pesquisarCliente(emitirContaHelper
+								 * .getIdCliente());
+								 */
+
+								String cnpjCpf = "";
+
+								Collection colecaoClienteImovel2 = repositorioClienteImovel.pesquisarClienteImovelResponsavelConta(emitirContaHelper
+										.getIdImovel());
+
+								if (colecaoClienteImovel2 != null && !colecaoClienteImovel2.isEmpty()) {
+									ClienteImovel clienteImovelRespConta2 = (ClienteImovel) colecaoClienteImovel2.iterator().next();
+
+									if (clienteImovelRespConta2 != null) {
+										Cliente cliente2 = clienteImovelRespConta2.getCliente();
+
+										if (cliente2.getCnpjFormatado() != null && !cliente2.getCnpjFormatado().equalsIgnoreCase("")) {
+											cnpjCpf = cliente2.getCnpjFormatado();
+										} else if (cliente2.getCpfFormatado() != null && !cliente2.getCpfFormatado().equalsIgnoreCase("")) {
+											cnpjCpf = cliente2.getCpfFormatado();
+										}
+
+									}
+								}
+
+								contaTxt.append(Util.completaString(cnpjCpf, 20));
+
+								FiltroConsumoTarifa filtroConsumoTarifa = new FiltroConsumoTarifa();
+
+								Collection colecaoConsumoTarifa = getControladorUtil().pesquisar(filtroConsumoTarifa, ConsumoTarifa.class.getName());
+
+								ConsumoTarifa consumoTarifa = (ConsumoTarifa) colecaoConsumoTarifa.iterator().next();
+
+								contaTxt.append(Util.completaString(consumoTarifa.getDescricao(), 25));
+
+								Object[] dadosRota = getControladorMicromedicao().obterRotaESequencialRotaDoImovelSeparados(imovelEmitido.getId());
+
+								contaTxt.append(Util.completaString(Util.adicionarZerosEsquedaNumero(6, dadosRota[0].toString()) + "", 6));
+
+								contaTxt.append(Util.completaString(Util.adicionarZerosEsquedaNumero(3, faturamentoGrupo.getId().toString()) + "", 3));
+
+								contaTxt.append(Util.completaString(Util.adicionarZerosEsquedaNumero(4, imovelEmitido.getLote() + "") + "", 4));
+
+								contaTxt.append(Util.completaString(Util.adicionarZerosEsquedaNumero(3, imovelEmitido.getSubLote() + "") + "", 3));
+
+								if (imovelEmitido.getAreaConstruida() != null) {
+									int area = imovelEmitido.getAreaConstruida().intValue();
+									contaTxt.append(Util.completaString(area + "", 5));
+
+								} else {
+									contaTxt.append(Util.completaString("", 5));
+								}
+
+								contaTxt.append(Util.completaString(emitirContaHelper.getIdLocalidade() + "", 10));
+
+								contaTxt.append(Util.completaString(endereco, 120));
+
+								contaTxt.append(Util.completaString(imovelEmitido.getQuadraFace().getNumeroQuadraFace() + "", 2));
+
+								contaTxt.append(Util.completaString(localidade.getUnidadeNegocio().getNomeAbreviado(), 6));
+
+								Integer amRefMaisUm = Util.somaMesAnoMesReferencia(emitirContaHelper.getAmReferencia(), 1);
+
+								FiltroFaturamentoAtividadeCronograma filtroFaturamentoAtividadeCronograma = new FiltroFaturamentoAtividadeCronograma();
+
+								filtroFaturamentoAtividadeCronograma.adicionarParametro(new ParametroSimples(
+										FiltroFaturamentoAtividadeCronograma.FATURAMENTO_ATIVIDADE_ID, "2"));
+								filtroFaturamentoAtividadeCronograma.adicionarParametro(new ParametroSimples(
+										FiltroFaturamentoAtividadeCronograma.FATURAMENTO_GRUPO_CRONOGRAMA_MENSAL_ANO_MES_REFERENCIA, amRefMaisUm + ""));
+								filtroFaturamentoAtividadeCronograma.adicionarParametro(new ParametroSimples(
+										FiltroFaturamentoAtividadeCronograma.FATURAMENTO_GRUPO_CRONOGRAMA_MENSAL_FATURAMENTO_GRUPO_ID, faturamentoGrupo.getId()
+												+ ""));
+
+								filtroFaturamentoAtividadeCronograma.adicionarCaminhoParaCarregamentoEntidade("faturamentoAtividade");
+								filtroFaturamentoAtividadeCronograma.adicionarCaminhoParaCarregamentoEntidade("faturamentoGrupoCronogramaMensal");
+								filtroFaturamentoAtividadeCronograma
+										.adicionarCaminhoParaCarregamentoEntidade("faturamentoGrupoCronogramaMensal.faturamentoGrupo");
+
+								Collection<FaturamentoAtividadeCronograma> cFaturamentoAtividadeCronograma = getControladorUtil().pesquisar(
+										filtroFaturamentoAtividadeCronograma, FaturamentoAtividadeCronograma.class.getName());
+								String dataPrevista = "";
+								if (cFaturamentoAtividadeCronograma != null && !cFaturamentoAtividadeCronograma.isEmpty()) {
+									FaturamentoAtividadeCronograma faturamentoAtividadeCronograma = (FaturamentoAtividadeCronograma) Util
+											.retonarObjetoDeColecao(cFaturamentoAtividadeCronograma);
+									if (faturamentoAtividadeCronograma.getDataPrevista() != null) {
+										dataPrevista = Util.formatarData(faturamentoAtividadeCronograma.getDataPrevista());
+									}
+								}
+
+								contaTxt.append(Util.completaString(dataPrevista, 10));
+
+								String leituraSituacaoDescricao = "";
+
+								FiltroLeituraSituacao filtroLeituraSituacao = new FiltroLeituraSituacao();
+								filtroLeituraSituacao.adicionarParametro(new ParametroSimples(FiltroLeituraSituacao.ID, idSituacaoLeituraAtual));
+
+								Collection<LeituraSituacao> colecaoLeituraSituacao = getControladorUtil().pesquisar(filtroLeituraSituacao,
+										LeituraSituacao.class.getName());
+								if (colecaoLeituraSituacao != null && !colecaoLeituraSituacao.isEmpty()) {
+									LeituraSituacao LeituraSituacao = (LeituraSituacao) Util.retonarObjetoDeColecao(colecaoLeituraSituacao);
+									if (LeituraSituacao != null) {
+										leituraSituacaoDescricao = LeituraSituacao.getDescricao();
+									}
+								}
+
+								contaTxt.append(Util.completaString(leituraSituacaoDescricao, 20));
+
+								// TipoCaptacao
+								if (!qualidade[24].trim().equalsIgnoreCase("")) {
+									contaTxt.append(Util.completaString(qualidade[24].toString(), 1));
+								} else {
+									contaTxt.append(Util.completaString("1", 1));
+								}
+
+								String mensagemBonusSocial = "Para usufruir dos beneficios do Bonus Social e necessario ".toUpperCase()
+										+ "efetuar o pagamento desta conta ate a data de vencimento".toUpperCase();
+
+								Integer idPerfilBonusSocial = new Integer(4);
+
+								if (imovelEmitido.getImovelPerfil().getId().equals(idPerfilBonusSocial)) {
+									contaTxt.append(Util.completaString(mensagemBonusSocial, 150));
+								} else {
+									contaTxt.append(Util.completaString("", 150));
+								}
+
+								if (enderecoAlternativo) {
+									contaTxt.append(Util.completaString(municipioEntrega, 40));
+								} else {
+									contaTxt.append(Util.completaString("", 40));
+								}
+
+								contaTxt.append(Util.completaString(localidade.getUnidadeNegocio().getNome(), 30));
+
+								String[] parmsPartesContaMensagem = this.obterMensagemConta3Partes(emitirContaHelper, sistemaParametro);
+
+								contaTxt.append(Util.completaString(parmsPartesContaMensagem[0], 100));
+								emitirContaHelper.setMsgLinha1Conta(parmsPartesContaMensagem[0]);
+
+								contaTxt.append(Util.completaString(parmsPartesContaMensagem[1], 100));
+								emitirContaHelper.setMsgLinha2Conta(parmsPartesContaMensagem[1]);
+
+								contaTxt.append(Util.completaString(parmsPartesContaMensagem[2], 100));
+								emitirContaHelper.setMsgLinha3Conta(parmsPartesContaMensagem[2]);
+
+								// Histórico de dias de consumo
+								String diasConsumo1 = "30";
+								String diasConsumo2 = "30";
+								String diasConsumo3 = "30";
+								String diasConsumo4 = "30";
+								String diasConsumo5 = "30";
+								String diasConsumo6 = "30";
+								String dataLeituraAnterior1 = "";
+								String dataLeituraAnterior2 = "";
+								String dataLeituraAnterior3 = "";
+								String dataLeituraAnterior4 = "";
+								String dataLeituraAnterior5 = "";
+								String dataLeituraAnterior6 = "";
+								String dataLeituraAtual1 = "";
+								String dataLeituraAtual2 = "";
+								String dataLeituraAtual3 = "";
+								String dataLeituraAtual4 = "";
+								String dataLeituraAtual5 = "";
+								String dataLeituraAtual6 = "";
+
+								Object[] parms1 = this.obterLeituraAnteriorEAtual(emitirContaHelper.getIdImovel(), mes1);
+
+								if (parms1 != null) {
+
+									if (parms1[0] != null) {
+										dataLeituraAnterior1 = Util.formatarData((Date) parms1[0]);
+									}
+									if (parms1[1] != null) {
+										dataLeituraAtual1 = Util.formatarData((Date) parms1[1]);
+									}
+
+									if (!dataLeituraAnterior1.equals("") && !dataLeituraAtual1.equals("")) {
+										diasConsumo1 = "" + Util.obterQuantidadeDiasEntreDuasDatas((Date) parms1[0], (Date) parms1[1]);
+										if (diasConsumo1.equalsIgnoreCase("0")) {
+											diasConsumo1 = "30";
+										}
+									}
+								}
+
+								Object[] parms2 = this.obterLeituraAnteriorEAtual(emitirContaHelper.getIdImovel(), mes2);
+								if (parms2 != null) {
+
+									if (parms2[0] != null) {
+										dataLeituraAnterior2 = Util.formatarData((Date) parms2[0]);
+									}
+									if (parms2[1] != null) {
+										dataLeituraAtual2 = Util.formatarData((Date) parms2[1]);
+									}
+
+									if (!dataLeituraAnterior2.equals("") && !dataLeituraAtual2.equals("")) {
+										diasConsumo2 = "" + Util.obterQuantidadeDiasEntreDuasDatas((Date) parms2[0], (Date) parms2[1]);
+										if (diasConsumo2.equalsIgnoreCase("0")) {
+											diasConsumo2 = "30";
+										}
+									}
+								}
+
+								Object[] parms3 = this.obterLeituraAnteriorEAtual(emitirContaHelper.getIdImovel(), mes3);
+								if (parms3 != null) {
+
+									if (parms3[0] != null) {
+										dataLeituraAnterior3 = Util.formatarData((Date) parms3[0]);
+									}
+									if (parms3[1] != null) {
+										dataLeituraAtual3 = Util.formatarData((Date) parms3[1]);
+									}
+
+									if (!dataLeituraAnterior3.equals("") && !dataLeituraAtual3.equals("")) {
+										diasConsumo3 = "" + Util.obterQuantidadeDiasEntreDuasDatas((Date) parms3[0], (Date) parms3[1]);
+										if (diasConsumo3.equalsIgnoreCase("0")) {
+											diasConsumo3 = "30";
+										}
+									}
+								}
+
+								Object[] parms4 = this.obterLeituraAnteriorEAtual(emitirContaHelper.getIdImovel(), mes4);
+								if (parms4 != null) {
+
+									if (parms4[0] != null) {
+										dataLeituraAnterior4 = Util.formatarData((Date) parms4[0]);
+									}
+									if (parms4[1] != null) {
+										dataLeituraAtual4 = Util.formatarData((Date) parms4[1]);
+									}
+
+									if (!dataLeituraAnterior4.equals("") && !dataLeituraAtual4.equals("")) {
+										diasConsumo4 = "" + Util.obterQuantidadeDiasEntreDuasDatas((Date) parms4[0], (Date) parms4[1]);
+										if (diasConsumo4.equalsIgnoreCase("0")) {
+											diasConsumo4 = "30";
+										}
+									}
+								}
+
+								Object[] parms5 = this.obterLeituraAnteriorEAtual(emitirContaHelper.getIdImovel(), mes5);
+								if (parms5 != null) {
+
+									if (parms5[0] != null) {
+										dataLeituraAnterior5 = Util.formatarData((Date) parms5[0]);
+									}
+									if (parms5[1] != null) {
+										dataLeituraAtual5 = Util.formatarData((Date) parms5[1]);
+									}
+
+									if (!dataLeituraAnterior5.equals("") && !dataLeituraAtual5.equals("")) {
+										diasConsumo5 = "" + Util.obterQuantidadeDiasEntreDuasDatas((Date) parms5[0], (Date) parms5[1]);
+										if (diasConsumo5.equalsIgnoreCase("0")) {
+											diasConsumo5 = "30";
+										}
+									}
+								}
+
+								Object[] parms6 = this.obterLeituraAnteriorEAtual(emitirContaHelper.getIdImovel(), mes6);
+								if (parms6 != null) {
+
+									if (parms6[0] != null) {
+										dataLeituraAnterior6 = Util.formatarData((Date) parms6[0]);
+									}
+									if (parms6[1] != null) {
+										dataLeituraAtual6 = Util.formatarData((Date) parms6[1]);
+									}
+
+									if (!dataLeituraAnterior6.equals("") && !dataLeituraAtual6.equals("")) {
+										diasConsumo6 = "" + Util.obterQuantidadeDiasEntreDuasDatas((Date) parms6[0], (Date) parms6[1]);
+										if (diasConsumo6.equalsIgnoreCase("0")) {
+											diasConsumo6 = "30";
+										}
+									}
+								}
+
+								contaTxt.append(Util.completaString(diasConsumo1, 2));
+								contaTxt.append(Util.completaString(diasConsumo2, 2));
+								contaTxt.append(Util.completaString(diasConsumo3, 2));
+								contaTxt.append(Util.completaString(diasConsumo4, 2));
+								contaTxt.append(Util.completaString(diasConsumo5, 2));
+								contaTxt.append(Util.completaString(diasConsumo6, 2));
+
+								// Critério de apuração - cosumoTipo -
+								// ultimos 6 meses - Apenas ligacao de agua
+								String consumoTipo1 = getControladorMicromedicao().obterConsumoTipoImovel(imovelEmitido.getId(), mes1, 1);
+								contaTxt.append(Util.completaString(consumoTipo1, 2));
+
+								String consumoTipo2 = getControladorMicromedicao().obterConsumoTipoImovel(imovelEmitido.getId(), mes2, 1);
+								contaTxt.append(Util.completaString(consumoTipo2, 2));
+
+								String consumoTipo3 = getControladorMicromedicao().obterConsumoTipoImovel(imovelEmitido.getId(), mes3, 1);
+								contaTxt.append(Util.completaString(consumoTipo3, 2));
+
+								String consumoTipo4 = getControladorMicromedicao().obterConsumoTipoImovel(imovelEmitido.getId(), mes4, 1);
+								contaTxt.append(Util.completaString(consumoTipo4, 2));
+
+								String consumoTipo5 = getControladorMicromedicao().obterConsumoTipoImovel(imovelEmitido.getId(), mes5, 1);
+								contaTxt.append(Util.completaString(consumoTipo5, 2));
+
+								String consumoTipo6 = getControladorMicromedicao().obterConsumoTipoImovel(imovelEmitido.getId(), mes6, 1);
+								contaTxt.append(Util.completaString(consumoTipo6, 2));
+
+								// Historico da Média de consumo por dia
+								BigDecimal consumoDB1 = Util.formatarMoedaRealparaBigDecimal(consumoM1);
+								BigDecimal consumoDB2 = Util.formatarMoedaRealparaBigDecimal(consumoM2);
+								BigDecimal consumoDB3 = Util.formatarMoedaRealparaBigDecimal(consumoM3);
+								BigDecimal consumoDB4 = Util.formatarMoedaRealparaBigDecimal(consumoM4);
+								BigDecimal consumoDB5 = Util.formatarMoedaRealparaBigDecimal(consumoM5);
+								BigDecimal consumoDB6 = Util.formatarMoedaRealparaBigDecimal(consumoM6);
+
+								BigDecimal diasDB1 = Util.formatarMoedaRealparaBigDecimal(diasConsumo1);
+								BigDecimal diasDB2 = Util.formatarMoedaRealparaBigDecimal(diasConsumo2);
+								BigDecimal diasDB3 = Util.formatarMoedaRealparaBigDecimal(diasConsumo3);
+								BigDecimal diasDB4 = Util.formatarMoedaRealparaBigDecimal(diasConsumo4);
+								BigDecimal diasDB5 = Util.formatarMoedaRealparaBigDecimal(diasConsumo5);
+								BigDecimal diasDB6 = Util.formatarMoedaRealparaBigDecimal(diasConsumo6);
+
+								String mediaConsumo1 = Util.formatarMoedaReal(consumoDB1.divide(diasDB1, 2, BigDecimal.ROUND_DOWN));
+								String mediaConsumo2 = Util.formatarMoedaReal(consumoDB2.divide(diasDB2, 2, BigDecimal.ROUND_DOWN));
+								String mediaConsumo3 = Util.formatarMoedaReal(consumoDB3.divide(diasDB3, 2, BigDecimal.ROUND_DOWN));
+								String mediaConsumo4 = Util.formatarMoedaReal(consumoDB4.divide(diasDB4, 2, BigDecimal.ROUND_DOWN));
+								String mediaConsumo5 = Util.formatarMoedaReal(consumoDB5.divide(diasDB5, 2, BigDecimal.ROUND_DOWN));
+								String mediaConsumo6 = Util.formatarMoedaReal(consumoDB6.divide(diasDB6, 2, BigDecimal.ROUND_DOWN));
+
+								contaTxt.append(Util.completaString(mediaConsumo1, 6));
+								contaTxt.append(Util.completaString(mediaConsumo2, 6));
+								contaTxt.append(Util.completaString(mediaConsumo3, 6));
+								contaTxt.append(Util.completaString(mediaConsumo4, 6));
+								contaTxt.append(Util.completaString(mediaConsumo5, 6));
+								contaTxt.append(Util.completaString(mediaConsumo6, 6));
+
+								if (imovelEmitido.getQuadra().getRota().getIndicadorImpressaoTermicaFinalGrupo().equals(ConstantesSistema.SIM)
+										&& municipioEntrega.equals(municipioImovel)) {
+
+									Object[] impressaoTermica = new Object[2];
+									// ----------------------------------------------------
+									/**
+									 * TODO: COSANPA Mantis 680 - Incluir número
+									 * sequencial nas contas impressas em lote
+									 * na impressão térmica.
+									 * 
+									 * @author Wellington Rocha
+									 * @date 12/12/2012
+									 */
+									String localidadeArquivo = imovelEmitido.getLocalidade().getId() + "parte" + qntArquivoLocalidadeImpressaoTermica;
+									if (!localidadesArquivo.contains(localidadeArquivo)) {
+										if (qtdImovelArquivoImpressaoTermica != 1000) {
+											qntArquivoLocalidadeImpressaoTermica = 1;
+											qtdContasLocalidade = 0;
+											localidadeArquivo = imovelEmitido.getLocalidade().getId() + "parte" + qntArquivoLocalidadeImpressaoTermica;
+										}
+										localidadesArquivo.add(localidadeArquivo);
+										qtdImovelArquivoImpressaoTermica = 1;
+
+									} else if (qtdImovelArquivoImpressaoTermica < 1000) {
+										qtdImovelArquivoImpressaoTermica++;
+									}
+									if (qtdImovelArquivoImpressaoTermica == 1000) {
+										qntArquivoLocalidadeImpressaoTermica++;
+									}
+									qtdContasLocalidade++;
+									// ----------------------------------------------------
+									impressaoContaImpressoraTermica = ImpressaoContaImpressoraTermica.getInstancia(repositorioFaturamento,
+											repositorioClienteImovel, sessionContext);
+									impressaoTermica[0] = impressaoContaImpressoraTermica.gerarArquivoFormatadoImpressaoTermica(emitirContaHelper,
+											sistemaParametro, qualidade, qtdContasLocalidade);
+									impressaoTermica[1] = localidadeArquivo;
+									stringFormatadaImpressaoTermica.add(impressaoTermica);
+
+								} else {
+									contasTxtLista.append(contaTxt.toString());
+									contasTxtLista.append(System.getProperty("line.separator"));
+									mapAtualizaSequencial.put(emitirContaHelper.getIdConta(), sequencialImpressao);
+									cont++;
+								}
+
+								conta = null;
+								contaTxt = null;
+
+								System.out.println("ID_CONTA:" + emitirContaHelper.getIdConta() + " SEQUENCIAL:" + sequencialImpressao + " CONT:" + cont);
+								if (flagTerminou && ehFaturamentoAntecipado) {
+									if (anoMesReferenciaFaturamentoAntecipado != null
+											&& anoMesReferenciaFaturamento.intValue() != anoMesReferenciaFaturamentoAntecipado.intValue()) {
+
+										anoMesReferenciaFaturamento = anoMesReferenciaFaturamentoAntecipado;
+										flagTerminou = false;
+										numeroIndiceAntecipado = 0;
+									}
 								}
 							}
+						} catch (Exception e) {
+							throw new EmitirContaException("Erro ao emitir conta com id = " + emitirContaHelper.getIdConta(), e);
 						}
-
-						numeroIndice = numeroIndice + 1000;
-
-						if (mapAtualizaSequencial != null) {
-
-							System.out.println("NUMERO_INDICE_ANTECIPADO:"
-									+ numeroIndiceAntecipado);
-							System.out.println("NUMERO_INDICE:" + numeroIndice);
-							System.out
-									.println("QTD_CONTAS:" + quantidadeContas);
-
-							repositorioFaturamento
-									.atualizarSequencialContaImpressao(mapAtualizaSequencial);
-						}
-						mapAtualizaSequencial = null;
-
-						/*
-						 * if (cont > 500){ flagTerminou = true; break; }
-						 */
-
-					}// fim laco if da paginacao
-
-					String idGrupoFaturamento = "_G" + faturamentoGrupo.getId();
-
-					/**
-					 * TODO: COSANPA
-					 * 
-					 * Alteração para atender o mantis 426
-					 * 
-					 * @author Wellington Rocha
-					 * @date 01/11/2012
-					 */
-					String mesReferencia = "_REF"
-							+ Util.formatarAnoMesParaMesAnoSemBarra(anoMesReferenciaFaturamentoSemAntecipacao);
-
-					String nomeZip = null;
-					String nomeArquivoImpressaoFormatada = null;
-
-					nomeZip = "CONTA" + idGrupoFaturamento + mesReferencia;
-					/**
-					 * TODO: COSANPA Criação do arquivo para impressao termica
-					 * Mantis 230 data: 22/12/2011
-					 */
-					nomeArquivoImpressaoFormatada = "ArquivoImpressaoTermica"
-							+ idGrupoFaturamento + mesReferencia;
-
-					BufferedWriter out = null;
-					ZipOutputStream zos = null;
-
-					File compactadoTipo = new File(nomeZip + ".zip");
-					File leituraTipo = new File(nomeZip + ".txt");
-
-					if (contasTxtLista != null && contasTxtLista.length() != 0) {
-						// fim de arquivo
-						// ************ TIPO E *************
-						zos = new ZipOutputStream(new FileOutputStream(
-								compactadoTipo));
-						out = new BufferedWriter(new OutputStreamWriter(
-								new FileOutputStream(
-										leituraTipo.getAbsolutePath())));
-						out.write(contasTxtLista.toString());
-						out.flush();
-						ZipUtil.adicionarArquivo(zos, leituraTipo);
-						zos.close();
-						leituraTipo.delete();
-						out.close();
 					}
 
-					if (stringFormatadaImpressaoTermica != null
-							&& stringFormatadaImpressaoTermica.size() > 0) {
+				} else {
+					flagTerminou = true;
+					if (ehFaturamentoAntecipado) {
+						if (anoMesReferenciaFaturamentoAntecipado != null
+								&& anoMesReferenciaFaturamento.intValue() != anoMesReferenciaFaturamentoAntecipado.intValue()) {
 
-						File arquivoImpressaoTermicaCompactado = new File(
-								nomeArquivoImpressaoFormatada + ".zip");
-
-						zos = new ZipOutputStream(new FileOutputStream(
-								arquivoImpressaoTermicaCompactado));
-						BufferedWriter[] buf = new BufferedWriter[localidadesArquivo
-								.size()];
-						File[] arquivoFormatadoImpressaoTermica = new File[localidadesArquivo
-								.size()];
-						int i = 0;
-
-						for (String localidade : localidadesArquivo) {
-							arquivoFormatadoImpressaoTermica[i] = new File(
-									nomeArquivoImpressaoFormatada + "_L"
-											+ localidade + ".txt");
-							buf[i] = new BufferedWriter(new OutputStreamWriter(
-									new FileOutputStream(
-											arquivoFormatadoImpressaoTermica[i]
-													.getAbsolutePath())));
-
-							for (Object[] impressaoTermica : stringFormatadaImpressaoTermica) {
-								if (impressaoTermica != null) {
-									String localidadeArquivo = (String) impressaoTermica[1];
-									if (localidadeArquivo.equals(localidade)
-											&& impressaoTermica[0] != null) {
-										buf[i].write((String) impressaoTermica[0]);
-										buf[i].flush();
-									}
-								}
-							}
-							ZipUtil.adicionarArquivo(zos,
-									arquivoFormatadoImpressaoTermica[i]);
-							i++;
-						}
-						zos.close();
-						for (int j = 0; j < localidadesArquivo.size(); j++) {
-							arquivoFormatadoImpressaoTermica[j].delete();
-							buf[j].close();
-							buf[j] = null;
+							anoMesReferenciaFaturamento = anoMesReferenciaFaturamentoAntecipado;
+							flagTerminou = false;
+							numeroIndiceAntecipado = 0;
 						}
 					}
-					nomeZip = null;
-					out = null;
-					zos = null;
-					compactadoTipo = null;
-					leituraTipo = null;
-					contasTxtLista = null;
-
-					tipoConta++;
-				} catch (ErroRepositorioException e) {
-					throw new ControladorException("erro.sistema", e);
 				}
 
-			} catch (IOException e) {
-				String mensagem = e.getMessage();
-				String[] inicioMensagem = mensagem.split("\\.");
-				if (inicioMensagem != null
-						&& (inicioMensagem[0].equals("erro") || inicioMensagem[0]
-								.equals("atencao"))) {
-					throw new ControladorException(mensagem);
-				} else {
-					throw new ControladorException("erro.sistema", e);
+				numeroIndice = numeroIndice + 1000;
+
+				if (mapAtualizaSequencial != null) {
+
+					System.out.println("NUMERO_INDICE_ANTECIPADO:" + numeroIndiceAntecipado);
+					System.out.println("NUMERO_INDICE:" + numeroIndice);
+					System.out.println("QTD_CONTAS:" + quantidadeContas);
+
+					repositorioFaturamento.atualizarSequencialContaImpressao(mapAtualizaSequencial);
 				}
-			} catch (Exception e) {
-				e.printStackTrace();
-				String mensagem = e.getMessage();
-				if (mensagem != null) {
-					String[] inicioMensagem = mensagem.split("\\.");
-					if (inicioMensagem != null
-							&& (inicioMensagem[0].equals("erro") || inicioMensagem[0]
-									.equals("atencao"))) {
-						throw new ControladorException(mensagem);
-					} else {
-						throw new ControladorException("erro.sistema", e);
+				mapAtualizaSequencial = null;
+
+				/*
+				 * if (cont > 500){ flagTerminou = true; break; }
+				 */
+
+			}// fim laco if da paginacao
+
+			String idGrupoFaturamento = "_G" + faturamentoGrupo.getId();
+
+			/**
+			 * TODO: COSANPA
+			 * 
+			 * Alteração para atender o mantis 426
+			 * 
+			 * @author Wellington Rocha
+			 * @date 01/11/2012
+			 */
+			String mesReferencia = "_REF" + Util.formatarAnoMesParaMesAnoSemBarra(anoMesReferenciaFaturamentoSemAntecipacao);
+
+			String nomeZip = null;
+			String nomeArquivoImpressaoFormatada = null;
+
+			nomeZip = "CONTA" + idGrupoFaturamento + mesReferencia;
+			/**
+			 * TODO: COSANPA Criação do arquivo para impressao termica Mantis
+			 * 230 data: 22/12/2011
+			 */
+			nomeArquivoImpressaoFormatada = "ArquivoImpressaoTermica" + idGrupoFaturamento + mesReferencia;
+
+			BufferedWriter out = null;
+			ZipOutputStream zos = null;
+
+			File compactadoTipo = new File(nomeZip + ".zip");
+			File leituraTipo = new File(nomeZip + ".txt");
+
+			if (contasTxtLista != null && contasTxtLista.length() != 0) {
+				// fim de arquivo
+				// ************ TIPO E *************
+				zos = new ZipOutputStream(new FileOutputStream(compactadoTipo));
+				out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(leituraTipo.getAbsolutePath())));
+				out.write(contasTxtLista.toString());
+				out.flush();
+				ZipUtil.adicionarArquivo(zos, leituraTipo);
+				zos.close();
+				leituraTipo.delete();
+				out.close();
+			}
+
+			if (stringFormatadaImpressaoTermica != null && stringFormatadaImpressaoTermica.size() > 0) {
+
+				File arquivoImpressaoTermicaCompactado = new File(nomeArquivoImpressaoFormatada + ".zip");
+
+				zos = new ZipOutputStream(new FileOutputStream(arquivoImpressaoTermicaCompactado));
+				BufferedWriter[] buf = new BufferedWriter[localidadesArquivo.size()];
+				File[] arquivoFormatadoImpressaoTermica = new File[localidadesArquivo.size()];
+				int i = 0;
+
+				for (String localidade : localidadesArquivo) {
+					arquivoFormatadoImpressaoTermica[i] = new File(nomeArquivoImpressaoFormatada + "_L" + localidade + ".txt");
+					buf[i] = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(arquivoFormatadoImpressaoTermica[i].getAbsolutePath())));
+
+					for (Object[] impressaoTermica : stringFormatadaImpressaoTermica) {
+						if (impressaoTermica != null) {
+							String localidadeArquivo = (String) impressaoTermica[1];
+							if (localidadeArquivo.equals(localidade) && impressaoTermica[0] != null) {
+								buf[i].write((String) impressaoTermica[0]);
+								buf[i].flush();
+							}
+						}
 					}
-				} else {
-					throw new ControladorException("erro.sistema", e);
+					ZipUtil.adicionarArquivo(zos, arquivoFormatadoImpressaoTermica[i]);
+					i++;
+				}
+				zos.close();
+				for (int j = 0; j < localidadesArquivo.size(); j++) {
+					arquivoFormatadoImpressaoTermica[j].delete();
+					buf[j].close();
+					buf[j] = null;
 				}
 			}
+			nomeZip = null;
+			out = null;
+			zos = null;
+			compactadoTipo = null;
+			leituraTipo = null;
+			contasTxtLista = null;
+
+			tipoConta++;
 
 			// --------------------------------------------------------
 			//
@@ -2699,19 +1671,14 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			//
 			// --------------------------------------------------------
 
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
-					idUnidadeIniciada, false);
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 
+		} catch (BaseRuntimeException e) {
+			logger.error(e.getMessage(), e);
 		} catch (Exception e) {
-			// Este catch serve para interceptar qualquer excecao que o processo
-			// batch venha a lancar e garantir que a unidade de processamento do
-			// batch sera atualizada com o erro ocorrido
+			logger.error(e);
 
-			e.printStackTrace();
-			// sessionContext.setRollbackOnly();
-
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(e,
-					idUnidadeIniciada, true);
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
 
 			throw new EJBException(e);
 		}
