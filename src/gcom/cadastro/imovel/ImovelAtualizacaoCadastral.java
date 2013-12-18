@@ -27,19 +27,15 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
     private Integer idImovel;
     
     /** identifier field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idLocalidade;
 	
     /** persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private int codigoSetorComercial;
 
     /** persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private int numeroQuadra;
 
     /** persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private short lote;
 
     /** persistent field */
@@ -127,7 +123,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
     private Integer idLigacaoEsgotoSituacao;
 
     /** nullable persistent field */
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+//	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idImovelPerfil;
 
     /** nullable persistent field */
