@@ -193,6 +193,7 @@ import java.util.Set;
 import javax.ejb.CreateException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
+import javax.transaction.UserTransaction;
 
 /**
  * Definição da lógica de negócio do Session Bean de ControladorCliente
@@ -1133,8 +1134,9 @@ public class ControladorTransacaoSEJB implements SessionBean {
 			// a coleção de atributos selecionados para o registro da transacao
 			throw new ControladorException("erro.sistema");			
 		}
+		
 		Interceptador.getInstancia().verificarObjetoAlterado(objetoTransacao,
-				objetoTransacao.retornarAtributosSelecionadosRegistro());	
+				objetoTransacao.retornarAtributosSelecionadosRegistro());
 	}
 	
 

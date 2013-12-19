@@ -153,89 +153,22 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.exception.DataException;
-
-/**
-
- * < <Descrição da Classe>>
-
- * 
-
- * @author Administrador
-
- */
-
-/**
-
- * Descrição da classe 
-
- *
-
- * @author Administrador
-
- * @date 18/03/2006
-
- */
-
-/**
-
- * Descrição da classe 
-
- *
-
- * @author Administrador
-
- * @date 18/03/2006
-
- */
-
-/**
- * 
- * Descrição da classe
- * 
- * 
- * 
- * @author Administrador
- * 
- * @date 18/03/2006
- * 
- */
+import org.jboss.logging.Logger;
 
 public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	private static IRepositorioImovel instancia;
-
-	/**
-	 * 
-	 * Construtor da classe RepositorioImovelHBM
-	 * 
-	 */
+	
+	private Logger logger = Logger.getLogger(RepositorioImovelHBM.class);
 
 	public RepositorioImovelHBM() {
 
 	}
 
-	/**
-	 * 
-	 * Retorna o valor de instance
-	 * 
-	 * 
-	 * 
-	 * @return O valor de instance
-	 * 
-	 */
-	/**
-	 * Retorna o valor de instance
-	 * 
-	 * @return O valor de instance
-	 */
 	public static IRepositorioImovel getInstancia() {
-
 		if (instancia == null) {
-
 			instancia = new RepositorioImovelHBM();
-
 		}
-
 		return instancia;
 	}
 	/**
@@ -6688,9 +6621,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 */
 
-	public void atualizarFaturamentoSituacaoTipo(Collection colecaoIdsImoveis,
-
-	Integer idFaturamentoTipo) throws ErroRepositorioException {
+	public void atualizarFaturamentoSituacaoTipo(Collection colecaoIdsImoveis, Integer idFaturamentoTipo) throws ErroRepositorioException {
 
 		String consulta = "";
 
@@ -6699,22 +6630,12 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		try {
 
 			if (colecaoIdsImoveis != null && !colecaoIdsImoveis.isEmpty()) {
+				logger.info("Atualizando " + colecaoIdsImoveis.size() +" Imoveis para o idFaturamentoTipo = " + idFaturamentoTipo);
 
 				consulta = "update gcom.cadastro.imovel.Imovel set "
-
 						+ "ftst_id = :idFaturamentoSituacao,imov_tmultimaalteracao = :ultimaAlteracao where imov_id IN (:ids)";
 
-				/*session.createQuery(consulta).setInteger(
-
-				"idFaturamentoSituacao", idFaturamentoTipo.intValue())
-
-				.setParameterList("ids", colecaoIdsImoveis)
-
-				.setTimestamp("ultimaAlteracao", new Date())
-
-				.executeUpdate();*/
 				if(colecaoIdsImoveis.size() > 999){
-
 					List<List<Integer>> particoes = CollectionUtil.particao((List<Integer>) colecaoIdsImoveis, 999);
 
 					int qtdQuebras = 999;
@@ -6725,44 +6646,26 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					}
 
 					for (int i = 0; i < indice; i++) {
-
-						session.createQuery(consulta).setInteger(
-
-								"idFaturamentoSituacao", idFaturamentoTipo.intValue())
+						session.createQuery(consulta).setInteger("idFaturamentoSituacao", idFaturamentoTipo.intValue())
 								.setParameterList("ids", particoes.get(i)).setTimestamp("ultimaAlteracao", new Date())
 								.executeUpdate();
-		
 					}
 				}
 				else{
-					
-					session.createQuery(consulta).setInteger(
-
-							"idFaturamentoSituacao", idFaturamentoTipo.intValue())
-
+					session.createQuery(consulta).setInteger("idFaturamentoSituacao", idFaturamentoTipo.intValue())
 							.setParameterList("ids", colecaoIdsImoveis)
-
 							.setTimestamp("ultimaAlteracao", new Date())
-
 							.executeUpdate();
 				}
 
 			}
 
 		} catch (HibernateException e) {
-
-			// levanta a exceção para a próxima camada
-
+			logger.error("Problemas ao atualizar o faturamento situacao tipo.");
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-
 		} finally {
-
-			// fecha a sessão
-
 			HibernateUtil.closeSession(session);
-
 		}
-
 	}
 
 	/**
@@ -6853,19 +6756,14 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 */
 
-	public void retirarSituacaoEspecialFaturamento(Collection colecaoIdsImoveis)
-
-	throws ErroRepositorioException {
-
-		String consulta = "";
+	public void retirarSituacaoEspecialFaturamento(Collection colecaoIdsImoveis) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
 
 		try {
-
 			if (colecaoIdsImoveis != null && !colecaoIdsImoveis.isEmpty()) {
 
-				consulta = "update gcom.cadastro.imovel.Imovel set "
+				String consulta = "update gcom.cadastro.imovel.Imovel set "
 						+ "ftst_id = null,ftsm_id = null,imov_tmultimaalteracao = :ultimaAlteracao " 
 						+ "where imov_id IN (:ids)";
 
@@ -6873,23 +6771,12 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 				.setParameterList("ids",colecaoIdsImoveis)
 				.setTimestamp("ultimaAlteracao",	new Date())
 				.executeUpdate();
-
 			}
-
 		} catch (HibernateException e) {
-
-			// levanta a exceção para a próxima camada
-
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-
 		} finally {
-
-			// fecha a sessão
-
 			HibernateUtil.closeSession(session);
-
 		}
-
 	}
 
 	/**

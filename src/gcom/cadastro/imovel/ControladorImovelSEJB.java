@@ -258,6 +258,11 @@ import java.util.TreeSet;
 import javax.ejb.CreateException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
+import javax.transaction.NotSupportedException;
+import javax.transaction.SystemException;
+import javax.transaction.UserTransaction;
+
+import org.jboss.logging.Logger;
 
 
 /**
@@ -279,6 +284,8 @@ public class ControladorImovelSEJB implements SessionBean {
 	private IRepositorioFaturamento repositorioFaturamento;
 
 	private IRepositorioCobranca repositorioCobranca;
+	
+	private Logger logger = Logger.getLogger(ControladorImovelSEJB.class);
 
 	/**
 	 * [SB001] Atualizar ImÛvel Campos Atualiza campos de imovel na execuÁ„o de
@@ -3807,11 +3814,9 @@ public class ControladorImovelSEJB implements SessionBean {
 			Integer idFaturamentoTipo, Usuario usuario) throws ControladorException {
 		try {
 			
-			this.repositorioImovel.atualizarFaturamentoSituacaoTipo(
-					colecaoIdsImoveis, idFaturamentoTipo);
+			this.repositorioImovel.atualizarFaturamentoSituacaoTipo(colecaoIdsImoveis, idFaturamentoTipo);
 
 		} catch (ErroRepositorioException ex) {
-			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
@@ -3832,42 +3837,7 @@ public class ControladorImovelSEJB implements SessionBean {
 			Integer idCobrancaTipo, Usuario usuario) throws ControladorException {
 		
 		try {
-//			//-------------REGISTRAR TRANSA«„O--------------------
-//			Iterator iterator = colecaoIdsImoveis.iterator();
-//			while(iterator.hasNext()){			
-//				String id = iterator.next().toString();
-//				
-//				FiltroImovel filtro = new FiltroImovel();
-//				
-//				filtro.adicionarParametro(new ParametroSimples(
-//						FiltroImovel.ID, id));
-//				filtro.adicionarCaminhoParaCarregamentoEntidade("cobrancaSituacaoTipo");
-//				
-//				Collection<Imovel> colecaoImovel = getControladorUtil().pesquisar(filtro,Imovel.class.getName());
-//				
-//				Imovel imovel = colecaoImovel.iterator().next();	
-//				
-//				if(imovel.getCobrancaSituacaoTipo()==null){
-//					CobrancaSituacaoTipo cSit = new CobrancaSituacaoTipo();
-//					imovel.setCobrancaSituacaoTipo(cSit);
-//				}
-//				
-//				imovel.getCobrancaSituacaoTipo().setId(idCobrancaTipo);
-//				
-//				RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-//						Operacao.OPERACAO_INFORMAR_SITUACAO_ESPECIAL_COBRANCA,
-//						new Integer(id),new Integer(id),
-//						new UsuarioAcaoUsuarioHelper(usuario,
-//						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-//				registradorOperacao.registrarOperacao(imovel);
-//								
-//				getControladorTransacao().registrarTransacao(imovel);
-//			}
-//			//-------------REGISTRAR TRANSA«„O--------------------
-			
-			this.repositorioImovel.atualizarCobrancaSituacaoTipo(
-					colecaoIdsImoveis, idCobrancaTipo);
-
+			this.repositorioImovel.atualizarCobrancaSituacaoTipo(colecaoIdsImoveis, idCobrancaTipo);
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
@@ -3877,105 +3847,105 @@ public class ControladorImovelSEJB implements SessionBean {
 	/**
 	 * [UC0156] Informar Situacao Especial Faturamento
 	 * 
-	 * @author Rhawi Dantas, RÙmulo AurÈlio
-	 * @created 16/01/2006, 25/05/2009
+	 * @throws SystemException 
+	 * @throws IllegalStateException 
 	 * 
 	 */
-	public void retirarSituacaoEspecialFaturamento(
-			SituacaoEspecialFaturamentoHelper situacaoEspecialFaturamentoHelper, 
-			Collection pesquisarDadosImoveisParaSerRetirados)
-			throws ControladorException {
+	public void retirarSituacaoEspecialFaturamento(SituacaoEspecialFaturamentoHelper situacaoEspecialFaturamentoHelper, 
+													Collection pesquisarDadosImoveisParaSerRetirados) throws ControladorException {
 		try {
-			
-			// vem do retirar = true. Se vier do inserir = false 
 			boolean retirar = true;
 			
-			Integer anoMesReferenciaFaturamentoGrupo = repositorioImovel
-			.validarMesAnoReferencia(situacaoEspecialFaturamentoHelper);
+			Integer anoMesReferenciaFaturamentoGrupo = repositorioImovel.validarMesAnoReferencia(situacaoEspecialFaturamentoHelper);
 			
 			situacaoEspecialFaturamentoHelper.setAnoMesReferenciaFaturamentoGrupo(anoMesReferenciaFaturamentoGrupo);
 			
-			Integer idFaturamentoSituacaoComando  = getControladorFaturamento()
-			.inserirFaturamentoSituacaoComando(situacaoEspecialFaturamentoHelper,retirar);
-			
-			Collection colecaoImoveis = null;
-			
-			Iterator iterator = pesquisarDadosImoveisParaSerRetirados.iterator();
-			
-			colecaoImoveis = new ArrayList();
-			
-			while (iterator.hasNext()) {
+			Collection colecaoImoveis = buildColecaoImoveis(pesquisarDadosImoveisParaSerRetirados);
 
-				Object[] dadosImoveis = (Object[]) iterator.next();
+			logger.info("Registrando a operacao de retirada de " + colecaoImoveis.size() + " imoveis "
+							+ "da situacao especial de faturamento. Usuario=["
+							+ situacaoEspecialFaturamentoHelper.getUsuarioLogado().getNomeUsuario() +"].");
+			registrarOperacoes(situacaoEspecialFaturamentoHelper, colecaoImoveis);
 
-				if (dadosImoveis != null) {
-					
-					
-					
-					Integer id = (Integer) dadosImoveis[0];
-
-					Date ultimaAlteracao = (Date) dadosImoveis[1];
-
-					Date ultimaAlteracaoImovel = this.pesquisarUltimaAlteracaoImovel(id);
-					
-					// Controle de concorrencia
-					if (ultimaAlteracaoImovel.after(ultimaAlteracao)) {
-						throw new ControladorException(
-								"atencao.atualizacao.timestamp");
-					}
-
-					// Adiciona os imoveis 
-					colecaoImoveis.add(id);
-					
-				}
-			
-			}
-			//-------------REGISTRAR TRANSA«„O--------------------
-			Iterator iteraAnoMes = colecaoImoveis.iterator();
-			while(iteraAnoMes.hasNext()){			
-				String imov_id = iteraAnoMes.next().toString();
+			logger.info("Atualizando ano mes faturamento situacao historico para " + colecaoImoveis.size() + " imoveis.");
+			Integer idFaturamentoSituacaoComando  = getControladorFaturamento().inserirFaturamentoSituacaoComando(situacaoEspecialFaturamentoHelper, retirar);
+			this.repositorioFaturamento.atualizarAnoMesFaturamentoSituacaoHistorico(situacaoEspecialFaturamentoHelper, colecaoImoveis, idFaturamentoSituacaoComando);
 				
-				FiltroFaturamentoSituacaoHistorico filtro = new FiltroFaturamentoSituacaoHistorico();
-				
-				filtro.adicionarParametro(new ParametroSimples(
-						FiltroFaturamentoSituacaoHistorico.ID_IMOVEL,imov_id));
-				
-				Collection<FaturamentoSituacaoHistorico> colecaoFaturamento = getControladorUtil().pesquisar(filtro,FaturamentoSituacaoHistorico.class.getName());
-				
-				if (colecaoFaturamento != null && !colecaoFaturamento.isEmpty()) {
-				FaturamentoSituacaoHistorico fsh = colecaoFaturamento.iterator().next();
-				
-			
-				fsh.setObservacaoRetira(situacaoEspecialFaturamentoHelper.getObservacaoRetira());
-				fsh.setAnoMesFaturamentoRetirada(situacaoEspecialFaturamentoHelper.getAnoMesReferenciaFaturamentoGrupo());
-				
-				RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-						Operacao.OPERACAO_RETIRAR_SITUACAO_ESPECIAL_FATURAMENTO,
-						new Integer(imov_id),new Integer(imov_id),
-						new UsuarioAcaoUsuarioHelper(situacaoEspecialFaturamentoHelper.getUsuarioLogado(),
-						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-				
-				registradorOperacao.registrarOperacao(fsh);
-								
-				getControladorTransacao().registrarTransacao(fsh);
-			}
-			//-------------REGISTRAR TRANSA«„O--------------------	
-			
-			this.repositorioFaturamento
-					.atualizarAnoMesFaturamentoSituacaoHistorico(
-							situacaoEspecialFaturamentoHelper,
-							colecaoImoveis,
-							idFaturamentoSituacaoComando);
-			
-			this.repositorioImovel
-					.retirarSituacaoEspecialFaturamento(/*pesquisarImoveisParaSerRemovidos*/colecaoImoveis);
-			}
+			logger.info("Retirando da situacao especial de faturamento " + colecaoImoveis.size() + " imoveis.");
+			this.repositorioImovel.retirarSituacaoEspecialFaturamento(colecaoImoveis);
 
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
-			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
 		}
+	}
+
+	private void registrarOperacoes(SituacaoEspecialFaturamentoHelper situacaoEspecialFaturamentoHelper, Collection colecaoImoveis) 
+			throws ControladorException {
+		Iterator iteraAnoMes = colecaoImoveis.iterator();
+		
+		while(iteraAnoMes.hasNext()){			
+			String imov_id = iteraAnoMes.next().toString();
+			registrarTransacao(situacaoEspecialFaturamentoHelper, imov_id);
+		}
+	}
+
+	private void registrarTransacao(SituacaoEspecialFaturamentoHelper situacaoEspecialFaturamentoHelper, String imov_id) throws ControladorException {
+		
+		Collection<FaturamentoSituacaoHistorico> colecaoFaturamento = pesquisarFaturamentoSituacaoHistoricoPorImovel(imov_id);
+		
+		if (colecaoFaturamento != null && !colecaoFaturamento.isEmpty()) {
+			FaturamentoSituacaoHistorico fsh = colecaoFaturamento.iterator().next();
+			
+			fsh.setObservacaoRetira(situacaoEspecialFaturamentoHelper.getObservacaoRetira());
+			fsh.setAnoMesFaturamentoRetirada(situacaoEspecialFaturamentoHelper.getAnoMesReferenciaFaturamentoGrupo());
+			
+			RegistradorOperacao registradorOperacao = new RegistradorOperacao(
+					Operacao.OPERACAO_RETIRAR_SITUACAO_ESPECIAL_FATURAMENTO,
+					new Integer(imov_id), 
+					new Integer(imov_id),
+					new UsuarioAcaoUsuarioHelper(situacaoEspecialFaturamentoHelper.getUsuarioLogado(),
+					UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+			
+			registradorOperacao.registrarOperacao(fsh);
+			getControladorTransacao().registrarTransacao(fsh);
+		}
+	}
+	
+	private Collection<FaturamentoSituacaoHistorico> pesquisarFaturamentoSituacaoHistoricoPorImovel(String imov_id) throws ControladorException {
+		FiltroFaturamentoSituacaoHistorico filtro = new FiltroFaturamentoSituacaoHistorico();
+		filtro.adicionarParametro(new ParametroSimples(FiltroFaturamentoSituacaoHistorico.ID_IMOVEL,imov_id));
+		
+		Collection<FaturamentoSituacaoHistorico> colecaoFaturamento = getControladorUtil().pesquisar(filtro, FaturamentoSituacaoHistorico.class.getName());
+		
+		return colecaoFaturamento;
+	}
+
+	private Collection buildColecaoImoveis(Collection pesquisarDadosImoveisParaSerRetirados) throws ControladorException {
+		
+		Collection colecaoImoveis = new ArrayList();
+		
+		Iterator iterator = pesquisarDadosImoveisParaSerRetirados.iterator();
+		
+		while (iterator.hasNext()) {
+
+			Object[] dadosImoveis = (Object[]) iterator.next();
+
+			if (dadosImoveis != null) {
+				Integer id = (Integer) dadosImoveis[0];
+
+				Date ultimaAlteracao = (Date) dadosImoveis[1];
+				Date ultimaAlteracaoImovel = this.pesquisarUltimaAlteracaoImovel(id);
+				
+				if (ultimaAlteracaoImovel.after(ultimaAlteracao)) {
+					throw new ControladorException("atencao.atualizacao.timestamp");
+				}
+
+				colecaoImoveis.add(id);
+			}
+		}
+		
+		return colecaoImoveis;
 	}
 
 	/**
@@ -3993,13 +3963,9 @@ public class ControladorImovelSEJB implements SessionBean {
 			Collection imoveisParaSerRetirados,Usuario usuario)throws ControladorException {
 		try {
 			
-			// vem do retirar = true. Se vier do inserir = false 
 			boolean retirar = true;
 			
-			//situacaoEspecialCobrancaHelper.setAnoMesReferenciaFaturamentoGrupo(anoMesReferenciaFaturamentoGrupo);
-			
-			Integer idCobrancaSituacaoComando  = getControladorCobranca()
-			.inserirCobrancaSituacaoComando(situacaoEspecialCobrancaHelper,retirar);
+			Integer idCobrancaSituacaoComando  = getControladorCobranca().inserirCobrancaSituacaoComando(situacaoEspecialCobrancaHelper,retirar);
 						
 			SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 

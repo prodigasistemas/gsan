@@ -15,63 +15,6 @@
 * You should have received a copy of the GNU General Public License
 * along with this program; if not, write to the Free Software
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
-*/
-
-/*
-* GSAN - Sistema Integrado de Gestão de Serviços de Saneamento
-* Copyright (C) <2007> 
-* Adriano Britto Siqueira
-* Alexandre Santos Cabral
-* Ana Carolina Alves Breda
-* Ana Maria Andrade Cavalcante
-* Aryed Lins de Araújo
-* Bruno Leonardo Rodrigues Barros
-* Carlos Elmano Rodrigues Ferreira
-* Cláudio de Andrade Lira
-* Denys Guimarães Guenes Tavares
-* Eduardo Breckenfeld da Rosa Borges
-* Fabíola Gomes de Araújo
-* Flávio Leonardo Cavalcanti Cordeiro
-* Francisco do Nascimento Júnior
-* Homero Sampaio Cavalcanti
-* Ivan Sérgio da Silva Júnior
-* José Edmar de Siqueira
-* José Thiago Tenório Lopes
-* Kássia Regina Silvestre de Albuquerque
-* Leonardo Luiz Vieira da Silva
-* Márcio Roberto Batista da Silva
-* Maria de Fátima Sampaio Leite
-* Micaela Maria Coelho de Araújo
-* Nelson Mendonça de Carvalho
-* Newton Morais e Silva
-* Pedro Alexandre Santos da Silva Filho
-* Rafael Corrêa Lima e Silva
-* Rafael Francisco Pinto
-* Rafael Koury Monteiro
-* Rafael Palermo de Araújo
-* Raphael Veras Rossiter
-* Roberto Sobreira Barbalho
-* Rodrigo Avellar Silveira
-* Rosana Carvalho Barbosa
-* Sávio Luiz de Andrade Cavalcante
-* Tai Mu Shih
-* Thiago Augusto Souza do Nascimento
-* Tiago Moreno Rodrigues
-* Vivianne Barbosa Sousa
-*
-* Este programa é software livre; você pode redistribuí-lo e/ou
-* modificá-lo sob os termos de Licença Pública Geral GNU, conforme
-* publicada pela Free Software Foundation; versão 2 da
-* Licença.
-* Este programa é distribuído na expectativa de ser útil, mas SEM
-* QUALQUER GARANTIA; sem mesmo a garantia implícita de
-* COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
-* PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
-* detalhes.
-* Você deve ter recebido uma cópia da Licença Pública Geral GNU
-* junto com este programa; se não, escreva para Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
-* 02111-1307, USA.
 */  
 package gcom.gui.faturamento;
 
@@ -97,14 +40,10 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-public class ValidarSituacaoEspecialFaturamentoInserirAtualizarAction extends
-		GcomAction {
+public class ValidarSituacaoEspecialFaturamentoInserirAtualizarAction extends GcomAction {
 
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 
-		// Seta o retorno
 		ActionForward retorno = actionMapping.findForward("telaSucesso");
 
 		SituacaoEspecialFaturamentoActionForm situacaoEspecialFaturamentoActionForm = (SituacaoEspecialFaturamentoActionForm) actionForm;
@@ -114,109 +53,71 @@ public class ValidarSituacaoEspecialFaturamentoInserirAtualizarAction extends
 		
 		Fachada fachada = Fachada.getInstancia();
 
-		// Comparar Ano Mes Referencia
-		String mesAnoReferenciaFaturamentoInicial = situacaoEspecialFaturamentoActionForm
-				.getMesAnoReferenciaFaturamentoInicial();
-		boolean mesAnoReferenciaInicialValido = Util
-				.validarMesAno(mesAnoReferenciaFaturamentoInicial);
+		String mesAnoReferenciaFaturamentoInicial = situacaoEspecialFaturamentoActionForm.getMesAnoReferenciaFaturamentoInicial();
+		boolean mesAnoReferenciaInicialValido = Util.validarMesAno(mesAnoReferenciaFaturamentoInicial);
 
-		String mesAnoReferenciaFaturamentoFinal = situacaoEspecialFaturamentoActionForm
-				.getMesAnoReferenciaFaturamentoFinal();
-
-		boolean mesAnoReferenciaFinalValido = Util
-				.validarMesAno(mesAnoReferenciaFaturamentoFinal);
+		String mesAnoReferenciaFaturamentoFinal = situacaoEspecialFaturamentoActionForm.getMesAnoReferenciaFaturamentoFinal();
+		boolean mesAnoReferenciaFinalValido = Util.validarMesAno(mesAnoReferenciaFaturamentoFinal);
 
 		Integer anoMesReferenciaInicial = null;
 		Integer anoMesReferenciaFinal = null;
 
 		if ((mesAnoReferenciaFaturamentoInicial != null && mesAnoReferenciaFaturamentoFinal != null)
-				&& (!mesAnoReferenciaFaturamentoInicial.equals("") && !mesAnoReferenciaFaturamentoFinal
-						.equals(""))) {
+				&& (!mesAnoReferenciaFaturamentoInicial.equals("") && !mesAnoReferenciaFaturamentoFinal.equals(""))) {
+			
 			if (!mesAnoReferenciaInicialValido) {
-				throw new ActionServletException(
-						"atencao.adicionar_debito_ano_mes_referencia_invalido",
-						null, "inicial");
+				throw new ActionServletException("atencao.adicionar_debito_ano_mes_referencia_invalido", null, "inicial");
 			}
+			
 			if (!mesAnoReferenciaFinalValido) {
-				throw new ActionServletException(
-						"atencao.adicionar_debito_ano_mes_referencia_invalido",
-						null, "final");
-
+				throw new ActionServletException("atencao.adicionar_debito_ano_mes_referencia_invalido", null, "final");
 			}
-			anoMesReferenciaInicial = Util
-					.formatarMesAnoComBarraParaAnoMes(mesAnoReferenciaFaturamentoInicial);
+			
+			anoMesReferenciaInicial = Util.formatarMesAnoComBarraParaAnoMes(mesAnoReferenciaFaturamentoInicial);
+			anoMesReferenciaFinal = Util.formatarMesAnoComBarraParaAnoMes(mesAnoReferenciaFaturamentoFinal);
 
-			anoMesReferenciaFinal = Util
-					.formatarMesAnoComBarraParaAnoMes(mesAnoReferenciaFaturamentoFinal);
-
-			boolean dataInicialSuperiorMenor = Util.compararAnoMesReferencia(
-					new Integer(anoMesReferenciaInicial), new Integer(
-							anoMesReferenciaFinal), "<");
-
-			boolean dataInicialSuperiorIgual = Util.compararAnoMesReferencia(
-					new Integer(anoMesReferenciaInicial), new Integer(
-							anoMesReferenciaFinal), "=");
+			boolean dataInicialSuperiorMenor = Util.compararAnoMesReferencia(new Integer(anoMesReferenciaInicial), new Integer(anoMesReferenciaFinal), "<");
+			boolean dataInicialSuperiorIgual = Util.compararAnoMesReferencia(new Integer(anoMesReferenciaInicial), new Integer(anoMesReferenciaFinal), "=");
 
 			if (dataInicialSuperiorMenor || dataInicialSuperiorIgual) {
 
-				Integer anoMesInicial = fachada
-						.validarMesAnoReferencia(transferirActionFormParaHelper(situacaoEspecialFaturamentoActionForm,usuarioLogado));
+				Integer anoMesInicial = fachada.validarMesAnoReferencia(transferirActionFormParaHelper(situacaoEspecialFaturamentoActionForm,usuarioLogado));
+				
 				if (anoMesInicial > (anoMesReferenciaInicial)) {
-
-					throw new ActionServletException(
-							"atencao.mes.ano.anterior.mes.ano.corrente.imovel");
-
+					throw new ActionServletException("atencao.mes.ano.anterior.mes.ano.corrente.imovel");
 				}
 			} else {
-				throw new ActionServletException(
-						"atencao.mes.ano.inicial.maior.mes.ano.final");
-
+				throw new ActionServletException("atencao.mes.ano.inicial.maior.mes.ano.final");
 			}
 		} else {
-			throw new ActionServletException("atencao.campo_texto.obrigatorio",
-					null,
-					"Mês e Ano de Referência do Faturamento Inicial e Final");
+			throw new ActionServletException("atencao.campo_texto.obrigatorio", null, "Mês e Ano de Referência do Faturamento Inicial e Final");
 		}
 
 		SituacaoEspecialFaturamentoHelper situacaoEspecialFaturamentoHelper = transferirActionFormParaHelper(situacaoEspecialFaturamentoActionForm,usuarioLogado);
 
 		Collection pesquisarImoveisParaSerInseridos = (Collection) sessao.getAttribute("SEMSituacaoEspecialFaturamento"); 
 			
-	
-		// vem do inserir, false. Se vier do retirar = true
 		boolean retirar = false;
 		
-		
-		// Inserir Situacao Especial de Faturamento
-		fachada.inserirSituacaoEspecialFaturamento(situacaoEspecialFaturamentoHelper,
-				retirar,pesquisarImoveisParaSerInseridos,new Integer(
-						situacaoEspecialFaturamentoActionForm
-						.getIdFaturamentoSituacaoTipo()), 
-						anoMesReferenciaInicial,anoMesReferenciaFinal);
+		fachada.inserirSituacaoEspecialFaturamento(situacaoEspecialFaturamentoHelper, retirar,pesquisarImoveisParaSerInseridos,
+													new Integer(situacaoEspecialFaturamentoActionForm.getIdFaturamentoSituacaoTipo()), 
+													anoMesReferenciaInicial,anoMesReferenciaFinal);
 		
 		
 		FiltroFaturamentoSituacaoTipo filtroFaturamentoSituacaoTipo = new FiltroFaturamentoSituacaoTipo();
 
-		filtroFaturamentoSituacaoTipo.adicionarParametro(new ParametroSimples(
-				FiltroFaturamentoSituacaoTipo.ID,
-				situacaoEspecialFaturamentoActionForm
-						.getIdFaturamentoSituacaoTipo()));
-		Collection collectionFaturamentoSituacaoTipo = fachada.pesquisar(
-				filtroFaturamentoSituacaoTipo, FaturamentoSituacaoTipo.class
-						.getName());
-		String descricaoFaturamentoSituacaoTipo = ((FaturamentoSituacaoTipo) Util
-				.retonarObjetoDeColecao(collectionFaturamentoSituacaoTipo))
-				.getDescricao();
+		filtroFaturamentoSituacaoTipo.adicionarParametro(new ParametroSimples(FiltroFaturamentoSituacaoTipo.ID, 
+																				situacaoEspecialFaturamentoActionForm.getIdFaturamentoSituacaoTipo()));
 		
+		Collection collectionFaturamentoSituacaoTipo = fachada.pesquisar(filtroFaturamentoSituacaoTipo, FaturamentoSituacaoTipo.class.getName());
+		String descricaoFaturamentoSituacaoTipo = ((FaturamentoSituacaoTipo) Util.retonarObjetoDeColecao(collectionFaturamentoSituacaoTipo)).getDescricao();
 		
-		montarPaginaSucesso(
-				httpServletRequest,
-				situacaoEspecialFaturamentoActionForm
-						.getQuantidadeImoveisSEMSituacaoEspecialFaturamento()
+		montarPaginaSucesso(httpServletRequest, situacaoEspecialFaturamentoActionForm.getQuantidadeImoveisSEMSituacaoEspecialFaturamento()
 						+ " imóvel(is) inserido(s) na situação especial de faturamento "
 						+ descricaoFaturamentoSituacaoTipo.toLowerCase() + " com sucesso.",
-				"Realizar outra Manutenção de Situação Especial de Faturamento",
-				"exibirSituacaoEspecialFaturamentoInformarAction.do?menu=sim");
+						"Realizar outra Manutenção de Situação Especial de Faturamento",
+						"exibirSituacaoEspecialFaturamentoInformarAction.do?menu=sim");
+		
 		return retorno;
 	}
 
