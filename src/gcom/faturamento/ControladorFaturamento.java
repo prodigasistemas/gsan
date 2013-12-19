@@ -16195,54 +16195,18 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 * 
 	 * @throws ControladorException
 	 */
-	public Collection pesquisarDadosRelatorioContasRetidas(
+	public Collection<RelatorioContasRetidasHelper> pesquisarDadosRelatorioContasRetidas(
 			int anoMesReferencia, Integer idFaturamentoGrupo) throws ControladorException {
 		
-		Collection retorno = new ArrayList();
+		Collection<RelatorioContasRetidasHelper> colecaoObjeto = new ArrayList<RelatorioContasRetidasHelper>();
+		
 		try {
-			Collection colecaoObjeto = repositorioFaturamento
-					.pesquisarDadosRelatorioContasRetidas(anoMesReferencia, idFaturamentoGrupo);
-			if (colecaoObjeto != null && !colecaoObjeto.isEmpty()) {
-				Iterator iterator = colecaoObjeto.iterator();
-
-				while (iterator.hasNext()) {
-					RelatorioContasRetidasHelper relatorioLeiturasContasRetidas = new RelatorioContasRetidasHelper();
-					Object[] objeto = (Object[]) iterator.next();
-					
-					// referencia
-					if (objeto[0] != null) {
-						relatorioLeiturasContasRetidas.setAnoMesReferencia((String) objeto[0]);
-					}
-
-					// unidade de negocio
-					if (objeto[1] != null) {
-						relatorioLeiturasContasRetidas.setUnidadeDeNegocio((String) objeto[1]);
-					}
-					
-					// grupo
-					if (objeto[2] != null) {
-						relatorioLeiturasContasRetidas.setGrupo((String) objeto[2]);
-					}
-					// qtd contas retidas
-					if (objeto[3] != null) {
-						relatorioLeiturasContasRetidas.setQtdContasRetidas((Integer) objeto[3]);
-					}
-					
-					
-					relatorioLeiturasContasRetidas
-							.setAnoMesReferencia(Util
-									.formatarAnoMesParaMesAnoSemBarra(anoMesReferencia));
-
-					retorno.add(relatorioLeiturasContasRetidas);
-
-				}
-
-			}
+			colecaoObjeto = repositorioFaturamento.pesquisarDadosRelatorioContasRetidas(anoMesReferencia, idFaturamentoGrupo);
 		} catch (ErroRepositorioException e) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);
 		}
-		return retorno;
+		return colecaoObjeto;
 	}
 
 	/**

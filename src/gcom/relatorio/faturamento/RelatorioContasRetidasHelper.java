@@ -1,13 +1,21 @@
 package gcom.relatorio.faturamento;
 
+import java.io.Serializable;
+
 import gcom.util.Util;
 
-public class RelatorioContasRetidasHelper {
+public class RelatorioContasRetidasHelper implements Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5116263322342672220L;
 	private String anoMesReferencia;
 	private String unidadeDeNegocio;
 	private String grupo;
 	private Integer qtdContasRetidas;
+	
+	public RelatorioContasRetidasHelper(){}
 	
 	public String getAnoMesReferencia() {
 		return anoMesReferencia;

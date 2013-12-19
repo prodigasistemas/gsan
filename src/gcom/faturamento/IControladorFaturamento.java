@@ -143,6 +143,7 @@ import gcom.micromedicao.consumo.ConsumoTipo;
 import gcom.micromedicao.medicao.FiltroMedicaoHistoricoSql;
 import gcom.relatorio.faturamento.FiltrarRelatorioDevolucaoPagamentosDuplicidadeHelper;
 import gcom.relatorio.faturamento.FiltrarRelatorioJurosMultasDebitosCanceladosHelper;
+import gcom.relatorio.faturamento.RelatorioContasRetidasHelper;
 import gcom.relatorio.faturamento.RelatorioFaturasAgrupadasBean;
 import gcom.relatorio.faturamento.RelatorioJurosMultasDebitosCanceladosHelper;
 import gcom.relatorio.faturamento.RelatorioProtocoloEntregaFaturaBean;
@@ -5718,7 +5719,7 @@ public interface IControladorFaturamento {
 	 * 
 	 * @throws ControladorException
 	 */
-	public Collection pesquisarDadosRelatorioContasRetidas(
+	public Collection<RelatorioContasRetidasHelper> pesquisarDadosRelatorioContasRetidas(
 			int anoMesReferencia, Integer idFaturamentoGrupo) throws ControladorException;
 	
 	/**
