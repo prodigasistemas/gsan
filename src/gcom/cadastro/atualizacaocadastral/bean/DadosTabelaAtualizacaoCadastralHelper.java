@@ -75,6 +75,7 @@
 */
 package gcom.cadastro.atualizacaocadastral.bean;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
@@ -82,7 +83,9 @@ import java.util.Date;
  * @date 02/06/2009
  */
 
-public class DadosTabelaAtualizacaoCadastralHelper {
+public class DadosTabelaAtualizacaoCadastralHelper implements Serializable{
+	private static final long serialVersionUID = 7924233122387459185L;
+
 	private Integer idTabelaAtualizacaoCadastral;
 	
 	private Integer idTabela;
