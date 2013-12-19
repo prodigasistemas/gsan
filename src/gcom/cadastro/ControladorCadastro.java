@@ -16656,19 +16656,6 @@ public class ControladorCadastro implements SessionBean {
 	 */
 	public void salvarTabelaColunaAtualizacaoCadastral(Object objetoAtualizacaoCadastralBase, Object objetoAtualizacaoCadastralTxt,
 			ArquivoTextoAtualizacaoCadastral arquivoTexto, Interceptador interceptador, int matriculaImovel) throws ControladorException {
-
-		ClienteAtualizacaoCadastral clienteAtualizacaoCadastralBase = null;
-		ClienteFoneAtualizacaoCadastral clienteFoneAtualizacaoCadastralBase = null;
-		ImovelAtualizacaoCadastral imovelAtualizacaoCadastralBase = null;
-		ImovelSubcategoriaAtualizacaoCadastral imovelSubcategoriaAtualizacaoCadastralBase = null;
-		ImovelRamoAtividadeAtualizacaoCadastral imovelRamoAtividadeAtualizacaoCadastralBase = null;
-
-		ClienteAtualizacaoCadastral clienteAtualizacaoCadastralTxt = null;
-		ClienteFoneAtualizacaoCadastral clienteFoneAtualizacaoCadastralTxt = null;
-		ImovelAtualizacaoCadastral imovelAtualizacaoCadastralTxt = null;
-		ImovelSubcategoriaAtualizacaoCadastral imovelSubcategoriaAtualizacaoCadastralTxt = null;
-		ImovelRamoAtividadeAtualizacaoCadastral imovelRamoAtividadeAtualizacaoCadastralTxt = null;
-
 		Collection<TabelaLinhaColunaAlteracao> colunasAlteradas = null;
 
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL, matriculaImovel,
@@ -16689,46 +16676,46 @@ public class ControladorCadastro implements SessionBean {
 			Tabela tabela = new Tabela();
 
 			if (objetoAtualizacaoCadastralBase instanceof ClienteAtualizacaoCadastral) {
-				clienteAtualizacaoCadastralBase = (ClienteAtualizacaoCadastral) objetoAtualizacaoCadastralBase;
-				clienteAtualizacaoCadastralTxt = (ClienteAtualizacaoCadastral) objetoAtualizacaoCadastralTxt;
+				ClienteAtualizacaoCadastral base = (ClienteAtualizacaoCadastral) objetoAtualizacaoCadastralBase;
+				ClienteAtualizacaoCadastral txt = (ClienteAtualizacaoCadastral) objetoAtualizacaoCadastralTxt;
 
-				tabelaAtualizacaoCadastral.setIdRegistroAlterado(clienteAtualizacaoCadastralBase.getIdCliente());
-				tabelaAtualizacaoCadastral.setCodigoCliente(clienteAtualizacaoCadastralBase.getIdCliente());
-				tabelaAtualizacaoCadastral.setOperacaoEfetuada(clienteAtualizacaoCadastralTxt.getOperacaoEfetuada());
+				tabelaAtualizacaoCadastral.setIdRegistroAlterado(base.getIdCliente());
+				tabelaAtualizacaoCadastral.setCodigoCliente(base.getIdCliente());
+				tabelaAtualizacaoCadastral.setOperacaoEfetuada(txt.getOperacaoEfetuada());
 				tabela.setId(Tabela.CLIENTE_ATUALIZACAO_CADASTRAL);
 				tabelaAtualizacaoCadastral.setIndicadorPrincipal(new Short("2"));
 
 			} else if (objetoAtualizacaoCadastralBase instanceof ImovelAtualizacaoCadastral) {
-				imovelAtualizacaoCadastralBase = (ImovelAtualizacaoCadastral) objetoAtualizacaoCadastralBase;
-				imovelAtualizacaoCadastralTxt = (ImovelAtualizacaoCadastral) objetoAtualizacaoCadastralTxt;
+				ImovelAtualizacaoCadastral base = (ImovelAtualizacaoCadastral) objetoAtualizacaoCadastralBase;
+				ImovelAtualizacaoCadastral txt = (ImovelAtualizacaoCadastral) objetoAtualizacaoCadastralTxt;
 
-				tabelaAtualizacaoCadastral.setIdRegistroAlterado(imovelAtualizacaoCadastralBase.getIdImovel());
-				tabelaAtualizacaoCadastral.setOperacaoEfetuada(imovelAtualizacaoCadastralTxt.getOperacaoEfetuada());
+				tabelaAtualizacaoCadastral.setIdRegistroAlterado(base.getIdImovel());
+				tabelaAtualizacaoCadastral.setOperacaoEfetuada(txt.getOperacaoEfetuada());
 				tabela.setId(Tabela.IMOVEL_ATUALIZACAO_CADASTRAL);
 				tabelaAtualizacaoCadastral.setIndicadorPrincipal(new Short("1"));
 			} else if (objetoAtualizacaoCadastralBase instanceof ClienteFoneAtualizacaoCadastral) {
-				clienteFoneAtualizacaoCadastralBase = (ClienteFoneAtualizacaoCadastral) objetoAtualizacaoCadastralBase;
-				clienteFoneAtualizacaoCadastralTxt = (ClienteFoneAtualizacaoCadastral) objetoAtualizacaoCadastralTxt;
+				ClienteFoneAtualizacaoCadastral base = (ClienteFoneAtualizacaoCadastral) objetoAtualizacaoCadastralBase;
+				ClienteFoneAtualizacaoCadastral txt = (ClienteFoneAtualizacaoCadastral) objetoAtualizacaoCadastralTxt;
 
 				tabelaAtualizacaoCadastral.setIndicadorPrincipal(new Short("2"));
 				tabela.setId(Tabela.CLIENTE_FONE_ATUALIZACAO_CADASTRAL);
-				tabelaAtualizacaoCadastral.setCodigoCliente(clienteFoneAtualizacaoCadastralTxt.getIdCliente());
-				tabelaAtualizacaoCadastral.setOperacaoEfetuada(clienteFoneAtualizacaoCadastralTxt.getOperacaoEfetuada());
-				tabelaAtualizacaoCadastral.setIdRegistroAlterado(clienteFoneAtualizacaoCadastralTxt.getIdCliente());
+				tabelaAtualizacaoCadastral.setCodigoCliente(txt.getIdCliente());
+				tabelaAtualizacaoCadastral.setOperacaoEfetuada(txt.getOperacaoEfetuada());
+				tabelaAtualizacaoCadastral.setIdRegistroAlterado(txt.getIdCliente());
 			} else if (objetoAtualizacaoCadastralBase instanceof ImovelSubcategoriaAtualizacaoCadastral) {
-				imovelSubcategoriaAtualizacaoCadastralBase = (ImovelSubcategoriaAtualizacaoCadastral) objetoAtualizacaoCadastralBase;
-				imovelSubcategoriaAtualizacaoCadastralTxt = (ImovelSubcategoriaAtualizacaoCadastral) objetoAtualizacaoCadastralTxt;
+				ImovelSubcategoriaAtualizacaoCadastral base = (ImovelSubcategoriaAtualizacaoCadastral) objetoAtualizacaoCadastralBase;
+				ImovelSubcategoriaAtualizacaoCadastral txt = (ImovelSubcategoriaAtualizacaoCadastral) objetoAtualizacaoCadastralTxt;
 
 				tabelaAtualizacaoCadastral.setIdRegistroAlterado(matriculaImovel);
-				tabelaAtualizacaoCadastral.setOperacaoEfetuada(imovelSubcategoriaAtualizacaoCadastralTxt.getOperacaoEfetuada());
+				tabelaAtualizacaoCadastral.setOperacaoEfetuada(txt.getOperacaoEfetuada());
 				tabela.setId(Tabela.IMOVEL_SUBCATEGORIA_ATUALIZACAO_CADASTRAL);
 				tabelaAtualizacaoCadastral.setIndicadorPrincipal(new Short("2"));
 			} else if (objetoAtualizacaoCadastralBase instanceof ImovelRamoAtividadeAtualizacaoCadastral) {
-				imovelRamoAtividadeAtualizacaoCadastralBase = (ImovelRamoAtividadeAtualizacaoCadastral) objetoAtualizacaoCadastralBase;
-				imovelRamoAtividadeAtualizacaoCadastralTxt = (ImovelRamoAtividadeAtualizacaoCadastral) objetoAtualizacaoCadastralTxt;
+				ImovelRamoAtividadeAtualizacaoCadastral base = (ImovelRamoAtividadeAtualizacaoCadastral) objetoAtualizacaoCadastralBase;
+				ImovelRamoAtividadeAtualizacaoCadastral txt = (ImovelRamoAtividadeAtualizacaoCadastral) objetoAtualizacaoCadastralTxt;
 
 				tabelaAtualizacaoCadastral.setIdRegistroAlterado(matriculaImovel);
-				tabelaAtualizacaoCadastral.setOperacaoEfetuada(imovelRamoAtividadeAtualizacaoCadastralTxt.getOperacaoEfetuada());
+				tabelaAtualizacaoCadastral.setOperacaoEfetuada(txt.getOperacaoEfetuada());
 				tabela.setId(Tabela.IMOVEL_RAMO_ATIVIDADE_ATUALIZACAO_CADASTRAL);
 				tabelaAtualizacaoCadastral.setIndicadorPrincipal(new Short("2"));
 			}
