@@ -8562,12 +8562,12 @@ public class ControladorCadastro implements SessionBean {
 		}
 
 		// NUMERO MEDIDOR ENERGIA
-		if (imovelAtualizacaoCadastral.getNumeroMedidirEnergia() != null
-				&& !imovelAtualizacaoCadastral.getNumeroMedidirEnergia()
+		if (imovelAtualizacaoCadastral.getNumeroMedidorEnergia() != null
+				&& !imovelAtualizacaoCadastral.getNumeroMedidorEnergia()
 						.equals("")) {
 			arquivoTextoRegistroTipoImovel.append(Util
 					.adicionarZerosEsquedaNumero(20, imovelAtualizacaoCadastral
-							.getNumeroMedidirEnergia().toString()));
+							.getNumeroMedidorEnergia().toString()));
 		} else {
 			arquivoTextoRegistroTipoImovel.append(Util.completaString("", 20));
 		}
@@ -17200,6 +17200,8 @@ public class ControladorCadastro implements SessionBean {
 		 imovelTxt.setCodigoCep(Integer.parseInt(maps[1].get("cep")));
 		 imovelTxt.setNomeBairro(maps[1].get("bairro"));
 		 imovelTxt.setNomeMunicipio(maps[1].get("municipio"));
+		 imovelTxt.setNumeroPontosUtilizacao(Short.parseShort(maps[1].get("numeroPontosUteis")));
+		 imovelTxt.setNumeroMorador(Short.parseShort(maps[1].get("numeroOcupantes")));
 		 
 		 // Linha 4
 		 imovelTxt.setIdLigacaoAguaSituacao(Integer.parseInt(maps[3].get("ligacaoAguaSituacao")));

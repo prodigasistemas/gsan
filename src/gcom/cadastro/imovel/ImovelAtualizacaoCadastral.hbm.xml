@@ -63,7 +63,7 @@
 		<property name="nomeMunicipio" type="java.lang.String" column="imac_nmmunicipio" length="30"/>
 		<property name="idUinidadeFederacao" type="java.lang.Integer" column="unfe_id" length="4"/>
 		<property name="dsUFSiglaMunicipio" type="java.lang.String" column="imac_dsufsiglamunicipio" length="2"/>
-		<property name="numeroMedidirEnergia" type="java.lang.String" column="imac_nnmedidorenergia" length="10"/>
+		<property name="numeroMedidorEnergia" type="java.lang.String" column="imac_nnmedidorenergia" length="10"/>
 		<property name="idCadastroOcorrencia" type="java.lang.Integer" column="cocr_id" length="4"/>
 		<property name="descricaoOutrasInformacoes" type="java.lang.String" column="imac_dsoutrasinformacoes" length="100"/>
 		<property name="nomeEntrevistado" type="java.lang.String" column="imac_nmentrevistado" length="50"/>

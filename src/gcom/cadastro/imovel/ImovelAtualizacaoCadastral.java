@@ -43,7 +43,6 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
     private short subLote;
 	
     /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer numeroSequencialRota;
 	
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
@@ -59,7 +58,6 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
     private String dsLogradouroTitulo;
     
     /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idLogradouro;
 	
     /** nullable persistent field */
@@ -67,7 +65,6 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
     private String descricaoLogradouro;
 	
     /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idBairro;
 	
     /** nullable persistent field */
@@ -87,27 +84,21 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
     private String complementoEndereco;
 	
     /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idEnderecoReferencia;
 
     /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idDespejo;
 
     /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private BigDecimal volumeReservatorioSuperior;
 
     /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private BigDecimal volumeReservatorioInferior;
 
     /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idPavimentoCalcada;
 
     /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idPavimentoRua;
 
     /** nullable persistent field */
@@ -123,19 +114,16 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
     private Integer idLigacaoEsgotoSituacao;
 
     /** nullable persistent field */
-//	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idImovelPerfil;
 
     /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private BigDecimal volumePiscina;
 
     /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idPocoTipo;
 
     /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Short numeroPontosUtilizacao;
 
     /** nullable persistent field */
@@ -162,15 +150,12 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
     private Date ultimaAlteracao;
 
     /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private BigDecimal areaConstruida;
 
     /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Short indicadorJardim;
 
     /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer numeroLeituraInstalacaoHidrometro;
 
     /** nullable persistent field */
@@ -182,11 +167,9 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
     private Integer idMarcaHidrometro;
 
     /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idLocalInstalacaoHidrometro;
 
     /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idProtecaoHidrometro;
 
     /** nullable persistent field */
@@ -194,15 +177,13 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
     private String numeroHidrometro;
 
     /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Short indicadorCavalete;
 	
     /** nullable persistent field */
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private String numeroMedidirEnergia;
+    private String numeroMedidorEnergia;
 	
     /** nullable persistent field */
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idCadastroOcorrencia;
 	
     /** nullable persistent field */
@@ -217,7 +198,6 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
 	private Integer idLocalInstalacaoRamal;
 	
     /** persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer codigoImovelPrincipal;
     
     /** persistent field */
@@ -256,7 +236,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
 			Integer idCapacidadeHidrometro, Integer idMarcaHidrometro,
 			Integer idLocalInstalacaoHidrometro, Integer idProtecaoHidrometro,
 			String numeroHidrometro, Short indicadorCavalete,
-			String numeroMedidirEnergia, Integer idCadastroOcorrencia,
+			String numeroMedidorEnergia, Integer idCadastroOcorrencia,
 			String descricaoOutrasInformacoes, String nomeEntrevistado,
 			Integer codigoImovelPrincipal,
 			Integer idSituacaoAtualizacaoCadastral, Integer idEmpresa,
@@ -309,7 +289,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
 		this.idProtecaoHidrometro = idProtecaoHidrometro;
 		this.numeroHidrometro = numeroHidrometro;
 		this.indicadorCavalete = indicadorCavalete;
-		this.numeroMedidirEnergia = numeroMedidirEnergia;
+		this.numeroMedidorEnergia = numeroMedidorEnergia;
 		this.idCadastroOcorrencia = idCadastroOcorrencia;
 		this.descricaoOutrasInformacoes = descricaoOutrasInformacoes;
 		this.nomeEntrevistado = nomeEntrevistado;
@@ -894,12 +874,12 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
 		this.nomeEntrevistado = nomeEntrevistado;
 	}
 
-	public String getNumeroMedidirEnergia() {
-		return numeroMedidirEnergia;
+	public String getNumeroMedidorEnergia() {
+		return numeroMedidorEnergia;
 	}
 
-	public void setNumeroMedidirEnergia(String numeroMedidirEnergia) {
-		this.numeroMedidirEnergia = numeroMedidirEnergia;
+	public void setNumeroMedidorEnergia(String numeroMedidorEnergia) {
+		this.numeroMedidorEnergia = numeroMedidorEnergia;
 	}
 
 	public Integer getIdLocalInstalacaoRamal() {

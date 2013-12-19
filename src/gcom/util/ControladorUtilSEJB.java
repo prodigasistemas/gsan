@@ -327,7 +327,7 @@ public class ControladorUtilSEJB implements SessionBean {
 		try {
 			return repositorioUtil.pesquisar(filtro, pacoteNomeObjeto);
 		} catch (ErroRepositorioException ex) {
-		//	sessionContext.setRollbackOnly();
+			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
