@@ -6,6 +6,7 @@ import gcom.tarefa.TarefaBatch;
 import gcom.tarefa.TarefaException;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
+import gcom.util.Util;
 import gcom.util.agendadortarefas.AgendadorTarefas;
 
 import java.util.Collection;
@@ -30,21 +31,21 @@ public class TarefaBatchCancelarGuiasPagamentoNaoPagas extends TarefaBatch {
 
 	public Object executar() throws TarefaException {
 
-		Date dataReferencia = (Date) getParametro("dataReferencia");
-
         @SuppressWarnings("unchecked")
-		Collection<Localidade> colecaoLocalidades = (Collection<Localidade>) getParametro(
+		Collection<Localidade> colecaoIdLocalidades = (Collection<Localidade>) getParametro(
 				ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH); 
 		
-		Iterator iterator = colecaoLocalidades.iterator();
+		Iterator iterator = colecaoIdLocalidades.iterator();
 
 		while (iterator.hasNext()) {
 
-			Localidade localidade = (Localidade) iterator.next();
+			Integer idLocalidade = (Integer) iterator.next();
+			
+			Date dataReferencia = Util.subtrairNumeroDiasDeUmaData(new Date(), 60);
 			
 			enviarMensagemControladorBatch(
 	                  ConstantesJNDI.BATCH_CANCELAR_GUIAS_PAGAMENTO_NAO_PAGAS,
-	                  new Object[] { this.getIdFuncionalidadeIniciada(),dataReferencia, localidade });
+	                  new Object[] { this.getIdFuncionalidadeIniciada(),dataReferencia, idLocalidade });
 			
 		}
 

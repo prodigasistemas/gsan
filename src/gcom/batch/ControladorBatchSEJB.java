@@ -4018,27 +4018,27 @@ public class ControladorBatchSEJB implements SessionBean {
 
 						break;
 						
-//					case Funcionalidade.CANCELAR_GUIAS_PAGAMENTO_NAO_PAGAS:
-//
-//						TarefaBatchCancelarGuiasPagamentoNaoPagas cancelarGuiasPagamentoNaoPagas = new TarefaBatchCancelarGuiasPagamentoNaoPagas(
-//								processoIniciado.getUsuario(),
-//								funcionalidadeIniciada.getId());
-//
-//						Date dataReferencia = new Date();
-//						cancelarGuiasPagamentoNaoPagas.addParametro("dataReferencia", dataReferencia);
-//
-//						Collection<Integer> colecaoIdsLocalidadesComGuiasPagamentoNaoPagas = getControladorArrecadacao()
-//								.pesquisarIdsLocalidadeComGuiasPagamentoNaoPagas(dataReferencia, null);
-//						
-//						cancelarGuiasPagamentoNaoPagas.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-//								colecaoIdsLocalidadesComGuiasPagamentoNaoPagas);
-//
-//
-//						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(cancelarGuiasPagamentoNaoPagas));
-//
-//						getControladorUtil().atualizar(funcionalidadeIniciada);
-//
-//						break;
+					case Funcionalidade.CANCELAR_GUIAS_PAGAMENTO_NAO_PAGAS:
+
+						TarefaBatchCancelarGuiasPagamentoNaoPagas cancelarGuiasPagamentoNaoPagas = new TarefaBatchCancelarGuiasPagamentoNaoPagas(
+								processoIniciado.getUsuario(),
+								funcionalidadeIniciada.getId());
+
+						Date dataReferencia = new Date();
+						cancelarGuiasPagamentoNaoPagas.addParametro("dataReferencia", dataReferencia);
+
+						Collection<Integer> colecaoIdsLocalidadesComGuiasPagamentoNaoPagas = getControladorArrecadacao()
+								.pesquisarIdsLocalidadeComGuiasPagamentoNaoPagas(dataReferencia, null);
+						
+						cancelarGuiasPagamentoNaoPagas.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
+								colecaoIdsLocalidadesComGuiasPagamentoNaoPagas);
+
+
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(cancelarGuiasPagamentoNaoPagas));
+
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+
+						break;
 						
 					default:
 

@@ -56598,7 +56598,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 	
 	public Collection<GuiaPagamento> obterGuiasPagamentoNaoPagasAtePeriodo(Integer idFuncionalidadeIniciada, Date dataVencimentoLimite, 
-			Integer financiamentoTipoServico, Localidade localidade) throws ControladorException {
+			Integer financiamentoTipoServico, Integer idLocalidade) throws ControladorException {
 		
 		Integer idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,UnidadeProcessamento.FUNCIONALIDADE,0);
 
@@ -56606,13 +56606,15 @@ public class ControladorArrecadacao implements SessionBean {
 		try {
 
 			colecaoGuiaPagamentos = repositorioArrecadacao
-					.obterGuiasPagamentoNaoPagasAtePeriodo(financiamentoTipoServico, dataVencimentoLimite, localidade);
+					.obterGuiasPagamentoNaoPagasAtePeriodo(financiamentoTipoServico, dataVencimentoLimite, idLocalidade);
 			
 			System.out.println("Quantidade de guias: " + colecaoGuiaPagamentos.size());
 			
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,idUnidadeIniciada, false);
 
 		} catch (ErroRepositorioException ex) {
+			System.out.println("Erro no processamento da LOCALIDADE: " + idLocalidade );
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}

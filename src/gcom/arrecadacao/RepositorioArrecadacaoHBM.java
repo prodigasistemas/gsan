@@ -31516,32 +31516,40 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		}
 		
 		public Collection<GuiaPagamento> obterGuiasPagamentoNaoPagasAtePeriodo(Integer financiamentoTipoServico, 
-				Date dataVencimentoLimite,  Localidade localidade) throws ErroRepositorioException {
+				Date dataVencimentoLimite,  Integer idLocalidade) throws ErroRepositorioException {
 			Session session = HibernateUtil.getSession();
 			
 			StringBuilder sql = new StringBuilder();
 			
+			
+			
 			Collection<GuiaPagamento> retorno = new ArrayList<GuiaPagamento>();
 			try {
-				sql.append("SELECT gpag ")
-		           .append(" FROM faturamento.guia_pagamento gpag ")
-		           .append(" LEFT JOIN arrecadacao.pagamento pgmt ON pgmt.gpag_id = gpag.gpag_id ")
-		           .append(" WHERE gpag_dtvencimento < :dataVencimentoLimite ")
-		           .append(" AND pgmt_id IS NULL ")
-		           //.append(" AND fntp_id = :financiamentoTipoServico ")
-		           .append(" AND loca_id = :localidade")
-		           .append(" AND dcst_idatual in (:situacaoNormal,:situacaoRetificada,:situacaoIncluida)");
+				sql.append(" UPDATE faturamento.guia_pagamento ")
+                    .append(" SET dcst_idanterior = dcst_idatual, ")
+                    .append(" dcst_idatual = :situacaoCancelada, ")
+                    .append(" gpag_tmultimaalteracao = now() ")
+                    .append(" WHERE gpag_id IN ")
+                    	.append(" (SELECT gpag.gpag_id ")
+                    	.append(" FROM faturamento.guia_pagamento gpag ")
+                    	.append(" LEFT JOIN arrecadacao.pagamento pgmt ON pgmt.gpag_id = gpag.gpag_id ")
+                    	.append(" WHERE gpag_dtvencimento < :dataVencimentoLimite ")
+                    	.append(" AND pgmt_id IS NULL ")
+                    	.append(" AND fntp_id in (:financiamentoTipoServicoNormal) ")
+                    	.append(" AND gpag.loca_id = :idLocalidade ")
+                    	.append(" AND dcst_idatual in (:situacaoNormal,:situacaoRetificada,:situacaoIncluida))");
 				
-				retorno = session.createQuery(sql.toString())
+				 session.createSQLQuery(sql.toString())
+					.setInteger("situacaoCancelada", DebitoCreditoSituacao.CANCELADA)
 					.setDate("dataVencimentoLimite", dataVencimentoLimite)
-					//.setInteger("financiamentoTipoServico", financiamentoTipoServico)
-					.setInteger("localidade", localidade.getId())
+					.setInteger("idLocalidade", idLocalidade)
+					.setInteger("financiamentoTipoServicoNormal", FinanciamentoTipo.SERVICO_NORMAL)
 					.setInteger("situacaoNormal", DebitoCreditoSituacao.NORMAL)
 					.setInteger("situacaoRetificada", DebitoCreditoSituacao.RETIFICADA)
-					.setInteger("situacaoIncluida", DebitoCreditoSituacao.INCLUIDA).list();
+					.setInteger("situacaoIncluida", DebitoCreditoSituacao.INCLUIDA).executeUpdate();
 				
 			} catch (HibernateException e) {
-
+				e.printStackTrace();
 				throw new ErroRepositorioException(e, "Erro no Hibernate");
 				
 			}
@@ -31558,18 +31566,18 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			
 			Collection<Integer> retorno = new ArrayList<Integer>();
 			try {
-				sql.append("SELECT gpag.loca_id ")
+				sql.append("SELECT distinct gpag.loca_id as localidade ")
 		           .append(" FROM faturamento.guia_pagamento gpag ")
 		           .append(" LEFT JOIN arrecadacao.pagamento pgmt ON pgmt.gpag_id = gpag.gpag_id ")
 		           .append(" WHERE gpag_dtvencimento < :dataVencimentoLimite ")
 		           .append(" AND pgmt_id IS NULL ")
-		           //.append(" AND fntp_id = :financiamentoTipoServico ")
-		           .append(" AND loca_id = :localidade")
+		           .append(" AND fntp_id in (:financiamentoTipoServicoNormal) ")
 		           .append(" AND dcst_idatual in (:situacaoNormal,:situacaoRetificada,:situacaoIncluida)");
 				
-				retorno = session.createQuery(sql.toString())
+				retorno = session.createSQLQuery(sql.toString())
+					.addScalar("localidade", Hibernate.INTEGER)
 					.setDate("dataVencimentoLimite", dataVencimentoLimite)
-					//.setInteger("financiamentoTipoServico", financiamentoTipoServico)
+					.setInteger("financiamentoTipoServicoNormal", FinanciamentoTipo.SERVICO_NORMAL)
 					.setInteger("situacaoNormal", DebitoCreditoSituacao.NORMAL)
 					.setInteger("situacaoRetificada", DebitoCreditoSituacao.RETIFICADA)
 					.setInteger("situacaoIncluida", DebitoCreditoSituacao.INCLUIDA).list();

@@ -4438,7 +4438,7 @@ public interface IControladorArrecadacao {
 				Integer anoMesReferencia) throws ControladorException;
 		
 		public Collection<GuiaPagamento> obterGuiasPagamentoNaoPagasAtePeriodo(Integer idFuncionalidadeIniciada, Date dataVencimentoLimite, 
-				Integer financiamentoTipoServico, Localidade localidade) throws ControladorException;
+				Integer financiamentoTipoServico, Integer idLocalidade) throws ControladorException;
 				
 		public Collection<Integer> pesquisarIdsLocalidadeComGuiasPagamentoNaoPagas(Date dataVencimentoLimite, 
 				Integer financiamentoTipoServico) throws ControladorException;
