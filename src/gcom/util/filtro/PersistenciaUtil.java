@@ -271,51 +271,6 @@ public class PersistenciaUtil {
 		// return colecaoDados;
 	}
 
-	/*
-	 * public static String processaObjetosParaCarregamentoJoinFetch( String
-	 * aliasTabela, Collection nomeObjetos) throws ErroRepositorioException {
-	 * 
-	 * String resultadoJoinsMontados = ""; // Verifica se o usuario informou //
-	 * algum objeto para ser carregado // // Armazena os joins que já foram //
-	 * usados // // // [stringDoJoin -> aliasDoJoin] Map<String, String>
-	 * joinExistentesQuery // = new HashMap<String, String>(); int
-	 * contadorItensColecao = 0; if (!nomeObjetos.isEmpty()) { Iterator
-	 * iteratorNomes = nomeObjetos.iterator(); // Percorre cada nome informado
-	 * while (iteratorNomes.hasNext()) { contadorItensColecao++;
-	 * 
-	 * int contadorNomes = 0;
-	 * 
-	 * String nomeColecao = (String) iteratorNomes.next(); // Serve de //
-	 * separador // para montar a hierarquia de objetos // informados
-	 * StringTokenizer separador = new StringTokenizer(nomeColecao, ".");
-	 * 
-	 * String ultimoNomeJoin = ""; while (separador.hasMoreTokens()) {
-	 * contadorNomes++; String join = ""; String aliasJoin = ""; if
-	 * (contadorNomes == 1) {
-	 * 
-	 * join = aliasTabela + "." + separador.nextToken(); aliasJoin = "a" +
-	 * contadorItensColecao + "" + contadorNomes; // Verificar se o join já //
-	 * existe no Map if // (joinExistentesQuery.containsKey(join)) // { // Se já
-	 * existir um // join igual, entao pegar o // alias // no lugar do join //
-	 * join = joinExistentesQuery.get(join); ultimoNomeJoin = join; } else {
-	 * 
-	 * resultadoJoinsMontados = resultadoJoinsMontados + " left join fetch " +
-	 * join + " " + aliasJoin + " "; if (!joinExistentesQuery.containsKey(join)) {
-	 * joinExistentesQuery.put(join, aliasJoin); } ultimoNomeJoin = aliasJoin; } }
-	 * else {
-	 * 
-	 * join = ultimoNomeJoin + "." + separador.nextToken(); aliasJoin = "a" +
-	 * contadorItensColecao + "" + contadorNomes; // Verificar se o join já //
-	 * existe no Map if // (joinExistentesQuery.containsKey(join)) // { // Se já
-	 * existir um // join igual, entao pegar o // alias // no lugar do join //
-	 * join = joinExistentesQuery.get(join); ultimoNomeJoin = join; } else {
-	 * 
-	 * resultadoJoinsMontados = resultadoJoinsMontados + " left join fetch " +
-	 * join + " " + aliasJoin + " "; if (!joinExistentesQuery.containsKey(join)) {
-	 * joinExistentesQuery.put(join, aliasJoin); } ultimoNomeJoin = aliasJoin; } } } } }
-	 * return resultadoJoinsMontados; }
-	 */
-
 	public static String processaObjetosParaCarregamentoJoinFetch(
 			String aliasTabela, Collection nomeObjetos)
 			throws ErroRepositorioException {
