@@ -159,6 +159,7 @@ import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.micromedicao.medicao.MedicaoTipo;
 import gcom.relatorio.faturamento.FiltrarRelatorioDevolucaoPagamentosDuplicidadeHelper;
 import gcom.relatorio.faturamento.FiltrarRelatorioJurosMultasDebitosCanceladosHelper;
+import gcom.relatorio.faturamento.RelatorioContasRetidasHelper;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
 import gcom.util.CollectionUtil;
 import gcom.util.ConstantesSistema;
@@ -198,6 +199,7 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.StatelessSession;
+import org.hibernate.transform.Transformers;
 
 /**
  * < <Descrição da Classe>>
@@ -58940,17 +58942,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * 
 	 * @throws ControladorException
 	 */
-	public Collection pesquisarDadosRelatorioContasRetidas(
+	public Collection<RelatorioContasRetidasHelper> pesquisarDadosRelatorioContasRetidas(
 			int anoMesReferencia, Integer idFaturamentoGrupo) throws ErroRepositorioException {
 		
-		Collection retorno = null;
+		Collection<RelatorioContasRetidasHelper> retorno = null;
+		
 		Session session = HibernateUtil.getSession();
-		String consulta;
+		
 		try {
-			consulta = "SELECT cnta_amreferenciaconta as referencia, " 		//0
-						+ " uneg_nmunidadenegocio as unidadeDeNegocio, " 	//1
-						+ " ftgr_id as grupo, " 							//2
-						+ " count(*) as qtdContasRetidas" 					//3
+			String consulta = "SELECT cnta_amreferenciaconta as anoMesReferencia, "
+						+ " uneg_nmunidadenegocio as unidadeDeNegocio, "
+						+ " ftgr_id as grupo, "
+						+ " count(*) as qtdContasRetidas"
 						+ " FROM faturamento.conta c, "
 						+ " cadastro.localidade l, "
 						+ " cadastro.unidade_negocio un, "
@@ -58966,21 +58969,19 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " order by 1,2,3 ";
 
 			retorno = session.createSQLQuery(consulta)
-					.addScalar("referencia", Hibernate.STRING)
+					.addScalar("anoMesReferencia", Hibernate.STRING)
 					.addScalar("unidadeDeNegocio", Hibernate.STRING)
 					.addScalar("grupo", Hibernate.STRING)
 					.addScalar("qtdContasRetidas", Hibernate.INTEGER)
-					
 					.setInteger("situacaoPreFaturada", DebitoCreditoSituacao.PRE_FATURADA)
 					.setInteger("idFaturamentoGrupo", idFaturamentoGrupo)
 					.setInteger("anoMesReferencia", Integer.valueOf(anoMesReferencia))
+					.setResultTransformer(Transformers.aliasToBean(RelatorioContasRetidasHelper.class))
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 

@@ -136,9 +136,8 @@ import org.apache.struts.action.ActionMapping;
  */
 public class AtualizarSituacaoEspecialFaturamentoAction extends GcomAction {
 
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest httpServletRequest,
+								HttpServletResponse httpServletResponse) {
 
 		Fachada fachada = Fachada.getInstancia();
 		HttpSession sessao = httpServletRequest.getSession(false);
@@ -146,7 +145,7 @@ public class AtualizarSituacaoEspecialFaturamentoAction extends GcomAction {
 		AtualizarSituacaoEspecialFaturamentoActionForm atualizarSituacaoEspecialFaturamentoActionForm = (AtualizarSituacaoEspecialFaturamentoActionForm) actionForm;
 		FaturamentoSituacaoComando faturamentoSituacaoComandoOriginal= (FaturamentoSituacaoComando) sessao.getAttribute("atualizarFaturamentoSituacaoComando");
 		
-		Usuario usuarioLogado =(Usuario) sessao.getAttribute(Usuario.USUARIO_LOGADO);
+		Usuario usuarioLogado = (Usuario) sessao.getAttribute(Usuario.USUARIO_LOGADO);
 		
 		validarMesAnoReferencia(atualizarSituacaoEspecialFaturamentoActionForm, usuarioLogado);
 
@@ -159,44 +158,34 @@ public class AtualizarSituacaoEspecialFaturamentoAction extends GcomAction {
         faturamentoSituacaoComandoOriginal = obterFaturamentoSituacaoComando(fachada,faturamentoSituacaoComandoOriginal);
 
         FaturamentoSituacaoComando faturamentoSituacaoComandoRetirar = criarCopiaComando(faturamentoSituacaoComandoOriginal);
-
         FaturamentoSituacaoComando faturamentoSituacaoComandoInserir = criarCopiaComando(faturamentoSituacaoComandoOriginal);
 
 		SistemaParametro sistemaParametros = fachada.pesquisarParametrosDoSistema();			  
 
-		modificarAtributosRetirarSituacaoEspecialFaturamento(
-				faturamentoSituacaoComandoRetirar, usuarioLogado, sistemaParametros);		
-
-		modificarAtributosInserirSituacaoEspecialFaturamento(
-				faturamentoSituacaoComandoInserir, usuarioLogado,
-				sistemaParametros,atualizarSituacaoEspecialFaturamentoActionForm);
+		modificarAtributosRetirarSituacaoEspecialFaturamento(faturamentoSituacaoComandoRetirar, usuarioLogado, sistemaParametros);		
+		modificarAtributosInserirSituacaoEspecialFaturamento(faturamentoSituacaoComandoInserir, usuarioLogado, sistemaParametros,atualizarSituacaoEspecialFaturamentoActionForm);
 		
-		ArrayList<FaturamentoSituacaoHistorico> colecaoFaturamentoSituacaoHistoricoAtualizar = 
-        	(ArrayList<FaturamentoSituacaoHistorico>) obterColecaoFaturamentoSituacaoHistorico(faturamentoSituacaoComandoOriginal);
-
+		ArrayList<FaturamentoSituacaoHistorico> colecaoFaturamentoSituacaoHistoricoAtualizar = (ArrayList<FaturamentoSituacaoHistorico>) obterColecaoFaturamentoSituacaoHistorico(faturamentoSituacaoComandoOriginal);
         ArrayList<FaturamentoSituacaoHistorico> colecaoFaturamentoSituacaoHistoricoInserir = null;
         
-        if( !Util.isVazioOrNulo(colecaoFaturamentoSituacaoHistoricoAtualizar)){
+        if(!Util.isVazioOrNulo(colecaoFaturamentoSituacaoHistoricoAtualizar)){
         	colecaoFaturamentoSituacaoHistoricoInserir = new ArrayList<FaturamentoSituacaoHistorico>();
         	
         	for(FaturamentoSituacaoHistorico historico: colecaoFaturamentoSituacaoHistoricoAtualizar){
 
         		FaturamentoSituacaoHistorico historicoInserir = criarCopiaHistorico(historico);
-        		modificarAtributosInserirFaturamentoSituacaoHistorico(
-						faturamentoSituacaoComandoInserir,historicoInserir);
-        		colecaoFaturamentoSituacaoHistoricoInserir.add(historicoInserir);
-
+        		modificarAtributosInserirFaturamentoSituacaoHistorico(faturamentoSituacaoComandoInserir,historicoInserir);
         		
-        		modificarAtributosRetirarFaturamentoSituacaoHistorico(
-						faturamentoSituacaoComandoRetirar, historico);
+        		colecaoFaturamentoSituacaoHistoricoInserir.add(historicoInserir);
+        		modificarAtributosRetirarFaturamentoSituacaoHistorico(faturamentoSituacaoComandoRetirar, historico);
         	}        	
         }
        
-		fachada.atualizarSituacaoEspecialFaturamento(faturamentoSituacaoComandoOriginal,faturamentoSituacaoComandoInserir, colecaoFaturamentoSituacaoHistoricoInserir, faturamentoSituacaoComandoRetirar, colecaoFaturamentoSituacaoHistoricoAtualizar);		
+		fachada.atualizarSituacaoEspecialFaturamento(faturamentoSituacaoComandoOriginal,faturamentoSituacaoComandoInserir, colecaoFaturamentoSituacaoHistoricoInserir, 
+													faturamentoSituacaoComandoRetirar, colecaoFaturamentoSituacaoHistoricoAtualizar);		
 		
 		montarPaginaSucesso(httpServletRequest, "Situacao Especial de Faturamento"
-				+ " atualizado com sucesso.",
-				"Realizar outra Manutenção de Situação Especial de Faturamento",
+				+ " atualizado com sucesso.", "Realizar outra Manutenção de Situação Especial de Faturamento", 
 				"exibirFiltrarSituacaoEspecialFaturamentoAction.do?menu=sim");        
         
 		return actionMapping.findForward("telaSucesso");
@@ -209,11 +198,8 @@ public class AtualizarSituacaoEspecialFaturamentoAction extends GcomAction {
 	 *@since 17/08/2009
 	 *@author Marlon Patrick
 	 */
-	private void modificarAtributosRetirarFaturamentoSituacaoHistorico(
-			FaturamentoSituacaoComando faturamentoSituacaoComandoRetirar,
-			FaturamentoSituacaoHistorico historico) {
-
-		
+	private void modificarAtributosRetirarFaturamentoSituacaoHistorico(FaturamentoSituacaoComando faturamentoSituacaoComandoRetirar, 
+																		FaturamentoSituacaoHistorico historico) {
 		historico.setAnoMesFaturamentoSituacaoFim(faturamentoSituacaoComandoRetirar.getAnoMesFinalSituacaoFaturamento());
 		historico.setAnoMesFaturamentoRetirada(faturamentoSituacaoComandoRetirar.getAnoMesFinalSituacaoFaturamento());
 		historico.setFaturamentoSituacaoComandoRetirada(faturamentoSituacaoComandoRetirar);
@@ -226,10 +212,8 @@ public class AtualizarSituacaoEspecialFaturamentoAction extends GcomAction {
 	 *@since 17/08/2009
 	 *@author Marlon Patrick
 	 */
-	private void modificarAtributosInserirFaturamentoSituacaoHistorico(
-			FaturamentoSituacaoComando faturamentoSituacaoComandoInserir,
-			FaturamentoSituacaoHistorico historico) {
-		
+	private void modificarAtributosInserirFaturamentoSituacaoHistorico(FaturamentoSituacaoComando faturamentoSituacaoComandoInserir, 
+																		FaturamentoSituacaoHistorico historico) {
 		historico.setId(null);
 		historico.setAnoMesFaturamentoRetirada(null);
 		historico.setUltimaAlteracao(new Date());
@@ -251,29 +235,20 @@ public class AtualizarSituacaoEspecialFaturamentoAction extends GcomAction {
 	 *@since 17/08/2009
 	 *@author Marlon Patrick
 	 */
-	private void modificarAtributosInserirSituacaoEspecialFaturamento(
-			FaturamentoSituacaoComando faturamentoSituacaoComandoInserir,
-			Usuario usuarioLogado,
-			SistemaParametro sistemaParametros,
-			AtualizarSituacaoEspecialFaturamentoActionForm atualizarSituacaoEspecialFaturamentoActionForm) {
+	private void modificarAtributosInserirSituacaoEspecialFaturamento(FaturamentoSituacaoComando faturamentoSituacaoComandoInserir, Usuario usuarioLogado,
+			SistemaParametro sistemaParametros, AtualizarSituacaoEspecialFaturamentoActionForm atualizarSituacaoEspecialFaturamentoActionForm) {
 		
-		//atributo passível de alteração na tela
 		faturamentoSituacaoComandoInserir.setId(null);		
-		faturamentoSituacaoComandoInserir.setObservacao(atualizarSituacaoEspecialFaturamentoActionForm.
-				getObservacao());		
+		faturamentoSituacaoComandoInserir.setObservacao(atualizarSituacaoEspecialFaturamentoActionForm.getObservacao());		
 		
-		//atributo passível de alteração na tela
 		faturamentoSituacaoComandoInserir.setAnoMesFinalSituacaoFaturamento( 
-				Util.formatarMesAnoComBarraParaAnoMes(atualizarSituacaoEspecialFaturamentoActionForm.
-						getMesAnoReferenciaFaturamentoFinal()));		
+				Util.formatarMesAnoComBarraParaAnoMes(atualizarSituacaoEspecialFaturamentoActionForm.getMesAnoReferenciaFaturamentoFinal()));		
 		
 		faturamentoSituacaoComandoInserir.setIndicadorComando((short)1);		
 		faturamentoSituacaoComandoInserir.setUsuario(usuarioLogado);		
 		faturamentoSituacaoComandoInserir.setUltimaAlteracao(new Date());
 		
-		faturamentoSituacaoComandoInserir.setAnoMesInicialSituacaoFaturamento(
-				sistemaParametros.getAnoMesFaturamento());
-
+		faturamentoSituacaoComandoInserir.setAnoMesInicialSituacaoFaturamento(sistemaParametros.getAnoMesFaturamento());
 	}
 
 	/**
@@ -284,10 +259,8 @@ public class AtualizarSituacaoEspecialFaturamentoAction extends GcomAction {
 	 *@since 17/08/2009
 	 *@author Marlon Patrick
 	 */
-	private void modificarAtributosRetirarSituacaoEspecialFaturamento(
-			FaturamentoSituacaoComando faturamentoSituacaoComando,
-			Usuario usuarioLogado, SistemaParametro sistemaParametros) {
-
+	private void modificarAtributosRetirarSituacaoEspecialFaturamento(FaturamentoSituacaoComando faturamentoSituacaoComando,
+																		Usuario usuarioLogado, SistemaParametro sistemaParametros) {
 		faturamentoSituacaoComando.setId(null);
 		faturamentoSituacaoComando.setIndicadorComando((short)2);		
 		faturamentoSituacaoComando.setUsuario(usuarioLogado);
@@ -295,24 +268,11 @@ public class AtualizarSituacaoEspecialFaturamentoAction extends GcomAction {
 		faturamentoSituacaoComando.setUltimaAlteracao(new Date());
 	}
 
-	/**
-	 *[UC ] - 
-	 *[SB ] -
-	 *[FS ] -
-	 *
-	 * comment
-	 *
-	 *@since 14/08/2009
-	 *@author Marlon Patrick
-	 */
-	private Collection<FaturamentoSituacaoHistorico> obterColecaoFaturamentoSituacaoHistorico(
-			FaturamentoSituacaoComando faturamentoSituacaoComando) {
+	private Collection<FaturamentoSituacaoHistorico> obterColecaoFaturamentoSituacaoHistorico(FaturamentoSituacaoComando faturamentoSituacaoComando) {
 		
 		FiltroFaturamentoSituacaoHistorico filtroFaturamentoSituacaoHistorico = new FiltroFaturamentoSituacaoHistorico();
-		filtroFaturamentoSituacaoHistorico.adicionarParametro(
-				new ParametroSimples(FiltroFaturamentoSituacaoHistorico.FATURAMENTO_COMANDO_INFORMA_ID,faturamentoSituacaoComando.getId()));
-		filtroFaturamentoSituacaoHistorico.adicionarParametro(
-				new ParametroNulo(FiltroFaturamentoSituacaoHistorico.ANO_MES_FATURAMENTO_RETIRADA));
+		filtroFaturamentoSituacaoHistorico.adicionarParametro(new ParametroSimples(FiltroFaturamentoSituacaoHistorico.FATURAMENTO_COMANDO_INFORMA_ID,faturamentoSituacaoComando.getId()));
+		filtroFaturamentoSituacaoHistorico.adicionarParametro(new ParametroNulo(FiltroFaturamentoSituacaoHistorico.ANO_MES_FATURAMENTO_RETIRADA));
 		
 		filtroFaturamentoSituacaoHistorico.adicionarCaminhoParaCarregamentoEntidade(FiltroFaturamentoSituacaoHistorico.FATURAMENTO_COMANDO_INFORMA);
 		filtroFaturamentoSituacaoHistorico.adicionarCaminhoParaCarregamentoEntidade(FiltroFaturamentoSituacaoHistorico.FATURAMENTO_RETIRA);
@@ -323,8 +283,7 @@ public class AtualizarSituacaoEspecialFaturamentoAction extends GcomAction {
 		filtroFaturamentoSituacaoHistorico.adicionarCaminhoParaCarregamentoEntidade(FiltroFaturamentoSituacaoHistorico.USUARIO_INFORMA);
 		filtroFaturamentoSituacaoHistorico.adicionarCaminhoParaCarregamentoEntidade(FiltroFaturamentoSituacaoHistorico.USUARIO_RETIRA);
 		
-		return Fachada.getInstancia().pesquisar(
-				filtroFaturamentoSituacaoHistorico, FaturamentoSituacaoHistorico.class.getName());		
+		return Fachada.getInstancia().pesquisar(filtroFaturamentoSituacaoHistorico, FaturamentoSituacaoHistorico.class.getName());		
 	}
 
 	/**
@@ -334,13 +293,10 @@ public class AtualizarSituacaoEspecialFaturamentoAction extends GcomAction {
 	 *@since 14/08/2009
 	 *@author Marlon Patrick
 	 */
-	private FaturamentoSituacaoComando obterFaturamentoSituacaoComando(
-			Fachada fachada,
-			FaturamentoSituacaoComando faturamentoSituacaoComando) {
+	private FaturamentoSituacaoComando obterFaturamentoSituacaoComando(Fachada fachada, FaturamentoSituacaoComando faturamentoSituacaoComando) {
 
 		FiltroFaturamentoSituacaoComando filtroFaturamentoSituacaoComando = new FiltroFaturamentoSituacaoComando();
-		filtroFaturamentoSituacaoComando.adicionarParametro(
-				new ParametroSimples(FiltroFaturamentoSituacaoComando.ID, faturamentoSituacaoComando.getId()));
+		filtroFaturamentoSituacaoComando.adicionarParametro(new ParametroSimples(FiltroFaturamentoSituacaoComando.ID, faturamentoSituacaoComando.getId()));
 		
 		filtroFaturamentoSituacaoComando.adicionarCaminhoParaCarregamentoEntidade(FiltroFaturamentoSituacaoComando.CATEGORIA_1);
 		filtroFaturamentoSituacaoComando.adicionarCaminhoParaCarregamentoEntidade(FiltroFaturamentoSituacaoComando.CATEGORIA_2);
@@ -353,8 +309,7 @@ public class AtualizarSituacaoEspecialFaturamentoAction extends GcomAction {
 		filtroFaturamentoSituacaoComando.adicionarCaminhoParaCarregamentoEntidade(FiltroFaturamentoSituacaoComando.FATURAMENTO_SITUACAO_TIPO);
 		filtroFaturamentoSituacaoComando.adicionarCaminhoParaCarregamentoEntidade(FiltroFaturamentoSituacaoComando.USUARIO);
 	
-		Collection<FaturamentoSituacaoComando> colecaoComando = fachada.
-					pesquisar(filtroFaturamentoSituacaoComando, FaturamentoSituacaoComando.class.getName());
+		Collection<FaturamentoSituacaoComando> colecaoComando = fachada.pesquisar(filtroFaturamentoSituacaoComando, FaturamentoSituacaoComando.class.getName());
 		
 		return colecaoComando.iterator().next();		
 	}
@@ -364,285 +319,162 @@ public class AtualizarSituacaoEspecialFaturamentoAction extends GcomAction {
 
 		Fachada fachada = Fachada.getInstancia();
 
-		String mesAnoReferenciaFaturamentoInicial = situacaoEspecialFaturamentoActionForm
-		.getMesAnoReferenciaFaturamentoInicial();
-
-		String mesAnoReferenciaFaturamentoFinal = situacaoEspecialFaturamentoActionForm
-		.getMesAnoReferenciaFaturamentoFinal();
+		String mesAnoReferenciaFaturamentoInicial = situacaoEspecialFaturamentoActionForm.getMesAnoReferenciaFaturamentoInicial();
+		String mesAnoReferenciaFaturamentoFinal = situacaoEspecialFaturamentoActionForm.getMesAnoReferenciaFaturamentoFinal();
 
 		if (!Util.verificarNaoVazio(mesAnoReferenciaFaturamentoInicial)) {
-
-			throw new ActionServletException("atencao.campo_texto.obrigatorio",
-					null,"Mês e Ano de Referência do Faturamento Inicial");
-
+			throw new ActionServletException("atencao.campo_texto.obrigatorio", null,"Mês e Ano de Referência do Faturamento Inicial");
 		}
 
 		if (!Util.verificarNaoVazio(mesAnoReferenciaFaturamentoFinal)) {
-
-			throw new ActionServletException("atencao.campo_texto.obrigatorio",
-					null,"Mês e Ano de Referência do Faturamento Final");
-
+			throw new ActionServletException("atencao.campo_texto.obrigatorio", null,"Mês e Ano de Referência do Faturamento Final");
 		}
-
 
 		Integer anoMesReferenciaInicial = null;
 		Integer anoMesReferenciaFinal = null;
 
-
 		if ( !Util.validarMesAno(mesAnoReferenciaFaturamentoInicial)) {
-			throw new ActionServletException(
-					"atencao.adicionar_debito_ano_mes_referencia_invalido",null, "inicial");
+			throw new ActionServletException("atencao.adicionar_debito_ano_mes_referencia_invalido",null, "inicial");
 		}
 		if ( !Util.validarMesAno(mesAnoReferenciaFaturamentoFinal)) {
-			throw new ActionServletException(
-					"atencao.adicionar_debito_ano_mes_referencia_invalido",null, "final");
+			throw new ActionServletException("atencao.adicionar_debito_ano_mes_referencia_invalido",null, "final");
 
 		}
 
-		anoMesReferenciaInicial = Util
-			.formatarMesAnoComBarraParaAnoMes(mesAnoReferenciaFaturamentoInicial);
+		anoMesReferenciaInicial = Util.formatarMesAnoComBarraParaAnoMes(mesAnoReferenciaFaturamentoInicial);
+		anoMesReferenciaFinal = Util.formatarMesAnoComBarraParaAnoMes(mesAnoReferenciaFaturamentoFinal);
 
-		anoMesReferenciaFinal = Util
-			.formatarMesAnoComBarraParaAnoMes(mesAnoReferenciaFaturamentoFinal);
-
-		boolean dataInicialMenor = Util.compararAnoMesReferencia(
-				new Integer(anoMesReferenciaInicial), new Integer(anoMesReferenciaFinal), "<");
-
-		boolean dataInicialIgual = Util.compararAnoMesReferencia(
-				new Integer(anoMesReferenciaInicial), new Integer(anoMesReferenciaFinal), "=");
+		boolean dataInicialMenor = Util.compararAnoMesReferencia(new Integer(anoMesReferenciaInicial), new Integer(anoMesReferenciaFinal), "<");
+		boolean dataInicialIgual = Util.compararAnoMesReferencia(new Integer(anoMesReferenciaInicial), new Integer(anoMesReferenciaFinal), "=");
 
 		if (dataInicialMenor || dataInicialIgual) {
 
-			Integer anoMesInicial = fachada
-				.validarMesAnoReferencia(transferirActionFormParaHelper(situacaoEspecialFaturamentoActionForm,usuarioLogado));
+			Integer anoMesInicial = fachada.validarMesAnoReferencia(transferirActionFormParaHelper(situacaoEspecialFaturamentoActionForm,usuarioLogado));
 			
 			if (anoMesInicial > anoMesReferenciaFinal) {
-
-				throw new ActionServletException(
-						"atencao.mes.ano.anterior.mes.ano.corrente.imovel");
-
+				throw new ActionServletException("atencao.mes.ano.anterior.mes.ano.corrente.imovel");
 			}
 		} else {
-			throw new ActionServletException(
-					"atencao.mes.ano.inicial.maior.mes.ano.final");
-
+			throw new ActionServletException("atencao.mes.ano.inicial.maior.mes.ano.final");
 		}
 	}
 	
-	private SituacaoEspecialFaturamentoHelper transferirActionFormParaHelper(
-			AtualizarSituacaoEspecialFaturamentoActionForm situacaoEspecialFaturamentoActionForm,
-			Usuario usuarioLogado) {
+	private SituacaoEspecialFaturamentoHelper transferirActionFormParaHelper(AtualizarSituacaoEspecialFaturamentoActionForm situacaoEspecialFaturamentoActionForm,
+																			Usuario usuarioLogado) {
 
 		SituacaoEspecialFaturamentoHelper situacaoEspecialFaturamentoHelper = new SituacaoEspecialFaturamentoHelper();
 
-		situacaoEspecialFaturamentoHelper
-				.setIdImovel(situacaoEspecialFaturamentoActionForm
-						.getIdImovel() == null ? ""
-						: situacaoEspecialFaturamentoActionForm.getIdImovel());
+		situacaoEspecialFaturamentoHelper.setIdImovel(situacaoEspecialFaturamentoActionForm.getIdImovel() == null ? ""
+														: situacaoEspecialFaturamentoActionForm.getIdImovel());
 
-		situacaoEspecialFaturamentoHelper
-				.setInscricaoTipo(situacaoEspecialFaturamentoActionForm
-						.getInscricaoTipo() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getInscricaoTipo());
+		situacaoEspecialFaturamentoHelper.setInscricaoTipo(situacaoEspecialFaturamentoActionForm.getInscricaoTipo() == null ? ""
+															: situacaoEspecialFaturamentoActionForm.getInscricaoTipo());
 
-		situacaoEspecialFaturamentoHelper
-				.setLoteDestino(situacaoEspecialFaturamentoActionForm
-						.getLoteDestino() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getLoteDestino());
+		situacaoEspecialFaturamentoHelper.setLoteDestino(situacaoEspecialFaturamentoActionForm.getLoteDestino() == null ? ""
+															: situacaoEspecialFaturamentoActionForm.getLoteDestino());
 
-		situacaoEspecialFaturamentoHelper
-				.setQuadraDestinoNM(situacaoEspecialFaturamentoActionForm
-						.getQuadraDestinoNM() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getQuadraDestinoNM());
+		situacaoEspecialFaturamentoHelper.setQuadraDestinoNM(situacaoEspecialFaturamentoActionForm.getQuadraDestinoNM() == null ? ""
+																: situacaoEspecialFaturamentoActionForm.getQuadraDestinoNM());
 
-		situacaoEspecialFaturamentoHelper
-				.setLoteOrigem(situacaoEspecialFaturamentoActionForm
-						.getLoteOrigem() == null ? ""
-						: situacaoEspecialFaturamentoActionForm.getLoteOrigem());
+		situacaoEspecialFaturamentoHelper.setLoteOrigem(situacaoEspecialFaturamentoActionForm.getLoteOrigem() == null ? ""
+														: situacaoEspecialFaturamentoActionForm.getLoteOrigem());
 
-		situacaoEspecialFaturamentoHelper
-				.setNomeLocalidadeOrigem(situacaoEspecialFaturamentoActionForm
-						.getNomeLocalidadeOrigem() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getNomeLocalidadeOrigem());
+		situacaoEspecialFaturamentoHelper.setNomeLocalidadeOrigem(situacaoEspecialFaturamentoActionForm.getNomeLocalidadeOrigem() == null ? ""
+																	: situacaoEspecialFaturamentoActionForm.getNomeLocalidadeOrigem());
 
-		situacaoEspecialFaturamentoHelper
-				.setNomeSetorComercialOrigem(situacaoEspecialFaturamentoActionForm
-						.getNomeSetorComercialOrigem() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getNomeSetorComercialOrigem());
+		situacaoEspecialFaturamentoHelper.setNomeSetorComercialOrigem(situacaoEspecialFaturamentoActionForm.getNomeSetorComercialOrigem() == null ? ""
+																		: situacaoEspecialFaturamentoActionForm.getNomeSetorComercialOrigem());
 
-		situacaoEspecialFaturamentoHelper
-				.setQuadraOrigemNM(situacaoEspecialFaturamentoActionForm
-						.getQuadraOrigemNM() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getQuadraOrigemNM());
+		situacaoEspecialFaturamentoHelper.setQuadraOrigemNM(situacaoEspecialFaturamentoActionForm.getQuadraOrigemNM() == null ? ""
+															: situacaoEspecialFaturamentoActionForm.getQuadraOrigemNM());
 
-		situacaoEspecialFaturamentoHelper
-				.setQuadraMensagemOrigem(situacaoEspecialFaturamentoActionForm
-						.getQuadraMensagemOrigem() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getQuadraMensagemOrigem());
+		situacaoEspecialFaturamentoHelper.setQuadraMensagemOrigem(situacaoEspecialFaturamentoActionForm.getQuadraMensagemOrigem() == null ? ""
+																	: situacaoEspecialFaturamentoActionForm.getQuadraMensagemOrigem());
 
-		situacaoEspecialFaturamentoHelper
-				.setNomeLocalidadeDestino(situacaoEspecialFaturamentoActionForm
-						.getNomeLocalidadeDestino() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getNomeLocalidadeDestino());
+		situacaoEspecialFaturamentoHelper.setNomeLocalidadeDestino(situacaoEspecialFaturamentoActionForm.getNomeLocalidadeDestino() == null ? ""
+																	: situacaoEspecialFaturamentoActionForm.getNomeLocalidadeDestino());
 
-		situacaoEspecialFaturamentoHelper
-				.setSetorComercialDestinoCD(situacaoEspecialFaturamentoActionForm
-						.getSetorComercialDestinoCD() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getSetorComercialDestinoCD());
+		situacaoEspecialFaturamentoHelper.setSetorComercialDestinoCD(situacaoEspecialFaturamentoActionForm.getSetorComercialDestinoCD() == null ? ""
+																		: situacaoEspecialFaturamentoActionForm.getSetorComercialDestinoCD());
 
-		situacaoEspecialFaturamentoHelper
-				.setSetorComercialOrigemCD(situacaoEspecialFaturamentoActionForm
-						.getSetorComercialOrigemCD() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getSetorComercialOrigemCD());
+		situacaoEspecialFaturamentoHelper.setSetorComercialOrigemCD(situacaoEspecialFaturamentoActionForm.getSetorComercialOrigemCD() == null ? ""
+																	: situacaoEspecialFaturamentoActionForm.getSetorComercialOrigemCD());
 
-		situacaoEspecialFaturamentoHelper
-				.setSetorComercialOrigemID(situacaoEspecialFaturamentoActionForm
-						.getSetorComercialOrigemID() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getSetorComercialOrigemID());
+		situacaoEspecialFaturamentoHelper.setSetorComercialOrigemID(situacaoEspecialFaturamentoActionForm.getSetorComercialOrigemID() == null ? ""
+																	: situacaoEspecialFaturamentoActionForm.getSetorComercialOrigemID());
 
-		situacaoEspecialFaturamentoHelper
-				.setQuadraOrigemID(situacaoEspecialFaturamentoActionForm
-						.getQuadraOrigemID() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getQuadraOrigemID());
+		situacaoEspecialFaturamentoHelper.setQuadraOrigemID(situacaoEspecialFaturamentoActionForm.getQuadraOrigemID() == null ? ""
+															: situacaoEspecialFaturamentoActionForm.getQuadraOrigemID());
 
-		situacaoEspecialFaturamentoHelper
-				.setLocalidadeDestinoID(situacaoEspecialFaturamentoActionForm
-						.getLocalidadeDestinoID() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getLocalidadeDestinoID());
+		situacaoEspecialFaturamentoHelper.setLocalidadeDestinoID(situacaoEspecialFaturamentoActionForm.getLocalidadeDestinoID() == null ? ""
+																: situacaoEspecialFaturamentoActionForm.getLocalidadeDestinoID());
 
-		situacaoEspecialFaturamentoHelper
-				.setLocalidadeOrigemID(situacaoEspecialFaturamentoActionForm
-						.getLocalidadeOrigemID() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getLocalidadeOrigemID());
+		situacaoEspecialFaturamentoHelper.setLocalidadeOrigemID(situacaoEspecialFaturamentoActionForm.getLocalidadeOrigemID() == null ? ""
+																: situacaoEspecialFaturamentoActionForm.getLocalidadeOrigemID());
 
-		situacaoEspecialFaturamentoHelper
-				.setNomeSetorComercialDestino(situacaoEspecialFaturamentoActionForm
-						.getNomeSetorComercialDestino() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getNomeSetorComercialDestino());
+		situacaoEspecialFaturamentoHelper.setNomeSetorComercialDestino(situacaoEspecialFaturamentoActionForm.getNomeSetorComercialDestino() == null ? ""
+																		: situacaoEspecialFaturamentoActionForm.getNomeSetorComercialDestino());
 
-		situacaoEspecialFaturamentoHelper
-				.setSetorComercialDestinoID(situacaoEspecialFaturamentoActionForm
-						.getSetorComercialDestinoID() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getSetorComercialDestinoID());
+		situacaoEspecialFaturamentoHelper.setSetorComercialDestinoID(situacaoEspecialFaturamentoActionForm.getSetorComercialDestinoID() == null ? ""
+																	: situacaoEspecialFaturamentoActionForm.getSetorComercialDestinoID());
 
-		situacaoEspecialFaturamentoHelper
-				.setQuadraMensagemDestino(situacaoEspecialFaturamentoActionForm
-						.getQuadraMensagemDestino() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getQuadraMensagemDestino());
+		situacaoEspecialFaturamentoHelper.setQuadraMensagemDestino(situacaoEspecialFaturamentoActionForm.getQuadraMensagemDestino() == null ? ""
+																	: situacaoEspecialFaturamentoActionForm.getQuadraMensagemDestino());
 
-		situacaoEspecialFaturamentoHelper
-				.setQuadraDestinoID(situacaoEspecialFaturamentoActionForm
-						.getQuadraDestinoID() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getQuadraDestinoID());
+		situacaoEspecialFaturamentoHelper.setQuadraDestinoID(situacaoEspecialFaturamentoActionForm.getQuadraDestinoID() == null ? ""
+															: situacaoEspecialFaturamentoActionForm.getQuadraDestinoID());
 
-		situacaoEspecialFaturamentoHelper
-				.setTipoSituacaoEspecialFaturamento(situacaoEspecialFaturamentoActionForm
-						.getTipoSituacaoEspecialFaturamento() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getTipoSituacaoEspecialFaturamento());
+		situacaoEspecialFaturamentoHelper.setTipoSituacaoEspecialFaturamento(situacaoEspecialFaturamentoActionForm.getTipoSituacaoEspecialFaturamento() == null ? "" 
+																			: situacaoEspecialFaturamentoActionForm.getTipoSituacaoEspecialFaturamento());
 
 		situacaoEspecialFaturamentoHelper
 				.setLoteOrigem(situacaoEspecialFaturamentoActionForm
 						.getLoteOrigem() == null ? ""
 						: situacaoEspecialFaturamentoActionForm.getLoteOrigem());
 
-		situacaoEspecialFaturamentoHelper
-				.setLoteDestino(situacaoEspecialFaturamentoActionForm
-						.getLoteDestino() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getLoteDestino());
+		situacaoEspecialFaturamentoHelper.setLoteDestino(situacaoEspecialFaturamentoActionForm.getLoteDestino() == null ? ""
+														: situacaoEspecialFaturamentoActionForm.getLoteDestino());
 
-		situacaoEspecialFaturamentoHelper
-				.setSubloteOrigem(situacaoEspecialFaturamentoActionForm
-						.getSubloteOrigem() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getSubloteOrigem());
+		situacaoEspecialFaturamentoHelper.setSubloteOrigem(situacaoEspecialFaturamentoActionForm.getSubloteOrigem() == null ? ""
+															: situacaoEspecialFaturamentoActionForm.getSubloteOrigem());
 
-		situacaoEspecialFaturamentoHelper
-				.setSubloteDestino(situacaoEspecialFaturamentoActionForm
-						.getSubloteDestino() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getSubloteDestino());
+		situacaoEspecialFaturamentoHelper.setSubloteDestino(situacaoEspecialFaturamentoActionForm.getSubloteDestino() == null ? ""
+															: situacaoEspecialFaturamentoActionForm.getSubloteDestino());
 
-		situacaoEspecialFaturamentoHelper
-				.setIdFaturamentoSituacaoMotivo(situacaoEspecialFaturamentoActionForm
-						.getIdFaturamentoSituacaoMotivo() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getIdFaturamentoSituacaoMotivo());
+		situacaoEspecialFaturamentoHelper.setIdFaturamentoSituacaoMotivo(situacaoEspecialFaturamentoActionForm.getIdFaturamentoSituacaoMotivo() == null ? ""
+																		: situacaoEspecialFaturamentoActionForm.getIdFaturamentoSituacaoMotivo());
 
-		situacaoEspecialFaturamentoHelper
-				.setIdFaturamentoSituacaoTipo(situacaoEspecialFaturamentoActionForm
-						.getIdFaturamentoSituacaoTipo() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getIdFaturamentoSituacaoTipo());
+		situacaoEspecialFaturamentoHelper.setIdFaturamentoSituacaoTipo(situacaoEspecialFaturamentoActionForm.getIdFaturamentoSituacaoTipo() == null ? ""
+																		: situacaoEspecialFaturamentoActionForm.getIdFaturamentoSituacaoTipo());
 
-		situacaoEspecialFaturamentoHelper
-				.setMesAnoReferenciaFaturamentoInicial(situacaoEspecialFaturamentoActionForm
-						.getMesAnoReferenciaFaturamentoInicial() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getMesAnoReferenciaFaturamentoInicial());
+		situacaoEspecialFaturamentoHelper.setMesAnoReferenciaFaturamentoInicial(situacaoEspecialFaturamentoActionForm.getMesAnoReferenciaFaturamentoInicial() == null ? ""
+																				: situacaoEspecialFaturamentoActionForm.getMesAnoReferenciaFaturamentoInicial());
 
-		situacaoEspecialFaturamentoHelper
-				.setMesAnoReferenciaFaturamentoFinal(situacaoEspecialFaturamentoActionForm
-						.getMesAnoReferenciaFaturamentoFinal() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getMesAnoReferenciaFaturamentoFinal());
+		situacaoEspecialFaturamentoHelper.setMesAnoReferenciaFaturamentoFinal(situacaoEspecialFaturamentoActionForm.getMesAnoReferenciaFaturamentoFinal() == null ? ""
+																				: situacaoEspecialFaturamentoActionForm.getMesAnoReferenciaFaturamentoFinal());
 
-		situacaoEspecialFaturamentoHelper
-				.setQuantidadeImoveisCOMSituacaoEspecialFaturamento(situacaoEspecialFaturamentoActionForm
-						.getQuantidadeImoveisCOMSituacaoEspecialFaturamento() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getQuantidadeImoveisCOMSituacaoEspecialFaturamento());
+		situacaoEspecialFaturamentoHelper.setQuantidadeImoveisCOMSituacaoEspecialFaturamento(situacaoEspecialFaturamentoActionForm.getQuantidadeImoveisCOMSituacaoEspecialFaturamento() == null ? ""
+																							: situacaoEspecialFaturamentoActionForm.getQuantidadeImoveisCOMSituacaoEspecialFaturamento());
 
-		situacaoEspecialFaturamentoHelper
-				.setQuantidadeImoveisSEMSituacaoEspecialFaturamento(situacaoEspecialFaturamentoActionForm
-						.getQuantidadeImoveisSEMSituacaoEspecialFaturamento() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getQuantidadeImoveisSEMSituacaoEspecialFaturamento());
+		situacaoEspecialFaturamentoHelper.setQuantidadeImoveisSEMSituacaoEspecialFaturamento(situacaoEspecialFaturamentoActionForm.getQuantidadeImoveisSEMSituacaoEspecialFaturamento() == null ? ""
+																							: situacaoEspecialFaturamentoActionForm.getQuantidadeImoveisSEMSituacaoEspecialFaturamento());
 
-		situacaoEspecialFaturamentoHelper
-				.setQuantidadeImoveisAtualizados(situacaoEspecialFaturamentoActionForm
-						.getQuantidadeImoveisAtualizados() == null ? ""
-						: situacaoEspecialFaturamentoActionForm
-								.getQuantidadeImoveisAtualizados());
+		situacaoEspecialFaturamentoHelper.setQuantidadeImoveisAtualizados(situacaoEspecialFaturamentoActionForm.getQuantidadeImoveisAtualizados() == null ? ""
+																			: situacaoEspecialFaturamentoActionForm.getQuantidadeImoveisAtualizados());
 		
 		situacaoEspecialFaturamentoHelper
 		.setCodigoRotaInicial(situacaoEspecialFaturamentoActionForm
 				.getCdRotaInicial() == null ? ""
 				: situacaoEspecialFaturamentoActionForm.getCdRotaInicial());
 		
-		situacaoEspecialFaturamentoHelper
-		.setCodigoRotaFinal(situacaoEspecialFaturamentoActionForm
-				.getCdRotaFinal() == null ? ""
-				: situacaoEspecialFaturamentoActionForm.getCdRotaFinal());
+		situacaoEspecialFaturamentoHelper.setCodigoRotaFinal(situacaoEspecialFaturamentoActionForm.getCdRotaFinal() == null ? ""
+															: situacaoEspecialFaturamentoActionForm.getCdRotaFinal());
 		
-		situacaoEspecialFaturamentoHelper
-		.setSequencialRotaInicial(situacaoEspecialFaturamentoActionForm
-				.getSequencialRotaInicial() == null ? ""
-				: situacaoEspecialFaturamentoActionForm.getSequencialRotaInicial());
+		situacaoEspecialFaturamentoHelper.setSequencialRotaInicial(situacaoEspecialFaturamentoActionForm.getSequencialRotaInicial() == null ? ""
+																	: situacaoEspecialFaturamentoActionForm.getSequencialRotaInicial());
 		
-		situacaoEspecialFaturamentoHelper
-		.setSequencialRotaFinal(situacaoEspecialFaturamentoActionForm
-				.getSequencialRotaFinal() == null ? ""
-				: situacaoEspecialFaturamentoActionForm.getSequencialRotaFinal());
+		situacaoEspecialFaturamentoHelper.setSequencialRotaFinal(situacaoEspecialFaturamentoActionForm.getSequencialRotaFinal() == null ? ""
+																	: situacaoEspecialFaturamentoActionForm.getSequencialRotaFinal());
 		
 		//Colocado por Raphael Rossiter em 11/08/2008 - Analista:Rosana Carvalho
 		if (situacaoEspecialFaturamentoActionForm.getConsumoFixoMedido() != null &&
@@ -669,15 +501,13 @@ public class AtualizarSituacaoEspecialFaturamentoAction extends GcomAction {
 		if (situacaoEspecialFaturamentoActionForm.getVolumeFixoNaoMedido() != null &&
 			!situacaoEspecialFaturamentoActionForm.getVolumeFixoNaoMedido().equals("")){
 				
-			situacaoEspecialFaturamentoHelper.setNumeroVolumeEsgotoNaoMedido(
-			new Integer(situacaoEspecialFaturamentoActionForm.getVolumeFixoNaoMedido()));
+			situacaoEspecialFaturamentoHelper.setNumeroVolumeEsgotoNaoMedido(new Integer(situacaoEspecialFaturamentoActionForm.getVolumeFixoNaoMedido()));
 		}
 		
 		if (situacaoEspecialFaturamentoActionForm.getObservacaoInforma() != null &&
 			!situacaoEspecialFaturamentoActionForm.getObservacaoInforma().equals("")){
 			
-			situacaoEspecialFaturamentoHelper.setObservacaoInforma(
-					situacaoEspecialFaturamentoActionForm.getObservacaoInforma());
+			situacaoEspecialFaturamentoHelper.setObservacaoInforma(situacaoEspecialFaturamentoActionForm.getObservacaoInforma());
 					
 			situacaoEspecialFaturamentoHelper.setObservacao(
 			situacaoEspecialFaturamentoActionForm.getObservacaoInforma());
@@ -687,17 +517,15 @@ public class AtualizarSituacaoEspecialFaturamentoAction extends GcomAction {
 
 		Integer quantidadeImoveisSem = 0;
 		
-		
 		if (situacaoEspecialFaturamentoActionForm.getQuantidadeImoveisSEMSituacaoEspecialFaturamento()!=null 
 				&& !situacaoEspecialFaturamentoActionForm.getQuantidadeImoveisSEMSituacaoEspecialFaturamento().equals("")){
 			
-			quantidadeImoveisSem =new Integer(situacaoEspecialFaturamentoActionForm.getQuantidadeImoveisSEMSituacaoEspecialFaturamento());
+			quantidadeImoveisSem = new Integer(situacaoEspecialFaturamentoActionForm.getQuantidadeImoveisSEMSituacaoEspecialFaturamento());
 		}
 		
 		Integer quantidadeTotal =  quantidadeImoveisSem;
 		
 		situacaoEspecialFaturamentoHelper.setQuantidadeDeImoveis(quantidadeTotal.toString());
-		
 		situacaoEspecialFaturamentoHelper.setIdsCategoria(situacaoEspecialFaturamentoActionForm.getIdsCategoria());
 		
 		if (situacaoEspecialFaturamentoActionForm.getIdsCategoria() != null) {
@@ -715,13 +543,10 @@ public class AtualizarSituacaoEspecialFaturamentoAction extends GcomAction {
 				} else if (idsCategoria[i].equals(Categoria.PUBLICO.toString())) {
 					situacaoEspecialFaturamentoHelper.setIndicadorPublico(ConstantesSistema.SIM.toString());
 				}
-				
 			}
 		}
 		
-		situacaoEspecialFaturamentoHelper.setIndicadorConsumoImovel(
-				situacaoEspecialFaturamentoActionForm.getIndicadorConsumoImovel());
-		
+		situacaoEspecialFaturamentoHelper.setIndicadorConsumoImovel(situacaoEspecialFaturamentoActionForm.getIndicadorConsumoImovel());
 		
 		return situacaoEspecialFaturamentoHelper;
 	}	

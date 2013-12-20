@@ -4,6 +4,7 @@ import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.relatorio.faturamento.RelatorioContasRetidasActionForm;
 import gcom.relatorio.faturamento.RelatorioContasRetidas;
+import gcom.relatorio.faturamento.RelatorioContasRetidasHelper;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.tarefa.TarefaRelatorio;
 import gcom.util.Util;
@@ -77,9 +78,8 @@ public class RelatorioContasRetidasBO {
 		return idFaturamentoGrupo;
 	}
 	
-	@SuppressWarnings("rawtypes")
-	private Collection getColecaoContasRetidas() {
-		Collection colecaoContasRetidas = getContasRetidas();
+	private Collection<RelatorioContasRetidasHelper> getColecaoContasRetidas() {
+		Collection<RelatorioContasRetidasHelper> colecaoContasRetidas = getContasRetidas();
 		
 		if(colecaoContasRetidas.isEmpty()){
 			throw new ActionServletException("atencao.relatorio.vazio");
@@ -96,8 +96,7 @@ public class RelatorioContasRetidasBO {
 		return Integer.parseInt(tipoRelatorio);
 	}
 
-	@SuppressWarnings("rawtypes")
-	private Collection getContasRetidas() {
+	private Collection<RelatorioContasRetidasHelper> getContasRetidas() {
 		return Fachada.getInstancia().pesquisarDadosRelatorioContasRetidas(Integer.parseInt(getAnoMesReferencia()), 
 				Integer.valueOf(getIdFaturamentoGrupo()));
 	}

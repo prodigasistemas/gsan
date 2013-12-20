@@ -408,7 +408,7 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 				inicializarPropriedadesLazies(retorno);
 			}
 			
-			 } catch (HibernateException e) {
+		} catch (HibernateException e) {
 			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {

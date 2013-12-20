@@ -20,44 +20,6 @@
 /*
 * GSAN - Sistema Integrado de Gestão de Serviços de Saneamento
 * Copyright (C) <2007> 
-* Adriano Britto Siqueira
-* Alexandre Santos Cabral
-* Ana Carolina Alves Breda
-* Ana Maria Andrade Cavalcante
-* Aryed Lins de Araújo
-* Bruno Leonardo Rodrigues Barros
-* Carlos Elmano Rodrigues Ferreira
-* Cláudio de Andrade Lira
-* Denys Guimarães Guenes Tavares
-* Eduardo Breckenfeld da Rosa Borges
-* Fabíola Gomes de Araújo
-* Flávio Leonardo Cavalcanti Cordeiro
-* Francisco do Nascimento Júnior
-* Homero Sampaio Cavalcanti
-* Ivan Sérgio da Silva Júnior
-* José Edmar de Siqueira
-* José Thiago Tenório Lopes
-* Kássia Regina Silvestre de Albuquerque
-* Leonardo Luiz Vieira da Silva
-* Márcio Roberto Batista da Silva
-* Maria de Fátima Sampaio Leite
-* Micaela Maria Coelho de Araújo
-* Nelson Mendonça de Carvalho
-* Newton Morais e Silva
-* Pedro Alexandre Santos da Silva Filho
-* Rafael Corrêa Lima e Silva
-* Rafael Francisco Pinto
-* Rafael Koury Monteiro
-* Rafael Palermo de Araújo
-* Raphael Veras Rossiter
-* Roberto Sobreira Barbalho
-* Rodrigo Avellar Silveira
-* Rosana Carvalho Barbosa
-* Sávio Luiz de Andrade Cavalcante
-* Tai Mu Shih
-* Thiago Augusto Souza do Nascimento
-* Tiago Moreno Rodrigues
-* Vivianne Barbosa Sousa
 *
 * Este programa é software livre; você pode redistribuí-lo e/ou
 * modificá-lo sob os termos de Licença Pública Geral GNU, conforme
@@ -142,9 +104,7 @@ public class Interceptador implements Interceptor {
 	}
 
 	/**
-	 * Retorna o valor de controladorTarifaSocial
-	 * 
-	 * @return O valor de controladorTarifaSocial
+	 * @return ControladorTransacaoLocal
 	 */
 	private ControladorTransacaoLocal getControladorTransacao() {
 		ControladorTransacaoLocalHome localHome = null;
@@ -217,18 +177,7 @@ public class Interceptador implements Interceptor {
 		if (coll != null && !coll.isEmpty()) {
 			tabela = (Tabela) coll.iterator().next();
 		} else {
-
 			return;
-			/*
-			 * Foi acordado retirar a inclusão automática de tabelas e colunas não encontradas
-			 * 					Francisco Nascimento, 05/03/08
-			 * 
-			tabela = new Tabela();
-			tabela.setNomeTabela(nomeTabela);
-			tabela.setDescricao(nomeTabela);
-			tabela.setUltimaAlteracao(new Date(System.currentTimeMillis()));
-			this.getControladorUtil().inserir(tabela);
-			*/
 		}
 
 		AlteracaoTipo alteracaoTipo = new AlteracaoTipo();
@@ -244,6 +193,7 @@ public class Interceptador implements Interceptor {
 		tabelaLinhaAlteracao.setAlteracaoTipo(alteracaoTipo);
 
 		Integer[] ids = getIds(novo);
+		
 		if (ids != null && ids.length > 0) {
 			tabelaLinhaAlteracao.setId1(ids[0]);
 		}
@@ -266,27 +216,6 @@ public class Interceptador implements Interceptor {
 			} else {
 				System.out.println("Coluna nao encontrada: " + tabelaLinhaColunaAlteracao.getTabelaColuna().getColuna());
 				continue;
-				/*
-				 * Foi acordado retirar a inclusão automática de tabelas e colunas não encontradas
-				 * 					Francisco Nascimento, 05/03/08
-				 *
-				 *
-				tabelaColuna = new TabelaColuna();
-				tabelaColuna.setColuna(tabelaLinhaColunaAlteracao.getTabelaColuna().getColuna());
-				tabelaColuna.setDescricaoColuna(tabelaLinhaColunaAlteracao.getTabelaColuna().getColuna());
-				tabelaColuna.setTabela(tabela);
-				tabelaColuna.setUltimaAlteracao(new Date(System.currentTimeMillis()));
-				
-				Integer idTabelaColuna = (Integer) this.getControladorUtil().inserir(tabelaColuna);
-				tabelaColuna.setId(idTabelaColuna);
-				// inserindo a ordem de exibicao desta tabela coluna
-				OperacaoOrdemExibicao ordemColuna = new OperacaoOrdemExibicao();
-				ordemColuna.setComp_id(new OperacaoOrdemExibicaoPK(new Integer(operacaoEfetuada.getOperacao().getId()),
-					tabela.getId()));
-				ordemColuna.setTabelaColuna(tabelaColuna);
-				this.getControladorUtil().inserir(ordemColuna);
-				
-				*/
 			}
 			tabelaLinhaColunaAlteracao.setTabelaColuna(tabelaColuna);
 		}
@@ -295,12 +224,11 @@ public class Interceptador implements Interceptor {
 		this.salvarTabelaLinhaAlteracaoPrincipal(operacaoEfetuada, novo);
 	}
 
-	public void verificarObjetoAlterado(Object arg0,String[] colecaoNomesAtributos) {
+	public void verificarObjetoAlterado(Object arg0, String[] colecaoNomesAtributos) {
 
 		if (arg0 instanceof ObjetoTransacao) {
 			ObjetoTransacao objetoTransacao = (ObjetoTransacao) arg0;
 			
-			// verifica se a classe possui controle de registrar transacao
 			if (!objetoTransacao.temControleAlteracao()){
 				return;
 			}
@@ -311,67 +239,48 @@ public class Interceptador implements Interceptor {
 
 				filtro.getParametros().clear();
 				if (objetoTransacao.getIdAntigo() instanceof ObjetoGcom){
-					filtro.adicionarParametro(new ParametroSimplesColecao(
-							objetoTransacao.retornaCamposChavePrimaria()[0],objetoTransacao.getIdAntigo()));					
+					filtro.adicionarParametro(new ParametroSimplesColecao(objetoTransacao.retornaCamposChavePrimaria()[0],objetoTransacao.getIdAntigo()));					
 				} else {
-					filtro.adicionarParametro(new ParametroSimples(
-							objetoTransacao.retornaCamposChavePrimaria()[0],objetoTransacao.getIdAntigo()));					
+					filtro.adicionarParametro(new ParametroSimples(objetoTransacao.retornaCamposChavePrimaria()[0],objetoTransacao.getIdAntigo()));					
 				}
 			}
+			
 			try {
 				Collection coll = RepositorioUtilHBM.getInstancia().pesquisar(filtro, objetoTransacao.getClass().getName());
 						
 				if (coll.iterator().hasNext()) {
-					ObjetoTransacao antigo = (ObjetoTransacao) coll.iterator()
-							.next();
-
-					if ((antigo.getUltimaAlteracao() != null)
-							&& (objetoTransacao.getUltimaAlteracao() == null || antigo
-									.getUltimaAlteracao().getTime() != objetoTransacao
-									.getUltimaAlteracao().getTime())) {
-						// throw new
-						// IllegalArgumentException(" Data diferente.");
-					}
+					ObjetoTransacao antigo = (ObjetoTransacao) coll.iterator().next();
 
 					// Para os dados adicionais sera utilizado o objeto antigo,
 					// pois
 					// é garantido que os campos estão com valores
-					boolean houveAlteracao = objetoTransacao
-							.getOperacaoEfetuada().preencherDadosAdicionais(
-									antigo);
+					boolean houveAlteracao = objetoTransacao.getOperacaoEfetuada().preencherDadosAdicionais(antigo);
 
-					Collection<TabelaLinhaColunaAlteracao> tabelaLinhaColunaAlteracoes = compareObjetoTransacao(
-							objetoTransacao, antigo, colecaoNomesAtributos);
+					Collection<TabelaLinhaColunaAlteracao> tabelaLinhaColunaAlteracoes = compareObjetoTransacao(objetoTransacao, antigo, colecaoNomesAtributos);
 
-					if (tabelaLinhaColunaAlteracoes != null
-							&& !tabelaLinhaColunaAlteracoes.isEmpty()) {
+					if (tabelaLinhaColunaAlteracoes != null && !tabelaLinhaColunaAlteracoes.isEmpty()) {
 
-						String idPrincipal = objetoTransacao
-								.getOperacaoEfetuada().getIdObjetoPrincipal()
-								+ "";
+						String idPrincipal = objetoTransacao.getOperacaoEfetuada().getIdObjetoPrincipal().toString();
 
-						// Adicionando uma linha com a descricao do objeto, caso
-						// esta descricao não seja vazia
 						String[] keys = antigo.retornaCamposChavePrimaria();
-						for (int i = 0; keys != null && i < keys.length; i++) {
-							String id = keys[i];
 
+						if(keys != null && keys.length > 0){
+							String id = keys[0];
+							
 							String descricaoVelho = consultarDescricao(antigo);
 							String descricaoNovo = consultarDescricao(objetoTransacao);
-
-							if (!(descricaoVelho.equals("") && descricaoNovo
-									.equals(""))
-									&& !descricaoVelho.equals(idPrincipal)) {
-
+							
+							if (!(descricaoVelho.equals("") && descricaoNovo.equals("")) && !descricaoVelho.equals(idPrincipal)) {
+								
 								TabelaLinhaColunaAlteracao tabelaLinhaColunaAlteracao = gerarTabelaLinhaColunaAlteracao(
-										id,
-										objetoTransacao.getTipoAtributo(id),
-										descricaoNovo, descricaoVelho);
+																													id,
+																													objetoTransacao.getTipoAtributo(id),
+																													descricaoNovo, 
+																													descricaoVelho);
+								
 								if (tabelaLinhaColunaAlteracao != null)
-									tabelaLinhaColunaAlteracoes
-											.add(tabelaLinhaColunaAlteracao);
+									tabelaLinhaColunaAlteracoes.add(tabelaLinhaColunaAlteracao);
 							}
-							break;
 						}
 
 						salvarModificacao(objetoTransacao,
@@ -380,11 +289,8 @@ public class Interceptador implements Interceptor {
 								tabelaLinhaColunaAlteracoes,
 								AlteracaoTipo.ALTERACAO);
 					} else {
-						if (houveAlteracao) {
-							if (objetoTransacao.getOperacaoEfetuada().getId() != null) {
-								getControladorUtil().atualizar(
-										objetoTransacao.getOperacaoEfetuada());
-							}
+						if (houveAlteracao && objetoTransacao.getOperacaoEfetuada().getId() != null) {
+							getControladorUtil().atualizar(objetoTransacao.getOperacaoEfetuada());
 						}
 					}
 				}
@@ -392,10 +298,6 @@ public class Interceptador implements Interceptor {
 				throw e;
 			} catch (Exception e) {
 				e.printStackTrace();
-				// caso tenha acontecido algum problema na consulta do objeto ao
-				// banco.
-				// throw new IllegalArgumentException(" Não pode consultar o
-				// objeto transaço do banco. msn: " + e.getMessage());
 			}
 		}
 	}
@@ -438,7 +340,7 @@ public class Interceptador implements Interceptor {
 	 */
 	public Collection<TabelaLinhaColunaAlteracao> compareObjetoTransacao(ObjetoTransacao novo, ObjetoTransacao velho,String [] colecaoNomesAtributos) {
 		
-		Collection<TabelaLinhaColunaAlteracao> tabelaLinhaColunaAlteracoes = new Vector();
+		Collection<TabelaLinhaColunaAlteracao> tabelaLinhaColunaAlteracoes = new ArrayList<TabelaLinhaColunaAlteracao>();
 
 		//Class classe = velho.getClass();
 		Method metodo = null;
@@ -457,53 +359,44 @@ public class Interceptador implements Interceptor {
 			usuariosAcao = velho.getUsuarioAcaoUsuarioHelp();			
 		}
 		
-		//Alteração refeferente a CRC2511 - Registrar transação
-		//para atualizaçõa de um campo apenas, o CPF do cliente
-		//em Efetuar Parcelamento de Débitos
-		//Anderson Italo/Francisco Nascimento
-		//data:13/07/2009
-		//anteriormente continha o código do trecho comentado
-		//if (atributosRegistro != null){
-		//	colecaoNomesAtributos = atributosRegistro;
-		//}
-		if (atributosRegistro != null && 
-				(colecaoNomesAtributos != null && colecaoNomesAtributos.length >= atributosRegistro.length) 
+		if (atributosRegistro != null 
+				&& (colecaoNomesAtributos != null && colecaoNomesAtributos.length >= atributosRegistro.length) 
 				|| colecaoNomesAtributos == null){
 
 			colecaoNomesAtributos = atributosRegistro;
 		}
-		//fim alteração
 		
 		for (int i = 0; i < colecaoNomesAtributos.length; i++) {
 			
 			nomeMetodo = "get";
 			Object[] args = {colecaoNomesAtributos[i]};
 			Class[] tipos = {String.class};
+			
 			try {
 				Object retornoMetodoVelho = null;
 				Object retornoMetodoNovo = null;
-				// invocando o metodo do objeto velho para pegar o retorno
+
 				if (velho != null) {
 					metodo = velho.getClass().getMethod(nomeMetodo, tipos);
 					retornoMetodoVelho = metodo.invoke(velho,args);			
 					
-					if (retornoMetodoVelho != null && retornoMetodoVelho
-							.getClass().getName().contains("Enhancer")){
+					if (retornoMetodoVelho != null && retornoMetodoVelho.getClass().getName().contains("Enhancer")){
+						
 						Filtro filtro = velho.retornaFiltroRegistroOperacao();
 						filtro.adicionarParametro(new ParametroSimples("id", velho.get("id")));
 						Collection coll;
+
 						try {
 							coll = RepositorioUtilHBM.getInstancia().pesquisar(filtro, velho.getClass().getName());
-
 							velho = (ObjetoTransacao) Util.retonarObjetoDeColecao(coll);
 						} catch (ErroRepositorioException e) {
-							System.out.println(e.getMessage());
+							e.printStackTrace();
 						}
 						
 						retornoMetodoVelho = metodo.invoke(velho,args);
-						
 					}
 				} 
+				
 				if (novo != null) {
 					metodo = novo.getClass().getMethod(nomeMetodo, tipos);
 					retornoMetodoNovo = metodo.invoke(novo, args);					
@@ -526,44 +419,17 @@ public class Interceptador implements Interceptor {
 						|| (retorno instanceof Date)
 						|| (retorno instanceof Collection)) {
 
-						Collection<TabelaLinhaColunaAlteracao> auxAlteracoes = new Vector<TabelaLinhaColunaAlteracao> ();
+						Collection<TabelaLinhaColunaAlteracao> auxAlteracoes = new ArrayList<TabelaLinhaColunaAlteracao>();
+						
 						verificarDiferencaAtributo(auxAlteracoes, colecaoNomesAtributos[i], novo, 
 								retornoMetodoNovo, velho, retornoMetodoVelho,
 								operacaoGeral, usuariosAcao, false);
+						
 						tabelaLinhaColunaAlteracoes.addAll(auxAlteracoes);
 				} 	
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-				// e.printStackTrace();
-				// nunca entra aqui
-				// excecao levantada quando o metodo invocado nao existe no
-				// objeto passado
-				// o metodo invocado foi pego da lista do objeto que se
-				// deseja utilizar
-			} catch (IllegalAccessException e) {
-				e.printStackTrace();
-				// e.printStackTrace();
-				// nunca entra aqui
-				// excecao levantada quando o metodo invocado nao existe no
-				// objeto passado
-				// o metodo invocado foi pego da lista do objeto que se
-				// deseja utilizar
-			} catch (InvocationTargetException e) {
-				e.printStackTrace();
-				// e.printStackTrace();
-				// nunca entra aqui
-				// excecao levantada quando o metodo invocado nao existe no
-				// objeto passado
-				// o metodo invocado foi pego da lista do objeto que se
-				// deseja utilizar
-			} catch (SecurityException e) {
-				e.printStackTrace();
-			} catch (NoSuchMethodException e) {
-				e.printStackTrace();
-			} catch (ControladorException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
-			
 		}
 
 		return tabelaLinhaColunaAlteracoes;

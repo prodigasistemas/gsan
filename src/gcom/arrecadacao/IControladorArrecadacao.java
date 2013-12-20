@@ -4443,5 +4443,7 @@ public interface IControladorArrecadacao {
 		public Collection<Integer> pesquisarIdsLocalidadeComGuiasPagamentoNaoPagas(Date dataVencimentoLimite, 
 				Integer financiamentoTipoServico) throws ControladorException;
 		
+		public void processarPagamentosDiferencaDoisReais(Integer anoMesReferenciaArrecadacao, Localidade localidade, Integer idFuncionalidadeIniciada) throws Exception;
+
 }	
 
