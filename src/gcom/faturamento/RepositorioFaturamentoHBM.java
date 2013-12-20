@@ -159,7 +159,6 @@ import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.micromedicao.medicao.MedicaoTipo;
 import gcom.relatorio.faturamento.FiltrarRelatorioDevolucaoPagamentosDuplicidadeHelper;
 import gcom.relatorio.faturamento.FiltrarRelatorioJurosMultasDebitosCanceladosHelper;
-import gcom.relatorio.faturamento.RelatorioContasRetidasHelper;
 import gcom.relatorio.faturamento.conta.RelatorioContasCanceladasRetificadasHelper;
 import gcom.util.CollectionUtil;
 import gcom.util.ConstantesSistema;
@@ -199,7 +198,6 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.StatelessSession;
-import org.hibernate.transform.Transformers;
 
 /**
  * < <Descrição da Classe>>
@@ -58942,10 +58940,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * 
 	 * @throws ControladorException
 	 */
-	public Collection<RelatorioContasRetidasHelper> pesquisarDadosRelatorioContasRetidas(
+	public Collection pesquisarDadosRelatorioContasRetidas(
 			int anoMesReferencia, Integer idFaturamentoGrupo) throws ErroRepositorioException {
 		
-		Collection<RelatorioContasRetidasHelper> retorno = null;
+		Collection retorno = null;
 		
 		Session session = HibernateUtil.getSession();
 		
@@ -58976,7 +58974,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.setInteger("situacaoPreFaturada", DebitoCreditoSituacao.PRE_FATURADA)
 					.setInteger("idFaturamentoGrupo", idFaturamentoGrupo)
 					.setInteger("anoMesReferencia", Integer.valueOf(anoMesReferencia))
-					.setResultTransformer(Transformers.aliasToBean(RelatorioContasRetidasHelper.class))
 					.list();
 
 		} catch (HibernateException e) {

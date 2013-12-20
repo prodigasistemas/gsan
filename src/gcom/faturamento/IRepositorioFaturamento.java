@@ -11763,7 +11763,7 @@ public interface IRepositorioFaturamento {
 	 * 
 	 * @throws ControladorException
 	 */
-	public Collection<RelatorioContasRetidasHelper> pesquisarDadosRelatorioContasRetidas(
+	public Collection pesquisarDadosRelatorioContasRetidas(
 			int anoMesReferencia, Integer idFaturamentoGrupo)
 			throws ErroRepositorioException;
 
