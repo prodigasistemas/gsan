@@ -75,6 +75,7 @@
 */  
 package gcom.seguranca.transacao;
 
+import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.interceptor.ObjetoGcom;
 
 import java.util.Date;
@@ -108,6 +109,8 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
     private TabelaAtualizacaoCadastral tabelaAtualizacaoCadastral;
     
     private TabelaColuna tabelaColuna;
+    
+    private ImovelSubcategoriaAtualizacaoCadastral imovelSubCategoria;
 
     public TabelaColunaAtualizacaoCadastral(Integer id, String colunaValorAnterior, String colunaValorAtual, Short indicadorAutorizado, 
     		Date dataProcessamento, Date ultimaAlteracao, TabelaAtualizacaoCadastral tabelaAtualizacaoCadastral, TabelaColuna tabelaColuna) {
@@ -189,6 +192,14 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
 
 	public void setUltimaAlteracao(Date ultimaAlteracao) {
 		this.ultimaAlteracao = ultimaAlteracao;
+	}
+	
+	public ImovelSubcategoriaAtualizacaoCadastral getImovelSubCategoria() {
+		return imovelSubCategoria;
+	}
+
+	public void setImovelSubCategoria(ImovelSubcategoriaAtualizacaoCadastral imovelSubCategoria) {
+		this.imovelSubCategoria = imovelSubCategoria;
 	}
 
 	public String[] retornaCamposChavePrimaria(){

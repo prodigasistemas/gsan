@@ -16673,6 +16673,8 @@ public class ControladorCadastro implements SessionBean {
 			registradorOperacao.registrarOperacao((ObjetoTransacao) objetoAtualizacaoCadastralTxt);
 
 			Collection<TabelaColunaAtualizacaoCadastral> colecaoTabelaColunaAtualizacaoCadastral = new ArrayList<TabelaColunaAtualizacaoCadastral>();
+			
+			ImovelSubcategoriaAtualizacaoCadastral subCategoria = null;
 
 			if (colunasAlteradas != null && !colunasAlteradas.isEmpty()) {
 				TabelaAtualizacaoCadastral tabelaAtualizacaoCadastral = new TabelaAtualizacaoCadastral();
@@ -16711,6 +16713,8 @@ public class ControladorCadastro implements SessionBean {
 				} else if (objetoAtualizacaoCadastralBase instanceof ImovelSubcategoriaAtualizacaoCadastral) {
 					ImovelSubcategoriaAtualizacaoCadastral base = (ImovelSubcategoriaAtualizacaoCadastral) objetoAtualizacaoCadastralBase;
 					ImovelSubcategoriaAtualizacaoCadastral txt = (ImovelSubcategoriaAtualizacaoCadastral) objetoAtualizacaoCadastralTxt;
+					
+					subCategoria = txt;
 
 					tabelaAtualizacaoCadastral.setIdRegistroAlterado(matriculaImovel);
 					tabelaAtualizacaoCadastral.setOperacaoEfetuada(txt.getOperacaoEfetuada());
@@ -16741,6 +16745,7 @@ public class ControladorCadastro implements SessionBean {
 					tabelaColunaAtualizacaoCadastral.setColunaValorAtual(tabelaLinhaColunaAlteracao.getConteudoColunaAtual());
 					tabelaColunaAtualizacaoCadastral.setIndicadorAutorizado(ConstantesSistema.INDICADOR_REGISTRO_ACEITO);
 					tabelaColunaAtualizacaoCadastral.setTabelaAtualizacaoCadastral(tabelaAtualizacaoCadastral);
+					tabelaColunaAtualizacaoCadastral.setImovelSubCategoria(subCategoria);
 
 					FiltroTabelaColuna filtroColuna = new FiltroTabelaColuna();
 					filtroColuna.adicionarParametro(new ParametroSimples(FiltroTabelaColuna.COLUNA, tabelaLinhaColunaAlteracao.getTabelaColuna().getColuna()));

@@ -103,6 +103,7 @@ public class DadosTabelaAtualizacaoCadastralHelper implements Serializable{
 	private Integer idAlteracaoTipo;
 	private String descricaoAlteracaoTipo;
 	private Date dataProcessamento;
+	private String imovelSubcategoria;
 	
 	
 	/**
@@ -256,6 +257,10 @@ public class DadosTabelaAtualizacaoCadastralHelper implements Serializable{
 	public void setDataProcessamento(Date dataProcessamento) {
 		this.dataProcessamento = dataProcessamento;
 	}
-	
-	
+	public String getImovelSubcategoria() {
+		return imovelSubcategoria;
+	}
+	public void setImovelSubcategoria(String imovelSubcategoria) {
+		this.imovelSubcategoria = imovelSubcategoria;
+	}
 }
