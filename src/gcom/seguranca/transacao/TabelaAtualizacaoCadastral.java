@@ -117,8 +117,10 @@ public class TabelaAtualizacaoCadastral {
     private Date dataProcessamento;
     
     private TabelaAtualizacaoCadastralSituacao tabelaAtualizacaoCadastralSituacao;
+    
+    private String complemento;
 
-	public TabelaAtualizacaoCadastral(Integer id, Integer idRegistroAlterado, Short indicadorPrincipal, Date ultimaAlteracao, Tabela tabela, OperacaoEfetuada operacaoEfetuada, Leiturista leiturista, AlteracaoTipo alteracaoTipo, ArquivoTextoAtualizacaoCadastral arquivoTextoAtualizacaoCadastral, Short indicadorAutorizado, Integer codigoImovel, Integer codigoCliente) {
+	public TabelaAtualizacaoCadastral(Integer id, Integer idRegistroAlterado, Short indicadorPrincipal, Date ultimaAlteracao, Tabela tabela, OperacaoEfetuada operacaoEfetuada, Leiturista leiturista, AlteracaoTipo alteracaoTipo, ArquivoTextoAtualizacaoCadastral arquivoTextoAtualizacaoCadastral, Short indicadorAutorizado, Integer codigoImovel, Integer codigoCliente, String complemento) {
 		this.id = id;
 		this.idRegistroAlterado = idRegistroAlterado;
 		this.indicadorPrincipal = indicadorPrincipal;
@@ -131,6 +133,7 @@ public class TabelaAtualizacaoCadastral {
 		this.indicadorAutorizado = indicadorAutorizado;
 		this.codigoImovel = codigoImovel;
 		this.codigoCliente = codigoCliente;
+		this.complemento = complemento;
 	}
 
 	/** default constructor */
@@ -272,6 +275,11 @@ public class TabelaAtualizacaoCadastral {
 		this.tabelaAtualizacaoCadastralSituacao = tabelaAtualizacaoCadastralSituacao;
 	}
 
-	
-	 	
+	public String getComplemento() {
+		return complemento;
+	}
+
+	public void setComplemento(String complemento) {
+		this.complemento = complemento;
+	}
 }

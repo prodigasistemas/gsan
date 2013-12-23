@@ -16674,8 +16674,6 @@ public class ControladorCadastro implements SessionBean {
 
 			Collection<TabelaColunaAtualizacaoCadastral> colecaoTabelaColunaAtualizacaoCadastral = new ArrayList<TabelaColunaAtualizacaoCadastral>();
 			
-			ImovelSubcategoriaAtualizacaoCadastral subCategoria = null;
-
 			if (colunasAlteradas != null && !colunasAlteradas.isEmpty()) {
 				TabelaAtualizacaoCadastral tabelaAtualizacaoCadastral = new TabelaAtualizacaoCadastral();
 				AlteracaoTipo alteracaoTipo = new AlteracaoTipo();
@@ -16714,10 +16712,9 @@ public class ControladorCadastro implements SessionBean {
 					ImovelSubcategoriaAtualizacaoCadastral base = (ImovelSubcategoriaAtualizacaoCadastral) objetoAtualizacaoCadastralBase;
 					ImovelSubcategoriaAtualizacaoCadastral txt = (ImovelSubcategoriaAtualizacaoCadastral) objetoAtualizacaoCadastralTxt;
 					
-					subCategoria = txt;
-
 					tabelaAtualizacaoCadastral.setIdRegistroAlterado(matriculaImovel);
 					tabelaAtualizacaoCadastral.setOperacaoEfetuada(txt.getOperacaoEfetuada());
+					tabelaAtualizacaoCadastral.setComplemento(txt.getDescricaoCategoria() + " - " + txt.getDescricaoSubcategoria());
 					tabela.setId(Tabela.IMOVEL_SUBCATEGORIA_ATUALIZACAO_CADASTRAL);
 					tabelaAtualizacaoCadastral.setIndicadorPrincipal(new Short("2"));
 				} else if (objetoAtualizacaoCadastralBase instanceof ImovelRamoAtividadeAtualizacaoCadastral) {
@@ -16745,7 +16742,6 @@ public class ControladorCadastro implements SessionBean {
 					tabelaColunaAtualizacaoCadastral.setColunaValorAtual(tabelaLinhaColunaAlteracao.getConteudoColunaAtual());
 					tabelaColunaAtualizacaoCadastral.setIndicadorAutorizado(ConstantesSistema.INDICADOR_REGISTRO_ACEITO);
 					tabelaColunaAtualizacaoCadastral.setTabelaAtualizacaoCadastral(tabelaAtualizacaoCadastral);
-					tabelaColunaAtualizacaoCadastral.setImovelSubCategoria(subCategoria);
 
 					FiltroTabelaColuna filtroColuna = new FiltroTabelaColuna();
 					filtroColuna.adicionarParametro(new ParametroSimples(FiltroTabelaColuna.COLUNA, tabelaLinhaColunaAlteracao.getTabelaColuna().getColuna()));

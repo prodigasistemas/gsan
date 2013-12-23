@@ -26,9 +26,5 @@
 		<many-to-one name="tabelaColuna" class="gcom.seguranca.transacao.TabelaColuna" not-null="true">
 			<column name="tbco_id"/>
 		</many-to-one>
-		
-		<many-to-one name="imovelSubCategoria" class="gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral" not-null="false">
-			<column name="isac_id"/>
-		</many-to-one>
 	</class>
 </hibernate-mapping>

@@ -126,7 +126,6 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 		String idImovel = (String) httpServletRequest.getParameter("idImovel");
 		String idCliente = (String) httpServletRequest.getParameter("idCliente");
 		String idArquivo = (String) httpServletRequest.getParameter("idArquivo");
-		Collection colecaoDadosTabelaAtualizacaoCadastral = null;
 		String idRegistroAlterado = (String) httpServletRequest.getParameter("idRegistroAlterado");
 		String idTipoAlteracao = (String) httpServletRequest.getParameter("idTipoAlteracao");
 		
@@ -196,6 +195,7 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 		
 		// Consulta os dados da Tabela Atualizacao Cadastral
 		Integer arquivo = new Integer(idArquivo);
+		Collection colecaoDadosTabelaAtualizacaoCadastral = null;
 		if(idCliente != null && !idCliente.equals("")){
 			colecaoDadosTabelaAtualizacaoCadastral = fachada.consultarDadosTabelaColunaAtualizacaoCadastral(
 					new Integer(idRegistroAlterado), arquivo, new Integer(idImovel), new Integer(idCliente),new Integer(idTipoAlteracao));

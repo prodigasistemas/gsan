@@ -110,8 +110,6 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
     
     private TabelaColuna tabelaColuna;
     
-    private ImovelSubcategoriaAtualizacaoCadastral imovelSubCategoria;
-
     public TabelaColunaAtualizacaoCadastral(Integer id, String colunaValorAnterior, String colunaValorAtual, Short indicadorAutorizado, 
     		Date dataProcessamento, Date ultimaAlteracao, TabelaAtualizacaoCadastral tabelaAtualizacaoCadastral, TabelaColuna tabelaColuna) {
 
@@ -194,14 +192,6 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
 	
-	public ImovelSubcategoriaAtualizacaoCadastral getImovelSubCategoria() {
-		return imovelSubCategoria;
-	}
-
-	public void setImovelSubCategoria(ImovelSubcategoriaAtualizacaoCadastral imovelSubCategoria) {
-		this.imovelSubCategoria = imovelSubCategoria;
-	}
-
 	public String[] retornaCamposChavePrimaria(){
 		String[] retorno = new String[1];
 		retorno[0] = "id";

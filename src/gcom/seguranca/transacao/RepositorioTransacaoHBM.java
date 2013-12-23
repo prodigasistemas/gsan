@@ -1026,7 +1026,8 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			.append("   atp.id,")// 10
 			.append("   atp.descricao, ") // 11
 			.append("   col.coluna, ")//12
-			.append("   tcol.dataProcessamento ")//13
+			.append("   tcol.dataProcessamento, ")//13
+			.append("   tac.complemento ")//14
 			.append(" from gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral tcol")
 			.append(" inner join tcol.tabelaColuna col ")
 			.append(" inner join tcol.tabelaAtualizacaoCadastral tac ")
