@@ -39061,26 +39061,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * 
-	 * Recebe uma arquivo e pra cada linha desse arquivo ele processa o
-	 * imovelCadastral ou ClienteImovelCadastral
-	 * 
-	 * @author Thiago Toscano
-	 * @date 16/02/2009
-	 * 
-	 * @throws FachadaException
-	 */
-	public void carregarImovelAtualizacaoCadastral(BufferedReader buffer) {
-		try {
-			this.getControladorCadastro().carregarImovelAtualizacaoCadastral(
-					buffer);
-		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex
-					.getParametroMensagem());
-		}
-	}
-
 	public void carregarImovelAtualizacaoCadastral(BufferedReader buffer, ArrayList<String> nomesImagens) {
 		try {
 			this.getControladorCadastro().carregarImovelAtualizacaoCadastral(

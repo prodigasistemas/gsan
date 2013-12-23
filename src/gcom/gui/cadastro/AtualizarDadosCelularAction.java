@@ -104,13 +104,8 @@ public class AtualizarDadosCelularAction extends GcomAction {
 		System.out.println("File Name: " + fileName);
 		System.out.println("File Size: " + fileSize);
 
-		
-		//Fachada.getInstancia().carregarImovelAtualizacaoCadastral(dados);
-		
 		montarPaginaSucesso(httpServletRequest, "Atualização/Inclusão com sucesso",
 				"Realizar outra Atualização/Inclusã", "exibirAtualizarDadosCelularAction.do?menu=sim");
-        
-		
 		
 		return retorno;
 	}
