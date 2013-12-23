@@ -145,19 +145,6 @@ public interface IControladorCadastro {
 	 */
 	public Collection pesquisarIdsEmpresa() throws ControladorException;
 
-	
-	/**
-	 * 
-	 * Recebe uma arquivo e pra cada linha desse arquivo ele processa o imovelCelular ou ClienteImovelCelular
-	 *
-	 * @author Thiago Toscano
-	 * @date 16/02/2009
-	 *
-	 * @param file
-	 * @throws ControladorException
-	 */
-	public void carregarImovelAtualizacaoCadastral(BufferedReader buffer) throws ControladorException;
-
 	/**
 	 * Informar Parametros do Sistema
 	 * 

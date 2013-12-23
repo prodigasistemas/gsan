@@ -1008,44 +1008,43 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			Integer idRegistroAlterado,
 			Integer idArquivo, Integer idImovel, Integer idCliente,Integer idTipoAlteracao) throws ErroRepositorioException {
 		List retorno = null;
-		String hql;
 		Session session = HibernateUtil.getSession();
 		
 		try {
-			hql =
-				"select " +
-				"	tac.id," + // 0
-				"	tab.id," + // 1
-				"	tab.descricao," + // 2
-				"	col.id," + // 3
-				"	col.descricaoColuna," + // 4
-				"	tcol.id," + // 5
-				"	tcol.colunaValorAnterior," + // 6
-				"	tcol.colunaValorAtual," + // 7
-				"	tcol.indicadorAutorizado," + // 8
-				"	tcol.ultimaAlteracao," + // 9
-				"	atp.id," + // 10
-				"	atp.descricao, " + // 11
-				"   col.coluna, " +//12
-				"   tcol.dataProcessamento " +//13
-				"from " +
-				"	gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral tcol " +
-				"	inner join tcol.tabelaColuna col " +
-				"	inner join tcol.tabelaAtualizacaoCadastral tac " +
-				"	inner join tac.tabela tab " +
-				"	inner join tac.alteracaoTipo atp " +
-				"where tac.idRegistroAlterado = :idRegistroAlterado " +
-				"and tac.arquivoTextoAtualizacaoCadastral.id = :idArquivo " +
-				"and tac.codigoImovel = :idImovel "+
-				"and atp.id = :idTipoAlteracao ";
+			StringBuilder builder = new StringBuilder();
+			builder.append("select ")
+			.append("   tac.id,") // 0
+			.append("   tab.id,") // 1
+			.append("   tab.descricao,") // 2
+			.append("   col.id,") // 3
+			.append("   col.descricaoColuna,") // 4
+			.append("   tcol.id,") // 5
+			.append("   tcol.colunaValorAnterior,")// 6
+			.append("   tcol.colunaValorAtual,")// 7
+			.append("   tcol.indicadorAutorizado,") // 8
+			.append("   tcol.ultimaAlteracao,") // 9
+			.append("   atp.id,")// 10
+			.append("   atp.descricao, ") // 11
+			.append("   col.coluna, ")//12
+			.append("   tcol.dataProcessamento, ")//13
+			.append("   tac.complemento ")//14
+			.append(" from gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral tcol")
+			.append(" inner join tcol.tabelaColuna col ")
+			.append(" inner join tcol.tabelaAtualizacaoCadastral tac ")
+			.append(" inner join tac.tabela tab ")
+			.append(" inner join tac.alteracaoTipo atp ")
+			.append(" where tac.idRegistroAlterado = :idRegistroAlterado ")
+			.append(" and tac.arquivoTextoAtualizacaoCadastral.id = :idArquivo ")
+			.append(" and tac.codigoImovel = :idImovel ")
+			.append(" and atp.id = :idTipoAlteracao ");
 				if(idCliente != null){
-					hql = hql + "and tac.codigoCliente = " +idCliente;
+					builder.append(" and tac.codigoCliente = " +idCliente);
 				}else{
-					hql = hql + "and tac.codigoCliente is null";
+					builder.append(" and tac.codigoCliente is null");
 				}
-				hql = hql + " order by tcol.id";
+				builder.append(" order by tcol.id");
 			 
-			 retorno = session.createQuery(hql)
+			 retorno = session.createQuery(builder.toString())
 			 	.setInteger("idRegistroAlterado", idRegistroAlterado)
 			 	.setInteger("idArquivo", idArquivo)
 			 	.setInteger("idImovel", idImovel)

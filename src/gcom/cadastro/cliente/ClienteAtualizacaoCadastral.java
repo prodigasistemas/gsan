@@ -21,7 +21,6 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao {
 	
     private Integer id;
 	
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idCliente;
     
     private Integer idImovel;
