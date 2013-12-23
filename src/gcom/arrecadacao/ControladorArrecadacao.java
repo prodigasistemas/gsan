@@ -56601,18 +56601,15 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 	
-	public Collection<GuiaPagamento> obterGuiasPagamentoNaoPagasAtePeriodo(Integer idFuncionalidadeIniciada, Date dataVencimentoLimite, 
+	public void atualizarGuiasPagamentoNaoPagasAtePeriodo(Integer idFuncionalidadeIniciada, Date dataVencimentoLimite, 
 			Integer financiamentoTipoServico, Integer idLocalidade) throws ControladorException {
 		
 		Integer idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,UnidadeProcessamento.FUNCIONALIDADE,0);
 
-		Collection<GuiaPagamento> colecaoGuiaPagamentos;
 		try {
-
-			colecaoGuiaPagamentos = repositorioArrecadacao
-					.obterGuiasPagamentoNaoPagasAtePeriodo(financiamentoTipoServico, dataVencimentoLimite, idLocalidade);
+			Collection<Integer> guiasPagamentoNaoPagasAtePeriodo = repositorioArrecadacao.pesquisarIdsGuiasPagamentoNaoPagas(dataVencimentoLimite, idLocalidade);
 			
-			System.out.println("Quantidade de guias: " + colecaoGuiaPagamentos.size());
+			repositorioArrecadacao.atualizarGuiasPagamentoNaoPagasAtePeriodo(financiamentoTipoServico, guiasPagamentoNaoPagasAtePeriodo);
 			
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,idUnidadeIniciada, false);
 
@@ -56622,9 +56619,6 @@ public class ControladorArrecadacao implements SessionBean {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
-		
-		return colecaoGuiaPagamentos;
-		
 	}
 	
 	public Collection<Integer> pesquisarIdsLocalidadeComGuiasPagamentoNaoPagas(Date dataVencimentoLimite, 

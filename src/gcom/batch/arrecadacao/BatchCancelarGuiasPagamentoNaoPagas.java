@@ -42,7 +42,7 @@ public class BatchCancelarGuiasPagamentoNaoPagas implements MessageDrivenBean,
 
 			ObjectMessage objectMessage = (ObjectMessage) message;
 			try {
-				 this.getControladorArrecadacao().obterGuiasPagamentoNaoPagasAtePeriodo(
+				 this.getControladorArrecadacao().atualizarGuiasPagamentoNaoPagasAtePeriodo(
 						 (Integer) ((Object[]) objectMessage.getObject())[0],
 						 (Date) ((Object[]) objectMessage.getObject())[1],
 						 null,
