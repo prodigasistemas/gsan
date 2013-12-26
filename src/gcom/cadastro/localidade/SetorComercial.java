@@ -77,6 +77,7 @@ package gcom.cadastro.localidade;
 
 import gcom.cadastro.geografico.Municipio;
 import gcom.interceptor.ObjetoTransacao;
+import gcom.util.filtro.DescriptorEntity;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 
@@ -86,7 +87,7 @@ import java.util.Date;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 /** @author Hibernate CodeGenerator */
-public class SetorComercial extends ObjetoTransacao implements Serializable{
+public class SetorComercial extends ObjetoTransacao implements Serializable, DescriptorEntity{
 	
 	private static final long serialVersionUID = 1L;
 	

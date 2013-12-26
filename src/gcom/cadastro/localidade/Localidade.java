@@ -82,6 +82,7 @@ import gcom.cadastro.endereco.LogradouroCep;
 import gcom.cadastro.geografico.Municipio;
 import gcom.interceptor.ObjetoTransacao;
 import gcom.micromedicao.hidrometro.HidrometroLocalArmazenagem;
+import gcom.util.filtro.DescriptorEntity;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 
@@ -93,7 +94,7 @@ import javax.jms.Session;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 /** @author Hibernate CodeGenerator */
-public class Localidade extends ObjetoTransacao {
+public class Localidade extends ObjetoTransacao implements DescriptorEntity{
 
 
 	public final static int AURORA = 347;

@@ -88,74 +88,29 @@ public class FiltroSetorComercial extends Filtro implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-    /**
-     * Constructor for the FiltroCliente object
-     * 
-     * @param campoOrderBy
-     *            Description of the Parameter
-     */
     public FiltroSetorComercial(String campoOrderBy) {
         this.campoOrderBy = campoOrderBy;
     }
 
-    /**
-     * Construtor da classe FiltroSetorComercial
-     */
     public FiltroSetorComercial() {
     }
 
-    /**
-     * Description of the Field
-     */
-    public final static String ID = "id";
-
-    /**
-     * Description of the Field
-     */
     public final static String CODIGO_SETOR_COMERCIAL = "codigo";
 
-    /**
-     * Description of the Field
-     */
     public final static String DESCRICAO = "descricao";
 
-    /**
-     * Description of the Field
-     */
     public final static String DESCRICAO_MUNICIPIO = "municipio.nome";
 
-    /**
-     * Description of the Field
-     */
     public final static String ID_LOCALIDADE = "localidade.id";
 
-    /**
-     * Description of the Field
-     */
     public final static String DESCRICAO_LOCALIDADE = "localidade.descricao";
-    /**
-     * Description of the Field
-     */
+
     public final static String ID_MUNICIPIO = "municipio.id";
 
-    /**
-     * Description of the Field
-     */
-    public final static String INDICADORUSO = "indicadorUso";
-    
-    /**
-     * Description of the Field
-     */
     public final static String INDICADOR_SETOR_ALTERNATIVO = "indicadorSetorAlternativo";
     
-    /**
-     * Description of the Field
-     */
     public final static String MUNICIPIO = "municipio";
     
-    /**
-     * Description of the Field
-     */
     public final static String LOCALIDADE = "localidade";
     
     public final static String LOCALIDADE_ID = "localidade.id";

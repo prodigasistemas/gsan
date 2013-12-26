@@ -91,6 +91,10 @@ public abstract class Filtro implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	
+    public final static String ID = "id";
+    
+    public final static String INDICADORUSO = "indicadorUso";
+	
 	/**
 	 * Coleção dos parâmetros que fazem parte do filtro
 	 */

@@ -102,7 +102,6 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 	
 	private String[] colunaImoveisSelecionados;
 	
-	
 	private String idLocalidadeInicial;	
 
 	private String idLocalidadeFinal;
@@ -330,5 +329,5 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 
 	public void setSeqRotaFinal(String seqRotaFinal) {
 		this.seqRotaFinal = seqRotaFinal;
-	}
+	}	
 }
