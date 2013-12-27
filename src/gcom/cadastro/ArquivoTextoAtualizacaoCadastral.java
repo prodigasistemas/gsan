@@ -110,6 +110,8 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable {
     private gcom.micromedicao.Leiturista leiturista;
 
     private SituacaoTransmissaoLeitura situacaoTransmissaoLeitura;
+    
+    private Integer quantidadeImoveisTransmitidos;
 
 	/**
 	 * @return Retorna o campo arquivoTexto.
@@ -280,13 +282,21 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable {
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
 
+	public Integer getQuantidadeImoveisTransmitidos() {
+		return quantidadeImoveisTransmitidos;
+	}
+
+	public void setQuantidadeImoveisTransmitidos(Integer quantidadeImoveisTransmitidos) {
+		this.quantidadeImoveisTransmitidos = quantidadeImoveisTransmitidos;
+	}
+
 	public ArquivoTextoAtualizacaoCadastral() {
 	}
 	
 	public ArquivoTextoAtualizacaoCadastral(Integer id, String descricaoArquivo, Integer codigoSetorComercial, 
 			Integer numeroQuadraInicial, Integer numeroQuadraFinal, Rota rota, Integer quantidadeImovel,
 			byte[] arquivoTexto, Date ultimaAlteracao, Localidade localidade, Leiturista leiturista, 
-			SituacaoTransmissaoLeitura situacaoTransmissaoLeitura) {
+			SituacaoTransmissaoLeitura situacaoTransmissaoLeitura, Integer quantidadeImoveisTransmitidos) {
 		this.id = id;
 		this.descricaoArquivo = descricaoArquivo;
 		this.codigoSetorComercial = codigoSetorComercial;
@@ -299,6 +309,7 @@ public class ArquivoTextoAtualizacaoCadastral implements Serializable {
 		this.localidade = localidade;
 		this.leiturista = leiturista;
 		this.situacaoTransmissaoLeitura = situacaoTransmissaoLeitura;
+		this.quantidadeImoveisTransmitidos = quantidadeImoveisTransmitidos;
 	}
    
     

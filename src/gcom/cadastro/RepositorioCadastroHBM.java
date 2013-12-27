@@ -6757,6 +6757,31 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
+	public Integer pesquisarQuantidadeImoveisPorSituacaoAtualizacaoCadastral(
+			Integer situacao, Integer idArquivoTexto) throws ErroRepositorioException {
+
+		Integer retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
+
+		try {
+			consulta = "SELECT count(distinct imov_id) as cont"
+				+ " FROM cadastro.imovel_atlz_cadastral imovel"
+				+ " WHERE siac_id = " + situacao
+				+ " AND txac_id = " + idArquivoTexto;
+
+			retorno = (Integer) session.createSQLQuery(consulta)
+					.addScalar("cont", Hibernate.INTEGER).uniqueResult();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+	
 	public Collection<Integer> pesquisarIdsImoveisAtualizacaoCadastral(
 			Integer idEmpresaLeiturista, Integer idRota)
 	throws ErroRepositorioException {

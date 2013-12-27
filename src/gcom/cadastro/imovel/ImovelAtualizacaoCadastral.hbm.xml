@@ -68,5 +68,7 @@
 		<property name="descricaoOutrasInformacoes" type="java.lang.String" column="imac_dsoutrasinformacoes" length="100"/>
 		<property name="nomeEntrevistado" type="java.lang.String" column="imac_nmentrevistado" length="50"/>
 		<property name="idLocalInstalacaoRamal" type="java.lang.Integer" column="rlin_id" length="2"/>
+		<property name="idArquivoTexto" type="java.lang.Integer" column="txac_id" length="10"/>
+		<property name="indicadorAtualizado" type="java.lang.Integer" column="imac_icatualizado" length="2"/>
 	</class>
 </hibernate-mapping>

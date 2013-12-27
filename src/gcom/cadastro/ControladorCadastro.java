@@ -99,6 +99,7 @@ import gcom.atendimentopublico.registroatendimento.bean.DefinirDataPrevistaUnida
 import gcom.batch.ControladorBatchLocal;
 import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.UnidadeProcessamento;
+import gcom.cadastro.atualizacaocadastral.FiltroImovelAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificado;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoBinario;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoCritica;
@@ -7864,6 +7865,8 @@ public class ControladorCadastro implements SessionBean {
 						.atualizarImovelAtualizacaoCadastralSituacaoAtualizacaoCadastral(
 								idImovel,
 								SituacaoAtualizacaoCadastral.EM_CAMPO, null);
+				
+				getControladorImovel().atualizarIdArquivoTextoImovelAtualizacaoCadastral(idArquivoTexto, idImovel);
 			}
 
 			// Trailer
@@ -7903,18 +7906,11 @@ public class ControladorCadastro implements SessionBean {
 		try {
 			String line = null;
 
-			Integer idArquivoTexto = null;
-			RegistradorOperacao registradorOperacao = null;
-			Imovel imovel = new Imovel();
-			Integer idCliente = null;
-			Integer idClienteRelacaoTipo = null;
-			Cliente cliente = new Cliente();
 			ArquivoTextoAtualizacaoCadastral arquivoTexto = null;
 			Interceptador interceptador = Interceptador.getInstancia();
 			ImovelAtualizacaoCadastral imovelAtualizacaoCadastralBase = null;
 			boolean indicadorExcluido = false;
 			boolean indicadorRepetido = false;
-			Integer idClieteUsuario = null;
 			
 			HashMap<String, String> linha1 = new HashMap<String, String>();
 			HashMap<String, String> linha2 = new HashMap<String, String>();
@@ -7942,17 +7938,11 @@ public class ControladorCadastro implements SessionBean {
 					ParserUtil parserHeader = new ParserUtil(header);
 					
 					String grupo = parserHeader.obterDadoParser(3);
-
 					String localidade = parserHeader.obterDadoParser(3);
-					
 					String setor = parserHeader.obterDadoParser(3);
-					
 					String rota = parserHeader.obterDadoParser(2);
-					
 					String anoMesReferencia = parserHeader.obterDadoParser(6);
-					
 					String idRota = parserHeader.obterDadoParser(4);
-					
 					String versaoCelular = parserHeader.obterDadoParser(10);
 					
 					arquivoTexto = repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(
@@ -8113,42 +8103,6 @@ public class ControladorCadastro implements SessionBean {
 
 					String clienteLinha = line.substring(2);
 					
-					//Inicializando atributos referentes ao proprietario
-					String nomeProprietario = null;
-					String tipoPessoaProprietario = null;
-					String cnpjCpfProprietario = null;
-					String rgProprietario = null;
-					String ufRgProprietario = null;
-					String sexoProprietario = null;
-					String telefoneProprietario = null;
-					String celularProprietario = null;
-					String emailProprietario = null;
-					String tipoLogradouroProprietario = null;
-					String logradouroProprietario = null;
-					String numeroProprietario = null;
-					String complementoProprietario = null;
-					String bairroProprietario = null;
-					String cepProprietario = null;
-					String municipioProprietario = null;
-
-					//Inicializando atributos referentes ao responsável
-					String nomeResponsavel = null;
-					String tipoPessoaResponsavel = null;
-					String cnpjCpfResponsavel = null;
-					String rgResponsavel = null;
-					String ufRgResponsavel = null;
-					String sexoResponsavel = null;
-					String telefoneResponsavel = null;
-					String celularResponsavel = null;
-					String emailResponsavel = null;
-					String tipoLogradouroResponsavel = null;
-					String logradouroResponsavel = null;
-					String numeroResponsavel = null;
-					String complementoResponsavel = null;
-					String bairroResponsavel = null;
-					String cepResponsavel = null;
-					String municipioResponsavel = null;
-					
 					parserCliente = new ParserUtil(clienteLinha);
 					
 					String matriculaImovelCliente = parserCliente.obterDadoParser(9).trim();
@@ -8196,100 +8150,100 @@ public class ControladorCadastro implements SessionBean {
 					String emailUsuario = parserCliente.obterDadoParser(30).trim();
 					linha1.put("emailUsuario", emailUsuario);
 					
-					nomeProprietario = parserCliente.obterDadoParser(50).trim();
+					String nomeProprietario = parserCliente.obterDadoParser(50).trim();
 					linha1.put("nomeProprietario", nomeProprietario);
 					
-					tipoPessoaProprietario = parserCliente.obterDadoParser(1).trim();
+					String tipoPessoaProprietario = parserCliente.obterDadoParser(1).trim();
 					linha1.put("tipoPessoaProprietario", tipoPessoaProprietario);
 					
-					cnpjCpfProprietario = parserCliente.obterDadoParser(14).trim();
+					String cnpjCpfProprietario = parserCliente.obterDadoParser(14).trim();
 					linha1.put("cnpjCpfProprietario", cnpjCpfProprietario);
 					
-					rgProprietario = parserCliente.obterDadoParser(9).trim();
+					String rgProprietario = parserCliente.obterDadoParser(9).trim();
 					linha1.put("rgProprietario", rgProprietario);
 					
-					ufRgProprietario = parserCliente.obterDadoParser(2).trim();
+					String ufRgProprietario = parserCliente.obterDadoParser(2).trim();
 					linha1.put("ufRgProprietario", ufRgProprietario);
 					
-					sexoProprietario = parserCliente.obterDadoParser(1).trim();
+					String sexoProprietario = parserCliente.obterDadoParser(1).trim();
 					linha1.put("sexoProprietario", sexoProprietario);
 					
-					telefoneProprietario = parserCliente.obterDadoParser(10).trim();
+					String telefoneProprietario = parserCliente.obterDadoParser(10).trim();
 					linha1.put("telefoneProprietario", telefoneProprietario);
 					
-					celularProprietario = parserCliente.obterDadoParser(10).trim();
+					String celularProprietario = parserCliente.obterDadoParser(10).trim();
 					linha1.put("celularProprietario", celularProprietario);
 					
-					emailProprietario = parserCliente.obterDadoParser(30).trim();
+					String emailProprietario = parserCliente.obterDadoParser(30).trim();
 					linha1.put("emailProprietario", emailProprietario);
 					
-					tipoLogradouroProprietario = parserCliente.obterDadoParser(2).trim();
+					String tipoLogradouroProprietario = parserCliente.obterDadoParser(2).trim();
 					linha1.put("idTipoLogradouroProprietario", tipoLogradouroProprietario);
 					
-					logradouroProprietario = parserCliente.obterDadoParser(40).trim();
+					String logradouroProprietario = parserCliente.obterDadoParser(40).trim();
 					linha1.put("logradouroProprietario", logradouroProprietario);
 					
-					numeroProprietario = parserCliente.obterDadoParser(5).trim();
+					String numeroProprietario = parserCliente.obterDadoParser(5).trim();
 					linha1.put("numeroProprietario", numeroProprietario);
 					
-					complementoProprietario = parserCliente.obterDadoParser(25).trim();
+					String complementoProprietario = parserCliente.obterDadoParser(25).trim();
 					linha1.put("complementoProprietario", complementoProprietario);
 					
-					bairroProprietario = parserCliente.obterDadoParser(20).trim();
+					String bairroProprietario = parserCliente.obterDadoParser(20).trim();
 					linha1.put("bairroProprietario", bairroProprietario);
 					
-					cepProprietario = parserCliente.obterDadoParser(8).trim();
+					String cepProprietario = parserCliente.obterDadoParser(8).trim();
 					linha1.put("cepProprietario", cepProprietario);
 					
-					municipioProprietario = parserCliente.obterDadoParser(15).trim();
+					String municipioProprietario = parserCliente.obterDadoParser(15).trim();
 					linha1.put("municipioProprietario", municipioProprietario);
 						
-					nomeResponsavel = parserCliente.obterDadoParser(50).trim();
+					String nomeResponsavel = parserCliente.obterDadoParser(50).trim();
 					linha1.put("nomeReponsavel", nomeResponsavel);
 					
-					tipoPessoaResponsavel = parserCliente.obterDadoParser(1).trim();
+					String tipoPessoaResponsavel = parserCliente.obterDadoParser(1).trim();
 					linha1.put("tipoPessoaResponsavel", tipoPessoaResponsavel);
 					
-					cnpjCpfResponsavel = parserCliente.obterDadoParser(14).trim();
+					String cnpjCpfResponsavel = parserCliente.obterDadoParser(14).trim();
 					linha1.put("cnpjCpfResponsavel", cnpjCpfResponsavel);
 					
-					rgResponsavel = parserCliente.obterDadoParser(9).trim();
+					String rgResponsavel = parserCliente.obterDadoParser(9).trim();
 					linha1.put("rgResponsavel", rgResponsavel);
 					
-					ufRgResponsavel = parserCliente.obterDadoParser(2).trim();
+					String ufRgResponsavel = parserCliente.obterDadoParser(2).trim();
 					linha1.put("ufRgResponsavel", ufRgResponsavel);
 					
-					sexoResponsavel = parserCliente.obterDadoParser(1).trim();
+					String sexoResponsavel = parserCliente.obterDadoParser(1).trim();
 					linha1.put("sexoResponsavel", sexoResponsavel);
 					
-					telefoneResponsavel = parserCliente.obterDadoParser(10).trim();
+					String telefoneResponsavel = parserCliente.obterDadoParser(10).trim();
 					linha1.put("telefoneResponsavel", telefoneResponsavel);
 					
-					celularResponsavel = parserCliente.obterDadoParser(10).trim();
+					String celularResponsavel = parserCliente.obterDadoParser(10).trim();
 					linha1.put("celularResponsavel", celularResponsavel);
 					
-					emailResponsavel = parserCliente.obterDadoParser(30).trim();
+					String emailResponsavel = parserCliente.obterDadoParser(30).trim();
 					linha1.put("emailResponsavel", emailResponsavel);
 					
-					tipoLogradouroResponsavel = parserCliente.obterDadoParser(2).trim();
+					String tipoLogradouroResponsavel = parserCliente.obterDadoParser(2).trim();
 					linha1.put("idTipoLogradouroResponsavel", tipoLogradouroResponsavel);
 					
-					logradouroResponsavel = parserCliente.obterDadoParser(40).trim();
+					String logradouroResponsavel = parserCliente.obterDadoParser(40).trim();
 					linha1.put("logradouroResponsavel", logradouroResponsavel);
 					
-					numeroResponsavel = parserCliente.obterDadoParser(5).trim();
+					String numeroResponsavel = parserCliente.obterDadoParser(5).trim();
 					linha1.put("numeroResponsavel", numeroResponsavel);
 					
-					complementoResponsavel = parserCliente.obterDadoParser(25).trim();
+					String complementoResponsavel = parserCliente.obterDadoParser(25).trim();
 					linha1.put("complementoResponsavel", complementoResponsavel);
 					
-					bairroResponsavel = parserCliente.obterDadoParser(20).trim();
+					String bairroResponsavel = parserCliente.obterDadoParser(20).trim();
 					linha1.put("bairroResponsavel", bairroResponsavel);
 					
-					cepResponsavel = parserCliente.obterDadoParser(8).trim();
+					String cepResponsavel = parserCliente.obterDadoParser(8).trim();
 					linha1.put("cepResponsavel", cepResponsavel);
 					
-					municipioResponsavel = parserCliente.obterDadoParser(15).trim();
+					String municipioResponsavel = parserCliente.obterDadoParser(15).trim();
 					linha1.put("municipioResponsavel", municipioResponsavel);
 						
 					String latitude = parserCliente.obterDadoParser(20).trim();
@@ -8445,8 +8399,13 @@ public class ControladorCadastro implements SessionBean {
 				}
 			}
 
-			repositorioCadastro.atualizarArquivoTextoAtualizacaoCadstral(idArquivoTexto,
-					SituacaoTransmissaoLeitura.TRANSMITIDO);
+			Integer quantidadeImoveisTransmitidos = repositorioCadastro.pesquisarQuantidadeImoveisPorSituacaoAtualizacaoCadastral(
+					SituacaoAtualizacaoCadastral.TRANSMITIDO, arquivoTexto.getId());
+			
+			if (quantidadeImoveisTransmitidos.compareTo(arquivoTexto.getQuantidadeImovel()) == 0) {
+				repositorioCadastro.atualizarArquivoTextoAtualizacaoCadstral(arquivoTexto.getId(),
+						SituacaoTransmissaoLeitura.TRANSMITIDO);
+			}
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			throw new EJBException(ex);
@@ -10787,13 +10746,29 @@ public class ControladorCadastro implements SessionBean {
 	 * @return Collection
 	 * @throws ControladorException
 	 */
-	public Collection<Rota> pesquisarArquivoTextoAtualizacaoCadastro(
+	public Collection pesquisarArquivoTextoAtualizacaoCadastro(
 			String idEmpresa, String idLocalidade, String idAgenteComercial,
 			String idSituacaoTransmissao) throws ControladorException {
 
 		try {
-			return this.repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(
-					idEmpresa, idLocalidade, idAgenteComercial, idSituacaoTransmissao);
+			Collection colecao = new ArrayList();
+			
+			Collection<ArquivoTextoAtualizacaoCadastral> colecaoArquivoTexto = 
+				this.repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(
+						idEmpresa, idLocalidade, idAgenteComercial, idSituacaoTransmissao);
+			
+			if (colecaoArquivoTexto != null && !colecaoArquivoTexto.isEmpty()) {
+				for (ArquivoTextoAtualizacaoCadastral arquivoTextoAtualizacaoCadastral : colecaoArquivoTexto) {
+					Integer quantidadeImoveisTransmitidos = repositorioCadastro.pesquisarQuantidadeImoveisPorSituacaoAtualizacaoCadastral(
+							SituacaoAtualizacaoCadastral.TRANSMITIDO, arquivoTextoAtualizacaoCadastral.getId());
+					
+					arquivoTextoAtualizacaoCadastral.setQuantidadeImoveisTransmitidos(quantidadeImoveisTransmitidos);
+					
+					colecao.add(arquivoTextoAtualizacaoCadastral);
+				}
+			}
+			
+			return colecao;
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
@@ -16664,6 +16639,8 @@ public class ControladorCadastro implements SessionBean {
 
 		try {
 
+			Integer idImovel = null;
+			
 			RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL, matriculaImovel,
 					matriculaImovel, new UsuarioAcaoUsuarioHelper(Usuario.USUARIO_BATCH, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 
@@ -16699,6 +16676,8 @@ public class ControladorCadastro implements SessionBean {
 					tabelaAtualizacaoCadastral.setOperacaoEfetuada(txt.getOperacaoEfetuada());
 					tabela.setId(Tabela.IMOVEL_ATUALIZACAO_CADASTRAL);
 					tabelaAtualizacaoCadastral.setIndicadorPrincipal(new Short("1"));
+					
+					idImovel = base.getId();
 				} else if (objetoAtualizacaoCadastralBase instanceof ClienteFoneAtualizacaoCadastral) {
 					ClienteFoneAtualizacaoCadastral base = (ClienteFoneAtualizacaoCadastral) objetoAtualizacaoCadastralBase;
 					ClienteFoneAtualizacaoCadastral txt = (ClienteFoneAtualizacaoCadastral) objetoAtualizacaoCadastralTxt;
@@ -16761,10 +16740,25 @@ public class ControladorCadastro implements SessionBean {
 						((ObjetoTransacao) objetoAtualizacaoCadastralTxt).getUsuarioAcaoUsuarioHelp(),
 						((ObjetoTransacao) objetoAtualizacaoCadastralTxt).getOperacaoEfetuada(), tabelaAtualizacaoCadastral,
 						colecaoTabelaColunaAtualizacaoCadastral);
+				
+				atualizarSituacaoImovelAtualizacaoCadastral(idImovel, SituacaoAtualizacaoCadastral.TRANSMITIDO);
 			}
 		} catch (Exception e) {
 			logger.error("Erro ao persistir alteracao na coluna.", e);
 		}
+	}
+
+	private void atualizarSituacaoImovelAtualizacaoCadastral(Integer idImovel, Integer situacao)
+			throws ControladorException {
+		FiltroImovelAtualizacaoCadastral filtroImovel = new FiltroImovelAtualizacaoCadastral();
+		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovelAtualizacaoCadastral.ID, idImovel));
+		
+		ImovelAtualizacaoCadastral imovel = (ImovelAtualizacaoCadastral) Util.retonarObjetoDeColecao(
+				getControladorUtil().pesquisar(filtroImovel, ImovelAtualizacaoCadastral.class.getName()));
+		
+		imovel.setIdSituacaoAtualizacaoCadastral(situacao);
+		
+		getControladorUtil().atualizar(imovel);
 	}
 
 	/**

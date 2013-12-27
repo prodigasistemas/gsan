@@ -97,6 +97,7 @@ import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoPerfil;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.FiscalizacaoSituacao;
 import gcom.atendimentopublico.ordemservico.SupressaoMotivo;
+import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteImovel;
@@ -17159,5 +17160,17 @@ public class ControladorImovelSEJB implements SessionBean {
 			throw new ControladorException("erro.sistema", ex);
 		}
 		
+	}
+	
+	public void atualizarIdArquivoTextoImovelAtualizacaoCadastral(
+			Integer idArquivoTexto, Integer idImovel) throws ControladorException {
+		
+		ArquivoTextoAtualizacaoCadastral arquitoTexto = new ArquivoTextoAtualizacaoCadastral();
+		arquitoTexto.setId(idArquivoTexto);
+		
+		ImovelAtualizacaoCadastral imovelAtualizacaoCadastral = this.pesquisarImovelAtualizacaoCadastral(idImovel);
+		imovelAtualizacaoCadastral.setIdArquivoTexto(idArquivoTexto);
+		
+		this.getControladorUtil().atualizar(imovelAtualizacaoCadastral);
 	}
 }

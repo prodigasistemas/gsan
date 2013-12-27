@@ -214,6 +214,10 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
 	
 	private String dsUFSiglaMunicipio;
 	
+	private Integer idArquivoTexto;
+	
+	private Integer indicadorAtualizado;
+	
 	public ImovelAtualizacaoCadastral(Integer id, Integer idImovel, Integer idLocalidade,
 			int codigoSetorComercial, int numeroQuadra, short lote,
 			short subLote, Integer numeroSequencialRota,
@@ -241,7 +245,8 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
 			Integer codigoImovelPrincipal,
 			Integer idSituacaoAtualizacaoCadastral, Integer idEmpresa,
 			Integer idMunicipio, String nomeMunicipio,
-			Integer idUinidadeFederacao, String dsUFSiglaMunicipio) {
+			Integer idUinidadeFederacao, String dsUFSiglaMunicipio,
+			Integer idArquivoTexto, Integer indicadorAtualizado) {
 		this.id = id;
 		this.idImovel = idImovel;
 		this.idLocalidade = idLocalidade;
@@ -300,6 +305,8 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
 		this.nomeMunicipio = nomeMunicipio;
 		this.idUinidadeFederacao = idUinidadeFederacao;
 		this.dsUFSiglaMunicipio = dsUFSiglaMunicipio;
+		this.idArquivoTexto = idArquivoTexto;
+		this.indicadorAtualizado = indicadorAtualizado;
 	}
 
 	public ImovelAtualizacaoCadastral(){    	
@@ -888,5 +895,21 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
 
 	public void setIdLocalInstalacaoRamal(Integer idLocalInstalacaoRamal) {
 		this.idLocalInstalacaoRamal = idLocalInstalacaoRamal;
+	}
+
+	public Integer getIdArquivoTexto() {
+		return idArquivoTexto;
+	}
+
+	public void setIdArquivoTexto(Integer idArquivoTexto) {
+		this.idArquivoTexto = idArquivoTexto;
+	}
+
+	public Integer getIndicadorAtualizado() {
+		return indicadorAtualizado;
+	}
+
+	public void setIndicadorAtualizado(Integer indicadorAtualizado) {
+		this.indicadorAtualizado = indicadorAtualizado;
 	}
 }

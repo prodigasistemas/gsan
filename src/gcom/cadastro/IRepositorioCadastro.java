@@ -961,6 +961,8 @@ public interface IRepositorioCadastro {
 	 */
 	public Integer pesquisarImovelAtualizacaoCadastralComIndicadorExclusaoCount() throws ErroRepositorioException;
 	
+	public Integer pesquisarQuantidadeImoveisPorSituacaoAtualizacaoCadastral(
+			Integer situacao, Integer idArquivoTexto) throws ErroRepositorioException;
 	
 	/**
 	 *  Pesquisar Ids dos Imoveis com siac_id = 0 and empresa = a empresa do leiturista 
