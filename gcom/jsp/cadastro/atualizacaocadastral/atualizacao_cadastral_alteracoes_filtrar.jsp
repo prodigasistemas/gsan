@@ -18,8 +18,15 @@
 <script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script>
 <html:javascript staticJavascript="false"  formName="FiltrarAlteracaoAtualizacaoCadastralActionForm" />
 
-<script LANGUAGE="JavaScript">
- 	
+<script language="JavaScript">
+    function recuperarDadosPopup(codigoRegistro, descricaoRegistro, tipoConsulta) {
+        var form = document.forms[0];
+        if (tipoConsulta == 'localidadeOrigem') {
+            form.idLocalidadeInicial.value = codigoRegistro;
+            form.nomeLocalidadeInicial.value = descricaoRegistro;
+         }
+    }
+    
 	//So chama a função abrirCalendario caso o campo esteja habilitado
 	function chamarCalendario(fieldNameOrigem,objetoRelacionado,fieldNameDestino){
 		abrirCalendarioReplicando('FiltrarAlteracaoAtualizacaoCadastralActionForm', fieldNameOrigem,fieldNameDestino);
@@ -42,29 +49,11 @@
 	
 	}
 	
-	function recuperarDadosPopup(codigoRegistro, descricaoRegistro, tipoConsulta) {
-	   var form = document.forms[0];
-	   if (tipoConsulta == 'arquivoTextoAtualizacaoCadastral') {
-	      form.idArquivo.value = codigoRegistro;
-	      form.descricaoArquivo.value = descricaoRegistro;
-	    }
-	    
-   }
-   
-   	function chamarPopup(url,altura, largura,objetoRelacionado){
-		if(objetoRelacionado.disabled != true){
-			abrirPopup(url, altura, largura);
-		}
-   	}
-   	
    function limparLeiturista(){
 		var form = document.forms[0];
 	    form.idArquivo.value = '';
 	    form.descricaoArquivo.value = '';
-	}
-	
-	
-	
+	}	
 </script>
 
 
@@ -160,154 +149,138 @@
 				labelProperty="descricao" property="id" />
 		</html:select></td>
 	 </tr>
-     <tr>
-		<td width="130"><strong>Identificador do Arquivo:</strong></td>
-		<td colspan="2"><html:text maxlength="9" property="idArquivo"
-			tabindex="1" size="9"
-			onkeypress="validaEnterComMensagem(event, 'exibirFiltrarAlteracaoAtualizacaoCadastralAction.do', 'idArquivo', 'Arquivo');" />
-		<a href="javascript:chamarPopup('exibirPesquisarArquivoTextoAtualizacaoCadastralAction.do?limpaForm=S', 495, 300,document.forms[0].idArquivo);">
-		<img width="23" height="21" border="0"
-			src="<bean:message key="caminho.imagens"/>pesquisa.gif"
-			title="Pesquisar Agente Cadastral" /></a> 
-		<logic:present
-			name="idArquivoEncontrado" scope="request">
-			<html:text maxlength="50" property="descricaoArquivo"
-				readonly="true"
-				style="background-color:#EFEFEF; border:0; color: #000000"
-				size="45" />
-		</logic:present> 
-		<logic:notPresent
-			name="idArquivoEncontrado" scope="request">
-			<html:text maxlength="50" property="descricaoArquivo"
-				readonly="true"
-				style="background-color:#EFEFEF; border:0; color: #ff0000"
-				size="45" />
-		</logic:notPresent> 
-		<a href="javascript:limparLeiturista();"> 
-		<img src="<bean:message key="caminho.imagens"/>limparcampo.gif"
-			border="0" title="Apagar" /></a></td>
-	</tr>  
-		
-		
-		<tr>
-		<td><strong>Exibir Campos:</strong></td>
-					<td><strong> <html:radio property="exibirCampos"
-						value="1" /> <strong>Pendentes de Alteração <html:radio
-						property="exibirCampos" value="2" /> Alterados/Resolvidos</strong><html:radio
-						property="exibirCampos" value="3" /> Todos</strong>
-						</td>
-		</tr>
-		
-		<tr>
-					<td width="120"><strong>Colunas dos imóveis e clientes:</strong></td>
-					<td colspan="2">
-					<table width="100%" border=0 cellpadding=0 cellspacing=0
-						align="left">
-						<tr>
-							<td width="175">
 
-							<div align="left"><strong>Disponíveis</strong></div>
+    <tr>
+      <td colspan="2"><hr></td>
+    </tr>
 
-							<html:select property="colunaImoveis" size="6" multiple="true"
-								style="width:190px" >
+	<tr>
+	  <td colspan="2">
+	    <strong>Informe os dados da inscri&ccedil;&atilde;o inicial:</strong>
+	  </td>
+	</tr>
 
-								<html:options collection="colecaoColunaImoveis" 
-									labelProperty="descricaoColuna" property="id" />
-							</html:select></td>
+    <tr>
+      <td><strong>Localidade:</strong>
+      </td>
+      <td><html:text tabindex="8" maxlength="3" property="idLocalidadeInicial" size="5"
+        onkeypress="somente_numero(this);form.target=''; validaEnter(event,'exibirFiltrarAlteracaoAtualizacaoCadastralAction.do?filtroLocalidade=LocalidadeInicial', 'idLocalidadeInicial');"
+        onkeyup="javascript:somente_numero(this);" />
+         
+        <a href="javascript:limparCampos('idLocalidadeInicial', 'nomeLocalidadeInicial'); abrirPopup('exibirPesquisarLocalidadeAction.do?tipo=origem', 400, 800);"
+        id="btPesqLocalidadeInicial"> 
+          <img border="0" src="<bean:message key="caminho.imagens"/>pesquisa.gif"/> 
+        </a>
+         
+          <logic:notPresent name="LocalidadeInicialInexistente" scope="request">
+            <html:text property="nomeLocalidadeInicial" size="35" readonly="true"
+              style="background-color: #EFEFEF; border: 0; color: #000000" />
+          </logic:notPresent>
 
-							<td width="5" valign="center"><br>
-							<table width="50" align="center">
-								<tr>
-									<td align="center"><input type="button" class="bottonRightCol"
-										onclick="javascript:MoverTodosDadosSelectMenu1PARAMenu2('FiltrarAlteracaoAtualizacaoCadastralActionForm', 'colunaImoveis', 'colunaImoveisSelecionados'); enviarSelectMultiplo('FiltrarAlteracaoAtualizacaoCadastralActionForm','colunaImoveisSelecionados');"
-										value=" &gt;&gt; "></td>
-								</tr>
+          <logic:present name="LocalidadeInicialInexistente" scope="request">
+            <html:text property="nomeLocalidadeInicial" size="35" readonly="true"
+              style="background-color: #EFEFEF; border: 0; color: #ff0000" />
+          </logic:present>
+          
+          <a href="javascript:limparCampos('idLocalidadeInicial', 'nomeLocalidadeInicial');">
+              <img src="<bean:message key="caminho.imagens"/>limparcampo.gif" border="0" title="Apagar" />
+          </a>          
+    </tr>
+    
+    <tr>
+      <td><strong>Setor Comercial :</strong></td>
+      <td><html:text maxlength="3" property="idSetorInicial" size="5" onkeyup="javascript:somente_numero(this);"
+           onkeypress="form.target='';validaEnterDependencia(event, 'filtrarImovelOutrosCriteriosWizardAction.do?action=exibirFiltrarImovelOutrosCriteriosLocalizarImoveis&objetoConsulta=2&inscricaoTipo=destino', document.forms[0].setorComercialDestinoCD, document.forms[0].localidadeDestinoID.value, 'Localidade Final.');return isCampoNumerico(event);"
+           tabindex="7" />
+           <a href="javascript:chamarPopup('exibirPesquisarSetorComercialAction.do', 'setorComercialOrigem', 'idLocalidade', document.forms[0].idLocalidadeInicial.value, 275, 480, 'Informe Localidade Inicial.');">
+           <img border="0" src="<bean:message key="caminho.imagens"/>pesquisa.gif" title="Pesquisar" />
+           </a>
+          <logic:notPresent name="SetorComercialInicialInexistente" scope="request">
+            <html:text property="nomeSetorComercialInicial" size="35" readonly="true"
+              style="background-color: #EFEFEF; border: 0; color: #000000" />
+          </logic:notPresent>
 
-								<tr>
-									<td align="center"><input type="button" class="brottonRightCol"
-										onclick="javascript:MoverDadosSelectMenu1PARAMenu2('FiltrarAlteracaoAtualizacaoCadastralActionForm', 'colunaImoveis', 'colunaImoveisSelecionados'); enviarSelectMultiplo('FiltrarAlteracaoAtualizacaoCadastralActionForm','colunaImoveisSelecionados');"
-										value=" &nbsp;&gt;  "></td>
-								</tr>
+          <logic:present name="SetorComercialInicialInexistente" scope="request">
+            <html:text property="nomeSetorComercialInicial" size="35" readonly="true"
+              style="background-color: #EFEFEF; border: 0; color: #ff0000" />
+          </logic:present>
+          
+          <a href="javascript:limparCampos('idSetorComercialInicial', 'nomeSetorComercialInicial');">
+              <img src="<bean:message key="caminho.imagens"/>limparcampo.gif" border="0" title="Apagar" />
+          </a>
+    </tr>
+    
+    <tr>
+      <td><strong>Exibir Campos:</strong></td>
+      <td><strong> <html:radio property="exibirCampos" value="1" /> <strong>Pendentes de Alteração <html:radio
+              property="exibirCampos" value="2" /> Alterados/Resolvidos</strong> <html:radio property="exibirCampos" value="3" /> Todos</strong>
+      </td>
+    </tr>
 
-								<tr>
-									<td align="center"><input type="button" class="bottonRightCol"
-										onclick="javascript:MoverDadosSelectMenu2PARAMenu1('FiltrarAlteracaoAtualizacaoCadastralActionForm', 'colunaImoveis', 'colunaImoveisSelecionados'); enviarSelectMultiplo('FiltrarAlteracaoAtualizacaoCadastralActionForm','colunaImoveisSelecionados');"
-										value=" &nbsp;&lt;  "></td>
-								</tr>
+    <tr>
+      <td width="120"><strong>Colunas dos imóveis e clientes:</strong>
+      </td>
+      <td colspan="2">
+        <table width="100%" border=0 cellpadding=0 cellspacing=0 align="left">
+          <tr>
+            <td width="175">
 
-								<tr>
-									<td align="center"><input type="button" class="bottonRightCol"
-										onclick="javascript:MoverTodosDadosSelectMenu2PARAMenu1('FiltrarAlteracaoAtualizacaoCadastralActionForm', 'colunaImoveis', 'colunaImoveisSelecionados'); enviarSelectMultiplo('FiltrarAlteracaoAtualizacaoCadastralActionForm','colunaImoveisSelecionados');"
-										value=" &lt;&lt; "></td>
-								</tr>
-							</table>
-							</td>
+              <div align="left">
+                <strong>Disponíveis</strong>
+              </div> <html:select property="colunaImoveis" size="6" multiple="true" style="width:190px">
 
-							<td>
-							<div align="left"><strong>Selecionados</strong></div>
+                <html:options collection="colecaoColunaImoveis" labelProperty="descricaoColuna" property="id" />
+              </html:select>
+            </td>
 
-							<html:select property="colunaImoveisSelecionados" size="6"
-								multiple="true" style="width:190px">
-								
-								<logic:present name="existeColecaoColunaImoveisSelecionados">
-									<html:options collection="colecaoColunaImoveisSelecionados"
-									labelProperty="descricaoColuna" property="id" />
-								</logic:present>
-								
+            <td width="5" valign="center"><br>
+              <table width="50" align="center">
+                <tr>
+                  <td align="center"><input type="button" class="bottonRightCol"
+                    onclick="javascript:MoverTodosDadosSelectMenu1PARAMenu2('FiltrarAlteracaoAtualizacaoCadastralActionForm', 'colunaImoveis', 'colunaImoveisSelecionados'); enviarSelectMultiplo('FiltrarAlteracaoAtualizacaoCadastralActionForm','colunaImoveisSelecionados');"
+                    value=" &gt;&gt; ">
+                  </td>
+                </tr>
 
-							</html:select></td>
-						</tr>
-					</table>
-					</td>
-				</tr>
-		
-		
-     <!--<tr>
-         <td>
-         	<strong>Período de Realização:</strong>
-         </td>        
-        <td colspan="2">
-         	<span class="style2">
-         	<strong> 
-				<html:text property="periodoRealizacaoInicial" 
-					size="11" 
-					maxlength="10" 
-					tabindex="3" 
-					onkeyup="mascaraData(this, event);replicaDataEncerramento();"/>
-		
-				<a href="javascript:chamarCalendario('periodoRealizacaoInicial',document.forms[0].periodoRealizacaoInicial,'periodoRealizacaoFinal');">
-				<img border="0" 
-					src="<bean:message key='caminho.imagens'/>calendario.gif" 
-					width="16" 
-					height="15" 
-					border="0" 
-					alt="Exibir Calendário" 
-					tabindex="4"/></a>
-					a 
-		
-				<html:text property="periodoRealizacaoFinal" 
-					size="11" 
-					maxlength="10" 
-					tabindex="3" 
-					onkeyup="mascaraData(this, event)"/>
-		
-				<a href="javascript:chamarCalendario('periodoRealizacaoFinal',document.forms[0].periodoRealizacaoFinal,'');">
-					<img border="0" 
-						src="<bean:message key='caminho.imagens'/>calendario.gif" 
-						width="16" 
-						height="15" 
-						border="0" 
-						alt="Exibir Calendário" 
-						tabindex="4"/></a>
-		
-		        </strong>(dd/mm/aaaa)<strong> 
-		    </strong>
-           	</span>
-       	</td>
-      </tr>-->
-      
-      
-  	  <tr>
+                <tr>
+                  <td align="center"><input type="button" class="brottonRightCol"
+                    onclick="javascript:MoverDadosSelectMenu1PARAMenu2('FiltrarAlteracaoAtualizacaoCadastralActionForm', 'colunaImoveis', 'colunaImoveisSelecionados'); enviarSelectMultiplo('FiltrarAlteracaoAtualizacaoCadastralActionForm','colunaImoveisSelecionados');"
+                    value=" &nbsp;&gt;  ">
+                  </td>
+                </tr>
+
+                <tr>
+                  <td align="center"><input type="button" class="bottonRightCol"
+                    onclick="javascript:MoverDadosSelectMenu2PARAMenu1('FiltrarAlteracaoAtualizacaoCadastralActionForm', 'colunaImoveis', 'colunaImoveisSelecionados'); enviarSelectMultiplo('FiltrarAlteracaoAtualizacaoCadastralActionForm','colunaImoveisSelecionados');"
+                    value=" &nbsp;&lt;  ">
+                  </td>
+                </tr>
+
+                <tr>
+                  <td align="center"><input type="button" class="bottonRightCol"
+                    onclick="javascript:MoverTodosDadosSelectMenu2PARAMenu1('FiltrarAlteracaoAtualizacaoCadastralActionForm', 'colunaImoveis', 'colunaImoveisSelecionados'); enviarSelectMultiplo('FiltrarAlteracaoAtualizacaoCadastralActionForm','colunaImoveisSelecionados');"
+                    value=" &lt;&lt; ">
+                  </td>
+                </tr>
+              </table></td>
+
+            <td>
+              <div align="left">
+                <strong>Selecionados</strong>
+              </div> <html:select property="colunaImoveisSelecionados" size="6" multiple="true" style="width:190px">
+
+                <logic:present name="existeColecaoColunaImoveisSelecionados">
+                  <html:options collection="colecaoColunaImoveisSelecionados" labelProperty="descricaoColuna" property="id" />
+                </logic:present>
+
+
+              </html:select>
+            </td>
+          </tr>
+        </table></td>
+    </tr>
+
+    <tr>
 		<td colspan="3">&nbsp;</td>
 	 </tr>
 	 <tr>
@@ -346,4 +319,5 @@
 <%@ include file="/jsp/util/telaespera.jsp"%>
 
 </body>
+
 </html:html>

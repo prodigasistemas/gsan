@@ -202,7 +202,7 @@ function enviarDadosQuatroParametrosCaminhoRetorno(nomeActionExibirPagina, codig
 function enviarDadosCincoParametrosCaminhoRetorno(nomeActionExibirPagina, codigoRegistro, descricaoRegistro1, descricaoRegistro2, descricaoRegistro3, tipoConsulta) {
 	window.location.href =
 	'/gsan/' + nomeActionExibirPagina + '.do?idCampoEnviarDados=' + codigoRegistro +
-	'&descricaoCampoEnviarDados1=' + descricaoRegistro1 + '&descricaoCampoEnviarDados2=' + descricaoRegistro2 + 
+	'&descricaoCampoEnviarDados1=' + descricaoRegistro1 + '&descricaoCampoEnviarDgit ados2=' + descricaoRegistro2 + 
 	'&descricaoCampoEnviarDados3=' + descricaoRegistro3 + '&tipoConsulta=' + tipoConsulta;
 
 }
@@ -559,6 +559,12 @@ function limparCampoPesquisa(nomeForm, nomeCampo) {
   campo.value = "";
 }
 
+function limparCampos(){
+	for(var i = 0; i< arguments.length; i++){
+		document.getElementsByName(arguments[i])[0].value = '';
+	}
+}
+
 
 // funcao utilizada no mecanismode processo quando o usuario clica no botao avancar
 function botaoAvancar(uri){
@@ -640,12 +646,6 @@ function botaoDesabilitaSemValidacao(form){
 // funcao utilizada no mecanismode processo quando o usuario clica no botao avancar
 function botaoAvancarTelaEspera(uri){
 
-	//alert(uri);
- //alert(uri.match('inserirUsuarioWizardAction.do'));
- //alert(uri.value.indexOf('inserirUsuarioWizard.do'));
- 
- 
- 
   document.forms[0].action=uri;
   var cancelarValidacao = false;
 

@@ -88,10 +88,6 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
     
     private String nomeLeiturista;
     
-    private String idArquivo;
-    
-    private String descricaoArquivo;
-    
     private String periodoRealizacaoInicial;
     
     private String periodoRealizacaoFinal;
@@ -105,6 +101,35 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 	private String[] colunaImoveis;
 	
 	private String[] colunaImoveisSelecionados;
+	
+	private String idLocalidadeInicial;	
+
+	private String idLocalidadeFinal;
+
+	private String nomeLocalidadeInicial;	
+
+	private String nomeLocalidadeFinal;
+	
+	private String idSetorInicial;	
+	
+	private String idSetorFinal;
+	
+	private String nomeSetorComercialInicial;	
+	
+	private String nomeSetorComercialFinal;
+	
+	private String idQuadraInicial;	
+	
+	private String idQuadraFinal;
+	
+	private String codRotaInicial;
+
+	private String seqRotaInicial;
+
+	private String codRotaFinal;
+
+	private String seqRotaFinal;
+	
 
 	public String getIdRegistrosAutorizados() {
 		return idRegistrosAutorizados;
@@ -122,14 +147,6 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 		this.idRegistrosNaoAutorizados = idRegistrosNaoAutorizados;
 	}
 
-	public String getDescricaoArquivo() {
-		return descricaoArquivo;
-	}
-
-	public void setDescricaoArquivo(String descricaoArquivo) {
-		this.descricaoArquivo = descricaoArquivo;
-	}
-
 	public String getPeriodoRealizacaoFinal() {
 		return periodoRealizacaoFinal;
 	}
@@ -144,14 +161,6 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 
 	public void setPeriodoRealizacaoInicial(String periodoRealizacaoInicial) {
 		this.periodoRealizacaoInicial = periodoRealizacaoInicial;
-	}
-
-	public String getIdArquivo() {
-		return idArquivo;
-	}
-
-	public void setIdArquivo(String idArquivo) {
-		this.idArquivo = idArquivo;
 	}
 
 	public String getNomeLeiturista() {
@@ -210,6 +219,115 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 		this.exibirCampos = exibirCampos;
 	}
 
-	
+	public String getIdLocalidadeInicial() {
+		return idLocalidadeInicial;
+	}
 
+	public void setIdLocalidadeInicial(String idLocalidadeInicial) {
+		this.idLocalidadeInicial = idLocalidadeInicial;
+	}
+
+	public String getIdLocalidadeFinal() {
+		return idLocalidadeFinal;
+	}
+
+	public void setIdLocalidadeFinal(String idLocalidadeFinal) {
+		this.idLocalidadeFinal = idLocalidadeFinal;
+	}
+
+	public String getNomeLocalidadeInicial() {
+		return nomeLocalidadeInicial;
+	}
+
+	public void setNomeLocalidadeInicial(String nomeLocalidadeInicial) {
+		this.nomeLocalidadeInicial = nomeLocalidadeInicial;
+	}
+
+	public String getNomeLocalidadeFinal() {
+		return nomeLocalidadeFinal;
+	}
+
+	public void setNomeLocalidadeFinal(String nomeLocalidadeFinal) {
+		this.nomeLocalidadeFinal = nomeLocalidadeFinal;
+	}
+
+	public String getIdSetorInicial() {
+		return idSetorInicial;
+	}
+
+	public void setIdSetorInicial(String idSetorInicial) {
+		this.idSetorInicial = idSetorInicial;
+	}
+
+	public String getIdSetorFinal() {
+		return idSetorFinal;
+	}
+
+	public void setIdSetorFinal(String idSetorFinal) {
+		this.idSetorFinal = idSetorFinal;
+	}
+
+	public String getNomeSetorComercialInicial() {
+		return nomeSetorComercialInicial;
+	}
+
+	public void setNomeSetorComercialInicial(String nomeSetorInicial) {
+		this.nomeSetorComercialInicial = nomeSetorInicial;
+	}
+
+	public String getNomeSetorComercialFinal() {
+		return nomeSetorComercialFinal;
+	}
+
+	public void setNomeSetorComercialFinal(String nomeSetorFinal) {
+		this.nomeSetorComercialFinal = nomeSetorFinal;
+	}
+
+	public String getIdQuadraInicial() {
+		return idQuadraInicial;
+	}
+
+	public void setIdQuadraInicial(String idQuadraInicial) {
+		this.idQuadraInicial = idQuadraInicial;
+	}
+
+	public String getIdQuadraFinal() {
+		return idQuadraFinal;
+	}
+
+	public void setIdQuadraFinal(String idQuadraFinal) {
+		this.idQuadraFinal = idQuadraFinal;
+	}
+
+	public String getCodRotaInicial() {
+		return codRotaInicial;
+	}
+
+	public void setCodRotaInicial(String codRotaInicial) {
+		this.codRotaInicial = codRotaInicial;
+	}
+
+	public String getSeqRotaInicial() {
+		return seqRotaInicial;
+	}
+
+	public void setSeqRotaInicial(String seqRotaInicial) {
+		this.seqRotaInicial = seqRotaInicial;
+	}
+
+	public String getCodRotaFinal() {
+		return codRotaFinal;
+	}
+
+	public void setCodRotaFinal(String codRotaFinal) {
+		this.codRotaFinal = codRotaFinal;
+	}
+
+	public String getSeqRotaFinal() {
+		return seqRotaFinal;
+	}
+
+	public void setSeqRotaFinal(String seqRotaFinal) {
+		this.seqRotaFinal = seqRotaFinal;
+	}	
 }
