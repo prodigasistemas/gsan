@@ -58944,13 +58944,14 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			int anoMesReferencia, Integer idFaturamentoGrupo) throws ErroRepositorioException {
 		
 		Collection retorno = null;
+		
 		Session session = HibernateUtil.getSession();
-		String consulta;
+		
 		try {
-			consulta = "SELECT cnta_amreferenciaconta as referencia, " 		//0
-						+ " uneg_nmunidadenegocio as unidadeDeNegocio, " 	//1
-						+ " ftgr_id as grupo, " 							//2
-						+ " count(*) as qtdContasRetidas" 					//3
+			String consulta = "SELECT cnta_amreferenciaconta as anoMesReferencia, "
+						+ " uneg_nmunidadenegocio as unidadeDeNegocio, "
+						+ " ftgr_id as grupo, "
+						+ " count(*) as qtdContasRetidas"
 						+ " FROM faturamento.conta c, "
 						+ " cadastro.localidade l, "
 						+ " cadastro.unidade_negocio un, "
@@ -58966,21 +58967,18 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " order by 1,2,3 ";
 
 			retorno = session.createSQLQuery(consulta)
-					.addScalar("referencia", Hibernate.STRING)
+					.addScalar("anoMesReferencia", Hibernate.STRING)
 					.addScalar("unidadeDeNegocio", Hibernate.STRING)
 					.addScalar("grupo", Hibernate.STRING)
 					.addScalar("qtdContasRetidas", Hibernate.INTEGER)
-					
 					.setInteger("situacaoPreFaturada", DebitoCreditoSituacao.PRE_FATURADA)
 					.setInteger("idFaturamentoGrupo", idFaturamentoGrupo)
 					.setInteger("anoMesReferencia", Integer.valueOf(anoMesReferencia))
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 

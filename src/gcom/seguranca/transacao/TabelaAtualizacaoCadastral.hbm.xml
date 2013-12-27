@@ -20,6 +20,8 @@
 		<property name="codigoImovel" type="java.lang.Integer" column="tatc_cdimovel" length="4"/>
 		<property name="codigoCliente" type="java.lang.Integer" column="tatc_cdcliente" length="4"/>
 		<property name="dataProcessamento" type="java.sql.Timestamp" column="tatc_dtprocessamento" length="8"/>
+		<property name="complemento" type="java.lang.String" column="tatc_complemento"/>
+		
 		<many-to-one name="tabela" class="gcom.seguranca.transacao.Tabela" not-null="true">
 			<column name="tabe_id"/>
 		</many-to-one>

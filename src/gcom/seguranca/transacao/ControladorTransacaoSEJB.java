@@ -193,6 +193,7 @@ import java.util.Set;
 import javax.ejb.CreateException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
+import javax.transaction.UserTransaction;
 
 /**
  * Definição da lógica de negócio do Session Bean de ControladorCliente
@@ -1133,8 +1134,9 @@ public class ControladorTransacaoSEJB implements SessionBean {
 			// a coleção de atributos selecionados para o registro da transacao
 			throw new ControladorException("erro.sistema");			
 		}
+		
 		Interceptador.getInstancia().verificarObjetoAlterado(objetoTransacao,
-				objetoTransacao.retornarAtributosSelecionadosRegistro());	
+				objetoTransacao.retornarAtributosSelecionadosRegistro());
 	}
 	
 
@@ -1361,6 +1363,9 @@ public class ControladorTransacaoSEJB implements SessionBean {
 						helper.setIdTabelaAtualizacaoCadastral((Integer) dados[0]); // Id da Tabela Atualizacao Cadastral
 						helper.setIdTabela((Integer) dados[1]); // Id da Tabela
 						helper.setDescricaoTabela((String) dados[2]); // Descricao da Tabela
+						if (dados[14] != null){
+							helper.setDescricaoTabela(helper.getDescricaoTabela() + " " + String.valueOf(dados[14]));
+						}
 						helper.setIdTabelaColuna((Integer) dados[3]); // Id da TabelaColuna
 						helper.setDescricaoColuna((String) dados[4]); // Descricao da TabelaColuna
 						helper.setIdTabelaColunaAtualizacaoCadastral((Integer) dados[5]); // Id da Tabela Coluna Atualizacao Cadastral

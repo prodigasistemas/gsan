@@ -16195,48 +16195,42 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 * 
 	 * @throws ControladorException
 	 */
-	public Collection pesquisarDadosRelatorioContasRetidas(
+	public Collection<RelatorioContasRetidasHelper> pesquisarDadosRelatorioContasRetidas(
 			int anoMesReferencia, Integer idFaturamentoGrupo) throws ControladorException {
 		
-		Collection retorno = new ArrayList();
+		Collection<RelatorioContasRetidasHelper> retorno = new ArrayList<RelatorioContasRetidasHelper>();
+		
 		try {
-			Collection colecaoObjeto = repositorioFaturamento
-					.pesquisarDadosRelatorioContasRetidas(anoMesReferencia, idFaturamentoGrupo);
-			if (colecaoObjeto != null && !colecaoObjeto.isEmpty()) {
+			Collection colecaoObjeto = repositorioFaturamento.pesquisarDadosRelatorioContasRetidas(anoMesReferencia, idFaturamentoGrupo);
+			
+			if(colecaoObjeto != null && !colecaoObjeto.isEmpty()){
+				RelatorioContasRetidasHelper relatorioLeiturasContasRetidas = null;
 				Iterator iterator = colecaoObjeto.iterator();
-
-				while (iterator.hasNext()) {
-					RelatorioContasRetidasHelper relatorioLeiturasContasRetidas = new RelatorioContasRetidasHelper();
-					Object[] objeto = (Object[]) iterator.next();
+				
+				while(iterator.hasNext()){
 					
-					// referencia
-					if (objeto[0] != null) {
-						relatorioLeiturasContasRetidas.setAnoMesReferencia((String) objeto[0]);
-					}
-
-					// unidade de negocio
-					if (objeto[1] != null) {
-						relatorioLeiturasContasRetidas.setUnidadeDeNegocio((String) objeto[1]);
+					relatorioLeiturasContasRetidas = new RelatorioContasRetidasHelper();
+					Object[] obj = (Object[]) iterator.next();
+					
+					if(obj[0] != null){
+						relatorioLeiturasContasRetidas.setAnoMesReferencia((String) obj[0]);
 					}
 					
-					// grupo
-					if (objeto[2] != null) {
-						relatorioLeiturasContasRetidas.setGrupo((String) objeto[2]);
-					}
-					// qtd contas retidas
-					if (objeto[3] != null) {
-						relatorioLeiturasContasRetidas.setQtdContasRetidas((Integer) objeto[3]);
+					if(obj[1] != null){
+						relatorioLeiturasContasRetidas.setUnidadeDeNegocio((String) obj[1]);
 					}
 					
+					if(obj[2] != null){
+						relatorioLeiturasContasRetidas.setGrupo((String) obj[2]);
+					}
 					
-					relatorioLeiturasContasRetidas
-							.setAnoMesReferencia(Util
-									.formatarAnoMesParaMesAnoSemBarra(anoMesReferencia));
-
+					if(obj[3] != null){
+						relatorioLeiturasContasRetidas.setQtdContasRetidas((Integer) obj[3]);
+					}
+					
+					relatorioLeiturasContasRetidas.setAnoMesReferencia(Util.formatarAnoMesParaMesAnoSemBarra(anoMesReferencia));
 					retorno.add(relatorioLeiturasContasRetidas);
-
 				}
-
 			}
 		} catch (ErroRepositorioException e) {
 			sessionContext.setRollbackOnly();

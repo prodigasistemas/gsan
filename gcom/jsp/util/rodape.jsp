@@ -16,7 +16,7 @@
 					</logic:notPresent>
 				</td>
 
-          		<td align="right">Vers&atilde;o: 5.1.1.57 (Batch) 12/12/2013 - 15:37:12 </td>
+          		<td align="right">Vers&atilde;o: 5.1.1.57 (Batch) 19/12/2013 - 14:47:49 </td>
         	</tr>
       	</table>
 		</td>

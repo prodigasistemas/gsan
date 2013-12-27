@@ -622,6 +622,7 @@ import gcom.relatorio.faturamento.ControladorRelatorioFaturamentoLocal;
 import gcom.relatorio.faturamento.ControladorRelatorioFaturamentoLocalHome;
 import gcom.relatorio.faturamento.FiltrarRelatorioDevolucaoPagamentosDuplicidadeHelper;
 import gcom.relatorio.faturamento.FiltrarRelatorioJurosMultasDebitosCanceladosHelper;
+import gcom.relatorio.faturamento.RelatorioContasRetidasHelper;
 import gcom.relatorio.faturamento.RelatorioDevolucaoPagamentosDuplicidadeHelper;
 import gcom.relatorio.faturamento.RelatorioFaturasAgrupadasBean;
 import gcom.relatorio.faturamento.RelatorioJurosMultasDebitosCanceladosHelper;
@@ -39060,26 +39061,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * 
-	 * Recebe uma arquivo e pra cada linha desse arquivo ele processa o
-	 * imovelCadastral ou ClienteImovelCadastral
-	 * 
-	 * @author Thiago Toscano
-	 * @date 16/02/2009
-	 * 
-	 * @throws FachadaException
-	 */
-	public void carregarImovelAtualizacaoCadastral(BufferedReader buffer) {
-		try {
-			this.getControladorCadastro().carregarImovelAtualizacaoCadastral(
-					buffer);
-		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex
-					.getParametroMensagem());
-		}
-	}
-
 	public void carregarImovelAtualizacaoCadastral(BufferedReader buffer, ArrayList<String> nomesImagens) {
 		try {
 			this.getControladorCadastro().carregarImovelAtualizacaoCadastral(
@@ -53288,11 +53269,9 @@ public class Fachada {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
-	public Collection pesquisarDadosRelatorioContasRetidas(
-			int anoMesReferencia, Integer idFaturamentoGrupo) {
+	public Collection<RelatorioContasRetidasHelper> pesquisarDadosRelatorioContasRetidas(int anoMesReferencia, Integer idFaturamentoGrupo) {
 		try {
-			return getControladorFaturamento()
-					.pesquisarDadosRelatorioContasRetidas(anoMesReferencia, idFaturamentoGrupo);
+			return getControladorFaturamento().pesquisarDadosRelatorioContasRetidas(anoMesReferencia, idFaturamentoGrupo);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
