@@ -16639,6 +16639,7 @@ public class ControladorCadastro implements SessionBean {
 
 		try {
 
+			// TODO - Atualizar ImovelAtualizacaoCadastral para TRANSMITIDO após salvar alterações
 			Integer idImovel = null;
 			
 			RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL, matriculaImovel,
