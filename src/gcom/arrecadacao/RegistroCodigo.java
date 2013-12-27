@@ -104,6 +104,7 @@ public class RegistroCodigo implements Serializable {
     public final static String CODIGO_F = "F";
     public final static String CODIGO_G = "G";
     public final static String CODIGO_X = "X";
+    public final static String CODIGO_K = "K";
     public final static Integer CODIGO_SETE = 7;
     public final static Integer CODIGO_SEIS = 6;
     public final static Integer FICHA_COMPENSACAO_ID = 15;
