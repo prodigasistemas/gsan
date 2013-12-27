@@ -16,63 +16,6 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
  */
-
-/*
- * GSAN - Sistema Integrado de Gestão de Serviços de Saneamento
- * Copyright (C) <2007> 
- * Adriano Britto Siqueira
- * Alexandre Santos Cabral
- * Ana Carolina Alves Breda
- * Ana Maria Andrade Cavalcante
- * Aryed Lins de Araújo
- * Bruno Leonardo Rodrigues Barros
- * Carlos Elmano Rodrigues Ferreira
- * Cláudio de Andrade Lira
- * Denys Guimarães Guenes Tavares
- * Eduardo Breckenfeld da Rosa Borges
- * Fabíola Gomes de Araújo
- * Flávio Leonardo Cavalcanti Cordeiro
- * Francisco do Nascimento Júnior
- * Homero Sampaio Cavalcanti
- * Ivan Sérgio da Silva Júnior
- * José Edmar de Siqueira
- * José Thiago Tenório Lopes
- * Kássia Regina Silvestre de Albuquerque
- * Leonardo Luiz Vieira da Silva
- * Márcio Roberto Batista da Silva
- * Maria de Fátima Sampaio Leite
- * Micaela Maria Coelho de Araújo
- * Nelson Mendonça de Carvalho
- * Newton Morais e Silva
- * Pedro Alexandre Santos da Silva Filho
- * Rafael Corrêa Lima e Silva
- * Rafael Francisco Pinto
- * Rafael Koury Monteiro
- * Rafael Palermo de Araújo
- * Raphael Veras Rossiter
- * Roberto Sobreira Barbalho
- * Rodrigo Avellar Silveira
- * Rosana Carvalho Barbosa
- * Sávio Luiz de Andrade Cavalcante
- * Tai Mu Shih
- * Thiago Augusto Souza do Nascimento
- * Tiago Moreno Rodrigues
- * Vivianne Barbosa Sousa
- *
- * Este programa é software livre; você pode redistribuí-lo e/ou
- * modificá-lo sob os termos de Licença Pública Geral GNU, conforme
- * publicada pela Free Software Foundation; versão 2 da
- * Licença.
- * Este programa é distribuído na expectativa de ser útil, mas SEM
- * QUALQUER GARANTIA; sem mesmo a garantia implícita de
- * COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
- * PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
- * detalhes.
- * Você deve ter recebido uma cópia da Licença Pública Geral GNU
- * junto com este programa; se não, escreva para Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- * 02111-1307, USA.
- */
 package gcom.gui.cadastro.atualizacaocadastral;
 
 import gcom.cadastro.empresa.Empresa;
@@ -120,104 +63,98 @@ public class ExibirFiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction
 
 		FiltrarAlteracaoAtualizacaoCadastralActionForm form = (FiltrarAlteracaoAtualizacaoCadastralActionForm) actionForm;
 
-		ActionForward retorno = actionMapping.findForward("exibirFiltrarAlteracaoAtualizacaoCadastral");
-
 		Fachada fachada = Fachada.getInstancia();
-		
+
 		try {
-			if (httpServletRequest.getParameterMap().containsKey("filtroLocalidade")){
+			if (httpServletRequest.getParameterMap().containsKey("filtroLocalidade")) {
 				String field = httpServletRequest.getParameter("filtroLocalidade");
 				FilterClassParameters filter = new FilterClassParameters(new FiltroLocalidade(), new Localidade(), "Localidade inexistente", field);
 				preencherCampoDescricao(form, filter, httpServletRequest);
-			}else if (httpServletRequest.getParameterMap().containsKey("filtroSetorComercial")){
+			} else if (httpServletRequest.getParameterMap().containsKey("filtroSetorComercial")) {
 				String field = httpServletRequest.getParameter("filtroSetorComercial");
 				FilterClassParameters filter = new FilterClassParameters(new FiltroSetorComercial(), new SetorComercial(), "Setor comercial inexistente", field);
 				preencherCampoDescricao(form, filter, httpServletRequest);
 			}
-		} catch (Exception e) {
-			logger.error("Erro ao filtrar Cadastro", e);
-		}
-			
 
-		// Obtém a sessão
-		HttpSession sessao = httpServletRequest.getSession(false);
+			HttpSession sessao = httpServletRequest.getSession(false);
 
+			Collection colecaoLeiturista = new ArrayList();
 
-		Collection colecaoLeiturista = new ArrayList();
+			if (sessao.getAttribute("colecaoEmpresa") == null) {
+				FiltroEmpresa filtroEmpresa = new FiltroEmpresa();
+				filtroEmpresa.adicionarParametro(new ParametroSimples(FiltroEmpresa.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
 
-		if (sessao.getAttribute("colecaoEmpresa") == null) {
-			FiltroEmpresa filtroEmpresa = new FiltroEmpresa();
-			filtroEmpresa.adicionarParametro(new ParametroSimples(FiltroEmpresa.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
+				filtroEmpresa.setCampoOrderBy(FiltroEmpresa.DESCRICAO);
 
-			filtroEmpresa.setCampoOrderBy(FiltroEmpresa.DESCRICAO);
+				Collection<Empresa> colecaoEmpresa = fachada.pesquisar(filtroEmpresa, Empresa.class.getName());
 
-			Collection<Empresa> colecaoEmpresa = fachada.pesquisar(filtroEmpresa, Empresa.class.getName());
-
-			// [FS0001 - Verificar Existencia de dados]
-			if ((colecaoEmpresa == null) || (colecaoEmpresa.size() == 0)) {
-				throw new ActionServletException("atencao.entidade_sem_dados_para_selecao", null, Empresa.class.getName());
-			} else {
-				sessao.setAttribute("colecaoEmpresa", colecaoEmpresa);
-			}
-		}
-
-		// Leiturista da Empresa
-		if (form.getIdEmpresa() != null && !form.getIdEmpresa().equals("-1") && !form.getIdEmpresa().equals("")) {
-
-			FiltroLeiturista filtroLeiturista = new FiltroLeiturista(FiltroLeiturista.ID);
-			filtroLeiturista.adicionarParametro(new ParametroSimples(FiltroLeiturista.EMPRESA_ID, form.getIdEmpresa()));
-			filtroLeiturista.adicionarCaminhoParaCarregamentoEntidade(FiltroLeiturista.CLIENTE);
-			filtroLeiturista.adicionarCaminhoParaCarregamentoEntidade(FiltroLeiturista.FUNCIONARIO);
-
-			Collection colecao = fachada.pesquisar(filtroLeiturista, Leiturista.class.getName());
-
-			if (colecao != null && !colecao.isEmpty()) {
-				Iterator it = colecao.iterator();
-				while (it.hasNext()) {
-					Leiturista leitu = (Leiturista) it.next();
-					DadosLeiturista dadosLeiu = null;
-					if (leitu.getFuncionario() != null) {
-						dadosLeiu = new DadosLeiturista(leitu.getId(), leitu.getFuncionario().getNome());
-					} else {
-						dadosLeiu = new DadosLeiturista(leitu.getId(), leitu.getCliente().getNome());
-					}
-					colecaoLeiturista.add(dadosLeiu);
+				if ((colecaoEmpresa == null) || (colecaoEmpresa.size() == 0)) {
+					throw new ActionServletException("atencao.entidade_sem_dados_para_selecao", null, Empresa.class.getName());
+				} else {
+					sessao.setAttribute("colecaoEmpresa", colecaoEmpresa);
 				}
 			}
 
-		}
+			// Leiturista da Empresa
+			if (form.getIdEmpresa() != null && !form.getIdEmpresa().equals("-1") && !form.getIdEmpresa().equals("")) {
 
-		sessao.setAttribute("colecaoLeiturista", colecaoLeiturista);
+				FiltroLeiturista filtroLeiturista = new FiltroLeiturista(FiltroLeiturista.ID);
+				filtroLeiturista.adicionarParametro(new ParametroSimples(FiltroLeiturista.EMPRESA_ID, form.getIdEmpresa()));
+				filtroLeiturista.adicionarCaminhoParaCarregamentoEntidade(FiltroLeiturista.CLIENTE);
+				filtroLeiturista.adicionarCaminhoParaCarregamentoEntidade(FiltroLeiturista.FUNCIONARIO);
 
-		Collection colecaoColunaImoveisSelecionados = null;
+				Collection colecao = fachada.pesquisar(filtroLeiturista, Leiturista.class.getName());
 
-		if (form.getColunaImoveisSelecionados() != null) {
+				if (colecao != null && !colecao.isEmpty()) {
+					Iterator it = colecao.iterator();
+					while (it.hasNext()) {
+						Leiturista leitu = (Leiturista) it.next();
+						DadosLeiturista dadosLeiu = null;
+						if (leitu.getFuncionario() != null) {
+							dadosLeiu = new DadosLeiturista(leitu.getId(), leitu.getFuncionario().getNome());
+						} else {
+							dadosLeiu = new DadosLeiturista(leitu.getId(), leitu.getCliente().getNome());
+						}
+						colecaoLeiturista.add(dadosLeiu);
+					}
+				}
 
-			String[] aux = form.getColunaImoveisSelecionados();
-
-			List aux1 = Arrays.asList(aux);
-			colecaoColunaImoveisSelecionados = aux1;
-
-			FiltroTabelaColuna filtroTabelaColuna = new FiltroTabelaColuna();
-
-			filtroTabelaColuna.adicionarParametro(new ParametroSimplesIn(FiltroTabelaColuna.ID, colecaoColunaImoveisSelecionados));
-
-			filtroTabelaColuna.setCampoOrderBy(FiltroTabelaColuna.DESCRICAO_COLUNA);
-
-			// Pesquisa de acordo com os parâmetros informados no filtro
-			colecaoColunaImoveisSelecionados = Fachada.getInstancia().pesquisar(filtroTabelaColuna, TabelaColuna.class.getName());
-
-			// Verifica se a pesquisa retornou algum objeto para a coleção
-			if (colecaoColunaImoveisSelecionados != null && !colecaoColunaImoveisSelecionados.isEmpty()) {
-				sessao.setAttribute("colecaoColunaImoveisSelecionados", colecaoColunaImoveisSelecionados);
-				sessao.setAttribute("existeColecaoColunaImoveisSelecionados", colecaoColunaImoveisSelecionados);
 			}
+
+			sessao.setAttribute("colecaoLeiturista", colecaoLeiturista);
+
+			Collection colecaoColunaImoveisSelecionados = null;
+
+			if (form.getColunaImoveisSelecionados() != null) {
+
+				String[] aux = form.getColunaImoveisSelecionados();
+
+				List aux1 = Arrays.asList(aux);
+				colecaoColunaImoveisSelecionados = aux1;
+
+				FiltroTabelaColuna filtroTabelaColuna = new FiltroTabelaColuna();
+
+				filtroTabelaColuna.adicionarParametro(new ParametroSimplesIn(FiltroTabelaColuna.ID, colecaoColunaImoveisSelecionados));
+
+				filtroTabelaColuna.setCampoOrderBy(FiltroTabelaColuna.DESCRICAO_COLUNA);
+
+				// Pesquisa de acordo com os parâmetros informados no filtro
+				colecaoColunaImoveisSelecionados = Fachada.getInstancia().pesquisar(filtroTabelaColuna, TabelaColuna.class.getName());
+
+				// Verifica se a pesquisa retornou algum objeto para a coleção
+				if (colecaoColunaImoveisSelecionados != null && !colecaoColunaImoveisSelecionados.isEmpty()) {
+					sessao.setAttribute("colecaoColunaImoveisSelecionados", colecaoColunaImoveisSelecionados);
+					sessao.setAttribute("existeColecaoColunaImoveisSelecionados", colecaoColunaImoveisSelecionados);
+				}
+			}
+
+			this.pesquisarColunaImoveis(httpServletRequest, colecaoColunaImoveisSelecionados);
+
+		} catch (Exception e) {
+			logger.error("Erro ao filtrar Cadastro", e);
 		}
 
-		// Monta a colecao
-		this.pesquisarColunaImoveis(httpServletRequest, colecaoColunaImoveisSelecionados);
-
-		return retorno;
+		return actionMapping.findForward("exibirFiltrarAlteracaoAtualizacaoCadastral");
 	}
 
 	private void pesquisarColunaImoveis(HttpServletRequest httpServletRequest, Collection colecaoColunaImoveisSelecionados) {

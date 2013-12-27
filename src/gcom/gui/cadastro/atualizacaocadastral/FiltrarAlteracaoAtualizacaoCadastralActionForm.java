@@ -114,9 +114,9 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 	
 	private String idSetorFinal;
 	
-	private String nomeSetorInicial;	
+	private String nomeSetorComercialInicial;	
 	
-	private String nomeSetorFinal;
+	private String nomeSetorComercialFinal;
 	
 	private String idQuadraInicial;	
 	
@@ -267,20 +267,20 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 		this.idSetorFinal = idSetorFinal;
 	}
 
-	public String getNomeSetorInicial() {
-		return nomeSetorInicial;
+	public String getNomeSetorComercialInicial() {
+		return nomeSetorComercialInicial;
 	}
 
-	public void setNomeSetorInicial(String nomeSetorInicial) {
-		this.nomeSetorInicial = nomeSetorInicial;
+	public void setNomeSetorComercialInicial(String nomeSetorInicial) {
+		this.nomeSetorComercialInicial = nomeSetorInicial;
 	}
 
-	public String getNomeSetorFinal() {
-		return nomeSetorFinal;
+	public String getNomeSetorComercialFinal() {
+		return nomeSetorComercialFinal;
 	}
 
-	public void setNomeSetorFinal(String nomeSetorFinal) {
-		this.nomeSetorFinal = nomeSetorFinal;
+	public void setNomeSetorComercialFinal(String nomeSetorFinal) {
+		this.nomeSetorComercialFinal = nomeSetorFinal;
 	}
 
 	public String getIdQuadraInicial() {

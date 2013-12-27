@@ -186,6 +186,30 @@
               <img src="<bean:message key="caminho.imagens"/>limparcampo.gif" border="0" title="Apagar" />
           </a>          
     </tr>
+    
+    <tr>
+      <td><strong>Setor Comercial :</strong></td>
+      <td><html:text maxlength="3" property="idSetorInicial" size="5" onkeyup="javascript:somente_numero(this);"
+           onkeypress="form.target='';validaEnterDependencia(event, 'filtrarImovelOutrosCriteriosWizardAction.do?action=exibirFiltrarImovelOutrosCriteriosLocalizarImoveis&objetoConsulta=2&inscricaoTipo=destino', document.forms[0].setorComercialDestinoCD, document.forms[0].localidadeDestinoID.value, 'Localidade Final.');return isCampoNumerico(event);"
+           tabindex="7" />
+           <a href="javascript:chamarPopup('exibirPesquisarSetorComercialAction.do', 'setorComercialOrigem', 'idLocalidade', document.forms[0].idLocalidadeInicial.value, 275, 480, 'Informe Localidade Inicial.');">
+           <img border="0" src="<bean:message key="caminho.imagens"/>pesquisa.gif" title="Pesquisar" />
+           </a>
+          <logic:notPresent name="SetorComercialInicialInexistente" scope="request">
+            <html:text property="nomeSetorComercialInicial" size="35" readonly="true"
+              style="background-color: #EFEFEF; border: 0; color: #000000" />
+          </logic:notPresent>
+
+          <logic:present name="SetorComercialInicialInexistente" scope="request">
+            <html:text property="nomeSetorComercialInicial" size="35" readonly="true"
+              style="background-color: #EFEFEF; border: 0; color: #ff0000" />
+          </logic:present>
+          
+          <a href="javascript:limparCampos('idSetorComercialInicial', 'nomeSetorComercialInicial');">
+              <img src="<bean:message key="caminho.imagens"/>limparcampo.gif" border="0" title="Apagar" />
+          </a>
+    </tr>
+    
     <tr>
       <td><strong>Exibir Campos:</strong></td>
       <td><strong> <html:radio property="exibirCampos" value="1" /> <strong>Pendentes de Alteração <html:radio
