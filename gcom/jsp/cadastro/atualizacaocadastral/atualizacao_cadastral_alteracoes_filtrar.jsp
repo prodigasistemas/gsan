@@ -20,22 +20,34 @@
 
 <script language="JavaScript">
     function recuperarDadosPopup(codigoRegistro, descricaoRegistro, tipoConsulta) {
+    	alert('tipoConsulta:' + tipoConsulta);
         var form = document.forms[0];
         if (tipoConsulta == 'localidadeOrigem') {
             form.idLocalidadeInicial.value = codigoRegistro;
             form.nomeLocalidadeInicial.value = descricaoRegistro;
             document.getElementsByName('nomeLocalidadeInicial')[0].style.color = '#000000';
-         }
+        }
+        else if (tipoConsulta == 'localidadeDestino') {
+            form.idLocalidadeFinal.value = codigoRegistro;
+            form.nomeLocalidadeFinal.value = descricaoRegistro;
+            document.getElementsByName('nomeLocalidadeFinal')[0].style.color = '#000000';
+        }
     }
     
     function recuperarDadosQuatroParametros(codigoRegistro, descricaoRegistro, codigoAuxiliar, tipoConsulta) {
+        alert('tipoConsulta:' + tipoConsulta);
         var form = document.forms[0];
         if (tipoConsulta == 'setorComercialOrigem') {
             form.cdSetorComercialInicial.value = codigoAuxiliar;
             form.nomeSetorComercialInicial.value = descricaoRegistro;
             document.getElementsByName('nomeSetorComercialInicial')[0].style.color = '#000000';
             
-         }
+        }
+        else if (tipoConsulta == 'setorComercialDestino') {
+            form.cdSetorComercialFinal.value = codigoAuxiliar;
+            form.nomeSetorComercialFinal.value = descricaoRegistro;
+            document.getElementsByName('nomeSetorComercialFinal')[0].style.color = '#000000';
+        }
     }
 
     //So chama a função abrirCalendario caso o campo esteja habilitado
@@ -182,15 +194,14 @@
         onkeyup="javascript:somente_numero(this);" />
          
         <a href="javascript:limparCampos('idLocalidadeInicial', 'nomeLocalidadeInicial', 'cdSetorComercialInicial', 'nomeSetorComercialInicial'); 
-           abrirPopup('exibirPesquisarLocalidadeAction.do?tipo=origem', 400, 800);"
-        id="btPesqLocalidadeInicial"> 
+           abrirPopup('exibirPesquisarLocalidadeAction.do?tipo=origem', 400, 800);"> 
           <img border="0" src="<bean:message key="caminho.imagens"/>pesquisa.gif"/> 
         </a>
          
         <html:text property="nomeLocalidadeInicial" size="35" readonly="true"
             style="background-color: #EFEFEF; border: 0; color: ${requestScope.corLocalidadeInicial}" />
           
-        <a href="javascript:limparCampos('idLocalidadeInicial', 'nomeLocalidadeInicial');">
+        <a href="javascript:limparCampos('idLocalidadeInicial', 'nomeLocalidadeInicial', 'cdSetorComercialInicial', 'nomeSetorComercialInicial');">
             <img src="<bean:message key="caminho.imagens"/>limparcampo.gif" border="0" title="Apagar" />
         </a>
       </td>          
@@ -215,6 +226,70 @@
       </td>
     </tr>
     
+    <tr>
+      <td><strong>Rota :</strong></td>
+      <td><html:text maxlength="3" property="cdRotaInicial" size="5" onkeyup="javascript:somente_numero(this);" tabindex="7" />
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="2"><hr></td>
+    </tr>
+
+  <tr>
+    <td colspan="2">
+      <strong>Informe os dados da inscri&ccedil;&atilde;o final:</strong>
+    </td>
+  </tr>
+
+    <tr>
+      <td><strong>Localidade:</strong>
+      </td>
+      <td><html:text tabindex="8" maxlength="3" property="idLocalidadeFinal" size="5"
+        onkeypress="somente_numero(this);form.target='';
+        javascript:limparCampos('cdSetorComercialFinal', 'nomeSetorComercialFinal'); 
+        validaEnter(event,
+        'exibirFiltrarAlteracaoAtualizacaoCadastralAction.do?filterClass=FiltroLocalidade&fieldLocalidade=LocalidadeFinal', 'idLocalidadeFinal');"
+        onkeyup="javascript:somente_numero(this);" />
+         
+        <a href="javascript:limparCampos('idLocalidadeFinal', 'nomeLocalidadeFinal', 'cdSetorComercialFinal', 'nomeSetorComercialFinal'); 
+           abrirPopup('exibirPesquisarLocalidadeAction.do?tipo=destino', 400, 800);"> 
+          <img border="0" src="<bean:message key="caminho.imagens"/>pesquisa.gif"/> 
+        </a>
+         
+        <html:text property="nomeLocalidadeFinal" size="35" readonly="true"
+            style="background-color: #EFEFEF; border: 0; color: ${requestScope.corLocalidadeFinal}" />
+          
+        <a href="javascript:limparCampos('idLocalidadeFinal', 'nomeLocalidadeFinal', 'cdSetorComercialFinal', 'nomeSetorComercialFinal');">
+            <img src="<bean:message key="caminho.imagens"/>limparcampo.gif" border="0" title="Apagar" />
+        </a>
+      </td>          
+    </tr>
+    
+    <tr>
+      <td><strong>Setor Comercial :</strong></td>
+      <td><html:text maxlength="3" property="cdSetorComercialFinal" size="5" onkeyup="javascript:somente_numero(this);"
+           onkeypress="validaEnterDependencia(event, 
+           'exibirFiltrarAlteracaoAtualizacaoCadastralAction.do?filterClass=FiltroSetorComercial&fieldLocalidade=LocalidadeFinal&fieldSetorComercial=SetorComercialFinal', 
+           this, document.forms[0].idLocalidadeFinal.value, 'Localidade Final.');"
+           tabindex="9" />
+           <a href="javascript:abrirPopupDependencia('exibirPesquisarSetorComercialAction.do?idLocalidade='+document.forms[0].idLocalidadeFinal.value+'&tipo=setorComercialDestino',document.forms[0].idLocalidadeFinal.value,'Localidade Final', 400, 800);">
+           <img border="0" src="<bean:message key="caminho.imagens"/>pesquisa.gif" title="Pesquisar" />
+           </a>
+          <html:text property="nomeSetorComercialFinal" size="35" readonly="true"
+            style="background-color: #EFEFEF; border: 0; color: ${requestScope.corSetorComercialFinal}" />
+          
+          <a href="javascript:limparCampos('cdSetorComercialFinal', 'nomeSetorComercialFinal');">
+              <img src="<bean:message key="caminho.imagens"/>limparcampo.gif" border="0" title="Apagar" />
+          </a>
+      </td>
+    </tr>
+    
+    <tr>
+      <td><strong>Rota :</strong></td>
+      <td><html:text maxlength="3" property="cdRotaFinal" size="5" onkeyup="javascript:somente_numero(this);" tabindex="10" />
+      </td>
+    </tr>
     <tr>
       <td><strong>Exibir Campos:</strong></td>
       <td><strong> <html:radio property="exibirCampos" value="1" /> <strong>Pendentes de Alteração <html:radio

@@ -118,18 +118,9 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 	
 	private String nomeSetorComercialFinal;
 	
-	private String idQuadraInicial;	
-	
-	private String idQuadraFinal;
-	
-	private String codRotaInicial;
+	private String cdRotaInicial;
 
-	private String seqRotaInicial;
-
-	private String codRotaFinal;
-
-	private String seqRotaFinal;
-	
+	private String cdRotaFinal;
 
 	public String getIdRegistrosAutorizados() {
 		return idRegistrosAutorizados;
@@ -283,51 +274,19 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 		this.nomeSetorComercialFinal = nomeSetorFinal;
 	}
 
-	public String getIdQuadraInicial() {
-		return idQuadraInicial;
+	public String getCdRotaInicial() {
+		return cdRotaInicial;
 	}
 
-	public void setIdQuadraInicial(String idQuadraInicial) {
-		this.idQuadraInicial = idQuadraInicial;
+	public void setCdRotaInicial(String codRotaInicial) {
+		this.cdRotaInicial = codRotaInicial;
 	}
 
-	public String getIdQuadraFinal() {
-		return idQuadraFinal;
+	public String getCdRotaFinal() {
+		return cdRotaFinal;
 	}
 
-	public void setIdQuadraFinal(String idQuadraFinal) {
-		this.idQuadraFinal = idQuadraFinal;
+	public void setCdRotaFinal(String codRotaFinal) {
+		this.cdRotaFinal = codRotaFinal;
 	}
-
-	public String getCodRotaInicial() {
-		return codRotaInicial;
-	}
-
-	public void setCodRotaInicial(String codRotaInicial) {
-		this.codRotaInicial = codRotaInicial;
-	}
-
-	public String getSeqRotaInicial() {
-		return seqRotaInicial;
-	}
-
-	public void setSeqRotaInicial(String seqRotaInicial) {
-		this.seqRotaInicial = seqRotaInicial;
-	}
-
-	public String getCodRotaFinal() {
-		return codRotaFinal;
-	}
-
-	public void setCodRotaFinal(String codRotaFinal) {
-		this.codRotaFinal = codRotaFinal;
-	}
-
-	public String getSeqRotaFinal() {
-		return seqRotaFinal;
-	}
-
-	public void setSeqRotaFinal(String seqRotaFinal) {
-		this.seqRotaFinal = seqRotaFinal;
-	}	
 }
