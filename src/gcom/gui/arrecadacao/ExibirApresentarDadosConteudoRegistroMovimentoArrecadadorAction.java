@@ -138,7 +138,8 @@ public class ExibirApresentarDadosConteudoRegistroMovimentoArrecadadorAction ext
         if ( dadosConteudoRegistroMovimentoArrecadadorHelper.getCodigoRegistro() != null &&
         	(dadosConteudoRegistroMovimentoArrecadadorHelper.getCodigoRegistro().equals(RegistroCodigo.CODIGO_F) ||
         	dadosConteudoRegistroMovimentoArrecadadorHelper.getCodigoRegistro().equals(RegistroCodigo.CODIGO_G)||
-            dadosConteudoRegistroMovimentoArrecadadorHelper.getCodigoRegistro().equals(RegistroCodigo.CODIGO_W))){
+            dadosConteudoRegistroMovimentoArrecadadorHelper.getCodigoRegistro().equals(RegistroCodigo.CODIGO_W)||
+            dadosConteudoRegistroMovimentoArrecadadorHelper.getCodigoRegistro().equals(RegistroCodigo.CODIGO_K))){
         	
         	httpServletRequest.setAttribute("consultarPagamentos", "OK");
         }

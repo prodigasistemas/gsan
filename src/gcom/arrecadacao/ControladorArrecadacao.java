@@ -3318,7 +3318,7 @@ public class ControladorArrecadacao implements SessionBean {
                             				}
 
                             				Integer idArrecadadorMovimentoItem = inserirItemMovimentoArrecadadorFichaCompensacaoNovo(
-                            						arrecadadorMovimento.getId(), descricaoOcorrenciaMovimento, 
+                            						linhaRegistro, arrecadadorMovimento.getId(), descricaoOcorrenciaMovimento, 
                             						indicadorAceitacaoRegistroMovimento,idImovelPagamento);
 
                             				ArrecadadorMovimentoItem arrecadadorMovimentoItem = new ArrecadadorMovimentoItem();
@@ -3583,7 +3583,10 @@ public class ControladorArrecadacao implements SessionBean {
             }
             
 
-        } catch (Exception e) {            
+        } catch (ControladorException e) {
+			sessionContext.setRollbackOnly();
+			throw e;
+		} catch (Exception e) {            
             System.out.println( "Deu erro na linha: " + aux );
             e.printStackTrace();
 
@@ -11060,18 +11063,18 @@ public class ControladorArrecadacao implements SessionBean {
 	 */
 	public DadosConteudoRegistroMovimentoArrecadadorHelper apresentarDadosConteudoRegistroMovimentoArrecadador(
 			ArrecadadorMovimentoItem arrecadadorMovimentoItem)
-			throws ControladorException {
+					throws ControladorException {
 
 		DadosConteudoRegistroMovimentoArrecadadorHelper retorno = new DadosConteudoRegistroMovimentoArrecadadorHelper();
 
 		FiltroArrecadadorMovimentoItem filtroArrecadadorMovimentoItem = new FiltroArrecadadorMovimentoItem();
 
 		filtroArrecadadorMovimentoItem
-				.adicionarCaminhoParaCarregamentoEntidade("registroCodigo");
+		.adicionarCaminhoParaCarregamentoEntidade("registroCodigo");
 
 		filtroArrecadadorMovimentoItem.adicionarParametro(new ParametroSimples(
 				FiltroArrecadadorMovimentoItem.ID, arrecadadorMovimentoItem
-						.getId()));
+				.getId()));
 
 		Collection colecaoArrecadadorMovimentoItem = getControladorUtil()
 				.pesquisar(filtroArrecadadorMovimentoItem,
@@ -11091,36 +11094,36 @@ public class ControladorArrecadacao implements SessionBean {
 		 */
 		if (arrecadadorMovimentoItemCompleto.getRegistroCodigo() != null
 				&& arrecadadorMovimentoItemCompleto.getRegistroCodigo()
-						.getCodigo().equals(RegistroCodigo.CODIGO_B)) {
+				.getCodigo().equals(RegistroCodigo.CODIGO_B)) {
 
 			// [UC0262] - Distribuir Dados do Registro de Movimento do
 			// Arrecadador
 			RegistroHelperCodigoB registroHelperCodigoB = (RegistroHelperCodigoB) this
 					.distribuirdadosRegistroMovimentoArrecadador(
 							arrecadadorMovimentoItemCompleto
-									.getConteudoRegistro(), null);
+							.getConteudoRegistro(), null);
 
 			retorno
-					.setCodigoRegistro(registroHelperCodigoB
-							.getCodigoRegistro());
+			.setCodigoRegistro(registroHelperCodigoB
+					.getCodigoRegistro());
 			retorno.setIdentificacaoClienteEmpresa(registroHelperCodigoB
 					.getIdClienteEmpresa());
 			retorno.setAgenciaDebito(registroHelperCodigoB.getAgenciaDebito());
 			retorno.setIdentificacaoClienteBanco(registroHelperCodigoB
 					.getIdClienteBanco());
 			retorno
-					.setDataOpcaoExclusao(Util
-							.formatarData(registroHelperCodigoB
-									.getDataOpcaoExclusao()));
+			.setDataOpcaoExclusao(Util
+					.formatarData(registroHelperCodigoB
+							.getDataOpcaoExclusao()));
 
 			if (registroHelperCodigoB.getCodigoMovimento().equals(
 					ConstantesSistema.CODIGO_MOVIMENTO_EXCLUSAO.toString())) {
 
 				retorno
-						.setDescricaoMovimento(ConstantesSistema.DESCRICAO_MOVIMENTO_EXCLUSAO);
+				.setDescricaoMovimento(ConstantesSistema.DESCRICAO_MOVIMENTO_EXCLUSAO);
 			} else {
 				retorno
-						.setDescricaoMovimento(ConstantesSistema.DESCRICAO_MOVIMENTO_INCLUSAO);
+				.setDescricaoMovimento(ConstantesSistema.DESCRICAO_MOVIMENTO_INCLUSAO);
 			}
 
 			if (arrecadadorMovimentoItemCompleto.getDescricaoOcorrencia() != null) {
@@ -11129,48 +11132,48 @@ public class ControladorArrecadacao implements SessionBean {
 			}
 
 			retorno.setNomeAgencia( arrecadadorMovimentoItem.getArrecadadorMovimento().getNomeBanco() );
-			
+
 			if (arrecadadorMovimentoItemCompleto.getIndicadorAceitacao() != null
 					&& arrecadadorMovimentoItemCompleto.getIndicadorAceitacao()
-							.equals(ArrecadadorMovimentoItem.INDICADOR_ACEITO)) {
+					.equals(ArrecadadorMovimentoItem.INDICADOR_ACEITO)) {
 
 				retorno
-						.setIndicadorAceitacao(ArrecadadorMovimentoItem.DESCRICAO_INDICADOR_ACEITO);
+				.setIndicadorAceitacao(ArrecadadorMovimentoItem.DESCRICAO_INDICADOR_ACEITO);
 			} else {
 				retorno
-						.setIndicadorAceitacao(ArrecadadorMovimentoItem.DESCRICAO_INDICADOR_NAO_ACEITO);
+				.setIndicadorAceitacao(ArrecadadorMovimentoItem.DESCRICAO_INDICADOR_NAO_ACEITO);
 			}
 
 		} else if (arrecadadorMovimentoItemCompleto.getRegistroCodigo() != null
 				&& arrecadadorMovimentoItemCompleto.getRegistroCodigo()
-						.getCodigo().equals(RegistroCodigo.CODIGO_C)) {
+				.getCodigo().equals(RegistroCodigo.CODIGO_C)) {
 
 			// [UC0262] - Distribuir Dados do Registro de Movimento do
 			// Arrecadador
 			RegistroHelperCodigoC registroHelperCodigoC = (RegistroHelperCodigoC) this
 					.distribuirdadosRegistroMovimentoArrecadador(
 							arrecadadorMovimentoItemCompleto
-									.getConteudoRegistro(), null);
+							.getConteudoRegistro(), null);
 
 			retorno
-					.setCodigoRegistro(registroHelperCodigoC
-							.getCodigoRegistro());
+			.setCodigoRegistro(registroHelperCodigoC
+					.getCodigoRegistro());
 			retorno.setIdentificacaoClienteEmpresa(registroHelperCodigoC
 					.getIdClienteEmpresa());
 			retorno.setAgenciaDebito(registroHelperCodigoC.getAgenciaDebito());
 			retorno.setIdentificacaoClienteBanco(registroHelperCodigoC
 					.getIdClienteBanco());
-			
+
 			retorno.setNomeAgencia( arrecadadorMovimentoItem.getArrecadadorMovimento().getNomeBanco() );
 
 			if (registroHelperCodigoC.getCodigoMovimento().equals(
 					ConstantesSistema.CODIGO_MOVIMENTO_EXCLUSAO.toString())) {
 
 				retorno
-						.setDescricaoMovimento(ConstantesSistema.DESCRICAO_MOVIMENTO_EXCLUSAO);
+				.setDescricaoMovimento(ConstantesSistema.DESCRICAO_MOVIMENTO_EXCLUSAO);
 			} else {
 				retorno
-						.setDescricaoMovimento(ConstantesSistema.DESCRICAO_MOVIMENTO_INCLUSAO);
+				.setDescricaoMovimento(ConstantesSistema.DESCRICAO_MOVIMENTO_INCLUSAO);
 			}
 
 			if (arrecadadorMovimentoItemCompleto.getDescricaoOcorrencia() != null) {
@@ -11193,18 +11196,18 @@ public class ControladorArrecadacao implements SessionBean {
 		 */
 		else if (arrecadadorMovimentoItemCompleto.getRegistroCodigo() != null
 				&& arrecadadorMovimentoItemCompleto.getRegistroCodigo()
-						.getCodigo().equals(RegistroCodigo.CODIGO_E)) {
+				.getCodigo().equals(RegistroCodigo.CODIGO_E)) {
 
 			// [UC0262] - Distribuir Dados do Registro de Movimento do
 			// Arrecadador
 			RegistroHelperCodigoE registroHelperCodigoE = (RegistroHelperCodigoE) this
 					.distribuirdadosRegistroMovimentoArrecadador(
 							arrecadadorMovimentoItemCompleto
-									.getConteudoRegistro(), null);
+							.getConteudoRegistro(), null);
 
 			retorno
-					.setCodigoRegistro(registroHelperCodigoE
-							.getCodigoRegistro());
+			.setCodigoRegistro(registroHelperCodigoE
+					.getCodigoRegistro());
 			retorno.setIdentificacaoClienteEmpresa(registroHelperCodigoE
 					.getIdClienteEmpresa());
 			retorno.setAgenciaDebito(registroHelperCodigoE.getAgenciaDebito());
@@ -11215,10 +11218,10 @@ public class ControladorArrecadacao implements SessionBean {
 
 			try {
 				retorno
-						.setValorDebito(Util
-								.formatarMoedaReal(Util
-										.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(registroHelperCodigoE
-												.getValorDebito())));
+				.setValorDebito(Util
+						.formatarMoedaReal(Util
+								.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(registroHelperCodigoE
+										.getValorDebito())));
 			} catch (NumberFormatException ex) {
 				retorno.setValorDebito(registroHelperCodigoE.getValorDebito());
 			}
@@ -11233,15 +11236,15 @@ public class ControladorArrecadacao implements SessionBean {
 			if (registroHelperCodigoE.getCodigoMovimento()
 					.equals(
 							ConstantesSistema.CODIGO_MOVIMENTO_DEBITO_NORMAL
-									.toString())) {
+							.toString())) {
 
 				retorno
-						.setDescricaoMovimento(ConstantesSistema.DESCRICAO_MOVIMENTO_DEBITO_NORMAL);
+				.setDescricaoMovimento(ConstantesSistema.DESCRICAO_MOVIMENTO_DEBITO_NORMAL);
 			} else {
 				retorno
-						.setDescricaoMovimento(ConstantesSistema.DESCRICAO_MOVIMENTO_CANCELAMENTO);
+				.setDescricaoMovimento(ConstantesSistema.DESCRICAO_MOVIMENTO_CANCELAMENTO);
 			}
-			
+
 			retorno.setNomeAgencia( arrecadadorMovimentoItem.getArrecadadorMovimento().getNomeBanco() );
 
 			if (arrecadadorMovimentoItemCompleto.getDescricaoOcorrencia() != null) {
@@ -11251,28 +11254,28 @@ public class ControladorArrecadacao implements SessionBean {
 
 			if (arrecadadorMovimentoItemCompleto.getIndicadorAceitacao() != null
 					&& arrecadadorMovimentoItemCompleto.getIndicadorAceitacao()
-							.equals(ArrecadadorMovimentoItem.INDICADOR_ACEITO)) {
+					.equals(ArrecadadorMovimentoItem.INDICADOR_ACEITO)) {
 
 				retorno
-						.setIndicadorAceitacao(ArrecadadorMovimentoItem.DESCRICAO_INDICADOR_ACEITO);
+				.setIndicadorAceitacao(ArrecadadorMovimentoItem.DESCRICAO_INDICADOR_ACEITO);
 			} else {
 				retorno
-						.setIndicadorAceitacao(ArrecadadorMovimentoItem.DESCRICAO_INDICADOR_NAO_ACEITO);
+				.setIndicadorAceitacao(ArrecadadorMovimentoItem.DESCRICAO_INDICADOR_NAO_ACEITO);
 			}
 		} else if (arrecadadorMovimentoItemCompleto.getRegistroCodigo() != null
 				&& arrecadadorMovimentoItemCompleto.getRegistroCodigo()
-						.getCodigo().equals(RegistroCodigo.CODIGO_F)) {
+				.getCodigo().equals(RegistroCodigo.CODIGO_F)) {
 
 			// [UC0262] - Distribuir Dados do Registro de Movimento do
 			// Arrecadador
 			RegistroHelperCodigoF registroHelperCodigoF = (RegistroHelperCodigoF) this
 					.distribuirdadosRegistroMovimentoArrecadador(
 							arrecadadorMovimentoItemCompleto
-									.getConteudoRegistro(), null);
+							.getConteudoRegistro(), null);
 
 			retorno
-					.setCodigoRegistro(registroHelperCodigoF
-							.getCodigoRegistro());
+			.setCodigoRegistro(registroHelperCodigoF
+					.getCodigoRegistro());
 			retorno.setIdentificacaoClienteEmpresa(registroHelperCodigoF
 					.getIdClienteEmpresa());
 			retorno.setAgenciaDebito(registroHelperCodigoF.getAgenciaDebito());
@@ -11283,39 +11286,39 @@ public class ControladorArrecadacao implements SessionBean {
 
 			try {
 				retorno
-						.setValorDebito(Util
-								.formatarMoedaReal(Util
-										.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(registroHelperCodigoF
-												.getValorDebito())));
+				.setValorDebito(Util
+						.formatarMoedaReal(Util
+								.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(registroHelperCodigoF
+										.getValorDebito())));
 			} catch (NumberFormatException ex) {
 				retorno.setValorDebito(registroHelperCodigoF.getValorDebito());
 			}
 
 			if (registroHelperCodigoF.getAnoMesReferenciaConta() != null &&
-				!registroHelperCodigoF.getAnoMesReferenciaConta().equals("")){
-				
+					!registroHelperCodigoF.getAnoMesReferenciaConta().equals("")){
+
 				retorno.setMesAnoReferenciaConta(Util.formatarAnoMesParaMesAno(new Integer(registroHelperCodigoF
-				.getAnoMesReferenciaConta()).intValue()));
+						.getAnoMesReferenciaConta()).intValue()));
 			}
-			
+
 			if (registroHelperCodigoF.getDigitoVerificadoAnoMesConta() != null &&
-				!registroHelperCodigoF.getDigitoVerificadoAnoMesConta().equals("")){
-				
+					!registroHelperCodigoF.getDigitoVerificadoAnoMesConta().equals("")){
+
 				retorno.setDigitoVerificadorConta(registroHelperCodigoF
-				.getDigitoVerificadoAnoMesConta());
+						.getDigitoVerificadoAnoMesConta());
 			}
-			
+
 
 			if (registroHelperCodigoF.getCodigoMovimento()
 					.equals(
 							ConstantesSistema.CODIGO_MOVIMENTO_DEBITO_NORMAL
-									.toString())) {
+							.toString())) {
 
 				retorno
-						.setDescricaoMovimento(ConstantesSistema.DESCRICAO_MOVIMENTO_DEBITO_NORMAL);
+				.setDescricaoMovimento(ConstantesSistema.DESCRICAO_MOVIMENTO_DEBITO_NORMAL);
 			} else {
 				retorno
-						.setDescricaoMovimento(ConstantesSistema.DESCRICAO_MOVIMENTO_CANCELAMENTO);
+				.setDescricaoMovimento(ConstantesSistema.DESCRICAO_MOVIMENTO_CANCELAMENTO);
 			}
 
 			if (arrecadadorMovimentoItemCompleto.getDescricaoOcorrencia() != null) {
@@ -11325,13 +11328,13 @@ public class ControladorArrecadacao implements SessionBean {
 
 			if (arrecadadorMovimentoItemCompleto.getIndicadorAceitacao() != null
 					&& arrecadadorMovimentoItemCompleto.getIndicadorAceitacao()
-							.equals(ArrecadadorMovimentoItem.INDICADOR_ACEITO)) {
+					.equals(ArrecadadorMovimentoItem.INDICADOR_ACEITO)) {
 
 				retorno
-						.setIndicadorAceitacao(ArrecadadorMovimentoItem.DESCRICAO_INDICADOR_ACEITO);
+				.setIndicadorAceitacao(ArrecadadorMovimentoItem.DESCRICAO_INDICADOR_ACEITO);
 			} else {
 				retorno
-						.setIndicadorAceitacao(ArrecadadorMovimentoItem.DESCRICAO_INDICADOR_NAO_ACEITO);
+				.setIndicadorAceitacao(ArrecadadorMovimentoItem.DESCRICAO_INDICADOR_NAO_ACEITO);
 			}
 
 			/*
@@ -11343,10 +11346,10 @@ public class ControladorArrecadacao implements SessionBean {
 			FiltroDebitoAutomaticoRetornoCodigo filtroDebitoAutomaticoRetornoCodigo = new FiltroDebitoAutomaticoRetornoCodigo();
 
 			filtroDebitoAutomaticoRetornoCodigo
-					.adicionarParametro(new ParametroSimples(
-							FiltroDebitoAutomaticoRetornoCodigo.ID,
-							new Integer(registroHelperCodigoF
-									.getCodigoRetorno())));
+			.adicionarParametro(new ParametroSimples(
+					FiltroDebitoAutomaticoRetornoCodigo.ID,
+					new Integer(registroHelperCodigoF
+							.getCodigoRetorno())));
 
 			Collection colecaoDebitoAutomaticoRetornoCodigo = getControladorUtil()
 					.pesquisar(filtroDebitoAutomaticoRetornoCodigo,
@@ -11361,7 +11364,7 @@ public class ControladorArrecadacao implements SessionBean {
 			}
 
 			retorno.setNomeAgencia( arrecadadorMovimentoItem.getArrecadadorMovimento().getNomeBanco() );
-			
+
 			/*
 			 * Lista de pagamentos relacionados ao ítem do movimento
 			 */
@@ -11369,13 +11372,13 @@ public class ControladorArrecadacao implements SessionBean {
 			filtroPagamento.setConsultaSemLimites(true);
 
 			filtroPagamento
-					.adicionarCaminhoParaCarregamentoEntidade("documentoTipo");
+			.adicionarCaminhoParaCarregamentoEntidade("documentoTipo");
 
 			filtroPagamento
-					.adicionarCaminhoParaCarregamentoEntidade("debitoTipo");
+			.adicionarCaminhoParaCarregamentoEntidade("debitoTipo");
 
 			filtroPagamento
-					.adicionarCaminhoParaCarregamentoEntidade("pagamentoSituacaoAtual");
+			.adicionarCaminhoParaCarregamentoEntidade("pagamentoSituacaoAtual");
 
 			filtroPagamento.adicionarParametro(new ParametroSimples(
 					FiltroPagamento.ARRECADADOR_MOVIMENTO_ITEM_ID,
@@ -11401,21 +11404,21 @@ public class ControladorArrecadacao implements SessionBean {
 		 */
 		else if (arrecadadorMovimentoItemCompleto.getRegistroCodigo() != null
 				&& arrecadadorMovimentoItemCompleto.getRegistroCodigo()
-						.getCodigo().equals(RegistroCodigo.CODIGO_G)) {
+				.getCodigo().equals(RegistroCodigo.CODIGO_G)) {
 
 			// [UC0262] - Distribuir Dados do Registro de Movimento do
 			// Arrecadador
 			RegistroHelperCodigoG registroHelperCodigoG = (RegistroHelperCodigoG) this
 					.distribuirdadosRegistroMovimentoArrecadador(
 							arrecadadorMovimentoItemCompleto
-									.getConteudoRegistro(), null);
+							.getConteudoRegistro(), null);
 
 			retorno
-					.setCodigoRegistro(registroHelperCodigoG
-							.getCodigoRegistro());
+			.setCodigoRegistro(registroHelperCodigoG
+					.getCodigoRegistro());
 			retorno
-					.setIdentificacaoAgenciaContaDigitoCreditada(registroHelperCodigoG
-							.getIdAgenciaContaDigito());
+			.setIdentificacaoAgenciaContaDigitoCreditada(registroHelperCodigoG
+					.getIdAgenciaContaDigito());
 			retorno.setDataPagamento(Util.formatarData(registroHelperCodigoG
 					.getDataPagamento()));
 			retorno.setDataPrevistaCredito(Util
@@ -11427,14 +11430,14 @@ public class ControladorArrecadacao implements SessionBean {
 					.apresentarDadosConteudoCodigoBarras(registroHelperCodigoG);
 
 			retorno
-					.setDadosConteudoCodigoBarrasHelper(dadosConteudoCodigoBarrasHelper);
+			.setDadosConteudoCodigoBarrasHelper(dadosConteudoCodigoBarrasHelper);
 
 			try {
 				retorno
-						.setValorRecebido(Util
-								.formatarMoedaReal(Util
-										.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(registroHelperCodigoG
-												.getValorRecebido())));
+				.setValorRecebido(Util
+						.formatarMoedaReal(Util
+								.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(registroHelperCodigoG
+										.getValorRecebido())));
 			} catch (NumberFormatException ex) {
 				retorno.setValorRecebido(registroHelperCodigoG
 						.getValorRecebido());
@@ -11442,10 +11445,10 @@ public class ControladorArrecadacao implements SessionBean {
 
 			try {
 				retorno
-						.setValorTarifa(Util
-								.formatarMoedaReal(Util
-										.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(registroHelperCodigoG
-												.getValorTarifa())));
+				.setValorTarifa(Util
+						.formatarMoedaReal(Util
+								.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(registroHelperCodigoG
+										.getValorTarifa())));
 			} catch (NumberFormatException ex) {
 				retorno.setValorTarifa(registroHelperCodigoG.getValorTarifa());
 			}
@@ -11453,17 +11456,17 @@ public class ControladorArrecadacao implements SessionBean {
 			retorno.setNsr(registroHelperCodigoG.getNumeroSeqRegistro());
 			retorno.setCodigoAgenciaArrecadadora(registroHelperCodigoG
 					.getCodigoAgenciaArrecadadora());			
-			
+
 			retorno.setNomeAgencia( arrecadadorMovimentoItem.getArrecadadorMovimento().getNomeBanco() );			
-			
+
 			retorno.setFormaArrecadacaoCaptura(registroHelperCodigoG
 					.getFormaArrecadacao());
 			retorno
-					.setNumeroAutenticacaoCaixaOUCodigoTransacao(registroHelperCodigoG
-							.getNumeroAutenticacao());
+			.setNumeroAutenticacaoCaixaOUCodigoTransacao(registroHelperCodigoG
+					.getNumeroAutenticacao());
 			retorno
-					.setFormaPagamento(registroHelperCodigoG
-							.getFormaPagamento());
+			.setFormaPagamento(registroHelperCodigoG
+					.getFormaPagamento());
 
 			/*
 			 * Lista de pagamentos relacionados ao ítem do movimento
@@ -11472,9 +11475,9 @@ public class ControladorArrecadacao implements SessionBean {
 			filtroPagamento.setConsultaSemLimites(true);
 
 			filtroPagamento
-					.adicionarCaminhoParaCarregamentoEntidade("documentoTipo");
+			.adicionarCaminhoParaCarregamentoEntidade("documentoTipo");
 			filtroPagamento
-					.adicionarCaminhoParaCarregamentoEntidade("pagamentoSituacaoAtual");
+			.adicionarCaminhoParaCarregamentoEntidade("pagamentoSituacaoAtual");
 
 			filtroPagamento.adicionarParametro(new ParametroSimples(
 					FiltroPagamento.ARRECADADOR_MOVIMENTO_ITEM_ID,
@@ -11496,153 +11499,202 @@ public class ControladorArrecadacao implements SessionBean {
 		 */
 		else if (arrecadadorMovimentoItemCompleto.getRegistroCodigo() != null
 				&& arrecadadorMovimentoItemCompleto.getRegistroCodigo()
-						.getCodigo().equals(RegistroCodigo.CODIGO_X)) {
+				.getCodigo().equals(RegistroCodigo.CODIGO_X)) {
 
 			// [UC0262] - Distribuir Dados do Registro de Movimento do
 			// Arrecadador
 			RegistroHelperCodigoX registroHelperCodigoX = (RegistroHelperCodigoX) this
 					.distribuirdadosRegistroMovimentoArrecadador(
 							arrecadadorMovimentoItemCompleto
-									.getConteudoRegistro(), null);
+							.getConteudoRegistro(), null);
 
 			retorno
-					.setCodigoRegistro(registroHelperCodigoX
-							.getCodigoRegistro());
+			.setCodigoRegistro(registroHelperCodigoX
+					.getCodigoRegistro());
 			retorno.setCodigoAgencia(registroHelperCodigoX.getCodigoAgencia());
 			retorno.setNomeAgencia(registroHelperCodigoX.getNomeAgencia());
 			retorno
-					.setNomeLogradouro(registroHelperCodigoX
-							.getNomelogradouro());
+			.setNomeLogradouro(registroHelperCodigoX
+					.getNomelogradouro());
 			retorno.setNumero(registroHelperCodigoX.getNumero());
 			retorno.setCodigoCep(registroHelperCodigoX.getCodigoCep());
 			retorno.setSufixoCep(registroHelperCodigoX.getSufixoCep());
 			retorno.setNomeCidade(registroHelperCodigoX.getNomeCidade());
 			retorno.setSiglaUnidadeFederacao(registroHelperCodigoX
 					.getSiglaUnidadeFederacao());
-			
+
 			retorno.setNomeAgencia( arrecadadorMovimentoItem.getArrecadadorMovimento().getNomeBanco() );
 
 			if (registroHelperCodigoX.getSituacaoAgencia().equals(
 					ConstantesSistema.CODIGO_SITUACAO_AGENCIA_ATIVO)) {
 
 				retorno
-						.setSituacaoAgencia(ConstantesSistema.DESCRICAO_SITUACAO_AGENCIA_ATIVO);
+				.setSituacaoAgencia(ConstantesSistema.DESCRICAO_SITUACAO_AGENCIA_ATIVO);
 			} else {
 
 				retorno
-						.setSituacaoAgencia(ConstantesSistema.DESCRICAO_SITUACAO_AGENCIA_EM_REGIME_ENCERRAMENTO);
+				.setSituacaoAgencia(ConstantesSistema.DESCRICAO_SITUACAO_AGENCIA_EM_REGIME_ENCERRAMENTO);
 			}
 		}
-        
-        /*
-         * Alterado por Vivianne Sousa em 28/01/2008 - Analista: Adriano
-         *
-         * Caso o código do registro corresponda a: "W", apresentar os seguintes
-         * campos:
-         * 
-         * Código do registro
-         * Identificação da agencia/conta/digito creditado
-         * Data de pagamento
-         * Data prevista para o crédito
-         * Código de barras
-         * Valor recebido
-         * NSR-Número Sequencial de Registro
-         * Forma de arrecadação/captura
-         * Número de autenticação caixa ou código de transação
-         * Forma de Pagamento
-         */
-        else if (arrecadadorMovimentoItemCompleto.getRegistroCodigo() != null
-                && arrecadadorMovimentoItemCompleto.getRegistroCodigo()
-                        .getCodigo().equals(RegistroCodigo.CODIGO_W)) {
 
-            // Distribuir Dados do Registro W de Movimento do Arrecadador
-            RegistroHelperCodigoW registroHelperCodigoW =  this
-                    .distribuirdadosRegistroWMovimentoArrecadador(
-                            arrecadadorMovimentoItemCompleto.getConteudoRegistro());
-            
-            retorno.setCodigoRegistro("W");
-            
-            retorno.setIdentificacaoAgenciaContaDigitoCreditada(
-                    registroHelperCodigoW.getIdentificacaoAgenciaContaDigitoCreditada());
-            
-            if(registroHelperCodigoW.getDataVencimentoTitulo() != null &&
-                    new Integer(registroHelperCodigoW.getDataVencimentoTitulo()).compareTo(0) > 0){
-                retorno.setDataPagamento(Util.converterDataSemBarraParaDataComBarra(
-                        registroHelperCodigoW.getDataVencimentoTitulo()));
-            }
-            
-            retorno.setDataPrevistaCredito(Util.converterDataSemBarraParaDataComBarra(
-                    registroHelperCodigoW.getDataEfetivacaoCredito()));
-                    
-            retorno.setValorRecebido(Util.formatarMoedaReal(Util
-                    .formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(
-                            registroHelperCodigoW.getValorPagoSacado())));
-            
-            retorno.setFormaArrecadacaoCaptura("Ficha de Compensação");
-            
-            //[SB0004] - Apresentar Dados do Conteúdo do Código de Barras
-            DadosConteudoCodigoBarrasHelper dadosConteudoCodigoBarrasHelper = 
-                apresentarDadosConteudoCodigoBarrasFichaCompensacao(registroHelperCodigoW);
-            
-            retorno.setDadosConteudoCodigoBarrasHelper(dadosConteudoCodigoBarrasHelper);
-            
-            /*
-             * Lista de pagamentos relacionados ao ítem do movimento
-             */
-            FiltroPagamento filtroPagamento = new FiltroPagamento();
-            filtroPagamento.setConsultaSemLimites(true);
+		/*
+		 * Alterado por Vivianne Sousa em 28/01/2008 - Analista: Adriano
+		 *
+		 * Caso o código do registro corresponda a: "W", apresentar os seguintes
+		 * campos:
+		 * 
+		 * Código do registro
+		 * Identificação da agencia/conta/digito creditado
+		 * Data de pagamento
+		 * Data prevista para o crédito
+		 * Código de barras
+		 * Valor recebido
+		 * NSR-Número Sequencial de Registro
+		 * Forma de arrecadação/captura
+		 * Número de autenticação caixa ou código de transação
+		 * Forma de Pagamento
+		 */
+		else if (arrecadadorMovimentoItemCompleto.getRegistroCodigo() != null
+				&& arrecadadorMovimentoItemCompleto.getRegistroCodigo()
+				.getCodigo().equals(RegistroCodigo.CODIGO_W)) {
 
-            filtroPagamento
-                    .adicionarCaminhoParaCarregamentoEntidade("documentoTipo");
+			// Distribuir Dados do Registro W de Movimento do Arrecadador
+			RegistroHelperCodigoW registroHelperCodigoW =  this
+					.distribuirdadosRegistroWMovimentoArrecadador(
+							arrecadadorMovimentoItemCompleto.getConteudoRegistro());
 
-            filtroPagamento
-                    .adicionarCaminhoParaCarregamentoEntidade("debitoTipo");
+			retorno.setCodigoRegistro("W");
 
-            filtroPagamento
-                    .adicionarCaminhoParaCarregamentoEntidade("pagamentoSituacaoAtual");
+			retorno.setIdentificacaoAgenciaContaDigitoCreditada(
+					registroHelperCodigoW.getIdentificacaoAgenciaContaDigitoCreditada());
 
-            filtroPagamento.adicionarParametro(new ParametroSimples(
-                    FiltroPagamento.ARRECADADOR_MOVIMENTO_ITEM_ID,
-                    arrecadadorMovimentoItemCompleto.getId()));
+			if(registroHelperCodigoW.getDataVencimentoTitulo() != null &&
+					new Integer(registroHelperCodigoW.getDataVencimentoTitulo()).compareTo(0) > 0){
+				retorno.setDataPagamento(Util.converterDataSemBarraParaDataComBarra(
+						registroHelperCodigoW.getDataVencimentoTitulo()));
+			}
 
-            Collection colecaoPagamentos = getControladorUtil().pesquisar(
-                    filtroPagamento, Pagamento.class.getName());
+			retorno.setDataPrevistaCredito(Util.converterDataSemBarraParaDataComBarra(
+					registroHelperCodigoW.getDataEfetivacaoCredito()));
 
-            retorno.setColecaoPagamentos(colecaoPagamentos);
+			retorno.setValorRecebido(Util.formatarMoedaReal(Util
+					.formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(
+							registroHelperCodigoW.getValorPagoSacado())));
 
-        }
-		
-        else if (arrecadadorMovimentoItemCompleto.getRegistroCodigo() != null
-                && arrecadadorMovimentoItemCompleto.getRegistroCodigo()
-                .getCodigo().equals(RegistroCodigo.CODIGO_CARTAO_CREDITO_TIPO_2.toString())) {
-        	
-        	FiltroMovimentoCartaoRejeita filtroMovimentoCartaoRejeita = new FiltroMovimentoCartaoRejeita();
-        	
-        	filtroMovimentoCartaoRejeita.adicionarParametro(new ParametroSimples(FiltroPagamento.ARRECADADOR_MOVIMENTO_ITEM_ID,
-            arrecadadorMovimentoItemCompleto.getId()));
-        	
-        	Collection colecaoMovimentoCartaoRejeita = getControladorUtil().pesquisar(
-        	filtroMovimentoCartaoRejeita, MovimentoCartaoRejeita.class.getName());
-        	
-        	if (colecaoMovimentoCartaoRejeita != null && !colecaoMovimentoCartaoRejeita.isEmpty()){
-        		
-        		MovimentoCartaoRejeita movimentoCartaoRejeita = (MovimentoCartaoRejeita) Util.retonarObjetoDeColecao(colecaoMovimentoCartaoRejeita);
-        		
-        		retorno.setNumeroCartao(Util.decrypt(movimentoCartaoRejeita.getNumeroCartao()));
-        		
-        		retorno.setDataTransacao(Util.formatarData(movimentoCartaoRejeita.getDataCompra()));
-        		
-        		try {
-    				
-        			retorno.setValorTransacao(Util.formatarMoedaReal(movimentoCartaoRejeita.getValorVenda()));
-        			
-    			} catch (NumberFormatException ex) {}
-    			
-    			retorno.setNumeroParcela(movimentoCartaoRejeita.getNumeroParcela().toString());
-    			
-    			retorno.setNumeroParcelaDebito(movimentoCartaoRejeita.getNumeroParcelaDebito().toString());
-        	}
-        }
+			retorno.setFormaArrecadacaoCaptura("Ficha de Compensação");
+
+			//[SB0004] - Apresentar Dados do Conteúdo do Código de Barras
+			DadosConteudoCodigoBarrasHelper dadosConteudoCodigoBarrasHelper = 
+					apresentarDadosConteudoCodigoBarrasFichaCompensacao(registroHelperCodigoW);
+
+			retorno.setDadosConteudoCodigoBarrasHelper(dadosConteudoCodigoBarrasHelper);
+
+			/*
+			 * Lista de pagamentos relacionados ao ítem do movimento
+			 */
+			FiltroPagamento filtroPagamento = new FiltroPagamento();
+			filtroPagamento.setConsultaSemLimites(true);
+
+			filtroPagamento
+			.adicionarCaminhoParaCarregamentoEntidade("documentoTipo");
+
+			filtroPagamento
+			.adicionarCaminhoParaCarregamentoEntidade("debitoTipo");
+
+			filtroPagamento
+			.adicionarCaminhoParaCarregamentoEntidade("pagamentoSituacaoAtual");
+
+			filtroPagamento.adicionarParametro(new ParametroSimples(
+					FiltroPagamento.ARRECADADOR_MOVIMENTO_ITEM_ID,
+					arrecadadorMovimentoItemCompleto.getId()));
+
+			Collection colecaoPagamentos = getControladorUtil().pesquisar(
+					filtroPagamento, Pagamento.class.getName());
+
+			retorno.setColecaoPagamentos(colecaoPagamentos);
+
+		} else if (arrecadadorMovimentoItemCompleto.getRegistroCodigo() != null
+				&& arrecadadorMovimentoItemCompleto.getRegistroCodigo()
+				.getCodigo().equals(RegistroCodigo.CODIGO_CARTAO_CREDITO_TIPO_2.toString())) {
+
+			FiltroMovimentoCartaoRejeita filtroMovimentoCartaoRejeita = new FiltroMovimentoCartaoRejeita();
+
+			filtroMovimentoCartaoRejeita.adicionarParametro(new ParametroSimples(FiltroPagamento.ARRECADADOR_MOVIMENTO_ITEM_ID,
+					arrecadadorMovimentoItemCompleto.getId()));
+
+			Collection colecaoMovimentoCartaoRejeita = getControladorUtil().pesquisar(
+					filtroMovimentoCartaoRejeita, MovimentoCartaoRejeita.class.getName());
+
+			if (colecaoMovimentoCartaoRejeita != null && !colecaoMovimentoCartaoRejeita.isEmpty()){
+
+				MovimentoCartaoRejeita movimentoCartaoRejeita = (MovimentoCartaoRejeita) Util.retonarObjetoDeColecao(colecaoMovimentoCartaoRejeita);
+
+				retorno.setNumeroCartao(Util.decrypt(movimentoCartaoRejeita.getNumeroCartao()));
+
+				retorno.setDataTransacao(Util.formatarData(movimentoCartaoRejeita.getDataCompra()));
+
+				try {
+
+					retorno.setValorTransacao(Util.formatarMoedaReal(movimentoCartaoRejeita.getValorVenda()));
+
+				} catch (NumberFormatException ex) {}
+
+				retorno.setNumeroParcela(movimentoCartaoRejeita.getNumeroParcela().toString());
+
+				retorno.setNumeroParcelaDebito(movimentoCartaoRejeita.getNumeroParcelaDebito().toString());
+			}
+		} else if (arrecadadorMovimentoItemCompleto.getRegistroCodigo() != null
+				&& arrecadadorMovimentoItemCompleto.getRegistroCodigo()
+				.getCodigo().equals(RegistroCodigo.CODIGO_K)) {
+
+			if(arrecadadorMovimentoItemCompleto.getConteudoRegistro() != null) {
+				RegistroFichaCompensacaoTipo7Helper registroTipo7 = 
+						new RegistroFichaCompensacaoTipo7Helper(arrecadadorMovimentoItemCompleto.getConteudoRegistro());
+
+				retorno.setCodigoRegistro("K");
+
+				retorno.setIdentificacaoAgenciaContaDigitoCreditada(
+						registroTipo7.getDigitoVerificadorContaCorrenteCedente());
+
+				if(registroTipo7.getDataVencimento() != null &&
+						new Integer(registroTipo7.getDataVencimento()).compareTo(0) > 0){
+					retorno.setDataPagamento(registroTipo7.getDataVencimento());
+				}
+
+				retorno.setDataPrevistaCredito(registroTipo7.getDataCreditoFormatadoComBarra());
+
+				retorno.setValorRecebido(Util.formatarMoedaReal(registroTipo7.getValorRecebidoFormatado()));
+
+				retorno.setFormaArrecadacaoCaptura("Ficha de Compensação");
+
+				DadosConteudoCodigoBarrasHelper dadosConteudoCodigoBarrasHelper = 
+						apresentarDadosConteudoCodigoBarrasFichaCompensacaoNovo(registroTipo7);
+
+				retorno.setDadosConteudoCodigoBarrasHelper(dadosConteudoCodigoBarrasHelper);
+
+				FiltroPagamento filtroPagamento = new FiltroPagamento();
+				filtroPagamento.setConsultaSemLimites(true);
+
+				filtroPagamento
+				.adicionarCaminhoParaCarregamentoEntidade("documentoTipo");
+
+				filtroPagamento
+				.adicionarCaminhoParaCarregamentoEntidade("debitoTipo");
+
+				filtroPagamento
+				.adicionarCaminhoParaCarregamentoEntidade("pagamentoSituacaoAtual");
+
+				filtroPagamento.adicionarParametro(new ParametroSimples(
+						FiltroPagamento.ARRECADADOR_MOVIMENTO_ITEM_ID,
+						arrecadadorMovimentoItemCompleto.getId()));
+
+				Collection colecaoPagamentos = getControladorUtil().pesquisar(
+						filtroPagamento, Pagamento.class.getName());
+
+				retorno.setColecaoPagamentos(colecaoPagamentos);
+
+			} 
+		}
 
 
 		return retorno;
@@ -44937,7 +44989,7 @@ public class ControladorArrecadacao implements SessionBean {
         return arrecadadorMovimento;
     }
     
-    public Integer inserirItemMovimentoArrecadadorFichaCompensacaoNovo(Integer idMovimento, String descricaoOcorrencia,
+    public Integer inserirItemMovimentoArrecadadorFichaCompensacaoNovo(String linhaRegistro, Integer idMovimento, String descricaoOcorrencia,
             int indicadorAceitacaoRegistro, Integer idImovelPagamento)
             throws ControladorException {
 
@@ -44953,6 +45005,7 @@ public class ControladorArrecadacao implements SessionBean {
         arrecadadorMovimentoItem.setRegistroCodigo(registroCodigo);
         ArrecadadorMovimento arrecadadorMovimento = new ArrecadadorMovimento();
         arrecadadorMovimento.setId(idMovimento);
+        arrecadadorMovimentoItem.setConteudoRegistro(linhaRegistro);
         arrecadadorMovimentoItem.setArrecadadorMovimento(arrecadadorMovimento);
         arrecadadorMovimentoItem.setDescricaoOcorrencia(descricaoOcorrencia);
         arrecadadorMovimentoItem.setIndicadorAceitacao(new Short("" + indicadorAceitacaoRegistro));
@@ -56638,4 +56691,119 @@ public class ControladorArrecadacao implements SessionBean {
 		return colecaoGuiaPagamentos;
 		
 	}
+	
+	public DadosConteudoCodigoBarrasHelper apresentarDadosConteudoCodigoBarrasFichaCompensacaoNovo(
+            RegistroFichaCompensacaoTipo7Helper registroTipo7)
+            throws ControladorException {
+
+        DadosConteudoCodigoBarrasHelper retorno = new DadosConteudoCodigoBarrasHelper();
+        
+        BigDecimal valorPagamento = registroTipo7.getValorRecebidoFormatado();
+        
+        String nossoNumeroSemDV = registroTipo7.getNossoNumero();
+        Integer tipoDocumento = registroTipo7.getTipoDocumentoInteger();
+        Integer idDocumento = registroTipo7.getIdDocumentoEmitido();
+        
+        if(tipoDocumento.equals(DocumentoTipo.CONTA)){
+        	
+        	Conta conta = getControladorFaturamento().obterImovelLocalidadeConta(idDocumento);
+            
+            if (conta != null){
+                //id da Localidade
+                retorno.setCodigoLocalidade(conta.getLocalidade().getId().toString());
+
+                //matrícula do imóvel
+                retorno.setMatriculaImovel(conta.getImovel().getId().toString());
+
+                //mês e ano de referência da conta
+                retorno.setMesAnoReferenciaConta(conta.getReferenciaFormatada());
+            }
+            else{
+                ContaHistorico contaHistorico = getControladorFaturamento().
+                    obterImovelLocalidadeContaHistorico(new Integer(idDocumento));
+                
+                if (contaHistorico != null){
+                    //id da Localidade
+                    retorno.setCodigoLocalidade(contaHistorico.getLocalidade().getId().toString());
+
+                    //matrícula do imóvel
+                    retorno.setMatriculaImovel(contaHistorico.getImovel().getId().toString());
+
+                    //mês e ano de referência da conta
+                    retorno.setMesAnoReferenciaConta(contaHistorico.getFormatarAnoMesParaMesAno());
+                }
+            }
+            
+            //tipo de pagamento
+            retorno.setTipoPagamento(ConstantesSistema.TIPO_PAGAMENTO_CONTA);
+        }
+        else if (tipoDocumento.equals(DocumentoTipo.EXTRATO_DE_DEBITO) || 
+        		tipoDocumento.equals(DocumentoTipo.VISITA_COBRANCA) ||
+        		tipoDocumento.equals(DocumentoTipo.ORDEM_CORTE)){
+        	
+        	CobrancaDocumento cobrancaDocumento = null ;
+            
+        	try {
+        		cobrancaDocumento = repositorioArrecadacao.pesquisarCobrancaDocumentoProcessarFichaCompensacao(new Integer(idDocumento));
+            } 
+        	catch (ErroRepositorioException e) {
+                throw new ControladorException("erro.sistema", e);
+            }
+        	
+        	if (cobrancaDocumento != null){
+        		
+        		if (cobrancaDocumento.getImovel() != null){
+        			
+        			retorno.setMatriculaImovel(cobrancaDocumento.getImovel().getId().toString());
+        		}
+        		else{
+        			
+        			retorno.setCodigoCliente(cobrancaDocumento.getCliente().getId().toString());
+        		}
+        		
+        		retorno.setSequencialDocumentoCobranca(cobrancaDocumento.getId().toString());
+    			
+    			retorno.setCodigoTipoDocumento(tipoDocumento.toString());
+        	}
+        	
+        	//tipo de pagamento
+            retorno.setTipoPagamento(ConstantesSistema.TIPO_PAGAMENTO_DOCUMENTO_COBRANCA);
+        }
+        
+        
+        Date dataVencimentoMais15 = Util.adicionarNumeroDiasDeUmaData(new Date(),15);
+        String fatorVencimento = getControladorFaturamento().obterFatorVencimento(dataVencimentoMais15);
+        
+        String especificacaoCodigoBarra = obterEspecificacaoCodigoBarraFichaCompensacao(
+                    ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO, 
+                    ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO, 
+                    valorPagamento, nossoNumeroSemDV.toString(),
+                    ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO, fatorVencimento);
+        
+        String digitoVerificador = especificacaoCodigoBarra.substring(4,5);
+        
+        //código do banco
+        retorno.setCodigoBanco(ConstantesSistema.CODIGO_BANCO_FICHA_COMPENSACAO);
+        
+        //código da moeda
+        retorno.setCodigoMoeda(ConstantesSistema.CODIGO_MOEDA_FICHA_COMPENSACAO);
+        
+        //dígito verificador geral
+        retorno.setDigitoVerificadorGeral(digitoVerificador);
+        
+        //fator de vencimento
+        retorno.setFatorVencimento(fatorVencimento);
+        
+        //valor do código de barras
+        retorno.setValorCodigoBarras(Util.formatarMoedaReal(valorPagamento));
+        
+        //nosso número
+        retorno.setNossoNumero(nossoNumeroSemDV);
+        
+        //tipo de carteira
+        retorno.setTipoCarteira(ConstantesSistema.CARTEIRA_FICHA_COMPENSACAO);
+        
+        return retorno;
+
+    }
 }

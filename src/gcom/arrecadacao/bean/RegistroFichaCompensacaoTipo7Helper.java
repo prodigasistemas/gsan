@@ -249,6 +249,12 @@ public class RegistroFichaCompensacaoTipo7Helper {
 	public Integer getTipoDocumentoInteger() {
 		return Integer.valueOf(getTipoDocumento());
 	}
+	public Date getDataVencimentoFormatado() {
+		return Util.converteStringSemBarraParaDateAnoSimples(dataVencimento);
+	}
+	public String getDataCreditoFormatadoComBarra(){
+		return Util.converterDataSemBarraParaDataComBarraAnoSimples(dataCredito);
+	}
 	private void buildSequencialRegistro(String linha) {
 		this.sequencialRegistro = linha.substring(395,400);		
 	}
