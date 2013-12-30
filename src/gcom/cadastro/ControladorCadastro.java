@@ -16638,8 +16638,6 @@ public class ControladorCadastro implements SessionBean {
 		Collection<TabelaLinhaColunaAlteracao> colunasAlteradas = null;
 
 		try {
-
-			// TODO - Atualizar ImovelAtualizacaoCadastral para TRANSMITIDO após salvar alterações
 			Integer idImovel = null;
 			
 			RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL, matriculaImovel,
@@ -16678,7 +16676,7 @@ public class ControladorCadastro implements SessionBean {
 					tabela.setId(Tabela.IMOVEL_ATUALIZACAO_CADASTRAL);
 					tabelaAtualizacaoCadastral.setIndicadorPrincipal(new Short("1"));
 					
-					idImovel = base.getId();
+					idImovel = base.getIdImovel();
 				} else if (objetoAtualizacaoCadastralBase instanceof ClienteFoneAtualizacaoCadastral) {
 					ClienteFoneAtualizacaoCadastral base = (ClienteFoneAtualizacaoCadastral) objetoAtualizacaoCadastralBase;
 					ClienteFoneAtualizacaoCadastral txt = (ClienteFoneAtualizacaoCadastral) objetoAtualizacaoCadastralTxt;
@@ -16742,13 +16740,26 @@ public class ControladorCadastro implements SessionBean {
 						((ObjetoTransacao) objetoAtualizacaoCadastralTxt).getOperacaoEfetuada(), tabelaAtualizacaoCadastral,
 						colecaoTabelaColunaAtualizacaoCadastral);
 				
-				atualizarSituacaoImovelAtualizacaoCadastral(idImovel, SituacaoAtualizacaoCadastral.TRANSMITIDO);
+				if (idImovel !=null) {
+					atualizarSituacaoImovelAtualizacaoCadastral(idImovel, SituacaoAtualizacaoCadastral.TRANSMITIDO);
+				}
 			}
 		} catch (Exception e) {
 			logger.error("Erro ao persistir alteracao na coluna.", e);
 		}
 	}
 
+	/**
+	 * TODO: COSANPA
+	 * 
+	 * Método para atualizar situação (siac_id) de ImovelAtualizacaoCadastral
+	 * 
+	 * @author Felipe Santos
+	 * @date 27/12/2013
+	 * @param idImovel
+	 * @param situacao
+	 * @throws ControladorException
+	 */
 	private void atualizarSituacaoImovelAtualizacaoCadastral(Integer idImovel, Integer situacao)
 			throws ControladorException {
 		FiltroImovelAtualizacaoCadastral filtroImovel = new FiltroImovelAtualizacaoCadastral();
