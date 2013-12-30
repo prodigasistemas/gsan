@@ -56652,7 +56652,45 @@ public class ControladorArrecadacao implements SessionBean {
 			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
 		}
-	}	
+	}
+	
+	public void atualizarGuiasPagamentoNaoPagasAtePeriodo(Integer idFuncionalidadeIniciada, Date dataVencimentoLimite, 
+			Integer financiamentoTipoServico, Integer idLocalidade) throws ControladorException {
+		
+		Integer idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,UnidadeProcessamento.FUNCIONALIDADE,0);
+
+		try {
+			Collection<Integer> guiasPagamentoNaoPagasAtePeriodo = repositorioArrecadacao.pesquisarIdsGuiasPagamentoNaoPagas(dataVencimentoLimite, idLocalidade);
+			
+			repositorioArrecadacao.atualizarGuiasPagamentoNaoPagasAtePeriodo(financiamentoTipoServico, guiasPagamentoNaoPagasAtePeriodo);
+			
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,idUnidadeIniciada, false);
+
+		} catch (ErroRepositorioException ex) {
+			System.out.println("Erro no processamento da LOCALIDADE: " + idLocalidade );
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	
+	public Collection<Integer> pesquisarIdsLocalidadeComGuiasPagamentoNaoPagas(Date dataVencimentoLimite, 
+			Integer financiamentoTipoServico) throws ControladorException {
+		
+		Collection<Integer> colecaoGuiaPagamentos;
+		try {
+
+			colecaoGuiaPagamentos = repositorioArrecadacao
+					.pesquisarIdsLocalidadeComGuiasPagamentoNaoPagas(financiamentoTipoServico, dataVencimentoLimite);
+			
+		} catch (ErroRepositorioException ex) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", ex);
+		}
+		
+		return colecaoGuiaPagamentos;
+		
+	}
 	
 	public DadosConteudoCodigoBarrasHelper apresentarDadosConteudoCodigoBarrasFichaCompensacaoNovo(
             RegistroFichaCompensacaoTipo7Helper registroTipo7)
