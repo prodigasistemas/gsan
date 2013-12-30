@@ -110,9 +110,9 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 
 	private String nomeLocalidadeFinal;
 	
-	private String idSetorInicial;	
+	private String cdSetorComercialInicial;	
 	
-	private String idSetorFinal;
+	private String cdSetorComercialFinal;
 	
 	private String nomeSetorComercialInicial;	
 	
@@ -251,20 +251,20 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 		this.nomeLocalidadeFinal = nomeLocalidadeFinal;
 	}
 
-	public String getIdSetorInicial() {
-		return idSetorInicial;
+	public String getCdSetorComercialInicial() {
+		return cdSetorComercialInicial;
 	}
 
-	public void setIdSetorInicial(String idSetorInicial) {
-		this.idSetorInicial = idSetorInicial;
+	public void setCdSetorComercialInicial(String setorInicial) {
+		this.cdSetorComercialInicial = setorInicial;
 	}
 
-	public String getIdSetorFinal() {
-		return idSetorFinal;
+	public String getCdSetorComercialFinal() {
+		return cdSetorComercialFinal;
 	}
 
-	public void setIdSetorFinal(String idSetorFinal) {
-		this.idSetorFinal = idSetorFinal;
+	public void setCdSetorComercialFinal(String setorFinal) {
+		this.cdSetorComercialFinal = setorFinal;
 	}
 
 	public String getNomeSetorComercialInicial() {

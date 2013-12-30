@@ -24,10 +24,21 @@
         if (tipoConsulta == 'localidadeOrigem') {
             form.idLocalidadeInicial.value = codigoRegistro;
             form.nomeLocalidadeInicial.value = descricaoRegistro;
+            document.getElementsByName('nomeLocalidadeInicial')[0].style.color = '#000000';
          }
     }
     
-	//So chama a função abrirCalendario caso o campo esteja habilitado
+    function recuperarDadosQuatroParametros(codigoRegistro, descricaoRegistro, codigoAuxiliar, tipoConsulta) {
+        var form = document.forms[0];
+        if (tipoConsulta == 'setorComercialOrigem') {
+            form.cdSetorComercialInicial.value = codigoAuxiliar;
+            form.nomeSetorComercialInicial.value = descricaoRegistro;
+            document.getElementsByName('nomeSetorComercialInicial')[0].style.color = '#000000';
+            
+         }
+    }
+
+    //So chama a função abrirCalendario caso o campo esteja habilitado
 	function chamarCalendario(fieldNameOrigem,objetoRelacionado,fieldNameDestino){
 		abrirCalendarioReplicando('FiltrarAlteracaoAtualizacaoCadastralActionForm', fieldNameOrigem,fieldNameDestino);
 
@@ -163,51 +174,45 @@
     <tr>
       <td><strong>Localidade:</strong>
       </td>
-      <td><html:text tabindex="8" maxlength="3" property="idLocalidadeInicial" size="5"
-        onkeypress="somente_numero(this);form.target=''; validaEnter(event,'exibirFiltrarAlteracaoAtualizacaoCadastralAction.do?filtroLocalidade=LocalidadeInicial', 'idLocalidadeInicial');"
+      <td><html:text tabindex="5" maxlength="3" property="idLocalidadeInicial" size="5"
+        onkeypress="somente_numero(this);form.target='';
+        javascript:limparCampos('cdSetorComercialInicial', 'nomeSetorComercialInicial'); 
+        validaEnter(event,
+        'exibirFiltrarAlteracaoAtualizacaoCadastralAction.do?filterClass=FiltroLocalidade&fieldLocalidade=LocalidadeInicial', 'idLocalidadeInicial');"
         onkeyup="javascript:somente_numero(this);" />
          
-        <a href="javascript:limparCampos('idLocalidadeInicial', 'nomeLocalidadeInicial'); abrirPopup('exibirPesquisarLocalidadeAction.do?tipo=origem', 400, 800);"
+        <a href="javascript:limparCampos('idLocalidadeInicial', 'nomeLocalidadeInicial', 'cdSetorComercialInicial', 'nomeSetorComercialInicial'); 
+           abrirPopup('exibirPesquisarLocalidadeAction.do?tipo=origem', 400, 800);"
         id="btPesqLocalidadeInicial"> 
           <img border="0" src="<bean:message key="caminho.imagens"/>pesquisa.gif"/> 
         </a>
          
-          <logic:notPresent name="LocalidadeInicialInexistente" scope="request">
-            <html:text property="nomeLocalidadeInicial" size="35" readonly="true"
-              style="background-color: #EFEFEF; border: 0; color: #000000" />
-          </logic:notPresent>
-
-          <logic:present name="LocalidadeInicialInexistente" scope="request">
-            <html:text property="nomeLocalidadeInicial" size="35" readonly="true"
-              style="background-color: #EFEFEF; border: 0; color: #ff0000" />
-          </logic:present>
+        <html:text property="nomeLocalidadeInicial" size="35" readonly="true"
+            style="background-color: #EFEFEF; border: 0; color: ${requestScope.corLocalidadeInicial}" />
           
-          <a href="javascript:limparCampos('idLocalidadeInicial', 'nomeLocalidadeInicial');">
-              <img src="<bean:message key="caminho.imagens"/>limparcampo.gif" border="0" title="Apagar" />
-          </a>          
+        <a href="javascript:limparCampos('idLocalidadeInicial', 'nomeLocalidadeInicial');">
+            <img src="<bean:message key="caminho.imagens"/>limparcampo.gif" border="0" title="Apagar" />
+        </a>
+      </td>          
     </tr>
     
     <tr>
       <td><strong>Setor Comercial :</strong></td>
-      <td><html:text maxlength="3" property="idSetorInicial" size="5" onkeyup="javascript:somente_numero(this);"
-           onkeypress="form.target='';validaEnterDependencia(event, 'filtrarImovelOutrosCriteriosWizardAction.do?action=exibirFiltrarImovelOutrosCriteriosLocalizarImoveis&objetoConsulta=2&inscricaoTipo=destino', document.forms[0].setorComercialDestinoCD, document.forms[0].localidadeDestinoID.value, 'Localidade Final.');return isCampoNumerico(event);"
-           tabindex="7" />
-           <a href="javascript:chamarPopup('exibirPesquisarSetorComercialAction.do', 'setorComercialOrigem', 'idLocalidade', document.forms[0].idLocalidadeInicial.value, 275, 480, 'Informe Localidade Inicial.');">
+      <td><html:text maxlength="3" property="cdSetorComercialInicial" size="5" onkeyup="javascript:somente_numero(this);"
+           onkeypress="validaEnterDependencia(event, 
+           'exibirFiltrarAlteracaoAtualizacaoCadastralAction.do?filterClass=FiltroSetorComercial&fieldLocalidade=LocalidadeInicial&fieldSetorComercial=SetorComercialInicial', 
+           this, document.forms[0].idLocalidadeInicial.value, 'Localidade Final.');"
+           tabindex="6" />
+           <a href="javascript:abrirPopupDependencia('exibirPesquisarSetorComercialAction.do?idLocalidade='+document.forms[0].idLocalidadeInicial.value+'&tipo=setorComercialOrigem',document.forms[0].idLocalidadeInicial.value,'Localidade Inicial', 400, 800);">
            <img border="0" src="<bean:message key="caminho.imagens"/>pesquisa.gif" title="Pesquisar" />
            </a>
-          <logic:notPresent name="SetorComercialInicialInexistente" scope="request">
-            <html:text property="nomeSetorComercialInicial" size="35" readonly="true"
-              style="background-color: #EFEFEF; border: 0; color: #000000" />
-          </logic:notPresent>
-
-          <logic:present name="SetorComercialInicialInexistente" scope="request">
-            <html:text property="nomeSetorComercialInicial" size="35" readonly="true"
-              style="background-color: #EFEFEF; border: 0; color: #ff0000" />
-          </logic:present>
+          <html:text property="nomeSetorComercialInicial" size="35" readonly="true"
+            style="background-color: #EFEFEF; border: 0; color: ${requestScope.corSetorComercialInicial}" />
           
-          <a href="javascript:limparCampos('idSetorComercialInicial', 'nomeSetorComercialInicial');">
+          <a href="javascript:limparCampos('cdSetorComercialInicial', 'nomeSetorComercialInicial');">
               <img src="<bean:message key="caminho.imagens"/>limparcampo.gif" border="0" title="Apagar" />
           </a>
+      </td>
     </tr>
     
     <tr>

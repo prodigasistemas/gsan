@@ -35,6 +35,7 @@ import gcom.seguranca.transacao.TabelaColuna;
 import gcom.util.ConstantesSistema;
 import gcom.util.Util;
 import gcom.util.filtro.DescriptorEntity;
+import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesIn;
 
@@ -49,6 +50,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -66,14 +68,8 @@ public class ExibirFiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction
 		Fachada fachada = Fachada.getInstancia();
 
 		try {
-			if (httpServletRequest.getParameterMap().containsKey("filtroLocalidade")) {
-				String field = httpServletRequest.getParameter("filtroLocalidade");
-				FilterClassParameters filter = new FilterClassParameters(new FiltroLocalidade(), new Localidade(), "Localidade inexistente", field);
-				preencherCampoDescricao(form, filter, httpServletRequest);
-			} else if (httpServletRequest.getParameterMap().containsKey("filtroSetorComercial")) {
-				String field = httpServletRequest.getParameter("filtroSetorComercial");
-				FilterClassParameters filter = new FilterClassParameters(new FiltroSetorComercial(), new SetorComercial(), "Setor comercial inexistente", field);
-				preencherCampoDescricao(form, filter, httpServletRequest);
+			if (StringUtils.isNotEmpty(httpServletRequest.getParameter("filterClass"))){
+				preencherCampoDescricao(form, httpServletRequest);
 			}
 
 			HttpSession sessao = httpServletRequest.getSession(false);
@@ -189,31 +185,45 @@ public class ExibirFiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction
 		}
 	}
 
-	private void preencherCampoDescricao(FiltrarAlteracaoAtualizacaoCadastralActionForm form, FilterClassParameters parameters, HttpServletRequest httpServletRequest)
+	private void preencherCampoDescricao(FiltrarAlteracaoAtualizacaoCadastralActionForm form, HttpServletRequest httpServletRequest)
 			throws Exception {
+		
+		String filterClass = "gcom.cadastro.localidade."+ httpServletRequest.getParameter("filterClass");
+		
+		Filtro filtro = (Filtro) Class.forName(filterClass).newInstance();
+		FilterClassParameters filter = null;
+		String fieldName = null;
+		
+		String fieldLocalidade = httpServletRequest.getParameter("fieldLocalidade");
+		if (filterClass.contains("FiltroLocalidade")){
+			filter = new FilterClassParameters(filtro, new Localidade(), "Localidade inexistente", fieldLocalidade);
+			filtro.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, recuperaValorCampo(form, "Id" + fieldLocalidade)));
+			filtro.adicionarParametro(new ParametroSimples(FiltroLocalidade.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));			
+			fieldName = fieldLocalidade;
+		}else if (filterClass.contains("FiltroSetorComercial")){
+			String fieldSetorComercial = httpServletRequest.getParameter("fieldSetorComercial");
 
-		Method getId = FiltrarAlteracaoAtualizacaoCadastralActionForm.class.getMethod("getId" + parameters.getFieldName());
+			filter = new FilterClassParameters(filtro, new SetorComercial(), "Setor comercial inexistente", fieldSetorComercial);
+			filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.CODIGO_SETOR_COMERCIAL, (String) recuperaValorCampo(form, "Cd"+ fieldSetorComercial)));
+			filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
+			filtro.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID_LOCALIDADE, new Integer(recuperaValorCampo(form, "Id"+ fieldLocalidade))));
+			httpServletRequest.setAttribute("cor" + fieldLocalidade, "#000000");
+			fieldName = fieldSetorComercial;
+		}
+		
+		DescriptorEntity entidade = pesquisarEntidade(filter);
 
-		Method setId = FiltrarAlteracaoAtualizacaoCadastralActionForm.class.getMethod("setId" + parameters.getFieldName(), String.class);
-
-		Method setNome = FiltrarAlteracaoAtualizacaoCadastralActionForm.class.getMethod("setNome" + parameters.getFieldName(), String.class);
-
-		String idEntidade = (String) getId.invoke(form);
-		DescriptorEntity entidade = pesquisarEntidade(idEntidade, parameters);
-
+		Method setNome = FiltrarAlteracaoAtualizacaoCadastralActionForm.class.getMethod("setNome" + fieldName, String.class);
 		if (entidade == null) {
-			setId.invoke(form, "");
-			setNome.invoke(form, parameters.getInvalidMessage());
-			httpServletRequest.setAttribute(parameters.getFieldName() + "Inexistente", "true");
+			setNome.invoke(form, filter.getInvalidMessage());
+			httpServletRequest.setAttribute("cor" + filter.getFieldName(), "#FF0000");
 		} else {
 			setNome.invoke(form, entidade.getDescricao());
+			httpServletRequest.setAttribute("cor" + filter.getFieldName(), "#000000");
 		}
 	}
 
-	private DescriptorEntity pesquisarEntidade(String idLocalidade, FilterClassParameters parameters) {
-		parameters.getFilter().adicionarParametro(new ParametroSimples(parameters.getFilter().ID, idLocalidade));
-		parameters.getFilter().adicionarParametro(new ParametroSimples(parameters.getFilter().INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
-
+	private DescriptorEntity pesquisarEntidade(FilterClassParameters parameters) {
 		Collection colecaoPesquisa = Fachada.getInstancia().pesquisar(parameters.getFilter(), parameters.getEntity().getClass().getName());
 
 		if (colecaoPesquisa == null || colecaoPesquisa.isEmpty()) {
@@ -221,5 +231,11 @@ public class ExibirFiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction
 		} else {
 			return (DescriptorEntity) Util.retonarObjetoDeColecao(colecaoPesquisa);
 		}
+	}
+	
+	private String recuperaValorCampo(FiltrarAlteracaoAtualizacaoCadastralActionForm form, String fieldName) throws Exception{
+		Method getMethod = FiltrarAlteracaoAtualizacaoCadastralActionForm.class.getMethod("get" + fieldName);
+		return (String) getMethod.invoke(form);
+		
 	}
 }
