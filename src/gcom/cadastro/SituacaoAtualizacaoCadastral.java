@@ -86,6 +86,12 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 public class SituacaoAtualizacaoCadastral extends ObjetoGcom {
 	
 	private static final long serialVersionUID = 1L;
+	
+	public static final Integer BLOQUEADO = 1;
+	public static final Integer DISPONIVEL = 0;
+	public static final Integer EM_CAMPO = 2;
+	public static final Integer TRANSMITIDO = 3;
+	public static final Integer APROVADO = 4;
 
     /** identifier field */
     private Integer id;
@@ -98,11 +104,6 @@ public class SituacaoAtualizacaoCadastral extends ObjetoGcom {
 
     /** identifier field */
     private Date ultimaAlteracao;
-
-    public static Integer BLOQUEADO = 1;
-    public static Integer DISPONIVEL = 0;
-    public static Integer EM_CAMPO = 2;
-    public static Integer APROVADO = 4;
     
     /** full constructor */
     public SituacaoAtualizacaoCadastral(Integer id, String descricao, Short indicadorUso, Date ultimaAlteracao) {

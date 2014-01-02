@@ -88,10 +88,6 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
     
     private String nomeLeiturista;
     
-    private String idArquivo;
-    
-    private String descricaoArquivo;
-    
     private String periodoRealizacaoInicial;
     
     private String periodoRealizacaoFinal;
@@ -105,6 +101,26 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 	private String[] colunaImoveis;
 	
 	private String[] colunaImoveisSelecionados;
+	
+	private String idLocalidadeInicial;	
+
+	private String idLocalidadeFinal;
+
+	private String nomeLocalidadeInicial;	
+
+	private String nomeLocalidadeFinal;
+	
+	private String cdSetorComercialInicial;	
+	
+	private String cdSetorComercialFinal;
+	
+	private String nomeSetorComercialInicial;	
+	
+	private String nomeSetorComercialFinal;
+	
+	private String cdRotaInicial;
+
+	private String cdRotaFinal;
 
 	public String getIdRegistrosAutorizados() {
 		return idRegistrosAutorizados;
@@ -122,14 +138,6 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 		this.idRegistrosNaoAutorizados = idRegistrosNaoAutorizados;
 	}
 
-	public String getDescricaoArquivo() {
-		return descricaoArquivo;
-	}
-
-	public void setDescricaoArquivo(String descricaoArquivo) {
-		this.descricaoArquivo = descricaoArquivo;
-	}
-
 	public String getPeriodoRealizacaoFinal() {
 		return periodoRealizacaoFinal;
 	}
@@ -144,14 +152,6 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 
 	public void setPeriodoRealizacaoInicial(String periodoRealizacaoInicial) {
 		this.periodoRealizacaoInicial = periodoRealizacaoInicial;
-	}
-
-	public String getIdArquivo() {
-		return idArquivo;
-	}
-
-	public void setIdArquivo(String idArquivo) {
-		this.idArquivo = idArquivo;
 	}
 
 	public String getNomeLeiturista() {
@@ -210,6 +210,83 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 		this.exibirCampos = exibirCampos;
 	}
 
-	
+	public String getIdLocalidadeInicial() {
+		return idLocalidadeInicial;
+	}
 
+	public void setIdLocalidadeInicial(String idLocalidadeInicial) {
+		this.idLocalidadeInicial = idLocalidadeInicial;
+	}
+
+	public String getIdLocalidadeFinal() {
+		return idLocalidadeFinal;
+	}
+
+	public void setIdLocalidadeFinal(String idLocalidadeFinal) {
+		this.idLocalidadeFinal = idLocalidadeFinal;
+	}
+
+	public String getNomeLocalidadeInicial() {
+		return nomeLocalidadeInicial;
+	}
+
+	public void setNomeLocalidadeInicial(String nomeLocalidadeInicial) {
+		this.nomeLocalidadeInicial = nomeLocalidadeInicial;
+	}
+
+	public String getNomeLocalidadeFinal() {
+		return nomeLocalidadeFinal;
+	}
+
+	public void setNomeLocalidadeFinal(String nomeLocalidadeFinal) {
+		this.nomeLocalidadeFinal = nomeLocalidadeFinal;
+	}
+
+	public String getCdSetorComercialInicial() {
+		return cdSetorComercialInicial;
+	}
+
+	public void setCdSetorComercialInicial(String setorInicial) {
+		this.cdSetorComercialInicial = setorInicial;
+	}
+
+	public String getCdSetorComercialFinal() {
+		return cdSetorComercialFinal;
+	}
+
+	public void setCdSetorComercialFinal(String setorFinal) {
+		this.cdSetorComercialFinal = setorFinal;
+	}
+
+	public String getNomeSetorComercialInicial() {
+		return nomeSetorComercialInicial;
+	}
+
+	public void setNomeSetorComercialInicial(String nomeSetorInicial) {
+		this.nomeSetorComercialInicial = nomeSetorInicial;
+	}
+
+	public String getNomeSetorComercialFinal() {
+		return nomeSetorComercialFinal;
+	}
+
+	public void setNomeSetorComercialFinal(String nomeSetorFinal) {
+		this.nomeSetorComercialFinal = nomeSetorFinal;
+	}
+
+	public String getCdRotaInicial() {
+		return cdRotaInicial;
+	}
+
+	public void setCdRotaInicial(String codRotaInicial) {
+		this.cdRotaInicial = codRotaInicial;
+	}
+
+	public String getCdRotaFinal() {
+		return cdRotaFinal;
+	}
+
+	public void setCdRotaFinal(String codRotaFinal) {
+		this.cdRotaFinal = codRotaFinal;
+	}
 }

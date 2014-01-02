@@ -381,7 +381,7 @@
 											</td>								
 											
 											<td width="9%" align="center">													
-										 		<div align="center">${arquivoTextoAtualizacaoCadastral.quantidadeImovel}</div>									 										
+										 		<div align="center">${arquivoTextoAtualizacaoCadastral.quantidadeImoveisTransmitidos} / ${arquivoTextoAtualizacaoCadastral.quantidadeImovel}</div>									 										
 											</td>
 											
 											<td width="10%">

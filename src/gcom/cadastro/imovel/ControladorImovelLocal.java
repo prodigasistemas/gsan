@@ -3604,4 +3604,7 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	 */
 	public Collection<RamoAtividade> pesquisarRamoAtividadeDoImovel(Integer idImovel)
 		throws ControladorException;
+	
+	public void atualizarIdArquivoTextoImovelAtualizacaoCadastral(
+			Integer idArquivoTexto, Integer idImovel) throws ControladorException;
 }

@@ -120,7 +120,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction {
         	peloMenosUmParametroInformado = true;
         }
         
-        if(form.getIdArquivo() != null && !form.getIdArquivo().equals("")){        	      	
+        if(form.getIdLocalidadeInicial() != null && !form.getIdLocalidadeInicial().equals("")){        	      	
         	peloMenosUmParametroInformado = true;
         }
         
@@ -146,7 +146,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction {
 			throw new ActionServletException("atencao.filtro.nenhum_parametro_informado");
 		}
 		
-		colecaoConsultarMovimentoAtualizacaoCadastralHelper = fachada.pesquisarMovimentoAtualizacaoCadastral(form.getIdArquivo(), form.getIdEmpresa(), form.getIdLeiturista(), form.getExibirCampos(), colunaImoveisSelecionados);
+		colecaoConsultarMovimentoAtualizacaoCadastralHelper = fachada.pesquisarMovimentoAtualizacaoCadastral(form.getIdLocalidadeInicial(), form.getIdEmpresa(), form.getIdLeiturista(), form.getExibirCampos(), colunaImoveisSelecionados);
         
         if( colecaoConsultarMovimentoAtualizacaoCadastralHelper == null || colecaoConsultarMovimentoAtualizacaoCadastralHelper.isEmpty()){
 			throw new ActionServletException("atencao.pesquisa.nenhumresultado", "exibirFiltrarAlteracaoAtualizacaoCadastralAction.do", null, new String[] {});
