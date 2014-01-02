@@ -115,8 +115,8 @@ public class ExibirConsultarMovimentoAtualizacaoCadastralAction extends GcomActi
         if(form.getIdEmpresa() != null && !form.getIdEmpresa().trim().equals(""+ConstantesSistema.NUMERO_NAO_INFORMADO)){
         	idEmpresa = new Integer(form.getIdEmpresa());
         }else{
-            ArquivoTextoAtualizacaoCadastral arquivo = fachada.pesquisarArquivoTextoAtualizacaoCadastro(form.getIdArquivo());
-        	idEmpresa = arquivo.getLeiturista().getEmpresa().getId();	
+//            ArquivoTextoAtualizacaoCadastral arquivo = fachada.pesquisarArquivoTextoAtualizacaoCadastro(form.getIdArquivo());
+//        	idEmpresa = arquivo.getLeiturista().getEmpresa().getId();	
         }
       
 		FiltroEmpresa filtroEmpresa = new FiltroEmpresa();
