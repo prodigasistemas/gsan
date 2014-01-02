@@ -1675,14 +1675,16 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 		} catch (BaseRuntimeException e) {
 			logger.error(e.getMessage(), e);
+			
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
+			throw new EJBException(e);
+			
 		} catch (Exception e) {
 			logger.error(e);
 
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
-
 			throw new EJBException(e);
 		}
-
 	}
 
 	/**
