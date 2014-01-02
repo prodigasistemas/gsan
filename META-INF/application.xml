@@ -851,6 +851,10 @@
 	</module>
 	
 	<module>
+		<ejb>BatchCancelarGuiasPagamentoNaoPagas.jar</ejb>
+	</module>
+
+	<module>
 		<ejb>BatchProcessarPagamentosDiferencaDoisReaisMDB.jar</ejb>
 	</module>
 	

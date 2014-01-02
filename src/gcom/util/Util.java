@@ -6538,4 +6538,20 @@ public class Util {
 		// totalizando o tamanho máximo informado
 		return stringBuilder.toString();
 	}
+	
+	public static String converterDataSemBarraParaDataComBarraAnoSimples(String data) {
+		String retorno = "";
+
+		if (data != null && !data.equals("") && data.trim().length() == 6) {
+
+			retorno = data.substring(0, 2) 
+				+ "/" 
+				+ data.substring(2, 4) 
+				+ "/" 
+				+ data.substring(4, 6);
+
+		}
+
+		return retorno;
+	}	
 }

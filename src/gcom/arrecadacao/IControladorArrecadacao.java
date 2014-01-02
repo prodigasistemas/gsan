@@ -4437,6 +4437,13 @@ public interface IControladorArrecadacao {
 		public Collection pesquisarDadosRelatorioBIG(
 				Integer anoMesReferencia) throws ControladorException;
 		
+		public void atualizarGuiasPagamentoNaoPagasAtePeriodo(Integer idFuncionalidadeIniciada, Date dataVencimentoLimite, 
+				Integer financiamentoTipoServico, Integer idLocalidade) throws ControladorException;
+				
+		public Collection<Integer> pesquisarIdsLocalidadeComGuiasPagamentoNaoPagas(Date dataVencimentoLimite, 
+				Integer financiamentoTipoServico) throws ControladorException;
+		
 		public void processarPagamentosDiferencaDoisReais(Integer anoMesReferenciaArrecadacao, Localidade localidade, Integer idFuncionalidadeIniciada) throws Exception;
+
 }	
 

@@ -13,7 +13,7 @@
 				<param name="sequence">arrecadacao.seq_arrecadador_mov_item</param>
 			</generator>
 		</id>
-		<property name="conteudoRegistro" type="java.lang.String" column="amit_cnregistro" length="150"/>
+		<property name="conteudoRegistro" type="java.lang.String" column="amit_cnregistro" length="401"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="amit_tmultimaalteracao" length="8"/>
 		<property name="descricaoOcorrencia" type="java.lang.String" column="amit_dsocorrencia" length="70"/>
 		<property name="indicadorAceitacao" type="java.lang.Short" column="amit_icaceitacao" length="2"/>

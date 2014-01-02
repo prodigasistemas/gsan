@@ -1,3 +1,4 @@
+
 package gcom.arrecadacao.bean;
 
 import java.util.Date;

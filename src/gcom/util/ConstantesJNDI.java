@@ -603,6 +603,9 @@ public class ConstantesJNDI {
 
 	public static String BATCH_PROCESSAR_PAGAMENTOS_DIFERENCA_DOIS_REAIS = "";
 	
+	public static String BATCH_CANCELAR_GUIAS_PAGAMENTO_NAO_PAGAS = "";
+
+	
 	static {
 
 		inicializarPropriedades();
@@ -1344,6 +1347,8 @@ public class ConstantesJNDI {
 			BATCH_PROCESSAR_PAGAMENTOS_DIFERENCA_DOIS_REAIS = propriedades
 			.getProperty("QueueBatchProcessarPagamentosDiferencaDoisReaisMDB");
 			
+			BATCH_CANCELAR_GUIAS_PAGAMENTO_NAO_PAGAS = propriedades.getProperty("QueueBatchCancelarGuiasPagamentoNaoPagasMDB");
+
 			stream.close();
 
 		} catch (Exception ex) {
