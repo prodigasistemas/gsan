@@ -5,15 +5,15 @@ import gcom.util.ControladorException;
 
 public class RegistroFichaCompensacaoBuilder {
 
-	public RegistroFichaCompensacaoHeaderHelper getHeader(String linha, ArrecadadorContrato arrecadadorContrato) throws ControladorException{
+	public static RegistroFichaCompensacaoHeaderHelper getHeader(String linha, ArrecadadorContrato arrecadadorContrato) throws ControladorException{
 		return new RegistroFichaCompensacaoHeaderHelper(linha, arrecadadorContrato);
 	}
 	
-	public RegistroFichaCompensacaoTipo7Helper getTipo7(String linha) throws ControladorException{
+	public static RegistroFichaCompensacaoTipo7Helper getTipo7(String linha) throws ControladorException{
 		return new RegistroFichaCompensacaoTipo7Helper(linha);
 	}
 	
-	public RegistroFichaCompensacaoTrailerHelper getTrailer(String linha) throws ControladorException{
+	public static RegistroFichaCompensacaoTrailerHelper getTrailer(String linha) throws ControladorException{
 		return new RegistroFichaCompensacaoTrailerHelper(linha);
 	}
 }
