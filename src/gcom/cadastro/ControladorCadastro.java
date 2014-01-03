@@ -8000,10 +8000,10 @@ public class ControladorCadastro implements SessionBean {
 					String numeroCelpa = parserImovel.obterDadoParser(20).trim();
 					linha2.put("numeroCelpa", numeroCelpa);
 					
-					String numeroPontosUteis = parserImovel.obterDadoParser(3).trim();
+					String numeroPontosUteis = parserImovel.obterDadoParser(5).trim();
 					linha2.put("numeroPontosUteis", numeroPontosUteis);
 					
-					String numeroOcupantes = parserImovel.obterDadoParser(3).trim();
+					String numeroOcupantes = parserImovel.obterDadoParser(5).trim();
 					linha2.put("numeroOcupantes", numeroOcupantes);
 					
 					String tipoLogradouroImovel = parserImovel.obterDadoParser(2).trim();
@@ -8538,16 +8538,16 @@ public class ControladorCadastro implements SessionBean {
 		
 		//Pontos de utilização
 		if(imovel.getNumeroPontosUtilizacao()!= null){
-			arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, imovel.getNumeroPontosUtilizacao()+""));
+			arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(5, imovel.getNumeroPontosUtilizacao()+""));
 		}else{
-			arquivoTextoRegistroTipoImovel.append("000");
+			arquivoTextoRegistroTipoImovel.append("00000");
 		}
 		
 		//Número de moradores
 		if(imovel.getNumeroMorador() != null){
-			arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(3, imovel.getNumeroMorador()+""));
+			arquivoTextoRegistroTipoImovel.append(Util.adicionarZerosEsquedaNumero(5, imovel.getNumeroMorador()+""));
 		}else{
-			arquivoTextoRegistroTipoImovel.append("000");
+			arquivoTextoRegistroTipoImovel.append("00000");
 		}
 
 		// Descricao do Tipo do Logradouro
