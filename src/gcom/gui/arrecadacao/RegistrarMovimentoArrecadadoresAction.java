@@ -86,6 +86,7 @@ import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
+import gcom.util.ControladorException;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
@@ -406,6 +407,11 @@ public class RegistrarMovimentoArrecadadoresAction extends GcomAction {
 				throw new ActionServletException("atencao.importacao.nao_concluida");
 			}
 
+			montarPaginaSucesso(httpServletRequest,
+					"Movimento Arrecadadores Enviado para Processamento", 
+					"Voltar",
+					"/exibirRegistrarMovimentoArredadadoresAction.do");
+
 		} catch (IOException ex) {
 			throw new ActionServletException("erro.importacao.nao_concluida");
 
@@ -413,12 +419,8 @@ public class RegistrarMovimentoArrecadadoresAction extends GcomAction {
 			throw new ActionServletException("erro.importacao.nao_concluida");
 		} catch (FileUploadException e) {
 			throw new ActionServletException("erro.sistema", e);
-		}
+		} 
 
-		montarPaginaSucesso(httpServletRequest,
-			"Movimento Arrecadadores Enviado para Processamento", 
-			"Voltar",
-			"/exibirRegistrarMovimentoArredadadoresAction.do");
 
 		return retorno;
 	}

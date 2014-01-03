@@ -3585,7 +3585,7 @@ public class ControladorArrecadacao implements SessionBean {
 
         } catch (ControladorException e) {
 			sessionContext.setRollbackOnly();
-			throw e;
+			throw new ControladorException(e.getMessage());
 		} catch (Exception e) {            
             System.out.println( "Deu erro na linha: " + aux );
             e.printStackTrace();
