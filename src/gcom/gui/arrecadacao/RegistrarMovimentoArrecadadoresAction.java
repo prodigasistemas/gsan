@@ -79,6 +79,7 @@ import gcom.arrecadacao.Arrecadador;
 import gcom.arrecadacao.ArrecadadorContrato;
 import gcom.arrecadacao.FiltroArrecadador;
 import gcom.arrecadacao.FiltroArrecadadorContrato;
+import gcom.arrecadacao.bean.RegistroFichaCompensacaoBuilder;
 import gcom.arrecadacao.bean.RegistroHelperCodigoF;
 import gcom.arrecadacao.bean.RegistroHelperCodigoG;
 import gcom.arrecadacao.bean.RegistroHelperCodigoZ;
@@ -358,7 +359,9 @@ public class RegistrarMovimentoArrecadadoresAction extends GcomAction {
 			            			
 			            			ArrecadadorContrato arrecadadorContrato = (ArrecadadorContrato)Util.retonarObjetoDeColecao(colecaoArrecadadorContrato);
 			            			
-			                    	primeiraLinha = false;
+									RegistroFichaCompensacaoBuilder.getHeader(linhaLida, arrecadadorContrato);
+
+									primeiraLinha = false;
 			                    }
 			                    
                                 stringBuilderTxt.append(linhaLida);
@@ -419,7 +422,9 @@ public class RegistrarMovimentoArrecadadoresAction extends GcomAction {
 			throw new ActionServletException("erro.importacao.nao_concluida");
 		} catch (FileUploadException e) {
 			throw new ActionServletException("erro.sistema", e);
-		} 
+		} catch (ControladorException ce) {
+			throw new ActionServletException(ce.getMessage(), ce);
+		}
 
 
 		return retorno;

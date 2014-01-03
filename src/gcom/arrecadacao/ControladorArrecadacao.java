@@ -3165,8 +3165,6 @@ public class ControladorArrecadacao implements SessionBean {
                 
                 Integer numeroSequecialArquivoRetornoFichaComp = null;
                 
-                RegistroFichaCompensacaoBuilder fichaCompensacaoBuilder = new RegistroFichaCompensacaoBuilder();
-                
                 RegistroFichaCompensacaoHeaderHelper registroHeader = null;
                 RegistroFichaCompensacaoTipo7Helper registroTipo7 = null;
                 RegistroFichaCompensacaoTrailerHelper registroTrailer = null;
@@ -3190,7 +3188,7 @@ public class ControladorArrecadacao implements SessionBean {
                     if (primeiraLinha) {
                     	arrecadadorContrato = this.obterArrecadadorContrato(arrecadadorContrato.getId());
 
-                    	registroHeader = fichaCompensacaoBuilder.getHeader(linha, arrecadadorContrato);
+                    	registroHeader = RegistroFichaCompensacaoBuilder.getHeader(linha, arrecadadorContrato);
 
                     	if (registroHeader.getIdCodigoBanco() != null
                                 && registroHeader.getDataGravacao() != null) {
@@ -3227,7 +3225,7 @@ public class ControladorArrecadacao implements SessionBean {
                         } else {
                             verificaRegistro9 = true;
                             
-                            registroTrailer = fichaCompensacaoBuilder.getTrailer(linha);
+                            registroTrailer = RegistroFichaCompensacaoBuilder.getTrailer(linha);
 
                             if (registroTrailer.getTotalLinhas() != countRegistros) {
                                 throw new ControladorException("atencao.total.registros.invalido");
@@ -3257,7 +3255,7 @@ public class ControladorArrecadacao implements SessionBean {
                             	switch (codigoRegistroInteger) {
 
                             	case 7:
-                            		registroTipo7 = fichaCompensacaoBuilder.getTipo7(linhaRegistro);
+                            		registroTipo7 = RegistroFichaCompensacaoBuilder.getTipo7(linhaRegistro);
                             		dataValida = Util.validarDiaMesAnoSemBarraAnoSimples(registroTipo7.getDataLiquidacao());
                             		if (!dataValida) {
                             			descricaoOcorrenciaMovimento = "DATA DE DÉBITO/PAGAMENTO INVÁLIDA";
