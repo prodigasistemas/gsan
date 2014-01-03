@@ -10882,30 +10882,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.createQuery(consulta).setInteger("idConta", idConta)
 					.list()));
 
-			/**
-			 * alterado por pedro alexandre dia 23/01/2007
-			 */
-			/*
-			 * consulta = "select contaCategoria " + "from ContaCategoria
-			 * contaCategoria " + "inner join contaCategoria.comp_id.conta conta " +
-			 * "inner join contaCategoria.comp_id.categoria categoria " + "where
-			 * conta.id = :idConta " + "order by categoria.id";
-			 * 
-			 * Iterator iterator = session.createQuery(consulta).setInteger(
-			 * "idConta", idConta.intValue()).iterate();
-			 * 
-			 * while (iterator.hasNext()) { ContaCategoria contaCategoria =
-			 * (ContaCategoria) iterator .next(); // carrega todos os objetos
-			 * Hibernate
-			 * .initialize(contaCategoria.getComp_id().getCategoria());
-			 * 
-			 * retorno.add(contaCategoria); }
-			 */
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
