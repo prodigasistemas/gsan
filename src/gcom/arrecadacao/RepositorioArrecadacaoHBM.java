@@ -31518,7 +31518,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		}
 		
 		public void atualizarGuiasPagamentoNaoPagasAtePeriodo(Integer financiamentoTipoServico, 
-				Collection<Integer> idsGuiasPagamentoNaoPagas) throws ErroRepositorioException {
+				Collection<Integer> idsGuiasPagamentoNaoPagas, Integer anoMesReferencia) throws ErroRepositorioException {
 			Session session = HibernateUtil.getSession();
 			
 			StringBuilder sql = new StringBuilder();
@@ -31529,11 +31529,13 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	                    .append(" SET gpag.debitoCreditoSituacaoAnterior = gpag.debitoCreditoSituacaoAtual, ")
 	                    .append(" gpag.debitoCreditoSituacaoAtual = :situacaoCancelada, ")
 	                    .append(" gpag.ultimaAlteracao = :ultimaAlteracao ")
+	                    .append(" gpag.anoMesReferenciaContabil = :anoMesReferencia ")
 	                    .append(" WHERE gpag.id IN (:guiasPagamentoNaoPagasAtePeriodo)");
 					
 					 session.createQuery(sql.toString())
 						.setInteger("situacaoCancelada", DebitoCreditoSituacao.CANCELADA)
 						.setDate("ultimaAlteracao", new Date())
+						.setInteger("anoMesReferencia", anoMesReferencia)
 						.setParameterList("guiasPagamentoNaoPagasAtePeriodo", idsGuiasPagamentoNaoPagas)
 						.executeUpdate();
 				}
