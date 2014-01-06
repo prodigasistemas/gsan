@@ -665,7 +665,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 								StringBuilder dadosContaCategoria = null;
 
 								Collection<ContaCategoria> cContaCategoria = repositorioFaturamento.pesquisarContaCategoria(emitirContaHelper.getIdConta());
-
+								
 								// Caso tenha mais de uma categoria (misto)
 								if (cContaCategoria.size() > 1) {
 									dadosContaCategoria = obterDadosContaCategoriaMisto(cContaCategoria);
@@ -677,14 +677,9 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 										consumoMinimo = contaCategoria.getConsumoMinimoAgua();
 
-										if (consumoMinimo == null) {
+										if (consumoMinimo == null || consumoMinimo == 0) {
 											consumoMinimo = contaCategoria.getConsumoMinimoEsgoto();
 										}
-
-										/*
-										 * consumoMinimo = emitirContaHelper
-										 * .getConsumoAgua();
-										 */
 
 										valorMinimo = emitirContaHelper.getValorAgua();
 
@@ -732,16 +727,11 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 									}
 
 									if (consumoMinimo != null && consumoMinimo == 0) {
-										// Collection cContaCategoria =
-										// repositorioFaturamento
-										// .pesquisarContaCategoria(emitirContaHelper
-										// .getIdConta());
-
 										ContaCategoria contaCategoria = (ContaCategoria) cContaCategoria.iterator().next();
-
+										
 										consumoMinimo = contaCategoria.getConsumoMinimoAgua();
 
-										if (consumoMinimo == null) {
+										if (consumoMinimo == null || consumoMinimo == 0) {
 											consumoMinimo = contaCategoria.getConsumoMinimoEsgoto();
 										}
 									}
@@ -1675,14 +1665,16 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 		} catch (BaseRuntimeException e) {
 			logger.error(e.getMessage(), e);
+			
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
+			throw new EJBException(e);
+			
 		} catch (Exception e) {
 			logger.error(e);
 
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
-
 			throw new EJBException(e);
 		}
-
 	}
 
 	/**

@@ -79,6 +79,7 @@ import gcom.arrecadacao.Arrecadador;
 import gcom.arrecadacao.ArrecadadorContrato;
 import gcom.arrecadacao.FiltroArrecadador;
 import gcom.arrecadacao.FiltroArrecadadorContrato;
+import gcom.arrecadacao.bean.RegistroFichaCompensacaoBuilder;
 import gcom.arrecadacao.bean.RegistroHelperCodigoF;
 import gcom.arrecadacao.bean.RegistroHelperCodigoG;
 import gcom.arrecadacao.bean.RegistroHelperCodigoZ;
@@ -86,6 +87,7 @@ import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
+import gcom.util.ControladorException;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
@@ -357,7 +359,9 @@ public class RegistrarMovimentoArrecadadoresAction extends GcomAction {
 			            			
 			            			ArrecadadorContrato arrecadadorContrato = (ArrecadadorContrato)Util.retonarObjetoDeColecao(colecaoArrecadadorContrato);
 			            			
-			                    	primeiraLinha = false;
+									RegistroFichaCompensacaoBuilder.getHeader(linhaLida, arrecadadorContrato);
+
+									primeiraLinha = false;
 			                    }
 			                    
                                 stringBuilderTxt.append(linhaLida);
@@ -406,6 +410,11 @@ public class RegistrarMovimentoArrecadadoresAction extends GcomAction {
 				throw new ActionServletException("atencao.importacao.nao_concluida");
 			}
 
+			montarPaginaSucesso(httpServletRequest,
+					"Movimento Arrecadadores Enviado para Processamento", 
+					"Voltar",
+					"/exibirRegistrarMovimentoArredadadoresAction.do");
+
 		} catch (IOException ex) {
 			throw new ActionServletException("erro.importacao.nao_concluida");
 
@@ -413,12 +422,10 @@ public class RegistrarMovimentoArrecadadoresAction extends GcomAction {
 			throw new ActionServletException("erro.importacao.nao_concluida");
 		} catch (FileUploadException e) {
 			throw new ActionServletException("erro.sistema", e);
+		} catch (ControladorException ce) {
+			throw new ActionServletException(ce.getMessage(), ce);
 		}
 
-		montarPaginaSucesso(httpServletRequest,
-			"Movimento Arrecadadores Enviado para Processamento", 
-			"Voltar",
-			"/exibirRegistrarMovimentoArredadadoresAction.do");
 
 		return retorno;
 	}

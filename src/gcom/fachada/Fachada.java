@@ -483,6 +483,7 @@ import gcom.gerencial.faturamento.bean.FiltrarResumoDadosCasHelper;
 import gcom.gerencial.micromedicao.ControladorGerencialMicromedicaoLocal;
 import gcom.gerencial.micromedicao.ControladorGerencialMicromedicaoLocalHome;
 import gcom.gui.atendimentopublico.registroatendimento.FiltrarAcompanhamentoRegistroAtendimentoHelper;
+import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionHelper;
 import gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoEmitirOSHelper;
 import gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoEncerrarOSHelper;
 import gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoGerarOSHelper;
@@ -40209,11 +40210,9 @@ public class Fachada {
 	 * @throws ErroRepositorioException
 	 */
 	public Collection<ConsultarMovimentoAtualizacaoCadastralHelper> pesquisarMovimentoAtualizacaoCadastral(
-			String idArquivoTxt, String idEmpresa, String idLeiturista, String exibirCampos, Collection colunaImoveisSelecionados) {
+			FiltrarAlteracaoAtualizacaoCadastralActionHelper helper) {
 		try {
-			return this.getControladorTransacao()
-					.pesquisarMovimentoAtualizacaoCadastral(idArquivoTxt,
-							idEmpresa, idLeiturista, exibirCampos, colunaImoveisSelecionados);
+			return this.getControladorTransacao().pesquisarMovimentoAtualizacaoCadastral(helper);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex
 					.getParametroMensagem());
