@@ -1289,15 +1289,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        				 }
 	        				 
 	        				 // verifica se o valor crédito é maior que o valor da
-	        				 // conta
-	        				 // caso seja chamar atualizar os creditos a realizar e
+	        				 // conta caso seja chamar atualizar os creditos a realizar e
 	        				 // os creditos realizados
-	        				 BigDecimal valorTotalContaSemCreditos = valorAgua
-	        				 .add(valorEsgoto);
-	        				 valorTotalContaSemCreditos = valorTotalContaSemCreditos
-	        				 .add(contaAtualizacao.getDebitos());
-	        				 valorTotalContaSemCreditos = valorTotalContaSemCreditos
-	        				 .subtract(valorImposto);
+	        				 BigDecimal valorTotalContaSemCreditos = valorAgua.add(valorEsgoto);
+	        				 valorTotalContaSemCreditos = valorTotalContaSemCreditos.add(contaAtualizacao.getDebitos());
+	        				 valorTotalContaSemCreditos = valorTotalContaSemCreditos.subtract(valorImposto);
 	        				 
 	        				 /** TODO:COSANPA
 	        				  * Bônus social 
@@ -1338,40 +1334,34 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        					 }
 	        				 }
 	        				 
-	        				 BigDecimal valorCreditos = contaAtualizacao
-	        				 .getValorCreditos();
+	        				 BigDecimal valorCreditos = contaAtualizacao.getValorCreditos();
 	        				 
 	        				 Collection indicadorRetransmissaoColecao = repositorioFaturamento.pesquisaIndicadorRetransmissaoMovimentoContaPF(contaAtualizacao.getImovel().getId(),
-				            		 helper.getFaturamentoGrupo().getAnoMesReferencia());
-				            Integer indicadorRetransmissao = null;
-				           if(!indicadorRetransmissaoColecao.isEmpty()) {
-				        	   Iterator indicadorIterator = indicadorRetransmissaoColecao.iterator();
-				        	   indicadorRetransmissao = (Integer) indicadorIterator.next();
-				           }
+	        						 helper.getFaturamentoGrupo().getAnoMesReferencia());
+	        				 Integer indicadorRetransmissao = null;
+	        				 if(!indicadorRetransmissaoColecao.isEmpty()) {
+	        					 Iterator indicadorIterator = indicadorRetransmissaoColecao.iterator();
+	        					 indicadorRetransmissao = (Integer) indicadorIterator.next();
+	        				 }
 				           
 	        				 if (valorCreditos.compareTo(valorTotalContaSemCreditos) == 1) {
 	        					 Imovel imovel = contaAtualizacao.getImovel();
-					            	BigDecimal valorTotalCreditos = this.atualizarCreditoResidual(imovel,
-					            		contaAtualizacao
-	        							 .getId(), helper
-	        							 .getFaturamentoGrupo()
-	        							 .getAnoMesReferencia(),
+	        					 BigDecimal valorTotalCreditos = this.atualizarCreditoResidual(imovel,
+	        							 contaAtualizacao.getId(), helper.getFaturamentoGrupo().getAnoMesReferencia(),
 	        							 valorTotalContaSemCreditos);
-	        					 contaAtualizacao
-	        					 .setValorCreditos(valorTotalCreditos);
-	        					 
+	        					 contaAtualizacao.setValorCreditos(valorTotalCreditos);
 	        					 /**TODO: COSANPA
-					            	 * Autor: Wellington Rocha
-					            	 * Data: 30/08/2011
-					            	 * 
-					            	 * Caso a conta seja retransmitida o valor do crédito residual 
-					            	 * não será atualizado novamente.
-					            	 */
+	        					  * Autor: Wellington Rocha
+	        					  * Data: 30/08/2011
+	        					  * 
+	        					  * Caso a conta seja retransmitida o valor do crédito residual 
+	        					  * não será atualizado novamente.
+	        					  */
 	        				 }else if( (indicadorRetransmissao != null 
-					            		/* 2 é igual a não*/
-					            		&& indicadorRetransmissao.equals(2)) 
-					            		&& (valorCreditos.compareTo(valorTotalContaSemCreditos)==0 
-					            		|| valorCreditos.compareTo(valorTotalContaSemCreditos)== -1 )){
+	        						 && indicadorRetransmissao.equals(2)) 
+	        						 && (valorCreditos.compareTo(valorTotalContaSemCreditos)==0 
+	        						 || valorCreditos.compareTo(valorTotalContaSemCreditos)== -1 )){
+
 					            	/**TODO:COSANPA
 					            	 * Autor: Adriana Muniz
 					            	 * Data: 09/08/2011
@@ -1382,25 +1372,22 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					            	 * */
 					            	//consulta todos os créditos com valor residual diferente de zero
 					            	Collection colecaoCreditosARealizar = repositorioFaturamento
-					            		.buscarCreditoARelizarPorImovel(contaAtualizacao.getImovel().getId());
+					            		.buscarCreditoARealizarPorImovelValorResidualDiferenteZero(contaAtualizacao.getImovel().getId());
 					            	
 					            	if(!colecaoCreditosARealizar.isEmpty() && colecaoCreditosARealizar != null) {
-					            		
+
 					            		Iterator creditoIterator = colecaoCreditosARealizar.iterator();
-					            		
+
 					            		while(creditoIterator.hasNext()) {
 					            			CreditoARealizar credito = (CreditoARealizar)creditoIterator.next();
-					            			
+
 					            			credito.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
-					            			
-					            			// atualiza o credito a realizar
-											repositorioFaturamento.atualizarCreditoARealizar(credito);
+
+					            			repositorioFaturamento.atualizarCreditoARealizar(credito);
 					            		}
 					            	}
 	        				 }
 	        				 
-	        				 // this.getControladorUtil().atualizar( contaAtualizacao
-	        				 // );
 	        				 try {
 	        					 repositorioFaturamento
 	        					 .atualizarContaProcessoMOBILE(contaAtualizacao);
@@ -7651,186 +7638,292 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	private BigDecimal atualizarCreditoResidual(Imovel imovel, Integer idConta,
 			Integer anoMesFaturamento, BigDecimal valorTotalContaSemCredito)
 			throws ControladorException {
-
 		// Acumula o valor do crédito
 		BigDecimal valorTotalCreditos = BigDecimal.ZERO;
-
-//		System.out.println("Atualizar valor residual. Id imóvel: " + imovel != null ? imovel.getId():"");
 		
-		try {
-			Collection colecaoCreditoRealizado = repositorioFaturamento
-					.pesquisarCreditosRealizados(idConta);
+		try{
+		Collection colecaoCreditoRealizado = repositorioFaturamento.pesquisarCreditosRealizados(idConta);
+		
+	//	System.out.println("Atualizar valor residual. Id imóvel: " + imovel != null ? imovel.getId():"");
+		
+		/**TODO:COSANPA
+		 * Autor: Adriana Muniz
+		 * Data: 20/07/2011
+		 * 
+		 * Alteração para atender créditos com uma prestação
+		 * */
+		List<Integer> idCreditosARealizarVerificados = new ArrayList<Integer>();
+		
+		/*
+		 * Caso a coleção de creditos a realizar não esteja vazia 
+		 */
+		if (colecaoCreditoRealizado != null && !colecaoCreditoRealizado.isEmpty()) {
 
-			/*
-			 * Caso a coleção de creditos a realizar não esteja vazia
-			 */
-			if (colecaoCreditoRealizado != null
-					&& !colecaoCreditoRealizado.isEmpty()) {
+			Iterator iteratorColecaoCreditosRealizados = colecaoCreditoRealizado
+			.iterator();
+			
+			boolean deletaCreditoRealizado = false;
+			
+			CreditoRealizado creditoRealizado = null;
+			
+			BigDecimal valorTotalACobrar = valorTotalContaSemCredito;
+			
+			while (iteratorColecaoCreditosRealizados.hasNext()){
+				creditoRealizado = (CreditoRealizado) iteratorColecaoCreditosRealizados
+				.next();
+				
+				BigDecimal valorCreditoRealizado = creditoRealizado.getValorCredito().
+				                  multiply(new BigDecimal(creditoRealizado.getNumeroPrestacao()+""));
+				
+				// Pesquisa os créditos a realizar do imóvel
+				Collection colecaoCreditosARealizar = this
+						.obterCreditoARealizarDadosCreditoRealizadoAntigo(imovel.getId(),
+						creditoRealizado.getCreditoTipo().getId(),
+						valorCreditoRealizado,
+						DebitoCreditoSituacao.NORMAL, anoMesFaturamento, 
+						creditoRealizado.getAnoMesReferenciaCredito(), 
+						creditoRealizado.getAnoMesCobrancaCredito());
+				
+				
+				/*
+				 * Caso a coleção de creditos a realizar não esteja vazia 
+				 */
+				if (colecaoCreditosARealizar != null && !colecaoCreditosARealizar.isEmpty()) {
+					
+					Iterator iteratorColecaoCreditosARealizar = colecaoCreditosARealizar
+					.iterator();
 
-				Iterator iteratorColecaoCreditosRealizados = colecaoCreditoRealizado
-						.iterator();
-
-				boolean deletaCreditoRealizado = false;
-
-				CreditoRealizado creditoRealizado = null;
-
-				BigDecimal valorTotalACobrar = valorTotalContaSemCredito;
-
-				while (iteratorColecaoCreditosRealizados.hasNext()) {
-					creditoRealizado = (CreditoRealizado) iteratorColecaoCreditosRealizados
-							.next();
-
-					// Pesquisa os créditos a realizar do imóvel
-					Collection colecaoCreditosARealizar = this
-							.obterCreditoARealizarDadosCreditoRealizado(
-									creditoRealizado.getCreditoARealizarGeral()
-											.getId(), anoMesFaturamento);
+					CreditoARealizar creditoARealizar = null;
 
 					/*
-					 * Caso a coleção de creditos a realizar não esteja vazia
+					 * Para cada crédito a realizar selecionado e até que o valor
+					 * total a cobrar seja igual a zero.
+					 * 
+					 * LAÇO PARA GERAR OS CREDITOS REALIZADOS
 					 */
-						if (colecaoCreditosARealizar != null
-								&& !colecaoCreditosARealizar.isEmpty()) {
-
-						Iterator iteratorColecaoCreditosARealizar = colecaoCreditosARealizar
-								.iterator();
-
-						CreditoARealizar creditoARealizar = null;
-
-						/*
-						 * Para cada crédito a realizar selecionado e até que o
-						 * valor total a cobrar seja igual a zero.
-						 * 
-						 * LAÇO PARA GERAR OS CREDITOS REALIZADOS
-						 */
 						while (iteratorColecaoCreditosARealizar.hasNext()) {
 
 							creditoARealizar = (CreditoARealizar) iteratorColecaoCreditosARealizar
 									.next();
 
-							if (!deletaCreditoRealizado) {
+							if (!idCreditosARealizarVerificados.contains(creditoARealizar.getId())) {
+								idCreditosARealizarVerificados.add(creditoARealizar.getId());
 
-								BigDecimal valorCredito = ConstantesSistema.VALOR_ZERO;
+								if (!deletaCreditoRealizado || idCreditosARealizarVerificados.contains(creditoARealizar.getId())) {
 
-								valorCredito = creditoRealizado
-										.getValorCredito();
+									BigDecimal valorCorrespondenteParcelaMes = ConstantesSistema.VALOR_ZERO;
+									BigDecimal valorCredito = ConstantesSistema.VALOR_ZERO;
+									BigDecimal valorConta = ConstantesSistema.VALOR_ZERO;
 
-								// Retira o valor de credito do valor total a
-								// cobrar
-								valorTotalACobrar = valorTotalACobrar
-										.subtract(valorCredito);
+									/**
+									 * TODO:COSANPA 
+									 * Data: 01/07/2011
+									 * autor: Adriana Muniz
+									 * 
+									 * Alteração para atender casos de créditos com apenas uma prestação e
+									 * que são consumidos conforme o valor da conta a ate ser concedido totalmente
+									 * */
 
-								/*
-								 * Caso o valor total a cobrar seja menor que
-								 * zero o valor residual do mês anterior vai ser
-								 * igual a valor total a cobrar vezes -1(menos
-								 * um) e o valor do crédito vai ser igual ao
-								 * valor do crédito menos valor residual do mês
-								 * anterior.
-								 * 
-								 * Valor Total A Cobrar = 0.00
-								 * 
-								 * Caso contrário o valor residual do mês
-								 * anterior vai ser iguala zero.
-								 */
-								if (valorTotalACobrar
-										.compareTo(ConstantesSistema.VALOR_ZERO) == -1) {
+									if (creditoARealizar.getNumeroPrestacaoCredito() == 1) {
+										BigDecimal valorResidual = ConstantesSistema.VALOR_ZERO;
+										
+										if (valorTotalCreditos.compareTo(valorTotalContaSemCredito) == -1) {
+											
+											if (creditoARealizar.getValorResidualMesAnterior().compareTo(ConstantesSistema.VALOR_ZERO) == 0) {
+												valorConta = valorTotalACobrar;
+												valorTotalACobrar = valorTotalACobrar.subtract(creditoARealizar.getValorCredito());
+												valorResidual = creditoARealizar.getValorCredito();
+											} else {
+												valorConta = valorTotalACobrar;
+												valorTotalACobrar = valorTotalACobrar.subtract(creditoARealizar.getValorResidualMesAnterior());
+												valorResidual = creditoARealizar.getValorResidualMesAnterior();
+											}
+											BigDecimal valorCreditoConcedido = ConstantesSistema.VALOR_ZERO;
+											// valorCredito = creditoARealizar.getValorCredito();
 
-									creditoARealizar
-											.setValorResidualMesAnterior(valorTotalACobrar
-													.multiply(new BigDecimal(
-															"-1")));
+											if (valorTotalACobrar.compareTo(ConstantesSistema.VALOR_ZERO) == -1) {
 
-									valorCredito = valorCredito
-											.subtract(creditoARealizar
-													.getValorResidualMesAnterior());
+												creditoARealizar.setValorResidualMesAnterior(valorTotalACobrar
+																.multiply(new BigDecimal(
+																		"-1")));
 
-									valorTotalACobrar = ConstantesSistema.VALOR_ZERO;
+												valorCreditoConcedido = valorResidual.subtract(creditoARealizar
+																.getValorResidualMesAnterior());
 
-									// atualiza o credito a realizar
-									repositorioFaturamento
-											.atualizarCreditoARealizar(creditoARealizar);
+												/**TODO:COSANPA
+												 * @author Adriana Muniz e Wellington Rocha
+												 * @date 30/08/2012
+												 * Atualização da data da ultima alteração do credito realizado
+												 * e atualização do credito realizado categoria
+												 */
+												// atualiza o credito realizado
+												creditoRealizado.setValorCredito(valorCreditoConcedido);
+												creditoRealizado.setUltimaAlteracao(new Date());
+												getControladorUtil().atualizar(creditoRealizado);
+												
+												//atualiza o credito realizado categoria
+												this.atualizarCreditoRealizadoCategoria(creditoARealizar,creditoRealizado);
 
-									// atualiza o credito realizado
-									creditoRealizado
-											.setValorCredito(valorCredito);
-									getControladorUtil().atualizar(
-											creditoRealizado);
+												// atualiza o credito a realizar
+												repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
 
-									// Pesquisa os créditos a realizar categoria
-									Collection colecaoCreditoARealizarCategoria = this
-											.obterCreditoRealizarCategoria(creditoARealizar
-													.getId());
+												// Acumula o valor do crédito
+												valorTotalCreditos = valorTotalCreditos.add(valorCreditoConcedido);
 
-									Iterator colecaoCreditoARealizarCategoriaIterator = colecaoCreditoARealizarCategoria
-											.iterator();
+												if (valorTotalCreditos.compareTo(valorTotalContaSemCredito) == 0) {
+													valorTotalACobrar = ConstantesSistema.VALOR_ZERO;
+										
+												}
+											} else {
+												BigDecimal valorConcedido = valorConta.subtract(valorTotalACobrar);
+												
+												if(valorConcedido.compareTo(ConstantesSistema.VALOR_ZERO) == -1)
+													valorConcedido = valorConcedido.multiply(new BigDecimal("-1"));
 
-									// Crédito a realizar categoria
-									CreditoARealizarCategoria creditoARealizarCategoria = null;
+												if(valorConcedido.compareTo(valorConta) == -1)
+													creditoARealizar.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
+												else {
+													if(valorResidual.compareTo(ConstantesSistema.VALOR_ZERO) == 0)
+														creditoARealizar.setValorResidualMesAnterior(
+																creditoARealizar.getValorCredito().subtract(valorConcedido));
+													else
+														creditoARealizar.setValorResidualMesAnterior(
+																valorResidual.subtract(valorConcedido));
+															
+												}
+												
+												repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
+												// Acumula o valor do crédito
+												valorTotalCreditos = valorTotalCreditos.add(valorConcedido);
+												
+												/**TODO:COSANPA
+												 * @author Adriana Muniz e Wellington Rocha
+												 * @date 30/08/2012
+												 * Atualização da data da ultima alteração do credito realizado
+												 * e atualização do credito realizado categoria
+												 */
+												// atualiza o credito realizado
+												creditoRealizado.setValorCredito(valorConcedido);
+												creditoRealizado.setUltimaAlteracao(new Date());
+												getControladorUtil().atualizar(creditoRealizado);
+												
+												//atualiza o credito realizado categoria
+												this.atualizarCreditoRealizadoCategoria(creditoARealizar,creditoRealizado);
+												
+												//Acrescentado no dia 26/08/2011
+												if (valorTotalCreditos.compareTo(valorTotalContaSemCredito) == 0) {
+													valorTotalACobrar = ConstantesSistema.VALOR_ZERO;
+													
+												}
+											}
 
-									Collection colecaoCategoriasObterValor = new ArrayList();
+										} else {
+											creditoARealizar.setValorResidualMesAnterior(creditoARealizar.getValorCredito());
+											// atualiza o credito a realizar
+											repositorioFaturamento.atualizarCreditoARealizar(creditoARealizar);
+										}
+									} else {
 
-									// Laço para recuperar as categorias do
-									// crédito
-									// a
-									// realizar
-									while (colecaoCreditoARealizarCategoriaIterator
-											.hasNext()) {
-										creditoARealizarCategoria = (CreditoARealizarCategoria) colecaoCreditoARealizarCategoriaIterator
-												.next();
+										int numeroPrestacoesRealizadas = creditoARealizar.getNumeroPrestacaoRealizada()
+												.intValue() - 1;
 
-										Categoria categoria = new Categoria();
-										categoria
-												.setId(creditoARealizarCategoria
-														.getCategoria().getId());
-										categoria
-												.setQuantidadeEconomiasCategoria(creditoARealizarCategoria
-														.getQuantidadeEconomia());
-										colecaoCategoriasObterValor
-												.add(categoria);
+										Short numeroParcelaBonus = 0;
+										if (creditoARealizar.getNumeroParcelaBonus() != null) {
+											numeroParcelaBonus = creditoARealizar.getNumeroParcelaBonus();
+										}
+
+										if (numeroPrestacoesRealizadas < (creditoARealizar.getNumeroPrestacaoCredito()
+												.intValue() - numeroParcelaBonus.intValue())) {
+
+											valorCorrespondenteParcelaMes = creditoARealizar.getValorCredito()
+													.divide(new BigDecimal(creditoARealizar.getNumeroPrestacaoCredito()),
+															2,BigDecimal.ROUND_HALF_UP);
+
+											if (numeroPrestacoesRealizadas == ((creditoARealizar
+													.getNumeroPrestacaoCredito()
+													.intValue() - numeroParcelaBonus
+													.intValue()) - 1)) {
+
+
+												BigDecimal valorMesVezesPrestacaoCredito = valorCorrespondenteParcelaMes
+														.multiply(
+																new BigDecimal(
+																		creditoARealizar
+																				.getNumeroPrestacaoCredito()))
+														.setScale(2);
+
+												BigDecimal parte11 = valorCorrespondenteParcelaMes
+														.add(creditoARealizar
+																.getValorCredito());
+
+												BigDecimal parte22 = parte11
+														.subtract(valorMesVezesPrestacaoCredito);
+
+												valorCorrespondenteParcelaMes = parte22;
+											}
+
+										}
+
+										valorCredito = valorCorrespondenteParcelaMes
+												.add(creditoARealizar
+														.getValorResidualMesAnterior());
+
+										valorTotalACobrar = valorTotalACobrar
+												.subtract(valorCredito);
+
+										if (valorTotalACobrar
+												.compareTo(ConstantesSistema.VALOR_ZERO) == -1) {
+
+											creditoARealizar
+													.setValorResidualMesAnterior(valorTotalACobrar
+															.multiply(new BigDecimal(
+																	"-1")));
+
+											valorCredito = valorCredito
+													.subtract(creditoARealizar
+															.getValorResidualMesAnterior());
+
+											valorTotalACobrar = ConstantesSistema.VALOR_ZERO;
+
+											// atualiza o credito a realizar
+											repositorioFaturamento
+													.atualizarCreditoARealizar(creditoARealizar);
+											
+											/**TODO:COSANPA
+											 * @author Adriana Muniz e Wellington Rocha
+											 * @date 30/08/2012
+											 * Atualização da data da ultima alteração do credito realizado
+											 * e atualização do credito realizado categoria
+											 */
+											// atualiza o credito realizado
+											creditoRealizado.setValorCredito(valorCredito);
+											creditoRealizado.setUltimaAlteracao(new Date());
+											getControladorUtil().atualizar(creditoRealizado);
+											
+											//atualiza o credito realizado categoria
+											this.atualizarCreditoRealizadoCategoria(creditoARealizar,creditoRealizado);
+											
+										} else {
+											creditoARealizar
+													.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
+											repositorioFaturamento
+													.atualizarCreditoARealizar(creditoARealizar);
+										}
+
+										// Acumula o valor do crédito
+										valorTotalCreditos = valorTotalCreditos
+												.add(valorCredito);
+									
 									}
 
-									// Obter os valores das categorias por
-									// categoria
-									// do
-									// credito a realizar categoria
-									Collection colecaoCategoriasCalculadasValor = getControladorImovel()
-											.obterValorPorCategoria(
-													colecaoCategoriasObterValor,
-													valorCredito);
-
-									repositorioFaturamento
-											.atualizarValorCreditoRealizadoCategoria(
-													creditoRealizado.getId(),
-													colecaoCategoriasObterValor,
-													colecaoCategoriasCalculadasValor);
-
 								} else {
-									creditoARealizar
-											.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
-									repositorioFaturamento
-											.atualizarCreditoARealizar(creditoARealizar);
-								}
+									// atualiza o credito a realizar
 
-								// Acumula o valor do crédito
-								valorTotalCreditos = valorTotalCreditos
-										.add(valorCredito);
-
-							} else {
-								// atualiza o credito a realizar
-								// caso o crédito residual consedido no mês seja
-								// diferente de nulo e seja maior que zero
-								if (creditoARealizar
-										.getValorResidualConcedidoMes() != null
-										&& creditoARealizar
-												.getValorResidualConcedidoMes()
-												.compareTo(BigDecimal.ZERO) > 0) {
-									// atualiza o valor residual anterior
-									creditoARealizar
-											.setValorResidualMesAnterior(creditoARealizar
-													.getValorResidualConcedidoMes());
-								} else {
-
+									/**TODO:COSANPA
+									 * 
+									 * Para não subtrair a prestação do crédito, caso o credito seja apenas de uma parcela
+									 * */
+									if (creditoARealizar.getNumeroPrestacaoCredito() != 1) {
 									// Atualiza o nº de prestações realizadas
 									creditoARealizar
 											.setNumeroPrestacaoRealizada(new Short(
@@ -7838,47 +7931,201 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 															.getNumeroPrestacaoRealizada()
 															.intValue() - 1)
 															+ ""));
-
+									}
 									// anoMes da prestação será o anaMes de
 									// referência da conta
 									creditoARealizar
 											.setAnoMesReferenciaPrestacao(null);
+
+									repositorioFaturamento
+											.atualizarCreditoARealizar(creditoARealizar);
 								}
-
-								repositorioFaturamento
-										.atualizarCreditoARealizar(creditoARealizar);
-							}
-
+								
+							}// fim laço que verifica se o credito a realizar já foi analisado
+							
 						}// fim laço de credito a realizar
+				}
+						
+				if (deletaCreditoRealizado) {
+				 // deleta o credito realizado categoria
+				 repositorioFaturamento.deletarCreditoRealizadoCategoria(creditoRealizado.getId());
 
-					}
+				 // deleta o credito realizado
+				 getControladorBatch().removerObjetoParaBatchSemTransacao(creditoRealizado);
+				}
 
-					if (deletaCreditoRealizado) {
-						// deleta o credito realizado categoria
-						repositorioFaturamento
-								.deletarCreditoRealizadoCategoria(creditoRealizado
-										.getId());
-
-						// deleta o credito realizado
-						getControladorBatch()
-								.removerObjetoParaBatchSemTransacao(
-										creditoRealizado);
-					}
-
-					if (valorTotalACobrar
-							.compareTo(ConstantesSistema.VALOR_ZERO) == 0) {
-						deletaCreditoRealizado = true;
-					}
+				if (valorTotalACobrar
+						.compareTo(ConstantesSistema.VALOR_ZERO) == 0) {
+					deletaCreditoRealizado = true;
 				}
 			}
-
+		}
+		
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
-
+		
 		return valorTotalCreditos;
 	}
+	
+	public Collection obterCreditoARealizarDadosCreditoRealizadoAntigo(Integer imovelId,
+            Integer idCreditoTipo, BigDecimal valorCredito,Integer debitoCreditoSituacaoAtualId,
+            Integer anoMesFaturamento, Integer amReferenciaCredito, Integer amCobrancaCredito)
+            throws ControladorException {
+
+        // lista de credito a realizar
+        Collection creditosARealizar = null;
+        Collection colecaoCreditosARealizar = null;
+        // Pesquisa créditos a cobrar
+        try {
+            colecaoCreditosARealizar = repositorioFaturamento
+                    .pesquisarCreditoARealizarPeloCreditoRealizadoAntigo(imovelId,
+                            idCreditoTipo,valorCredito,debitoCreditoSituacaoAtualId,
+                            anoMesFaturamento);
+
+        } catch (ErroRepositorioException ex) {
+            sessionContext.setRollbackOnly();
+            throw new ControladorException("erro.sistema", ex);
+        }
+
+        // Verifica se existe débitos a realizar
+        if (colecaoCreditosARealizar != null && !colecaoCreditosARealizar.isEmpty()) {
+
+            creditosARealizar = new ArrayList();
+
+            Iterator iteratorColecaoCreditosARealizar = colecaoCreditosARealizar.iterator();
+            CreditoARealizar creditoARealizar = null;
+            while (iteratorColecaoCreditosARealizar.hasNext()) {
+
+                Object[] arrayCreditosACobrar = (Object[]) iteratorColecaoCreditosARealizar.next();
+                
+                /**TODO: COSANPA
+                 * Autor: Adriana Muniz
+                 * Data: 01/09/2011
+                 * 
+                 * Adição de verificação da referencia do credito e da cobrança, visando com isso
+                 * trazer o credito a realizar referente ao credito realizado
+                 * */
+                //selecionar o crédito a partir da referência do credito e da cobrança
+                Integer referenciaCredito = (Integer)arrayCreditosACobrar[13];
+                Integer cobrancacredito = (Integer)arrayCreditosACobrar[14];
+                if(referenciaCredito.equals(amReferenciaCredito) &&
+                		cobrancacredito.equals(amCobrancaCredito)) {
+
+                	creditoARealizar = new CreditoARealizar();
+                	// id do Credito a Realizar - Item 0
+                	if (arrayCreditosACobrar[0] != null) {
+                		creditoARealizar.setId((Integer) arrayCreditosACobrar[0]);
+                	}
+
+                	// numero de prestacoes realizadas - item 1
+                	if (arrayCreditosACobrar[1] != null) {
+                		creditoARealizar.setNumeroPrestacaoRealizada((Short) arrayCreditosACobrar[1]);
+                	}
+
+                	// numero de prestacoes credito - item 2
+                	if (arrayCreditosACobrar[2] != null) {
+                		creditoARealizar.setNumeroPrestacaoCredito((Short) arrayCreditosACobrar[2]);
+
+                	}
+
+                	// valor de credito - item 3
+                	if (arrayCreditosACobrar[3] != null) {
+                		creditoARealizar.setValorCredito((BigDecimal) arrayCreditosACobrar[3]);
+
+                	}
+
+                	// valor residual mes anterior - item 4
+                	if (arrayCreditosACobrar[4] != null) {
+                		creditoARealizar.setValorResidualMesAnterior((BigDecimal) arrayCreditosACobrar[4]);
+                	}
+
+                	// credito tipo - item 5
+                	if (arrayCreditosACobrar[5] != null) {
+                		CreditoTipo creditoTipo = new CreditoTipo();
+                		creditoTipo.setId((Integer) arrayCreditosACobrar[5]);
+                		creditoARealizar.setCreditoTipo(creditoTipo);
+
+                	}
+
+                	// lancamento item contabil - item 6
+                	if (arrayCreditosACobrar[6] != null) {
+                		LancamentoItemContabil lancamentoItemContabil = new LancamentoItemContabil();
+                		lancamentoItemContabil.setId((Integer) arrayCreditosACobrar[6]);
+                		creditoARealizar.setLancamentoItemContabil(lancamentoItemContabil);
+                	}
+
+                	// lancamento - item 7
+                	if (arrayCreditosACobrar[7] != null) {
+                		Localidade localidade = new Localidade();
+                		localidade.setId((Integer) arrayCreditosACobrar[7]);
+                		creditoARealizar.setLocalidade(localidade);
+                	}
+
+                	// quadra - item 8
+                	if (arrayCreditosACobrar[8] != null) {
+                		Quadra quadra = new Quadra();
+                		quadra.setId((Integer) arrayCreditosACobrar[8]);
+                		creditoARealizar.setQuadra(quadra);
+                	}
+
+                	// codigo setor comercial - item 9
+                	if (arrayCreditosACobrar[9] != null) {
+                		creditoARealizar.setCodigoSetorComercial((Integer) arrayCreditosACobrar[9]);
+                	}
+
+                	// numero quadra - item 10
+                	if (arrayCreditosACobrar[10] != null) {
+                		creditoARealizar.setNumeroQuadra((Integer) arrayCreditosACobrar[10]);
+                	}
+
+                	// numero lote - item 11
+                	if (arrayCreditosACobrar[11] != null) {
+                		creditoARealizar.setNumeroLote((Short) arrayCreditosACobrar[11]);
+                	}
+
+                	// numero sublote - item 12
+                	if (arrayCreditosACobrar[12] != null) {
+                		creditoARealizar.setNumeroSubLote((Short) arrayCreditosACobrar[12]);
+                	}
+
+                	// ano mes referencia credito - item 13
+                	if (arrayCreditosACobrar[13] != null) {
+                		creditoARealizar.setAnoMesReferenciaCredito((Integer) arrayCreditosACobrar[13]);
+                	}
+
+                	// ano mes cobranca credito - item 14
+                	if (arrayCreditosACobrar[14] != null) {
+                		creditoARealizar.setAnoMesCobrancaCredito((Integer) arrayCreditosACobrar[14]);
+                	}
+
+                	// CreditoOrigem - item 15
+                	if (arrayCreditosACobrar[15] != null) {
+
+                		CreditoOrigem creditoOrigem = new CreditoOrigem();
+                		creditoOrigem.setId((Integer) arrayCreditosACobrar[15]);
+
+                		creditoARealizar.setCreditoOrigem(creditoOrigem);
+                	}
+
+                	/*
+                	 * Alterado por Vivianne Sousa em 20/12/2007 - Analista: Adriano
+                	 * criação do bonus para parcelamento com RD especial
+                	 */
+                	//numero de parcelas bonus - item 16
+                	if (arrayCreditosACobrar[16] != null) {
+                		creditoARealizar.setNumeroParcelaBonus((Short) arrayCreditosACobrar[16]);
+                	}
+
+                	creditosARealizar.add(creditoARealizar);
+                }
+            }
+        }
+
+        return creditosARealizar;
+
+    }
 
 	/**
 	 * Obtem os Credito A Realizar do Imovel

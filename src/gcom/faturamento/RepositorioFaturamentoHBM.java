@@ -45507,6 +45507,106 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		}
 		return retorno;
 	}
+	
+	/**
+	 * [UC0113] - Faturar Grupo Faturamento Author:Sávio Luiz Data:27/10/2009
+	 * Consultar os Creditos a Realizar do Imovel
+	 * 
+	 * @param imovelId
+	 *            Id do Imovel
+	 * @param debitoCreditoSituacaoAtualId
+	 *            Id do Debito Credito Situação
+	 * @return Coleção de Creditos a Realizar
+	 * @exception ErroRepositorioException
+	 */
+	public Collection pesquisarCreditoARealizarPeloCreditoRealizadoAntigo(
+			Integer imovelId, Integer idCreditoTipo, BigDecimal valorCredito,
+			Integer debitoCreditoSituacaoAtualId, Integer anoMesFaturamento)
+			throws ErroRepositorioException {
+		Collection retorno = null;
+
+		Session session = HibernateUtil.getSession();
+		String consulta = null;
+
+		/**TODO:COSANPA
+		 * Data: 30/01/2011
+		 * 
+		 * retirada de um criterio da select que impedia que o credito a realizar de determinado credito 
+		 * realizado fosse encontrado, com isso o crédito era liberado no IS, mas não era liberado no gsan
+		 * 
+		 * */
+		try {
+
+			consulta = "select "
+					+ "  crar.crar_id as idCreditoARealizar, "
+					+ "  crar.crar_nnprestacaorealizadas as numeroPrestacaoRealizada, "
+					+ "  crar.crar_nnprestacaocredito as numeroPrestacaoCredito, "
+					+ "  crar.crar_vlcredito as valorCredito, "
+					+ "  crar.crar_vlresidualmesanterior as valorResidualMesAnterior, "
+					+ "  crti.crti_id as idCreditoTipo, "
+					+ "  lict.lict_id as idLancamentoItemContabil, "
+					+ "  loca.loca_id as idLocalidade, "
+					+ "  qdra.qdra_id as idQuadra, "
+					+ "  crar.crar_cdsetorcomercial as codigoSetorComercial, "
+					+ "  crar.crar_nnquadra as numeroQuadra, "
+					+ "  crar.crar_nnlote as lote, "
+					+ "  crar.crar_nnsublote as sublote, "
+					+ "  crar.crar_amreferenciacredito as amReferenciaCredito, "
+					+ "  crar.crar_amcobrancacredito as amCobrancaCredito, "
+					+ "  crog.crog_id as idCreditoOrigem, "
+					+ "  crar.crar_nnparcelabonus as numeroParcelaBonus "
+					+ " from "
+					+ "  faturamento.credito_a_realizar crar "
+					+ " inner join faturamento.debito_credito_situacao dcst on crar.dcst_idatual=dcst.dcst_id "
+					+ " inner join cadastro.imovel imov on crar.imov_id=imov.imov_id "
+					+ " inner join faturamento.credito_tipo crti on crar.crti_id=crti.crti_id "
+					+ " inner join financeiro.lancamento_item_contabil lict on crar.lict_id=lict.lict_id "
+					+ " inner join cadastro.localidade loca on crar.loca_id=loca.loca_id "
+					+ " inner join cadastro.quadra qdra on crar.qdra_id=qdra.qdra_id "
+					+ " inner join faturamento.credito_origem crog on crar.crog_id=crog.crog_id "
+					+ " left outer join cobranca.parcelamento parc on crar.parc_id=parc.parc_id "
+					+ " where  imov.imov_id= :imovelId "
+					+ "  and crar.dcst_idatual= :debitoCreditoSituacaoAtualId "
+					//+ "  and (crar.crar_vlcredito + crar_vlresidualmesanterior) = :valorCredito "
+					+ "  and crar.crti_id = :idCreditoTipo "
+					+ "  and crar.crar_amreferenciaprestacao = :anoMesFaturamento "
+					+ "  and (parc.parc_id is null or crar.crar_nnprestacaorealizadas>1 or (parc.parc_id is not null) "
+					+ "       and crar.crar_nnprestacaorealizadas=1 and parc.parc_amreferenciafaturamento< :anoMesFaturamento) ";
+
+			retorno = session.createSQLQuery(consulta).addScalar(
+					"idCreditoARealizar", Hibernate.INTEGER).addScalar(
+					"numeroPrestacaoRealizada", Hibernate.SHORT).addScalar(
+					"numeroPrestacaoCredito", Hibernate.SHORT).addScalar(
+					"valorCredito", Hibernate.BIG_DECIMAL).addScalar(
+					"valorResidualMesAnterior", Hibernate.BIG_DECIMAL)
+					.addScalar("idCreditoTipo", Hibernate.INTEGER).addScalar(
+							"idLancamentoItemContabil", Hibernate.INTEGER)
+					.addScalar("idLocalidade", Hibernate.INTEGER).addScalar(
+							"idQuadra", Hibernate.INTEGER).addScalar(
+							"codigoSetorComercial", Hibernate.INTEGER)
+					.addScalar("numeroQuadra", Hibernate.INTEGER).addScalar(
+							"lote", Hibernate.SHORT).addScalar("sublote",
+							Hibernate.SHORT).addScalar("amReferenciaCredito",
+							Hibernate.INTEGER).addScalar("amCobrancaCredito",
+							Hibernate.INTEGER).addScalar("idCreditoOrigem",
+							Hibernate.INTEGER).addScalar("numeroParcelaBonus",
+							Hibernate.SHORT).setInteger("imovelId",
+							imovelId.intValue()).setInteger(
+							"debitoCreditoSituacaoAtualId",
+							debitoCreditoSituacaoAtualId).setInteger(
+							"anoMesFaturamento", anoMesFaturamento)
+					//.setBigDecimal("valorCredito", valorCredito)
+					.setInteger("idCreditoTipo", idCreditoTipo).list();
+
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
 
 	/**
 	 * Metodo que deleta os creditos realizados categoria de um respectivo
@@ -58665,7 +58765,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * @return Collection
 	 * @throws ErroRepositorioException
 	 */
-	public Collection buscarCreditoARelizarPorImovel(Integer idImovel)
+	public Collection buscarCreditoARealizarPorImovelValorResidualDiferenteZero(Integer idImovel)
 		throws ErroRepositorioException {
 		
 		Session session = HibernateUtil.getSession();
