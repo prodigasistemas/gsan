@@ -11671,7 +11671,7 @@ public interface IRepositorioFaturamento {
 	 * @return Collection
 	 * @throws ErroRepositorioException
 	 */
-	public Collection buscarCreditoARelizarPorImovel(Integer idImovel)
+	public Collection buscarCreditoARealizarPorImovelValorResidualDiferenteZero(Integer idImovel)
 			throws ErroRepositorioException;
 
 	/*
@@ -12171,4 +12171,9 @@ public interface IRepositorioFaturamento {
 
 	public Object[] pesquisarInadimplenciaEmitidasMaior90RelatorioBIG(Date dataFinal,
 			Integer idLocalidade) throws ErroRepositorioException;
+	
+	public Collection pesquisarCreditoARealizarPeloCreditoRealizadoAntigo(
+			Integer imovelId, Integer idCreditoTipo, BigDecimal valorCredito,
+			Integer debitoCreditoSituacaoAtualId, Integer anoMesFaturamento)
+			throws ErroRepositorioException;
 }
