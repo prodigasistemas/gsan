@@ -31528,7 +31528,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					 sql.append(" UPDATE GuiaPagamento as gpag")
 	                    .append(" SET gpag.debitoCreditoSituacaoAnterior = gpag.debitoCreditoSituacaoAtual, ")
 	                    .append(" gpag.debitoCreditoSituacaoAtual = :situacaoCancelada, ")
-	                    .append(" gpag.ultimaAlteracao = :ultimaAlteracao ")
+	                    .append(" gpag.ultimaAlteracao = :ultimaAlteracao, ")
 	                    .append(" gpag.anoMesReferenciaContabil = :anoMesReferencia ")
 	                    .append(" WHERE gpag.id IN (:guiasPagamentoNaoPagasAtePeriodo)");
 					
