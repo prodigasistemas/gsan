@@ -81,6 +81,7 @@ import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.imovel.ImovelSubcategoria;
+import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionHelper;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
 
@@ -181,8 +182,8 @@ public interface IRepositorioTransacao {
 	 * @return Collection
 	 * @throws ErroRepositorioException
 	 */
-	public Collection<ConsultarMovimentoAtualizacaoCadastralHelper> pesquisarMovimentoAtualizacaoCadastral(String idArquivoTxt, 
-			String idEmpresa, String idLeiturista, String exibirCampos, Collection colunaImoveisSelecionados)throws ErroRepositorioException;
+	public Collection<ConsultarMovimentoAtualizacaoCadastralHelper> pesquisarMovimentoAtualizacaoCadastral(
+			FiltrarAlteracaoAtualizacaoCadastralActionHelper helper)throws ErroRepositorioException;
 	
 	/**
 	 * @author Ivan Sergio

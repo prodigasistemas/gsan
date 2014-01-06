@@ -98,8 +98,6 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 	
 	private String exibirCampos;
 	
-	private String[] colunaImoveis;
-	
 	private String[] colunaImoveisSelecionados;
 	
 	private String idLocalidadeInicial;	
@@ -184,14 +182,6 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 
 	public void setNomeEmpresa(String nomeEmpresa) {
 		this.nomeEmpresa = nomeEmpresa;
-	}
-
-	public String[] getColunaImoveis() {
-		return colunaImoveis;
-	}
-
-	public void setColunaImoveis(String[] colunaImoveis) {
-		this.colunaImoveis = colunaImoveis;
 	}
 
 	public String[] getColunaImoveisSelecionados() {

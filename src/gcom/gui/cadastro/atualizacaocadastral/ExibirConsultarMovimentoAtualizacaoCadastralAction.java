@@ -99,36 +99,24 @@ public class ExibirConsultarMovimentoAtualizacaoCadastralAction extends GcomActi
             ActionForm actionForm, HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
 
-        //Seta o retorno
-        ActionForward retorno = actionMapping
-                .findForward("exibirConsultarMovimentoAtualizacaoCadastral");
+        ActionForward retorno = actionMapping.findForward("exibirConsultarMovimentoAtualizacaoCadastral");
 
-        //Obtém a instância da fachada
         Fachada fachada = Fachada.getInstancia();
 
-        //Obtém a sessão
-        //HttpSession sessao = httpServletRequest.getSession(false);
-        
         FiltrarAlteracaoAtualizacaoCadastralActionForm form = (FiltrarAlteracaoAtualizacaoCadastralActionForm) actionForm;
         
         Integer idEmpresa = null;
-        if(form.getIdEmpresa() != null && !form.getIdEmpresa().trim().equals(""+ConstantesSistema.NUMERO_NAO_INFORMADO)){
+        if (form.getIdEmpresa() != null 
+        		&& !form.getIdEmpresa().trim().equals(""+ConstantesSistema.NUMERO_NAO_INFORMADO)) {
         	idEmpresa = new Integer(form.getIdEmpresa());
-        }else{
-//            ArquivoTextoAtualizacaoCadastral arquivo = fachada.pesquisarArquivoTextoAtualizacaoCadastro(form.getIdArquivo());
-//        	idEmpresa = arquivo.getLeiturista().getEmpresa().getId();	
+        	
+        	FiltroEmpresa filtroEmpresa = new FiltroEmpresa();
+        	filtroEmpresa.adicionarParametro(new ParametroSimples(FiltroEmpresa.ID, idEmpresa));
+        	Collection colecaoPesquisa = fachada.pesquisar(filtroEmpresa, Empresa.class.getName());
+        	Empresa empresa = (Empresa) Util.retonarObjetoDeColecao(colecaoPesquisa);
+        	form.setNomeEmpresa(empresa.getDescricao());
         }
       
-		FiltroEmpresa filtroEmpresa = new FiltroEmpresa();
-		filtroEmpresa.adicionarParametro(new ParametroSimples(FiltroEmpresa.ID, idEmpresa));
-
-		Collection colecaoPesquisa = fachada.pesquisar(
-						filtroEmpresa, Empresa.class.getName());
-
-		Empresa emp = (Empresa) Util.retonarObjetoDeColecao(colecaoPesquisa);
-        
-        form.setNomeEmpresa(emp.getDescricao());
-        
         return retorno;
     }
     

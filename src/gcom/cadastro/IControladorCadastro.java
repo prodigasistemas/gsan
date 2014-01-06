@@ -800,7 +800,7 @@ public interface IControladorCadastro {
 	 * @date 25/08/2008
 	 */
 
-	public void obterImovelClienteProprietarioUsuario(Integer idSetor , Integer idFuncionalidadeIniciada,
+	public void gerarTabelasTemporariasAtualizacaoCadastral(Integer idSetor , Integer idFuncionalidadeIniciada,
 			ImovelGeracaoTabelasTemporariasCadastroHelper helper) throws ControladorException;
 	
 	/**

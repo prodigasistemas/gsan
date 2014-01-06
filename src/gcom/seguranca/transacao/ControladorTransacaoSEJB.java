@@ -142,6 +142,7 @@ import gcom.cadastro.imovel.PavimentoCalcada;
 import gcom.cadastro.imovel.PavimentoRua;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.fachada.Fachada;
+import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionHelper;
 import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.Interceptador;
 import gcom.interceptor.ObjetoTransacao;
@@ -1527,13 +1528,13 @@ public class ControladorTransacaoSEJB implements SessionBean {
 	 * @return Collection
 	 * @throws ErroRepositorioException
 	 */
-	public Collection<ConsultarMovimentoAtualizacaoCadastralHelper> pesquisarMovimentoAtualizacaoCadastral(String idArquivoTxt, 
-		String idEmpresa, String idLeiturista, String exibirCampos, Collection colunaImoveisSelecionados)throws ControladorException {
+	public Collection<ConsultarMovimentoAtualizacaoCadastralHelper> pesquisarMovimentoAtualizacaoCadastral(
+			FiltrarAlteracaoAtualizacaoCadastralActionHelper helper)throws ControladorException {
 
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> retorno = null;
 
 		try {
-			retorno = repositorioTransacao.pesquisarMovimentoAtualizacaoCadastral(idArquivoTxt, idEmpresa, idLeiturista, exibirCampos, colunaImoveisSelecionados);
+			retorno = repositorioTransacao.pesquisarMovimentoAtualizacaoCadastral(helper);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
