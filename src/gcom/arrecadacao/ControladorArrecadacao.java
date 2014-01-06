@@ -56660,7 +56660,9 @@ public class ControladorArrecadacao implements SessionBean {
 		try {
 			Collection<Integer> guiasPagamentoNaoPagasAtePeriodo = repositorioArrecadacao.pesquisarIdsGuiasPagamentoNaoPagas(dataVencimentoLimite, idLocalidade);
 			
-			repositorioArrecadacao.atualizarGuiasPagamentoNaoPagasAtePeriodo(financiamentoTipoServico, guiasPagamentoNaoPagasAtePeriodo);
+			Integer anoMesReferencia = getSistemaParametro().getAnoMesArrecadacao();
+			
+			repositorioArrecadacao.atualizarGuiasPagamentoNaoPagasAtePeriodo(financiamentoTipoServico, guiasPagamentoNaoPagasAtePeriodo, anoMesReferencia);
 			
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,idUnidadeIniciada, false);
 

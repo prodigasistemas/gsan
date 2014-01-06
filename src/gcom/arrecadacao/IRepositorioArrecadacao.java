@@ -7128,7 +7128,7 @@ public interface IRepositorioArrecadacao {
 	public void atualizarSituacaoPagamento(Integer pagamentoSituacao, Integer idPagamento) throws ErroRepositorioException;
 	
 	public void atualizarGuiasPagamentoNaoPagasAtePeriodo(Integer financiamentoTipoServico, 
-			Collection<Integer> idsGuiasPagamentoNaoPagas) throws ErroRepositorioException;
+			Collection<Integer> idsGuiasPagamentoNaoPagas, Integer anoMesReferencia) throws ErroRepositorioException;
 	
 	public Collection<Integer> pesquisarIdsGuiasPagamentoNaoPagas(Date dataVencimentoLimite,  Integer idLocalidade) throws ErroRepositorioException;
 	
