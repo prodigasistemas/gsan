@@ -120,7 +120,7 @@ public class BatchGerarTabelasTemporariasAtualizacaoCadastralMDB
 
 			ObjectMessage objectMessage = (ObjectMessage) message;
 			try {
-				this.getControladorCadastro().obterImovelClienteProprietarioUsuario(
+				this.getControladorCadastro().gerarTabelasTemporariasAtualizacaoCadastral(
 						(Integer) ((Object[]) objectMessage.getObject())[0],
 						(Integer) ((Object[]) objectMessage.getObject())[1],
 						(ImovelGeracaoTabelasTemporariasCadastroHelper) ((Object[]) objectMessage.getObject())[2]);

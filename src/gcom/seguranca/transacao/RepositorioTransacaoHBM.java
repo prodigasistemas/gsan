@@ -81,6 +81,7 @@ import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
+import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionHelper;
 import gcom.seguranca.acesso.FiltroOperacaoEfetuada;
 import gcom.seguranca.acesso.FiltroOperacaoOrdemExibicao;
 import gcom.seguranca.acesso.Operacao;
@@ -781,218 +782,213 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 	 * @return Collection
 	 * @throws ErroRepositorioException
 	 */
-	public Collection<ConsultarMovimentoAtualizacaoCadastralHelper> pesquisarMovimentoAtualizacaoCadastral(String idArquivoTxt, 
-			String idEmpresa, String idLeiturista, String exibirCampos, Collection colunaImoveisSelecionados) throws ErroRepositorioException{
+	public Collection<ConsultarMovimentoAtualizacaoCadastralHelper> pesquisarMovimentoAtualizacaoCadastral(
+			FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper)
+			throws ErroRepositorioException {
 
-		
 		Collection retornoConsulta = null;
 		Session session = HibernateUtil.getSession();
 		String consulta = "";
 		Collection consultarMovimentoAtualizacaoCadastralHelper = new ArrayList();
 
 		try {
-				consulta = " select tatc.altp_id as tipoAlteracao ,"//0
-					     + " tatc.tatc_cdimovel as idImovel,"//1
-					     + " tatc.tatc_cdcliente as idCliente,"//2
-					     + " sum(case when (tatc.tabe_id in(661,664,665)) then 1 else 0 end) as qtdImovel,"//3
-					     + " sum(case when (tatc.tabe_id in(662,663)) then 1 else 0 end) as qtdCliente,"//4
-					     + " func.func_nmfuncionario as nomeFuncionario," //5
-					     + " clie.clie_nmcliente as nomeCliente,"//6
-					     + " txac.txac_id as idArquivo,"//7
-					     + " tatc.tatc_icautorizado as icAutorizado,"//8
-					     + " tatc.tatc_idregistroalterado as idRegistroAlterado "//9
-					     //+ " altp_id as tipoAlteracao"//11
-					    // + " tatc.tatc_ultimaalteracao as dataRealizacao"//12
-					     + " from seguranca.tab_atlz_cadastral tatc"
-					     + " inner join seguranca.operacao_efetuada opef on(opef.opef_id = tatc.opef_id)"
-					     + " left join seguranca.tab_col_atlz_cadastral tcac on (tatc.tatc_id = tcac.tatc_id)"
-					     + " inner join cadastro.arquivo_texto_atlz_cad txac on(tatc.txac_id = txac.txac_id)"
-					     + " inner join micromedicao.leiturista leit on(tatc.leit_id = leit.leit_id)"
-					     + " left join cadastro.funcionario func on(leit.func_id = func.func_id)"
-					     + " left join cadastro.cliente clie on(leit.clie_id = clie.clie_id)"
-					     + " where 1=1 ";
-				
-						 if(idArquivoTxt != null && !idArquivoTxt.equals("")){
-							 consulta = consulta + " and txac.txac_id ="+ idArquivoTxt;							 
-						 }
+			consulta = "select tatc.altp_id as tipoAlteracao ,"// 0
+					+ " tatc.tatc_cdimovel as idImovel,"// 1
+					+ " tatc.tatc_cdcliente as idCliente,"// 2
+					+ " sum(case when (tatc.tabe_id in(661,664,665)) then 1 else 0 end) as qtdImovel,"// 3
+					+ " sum(case when (tatc.tabe_id in(662,663)) then 1 else 0 end) as qtdCliente,"// 4
+					+ " func.func_nmfuncionario as nomeFuncionario," // 5
+					+ " clie.clie_nmcliente as nomeCliente,"// 6
+					+ " txac.txac_id as idArquivo,"// 7
+					+ " tatc.tatc_icautorizado as icAutorizado,"// 8
+					+ " tatc.tatc_idregistroalterado as idRegistroAlterado "// 9
+					+ " from seguranca.tab_atlz_cadastral tatc"
+					+ " inner join seguranca.operacao_efetuada opef on(opef.opef_id = tatc.opef_id)"
+					+ " left join seguranca.tab_col_atlz_cadastral tcac on (tatc.tatc_id = tcac.tatc_id)"
+					+ " inner join cadastro.arquivo_texto_atlz_cad txac on(tatc.txac_id = txac.txac_id)"
+					+ " inner join micromedicao.rota rota on(rota.rota_id = txac.rota_id)"
+					+ " inner join micromedicao.leiturista leit on(tatc.leit_id = leit.leit_id)"
+					+ " left join cadastro.funcionario func on(leit.func_id = func.func_id)"
+					+ " left join cadastro.cliente clie on(leit.clie_id = clie.clie_id)"
+					+ " where 1=1 ";
 
-						 if(idEmpresa != null && !idEmpresa.trim().equals(""+ConstantesSistema.NUMERO_NAO_INFORMADO)){
-							 consulta = consulta + " and leit.empr_id = "+ idEmpresa;							 
-						 }
-						 
-						 if(idLeiturista != null  && !idLeiturista.trim().equals(""+ConstantesSistema.NUMERO_NAO_INFORMADO)){
-							 consulta = consulta + " and leit.leit_id = "+idLeiturista;
-						 }
-						 
-						 if(exibirCampos != null && !exibirCampos.trim().equals("")){
-							 if (exibirCampos.equals("1")){
-								 consulta = consulta + " and tcac.tcac_dtprocessamento is null ";
-							 } else if (exibirCampos.equals("2")){
-								 consulta = consulta + " and tcac.tcac_dtprocessamento is not null ";
-							 }
-						 }
-						 
-						 if (colunaImoveisSelecionados != null && !colunaImoveisSelecionados.isEmpty()){
-							 consulta = consulta + " and tcac.tbco_id in (:colunaImoveisSelecionados)" ;
-						 }
-					 
-						 consulta = consulta + " group by tatc.altp_id,tatc.tatc_cdimovel,tatc.tatc_cdcliente,func.func_nmfuncionario,clie.clie_nmcliente,txac.txac_id,tatc.tatc_icautorizado,tatc.tatc_idregistroalterado";
-						 consulta = consulta + " order by tatc.tatc_cdimovel,tatc.tatc_cdcliente,func.func_nmfuncionario,clie.clie_nmcliente,txac.txac_id,tatc.tatc_icautorizado,tatc.tatc_idregistroalterado";
-						 
+			if (filtroHelper.getIdLocalidadeInicial() != null
+					&& !filtroHelper.getIdLocalidadeInicial().equals("")) {
+				consulta += " and txac.loca_id between " + filtroHelper.getIdLocalidadeInicial() 
+					+ " and " + filtroHelper.getIdLocalidadeFinal();
+			}
+			
+			if (filtroHelper.getCdSetorComercialInicial() != null
+					&& !filtroHelper.getCdSetorComercialFinal().equals("")) {
+				consulta += " and txac.txac_cdsetorcomercial between " + filtroHelper.getCdSetorComercialInicial() 
+					+ " and " + filtroHelper.getCdSetorComercialFinal();
+			}
+			
+			if (filtroHelper.getCdRotaInicial() != null
+					&& !filtroHelper.getCdRotaInicial().equals("")) {
+				consulta += " and rota.rota_cdrota between " + filtroHelper.getCdRotaInicial() 
+					+ " and " + filtroHelper.getCdRotaFinal();
+			}
 
-						 if (colunaImoveisSelecionados != null && !colunaImoveisSelecionados.isEmpty()){
-								retornoConsulta = session.createSQLQuery(consulta)
-										.addScalar("tipoAlteracao", Hibernate.INTEGER)
-										.addScalar("idImovel", Hibernate.INTEGER)
-										.addScalar("idCliente", Hibernate.INTEGER)
-										.addScalar("qtdImovel", Hibernate.INTEGER)
-										.addScalar("qtdCliente", Hibernate.INTEGER)
-										.addScalar("nomeFuncionario", Hibernate.STRING)
-										.addScalar("nomeCliente", Hibernate.STRING)
-										.addScalar("idArquivo", Hibernate.INTEGER)
-										.addScalar("icAutorizado", Hibernate.INTEGER)
-										.addScalar("idRegistroAlterado",Hibernate.INTEGER)
-										.setParameterList("colunaImoveisSelecionados", colunaImoveisSelecionados)
-										//.addScalar("tipoAlteracao", Hibernate.INTEGER)
-										//.addScalar("dataRealizacao", Hibernate.DATE)
-										.list();
-						} else {
-											 
-									retornoConsulta = session.createSQLQuery(consulta)
-									.addScalar("tipoAlteracao", Hibernate.INTEGER)
-									.addScalar("idImovel", Hibernate.INTEGER)
-									.addScalar("idCliente", Hibernate.INTEGER)
-									.addScalar("qtdImovel", Hibernate.INTEGER)
-									.addScalar("qtdCliente", Hibernate.INTEGER)
-									.addScalar("nomeFuncionario", Hibernate.STRING)
-									.addScalar("nomeCliente", Hibernate.STRING)
-									.addScalar("idArquivo", Hibernate.INTEGER)
-									.addScalar("icAutorizado", Hibernate.INTEGER)
-									.addScalar("idRegistroAlterado",Hibernate.INTEGER)
-									.list();
-								}
+			if (filtroHelper.getIdEmpresa() != null
+					&& !filtroHelper.getIdEmpresa().trim().equals(
+							"" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
+				consulta += " and leit.empr_id = " + filtroHelper.getIdEmpresa();
+			}
 
-//				TreeMap<String, ConsultarMovimentoAtualizacaoCadastralHelper> colecao = 
-//					new TreeMap<String, ConsultarMovimentoAtualizacaoCadastralHelper>();
-				
-				Integer ultimoImovel = null;
-				Integer ultimoCliente = null;
-				
-				if (retornoConsulta.size() > 0) {
-					Iterator helperIter = retornoConsulta.iterator();
-					while (helperIter.hasNext()) {
-		
-						Object[] element = (Object[]) helperIter.next();
-						
-						Integer novoImovel = (Integer) element[1]; 
-						Integer novoCliente = (Integer) element[2];
-						
-						if (ultimoImovel != null && 
-								(novoImovel.intValue() == ultimoImovel.intValue() && novoCliente == null)){
-							novoCliente = ultimoCliente;
-						}
-						
-						//String chave = novoImovel + (novoCliente != null ? (novoCliente + "") : "");
-						
-						//ConsultarMovimentoAtualizacaoCadastralHelper helper = colecao.get(chave);
-						
-						ConsultarMovimentoAtualizacaoCadastralHelper helper = null;
-						
-						if (helper == null){
-							
-							helper = new ConsultarMovimentoAtualizacaoCadastralHelper();														 
-							
-							helper.setIdTipoAlteracao((Integer)element[0]);
-							
-							helper.setIdImovel((Integer)element[1]);
-							
-							helper.setIdCliente((Integer) element[2]);
-							
-							String sql = " select  array_to_string(ARRAY" 
-								+" (select tcac_cnvaloratual" 
-								+" from seguranca.tab_atlz_cadastral tatc" 
-								+" inner join seguranca.tab_col_atlz_cadastral tcac on (tatc.tatc_id = tcac.tatc_id)" 
-						        +" inner join seguranca.tabela_coluna tbco on(tcac.tbco_id = tbco.tbco_id)" 
-						        +" where tatc_cdimovel = "+(Integer)element[1]
-						        +" and altp_id = 2 and tbco_nmcoluna in('loca_id','imac_cdsetorcomercial','imac_nnquadra','imac_nnlote','imac_nnsublote')), '.') as inscricao";
-							
-							/*String sql = "SELECT SUBSTR(inscricao, 2, LENGTH(inscricao)) as inscricao FROM ( " 
-							            +" SELECT REPLACE(MAX(SYS_CONNECT_BY_PATH(tcac_cnvaloratual, '.')), '.', '.') as inscricao FROM ( " 
-							            +"      SELECT tcac_cnvaloratual, ROW_NUMBER() OVER (ORDER BY 1) r " 
-										+" from seguranca.tab_atlz_cadastral tatc" 
-										+" inner join seguranca.tab_col_atlz_cadastral tcac on (tatc.tatc_id = tcac.tatc_id)" 
-								        +" inner join seguranca.tabela_coluna tbco on(tcac.tbco_id = tbco.tbco_id)" 
-								        +" where tatc_cdimovel = "+(Integer)element[1]
-							            +"             and altp_id = 2 and tbco_nmcoluna in('loca_id','imac_cdsetorcomercial','imac_nnquadra','imac_nnlote','imac_nnsublote')) " 
-							            +"      START WITH r=1 CONNECT BY PRIOR r = r-1 ) "; */
-							String inscricao = (String)session.createSQLQuery(sql)
-									.addScalar("inscricao" , Hibernate.STRING)			
-										.setMaxResults(1).uniqueResult();
-							
-							if(inscricao != null && !inscricao.equals("")){
-								helper.setInscricao(inscricao);
-							}
-							
-							if(element[2] != null && !element[2].equals("")){
-								String sqlCliente = " select crtp_dsclienterelacaotipo as clienteTipo"
-												   +" from cadastro.cliente_relacao_tipo"
-												   +" where crtp_id in("
-												   +" select tcac_cnvaloratual"
-												   +" from seguranca.tab_atlz_cadastral tatc"
-												   +" inner join seguranca.tab_col_atlz_cadastral tcac on (tcac.tatc_id = tatc.tatc_id)"
-												   +" inner join seguranca.tabela_coluna tbco on(tcac.tbco_id = tbco.tbco_id)"
-												   +" where tatc_cdcliente = "+(Integer)element[2] 
-											       +" and tbco_nmcoluna = 'crtp_id' and altp_id = 2)";
-						
-								String clienteTipo = (String)session.createSQLQuery(sqlCliente)
-										.addScalar("clienteTipo" , Hibernate.STRING)			
-										.setMaxResults(1).uniqueResult();	
-								
-								if(clienteTipo != null && !clienteTipo.equals("")){
-									helper.setTipoClienteNovo("NOVO "+clienteTipo);
-								}
-							}
-														
-							helper.setQtdAlteracaoImovel((Integer) element[3]);
-							
-							helper.setQtdAlteracaoCliente((Integer) element[4]);
-							
-							helper.setNomeFuncionario((String) element[5]);
-							
-							helper.setNomeCliente((String) element[6]);
-							
-							helper.setIdArquivo((Integer) element[7]);
-							
-							helper.setIcAutorizado((Integer) element[8]);
-							
-							helper.setIdRegistroAlterado((Integer) element[9]);
-							
-//							if (element[2] == null) {
-//								chave = chave + "2";
-//							}
-//							colecao.put(chave, helper);							
-							
-						} else {
-							if (helper.getQtdAlteracaoImovel() == 0){
-								helper.setQtdAlteracaoImovel((Integer) element[3]); 
-							}
-						}
-						
-						ultimoImovel = (Integer)element[1];
-						ultimoCliente = (Integer)element[2];
-					
-						consultarMovimentoAtualizacaoCadastralHelper.add(helper);
+			if (filtroHelper.getIdLeiturista() != null
+					&& !filtroHelper.getIdLeiturista().trim().equals(
+							"" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
+				consulta += " and leit.leit_id = " + filtroHelper.getIdLeiturista();
+			}
 
-					}
-					//consultarMovimentoAtualizacaoCadastralHelper = colecao.values();
+			if (filtroHelper.getExibirCampos() != null 
+					&& !filtroHelper.getExibirCampos().trim().equals("")) {
+				if (filtroHelper.getExibirCampos().equals("1")) {
+					consulta += " and tcac.tcac_dtprocessamento is null ";
+				} else if (filtroHelper.getExibirCampos().equals("2")) {
+					consulta += " and tcac.tcac_dtprocessamento is not null ";
 				}
-            
+			}
+			
+			Collection colunaImoveisSelecionados = filtroHelper.getColunaImoveisSelecionados();
+			if (colunaImoveisSelecionados != null
+					&& !colunaImoveisSelecionados.isEmpty()) {
+				consulta += " and tcac.tbco_id in (:colunaImoveisSelecionados)";
+			}
+
+			consulta += " group by tatc.altp_id,tatc.tatc_cdimovel,tatc.tatc_cdcliente,func.func_nmfuncionario,clie.clie_nmcliente,txac.txac_id,tatc.tatc_icautorizado,tatc.tatc_idregistroalterado";
+			consulta += " order by tatc.tatc_cdimovel,tatc.tatc_cdcliente,func.func_nmfuncionario,clie.clie_nmcliente,txac.txac_id,tatc.tatc_icautorizado,tatc.tatc_idregistroalterado";
+
+			if (colunaImoveisSelecionados != null
+					&& !colunaImoveisSelecionados.isEmpty()) {
+				retornoConsulta = session.createSQLQuery(consulta).addScalar(
+						"tipoAlteracao", Hibernate.INTEGER).addScalar(
+						"idImovel", Hibernate.INTEGER).addScalar("idCliente",
+						Hibernate.INTEGER).addScalar("qtdImovel",
+						Hibernate.INTEGER).addScalar("qtdCliente",
+						Hibernate.INTEGER).addScalar("nomeFuncionario",
+						Hibernate.STRING).addScalar("nomeCliente",
+						Hibernate.STRING).addScalar("idArquivo",
+						Hibernate.INTEGER).addScalar("icAutorizado",
+						Hibernate.INTEGER).addScalar("idRegistroAlterado",
+						Hibernate.INTEGER).setParameterList(
+						"colunaImoveisSelecionados", colunaImoveisSelecionados)
+						.list();
+			} else {
+
+				retornoConsulta = session.createSQLQuery(consulta).addScalar(
+						"tipoAlteracao", Hibernate.INTEGER).addScalar(
+						"idImovel", Hibernate.INTEGER).addScalar("idCliente",
+						Hibernate.INTEGER).addScalar("qtdImovel",
+						Hibernate.INTEGER).addScalar("qtdCliente",
+						Hibernate.INTEGER).addScalar("nomeFuncionario",
+						Hibernate.STRING).addScalar("nomeCliente",
+						Hibernate.STRING).addScalar("idArquivo",
+						Hibernate.INTEGER).addScalar("icAutorizado",
+						Hibernate.INTEGER).addScalar("idRegistroAlterado",
+						Hibernate.INTEGER).list();
+			}
+
+			Integer ultimoImovel = null;
+			Integer ultimoCliente = null;
+
+			if (retornoConsulta.size() > 0) {
+				Iterator helperIter = retornoConsulta.iterator();
+				while (helperIter.hasNext()) {
+
+					Object[] element = (Object[]) helperIter.next();
+
+					Integer novoImovel = (Integer) element[1];
+					Integer novoCliente = (Integer) element[2];
+
+					if (ultimoImovel != null
+							&& (novoImovel.intValue() == ultimoImovel
+									.intValue() && novoCliente == null)) {
+						novoCliente = ultimoCliente;
+					}
+
+					ConsultarMovimentoAtualizacaoCadastralHelper helper = null;
+
+					if (helper == null) {
+
+						helper = new ConsultarMovimentoAtualizacaoCadastralHelper();
+
+						helper.setIdTipoAlteracao((Integer) element[0]);
+
+						helper.setIdImovel((Integer) element[1]);
+
+						helper.setIdCliente((Integer) element[2]);
+
+						String sql = " select  array_to_string(ARRAY"
+								+ " (select tcac_cnvaloratual"
+								+ " from seguranca.tab_atlz_cadastral tatc"
+								+ " inner join seguranca.tab_col_atlz_cadastral tcac on (tatc.tatc_id = tcac.tatc_id)"
+								+ " inner join seguranca.tabela_coluna tbco on(tcac.tbco_id = tbco.tbco_id)"
+								+ " where tatc_cdimovel = "
+								+ (Integer) element[1]
+								+ " and altp_id = 2 and tbco_nmcoluna in('loca_id','imac_cdsetorcomercial','imac_nnquadra','imac_nnlote','imac_nnsublote')), '.') as inscricao";
+
+						String inscricao = (String) session.createSQLQuery(sql)
+								.addScalar("inscricao", Hibernate.STRING)
+								.setMaxResults(1).uniqueResult();
+
+						if (inscricao != null && !inscricao.equals("")) {
+							helper.setInscricao(inscricao);
+						}
+
+						if (element[2] != null && !element[2].equals("")) {
+							String sqlCliente = " select crtp_dsclienterelacaotipo as clienteTipo"
+									+ " from cadastro.cliente_relacao_tipo"
+									+ " where crtp_id in("
+									+ " select tcac_cnvaloratual"
+									+ " from seguranca.tab_atlz_cadastral tatc"
+									+ " inner join seguranca.tab_col_atlz_cadastral tcac on (tcac.tatc_id = tatc.tatc_id)"
+									+ " inner join seguranca.tabela_coluna tbco on(tcac.tbco_id = tbco.tbco_id)"
+									+ " where tatc_cdcliente = "
+									+ (Integer) element[2]
+									+ " and tbco_nmcoluna = 'crtp_id' and altp_id = 2)";
+
+							String clienteTipo = (String) session
+									.createSQLQuery(sqlCliente).addScalar(
+											"clienteTipo", Hibernate.STRING)
+									.setMaxResults(1).uniqueResult();
+
+							if (clienteTipo != null && !clienteTipo.equals("")) {
+								helper
+										.setTipoClienteNovo("NOVO "
+												+ clienteTipo);
+							}
+						}
+
+						helper.setQtdAlteracaoImovel((Integer) element[3]);
+						helper.setQtdAlteracaoCliente((Integer) element[4]);
+						helper.setNomeFuncionario((String) element[5]);
+						helper.setNomeCliente((String) element[6]);
+						helper.setIdArquivo((Integer) element[7]);
+						helper.setIcAutorizado((Integer) element[8]);
+						helper.setIdRegistroAlterado((Integer) element[9]);
+
+					} else {
+						if (helper.getQtdAlteracaoImovel() == 0) {
+							helper.setQtdAlteracaoImovel((Integer) element[3]);
+						}
+					}
+
+					ultimoImovel = (Integer) element[1];
+					ultimoCliente = (Integer) element[2];
+
+					consultarMovimentoAtualizacaoCadastralHelper.add(helper);
+
+				}
+			}
+
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
-		
+
 		return consultarMovimentoAtualizacaoCadastralHelper;
 	}
 	

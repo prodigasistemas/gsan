@@ -7401,7 +7401,7 @@ public class ControladorCadastro implements SessionBean {
 	 * @author Vinicius Medeiros
 	 * @date 25/08/2008
 	 */
-	public void obterImovelClienteProprietarioUsuario(Integer idSetor,
+	public void gerarTabelasTemporariasAtualizacaoCadastral(Integer idSetor,
 			Integer idFuncionalidadeIniciada,
 			ImovelGeracaoTabelasTemporariasCadastroHelper helper)
 			throws ControladorException {

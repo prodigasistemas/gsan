@@ -77,6 +77,7 @@ package gcom.seguranca.transacao;
 
 import gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCadastralHelper;
 import gcom.cadastro.atualizacaocadastral.bean.DadosTabelaAtualizacaoCadastralHelper;
+import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionHelper;
 import gcom.interceptor.ObjetoTransacao;
 import gcom.seguranca.acesso.OperacaoEfetuada;
 import gcom.seguranca.acesso.usuario.Usuario;
@@ -242,8 +243,8 @@ public interface ControladorTransacaoLocal extends javax.ejb.EJBLocalObject {
 	 * @return Collection
 	 * @throws ErroRepositorioException
 	 */
-	public Collection<ConsultarMovimentoAtualizacaoCadastralHelper> pesquisarMovimentoAtualizacaoCadastral(String idArquivoTxt, String idEmpresa, String idLeiturista, String exibirCampos, Collection colunaImoveisSelecionados)
-		throws ControladorException;
+	public Collection<ConsultarMovimentoAtualizacaoCadastralHelper> pesquisarMovimentoAtualizacaoCadastral(
+			FiltrarAlteracaoAtualizacaoCadastralActionHelper helper) throws ControladorException;
 	
 	/**
 	 * @author Ivan Sergio

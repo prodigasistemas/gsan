@@ -81,7 +81,6 @@ import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.util.ConstantesSistema;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.servlet.http.HttpServletRequest;
@@ -98,55 +97,25 @@ public class FiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction {
 			ActionForm actionForm, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 
-		// Obtém a instância da fachada
 		Fachada fachada = Fachada.getInstancia();
 
-		ActionForward retorno = actionMapping
-				.findForward("filtrarAlteracaoAtualizacaoCadastral");
+		ActionForward retorno = actionMapping.findForward("filtrarAlteracaoAtualizacaoCadastral");
 		
 		HttpSession sessao = httpServletRequest.getSession(false);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionForm form = (FiltrarAlteracaoAtualizacaoCadastralActionForm) actionForm;
         
-        Collection<ConsultarMovimentoAtualizacaoCadastralHelper> colecaoConsultarMovimentoAtualizacaoCadastralHelper = new ArrayList();
-        
-		boolean peloMenosUmParametroInformado = false;
-        
-        if(form.getIdEmpresa() != null && !form.getIdEmpresa().trim().equals(""+ConstantesSistema.NUMERO_NAO_INFORMADO)){
-        	peloMenosUmParametroInformado = true;
-        }
-        
-        if(form.getIdLeiturista() != null && !form.getIdLeiturista().equals("")){        	      	
-        	peloMenosUmParametroInformado = true;
-        }
-        
-        if(form.getIdLocalidadeInicial() != null && !form.getIdLocalidadeInicial().equals("")){        	      	
-        	peloMenosUmParametroInformado = true;
-        }
-        
-        if(form.getExibirCampos() != null && !form.getExibirCampos().equals("")){
-        	peloMenosUmParametroInformado = true;
-        }
-        
-        if (form.getColunaImoveisSelecionados() != null && !form.getColunaImoveisSelecionados().equals("")){
-        	peloMenosUmParametroInformado = true;
-        }
-        
-        Collection colunaImoveisSelecionados = new ArrayList();
-        
-        if (form.getColunaImoveisSelecionados() != null && !form.getColunaImoveisSelecionados().equals("-1")){
-	        String[] colunaSelecionados = form.getColunaImoveisSelecionados();
-	        for (int i = 0; i < colunaSelecionados.length ; i++){
-	        	colunaImoveisSelecionados.add(colunaSelecionados[i]);
-	        }
-        }
-        
-		// Erro caso o usuário mandou filtrar sem nenhum parâmetro
-		if (!peloMenosUmParametroInformado) {
+		if (!existeParametroInformado(form)) {
 			throw new ActionServletException("atencao.filtro.nenhum_parametro_informado");
 		}
 		
-		colecaoConsultarMovimentoAtualizacaoCadastralHelper = fachada.pesquisarMovimentoAtualizacaoCadastral(form.getIdLocalidadeInicial(), form.getIdEmpresa(), form.getIdLeiturista(), form.getExibirCampos(), colunaImoveisSelecionados);
+		FiltrarAlteracaoAtualizacaoCadastralActionHelper helper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper(
+				form.getIdEmpresa(), form.getIdLeiturista(), form.getExibirCampos(), form.getColunaImoveisSelecionados(),
+				form.getIdLocalidadeInicial(), form.getCdSetorComercialInicial(), form.getCdRotaInicial(),
+				form.getIdLocalidadeFinal(), form.getCdSetorComercialFinal(), form.getCdRotaFinal());
+		
+		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> colecaoConsultarMovimentoAtualizacaoCadastralHelper = 
+				fachada.pesquisarMovimentoAtualizacaoCadastral(helper);
         
         if( colecaoConsultarMovimentoAtualizacaoCadastralHelper == null || colecaoConsultarMovimentoAtualizacaoCadastralHelper.isEmpty()){
 			throw new ActionServletException("atencao.pesquisa.nenhumresultado", "exibirFiltrarAlteracaoAtualizacaoCadastralAction.do", null, new String[] {});
@@ -156,4 +125,59 @@ public class FiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction {
 		return retorno;
 	}
 
+	private boolean existeParametroInformado(FiltrarAlteracaoAtualizacaoCadastralActionForm form) {
+		boolean peloMenosUmParametroInformado = false;
+
+		if (form.getIdEmpresa() != null
+				&& !form.getIdEmpresa().trim().equals(
+						"" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
+			peloMenosUmParametroInformado = true;
+		}
+
+		if (form.getIdLeiturista() != null
+				&& !form.getIdLeiturista().equals("")) {
+			peloMenosUmParametroInformado = true;
+		}
+
+		if (form.getIdLocalidadeInicial() != null
+				&& !form.getIdLocalidadeInicial().equals("")) {
+			peloMenosUmParametroInformado = true;
+		}
+
+		if (form.getCdSetorComercialInicial() != null
+				&& !form.getCdSetorComercialInicial().equals("")) {
+			peloMenosUmParametroInformado = true;
+		}
+
+		if (form.getCdRotaInicial() != null
+				&& !form.getCdRotaInicial().equals("")) {
+			peloMenosUmParametroInformado = true;
+		}
+
+		if (form.getIdLocalidadeFinal() != null
+				&& !form.getIdLocalidadeFinal().equals("")) {
+			peloMenosUmParametroInformado = true;
+		}
+
+		if (form.getCdSetorComercialFinal() != null
+				&& !form.getCdSetorComercialFinal().equals("")) {
+			peloMenosUmParametroInformado = true;
+		}
+
+		if (form.getCdRotaFinal() != null && !form.getCdRotaFinal().equals("")) {
+			peloMenosUmParametroInformado = true;
+		}
+
+		if (form.getExibirCampos() != null
+				&& !form.getExibirCampos().equals("")) {
+			peloMenosUmParametroInformado = true;
+		}
+
+		if (form.getColunaImoveisSelecionados() != null
+				&& !form.getColunaImoveisSelecionados().equals("")) {
+			peloMenosUmParametroInformado = true;
+		}
+
+		return peloMenosUmParametroInformado;
+	}
 }
