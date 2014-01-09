@@ -124,10 +124,10 @@ public class GuiaPagamentoHistorico implements Serializable {
     private short indicadorMulta;
     
     /** persistent field */
-    private short numeroPrestacaoDebito;
+    private Short numeroPrestacaoDebito;
     
     /** persistent field */
-    private short numeroPrestacaoTotal;
+    private Short numeroPrestacaoTotal;
     
     private String observacao;
 	
@@ -558,22 +558,22 @@ public class GuiaPagamentoHistorico implements Serializable {
 	}
 
 
-	public short getNumeroPrestacaoDebito() {
+	public Short getNumeroPrestacaoDebito() {
 		return numeroPrestacaoDebito;
 	}
 
 
-	public void setNumeroPrestacaoDebito(short numeroPrestacaoDebito) {
+	public void setNumeroPrestacaoDebito(Short numeroPrestacaoDebito) {
 		this.numeroPrestacaoDebito = numeroPrestacaoDebito;
 	}
 
 
-	public short getNumeroPrestacaoTotal() {
+	public Short getNumeroPrestacaoTotal() {
 		return numeroPrestacaoTotal;
 	}
 
 
-	public void setNumeroPrestacaoTotal(short numeroPrestacaoTotal) {
+	public void setNumeroPrestacaoTotal(Short numeroPrestacaoTotal) {
 		this.numeroPrestacaoTotal = numeroPrestacaoTotal;
 	}
 

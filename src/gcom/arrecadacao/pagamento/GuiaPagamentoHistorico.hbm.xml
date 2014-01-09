@@ -17,8 +17,8 @@
 		<property name="valorDebito" type="java.math.BigDecimal" column="gphi_vldebito" not-null="true" length="13"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="gphi_tmultimaalteracao" not-null="true" length="8"/>
 		<property name="indicadorMulta" type="short" column="gphi_iccobrancamulta" not-null="true" length="2"/>
-		<property name="numeroPrestacaoDebito" type="short" column="gphi_nnprestacaodebito" length="2"/>
-		<property name="numeroPrestacaoTotal" type="short" column="gphi_nnprestacaototal" length="2"/>
+		<property name="numeroPrestacaoDebito" type="java.lang.Short" column="gphi_nnprestacaodebito" length="2"/>
+		<property name="numeroPrestacaoTotal" type="java.lang.Short" column="gphi_nnprestacaototal" length="2"/>
 		<property name="observacao" type="java.lang.String" column="gphi_dsobservacao" length="200"/>
 		<property name="indicadorEmitirObservacao" type="java.lang.Short" column="gphi_icemitirobservacao" length="2"/>
 		<property name="numeroGuiaFatura" type="java.lang.String" column="gphi_nnguiafatura" not-null="false" length="14"/>
