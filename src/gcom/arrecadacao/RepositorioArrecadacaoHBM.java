@@ -102,7 +102,6 @@ import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
 import gcom.cadastro.imovel.Imovel;
-import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.CobrancaDocumento;
 import gcom.cobranca.CobrancaDocumentoItem;
@@ -113,6 +112,7 @@ import gcom.fachada.Fachada;
 import gcom.faturamento.ImpostoTipo;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaGeral;
+import gcom.faturamento.conta.ContaMotivoCancelamento;
 import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.credito.CreditoARealizar;
 import gcom.faturamento.credito.CreditoOrigem;
@@ -31617,5 +31617,56 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			
 			return retorno;
 			
+		}
+		
+		/**
+		 * TODO : COSANPA
+		 * @author Pamela Gatinho
+		 * @date 17/05/2013
+		 * 
+		 * Método para pesquisar pagamentos por ids passados como parâmetro
+		 */
+		public Collection<Pagamento> obterPagamentos(Collection<Integer> idsPagamentos) throws ErroRepositorioException {
+
+			Collection<Pagamento> retorno = new ArrayList<Pagamento>();
+			Collection<Pagamento> pagamentos = null;
+			Collection<Object[]> colecaoPagamentos = null;
+			
+			Session session = HibernateUtil.getSession();
+			String consulta = null;
+			String innerCancelamento = null;
+
+			try {
+				consulta = "select pagamento "
+					+ " from gcom.arrecadacao.pagamento.Pagamento as pagamento "
+					+ " inner join pagamento.contaGeral contaGeral "
+					+ " inner join contaGeral.conta conta "
+					+ " inner join conta.contaMotivoCancelamento contaMotivoCancelamento "
+					+ " where pagamento.id in (:idsPagamentos) "
+					+ " order by pagamento.dataPagamento, pagamento.imovel.id, pagamento.valorPagamento ";
+
+				pagamentos = session.createQuery(consulta)
+					.setParameterList("idsPagamentos", idsPagamentos).list();
+				
+				for (Pagamento pagamento: pagamentos) {
+					ContaGeral contaGeral = (ContaGeral) session.get(ContaGeral.class, pagamento.getContaGeral().getId());
+					Conta conta = (Conta) session.get(Conta.class, pagamento.getContaGeral().getId());
+					ContaMotivoCancelamento contaMotivoCancelamento = (ContaMotivoCancelamento) session.get(
+							ContaMotivoCancelamento.class, conta.getContaMotivoCancelamento().getId());
+						
+					conta.setContaMotivoCancelamento(contaMotivoCancelamento);
+					contaGeral.setConta(conta);
+					pagamento.setContaGeral(contaGeral);
+						
+					retorno.add(pagamento);
+				}
+
+			} catch (HibernateException e) {
+				throw new ErroRepositorioException(e, "Erro no Hibernate");
+			} finally {
+				HibernateUtil.closeSession(session);
+			}
+
+			return retorno;
 		}
 }

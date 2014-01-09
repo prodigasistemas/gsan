@@ -7134,4 +7134,13 @@ public interface IRepositorioArrecadacao {
 	
 	public Collection<Integer> pesquisarIdsLocalidadeComGuiasPagamentoNaoPagas(Integer financiamentoTipoServico, 
 			Date dataVencimentoLimite) throws ErroRepositorioException;
+	
+	/**
+	 * TODO : COSANPA
+	 * @author Pamela Gatinho
+	 * @date 17/05/2013
+	 * 
+	 * Método para pesquisar pagamentos por ids passados como parâmetro
+	 */
+	public Collection<Pagamento> obterPagamentos(Collection<Integer> idsPagamentos) throws ErroRepositorioException;
 }

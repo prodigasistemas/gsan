@@ -78,6 +78,7 @@ package gcom.faturamento;
 import gcom.arrecadacao.ContratoDemanda;
 import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
+import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.OrdemServico;
@@ -5885,5 +5886,42 @@ public interface IControladorFaturamento {
 	public DebitoACobrar gerarDebitoACobrar(Integer anoMesReferenciaArrecadacao, Integer anoMesReferenciaFaturamento, Imovel imovel, 
 			Short numeroPrestacaoDebito, Short numeroPrestacaoCobradas, Integer anoMesReferenciaDebito, BigDecimal valorDebito, 
 			DebitoTipo debitoTipo, Usuario usuario) throws ControladorException;
+	
+	/**
+	 * TODO : COSANPA
+	 * Pamela Gatinho - 17/05/2013
+	 * @param pagamentos
+	 * 
+	 * Método que inclui novas contas para contas que já estavam no histórico
+	 * e que já estavam prescritas. Retorna um Map, no qual a chave é o id
+	 * da conta em histórico e o valor e a nova conta, para poder saber a qual
+	 * conta do histórico a nova conta pertence.
+	 * 
+	 * @return Map<Integer, Conta> 
+	 * @throws ErroRepositorioException 
+	 * @throws ControladorException 
+	 */
+		public Map<Integer, Conta> incluirContasParaRefaturarPagamentos(Collection<Pagamento> pagamentos, Date dataArrecadacao) throws ControladorException, ErroRepositorioException;
+	
+		/**
+		 * TODO : COSANPA
+		 * Pamela Gatinho - 17/05/2013
+		 * @param pagamentos
+		 * 
+		 * Metodo para retornar uma lista somente com os id's dos pagamentos 
+		 * enviados como parâmetro
+		 */
+		@SuppressWarnings("unchecked")
+		public Collection<Integer> getListaIdContas(Collection<Pagamento> pagamentos);
+		
+		/**
+		 * TODO : COSANPA
+		 * Pamela Gatinho - 17/05/2013
+		 * @param pagamentos
+		 * 
+		 * Metodo que pesquisa os objetos ContaHistorico relacionados aos pagamentos
+		 * enviados como parâmetro.
+		 */
+		public Collection pesquisarContaOuContaHistorico(Collection<Integer> idsPagamentos, String className) throws ControladorException;
 
 }

@@ -3595,7 +3595,7 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 			//caso dataEncerramento seja menor que dataCorrente menos quantidade de dias parametros.			
 			Integer numOS = Util.converterStringParaInteger(numeroOS);
 			try {
-//				Date dataGeracaoOS =repositorioOrdemServico.obterDataGeracaOS(numOS);
+				Date dataGeracaoOS = repositorioOrdemServico.obterDataGeracaOS(numOS);
 				
 				SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 			
@@ -3610,7 +3610,14 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 			    
 			    // -1 se a data1 for menor que a data2, 0 se as datas forem iguais,
 				//  1 se a data1 for maior que a data2.
-				if(Util.compararData(dataEncerramentoDate, xData) == -1){
+				
+			    if(Util.compararData(dataEncerramentoDate, dataGeracaoOS) == -1){
+					throw new ControladorException(
+							"atencao.data_encerramento_anterior_permitido", null,
+							"Data de Encerramento");
+				}
+			    
+			    if(Util.compararData(dataEncerramentoDate, xData) == -1){
 					throw new ControladorException(
 							"atencao.data_encerramento_anterior_permitido", null,
 							"Data de Encerramento");

@@ -122,6 +122,8 @@ import gcom.cobranca.bean.GuiaPagamentoValoresHelper;
 import gcom.faturamento.GuiaPagamentoGeral;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaGeral;
+import gcom.faturamento.credito.CreditoOrigem;
+import gcom.faturamento.credito.CreditoTipo;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoACobrarGeral;
 import gcom.faturamento.debito.DebitoTipo;
@@ -4445,5 +4447,31 @@ public interface IControladorArrecadacao {
 		
 		public void processarPagamentosDiferencaDoisReais(Integer anoMesReferenciaArrecadacao, Localidade localidade, Integer idFuncionalidadeIniciada) throws Exception;
 
+		/**
+		 * TODO : COSANPA
+		 * @author Pamela Gatinho
+		 * @date 17/05/2013
+		 * 
+		 * @param idsPagamentos
+		 * @return
+		 */
+		public Collection<Pagamento> obterPagamentos(Collection<Integer> pagamentos) 
+		throws ControladorException;
+		
+		/**
+		 * TODO : COSANPA
+		 * @author Pamela Gatinho
+		 * @date 17/05/2013
+		 * 
+		 * Nova regra para classificar pagamentos de débitos prescritos
+		 * @param pagamentoSituacao
+		 * @param dataInicial
+		 * @param dataFinal
+		 * @return
+		 * @throws ControladorException 
+		 */
+		public void classificarPagamentosResolvidos(Collection<Pagamento> pagamentos, Usuario usuarioLogado,
+				CreditoTipo creditoTipo, CreditoOrigem creditoOrigem, boolean indicadorIncluirCredito) 
+			throws ControladorException;
 }	
 

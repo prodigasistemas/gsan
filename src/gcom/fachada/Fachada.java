@@ -448,6 +448,7 @@ import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.conta.FaturaItem;
 import gcom.faturamento.conta.ImpostoDeduzidoHelper;
 import gcom.faturamento.credito.CreditoARealizar;
+import gcom.faturamento.credito.CreditoOrigem;
 import gcom.faturamento.credito.CreditoRealizado;
 import gcom.faturamento.credito.CreditoTipo;
 import gcom.faturamento.debito.DebitoACobrar;
@@ -53780,6 +53781,49 @@ public class Fachada {
 			return this.getControladorCadastro().pesquisarRotasAtualizacaoCadastral(helper);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	/**
+	 * TODO : COSANPA
+	 * @author Pamela Gatinho
+	 * @date 17/05/2013
+	 * 
+	 * @param pagamentoSituacao
+	 * @param dataInicial
+	 * @param dataFinal
+	 * @return
+	 */
+	public Collection<Pagamento> obterPagamentos(Collection<Integer> idPagamentos) {
+		try {
+			return this.getControladorArrecadacao().obterPagamentos(idPagamentos);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex
+					.getParametroMensagem());
+		}
+	}
+	
+	/**
+	 * TODO : COSANPA
+	 * @author Pamela Gatinho
+	 * @date 17/05/2013
+	 * 
+	 * Nova regra para classificar pagamentos em DUPLICIDADE, CANCELADO POR PARCELAMENTO
+	 * @param pagamentoSituacao
+	 * @param dataInicial
+	 * @param dataFinal
+	 * @return
+	 * @throws ControladorException 
+	 */
+	public void classificarPagamentosResolvidos(Collection<Pagamento> pagamentos, Usuario usuarioLogado,
+			CreditoTipo creditoTipo, CreditoOrigem creditoOrigem, boolean indicadorIncluirCredito) 
+		throws ControladorException {
+		try {
+			this.getControladorArrecadacao().classificarPagamentosResolvidos(pagamentos, usuarioLogado, 
+					creditoTipo, creditoOrigem, indicadorIncluirCredito);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex
+					.getParametroMensagem());
 		}
 	}
 }

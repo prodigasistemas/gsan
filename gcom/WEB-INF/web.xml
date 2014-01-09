@@ -907,7 +907,9 @@
 				/WEB-INF/atendimentopublico/ordemservico/struts-config-RelatorioOrdensServicoFiscalizacao.xml,
 				/WEB-INF/arrecadacao/struts-config-InformarAcertoDocumentosNaoAceitos.xml,
 				/WEB-INF/atendimentopublico/ordemservico/struts-config-AtualizarOrdemServicoAcompanhamentoCelular.xml,
-				/WEB-INF/relatorio/big/struts-config-RelatorioBIG.xml
+				/WEB-INF/relatorio/big/struts-config-RelatorioBIG.xml,
+				/WEB-INF/arrecadacao/struts-config-PagamentosAClassificar.xml
+				
 				
 			</param-value>
 		</init-param>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="PagamentosAClassificarActionForm"
+			type="gcom.gui.arrecadacao.PagamentosAClassificarActionForm" />
+	</form-beans>
+
+	<!--******************* PÁGINAS GLOBAIS *******************-->
+	<global-forwards />
+	<action-mappings>
+		<action  name="PagamentosAClassificarActionForm"
+			type="gcom.gui.arrecadacao.ExibirFiltrarPagamentosAClassificarAction"
+			validate="false" scope="session" path="/exibirFiltrarPagamentosAClassificarAction">
+			<forward name="exibirFiltrarPagamentosAClassificar"
+				path="/jsp/arrecadacao/exibir_filtrar_pagamentos_a_classificar.jsp" />
+		</action>
+		
+		<action name="PagamentosAClassificarActionForm"
+			type="gcom.gui.arrecadacao.FiltrarPagamentosAClassificarAction"
+			validate="false" scope="session" path="/filtrarPagamentosRecuperacaoDeCreditoAction">
+			<forward name="filtrarPagamentosRecuperacaoDeCreditoAction" path="/jsp/arrecadacao/pagamentos_a_classificar.jsp" />
+		</action>
+		
+		<action name="PagamentosAClassificarActionForm"
+			type="gcom.gui.arrecadacao.ClassificarPagamentosAction"
+			validate="false" scope="session" path="/classificarPagamentosAction">
+			<forward name="classificarPagamentosAction" path="/jsp/arrecadacao/pagamentos_a_classificar.jsp" />
+		</action>
+		
+		<action name="PagamentosAClassificarActionForm"
+			type="gcom.gui.arrecadacao.RefaturarPagamentosNaoClassificadosAction"
+			validate="false" scope="session" path="/refaturarPagamentosNaoClassificadosAction">
+			<forward name="refaturarPagamentosNaoClassificadosAction" path="/jsp/arrecadacao/pagamentos_a_classificar.jsp" />
+		</action>
+	</action-mappings>
+
+	<message-resources null="false" parameter="gcom.properties.application" />
+</struts-config>

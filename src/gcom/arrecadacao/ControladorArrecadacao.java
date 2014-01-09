@@ -56806,4 +56806,142 @@ public class ControladorArrecadacao implements SessionBean {
         return retorno;
 
     }
+	
+	/**
+	 * TODO : COSANPA
+	 * @author Pamela Gatinho
+	 * @date 17/05/2013
+	 * 
+	 * @param idsPagamentos
+	 * @return
+	 */
+	public Collection<Pagamento> obterPagamentos(Collection<Integer> idsPagamentos) 
+		throws ControladorException {
+		Collection<Pagamento> pagamentos = null;
+		try {
+			
+			pagamentos = repositorioArrecadacao.obterPagamentos(idsPagamentos);
+			
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
+		return pagamentos;
+	}
+	
+	/**
+	 * TODO : COSANPA
+	 * @author Pamela Gatinho
+	 * @date 17/05/2013
+	 * 
+	 * Nova regra para classificar pagamentos em DUPLICIDADE, CANCELADO POR PARCELAMENTO
+	 * @param pagamentoSituacao
+	 * @param dataInicial
+	 * @param dataFinal
+	 * @return
+	 * @throws ControladorException 
+	 */
+	public void classificarPagamentosResolvidos(Collection<Pagamento> pagamentos, Usuario usuarioLogado,
+			CreditoTipo creditoTipo, CreditoOrigem creditoOrigem, boolean indicadorIncluirCredito) 
+		throws ControladorException {
+		
+		try {
+			
+			if (indicadorIncluirCredito) {
+				incluirCreditoPagamentosResolvidos(pagamentos, usuarioLogado, creditoTipo, creditoOrigem);
+			} else {
+				refaturarContaParaClassificarPagamentos(pagamentos, new Date());
+			}
+			
+			repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(pagamentos, PagamentoSituacao.PAGAMENTO_CLASSIFICADO);
+			
+		} catch(ErroRepositorioException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	/**
+	 * TODO : COSANPA
+	 * Pamela Gatinho - 26/06/2013
+	 * @param idsContas
+	 * @throws ErroRepositorioException 
+	 */
+	private void refaturarContaParaClassificarPagamentos(Collection<Pagamento> pagamentos, Date dataArrecadacao) 
+		throws ErroRepositorioException {
+		
+		try{
+			Map<Integer, Conta> mapContasNovas = getControladorFaturamento().incluirContasParaRefaturarPagamentos(pagamentos, dataArrecadacao);
+			
+			Collection<Integer> idsContas = getControladorFaturamento().getListaIdContas(pagamentos);
+
+			Collection<ContaHistorico> listaContaHistoricoOrigem = getControladorFaturamento().pesquisarContaOuContaHistorico(idsContas, ContaHistorico.class.toString());
+			
+			Set<Integer> listaIdsContaHistorico = mapContasNovas.keySet();
+			
+			for (Integer idContaHistorico : listaIdsContaHistorico) {
+				Pagamento pagamento = this.pesquisarPagamentoDeConta(idContaHistorico);
+				
+				if (pagamento != null) {
+					Conta novaConta = mapContasNovas.get(idContaHistorico);
+					pagamento.setContaGeral(novaConta.getContaGeral());
+					
+					repositorioUtil.atualizar(pagamento);
+				}
+				
+			}
+		} catch (Exception e) {
+			
+		}
+		
+	}
+	
+	/**
+	 * TODO : COSANPA
+	 * @author Pamela Gatinho
+	 * @date 17/05/2013
+	 * 
+	 * Método para criar um crédito para pagamentos em devolução
+	 * 
+	 * @param pagamentos
+	 * @param usuarioLogado
+	 * @throws ControladorException
+	 */
+	public void incluirCreditoPagamentosResolvidos(Collection<Pagamento> pagamentos, Usuario usuarioLogado,
+			CreditoTipo creditoTipo, CreditoOrigem creditoOrigem) 
+		throws ControladorException {
+		
+		for (Pagamento pagamento : pagamentos){
+			CreditoARealizar credito = new CreditoARealizar();
+			
+			Imovel imovel = getControladorImovel().pesquisarImovel(pagamento.getImovel().getId());
+			
+			SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();	
+			credito.setAnoMesReferenciaCredito(sistemaParametros.getAnoMesArrecadacao());
+			
+			credito.setCreditoTipo(creditoTipo);
+			credito.setCreditoOrigem(creditoOrigem);
+			credito.setImovel(imovel);
+			credito.setCodigoSetorComercial(imovel.getSetorComercial().getCodigo());
+			credito.setNumeroQuadra(imovel.getQuadra().getNumeroQuadra());
+			credito.setNumeroLote(imovel.getLote());
+			credito.setNumeroSubLote(imovel.getSubLote());
+			credito.setQuadra(imovel.getQuadra());
+			credito.setLocalidade(imovel.getLocalidade());
+			credito.setNumeroPrestacaoCredito((short) 1);
+			credito.setNumeroPrestacaoRealizada((short)0);
+			credito.setValorResidualMesAnterior(new BigDecimal(0.00));
+			credito.setValorCredito(pagamento.getValorPagamento());
+			credito.setGeracaoCredito(new Date());
+			credito.setUltimaAlteracao(new Date());
+			
+			LancamentoItemContabil lancamentoItemContabil = new LancamentoItemContabil(LancamentoItemContabil.OUTROS_SERVICOS_AGUA);
+			credito.setLancamentoItemContabil(lancamentoItemContabil);
+			
+			DebitoCreditoSituacao debitoCreditoSituacaoAtual =  new DebitoCreditoSituacao(DebitoCreditoSituacao.NORMAL);
+			credito.setDebitoCreditoSituacaoAtual(debitoCreditoSituacaoAtual);
+			
+			//getControladorFaturamento().inserirCreditoARealizar(imovel, credito, usuarioLogado);
+			getControladorFaturamento().gerarCreditoARealizar(credito, imovel, usuarioLogado);
+		}
+	}
 }

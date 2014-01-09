@@ -60762,4 +60762,46 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		return retorno;
 	}
+	
+	/**
+	 * TODO : COSANPA
+	 * @author Pamela Gatinho
+	 * @date 17/05/2013
+	 * 
+	 * Pesquisa uma lista de contas na tabela conta histórico.
+	 * 
+	 * @param contasIds
+	 * @return Collection de contas em histórico
+	 * @exception ErroRepositorioException
+	 *                Descrição da exceção
+	 */
+	public Collection pesquisarContaOuContaHistorico(Collection idsContas, String className)
+		throws ErroRepositorioException {
+
+		Collection<ContaHistorico> retorno = null;
+
+		Session session = HibernateUtil.getSession();
+		String consulta;
+
+		try {
+			consulta = "select c " + "from "+ className + " c "
+					+ "inner join fetch c.imovel imov "
+					+ "inner join fetch imov.localidade loc "
+					+ "inner join fetch c.debitoCreditoSituacaoAtual "
+					+ "inner join fetch c.quadra "
+					+ "where c.id in (:contasIds) ";
+
+			retorno = (Collection) session.createQuery(consulta)
+					.setParameterList("contasIds", idsContas).list();
+			
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
 }
