@@ -16710,7 +16710,7 @@ public class ControladorCadastro implements SessionBean {
 
 				tabelaAtualizacaoCadastral.setArquivoTextoAtualizacaoCadastral(arquivoTexto);
 				tabelaAtualizacaoCadastral.setTabela(tabela);
-				tabelaAtualizacaoCadastral.setIndicadorAutorizado(ConstantesSistema.INDICADOR_REGISTRO_ACEITO);
+				tabelaAtualizacaoCadastral.setIndicadorAutorizado(ConstantesSistema.INDICADOR_REGISTRO_NAO_ACEITO);
 
 				Iterator colunasAlteradasIter = colunasAlteradas.iterator();
 				while (colunasAlteradasIter.hasNext()) {
@@ -16718,7 +16718,7 @@ public class ControladorCadastro implements SessionBean {
 					TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral = new TabelaColunaAtualizacaoCadastral();
 					tabelaColunaAtualizacaoCadastral.setColunaValorAnterior(tabelaLinhaColunaAlteracao.getConteudoColunaAnterior());
 					tabelaColunaAtualizacaoCadastral.setColunaValorAtual(tabelaLinhaColunaAlteracao.getConteudoColunaAtual());
-					tabelaColunaAtualizacaoCadastral.setIndicadorAutorizado(ConstantesSistema.INDICADOR_REGISTRO_ACEITO);
+					tabelaColunaAtualizacaoCadastral.setIndicadorAutorizado(ConstantesSistema.INDICADOR_REGISTRO_NAO_ACEITO);
 					tabelaColunaAtualizacaoCadastral.setTabelaAtualizacaoCadastral(tabelaAtualizacaoCadastral);
 
 					FiltroTabelaColuna filtroColuna = new FiltroTabelaColuna();
