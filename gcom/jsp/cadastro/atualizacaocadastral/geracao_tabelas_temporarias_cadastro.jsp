@@ -5,6 +5,7 @@
 <%@ taglib uri="/WEB-INF/gsanLib.tld" prefix="gsan"%>
 
 <%@page import="gcom.cadastro.empresa.Empresa"%>
+<%@page import="gcom.gui.micromedicao.DadosLeiturista"%>
 <%@page import="gcom.cadastro.imovel.ImovelPerfil"%>
 <%@page import="gcom.cadastro.imovel.Categoria"%>
 <%@page import="gcom.cadastro.imovel.Subcategoria"%>
@@ -566,12 +567,37 @@
 
 		} 
 	}
+
+	function listarLeiturista() {
+		var form = document.forms[0];
+    	var obj = form.firma;
+
+    	if (obj.value != "-1") {
+    		form.leiturista.disabled = false;
+			form.action = 'exibirFiltrarImovelGeracaoTabelasTemporariasCadastro.do';
+		  	form.submit();
+    		return;
+    	}else {
+    		form.leiturista.value = "-1";
+    		form.leiturista.disabled = true;
+    	}
+	}
+
+	function bloquearLeiturista() {
+		var form = document.forms[0];
+    	var obj = form.firma;
+
+    	if (obj.value == "-1") {
+    		form.leiturista.value = "-1";
+    		form.leiturista.disabled = true;
+    	}
+    }
 	
 </script>
 
 </head>
 <body leftmargin="5" topmargin="5" onload="setarFoco('${requestScope.nomeCampo}');habilitaDesabilitaMatriculaCliente();
-bloquearSubCategoria();controleQuadra();">
+bloquearSubCategoria();controleQuadra();bloquearLeiturista();">
 
 <form action="/gsan/exibirFiltrarImovelGeracaoTabelasTemporariasCadastro.do"
 method="post" enctype="multipart/form-data">
@@ -784,13 +810,13 @@ method="post" enctype="multipart/form-data">
 					</tr>
 					
 					<tr>
-						<td><strong>Firma:&nbsp;</strong></td>
+						<td><strong>Empresa:&nbsp;</strong></td>
 						<td align="right">
 							<div align="left">
 								<strong>
 									<logic:present name="sugestao">
 										<logic:equal name="sugestao" value="1">
-											<select name="firma" >
+											<select name="firma" onchange="javascript:listarLeiturista();" style="width: 400px;">
 											<option value="-1">&nbsp;</option>
 												<logic:iterate id="empresa" type="Empresa" name="colecaoFirma" scope="session">
 													<logic:equal name="helper" property="firma" value="${empresa.id}">
@@ -803,7 +829,7 @@ method="post" enctype="multipart/form-data">
 											</select>
 										</logic:equal>
 										<logic:equal name="sugestao" value="2">
-											<select name="firma">
+											<select name="firma" onchange="javascript:listarLeiturista();" style="width: 400px;">
 												<option value="-1">&nbsp;</option>											
 												<logic:iterate id="empresa" type="Empresa" name="colecaoFirma" scope="session">
 													<logic:equal name="helper" property="firma" value="${empresa.id}">
@@ -818,7 +844,7 @@ method="post" enctype="multipart/form-data">
 									</logic:present>
 									
 									<logic:notPresent name="sugestao">
-										<select name="firma">
+										<select name="firma" onchange="javascript:listarLeiturista();" style="width: 400px;">
 											<option value="-1">&nbsp;</option>										
 										 	<logic:iterate id="empresa" type="Empresa" name="colecaoFirma" scope="session">
 												<logic:equal name="helper" property="firma" value="${empresa.id}">
@@ -831,6 +857,26 @@ method="post" enctype="multipart/form-data">
 										</select>
 									</logic:notPresent>
 								</strong>
+							</div>
+						</td>
+					</tr>
+					
+					<tr>
+						<td><strong>Agente Comercial:&nbsp;</strong></td>
+						<td align="right">
+							<div align="left">
+								<select name="leiturista" style="width: 400px;">
+									<option value="-1">&nbsp;</option>											
+										<logic:iterate id="leiturista" type="DadosLeiturista" name="colecaoLeiturista" scope="session">
+											<logic:equal name="helper" property="leiturista" value="${leiturista.id}">
+												<option selected="selected" value="${leiturista.id}">${helper.nomeLeiturista}</option>
+											</logic:equal>
+									
+											<logic:notEqual name="helper" property="leiturista" value="${leiturista.id}">
+												<option value="${leiturista.id}">${leiturista.descricao}</option>
+											</logic:notEqual>
+										</logic:iterate>
+								</select>
 							</div>
 						</td>
 					</tr>
@@ -1216,7 +1262,7 @@ method="post" enctype="multipart/form-data">
 						<td align="right">
 							<div align="left">
 								<strong>
-									<select name="perfilImovel" style="width: 430px;">
+									<select name="perfilImovel" style="width: 400px;">
 										<option value="-1">&nbsp;</option>									
 										<logic:iterate id="imovelPerfil" type="ImovelPerfil" name="collectionImovelPerfil" scope="session">
 											<logic:equal name="helper" property="perfilImovel" value="${imovelPerfil.id}">
@@ -1239,7 +1285,7 @@ method="post" enctype="multipart/form-data">
 						<td align="right">
 							<div align="left">
 								<strong>
-									<select name="categoria" onchange="ControleCategoria();" style="width: 430px;">
+									<select name="categoria" onchange="ControleCategoria();" style="width: 400px;">
 										<option value="-1">&nbsp;</option>
 										<logic:iterate id="categoria" type="Categoria" name="collectionImovelCategoria" scope="session">
 											<logic:equal name="helper" property="categoria" value="${categoria.id}">
@@ -1262,7 +1308,7 @@ method="post" enctype="multipart/form-data">
 						<td align="right">
 							<div align="left">
 								<strong>
-									<select name="subCategoria" style="width: 430px;">
+									<select name="subCategoria" style="width: 400px;">
 										<option value="-1">&nbsp;</option>
 										<logic:iterate id="subCategoria" type="Subcategoria" name="collectionImovelSubcategoria" scope="session">
 											<logic:equal name="helper" property="subCategoria" value="${subCategoria.id}">
@@ -1322,7 +1368,8 @@ method="post" enctype="multipart/form-data">
 						</td>
 					  </tr>
 					</table>
-					</td>	   
+					</td>
+					</tr>   
 				   <tr>
 						<td>&nbsp;</td>
 						<td colspan="3" align="right">&nbsp;</td>
