@@ -125,31 +125,21 @@ public class FiltrarImovelGeracaoTabelasTemporariasCadastroAction extends GcomAc
 			ActionForm actionForm, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 
-		// Seta o mapeamento de retorno
 		ActionForward retorno = actionMapping.findForward("telaSucesso");
-		
-		// Obtém a instância da fachada
 		Fachada fachada = Fachada.getInstancia();
-		
 		ImovelGeracaoTabelasTemporariasCadastroHelper imovelGeracaoTabelasTemporariasCadastroHelper =
 			new ImovelGeracaoTabelasTemporariasCadastroHelper();
-		
 		String line = null;
-		Collection colecaoMatriculas = new ArrayList();
+		Collection<Integer> colecaoMatriculas = new ArrayList<Integer>();
 		
 		try {
-			//Classe utilizada para processamento de uploads de arquivos
 			DiskFileUpload upload = new DiskFileUpload();
-	
-			// Parse the request
-			List items = upload.parseRequest(httpServletRequest);
-	
+			List itens = upload.parseRequest(httpServletRequest);
 			FileItem item = null;
 			
-			// pega uma lista de itens do form
-			Iterator iter = items.iterator();
-			while (iter.hasNext()) {
-				item = (FileItem) iter.next();
+			Iterator iterator = itens.iterator();
+			while (iterator.hasNext()) {
+				item = (FileItem) iterator.next();
 				
 				//Matricula do imovel
 				if( item.getFieldName().equals("matricula") && !item.getString().equals("") ) {
@@ -169,6 +159,11 @@ public class FiltrarImovelGeracaoTabelasTemporariasCadastroAction extends GcomAc
 				//Firma(empresa)
 				if ( item.getFieldName().equals("firma") && !item.getString().equals("-1") ) {
 					imovelGeracaoTabelasTemporariasCadastroHelper.setFirma( item.getString() );
+				}
+				
+				//Leiturista(Agente Comercial)
+				if ( item.getFieldName().equals("leiturista") && !item.getString().equals("-1") ) {
+					imovelGeracaoTabelasTemporariasCadastroHelper.setLeiturista(item.getString());
 				} 
 				
 				//Quantidade Maxima

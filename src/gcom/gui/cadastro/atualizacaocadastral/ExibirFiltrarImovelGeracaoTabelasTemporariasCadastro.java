@@ -411,7 +411,8 @@ public class ExibirFiltrarImovelGeracaoTabelasTemporariasCadastro extends
 		
 		if (httpServletRequest.getParameter("menu") == null) {
 			try {
-				List itens = new DiskFileUpload().parseRequest(httpServletRequest);
+				DiskFileUpload upload = new DiskFileUpload();
+				List itens = upload.parseRequest(httpServletRequest);
 				FileItem item = null;
 				Iterator iteratorItens = itens.iterator();
 				
@@ -442,6 +443,32 @@ public class ExibirFiltrarImovelGeracaoTabelasTemporariasCadastro extends
 						Empresa empresa = (Empresa) Util.retonarObjetoDeColecao(colecaoEmpresa);
 
 						helper.setNomeFirma(empresa.getDescricao());
+					}
+					
+					if (item.getFieldName().equals("leiturista") && !item.getString().equals("-1")) {
+						
+						helper.setLeiturista(item.getString());
+						
+						FiltroLeiturista filtroLeiturista = new FiltroLeiturista();
+						filtroLeiturista.adicionarParametro(new ParametroSimples(
+								FiltroLeiturista.ID, helper.getLeiturista()));
+						filtroLeiturista.adicionarCaminhoParaCarregamentoEntidade(FiltroLeiturista.CLIENTE);
+						filtroLeiturista.adicionarCaminhoParaCarregamentoEntidade(FiltroLeiturista.FUNCIONARIO);
+						Collection<Leiturista> colecaoLeiturista = fachada.pesquisar(
+								filtroLeiturista, Leiturista.class.getName());
+						Leiturista leiturista = (Leiturista) Util.retonarObjetoDeColecao(colecaoLeiturista);
+								
+						DadosLeiturista dadosLeiturista = null;
+						
+						if (leiturista.getFuncionario() != null) {
+							dadosLeiturista = new DadosLeiturista(leiturista.getId(),
+									leiturista.getFuncionario().getNome());
+						} else {
+							dadosLeiturista = new DadosLeiturista(leiturista.getId(),
+									leiturista.getCliente().getNome());
+						}
+						
+						helper.setNomeLeiturista(dadosLeiturista.getDescricao());
 					}
 
 					if (item.getFieldName().equals("quantidadeMaxima") && !item.getString().equals("")) {
