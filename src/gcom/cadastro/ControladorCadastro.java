@@ -165,6 +165,7 @@ import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.cadastro.imovel.ImagemAtualizacaoCadastral;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
+import gcom.cadastro.imovel.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelInscricaoAlterada;
 import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.cadastro.imovel.ImovelProgramaEspecial;
@@ -7594,6 +7595,8 @@ public class ControladorCadastro implements SessionBean {
 								}
 							}
 						}
+						
+						inserirImovelControleAtualizacaoCadastral(idImovel);
 
 						// Atualizar Situacao Atualizacao Cadastral
 						getControladorImovel()
@@ -7628,6 +7631,19 @@ public class ControladorCadastro implements SessionBean {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex,
 					idUnidadeIniciada, true);
 			throw new EJBException(ex);
+		}
+	}
+
+	public void inserirImovelControleAtualizacaoCadastral(Integer idImovel) {
+		ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral = new ImovelControleAtualizacaoCadastral();
+		imovelControleAtualizacaoCadastral.setDataGeracao(new Date());
+		imovelControleAtualizacaoCadastral.setImovel(new Imovel(idImovel));
+		imovelControleAtualizacaoCadastral.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.DISPONIVEL));
+		
+		try {
+			getControladorUtil().inserir(imovelControleAtualizacaoCadastral);
+		} catch (ControladorException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -16710,7 +16726,7 @@ public class ControladorCadastro implements SessionBean {
 
 				tabelaAtualizacaoCadastral.setArquivoTextoAtualizacaoCadastral(arquivoTexto);
 				tabelaAtualizacaoCadastral.setTabela(tabela);
-				tabelaAtualizacaoCadastral.setIndicadorAutorizado(ConstantesSistema.INDICADOR_REGISTRO_ACEITO);
+				tabelaAtualizacaoCadastral.setIndicadorAutorizado(ConstantesSistema.INDICADOR_REGISTRO_NAO_ACEITO);
 
 				Iterator colunasAlteradasIter = colunasAlteradas.iterator();
 				while (colunasAlteradasIter.hasNext()) {
@@ -16718,7 +16734,7 @@ public class ControladorCadastro implements SessionBean {
 					TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral = new TabelaColunaAtualizacaoCadastral();
 					tabelaColunaAtualizacaoCadastral.setColunaValorAnterior(tabelaLinhaColunaAlteracao.getConteudoColunaAnterior());
 					tabelaColunaAtualizacaoCadastral.setColunaValorAtual(tabelaLinhaColunaAlteracao.getConteudoColunaAtual());
-					tabelaColunaAtualizacaoCadastral.setIndicadorAutorizado(ConstantesSistema.INDICADOR_REGISTRO_ACEITO);
+					tabelaColunaAtualizacaoCadastral.setIndicadorAutorizado(ConstantesSistema.INDICADOR_REGISTRO_NAO_ACEITO);
 					tabelaColunaAtualizacaoCadastral.setTabelaAtualizacaoCadastral(tabelaAtualizacaoCadastral);
 
 					FiltroTabelaColuna filtroColuna = new FiltroTabelaColuna();
@@ -17173,6 +17189,8 @@ public class ControladorCadastro implements SessionBean {
 
 			ImovelAtualizacaoCadastral imovelAtualizacaoCadastralBase = getControladorImovel().pesquisarImovelAtualizacaoCadastral(matriculaImovel);
 			salvarTabelaColunaAtualizacaoCadastral(imovelAtualizacaoCadastralBase, imovelTxt, arquivoTexto, interceptador, matriculaImovel);
+			
+			atualizarRetornoImovelControleAtualizacaoCadastral(matriculaImovel, SituacaoAtualizacaoCadastral.TRANSMITIDO);
 
 		} catch (ControladorException e) {
 			e.printStackTrace();
@@ -17180,6 +17198,20 @@ public class ControladorCadastro implements SessionBean {
 
 	}
 	
+	private void atualizarRetornoImovelControleAtualizacaoCadastral(
+			int matriculaImovel, Integer situacao) throws ControladorException {
+		try {
+			ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral = 
+					repositorioImovel.pesquisarImovelControleAtualizacaoCadastral(matriculaImovel, SituacaoAtualizacaoCadastral.DISPONIVEL);
+			imovelControleAtualizacaoCadastral.setDataRetorno(new Date());
+			imovelControleAtualizacaoCadastral.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.TRANSMITIDO));
+			
+			getControladorUtil().atualizar(imovelControleAtualizacaoCadastral);
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * TODO: COSANPA
 	 * 
