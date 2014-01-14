@@ -133,13 +133,14 @@ public class ExibirFiltrarImovelGeracaoTabelasTemporariasCadastro extends
 	private String codigoSetorComercial = null;
 	private String idSetorComercial = null;
 	private String nomeQuadra = null;
+	
+	private static Fachada fachada = Fachada.getInstancia();
 
 	public ActionForward execute(ActionMapping actionMapping,
 			ActionForm actionForm, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 
 		ActionForward retorno = actionMapping.findForward("filtrarImovelGeracaoTabelasTemporariasCadastro");
-		Fachada fachada = Fachada.getInstancia();
 		HttpSession sessao = httpServletRequest.getSession(false);
 		ImovelGeracaoTabelasTemporariasCadastroHelper helper = new ImovelGeracaoTabelasTemporariasCadastroHelper();
 
@@ -149,52 +150,50 @@ public class ExibirFiltrarImovelGeracaoTabelasTemporariasCadastro extends
 			helper.setImovelSituacao("1");
 		}
 
-		helper = this.carregarCampos(httpServletRequest, fachada, helper);
+		helper = this.carregarCampos(httpServletRequest, helper);
 
-		this.carregarQuadraInicial(fachada, helper);
+		this.carregarQuadraInicial(helper);
 
-		this.carregarQuadraFinal(fachada, helper);
+		this.carregarQuadraFinal(helper);
 
-		this.carregarColecaoEmpresa(fachada, sessao);
+		this.carregarColecaoEmpresa(sessao);
 		
 		Integer idEmpresa = 0;
 		if (helper.getFirma() != null && !helper.getFirma().equals("-1")) {
 			idEmpresa = new Integer(helper.getFirma());
 		}
 		
-		this.carregarLeiturista(fachada, sessao, idEmpresa);
+		this.carregarLeiturista(sessao, idEmpresa);
 
-		this.consultarObjetos(httpServletRequest, fachada, helper);
+		this.consultarObjetos(httpServletRequest, helper);
 
-		this.carregarColecaoImovelPerfil(fachada, sessao, helper);
+		this.carregarColecaoImovelPerfil(sessao, helper);
 
-		this.carregarColecaoCategoria(fachada, sessao, helper);
+		this.carregarColecaoCategoria(sessao, helper);
 		
 		Integer idCategoria = 0;
 		if (helper.getCategoria() != null && !helper.getCategoria().equals("-1")) {
 			idCategoria = new Integer(helper.getCategoria());
 		}
 		
-		this.carregarColecaoSubcategoria(fachada, sessao, idCategoria);
+		this.carregarColecaoSubcategoria(sessao, idCategoria);
 
-		this.carregarColecaoLigacaoAguaSituacao(fachada, sessao);
+		this.carregarColecaoLigacaoAguaSituacao(sessao);
 
-		this.carregarColecaoClienteRelacaoTipo(fachada, sessao);
+		this.carregarColecaoClienteRelacaoTipo(sessao);
 
 		sessao.setAttribute("helper", helper);
 
 		return retorno;
 	}
 
-	private void carregarColecaoClienteRelacaoTipo(Fachada fachada,
-			HttpSession sessao) {
+	private void carregarColecaoClienteRelacaoTipo(HttpSession sessao) {
 		FiltroClienteRelacaoTipo filtro = new FiltroClienteRelacaoTipo(FiltroClienteRelacaoTipo.DESCRICAO);
 		Collection colecaoClienteRelacaoTipo = fachada.pesquisar(filtro, ClienteRelacaoTipo.class.getName());
 		sessao.setAttribute("colecaoClienteRelacaoTipo", colecaoClienteRelacaoTipo);
 	}
 
-	private void carregarColecaoLigacaoAguaSituacao(Fachada fachada,
-			HttpSession sessao) throws ActionServletException {
+	private void carregarColecaoLigacaoAguaSituacao(HttpSession sessao) throws ActionServletException {
 		FiltroLigacaoAguaSituacao filtroLigacaoAguaSituacao = new FiltroLigacaoAguaSituacao();
 		filtroLigacaoAguaSituacao.setCampoOrderBy(FiltroLigacaoAguaSituacao.DESCRICAO);
 		filtroLigacaoAguaSituacao.adicionarParametro(new ParametroSimples(
@@ -210,9 +209,8 @@ public class ExibirFiltrarImovelGeracaoTabelasTemporariasCadastro extends
 		}
 	}
 
-	private void carregarColecaoSubcategoria(Fachada fachada,
-			HttpSession sessao, Integer idCategoria)
-			throws ActionServletException {
+	private void carregarColecaoSubcategoria(HttpSession sessao,
+			Integer idCategoria) throws ActionServletException {
 		
 		Collection<Subcategoria> colecaoSubcategoria = null;
 		
@@ -233,7 +231,7 @@ public class ExibirFiltrarImovelGeracaoTabelasTemporariasCadastro extends
 		sessao.setAttribute("collectionImovelSubcategoria", colecaoSubcategoria);
 	}
 
-	private void carregarColecaoCategoria(Fachada fachada, HttpSession sessao,
+	private void carregarColecaoCategoria(HttpSession sessao,
 			ImovelGeracaoTabelasTemporariasCadastroHelper helper)
 			throws ActionServletException {
 		Collection<Categoria> colecaoCategoria = null;
@@ -252,7 +250,7 @@ public class ExibirFiltrarImovelGeracaoTabelasTemporariasCadastro extends
 		}
 	}
 
-	private void carregarColecaoImovelPerfil(Fachada fachada, HttpSession sessao,
+	private void carregarColecaoImovelPerfil(HttpSession sessao,
 			ImovelGeracaoTabelasTemporariasCadastroHelper helper)
 			throws ActionServletException {
 		Collection<ImovelPerfil> colecaoImovelPerfil = null;
@@ -270,8 +268,7 @@ public class ExibirFiltrarImovelGeracaoTabelasTemporariasCadastro extends
 		}
 	}
 
-	private void carregarColecaoEmpresa(Fachada fachada,
-			HttpSession sessao) throws ActionServletException {
+	private void carregarColecaoEmpresa(HttpSession sessao) throws ActionServletException {
 		
 		if (sessao.getAttribute("colecaoFirma") == null) {
 			FiltroEmpresa filtroEmpresa = new FiltroEmpresa();
@@ -290,7 +287,7 @@ public class ExibirFiltrarImovelGeracaoTabelasTemporariasCadastro extends
 		}
 	}
 
-	private void carregarLeiturista(Fachada fachada, HttpSession sessao,
+	private void carregarLeiturista(HttpSession sessao,
 			Integer idEmpresa) throws ActionServletException {
 		
 		Collection<DadosLeiturista> colecaoLeiturista = new ArrayList<DadosLeiturista>();
@@ -329,9 +326,9 @@ public class ExibirFiltrarImovelGeracaoTabelasTemporariasCadastro extends
 		sessao.setAttribute("colecaoLeiturista", colecaoLeiturista);
 	}
 	
-	private void carregarQuadraFinal(Fachada fachada,
-			ImovelGeracaoTabelasTemporariasCadastroHelper helper)
+	private void carregarQuadraFinal(ImovelGeracaoTabelasTemporariasCadastroHelper helper)
 			throws ActionServletException {
+		
 		if (helper.getIdQuadraFinal() != null && helper.getIdQuadraFinal().length() > 0) {
 			FiltroQuadra filtroQuadra = new FiltroQuadra();
 			filtroQuadra.adicionarParametro(new ParametroSimples(FiltroQuadra.ID, helper.getIdQuadraFinal()));
@@ -344,9 +341,9 @@ public class ExibirFiltrarImovelGeracaoTabelasTemporariasCadastro extends
 		}
 	}
 
-	private void carregarQuadraInicial(Fachada fachada,
-			ImovelGeracaoTabelasTemporariasCadastroHelper helper)
+	private void carregarQuadraInicial(ImovelGeracaoTabelasTemporariasCadastroHelper helper)
 			throws ActionServletException {
+		
 		if (helper.getIdQuadraInicial() != null && helper.getIdQuadraInicial().length() > 0) {
 			FiltroQuadra filtroQuadra = new FiltroQuadra();
 			filtroQuadra.adicionarParametro(new ParametroSimples(FiltroQuadra.ID, helper.getIdQuadraInicial()));
@@ -360,9 +357,9 @@ public class ExibirFiltrarImovelGeracaoTabelasTemporariasCadastro extends
 	}
 
 	private void consultarObjetos(HttpServletRequest httpServletRequest,
-			Fachada fachada,
 			ImovelGeracaoTabelasTemporariasCadastroHelper helper)
 			throws NumberFormatException {
+		
 		String objetoConsulta = (String) httpServletRequest.getParameter("objetoConsulta");
 		String inscricaoTipo = (String) httpServletRequest.getParameter("inscricaoTipo");
 
@@ -373,30 +370,30 @@ public class ExibirFiltrarImovelGeracaoTabelasTemporariasCadastro extends
 
 			switch (Integer.parseInt(objetoConsulta)) {
 			case 1: // Localidade
-				pesquisarLocalidade(inscricaoTipo, helper, fachada, httpServletRequest);
+				pesquisarLocalidade(inscricaoTipo, helper, httpServletRequest);
 				break;
 
 			case 2: // Setor Comercial
-				pesquisarLocalidade(inscricaoTipo, helper, fachada, httpServletRequest);
-				pesquisarSetorComercial(inscricaoTipo, helper, fachada, httpServletRequest);
+				pesquisarLocalidade(inscricaoTipo, helper, httpServletRequest);
+				pesquisarSetorComercial(inscricaoTipo, helper, httpServletRequest);
 				break;
 
 			case 3: // Quadra
-				pesquisarLocalidade(inscricaoTipo, helper, fachada, httpServletRequest);
-				pesquisarSetorComercial(inscricaoTipo, helper, fachada, httpServletRequest);
-				pesquisarQuadra(inscricaoTipo, helper, fachada, httpServletRequest);
+				pesquisarLocalidade(inscricaoTipo, helper, httpServletRequest);
+				pesquisarSetorComercial(inscricaoTipo, helper, httpServletRequest);
+				pesquisarQuadra(inscricaoTipo, helper, httpServletRequest);
 				break;
 
 			case 4: // Elo
-				pesquisarElo(inscricaoTipo, helper, fachada, httpServletRequest);
+				pesquisarElo(inscricaoTipo, helper, httpServletRequest);
 				break;
 
 			case 5: // Cliente
-				pesquisarCliente(helper, fachada, httpServletRequest);
+				pesquisarCliente(helper, httpServletRequest);
 				break;
 
 			case 6: // Imovel
-				pesquisarImoveis(helper, fachada, httpServletRequest);
+				pesquisarImoveis(helper, httpServletRequest);
 
 			default:
 				break;
@@ -405,7 +402,7 @@ public class ExibirFiltrarImovelGeracaoTabelasTemporariasCadastro extends
 	}
 
 	private ImovelGeracaoTabelasTemporariasCadastroHelper carregarCampos(
-			HttpServletRequest httpServletRequest, Fachada fachada,
+			HttpServletRequest httpServletRequest,
 			ImovelGeracaoTabelasTemporariasCadastroHelper helper)
 			throws ActionServletException {
 		
@@ -616,7 +613,7 @@ public class ExibirFiltrarImovelGeracaoTabelasTemporariasCadastro extends
 
 	private void pesquisarElo(String inscricaoTipo,
 			ImovelGeracaoTabelasTemporariasCadastroHelper helper,
-			Fachada fachada, HttpServletRequest httpServletRequest) {
+			HttpServletRequest httpServletRequest) {
 
 		FiltroLocalidade filtroLocalidade = new FiltroLocalidade();
 
@@ -663,7 +660,7 @@ public class ExibirFiltrarImovelGeracaoTabelasTemporariasCadastro extends
 
 	private void pesquisarLocalidade(String inscricaoTipo,
 			ImovelGeracaoTabelasTemporariasCadastroHelper helper,
-			Fachada fachada, HttpServletRequest httpServletRequest) {
+			HttpServletRequest httpServletRequest) {
 
 		FiltroLocalidade filtroLocalidade = new FiltroLocalidade();
 
@@ -725,7 +722,7 @@ public class ExibirFiltrarImovelGeracaoTabelasTemporariasCadastro extends
 	@SuppressWarnings("static-access")
 	private void pesquisarSetorComercial(String inscricaoTipo,
 			ImovelGeracaoTabelasTemporariasCadastroHelper helper,
-			Fachada fachada, HttpServletRequest httpServletRequest) {
+			HttpServletRequest httpServletRequest) {
 
 		FiltroSetorComercial filtroSetorComercial = new FiltroSetorComercial();
 
@@ -824,7 +821,7 @@ public class ExibirFiltrarImovelGeracaoTabelasTemporariasCadastro extends
 
 	private void pesquisarQuadra(String inscricaoTipo,
 			ImovelGeracaoTabelasTemporariasCadastroHelper helper,
-			Fachada fachada, HttpServletRequest httpServletRequest) {
+			HttpServletRequest httpServletRequest) {
 
 		FiltroQuadra filtroQuadra = new FiltroQuadra();
 		filtroQuadra.adicionarCaminhoParaCarregamentoEntidade("bairro");
@@ -924,7 +921,7 @@ public class ExibirFiltrarImovelGeracaoTabelasTemporariasCadastro extends
 	}
 
 	public void pesquisarCliente(ImovelGeracaoTabelasTemporariasCadastroHelper helper,
-			Fachada fachada, HttpServletRequest httpServletRequest) {
+			HttpServletRequest httpServletRequest) {
 		
 		FiltroCliente filtroCliente = new FiltroCliente();
 
@@ -948,7 +945,7 @@ public class ExibirFiltrarImovelGeracaoTabelasTemporariasCadastro extends
 	}
 
 	public void pesquisarImoveis(ImovelGeracaoTabelasTemporariasCadastroHelper helper,
-			Fachada fachada, HttpServletRequest httpServletRequest) {
+			HttpServletRequest httpServletRequest) {
 
 		FiltroImovel filtroImovel = new FiltroImovel();
 		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, helper.getMatricula()));

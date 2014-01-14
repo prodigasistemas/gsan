@@ -659,7 +659,7 @@ method="post" enctype="multipart/form-data">
 					<tr>
 						<td width="11"><img border="0"
 							src="<bean:message key="caminho.imagens"/>parahead_left.gif" /></td>
-						<td class="parabg">Filtrar Im&oacute;vel</td>
+						<td class="parabg">Gerar Tabelas Tempor&aacute;rias para Atualiza&ccedil;&atilde;o Cadastral </td>
 						<td width="11"><img border="0"
 							src="<bean:message key="caminho.imagens"/>parahead_right.gif" /></td>
 					</tr>
@@ -862,7 +862,7 @@ method="post" enctype="multipart/form-data">
 					</tr>
 					
 					<tr>
-						<td><strong>Agente Comercial:&nbsp;</strong></td>
+						<td><strong>Agente Cadastral:&nbsp;</strong></td>
 						<td align="right">
 							<div align="left">
 								<select name="leiturista" style="width: 400px;">

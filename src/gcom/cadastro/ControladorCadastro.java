@@ -7410,34 +7410,17 @@ public class ControladorCadastro implements SessionBean {
 		int idUnidadeIniciada = 0;
 
 		try {
-
-			if (helper.getColecaoMatriculas() != null
-					&& !helper.getColecaoMatriculas().isEmpty()) {
-				idUnidadeIniciada = getControladorBatch()
-						.iniciarUnidadeProcessamentoBatch(
-								idFuncionalidadeIniciada,
-								UnidadeProcessamento.FUNCIONALIDADE, 0);
-			} else {
-				idUnidadeIniciada = getControladorBatch()
-						.iniciarUnidadeProcessamentoBatch(
-								idFuncionalidadeIniciada,
-								UnidadeProcessamento.SETOR_COMERCIAL, (idSetor));
-			}
+			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(
+					idFuncionalidadeIniciada, UnidadeProcessamento.SETOR_COMERCIAL, idSetor);
 
 			Collection colecaoIdsImovel = null;
 
-			if (helper.getColecaoMatriculas() != null
-					&& !helper.getColecaoMatriculas().isEmpty()) {
-				colecaoIdsImovel = helper.getColecaoMatriculas();
+			if (helper.getImovelSituacao() != null && new Integer(helper.getImovelSituacao()) == 2) {
+				colecaoIdsImovel = repositorioCadastro.pesquisarImovelDebitoAtualizacaoCadastral(
+						colecaoIdsImovel);
 			} else {
-				colecaoIdsImovel = repositorioCadastro
-						.obterIdsImovelGeracaoTabelasTemporarias(idSetor,
-								helper);
-				if (helper.getImovelSituacao() != null
-						&& new Integer(helper.getImovelSituacao()) == 2) {
-					colecaoIdsImovel = repositorioCadastro
-							.pesquisarImovelDebitoAtualizacaoCadastral(colecaoIdsImovel);
-				}
+				colecaoIdsImovel = repositorioCadastro.obterIdsImovelGeracaoTabelasTemporarias(
+						idSetor, helper);
 			}
 
 			ClienteAtualizacaoCadastral clienteAtualizacaoCadastralProprietario = null;
