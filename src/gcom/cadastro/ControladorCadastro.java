@@ -17267,8 +17267,7 @@ public class ControladorCadastro implements SessionBean {
 		}
 	}
 	
-	public Leiturista getLeituristaAtualizacaoCadastral(
-			Integer idLeiturista) throws ControladorException {
+	public Leiturista getLeituristaAtualizacaoCadastral(Integer idLeiturista) throws ControladorException {
 		try{
 			FiltroLeiturista filtroLeiturista = new FiltroLeiturista();
 			filtroLeiturista.adicionarParametro(new ParametroSimples(
@@ -17285,4 +17284,21 @@ public class ControladorCadastro implements SessionBean {
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
+	
+	public Collection<Integer> pesquisarIdImoveisAprovados() throws ControladorException {
+		Collection<Integer> idImoveisAprovados = new ArrayList<Integer>();
+		try {
+			idImoveisAprovados = repositorioImovel.pesquisarIdImoveisAprovados();
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
+		return idImoveisAprovados;
+	}
+	
+	public void atualizarImoveisAprovados() throws ControladorException {
+		Collection<Integer> idImoveis = pesquisarIdImoveisAprovados();
+		
+	}
+	
+	
 }
