@@ -1564,7 +1564,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 			for (int i = 0; i < idsAtualizacaoCadastral.length; i++) {
 				Integer idAtualizacaoCadastral = new Integer(idsAtualizacaoCadastral[i]);
 				// atualiza o indicador de autorizado para sim 
-				this.repositorioTransacao.atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(idAtualizacaoCadastral, indicador);
+				this.repositorioTransacao.atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(idAtualizacaoCadastral, indicador, usuarioLogado);
 				//verifica qual o tipo de atualização cadastral
 				if(tipoAlteracaoCadastral == null){
 					TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral = this.repositorioTransacao.pesquisarTabelaColunaAtualizacaoCadastral(idAtualizacaoCadastral);

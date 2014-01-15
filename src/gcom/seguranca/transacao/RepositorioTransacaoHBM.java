@@ -86,6 +86,7 @@ import gcom.seguranca.acesso.FiltroOperacaoEfetuada;
 import gcom.seguranca.acesso.FiltroOperacaoOrdemExibicao;
 import gcom.seguranca.acesso.Operacao;
 import gcom.seguranca.acesso.OperacaoOrdemExibicao;
+import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
@@ -114,7 +115,9 @@ import java.util.concurrent.CopyOnWriteArraySet;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
+import org.jboss.logging.Logger;
 
 /**
  * < <Descrição da Classe>>
@@ -123,6 +126,8 @@ import org.hibernate.Session;
  * @created 22 de Julho de 2005
  */
 public class RepositorioTransacaoHBM implements IRepositorioTransacao {
+	
+	private static Logger logger = Logger.getLogger(RepositorioTransacaoHBM.class);
 
 	private static IRepositorioTransacao instancia;
 
@@ -1064,30 +1069,34 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 	 * @param indicador
 	 * @throws ErroRepositorioException
 	 */
-	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(
-			Integer idAtualizacaoCadastral,
-			Short indicador) throws ErroRepositorioException {
+	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer idAtualizacaoCadastral,	Short indicador, Usuario usuario) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		
-		String hql =
-			"UPDATE gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral tcol " +
-			"SET tcol.indicadorAutorizado = :indicador, " +
-			"tcol.ultimaAlteracao = :dataAtual " ;
-		if(indicador.equals(ConstantesSistema.SIM)){
-			hql = hql + ",tcol.dataProcessamento = :dataAtual ";
-		}
+		StringBuilder query = new StringBuilder();
+		query.append("UPDATE gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral tcol ")
+			.append("SET tcol.indicadorAutorizado = :indicador, ")
+			.append(" tcol.ultimaAlteracao = :dataAtual ");
 		
+		if(indicador.equals(ConstantesSistema.SIM)){
+			query.append(" ,tcol.dataValidacao = :dataAtual ")
+			.append(" , tcol.usuario = :usuario");
+		}
 			
-		hql = hql + "WHERE tcol.id = :idAtualizacaoCadastral";
+		query.append(" WHERE tcol.id = :idAtualizacaoCadastral");
 		
 		try {
-			session.createQuery(hql)
+			Query sql = session.createQuery(query.toString())
 				.setShort("indicador", indicador)
 				.setTimestamp("dataAtual", new Date())
-				.setInteger("idAtualizacaoCadastral", idAtualizacaoCadastral)
-				.executeUpdate();
-
+				.setInteger("idAtualizacaoCadastral", idAtualizacaoCadastral);
+			
+			if(indicador.equals(ConstantesSistema.SIM)){
+				sql.setEntity("usuario", usuario);
+			}
+			
+			sql.executeUpdate();
 		} catch (HibernateException e) {
+			logger.error("Erro ao altera tabela_coluna_atualizacao_cadastral", e);
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
