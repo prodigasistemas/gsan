@@ -7694,7 +7694,7 @@ public class ControladorCadastro implements SessionBean {
 	 */
 	public void gerarArquivoTextoAtualizacaoCadastralDispositivoMovel(
 			Integer idFuncionalidadeIniciada,
-			GerarArquivoTextoAtualizacaoCadastralHelper helper,
+			ImovelGeracaoTabelasTemporariasCadastroHelper helper,
 			Integer idRota) throws ControladorException {
 
 		int idUnidadeIniciada = 0;
@@ -7713,24 +7713,18 @@ public class ControladorCadastro implements SessionBean {
 
 			// Situação do Arquivo
 			SituacaoTransmissaoLeitura situacaoTransmissaoLeitura = new SituacaoTransmissaoLeitura();
-			situacaoTransmissaoLeitura.setId(helper.getSituacao());
+			situacaoTransmissaoLeitura.setId(SituacaoTransmissaoLeitura.LIBERADO);
 			arquivoTextoAtualizacaoCadastral.setSituacaoTransmissaoLeitura(situacaoTransmissaoLeitura);
 
-			if (helper.getColecaoImovel() == null
-					|| helper.getColecaoImovel().isEmpty()) {
+			leiturista = this.getLeituristaAtualizacaoCadastral(Integer.parseInt(helper.getLeiturista()));
 
-				leiturista = this.getLeituristaAtualizacaoCadastral(helper.getIdLeiturista());
-
-				idsImoveis = repositorioCadastro.pesquisarIdsImoveisAtualizacaoCadastral(
-						leiturista.getEmpresa().getId(), idRota);
-			}
+			idsImoveis = repositorioCadastro.pesquisarIdsImoveisAtualizacaoCadastral(
+					leiturista.getEmpresa().getId(), idRota);
 
 			if (idsImoveis == null || idsImoveis.isEmpty()) {
 				System.out.println("Nenhum imóvel encontrado. ARQUIVO NÃO GERADO");
 				getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 			} else {
-				helper.setColecaoImovel(idsImoveis);
-
 				Rota rota = getControladorMicromedicao().pesquisarRota(idRota);
 				SetorComercial setor = rota.getSetorComercial();
 				Localidade localidade = setor.getLocalidade();
@@ -7765,13 +7759,13 @@ public class ControladorCadastro implements SessionBean {
 				arquivoTextoAtualizacaoCadastral.setUltimaAlteracao(new Date());
 
 				Integer idArquivoTexto = (Integer) getControladorUtil().inserir(arquivoTextoAtualizacaoCadastral);
-				arquivoTexto = this.gerarArquivoTxt(helper.getColecaoImovel(), idArquivoTexto, leiturista, rota);
+				arquivoTexto = this.gerarArquivoTxt(idsImoveis, idArquivoTexto, leiturista, rota);
 
 				// -------------------------------------------------------------------------
 				ZipOutputStream zos = null;
 				BufferedWriter out = null;
-				File leituraTipo = new File(helper.getDescricao() + ".txt");
-				File compactado = new File(helper.getDescricao() + ".zip");
+				File leituraTipo = new File(descricaoArquivoTxt + ".txt");
+				File compactado = new File(descricaoArquivoTxt + ".zip");
 				zos = new ZipOutputStream(new FileOutputStream(compactado));
 				out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(
 						leituraTipo.getAbsolutePath())));

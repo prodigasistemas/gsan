@@ -179,17 +179,15 @@ public class FiltrarImovelGeracaoTabelasTemporariasCadastroAction extends GcomAc
 			helper.setColecaoMatriculas(colecaoMatriculas);
 		}
 			
-		//Informa a Quantidade de Imoveis ou vai para o batch
+		Collection colecaoIdsImovel = fachada.obterIdsImovelGeracaoTabelasTemporarias(helper);
+		
 		if (helper.getSugestao().equals("1")) {
 			if ( colecaoMatriculas != null && colecaoMatriculas.size() > 0 ) {
 				throw new ActionServletException("atencao_quantidade_imoveis_sugestao_sim",
 						null, "" + colecaoMatriculas.size());
 			} else {
-				Collection colecaoIdsImovel = fachada.obterIdsImovelGeracaoTabelasTemporarias(helper);
-				
-				Integer totalImoveis = null;
-				totalImoveis = colecaoIdsImovel.size();
-				throw new ActionServletException("atencao_quantidade_imoveis_sugestao_sim", null, totalImoveis.toString());		
+				throw new ActionServletException("atencao_quantidade_imoveis_sugestao_sim", 
+						null, "" + colecaoIdsImovel.size());		
 			}
         } else {
 			Map parametros = new HashMap();
