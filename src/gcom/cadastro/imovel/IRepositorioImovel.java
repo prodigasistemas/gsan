@@ -3296,9 +3296,10 @@ public interface IRepositorioImovel {
      * @date 21/03/2012
 	 * @exception ErroRepositorioException
 	 */
-	public Collection pesquisarRamoAtividadeDoImovel(Integer idImovel)
-		throws ErroRepositorioException;
+	public Collection pesquisarRamoAtividadeDoImovel(Integer idImovel) throws ErroRepositorioException;
 	
 	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacaoCadastral
-	(Integer idImovel, Integer situacao) throws ErroRepositorioException;
+			(Integer idImovel, Integer situacao) throws ErroRepositorioException;
+	
+	public Collection<Integer> pesquisarIdImoveisAprovados() throws ErroRepositorioException;
 }
