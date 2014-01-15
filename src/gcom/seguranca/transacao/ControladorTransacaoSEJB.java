@@ -1391,7 +1391,10 @@ public class ControladorTransacaoSEJB implements SessionBean {
 						helper.setIdAlteracaoTipo((Integer) dados[10]); // Id da Alteracao Tipo
 						helper.setDescricaoAlteracaoTipo((String) dados[11]); // Descricao da Alteracao Tipo
 						if(dados[13] != null){
-							helper.setDataProcessamento((Date)dados[13]);
+							helper.setDataValidacao((Date)dados[13]);
+						}
+						if(dados[15] != null){
+							helper.setNomeUsuario((String) dados[15]);
 						}
 						
 						retorno.add(helper);

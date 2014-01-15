@@ -77,6 +77,7 @@ package gcom.seguranca.transacao;
 
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.interceptor.ObjetoGcom;
+import gcom.seguranca.acesso.usuario.Usuario;
 
 import java.util.Date;
 
@@ -100,7 +101,7 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
     private Short indicadorAutorizado;
     
     /** nullable persistent field */
-    private Date dataProcessamento;
+    private Date dataValidacao;
     
     /** nullable persistent field */
     private Date ultimaAlteracao;
@@ -110,14 +111,16 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
     
     private TabelaColuna tabelaColuna;
     
+	private Usuario usuario;
+    
     public TabelaColunaAtualizacaoCadastral(Integer id, String colunaValorAnterior, String colunaValorAtual, Short indicadorAutorizado, 
-    		Date dataProcessamento, Date ultimaAlteracao, TabelaAtualizacaoCadastral tabelaAtualizacaoCadastral, TabelaColuna tabelaColuna) {
+    		Date dataValidacao, Date ultimaAlteracao, TabelaAtualizacaoCadastral tabelaAtualizacaoCadastral, TabelaColuna tabelaColuna) {
 
 		this.id = id;
 		this.colunaValorAnterior = colunaValorAnterior;
 		this.colunaValorAtual = colunaValorAtual;
 		this.indicadorAutorizado = indicadorAutorizado;
-		this.dataProcessamento = dataProcessamento;
+		this.dataValidacao = dataValidacao;
 		this.ultimaAlteracao = ultimaAlteracao;
 		this.tabelaAtualizacaoCadastral = tabelaAtualizacaoCadastral;
 		this.tabelaColuna = tabelaColuna;
@@ -151,12 +154,12 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
 		this.colunaValorAtual = colunaValorAtual;
 	}
 
-	public Date getDataProcessamento() {
-		return dataProcessamento;
+	public Date getDataValidacao() {
+		return dataValidacao;
 	}
 
-	public void setDataProcessamento(Date dataProcessamento) {
-		this.dataProcessamento = dataProcessamento;
+	public void setDataValidacao(Date dataValidacao) {
+		this.dataValidacao = dataValidacao;
 	}
 
 	public Short getIndicadorAutorizado() {
@@ -192,6 +195,14 @@ public class TabelaColunaAtualizacaoCadastral extends ObjetoGcom {
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
 	
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
 	public String[] retornaCamposChavePrimaria(){
 		String[] retorno = new String[1];
 		retorno[0] = "id";
