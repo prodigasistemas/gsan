@@ -76,12 +76,12 @@
 package gcom.seguranca.transacao;
 
 import gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCadastralHelper;
-import gcom.cadastro.atualizacaocadastral.bean.DadosTabelaAtualizacaoCadastralHelper;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionHelper;
+import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
 
@@ -205,9 +205,7 @@ public interface IRepositorioTransacao {
 	 * @param indicador
 	 * @throws ErroRepositorioException
 	 */
-	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(
-			Integer idAtualizacaoCadastral,
-			Short indicador) throws ErroRepositorioException;
+	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer idAtualizacaoCadastral,	Short indicador, Usuario usuario) throws ErroRepositorioException;
 	
 	/**
 	 * @author Ana Maria
