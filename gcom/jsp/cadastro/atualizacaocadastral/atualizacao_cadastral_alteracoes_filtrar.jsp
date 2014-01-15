@@ -86,7 +86,6 @@
 		var form = document.forms[0];
 		form.cdRotaFinal.value = form.cdRotaInicial.value;
 	}
-	
 </script>
 
 
@@ -173,7 +172,7 @@
 		</td>
 	  </tr>
 	  <tr>
-		<td height="10" width="145"><strong>Agente Comercial:</strong></td>
+		<td height="10" width="145"><strong>Agente Cadastral:</strong></td>
 		<td colspan="2" align="left"><html:select property="idLeiturista"
 			tabindex="4">
 			<html:option value="-1">&nbsp;</html:option>

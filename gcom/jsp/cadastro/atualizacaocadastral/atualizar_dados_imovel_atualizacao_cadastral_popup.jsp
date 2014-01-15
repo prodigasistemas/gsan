@@ -152,21 +152,14 @@
 							<tr>
 								<td height="0">
 
-									<table width="1000" bgcolor="#90c7fc" border=0>
+									<table width="100%" bgcolor="#90c7fc" border=0>
 										<tr bordercolor="#90c7fc" bgcolor="#90c7fc">
 											<td width="150"><strong>Tabela</strong></td>
 											<td width="150"><strong>Campo</strong></td>
-											<td width="400" colspan="2">
-												<table border=0 cellpadding="0" cellspacing="0" width="100%">
-													<tr><td colspan="2" align="center"><strong>Conte&uacute;do</strong></td></tr>
-													<tr>
-														<td align="center"><strong>Anterior</strong></td>
-														<td align="center"><strong>Atual</strong></td>
-													</tr>
-												</table>
-											</td>
-											<td width="150"><strong>Data/Hora Atualiza&ccedil;&atilde;o</strong></td>
-											<td width="100"><strong>Tipo Opera&ccedil;&atilde;o</strong></td>
+    										<td width="200" align="center"><strong>Anterior</strong></td>
+    										<td width="200" align="center"><strong>Atual</strong></td>
+											<td width="200" align="center" ><strong>Data/Hora Valida&ccedil;&atilde;o</strong></td>
+											<td width="100" align="center"><strong>Usu&aacute;rio</strong></td>
 											<td width="50"><strong>Alterar</strong></td>
 										</tr>
 									</table>
@@ -176,7 +169,7 @@
 							<tr>
 								<td>
 
-									<table width="1000" align="center" bgcolor="#99CCFF" border=0>
+									<table width="100%" align="center" bgcolor="#99CCFF" border=0>
 									<%int cont = 1;%>
 									<logic:iterate name="colecaoDadosTabelaAtualizacaoCadastral" id="dadosTabelaAtualizacaoCadastralHelper">
 										<%cont = cont + 1;
@@ -197,15 +190,15 @@
 												<td width="200">
 													<bean:write name="dadosTabelaAtualizacaoCadastralHelper" property="colunaValorAtual" />
 												</td>
-												<td width="150">
-													<bean:write name="dadosTabelaAtualizacaoCadastralHelper" property="ultimaAtualizacao" />
+												<td width="200">
+													<bean:write name="dadosTabelaAtualizacaoCadastralHelper" property="dataValidacao" />
 												</td>
-												<td width="100">
-													<bean:write name="dadosTabelaAtualizacaoCadastralHelper" property="descricaoAlteracaoTipo" />
-												</td>
+                                                <td width="100">
+                                                  <bean:write name="dadosTabelaAtualizacaoCadastralHelper" property="nomeUsuario" />
+                                                </td>
 												<td width="50">
 												<div align="center">
-												  <logic:empty name="dadosTabelaAtualizacaoCadastralHelper" property="dataProcessamento">
+												  <logic:empty name="dadosTabelaAtualizacaoCadastralHelper" property="dataValidacao">
 													<%
 													String checado = "checked";
 													%>

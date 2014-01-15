@@ -53775,7 +53775,7 @@ public class Fachada {
 		}
 	}
 	
-	public Collection<Integer> pesquisarRotasAtualizacaoCadastral(GerarArquivoTextoAtualizacaoCadastralHelper helper) {
+	public Collection<Integer> pesquisarRotasAtualizacaoCadastral(ImovelGeracaoTabelasTemporariasCadastroHelper helper) {
 		try {
 			return this.getControladorCadastro().pesquisarRotasAtualizacaoCadastral(helper);
 		} catch (ControladorException ex) {

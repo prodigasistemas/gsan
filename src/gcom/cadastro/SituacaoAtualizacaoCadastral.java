@@ -112,6 +112,10 @@ public class SituacaoAtualizacaoCadastral extends ObjetoGcom {
         this.indicadorUso = indicadorUso;
         this.ultimaAlteracao = ultimaAlteracao;
     }
+    
+    public SituacaoAtualizacaoCadastral(Integer id) {
+    	this.id = id;
+    }
 
     /** default constructor */
     public SituacaoAtualizacaoCadastral() {
