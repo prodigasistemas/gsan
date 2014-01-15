@@ -17231,10 +17231,10 @@ public class ControladorCadastro implements SessionBean {
 	}
 	
 	public Collection<Integer> pesquisarRotasAtualizacaoCadastral(
-			GerarArquivoTextoAtualizacaoCadastralHelper helper) throws ControladorException {
+			ImovelGeracaoTabelasTemporariasCadastroHelper helper) throws ControladorException {
 		
 		try {
-			Leiturista leiturista = getLeituristaAtualizacaoCadastral(helper.getIdLeiturista());
+			Leiturista leiturista = getLeituristaAtualizacaoCadastral(Integer.parseInt(helper.getLeiturista()));
 			
 			return this.repositorioCadastro.pesquisarRotasAtualizacaoCadastral(leiturista.getEmpresa().getId());
 		} catch (ErroRepositorioException ex) {
