@@ -7410,34 +7410,17 @@ public class ControladorCadastro implements SessionBean {
 		int idUnidadeIniciada = 0;
 
 		try {
-
-			if (helper.getColecaoMatriculas() != null
-					&& !helper.getColecaoMatriculas().isEmpty()) {
-				idUnidadeIniciada = getControladorBatch()
-						.iniciarUnidadeProcessamentoBatch(
-								idFuncionalidadeIniciada,
-								UnidadeProcessamento.FUNCIONALIDADE, 0);
-			} else {
-				idUnidadeIniciada = getControladorBatch()
-						.iniciarUnidadeProcessamentoBatch(
-								idFuncionalidadeIniciada,
-								UnidadeProcessamento.SETOR_COMERCIAL, (idSetor));
-			}
+			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(
+					idFuncionalidadeIniciada, UnidadeProcessamento.SETOR_COMERCIAL, idSetor);
 
 			Collection colecaoIdsImovel = null;
 
-			if (helper.getColecaoMatriculas() != null
-					&& !helper.getColecaoMatriculas().isEmpty()) {
-				colecaoIdsImovel = helper.getColecaoMatriculas();
+			if (helper.getImovelSituacao() != null && new Integer(helper.getImovelSituacao()) == 2) {
+				colecaoIdsImovel = repositorioCadastro.pesquisarImovelDebitoAtualizacaoCadastral(
+						colecaoIdsImovel);
 			} else {
-				colecaoIdsImovel = repositorioCadastro
-						.obterIdsImovelGeracaoTabelasTemporarias(idSetor,
-								helper);
-				if (helper.getImovelSituacao() != null
-						&& new Integer(helper.getImovelSituacao()) == 2) {
-					colecaoIdsImovel = repositorioCadastro
-							.pesquisarImovelDebitoAtualizacaoCadastral(colecaoIdsImovel);
-				}
+				colecaoIdsImovel = repositorioCadastro.obterIdsImovelGeracaoTabelasTemporarias(
+						idSetor, helper);
 			}
 
 			ClienteAtualizacaoCadastral clienteAtualizacaoCadastralProprietario = null;
@@ -7711,7 +7694,7 @@ public class ControladorCadastro implements SessionBean {
 	 */
 	public void gerarArquivoTextoAtualizacaoCadastralDispositivoMovel(
 			Integer idFuncionalidadeIniciada,
-			GerarArquivoTextoAtualizacaoCadastralHelper helper,
+			ImovelGeracaoTabelasTemporariasCadastroHelper helper,
 			Integer idRota) throws ControladorException {
 
 		int idUnidadeIniciada = 0;
@@ -7730,24 +7713,18 @@ public class ControladorCadastro implements SessionBean {
 
 			// Situação do Arquivo
 			SituacaoTransmissaoLeitura situacaoTransmissaoLeitura = new SituacaoTransmissaoLeitura();
-			situacaoTransmissaoLeitura.setId(helper.getSituacao());
+			situacaoTransmissaoLeitura.setId(SituacaoTransmissaoLeitura.LIBERADO);
 			arquivoTextoAtualizacaoCadastral.setSituacaoTransmissaoLeitura(situacaoTransmissaoLeitura);
 
-			if (helper.getColecaoImovel() == null
-					|| helper.getColecaoImovel().isEmpty()) {
+			leiturista = this.getLeituristaAtualizacaoCadastral(Integer.parseInt(helper.getLeiturista()));
 
-				leiturista = this.getLeituristaAtualizacaoCadastral(helper.getIdLeiturista());
-
-				idsImoveis = repositorioCadastro.pesquisarIdsImoveisAtualizacaoCadastral(
-						leiturista.getEmpresa().getId(), idRota);
-			}
+			idsImoveis = repositorioCadastro.pesquisarIdsImoveisAtualizacaoCadastral(
+					leiturista.getEmpresa().getId(), idRota);
 
 			if (idsImoveis == null || idsImoveis.isEmpty()) {
 				System.out.println("Nenhum imóvel encontrado. ARQUIVO NÃO GERADO");
 				getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 			} else {
-				helper.setColecaoImovel(idsImoveis);
-
 				Rota rota = getControladorMicromedicao().pesquisarRota(idRota);
 				SetorComercial setor = rota.getSetorComercial();
 				Localidade localidade = setor.getLocalidade();
@@ -7782,13 +7759,13 @@ public class ControladorCadastro implements SessionBean {
 				arquivoTextoAtualizacaoCadastral.setUltimaAlteracao(new Date());
 
 				Integer idArquivoTexto = (Integer) getControladorUtil().inserir(arquivoTextoAtualizacaoCadastral);
-				arquivoTexto = this.gerarArquivoTxt(helper.getColecaoImovel(), idArquivoTexto, leiturista, rota);
+				arquivoTexto = this.gerarArquivoTxt(idsImoveis, idArquivoTexto, leiturista, rota);
 
 				// -------------------------------------------------------------------------
 				ZipOutputStream zos = null;
 				BufferedWriter out = null;
-				File leituraTipo = new File(helper.getDescricao() + ".txt");
-				File compactado = new File(helper.getDescricao() + ".zip");
+				File leituraTipo = new File(descricaoArquivoTxt + ".txt");
+				File compactado = new File(descricaoArquivoTxt + ".zip");
 				zos = new ZipOutputStream(new FileOutputStream(compactado));
 				out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(
 						leituraTipo.getAbsolutePath())));
@@ -17254,10 +17231,10 @@ public class ControladorCadastro implements SessionBean {
 	}
 	
 	public Collection<Integer> pesquisarRotasAtualizacaoCadastral(
-			GerarArquivoTextoAtualizacaoCadastralHelper helper) throws ControladorException {
+			ImovelGeracaoTabelasTemporariasCadastroHelper helper) throws ControladorException {
 		
 		try {
-			Leiturista leiturista = getLeituristaAtualizacaoCadastral(helper.getIdLeiturista());
+			Leiturista leiturista = getLeituristaAtualizacaoCadastral(Integer.parseInt(helper.getLeiturista()));
 			
 			return this.repositorioCadastro.pesquisarRotasAtualizacaoCadastral(leiturista.getEmpresa().getId());
 		} catch (ErroRepositorioException ex) {

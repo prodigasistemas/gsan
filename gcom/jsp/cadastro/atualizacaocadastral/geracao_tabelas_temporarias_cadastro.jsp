@@ -5,6 +5,7 @@
 <%@ taglib uri="/WEB-INF/gsanLib.tld" prefix="gsan"%>
 
 <%@page import="gcom.cadastro.empresa.Empresa"%>
+<%@page import="gcom.gui.micromedicao.DadosLeiturista"%>
 <%@page import="gcom.cadastro.imovel.ImovelPerfil"%>
 <%@page import="gcom.cadastro.imovel.Categoria"%>
 <%@page import="gcom.cadastro.imovel.Subcategoria"%>
@@ -54,10 +55,15 @@
 	  			}
 				
 				if ((form.sugestao[1].checked) && form.firma.selectedIndex == 0) {
-					
-						alert('Informe a Firma.');
-						form.firma.focus();
-						return;
+					alert('Informe a Empresa.');
+					form.firma.focus();
+					return;
+				}
+
+				if (form.firma.selectedIndex > 0 && form.leiturista.selectedIndex <= 0) {
+					alert('Informe o Agente Cadastral.');
+					form.leiturista.focus();
+					return;
 				}
 				
 				if ( parseInt(form.localidadeFinal.value) < parseInt(form.localidadeInicial.value) ) {
@@ -104,15 +110,17 @@
 			if (form.sugestao[0].checked) { 
 				form.firma.disabled = true;
 				form.firma.selectedIndex = 0;
+	    		form.leiturista.disabled = true;
+				form.leiturista.selectedIndex = 0;
 				form.quantidadeMaxima.disabled = true;
 				form.quantidadeMaxima.selectedIndex = 0;
 			}
 			
 			if (form.sugestao[1].checked) {
 				form.firma.disabled = false;
+	    		form.leiturista.disabled = false;
 				form.quantidadeMaxima.disabled = false;
 			}
-
 	}
 	
 	function habilitaDesabilitaInscricao() {
@@ -566,12 +574,37 @@
 
 		} 
 	}
+
+	function listarLeiturista() {
+		var form = document.forms[0];
+    	var obj = form.firma;
+
+    	if (obj.value != "-1") {
+    		form.leiturista.disabled = false;
+			form.action = 'exibirFiltrarImovelGeracaoTabelasTemporariasCadastro.do';
+		  	form.submit();
+    		return;
+    	}else {
+    		form.leiturista.value = "-1";
+    		form.leiturista.disabled = true;
+    	}
+	}
+
+	function bloquearLeiturista() {
+		var form = document.forms[0];
+    	var obj = form.firma;
+
+    	if (obj.value == "-1") {
+    		form.leiturista.value = "-1";
+    		form.leiturista.disabled = true;
+    	}
+    }
 	
 </script>
 
 </head>
 <body leftmargin="5" topmargin="5" onload="setarFoco('${requestScope.nomeCampo}');habilitaDesabilitaMatriculaCliente();
-bloquearSubCategoria();controleQuadra();">
+bloquearSubCategoria();controleQuadra();bloquearLeiturista();">
 
 <form action="/gsan/exibirFiltrarImovelGeracaoTabelasTemporariasCadastro.do"
 method="post" enctype="multipart/form-data">
@@ -622,18 +655,12 @@ method="post" enctype="multipart/form-data">
 					</tr>
 				</table>
 				
-				<!--
-				******************************************************************
-				** Início do Formulário ******************************************
-				******************************************************************
-				-->
-				
 				<table width="100%" border="0" align="center" cellpadding="0"
 					cellspacing="0">
 					<tr>
 						<td width="11"><img border="0"
 							src="<bean:message key="caminho.imagens"/>parahead_left.gif" /></td>
-						<td class="parabg">Filtrar Im&oacute;vel</td>
+						<td class="parabg">Gerar Tabelas Tempor&aacute;rias para Atualiza&ccedil;&atilde;o Cadastral </td>
 						<td width="11"><img border="0"
 							src="<bean:message key="caminho.imagens"/>parahead_right.gif" /></td>
 					</tr>
@@ -642,21 +669,124 @@ method="post" enctype="multipart/form-data">
 			
 				<table width="100%" border="0">
 					<tr>
-						<td colspan="2">Para filtrar o(s) im&oacute;vel(is), informe os dados abaixo:</td>
+						<td colspan="2">Para filtrar o(s) im&oacute;vel(is) para Atualiza&ccedil;&atilde;o Cadastral, informe os dados abaixo:</td>
 					</tr>
 
-					<!--<tr> 
-	                    <td colspan="3">Para carregar dados da atualização cadastral, informe os dados abaixo:</td>
-	                    <tr> 
-                  		<td width="27%" class="style1">
-                  			<strong>Lista de Matr&iacute;culas:</strong>
-                  		</td>
-                  		<td width="73%" colspan="2" class="style1">
-                  			<input type="file" style="textbox" name="arquivo" size="50" tabindex="1"
-                  			onchange="javascript:habilitarDesabilitarFiltro();"/> 
-                  		</td>
-	                </tr>-->
-                
+					<tr>
+						<td><strong>A&ccedil;&atilde;o:</strong></td>
+						<td align="left">
+							<table width="100%" border="0">
+								<tr>
+									<td style="width: 175px;">
+										<logic:equal name="helper" property="sugestao" value="1">
+											<input type="radio" value="1" name="sugestao" onclick="habDesabFirmaEQuantMaxima();" checked="true"/>&nbsp;SIMULAR QTD. IM&Oacute;VEIS
+										</logic:equal>
+										
+										<logic:notEqual name="helper" property="sugestao" value="1">
+											<input type="radio" value="1" name="sugestao" onclick="habDesabFirmaEQuantMaxima();" />&nbsp;SIMULAR QTD. IM&Oacute;VEIS
+										</logic:notEqual>
+										
+									</td>
+									<td align="left">
+										<logic:equal name="helper" property="sugestao" value="2">
+											<input type="radio" value="2" name="sugestao" onclick="habDesabFirmaEQuantMaxima();" checked="true"/>&nbsp;GERAR DADOS
+										</logic:equal>
+										
+										<logic:notEqual name="helper" property="sugestao" value="2">
+											<input type="radio" value="2" name="sugestao" onclick="habDesabFirmaEQuantMaxima();" />&nbsp;GERAR DADOS
+										</logic:notEqual>
+									</td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+					
+					<tr><td colspan="2"><hr></td></tr>
+					
+					<tr>
+						<td><strong>Empresa:<font color="#FF0000">*</font></strong></td>
+						<td align="right">
+							<div align="left">
+								<strong>
+									<logic:present name="sugestao">
+										<logic:equal name="sugestao" value="1">
+											<select name="firma" onchange="javascript:listarLeiturista();" style="width: 400px;">
+											<option value="-1">&nbsp;</option>
+												<logic:iterate id="empresa" type="Empresa" name="colecaoFirma" scope="session">
+													<logic:equal name="helper" property="firma" value="${empresa.id}">
+														<option selected="selected" value="${empresa.id}">${helper.nomeFirma}</option>
+													</logic:equal>
+													<logic:notEqual name="helper" property="firma" value="${empresa.id}">
+														<option value="${empresa.id}">${empresa.descricao}</option>
+													</logic:notEqual>
+												</logic:iterate>
+											</select>
+										</logic:equal>
+										<logic:equal name="sugestao" value="2">
+											<select name="firma" onchange="javascript:listarLeiturista();" style="width: 400px;">
+												<option value="-1">&nbsp;</option>											
+												<logic:iterate id="empresa" type="Empresa" name="colecaoFirma" scope="session">
+													<logic:equal name="helper" property="firma" value="${empresa.id}">
+														<option selected="selected" value="${empresa.id}">${helper.nomeFirma}</option>
+													</logic:equal>
+													<logic:notEqual name="helper" property="firma" value="${empresa.id}">
+														<option value="${empresa.id}">${empresa.descricao}</option>
+													</logic:notEqual>
+												</logic:iterate>
+											</select>
+										</logic:equal>
+									</logic:present>
+									
+									<logic:notPresent name="sugestao">
+										<select name="firma" onchange="javascript:listarLeiturista();" style="width: 400px;">
+											<option value="-1">&nbsp;</option>										
+										 	<logic:iterate id="empresa" type="Empresa" name="colecaoFirma" scope="session">
+												<logic:equal name="helper" property="firma" value="${empresa.id}">
+														<option selected="selected" value="${empresa.id}">${helper.nomeFirma}</option>
+													</logic:equal>
+													<logic:notEqual name="helper" property="firma" value="${empresa.id}">
+														<option value="${empresa.id}">${empresa.descricao}</option>
+													</logic:notEqual>
+											</logic:iterate>
+										</select>
+									</logic:notPresent>
+								</strong>
+							</div>
+						</td>
+					</tr>
+					
+					<tr>
+						<td><strong>Agente Cadastral:<font color="#FF0000">*</font></strong></td>
+						<td align="right">
+							<div align="left">
+								<select name="leiturista" style="width: 400px;">
+									<option value="-1">&nbsp;</option>											
+										<logic:iterate id="leiturista" type="DadosLeiturista" name="colecaoLeiturista" scope="session">
+											<logic:equal name="helper" property="leiturista" value="${leiturista.id}">
+												<option selected="selected" value="${leiturista.id}">${helper.nomeLeiturista}</option>
+											</logic:equal>
+									
+											<logic:notEqual name="helper" property="leiturista" value="${leiturista.id}">
+												<option value="${leiturista.id}">${leiturista.descricao}</option>
+											</logic:notEqual>
+										</logic:iterate>
+								</select>
+							</div>
+						</td>
+					</tr>
+
+					<tr>
+						<td><strong>Quantidade M&aacute;xima:</strong></td>
+						<td align="left">
+							<input type="text" name="quantidadeMaxima" size="5" maxlength="4" 
+							value="${helper.quantidadeMaxima }"
+							onkeypress="javascript:somente_numero(this);"
+							onkeyup="javascript:somente_numero(this);"/>
+						</td>
+					</tr>
+					
+					<tr><td colspan="2"><hr></td></tr>
+					
 					<tr>
 						<td widht="30%"><strong>Matr&iacute;cula:</strong></td>
 						<td widht="70%" align="left">
@@ -750,99 +880,6 @@ method="post" enctype="multipart/form-data">
 								<img src="<bean:message key="caminho.imagens"/>limparcampo.gif"border="0" title="Apagar" />
 							</a>
 						</td>						
-					</tr>
-					
-					<tr>
-						<td><strong>Sugest&atilde;o:</strong></td>
-						<td align="left">
-							<table width="100%" border="0">
-								<tr>
-									<td width="100">
-										
-										<logic:equal name="helper" property="sugestao" value="1">
-											<input type="radio" value="1" name="sugestao" onclick="habDesabFirmaEQuantMaxima();" checked="true"/>&nbsp;Sim
-										</logic:equal>
-										
-										<logic:notEqual name="helper" property="sugestao" value="1">
-											<input type="radio" value="1" name="sugestao" onclick="habDesabFirmaEQuantMaxima();"/>&nbsp;Sim
-										</logic:notEqual>
-										
-									</td>
-									<td align="left">
-										
-										<logic:equal name="helper" property="sugestao" value="2">
-											<input type="radio" value="2" name="sugestao" onclick="habDesabFirmaEQuantMaxima();" checked="true"/>&nbsp;N&atilde;o
-										</logic:equal>
-										
-										<logic:notEqual name="helper" property="sugestao" value="2">
-											<input type="radio" value="2" name="sugestao" onclick="habDesabFirmaEQuantMaxima();"/>&nbsp;N&atilde;o
-										</logic:notEqual>
-									</td>
-								</tr>
-							</table>
-						</td>
-					</tr>
-					
-					<tr>
-						<td><strong>Firma:&nbsp;</strong></td>
-						<td align="right">
-							<div align="left">
-								<strong>
-									<logic:present name="sugestao">
-										<logic:equal name="sugestao" value="1">
-											<select name="firma" >
-											<option value="-1">&nbsp;</option>
-												<logic:iterate id="empresa" type="Empresa" name="colecaoFirma" scope="session">
-													<logic:equal name="helper" property="firma" value="${empresa.id}">
-														<option selected="selected" value="${empresa.id}">${helper.nomeFirma}</option>
-													</logic:equal>
-													<logic:notEqual name="helper" property="firma" value="${empresa.id}">
-														<option value="${empresa.id}">${empresa.descricao}</option>
-													</logic:notEqual>
-												</logic:iterate>
-											</select>
-										</logic:equal>
-										<logic:equal name="sugestao" value="2">
-											<select name="firma">
-												<option value="-1">&nbsp;</option>											
-												<logic:iterate id="empresa" type="Empresa" name="colecaoFirma" scope="session">
-													<logic:equal name="helper" property="firma" value="${empresa.id}">
-														<option selected="selected" value="${empresa.id}">${helper.nomeFirma}</option>
-													</logic:equal>
-													<logic:notEqual name="helper" property="firma" value="${empresa.id}">
-														<option value="${empresa.id}">${empresa.descricao}</option>
-													</logic:notEqual>
-												</logic:iterate>
-											</select>
-										</logic:equal>
-									</logic:present>
-									
-									<logic:notPresent name="sugestao">
-										<select name="firma">
-											<option value="-1">&nbsp;</option>										
-										 	<logic:iterate id="empresa" type="Empresa" name="colecaoFirma" scope="session">
-												<logic:equal name="helper" property="firma" value="${empresa.id}">
-														<option selected="selected" value="${empresa.id}">${helper.nomeFirma}</option>
-													</logic:equal>
-													<logic:notEqual name="helper" property="firma" value="${empresa.id}">
-														<option value="${empresa.id}">${empresa.descricao}</option>
-													</logic:notEqual>
-											</logic:iterate>
-										</select>
-									</logic:notPresent>
-								</strong>
-							</div>
-						</td>
-					</tr>
-
-					<tr>
-						<td><strong>Quantidade M&aacute;xima:</strong></td>
-						<td align="left">
-							<input type="text" name="quantidadeMaxima" size="5" maxlength="4" 
-							value="${helper.quantidadeMaxima }"
-							onkeypress="javascript:somente_numero(this);"
-							onkeyup="javascript:somente_numero(this);"/>
-						</td>
 					</tr>
 					
 					<tr><td colspan="2"><hr></td></tr>
@@ -1216,7 +1253,7 @@ method="post" enctype="multipart/form-data">
 						<td align="right">
 							<div align="left">
 								<strong>
-									<select name="perfilImovel" style="width: 430px;">
+									<select name="perfilImovel" style="width: 400px;">
 										<option value="-1">&nbsp;</option>									
 										<logic:iterate id="imovelPerfil" type="ImovelPerfil" name="collectionImovelPerfil" scope="session">
 											<logic:equal name="helper" property="perfilImovel" value="${imovelPerfil.id}">
@@ -1239,7 +1276,7 @@ method="post" enctype="multipart/form-data">
 						<td align="right">
 							<div align="left">
 								<strong>
-									<select name="categoria" onchange="ControleCategoria();" style="width: 430px;">
+									<select name="categoria" onchange="ControleCategoria();" style="width: 400px;">
 										<option value="-1">&nbsp;</option>
 										<logic:iterate id="categoria" type="Categoria" name="collectionImovelCategoria" scope="session">
 											<logic:equal name="helper" property="categoria" value="${categoria.id}">
@@ -1262,7 +1299,7 @@ method="post" enctype="multipart/form-data">
 						<td align="right">
 							<div align="left">
 								<strong>
-									<select name="subCategoria" style="width: 430px;">
+									<select name="subCategoria" style="width: 400px;">
 										<option value="-1">&nbsp;</option>
 										<logic:iterate id="subCategoria" type="Subcategoria" name="collectionImovelSubcategoria" scope="session">
 											<logic:equal name="helper" property="subCategoria" value="${subCategoria.id}">
@@ -1322,7 +1359,8 @@ method="post" enctype="multipart/form-data">
 						</td>
 					  </tr>
 					</table>
-					</td>	   
+					</td>
+					</tr>   
 				   <tr>
 						<td>&nbsp;</td>
 						<td colspan="3" align="right">&nbsp;</td>
