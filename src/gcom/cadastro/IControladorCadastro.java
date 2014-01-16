@@ -815,7 +815,7 @@ public interface IControladorCadastro {
 	 */
     
 	public void gerarArquivoTextoAtualizacaoCadastralDispositivoMovel(Integer idFuncionalidadeIniciada,
-			GerarArquivoTextoAtualizacaoCadastralHelper helper, Integer idRota)
+			ImovelGeracaoTabelasTemporariasCadastroHelper helper, Integer idRota)
 		throws ControladorException;
     
     /**
@@ -1673,6 +1673,6 @@ public interface IControladorCadastro {
 	public void carregarImovelAtualizacaoCadastral(BufferedReader buffer, ArrayList<String> nomesImagens) throws ControladorException;
 	
 	public Collection<Integer> pesquisarRotasAtualizacaoCadastral(
-			GerarArquivoTextoAtualizacaoCadastralHelper helper) throws ControladorException;
+			ImovelGeracaoTabelasTemporariasCadastroHelper helper) throws ControladorException;
 
 }

@@ -76,6 +76,7 @@
 package gcom.batch.cadastro;
 
 import gcom.cadastro.imovel.bean.GerarArquivoTextoAtualizacaoCadastralHelper;
+import gcom.cadastro.imovel.bean.ImovelGeracaoTabelasTemporariasCadastroHelper;
 import gcom.fachada.Fachada;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.tarefa.TarefaBatch;
@@ -110,8 +111,8 @@ public class TarefaBatchGerarArquivoTextoAtualizacaoCadastral extends TarefaBatc
 	public Object executar() throws TarefaException {
 
 		Map parametros = (Map) getParametro(ConstantesSistema.PARAMETROS_BATCH);
-		GerarArquivoTextoAtualizacaoCadastralHelper helper = (GerarArquivoTextoAtualizacaoCadastralHelper) 
-				parametros.get("gerarArquivoTextoAtualizacaoCadastralHelper");
+		ImovelGeracaoTabelasTemporariasCadastroHelper helper = (ImovelGeracaoTabelasTemporariasCadastroHelper)
+				parametros.get("imovelGeracaoTabelasTemporariasCadastroHelper");
 		
 		Collection<Integer> colecaoRotas = Fachada.getInstancia().pesquisarRotasAtualizacaoCadastral(helper);
 		

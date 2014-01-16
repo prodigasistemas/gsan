@@ -31486,4 +31486,44 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		return colecaoRamoAtividadeImovel;
 	}
+	
+	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacaoCadastral
+			(Integer idImovel, Integer situacao) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try {
+
+			String consulta = "SELECT icac "
+					+ "FROM ImovelControleAtualizacaoCadastral icac "
+					+ "INNER JOIN icac.imovel imovel "
+					+ "INNER JOIN icac.situacaoAtualizacaoCadastral situacao "
+					+ "WHERE imovel.id = :idImovel "
+					+ "AND situacao.id = :idSituacao ";
+
+			return (ImovelControleAtualizacaoCadastral) session.createQuery(consulta)
+					.setInteger("idImovel", idImovel)
+					.setInteger("idSituacao", situacao).uniqueResult();
+		}catch (HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+	
+	public Collection<Integer> pesquisarIdImoveisAprovados() throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try {
+			String consulta = "SELECT imovel.id "
+					+ "FROM ImovelControleAtualizacaoCadastral icac "
+					+ "INNER JOIN icac.imovel imovel "
+					+ "INNER JOIN icac.situacaoAtualizacaoCadastral situacao "
+					+ "WHERE situacao.id = :idSituacao ";
+
+			return (Collection<Integer>) session.createQuery(consulta)
+					.setInteger("idSituacao", SituacaoAtualizacaoCadastral.APROVADO).list();
+		}catch (HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
 }
