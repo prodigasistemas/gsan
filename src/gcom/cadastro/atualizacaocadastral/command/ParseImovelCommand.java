@@ -162,5 +162,11 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 
 		String data = parser.obterDadoParser(26).trim();
 		linha.put("data", data);
+		
+		validaCamposImovel(atualizacao);
+	}
+
+	private void validaCamposImovel(AtualizacaoCadastral atualizacao) {
+		
 	}
 }
