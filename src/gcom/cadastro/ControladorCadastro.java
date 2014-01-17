@@ -102,6 +102,7 @@ import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.atualizacaocadastral.FiltroImovelAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.command.AbstractAtualizacaoCadastralCommand;
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastral;
+import gcom.cadastro.atualizacaocadastral.command.MontarObjetosAtualizacaoCadastralCommand;
 import gcom.cadastro.atualizacaocadastral.command.ParseAnormalidadeCommand;
 import gcom.cadastro.atualizacaocadastral.command.ParseClienteCommand;
 import gcom.cadastro.atualizacaocadastral.command.ParseHeaderCommand;
@@ -171,7 +172,6 @@ import gcom.cadastro.imovel.FiltroImovelProgramaEspecial;
 import gcom.cadastro.imovel.FiltroSubCategoria;
 import gcom.cadastro.imovel.FonteAbastecimento;
 import gcom.cadastro.imovel.IRepositorioImovel;
-import gcom.cadastro.imovel.ImagemAtualizacaoCadastral;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelControleAtualizacaoCadastral;
@@ -184,7 +184,6 @@ import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoriaPK;
 import gcom.cadastro.imovel.RepositorioImovelHBM;
 import gcom.cadastro.imovel.Subcategoria;
-import gcom.cadastro.imovel.bean.GerarArquivoTextoAtualizacaoCadastralHelper;
 import gcom.cadastro.imovel.bean.ImovelGeracaoTabelasTemporariasCadastroHelper;
 import gcom.cadastro.localidade.FiltroGerenciaRegional;
 import gcom.cadastro.localidade.FiltroQuadra;
@@ -331,7 +330,6 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
@@ -350,11 +348,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -364,7 +360,6 @@ import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
-import javax.imageio.ImageIO;
 
 import org.jboss.logging.Logger;
 
@@ -7919,6 +7914,8 @@ public class ControladorCadastro implements SessionBean {
 							repositorioImovel, getControladorImovel(), getControladorCliente());
 					command.execute(atualizacao);					
 				} else if ("01".equals(registroTipo)) {
+					atualizacao.inicializaLeituras();
+
 					AbstractAtualizacaoCadastralCommand command = new ParseClienteCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
 							repositorioImovel, getControladorImovel(), getControladorCliente());
 					command.execute(atualizacao);
@@ -7940,6 +7937,14 @@ public class ControladorCadastro implements SessionBean {
 					command.execute(atualizacao);					
 				}else if ("06".equals(registroTipo)) {
 					AbstractAtualizacaoCadastralCommand command = new ParseAnormalidadeCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
+							repositorioImovel, getControladorImovel(), getControladorCliente());
+					command.execute(atualizacao);
+					
+					atualizacao.liberarAtualizacao();
+				}
+				
+				if (atualizacao.atualizacaoLiberada()){
+					MontarObjetosAtualizacaoCadastralCommand command = new MontarObjetosAtualizacaoCadastralCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
 							repositorioImovel, getControladorImovel(), getControladorCliente());
 					command.execute(atualizacao);
 				}

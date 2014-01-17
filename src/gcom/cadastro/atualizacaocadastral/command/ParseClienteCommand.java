@@ -19,7 +19,6 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 	}
 
 	public void execute(AtualizacaoCadastral atualizacao) throws Exception {
-		atualizacao.inicializaLeituras();
 		Map<String, String> linha = atualizacao.getLinhaCliente();
 
 		String matriculaImovelCliente = parser.obterDadoParser(9).trim();
