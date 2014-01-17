@@ -1,12 +1,6 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.Map;
-import java.util.NoSuchElementException;
-
+import gcom.atualizacaocadastral.ImovelRetorno;
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
@@ -29,6 +23,13 @@ import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ParserUtil;
 import gcom.util.filtro.ParametroSimples;
+
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
+import java.util.Map;
+import java.util.NoSuchElementException;
 
 public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizacaoCadastralCommand {
 
@@ -434,6 +435,9 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		ImovelAtualizacaoCadastral imovelAtualizacaoCadastralBase = controladorImovel.pesquisarImovelAtualizacaoCadastral(matriculaImovel);
 		salvarTabelaColunaAtualizacaoCadastral(imovelAtualizacaoCadastralBase, imovelTxt, arquivoTexto, interceptador, matriculaImovel);
 
+		ImovelRetorno imovelRetorno = new ImovelRetorno(imovelTxt);
+		controladorUtil.inserir(imovelRetorno);
+		
 		atualizarSituacaoControleImovelAtualizacaoCadastral(matriculaImovel, SituacaoAtualizacaoCadastral.TRANSMITIDO);
 	}
 
