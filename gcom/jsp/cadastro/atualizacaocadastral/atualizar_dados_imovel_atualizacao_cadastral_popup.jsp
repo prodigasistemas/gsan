@@ -24,7 +24,7 @@
 
 <script language="JavaScript">
 <!-- Begin
-	function confirma() {
+	function confirma() {    
 		var form = document.forms[0];
 		var valoresNao = "";
 		var valoresSim = "";
@@ -80,7 +80,7 @@
 </logic:present>
 
 <logic:notPresent name="reload">
-	<body leftmargin="5" topmargin="5" onload="resizePageSemLink(1060, 480);verificarTipoAlteracao('',0)">
+	<body leftmargin="5" topmargin="5" onload="resizePageSemLink(1060, 480);">
 </logic:notPresent>
 
 <html:form action="/atualizarDadosImovelAtualizacaoCadastralAction"
@@ -160,7 +160,7 @@
     										<td width="200" align="center"><strong>Atual</strong></td>
 											<td width="200" align="center" ><strong>Data/Hora Valida&ccedil;&atilde;o</strong></td>
 											<td width="100" align="center"><strong>Usu&aacute;rio</strong></td>
-											<td width="50"><strong>Alterar</strong></td>
+											<td width="50"><strong><a href="javascript:facilitador(this);">Todos</a></strong></td>
 										</tr>
 									</table>
 
@@ -199,11 +199,8 @@
 												<td width="50">
 												<div align="center">
 												  <logic:empty name="dadosTabelaAtualizacaoCadastralHelper" property="dataValidacao">
-													<%
-													String checado = "checked";
-													%>
-													<input type="checkbox" name="chkRegistrosAlteracao" id="chkRegistrosAlteracao" <%=checado%>
-													value="<%=""+((DadosTabelaAtualizacaoCadastralHelper) dadosTabelaAtualizacaoCadastralHelper).getIdTabelaColunaAtualizacaoCadastral()%>" onclick="javascript:verificarTipoAlteracao('<%=((DadosTabelaAtualizacaoCadastralHelper) dadosTabelaAtualizacaoCadastralHelper).getIdAlteracaoTipo()%>',this);" />
+													<input type="checkbox" name="chkRegistrosAlteracao" id="chkRegistrosAlteracao" 
+													value="<%=""+((DadosTabelaAtualizacaoCadastralHelper) dadosTabelaAtualizacaoCadastralHelper).getIdTabelaColunaAtualizacaoCadastral()%>" />
 												  </logic:empty>
 												</div>
 												</td>
