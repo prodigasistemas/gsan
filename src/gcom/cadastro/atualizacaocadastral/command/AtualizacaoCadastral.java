@@ -20,6 +20,7 @@ public class AtualizacaoCadastral {
 	private HashMap<String, String> linhaMedidor = new HashMap<String, String>();
 	private HashMap<String, String> linhaAnormalidade = new HashMap<String, String>();
 	
+	private boolean atualizacaoLiberada = false;
 
 	public ArquivoTextoAtualizacaoCadastral getArquivoTexto() {
 		return arquivoTexto;
@@ -91,6 +92,15 @@ public class AtualizacaoCadastral {
 		linhaRamoAtividade = new HashMap<String, String>();
 		linhaServicos = new HashMap<String, String>();
 		linhaMedidor = new HashMap<String, String>();
-		linhaAnormalidade = new HashMap<String, String>();		
+		linhaAnormalidade = new HashMap<String, String>();
+		atualizacaoLiberada = false;
+	}
+
+	public void liberarAtualizacao() {
+		atualizacaoLiberada = true;
+	}
+	
+	public boolean atualizacaoLiberada(){
+		return atualizacaoLiberada;
 	}
 }

@@ -27,6 +27,7 @@ import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.atualizacaocadastral.FiltroImovelAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.command.AbstractAtualizacaoCadastralCommand;
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastral;
+import gcom.cadastro.atualizacaocadastral.command.MontarObjetosAtualizacaoCadastralCommand;
 import gcom.cadastro.atualizacaocadastral.command.ParseAnormalidadeCommand;
 import gcom.cadastro.atualizacaocadastral.command.ParseClienteCommand;
 import gcom.cadastro.atualizacaocadastral.command.ParseHeaderCommand;
@@ -7815,6 +7816,8 @@ public class ControladorCadastro implements SessionBean {
 							repositorioImovel, getControladorImovel(), getControladorCliente());
 					command.execute(atualizacao);					
 				} else if ("01".equals(registroTipo)) {
+					atualizacao.inicializaLeituras();
+
 					AbstractAtualizacaoCadastralCommand command = new ParseClienteCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
 							repositorioImovel, getControladorImovel(), getControladorCliente());
 					command.execute(atualizacao);
@@ -7836,6 +7839,14 @@ public class ControladorCadastro implements SessionBean {
 					command.execute(atualizacao);					
 				}else if ("06".equals(registroTipo)) {
 					AbstractAtualizacaoCadastralCommand command = new ParseAnormalidadeCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
+							repositorioImovel, getControladorImovel(), getControladorCliente());
+					command.execute(atualizacao);
+					
+					atualizacao.liberarAtualizacao();
+				}
+				
+				if (atualizacao.atualizacaoLiberada()){
+					MontarObjetosAtualizacaoCadastralCommand command = new MontarObjetosAtualizacaoCadastralCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
 							repositorioImovel, getControladorImovel(), getControladorCliente());
 					command.execute(atualizacao);
 				}
