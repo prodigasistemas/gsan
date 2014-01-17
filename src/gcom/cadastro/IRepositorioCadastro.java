@@ -977,7 +977,7 @@ public interface IRepositorioCadastro {
 			Integer idRota) throws ErroRepositorioException;
 	
 	public Collection<Integer> pesquisarRotasAtualizacaoCadastral(
-			Integer idEmpresaLeiturista) throws ErroRepositorioException;
+			Collection idsImoveis) throws ErroRepositorioException;
 	
 	/**
 	 * Pesquisa as críticas existentes para um determinado arquivo importado da atualizacao cadastral simplificado.
