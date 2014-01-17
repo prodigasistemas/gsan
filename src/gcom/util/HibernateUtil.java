@@ -240,6 +240,7 @@ import gcom.atendimentopublico.registroatendimento.SolicitacaoTipoGrupo;
 import gcom.atendimentopublico.registroatendimento.SolicitanteFone;
 import gcom.atendimentopublico.registroatendimento.Tramite;
 import gcom.atendimentopublico.registroatendimento.VisualizacaoRegistroAtendimentoUrgencia;
+import gcom.atualizacaocadastral.ImovelRetorno;
 import gcom.batch.FuncionalidadeIniciada;
 import gcom.batch.FuncionalidadeSituacao;
 import gcom.batch.Processo;
@@ -1660,6 +1661,7 @@ public class HibernateUtil {
 					// ************************************//
 					
 					.addClass(ServicoTerceiroAcompanhamentoServico.class)
+					.addClass(ImovelRetorno.class)
 					;
 							
 							
