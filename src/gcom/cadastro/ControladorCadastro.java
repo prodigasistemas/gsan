@@ -7941,150 +7941,6 @@ public class ControladorCadastro implements SessionBean {
 					arquivoTexto = repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(
 							localidade + setor + rota, anoMesReferencia);
 					
-				} else if ("02".equals(registroTipo)) {
-
-					String imovelLinha = line.substring(2);
-					
-					ParserUtil parserImovel = new ParserUtil(imovelLinha);
-					
-					matricula = Integer.parseInt(parserImovel
-							.obterDadoParser(9));
-					linha2.put("matricula", ""+matricula);
-					
-					for (String nomeImagem : nomesImagens) {
-						if (nomeImagem.contains(""+matricula)) {
-							File file = new File(nomeImagem);
-							
-							BufferedImage image = ImageIO.read(file);
-							ByteArrayOutputStream baos = new ByteArrayOutputStream();
-							ImageIO.write(image, nomeImagem.split("[.]")[1], baos);
-							byte[] imagem = baos.toByteArray();
-							
-							ImagemAtualizacaoCadastral imagemAtualizacaoCadastral = new ImagemAtualizacaoCadastral();
-							imagemAtualizacaoCadastral.setIdImovel(matricula);
-							imagemAtualizacaoCadastral.setImagem(imagem);
-							imagemAtualizacaoCadastral.setUltimaAlteracao(new Date());
-							
-							this.getControladorUtil().inserir(imagemAtualizacaoCadastral);
-							
-							baos.close();
-							file.delete();
-						}
-					}
-					
-					String codigoCliente = parserImovel.obterDadoParser(30).trim();
-					linha2.put("codigoCliente", codigoCliente);
-					
-					String inscricao = parserImovel.obterDadoParser(17).trim();
-					linha2.put("inscricao", inscricao);
-					
-					String rota = parserImovel.obterDadoParser(2).trim();
-					linha2.put("rota", rota);
-					
-					String face = parserImovel.obterDadoParser(2).trim();
-					linha2.put("face", face);
-					
-					String codigoMunicipio = parserImovel.obterDadoParser(8).trim();
-					linha2.put("codigoMunicipio", codigoMunicipio);
-					
-					String numeroIPTU = parserImovel.obterDadoParser(31).trim();
-					linha2.put("numeroIPTU", numeroIPTU.trim().equals("") ? null : numeroIPTU);
-					
-					String numeroCelpa = parserImovel.obterDadoParser(20).trim();
-					linha2.put("numeroCelpa", numeroCelpa);
-					
-					String numeroPontosUteis = parserImovel.obterDadoParser(5).trim();
-					linha2.put("numeroPontosUteis", numeroPontosUteis);
-					
-					String numeroOcupantes = parserImovel.obterDadoParser(5).trim();
-					linha2.put("numeroOcupantes", numeroOcupantes);
-					
-					String tipoLogradouroImovel = parserImovel.obterDadoParser(2).trim();
-					linha2.put("idTipoLogradouroImovel", tipoLogradouroImovel);
-					
-					String logradouroImovel = parserImovel.obterDadoParser(40).trim();
-					linha2.put("logradouroImovel", logradouroImovel);
-					
-					String numeroImovel = parserImovel.obterDadoParser(5).trim();
-					linha2.put("numeroImovel", numeroImovel);
-					
-					String complementoImovel = parserImovel.obterDadoParser(25).trim();
-					linha2.put("complementoImovel", complementoImovel);
-					
-					String bairro = parserImovel.obterDadoParser(20).trim();
-					linha2.put("bairro", bairro);
-					
-					String cep = parserImovel.obterDadoParser(8).trim();
-					linha2.put("cep", cep);
-					
-					String municipio = parserImovel.obterDadoParser(15).trim();
-					linha2.put("municipio", municipio);
-					
-					String codigoLogradouro = parserImovel.obterDadoParser(9).trim();
-					linha2.put("codigoLogradouro", codigoLogradouro);
-					
-					String subcategoriaR1 = parserImovel.obterDadoParser(3).trim();
-					linha2.put("subcategoriaR1", subcategoriaR1);
-					
-					String subcategoriaR2 = parserImovel.obterDadoParser(3).trim();
-					linha2.put("subcategoriaR2", subcategoriaR2);
-					
-					String subcategoriaR3 = parserImovel.obterDadoParser(3).trim();
-					linha2.put("subcategoriaR3", subcategoriaR3);
-					
-					String subcategoriaR4 = parserImovel.obterDadoParser(3).trim();
-					linha2.put("subcategoriaR4", subcategoriaR4);
-					
-					String subcategoriaC1 = parserImovel.obterDadoParser(3).trim();
-					linha2.put("subcategoriaC1", subcategoriaC1);
-					
-					String subcategoriaC2 = parserImovel.obterDadoParser(3).trim();
-					linha2.put("subcategoriaC2", subcategoriaC2);
-					
-					String subcategoriaC3 = parserImovel.obterDadoParser(3).trim();
-					linha2.put("subcategoriaC3", subcategoriaC3);
-					
-					String subcategoriaC4 = parserImovel.obterDadoParser(3).trim();
-					linha2.put("subcategoriaC4", subcategoriaC4);
-					
-					String subcategoriaP1 = parserImovel.obterDadoParser(3).trim();
-					linha2.put("subcategoriaP1", subcategoriaP1);
-					
-					String subcategoriaP2 = parserImovel.obterDadoParser(3).trim();
-					linha2.put("subcategoriaP2", subcategoriaP2);
-					
-					String subcategoriaP3 = parserImovel.obterDadoParser(3).trim();
-					linha2.put("subcategoriaP3", subcategoriaP3);
-					
-					String subcategoriaP4 = parserImovel.obterDadoParser(3).trim();
-					linha2.put("subcategoriaP4", subcategoriaP4);
-					
-					String subcategoriaI1 = parserImovel.obterDadoParser(3).trim();
-					linha2.put("subcategoriaI1", subcategoriaI1);
-					
-					String subcategoriaI2 = parserImovel.obterDadoParser(3).trim();
-					linha2.put("subcategoriaI2", subcategoriaI2);
-					
-					String subcategoriaI3 = parserImovel.obterDadoParser(3).trim();
-					linha2.put("subcategoriaI3", subcategoriaI3);
-					
-					String subcategoriaI4 = parserImovel.obterDadoParser(3).trim();
-					linha2.put("subcategoriaI4", subcategoriaI4);
-					
-					String fonteAbastecimento = parserImovel.obterDadoParser(2).trim();
-					linha2.put("fonteAbastecimento", fonteAbastecimento);
-					
-					String latitude = parserImovel.obterDadoParser(20).trim();
-					linha2.put("latitude", latitude);
-					
-					String longitude = parserImovel.obterDadoParser(20).trim();
-					linha2.put("longitude", longitude);
-					
-					String data = parserImovel.obterDadoParser(26).trim();
-					linha2.put("data", data);
-
-					String tipoAlteracao = "A";
-
 				} else if ("01".equals(registroTipo) && !indicadorExcluido) {
 					
 					linha1 = new HashMap<String, String>();
@@ -8094,301 +7950,26 @@ public class ControladorCadastro implements SessionBean {
 					linha5 = new HashMap<String, String>();
 					linha6 = new HashMap<String, String>();
 
-					String clienteLinha = line.substring(2);
+					parserLinha1(line, linha1);
 					
-					parserCliente = new ParserUtil(clienteLinha);
-					
-					String matriculaImovelCliente = parserCliente.obterDadoParser(9).trim();
-					linha1.put("matriculaImovelCliente", matriculaImovelCliente);
-					
-					String gerencia = parserCliente.obterDadoParser(25).trim();
-					linha1.put("gerencia", gerencia);
-					
-					String tipoEnderecoProprientario = parserCliente.obterDadoParser(1).trim();
-					linha1.put("tipoEnderecoProprietario", tipoEnderecoProprientario);
-					
-					String tipoEnderecoResponsavel = parserCliente.obterDadoParser(1).trim();
-					linha1.put("tipoEnderecoResponsavel", tipoEnderecoResponsavel);
-					
-					String usuarioProprietario = parserCliente.obterDadoParser(1).trim();
-					linha1.put("usuarioProprietario", usuarioProprietario);
-					
-					String tipoResponsavel = parserCliente.obterDadoParser(1).trim();
-					linha1.put("tipoResponsavel", tipoResponsavel);
-					
-					String nomeUsuario = parserCliente.obterDadoParser(50).trim();
-					linha1.put("nomeUsuario", nomeUsuario);
-					
-					String tipoPessoaUsuario = parserCliente.obterDadoParser(1).trim();
-					linha1.put("tipoPessoaUsuario", tipoPessoaUsuario);
-					
-					String cnpjCpfUsuario = parserCliente.obterDadoParser(14).trim();
-					linha1.put("cnpjCpfUsuario", cnpjCpfUsuario);
-					
-					String rgUsuario = parserCliente.obterDadoParser(9).trim();
-					linha1.put("rgUsuario", rgUsuario);
-					
-					String ufRgUsuario = parserCliente.obterDadoParser(2).trim();
-					linha1.put("ufRgUsuario", ufRgUsuario);
-					
-					String sexoUsuario = parserCliente.obterDadoParser(1).trim();
-					linha1.put("sexoUsuario", sexoUsuario);
-					
-					String telefoneUsuario = parserCliente.obterDadoParser(10).trim();
-					linha1.put("telefoneUsuario", telefoneUsuario);
-					
-					String celularUsuario = parserCliente.obterDadoParser(10).trim();
-					linha1.put("celularUsuario", celularUsuario);
-					
-					String emailUsuario = parserCliente.obterDadoParser(30).trim();
-					linha1.put("emailUsuario", emailUsuario);
-					
-					String nomeProprietario = parserCliente.obterDadoParser(50).trim();
-					linha1.put("nomeProprietario", nomeProprietario);
-					
-					String tipoPessoaProprietario = parserCliente.obterDadoParser(1).trim();
-					linha1.put("tipoPessoaProprietario", tipoPessoaProprietario);
-					
-					String cnpjCpfProprietario = parserCliente.obterDadoParser(14).trim();
-					linha1.put("cnpjCpfProprietario", cnpjCpfProprietario);
-					
-					String rgProprietario = parserCliente.obterDadoParser(9).trim();
-					linha1.put("rgProprietario", rgProprietario);
-					
-					String ufRgProprietario = parserCliente.obterDadoParser(2).trim();
-					linha1.put("ufRgProprietario", ufRgProprietario);
-					
-					String sexoProprietario = parserCliente.obterDadoParser(1).trim();
-					linha1.put("sexoProprietario", sexoProprietario);
-					
-					String telefoneProprietario = parserCliente.obterDadoParser(10).trim();
-					linha1.put("telefoneProprietario", telefoneProprietario);
-					
-					String celularProprietario = parserCliente.obterDadoParser(10).trim();
-					linha1.put("celularProprietario", celularProprietario);
-					
-					String emailProprietario = parserCliente.obterDadoParser(30).trim();
-					linha1.put("emailProprietario", emailProprietario);
-					
-					String tipoLogradouroProprietario = parserCliente.obterDadoParser(2).trim();
-					linha1.put("idTipoLogradouroProprietario", tipoLogradouroProprietario);
-					
-					String logradouroProprietario = parserCliente.obterDadoParser(40).trim();
-					linha1.put("logradouroProprietario", logradouroProprietario);
-					
-					String numeroProprietario = parserCliente.obterDadoParser(5).trim();
-					linha1.put("numeroProprietario", numeroProprietario);
-					
-					String complementoProprietario = parserCliente.obterDadoParser(25).trim();
-					linha1.put("complementoProprietario", complementoProprietario);
-					
-					String bairroProprietario = parserCliente.obterDadoParser(20).trim();
-					linha1.put("bairroProprietario", bairroProprietario);
-					
-					String cepProprietario = parserCliente.obterDadoParser(8).trim();
-					linha1.put("cepProprietario", cepProprietario);
-					
-					String municipioProprietario = parserCliente.obterDadoParser(15).trim();
-					linha1.put("municipioProprietario", municipioProprietario);
-						
-					String nomeResponsavel = parserCliente.obterDadoParser(50).trim();
-					linha1.put("nomeReponsavel", nomeResponsavel);
-					
-					String tipoPessoaResponsavel = parserCliente.obterDadoParser(1).trim();
-					linha1.put("tipoPessoaResponsavel", tipoPessoaResponsavel);
-					
-					String cnpjCpfResponsavel = parserCliente.obterDadoParser(14).trim();
-					linha1.put("cnpjCpfResponsavel", cnpjCpfResponsavel);
-					
-					String rgResponsavel = parserCliente.obterDadoParser(9).trim();
-					linha1.put("rgResponsavel", rgResponsavel);
-					
-					String ufRgResponsavel = parserCliente.obterDadoParser(2).trim();
-					linha1.put("ufRgResponsavel", ufRgResponsavel);
-					
-					String sexoResponsavel = parserCliente.obterDadoParser(1).trim();
-					linha1.put("sexoResponsavel", sexoResponsavel);
-					
-					String telefoneResponsavel = parserCliente.obterDadoParser(10).trim();
-					linha1.put("telefoneResponsavel", telefoneResponsavel);
-					
-					String celularResponsavel = parserCliente.obterDadoParser(10).trim();
-					linha1.put("celularResponsavel", celularResponsavel);
-					
-					String emailResponsavel = parserCliente.obterDadoParser(30).trim();
-					linha1.put("emailResponsavel", emailResponsavel);
-					
-					String tipoLogradouroResponsavel = parserCliente.obterDadoParser(2).trim();
-					linha1.put("idTipoLogradouroResponsavel", tipoLogradouroResponsavel);
-					
-					String logradouroResponsavel = parserCliente.obterDadoParser(40).trim();
-					linha1.put("logradouroResponsavel", logradouroResponsavel);
-					
-					String numeroResponsavel = parserCliente.obterDadoParser(5).trim();
-					linha1.put("numeroResponsavel", numeroResponsavel);
-					
-					String complementoResponsavel = parserCliente.obterDadoParser(25).trim();
-					linha1.put("complementoResponsavel", complementoResponsavel);
-					
-					String bairroResponsavel = parserCliente.obterDadoParser(20).trim();
-					linha1.put("bairroResponsavel", bairroResponsavel);
-					
-					String cepResponsavel = parserCliente.obterDadoParser(8).trim();
-					linha1.put("cepResponsavel", cepResponsavel);
-					
-					String municipioResponsavel = parserCliente.obterDadoParser(15).trim();
-					linha1.put("municipioResponsavel", municipioResponsavel);
-						
-					String latitude = parserCliente.obterDadoParser(20).trim();
-					linha1.put("latitude", latitude);
-					
-					String longitude = parserCliente.obterDadoParser(20).trim();
-					linha1.put("longitude", longitude);
-					
-					String data = parserCliente.obterDadoParser(26).trim();
-					linha1.put("data", data);
-					
-					int matriculaUsuario = Integer.parseInt(parserCliente.obterDadoParser(9));
-					linha1.put("matriculaUsuario", ""+matriculaUsuario);
-					
-					int matriculaResponsavel = Integer.parseInt(parserCliente.obterDadoParser(9));;
-					linha1.put("matriculaResponsavel", ""+matriculaResponsavel);
-					
-					int matriculaProprietario = Integer.parseInt(parserCliente.obterDadoParser(9));;
-					linha1.put("matriculaProprietario", ""+matriculaProprietario);
-					
+				} else if ("02".equals(registroTipo)) {
+
+					parserLinha2(nomesImagens, line, linha2);
+
 				} else if ("03".equals(registroTipo) && !indicadorExcluido && !indicadorRepetido) {
 
-					String imovelRamoAtividade = line.substring(2);
-
-					ParserUtil parserImovelRamoAtividade = new ParserUtil(imovelRamoAtividade);
-					
-					String matriculaImovelRamoAtividade = parserImovelRamoAtividade.obterDadoParser(9).trim();
-					linha3.put("matriculaImovelRamoAtividade", matriculaImovelRamoAtividade);
-					
-					String ramoAtividade = parserImovelRamoAtividade.obterDadoParser(3).trim();
-					linha3.put("ramoAtividade", ramoAtividade);
-					
-					int matriculaImovel = Integer.parseInt(matriculaImovelRamoAtividade);
-					int idRamoAtividade = Integer.parseInt(ramoAtividade);
-					
-					boolean existeRamoAtividade = repositorioCadastro
-							.existeImovelRamoAtividadeAtualizacaoCadastral(matriculaImovel, idRamoAtividade);
-					
-					if (!existeRamoAtividade) {
-						ImovelRamoAtividadeAtualizacaoCadastral ramoAtividadeTxt = new ImovelRamoAtividadeAtualizacaoCadastral();
-						ramoAtividadeTxt.setIdImovel(matriculaImovel);
-						ramoAtividadeTxt.setIdRamoAtividade(idRamoAtividade);
-						
-						salvarTabelaColunaAtualizacaoCadastral(new ImovelRamoAtividadeAtualizacaoCadastral(), 
-								ramoAtividadeTxt, arquivoTexto, interceptador, matriculaImovel);
-					}
+					parserLinha3(line, arquivoTexto, interceptador, linha3);
 				} else if ("04".equals(registroTipo) && !indicadorExcluido) {
 
-					String imovelServicos = line.substring(2);
-
-					ParserUtil parserImovelServicos = new ParserUtil(
-							imovelServicos);
-
-					ImovelSubcategoriaAtualizacaoCadastral imovelSubcategoriaAtualizacaoCadastralTxt = new ImovelSubcategoriaAtualizacaoCadastral();
-
-					String matriculaImovelServicos = parserImovelServicos.obterDadoParser(9).trim();
-					linha4.put("matriculaImovelServicos", matriculaImovelServicos);
-					
-					String ligacaoAguaSituacao = parserImovelServicos.obterDadoParser(2).trim();
-					linha4.put("ligacaoAguaSituacao", ligacaoAguaSituacao);
-					
-					String ligacaoEsgotoSituacao = parserImovelServicos.obterDadoParser(2).trim();
-					linha4.put("ligacaoEsgotoSituacao", ligacaoEsgotoSituacao);
-					
-					String localInstalacaoRamal = parserImovelServicos.obterDadoParser(2).trim();
-					linha4.put("localInstalacaoRamal", localInstalacaoRamal);
-					
-					String latitude = parserImovelServicos.obterDadoParser(20).trim();
-					linha4.put("latitude", latitude);
-					
-					String longitude = parserImovelServicos.obterDadoParser(20).trim();
-					linha4.put("longitude", longitude);
-
-					String dataServico = parserImovelServicos.obterDadoParser(26).trim();
-					linha4.put("dataServico", dataServico);
+					parserLinha4(line, linha4);
 					
 				}else if ("05".equals(registroTipo) && !indicadorExcluido) {
 
-					String imovelMedidor = line.substring(2);
-
-					ParserUtil parserImovelMedidor = new ParserUtil(
-							imovelMedidor);
-
-					ImovelSubcategoriaAtualizacaoCadastral imovelSubcategoriaAtualizacaoCadastralTxt = new ImovelSubcategoriaAtualizacaoCadastral();
-
-					String matriculaImovelMedidor = parserImovelMedidor.obterDadoParser(9);
-					
-					String icImovelPossuiMedidor = parserImovelMedidor.obterDadoParser(1);
-					
-					String numeroHidrometro = null;
-					String marcaHidrometro = null;
-					String capacidadeHidrometro = null;
-					String tipoCaixaProtecaoHidrometro = null;
-					
-					if(icImovelPossuiMedidor.equals("1")){
-						numeroHidrometro = parserImovelMedidor.obterDadoParser(10).trim();
-						linha5.put("numeroHidrometro", numeroHidrometro);
-						
-						marcaHidrometro = parserImovelMedidor.obterDadoParser(2).trim();
-						linha5.put("marcaHidrometro", marcaHidrometro);
-						
-						capacidadeHidrometro = parserImovelMedidor.obterDadoParser(2).trim();
-						linha5.put("capacidadeHidrometro", capacidadeHidrometro);
-						
-						tipoCaixaProtecaoHidrometro = parserImovelMedidor.obterDadoParser(2).trim();
-						linha5.put("tipoCaixaProtecaoHidrometro", tipoCaixaProtecaoHidrometro);
-						
-						String latitude = parserImovelMedidor.obterDadoParser(20).trim();
-						linha5.put("latitude", latitude);
-						
-						String longitude = parserImovelMedidor.obterDadoParser(20).trim();
-						linha5.put("longitude", longitude);
-
-						String dataServico = parserImovelMedidor.obterDadoParser(26).trim();
-						linha5.put("dataServico", dataServico);
-					}else{
-						parserImovelMedidor.obterDadoParser(16).trim();
-					}
+					parserLinha5(line, linha5);
 				}else if ("06".equals(registroTipo) && !indicadorExcluido) {
 
-					String imovelAnormalidade = line.substring(2);
-
-					ParserUtil parserImovelAnormalidade = new ParserUtil(
-							imovelAnormalidade);
-
-					ImovelSubcategoriaAtualizacaoCadastral imovelSubcategoriaAtualizacaoCadastralTxt = new ImovelSubcategoriaAtualizacaoCadastral();
-
-					String matriculaImovelAnormalidade = parserImovelAnormalidade.obterDadoParser(9).trim();
-					linha6.put("matriculaImovelAnormalidade", matriculaImovelAnormalidade);
-					
-					String codigoAnormalidade = parserImovelAnormalidade.obterDadoParser(3).trim();
-					linha6.put("codigoAnormalidade", codigoAnormalidade);
-					
-					String comentario = parserImovelAnormalidade.obterDadoParser(200).trim();
-					linha6.put("comentario", comentario);
-					
-					String pathFoto1 = parserImovelAnormalidade.obterDadoParser(30).trim();
-					linha6.put("pathFoto1", pathFoto1);
-					
-					String pathFoto2 = parserImovelAnormalidade.obterDadoParser(30).trim();
-					linha6.put("pathFoto2", pathFoto2);
-					
-					String latitude = parserImovelAnormalidade.obterDadoParser(20).trim();
-					linha6.put("latitude", latitude);
-					
-					String longitude = parserImovelAnormalidade.obterDadoParser(20).trim();
-					linha6.put("longitude", longitude);
-
-					String dataServico = parserImovelAnormalidade.obterDadoParser(26).trim();
-					linha6.put("dataServico", dataServico);
-					
-					this.montarObjetosAtualizacaoCadastral(arquivoTexto, linha1, linha2, linha3, linha4, linha5, linha6);
+					parserLinha6(line, arquivoTexto, linha1, linha2, linha3,
+							linha4, linha5, linha6);
 				}
 			}
 
@@ -8410,6 +7991,461 @@ public class ControladorCadastro implements SessionBean {
 				}
 			}
 		}
+	}
+
+	private void parserLinha6(String line,
+			ArquivoTextoAtualizacaoCadastral arquivoTexto,
+			HashMap<String, String> linha1, HashMap<String, String> linha2,
+			HashMap<String, String> linha3, HashMap<String, String> linha4,
+			HashMap<String, String> linha5, HashMap<String, String> linha6) {
+		String imovelAnormalidade = line.substring(2);
+
+		ParserUtil parserImovelAnormalidade = new ParserUtil(
+				imovelAnormalidade);
+
+		ImovelSubcategoriaAtualizacaoCadastral imovelSubcategoriaAtualizacaoCadastralTxt = new ImovelSubcategoriaAtualizacaoCadastral();
+
+		String matriculaImovelAnormalidade = parserImovelAnormalidade.obterDadoParser(9).trim();
+		linha6.put("matriculaImovelAnormalidade", matriculaImovelAnormalidade);
+		
+		String codigoAnormalidade = parserImovelAnormalidade.obterDadoParser(3).trim();
+		linha6.put("codigoAnormalidade", codigoAnormalidade);
+		
+		String comentario = parserImovelAnormalidade.obterDadoParser(200).trim();
+		linha6.put("comentario", comentario);
+		
+		String pathFoto1 = parserImovelAnormalidade.obterDadoParser(30).trim();
+		linha6.put("pathFoto1", pathFoto1);
+		
+		String pathFoto2 = parserImovelAnormalidade.obterDadoParser(30).trim();
+		linha6.put("pathFoto2", pathFoto2);
+		
+		String latitude = parserImovelAnormalidade.obterDadoParser(20).trim();
+		linha6.put("latitude", latitude);
+		
+		String longitude = parserImovelAnormalidade.obterDadoParser(20).trim();
+		linha6.put("longitude", longitude);
+
+		String dataServico = parserImovelAnormalidade.obterDadoParser(26).trim();
+		linha6.put("dataServico", dataServico);
+		
+		this.montarObjetosAtualizacaoCadastral(arquivoTexto, linha1, linha2, linha3, linha4, linha5, linha6);
+	}
+
+	private void parserLinha5(String line, HashMap<String, String> linha5) {
+		String imovelMedidor = line.substring(2);
+
+		ParserUtil parserImovelMedidor = new ParserUtil(
+				imovelMedidor);
+
+		ImovelSubcategoriaAtualizacaoCadastral imovelSubcategoriaAtualizacaoCadastralTxt = new ImovelSubcategoriaAtualizacaoCadastral();
+
+		String matriculaImovelMedidor = parserImovelMedidor.obterDadoParser(9);
+		
+		String icImovelPossuiMedidor = parserImovelMedidor.obterDadoParser(1);
+		
+		String numeroHidrometro = null;
+		String marcaHidrometro = null;
+		String capacidadeHidrometro = null;
+		String tipoCaixaProtecaoHidrometro = null;
+		
+		if(icImovelPossuiMedidor.equals("1")){
+			numeroHidrometro = parserImovelMedidor.obterDadoParser(10).trim();
+			linha5.put("numeroHidrometro", numeroHidrometro);
+			
+			marcaHidrometro = parserImovelMedidor.obterDadoParser(2).trim();
+			linha5.put("marcaHidrometro", marcaHidrometro);
+			
+			capacidadeHidrometro = parserImovelMedidor.obterDadoParser(2).trim();
+			linha5.put("capacidadeHidrometro", capacidadeHidrometro);
+			
+			tipoCaixaProtecaoHidrometro = parserImovelMedidor.obterDadoParser(2).trim();
+			linha5.put("tipoCaixaProtecaoHidrometro", tipoCaixaProtecaoHidrometro);
+			
+			String latitude = parserImovelMedidor.obterDadoParser(20).trim();
+			linha5.put("latitude", latitude);
+			
+			String longitude = parserImovelMedidor.obterDadoParser(20).trim();
+			linha5.put("longitude", longitude);
+
+			String dataServico = parserImovelMedidor.obterDadoParser(26).trim();
+			linha5.put("dataServico", dataServico);
+		}else{
+			parserImovelMedidor.obterDadoParser(16).trim();
+		}
+	}
+
+	private void parserLinha4(String line, HashMap<String, String> linha4) {
+		String imovelServicos = line.substring(2);
+
+		ParserUtil parserImovelServicos = new ParserUtil(
+				imovelServicos);
+
+		ImovelSubcategoriaAtualizacaoCadastral imovelSubcategoriaAtualizacaoCadastralTxt = new ImovelSubcategoriaAtualizacaoCadastral();
+
+		String matriculaImovelServicos = parserImovelServicos.obterDadoParser(9).trim();
+		linha4.put("matriculaImovelServicos", matriculaImovelServicos);
+		
+		String ligacaoAguaSituacao = parserImovelServicos.obterDadoParser(2).trim();
+		linha4.put("ligacaoAguaSituacao", ligacaoAguaSituacao);
+		
+		String ligacaoEsgotoSituacao = parserImovelServicos.obterDadoParser(2).trim();
+		linha4.put("ligacaoEsgotoSituacao", ligacaoEsgotoSituacao);
+		
+		String localInstalacaoRamal = parserImovelServicos.obterDadoParser(2).trim();
+		linha4.put("localInstalacaoRamal", localInstalacaoRamal);
+		
+		String latitude = parserImovelServicos.obterDadoParser(20).trim();
+		linha4.put("latitude", latitude);
+		
+		String longitude = parserImovelServicos.obterDadoParser(20).trim();
+		linha4.put("longitude", longitude);
+
+		String dataServico = parserImovelServicos.obterDadoParser(26).trim();
+		linha4.put("dataServico", dataServico);
+	}
+
+	private void parserLinha3(String line,
+			ArquivoTextoAtualizacaoCadastral arquivoTexto,
+			Interceptador interceptador, HashMap<String, String> linha3)
+			throws ErroRepositorioException, ControladorException {
+		String imovelRamoAtividade = line.substring(2);
+
+		ParserUtil parserImovelRamoAtividade = new ParserUtil(imovelRamoAtividade);
+		
+		String matriculaImovelRamoAtividade = parserImovelRamoAtividade.obterDadoParser(9).trim();
+		linha3.put("matriculaImovelRamoAtividade", matriculaImovelRamoAtividade);
+		
+		String ramoAtividade = parserImovelRamoAtividade.obterDadoParser(3).trim();
+		linha3.put("ramoAtividade", ramoAtividade);
+		
+		int matriculaImovel = Integer.parseInt(matriculaImovelRamoAtividade);
+		int idRamoAtividade = Integer.parseInt(ramoAtividade);
+		
+		boolean existeRamoAtividade = repositorioCadastro
+				.existeImovelRamoAtividadeAtualizacaoCadastral(matriculaImovel, idRamoAtividade);
+		
+		if (!existeRamoAtividade) {
+			ImovelRamoAtividadeAtualizacaoCadastral ramoAtividadeTxt = new ImovelRamoAtividadeAtualizacaoCadastral();
+			ramoAtividadeTxt.setIdImovel(matriculaImovel);
+			ramoAtividadeTxt.setIdRamoAtividade(idRamoAtividade);
+			
+			salvarTabelaColunaAtualizacaoCadastral(new ImovelRamoAtividadeAtualizacaoCadastral(), 
+					ramoAtividadeTxt, arquivoTexto, interceptador, matriculaImovel);
+		}
+	}
+
+	private void parserLinha1(String line, HashMap<String, String> linha1) {
+		ParserUtil parserCliente;
+		String clienteLinha = line.substring(2);
+		
+		parserCliente = new ParserUtil(clienteLinha);
+		
+		String matriculaImovelCliente = parserCliente.obterDadoParser(9).trim();
+		linha1.put("matriculaImovelCliente", matriculaImovelCliente);
+		
+		String gerencia = parserCliente.obterDadoParser(25).trim();
+		linha1.put("gerencia", gerencia);
+		
+		String tipoEnderecoProprientario = parserCliente.obterDadoParser(1).trim();
+		linha1.put("tipoEnderecoProprietario", tipoEnderecoProprientario);
+		
+		String tipoEnderecoResponsavel = parserCliente.obterDadoParser(1).trim();
+		linha1.put("tipoEnderecoResponsavel", tipoEnderecoResponsavel);
+		
+		String usuarioProprietario = parserCliente.obterDadoParser(1).trim();
+		linha1.put("usuarioProprietario", usuarioProprietario);
+		
+		String tipoResponsavel = parserCliente.obterDadoParser(1).trim();
+		linha1.put("tipoResponsavel", tipoResponsavel);
+		
+		String nomeUsuario = parserCliente.obterDadoParser(50).trim();
+		linha1.put("nomeUsuario", nomeUsuario);
+		
+		String tipoPessoaUsuario = parserCliente.obterDadoParser(1).trim();
+		linha1.put("tipoPessoaUsuario", tipoPessoaUsuario);
+		
+		String cnpjCpfUsuario = parserCliente.obterDadoParser(14).trim();
+		linha1.put("cnpjCpfUsuario", cnpjCpfUsuario);
+		
+		String rgUsuario = parserCliente.obterDadoParser(9).trim();
+		linha1.put("rgUsuario", rgUsuario);
+		
+		String ufRgUsuario = parserCliente.obterDadoParser(2).trim();
+		linha1.put("ufRgUsuario", ufRgUsuario);
+		
+		String sexoUsuario = parserCliente.obterDadoParser(1).trim();
+		linha1.put("sexoUsuario", sexoUsuario);
+		
+		String telefoneUsuario = parserCliente.obterDadoParser(10).trim();
+		linha1.put("telefoneUsuario", telefoneUsuario);
+		
+		String celularUsuario = parserCliente.obterDadoParser(10).trim();
+		linha1.put("celularUsuario", celularUsuario);
+		
+		String emailUsuario = parserCliente.obterDadoParser(30).trim();
+		linha1.put("emailUsuario", emailUsuario);
+		
+		String nomeProprietario = parserCliente.obterDadoParser(50).trim();
+		linha1.put("nomeProprietario", nomeProprietario);
+		
+		String tipoPessoaProprietario = parserCliente.obterDadoParser(1).trim();
+		linha1.put("tipoPessoaProprietario", tipoPessoaProprietario);
+		
+		String cnpjCpfProprietario = parserCliente.obterDadoParser(14).trim();
+		linha1.put("cnpjCpfProprietario", cnpjCpfProprietario);
+		
+		String rgProprietario = parserCliente.obterDadoParser(9).trim();
+		linha1.put("rgProprietario", rgProprietario);
+		
+		String ufRgProprietario = parserCliente.obterDadoParser(2).trim();
+		linha1.put("ufRgProprietario", ufRgProprietario);
+		
+		String sexoProprietario = parserCliente.obterDadoParser(1).trim();
+		linha1.put("sexoProprietario", sexoProprietario);
+		
+		String telefoneProprietario = parserCliente.obterDadoParser(10).trim();
+		linha1.put("telefoneProprietario", telefoneProprietario);
+		
+		String celularProprietario = parserCliente.obterDadoParser(10).trim();
+		linha1.put("celularProprietario", celularProprietario);
+		
+		String emailProprietario = parserCliente.obterDadoParser(30).trim();
+		linha1.put("emailProprietario", emailProprietario);
+		
+		String tipoLogradouroProprietario = parserCliente.obterDadoParser(2).trim();
+		linha1.put("idTipoLogradouroProprietario", tipoLogradouroProprietario);
+		
+		String logradouroProprietario = parserCliente.obterDadoParser(40).trim();
+		linha1.put("logradouroProprietario", logradouroProprietario);
+		
+		String numeroProprietario = parserCliente.obterDadoParser(5).trim();
+		linha1.put("numeroProprietario", numeroProprietario);
+		
+		String complementoProprietario = parserCliente.obterDadoParser(25).trim();
+		linha1.put("complementoProprietario", complementoProprietario);
+		
+		String bairroProprietario = parserCliente.obterDadoParser(20).trim();
+		linha1.put("bairroProprietario", bairroProprietario);
+		
+		String cepProprietario = parserCliente.obterDadoParser(8).trim();
+		linha1.put("cepProprietario", cepProprietario);
+		
+		String municipioProprietario = parserCliente.obterDadoParser(15).trim();
+		linha1.put("municipioProprietario", municipioProprietario);
+			
+		String nomeResponsavel = parserCliente.obterDadoParser(50).trim();
+		linha1.put("nomeReponsavel", nomeResponsavel);
+		
+		String tipoPessoaResponsavel = parserCliente.obterDadoParser(1).trim();
+		linha1.put("tipoPessoaResponsavel", tipoPessoaResponsavel);
+		
+		String cnpjCpfResponsavel = parserCliente.obterDadoParser(14).trim();
+		linha1.put("cnpjCpfResponsavel", cnpjCpfResponsavel);
+		
+		String rgResponsavel = parserCliente.obterDadoParser(9).trim();
+		linha1.put("rgResponsavel", rgResponsavel);
+		
+		String ufRgResponsavel = parserCliente.obterDadoParser(2).trim();
+		linha1.put("ufRgResponsavel", ufRgResponsavel);
+		
+		String sexoResponsavel = parserCliente.obterDadoParser(1).trim();
+		linha1.put("sexoResponsavel", sexoResponsavel);
+		
+		String telefoneResponsavel = parserCliente.obterDadoParser(10).trim();
+		linha1.put("telefoneResponsavel", telefoneResponsavel);
+		
+		String celularResponsavel = parserCliente.obterDadoParser(10).trim();
+		linha1.put("celularResponsavel", celularResponsavel);
+		
+		String emailResponsavel = parserCliente.obterDadoParser(30).trim();
+		linha1.put("emailResponsavel", emailResponsavel);
+		
+		String tipoLogradouroResponsavel = parserCliente.obterDadoParser(2).trim();
+		linha1.put("idTipoLogradouroResponsavel", tipoLogradouroResponsavel);
+		
+		String logradouroResponsavel = parserCliente.obterDadoParser(40).trim();
+		linha1.put("logradouroResponsavel", logradouroResponsavel);
+		
+		String numeroResponsavel = parserCliente.obterDadoParser(5).trim();
+		linha1.put("numeroResponsavel", numeroResponsavel);
+		
+		String complementoResponsavel = parserCliente.obterDadoParser(25).trim();
+		linha1.put("complementoResponsavel", complementoResponsavel);
+		
+		String bairroResponsavel = parserCliente.obterDadoParser(20).trim();
+		linha1.put("bairroResponsavel", bairroResponsavel);
+		
+		String cepResponsavel = parserCliente.obterDadoParser(8).trim();
+		linha1.put("cepResponsavel", cepResponsavel);
+		
+		String municipioResponsavel = parserCliente.obterDadoParser(15).trim();
+		linha1.put("municipioResponsavel", municipioResponsavel);
+			
+		String latitude = parserCliente.obterDadoParser(20).trim();
+		linha1.put("latitude", latitude);
+		
+		String longitude = parserCliente.obterDadoParser(20).trim();
+		linha1.put("longitude", longitude);
+		
+		String data = parserCliente.obterDadoParser(26).trim();
+		linha1.put("data", data);
+		
+		int matriculaUsuario = Integer.parseInt(parserCliente.obterDadoParser(9));
+		linha1.put("matriculaUsuario", ""+matriculaUsuario);
+		
+		int matriculaResponsavel = Integer.parseInt(parserCliente.obterDadoParser(9));;
+		linha1.put("matriculaResponsavel", ""+matriculaResponsavel);
+		
+		int matriculaProprietario = Integer.parseInt(parserCliente.obterDadoParser(9));;
+		linha1.put("matriculaProprietario", ""+matriculaProprietario);
+	}
+
+	private void parserLinha2(ArrayList<String> nomesImagens, String line,
+			HashMap<String, String> linha2) throws IOException,
+			ControladorException {
+		Integer matricula;
+		String imovelLinha = line.substring(2);
+		
+		ParserUtil parserImovel = new ParserUtil(imovelLinha);
+		
+		matricula = Integer.parseInt(parserImovel
+				.obterDadoParser(9));
+		linha2.put("matricula", ""+matricula);
+		
+		for (String nomeImagem : nomesImagens) {
+			if (nomeImagem.contains(""+matricula)) {
+				File file = new File(nomeImagem);
+				
+				BufferedImage image = ImageIO.read(file);
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				ImageIO.write(image, nomeImagem.split("[.]")[1], baos);
+				byte[] imagem = baos.toByteArray();
+				
+				ImagemAtualizacaoCadastral imagemAtualizacaoCadastral = new ImagemAtualizacaoCadastral();
+				imagemAtualizacaoCadastral.setIdImovel(matricula);
+				imagemAtualizacaoCadastral.setImagem(imagem);
+				imagemAtualizacaoCadastral.setUltimaAlteracao(new Date());
+				
+				this.getControladorUtil().inserir(imagemAtualizacaoCadastral);
+				
+				baos.close();
+				file.delete();
+			}
+		}
+		
+		String codigoCliente = parserImovel.obterDadoParser(30).trim();
+		linha2.put("codigoCliente", codigoCliente);
+		
+		String inscricao = parserImovel.obterDadoParser(17).trim();
+		linha2.put("inscricao", inscricao);
+		
+		String rota = parserImovel.obterDadoParser(2).trim();
+		linha2.put("rota", rota);
+		
+		String face = parserImovel.obterDadoParser(2).trim();
+		linha2.put("face", face);
+		
+		String codigoMunicipio = parserImovel.obterDadoParser(8).trim();
+		linha2.put("codigoMunicipio", codigoMunicipio);
+		
+		String numeroIPTU = parserImovel.obterDadoParser(31).trim();
+		linha2.put("numeroIPTU", numeroIPTU.trim().equals("") ? null : numeroIPTU);
+		
+		String numeroCelpa = parserImovel.obterDadoParser(20).trim();
+		linha2.put("numeroCelpa", numeroCelpa);
+		
+		String numeroPontosUteis = parserImovel.obterDadoParser(5).trim();
+		linha2.put("numeroPontosUteis", numeroPontosUteis);
+		
+		String numeroOcupantes = parserImovel.obterDadoParser(5).trim();
+		linha2.put("numeroOcupantes", numeroOcupantes);
+		
+		String tipoLogradouroImovel = parserImovel.obterDadoParser(2).trim();
+		linha2.put("idTipoLogradouroImovel", tipoLogradouroImovel);
+		
+		String logradouroImovel = parserImovel.obterDadoParser(40).trim();
+		linha2.put("logradouroImovel", logradouroImovel);
+		
+		String numeroImovel = parserImovel.obterDadoParser(5).trim();
+		linha2.put("numeroImovel", numeroImovel);
+		
+		String complementoImovel = parserImovel.obterDadoParser(25).trim();
+		linha2.put("complementoImovel", complementoImovel);
+		
+		String bairro = parserImovel.obterDadoParser(20).trim();
+		linha2.put("bairro", bairro);
+		
+		String cep = parserImovel.obterDadoParser(8).trim();
+		linha2.put("cep", cep);
+		
+		String municipio = parserImovel.obterDadoParser(15).trim();
+		linha2.put("municipio", municipio);
+		
+		String codigoLogradouro = parserImovel.obterDadoParser(9).trim();
+		linha2.put("codigoLogradouro", codigoLogradouro);
+		
+		String subcategoriaR1 = parserImovel.obterDadoParser(3).trim();
+		linha2.put("subcategoriaR1", subcategoriaR1);
+		
+		String subcategoriaR2 = parserImovel.obterDadoParser(3).trim();
+		linha2.put("subcategoriaR2", subcategoriaR2);
+		
+		String subcategoriaR3 = parserImovel.obterDadoParser(3).trim();
+		linha2.put("subcategoriaR3", subcategoriaR3);
+		
+		String subcategoriaR4 = parserImovel.obterDadoParser(3).trim();
+		linha2.put("subcategoriaR4", subcategoriaR4);
+		
+		String subcategoriaC1 = parserImovel.obterDadoParser(3).trim();
+		linha2.put("subcategoriaC1", subcategoriaC1);
+		
+		String subcategoriaC2 = parserImovel.obterDadoParser(3).trim();
+		linha2.put("subcategoriaC2", subcategoriaC2);
+		
+		String subcategoriaC3 = parserImovel.obterDadoParser(3).trim();
+		linha2.put("subcategoriaC3", subcategoriaC3);
+		
+		String subcategoriaC4 = parserImovel.obterDadoParser(3).trim();
+		linha2.put("subcategoriaC4", subcategoriaC4);
+		
+		String subcategoriaP1 = parserImovel.obterDadoParser(3).trim();
+		linha2.put("subcategoriaP1", subcategoriaP1);
+		
+		String subcategoriaP2 = parserImovel.obterDadoParser(3).trim();
+		linha2.put("subcategoriaP2", subcategoriaP2);
+		
+		String subcategoriaP3 = parserImovel.obterDadoParser(3).trim();
+		linha2.put("subcategoriaP3", subcategoriaP3);
+		
+		String subcategoriaP4 = parserImovel.obterDadoParser(3).trim();
+		linha2.put("subcategoriaP4", subcategoriaP4);
+		
+		String subcategoriaI1 = parserImovel.obterDadoParser(3).trim();
+		linha2.put("subcategoriaI1", subcategoriaI1);
+		
+		String subcategoriaI2 = parserImovel.obterDadoParser(3).trim();
+		linha2.put("subcategoriaI2", subcategoriaI2);
+		
+		String subcategoriaI3 = parserImovel.obterDadoParser(3).trim();
+		linha2.put("subcategoriaI3", subcategoriaI3);
+		
+		String subcategoriaI4 = parserImovel.obterDadoParser(3).trim();
+		linha2.put("subcategoriaI4", subcategoriaI4);
+		
+		String fonteAbastecimento = parserImovel.obterDadoParser(2).trim();
+		linha2.put("fonteAbastecimento", fonteAbastecimento);
+		
+		String latitude = parserImovel.obterDadoParser(20).trim();
+		linha2.put("latitude", latitude);
+		
+		String longitude = parserImovel.obterDadoParser(20).trim();
+		linha2.put("longitude", longitude);
+		
+		String data = parserImovel.obterDadoParser(26).trim();
+		linha2.put("data", data);
+
+		String tipoAlteracao = "A";
 	}
 
 	/**
