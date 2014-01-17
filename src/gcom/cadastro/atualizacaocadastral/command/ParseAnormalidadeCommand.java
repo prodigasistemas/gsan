@@ -76,9 +76,7 @@ public class ParseAnormalidadeCommand extends AbstractAtualizacaoCadastralComman
 		ClienteAtualizacaoCadastral clienteUsuarioTxt = null;
 		ClienteAtualizacaoCadastral clienteResponsavelTxt = null;
 		ClienteAtualizacaoCadastral clienteProprietarioTxt = null;
-		ClienteFoneAtualizacaoCadastral clienteFoneTxt = null;
 		ImovelAtualizacaoCadastral imovelTxt = null;
-		ImovelSubcategoriaAtualizacaoCadastral imovelSubcategoriaTxt = null;
 
 		Interceptador interceptador = Interceptador.getInstancia();
 
@@ -464,7 +462,7 @@ public class ParseAnormalidadeCommand extends AbstractAtualizacaoCadastralComman
 		ImovelAtualizacaoCadastral imovelAtualizacaoCadastralBase = controladorImovel.pesquisarImovelAtualizacaoCadastral(matriculaImovel);
 		salvarTabelaColunaAtualizacaoCadastral(imovelAtualizacaoCadastralBase, imovelTxt, arquivoTexto, interceptador, matriculaImovel);
 
-		atualizarRetornoImovelControleAtualizacaoCadastral(matriculaImovel, SituacaoAtualizacaoCadastral.TRANSMITIDO);
+		atualizarSituacaoControleImovelAtualizacaoCadastral(matriculaImovel, SituacaoAtualizacaoCadastral.TRANSMITIDO);
 	}
 
 	public String getDescricaoLogradouro(int idTipoLogradouro) {
@@ -475,11 +473,10 @@ public class ParseAnormalidadeCommand extends AbstractAtualizacaoCadastralComman
 		return logradouroTipo.getDescricao();
 	}
 
-	private void atualizarRetornoImovelControleAtualizacaoCadastral(int matriculaImovel, Integer situacao) throws Exception {
-		ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral = repositorioImovel.pesquisarImovelControleAtualizacaoCadastral(matriculaImovel,
-				SituacaoAtualizacaoCadastral.DISPONIVEL);
+	private void atualizarSituacaoControleImovelAtualizacaoCadastral(int matriculaImovel, Integer situacao) throws Exception {
+		ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral = repositorioImovel.pesquisarImovelControleAtualizacaoCadastral(matriculaImovel);
 		imovelControleAtualizacaoCadastral.setDataRetorno(new Date());
-		imovelControleAtualizacaoCadastral.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.TRANSMITIDO));
+		imovelControleAtualizacaoCadastral.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(situacao));
 
 		controladorUtil.atualizar(imovelControleAtualizacaoCadastral);
 	}

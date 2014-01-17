@@ -31487,8 +31487,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		return colecaoRamoAtividadeImovel;
 	}
 	
-	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacaoCadastral
-			(Integer idImovel, Integer situacao) throws ErroRepositorioException {
+	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		try {
 
@@ -31496,12 +31495,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					+ "FROM ImovelControleAtualizacaoCadastral icac "
 					+ "INNER JOIN icac.imovel imovel "
 					+ "INNER JOIN icac.situacaoAtualizacaoCadastral situacao "
-					+ "WHERE imovel.id = :idImovel "
-					+ "AND situacao.id = :idSituacao ";
+					+ "WHERE imovel.id = :idImovel ";
 
 			return (ImovelControleAtualizacaoCadastral) session.createQuery(consulta)
-					.setInteger("idImovel", idImovel)
-					.setInteger("idSituacao", situacao).uniqueResult();
+					.setInteger("idImovel", idImovel).uniqueResult();
 		}catch (HibernateException e) {
 			throw new ErroRepositorioException("Erro no Hibernate");
 		} finally {
