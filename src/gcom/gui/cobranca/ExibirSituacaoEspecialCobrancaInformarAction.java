@@ -200,8 +200,6 @@ public class ExibirSituacaoEspecialCobrancaInformarAction extends GcomAction {
 			
 			SEMSituacaoEspecialCobranca = fachada.pesquisarImovelSituacaoEspecialCobranca("SEM", situacaoEspecialCobrancaHelper);
 			
-			
-			
 			if (!possuiCOMSituacaoEspecialCobranca() && !possuiSEMSituacaoEspecialCobranca()) {
 				throw new ActionServletException("atencao.nao.parametro.informado", null, "");
 			}
@@ -899,11 +897,11 @@ public class ExibirSituacaoEspecialCobrancaInformarAction extends GcomAction {
 	}
 	
 	private boolean possuiCOMSituacaoEspecialCobranca(){
-		return COMSituacaoEspecialCobranca == null || COMSituacaoEspecialCobranca.isEmpty();
+		return COMSituacaoEspecialCobranca != null && !COMSituacaoEspecialCobranca.isEmpty();
 	}
 	
 	private boolean possuiSEMSituacaoEspecialCobranca(){
-		return SEMSituacaoEspecialCobranca == null || SEMSituacaoEspecialCobranca.isEmpty();
+		return SEMSituacaoEspecialCobranca != null && !SEMSituacaoEspecialCobranca.isEmpty();
 	}
 	
 	private boolean possuiLocalidadeOrigem(){

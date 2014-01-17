@@ -165,6 +165,7 @@ import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.cadastro.imovel.ImagemAtualizacaoCadastral;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
+import gcom.cadastro.imovel.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelInscricaoAlterada;
 import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.cadastro.imovel.ImovelProgramaEspecial;
@@ -7409,34 +7410,17 @@ public class ControladorCadastro implements SessionBean {
 		int idUnidadeIniciada = 0;
 
 		try {
-
-			if (helper.getColecaoMatriculas() != null
-					&& !helper.getColecaoMatriculas().isEmpty()) {
-				idUnidadeIniciada = getControladorBatch()
-						.iniciarUnidadeProcessamentoBatch(
-								idFuncionalidadeIniciada,
-								UnidadeProcessamento.FUNCIONALIDADE, 0);
-			} else {
-				idUnidadeIniciada = getControladorBatch()
-						.iniciarUnidadeProcessamentoBatch(
-								idFuncionalidadeIniciada,
-								UnidadeProcessamento.SETOR_COMERCIAL, (idSetor));
-			}
+			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(
+					idFuncionalidadeIniciada, UnidadeProcessamento.SETOR_COMERCIAL, idSetor);
 
 			Collection colecaoIdsImovel = null;
 
-			if (helper.getColecaoMatriculas() != null
-					&& !helper.getColecaoMatriculas().isEmpty()) {
-				colecaoIdsImovel = helper.getColecaoMatriculas();
+			if (helper.getImovelSituacao() != null && new Integer(helper.getImovelSituacao()) == 2) {
+				colecaoIdsImovel = repositorioCadastro.pesquisarImovelDebitoAtualizacaoCadastral(
+						colecaoIdsImovel);
 			} else {
-				colecaoIdsImovel = repositorioCadastro
-						.obterIdsImovelGeracaoTabelasTemporarias(idSetor,
-								helper);
-				if (helper.getImovelSituacao() != null
-						&& new Integer(helper.getImovelSituacao()) == 2) {
-					colecaoIdsImovel = repositorioCadastro
-							.pesquisarImovelDebitoAtualizacaoCadastral(colecaoIdsImovel);
-				}
+				colecaoIdsImovel = repositorioCadastro.obterIdsImovelGeracaoTabelasTemporarias(
+						idSetor, helper);
 			}
 
 			ClienteAtualizacaoCadastral clienteAtualizacaoCadastralProprietario = null;
@@ -7594,6 +7578,8 @@ public class ControladorCadastro implements SessionBean {
 								}
 							}
 						}
+						
+						inserirImovelControleAtualizacaoCadastral(idImovel);
 
 						// Atualizar Situacao Atualizacao Cadastral
 						getControladorImovel()
@@ -7628,6 +7614,19 @@ public class ControladorCadastro implements SessionBean {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex,
 					idUnidadeIniciada, true);
 			throw new EJBException(ex);
+		}
+	}
+
+	public void inserirImovelControleAtualizacaoCadastral(Integer idImovel) {
+		ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral = new ImovelControleAtualizacaoCadastral();
+		imovelControleAtualizacaoCadastral.setDataGeracao(new Date());
+		imovelControleAtualizacaoCadastral.setImovel(new Imovel(idImovel));
+		imovelControleAtualizacaoCadastral.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.DISPONIVEL));
+		
+		try {
+			getControladorUtil().inserir(imovelControleAtualizacaoCadastral);
+		} catch (ControladorException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -7695,7 +7694,7 @@ public class ControladorCadastro implements SessionBean {
 	 */
 	public void gerarArquivoTextoAtualizacaoCadastralDispositivoMovel(
 			Integer idFuncionalidadeIniciada,
-			GerarArquivoTextoAtualizacaoCadastralHelper helper,
+			ImovelGeracaoTabelasTemporariasCadastroHelper helper,
 			Integer idRota) throws ControladorException {
 
 		int idUnidadeIniciada = 0;
@@ -7714,24 +7713,18 @@ public class ControladorCadastro implements SessionBean {
 
 			// Situação do Arquivo
 			SituacaoTransmissaoLeitura situacaoTransmissaoLeitura = new SituacaoTransmissaoLeitura();
-			situacaoTransmissaoLeitura.setId(helper.getSituacao());
+			situacaoTransmissaoLeitura.setId(SituacaoTransmissaoLeitura.LIBERADO);
 			arquivoTextoAtualizacaoCadastral.setSituacaoTransmissaoLeitura(situacaoTransmissaoLeitura);
 
-			if (helper.getColecaoImovel() == null
-					|| helper.getColecaoImovel().isEmpty()) {
+			leiturista = this.getLeituristaAtualizacaoCadastral(Integer.parseInt(helper.getLeiturista()));
 
-				leiturista = this.getLeituristaAtualizacaoCadastral(helper.getIdLeiturista());
-
-				idsImoveis = repositorioCadastro.pesquisarIdsImoveisAtualizacaoCadastral(
-						leiturista.getEmpresa().getId(), idRota);
-			}
+			idsImoveis = repositorioCadastro.pesquisarIdsImoveisAtualizacaoCadastral(
+					leiturista.getEmpresa().getId(), idRota);
 
 			if (idsImoveis == null || idsImoveis.isEmpty()) {
 				System.out.println("Nenhum imóvel encontrado. ARQUIVO NÃO GERADO");
 				getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 			} else {
-				helper.setColecaoImovel(idsImoveis);
-
 				Rota rota = getControladorMicromedicao().pesquisarRota(idRota);
 				SetorComercial setor = rota.getSetorComercial();
 				Localidade localidade = setor.getLocalidade();
@@ -7766,13 +7759,13 @@ public class ControladorCadastro implements SessionBean {
 				arquivoTextoAtualizacaoCadastral.setUltimaAlteracao(new Date());
 
 				Integer idArquivoTexto = (Integer) getControladorUtil().inserir(arquivoTextoAtualizacaoCadastral);
-				arquivoTexto = this.gerarArquivoTxt(helper.getColecaoImovel(), idArquivoTexto, leiturista, rota);
+				arquivoTexto = this.gerarArquivoTxt(idsImoveis, idArquivoTexto, leiturista, rota);
 
 				// -------------------------------------------------------------------------
 				ZipOutputStream zos = null;
 				BufferedWriter out = null;
-				File leituraTipo = new File(helper.getDescricao() + ".txt");
-				File compactado = new File(helper.getDescricao() + ".zip");
+				File leituraTipo = new File(descricaoArquivoTxt + ".txt");
+				File compactado = new File(descricaoArquivoTxt + ".zip");
 				zos = new ZipOutputStream(new FileOutputStream(compactado));
 				out = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(
 						leituraTipo.getAbsolutePath())));
@@ -16746,7 +16739,7 @@ public class ControladorCadastro implements SessionBean {
 
 				tabelaAtualizacaoCadastral.setArquivoTextoAtualizacaoCadastral(arquivoTexto);
 				tabelaAtualizacaoCadastral.setTabela(tabela);
-				tabelaAtualizacaoCadastral.setIndicadorAutorizado(ConstantesSistema.INDICADOR_REGISTRO_ACEITO);
+				tabelaAtualizacaoCadastral.setIndicadorAutorizado(ConstantesSistema.INDICADOR_REGISTRO_NAO_ACEITO);
 
 				Iterator colunasAlteradasIter = colunasAlteradas.iterator();
 				while (colunasAlteradasIter.hasNext()) {
@@ -16754,7 +16747,7 @@ public class ControladorCadastro implements SessionBean {
 					TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral = new TabelaColunaAtualizacaoCadastral();
 					tabelaColunaAtualizacaoCadastral.setColunaValorAnterior(tabelaLinhaColunaAlteracao.getConteudoColunaAnterior());
 					tabelaColunaAtualizacaoCadastral.setColunaValorAtual(tabelaLinhaColunaAlteracao.getConteudoColunaAtual());
-					tabelaColunaAtualizacaoCadastral.setIndicadorAutorizado(ConstantesSistema.INDICADOR_REGISTRO_ACEITO);
+					tabelaColunaAtualizacaoCadastral.setIndicadorAutorizado(ConstantesSistema.INDICADOR_REGISTRO_NAO_ACEITO);
 					tabelaColunaAtualizacaoCadastral.setTabelaAtualizacaoCadastral(tabelaAtualizacaoCadastral);
 
 					FiltroTabelaColuna filtroColuna = new FiltroTabelaColuna();
@@ -17209,6 +17202,8 @@ public class ControladorCadastro implements SessionBean {
 
 			ImovelAtualizacaoCadastral imovelAtualizacaoCadastralBase = getControladorImovel().pesquisarImovelAtualizacaoCadastral(matriculaImovel);
 			salvarTabelaColunaAtualizacaoCadastral(imovelAtualizacaoCadastralBase, imovelTxt, arquivoTexto, interceptador, matriculaImovel);
+			
+			atualizarRetornoImovelControleAtualizacaoCadastral(matriculaImovel, SituacaoAtualizacaoCadastral.TRANSMITIDO);
 
 		} catch (ControladorException e) {
 			e.printStackTrace();
@@ -17216,6 +17211,20 @@ public class ControladorCadastro implements SessionBean {
 
 	}
 	
+	private void atualizarRetornoImovelControleAtualizacaoCadastral(
+			int matriculaImovel, Integer situacao) throws ControladorException {
+		try {
+			ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral = 
+					repositorioImovel.pesquisarImovelControleAtualizacaoCadastral(matriculaImovel, SituacaoAtualizacaoCadastral.DISPONIVEL);
+			imovelControleAtualizacaoCadastral.setDataRetorno(new Date());
+			imovelControleAtualizacaoCadastral.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.TRANSMITIDO));
+			
+			getControladorUtil().atualizar(imovelControleAtualizacaoCadastral);
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
+	}
+
 	/**
 	 * TODO: COSANPA
 	 * 
@@ -17258,10 +17267,10 @@ public class ControladorCadastro implements SessionBean {
 	}
 	
 	public Collection<Integer> pesquisarRotasAtualizacaoCadastral(
-			GerarArquivoTextoAtualizacaoCadastralHelper helper) throws ControladorException {
+			ImovelGeracaoTabelasTemporariasCadastroHelper helper) throws ControladorException {
 		
 		try {
-			Leiturista leiturista = getLeituristaAtualizacaoCadastral(helper.getIdLeiturista());
+			Leiturista leiturista = getLeituristaAtualizacaoCadastral(Integer.parseInt(helper.getLeiturista()));
 			
 			return this.repositorioCadastro.pesquisarRotasAtualizacaoCadastral(leiturista.getEmpresa().getId());
 		} catch (ErroRepositorioException ex) {
@@ -17271,8 +17280,7 @@ public class ControladorCadastro implements SessionBean {
 		}
 	}
 	
-	public Leiturista getLeituristaAtualizacaoCadastral(
-			Integer idLeiturista) throws ControladorException {
+	public Leiturista getLeituristaAtualizacaoCadastral(Integer idLeiturista) throws ControladorException {
 		try{
 			FiltroLeiturista filtroLeiturista = new FiltroLeiturista();
 			filtroLeiturista.adicionarParametro(new ParametroSimples(
@@ -17289,4 +17297,21 @@ public class ControladorCadastro implements SessionBean {
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
+	
+	public Collection<Integer> pesquisarIdImoveisAprovados() throws ControladorException {
+		Collection<Integer> idImoveisAprovados = new ArrayList<Integer>();
+		try {
+			idImoveisAprovados = repositorioImovel.pesquisarIdImoveisAprovados();
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
+		return idImoveisAprovados;
+	}
+	
+	public void atualizarImoveisAprovados() throws ControladorException {
+		Collection<Integer> idImoveis = pesquisarIdImoveisAprovados();
+		
+	}
+	
+	
 }

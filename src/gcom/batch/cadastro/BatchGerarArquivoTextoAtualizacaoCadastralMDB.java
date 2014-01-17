@@ -78,6 +78,7 @@ package gcom.batch.cadastro;
 import gcom.cadastro.ControladorCadastroLocal;
 import gcom.cadastro.ControladorCadastroLocalHome;
 import gcom.cadastro.imovel.bean.GerarArquivoTextoAtualizacaoCadastralHelper;
+import gcom.cadastro.imovel.bean.ImovelGeracaoTabelasTemporariasCadastroHelper;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ControladorException;
 import gcom.util.ServiceLocator;
@@ -118,7 +119,7 @@ public class BatchGerarArquivoTextoAtualizacaoCadastralMDB implements MessageDri
 			try {
 				this.getControladorCadastro().gerarArquivoTextoAtualizacaoCadastralDispositivoMovel(
 						(Integer) ((Object[]) objectMessage.getObject())[0],
-						(GerarArquivoTextoAtualizacaoCadastralHelper) ((Object[]) objectMessage.getObject())[1],
+						(ImovelGeracaoTabelasTemporariasCadastroHelper) ((Object[]) objectMessage.getObject())[1],
 						(Integer) ((Object[]) objectMessage.getObject())[2]);
 
 			} catch (JMSException e) {

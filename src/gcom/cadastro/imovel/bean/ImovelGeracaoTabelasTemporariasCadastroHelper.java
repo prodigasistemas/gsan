@@ -97,6 +97,8 @@ public class ImovelGeracaoTabelasTemporariasCadastroHelper  implements Serializa
 	private String sugestao;
 	private String firma;
 	private String nomeFirma;
+	private String leiturista;
+	private String nomeLeiturista;
 	private Integer quantidadeMaxima;
 	private String elo;
 	private String nomeElo;
@@ -723,4 +725,19 @@ public class ImovelGeracaoTabelasTemporariasCadastroHelper  implements Serializa
 		this.nomeSituacaoLigacaoAgua = nomeSituacaoLigacaoAgua;
 	}
 
+	public String getLeiturista() {
+		return leiturista;
+	}
+
+	public void setLeiturista(String leiturista) {
+		this.leiturista = leiturista;
+	}
+
+	public String getNomeLeiturista() {
+		return nomeLeiturista;
+	}
+
+	public void setNomeLeiturista(String nomeLeiturista) {
+		this.nomeLeiturista = nomeLeiturista;
+	}
 }
