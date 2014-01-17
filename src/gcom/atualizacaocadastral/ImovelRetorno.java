@@ -3,17 +3,13 @@ package gcom.atualizacaocadastral;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
-import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
 import gcom.cadastro.imovel.FonteAbastecimento;
 import gcom.cadastro.imovel.IImovel;
-import gcom.cadastro.localidade.Localidade;
-import gcom.cadastro.localidade.SetorComercial;
 import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
 
 import java.math.BigDecimal;
 import java.util.Date;
-import java.util.HashMap;
 
 public class ImovelRetorno implements IImovel{
 
@@ -35,13 +31,10 @@ public class ImovelRetorno implements IImovel{
 	private FonteAbastecimento fonteAbastecimento;
 	private LigacaoAgua ligacaoAgua;
 	private Date ultimaAlteracao;
-	private Localidade localidade;
-	private SetorComercial setorComercia;
 	private Integer idImovel;
 	private int numeroQuadra;
 	private short lote;
 	private Integer numeroSequencialRota;
-	private LogradouroBairro logradouroBairro;
     private Integer idCapacidadeHidrometro;
     private Integer idMarcaHidrometro;
     private Integer idProtecaoHidrometro;
@@ -50,28 +43,34 @@ public class ImovelRetorno implements IImovel{
 	private Integer idMunicipio;
 	private String nomeMunicipio;
 	private String dsUFSiglaMunicipio;
+	
 
 	public ImovelRetorno () {
 		
 	}
 	
-	public ImovelRetorno (HashMap<String, String> mapParametros) {
-		this.fonteAbastecimento = new FonteAbastecimento();
-		
-		this.numeroIptu = new BigDecimal(mapParametros.get("numeroIPTU"));
-		this.numeroMedidorEnergia = mapParametros.get("numeroCelpa");
-		mapParametros.get("idTipoLogradouroImovel");
-		mapParametros.get("logradouroImovel");
-		this.numeroImovel = mapParametros.get("numeroImovel");
-		mapParametros.get("complementoImovel");
-		mapParametros.get("bairro");
-		mapParametros.get("cep");
-		mapParametros.get("municipio");
-		mapParametros.get("codigoLogradouro");
-		this.fonteAbastecimento.setId(new Integer(mapParametros.get("fonteAbastecimento")));
-		this.coordenadaX = mapParametros.get("latitude");
-		this.coordenadaY = mapParametros.get("longitude");
-
+	public ImovelRetorno (IImovel imovelAtualizacaoCadastral) {
+		this.coordenadaX = imovelAtualizacaoCadastral.getCoordenadaX();
+		this.coordenadaY = imovelAtualizacaoCadastral.getCoordenadaY();
+		this.fonteAbastecimento = imovelAtualizacaoCadastral.getFonteAbastecimento();
+		this.hidrometroInstalacaoHistorico = imovelAtualizacaoCadastral.getHidrometroInstalacaoHistorico();
+		this.idCapacidadeHidrometro = imovelAtualizacaoCadastral.getIdCapacidadeHidrometro();
+		this.idMarcaHidrometro = imovelAtualizacaoCadastral.getIdMarcaHidrometro();
+		this.idProtecaoHidrometro = imovelAtualizacaoCadastral.getIdProtecaoHidrometro();
+		this.informacoesComplementares = imovelAtualizacaoCadastral.getInformacoesComplementares();
+		this.ligacaoAgua = imovelAtualizacaoCadastral.getLigacaoAgua();
+		this.ligacaoAguaSituacao = imovelAtualizacaoCadastral.getLigacaoAguaSituacao();
+		this.ligacaoEsgotoSituacao = imovelAtualizacaoCadastral.getLigacaoEsgotoSituacao();
+		this.lote = imovelAtualizacaoCadastral.getLote();
+		this.nomeEntrevistado = imovelAtualizacaoCadastral.getNomeEntrevistado();
+		this.numeroHidrometro = imovelAtualizacaoCadastral.getNumeroHidrometro();
+		this.numeroImovel = imovelAtualizacaoCadastral.getNumeroImovel();
+		this.numeroIptu = imovelAtualizacaoCadastral.getNumeroIptu();
+		this.numeroMedidorEnergia = imovelAtualizacaoCadastral.getNumeroMedidorEnergia();
+		this.numeroMorador = imovelAtualizacaoCadastral.getNumeroMorador();
+		this.numeroPontosUtilizacao = imovelAtualizacaoCadastral.getNumeroPontosUtilizacao();
+		this.numeroQuadra = imovelAtualizacaoCadastral.getNumeroQuadra();
+		this.subLote = imovelAtualizacaoCadastral.getSubLote();
 	}
 
 	public Integer getId() {
@@ -306,30 +305,6 @@ public class ImovelRetorno implements IImovel{
 		this.dsUFSiglaMunicipio = dsUFSiglaMunicipio;
 	}
 
-	public Localidade getLocalidade() {
-		return localidade;
-	}
-
-	public void setLocalidade(Localidade localidade) {
-		this.localidade = localidade;
-	}
-
-	public SetorComercial getSetorComercia() {
-		return this.setorComercia;
-	}
-
-	public void setSetorComercia(SetorComercial setorComercia) {
-		this.setorComercia = setorComercia;
-	}
-
-	public LogradouroBairro getLogradouroBairro() {
-		return logradouroBairro;
-	}
-
-	public void setLogradouroBairro(LogradouroBairro logradouroBairro) {
-		this.logradouroBairro = logradouroBairro;
-	}
-	
 	public Integer getIdImovel() {
 		return idImovel;
 	}

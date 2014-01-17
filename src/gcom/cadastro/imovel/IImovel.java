@@ -130,16 +130,4 @@ public interface IImovel {
 
 	public void setDsUFSiglaMunicipio(String dsUFSiglaMunicipio);
 
-	public Localidade getLocalidade();
-
-	public void setLocalidade(Localidade localidade);
-
-	public SetorComercial getSetorComercia();
-
-	public void setSetorComercia(SetorComercial setorComercia);
-
-	public LogradouroBairro getLogradouroBairro();
-
-	public void setLogradouroBairro(LogradouroBairro logradouroBairro);
-
 }

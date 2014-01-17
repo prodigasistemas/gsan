@@ -96,6 +96,9 @@ import gcom.atendimentopublico.registroatendimento.MeioSolicitacao;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao;
 import gcom.atendimentopublico.registroatendimento.bean.DefinirDataPrevistaUnidadeDestinoEspecificacaoHelper;
+import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
+import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocalHome;
+import gcom.atualizacaocadastral.ImovelRetorno;
 import gcom.batch.ControladorBatchLocal;
 import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.UnidadeProcessamento;
@@ -175,7 +178,6 @@ import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoriaPK;
 import gcom.cadastro.imovel.RepositorioImovelHBM;
 import gcom.cadastro.imovel.Subcategoria;
-import gcom.cadastro.imovel.bean.GerarArquivoTextoAtualizacaoCadastralHelper;
 import gcom.cadastro.imovel.bean.ImovelGeracaoTabelasTemporariasCadastroHelper;
 import gcom.cadastro.localidade.FiltroGerenciaRegional;
 import gcom.cadastro.localidade.FiltroQuadra;
@@ -456,6 +458,25 @@ public class ControladorCadastro implements SessionBean {
 		this.sessionContext = sessionContext;
 	}
 
+	private ControladorAtualizacaoCadastralLocal getControladorAtualizacaoCadastral() {
+		ControladorAtualizacaoCadastralLocalHome localHome = null; 
+		ControladorAtualizacaoCadastralLocal local = null;
+				
+		ServiceLocator locator = null;
+		
+		try {
+			locator = ServiceLocator.getInstancia();
+			localHome = (ControladorAtualizacaoCadastralLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_ATUALIZACAO_CADASTRAL);
+			local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch(ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}
+	
 	private ControladorFaturamentoLocal getControladorFaturamento() {
 		ControladorFaturamentoLocalHome localHome = null;
 		ControladorFaturamentoLocal local = null;
@@ -17128,6 +17149,8 @@ public class ControladorCadastro implements SessionBean {
 			imovelTxt.setDescricaoOutrasInformacoes(maps[5].get("comentario").trim());
 			imovelTxt.setCoordenadaY(maps[5].get("latitude"));
 			imovelTxt.setCoordenadaX(maps[5].get("longitude"));
+			
+			ImovelRetorno imovelRetorno = new ImovelRetorno(imovelTxt);
 
 			// Imovel Subcategoria
 			short qtdEconomias = 0;
@@ -17202,6 +17225,8 @@ public class ControladorCadastro implements SessionBean {
 
 			ImovelAtualizacaoCadastral imovelAtualizacaoCadastralBase = getControladorImovel().pesquisarImovelAtualizacaoCadastral(matriculaImovel);
 			salvarTabelaColunaAtualizacaoCadastral(imovelAtualizacaoCadastralBase, imovelTxt, arquivoTexto, interceptador, matriculaImovel);
+			
+			getControladorAtualizacaoCadastral().incluirImovelRetorno(imovelRetorno);
 			
 			atualizarRetornoImovelControleAtualizacaoCadastral(matriculaImovel, SituacaoAtualizacaoCadastral.TRANSMITIDO);
 

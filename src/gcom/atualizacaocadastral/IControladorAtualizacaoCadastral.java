@@ -8,6 +8,8 @@ import java.util.Collection;
 public interface IControladorAtualizacaoCadastral {
 	
 	public Collection<IImovel> obterImoveisParaAtualizar() throws ControladorException;
+	
+	public void incluirImovelRetorno(IImovel imovelAtualizacaoCadastral);
 
 
 }

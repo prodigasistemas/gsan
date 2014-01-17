@@ -3,7 +3,10 @@ package gcom.cadastro.imovel;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
+import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
+import gcom.cadastro.localidade.Localidade;
+import gcom.cadastro.localidade.SetorComercial;
 import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.ObjetoTransacao;
 import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
@@ -20,7 +23,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 /** @author Hibernate CodeGenerator */
 @ControleAlteracao()
-public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
+public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImovel {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -967,4 +970,5 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao {
 	public void setInformacoesComplementares(String informacoesComplementares) {
 		this.descricaoOutrasInformacoes = informacoesComplementares;
 	}
+
 }

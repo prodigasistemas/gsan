@@ -41,5 +41,5 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		return retorno;
 
 	}
-
+	
 }

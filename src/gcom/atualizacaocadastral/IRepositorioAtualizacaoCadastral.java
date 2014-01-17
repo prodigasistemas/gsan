@@ -8,4 +8,5 @@ import java.util.Collection;
 public interface IRepositorioAtualizacaoCadastral {
 
 	public Collection<IImovel> obterImoveisParaAtualizar() throws ErroRepositorioException;
+
 }

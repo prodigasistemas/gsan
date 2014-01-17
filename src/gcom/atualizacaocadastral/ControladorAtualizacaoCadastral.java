@@ -3,6 +3,8 @@ package gcom.atualizacaocadastral;
 import gcom.cadastro.imovel.IImovel;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
+import gcom.util.IRepositorioUtil;
+import gcom.util.RepositorioUtilHBM;
 
 import java.rmi.RemoteException;
 import java.util.Collection;
@@ -14,7 +16,7 @@ import javax.ejb.SessionContext;
 
 import org.apache.log4j.Logger;
 
-public class ControladorAtualizacaoCadastral implements SessionBean {
+public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoCadastral, SessionBean {
 
 
 	private static final long serialVersionUID = -3792912776769033056L;
@@ -22,6 +24,8 @@ public class ControladorAtualizacaoCadastral implements SessionBean {
 	private static Logger logger = Logger.getLogger(ControladorAtualizacaoCadastral.class);
 	
 	private IRepositorioAtualizacaoCadastral repositorioAtualizacaoCadastral = null;
+	
+	private IRepositorioUtil repositorioUtil = null;
 	
 	SessionContext sessionContext;
 	
@@ -50,6 +54,9 @@ public class ControladorAtualizacaoCadastral implements SessionBean {
 			logger.error("Erro ao pesquisar imoveis para atualizar.", e);
 		}
 		return imoveis;
+	}
+
+	public void incluirImovelRetorno(IImovel imovelAtualizacaoCadastral) {
 	}
 
 
