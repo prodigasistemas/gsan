@@ -75,7 +75,6 @@
 */  
 package gcom.seguranca.transacao;
 
-import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.interceptor.ObjetoGcom;
 import gcom.seguranca.acesso.usuario.Usuario;
 
