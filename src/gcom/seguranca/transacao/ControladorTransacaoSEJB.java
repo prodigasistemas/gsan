@@ -1391,7 +1391,10 @@ public class ControladorTransacaoSEJB implements SessionBean {
 						helper.setIdAlteracaoTipo((Integer) dados[10]); // Id da Alteracao Tipo
 						helper.setDescricaoAlteracaoTipo((String) dados[11]); // Descricao da Alteracao Tipo
 						if(dados[13] != null){
-							helper.setDataProcessamento((Date)dados[13]);
+							helper.setDataValidacao((Date)dados[13]);
+						}
+						if(dados[15] != null){
+							helper.setNomeUsuario((String) dados[15]);
 						}
 						
 						retorno.add(helper);
@@ -1561,7 +1564,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 			for (int i = 0; i < idsAtualizacaoCadastral.length; i++) {
 				Integer idAtualizacaoCadastral = new Integer(idsAtualizacaoCadastral[i]);
 				// atualiza o indicador de autorizado para sim 
-				this.repositorioTransacao.atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(idAtualizacaoCadastral, indicador);
+				this.repositorioTransacao.atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(idAtualizacaoCadastral, indicador, usuarioLogado);
 				//verifica qual o tipo de atualização cadastral
 				if(tipoAlteracaoCadastral == null){
 					TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral = this.repositorioTransacao.pesquisarTabelaColunaAtualizacaoCadastral(idAtualizacaoCadastral);

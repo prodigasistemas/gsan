@@ -3301,4 +3301,6 @@ public interface IRepositorioImovel {
 	
 	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacaoCadastral
 	(Integer idImovel, Integer situacao) throws ErroRepositorioException;
+
+	public Collection<Integer> pesquisarIdImoveisAprovados() throws ErroRepositorioException;
 }
