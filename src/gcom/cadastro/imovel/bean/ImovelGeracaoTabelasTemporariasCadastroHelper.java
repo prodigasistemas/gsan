@@ -80,16 +80,7 @@ import java.util.Collection;
 
 public class ImovelGeracaoTabelasTemporariasCadastroHelper  implements Serializable {
 	private static final long serialVersionUID = 1L;
-	/**
-	 * [UC0831] Gerar Tabelas Temporarias para Atualizacao Cadastral
-	 *
-	 *
-	 * @author Vinicius
-	 * @date 10/09/2008
-	 *
-	 */
 
-	private Collection colecaoMatriculas;
 	private String matricula;
 	private String nomeMatricula;
 	private String cliente;
@@ -132,9 +123,7 @@ public class ImovelGeracaoTabelasTemporariasCadastroHelper  implements Serializa
 	private String msgQuadraInicial;
 	private String msgQuadraFinal;
 	private String quadraMensagemOrigem;
-	
-	
-	private Collection colecaoImovel;
+	private Collection colecaoIdsImoveis;
 
 
 	/**
@@ -191,34 +180,6 @@ public class ImovelGeracaoTabelasTemporariasCadastroHelper  implements Serializa
 	 */
 	public void setCodigoSetorComercialInicial(String codigoSetorComercialInicial) {
 		this.codigoSetorComercialInicial = codigoSetorComercialInicial;
-	}
-
-	/**
-	 * @return Returns the colecaoImovel.
-	 */
-	public Collection getColecaoImovel() {
-		return colecaoImovel;
-	}
-
-	/**
-	 * @param colecaoImovel The colecaoImovel to set.
-	 */
-	public void setColecaoImovel(Collection colecaoImovel) {
-		this.colecaoImovel = colecaoImovel;
-	}
-
-	/**
-	 * @return Returns the colecaoMatriculas.
-	 */
-	public Collection getColecaoMatriculas() {
-		return colecaoMatriculas;
-	}
-
-	/**
-	 * @param colecaoMatriculas The colecaoMatriculas to set.
-	 */
-	public void setColecaoMatriculas(Collection colecaoMatriculas) {
-		this.colecaoMatriculas = colecaoMatriculas;
 	}
 
 	/**
@@ -739,5 +700,13 @@ public class ImovelGeracaoTabelasTemporariasCadastroHelper  implements Serializa
 
 	public void setNomeLeiturista(String nomeLeiturista) {
 		this.nomeLeiturista = nomeLeiturista;
+	}
+
+	public Collection getColecaoIdsImoveis() {
+		return colecaoIdsImoveis;
+	}
+
+	public void setColecaoIdsImoveis(Collection colecaoIdsImoveis) {
+		this.colecaoIdsImoveis = colecaoIdsImoveis;
 	}
 }
