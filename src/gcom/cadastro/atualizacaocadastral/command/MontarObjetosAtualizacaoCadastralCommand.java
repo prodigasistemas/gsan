@@ -436,6 +436,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		salvarTabelaColunaAtualizacaoCadastral(imovelAtualizacaoCadastralBase, imovelTxt, arquivoTexto, interceptador, matriculaImovel);
 
 		ImovelRetorno imovelRetorno = new ImovelRetorno(imovelTxt);
+		imovelRetorno.setUltimaAlteracao(new Date());
 		controladorUtil.inserir(imovelRetorno);
 		
 		atualizarSituacaoControleImovelAtualizacaoCadastral(matriculaImovel, SituacaoAtualizacaoCadastral.TRANSMITIDO);

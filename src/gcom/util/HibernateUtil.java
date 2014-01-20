@@ -1190,6 +1190,7 @@ public class HibernateUtil {
 					// gcom.cadastro.descricaogenerica
 					.addClass(DescricaoGenerica.class)
 					.addClass(ImovelControleAtualizacaoCadastral.class)
+					.addClass(ImovelRetorno.class)
 			
 							
 					// *************************************//
@@ -1661,7 +1662,7 @@ public class HibernateUtil {
 					// ************************************//
 					
 					.addClass(ServicoTerceiroAcompanhamentoServico.class)
-					.addClass(ImovelRetorno.class)
+					//.addClass(ImovelRetorno.class)
 					;
 							
 							
