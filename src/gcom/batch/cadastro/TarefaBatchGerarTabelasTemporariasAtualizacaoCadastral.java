@@ -76,6 +76,7 @@
 package gcom.batch.cadastro;
 
 import gcom.cadastro.imovel.bean.ImovelGeracaoTabelasTemporariasCadastroHelper;
+import gcom.fachada.Fachada;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.tarefa.TarefaBatch;
 import gcom.tarefa.TarefaException;
@@ -109,30 +110,17 @@ public class TarefaBatchGerarTabelasTemporariasAtualizacaoCadastral extends Tare
 	public Object executar() throws TarefaException {
 
 		Map parametros = (Map) getParametro(ConstantesSistema.PARAMETROS_BATCH);
-		ImovelGeracaoTabelasTemporariasCadastroHelper helper = (ImovelGeracaoTabelasTemporariasCadastroHelper)parametros.get("imovelGeracaoTabelasTemporariasCadastroHelper");
+		ImovelGeracaoTabelasTemporariasCadastroHelper helper = (ImovelGeracaoTabelasTemporariasCadastroHelper)
+				parametros.get("imovelGeracaoTabelasTemporariasCadastroHelper");
 		
+		Collection<Integer> colecaoIdRotas = Fachada.getInstancia().pesquisarRotasAtualizacaoCadastral(helper);
 		
-		if (helper.getColecaoMatriculas() != null && !helper.getColecaoMatriculas().isEmpty()){
-			
+		for (Integer idRota : colecaoIdRotas) {
 			enviarMensagemControladorBatch(
 					ConstantesJNDI.BATCH_GERAR_TABELAS_TEMPORARIAS_ATUALIZACAO_CADASTRAL_MDB,
-					new Object[]{0, this.getIdFuncionalidadeIniciada(),helper});
-			
-		}else{
-		
-			Collection colecaoIdsSetor = (Collection) getParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH);
-			Iterator iterator = colecaoIdsSetor.iterator();
-	
-			while (iterator.hasNext()) {
-	
-				Integer idSetor = (Integer) iterator.next();
-	
-				enviarMensagemControladorBatch(
-						ConstantesJNDI.BATCH_GERAR_TABELAS_TEMPORARIAS_ATUALIZACAO_CADASTRAL_MDB,
-						new Object[]{idSetor, this.getIdFuncionalidadeIniciada(),helper});
-				
-			}
+					new Object[]{ idRota, this.getIdFuncionalidadeIniciada(), helper });
 		}
+		
 		return null;
 	}
 

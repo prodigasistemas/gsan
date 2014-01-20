@@ -1,78 +1,3 @@
-/*
-* Copyright (C) 2007-2007 the GSAN - Sistema Integrado de Gestão de Serviços de Saneamento
-*
-* This file is part of GSAN, an integrated service management system for Sanitation
-*
-* GSAN is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License.
-*
-* GSAN is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
-*/
-/*
-* GSAN - Sistema Integrado de Gestão de Serviços de Saneamento
-* Copyright (C) <2007> 
-* Adriano Britto Siqueira
-* Alexandre Santos Cabral
-* Ana Carolina Alves Breda
-* Ana Maria Andrade Cavalcante
-* Aryed Lins de Araújo
-* Bruno Leonardo Rodrigues Barros
-* Carlos Elmano Rodrigues Ferreira
-* Cláudio de Andrade Lira
-* Denys Guimarães Guenes Tavares
-* Eduardo Breckenfeld da Rosa Borges
-* Fabíola Gomes de Araújo
-* Flávio Leonardo Cavalcanti Cordeiro
-* Francisco do Nascimento Júnior
-* Homero Sampaio Cavalcanti
-* Ivan Sérgio da Silva Júnior
-* José Edmar de Siqueira
-* José Thiago Tenório Lopes
-* Kássia Regina Silvestre de Albuquerque
-* Leonardo Luiz Vieira da Silva
-* Márcio Roberto Batista da Silva
-* Maria de Fátima Sampaio Leite
-* Micaela Maria Coelho de Araújo
-* Nelson Mendonça de Carvalho
-* Newton Morais e Silva
-* Pedro Alexandre Santos da Silva Filho
-* Rafael Corrêa Lima e Silva
-* Rafael Francisco Pinto
-* Rafael Koury Monteiro
-* Rafael Palermo de Araújo
-* Raphael Veras Rossiter
-* Roberto Sobreira Barbalho
-* Rodrigo Avellar Silveira
-* Rosana Carvalho Barbosa
-* Sávio Luiz de Andrade Cavalcante
-* Tai Mu Shih
-* Thiago Augusto Souza do Nascimento
-* Tiago Moreno Rodrigues
-* Vivianne Barbosa Sousa
-*
-* Este programa é software livre; você pode redistribuí-lo e/ou
-* modificá-lo sob os termos de Licença Pública Geral GNU, conforme
-* publicada pela Free Software Foundation; versão 2 da
-* Licença.
-* Este programa é distribuído na expectativa de ser útil, mas SEM
-* QUALQUER GARANTIA; sem mesmo a garantia implícita de
-* COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
-* PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
-* detalhes.
-* Você deve ter recebido uma cópia da Licença Pública Geral GNU
-* junto com este programa; se não, escreva para Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
-* 02111-1307, USA.
-*/
-
 package gcom.cadastro;
 
 import gcom.arrecadacao.ControladorArrecadacaoLocal;
@@ -102,6 +27,7 @@ import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.atualizacaocadastral.FiltroImovelAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.command.AbstractAtualizacaoCadastralCommand;
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastral;
+import gcom.cadastro.atualizacaocadastral.command.MontarObjetosAtualizacaoCadastralCommand;
 import gcom.cadastro.atualizacaocadastral.command.ParseAnormalidadeCommand;
 import gcom.cadastro.atualizacaocadastral.command.ParseClienteCommand;
 import gcom.cadastro.atualizacaocadastral.command.ParseHeaderCommand;
@@ -171,7 +97,6 @@ import gcom.cadastro.imovel.FiltroImovelProgramaEspecial;
 import gcom.cadastro.imovel.FiltroSubCategoria;
 import gcom.cadastro.imovel.FonteAbastecimento;
 import gcom.cadastro.imovel.IRepositorioImovel;
-import gcom.cadastro.imovel.ImagemAtualizacaoCadastral;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelControleAtualizacaoCadastral;
@@ -184,7 +109,6 @@ import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoriaPK;
 import gcom.cadastro.imovel.RepositorioImovelHBM;
 import gcom.cadastro.imovel.Subcategoria;
-import gcom.cadastro.imovel.bean.GerarArquivoTextoAtualizacaoCadastralHelper;
 import gcom.cadastro.imovel.bean.ImovelGeracaoTabelasTemporariasCadastroHelper;
 import gcom.cadastro.localidade.FiltroGerenciaRegional;
 import gcom.cadastro.localidade.FiltroQuadra;
@@ -331,7 +255,6 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 
-import java.awt.image.BufferedImage;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayOutputStream;
@@ -350,11 +273,9 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
-import java.util.NoSuchElementException;
 import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -364,34 +285,10 @@ import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
-import javax.imageio.ImageIO;
 
 import org.jboss.logging.Logger;
 
 import br.com.danhil.BarCode.Interleaved2of5;
-
-/**
- * <p>
- * 
- * Title: GCOM
- * </p>
- * <p>
- * 
- * Description: Sistema de Gestão Comercial
- * </p>
- * <p>
- * 
- * Copyright: Copyright (c) 2004
- * </p>
- * <p>
- * 
- * Company: COMPESA - Companhia Pernambucana de Saneamento
- * </p>
- * 
- * @author not attributable
- * @created 6 de Setembro de 2005
- * @version 1.0
- */
 
 public class ControladorCadastro implements SessionBean {
 
@@ -7411,7 +7308,7 @@ public class ControladorCadastro implements SessionBean {
 	 * @author Vinicius Medeiros
 	 * @date 25/08/2008
 	 */
-	public void gerarTabelasTemporariasAtualizacaoCadastral(Integer idSetor,
+	public void gerarTabelasTemporariasAtualizacaoCadastral(Integer idRota,
 			Integer idFuncionalidadeIniciada,
 			ImovelGeracaoTabelasTemporariasCadastroHelper helper)
 			throws ControladorException {
@@ -7420,16 +7317,14 @@ public class ControladorCadastro implements SessionBean {
 
 		try {
 			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(
-					idFuncionalidadeIniciada, UnidadeProcessamento.SETOR_COMERCIAL, idSetor);
+					idFuncionalidadeIniciada, UnidadeProcessamento.ROTA, idRota);
 
-			Collection colecaoIdsImovel = null;
+			Collection colecaoIdsImovel = repositorioCadastro.obterIdsImovelGeracaoTabelasTemporarias(
+					idRota, helper);
 
 			if (helper.getImovelSituacao() != null && new Integer(helper.getImovelSituacao()) == 2) {
 				colecaoIdsImovel = repositorioCadastro.pesquisarImovelDebitoAtualizacaoCadastral(
 						colecaoIdsImovel);
-			} else {
-				colecaoIdsImovel = repositorioCadastro.obterIdsImovelGeracaoTabelasTemporarias(
-						idSetor, helper);
 			}
 
 			ClienteAtualizacaoCadastral clienteAtualizacaoCadastralProprietario = null;
@@ -7442,182 +7337,133 @@ public class ControladorCadastro implements SessionBean {
 
 				ImovelAtualizacaoCadastral imovelAtualizacaoCadastral = obterImovelGeracaoTabelasTemporarias(idImovel);
 
-				// Imovel Atualização Cadastral
 				if (imovelAtualizacaoCadastral.getIdImovel() != null) {
 
-					if (!imovelJaExisteImovelAtualizacaoCadastral(imovelAtualizacaoCadastral
-							.getIdImovel())) {
-						imovelAtualizacaoCadastral
-								.setIdSituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.DISPONIVEL);
-						if (helper.getColecaoMatriculas() == null
-								|| helper.getColecaoMatriculas().isEmpty()) {
-							imovelAtualizacaoCadastral
-									.setIdEmpresa(new Integer(helper.getFirma()));
-						}
-						imovelAtualizacaoCadastral
-								.setUltimaAlteracao(new Date());
-						getControladorUtil()
-								.inserir(imovelAtualizacaoCadastral);
+					if (!imovelJaExisteImovelAtualizacaoCadastral(imovelAtualizacaoCadastral.getIdImovel())) {
+						
+						// Imovel
+						imovelAtualizacaoCadastral.setIdSituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.DISPONIVEL);
+						imovelAtualizacaoCadastral.setIdEmpresa(new Integer(helper.getFirma()));
+						imovelAtualizacaoCadastral.setUltimaAlteracao(new Date());
+						
+						getControladorUtil().inserir(imovelAtualizacaoCadastral);
+						
 						// Imovel Subcategoria
 						Collection imovelSubcategorias = obterImovelSubcategoriaAtualizacaoCadastral(idImovel);
-						Iterator imovelSubcategoriaIter = imovelSubcategorias
-								.iterator();
-						while (imovelSubcategoriaIter.hasNext()) {
-							ImovelSubcategoriaAtualizacaoCadastral imovSubAtual = (ImovelSubcategoriaAtualizacaoCadastral) imovelSubcategoriaIter
-									.next();
+						Iterator iteratorImovelSubcategoria = imovelSubcategorias.iterator();
+						
+						while (iteratorImovelSubcategoria.hasNext()) {
+							ImovelSubcategoriaAtualizacaoCadastral imovSubAtual =
+									(ImovelSubcategoriaAtualizacaoCadastral) iteratorImovelSubcategoria.next();
 							imovSubAtual.setUltimaAlteracao(new Date());
+							
 							getControladorUtil().inserir(imovSubAtual);
 						}
 						
 						Collection imovelRamoAtividade = obterImovelRamoAtividadeAtualizacaoCadastral(idImovel);
-						Iterator imovelRamoAtividadeIter = imovelRamoAtividade.iterator();
-						while (imovelRamoAtividadeIter.hasNext()) {
-							ImovelRamoAtividadeAtualizacaoCadastral imovRamoAtividade = (ImovelRamoAtividadeAtualizacaoCadastral) imovelRamoAtividadeIter
-									.next();
+						Iterator iteratorImovelRamoAtividade = imovelRamoAtividade.iterator();
+						while (iteratorImovelRamoAtividade.hasNext()) {
+							ImovelRamoAtividadeAtualizacaoCadastral imovRamoAtividade =
+									(ImovelRamoAtividadeAtualizacaoCadastral) iteratorImovelRamoAtividade.next();
 							imovRamoAtividade.setUltimaAlteracao(new Date());
 							getControladorUtil().inserir(imovRamoAtividade);
 						}
 
 						// Cliente Usuario
-						clienteAtualizacaoCadastralUsuario = getControladorCliente()
-								.obterClientetuAlizacaoCadastral(idImovel,
-										ClienteRelacaoTipo.USUARIO);
+						clienteAtualizacaoCadastralUsuario = getControladorCliente().obterClientetuAlizacaoCadastral(
+								idImovel, ClienteRelacaoTipo.USUARIO);
 
 						if (clienteAtualizacaoCadastralUsuario != null) {
 
-							clienteAtualizacaoCadastralUsuario
-									.setUltimaAlteracao(new Date());
-							Integer idClienteAtualizacaoCadastral = (Integer) getControladorUtil()
-									.inserir(clienteAtualizacaoCadastralUsuario);
+							clienteAtualizacaoCadastralUsuario.setUltimaAlteracao(new Date());
+							Integer idClienteAtualizacaoCadastral = (Integer) getControladorUtil().inserir(
+									clienteAtualizacaoCadastralUsuario);
 
-							// Cliente Fone Usuário
-							Collection clienteFonesAtualizacaoCadastral = getControladorCliente()
-									.obterDadosClienteFone(
-											clienteAtualizacaoCadastralUsuario
-													.getIdCliente());
+							// Cliente Fone Usu�rio
+							Collection clienteFonesAtualizacaoCadastral = getControladorCliente().obterDadosClienteFone(
+									clienteAtualizacaoCadastralUsuario.getIdCliente());
+							
 							if (clienteFonesAtualizacaoCadastral != null
-									&& !clienteFonesAtualizacaoCadastral
-											.isEmpty()) {
-								Iterator clienteFonesAtualizacaoCadastralIter = clienteFonesAtualizacaoCadastral
-										.iterator();
-								while (clienteFonesAtualizacaoCadastralIter
-										.hasNext()) {
-									ClienteFoneAtualizacaoCadastral clienteFoneAtualizacaoCadastral = (ClienteFoneAtualizacaoCadastral) clienteFonesAtualizacaoCadastralIter
-											.next();
-									clienteFoneAtualizacaoCadastral
-											.setIdClienteAtualizacaoCadastral(idClienteAtualizacaoCadastral);
-									clienteFoneAtualizacaoCadastral
-											.setUltimaAlteracao(new Date());
-									getControladorUtil().inserir(
-											clienteFoneAtualizacaoCadastral);
+									&& !clienteFonesAtualizacaoCadastral.isEmpty()) {
+								
+								Iterator iteratorClienteFonesAtualizacaoCadastral = clienteFonesAtualizacaoCadastral.iterator();
+								
+								while (iteratorClienteFonesAtualizacaoCadastral.hasNext()) {
+									ClienteFoneAtualizacaoCadastral clienteFoneAtualizacaoCadastral = 
+											(ClienteFoneAtualizacaoCadastral) iteratorClienteFonesAtualizacaoCadastral.next();
+									clienteFoneAtualizacaoCadastral.setIdClienteAtualizacaoCadastral(idClienteAtualizacaoCadastral);
+									clienteFoneAtualizacaoCadastral.setUltimaAlteracao(new Date());
+									getControladorUtil().inserir(clienteFoneAtualizacaoCadastral);
 								}
 							}
 						}
 
-						// Cliente Responsável
-						clienteAtualizacaoCadastralResposavel = getControladorCliente()
-								.obterClientetuAlizacaoCadastral(idImovel,
-										ClienteRelacaoTipo.RESPONSAVEL);
+						// Cliente Respons�vel
+						clienteAtualizacaoCadastralResposavel = getControladorCliente().obterClientetuAlizacaoCadastral(
+								idImovel, ClienteRelacaoTipo.RESPONSAVEL);
 
 						if (clienteAtualizacaoCadastralResposavel != null) {
 
-							clienteAtualizacaoCadastralResposavel
-									.setUltimaAlteracao(new Date());
-							Integer idClienteAtualizacaoCadastral = (Integer) getControladorUtil()
-									.inserir(
-											clienteAtualizacaoCadastralResposavel);
+							clienteAtualizacaoCadastralResposavel.setUltimaAlteracao(new Date());
+							Integer idClienteAtualizacaoCadastral = (Integer) getControladorUtil().inserir(
+									clienteAtualizacaoCadastralResposavel);
 
-							// Cliente Fone Responsável
-							Collection clienteFonesAtualizacaoCadastral = getControladorCliente()
-									.obterDadosClienteFone(
-											clienteAtualizacaoCadastralResposavel
-													.getIdCliente());
+							// Cliente Fone Respons�vel
+							Collection clienteFonesAtualizacaoCadastral = getControladorCliente().obterDadosClienteFone(
+									clienteAtualizacaoCadastralResposavel.getIdCliente());
+							
 							if (clienteFonesAtualizacaoCadastral != null
-									&& !clienteFonesAtualizacaoCadastral
-											.isEmpty()) {
-								Iterator clienteFonesAtualizacaoCadastralIter = clienteFonesAtualizacaoCadastral
-										.iterator();
-								while (clienteFonesAtualizacaoCadastralIter
-										.hasNext()) {
-									ClienteFoneAtualizacaoCadastral clienteFoneAtualizacaoCadastral = (ClienteFoneAtualizacaoCadastral) clienteFonesAtualizacaoCadastralIter
-											.next();
-									clienteFoneAtualizacaoCadastral
-											.setIdClienteAtualizacaoCadastral(idClienteAtualizacaoCadastral);
-									clienteFoneAtualizacaoCadastral
-											.setUltimaAlteracao(new Date());
-									getControladorUtil().inserir(
-											clienteFoneAtualizacaoCadastral);
+									&& !clienteFonesAtualizacaoCadastral.isEmpty()) {
+								
+								Iterator iteratorClienteFonesAtualizacaoCadastral = clienteFonesAtualizacaoCadastral.iterator();
+								
+								while (iteratorClienteFonesAtualizacaoCadastral.hasNext()) {
+									
+									ClienteFoneAtualizacaoCadastral clienteFoneAtualizacaoCadastral = 
+											(ClienteFoneAtualizacaoCadastral) iteratorClienteFonesAtualizacaoCadastral.next();
+									clienteFoneAtualizacaoCadastral.setIdClienteAtualizacaoCadastral(idClienteAtualizacaoCadastral);
+									clienteFoneAtualizacaoCadastral.setUltimaAlteracao(new Date());
+									getControladorUtil().inserir(clienteFoneAtualizacaoCadastral);
 								}
 							}
 						}
 
 						// Cliente Proprietario
-						clienteAtualizacaoCadastralProprietario = getControladorCliente()
-								.obterClientetuAlizacaoCadastral(idImovel,
-										ClienteRelacaoTipo.PROPRIETARIO);
+						clienteAtualizacaoCadastralProprietario = getControladorCliente().obterClientetuAlizacaoCadastral(
+								idImovel, ClienteRelacaoTipo.PROPRIETARIO);
 
 						if (clienteAtualizacaoCadastralProprietario != null) {
 
-							clienteAtualizacaoCadastralProprietario
-									.setUltimaAlteracao(new Date());
-							Integer idClienteAtualizacaoCadastral = (Integer) getControladorUtil()
-									.inserir(
-											clienteAtualizacaoCadastralProprietario);
+							clienteAtualizacaoCadastralProprietario.setUltimaAlteracao(new Date());
+							Integer idClienteAtualizacaoCadastral = (Integer) getControladorUtil().inserir(
+									clienteAtualizacaoCadastralProprietario);
 
 							// Cliente Fone Proprietario
-							Collection clienteFonesAtualizacaoCadastral = getControladorCliente()
-									.obterDadosClienteFone(
-											clienteAtualizacaoCadastralProprietario
-													.getIdCliente());
+							Collection clienteFonesAtualizacaoCadastral = getControladorCliente().obterDadosClienteFone(
+									clienteAtualizacaoCadastralProprietario.getIdCliente());
+							
 							if (clienteFonesAtualizacaoCadastral != null
-									&& !clienteFonesAtualizacaoCadastral
-											.isEmpty()) {
-								Iterator clienteFonesAtualizacaoCadastralIter = clienteFonesAtualizacaoCadastral
-										.iterator();
-								while (clienteFonesAtualizacaoCadastralIter
-										.hasNext()) {
-									ClienteFoneAtualizacaoCadastral clienteFoneAtualizacaoCadastral = (ClienteFoneAtualizacaoCadastral) clienteFonesAtualizacaoCadastralIter
-											.next();
-									clienteFoneAtualizacaoCadastral
-											.setIdClienteAtualizacaoCadastral(idClienteAtualizacaoCadastral);
-									clienteFoneAtualizacaoCadastral
-											.setUltimaAlteracao(new Date());
-									getControladorUtil().inserir(
-											clienteFoneAtualizacaoCadastral);
+									&& !clienteFonesAtualizacaoCadastral.isEmpty()) {
+								
+								Iterator iteratorClienteFonesAtualizacaoCadastral = clienteFonesAtualizacaoCadastral.iterator();
+								
+								while (iteratorClienteFonesAtualizacaoCadastral.hasNext()) {
+									ClienteFoneAtualizacaoCadastral clienteFoneAtualizacaoCadastral =
+											(ClienteFoneAtualizacaoCadastral) iteratorClienteFonesAtualizacaoCadastral.next();
+									
+									clienteFoneAtualizacaoCadastral.setIdClienteAtualizacaoCadastral(idClienteAtualizacaoCadastral);
+									clienteFoneAtualizacaoCadastral.setUltimaAlteracao(new Date());
+									getControladorUtil().inserir(clienteFoneAtualizacaoCadastral);
 								}
 							}
 						}
 						
 						inserirImovelControleAtualizacaoCadastral(idImovel);
-
-						// Atualizar Situacao Atualizacao Cadastral
-						getControladorImovel()
-								.atualizarImovelSituacaoAtualizacaoCadastral(
-										idImovel,
-										SituacaoAtualizacaoCadastral.BLOQUEADO);
-
-						Integer idEmpresa = null;
-						if (helper.getFirma() != null
-								&& !helper
-										.getFirma()
-										.equals(
-												""
-														+ ConstantesSistema.NUMERO_NAO_INFORMADO)) {
-							idEmpresa = new Integer(helper.getFirma());
-						}
-
-						getControladorImovel()
-								.atualizarImovelAtualizacaoCadastralSituacaoAtualizacaoCadastral(
-										idImovel,
-										SituacaoAtualizacaoCadastral.DISPONIVEL,
-										idEmpresa);
 					}
 				}
 			}
 
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
-					idUnidadeIniciada, false);
-
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex,
@@ -7720,7 +7566,7 @@ public class ControladorCadastro implements SessionBean {
 			SistemaParametro parametroSistema = getControladorUtil().pesquisarParametrosDoSistema();
 			String anoMesReferencia = parametroSistema.getAnoMesFaturamento().toString();
 
-			// Situação do Arquivo
+			// Situa��o do Arquivo
 			SituacaoTransmissaoLeitura situacaoTransmissaoLeitura = new SituacaoTransmissaoLeitura();
 			situacaoTransmissaoLeitura.setId(SituacaoTransmissaoLeitura.LIBERADO);
 			arquivoTextoAtualizacaoCadastral.setSituacaoTransmissaoLeitura(situacaoTransmissaoLeitura);
@@ -7731,7 +7577,7 @@ public class ControladorCadastro implements SessionBean {
 					leiturista.getEmpresa().getId(), idRota);
 
 			if (idsImoveis == null || idsImoveis.isEmpty()) {
-				System.out.println("Nenhum imóvel encontrado. ARQUIVO NÃO GERADO");
+				System.out.println("Nenhum im�vel encontrado. ARQUIVO N�O GERADO");
 				getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 			} else {
 				Rota rota = getControladorMicromedicao().pesquisarRota(idRota);
@@ -7742,7 +7588,7 @@ public class ControladorCadastro implements SessionBean {
 				arquivoTextoAtualizacaoCadastral.setCodigoSetorComercial(new Integer(setor.getCodigo()));
 				arquivoTextoAtualizacaoCadastral.setRota(rota);
 
-				// Descrição do Arquivo
+				// Descri��o do Arquivo
 				String descricaoArquivoTxt = Util.adicionarZerosEsquedaNumero(3, localidade.getId() + "")
 						+ "_"
 						+ Util.adicionarZerosEsquedaNumero(3, setor.getCodigo() + "")
@@ -7754,7 +7600,7 @@ public class ControladorCadastro implements SessionBean {
 				// Leiturista
 				arquivoTextoAtualizacaoCadastral.setLeiturista(leiturista);
 
-				// Quatidade Imóvel
+				// Quatidade Im�vel
 				arquivoTextoAtualizacaoCadastral.setQuantidadeImovel(idsImoveis.size());
 
 				// Arquivo texto
@@ -7919,6 +7765,8 @@ public class ControladorCadastro implements SessionBean {
 							repositorioImovel, getControladorImovel(), getControladorCliente());
 					command.execute(atualizacao);					
 				} else if ("01".equals(registroTipo)) {
+					atualizacao.inicializaLeituras();
+
 					AbstractAtualizacaoCadastralCommand command = new ParseClienteCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
 							repositorioImovel, getControladorImovel(), getControladorCliente());
 					command.execute(atualizacao);
@@ -7940,6 +7788,14 @@ public class ControladorCadastro implements SessionBean {
 					command.execute(atualizacao);					
 				}else if ("06".equals(registroTipo)) {
 					AbstractAtualizacaoCadastralCommand command = new ParseAnormalidadeCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
+							repositorioImovel, getControladorImovel(), getControladorCliente());
+					command.execute(atualizacao);
+					
+					atualizacao.liberarAtualizacao();
+				}
+				
+				if (atualizacao.atualizacaoLiberada()){
+					MontarObjetosAtualizacaoCadastralCommand command = new MontarObjetosAtualizacaoCadastralCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
 							repositorioImovel, getControladorImovel(), getControladorCliente());
 					command.execute(atualizacao);
 				}
@@ -16349,7 +16205,7 @@ public class ControladorCadastro implements SessionBean {
 		try {
 			Leiturista leiturista = getLeituristaAtualizacaoCadastral(Integer.parseInt(helper.getLeiturista()));
 			
-			return this.repositorioCadastro.pesquisarRotasAtualizacaoCadastral(leiturista.getEmpresa().getId());
+			return this.repositorioCadastro.pesquisarRotasAtualizacaoCadastral(helper.getColecaoIdsImoveis());
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
 			sessionContext.setRollbackOnly();
