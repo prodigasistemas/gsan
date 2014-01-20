@@ -8350,39 +8350,12 @@ public class ControladorBatchSEJB implements SessionBean {
 								processoIniciado.getUsuario(),
 								funcionalidadeIniciada.getId());
 
-						// Adicionar o conjunto de parametros informados pelo
-						// usuário através da interface do sistema
-						tabela.addParametro(ConstantesSistema.PARAMETROS_BATCH,
-								parametros);
+						tabela.addParametro(ConstantesSistema.PARAMETROS_BATCH, parametros);
 
-						ImovelGeracaoTabelasTemporariasCadastroHelper imovelGeracaoTabelasTemporariasCadastroHelper = (ImovelGeracaoTabelasTemporariasCadastroHelper) parametros
-								.get("imovelGeracaoTabelasTemporariasCadastroHelper");
+						ImovelGeracaoTabelasTemporariasCadastroHelper imovelGeracaoTabelasTemporariasCadastroHelper = 
+								(ImovelGeracaoTabelasTemporariasCadastroHelper) parametros.get("imovelGeracaoTabelasTemporariasCadastroHelper");
 
-						// ----------------------------------------------
-
-						// FAZER CONSULTA DAS LOCALIDADES
-						Collection idsSetor = null;
-						if (imovelGeracaoTabelasTemporariasCadastroHelper
-								.getColecaoMatriculas() == null
-								|| imovelGeracaoTabelasTemporariasCadastroHelper
-										.getColecaoMatriculas().isEmpty()) {
-
-							idsSetor = getControladorCadastro()
-									.pesquisarSetorComercialGeracaoTabelasTemporarias(
-											imovelGeracaoTabelasTemporariasCadastroHelper); // obterLocalidade
-							// ??
-						}
-
-						// ----------------------------------------------
-						tabela
-								.addParametro(
-										ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-										idsSetor);
-
-						// Seta o objeto para ser serializado no banco, onde
-						// depois sera executado por uma thread
-						funcionalidadeIniciada.setTarefaBatch(IoUtil
-								.transformarObjetoParaBytes(tabela));
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tabela));
 
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 
