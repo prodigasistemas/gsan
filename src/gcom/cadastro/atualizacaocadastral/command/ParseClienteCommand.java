@@ -1,5 +1,6 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
+import gcom.cadastro.ControladorCadastro;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.imovel.ControladorImovelLocal;
@@ -10,7 +11,11 @@ import gcom.util.ParserUtil;
 
 import java.util.Map;
 
+import org.jboss.logging.Logger;
+
 public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
+	
+	private static Logger logger = Logger.getLogger(ParseClienteCommand.class);
 
 	public ParseClienteCommand(ParserUtil parser, IRepositorioCadastro repositorioCadastro, ControladorUtilLocal controladorUtil, 
 			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, 
@@ -23,6 +28,8 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 
 		String matriculaImovelCliente = parser.obterDadoParser(9).trim();
 		linha.put("matriculaImovelCliente", matriculaImovelCliente);
+		
+		logger.info("Carregando Imóvel: " + Integer.parseInt(matriculaImovelCliente));
 		
 		String gerencia = parser.obterDadoParser(25).trim();
 		linha.put("gerencia", gerencia);
@@ -69,7 +76,7 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		String emailUsuario = parser.obterDadoParser(30).trim();
 		linha.put("emailUsuario", emailUsuario);
 		
-		int matriculaProprietario = Integer.parseInt(parser.obterDadoParser(9));;
+		int matriculaProprietario = Integer.parseInt(parser.obterDadoParser(9));
 		linha.put("matriculaProprietario", ""+matriculaProprietario);
 
 		String nomeProprietario = parser.obterDadoParser(50).trim();
@@ -120,7 +127,7 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		String municipioProprietario = parser.obterDadoParser(15).trim();
 		linha.put("municipioProprietario", municipioProprietario);
 			
-		int matriculaResponsavel = Integer.parseInt(parser.obterDadoParser(9));;
+		int matriculaResponsavel = Integer.parseInt(parser.obterDadoParser(9));
 		linha.put("matriculaResponsavel", ""+matriculaResponsavel);
 		
 		String nomeResponsavel = parser.obterDadoParser(50).trim();

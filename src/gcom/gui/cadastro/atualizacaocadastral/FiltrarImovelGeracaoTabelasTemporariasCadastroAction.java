@@ -141,24 +141,23 @@ public class FiltrarImovelGeracaoTabelasTemporariasCadastroAction extends GcomAc
 		
 		Collection<Integer> colecaoIdsImoveis = fachada.obterIdsImovelGeracaoTabelasTemporarias(helper);
 		
-		if (helper.getSugestao().equals("1")) {
-			throw new ActionServletException("atencao.quantidade_imoveis_sugestao_sim", String.valueOf(colecaoIdsImoveis.size()));		
-        } else {
-        	if (colecaoIdsImoveis.size() > 0) {
-        		
-        		helper.setColecaoIdsImoveis(colecaoIdsImoveis);
-        		
-        		Map parametros = new HashMap();
-        		parametros.put("imovelGeracaoTabelasTemporariasCadastroHelper", helper);
-        		
-        		Fachada.getInstancia().inserirProcessoIniciadoParametrosLivres(parametros,
-        				Processo.GERAR_TABELAS_TEMP_ATU_CADASTRAL, this.getUsuarioLogado(httpServletRequest));
-        		
-        		montarPaginaSucesso(httpServletRequest, "Geração de tabelas encaminhada para Batch.", "", "");
-        	} else {
-        		throw new ActionServletException("atencao.sem_imoveis_disponiveis");	
-        	}
-        }
+		if (colecaoIdsImoveis.size() > 0) {
+			if (helper.getSugestao().equals("1")) {
+				throw new ActionServletException("atencao.quantidade_imoveis_sugestao_sim", String.valueOf(colecaoIdsImoveis.size()));		
+			} else {
+				helper.setColecaoIdsImoveis(colecaoIdsImoveis);
+				
+				Map parametros = new HashMap();
+				parametros.put("imovelGeracaoTabelasTemporariasCadastroHelper", helper);
+				
+				Fachada.getInstancia().inserirProcessoIniciadoParametrosLivres(parametros,
+						Processo.GERAR_TABELAS_TEMP_ATU_CADASTRAL, this.getUsuarioLogado(httpServletRequest));
+				
+				montarPaginaSucesso(httpServletRequest, "Geração de tabelas encaminhada para Batch.", "", "");
+			}
+		} else {
+			throw new ActionServletException("atencao.sem_imoveis_disponiveis");
+		}
 
 		return retorno;
 	}
