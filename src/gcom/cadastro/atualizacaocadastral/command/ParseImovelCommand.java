@@ -167,6 +167,9 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 	}
 
 	private void validaCamposImovel(AtualizacaoCadastral atualizacao) {
-		
+		Map<String, String> linha = atualizacao.getLinhaImovel();
+		if (linha.get("latitude") == null || linha.get("longitude") == null){
+			atualizacao.addMensagemErro("Coordenadas geográficas inválidas");
+		}
 	}
 }

@@ -1,14 +1,19 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
 import gcom.cadastro.IRepositorioCadastro;
+import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.IRepositorioImovel;
+import gcom.cadastro.imovel.ImovelControleAtualizacaoCadastral;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.util.ControladorUtilLocal;
+import gcom.util.ErroRepositorioException;
 import gcom.util.ParserUtil;
 
 import java.util.Map;
+
+import org.apache.commons.lang.StringUtils;
 
 public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 
@@ -20,9 +25,11 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 
 	public void execute(AtualizacaoCadastral atualizacao) throws Exception {
 		Map<String, String> linha = atualizacao.getLinhaCliente();
-
+		
 		String matriculaImovelCliente = parser.obterDadoParser(9).trim();
 		linha.put("matriculaImovelCliente", matriculaImovelCliente);
+		
+		atualizacao.setMatricula(matriculaImovelCliente);
 		
 		String gerencia = parser.obterDadoParser(25).trim();
 		linha.put("gerencia", gerencia);
@@ -43,7 +50,7 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		linha.put("matriculaUsuario", ""+matriculaUsuario);
 							
 		String nomeUsuario = parser.obterDadoParser(50).trim();
-		linha.put("nomeUsuario", nomeUsuario);
+		linha.put("nomeUsuario", nomeUsuario.toUpperCase());
 		
 		String tipoPessoaUsuario = parser.obterDadoParser(1).trim();
 		linha.put("tipoPessoaUsuario", tipoPessoaUsuario);
@@ -73,7 +80,7 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		linha.put("matriculaProprietario", ""+matriculaProprietario);
 
 		String nomeProprietario = parser.obterDadoParser(50).trim();
-		linha.put("nomeProprietario", nomeProprietario);
+		linha.put("nomeProprietario", nomeProprietario.toUpperCase());
 		
 		String tipoPessoaProprietario = parser.obterDadoParser(1).trim();
 		linha.put("tipoPessoaProprietario", tipoPessoaProprietario);
@@ -124,7 +131,7 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		linha.put("matriculaResponsavel", ""+matriculaResponsavel);
 		
 		String nomeResponsavel = parser.obterDadoParser(50).trim();
-		linha.put("nomeReponsavel", nomeResponsavel);
+		linha.put("nomeResponsavel", nomeResponsavel.toUpperCase());
 		
 		String tipoPessoaResponsavel = parser.obterDadoParser(1).trim();
 		linha.put("tipoPessoaResponsavel", tipoPessoaResponsavel);
@@ -179,5 +186,32 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		
 		String data = parser.obterDadoParser(26).trim();
 		linha.put("data", data);
+		
+		validaCampos(atualizacao);		
+	}
+	
+	private void validaCampos(AtualizacaoCadastral atualizacao) throws Exception {
+		Map<String, String> linha = atualizacao.getLinhaCliente();
+		
+		ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral = repositorioImovel.pesquisarImovelControleAtualizacaoCadastral(Integer.valueOf(atualizacao.getMatricula()));
+		
+		if (imovelControleAtualizacaoCadastral.getSituacaoAtualizacaoCadastral().getId() == SituacaoAtualizacaoCadastral.APROVADO){
+			atualizacao.addMensagemErro("Imóvel com situação 'APROVADO'");
+			atualizacao.setImovelAprovado(true);
+		}
+
+		String regexNome = "[a-zA-Z\\s]*";
+		
+		if (StringUtils.isNotBlank(linha.get("nomeUsuario")) && !linha.get("nomeUsuario").matches(regexNome)){
+			atualizacao.addMensagemErro("Nome de usuário inválido.");
+		}
+		
+		if (StringUtils.isNotBlank(linha.get("nomeResponsavel")) && !linha.get("nomeResponsavel").matches(regexNome)){
+			atualizacao.addMensagemErro("Nome de responsável inválido.");
+		}
+
+		if (StringUtils.isNotBlank(linha.get("nomeProprietario")) && !linha.get("nomeProprietario").matches(regexNome)){
+			atualizacao.addMensagemErro("Nome de proprietário inválido.");
+		}
 	}
 }
