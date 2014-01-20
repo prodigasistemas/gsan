@@ -8,7 +8,6 @@ import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.cadastro.imovel.ImovelControleAtualizacaoCadastral;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.util.ControladorUtilLocal;
-import gcom.util.ErroRepositorioException;
 import gcom.util.ParserUtil;
 
 import java.util.Map;
@@ -200,18 +199,25 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 			atualizacao.setImovelAprovado(true);
 		}
 
-		String regexNome = "[a-zA-Z\\s]*";
-		
-		if (StringUtils.isNotBlank(linha.get("nomeUsuario")) && !linha.get("nomeUsuario").matches(regexNome)){
+		if (nomeInvalido(linha.get("nomeUsuario"))){
 			atualizacao.addMensagemErro("Nome de usuário inválido.");
 		}
 		
-		if (StringUtils.isNotBlank(linha.get("nomeResponsavel")) && !linha.get("nomeResponsavel").matches(regexNome)){
+		if (nomeInvalido(linha.get("nomeResponsavel"))){
 			atualizacao.addMensagemErro("Nome de responsável inválido.");
 		}
 
-		if (StringUtils.isNotBlank(linha.get("nomeProprietario")) && !linha.get("nomeProprietario").matches(regexNome)){
+		if (nomeInvalido(linha.get("nomeProprietario"))){
 			atualizacao.addMensagemErro("Nome de proprietário inválido.");
 		}
+	}
+	
+	private boolean nomeInvalido(String nome){
+		String regexNome = "[a-zA-Z\\s]*";
+		if (StringUtils.isNotBlank(nome) && !nome.matches(regexNome)){
+			return true;
+		}
+		return false;
+		
 	}
 }

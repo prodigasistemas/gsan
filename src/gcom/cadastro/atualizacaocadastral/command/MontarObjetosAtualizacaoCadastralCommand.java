@@ -44,7 +44,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	}
 	
 	public void montarObjetosAtualizacaoCadastral(ArquivoTextoAtualizacaoCadastral arquivoTexto, Map<String, String>... maps) throws Exception {
-
+		
 		ClienteAtualizacaoCadastral clienteUsuarioTxt = null;
 		ClienteAtualizacaoCadastral clienteResponsavelTxt = null;
 		ClienteAtualizacaoCadastral clienteProprietarioTxt = null;

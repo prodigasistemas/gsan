@@ -4,9 +4,12 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+
+import org.apache.commons.lang.StringUtils;
 
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.cliente.ControladorClienteLocal;
@@ -170,6 +173,26 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 		Map<String, String> linha = atualizacao.getLinhaImovel();
 		if (linha.get("latitude") == null || linha.get("longitude") == null){
 			atualizacao.addMensagemErro("Coordenadas geográficas inválidas");
+		}
+		
+		boolean existeEconomia = false;
+		for(String key: linha.keySet()){
+			if (key.contains("subcategoria")){
+				String valor =  linha.get(key).trim();
+				if (!StringUtils.isBlank(valor) && !StringUtils.containsOnly(valor, "0")){
+					existeEconomia = true;
+					
+					char codigo = key.replace("subcategoria", "").charAt(0);
+					TipoEconomia tipo = TipoEconomia.getByCodigo(codigo);
+					if (!atualizacao.getDadosImovel().contemTipoEconomia(tipo)){
+						atualizacao.getDadosImovel().addTipoEconomia(tipo);
+					}
+				}
+			}
+		}
+		
+		if (!existeEconomia){
+			atualizacao.addMensagemErro("Imóvel deve ter associado ao menos uma economia.");
 		}
 	}
 }

@@ -27,6 +27,7 @@ import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.atualizacaocadastral.FiltroImovelAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.command.AbstractAtualizacaoCadastralCommand;
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastral;
+import gcom.cadastro.atualizacaocadastral.command.EfetuarValidacoesAtualizacaoCadastralCommand;
 import gcom.cadastro.atualizacaocadastral.command.MontarObjetosAtualizacaoCadastralCommand;
 import gcom.cadastro.atualizacaocadastral.command.ParseAnormalidadeCommand;
 import gcom.cadastro.atualizacaocadastral.command.ParseClienteCommand;
@@ -7379,7 +7380,7 @@ public class ControladorCadastro implements SessionBean {
 							Integer idClienteAtualizacaoCadastral = (Integer) getControladorUtil().inserir(
 									clienteAtualizacaoCadastralUsuario);
 
-							// Cliente Fone Usuário
+							// Cliente Fone Usuï¿½rio
 							Collection clienteFonesAtualizacaoCadastral = getControladorCliente().obterDadosClienteFone(
 									clienteAtualizacaoCadastralUsuario.getIdCliente());
 							
@@ -7398,7 +7399,7 @@ public class ControladorCadastro implements SessionBean {
 							}
 						}
 
-						// Cliente Responsável
+						// Cliente Responsï¿½vel
 						clienteAtualizacaoCadastralResposavel = getControladorCliente().obterClientetuAlizacaoCadastral(
 								idImovel, ClienteRelacaoTipo.RESPONSAVEL);
 
@@ -7408,7 +7409,7 @@ public class ControladorCadastro implements SessionBean {
 							Integer idClienteAtualizacaoCadastral = (Integer) getControladorUtil().inserir(
 									clienteAtualizacaoCadastralResposavel);
 
-							// Cliente Fone Responsável
+							// Cliente Fone Responsï¿½vel
 							Collection clienteFonesAtualizacaoCadastral = getControladorCliente().obterDadosClienteFone(
 									clienteAtualizacaoCadastralResposavel.getIdCliente());
 							
@@ -7566,7 +7567,7 @@ public class ControladorCadastro implements SessionBean {
 			SistemaParametro parametroSistema = getControladorUtil().pesquisarParametrosDoSistema();
 			String anoMesReferencia = parametroSistema.getAnoMesFaturamento().toString();
 
-			// Situação do Arquivo
+			// Situaï¿½ï¿½o do Arquivo
 			SituacaoTransmissaoLeitura situacaoTransmissaoLeitura = new SituacaoTransmissaoLeitura();
 			situacaoTransmissaoLeitura.setId(SituacaoTransmissaoLeitura.LIBERADO);
 			arquivoTextoAtualizacaoCadastral.setSituacaoTransmissaoLeitura(situacaoTransmissaoLeitura);
@@ -7577,7 +7578,7 @@ public class ControladorCadastro implements SessionBean {
 					leiturista.getEmpresa().getId(), idRota);
 
 			if (idsImoveis == null || idsImoveis.isEmpty()) {
-				System.out.println("Nenhum imóvel encontrado. ARQUIVO NÃO GERADO");
+				System.out.println("Nenhum imï¿½vel encontrado. ARQUIVO Nï¿½O GERADO");
 				getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 			} else {
 				Rota rota = getControladorMicromedicao().pesquisarRota(idRota);
@@ -7588,7 +7589,7 @@ public class ControladorCadastro implements SessionBean {
 				arquivoTextoAtualizacaoCadastral.setCodigoSetorComercial(new Integer(setor.getCodigo()));
 				arquivoTextoAtualizacaoCadastral.setRota(rota);
 
-				// Descrição do Arquivo
+				// Descriï¿½ï¿½o do Arquivo
 				String descricaoArquivoTxt = Util.adicionarZerosEsquedaNumero(3, localidade.getId() + "")
 						+ "_"
 						+ Util.adicionarZerosEsquedaNumero(3, setor.getCodigo() + "")
@@ -7600,7 +7601,7 @@ public class ControladorCadastro implements SessionBean {
 				// Leiturista
 				arquivoTextoAtualizacaoCadastral.setLeiturista(leiturista);
 
-				// Quatidade Imóvel
+				// Quatidade Imï¿½vel
 				arquivoTextoAtualizacaoCadastral.setQuantidadeImovel(idsImoveis.size());
 
 				// Arquivo texto
@@ -7799,6 +7800,9 @@ public class ControladorCadastro implements SessionBean {
 				}
 				
 				if (atualizacao.atualizacaoLiberada()){
+					AbstractAtualizacaoCadastralCommand validaCommand = new EfetuarValidacoesAtualizacaoCadastralCommand();
+					validaCommand.execute(atualizacao);
+					
 					AbstractAtualizacaoCadastralCommand command = new MontarObjetosAtualizacaoCadastralCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
 							repositorioImovel, getControladorImovel(), getControladorCliente());
 					command.execute(atualizacao);

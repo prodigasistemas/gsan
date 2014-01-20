@@ -29,6 +29,10 @@ public class AtualizacaoCadastral {
 	private List<String> mensagensErro = new ArrayList<String>();
 
 	private boolean erroCadastro = false;
+	
+	private DadoAtualizacaoImovel dadosImovel = new DadoAtualizacaoImovel();
+
+	private List<DadoAtualizacaoRamoAtividade> dadosRamoAtividade = new ArrayList<DadoAtualizacaoRamoAtividade>();
 
 	public ArquivoTextoAtualizacaoCadastral getArquivoTexto() {
 		return arquivoTexto;
@@ -140,5 +144,21 @@ public class AtualizacaoCadastral {
 		linhaAnormalidade = new HashMap<String, String>();
 		atualizacaoLiberada = false;
 		imovelAprovado = false;
+	}
+
+	public DadoAtualizacaoImovel getDadosImovel() {
+		return dadosImovel;
+	}
+
+	public void setDadosImovel(DadoAtualizacaoImovel dadosImovel) {
+		this.dadosImovel = dadosImovel;
+	}
+
+	public List<DadoAtualizacaoRamoAtividade> getDadosRamoAtividade() {
+		return dadosRamoAtividade;
+	}
+
+	public void addDadoRamoAtividade(DadoAtualizacaoRamoAtividade dadoRamoAtividade) {
+		this.dadosRamoAtividade.add(dadoRamoAtividade);
 	}
 }
