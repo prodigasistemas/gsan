@@ -7380,7 +7380,6 @@ public class ControladorCadastro implements SessionBean {
 							Integer idClienteAtualizacaoCadastral = (Integer) getControladorUtil().inserir(
 									clienteAtualizacaoCadastralUsuario);
 
-							// Cliente Fone Usu�rio
 							Collection clienteFonesAtualizacaoCadastral = getControladorCliente().obterDadosClienteFone(
 									clienteAtualizacaoCadastralUsuario.getIdCliente());
 							
@@ -7399,7 +7398,6 @@ public class ControladorCadastro implements SessionBean {
 							}
 						}
 
-						// Cliente Respons�vel
 						clienteAtualizacaoCadastralResposavel = getControladorCliente().obterClientetuAlizacaoCadastral(
 								idImovel, ClienteRelacaoTipo.RESPONSAVEL);
 
@@ -7409,7 +7407,6 @@ public class ControladorCadastro implements SessionBean {
 							Integer idClienteAtualizacaoCadastral = (Integer) getControladorUtil().inserir(
 									clienteAtualizacaoCadastralResposavel);
 
-							// Cliente Fone Respons�vel
 							Collection clienteFonesAtualizacaoCadastral = getControladorCliente().obterDadosClienteFone(
 									clienteAtualizacaoCadastralResposavel.getIdCliente());
 							
@@ -7567,7 +7564,6 @@ public class ControladorCadastro implements SessionBean {
 			SistemaParametro parametroSistema = getControladorUtil().pesquisarParametrosDoSistema();
 			String anoMesReferencia = parametroSistema.getAnoMesFaturamento().toString();
 
-			// Situa��o do Arquivo
 			SituacaoTransmissaoLeitura situacaoTransmissaoLeitura = new SituacaoTransmissaoLeitura();
 			situacaoTransmissaoLeitura.setId(SituacaoTransmissaoLeitura.LIBERADO);
 			arquivoTextoAtualizacaoCadastral.setSituacaoTransmissaoLeitura(situacaoTransmissaoLeitura);
@@ -7589,7 +7585,6 @@ public class ControladorCadastro implements SessionBean {
 				arquivoTextoAtualizacaoCadastral.setCodigoSetorComercial(new Integer(setor.getCodigo()));
 				arquivoTextoAtualizacaoCadastral.setRota(rota);
 
-				// Descri��o do Arquivo
 				String descricaoArquivoTxt = Util.adicionarZerosEsquedaNumero(3, localidade.getId() + "")
 						+ "_"
 						+ Util.adicionarZerosEsquedaNumero(3, setor.getCodigo() + "")
@@ -7601,7 +7596,6 @@ public class ControladorCadastro implements SessionBean {
 				// Leiturista
 				arquivoTextoAtualizacaoCadastral.setLeiturista(leiturista);
 
-				// Quatidade Im�vel
 				arquivoTextoAtualizacaoCadastral.setQuantidadeImovel(idsImoveis.size());
 
 				// Arquivo texto
@@ -7804,6 +7798,14 @@ public class ControladorCadastro implements SessionBean {
 					validaCommand.execute(atualizacao);
 					
 					AbstractAtualizacaoCadastralCommand command = new MontarObjetosAtualizacaoCadastralCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
+							repositorioImovel, getControladorImovel(), getControladorCliente());
+					command.execute(atualizacao);
+					
+					atualizacao.liberarAtualizacao();
+				}
+				
+				if (atualizacao.atualizacaoLiberada()){
+					MontarObjetosAtualizacaoCadastralCommand command = new MontarObjetosAtualizacaoCadastralCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
 							repositorioImovel, getControladorImovel(), getControladorCliente());
 					command.execute(atualizacao);
 				}

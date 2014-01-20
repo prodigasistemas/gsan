@@ -98,14 +98,6 @@ public class AtualizacaoCadastral {
 		this.linhaAnormalidade = linha6;
 	}
 
-	public void liberarAtualizacao() {
-		atualizacaoLiberada = true;
-	}
-
-	public boolean atualizacaoLiberada() {
-		return atualizacaoLiberada;
-	}
-
 	public boolean cadastroInvalido() {
 		return erroCadastro;
 	}
@@ -160,5 +152,13 @@ public class AtualizacaoCadastral {
 
 	public void addDadoRamoAtividade(DadoAtualizacaoRamoAtividade dadoRamoAtividade) {
 		this.dadosRamoAtividade.add(dadoRamoAtividade);
+	}
+
+	public void liberarAtualizacao() {
+		atualizacaoLiberada = true;
+	}
+	
+	public boolean atualizacaoLiberada(){
+		return atualizacaoLiberada;
 	}
 }

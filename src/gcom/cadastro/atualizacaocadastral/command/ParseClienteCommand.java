@@ -1,5 +1,6 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
+import gcom.cadastro.ControladorCadastro;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.cliente.ControladorClienteLocal;
