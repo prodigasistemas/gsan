@@ -9,7 +9,6 @@
       		</generator>
 		</id>
 		
-		<property name="subLote" type="short" column="imac_nnsublote" not-null="true" length="2"/>
 		<property name="numeroImovel" type="java.lang.String" column="imac_nnimovel" not-null="true" length="5"/>
 		<property name="complementoEndereco" type="java.lang.String" column="imac_dscomplementoendereco" length="25"/>
 		<property name="numeroPontosUtilizacao" type="java.lang.Short" column="imac_nnpontosutilizacao" length="2"/>
@@ -19,8 +18,6 @@
 		<property name="coordenadaY" type="java.lang.String" column="imac_nncoordenaday" length="20"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="imac_tmultimaalteracao" not-null="true" length="8"/>
 
-		<property name="idCapacidadeHidrometro" type="java.lang.Integer" column="hicp_id" length="4"/>
-		<property name="idMarcaHidrometro" type="java.lang.Integer" column="himc_id" length="4"/>
 		<property name="numeroHidrometro" type="java.lang.String" column="imac_nnhidrometro" length="10"/>
 		<property name="numeroMedidorEnergia" type="java.lang.String" column="imac_nnmedidorenergia" length="10"/>
 		<property name="informacoesComplementares" type="java.lang.String" column="imac_dsoutrasinformacoes" length="100"/>
@@ -30,18 +27,13 @@
 			<column name="last_id"/>
 		</many-to-one>
 		
-		<many-to-one name="logradouroCep" class="gcom.cadastro.endereco.LogradouroCep" not-null="true">
-			<column name="lgcp_id"/>
-		</many-to-one>
-		
-		<many-to-one name="hidrometroInstalacaoHistorico" class="gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico" not-null="true">
-			<column name="hidi_id"/>
-		</many-to-one>
-		
 		<many-to-one name="fonteAbastecimento" class="gcom.cadastro.imovel.FonteAbastecimento" not-null="true">
 			<column name="ftab_id"/>
 		</many-to-one>
 		
+		<many-to-one name="hidrometroProtecao" class="gcom.micromedicao.hidrometro.HidrometroProtecao" not-null="true">
+			<column name="hipr_id"/>
+		</many-to-one>
 		
 	</class>
 </hibernate-mapping>

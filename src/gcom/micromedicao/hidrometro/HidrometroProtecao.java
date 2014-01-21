@@ -120,7 +120,11 @@ public class HidrometroProtecao extends ObjetoTransacao {
         this.descricaoAbreviada = descricaoAbreviada;
     }
 
-    public Integer getId() {
+    public HidrometroProtecao(Integer id) {
+    	this.id = id;
+    }
+
+	public Integer getId() {
         return this.id;
     }
 
