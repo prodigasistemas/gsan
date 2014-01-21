@@ -1,13 +1,5 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.util.Date;
-import java.util.Map;
-
-import javax.imageio.ImageIO;
-
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.imovel.ControladorImovelLocal;
@@ -16,6 +8,14 @@ import gcom.cadastro.imovel.ImagemAtualizacaoCadastral;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ParserUtil;
+
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.util.Date;
+import java.util.Map;
+
+import javax.imageio.ImageIO;
 
 public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 
@@ -167,6 +167,29 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 	}
 
 	private void validaCamposImovel(AtualizacaoCadastral atualizacao) {
+		Map<String, String> linha = atualizacao.getLinhaImovel();
+		if (linha.get("latitude") == null || linha.get("longitude") == null){
+			atualizacao.addMensagemErro("Coordenadas geográficas inválidas");
+		}
 		
+		boolean existeEconomia = false;
+		for(String key: linha.keySet()){
+			if (key.contains("subcategoria")){
+				String valor =  linha.get(key).trim();
+				if (valor != null && valor.trim().length() > 0 && valor.replace("0", "").trim().length() > 0){
+					existeEconomia = true;
+					
+					char codigo = key.replace("subcategoria", "").charAt(0);
+					TipoEconomia tipo = TipoEconomia.getByCodigo(codigo);
+					if (!atualizacao.getDadosImovel().contemTipoEconomia(tipo)){
+						atualizacao.getDadosImovel().addTipoEconomia(tipo);
+					}
+				}
+			}
+		}
+		
+		if (!existeEconomia){
+			atualizacao.addMensagemErro("Imóvel deve ter associado ao menos uma economia.");
+		}
 	}
 }

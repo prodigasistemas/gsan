@@ -8,19 +8,31 @@ import java.util.List;
 import java.util.Map;
 
 public class AtualizacaoCadastral {
-	
+
 	private ArquivoTextoAtualizacaoCadastral arquivoTexto = null;
-	
+
 	private List<String> nomesImagens = new ArrayList<String>();
-	
+
+	private int matricula = 0;
+
 	private Map<String, String> linhaImovel = new HashMap<String, String>();
-	private HashMap<String, String> linhaCliente = new HashMap<String, String>();
-	private HashMap<String, String> linhaRamoAtividade = new HashMap<String, String>();
-	private HashMap<String, String> linhaServicos = new HashMap<String, String>();
-	private HashMap<String, String> linhaMedidor = new HashMap<String, String>();
-	private HashMap<String, String> linhaAnormalidade = new HashMap<String, String>();
-	
+	private Map<String, String> linhaCliente = new HashMap<String, String>();
+	private Map<String, String> linhaRamoAtividade = new HashMap<String, String>();
+	private Map<String, String> linhaServicos = new HashMap<String, String>();
+	private Map<String, String> linhaMedidor = new HashMap<String, String>();
+	private Map<String, String> linhaAnormalidade = new HashMap<String, String>();
+
 	private boolean atualizacaoLiberada = false;
+	
+	private boolean imovelAprovado = false;
+
+	private List<String> mensagensErro = new ArrayList<String>();
+
+	private boolean erroCadastro = false;
+	
+	private DadoAtualizacaoImovel dadosImovel = new DadoAtualizacaoImovel();
+
+	private List<DadoAtualizacaoRamoAtividade> dadosRamoAtividade = new ArrayList<DadoAtualizacaoRamoAtividade>();
 
 	public ArquivoTextoAtualizacaoCadastral getArquivoTexto() {
 		return arquivoTexto;
@@ -50,7 +62,7 @@ public class AtualizacaoCadastral {
 		this.linhaImovel = linha2;
 	}
 
-	public HashMap<String, String> getLinhaCliente() {
+	public Map<String, String> getLinhaCliente() {
 		return linhaCliente;
 	}
 	
@@ -62,7 +74,7 @@ public class AtualizacaoCadastral {
 		this.linhaCliente = linha1;
 	}
 
-	public HashMap<String, String> getLinhaRamoAtividade() {
+	public Map<String, String> getLinhaRamoAtividade() {
 		return linhaRamoAtividade;
 	}
 
@@ -70,7 +82,7 @@ public class AtualizacaoCadastral {
 		this.linhaRamoAtividade = linha3;
 	}
 
-	public HashMap<String, String> getLinhaServicos() {
+	public Map<String, String> getLinhaServicos() {
 		return linhaServicos;
 	}
 	
@@ -82,7 +94,7 @@ public class AtualizacaoCadastral {
 		this.linhaServicos = linha4;
 	}
 
-	public HashMap<String, String> getLinhaMedidor() {
+	public Map<String, String> getLinhaMedidor() {
 		return linhaMedidor;
 	}
 	
@@ -94,7 +106,7 @@ public class AtualizacaoCadastral {
 		this.linhaMedidor = linha5;
 	}
 
-	public HashMap<String, String> getLinhaAnormalidade() {
+	public Map<String, String> getLinhaAnormalidade() {
 		return linhaAnormalidade;
 	}
 	
@@ -105,8 +117,37 @@ public class AtualizacaoCadastral {
 	public void setLinhaAnormalidade(HashMap<String, String> linha6) {
 		this.linhaAnormalidade = linha6;
 	}
+
+	public boolean cadastroInvalido() {
+		return erroCadastro;
+	}
+
+	public List<String> getMensagensErro() {
+		return mensagensErro;
+	}
+
+	public void addMensagemErro(String erro) {
+		erroCadastro = true;
+		mensagensErro.add(erro);
+	}
 	
-	public void inicializaLeituras(){
+	public int getMatricula() {
+		return matricula;
+	}
+
+	public void setMatricula(int matricula) {
+		this.matricula = matricula;
+	}
+	
+	public boolean isImovelAprovado() {
+		return imovelAprovado;
+	}
+
+	public void setImovelAprovado(boolean imovelAprovado) {
+		this.imovelAprovado = imovelAprovado;
+	}
+
+	public void inicializaLeituras() {
 		linhaImovel = new HashMap<String, String>();
 		linhaCliente = new HashMap<String, String>();
 		linhaRamoAtividade = new HashMap<String, String>();
@@ -114,6 +155,23 @@ public class AtualizacaoCadastral {
 		linhaMedidor = new HashMap<String, String>();
 		linhaAnormalidade = new HashMap<String, String>();
 		atualizacaoLiberada = false;
+		imovelAprovado = false;
+	}
+
+	public DadoAtualizacaoImovel getDadosImovel() {
+		return dadosImovel;
+	}
+
+	public void setDadosImovel(DadoAtualizacaoImovel dadosImovel) {
+		this.dadosImovel = dadosImovel;
+	}
+
+	public List<DadoAtualizacaoRamoAtividade> getDadosRamoAtividade() {
+		return dadosRamoAtividade;
+	}
+
+	public void addDadoRamoAtividade(DadoAtualizacaoRamoAtividade dadoRamoAtividade) {
+		this.dadosRamoAtividade.add(dadoRamoAtividade);
 	}
 
 	public void liberarAtualizacao() {

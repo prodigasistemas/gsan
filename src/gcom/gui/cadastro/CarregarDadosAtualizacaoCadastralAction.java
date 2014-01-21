@@ -3,6 +3,7 @@ package gcom.gui.cadastro;
 import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
+import gcom.util.exception.BaseRuntimeException;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,6 +17,7 @@ import java.util.List;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
+import javax.ejb.EJBException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -88,9 +90,14 @@ public class CarregarDadosAtualizacaoCadastralAction extends GcomAction {
 
 						Fachada.getInstancia().carregarImovelAtualizacaoCadastral(buffer, imagens);
 						zipInputStream.close();
-					} catch (IOException e) {
-						e.printStackTrace();
-						throw new ActionServletException("erro_arquivo_carregado");
+					}catch (Exception e) {
+						if (e instanceof EJBException){
+							Throwable t = ((EJBException) e).getCausedByException();
+							if (t instanceof BaseRuntimeException){
+								throw new ActionServletException(t.getMessage(), ((BaseRuntimeException) t).getParametros());
+							}
+						}
+						throw new ActionServletException("atencao.erro_arquivo_carregado");
 					}
 				} else {
 					throw new ActionServletException("atencao.arquivo_zip_nao_encontrado");

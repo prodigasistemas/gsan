@@ -44,7 +44,6 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	}
 	
 	public void salvarObjetosAtualizacaoCadastral() throws Exception {
-
 		int matriculaImovel = Integer.parseInt(atualizacaoCadastral.getLinhaImovel("matricula"));
 
 		salvarImovelSubcategoriaAtualizacaoCadastral(matriculaImovel);

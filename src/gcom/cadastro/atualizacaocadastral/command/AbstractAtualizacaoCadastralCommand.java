@@ -52,6 +52,10 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 	protected IRepositorioImovel repositorioImovel;
 	protected ControladorImovelLocal controladorImovel;
 	protected ControladorClienteLocal controladorCliente;
+	
+	public AbstractAtualizacaoCadastralCommand(){
+		
+	}
 
 	public AbstractAtualizacaoCadastralCommand(ParserUtil parser, IRepositorioCadastro repositorioCadastro, ControladorUtilLocal controladorUtil, 
 			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, 
