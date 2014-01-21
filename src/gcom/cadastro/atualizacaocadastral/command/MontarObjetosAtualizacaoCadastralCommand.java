@@ -46,44 +46,57 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	public void montarObjetosAtualizacaoCadastral() throws Exception {
 
 		int matriculaImovel = Integer.parseInt(atualizacaoCadastral.getLinhaImovel("matricula"));
+
 		salvarImovelSubcategoriaAtualizacaoCadastral(matriculaImovel);
 
 		int matriculaUsuario = Integer.parseInt(atualizacaoCadastral.getLinhaCliente("matriculaUsuario"));
 		int matriculaResponsavel = Integer.parseInt(atualizacaoCadastral.getLinhaCliente("matriculaResponsavel"));
 		int matriculaProprietario = Integer.parseInt(atualizacaoCadastral.getLinhaCliente("matriculaProprietario"));
 
-		ClienteAtualizacaoCadastral clienteUsuarioTxt = buildClienteUsuario(matriculaImovel, matriculaUsuario,
-													matriculaResponsavel, matriculaProprietario);
-		ClienteAtualizacaoCadastral clienteResponsavelTxt = buildClienteResponsavel(matriculaImovel, matriculaResponsavel);
-		ClienteAtualizacaoCadastral clienteProprietarioTxt = buildClienteProprietario(matriculaImovel, matriculaProprietario);
+		salvarClienteUsuario(matriculaUsuario, matriculaImovel, matriculaResponsavel, matriculaProprietario);
+		salvarClienteResponsavel(matriculaImovel, matriculaResponsavel);
+		salvarClienteProprietario(matriculaImovel, matriculaProprietario);
+		salvarImovel(matriculaImovel);
+		
+		atualizarSituacaoControleImovelAtualizacaoCadastral(matriculaImovel, SituacaoAtualizacaoCadastral.TRANSMITIDO);
+	}
 
-		if (matriculaUsuario != 0) {
-			ClienteAtualizacaoCadastral clienteAtualizacaoCadastralBase = controladorCliente.pesquisarClienteAtualizacaoCadastral(matriculaUsuario,
-					matriculaImovel, new Integer(ClienteRelacaoTipo.USUARIO));
+	private void salvarImovel(int matriculaImovel) throws ControladorException {
+		ImovelAtualizacaoCadastral imovelTxt = buildImovelTxt(matriculaImovel);
+		ImovelAtualizacaoCadastral imovelAtualizacaoCadastralBase = controladorImovel.pesquisarImovelAtualizacaoCadastral(matriculaImovel);
 
-			salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, clienteAtualizacaoCadastralBase, clienteUsuarioTxt, matriculaImovel);
+		salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, imovelAtualizacaoCadastralBase, imovelTxt, matriculaImovel);
+		salvarImovelRetorno(imovelTxt);
+	}
 
-		} else if (matriculaResponsavel != 0) {
-			ClienteAtualizacaoCadastral clienteAtualizacaoCadastralBase = controladorCliente.pesquisarClienteAtualizacaoCadastral(matriculaResponsavel,
-					matriculaImovel, new Integer(ClienteRelacaoTipo.RESPONSAVEL));
-
-			salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, clienteAtualizacaoCadastralBase, clienteResponsavelTxt, matriculaImovel);
-
-		} else if (matriculaProprietario != 0) {
+	private void salvarClienteProprietario(int matriculaImovel, int matriculaProprietario) throws ControladorException {
+		if (matriculaProprietario != 0) {
+			ClienteAtualizacaoCadastral clienteProprietarioTxt = buildClienteProprietario(matriculaImovel, matriculaProprietario);
 			ClienteAtualizacaoCadastral clienteAtualizacaoCadastralBase = controladorCliente.pesquisarClienteAtualizacaoCadastral(matriculaProprietario,
 					matriculaImovel, new Integer(ClienteRelacaoTipo.PROPRIETARIO));
 
 			salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, clienteAtualizacaoCadastralBase, clienteProprietarioTxt, matriculaImovel);
 		}
+	}
 
-		ImovelAtualizacaoCadastral imovelTxt = buildImovelTxt(matriculaImovel);
-		ImovelAtualizacaoCadastral imovelAtualizacaoCadastralBase = controladorImovel.pesquisarImovelAtualizacaoCadastral(matriculaImovel);
-		
-		salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, imovelAtualizacaoCadastralBase, imovelTxt, matriculaImovel);
+	private void salvarClienteResponsavel(int matriculaImovel, int matriculaResponsavel) throws ControladorException {
+		if (matriculaResponsavel != 0) {
+			ClienteAtualizacaoCadastral clienteResponsavelTxt = buildClienteResponsavel(matriculaImovel, matriculaResponsavel);
+			ClienteAtualizacaoCadastral clienteAtualizacaoCadastralBase = controladorCliente.pesquisarClienteAtualizacaoCadastral(matriculaResponsavel,
+					matriculaImovel, new Integer(ClienteRelacaoTipo.RESPONSAVEL));
 
-		salvarImovelRetorno(imovelTxt);
-		
-		atualizarSituacaoControleImovelAtualizacaoCadastral(matriculaImovel, SituacaoAtualizacaoCadastral.TRANSMITIDO);
+			salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, clienteAtualizacaoCadastralBase, clienteResponsavelTxt, matriculaImovel);
+		}
+	}
+
+	private void salvarClienteUsuario(int matriculaUsuario, int matriculaImovel, int matriculaResponsavel, int matriculaProprietario) throws ControladorException {
+		if (matriculaUsuario != 0) {
+			ClienteAtualizacaoCadastral clienteUsuarioTxt = buildClienteUsuario(matriculaImovel, matriculaUsuario, matriculaResponsavel, matriculaProprietario);
+			ClienteAtualizacaoCadastral clienteAtualizacaoCadastralBase = controladorCliente.pesquisarClienteAtualizacaoCadastral(matriculaUsuario,
+					matriculaImovel, new Integer(ClienteRelacaoTipo.USUARIO));
+
+			salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, clienteAtualizacaoCadastralBase, clienteUsuarioTxt, matriculaImovel);
+		}		
 	}
 
 	private void salvarImovelSubcategoriaAtualizacaoCadastral(int matriculaImovel) throws ControladorException {
