@@ -3,13 +3,10 @@ package gcom.cadastro.imovel;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
-import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
-import gcom.cadastro.localidade.Localidade;
-import gcom.cadastro.localidade.SetorComercial;
 import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.ObjetoTransacao;
-import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
+import gcom.micromedicao.hidrometro.HidrometroProtecao;
 import gcom.seguranca.transacao.FiltroTabela;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
@@ -193,8 +190,6 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 	private Integer indicadorAtualizado;
 	
 	private LigacaoEsgotoSituacao ligacaoEsgotoSituacao;
-	
-	private HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico;
 	
 	private LigacaoAguaSituacao ligacaoAguaSituacao;
 	
@@ -795,7 +790,6 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 
 	@Override
 	public String[] retornaCamposChavePrimaria() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -907,15 +901,6 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 		this.ligacaoEsgotoSituacao = ligacaoEsgotoSituacao;
 	}
 
-	public HidrometroInstalacaoHistorico getHidrometroInstalacaoHistorico() {
-		return hidrometroInstalacaoHistorico;
-	}
-
-	public void setHidrometroInstalacaoHistorico(
-			HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico) {
-		this.hidrometroInstalacaoHistorico = hidrometroInstalacaoHistorico;
-	}
-
 	public LigacaoAguaSituacao getLigacaoAguaSituacao() {
 		return ligacaoAguaSituacao;
 	}
@@ -954,6 +939,16 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 
 	public void setInformacoesComplementares(String informacoesComplementares) {
 		this.descricaoOutrasInformacoes = informacoesComplementares;
+	}
+
+	public HidrometroProtecao getHidrometroProtecao() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setHidrometroProtecao(HidrometroProtecao hidrometroProtecao) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

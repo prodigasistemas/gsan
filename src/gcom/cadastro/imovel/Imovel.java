@@ -104,6 +104,7 @@ import gcom.interceptor.ObjetoTransacao;
 import gcom.micromedicao.Rota;
 import gcom.micromedicao.consumo.ConsumoHistorico;
 import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
+import gcom.micromedicao.hidrometro.HidrometroProtecao;
 import gcom.micromedicao.leitura.LeituraAnormalidade;
 import gcom.micromedicao.medicao.MedicaoHistorico;
 import gcom.util.ConstantesSistema;
@@ -2220,15 +2221,34 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 	public void setSetorComercia(SetorComercial setorComercia) {
 		this.setorComercial = setorComercia;
 	}
-
+	
 	public Integer getIdLigacaoAguaSituacao() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public void setIdLigacaoAguaSituacao(Integer idLigacaoAguaSituacao) {
-		// TODO Auto-generated method stub
-		
+	}
+
+	public Integer getIdFonteAbastecimento() {
+		return null;
+	}
+
+	public void setIdFonteAbastecimento(Integer idFonteAbastecimento) {
+	}
+
+	public Integer getIdImovel() {
+		return id;
+	}
+
+	public void setIdImovel(Integer idImovel) {
+		this.id = idImovel;
+	}
+
+	public HidrometroProtecao getHidrometroProtecao() {
+		return null;
+	}
+
+	public void setHidrometroProtecao(HidrometroProtecao hidrometroProtecao) {
 	}
 	
 }

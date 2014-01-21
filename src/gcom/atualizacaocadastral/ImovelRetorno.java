@@ -1,12 +1,9 @@
 package gcom.atualizacaocadastral;
 
-import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
-import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
-import gcom.cadastro.endereco.LogradouroCep;
 import gcom.cadastro.imovel.FonteAbastecimento;
 import gcom.cadastro.imovel.IImovel;
-import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
+import gcom.micromedicao.hidrometro.HidrometroProtecao;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -14,7 +11,6 @@ import java.util.Date;
 public class ImovelRetorno implements IImovel{
 
 	private Integer id;
-	private short subLote;
 	private String numeroImovel;
 	private String complementoEndereco;
 	private Short numeroPontosUtilizacao;
@@ -22,29 +18,20 @@ public class ImovelRetorno implements IImovel{
 	private BigDecimal numeroIptu;
 	private String coordenadaX;
 	private String coordenadaY;
-	private LigacaoEsgotoSituacao ligacaoEsgotoSituacao;
-	private HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico;
-	private LigacaoAguaSituacao ligacaoAguaSituacao;
-	private LogradouroCep logradouroCep;
 	private String numeroMedidorEnergia;
 	private String informacoesComplementares;
-	private FonteAbastecimento fonteAbastecimento;
-	private LigacaoAgua ligacaoAgua;
-	private Date ultimaAlteracao;
 	private Integer idImovel;
-	private int numeroQuadra;
-	private short lote;
-	private Integer numeroSequencialRota;
-    private Integer idCapacidadeHidrometro;
-    private Integer idMarcaHidrometro;
-    private Integer idProtecaoHidrometro;
     private String numeroHidrometro;
     private String nomeEntrevistado;
-	private Integer idMunicipio;
-	private String nomeMunicipio;
-	private String dsUFSiglaMunicipio;
+    private LigacaoAguaSituacao ligacaoAguaSituacao;
+    private FonteAbastecimento fonteAbastecimento;
+    private HidrometroProtecao hidrometroProtecao;
+    
 	private Integer idLigacaoAguaSituacao;
 	private Integer idFonteAbastecimento;
+	private Integer idProtecaoHidrometro;
+	
+	private Date ultimaAlteracao;
 	
 
 	public ImovelRetorno () {
@@ -52,26 +39,22 @@ public class ImovelRetorno implements IImovel{
 	}
 	
 	public ImovelRetorno (IImovel imovelAtualizacaoCadastral) {
+		this.numeroImovel = imovelAtualizacaoCadastral.getNumeroImovel();
+		this.complementoEndereco = imovelAtualizacaoCadastral.getComplementoEndereco();
+		this.numeroPontosUtilizacao = imovelAtualizacaoCadastral.getNumeroPontosUtilizacao();
+		this.numeroMorador = imovelAtualizacaoCadastral.getNumeroMorador();
+		this.numeroIptu = imovelAtualizacaoCadastral.getNumeroIptu();
 		this.coordenadaX = imovelAtualizacaoCadastral.getCoordenadaX();
 		this.coordenadaY = imovelAtualizacaoCadastral.getCoordenadaY();
-		this.hidrometroInstalacaoHistorico = imovelAtualizacaoCadastral.getHidrometroInstalacaoHistorico();
-		this.idCapacidadeHidrometro = imovelAtualizacaoCadastral.getIdCapacidadeHidrometro();
-		this.idMarcaHidrometro = imovelAtualizacaoCadastral.getIdMarcaHidrometro();
-		this.idProtecaoHidrometro = imovelAtualizacaoCadastral.getIdProtecaoHidrometro();
+		this.numeroMedidorEnergia = imovelAtualizacaoCadastral.getNumeroMedidorEnergia();
 		this.informacoesComplementares = imovelAtualizacaoCadastral.getInformacoesComplementares();
-		
+		this.idImovel = imovelAtualizacaoCadastral.getIdImovel();
+		this.numeroHidrometro = imovelAtualizacaoCadastral.getNumeroHidrometro();
+		this.idProtecaoHidrometro = imovelAtualizacaoCadastral.getIdProtecaoHidrometro();
+		this.nomeEntrevistado = imovelAtualizacaoCadastral.getNomeEntrevistado();
 		this.ligacaoAguaSituacao = new LigacaoAguaSituacao(imovelAtualizacaoCadastral.getIdLigacaoAguaSituacao());
 		this.fonteAbastecimento = new FonteAbastecimento(imovelAtualizacaoCadastral.getIdFonteAbastecimento());
-
-		this.nomeEntrevistado = imovelAtualizacaoCadastral.getNomeEntrevistado();
-		this.numeroHidrometro = imovelAtualizacaoCadastral.getNumeroHidrometro();
-		this.numeroImovel = imovelAtualizacaoCadastral.getNumeroImovel();
-		this.numeroIptu = imovelAtualizacaoCadastral.getNumeroIptu();
-		this.numeroMedidorEnergia = imovelAtualizacaoCadastral.getNumeroMedidorEnergia();
-		this.numeroMorador = imovelAtualizacaoCadastral.getNumeroMorador();
-		this.numeroPontosUtilizacao = imovelAtualizacaoCadastral.getNumeroPontosUtilizacao();
-		this.numeroQuadra = imovelAtualizacaoCadastral.getNumeroQuadra();
-		this.subLote = imovelAtualizacaoCadastral.getSubLote();
+		this.hidrometroProtecao = new HidrometroProtecao(imovelAtualizacaoCadastral.getIdProtecaoHidrometro());
 	}
 
 	public Integer getId() {
@@ -80,14 +63,6 @@ public class ImovelRetorno implements IImovel{
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public short getSubLote() {
-		return subLote;
-	}
-
-	public void setSubLote(short subLote) {
-		this.subLote = subLote;
 	}
 
 	public String getNumeroImovel() {
@@ -146,36 +121,12 @@ public class ImovelRetorno implements IImovel{
 		this.coordenadaY = coordenadaY;
 	}
 
-	public LigacaoEsgotoSituacao getLigacaoEsgotoSituacao() {
-		return ligacaoEsgotoSituacao;
-	}
-
-	public void setLigacaoEsgotoSituacao(LigacaoEsgotoSituacao ligacaoEsgotoSituacao) {
-		this.ligacaoEsgotoSituacao = ligacaoEsgotoSituacao;
-	}
-
-	public HidrometroInstalacaoHistorico getHidrometroInstalacaoHistorico() {
-		return hidrometroInstalacaoHistorico;
-	}
-
-	public void setHidrometroInstalacaoHistorico(HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico) {
-		this.hidrometroInstalacaoHistorico = hidrometroInstalacaoHistorico;
-	}
-
 	public LigacaoAguaSituacao getLigacaoAguaSituacao() {
 		return ligacaoAguaSituacao;
 	}
 
 	public void setLigacaoAguaSituacao(LigacaoAguaSituacao ligacaoAguaSituacao) {
 		this.ligacaoAguaSituacao = ligacaoAguaSituacao;
-	}
-
-	public LogradouroCep getLogradouroCep() {
-		return logradouroCep;
-	}
-
-	public void setLogradouroCep(LogradouroCep logradouroCep) {
-		this.logradouroCep = logradouroCep;
 	}
 
 	public String getNumeroMedidorEnergia() {
@@ -202,60 +153,12 @@ public class ImovelRetorno implements IImovel{
 		this.fonteAbastecimento = fonteAbastecimento;
 	}
 
-	public LigacaoAgua getLigacaoAgua() {
-		return ligacaoAgua;
-	}
-
-	public void setLigacaoAgua(LigacaoAgua ligacaoAgua) {
-		this.ligacaoAgua = ligacaoAgua;
-	}
-
 	public Date getUltimaAlteracao() {
 		return ultimaAlteracao;
 	}
 
 	public void setUltimaAlteracao(Date ultimaAlteracao) {
 		this.ultimaAlteracao = ultimaAlteracao;
-	}
-
-	public int getNumeroQuadra() {
-		return numeroQuadra;
-	}
-
-	public void setNumeroQuadra(int numeroQuadra) {
-		this.numeroQuadra = numeroQuadra;
-	}
-
-	public short getLote() {
-		return lote;
-	}
-
-	public void setLote(short lote) {
-		this.lote = lote;
-	}
-
-	public Integer getNumeroSequencialRota() {
-		return numeroSequencialRota;
-	}
-
-	public void setNumeroSequencialRota(Integer numeroSequencialRota) {
-		this.numeroSequencialRota = numeroSequencialRota;
-	}
-
-	public Integer getIdCapacidadeHidrometro() {
-		return idCapacidadeHidrometro;
-	}
-
-	public void setIdCapacidadeHidrometro(Integer idCapacidadeHidrometro) {
-		this.idCapacidadeHidrometro = idCapacidadeHidrometro;
-	}
-
-	public Integer getIdMarcaHidrometro() {
-		return idMarcaHidrometro;
-	}
-
-	public void setIdMarcaHidrometro(Integer idMarcaHidrometro) {
-		this.idMarcaHidrometro = idMarcaHidrometro;
 	}
 
 	public Integer getIdProtecaoHidrometro() {
@@ -282,30 +185,6 @@ public class ImovelRetorno implements IImovel{
 		this.nomeEntrevistado = nomeEntrevistado;
 	}
 
-	public Integer getIdMunicipio() {
-		return idMunicipio;
-	}
-
-	public void setIdMunicipio(Integer idMunicipio) {
-		this.idMunicipio = idMunicipio;
-	}
-
-	public String getNomeMunicipio() {
-		return nomeMunicipio;
-	}
-
-	public void setNomeMunicipio(String nomeMunicipio) {
-		this.nomeMunicipio = nomeMunicipio;
-	}
-
-	public String getDsUFSiglaMunicipio() {
-		return dsUFSiglaMunicipio;
-	}
-
-	public void setDsUFSiglaMunicipio(String dsUFSiglaMunicipio) {
-		this.dsUFSiglaMunicipio = dsUFSiglaMunicipio;
-	}
-
 	public Integer getIdImovel() {
 		return idImovel;
 	}
@@ -330,6 +209,12 @@ public class ImovelRetorno implements IImovel{
 		this.idFonteAbastecimento = id;
 	}
 
-	
-	
+	public HidrometroProtecao getHidrometroProtecao() {
+		return hidrometroProtecao;
+	}
+
+	public void setHidrometroProtecao(HidrometroProtecao hidrometroProtecao) {
+		this.hidrometroProtecao = hidrometroProtecao;
+	}
+
 }
