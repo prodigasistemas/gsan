@@ -43,6 +43,8 @@ public class ImovelRetorno implements IImovel{
 	private Integer idMunicipio;
 	private String nomeMunicipio;
 	private String dsUFSiglaMunicipio;
+	private Integer idLigacaoAguaSituacao;
+	private Integer idFonteAbastecimento;
 	
 
 	public ImovelRetorno () {
@@ -52,16 +54,15 @@ public class ImovelRetorno implements IImovel{
 	public ImovelRetorno (IImovel imovelAtualizacaoCadastral) {
 		this.coordenadaX = imovelAtualizacaoCadastral.getCoordenadaX();
 		this.coordenadaY = imovelAtualizacaoCadastral.getCoordenadaY();
-		this.fonteAbastecimento = imovelAtualizacaoCadastral.getFonteAbastecimento();
 		this.hidrometroInstalacaoHistorico = imovelAtualizacaoCadastral.getHidrometroInstalacaoHistorico();
 		this.idCapacidadeHidrometro = imovelAtualizacaoCadastral.getIdCapacidadeHidrometro();
 		this.idMarcaHidrometro = imovelAtualizacaoCadastral.getIdMarcaHidrometro();
 		this.idProtecaoHidrometro = imovelAtualizacaoCadastral.getIdProtecaoHidrometro();
 		this.informacoesComplementares = imovelAtualizacaoCadastral.getInformacoesComplementares();
-		this.ligacaoAgua = imovelAtualizacaoCadastral.getLigacaoAgua();
-		this.ligacaoAguaSituacao = imovelAtualizacaoCadastral.getLigacaoAguaSituacao();
-		this.ligacaoEsgotoSituacao = imovelAtualizacaoCadastral.getLigacaoEsgotoSituacao();
-		this.lote = imovelAtualizacaoCadastral.getLote();
+		
+		this.ligacaoAguaSituacao = new LigacaoAguaSituacao(imovelAtualizacaoCadastral.getIdLigacaoAguaSituacao());
+		this.fonteAbastecimento = new FonteAbastecimento(imovelAtualizacaoCadastral.getIdFonteAbastecimento());
+
 		this.nomeEntrevistado = imovelAtualizacaoCadastral.getNomeEntrevistado();
 		this.numeroHidrometro = imovelAtualizacaoCadastral.getNumeroHidrometro();
 		this.numeroImovel = imovelAtualizacaoCadastral.getNumeroImovel();
@@ -313,5 +314,22 @@ public class ImovelRetorno implements IImovel{
 		this.idImovel = idImovel;
 	}
 
+	public Integer getIdLigacaoAguaSituacao() {
+		return idLigacaoAguaSituacao;
+	}
+
+	public void setIdLigacaoAguaSituacao(Integer idLigacaoAguaSituacao) {
+		this.idLigacaoAguaSituacao = idLigacaoAguaSituacao;
+	}
+
+	public Integer getIdFonteAbastecimento() {
+		return idFonteAbastecimento;
+	}
+
+	public void setIdFonteAbastecimento(Integer idFonteAbastecimento) {
+		this.idFonteAbastecimento = id;
+	}
+
+	
 	
 }

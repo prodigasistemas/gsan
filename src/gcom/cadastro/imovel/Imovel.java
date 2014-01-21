@@ -2220,5 +2220,15 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 	public void setSetorComercia(SetorComercial setorComercia) {
 		this.setorComercial = setorComercia;
 	}
+
+	public Integer getIdLigacaoAguaSituacao() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setIdLigacaoAguaSituacao(Integer idLigacaoAguaSituacao) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

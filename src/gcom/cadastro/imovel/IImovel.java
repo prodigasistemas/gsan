@@ -130,4 +130,12 @@ public interface IImovel {
 
 	public void setDsUFSiglaMunicipio(String dsUFSiglaMunicipio);
 
+	public Integer getIdLigacaoAguaSituacao();
+	
+	public void setIdLigacaoAguaSituacao(Integer idLigacaoAguaSituacao);
+	
+	public Integer getIdFonteAbastecimento();
+
+    public void setIdFonteAbastecimento(Integer idFonteAbastecimento);
+    
 }

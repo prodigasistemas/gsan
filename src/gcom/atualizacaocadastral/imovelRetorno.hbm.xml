@@ -26,7 +26,7 @@
 		<property name="informacoesComplementares" type="java.lang.String" column="imac_dsoutrasinformacoes" length="100"/>
 		<property name="nomeEntrevistado" type="java.lang.String" column="imac_nmentrevistado" length="50"/>
 		
-		<many-to-one name="ligacaoAgua" class="gcom.atendimentopublico.ligacaoagua.LigacaoAgua" not-null="true">
+		<many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="true">
 			<column name="last_id"/>
 		</many-to-one>
 		
@@ -37,6 +37,11 @@
 		<many-to-one name="hidrometroInstalacaoHistorico" class="gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico" not-null="true">
 			<column name="hidi_id"/>
 		</many-to-one>
+		
+		<many-to-one name="fonteAbastecimento" class="gcom.cadastro.imovel.FonteAbastecimento" not-null="true">
+			<column name="ftab_id"/>
+		</many-to-one>
+		
 		
 	</class>
 </hibernate-mapping>

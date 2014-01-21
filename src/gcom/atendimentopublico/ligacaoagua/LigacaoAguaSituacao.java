@@ -221,6 +221,10 @@ public class LigacaoAguaSituacao extends ObjetoTransacao {
 	 */
 	public LigacaoAguaSituacao() {
 	}
+	
+	public LigacaoAguaSituacao(Integer id) {
+		this.id = id;
+	}
 
 	/**
 	 * @return Retorna o campo descricaoAbreviado.
