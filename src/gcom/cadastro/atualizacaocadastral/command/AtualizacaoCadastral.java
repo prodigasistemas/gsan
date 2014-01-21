@@ -13,7 +13,7 @@ public class AtualizacaoCadastral {
 
 	private List<String> nomesImagens = new ArrayList<String>();
 
-	private String matricula = "";
+	private int matricula = 0;
 
 	private Map<String, String> linhaImovel = new HashMap<String, String>();
 	private Map<String, String> linhaCliente = new HashMap<String, String>();
@@ -111,11 +111,11 @@ public class AtualizacaoCadastral {
 		mensagensErro.add(erro);
 	}
 	
-	public String getMatricula() {
+	public int getMatricula() {
 		return matricula;
 	}
 
-	public void setMatricula(String matricula) {
+	public void setMatricula(int matricula) {
 		this.matricula = matricula;
 	}
 	

@@ -9,6 +9,10 @@ import gcom.cadastro.imovel.ImovelControleAtualizacaoCadastral;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ParserUtil;
+import gcom.util.Util;
+import gcom.util.exception.MatriculaProprietarioException;
+import gcom.util.exception.MatriculaResponsavelException;
+import gcom.util.exception.MatriculaUsuarioException;
 
 import java.util.Map;
 
@@ -18,6 +22,10 @@ import org.jboss.logging.Logger;
 public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 	
 	private static Logger logger = Logger.getLogger(ParseClienteCommand.class);
+	
+	public ParseClienteCommand() {
+		super();
+	}
 
 	public ParseClienteCommand(ParserUtil parser, IRepositorioCadastro repositorioCadastro, ControladorUtilLocal controladorUtil, 
 			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, 
@@ -31,7 +39,7 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		String matriculaImovelCliente = parser.obterDadoParser(9).trim();
 		linha.put("matriculaImovelCliente", matriculaImovelCliente);
 		
-		atualizacao.setMatricula(matriculaImovelCliente);
+		atualizacao.setMatricula(Integer.valueOf(matriculaImovelCliente));
 		
 		logger.info("Carregando Imóvel: " + Integer.parseInt(matriculaImovelCliente));
 		
@@ -50,7 +58,12 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		String tipoResponsavel = parser.obterDadoParser(1).trim();
 		linha.put("tipoResponsavel", tipoResponsavel);
 		
-		int matriculaUsuario = Integer.parseInt(parser.obterDadoParser(9));
+		int matriculaUsuario = 0;
+		try {
+			matriculaUsuario = Integer.parseInt(parser.obterDadoParser(9));
+		} catch (Exception e) {
+			throw new MatriculaUsuarioException(e, String.valueOf(atualizacao.getMatricula())); 
+		}
 		linha.put("matriculaUsuario", ""+matriculaUsuario);
 							
 		String nomeUsuario = parser.obterDadoParser(50).trim();
@@ -80,7 +93,13 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		String emailUsuario = parser.obterDadoParser(30).trim();
 		linha.put("emailUsuario", emailUsuario);
 		
-		int matriculaProprietario = Integer.parseInt(parser.obterDadoParser(9));
+		int matriculaProprietario = 0;
+		try {
+			matriculaProprietario = Integer.parseInt(parser.obterDadoParser(9));
+		} catch (Exception e) {
+			throw new MatriculaProprietarioException(e, String.valueOf(atualizacao.getMatricula()));
+		}
+		
 		linha.put("matriculaProprietario", ""+matriculaProprietario);
 
 		String nomeProprietario = parser.obterDadoParser(50).trim();
@@ -131,7 +150,12 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		String municipioProprietario = parser.obterDadoParser(15).trim();
 		linha.put("municipioProprietario", municipioProprietario);
 			
-		int matriculaResponsavel = Integer.parseInt(parser.obterDadoParser(9));
+		int matriculaResponsavel = 0;
+		try {
+			matriculaResponsavel = Integer.parseInt(parser.obterDadoParser(9));
+		} catch (Exception e) {
+			throw new MatriculaResponsavelException(e, String.valueOf(atualizacao.getMatricula()));
+		}
 		linha.put("matriculaResponsavel", ""+matriculaResponsavel);
 		
 		String nomeResponsavel = parser.obterDadoParser(50).trim();
@@ -204,25 +228,50 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 			atualizacao.setImovelAprovado(true);
 		}
 
-		if (nomeInvalido(linha.get("nomeUsuario"))){
+		if (Util.nomeInvalido(linha.get("nomeUsuario"))){
 			atualizacao.addMensagemErro("Nome de usuário inválido.");
 		}
 		
-		if (nomeInvalido(linha.get("nomeResponsavel"))){
+		if (Util.nomeInvalido(linha.get("nomeResponsavel"))){
 			atualizacao.addMensagemErro("Nome de responsável inválido.");
 		}
 
-		if (nomeInvalido(linha.get("nomeProprietario"))){
+		if (Util.nomeInvalido(linha.get("nomeProprietario"))){
 			atualizacao.addMensagemErro("Nome de proprietário inválido.");
+		}
+		
+		if (Util.cpfCnpjInvalido(linha.get("cnpjCpfUsuario"))){
+			atualizacao.addMensagemErro("CPF/CNPJ de usuário inválido.");
+			limparDadosUsuario(linha);
+		}
+		
+		if (Util.cpfCnpjInvalido(linha.get("cnpjCpfProprietario"))){
+			atualizacao.addMensagemErro("CPF/CNPJ de proprietário inválido.");
+		}
+
+		if (Util.cpfCnpjInvalido(linha.get("cnpjCpfResponsavel"))){
+			atualizacao.addMensagemErro("CPF/CNPJ de responsável inválido.");
+		}
+		
+		if (StringUtils.isEmpty(linha.get("latitude"))){
+			atualizacao.addMensagemErro("Latitude nao informada");
+		}
+		
+		if (StringUtils.isEmpty(linha.get("longitude"))){
+			atualizacao.addMensagemErro("Longitude nao informada");
 		}
 	}
 	
-	private boolean nomeInvalido(String nome){
-		String regexNome = "[a-zA-Z\\s]*";
-		if (nome != null && nome.trim().length() > 0 && !nome.matches(regexNome)){
-			return true;
-		}
-		return false;
-		
+	private void limparDadosUsuario(Map<String, String> linha) {
+		linha.put("matriculaUsuario", "");
+		linha.put("nomeUsuario", "");
+		linha.put("tipoPessoaUsuario", "");
+		linha.put("cnpjCpfUsuario", "");
+		linha.put("rgUsuario", "");
+		linha.put("ufRgUsuario", "");
+		linha.put("sexoUsuario", "");
+		linha.put("telefoneUsuario", "");
+		linha.put("celularUsuario", "");
+		linha.put("emailUsuario", "");
 	}
 }

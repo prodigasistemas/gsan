@@ -154,6 +154,11 @@ public class ActionServletException extends RuntimeException {
 		parametrosMensagem.addAll(Arrays.asList(parametroMensagem));
 	}
 
+	public ActionServletException(String mensagem, List<String> parametroMensagem) {
+		super(mensagem);
+		parametrosMensagem.addAll(parametroMensagem);
+	}
+
 	public List<String> getParametroMensagem() {
 		ArrayList<String> list = new ArrayList<String>();
 		list.addAll(parametrosMensagem);

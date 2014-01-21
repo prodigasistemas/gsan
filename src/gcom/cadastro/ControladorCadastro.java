@@ -252,6 +252,7 @@ import gcom.util.Util;
 import gcom.util.ZipUtil;
 import gcom.util.email.ErroEmailException;
 import gcom.util.email.ServicosEmail;
+import gcom.util.exception.BaseRuntimeException;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
@@ -7741,7 +7742,7 @@ public class ControladorCadastro implements SessionBean {
 	 * @throws ControladorException
 	 */
 	public void carregarImovelAtualizacaoCadastral(BufferedReader buffer,
-			ArrayList<String> nomesImagens) throws ControladorException {
+			ArrayList<String> nomesImagens) throws Exception {
 
 		try {
 			String line = null;
@@ -7818,6 +7819,8 @@ public class ControladorCadastro implements SessionBean {
 				repositorioCadastro.atualizarArquivoTextoAtualizacaoCadstral(atualizacao.getArquivoTexto().getId(),
 						SituacaoTransmissaoLeitura.TRANSMITIDO);
 			}
+		} catch (BaseRuntimeException e) {
+			throw e;
 		} catch (Exception e) {
 			logger.error("Erro ao carregar arquivo de atualizacao cadastral.");
 			throw new EJBException(new Exception("Erro ao carregar arquivo de atualizacao cadastral."));

@@ -17,8 +17,6 @@ import java.util.Map;
 
 import javax.imageio.ImageIO;
 
-import org.apache.commons.lang.StringUtils;
-
 public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 
 	public ParseImovelCommand(ParserUtil parser, IRepositorioCadastro repositorioCadastro, ControladorUtilLocal controladorUtil, 
