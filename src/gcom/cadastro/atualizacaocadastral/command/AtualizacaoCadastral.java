@@ -41,6 +41,10 @@ public class AtualizacaoCadastral {
 	public Map<String, String> getLinhaImovel() {
 		return linhaImovel;
 	}
+	
+	public String getLinhaImovel(String campo) {
+		return linhaImovel.get(campo);
+	}
 
 	public void setLinhaImovel(Map<String, String> linha2) {
 		this.linhaImovel = linha2;
@@ -48,6 +52,10 @@ public class AtualizacaoCadastral {
 
 	public HashMap<String, String> getLinhaCliente() {
 		return linhaCliente;
+	}
+	
+	public String getLinhaCliente(String campo) {
+		return linhaCliente.get(campo);
 	}
 
 	public void setLinhaCliente(HashMap<String, String> linha1) {
@@ -65,6 +73,10 @@ public class AtualizacaoCadastral {
 	public HashMap<String, String> getLinhaServicos() {
 		return linhaServicos;
 	}
+	
+	public String getLinhaServicos(String campo) {
+		return linhaServicos.get(campo);
+	}
 
 	public void setLinhaServicos(HashMap<String, String> linha4) {
 		this.linhaServicos = linha4;
@@ -73,6 +85,10 @@ public class AtualizacaoCadastral {
 	public HashMap<String, String> getLinhaMedidor() {
 		return linhaMedidor;
 	}
+	
+	public String getLinhaMedidor(String campo) {
+		return linhaMedidor.get(campo);
+	}
 
 	public void setLinhaMedidor(HashMap<String, String> linha5) {
 		this.linhaMedidor = linha5;
@@ -80,6 +96,10 @@ public class AtualizacaoCadastral {
 
 	public HashMap<String, String> getLinhaAnormalidade() {
 		return linhaAnormalidade;
+	}
+	
+	public String getLinhaAnormalidade(String campo) {
+		return linhaAnormalidade.get(campo);
 	}
 
 	public void setLinhaAnormalidade(HashMap<String, String> linha6) {
