@@ -46,8 +46,7 @@ public class ParseRamoAtividadeCommand extends AbstractAtualizacaoCadastralComma
 			
 			ArquivoTextoAtualizacaoCadastral arquivoTexto = atualizacao.getArquivoTexto();
 
-			salvarTabelaColunaAtualizacaoCadastral(new ImovelRamoAtividadeAtualizacaoCadastral(), ramoAtividadeTxt, arquivoTexto, interceptador,
-					matriculaImovel);
+			salvarTabelaColunaAtualizacaoCadastral(atualizacao, new ImovelRamoAtividadeAtualizacaoCadastral(), ramoAtividadeTxt, matriculaImovel);
 		}
 	}
 }
