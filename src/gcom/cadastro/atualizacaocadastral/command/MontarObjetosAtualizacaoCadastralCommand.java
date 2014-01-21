@@ -47,11 +47,6 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 
 		ArquivoTextoAtualizacaoCadastral arquivoTexto = atualizacaoCadastral.getArquivoTexto();
 		
-		ClienteAtualizacaoCadastral clienteUsuarioTxt = null;
-		ClienteAtualizacaoCadastral clienteResponsavelTxt = null;
-		ClienteAtualizacaoCadastral clienteProprietarioTxt = null;
-		ImovelAtualizacaoCadastral imovelTxt = null;
-		
 		Map<String, String> linhaCliente = atualizacaoCadastral.getLinhaCliente();
 		Map<String, String> linhaImovel = atualizacaoCadastral.getLinhaImovel();
 		Map<String, String> linhaRamoAtividade = atualizacaoCadastral.getLinhaRamoAtividade(); // NAO USADO
@@ -62,64 +57,49 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		Interceptador interceptador = Interceptador.getInstancia();
 
 		int matriculaImovel = Integer.parseInt(linhaImovel.get("matricula"));
+		salvarImovelSubcategoriaAtualizacaoCadastral(arquivoTexto, linhaImovel, interceptador, matriculaImovel);
 
 		// Linha 1
 		int matriculaUsuario = Integer.parseInt(linhaCliente.get("matriculaUsuario"));
 		int matriculaResponsavel = Integer.parseInt(linhaCliente.get("matriculaResponsavel"));
 		int matriculaProprietario = Integer.parseInt(linhaCliente.get("matriculaProprietario"));
 
-		ArrayList<ClienteFoneAtualizacaoCadastral> clientesFone = new ArrayList<ClienteFoneAtualizacaoCadastral>();
+		ClienteAtualizacaoCadastral clienteUsuarioTxt = buildClienteUsuario(arquivoTexto, linhaCliente, linhaImovel, interceptador, matriculaImovel, matriculaUsuario,
+													matriculaResponsavel, matriculaProprietario);
+		ClienteAtualizacaoCadastral clienteResponsavelTxt = buildClienteResponsavel(arquivoTexto, linhaCliente, interceptador, matriculaImovel, matriculaResponsavel);
+		ClienteAtualizacaoCadastral clienteProprietarioTxt = buildClienteProprietario(arquivoTexto, linhaCliente, interceptador, matriculaImovel, matriculaProprietario);
 
 		if (matriculaUsuario != 0) {
-			clienteUsuarioTxt = buildClienteUsuario(arquivoTexto, linhaCliente, linhaImovel, interceptador, matriculaImovel, matriculaUsuario,
-													matriculaResponsavel, matriculaProprietario, clientesFone);
-		}
-		if (matriculaResponsavel != 0) {
-			clienteResponsavelTxt = buildClienteResponsavel(arquivoTexto, linhaCliente, interceptador, matriculaImovel, matriculaResponsavel, clientesFone);
-		}
+			ClienteAtualizacaoCadastral clienteAtualizacaoCadastralBase = controladorCliente.pesquisarClienteAtualizacaoCadastral(matriculaUsuario,
+					matriculaImovel, new Integer(ClienteRelacaoTipo.USUARIO));
 
-		if (matriculaProprietario != 0) {
-			clienteProprietarioTxt = buildClienteProprietario(arquivoTexto, linhaCliente, interceptador, matriculaImovel, matriculaProprietario, clientesFone);
-		}
+			salvarTabelaColunaAtualizacaoCadastral(clienteAtualizacaoCadastralBase, clienteUsuarioTxt, arquivoTexto, interceptador, matriculaImovel);
 
-		// Linha 2
-		imovelTxt = new ImovelAtualizacaoCadastral();
+		} else if (matriculaResponsavel != 0) {
+			ClienteAtualizacaoCadastral clienteAtualizacaoCadastralBase = controladorCliente.pesquisarClienteAtualizacaoCadastral(matriculaResponsavel,
+					matriculaImovel, new Integer(ClienteRelacaoTipo.RESPONSAVEL));
 
-		imovelTxt.setIdImovel(matriculaImovel);
-		imovelTxt.setNumeroImovel(linhaImovel.get("numeroImovel"));
-		imovelTxt.setComplementoEndereco(linhaImovel.get("complementoImovel"));
-		imovelTxt.setIdFonteAbastecimento(Integer.parseInt(linhaImovel.get("fonteAbastecimento")));
-		imovelTxt.setNumeroIptu(linhaImovel.get("numeroIPTU") == null ? null : new BigDecimal(linhaImovel.get("numeroIPTU")));
-		imovelTxt.setNumeroContratoEnergia(linhaImovel.get("numeroCelpa").equals("") ? null : Long.parseLong(linhaImovel.get("numeroCelpa")));
-		imovelTxt.setIdLogradouroTipo(Integer.parseInt(linhaImovel.get("idTipoLogradouroImovel")));
-		imovelTxt.setDsLogradouroTipo(getDescricaoLogradouro(Integer.parseInt(linhaImovel.get("idTipoLogradouroImovel"))));
-		imovelTxt.setDescricaoLogradouro(linhaImovel.get("logradouroImovel"));
-		imovelTxt.setCodigoCep(Integer.parseInt(linhaImovel.get("cep")));
-		imovelTxt.setNomeBairro(linhaImovel.get("bairro"));
-		imovelTxt.setNomeMunicipio(linhaImovel.get("municipio"));
-		imovelTxt.setNumeroPontosUtilizacao(Short.parseShort(linhaImovel.get("numeroPontosUteis")));
-		imovelTxt.setNumeroMorador(Short.parseShort(linhaImovel.get("numeroOcupantes")));
+			salvarTabelaColunaAtualizacaoCadastral(clienteAtualizacaoCadastralBase, clienteResponsavelTxt, arquivoTexto, interceptador, matriculaImovel);
 
-		// Linha 4
-		imovelTxt.setIdLigacaoAguaSituacao(Integer.parseInt(linhaServicos.get("ligacaoAguaSituacao")));
-		imovelTxt.setIdLigacaoEsgotoSituacao(Integer.parseInt(linhaServicos.get("ligacaoEsgotoSituacao")));
-		imovelTxt.setIdLocalInstalacaoRamal(linhaServicos.get("localInstalacaoRamal").equals("") ? null : Integer.parseInt(linhaServicos.get("localInstalacaoRamal")));
+		} else if (matriculaProprietario != 0) {
+			ClienteAtualizacaoCadastral clienteAtualizacaoCadastralBase = controladorCliente.pesquisarClienteAtualizacaoCadastral(matriculaProprietario,
+					matriculaImovel, new Integer(ClienteRelacaoTipo.PROPRIETARIO));
 
-		// Linha 5
-		if (linhaMedidor.size() > 0) {
-			imovelTxt.setNumeroHidrometro(linhaMedidor.get("numeroHidrometro"));
-			imovelTxt.setIdMarcaHidrometro(linhaMedidor.get("marcaHidrometro").equals("") ? 0 : Integer.parseInt(linhaMedidor.get("marcaHidrometro")));
-			imovelTxt.setIdProtecaoHidrometro(linhaMedidor.get("tipoCaixaProtecaoHidrometro").equals("") ? 0 : Integer.parseInt(linhaMedidor
-					.get("tipoCaixaProtecaoHidrometro")));
-			imovelTxt.setIdCapacidadeHidrometro(linhaMedidor.get("capacidadeHidrometro").equals("") ? 0 : Integer.parseInt(linhaMedidor.get("capacidadeHidrometro")));
+			salvarTabelaColunaAtualizacaoCadastral(clienteAtualizacaoCadastralBase, clienteProprietarioTxt, arquivoTexto, interceptador, matriculaImovel);
 		}
 
-		// Linha 6
-		imovelTxt.setIdCadastroOcorrencia(Integer.parseInt(linhaAnormalidade.get("codigoAnormalidade")));
-		imovelTxt.setDescricaoOutrasInformacoes(linhaAnormalidade.get("comentario").trim());
-		imovelTxt.setCoordenadaY(linhaAnormalidade.get("latitude"));
-		imovelTxt.setCoordenadaX(linhaAnormalidade.get("longitude"));
+		ImovelAtualizacaoCadastral imovelTxt = buildImovelTxt(linhaImovel, linhaServicos, linhaMedidor, linhaAnormalidade, matriculaImovel);
+		ImovelAtualizacaoCadastral imovelAtualizacaoCadastralBase = controladorImovel.pesquisarImovelAtualizacaoCadastral(matriculaImovel);
+		
+		salvarTabelaColunaAtualizacaoCadastral(imovelAtualizacaoCadastralBase, imovelTxt, arquivoTexto, interceptador, matriculaImovel);
 
+		salvarImovelRetorno(imovelTxt);
+		
+		atualizarSituacaoControleImovelAtualizacaoCadastral(matriculaImovel, SituacaoAtualizacaoCadastral.TRANSMITIDO);
+	}
+
+	private void salvarImovelSubcategoriaAtualizacaoCadastral(ArquivoTextoAtualizacaoCadastral arquivoTexto, Map<String, String> linhaImovel,
+			Interceptador interceptador, int matriculaImovel) throws ControladorException {
 		// Imovel Subcategoria
 		short qtdEconomias = 0;
 		String descricaoSubcategoria = "";
@@ -171,36 +151,60 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 			}
 
 		}
+	}
 
-		if (matriculaUsuario != 0) {
-			ClienteAtualizacaoCadastral clienteAtualizacaoCadastralBase = controladorCliente.pesquisarClienteAtualizacaoCadastral(matriculaUsuario,
-					matriculaImovel, new Integer(ClienteRelacaoTipo.USUARIO));
+	private ImovelAtualizacaoCadastral buildImovelTxt(Map<String, String> linhaImovel, Map<String, String> linhaServicos,
+			Map<String, String> linhaMedidor, Map<String, String> linhaAnormalidade, int matriculaImovel) {
+		ImovelAtualizacaoCadastral imovelTxt;
+		imovelTxt = new ImovelAtualizacaoCadastral();
 
-			salvarTabelaColunaAtualizacaoCadastral(clienteAtualizacaoCadastralBase, clienteUsuarioTxt, arquivoTexto, interceptador, matriculaImovel);
+		// Linha 2
+		imovelTxt.setIdImovel(matriculaImovel);
+		imovelTxt.setNumeroImovel(linhaImovel.get("numeroImovel"));
+		imovelTxt.setComplementoEndereco(linhaImovel.get("complementoImovel"));
+		imovelTxt.setIdFonteAbastecimento(Integer.parseInt(linhaImovel.get("fonteAbastecimento")));
+		imovelTxt.setNumeroIptu(linhaImovel.get("numeroIPTU") == null ? null : new BigDecimal(linhaImovel.get("numeroIPTU")));
+		imovelTxt.setNumeroContratoEnergia(linhaImovel.get("numeroCelpa").equals("") ? null : Long.parseLong(linhaImovel.get("numeroCelpa")));
+		imovelTxt.setIdLogradouroTipo(Integer.parseInt(linhaImovel.get("idTipoLogradouroImovel")));
+		imovelTxt.setDsLogradouroTipo(getDescricaoLogradouro(Integer.parseInt(linhaImovel.get("idTipoLogradouroImovel"))));
+		imovelTxt.setDescricaoLogradouro(linhaImovel.get("logradouroImovel"));
+		imovelTxt.setCodigoCep(Integer.parseInt(linhaImovel.get("cep")));
+		imovelTxt.setNomeBairro(linhaImovel.get("bairro"));
+		imovelTxt.setNomeMunicipio(linhaImovel.get("municipio"));
+		imovelTxt.setNumeroPontosUtilizacao(Short.parseShort(linhaImovel.get("numeroPontosUteis")));
+		imovelTxt.setNumeroMorador(Short.parseShort(linhaImovel.get("numeroOcupantes")));
 
-		} else if (matriculaResponsavel != 0) {
-			ClienteAtualizacaoCadastral clienteAtualizacaoCadastralBase = controladorCliente.pesquisarClienteAtualizacaoCadastral(matriculaResponsavel,
-					matriculaImovel, new Integer(ClienteRelacaoTipo.RESPONSAVEL));
+		// Linha 4
+		imovelTxt.setIdLigacaoAguaSituacao(Integer.parseInt(linhaServicos.get("ligacaoAguaSituacao")));
+		imovelTxt.setIdLigacaoEsgotoSituacao(Integer.parseInt(linhaServicos.get("ligacaoEsgotoSituacao")));
+		imovelTxt.setIdLocalInstalacaoRamal(linhaServicos.get("localInstalacaoRamal").equals("") ? null : Integer.parseInt(linhaServicos.get("localInstalacaoRamal")));
 
-			salvarTabelaColunaAtualizacaoCadastral(clienteAtualizacaoCadastralBase, clienteResponsavelTxt, arquivoTexto, interceptador, matriculaImovel);
-
-		} else if (matriculaProprietario != 0) {
-			ClienteAtualizacaoCadastral clienteAtualizacaoCadastralBase = controladorCliente.pesquisarClienteAtualizacaoCadastral(matriculaProprietario,
-					matriculaImovel, new Integer(ClienteRelacaoTipo.PROPRIETARIO));
-
-			salvarTabelaColunaAtualizacaoCadastral(clienteAtualizacaoCadastralBase, clienteProprietarioTxt, arquivoTexto, interceptador, matriculaImovel);
+		// Linha 5
+		if (linhaMedidor.size() > 0) {
+			imovelTxt.setNumeroHidrometro(linhaMedidor.get("numeroHidrometro"));
+			imovelTxt.setIdMarcaHidrometro(linhaMedidor.get("marcaHidrometro").equals("") ? 0 : Integer.parseInt(linhaMedidor.get("marcaHidrometro")));
+			imovelTxt.setIdProtecaoHidrometro(linhaMedidor.get("tipoCaixaProtecaoHidrometro").equals("") ? 0 : Integer.parseInt(linhaMedidor
+					.get("tipoCaixaProtecaoHidrometro")));
+			imovelTxt.setIdCapacidadeHidrometro(linhaMedidor.get("capacidadeHidrometro").equals("") ? 0 : Integer.parseInt(linhaMedidor.get("capacidadeHidrometro")));
 		}
 
-		ImovelAtualizacaoCadastral imovelAtualizacaoCadastralBase = controladorImovel.pesquisarImovelAtualizacaoCadastral(matriculaImovel);
-		salvarTabelaColunaAtualizacaoCadastral(imovelAtualizacaoCadastralBase, imovelTxt, arquivoTexto, interceptador, matriculaImovel);
-
-		salvarImovelRetorno(imovelTxt);
-		
-		atualizarSituacaoControleImovelAtualizacaoCadastral(matriculaImovel, SituacaoAtualizacaoCadastral.TRANSMITIDO);
+		// Linha 6
+		imovelTxt.setIdCadastroOcorrencia(Integer.parseInt(linhaAnormalidade.get("codigoAnormalidade")));
+		imovelTxt.setDescricaoOutrasInformacoes(linhaAnormalidade.get("comentario").trim());
+		imovelTxt.setCoordenadaY(linhaAnormalidade.get("latitude"));
+		imovelTxt.setCoordenadaX(linhaAnormalidade.get("longitude"));
+		return imovelTxt;
 	}
 
 	private ClienteAtualizacaoCadastral buildClienteProprietario(ArquivoTextoAtualizacaoCadastral arquivoTexto, Map<String, String> linhaCliente,
-			Interceptador interceptador, int matriculaImovel, int matriculaProprietario, ArrayList<ClienteFoneAtualizacaoCadastral> clientesFone) {
+			Interceptador interceptador, int matriculaImovel, int matriculaProprietario) {
+		
+		if (matriculaProprietario == 0) {
+			return null;
+		}
+		
+		ArrayList<ClienteFoneAtualizacaoCadastral> clientesFone = new ArrayList<ClienteFoneAtualizacaoCadastral>();
+		
 		ClienteAtualizacaoCadastral clienteProprietarioTxt;
 		clienteProprietarioTxt = new ClienteAtualizacaoCadastral();
 
@@ -278,7 +282,14 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	}
 
 	private ClienteAtualizacaoCadastral buildClienteResponsavel(ArquivoTextoAtualizacaoCadastral arquivoTexto, Map<String, String> linhaCliente,
-			Interceptador interceptador, int matriculaImovel, int matriculaResponsavel, ArrayList<ClienteFoneAtualizacaoCadastral> clientesFone) {
+			Interceptador interceptador, int matriculaImovel, int matriculaResponsavel) {
+		
+		if (matriculaResponsavel == 0) {
+			return null;
+		}
+		
+		ArrayList<ClienteFoneAtualizacaoCadastral> clientesFone = new ArrayList<ClienteFoneAtualizacaoCadastral>();
+		
 		ClienteAtualizacaoCadastral clienteResponsavelTxt;
 		clienteResponsavelTxt = new ClienteAtualizacaoCadastral();
 
@@ -360,7 +371,14 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 
 	private ClienteAtualizacaoCadastral buildClienteUsuario(ArquivoTextoAtualizacaoCadastral arquivoTexto, Map<String, String> linhaCliente,
 			Map<String, String> linhaImovel, Interceptador interceptador, int matriculaImovel, int matriculaUsuario, int matriculaResponsavel,
-			int matriculaProprietario, ArrayList<ClienteFoneAtualizacaoCadastral> clientesFone) {
+			int matriculaProprietario) {
+		
+		if (matriculaUsuario == 0) {
+			return null;
+		}
+		
+		ArrayList<ClienteFoneAtualizacaoCadastral> clientesFone = new ArrayList<ClienteFoneAtualizacaoCadastral>();
+		
 		ClienteAtualizacaoCadastral clienteUsuarioTxt;
 		clienteUsuarioTxt = new ClienteAtualizacaoCadastral();
 
