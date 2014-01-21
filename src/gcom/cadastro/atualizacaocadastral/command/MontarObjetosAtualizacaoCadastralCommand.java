@@ -74,7 +74,6 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 			clienteUsuarioTxt = buildClienteUsuario(arquivoTexto, linhaCliente, linhaImovel, interceptador, matriculaImovel, matriculaUsuario,
 													matriculaResponsavel, matriculaProprietario, clientesFone);
 		}
-
 		if (matriculaResponsavel != 0) {
 			clienteResponsavelTxt = buildClienteResponsavel(arquivoTexto, linhaCliente, interceptador, matriculaImovel, matriculaResponsavel, clientesFone);
 		}

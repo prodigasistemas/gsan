@@ -92,10 +92,6 @@ import gcom.util.ConstantesSistema;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -124,8 +120,7 @@ public class FiltrarImovelGeracaoTabelasTemporariasCadastroAction extends GcomAc
 		ActionForward retorno = actionMapping.findForward("telaSucesso");
 		
 		String linha = null;
-		Collection<Integer> colecaoMatriculas = new ArrayList<Integer>();
-		
+
 		try {
 			DiskFileUpload upload = new DiskFileUpload();
 			List itens = upload.parseRequest(httpServletRequest);
@@ -137,73 +132,32 @@ public class FiltrarImovelGeracaoTabelasTemporariasCadastroAction extends GcomAc
 				
 				this.carregarCampos(httpServletRequest, item);
 				
-				//INICIO ARQUIVO TEXTO - COLECAO DE MATRICULAS -
-				
-				// verifica se não é diretorio
-				if (!item.isFormField()) {
-					
-					// coloca o nome do item para maiusculo
-					String nomeItem = item.getName().toUpperCase();
-					if (nomeItem.endsWith(".TXT")) {
-						
-						//abre o arquivo
-						InputStreamReader reader = new InputStreamReader(item.getInputStream());
-						BufferedReader buffer = new BufferedReader(reader);
-						while ((linha = buffer.readLine()) != null) {
-							
-							// pega a linha do arquivo
-							String linhaLida = linha;
-
-							//se for a ultima linha do arquivo
-							if (linhaLida != null && linhaLida.length() > 0) {
-								colecaoMatriculas.add(new Integer(linhaLida));
-							} else {
-								break;
-							}
-						}
-					}
-				}	
-				//FIM - ARQUIVO TEXTO -
 			}
-		
-		} catch (IOException ex) {
-			throw new ActionServletException("erro.importacao.nao_concluida");
 		} catch (NumberFormatException ex) {
 			throw new ActionServletException("erro.importacao.nao_concluida");
 		} catch (FileUploadException e) {
 			throw new ActionServletException("erro.sistema", e);
 		}	
 		
-		//Colecao de matriculas no txt
-		if ( colecaoMatriculas != null && colecaoMatriculas.size() > 0 ) {
-			helper.setColecaoMatriculas(colecaoMatriculas);
-		}
-			
-		Collection colecaoIdsImovel = fachada.obterIdsImovelGeracaoTabelasTemporarias(helper);
+		Collection<Integer> colecaoIdsImoveis = fachada.obterIdsImovelGeracaoTabelasTemporarias(helper);
 		
-		int qtdImoveis = colecaoIdsImovel.size();
-		
-		if (helper.getSugestao().equals("1")) {
-			if ( colecaoMatriculas != null && colecaoMatriculas.size() > 0 ) {
-				throw new ActionServletException("atencao.quantidade_imoveis_sugestao_sim",
-						null, "" + colecaoMatriculas.size());
+		if (colecaoIdsImoveis.size() > 0) {
+			if (helper.getSugestao().equals("1")) {
+				throw new ActionServletException("atencao.quantidade_imoveis_sugestao_sim", String.valueOf(colecaoIdsImoveis.size()));		
 			} else {
-				throw new ActionServletException("atencao.quantidade_imoveis_sugestao_sim", 
-						null, "" + qtdImoveis);		
+				helper.setColecaoIdsImoveis(colecaoIdsImoveis);
+				
+				Map parametros = new HashMap();
+				parametros.put("imovelGeracaoTabelasTemporariasCadastroHelper", helper);
+				
+				Fachada.getInstancia().inserirProcessoIniciadoParametrosLivres(parametros,
+						Processo.GERAR_TABELAS_TEMP_ATU_CADASTRAL, this.getUsuarioLogado(httpServletRequest));
+				
+				montarPaginaSucesso(httpServletRequest, "Geração de tabelas encaminhada para Batch.", "", "");
 			}
-        } else {
-        	if (qtdImoveis > 0) {
-        		Map parametros = new HashMap();
-        		parametros.put("imovelGeracaoTabelasTemporariasCadastroHelper", helper);
-        		
-        		Fachada.getInstancia().inserirProcessoIniciadoParametrosLivres(parametros,
-        				Processo.GERAR_TABELAS_TEMP_ATU_CADASTRAL, this.getUsuarioLogado(httpServletRequest));
-        		
-        		montarPaginaSucesso(httpServletRequest, "Geração de tabelas encaminhada para Batch.", "", "");
-        	} else {
-        		throw new ActionServletException("atencao.sem_imoveis_disponiveis");	
-        	}
-        }
+		} else {
+			throw new ActionServletException("atencao.sem_imoveis_disponiveis");
+		}
 
 		return retorno;
 	}

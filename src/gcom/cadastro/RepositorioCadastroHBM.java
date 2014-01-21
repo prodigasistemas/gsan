@@ -5453,7 +5453,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 	 */
 
 	public Collection<Integer> obterIdsImovelGeracaoTabelasTemporarias(
-			Integer idSetor,
+			Integer idRota,
 			ImovelGeracaoTabelasTemporariasCadastroHelper helper)
 			throws ErroRepositorioException {
 
@@ -5467,137 +5467,100 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		try {
 
 			consulta = "SELECT distinct(imov.imov_id) as idImovel "
-					+ "from cadastro.imovel imov ";
+					+ "from cadastro.imovel imov "
+					+ "LEFT JOIN cadastro.quadra qdra ON qdra.qdra_id = imov.qdra_id ";
 
 			if (helper.getCliente() != null) {
-				consulta = consulta
-						+ "LEFT JOIN cadastro.cliente_imovel clim ON clim.imov_id = imov.imov_id ";
+				consulta += "LEFT JOIN cadastro.cliente_imovel clim ON clim.imov_id = imov.imov_id ";
 			}
 
 			if (helper.getLocalidadeInicial() != null
 					|| helper.getElo() != null) {
-				consulta = consulta
-						+ "LEFT JOIN cadastro.localidade local ON local.loca_id = imov.loca_id ";
-			}
-
-			if (helper.getRotaInicial() != null) {
-				consulta = consulta
-						+ "LEFT JOIN cadastro.quadra qdra ON qdra.qdra_id = imov.qdra_id ";
+				consulta += "LEFT JOIN cadastro.localidade local ON local.loca_id = imov.loca_id ";
 			}
 
 			if (helper.getCategoria() != null
 					|| helper.getSubCategoria() != null) {
-				consulta = consulta
-						+ "LEFT JOIN cadastro.imovel_subcategoria imsb ON imsb.imov_id = imov.imov_id "
-						+ "LEFT JOIN cadastro.subcategoria scat ON scat.scat_id = imsb.scat_id ";
+				consulta += "LEFT JOIN cadastro.imovel_subcategoria imsb ON imsb.imov_id = imov.imov_id "
+					+ "LEFT JOIN cadastro.subcategoria scat ON scat.scat_id = imsb.scat_id ";
 			}
 
-			consulta = consulta
-					+ "where imov.imov_icexclusao <> 1 AND (imov.siac_id is null OR imov.siac_id = 0) AND ";
+			consulta += "where imov.imov_icexclusao <> 1 AND (imov.siac_id is null OR imov.siac_id = 0) AND ";
 
-			if (idSetor != null) {
-				consulta = consulta + "imov.stcm_id =:idSetor AND ";
-				parameters.put("idSetor", idSetor);
+			if (idRota != null) {
+				consulta += "qdra.rota_id =:idRota AND ";
+				parameters.put("idRota", idRota);
 			}
 
 			if (helper.getMatricula() != null) {
-
-				consulta = consulta + "imov.imov_id = :matricula AND ";
+				consulta += "imov.imov_id = :matricula AND ";
 				parameters.put("matricula", helper.getMatricula());
 			}
 
 			if (helper.getCliente() != null) {
-
-				consulta = consulta + "clim.clie_id = :cliente AND ";
+				consulta += "clim.clie_id = :cliente AND ";
 				parameters.put("cliente", helper.getCliente());
 			}
 
 			if (helper.getElo() != null) {
-
-				consulta = consulta + "local.loca_cdelo = :elo AND ";
+				consulta += "local.loca_cdelo = :elo AND ";
 				parameters.put("elo", helper.getElo());
 			}
 
 			if (helper.getLocalidadeInicial() != null) {
-
-				consulta = consulta
-						+ " local.loca_id between :localidadeInicial AND :localidadeFinal AND ";
-
-				parameters.put("localidadeInicial", helper
-						.getLocalidadeInicial());
+				consulta += " local.loca_id between :localidadeInicial AND :localidadeFinal AND ";
+				parameters.put("localidadeInicial", helper.getLocalidadeInicial());
 				parameters.put("localidadeFinal", helper.getLocalidadeFinal());
 			}
 
 			if (helper.getSetorComercialInicial() != null) {
-
-				consulta = consulta
-						+ " imov.stcm_id between :setorComercialInicial AND :setorComercialFinal AND ";
-
-				parameters.put("setorComercialInicial", helper
-						.getSetorComercialInicial());
-				parameters.put("setorComercialFinal", helper
-						.getSetorComercialFinal());
+				consulta += " imov.stcm_id between :setorComercialInicial AND :setorComercialFinal AND ";
+				parameters.put("setorComercialInicial", helper.getSetorComercialInicial());
+				parameters.put("setorComercialFinal", helper.getSetorComercialFinal());
 
 			}
 
 			if (helper.getIdQuadraInicial() != null) {
-
-				consulta = consulta
-						+ " imov.qdra_id between :quadraInicial AND :quadraFinal AND ";
-
+				consulta += " imov.qdra_id between :quadraInicial AND :quadraFinal AND ";
 				parameters.put("quadraInicial", helper.getIdQuadraInicial());
 				parameters.put("quadraFinal", helper.getIdQuadraFinal());
 			}
 
 			if (helper.getRotaInicial() != null) {
-
-				consulta = consulta
-						+ " qdra.rota_id between :rotaInicial AND :rotaFinal AND ";
-
+				consulta += " qdra.rota_id between :rotaInicial AND :rotaFinal AND ";
 				parameters.put("rotaInicial", helper.getRotaInicial());
 				parameters.put("rotaFinal", helper.getRotaFinal());
 			}
 
 			if (helper.getRotaSequenciaInicial() != null) {
-
-				consulta = consulta
-						+ " imov.imov_nnsequencialrota between :rotaSequenciaInicial AND :rotaSequenciaFinal AND ";
-
-				parameters.put("rotaSequenciaInicial", helper
-						.getRotaSequenciaInicial());
-				parameters.put("rotaSequenciaFinal", helper
-						.getRotaSequenciaFinal());
+				consulta += " imov.imov_nnsequencialrota between :rotaSequenciaInicial AND :rotaSequenciaFinal AND ";
+				parameters.put("rotaSequenciaInicial", helper.getRotaSequenciaInicial());
+				parameters.put("rotaSequenciaFinal", helper.getRotaSequenciaFinal());
 			}
 
 			if (helper.getPerfilImovel() != null) {
-
-				consulta = consulta + "imov.iper_id = :perfilImovel AND ";
+				consulta += "imov.iper_id = :perfilImovel AND ";
 				parameters.put("perfilImovel", helper.getPerfilImovel());
 			}
 
 			if (helper.getCategoria() != null) {
-
-				consulta = consulta + "scat.catg_id = :categoria AND ";
+				consulta += "scat.catg_id = :categoria AND ";
 				parameters.put("categoria", helper.getCategoria());
 			}
 
 			if (helper.getSubCategoria() != null) {
-
-				consulta = consulta + "scat.scat_id = :subCategoria AND ";
+				consulta += "scat.scat_id = :subCategoria AND ";
 				parameters.put("subCategoria", helper.getSubCategoria());
 			}
 
 			if (helper.getIdSituacaoLigacaoAgua() != null) {
-				consulta = consulta
-						+ "imov.last_id = :idSituacaoLigacaoAgua AND ";
-				parameters.put("idSituacaoLigacaoAgua", helper
-						.getIdSituacaoLigacaoAgua());
+				consulta += "imov.last_id = :idSituacaoLigacaoAgua AND ";
+				parameters.put("idSituacaoLigacaoAgua", helper.getIdSituacaoLigacaoAgua());
 			}
 
 			consulta = Util.removerUltimosCaracteres(consulta, 4);
 
-			query = session.createSQLQuery(consulta).addScalar("idImovel",
-					Hibernate.INTEGER);
+			query = session.createSQLQuery(consulta).addScalar("idImovel", Hibernate.INTEGER);
 
 			Set set = parameters.keySet();
 			Iterator iterMap = set.iterator();
@@ -5620,7 +5583,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		}
 
 		return retorno;
-
 	}
 
 	/**
@@ -6819,7 +6781,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 	}
 	
 	public Collection<Integer> pesquisarRotasAtualizacaoCadastral(
-			Integer idEmpresaLeiturista) throws ErroRepositorioException {
+			Collection idsImoveis) throws ErroRepositorioException {
 
 		Collection<Integer> retorno = null;
 		Session session = HibernateUtil.getSession();
@@ -6827,18 +6789,16 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 		try {
 			consulta = "SELECT distinct(rota.rota_id) as idRota "
-				+ "FROM cadastro.imovel_atlz_cadastral AS imac "
-				+ "INNER JOIN cadastro.imovel AS imov ON imov.imov_id = imac.imov_id "
+				+ "FROM cadastro.imovel AS imov "
 				+ "INNER JOIN cadastro.setor_comercial AS stcm ON imov.stcm_id = stcm.stcm_id "
 				+ "INNER JOIN cadastro.quadra AS qdra ON imov.qdra_id = qdra.qdra_id "
 				+ "INNER JOIN micromedicao.rota AS rota ON rota.rota_id = qdra.rota_id "
-				+ "WHERE imac.siac_id = :situacao " 
-				+ "AND imac.empr_id = :idEmpresaLeiturista";
+				+ "WHERE imov.imov_id IN (:idsImoveis) "
+				+ "ORDER BY rota.rota_id";
 
 			retorno = (Collection<Integer>) session.createSQLQuery(consulta)
 					.addScalar("idRota", Hibernate.INTEGER)
-					.setInteger("situacao", SituacaoAtualizacaoCadastral.DISPONIVEL)
-					.setInteger("idEmpresaLeiturista", idEmpresaLeiturista)
+					.setParameterList("idsImoveis", idsImoveis)
 					.list();
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
