@@ -1,6 +1,5 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
-import gcom.cadastro.ControladorCadastro;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.cliente.ControladorClienteLocal;
@@ -220,7 +219,7 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 	
 	private boolean nomeInvalido(String nome){
 		String regexNome = "[a-zA-Z\\s]*";
-		if (StringUtils.isNotBlank(nome) && !nome.matches(regexNome)){
+		if (nome != null && nome.trim().length() > 0 && !nome.matches(regexNome)){
 			return true;
 		}
 		return false;

@@ -178,7 +178,7 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 		for(String key: linha.keySet()){
 			if (key.contains("subcategoria")){
 				String valor =  linha.get(key).trim();
-				if (!StringUtils.isBlank(valor) && !StringUtils.containsOnly(valor, "0")){
+				if (valor != null && valor.trim().length() > 0 && valor.replace("0", "").trim().length() > 0){
 					existeEconomia = true;
 					
 					char codigo = key.replace("subcategoria", "").charAt(0);
