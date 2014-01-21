@@ -40,10 +40,10 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 
 	public void execute(AtualizacaoCadastral atualizacaoCadastral) throws Exception {
 		this.atualizacaoCadastral = atualizacaoCadastral;
-		montarObjetosAtualizacaoCadastral();
+		salvarObjetosAtualizacaoCadastral();
 	}
 	
-	public void montarObjetosAtualizacaoCadastral() throws Exception {
+	public void salvarObjetosAtualizacaoCadastral() throws Exception {
 
 		int matriculaImovel = Integer.parseInt(atualizacaoCadastral.getLinhaImovel("matricula"));
 
@@ -192,6 +192,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		imovelTxt.setDescricaoOutrasInformacoes(atualizacaoCadastral.getLinhaAnormalidade("comentario").trim());
 		imovelTxt.setCoordenadaY(atualizacaoCadastral.getLinhaAnormalidade("latitude"));
 		imovelTxt.setCoordenadaX(atualizacaoCadastral.getLinhaAnormalidade("longitude"));
+		
 		return imovelTxt;
 	}
 
@@ -200,8 +201,6 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		if (matriculaProprietario == 0) {
 			return null;
 		}
-		
-		ArrayList<ClienteFoneAtualizacaoCadastral> clientesFone = new ArrayList<ClienteFoneAtualizacaoCadastral>();
 		
 		ClienteAtualizacaoCadastral clienteProprietarioTxt;
 		clienteProprietarioTxt = new ClienteAtualizacaoCadastral();
@@ -222,60 +221,13 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		clienteProprietarioTxt.setIdClienteRelacaoTipo(new Integer(ClienteRelacaoTipo.PROPRIETARIO));
 		clienteProprietarioTxt.setIdImovel(Integer.parseInt(atualizacaoCadastral.getLinhaCliente("matriculaImovelCliente")));
 
-		if (!atualizacaoCadastral.getLinhaCliente("telefoneProprietario").trim().equals("")) {
-			ClienteFoneAtualizacaoCadastral clienteFone = new ClienteFoneAtualizacaoCadastral();
-
-			// clienteFone.setIdCliente(id);
-			clienteFone.setDdd(atualizacaoCadastral.getLinhaCliente("telefoneProprietario").substring(0, 2));
-			clienteFone.setTelefone(atualizacaoCadastral.getLinhaCliente("telefoneProprietario").substring(2));
-			clienteFone.setIdFoneTipo(FoneTipo.RESIDENCIAL);
-			clienteFone.setIdCliente(matriculaProprietario);
-
-			clientesFone.add(clienteFone);
-
-			try {
-				ClienteFoneAtualizacaoCadastral clienteFoneAtualizacaoCadastral = controladorCliente
-						.pesquisarClienteFoneAtualizacaoCadastral(Integer.valueOf(matriculaProprietario), Integer.valueOf(matriculaImovel),
-								FoneTipo.RESIDENCIAL, Integer.valueOf(ClienteRelacaoTipo.PROPRIETARIO), null).iterator().next();
-
-				salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, clienteFoneAtualizacaoCadastral, clienteFone, matriculaImovel);
-			} catch (NoSuchElementException e) {
-				ClienteFoneAtualizacaoCadastral clienteFoneAtualizacaoCadastral = new ClienteFoneAtualizacaoCadastral();
-				try {
-					salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, clienteFoneAtualizacaoCadastral, clienteFone, matriculaImovel);
-				} catch (ControladorException e1) {
-					e1.printStackTrace();
-				}
-			} catch (ControladorException e) {
-				e.printStackTrace();
-			}
-		}
-
-		if (!atualizacaoCadastral.getLinhaCliente("celularProprietario").trim().equals("")) {
-			ClienteFoneAtualizacaoCadastral clienteFone = new ClienteFoneAtualizacaoCadastral();
-
-			clienteFone.setDdd(atualizacaoCadastral.getLinhaCliente("celularProprietario").substring(0, 2));
-			clienteFone.setTelefone(atualizacaoCadastral.getLinhaCliente("celularProprietario").substring(2));
-			clienteFone.setIdFoneTipo(FoneTipo.CELULAR);
-			clienteFone.setIdCliente(matriculaProprietario);
-
-			clientesFone.add(clienteFone);
-
-			try {
-				ClienteFoneAtualizacaoCadastral clienteFoneAtualizacaoCadastral = controladorCliente
-						.pesquisarClienteFoneAtualizacaoCadastral(Integer.valueOf(matriculaProprietario), Integer.valueOf(matriculaImovel),
-								FoneTipo.CELULAR, Integer.valueOf(ClienteRelacaoTipo.PROPRIETARIO), null).iterator().next();
-			} catch (NoSuchElementException e) {
-				ClienteFoneAtualizacaoCadastral clienteFoneAtualizacaoCadastral = new ClienteFoneAtualizacaoCadastral();
-				try {
-					salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, clienteFoneAtualizacaoCadastral, clienteFone, matriculaImovel);
-				} catch (ControladorException e1) {
-					e1.printStackTrace();
-				}
-			} catch (ControladorException e) {
-				e.printStackTrace();
-			}
-		}
+		ArrayList<ClienteFoneAtualizacaoCadastral> clientesFone = new ArrayList<ClienteFoneAtualizacaoCadastral>();
+		
+		salvarClienteFoneAtualizacaoCadastral(atualizacaoCadastral.getLinhaCliente("telefoneProprietario"), FoneTipo.RESIDENCIAL,
+												matriculaImovel, matriculaProprietario, clientesFone);
+		salvarClienteFoneAtualizacaoCadastral(atualizacaoCadastral.getLinhaCliente("celularProprietario"), FoneTipo.CELULAR,
+												matriculaImovel, matriculaProprietario, clientesFone);
+		
 		return clienteProprietarioTxt;
 	}
 
@@ -284,8 +236,6 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		if (matriculaResponsavel == 0) {
 			return null;
 		}
-		
-		ArrayList<ClienteFoneAtualizacaoCadastral> clientesFone = new ArrayList<ClienteFoneAtualizacaoCadastral>();
 		
 		ClienteAtualizacaoCadastral clienteResponsavelTxt;
 		clienteResponsavelTxt = new ClienteAtualizacaoCadastral();
@@ -306,63 +256,13 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		clienteResponsavelTxt.setIdClienteRelacaoTipo(new Integer(ClienteRelacaoTipo.RESPONSAVEL));
 		clienteResponsavelTxt.setIdImovel(Integer.parseInt(atualizacaoCadastral.getLinhaCliente("matriculaImovelCliente")));
 
-		if (!atualizacaoCadastral.getLinhaCliente("telefoneResponsavel").trim().equals("")) {
-			ClienteFoneAtualizacaoCadastral clienteFone = new ClienteFoneAtualizacaoCadastral();
-
-			// clienteFone.setIdCliente(id);
-			clienteFone.setDdd(atualizacaoCadastral.getLinhaCliente("telefoneResponsavel").substring(0, 2));
-			clienteFone.setTelefone(atualizacaoCadastral.getLinhaCliente("telefoneResponsavel").substring(2));
-			clienteFone.setIdFoneTipo(FoneTipo.RESIDENCIAL);
-			clienteFone.setIdCliente(matriculaResponsavel);
-
-			clientesFone.add(clienteFone);
-
-			try {
-				ClienteFoneAtualizacaoCadastral clienteFoneAtualizacaoCadastral = controladorCliente
-						.pesquisarClienteFoneAtualizacaoCadastral(Integer.valueOf(matriculaResponsavel), Integer.valueOf(matriculaImovel),
-								FoneTipo.RESIDENCIAL, Integer.valueOf(ClienteRelacaoTipo.RESPONSAVEL), null).iterator().next();
-
-				salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, clienteFoneAtualizacaoCadastral, clienteFone, matriculaImovel);
-			} catch (NoSuchElementException e) {
-				ClienteFoneAtualizacaoCadastral clienteFoneAtualizacaoCadastral = new ClienteFoneAtualizacaoCadastral();
-				try {
-					salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, clienteFoneAtualizacaoCadastral, clienteFone, matriculaImovel);
-				} catch (ControladorException e1) {
-					e1.printStackTrace();
-				}
-			} catch (ControladorException e) {
-				e.printStackTrace();
-			}
-		}
-
-		if (!atualizacaoCadastral.getLinhaCliente("celularResponsavel").trim().equals("")) {
-			ClienteFoneAtualizacaoCadastral clienteFone = new ClienteFoneAtualizacaoCadastral();
-
-			// clienteFone.setIdCliente(id);
-			clienteFone.setDdd(atualizacaoCadastral.getLinhaCliente("celularResponsavel").substring(0, 2));
-			clienteFone.setTelefone(atualizacaoCadastral.getLinhaCliente("celularResponsavel").substring(2));
-			clienteFone.setIdFoneTipo(FoneTipo.CELULAR);
-			clienteFone.setIdCliente(matriculaResponsavel);
-
-			clientesFone.add(clienteFone);
-
-			try {
-				ClienteFoneAtualizacaoCadastral clienteFoneAtualizacaoCadastral = controladorCliente
-						.pesquisarClienteFoneAtualizacaoCadastral(Integer.valueOf(matriculaResponsavel), Integer.valueOf(matriculaImovel),
-								FoneTipo.CELULAR, Integer.valueOf(ClienteRelacaoTipo.RESPONSAVEL), null).iterator().next();
-
-				salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, clienteFoneAtualizacaoCadastral, clienteFone, matriculaImovel);
-			} catch (NoSuchElementException e) {
-				ClienteFoneAtualizacaoCadastral clienteFoneAtualizacaoCadastral = new ClienteFoneAtualizacaoCadastral();
-				try {
-					salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, clienteFoneAtualizacaoCadastral, clienteFone, matriculaImovel);
-				} catch (ControladorException e1) {
-					e1.printStackTrace();
-				}
-			} catch (ControladorException e) {
-				e.printStackTrace();
-			}
-		}
+		ArrayList<ClienteFoneAtualizacaoCadastral> clientesFone = new ArrayList<ClienteFoneAtualizacaoCadastral>();
+		
+		salvarClienteFoneAtualizacaoCadastral(atualizacaoCadastral.getLinhaCliente("telefoneResponsavel"), FoneTipo.RESIDENCIAL,
+												matriculaImovel, matriculaResponsavel, clientesFone);
+		salvarClienteFoneAtualizacaoCadastral(atualizacaoCadastral.getLinhaCliente("celularResponsavel"), FoneTipo.CELULAR,
+												matriculaImovel, matriculaResponsavel, clientesFone);
+		
 		return clienteResponsavelTxt;
 	}
 
@@ -371,8 +271,6 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		if (matriculaUsuario == 0) {
 			return null;
 		}
-		
-		ArrayList<ClienteFoneAtualizacaoCadastral> clientesFone = new ArrayList<ClienteFoneAtualizacaoCadastral>();
 		
 		ClienteAtualizacaoCadastral clienteUsuarioTxt;
 		clienteUsuarioTxt = new ClienteAtualizacaoCadastral();
@@ -394,49 +292,32 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		clienteUsuarioTxt.setCodigoCep(Integer.parseInt(atualizacaoCadastral.getLinhaImovel("cep")));
 		clienteUsuarioTxt.setNomeMunicipio(atualizacaoCadastral.getLinhaImovel("municipio"));
 
-		if (!atualizacaoCadastral.getLinhaCliente("telefoneUsuario").trim().equals("")) {
+
+		ArrayList<ClienteFoneAtualizacaoCadastral> clientesFone = new ArrayList<ClienteFoneAtualizacaoCadastral>();
+		
+		salvarClienteFoneAtualizacaoCadastral(atualizacaoCadastral.getLinhaCliente("telefoneUsuario"), FoneTipo.RESIDENCIAL,
+												matriculaImovel, matriculaUsuario, clientesFone);
+		salvarClienteFoneAtualizacaoCadastral(atualizacaoCadastral.getLinhaCliente("celularUsuario"), FoneTipo.CELULAR, 
+												matriculaImovel, matriculaUsuario, clientesFone);
+		
+		return clienteUsuarioTxt;
+	}
+
+	private void salvarClienteFoneAtualizacaoCadastral(String tipoClientFone, Integer foneTipo, int matriculaImovel, int matriculaCliente, 
+														ArrayList<ClienteFoneAtualizacaoCadastral> clientesFone) {
+		if (!tipoClientFone.trim().equals("")) {
 			ClienteFoneAtualizacaoCadastral clienteFone = new ClienteFoneAtualizacaoCadastral();
 
-			// clienteFone.setIdCliente(id);
-			clienteFone.setDdd(atualizacaoCadastral.getLinhaCliente("telefoneUsuario").substring(0, 2));
-			clienteFone.setTelefone(atualizacaoCadastral.getLinhaCliente("telefoneUsuario").substring(2));
-			clienteFone.setIdFoneTipo(FoneTipo.RESIDENCIAL);
-			clienteFone.setIdCliente(matriculaUsuario);
+			clienteFone.setDdd(tipoClientFone.substring(0, 2));
+			clienteFone.setTelefone(tipoClientFone.substring(2));
+			clienteFone.setIdFoneTipo(foneTipo);
+			clienteFone.setIdCliente(matriculaCliente);
 
 			clientesFone.add(clienteFone);
 
 			try {
 				ClienteFoneAtualizacaoCadastral clienteFoneAtualizacaoCadastral = controladorCliente
-						.pesquisarClienteFoneAtualizacaoCadastral(Integer.valueOf(matriculaUsuario), Integer.valueOf(matriculaImovel),
-								FoneTipo.RESIDENCIAL, Integer.valueOf(ClienteRelacaoTipo.USUARIO), null).iterator().next();
-
-				salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, clienteFoneAtualizacaoCadastral, clienteFone, matriculaImovel);
-			} catch (NoSuchElementException e) {
-				ClienteFoneAtualizacaoCadastral clienteFoneAtualizacaoCadastral = new ClienteFoneAtualizacaoCadastral();
-				try {
-					salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, clienteFoneAtualizacaoCadastral, clienteFone, matriculaImovel);
-				} catch (ControladorException e1) {
-					e1.printStackTrace();
-				}
-			} catch (ControladorException e) {
-				e.printStackTrace();
-			}
-		}
-
-		if (!atualizacaoCadastral.getLinhaCliente("celularUsuario").trim().equals("")) {
-			ClienteFoneAtualizacaoCadastral clienteFone = new ClienteFoneAtualizacaoCadastral();
-
-			// clienteFone.setIdCliente(id);
-			clienteFone.setDdd(atualizacaoCadastral.getLinhaCliente("celularUsuario").substring(0, 2));
-			clienteFone.setTelefone(atualizacaoCadastral.getLinhaCliente("celularUsuario").substring(2));
-			clienteFone.setIdFoneTipo(FoneTipo.CELULAR);
-			clienteFone.setIdCliente(matriculaUsuario);
-
-			clientesFone.add(clienteFone);
-
-			try {
-				ClienteFoneAtualizacaoCadastral clienteFoneAtualizacaoCadastral = controladorCliente
-						.pesquisarClienteFoneAtualizacaoCadastral(Integer.valueOf(matriculaUsuario), Integer.valueOf(matriculaImovel), FoneTipo.CELULAR,
+						.pesquisarClienteFoneAtualizacaoCadastral(Integer.valueOf(matriculaCliente), Integer.valueOf(matriculaImovel), FoneTipo.CELULAR,
 								Integer.valueOf(ClienteRelacaoTipo.USUARIO), null).iterator().next();
 
 				salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, clienteFoneAtualizacaoCadastral, clienteFone, matriculaImovel);
@@ -451,7 +332,6 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 				e.printStackTrace();
 			}
 		}
-		return clienteUsuarioTxt;
 	}
 
 	private void salvarImovelRetorno(ImovelAtualizacaoCadastral imovelTxt) throws ControladorException {
