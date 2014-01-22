@@ -1,6 +1,7 @@
 package gcom.gui.cadastro;
 
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastral;
+import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastralImovel;
 import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
@@ -13,14 +14,17 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 import javax.ejb.EJBException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.fileupload.DiskFileUpload;
 import org.apache.commons.fileupload.FileItem;
@@ -93,6 +97,25 @@ public class CarregarDadosAtualizacaoCadastralAction extends GcomAction {
 						}
 
 						AtualizacaoCadastral atualizacao =  Fachada.getInstancia().carregarImovelAtualizacaoCadastral(buffer, imagens);
+						
+						if (atualizacao.existeErroNoCadastro()){
+							HttpSession sessao = httpServletRequest.getSession(false);
+							Map<String, List<String>> mapErros = new HashMap<String, List<String>>();
+							
+							for (AtualizacaoCadastralImovel imovel: atualizacao.getAtualizacoesImovel()){
+								List<String> erros = mapErros.get(String.valueOf(imovel.getMatricula()));
+								if (erros == null){
+									erros = new ArrayList<String>();
+									mapErros.put(String.valueOf(imovel.getMatricula()), erros);
+								}
+								erros.addAll(imovel.getMensagensErro());
+							}
+							
+							httpServletRequest.setAttribute("colecaoErrosCadastro", mapErros);
+							
+							retorno = actionMapping.findForward("CarregarDadosAtualizacaoCadastralAction");
+						}
+						
 						zipInputStream.close();
 					}catch (Exception e) {
 						if (e instanceof EJBException){

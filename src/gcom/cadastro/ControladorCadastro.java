@@ -7751,7 +7751,7 @@ public class ControladorCadastro implements SessionBean {
 				ParserUtil parserTipo = new ParserUtil(line);
 				String registroTipo = parserTipo.obterDadoParserTrim(2);
 
-				String conteudo = line.substring(2);
+				String conteudo = new String(line.substring(2).getBytes(), "UTF-8");
 				ParserUtil parserConteudo = new ParserUtil(conteudo);
 				
 				if ("00".equals(registroTipo)) {

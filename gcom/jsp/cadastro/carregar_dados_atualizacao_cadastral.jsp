@@ -148,6 +148,53 @@
                    </table>
                   </td>
                </tr>
+               
+
+              <logic:present name="colecaoErrosCadastro">
+              <tr>
+                <td colspan="2">
+                  <strong>
+                    <font color="#FF0000">Arquivo de atualizaç&atilde;o cadastral possui erros</font>
+                  </strong> 
+                </td>
+              </tr>
+              <tr>
+                <td colspan="2">                
+                  <div style="width: 100%; height: 100%; overflow: auto;">
+                    <table width="100%" bgcolor="#99CCFF">
+                      <tr bordercolor="#FFFFFF" bgcolor="#90c7fc">
+                        <td width="140"> Matr&iacute;cula do im&oacute;vel</td>
+                        <td> Descri&ccedil;&atilde;o do erro </td>
+                      </tr>
+                      <% String cor = "#cbe5fe";%>
+                      <logic:iterate name="colecaoErrosCadastro" id="element">
+                      <%  if (cor.equalsIgnoreCase("#cbe5fe")){ 
+                        cor = "#FFFFFF";%>
+                      <tr bgcolor="#FFFFFF" height="18">  
+                      <%} else{ 
+                        cor = "#cbe5fe";%>
+                      <tr bgcolor="#cbe5fe" height="18">    
+                      <%}%>
+                  
+                        <td><bean:write name="element" property="key"/></td>
+                        <td>
+                          <table>
+                            <logic:iterate name="element" property="value" id="erro">
+                              <tr>
+                              <td><bean:write name="erro"/></td>
+                              </tr>
+                            </logic:iterate>
+                          
+                          </table>
+                        </td>
+                      </tr>                      
+                      </logic:iterate>
+                    </table>
+                  </div>
+                </td>
+            </tr>
+            </logic:present>
+                       
             </table>
           	<p class="style1">&nbsp;</p>
           </td>

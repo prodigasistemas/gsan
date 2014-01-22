@@ -22,11 +22,19 @@ public class AtualizacaoCadastralImovel {
 
 	private List<String> mensagensErro = new ArrayList<String>();
 
-	private boolean erroCadastro = false;
-	
 	private DadoAtualizacaoImovel dadosImovel = new DadoAtualizacaoImovel();
 
 	private List<DadoAtualizacaoRamoAtividade> dadosRamoAtividade = new ArrayList<DadoAtualizacaoRamoAtividade>();
+	
+	private AtualizacaoCadastral atualizacaoArquivo;
+	
+	public AtualizacaoCadastralImovel(){
+		
+	}
+	
+	public AtualizacaoCadastralImovel(AtualizacaoCadastral atualizacaoArquivo) {
+		this.atualizacaoArquivo = atualizacaoArquivo;
+	}
 
 	public List<String> getNomesImagens() {
 		return nomesImagens;
@@ -105,7 +113,7 @@ public class AtualizacaoCadastralImovel {
 	}
 
 	public boolean cadastroInvalido() {
-		return erroCadastro;
+		return mensagensErro.size() > 0;
 	}
 
 	public List<String> getMensagensErro() {
@@ -113,7 +121,7 @@ public class AtualizacaoCadastralImovel {
 	}
 
 	public void addMensagemErro(String erro) {
-		erroCadastro = true;
+		atualizacaoArquivo.cadastroComErro();
 		mensagensErro.add(erro);
 	}
 	
