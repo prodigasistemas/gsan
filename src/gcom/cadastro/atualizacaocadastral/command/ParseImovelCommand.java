@@ -26,12 +26,12 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 	}
 
 	public void execute(AtualizacaoCadastral atualizacao) throws Exception {
-		Map<String, String> linha = atualizacao.getLinhaImovel();
+		Map<String, String> linha = atualizacao.getImovelAtual().getLinhaImovel();
 		
 		Integer matricula = Integer.parseInt(parser.obterDadoParser(9));
 		linha.put("matricula", "" + matricula);
 
-		for (String nomeImagem : atualizacao.getNomesImagens()) {
+		for (String nomeImagem : atualizacao.getImovelAtual().getNomesImagens()) {
 			if (nomeImagem.contains("" + matricula)) {
 				File file = new File(nomeImagem);
 
@@ -167,9 +167,9 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 	}
 
 	private void validaCamposImovel(AtualizacaoCadastral atualizacao) {
-		Map<String, String> linha = atualizacao.getLinhaImovel();
+		Map<String, String> linha = atualizacao.getImovelAtual().getLinhaImovel();
 		if (linha.get("latitude") == null || linha.get("longitude") == null){
-			atualizacao.addMensagemErro("Coordenadas geográficas inválidas");
+			atualizacao.getImovelAtual().addMensagemErro("Coordenadas geográficas inválidas");
 		}
 		
 		boolean existeEconomia = false;
@@ -181,15 +181,15 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 					
 					char codigo = key.replace("subcategoria", "").charAt(0);
 					TipoEconomia tipo = TipoEconomia.getByCodigo(codigo);
-					if (!atualizacao.getDadosImovel().contemTipoEconomia(tipo)){
-						atualizacao.getDadosImovel().addTipoEconomia(tipo);
+					if (!atualizacao.getImovelAtual().getDadosImovel().contemTipoEconomia(tipo)){
+						atualizacao.getImovelAtual().getDadosImovel().addTipoEconomia(tipo);
 					}
 				}
 			}
 		}
 		
 		if (!existeEconomia){
-			atualizacao.addMensagemErro("Imóvel deve ter associado ao menos uma economia.");
+			atualizacao.getImovelAtual().addMensagemErro("Imóvel deve ter associado ao menos uma economia.");
 		}
 	}
 }

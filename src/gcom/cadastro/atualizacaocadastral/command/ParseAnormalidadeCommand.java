@@ -19,7 +19,7 @@ public class ParseAnormalidadeCommand extends AbstractAtualizacaoCadastralComman
 	}
 
 	public void execute(AtualizacaoCadastral atualizacao) throws Exception {
-		Map<String, String> linha = atualizacao.getLinhaAnormalidade();
+		Map<String, String> linha = atualizacao.getImovelAtual().getLinhaAnormalidade();
 
 		String matriculaImovelAnormalidade = parser.obterDadoParser(9).trim();
 		linha.put("matriculaImovelAnormalidade", matriculaImovelAnormalidade);

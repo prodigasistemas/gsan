@@ -7741,13 +7741,11 @@ public class ControladorCadastro implements SessionBean {
 	 * @param nomesImagens
 	 * @throws ControladorException
 	 */
-	public void carregarImovelAtualizacaoCadastral(BufferedReader buffer,
-			ArrayList<String> nomesImagens) throws Exception {
-
+	public AtualizacaoCadastral carregarImovelAtualizacaoCadastral(BufferedReader buffer, ArrayList<String> nomesImagens) throws Exception {
+		AtualizacaoCadastral atualizacao = new AtualizacaoCadastral();
+		
 		try {
 			String line = null;
-
-			AtualizacaoCadastral atualizacao = new AtualizacaoCadastral();
 
 			while ((line = buffer.readLine()) != null) {
 				ParserUtil parserTipo = new ParserUtil(line);
@@ -7761,14 +7759,14 @@ public class ControladorCadastro implements SessionBean {
 							repositorioImovel, getControladorImovel(), getControladorCliente());
 					command.execute(atualizacao);
 				} else if ("01".equals(registroTipo)) {
-					atualizacao.inicializaLeituras();
+					atualizacao.novaAtualizacaoImovel();
 
 					AbstractAtualizacaoCadastralCommand command = new ParseClienteCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
 							repositorioImovel, getControladorImovel(), getControladorCliente());
 					command.execute(atualizacao);
 				}
 				
-				if (!atualizacao.isImovelAprovado()){
+				if (!atualizacao.getImovelAtual().isImovelAprovado()){
 					if ("02".equals(registroTipo)) {
 						AbstractAtualizacaoCadastralCommand command = new ParseImovelCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
 								repositorioImovel, getControladorImovel(), getControladorCliente());
@@ -7790,23 +7788,17 @@ public class ControladorCadastro implements SessionBean {
 								repositorioImovel, getControladorImovel(), getControladorCliente());
 						command.execute(atualizacao);
 						
-						atualizacao.liberarAtualizacao();
+						atualizacao.liberarValidacao();
 					}
 				}
 				
-				if (atualizacao.atualizacaoLiberada()){
+				if (atualizacao.validacaoLiberada()){
 					AbstractAtualizacaoCadastralCommand validaCommand = new EfetuarValidacoesAtualizacaoCadastralCommand();
 					validaCommand.execute(atualizacao);
-					
-					AbstractAtualizacaoCadastralCommand command = new MontarObjetosAtualizacaoCadastralCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
-							repositorioImovel, getControladorImovel(), getControladorCliente());
-					command.execute(atualizacao);
-					
-					atualizacao.liberarAtualizacao();
 				}
 				
-				if (atualizacao.atualizacaoLiberada()){
-					MontarObjetosAtualizacaoCadastralCommand command = new MontarObjetosAtualizacaoCadastralCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
+				if(atualizacao.validacaoLiberada() && !atualizacao.getImovelAtual().cadastroInvalido()){
+					AbstractAtualizacaoCadastralCommand command = new MontarObjetosAtualizacaoCadastralCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
 							repositorioImovel, getControladorImovel(), getControladorCliente());
 					command.execute(atualizacao);
 				}
@@ -7819,11 +7811,8 @@ public class ControladorCadastro implements SessionBean {
 				repositorioCadastro.atualizarArquivoTextoAtualizacaoCadstral(atualizacao.getArquivoTexto().getId(),
 						SituacaoTransmissaoLeitura.TRANSMITIDO);
 			}
-		} catch (BaseRuntimeException e) {
-			throw e;
 		} catch (Exception e) {
-			logger.error("Erro ao carregar arquivo de atualizacao cadastral.");
-			throw new EJBException(new Exception("Erro ao carregar arquivo de atualizacao cadastral."));
+			throw e;
 		} finally {
 			if (buffer != null) {
 				try {
@@ -7832,6 +7821,8 @@ public class ControladorCadastro implements SessionBean {
 				}
 			}
 		}
+		
+		return atualizacao;
 	}
 
 	/**

@@ -23,7 +23,7 @@ public class ParseRamoAtividadeCommand extends AbstractAtualizacaoCadastralComma
 
 	public void execute(AtualizacaoCadastral atualizacao) throws Exception {
 		
-		Map<String, String> linha = atualizacao.getLinhaRamoAtividade();
+		Map<String, String> linha = atualizacao.getImovelAtual().getLinhaRamoAtividade();
 
 		String matriculaImovelRamoAtividade = parser.obterDadoParser(9).trim();
 		linha.put("matriculaImovelRamoAtividade", matriculaImovelRamoAtividade);
@@ -36,7 +36,7 @@ public class ParseRamoAtividadeCommand extends AbstractAtualizacaoCadastralComma
 		
 		DadoAtualizacaoRamoAtividade ramo = new DadoAtualizacaoRamoAtividade();
 		ramo.setId(idRamoAtividade);
-		atualizacao.addDadoRamoAtividade(ramo);
+		atualizacao.getImovelAtual().addDadoRamoAtividade(ramo);
 
 		boolean existeRamoAtividade = repositorioCadastro.existeImovelRamoAtividadeAtualizacaoCadastral(matriculaImovel, idRamoAtividade);
 

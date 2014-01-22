@@ -1,5 +1,6 @@
 package gcom.gui.cadastro;
 
+import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastral;
 import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
@@ -27,6 +28,7 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.jboss.logging.Logger;
 
 /**
  * 
@@ -36,6 +38,8 @@ import org.apache.struts.action.ActionMapping;
  * @date 18/05/2009
  */
 public class CarregarDadosAtualizacaoCadastralAction extends GcomAction {
+	
+	private static Logger logger = Logger.getLogger(CarregarDadosAtualizacaoCadastralAction.class);
 
 	public ActionForward execute(ActionMapping actionMapping,
 			ActionForm actionForm, HttpServletRequest httpServletRequest,
@@ -88,7 +92,7 @@ public class CarregarDadosAtualizacaoCadastralAction extends GcomAction {
 							}
 						}
 
-						Fachada.getInstancia().carregarImovelAtualizacaoCadastral(buffer, imagens);
+						AtualizacaoCadastral atualizacao =  Fachada.getInstancia().carregarImovelAtualizacaoCadastral(buffer, imagens);
 						zipInputStream.close();
 					}catch (Exception e) {
 						if (e instanceof EJBException){
@@ -97,6 +101,7 @@ public class CarregarDadosAtualizacaoCadastralAction extends GcomAction {
 								throw new ActionServletException(t.getMessage(), ((BaseRuntimeException) t).getParametros());
 							}
 						}
+						logger.error("Erro ao carregar arquivo de atualizacao.");
 						throw new ActionServletException("atencao.erro_arquivo_carregado");
 					}
 				} else {
