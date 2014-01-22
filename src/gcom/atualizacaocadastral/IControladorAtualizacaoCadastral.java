@@ -9,7 +9,4 @@ public interface IControladorAtualizacaoCadastral {
 	
 	public Collection<IImovel> obterImoveisParaAtualizar() throws ControladorException;
 	
-	public void incluirImovelRetorno(IImovel imovelAtualizacaoCadastral);
-
-
 }
