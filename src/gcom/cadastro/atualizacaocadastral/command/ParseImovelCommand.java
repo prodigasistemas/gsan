@@ -2,11 +2,13 @@ package gcom.cadastro.atualizacaocadastral.command;
 
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.cliente.ControladorClienteLocal;
+import gcom.cadastro.endereco.LogradouroTipo;
 import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.cadastro.imovel.ImagemAtualizacaoCadastral;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.util.ControladorUtilLocal;
+import gcom.util.ErroRepositorioException;
 import gcom.util.ParserUtil;
 
 import java.awt.image.BufferedImage;
@@ -16,6 +18,8 @@ import java.util.Date;
 import java.util.Map;
 
 import javax.imageio.ImageIO;
+
+import org.apache.commons.lang.StringUtils;
 
 public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 
@@ -166,30 +170,56 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 		validaCamposImovel(atualizacao);
 	}
 
-	private void validaCamposImovel(AtualizacaoCadastral atualizacao) {
-		Map<String, String> linha = atualizacao.getImovelAtual().getLinhaImovel();
-		if (linha.get("latitude") == null || linha.get("longitude") == null){
-			atualizacao.getImovelAtual().addMensagemErro("Coordenadas geográficas inválidas");
+	private void validaCamposImovel(AtualizacaoCadastral atualizacao) throws Exception {
+		AtualizacaoCadastralImovel imovel = atualizacao.getImovelAtual(); 
+		Map<String, String> linha = imovel.getLinhaImovel();
+		
+		if (StringUtils.isEmpty(linha.get("latitude"))){
+			imovel.addMensagemErro("Latitude inválida");
+		}else{
+			if (StringUtils.containsOnly(linha.get("latitude").trim(), new char[]{'0'})){
+				imovel.addMensagemErro("Latitude inválida");
+			}
+		}
+		
+		if (StringUtils.isEmpty(linha.get("longitude"))){
+			imovel.addMensagemErro("Longitude inválida");
+		}
+		else{
+			if (StringUtils.containsOnly(linha.get("longitude").trim(), new char[]{'0'})){
+				imovel.addMensagemErro("Longitude inválida");
+			}
 		}
 		
 		boolean existeEconomia = false;
 		for(String key: linha.keySet()){
 			if (key.contains("subcategoria")){
 				String valor =  linha.get(key).trim();
-				if (valor != null && valor.trim().length() > 0 && valor.replace("0", "").trim().length() > 0){
+				if (StringUtils.isNotEmpty(valor) && !StringUtils.containsOnly(valor.trim(), new char[]{'0'})){
 					existeEconomia = true;
 					
 					char codigo = key.replace("subcategoria", "").charAt(0);
 					TipoEconomia tipo = TipoEconomia.getByCodigo(codigo);
-					if (!atualizacao.getImovelAtual().getDadosImovel().contemTipoEconomia(tipo)){
-						atualizacao.getImovelAtual().getDadosImovel().addTipoEconomia(tipo);
+					if (!imovel.getDadosImovel().contemTipoEconomia(tipo)){
+						imovel.getDadosImovel().addTipoEconomia(tipo);
 					}
 				}
 			}
 		}
 		
 		if (!existeEconomia){
-			atualizacao.getImovelAtual().addMensagemErro("Imóvel deve ter associado ao menos uma economia.");
+			imovel.addMensagemErro("Imóvel deve possuir ao menos uma economia.");
+		}
+		
+		String tipoLogradouro = linha.get("idTipoLogradouroImovel");
+		
+		if (StringUtils.isEmpty(tipoLogradouro)){
+			imovel.addMensagemErro("Tipo do logradouro do imóvel inválido.");
+		}else{
+			LogradouroTipo tipo = repositorioImovel.pesquisarTipoLogradouro(Integer.valueOf(tipoLogradouro));
+			if (tipo == null){
+				imovel.addMensagemErro("Tipo do logradouro do imóvel inexistente.");
+			}
 		}
 	}
 }

@@ -240,16 +240,16 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 			atualizacao.getImovelAtual().addMensagemErro("Nome de proprietário inválido.");
 		}
 		
-		if (Util.cpfCnpjInvalido(linha.get("cnpjCpfUsuario"))){
+		if (StringUtils.isNotEmpty(linha.get("cnpjCpfUsuario")) && Util.cpfCnpjInvalido(linha.get("cnpjCpfUsuario"))){
 			atualizacao.getImovelAtual().addMensagemErro("CPF/CNPJ de usuário inválido.");
 			limparDadosUsuario(linha);
 		}
 		
-		if (Util.cpfCnpjInvalido(linha.get("cnpjCpfProprietario"))){
+		if (StringUtils.isNotEmpty(linha.get("cnpjCpfProprietario")) && Util.cpfCnpjInvalido(linha.get("cnpjCpfProprietario"))){
 			atualizacao.getImovelAtual().addMensagemErro("CPF/CNPJ de proprietário inválido.");
 		}
 
-		if (Util.cpfCnpjInvalido(linha.get("cnpjCpfResponsavel"))){
+		if (StringUtils.isNotEmpty(linha.get("cnpjCpfResponsavel")) && Util.cpfCnpjInvalido(linha.get("cnpjCpfResponsavel"))){
 			atualizacao.getImovelAtual().addMensagemErro("CPF/CNPJ de responsável inválido.");
 		}
 		
