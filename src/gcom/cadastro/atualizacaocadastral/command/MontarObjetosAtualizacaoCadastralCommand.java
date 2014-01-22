@@ -26,12 +26,12 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.NoSuchElementException;
 
 public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizacaoCadastralCommand {
 	
 	private AtualizacaoCadastral atualizacaoCadastral;
-
 	private AtualizacaoCadastralImovel atualizacaoCadastralImovel;
 
 	public MontarObjetosAtualizacaoCadastralCommand(ParserUtil parser, IRepositorioCadastro repositorioCadastro, ControladorUtilLocal controladorUtil,
@@ -49,12 +49,13 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	public void salvarObjetosAtualizacaoCadastral() throws Exception {
 		int matriculaImovel = Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("matricula"));
 
-		salvarImovelSubcategoriaAtualizacaoCadastral(matriculaImovel);
+		salvarImovelSubcategoria(matriculaImovel);
 
 		int matriculaUsuario = Integer.parseInt(atualizacaoCadastralImovel.getLinhaCliente("matriculaUsuario"));
 		int matriculaResponsavel = Integer.parseInt(atualizacaoCadastralImovel.getLinhaCliente("matriculaResponsavel"));
 		int matriculaProprietario = Integer.parseInt(atualizacaoCadastralImovel.getLinhaCliente("matriculaProprietario"));
 
+		salvarImovelSubcategoria(matriculaImovel);
 		salvarClienteUsuario(matriculaUsuario, matriculaImovel, matriculaResponsavel, matriculaProprietario);
 		salvarClienteResponsavel(matriculaImovel, matriculaResponsavel);
 		salvarClienteProprietario(matriculaImovel, matriculaProprietario);
@@ -101,58 +102,44 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		}		
 	}
 
-	private void salvarImovelSubcategoriaAtualizacaoCadastral(int matriculaImovel) throws ControladorException {
+	private void salvarImovelSubcategoria(int matriculaImovel) throws ControladorException {
+		List<ImovelSubcategoriaAtualizacaoCadastral> subcategorias = new ArrayList<ImovelSubcategoriaAtualizacaoCadastral>();
+		verificarSubcategorias(matriculaImovel, "R", "RESIDENCIAL", subcategorias);
+		verificarSubcategorias(matriculaImovel, "C", "COMERCIAL", subcategorias);
+		verificarSubcategorias(matriculaImovel, "I", "INDUSTRIAL", subcategorias);
+		verificarSubcategorias(matriculaImovel, "P", "PUBLICO", subcategorias);
 		
-		// Imovel Subcategoria
-		short qtdEconomias = 0;
-		String descricaoSubcategoria = "";
-		String descricaoCategoria = "";
-		int idCategoria = 0;
-		for (int i = 0; i < 16; i++) {
-			if (i <= 3) {
-				qtdEconomias = Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("subcategoriaR" + (i + 1)));
-				idCategoria = 1;
-				descricaoSubcategoria = "R" + (i + 1);
-				descricaoCategoria = "RESIDENCIAL";
-			} else if (i >= 4 && i < 8) {
-				qtdEconomias = Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("subcategoriaC" + (i - 3)));
-				idCategoria = 2;
-				descricaoSubcategoria = "C" + (i - 3);
-				descricaoCategoria = "COMERCIAL";
-			} else if (i >= 8 && i < 12) {
-				qtdEconomias = Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("subcategoriaI" + (i - 7)));
-				idCategoria = 3;
-				descricaoSubcategoria = "I" + (i - 7);
-				descricaoCategoria = "INDUSTRIAL";
+		for (ImovelSubcategoriaAtualizacaoCadastral subcategoria : subcategorias) {
+			Collection subCategoria = controladorImovel.pesquisarImovelSubcategoriaAtualizacaoCadastral(matriculaImovel, subcategoria.getIdSubcategoria(), null);
+			ImovelSubcategoriaAtualizacaoCadastral imovelSubcategoriaAtualizacaoCadastral = null;
+			if (subCategoria.isEmpty()) {
+				imovelSubcategoriaAtualizacaoCadastral = new ImovelSubcategoriaAtualizacaoCadastral();
 			} else {
-				qtdEconomias = Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("subcategoriaP" + (i - 11)));
-				idCategoria = 4;
-				descricaoSubcategoria = "P" + (i - 11);
-				descricaoCategoria = "PUBLICO";
+				imovelSubcategoriaAtualizacaoCadastral = (ImovelSubcategoriaAtualizacaoCadastral) subCategoria.iterator().next();
 			}
 
-			if (qtdEconomias != 0) {
-				ImovelSubcategoriaAtualizacaoCadastral subcategoria = new ImovelSubcategoriaAtualizacaoCadastral();
+			salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, imovelSubcategoriaAtualizacaoCadastral, subcategoria, matriculaImovel);
+		}
+	}
 
+	private void verificarSubcategorias(int matriculaImovel, String descricaoSubcategoria, String descricaoCategoria, List<ImovelSubcategoriaAtualizacaoCadastral> subcategorias) {
+		for (int j = 1; j < 5; j++) {
+			descricaoSubcategoria += j;
+			short qtdEconomias = Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("subcategoria" + descricaoSubcategoria));
+			if(qtdEconomias != 0){
+				ImovelSubcategoriaAtualizacaoCadastral subcategoria = new ImovelSubcategoriaAtualizacaoCadastral();
+				
 				subcategoria.setIdImovel(matriculaImovel);
 				subcategoria.setQuantidadeEconomias(qtdEconomias);
-				subcategoria.setIdSubcategoria(i + 1);
-				subcategoria.setIdCategoria(idCategoria);
 				subcategoria.setDescricaoSubcategoria(descricaoSubcategoria);
 				subcategoria.setDescricaoCategoria(descricaoCategoria);
 
-				Collection subCategoria = controladorImovel.pesquisarImovelSubcategoriaAtualizacaoCadastral(matriculaImovel, subcategoria.getIdSubcategoria(),
-						null);
-				ImovelSubcategoriaAtualizacaoCadastral imovelSubcategoriaAtualizacaoCadastral = null;
-				if (subCategoria.isEmpty()) {
-					imovelSubcategoriaAtualizacaoCadastral = new ImovelSubcategoriaAtualizacaoCadastral();
-				} else {
-					imovelSubcategoriaAtualizacaoCadastral = (ImovelSubcategoriaAtualizacaoCadastral) subCategoria.iterator().next();
-				}
-
-				salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, imovelSubcategoriaAtualizacaoCadastral, subcategoria, matriculaImovel);
+				TipoSubcategoria tipoSubcategoria = TipoSubcategoria.getByCodigo(descricaoSubcategoria);
+				subcategoria.setIdCategoria(tipoSubcategoria.getIdCategoria());
+				subcategoria.setIdSubcategoria(tipoSubcategoria.getIdSubcategoria());
+				
+				subcategorias.add(subcategoria);
 			}
-
 		}
 	}
 
