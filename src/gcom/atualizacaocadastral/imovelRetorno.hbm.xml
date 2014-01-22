@@ -8,7 +8,8 @@
           		<param name="sequence">atualizacaocadastral.sequence_imovel_retorno</param>
       		</generator>
 		</id>
-		
+
+		<property name="idImovel" type="java.lang.String" column="imov_id" not-null="true" length="5"/>
 		<property name="numeroImovel" type="java.lang.String" column="imac_nnimovel" not-null="true" length="5"/>
 		<property name="complementoEndereco" type="java.lang.String" column="imac_dscomplementoendereco" length="25"/>
 		<property name="numeroPontosUtilizacao" type="java.lang.Short" column="imac_nnpontosutilizacao" length="2"/>

@@ -221,9 +221,9 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 	private void validaCampos(AtualizacaoCadastral atualizacao) throws Exception {
 		Map<String, String> linha = atualizacao.getImovelAtual().getLinhaCliente();
 		
-		ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral = repositorioImovel.pesquisarImovelControleAtualizacaoCadastral(Integer.valueOf(atualizacao.getImovelAtual().getMatricula()));
+		ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral = repositorioImovel.pesquisarImovelControleAtualizacaoCadastral(atualizacao.getImovelAtual().getMatricula());
 		
-		if (imovelControleAtualizacaoCadastral.getSituacaoAtualizacaoCadastral().getId() == SituacaoAtualizacaoCadastral.APROVADO){
+		if (imovelControleAtualizacaoCadastral != null && imovelControleAtualizacaoCadastral.getSituacaoAtualizacaoCadastral().getId() == SituacaoAtualizacaoCadastral.APROVADO){
 			atualizacao.getImovelAtual().addMensagemErro("Imóvel com situação 'APROVADO'");
 			atualizacao.getImovelAtual().setImovelAprovado(true);
 		}

@@ -1,5 +1,6 @@
 package gcom.atualizacaocadastral;
 
+import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.imovel.IImovel;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
@@ -30,7 +31,10 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		
 		try {
 			
-			consulta = "";
+			consulta = " from ImovelRetorno imovelRetorno"
+					+ " where imovelRetorno.idImovel in "
+						+ " ( select imovelCotrole.idImovel from ImovelControleAtualizacaoCadastral imovelControle "
+						+ " where situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  + ") " ;
 			
 			retorno = (Collection<IImovel>) session.createQuery(consulta);
 		} catch (HibernateException e) {
