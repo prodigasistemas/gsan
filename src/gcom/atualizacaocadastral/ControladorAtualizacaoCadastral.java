@@ -3,8 +3,6 @@ package gcom.atualizacaocadastral;
 import gcom.cadastro.imovel.IImovel;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
-import gcom.util.IRepositorioUtil;
-import gcom.util.RepositorioUtilHBM;
 
 import java.rmi.RemoteException;
 import java.util.Collection;
@@ -24,8 +22,6 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 	private static Logger logger = Logger.getLogger(ControladorAtualizacaoCadastral.class);
 	
 	private IRepositorioAtualizacaoCadastral repositorioAtualizacaoCadastral = null;
-	
-	private IRepositorioUtil repositorioUtil = null;
 	
 	SessionContext sessionContext;
 	
@@ -54,9 +50,6 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			logger.error("Erro ao pesquisar imoveis para atualizar.", e);
 		}
 		return imoveis;
-	}
-
-	public void incluirImovelRetorno(IImovel imovelAtualizacaoCadastral) {
 	}
 
 
