@@ -105,10 +105,10 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 
 	private void salvarImovelSubcategoria() throws ControladorException {
 		List<ImovelSubcategoriaAtualizacaoCadastral> subcategorias = new ArrayList<ImovelSubcategoriaAtualizacaoCadastral>();
-		verificarSubcategorias("R", "RESIDENCIAL", subcategorias);
-		verificarSubcategorias("C", "COMERCIAL", subcategorias);
-		verificarSubcategorias("I", "INDUSTRIAL", subcategorias);
-		verificarSubcategorias("P", "PUBLICO", subcategorias);
+		subcategorias.addAll(buildImovelSubcategorias(TipoEconomia.RESIDENCIAL));
+		subcategorias.addAll(buildImovelSubcategorias(TipoEconomia.COMERCIAL));
+		subcategorias.addAll(buildImovelSubcategorias(TipoEconomia.INDUSTRIAL));
+		subcategorias.addAll(buildImovelSubcategorias(TipoEconomia.PUBLICO));
 		
 		for (ImovelSubcategoriaAtualizacaoCadastral subcategoria : subcategorias) {
 			Collection subCategoria = controladorImovel.pesquisarImovelSubcategoriaAtualizacaoCadastral(matriculaImovel, subcategoria.getIdSubcategoria(), null);
@@ -123,7 +123,11 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		}
 	}
 
-	private void verificarSubcategorias(String descricaoSubcategoria, String descricaoCategoria, List<ImovelSubcategoriaAtualizacaoCadastral> subcategorias) {
+	private List<ImovelSubcategoriaAtualizacaoCadastral> buildImovelSubcategorias(TipoEconomia tipoEconomia) {
+		List<ImovelSubcategoriaAtualizacaoCadastral> subcategorias = new ArrayList<ImovelSubcategoriaAtualizacaoCadastral>();
+		
+		String descricaoSubcategoria = String.valueOf(tipoEconomia.getCodigo());
+		
 		for (int j = 1; j < 5; j++) {
 			descricaoSubcategoria += j;
 			short qtdEconomias = Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("subcategoria" + descricaoSubcategoria));
@@ -133,7 +137,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 				subcategoria.setIdImovel(matriculaImovel);
 				subcategoria.setQuantidadeEconomias(qtdEconomias);
 				subcategoria.setDescricaoSubcategoria(descricaoSubcategoria);
-				subcategoria.setDescricaoCategoria(descricaoCategoria);
+				subcategoria.setDescricaoCategoria(tipoEconomia.getDescricao());
 
 				TipoSubcategoria tipoSubcategoria = TipoSubcategoria.getByCodigo(descricaoSubcategoria);
 				subcategoria.setIdCategoria(tipoSubcategoria.getIdCategoria());
@@ -142,6 +146,8 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 				subcategorias.add(subcategoria);
 			}
 		}
+		
+		return subcategorias;
 	}
 
 	private ImovelAtualizacaoCadastral buildImovelTxt() {
