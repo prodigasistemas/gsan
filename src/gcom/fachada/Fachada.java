@@ -234,6 +234,7 @@ import gcom.cadastro.EnvioEmail;
 import gcom.cadastro.ImovelInscricaoAlteradaHelper;
 import gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCadastralHelper;
 import gcom.cadastro.atualizacaocadastral.bean.DadosTabelaAtualizacaoCadastralHelper;
+import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificado;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoBinario;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoCritica;
@@ -39061,8 +39062,8 @@ public class Fachada {
 		}
 	}
 
-	public void carregarImovelAtualizacaoCadastral(BufferedReader buffer, ArrayList<String> nomesImagens) throws Exception {
-		this.getControladorCadastro().carregarImovelAtualizacaoCadastral(
+	public AtualizacaoCadastral carregarImovelAtualizacaoCadastral(BufferedReader buffer, ArrayList<String> nomesImagens) throws Exception {
+		return this.getControladorCadastro().carregarImovelAtualizacaoCadastral(
 				buffer, nomesImagens);
 	}
 	

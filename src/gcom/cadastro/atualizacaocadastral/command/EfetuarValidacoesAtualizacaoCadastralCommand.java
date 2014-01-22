@@ -22,9 +22,9 @@ public class EfetuarValidacoesAtualizacaoCadastralCommand extends AbstractAtuali
 
 	@Override
 	public void execute(AtualizacaoCadastral atualizacao) throws Exception {
-		if (atualizacao.getDadosImovel().contemTipoEconomia(TipoEconomia.COMERCIAL, TipoEconomia.PUBLICA, TipoEconomia.INDUSTRIAL)){
-			if (atualizacao.getDadosRamoAtividade().isEmpty()){
-				atualizacao.addMensagemErro("Imovel sem ramo de atividade");
+		if (atualizacao.getImovelAtual().getDadosImovel().contemTipoEconomia(TipoEconomia.COMERCIAL, TipoEconomia.PUBLICA, TipoEconomia.INDUSTRIAL)){
+			if (atualizacao.getImovelAtual().getDadosRamoAtividade().isEmpty()){
+				atualizacao.getImovelAtual().addMensagemErro("Imovel sem ramo de atividade");
 			}
 		}
 	}
