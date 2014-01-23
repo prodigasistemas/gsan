@@ -44,5 +44,8 @@ public class ParseAnormalidadeCommand extends AbstractAtualizacaoCadastralComman
 
 		String dataServico = parser.obterDadoParser(26).trim();
 		linha.put("dataServico", dataServico);
+		
+		String tipoEntrevistado = parser.obterDadoParser(20).trim();
+		linha.put("tipoEntrevistado", tipoEntrevistado);
 	}
 }

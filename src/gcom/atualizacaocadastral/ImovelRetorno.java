@@ -22,7 +22,7 @@ public class ImovelRetorno implements IImovel{
 	private String informacoesComplementares;
 	private Integer idImovel;
     private String numeroHidrometro;
-    private String nomeEntrevistado;
+    private String tipoEntrevistado;
     private LigacaoAguaSituacao ligacaoAguaSituacao;
     private FonteAbastecimento fonteAbastecimento;
     private HidrometroProtecao hidrometroProtecao;
@@ -51,7 +51,7 @@ public class ImovelRetorno implements IImovel{
 		this.idImovel = imovelAtualizacaoCadastral.getIdImovel();
 		this.numeroHidrometro = imovelAtualizacaoCadastral.getNumeroHidrometro();
 		this.idProtecaoHidrometro = imovelAtualizacaoCadastral.getIdProtecaoHidrometro();
-		this.nomeEntrevistado = imovelAtualizacaoCadastral.getNomeEntrevistado();
+		this.tipoEntrevistado = imovelAtualizacaoCadastral.getTipoEntrevistado();
 		this.ligacaoAguaSituacao = new LigacaoAguaSituacao(imovelAtualizacaoCadastral.getIdLigacaoAguaSituacao());
 		this.fonteAbastecimento = new FonteAbastecimento(imovelAtualizacaoCadastral.getIdFonteAbastecimento());
 		this.hidrometroProtecao = new HidrometroProtecao(imovelAtualizacaoCadastral.getIdProtecaoHidrometro());
@@ -177,12 +177,12 @@ public class ImovelRetorno implements IImovel{
 		this.numeroHidrometro = numeroHidrometro;
 	}
 
-	public String getNomeEntrevistado() {
-		return nomeEntrevistado;
+	public String getTipoEntrevistado() {
+		return tipoEntrevistado;
 	}
 
-	public void setNomeEntrevistado(String nomeEntrevistado) {
-		this.nomeEntrevistado = nomeEntrevistado;
+	public void setTipoEntrevistado(String tipoEntrevistado) {
+		this.tipoEntrevistado = tipoEntrevistado;
 	}
 
 	public Integer getIdImovel() {

@@ -7,6 +7,7 @@ import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.cadastro.imovel.ImagemAtualizacaoCadastral;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
+import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ErroRepositorioException;
 import gcom.util.ParserUtil;
@@ -14,6 +15,7 @@ import gcom.util.ParserUtil;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.util.Date;
 import java.util.Map;
 
@@ -34,27 +36,12 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 		
 		Integer matricula = Integer.parseInt(parser.obterDadoParser(9));
 		linha.put("matricula", "" + matricula);
+		
+		// TODO - Incluir validação quando tipo for 0 ou nulo
+		String tipoOperacao = parser.obterDadoParser(1);
+		linha.put("tipoOperacao", "" + tipoOperacao);
 
-		for (String nomeImagem : atualizacao.getImovelAtual().getNomesImagens()) {
-			if (nomeImagem.contains("" + matricula)) {
-				File file = new File(nomeImagem);
-
-				BufferedImage image = ImageIO.read(file);
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				ImageIO.write(image, nomeImagem.split("[.]")[1], baos);
-				byte[] imagem = baos.toByteArray();
-
-				ImagemAtualizacaoCadastral imagemAtualizacaoCadastral = new ImagemAtualizacaoCadastral();
-				imagemAtualizacaoCadastral.setIdImovel(matricula);
-				imagemAtualizacaoCadastral.setImagem(imagem);
-				imagemAtualizacaoCadastral.setUltimaAlteracao(new Date());
-
-				controladorUtil.inserir(imagemAtualizacaoCadastral);
-
-				baos.close();
-				file.delete();
-			}
-		}
+		inserirImagem(atualizacao, matricula);
 
 		String codigoCliente = parser.obterDadoParser(30).trim();
 		linha.put("codigoCliente", codigoCliente);
@@ -168,6 +155,30 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 		linha.put("data", data);
 		
 		validaCamposImovel(atualizacao);
+	}
+
+	private void inserirImagem(AtualizacaoCadastral atualizacao,
+			Integer matricula) throws IOException, ControladorException {
+		for (String nomeImagem : atualizacao.getImovelAtual().getNomesImagens()) {
+			if (nomeImagem.contains("" + matricula)) {
+				File file = new File(nomeImagem);
+
+				BufferedImage image = ImageIO.read(file);
+				ByteArrayOutputStream baos = new ByteArrayOutputStream();
+				ImageIO.write(image, nomeImagem.split("[.]")[1], baos);
+				byte[] imagem = baos.toByteArray();
+
+				ImagemAtualizacaoCadastral imagemAtualizacaoCadastral = new ImagemAtualizacaoCadastral();
+				imagemAtualizacaoCadastral.setIdImovel(matricula);
+				imagemAtualizacaoCadastral.setImagem(imagem);
+				imagemAtualizacaoCadastral.setUltimaAlteracao(new Date());
+
+				controladorUtil.inserir(imagemAtualizacaoCadastral);
+
+				baos.close();
+				file.delete();
+			}
+		}
 	}
 
 	private void validaCamposImovel(AtualizacaoCadastral atualizacao) throws Exception {
