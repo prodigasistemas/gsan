@@ -31543,4 +31543,20 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		}
 	}
 
+	public Logradouro pesquisarLogradouro(Integer codigoLogradouro) throws ErroRepositorioException{
+		Session session = HibernateUtil.getSession();
+		try {
+			String consulta = "SELECT logr "
+					+ "FROM Logradouro logr "
+					+ "WHERE logr.id = :codigo ";
+			
+			return (Logradouro) session.createQuery(consulta)
+					.setInteger("codigo", codigoLogradouro).uniqueResult();
+		}catch (HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+
 }
