@@ -1,0 +1,3 @@
+ALTER TABLE cadastro.imovel_atlz_cadastral RENAME COLUMN imac_nmentrevistado TO imac_tipoentrevistado;
+ALTER TABLE cadastro.imovel_atlz_cadastral ADD COLUMN imac_tipooperacao INTEGER;
+ALTER TABLE atualizacaocadastral.imovel_retorno RENAME COLUMN imac_nmentrevistado TO imac_tipoentrevistado;
