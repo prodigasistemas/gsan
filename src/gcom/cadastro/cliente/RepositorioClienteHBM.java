@@ -2026,10 +2026,10 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
      * @date 15/05/2009
 	 * @exception ErroRepositorioException
 	 */
-	public ClienteAtualizacaoCadastral pesquisarClienteAtualizacaoCadastral(Integer idCliente, Integer idImovel, Integer idClienteRelacaoTipo)
+	public IClienteAtualizacaoCadastral pesquisarClienteAtualizacaoCadastral(Integer idCliente, Integer idImovel, Integer idClienteRelacaoTipo)
 		throws ErroRepositorioException {
 	
-		ClienteAtualizacaoCadastral clienteAtualizacaoCadastral = null;
+		IClienteAtualizacaoCadastral clienteAtualizacaoCadastral = null;
 		String consulta = "";
 	
 		Session session = HibernateUtil.getSession();
@@ -2048,7 +2048,7 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 				consulta = consulta + " and clie.idCliente = "+ idCliente;
 			}
 	
-			clienteAtualizacaoCadastral = (ClienteAtualizacaoCadastral)session.createQuery(consulta)
+			clienteAtualizacaoCadastral = (IClienteAtualizacaoCadastral)session.createQuery(consulta)
 										.setInteger("idImovel", idImovel)
 										.setMaxResults(1).uniqueResult();
 					

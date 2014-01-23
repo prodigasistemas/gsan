@@ -61,6 +61,7 @@ import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.cliente.FiltroClienteTipo;
 import gcom.cadastro.cliente.FiltroOrgaoExpedidorRg;
 import gcom.cadastro.cliente.FoneTipo;
+import gcom.cadastro.cliente.IClienteAtualizacaoCadastral;
 import gcom.cadastro.cliente.IRepositorioClienteImovel;
 import gcom.cadastro.cliente.OrgaoExpedidorRg;
 import gcom.cadastro.cliente.RamoAtividade;
@@ -7329,9 +7330,9 @@ public class ControladorCadastro implements SessionBean {
 						colecaoIdsImovel);
 			}
 
-			ClienteAtualizacaoCadastral clienteAtualizacaoCadastralProprietario = null;
-			ClienteAtualizacaoCadastral clienteAtualizacaoCadastralUsuario = null;
-			ClienteAtualizacaoCadastral clienteAtualizacaoCadastralResposavel = null;
+			IClienteAtualizacaoCadastral clienteAtualizacaoCadastralProprietario = null;
+			IClienteAtualizacaoCadastral clienteAtualizacaoCadastralUsuario = null;
+			IClienteAtualizacaoCadastral clienteAtualizacaoCadastralResposavel = null;
 
 			Iterator iteratorImovel = colecaoIdsImovel.iterator();
 			while (iteratorImovel.hasNext()) {
@@ -8414,12 +8415,12 @@ public class ControladorCadastro implements SessionBean {
 
 		Iterator colecaoClienteImovelIterator = colecaoClienteImovel.iterator();
 
-		ClienteAtualizacaoCadastral clienteUsuario = null;
-		ClienteAtualizacaoCadastral clienteResponsavel = null;
-		ClienteAtualizacaoCadastral clienteProprietario = null;
+		IClienteAtualizacaoCadastral clienteUsuario = null;
+		IClienteAtualizacaoCadastral clienteResponsavel = null;
+		IClienteAtualizacaoCadastral clienteProprietario = null;
 
 		while (colecaoClienteImovelIterator.hasNext()) {
-			ClienteAtualizacaoCadastral cliente = (ClienteAtualizacaoCadastral) colecaoClienteImovelIterator
+			IClienteAtualizacaoCadastral cliente = (IClienteAtualizacaoCadastral) colecaoClienteImovelIterator
 					.next();
 			if (cliente.getIdClienteRelacaoTipo() != null) {
 				if (cliente.getIdClienteRelacaoTipo().equals(
@@ -16064,7 +16065,7 @@ public class ControladorCadastro implements SessionBean {
 				Tabela tabela = new Tabela();
 
 				if (objetoAtualizacaoCadastralBase instanceof ClienteAtualizacaoCadastral) {
-					ClienteAtualizacaoCadastral base = (ClienteAtualizacaoCadastral) objetoAtualizacaoCadastralBase;
+					IClienteAtualizacaoCadastral base = (IClienteAtualizacaoCadastral) objetoAtualizacaoCadastralBase;
 					ClienteAtualizacaoCadastral txt = (ClienteAtualizacaoCadastral) objetoAtualizacaoCadastralTxt;
 
 					tabelaAtualizacaoCadastral.setIdRegistroAlterado(base.getIdCliente());
