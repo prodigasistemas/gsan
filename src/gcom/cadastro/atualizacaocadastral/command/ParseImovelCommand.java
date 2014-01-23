@@ -288,7 +288,7 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 		Map<String, String> cliente = imovel.getLinhaCliente();
 		cliente.put("tipoResponsavel", "0");
 		
-		cliente.put("matriculaResponsavel", "");
+		cliente.put("matriculaResponsavel", "0");
 		cliente.put("nomeResponsavel", "");
 		cliente.put("tipoPessoaResponsavel", "");
 		cliente.put("cnpjCpfResponsavel", "");
@@ -312,7 +312,7 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 		Map<String, String> cliente = imovel.getLinhaCliente();
 		cliente.put("usuarioProprietario", "1");
 		
-		cliente.put("matriculaProprietario", "");
+		cliente.put("matriculaProprietario", "0");
 		cliente.put("nomeProprietario", "");
 		cliente.put("tipoPessoaProprietario", "");
 		cliente.put("cnpjCpfProprietario", "");

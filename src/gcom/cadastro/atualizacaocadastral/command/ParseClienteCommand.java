@@ -232,13 +232,9 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 			atualizacao.getImovelAtual().addMensagemErro("Nome de usuário inválido.");
 		}
 		
-		if (Util.nomeInvalido(linha.get("nomeResponsavel"))){
-			atualizacao.getImovelAtual().addMensagemErro("Nome de responsável inválido.");
-		}
+		testNomeResponsavel(atualizacao, linha);
 
-		if (Util.nomeInvalido(linha.get("nomeProprietario"))){
-			atualizacao.getImovelAtual().addMensagemErro("Nome de proprietário inválido.");
-		}
+		testNomeProprietario(atualizacao, linha);
 		
 		if (StringUtils.isNotEmpty(linha.get("cnpjCpfUsuario")) && Util.cpfCnpjInvalido(linha.get("cnpjCpfUsuario"))){
 			atualizacao.getImovelAtual().addMensagemErro("CPF/CNPJ de usuário inválido.");
@@ -252,18 +248,26 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		if (StringUtils.isNotEmpty(linha.get("cnpjCpfResponsavel")) && Util.cpfCnpjInvalido(linha.get("cnpjCpfResponsavel"))){
 			atualizacao.getImovelAtual().addMensagemErro("CPF/CNPJ de responsável inválido.");
 		}
-		
-		if (StringUtils.isEmpty(linha.get("latitude"))){
-			atualizacao.getImovelAtual().addMensagemErro("Latitude nao informada");
+	}
+
+	private void testNomeProprietario(AtualizacaoCadastral atualizacao, Map<String, String> linha) {
+		if (linha.get("usuarioProprietario").length() > 1 && linha.get("usuarioProprietario").charAt(0) == '2'){
+			if (Util.nomeInvalido(linha.get("nomeProprietario"))){
+				atualizacao.getImovelAtual().addMensagemErro("Nome de proprietário inválido.");
+			}
 		}
-		
-		if (StringUtils.isEmpty(linha.get("longitude"))){
-			atualizacao.getImovelAtual().addMensagemErro("Longitude nao informada");
+	}
+
+	private void testNomeResponsavel(AtualizacaoCadastral atualizacao, Map<String, String> linha) {
+		if (linha.get("tipoResponsavel").length() > 1 && linha.get("tipoResponsavel").charAt(0) == '2'){
+			if (Util.nomeInvalido(linha.get("nomeResponsavel"))){
+				atualizacao.getImovelAtual().addMensagemErro("Nome de responsável inválido.");
+			}
 		}
 	}
 	
 	private void limparDadosUsuario(Map<String, String> linha) {
-		linha.put("matriculaUsuario", "");
+		linha.put("matriculaUsuario", "0");
 		linha.put("nomeUsuario", "");
 		linha.put("tipoPessoaUsuario", "");
 		linha.put("cnpjCpfUsuario", "");
