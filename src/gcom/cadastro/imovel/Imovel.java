@@ -181,7 +181,7 @@ public class Imovel extends ObjetoTransacao implements IImovel {
     private Integer idMarcaHidrometro;
     private Integer idProtecaoHidrometro;
     private String numeroHidrometro;
-    private String nomeEntrevistado;
+    private String tipoEntrevistado;
 	private Integer idMunicipio;
 	private String nomeMunicipio;
 	private String dsUFSiglaMunicipio;
@@ -2182,12 +2182,12 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 		this.numeroHidrometro = numeroHidrometro;
 	}
 
-	public String getNomeEntrevistado() {
-		return nomeEntrevistado;
+	public String getTipoEntrevistado() {
+		return tipoEntrevistado;
 	}
 
-	public void setNomeEntrevistado(String nomeEntrevistado) {
-		this.nomeEntrevistado = nomeEntrevistado;
+	public void setTipoEntrevistado(String tipoEntrevistado) {
+		this.tipoEntrevistado = tipoEntrevistado;
 	}
 
 	public Integer getIdMunicipio() {

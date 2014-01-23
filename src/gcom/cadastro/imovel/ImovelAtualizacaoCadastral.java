@@ -166,7 +166,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
     private String descricaoOutrasInformacoes;
 	
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private String nomeEntrevistado;
+    private String tipoEntrevistado;
 	
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
 	private Integer idLocalInstalacaoRamal;
@@ -199,6 +199,8 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 	
 	private LigacaoAgua ligacaoAgua;
 	
+	private int tipoOperacao;
+	
 	public ImovelAtualizacaoCadastral(Integer id, Integer idImovel, Integer idLocalidade,
 			int codigoSetorComercial, int numeroQuadra, short lote,
 			short subLote, Integer numeroSequencialRota,
@@ -222,12 +224,13 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 			Integer idLocalInstalacaoHidrometro, Integer idProtecaoHidrometro,
 			String numeroHidrometro, Short indicadorCavalete,
 			String numeroMedidorEnergia, Integer idCadastroOcorrencia,
-			String descricaoOutrasInformacoes, String nomeEntrevistado,
+			String descricaoOutrasInformacoes, String tipoEntrevistado,
 			Integer codigoImovelPrincipal,
 			Integer idSituacaoAtualizacaoCadastral, Integer idEmpresa,
 			Integer idMunicipio, String nomeMunicipio,
 			Integer idUinidadeFederacao, String dsUFSiglaMunicipio,
-			Integer idArquivoTexto, Integer indicadorAtualizado) {
+			Integer idArquivoTexto, Integer indicadorAtualizado,
+			int tipoOperacao) {
 		this.id = id;
 		this.idImovel = idImovel;
 		this.idLocalidade = idLocalidade;
@@ -278,7 +281,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 		this.numeroMedidorEnergia = numeroMedidorEnergia;
 		this.idCadastroOcorrencia = idCadastroOcorrencia;
 		this.descricaoOutrasInformacoes = descricaoOutrasInformacoes;
-		this.nomeEntrevistado = nomeEntrevistado;
+		this.tipoEntrevistado = tipoEntrevistado;
 		this.codigoImovelPrincipal = codigoImovelPrincipal;
 		this.idSituacaoAtualizacaoCadastral = idSituacaoAtualizacaoCadastral;
 		this.idEmpresa = idEmpresa;
@@ -288,6 +291,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 		this.dsUFSiglaMunicipio = dsUFSiglaMunicipio;
 		this.idArquivoTexto = idArquivoTexto;
 		this.indicadorAtualizado = indicadorAtualizado;
+		this.tipoOperacao = tipoOperacao;
 	}
 
 	public ImovelAtualizacaoCadastral(){    	
@@ -853,12 +857,12 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 		this.idCadastroOcorrencia = idCadastroOcorrencia;
 	}
 
-	public String getNomeEntrevistado() {
-		return nomeEntrevistado;
+	public String getTipoEntrevistado() {
+		return tipoEntrevistado;
 	}
 
-	public void setNomeEntrevistado(String nomeEntrevistado) {
-		this.nomeEntrevistado = nomeEntrevistado;
+	public void setTipoEntrevistado(String tipoEntrevistado) {
+		this.tipoEntrevistado = tipoEntrevistado;
 	}
 
 	public String getNumeroMedidorEnergia() {
@@ -951,4 +955,11 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 		
 	}
 
+	public int getTipoOperacao() {
+		return tipoOperacao;
+	}
+
+	public void setTipoOperacao(int tipoOperacao) {
+		this.tipoOperacao = tipoOperacao;
+	}
 }

@@ -68,9 +68,9 @@ public interface IImovel {
 
 	public void setNumeroHidrometro(String numeroHidrometro);
 
-	public String getNomeEntrevistado();
+	public String getTipoEntrevistado();
 
-	public void setNomeEntrevistado(String nomeEntrevistado);
+	public void setTipoEntrevistado(String tipoEntrevistado);
 
 	public Integer getIdLigacaoAguaSituacao();
 	
