@@ -156,4 +156,8 @@ public class AtualizacaoCadastralImovel {
 	public void addDadoRamoAtividade(DadoAtualizacaoRamoAtividade dadoRamoAtividade) {
 		this.dadosRamoAtividade.add(dadoRamoAtividade);
 	}
+
+	public AtualizacaoCadastral getAtualizacaoArquivo() {
+		return atualizacaoArquivo;
+	}
 }
