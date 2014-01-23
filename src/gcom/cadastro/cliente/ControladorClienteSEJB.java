@@ -2667,7 +2667,7 @@ public class ControladorClienteSEJB implements SessionBean {
 	 * @throws ErroRepositorioException
 	 */
 
-	public IClienteAtualizacaoCadastral obterClientetuAtualizacaoCadastral(Integer idImovel, 
+	public IClienteAtualizacaoCadastral obterClienteAtualizacaoCadastral(Integer idImovel, 
 			Short idClienteRelacaoTipo) throws ControladorException{
 	
 		try {
