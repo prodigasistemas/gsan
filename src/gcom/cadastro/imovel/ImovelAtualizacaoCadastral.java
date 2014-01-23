@@ -948,7 +948,5 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 
 	public void setHidrometroProtecao(HidrometroProtecao hidrometroProtecao) {
 		// TODO Auto-generated method stub
-		
 	}
-
 }

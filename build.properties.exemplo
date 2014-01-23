@@ -1,6 +1,6 @@
 eclipse.home=
-JBossApplicationServer.3x.home=
-JBossApplicationServer.3x.deploy=
+jboss.home=
+jboss.deploy=
 CaminhoReports=
 build.manifest=
 

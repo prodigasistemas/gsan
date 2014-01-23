@@ -7373,7 +7373,7 @@ public class ControladorCadastro implements SessionBean {
 						}
 
 						// Cliente Usuario
-						clienteAtualizacaoCadastralUsuario = getControladorCliente().obterClientetuAlizacaoCadastral(
+						clienteAtualizacaoCadastralUsuario = getControladorCliente().obterClienteAtualizacaoCadastral(
 								idImovel, ClienteRelacaoTipo.USUARIO);
 
 						if (clienteAtualizacaoCadastralUsuario != null) {
@@ -7400,7 +7400,7 @@ public class ControladorCadastro implements SessionBean {
 							}
 						}
 
-						clienteAtualizacaoCadastralResposavel = getControladorCliente().obterClientetuAlizacaoCadastral(
+						clienteAtualizacaoCadastralResposavel = getControladorCliente().obterClienteAtualizacaoCadastral(
 								idImovel, ClienteRelacaoTipo.RESPONSAVEL);
 
 						if (clienteAtualizacaoCadastralResposavel != null) {
@@ -7429,7 +7429,7 @@ public class ControladorCadastro implements SessionBean {
 						}
 
 						// Cliente Proprietario
-						clienteAtualizacaoCadastralProprietario = getControladorCliente().obterClientetuAlizacaoCadastral(
+						clienteAtualizacaoCadastralProprietario = getControladorCliente().obterClienteAtualizacaoCadastral(
 								idImovel, ClienteRelacaoTipo.PROPRIETARIO);
 
 						if (clienteAtualizacaoCadastralProprietario != null) {
