@@ -91,55 +91,28 @@ public class ClienteFone extends ObjetoTransacao {
 	
 	private static final long serialVersionUID = 1L;
 
-	/** identifier field */
 	private Integer id;
 
-	/** nullable persistent field */
-//	@ControleAlteracao(funcionalidade={Cliente.ATRIBUTOS_CLIENTE_INSERIR, 
-//			Cliente.ATRIBUTOS_CLIENTE_ATUALIZAR})
 	private String ddd;
 
-	/** nullable persistent field */
-//	@ControleAlteracao(funcionalidade={Cliente.ATRIBUTOS_CLIENTE_INSERIR, 
-//			Cliente.ATRIBUTOS_CLIENTE_ATUALIZAR})
 	private String telefone;
 
-	/** nullable persistent field */
-//	@ControleAlteracao(funcionalidade={Cliente.ATRIBUTOS_CLIENTE_INSERIR, 
-//			Cliente.ATRIBUTOS_CLIENTE_ATUALIZAR})
 	private String ramal;
 	
-	/** nullable persistent field */
-//	@ControleAlteracao(funcionalidade={Cliente.ATRIBUTOS_CLIENTE_INSERIR, 
-//			Cliente.ATRIBUTOS_CLIENTE_ATUALIZAR})
 	private String contato;
 
-	/** nullable persistent field */
-//	@ControleAlteracao(funcionalidade={Cliente.ATRIBUTOS_CLIENTE_INSERIR, 
-//			Cliente.ATRIBUTOS_CLIENTE_ATUALIZAR})
 	private Short indicadorTelefonePadrao;
 
-	/** nullable persistent field */
 	private Date ultimaAlteracao;
 
-	/** persistent field */
-//	@ControleAlteracao(value=FiltroClienteFone.FONE_TIPO, 
-//    		funcionalidade={Cliente.ATRIBUTOS_CLIENTE_INSERIR, 
-//			Cliente.ATRIBUTOS_CLIENTE_ATUALIZAR})
 	private gcom.cadastro.cliente.FoneTipo foneTipo;
 
-	/** persistent field */
 	private gcom.cadastro.cliente.Cliente cliente;
 	
 	public static final Short INDICADOR_FONE_PADRAO = new Short("1");
 	
-	// Criado um parâmetro auxiliar para identificar se o tipo do cliente
-	// é do mesmo cliente em atualização cadastral
-	// Autor: Sávio Luiz
-	// Data: 17/05/2011
 	private Integer idTabelaAtualizacaoCadastralAux;
 
-	/** full constructor */
 	public ClienteFone(String ddd, String telefone, String ramal, String contato,
 			Short indicadorTelefonePadrao, Date ultimaAlteracao,
 			gcom.cadastro.cliente.FoneTipo foneTipo,
@@ -154,11 +127,9 @@ public class ClienteFone extends ObjetoTransacao {
 		this.cliente = cliente;
 	}
 
-	/** default constructor */
 	public ClienteFone() {
 	}
 
-	/** minimal constructor */
 	public ClienteFone(gcom.cadastro.cliente.FoneTipo foneTipo,
 			gcom.cadastro.cliente.Cliente cliente) {
 		this.foneTipo = foneTipo;
@@ -241,11 +212,6 @@ public class ClienteFone extends ObjetoTransacao {
 		return new ToStringBuilder(this).append("id", getId()).toString();
 	}
 
-	/**
-	 * Retorna o valor de dddTelefone
-	 * 
-	 * @return O valor de dddTelefone
-	 */
 	public String getDddTelefone() {
 		
 		if (this.ddd != null){
@@ -254,13 +220,6 @@ public class ClienteFone extends ObjetoTransacao {
 		return this.telefone;
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param other
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
 	public boolean equals(Object other) {
 		if ((this == other)) {
 			return true;

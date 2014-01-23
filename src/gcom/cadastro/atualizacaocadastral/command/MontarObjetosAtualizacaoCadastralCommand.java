@@ -1,6 +1,8 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
+import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.atualizacaocadastral.ImovelRetorno;
+import gcom.atualizacaocadastral.ImovelSubcategoriaRetorno;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteAtualizacaoCadastral;
@@ -13,9 +15,11 @@ import gcom.cadastro.endereco.FiltroLogradouroTipo;
 import gcom.cadastro.endereco.LogradouroTipo;
 import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.IRepositorioImovel;
+import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
-import gcom.cadastro.imovel.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
+import gcom.cadastro.imovel.ImovelSubcategoriaPK;
+import gcom.cadastro.imovel.Subcategoria;
 import gcom.fachada.Fachada;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.util.ControladorException;
@@ -146,12 +150,16 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 				subcategoria.setIdCategoria(tipoSubcategoria.getIdCategoria());
 				subcategoria.setIdSubcategoria(tipoSubcategoria.getIdSubcategoria());
 				
+				ImovelSubcategoriaPK pk = new ImovelSubcategoriaPK(matriculaImovel,tipoSubcategoria.getIdSubcategoria());
+				subcategoria.setComp_id(pk);
+				
 				subcategorias.add(subcategoria);
 			}
 		}
 		
 		return subcategorias;
 	}
+	
 
 	private ImovelAtualizacaoCadastral buildImovelTxt() {
 		ImovelAtualizacaoCadastral imovelTxt;
@@ -330,6 +338,12 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		ImovelRetorno imovelRetorno = new ImovelRetorno(imovelTxt);
 		imovelRetorno.setUltimaAlteracao(new Date());
 		controladorUtil.inserir(imovelRetorno);
+	}
+	
+	private void salvarImovelSubcategoriaRetorno(ImovelSubcategoriaAtualizacaoCadastral imovelSubcategoriaTxt) throws ControladorException {
+		ImovelSubcategoriaRetorno imovelSubcategoriaRetorno = new ImovelSubcategoriaRetorno(imovelSubcategoriaTxt);
+		imovelSubcategoriaRetorno.setUltimaAlteracao(new Date());
+		controladorUtil.inserir(imovelSubcategoriaRetorno);
 	}
 
 	public String getDescricaoLogradouro(int idTipoLogradouro) {
