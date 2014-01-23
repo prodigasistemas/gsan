@@ -2667,11 +2667,11 @@ public class ControladorClienteSEJB implements SessionBean {
 	 * @throws ErroRepositorioException
 	 */
 
-	public ClienteAtualizacaoCadastral obterClientetuAlizacaoCadastral(Integer idImovel, 
+	public IClienteAtualizacaoCadastral obterClientetuAlizacaoCadastral(Integer idImovel, 
 			Short idClienteRelacaoTipo) throws ControladorException{
 	
 		try {
-			ClienteAtualizacaoCadastral cliente = null;	
+			IClienteAtualizacaoCadastral cliente = null;	
 			
 			Object[] element =  this.repositorioCliente.obterDadosCliente(idImovel, idClienteRelacaoTipo);
 			
@@ -2958,7 +2958,7 @@ public class ControladorClienteSEJB implements SessionBean {
      * @date 15/05/2009
 	 * @exception ErroRepositorioException
 	 */
-	public ClienteAtualizacaoCadastral pesquisarClienteAtualizacaoCadastral(Integer idCliente, Integer idImovel, Integer idClienteRelacaoTipo)
+	public IClienteAtualizacaoCadastral pesquisarClienteAtualizacaoCadastral(Integer idCliente, Integer idImovel, Integer idClienteRelacaoTipo)
 		throws ControladorException {
 	    try {
 	        return repositorioCliente.pesquisarClienteAtualizacaoCadastral(idCliente, idImovel, idClienteRelacaoTipo);
