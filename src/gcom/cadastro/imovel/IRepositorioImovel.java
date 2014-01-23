@@ -84,6 +84,7 @@ import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.endereco.Cep;
+import gcom.cadastro.endereco.Logradouro;
 import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
 import gcom.cadastro.endereco.LogradouroTipo;
@@ -3304,4 +3305,6 @@ public interface IRepositorioImovel {
 	public Collection<Integer> pesquisarIdImoveisAprovados() throws ErroRepositorioException;
 	
 	public LogradouroTipo pesquisarTipoLogradouro(Integer idTipoLogradouro) throws ErroRepositorioException;
+	
+	public Logradouro pesquisarLogradouro(Integer codigoLogradouro) throws ErroRepositorioException;
 }
