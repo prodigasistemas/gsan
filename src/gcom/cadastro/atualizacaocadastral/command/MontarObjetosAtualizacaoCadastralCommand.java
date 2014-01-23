@@ -129,18 +129,20 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		
 		String descricaoSubcategoria = String.valueOf(tipoEconomia.getCodigo());
 		
+		String codigoSubcategoria = "";
+		
 		for (int j = 1; j < 5; j++) {
-			descricaoSubcategoria += j;
-			short qtdEconomias = Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("subcategoria" + descricaoSubcategoria));
+			codigoSubcategoria = descricaoSubcategoria + j;
+			short qtdEconomias = Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("subcategoria" + codigoSubcategoria));
 			if(qtdEconomias != 0){
 				ImovelSubcategoriaAtualizacaoCadastral subcategoria = new ImovelSubcategoriaAtualizacaoCadastral();
 				
 				subcategoria.setIdImovel(matriculaImovel);
 				subcategoria.setQuantidadeEconomias(qtdEconomias);
-				subcategoria.setDescricaoSubcategoria(descricaoSubcategoria);
+				subcategoria.setDescricaoSubcategoria(codigoSubcategoria);
 				subcategoria.setDescricaoCategoria(tipoEconomia.getDescricao());
 
-				TipoSubcategoria tipoSubcategoria = TipoSubcategoria.getByCodigo(descricaoSubcategoria);
+				TipoSubcategoria tipoSubcategoria = TipoSubcategoria.getByCodigo(codigoSubcategoria);
 				subcategoria.setIdCategoria(tipoSubcategoria.getIdCategoria());
 				subcategoria.setIdSubcategoria(tipoSubcategoria.getIdSubcategoria());
 				
