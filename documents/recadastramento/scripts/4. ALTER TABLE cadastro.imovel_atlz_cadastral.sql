@@ -21,3 +21,7 @@ ALTER TABLE cadastro.imovel_atlz_cadastral DROP COLUMN imac_id;
 ALTER TABLE cadastro.imovel_atlz_cadastral ADD CONSTRAINT imovel_atlz_cadastral_pkey PRIMARY KEY (imov_id);
 
 ALTER TABLE cadastro.imovel_atlz_cadastral ALTER COLUMN imac_icatualizado DROP NOT NULL;
+
+
+ALTER TABLE cadastro.imovel_atlz_cadastral RENAME COLUMN imac_nmentrevistado TO imac_tipoentrevistado;
+ALTER TABLE cadastro.imovel_atlz_cadastral ADD COLUMN imac_tipooperacao INTEGER;
