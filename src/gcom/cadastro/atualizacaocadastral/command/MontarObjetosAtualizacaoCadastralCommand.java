@@ -95,6 +95,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 			}
 
 			salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, imovelSubcategoriaAtualizacaoCadastral, subcategoria, matriculaImovel);
+			salvarImovelSubcategoriaRetorno(subcategoria);
 		}
 	}
 
