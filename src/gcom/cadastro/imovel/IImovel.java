@@ -87,5 +87,9 @@ public interface IImovel {
     public HidrometroProtecao getHidrometroProtecao();
 
 	public void setHidrometroProtecao(HidrometroProtecao hidrometroProtecao);
+
+	public Integer getTipoOperacao();
+	
+	public void setTipoOperacao(Integer tipoOperacao);
     
 }

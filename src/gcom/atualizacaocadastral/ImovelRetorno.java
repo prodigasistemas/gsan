@@ -26,13 +26,11 @@ public class ImovelRetorno implements IImovel{
     private LigacaoAguaSituacao ligacaoAguaSituacao;
     private FonteAbastecimento fonteAbastecimento;
     private HidrometroProtecao hidrometroProtecao;
-    
 	private Integer idLigacaoAguaSituacao;
 	private Integer idFonteAbastecimento;
 	private Integer idProtecaoHidrometro;
-	
 	private Date ultimaAlteracao;
-	
+	private Integer tipoOperacao;
 
 	public ImovelRetorno () {
 		
@@ -55,6 +53,7 @@ public class ImovelRetorno implements IImovel{
 		this.ligacaoAguaSituacao = new LigacaoAguaSituacao(imovelAtualizacaoCadastral.getIdLigacaoAguaSituacao());
 		this.fonteAbastecimento = new FonteAbastecimento(imovelAtualizacaoCadastral.getIdFonteAbastecimento());
 		this.hidrometroProtecao = new HidrometroProtecao(imovelAtualizacaoCadastral.getIdProtecaoHidrometro());
+		this.tipoOperacao = imovelAtualizacaoCadastral.getTipoOperacao();
 	}
 
 	public Integer getId() {
@@ -217,4 +216,11 @@ public class ImovelRetorno implements IImovel{
 		this.hidrometroProtecao = hidrometroProtecao;
 	}
 
+	public Integer getTipoOperacao() {
+		return tipoOperacao;
+	}
+
+	public void setTipoOperacao(Integer tipoOperacao) {
+		this.tipoOperacao = tipoOperacao;
+	}
 }

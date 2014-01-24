@@ -1,4 +1,4 @@
-﻿-- Schema: atualizacaocadastral
+-- Schema: atualizacaocadastral
   
 GRANT ALL ON SCHEMA atualizacaocadastral TO gsan_admin;
 GRANT USAGE ON SCHEMA atualizacaocadastral TO pg_aplic;
@@ -37,7 +37,8 @@ CREATE TABLE atualizacaocadastral.imovel_retorno
   imac_nnhidrometro character(10),
   imac_nnmedidorenergia character(10),
   imac_dsoutrasinformacoes character varying(100),
-  imac_nmentrevistado character varying(50),
+  imac_tipoentrevistado character varying(50),
+  imac_tipooperacao integer,
   imac_tmultimaalteracao timestamp without time zone,
   last_id integer,
   ftab_id integer,
