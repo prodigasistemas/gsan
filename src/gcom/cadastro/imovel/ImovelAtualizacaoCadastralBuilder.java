@@ -15,10 +15,13 @@ public class ImovelAtualizacaoCadastralBuilder {
 
 	private AtualizacaoCadastralImovel atualizacaoCadastralImovel;
 	
-	public ImovelAtualizacaoCadastralBuilder(int matricula, AtualizacaoCadastralImovel atualizacaoCadastralImovel){
+	private int tipoOperacao;
+	
+	public ImovelAtualizacaoCadastralBuilder(int matricula, AtualizacaoCadastralImovel atualizacaoCadastralImovel, int tipoOperacao){
 		this.matricula = matricula;
 		this.imovelAtualizacaoCadastral = new ImovelAtualizacaoCadastral();
 		this.atualizacaoCadastralImovel = atualizacaoCadastralImovel;
+		this.tipoOperacao = tipoOperacao;
 		
 		buildImovel();
 	}
@@ -30,6 +33,7 @@ public class ImovelAtualizacaoCadastralBuilder {
 	public void buildImovel(){
 		// Linha 2
 		imovelAtualizacaoCadastral.setIdImovel(matricula);
+		imovelAtualizacaoCadastral.setTipoOperacao(tipoOperacao);
 		imovelAtualizacaoCadastral.setNumeroImovel(atualizacaoCadastralImovel.getLinhaImovel("numeroImovel"));
 		imovelAtualizacaoCadastral.setComplementoEndereco(atualizacaoCadastralImovel.getLinhaImovel("complementoImovel"));
 		imovelAtualizacaoCadastral.setIdFonteAbastecimento(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("fonteAbastecimento")));
@@ -63,6 +67,7 @@ public class ImovelAtualizacaoCadastralBuilder {
 		imovelAtualizacaoCadastral.setDescricaoOutrasInformacoes(atualizacaoCadastralImovel.getLinhaAnormalidade("comentario").trim());
 		imovelAtualizacaoCadastral.setCoordenadaY(atualizacaoCadastralImovel.getLinhaAnormalidade("latitude"));
 		imovelAtualizacaoCadastral.setCoordenadaX(atualizacaoCadastralImovel.getLinhaAnormalidade("longitude"));
+		imovelAtualizacaoCadastral.setTipoEntrevistado(atualizacaoCadastralImovel.getLinhaAnormalidade("tipoEntrevistado"));
 	}
 	
 	public String getDescricaoLogradouro(int idTipoLogradouro) {

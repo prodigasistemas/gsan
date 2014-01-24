@@ -48,8 +48,11 @@ public class ParseRamoAtividadeCommand extends AbstractAtualizacaoCadastralComma
 			Interceptador interceptador = Interceptador.getInstancia();
 			
 			ArquivoTextoAtualizacaoCadastral arquivoTexto = atualizacao.getArquivoTexto();
+			
+			int tipoOperacao = Integer.parseInt(atualizacao.getImovelAtual().getLinhaImovel("tipoOperacao"));
 
-			salvarTabelaColunaAtualizacaoCadastral(atualizacao, new ImovelRamoAtividadeAtualizacaoCadastral(), ramoAtividadeTxt, matriculaImovel);
+			salvarTabelaColunaAtualizacaoCadastral(atualizacao, new ImovelRamoAtividadeAtualizacaoCadastral(),
+					ramoAtividadeTxt, matriculaImovel, tipoOperacao);
 		}
 	}
 }
