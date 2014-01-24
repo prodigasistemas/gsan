@@ -4,3 +4,5 @@ jboss.deploy=
 CaminhoReports=
 build.manifest=
 
+# Tipo da versao que sera processada no build.xml, os valores sao: Online ou Batch
+gsan.tipo=
