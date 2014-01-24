@@ -199,7 +199,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 	
 	private LigacaoAgua ligacaoAgua;
 	
-	private int tipoOperacao;
+	private Integer tipoOperacao;
 	
 	public ImovelAtualizacaoCadastral(Integer id, Integer idImovel, Integer idLocalidade,
 			int codigoSetorComercial, int numeroQuadra, short lote,
@@ -230,7 +230,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 			Integer idMunicipio, String nomeMunicipio,
 			Integer idUinidadeFederacao, String dsUFSiglaMunicipio,
 			Integer idArquivoTexto, Integer indicadorAtualizado,
-			int tipoOperacao) {
+			Integer tipoOperacao) {
 		this.id = id;
 		this.idImovel = idImovel;
 		this.idLocalidade = idLocalidade;
@@ -954,11 +954,11 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 		// TODO Auto-generated method stub
 	}
 
-	public int getTipoOperacao() {
+	public Integer getTipoOperacao() {
 		return tipoOperacao;
 	}
 
-	public void setTipoOperacao(int tipoOperacao) {
+	public void setTipoOperacao(Integer tipoOperacao) {
 		this.tipoOperacao = tipoOperacao;
 	}
 }

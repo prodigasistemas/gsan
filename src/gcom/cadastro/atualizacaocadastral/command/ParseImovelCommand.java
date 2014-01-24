@@ -38,7 +38,7 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 	public void execute(AtualizacaoCadastral atualizacao) throws Exception {
 		Map<String, String> linha = atualizacao.getImovelAtual().getLinhaImovel();
 		
-		Integer matricula = Integer.parseInt(parser.obterDadoParser(9));
+		Integer matricula = Integer.parseInt(parser.obterDadoParser(9).trim());
 		linha.put("matricula", "" + matricula);
 		
 		String tipoOperacao = parser.obterDadoParser(1);
