@@ -13,7 +13,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 /** @author Hibernate CodeGenerator */
 @ControleAlteracao()
-public class ClienteAtualizacaoCadastral extends ObjetoTransacao {
+public abstract class ClienteAtualizacaoCadastral extends ObjetoTransacao implements IClienteAtualizacaoCadastral {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -188,234 +188,408 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao {
 		this.dsUFSiglaMunicipio = dsUFSiglaMunicipio;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getIdCliente()
+	 */
 	public Integer getIdCliente() {
         return this.idCliente;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setIdCliente(java.lang.Integer)
+	 */
     public void setIdCliente(Integer idCliente) {
         this.idCliente = idCliente;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getIdImovel()
+	 */
     public Integer getIdImovel() {
 		return idImovel;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setIdImovel(java.lang.Integer)
+	 */
 	public void setIdImovel(Integer idImovel) {
 		this.idImovel = idImovel;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getNomeCliente()
+	 */
 	public String getNomeCliente() {
         return this.nomeCliente;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setNomeCliente(java.lang.String)
+	 */
     public void setNomeCliente(String nomeCliente) {
         this.nomeCliente = nomeCliente;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getIdClienteTipo()
+	 */
     public Integer getIdClienteTipo() {
 		return idClienteTipo;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setIdClienteTipo(java.lang.Integer)
+	 */
 	public void setIdClienteTipo(Integer idClienteTipo) {
 		this.idClienteTipo = idClienteTipo;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getRg()
+	 */
 	public String getRg() {
         return this.rg;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setRg(java.lang.String)
+	 */
     public void setRg(String rg) {
         this.rg = rg;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getDataEmissaoRg()
+	 */
     public Date getDataEmissaoRg() {
         return this.dataEmissaoRg;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setDataEmissaoRg(java.util.Date)
+	 */
     public void setDataEmissaoRg(Date dataEmissaoRg) {
         this.dataEmissaoRg = dataEmissaoRg;
     }
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getDataNascimento()
+	 */
 	public Date getDataNascimento() {
         return this.dataNascimento;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setDataNascimento(java.util.Date)
+	 */
     public void setDataNascimento(Date dataNascimento) {
         this.dataNascimento = dataNascimento;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getIdProfissao()
+	 */
     public Integer getIdProfissao() {
         return this.idProfissao;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setIdProfissao(java.lang.Integer)
+	 */
     public void setIdProfissao(Integer idProfissao) {
         this.idProfissao = idProfissao;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getIdPessoaSexo()
+	 */
     public Integer getIdPessoaSexo() {
         return this.idPessoaSexo;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setIdPessoaSexo(java.lang.Integer)
+	 */
     public void setIdPessoaSexo(Integer idPessoaSexo) {
         this.idPessoaSexo = idPessoaSexo;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getCpfCnpj()
+	 */
     public String getCpfCnpj() {
         return this.cpfCnpj;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setCpfCnpj(java.lang.String)
+	 */
     public void setCpfCnpj(String cpfCnpj) {
         this.cpfCnpj = cpfCnpj;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getEmail()
+	 */
     public String getEmail() {
         return this.email;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setEmail(java.lang.String)
+	 */
     public void setEmail(String email) {
         this.email = email;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getIndicadorUso()
+	 */
     public Short getIndicadorUso() {
         return this.indicadorUso;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setIndicadorUso(java.lang.Short)
+	 */
     public void setIndicadorUso(Short indicadorUso) {
         this.indicadorUso = indicadorUso;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getUltimaAlteracao()
+	 */
     public Date getUltimaAlteracao() {
         return this.ultimaAlteracao;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setUltimaAlteracao(java.util.Date)
+	 */
     public void setUltimaAlteracao(Date ultimaAlteracao) {
         this.ultimaAlteracao = ultimaAlteracao;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getNomeMae()
+	 */
     public String getNomeMae() {
         return this.nomeMae;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setNomeMae(java.lang.String)
+	 */
     public void setNomeMae(String nomeMae) {
         this.nomeMae = nomeMae;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getIdEnderecoTipo()
+	 */
     public Integer getIdEnderecoTipo() {
         return this.idEnderecoTipo;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setIdEnderecoTipo(java.lang.Integer)
+	 */
     public void setIdEnderecoTipo(Integer idEnderecoTipo) {
         this.idEnderecoTipo = idEnderecoTipo;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getIdLogradouro()
+	 */
     public Integer getIdLogradouro() {
         return this.idLogradouro;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setIdLogradouro(java.lang.Integer)
+	 */
     public void setIdLogradouro(Integer idLogradouro) {
         this.idLogradouro = idLogradouro;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getDescricaoLogradouro()
+	 */
     public String getDescricaoLogradouro() {
         return this.descricaoLogradouro;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setDescricaoLogradouro(java.lang.String)
+	 */
     public void setDescricaoLogradouro(String descricaoLogradouro) {
         this.descricaoLogradouro = descricaoLogradouro;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getCodigoCep()
+	 */
     public Integer getCodigoCep() {
 		return codigoCep;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setCodigoCep(java.lang.Integer)
+	 */
 	public void setCodigoCep(Integer codigoCep) {
 		this.codigoCep = codigoCep;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getIdBairro()
+	 */
 	public Integer getIdBairro() {
         return this.idBairro;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setIdBairro(java.lang.Integer)
+	 */
     public void setIdBairro(Integer idBairro) {
         this.idBairro = idBairro;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getNomeBairro()
+	 */
     public String getNomeBairro() {
         return this.nomeBairro;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setNomeBairro(java.lang.String)
+	 */
     public void setNomeBairro(String nomeBairro) {
         this.nomeBairro = nomeBairro;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getIdEnderecoReferencia()
+	 */
     public Integer getIdEnderecoReferencia() {
         return this.idEnderecoReferencia;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setIdEnderecoReferencia(java.lang.Integer)
+	 */
     public void setIdEnderecoReferencia(Integer idEnderecoReferencia) {
         this.idEnderecoReferencia = idEnderecoReferencia;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getNumeroImovel()
+	 */
     public String getNumeroImovel() {
         return this.numeroImovel;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setNumeroImovel(java.lang.String)
+	 */
     public void setNumeroImovel(String numeroImovel) {
         this.numeroImovel = numeroImovel;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getComplementoEndereco()
+	 */
     public String getComplementoEndereco() {
         return this.complementoEndereco;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setComplementoEndereco(java.lang.String)
+	 */
     public void setComplementoEndereco(String complementoEndereco) {
         this.complementoEndereco = complementoEndereco;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getCnae()
+	 */
     public Integer getCnae() {
         return this.cnae;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setCnae(java.lang.Integer)
+	 */
     public void setCnae(Integer cnae) {
         this.cnae = cnae;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getIdClienteRelacaoTipo()
+	 */
     public Integer getIdClienteRelacaoTipo() {
         return this.idClienteRelacaoTipo;
     }
 
+    /* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setIdClienteRelacaoTipo(java.lang.Integer)
+	 */
     public void setIdClienteRelacaoTipo(Integer idClienteRelacaoTipo) {
         this.idClienteRelacaoTipo = idClienteRelacaoTipo;
     }
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getDsLogradouroTipo()
+	 */
 	public String getDsLogradouroTipo() {
 		return dsLogradouroTipo;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setDsLogradouroTipo(java.lang.String)
+	 */
 	public void setDsLogradouroTipo(String dsLogradouroTipo) {
 		this.dsLogradouroTipo = dsLogradouroTipo;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getDsLogradouroTitulo()
+	 */
 	public String getDsLogradouroTitulo() {
 		return dsLogradouroTitulo;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setDsLogradouroTitulo(java.lang.String)
+	 */
 	public void setDsLogradouroTitulo(String dsLogradouroTitulo) {
 		this.dsLogradouroTitulo = dsLogradouroTitulo;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getIdLogradouroTipo()
+	 */
 	public Integer getIdLogradouroTipo() {
 		return idLogradouroTipo;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setIdLogradouroTipo(java.lang.Integer)
+	 */
 	public void setIdLogradouroTipo(Integer idLogradouroTipo) {
 		this.idLogradouroTipo = idLogradouroTipo;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getIdLogradouroTitulo()
+	 */
 	public Integer getIdLogradouroTitulo() {
 		return idLogradouroTitulo;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setIdLogradouroTitulo(java.lang.Integer)
+	 */
 	public void setIdLogradouroTitulo(Integer idLogradouroTitulo) {
 		this.idLogradouroTitulo = idLogradouroTitulo;
 	}
@@ -426,6 +600,9 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao {
             .toString();
     }
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#retornaFiltro()
+	 */
 	@Override
 	public Filtro retornaFiltro() {
 		Filtro filtro = retornaFiltro();
@@ -434,75 +611,126 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao {
 
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#retornaCamposChavePrimaria()
+	 */
 	@Override
 	public String[] retornaCamposChavePrimaria() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getId()
+	 */
 	public Integer getId() {
 		return id;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setId(java.lang.Integer)
+	 */
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getDsAbreviadaOrgaoExpedidorRg()
+	 */
 	public String getDsAbreviadaOrgaoExpedidorRg() {
 		return dsAbreviadaOrgaoExpedidorRg;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setDsAbreviadaOrgaoExpedidorRg(java.lang.String)
+	 */
 	public void setDsAbreviadaOrgaoExpedidorRg(String dsAbreviadaOrgaoExpedidorRg) {
 		this.dsAbreviadaOrgaoExpedidorRg = dsAbreviadaOrgaoExpedidorRg;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getDsUFSiglaMunicipio()
+	 */
 	public String getDsUFSiglaMunicipio() {
 		return dsUFSiglaMunicipio;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setDsUFSiglaMunicipio(java.lang.String)
+	 */
 	public void setDsUFSiglaMunicipio(String dsUFSiglaMunicipio) {
 		this.dsUFSiglaMunicipio = dsUFSiglaMunicipio;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getDsUFSiglaOrgaoExpedidorRg()
+	 */
 	public String getDsUFSiglaOrgaoExpedidorRg() {
 		return dsUFSiglaOrgaoExpedidorRg;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setDsUFSiglaOrgaoExpedidorRg(java.lang.String)
+	 */
 	public void setDsUFSiglaOrgaoExpedidorRg(String dsUFSiglaOrgaoExpedidorRg) {
 		this.dsUFSiglaOrgaoExpedidorRg = dsUFSiglaOrgaoExpedidorRg;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getIdMunicipio()
+	 */
 	public Integer getIdMunicipio() {
 		return idMunicipio;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setIdMunicipio(java.lang.Integer)
+	 */
 	public void setIdMunicipio(Integer idMunicipio) {
 		this.idMunicipio = idMunicipio;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getIdUinidadeFederacao()
+	 */
 	public Integer getIdUinidadeFederacao() {
 		return idUinidadeFederacao;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setIdUinidadeFederacao(java.lang.Integer)
+	 */
 	public void setIdUinidadeFederacao(Integer idUinidadeFederacao) {
 		this.idUinidadeFederacao = idUinidadeFederacao;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getNomeMunicipio()
+	 */
 	public String getNomeMunicipio() {
 		return nomeMunicipio;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setNomeMunicipio(java.lang.String)
+	 */
 	public void setNomeMunicipio(String nomeMunicipio) {
 		this.nomeMunicipio = nomeMunicipio;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#getIdRamoAtividade()
+	 */
 	public Integer getIdRamoAtividade() {
 		return idRamoAtividade;
 	}
 
+	/* (non-Javadoc)
+	 * @see gcom.cadastro.cliente.IClienteAtualizacaoCadastral#setIdRamoAtividade(java.lang.Integer)
+	 */
 	public void setIdRamoAtividade(Integer idRamoAtividade) {
 		this.idRamoAtividade = idRamoAtividade;
 	}
 	
-	
+	public abstract void buildCliente();
 }

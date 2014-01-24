@@ -424,7 +424,7 @@ public interface IRepositorioCliente {
      * @date 15/05/2009
 	 * @exception ErroRepositorioException
 	 */
-	public ClienteAtualizacaoCadastral pesquisarClienteAtualizacaoCadastral(Integer idCliente, Integer idImovel, Integer idClienteRelacaoTipo)
+	public IClienteAtualizacaoCadastral pesquisarClienteAtualizacaoCadastral(Integer idCliente, Integer idImovel, Integer idClienteRelacaoTipo)
 		throws ErroRepositorioException;
 	
 	/**

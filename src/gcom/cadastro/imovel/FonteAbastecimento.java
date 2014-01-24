@@ -141,6 +141,10 @@ public class FonteAbastecimento extends ObjetoTransacao {
     public FonteAbastecimento() {
     }
 
+    public FonteAbastecimento(Integer id) {
+    	this.id = id; 
+    }
+    
     /** minimal constructor */
     public FonteAbastecimento(String descricao, String descricaoAbreviada) {
         this.descricao = descricao;

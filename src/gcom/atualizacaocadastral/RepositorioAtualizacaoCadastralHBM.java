@@ -1,0 +1,49 @@
+package gcom.atualizacaocadastral;
+
+import gcom.cadastro.SituacaoAtualizacaoCadastral;
+import gcom.cadastro.imovel.IImovel;
+import gcom.util.ErroRepositorioException;
+import gcom.util.HibernateUtil;
+
+import java.util.Collection;
+
+import org.hibernate.HibernateException;
+import org.hibernate.Session;
+
+public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizacaoCadastral {
+
+	public static IRepositorioAtualizacaoCadastral instancia;
+	
+	public IRepositorioAtualizacaoCadastral getInstancia() {
+		if (instancia == null) {
+			instancia = new RepositorioAtualizacaoCadastralHBM();
+		}
+		return instancia;
+	}
+
+	@SuppressWarnings("unchecked")
+	public Collection<IImovel> obterImoveisParaAtualizar() throws ErroRepositorioException {
+		
+		Collection<IImovel> retorno = null;
+		Session session = HibernateUtil.getSession();
+		
+		String consulta = null;
+		
+		try {
+			
+			consulta = " from ImovelRetorno imovelRetorno"
+					+ " where imovelRetorno.idImovel in "
+						+ " ( select imovelCotrole.idImovel from ImovelControleAtualizacaoCadastral imovelControle "
+						+ " where situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  + ") " ;
+			
+			retorno = (Collection<IImovel>) session.createQuery(consulta);
+		} catch (HibernateException e) {
+			
+		}
+		
+		
+		return retorno;
+
+	}
+	
+}

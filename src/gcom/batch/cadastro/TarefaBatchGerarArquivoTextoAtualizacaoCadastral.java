@@ -114,18 +114,14 @@ public class TarefaBatchGerarArquivoTextoAtualizacaoCadastral extends TarefaBatc
 		ImovelGeracaoTabelasTemporariasCadastroHelper helper = (ImovelGeracaoTabelasTemporariasCadastroHelper)
 				parametros.get("imovelGeracaoTabelasTemporariasCadastroHelper");
 		
-		Collection<Integer> colecaoRotas = Fachada.getInstancia().pesquisarRotasAtualizacaoCadastral(helper);
+		Collection<Integer> colecaoIdRotas = Fachada.getInstancia().pesquisarRotasAtualizacaoCadastral(helper);
 		
-		Iterator iterator = colecaoRotas.iterator();
-		
-		while(iterator.hasNext()) {
-			Integer idRota = (Integer) iterator.next();
-			
+		for (Integer idRota : colecaoIdRotas) {
 			enviarMensagemControladorBatch(
 					ConstantesJNDI.BATCH_GERAR_ARQUIVO_TEXTO_ATUALIZACAO_CADASTRAL_MDB,
 					new Object[] { this.getIdFuncionalidadeIniciada(), helper, idRota });
 		}
-
+		
 		return null;
 	}
 

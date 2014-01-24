@@ -1,6 +1,7 @@
 package gcom.cadastro;
 
 
+import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificado;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoBinario;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoCritica;
@@ -20,7 +21,6 @@ import gcom.cadastro.imovel.EntidadeBeneficente;
 import gcom.cadastro.imovel.ImovelInscricaoAlterada;
 import gcom.cadastro.imovel.ImovelProgramaEspecial;
 import gcom.cadastro.imovel.Subcategoria;
-import gcom.cadastro.imovel.bean.GerarArquivoTextoAtualizacaoCadastralHelper;
 import gcom.cadastro.imovel.bean.ImovelGeracaoTabelasTemporariasCadastroHelper;
 import gcom.cadastro.localidade.GerenciaRegional;
 import gcom.cadastro.localidade.QuadraFace;
@@ -1670,7 +1670,7 @@ public interface IControladorCadastro {
 	 */
 	public  List<HidrometroInstalacaoHistorico> pesquisarHidrometroPeloIdImovel(Integer idImovel) throws ControladorException;
 	
-	public void carregarImovelAtualizacaoCadastral(BufferedReader buffer, ArrayList<String> nomesImagens) throws ControladorException;
+	public AtualizacaoCadastral carregarImovelAtualizacaoCadastral(BufferedReader buffer, ArrayList<String> nomesImagens) throws Exception;
 	
 	public Collection<Integer> pesquisarRotasAtualizacaoCadastral(
 			ImovelGeracaoTabelasTemporariasCadastroHelper helper) throws ControladorException;

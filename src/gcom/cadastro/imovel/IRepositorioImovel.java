@@ -79,13 +79,16 @@ import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.arrecadacao.pagamento.PagamentoHistorico;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
+import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.endereco.Cep;
+import gcom.cadastro.endereco.Logradouro;
 import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
+import gcom.cadastro.endereco.LogradouroTipo;
 import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.imovel.bean.ImovelSubcategoriaHelper;
 import gcom.cadastro.tarifasocial.TarifaSocialCarta;
@@ -3298,8 +3301,11 @@ public interface IRepositorioImovel {
 	 */
 	public Collection pesquisarRamoAtividadeDoImovel(Integer idImovel) throws ErroRepositorioException;
 	
-	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacaoCadastral
-			(Integer idImovel, Integer situacao) throws ErroRepositorioException;
+	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException;
 	
 	public Collection<Integer> pesquisarIdImoveisAprovados() throws ErroRepositorioException;
+	
+	public LogradouroTipo pesquisarTipoLogradouro(Integer idTipoLogradouro) throws ErroRepositorioException;
+	
+	public Logradouro pesquisarLogradouro(Integer codigoLogradouro) throws ErroRepositorioException;
 }

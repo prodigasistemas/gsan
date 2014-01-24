@@ -18,7 +18,11 @@
 		<action
 			type="gcom.gui.cadastro.CarregarDadosAtualizacaoCadastralAction"
 			validate="true" 
-			path="/carregarDadosAtualizacaoCadastralAction" />
+			path="/carregarDadosAtualizacaoCadastralAction">
+			
+			<forward name="CarregarDadosAtualizacaoCadastralAction"
+				path="/jsp/cadastro/carregar_dados_atualizacao_cadastral.jsp" />
+		</action>
 
 	</action-mappings>
 
