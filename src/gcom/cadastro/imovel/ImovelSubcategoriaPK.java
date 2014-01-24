@@ -98,6 +98,14 @@ public class ImovelSubcategoriaPK extends ObjetoGcom{
         this.imovel = imovel;
         this.subcategoria = subcategoria;
     }
+    
+    public ImovelSubcategoriaPK(int matriculaImovel, Integer idSubcategoria) {
+    	Imovel imovel = new Imovel(new Integer(matriculaImovel));
+		Subcategoria subcategoria = new Subcategoria(idSubcategoria);
+		
+        this.imovel = imovel;
+        this.subcategoria = subcategoria;
+    }
 
     /** default constructor */
     public ImovelSubcategoriaPK() {

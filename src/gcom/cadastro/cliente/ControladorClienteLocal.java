@@ -687,7 +687,7 @@ public interface ControladorClienteLocal extends javax.ejb.EJBLocalObject {
 	 * @throws ErroRepositorioException
 	 */
 
-	public IClienteAtualizacaoCadastral obterClientetuAlizacaoCadastral(Integer idImovel, 
+	public IClienteAtualizacaoCadastral obterClienteAtualizacaoCadastral(Integer idImovel, 
 			Short idClienteRelacaoTipo) throws ControladorException;
 	
 	/**

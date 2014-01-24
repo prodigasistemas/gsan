@@ -21,6 +21,7 @@ import gcom.atendimentopublico.registroatendimento.MeioSolicitacao;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao;
 import gcom.atendimentopublico.registroatendimento.bean.DefinirDataPrevistaUnidadeDestinoEspecificacaoHelper;
+import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.batch.ControladorBatchLocal;
 import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.UnidadeProcessamento;
@@ -101,7 +102,6 @@ import gcom.cadastro.imovel.FonteAbastecimento;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
-import gcom.cadastro.imovel.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelInscricaoAlterada;
 import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.cadastro.imovel.ImovelProgramaEspecial;
@@ -7373,7 +7373,7 @@ public class ControladorCadastro implements SessionBean {
 						}
 
 						// Cliente Usuario
-						clienteAtualizacaoCadastralUsuario = getControladorCliente().obterClientetuAlizacaoCadastral(
+						clienteAtualizacaoCadastralUsuario = getControladorCliente().obterClienteAtualizacaoCadastral(
 								idImovel, ClienteRelacaoTipo.USUARIO);
 
 						if (clienteAtualizacaoCadastralUsuario != null) {
@@ -7400,7 +7400,7 @@ public class ControladorCadastro implements SessionBean {
 							}
 						}
 
-						clienteAtualizacaoCadastralResposavel = getControladorCliente().obterClientetuAlizacaoCadastral(
+						clienteAtualizacaoCadastralResposavel = getControladorCliente().obterClienteAtualizacaoCadastral(
 								idImovel, ClienteRelacaoTipo.RESPONSAVEL);
 
 						if (clienteAtualizacaoCadastralResposavel != null) {
@@ -7429,7 +7429,7 @@ public class ControladorCadastro implements SessionBean {
 						}
 
 						// Cliente Proprietario
-						clienteAtualizacaoCadastralProprietario = getControladorCliente().obterClientetuAlizacaoCadastral(
+						clienteAtualizacaoCadastralProprietario = getControladorCliente().obterClienteAtualizacaoCadastral(
 								idImovel, ClienteRelacaoTipo.PROPRIETARIO);
 
 						if (clienteAtualizacaoCadastralProprietario != null) {

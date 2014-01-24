@@ -1,8 +1,9 @@
-package gcom.cadastro.imovel;
+package gcom.atualizacaocadastral;
 
 import java.util.Date;
 
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
+import gcom.cadastro.imovel.Imovel;
 
 public class ImovelControleAtualizacaoCadastral {
 

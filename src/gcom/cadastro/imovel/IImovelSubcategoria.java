@@ -1,5 +1,7 @@
 package gcom.cadastro.imovel;
 
+import java.util.Date;
+
 public interface IImovelSubcategoria {
 	
 	public ImovelSubcategoriaPK getComp_id();
@@ -9,5 +11,9 @@ public interface IImovelSubcategoria {
 	public short getQuantidadeEconomias();
 	
 	public void setQuantidadeEconomias(short getQuantidadeEconomias);
+	
+	public Date getUltimaAlteracao();
+	
+	public void setUltimaAlteracao(Date ultimaAlteracao);
 
 }
