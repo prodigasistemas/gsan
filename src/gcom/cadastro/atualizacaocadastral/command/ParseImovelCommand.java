@@ -188,14 +188,10 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 		AtualizacaoCadastralImovel imovel = atualizacao.getImovelAtual(); 
 		Map<String, String> linha = imovel.getLinhaImovel();
 		
-		valiadarTipoLogradouro(imovel, linha);
-
+		validarTipoLogradouro(imovel, linha);
 		validarTipoOperacao(imovel, linha);
-		
 		validarCoordenadas(imovel, linha);
-		
 		validarEconomias(imovel, linha);
-		
 	}
 
 	private void validarTipoOperacao(AtualizacaoCadastralImovel imovel, Map<String, String> linha) throws ErroRepositorioException {
@@ -284,11 +280,7 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 		}
 	}
 
-	private boolean campoNumericoInvalido(String tipoOperacao) {
-		return StringUtils.isEmpty(tipoOperacao) || !StringUtils.isNumeric(tipoOperacao) || StringUtils.containsOnly(tipoOperacao, new char[]{'0'}) ;
-	}
-
-	private void valiadarTipoLogradouro(AtualizacaoCadastralImovel imovel, Map<String, String> linha) throws ErroRepositorioException {
+	private void validarTipoLogradouro(AtualizacaoCadastralImovel imovel, Map<String, String> linha) throws ErroRepositorioException {
 		String tipoLogradouro = linha.get("idTipoLogradouroImovel");
 		
 		if (StringUtils.isEmpty(tipoLogradouro)){
@@ -341,4 +333,9 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 			}
 		}
 	}
+
+	private boolean campoNumericoInvalido(String tipoOperacao) {
+		return StringUtils.isEmpty(tipoOperacao) || !StringUtils.isNumeric(tipoOperacao) || StringUtils.containsOnly(tipoOperacao, new char[]{'0'}) ;
+	}
+	
 }
