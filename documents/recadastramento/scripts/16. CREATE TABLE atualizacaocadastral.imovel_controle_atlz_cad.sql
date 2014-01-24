@@ -1,4 +1,17 @@
-﻿-- Table: atualizacaocadastral.imovel_controle_atlz_cad
+CREATE SEQUENCE atualizacaocadastral.seq_imovel_controle_atlz_cad
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 4573
+  CACHE 1;
+ALTER TABLE atualizacaocadastral.seq_imovel_controle_atlz_cad
+  OWNER TO gsan_admin;
+GRANT ALL ON TABLE atualizacaocadastral.seq_imovel_controle_atlz_cad TO gsan_admin;
+GRANT SELECT, UPDATE ON TABLE atualizacaocadastral.seq_imovel_controle_atlz_cad TO pg_aplic;
+GRANT SELECT ON TABLE atualizacaocadastral.seq_imovel_controle_atlz_cad TO pg_users;
+
+
+-- Table: atualizacaocadastral.imovel_controle_atlz_cad
  
 -- DROP TABLE cadastro.imovel_controle_atlz_cad;
  
