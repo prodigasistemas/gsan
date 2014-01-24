@@ -97,7 +97,10 @@ import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoPerfil;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.FiscalizacaoSituacao;
 import gcom.atendimentopublico.ordemservico.SupressaoMotivo;
+import gcom.atualizacaocadastral.IRepositorioAtualizacaoCadastral;
 import gcom.atualizacaocadastral.ImovelRetorno;
+import gcom.atualizacaocadastral.ImovelSubcategoriaRetorno;
+import gcom.atualizacaocadastral.RepositorioAtualizacaoCadastralHBM;
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteFone;
@@ -292,6 +295,8 @@ public class ControladorImovelSEJB implements SessionBean {
 	private IRepositorioFaturamento repositorioFaturamento;
 
 	private IRepositorioCobranca repositorioCobranca;
+	
+	private IRepositorioAtualizacaoCadastral repositorioAtualizacaoCadastral;
 	
 	private Logger logger = Logger.getLogger(ControladorImovelSEJB.class);
 
@@ -577,6 +582,8 @@ public class ControladorImovelSEJB implements SessionBean {
 		repositorioCobranca = RepositorioCobrancaHBM.getInstancia();
 		
 		repositorioSeguranca = RepositorioSegurancaHBM.getInstancia();
+		
+		repositorioAtualizacaoCadastral = RepositorioAtualizacaoCadastralHBM.getInstancia();
 		
 	}
 
@@ -17187,12 +17194,13 @@ public class ControladorImovelSEJB implements SessionBean {
 	public void apagarInformacoesRetornoImovelAtualizacaoCadastral(Integer idImovel) throws ControladorException {
 		apagarTabelaAtualizacaoCadastralPorIdImovel(idImovel);
 		apagarImovelRetorno(idImovel);
+		apagarImovelSubcategoriaRetorno(idImovel);
 	}
 
 	public void apagarImovelRetorno(Integer idImovel) throws ControladorException {
 		ImovelRetorno imovelRetorno;
 		try {
-			imovelRetorno = repositorioImovel.pesquisarImovelRetornoPorIdImovel(idImovel);
+			imovelRetorno = repositorioAtualizacaoCadastral.pesquisarImovelRetornoPorIdImovel(idImovel);
 			if(imovelRetorno != null) {
 				this.getControladorUtil().remover(imovelRetorno);
 			}
@@ -17214,6 +17222,20 @@ public class ControladorImovelSEJB implements SessionBean {
 						this.getControladorUtil().remover(tabelaColunaAtlzCad);
 					}
 					this.getControladorUtil().remover(tabelaAtlzCad);
+				}
+			}
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void apagarImovelSubcategoriaRetorno(Integer idImovel) throws ControladorException {
+		List<ImovelSubcategoriaRetorno> colecaoImovelSubCategoriaRetorno;
+		try {
+			colecaoImovelSubCategoriaRetorno = repositorioAtualizacaoCadastral.pesquisarImovelSubcategoriaRetornoPorIdImovel(idImovel);
+			if(colecaoImovelSubCategoriaRetorno != null) {
+				for(ImovelSubcategoriaRetorno imovelSubCategoriaRetorno : colecaoImovelSubCategoriaRetorno) {
+					this.getControladorUtil().remover(imovelSubCategoriaRetorno);
 				}
 			}
 		} catch (ErroRepositorioException e) {

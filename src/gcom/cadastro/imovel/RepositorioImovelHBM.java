@@ -31559,19 +31559,4 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			HibernateUtil.closeSession(session);
 		}
 	}
-
-	public ImovelRetorno pesquisarImovelRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException {
-		Session session = HibernateUtil.getSession();
-		try{
-			String consulta = " SELECT imovelRetorno "
-							+ " FROM ImovelRetorno imovelRetorno "
-							+ " WHERE imovelRetorno.idImovel = :idImovel ";
-			return (ImovelRetorno) session.createQuery(consulta)
-							.setInteger("idImovel", idImovel).uniqueResult();
-		}catch (HibernateException e) {
-			throw new ErroRepositorioException("Erro no Hibernate");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
-	}
 }

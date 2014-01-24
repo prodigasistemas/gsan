@@ -3309,6 +3309,4 @@ public interface IRepositorioImovel {
 	public LogradouroTipo pesquisarTipoLogradouro(Integer idTipoLogradouro) throws ErroRepositorioException;
 	
 	public Logradouro pesquisarLogradouro(Integer codigoLogradouro) throws ErroRepositorioException;
-	
-	public ImovelRetorno pesquisarImovelRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException;
 }
