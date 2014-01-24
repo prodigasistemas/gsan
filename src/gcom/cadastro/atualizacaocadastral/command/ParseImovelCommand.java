@@ -278,57 +278,10 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 					imovel.addMensagemErro("Número de inscrição repetido");
 				}
 				
-				limparDadosProprietario(imovel);
-				limparDadosResponsavel(imovel);
+				imovel.limparDadosProprietario();
+				imovel.limparDadosResponsavel();
 			}
 		}
-	}
-
-	private void limparDadosResponsavel(AtualizacaoCadastralImovel imovel) {
-		Map<String, String> cliente = imovel.getLinhaCliente();
-		cliente.put("tipoResponsavel", "0");
-		
-		cliente.put("matriculaResponsavel", "0");
-		cliente.put("nomeResponsavel", "");
-		cliente.put("tipoPessoaResponsavel", "");
-		cliente.put("cnpjCpfResponsavel", "");
-		cliente.put("rgResponsavel", "");
-		cliente.put("ufRgResponsavel", "");
-		cliente.put("sexoResponsavel", "");
-		cliente.put("telefoneResponsavel", "");
-		cliente.put("celularResponsavel", "");
-		cliente.put("emailResponsavel", "");
-		cliente.put("idTipoLogradouroResponsavel", "");
-		cliente.put("logradouroResponsavel", "");
-		cliente.put("numeroResponsavel", "");
-		cliente.put("complementoResponsavel", "");
-		cliente.put("bairroResponsavel", "");
-		cliente.put("cepResponsavel", "");
-		cliente.put("municipioResponsavel", "");		
-		
-	}
-
-	private void limparDadosProprietario(AtualizacaoCadastralImovel imovel) {
-		Map<String, String> cliente = imovel.getLinhaCliente();
-		cliente.put("usuarioProprietario", "1");
-		
-		cliente.put("matriculaProprietario", "0");
-		cliente.put("nomeProprietario", "");
-		cliente.put("tipoPessoaProprietario", "");
-		cliente.put("cnpjCpfProprietario", "");
-		cliente.put("rgProprietario", "");
-		cliente.put("ufRgProprietario", "");
-		cliente.put("sexoProprietario", "");
-		cliente.put("telefoneProprietario", "");
-		cliente.put("celularProprietario", "");
-		cliente.put("emailProprietario", "");
-		cliente.put("idTipoLogradouroProprietario", "");
-		cliente.put("logradouroProprietario", "");
-		cliente.put("numeroProprietario", "");
-		cliente.put("complementoProprietario", "");
-		cliente.put("bairroProprietario", "");
-		cliente.put("cepProprietario", "");
-		cliente.put("municipioProprietario", "");		
 	}
 
 	private boolean campoNumericoInvalido(String tipoOperacao) {
