@@ -23,6 +23,7 @@
 		<property name="numeroMedidorEnergia" type="java.lang.String" column="imac_nnmedidorenergia" length="10"/>
 		<property name="informacoesComplementares" type="java.lang.String" column="imac_dsoutrasinformacoes" length="100"/>
 		<property name="tipoEntrevistado" type="java.lang.String" column="imac_tipoentrevistado" length="50"/>
+		<property name="tipoOperacao" type="java.lang.Integer" column="imac_tipooperacao" length="1"/>
 		
 		<many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="true">
 			<column name="last_id"/>

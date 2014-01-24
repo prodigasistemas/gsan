@@ -2250,5 +2250,12 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 
 	public void setHidrometroProtecao(HidrometroProtecao hidrometroProtecao) {
 	}
+
+	public Integer getTipoOperacao() {
+		return null;
+	}
+
+	public void setTipoOperacao(Integer tipoOperacao) {
+	}
 	
 }

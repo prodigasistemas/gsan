@@ -1336,7 +1336,7 @@ public class RepositorioClienteImovelHBM implements IRepositorioClienteImovel {
 		
 		try {
 			consulta = " SELECT cliente" 
-					 + " FROM ClienteAtualizacaoCadastral cliente" 
+					 + " FROM ClienteAtualizacaoCadastralImpl cliente" 
 					 + " WHERE cliente.idImovel = :idImovel";
 		
 			colecaoClienteImovel = session.createQuery(consulta).setInteger("idImovel",
