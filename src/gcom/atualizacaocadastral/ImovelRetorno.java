@@ -26,13 +26,10 @@ public class ImovelRetorno implements IImovel{
     private LigacaoAguaSituacao ligacaoAguaSituacao;
     private FonteAbastecimento fonteAbastecimento;
     private HidrometroProtecao hidrometroProtecao;
-    
 	private Integer idLigacaoAguaSituacao;
 	private Integer idFonteAbastecimento;
 	private Integer idProtecaoHidrometro;
-	
 	private Date ultimaAlteracao;
-	
 	private Integer tipoOperacao;
 
 	public ImovelRetorno () {
@@ -226,5 +223,4 @@ public class ImovelRetorno implements IImovel{
 	public void setTipoOperacao(Integer tipoOperacao) {
 		this.tipoOperacao = tipoOperacao;
 	}
-
 }

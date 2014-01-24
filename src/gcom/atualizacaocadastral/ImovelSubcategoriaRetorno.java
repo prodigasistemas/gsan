@@ -2,7 +2,6 @@ package gcom.atualizacaocadastral;
 
 import gcom.cadastro.imovel.IImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelSubcategoriaPK;
-
 import java.util.Date;
 
 public class ImovelSubcategoriaRetorno implements IImovelSubcategoria {
@@ -39,8 +38,4 @@ public class ImovelSubcategoriaRetorno implements IImovelSubcategoria {
 	public void setUltimaAlteracao(Date ultimaAlteracao) {
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
-	
-	
-	
-
 }
