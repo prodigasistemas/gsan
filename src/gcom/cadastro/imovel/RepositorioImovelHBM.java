@@ -81,6 +81,7 @@ import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.FiscalizacaoSituacaoAgua;
 import gcom.atendimentopublico.ordemservico.FiscalizacaoSituacaoEsgoto;
+import gcom.atualizacaocadastral.ImovelRetorno;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
@@ -31496,7 +31497,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			String consulta = "SELECT icac "
 					+ "FROM ImovelControleAtualizacaoCadastral icac "
 					+ "INNER JOIN icac.imovel imovel "
-					+ "INNER JOIN icac.situacaoAtualizacaoCadastral situacao "
+					+ "INNER JOIN FETCH icac.situacaoAtualizacaoCadastral situacao "
 					+ "WHERE imovel.id = :idImovel ";
 
 			return (ImovelControleAtualizacaoCadastral) session.createQuery(consulta)
@@ -31558,4 +31559,18 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		}
 	}
 
+	public ImovelRetorno pesquisarImovelRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try{
+			String consulta = " SELECT imovelRetorno "
+							+ " FROM ImovelRetorno imovelRetorno "
+							+ " WHERE imovelRetorno.idImovel = :idImovel ";
+			return (ImovelRetorno) session.createQuery(consulta)
+							.setInteger("idImovel", idImovel).uniqueResult();
+		}catch (HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
 }
