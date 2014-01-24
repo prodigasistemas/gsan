@@ -31497,7 +31497,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 			String consulta = "SELECT icac "
 					+ "FROM ImovelControleAtualizacaoCadastral icac "
-					+ "INNER JOIN icac.imovel imovel "
+					+ "INNER JOIN FETCH icac.imovel imovel "
 					+ "INNER JOIN FETCH icac.situacaoAtualizacaoCadastral situacao "
 					+ "WHERE imovel.id = :idImovel ";
 
