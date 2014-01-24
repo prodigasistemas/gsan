@@ -116,7 +116,7 @@ public class InicializadorSistema extends HttpServlet{
 
 		 */
 		
-//		AgendadorTarefas.initAgendador();
+		//AgendadorTarefas.initAgendador();
 		
 		/*try {
 			if (ServiceLocator.getResource("java:/BatchDS") != null) {
