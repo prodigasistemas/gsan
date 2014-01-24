@@ -202,7 +202,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 			}
 		}
 	}
-
+	
 	private void salvarImovelRetorno(ImovelAtualizacaoCadastral imovelTxt) throws ControladorException {
 		ImovelRetorno imovelRetorno = new ImovelRetorno(imovelTxt);
 		imovelRetorno.setUltimaAlteracao(new Date());
