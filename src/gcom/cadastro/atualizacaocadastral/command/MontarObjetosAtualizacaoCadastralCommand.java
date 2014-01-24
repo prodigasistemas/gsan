@@ -1,6 +1,7 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
+import gcom.atualizacaocadastral.ImovelRamoAtividadeRetorno;
 import gcom.atualizacaocadastral.ImovelRetorno;
 import gcom.atualizacaocadastral.ImovelSubcategoriaRetorno;
 import gcom.cadastro.IRepositorioCadastro;
@@ -213,7 +214,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		imovelSubcategoriaRetorno.setUltimaAlteracao(new Date());
 		controladorUtil.inserir(imovelSubcategoriaRetorno);
 	}
-
+	
 	private void atualizarSituacaoControleImovelAtualizacaoCadastral(Integer situacao) throws Exception {
 		ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral = repositorioImovel.pesquisarImovelControleAtualizacaoCadastral(matriculaImovel);
 		imovelControleAtualizacaoCadastral.setDataRetorno(new Date());

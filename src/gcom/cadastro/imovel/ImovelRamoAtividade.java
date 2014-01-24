@@ -4,15 +4,13 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 
+import gcom.atualizacaocadastral.IImovelRamoAtividade;
 import gcom.interceptor.ObjetoTransacao;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 
-public class ImovelRamoAtividade extends ObjetoTransacao {
+public class ImovelRamoAtividade extends ObjetoTransacao implements IImovelRamoAtividade {
     
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private ImovelRamoAtividadePK comp_id;
