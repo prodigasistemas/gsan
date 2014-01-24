@@ -3,10 +3,13 @@ package gcom.atualizacaocadastral;
 import gcom.cadastro.imovel.IImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelSubcategoriaPK;
 
+import java.util.Date;
+
 public class ImovelSubcategoriaRetorno implements IImovelSubcategoria {
 	
 	private ImovelSubcategoriaPK comp_id;
 	private short quantidadeEconomias;
+	private Date ultimaAlteracao;
 	
 	public ImovelSubcategoriaPK getComp_id() {
 		return comp_id;
@@ -29,6 +32,15 @@ public class ImovelSubcategoriaRetorno implements IImovelSubcategoria {
 		this.comp_id = imovelSubcategoria.getComp_id();
 		this.quantidadeEconomias = imovelSubcategoria.getQuantidadeEconomias();
 	}
+	
+	public Date getUltimaAlteracao() {
+		return ultimaAlteracao;
+	}
+	public void setUltimaAlteracao(Date ultimaAlteracao) {
+		this.ultimaAlteracao = ultimaAlteracao;
+	}
+	
+	
 	
 
 }

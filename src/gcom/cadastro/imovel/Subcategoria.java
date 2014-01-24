@@ -190,6 +190,10 @@ public class Subcategoria extends ObjetoTransacao {
 
     public Subcategoria() {
     }
+    
+    public Subcategoria(Integer id) {
+    	this.id = id;
+    }
 
     public Subcategoria(int codigo, String descricao,
             gcom.cadastro.imovel.Categoria categoria) {
