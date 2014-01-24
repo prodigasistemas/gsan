@@ -97,6 +97,7 @@ import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoPerfil;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.FiscalizacaoSituacao;
 import gcom.atendimentopublico.ordemservico.SupressaoMotivo;
+import gcom.atualizacaocadastral.ImovelRetorno;
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteFone;
@@ -212,6 +213,8 @@ import gcom.relatorio.cadastro.RelatorioResumoQtdeImoveisExcluidosTarifaSocialHe
 import gcom.relatorio.micromedicao.FiltrarAnaliseExcecoesLeiturasHelper;
 import gcom.seguranca.ControladorPermissaoEspecialLocal;
 import gcom.seguranca.ControladorPermissaoEspecialLocalHome;
+import gcom.seguranca.IRepositorioSeguranca;
+import gcom.seguranca.RepositorioSegurancaHBM;
 import gcom.seguranca.acesso.Abrangencia;
 import gcom.seguranca.acesso.ControladorAcessoLocal;
 import gcom.seguranca.acesso.ControladorAcessoLocalHome;
@@ -224,6 +227,8 @@ import gcom.seguranca.acesso.usuario.UsuarioAcao;
 import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.seguranca.transacao.ControladorTransacaoLocalHome;
+import gcom.seguranca.transacao.TabelaAtualizacaoCadastral;
+import gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
@@ -279,6 +284,8 @@ public class ControladorImovelSEJB implements SessionBean {
 	SessionContext sessionContext;
 
 	private IRepositorioImovel repositorioImovel;
+	
+	private IRepositorioSeguranca repositorioSeguranca;
 
 	private IRepositorioCategoria repositorioCategoria;
 
@@ -568,6 +575,8 @@ public class ControladorImovelSEJB implements SessionBean {
 		repositorioFaturamento = RepositorioFaturamentoHBM.getInstancia();
 
 		repositorioCobranca = RepositorioCobrancaHBM.getInstancia();
+		
+		repositorioSeguranca = RepositorioSegurancaHBM.getInstancia();
 		
 	}
 
@@ -17172,5 +17181,43 @@ public class ControladorImovelSEJB implements SessionBean {
 		imovelAtualizacaoCadastral.setIdArquivoTexto(idArquivoTexto);
 		
 		this.getControladorUtil().atualizar(imovelAtualizacaoCadastral);
+	}
+
+
+	public void apagarInformacoesRetornoImovelAtualizacaoCadastral(Integer idImovel) throws ControladorException {
+		apagarTabelaAtualizacaoCadastralPorIdImovel(idImovel);
+		apagarImovelRetorno(idImovel);
+	}
+
+	public void apagarImovelRetorno(Integer idImovel) throws ControladorException {
+		ImovelRetorno imovelRetorno;
+		try {
+			imovelRetorno = repositorioImovel.pesquisarImovelRetornoPorIdImovel(idImovel);
+			if(imovelRetorno != null) {
+				this.getControladorUtil().remover(imovelRetorno);
+			}
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void apagarTabelaAtualizacaoCadastralPorIdImovel(Integer idImovel) throws ControladorException {
+		List<TabelaAtualizacaoCadastral> colecaoTabelaAtualizacaoCadastral;
+		List<TabelaColunaAtualizacaoCadastral> colecaoTabelaColunaAtualizacaoCadastral;
+		try {
+			colecaoTabelaAtualizacaoCadastral = repositorioSeguranca.pesquisaTabelaAtualizacaoCadastralPorImovel(idImovel);
+
+			if(colecaoTabelaAtualizacaoCadastral != null) {
+				for(TabelaAtualizacaoCadastral tabelaAtlzCad : colecaoTabelaAtualizacaoCadastral){
+					colecaoTabelaColunaAtualizacaoCadastral = repositorioSeguranca.pesquisaTabelaColunaAtualizacaoCadastral(tabelaAtlzCad.getId());
+					for(TabelaColunaAtualizacaoCadastral tabelaColunaAtlzCad : colecaoTabelaColunaAtualizacaoCadastral) {
+						this.getControladorUtil().remover(tabelaColunaAtlzCad);
+					}
+					this.getControladorUtil().remover(tabelaAtlzCad);
+				}
+			}
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
 	}
 }
