@@ -604,6 +604,9 @@ public class ConstantesJNDI {
 	public static String BATCH_PROCESSAR_PAGAMENTOS_DIFERENCA_DOIS_REAIS = "";
 	
 	public static String BATCH_CANCELAR_GUIAS_PAGAMENTO_NAO_PAGAS = "";
+	
+	public static String CONTROLADOR_ATUALIZACAO_CADASTRAL = "";
+
 
 	
 	static {
@@ -803,6 +806,9 @@ public class ConstantesJNDI {
 
 			CONTROLADOR_CADASTRO_SEJB = propriedades
 					.getProperty("ControladorCadastro");
+			
+			CONTROLADOR_ATUALIZACAO_CADASTRAL = propriedades
+					.getProperty("ControladorAtualizacaoCadastral");
 
 			BATCH_CLASSIFICAR_PAGAMENTOS_DEVOLUCOES_MDB = propriedades
 					.getProperty("QueueBatchClassificarPagamentosDevolucoesMDB");

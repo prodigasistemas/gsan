@@ -91,7 +91,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * @created 2 de Junho de 2004
  */
 @ControleAlteracao()
-public class ImovelSubcategoria extends ObjetoTransacao {
+public class ImovelSubcategoria extends ObjetoTransacao implements IImovelSubcategoria {
 	
 	private static final long serialVersionUID = 1L;
 

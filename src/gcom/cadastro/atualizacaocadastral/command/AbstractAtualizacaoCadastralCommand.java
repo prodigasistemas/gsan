@@ -7,6 +7,7 @@ import gcom.cadastro.atualizacaocadastral.FiltroImovelAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteFoneAtualizacaoCadastral;
 import gcom.cadastro.cliente.ControladorClienteLocal;
+import gcom.cadastro.cliente.IClienteAtualizacaoCadastral;
 import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
@@ -52,6 +53,10 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 	protected IRepositorioImovel repositorioImovel;
 	protected ControladorImovelLocal controladorImovel;
 	protected ControladorClienteLocal controladorCliente;
+	
+	public AbstractAtualizacaoCadastralCommand(){
+		
+	}
 
 	public AbstractAtualizacaoCadastralCommand(ParserUtil parser, IRepositorioCadastro repositorioCadastro, ControladorUtilLocal controladorUtil, 
 			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, 
@@ -67,9 +72,11 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 
 	public abstract void execute(AtualizacaoCadastral atualizacao) throws Exception;
 
-	public void salvarTabelaColunaAtualizacaoCadastral(Object objetoAtualizacaoCadastralBase, Object objetoAtualizacaoCadastralTxt,
-			ArquivoTextoAtualizacaoCadastral arquivoTexto, Interceptador interceptador, int matriculaImovel) throws ControladorException {
+	public void salvarTabelaColunaAtualizacaoCadastral(AtualizacaoCadastral atualizacaoCadastral, Object objetoAtualizacaoCadastralBase, Object objetoAtualizacaoCadastralTxt, int matriculaImovel) throws ControladorException {
 		Collection<TabelaLinhaColunaAlteracao> colunasAlteradas = null;
+		
+		ArquivoTextoAtualizacaoCadastral arquivoTexto = atualizacaoCadastral.getArquivoTexto();
+		Interceptador interceptador = Interceptador.getInstancia();
 
 		try {
 			Integer idImovel = null;
@@ -92,7 +99,7 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 				Tabela tabela = new Tabela();
 
 				if (objetoAtualizacaoCadastralBase instanceof ClienteAtualizacaoCadastral) {
-					ClienteAtualizacaoCadastral base = (ClienteAtualizacaoCadastral) objetoAtualizacaoCadastralBase;
+					IClienteAtualizacaoCadastral base = (IClienteAtualizacaoCadastral) objetoAtualizacaoCadastralBase;
 					ClienteAtualizacaoCadastral txt = (ClienteAtualizacaoCadastral) objetoAtualizacaoCadastralTxt;
 
 					tabelaAtualizacaoCadastral.setIdRegistroAlterado(base.getIdCliente());

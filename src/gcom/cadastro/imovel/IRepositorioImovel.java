@@ -84,8 +84,10 @@ import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.endereco.Cep;
+import gcom.cadastro.endereco.Logradouro;
 import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
+import gcom.cadastro.endereco.LogradouroTipo;
 import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.imovel.bean.ImovelSubcategoriaHelper;
 import gcom.cadastro.tarifasocial.TarifaSocialCarta;
@@ -3301,4 +3303,8 @@ public interface IRepositorioImovel {
 	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException;
 	
 	public Collection<Integer> pesquisarIdImoveisAprovados() throws ErroRepositorioException;
+	
+	public LogradouroTipo pesquisarTipoLogradouro(Integer idTipoLogradouro) throws ErroRepositorioException;
+	
+	public Logradouro pesquisarLogradouro(Integer codigoLogradouro) throws ErroRepositorioException;
 }

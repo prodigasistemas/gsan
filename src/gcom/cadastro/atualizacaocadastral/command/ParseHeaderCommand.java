@@ -8,6 +8,7 @@ import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ParserUtil;
+import gcom.util.exception.ArquivoAtualizacaoInexistenteException;
 
 public class ParseHeaderCommand extends AbstractAtualizacaoCadastralCommand {
 
@@ -27,6 +28,10 @@ public class ParseHeaderCommand extends AbstractAtualizacaoCadastralCommand {
 		String versaoCelular = parser.obterDadoParser(10);
 		
 		ArquivoTextoAtualizacaoCadastral arquivoTexto = repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(localidade + setor + rota, anoMesReferencia);
+		
+		if (arquivoTexto == null){
+			throw new ArquivoAtualizacaoInexistenteException();
+		}
 		
 		atualizacao.setArquivoTexto(arquivoTexto);
 	}

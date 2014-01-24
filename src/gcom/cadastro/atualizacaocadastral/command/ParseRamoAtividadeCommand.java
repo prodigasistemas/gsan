@@ -23,8 +23,7 @@ public class ParseRamoAtividadeCommand extends AbstractAtualizacaoCadastralComma
 
 	public void execute(AtualizacaoCadastral atualizacao) throws Exception {
 		
-		Map<String, String> linha = atualizacao.getLinhaRamoAtividade();
-
+		Map<String, String> linha = atualizacao.getImovelAtual().getLinhaRamoAtividade();
 
 		String matriculaImovelRamoAtividade = parser.obterDadoParser(9).trim();
 		linha.put("matriculaImovelRamoAtividade", matriculaImovelRamoAtividade);
@@ -34,6 +33,10 @@ public class ParseRamoAtividadeCommand extends AbstractAtualizacaoCadastralComma
 
 		int matriculaImovel = Integer.parseInt(matriculaImovelRamoAtividade);
 		int idRamoAtividade = Integer.parseInt(ramoAtividade);
+		
+		DadoAtualizacaoRamoAtividade ramo = new DadoAtualizacaoRamoAtividade();
+		ramo.setId(idRamoAtividade);
+		atualizacao.getImovelAtual().addDadoRamoAtividade(ramo);
 
 		boolean existeRamoAtividade = repositorioCadastro.existeImovelRamoAtividadeAtualizacaoCadastral(matriculaImovel, idRamoAtividade);
 
@@ -46,8 +49,7 @@ public class ParseRamoAtividadeCommand extends AbstractAtualizacaoCadastralComma
 			
 			ArquivoTextoAtualizacaoCadastral arquivoTexto = atualizacao.getArquivoTexto();
 
-			salvarTabelaColunaAtualizacaoCadastral(new ImovelRamoAtividadeAtualizacaoCadastral(), ramoAtividadeTxt, arquivoTexto, interceptador,
-					matriculaImovel);
+			salvarTabelaColunaAtualizacaoCadastral(atualizacao, new ImovelRamoAtividadeAtualizacaoCadastral(), ramoAtividadeTxt, matriculaImovel);
 		}
 	}
 }

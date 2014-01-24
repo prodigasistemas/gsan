@@ -90,8 +90,10 @@ import gcom.cadastro.cliente.RamoAtividade;
 import gcom.cadastro.cliente.bean.ClienteImovelEconomiaHelper;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.endereco.Cep;
+import gcom.cadastro.endereco.Logradouro;
 import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
+import gcom.cadastro.endereco.LogradouroTipo;
 import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.imovel.bean.FiltrarImovelOutrosCriteriosHelper;
 import gcom.cadastro.imovel.bean.ImovelEconomiaHelper;
@@ -31523,4 +31525,37 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			HibernateUtil.closeSession(session);
 		}
 	}
+	
+	public LogradouroTipo pesquisarTipoLogradouro(Integer idTipoLogradouro) throws ErroRepositorioException{
+		Session session = HibernateUtil.getSession();
+		try {
+			String consulta = "SELECT tipo "
+					+ "FROM LogradouroTipo tipo "
+					+ "WHERE tipo.id = :idTipo ";
+
+			return (LogradouroTipo) session.createQuery(consulta)
+					.setInteger("idTipo", idTipoLogradouro).uniqueResult();
+		}catch (HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+
+	public Logradouro pesquisarLogradouro(Integer codigoLogradouro) throws ErroRepositorioException{
+		Session session = HibernateUtil.getSession();
+		try {
+			String consulta = "SELECT logr "
+					+ "FROM Logradouro logr "
+					+ "WHERE logr.id = :codigo ";
+			
+			return (Logradouro) session.createQuery(consulta)
+					.setInteger("codigo", codigoLogradouro).uniqueResult();
+		}catch (HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+
 }

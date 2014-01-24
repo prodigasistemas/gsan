@@ -1,21 +1,31 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
-import gcom.cadastro.ControladorCadastro;
 import gcom.cadastro.IRepositorioCadastro;
+import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.IRepositorioImovel;
+import gcom.cadastro.imovel.ImovelControleAtualizacaoCadastral;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ParserUtil;
+import gcom.util.Util;
+import gcom.util.exception.MatriculaProprietarioException;
+import gcom.util.exception.MatriculaResponsavelException;
+import gcom.util.exception.MatriculaUsuarioException;
 
 import java.util.Map;
 
+import org.apache.commons.lang.StringUtils;
 import org.jboss.logging.Logger;
 
 public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 	
 	private static Logger logger = Logger.getLogger(ParseClienteCommand.class);
+	
+	public ParseClienteCommand() {
+		super();
+	}
 
 	public ParseClienteCommand(ParserUtil parser, IRepositorioCadastro repositorioCadastro, ControladorUtilLocal controladorUtil, 
 			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, 
@@ -24,10 +34,12 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 	}
 
 	public void execute(AtualizacaoCadastral atualizacao) throws Exception {
-		Map<String, String> linha = atualizacao.getLinhaCliente();
-
+		Map<String, String> linha = atualizacao.getImovelAtual().getLinhaCliente();
+		
 		String matriculaImovelCliente = parser.obterDadoParser(9).trim();
 		linha.put("matriculaImovelCliente", matriculaImovelCliente);
+		
+		atualizacao.getImovelAtual().setMatricula(Integer.valueOf(matriculaImovelCliente));
 		
 		logger.info("Carregando Imóvel: " + Integer.parseInt(matriculaImovelCliente));
 		
@@ -46,11 +58,16 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		String tipoResponsavel = parser.obterDadoParser(1).trim();
 		linha.put("tipoResponsavel", tipoResponsavel);
 		
-		int matriculaUsuario = Integer.parseInt(parser.obterDadoParser(9));
+		int matriculaUsuario = 0;
+		try {
+			matriculaUsuario = Integer.parseInt(parser.obterDadoParser(9));
+		} catch (Exception e) {
+			throw new MatriculaUsuarioException(e, String.valueOf(atualizacao.getImovelAtual().getMatricula())); 
+		}
 		linha.put("matriculaUsuario", ""+matriculaUsuario);
 							
 		String nomeUsuario = parser.obterDadoParser(50).trim();
-		linha.put("nomeUsuario", nomeUsuario);
+		linha.put("nomeUsuario", nomeUsuario.toUpperCase());
 		
 		String tipoPessoaUsuario = parser.obterDadoParser(1).trim();
 		linha.put("tipoPessoaUsuario", tipoPessoaUsuario);
@@ -76,11 +93,17 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		String emailUsuario = parser.obterDadoParser(30).trim();
 		linha.put("emailUsuario", emailUsuario);
 		
-		int matriculaProprietario = Integer.parseInt(parser.obterDadoParser(9));
+		int matriculaProprietario = 0;
+		try {
+			matriculaProprietario = Integer.parseInt(parser.obterDadoParser(9));
+		} catch (Exception e) {
+			throw new MatriculaProprietarioException(e, String.valueOf(atualizacao.getImovelAtual().getMatricula()));
+		}
+		
 		linha.put("matriculaProprietario", ""+matriculaProprietario);
 
 		String nomeProprietario = parser.obterDadoParser(50).trim();
-		linha.put("nomeProprietario", nomeProprietario);
+		linha.put("nomeProprietario", nomeProprietario.toUpperCase());
 		
 		String tipoPessoaProprietario = parser.obterDadoParser(1).trim();
 		linha.put("tipoPessoaProprietario", tipoPessoaProprietario);
@@ -127,11 +150,16 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		String municipioProprietario = parser.obterDadoParser(15).trim();
 		linha.put("municipioProprietario", municipioProprietario);
 			
-		int matriculaResponsavel = Integer.parseInt(parser.obterDadoParser(9));
+		int matriculaResponsavel = 0;
+		try {
+			matriculaResponsavel = Integer.parseInt(parser.obterDadoParser(9));
+		} catch (Exception e) {
+			throw new MatriculaResponsavelException(e, String.valueOf(atualizacao.getImovelAtual().getMatricula()));
+		}
 		linha.put("matriculaResponsavel", ""+matriculaResponsavel);
 		
 		String nomeResponsavel = parser.obterDadoParser(50).trim();
-		linha.put("nomeReponsavel", nomeResponsavel);
+		linha.put("nomeResponsavel", nomeResponsavel.toUpperCase());
 		
 		String tipoPessoaResponsavel = parser.obterDadoParser(1).trim();
 		linha.put("tipoPessoaResponsavel", tipoPessoaResponsavel);
@@ -186,5 +214,68 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		
 		String data = parser.obterDadoParser(26).trim();
 		linha.put("data", data);
+		
+		validaCampos(atualizacao);		
+	}
+	
+	private void validaCampos(AtualizacaoCadastral atualizacao) throws Exception {
+		Map<String, String> linha = atualizacao.getImovelAtual().getLinhaCliente();
+		
+		ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral = repositorioImovel.pesquisarImovelControleAtualizacaoCadastral(atualizacao.getImovelAtual().getMatricula());
+		
+		if (imovelControleAtualizacaoCadastral != null && imovelControleAtualizacaoCadastral.getSituacaoAtualizacaoCadastral().getId() == SituacaoAtualizacaoCadastral.APROVADO){
+			atualizacao.getImovelAtual().addMensagemErro("Imóvel com situação 'APROVADO'");
+			atualizacao.getImovelAtual().setImovelAprovado(true);
+		}
+
+		if (Util.nomeInvalido(linha.get("nomeUsuario"))){
+			atualizacao.getImovelAtual().addMensagemErro("Nome de usuário inválido.");
+		}
+		
+		testNomeResponsavel(atualizacao, linha);
+
+		testNomeProprietario(atualizacao, linha);
+		
+		if (StringUtils.isNotEmpty(linha.get("cnpjCpfUsuario")) && Util.cpfCnpjInvalido(linha.get("cnpjCpfUsuario"))){
+			atualizacao.getImovelAtual().addMensagemErro("CPF/CNPJ de usuário inválido.");
+			limparDadosUsuario(linha);
+		}
+		
+		if (StringUtils.isNotEmpty(linha.get("cnpjCpfProprietario")) && Util.cpfCnpjInvalido(linha.get("cnpjCpfProprietario"))){
+			atualizacao.getImovelAtual().addMensagemErro("CPF/CNPJ de proprietário inválido.");
+		}
+
+		if (StringUtils.isNotEmpty(linha.get("cnpjCpfResponsavel")) && Util.cpfCnpjInvalido(linha.get("cnpjCpfResponsavel"))){
+			atualizacao.getImovelAtual().addMensagemErro("CPF/CNPJ de responsável inválido.");
+		}
+	}
+
+	private void testNomeProprietario(AtualizacaoCadastral atualizacao, Map<String, String> linha) {
+		if (linha.get("usuarioProprietario").length() > 1 && linha.get("usuarioProprietario").charAt(0) == '2'){
+			if (Util.nomeInvalido(linha.get("nomeProprietario"))){
+				atualizacao.getImovelAtual().addMensagemErro("Nome de proprietário inválido.");
+			}
+		}
+	}
+
+	private void testNomeResponsavel(AtualizacaoCadastral atualizacao, Map<String, String> linha) {
+		if (linha.get("tipoResponsavel").length() > 1 && linha.get("tipoResponsavel").charAt(0) == '2'){
+			if (Util.nomeInvalido(linha.get("nomeResponsavel"))){
+				atualizacao.getImovelAtual().addMensagemErro("Nome de responsável inválido.");
+			}
+		}
+	}
+	
+	private void limparDadosUsuario(Map<String, String> linha) {
+		linha.put("matriculaUsuario", "0");
+		linha.put("nomeUsuario", "");
+		linha.put("tipoPessoaUsuario", "");
+		linha.put("cnpjCpfUsuario", "");
+		linha.put("rgUsuario", "");
+		linha.put("ufRgUsuario", "");
+		linha.put("sexoUsuario", "");
+		linha.put("telefoneUsuario", "");
+		linha.put("celularUsuario", "");
+		linha.put("emailUsuario", "");
 	}
 }

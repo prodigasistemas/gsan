@@ -234,6 +234,7 @@ import gcom.cadastro.EnvioEmail;
 import gcom.cadastro.ImovelInscricaoAlteradaHelper;
 import gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCadastralHelper;
 import gcom.cadastro.atualizacaocadastral.bean.DadosTabelaAtualizacaoCadastralHelper;
+import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificado;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoBinario;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoCritica;
@@ -285,7 +286,6 @@ import gcom.cadastro.imovel.ImovelProgramaEspecial;
 import gcom.cadastro.imovel.ImovelSituacao;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.Subcategoria;
-import gcom.cadastro.imovel.bean.GerarArquivoTextoAtualizacaoCadastralHelper;
 import gcom.cadastro.imovel.bean.ImovelAbaCaracteristicasHelper;
 import gcom.cadastro.imovel.bean.ImovelAbaCaracteristicasRetornoHelper;
 import gcom.cadastro.imovel.bean.ImovelAbaConclusaoHelper;
@@ -39062,14 +39062,9 @@ public class Fachada {
 		}
 	}
 
-	public void carregarImovelAtualizacaoCadastral(BufferedReader buffer, ArrayList<String> nomesImagens) {
-		try {
-			this.getControladorCadastro().carregarImovelAtualizacaoCadastral(
-					buffer, nomesImagens);
-		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex
-					.getParametroMensagem());
-		}
+	public AtualizacaoCadastral carregarImovelAtualizacaoCadastral(BufferedReader buffer, ArrayList<String> nomesImagens) throws Exception {
+		return this.getControladorCadastro().carregarImovelAtualizacaoCadastral(
+				buffer, nomesImagens);
 	}
 	
 	/**

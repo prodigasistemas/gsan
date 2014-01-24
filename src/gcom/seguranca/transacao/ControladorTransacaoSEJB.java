@@ -97,7 +97,6 @@ import gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao;
 import gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCadastralHelper;
 import gcom.cadastro.atualizacaocadastral.bean.DadosTabelaAtualizacaoCadastralHelper;
 import gcom.cadastro.cliente.Cliente;
-import gcom.cadastro.cliente.ClienteAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteEndereco;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteImovel;
@@ -116,6 +115,7 @@ import gcom.cadastro.cliente.FiltroPessoaSexo;
 import gcom.cadastro.cliente.FiltroProfissao;
 import gcom.cadastro.cliente.FiltroRamoAtividade;
 import gcom.cadastro.cliente.FoneTipo;
+import gcom.cadastro.cliente.IClienteAtualizacaoCadastral;
 import gcom.cadastro.cliente.PessoaSexo;
 import gcom.cadastro.cliente.Profissao;
 import gcom.cadastro.cliente.RamoAtividade;
@@ -1955,7 +1955,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 					
 					if(cliente == null || cliente.equals("")){
 						 //pesquisa o cliente atualizacao pelo imóvel e relação
-						 ClienteAtualizacaoCadastral clienteAtualizacaoCadastralAux = getControladorCliente()
+						 IClienteAtualizacaoCadastral clienteAtualizacaoCadastralAux = getControladorCliente()
 								.pesquisarClienteAtualizacaoCadastral(null, tabelaColunaAtualizacaoCadastral.getTabelaAtualizacaoCadastral().getCodigoImovel(), Integer.parseInt(""+ClienteRelacaoTipo.USUARIO));
 						 
 						 //seta o id do cliente cadastrado com o imóvel para ficar esse cliente com o valor anterior 
@@ -2545,7 +2545,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 						
 						if(cliente == null || cliente.equals("")){
 							 //pesquisa o cliente atualizacao pelo imóvel e relação
-							 ClienteAtualizacaoCadastral clienteAtualizacaoCadastralAux = getControladorCliente()
+							 IClienteAtualizacaoCadastral clienteAtualizacaoCadastralAux = getControladorCliente()
 									.pesquisarClienteAtualizacaoCadastral(null, tabelaColunaAtualizacaoCadastral.getTabelaAtualizacaoCadastral().getCodigoImovel(), Integer.parseInt(""+ClienteRelacaoTipo.USUARIO));
 							 
 							 //seta o id do cliente cadastrado com o imóvel para ficar esse cliente com o valor anterior 
