@@ -118,13 +118,15 @@ public class RamoAtividade extends ObjetoTransacao {
         this.ultimaAlteracao = ultimaAlteracao;
     }
 
-    /** default constructor */
     public RamoAtividade() {
     }
 
-    /** minimal constructor */
     public RamoAtividade(short codigo) {
         this.codigo = codigo;
+    }
+    
+    public RamoAtividade(Integer id) {
+    	this.id = id;
     }
 
     public Integer getId() {

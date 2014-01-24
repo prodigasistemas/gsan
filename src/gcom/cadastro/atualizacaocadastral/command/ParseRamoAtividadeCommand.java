@@ -10,6 +10,8 @@ import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.cadastro.imovel.ImovelRamoAtividadeAtualizacaoCadastral;
+import gcom.cadastro.imovel.ImovelRamoAtividadePK;
+import gcom.cadastro.imovel.ImovelSubcategoriaPK;
 import gcom.interceptor.Interceptador;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.util.ControladorException;
@@ -47,6 +49,9 @@ public class ParseRamoAtividadeCommand extends AbstractAtualizacaoCadastralComma
 			ImovelRamoAtividadeAtualizacaoCadastral ramoAtividadeTxt = new ImovelRamoAtividadeAtualizacaoCadastral();
 			ramoAtividadeTxt.setIdImovel(matriculaImovel);
 			ramoAtividadeTxt.setIdRamoAtividade(idRamoAtividade);
+
+			ImovelRamoAtividadePK pf = new ImovelRamoAtividadePK(matriculaImovel, idRamoAtividade);
+			ramoAtividadeTxt.setComp_id(pf);
 
 			Interceptador interceptador = Interceptador.getInstancia();
 			
