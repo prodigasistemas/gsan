@@ -80,6 +80,7 @@ import gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteEndereco;
 import gcom.cadastro.cliente.ClienteFone;
+import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.funcionario.FiltroFuncionario;
 import gcom.cadastro.funcionario.Funcionario;
 import gcom.cadastro.imovel.Imovel;
@@ -376,10 +377,10 @@ public class ExibirInserirRegistroAtendimentoDadosSolicitanteAction extends Gcom
     		long objetoRemocao = (Long.valueOf(httpServletRequest.getParameter("removerFone"))).longValue();
     		Collection colecaoFones = (Collection) sessao.getAttribute("colecaoFonesAbaSolicitante");
     		Iterator iteratorColecaoFones = colecaoFones.iterator();
-    		ClienteFone clienteFone = null;
+    		IClienteFone clienteFone = null;
     		
     		while (iteratorColecaoFones.hasNext()){
-    			clienteFone = (ClienteFone) iteratorColecaoFones.next();
+    			clienteFone = (IClienteFone) iteratorColecaoFones.next();
     			
     			if (obterTimestampIdObjeto(clienteFone) == objetoRemocao){
     				colecaoFones.remove(clienteFone);

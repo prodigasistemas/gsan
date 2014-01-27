@@ -85,6 +85,7 @@ import gcom.cadastro.cliente.FiltroCliente;
 import gcom.cadastro.cliente.FiltroClienteEndereco;
 import gcom.cadastro.cliente.FiltroClienteFone;
 import gcom.cadastro.cliente.FiltroClienteImovel;
+import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.Imovel;
 import gcom.fachada.Fachada;
@@ -350,7 +351,7 @@ public class PesquisarGuiaPagamentoAction extends GcomAction {
 			//Caso o telefone for encontrado para o cliente informado 
 			if (colecaoClienteFone != null && !colecaoClienteFone.isEmpty()) {
 				//Recupera o relacionamento entre cliente e telefone
-				ClienteFone clienteFone = (ClienteFone)Util.retonarObjetoDeColecao(colecaoClienteFone);
+				IClienteFone clienteFone = (IClienteFone)Util.retonarObjetoDeColecao(colecaoClienteFone);
 				
 				//Seta no form o nº do telefone do cliente para exibição
 				pesquisarGuiaPagamentoActionForm.setTelefoneCliente(clienteFone.getTelefone());

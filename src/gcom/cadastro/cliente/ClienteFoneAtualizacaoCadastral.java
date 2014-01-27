@@ -14,7 +14,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 /** @author Hibernate CodeGenerator */
 @ControleAlteracao()
-public class ClienteFoneAtualizacaoCadastral  extends ObjetoTransacao {
+public class ClienteFoneAtualizacaoCadastral  extends ObjetoTransacao implements IClienteFone{
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -24,27 +24,10 @@ public class ClienteFoneAtualizacaoCadastral  extends ObjetoTransacao {
     
     private Integer idClienteAtualizacaoCadastral;
     
-    private Integer idCliente;
-    
-	public Integer getIdClienteAtualizacaoCadastral() {
-		return idClienteAtualizacaoCadastral;
-	}
-
-	public void setIdClienteAtualizacaoCadastral(
-			Integer idClienteAtualizacaoCadastral) {
-		this.idClienteAtualizacaoCadastral = idClienteAtualizacaoCadastral;
-	}
-
-	public Integer getIdCliente() {
-		return idCliente;
-	}
-
-	public void setIdCliente(Integer idCliente) {
-		this.idCliente = idCliente;
-	}
+    private Cliente cliente;
 
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private Integer idFoneTipo;
+    private FoneTipo foneTipo;
 
     /** nullable persistent field */
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
@@ -68,7 +51,7 @@ public class ClienteFoneAtualizacaoCadastral  extends ObjetoTransacao {
     public ClienteFoneAtualizacaoCadastral(Integer id, Integer idClienteAtualizacaoCadastral, Integer idFoneTipo, String ddd, String telefone, String ramal, Date ultimaAlteracao) {
 		this.id = id;
 		this.idClienteAtualizacaoCadastral = idClienteAtualizacaoCadastral;
-		this.idFoneTipo = idFoneTipo;
+		this.foneTipo = new FoneTipo(idFoneTipo);
 		this.ddd = ddd;
 		this.telefone = telefone;
 		this.ramal = ramal;
@@ -78,6 +61,31 @@ public class ClienteFoneAtualizacaoCadastral  extends ObjetoTransacao {
 	/** default constructor */
     public ClienteFoneAtualizacaoCadastral() {
     }
+    
+	public Integer getIdClienteAtualizacaoCadastral() {
+		return idClienteAtualizacaoCadastral;
+	}
+
+	public void setIdClienteAtualizacaoCadastral(
+			Integer idClienteAtualizacaoCadastral) {
+		this.idClienteAtualizacaoCadastral = idClienteAtualizacaoCadastral;
+	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+	
+	public Integer getIdCliente() {
+		return cliente.getId();
+	}
+
+	public void setIdCliente(Integer idCliente) {
+		this.cliente.setId(idCliente);
+	}
 
     public String getDdd() {
         return this.ddd;
@@ -142,10 +150,8 @@ public class ClienteFoneAtualizacaoCadastral  extends ObjetoTransacao {
 
 	@Override
 	public String[] retornaCamposChavePrimaria() {
-		// TODO Auto-generated method stub
 		return null;
 	}
-
 
 	public Short getIndicadorFonePadrao() {
 		return indicadorFonePadrao;
@@ -155,13 +161,19 @@ public class ClienteFoneAtualizacaoCadastral  extends ObjetoTransacao {
 		this.indicadorFonePadrao = indicadorFonePadrao;
 	}
 
+	public FoneTipo getFoneTipo() {
+		return foneTipo;
+	}
+
+	public void setFoneTipo(FoneTipo foneTipo) {
+		this.foneTipo = foneTipo;
+	}
+	
 	public Integer getIdFoneTipo() {
-		return idFoneTipo;
+		return foneTipo.getId();
 	}
 
 	public void setIdFoneTipo(Integer idFoneTipo) {
-		this.idFoneTipo = idFoneTipo;
+		this.foneTipo.setId(idFoneTipo);
 	}
-	
-
 }

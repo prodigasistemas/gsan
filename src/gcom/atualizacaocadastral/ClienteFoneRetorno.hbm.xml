@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <class name="gcom.atualizacaocadastral.ClienteFoneRetorno" table="atualizacaocadastral.cliente_fone_retorno">
+    <id name="id" type="java.lang.Integer" column="clfr_id">
+      <generator class="sequence">
+          <param name="sequence">atualizacaocadastral.sequence_cliente_fone_retorno</param>
+      </generator>
+    </id>
+
+    <property name="ddd" type="java.lang.String" column="clfr_cdddd" length="2"/>
+    <property name="telefone" type="java.lang.String" column="clfr_nnfone" length="9"/>
+    <property name="ultimaAlteracao" type="java.sql.Timestamp" column="clfr_tmultimaalteracao" not-null="true" length="8"/>
+    
+    <many-to-one name="foneTipo" class="gcom.cadastro.cliente.FoneTipo" not-null="true">
+      <column name="fnet_id"/>
+    </many-to-one>
+    
+    <many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="true">
+      <column name="clie_cdclienteresponsavel"/>
+    </many-to-one>
+  </class>
+</hibernate-mapping>
