@@ -24,7 +24,7 @@ public class EfetuarValidacoesAtualizacaoCadastralCommand extends AbstractAtuali
 	public void execute(AtualizacaoCadastral atualizacao) throws Exception {
 		if (atualizacao.getImovelAtual().getDadosImovel().contemTipoEconomia(TipoEconomia.COMERCIAL, TipoEconomia.PUBLICO, TipoEconomia.INDUSTRIAL)){
 			if (atualizacao.getImovelAtual().getDadosRamoAtividade().isEmpty()){
-				atualizacao.getImovelAtual().addMensagemErro("Imovel sem ramo de atividade");
+				atualizacao.getImovelAtual().addMensagemErro("Imovel do tipo comercial, público ou industrial deve possuir ramo de atividade");
 			}
 		}
 	}
