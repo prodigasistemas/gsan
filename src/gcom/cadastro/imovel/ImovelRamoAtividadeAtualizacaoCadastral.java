@@ -1,5 +1,6 @@
 package gcom.cadastro.imovel;
 
+import gcom.atualizacaocadastral.IImovelRamoAtividade;
 import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.ObjetoTransacao;
 import gcom.seguranca.transacao.FiltroTabela;
@@ -9,9 +10,8 @@ import gcom.util.filtro.ParametroSimples;
 import java.util.Date;
 
 
-/** @author Hibernate CodeGenerator */
 @ControleAlteracao()
-public class ImovelRamoAtividadeAtualizacaoCadastral extends ObjetoTransacao {
+public class ImovelRamoAtividadeAtualizacaoCadastral extends ObjetoTransacao implements IImovelRamoAtividade {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -24,8 +24,9 @@ public class ImovelRamoAtividadeAtualizacaoCadastral extends ObjetoTransacao {
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idRamoAtividade;
 
-    /** persistent field */
     private Date ultimaAlteracao;
+    
+    private ImovelRamoAtividadePK comp_id;
     
     
     public Integer getId() {
@@ -69,10 +70,15 @@ public class ImovelRamoAtividadeAtualizacaoCadastral extends ObjetoTransacao {
 
 	@Override
 	public String[] retornaCamposChavePrimaria() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
+	public ImovelRamoAtividadePK getComp_id() {
+		return comp_id;
+	}
 
+	public void setComp_id(ImovelRamoAtividadePK comp_id) {
+		this.comp_id = comp_id;
+	}
 	
 }

@@ -13,7 +13,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 /** @author Hibernate CodeGenerator */
 @ControleAlteracao()
-public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements IClienteAtualizacaoCadastral {
+public abstract class ClienteAtualizacaoCadastral extends ObjetoTransacao implements IClienteAtualizacaoCadastral {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -732,5 +732,5 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 		this.idRamoAtividade = idRamoAtividade;
 	}
 	
-	
+	public abstract void buildCliente();
 }

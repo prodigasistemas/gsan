@@ -1,11 +1,11 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
+import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.IRepositorioImovel;
-import gcom.cadastro.imovel.ImovelControleAtualizacaoCadastral;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ParserUtil;
@@ -219,63 +219,68 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 	}
 	
 	private void validaCampos(AtualizacaoCadastral atualizacao) throws Exception {
-		Map<String, String> linha = atualizacao.getImovelAtual().getLinhaCliente();
+		AtualizacaoCadastralImovel imovelAtual = atualizacao.getImovelAtual();
+		Map<String, String> linha = imovelAtual.getLinhaCliente();
 		
 		ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral = repositorioImovel.pesquisarImovelControleAtualizacaoCadastral(atualizacao.getImovelAtual().getMatricula());
 		
 		if (imovelControleAtualizacaoCadastral != null && imovelControleAtualizacaoCadastral.getSituacaoAtualizacaoCadastral().getId() == SituacaoAtualizacaoCadastral.APROVADO){
 			atualizacao.getImovelAtual().addMensagemErro("Imóvel com situação 'APROVADO'");
 			atualizacao.getImovelAtual().setImovelAprovado(true);
+		} else {
+            controladorImovel.apagarInformacoesRetornoImovelAtualizacaoCadastral(imovelControleAtualizacaoCadastral.getImovel().getId());
 		}
 
-		if (Util.nomeInvalido(linha.get("nomeUsuario"))){
-			atualizacao.getImovelAtual().addMensagemErro("Nome de usuário inválido.");
-		}
 		
-		testNomeResponsavel(atualizacao, linha);
+		testaUsuario(imovelAtual, linha);
 
-		testNomeProprietario(atualizacao, linha);
+		testaResponsavel(imovelAtual, linha);
+
+		testaProprietario(imovelAtual, linha);
+		
+	}
+	
+	private void testaUsuario(AtualizacaoCadastralImovel imovelAtual, Map<String, String> linha) {
+		if (Util.nomeInvalido(linha.get("nomeUsuario"))){
+			imovelAtual.addMensagemErro("Nome de usuário inválido.");
+		}
 		
 		if (StringUtils.isNotEmpty(linha.get("cnpjCpfUsuario")) && Util.cpfCnpjInvalido(linha.get("cnpjCpfUsuario"))){
-			atualizacao.getImovelAtual().addMensagemErro("CPF/CNPJ de usuário inválido.");
-			limparDadosUsuario(linha);
+			imovelAtual.addMensagemErro("CPF/CNPJ de usuário inválido.");
+			imovelAtual.limparDadosUsuario();
+		}		
+	}
+
+	private void testaProprietario(AtualizacaoCadastralImovel imovelAtual, Map<String, String> linha) {
+		if (linha.get("usuarioProprietario").length() > 1){
+			if (linha.get("usuarioProprietario").charAt(0) == '2'){
+				if (Util.nomeInvalido(linha.get("nomeProprietario"))){
+					imovelAtual.addMensagemErro("Nome de proprietário inválido.");
+				}
+			}else{
+				imovelAtual.limparDadosProprietario();
+			}
 		}
 		
 		if (StringUtils.isNotEmpty(linha.get("cnpjCpfProprietario")) && Util.cpfCnpjInvalido(linha.get("cnpjCpfProprietario"))){
-			atualizacao.getImovelAtual().addMensagemErro("CPF/CNPJ de proprietário inválido.");
+			imovelAtual.addMensagemErro("CPF/CNPJ de proprietário inválido.");
 		}
+	}
 
+	private void testaResponsavel(AtualizacaoCadastralImovel imovelAtual, Map<String, String> linha) {
+		if (linha.get("tipoResponsavel").length() > 1){
+			if (linha.get("tipoResponsavel").charAt(0) == '2'){
+				if (Util.nomeInvalido(linha.get("nomeResponsavel"))){
+					imovelAtual.addMensagemErro("Nome de responsável inválido.");
+				}
+			}
+			else{
+				imovelAtual.limparDadosResponsavel();
+			}
+		}
+		
 		if (StringUtils.isNotEmpty(linha.get("cnpjCpfResponsavel")) && Util.cpfCnpjInvalido(linha.get("cnpjCpfResponsavel"))){
-			atualizacao.getImovelAtual().addMensagemErro("CPF/CNPJ de responsável inválido.");
+			imovelAtual.addMensagemErro("CPF/CNPJ de responsável inválido.");
 		}
-	}
-
-	private void testNomeProprietario(AtualizacaoCadastral atualizacao, Map<String, String> linha) {
-		if (linha.get("usuarioProprietario").length() > 1 && linha.get("usuarioProprietario").charAt(0) == '2'){
-			if (Util.nomeInvalido(linha.get("nomeProprietario"))){
-				atualizacao.getImovelAtual().addMensagemErro("Nome de proprietário inválido.");
-			}
-		}
-	}
-
-	private void testNomeResponsavel(AtualizacaoCadastral atualizacao, Map<String, String> linha) {
-		if (linha.get("tipoResponsavel").length() > 1 && linha.get("tipoResponsavel").charAt(0) == '2'){
-			if (Util.nomeInvalido(linha.get("nomeResponsavel"))){
-				atualizacao.getImovelAtual().addMensagemErro("Nome de responsável inválido.");
-			}
-		}
-	}
-	
-	private void limparDadosUsuario(Map<String, String> linha) {
-		linha.put("matriculaUsuario", "0");
-		linha.put("nomeUsuario", "");
-		linha.put("tipoPessoaUsuario", "");
-		linha.put("cnpjCpfUsuario", "");
-		linha.put("rgUsuario", "");
-		linha.put("ufRgUsuario", "");
-		linha.put("sexoUsuario", "");
-		linha.put("telefoneUsuario", "");
-		linha.put("celularUsuario", "");
-		linha.put("emailUsuario", "");
 	}
 }

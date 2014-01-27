@@ -70,6 +70,7 @@
 		<property name="idLocalInstalacaoRamal" type="java.lang.Integer" column="rlin_id" length="2"/>
 		<property name="idArquivoTexto" type="java.lang.Integer" column="txac_id" length="10"/>
 		<property name="indicadorAtualizado" type="java.lang.Integer" column="imac_icatualizado" length="2" not-null="false"/>
-		<property name="tipoOperacao" type="java.lang.Integer" column="imac_tipooperacao" length="1" not-null="true"/>
+		<property name="tipoOperacao" type="java.lang.Integer" column="imac_tipooperacao" length="1"/>
+
 	</class>
 </hibernate-mapping>

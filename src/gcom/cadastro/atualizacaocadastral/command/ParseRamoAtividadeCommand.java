@@ -1,15 +1,20 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
+import java.util.Date;
 import java.util.Map;
 
+import gcom.atualizacaocadastral.ImovelRamoAtividadeRetorno;
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.cadastro.imovel.ImovelRamoAtividadeAtualizacaoCadastral;
+import gcom.cadastro.imovel.ImovelRamoAtividadePK;
+import gcom.cadastro.imovel.ImovelSubcategoriaPK;
 import gcom.interceptor.Interceptador;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
+import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ParserUtil;
 
@@ -45,11 +50,25 @@ public class ParseRamoAtividadeCommand extends AbstractAtualizacaoCadastralComma
 			ramoAtividadeTxt.setIdImovel(matriculaImovel);
 			ramoAtividadeTxt.setIdRamoAtividade(idRamoAtividade);
 
+			ImovelRamoAtividadePK pf = new ImovelRamoAtividadePK(matriculaImovel, idRamoAtividade);
+			ramoAtividadeTxt.setComp_id(pf);
+
 			Interceptador interceptador = Interceptador.getInstancia();
 			
 			ArquivoTextoAtualizacaoCadastral arquivoTexto = atualizacao.getArquivoTexto();
+			
+			int tipoOperacao = Integer.parseInt(atualizacao.getImovelAtual().getLinhaImovel("tipoOperacao"));
 
-			salvarTabelaColunaAtualizacaoCadastral(atualizacao, new ImovelRamoAtividadeAtualizacaoCadastral(), ramoAtividadeTxt, matriculaImovel);
+			salvarTabelaColunaAtualizacaoCadastral(atualizacao, new ImovelRamoAtividadeAtualizacaoCadastral(),
+					ramoAtividadeTxt, matriculaImovel, tipoOperacao);
+			
+			salvarImovelRamoAtividadeRetorno(ramoAtividadeTxt);
 		}
+	}
+	
+	private void salvarImovelRamoAtividadeRetorno(ImovelRamoAtividadeAtualizacaoCadastral imovelRamoAtividadeTxt) throws ControladorException {
+		ImovelRamoAtividadeRetorno imovelRamoAtividadeRetorno = new ImovelRamoAtividadeRetorno(imovelRamoAtividadeTxt);
+		imovelRamoAtividadeRetorno.setUltimaAlteracao(new Date());
+		controladorUtil.inserir(imovelRamoAtividadeRetorno);
 	}
 }

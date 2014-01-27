@@ -72,7 +72,9 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 
 	public abstract void execute(AtualizacaoCadastral atualizacao) throws Exception;
 
-	public void salvarTabelaColunaAtualizacaoCadastral(AtualizacaoCadastral atualizacaoCadastral, Object objetoAtualizacaoCadastralBase, Object objetoAtualizacaoCadastralTxt, int matriculaImovel) throws ControladorException {
+	public void salvarTabelaColunaAtualizacaoCadastral(AtualizacaoCadastral atualizacaoCadastral,
+			Object objetoAtualizacaoCadastralBase, Object objetoAtualizacaoCadastralTxt,
+			int matriculaImovel, int tipoOperacao) throws ControladorException {
 		Collection<TabelaLinhaColunaAlteracao> colunasAlteradas = null;
 		
 		ArquivoTextoAtualizacaoCadastral arquivoTexto = atualizacaoCadastral.getArquivoTexto();
@@ -94,7 +96,7 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 			if (colunasAlteradas != null && !colunasAlteradas.isEmpty()) {
 				TabelaAtualizacaoCadastral tabelaAtualizacaoCadastral = new TabelaAtualizacaoCadastral();
 				AlteracaoTipo alteracaoTipo = new AlteracaoTipo();
-				alteracaoTipo.setId(AlteracaoTipo.ALTERACAO);
+				alteracaoTipo.setId(tipoOperacao);
 				tabelaAtualizacaoCadastral.setAlteracaoTipo(alteracaoTipo);
 				Tabela tabela = new Tabela();
 

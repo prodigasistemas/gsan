@@ -160,4 +160,63 @@ public class AtualizacaoCadastralImovel {
 	public AtualizacaoCadastral getAtualizacaoArquivo() {
 		return atualizacaoArquivo;
 	}
+	
+	public void limparDadosUsuario() {
+		linhaCliente.put("matriculaUsuario", "0");
+		
+		linhaCliente.put("nomeUsuario", "");
+		linhaCliente.put("tipoPessoaUsuario", "");
+		linhaCliente.put("cnpjCpfUsuario", "");
+		linhaCliente.put("rgUsuario", "");
+		linhaCliente.put("ufRgUsuario", "");
+		linhaCliente.put("sexoUsuario", "");
+		linhaCliente.put("telefoneUsuario", "");
+		linhaCliente.put("celularUsuario", "");
+		linhaCliente.put("emailUsuario", "");
+	}
+	
+	public void limparDadosProprietario() {
+		linhaCliente.put("usuarioProprietario", "1");
+		
+		linhaCliente.put("matriculaProprietario", "0");
+		linhaCliente.put("nomeProprietario", "");
+		linhaCliente.put("tipoPessoaProprietario", "");
+		linhaCliente.put("cnpjCpfProprietario", "");
+		linhaCliente.put("rgProprietario", "");
+		linhaCliente.put("ufRgProprietario", "");
+		linhaCliente.put("sexoProprietario", "");
+		linhaCliente.put("telefoneProprietario", "");
+		linhaCliente.put("celularProprietario", "");
+		linhaCliente.put("emailProprietario", "");
+		linhaCliente.put("idTipoLogradouroProprietario", "");
+		linhaCliente.put("logradouroProprietario", "");
+		linhaCliente.put("numeroProprietario", "");
+		linhaCliente.put("complementoProprietario", "");
+		linhaCliente.put("bairroProprietario", "");
+		linhaCliente.put("cepProprietario", "");
+		linhaCliente.put("municipioProprietario", "");		
+	}		
+	
+	public void limparDadosResponsavel() {
+		linhaCliente.put("tipoResponsavel", "0");
+		
+		linhaCliente.put("matriculaResponsavel", "0");
+		linhaCliente.put("nomeResponsavel", "");
+		linhaCliente.put("tipoPessoaResponsavel", "");
+		linhaCliente.put("cnpjCpfResponsavel", "");
+		linhaCliente.put("rgResponsavel", "");
+		linhaCliente.put("ufRgResponsavel", "");
+		linhaCliente.put("sexoResponsavel", "");
+		linhaCliente.put("telefoneResponsavel", "");
+		linhaCliente.put("celularResponsavel", "");
+		linhaCliente.put("emailResponsavel", "");
+		linhaCliente.put("idTipoLogradouroResponsavel", "");
+		linhaCliente.put("logradouroResponsavel", "");
+		linhaCliente.put("numeroResponsavel", "");
+		linhaCliente.put("complementoResponsavel", "");
+		linhaCliente.put("bairroResponsavel", "");
+		linhaCliente.put("cepResponsavel", "");
+		linhaCliente.put("municipioResponsavel", "");		
+		
+	}
 }

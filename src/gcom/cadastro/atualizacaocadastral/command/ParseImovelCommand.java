@@ -38,7 +38,7 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 	public void execute(AtualizacaoCadastral atualizacao) throws Exception {
 		Map<String, String> linha = atualizacao.getImovelAtual().getLinhaImovel();
 		
-		Integer matricula = Integer.parseInt(parser.obterDadoParser(9));
+		Integer matricula = Integer.parseInt(parser.obterDadoParser(9).trim());
 		linha.put("matricula", "" + matricula);
 		
 		String tipoOperacao = parser.obterDadoParser(1);
@@ -188,14 +188,10 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 		AtualizacaoCadastralImovel imovel = atualizacao.getImovelAtual(); 
 		Map<String, String> linha = imovel.getLinhaImovel();
 		
-		valiadarTipoLogradouro(imovel, linha);
-
+		validarTipoLogradouro(imovel, linha);
 		validarTipoOperacao(imovel, linha);
-		
 		validarCoordenadas(imovel, linha);
-		
 		validarEconomias(imovel, linha);
-		
 	}
 
 	private void validarTipoOperacao(AtualizacaoCadastralImovel imovel, Map<String, String> linha) throws ErroRepositorioException {
@@ -278,64 +274,13 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 					imovel.addMensagemErro("Número de inscrição repetido");
 				}
 				
-				limparDadosProprietario(imovel);
-				limparDadosResponsavel(imovel);
+				imovel.limparDadosProprietario();
+				imovel.limparDadosResponsavel();
 			}
 		}
 	}
 
-	private void limparDadosResponsavel(AtualizacaoCadastralImovel imovel) {
-		Map<String, String> cliente = imovel.getLinhaCliente();
-		cliente.put("tipoResponsavel", "0");
-		
-		cliente.put("matriculaResponsavel", "0");
-		cliente.put("nomeResponsavel", "");
-		cliente.put("tipoPessoaResponsavel", "");
-		cliente.put("cnpjCpfResponsavel", "");
-		cliente.put("rgResponsavel", "");
-		cliente.put("ufRgResponsavel", "");
-		cliente.put("sexoResponsavel", "");
-		cliente.put("telefoneResponsavel", "");
-		cliente.put("celularResponsavel", "");
-		cliente.put("emailResponsavel", "");
-		cliente.put("idTipoLogradouroResponsavel", "");
-		cliente.put("logradouroResponsavel", "");
-		cliente.put("numeroResponsavel", "");
-		cliente.put("complementoResponsavel", "");
-		cliente.put("bairroResponsavel", "");
-		cliente.put("cepResponsavel", "");
-		cliente.put("municipioResponsavel", "");		
-		
-	}
-
-	private void limparDadosProprietario(AtualizacaoCadastralImovel imovel) {
-		Map<String, String> cliente = imovel.getLinhaCliente();
-		cliente.put("usuarioProprietario", "1");
-		
-		cliente.put("matriculaProprietario", "0");
-		cliente.put("nomeProprietario", "");
-		cliente.put("tipoPessoaProprietario", "");
-		cliente.put("cnpjCpfProprietario", "");
-		cliente.put("rgProprietario", "");
-		cliente.put("ufRgProprietario", "");
-		cliente.put("sexoProprietario", "");
-		cliente.put("telefoneProprietario", "");
-		cliente.put("celularProprietario", "");
-		cliente.put("emailProprietario", "");
-		cliente.put("idTipoLogradouroProprietario", "");
-		cliente.put("logradouroProprietario", "");
-		cliente.put("numeroProprietario", "");
-		cliente.put("complementoProprietario", "");
-		cliente.put("bairroProprietario", "");
-		cliente.put("cepProprietario", "");
-		cliente.put("municipioProprietario", "");		
-	}
-
-	private boolean campoNumericoInvalido(String tipoOperacao) {
-		return StringUtils.isEmpty(tipoOperacao) || !StringUtils.isNumeric(tipoOperacao) || StringUtils.containsOnly(tipoOperacao, new char[]{'0'}) ;
-	}
-
-	private void valiadarTipoLogradouro(AtualizacaoCadastralImovel imovel, Map<String, String> linha) throws ErroRepositorioException {
+	private void validarTipoLogradouro(AtualizacaoCadastralImovel imovel, Map<String, String> linha) throws ErroRepositorioException {
 		String tipoLogradouro = linha.get("idTipoLogradouroImovel");
 		
 		if (StringUtils.isEmpty(tipoLogradouro)){
@@ -388,4 +333,9 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 			}
 		}
 	}
+
+	private boolean campoNumericoInvalido(String tipoOperacao) {
+		return StringUtils.isEmpty(tipoOperacao) || !StringUtils.isNumeric(tipoOperacao) || StringUtils.containsOnly(tipoOperacao, new char[]{'0'}) ;
+	}
+	
 }

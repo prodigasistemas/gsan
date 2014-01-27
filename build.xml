@@ -8,7 +8,7 @@
 
 	<property file="build.properties" />
 
-	<property name="servidor.tipo" value="Batch" />
+	<property name="servidor.tipo" value="${gsan.tipo}" />
 	<property name="servidor.versao" value="5.1.1.57" />
 
 	<property name="dest" value="bin" />
@@ -97,6 +97,9 @@
 				<include name="**/rodape.jsp" />
 			</fileset>
 		</replaceregexp>
+		
+		<replaceregexp file="${src}/gcom/properties/application.properties" match="gsan.tipo=(.*)" replace="gsan.tipo=${gsan.tipo}" byline="true"/>
+		
 	</target>
 
 	<target depends="init, alterarDataVersao" name="javacompile">

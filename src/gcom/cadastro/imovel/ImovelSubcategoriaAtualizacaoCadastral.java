@@ -11,7 +11,7 @@ import java.util.Date;
 
 /** @author Hibernate CodeGenerator */
 @ControleAlteracao()
-public class ImovelSubcategoriaAtualizacaoCadastral extends ObjetoTransacao {
+public class ImovelSubcategoriaAtualizacaoCadastral extends ObjetoTransacao implements IImovelSubcategoria {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -36,6 +36,8 @@ public class ImovelSubcategoriaAtualizacaoCadastral extends ObjetoTransacao {
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private short quantidadeEconomias;
 
+	private ImovelSubcategoriaPK comp_id;
+	
     /** persistent field */
     private Date ultimaAlteracao;
 
@@ -48,6 +50,8 @@ public class ImovelSubcategoriaAtualizacaoCadastral extends ObjetoTransacao {
 		this.descricaoSubcategoria = descricaoSubcategoria;
 		this.quantidadeEconomias = quantidadeEconomias;
 		this.ultimaAlteracao = ultimaAlteracao;
+		
+		this.comp_id = new ImovelSubcategoriaPK(new Imovel(idImovel), new Subcategoria(idSubcategoria));
 	}
 
 	/** default constructor */
@@ -130,6 +134,14 @@ public class ImovelSubcategoriaAtualizacaoCadastral extends ObjetoTransacao {
 	public String[] retornaCamposChavePrimaria() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	public ImovelSubcategoriaPK getComp_id() {
+		return comp_id;
+	}
+
+	public void setComp_id(ImovelSubcategoriaPK compId) {
+		this.comp_id = compId;
 	}
 
 }
