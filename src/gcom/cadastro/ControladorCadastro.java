@@ -7591,8 +7591,7 @@ public class ControladorCadastro implements SessionBean {
 						+ "_"
 						+ Util.adicionarZerosEsquedaNumero(3, setor.getCodigo() + "")
 						+ "_"
-						+ Util.adicionarZerosEsquedaNumero(2, rota.getCodigo() + "")
-						+ "_" + anoMesReferencia;
+						+ Util.adicionarZerosEsquedaNumero(2, rota.getCodigo() + "");
 				arquivoTextoAtualizacaoCadastral.setDescricaoArquivo(descricaoArquivoTxt);
 				
 				// Leiturista
@@ -10191,13 +10190,12 @@ public class ControladorCadastro implements SessionBean {
 	 * @throws ControladorException
 	 */
 	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(
-			String idArquivoTxt) throws ControladorException {
+			Integer idArquivoTxt) throws ControladorException {
 
 		ArquivoTextoAtualizacaoCadastral retorno = null;
 
 		try {
-			retorno = this.repositorioCadastro
-					.pesquisarArquivoTextoAtualizacaoCadastro(idArquivoTxt);
+			retorno = this.repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(idArquivoTxt);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}

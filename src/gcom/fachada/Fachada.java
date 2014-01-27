@@ -39168,10 +39168,9 @@ public class Fachada {
 	 * @return Collection
 	 */
 	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(
-			String idArquivoTxt) {
+			Integer idArquivoTxt) {
 		try {
-			return this.getControladorCadastro()
-					.pesquisarArquivoTextoAtualizacaoCadastro(idArquivoTxt);
+			return this.getControladorCadastro().pesquisarArquivoTextoAtualizacaoCadastro(idArquivoTxt);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex
 					.getParametroMensagem());

@@ -13,6 +13,10 @@ public class ImovelRamoAtividadeRetorno implements IImovelRamoAtividade {
 		
 	}
 	
+	public ImovelRamoAtividadeRetorno(ImovelRamoAtividadePK pk) {
+		this.comp_id = pk;
+	}
+	
 	public ImovelRamoAtividadeRetorno(IImovelRamoAtividade imovelRamoAtividade) {
 		this.comp_id = imovelRamoAtividade.getComp_id();
 	}

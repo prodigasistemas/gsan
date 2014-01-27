@@ -19,6 +19,8 @@ import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastralBuilder;
+import gcom.cadastro.imovel.ImovelRamoAtividadeAtualizacaoCadastral;
+import gcom.cadastro.imovel.ImovelRamoAtividadePK;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoriaPK;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
@@ -61,6 +63,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	}
 	
 	public void salvarObjetosAtualizacaoCadastral() throws Exception {
+		salvarRamoAtividade();
 		salvarClienteUsuario();
 		salvarClienteResponsavel();
 		salvarClienteProprietario();
@@ -69,6 +72,31 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		
 		atualizarSituacaoControleImovelAtualizacaoCadastral(SituacaoAtualizacaoCadastral.TRANSMITIDO);
 	}
+	
+	private void salvarRamoAtividade() throws Exception {
+		for (DadoAtualizacaoRamoAtividade ramo: atualizacaoCadastralImovel.getDadosRamoAtividade()){
+			boolean existeRamoAtividadeAtualizacao = repositorioCadastro.existeImovelRamoAtividadeAtualizacaoCadastral(matriculaImovel, ramo.getId());
+			
+			if (!existeRamoAtividadeAtualizacao) {
+				ImovelRamoAtividadeAtualizacaoCadastral ramoAtividadeTxt = new ImovelRamoAtividadeAtualizacaoCadastral();
+				ramoAtividadeTxt.setIdImovel(matriculaImovel);
+				ramoAtividadeTxt.setIdRamoAtividade(ramo.getId());
+				
+				ImovelRamoAtividadePK pk = new ImovelRamoAtividadePK(matriculaImovel, ramo.getId());
+				ramoAtividadeTxt.setComp_id(pk);
+				
+				int tipoOperacao = Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("tipoOperacao"));
+				
+				salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, new ImovelRamoAtividadeAtualizacaoCadastral(),
+						ramoAtividadeTxt, matriculaImovel, tipoOperacao);
+				
+				ImovelRamoAtividadeRetorno imovelRamoAtividadeRetorno = new ImovelRamoAtividadeRetorno(pk);
+				imovelRamoAtividadeRetorno.setUltimaAlteracao(new Date());
+				controladorUtil.inserir(imovelRamoAtividadeRetorno);
+			}
+		}
+	}
+
 
 	private void salvarImovel() throws ControladorException {
 		ImovelAtualizacaoCadastralBuilder builder = new ImovelAtualizacaoCadastralBuilder(matriculaImovel, atualizacaoCadastralImovel, tipoOperacao);

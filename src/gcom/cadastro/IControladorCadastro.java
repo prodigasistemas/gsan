@@ -870,7 +870,7 @@ public interface IControladorCadastro {
 	 * @return Collection
 	 * @throws ControladorException
 	 */
-	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(String idArquivoTxt)
+	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(Integer idArquivoTxt)
 		throws ControladorException;
 	
 	/**

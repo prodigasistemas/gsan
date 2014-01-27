@@ -147,11 +147,14 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+import org.jboss.logging.Logger;
 
 /**
  * @author Administrador
  */
 public class RepositorioCadastroHBM implements IRepositorioCadastro {
+	
+	private Logger logger = Logger.getLogger(RepositorioCadastroHBM.class);
 
 	private static IRepositorioCadastro instancia;
 
@@ -5316,7 +5319,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 	 * @throws ErroRepositorioException
 	 */
 	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(
-			String idArquivoTxt) throws ErroRepositorioException {
+			Integer idArquivoTxt) throws ErroRepositorioException {
 
 		ArquivoTextoAtualizacaoCadastral retorno = null;
 		Session session = HibernateUtil.getSession();
@@ -5341,21 +5344,15 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 	}
 
 	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(
-			String inscricao, String anoMesReferencia)
+			String descricao)
 			throws ErroRepositorioException {
 
 		ArquivoTextoAtualizacaoCadastral retorno = null;
 		Session session = HibernateUtil.getSession();
 		String consulta = "";
-		String localidade = inscricao.substring(0, 3);
-		String setor = inscricao.substring(3, 6);
-		String rota = inscricao.substring(6, 8);
-
-		String descricao = String.format("%s_%s_%s_%s", localidade, setor,
-				rota, anoMesReferencia);
 
 		try {
-			consulta = " select txac"// 2
+			consulta = " select txac"
 					+ " from ArquivoTextoAtualizacaoCadastral txac"
 					+ " inner join fetch txac.leiturista leit"
 					+ " where txac.descricaoArquivo = :descricao";
@@ -9999,8 +9996,8 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 				}
 			}
 		} catch (HibernateException e) {
-			e.printStackTrace();
-			throw new ErroRepositorioException("Erro no Hibernate");
+			logger.error("Erro ao obterImovelRamoAtividadeAtualizacaoCadastral", e);
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
@@ -10008,9 +10005,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return imovelRamoAtividade;
 	}
 
-	public boolean existeImovelRamoAtividadeAtualizacaoCadastral(
-			Integer idImovel, Integer idRamoAtividade)
-			throws ErroRepositorioException {
+	public boolean existeImovelRamoAtividadeAtualizacaoCadastral(Integer idImovel, Integer idRamoAtividade) throws ErroRepositorioException {
 		
 		Session session = HibernateUtil.getSession();
 		String consulta;
@@ -10034,12 +10029,37 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 				return true;
 			}
 		} catch (HibernateException e) {
-			e.printStackTrace();
-			throw new ErroRepositorioException("Erro no Hibernate");
+			logger.error("Erro ao pesquisar ramo de atividade atualizacao cadastral", e);
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
 
+		return false;
+	}
+	
+	public boolean existeRamoAtividade(Integer idRamoAtividade)	throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("select ramo ")
+			.append(" from RamoAtividade ramo ")
+			.append(" where ramo.id = :idRamo");
+			
+			List retorno = session.createQuery(sql.toString())
+					.setInteger("idRamo", idRamoAtividade)
+					.list();
+
+			if (retorno.size() > 0) {
+				return true;
+			}
+		} catch (HibernateException e) {
+			logger.error("Erro ao pesquisar ramo de atividade", e);
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
 		return false;
 	}
 }

@@ -17196,6 +17196,7 @@ public class ControladorImovelSEJB implements SessionBean {
 		apagarTabelaAtualizacaoCadastralPorIdImovel(idImovel);
 		apagarImovelRetorno(idImovel);
 		apagarImovelSubcategoriaRetorno(idImovel);
+		apagarImovelRamoAtividade(idImovel);
 	}
 
 	public void apagarImovelRetorno(Integer idImovel) throws ControladorException {
@@ -17239,6 +17240,14 @@ public class ControladorImovelSEJB implements SessionBean {
 					this.getControladorUtil().remover(imovelSubCategoriaRetorno);
 				}
 			}
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void apagarImovelRamoAtividade(Integer idImovel) throws ControladorException {
+		try {
+			repositorioAtualizacaoCadastral.apagarImovelRamoAtividadeRetornoPorIdImovel(idImovel);
 		} catch (ErroRepositorioException e) {
 			e.printStackTrace();
 		}

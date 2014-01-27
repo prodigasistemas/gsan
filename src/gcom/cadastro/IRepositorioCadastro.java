@@ -699,7 +699,7 @@ public interface IRepositorioCadastro {
 	 * @return Collection
 	 * @throws ErroRepositorioException
 	 */
-	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(String idArquivoTxt)
+	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(Integer idArquivoTxt)
 		throws ErroRepositorioException;
 	
 	/**
@@ -738,7 +738,7 @@ public interface IRepositorioCadastro {
 	 * @throws ErroRepositorioException
 	 */
 
-	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(String inscricao, String anoMesReferencia)
+	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(String descricao)
 	throws ErroRepositorioException;
 	
 	public Collection<Integer>  obterIdsImovelGeracaoTabelasTemporarias(Integer idSetor, ImovelGeracaoTabelasTemporariasCadastroHelper helper) 
@@ -1586,4 +1586,6 @@ public interface IRepositorioCadastro {
  	 * @throws ErroRepositorioException
  	 */
  	public boolean existeImovelRamoAtividadeAtualizacaoCadastral(Integer idImovel, Integer idRamoAtividade) throws ErroRepositorioException;
+ 	
+	public boolean existeRamoAtividade(Integer idRamoAtividade)	throws ErroRepositorioException;
 }
