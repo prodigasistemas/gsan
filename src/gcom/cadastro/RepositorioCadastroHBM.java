@@ -5319,7 +5319,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 	 * @throws ErroRepositorioException
 	 */
 	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(
-			String idArquivoTxt) throws ErroRepositorioException {
+			Integer idArquivoTxt) throws ErroRepositorioException {
 
 		ArquivoTextoAtualizacaoCadastral retorno = null;
 		Session session = HibernateUtil.getSession();
@@ -5344,21 +5344,15 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 	}
 
 	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(
-			String inscricao, String anoMesReferencia)
+			String descricao)
 			throws ErroRepositorioException {
 
 		ArquivoTextoAtualizacaoCadastral retorno = null;
 		Session session = HibernateUtil.getSession();
 		String consulta = "";
-		String localidade = inscricao.substring(0, 3);
-		String setor = inscricao.substring(3, 6);
-		String rota = inscricao.substring(6, 8);
-
-		String descricao = String.format("%s_%s_%s_%s", localidade, setor,
-				rota, anoMesReferencia);
 
 		try {
-			consulta = " select txac"// 2
+			consulta = " select txac"
 					+ " from ArquivoTextoAtualizacaoCadastral txac"
 					+ " inner join fetch txac.leiturista leit"
 					+ " where txac.descricaoArquivo = :descricao";
