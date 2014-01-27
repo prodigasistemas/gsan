@@ -96,7 +96,6 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		}
 	}
 
-
 	private void salvarImovel() throws ControladorException {
 		ImovelAtualizacaoCadastralBuilder builder = new ImovelAtualizacaoCadastralBuilder(matriculaImovel, atualizacaoCadastralImovel, tipoOperacao);
 		ImovelAtualizacaoCadastral imovelTxt = builder.getImovelAtualizacaoCadastral();
