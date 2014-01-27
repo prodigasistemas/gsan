@@ -230,7 +230,6 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		} else {
             controladorImovel.apagarInformacoesRetornoImovelAtualizacaoCadastral(atualizacao.getImovelAtual().getMatricula());
 		}
-
 		
 		testaUsuario(imovelAtual, linha);
 
