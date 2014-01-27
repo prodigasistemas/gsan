@@ -21,4 +21,13 @@ public class DadoAtualizacaoImovel {
 		}
 		return false;
 	}
+	
+	public boolean contemApenasResidencial(){
+		for (TipoEconomia tipo: TipoEconomia.values()){
+			if (tipo != TipoEconomia.RESIDENCIAL && tiposEconomia.contains(tipo)){
+				return false;
+			}
+		}
+		return true;
+	}
 }

@@ -147,11 +147,14 @@ import org.hibernate.HibernateException;
 import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
+import org.jboss.logging.Logger;
 
 /**
  * @author Administrador
  */
 public class RepositorioCadastroHBM implements IRepositorioCadastro {
+	
+	private Logger logger = Logger.getLogger(RepositorioCadastroHBM.class);
 
 	private static IRepositorioCadastro instancia;
 
@@ -9999,8 +10002,8 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 				}
 			}
 		} catch (HibernateException e) {
-			e.printStackTrace();
-			throw new ErroRepositorioException("Erro no Hibernate");
+			logger.error("Erro ao obterImovelRamoAtividadeAtualizacaoCadastral", e);
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
@@ -10008,9 +10011,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return imovelRamoAtividade;
 	}
 
-	public boolean existeImovelRamoAtividadeAtualizacaoCadastral(
-			Integer idImovel, Integer idRamoAtividade)
-			throws ErroRepositorioException {
+	public boolean existeImovelRamoAtividadeAtualizacaoCadastral(Integer idImovel, Integer idRamoAtividade) throws ErroRepositorioException {
 		
 		Session session = HibernateUtil.getSession();
 		String consulta;
@@ -10034,12 +10035,37 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 				return true;
 			}
 		} catch (HibernateException e) {
-			e.printStackTrace();
-			throw new ErroRepositorioException("Erro no Hibernate");
+			logger.error("Erro ao pesquisar ramo de atividade atualizacao cadastral", e);
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
 
+		return false;
+	}
+	
+	public boolean existeRamoAtividade(Integer idRamoAtividade)	throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("select ramo ")
+			.append(" from RamoAtividade ramo ")
+			.append(" where ramo.id = :idRamo");
+			
+			List retorno = session.createQuery(sql.toString())
+					.setInteger("idRamo", idRamoAtividade)
+					.list();
+
+			if (retorno.size() > 0) {
+				return true;
+			}
+		} catch (HibernateException e) {
+			logger.error("Erro ao pesquisar ramo de atividade", e);
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
 		return false;
 	}
 }

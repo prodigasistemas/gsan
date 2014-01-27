@@ -13,5 +13,6 @@ public interface IRepositorioAtualizacaoCadastral {
 	public ImovelRetorno pesquisarImovelRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException;
 	
 	public List<ImovelSubcategoriaRetorno> pesquisarImovelSubcategoriaRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException;
-
+	
+	public void apagarImovelRamoAtividadeRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException;
 }

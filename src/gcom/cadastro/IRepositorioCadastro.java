@@ -1586,4 +1586,6 @@ public interface IRepositorioCadastro {
  	 * @throws ErroRepositorioException
  	 */
  	public boolean existeImovelRamoAtividadeAtualizacaoCadastral(Integer idImovel, Integer idRamoAtividade) throws ErroRepositorioException;
+ 	
+	public boolean existeRamoAtividade(Integer idRamoAtividade)	throws ErroRepositorioException;
 }
