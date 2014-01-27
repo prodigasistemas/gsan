@@ -19,15 +19,16 @@ public class ParseHeaderCommand extends AbstractAtualizacaoCadastralCommand {
 	}
 
 	public void execute(AtualizacaoCadastral atualizacao) throws Exception {
-		String grupo      = parser.obterDadoParser(3);
+		String grupo = parser.obterDadoParser(3);
 		String localidade = parser.obterDadoParser(3);
-		String setor      = parser.obterDadoParser(3);
-		String rota       = parser.obterDadoParser(2);
+		String setor = parser.obterDadoParser(3);
+		String rota = parser.obterDadoParser(2);
 		String anoMesReferencia = parser.obterDadoParser(6);
-		String idRota     = parser.obterDadoParser(4);
+		String idRota = parser.obterDadoParser(4);
 		String versaoCelular = parser.obterDadoParser(10);
 		
-		ArquivoTextoAtualizacaoCadastral arquivoTexto = repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(localidade + setor + rota, anoMesReferencia);
+		ArquivoTextoAtualizacaoCadastral arquivoTexto = repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(
+				localidade + "_" + setor + "_" + rota);
 		
 		if (arquivoTexto == null){
 			throw new ArquivoAtualizacaoInexistenteException();

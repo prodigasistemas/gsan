@@ -114,7 +114,7 @@ public class RetornarArquivoTxtAtualizacaoCadastralAction extends GcomAction {
 
 		Fachada fachada = Fachada.getInstancia();
 
-		ArquivoTextoAtualizacaoCadastral arquivoTexto = fachada.pesquisarArquivoTextoAtualizacaoCadastro(idArquivoTxt);
+		ArquivoTextoAtualizacaoCadastral arquivoTexto = fachada.pesquisarArquivoTextoAtualizacaoCadastro(Integer.parseInt(idArquivoTxt));
 		
 		if(!arquivoTexto.getSituacaoTransmissaoLeitura().getId().equals(SituacaoTransmissaoLeitura.DISPONIVEL) && 
 				!arquivoTexto.getSituacaoTransmissaoLeitura().getId().equals(SituacaoTransmissaoLeitura.TRANSMITIDO)){
