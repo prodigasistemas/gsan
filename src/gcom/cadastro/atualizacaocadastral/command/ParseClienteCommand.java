@@ -244,21 +244,17 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 			imovelAtual.addMensagemErro("Nome de usuário inválido.");
 		}
 		
-		if (StringUtils.isNotEmpty(linha.get("cnpjCpfUsuario")) && Util.cpfCnpjInvalido(linha.get("cnpjCpfUsuario"))){
+		if (StringUtils.isEmpty(linha.get("cnpjCpfUsuario"))){
+			imovelAtual.limparDadosUsuario();
+		}else if (Util.cpfCnpjInvalido(linha.get("cnpjCpfUsuario"))){
 			imovelAtual.addMensagemErro("CPF/CNPJ de usuário inválido.");
 			imovelAtual.limparDadosUsuario();
-		}		
+		}
 	}
 
 	private void testaProprietario(AtualizacaoCadastralImovel imovelAtual, Map<String, String> linha) {
-		if (linha.get("usuarioProprietario").length() > 1){
-			if (linha.get("usuarioProprietario").charAt(0) == '2'){
-				if (Util.nomeInvalido(linha.get("nomeProprietario"))){
-					imovelAtual.addMensagemErro("Nome de proprietário inválido.");
-				}
-			}else{
-				imovelAtual.limparDadosProprietario();
-			}
+		if (StringUtils.isNotEmpty(linha.get("nomeProprietario")) &&  Util.nomeInvalido(linha.get("nomeProprietario"))){
+			imovelAtual.addMensagemErro("Nome de proprietário inválido.");
 		}
 		
 		if (StringUtils.isNotEmpty(linha.get("cnpjCpfProprietario")) && Util.cpfCnpjInvalido(linha.get("cnpjCpfProprietario"))){
@@ -267,15 +263,8 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 	}
 
 	private void testaResponsavel(AtualizacaoCadastralImovel imovelAtual, Map<String, String> linha) {
-		if (linha.get("tipoResponsavel").length() > 1){
-			if (linha.get("tipoResponsavel").charAt(0) == '2'){
-				if (Util.nomeInvalido(linha.get("nomeResponsavel"))){
-					imovelAtual.addMensagemErro("Nome de responsável inválido.");
-				}
-			}
-			else{
-				imovelAtual.limparDadosResponsavel();
-			}
+		if (StringUtils.isNotEmpty(linha.get("nomeResponsavel")) && Util.nomeInvalido(linha.get("nomeResponsavel"))){
+			imovelAtual.addMensagemErro("Nome de responsável inválido.");
 		}
 		
 		if (StringUtils.isNotEmpty(linha.get("cnpjCpfResponsavel")) && Util.cpfCnpjInvalido(linha.get("cnpjCpfResponsavel"))){

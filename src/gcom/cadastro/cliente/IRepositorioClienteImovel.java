@@ -461,6 +461,7 @@ public interface IRepositorioClienteImovel {
 	 * 
 	 * @throws ErroRepositorioException
 	 */	
-	public ClienteImovel pesquisarClienteImovelOSFiscalizada(
-			Integer idImovel) throws ErroRepositorioException;
+	public ClienteImovel pesquisarClienteImovelOSFiscalizada(Integer idImovel) throws ErroRepositorioException;
+	
+	public boolean existeClienteImovelTipo(Integer idCliente, Integer idImovel, Integer idTipo, String cpfCnpj) throws ErroRepositorioException;
 }
