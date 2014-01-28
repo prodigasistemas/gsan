@@ -72,8 +72,16 @@ public class ParseMedidorCommand extends AbstractAtualizacaoCadastralCommand {
 	private void validarCampos(AtualizacaoCadastral atualizacao) {
 		AtualizacaoCadastralImovel imovel = atualizacao.getImovelAtual();
 		Map<String, String> linha = imovel.getLinhaMedidor();
-				
+		
+		validarValorNumeroHidrometro(imovel, linha);		
 		validarTipoCaixaProtecaoHidrometro(imovel, linha);
+	}
+
+	private void validarValorNumeroHidrometro(AtualizacaoCadastralImovel imovel, Map<String, String> linha) {
+		String numeroHidrometro = linha.get("numeroHidrometro");
+		if(StringUtils.isEmpty(numeroHidrometro)) {
+			imovel.addMensagemErro("Número do hidrômetro não está preenchido");
+		}
 	}
 
 	private void validarTipoCaixaProtecaoHidrometro(AtualizacaoCadastralImovel imovel, Map<String, String> linha) {
