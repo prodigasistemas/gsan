@@ -538,6 +538,10 @@ public class Cliente extends ObjetoTransacao {
 		this.indicadorVencimentoMesSeguinte = indicadorVencimentoMesSeguinte;
 	}
 
+	public Cliente(Integer idCliente) {
+		this.id = idCliente;
+	}
+
 	/**
 	 * Retorna o valor de id
 	 * 

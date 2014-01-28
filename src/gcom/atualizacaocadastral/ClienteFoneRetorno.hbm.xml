@@ -17,7 +17,7 @@
     </many-to-one>
     
     <many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="true">
-      <column name="clie_cdclienteresponsavel"/>
+      <column name="clie_id"/>
     </many-to-one>
   </class>
 </hibernate-mapping>

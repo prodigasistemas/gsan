@@ -15,6 +15,8 @@ public class ClienteFoneRetorno implements IClienteFone{
 	private Cliente cliente;
 	private Date ultimaAlteracao;
 	
+	public ClienteFoneRetorno(){}
+	
 	public ClienteFoneRetorno(IClienteFone clienteFone){
 		this.ddd = clienteFone.getDdd();
 		this.telefone = clienteFone.getTelefone();

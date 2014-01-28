@@ -84,7 +84,11 @@ public class ClienteFoneAtualizacaoCadastral  extends ObjetoTransacao implements
 	}
 
 	public void setIdCliente(Integer idCliente) {
-		this.cliente.setId(idCliente);
+		if(cliente == null){
+			this.cliente = new Cliente(idCliente);
+		}else{
+			this.cliente.setId(idCliente);
+		}
 	}
 
     public String getDdd() {
@@ -174,6 +178,10 @@ public class ClienteFoneAtualizacaoCadastral  extends ObjetoTransacao implements
 	}
 
 	public void setIdFoneTipo(Integer idFoneTipo) {
-		this.foneTipo.setId(idFoneTipo);
+		if(foneTipo == null){
+			foneTipo = new FoneTipo(idFoneTipo);
+		}else{
+			foneTipo.setId(idFoneTipo);
+		}
 	}
 }
