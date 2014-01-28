@@ -173,12 +173,12 @@ import gcom.cadastro.ControladorCadastroLocalHome;
 import gcom.cadastro.EnvioEmail;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteEndereco;
-import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteGuiaPagamento;
 import gcom.cadastro.cliente.ClienteGuiaPagamentoHistorico;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.EsferaPoder;
 import gcom.cadastro.cliente.FiltroCliente;
+import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.cliente.IRepositorioCliente;
 import gcom.cadastro.cliente.RepositorioClienteHBM;
 import gcom.cadastro.empresa.Empresa;
@@ -39119,7 +39119,7 @@ public class ControladorArrecadacao implements SessionBean {
 	 * @return ClienteFone
 	 * @throws ControladorException
 	 */
-	public ClienteFone pesquisarClienteFonePagamento(Integer idCliente)
+	public IClienteFone pesquisarClienteFonePagamento(Integer idCliente)
 			throws ControladorException {
 
 		try {

@@ -76,6 +76,7 @@
 package gcom.gui.cadastro.cliente;
 
 import gcom.cadastro.cliente.ClienteFone;
+import gcom.cadastro.cliente.IClienteFone;
 import gcom.gui.GcomAction;
 
 import java.util.Collection;
@@ -158,7 +159,7 @@ public class RemoverClienteTelefoneAction extends GcomAction {
 								Iterator iteratorTemp = colecaoClienteFone
 										.iterator();
 								// Pega o primeiro da lista
-								ClienteFone clienteFonePrimeiroDaLista = (ClienteFone) iteratorTemp
+								IClienteFone clienteFonePrimeiroDaLista = (IClienteFone) iteratorTemp
 										.next();
 
 								// Verifica se o primeiro da lista é o mesmo que
@@ -166,7 +167,7 @@ public class RemoverClienteTelefoneAction extends GcomAction {
 								if (clienteFonePrimeiroDaLista
 										.equals(clienteFone)) {
 									// Seta como principal o segundo da lista
-									clienteFonePrimeiroDaLista = (ClienteFone) iteratorTemp
+									clienteFonePrimeiroDaLista = (IClienteFone) iteratorTemp
 											.next();
 								}
 

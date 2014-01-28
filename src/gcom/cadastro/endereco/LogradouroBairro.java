@@ -184,5 +184,17 @@ public class LogradouroBairro extends ObjetoTransacao {
 	
 	public String getDescricaoParaRegistroTransacao(){
 		return this.bairro.getNome();
-	}	
+	}
+	
+	public boolean hasBairro(){
+		return bairro != null && bairro.getId().intValue() != 0;
+	}
+	
+	public boolean hasUnidadeFederacao(){
+		return bairro.getMunicipio().getUnidadeFederacao() != null && bairro.getMunicipio().getUnidadeFederacao().getId().intValue() != 0;
+	}
+	
+	public boolean hasMunicipio(){
+		return bairro.getMunicipio() != null && bairro.getMunicipio().getId().intValue() != 0;
+	}
 }

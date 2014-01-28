@@ -79,6 +79,7 @@ import gcom.cadastro.cliente.ClienteEndereco;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.FiltroClienteEndereco;
 import gcom.cadastro.cliente.FiltroClienteFone;
+import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cobranca.DocumentoTipo;
@@ -333,7 +334,7 @@ public class ExibirPesquisarGuiaDevolucaoAction extends GcomAction {
 							&& !colecaoClienteFone.isEmpty()) {
 						// O telefone foi encontrado
 						pesquisarGuiaDevolucaoActionForm.setClienteFone(""
-								+ ((ClienteFone) ((List) colecaoClienteFone)
+								+ ((IClienteFone) ((List) colecaoClienteFone)
 										.get(0)).getTelefone());
 					}
 	

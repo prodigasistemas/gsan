@@ -303,4 +303,12 @@ public class EnderecoReferencia extends ObjetoTransacao {
 	public String getDescricaoParaRegistroTransacao(){
 		return this.descricao;
 	}
+	
+	public boolean hasDescricao(){
+		return descricao != null && !descricao.equals("");
+	}
+	
+	public boolean hasDescricaoAbreviada(){
+		return descricaoAbreviada != null && !descricaoAbreviada.equals("");
+	}
 }

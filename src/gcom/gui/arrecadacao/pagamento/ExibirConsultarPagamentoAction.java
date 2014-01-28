@@ -81,13 +81,14 @@ import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.arrecadacao.pagamento.PagamentoHistorico;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteEndereco;
-import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteTipo;
+import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cobranca.DocumentoTipo;
 import gcom.fachada.Fachada;
 import gcom.gui.GcomAction;
 import gcom.util.Util;
+
 
 
 import java.math.BigDecimal;
@@ -389,7 +390,7 @@ public class ExibirConsultarPagamentoAction extends GcomAction {
             }
 
             // Pesquisa o telefone padrão do cliente pelo seu id
-            ClienteFone clienteFone = fachada.pesquisarClienteFonePagamento(cliente.getId());
+            IClienteFone clienteFone = fachada.pesquisarClienteFonePagamento(cliente.getId());
 
             if (clienteFone != null) {
                 sessao.setAttribute("clienteFone", clienteFone);
@@ -517,7 +518,7 @@ public class ExibirConsultarPagamentoAction extends GcomAction {
                 }
 
                 // Pesquisa o telefone padrão do cliente pelo seu id
-                ClienteFone clienteFone = fachada.pesquisarClienteFonePagamento(cliente.getId());
+                IClienteFone clienteFone = fachada.pesquisarClienteFonePagamento(cliente.getId());
 
                 if (clienteFone != null) {
                     sessao.setAttribute("clienteFone", clienteFone);
