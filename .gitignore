@@ -9,6 +9,6 @@ bin
 sonar-project.properties
 reports/*.jasper
 build.properties
-src/gcom/gui/InicializadorSistema.java
 gcom/jsp/util/rodape.jsp
 documents/recadastramento/layouts/~$Layout_Retorno_Cadastro.xlsx
+src/gcom/properties/version.properties

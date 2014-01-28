@@ -77,9 +77,9 @@ package gcom.gui.atendimentopublico;
 
 
 import gcom.cadastro.cliente.Cliente;
-import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.FiltroCliente;
+import gcom.cadastro.cliente.IClienteFone;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.interceptor.RegistradorOperacao;
@@ -395,7 +395,7 @@ public class AtualizarDadosImovelPopupPROMAISAction extends GcomAction {
 							this.getFachada().removerTodosTelefonesPorCliente(cliente.getId());
 							
 							for (Iterator iterator = cliente.getClienteFones().iterator(); iterator.hasNext();) {
-								ClienteFone clienteFone = (ClienteFone) iterator.next();
+								IClienteFone clienteFone = (IClienteFone) iterator.next();
 								
 								getFachada().inserir(clienteFone);	
 							}

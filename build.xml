@@ -98,7 +98,7 @@
 			</fileset>
 		</replaceregexp>
 		
-		<replaceregexp file="${src}/gcom/properties/application.properties" match="gsan.tipo=(.*)" replace="gsan.tipo=${gsan.tipo}" byline="true"/>
+		<replaceregexp file="${src}/gcom/properties/version.properties" match="gsan.tipo=(.*)" replace="gsan.tipo=${gsan.tipo}" byline="true"/>
 		
 	</target>
 

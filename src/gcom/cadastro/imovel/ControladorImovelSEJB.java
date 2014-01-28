@@ -112,6 +112,7 @@ import gcom.cadastro.cliente.ClienteTipo;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.cliente.ControladorClienteLocalHome;
 import gcom.cadastro.cliente.FiltroClienteImovel;
+import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.cliente.bean.ClienteImovelEconomiaHelper;
 import gcom.cadastro.endereco.Cep;
 import gcom.cadastro.endereco.ControladorEnderecoLocal;
@@ -7157,7 +7158,7 @@ public class ControladorImovelSEJB implements SessionBean {
 				.next();
 
 		Cliente cliente = new Cliente();
-		ClienteFone clienteFone = null;
+		IClienteFone clienteFone = null;
 
 		// 0 - id co cliente
 		if (arrayCliente[0] != null) {
