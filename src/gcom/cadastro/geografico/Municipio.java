@@ -300,4 +300,8 @@ public class Municipio extends ObjetoTransacao {
 		this.indicadorRelacaoQuadraBairro = indicadorRelacaoQuadraBairro;
 	}
 	
+	public boolean hasUnidadeFederacao(){
+		return unidadeFederacao != null && unidadeFederacao.getId().intValue() != 0;
+	}
+	
 }

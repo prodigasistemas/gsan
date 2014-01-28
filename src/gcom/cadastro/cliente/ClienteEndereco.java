@@ -17,62 +17,6 @@
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
 */
 
-/*
-* GSAN - Sistema Integrado de Gestão de Serviços de Saneamento
-* Copyright (C) <2007> 
-* Adriano Britto Siqueira
-* Alexandre Santos Cabral
-* Ana Carolina Alves Breda
-* Ana Maria Andrade Cavalcante
-* Aryed Lins de Araújo
-* Bruno Leonardo Rodrigues Barros
-* Carlos Elmano Rodrigues Ferreira
-* Cláudio de Andrade Lira
-* Denys Guimarães Guenes Tavares
-* Eduardo Breckenfeld da Rosa Borges
-* Fabíola Gomes de Araújo
-* Flávio Leonardo Cavalcanti Cordeiro
-* Francisco do Nascimento Júnior
-* Homero Sampaio Cavalcanti
-* Ivan Sérgio da Silva Júnior
-* José Edmar de Siqueira
-* José Thiago Tenório Lopes
-* Kássia Regina Silvestre de Albuquerque
-* Leonardo Luiz Vieira da Silva
-* Márcio Roberto Batista da Silva
-* Maria de Fátima Sampaio Leite
-* Micaela Maria Coelho de Araújo
-* Nelson Mendonça de Carvalho
-* Newton Morais e Silva
-* Pedro Alexandre Santos da Silva Filho
-* Rafael Corrêa Lima e Silva
-* Rafael Francisco Pinto
-* Rafael Koury Monteiro
-* Rafael Palermo de Araújo
-* Raphael Veras Rossiter
-* Roberto Sobreira Barbalho
-* Rodrigo Avellar Silveira
-* Rosana Carvalho Barbosa
-* Sávio Luiz de Andrade Cavalcante
-* Tai Mu Shih
-* Thiago Augusto Souza do Nascimento
-* Tiago Moreno Rodrigues
-* Vivianne Barbosa Sousa
-*
-* Este programa é software livre; você pode redistribuí-lo e/ou
-* modificá-lo sob os termos de Licença Pública Geral GNU, conforme
-* publicada pela Free Software Foundation; versão 2 da
-* Licença.
-* Este programa é distribuído na expectativa de ser útil, mas SEM
-* QUALQUER GARANTIA; sem mesmo a garantia implícita de
-* COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
-* PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
-* detalhes.
-* Você deve ter recebido uma cópia da Licença Pública Geral GNU
-* junto com este programa; se não, escreva para Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
-* 02111-1307, USA.
-*/  
 package gcom.cadastro.cliente;
 
 import gcom.cadastro.endereco.EnderecoReferencia;
@@ -149,7 +93,6 @@ public class ClienteEndereco extends ObjetoTransacao {
 	
 	public final static Short INDICADOR_ENDERECO_CORRESPONDENCIA = new Short("1");
 
-	/** full constructor */
 	public ClienteEndereco(String numero, String complemento,
 			Short indicadorEnderecoCorrespondencia, Date ultimaAlteracao,
 			EnderecoTipo enderecoTipo, gcom.cadastro.cliente.Cliente cliente,
@@ -166,7 +109,6 @@ public class ClienteEndereco extends ObjetoTransacao {
 		this.logradouroBairro = logradouroBairro;
 	}
 	
-	/** full constructor para atualização cadastral */
 	public ClienteEndereco(ClienteEndereco clienteEnderecoCadastrado) {
 		this.numero = clienteEnderecoCadastrado.getNumero();
 		this.complemento = clienteEnderecoCadastrado.getComplemento();
@@ -179,11 +121,9 @@ public class ClienteEndereco extends ObjetoTransacao {
 		this.logradouroBairro = clienteEnderecoCadastrado.getLogradouroBairro();
 	}
 
-	/** default constructor */
 	public ClienteEndereco() {
 	}
 
-	/** minimal constructor */
 	public ClienteEndereco(EnderecoTipo enderecoTipo,
 			gcom.cadastro.cliente.Cliente cliente,
 			EnderecoReferencia enderecoReferencia, LogradouroCep logradouroCep,
@@ -260,312 +200,133 @@ public class ClienteEndereco extends ObjetoTransacao {
 		this.enderecoReferencia = enderecoReferencia;
 	}
 
-	/**
-	 * < * Retorna o valor de enderecoFormatado < * < *
-	 * 
-	 * @return O valor de enderecoFormatado <
-	 */
 	public String getEnderecoFormatado() {
 		String endereco = null;
 
-		// verifica se o logradouro do imovel é diferente de null
-		if (this.getLogradouroCep() != null
-				&& this.getLogradouroCep().getLogradouro() != null
-				&& !this.getLogradouroCep().getLogradouro().getId().equals(
-						new Integer("0"))) {
-
-			// verifica se o logradouro tipo do imovel é diferente de null
-			if (this.getLogradouroCep().getLogradouro().getLogradouroTipo() != null
-					&& !this.getLogradouroCep().getLogradouro()
-							.getLogradouroTipo().equals("")) {
-				// concatena o logradouro tipo do imovel
-				endereco = this.getLogradouroCep().getLogradouro()
-						.getLogradouroTipo().getDescricao().trim();
+		if (this.getLogradouroCep() != null && this.getLogradouroCep().hasLogradouro()) {
+			if (this.getLogradouroCep().hasLogradouroTipo()) {
+				endereco = this.getLogradouroCep().getLogradouro().getLogradouroTipo().getDescricao().trim();
 			}
-			// verifica se o logradouro titulo do imovel é diferente de null
-			if (this.getLogradouroCep().getLogradouro().getLogradouroTitulo() != null
-					&& !this.getLogradouroCep().getLogradouro()
-							.getLogradouroTitulo().equals("")) {
-				// concatena o logradouro titulo do imovel
-				endereco = endereco
-						+ " "
-						+ this.getLogradouroCep().getLogradouro()
-								.getLogradouroTitulo().getDescricao().trim();
+			if (this.getLogradouroCep().hasTitulo()) {
+				endereco += " " + this.getLogradouroCep().getLogradouro().getLogradouroTitulo().getDescricao().trim();
 			}
 
-			// concatena o logradouro do imovel
-			endereco = endereco + " "
-					+ this.getLogradouroCep().getLogradouro().getNome().trim();
+			endereco += " " + this.getLogradouroCep().getLogradouro().getNome().trim();
 
-			if (this.getEnderecoReferencia() != null
-					&& !this.getEnderecoReferencia().equals("")) {
-				if (this.getEnderecoReferencia().getDescricao() != null
-						&& !this.getEnderecoReferencia().getDescricao().equals(
-								"")) {
-					endereco = endereco + " - "
-							+ this.getEnderecoReferencia().getDescricao().trim();
-				}
+			if (this.getEnderecoReferencia() != null && !this.getEnderecoReferencia().equals("") && this.getEnderecoReferencia().hasDescricao()) {
+				endereco +=  " - " + this.getEnderecoReferencia().getDescricao().trim();
 			}
 
-			// concate o numero do imovel
 			endereco = endereco + " - " + this.getNumero().trim();
 
-			if (this.getComplemento() != null
-					&& !this.getComplemento().equalsIgnoreCase("")) {
+			if (this.getComplemento() != null && !this.getComplemento().equalsIgnoreCase("")) {
 				endereco = endereco + " - " + this.getComplemento().trim();
 			}
 
-			if (this.getLogradouroBairro() != null
-					&& this.getLogradouroBairro().getBairro() != null
-					&& this.getLogradouroBairro().getBairro().getId()
-							.intValue() != 0) {
-				endereco = endereco + " - "
-						+ this.getLogradouroBairro().getBairro().getNome().trim();
+			if (this.getLogradouroBairro() != null && this.getLogradouroBairro().hasBairro()) {
+				endereco += " - " + this.getLogradouroBairro().getBairro().getNome().trim();
 
-				if (this.getLogradouroBairro().getBairro().getMunicipio() != null
-						&& this.getLogradouroBairro().getBairro()
-								.getMunicipio().getId().intValue() != 0) {
-					endereco = endereco
-							+ " "
-							+ this.getLogradouroBairro().getBairro()
-									.getMunicipio().getNome().trim();
+				if (this.getLogradouroBairro().hasMunicipio()) {
+					endereco += " " + this.getLogradouroBairro().getBairro().getMunicipio().getNome().trim();
 				}
 
-				if (this.getLogradouroBairro().getBairro().getMunicipio()
-						.getUnidadeFederacao() != null
-						&& this.getLogradouroBairro().getBairro()
-								.getMunicipio().getUnidadeFederacao().getId()
-								.intValue() != 0) {
-					endereco = endereco
-							+ " "
-							+ this.getLogradouroBairro().getBairro()
-									.getMunicipio().getUnidadeFederacao()
-									.getSigla().trim();
+				if (this.getLogradouroBairro().hasUnidadeFederacao()) {
+					endereco += " " + this.getLogradouroBairro().getBairro().getMunicipio().getUnidadeFederacao().getSigla().trim();
 				}
 			}
 
-			if (this.getLogradouroCep() != null
-					&& this.getLogradouroCep().getCep() != null) {
-				// concatena o cep formatado do imóvel
-				endereco = endereco + " "
-						+ this.getLogradouroCep().getCep().getCepFormatado().trim();
+			if (this.getLogradouroCep() != null && this.getLogradouroCep().getCep() != null) {
+				endereco += " " + this.getLogradouroCep().getCep().getCepFormatado().trim();
 			}
 			
 			if (this.getPerimetroInicial() != null) {
-				endereco = endereco + " ENTRE " + this.getPerimetroInicial().getDescricaoFormatada() + " E " 
-						+ this.getPerimetroFinal().getDescricaoFormatada();
+				endereco += " ENTRE " + this.getPerimetroInicial().getDescricaoFormatada() + " E " + this.getPerimetroFinal().getDescricaoFormatada();
 			}
-
 		}
 
 		return endereco;
 	}
 
-	/**
-	 * < * Retorna o valor de enderecoFormatado < * < *
-	 * 
-	 * @return O valor de enderecoFormatado <
-	 */
 	public String getEnderecoFormatadoAbreviado() {
 		String endereco = null;
 
-		// verifica se o logradouro do imovel é diferente de null
-		if (this.getLogradouroCep() != null
-				&& this.getLogradouroCep().getLogradouro() != null
-				&& !this.getLogradouroCep().getLogradouro().getId().equals(
-						new Integer("0"))) {
-			
-			
-
-			// verifica se o logradouro tipo do imovel é diferente de null
-			if (this.getLogradouroCep().getLogradouro().getLogradouroTipo() != null
-					&& !this.getLogradouroCep().getLogradouro()
-							.getLogradouroTipo().equals("")) {
-				if (this.getLogradouroCep().getLogradouro().getLogradouroTipo()
-						.getDescricaoAbreviada() != null
-						&& !this.getLogradouroCep().getLogradouro()
-								.getLogradouroTipo().getDescricaoAbreviada()
-								.equals("")) {
-					// concatena o logradouro tipo do imovel
-					endereco = this.getLogradouroCep().getLogradouro()
-							.getLogradouroTipo().getDescricaoAbreviada().trim();
-				}
+		if (this.getLogradouroCep() != null && this.getLogradouroCep().hasLogradouro()) {
+			if (this.getLogradouroCep().hasLogradouroTipo() && this.getLogradouroCep().hasTipoDescricaoAbreviada()) {
+				endereco = this.getLogradouroCep().getLogradouro().getLogradouroTipo().getDescricaoAbreviada().trim();
 			}
-			// verifica se o logradouro titulo do imovel é diferente de null
-			if (this.getLogradouroCep().getLogradouro().getLogradouroTitulo() != null
-					&& !this.getLogradouroCep().getLogradouro()
-							.getLogradouroTitulo().equals("")) {
-				if (this.getLogradouroCep().getLogradouro()
-						.getLogradouroTitulo().getDescricaoAbreviada() != null
-						&& !this.getLogradouroCep().getLogradouro()
-								.getLogradouroTitulo().getDescricaoAbreviada()
-								.equals("")) {
-					// concatena o logradouro titulo do imovel
-					endereco = endereco
-							+ " "
-							+ this.getLogradouroCep().getLogradouro()
-									.getLogradouroTitulo()
-									.getDescricaoAbreviada().trim();
-				}
+			if (this.getLogradouroCep().hasTitulo() && this.getLogradouroCep().hasDescricaoAbreviada()) {
+				endereco += " " + this.getLogradouroCep().getLogradouro().getLogradouroTitulo().getDescricaoAbreviada().trim();
 			}
 
-			// concatena o logradouro do imovel
-			endereco = endereco + " "
-					+ this.getLogradouroCep().getLogradouro().getNome().trim();
+			endereco += " " + this.getLogradouroCep().getLogradouro().getNome().trim();
 
-			if (this.getEnderecoReferencia() != null
-					&& !this.getEnderecoReferencia().equals("")) {
-				if (this.getEnderecoReferencia().getDescricaoAbreviada() != null
-						&& !this.getEnderecoReferencia().getDescricaoAbreviada().equals(
-								"")) {
-					endereco = endereco + ", "
-							+ this.getEnderecoReferencia().getDescricaoAbreviada().trim();
-				}
+			if (this.getEnderecoReferencia() != null && !this.getEnderecoReferencia().equals("") && this.getEnderecoReferencia().hasDescricaoAbreviada()) {
+					endereco +=  ", " + this.getEnderecoReferencia().getDescricaoAbreviada().trim();
 			}
 
 			if (this.getNumero() != null && !this.getNumero().equals("")) {
-
-				// concate o numero do imovel
-				endereco = endereco + this.getNumero().trim();
+				endereco += this.getNumero().trim();
 			}
 
-			if (this.getComplemento() != null
-					&& !this.getComplemento().equalsIgnoreCase("")) {
-				endereco = endereco + " - " + this.getComplemento().trim();
+			if (this.getComplemento() != null && !this.getComplemento().equalsIgnoreCase("")) {
+				endereco +=  " - " + this.getComplemento().trim();
 			}
-			
 
-			if (this.getLogradouroBairro() != null
-					&& this.getLogradouroBairro().getBairro() != null
-					&& this.getLogradouroBairro().getBairro().getId()
-							.intValue() != 0) {
-				endereco = endereco + " - "
-						+ this.getLogradouroBairro().getBairro().getNome().trim();
+			if (this.getLogradouroBairro() != null && this.getLogradouroBairro().hasBairro()) {
+				endereco +=  " - " + this.getLogradouroBairro().getBairro().getNome().trim();
 
-				if (this.getLogradouroBairro().getBairro().getMunicipio() != null
-						&& this.getLogradouroBairro().getBairro()
-								.getMunicipio().getId().intValue() != 0) {
-					endereco = endereco
-							+ " "
-							+ this.getLogradouroBairro().getBairro()
-									.getMunicipio().getNome().trim();
+				if (this.getLogradouroBairro().hasMunicipio()) {
+					endereco += " " + this.getLogradouroBairro().getBairro().getMunicipio().getNome().trim();
 					
-					if (this.getLogradouroBairro().getBairro().getMunicipio()
-							.getUnidadeFederacao() != null
-							&& this.getLogradouroBairro().getBairro()
-									.getMunicipio().getUnidadeFederacao().getId()
-									.intValue() != 0) {
-						endereco = endereco
-								+ " "
-								+ this.getLogradouroBairro().getBairro()
-										.getMunicipio().getUnidadeFederacao()
-										.getSigla().trim();
+					if (this.getLogradouroBairro().hasUnidadeFederacao()) {
+						endereco += " " + this.getLogradouroBairro().getBairro().getMunicipio().getUnidadeFederacao().getSigla().trim();
 					}
 				}
-
-				
 			}
-			else if(this.getLogradouroCep().getLogradouro().getMunicipio()!= null){
-				endereco = endereco
-				+ " - "
-				+ this.getLogradouroCep().getLogradouro().getMunicipio().getNome().trim();
-				if (this.getLogradouroCep().getLogradouro().getMunicipio()
-						.getUnidadeFederacao() != null
-						&& this.getLogradouroCep().getLogradouro().getMunicipio().getUnidadeFederacao().getId()
-								.intValue() != 0) {
-					endereco = endereco
-							+ " "
-							+ this.getLogradouroCep().getLogradouro()
-									.getMunicipio().getUnidadeFederacao()
-									.getSigla().trim();
+			else if(this.getLogradouroCep().hasMunicipio()){
+				endereco += " - " + this.getLogradouroCep().getLogradouro().getMunicipio().getNome().trim();
+				
+				if (this.getLogradouroBairro().hasUnidadeFederacao()) {
+					endereco += " " + this.getLogradouroCep().getLogradouro().getMunicipio().getUnidadeFederacao().getSigla().trim();
 				}
 				
 			}
 
-			if (this.getLogradouroCep() != null
-					&& this.getLogradouroCep().getCep() != null) {
-				// concatena o cep formatado do imóvel
-				endereco = endereco + " "
-						+ this.getLogradouroCep().getCep().getCepFormatado().trim();
+			if (this.getLogradouroCep() != null && this.getLogradouroCep().hasLogradouro()) {
+				endereco += " " + this.getLogradouroCep().getCep().getCepFormatado().trim();
 			}
 			
 			if (this.getPerimetroInicial() != null) {
-				endereco = endereco + " ENTRE " + this.getPerimetroInicial().getDescricaoFormatada() + " E " 
-						+ this.getPerimetroFinal().getDescricaoFormatada();
+				endereco += " ENTRE " + this.getPerimetroInicial().getDescricaoFormatada() + " E " + this.getPerimetroFinal().getDescricaoFormatada();
 			}
-
 		}
 
 		return endereco;
 	}
-	
+
 	public String getEnderecoTipoTituloLogradouro() {
 		String endereco = null;
 
-		// verifica se o logradouro do imovel é diferente de null
-		if (this.getLogradouroCep() != null
-				&& this.getLogradouroCep().getLogradouro() != null
-				&& !this.getLogradouroCep().getLogradouro().getId().equals(
-						new Integer("0"))) {			
+		if (this.getLogradouroCep() != null && this.getLogradouroCep().hasLogradouro()) {			
 
-			// verifica se o logradouro tipo do imovel é diferente de null
-			if (this.getLogradouroCep().getLogradouro().getLogradouroTipo() != null
-					&& !this.getLogradouroCep().getLogradouro()
-							.getLogradouroTipo().equals("")) {
-				if (this.getLogradouroCep().getLogradouro().getLogradouroTipo()
-						.getDescricao() != null
-						&& !this.getLogradouroCep().getLogradouro()
-								.getLogradouroTipo().getDescricao()
-								.equals("")) {
-					// concatena o logradouro tipo do imovel
-					endereco = this.getLogradouroCep().getLogradouro()
-							.getLogradouroTipo().getDescricao().trim();
-				}
-			}
-			// verifica se o logradouro titulo do imovel é diferente de null
-			if (this.getLogradouroCep().getLogradouro().getLogradouroTitulo() != null
-					&& !this.getLogradouroCep().getLogradouro()
-							.getLogradouroTitulo().equals("")) {
-				if (this.getLogradouroCep().getLogradouro()
-						.getLogradouroTitulo().getDescricao() != null
-						&& !this.getLogradouroCep().getLogradouro()
-								.getLogradouroTitulo().getDescricao()
-								.equals("")) {
-					// concatena o logradouro titulo do imovel
-					endereco = endereco
-							+ " "
-							+ this.getLogradouroCep().getLogradouro()
-									.getLogradouroTitulo()
-									.getDescricao().trim();
-				}
+			if (this.getLogradouroCep().hasLogradouroTipo() && this.getLogradouroCep().hasTipoDescricao()) {
+				endereco = this.getLogradouroCep().getLogradouro().getLogradouroTipo().getDescricao().trim();
 			}
 
-			// concatena o logradouro do imovel
-				endereco = endereco + " "
-						+ this.getLogradouroCep().getLogradouro().getNome().trim();
+			if (this.getLogradouroCep().hasTitulo() && this.getLogradouroCep().hasTituloDescricao()) {
+				endereco += " " + this.getLogradouroCep().getLogradouro().getLogradouroTitulo().getDescricao().trim();
+			}
+
+			endereco += " " + this.getLogradouroCep().getLogradouro().getNome().trim();
 			
-			if (this.getEnderecoReferencia() != null
-					&& !this.getEnderecoReferencia().equals("")) {
-				if (this.getEnderecoReferencia().getDescricaoAbreviada() != null
-						&& !this.getEnderecoReferencia().getDescricao().equals(
-								"")) {
-					endereco = endereco + ", "
-							+ this.getEnderecoReferencia().getDescricao().trim();
-				}
+			if (this.getEnderecoReferencia() != null && !this.getEnderecoReferencia().equals("") && this.getEnderecoReferencia().hasDescricao()) {
+				endereco += ", " + this.getEnderecoReferencia().getDescricao().trim();
 			}
-
 		}
 
 		return endereco;
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param other
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
 	public boolean equals(Object other) {
 		if ((this == other)) {
 			return true;
@@ -580,16 +341,6 @@ public class ClienteEndereco extends ObjetoTransacao {
 		}
 		
 		return this.getId().intValue() == castOther.getId().intValue();
-		
-//		return new EqualsBuilder().append(this.getCliente().getId(),
-//				castOther.getCliente().getId()).append(
-//				this.getLogradouroBairro() != null ? this.getLogradouroBairro().getBairro().getId() : null,
-//				castOther.getLogradouroBairro() != null ? castOther.getLogradouroBairro().getBairro().getId() : null)
-//				.append(this.getLogradouroCep() != null? this.getLogradouroCep().getCep().getCepId() : null,
-//				castOther.getLogradouroCep() != null? castOther.getLogradouroCep().getCep().getCepId() : null)
-//				.append(this.getComplemento(), castOther.getComplemento())
-//				.append(this.getUltimaAlteracao().getTime(), castOther.getUltimaAlteracao().getTime())
-//				.isEquals();
 	}
 
 	public String toString() {
@@ -654,8 +405,6 @@ public class ClienteEndereco extends ObjetoTransacao {
 				FiltroClienteEndereco.ENDERECO_REFERENCIA);
 		filtroClienteEndereco.adicionarCaminhoParaCarregamentoEntidade(
 				FiltroClienteEndereco.LOGRADOURO_MUNICIPIO);
-//		filtroClienteEndereco.adicionarCaminhoParaCarregamentoEntidade(
-//				FiltroClienteEndereco.CEP_MUNICIPIO);
 		filtroClienteEndereco.adicionarCaminhoParaCarregamentoEntidade(
 				FiltroClienteEndereco.BAIRRO_MUNICIPIO_UNIDADE_FEDERACAO);
 		return filtroClienteEndereco;
@@ -667,37 +416,19 @@ public class ClienteEndereco extends ObjetoTransacao {
 		return retorno;
 	}
 
-	/**
-	 * @return Retorna o campo perimetroFinal.
-	 */
 	public Logradouro getPerimetroFinal() {
 		return perimetroFinal;
 	}
 
-	/**
-	 * @param perimetroFinal O perimetroFinal a ser setado.
-	 */
 	public void setPerimetroFinal(Logradouro perimetroFinal) {
 		this.perimetroFinal = perimetroFinal;
 	}
 
-	/**
-	 * @return Retorna o campo perimetroInicial.
-	 */
 	public Logradouro getPerimetroInicial() {
 		return perimetroInicial;
 	}
 
-	/**
-	 * @param perimetroInicial O perimetroInicial a ser setado.
-	 */
 	public void setPerimetroInicial(Logradouro perimetroInicial) {
 		this.perimetroInicial = perimetroInicial;
 	}
-
-//	@Override
-//	public String getDescricaoParaRegistroTransacao() {
-//		return ""; //getLogradouroCep().getDescricaoParaRegistroTransacao() + " - " + this.numero;
-//	}
-
 }
