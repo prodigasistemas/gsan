@@ -111,6 +111,11 @@
 	<module>
 		<ejb>ControladorOperacionalGCOM.jar</ejb>
 	</module>
+	
+	<module>
+		<ejb>ControladorAtualizacaoCadastralGCOM.jar</ejb>
+	</module>
+	
 
 	<module>
 		<ejb>BatchConsistirLeiturasCalcularConsumosMDB.jar</ejb>

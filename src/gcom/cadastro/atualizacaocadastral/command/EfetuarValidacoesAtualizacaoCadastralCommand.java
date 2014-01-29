@@ -1,8 +1,8 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
+import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.cliente.ControladorClienteLocal;
-import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.util.ControladorUtilLocal;
@@ -15,7 +15,7 @@ public class EfetuarValidacoesAtualizacaoCadastralCommand extends AbstractAtuali
 	}
 
 	public EfetuarValidacoesAtualizacaoCadastralCommand(ParserUtil parser, IRepositorioCadastro repositorioCadastro, ControladorUtilLocal controladorUtil,
-			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, ControladorImovelLocal controladorImovel,
+			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, ControladorAtualizacaoCadastralLocal controladorImovel,
 			ControladorClienteLocal controladorCliente) {
 		super(parser, repositorioCadastro, controladorUtil, controladorTransacao, repositorioImovel, controladorImovel, controladorCliente);
 	}

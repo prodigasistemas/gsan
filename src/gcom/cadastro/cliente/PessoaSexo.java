@@ -114,8 +114,13 @@ public class PessoaSexo extends ObjetoTransacao {
     /** default constructor */
     public PessoaSexo() {
     }
+    
 
-    public Integer getId() {
+    public PessoaSexo(Integer id) {
+		this.id = id;
+	}
+
+	public Integer getId() {
         return this.id;
     }
 

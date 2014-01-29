@@ -21,6 +21,8 @@ import gcom.atendimentopublico.registroatendimento.MeioSolicitacao;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao;
 import gcom.atendimentopublico.registroatendimento.bean.DefinirDataPrevistaUnidadeDestinoEspecificacaoHelper;
+import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
+import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocalHome;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.batch.ControladorBatchLocal;
 import gcom.batch.ControladorBatchLocalHome;
@@ -253,7 +255,6 @@ import gcom.util.Util;
 import gcom.util.ZipUtil;
 import gcom.util.email.ErroEmailException;
 import gcom.util.email.ServicosEmail;
-import gcom.util.exception.BaseRuntimeException;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
@@ -528,6 +529,32 @@ public class ControladorCadastro implements SessionBean {
 
 			localHome = (ControladorImovelLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_IMOVEL_SEJB);
+			// guarda a referencia de um objeto capaz de fazer chamadas à
+			// objetos remotamente
+			local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}
+	
+	protected ControladorAtualizacaoCadastralLocal getControladorAtualizacaoCadastral() {
+
+		ControladorAtualizacaoCadastralLocalHome localHome = null;
+		ControladorAtualizacaoCadastralLocal local = null;
+
+		// pega a instância do ServiceLocator.
+
+		ServiceLocator locator = null;
+
+		try {
+			locator = ServiceLocator.getInstancia();
+
+			localHome = (ControladorAtualizacaoCadastralLocalHome) locator
+					.getLocalHome(ConstantesJNDI.CONTROLADOR_ATUALIZACAO_CADASTRAL);
 			// guarda a referencia de um objeto capaz de fazer chamadas à
 			// objetos remotamente
 			local = localHome.create();
@@ -7756,36 +7783,36 @@ public class ControladorCadastro implements SessionBean {
 				
 				if ("00".equals(registroTipo)) {
 					AbstractAtualizacaoCadastralCommand command = new ParseHeaderCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
-							repositorioImovel, getControladorImovel(), getControladorCliente());
+							repositorioImovel, getControladorAtualizacaoCadastral(), getControladorCliente());
 					command.execute(atualizacao);
 				} else if ("01".equals(registroTipo)) {
 					atualizacao.novaAtualizacaoImovel();
 
 					AbstractAtualizacaoCadastralCommand command = new ParseClienteCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
-							repositorioImovel, getControladorImovel(), getControladorCliente());
+							repositorioImovel, getControladorAtualizacaoCadastral(), getControladorCliente());
 					command.execute(atualizacao);
 				}
 				
 				if (!atualizacao.getImovelAtual().isImovelAprovado()){
 					if ("02".equals(registroTipo)) {
 						AbstractAtualizacaoCadastralCommand command = new ParseImovelCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
-								repositorioImovel, getControladorImovel(), getControladorCliente());
+								repositorioImovel, getControladorAtualizacaoCadastral(), getControladorCliente());
 						command.execute(atualizacao);					
 					} else if ("03".equals(registroTipo)) {
 						AbstractAtualizacaoCadastralCommand command = new ParseRamoAtividadeCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
-								repositorioImovel, getControladorImovel(), getControladorCliente());
+								repositorioImovel, getControladorAtualizacaoCadastral(), getControladorCliente());
 						command.execute(atualizacao);					
 					} else if ("04".equals(registroTipo)) {
 						AbstractAtualizacaoCadastralCommand command = new ParseServicosCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
-								repositorioImovel, getControladorImovel(), getControladorCliente());
+								repositorioImovel, getControladorAtualizacaoCadastral(), getControladorCliente());
 						command.execute(atualizacao);					
 					}else if ("05".equals(registroTipo)) {
 						AbstractAtualizacaoCadastralCommand command = new ParseMedidorCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
-								repositorioImovel, getControladorImovel(), getControladorCliente());
+								repositorioImovel, getControladorAtualizacaoCadastral(), getControladorCliente());
 						command.execute(atualizacao);					
 					}else if ("06".equals(registroTipo)) {
 						AbstractAtualizacaoCadastralCommand command = new ParseAnormalidadeCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
-								repositorioImovel, getControladorImovel(), getControladorCliente());
+								repositorioImovel, getControladorAtualizacaoCadastral(), getControladorCliente());
 						command.execute(atualizacao);
 						
 						atualizacao.liberarValidacao();
@@ -7799,7 +7826,7 @@ public class ControladorCadastro implements SessionBean {
 				
 				if(atualizacao.validacaoLiberada() && !atualizacao.getImovelAtual().cadastroInvalido()){
 					AbstractAtualizacaoCadastralCommand command = new MontarObjetosAtualizacaoCadastralCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
-							repositorioImovel, getControladorImovel(), getControladorCliente(), repositorioClienteImovel);
+							repositorioImovel, getControladorAtualizacaoCadastral(), getControladorCliente(), repositorioClienteImovel);
 					command.execute(atualizacao);
 					atualizacao.excluirImovelSemErros();
 				}
@@ -7877,7 +7904,7 @@ public class ControladorCadastro implements SessionBean {
 		ImovelAtualizacaoCadastral imovelAtualizacaoCadastral = null;
 		Imovel imovel = null;
 
-		imovelAtualizacaoCadastral = getControladorImovel()
+		imovelAtualizacaoCadastral = getControladorAtualizacaoCadastral()
 				.pesquisarImovelAtualizacaoCadastral(idImovel);
 		imovel = getControladorImovel().pesquisarImovel(idImovel);
 
@@ -8010,7 +8037,7 @@ public class ControladorCadastro implements SessionBean {
 				9, imovelAtualizacaoCadastral.getIdLogradouro().toString()));
 
 		// Subcategorias
-		Collection colecaoImovelSubcategoria = getControladorImovel()
+		Collection colecaoImovelSubcategoria = getControladorAtualizacaoCadastral()
 				.pesquisarImovelSubcategoriaAtualizacaoCadastral(idImovel, null, null);
 
 		Iterator imovelSubcategoriaIterator = colecaoImovelSubcategoria
@@ -8496,9 +8523,9 @@ public class ControladorCadastro implements SessionBean {
 			arquivoTextoRegistroTipoCliente.append(Util.adicionarZerosEsquedaNumero(9, clienteUsuario.getIdCliente().toString()));
 			
 			// Nome do Cliente Usuário
-			if (clienteUsuario.getNomeCliente() != null) {
+			if (clienteUsuario.getNome() != null) {
 				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteUsuario.getNomeCliente(), 50));
+						clienteUsuario.getNome(), 50));
 			} else {
 				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
 						50));
@@ -8519,9 +8546,13 @@ public class ControladorCadastro implements SessionBean {
 			}
 
 			// CPF/CNPJ Cliente
-			if (clienteUsuario.getCpfCnpj() != null) {
+			if (clienteUsuario.getCpf() != null) {
 				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteUsuario.getCpfCnpj(), 14));
+						clienteUsuario.getCpf(), 14));
+				
+			} else if (clienteUsuario.getCnpj() != null) {
+				arquivoTextoRegistroTipoCliente.append(Util.completaString(
+						clienteUsuario.getCnpj(), 14));
 			} else {
 				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
 						14));
@@ -8546,10 +8577,10 @@ public class ControladorCadastro implements SessionBean {
 			}
 
 			// Sexo do Cliente (1-Masculino/2-Feminino)
-			if (clienteUsuario.getIdPessoaSexo() != null
-					&& !clienteUsuario.getIdPessoaSexo().equals("")) {
+			if (clienteUsuario.getPessoaSexo() != null
+					&& !clienteUsuario.getPessoaSexo().getId().equals("")) {
 				arquivoTextoRegistroTipoCliente.append(clienteUsuario
-						.getIdPessoaSexo());
+						.getPessoaSexo().getId());
 			} else {
 				arquivoTextoRegistroTipoCliente.append(" ");
 			}
@@ -8665,9 +8696,9 @@ public class ControladorCadastro implements SessionBean {
 			arquivoTextoRegistroTipoCliente.append(Util.adicionarZerosEsquedaNumero(9, clienteProprietario.getIdCliente().toString()));
 			
 			// Nome do Cliente Proprietário
-			if (clienteProprietario.getNomeCliente() != null) {
+			if (clienteProprietario.getNome() != null) {
 				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteProprietario.getNomeCliente(), 50));
+						clienteProprietario.getNome(), 50));
 			} else {
 				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
 						50));
@@ -8689,9 +8720,13 @@ public class ControladorCadastro implements SessionBean {
 			}
 
 			// CPF/CNPJ Cliente
-			if (clienteProprietario.getCpfCnpj() != null) {
+			if (clienteProprietario.getCpf() != null) {
 				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteProprietario.getCpfCnpj(), 14));
+						clienteProprietario.getCpf(), 14));
+				
+			} else if (clienteProprietario.getCnpj() != null) {
+				arquivoTextoRegistroTipoCliente.append(Util.completaString(
+						clienteProprietario.getCnpj(), 14));
 			} else {
 				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
 						14));
@@ -8716,10 +8751,10 @@ public class ControladorCadastro implements SessionBean {
 			}
 
 			// Sexo do Cliente (1-Masculino/2-Feminino)
-			if (clienteProprietario.getIdPessoaSexo() != null
-					&& !clienteProprietario.getIdPessoaSexo().equals("")) {
+			if (clienteProprietario.getPessoaSexo() != null
+					&& !clienteProprietario.getPessoaSexo().getId().equals("")) {
 				arquivoTextoRegistroTipoCliente.append(clienteProprietario
-						.getIdPessoaSexo());
+						.getPessoaSexo().getId());
 			} else {
 				arquivoTextoRegistroTipoCliente.append(" ");
 			}
@@ -8896,9 +8931,9 @@ public class ControladorCadastro implements SessionBean {
 			arquivoTextoRegistroTipoCliente.append(Util.adicionarZerosEsquedaNumero(9, clienteResponsavel.getIdCliente().toString()));
 			
 			// Nome do Cliente Proprietário
-			if (clienteResponsavel.getNomeCliente() != null) {
+			if (clienteResponsavel.getNome() != null) {
 				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteResponsavel.getNomeCliente(), 50));
+						clienteResponsavel.getNome(), 50));
 			} else {
 				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
 						50));
@@ -8920,9 +8955,13 @@ public class ControladorCadastro implements SessionBean {
 			}
 
 			// CPF/CNPJ Cliente
-			if (clienteResponsavel.getCpfCnpj() != null) {
+			if (clienteResponsavel.getCpf() != null) {
 				arquivoTextoRegistroTipoCliente.append(Util.completaString(
-						clienteResponsavel.getCpfCnpj(), 14));
+						clienteResponsavel.getCpf(), 14));
+				
+			} else if (clienteResponsavel.getCnpj() != null) {
+				arquivoTextoRegistroTipoCliente.append(Util.completaString(
+						clienteResponsavel.getCnpj(), 14));
 			} else {
 				arquivoTextoRegistroTipoCliente.append(Util.completaString("",
 						14));
@@ -8947,10 +8986,10 @@ public class ControladorCadastro implements SessionBean {
 			}
 
 			// Sexo do Cliente (1-Masculino/2-Feminino)
-			if (clienteResponsavel.getIdPessoaSexo() != null
-					&& !clienteResponsavel.getIdPessoaSexo().equals("")) {
+			if (clienteResponsavel.getPessoaSexo() != null
+					&& !clienteResponsavel.getPessoaSexo().getId().equals("")) {
 				arquivoTextoRegistroTipoCliente.append(clienteResponsavel
-						.getIdPessoaSexo());
+						.getPessoaSexo().getId());
 			} else {
 				arquivoTextoRegistroTipoCliente.append(" ");
 			}
@@ -9145,7 +9184,7 @@ public class ControladorCadastro implements SessionBean {
 		ImovelAtualizacaoCadastral imovelAtualizacaoCadastral = null;
 		Imovel imovel = null;
 
-		imovelAtualizacaoCadastral = getControladorImovel()
+		imovelAtualizacaoCadastral = getControladorAtualizacaoCadastral()
 				.pesquisarImovelAtualizacaoCadastral(idImovel);
 		imovel = getControladorImovel().pesquisarImovel(idImovel);
 
@@ -9284,7 +9323,7 @@ public class ControladorCadastro implements SessionBean {
 		ImovelAtualizacaoCadastral imovelAtualizacaoCadastral = null;
 		Imovel imovel = null;
 
-		imovelAtualizacaoCadastral = getControladorImovel()
+		imovelAtualizacaoCadastral = getControladorAtualizacaoCadastral()
 				.pesquisarImovelAtualizacaoCadastral(idImovel);
 		imovel = getControladorImovel().pesquisarImovel(idImovel);
 

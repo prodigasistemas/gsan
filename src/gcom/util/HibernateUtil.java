@@ -241,6 +241,7 @@ import gcom.atendimentopublico.registroatendimento.SolicitanteFone;
 import gcom.atendimentopublico.registroatendimento.Tramite;
 import gcom.atendimentopublico.registroatendimento.VisualizacaoRegistroAtendimentoUrgencia;
 import gcom.atualizacaocadastral.ClienteFoneRetorno;
+import gcom.atualizacaocadastral.ClienteRetorno;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.atualizacaocadastral.ImovelRamoAtividadeRetorno;
 import gcom.atualizacaocadastral.ImovelRetorno;
@@ -1197,6 +1198,7 @@ public class HibernateUtil {
 					.addClass(ImovelSubcategoriaRetorno.class)
 					.addClass(ImovelRamoAtividadeRetorno.class)
 					.addClass(ClienteFoneRetorno.class)
+					.addClass(ClienteRetorno.class)
 			
 							
 					// *************************************//

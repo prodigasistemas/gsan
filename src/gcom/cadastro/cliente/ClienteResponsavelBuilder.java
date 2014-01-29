@@ -19,14 +19,16 @@ public class ClienteResponsavelBuilder{
 	private void buildCliente() {
 		clienteTxt = new ClienteAtualizacaoCadastral();
 
-		clienteTxt.setNomeCliente(atualizacaoCadastralImovel.getLinhaCliente("nomeResponsavel"));
-		clienteTxt.setCpfCnpj(atualizacaoCadastralImovel.getLinhaCliente("cnpjCpfResponsavel"));
+		clienteTxt.setNome(atualizacaoCadastralImovel.getLinhaCliente("nomeResponsavel"));
+		clienteTxt.setCpf(atualizacaoCadastralImovel.getLinhaCliente("cnpjCpfResponsavel"));
+		clienteTxt.setCnpj(atualizacaoCadastralImovel.getLinhaCliente("cnpjCpfResponsavel"));
 		clienteTxt.setRg(atualizacaoCadastralImovel.getLinhaCliente("rgResponsavel"));
 		clienteTxt.setDsUFSiglaOrgaoExpedidorRg(atualizacaoCadastralImovel.getLinhaCliente("ufRgResponsavel"));
 		
 		String campo = atualizacaoCadastralImovel.getLinhaCliente("sexoResponsavel");
 		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
-			clienteTxt.setIdPessoaSexo(Integer.parseInt(campo));
+			PessoaSexo sexo = new PessoaSexo(Integer.parseInt(campo));
+			clienteTxt.setPessoaSexo(sexo);
 		}
 		
 		clienteTxt.setEmail(atualizacaoCadastralImovel.getLinhaCliente("emailResponsavel"));
@@ -52,6 +54,11 @@ public class ClienteResponsavelBuilder{
 		campo = atualizacaoCadastralImovel.getLinhaCliente("matriculaImovelCliente");
 		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
 			clienteTxt.setIdImovel(Integer.parseInt(campo));
+		}
+
+		campo = atualizacaoCadastralImovel.getLinhaCliente("tipoPessoaResponsavel");
+		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
+			clienteTxt.setIdClienteTipo(Integer.parseInt(campo));
 		}
 	}
 	

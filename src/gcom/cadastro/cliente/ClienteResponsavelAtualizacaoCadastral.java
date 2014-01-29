@@ -6,9 +6,6 @@ import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastralImovel;
 
 public class ClienteResponsavelAtualizacaoCadastral extends ClienteAtualizacaoCadastral{
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 8230996977700617985L;
 	
 	private AtualizacaoCadastralImovel atualizacaoCadastralImovel;
@@ -22,8 +19,8 @@ public class ClienteResponsavelAtualizacaoCadastral extends ClienteAtualizacaoCa
 
 	@Override
 	public void buildCliente() {
-		this.setNomeCliente(atualizacaoCadastralImovel.getLinhaCliente("nomeResponsavel"));
-		this.setCpfCnpj(atualizacaoCadastralImovel.getLinhaCliente("cnpjCpfResponsavel"));
+		this.setNome(atualizacaoCadastralImovel.getLinhaCliente("nomeResponsavel"));
+		this.setCpf(atualizacaoCadastralImovel.getLinhaCliente("cnpjCpfResponsavel"));
 		this.setRg(atualizacaoCadastralImovel.getLinhaCliente("rgResponsavel"));
 		this.setDsUFSiglaOrgaoExpedidorRg(atualizacaoCadastralImovel.getLinhaCliente("ufRgResponsavel"));
 		
@@ -56,6 +53,10 @@ public class ClienteResponsavelAtualizacaoCadastral extends ClienteAtualizacaoCa
 		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
 			this.setIdImovel(Integer.parseInt(campo));
 		}
+		this.setIdImovel(Integer.parseInt(atualizacaoCadastralImovel.getLinhaCliente("matriculaImovelCliente")));
+		this.setIdClienteTipo(Integer.parseInt(atualizacaoCadastralImovel.getLinhaCliente("tipoPessoaResponsavel")));
+
 	}
 
+	
 }
