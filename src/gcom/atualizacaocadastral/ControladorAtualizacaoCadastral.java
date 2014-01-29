@@ -1,6 +1,7 @@
 package gcom.atualizacaocadastral;
 
 import gcom.cadastro.imovel.IImovel;
+import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
 
@@ -50,6 +51,10 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			logger.error("Erro ao pesquisar imoveis para atualizar.", e);
 		}
 		return imoveis;
+	}
+	
+	public void atualizarImoveisAprovados(Integer idFuncionalidade, Usuario usuarioLogado) {
+		
 	}
 
 
