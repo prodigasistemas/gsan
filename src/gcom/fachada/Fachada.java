@@ -40222,8 +40222,8 @@ public class Fachada {
 	 * @return
 	 */
 	public Collection<DadosTabelaAtualizacaoCadastralHelper> consultarDadosTabelaColunaAtualizacaoCadastral(
-			Integer idRegistroAlterado, Integer idArquivo, Integer idImovel,
-			Integer idCliente,Integer idTipoAlteracao) {
+			Long idRegistroAlterado, Integer idArquivo, Integer idImovel,
+			Long idCliente,Integer idTipoAlteracao) {
 
 		try {
 			return this.getControladorTransacao()

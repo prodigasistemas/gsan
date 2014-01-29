@@ -57,4 +57,8 @@ public class AtualizacaoCadastral {
 	public void cadastroComErro() {
 		this.erroCadastro = true;
 	}
+
+	public void excluirImovelSemErros() {
+		imoveis.remove(imovelAtual);
+	}
 }

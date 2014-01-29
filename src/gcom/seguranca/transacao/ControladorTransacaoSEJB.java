@@ -1078,7 +1078,6 @@ public class ControladorTransacaoSEJB implements SessionBean {
 					
 					// Pesquisando o objeto de TabelaColuna
 					TabelaColuna tabelaColuna = tabelaColunaAtualizacaoCadastral.getTabelaColuna();
-					System.out.println("tabela coluna:"+tabelaColuna.getColuna());
 					if (tabelaColuna != null && tabelaColuna.getColuna() != null) {
 						FiltroTabelaColuna filtroTabelaColuna = new FiltroTabelaColuna();
 						filtroTabelaColuna.adicionarParametro(new ParametroSimples(FiltroTabelaColuna.TABELA_ID, tabelaAtualizacaoCadastral
@@ -1339,8 +1338,8 @@ public class ControladorTransacaoSEJB implements SessionBean {
 	 * @throws ControladorException
 	 */
 	public Collection<DadosTabelaAtualizacaoCadastralHelper> consultarDadosTabelaColunaAtualizacaoCadastral(
-			Integer idRegistroAlterado,
-			Integer idArquivo, Integer idImovel, Integer idCliente,Integer idTipoAlteracao)
+			Long idRegistroAlterado,
+			Integer idArquivo, Integer idImovel, Long idCliente,Integer idTipoAlteracao)
 		throws ControladorException {
 		
 		Collection<DadosTabelaAtualizacaoCadastralHelper> retorno = null;
@@ -2043,7 +2042,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 								//se o telefone foi alterado para o cliente que estava sendo atualizado,
 								//o telefone será atualizado para o nome cliente
 								if(tacClienteAtualizadoFone != null){
-									tacClienteAtualizadoFone.setCodigoCliente(clienteMesmoNomeCPF.getId());
+									tacClienteAtualizadoFone.setCodigoCliente((long)clienteMesmoNomeCPF.getId());
 									getControladorUtil().atualizar(tacClienteAtualizadoFone);
 								}
 								
@@ -2139,7 +2138,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 								//se o telefone foi alterado para o cliente que estava sendo atualizado,
 								//o telefone será atualizado para o nome cliente
 								if(tacClienteAtualizadoFone != null){
-									tacClienteAtualizadoFone.setCodigoCliente(clienteNovo.getId());
+									tacClienteAtualizadoFone.setCodigoCliente((long)clienteNovo.getId());
 									getControladorUtil().atualizar(tacClienteAtualizadoFone);
 								}
 							}
