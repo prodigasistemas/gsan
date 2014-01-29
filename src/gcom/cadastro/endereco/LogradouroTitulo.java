@@ -167,5 +167,13 @@ public class LogradouroTitulo extends ObjetoGcom {
     public String toString() {
         return new ToStringBuilder(this).append("id", getId()).toString();
     }
+    
+    public boolean hasDescricao(){
+    	return descricao != null && !descricao.equals("");
+    }
+    
+    public boolean hasDescricaoAbreviada(){
+    	return descricaoAbreviada != null && !descricaoAbreviada.equals("");
+    }
 
 }

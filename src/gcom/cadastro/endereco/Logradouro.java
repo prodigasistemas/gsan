@@ -330,11 +330,6 @@ public class Logradouro extends ObjetoTransacao {
     	getDescricaoFormatada();
     }
     
-//    @Override
-//    public String getDescricaoParaRegistroTransacao() {
-//    	return getId() + " " + getDescricaoFormatada();
-//    }
-    
     @Override
 	public Filtro retornaFiltroRegistroOperacao() {
 		Filtro filtro = retornaFiltro();
@@ -343,6 +338,17 @@ public class Logradouro extends ObjetoTransacao {
 		return filtro;
 	}
     
+    public boolean hasMunicipio() {
+		return this.municipio != null;
+	}
+    
+    public boolean hasLogradouroTitulo(){
+    	return logradouroTitulo != null && !logradouroTitulo.equals("");
+    }
+    
+    public boolean hasLogradouroTipo(){
+    	return logradouroTipo != null && !logradouroTipo.equals("");
+    }
 }
 
 

@@ -99,6 +99,7 @@ import gcom.cadastro.cliente.ClienteEndereco;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
+import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
 import gcom.cadastro.imovel.Imovel;
@@ -18046,10 +18047,10 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	 * @return ClienteFone
 	 * @throws ErroRepositorioException
 	 */
-	public ClienteFone pesquisarClienteFonePagamento(Integer idCliente)
+	public IClienteFone pesquisarClienteFonePagamento(Integer idCliente)
 			throws ErroRepositorioException {
 
-		ClienteFone clienteFone = null;
+		IClienteFone clienteFone = null;
 
 		String hql = "";
 
@@ -18064,7 +18065,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					+ " AND cliFone.indicadorTelefonePadrao = "
 					+ ClienteFone.INDICADOR_FONE_PADRAO.toString();
 
-			clienteFone = (ClienteFone) session.createQuery(hql).setInteger(
+			clienteFone = (IClienteFone) session.createQuery(hql).setInteger(
 					"idCliente", idCliente).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {

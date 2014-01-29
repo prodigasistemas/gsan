@@ -224,4 +224,7 @@ public class Bairro extends ObjetoTransacao {
 		return (this.getId().equals(castOther.getId()));
 	}
 
+    public boolean hasMunicipio(){
+		return municipio != null && municipio.getId().intValue() != 0;
+	}
 }

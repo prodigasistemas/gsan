@@ -7799,7 +7799,7 @@ public class ControladorCadastro implements SessionBean {
 				
 				if(atualizacao.validacaoLiberada() && !atualizacao.getImovelAtual().cadastroInvalido()){
 					AbstractAtualizacaoCadastralCommand command = new MontarObjetosAtualizacaoCadastralCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
-							repositorioImovel, getControladorImovel(), getControladorCliente());
+							repositorioImovel, getControladorImovel(), getControladorCliente(), repositorioClienteImovel);
 					command.execute(atualizacao);
 				}
 			}

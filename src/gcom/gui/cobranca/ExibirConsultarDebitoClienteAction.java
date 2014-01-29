@@ -82,6 +82,7 @@ import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.FiltroCliente;
 import gcom.cadastro.cliente.FiltroClienteEndereco;
 import gcom.cadastro.cliente.FiltroClienteFone;
+import gcom.cadastro.cliente.IClienteFone;
 import gcom.cobranca.bean.ContaValoresHelper;
 import gcom.cobranca.bean.GuiaPagamentoValoresHelper;
 import gcom.cobranca.bean.ObterDebitoImovelOuClienteHelper;
@@ -405,7 +406,7 @@ public class ExibirConsultarDebitoClienteAction extends GcomAction {
 					&& !colecaoClienteFone.isEmpty()) {
 				// O telefone foi encontrado
 				consultarDebitoClienteActionForm.setClienteFone(""
-						+ ((ClienteFone) ((List) colecaoClienteFone)
+						+ ((IClienteFone) ((List) colecaoClienteFone)
 								.get(0)).getTelefone());
 			}
 			

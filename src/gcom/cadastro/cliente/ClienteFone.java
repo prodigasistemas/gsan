@@ -17,62 +17,6 @@
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
 */
 
-/*
-* GSAN - Sistema Integrado de Gestão de Serviços de Saneamento
-* Copyright (C) <2007> 
-* Adriano Britto Siqueira
-* Alexandre Santos Cabral
-* Ana Carolina Alves Breda
-* Ana Maria Andrade Cavalcante
-* Aryed Lins de Araújo
-* Bruno Leonardo Rodrigues Barros
-* Carlos Elmano Rodrigues Ferreira
-* Cláudio de Andrade Lira
-* Denys Guimarães Guenes Tavares
-* Eduardo Breckenfeld da Rosa Borges
-* Fabíola Gomes de Araújo
-* Flávio Leonardo Cavalcanti Cordeiro
-* Francisco do Nascimento Júnior
-* Homero Sampaio Cavalcanti
-* Ivan Sérgio da Silva Júnior
-* José Edmar de Siqueira
-* José Thiago Tenório Lopes
-* Kássia Regina Silvestre de Albuquerque
-* Leonardo Luiz Vieira da Silva
-* Márcio Roberto Batista da Silva
-* Maria de Fátima Sampaio Leite
-* Micaela Maria Coelho de Araújo
-* Nelson Mendonça de Carvalho
-* Newton Morais e Silva
-* Pedro Alexandre Santos da Silva Filho
-* Rafael Corrêa Lima e Silva
-* Rafael Francisco Pinto
-* Rafael Koury Monteiro
-* Rafael Palermo de Araújo
-* Raphael Veras Rossiter
-* Roberto Sobreira Barbalho
-* Rodrigo Avellar Silveira
-* Rosana Carvalho Barbosa
-* Sávio Luiz de Andrade Cavalcante
-* Tai Mu Shih
-* Thiago Augusto Souza do Nascimento
-* Tiago Moreno Rodrigues
-* Vivianne Barbosa Sousa
-*
-* Este programa é software livre; você pode redistribuí-lo e/ou
-* modificá-lo sob os termos de Licença Pública Geral GNU, conforme
-* publicada pela Free Software Foundation; versão 2 da
-* Licença.
-* Este programa é distribuído na expectativa de ser útil, mas SEM
-* QUALQUER GARANTIA; sem mesmo a garantia implícita de
-* COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
-* PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
-* detalhes.
-* Você deve ter recebido uma cópia da Licença Pública Geral GNU
-* junto com este programa; se não, escreva para Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
-* 02111-1307, USA.
-*/  
 package gcom.cadastro.cliente;
 
 import gcom.interceptor.ControleAlteracao;
@@ -87,7 +31,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 /** @author Hibernate CodeGenerator */
 @ControleAlteracao
-public class ClienteFone extends ObjetoTransacao {
+public class ClienteFone extends ObjetoTransacao implements IClienteFone {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -105,9 +49,9 @@ public class ClienteFone extends ObjetoTransacao {
 
 	private Date ultimaAlteracao;
 
-	private gcom.cadastro.cliente.FoneTipo foneTipo;
+	private FoneTipo foneTipo;
 
-	private gcom.cadastro.cliente.Cliente cliente;
+	private Cliente cliente;
 	
 	public static final Short INDICADOR_FONE_PADRAO = new Short("1");
 	
@@ -115,8 +59,8 @@ public class ClienteFone extends ObjetoTransacao {
 
 	public ClienteFone(String ddd, String telefone, String ramal, String contato,
 			Short indicadorTelefonePadrao, Date ultimaAlteracao,
-			gcom.cadastro.cliente.FoneTipo foneTipo,
-			gcom.cadastro.cliente.Cliente cliente) {
+			FoneTipo foneTipo,
+			Cliente cliente) {
 		this.ddd = ddd;
 		this.telefone = telefone;
 		this.ramal = ramal;
@@ -130,8 +74,7 @@ public class ClienteFone extends ObjetoTransacao {
 	public ClienteFone() {
 	}
 
-	public ClienteFone(gcom.cadastro.cliente.FoneTipo foneTipo,
-			gcom.cadastro.cliente.Cliente cliente) {
+	public ClienteFone(FoneTipo foneTipo, Cliente cliente) {
 		this.foneTipo = foneTipo;
 		this.cliente = cliente;
 	}
@@ -192,19 +135,19 @@ public class ClienteFone extends ObjetoTransacao {
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
 
-	public gcom.cadastro.cliente.FoneTipo getFoneTipo() {
+	public FoneTipo getFoneTipo() {
 		return this.foneTipo;
 	}
 
-	public void setFoneTipo(gcom.cadastro.cliente.FoneTipo foneTipo) {
+	public void setFoneTipo(FoneTipo foneTipo) {
 		this.foneTipo = foneTipo;
 	}
 
-	public gcom.cadastro.cliente.Cliente getCliente() {
+	public Cliente getCliente() {
 		return this.cliente;
 	}
 
-	public void setCliente(gcom.cadastro.cliente.Cliente cliente) {
+	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
 
@@ -264,7 +207,4 @@ public class ClienteFone extends ObjetoTransacao {
 			Integer idTabelaAtualizacaoCadastralAux) {
 		this.idTabelaAtualizacaoCadastralAux = idTabelaAtualizacaoCadastralAux;
 	}
-	
-	
-
 }

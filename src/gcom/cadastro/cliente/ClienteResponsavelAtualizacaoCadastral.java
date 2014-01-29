@@ -1,5 +1,7 @@
 package gcom.cadastro.cliente;
 
+import org.apache.commons.lang.StringUtils;
+
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastralImovel;
 
 public class ClienteResponsavelAtualizacaoCadastral extends ClienteAtualizacaoCadastral{
@@ -24,17 +26,36 @@ public class ClienteResponsavelAtualizacaoCadastral extends ClienteAtualizacaoCa
 		this.setCpfCnpj(atualizacaoCadastralImovel.getLinhaCliente("cnpjCpfResponsavel"));
 		this.setRg(atualizacaoCadastralImovel.getLinhaCliente("rgResponsavel"));
 		this.setDsUFSiglaOrgaoExpedidorRg(atualizacaoCadastralImovel.getLinhaCliente("ufRgResponsavel"));
-		this.setIdPessoaSexo(atualizacaoCadastralImovel.getLinhaCliente("sexoResponsavel").equals("") ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaCliente("sexoResponsavel")));
+		
+		String campo = atualizacaoCadastralImovel.getLinhaCliente("sexoResponsavel");
+		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
+			this.setIdPessoaSexo(Integer.parseInt(campo));
+		}
+		
 		this.setEmail(atualizacaoCadastralImovel.getLinhaCliente("emailResponsavel"));
-		this.setIdLogradouroTipo(Integer.parseInt(atualizacaoCadastralImovel.getLinhaCliente("idTipoLogradouroResponsavel")));
+		
+		campo = atualizacaoCadastralImovel.getLinhaCliente("idTipoLogradouroResponsavel");
+		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
+			this.setIdLogradouroTipo(Integer.parseInt(campo));
+		}
+		
 		this.setDescricaoLogradouro(atualizacaoCadastralImovel.getLinhaCliente("logradouroResponsavel"));
 		this.setNumeroImovel(atualizacaoCadastralImovel.getLinhaCliente("numeroResponsavel"));
 		this.setComplementoEndereco(atualizacaoCadastralImovel.getLinhaCliente("complementoResponsavel"));
 		this.setNomeBairro(atualizacaoCadastralImovel.getLinhaCliente("bairroResponsavel"));
-		this.setCodigoCep(Integer.parseInt(atualizacaoCadastralImovel.getLinhaCliente("cepResponsavel")));
+		
+		campo = atualizacaoCadastralImovel.getLinhaCliente("cepResponsavel");
+		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
+			this.setCodigoCep(Integer.parseInt(campo));
+		}
+		
 		this.setNomeMunicipio(atualizacaoCadastralImovel.getLinhaCliente("municipioResponsavel"));
 		this.setIdClienteRelacaoTipo(new Integer(ClienteRelacaoTipo.RESPONSAVEL));
-		this.setIdImovel(Integer.parseInt(atualizacaoCadastralImovel.getLinhaCliente("matriculaImovelCliente")));
+		
+		campo = atualizacaoCadastralImovel.getLinhaCliente("matriculaImovelCliente");
+		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
+			this.setIdImovel(Integer.parseInt(campo));
+		}
 	}
 
 }

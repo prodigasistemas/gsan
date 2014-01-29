@@ -118,7 +118,11 @@ public class FoneTipo implements Serializable {
     public FoneTipo() {
     }
 
-    public Integer getId() {
+    public FoneTipo(Integer idFoneTipo) {
+    	this.id = idFoneTipo;
+	}
+
+	public Integer getId() {
         return this.id;
     }
 

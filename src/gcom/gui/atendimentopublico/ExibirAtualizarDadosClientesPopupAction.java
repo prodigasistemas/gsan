@@ -79,6 +79,7 @@ import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.FiltroClienteImovel;
+import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.gui.GcomAction;
@@ -310,7 +311,7 @@ public class ExibirAtualizarDadosClientesPopupAction extends GcomAction {
 						Iterator iteraFone = colecaoClienteFone.iterator();
 						while (iteraFone.hasNext()) {
 							
-							ClienteFone clienteFone = (ClienteFone) iteraFone.next();
+							IClienteFone clienteFone = (IClienteFone) iteraFone.next();
 							
 							if(chaveRemoverFone.equals(""+count)){
 								colecaoClienteFone.remove(clienteFone);

@@ -95,13 +95,13 @@ import gcom.cadastro.CpfTipo;
 import gcom.cadastro.EnvioEmail;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteEndereco;
-import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.ClienteTipo;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.cliente.ControladorClienteLocalHome;
 import gcom.cadastro.cliente.EsferaPoder;
+import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.endereco.ControladorEnderecoLocal;
 import gcom.cadastro.endereco.ControladorEnderecoLocalHome;
 import gcom.cadastro.geografico.FiltroUnidadeFederacao;
@@ -4137,7 +4137,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
             registroDetalheConsumidor.append(Util.completaString(parmsEndereco[2], 2));   
         }
 
-		ClienteFone cliFone = (ClienteFone) Util
+		IClienteFone cliFone = (IClienteFone) Util
 				.retonarObjetoDeColecao(this.repositorioSpcSerasa.getDddFone(cliente.getId()));
 		
 		// D1.16 - DDD		
@@ -7912,7 +7912,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			}
 			
 			// D.35 - DDD
-			ClienteFone cliFone = (ClienteFone) Util
+			IClienteFone cliFone = (IClienteFone) Util
 			.retonarObjetoDeColecao(this.repositorioSpcSerasa
 					.getDddFone(cliente.getId()));
 			if(cliFone!= null){
