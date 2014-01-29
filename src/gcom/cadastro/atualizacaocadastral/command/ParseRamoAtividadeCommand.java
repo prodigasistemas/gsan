@@ -29,21 +29,23 @@ public class ParseRamoAtividadeCommand extends AbstractAtualizacaoCadastralComma
 		
 		int idRamoAtividade = Integer.parseInt(ramoAtividade);
 		
-		AtualizacaoCadastralImovel imovelAtual = atualizacao.getImovelAtual();
-		if (imovelAtual.getDadosImovel().contemApenasResidencial()){
-			imovelAtual.addMensagemErro("Categoria residencial não admite ramo de atividade");
-			return;
+		if (idRamoAtividade > 0) {
+			AtualizacaoCadastralImovel imovelAtual = atualizacao.getImovelAtual();
+			if (imovelAtual.getDadosImovel().contemApenasResidencial()){
+				imovelAtual.addMensagemErro("Categoria residencial não admite ramo de atividade");
+				return;
+			}
+			
+			boolean existeRamoAtividade = repositorioCadastro.existeRamoAtividade(idRamoAtividade);
+			
+			if (!existeRamoAtividade){
+				imovelAtual.addMensagemErro("Código inválido do ramo de atividade");
+				return;
+			}
+			
+			DadoAtualizacaoRamoAtividade ramo = new DadoAtualizacaoRamoAtividade();
+			ramo.setId(idRamoAtividade);
+			atualizacao.getImovelAtual().addDadoRamoAtividade(ramo);
 		}
-		
-		boolean existeRamoAtividade = repositorioCadastro.existeRamoAtividade(idRamoAtividade);
-		
-		if (!existeRamoAtividade){
-			imovelAtual.addMensagemErro("Identificador inválido do ramo de atividade");
-			return;
-		}
-		
-		DadoAtualizacaoRamoAtividade ramo = new DadoAtualizacaoRamoAtividade();
-		ramo.setId(idRamoAtividade);
-		atualizacao.getImovelAtual().addDadoRamoAtividade(ramo);
 	}
 }
