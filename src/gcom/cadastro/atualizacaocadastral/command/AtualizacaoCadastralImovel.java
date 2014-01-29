@@ -122,7 +122,7 @@ public class AtualizacaoCadastralImovel {
 
 	public void addMensagemErro(String erro) {
 		atualizacaoArquivo.cadastroComErro();
-		mensagensErro.add(erro);
+		mensagensErro.add(erro.toUpperCase());
 	}
 	
 	public int getMatricula() {
