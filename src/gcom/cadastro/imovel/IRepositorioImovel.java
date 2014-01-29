@@ -2195,31 +2195,6 @@ public interface IRepositorioImovel {
 			Integer quadraInicial, Integer quadraFinal, Integer idEmpresa, Integer idRota)throws ErroRepositorioException;
 	
 	/**
-	 * Pesquisar dados do Imóvel Atualização Cadastral
-	 * 
-	 * @param idImovel
-	 * @return Imovel
-	 * 
-	 * @author Ana Maria
-     * @date 17/09/2008
-	 * @exception ErroRepositorioException
-	 */
-	public ImovelAtualizacaoCadastral pesquisarImovelAtualizacaoCadastral(Integer idImovel)
-		throws ErroRepositorioException;
-	
-	/**
-	 * Pesquisar Imóvel Subcategoria Atualização Cadastral
-	 * 
-	 * @param idImovel
-	 * 
-	 * @author Ana Maria
-     * @date 17/09/2008
-	 * @exception ErroRepositorioException
-	 */
-	public Collection pesquisarImovelSubcategoriaAtualizacaoCadastral(Integer idImovel, Integer idSubcategoria,Integer idCategoria)
-		throws ErroRepositorioException;
-	
-	/**
 	 * Pesquisar existência de imóvel economia
 	 * 
 	 * @author Ana Maria

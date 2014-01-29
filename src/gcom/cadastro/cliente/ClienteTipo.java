@@ -55,14 +55,12 @@ public class ClienteTipo extends ObjetoTransacao {
     private Date ultimaAlteracao;
     private String descricaoComId;
 
-    private gcom.cadastro.cliente.EsferaPoder esferaPoder;
+    private EsferaPoder esferaPoder;
 
     public final static Short INDICADOR_PESSOA_FISICA = new Short("1");
     public final static Short INDICADOR_PESSOA_JURIDICA = new Short("2");
 
-    public ClienteTipo(String descricao, Short indicadorPessoaFisicaJuridica,
-            Short indicadorUso, Date ultimaAlteracao,
-            gcom.cadastro.cliente.EsferaPoder esferaPoder) {
+    public ClienteTipo(String descricao, Short indicadorPessoaFisicaJuridica, Short indicadorUso, Date ultimaAlteracao, EsferaPoder esferaPoder) {
         this.descricao = descricao;
         this.indicadorPessoaFisicaJuridica = indicadorPessoaFisicaJuridica;
         this.indicadorUso = indicadorUso;
@@ -135,14 +133,14 @@ public class ClienteTipo extends ObjetoTransacao {
     }
         
     public String[] retornaCamposChavePrimaria() {
-		String[] retorno = {"id"};
-		return retorno;
-	}
-    
+    	String[] retorno = {"id"};
+    	return retorno;
+    }
+        
     public Filtro retornaFiltro(){
-    	FiltroClienteTipo filtroClienteTipo = new FiltroClienteTipo();
-    	filtroClienteTipo.adicionarParametro(new ParametroSimples(FiltroClienteTipo.ID,this.getId()));
-       	return filtroClienteTipo;
+        FiltroClienteTipo filtroClienteTipo = new FiltroClienteTipo();
+        filtroClienteTipo.adicionarParametro(new ParametroSimples(FiltroClienteTipo.ID,this.getId()));
+        return filtroClienteTipo;
     }
 
 	public String getDescricaoComId() {
@@ -158,15 +156,16 @@ public class ClienteTipo extends ObjetoTransacao {
 
 	@Override
 	public String getDescricaoParaRegistroTransacao() {
+		
 		String descricao = getDescricao();
+		
 		if (getDescricao() != null){
-			if (indicadorPessoaFisicaJuridica.shortValue() 
-					== INDICADOR_PESSOA_FISICA.shortValue()){
+			if (indicadorPessoaFisicaJuridica.shortValue() == INDICADOR_PESSOA_FISICA.shortValue()){
 				descricao += " (PF)";
 			} else {
 				descricao += " (PJ)";
 			}				
 		}
-		return descricao;
+			return descricao;
 	}
 }

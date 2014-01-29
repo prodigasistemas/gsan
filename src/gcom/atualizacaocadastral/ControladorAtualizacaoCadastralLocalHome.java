@@ -6,4 +6,5 @@ import javax.ejb.EJBLocalHome;
 public interface ControladorAtualizacaoCadastralLocalHome  extends EJBLocalHome{
 
 	public ControladorAtualizacaoCadastralLocal create() throws CreateException;
+	
 }

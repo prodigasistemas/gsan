@@ -2,6 +2,8 @@ package gcom.atualizacaocadastral;
 
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.imovel.IImovel;
+import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
+import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
 
@@ -60,6 +62,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<ImovelSubcategoriaRetorno> pesquisarImovelSubcategoriaRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		List<ImovelSubcategoriaRetorno> retorno = null;
@@ -78,7 +81,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		return retorno;
 	}
 	
-	public void apagarImovelRamoAtividadeRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException {
+	public void apagarImovelRetornoRamoAtividadeRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		try{
 			String consulta = " DELETE ImovelRamoAtividadeRetorno ramo "
@@ -89,5 +92,69 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<ImovelSubcategoria> pesquisarImovelSubcategoriaAtualizacaoCadastral(Integer idImovel, Integer idSubcategoria,Integer idCategoria)
+			throws ErroRepositorioException {
+		
+			Collection<ImovelSubcategoria> retorno = null;
+			Session session = HibernateUtil.getSession();
+			String consulta = null;
+			
+			try {
+				consulta = " SELECT imovelSubcategoria" 
+						 + " FROM ImovelSubcategoriaAtualizacaoCadastral imovelSubcategoria" 
+						 + " WHERE imovelSubcategoria.idImovel = :idImovel";
+				
+				if(idSubcategoria != null){
+					consulta = consulta + " AND imovelSubcategoria.idSubcategoria = "+idSubcategoria;
+				}
+				
+				if(idCategoria != null){
+					consulta = consulta + " AND imovelSubcategoria.idCategoria = "+idCategoria;
+				}
+			
+				retorno = (Collection<ImovelSubcategoria>)session.createQuery(consulta).setInteger("idImovel",
+						idImovel.intValue()).list();
+			
+			} catch (HibernateException e) {
+				throw new ErroRepositorioException(e, "Erro no Hibernate");
+			} finally {
+				HibernateUtil.closeSession(session);
+			}
+			
+			return retorno;
+
+	}
+	
+	public ImovelAtualizacaoCadastral pesquisarImovelAtualizacaoCadastral(Integer idImovel)
+		throws ErroRepositorioException {
+	
+		ImovelAtualizacaoCadastral imovelAtualizacaoCadastral = null;
+		String consulta = "";
+	
+		Session session = HibernateUtil.getSession();
+	
+		try {
+	
+			consulta = " SELECT imov"
+				     + " FROM ImovelAtualizacaoCadastral imov" 				    				    
+				     + " WHERE imov.idImovel = :idImovel";
+	
+		imovelAtualizacaoCadastral = (ImovelAtualizacaoCadastral)session.createQuery(consulta)
+										.setInteger("idImovel", idImovel)
+										.setMaxResults(1).uniqueResult();
+					
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+	
+			HibernateUtil.closeSession(session);
+	
+		}
+	
+		return imovelAtualizacaoCadastral;
+	
 	}
 }

@@ -1,12 +1,12 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
+import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.endereco.Logradouro;
 import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
 import gcom.cadastro.endereco.LogradouroTipo;
-import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.cadastro.imovel.ImagemAtualizacaoCadastral;
 import gcom.seguranca.transacao.AlteracaoTipo;
@@ -31,8 +31,8 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 
 	public ParseImovelCommand(ParserUtil parser, IRepositorioCadastro repositorioCadastro, ControladorUtilLocal controladorUtil, 
 			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, 
-			ControladorImovelLocal controladorImovel, ControladorClienteLocal controladorCliente) {
-		super(parser, repositorioCadastro, controladorUtil, controladorTransacao, repositorioImovel, controladorImovel, controladorCliente);
+			ControladorAtualizacaoCadastralLocal controladorAtualizacaoCadastral, ControladorClienteLocal controladorCliente) {
+		super(parser, repositorioCadastro, controladorUtil, controladorTransacao, repositorioImovel, controladorAtualizacaoCadastral, controladorCliente);
 	}
 
 	public void execute(AtualizacaoCadastral atualizacao) throws Exception {

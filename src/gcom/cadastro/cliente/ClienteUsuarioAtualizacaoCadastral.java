@@ -23,8 +23,8 @@ public class ClienteUsuarioAtualizacaoCadastral extends ClienteAtualizacaoCadast
 	
 	@Override
 	public void buildCliente() {
-		this.setNomeCliente(atualizacaoCadastralImovel.getLinhaCliente("nomeUsuario"));
-		this.setCpfCnpj(atualizacaoCadastralImovel.getLinhaCliente("cnpjCpfUsuario"));
+		this.setNome(atualizacaoCadastralImovel.getLinhaCliente("nomeUsuario"));
+		this.setCpf(atualizacaoCadastralImovel.getLinhaCliente("cnpjCpfUsuario"));
 		this.setRg(atualizacaoCadastralImovel.getLinhaCliente("rgUsuario"));
 		this.setDsUFSiglaOrgaoExpedidorRg(atualizacaoCadastralImovel.getLinhaCliente("ufRgUsuario"));
 		this.setIdPessoaSexo(atualizacaoCadastralImovel.getLinhaCliente("sexoUsuario").equals("0") ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaCliente("sexoUsuario")));
@@ -39,6 +39,7 @@ public class ClienteUsuarioAtualizacaoCadastral extends ClienteAtualizacaoCadast
 		this.setNomeBairro(atualizacaoCadastralImovel.getLinhaImovel("bairro"));
 		this.setCodigoCep(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("cep")));
 		this.setNomeMunicipio(atualizacaoCadastralImovel.getLinhaImovel("municipio"));
+		this.setIdClienteTipo(Integer.parseInt(atualizacaoCadastralImovel.getLinhaCliente("tipoPessoaUsuario")));
 	}
 	
 	public String getDescricaoLogradouro(int idTipoLogradouro) {

@@ -1,30 +1,16 @@
 package gcom.cadastro.cliente;
 
+import gcom.atualizacaocadastral.ICliente;
 import gcom.util.filtro.Filtro;
 
 import java.util.Date;
 
-public interface IClienteAtualizacaoCadastral {
+public interface IClienteAtualizacaoCadastral extends ICliente {
 
-	public abstract Integer getIdCliente();
-
-	public abstract void setIdCliente(Integer idCliente);
-
-	public abstract Integer getIdImovel();
-
-	public abstract void setIdImovel(Integer idImovel);
-
-	public abstract String getNomeCliente();
-
-	public abstract void setNomeCliente(String nomeCliente);
 
 	public abstract Integer getIdClienteTipo();
 
 	public abstract void setIdClienteTipo(Integer idClienteTipo);
-
-	public abstract String getRg();
-
-	public abstract void setRg(String rg);
 
 	public abstract Date getDataEmissaoRg();
 
@@ -38,25 +24,9 @@ public interface IClienteAtualizacaoCadastral {
 
 	public abstract void setIdProfissao(Integer idProfissao);
 
-	public abstract Integer getIdPessoaSexo();
-
-	public abstract void setIdPessoaSexo(Integer idPessoaSexo);
-
-	public abstract String getCpfCnpj();
-
-	public abstract void setCpfCnpj(String cpfCnpj);
-
-	public abstract String getEmail();
-
-	public abstract void setEmail(String email);
-
 	public abstract Short getIndicadorUso();
 
 	public abstract void setIndicadorUso(Short indicadorUso);
-
-	public abstract Date getUltimaAlteracao();
-
-	public abstract void setUltimaAlteracao(Date ultimaAlteracao);
 
 	public abstract String getNomeMae();
 

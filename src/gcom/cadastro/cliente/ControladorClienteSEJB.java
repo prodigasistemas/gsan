@@ -90,6 +90,7 @@ import gcom.cadastro.endereco.LogradouroTitulo;
 import gcom.cadastro.geografico.Bairro;
 import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.geografico.UnidadeFederacao;
+import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cadastro.tarifasocial.FiltroTarifaSocialDadoEconomia;
 import gcom.cadastro.tarifasocial.TarifaSocialDadoEconomia;
@@ -2681,10 +2682,10 @@ public class ControladorClienteSEJB implements SessionBean {
 			
 				cliente.setIdCliente((Integer) element[0]);					
 				
-				cliente.setIdImovel(idImovel);
+				//cliente.setImovel(new Imovel(idImovel));
 					
 				if (element[1] != null){
-					cliente.setNomeCliente((String) element[1]);
+					cliente.setNome((String) element[1]);
 				}
 				
 				if (element[2] != null){
@@ -2692,9 +2693,9 @@ public class ControladorClienteSEJB implements SessionBean {
 				}
 				
 				if (element[3] != null){
-					cliente.setCpfCnpj((String) element[3]);
+					cliente.setCpf((String) element[3]);
 				}else if(element[4] != null){
-					cliente.setCpfCnpj((String) element[4]);
+					cliente.setCpf((String) element[4]);
 				}
 				
 				if (element[5] != null){
@@ -2731,7 +2732,7 @@ public class ControladorClienteSEJB implements SessionBean {
 				}
 				
 				if (element[11] != null){
-					cliente.setIdPessoaSexo((Integer)element[11]);
+					cliente.getPessoaSexo().setId(((Integer)element[11]));
 				}
 				
 				if (element[12] != null){
@@ -2833,7 +2834,7 @@ public class ControladorClienteSEJB implements SessionBean {
 					cliente.setComplementoEndereco(trunk);
 				}
 				
-				cliente.setIdClienteRelacaoTipo(new Integer(idClienteRelacaoTipo));
+				cliente.getClienteTipo().setId((new Integer(idClienteRelacaoTipo)));
 				
 			}
 			

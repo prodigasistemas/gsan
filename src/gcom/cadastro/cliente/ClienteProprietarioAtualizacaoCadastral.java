@@ -21,8 +21,8 @@ public class ClienteProprietarioAtualizacaoCadastral extends ClienteAtualizacaoC
 	
 	@Override
 	public void buildCliente() {
-		this.setNomeCliente(atualizacaoCadastralImovel.getLinhaCliente("nomeProprietario"));
-		this.setCpfCnpj(atualizacaoCadastralImovel.getLinhaCliente("cnpjCpfProprietario"));
+		this.setNome(atualizacaoCadastralImovel.getLinhaCliente("nomeProprietario"));
+		this.setCpf(atualizacaoCadastralImovel.getLinhaCliente("cnpjCpfProprietario"));
 		this.setRg(atualizacaoCadastralImovel.getLinhaCliente("rgProprietario"));
 		this.setDsUFSiglaOrgaoExpedidorRg(atualizacaoCadastralImovel.getLinhaCliente("ufRgProprietario"));
 		
@@ -55,5 +55,8 @@ public class ClienteProprietarioAtualizacaoCadastral extends ClienteAtualizacaoC
 		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
 			this.setIdImovel(Integer.parseInt(campo));
 		}
+		this.setIdImovel(Integer.parseInt(atualizacaoCadastralImovel.getLinhaCliente("matriculaImovelCliente")));
+		this.setIdClienteTipo(Integer.parseInt(atualizacaoCadastralImovel.getLinhaCliente("tipoPessoaProprietario")));
+
 	}
 }

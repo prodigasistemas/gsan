@@ -1,5 +1,6 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
+import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
@@ -8,7 +9,6 @@ import gcom.cadastro.cliente.ClienteAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteFoneAtualizacaoCadastral;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.cliente.IClienteAtualizacaoCadastral;
-import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelRamoAtividadeAtualizacaoCadastral;
@@ -51,7 +51,7 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 	protected ControladorUtilLocal controladorUtil;
 	protected ControladorTransacaoLocal controladorTransacao;
 	protected IRepositorioImovel repositorioImovel;
-	protected ControladorImovelLocal controladorImovel;
+	protected ControladorAtualizacaoCadastralLocal controladorAtualizacaoCadastral;
 	protected ControladorClienteLocal controladorCliente;
 	
 	public AbstractAtualizacaoCadastralCommand(){
@@ -60,13 +60,14 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 
 	public AbstractAtualizacaoCadastralCommand(ParserUtil parser, IRepositorioCadastro repositorioCadastro, ControladorUtilLocal controladorUtil, 
 			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, 
-			ControladorImovelLocal controladorImovel, ControladorClienteLocal controladorCliente) {
+			ControladorAtualizacaoCadastralLocal controladorAtualizacaoCadastral, ControladorClienteLocal controladorCliente) {
+		
 		this.parser = parser;
 		this.repositorioCadastro = repositorioCadastro;
 		this.controladorUtil = controladorUtil;
 		this.controladorTransacao = controladorTransacao;
 		this.repositorioImovel = repositorioImovel;
-		this.controladorImovel = controladorImovel;
+		this.controladorAtualizacaoCadastral = controladorAtualizacaoCadastral;
 		this.controladorCliente = controladorCliente;
 	}
 
