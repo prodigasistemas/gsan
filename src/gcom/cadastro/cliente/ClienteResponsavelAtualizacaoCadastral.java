@@ -55,6 +55,8 @@ public class ClienteResponsavelAtualizacaoCadastral extends ClienteAtualizacaoCa
 		}
 		this.setIdImovel(Integer.parseInt(atualizacaoCadastralImovel.getLinhaCliente("matriculaImovelCliente")));
 		this.setIdClienteTipo(Integer.parseInt(atualizacaoCadastralImovel.getLinhaCliente("tipoPessoaResponsavel")));
+		this.setIdCliente(Integer.parseInt(atualizacaoCadastralImovel.getLinhaCliente("matriculaResponsavel")));
+
 
 	}
 

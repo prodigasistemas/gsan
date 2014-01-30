@@ -1,8 +1,11 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
 import gcom.atualizacaocadastral.ClienteFoneRetorno;
+import gcom.atualizacaocadastral.ClienteImovelRetorno;
 import gcom.atualizacaocadastral.ClienteRetorno;
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
+import gcom.atualizacaocadastral.ICliente;
+import gcom.atualizacaocadastral.IClienteImovel;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.atualizacaocadastral.ImovelRamoAtividadeRetorno;
 import gcom.atualizacaocadastral.ImovelRetorno;
@@ -20,6 +23,7 @@ import gcom.cadastro.cliente.FoneTipo;
 import gcom.cadastro.cliente.IClienteAtualizacaoCadastral;
 import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.cliente.IRepositorioClienteImovel;
+import gcom.cadastro.imovel.IImovel;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastralBuilder;
@@ -186,6 +190,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
         			, atualizacaoCadastralImovel.getLinhaCliente("celularProprietario")
         			, existeCliente);
         	salvarClienteRetorno(clienteTxt);
+        	salvarClienteImovelRetorno(clienteTxt, matriculaImovel);
 		}
 	}
 
@@ -293,6 +298,13 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		ClienteRetorno clienteRetorno = new ClienteRetorno(clienteTxt);
 		clienteRetorno.setUltimaAlteracao(new Date());
 		controladorUtil.inserir(clienteRetorno);
+		
+	}
+	
+	private void salvarClienteImovelRetorno(IClienteAtualizacaoCadastral clienteTxt, int matriculaImovel) throws ControladorException {
+		ClienteImovelRetorno clienteImovelRetorno = new ClienteImovelRetorno(clienteTxt, matriculaImovel);
+		clienteImovelRetorno.setUltimaAlteracao(new Date());
+		controladorUtil.inserir(clienteTxt);
 	}
 	
 	private void atualizarSituacaoControleImovelAtualizacaoCadastral(Integer situacao) throws Exception {

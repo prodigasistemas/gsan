@@ -40,6 +40,8 @@ public class ClienteUsuarioAtualizacaoCadastral extends ClienteAtualizacaoCadast
 		this.setCodigoCep(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("cep")));
 		this.setNomeMunicipio(atualizacaoCadastralImovel.getLinhaImovel("municipio"));
 		this.setIdClienteTipo(Integer.parseInt(atualizacaoCadastralImovel.getLinhaCliente("tipoPessoaUsuario")));
+		this.setIdCliente(Integer.parseInt(atualizacaoCadastralImovel.getLinhaCliente("matriculaUsuario")));
+
 	}
 	
 	public String getDescricaoLogradouro(int idTipoLogradouro) {
