@@ -56,7 +56,10 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 	protected ControladorClienteLocal controladorCliente;
 	
 	public AbstractAtualizacaoCadastralCommand(){
-		
+	}
+	
+	public AbstractAtualizacaoCadastralCommand(ParserUtil parser){
+		this.parser = parser;
 	}
 
 	public AbstractAtualizacaoCadastralCommand(ParserUtil parser, IRepositorioCadastro repositorioCadastro, ControladorUtilLocal controladorUtil, 

@@ -1,14 +1,12 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
-import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
+import gcom.atualizacaocadastral.IControladorAtualizacaoCadastral;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
-import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
+import gcom.cadastro.atualizacaocadastral.validador.ValidadorMatriculasClientesCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorSexoCommand;
-import gcom.cadastro.cliente.ControladorClienteLocal;
+import gcom.cadastro.cliente.IRepositorioClienteImovel;
 import gcom.cadastro.imovel.IRepositorioImovel;
-import gcom.seguranca.transacao.ControladorTransacaoLocal;
-import gcom.util.ControladorUtilLocal;
 import gcom.util.ParserUtil;
 import gcom.util.Util;
 import gcom.util.exception.MatriculaProprietarioException;
@@ -24,14 +22,20 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 	
 	private static Logger logger = Logger.getLogger(ParseClienteCommand.class);
 	
-	public ParseClienteCommand() {
-		super();
-	}
-
-	public ParseClienteCommand(ParserUtil parser, IRepositorioCadastro repositorioCadastro, ControladorUtilLocal controladorUtil, 
-			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, 
-			ControladorAtualizacaoCadastralLocal controladorAtualizacaoCadastral, ControladorClienteLocal controladorCliente) {
-		super(parser, repositorioCadastro, controladorUtil, controladorTransacao, repositorioImovel, controladorAtualizacaoCadastral, controladorCliente);
+	private IRepositorioImovel repositorioImovel;
+	private IRepositorioClienteImovel repositorioClienteImovel;
+	private IControladorAtualizacaoCadastral controladorAtualizacaoCadastral;
+	
+	public ParseClienteCommand(ParserUtil parser
+			, IRepositorioImovel repositorioImovel
+			, IControladorAtualizacaoCadastral controladorAtualizacaoCadastral
+			, IRepositorioClienteImovel repositorioClienteImovel) {
+		
+		super(parser);
+		
+		this.repositorioImovel = repositorioImovel;
+		this.repositorioClienteImovel = repositorioClienteImovel;
+		this.controladorAtualizacaoCadastral = controladorAtualizacaoCadastral;
 	}
 
 	public void execute(AtualizacaoCadastral atualizacao) throws Exception {
@@ -239,6 +243,7 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		testaProprietario(imovelAtual, linha);
 		
 		new ValidadorSexoCommand(imovelAtual, linha).execute();
+		new ValidadorMatriculasClientesCommand(imovelAtual, linha, repositorioClienteImovel).execute();
 		
 	}
 	

@@ -7788,8 +7788,10 @@ public class ControladorCadastro implements SessionBean {
 				} else if ("01".equals(registroTipo)) {
 					atualizacao.novaAtualizacaoImovel();
 
-					AbstractAtualizacaoCadastralCommand command = new ParseClienteCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
-							repositorioImovel, getControladorAtualizacaoCadastral(), getControladorCliente());
+					AbstractAtualizacaoCadastralCommand command = new ParseClienteCommand(parserConteudo
+							, repositorioImovel
+							, getControladorAtualizacaoCadastral()
+							, repositorioClienteImovel);
 					command.execute(atualizacao);
 				}
 				

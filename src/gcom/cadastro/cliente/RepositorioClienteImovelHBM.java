@@ -1249,22 +1249,19 @@ public class RepositorioClienteImovelHBM implements IRepositorioClienteImovel {
 	 * @return Collection
 	 * @throws ControladorException
 	 */
-	public Collection pesquisarClienteImovel(Integer idImovel)
-		throws ErroRepositorioException {
-
-		Collection retorno = null;
+	public Collection<ClienteImovel> pesquisarClienteImovel(Integer idImovel) throws ErroRepositorioException {
+		Collection<ClienteImovel> retorno = null;
 		Session session = HibernateUtil.getSession();
 		String consulta = null;
-		
 		try {
 			consulta = "SELECT clienteImovel " 
 					 + "from ClienteImovel clienteImovel " 
 					 + "where clienteImovel.imovel.id = :idImovel " 
 					 + "and clienteImovel.dataFimRelacao is null ";
 		
-			retorno = session.createQuery(consulta).setInteger("idImovel",
-					idImovel.intValue()).list();
-		
+			retorno = session.createQuery(consulta)
+					.setInteger("idImovel",	idImovel.intValue())
+					.list();
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {

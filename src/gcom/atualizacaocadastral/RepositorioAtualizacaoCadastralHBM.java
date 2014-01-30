@@ -155,6 +155,18 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		}
 	
 		return imovelAtualizacaoCadastral;
+	}
 	
+	public void apagarClienteImovelRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException{
+		Session session = HibernateUtil.getSession();
+		try{
+			String consulta = " DELETE ClienteImovelRetorno ret "
+					+ " WHERE ret.imovel.id = :idImovel ";
+			session.createQuery(consulta).setInteger("idImovel", idImovel).executeUpdate();
+		}catch (HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}		
 	}
 }

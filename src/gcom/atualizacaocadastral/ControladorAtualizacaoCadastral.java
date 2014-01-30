@@ -176,6 +176,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		apagarImovelRetorno(idImovel);
 		apagarImovelSubcategoriaRetorno(idImovel);
 		apagarImovelRamoAtividade(idImovel);
+		apagarImovelClienteRetorno(idImovel);
 	}
 
 	private void apagarImovelRetorno(Integer idImovel) throws ControladorException {
@@ -227,6 +228,14 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 	private void apagarImovelRamoAtividade(Integer idImovel) throws ControladorException {
 		try {
 			repositorioAtualizacaoCadastral.apagarImovelRetornoRamoAtividadeRetornoPorIdImovel(idImovel);
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
+	}
+
+	private void apagarImovelClienteRetorno(Integer idImovel) throws ControladorException {
+		try {
+			repositorioAtualizacaoCadastral.apagarClienteImovelRetornoPorIdImovel(idImovel);
 		} catch (ErroRepositorioException e) {
 			e.printStackTrace();
 		}
