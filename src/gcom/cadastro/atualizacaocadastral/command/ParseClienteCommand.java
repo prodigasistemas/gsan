@@ -4,6 +4,7 @@ import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
+import gcom.cadastro.atualizacaocadastral.validador.ValidadorSexoCommand;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
@@ -237,18 +238,13 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 
 		testaProprietario(imovelAtual, linha);
 		
+		new ValidadorSexoCommand(imovelAtual, linha).execute();
+		
 	}
 	
 	private void testaUsuario(AtualizacaoCadastralImovel imovelAtual, Map<String, String> linha) throws Exception {
 		if (Util.nomeInvalido(linha.get("nomeUsuario"))){
 			imovelAtual.addMensagemErro("Nome de usuário inválido.");
-		}
-		
-		String sexoUsuario = linha.get("sexoUsuario"); 
-		if (StringUtils.isEmpty(sexoUsuario) || !StringUtils.isNumeric(sexoUsuario)){
-			imovelAtual.addMensagemErro("Sexo de usuário inválido.");
-		}else if (!repositorioCadastro.existePessoaSexo(Integer.parseInt(sexoUsuario))){
-			imovelAtual.addMensagemErro("Sexo de usuário inválido.");
 		}
 		
 		if (StringUtils.isEmpty(linha.get("cnpjCpfUsuario"))){
@@ -264,16 +260,8 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 			if (Util.nomeInvalido(linha.get("nomeProprietario"))){
 				imovelAtual.addMensagemErro("Nome de proprietário inválido.");
 			}
-			
-			String sexo = linha.get("sexoProprietario"); 
-			if (StringUtils.isEmpty(sexo) || !StringUtils.isNumeric(sexo)){
-				imovelAtual.addMensagemErro("Sexo de proprietário inválido.");
-			}else if (!repositorioCadastro.existePessoaSexo(Integer.parseInt(sexo))){
-				imovelAtual.addMensagemErro("Sexo de proprietário inválido.");
-			}
 		}
 		
-
 		if (StringUtils.isNotEmpty(linha.get("cnpjCpfProprietario")) && Util.cpfCnpjInvalido(linha.get("cnpjCpfProprietario"))){
 			imovelAtual.addMensagemErro("CPF/CNPJ de proprietário inválido.");
 		}
@@ -283,13 +271,6 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		if (StringUtils.isNotEmpty(linha.get("nomeResponsavel"))){
 			if (Util.nomeInvalido(linha.get("nomeResponsavel"))){
 				imovelAtual.addMensagemErro("Nome de responsável inválido.");
-			}
-			
-			String sexo = linha.get("sexoResponsavel"); 
-			if (StringUtils.isEmpty(sexo) || !StringUtils.isNumeric(sexo)){
-				imovelAtual.addMensagemErro("Sexo de responsável inválido.");
-			}else if (!repositorioCadastro.existePessoaSexo(Integer.parseInt(sexo))){
-				imovelAtual.addMensagemErro("Sexo de responsável inválido.");
 			}
 		}
 		
