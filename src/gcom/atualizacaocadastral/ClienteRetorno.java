@@ -45,6 +45,7 @@ public class ClienteRetorno implements ICliente {
 		this.pessoaSexo = cliente.getPessoaSexo();
 		
 		this.clienteTipo = new ClienteTipo(cliente.getIdClienteTipo());
+		this.idCliente = cliente.getIdCliente();
 	}
 	
 	public Integer getIdCliente() {
@@ -166,7 +167,5 @@ public class ClienteRetorno implements ICliente {
 	public void setIdClienteTipo(Integer idCLienteTipo) {
 		this.idClienteTipo = idCLienteTipo;
 	}
-	
-	
 
 }

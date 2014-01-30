@@ -32,6 +32,8 @@ public class ClienteResponsavelBuilder{
 		}
 		
 		clienteTxt.setEmail(atualizacaoCadastralImovel.getLinhaCliente("emailResponsavel"));
+		clienteTxt.setIdCliente(new Integer(atualizacaoCadastralImovel.getLinhaCliente("matriculaResponsavel")));
+
 		
 		campo = atualizacaoCadastralImovel.getLinhaCliente("idTipoLogradouroResponsavel");
 		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){

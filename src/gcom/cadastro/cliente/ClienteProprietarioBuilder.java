@@ -31,12 +31,13 @@ public class ClienteProprietarioBuilder {
 		}
 		
 		clienteTxt.setEmail(atualizacaoCadastralImovel.getLinhaCliente("emailProprietario"));
+		clienteTxt.setIdCliente(new Integer(atualizacaoCadastralImovel.getLinhaCliente("matriculaProprietario")));
 		
 		campo = atualizacaoCadastralImovel.getLinhaCliente("idTipoLogradouroProprietario");
 		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
 			clienteTxt.setIdLogradouroTipo(Integer.parseInt(campo));
 		}
-		
+
 		clienteTxt.setDescricaoLogradouro(atualizacaoCadastralImovel.getLinhaCliente("logradouroProprietario"));
 		clienteTxt.setNumeroImovel(atualizacaoCadastralImovel.getLinhaCliente("numeroProprietario"));
 		clienteTxt.setComplementoEndereco(atualizacaoCadastralImovel.getLinhaCliente("complementoProprietario"));

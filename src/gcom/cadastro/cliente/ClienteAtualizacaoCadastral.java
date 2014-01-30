@@ -1,6 +1,7 @@
 package gcom.cadastro.cliente;
 
 import gcom.cadastro.geografico.UnidadeFederacao;
+import gcom.cadastro.imovel.Imovel;
 import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.ObjetoTransacao;
 import gcom.seguranca.transacao.FiltroTabela;
@@ -98,11 +99,19 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 	
 	private String dsUFSiglaMunicipio;
 	
+	private Short indicadorNomeConta;
+	
 	private ClienteTipo clienteTipo;
 	
 	private UnidadeFederacao unidadeFederacao;
 	
 	private PessoaSexo pessoaSexo;
+	
+	private Imovel imovel;
+	
+	private Cliente cliente;
+	
+	private ClienteRelacaoTipo clienteRelacaoTipo;
 
 	public ClienteAtualizacaoCadastral(){
 		clienteTipo = new ClienteTipo();
@@ -499,4 +508,37 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 	public void setIdClienteTipo(Integer idClienteTipo) {
 		this.idClienteTipo = idClienteTipo;
 	}
+	
+	public Imovel getImovel() {
+		return imovel;
+	}
+	
+	public void setImovel(Imovel imovel) {
+		this.imovel = imovel;
+	}
+	
+	public Cliente getCliente() {
+		return cliente;
+	}
+	
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+	
+	public ClienteRelacaoTipo getClienteRelacaoTipo() {
+		return clienteRelacaoTipo;
+	}
+	
+	public void setClienteRelacaoTipo(ClienteRelacaoTipo clienteRelacaoTipo) {
+		this.clienteRelacaoTipo = clienteRelacaoTipo;
+	}
+	
+	public Short getIndicadorNomeConta() {
+		return indicadorNomeConta;
+	}
+
+	public void setIndicadorNomeConta(Short indicadorNomeConta) {
+		this.indicadorNomeConta = indicadorNomeConta;
+	}
+	
 }

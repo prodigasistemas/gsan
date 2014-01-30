@@ -36,6 +36,8 @@ public class ClienteUsuarioBuilder{
  
 		clienteTxt.setEmail(atualizacaoCadastralImovel.getLinhaCliente("emailUsuario"));
 		clienteTxt.setIdClienteRelacaoTipo(new Integer(ClienteRelacaoTipo.USUARIO));
+		clienteTxt.setIdCliente(new Integer(atualizacaoCadastralImovel.getLinhaCliente("matriculaUsuario")));
+
 		
 		campo = atualizacaoCadastralImovel.getLinhaCliente("matriculaImovelCliente");
 		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){

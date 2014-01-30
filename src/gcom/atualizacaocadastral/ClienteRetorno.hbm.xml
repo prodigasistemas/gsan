@@ -13,6 +13,7 @@
 				<param name="sequence">atualizacaocadastral.seq_cliente_retorno</param>
 			</generator>
 		</id>
+		<!--  property name="idCliente" type="java.lang.Integer" column="clie_id" length="50"/ -->
 		<property name="nome" type="java.lang.String" column="clir_nmcliente" length="50"/>
 		<property name="cpf" type="java.lang.String" column="clir_nncpf" length="11"/>
 		<property name="rg" type="java.lang.String" column="clir_nnrg" length="13"/>
