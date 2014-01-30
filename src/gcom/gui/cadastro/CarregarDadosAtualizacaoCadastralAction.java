@@ -98,7 +98,7 @@ public class CarregarDadosAtualizacaoCadastralAction extends GcomAction {
 
 						AtualizacaoCadastral atualizacao =  Fachada.getInstancia().carregarImovelAtualizacaoCadastral(buffer, imagens);
 						
-						if (atualizacao.existeErroNoCadastro()){
+						if (atualizacao.existeErroNoArquivo()){
 							HttpSession sessao = httpServletRequest.getSession(false);
 							Map<String, List<String>> mapErros = new HashMap<String, List<String>>();
 							

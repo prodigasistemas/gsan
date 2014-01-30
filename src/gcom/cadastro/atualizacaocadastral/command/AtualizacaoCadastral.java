@@ -11,11 +11,9 @@ public class AtualizacaoCadastral {
 
 	private boolean validacaoLiberada = false;
 	
-	private List<AtualizacaoCadastralImovel> imoveis = new ArrayList<AtualizacaoCadastralImovel>();
+	private List<AtualizacaoCadastralImovel> imoveisComErro = new ArrayList<AtualizacaoCadastralImovel>();
 	
 	private AtualizacaoCadastralImovel imovelAtual = new AtualizacaoCadastralImovel();
-	
-	private boolean erroCadastro = false;
 	
 	public ArquivoTextoAtualizacaoCadastral getArquivoTexto() {
 		return arquivoTexto;
@@ -35,10 +33,9 @@ public class AtualizacaoCadastral {
 	
 	public AtualizacaoCadastralImovel novaAtualizacaoImovel(){
 		validacaoLiberada = false;
-		erroCadastro = false;
 		AtualizacaoCadastralImovel imovel = new AtualizacaoCadastralImovel(this);
 		imovelAtual = imovel;
-		imoveis.add(imovel);
+		imoveisComErro.add(imovel);
 		return imovel;
 	}
 	
@@ -47,18 +44,14 @@ public class AtualizacaoCadastral {
 	}
 	
 	public List<AtualizacaoCadastralImovel> getAtualizacoesImovel(){
-		return imoveis;
-	}
-
-	public boolean existeErroNoCadastro() {
-		return erroCadastro;
-	}
-
-	public void cadastroComErro() {
-		this.erroCadastro = true;
+		return imoveisComErro;
 	}
 
 	public void excluirImovelSemErros() {
-		imoveis.remove(imovelAtual);
+		imoveisComErro.remove(imovelAtual);
 	}
+	
+	public boolean existeErroNoArquivo() {
+		return imoveisComErro.size() > 0;
+	}	
 }

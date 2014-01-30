@@ -10062,4 +10062,29 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		
 		return false;
 	}
+	
+	public boolean existePessoaSexo(Integer idSexo) throws ErroRepositorioException{
+		Session session = HibernateUtil.getSession();
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("select sexo ")
+			.append(" from PessoaSexo sexo ")
+			.append(" where sexo.id = :idSexo");
+			
+			List retorno = session.createQuery(sql.toString())
+					.setInteger("idSexo", idSexo)
+					.list();
+
+			if (retorno.size() > 0) {
+				return true;
+			}
+		} catch (HibernateException e) {
+			logger.error("Erro ao pesquisar sexo de pessoa", e);
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		return false;
+	}
 }
