@@ -3284,4 +3284,6 @@ public interface IRepositorioImovel {
 	public LogradouroTipo pesquisarTipoLogradouro(Integer idTipoLogradouro) throws ErroRepositorioException;
 	
 	public Logradouro pesquisarLogradouro(Integer codigoLogradouro) throws ErroRepositorioException;
+	
+	public Integer pesquisarLogradouroImovelAtualizacaoCadastral(Integer matriculaImovel) throws ErroRepositorioException;
 }

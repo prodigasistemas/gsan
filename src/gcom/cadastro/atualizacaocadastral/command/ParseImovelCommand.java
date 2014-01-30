@@ -157,7 +157,7 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 		String data = parser.obterDadoParser(26).trim();
 		linha.put("data", data);
 		
-		validaCamposImovel(atualizacao);
+		validaCamposImovel(atualizacao, parser);
 	}
 
 	private void inserirImagem(AtualizacaoCadastral atualizacao,
@@ -184,14 +184,16 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 		}
 	}
 
-	private void validaCamposImovel(AtualizacaoCadastral atualizacao) throws Exception {
+	private void validaCamposImovel(AtualizacaoCadastral atualizacao, ParserUtil parser) throws Exception {
 		AtualizacaoCadastralImovel imovel = atualizacao.getImovelAtual(); 
 		Map<String, String> linha = imovel.getLinhaImovel();
-		
-		validarTipoLogradouro(imovel, linha);
+
 		validarTipoOperacao(imovel, linha);
+		validarTipoLogradouro(imovel, linha);
+		validarLogradouro(imovel,linha);
 		validarCoordenadas(imovel, linha);
 		validarEconomias(imovel, linha);
+		validarTamanhoLinha(imovel, parser);
 	}
 
 	private void validarTipoOperacao(AtualizacaoCadastralImovel imovel, Map<String, String> linha) throws ErroRepositorioException {
@@ -338,4 +340,27 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 		return StringUtils.isEmpty(tipoOperacao) || !StringUtils.isNumeric(tipoOperacao) || StringUtils.containsOnly(tipoOperacao, new char[]{'0'}) ;
 	}
 	
+	private void validarTamanhoLinha(AtualizacaoCadastralImovel imovel, ParserUtil parser) {
+		if(parser.getFonte().length() != 370) {
+			imovel.addMensagemErro("A linha Tipo 02 não está compatível ao definido no leiaute");
+		}
+	}
+	
+	private void validarLogradouro(AtualizacaoCadastralImovel imovel, Map<String, String> linha) throws ErroRepositorioException{
+		String codigoLogradouro = linha.get("codigoLogradouro");
+		if(campoNumericoInvalido(codigoLogradouro)) {
+			imovel.addMensagemErro("Código do logradouro é inválido");
+		} 
+		
+		Logradouro logradouro = repositorioImovel.pesquisarLogradouro(Integer.valueOf(codigoLogradouro));
+		if(logradouro == null) {
+			imovel.addMensagemErro("Logradouro inexistente");
+		}
+
+		Integer idLogradouro = repositorioImovel.pesquisarLogradouroImovelAtualizacaoCadastral(Integer.parseInt(linha.get("matricula")));
+		if(!idLogradouro.equals(Integer.valueOf(codigoLogradouro))) {
+			imovel.addMensagemErro("Código do logradouro não pode ser alterado");
+		}
+		
+	}
 }
