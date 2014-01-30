@@ -10,8 +10,6 @@ import javax.ejb.EJBLocalObject;
 
 public interface ControladorAtualizacaoCadastralLocal extends EJBLocalObject, IControladorAtualizacaoCadastral {
 
-	public void apagarInformacoesRetornoImovelAtualizacaoCadastral(Integer idImovel) throws ControladorException;
-	
 	public Collection<ImovelSubcategoria> pesquisarImovelSubcategoriaAtualizacaoCadastral(Integer idImovel, Integer idSubcategoria,Integer idCategoria)
 		throws ControladorException;
 	
