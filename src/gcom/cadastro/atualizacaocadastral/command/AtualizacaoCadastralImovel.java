@@ -121,7 +121,6 @@ public class AtualizacaoCadastralImovel {
 	}
 
 	public void addMensagemErro(String erro) {
-		atualizacaoArquivo.cadastroComErro();
 		mensagensErro.add(erro.toUpperCase());
 	}
 	

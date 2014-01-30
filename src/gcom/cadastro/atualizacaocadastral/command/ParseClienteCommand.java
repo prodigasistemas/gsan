@@ -239,9 +239,16 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		
 	}
 	
-	private void testaUsuario(AtualizacaoCadastralImovel imovelAtual, Map<String, String> linha) {
+	private void testaUsuario(AtualizacaoCadastralImovel imovelAtual, Map<String, String> linha) throws Exception {
 		if (Util.nomeInvalido(linha.get("nomeUsuario"))){
 			imovelAtual.addMensagemErro("Nome de usuário inválido.");
+		}
+		
+		String sexoUsuario = linha.get("sexoUsuario"); 
+		if (StringUtils.isEmpty(sexoUsuario) || !StringUtils.isNumeric(sexoUsuario)){
+			imovelAtual.addMensagemErro("Sexo de usuário inválido.");
+		}else if (!repositorioCadastro.existePessoaSexo(Integer.parseInt(sexoUsuario))){
+			imovelAtual.addMensagemErro("Sexo de usuário inválido.");
 		}
 		
 		if (StringUtils.isEmpty(linha.get("cnpjCpfUsuario"))){
@@ -252,19 +259,38 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		}
 	}
 
-	private void testaProprietario(AtualizacaoCadastralImovel imovelAtual, Map<String, String> linha) {
-		if (StringUtils.isNotEmpty(linha.get("nomeProprietario")) &&  Util.nomeInvalido(linha.get("nomeProprietario"))){
-			imovelAtual.addMensagemErro("Nome de proprietário inválido.");
+	private void testaProprietario(AtualizacaoCadastralImovel imovelAtual, Map<String, String> linha) throws Exception {
+		if (StringUtils.isNotEmpty(linha.get("nomeProprietario"))){
+			if (Util.nomeInvalido(linha.get("nomeProprietario"))){
+				imovelAtual.addMensagemErro("Nome de proprietário inválido.");
+			}
+			
+			String sexo = linha.get("sexoProprietario"); 
+			if (StringUtils.isEmpty(sexo) || !StringUtils.isNumeric(sexo)){
+				imovelAtual.addMensagemErro("Sexo de proprietário inválido.");
+			}else if (!repositorioCadastro.existePessoaSexo(Integer.parseInt(sexo))){
+				imovelAtual.addMensagemErro("Sexo de proprietário inválido.");
+			}
 		}
 		
+
 		if (StringUtils.isNotEmpty(linha.get("cnpjCpfProprietario")) && Util.cpfCnpjInvalido(linha.get("cnpjCpfProprietario"))){
 			imovelAtual.addMensagemErro("CPF/CNPJ de proprietário inválido.");
 		}
 	}
 
-	private void testaResponsavel(AtualizacaoCadastralImovel imovelAtual, Map<String, String> linha) {
-		if (StringUtils.isNotEmpty(linha.get("nomeResponsavel")) && Util.nomeInvalido(linha.get("nomeResponsavel"))){
-			imovelAtual.addMensagemErro("Nome de responsável inválido.");
+	private void testaResponsavel(AtualizacaoCadastralImovel imovelAtual, Map<String, String> linha) throws Exception {
+		if (StringUtils.isNotEmpty(linha.get("nomeResponsavel"))){
+			if (Util.nomeInvalido(linha.get("nomeResponsavel"))){
+				imovelAtual.addMensagemErro("Nome de responsável inválido.");
+			}
+			
+			String sexo = linha.get("sexoResponsavel"); 
+			if (StringUtils.isEmpty(sexo) || !StringUtils.isNumeric(sexo)){
+				imovelAtual.addMensagemErro("Sexo de responsável inválido.");
+			}else if (!repositorioCadastro.existePessoaSexo(Integer.parseInt(sexo))){
+				imovelAtual.addMensagemErro("Sexo de responsável inválido.");
+			}
 		}
 		
 		if (StringUtils.isNotEmpty(linha.get("cnpjCpfResponsavel")) && Util.cpfCnpjInvalido(linha.get("cnpjCpfResponsavel"))){
