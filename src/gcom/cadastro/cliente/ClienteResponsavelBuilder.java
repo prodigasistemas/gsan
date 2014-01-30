@@ -20,12 +20,18 @@ public class ClienteResponsavelBuilder{
 		clienteTxt = new ClienteAtualizacaoCadastral();
 
 		clienteTxt.setNome(atualizacaoCadastralImovel.getLinhaCliente("nomeResponsavel"));
-		clienteTxt.setCpf(atualizacaoCadastralImovel.getLinhaCliente("cnpjCpfResponsavel"));
-		clienteTxt.setCnpj(atualizacaoCadastralImovel.getLinhaCliente("cnpjCpfResponsavel"));
+		
+		String campo = atualizacaoCadastralImovel.getLinhaCliente("cnpjCpfResponsavel");
+		if (campo.length() == 11) {
+			clienteTxt.setCpf(campo);
+		} else if (campo.length() == 14) {
+			clienteTxt.setCnpj(campo);
+		}
+		
 		clienteTxt.setRg(atualizacaoCadastralImovel.getLinhaCliente("rgResponsavel"));
 		clienteTxt.setDsUFSiglaOrgaoExpedidorRg(atualizacaoCadastralImovel.getLinhaCliente("ufRgResponsavel"));
 		
-		String campo = atualizacaoCadastralImovel.getLinhaCliente("sexoResponsavel");
+		campo = atualizacaoCadastralImovel.getLinhaCliente("sexoResponsavel");
 		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
 			PessoaSexo sexo = new PessoaSexo(Integer.parseInt(campo));
 			clienteTxt.setPessoaSexo(sexo);
