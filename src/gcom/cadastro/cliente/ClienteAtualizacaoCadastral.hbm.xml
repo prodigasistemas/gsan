@@ -7,7 +7,7 @@
     http://boss.bekk.no/boss/middlegen/
     http://hibernate.sourceforge.net/
 -->
-	<class name="gcom.cadastro.cliente.ClienteAtualizacaoCadastralImpl" table="cadastro.cliente_atlz_cadastral">
+	<class name="gcom.cadastro.cliente.ClienteAtualizacaoCadastral" table="cadastro.cliente_atlz_cadastral">
 		<id name="id" type="java.lang.Integer" column="clac_id">
 			<generator class="sequence">
 				<param name="sequence">cadastro.seq_cliente_atlz_cadastral</param>

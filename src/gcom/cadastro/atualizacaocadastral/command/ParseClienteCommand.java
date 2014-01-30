@@ -41,7 +41,7 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		
 		atualizacao.getImovelAtual().setMatricula(Integer.valueOf(matriculaImovelCliente));
 		
-		logger.info("Carregando Imóvel: " + Integer.parseInt(matriculaImovelCliente));
+		logger.info("Carregando Imovel: " + Integer.parseInt(matriculaImovelCliente));
 		
 		String gerencia = parser.obterDadoParser(25).trim();
 		linha.put("gerencia", gerencia);

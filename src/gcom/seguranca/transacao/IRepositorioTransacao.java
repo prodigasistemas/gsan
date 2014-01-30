@@ -194,8 +194,8 @@ public interface IRepositorioTransacao {
 	 * @throws ErroRepositorioException
 	 */
 	public List consultarDadosTabelaColunaAtualizacaoCadastral(
-			Integer idRegistroAlterado,
-			Integer idArquivo, Integer idImovel, Integer idCliente,Integer idTipoAlteracao) throws ErroRepositorioException;
+			Long idRegistroAlterado,
+			Integer idArquivo, Integer idImovel, Long idCliente,Integer idTipoAlteracao) throws ErroRepositorioException;
 	
 	/**
 	 * @author Ivan Sergio

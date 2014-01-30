@@ -4,26 +4,23 @@ import gcom.atualizacaocadastral.ClienteFoneRetorno;
 import gcom.atualizacaocadastral.ClienteImovelRetorno;
 import gcom.atualizacaocadastral.ClienteRetorno;
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
-import gcom.atualizacaocadastral.ICliente;
-import gcom.atualizacaocadastral.IClienteImovel;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.atualizacaocadastral.ImovelRamoAtividadeRetorno;
 import gcom.atualizacaocadastral.ImovelRetorno;
 import gcom.atualizacaocadastral.ImovelSubcategoriaRetorno;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
-import gcom.cadastro.cliente.ClienteAtualizacaoCadastralImpl;
+import gcom.cadastro.cliente.ClienteAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteFoneAtualizacaoCadastral;
-import gcom.cadastro.cliente.ClienteProprietarioAtualizacaoCadastral;
+import gcom.cadastro.cliente.ClienteProprietarioBuilder;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
-import gcom.cadastro.cliente.ClienteResponsavelAtualizacaoCadastral;
-import gcom.cadastro.cliente.ClienteUsuarioAtualizacaoCadastral;
+import gcom.cadastro.cliente.ClienteResponsavelBuilder;
+import gcom.cadastro.cliente.ClienteUsuarioBuilder;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.cliente.FoneTipo;
 import gcom.cadastro.cliente.IClienteAtualizacaoCadastral;
 import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.cliente.IRepositorioClienteImovel;
-import gcom.cadastro.imovel.IImovel;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastralBuilder;
@@ -59,8 +56,9 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 
 	public MontarObjetosAtualizacaoCadastralCommand(ParserUtil parser, IRepositorioCadastro repositorioCadastro, ControladorUtilLocal controladorUtil,
 			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, ControladorAtualizacaoCadastralLocal controladorAtualizacaoCadastral,
-			ControladorClienteLocal controladorCliente) {
+			ControladorClienteLocal controladorCliente, IRepositorioClienteImovel repositorioClienteImovel) {
 		super(parser, repositorioCadastro, controladorUtil, controladorTransacao, repositorioImovel, controladorAtualizacaoCadastral, controladorCliente);
+		this.repositorioClienteImovel = repositorioClienteImovel;
 	}
 
 	public void execute(AtualizacaoCadastral atualizacaoCadastral) throws Exception {
@@ -177,7 +175,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	
 
 	private void salvarClienteProprietario() throws Exception {
-		IClienteAtualizacaoCadastral clienteTxt = new ClienteProprietarioAtualizacaoCadastral(atualizacaoCadastralImovel);
+		IClienteAtualizacaoCadastral clienteTxt = new ClienteProprietarioBuilder(atualizacaoCadastralImovel).getClienteTxt();
 		
 		if (matriculaProprietario != 0 || StringUtils.isNotEmpty(clienteTxt.getCpf())) {
 	        boolean existeCliente = repositorioClienteImovel.existeClienteImovelTipo(matriculaProprietario
@@ -195,36 +193,35 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	}
 
 	private void salvarClienteResponsavel() throws Exception {
-		IClienteAtualizacaoCadastral clienteTxt = new ClienteResponsavelAtualizacaoCadastral(atualizacaoCadastralImovel);
+		IClienteAtualizacaoCadastral clienteTxt = new ClienteResponsavelBuilder(atualizacaoCadastralImovel).getClienteTxt();
 		
 		if (matriculaResponsavel != 0 || StringUtils.isNotEmpty(clienteTxt.getCpf())) {
-
 	        boolean existeCliente = repositorioClienteImovel.existeClienteImovelTipo(matriculaResponsavel
 	                , matriculaImovel
 	                , (int) ClienteRelacaoTipo.RESPONSAVEL
 	                , clienteTxt.getCpf());
 	        
-	        if (!existeCliente){
-	        	
-	        }
-			
 			salvarCliente(matriculaResponsavel, ClienteRelacaoTipo.RESPONSAVEL, clienteTxt
 					, atualizacaoCadastralImovel.getLinhaCliente("telefoneResponsavel")
 					, atualizacaoCadastralImovel.getLinhaCliente("celularResponsavel")
 					, existeCliente);
 			salvarClienteRetorno(clienteTxt);
+        	salvarClienteImovelRetorno(clienteTxt, matriculaImovel);
+
 		}
 	}
 	
 	private void salvarClienteUsuario() throws ControladorException {
 		if (matriculaUsuario != 0) {
-			IClienteAtualizacaoCadastral clienteTxt = new ClienteUsuarioAtualizacaoCadastral(atualizacaoCadastralImovel);
+			IClienteAtualizacaoCadastral clienteTxt = new ClienteUsuarioBuilder(atualizacaoCadastralImovel).getClienteTxt();
 
 			salvarCliente(matriculaUsuario, ClienteRelacaoTipo.USUARIO, clienteTxt
 					,atualizacaoCadastralImovel.getLinhaCliente("telefoneUsuario")
 					, atualizacaoCadastralImovel.getLinhaCliente("celularUsuario")
 					, true);
 			salvarClienteRetorno(clienteTxt);
+        	salvarClienteImovelRetorno(clienteTxt, matriculaImovel);
+
 		}		
 	}
 
@@ -237,7 +234,8 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		if (existeCliente){
 			clienteAtualizacaoCadastralBase = controladorCliente.pesquisarClienteAtualizacaoCadastral(matricula, matriculaImovel, new Integer(clienteRelacaoTipo));			
 		}else{
-			clienteAtualizacaoCadastralBase = new ClienteAtualizacaoCadastralImpl();
+			clienteAtualizacaoCadastralBase = new ClienteAtualizacaoCadastral();
+			
 		}
 		
 		
@@ -304,7 +302,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	private void salvarClienteImovelRetorno(IClienteAtualizacaoCadastral clienteTxt, int matriculaImovel) throws ControladorException {
 		ClienteImovelRetorno clienteImovelRetorno = new ClienteImovelRetorno(clienteTxt, matriculaImovel);
 		clienteImovelRetorno.setUltimaAlteracao(new Date());
-		controladorUtil.inserir(clienteTxt);
+		controladorUtil.inserir(clienteImovelRetorno);
 	}
 	
 	private void atualizarSituacaoControleImovelAtualizacaoCadastral(Integer situacao) throws Exception {

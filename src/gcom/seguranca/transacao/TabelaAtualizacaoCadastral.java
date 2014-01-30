@@ -92,7 +92,7 @@ public class TabelaAtualizacaoCadastral {
 	
 	private Integer id;
 	
-	private Integer idRegistroAlterado;
+	private Long idRegistroAlterado;
 	
 	private Short indicadorPrincipal;
 	
@@ -112,7 +112,7 @@ public class TabelaAtualizacaoCadastral {
     
     private Integer codigoImovel;
     
-    private Integer codigoCliente;
+    private Long codigoCliente;
     
     private Date dataProcessamento;
     
@@ -120,7 +120,7 @@ public class TabelaAtualizacaoCadastral {
     
     private String complemento;
 
-	public TabelaAtualizacaoCadastral(Integer id, Integer idRegistroAlterado, Short indicadorPrincipal, Date ultimaAlteracao, Tabela tabela, OperacaoEfetuada operacaoEfetuada, Leiturista leiturista, AlteracaoTipo alteracaoTipo, ArquivoTextoAtualizacaoCadastral arquivoTextoAtualizacaoCadastral, Short indicadorAutorizado, Integer codigoImovel, Integer codigoCliente, String complemento) {
+	public TabelaAtualizacaoCadastral(Integer id, Long idRegistroAlterado, Short indicadorPrincipal, Date ultimaAlteracao, Tabela tabela, OperacaoEfetuada operacaoEfetuada, Leiturista leiturista, AlteracaoTipo alteracaoTipo, ArquivoTextoAtualizacaoCadastral arquivoTextoAtualizacaoCadastral, Short indicadorAutorizado, Integer codigoImovel, Long codigoCliente, String complemento) {
 		this.id = id;
 		this.idRegistroAlterado = idRegistroAlterado;
 		this.indicadorPrincipal = indicadorPrincipal;
@@ -177,11 +177,11 @@ public class TabelaAtualizacaoCadastral {
 		this.id = id;
 	}
 
-	public Integer getIdRegistroAlterado() {
+	public Long getIdRegistroAlterado() {
 		return idRegistroAlterado;
 	}
 
-	public void setIdRegistroAlterado(Integer idRegistroAlterado) {
+	public void setIdRegistroAlterado(Long idRegistroAlterado) {
 		this.idRegistroAlterado = idRegistroAlterado;
 	}
 
@@ -242,11 +242,11 @@ public class TabelaAtualizacaoCadastral {
 		this.indicadorAutorizado = indicadorAutorizado;
 	}
 	
-	public Integer getCodigoCliente() {
+	public Long getCodigoCliente() {
 		return codigoCliente;
 	}
 
-	public void setCodigoCliente(Integer codigoCliente) {
+	public void setCodigoCliente(Long codigoCliente) {
 		this.codigoCliente = codigoCliente;
 	}
 

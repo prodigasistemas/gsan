@@ -2678,7 +2678,7 @@ public class ControladorClienteSEJB implements SessionBean {
 			
 			if (element != null) {				
 
-				cliente = new ClienteAtualizacaoCadastralImpl();
+				cliente = new ClienteAtualizacaoCadastral();
 			
 				cliente.setIdCliente((Integer) element[0]);					
 				

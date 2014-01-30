@@ -15,7 +15,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 /** @author Hibernate CodeGenerator */
 @ControleAlteracao()
-public abstract class ClienteAtualizacaoCadastral extends ObjetoTransacao implements IClienteAtualizacaoCadastral {
+public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements IClienteAtualizacaoCadastral {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -31,7 +31,7 @@ public abstract class ClienteAtualizacaoCadastral extends ObjetoTransacao implem
     private String nome;
 	
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private Integer idClienteRelacaoTipo;
+    public Integer idClienteRelacaoTipo;
 
     private Integer idClienteTipo;
 
@@ -466,8 +466,6 @@ public abstract class ClienteAtualizacaoCadastral extends ObjetoTransacao implem
 		this.idRamoAtividade = idRamoAtividade;
 	}
 	
-	public abstract void buildCliente();
-
 	public ClienteTipo getClienteTipo() {
 		return clienteTipo;
 	}

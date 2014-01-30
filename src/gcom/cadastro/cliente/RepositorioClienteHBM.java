@@ -2037,7 +2037,7 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 		try {
 	
 			consulta = " SELECT clie"
-				     + " FROM ClienteAtualizacaoCadastralImpl clie" 				    				    
+				     + " FROM ClienteAtualizacaoCadastral clie" 				    				    
 				     + " WHERE clie.idImovel = :idImovel "; 
 			
 			if(idClienteRelacaoTipo != null){
@@ -2048,7 +2048,7 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 				consulta = consulta + " and clie.idCliente = "+ idCliente;
 			}
 	
-			clienteAtualizacaoCadastral = (ClienteAtualizacaoCadastralImpl)session.createQuery(consulta)
+			clienteAtualizacaoCadastral = (IClienteAtualizacaoCadastral)session.createQuery(consulta)
 										.setInteger("idImovel", idImovel)
 										.setMaxResults(1).uniqueResult();
 					
@@ -2087,7 +2087,7 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 			consulta = " SELECT clienteFone" 
 				 + " FROM ClienteFoneAtualizacaoCadastral clienteFone" 
 				 + " WHERE clienteFone.idClienteAtualizacaoCadastral in(SELECT clienteAtualizacaoCadastral.id" 
-				 + "												    FROM ClienteAtualizacaoCadastralImpl clienteAtualizacaoCadastral" 
+				 + "												    FROM ClienteAtualizacaoCadastral clienteAtualizacaoCadastral" 
 				 + "												    WHERE clienteAtualizacaoCadastral.idCliente =:idCliente ";
 		
 				 if(idClienteRelacaoTipo != null){

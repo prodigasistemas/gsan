@@ -127,5 +127,8 @@ public interface IClienteAtualizacaoCadastral extends ICliente {
 	public abstract Integer getIdRamoAtividade();
 
 	public abstract void setIdRamoAtividade(Integer idRamoAtividade);
+	
+    public Integer getIdImovel();
 
+	public void setIdImovel(Integer idImovel);
 }
