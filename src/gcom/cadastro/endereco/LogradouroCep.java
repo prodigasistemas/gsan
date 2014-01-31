@@ -154,6 +154,20 @@ public class LogradouroCep extends ObjetoTransacao {
 		this.indicadorUso = indicadorUso;
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
+	
+	public LogradouroCep(Integer idLogradouro, Integer codigoCep) {
+		this.logradouro = new Logradouro(idLogradouro);
+		this.cep = new Cep(codigoCep);
+	}
+
+	public LogradouroCep(Integer id) {
+		this.id = id;
+	}
+
+	public LogradouroCep(Integer idLogradouro, Cep cep) {
+		this.id = idLogradouro;
+		this.cep = cep;
+	}
 
 	/**
 	 * @return Retorna o campo cep.

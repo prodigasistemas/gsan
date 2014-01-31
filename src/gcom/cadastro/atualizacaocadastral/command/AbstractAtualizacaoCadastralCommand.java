@@ -9,6 +9,7 @@ import gcom.cadastro.cliente.ClienteAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteFoneAtualizacaoCadastral;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.cliente.IClienteAtualizacaoCadastral;
+import gcom.cadastro.endereco.ControladorEnderecoLocal;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelRamoAtividadeAtualizacaoCadastral;
@@ -52,6 +53,7 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 	protected ControladorUtilLocal controladorUtil;
 	protected ControladorTransacaoLocal controladorTransacao;
 	protected IRepositorioImovel repositorioImovel;
+	protected ControladorEnderecoLocal controladorEndereco;
 	protected ControladorAtualizacaoCadastralLocal controladorAtualizacaoCadastral;
 	protected ControladorClienteLocal controladorCliente;
 	
@@ -63,7 +65,7 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 	}
 
 	public AbstractAtualizacaoCadastralCommand(ParserUtil parser, IRepositorioCadastro repositorioCadastro, ControladorUtilLocal controladorUtil, 
-			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, 
+			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, ControladorEnderecoLocal controladorEndereco,
 			ControladorAtualizacaoCadastralLocal controladorAtualizacaoCadastral, ControladorClienteLocal controladorCliente) {
 		
 		this.parser = parser;
@@ -71,6 +73,7 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 		this.controladorUtil = controladorUtil;
 		this.controladorTransacao = controladorTransacao;
 		this.repositorioImovel = repositorioImovel;
+		this.controladorEndereco = controladorEndereco;
 		this.controladorAtualizacaoCadastral = controladorAtualizacaoCadastral;
 		this.controladorCliente = controladorCliente;
 	}

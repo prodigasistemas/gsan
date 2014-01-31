@@ -1,11 +1,12 @@
 package gcom.cadastro.cliente;
 
 import gcom.atualizacaocadastral.ICliente;
+import gcom.atualizacaocadastral.IClienteEndereco;
 import gcom.util.filtro.Filtro;
 
 import java.util.Date;
 
-public interface IClienteAtualizacaoCadastral extends ICliente {
+public interface IClienteAtualizacaoCadastral extends ICliente, IClienteEndereco {
 
 
 	public abstract Integer getIdClienteTipo();

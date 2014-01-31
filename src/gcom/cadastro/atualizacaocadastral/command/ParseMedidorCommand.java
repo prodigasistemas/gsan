@@ -3,11 +3,9 @@ package gcom.cadastro.atualizacaocadastral.command;
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.cliente.ControladorClienteLocal;
+import gcom.cadastro.endereco.ControladorEnderecoLocal;
 import gcom.cadastro.imovel.IRepositorioImovel;
-import gcom.micromedicao.ControladorMicromedicaoLocal;
-import gcom.micromedicao.IRepositorioMicromedicao;
 import gcom.micromedicao.hidrometro.FiltroHidrometroProtecao;
-import gcom.micromedicao.hidrometro.HidrometroMarca;
 import gcom.micromedicao.hidrometro.HidrometroProtecao;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.util.ControladorException;
@@ -23,9 +21,9 @@ import org.apache.commons.lang.StringUtils;
 public class ParseMedidorCommand extends AbstractAtualizacaoCadastralCommand {
 
 	public ParseMedidorCommand(ParserUtil parser, IRepositorioCadastro repositorioCadastro, ControladorUtilLocal controladorUtil, 
-			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, 
+			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, ControladorEnderecoLocal controladorEndereco,
 			ControladorAtualizacaoCadastralLocal controladorAtualizacaoCadastral, ControladorClienteLocal controladorCliente) {
-		super(parser, repositorioCadastro, controladorUtil, controladorTransacao, repositorioImovel, 
+		super(parser, repositorioCadastro, controladorUtil, controladorTransacao, repositorioImovel, controladorEndereco,
 				controladorAtualizacaoCadastral, controladorCliente);
 	}
 
