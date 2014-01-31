@@ -2,6 +2,7 @@ package gcom.cadastro.atualizacaocadastral.command;
 
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.cadastro.IRepositorioCadastro;
+import gcom.cadastro.atualizacaocadastral.validador.ValidadorTamanhoLinhaMedidorCommand;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.micromedicao.ControladorMicromedicaoLocal;
@@ -31,6 +32,7 @@ public class ParseMedidorCommand extends AbstractAtualizacaoCadastralCommand {
 
 	public void execute(AtualizacaoCadastral atualizacao) throws Exception {
 		Map<String, String> linha = atualizacao.getImovelAtual().getLinhaMedidor();
+		AtualizacaoCadastralImovel imovel = atualizacao.getImovelAtual();
 
 		String matriculaImovelMedidor = parser.obterDadoParser(9);
 		
@@ -41,7 +43,9 @@ public class ParseMedidorCommand extends AbstractAtualizacaoCadastralCommand {
 		String capacidadeHidrometro = null;
 		String tipoCaixaProtecaoHidrometro = null;
 		
-		if(icImovelPossuiMedidor.equals("1")){
+		new ValidadorTamanhoLinhaMedidorCommand(parser, imovel).execute();
+		
+		if(icImovelPossuiMedidor.equals("1") && !imovel.cadastroInvalido()){
 			numeroHidrometro = parser.obterDadoParser(10).trim();
 			linha.put("numeroHidrometro", numeroHidrometro);
 
@@ -63,14 +67,13 @@ public class ParseMedidorCommand extends AbstractAtualizacaoCadastralCommand {
 			String dataServico = parser.obterDadoParser(26).trim();
 			linha.put("dataServico", dataServico);
 
-			validarCampos(atualizacao);
+			validarCampos(atualizacao, imovel);
 		}else{
 			parser.obterDadoParser(16).trim();
 		}
 	}
 	
-	private void validarCampos(AtualizacaoCadastral atualizacao) {
-		AtualizacaoCadastralImovel imovel = atualizacao.getImovelAtual();
+	private void validarCampos(AtualizacaoCadastral atualizacao, AtualizacaoCadastralImovel imovel) {
 		Map<String, String> linha = imovel.getLinhaMedidor();
 		
 		validarValorNumeroHidrometro(imovel, linha);		

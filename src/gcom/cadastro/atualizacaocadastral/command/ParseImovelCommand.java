@@ -2,6 +2,7 @@ package gcom.cadastro.atualizacaocadastral.command;
 
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.cadastro.IRepositorioCadastro;
+import gcom.cadastro.atualizacaocadastral.validador.ValidadorTamanhoLinhaImovelCommand;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.endereco.Logradouro;
 import gcom.cadastro.endereco.LogradouroBairro;
@@ -37,127 +38,133 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 
 	public void execute(AtualizacaoCadastral atualizacao) throws Exception {
 		Map<String, String> linha = atualizacao.getImovelAtual().getLinhaImovel();
+		AtualizacaoCadastralImovel imovel = atualizacao.getImovelAtual(); 
 		
-		Integer matricula = Integer.parseInt(parser.obterDadoParser(9).trim());
-		linha.put("matricula", "" + matricula);
+		new ValidadorTamanhoLinhaImovelCommand(parser, imovel).execute();
 		
-		String tipoOperacao = parser.obterDadoParser(1);
-		linha.put("tipoOperacao", "" + tipoOperacao);
+		if(!imovel.cadastroInvalido()) {
 
-		inserirImagem(atualizacao, matricula);
+			Integer matricula = Integer.parseInt(parser.obterDadoParser(9).trim());
+			linha.put("matricula", "" + matricula);
 
-		String codigoCliente = parser.obterDadoParser(30).trim();
-		linha.put("codigoCliente", codigoCliente);
+			String tipoOperacao = parser.obterDadoParser(1);
+			linha.put("tipoOperacao", "" + tipoOperacao);
 
-		String inscricao = parser.obterDadoParser(17).trim();
-		linha.put("inscricao", inscricao);
+			inserirImagem(atualizacao, matricula);
 
-		String rota = parser.obterDadoParser(2).trim();
-		linha.put("rota", rota);
+			String codigoCliente = parser.obterDadoParser(30).trim();
+			linha.put("codigoCliente", codigoCliente);
 
-		String face = parser.obterDadoParser(2).trim();
-		linha.put("face", face);
+			String inscricao = parser.obterDadoParser(17).trim();
+			linha.put("inscricao", inscricao);
 
-		String codigoMunicipio = parser.obterDadoParser(8).trim();
-		linha.put("codigoMunicipio", codigoMunicipio);
+			String rota = parser.obterDadoParser(2).trim();
+			linha.put("rota", rota);
 
-		String numeroIPTU = parser.obterDadoParser(31).trim();
-		linha.put("numeroIPTU", numeroIPTU.trim().equals("") ? null : numeroIPTU);
+			String face = parser.obterDadoParser(2).trim();
+			linha.put("face", face);
 
-		String numeroCelpa = parser.obterDadoParser(20).trim();
-		linha.put("numeroCelpa", numeroCelpa);
+			String codigoMunicipio = parser.obterDadoParser(8).trim();
+			linha.put("codigoMunicipio", codigoMunicipio);
 
-		String numeroPontosUteis = parser.obterDadoParser(5).trim();
-		linha.put("numeroPontosUteis", numeroPontosUteis);
+			String numeroIPTU = parser.obterDadoParser(31).trim();
+			linha.put("numeroIPTU", numeroIPTU.trim().equals("") ? null : numeroIPTU);
 
-		String numeroOcupantes = parser.obterDadoParser(5).trim();
-		linha.put("numeroOcupantes", numeroOcupantes);
+			String numeroCelpa = parser.obterDadoParser(20).trim();
+			linha.put("numeroCelpa", numeroCelpa);
 
-		String tipoLogradouroImovel = parser.obterDadoParser(2).trim();
-		linha.put("idTipoLogradouroImovel", tipoLogradouroImovel);
+			String numeroPontosUteis = parser.obterDadoParser(5).trim();
+			linha.put("numeroPontosUteis", numeroPontosUteis);
 
-		String logradouroImovel = parser.obterDadoParser(40).trim();
-		linha.put("logradouroImovel", logradouroImovel);
+			String numeroOcupantes = parser.obterDadoParser(5).trim();
+			linha.put("numeroOcupantes", numeroOcupantes);
 
-		String numeroImovel = parser.obterDadoParser(5).trim();
-		linha.put("numeroImovel", numeroImovel);
+			String tipoLogradouroImovel = parser.obterDadoParser(2).trim();
+			linha.put("idTipoLogradouroImovel", tipoLogradouroImovel);
 
-		String complementoImovel = parser.obterDadoParser(25).trim();
-		linha.put("complementoImovel", complementoImovel);
+			String logradouroImovel = parser.obterDadoParser(40).trim();
+			linha.put("logradouroImovel", logradouroImovel);
 
-		String bairro = parser.obterDadoParser(20).trim();
-		linha.put("bairro", bairro);
+			String numeroImovel = parser.obterDadoParser(5).trim();
+			linha.put("numeroImovel", numeroImovel);
 
-		String cep = parser.obterDadoParser(8).trim();
-		linha.put("cep", cep);
+			String complementoImovel = parser.obterDadoParser(25).trim();
+			linha.put("complementoImovel", complementoImovel);
 
-		String municipio = parser.obterDadoParser(15).trim();
-		linha.put("municipio", municipio);
+			String bairro = parser.obterDadoParser(20).trim();
+			linha.put("bairro", bairro);
 
-		String codigoLogradouro = parser.obterDadoParser(9).trim();
-		linha.put("codigoLogradouro", codigoLogradouro);
+			String cep = parser.obterDadoParser(8).trim();
+			linha.put("cep", cep);
 
-		String subcategoriaR1 = parser.obterDadoParser(3).trim();
-		linha.put("subcategoriaR1", subcategoriaR1);
+			String municipio = parser.obterDadoParser(15).trim();
+			linha.put("municipio", municipio);
 
-		String subcategoriaR2 = parser.obterDadoParser(3).trim();
-		linha.put("subcategoriaR2", subcategoriaR2);
+			String codigoLogradouro = parser.obterDadoParser(9).trim();
+			linha.put("codigoLogradouro", codigoLogradouro);
 
-		String subcategoriaR3 = parser.obterDadoParser(3).trim();
-		linha.put("subcategoriaR3", subcategoriaR3);
+			String subcategoriaR1 = parser.obterDadoParser(3).trim();
+			linha.put("subcategoriaR1", subcategoriaR1);
 
-		String subcategoriaR4 = parser.obterDadoParser(3).trim();
-		linha.put("subcategoriaR4", subcategoriaR4);
+			String subcategoriaR2 = parser.obterDadoParser(3).trim();
+			linha.put("subcategoriaR2", subcategoriaR2);
 
-		String subcategoriaC1 = parser.obterDadoParser(3).trim();
-		linha.put("subcategoriaC1", subcategoriaC1);
+			String subcategoriaR3 = parser.obterDadoParser(3).trim();
+			linha.put("subcategoriaR3", subcategoriaR3);
 
-		String subcategoriaC2 = parser.obterDadoParser(3).trim();
-		linha.put("subcategoriaC2", subcategoriaC2);
+			String subcategoriaR4 = parser.obterDadoParser(3).trim();
+			linha.put("subcategoriaR4", subcategoriaR4);
 
-		String subcategoriaC3 = parser.obterDadoParser(3).trim();
-		linha.put("subcategoriaC3", subcategoriaC3);
+			String subcategoriaC1 = parser.obterDadoParser(3).trim();
+			linha.put("subcategoriaC1", subcategoriaC1);
 
-		String subcategoriaC4 = parser.obterDadoParser(3).trim();
-		linha.put("subcategoriaC4", subcategoriaC4);
+			String subcategoriaC2 = parser.obterDadoParser(3).trim();
+			linha.put("subcategoriaC2", subcategoriaC2);
 
-		String subcategoriaP1 = parser.obterDadoParser(3).trim();
-		linha.put("subcategoriaP1", subcategoriaP1);
+			String subcategoriaC3 = parser.obterDadoParser(3).trim();
+			linha.put("subcategoriaC3", subcategoriaC3);
 
-		String subcategoriaP2 = parser.obterDadoParser(3).trim();
-		linha.put("subcategoriaP2", subcategoriaP2);
+			String subcategoriaC4 = parser.obterDadoParser(3).trim();
+			linha.put("subcategoriaC4", subcategoriaC4);
 
-		String subcategoriaP3 = parser.obterDadoParser(3).trim();
-		linha.put("subcategoriaP3", subcategoriaP3);
+			String subcategoriaP1 = parser.obterDadoParser(3).trim();
+			linha.put("subcategoriaP1", subcategoriaP1);
 
-		String subcategoriaP4 = parser.obterDadoParser(3).trim();
-		linha.put("subcategoriaP4", subcategoriaP4);
+			String subcategoriaP2 = parser.obterDadoParser(3).trim();
+			linha.put("subcategoriaP2", subcategoriaP2);
 
-		String subcategoriaI1 = parser.obterDadoParser(3).trim();
-		linha.put("subcategoriaI1", subcategoriaI1);
+			String subcategoriaP3 = parser.obterDadoParser(3).trim();
+			linha.put("subcategoriaP3", subcategoriaP3);
 
-		String subcategoriaI2 = parser.obterDadoParser(3).trim();
-		linha.put("subcategoriaI2", subcategoriaI2);
+			String subcategoriaP4 = parser.obterDadoParser(3).trim();
+			linha.put("subcategoriaP4", subcategoriaP4);
 
-		String subcategoriaI3 = parser.obterDadoParser(3).trim();
-		linha.put("subcategoriaI3", subcategoriaI3);
+			String subcategoriaI1 = parser.obterDadoParser(3).trim();
+			linha.put("subcategoriaI1", subcategoriaI1);
 
-		String subcategoriaI4 = parser.obterDadoParser(3).trim();
-		linha.put("subcategoriaI4", subcategoriaI4);
+			String subcategoriaI2 = parser.obterDadoParser(3).trim();
+			linha.put("subcategoriaI2", subcategoriaI2);
 
-		String fonteAbastecimento = parser.obterDadoParser(2).trim();
-		linha.put("fonteAbastecimento", fonteAbastecimento);
+			String subcategoriaI3 = parser.obterDadoParser(3).trim();
+			linha.put("subcategoriaI3", subcategoriaI3);
 
-		String latitude = parser.obterDadoParser(20).trim();
-		linha.put("latitude", latitude);
+			String subcategoriaI4 = parser.obterDadoParser(3).trim();
+			linha.put("subcategoriaI4", subcategoriaI4);
 
-		String longitude = parser.obterDadoParser(20).trim();
-		linha.put("longitude", longitude);
+			String fonteAbastecimento = parser.obterDadoParser(2).trim();
+			linha.put("fonteAbastecimento", fonteAbastecimento);
 
-		String data = parser.obterDadoParser(26).trim();
-		linha.put("data", data);
-		
-		validaCamposImovel(atualizacao, parser);
+			String latitude = parser.obterDadoParser(20).trim();
+			linha.put("latitude", latitude);
+
+			String longitude = parser.obterDadoParser(20).trim();
+			linha.put("longitude", longitude);
+
+			String data = parser.obterDadoParser(26).trim();
+			linha.put("data", data);
+
+			validaCamposImovel(atualizacao, imovel);
+		}
 	}
 
 	private void inserirImagem(AtualizacaoCadastral atualizacao,
@@ -184,8 +191,7 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 		}
 	}
 
-	private void validaCamposImovel(AtualizacaoCadastral atualizacao, ParserUtil parser) throws Exception {
-		AtualizacaoCadastralImovel imovel = atualizacao.getImovelAtual(); 
+	private void validaCamposImovel(AtualizacaoCadastral atualizacao, AtualizacaoCadastralImovel imovel) throws Exception {
 		Map<String, String> linha = imovel.getLinhaImovel();
 
 		validarTipoOperacao(imovel, linha);

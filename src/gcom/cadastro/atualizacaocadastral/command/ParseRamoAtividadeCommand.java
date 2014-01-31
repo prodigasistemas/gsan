@@ -2,10 +2,13 @@ package gcom.cadastro.atualizacaocadastral.command;
 
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.cadastro.IRepositorioCadastro;
+import gcom.cadastro.atualizacaocadastral.validador.ValidadorTamanhoLinhaClienteCommand;
+import gcom.cadastro.atualizacaocadastral.validador.ValidadorTamanhoLinhaRamoAtividadeCommand;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.util.ControladorUtilLocal;
+import gcom.util.ErroRepositorioException;
 import gcom.util.ParserUtil;
 
 import java.util.Map;
@@ -20,26 +23,34 @@ public class ParseRamoAtividadeCommand extends AbstractAtualizacaoCadastralComma
 
 	public void execute(AtualizacaoCadastral atualizacao) throws Exception {
 		Map<String, String> linha = atualizacao.getImovelAtual().getLinhaRamoAtividade();
+		AtualizacaoCadastralImovel imovel = atualizacao.getImovelAtual();
 		
-		String matriculaImovelRamoAtividade = parser.obterDadoParser(9).trim();
-		linha.put("matriculaImovelRamoAtividade", matriculaImovelRamoAtividade);
-		
-		String ramoAtividade = parser.obterDadoParser(3).trim();
-		linha.put("ramoAtividade", ramoAtividade);
-		
-		int idRamoAtividade = Integer.parseInt(ramoAtividade);
+		new ValidadorTamanhoLinhaRamoAtividadeCommand(parser, imovel).execute();
+		if(!imovel.cadastroInvalido()) {
+
+			String matriculaImovelRamoAtividade = parser.obterDadoParser(9).trim();
+			linha.put("matriculaImovelRamoAtividade", matriculaImovelRamoAtividade);
+
+			String ramoAtividade = parser.obterDadoParser(3).trim();
+			linha.put("ramoAtividade", ramoAtividade);
+
+			validarCampos(atualizacao, imovel, linha);
+		}
+	}
+
+	private void validarCampos(AtualizacaoCadastral atualizacao, AtualizacaoCadastralImovel imovel, Map<String, String> linha) throws ErroRepositorioException {
+		int idRamoAtividade = Integer.parseInt(linha.get("ramoAtividade"));
 		
 		if (idRamoAtividade > 0) {
-			AtualizacaoCadastralImovel imovelAtual = atualizacao.getImovelAtual();
-			if (imovelAtual.getDadosImovel().contemApenasResidencial()){
-				imovelAtual.addMensagemErro("Categoria residencial não admite ramo de atividade");
+			if (imovel.getDadosImovel().contemApenasResidencial()){
+				imovel.addMensagemErro("Categoria residencial não admite ramo de atividade");
 				return;
 			}
 			
 			boolean existeRamoAtividade = repositorioCadastro.existeRamoAtividade(idRamoAtividade);
 			
 			if (!existeRamoAtividade){
-				imovelAtual.addMensagemErro("Código inválido do ramo de atividade");
+				imovel.addMensagemErro("Código inválido do ramo de atividade");
 				return;
 			}
 			
@@ -47,5 +58,7 @@ public class ParseRamoAtividadeCommand extends AbstractAtualizacaoCadastralComma
 			ramo.setId(idRamoAtividade);
 			atualizacao.getImovelAtual().addDadoRamoAtividade(ramo);
 		}
+		
 	}
+
 }
