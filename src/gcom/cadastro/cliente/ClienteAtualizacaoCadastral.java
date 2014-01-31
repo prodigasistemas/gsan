@@ -1,5 +1,8 @@
 package gcom.cadastro.cliente;
 
+import gcom.cadastro.endereco.EnderecoTipo;
+import gcom.cadastro.endereco.LogradouroBairro;
+import gcom.cadastro.endereco.LogradouroCep;
 import gcom.cadastro.geografico.UnidadeFederacao;
 import gcom.cadastro.imovel.Imovel;
 import gcom.interceptor.ControleAlteracao;
@@ -16,7 +19,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 /** @author Hibernate CodeGenerator */
 @ControleAlteracao()
 public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements IClienteAtualizacaoCadastral {
-	
+
 	private static final long serialVersionUID = 1L;
 	
 	public static final int ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL = 1502;
@@ -509,20 +512,44 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 		this.idClienteTipo = idClienteTipo;
 	}
 	
+	public String getNumero() {
+		return numeroImovel;
+	}
+
+	public void setNumero(String numero) {
+		this.numeroImovel = numero;
+	}
+
+	public String getComplemento() {
+		return complementoEndereco;
+	}
+
+	public void setComplemento(String complemento) {
+		this.complementoEndereco = complemento;
+	}
+
+	public EnderecoTipo getEnderecoTipo() {
+		return new EnderecoTipo(idEnderecoTipo);
+	}
+
+	public void setEnderecoTipo(EnderecoTipo enderecoTipo) {
+		this.idEnderecoTipo = enderecoTipo.getId();
+	}
+	
+	public Cliente getCliente(){
+		return new Cliente(idCliente);
+	}
+
+	public void setCliente(Cliente cliente){
+		this.idCliente = cliente.getId();
+	}
+
 	public Imovel getImovel() {
 		return imovel;
 	}
 	
 	public void setImovel(Imovel imovel) {
 		this.imovel = imovel;
-	}
-	
-	public Cliente getCliente() {
-		return cliente;
-	}
-	
-	public void setCliente(Cliente cliente) {
-		this.cliente = cliente;
 	}
 	
 	public ClienteRelacaoTipo getClienteRelacaoTipo() {
@@ -540,5 +567,4 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 	public void setIndicadorNomeConta(Short indicadorNomeConta) {
 		this.indicadorNomeConta = indicadorNomeConta;
 	}
-	
 }

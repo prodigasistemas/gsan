@@ -22,4 +22,6 @@ public interface IRepositorioAtualizacaoCadastral {
 		throws ErroRepositorioException;
 	
 	public ImovelAtualizacaoCadastral pesquisarImovelAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException;
+
+	public void apagarClienteImovelRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException;
 }

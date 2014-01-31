@@ -4,6 +4,7 @@ import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorTamanhoLinhaAnormalidadeCommand;
 import gcom.cadastro.cliente.ControladorClienteLocal;
+import gcom.cadastro.endereco.ControladorEnderecoLocal;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.util.ControladorUtilLocal;
@@ -14,9 +15,9 @@ import java.util.Map;
 public class ParseAnormalidadeCommand extends AbstractAtualizacaoCadastralCommand {
 
 	public ParseAnormalidadeCommand(ParserUtil parser, IRepositorioCadastro repositorioCadastro, ControladorUtilLocal controladorUtil,
-			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, ControladorAtualizacaoCadastralLocal controladorImovel,
-			ControladorClienteLocal controladorCliente) {
-		super(parser, repositorioCadastro, controladorUtil, controladorTransacao, repositorioImovel, controladorImovel, controladorCliente);
+			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, ControladorEnderecoLocal controladorEndereco,
+			ControladorAtualizacaoCadastralLocal controladorImovel, ControladorClienteLocal controladorCliente) {
+		super(parser, repositorioCadastro, controladorUtil, controladorTransacao, repositorioImovel, controladorEndereco, controladorImovel, controladorCliente);
 	}
 
 	public void execute(AtualizacaoCadastral atualizacao) throws Exception {

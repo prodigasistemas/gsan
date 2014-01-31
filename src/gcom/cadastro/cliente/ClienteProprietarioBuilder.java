@@ -19,12 +19,18 @@ public class ClienteProprietarioBuilder {
 		clienteTxt = new ClienteAtualizacaoCadastral();
 
 		clienteTxt.setNome(atualizacaoCadastralImovel.getLinhaCliente("nomeProprietario"));
-		clienteTxt.setCpf(atualizacaoCadastralImovel.getLinhaCliente("cnpjCpfProprietario"));
-		clienteTxt.setCnpj(atualizacaoCadastralImovel.getLinhaCliente("cnpjCpfProprietario"));
+		
+		String campo = atualizacaoCadastralImovel.getLinhaCliente("cnpjCpfProprietario");
+		if (campo.length() == 11) {
+			clienteTxt.setCpf(campo);
+		} else if (campo.length() == 14) {
+			clienteTxt.setCnpj(campo);
+		}
+		
 		clienteTxt.setRg(atualizacaoCadastralImovel.getLinhaCliente("rgProprietario"));
 		clienteTxt.setDsUFSiglaOrgaoExpedidorRg(atualizacaoCadastralImovel.getLinhaCliente("ufRgProprietario"));
 		
-		String campo = atualizacaoCadastralImovel.getLinhaCliente("sexoProprietario");
+		campo = atualizacaoCadastralImovel.getLinhaCliente("sexoProprietario");
 		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
 			PessoaSexo sexo = new PessoaSexo(Integer.parseInt(campo));
 			clienteTxt.setPessoaSexo(sexo);

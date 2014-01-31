@@ -19,6 +19,7 @@
 
 package gcom.cadastro.cliente;
 
+import gcom.atualizacaocadastral.IClienteEndereco;
 import gcom.cadastro.endereco.EnderecoReferencia;
 import gcom.cadastro.endereco.EnderecoTipo;
 import gcom.cadastro.endereco.FiltroLogradouro;
@@ -37,7 +38,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 /** @author Hibernate CodeGenerator */
 @ControleAlteracao
-public class ClienteEndereco extends ObjetoTransacao {
+public class ClienteEndereco extends ObjetoTransacao implements IClienteEndereco {
 	
 	private static final long serialVersionUID = 1L;
 
@@ -430,5 +431,49 @@ public class ClienteEndereco extends ObjetoTransacao {
 
 	public void setPerimetroInicial(Logradouro perimetroInicial) {
 		this.perimetroInicial = perimetroInicial;
+	}
+
+	public String getNomeMunicipio() {
+		try{
+			return this.logradouroCep.getLogradouro().getMunicipio().getNome();
+		} catch(NullPointerException e){
+			return null;
+		}
+	}
+
+	public void setNomeMunicipio(String nomeMunicipio) {
+		// TODO Auto-generated method stub
+	}
+
+	public String getNomeBairro() {
+		try{
+			return this.logradouroBairro.getBairro().getNome();
+		} catch(NullPointerException e){
+			return null;
+		}
+	}
+
+	public void setNomeBairro(String nomeBairro) {
+		// TODO Auto-generated method stub
+	}
+
+	public String getDescricaoLogradouro() {
+		try{
+			return this.logradouroCep.getLogradouro().getNome();
+		} catch(NullPointerException e){
+			return null;
+		}
+	}
+
+	public void setDescricaoLogradouro(String descricaoLogradouro) {
+		// TODO Auto-generated method stub
+	}
+	
+	public Integer getCodigoCep(){
+		return this.logradouroCep.getCep().getCodigo();
+	}
+	
+	public void setCodigoCep(Integer codigoCep){
+		// TODO Auto-generated method stub
 	}
 }

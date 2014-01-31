@@ -15,5 +15,5 @@ public abstract class ValidadorCommand {
 		this.linha = linha;
 	}
 	
-	public abstract void execute();
+	public abstract void execute() throws Exception;
 }

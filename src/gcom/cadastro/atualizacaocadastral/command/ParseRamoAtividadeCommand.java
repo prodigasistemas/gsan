@@ -5,6 +5,7 @@ import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorTamanhoLinhaClienteCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorTamanhoLinhaRamoAtividadeCommand;
 import gcom.cadastro.cliente.ControladorClienteLocal;
+import gcom.cadastro.endereco.ControladorEnderecoLocal;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.util.ControladorUtilLocal;
@@ -16,9 +17,9 @@ import java.util.Map;
 public class ParseRamoAtividadeCommand extends AbstractAtualizacaoCadastralCommand {
 
 	public ParseRamoAtividadeCommand(ParserUtil parser, IRepositorioCadastro repositorioCadastro, ControladorUtilLocal controladorUtil, 
-			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, 
+			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, ControladorEnderecoLocal controladorEndereco,
 			ControladorAtualizacaoCadastralLocal controladorImovel, ControladorClienteLocal controladorCliente) {
-		super(parser, repositorioCadastro, controladorUtil, controladorTransacao, repositorioImovel, controladorImovel, controladorCliente);
+		super(parser, repositorioCadastro, controladorUtil, controladorTransacao, repositorioImovel, controladorEndereco, controladorImovel, controladorCliente);
 	}
 
 	public void execute(AtualizacaoCadastral atualizacao) throws Exception {

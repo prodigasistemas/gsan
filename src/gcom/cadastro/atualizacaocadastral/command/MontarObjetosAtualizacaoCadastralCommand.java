@@ -1,5 +1,6 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
+import gcom.atualizacaocadastral.ClienteEnderecoRetorno;
 import gcom.atualizacaocadastral.ClienteFoneRetorno;
 import gcom.atualizacaocadastral.ClienteImovelRetorno;
 import gcom.atualizacaocadastral.ClienteRetorno;
@@ -21,6 +22,7 @@ import gcom.cadastro.cliente.FoneTipo;
 import gcom.cadastro.cliente.IClienteAtualizacaoCadastral;
 import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.cliente.IRepositorioClienteImovel;
+import gcom.cadastro.endereco.ControladorEnderecoLocal;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastralBuilder;
@@ -55,9 +57,9 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	
 
 	public MontarObjetosAtualizacaoCadastralCommand(ParserUtil parser, IRepositorioCadastro repositorioCadastro, ControladorUtilLocal controladorUtil,
-			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, ControladorAtualizacaoCadastralLocal controladorAtualizacaoCadastral,
-			ControladorClienteLocal controladorCliente, IRepositorioClienteImovel repositorioClienteImovel) {
-		super(parser, repositorioCadastro, controladorUtil, controladorTransacao, repositorioImovel, controladorAtualizacaoCadastral, controladorCliente);
+			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, ControladorEnderecoLocal controladorEndereco, 
+			ControladorAtualizacaoCadastralLocal controladorAtualizacaoCadastral, ControladorClienteLocal controladorCliente, IRepositorioClienteImovel repositorioClienteImovel) {
+		super(parser, repositorioCadastro, controladorUtil, controladorTransacao, repositorioImovel, controladorEndereco, controladorAtualizacaoCadastral, controladorCliente);
 		this.repositorioClienteImovel = repositorioClienteImovel;
 	}
 
@@ -230,6 +232,8 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		salvarClienteFoneAtualizacaoCadastral(telefone, clienteRelacaoTipo, FoneTipo.RESIDENCIAL, matricula, clientesFone);
 		salvarClienteFoneAtualizacaoCadastral(celular, clienteRelacaoTipo, FoneTipo.CELULAR, matricula, clientesFone);
 		
+		salvarClienteEnderecoRetorno(matricula, clienteTxt);
+		
 		IClienteAtualizacaoCadastral clienteAtualizacaoCadastralBase = null;
 		if (existeCliente){
 			clienteAtualizacaoCadastralBase = controladorCliente.pesquisarClienteAtualizacaoCadastral(matricula, matriculaImovel, new Integer(clienteRelacaoTipo));			
@@ -238,9 +242,9 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 			
 		}
 		
-		
 		salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, clienteAtualizacaoCadastralBase, clienteTxt, matriculaImovel, tipoOperacao);
 	}
+
 
 	private void salvarClienteFoneAtualizacaoCadastral(String tipoClientFone, Short clienteRelacaoTipo, Integer foneTipo, int matriculaCliente, ArrayList<ClienteFoneAtualizacaoCadastral> clientesFone) {
 		if (!tipoClientFone.trim().equals("")) {
@@ -274,6 +278,12 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		}
 	}
 	
+	private void salvarClienteEnderecoRetorno(Integer matriculaCliente, IClienteAtualizacaoCadastral clienteAtualizacaoCadastral) throws ControladorException {
+		ClienteEnderecoRetorno clienteEnderecoRetorno = new ClienteEnderecoRetorno(matriculaCliente, clienteAtualizacaoCadastral);
+		clienteEnderecoRetorno.setUltimaAlteracao(new Date());
+		controladorUtil.inserir(clienteEnderecoRetorno);
+	}
+
 	private void salvarClienteFoneRetorno(IClienteFone clienteFone) throws ControladorException {
 		ClienteFoneRetorno clienteFoneRetorno = new ClienteFoneRetorno(clienteFone);
 		clienteFoneRetorno.setUltimaAlteracao(new Date());

@@ -389,8 +389,7 @@ public interface IRepositorioClienteImovel {
 	 * @return Collection
 	 * @throws ControladorException
 	 */
-	public Collection pesquisarClienteImovel(Integer idImovel)
-		throws ErroRepositorioException;
+	public Collection<ClienteImovel> pesquisarClienteImovel(Integer idImovel) throws ErroRepositorioException;
 	
 	
 	/**

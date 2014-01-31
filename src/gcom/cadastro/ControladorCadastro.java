@@ -7783,36 +7783,38 @@ public class ControladorCadastro implements SessionBean {
 				
 				if ("00".equals(registroTipo)) {
 					AbstractAtualizacaoCadastralCommand command = new ParseHeaderCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
-							repositorioImovel, getControladorAtualizacaoCadastral(), getControladorCliente());
+							repositorioImovel, getControladorEndereco(), getControladorAtualizacaoCadastral(), getControladorCliente());
 					command.execute(atualizacao);
 				} else if ("01".equals(registroTipo)) {
 					atualizacao.novaAtualizacaoImovel();
 
-					AbstractAtualizacaoCadastralCommand command = new ParseClienteCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
-							repositorioImovel, getControladorAtualizacaoCadastral(), getControladorCliente());
+					AbstractAtualizacaoCadastralCommand command = new ParseClienteCommand(parserConteudo
+							, repositorioImovel
+							, getControladorAtualizacaoCadastral()
+							, repositorioClienteImovel);
 					command.execute(atualizacao);
 				}
 				
 				if (!atualizacao.getImovelAtual().isImovelAprovado()){
 					if ("02".equals(registroTipo)) {
 						AbstractAtualizacaoCadastralCommand command = new ParseImovelCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
-								repositorioImovel, getControladorAtualizacaoCadastral(), getControladorCliente());
+								repositorioImovel, getControladorEndereco(), getControladorAtualizacaoCadastral(), getControladorCliente());
 						command.execute(atualizacao);					
 					} else if ("03".equals(registroTipo)) {
 						AbstractAtualizacaoCadastralCommand command = new ParseRamoAtividadeCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
-								repositorioImovel, getControladorAtualizacaoCadastral(), getControladorCliente());
+								repositorioImovel, getControladorEndereco(), getControladorAtualizacaoCadastral(), getControladorCliente());
 						command.execute(atualizacao);					
 					} else if ("04".equals(registroTipo)) {
 						AbstractAtualizacaoCadastralCommand command = new ParseServicosCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
-								repositorioImovel, getControladorAtualizacaoCadastral(), getControladorCliente());
+								repositorioImovel, getControladorEndereco(), getControladorAtualizacaoCadastral(), getControladorCliente());
 						command.execute(atualizacao);					
 					}else if ("05".equals(registroTipo)) {
 						AbstractAtualizacaoCadastralCommand command = new ParseMedidorCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
-								repositorioImovel, getControladorAtualizacaoCadastral(), getControladorCliente());
+								repositorioImovel, getControladorEndereco(), getControladorAtualizacaoCadastral(), getControladorCliente());
 						command.execute(atualizacao);					
 					}else if ("06".equals(registroTipo)) {
 						AbstractAtualizacaoCadastralCommand command = new ParseAnormalidadeCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
-								repositorioImovel, getControladorAtualizacaoCadastral(), getControladorCliente());
+								repositorioImovel, getControladorEndereco(), getControladorAtualizacaoCadastral(), getControladorCliente());
 						command.execute(atualizacao);
 						
 						atualizacao.liberarValidacao();
@@ -7825,8 +7827,9 @@ public class ControladorCadastro implements SessionBean {
 				}
 				
 				if(atualizacao.validacaoLiberada() && !atualizacao.getImovelAtual().cadastroInvalido()){
-					AbstractAtualizacaoCadastralCommand command = new MontarObjetosAtualizacaoCadastralCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
-							repositorioImovel, getControladorAtualizacaoCadastral(), getControladorCliente(), repositorioClienteImovel);
+					AbstractAtualizacaoCadastralCommand command = new MontarObjetosAtualizacaoCadastralCommand(parserConteudo, repositorioCadastro, 
+							getControladorUtil(), getControladorTransacao(), repositorioImovel, getControladorEndereco(), 
+							getControladorAtualizacaoCadastral(), getControladorCliente(), repositorioClienteImovel);
 					command.execute(atualizacao);
 					atualizacao.excluirImovelSemErros();
 				}
