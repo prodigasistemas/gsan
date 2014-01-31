@@ -1,4 +1,4 @@
- 
+﻿ 
 -- Table: atualizacaocadastral.cliente_endereco_retorno
  DROP TABLE atualizacaocadastral.cliente_endereco_retorno;
  
@@ -12,7 +12,7 @@ CREATE TABLE atualizacaocadastral.cliente_endereco_retorno
   cler_nmbairro character varying(20),
   cler_dslogradouro character varying(40),
   cler_cdcep character(8),
-  edtp_id integer NOT NULL, -- Id do Tipo de Endereco
+  edtp_id integer, -- Id do Tipo de Endereco
   clie_id integer NOT NULL, -- Id do Cliente
   CONSTRAINT cliente_endereco_retorno_pkey PRIMARY KEY (cler_id),
   CONSTRAINT fk1_cliente_endereco_retorno FOREIGN KEY (clie_id)
