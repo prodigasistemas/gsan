@@ -1255,7 +1255,10 @@ public class RepositorioClienteImovelHBM implements IRepositorioClienteImovel {
 		String consulta = null;
 		try {
 			consulta = "SELECT clienteImovel " 
-					 + "from ClienteImovel clienteImovel " 
+					 + "from ClienteImovel clienteImovel "
+					 + " left join fetch clienteImovel.clienteRelacaoTipo relacao " 
+					 + " inner join fetch clienteImovel.cliente cliente " 
+					 + " inner join fetch cliente.clienteTipo tipo " 
 					 + "where clienteImovel.imovel.id = :idImovel " 
 					 + "and clienteImovel.dataFimRelacao is null ";
 		
