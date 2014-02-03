@@ -24,12 +24,9 @@ CREATE TABLE atualizacaocadastral.cliente_imovel_retorno
   clir_id integer NOT NULL, -- Id do cliente_imovel (sequencial)
   clir_tmultimaalteracao timestamp without time zone NOT NULL DEFAULT now(), -- Timestamp
   imov_id integer NOT NULL, -- Id do Imovel
-  clie_id integer NOT NULL, -- Id do Cliente
+  clie_id integer, -- Id do Cliente
   crtp_id integer, -- Id do Tipo de Relacao do Cliente com o Imovel
   CONSTRAINT cliente_imovel_retorno_pkey PRIMARY KEY (clir_id),
-  CONSTRAINT fk1_cliente_imovel_retorno FOREIGN KEY (clie_id)
-      REFERENCES cadastro.cliente (clie_id) MATCH SIMPLE
-      ON UPDATE RESTRICT ON DELETE RESTRICT,
   CONSTRAINT fk2_cliente_imovel_retorno FOREIGN KEY (imov_id)
       REFERENCES cadastro.imovel (imov_id) MATCH SIMPLE
       ON UPDATE RESTRICT ON DELETE RESTRICT,
@@ -49,7 +46,6 @@ COMMENT ON TABLE atualizacaocadastral.cliente_imovel_retorno
   IS 'Relacao que um cliente possa ter com um ou mais imovel, na condicao de usuario, responsavel ou proprietario.';
 COMMENT ON COLUMN atualizacaocadastral.cliente_imovel_retorno.clir_id IS 'Id do cliente_imovel (sequencial)';
 COMMENT ON COLUMN atualizacaocadastral.cliente_imovel_retorno.clir_tmultimaalteracao IS 'Timestamp';
-COMMENT ON COLUMN atualizacaocadastral.cliente_imovel_retorno.clir_icnomeconta IS 'Indica se este e o Cliente cujo Nome deve sair na Conta do Imovel (1_Sim; 2_Nao). Um e somente um Cliente do Imovel deve ter o Indicador igual a 1_Sim.';
 COMMENT ON COLUMN atualizacaocadastral.cliente_imovel_retorno.imov_id IS 'Id do Imovel';
 COMMENT ON COLUMN atualizacaocadastral.cliente_imovel_retorno.clie_id IS 'Id do Cliente';
 COMMENT ON COLUMN atualizacaocadastral.cliente_imovel_retorno.crtp_id IS 'Id do Tipo de Relacao do Cliente com o Imovel';

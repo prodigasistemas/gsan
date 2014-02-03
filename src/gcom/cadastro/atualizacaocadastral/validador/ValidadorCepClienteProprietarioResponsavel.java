@@ -22,7 +22,7 @@ public class ValidadorCepClienteProprietarioResponsavel extends ValidadorCommand
 		String matriculaProprietario = linha.get("matriculaProprietario"); 
 		String cepProprietario = linha.get("cepProprietario");
 		String nomeProprietario = linha.get("nomeProprietario");
-		if(!StringUtils.isEmpty(matriculaProprietario) && !StringUtils.containsOnly(matriculaProprietario,  new char[]{'0'}))
+		if((!StringUtils.isEmpty(matriculaProprietario) && !StringUtils.containsOnly(matriculaProprietario,  new char[]{'0'}))
 			|| (StringUtils.containsOnly(nomeProprietario,  new char[]{'0'}) && !StringUtils.isEmpty(nomeProprietario))) {
 			if(StringUtils.isEmpty(cepProprietario)) {
 				cadastroImovel.addMensagemErro("E obrigatório o preenchimento do CEP para o cliente Proprietário.");
