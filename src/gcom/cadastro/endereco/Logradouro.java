@@ -225,7 +225,11 @@ public class Logradouro extends ObjetoTransacao {
         this.logradouroTipo = logradouroTipo;
     }
 
-    public Integer getId() {
+    public Logradouro(Integer idLogradouro) {
+    	this.id = idLogradouro;
+	}
+
+	public Integer getId() {
         return this.id;
     }
 

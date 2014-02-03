@@ -2,7 +2,9 @@ package gcom.cadastro.atualizacaocadastral.command;
 
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.cadastro.IRepositorioCadastro;
+import gcom.cadastro.atualizacaocadastral.validador.ValidadorTamanhoLinhaAnormalidadeCommand;
 import gcom.cadastro.cliente.ControladorClienteLocal;
+import gcom.cadastro.endereco.ControladorEnderecoLocal;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.util.ControladorUtilLocal;
@@ -13,39 +15,46 @@ import java.util.Map;
 public class ParseAnormalidadeCommand extends AbstractAtualizacaoCadastralCommand {
 
 	public ParseAnormalidadeCommand(ParserUtil parser, IRepositorioCadastro repositorioCadastro, ControladorUtilLocal controladorUtil,
-			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, ControladorAtualizacaoCadastralLocal controladorImovel,
-			ControladorClienteLocal controladorCliente) {
-		super(parser, repositorioCadastro, controladorUtil, controladorTransacao, repositorioImovel, controladorImovel, controladorCliente);
+			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, ControladorEnderecoLocal controladorEndereco,
+			ControladorAtualizacaoCadastralLocal controladorImovel, ControladorClienteLocal controladorCliente) {
+		super(parser, repositorioCadastro, controladorUtil, controladorTransacao, repositorioImovel, controladorEndereco, controladorImovel, controladorCliente);
 	}
 
 	public void execute(AtualizacaoCadastral atualizacao) throws Exception {
 		Map<String, String> linha = atualizacao.getImovelAtual().getLinhaAnormalidade();
+		AtualizacaoCadastralImovel imovel = atualizacao.getImovelAtual();
 
-		String matriculaImovelAnormalidade = parser.obterDadoParser(9).trim();
-		linha.put("matriculaImovelAnormalidade", matriculaImovelAnormalidade);
+		new ValidadorTamanhoLinhaAnormalidadeCommand(parser, imovel).execute();
 
-		String codigoAnormalidade = parser.obterDadoParser(3).trim();
-		linha.put("codigoAnormalidade", codigoAnormalidade);
+		if(!imovel.cadastroInvalido()) {
 
-		String comentario = parser.obterDadoParser(200).trim();
-		linha.put("comentario", comentario);
+			String matriculaImovelAnormalidade = parser.obterDadoParser(9).trim();
+			linha.put("matriculaImovelAnormalidade", matriculaImovelAnormalidade);
 
-		String pathFoto1 = parser.obterDadoParser(30).trim();
-		linha.put("pathFoto1", pathFoto1);
+			String codigoAnormalidade = parser.obterDadoParser(3).trim();
+			linha.put("codigoAnormalidade", codigoAnormalidade);
 
-		String pathFoto2 = parser.obterDadoParser(30).trim();
-		linha.put("pathFoto2", pathFoto2);
+			String comentario = parser.obterDadoParser(200).trim();
+			linha.put("comentario", comentario);
 
-		String latitude = parser.obterDadoParser(20).trim();
-		linha.put("latitude", latitude);
+			String pathFoto1 = parser.obterDadoParser(30).trim();
+			linha.put("pathFoto1", pathFoto1);
 
-		String longitude = parser.obterDadoParser(20).trim();
-		linha.put("longitude", longitude);
+			String pathFoto2 = parser.obterDadoParser(30).trim();
+			linha.put("pathFoto2", pathFoto2);
 
-		String dataServico = parser.obterDadoParser(26).trim();
-		linha.put("dataServico", dataServico);
-		
-		String tipoEntrevistado = parser.obterDadoParser(20).trim();
-		linha.put("tipoEntrevistado", tipoEntrevistado);
+			String latitude = parser.obterDadoParser(20).trim();
+			linha.put("latitude", latitude);
+
+			String longitude = parser.obterDadoParser(20).trim();
+			linha.put("longitude", longitude);
+
+			String dataServico = parser.obterDadoParser(26).trim();
+			linha.put("dataServico", dataServico);
+
+			String tipoEntrevistado = parser.obterDadoParser(20).trim();
+			linha.put("tipoEntrevistado", tipoEntrevistado);
+		}
+
 	}
 }

@@ -125,7 +125,12 @@ public class LogradouroBairro extends ObjetoTransacao {
     public LogradouroBairro() {
     }
 
-    public Date getUltimaAlteracao() {
+    public LogradouroBairro(Integer idLogradouro, Integer idBairro) {
+    	this.logradouro = new Logradouro(idLogradouro);
+    	this.bairro = new Bairro(idBairro);
+	}
+
+	public Date getUltimaAlteracao() {
         return this.ultimaAlteracao;
     }
 
