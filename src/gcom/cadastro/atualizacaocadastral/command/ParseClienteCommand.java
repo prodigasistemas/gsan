@@ -5,6 +5,7 @@ import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorMatriculasClientesCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorSexoCommand;
+import gcom.cadastro.atualizacaocadastral.validador.ValidadorTipoPessoaCommand;
 import gcom.cadastro.cliente.IRepositorioClienteImovel;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.util.ParserUtil;
@@ -244,6 +245,7 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		
 		new ValidadorSexoCommand(imovelAtual, linha).execute();
 		new ValidadorMatriculasClientesCommand(imovelAtual, linha, repositorioClienteImovel).execute();
+		new ValidadorTipoPessoaCommand(imovelAtual, linha, repositorioClienteImovel).execute();
 		
 	}
 	
