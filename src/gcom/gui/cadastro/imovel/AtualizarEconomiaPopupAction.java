@@ -82,6 +82,7 @@ import gcom.cadastro.imovel.ImovelEconomia;
 import gcom.fachada.Fachada;
 import gcom.gui.GcomAction;
 import gcom.util.ConstantesSistema;
+import gcom.util.Util;
 import gcom.util.filtro.MaiorQue;
 import gcom.util.filtro.MenorQue;
 import gcom.util.filtro.ParametroSimples;
@@ -264,7 +265,7 @@ public class AtualizarEconomiaPopupAction extends GcomAction {
 					imovel, economiaPopupActionForm.getNumeroIptu(),
 					imovelEconomia.getUltimaAlteracao());
 
-			imovelEconomia.setNumeroIptu(new BigDecimal(economiaPopupActionForm
+			imovelEconomia.setNumeroIptu(Util.formatarIPTU(economiaPopupActionForm
 					.getNumeroIptu()));
 		} else {
 			imovelEconomia.setNumeroIptu(null);

@@ -298,7 +298,7 @@ public class ExibirConsultarImovelDadosCadastraisAction extends GcomAction {
 		}
 
 		if(imovel.getNumeroIptu() != null){
-			consultarImovelActionForm.setNumeroIptuDadosCadastrais(Util.formatarMoedaReal(imovel.getNumeroIptu()));
+			consultarImovelActionForm.setNumeroIptuDadosCadastrais(imovel.getNumeroIptu());
 		} else {
 			consultarImovelActionForm.setNumeroIptuDadosCadastrais("");
 		}

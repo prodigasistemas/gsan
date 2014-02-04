@@ -19037,7 +19037,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 */
 
-	public Integer verificarNumeroIptu(BigDecimal numeroIptu, Integer idImovel,
+	public Integer verificarNumeroIptu(String numeroIptu, Integer idImovel,
 
 	Integer idImovelEconomia, Integer idMunicipio)
 
@@ -19093,7 +19093,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 				.addScalar("idImovel", Hibernate.INTEGER)
 
-				.setBigDecimal("numeroIptu", numeroIptu).setInteger(
+				.setString("numeroIptu", numeroIptu).setInteger(
 
 				"idImovel", idImovel).setInteger("idMunicipio",
 
@@ -19135,7 +19135,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 				.addScalar("idImovel", Hibernate.INTEGER)
 
-				.setBigDecimal("numeroIptu", numeroIptu).setInteger(
+				.setString("numeroIptu", numeroIptu).setInteger(
 
 				"idImovelEconomia", idImovelEconomia)
 

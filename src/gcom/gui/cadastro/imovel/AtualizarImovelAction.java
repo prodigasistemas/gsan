@@ -515,7 +515,7 @@ public class AtualizarImovelAction extends GcomAction {
 		
 		imovel.setNumeroPontosUtilizacao(Util.verificarNaoVazio(pontoUtilizaco) ? new Short(pontoUtilizaco) : null);
 		imovel.setNumeroMorador(Util.verificarNaoVazio(numeroMoradores) ? new Short(numeroMoradores) : null);
-		imovel.setNumeroIptu(Util.verificarNaoVazio(numeroIptu) ? new BigDecimal(numeroIptu) : null);
+		imovel.setNumeroIptu(Util.verificarNaoVazio(numeroIptu) ? Util.formatarIPTU(numeroIptu) : null);
 		imovel.setNumeroCelpe(Util.verificarNaoVazio(numeroContratoCelpe) ? new Long(numeroContratoCelpe) : null);
 		imovel.setCoordenadaX(Util.verificarNaoVazio(cordenadasX) ? new String(cordenadasX.replace(',','.')) : null);
 		imovel.setCoordenadaY(Util.verificarNaoVazio(cordenadasY) ? new String(cordenadasY.replace(',','.')) : null);

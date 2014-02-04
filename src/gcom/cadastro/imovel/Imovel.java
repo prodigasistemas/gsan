@@ -234,7 +234,7 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER,
 			TarifaSocialDadoEconomia.ATRIBUTOS_INSERIR_TARIFA_SOCIAL,TarifaSocialDadoEconomia.ATRIBUTOS_MANTER_TARIFA_SOCIAL})
-	private BigDecimal numeroIptu;
+	private String numeroIptu;
 
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_IMOVEL_INSERIR,ATRIBUTOS_IMOVEL_ATUALIZAR,ATRIBUTOS_IMOVEL_REMOVER,
 			TarifaSocialDadoEconomia.ATRIBUTOS_INSERIR_TARIFA_SOCIAL,TarifaSocialDadoEconomia.ATRIBUTOS_MANTER_TARIFA_SOCIAL})
@@ -406,7 +406,7 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 			Short numeroParcelamento,
 			Short numeroReparcelamento,
 			Short diaVencimento,
-			BigDecimal numeroIptu,
+			String numeroIptu,
 			Long numeroCelpe,
 			Short indicadorConta,
 			Short indicadorEmissaoExtratoFaturamento,
@@ -570,7 +570,7 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 			Short numeroParcelamento,
 			Short numeroReparcelamento,
 			Short diaVencimento,
-			BigDecimal numeroIptu,
+			String numeroIptu,
 			Long numeroCelpe,
 			Short indicadorConta,
 			Short indicadorEmissaoExtratoFaturamento,
@@ -930,11 +930,11 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 		this.diaVencimento = diaVencimento;
 	}
 
-	public BigDecimal getNumeroIptu() {
+	public String getNumeroIptu() {
 		return this.numeroIptu;
 	}
 
-	public void setNumeroIptu(BigDecimal numeroIptu) {
+	public void setNumeroIptu(String numeroIptu) {
 		this.numeroIptu = numeroIptu;
 	}
 

@@ -2471,7 +2471,7 @@ public class Fachada {
 	 * @param imovel
 	 */
 	public String[] verificarPreenchimentoInserirDadosTarifaSocialMultiplas(
-			Long numeroCelpe, BigDecimal areaConstruida, BigDecimal numeroIPTU,
+			Long numeroCelpe, BigDecimal areaConstruida, String numeroIPTU,
 			Integer idImovelEconomia, String numeroCartaoSocial,
 			String dataValidadeCartaoSocial, String numeroParcelasCartaoSocial,
 			Integer consumoMedio, BigDecimal valorRendaFamiliar,
@@ -23395,7 +23395,7 @@ public class Fachada {
 	 *            Descrição do parâmetro
 	 */
 	public String[] verificarPreenchimentoInserirDadosTarifaSocial(
-			Long numeroCelpe, BigDecimal areaConstruida, BigDecimal numeroIPTU,
+			Long numeroCelpe, BigDecimal areaConstruida, String numeroIPTU,
 			Integer idImovel, String numeroCartaoSocial,
 			String dataValidadeCartaoSocial, String numeroParcelasCartaoSocial,
 			Integer consumoMedio, BigDecimal valorRendaFamiliar,
@@ -25667,7 +25667,7 @@ public class Fachada {
 	 * @author Rafael Corrêa
 	 * @throws ControladorException
 	 */
-	public Integer verificarNumeroIptu(BigDecimal numeroIptu, Integer idImovel,
+	public Integer verificarNumeroIptu(String numeroIptu, Integer idImovel,
 			Integer idImovelEconomia, Integer idMunicipio) {
 		try {
 			return this.getControladorImovel().verificarNumeroIptu(numeroIptu,
@@ -25730,7 +25730,7 @@ public class Fachada {
 	 * @throws ControladorException
 	 */
 	public void verificarPreenchimentoManterDadosTarifaSocial(Long numeroCelpe,
-			BigDecimal areaConstruida, BigDecimal numeroIPTU, Integer idImovel,
+			BigDecimal areaConstruida, String numeroIPTU, Integer idImovel,
 			String numeroCartaoSocial, String dataValidadeCartaoSocial,
 			String numeroParcelasCartaoSocial, Integer consumoMedio,
 			BigDecimal valorRendaFamiliar, String tarifaSocialCartaoTipo,
@@ -25775,7 +25775,7 @@ public class Fachada {
 	 * @throws ControladorException
 	 */
 	public void verificarPreenchimentoManterDadosTarifaSocialMultiplasEconomias(
-			Long numeroCelpe, BigDecimal areaConstruida, BigDecimal numeroIPTU,
+			Long numeroCelpe, BigDecimal areaConstruida, String numeroIPTU,
 			Integer idImovelEconomia, String numeroCartaoSocial,
 			String dataValidadeCartaoSocial, String numeroParcelasCartaoSocial,
 			Integer consumoMedio, BigDecimal valorRendaFamiliar,

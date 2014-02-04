@@ -165,10 +165,10 @@ public class InserirTarifaSocialDadosCartaoUmaEconomiaAction extends GcomAction 
 			areaConstruidaFormatada = Util.formatarMoedaRealparaBigDecimal(areaConstruida);
 		}
 		
-		BigDecimal numeroIptuFormatado = null;
+		String numeroIptuFormatado = null;
 		
 		if (numeroIptu != null && !numeroIptu.trim().equals("")) {
-			numeroIptuFormatado = Util.formatarMoedaRealparaBigDecimal(numeroIptu);
+			numeroIptuFormatado = Util.formatarIPTU(numeroIptu);
 		}
 			
 		Integer idImovel = clienteImovel.getImovel().getId();

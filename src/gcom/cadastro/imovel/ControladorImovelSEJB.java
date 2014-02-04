@@ -6880,7 +6880,7 @@ public class ControladorImovelSEJB implements SessionBean {
 
 			// Numero IPTU- 22
 			if (arrayImovel[22] != null) {
-				imovel.setNumeroIptu((BigDecimal) arrayImovel[22]);
+				imovel.setNumeroIptu((String) arrayImovel[22]);
 			}
 
 			// Numero CELPE- 23
@@ -10409,7 +10409,7 @@ public class ControladorImovelSEJB implements SessionBean {
 	 * @author Rafael Corrêa
 	 * @throws ControladorException
 	 */
-	public Integer verificarNumeroIptu(BigDecimal numeroIptu, Integer idImovel,
+	public Integer verificarNumeroIptu(String numeroIptu, Integer idImovel,
 			Integer idImovelEconomia, Integer idMunicipio)
 			throws ControladorException {
 		try {
