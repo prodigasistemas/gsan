@@ -112,6 +112,9 @@ public class CarregarDadosAtualizacaoCadastralAction extends GcomAction {
 							}
 							
 							httpServletRequest.setAttribute("colecaoErrosCadastro", mapErros);
+							httpServletRequest.setAttribute("nomeArquivo", atualizacao.getArquivoTexto().getDescricaoArquivo());
+							httpServletRequest.setAttribute("totalImoveis", atualizacao.getTotalImoveis());
+							httpServletRequest.setAttribute("totalImoveisComErro", atualizacao.getTotalImoveisComErro());
 							
 							retorno = actionMapping.findForward("CarregarDadosAtualizacaoCadastralAction");
 						}

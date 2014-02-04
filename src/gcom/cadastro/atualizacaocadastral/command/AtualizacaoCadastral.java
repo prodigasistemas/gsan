@@ -15,6 +15,8 @@ public class AtualizacaoCadastral {
 	
 	private AtualizacaoCadastralImovel imovelAtual = new AtualizacaoCadastralImovel();
 	
+	private int totalImoveis = 0;
+	
 	public ArquivoTextoAtualizacaoCadastral getArquivoTexto() {
 		return arquivoTexto;
 	}
@@ -36,6 +38,7 @@ public class AtualizacaoCadastral {
 		AtualizacaoCadastralImovel imovel = new AtualizacaoCadastralImovel(this);
 		imovelAtual = imovel;
 		imoveisComErro.add(imovel);
+		totalImoveis++;
 		return imovel;
 	}
 	
@@ -53,5 +56,17 @@ public class AtualizacaoCadastral {
 	
 	public boolean existeErroNoArquivo() {
 		return imoveisComErro.size() > 0;
-	}	
+	}
+
+	public int getTotalImoveisComErro() {
+		return imoveisComErro.size();
+	}
+
+	public int getTotalImoveis() {
+		return totalImoveis;
+	}
+
+	public void setTotalImoveis(int totalImoveis) {
+		this.totalImoveis = totalImoveis;
+	}
 }
