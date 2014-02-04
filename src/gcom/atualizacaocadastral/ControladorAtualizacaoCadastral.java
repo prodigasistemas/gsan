@@ -7,9 +7,12 @@ import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.ControladorImovelLocalHome;
 import gcom.cadastro.imovel.IImovel;
+import gcom.cadastro.imovel.IImovelSubcategoria;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoria;
+import gcom.micromedicao.ControladorMicromedicaoLocal;
+import gcom.micromedicao.ControladorMicromedicaoLocalHome;
 import gcom.seguranca.IRepositorioSeguranca;
 import gcom.seguranca.RepositorioSegurancaHBM;
 import gcom.seguranca.acesso.usuario.Usuario;
@@ -20,6 +23,7 @@ import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ControladorUtilLocalHome;
 import gcom.util.ErroRepositorioException;
+import gcom.util.MergeProperties;
 import gcom.util.ServiceLocator;
 import gcom.util.ServiceLocatorException;
 import gcom.util.SistemaException;
@@ -87,6 +91,26 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 
 	}
 	
+	private ControladorMicromedicaoLocal getControladorMicromedicao() {
+		ControladorMicromedicaoLocalHome localHome = null;
+		ControladorMicromedicaoLocal local = null;
+
+		ServiceLocator locator = null;
+
+		try {
+			locator = ServiceLocator.getInstancia();
+
+			localHome = (ControladorMicromedicaoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_MICROMEDICAO_SEJB);
+			local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}
+	
 	protected ControladorUtilLocal getControladorUtil() {
 
 		ControladorUtilLocalHome localHome = null;
@@ -148,13 +172,91 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			
 			Collection<IImovel> imoveis = this.obterImoveisParaAtualizar();
 			
-			for (IImovel imovel : imoveis) {
-				getControladorUtil().atualizar((Imovel)imovel);
+			for (IImovel imovelRetorno : imoveis) {
+				
+				if (isImovelEmCampo(imovelRetorno.getIdImovel())) {
+					atualizarImovelAtualizacaoCadastral(imovelRetorno);
+					atualizarImovelSubcategoriaAtualizacaoCadastral(imovelRetorno);
+				}
 			}
 			
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 		} catch (Exception e) {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
+		}
+	}
+	
+	private void atualizarImovelAtualizacaoCadastral(IImovel imovelRetorno) {
+		Imovel imovel;
+		try {
+			imovel = getControladorImovel().pesquisarImovel(imovelRetorno.getIdImovel());
+
+			MergeProperties.mergeProperties(imovel, imovelRetorno);
+			imovelRetorno.setId(imovelRetorno.getIdImovel());
+			
+			getControladorUtil().atualizar(imovel);
+			
+		} catch (ControladorException e) {
+			logger.error("Erro ao atualizar o imóvel" + imovelRetorno.getId());
+		}
+	}
+	
+	private void atualizarImovelSubcategoriaAtualizacaoCadastral(IImovel imovelRetorno) {
+		try {
+			imovelRetorno.setId(imovelRetorno.getIdImovel());
+	
+			Collection<IImovelSubcategoria> subcategoriasRetorno = this.obterImovelSubcategoriaParaAtualizar();
+			
+			Imovel imovel = new Imovel(imovelRetorno.getIdImovel());
+			for (IImovelSubcategoria subcategoriaRetorno : subcategoriasRetorno) {
+					ImovelSubcategoria imovelSubcategoria = this.obterSubcategoriaDoImovel(imovel, subcategoriaRetorno.getComp_id().getSubcategoria().getId());
+					
+					if (imovelSubcategoria != null) {
+						MergeProperties.mergeProperties(imovelSubcategoria, subcategoriaRetorno);
+						getControladorUtil().atualizar(imovelSubcategoria);
+					} else {
+						getControladorUtil().inserir(subcategoriaRetorno);
+					}
+			}
+		} catch (ControladorException e) {
+			logger.error("Erro ao inserir subcategorias do imóvel " + imovelRetorno.getId());
+		}
+	}
+	
+	private ImovelSubcategoria obterSubcategoriaDoImovel(IImovel imovel, Integer idSubcategoria) {
+		ImovelSubcategoria imovelSubcategoria = null;
+		try {
+			Collection<ImovelSubcategoria> subcategoriasImovel = getControladorImovel().pesquisarImovelSubcategorias((Imovel)imovel);
+			
+			for (ImovelSubcategoria subcategoria : subcategoriasImovel) {
+				if (subcategoria.getComp_id().getSubcategoria().getId().equals(idSubcategoria)) {
+					return subcategoria;
+				}
+			}
+		} catch (ControladorException e) {
+			logger.error("Erro ao remover subcategorias do imóvel" + imovel.getId());
+		}
+		
+		return imovelSubcategoria;
+		
+	}
+	
+	private Collection<IImovelSubcategoria> obterImovelSubcategoriaParaAtualizar() {
+		Collection<IImovelSubcategoria> subcategorias = null;
+		try {
+			subcategorias = repositorioAtualizacaoCadastral.obterImovelSubcategoriaParaAtualizar();
+		} catch (ErroRepositorioException e) {
+			logger.error("Erro ao pesquisar imoveis para atualizar.", e);
+		}
+		return subcategorias;
+	}
+
+	private boolean isImovelEmCampo(Integer idImovel) {
+		try {
+			getControladorMicromedicao().validarImovelEmCampo(idImovel); 
+			return true;
+		} catch (ControladorException e) {
+			return false;
 		}
 	}
 	
@@ -176,7 +278,6 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		apagarImovelRetorno(idImovel);
 		apagarImovelSubcategoriaRetorno(idImovel);
 		apagarImovelRamoAtividade(idImovel);
-		apagarImovelClienteRetorno(idImovel);
 	}
 
 	private void apagarImovelRetorno(Integer idImovel) throws ControladorException {
@@ -233,14 +334,6 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		}
 	}
 
-	private void apagarImovelClienteRetorno(Integer idImovel) throws ControladorException {
-		try {
-			repositorioAtualizacaoCadastral.apagarClienteImovelRetornoPorIdImovel(idImovel);
-		} catch (ErroRepositorioException e) {
-			e.printStackTrace();
-		}
-	}
-	
 	public Collection<ImovelSubcategoria> pesquisarImovelSubcategoriaAtualizacaoCadastral(Integer idImovel, Integer idSubcategoria,Integer idCategoria)
 		throws ControladorException {
         try {

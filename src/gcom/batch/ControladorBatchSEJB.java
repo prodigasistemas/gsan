@@ -86,6 +86,7 @@ import gcom.atendimentopublico.ordemservico.ControladorOrdemServicoLocal;
 import gcom.atendimentopublico.ordemservico.ControladorOrdemServicoLocalHome;
 import gcom.atendimentopublico.registroatendimento.FiltroRaEncerramentoComando;
 import gcom.atendimentopublico.registroatendimento.RaEncerramentoComando;
+import gcom.atualizacaocadastral.TarefaBatchAtualizacaoCadastral;
 import gcom.batch.arrecadacao.TarefaBatchAtualizarLigacaoAguaLigadoAnaliseParaLigado;
 import gcom.batch.arrecadacao.TarefaBatchCancelarGuiasPagamentoNaoPagas;
 import gcom.batch.arrecadacao.TarefaBatchClassificarPagamentosDevolucoes;
@@ -4062,6 +4063,15 @@ public class ControladorBatchSEJB implements SessionBean {
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 
 						break;		
+					}
+					
+					case Funcionalidade.ATUALIZACAO_CADASTRAL: {
+						TarefaBatchAtualizacaoCadastral batchAtualizacaoCadastral = new TarefaBatchAtualizacaoCadastral(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+						
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batchAtualizacaoCadastral));
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+						
 					}
 
 					default:

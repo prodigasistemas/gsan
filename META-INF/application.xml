@@ -864,6 +864,10 @@
 	</module>
 	
 	<module>
+		<ejb>BatchAtualizacaoCadastralMDB.jar</ejb>
+	</module>
+	
+	<module>
 		<java>gcom.jar</java>
 	</module>
 	

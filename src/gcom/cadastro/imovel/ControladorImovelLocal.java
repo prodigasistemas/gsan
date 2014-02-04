@@ -3584,4 +3584,6 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 			Integer idArquivoTexto, Integer idImovel) throws ControladorException;
 	
 	public void apagarInformacoesRetornoImovelAtualizacaoCadastral(Integer idImovel) throws ControladorException;
+	
+    public Collection<ImovelSubcategoria> pesquisarImovelSubcategorias(Imovel imovel) throws ControladorException;
 }

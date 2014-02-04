@@ -2,6 +2,7 @@ package gcom.atualizacaocadastral;
 
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.imovel.IImovel;
+import gcom.cadastro.imovel.IImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.util.ErroRepositorioException;
@@ -34,18 +35,44 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		
 		try {
 			
-			consulta = " from ImovelRetorno imovelRetorno"
+			consulta = "from ImovelRetorno imovelRetorno"
 					+ " where imovelRetorno.idImovel in "
-						+ " ( select imovelCotrole.idImovel from ImovelControleAtualizacaoCadastral imovelControle "
-						+ " where situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  + ") " ;
+						+ " ( select imovelControle.imovel.id from ImovelControleAtualizacaoCadastral imovelControle "
+						+ " where imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  + ") " ;
 			
-			retorno = (Collection<IImovel>) session.createQuery(consulta);
+			retorno = (Collection<IImovel>) session.createQuery(consulta).list();
 		} catch (HibernateException e) {
-			
+			e.printStackTrace();
 		}
 		
 		return retorno;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<IImovelSubcategoria> obterImovelSubcategoriaParaAtualizar() throws ErroRepositorioException { 
+		
+		Collection<IImovelSubcategoria> retorno = null;
+		Session session = HibernateUtil.getSession();
+		
+		String consulta = null;
+		
+		try {
+			
+			consulta = "from ImovelSubcategoria imovelSubcategoria"
+					+ " where imovelSubcategoria.comp_id.imovel.id in "
+						+ " ( select imovelControle.imovel.id from ImovelControleAtualizacaoCadastral imovelControle "
+						+ " where imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  + ") " ;
+			
+			retorno = (Collection<IImovelSubcategoria>) session.createQuery(consulta).list();
+		} catch (HibernateException e) {
+			e.printStackTrace();
+		}
+		
+		return retorno;
+	
+		
+	}
+
 	
 	public ImovelRetorno pesquisarImovelRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
@@ -157,16 +184,22 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		return imovelAtualizacaoCadastral;
 	}
 	
-	public void apagarClienteImovelRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException{
+	@SuppressWarnings("unchecked")
+	public Collection<ClienteImovelRetorno> pesquisarClienteImovelRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
+		
+		Collection<ClienteImovelRetorno> listaClienteImovel;
 		try{
-			String consulta = " DELETE ClienteImovelRetorno ret "
-					+ " WHERE ret.imovel.id = :idImovel ";
-			session.createQuery(consulta).setInteger("idImovel", idImovel).executeUpdate();
+			String consulta = " select clienteImovel " 
+					+ " from ClienteImovelRetorno clienteImovel "
+					+ " WHERE clienteImovel.imovel.id = :idImovel ";
+			listaClienteImovel = (Collection<ClienteImovelRetorno>) session.createQuery(consulta).setInteger("idImovel", idImovel).list();
 		}catch (HibernateException e) {
 			throw new ErroRepositorioException("Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
-		}		
+		}	
+		
+		return listaClienteImovel;
 	}
 }
