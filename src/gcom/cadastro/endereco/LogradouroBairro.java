@@ -125,7 +125,12 @@ public class LogradouroBairro extends ObjetoTransacao {
     public LogradouroBairro() {
     }
 
-    public Date getUltimaAlteracao() {
+    public LogradouroBairro(Integer idLogradouro, Integer idBairro) {
+    	this.logradouro = new Logradouro(idLogradouro);
+    	this.bairro = new Bairro(idBairro);
+	}
+
+	public Date getUltimaAlteracao() {
         return this.ultimaAlteracao;
     }
 
@@ -184,5 +189,17 @@ public class LogradouroBairro extends ObjetoTransacao {
 	
 	public String getDescricaoParaRegistroTransacao(){
 		return this.bairro.getNome();
-	}	
+	}
+	
+	public boolean hasBairro(){
+		return bairro != null && bairro.getId().intValue() != 0;
+	}
+	
+	public boolean hasUnidadeFederacao(){
+		return bairro.getMunicipio().getUnidadeFederacao() != null && bairro.getMunicipio().getUnidadeFederacao().getId().intValue() != 0;
+	}
+	
+	public boolean hasMunicipio(){
+		return bairro.getMunicipio() != null && bairro.getMunicipio().getId().intValue() != 0;
+	}
 }

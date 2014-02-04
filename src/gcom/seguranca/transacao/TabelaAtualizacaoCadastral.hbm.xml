@@ -13,12 +13,12 @@
 				<param name="sequence">seguranca.seq_tab_atlz_cadastral</param>
 			</generator>
 		</id>
-		<property name="idRegistroAlterado" type="java.lang.Integer" column="tatc_idregistroalterado" length="100"/>
+		<property name="idRegistroAlterado" type="java.lang.Long" column="tatc_idregistroalterado" length="100"/>
 		<property name="indicadorPrincipal" type="java.lang.Short" column="tatc_icprincipal" length="2"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="tatc_ultimaalteracao" length="8"/>
 		<property name="indicadorAutorizado" type="java.lang.Short" column="tatc_icautorizado" length="2"/>
 		<property name="codigoImovel" type="java.lang.Integer" column="tatc_cdimovel" length="4"/>
-		<property name="codigoCliente" type="java.lang.Integer" column="tatc_cdcliente" length="4"/>
+		<property name="codigoCliente" type="java.lang.Long" column="tatc_cdcliente" length="4"/>
 		<property name="dataProcessamento" type="java.sql.Timestamp" column="tatc_dtprocessamento" length="8"/>
 		<property name="complemento" type="java.lang.String" column="tatc_complemento"/>
 		

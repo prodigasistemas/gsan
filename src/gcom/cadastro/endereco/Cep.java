@@ -266,7 +266,11 @@ public class Cep extends ObjetoGcom {
         this.cepTipo = cepTipo;
     }
 
-    /**
+    public Cep(Integer codigoCep) {
+    	this.codigo = codigoCep;
+	}
+
+	/**
      * Retorna o valor de cepId
      * 
      * @return O valor de cepId

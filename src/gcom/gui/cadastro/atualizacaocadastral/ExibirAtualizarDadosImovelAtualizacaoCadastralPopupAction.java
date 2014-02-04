@@ -198,10 +198,10 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 		Collection colecaoDadosTabelaAtualizacaoCadastral = null;
 		if(idCliente != null && !idCliente.equals("")){
 			colecaoDadosTabelaAtualizacaoCadastral = fachada.consultarDadosTabelaColunaAtualizacaoCadastral(
-					new Integer(idRegistroAlterado), arquivo, new Integer(idImovel), new Integer(idCliente),new Integer(idTipoAlteracao));
+					new Long(idRegistroAlterado), arquivo, new Integer(idImovel), new Long(idCliente),new Integer(idTipoAlteracao));
 		}else{
 			colecaoDadosTabelaAtualizacaoCadastral = fachada.consultarDadosTabelaColunaAtualizacaoCadastral(
-					new Integer(idRegistroAlterado), arquivo, new Integer(idImovel), null,new Integer(idTipoAlteracao));
+					new Long(idRegistroAlterado), arquivo, new Integer(idImovel), null,new Integer(idTipoAlteracao));
 		}
 		
 		if (colecaoDadosTabelaAtualizacaoCadastral != null && !colecaoDadosTabelaAtualizacaoCadastral.isEmpty()) {

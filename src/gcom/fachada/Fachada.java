@@ -241,7 +241,6 @@ import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimpli
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoLinha;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteEndereco;
-import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteTipo;
 import gcom.cadastro.cliente.ControladorClienteLocal;
@@ -250,6 +249,7 @@ import gcom.cadastro.cliente.EsferaPoder;
 import gcom.cadastro.cliente.FiltroCliente;
 import gcom.cadastro.cliente.FiltroClienteEndereco;
 import gcom.cadastro.cliente.FiltroClienteImovel;
+import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.cliente.bean.PesquisarClienteResponsavelSuperiorHelper;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.empresa.EmpresaCobrancaFaixa;
@@ -24441,7 +24441,7 @@ public class Fachada {
 	 * 
 	 * @return ClienteFone
 	 */
-	public ClienteFone pesquisarClienteFonePagamento(Integer idCliente) {
+	public IClienteFone pesquisarClienteFonePagamento(Integer idCliente) {
 		try {
 			return this.getControladorArrecadacao()
 					.pesquisarClienteFonePagamento(idCliente);
@@ -40222,8 +40222,8 @@ public class Fachada {
 	 * @return
 	 */
 	public Collection<DadosTabelaAtualizacaoCadastralHelper> consultarDadosTabelaColunaAtualizacaoCadastral(
-			Integer idRegistroAlterado, Integer idArquivo, Integer idImovel,
-			Integer idCliente,Integer idTipoAlteracao) {
+			Long idRegistroAlterado, Integer idArquivo, Integer idImovel,
+			Long idCliente,Integer idTipoAlteracao) {
 
 		try {
 			return this.getControladorTransacao()

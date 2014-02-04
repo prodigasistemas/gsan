@@ -24,6 +24,9 @@ import gcom.util.ConstantesAplicacao;
 import gcom.util.HibernateUtil;
 import gcom.util.agendadortarefas.AgendadorTarefas;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Properties;
 import java.util.TimeZone;
 
 import javax.servlet.http.HttpServlet;
@@ -54,13 +57,35 @@ public class InicializadorSistema extends HttpServlet{
 		}
 	}
 
-	public String getTipo(){
-		String tipo = "Online";
-		String gsanTipo = ConstantesAplicacao.get("gsan.tipo");
-		if(gsanTipo != null){
-			tipo = gsanTipo;
-		}
-		
-		return tipo;
-	}
+	
+	private String getTipo() {
+        Properties propriedades = new Properties();
+        InputStream stream;
+
+        String tipo = "Online";
+        try {
+            ClassLoader classLoader = ClassLoader.getSystemClassLoader();
+
+            stream = classLoader.getResourceAsStream("version.properties");
+            if (stream == null) {
+                stream = ConstantesAplicacao.class.getClassLoader().getResourceAsStream("version.properties");
+            }
+            if (stream == null) {
+                stream = ConstantesAplicacao.class.getResourceAsStream("version.properties");
+            }
+
+            propriedades.load(stream);
+
+            String gsanTipo = propriedades.getProperty("gsan.tipo");
+
+            if(gsanTipo != null){
+            	tipo = gsanTipo;
+            }
+            
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return tipo;
+    }
 }

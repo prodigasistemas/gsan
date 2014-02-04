@@ -92,7 +92,7 @@ public class ConsultarMovimentoAtualizacaoCadastralHelper {
 	
 	private Integer idImovel;
 	
-	private Integer idCliente;
+	private Long idCliente;
 	
 	private Integer qtdAlteracaoImovel;
 	
@@ -112,11 +112,11 @@ public class ConsultarMovimentoAtualizacaoCadastralHelper {
 	
 	private String tipoClienteNovo;
 	
-	private Integer idRegistroAlterado;
+	private Long idRegistroAlterado;
 	
 	private Integer idTipoAlteracao;
 	
-	public ConsultarMovimentoAtualizacaoCadastralHelper(Integer icAutorizado, Integer argumento, Integer idImovel, Integer idCliente, Integer qtdAlteracaoImovel, Integer qtdAlteracaoCliente, String nomeFuncionario, String nomeCliente, Date dataRealizacao, String nomeEmpresa, Integer idArquivo, String inscricao, String tipoClienteNovo) {
+	public ConsultarMovimentoAtualizacaoCadastralHelper(Integer icAutorizado, Integer argumento, Integer idImovel, Long idCliente, Integer qtdAlteracaoImovel, Integer qtdAlteracaoCliente, String nomeFuncionario, String nomeCliente, Date dataRealizacao, String nomeEmpresa, Integer idArquivo, String inscricao, String tipoClienteNovo) {
 		this.icAutorizado = icAutorizado;
 		this.argumento = argumento;
 		this.idImovel = idImovel;
@@ -142,11 +142,11 @@ public class ConsultarMovimentoAtualizacaoCadastralHelper {
 		this.argumento = argumento;
 	}
 
-	public Integer getIdCliente() {
+	public Long getIdCliente() {
 		return idCliente;
 	}
 
-	public void setIdCliente(Integer idCliente) {
+	public void setIdCliente(Long idCliente) {
 		this.idCliente = idCliente;
 	}
 
@@ -238,11 +238,11 @@ public class ConsultarMovimentoAtualizacaoCadastralHelper {
 		this.tipoClienteNovo = tipoClienteNovo;
 	}
 
-	public Integer getIdRegistroAlterado() {
+	public Long getIdRegistroAlterado() {
 		return idRegistroAlterado;
 	}
 
-	public void setIdRegistroAlterado(Integer idRegistroAlterado) {
+	public void setIdRegistroAlterado(Long idRegistroAlterado) {
 		this.idRegistroAlterado = idRegistroAlterado;
 	}
 

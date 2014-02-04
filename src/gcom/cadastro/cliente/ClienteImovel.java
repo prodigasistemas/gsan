@@ -75,6 +75,7 @@
 */  
 package gcom.cadastro.cliente;
 
+import gcom.atualizacaocadastral.IClienteImovel;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.tarifasocial.TarifaSocialDadoEconomia;
 import gcom.interceptor.ControleAlteracao;
@@ -90,7 +91,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 /** @author Hibernate CodeGenerator */
 @ControleAlteracao()
-public class ClienteImovel extends ObjetoTransacao {
+public class ClienteImovel extends ObjetoTransacao implements IClienteImovel {
 	private static final long serialVersionUID = 1L;
 
 	/** identifier field */

@@ -27096,88 +27096,6 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * Pesquisar dados do Imóvel Atualização Cadastral
-	 * 
-	 * @param idImovel
-	 * @return Imovel
-	 * 
-	 * @author Ana Maria
-     * @date 17/09/2008
-	 * @exception ErroRepositorioException
-	 */
-	public ImovelAtualizacaoCadastral pesquisarImovelAtualizacaoCadastral(Integer idImovel)
-		throws ErroRepositorioException {
-	
-		ImovelAtualizacaoCadastral imovelAtualizacaoCadastral = null;
-		String consulta = "";
-	
-		Session session = HibernateUtil.getSession();
-	
-		try {
-	
-			consulta = " SELECT imov"
-				     + " FROM ImovelAtualizacaoCadastral imov" 				    				    
-				     + " WHERE imov.idImovel = :idImovel";
-	
-		imovelAtualizacaoCadastral = (ImovelAtualizacaoCadastral)session.createQuery(consulta)
-										.setInteger("idImovel", idImovel)
-										.setMaxResults(1).uniqueResult();
-					
-		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-	
-			HibernateUtil.closeSession(session);
-	
-		}
-	
-		return imovelAtualizacaoCadastral;
-	
-	}
-
-	/**
-	 * Pesquisar Imóvel Subcategoria Atualização Cadastral
-	 * 
-	 * @param idImovel
-	 * 
-	 * @author Ana Maria
-     * @date 17/09/2008
-	 * @exception ErroRepositorioException
-	 */
-	public Collection pesquisarImovelSubcategoriaAtualizacaoCadastral(Integer idImovel, Integer idSubcategoria,Integer idCategoria)
-		throws ErroRepositorioException {
-	
-		Collection retorno = null;
-		Session session = HibernateUtil.getSession();
-		String consulta = null;
-		
-		try {
-			consulta = " SELECT imovelSubcategoria" 
-					 + " FROM ImovelSubcategoriaAtualizacaoCadastral imovelSubcategoria" 
-					 + " WHERE imovelSubcategoria.idImovel = :idImovel";
-			
-			if(idSubcategoria != null){
-				consulta = consulta + " AND imovelSubcategoria.idSubcategoria = "+idSubcategoria;
-			}
-			
-			if(idCategoria != null){
-				consulta = consulta + " AND imovelSubcategoria.idCategoria = "+idCategoria;
-			}
-		
-			retorno = session.createQuery(consulta).setInteger("idImovel",
-					idImovel.intValue()).list();
-		
-		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
-		
-		return retorno;
-
-	}
-	
-	/**
 	 * Pesquisar existência de imóvel economia
 	 * 
 	 * @author Ana Maria
@@ -31559,4 +31477,19 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 			HibernateUtil.closeSession(session);
 		}
 	}
+	
+	public Integer pesquisarLogradouroImovelAtualizacaoCadastral(Integer matriculaImovel) throws ErroRepositorioException {
+        Session session = HibernateUtil.getSession();
+        try {
+                String consulta = " SELECT imovel.idLogradouro "
+                                + " FROM ImovelAtualizacaoCadastral imovel "
+                                + " WHERE imovel.idImovel = :idImovel ";
+                return (Integer) session.createQuery(consulta).setInteger("idImovel", matriculaImovel).uniqueResult();
+        } catch (HibernateException e) {
+                throw new ErroRepositorioException("Erro no Hibernate");
+        } finally {
+                HibernateUtil.closeSession(session);
+        }
+        
+}
 }

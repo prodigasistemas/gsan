@@ -2520,31 +2520,6 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 			Integer quadraInicial, Integer quadraFinal, Integer idEmpresa, Integer idRota)throws ControladorException;
 
 	/**
-	 * Pesquisar dados do Imóvel Atualização Cadastral
-	 * 
-	 * @param idImovel
-	 * @return Imovel
-	 * 
-	 * @author Ana Maria
-     * @date 17/09/2008
-	 * @exception ErroRepositorioException
-	 */
-	public ImovelAtualizacaoCadastral pesquisarImovelAtualizacaoCadastral(Integer idImovel)
-		throws ControladorException;
-	
-	/**
-	 * Pesquisar Imóvel Subcategoria Atualização Cadastral
-	 * 
-	 * @param idImovel
-	 * 
-	 * @author Ana Maria
-     * @date 17/09/2008
-	 * @exception ErroRepositorioException
-	 */
-	public Collection pesquisarImovelSubcategoriaAtualizacaoCadastral(Integer idImovel, Integer idSubcategoria,Integer idCategoria)
-		throws ControladorException;
-	
-	/**
 	 * Pesquisar existência de imóvel economia
 	 * 
 	 * @author Ana Maria

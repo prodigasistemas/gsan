@@ -36,7 +36,7 @@ CREATE TABLE atualizacaocadastral.imovel_retorno
   imac_nncoordenaday character varying(20),
   imac_nnhidrometro character(10),
   imac_nnmedidorenergia character(10),
-  imac_dsoutrasinformacoes character varying(100),
+  imac_dsoutrasinformacoes character varying(200),
   imac_tipoentrevistado character varying(50),
   imac_tipooperacao integer,
   imac_tmultimaalteracao timestamp without time zone,

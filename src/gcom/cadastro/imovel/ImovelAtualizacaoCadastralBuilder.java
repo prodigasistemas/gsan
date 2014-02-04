@@ -34,6 +34,14 @@ public class ImovelAtualizacaoCadastralBuilder {
 		// Linha 2
 		imovelAtualizacaoCadastral.setIdImovel(matricula);
 		imovelAtualizacaoCadastral.setTipoOperacao(tipoOperacao);
+		
+		String inscricao = atualizacaoCadastralImovel.getLinhaImovel("inscricao");
+		imovelAtualizacaoCadastral.setIdLocalidade(Integer.parseInt(inscricao.substring(0, 3)));
+		imovelAtualizacaoCadastral.setCodigoSetorComercial(Integer.parseInt(inscricao.substring(3, 6)));
+		imovelAtualizacaoCadastral.setNumeroQuadra(Integer.parseInt(inscricao.substring(6, 10)));
+		imovelAtualizacaoCadastral.setLote(Short.parseShort(inscricao.substring(10, 14)));
+		imovelAtualizacaoCadastral.setSubLote(Short.parseShort(inscricao.substring(14, 17)));
+		
 		imovelAtualizacaoCadastral.setNumeroImovel(atualizacaoCadastralImovel.getLinhaImovel("numeroImovel"));
 		imovelAtualizacaoCadastral.setComplementoEndereco(atualizacaoCadastralImovel.getLinhaImovel("complementoImovel"));
 		imovelAtualizacaoCadastral.setIdFonteAbastecimento(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("fonteAbastecimento")));
@@ -45,8 +53,9 @@ public class ImovelAtualizacaoCadastralBuilder {
 		imovelAtualizacaoCadastral.setCodigoCep(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("cep")));
 		imovelAtualizacaoCadastral.setNomeBairro(atualizacaoCadastralImovel.getLinhaImovel("bairro"));
 		imovelAtualizacaoCadastral.setNomeMunicipio(atualizacaoCadastralImovel.getLinhaImovel("municipio"));
-		imovelAtualizacaoCadastral.setNumeroPontosUtilizacao(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("numeroPontosUteis")));
-		imovelAtualizacaoCadastral.setNumeroMorador(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("numeroOcupantes")));
+		imovelAtualizacaoCadastral.setIdLogradouro(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("codigoLogradouro")));
+		imovelAtualizacaoCadastral.setNumeroPontosUtilizacao(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("numeroPontosUteis")) == 0 ? null : Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("numeroPontosUteis")));
+		imovelAtualizacaoCadastral.setNumeroMorador(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("numeroOcupantes")) == 0 ? null : Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("numeroOcupantes")));
 		imovelAtualizacaoCadastral.setTipoOperacao(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("tipoOperacao")));
 
 		// Linha 4
@@ -57,13 +66,13 @@ public class ImovelAtualizacaoCadastralBuilder {
 		// Linha 5
 		if (atualizacaoCadastralImovel.getLinhaMedidor().size() > 0) {
 			imovelAtualizacaoCadastral.setNumeroHidrometro(atualizacaoCadastralImovel.getLinhaMedidor("numeroHidrometro"));
-			imovelAtualizacaoCadastral.setIdMarcaHidrometro(atualizacaoCadastralImovel.getLinhaMedidor("marcaHidrometro").equals("") ? 0 : Integer.parseInt(atualizacaoCadastralImovel.getLinhaMedidor("marcaHidrometro")));
-			imovelAtualizacaoCadastral.setIdProtecaoHidrometro(atualizacaoCadastralImovel.getLinhaMedidor("tipoCaixaProtecaoHidrometro").equals("") ? 0 : Integer.parseInt(atualizacaoCadastralImovel.getLinhaMedidor("tipoCaixaProtecaoHidrometro")));
-			imovelAtualizacaoCadastral.setIdCapacidadeHidrometro(atualizacaoCadastralImovel.getLinhaMedidor("capacidadeHidrometro").equals("") ? 0 : Integer.parseInt(atualizacaoCadastralImovel.getLinhaMedidor("capacidadeHidrometro")));
+			imovelAtualizacaoCadastral.setIdMarcaHidrometro(Integer.parseInt(atualizacaoCadastralImovel.getLinhaMedidor("marcaHidrometro")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaMedidor("marcaHidrometro")));
+			imovelAtualizacaoCadastral.setIdCapacidadeHidrometro(Integer.parseInt(atualizacaoCadastralImovel.getLinhaMedidor("capacidadeHidrometro")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaMedidor("capacidadeHidrometro")));
+			imovelAtualizacaoCadastral.setIdProtecaoHidrometro(Integer.parseInt(atualizacaoCadastralImovel.getLinhaMedidor("tipoCaixaProtecaoHidrometro")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaMedidor("tipoCaixaProtecaoHidrometro")));
 		}
 
 		// Linha 6
-		imovelAtualizacaoCadastral.setIdCadastroOcorrencia(Integer.parseInt(atualizacaoCadastralImovel.getLinhaAnormalidade("codigoAnormalidade")));
+		imovelAtualizacaoCadastral.setIdCadastroOcorrencia(Integer.parseInt(atualizacaoCadastralImovel.getLinhaAnormalidade("codigoAnormalidade")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaAnormalidade("codigoAnormalidade")));
 		imovelAtualizacaoCadastral.setDescricaoOutrasInformacoes(atualizacaoCadastralImovel.getLinhaAnormalidade("comentario").trim());
 		imovelAtualizacaoCadastral.setCoordenadaY(atualizacaoCadastralImovel.getLinhaAnormalidade("latitude"));
 		imovelAtualizacaoCadastral.setCoordenadaX(atualizacaoCadastralImovel.getLinhaAnormalidade("longitude"));

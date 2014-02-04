@@ -869,34 +869,38 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 					&& !colunaImoveisSelecionados.isEmpty()) {
 				retornoConsulta = session.createSQLQuery(consulta).addScalar(
 						"tipoAlteracao", Hibernate.INTEGER).addScalar(
-						"idImovel", Hibernate.INTEGER).addScalar("idCliente",
-						Hibernate.INTEGER).addScalar("qtdImovel",
+						"idImovel", Hibernate.INTEGER)
+						.addScalar("idCliente",	Hibernate.LONG)
+						.addScalar("qtdImovel",
 						Hibernate.INTEGER).addScalar("qtdCliente",
 						Hibernate.INTEGER).addScalar("nomeFuncionario",
 						Hibernate.STRING).addScalar("nomeCliente",
 						Hibernate.STRING).addScalar("idArquivo",
 						Hibernate.INTEGER).addScalar("icAutorizado",
-						Hibernate.INTEGER).addScalar("idRegistroAlterado",
-						Hibernate.INTEGER).setParameterList(
+						Hibernate.INTEGER)
+						.addScalar("idRegistroAlterado", Hibernate.LONG)
+						.setParameterList(
 						"colunaImoveisSelecionados", colunaImoveisSelecionados)
 						.list();
 			} else {
 
 				retornoConsulta = session.createSQLQuery(consulta).addScalar(
 						"tipoAlteracao", Hibernate.INTEGER).addScalar(
-						"idImovel", Hibernate.INTEGER).addScalar("idCliente",
-						Hibernate.INTEGER).addScalar("qtdImovel",
+						"idImovel", Hibernate.INTEGER)
+						.addScalar("idCliente",	Hibernate.LONG)
+						.addScalar("qtdImovel",
 						Hibernate.INTEGER).addScalar("qtdCliente",
 						Hibernate.INTEGER).addScalar("nomeFuncionario",
 						Hibernate.STRING).addScalar("nomeCliente",
 						Hibernate.STRING).addScalar("idArquivo",
 						Hibernate.INTEGER).addScalar("icAutorizado",
-						Hibernate.INTEGER).addScalar("idRegistroAlterado",
-						Hibernate.INTEGER).list();
+						Hibernate.INTEGER)
+						.addScalar("idRegistroAlterado", Hibernate.LONG)
+						.list();
 			}
 
 			Integer ultimoImovel = null;
-			Integer ultimoCliente = null;
+			Long ultimoCliente = null;
 
 			if (retornoConsulta.size() > 0) {
 				Iterator helperIter = retornoConsulta.iterator();
@@ -905,7 +909,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 					Object[] element = (Object[]) helperIter.next();
 
 					Integer novoImovel = (Integer) element[1];
-					Integer novoCliente = (Integer) element[2];
+					Long novoCliente = (Long) element[2];
 
 					if (ultimoImovel != null
 							&& (novoImovel.intValue() == ultimoImovel
@@ -923,7 +927,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 
 						helper.setIdImovel((Integer) element[1]);
 
-						helper.setIdCliente((Integer) element[2]);
+						helper.setIdCliente((Long) element[2]);
 
 						String sql = " select  array_to_string(ARRAY"
 								+ " (select tcac_cnvaloratual"
@@ -951,7 +955,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 									+ " inner join seguranca.tab_col_atlz_cadastral tcac on (tcac.tatc_id = tatc.tatc_id)"
 									+ " inner join seguranca.tabela_coluna tbco on(tcac.tbco_id = tbco.tbco_id)"
 									+ " where tatc_cdcliente = "
-									+ (Integer) element[2]
+									+ (Long) element[2]
 									+ " and tbco_nmcoluna = 'crtp_id' and altp_id = 2)";
 
 							String clienteTipo = (String) session
@@ -972,7 +976,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 						helper.setNomeCliente((String) element[6]);
 						helper.setIdArquivo((Integer) element[7]);
 						helper.setIcAutorizado((Integer) element[8]);
-						helper.setIdRegistroAlterado((Integer) element[9]);
+						helper.setIdRegistroAlterado((Long) element[9]);
 
 					} else {
 						if (helper.getQtdAlteracaoImovel() == 0) {
@@ -981,7 +985,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 					}
 
 					ultimoImovel = (Integer) element[1];
-					ultimoCliente = (Integer) element[2];
+					ultimoCliente = (Long) element[2];
 
 					consultarMovimentoAtualizacaoCadastralHelper.add(helper);
 
@@ -1006,8 +1010,8 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 	 * @throws ErroRepositorioException
 	 */
 	public List consultarDadosTabelaColunaAtualizacaoCadastral(
-			Integer idRegistroAlterado,
-			Integer idArquivo, Integer idImovel, Integer idCliente,Integer idTipoAlteracao) throws ErroRepositorioException {
+			Long idRegistroAlterado,
+			Integer idArquivo, Integer idImovel, Long idCliente,Integer idTipoAlteracao) throws ErroRepositorioException {
 		List retorno = null;
 		Session session = HibernateUtil.getSession();
 		
@@ -1048,7 +1052,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				builder.append(" order by tcol.id");
 			 
 			 retorno = session.createQuery(builder.toString())
-			 	.setInteger("idRegistroAlterado", idRegistroAlterado)
+			 	.setLong("idRegistroAlterado", idRegistroAlterado)
 			 	.setInteger("idArquivo", idArquivo)
 			 	.setInteger("idImovel", idImovel)
 			 	.setInteger("idTipoAlteracao",idTipoAlteracao)

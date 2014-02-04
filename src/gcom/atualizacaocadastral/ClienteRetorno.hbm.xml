@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+	<class name="gcom.atualizacaocadastral.ClienteRetorno" table="atualizacaocadastral.cliente_retorno">
+		<id name="id" type="java.lang.Integer" column="clir_id">
+			<generator class="sequence">
+				<param name="sequence">atualizacaocadastral.seq_cliente_retorno</param>
+			</generator>
+		</id>
+		<!--  property name="idCliente" type="java.lang.Integer" column="clie_id" length="50"/ -->
+		<property name="nome" type="java.lang.String" column="clir_nmcliente" length="50"/>
+		<property name="cpf" type="java.lang.String" column="clir_nncpf" length="11"/>
+		<property name="rg" type="java.lang.String" column="clir_nnrg" length="13"/>
+		<property name="cnpj" type="java.lang.String" column="clir_nncnpj" length="14"/>
+		<property name="email" type="java.lang.String" column="clir_dsemail" length="40"/>
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="clir_tmultimaalteracao" length="8"/>
+		
+		<set name="clienteFones" lazy="true" inverse="true" cascade="delete">
+			<key>
+				<column name="clir_id"/>
+			</key>
+			<one-to-many class="gcom.cadastro.cliente.ClienteFone"/>
+		</set>
+		
+		<set name="clienteImoveis" lazy="true" inverse="true">
+			<key>
+				<column name="clir_id"/>
+			</key>
+			<one-to-many class="gcom.cadastro.cliente.ClienteImovel"/>
+		</set>
+
+		<set name="clienteEnderecos" lazy="true" inverse="true" cascade="delete">
+			<key>
+				<column name="clir_id"/>
+			</key>
+			<one-to-many class="gcom.cadastro.cliente.ClienteEndereco"/>
+		</set>
+
+		<many-to-one name="pessoaSexo" class="gcom.cadastro.cliente.PessoaSexo" not-null="true">
+			<column name="psex_id"/>
+		</many-to-one>
+
+		<many-to-one name="unidadeFederacao" class="gcom.cadastro.geografico.UnidadeFederacao" not-null="true">
+			<column name="unfe_id"/>
+		</many-to-one>
+
+		<many-to-one name="clienteTipo" class="gcom.cadastro.cliente.ClienteTipo" not-null="true">
+			<column name="cltp_id"/>
+		</many-to-one>
+		
+	</class>
+</hibernate-mapping>
