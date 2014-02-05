@@ -22,9 +22,10 @@
 		</action>
 		<action name="FiltrarAlteracaoAtualizacaoCadastralActionForm"
 			type="gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralAction"
-			path="/filtrarAlteracaoAtualizacaoCadastralAction"	>	
-		<forward name="filtrarAlteracaoAtualizacaoCadastral"
-				path="/exibirConsultarMovimentoAtualizacaoCadastralAction.do" />		
+			path="/filtrarAlteracaoAtualizacaoCadastralAction"	>
+			
+			<forward name="filtrarAlteracaoAtualizacaoCadastral"
+					path="/exibirConsultarMovimentoAtualizacaoCadastralAction.do" />		
 		</action>
 		
 		<action name="FiltrarAlteracaoAtualizacaoCadastralActionForm"
@@ -37,9 +38,10 @@
 		</action>
 		<action name="FiltrarAlteracaoAtualizacaoCadastralActionForm"
 			type="gcom.gui.cadastro.atualizacaocadastral.AtualizarDadosCadastraisViaMovimentoAction"
-			path="/atualizarDadosCadastraisViaMovimentoAction"	>	
-		<forward name="atualizarDadosCadastraisViaMovimentoAction"
-				path="/atualizarDadosCadastraisViaMovimentoAction.do" />		
+			path="/atualizarDadosCadastraisViaMovimentoAction"	>
+			
+			<forward name="atualizarDadosCadastraisViaMovimentoAction"
+					path="/atualizarDadosCadastraisViaMovimentoAction.do" />		
 		</action>
 		
 		<action name="ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm"
@@ -54,8 +56,9 @@
 			type="gcom.gui.cadastro.atualizacaocadastral.AtualizarDadosImovelAtualizacaoCadastralAction"
 			validate="true" 
 			path="/atualizarDadosImovelAtualizacaoCadastralAction"	>	
-		<forward name="exibirAtualizarDadosImovelAtualizacaoCadastralPopup" 
-				path="/jsp/cadastro/atualizacaocadastral/atualizar_dados_imovel_atualizacao_cadastral_popup.jsp" />		
+		
+			<forward name="filtrarAlteracaoAtualizacaoCadastral"
+					path="/filtrarAlteracaoAtualizacaoCadastralAction.do" />		
 		</action>
 		
 	<!--FIM FILTRAR ATUALIZACAO CADASTRAL-->
