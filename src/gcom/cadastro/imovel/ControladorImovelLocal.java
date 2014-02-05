@@ -1732,7 +1732,7 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	 * @author Rafael Corrêa
 	 * @throws ControladorException
 	 */
-	public Integer verificarNumeroIptu(BigDecimal numeroIptu, Integer idImovel,
+	public Integer verificarNumeroIptu(String numeroIptu, Integer idImovel,
 			Integer idImovelEconomia, Integer idMunicipio)
 			throws ControladorException;
 	
@@ -3584,4 +3584,6 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 			Integer idArquivoTexto, Integer idImovel) throws ControladorException;
 	
 	public void apagarInformacoesRetornoImovelAtualizacaoCadastral(Integer idImovel) throws ControladorException;
+	
+    public Collection<ImovelSubcategoria> pesquisarImovelSubcategorias(Imovel imovel) throws ControladorException;
 }

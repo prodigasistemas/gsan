@@ -1,5 +1,6 @@
 package gcom.atualizacaocadastral;
 
+import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteEndereco;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteImovel;
@@ -25,6 +26,7 @@ public class ClienteRetorno implements ICliente {
 	private UnidadeFederacao unidadeFederacao;
 	private PessoaSexo pessoaSexo;
 	private ClienteTipo clienteTipo;
+	private Cliente cliente;
 	
 	private Set<ClienteFone> clienteFones;
     private Set<ClienteImovel> clienteImoveis;
@@ -45,7 +47,7 @@ public class ClienteRetorno implements ICliente {
 		this.pessoaSexo = cliente.getPessoaSexo();
 		
 		this.clienteTipo = new ClienteTipo(cliente.getIdClienteTipo());
-		this.idCliente = cliente.getIdCliente();
+		this.cliente = new Cliente(cliente.getIdCliente());
 	}
 	
 	public Integer getIdCliente() {
@@ -167,5 +169,15 @@ public class ClienteRetorno implements ICliente {
 	public void setIdClienteTipo(Integer idCLienteTipo) {
 		this.idClienteTipo = idCLienteTipo;
 	}
+
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
+	
+	
 
 }

@@ -97,6 +97,7 @@ import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoPerfil;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.FiscalizacaoSituacao;
 import gcom.atendimentopublico.ordemservico.SupressaoMotivo;
+import gcom.atualizacaocadastral.ClienteImovelRetorno;
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocalHome;
 import gcom.atualizacaocadastral.IRepositorioAtualizacaoCadastral;
@@ -835,45 +836,10 @@ public class ControladorImovelSEJB implements SessionBean {
 
 		Collection retorno = null;
 
-		// // Filtro para obter o imóvel subcategoria
-		// FiltroImovelSubCategoria filtroImovelSubCategoria = new
-		// FiltroImovelSubCategoria();
-		//
-		// // Objetos que serão retornados pelo Hibernate
-		// filtroImovelSubCategoria
-		// .adicionarCaminhoParaCarregamentoEntidade("comp_id.subcategoria.categoria");
-		//
-		// // Objetos que serão utilizados para formatar o endereço
-		// filtroImovelSubCategoria
-		// .adicionarCaminhoParaCarregamentoEntidade("comp_id.imovel.localidade");
-		// filtroImovelSubCategoria
-		// .adicionarCaminhoParaCarregamentoEntidade("comp_id.imovel.setorComercial.municipio");
-		// filtroImovelSubCategoria
-		// .adicionarCaminhoParaCarregamentoEntidade("comp_id.imovel.logradouroBairro.bairro.municipio.unidadeFederacao");
-		// filtroImovelSubCategoria
-		// .adicionarCaminhoParaCarregamentoEntidade("comp_id.imovel.logradouroCep.cep");
-		// filtroImovelSubCategoria
-		// .adicionarCaminhoParaCarregamentoEntidade("comp_id.imovel.logradouroCep.logradouro.logradouroTipo");
-		// filtroImovelSubCategoria
-		// .adicionarCaminhoParaCarregamentoEntidade("comp_id.imovel.logradouroCep.logradouro.logradouroTitulo");
-		// filtroImovelSubCategoria
-		// .adicionarCaminhoParaCarregamentoEntidade("comp_id.imovel.enderecoReferencia");
-		//		
-		// // filtroImovelSubCategoria
-		// // .setCampoDistinct(FiltroImovelSubCategoria.IMOVEL);
-		//
-		// filtroImovelSubCategoria.adicionarParametro(new ParametroSimples(
-		// FiltroImovelSubCategoria.IMOVEL_ID, imovel.getId()));
-		//
-		// filtroImovelSubCategoria
-		// .adicionarCaminhoParaCarregamentoEntidade(FiltroImovelSubCategoria.IMOVEL_ECONOMIAS);
-
-		// Pesquisa imóvel subcategoria passado como parâmetro um imóvel
 		Collection colecaoImovelSubCategoria = null;
 
 		try {
-			colecaoImovelSubCategoria = repositorioImovel
-					.pesquisarImovelSubcategorias(imovel.getId());
+			colecaoImovelSubCategoria = repositorioImovel.pesquisarImovelSubcategorias(imovel.getId());
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
@@ -887,7 +853,6 @@ public class ControladorImovelSEJB implements SessionBean {
 
 			while (colecaoImovelSubCategoriaIterator.hasNext()) {
 
-				// Obtém o imóvel subcategoria
 				ImovelSubcategoria imovelSubcategoria = (ImovelSubcategoria) colecaoImovelSubCategoriaIterator
 						.next();
 
@@ -6880,7 +6845,7 @@ public class ControladorImovelSEJB implements SessionBean {
 
 			// Numero IPTU- 22
 			if (arrayImovel[22] != null) {
-				imovel.setNumeroIptu((BigDecimal) arrayImovel[22]);
+				imovel.setNumeroIptu((String) arrayImovel[22]);
 			}
 
 			// Numero CELPE- 23
@@ -10409,7 +10374,7 @@ public class ControladorImovelSEJB implements SessionBean {
 	 * @author Rafael Corrêa
 	 * @throws ControladorException
 	 */
-	public Integer verificarNumeroIptu(BigDecimal numeroIptu, Integer idImovel,
+	public Integer verificarNumeroIptu(String numeroIptu, Integer idImovel,
 			Integer idImovelEconomia, Integer idMunicipio)
 			throws ControladorException {
 		try {
@@ -13213,6 +13178,14 @@ public class ControladorImovelSEJB implements SessionBean {
     public Collection<ImovelSubcategoria> pesquisarImovelSubcategoria(Imovel imovel) throws ControladorException {
         try {
             return repositorioImovel.pesquisarImovelSubcategoriasMaxCinco(imovel.getId());
+        } catch (ErroRepositorioException ex) {
+            throw new ControladorException("erro.sistema", ex);
+        }
+    }
+    
+    public Collection<ImovelSubcategoria> pesquisarImovelSubcategorias(Imovel imovel) throws ControladorException {
+        try {
+            return repositorioImovel.pesquisarImovelSubcategorias(imovel.getId());
         } catch (ErroRepositorioException ex) {
             throw new ControladorException("erro.sistema", ex);
         }
@@ -17133,6 +17106,7 @@ public class ControladorImovelSEJB implements SessionBean {
 		apagarImovelRetorno(idImovel);
 		apagarImovelSubcategoriaRetorno(idImovel);
 		apagarImovelRamoAtividade(idImovel);
+		apagarClienteImovelRetornoPorIdImovel(idImovel);
 	}
 
 	public void apagarImovelRetorno(Integer idImovel) throws ControladorException {
@@ -17146,7 +17120,23 @@ public class ControladorImovelSEJB implements SessionBean {
 			e.printStackTrace();
 		}
 	}
-
+	
+	public void apagarClienteImovelRetornoPorIdImovel(Integer idImovel) throws ControladorException {
+		Collection<ClienteImovelRetorno> listaClienteImovel = new ArrayList<ClienteImovelRetorno>();
+		
+		try {
+			listaClienteImovel = repositorioAtualizacaoCadastral.pesquisarClienteImovelRetornoPorIdImovel(idImovel);
+			
+			if (listaClienteImovel != null  && !listaClienteImovel.isEmpty()) {
+				for (ClienteImovelRetorno clienteImovel : listaClienteImovel) {
+					this.getControladorUtil().remover(clienteImovel);
+				}
+			}
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void apagarTabelaAtualizacaoCadastralPorIdImovel(Integer idImovel) throws ControladorException {
 		List<TabelaAtualizacaoCadastral> colecaoTabelaAtualizacaoCadastral;
 		List<TabelaColunaAtualizacaoCadastral> colecaoTabelaColunaAtualizacaoCadastral;

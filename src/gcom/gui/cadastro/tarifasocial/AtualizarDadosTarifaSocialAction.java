@@ -92,6 +92,7 @@ import gcom.gui.ControladorAlteracaoGcomAction;
 import gcom.gui.ControladorAlteracaoGcomActionForm;
 import gcom.gui.ControladorGcomAction;
 import gcom.util.FachadaException;
+import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 
 import java.math.BigDecimal;
@@ -148,7 +149,7 @@ public class AtualizarDadosTarifaSocialAction extends ControladorAlteracaoGcomAc
 							form.setAreaConstruida((obj.getAreaConstruida() + "").replace('.',','));
 						if (obj.getAreaConstruidaFaixa() != null)
 							form.setAreaConstruidaFaixa(obj.getAreaConstruidaFaixa().getId() + "");
-						if (obj.getNumeroIptu() != null && obj.getNumeroIptu().intValue() != 0) 
+						if (obj.getNumeroIptu() != null) 
 							form.setNumeroIPTU(obj.getNumeroIptu() + "");
 						if (obj.getNumeroCelpe() != null  && obj.getNumeroCelpe().intValue() != 0)
 							form.setNumeroContratoCelpe(obj.getNumeroCelpe() + "");
@@ -168,7 +169,7 @@ public class AtualizarDadosTarifaSocialAction extends ControladorAlteracaoGcomAc
 								form.setAreaConstruida((obj.getAreaConstruida() + "").replace('.',','));
 							if (obj.getAreaConstruidaFaixa() != null)
 								form.setAreaConstruidaFaixa(obj.getAreaConstruidaFaixa().getId() + "");
-							if (obj.getNumeroIptu() != null && obj.getNumeroIptu().intValue() != 0) 
+							if (obj.getNumeroIptu() != null) 
 								form.setNumeroIPTU(obj.getNumeroIptu() + "");
 							if (obj.getNumeroCelpe() != null && obj.getNumeroCelpe().intValue() != 0) 
 								form.setNumeroContratoCelpe(obj.getNumeroCelpe() + "");
@@ -213,7 +214,7 @@ public class AtualizarDadosTarifaSocialAction extends ControladorAlteracaoGcomAc
 							obj.setAreaConstruidaFaixa(null);
 						}
 						if (!"".equals(form.getNumeroIPTU().trim())) {
-							obj.setNumeroIptu(new BigDecimal(form.getNumeroIPTU()));
+							obj.setNumeroIptu(Util.formatarIPTU(form.getNumeroIPTU()));
 							validarDuplicidadeContratoIPTU(form.getNumeroIPTU(),obj, null,request);
 						} else {
 							obj.setNumeroIptu(null);
@@ -244,7 +245,7 @@ public class AtualizarDadosTarifaSocialAction extends ControladorAlteracaoGcomAc
 							}
 
 							if (!"".equals(form.getNumeroIPTU().trim())) {
-								obj.setNumeroIptu(new BigDecimal(form.getNumeroIPTU()));
+								obj.setNumeroIptu(Util.formatarIPTU(form.getNumeroIPTU()));
 								validarDuplicidadeContratoIPTU(form.getNumeroIPTU(),null,obj, request);
 							} else {
 								obj.setNumeroIptu(null);
@@ -269,7 +270,7 @@ public class AtualizarDadosTarifaSocialAction extends ControladorAlteracaoGcomAc
 
 		Long numeroCelpe = (!"".equals(form.getNumeroContratoCelpe().trim())) ? (new Long(form.getNumeroContratoCelpe())) : null; 
 		BigDecimal areaConstruida = (!"".equals(form.getAreaConstruida().trim())) ? (new BigDecimal(form.getAreaConstruida())) : null; 
-		BigDecimal numeroIPTU = (!"".equals(form.getNumeroIPTU().trim()))? (new BigDecimal(form.getNumeroIPTU())): null; 
+		String numeroIPTU = (!"".equals(form.getNumeroIPTU().trim())) ? form.getNumeroIPTU() : null; 
 		Integer idImovel = new Integer(f.getIdRegistroAtualizacao());
 		String numeroCartaoSocial = (!"".equals(form.getNumeroCartaoProgramaSocial().trim()))?form.getNumeroCartaoProgramaSocial():null;
 		String dataValidadeCartaoSocial = (!"".equals(form.getDataValidadeCartao().trim()))? form.getDataValidadeCartao() : null;

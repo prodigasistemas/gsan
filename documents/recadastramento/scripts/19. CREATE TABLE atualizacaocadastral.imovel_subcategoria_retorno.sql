@@ -7,6 +7,7 @@ CREATE TABLE atualizacaocadastral.imovel_subcategoria_retorno
   imov_id integer NOT NULL,
   scat_id integer NOT NULL,
   isre_qteconomia smallint,
+  imre_id integer,
   isre_tmultimaalteracao timestamp without time zone,
   CONSTRAINT imovel_subcategoria_retorno_pkey PRIMARY KEY (imov_id, scat_id),
   CONSTRAINT fk1_imovel_subcategoria_retorno FOREIGN KEY (imov_id)

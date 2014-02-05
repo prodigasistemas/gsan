@@ -15,6 +15,10 @@ public class TarefaBatchAtualizacaoCadastral extends TarefaBatch {
 	public TarefaBatchAtualizacaoCadastral(Usuario usuario, int idFuncionalidadeIniciada) {
 		super(usuario, idFuncionalidadeIniciada);
 	}
+	
+	public TarefaBatchAtualizacaoCadastral() {
+		super(null, 0);
+	}
 
 	@Override
 	protected Collection<Object> pesquisarTodasUnidadeProcessamentoBatch() {

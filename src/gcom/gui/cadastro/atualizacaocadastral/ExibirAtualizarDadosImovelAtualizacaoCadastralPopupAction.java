@@ -75,6 +75,7 @@
 */  
 package gcom.gui.cadastro.atualizacaocadastral;
 
+import gcom.cadastro.atualizacaocadastral.bean.DadosTabelaAtualizacaoCadastralHelper;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.imovel.Imovel;
@@ -172,7 +173,7 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 				atualizacaoCadastralActionForm.setNumeroQuadra("" + quadra.getNumeroQuadra());
 			}else {
 				// Imovel
-				atualizacaoCadastralActionForm.setIdImovel("Incluido");
+				atualizacaoCadastralActionForm.setIdImovel(idImovel);
 				// Localidade
 				atualizacaoCadastralActionForm.setIdLocalidade(null);
 				atualizacaoCadastralActionForm.setDescricaoLocalidade(null);
@@ -195,7 +196,7 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 		
 		// Consulta os dados da Tabela Atualizacao Cadastral
 		Integer arquivo = new Integer(idArquivo);
-		Collection colecaoDadosTabelaAtualizacaoCadastral = null;
+		Collection<DadosTabelaAtualizacaoCadastralHelper> colecaoDadosTabelaAtualizacaoCadastral = null;
 		if(idCliente != null && !idCliente.equals("")){
 			colecaoDadosTabelaAtualizacaoCadastral = fachada.consultarDadosTabelaColunaAtualizacaoCadastral(
 					new Long(idRegistroAlterado), arquivo, new Integer(idImovel), new Long(idCliente),new Integer(idTipoAlteracao));

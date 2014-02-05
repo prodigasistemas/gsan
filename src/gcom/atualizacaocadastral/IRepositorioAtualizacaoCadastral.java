@@ -1,6 +1,7 @@
 package gcom.atualizacaocadastral;
 
 import gcom.cadastro.imovel.IImovel;
+import gcom.cadastro.imovel.IImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.util.ErroRepositorioException;
@@ -23,6 +24,10 @@ public interface IRepositorioAtualizacaoCadastral {
 	
 	public ImovelAtualizacaoCadastral pesquisarImovelAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException;
 
+	public Collection<ClienteImovelRetorno> pesquisarClienteImovelRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException;
+	
+	public Collection<IImovelSubcategoria> obterImovelSubcategoriaParaAtualizar(Integer idImovel) throws ErroRepositorioException;
+	
 	public void apagarClienteImovelRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException;
 	
 	public void apagarClienteEnderecoRetorno(Collection<Integer> idsClientesRetorno) throws ErroRepositorioException;
@@ -32,5 +37,6 @@ public interface IRepositorioAtualizacaoCadastral {
 	public void apagarClienteRetorno(Collection<Integer> idsClientesRetorno) throws ErroRepositorioException;
 	
 	public Collection<Integer> pesquisarIdsClienteRetorno(Integer idImovel) throws ErroRepositorioException;
-	
+
+	public void liberarCadastroImovel(Integer idImovel) throws ErroRepositorioException;
 }

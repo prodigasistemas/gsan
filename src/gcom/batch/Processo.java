@@ -407,51 +407,25 @@ public class Processo extends ObjetoGcom {
 	
 	public static final int GERAR_RELATORIO_DOCUMENTO_VISITA_COBRANCA = 268;
 	
-	/**TODO: COSANPA
-	 * @author Adriana Muniz
-	 * @date 02/12/2011
-	 * 
-	 * Criação do processo para a geração do relatório de debito
-	 * */
 	public static final int GERAR_RELATORIO_DEBITO = 1000;
 	
-	/**TODO: COSANPA
-	 * @author Wellington Rocha
-	 * @date 27/12/2012
-	 * 
-	 * Criação de relatório de registros de atendimento por unidade por usuário
-	 * */
 	public static final int GERAR_RELATORIO_REGISTRO_ATENDIMENTO_POR_UNIDADE_POR_USUARIO = 1001;
 	
+	public static final int ATUALIZACAO_CADASTRAL = 507;
 	
-	/** identifier field */
 	private Integer id;
-
-	/** nullable persistent field */
 	private String descricaoProcesso;
-
-	/** nullable persistent field */
 	private String descricaoAbreviada;
-
-	/** persistent field */
 	private short indicadorUso;
-
-	/** nullable persistent field */
+	private short indicadorAutorizacao;
 	private Date ultimaAlteracao;
 
-	/** persistent field */
 	private Set processosFuncionalidade;
-
-	/** persistent field */
 	private Set processosIniciados;
 
-	/** persistent field */
 	private ProcessoTipo processoTipo;
 	
-	private short indicadorAutorizacao;
-	
 
-	/** full constructor */
 	public Processo(String descricaoProcesso, String descricaoAbreviada,
 			short indicadorUso, Date ultimaAlteracao,
 			ProcessoTipo processoTipo, Set processosFuncionalidade,

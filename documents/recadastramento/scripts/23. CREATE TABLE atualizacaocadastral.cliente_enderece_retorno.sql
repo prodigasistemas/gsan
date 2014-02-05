@@ -1,6 +1,6 @@
 ﻿ 
 -- Table: atualizacaocadastral.cliente_endereco_retorno
- DROP TABLE atualizacaocadastral.cliente_endereco_retorno;
+-- DROP TABLE atualizacaocadastral.cliente_endereco_retorno;
  
 CREATE TABLE atualizacaocadastral.cliente_endereco_retorno
 (
@@ -14,6 +14,7 @@ CREATE TABLE atualizacaocadastral.cliente_endereco_retorno
   cler_cdcep character(8),
   edtp_id integer, -- Id do Tipo de Endereco
   clie_id integer, -- Id do Cliente
+  clir_id integer,
   CONSTRAINT cliente_endereco_retorno_pkey PRIMARY KEY (cler_id),
   CONSTRAINT fk2_cliente_endereco_retorno FOREIGN KEY (edtp_id)
       REFERENCES cadastro.endereco_tipo (edtp_id) MATCH SIMPLE

@@ -28,9 +28,9 @@ public interface IImovel {
 
 	public void setNumeroMorador(Short numeroMorador);
 
-	public BigDecimal getNumeroIptu();
+	public String getNumeroIptu();
 	
-	public void setNumeroIptu(BigDecimal numeroIptu);
+	public void setNumeroIptu(String numeroIptu);
 
 	public String getCoordenadaX();
 

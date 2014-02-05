@@ -4448,7 +4448,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					.addScalar("coordenadaX", Hibernate.STRING)
 					.addScalar("coordenadaY", Hibernate.STRING)
 					.addScalar("imovelPrincipal", Hibernate.INTEGER)
-					.addScalar("numIptu", Hibernate.BIG_DECIMAL)
+					.addScalar("numIptu", Hibernate.STRING)
 					.addScalar("numCelpe", Hibernate.LONG)
 					.addScalar("localInstalacoRamal", Hibernate.INTEGER)
 					.setInteger("idImovel", idImovel);
@@ -10086,5 +10086,26 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		}
 		
 		return false;
+	}
+	
+	public void liberarCadastroImovel(Integer idImovel) throws ErroRepositorioException{
+		Session session = HibernateUtil.getSession();
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("update ImovelAtualizacaoCadastral tab ")
+			.append(" set tab.idSituacaoAtualizacaoCadastral = :situacao ")
+			.append(" where tab.idImovel = :idImovel");
+			
+			session.createQuery(sql.toString())
+				.setInteger("idImovel", idImovel)
+				.setInteger("situacao", SituacaoAtualizacaoCadastral.APROVADO)
+				.executeUpdate();
+
+		} catch (HibernateException e) {
+			logger.error("Erro ao liberar cadastro do imovel", e);
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
 	}
 }

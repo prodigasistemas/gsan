@@ -28,6 +28,7 @@ CREATE TABLE atualizacaocadastral.cliente_fone_retorno
   clfr_tmultimaalteracao timestamp without time zone NOT NULL DEFAULT now(), -- Timestamp
   fnet_id integer NOT NULL, -- Id do Tipo de Telefone
   clie_id integer, -- Id do Cliente
+  clir_id integer,
   CONSTRAINT cliente_fone_retorno_pkey PRIMARY KEY (clfr_id),
   CONSTRAINT fk2_cliente_fone FOREIGN KEY (fnet_id)
       REFERENCES cadastro.fone_tipo (fnet_id) MATCH SIMPLE

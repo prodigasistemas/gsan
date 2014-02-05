@@ -6457,5 +6457,15 @@ public class Util {
 		}
 		return true;
 	}
-	
+
+	public static String formatarIPTU(String numeroIPTU) {
+		return numeroIPTU.substring(0, 3) + "/"
+			 + numeroIPTU.substring(3, 8) + "/"
+			 + numeroIPTU.substring(8, 10) + "/"
+			 + numeroIPTU.substring(10, 12) + "/"
+			 + numeroIPTU.substring(12, 16) + "/"
+			 + numeroIPTU.substring(16, 19) + "/"
+			 + numeroIPTU.substring(19, 22) + "-"
+			 + numeroIPTU.substring(22, 24);
+	}
 }

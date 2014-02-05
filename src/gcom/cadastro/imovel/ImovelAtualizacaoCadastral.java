@@ -119,7 +119,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
     private Short numeroMorador;
 
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private BigDecimal numeroIptu;
+    private String numeroIptu;
 
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Long numeroContratoEnergia;
@@ -215,7 +215,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 			Integer idLigacaoAguaSituacao, Integer idLigacaoEsgotoSituacao,
 			Integer idImovelPerfil, BigDecimal volumePiscina,
 			Integer idPocoTipo, Short numeroPontosUtilizacao,
-			Short numeroMorador, BigDecimal numeroIptu,
+			Short numeroMorador, String numeroIptu,
 			Long numeroContratoEnergia, String coordenadaX,
 			String coordenadaY, Date ultimaAlteracao,
 			BigDecimal areaConstruida, Short indicadorJardim,
@@ -457,11 +457,11 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
         this.numeroMorador = numeroMorador;
     }
 
-    public BigDecimal getNumeroIptu() {
+    public String getNumeroIptu() {
         return this.numeroIptu;
     }
 
-    public void setNumeroIptu(BigDecimal numeroIptu) {
+    public void setNumeroIptu(String numeroIptu) {
         this.numeroIptu = numeroIptu;
     }
 

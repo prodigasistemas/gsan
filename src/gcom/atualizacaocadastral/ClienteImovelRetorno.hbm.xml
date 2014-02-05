@@ -8,7 +8,7 @@
     http://hibernate.sourceforge.net/
 -->
 	<class name="gcom.atualizacaocadastral.ClienteImovelRetorno" table="atualizacaocadastral.cliente_imovel_retorno">
-		<id name="id" type="java.lang.Integer" column="clir_id">
+		<id name="id" type="java.lang.Integer" column="cire_id">
 			<generator class="sequence">
 				<param name="sequence">atualizacaocadastral.seq_cliente_imovel_retorno</param>
 			</generator>
@@ -27,5 +27,10 @@
 		<many-to-one name="clienteRelacaoTipo" class="gcom.cadastro.cliente.ClienteRelacaoTipo" not-null="true">
 			<column name="crtp_id"/>
 		</many-to-one>
+		
+		<property name="idClienteRetorno" type="java.lang.Integer" column="clir_id" length="8"/>
+		<property name="idImovelRetorno" type="java.lang.Integer" column="imre_id" not-null="true" length="5"/>
+		
+		
 	</class>
 </hibernate-mapping>

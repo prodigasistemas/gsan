@@ -20,6 +20,8 @@
 		</composite-id>
 		<property name="quantidadeEconomias" type="short" column="isre_qteconomia" not-null="true" length="2"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="isre_tmultimaalteracao" length="8"/>
+		<property name="idImovelRetorno" type="java.lang.Integer" column="imre_id" not-null="true" length="5"/>
+		
 		
 	</class>
 </hibernate-mapping>
