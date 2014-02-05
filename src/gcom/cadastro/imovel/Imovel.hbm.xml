@@ -37,7 +37,7 @@
 		<property name="numeroReparcelamento" type="java.lang.Short" column="imov_nnreparcelamento" length="2"/>
 		<property name="numeroReparcelamentoConsecutivos" type="java.lang.Short" column="imov_nnreparcmtconsec" length="2"/>
 		<property name="diaVencimento" type="java.lang.Short" column="imov_ddvencimento" length="2"/>
-		<property name="numeroIptu" type="java.math.BigDecimal" column="imov_nniptu" length="20"/>
+		<property name="numeroIptu" type="java.lang.String" column="imov_nniptu" length="31"/>
 		<property name="numeroCelpe" type="java.lang.Long" column="imov_nncontratoenergia" length="10"/>
 		<!-- bi-directional many-to-one association to ImovelContaEnvio -->
 		<many-to-one name="imovelContaEnvio" class="gcom.cadastro.imovel.ImovelContaEnvio" not-null="true">

@@ -15,7 +15,7 @@ public class ImovelRetorno implements IImovel{
 	private String complementoEndereco;
 	private Short numeroPontosUtilizacao;
 	private Short numeroMorador;
-	private BigDecimal numeroIptu;
+	private String numeroIptu;
 	private String coordenadaX;
 	private String coordenadaY;
 	private String numeroMedidorEnergia;
@@ -96,11 +96,11 @@ public class ImovelRetorno implements IImovel{
 		this.numeroMorador = numeroMorador;
 	}
 
-	public BigDecimal getNumeroIptu() {
+	public String getNumeroIptu() {
 		return numeroIptu;
 	}
 
-	public void setNumeroIptu(BigDecimal numeroIptu) {
+	public void setNumeroIptu(String numeroIptu) {
 		this.numeroIptu = numeroIptu;
 	}
 

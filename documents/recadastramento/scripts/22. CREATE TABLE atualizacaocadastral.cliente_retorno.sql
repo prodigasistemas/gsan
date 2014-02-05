@@ -1,4 +1,4 @@
-﻿- Sequence: atualizacaocadastral.seq_cliente_retorno
+﻿-- Sequence: atualizacaocadastral.seq_cliente_retorno
  
 -- DROP SEQUENCE atualizacaocadastral.seq_cliente_retorno;
  

@@ -27,11 +27,9 @@ CREATE TABLE atualizacaocadastral.cliente_fone_retorno
   clfr_nnfone character varying(9), -- Numero do Telefone
   clfr_tmultimaalteracao timestamp without time zone NOT NULL DEFAULT now(), -- Timestamp
   fnet_id integer NOT NULL, -- Id do Tipo de Telefone
-  clie_id integer NOT NULL, -- Id do Cliente
+  clie_id integer, -- Id do Cliente
+  clir_id integer,
   CONSTRAINT cliente_fone_retorno_pkey PRIMARY KEY (clfr_id),
-  CONSTRAINT fk1_cliente_fone FOREIGN KEY (clie_id)
-      REFERENCES cadastro.cliente (clie_id) MATCH SIMPLE
-      ON UPDATE RESTRICT ON DELETE RESTRICT,
   CONSTRAINT fk2_cliente_fone FOREIGN KEY (fnet_id)
       REFERENCES cadastro.fone_tipo (fnet_id) MATCH SIMPLE
       ON UPDATE RESTRICT ON DELETE RESTRICT

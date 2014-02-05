@@ -13,11 +13,12 @@ import javax.ejb.MessageDrivenBean;
 import javax.ejb.MessageDrivenContext;
 import javax.jms.JMSException;
 import javax.jms.Message;
+import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
 import org.apache.log4j.Logger;
 
-public class BatchAtualizacaoCadastralMDB implements MessageDrivenBean {
+public class BatchAtualizacaoCadastralMDB implements MessageDrivenBean, MessageListener {
 
 	private static final long serialVersionUID = -4276287730534911539L;
 
@@ -75,5 +76,10 @@ public class BatchAtualizacaoCadastralMDB implements MessageDrivenBean {
 		}
 	
 	}
+	
+	public void ejbCreate() {
+
+	}
+
 
 }

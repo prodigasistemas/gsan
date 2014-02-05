@@ -7260,7 +7260,7 @@ public class ControladorCadastro implements SessionBean {
 				// Número de IPTU
 				if (element[33] != null) {
 					imovelAtualizacaoCadastral
-							.setNumeroIptu((BigDecimal) element[33]);
+							.setNumeroIptu((String) element[33]);
 				}
 
 				// Contrato de energia

@@ -243,7 +243,7 @@ public class ConstantesJNDI {
 	public static String BATCH_EMITIR_BOLETOS_MDB = "";
 	public static String BATCH_RETIFICAR_CONJUNTO_CONTA_CONSUMOS_MDB = "";
 	public static String BATCH_GERAR_BONUS_TARIFA_SOCIAL = "";
-	public static String  BATCH_EXCLUIR_IMOVEIS_DA_TARIFA_SOCIAL = "";
+	public static String BATCH_EXCLUIR_IMOVEIS_DA_TARIFA_SOCIAL = "";
 	public static String BATCH_GERAR_ARQUIVO_TEXTO_PAGAMENTOS_CONTAS_COBRANCA_POR_EMPRESA = "";
 	public static String BATCH_GERAR_ARQUIVO_TEXTO_CONTAS_PROJETOS_ESPECIAIS = "";
 	public static String BATCH_INSERIR_PAGAMENTOS_FATURAS_ESPECIAIS = "";
@@ -579,8 +579,6 @@ public class ConstantesJNDI {
 			BATCH_GERAR_DADOS_RELATORIO_BIG_MDB = propriedades.getProperty("QueueBatchGerarDadosRelatorioBIGMDB");
 			BATCH_PROCESSAR_PAGAMENTOS_DIFERENCA_DOIS_REAIS = propriedades.getProperty("QueueBatchProcessarPagamentosDiferencaDoisReaisMDB");
 			BATCH_CANCELAR_GUIAS_PAGAMENTO_NAO_PAGAS = propriedades.getProperty("QueueBatchCancelarGuiasPagamentoNaoPagasMDB");
-			BATCH_ATUALIZACAO_CADASTRAL = propriedades.getProperty("QueueBatchAtualizacaoCadastralMDB");
-
 			BATCH_ATUALIZACAO_CADASTRAL = propriedades.getProperty("QueueBatchAtualizacaoCadastralMDB");
 
 			stream.close();

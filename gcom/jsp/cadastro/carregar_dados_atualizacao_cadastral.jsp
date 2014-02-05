@@ -18,7 +18,6 @@
 	src="<bean:message key="caminho.js"/>util.js"></script>
 	<script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script><html:javascript staticJavascript="false"  formName="CarregarDadosAtualizacaoCadastralAction" />
 <script language="JavaScript">
-<!--
 
 	function validarForm(){
 	   var form = document.forms[0];
@@ -29,13 +28,9 @@
 		  alert(mensagem);
 	   }else{
 	   	 form.submit();		
-	   	 //submitForm(form);
 	   }
-	   
 	}
 
-
--->
 </script>
 
 </head>
@@ -93,7 +88,7 @@
             <table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
               <tr>
                 <td width="11"><img border="0" src="imagens/parahead_left.gif"/></td>
-                <td class="parabg">Gerar Diferença Arquivo Texto</td>
+                <td class="parabg">Carregar Arquivo de Retorno</td>
 
                 <td width="11" valign="top"><img border="0" src="imagens/parahead_right.gif"/></td>
               </tr>
@@ -140,7 +135,7 @@
                    <table>
                       <tr> 
                         <td width="500" align="right"> 
-                    	    <input type="button" onClick="javascript:validarForm();"  name="botaoConcluir" class="bottonRightCol" value="Atualizar">
+                    	    <input type="button" onClick="javascript:validarForm();"  name="botaoConcluir" class="bottonRightCol" value="Carregar">
                         </td>
                         <td>&nbsp;</td>
 
@@ -151,20 +146,48 @@
                
 
               <logic:present name="colecaoErrosCadastro">
+              <tr><td colspan="2"><hr></td></tr>
               <tr>
                 <td colspan="2">
-                  <strong>
-                    <font color="#FF0000">Arquivo de atualizaç&atilde;o cadastral possui erros</font>
-                  </strong> 
+                  <strong>Relat&oacute;rio de Ocorr&ecirc;ncias de Cadastro:</strong> 
                 </td>
               </tr>
+              
+              <tr><td>&nbsp;</td></tr>
+                
+              <tr>
+              	<td widht="30%">Nome do Arquivo:</td>
+				<td widht="70%" align="left">
+	              	<input type="text" size="20" maxlength="20" value="<bean:write name="nomeArquivo"/>"
+	              		readonly="true" style="background-color:#EFEFEF; border:0; color: #000000;" />
+                </td>
+              </tr>
+              
+              <tr>
+                <td widht="30%">Qtd. Total de Im&oacute;veis:</td>
+				<td widht="70%" align="left">
+					<input type="text" size="20" maxlength="20" value="<bean:write name="totalImoveis"/>"
+	              		readonly="true" style="background-color:#EFEFEF; border:0; color: #000000;" />
+                </td>
+              </tr>
+              
+              <tr>  
+                <td widht="30%">Qtd. de Im&oacute;veis com Erro:</td>
+				<td widht="70%" align="left">
+					<input type="text" size="20" maxlength="20" value="<bean:write name="totalImoveisComErro"/>"
+	              		readonly="true" style="background-color:#EFEFEF; border:0; color: #ff0000;" />
+                </td>
+              </tr>
+              
+              <tr><td>&nbsp;</td></tr>
+              
               <tr>
                 <td colspan="2">                
                   <div style="width: 100%; height: 100%; overflow: auto;">
                     <table width="100%" bgcolor="#99CCFF">
                       <tr bordercolor="#FFFFFF" bgcolor="#90c7fc">
-                        <td width="140"> Matr&iacute;cula do im&oacute;vel</td>
-                        <td> Descri&ccedil;&atilde;o do erro </td>
+                        <td width="140"> Matr&iacute;cula do Im&oacute;vel </td>
+                        <td> Descri&ccedil;&atilde;o do Erro </td>
                       </tr>
                       <% String cor = "#cbe5fe";%>
                       <logic:iterate name="colecaoErrosCadastro" id="element">

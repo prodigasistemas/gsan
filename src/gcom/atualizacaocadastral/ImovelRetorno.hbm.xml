@@ -14,11 +14,10 @@
 		<property name="complementoEndereco" type="java.lang.String" column="imac_dscomplementoendereco" length="25"/>
 		<property name="numeroPontosUtilizacao" type="java.lang.Short" column="imac_nnpontosutilizacao" length="2"/>
 		<property name="numeroMorador" type="java.lang.Short" column="imac_nnmorador" length="2"/>
-		<property name="numeroIptu" type="java.math.BigDecimal" column="imac_nniptu" length="20"/>
+		<property name="numeroIptu" type="java.lang.String" column="imac_nniptu" length="31"/>
 		<property name="coordenadaX" type="java.lang.String" column="imac_nncoordenadax" length="20"/>
 		<property name="coordenadaY" type="java.lang.String" column="imac_nncoordenaday" length="20"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="imac_tmultimaalteracao" not-null="true" length="8"/>
-
 		<property name="numeroHidrometro" type="java.lang.String" column="imac_nnhidrometro" length="10"/>
 		<property name="numeroMedidorEnergia" type="java.lang.String" column="imac_nnmedidorenergia" length="10"/>
 		<property name="informacoesComplementares" type="java.lang.String" column="imac_dsoutrasinformacoes" length="100"/>

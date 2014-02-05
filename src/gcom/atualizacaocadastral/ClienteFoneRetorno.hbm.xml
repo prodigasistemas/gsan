@@ -11,6 +11,7 @@
     <property name="ddd" type="java.lang.String" column="clfr_cdddd" length="2"/>
     <property name="telefone" type="java.lang.String" column="clfr_nnfone" length="9"/>
     <property name="ultimaAlteracao" type="java.sql.Timestamp" column="clfr_tmultimaalteracao" not-null="true" length="8"/>
+    <property name="idClienteRetorno" type="java.lang.Integer" column="clir_id" length="8"/>
     
     <many-to-one name="foneTipo" class="gcom.cadastro.cliente.FoneTipo" not-null="true">
       <column name="fnet_id"/>

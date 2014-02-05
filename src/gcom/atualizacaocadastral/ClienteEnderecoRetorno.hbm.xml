@@ -20,6 +20,9 @@
     <property name="nomeBairro" type="java.lang.String" column="cler_nmbairro" length="20"/>
     <property name="descricaoLogradouro" type="java.lang.String" column="cler_dslogradouro" length="40"/>
     <property name="codigoCep" type="java.lang.Integer" column="cler_cdcep" length="8"/>
+    <property name="idClienteRetorno" type="java.lang.Integer" column="clir_id" length="8"/>
+    
+    
     <!-- associations -->
     <!-- bi-directional many-to-one association to EnderecoTipo -->
     <many-to-one name="enderecoTipo" class="gcom.cadastro.endereco.EnderecoTipo" not-null="true">

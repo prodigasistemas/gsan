@@ -22,46 +22,26 @@ public class ValidadorMatriculasClientesCommand extends ValidadorCommand {
 	public void execute() throws Exception{
 		Collection<ClienteImovel> clientes = repositorioClienteImovel.pesquisarClienteImovel(cadastroImovel.getMatricula());
 		
-		validaProprietario(linha, clientes);
-
-		validaResponsavel(linha, clientes);
+		validaProprietario(linha, clientes, "Proprietario", ClienteRelacaoTipo.PROPRIETARIO);
+		validaProprietario(linha, clientes, "Responsavel", ClienteRelacaoTipo.RESPONSAVEL);
 	}
 
-	private void validaResponsavel(Map<String, String> linha, Collection<ClienteImovel> clientes) {
-		int matricula = Integer.valueOf(linha.get("matriculaResponsavel"));
+	private void validaProprietario(Map<String, String> linha, Collection<ClienteImovel> clientes, String cliente, Short relacao) {
+		int matricula = Integer.valueOf(linha.get("matricula" + cliente));
 		
 		int base = -1;
-		for (ClienteImovel cliente : clientes) {
-			if (cliente.getClienteRelacaoTipo().getId().intValue() == (int) ClienteRelacaoTipo.RESPONSAVEL){
-				base = cliente.getCliente().getId();
+		for (ClienteImovel clienteImovel : clientes) {
+			if (clienteImovel.getClienteRelacaoTipo().getId().intValue() == (int) relacao){
+				base = clienteImovel.getCliente().getId();
 			}
 		}
-
+		
 		if (base == -1 && matricula != 0){
-			cadastroImovel.addMensagemErro("Matrícula do responsável inexistente");
+			linha.put("matricula" + cliente, "0");
 		}
 		
 		if (base != -1 && base != matricula){
-			cadastroImovel.addMensagemErro("Inconsistencia na matrícula do responsável");
-		}
-	}
-
-	private void validaProprietario(Map<String, String> linha, Collection<ClienteImovel> clientes) {
-		int matricula = Integer.valueOf(linha.get("matriculaProprietario"));
-		
-		int base = -1;
-		for (ClienteImovel cliente : clientes) {
-			if (cliente.getClienteRelacaoTipo().getId().intValue() == (int) ClienteRelacaoTipo.PROPRIETARIO){
-				base = cliente.getCliente().getId();
-			}
-		}
-
-		if (base == -1 && matricula != 0){
-			cadastroImovel.addMensagemErro("Matrícula do proprietário inexistente");
-		}
-		
-		if (base != -1 && base != matricula){
-			cadastroImovel.addMensagemErro("Inconsistencia na matrícula do proprietário");
+			cadastroImovel.addMensagemErro(String.format("Inconsistencia na matrícula do %s", cliente));
 		}
 	}
 }

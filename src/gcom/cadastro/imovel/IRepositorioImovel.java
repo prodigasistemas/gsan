@@ -1340,7 +1340,7 @@ public interface IRepositorioImovel {
 	 * @author Rafael Corrêa
 	 * @throws ErroRepositorioException
 	 */
-	public Integer verificarNumeroIptu(BigDecimal numeroIptu, Integer idImovel,
+	public Integer verificarNumeroIptu(String numeroIptu, Integer idImovel,
 			Integer idImovelEconomia, Integer idMunicipio)
 			throws ErroRepositorioException;
 	
