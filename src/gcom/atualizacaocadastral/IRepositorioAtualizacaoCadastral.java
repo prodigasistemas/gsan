@@ -26,6 +26,6 @@ public interface IRepositorioAtualizacaoCadastral {
 
 	public Collection<ClienteImovelRetorno> pesquisarClienteImovelRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException;
 	
-	public Collection<IImovelSubcategoria> obterImovelSubcategoriaParaAtualizar() throws ErroRepositorioException;
+	public Collection<IImovelSubcategoria> obterImovelSubcategoriaParaAtualizar(Integer idImovel) throws ErroRepositorioException;
 	
 }

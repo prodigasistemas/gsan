@@ -27,5 +27,10 @@
 		<many-to-one name="clienteRelacaoTipo" class="gcom.cadastro.cliente.ClienteRelacaoTipo" not-null="true">
 			<column name="crtp_id"/>
 		</many-to-one>
+		
+		<property name="idClienteRetorno" type="java.lang.Integer" column="clir_id" length="8"/>
+		<property name="idImovelRetorno" type="java.lang.Integer" column="imre_id" not-null="true" length="5"/>
+		
+		
 	</class>
 </hibernate-mapping>

@@ -43,13 +43,15 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			retorno = (Collection<IImovel>) session.createQuery(consulta).list();
 		} catch (HibernateException e) {
 			e.printStackTrace();
+		} finally {
+			HibernateUtil.closeSession(session);
 		}
 		
 		return retorno;
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Collection<IImovelSubcategoria> obterImovelSubcategoriaParaAtualizar() throws ErroRepositorioException { 
+	public Collection<IImovelSubcategoria> obterImovelSubcategoriaParaAtualizar(Integer idImovel) throws ErroRepositorioException { 
 		
 		Collection<IImovelSubcategoria> retorno = null;
 		Session session = HibernateUtil.getSession();
@@ -59,13 +61,13 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		try {
 			
 			consulta = "from ImovelSubcategoria imovelSubcategoria"
-					+ " where imovelSubcategoria.comp_id.imovel.id in "
-						+ " ( select imovelControle.imovel.id from ImovelControleAtualizacaoCadastral imovelControle "
-						+ " where imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  + ") " ;
+					+ " where imovelSubcategoria.comp_id.imovel.id = :idImovel " ;
 			
-			retorno = (Collection<IImovelSubcategoria>) session.createQuery(consulta).list();
+			retorno = (Collection<IImovelSubcategoria>) session.createQuery(consulta).setInteger("idImovel", idImovel).list();
 		} catch (HibernateException e) {
 			e.printStackTrace();
+		} finally {
+			HibernateUtil.closeSession(session);
 		}
 		
 		return retorno;

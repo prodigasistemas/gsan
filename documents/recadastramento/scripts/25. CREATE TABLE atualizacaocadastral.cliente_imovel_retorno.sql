@@ -1,4 +1,4 @@
-﻿- Sequence: atualizacaocadastral.seq_cliente_imovel_retorno
+﻿-- Sequence: atualizacaocadastral.seq_cliente_imovel_retorno
  
 -- DROP SEQUENCE atualizacaocadastral.seq_cliente_imovel_retorno;
  
@@ -15,7 +15,7 @@ GRANT SELECT, UPDATE ON TABLE atualizacaocadastral.seq_cliente_imovel_retorno TO
 GRANT SELECT ON TABLE atualizacaocadastral.seq_cliente_imovel_retorno TO pg_users;
  
  
-- Table: atualizacaocadastral.cliente_imovel_retorno
+-- Table: atualizacaocadastral.cliente_imovel_retorno
  
 -- DROP TABLE atualizacaocadastral.cliente_imovel_retorno;
  
@@ -23,13 +23,11 @@ CREATE TABLE atualizacaocadastral.cliente_imovel_retorno
 (
   clir_id integer NOT NULL, -- Id do cliente_imovel (sequencial)
   clir_tmultimaalteracao timestamp without time zone NOT NULL DEFAULT now(), -- Timestamp
-  imov_id integer NOT NULL, -- Id do Imovel
+  imov_id integer, -- Id do Imovel
   clie_id integer, -- Id do Cliente
   crtp_id integer, -- Id do Tipo de Relacao do Cliente com o Imovel
+  imre_id integer,
   CONSTRAINT cliente_imovel_retorno_pkey PRIMARY KEY (clir_id),
-  CONSTRAINT fk2_cliente_imovel_retorno FOREIGN KEY (imov_id)
-      REFERENCES cadastro.imovel (imov_id) MATCH SIMPLE
-      ON UPDATE RESTRICT ON DELETE RESTRICT,
   CONSTRAINT fk3_cliente_imovel_retorno FOREIGN KEY (crtp_id)
       REFERENCES cadastro.cliente_relacao_tipo (crtp_id) MATCH SIMPLE
       ON UPDATE RESTRICT ON DELETE RESTRICT

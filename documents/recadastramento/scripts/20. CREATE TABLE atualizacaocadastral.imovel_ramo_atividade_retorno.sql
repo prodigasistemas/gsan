@@ -6,6 +6,7 @@ CREATE TABLE atualizacaocadastral.imovel_ramo_atividade_retorno
 (
   imov_id integer NOT NULL, -- Id do Imovel
   ratv_id integer NOT NULL, -- Id do ramo de atividade
+  imre_id integer,
   irar_tmultimaalteracao timestamp without time zone NOT NULL DEFAULT now(), -- Timestamp da ultima alteracao
   CONSTRAINT imovel_ramo_atividade_retorno_pkey PRIMARY KEY (imov_id, ratv_id),
   CONSTRAINT fk2_imovel_ramo_atividade_retorno FOREIGN KEY (ratv_id)
