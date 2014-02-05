@@ -13,11 +13,8 @@ CREATE TABLE atualizacaocadastral.cliente_endereco_retorno
   cler_dslogradouro character varying(40),
   cler_cdcep character(8),
   edtp_id integer, -- Id do Tipo de Endereco
-  clie_id integer NOT NULL, -- Id do Cliente
+  clie_id integer, -- Id do Cliente
   CONSTRAINT cliente_endereco_retorno_pkey PRIMARY KEY (cler_id),
-  CONSTRAINT fk1_cliente_endereco_retorno FOREIGN KEY (clie_id)
-      REFERENCES cadastro.cliente (clie_id) MATCH SIMPLE
-      ON UPDATE RESTRICT ON DELETE RESTRICT,
   CONSTRAINT fk2_cliente_endereco_retorno FOREIGN KEY (edtp_id)
       REFERENCES cadastro.endereco_tipo (edtp_id) MATCH SIMPLE
       ON UPDATE RESTRICT ON DELETE RESTRICT

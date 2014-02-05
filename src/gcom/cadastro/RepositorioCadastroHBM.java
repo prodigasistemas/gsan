@@ -4448,7 +4448,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					.addScalar("coordenadaX", Hibernate.STRING)
 					.addScalar("coordenadaY", Hibernate.STRING)
 					.addScalar("imovelPrincipal", Hibernate.INTEGER)
-					.addScalar("numIptu", Hibernate.BIG_DECIMAL)
+					.addScalar("numIptu", Hibernate.STRING)
 					.addScalar("numCelpe", Hibernate.LONG)
 					.addScalar("localInstalacoRamal", Hibernate.INTEGER)
 					.setInteger("idImovel", idImovel);

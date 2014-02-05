@@ -1261,7 +1261,7 @@ public class RepositorioImovelTarifaSocialHBM implements IRepositorioImovelTarif
 							Hibernate.SHORT).addScalar("contratoEnergia",
 							Hibernate.LONG).addScalar("consumoMedio",
 							Hibernate.INTEGER).addScalar("numeroIptu",
-							Hibernate.BIG_DECIMAL).addScalar("areaConstruida",
+							Hibernate.STRING).addScalar("areaConstruida",
 							Hibernate.BIG_DECIMAL).addScalar(
 							"areaConstruidaFaixa", Hibernate.INTEGER)
 					.addScalar("tipoRenda", Hibernate.STRING).addScalar(
@@ -1756,7 +1756,7 @@ public class RepositorioImovelTarifaSocialHBM implements IRepositorioImovelTarif
 							Hibernate.SHORT).addScalar("contratoEnergia",
 							Hibernate.LONG).addScalar("consumoMedio",
 							Hibernate.INTEGER).addScalar("numeroIptu",
-							Hibernate.BIG_DECIMAL).addScalar("areaConstruida",
+							Hibernate.STRING).addScalar("areaConstruida",
 							Hibernate.BIG_DECIMAL).addScalar(
 							"areaConstruidaFaixa", Hibernate.INTEGER)
 					.addScalar("tipoRenda", Hibernate.STRING).addScalar(

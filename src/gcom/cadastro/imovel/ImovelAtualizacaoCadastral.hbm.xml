@@ -29,7 +29,7 @@
 		<property name="idPocoTipo" type="java.lang.Integer" column="poco_id"/>
 		<property name="numeroPontosUtilizacao" type="java.lang.Short" column="imac_nnpontosutilizacao" length="2"/>
 		<property name="numeroMorador" type="java.lang.Short" column="imac_nnmorador" length="2"/>
-		<property name="numeroIptu" type="java.math.BigDecimal" column="imac_nniptu" length="20"/>
+		<property name="numeroIptu" type="java.lang.String" column="imac_nniptu" length="31"/>
 		<property name="numeroContratoEnergia" type="java.lang.Long" column="imac_nncontratoenergia" length="10"/>
 		<property name="coordenadaX" type="java.lang.String" column="imac_nncoordenadax" length="20"/>
 		<property name="coordenadaY" type="java.lang.String" column="imac_nncoordenaday" length="20"/>

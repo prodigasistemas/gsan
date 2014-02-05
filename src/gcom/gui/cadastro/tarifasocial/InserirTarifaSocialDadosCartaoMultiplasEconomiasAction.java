@@ -199,10 +199,10 @@ public class InserirTarifaSocialDadosCartaoMultiplasEconomiasAction extends
 			areaConstruidaFormatada = Util.formatarMoedaRealparaBigDecimal(areaConstruida);
 		}
 		
-		BigDecimal numeroIptuFormatado = null;
+		String numeroIptuFormatado = null;
 		
 		if (numeroIptu != null && !numeroIptu.trim().equals("")) {
-			numeroIptuFormatado = Util.formatarMoedaRealparaBigDecimal(numeroIptu);
+			numeroIptuFormatado = Util.formatarIPTU(numeroIptu);
 		}
 		
 		ImovelEconomia imovelEconomiaAtualizado = (ImovelEconomia) sessao.getAttribute("imovelEconomiaAtualizado");

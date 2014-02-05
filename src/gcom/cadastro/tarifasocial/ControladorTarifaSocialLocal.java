@@ -161,7 +161,7 @@ public interface ControladorTarifaSocialLocal extends javax.ejb.EJBLocalObject {
 	 *            Descrição do parâmetro
 	 */
 	public String[] verificarPreenchimentoInserirDadosTarifaSocial(Long numeroCelpe, 
-			BigDecimal areaConstruida, BigDecimal numeroIPTU, Integer idImovel, String numeroCartaoSocial,
+			BigDecimal areaConstruida, String numeroIPTU, Integer idImovel, String numeroCartaoSocial,
 			String dataValidadeCartaoSocial, String numeroParcelasCartaoSocial,
 			Integer consumoMedio, BigDecimal valorRendaFamiliar, String tarifaSocialCartaoTipo,
 			String tipoRenda) throws ControladorException;
@@ -180,7 +180,7 @@ public interface ControladorTarifaSocialLocal extends javax.ejb.EJBLocalObject {
 	 * @throws ControladorException
 	 */
 	public String[] verificarPreenchimentoInserirDadosTarifaSocialMultiplas(
-			Long numeroCelpe, BigDecimal areaConstruida, BigDecimal numeroIPTU,
+			Long numeroCelpe, BigDecimal areaConstruida, String numeroIPTU,
 			Integer idImovelEconomia, String numeroCartaoSocial,
 			String dataValidadeCartaoSocial, String numeroParcelasCartaoSocial,
 			Integer consumoMedio, BigDecimal valorRendaFamiliar,
@@ -468,7 +468,7 @@ public interface ControladorTarifaSocialLocal extends javax.ejb.EJBLocalObject {
 	 * @throws ControladorException
 	 */
 	public void verificarPreenchimentoManterDadosTarifaSocial(
-			Long numeroCelpe, BigDecimal areaConstruida, BigDecimal numeroIPTU,
+			Long numeroCelpe, BigDecimal areaConstruida, String numeroIPTU,
 			Integer idImovel, String numeroCartaoSocial,
 			String dataValidadeCartaoSocial, String numeroParcelasCartaoSocial,
 			Integer consumoMedio, BigDecimal valorRendaFamiliar,
@@ -571,7 +571,7 @@ public interface ControladorTarifaSocialLocal extends javax.ejb.EJBLocalObject {
 	 * @throws ControladorException
 	 */
 	public void verificarPreenchimentoManterDadosTarifaSocialMultiplasEconomias(
-			Long numeroCelpe, BigDecimal areaConstruida, BigDecimal numeroIPTU,
+			Long numeroCelpe, BigDecimal areaConstruida, String numeroIPTU,
 			Integer idImovelEconomia, String numeroCartaoSocial,
 			String dataValidadeCartaoSocial, String numeroParcelasCartaoSocial,
 			Integer consumoMedio, BigDecimal valorRendaFamiliar,
