@@ -17,6 +17,8 @@ public class ClienteImovelRetorno extends ClienteRetorno implements IClienteImov
 	
 	private Date ultimaAlteracao;
 	private Short indicadorNomeConta;
+	private Integer idClienteRetorno;
+	private Integer idImovelRetorno;
 
 	public ClienteImovelRetorno() {
 		
@@ -74,6 +76,22 @@ public class ClienteImovelRetorno extends ClienteRetorno implements IClienteImov
 
 	public void setIndicadorNomeConta(Short indicadorNomeConta) {
 		this.indicadorNomeConta = indicadorNomeConta;
+	}
+
+	public Integer getIdClienteRetorno() {
+		return idClienteRetorno;
+	}
+
+	public void setIdClienteRetorno(Integer idClienteRetorno) {
+		this.idClienteRetorno = idClienteRetorno;
+	}
+
+	public Integer getIdImovelRetorno() {
+		return idImovelRetorno;
+	}
+
+	public void setIdImovelRetorno(Integer idImovelRetorno) {
+		this.idImovelRetorno = idImovelRetorno;
 	}
 	
 }

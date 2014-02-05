@@ -176,7 +176,19 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		apagarImovelRetorno(idImovel);
 		apagarImovelSubcategoriaRetorno(idImovel);
 		apagarImovelRamoAtividade(idImovel);
-		apagarImovelClienteRetorno(idImovel);
+		apagarInformacoesRetornoCliente(idImovel);
+	}
+
+	private void apagarInformacoesRetornoCliente(Integer idImovel) throws ControladorException  {
+		try {
+			Collection<Integer> idsClientesRetorno = repositorioAtualizacaoCadastral.pesquisarIdsClienteRetorno(idImovel);
+			apagarClienteEnderecoRetornoPorIdsClientes(idsClientesRetorno);
+			apagarClienteFoneRetornoPorIdsClientes(idsClientesRetorno);
+			apagarClienteRetorno(idsClientesRetorno);
+			apagarImovelClienteRetorno(idImovel);
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
 	}
 
 	private void apagarImovelRetorno(Integer idImovel) throws ControladorException {
@@ -259,4 +271,36 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
         }
     }
 
+
+	private void apagarClienteEnderecoRetornoPorIdsClientes(Collection<Integer> idsClientesRetorno) {
+		try {
+		/*	List<ClienteEnderecoRetorno> colecaoClienteEnderecoRet = repositorioAtualizacaoCadastral.pesquisarClienteEnderecoRetorno(idsClientesImovelRetorno);
+			for(ClienteEnderecoRetorno cliente : colecaoClienteEnderecoRet) {
+				this.getControladorUtil().remover(cliente);
+			}*/
+			repositorioAtualizacaoCadastral.apagarClienteEnderecoRetorno(idsClientesRetorno);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void apagarClienteFoneRetornoPorIdsClientes(Collection<Integer> idsClientesRetorno) {
+		try {
+			/*List<ClienteFoneRetorno> colecaoClienteFoneRet = repositorioAtualizacaoCadastral.pesquisarClienteFoneRetorno(idsClientesImovelRetorno);
+			for(ClienteFoneRetorno cliente : colecaoClienteFoneRet) {
+				this.getControladorUtil().remover(cliente);
+			}*/
+			repositorioAtualizacaoCadastral.apagarClienteFoneRetorno(idsClientesRetorno);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	private void apagarClienteRetorno(Collection<Integer> idsClientesRetorno) {
+		try {
+			repositorioAtualizacaoCadastral.apagarClienteRetorno(idsClientesRetorno);
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
+	}
 }

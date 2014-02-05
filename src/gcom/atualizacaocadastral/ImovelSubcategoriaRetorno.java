@@ -9,6 +9,7 @@ public class ImovelSubcategoriaRetorno implements IImovelSubcategoria {
 	private ImovelSubcategoriaPK comp_id;
 	private short quantidadeEconomias;
 	private Date ultimaAlteracao;
+	private Integer idImovelRetorno;
 	
 	public ImovelSubcategoriaPK getComp_id() {
 		return comp_id;
@@ -37,5 +38,12 @@ public class ImovelSubcategoriaRetorno implements IImovelSubcategoria {
 	}
 	public void setUltimaAlteracao(Date ultimaAlteracao) {
 		this.ultimaAlteracao = ultimaAlteracao;
+	}
+	
+	public Integer getIdImovelRetorno() {
+		return idImovelRetorno;
+	}
+	public void setIdImovelRetorno(Integer idImovelRetorno) {
+		this.idImovelRetorno = idImovelRetorno;
 	}
 }

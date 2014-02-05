@@ -18,6 +18,7 @@ public class ClienteEnderecoRetorno implements IClienteEndereco {
 	private String nomeBairro;
 	private String descricaoLogradouro;
 	private Integer codigoCep;
+	private Integer idClienteRetorno;
 	
 	public ClienteEnderecoRetorno(){}
 	
@@ -110,5 +111,13 @@ public class ClienteEnderecoRetorno implements IClienteEndereco {
 	
 	public void setCodigoCep(Integer codigoCep){
 		this.codigoCep = codigoCep;
+	}
+
+	public Integer getIdClienteRetorno() {
+		return idClienteRetorno;
+	}
+
+	public void setIdClienteRetorno(Integer idClienteRetorno) {
+		this.idClienteRetorno = idClienteRetorno;
 	}
 }

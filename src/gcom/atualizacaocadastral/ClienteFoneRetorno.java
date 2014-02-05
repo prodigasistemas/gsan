@@ -14,6 +14,7 @@ public class ClienteFoneRetorno implements IClienteFone{
 	private FoneTipo foneTipo;
 	private Cliente cliente;
 	private Date ultimaAlteracao;
+	private Integer idClienteRetorno;
 	
 	public ClienteFoneRetorno(){}
 	
@@ -70,5 +71,13 @@ public class ClienteFoneRetorno implements IClienteFone{
 
 	public void setUltimaAlteracao(Date ultimaAlteracao) {
 		this.ultimaAlteracao = ultimaAlteracao;
+	}
+
+	public Integer getIdClienteRetorno() {
+		return idClienteRetorno;
+	}
+
+	public void setIdClienteRetorno(Integer idClienteRetorno) {
+		this.idClienteRetorno = idClienteRetorno;
 	}
 }

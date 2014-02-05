@@ -10,6 +10,7 @@ import gcom.util.HibernateUtil;
 import java.util.Collection;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 
@@ -168,5 +169,57 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		} finally {
 			HibernateUtil.closeSession(session);
 		}		
+	}
+
+	public void apagarClienteEnderecoRetorno(Collection<Integer> idsClientesRetorno) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try {
+			String query = " DELETE FROM ClienteEnderecoRetorno clieImovel where clieImovel.idClienteRetorno in (:idClienteRetorno) ";
+			session.createQuery(query).setParameterList("idsClientesRetorno", idsClientesRetorno).executeUpdate();
+		}catch(HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+		}finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+
+	public void apagarClienteFoneRetorno(Collection<Integer> idsClientesRetorno) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try {
+			String query = " DELETE FROM ClienteFoneRetorno clieImovel where clieImovel.idClienteRetorno in (:idClienteRetorno) ";
+			session.createQuery(query).setParameterList("idsClientesRetorno", idsClientesRetorno).executeUpdate();
+		}catch(HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+		}finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+
+	public void apagarClienteRetorno(Collection<Integer> idsClientesRetorno) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try {
+			String query = " DELETE FROM ClienteRetorno clieImovel where clieImovel.idClienteRetorno in (:idsClientesRetorno) ";
+			session.createQuery(query).setParameterList("idsClientesRetorno", idsClientesRetorno).executeUpdate();
+		}catch(HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+		}finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+
+	public Collection<Integer> pesquisarIdsClienteRetorno(Integer idImovel) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		Collection<Integer> retorno = null;
+		try {
+			String consulta = "SELECT clieImovel.idClienteRetorno "
+					+ " FROM ClienteImovelRetorno clieImovel "
+					+ " WHERE clieImovel.imovel.id = :idImovel ";
+			retorno = (Collection<Integer>)session.createQuery(consulta).setInteger("idImovel", idImovel).list();
+		}catch(HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+		}finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
 	}
 }

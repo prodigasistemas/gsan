@@ -8,6 +8,7 @@ public class ImovelRamoAtividadeRetorno implements IImovelRamoAtividade {
 
 	private ImovelRamoAtividadePK comp_id;
 	private Date ultimaAlteracao;
+	private Integer idImovelRetorno;
 	
 	public ImovelRamoAtividadeRetorno() {
 		
@@ -33,6 +34,12 @@ public class ImovelRamoAtividadeRetorno implements IImovelRamoAtividade {
 	public void setUltimaAlteracao(Date ultimaAlteracao) {
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
-	
-	
+
+	public Integer getIdImovelRetorno() {
+		return idImovelRetorno;
+	}
+
+	public void setIdImovelRetorno(Integer idImovelRetorno) {
+		this.idImovelRetorno = idImovelRetorno;
+	}
 }
