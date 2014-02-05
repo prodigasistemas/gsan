@@ -1,5 +1,6 @@
 package gcom.atualizacaocadastral;
 
+import gcom.cadastro.RepositorioCadastroHBM;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.imovel.IImovel;
 import gcom.cadastro.imovel.IImovelSubcategoria;
@@ -8,15 +9,20 @@ import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
 
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.jboss.logging.Logger;
 
 public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizacaoCadastral {
 
 	public static IRepositorioAtualizacaoCadastral instancia;
+	
+	private Logger logger = Logger.getLogger(RepositorioAtualizacaoCadastralHBM.class);
+	
 	
 	public static IRepositorioAtualizacaoCadastral getInstancia() {
 		if (instancia == null) {
@@ -203,5 +209,34 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		}	
 		
 		return listaClienteImovel;
+	}
+	
+	public void liberarCadastroImovel(Integer idImovel) throws ErroRepositorioException{
+		Session session = HibernateUtil.getSession();
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append("update ImovelControleAtualizacaoCadastral tab ")
+			.append(" set tab.situacaoAtualizacaoCadastral.id = :situacao ")
+			.append(" , tab.dataAprovacao = :data")
+			.append(" where tab.imovel.id = :idImovel");
+			
+			session.createQuery(sql.toString())
+				.setInteger("situacao", SituacaoAtualizacaoCadastral.APROVADO)
+				.setInteger("idImovel", idImovel)
+				.setTimestamp("data", Calendar.getInstance().getTime())
+				.executeUpdate();
+
+		} catch (HibernateException e) {
+			logger.error("Erro ao liberar cadastro do imovel", e);
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+
+	public void apagarClienteImovelRetornoPorIdImovel(Integer idImovel)
+			throws ErroRepositorioException {
+		// TODO Auto-generated method stub
+		
 	}
 }

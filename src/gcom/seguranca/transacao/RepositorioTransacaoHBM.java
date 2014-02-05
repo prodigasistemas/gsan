@@ -794,7 +794,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 		Collection retornoConsulta = null;
 		Session session = HibernateUtil.getSession();
 		String consulta = "";
-		Collection consultarMovimentoAtualizacaoCadastralHelper = new ArrayList();
+		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> consultarMovimentoAtualizacaoCadastralHelper = new ArrayList<ConsultarMovimentoAtualizacaoCadastralHelper>();
 
 		try {
 			consulta = "select tatc.altp_id as tipoAlteracao ,"// 0
@@ -815,7 +815,8 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 					+ " inner join micromedicao.leiturista leit on(tatc.leit_id = leit.leit_id)"
 					+ " left join cadastro.funcionario func on(leit.func_id = func.func_id)"
 					+ " left join cadastro.cliente clie on(leit.clie_id = clie.clie_id)"
-					+ " where 1=1 ";
+					+ " left join atualizacaocadastral.imovel_controle_atlz_cad ctrl on (ctrl.imov_id = tatc.tatc_cdimovel) "
+					+ " where ctrl.siac_id <> 4 ";
 
 			if (filtroHelper.getIdLocalidadeInicial() != null
 					&& !filtroHelper.getIdLocalidadeInicial().equals("")) {
@@ -917,78 +918,43 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 						novoCliente = ultimoCliente;
 					}
 
-					ConsultarMovimentoAtualizacaoCadastralHelper helper = null;
+					ConsultarMovimentoAtualizacaoCadastralHelper helper =  new ConsultarMovimentoAtualizacaoCadastralHelper();
 
-					if (helper == null) {
-
-						helper = new ConsultarMovimentoAtualizacaoCadastralHelper();
-
-						helper.setIdTipoAlteracao((Integer) element[0]);
-
-						helper.setIdImovel((Integer) element[1]);
-
-						helper.setIdCliente((Long) element[2]);
-
-						String sql = " select  array_to_string(ARRAY"
-								+ " (select tcac_cnvaloratual"
-								+ " from seguranca.tab_atlz_cadastral tatc"
-								+ " inner join seguranca.tab_col_atlz_cadastral tcac on (tatc.tatc_id = tcac.tatc_id)"
-								+ " inner join seguranca.tabela_coluna tbco on(tcac.tbco_id = tbco.tbco_id)"
-								+ " where tatc_cdimovel = "
-								+ (Integer) element[1]
-								+ " and altp_id = 2 and tbco_nmcoluna in('loca_id','imac_cdsetorcomercial','imac_nnquadra','imac_nnlote','imac_nnsublote')), '.') as inscricao";
-
-						String inscricao = (String) session.createSQLQuery(sql)
-								.addScalar("inscricao", Hibernate.STRING)
-								.setMaxResults(1).uniqueResult();
-
-						if (inscricao != null && !inscricao.equals("")) {
-							helper.setInscricao(inscricao);
-						}
-
-						if (element[2] != null && !element[2].equals("")) {
-							String sqlCliente = " select crtp_dsclienterelacaotipo as clienteTipo"
-									+ " from cadastro.cliente_relacao_tipo"
-									+ " where crtp_id in("
-									+ " select tcac_cnvaloratual"
-									+ " from seguranca.tab_atlz_cadastral tatc"
-									+ " inner join seguranca.tab_col_atlz_cadastral tcac on (tcac.tatc_id = tatc.tatc_id)"
-									+ " inner join seguranca.tabela_coluna tbco on(tcac.tbco_id = tbco.tbco_id)"
-									+ " where tatc_cdcliente = "
-									+ (Long) element[2]
-									+ " and tbco_nmcoluna = 'crtp_id' and altp_id = 2)";
-
-							String clienteTipo = (String) session
-									.createSQLQuery(sqlCliente).addScalar(
-											"clienteTipo", Hibernate.STRING)
-									.setMaxResults(1).uniqueResult();
-
-							if (clienteTipo != null && !clienteTipo.equals("")) {
-								helper
-										.setTipoClienteNovo("NOVO "
-												+ clienteTipo);
-							}
-						}
-
-						helper.setQtdAlteracaoImovel((Integer) element[3]);
-						helper.setQtdAlteracaoCliente((Integer) element[4]);
-						helper.setNomeFuncionario((String) element[5]);
-						helper.setNomeCliente((String) element[6]);
-						helper.setIdArquivo((Integer) element[7]);
-						helper.setIcAutorizado((Integer) element[8]);
-						helper.setIdRegistroAlterado((Long) element[9]);
-
-					} else {
-						if (helper.getQtdAlteracaoImovel() == 0) {
-							helper.setQtdAlteracaoImovel((Integer) element[3]);
-						}
+					helper.setIdTipoAlteracao((Integer) element[0]);
+	
+					helper.setIdImovel((Integer) element[1]);
+	
+					helper.setIdCliente((Long) element[2]);
+	
+					String sql = " select  array_to_string(ARRAY"
+							+ " (select tcac_cnvaloratual"
+							+ " from seguranca.tab_atlz_cadastral tatc"
+							+ " inner join seguranca.tab_col_atlz_cadastral tcac on (tatc.tatc_id = tcac.tatc_id)"
+							+ " inner join seguranca.tabela_coluna tbco on(tcac.tbco_id = tbco.tbco_id)"
+							+ " where tatc_cdimovel = "
+							+ (Integer) element[1]
+							+ " and altp_id = 2 and tbco_nmcoluna in('loca_id','imac_cdsetorcomercial','imac_nnquadra','imac_nnlote','imac_nnsublote')), '.') as inscricao";
+	
+					String inscricao = (String) session.createSQLQuery(sql)
+							.addScalar("inscricao", Hibernate.STRING)
+							.setMaxResults(1).uniqueResult();
+	
+					if (inscricao != null && !inscricao.equals("")) {
+						helper.setInscricao(inscricao);
 					}
+	
+					helper.setQtdAlteracaoImovel((Integer) element[3]);
+					helper.setQtdAlteracaoCliente((Integer) element[4]);
+					helper.setNomeFuncionario((String) element[5]);
+					helper.setNomeCliente((String) element[6]);
+					helper.setIdArquivo((Integer) element[7]);
+					helper.setIcAutorizado((Integer) element[8]);
+					helper.setIdRegistroAlterado((Long) element[9]);
 
 					ultimoImovel = (Integer) element[1];
 					ultimoCliente = (Long) element[2];
 
 					consultarMovimentoAtualizacaoCadastralHelper.add(helper);
-
 				}
 			}
 
@@ -1890,6 +1856,33 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 		}
 		
 		return retorno;
-
+	}
+	
+	public boolean existeAlteracaoNaoAprovadaParaImovel(Integer idImovel) throws ErroRepositorioException{
+		Session session = HibernateUtil.getSession();
+		Short NAO = 2;
+		boolean retorno = false;
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append(" select tcac ")
+			.append(" from TabelaColunaAtualizacaoCadastral tcac ")
+			.append(" inner join tcac.tabelaAtualizacaoCadastral tac ")
+			.append(" where tac.codigoImovel = :idImovel ")
+			.append(" and tcac.indicadorAutorizado = :indicador ");
+		
+			List<TabelaColunaAtualizacaoCadastral> lista = session.createQuery(sql.toString())
+		           .setInteger("idImovel",idImovel)
+		           .setShort("indicador", NAO)
+		           .list();
+			if (lista.size() > 0){
+				retorno = true;
+			}
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		return retorno;
 	}
 }

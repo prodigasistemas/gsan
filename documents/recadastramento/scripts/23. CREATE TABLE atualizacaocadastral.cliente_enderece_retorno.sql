@@ -1,6 +1,6 @@
 ﻿ 
 -- Table: atualizacaocadastral.cliente_endereco_retorno
- DROP TABLE atualizacaocadastral.cliente_endereco_retorno;
+-- DROP TABLE atualizacaocadastral.cliente_endereco_retorno;
  
 CREATE TABLE atualizacaocadastral.cliente_endereco_retorno
 (

@@ -23,7 +23,6 @@
 <script language="JavaScript" src="<bean:message key="caminho.js"/>Calendario.js"></script>
 
 <script language="JavaScript">
-<!-- Begin
 	function confirma() {    
 		var form = document.forms[0];
 		var valoresNao = "";
@@ -69,35 +68,55 @@
 			desmarcarTodos();
 		}
 	}
-	
--->
 </script>
 </head>
 
-<logic:present name="reload">
-	<body leftmargin="5" topmargin="5"
-		onload="window.close();">
-</logic:present>
-
-<logic:notPresent name="reload">
-	<body leftmargin="5" topmargin="5" onload="resizePageSemLink(1060, 480);">
-</logic:notPresent>
+<body leftmargin="5" topmargin="5">
 
 <html:form action="/atualizarDadosImovelAtualizacaoCadastralAction"
 	name="ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm"
-	type="gcom.gui.cadastro.ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm" method="post"
-	onsubmit="">
+	type="gcom.gui.cadastro.ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm" method="post">
+  
+<%@ include file="/jsp/util/cabecalho.jsp"%>
+<%@ include file="/jsp/util/menu.jsp" %>
+  
 	<html:hidden property="idRegistrosNaoAutorizados" />
 	<html:hidden property="idRegistrosAutorizados" />
 
 	<table width="1000" border="0" cellpadding="0" cellspacing="5">
 		<tr>
+      <td width="160" valign="top" class="leftcoltext">
+      <div align="center">
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <%@ include file="/jsp/util/informacoes_usuario.jsp"%>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+
+      <%@ include file="/jsp/util/mensagens.jsp"%>
+
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      </div>
+      </td>
+    
 			<td width="1000" valign="top" class="centercoltext">
-			<table height="100%">
-				<tr>
-					<td></td>
-				</tr>
-			</table>
 			<table width="100%" border="0" align="center" cellpadding="0"
 				cellspacing="0">
 				<tr>
@@ -222,13 +241,16 @@
 						name="Button" type="button" class="bottonRightCol" value="Confirmar"
 						onClick="confirma();">
 					<input name="Button2" type="button" class="bottonRightCol"
-						value="Fechar" onClick="window.close();"></div>
+						value="Fechar" onClick="window.location.href='/gsan/filtrarAlteracaoAtualizacaoCadastralAction.do'"></div>
 					</td>
 				</tr>
 			</table>
 			</td>
 		</tr>
 	</table>
+<%@ include file="/jsp/util/rodape.jsp"%>
+  
 </html:form>
+
 </body>
 </html:html>
