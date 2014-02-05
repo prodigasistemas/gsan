@@ -2682,7 +2682,7 @@ public class ControladorClienteSEJB implements SessionBean {
 			
 				cliente.setIdCliente((Integer) element[0]);					
 				
-				//cliente.setImovel(new Imovel(idImovel));
+				cliente.setIdImovel(idImovel);
 					
 				if (element[1] != null){
 					cliente.setNome((String) element[1]);
