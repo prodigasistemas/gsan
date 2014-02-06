@@ -242,7 +242,10 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 			atualizacao.getImovelAtual().addMensagemErro("Imóvel com situação 'APROVADO'");
 			atualizacao.getImovelAtual().setImovelAprovado(true);
 		} else {
-            controladorAtualizacaoCadastral.apagarInformacoesRetornoImovelAtualizacaoCadastral(atualizacao.getImovelAtual().getMatricula());
+			//Quando a matrícula não existe, ela é enviada com o valor negativo
+			if(atualizacao.getImovelAtual().getMatricula() > 0) {
+				controladorAtualizacaoCadastral.apagarInformacoesRetornoImovelAtualizacaoCadastral(atualizacao.getImovelAtual().getMatricula());
+			}
 		}
 		
 		testaUsuario(imovelAtual, linha);

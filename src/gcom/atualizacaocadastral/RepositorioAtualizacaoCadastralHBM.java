@@ -275,7 +275,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	public void apagarClienteRetorno(Collection<Integer> idsClientesRetorno) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		try {
-			String query = " DELETE FROM ClienteRetorno clieImovel where clieImovel.idClienteRetorno in (:idsClientesRetorno) ";
+			String query = " DELETE FROM ClienteRetorno ret where ret.id in (:idsClientesRetorno) ";
 			session.createQuery(query).setParameterList("idsClientesRetorno", idsClientesRetorno).executeUpdate();
 		}catch(HibernateException e) {
 			throw new ErroRepositorioException("Erro no Hibernate");
