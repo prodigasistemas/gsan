@@ -4,12 +4,14 @@ import gcom.batch.ControladorBatchLocal;
 import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
+import gcom.cadastro.cliente.RamoAtividade;
 import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.ControladorImovelLocalHome;
 import gcom.cadastro.imovel.IImovel;
 import gcom.cadastro.imovel.IImovelSubcategoria;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
+import gcom.cadastro.imovel.ImovelRamoAtividade;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.micromedicao.ControladorMicromedicaoLocal;
 import gcom.micromedicao.ControladorMicromedicaoLocalHome;
@@ -179,6 +181,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 				if (isImovelEmCampo(imovelRetorno.getIdImovel())) {
 					atualizarImovelAtualizacaoCadastral(imovelRetorno);
 					atualizarImovelSubcategoriaAtualizacaoCadastral(imovelRetorno);
+					//atualizarImovelRamoAtividadeAtualizacaoCadastral(imovelRetorno);
 				}
 			}
 			
@@ -188,6 +191,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		}
 	}
 	
+
 	private void atualizarImovelAtualizacaoCadastral(IImovel imovelRetorno) {
 		Imovel imovel;
 		try {
@@ -234,6 +238,50 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		}
 	}
 	
+//	private void atualizarImovelRamoAtividadeAtualizacaoCadastral(IImovel imovelRetorno) {
+//
+//		try {
+//			imovelRetorno.setId(imovelRetorno.getIdImovel());
+//			Imovel imovel = new Imovel(imovelRetorno.getIdImovel());
+//	
+//			Collection<IImovelRamoAtividade> ramosAtividadeRetorno = this.obterImovelRamoAtividadeParaAtualizar(imovel.getId());
+//			Collection<Integer> idsRamosAtividades = this.obterIdsRamosAtividadesImovel(imovel);
+//			
+//			
+//			for (IImovelRamoAtividade ramoAtividadeRetorno : ramosAtividadeRetorno) {
+//					ImovelRamoAtividade imovelRamoAtividade = this.obterRamoAtividadeDoImovel(imovel, ramoAtividadeRetorno.getComp_id().getRamo_atividade().getId());
+//					
+//					if (imovelRamoAtividade != null) {
+//						MergeProperties.mergeProperties(imovelRamoAtividade, ramoAtividadeRetorno);
+//						imovelRamoAtividade.setUltimaAlteracao(new Date());
+//						getControladorUtil().atualizar(imovelRamoAtividade);
+//						idsRamosAtividades.remove(imovelRamoAtividade.getComp_id().getRamo_atividade().getId());
+//					} else {
+//						
+//						imovelRamoAtividade = new ImovelRamoAtividade();
+//						MergeProperties.mergeProperties(imovelRamoAtividade, ramoAtividadeRetorno);
+//						getControladorUtil().inserir(imovelRamoAtividade);
+//					}
+//			}
+//			
+//			this.removerRamosAtividadeDoImovel(imovelRetorno, idsRamosAtividades);
+//		} catch (ControladorException e) {
+//			logger.error("Erro ao inserir subcategorias do imóvel " + imovelRetorno.getId());
+//		}
+//	
+//	}
+
+	private Collection<Integer> obterIdsRamosAtividadesImovel(Imovel imovel) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	private Collection<IImovelRamoAtividade> obterImovelRamoAtividadeParaAtualizar(
+			Integer id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 	private void removerSubcategoriasDoImovel(IImovel imovel, Collection<Integer> idsSubcategorias) {
 		for (Integer id : idsSubcategorias) {
 			try {
@@ -244,6 +292,24 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	private void removerRamosAtividadeDoImovel(IImovel imovel, Collection<Integer> idsRamosAtividades) {
+		for (Integer id : idsRamosAtividades) {
+			try {
+				ImovelRamoAtividade imovelRamoAtividade = this.obterRamoAtiviadeDoImovel(imovel, id);
+				
+				getControladorUtil().remover(imovelRamoAtividade);
+			} catch (ControladorException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+
+	private ImovelRamoAtividade obterRamoAtiviadeDoImovel(IImovel imovel,
+			Integer id) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	private ImovelSubcategoria obterSubcategoriaDoImovel(IImovel imovel, Integer idSubcategoria) {
@@ -262,6 +328,24 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		
 		return imovelSubcategoria;
 		
+	}
+	
+	private RamoAtividade obterRamoAtividadeDoImovel(Imovel imovel, Integer id) {
+
+		RamoAtividade ramoAtividadeRetorno = null;
+		try {
+			Collection<RamoAtividade> ramosAtividadeImovel = getControladorImovel().pesquisarRamoAtividadeDoImovel(imovel.getId());
+			
+			for (RamoAtividade ramoAtividade : ramosAtividadeImovel) {
+				if (ramoAtividade.getId().equals(id)) {
+					return ramoAtividade;
+				}
+			}
+		} catch (ControladorException e) {
+			logger.error("Erro ao consultar ramos atividade do imóvel" + imovel.getId());
+		}
+		
+		return ramoAtividadeRetorno;
 	}
 	
 	private Collection<Integer> obterIdsSubcategoriasImovel(IImovel imovel) throws ControladorException {
