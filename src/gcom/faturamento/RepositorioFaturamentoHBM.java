@@ -17251,7 +17251,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			updateParcelas = "update faturamento.credito_a_realizar set crar_nnprestacaorealizadas=crar_nnprestacaorealizadas - 1, "
 					+ " crar_tmultimaalteracao = ? "
-					+ " where crar_amreferenciaprestacao >= ? and crar_nnprestacaorealizadas > 0 and imov_id in ";
+					+ " where crar_amreferenciaprestacao >= ? and crar_nnprestacaorealizadas > 0 "
+					+ " and (crar_nnprestacaocredito > 1 or (crar_nnprestacaocredito = 1 and crar_vlresidualmesanterior = 0.00)) "
+					+ " and imov_id in ";
 			
 			updateResidual = "update faturamento.credito_a_realizar set crar_vlresidualmesanterior = coalesce(crar_vlresidualconcedidomes,0), "
 				+ "crar_vlresidualconcedidomes = null, crar_tmultimaalteracao = ? "
