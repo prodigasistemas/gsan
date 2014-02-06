@@ -83,14 +83,12 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	}
 
 	
-	public ImovelRetorno pesquisarImovelRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException {
+	public void apagarImovelRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		try{
-			String consulta = " SELECT imovelRetorno "
-							+ " FROM ImovelRetorno imovelRetorno "
+			String consulta = " DELETE FROM ImovelRetorno imovelRetorno "
 							+ " WHERE imovelRetorno.idImovel = :idImovel ";
-			return (ImovelRetorno) session.createQuery(consulta)
-							.setInteger("idImovel", idImovel).uniqueResult();
+			session.createQuery(consulta).setInteger("idImovel", idImovel).executeUpdate();
 		}catch (HibernateException e) {
 			throw new ErroRepositorioException("Erro no Hibernate");
 		} finally {
