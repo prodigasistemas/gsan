@@ -31,7 +31,7 @@ CREATE TABLE atualizacaocadastral.imovel_retorno
   imac_dscomplementoendereco character varying(25),
   imac_nnpontosutilizacao smallint,
   imac_nnmorador smallint,
-  imac_nniptu numeric(20,0),
+  imac_nniptu character varying(31),
   imac_nncoordenadax character varying(20),
   imac_nncoordenaday character varying(20),
   imac_nnhidrometro character(10),
