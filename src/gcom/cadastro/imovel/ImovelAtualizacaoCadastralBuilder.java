@@ -46,7 +46,19 @@ public class ImovelAtualizacaoCadastralBuilder {
 		imovelAtualizacaoCadastral.setComplementoEndereco(atualizacaoCadastralImovel.getLinhaImovel("complementoImovel"));
 		imovelAtualizacaoCadastral.setIdFonteAbastecimento(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("fonteAbastecimento")));
 		imovelAtualizacaoCadastral.setNumeroIptu(atualizacaoCadastralImovel.getLinhaImovel("numeroIPTU"));
-		imovelAtualizacaoCadastral.setNumeroContratoEnergia(atualizacaoCadastralImovel.getLinhaImovel("numeroCelpa").equals("") ? null : Long.parseLong(atualizacaoCadastralImovel.getLinhaImovel("numeroCelpa")));
+		
+		String contratoEnergia = atualizacaoCadastralImovel.getLinhaImovel("numeroCelpa");
+		
+		if (contratoEnergia.equals("")) {
+			imovelAtualizacaoCadastral.setNumeroContratoEnergia(null);
+		} else {
+			try {
+				imovelAtualizacaoCadastral.setNumeroContratoEnergia(Long.parseLong(contratoEnergia));
+			} catch (NumberFormatException e) {
+				imovelAtualizacaoCadastral.setNumeroContratoEnergia(null);
+			}
+		}
+		
 		imovelAtualizacaoCadastral.setIdLogradouroTipo(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("idTipoLogradouroImovel")));
 		imovelAtualizacaoCadastral.setDsLogradouroTipo(getDescricaoLogradouro(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("idTipoLogradouroImovel"))));
 		imovelAtualizacaoCadastral.setDescricaoLogradouro(atualizacaoCadastralImovel.getLinhaImovel("logradouroImovel"));

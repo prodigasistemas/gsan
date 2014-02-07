@@ -253,8 +253,12 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		if (!tipoClientFone.trim().equals("")) {
 			ClienteFoneAtualizacaoCadastral clienteFone = new ClienteFoneAtualizacaoCadastral();
 
-			clienteFone.setDdd(tipoClientFone.substring(0, 2));
-			clienteFone.setTelefone(tipoClientFone.substring(2));
+			if (tipoClientFone.length() > 2) {
+				clienteFone.setDdd(tipoClientFone.substring(0, 2));
+				clienteFone.setTelefone(tipoClientFone.substring(2));
+			} else {
+				clienteFone.setTelefone(tipoClientFone);
+			}
 			clienteFone.setIdFoneTipo(foneTipo);
 			clienteFone.setIdCliente(matriculaCliente);
 
