@@ -14,7 +14,7 @@ public class ValidadorTamanhoLinhaMedidorCommand extends ValidadorCommand {
 	@Override
 	public void execute() {
 		if (parser.getFonte().length() != 92){
-			cadastroImovel.addMensagemErro("A linha Tipo 05 não está compatível ao definido no leiaute");
+			cadastroImovel.addMensagemErroLayout("A linha Tipo 05 não está compatível ao definido no leiaute");
 		}
 	}
 }

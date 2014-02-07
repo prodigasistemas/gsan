@@ -3,8 +3,6 @@ package gcom.cadastro.atualizacaocadastral.validador;
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastralImovel;
 import gcom.util.ParserUtil;
 
-import java.util.Map;
-
 public class ValidadorTamanhoLinhaClienteCommand extends ValidadorCommand{
 	private ParserUtil parser;
 
@@ -16,7 +14,7 @@ public class ValidadorTamanhoLinhaClienteCommand extends ValidadorCommand{
 	@Override
 	public void execute() {
 		if (parser.getFonte().length() != 742){
-			cadastroImovel.addMensagemErro("A linha Tipo 01 não está compatível ao definido no leiaute");
+			cadastroImovel.addMensagemErroLayout("A linha Tipo 01 não está compatível ao definido no leiaute");
 		}
 	}
 }
