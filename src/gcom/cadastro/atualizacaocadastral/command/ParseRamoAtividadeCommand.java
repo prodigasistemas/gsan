@@ -2,7 +2,6 @@ package gcom.cadastro.atualizacaocadastral.command;
 
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.cadastro.IRepositorioCadastro;
-import gcom.cadastro.atualizacaocadastral.validador.ValidadorTamanhoLinhaClienteCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorTamanhoLinhaRamoAtividadeCommand;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.endereco.ControladorEnderecoLocal;
@@ -27,7 +26,7 @@ public class ParseRamoAtividadeCommand extends AbstractAtualizacaoCadastralComma
 		AtualizacaoCadastralImovel imovel = atualizacao.getImovelAtual();
 		
 		new ValidadorTamanhoLinhaRamoAtividadeCommand(parser, imovel).execute();
-		if(!imovel.cadastroInvalido()) {
+		if(!imovel.isErroLayout()) {
 
 			String matriculaImovelRamoAtividade = parser.obterDadoParser(9).trim();
 			linha.put("matriculaImovelRamoAtividade", matriculaImovelRamoAtividade);

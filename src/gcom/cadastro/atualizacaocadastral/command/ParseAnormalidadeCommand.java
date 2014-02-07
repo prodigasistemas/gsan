@@ -26,7 +26,7 @@ public class ParseAnormalidadeCommand extends AbstractAtualizacaoCadastralComman
 
 		new ValidadorTamanhoLinhaAnormalidadeCommand(parser, imovel).execute();
 
-		if(!imovel.cadastroInvalido()) {
+		if(!imovel.isErroLayout()) {
 
 			String matriculaImovelAnormalidade = parser.obterDadoParser(9).trim();
 			linha.put("matriculaImovelAnormalidade", matriculaImovelAnormalidade);
