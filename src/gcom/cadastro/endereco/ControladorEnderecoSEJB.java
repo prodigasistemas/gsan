@@ -5126,11 +5126,17 @@ public class ControladorEnderecoSEJB implements SessionBean {
 							+ arrayEndereco[23]);
 					logradouro.setLogradouroTitulo(logradouroTitulo);
 				}
+				
+				Cep cep = null;
 				if (arrayEndereco[10] != null) {
+					cep = new Cep();
+					cep.setCepId((Integer) arrayEndereco[10]);
+					cep.setCodigo((Integer) arrayEndereco[16]);
 					cepFormatado = "" + (Integer) arrayEndereco[16];
 				}
 		
 				logradouroCep.setLogradouro(logradouro);
+				logradouroCep.setCep(cep);
 			}
 		
 			clienteEndereco.setLogradouroCep(logradouroCep);
