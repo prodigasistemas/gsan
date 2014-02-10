@@ -2834,7 +2834,7 @@ public class ControladorClienteSEJB implements SessionBean {
 					cliente.setComplementoEndereco(trunk);
 				}
 				
-				cliente.getClienteTipo().setId((new Integer(idClienteRelacaoTipo)));
+				cliente.setIdClienteRelacaoTipo(new Integer(idClienteRelacaoTipo));
 				
 			}
 			

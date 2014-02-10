@@ -43,7 +43,7 @@ public class ParseMedidorCommand extends AbstractAtualizacaoCadastralCommand {
 		
 		new ValidadorTamanhoLinhaMedidorCommand(parser, imovel).execute();
 		
-		if(icImovelPossuiMedidor.equals("1") && !imovel.cadastroInvalido()){
+		if(icImovelPossuiMedidor.equals("1") && !imovel.isErroLayout()){
 			numeroHidrometro = parser.obterDadoParser(10).trim();
 			linha.put("numeroHidrometro", numeroHidrometro);
 

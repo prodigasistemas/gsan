@@ -431,12 +431,8 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 	}
 
 	private void apagarImovelRetorno(Integer idImovel) throws ControladorException {
-		ImovelRetorno imovelRetorno;
 		try {
-			imovelRetorno = repositorioAtualizacaoCadastral.pesquisarImovelRetornoPorIdImovel(idImovel);
-			if(imovelRetorno != null) {
-				this.getControladorUtil().remover(imovelRetorno);
-			}
+			repositorioAtualizacaoCadastral.apagarImovelRetornoPorIdImovel(idImovel);
 		} catch (ErroRepositorioException e) {
 			e.printStackTrace();
 		}

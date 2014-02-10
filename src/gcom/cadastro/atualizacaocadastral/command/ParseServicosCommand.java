@@ -26,7 +26,7 @@ public class ParseServicosCommand extends AbstractAtualizacaoCadastralCommand {
 		
 		new ValidadorTamanhoLinhaServicosCommand(parser, imovel).execute();
 		
-		if(!imovel.cadastroInvalido()) {
+		if(!imovel.isErroLayout()) {
 
 			String matriculaImovelServicos = parser.obterDadoParser(9).trim();
 			linha.put("matriculaImovelServicos", matriculaImovelServicos);

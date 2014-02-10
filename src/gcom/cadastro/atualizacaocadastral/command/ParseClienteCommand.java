@@ -48,7 +48,7 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		
 		new ValidadorTamanhoLinhaClienteCommand(parser,imovelAtual).execute();;
 		
-		if(!imovelAtual.cadastroInvalido()) {
+		if(!imovelAtual.isErroLayout()) {
 
 			String matriculaImovelCliente = parser.obterDadoParser(9).trim();
 			linha.put("matriculaImovelCliente", matriculaImovelCliente);
@@ -242,7 +242,10 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 			atualizacao.getImovelAtual().addMensagemErro("Imóvel com situação 'APROVADO'");
 			atualizacao.getImovelAtual().setImovelAprovado(true);
 		} else {
-            controladorAtualizacaoCadastral.apagarInformacoesRetornoImovelAtualizacaoCadastral(atualizacao.getImovelAtual().getMatricula());
+			//Quando a matrícula não existe, ela é enviada com o valor negativo
+			if(atualizacao.getImovelAtual().getMatricula() > 0) {
+				controladorAtualizacaoCadastral.apagarInformacoesRetornoImovelAtualizacaoCadastral(atualizacao.getImovelAtual().getMatricula());
+			}
 		}
 		
 		testaUsuario(imovelAtual, linha);

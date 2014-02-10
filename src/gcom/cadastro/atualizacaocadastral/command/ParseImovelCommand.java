@@ -43,7 +43,7 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 		
 		new ValidadorTamanhoLinhaImovelCommand(parser, imovel).execute();
 		
-		if(!imovel.cadastroInvalido()) {
+		if(!imovel.isErroLayout()) {
 
 			Integer matricula = Integer.parseInt(parser.obterDadoParser(9).trim());
 			linha.put("matricula", "" + matricula);

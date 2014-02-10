@@ -7603,7 +7603,7 @@ public class ControladorCadastro implements SessionBean {
 					leiturista.getEmpresa().getId(), idRota);
 
 			if (idsImoveis == null || idsImoveis.isEmpty()) {
-				System.out.println("Nenhum imï¿½vel encontrado. ARQUIVO Nï¿½O GERADO");
+				System.out.println("Nenhum imóvel encontrado. ARQUIVO NÃO GERADO");
 				getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 			} else {
 				Rota rota = getControladorMicromedicao().pesquisarRota(idRota);
@@ -8580,7 +8580,7 @@ public class ControladorCadastro implements SessionBean {
 			}
 
 			// Sexo do Cliente (1-Masculino/2-Feminino)
-			if (clienteUsuario.getPessoaSexo() != null
+			if (clienteUsuario.getPessoaSexo() != null && clienteUsuario.getPessoaSexo().getId() != null
 					&& !clienteUsuario.getPessoaSexo().getId().equals("")) {
 				arquivoTextoRegistroTipoCliente.append(clienteUsuario
 						.getPessoaSexo().getId());
@@ -8754,7 +8754,7 @@ public class ControladorCadastro implements SessionBean {
 			}
 
 			// Sexo do Cliente (1-Masculino/2-Feminino)
-			if (clienteProprietario.getPessoaSexo() != null
+			if (clienteProprietario.getPessoaSexo() != null && clienteProprietario.getPessoaSexo().getId() != null
 					&& !clienteProprietario.getPessoaSexo().getId().equals("")) {
 				arquivoTextoRegistroTipoCliente.append(clienteProprietario
 						.getPessoaSexo().getId());
@@ -8989,7 +8989,7 @@ public class ControladorCadastro implements SessionBean {
 			}
 
 			// Sexo do Cliente (1-Masculino/2-Feminino)
-			if (clienteResponsavel.getPessoaSexo() != null
+			if (clienteResponsavel.getPessoaSexo() != null && clienteResponsavel.getPessoaSexo().getId() != null
 					&& !clienteResponsavel.getPessoaSexo().getId().equals("")) {
 				arquivoTextoRegistroTipoCliente.append(clienteResponsavel
 						.getPessoaSexo().getId());

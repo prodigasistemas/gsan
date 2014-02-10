@@ -83,14 +83,12 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	}
 
 	
-	public ImovelRetorno pesquisarImovelRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException {
+	public void apagarImovelRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		try{
-			String consulta = " SELECT imovelRetorno "
-							+ " FROM ImovelRetorno imovelRetorno "
+			String consulta = " DELETE FROM ImovelRetorno imovelRetorno "
 							+ " WHERE imovelRetorno.idImovel = :idImovel ";
-			return (ImovelRetorno) session.createQuery(consulta)
-							.setInteger("idImovel", idImovel).uniqueResult();
+			session.createQuery(consulta).setInteger("idImovel", idImovel).executeUpdate();
 		}catch (HibernateException e) {
 			throw new ErroRepositorioException("Erro no Hibernate");
 		} finally {
@@ -275,7 +273,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	public void apagarClienteRetorno(Collection<Integer> idsClientesRetorno) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		try {
-			String query = " DELETE FROM ClienteRetorno clieImovel where clieImovel.idClienteRetorno in (:idsClientesRetorno) ";
+			String query = " DELETE FROM ClienteRetorno ret where ret.id in (:idsClientesRetorno) ";
 			session.createQuery(query).setParameterList("idsClientesRetorno", idsClientesRetorno).executeUpdate();
 		}catch(HibernateException e) {
 			throw new ErroRepositorioException("Erro no Hibernate");
