@@ -49,7 +49,6 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private short subLote;
 	
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer numeroSequencialRota;
 	
     @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
@@ -58,10 +57,8 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
     @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private String dsLogradouroTipo;
 	
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idLogradouroTitulo;
 	
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private String dsLogradouroTitulo;
     
     @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
@@ -81,7 +78,6 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
     @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private String complementoEndereco;
 	
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idEnderecoReferencia;
 
     private Integer idDespejo;
@@ -90,10 +86,8 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 
     private BigDecimal volumeReservatorioInferior;
 
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idPavimentoCalcada;
 
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idPavimentoRua;
 
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
@@ -105,7 +99,6 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idLigacaoEsgotoSituacao;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idImovelPerfil;
 
     private BigDecimal volumePiscina;
@@ -153,7 +146,6 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private String numeroHidrometro;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
 	private Short indicadorCavalete;
 	
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})

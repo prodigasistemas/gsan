@@ -60,6 +60,14 @@ import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastr
 import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.Interceptador;
 import gcom.interceptor.ObjetoTransacao;
+import gcom.micromedicao.hidrometro.FiltroHidrometroCapacidade;
+import gcom.micromedicao.hidrometro.FiltroHidrometroLocalInstalacao;
+import gcom.micromedicao.hidrometro.FiltroHidrometroMarca;
+import gcom.micromedicao.hidrometro.FiltroHidrometroProtecao;
+import gcom.micromedicao.hidrometro.HidrometroCapacidade;
+import gcom.micromedicao.hidrometro.HidrometroLocalInstalacao;
+import gcom.micromedicao.hidrometro.HidrometroMarca;
+import gcom.micromedicao.hidrometro.HidrometroProtecao;
 import gcom.seguranca.AtributoGrupo;
 import gcom.seguranca.acesso.FiltroOperacao;
 import gcom.seguranca.acesso.FiltroOperacaoTabela;
@@ -1342,22 +1350,6 @@ public class ControladorTransacaoSEJB implements SessionBean {
 					LigacaoEsgotoSituacao ligacaoEsgotoSituacao = (LigacaoEsgotoSituacao) Util.retonarObjetoDeColecao(pesquisa);
 					retorno = ligacaoEsgotoSituacao.getDescricao();
 				}				
-			}else if(coluna.equals("pcal_id")){
-				FiltroPavimentoCalcada filtroPavimentoCalcada = new FiltroPavimentoCalcada();
-				filtroPavimentoCalcada.adicionarParametro(new ParametroSimples(FiltroPavimentoCalcada.ID, campo));
-				Collection pesquisa = getControladorUtil().pesquisar(filtroPavimentoCalcada, PavimentoCalcada.class.getName());
-				if (pesquisa != null && !pesquisa.isEmpty()) {
-					PavimentoCalcada pavimentoCalcada = (PavimentoCalcada) Util.retonarObjetoDeColecao(pesquisa);
-					retorno = pavimentoCalcada.getDescricao();				
-				}
-			}else if(coluna.equals("prua_id")){
-				FiltroPavimentoRua filtroPavimentoRua = new FiltroPavimentoRua();
-				filtroPavimentoRua.adicionarParametro(new ParametroSimples(FiltroPavimentoRua.ID, campo));
-				Collection pesquisa = getControladorUtil().pesquisar(filtroPavimentoRua, PavimentoRua.class.getName());
-				if (pesquisa != null && !pesquisa.isEmpty()) {
-					PavimentoRua pavimentoRua = (PavimentoRua) Util.retonarObjetoDeColecao(pesquisa);
-					retorno = pavimentoRua.getDescricao();				
-				}				
 			}else if(coluna.equals("ftab_id")){
 				FiltroFonteAbastecimento filtroFonteAbastecimento = new FiltroFonteAbastecimento();
 				filtroFonteAbastecimento.adicionarParametro(new ParametroSimples(FiltroFonteAbastecimento.ID, campo));
@@ -1430,7 +1422,39 @@ public class ControladorTransacaoSEJB implements SessionBean {
 					CadastroOcorrencia cadastroOcorrencia = (CadastroOcorrencia) Util.retonarObjetoDeColecao(pesquisa);
 					retorno = cadastroOcorrencia.getDescricao();				
 				}					
-			}					
+			} else if (coluna.equals("hicp_id")) {
+				FiltroHidrometroCapacidade filtroHidrometroCapacidade = new FiltroHidrometroCapacidade();
+				filtroHidrometroCapacidade.adicionarParametro(new ParametroSimples(FiltroHidrometroCapacidade.ID, campo));
+				Collection pesquisa = getControladorUtil().pesquisar(filtroHidrometroCapacidade, HidrometroCapacidade.class.getName());
+				if (pesquisa != null && !pesquisa.isEmpty()) {
+					HidrometroCapacidade hidrometroCapacidade = (HidrometroCapacidade) Util.retonarObjetoDeColecao(pesquisa);
+					retorno = hidrometroCapacidade.getDescricao();				
+				}
+			} else if (coluna.equals("himc_id")) {
+				FiltroHidrometroMarca filtroHidrometroMarca = new FiltroHidrometroMarca();
+				filtroHidrometroMarca.adicionarParametro(new ParametroSimples(FiltroHidrometroMarca.ID, campo));
+				Collection pesquisa = getControladorUtil().pesquisar(filtroHidrometroMarca, HidrometroMarca.class.getName());
+				if (pesquisa != null && !pesquisa.isEmpty()) {
+					HidrometroMarca hidrometroMarca = (HidrometroMarca) Util.retonarObjetoDeColecao(pesquisa);
+					retorno = hidrometroMarca.getDescricao();				
+				}
+			} else if (coluna.equals("hili_id")) {
+				FiltroHidrometroLocalInstalacao filtroHidrometroLocalInstalacao = new FiltroHidrometroLocalInstalacao();
+				filtroHidrometroLocalInstalacao.adicionarParametro(new ParametroSimples(FiltroHidrometroLocalInstalacao.ID, campo));
+				Collection pesquisa = getControladorUtil().pesquisar(filtroHidrometroLocalInstalacao, HidrometroLocalInstalacao.class.getName());
+				if (pesquisa != null && !pesquisa.isEmpty()) {
+					HidrometroLocalInstalacao hidrometroLocalInstalacao = (HidrometroLocalInstalacao) Util.retonarObjetoDeColecao(pesquisa);
+					retorno = hidrometroLocalInstalacao.getDescricao();				
+				}
+			} else if (coluna.equals("hipr_id")) {
+				FiltroHidrometroProtecao filtroHidrometroProtecao = new FiltroHidrometroProtecao();
+				filtroHidrometroProtecao.adicionarParametro(new ParametroSimples(FiltroHidrometroProtecao.ID, campo));
+				Collection pesquisa = getControladorUtil().pesquisar(filtroHidrometroProtecao, HidrometroProtecao.class.getName());
+				if (pesquisa != null && !pesquisa.isEmpty()) {
+					HidrometroProtecao hidrometroProtecao = (HidrometroProtecao) Util.retonarObjetoDeColecao(pesquisa);
+					retorno = hidrometroProtecao.getDescricao();				
+				}
+			}
 		}
 		return retorno;
 	}
