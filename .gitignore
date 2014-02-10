@@ -12,3 +12,7 @@ build.properties
 gcom/jsp/util/rodape.jsp
 documents/recadastramento/layouts/~$Layout_Retorno_Cadastro.xlsx
 src/gcom/properties/version.properties
+scripts/build/build_gcom_desenv.sh
+scripts/build/build_gcom_homolog.sh
+scripts/build/build_gcom_prod_online.sh
+scripts/build/build_gcom_prod_batch.sh
