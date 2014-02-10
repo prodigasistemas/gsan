@@ -42,7 +42,7 @@ public class ValidadorTipoPessoaCommand extends ValidadorCommand {
 		if (StringUtils.isNotEmpty(linha.get("cnpjCpfUsuario"))){
 			if (tipoPessoaValido(linha.get("tipoPessoaUsuario"), MSG_TIPO_PESSOA_USUARIO)){
 				validarCpfCnpj("Usuario");
-				validarTipoCadastrado("Usuario", ClienteRelacaoTipo.USUARIO);
+//				validarTipoCadastrado("Usuario", ClienteRelacaoTipo.USUARIO);
 			}
 			
 		}
@@ -50,14 +50,14 @@ public class ValidadorTipoPessoaCommand extends ValidadorCommand {
 		if (StringUtils.isNotEmpty(linha.get("nomeProprietario"))){
 			if (tipoPessoaValido(linha.get("tipoPessoaProprietario"), MSG_TIPO_PESSOA_PROPRIETARIO)){
 				validarCpfCnpj("Proprietario");
-				validarTipoCadastrado("Proprietario", ClienteRelacaoTipo.PROPRIETARIO);
+//				validarTipoCadastrado("Proprietario", ClienteRelacaoTipo.PROPRIETARIO);
 			}
 		}
 
 		if (StringUtils.isNotEmpty(linha.get("nomeResponsavel"))){
 			if (tipoPessoaValido(linha.get("tipoPessoaResponsavel"), MSG_TIPO_PESSOA_RESPONSAVEL)){
 				validarCpfCnpj("Responsavel");
-				validarTipoCadastrado("Responsavel", ClienteRelacaoTipo.RESPONSAVEL);
+//				validarTipoCadastrado("Responsavel", ClienteRelacaoTipo.RESPONSAVEL);
 			}
 		}
 	}
