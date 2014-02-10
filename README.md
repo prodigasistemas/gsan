@@ -17,7 +17,7 @@ Módulos do GSAN
 * Módulo de Arrecadação
 * Módulo de Atendimento ao Público
 
-Processo de Build
+Scripts de Build
 ===
 
 Atualmente o GSAN possui um script Anti [build.xml](https://github.com/prodigasistemas/gsan/blob/master/build.xml) que realiza o processo de build para o Jboss que será utilizado para inicializar a aplicação.
