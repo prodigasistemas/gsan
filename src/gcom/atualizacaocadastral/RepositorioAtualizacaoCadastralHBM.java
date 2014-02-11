@@ -1,6 +1,7 @@
 package gcom.atualizacaocadastral;
 
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
+import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.imovel.IImovel;
 import gcom.cadastro.imovel.IImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
@@ -79,6 +80,60 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	
 		
 	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<IImovelRamoAtividade> obterImovelRamoAtividadeParaAtualizar(Integer idImovel) throws ErroRepositorioException { 
+		
+		Collection<IImovelRamoAtividade> retorno = null;
+		Session session = HibernateUtil.getSession();
+		
+		String consulta = null;
+		
+		try {
+			
+			consulta = "from ImovelRamoAtividadeRetorno imovelRamoAtividade"
+					+ " where imovelRamoAtividade.comp_id.imovel.id = :idImovel " ;
+			
+			retorno = (Collection<IImovelRamoAtividade>) session.createQuery(consulta).setInteger("idImovel", idImovel).list();
+		} catch (HibernateException e) {
+			e.printStackTrace();
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		return retorno;
+	
+		
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<IClienteFone> obterClienterFoneParaAtualizar(Integer idImovel) throws ErroRepositorioException {
+		Collection<IClienteFone> retorno = null;
+		Session session = HibernateUtil.getSession();
+		
+		String consulta = null;
+		
+		try {
+			consulta = "select clienteFoneRetorno " 
+					+ "from ClienteImovelRetorno clienteImovelRetorno "
+					+ " inner join clienteImovelRetorno.cliente cliente "
+					+ " inner join clienteImovelRetorno.imovel imovel " 
+					+ " inner join clienteFoneRetorno clienteFoneRetorno"
+					+ " where imovel.id in " 
+						+ " ( select imovelControle.imovel.id from ImovelControleAtualizacaoCadastral imovelControle "
+						+ " where imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  + ") " ;
+		;
+			
+			retorno = (Collection<IClienteFone>) session.createQuery(consulta).list();
+		} catch (HibernateException e) {
+			e.printStackTrace();
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		return retorno;
+	}
+
 
 	
 	public void apagarImovelRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException {

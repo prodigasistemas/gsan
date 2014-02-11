@@ -31370,35 +31370,20 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
      * @date 21/03/2012
 	 * @exception ErroRepositorioException
 	 */
-	public Collection pesquisarRamoAtividadeDoImovel(Integer idImovel)
-			throws ErroRepositorioException {
+	public Collection<ImovelRamoAtividade> pesquisarRamoAtividadeDoImovel(Integer idImovel) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
 		String consulta;
-		Collection<RamoAtividade> colecaoRamoAtividadeImovel = new ArrayList<RamoAtividade>();
-		Collection retornoConsulta = null;
+		Collection<ImovelRamoAtividade> colecaoRamoAtividadeImovel = new ArrayList<ImovelRamoAtividade>();
 
 		try {
-			consulta = "select ratv_id as ramoAtividade "
-					+ "from cadastro.imovel_ramo_atividade "
-					+ "where imov_id = :idImovel";
+			consulta = "from ImovelRamoAtividade ramoAtividade "
+					+ "where ramoAtividade.comp_id.imovel.id = :idImovel";
 
-			retornoConsulta = session.createSQLQuery(consulta)
-					.addScalar("ramoAtividade", Hibernate.INTEGER)
+			colecaoRamoAtividadeImovel = session.createQuery(consulta)
 					.setInteger("idImovel", idImovel)
 					.list();
 
-			if (retornoConsulta.size() > 0) {
-				Iterator imovelRamoAtividadeIter = retornoConsulta.iterator();
-				while (imovelRamoAtividadeIter.hasNext()) {
-					Integer idRamoAtividade = (Integer) imovelRamoAtividadeIter.next();
-
-					RamoAtividade ramoAtividade = new RamoAtividade();
-					ramoAtividade.setId(idRamoAtividade);
-
-					colecaoRamoAtividadeImovel.add(ramoAtividade);
-				}
-			}
 		} catch (HibernateException e) {
 			e.printStackTrace();
 			throw new ErroRepositorioException("Erro no Hibernate");
