@@ -316,6 +316,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		ImovelSubcategoriaRetorno imovelSubcategoriaRetorno = new ImovelSubcategoriaRetorno();
 		imovelSubcategoriaRetorno.setImovel(imovelSubcategoriaTxt.getImovel());
 		imovelSubcategoriaRetorno.setSubcategoria(imovelSubcategoriaTxt.getSubcategoria());
+		imovelSubcategoriaRetorno.setQuantidadeEconomias(imovelSubcategoriaTxt.getQuantidadeEconomias());
 		imovelSubcategoriaRetorno.setUltimaAlteracao(new Date());
 		imovelSubcategoriaRetorno.setIdImovelRetorno(idImovelRetorno);
 		controladorUtil.inserir(imovelSubcategoriaRetorno);
