@@ -53,9 +53,6 @@ CREATE TABLE atualizacaocadastral.imovel_retorno
       ON UPDATE RESTRICT ON DELETE RESTRICT,
   CONSTRAINT fk3_imovel_retorno FOREIGN KEY (hipr_id)
       REFERENCES micromedicao.hidrometro_protecao (hipr_id) MATCH SIMPLE
-      ON UPDATE RESTRICT ON DELETE RESTRICT,
-  CONSTRAINT fk4_imovel_retorno FOREIGN KEY (imov_id)
-      REFERENCES cadastro.imovel (imov_id) MATCH SIMPLE
       ON UPDATE RESTRICT ON DELETE RESTRICT
 )
 WITH (

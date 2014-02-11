@@ -105,25 +105,7 @@ INSERT INTO seguranca.tabela_coluna(
 INSERT INTO seguranca.tabela_coluna(
             tbco_id, tabe_id, tbco_tmultimaalteracao, tbco_nmcoluna, tbco_dscoluna, 
             tbco_icprimarykey, tbco_nmabreviado, atrb_id)
-    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 661, now(), 'edrf_id', 'Id Endereco Referencia', 
-            2, 'edrf_id', null);
-
-INSERT INTO seguranca.tabela_coluna(
-            tbco_id, tabe_id, tbco_tmultimaalteracao, tbco_nmcoluna, tbco_dscoluna, 
-            tbco_icprimarykey, tbco_nmabreviado, atrb_id)
-    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 661, now(), 'pcal_id', 'Id pavimento Calcada', 
-            2, 'pcal_id', null);
-
-INSERT INTO seguranca.tabela_coluna(
-            tbco_id, tabe_id, tbco_tmultimaalteracao, tbco_nmcoluna, tbco_dscoluna, 
-            tbco_icprimarykey, tbco_nmabreviado, atrb_id)
-    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 661, now(), 'prua_id', 'Id do Pavimento da Rua', 
-            2, 'prua_id', null);
-
-INSERT INTO seguranca.tabela_coluna(
-            tbco_id, tabe_id, tbco_tmultimaalteracao, tbco_nmcoluna, tbco_dscoluna, 
-            tbco_icprimarykey, tbco_nmabreviado, atrb_id)
-    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 661, now(), 'ftab_id', 'Id Fonte Abastecimento', 
+    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 661, now(), 'ftab_id', 'Fonte de Abastecimento', 
             2, 'ftab_id', null);
 
 INSERT INTO seguranca.tabela_coluna(
@@ -137,18 +119,6 @@ INSERT INTO seguranca.tabela_coluna(
             tbco_icprimarykey, tbco_nmabreviado, atrb_id)
     VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 661, now(), 'lest_id', 'Situacao Ligacao Esgoto', 
             2, 'lest_id', null);
-
---INSERT INTO seguranca.tabela_coluna(
---            tbco_id, tabe_id, tbco_tmultimaalteracao, tbco_nmcoluna, tbco_dscoluna, 
---            tbco_icprimarykey, tbco_nmabreviado, atrb_id)
---    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 661, now(), 'iper_id', 'id do perfil do imovel', 
---            2, 'iper_id', null);
-
---INSERT INTO seguranca.tabela_coluna(
---            tbco_id, tabe_id, tbco_tmultimaalteracao, tbco_nmcoluna, tbco_dscoluna, 
---            tbco_icprimarykey, tbco_nmabreviado, atrb_id)
---    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 661, now(), 'poco_id', 'id do tipo de poco', 
---            2, 'poco_id', null);
 
 INSERT INTO seguranca.tabela_coluna(
             tbco_id, tabe_id, tbco_tmultimaalteracao, tbco_nmcoluna, tbco_dscoluna, 
@@ -165,37 +135,31 @@ INSERT INTO seguranca.tabela_coluna(
 INSERT INTO seguranca.tabela_coluna(
             tbco_id, tabe_id, tbco_tmultimaalteracao, tbco_nmcoluna, tbco_dscoluna, 
             tbco_icprimarykey, tbco_nmabreviado, atrb_id)
-    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 661, now(), 'imac_nncontratoenergia', 'Numero Contrato Energia', 
-            2, 'imac_nncontratoenergia', null);
-
-INSERT INTO seguranca.tabela_coluna(
-            tbco_id, tabe_id, tbco_tmultimaalteracao, tbco_nmcoluna, tbco_dscoluna, 
-            tbco_icprimarykey, tbco_nmabreviado, atrb_id)
-    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 661, now(), 'imac_nncoordenadax', 'Coordenada X', 
+    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 661, now(), 'imac_nncoordenadax', 'Latidude', 
             2, 'imac_nncoordenadax', null);
 
 INSERT INTO seguranca.tabela_coluna(
             tbco_id, tabe_id, tbco_tmultimaalteracao, tbco_nmcoluna, tbco_dscoluna, 
             tbco_icprimarykey, tbco_nmabreviado, atrb_id)
-    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 661, now(), 'imac_nncoordenaday', 'Coordenada Y', 
+    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 661, now(), 'imac_nncoordenaday', 'Longitude', 
             2, 'imac_nncoordenadax', null);
 
 INSERT INTO seguranca.tabela_coluna(
             tbco_id, tabe_id, tbco_tmultimaalteracao, tbco_nmcoluna, tbco_dscoluna, 
             tbco_icprimarykey, tbco_nmabreviado, atrb_id)
-    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 661, now(), 'hicp_id', 'Id Capacidade Hidrometro', 
+    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 661, now(), 'hicp_id', 'Capacidade Hidrometro', 
             2, 'hicp_id', null);
 
 INSERT INTO seguranca.tabela_coluna(
             tbco_id, tabe_id, tbco_tmultimaalteracao, tbco_nmcoluna, tbco_dscoluna, 
             tbco_icprimarykey, tbco_nmabreviado, atrb_id)
-    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 661, now(), 'himc_id', 'Id Marca Hidrometro', 
+    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 661, now(), 'himc_id', 'Marca Hidrometro', 
             2, 'himc_id', null);
 
 INSERT INTO seguranca.tabela_coluna(
             tbco_id, tabe_id, tbco_tmultimaalteracao, tbco_nmcoluna, tbco_dscoluna, 
             tbco_icprimarykey, tbco_nmabreviado, atrb_id)
-    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 661, now(), 'hili_id', 'Id Local Instal Hidromet', 
+    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 661, now(), 'hili_id', 'Local Instalacao Hidrometro', 
             2, 'hili_id', null);
 
 INSERT INTO seguranca.tabela_coluna(
@@ -204,11 +168,6 @@ INSERT INTO seguranca.tabela_coluna(
     VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 661, now(), 'imac_nnhidrometro', 'Numero do Hidrometro', 
             2, 'imac_nnhidrometro', null);
 
-INSERT INTO seguranca.tabela_coluna(
-            tbco_id, tabe_id, tbco_tmultimaalteracao, tbco_nmcoluna, tbco_dscoluna, 
-            tbco_icprimarykey, tbco_nmabreviado, atrb_id)
-    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 661, now(), 'imac_iccavalete', 'Indicador de Cavalete', 
-            2, 'imac_iccavalete', null);
 
 INSERT INTO seguranca.tabela_coluna(
             tbco_id, tabe_id, tbco_tmultimaalteracao, tbco_nmcoluna, tbco_dscoluna, 
@@ -219,7 +178,7 @@ INSERT INTO seguranca.tabela_coluna(
 INSERT INTO seguranca.tabela_coluna(
             tbco_id, tabe_id, tbco_tmultimaalteracao, tbco_nmcoluna, tbco_dscoluna, 
             tbco_icprimarykey, tbco_nmabreviado, atrb_id)
-    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 661, now(), 'cocr_id', 'Id Ocorrencia Cadastro', 
+    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 661, now(), 'cocr_id', 'Ocorrencia de Cadastro', 
             2, 'cocr_id', null);
 
 INSERT INTO seguranca.tabela_coluna(
@@ -231,13 +190,13 @@ INSERT INTO seguranca.tabela_coluna(
 INSERT INTO seguranca.tabela_coluna(
             tbco_id, tabe_id, tbco_tmultimaalteracao, tbco_nmcoluna, tbco_dscoluna, 
             tbco_icprimarykey, tbco_nmabreviado, atrb_id)
-    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 661, now(), 'imac_nmentrevistado', 'Nome do Estrevistado', 
+    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 661, now(), 'imac_tipoentrevistado', 'Entrevistado', 
             2, 'imac_nsentrevistado', null);
 
 INSERT INTO seguranca.tabela_coluna(
             tbco_id, tabe_id, tbco_tmultimaalteracao, tbco_nmcoluna, tbco_dscoluna, 
             tbco_icprimarykey, tbco_nmabreviado, atrb_id)
-    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 661, now(), 'rlin_id', 'Id de Local de Instalacao', 
+    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 661, now(), 'rlin_id', 'Local Instalacao de Ramal', 
             2, 'rlin_id', null);
 
 INSERT INTO seguranca.tabela_coluna(
@@ -245,6 +204,12 @@ INSERT INTO seguranca.tabela_coluna(
            tbco_icprimarykey, tbco_nmabreviado, atrb_id)
    VALUES ((SELECT max(tbco_id)+1 from seguranca.tabela_coluna),661, now(), 'imac_nnpontosutilizacao', 'Numero Pontos Utilizacao',
 	   2, 'imac_nnpontosutilizacao', null);
+
+INSERT INTO seguranca.tabela_coluna(
+           tbco_id, tabe_id, tbco_tmultimaalteracao, tbco_nmcoluna, tbco_dscoluna, 
+           tbco_icprimarykey, tbco_nmabreviado, atrb_id)
+   VALUES ((SELECT max(tbco_id)+1 from seguranca.tabela_coluna),661, now(), 'hipr_id', 'Protecao Hidrometro',
+	   2, 'hipr_id', null);
 
 
 

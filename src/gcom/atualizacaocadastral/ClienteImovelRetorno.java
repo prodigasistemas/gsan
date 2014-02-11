@@ -3,7 +3,6 @@ package gcom.atualizacaocadastral;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.IClienteAtualizacaoCadastral;
-import gcom.cadastro.imovel.IImovel;
 import gcom.cadastro.imovel.Imovel;
 
 import java.util.Date;

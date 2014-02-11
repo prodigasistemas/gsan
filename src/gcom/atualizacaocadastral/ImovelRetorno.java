@@ -5,7 +5,6 @@ import gcom.cadastro.imovel.FonteAbastecimento;
 import gcom.cadastro.imovel.IImovel;
 import gcom.micromedicao.hidrometro.HidrometroProtecao;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public class ImovelRetorno implements IImovel{
@@ -36,6 +35,10 @@ public class ImovelRetorno implements IImovel{
 		
 	}
 	
+	public ImovelRetorno(Integer id) {
+		this.id = id;
+	}
+
 	public ImovelRetorno (IImovel imovelAtualizacaoCadastral) {
 		this.numeroImovel = imovelAtualizacaoCadastral.getNumeroImovel();
 		this.complementoEndereco = imovelAtualizacaoCadastral.getComplementoEndereco();
