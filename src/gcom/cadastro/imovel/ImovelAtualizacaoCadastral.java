@@ -288,6 +288,10 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 
 	public ImovelAtualizacaoCadastral(){    	
     }
+	
+	public ImovelAtualizacaoCadastral(Integer idImovel) {
+		this.idImovel = idImovel;
+	}
 
 	public Integer getId() {
 		return id;

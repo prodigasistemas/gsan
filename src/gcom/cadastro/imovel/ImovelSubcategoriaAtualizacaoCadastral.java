@@ -19,16 +19,16 @@ public class ImovelSubcategoriaAtualizacaoCadastral extends ObjetoTransacao impl
 
     private Integer id;    
 
-    private Integer idImovel;
-    
-//	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private Integer idCategoria;
+	private Imovel imovel;
+
+	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+    private Categoria categoria;
+
+	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+    private Subcategoria subcategoria;
 
 //	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private String descricaoCategoria;
-    
-//	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private Integer idSubcategoria;
 	
 //	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private String descricaoSubcategoria;
@@ -36,22 +36,18 @@ public class ImovelSubcategoriaAtualizacaoCadastral extends ObjetoTransacao impl
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private short quantidadeEconomias;
 
-	private ImovelSubcategoriaPK comp_id;
-	
     /** persistent field */
     private Date ultimaAlteracao;
 
-    public ImovelSubcategoriaAtualizacaoCadastral(Integer id, Integer idImovel, Integer idCategoria, String descricaoCategoria, Integer idSubcategoria, String descricaoSubcategoria, short quantidadeEconomias, Date ultimaAlteracao) {
+    public ImovelSubcategoriaAtualizacaoCadastral(Integer id, Imovel imovel, Categoria categoria, Subcategoria subcategoria, String descricaoCategoria, String descricaoSubcategoria, short quantidadeEconomias, Date ultimaAlteracao) {
 		this.id = id;
-		this.idImovel = idImovel;
-		this.idCategoria = idCategoria;
+		this.imovel = imovel;
+		this.categoria = categoria;
+		this.subcategoria = subcategoria;
 		this.descricaoCategoria = descricaoCategoria;
-		this.idSubcategoria = idSubcategoria;
 		this.descricaoSubcategoria = descricaoSubcategoria;
 		this.quantidadeEconomias = quantidadeEconomias;
 		this.ultimaAlteracao = ultimaAlteracao;
-		
-		this.comp_id = new ImovelSubcategoriaPK(new Imovel(idImovel), new Subcategoria(idSubcategoria));
 	}
 
 	/** default constructor */
@@ -82,14 +78,6 @@ public class ImovelSubcategoriaAtualizacaoCadastral extends ObjetoTransacao impl
         this.descricaoSubcategoria = descricaoSubcategoria;
     }
 
-    public Integer getIdCategoria() {
-        return this.idCategoria;
-    }
-
-    public void setIdCategoria(Integer idCategoria) {
-        this.idCategoria = idCategoria;
-    }
-
     public String getDescricaoCategoria() {
         return this.descricaoCategoria;
     }
@@ -106,42 +94,38 @@ public class ImovelSubcategoriaAtualizacaoCadastral extends ObjetoTransacao impl
 		this.id = id;
 	}
 
-	public Integer getIdImovel() {
-		return idImovel;
-	}
-
-	public void setIdImovel(Integer idImovel) {
-		this.idImovel = idImovel;
-	}
-
-	public Integer getIdSubcategoria() {
-		return idSubcategoria;
-	}
-
-	public void setIdSubcategoria(Integer idSubcategoria) {
-		this.idSubcategoria = idSubcategoria;
-	}
-	
-	@Override
 	public Filtro retornaFiltro() {
 		Filtro filtro = retornaFiltro();
-		filtro.adicionarParametro(new ParametroSimples(FiltroTabela.ID, this.getIdImovel()));
+		filtro.adicionarParametro(new ParametroSimples(FiltroTabela.ID, this.getImovel().getId()));
 		return filtro;
 
 	}
 
-	@Override
 	public String[] retornaCamposChavePrimaria() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
-	public ImovelSubcategoriaPK getComp_id() {
-		return comp_id;
+	public Imovel getImovel() {
+		return imovel;
 	}
 
-	public void setComp_id(ImovelSubcategoriaPK compId) {
-		this.comp_id = compId;
+	public void setImovel(Imovel imovel) {
+		this.imovel = imovel;
 	}
 
+	public Subcategoria getSubcategoria() {
+		return subcategoria;
+	}
+
+	public void setSubcategoria(Subcategoria subcategoria) {
+		this.subcategoria = subcategoria;
+	}
+
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
 }

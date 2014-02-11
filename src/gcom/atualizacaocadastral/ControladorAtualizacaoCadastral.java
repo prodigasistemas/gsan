@@ -213,7 +213,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			
 			
 			for (IImovelSubcategoria subcategoriaRetorno : subcategoriasRetorno) {
-					ImovelSubcategoria imovelSubcategoria = this.obterSubcategoriaDoImovel(imovel, subcategoriaRetorno.getComp_id().getSubcategoria().getId());
+					ImovelSubcategoria imovelSubcategoria = this.obterSubcategoriaDoImovel(imovel, subcategoriaRetorno.getSubcategoria().getId());
 					
 					if (imovelSubcategoria != null) {
 						MergeProperties.mergeProperties(imovelSubcategoria, subcategoriaRetorno);

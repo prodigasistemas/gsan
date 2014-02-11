@@ -11,41 +11,24 @@
     http://hibernate.sourceforge.net/
 -->
 
-<class 
-    name="gcom.cadastro.imovel.ImovelRamoAtividadeAtualizacaoCadastral" 
-    table="cadastro.imovel_ramo_ativ_atlz_cad"
->
+<class  name="gcom.cadastro.imovel.ImovelRamoAtividadeAtualizacaoCadastral" 
+    table="cadastro.imovel_ramo_ativ_atlz_cad">
 
-    <id
-        name="id"
-        type="java.lang.Integer"
-        column="imra_id">
-        
-		    <generator class="sequence">
-		        <param name="sequence">cadastro.sequence_imovel_ramo_ativ_atlz_cad</param>
-		    </generator>
+    <id name="id" type="java.lang.Integer" column="imra_id">
+	    <generator class="sequence">
+	        <param name="sequence">cadastro.sequence_imovel_ramo_ativ_atlz_cad</param>
+	    </generator>
     </id>
-
-    <property
-        name="idImovel" 
-        column="imov_id" 
-        type="java.lang.Integer"
-        length="4"
-    />
-    <property
-        name="idRamoAtividade" 
-        column="ratv_id" 
-        type="java.lang.Integer"
-        length="4"
-    />
-    <property
-        name="ultimaAlteracao"
-        type="java.sql.Timestamp"
-        column="imra_tmultimaalteracao"
-        not-null="true"
-        length="8"
-    />
-
-
+    
+	<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel">
+		<column name="imov_id"/>
+	</many-to-one>
+	
+	<many-to-one name="ramoAtividade" class="gcom.cadastro.cliente.RamoAtividade">
+		<column name="ratv_id"/>
+	</many-to-one>
+    
+    <property name="ultimaAlteracao" type="java.sql.Timestamp"
+        column="imra_tmultimaalteracao" not-null="true" length="8"/>
 </class>
 </hibernate-mapping>

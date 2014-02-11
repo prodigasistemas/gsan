@@ -1,6 +1,7 @@
 package gcom.cadastro.imovel;
 
 import gcom.atualizacaocadastral.IImovelRamoAtividade;
+import gcom.cadastro.cliente.RamoAtividade;
 import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.ObjetoTransacao;
 import gcom.seguranca.transacao.FiltroTabela;
@@ -19,15 +20,12 @@ public class ImovelRamoAtividadeAtualizacaoCadastral extends ObjetoTransacao imp
 
     private Integer id;
 
-	private Integer idImovel;
-    
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private Integer idRamoAtividade;
+    private Imovel imovel;
+
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+    private RamoAtividade ramoAtividade;
 
     private Date ultimaAlteracao;
-    
-    private ImovelRamoAtividadePK comp_id;
-    
     
     public Integer getId() {
 		return id;
@@ -35,22 +33,6 @@ public class ImovelRamoAtividadeAtualizacaoCadastral extends ObjetoTransacao imp
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public Integer getIdImovel() {
-		return idImovel;
-	}
-
-	public void setIdImovel(Integer idImovel) {
-		this.idImovel = idImovel;
-	}
-
-	public Integer getIdRamoAtividade() {
-		return idRamoAtividade;
-	}
-
-	public void setIdRamoAtividade(Integer idRamoAtividade) {
-		this.idRamoAtividade = idRamoAtividade;
 	}
 
 	public Date getUltimaAlteracao() {
@@ -61,24 +43,26 @@ public class ImovelRamoAtividadeAtualizacaoCadastral extends ObjetoTransacao imp
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
 
-	@Override
 	public Filtro retornaFiltro() {
 		Filtro filtro = retornaFiltro();
-		filtro.adicionarParametro(new ParametroSimples(FiltroTabela.ID, this.getIdImovel()));
+		filtro.adicionarParametro(new ParametroSimples(FiltroTabela.ID, this.getImovel().getId()));
 		return filtro;
 	}
 
-	@Override
 	public String[] retornaCamposChavePrimaria() {
 		return null;
 	}
 
-	public ImovelRamoAtividadePK getComp_id() {
-		return comp_id;
+	public Imovel getImovel() {
+		return imovel;
 	}
-
-	public void setComp_id(ImovelRamoAtividadePK comp_id) {
-		this.comp_id = comp_id;
+	public void setImovel(Imovel imovel) {
+		this.imovel = imovel;
 	}
-	
+	public RamoAtividade getRamoAtividade() {
+		return ramoAtividade;
+	}
+	public void setRamoAtividade(RamoAtividade ramoAtividade) {
+		this.ramoAtividade = ramoAtividade;
+	}
 }

@@ -365,7 +365,7 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 		}
 
 		Integer idLogradouro = repositorioImovel.pesquisarLogradouroImovelAtualizacaoCadastral(Integer.parseInt(linha.get("matricula")));
-		if(!idLogradouro.equals(Integer.valueOf(codigoLogradouro))) {
+		if(idLogradouro != null && !idLogradouro.equals(Integer.valueOf(codigoLogradouro))) {
 			imovel.addMensagemErro("Código do logradouro não pode ser alterado");
 		}
 		

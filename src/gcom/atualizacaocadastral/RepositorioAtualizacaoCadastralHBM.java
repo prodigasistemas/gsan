@@ -1,6 +1,5 @@
 package gcom.atualizacaocadastral;
 
-import gcom.cadastro.RepositorioCadastroHBM;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.imovel.IImovel;
 import gcom.cadastro.imovel.IImovelSubcategoria;
@@ -13,7 +12,6 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
-import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.jboss.logging.Logger;
@@ -68,7 +66,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		try {
 			
 			consulta = "from ImovelSubcategoria imovelSubcategoria"
-					+ " where imovelSubcategoria.comp_id.imovel.id = :idImovel " ;
+					+ " where imovelSubcategoria.imovel.id = :idImovel " ;
 			
 			retorno = (Collection<IImovelSubcategoria>) session.createQuery(consulta).setInteger("idImovel", idImovel).list();
 		} catch (HibernateException e) {
@@ -103,7 +101,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		try{
 			String consulta = " SELECT imovelSubCatRetorno "
 							+ " FROM ImovelSubcategoriaRetorno imovelSubCatRetorno "
-							+ " INNER JOIN imovelSubCatRetorno.comp_id.imovel imovel"
+							+ " INNER JOIN imovelSubCatRetorno.imovel imovel"
 							+ " WHERE imovel.id = :idImovel ";
 			retorno = (List<ImovelSubcategoriaRetorno>) session.createQuery(consulta)
 							.setInteger("idImovel", idImovel).list();
@@ -119,7 +117,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		Session session = HibernateUtil.getSession();
 		try{
 			String consulta = " DELETE ImovelRamoAtividadeRetorno ramo "
-					+ " WHERE ramo.comp_id.imovel.id = :idImovel ";
+					+ " WHERE ramo.imovel.id = :idImovel ";
 			session.createQuery(consulta).setInteger("idImovel", idImovel).executeUpdate();
 		}catch (HibernateException e) {
 			throw new ErroRepositorioException("Erro no Hibernate");
@@ -139,14 +137,14 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			try {
 				consulta = " SELECT imovelSubcategoria" 
 						 + " FROM ImovelSubcategoriaAtualizacaoCadastral imovelSubcategoria" 
-						 + " WHERE imovelSubcategoria.idImovel = :idImovel";
+						 + " WHERE imovelSubcategoria.imovel.id = :idImovel";
 				
 				if(idSubcategoria != null){
-					consulta = consulta + " AND imovelSubcategoria.idSubcategoria = "+idSubcategoria;
+					consulta = consulta + " AND imovelSubcategoria.subcategoria.id = "+idSubcategoria;
 				}
 				
 				if(idCategoria != null){
-					consulta = consulta + " AND imovelSubcategoria.idCategoria = "+idCategoria;
+					consulta = consulta + " AND imovelSubcategoria.categoria.id = "+idCategoria;
 				}
 			
 				retorno = (Collection<ImovelSubcategoria>)session.createQuery(consulta).setInteger("idImovel",
