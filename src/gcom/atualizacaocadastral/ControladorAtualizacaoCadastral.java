@@ -4,6 +4,7 @@ import gcom.batch.ControladorBatchLocal;
 import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
+import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.cliente.ControladorClienteLocalHome;
@@ -15,7 +16,6 @@ import gcom.cadastro.imovel.IImovelSubcategoria;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelRamoAtividade;
-import gcom.cadastro.imovel.ImovelRamoAtividadePK;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.micromedicao.ControladorMicromedicaoLocal;
 import gcom.micromedicao.ControladorMicromedicaoLocalHome;
@@ -513,7 +513,8 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		this.getControladorUtil().atualizar(imovelAtualizacaoCadastral);
 	}
 
-	public void apagarInformacoesRetornoImovelAtualizacaoCadastral(Integer idImovel) throws ControladorException {
+	public void apagarInformacoesRetornoImovelAtualizacaoCadastral(Integer idImovel) throws Exception {
+		atualizarImovelControle(idImovel);
 		apagarTabelaAtualizacaoCadastralPorIdImovel(idImovel);
 		apagarImovelRetorno(idImovel);
 		apagarImovelSubcategoriaRetorno(idImovel);
@@ -521,78 +522,62 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		apagarInformacoesRetornoCliente(idImovel);
 	}
 
-	private void apagarInformacoesRetornoCliente(Integer idImovel) throws ControladorException  {
-		try {
-			Collection<Integer> idsClientesRetorno = repositorioAtualizacaoCadastral.pesquisarIdsClienteRetorno(idImovel);
-			if(!idsClientesRetorno.isEmpty()) {
-				apagarClienteEnderecoRetornoPorIdsClientes(idsClientesRetorno);
-				apagarClienteFoneRetornoPorIdsClientes(idsClientesRetorno);
-				apagarClienteRetorno(idsClientesRetorno);
-				
-			}
-			apagarImovelClienteRetorno(idImovel);
-		} catch (ErroRepositorioException e) {
-			e.printStackTrace();
+	private void atualizarImovelControle(Integer idImovel) throws Exception{
+		ImovelControleAtualizacaoCadastral controle = repositorioAtualizacaoCadastral.pesquisarImovelControleAtualizacao(idImovel);
+		if (controle != null){
+			controle.setImovelRetorno(null);
+			controle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.EM_CAMPO));
+			this.getControladorUtil().atualizar(controle);
 		}
 	}
 
-	private void apagarImovelClienteRetorno(Integer idImovel) {
-		try {
-			repositorioAtualizacaoCadastral.apagarClienteImovelRetornoPorIdImovel(idImovel);
-		} catch (ErroRepositorioException e) {
-			e.printStackTrace();
+	private void apagarInformacoesRetornoCliente(Integer idImovel) throws Exception  {
+		Collection<Integer> idsClientesRetorno = repositorioAtualizacaoCadastral.pesquisarIdsClienteRetorno(idImovel);
+		if(!idsClientesRetorno.isEmpty()) {
+			apagarClienteEnderecoRetornoPorIdsClientes(idsClientesRetorno);
+			apagarClienteFoneRetornoPorIdsClientes(idsClientesRetorno);
+			apagarClienteRetorno(idsClientesRetorno);
+			
 		}
-		
+		apagarImovelClienteRetorno(idImovel);
 	}
 
-	private void apagarImovelRetorno(Integer idImovel) throws ControladorException {
-		try {
-			repositorioAtualizacaoCadastral.apagarImovelRetornoPorIdImovel(idImovel);
-		} catch (ErroRepositorioException e) {
-			e.printStackTrace();
-		}
+	private void apagarImovelClienteRetorno(Integer idImovel) throws Exception {
+		repositorioAtualizacaoCadastral.apagarClienteImovelRetornoPorIdImovel(idImovel);
 	}
 
-	private void apagarTabelaAtualizacaoCadastralPorIdImovel(Integer idImovel) throws ControladorException {
+	private void apagarImovelRetorno(Integer idImovel) throws Exception {
+		repositorioAtualizacaoCadastral.apagarImovelRetornoPorIdImovel(idImovel);
+	}
+
+	private void apagarTabelaAtualizacaoCadastralPorIdImovel(Integer idImovel) throws Exception {
 		List<TabelaAtualizacaoCadastral> colecaoTabelaAtualizacaoCadastral;
 		List<TabelaColunaAtualizacaoCadastral> colecaoTabelaColunaAtualizacaoCadastral;
-		try {
-			colecaoTabelaAtualizacaoCadastral = repositorioSeguranca.pesquisaTabelaAtualizacaoCadastralPorImovel(idImovel);
+		colecaoTabelaAtualizacaoCadastral = repositorioSeguranca.pesquisaTabelaAtualizacaoCadastralPorImovel(idImovel);
 
-			if(colecaoTabelaAtualizacaoCadastral != null) {
-				for(TabelaAtualizacaoCadastral tabelaAtlzCad : colecaoTabelaAtualizacaoCadastral){
-					colecaoTabelaColunaAtualizacaoCadastral = repositorioSeguranca.pesquisaTabelaColunaAtualizacaoCadastral(tabelaAtlzCad.getId());
-					for(TabelaColunaAtualizacaoCadastral tabelaColunaAtlzCad : colecaoTabelaColunaAtualizacaoCadastral) {
-						this.getControladorUtil().remover(tabelaColunaAtlzCad);
-					}
-					this.getControladorUtil().remover(tabelaAtlzCad);
+		if(colecaoTabelaAtualizacaoCadastral != null) {
+			for(TabelaAtualizacaoCadastral tabelaAtlzCad : colecaoTabelaAtualizacaoCadastral){
+				colecaoTabelaColunaAtualizacaoCadastral = repositorioSeguranca.pesquisaTabelaColunaAtualizacaoCadastral(tabelaAtlzCad.getId());
+				for(TabelaColunaAtualizacaoCadastral tabelaColunaAtlzCad : colecaoTabelaColunaAtualizacaoCadastral) {
+					this.getControladorUtil().remover(tabelaColunaAtlzCad);
 				}
+				this.getControladorUtil().remover(tabelaAtlzCad);
 			}
-		} catch (ErroRepositorioException e) {
-			e.printStackTrace();
 		}
 	}
 	
-	private void apagarImovelSubcategoriaRetorno(Integer idImovel) throws ControladorException {
+	private void apagarImovelSubcategoriaRetorno(Integer idImovel) throws Exception {
 		List<ImovelSubcategoriaRetorno> colecaoImovelSubCategoriaRetorno;
-		try {
-			colecaoImovelSubCategoriaRetorno = repositorioAtualizacaoCadastral.pesquisarImovelSubcategoriaRetornoPorIdImovel(idImovel);
-			if(colecaoImovelSubCategoriaRetorno != null) {
-				for(ImovelSubcategoriaRetorno imovelSubCategoriaRetorno : colecaoImovelSubCategoriaRetorno) {
-					this.getControladorUtil().remover(imovelSubCategoriaRetorno);
-				}
+		colecaoImovelSubCategoriaRetorno = repositorioAtualizacaoCadastral.pesquisarImovelSubcategoriaRetornoPorIdImovel(idImovel);
+		if(colecaoImovelSubCategoriaRetorno != null) {
+			for(ImovelSubcategoriaRetorno imovelSubCategoriaRetorno : colecaoImovelSubCategoriaRetorno) {
+				this.getControladorUtil().remover(imovelSubCategoriaRetorno);
 			}
-		} catch (ErroRepositorioException e) {
-			e.printStackTrace();
 		}
 	}
 	
-	private void apagarImovelRamoAtividade(Integer idImovel) throws ControladorException {
-		try {
-			repositorioAtualizacaoCadastral.apagarImovelRetornoRamoAtividadeRetornoPorIdImovel(idImovel);
-		} catch (ErroRepositorioException e) {
-			e.printStackTrace();
-		}
+	private void apagarImovelRamoAtividade(Integer idImovel) throws Exception {
+		repositorioAtualizacaoCadastral.apagarImovelRetornoRamoAtividadeRetornoPorIdImovel(idImovel);
 	}
 
 	public Collection<ImovelSubcategoria> pesquisarImovelSubcategoriaAtualizacaoCadastral(Integer idImovel, Integer idSubcategoria,Integer idCategoria)
@@ -623,19 +608,11 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		}
 	}
 	
-	private void apagarClienteFoneRetornoPorIdsClientes(Collection<Integer> idsClientesRetorno) {
-		try {
-			repositorioAtualizacaoCadastral.apagarClienteFoneRetorno(idsClientesRetorno);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
+	private void apagarClienteFoneRetornoPorIdsClientes(Collection<Integer> idsClientesRetorno) throws Exception {
+		repositorioAtualizacaoCadastral.apagarClienteFoneRetorno(idsClientesRetorno);
 	}
 	
-	private void apagarClienteRetorno(Collection<Integer> idsClientesRetorno) {
-		try {
-			repositorioAtualizacaoCadastral.apagarClienteRetorno(idsClientesRetorno);
-		} catch (ErroRepositorioException e) {
-			e.printStackTrace();
-		}
+	private void apagarClienteRetorno(Collection<Integer> idsClientesRetorno) throws Exception{
+		repositorioAtualizacaoCadastral.apagarClienteRetorno(idsClientesRetorno);
 	}
 }

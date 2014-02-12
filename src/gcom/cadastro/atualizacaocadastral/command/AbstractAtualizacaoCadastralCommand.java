@@ -215,10 +215,10 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovelAtualizacaoCadastral.ID, idImovel));
 
 		ImovelAtualizacaoCadastral imovel = (ImovelAtualizacaoCadastral) Util.retonarObjetoDeColecao(controladorUtil.pesquisar(filtroImovel, ImovelAtualizacaoCadastral.class.getName()));
-
-		imovel.setIdSituacaoAtualizacaoCadastral(situacao);
-
-		controladorUtil.atualizar(imovel);
+		
+		if (imovel != null){
+			imovel.setIdSituacaoAtualizacaoCadastral(situacao);
+			controladorUtil.atualizar(imovel);
+		}
 	}
-
 }

@@ -30,7 +30,7 @@ INSERT INTO seguranca.tabela_coluna(
 INSERT INTO seguranca.tabela_coluna(
 	    tbco_id, tabe_id, tbco_tmultimaalteracao, tbco_nmcoluna, tbco_dscoluna, 
 	    tbco_icprimarykey, tbco_nmabreviado, atrb_id)
-	VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 663, now(), 'fnet_id', 'Id Telefone Tipo', 
+	VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 663, now(), 'fnet_id', 'Telefone Tipo', 
 		2, null, null);
 
 INSERT INTO seguranca.tabela_coluna(

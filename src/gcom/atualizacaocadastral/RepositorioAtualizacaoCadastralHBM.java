@@ -48,7 +48,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			
 			retorno = (Collection<IImovel>) session.createQuery(consulta).list();
 		} catch (HibernateException e) {
-			e.printStackTrace();
+			throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis.");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
@@ -58,12 +58,10 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	
 	@SuppressWarnings("unchecked")
 	public Collection<IImovelSubcategoria> obterImovelSubcategoriaParaAtualizar(Integer idImovel) throws ErroRepositorioException { 
-		
 		Collection<IImovelSubcategoria> retorno = null;
 		Session session = HibernateUtil.getSession();
 		
 		String consulta = null;
-		
 		try {
 			
 			consulta = "from ImovelSubcategoriaRetorno imovelSubcategoria"
@@ -71,14 +69,31 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			
 			retorno = (Collection<IImovelSubcategoria>) session.createQuery(consulta).setInteger("idImovel", idImovel).list();
 		} catch (HibernateException e) {
-			e.printStackTrace();
+			throw new ErroRepositorioException(e, "Erro ao pesquisar imovel subcategoria.");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
 		
 		return retorno;
+	}
 	
+	
+	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacao(Integer idImovel) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		ImovelControleAtualizacaoCadastral retorno = null;
+		try{
+			String consulta = " SELECT e FROM ImovelControleAtualizacaoCadastral e "
+							+ " WHERE e.imovelRetorno.idImovel = :idImovel ";
+			retorno = (ImovelControleAtualizacaoCadastral) session.createQuery(consulta)
+					.setInteger("idImovel", idImovel)
+					.uniqueResult();
+		}catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao pesquisar imovel controle atualizacao cadastral");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
 		
+		return retorno;
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -132,7 +147,6 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	}
 
 
-	
 	public void apagarImovelRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		try{
@@ -140,7 +154,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 							+ " WHERE imovelRetorno.idImovel = :idImovel ";
 			session.createQuery(consulta).setInteger("idImovel", idImovel).executeUpdate();
 		}catch (HibernateException e) {
-			throw new ErroRepositorioException("Erro no Hibernate");
+			throw new ErroRepositorioException(e, "Erro ao excluir imovel retorno");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
@@ -158,7 +172,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			retorno = (List<ImovelSubcategoriaRetorno>) session.createQuery(consulta)
 							.setInteger("idImovel", idImovel).list();
 		}catch (HibernateException e) {
-			throw new ErroRepositorioException("Erro no Hibernate");
+			throw new ErroRepositorioException(e, "Erro ao pesquisar imovel subcategoria");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
@@ -172,7 +186,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 					+ " WHERE ramo.imovel.id = :idImovel ";
 			session.createQuery(consulta).setInteger("idImovel", idImovel).executeUpdate();
 		}catch (HibernateException e) {
-			throw new ErroRepositorioException("Erro no Hibernate");
+			throw new ErroRepositorioException(e, "Erro ao apagar imovel retorno ramo atividade");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
@@ -203,7 +217,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 						idImovel.intValue()).list();
 			
 			} catch (HibernateException e) {
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
+				throw new ErroRepositorioException(e, "Erro ao pesquisar imovel subcategoria");
 			} finally {
 				HibernateUtil.closeSession(session);
 			}
@@ -231,7 +245,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 										.setMaxResults(1).uniqueResult();
 					
 		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
+			throw new ErroRepositorioException(e, "Erro ap pesquisar imovel atualizacao cadastral");
 		} finally {
 	
 			HibernateUtil.closeSession(session);
@@ -252,7 +266,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 					+ " WHERE clienteImovel.imovel.id = :idImovel ";
 			listaClienteImovel = (Collection<ClienteImovelRetorno>) session.createQuery(consulta).setInteger("idImovel", idImovel).list();
 		}catch (HibernateException e) {
-			throw new ErroRepositorioException("Erro no Hibernate");
+			throw new ErroRepositorioException(e, "Erro ao pesquisar cliente imovel retorno");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}	
@@ -277,7 +291,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 
 		} catch (HibernateException e) {
 			logger.error("Erro ao liberar cadastro do imovel", e);
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
+			throw new ErroRepositorioException(e, "Erro ao liberar cadastro do imovel");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
@@ -289,7 +303,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			String query = "DELETE FROM ClienteImovelRetorno ret WHERE ret.imovel.id = :idImovel ";
 			session.createQuery(query).setInteger("idImovel", idImovel).executeUpdate();
 		}catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
+			throw new ErroRepositorioException(e, "Erro ao apagar cliente imovel retono");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
@@ -302,7 +316,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			String query = " DELETE FROM ClienteEnderecoRetorno clieImovel where clieImovel.idClienteRetorno in (:idsClientesRetorno) ";
 			session.createQuery(query).setParameterList("idsClientesRetorno", idsClientesRetorno).executeUpdate();
 		}catch(HibernateException e) {
-			throw new ErroRepositorioException("Erro no Hibernate");
+			throw new ErroRepositorioException("Erro ao apagar cliente endereco retorno");
 		}finally {
 			HibernateUtil.closeSession(session);
 		}
@@ -314,7 +328,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			String query = " DELETE FROM ClienteFoneRetorno clieImovel where clieImovel.idClienteRetorno in (:idsClientesRetorno) ";
 			session.createQuery(query).setParameterList("idsClientesRetorno", idsClientesRetorno).executeUpdate();
 		}catch(HibernateException e) {
-			throw new ErroRepositorioException("Erro no Hibernate");
+			throw new ErroRepositorioException("Erro ao apagar cliente fone retorno");
 		}finally {
 			HibernateUtil.closeSession(session);
 		}
@@ -326,7 +340,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			String query = " DELETE FROM ClienteRetorno ret where ret.id in (:idsClientesRetorno) ";
 			session.createQuery(query).setParameterList("idsClientesRetorno", idsClientesRetorno).executeUpdate();
 		}catch(HibernateException e) {
-			throw new ErroRepositorioException("Erro no Hibernate");
+			throw new ErroRepositorioException("Erro ao apagar cliente retorno");
 		}finally {
 			HibernateUtil.closeSession(session);
 		}
@@ -341,7 +355,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 					+ " WHERE clieImovel.imovel.id = :idImovel ";
 			retorno = (Collection<Integer>)session.createQuery(consulta).setInteger("idImovel", idImovel).list();
 		}catch(HibernateException e) {
-			throw new ErroRepositorioException("Erro no Hibernate");
+			throw new ErroRepositorioException("Erro ao pesquisar ids de cliente retorno");
 		}finally {
 			HibernateUtil.closeSession(session);
 		}

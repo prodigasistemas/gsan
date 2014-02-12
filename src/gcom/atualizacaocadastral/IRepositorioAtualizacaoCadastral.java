@@ -45,7 +45,7 @@ public interface IRepositorioAtualizacaoCadastral {
 	
 	public void apagarClienteRetorno(Collection<Integer> idsClientesRetorno) throws ErroRepositorioException;
 	
-
 	public void liberarCadastroImovel(Integer idImovel) throws ErroRepositorioException;
-
+	
+	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacao(Integer idImovel) throws ErroRepositorioException;	
 }
