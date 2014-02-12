@@ -611,10 +611,12 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 		String consulta = null;
 
 		try {
-			consulta = "from ClienteFone cfon " 
-				    + "left join fetch cfon.imovel imovel "
+			consulta = "select cfon "
+					+ "from ClienteFone cfon, " 
+					+ " ClienteImovel clienteImovel "
 					+ "left join fetch cfon.foneTipo fnet "
-					+ "where imovel.id = :idImovel ";
+				    + "where clienteImovel.cliente.id = cfon.cliente.id "
+					+ "and clienteImovel.imovel.id = :idImovel ";
 
 			retorno = (Collection<ClienteFone>)session.createQuery(consulta).setInteger("idImovel",	idImovel.intValue()).list();
 		} catch (HibernateException e) {

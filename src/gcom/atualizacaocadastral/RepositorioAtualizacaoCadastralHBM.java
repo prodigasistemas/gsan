@@ -66,7 +66,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		
 		try {
 			
-			consulta = "from ImovelSubcategoria imovelSubcategoria"
+			consulta = "from ImovelSubcategoriaRetorno imovelSubcategoria"
 					+ " where imovelSubcategoria.imovel.id = :idImovel " ;
 			
 			retorno = (Collection<IImovelSubcategoria>) session.createQuery(consulta).setInteger("idImovel", idImovel).list();
@@ -92,7 +92,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		try {
 			
 			consulta = "from ImovelRamoAtividadeRetorno imovelRamoAtividade"
-					+ " where imovelRamoAtividade.comp_id.imovel.id = :idImovel " ;
+					+ " where imovelRamoAtividade.imovel.id = :idImovel " ;
 			
 			retorno = (Collection<IImovelRamoAtividade>) session.createQuery(consulta).setInteger("idImovel", idImovel).list();
 		} catch (HibernateException e) {
@@ -115,16 +115,13 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		
 		try {
 			consulta = "select clienteFoneRetorno " 
-					+ "from ClienteImovelRetorno clienteImovelRetorno "
-					+ " inner join clienteImovelRetorno.cliente cliente "
-					+ " inner join clienteImovelRetorno.imovel imovel " 
-					+ " inner join clienteFoneRetorno clienteFoneRetorno"
-					+ " where imovel.id in " 
-						+ " ( select imovelControle.imovel.id from ImovelControleAtualizacaoCadastral imovelControle "
-						+ " where imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  + ") " ;
-		;
+					+ "from ClienteFoneRetorno clienteFoneRetorno, "
+					+ " ClienteImovelRetorno clienteImovelRetorno" 
+					+ " inner join clienteFoneRetorno.cliente cliente "
+					+ " where clienteFoneRetorno.idClienteRetorno = clienteImovelRetorno.idClienteRetorno "
+					+ " and clienteImovelRetorno.imovel.id = :idImovel ";
 			
-			retorno = (Collection<IClienteFone>) session.createQuery(consulta).list();
+			retorno = (Collection<IClienteFone>) session.createQuery(consulta).setInteger("idImovel", idImovel).list();
 		} catch (HibernateException e) {
 			e.printStackTrace();
 		} finally {

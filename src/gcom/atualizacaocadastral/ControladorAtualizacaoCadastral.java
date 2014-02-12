@@ -15,6 +15,7 @@ import gcom.cadastro.imovel.IImovelSubcategoria;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelRamoAtividade;
+import gcom.cadastro.imovel.ImovelRamoAtividadePK;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.micromedicao.ControladorMicromedicaoLocal;
 import gcom.micromedicao.ControladorMicromedicaoLocalHome;
@@ -287,16 +288,17 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 						idsRamosAtividadesImovel.remove(imovelRamoAtividade.getComp_id().getRamo_atividade().getId());
 					} else {
 						
-						ImovelRamoAtividade imovelRamoAtividadeNovo = new ImovelRamoAtividade();
-						MergeProperties.mergeProperties(imovelRamoAtividadeNovo, ramoAtividadeRetorno);
+						ImovelRamoAtividade imovelRamoAtividadeNovo = new ImovelRamoAtividade(ramoAtividadeRetorno.getImovel().getId(), ramoAtividadeRetorno.getRamoAtividade().getId());
+						imovelRamoAtividadeNovo.setUltimaAlteracao(new Date());
+						
 						getControladorUtil().inserir(imovelRamoAtividadeNovo);
 					}
 			}
 			
 			this.removerRamosAtividadeDoImovel(imovelRetorno, idsRamosAtividadesImovel);
 		} catch (ControladorException e) {
-			logger.error("Erro ao atualizar subcategorias do imóvel " + imovelRetorno.getId());
-			throw new ControladorException("Erro ao atualizar subcategorias do imóvel " + imovelRetorno.getId(), e);
+			logger.error("Erro ao atualizar ramo de atividade do imóvel " + imovelRetorno.getId());
+			throw new ControladorException("Erro ao atualizar ramo de atividade do imóvel " + imovelRetorno.getId(), e);
 		}
 	
 	}
@@ -304,22 +306,19 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 	private void atualizarClienteFoneAtualizacaoCadastral(IImovel imovelRetorno) throws ControladorException {
 		
 		try {
+			this.removerClienteFoneDoImovel(imovelRetorno);
+
 			Collection<IClienteFone> clienteFonesRetorno = this.obterClientesFoneParaAtualizar(imovelRetorno.getId());
-			Collection<Integer> idsClientes = new ArrayList<Integer>();
 			
 			for (IClienteFone clienteFoneRetorno : clienteFonesRetorno) {
 				ClienteFone clienteFone = new ClienteFone();
 				MergeProperties.mergeProperties(clienteFone, clienteFoneRetorno);
-				
+				clienteFone.setUltimaAlteracao(new Date());
 				clienteFone.setId(null);
 				getControladorUtil().inserir(clienteFone);
 				
-				if (!idsClientes.contains(clienteFoneRetorno.getCliente().getId())) {
-					idsClientes.add(clienteFoneRetorno.getCliente().getId());
-				}
 			}
 			
-			this.removerClienteFoneDoImovel(imovelRetorno);
 		} catch (ControladorException e) {
 			logger.error("Erro ao inserir fone dos clientes do imóvel " + imovelRetorno.getId());
 			throw new ControladorException("Erro ao inserir o fone dos clientes  do imóvel " + imovelRetorno.getId(), e);
@@ -357,7 +356,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 	private void removerClienteFoneDoImovel(IImovel imovel) throws ControladorException {
 		Collection<ClienteFone> clienteFones = getControladorCliente().pesquisarClienteFoneDoImovel(imovel.getId());
 
-		for (IClienteFone clienteFone : clienteFones) {
+		for (ClienteFone clienteFone : clienteFones) {
 			try {
 				getControladorUtil().remover(clienteFone);
 			} catch (ControladorException e) {
