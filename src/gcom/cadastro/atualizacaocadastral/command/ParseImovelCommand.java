@@ -1,10 +1,7 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
-import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
-import gcom.cadastro.IRepositorioCadastro;
+import gcom.atualizacaocadastral.IControladorAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorTamanhoLinhaImovelCommand;
-import gcom.cadastro.cliente.ControladorClienteLocal;
-import gcom.cadastro.endereco.ControladorEnderecoLocal;
 import gcom.cadastro.endereco.Logradouro;
 import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
@@ -12,7 +9,6 @@ import gcom.cadastro.endereco.LogradouroTipo;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.cadastro.imovel.ImagemAtualizacaoCadastral;
 import gcom.seguranca.transacao.AlteracaoTipo;
-import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ErroRepositorioException;
@@ -31,12 +27,17 @@ import org.apache.commons.lang.StringUtils;
 
 public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 
-	public ParseImovelCommand(ParserUtil parser, IRepositorioCadastro repositorioCadastro, ControladorUtilLocal controladorUtil, 
-			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, ControladorEnderecoLocal controladorEndereco,
-			ControladorAtualizacaoCadastralLocal controladorAtualizacaoCadastral, ControladorClienteLocal controladorCliente) {
-		super(parser, repositorioCadastro, controladorUtil, controladorTransacao, repositorioImovel, controladorEndereco, controladorAtualizacaoCadastral, controladorCliente);
+	private ControladorUtilLocal controladorUtil;
+	private IControladorAtualizacaoCadastral controladorAtualizacaoCadastral;
+	private IRepositorioImovel repositorioImovel;
+	
+	public ParseImovelCommand(ParserUtil parser, ControladorUtilLocal controladorUtil, IControladorAtualizacaoCadastral controladorAtualizacaoCadastral, IRepositorioImovel repositorioImovel){
+		super(parser);
+		this.controladorUtil = controladorUtil;
+		this.controladorAtualizacaoCadastral = controladorAtualizacaoCadastral;
+		this.repositorioImovel = repositorioImovel;
 	}
-
+	
 	public void execute(AtualizacaoCadastral atualizacao) throws Exception {
 		Map<String, String> linha = atualizacao.getImovelAtual().getLinhaImovel();
 		AtualizacaoCadastralImovel imovel = atualizacao.getImovelAtual(); 
@@ -47,6 +48,8 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 
 			Integer matricula = Integer.parseInt(parser.obterDadoParser(9).trim());
 			linha.put("matricula", "" + matricula);
+			
+			verificaImovelNovo(atualizacao);
 
 			String tipoOperacao = parser.obterDadoParser(1);
 			linha.put("tipoOperacao", "" + tipoOperacao);
@@ -166,6 +169,21 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 
 			validaCamposImovel(atualizacao, imovel);
 		}
+	}
+
+	private void verificaImovelNovo(AtualizacaoCadastral atualizacao) throws Exception {
+		Map<String, String> linha = atualizacao.getImovelAtual().getLinhaImovel();
+		
+		String matricula = linha.get("matricula");
+		
+		if (matriculaInvalida(matricula)){
+			matricula = String.valueOf(controladorAtualizacaoCadastral.recuperaValorSequenceImovelRetorno() + 1);
+			linha.put("matricula", matricula);
+		}
+	}
+	
+	private boolean matriculaInvalida(String matricula){
+		return StringUtils.isEmpty(matricula) || !StringUtils.isNumeric(matricula) || Integer.parseInt(matricula) <=0;
 	}
 
 	private void inserirImagem(AtualizacaoCadastral atualizacao,

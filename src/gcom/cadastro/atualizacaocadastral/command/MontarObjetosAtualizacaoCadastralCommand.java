@@ -112,19 +112,21 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		}
 	}
 
+	
 	private void salvarImovel() throws Exception {
 		ImovelAtualizacaoCadastralBuilder builder = new ImovelAtualizacaoCadastralBuilder(matriculaImovel, atualizacaoCadastralImovel, tipoOperacao);
 		ImovelAtualizacaoCadastral imovelTxt = builder.getImovelAtualizacaoCadastral();
 		
 		ImovelAtualizacaoCadastral imovelAtualizacaoCadastralBase = controladorAtualizacaoCadastral.pesquisarImovelAtualizacaoCadastral(matriculaImovel);
 		
+		salvarImovelRetorno(imovelTxt);
+
 		if (imovelAtualizacaoCadastralBase == null){
 			imovelAtualizacaoCadastralBase = new ImovelAtualizacaoCadastral(matriculaImovel);
 			tipoOperacao = AlteracaoTipo.INCLUSAO;
 		}
 
 		salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, imovelAtualizacaoCadastralBase, imovelTxt, matriculaImovel, tipoOperacao);
-		salvarImovelRetorno(imovelTxt);
 		
 		salvarRamoAtividade();
 		salvarImovelSubcategoria();
@@ -342,6 +344,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		
 		if (controle == null){
 			controle = new ImovelControleAtualizacaoCadastral();
+			controle.setImovel(new Imovel(matriculaImovel));
 		}
 		
 		controle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(situacao));

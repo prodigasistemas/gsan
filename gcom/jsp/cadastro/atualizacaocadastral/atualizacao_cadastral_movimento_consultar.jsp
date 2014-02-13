@@ -153,13 +153,13 @@
 		
 				<tr>
 					<td>
-					<table width="590" bgcolor="#99CCFF" border="0">
+					<table width="620" bgcolor="#99CCFF" border="0">
 						<tr bgcolor="#99CCFF">
 							<td width="40" bgcolor="#90c7fc">
 							<div align="center"><strong><a
 								href="javascript:facilitador(this);">Todos</a></strong></div>
 							</td>
-							<td width="70" bgcolor="#90c7fc">
+							<td width="100" bgcolor="#90c7fc">
 							<div align="center"><strong>Imóvel</strong></div>
 							</td>
 							<td width="90" bgcolor="#90c7fc">
@@ -181,7 +181,7 @@
 				<%int cont = 0;%>
 				<logic:present name="colecaoConsultarMovimentoAtualizacaoCadastralHelper">
 				<tr>
-					<td width="590" colspan="5">
+					<td width="620" colspan="5">
 					<div style="width: 100%; height: 300; overflow: auto;">
 					<table width="100%" align="center" bgcolor="#99CCFF" border="0">
 						<logic:iterate name="colecaoConsultarMovimentoAtualizacaoCadastralHelper" id="consultarMovimentoAtualizacaoCadastralHelper"
@@ -203,26 +203,24 @@
  									value="<bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="icAutorizado"/>" /> 								 
 
 								</td>
-								
-								<logic:equal name="consultarMovimentoAtualizacaoCadastralHelper" property="inscricao" value="">
-								  <td width="70">
-									<logic:equal name="consultarMovimentoAtualizacaoCadastralHelper" property="qtdAlteracaoImovel" value="0">
-											<div align="center"><bean:write name="consultarMovimentoAtualizacaoCadastralHelper"
-												property="idImovel" /></div>
-									</logic:equal> 
-									<logic:notEqual name="consultarMovimentoAtualizacaoCadastralHelper" property="qtdAlteracaoImovel" value="0">
-										<div align="center"><a href="exibirAtualizarDadosImovelAtualizacaoCadastralPopupAction.do?idImovel=<bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idImovel"/>&idArquivo=<bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idArquivo"/>&idRegistroAlterado=<bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idRegistroAlterado"/>&idTipoAlteracao=<bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idTipoAlteracao"/>">
-										<bean:write	name="consultarMovimentoAtualizacaoCadastralHelper" property="idImovel"/></a></div>
-									</logic:notEqual>																		
-								  </td>
-								</logic:equal> 
-								<logic:notEqual name="consultarMovimentoAtualizacaoCadastralHelper" property="inscricao" value="">
-									<td width="70">
-										<div align="center"><a href="exibirAtualizarDadosImovelAtualizacaoCadastralPopupAction.do?idImovel=<bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idImovel"/>&idArquivo=<bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idArquivo"/>&idRegistroAlterado=<bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idRegistroAlterado"/>&idTipoAlteracao=<bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idTipoAlteracao"/>">
-										<bean:write	name="consultarMovimentoAtualizacaoCadastralHelper" property="inscricao"/></a></div>
-									</td>
-								</logic:notEqual>
-								
+                
+                                <td width="100">
+                                  <div align="center">
+                                    <logic:equal name="consultarMovimentoAtualizacaoCadastralHelper" property="idTipoAlteracao" value="2">
+                                        NOVO - 
+                                    </logic:equal> 
+                                    
+                                    <logic:equal name="consultarMovimentoAtualizacaoCadastralHelper" property="qtdAlteracaoImovel" value="0">
+                                        <bean:write name="consultarMovimentoAtualizacaoCadastralHelper"
+                                          property="idImovel" />
+                                    </logic:equal> 
+                                    <logic:notEqual name="consultarMovimentoAtualizacaoCadastralHelper" property="qtdAlteracaoImovel" value="0">
+                                      <a href="exibirAtualizarDadosImovelAtualizacaoCadastralPopupAction.do?idImovel=<bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idImovel"/>&idArquivo=<bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idArquivo"/>&idRegistroAlterado=<bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idRegistroAlterado"/>&idTipoAlteracao=<bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idTipoAlteracao"/>">
+                                      <bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idImovel"/></a>
+                                    </logic:notEqual>           
+                                  </div>                      
+                                </td>                                
+                
 								<td width="90">
 								<div align="center"><bean:write name="consultarMovimentoAtualizacaoCadastralHelper"
 									property="qtdAlteracaoImovel" /></div>

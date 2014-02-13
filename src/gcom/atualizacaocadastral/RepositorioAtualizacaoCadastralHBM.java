@@ -13,8 +13,10 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
 
+import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
+import org.hibernate.type.Type;
 import org.jboss.logging.Logger;
 
 public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizacaoCadastral {
@@ -356,6 +358,20 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			retorno = (Collection<Integer>)session.createQuery(consulta).setInteger("idImovel", idImovel).list();
 		}catch(HibernateException e) {
 			throw new ErroRepositorioException("Erro ao pesquisar ids de cliente retorno");
+		}finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+
+	public Integer recuperaValorSequenceImovelRetorno() throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		Integer retorno = null;
+		try {
+			String consulta = "select last_value from atualizacaocadastral.sequence_imovel_retorno ";
+			retorno = (Integer) session.createSQLQuery(consulta).addScalar("last_value", Hibernate.INTEGER).uniqueResult();
+		}catch(HibernateException e) {
+			throw new ErroRepositorioException("Erro ao recuperar valor da sequece do imovel retorno");
 		}finally {
 			HibernateUtil.closeSession(session);
 		}

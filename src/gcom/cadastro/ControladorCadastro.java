@@ -7784,8 +7784,7 @@ public class ControladorCadastro implements SessionBean {
 				
 				if (!atualizacao.getImovelAtual().isImovelAprovado()){
 					if ("02".equals(registroTipo)) {
-						AbstractAtualizacaoCadastralCommand command = new ParseImovelCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
-								repositorioImovel, getControladorEndereco(), getControladorAtualizacaoCadastral(), getControladorCliente());
+						AbstractAtualizacaoCadastralCommand command = new ParseImovelCommand(parserConteudo, getControladorUtil(), getControladorAtualizacaoCadastral(), repositorioImovel);
 						command.execute(atualizacao);					
 					} else if ("03".equals(registroTipo)) {
 						AbstractAtualizacaoCadastralCommand command = new ParseRamoAtividadeCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
