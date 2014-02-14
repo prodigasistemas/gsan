@@ -16,12 +16,7 @@
 					</logic:notPresent>
 				</td>
 
-<<<<<<< Updated upstream
-          		<td align="right">Vers&atilde;o: 5.1.1.57 (Online) 13/02/2014 - 9:28:19 </td>
-=======
-          		<td align="right">Vers&atilde;o: 5.1.1.57 (Online) 13/02/2014 - 9:28:19 </td>
-
->>>>>>> Stashed changes
+          		<td align="right">Vers&atilde;o: 5.1.1.57 (Online) 14/02/2014 - 16:50:22 </td>
         	</tr>
       	</table>
 		</td>

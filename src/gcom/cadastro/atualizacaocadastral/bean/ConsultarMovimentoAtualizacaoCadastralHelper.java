@@ -6,67 +6,30 @@ public class ConsultarMovimentoAtualizacaoCadastralHelper {
 
 	private Integer icAutorizado;
 	
-	private Integer argumento;
-	
 	private Integer idImovel;
-	
-	private Long idCliente;
-	
-	private Integer qtdAlteracaoImovel;
-	
-	private Integer qtdAlteracaoCliente;
 	
 	private String nomeFuncionario;
 	
-	private String nomeCliente;
-	
 	private Date dataRealizacao;
-	
-	private String nomeEmpresa;
 	
 	private Integer idArquivo;
 	
 	private String inscricao;
 	
-	private String clienteNovo;
-	
 	private Long idRegistroAlterado;
 	
 	private Integer idTipoAlteracao;
 	
-	public ConsultarMovimentoAtualizacaoCadastralHelper(Integer icAutorizado, Integer argumento, Integer idImovel, Long idCliente, Integer qtdAlteracaoImovel, Integer qtdAlteracaoCliente, String nomeFuncionario, String nomeCliente, Date dataRealizacao, String nomeEmpresa, Integer idArquivo, String inscricao, String clienteNovo) {
+	public ConsultarMovimentoAtualizacaoCadastralHelper(Integer icAutorizado, Integer idImovel, String nomeFuncionario, Date dataRealizacao, Integer idArquivo, String inscricao) {
 		this.icAutorizado = icAutorizado;
-		this.argumento = argumento;
 		this.idImovel = idImovel;
-		this.idCliente = idCliente;
-		this.qtdAlteracaoImovel = qtdAlteracaoImovel;
-		this.qtdAlteracaoCliente = qtdAlteracaoCliente;
 		this.nomeFuncionario = nomeFuncionario;
-		this.nomeCliente = nomeCliente;
 		this.dataRealizacao = dataRealizacao;
-		this.nomeEmpresa = nomeEmpresa;
 		this.idArquivo = idArquivo;
 		this.inscricao = inscricao;
-		this.clienteNovo = clienteNovo;
 	}
 
 	public ConsultarMovimentoAtualizacaoCadastralHelper(){}
-
-	public Integer getArgumento() {
-		return argumento;
-	}
-
-	public void setArgumento(Integer argumento) {
-		this.argumento = argumento;
-	}
-
-	public Long getIdCliente() {
-		return idCliente;
-	}
-
-	public void setIdCliente(Long idCliente) {
-		this.idCliente = idCliente;
-	}
 
 	public Integer getIdImovel() {
 		return idImovel;
@@ -74,14 +37,6 @@ public class ConsultarMovimentoAtualizacaoCadastralHelper {
 
 	public void setIdImovel(Integer idImovel) {
 		this.idImovel = idImovel;
-	}
-
-	public String getNomeCliente() {
-		return nomeCliente;
-	}
-
-	public void setNomeCliente(String nomeCliente) {
-		this.nomeCliente = nomeCliente;
 	}
 
 	public String getNomeFuncionario() {
@@ -92,22 +47,6 @@ public class ConsultarMovimentoAtualizacaoCadastralHelper {
 		this.nomeFuncionario = nomeFuncionario;
 	}
 
-	public Integer getQtdAlteracaoCliente() {
-		return qtdAlteracaoCliente;
-	}
-
-	public void setQtdAlteracaoCliente(Integer qtdAlteracaoCliente) {
-		this.qtdAlteracaoCliente = qtdAlteracaoCliente;
-	}
-
-	public Integer getQtdAlteracaoImovel() {
-		return qtdAlteracaoImovel;
-	}
-
-	public void setQtdAlteracaoImovel(Integer qtdAlteracaoImovel) {
-		this.qtdAlteracaoImovel = qtdAlteracaoImovel;
-	}
-
 	public Date getDataRealizacao() {
 		return dataRealizacao;
 	}
@@ -116,14 +55,6 @@ public class ConsultarMovimentoAtualizacaoCadastralHelper {
 		this.dataRealizacao = dataRealizacao;
 	}
 
-	public String getNomeEmpresa() {
-		return nomeEmpresa;
-	}
-
-	public void setNomeEmpresa(String nomeEmpresa) {
-		this.nomeEmpresa = nomeEmpresa;
-	}	
-		
 	public Integer getIdArquivo() {
 		return idArquivo;
 	}
@@ -148,17 +79,6 @@ public class ConsultarMovimentoAtualizacaoCadastralHelper {
 		this.inscricao = inscricao;
 	}
 
-	public String getClienteNovo() {
-		if (idCliente != null){
-			clienteNovo = String.valueOf(idCliente); 
-			if (clienteNovo.length() >= 13){
-				clienteNovo =  "NOVO";
-			}
-		}
-		
-		return clienteNovo;
-	}
-
 	public Long getIdRegistroAlterado() {
 		return idRegistroAlterado;
 	}
@@ -173,5 +93,32 @@ public class ConsultarMovimentoAtualizacaoCadastralHelper {
 
 	public void setIdTipoAlteracao(Integer idTipoAlteracao) {
 		this.idTipoAlteracao = idTipoAlteracao;
+	}
+
+	public String toString() {
+		return "ConsultarMovimentoAtualizacaoCadastralHelper [idImovel=" + idImovel + ", idTipoAlteracao=" + idTipoAlteracao + "]";
+	}
+
+	public int hashCode() {
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((idImovel == null) ? 0 : idImovel.hashCode());
+		return result;
+	}
+
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		ConsultarMovimentoAtualizacaoCadastralHelper other = (ConsultarMovimentoAtualizacaoCadastralHelper) obj;
+		if (idImovel == null) {
+			if (other.idImovel != null)
+				return false;
+		} else if (!idImovel.equals(other.idImovel))
+			return false;
+		return true;
 	}
 }
