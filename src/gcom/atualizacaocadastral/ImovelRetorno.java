@@ -30,6 +30,13 @@ public class ImovelRetorno implements IImovel{
 	private Integer idProtecaoHidrometro;
 	private Date ultimaAlteracao;
 	private Integer tipoOperacao;
+	private Integer codigoMunicipio;
+	private String nomeMunicipio;
+	private Integer idLogradouroTipo;
+	private String codigoLogradouro; 
+	private String descricaoLogradouro;
+	private String nomeBairro;
+	private Integer codigoCep;
 
 	public ImovelRetorno () {
 		
@@ -225,5 +232,61 @@ public class ImovelRetorno implements IImovel{
 
 	public void setTipoOperacao(Integer tipoOperacao) {
 		this.tipoOperacao = tipoOperacao;
+	}
+
+	public Integer getCodigoMunicipio() {
+		return codigoMunicipio;
+	}
+
+	public void setCodigoMunicipio(Integer codigoMunicipio) {
+		this.codigoMunicipio = codigoMunicipio;
+	}
+
+	public String getNomeMunicipio() {
+		return nomeMunicipio;
+	}
+
+	public void setNomeMunicipio(String nomeMunicipio) {
+		this.nomeMunicipio = nomeMunicipio;
+	}
+
+	public Integer getLogradouroTipo() {
+		return idLogradouroTipo;
+	}
+
+	public void setLogradouroTipo(Integer logradouroTipo) {
+		this.idLogradouroTipo = logradouroTipo;
+	}
+
+	public String getCodigoLogradouro() {
+		return codigoLogradouro;
+	}
+
+	public void setCodigoLogradouro(String codigoLogradouro) {
+		this.codigoLogradouro = codigoLogradouro;
+	}
+
+	public String getDescricaoLogradouro() {
+		return descricaoLogradouro;
+	}
+
+	public void setDescricaoLogradouro(String descricaoLogradouro) {
+		this.descricaoLogradouro = descricaoLogradouro;
+	}
+
+	public String getNomeBairro() {
+		return nomeBairro;
+	}
+
+	public void setNomeBairro(String nomeBairro) {
+		this.nomeBairro = nomeBairro;
+	}
+
+	public Integer getCodigoCep() {
+		return codigoCep;
+	}
+
+	public void setCodigoCep(Integer codigoCep) {
+		this.codigoCep = codigoCep;
 	}
 }

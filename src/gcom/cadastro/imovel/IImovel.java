@@ -3,7 +3,6 @@ package gcom.cadastro.imovel;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.micromedicao.hidrometro.HidrometroProtecao;
 
-import java.math.BigDecimal;
 import java.util.Date;
 
 public interface IImovel {
@@ -91,5 +90,32 @@ public interface IImovel {
 	public Integer getTipoOperacao();
 	
 	public void setTipoOperacao(Integer tipoOperacao);
-    
+	
+	public Integer getCodigoMunicipio();
+	
+	public void setCodigoMunicipio(Integer codigoMunicipio);
+	
+	public String getNomeMunicipio();
+	
+	public void setNomeMunicipio(String nomeMunicipio);
+	
+	public Integer getLogradouroTipo();
+	
+	public void setLogradouroTipo(Integer logradouroTipo);
+	
+	public String getCodigoLogradouro();
+	
+	public void setCodigoLogradouro(String codigoLogradouro);
+	
+	public String getDescricaoLogradouro();
+	
+	public void setDescricaoLogradouro(String descricaoLogradouro);
+	
+	public String getNomeBairro();
+	
+	public void setNomeBairro(String nomeBairro);
+	
+	public Integer getCodigoCep();
+	
+	public void setCodigoCep(Integer codigoCep);
 }

@@ -193,6 +193,12 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 	
 	private Integer tipoOperacao;
 	
+	private Integer codigoMunicipio;
+	
+	private String descricaoMunicipio;
+	
+	private String codigoLogradouro;
+	
 	public ImovelAtualizacaoCadastral(Integer id, Integer idImovel, Integer idLocalidade,
 			int codigoSetorComercial, int numeroQuadra, short lote,
 			short subLote, Integer numeroSequencialRota,
@@ -956,5 +962,29 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 
 	public void setTipoOperacao(Integer tipoOperacao) {
 		this.tipoOperacao = tipoOperacao;
+	}
+
+	public Integer getCodigoMunicipio() {
+		return this.codigoMunicipio;
+	}
+
+	public void setCodigoMunicipio(Integer codigoMunicipio) {
+		this.codigoMunicipio = codigoMunicipio;
+	}
+
+	public Integer getLogradouroTipo() {
+		return idLogradouroTipo;
+	}
+
+	public void setLogradouroTipo(Integer logradouroTipo) {
+		this.idLogradouroTipo = logradouroTipo;
+	}
+
+	public String getCodigoLogradouro() {
+		return String.valueOf(idLogradouro);
+	}
+
+	public void setCodigoLogradouro(String codigoLogradouro) {
+		this.idLogradouro = Integer.valueOf(codigoLogradouro);
 	}
 }
