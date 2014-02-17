@@ -17,49 +17,7 @@
 * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
 */
 
-/*
-* GSAN - Sistema Integrado de Gestão de Serviços de Saneamento
-* Copyright (C) <2007> 
-* Adriano Britto Siqueira
-* Alexandre Santos Cabral
-* Ana Carolina Alves Breda
-* Ana Maria Andrade Cavalcante
-* Aryed Lins de Araújo
-* Bruno Leonardo Rodrigues Barros
-* Carlos Elmano Rodrigues Ferreira
-* Cláudio de Andrade Lira
-* Denys Guimarães Guenes Tavares
-* Eduardo Breckenfeld da Rosa Borges
-* Fabíola Gomes de Araújo
-* Flávio Leonardo Cavalcanti Cordeiro
-* Francisco do Nascimento Júnior
-* Homero Sampaio Cavalcanti
-* Ivan Sérgio Virginio da Silva Júnior
-* José Edmar de Siqueira
-* José Thiago Tenório Lopes
-* Kássia Regina Silvestre de Albuquerque
-* Leonardo Luiz Vieira da Silva
-* Márcio Roberto Batista da Silva
-* Maria de Fátima Sampaio Leite
-* Micaela Maria Coelho de Araújo
-* Nelson Mendonça de Carvalho
-* Newton Morais e Silva
-* Pedro Alexandre Santos da Silva Filho
-* Rafael Corrêa Lima e Silva
-* Rafael Francisco Pinto
-* Rafael Koury Monteiro
-* Rafael Palermo de Araújo
-* Raphael Veras Rossiter
-* Roberto Sobreira Barbalho
-* Rodrigo Avellar Silveira
-* Rosana Carvalho Barbosa
-* Sávio Luiz de Andrade Cavalcante
-* Tai Mu Shih
-* Thiago Augusto Souza do Nascimento
-* Tiago Moreno Rodrigues
-* Vivianne Barbosa Sousa
-*
-* Este programa é software livre; você pode redistribuí-lo e/ou
+/* Este programa é software livre; você pode redistribuí-lo e/ou
 * modificá-lo sob os termos de Licença Pública Geral GNU, conforme
 * publicada pela Free Software Foundation; versão 2 da
 * Licença.
@@ -78,6 +36,7 @@ package gcom.gui.cadastro.atualizacaocadastral;
 import gcom.cadastro.atualizacaocadastral.bean.DadosTabelaAtualizacaoCadastralHelper;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.FiltroClienteImovel;
+import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.localidade.Quadra;
@@ -98,95 +57,56 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-/**
- * Action para exibir a página de Atualizacao Cadastral
- * 
- * @author Ivan Sergio
- * @created 02/06/2009
- */
 public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends GcomAction {
 
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 
 		// Prepara o retorno da Ação
-		ActionForward retorno = 
-			actionMapping.findForward("exibirAtualizarDadosImovelAtualizacaoCadastralPopup");
+		ActionForward retorno = actionMapping.findForward("exibirAtualizarDadosImovelAtualizacaoCadastralPopup");
 		
 		// Cria a sessão
 		HttpSession sessao = httpServletRequest.getSession(false);
 		
 		// Obtém o action form
-		ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm atualizacaoCadastralActionForm =
-			(ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm) actionForm;
+		ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm form = (ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm) actionForm;
 
 		// Obtém a fachada
 		Fachada fachada = Fachada.getInstancia();
 		
 		String idImovel = (String) httpServletRequest.getParameter("idImovel");
-		String idCliente = (String) httpServletRequest.getParameter("idCliente");
-		String idArquivo = (String) httpServletRequest.getParameter("idArquivo");
-		String idRegistroAlterado = (String) httpServletRequest.getParameter("idRegistroAlterado");
-		String idTipoAlteracao = (String) httpServletRequest.getParameter("idTipoAlteracao");
 		
 		// Realiza o Filtro para o Imovel
-		if ( (idImovel != null && !idImovel.equals("")) || (idCliente != null && !idCliente.equals("")) ) {
-			FiltroClienteImovel filtroClienteImovel = new FiltroClienteImovel();
+		if ( (idImovel != null && !idImovel.equals(""))) {
+			FiltroImovel filtro = new FiltroImovel();
 			
-			if (idImovel != null && !idImovel.equals("")) {
-				filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.IMOVEL);
-				filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.IMOVEL_ID, idImovel));
-				//idRegistroAlterado = new Integer(idImovel);
-			}
+			filtro.adicionarParametro(new ParametroSimples(FiltroImovel.ID, idImovel));
 			
-			if (idCliente != null && !idCliente.equals("")) {
-				filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.CLIENTE);
-				filtroClienteImovel.adicionarParametro(new ParametroSimples(FiltroClienteImovel.CLIENTE_ID, idCliente));
-				//idRegistroAlterado = new Integer(idCliente);
-			}
+			filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroImovel.LOCALIDADE);
+			filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroImovel.SETOR_COMERCIAL);
+			filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroImovel.QUADRA);
 			
-			filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.LOCALIDADE);
-			filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.SETOR_COMERCIAL);
-			filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade(FiltroClienteImovel.QUADRA);
+			Imovel imovel = (Imovel) Util.retonarObjetoDeColecao(fachada.pesquisar(filtro, Imovel.class.getName()));
 			
-			ClienteImovel clienteImovel = (ClienteImovel) Util.retonarObjetoDeColecao(fachada.pesquisar(
-					filtroClienteImovel, ClienteImovel.class.getName()));
+			form.setIdImovel(idImovel);
+			form.setDescricaoImovel("NOVO");
 			
-			if (clienteImovel != null) {
-				Imovel imovel = clienteImovel.getImovel();
+			if (imovel != null) {
 				Localidade localidade = (Localidade) imovel.getLocalidade();
 				SetorComercial setorComercial = (SetorComercial) imovel.getSetorComercial();
 				Quadra quadra = (Quadra) imovel.getQuadra();
 				
 				// Imovel
-				atualizacaoCadastralActionForm.setIdImovel(imovel.getId().toString());
+				form.setDescricaoImovel(imovel.getId().toString());
 				// Localidade
-				atualizacaoCadastralActionForm.setIdLocalidade(localidade.getId().toString());
-				atualizacaoCadastralActionForm.setDescricaoLocalidade(localidade.getDescricao());
+				form.setIdLocalidade(localidade.getId().toString());
+				form.setDescricaoLocalidade(localidade.getDescricao());
 				// Setor Comercial
-				atualizacaoCadastralActionForm.setIdSetorComercial(setorComercial.getId().toString());
-				atualizacaoCadastralActionForm.setCodigoSetorComercial("" + setorComercial.getCodigo());
-				atualizacaoCadastralActionForm.setDescricaoSetorComercial(setorComercial.getDescricao());
+				form.setIdSetorComercial(setorComercial.getId().toString());
+				form.setCodigoSetorComercial("" + setorComercial.getCodigo());
+				form.setDescricaoSetorComercial(setorComercial.getDescricao());
 				// Quadra
-				atualizacaoCadastralActionForm.setIdQuadra(quadra.getId().toString());
-				atualizacaoCadastralActionForm.setNumeroQuadra("" + quadra.getNumeroQuadra());
-			}else {
-				// Imovel
-				atualizacaoCadastralActionForm.setIdImovel(idImovel);
-				// Localidade
-				atualizacaoCadastralActionForm.setIdLocalidade(null);
-				atualizacaoCadastralActionForm.setDescricaoLocalidade(null);
-				// Setor Comercial
-				atualizacaoCadastralActionForm.setIdSetorComercial(null);
-				atualizacaoCadastralActionForm.setCodigoSetorComercial(null);
-				atualizacaoCadastralActionForm.setDescricaoSetorComercial(null);
-				// Quadra
-				atualizacaoCadastralActionForm.setIdQuadra(null);
-				atualizacaoCadastralActionForm.setNumeroQuadra(null);
-/*				throw new ActionServletException(
-						"atencao.pesquisa.nenhumresultado", null,
-						"Dados do Imovel");*/
+				form.setIdQuadra(quadra.getId().toString());
+				form.setNumeroQuadra("" + quadra.getNumeroQuadra());
 			}
 		}else {
 			throw new ActionServletException(
@@ -194,18 +114,10 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 					"Dados do Imovel e Cliente");
 		}
 		
-		// Consulta os dados da Tabela Atualizacao Cadastral
-		Integer arquivo = new Integer(idArquivo);
-		Collection<DadosTabelaAtualizacaoCadastralHelper> colecaoDadosTabelaAtualizacaoCadastral = null;
-		if(idCliente != null && !idCliente.equals("")){
-			colecaoDadosTabelaAtualizacaoCadastral = fachada.consultarDadosTabelaColunaAtualizacaoCadastral(
-					new Long(idRegistroAlterado), arquivo, new Integer(idImovel), new Long(idCliente),new Integer(idTipoAlteracao));
-		}else{
-			colecaoDadosTabelaAtualizacaoCadastral = fachada.consultarDadosTabelaColunaAtualizacaoCadastral(
-					new Long(idRegistroAlterado), arquivo, new Integer(idImovel), null,new Integer(idTipoAlteracao));
-		}
+		Collection<DadosTabelaAtualizacaoCadastralHelper> colecaoDadosTabelaAtualizacaoCadastral = 
+				fachada.consultarDadosTabelaColunaAtualizacaoCadastral(null, null, new Integer(idImovel), null, null);
 		
-		if (colecaoDadosTabelaAtualizacaoCadastral != null && !colecaoDadosTabelaAtualizacaoCadastral.isEmpty()) {
+		if (!colecaoDadosTabelaAtualizacaoCadastral.isEmpty()) {
 			sessao.setAttribute("colecaoDadosTabelaAtualizacaoCadastral", colecaoDadosTabelaAtualizacaoCadastral);
 		}else { 
 			throw new ActionServletException(
