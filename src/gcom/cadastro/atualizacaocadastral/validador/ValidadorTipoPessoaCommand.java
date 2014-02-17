@@ -2,7 +2,6 @@ package gcom.cadastro.atualizacaocadastral.validador;
 
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastralImovel;
 import gcom.cadastro.cliente.ClienteImovel;
-import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.IRepositorioClienteImovel;
 import gcom.util.Util;
 

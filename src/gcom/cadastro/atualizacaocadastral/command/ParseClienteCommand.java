@@ -3,23 +3,22 @@ package gcom.cadastro.atualizacaocadastral.command;
 import gcom.atualizacaocadastral.IControladorAtualizacaoCadastral;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
+import gcom.cadastro.atualizacaocadastral.validador.ValidadorCPFsClientesCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorCepClienteProprietarioResponsavel;
-import gcom.cadastro.atualizacaocadastral.validador.ValidadorMatriculasClientesCommand;
+import gcom.cadastro.atualizacaocadastral.validador.ValidadorNomesClientesCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorSexoCommand;
-import gcom.cadastro.atualizacaocadastral.validador.ValidadorTipoPessoaCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorTamanhoLinhaClienteCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorTipoEnderecoCommand;
+import gcom.cadastro.atualizacaocadastral.validador.ValidadorTipoPessoaCommand;
 import gcom.cadastro.cliente.IRepositorioClienteImovel;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.util.ParserUtil;
-import gcom.util.Util;
 import gcom.util.exception.MatriculaProprietarioException;
 import gcom.util.exception.MatriculaResponsavelException;
 import gcom.util.exception.MatriculaUsuarioException;
 
 import java.util.Map;
 
-import org.apache.commons.lang.StringUtils;
 import org.jboss.logging.Logger;
 
 public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
@@ -248,53 +247,12 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 			}
 		}
 		
-		testaUsuario(imovelAtual, linha);
-
-		testaResponsavel(imovelAtual, linha);
-
-		testaProprietario(imovelAtual, linha);
 		
 		new ValidadorSexoCommand(imovelAtual, linha).execute();
-		new ValidadorMatriculasClientesCommand(imovelAtual, linha, repositorioClienteImovel).execute();
+		new ValidadorNomesClientesCommand(imovelAtual, linha).execute();
+		new ValidadorCPFsClientesCommand(imovelAtual, linha, repositorioClienteImovel).execute();
 		new ValidadorCepClienteProprietarioResponsavel(imovelAtual, linha).execute();
 		new ValidadorTipoPessoaCommand(imovelAtual, linha, repositorioClienteImovel).execute();
 		new ValidadorTipoEnderecoCommand(imovelAtual, linha).execute();
-	}
-	
-	private void testaUsuario(AtualizacaoCadastralImovel imovelAtual, Map<String, String> linha) throws Exception {
-		if (Util.nomeInvalido(linha.get("nomeUsuario"))){
-			imovelAtual.addMensagemErro("Nome de usuário inválido.");
-		}
-		
-		if (StringUtils.isEmpty(linha.get("cnpjCpfUsuario"))){
-			imovelAtual.limparDadosUsuario();
-		}else if (Util.cpfCnpjInvalido(linha.get("cnpjCpfUsuario"))){
-			imovelAtual.addMensagemErro("CPF/CNPJ de usuário inválido.");
-			imovelAtual.limparDadosUsuario();
-		}
-	}
-
-	private void testaProprietario(AtualizacaoCadastralImovel imovelAtual, Map<String, String> linha) throws Exception {
-		if (StringUtils.isNotEmpty(linha.get("nomeProprietario"))){
-			if (Util.nomeInvalido(linha.get("nomeProprietario"))){
-				imovelAtual.addMensagemErro("Nome de proprietário inválido.");
-			}
-		}
-		
-		if (StringUtils.isNotEmpty(linha.get("cnpjCpfProprietario")) && Util.cpfCnpjInvalido(linha.get("cnpjCpfProprietario"))){
-			imovelAtual.addMensagemErro("CPF/CNPJ de proprietário inválido.");
-		}
-	}
-
-	private void testaResponsavel(AtualizacaoCadastralImovel imovelAtual, Map<String, String> linha) throws Exception {
-		if (StringUtils.isNotEmpty(linha.get("nomeResponsavel"))){
-			if (Util.nomeInvalido(linha.get("nomeResponsavel"))){
-				imovelAtual.addMensagemErro("Nome de responsável inválido.");
-			}
-		}
-		
-		if (StringUtils.isNotEmpty(linha.get("cnpjCpfResponsavel")) && Util.cpfCnpjInvalido(linha.get("cnpjCpfResponsavel"))){
-			imovelAtual.addMensagemErro("CPF/CNPJ de responsável inválido.");
-		}
 	}
 }
