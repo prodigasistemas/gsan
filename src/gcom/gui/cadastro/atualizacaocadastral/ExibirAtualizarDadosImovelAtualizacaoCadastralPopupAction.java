@@ -34,8 +34,6 @@
 package gcom.gui.cadastro.atualizacaocadastral;
 
 import gcom.cadastro.atualizacaocadastral.bean.DadosTabelaAtualizacaoCadastralHelper;
-import gcom.cadastro.cliente.ClienteImovel;
-import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.localidade.Localidade;

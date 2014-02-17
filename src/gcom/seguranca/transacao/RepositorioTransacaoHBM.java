@@ -698,7 +698,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			.append(" left join cadastro.funcionario func on(leit.func_id = func.func_id)")
 			.append(" left join cadastro.cliente clie on(leit.clie_id = clie.clie_id)")
 			.append(" left join atualizacaocadastral.imovel_controle_atlz_cad ctrl on (ctrl.imov_id = tatc.tatc_cdimovel)") 
-			.append(" where ctrl.siac_id <> :situacao");
+			.append(" where ctrl.siac_id = :situacao");
 
 			if (StringUtils.isNotEmpty(filtroHelper.getIdLocalidadeInicial())) {
 				sql.append(" and txac.loca_id between " + filtroHelper.getIdLocalidadeInicial() + " and " + filtroHelper.getIdLocalidadeFinal());
@@ -735,7 +735,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 					.addScalar("idImovel", Hibernate.INTEGER)
 					.addScalar("nomeFuncionario", Hibernate.STRING)
 					.addScalar("icAutorizado", Hibernate.INTEGER)
-					.setInteger("situacao", SituacaoAtualizacaoCadastral.APROVADO)
+					.setInteger("situacao", Integer.valueOf(filtroHelper.getExibirCampos()))
 					.list();
 			
 			Map<Integer, ConsultarMovimentoAtualizacaoCadastralHelper> map = new LinkedHashSetAlteracaoCadastral();
