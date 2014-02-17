@@ -88,6 +88,7 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 			Imovel imovel = (Imovel) Util.retonarObjetoDeColecao(fachada.pesquisar(filtro, Imovel.class.getName()));
 			
 			form.setIdImovel(idImovel);
+			form.setDescricaoImovel("NOVO");
 			
 			if (imovel != null) {
 				Localidade localidade = (Localidade) imovel.getLocalidade();
@@ -95,7 +96,7 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 				Quadra quadra = (Quadra) imovel.getQuadra();
 				
 				// Imovel
-				form.setIdImovel(imovel.getId().toString());
+				form.setDescricaoImovel(imovel.getId().toString());
 				// Localidade
 				form.setIdLocalidade(localidade.getId().toString());
 				form.setDescricaoLocalidade(localidade.getDescricao());
