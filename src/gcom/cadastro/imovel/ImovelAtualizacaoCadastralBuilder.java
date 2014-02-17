@@ -62,6 +62,7 @@ public class ImovelAtualizacaoCadastralBuilder {
 		imovelAtualizacaoCadastral.setDescricaoLogradouro(atualizacaoCadastralImovel.getLinhaImovel("logradouroImovel"));
 		imovelAtualizacaoCadastral.setCodigoCep(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("cep")));
 		imovelAtualizacaoCadastral.setNomeBairro(atualizacaoCadastralImovel.getLinhaImovel("bairro"));
+		imovelAtualizacaoCadastral.setCodigoMunicipio(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("codigoMunicipio")));
 		imovelAtualizacaoCadastral.setNomeMunicipio(atualizacaoCadastralImovel.getLinhaImovel("municipio"));
 		imovelAtualizacaoCadastral.setIdLogradouro(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("codigoLogradouro")));
 		imovelAtualizacaoCadastral.setNumeroPontosUtilizacao(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("numeroPontosUteis")) == 0 ? null : Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("numeroPontosUteis")));

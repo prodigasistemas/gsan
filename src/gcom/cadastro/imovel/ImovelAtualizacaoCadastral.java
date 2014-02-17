@@ -193,6 +193,8 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 	
 	private Integer tipoOperacao;
 	
+	private Integer codigoMunicipio;
+	
 	public ImovelAtualizacaoCadastral(Integer id, Integer idImovel, Integer idLocalidade,
 			int codigoSetorComercial, int numeroQuadra, short lote,
 			short subLote, Integer numeroSequencialRota,
@@ -219,7 +221,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 			String descricaoOutrasInformacoes, String tipoEntrevistado,
 			Integer codigoImovelPrincipal,
 			Integer idSituacaoAtualizacaoCadastral, Integer idEmpresa,
-			Integer idMunicipio, String nomeMunicipio,
+			Integer idMunicipio, Integer codigoMunicipio, String nomeMunicipio,
 			Integer idUinidadeFederacao, String dsUFSiglaMunicipio,
 			Integer idArquivoTexto, Integer indicadorAtualizado,
 			Integer tipoOperacao) {
@@ -278,6 +280,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 		this.idSituacaoAtualizacaoCadastral = idSituacaoAtualizacaoCadastral;
 		this.idEmpresa = idEmpresa;
 		this.idMunicipio = idMunicipio;
+		this.codigoMunicipio = codigoMunicipio;
 		this.nomeMunicipio = nomeMunicipio;
 		this.idUinidadeFederacao = idUinidadeFederacao;
 		this.dsUFSiglaMunicipio = dsUFSiglaMunicipio;
@@ -956,5 +959,29 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 
 	public void setTipoOperacao(Integer tipoOperacao) {
 		this.tipoOperacao = tipoOperacao;
+	}
+
+	public Integer getCodigoMunicipio() {
+		return this.codigoMunicipio;
+	}
+
+	public void setCodigoMunicipio(Integer codigoMunicipio) {
+		this.codigoMunicipio = codigoMunicipio;
+	}
+
+	public Integer getLogradouroTipo() {
+		return idLogradouroTipo;
+	}
+
+	public void setLogradouroTipo(Integer logradouroTipo) {
+		this.idLogradouroTipo = logradouroTipo;
+	}
+
+	public String getCodigoLogradouro() {
+		return String.valueOf(idLogradouro);
+	}
+
+	public void setCodigoLogradouro(String codigoLogradouro) {
+		this.idLogradouro = Integer.valueOf(codigoLogradouro);
 	}
 }
