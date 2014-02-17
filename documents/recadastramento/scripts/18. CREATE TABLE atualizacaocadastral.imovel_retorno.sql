@@ -43,14 +43,7 @@ CREATE TABLE atualizacaocadastral.imovel_retorno
   last_id integer,
   ftab_id integer,
   hipr_id integer,
-  imov_id integer,
-  muni_id integer,
-  imac_nmmunicipio character varying(30),
-  lgtp_id integer,
-  logr_id integer,
-  imac_dslogradouro character varying(40),
-  imac_nmbairro character varying(30),
-  imac_cdcep integer
+  imov_id integer
 
   CONSTRAINT imovel_retorno_pkey PRIMARY KEY (imre_id),
   CONSTRAINT fk1_imovel_retorno FOREIGN KEY (last_id)

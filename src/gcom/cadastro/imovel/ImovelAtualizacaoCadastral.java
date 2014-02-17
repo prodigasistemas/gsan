@@ -195,10 +195,6 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 	
 	private Integer codigoMunicipio;
 	
-	private String descricaoMunicipio;
-	
-	private String codigoLogradouro;
-	
 	public ImovelAtualizacaoCadastral(Integer id, Integer idImovel, Integer idLocalidade,
 			int codigoSetorComercial, int numeroQuadra, short lote,
 			short subLote, Integer numeroSequencialRota,
@@ -225,7 +221,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 			String descricaoOutrasInformacoes, String tipoEntrevistado,
 			Integer codigoImovelPrincipal,
 			Integer idSituacaoAtualizacaoCadastral, Integer idEmpresa,
-			Integer idMunicipio, String nomeMunicipio,
+			Integer idMunicipio, Integer codigoMunicipio, String nomeMunicipio,
 			Integer idUinidadeFederacao, String dsUFSiglaMunicipio,
 			Integer idArquivoTexto, Integer indicadorAtualizado,
 			Integer tipoOperacao) {
@@ -284,6 +280,7 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 		this.idSituacaoAtualizacaoCadastral = idSituacaoAtualizacaoCadastral;
 		this.idEmpresa = idEmpresa;
 		this.idMunicipio = idMunicipio;
+		this.codigoMunicipio = codigoMunicipio;
 		this.nomeMunicipio = nomeMunicipio;
 		this.idUinidadeFederacao = idUinidadeFederacao;
 		this.dsUFSiglaMunicipio = dsUFSiglaMunicipio;

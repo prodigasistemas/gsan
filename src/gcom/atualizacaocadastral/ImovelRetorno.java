@@ -33,7 +33,7 @@ public class ImovelRetorno implements IImovel{
 	private Integer codigoMunicipio;
 	private String nomeMunicipio;
 	private Integer idLogradouroTipo;
-	private String codigoLogradouro; 
+	private Integer idLogradouro; 
 	private String descricaoLogradouro;
 	private String nomeBairro;
 	private Integer codigoCep;
@@ -64,6 +64,13 @@ public class ImovelRetorno implements IImovel{
 		this.fonteAbastecimento = new FonteAbastecimento(imovelAtualizacaoCadastral.getIdFonteAbastecimento());
 		this.hidrometroProtecao = new HidrometroProtecao(imovelAtualizacaoCadastral.getIdProtecaoHidrometro());
 		this.tipoOperacao = imovelAtualizacaoCadastral.getTipoOperacao();
+		this.codigoMunicipio = imovelAtualizacaoCadastral.getCodigoMunicipio();
+		this.nomeMunicipio = imovelAtualizacaoCadastral.getNomeMunicipio();
+		this.idLogradouroTipo = imovelAtualizacaoCadastral.getLogradouroTipo();
+		this.idLogradouro = Integer.parseInt(imovelAtualizacaoCadastral.getCodigoLogradouro()); 
+		this.descricaoLogradouro = imovelAtualizacaoCadastral.getDescricaoLogradouro();
+		this.nomeBairro = imovelAtualizacaoCadastral.getNomeBairro();
+		this.codigoCep = imovelAtualizacaoCadastral.getCodigoCep();
 	}
 
 	public Integer getId() {
@@ -250,6 +257,14 @@ public class ImovelRetorno implements IImovel{
 		this.nomeMunicipio = nomeMunicipio;
 	}
 
+	public Integer getIdLogradouroTipo() {
+		return idLogradouroTipo;
+	}
+
+	public void setIdLogradouroTipo(Integer idLogradouroTipo) {
+		this.idLogradouroTipo = idLogradouroTipo;
+	}
+	
 	public Integer getLogradouroTipo() {
 		return idLogradouroTipo;
 	}
@@ -257,13 +272,21 @@ public class ImovelRetorno implements IImovel{
 	public void setLogradouroTipo(Integer logradouroTipo) {
 		this.idLogradouroTipo = logradouroTipo;
 	}
+	
+	public Integer getIdLogradouro() {
+		return idLogradouro;
+	}
+
+	public void setIdLogradouro(Integer idLogradouro) {
+		this.idLogradouro = idLogradouro;
+	}
 
 	public String getCodigoLogradouro() {
-		return codigoLogradouro;
+		return idLogradouro.toString();
 	}
 
 	public void setCodigoLogradouro(String codigoLogradouro) {
-		this.codigoLogradouro = codigoLogradouro;
+		this.idLogradouro = Integer.parseInt(codigoLogradouro);
 	}
 
 	public String getDescricaoLogradouro() {

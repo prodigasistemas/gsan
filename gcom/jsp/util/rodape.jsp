@@ -17,9 +17,9 @@
 				</td>
 
 <<<<<<< Updated upstream
-          		<td align="right">Vers&atilde;o: 5.1.1.57 (Online) 13/02/2014 - 9:28:19 </td>
+          		<td align="right">Vers&atilde;o: 5.1.1.57 (Online) 17/02/2014 - 17:01:02 </td>
 =======
-          		<td align="right">Vers&atilde;o: 5.1.1.57 (Online) 13/02/2014 - 9:28:19 </td>
+          		<td align="right">Vers&atilde;o: 5.1.1.57 (Online) 17/02/2014 - 17:01:02 </td>
 
 >>>>>>> Stashed changes
         	</tr>
