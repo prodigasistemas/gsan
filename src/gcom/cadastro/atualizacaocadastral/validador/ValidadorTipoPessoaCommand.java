@@ -2,7 +2,6 @@ package gcom.cadastro.atualizacaocadastral.validador;
 
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastralImovel;
 import gcom.cadastro.cliente.ClienteImovel;
-import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.IRepositorioClienteImovel;
 import gcom.util.Util;
 
@@ -62,6 +61,8 @@ public class ValidadorTipoPessoaCommand extends ValidadorCommand {
 		}
 	}
 	
+	@Deprecated
+	@SuppressWarnings("unused")
 	private void validarTipoCadastrado(String cliente, Short relacao) {
 		String tipo = linha.get("tipoPessoa" + cliente);
 		if (existeTipoRelacao(relacao) && tipoRelacao(relacao) != Short.valueOf(tipo)){
@@ -94,7 +95,7 @@ public class ValidadorTipoPessoaCommand extends ValidadorCommand {
 		if (StringUtils.isNotEmpty(cpfCnpj)){
 			if (pessoaFisica(tipo.charAt(0))){
 				if (Util.isCPF(cpfCnpj)){
-					linha.put("cpf" + cliente, cpfCnpj.substring(3));
+					linha.put("cpf" + cliente, cpfCnpj);
 				}else{
 					cadastroImovel.addMensagemErro(String.format(MSG_CPF_CNPJ_INCONSISTENTE, cliente));
 				}
