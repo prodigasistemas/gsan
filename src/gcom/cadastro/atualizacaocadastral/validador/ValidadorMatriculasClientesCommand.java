@@ -41,7 +41,7 @@ public class ValidadorMatriculasClientesCommand extends ValidadorCommand {
 		}
 		
 		if (base != -1 && base != matricula){
-			cadastroImovel.addMensagemErro(String.format("Inconsistencia na matrícula do %s", cliente));
+			cadastroImovel.addMensagemErro(String.format("Inconsistência na matrícula de %s.", cliente));
 		}
 	}
 }

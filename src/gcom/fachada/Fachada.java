@@ -38985,9 +38985,9 @@ public class Fachada {
 		}
 	}
 
-	public AtualizacaoCadastral carregarImovelAtualizacaoCadastral(BufferedReader buffer, ArrayList<String> nomesImagens) throws Exception {
+	public AtualizacaoCadastral carregarImovelAtualizacaoCadastral(BufferedReader buffer, List<String> imagens) throws Exception {
 		return this.getControladorCadastro().carregarImovelAtualizacaoCadastral(
-				buffer, nomesImagens);
+				buffer, imagens);
 	}
 	
 	/**

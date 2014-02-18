@@ -30,6 +30,7 @@ import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.atualizacaocadastral.FiltroImovelAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.command.AbstractAtualizacaoCadastralCommand;
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastral;
+import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastralImovel;
 import gcom.cadastro.atualizacaocadastral.command.EfetuarValidacoesAtualizacaoCadastralCommand;
 import gcom.cadastro.atualizacaocadastral.command.MontarObjetosAtualizacaoCadastralCommand;
 import gcom.cadastro.atualizacaocadastral.command.ParseAnormalidadeCommand;
@@ -7755,8 +7756,9 @@ public class ControladorCadastro implements SessionBean {
 	 * @param nomesImagens
 	 * @throws ControladorException
 	 */
-	public AtualizacaoCadastral carregarImovelAtualizacaoCadastral(BufferedReader buffer, ArrayList<String> nomesImagens) throws Exception {
+	public AtualizacaoCadastral carregarImovelAtualizacaoCadastral(BufferedReader buffer, List<String> imagens) throws Exception {
 		AtualizacaoCadastral atualizacao = new AtualizacaoCadastral();
+		atualizacao.setImagens(imagens);
 		
 		try {
 			String line = null;
@@ -7821,6 +7823,8 @@ public class ControladorCadastro implements SessionBean {
 				}
 			}
 
+			this.excluirImagemImoveisComErro(atualizacao);
+			
 			Integer quantidadeImoveisTransmitidos = repositorioCadastro.pesquisarQuantidadeImoveisPorSituacaoAtualizacaoCadastral(
 					SituacaoAtualizacaoCadastral.TRANSMITIDO, atualizacao.getArquivoTexto().getId());
 			
@@ -7840,6 +7844,25 @@ public class ControladorCadastro implements SessionBean {
 		}
 		
 		return atualizacao;
+	}
+
+	private void excluirImagemImoveisComErro(AtualizacaoCadastral atualizacao) throws Exception {
+		
+		List<AtualizacaoCadastralImovel> imoveisComErro = atualizacao.getImoveisComErro();
+		
+		for (AtualizacaoCadastralImovel imovelComErro : imoveisComErro) {
+			Integer matricula = imovelComErro.getMatricula();
+			
+			for (String nomeImagem : atualizacao.getImagens()) {
+				String caminhoJboss = System.getProperty("jboss.server.home.dir");
+				String pasta = "/images/cadastro/" + atualizacao.getArquivoTexto().getDescricaoArquivo();
+				
+				if (nomeImagem.contains(matricula.toString())) {
+					File arquivo = new File(caminhoJboss + pasta, nomeImagem);
+					arquivo.delete();
+				}
+			}
+		}
 	}
 
 	/**

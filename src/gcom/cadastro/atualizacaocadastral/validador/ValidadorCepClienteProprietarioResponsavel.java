@@ -25,12 +25,12 @@ public class ValidadorCepClienteProprietarioResponsavel extends ValidadorCommand
 		if((!StringUtils.isEmpty(matriculaProprietario) && !StringUtils.containsOnly(matriculaProprietario,  new char[]{'0'}))
 			|| (StringUtils.containsOnly(nomeProprietario,  new char[]{'0'}) && !StringUtils.isEmpty(nomeProprietario))) {
 			if(StringUtils.isEmpty(cepProprietario)) {
-				cadastroImovel.addMensagemErro("E obrigatório o preenchimento do CEP para o cliente Proprietário.");
+				cadastroImovel.addMensagemErro("É obrigatório o preenchimento do CEP para o cliente Proprietário.");
 				return;
 			}
 			
 			if(!StringUtils.isNumeric(cepProprietario) || StringUtils.containsOnly(cepProprietario,  new char[]{'0'})){
-				cadastroImovel.addMensagemErro("Número do CEP do cliente Proprietário é inválido");
+				cadastroImovel.addMensagemErro("Número do CEP de cliente Proprietário inválido.");
 			}
 		}
 	}
@@ -47,7 +47,7 @@ public class ValidadorCepClienteProprietarioResponsavel extends ValidadorCommand
 			}
 				
 			if(!StringUtils.isNumeric(cepResponsavel) || StringUtils.containsOnly(cepResponsavel,  new char[]{'0'})){
-				cadastroImovel.addMensagemErro("Número do CEP do cliente Responsável é inválido");
+				cadastroImovel.addMensagemErro("Número do CEP de cliente Responsável inválido.");
 			}
 		}
 	}

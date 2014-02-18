@@ -1,5 +1,8 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
+import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
+import gcom.atualizacaocadastral.ImagemRetorno;
+import gcom.cadastro.IRepositorioCadastro;
 import gcom.atualizacaocadastral.IControladorAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorTamanhoLinhaImovelCommand;
 import gcom.cadastro.endereco.Logradouro;
@@ -7,7 +10,6 @@ import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
 import gcom.cadastro.endereco.LogradouroTipo;
 import gcom.cadastro.imovel.IRepositorioImovel;
-import gcom.cadastro.imovel.ImagemAtualizacaoCadastral;
 import gcom.seguranca.transacao.AlteracaoTipo;
 import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
@@ -53,8 +55,6 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 
 			String tipoOperacao = parser.obterDadoParser(1);
 			linha.put("tipoOperacao", "" + tipoOperacao);
-
-			inserirImagem(atualizacao, matricula);
 
 			String codigoCliente = parser.obterDadoParser(30).trim();
 			linha.put("codigoCliente", codigoCliente);
@@ -186,30 +186,6 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 		return StringUtils.isEmpty(matricula) || !StringUtils.isNumeric(matricula) || Integer.parseInt(matricula) <=0;
 	}
 
-	private void inserirImagem(AtualizacaoCadastral atualizacao,
-			Integer matricula) throws IOException, ControladorException {
-		for (String nomeImagem : atualizacao.getImovelAtual().getNomesImagens()) {
-			if (nomeImagem.contains("" + matricula)) {
-				File file = new File(nomeImagem);
-
-				BufferedImage image = ImageIO.read(file);
-				ByteArrayOutputStream baos = new ByteArrayOutputStream();
-				ImageIO.write(image, nomeImagem.split("[.]")[1], baos);
-				byte[] imagem = baos.toByteArray();
-
-				ImagemAtualizacaoCadastral imagemAtualizacaoCadastral = new ImagemAtualizacaoCadastral();
-				imagemAtualizacaoCadastral.setIdImovel(matricula);
-				imagemAtualizacaoCadastral.setImagem(imagem);
-				imagemAtualizacaoCadastral.setUltimaAlteracao(new Date());
-
-				controladorUtil.inserir(imagemAtualizacaoCadastral);
-
-				baos.close();
-				file.delete();
-			}
-		}
-	}
-
 	private void validaCamposImovel(AtualizacaoCadastral atualizacao, AtualizacaoCadastralImovel imovel) throws Exception {
 		Map<String, String> linha = imovel.getLinhaImovel();
 
@@ -218,13 +194,12 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 		validarLogradouro(imovel,linha);
 		validarCoordenadas(imovel, linha);
 		validarEconomias(imovel, linha);
-		validarTamanhoLinha(imovel, parser);
 	}
 
 	private void validarTipoOperacao(AtualizacaoCadastralImovel imovel, Map<String, String> linha) throws ErroRepositorioException {
 		String tipoOperacao = linha.get("tipoOperacao"); 
 		if (campoNumericoInvalido(tipoOperacao)){
-			imovel.addMensagemErro("Tipo da operação é inválido");
+			imovel.addMensagemErro("Tipo da operação é inválida.");
 		}else{
 			Integer tipo = Integer.valueOf(tipoOperacao);
 			if (tipo == AlteracaoTipo.INCLUSAO){
@@ -236,16 +211,16 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 				
 				boolean codigosInvalidos = false;
 				if (campoNumericoInvalido(codigoLogradouro)){
-					imovel.addMensagemErro("Código do logradouro inválido");
+					imovel.addMensagemErro("Código do logradouro inválido.");
 					codigosInvalidos = true;
 				}
 				if (campoNumericoInvalido(codigoMunicipio)){
-					imovel.addMensagemErro("Código do município inválido");
+					imovel.addMensagemErro("Código do município inválido.");
 					codigosInvalidos = true;
 				}
 				
 				if (campoNumericoInvalido(cep)){
-					imovel.addMensagemErro("CEP inválido");
+					imovel.addMensagemErro("CEP inválido.");
 					codigosInvalidos = true;
 				}
 				
@@ -260,11 +235,11 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 					}
 					
 					if (bairroInvalido){
-						imovel.addMensagemErro("Bairro inválido");
+						imovel.addMensagemErro("Bairro inválido.");
 					}
 					
 					if (!logradouro.getMunicipio().getNome().equalsIgnoreCase(municipio)){
-						imovel.addMensagemErro("Município inválido");
+						imovel.addMensagemErro("Município inválido.");
 					}
 					
 					boolean cepInvalido = true;
@@ -275,7 +250,7 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 					}
 					
 					if (cepInvalido){
-						imovel.addMensagemErro("CEP inválido");
+						imovel.addMensagemErro("CEP inválido.");
 					}
 				}
 				
@@ -284,21 +259,21 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 				String sublote   = inscricao.substring(14);
 				
 				if (campoNumericoInvalido(lote)){
-					imovel.addMensagemErro("Lote inválido");
+					imovel.addMensagemErro("Lote inválido.");
 				}
 				if (campoNumericoInvalido(sublote)){
-					imovel.addMensagemErro("Sublote inválido");
+					imovel.addMensagemErro("Sublote inválido.");
 				}
 				
 				int qtdInscricao = 0;
-				for (AtualizacaoCadastralImovel itemAtualizacao: imovel.getAtualizacaoArquivo().getAtualizacoesImovel()){
+				for (AtualizacaoCadastralImovel itemAtualizacao: imovel.getAtualizacaoArquivo().getImoveisComErro()){
 					if (itemAtualizacao.getLinhaImovel("inscricao").equals(inscricao)){
 						qtdInscricao++;
 					}
 				}
 				
 				if (qtdInscricao > 1){
-					imovel.addMensagemErro("Número de inscrição repetido");
+					imovel.addMensagemErro("Número de inscrição repetido.");
 				}
 				
 				imovel.limparDadosProprietario();
@@ -344,19 +319,19 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 
 	private void validarCoordenadas(AtualizacaoCadastralImovel imovel, Map<String, String> linha) {
 		if (StringUtils.isEmpty(linha.get("latitude"))){
-			imovel.addMensagemErro("Latitude inválida");
+			imovel.addMensagemErro("Latitude inválida.");
 		}else{
 			if (StringUtils.containsOnly(linha.get("latitude").trim(), new char[]{'0'})){
-				imovel.addMensagemErro("Latitude inválida");
+				imovel.addMensagemErro("Latitude inválida.");
 			}
 		}
 		
 		if (StringUtils.isEmpty(linha.get("longitude"))){
-			imovel.addMensagemErro("Longitude inválida");
+			imovel.addMensagemErro("Longitude inválida.");
 		}
 		else{
 			if (StringUtils.containsOnly(linha.get("longitude").trim(), new char[]{'0'})){
-				imovel.addMensagemErro("Longitude inválida");
+				imovel.addMensagemErro("Longitude inválida.");
 			}
 		}
 	}
@@ -365,26 +340,20 @@ public class ParseImovelCommand extends AbstractAtualizacaoCadastralCommand {
 		return StringUtils.isEmpty(tipoOperacao) || !StringUtils.isNumeric(tipoOperacao) || StringUtils.containsOnly(tipoOperacao, new char[]{'0'}) ;
 	}
 	
-	private void validarTamanhoLinha(AtualizacaoCadastralImovel imovel, ParserUtil parser) {
-		if(parser.getFonte().length() != 370) {
-			imovel.addMensagemErro("A linha Tipo 02 não está compatível ao definido no leiaute");
-		}
-	}
-	
 	private void validarLogradouro(AtualizacaoCadastralImovel imovel, Map<String, String> linha) throws ErroRepositorioException{
 		String codigoLogradouro = linha.get("codigoLogradouro");
 		if(campoNumericoInvalido(codigoLogradouro)) {
-			imovel.addMensagemErro("Código do logradouro é inválido");
+			imovel.addMensagemErro("Código do logradouro é inválido.");
 		} 
 		
 		Logradouro logradouro = repositorioImovel.pesquisarLogradouro(Integer.valueOf(codigoLogradouro));
 		if(logradouro == null) {
-			imovel.addMensagemErro("Logradouro inexistente");
+			imovel.addMensagemErro("Logradouro inexistente.");
 		}
 
 		Integer idLogradouro = repositorioImovel.pesquisarLogradouroImovelAtualizacaoCadastral(Integer.parseInt(linha.get("matricula")));
 		if(idLogradouro != null && !idLogradouro.equals(Integer.valueOf(codigoLogradouro))) {
-			imovel.addMensagemErro("Código do logradouro não pode ser alterado");
+			imovel.addMensagemErro("Código do logradouro não pode ser alterado.");
 		}
 		
 	}
