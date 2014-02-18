@@ -34,7 +34,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	}
 
 	@SuppressWarnings("unchecked")
-	public Collection<IImovel> obterImoveisParaAtualizar() throws ErroRepositorioException {
+	public Collection<IImovel> obterImoveisParaAtualizar(Integer tipoOperacao) throws ErroRepositorioException {
 		
 		Collection<IImovel> retorno = null;
 		Session session = HibernateUtil.getSession();
@@ -44,11 +44,13 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		try {
 			
 			consulta = "from ImovelRetorno imovelRetorno"
-					+ " where imovelRetorno.idImovel in "
+					+ " where imovelRetorno.tipoOperacao = :tipoOperacao"
+					+ " and imovelRetorno.idImovel in "
 						+ " ( select imovelControle.imovel.id from ImovelControleAtualizacaoCadastral imovelControle "
 						+ " where imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  + ") " ;
 			
-			retorno = (Collection<IImovel>) session.createQuery(consulta).list();
+			retorno = (Collection<IImovel>) session.createQuery(consulta).
+					setInteger("tipoOperacao",  tipoOperacao).list();
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis.");
 		} finally {
