@@ -7478,6 +7478,8 @@ public class ControladorCadastro implements SessionBean {
 						}
 						
 						inserirImovelControleAtualizacaoCadastral(idImovel);
+						getControladorImovel().atualizarImovelSituacaoAtualizacaoCadastral(
+								idImovel, SituacaoAtualizacaoCadastral.BLOQUEADO);
 					}
 				}
 			}
