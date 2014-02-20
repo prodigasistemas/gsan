@@ -1,4 +1,4 @@
-package gcom.cadastro.imovel;
+package gcom.atualizacaocadastral;
 
 import java.util.Date;
 
@@ -7,7 +7,7 @@ import gcom.interceptor.ObjetoTransacao;
 import gcom.util.filtro.Filtro;
 
 @ControleAlteracao()
-public class ImagemAtualizacaoCadastral extends ObjetoTransacao {
+public class ImagemRetorno extends ObjetoTransacao {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -17,38 +17,43 @@ public class ImagemAtualizacaoCadastral extends ObjetoTransacao {
 	
 	private Integer idImovel;
 	
-	private byte[] imagem;
+	private String nomeImagem;
 	
-	/** persistent field */
+	private String pathImagem;
+	
     private Date ultimaAlteracao;
 	
 	public Integer getId() {
 		return id;
 	}
 
-	public Integer getIdImovel() {
-		return idImovel;
-	}
-	
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Integer getIdImovel() {
+		return idImovel;
 	}
 
 	public void setIdImovel(Integer idImovel) {
 		this.idImovel = idImovel;
 	}
 
-	public byte[] getImagem() {
-		return imagem;
+	public String getNomeImagem() {
+		return nomeImagem;
 	}
 
-	public void setImagem(byte[] imagem) {
-		this.imagem = imagem;
+	public void setNomeImagem(String nomeImagem) {
+		this.nomeImagem = nomeImagem;
 	}
-	
-	
 
-	
+	public String getPathImagem() {
+		return pathImagem;
+	}
+
+	public void setPathImagem(String pathImagem) {
+		this.pathImagem = pathImagem;
+	}
 
 	public Date getUltimaAlteracao() {
 		return ultimaAlteracao;
@@ -60,15 +65,11 @@ public class ImagemAtualizacaoCadastral extends ObjetoTransacao {
 
 	@Override
 	public Filtro retornaFiltro() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public String[] retornaCamposChavePrimaria() {
-		// TODO Auto-generated method stub
 		return null;
 	}
-	
-
 }

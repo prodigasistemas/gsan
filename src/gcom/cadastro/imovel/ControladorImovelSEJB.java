@@ -17073,7 +17073,7 @@ public class ControladorImovelSEJB implements SessionBean {
 	 * @throws ControladorException
 	 */
 
-	public Collection pesquisarRamoAtividadeDoImovel(Integer idImovel)
+	public Collection<ImovelRamoAtividade> pesquisarRamoAtividadeDoImovel(Integer idImovel)
 			throws ControladorException {
 	
 		try {

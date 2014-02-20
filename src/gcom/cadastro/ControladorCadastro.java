@@ -30,6 +30,7 @@ import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.atualizacaocadastral.FiltroImovelAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.command.AbstractAtualizacaoCadastralCommand;
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastral;
+import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastralImovel;
 import gcom.cadastro.atualizacaocadastral.command.EfetuarValidacoesAtualizacaoCadastralCommand;
 import gcom.cadastro.atualizacaocadastral.command.MontarObjetosAtualizacaoCadastralCommand;
 import gcom.cadastro.atualizacaocadastral.command.ParseAnormalidadeCommand;
@@ -45,7 +46,6 @@ import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimpli
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoLinha;
 import gcom.cadastro.atualizacaocadastralsimplificado.FiltroAtualizacaoCadastralSimplificadoCritica;
 import gcom.cadastro.cliente.Cliente;
-import gcom.cadastro.cliente.ClienteAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteConta;
 import gcom.cadastro.cliente.ClienteEndereco;
 import gcom.cadastro.cliente.ClienteFone;
@@ -107,6 +107,7 @@ import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelInscricaoAlterada;
 import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.cadastro.imovel.ImovelProgramaEspecial;
+import gcom.cadastro.imovel.ImovelRamoAtividade;
 import gcom.cadastro.imovel.ImovelRamoAtividadeAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
@@ -175,8 +176,6 @@ import gcom.gui.relatorio.cadastro.FiltrarRelatorioAcessoSPCHelper;
 import gcom.gui.relatorio.cadastro.GerarRelatorioAlteracoesCpfCnpjHelper;
 import gcom.gui.relatorio.cadastro.micromedicao.FiltrarRelatorioColetaMedidorEnergiaHelper;
 import gcom.gui.relatorio.seguranca.GerarRelatorioAlteracoesSistemaColunaHelper;
-import gcom.interceptor.Interceptador;
-import gcom.interceptor.ObjetoTransacao;
 import gcom.interceptor.RegistradorOperacao;
 import gcom.micromedicao.ArquivoTextoLigacoesHidrometroHelper;
 import gcom.micromedicao.ControladorMicromedicaoLocal;
@@ -226,15 +225,8 @@ import gcom.seguranca.acesso.usuario.FiltroUsuario;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.seguranca.acesso.usuario.UsuarioAcao;
 import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
-import gcom.seguranca.transacao.AlteracaoTipo;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.seguranca.transacao.ControladorTransacaoLocalHome;
-import gcom.seguranca.transacao.FiltroTabelaColuna;
-import gcom.seguranca.transacao.Tabela;
-import gcom.seguranca.transacao.TabelaAtualizacaoCadastral;
-import gcom.seguranca.transacao.TabelaColuna;
-import gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral;
-import gcom.seguranca.transacao.TabelaLinhaColunaAlteracao;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
@@ -7486,6 +7478,8 @@ public class ControladorCadastro implements SessionBean {
 						}
 						
 						inserirImovelControleAtualizacaoCadastral(idImovel);
+						getControladorImovel().atualizarImovelSituacaoAtualizacaoCadastral(
+								idImovel, SituacaoAtualizacaoCadastral.BLOQUEADO);
 					}
 				}
 			}
@@ -7704,16 +7698,12 @@ public class ControladorCadastro implements SessionBean {
 						.gerarArquivoTextoRegistroTipoImovel(idImovel));
 				qtdRegistro = qtdRegistro + 1;
 
-				Collection<RamoAtividade> colecaoRamoAtividade = getControladorImovel()
-						.pesquisarRamoAtividadeDoImovel(idImovel);
+				Collection<ImovelRamoAtividade> colecaoImovelRamoAtividade = getControladorImovel().pesquisarRamoAtividadeDoImovel(idImovel);
 
-				if (colecaoRamoAtividade != null
-						&& !colecaoRamoAtividade.isEmpty()) {
+				if (colecaoImovelRamoAtividade != null && !colecaoImovelRamoAtividade.isEmpty()) {
 					// REGISTRO_TIPO_03(Ramos de Atividade do Imovel)
-					arquivoTexto.append(this
-							.gerarArquivoTextoRegistroTipoRamoAtividadeImovel(
-									colecaoRamoAtividade, idImovel));
-					qtdRegistro = qtdRegistro + colecaoRamoAtividade.size();
+					arquivoTexto.append(this.gerarArquivoTextoRegistroTipoRamoAtividadeImovel(colecaoImovelRamoAtividade, idImovel));
+					qtdRegistro = qtdRegistro + colecaoImovelRamoAtividade.size();
 				}
 
 				// REGISTRO_TIPO_04 (Dados Serviços)
@@ -7768,8 +7758,9 @@ public class ControladorCadastro implements SessionBean {
 	 * @param nomesImagens
 	 * @throws ControladorException
 	 */
-	public AtualizacaoCadastral carregarImovelAtualizacaoCadastral(BufferedReader buffer, ArrayList<String> nomesImagens) throws Exception {
+	public AtualizacaoCadastral carregarImovelAtualizacaoCadastral(BufferedReader buffer, List<String> imagens) throws Exception {
 		AtualizacaoCadastral atualizacao = new AtualizacaoCadastral();
+		atualizacao.setImagens(imagens);
 		
 		try {
 			String line = null;
@@ -7797,8 +7788,7 @@ public class ControladorCadastro implements SessionBean {
 				
 				if (!atualizacao.getImovelAtual().isImovelAprovado()){
 					if ("02".equals(registroTipo)) {
-						AbstractAtualizacaoCadastralCommand command = new ParseImovelCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
-								repositorioImovel, getControladorEndereco(), getControladorAtualizacaoCadastral(), getControladorCliente());
+						AbstractAtualizacaoCadastralCommand command = new ParseImovelCommand(parserConteudo, getControladorUtil(), getControladorAtualizacaoCadastral(), repositorioImovel);
 						command.execute(atualizacao);					
 					} else if ("03".equals(registroTipo)) {
 						AbstractAtualizacaoCadastralCommand command = new ParseRamoAtividadeCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
@@ -7835,6 +7825,8 @@ public class ControladorCadastro implements SessionBean {
 				}
 			}
 
+			this.excluirImagemImoveisComErro(atualizacao);
+			
 			Integer quantidadeImoveisTransmitidos = repositorioCadastro.pesquisarQuantidadeImoveisPorSituacaoAtualizacaoCadastral(
 					SituacaoAtualizacaoCadastral.TRANSMITIDO, atualizacao.getArquivoTexto().getId());
 			
@@ -7854,6 +7846,25 @@ public class ControladorCadastro implements SessionBean {
 		}
 		
 		return atualizacao;
+	}
+
+	private void excluirImagemImoveisComErro(AtualizacaoCadastral atualizacao) throws Exception {
+		
+		List<AtualizacaoCadastralImovel> imoveisComErro = atualizacao.getImoveisComErro();
+		
+		for (AtualizacaoCadastralImovel imovelComErro : imoveisComErro) {
+			Integer matricula = imovelComErro.getMatricula();
+			
+			for (String nomeImagem : atualizacao.getImagens()) {
+				String caminhoJboss = System.getProperty("jboss.server.home.dir");
+				String pasta = "/images/cadastro/" + atualizacao.getArquivoTexto().getDescricaoArquivo();
+				
+				if (nomeImagem.contains(matricula.toString())) {
+					File arquivo = new File(caminhoJboss + pasta, nomeImagem);
+					arquivo.delete();
+				}
+			}
+		}
 	}
 
 	/**
@@ -9236,33 +9247,22 @@ public class ControladorCadastro implements SessionBean {
 	 * @param imovel
 	 * @throws ControladorException
 	 */
-	public StringBuilder gerarArquivoTextoRegistroTipoRamoAtividadeImovel(
-			Collection colecaoRamoAtividadeDoImovel, Integer idImovel)
+	public StringBuilder gerarArquivoTextoRegistroTipoRamoAtividadeImovel(Collection<ImovelRamoAtividade> colecaoImovelRamoAtividade, Integer idImovel)
 			throws ControladorException {
 
 		StringBuilder arquivoTextoRegistroTipoRamoAtividadeImovel = new StringBuilder();
 
-		Iterator ramoAtividadeDoImovelIterator = colecaoRamoAtividadeDoImovel
-				.iterator();
-		while (ramoAtividadeDoImovelIterator.hasNext()) {
+		Iterator imovelRamoAtividadeIterator = colecaoImovelRamoAtividade.iterator();
+		while (imovelRamoAtividadeIterator.hasNext()) {
 
-			RamoAtividade ramoAtividade = (RamoAtividade) ramoAtividadeDoImovelIterator
-					.next();
+			ImovelRamoAtividade imovelRamoAtividade = (ImovelRamoAtividade) imovelRamoAtividadeIterator.next();
 
-			// TIPO DO REGISTRO
 			arquivoTextoRegistroTipoRamoAtividadeImovel.append("03");
+			arquivoTextoRegistroTipoRamoAtividadeImovel.append(Util.adicionarZerosEsquedaNumero(9, idImovel.toString()));
+			arquivoTextoRegistroTipoRamoAtividadeImovel.append(Util	.adicionarZerosEsquedaNumero(3, 
+					imovelRamoAtividade.getComp_id().getRamo_atividade().getId().toString()));
 
-			// ID IMOVEL
-			arquivoTextoRegistroTipoRamoAtividadeImovel.append(Util
-					.adicionarZerosEsquedaNumero(9, idImovel.toString()));
-
-			// ID RAMO ATIVIDADE
-			arquivoTextoRegistroTipoRamoAtividadeImovel.append(Util
-					.adicionarZerosEsquedaNumero(3, ramoAtividade.getId()
-							.toString()));
-
-			arquivoTextoRegistroTipoRamoAtividadeImovel.append(System
-					.getProperty("line.separator"));
+			arquivoTextoRegistroTipoRamoAtividadeImovel.append(System.getProperty("line.separator"));
 
 		}
 		return arquivoTextoRegistroTipoRamoAtividadeImovel;

@@ -3577,7 +3577,7 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	 * @exception ErroRepositorioException
 	 *                Erro no hibernate
 	 */
-	public Collection<RamoAtividade> pesquisarRamoAtividadeDoImovel(Integer idImovel)
+	public Collection<ImovelRamoAtividade> pesquisarRamoAtividadeDoImovel(Integer idImovel)
 		throws ControladorException;
 	
 	public void atualizarIdArquivoTextoImovelAtualizacaoCadastral(

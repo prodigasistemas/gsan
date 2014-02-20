@@ -18,10 +18,7 @@ import org.apache.struts.action.ActionMapping;
 
 public class FiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction {
 
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
-
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 		Fachada fachada = Fachada.getInstancia();
 
 		ActionForward retorno = actionMapping.findForward("filtrarAlteracaoAtualizacaoCadastral");
@@ -34,18 +31,17 @@ public class FiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction {
 			throw new ActionServletException("atencao.filtro.nenhum_parametro_informado");
 		}
 		
-		FiltrarAlteracaoAtualizacaoCadastralActionHelper helper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper(
+		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro = new FiltrarAlteracaoAtualizacaoCadastralActionHelper(
 				form.getIdEmpresa(), form.getIdLeiturista(), form.getExibirCampos(), form.getColunaImoveisSelecionados(),
 				form.getIdLocalidadeInicial(), form.getCdSetorComercialInicial(), form.getCdRotaInicial(),
 				form.getIdLocalidadeFinal(), form.getCdSetorComercialFinal(), form.getCdRotaFinal());
 		
-		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> colecaoConsultarMovimentoAtualizacaoCadastralHelper = 
-				fachada.pesquisarMovimentoAtualizacaoCadastral(helper);
+		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> helper = fachada.pesquisarMovimentoAtualizacaoCadastral(filtro);
         
-        if( colecaoConsultarMovimentoAtualizacaoCadastralHelper == null || colecaoConsultarMovimentoAtualizacaoCadastralHelper.isEmpty()){
+        if( helper.isEmpty()){
 			throw new ActionServletException("atencao.pesquisa.nenhumresultado", "exibirFiltrarAlteracaoAtualizacaoCadastralAction.do", null, new String[] {});
         }
-        sessao.setAttribute("colecaoConsultarMovimentoAtualizacaoCadastralHelper",colecaoConsultarMovimentoAtualizacaoCadastralHelper);
+        sessao.setAttribute("colecaoConsultarMovimentoAtualizacaoCadastralHelper",helper);
 
 		return retorno;
 	}

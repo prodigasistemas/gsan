@@ -11,13 +11,13 @@ INSERT INTO seguranca.tabela_coluna(tbco_id, tabe_id, tbco_tmultimaalteracao, tb
 INSERT INTO seguranca.tabela_coluna(
             tbco_id, tabe_id, tbco_tmultimaalteracao, tbco_nmcoluna, tbco_dscoluna, 
             tbco_icprimarykey, tbco_nmabreviado, atrb_id)
-    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 662, now(), 'crtp_id', 'Id Relacao Tipo', 
+    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 662, now(), 'crtp_id', 'Relacao Tipo', 
             2, 'crtp_id', null);
 
 INSERT INTO seguranca.tabela_coluna(
             tbco_id, tabe_id, tbco_tmultimaalteracao, tbco_nmcoluna, tbco_dscoluna, 
             tbco_icprimarykey, tbco_nmabreviado, atrb_id)
-    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 662, now(), 'cltp_id', 'Id Cliente Tipo', 
+    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 662, now(), 'cltp_id', 'Cliente Tipo', 
             2, 'cltp_id', null);
 
 INSERT INTO seguranca.tabela_coluna(
@@ -59,13 +59,13 @@ INSERT INTO seguranca.tabela_coluna(
 INSERT INTO seguranca.tabela_coluna(
             tbco_id, tabe_id, tbco_tmultimaalteracao, tbco_nmcoluna, tbco_dscoluna, 
             tbco_icprimarykey, tbco_nmabreviado, atrb_id)
-    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 662, now(), 'prof_id', 'Id da Profissao', 
+    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 662, now(), 'prof_id', 'Profissao', 
             2, 'prof_id', null);
 
 INSERT INTO seguranca.tabela_coluna(
             tbco_id, tabe_id, tbco_tmultimaalteracao, tbco_nmcoluna, tbco_dscoluna, 
             tbco_icprimarykey, tbco_nmabreviado, atrb_id)
-    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 662, now(), 'ratv_id', 'Id Ramo de AtivIdade', 
+    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 662, now(), 'ratv_id', 'Ramo de AtivIdade', 
             2, 'ratv_id', null);
 
 INSERT INTO seguranca.tabela_coluna(
@@ -107,7 +107,7 @@ INSERT INTO seguranca.tabela_coluna(
 INSERT INTO seguranca.tabela_coluna(
             tbco_id, tabe_id, tbco_tmultimaalteracao, tbco_nmcoluna, tbco_dscoluna, 
             tbco_icprimarykey, tbco_nmabreviado, atrb_id)
-    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 662, now(), 'lgtt_id', 'Id Logradouro Titulo', 
+    VALUES ((select max(tbco_id) + 1 from seguranca.tabela_coluna), 662, now(), 'lgtt_id', 'IdLogradouro Titulo', 
             2, null, null);
 
 INSERT INTO seguranca.tabela_coluna(

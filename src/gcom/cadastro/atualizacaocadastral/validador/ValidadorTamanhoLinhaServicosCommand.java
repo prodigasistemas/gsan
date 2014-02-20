@@ -14,7 +14,7 @@ public class ValidadorTamanhoLinhaServicosCommand extends ValidadorCommand {
 	@Override
 	public void execute() {
 		if (parser.getFonte().length() != 81){
-			cadastroImovel.addMensagemErroLayout("A linha Tipo 04 não está compatível ao definido no leiaute");
+			cadastroImovel.addMensagemErroLayout("Linha Tipo 04 (Serviços) não compatível com o Layout.");
 		}
 	}
 }
