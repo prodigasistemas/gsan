@@ -7,6 +7,7 @@ import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.util.ErroRepositorioException;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 public interface IRepositorioAtualizacaoCadastral {
@@ -39,4 +40,10 @@ public interface IRepositorioAtualizacaoCadastral {
 	public Collection<Integer> pesquisarIdsClienteRetorno(Integer idImovel) throws ErroRepositorioException;
 
 	public void liberarCadastroImovel(Integer idImovel) throws ErroRepositorioException;
+
+	public Collection<Integer> pesquisarImoveisAprovadosPorPeriodo(Date dataInicial, Date dataFinal) throws ErroRepositorioException;
+	
+	public Collection<Integer> pesquisarImoveisDisponiveisPorPeriodo(Date dataInicial, Date dataFinal) throws ErroRepositorioException;
+	
+	public Collection<Integer> pesquisarImoveisTransmitidosPorPeriodo(Date dataInicial, Date dataFinal) throws ErroRepositorioException;
 }

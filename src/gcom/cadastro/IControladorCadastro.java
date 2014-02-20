@@ -1674,5 +1674,7 @@ public interface IControladorCadastro {
 	
 	public Collection<Integer> pesquisarRotasAtualizacaoCadastral(
 			ImovelGeracaoTabelasTemporariasCadastroHelper helper) throws ControladorException;
+	
+	public SituacaoAtualizacaoCadastral pesquisarSituacaoAtualizacaoCadastralPorId(Integer idSituacaoCadastral) throws ControladorException;
 
 }

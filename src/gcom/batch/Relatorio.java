@@ -546,6 +546,8 @@ public class Relatorio implements Serializable {
      * @autor Adriana Muniz - 22/12/2011
      */
     public static final int SIMULADOR_DEBITO = 1003;
+    
+    public static final int RELATORIO_IMOVEIS_SITUACAO_PERIODO = 223;
 
     /** identifier field */
     private Integer id;

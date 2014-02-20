@@ -5,6 +5,7 @@ import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.util.ControladorException;
 
 import java.util.Collection;
+import java.util.Date;
 
 import javax.ejb.EJBLocalObject;
 
