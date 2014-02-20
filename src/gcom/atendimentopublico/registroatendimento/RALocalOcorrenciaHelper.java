@@ -33,123 +33,288 @@ public class RALocalOcorrenciaHelper {
 	public Integer getIdImovel() {
 		return idImovel;
 	}
+	
 	public void setIdImovel(Integer idImovel) {
 		this.idImovel = idImovel;
 	}
+	
+	public RALocalOcorrenciaHelper idImovel(Integer idImovel) {
+		setIdImovel(idImovel);
+		return this;
+	}
+	
 	public Collection<Conta> getColecaoContas() {
 		return colecaoContas;
 	}
+	
 	public void setColecaoContas(Collection<Conta> colecaoContas) {
 		this.colecaoContas = colecaoContas;
 	}
+	
+	public RALocalOcorrenciaHelper colecaoContas(Collection<Conta> colecaoContas) {
+		setColecaoContas(colecaoContas);
+		return this;
+	}
+	
 	public Collection<Endereco> getColecaoEndereco() {
 		return colecaoEndereco;
 	}
+	
 	public void setColecaoEndereco(Collection<Endereco> colecaoEndereco) {
 		this.colecaoEndereco = colecaoEndereco;
 	}
+	
+	public RALocalOcorrenciaHelper colecaoEndereco(Collection<Endereco> colecaoEndereco) {
+		setColecaoEndereco(colecaoEndereco);
+		return this;
+	}
+	
 	public String getPontoReferenciaLocalOcorrencia() {
 		return pontoReferenciaLocalOcorrencia;
 	}
-	public void setPontoReferenciaLocalOcorrencia(
-			String pontoReferenciaLocalOcorrencia) {
+	
+	public void setPontoReferenciaLocalOcorrencia(String pontoReferenciaLocalOcorrencia) {
 		this.pontoReferenciaLocalOcorrencia = pontoReferenciaLocalOcorrencia;
 	}
+	
+	public RALocalOcorrenciaHelper pontoReferenciaLocalOcorrencia(String pontoReferenciaLocalOcorrencia) {
+		setPontoReferenciaLocalOcorrencia(pontoReferenciaLocalOcorrencia);
+		return this;
+	}
+	
 	public BigDecimal getNnCoordenadaNorte() {
 		return nnCoordenadaNorte;
 	}
+	
 	public void setNnCoordenadaNorte(BigDecimal nnCoordenadaNorte) {
 		this.nnCoordenadaNorte = nnCoordenadaNorte;
 	}
+	
+	public RALocalOcorrenciaHelper nnCoordenadaNorte(BigDecimal nnCoordenadaNorte) {
+		setNnCoordenadaNorte(nnCoordenadaNorte);
+		return this;
+	}
+	
 	public BigDecimal getNnCoordenadaLeste() {
 		return nnCoordenadaLeste;
 	}
+	
 	public void setNnCoordenadaLeste(BigDecimal nnCoordenadaLeste) {
 		this.nnCoordenadaLeste = nnCoordenadaLeste;
 	}
+	
+	public RALocalOcorrenciaHelper nnCoordenadaLeste(BigDecimal nnCorrdenadaLeste) {
+		setNnCoordenadaLeste(nnCorrdenadaLeste);
+		return this;
+	}
+	
 	public Integer getIdBairroArea() {
 		return idBairroArea;
 	}
+	
 	public void setIdBairroArea(Integer idBairroArea) {
 		this.idBairroArea = idBairroArea;
 	}
+	
+	public RALocalOcorrenciaHelper idBairroArea(Integer idBairroArea) {
+		setIdBairroArea(idBairroArea);
+		return this;
+	}
+	
 	public Integer getIdLocalidade() {
 		return idLocalidade;
 	}
+	
 	public void setIdLocalidade(Integer idLocalidade) {
 		this.idLocalidade = idLocalidade;
 	}
+	
+	public RALocalOcorrenciaHelper idLocalidade(Integer idLocalidade) {
+		setIdLocalidade(idLocalidade);
+		return this;
+	}
+	
 	public Integer getIdSetorComercial() {
 		return idSetorComercial;
 	}
+	
 	public void setIdSetorComercial(Integer idSetorComercial) {
 		this.idSetorComercial = idSetorComercial;
 	}
+	
+	public RALocalOcorrenciaHelper idSetorComercial(Integer idSetorComercial) {
+		setIdSetorComercial(idSetorComercial);
+		return this;
+	}
+	
 	public Integer getIdQuadra() {
 		return idQuadra;
 	}
+	
 	public void setIdQuadra(Integer idQuadra) {
 		this.idQuadra = idQuadra;
 	}
+	
+	public RALocalOcorrenciaHelper dQuadra(Integer idQuadra) {
+		setIdQuadra(idQuadra);
+		return this;
+	}
+	
 	public Integer getIdDivisaoEsgoto() {
 		return idDivisaoEsgoto;
 	}
+	
 	public void setIdDivisaoEsgoto(Integer idDivisaoEsgoto) {
 		this.idDivisaoEsgoto = idDivisaoEsgoto;
 	}
+	
+	public RALocalOcorrenciaHelper idDivisaoEsgoto(Integer idDivisaoEsgoto) {
+		setIdDivisaoEsgoto(idDivisaoEsgoto);
+		return this;
+	}
+	
 	public Integer getIdUnidadeDestino() {
 		return idUnidadeDestino;
 	}
+	
 	public void setIdUnidadeDestino(Integer idUnidadeDestino) {
 		this.idUnidadeDestino = idUnidadeDestino;
 	}
+	
+	public RALocalOcorrenciaHelper idUnidadeDestino(Integer idUnidadeDestino) {
+		setIdUnidadeDestino(idUnidadeDestino);
+		return this;
+	}
+	
 	public String getParecerUnidadeDestino() {
 		return parecerUnidadeDestino;
 	}
+	
 	public void setParecerUnidadeDestino(String parecerUnidadeDestino) {
 		this.parecerUnidadeDestino = parecerUnidadeDestino;
 	}
+	
+	public RALocalOcorrenciaHelper parecerUnidadeDestino(String parecerUnidadeDestino) {
+		setParecerUnidadeDestino(parecerUnidadeDestino);
+		return this;
+	}
+	
 	public Integer getIdLocalOcorrencia() {
 		return idLocalOcorrencia;
 	}
+	
 	public void setIdLocalOcorrencia(Integer idLocalOcorrencia) {
 		this.idLocalOcorrencia = idLocalOcorrencia;
 	}
+	
+	public RALocalOcorrenciaHelper idLocalOcorrencia(Integer idLocalOcorrencia) {
+		setIdLocalOcorrencia(idLocalOcorrencia);
+		return this;
+	}
+	
 	public Integer getIdPavimentoRua() {
 		return idPavimentoRua;
 	}
+	
 	public void setIdPavimentoRua(Integer idPavimentoRua) {
 		this.idPavimentoRua = idPavimentoRua;
 	}
+	
+	public RALocalOcorrenciaHelper idPavimentoRua(Integer idPavimentoRua) {
+		setIdPavimentoRua(idPavimentoRua);
+		return this;
+	}
+
 	public Integer getIdPavimentoCalcada() {
 		return idPavimentoCalcada;
 	}
+	
 	public void setIdPavimentoCalcada(Integer idPavimentoCalcada) {
 		this.idPavimentoCalcada = idPavimentoCalcada;
 	}
+	
+	public RALocalOcorrenciaHelper idPavimentoCalcada(Integer idPavimentoCalcada) {
+		setIdPavimentoCalcada(idPavimentoCalcada);
+		return this;
+	}
+	
 	public String getDescricaoLocalOcorrencia() {
 		return descricaoLocalOcorrencia;
 	}
+	
 	public void setDescricaoLocalOcorrencia(String descricaoLocalOcorrencia) {
 		this.descricaoLocalOcorrencia = descricaoLocalOcorrencia;
 	}
+	
+	public RALocalOcorrenciaHelper descricaoLocalOcorrencia(String descricaoLocalOcorrencia) {
+		setDescricaoLocalOcorrencia(descricaoLocalOcorrencia);
+		return this;
+	}
+	
 	public short getIndicCoordenadaSemLogradouro() {
 		return indicCoordenadaSemLogradouro;
 	}
+	
 	public void setIndicCoordenadaSemLogradouro(short indicCoordenadaSemLogradouro) {
 		this.indicCoordenadaSemLogradouro = indicCoordenadaSemLogradouro;
 	}
+	
+	public RALocalOcorrenciaHelper indicadorCoordenadaSemLogradouro(short indicadorCoordenadaSemLogradouro) {
+		setIndicCoordenadaSemLogradouro(indicadorCoordenadaSemLogradouro);
+		return this;
+	}
+	
 	public Collection<Pagamento> getColecaoPagamentos() {
 		return colecaoPagamentos;
 	}
+	
 	public void setColecaoPagamentos(Collection<Pagamento> colecaoPagamentos) {
 		this.colecaoPagamentos = colecaoPagamentos;
 	}
+	
+	public RALocalOcorrenciaHelper colecaoPagamentos(Collection<Pagamento> colecaoPagamentos) {
+		setColecaoPagamentos(colecaoPagamentos);
+		return this;
+	}
+	
 	public BigDecimal getNnDiametro() {
 		return nnDiametro;
 	}
+	
 	public void setNnDiametro(BigDecimal nnDiametro) {
 		this.nnDiametro = nnDiametro;
+	}
+	
+	public RALocalOcorrenciaHelper nnDiametro(BigDecimal nnDiametro) {
+		setNnDiametro(nnDiametro);
+		return this;
+	}
+	
+	public RALocalOcorrenciaHelper criar() throws Exception {
+		StringBuffer mensagemErro = new StringBuffer();
+		if(idLocalidade == null){
+			mensagemErro.append("Id da localidade não foi preenchido.\n");
+		}
+		if(idBairroArea == null ){
+			mensagemErro.append("Id do bairro não foi preenchido.\n");
+		}
+		if(idSetorComercial == null ){
+			mensagemErro.append("Id do setor comercial não foi preenchido.\n");
+		}
+		
+		if(idQuadra == null ){
+			mensagemErro.append("Id do setor comercial não foi preenchido.\n");
+		}
+		
+		if(parecerUnidadeDestino  == null ){
+			mensagemErro.append("Parecer não foi preenchido.\n");
+		}
+		
+		if(mensagemErro.length() > 0){
+			throw new Exception(mensagemErro.toString());
+		}
+		
+		return this;
 	}
 	
 }

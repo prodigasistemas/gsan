@@ -10,6 +10,15 @@ public class RABuilder {
 	
 	Collection colecaoRegistroAtendimentoAnexo;
 	
+	public RABuilder() {
+		
+	}
+	
+	public RABuilder(RADadosGeraisHelper raDadosGeraisHelper, RALocalOcorrenciaHelper raLocalOcorrenciaHelper, RASolicitanteHelper raSolicitanteHelper) {
+		this.raDadosGeraisHelper = raDadosGeraisHelper;
+		this.raLocalOcorrenciaHelper = raLocalOcorrenciaHelper;
+		this.raSolicitanteHelper = raSolicitanteHelper;
+	}
 	public RADadosGeraisHelper getRaDadosGeraisHelper() {
 		return raDadosGeraisHelper;
 	}
