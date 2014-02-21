@@ -81,6 +81,7 @@ import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimpli
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.EsferaPoder;
+import gcom.cadastro.cliente.RamoAtividade;
 import gcom.cadastro.geografico.MunicipioFeriado;
 import gcom.cadastro.imovel.CadastroOcorrencia;
 import gcom.cadastro.imovel.Categoria;
@@ -89,6 +90,7 @@ import gcom.cadastro.imovel.ImovelContaEnvio;
 import gcom.cadastro.imovel.ImovelProgramaEspecial;
 import gcom.cadastro.imovel.ImovelRamoAtividadeAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
+import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.imovel.bean.ImovelGeracaoTabelasTemporariasCadastroHelper;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.localidade.Quadra;
@@ -4521,15 +4523,15 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 					ImovelSubcategoriaAtualizacaoCadastral imovSubAtual = new ImovelSubcategoriaAtualizacaoCadastral();
 
-					imovSubAtual.setIdImovel(idImovel);
+					imovSubAtual.setImovel(new Imovel(idImovel));
 
-					imovSubAtual.setIdSubcategoria((Integer) element[0]);
+					imovSubAtual.setSubcategoria(new Subcategoria((Integer) element[0]));
 
 					imovSubAtual.setQuantidadeEconomias((Short) element[1]);
 
 					imovSubAtual.setDescricaoSubcategoria((String) element[2]);
 
-					imovSubAtual.setIdCategoria((Integer) element[3]);
+					imovSubAtual.setCategoria(new Categoria((Integer) element[3]));
 
 					imovSubAtual.setDescricaoCategoria((String) element[4]);
 
@@ -9988,9 +9990,9 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					
 					ImovelRamoAtividadeAtualizacaoCadastral imovRamoAtividadeAtual = new ImovelRamoAtividadeAtualizacaoCadastral(); 
 					
-					imovRamoAtividadeAtual.setIdImovel(idImovel);
+					imovRamoAtividadeAtual.setImovel(new Imovel(idImovel));
 					
-					imovRamoAtividadeAtual.setIdRamoAtividade(element);
+					imovRamoAtividadeAtual.setRamoAtividade(new RamoAtividade(element));
 					
 					imovelRamoAtividade.add(imovRamoAtividadeAtual);
 				}

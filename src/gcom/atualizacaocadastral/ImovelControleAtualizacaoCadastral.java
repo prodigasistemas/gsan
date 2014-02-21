@@ -13,6 +13,7 @@ public class ImovelControleAtualizacaoCadastral {
 	private Date dataRetorno;
 	private Date dataAprovacao;
 	private SituacaoAtualizacaoCadastral situacaoAtualizacaoCadastral;
+	private ImovelRetorno imovelRetorno;
 	
 	public Integer getId() {
 		return id;
@@ -51,5 +52,10 @@ public class ImovelControleAtualizacaoCadastral {
 			SituacaoAtualizacaoCadastral situacaoAtualizacaoCadastral) {
 		this.situacaoAtualizacaoCadastral = situacaoAtualizacaoCadastral;
 	}
-
+	public ImovelRetorno getImovelRetorno() {
+		return imovelRetorno;
+	}
+	public void setImovelRetorno(ImovelRetorno imovelRetorno) {
+		this.imovelRetorno = imovelRetorno;
+	}
 }

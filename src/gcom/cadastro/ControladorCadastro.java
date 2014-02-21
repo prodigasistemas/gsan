@@ -7603,7 +7603,7 @@ public class ControladorCadastro implements SessionBean {
 					leiturista.getEmpresa().getId(), idRota);
 
 			if (idsImoveis == null || idsImoveis.isEmpty()) {
-				System.out.println("Nenhum imÛvel encontrado. ARQUIVO N√O GERADO");
+				System.out.println("Nenhum im√≥vel encontrado. ARQUIVO N√ÉO GERADO");
 				getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 			} else {
 				Rota rota = getControladorMicromedicao().pesquisarRota(idRota);
@@ -8067,7 +8067,7 @@ public class ControladorCadastro implements SessionBean {
 
 			ImovelSubcategoriaAtualizacaoCadastral imovelSubcategoria = (ImovelSubcategoriaAtualizacaoCadastral) imovelSubcategoriaIterator
 					.next();
-			switch (imovelSubcategoria.getIdSubcategoria().intValue()) {
+			switch (imovelSubcategoria.getSubcategoria().getId().intValue()) {
 
 			case Subcategoria.RESIDENCIAL_R1:
 				residencial1 = imovelSubcategoria;

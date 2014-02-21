@@ -13,12 +13,22 @@
 				<param name="sequence">cadastro.seq_imovel_subcatg_atlz_cad</param>
 			</generator>
 		</id>
-		<property name="idImovel" column="imov_id" type="java.lang.Integer" length="4"/>
-		<property name="idSubcategoria" column="scat_id" type="java.lang.Integer" length="4"/>
+
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel">
+			<column name="imov_id"/>
+		</many-to-one>
+	
+		<many-to-one name="categoria" class="gcom.cadastro.imovel.Categoria">
+			<column name="catg_id"/>
+		</many-to-one>
+
+		<many-to-one name="subcategoria" class="gcom.cadastro.imovel.Subcategoria">
+			<column name="scat_id"/>
+		</many-to-one>
+
 		<property name="quantidadeEconomias" type="short" column="isac_qteconomia" not-null="true" length="2"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="isac_tmultimaalteracao" not-null="true" length="8"/>
 		<property name="descricaoSubcategoria" type="java.lang.String" column="isac_dssubcategoria" length="50"/>
-		<property name="idCategoria" column="catg_id" type="java.lang.Integer" length="4"/>
 		<property name="descricaoCategoria" type="java.lang.String" column="isac_dscategoria" length="15"/>
 	</class>
 </hibernate-mapping>

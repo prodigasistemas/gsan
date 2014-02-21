@@ -13,19 +13,20 @@ GRANT SELECT ON TABLE atualizacaocadastral.seq_imovel_controle_atlz_cad TO pg_us
 
 -- Table: atualizacaocadastral.imovel_controle_atlz_cad
  
--- DROP TABLE cadastro.imovel_controle_atlz_cad;
+-- DROP TABLE atualizacaocadastral.imovel_controle_atlz_cad;
  
 CREATE TABLE atualizacaocadastral.imovel_controle_atlz_cad
 (
   icac_id integer NOT NULL,
-  imov_id integer NOT NULL,
+  imov_id integer,
   icac_tmgeracao timestamp without time zone,
   icac_tmretorno timestamp without time zone,
   icac_tmaprovacao timestamp without time zone,
   siac_id integer NOT NULL,
+  imre_id integer,
   CONSTRAINT imovel_controle_atlz_cad_pk PRIMARY KEY (icac_id),
-  CONSTRAINT fk1_imovel_controle_atlz_cad FOREIGN KEY (imov_id)
-      REFERENCES cadastro.imovel (imov_id) MATCH SIMPLE
+  CONSTRAINT fk1_imovel_controle_atlz_cad FOREIGN KEY (imre_id)
+      REFERENCES atualizacaocadastral.imovel_retorno (imre_id) MATCH SIMPLE
       ON UPDATE RESTRICT ON DELETE RESTRICT,
   CONSTRAINT fk2_imovel_controle_atlz_cad FOREIGN KEY (siac_id)
       REFERENCES cadastro.situacao_atlz_cadastral (siac_id) MATCH SIMPLE

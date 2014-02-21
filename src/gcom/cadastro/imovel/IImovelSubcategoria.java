@@ -4,9 +4,13 @@ import java.util.Date;
 
 public interface IImovelSubcategoria {
 	
-	public ImovelSubcategoriaPK getComp_id();
+	public Imovel getImovel();
 	
-	public void setComp_id(ImovelSubcategoriaPK compId);
+	public void setImovel(Imovel imovel);
+	
+	public Subcategoria getSubcategoria();
+
+	public void setSubcategoria(Subcategoria subcategoria);
 	
 	public short getQuantidadeEconomias();
 	

@@ -8,20 +8,22 @@
     http://hibernate.sourceforge.net/
 -->
 	<class name="gcom.atualizacaocadastral.ImovelSubcategoriaRetorno" table="atualizacaocadastral.imovel_subcategoria_retorno">
-		<composite-id name="comp_id" class="gcom.cadastro.imovel.ImovelSubcategoriaPK">
-			<!-- bi-directional many-to-one association to Imovel -->
-			<key-many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel">
-				<column name="imov_id"/>
-			</key-many-to-one>
-			<!-- bi-directional many-to-one association to Subcategoria -->
-			<key-many-to-one name="subcategoria" class="gcom.cadastro.imovel.Subcategoria">
-				<column name="scat_id"/>
-			</key-many-to-one>
-		</composite-id>
+		<id name="id" type="java.lang.Integer" column="isre_id">
+			<generator class="sequence">
+				<param name="sequence">atualizacaocadastral.sequence_imovel_subcategoria_retorno</param>
+			</generator>
+		</id>
+		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel">
+			<column name="imov_id"/>
+		</many-to-one>
+	
+		<many-to-one name="subcategoria" class="gcom.cadastro.imovel.Subcategoria">
+			<column name="scat_id"/>
+		</many-to-one>
+		
 		<property name="quantidadeEconomias" type="short" column="isre_qteconomia" not-null="true" length="2"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="isre_tmultimaalteracao" length="8"/>
 		<property name="idImovelRetorno" type="java.lang.Integer" column="imre_id" not-null="true" length="5"/>
-		
 		
 	</class>
 </hibernate-mapping>

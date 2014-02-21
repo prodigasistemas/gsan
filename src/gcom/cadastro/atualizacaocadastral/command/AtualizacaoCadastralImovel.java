@@ -178,10 +178,12 @@ public class AtualizacaoCadastralImovel {
 	public void limparDadosProprietario() {
 		linhaCliente.put("usuarioProprietario", "1");
 		linhaCliente.put("matriculaProprietario", "0");
+		linhaCliente.put("cnpjCpfProprietario", "");
 	}		
 	
 	public void limparDadosResponsavel() {
 		linhaCliente.put("tipoResponsavel", "0");
 		linhaCliente.put("matriculaResponsavel", "0");
+		linhaCliente.put("cnpjCpfResponsavel", "");
 	}
 }

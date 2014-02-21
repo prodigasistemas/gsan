@@ -1,32 +1,42 @@
 package gcom.atualizacaocadastral;
 
-import gcom.cadastro.imovel.ImovelRamoAtividadePK;
+import gcom.cadastro.cliente.RamoAtividade;
+import gcom.cadastro.imovel.Imovel;
 
 import java.util.Date;
 
 public class ImovelRamoAtividadeRetorno implements IImovelRamoAtividade {
+	
+	private Integer id;
+	
+    private Imovel imovel;
 
-	private ImovelRamoAtividadePK comp_id;
+    private RamoAtividade ramoAtividade;
+	
 	private Date ultimaAlteracao;
+
 	private Integer idImovelRetorno;
 	
 	public ImovelRamoAtividadeRetorno() {
-		
 	}
 	
-	public ImovelRamoAtividadeRetorno(ImovelRamoAtividadePK pk) {
-		this.comp_id = pk;
+	public Integer getId() {
+		return id;
 	}
-	
-	public ImovelRamoAtividadeRetorno(IImovelRamoAtividade imovelRamoAtividade) {
-		this.comp_id = imovelRamoAtividade.getComp_id();
+	public void setId(Integer id) {
+		this.id = id;
 	}
-	
-	public ImovelRamoAtividadePK getComp_id() {
-		return comp_id;
+	public Imovel getImovel() {
+		return imovel;
 	}
-	public void setComp_id(ImovelRamoAtividadePK comp_id) {
-		this.comp_id = comp_id;
+	public void setImovel(Imovel imovel) {
+		this.imovel = imovel;
+	}
+	public RamoAtividade getRamoAtividade() {
+		return ramoAtividade;
+	}
+	public void setRamoAtividade(RamoAtividade ramoAtividade) {
+		this.ramoAtividade = ramoAtividade;
 	}
 	public Date getUltimaAlteracao() {
 		return ultimaAlteracao;
@@ -34,11 +44,9 @@ public class ImovelRamoAtividadeRetorno implements IImovelRamoAtividade {
 	public void setUltimaAlteracao(Date ultimaAlteracao) {
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
-
 	public Integer getIdImovelRetorno() {
 		return idImovelRetorno;
 	}
-
 	public void setIdImovelRetorno(Integer idImovelRetorno) {
 		this.idImovelRetorno = idImovelRetorno;
 	}

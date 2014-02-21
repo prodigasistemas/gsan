@@ -1,21 +1,33 @@
 package gcom.atualizacaocadastral;
 
 import gcom.cadastro.imovel.IImovelSubcategoria;
-import gcom.cadastro.imovel.ImovelSubcategoriaPK;
+import gcom.cadastro.imovel.Imovel;
+import gcom.cadastro.imovel.Subcategoria;
+
 import java.util.Date;
 
 public class ImovelSubcategoriaRetorno implements IImovelSubcategoria {
 	
-	private ImovelSubcategoriaPK comp_id;
+	private Integer id;
+
+	private gcom.cadastro.imovel.Imovel imovel;
+
+    private gcom.cadastro.imovel.Subcategoria subcategoria;
+	
 	private short quantidadeEconomias;
+	
 	private Date ultimaAlteracao;
+	
 	private Integer idImovelRetorno;
 	
-	public ImovelSubcategoriaPK getComp_id() {
-		return comp_id;
+	public ImovelSubcategoriaRetorno() {
 	}
-	public void setComp_id(ImovelSubcategoriaPK comp_id) {
-		this.comp_id = comp_id;
+
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	public short getQuantidadeEconomias() {
 		return quantidadeEconomias;
@@ -23,27 +35,32 @@ public class ImovelSubcategoriaRetorno implements IImovelSubcategoria {
 	public void setQuantidadeEconomias(short quantidadeEconomias) {
 		this.quantidadeEconomias = quantidadeEconomias;
 	}
-	
-	public ImovelSubcategoriaRetorno() {
-		
-	}
-	
-	public ImovelSubcategoriaRetorno(IImovelSubcategoria imovelSubcategoria) {
-		this.comp_id = imovelSubcategoria.getComp_id();
-		this.quantidadeEconomias = imovelSubcategoria.getQuantidadeEconomias();
-	}
-	
 	public Date getUltimaAlteracao() {
 		return ultimaAlteracao;
 	}
 	public void setUltimaAlteracao(Date ultimaAlteracao) {
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
-	
 	public Integer getIdImovelRetorno() {
 		return idImovelRetorno;
 	}
 	public void setIdImovelRetorno(Integer idImovelRetorno) {
 		this.idImovelRetorno = idImovelRetorno;
+	}
+	public Imovel getImovel() {
+		return imovel;
+	}
+	public void setImovel(Imovel imovel) {
+		this.imovel = imovel;
+	}
+	public Subcategoria getSubcategoria() {
+		return subcategoria;
+	}
+	public void setSubcategoria(Subcategoria subcategoria) {
+		this.subcategoria = subcategoria;
+		
+		if (subcategoria != null && subcategoria.getQuantidadeEconomias() != null){
+			this.setQuantidadeEconomias(subcategoria.getQuantidadeEconomias().shortValue());
+		}
 	}
 }

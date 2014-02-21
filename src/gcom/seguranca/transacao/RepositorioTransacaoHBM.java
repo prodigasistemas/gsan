@@ -1581,8 +1581,8 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			    + " from ImovelSubcategoria imSub "
 			    + " left join fetch imSub.comp_id.subcategoria subcategoria "
 				+ " left join fetch subcategoria.categoria "
-			    + " where imSub.comp_id.imovel.id = "+ imovelSubcategoriaAtualizacaoCadastral.getIdImovel()
-			    + " and subcategoria.id = "+ imovelSubcategoriaAtualizacaoCadastral.getIdSubcategoria() ;
+			    + " where imSub.comp_id.imovel.id = "+ imovelSubcategoriaAtualizacaoCadastral.getImovel().getId()
+			    + " and subcategoria.id = "+ imovelSubcategoriaAtualizacaoCadastral.getSubcategoria().getId();
 			
 			imovelSubcategoria = (ImovelSubcategoria)session.createQuery(hql1)
 			           .setMaxResults(1).uniqueResult();
