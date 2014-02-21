@@ -20,44 +20,6 @@
 /*
 * GSAN - Sistema Integrado de Gestão de Serviços de Saneamento
 * Copyright (C) <2007> 
-* Adriano Britto Siqueira
-* Alexandre Santos Cabral
-* Ana Carolina Alves Breda
-* Ana Maria Andrade Cavalcante
-* Aryed Lins de Araújo
-* Bruno Leonardo Rodrigues Barros
-* Carlos Elmano Rodrigues Ferreira
-* Cláudio de Andrade Lira
-* Denys Guimarães Guenes Tavares
-* Eduardo Breckenfeld da Rosa Borges
-* Fabíola Gomes de Araújo
-* Flávio Leonardo Cavalcanti Cordeiro
-* Francisco do Nascimento Júnior
-* Homero Sampaio Cavalcanti
-* Ivan Sérgio da Silva Júnior
-* José Edmar de Siqueira
-* José Thiago Tenório Lopes
-* Kássia Regina Silvestre de Albuquerque
-* Leonardo Luiz Vieira da Silva
-* Márcio Roberto Batista da Silva
-* Maria de Fátima Sampaio Leite
-* Micaela Maria Coelho de Araújo
-* Nelson Mendonça de Carvalho
-* Newton Morais e Silva
-* Pedro Alexandre Santos da Silva Filho
-* Rafael Corrêa Lima e Silva
-* Rafael Francisco Pinto
-* Rafael Koury Monteiro
-* Rafael Palermo de Araújo
-* Raphael Veras Rossiter
-* Roberto Sobreira Barbalho
-* Rodrigo Avellar Silveira
-* Rosana Carvalho Barbosa
-* Sávio Luiz de Andrade Cavalcante
-* Tai Mu Shih
-* Thiago Augusto Souza do Nascimento
-* Tiago Moreno Rodrigues
-* Vivianne Barbosa Sousa
 *
 * Este programa é software livre; você pode redistribuí-lo e/ou
 * modificá-lo sob os termos de Licença Pública Geral GNU, conforme
@@ -90,29 +52,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-/**
- * < <Descrição da Classe>>
- * 
- * @author Cesar
- */
 public class GerenciadorProcessoAction extends Action {
-    /**
-     * < <Descrição do método>>
-     * 
-     * @param actionMapping
-     *            Descrição do parâmetro
-     * @param actionForm
-     *            Descrição do parâmetro
-     * @param httpServletRequest
-     *            Descrição do parâmetro
-     * @param httpServletResponse
-     *            Descrição do parâmetro
-     * @return Descrição do retorno
-     * @exception IOException
-     *                Descrição da exceção
-     * @exception ServletException
-     *                Descrição da exceção
-     */
     public ActionForward execute(ActionMapping actionMapping,
             ActionForm actionForm, HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) throws IOException,
@@ -174,27 +114,5 @@ public class GerenciadorProcessoAction extends Action {
         }
 
         return retorno;
-        /*
-         * if (gerenciadorPaginas.getPaginaCorrente() == null) { paginaDestino =
-         * gerenciadorPaginas.getPaginaSeguinte(); retorno =
-         * actionMapping.findForward(paginaDestino.getUriInicial()); } else {
-         * acao = httpServletRequest.getParameter("acao"); numeroPagina =
-         * httpServletRequest.getParameter("numeroPagina"); if (acao != null) {
-         * if (acao.equals("avancar")) { if
-         * (gerenciadorPaginas.getPaginaCorrente().getAtributosPagina().size() >
-         * 0) { gerenciadorPaginas.getPaginaCorrente().setHint(
-         * gerenciadorPaginas.generateHint(httpServletRequest,
-         * gerenciadorPaginas.getPaginaCorrente())); } paginaDestino =
-         * gerenciadorPaginas.getPaginaSeguinte(); retorno =
-         * actionMapping.findForward(paginaDestino.getUriInicial()); } else if
-         * (acao.equals("voltar")) { paginaDestino =
-         * gerenciadorPaginas.getPaginaAnterior(); retorno =
-         * actionMapping.findForward(paginaDestino.getUriInicial()); } else if
-         * (acao.equals("executar")) { retorno =
-         * actionMapping.findForward(gerenciadorPaginas.getActionFinal()); } }
-         * else { if (numeroPagina != null) { paginaDestino =
-         * gerenciadorPaginas.setPaginaCorrentePeloIndice(Integer.parseInt(numeroPagina));
-         * retorno = actionMapping.findForward(paginaDestino.getUriInicial()); } } }
-         */
     }
 }

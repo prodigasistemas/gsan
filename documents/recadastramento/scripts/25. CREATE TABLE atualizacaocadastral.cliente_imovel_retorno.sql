@@ -27,6 +27,7 @@ CREATE TABLE atualizacaocadastral.cliente_imovel_retorno
   clie_id integer, -- Id do Cliente
   crtp_id integer, -- Id do Tipo de Relacao do Cliente com o Imovel
   imre_id integer,
+  clir_id integer,
   CONSTRAINT cliente_imovel_retorno_pkey PRIMARY KEY (cire_id),
   CONSTRAINT fk3_cliente_imovel_retorno FOREIGN KEY (crtp_id)
       REFERENCES cadastro.cliente_relacao_tipo (crtp_id) MATCH SIMPLE

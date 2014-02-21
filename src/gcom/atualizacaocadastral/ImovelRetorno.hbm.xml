@@ -24,6 +24,15 @@
 		<property name="tipoEntrevistado" type="java.lang.String" column="imac_tipoentrevistado" length="50"/>
 		<property name="tipoOperacao" type="java.lang.Integer" column="imac_tipooperacao" length="1"/>
 		
+		<property name="codigoMunicipio" type="java.lang.Integer" column="muni_id" length="4"/>
+		<property name="nomeMunicipio" type="java.lang.String" column="imac_nmmunicipio" length="30"/>
+		<property name="idLogradouroTipo" type="java.lang.Integer" column="lgtp_id" length="9"/>
+		<property name="idLogradouro" type="java.lang.Integer" column="logr_id" length="4"/>
+		<property name="descricaoLogradouro" type="java.lang.String" column="imac_dslogradouro" length="40"/>
+		<property name="nomeBairro" type="java.lang.String" column="imac_nmbairro" length="30"/>
+		<property name="codigoCep" type="java.lang.Integer" column="imac_cdcep" length="4"/>
+				
+		
 		<many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="true">
 			<column name="last_id"/>
 		</many-to-one>

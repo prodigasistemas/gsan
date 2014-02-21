@@ -244,6 +244,7 @@ import gcom.atualizacaocadastral.ClienteEnderecoRetorno;
 import gcom.atualizacaocadastral.ClienteFoneRetorno;
 import gcom.atualizacaocadastral.ClienteImovelRetorno;
 import gcom.atualizacaocadastral.ClienteRetorno;
+import gcom.atualizacaocadastral.ImagemRetorno;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.atualizacaocadastral.ImovelRamoAtividadeRetorno;
 import gcom.atualizacaocadastral.ImovelRetorno;
@@ -333,7 +334,6 @@ import gcom.cadastro.imovel.Despejo;
 import gcom.cadastro.imovel.EloAnormalidade;
 import gcom.cadastro.imovel.EntidadeBeneficente;
 import gcom.cadastro.imovel.FonteAbastecimento;
-import gcom.cadastro.imovel.ImagemAtualizacaoCadastral;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelCadastroOcorrencia;
@@ -1157,7 +1157,7 @@ public class HibernateUtil {
 							.addClass(ImovelSuprimido.class)
 							.addClass(ImovelInscricaoAlterada.class)
 							.addClass(ImovelRamoAtividadeAtualizacaoCadastral.class)
-							.addClass(ImagemAtualizacaoCadastral.class)
+							.addClass(ImagemRetorno.class)
 					// gcom.cadastro.localidade
 					.addClass(GerenciaRegional.class)
 					.addClass(Localidade.class).addClass(LocalidadePorte.class)

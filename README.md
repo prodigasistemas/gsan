@@ -20,8 +20,8 @@ Módulos do GSAN
 Scripts de Build
 ===
 
-Atualmente o GSAN possui um script Anti [build.xml](https://github.com/prodigasistemas/gsan/blob/master/build.xml) que realiza o processo de build para o Jboss que será utilizado para inicializar a aplicação.
-Para o build.xml ser executado, é necessárioi criar o arquivo build.properties e configurá-lo com os caminhos necessários para a execução do build. Na raiz do projeto existe o arquivo [build.properties.exemplo](https://github.com/prodigasistemas/gsan/blob/master/build.properties.exemplo) que possui as variáveis necessárias para o script.
+Atualmente o GSAN possui um script Ant [build.xml](https://github.com/prodigasistemas/gsan/blob/master/build.xml) que realiza o processo de build para o Jboss que será utilizado para inicializar a aplicação.
+Para o build.xml ser executado, é necessário criar o arquivo build.properties e configurá-lo com os caminhos necessários para a execução do build. Na raiz do projeto existe o arquivo [build.properties.exemplo](https://github.com/prodigasistemas/gsan/blob/master/build.properties.exemplo) que possui as variáveis necessárias para o script.
 
 No projeto foram incluídos alguns scripts que automatizam algumas fases do processo de build e podem ser executados para realizar o build local e build remoto, para outros servidores, como ambientes de Homologação e Produção.
 Para execução desses builds é necessário exportar as variáveis de ambiente JBOSS_GSAN e GSAN_PATH.

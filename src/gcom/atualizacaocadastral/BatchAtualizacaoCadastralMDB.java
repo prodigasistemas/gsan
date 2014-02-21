@@ -2,7 +2,6 @@ package gcom.atualizacaocadastral;
 
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesJNDI;
-import gcom.util.ControladorException;
 import gcom.util.ServiceLocator;
 import gcom.util.ServiceLocatorException;
 import gcom.util.SistemaException;
@@ -11,7 +10,6 @@ import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 import javax.ejb.MessageDrivenBean;
 import javax.ejb.MessageDrivenContext;
-import javax.jms.JMSException;
 import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
@@ -45,9 +43,7 @@ public class BatchAtualizacaoCadastralMDB implements MessageDrivenBean, MessageL
 				this.getControladorAtualizacaoCadastral().atualizarImoveisAprovados(
 						(Integer) ((Object[])objectMessage.getObject())[0],
 						(Usuario)((Object[])objectMessage.getObject())[1]);
-			} catch (JMSException e) {
-				logger.error("Erro ao atualizar imoveis atualizados");
-			} catch (ControladorException ce) {
+			} catch (Exception ce) {
 				logger.error("Erro ao atualizar imoveis atualizados");
 			}
 			

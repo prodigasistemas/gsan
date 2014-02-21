@@ -5,6 +5,7 @@ import gcom.atualizacaocadastral.ClienteFoneRetorno;
 import gcom.atualizacaocadastral.ClienteImovelRetorno;
 import gcom.atualizacaocadastral.ClienteRetorno;
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
+import gcom.atualizacaocadastral.ImagemRetorno;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.atualizacaocadastral.ImovelRamoAtividadeRetorno;
 import gcom.atualizacaocadastral.ImovelRetorno;
@@ -38,11 +39,18 @@ import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ParserUtil;
 
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
+
+import javax.imageio.ImageIO;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -84,6 +92,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		salvarClienteUsuario();
 		salvarClienteResponsavel();
 		salvarClienteProprietario();
+		salvarImagem(atualizacaoCadastral, atualizacaoCadastralImovel.getMatricula());
 		
 		atualizarSituacaoControleImovelAtualizacaoCadastral(SituacaoAtualizacaoCadastral.TRANSMITIDO);
 	}
@@ -112,19 +121,21 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		}
 	}
 
+	
 	private void salvarImovel() throws Exception {
 		ImovelAtualizacaoCadastralBuilder builder = new ImovelAtualizacaoCadastralBuilder(matriculaImovel, atualizacaoCadastralImovel, tipoOperacao);
 		ImovelAtualizacaoCadastral imovelTxt = builder.getImovelAtualizacaoCadastral();
 		
 		ImovelAtualizacaoCadastral imovelAtualizacaoCadastralBase = controladorAtualizacaoCadastral.pesquisarImovelAtualizacaoCadastral(matriculaImovel);
 		
+		salvarImovelRetorno(imovelTxt);
+
 		if (imovelAtualizacaoCadastralBase == null){
 			imovelAtualizacaoCadastralBase = new ImovelAtualizacaoCadastral(matriculaImovel);
 			tipoOperacao = AlteracaoTipo.INCLUSAO;
 		}
 
 		salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, imovelAtualizacaoCadastralBase, imovelTxt, matriculaImovel, tipoOperacao);
-		salvarImovelRetorno(imovelTxt);
 		
 		salvarRamoAtividade();
 		salvarImovelSubcategoria();
@@ -342,11 +353,41 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		
 		if (controle == null){
 			controle = new ImovelControleAtualizacaoCadastral();
+			controle.setImovel(new Imovel(matriculaImovel));
 		}
 		
 		controle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(situacao));
 		controle.setDataRetorno(new Date());
 		controle.setImovelRetorno(new ImovelRetorno(idImovelRetorno));
 		controladorUtil.inserirOuAtualizar(controle);
-	}	
+	}
+	
+	private void salvarImagem(AtualizacaoCadastral atualizacao,
+			Integer matricula) throws Exception {
+
+		int contador = 0;
+		
+		for (String nomeImagem : atualizacao.getImagens()) {
+
+			String caminhoJboss = System.getProperty("jboss.server.home.dir");
+			String pasta = "/images/cadastro/" + atualizacao.getArquivoTexto().getDescricaoArquivo();
+			
+			if (nomeImagem.contains(matricula.toString())) {
+				try {
+					contador++;
+					File imagem = new File(caminhoJboss + pasta, nomeImagem);
+
+					ImagemRetorno imagemRetorno = new ImagemRetorno();
+					imagemRetorno.setIdImovel(matricula);
+					imagemRetorno.setNomeImagem(imagem.getName());
+					imagemRetorno.setPathImagem(imagem.getAbsolutePath());
+					imagemRetorno.setUltimaAlteracao(new Date());
+
+					controladorUtil.inserir(imagemRetorno);
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+			}
+		}
+	}
 }

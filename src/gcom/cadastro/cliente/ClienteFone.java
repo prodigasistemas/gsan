@@ -36,22 +36,14 @@ public class ClienteFone extends ObjetoTransacao implements IClienteFone {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
-
 	private String ddd;
-
 	private String telefone;
-
-	private String ramal;
-	
-	private String contato;
-
-	private Short indicadorTelefonePadrao;
-
-	private Date ultimaAlteracao;
-
 	private FoneTipo foneTipo;
-
 	private Cliente cliente;
+	private Date ultimaAlteracao;
+	private String ramal;
+	private String contato;
+	private Short indicadorTelefonePadrao;
 	
 	public static final Short INDICADOR_FONE_PADRAO = new Short("1");
 	

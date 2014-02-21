@@ -23,6 +23,10 @@ public class ImovelRamoAtividade extends ObjetoTransacao implements IImovelRamoA
 		
 	}
 	
+	public ImovelRamoAtividade(int idImovel, int idRamoAtividade) {
+	this.comp_id = new ImovelRamoAtividadePK(idImovel, idRamoAtividade);	
+	}
+	
 	public ImovelRamoAtividade(ImovelRamoAtividadePK comp_id, Date ultimaAlteracao) {
 		this.comp_id = comp_id;
 		this.ultimaAlteracao = ultimaAlteracao;

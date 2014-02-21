@@ -577,39 +577,48 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 		return retorno;
 	}
 
-	/**
-	 * Pesquisa todos os telefones de um cliente
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 23/08/2006
-	 * 
-	 * @param idCliente
-	 * @return Collection
-	 * @throws ErroRepositorioException
-	 */
-	public Collection pesquisarClienteFone(Integer idCliente)
+	@SuppressWarnings("unchecked")
+	public Collection<ClienteFone> pesquisarClienteFone(Integer idCliente)
 			throws ErroRepositorioException {
 
-		Collection retorno = null;
+		Collection<ClienteFone> retorno = null;
 		Session session = HibernateUtil.getSession();
 		String consulta = null;
 
 		try {
-			consulta = /*"SELECT cfon.id," + // 0
-					" cfon.ddd, " + // 1
-					" cfon.telefone, " + // 2
-					" cfon.indicadorTelefonePadrao, " + // 3
-					" fnet.descricao, " + // 4
-					" cfon.ultimaAlteracao, "+ // 5
-					" fnet.id " //6*/					
-					"from ClienteFone cfon " 
+			consulta = "from ClienteFone cfon " 
 				    + "left join fetch cfon.cliente clie "
 					+ "left join fetch cfon.foneTipo fnet "
 					+ "where clie.id = :idCliente ";
 
-			retorno = session.createQuery(consulta).setInteger("idCliente",
-					idCliente.intValue()).list();
+			retorno = (Collection<ClienteFone>)session.createQuery(consulta).setInteger("idCliente",	idCliente.intValue()).list();
 
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<ClienteFone> pesquisarClienteFoneDoImovel(Integer idImovel) throws ErroRepositorioException {
+
+		Collection<ClienteFone> retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = null;
+
+		try {
+			consulta = "select cfon "
+					+ "from ClienteFone cfon, " 
+					+ " ClienteImovel clienteImovel "
+					+ "left join fetch cfon.foneTipo fnet "
+				    + "where clienteImovel.cliente.id = cfon.cliente.id "
+					+ "and clienteImovel.imovel.id = :idImovel ";
+
+			retorno = (Collection<ClienteFone>)session.createQuery(consulta).setInteger("idImovel",	idImovel.intValue()).list();
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {

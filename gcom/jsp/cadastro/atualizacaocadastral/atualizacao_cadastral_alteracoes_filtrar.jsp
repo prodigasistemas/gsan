@@ -302,9 +302,12 @@
     </tr>
     
     <tr>
-      <td><strong>Exibir Campos:</strong></td>
-      <td><strong> <html:radio property="exibirCampos" value="1" /> <strong>Pendentes de Alteração <html:radio
-              property="exibirCampos" value="2" /> Alterados/Resolvidos</strong> <html:radio property="exibirCampos" value="3" /> Todos</strong>
+      <td><strong>Exibir im&oacute;veis:</strong></td>
+      <td>
+        <strong> 
+          <html:radio property="exibirCampos" value="3" /> Pendentes de Aprova&ccedil;&atilde;o 
+          <html:radio property="exibirCampos" value="4" /> Aprovados
+        </strong>
       </td>
     </tr>
 

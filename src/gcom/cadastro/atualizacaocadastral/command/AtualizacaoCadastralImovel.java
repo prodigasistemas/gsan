@@ -7,8 +7,6 @@ import java.util.Map;
 
 public class AtualizacaoCadastralImovel {
 
-	private List<String> nomesImagens = new ArrayList<String>();
-
 	private int matricula = 0;
 
 	private Map<String, String> linhaImovel = new HashMap<String, String>();
@@ -36,14 +34,6 @@ public class AtualizacaoCadastralImovel {
 	
 	public AtualizacaoCadastralImovel(AtualizacaoCadastral atualizacaoArquivo) {
 		this.atualizacaoArquivo = atualizacaoArquivo;
-	}
-
-	public List<String> getNomesImagens() {
-		return nomesImagens;
-	}
-
-	public void setNomesImagens(List<String> nomesImagens) {
-		this.nomesImagens = nomesImagens;
 	}
 
 	public Map<String, String> getLinhaImovel() {

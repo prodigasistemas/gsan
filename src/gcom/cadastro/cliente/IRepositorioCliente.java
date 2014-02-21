@@ -577,6 +577,8 @@ public interface IRepositorioCliente {
      * @author Wellington Rocha
      *                
      */
-    public ClienteTipo pesquisarClienteTipo(Integer idClienteTipo)
-            throws ErroRepositorioException;
+    public ClienteTipo pesquisarClienteTipo(Integer idClienteTipo) throws ErroRepositorioException;
+    
+	public Collection<ClienteFone> pesquisarClienteFoneDoImovel(Integer idImovel) throws ErroRepositorioException;
+
 }
