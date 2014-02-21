@@ -32,8 +32,8 @@ public class ValidadorTipoEnderecoCommand extends ValidadorCommand{
 		}
 	}
 	
-	private boolean tipoEnderecoResidencialOuComercial(char setipoEnderecoxo){
-		return setipoEnderecoxo == '1' || setipoEnderecoxo == '2';
+	private boolean tipoEnderecoResidencialOuComercial(char tipo){
+		return tipo == '1' || tipo == '2';
 	}
 
 }
