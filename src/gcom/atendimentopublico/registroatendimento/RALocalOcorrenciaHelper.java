@@ -11,7 +11,7 @@ public class RALocalOcorrenciaHelper {
 
 	private Integer idImovel;
 	private Collection<Conta> colecaoContas;
-	private Collection<Endereco> colecaoEndereco; 
+	private Collection colecaoEndereco; 
 	private String pontoReferenciaLocalOcorrencia;
 	private BigDecimal nnCoordenadaNorte;
 	private BigDecimal nnCoordenadaLeste;
@@ -56,15 +56,15 @@ public class RALocalOcorrenciaHelper {
 		return this;
 	}
 	
-	public Collection<Endereco> getColecaoEndereco() {
+	public Collection getColecaoEndereco() {
 		return colecaoEndereco;
 	}
 	
-	public void setColecaoEndereco(Collection<Endereco> colecaoEndereco) {
+	public void setColecaoEndereco(Collection colecaoEndereco) {
 		this.colecaoEndereco = colecaoEndereco;
 	}
 	
-	public RALocalOcorrenciaHelper colecaoEndereco(Collection<Endereco> colecaoEndereco) {
+	public RALocalOcorrenciaHelper colecaoEndereco(Collection colecaoEndereco) {
 		setColecaoEndereco(colecaoEndereco);
 		return this;
 	}
@@ -155,7 +155,7 @@ public class RALocalOcorrenciaHelper {
 		this.idQuadra = idQuadra;
 	}
 	
-	public RALocalOcorrenciaHelper dQuadra(Integer idQuadra) {
+	public RALocalOcorrenciaHelper idQuadra(Integer idQuadra) {
 		setIdQuadra(idQuadra);
 		return this;
 	}

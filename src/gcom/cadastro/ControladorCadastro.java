@@ -18,6 +18,10 @@ import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendiment
 import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocalHome;
 import gcom.atendimentopublico.registroatendimento.FiltroSolicitacaoTipoEspecificacao;
 import gcom.atendimentopublico.registroatendimento.MeioSolicitacao;
+import gcom.atendimentopublico.registroatendimento.RABuilder;
+import gcom.atendimentopublico.registroatendimento.RADadosGeraisHelper;
+import gcom.atendimentopublico.registroatendimento.RALocalOcorrenciaHelper;
+import gcom.atendimentopublico.registroatendimento.RASolicitanteHelper;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao;
 import gcom.atendimentopublico.registroatendimento.bean.DefinirDataPrevistaUnidadeDestinoEspecificacaoHelper;
@@ -14631,15 +14635,10 @@ public class ControladorCadastro implements SessionBean {
 		Integer idSolicitacaoTipoEspecificacao = solTipEspec.getId(); // CONTA BRAILE
 		
 		Integer idUnidadeAtendimento = unidadeOrganizacional.getId();
-		//Integer idUnidadeDestino = new Integer("9048");
-		Date dataAtual = new Date();
 		
 		DefinirDataPrevistaUnidadeDestinoEspecificacaoHelper definirDataPrevistaUnidadeDestinoEspecificacaoHelper = 
 			this.getControladorRegistroAtendimento().definirDataPrevistaUnidadeDestinoEspecificacao(new Date(),
 					idSolicitacaoTipoEspecificacao); 
-		
-		String dataAtendimento = Util.formatarData(dataAtual);
-		String horaAtendimento = Util.formatarHoraSemData(dataAtual);
 		
 		FiltroOrgaoExpedidorRg filtroOrgaoExpedidor = new FiltroOrgaoExpedidorRg();
 		
@@ -14730,69 +14729,15 @@ public class ControladorCadastro implements SessionBean {
 			colecaoEndereco.add(clienteEndereco);
 		}
 		
-		Integer[] idRA = this.getControladorRegistroAtendimento().inserirRegistroAtendimento(
-				
-				// Indicador Atendimento OnLine
-				new Short("1"), 
-			
-				// Data Atendimento / Hora Atendimento
-				dataAtendimento, horaAtendimento,
-			
-				// Tempo Espera Inicial / Final
-				null, null, 
-			
-				// Meio Solicitação / Solicitação Tipo Especificação
-				idMeioSolicitacao, idSolicitacaoTipoEspecificacao, 
-			
-				// Data Prevista / Observação
-				Util.formatarData(definirDataPrevistaUnidadeDestinoEspecificacaoHelper.getDataPrevista()), observacao,
-			
-				// Imóvel / Descrição do Local da Ocorrência / Solicitação Tipo
-				contaBraile.getImovel().getId(), null, idSolicitacaoTipo,
-			
-				// Coleção de Endereços / Ponto Referência Local Ocorrência
-				colecaoEnderecos, null, 
-			
-				// Bairro Área
-				null,
-					
-				// Localidade		
-				imovel.getLocalidade().getId(), 
-			
-				// Setor Comercial
-				imovel.getSetorComercial().getId(), 
-					
-				// Quadra		
-				imovel.getQuadra().getId(),
-			
-				// Divisão Esgoto / Local Ocorrência
-				null, null, 
-			
-				// Pavimento Rua / Pavimento Calçada
-				imovel.getPavimentoRua().getId(), imovel.getPavimentoCalcada().getId(),
-			
-				// Unidade Atendimento / Usuário Logado
-				idUnidadeAtendimento, usuarioLogado.getId(),
-			
-				// Cliente / Ponto Referência Solicitante
-				null, null, 
-			
-				// Nome Solicitante / Novo Solicitante
-				nomeSolicitante, false,
-			
-				// Unidade Solicitante / Funcionário
-				null, null, 
-			
-				// Coleção Telefones / Coleção Endereços Solicitante
-				null, colecaoEndereco, 
-			
-				// Unidade Destino / Parecer Unidade Destino
-				idUnidadeAtendimento, parecer, 
-			
-				// Serviço Tipo / Número RA Manual / RA Gerado
-				null, null, null,null,null,ConstantesSistema.NAO, null, 
-				
-				protocoloAtendimento, null, null,null, null, null,null,null);
+		RADadosGeraisHelper raDadosGerais = RABuilder.buildRADadosGeraisHelper(new Short("1"), idMeioSolicitacao, idSolicitacaoTipoEspecificacao, 
+																				Util.formatarData(definirDataPrevistaUnidadeDestinoEspecificacaoHelper.getDataPrevista()),
+																				observacao, idSolicitacaoTipoEspecificacao, 
+																				idUnidadeAtendimento, usuarioLogado, protocoloAtendimento);
+		RALocalOcorrenciaHelper raLocalOcorrencia = RABuilder.buildRALocalOcorrencia(contaBraile, colecaoEndereco, idUnidadeAtendimento, parecer,
+																					ConstantesSistema.NAO);
+		RASolicitanteHelper raSolicitante = RABuilder.buildRASolicitante(nomeSolicitante, false, colecaoEndereco);
+		
+		Integer[] idRA = this.getControladorRegistroAtendimento().inserirRegistroAtendimento(raDadosGerais, raLocalOcorrencia, raSolicitante);
 		
 		return idRA[0];
 		

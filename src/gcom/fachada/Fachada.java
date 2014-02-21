@@ -118,7 +118,11 @@ import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendiment
 import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocalHome;
 import gcom.atendimentopublico.registroatendimento.EspecificacaoImovSitCriterio;
 import gcom.atendimentopublico.registroatendimento.EspecificacaoImovelSituacao;
+import gcom.atendimentopublico.registroatendimento.RABuilder;
+import gcom.atendimentopublico.registroatendimento.RADadosGeraisHelper;
+import gcom.atendimentopublico.registroatendimento.RALocalOcorrenciaHelper;
 import gcom.atendimentopublico.registroatendimento.RAReiteracao;
+import gcom.atendimentopublico.registroatendimento.RASolicitanteHelper;
 import gcom.atendimentopublico.registroatendimento.RaDadosAgenciaReguladora;
 import gcom.atendimentopublico.registroatendimento.RaEncerramentoComando;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
@@ -18042,70 +18046,10 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0366] Inserir Registro de Atendimento
-	 * 
-	 * [SB0028] é Inclui Registro de Atendimento
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 28/08/2006
-	 * 
-	 * @throws ControladorException
-	 */
-	public Integer[] inserirRegistroAtendimento(
-			short indicadorAtendimentoOnLine, String dataAtendimento,
-			String horaAtendimento, String tempoEsperaInicial,
-			String tempoEsperaFinal, Integer idMeioSolicitacao,
-			Integer idSolicitacaoTipoEspecificacao, String dataPrevista,
-			String observacao, Integer idImovel,
-			String descricaoLocalOcorrencia, Integer idSolicitacaoTipo,
-			Collection colecaoEndereco, String pontoReferenciaLocalOcorrencia,
-			Integer idBairroArea, Integer idLocalidade,
-			Integer idSetorComercial, Integer idQuadra,
-			Integer idDivisaoEsgoto, Integer idLocalOcorrencia,
-			Integer idPavimentoRua, Integer idPavimentoCalcada,
-			Integer idUnidadeAtendimento, Integer idUsuarioLogado,
-			Integer idCliente, String pontoReferenciaSolicitante,
-			String nomeSolicitante, boolean novoSolicitante,
-			Integer idUnidadeSolicitante, Integer idFuncionario,
-			Collection colecaoFone, Collection colecaoEnderecoSolicitante,
-			Integer idUnidadeDestino, String parecerUnidadeDestino,
-			Integer idServicoTipo, String numeroRAManual, Integer idRAJAGerado,
-			BigDecimal nnCoordenadaNorte, BigDecimal nnCoordenadaLeste,
-			short indicCoordenadaSemLogradouro,
-			Collection colecaoRegistroAtendimentoAnexo,
-			String protocoloAtendimento, Collection colecaoContas,
-			String observacaoOS,Collection colecaoPagamentos,
-			String habilitarCampoSatisfacaoEmail, String enviarEmailSatisfacao, String enderecoEmail,
-			BigDecimal nnDiametro) {
+	public Integer[] inserirRegistroAtendimento(RADadosGeraisHelper raDadosGerais, RALocalOcorrenciaHelper raLocalOcorrencia, RASolicitanteHelper raSolicitante) {
 
 		try {
-			return this.getControladorRegistroAtendimento()
-					.inserirRegistroAtendimento(indicadorAtendimentoOnLine,
-							dataAtendimento, horaAtendimento,
-							tempoEsperaInicial, tempoEsperaFinal,
-							idMeioSolicitacao, idSolicitacaoTipoEspecificacao,
-							dataPrevista, observacao, idImovel,
-							descricaoLocalOcorrencia, idSolicitacaoTipo,
-							colecaoEndereco, pontoReferenciaLocalOcorrencia,
-							idBairroArea, idLocalidade, idSetorComercial,
-							idQuadra, idDivisaoEsgoto, idLocalOcorrencia,
-							idPavimentoRua, idPavimentoCalcada,
-							idUnidadeAtendimento, idUsuarioLogado, idCliente,
-							pontoReferenciaSolicitante, nomeSolicitante,
-							novoSolicitante, idUnidadeSolicitante,
-							idFuncionario, colecaoFone,
-							colecaoEnderecoSolicitante, idUnidadeDestino,
-							parecerUnidadeDestino, idServicoTipo,
-							numeroRAManual, idRAJAGerado, nnCoordenadaNorte,
-							nnCoordenadaLeste, indicCoordenadaSemLogradouro,
-							colecaoRegistroAtendimentoAnexo,
-							protocoloAtendimento, 
-							colecaoContas, 
-							observacaoOS,
-							colecaoPagamentos,
-							habilitarCampoSatisfacaoEmail, enviarEmailSatisfacao, enderecoEmail,
-							nnDiametro);
+			return this.getControladorRegistroAtendimento().inserirRegistroAtendimento(raDadosGerais, raLocalOcorrencia, raSolicitante);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex
 					.getParametroMensagem());

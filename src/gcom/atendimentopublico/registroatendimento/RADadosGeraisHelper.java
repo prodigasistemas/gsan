@@ -1,8 +1,11 @@
 package gcom.atendimentopublico.registroatendimento;
 
+import java.util.Collection;
+
 
 public class RADadosGeraisHelper {
 
+	private Integer idRegistroAtendimento;
 	private short indicadorAtendimentoOnLine; 
 	private String numeroRAManual; 
 	private String dataAtendimento;
@@ -20,12 +23,22 @@ public class RADadosGeraisHelper {
 	private Integer idRAJAGerado;
 	private String protocoloAtendimento;
 	private String observacaoOS;
+	@SuppressWarnings("rawtypes")
+	private Collection colecaoRegistroAtendimentoAnexo;
 	
 	public RADadosGeraisHelper() {
 		
 	}
 	
- 	public short getIndicadorAtendimentoOnLine() {
+ 	public Integer getIdRegistroAtendimento() {
+		return idRegistroAtendimento;
+	}
+
+	public void setIdRegistroAtendimento(Integer idRegistroAtendimento) {
+		this.idRegistroAtendimento = idRegistroAtendimento;
+	}
+
+	public short getIndicadorAtendimentoOnLine() {
 		return indicadorAtendimentoOnLine;
 	}
 	private void setIndicadorAtendimentoOnLine(short indicadorAtendimentoOnLine) {
@@ -193,6 +206,19 @@ public class RADadosGeraisHelper {
 	}
 	public RADadosGeraisHelper observacaoOS(String observacaoOS){
 		setObservacaoOS(observacaoOS);
+		return this;
+	}
+	@SuppressWarnings("rawtypes")
+	public Collection getColecaoRegistroAtendimentoAnexo() {
+		return colecaoRegistroAtendimentoAnexo;
+	}
+	@SuppressWarnings("rawtypes")
+	private void setColecaoRegistroAtendimentoAnexo(Collection colecaoRegistroAtendimentoAnexo) {
+		this.colecaoRegistroAtendimentoAnexo = colecaoRegistroAtendimentoAnexo;
+	}
+	@SuppressWarnings("rawtypes")
+	public RADadosGeraisHelper colecaoRegistroAtendimentoAnexo(Collection colecaoRegistroAtendimentoAnexo){
+		setColecaoRegistroAtendimentoAnexo(colecaoRegistroAtendimentoAnexo);
 		return this;
 	}
 

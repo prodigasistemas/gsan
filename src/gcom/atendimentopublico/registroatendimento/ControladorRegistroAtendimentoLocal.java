@@ -1366,31 +1366,7 @@ public interface ControladorRegistroAtendimentoLocal extends
 	 * 
 	 * @throws ControladorException
 	 */
-	public Integer[] inserirRegistroAtendimento(short indicadorAtendimentoOnLine,
-			String dataAtendimento, String horaAtendimento,
-			String tempoEsperaInicial, String tempoEsperaFinal,
-			Integer idMeioSolicitacao, Integer idSolicitacaoTipoEspecificacao,
-			String dataPrevista, String observacao, Integer idImovel,
-			String descricaoLocalOcorrencia, Integer idSolicitacaoTipo,
-			Collection colecaoEndereco, String pontoReferenciaLocalOcorrencia,
-			Integer idBairroArea, Integer idLocalidade,
-			Integer idSetorComercial, Integer idQuadra,
-			Integer idDivisaoEsgoto, Integer idLocalOcorrencia,
-			Integer idPavimentoRua, Integer idPavimentoCalcada,
-			Integer idUnidadeAtendimento, Integer idUsuarioLogado,
-			Integer idCliente, String pontoReferenciaSolicitante,
-			String nomeSolicitante, boolean novoSolicitante,
-			Integer idUnidadeSolicitante, Integer idFuncionario,
-			Collection colecaoFone, Collection colecaoEnderecoSolicitante,
-			Integer idUnidadeDestino, String parecerUnidadeDestino,
-			Integer idServicoTipo, String numeroRAManual, Integer idRAJAGerado,
-			BigDecimal nnCoordenadaNorte,BigDecimal nnCoordenadaLeste,short indicCoordenadaSemLogradouro,
-			Collection colecaoRegistroAtendimentoAnexo, String protocoloAtendimento,
-			Collection colecaoContas,
-			String observacaoOS,
-			Collection colecaoPagamentos,
-			String habilitarCampoSatisfacaoEmail, String enviarEmailSatisfacao, String enderecoEmail,
-			BigDecimal nnDiamentro)
+	public Integer[] inserirRegistroAtendimento(RADadosGeraisHelper raDadosGeraisHelper, RALocalOcorrenciaHelper raLocalOcorrenciaHelper, RASolicitanteHelper raSolicitanteHelper)
 			throws ControladorException;
 
 	/**

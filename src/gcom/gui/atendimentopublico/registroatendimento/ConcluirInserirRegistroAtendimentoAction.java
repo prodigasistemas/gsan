@@ -80,6 +80,10 @@ import gcom.atendimentopublico.registroatendimento.AtendimentoRelacaoTipo;
 import gcom.atendimentopublico.registroatendimento.FiltroAtendimentoMotivoEncerramento;
 import gcom.atendimentopublico.registroatendimento.FiltroRegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.FiltroSolicitacaoTipoEspecificacao;
+import gcom.atendimentopublico.registroatendimento.RABuilder;
+import gcom.atendimentopublico.registroatendimento.RADadosGeraisHelper;
+import gcom.atendimentopublico.registroatendimento.RALocalOcorrenciaHelper;
+import gcom.atendimentopublico.registroatendimento.RASolicitanteHelper;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimentoUnidade;
 import gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao;
@@ -106,7 +110,6 @@ import gcom.util.ConstantesSistema;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -128,6 +131,7 @@ import org.apache.struts.action.ActionMapping;
  */
 public class ConcluirInserirRegistroAtendimentoAction extends GcomAction {
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public ActionForward execute(ActionMapping actionMapping,
             ActionForm actionForm, HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
@@ -267,30 +271,11 @@ public class ConcluirInserirRegistroAtendimentoAction extends GcomAction {
 		// valida os campos de enter(caso tenha mudado algum valor validar)
 		validarCamposEnter(form, httpServletRequest, actionMapping, sessao);
 
-		BigDecimal nnDiametro = null;
-		
-		if(form.getNnDiamentro()!=null && !form.getNnDiamentro().equals("")){
-			nnDiametro = new BigDecimal(form.getNnDiamentro());
-		}
-		/*
-         * Validação Aba 03
-         * ======================================================================================================
-         */
         String nomeSolicitante = null;
 
         if (form.getNomeSolicitante() != null && 
 			!form.getNomeSolicitante().equalsIgnoreCase("")){
 			nomeSolicitante = form.getNomeSolicitante();
-		}
-		
-		Collection colecaoEnderecoSolicitante = null;
-		if (sessao.getAttribute("colecaoEnderecosAbaSolicitante") != null){
-			colecaoEnderecoSolicitante = (Collection) sessao.getAttribute("colecaoEnderecosAbaSolicitante");
-		}
-		
-		Collection colecaoFone = null;
-		if (sessao.getAttribute("colecaoFonesAbaSolicitante") != null){
-			colecaoFone = (Collection) sessao.getAttribute("colecaoFonesAbaSolicitante");
 		}
 		
 		Short indicadorClienteEspecificacao = null;
@@ -307,8 +292,8 @@ public class ConcluirInserirRegistroAtendimentoAction extends GcomAction {
 			Util.converterStringParaInteger(form.getIdCliente()), 
 			Util.converterStringParaInteger(form.getIdUnidadeSolicitante()),
 			Util.converterStringParaInteger(form.getIdFuncionarioResponsavel()), nomeSolicitante,
-			colecaoEnderecoSolicitante, 
-			colecaoFone, 
+			RABuilder.getColecaoEnderecoSolicitante(form, sessao), 
+			RABuilder.getColecaoFone(form, sessao), 
 			indicadorClienteEspecificacao, 
 			Util.converterStringParaInteger(form.getIdImovel()), 
 			null, 
@@ -325,22 +310,6 @@ public class ConcluirInserirRegistroAtendimentoAction extends GcomAction {
 			habilitarCampoSatisfacaoEmail = false;
 		}
 		
-		//======================================================================================================
-		//Dados enviados do AcquaGis para o Gsan
-		//As coordenadas foram invertidas para sicronizar com o AcquaGis.
-		//======================================================================================================
-		BigDecimal coordenadaNorte = null;
-		BigDecimal coordenadaLeste = null;
-		
-		if(form.getNnCoordenadaNorte()!=null && !form.getNnCoordenadaNorte().equalsIgnoreCase("")){
-			coordenadaNorte = new BigDecimal (form.getNnCoordenadaNorte().replace(",","."));
-			
-		}
-		
-		if(form.getNnCoordenadaLeste()!=null && !form.getNnCoordenadaLeste().equalsIgnoreCase("")){
-			coordenadaLeste = new BigDecimal(form.getNnCoordenadaLeste().replace(",","."));			
-		}
-		
 		
 		/*
          * Validação Aba 04 - Anexos
@@ -351,12 +320,6 @@ public class ConcluirInserirRegistroAtendimentoAction extends GcomAction {
 			
 			colecaoRegistroAtendimentoAnexo = (Collection) 
 			sessao.getAttribute("colecaoRegistroAtendimentoAnexo");	
-		}
-		
-		//ServicoTipo
-		Integer idServicoTipo = null;
-		if (sessao.getAttribute("servicoTipo") != null){
-			idServicoTipo = (Integer) sessao.getAttribute("servicoTipo");
 		}
 		
 		Collection colecaoEnderecoLocalOcorrencia = null;
@@ -455,54 +418,16 @@ public class ConcluirInserirRegistroAtendimentoAction extends GcomAction {
 					throw new ActionServletException("atencao.execedeu_limit_observacao",null,msg);
 				}
 				
-				idsGerados = 
-					this.getFachada().inserirRegistroAtendimento(Short.parseShort(form.getTipo()),
-						form.getDataAtendimento(), 
-						form.getHora(),
-						form.getTempoEsperaInicial(), 
-						form.getTempoEsperaFinal(),
-						Util.converterStringParaInteger(form.getMeioSolicitacao()), 
-						Util.converterStringParaInteger(form.getEspecificacao()),
-						form.getDataPrevista(), 
-						form.getObservacao(), 
-						Util.converterStringParaInteger(form.getIdImovel()),
-						form.getDescricaoLocalOcorrencia(), 
-						Util.converterStringParaInteger(form.getTipoSolicitacao()),
-						colecaoEnderecoLocalOcorrencia, 
-						form.getPontoReferencia(),
-						Util.converterStringParaInteger(form.getIdBairroArea()), 
-						Util.converterStringParaInteger(form.getIdLocalidade()),
-						Util.converterStringParaInteger(form.getIdSetorComercial()), 
-						Util.converterStringParaInteger(form.getIdQuadra()),
-						Util.converterStringParaInteger(form.getIdDivisaoEsgoto()), 
-						Util.converterStringParaInteger(form.getIdLocalOcorrencia()),
-						Util.converterStringParaInteger(form.getIdPavimentoRua()), 
-						Util.converterStringParaInteger(form.getIdPavimentoCalcada()),
-						Util.converterStringParaInteger(form.getUnidade()), 
-						usuario.getId(),
-						Util.converterStringParaInteger(form.getIdCliente()), 
-						form.getPontoReferenciaSolicitante(),
-						form.getNomeSolicitante(), 
-						false,
-						Util.converterStringParaInteger(form.getIdUnidadeSolicitante()), 
-						Util.converterStringParaInteger(form.getIdFuncionarioResponsavel()),
-						colecaoFone, 
-						colecaoEnderecoSolicitante,
-						Util.converterStringParaInteger(form.getIdUnidadeDestino()), 
-						form.getParecerUnidadeDestino(), 
-						idServicoTipo, 
-						form.getNumeroAtendimentoManual(), 
-						idRAJAGerado,
-						coordenadaNorte,
-						coordenadaLeste,
-						(Short)(sessao.getAttribute("indicCoordenadaSemLogradouro")), 
-						colecaoRegistroAtendimentoAnexo,
-						(String) sessao.getAttribute("protocoloAtendimento"),
-						colecaoContas, 
-						null,
-						colecaoPagamento, habilitarCampoSatisfacaoEmail.booleanValue()+"", 
-						form.getEnviarEmailSatisfacao(), form.getEnderecoEmail(),
-						nnDiametro);
+				RASolicitanteHelper raSolicitante = new RASolicitanteHelper();
+				RADadosGeraisHelper raDadosGerais = RABuilder.buildRADadosGeraisHelper(form, usuario, idRAJAGerado, 
+																						(String) sessao.getAttribute("protocoloAtendimento"),
+																						colecaoRegistroAtendimentoAnexo);
+				
+				RALocalOcorrenciaHelper raLocalOcorrencia = RABuilder.buildRALocalOcorrencia(form, colecaoEnderecoLocalOcorrencia, 
+																						(Short)(sessao.getAttribute("indicCoordenadaSemLogradouro")), 
+																						colecaoContas);
+
+				idsGerados = this.getFachada().inserirRegistroAtendimento(raDadosGerais, raLocalOcorrencia, raSolicitante);
 				
 				sessao.setAttribute("idRegistroAtendimento", idsGerados[0].toString());
 				
@@ -583,56 +508,16 @@ public class ConcluirInserirRegistroAtendimentoAction extends GcomAction {
 				throw new ActionServletException("atencao.execedeu_limit_observacao",null,msg);
 			}
 			
+			RASolicitanteHelper raSolicitante = new RASolicitanteHelper();
+			RADadosGeraisHelper raDadosGerais = RABuilder.buildRADadosGeraisHelper(form, usuario, idRAJAGerado, 
+																					(String) sessao.getAttribute("protocoloAtendimento"),
+																					colecaoRegistroAtendimentoAnexo);
 			
-			idsGerados = 
-				this.getFachada().inserirRegistroAtendimento(
-					Short.parseShort(form.getTipo()),
-					form.getDataAtendimento(), 
-					form.getHora(),
-					form.getTempoEsperaInicial(), 
-					form.getTempoEsperaFinal(),
-					Util.converterStringParaInteger(form.getMeioSolicitacao()), 
-					Util.converterStringParaInteger(form.getEspecificacao()),
-					form.getDataPrevista(), 
-					form.getObservacao(), 
-					Util.converterStringParaInteger(form.getIdImovel()),
-					form.getDescricaoLocalOcorrencia(), 
-					Util.converterStringParaInteger(form.getTipoSolicitacao()),
-					colecaoEnderecoLocalOcorrencia, 
-					form.getPontoReferencia(),
-					Util.converterStringParaInteger(form.getIdBairroArea()), 
-					Util.converterStringParaInteger(form.getIdLocalidade()),
-					Util.converterStringParaInteger(form.getIdSetorComercial()), 
-					Util.converterStringParaInteger(form.getIdQuadra()),
-					Util.converterStringParaInteger(form.getIdDivisaoEsgoto()), 
-					Util.converterStringParaInteger(form.getIdLocalOcorrencia()),
-					Util.converterStringParaInteger(form.getIdPavimentoRua()), 
-					Util.converterStringParaInteger(form.getIdPavimentoCalcada()),
-					Util.converterStringParaInteger(form.getUnidade()), 
-					usuario.getId(),
-					Util.converterStringParaInteger(form.getIdCliente()), 
-					form.getPontoReferenciaSolicitante(),
-					form.getNomeSolicitante(), 
-					false,
-					Util.converterStringParaInteger(form.getIdUnidadeSolicitante()), 
-					Util.converterStringParaInteger(form.getIdFuncionarioResponsavel()),
-					colecaoFone, 
-					colecaoEnderecoSolicitante,
-					Util.converterStringParaInteger(form.getIdUnidadeDestino()), 
-					form.getParecerUnidadeDestino(), 
-					idServicoTipo, 
-					form.getNumeroAtendimentoManual(), 
-					idRAJAGerado,
-					coordenadaNorte,
-					coordenadaLeste,
-					(Short)(sessao.getAttribute("indicCoordenadaSemLogradouro")), 
-					colecaoRegistroAtendimentoAnexo,
-					(String) sessao.getAttribute("protocoloAtendimento"),
-					colecaoContas, 
-					null,
-					colecaoPagamento,
-					habilitarCampoSatisfacaoEmail.booleanValue()+"", form.getEnviarEmailSatisfacao(), form.getEnderecoEmail(),
-					nnDiametro);
+			RALocalOcorrenciaHelper raLocalOcorrencia = RABuilder.buildRALocalOcorrencia(form, colecaoEnderecoLocalOcorrencia, 
+																					(Short)(sessao.getAttribute("indicCoordenadaSemLogradouro")), 
+																					colecaoContas);
+
+			idsGerados = this.getFachada().inserirRegistroAtendimento(raDadosGerais, raLocalOcorrencia, raSolicitante);
 			
 			sessao.setAttribute("idRegistroAtendimento", idsGerados[0].toString());
 			
@@ -698,6 +583,7 @@ public class ConcluirInserirRegistroAtendimentoAction extends GcomAction {
 		
 	
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void validarCamposEnter(
 			InserirRegistroAtendimentoActionForm inserirRegistroAtendimentoActionForm,
 			HttpServletRequest httpServletRequest,
@@ -1087,6 +973,7 @@ public class ConcluirInserirRegistroAtendimentoAction extends GcomAction {
 		filtroBairroArea.adicionarParametro(new ParametroSimples(
 				FiltroBairroArea.ID_BAIRRO, idBairro));
 
+		@SuppressWarnings("rawtypes")
 		Collection colecaoBairroArea = this.getFachada().pesquisar(filtroBairroArea,
 				BairroArea.class.getName());
 
@@ -1158,6 +1045,7 @@ public class ConcluirInserirRegistroAtendimentoAction extends GcomAction {
 		
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private RegistroAtendimentoUnidade montarRegistroAtendimentoParaEncerramento(Integer idRegistroAtendimento, Usuario usuarioLogado) {
 		
 		Fachada fachada = Fachada.getInstancia();

@@ -13,7 +13,7 @@ public class RASolicitanteHelper {
 	private Integer idUnidadeSolicitante; 
 	private Integer idServicoTipo; 
 	private Collection colecaoFone; 
-	private Collection<Endereco> colecaoEnderecoSolicitante;
+	private Collection colecaoEnderecoSolicitante;
 	private String habilitarCampoSatisfacaoEmail; 
 	private String enviarEmailSatisfacao; 
 	private String enderecoEmail;
@@ -109,15 +109,15 @@ public class RASolicitanteHelper {
 		return this;
 	}
 	
-	public Collection<Endereco> getColecaoEnderecoSolicitante() {
+	public Collection getColecaoEnderecoSolicitante() {
 		return colecaoEnderecoSolicitante;
 	}
 	
-	public void setColecaoEnderecoSolicitante(Collection<Endereco> colecaoEnderecoSolicitante) {
+	public void setColecaoEnderecoSolicitante(Collection colecaoEnderecoSolicitante) {
 		this.colecaoEnderecoSolicitante = colecaoEnderecoSolicitante;
 	}
 	
-	public RASolicitanteHelper colecaoEnderecoSolicitante(Collection<Endereco> colecaoEnderecoSolicitante) {
+	public RASolicitanteHelper colecaoEnderecoSolicitante(Collection colecaoEnderecoSolicitante) {
 		setColecaoEnderecoSolicitante(colecaoEnderecoSolicitante);
 		return this;
 	}
