@@ -50,7 +50,7 @@
 						key="staticText-1"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font pdfFontName="Courier" size="14" isBold="true"/>
+						<font pdfFontName="Courier-Bold" size="14" isBold="true"/>
 					</textElement>
 				<text><![CDATA[COMPANHIA DE SANEAMENTO DO PARÁ]]></text>
 				</staticText>
@@ -115,7 +115,7 @@
 						key="staticText-3"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font size="10"/>
+						<font pdfFontName="Courier-Bold" size="10"/>
 					</textElement>
 				<text><![CDATA[PÁGINA:]]></text>
 				</staticText>
@@ -141,7 +141,7 @@
 						key="textField-2"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font pdfFontName="Helvetica"/>
+						<font pdfFontName="Courier"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
 				</textField>
@@ -154,7 +154,7 @@
 						key="textField-3"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font pdfFontName="Helvetica"/>
+						<font pdfFontName="Courier"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
 				</textField>
@@ -167,7 +167,7 @@
 						key="staticText-4"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font/>
+						<font pdfFontName="Courier"/>
 					</textElement>
 				<text><![CDATA[/]]></text>
 				</staticText>
@@ -180,7 +180,7 @@
 						key="staticText-5"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font pdfFontName="Courier" isBold="true"/>
+						<font pdfFontName="Courier-Bold" isBold="false"/>
 					</textElement>
 				<text><![CDATA[SITUAÇÃO:]]></text>
 				</staticText>
@@ -206,7 +206,7 @@
 						key="staticText-6"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font pdfFontName="Courier" isBold="true"/>
+						<font pdfFontName="Courier-Bold" isBold="false"/>
 					</textElement>
 				<text><![CDATA[PERÍODO:]]></text>
 				</staticText>
@@ -225,7 +225,7 @@
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="412"
+						x="402"
 						y="113"
 						width="62"
 						height="16"
@@ -244,7 +244,7 @@
 						height="16"
 						key="staticText-7"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement verticalAlignment="Middle">
+					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font pdfFontName="Courier"/>
 					</textElement>
 				<text><![CDATA[a]]></text>
@@ -300,7 +300,7 @@
 						key="staticText-8"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font pdfFontName="Courier" size="11" isBold="true"/>
+						<font pdfFontName="Courier-Bold" size="11" isBold="false"/>
 					</textElement>
 				<text><![CDATA[TOTAL DE IMÓVEIS:]]></text>
 				</staticText>
@@ -313,7 +313,7 @@
 						key="textField-8"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement verticalAlignment="Middle">
-						<font pdfFontName="Courier" size="11" isBold="true"/>
+						<font pdfFontName="Courier" size="11" isBold="false"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$P{qtdeImoveis}]]></textFieldExpression>
 				</textField>

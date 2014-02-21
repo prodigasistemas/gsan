@@ -36,7 +36,7 @@ public class RelatorioImoveisSituacaoPeriodo extends TarefaRelatorio {
 		String descricaoSituacaoCadastral = (String) getParametro("descricaoSituacaoCadastral");
 		Collection<Integer> colecaoImoveis = (Collection) getParametro("colecaoImoveis");
 		if (colecaoImoveis == null || colecaoImoveis.isEmpty()) {
-			throw new RelatorioVazioException("atencao.relatorio.vazio");
+			throw new RelatorioVazioException("atencao.pesquisa.nenhumresultado");
 		} else {
 		Integer qtdeImoveis = colecaoImoveis.size();
 		Collection<RelatorioImoveisSituacaoPeriodoBean> colecaoBean = this.inicializarBeanRelatório(colecaoImoveis);

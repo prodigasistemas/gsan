@@ -34,14 +34,12 @@ public class GerarRelatorioImoveisSituacaoPeriodoAction extends ExibidorProcessa
 
 			RelatorioImoveisSituacaoPeriodo relatorio = relatorioBO.getRelatorioImoveisSituacaoPeriodo();
 
-			retorno = processarExibicaoRelatorio(relatorio, (Integer)relatorio.getParametro("tipoFormatoRelatorio"), 
+			processarExibicaoRelatorio(relatorio, (Integer)relatorio.getParametro("tipoFormatoRelatorio"), 
 					httpServletRequest, httpServletResponse, actionMapping);
 
-		} catch (SistemaException ex) {
-			ex.printStackTrace();
 		} catch (RelatorioVazioException ex) {
-			ex.printStackTrace();
-		}
+			throw new RelatorioVazioException("teste");
+		} 
 	}
 	
 }

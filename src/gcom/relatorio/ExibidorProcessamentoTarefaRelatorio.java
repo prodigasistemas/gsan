@@ -185,9 +185,6 @@ public class ExibidorProcessamentoTarefaRelatorio extends GcomAction {
 			} else {
 				OutputStream out = null;
 
-				// httpServletResponse.addHeader("Content-Disposition","attachment;
-				// filename=relatorio");
-
 				String mimeType = null;
 				switch (tipoRelatorio) {
 				case TarefaRelatorio.TIPO_PDF:
@@ -218,8 +215,6 @@ public class ExibidorProcessamentoTarefaRelatorio extends GcomAction {
 
 				httpServletResponse.setContentType(mimeType);
 				out = httpServletResponse.getOutputStream();
-				// out.write((byte[])
-				// Util.retonarObjetoDeColecao(relatorioRetorno.values()));
 				out.write(relatorioProcessado.getDados());
 				out.flush();
 				out.close();
@@ -247,11 +242,8 @@ public class ExibidorProcessamentoTarefaRelatorio extends GcomAction {
 			retorno = actionMapping.findForward("telaErroPopup");
 
 		} catch (RelatorioVazioException ex1) {
-			// manda o erro para a página no request atual
-			reportarErros(httpServletRequest, "atencao.relatorio.vazio");
-
-			// seta o mapeamento de retorno para a tela de atenção de popup
-			retorno = actionMapping.findForward("telaAtencaoPopup");
+			 ActionServletException exception = new ActionServletException(ex1.getMessage());
+			 throw exception;
 		}
 
 		return retorno;
