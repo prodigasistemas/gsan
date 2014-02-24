@@ -14729,7 +14729,7 @@ public class ControladorCadastro implements SessionBean {
 			colecaoEndereco.add(clienteEndereco);
 		}
 		
-		RADadosGeraisHelper raDadosGerais = RABuilder.buildRADadosGeraisHelper(new Short("1"), idMeioSolicitacao, idSolicitacaoTipoEspecificacao, 
+		RADadosGeraisHelper raDadosGerais = RABuilder.buildRADadosGerais(new Short("1"), idMeioSolicitacao, idSolicitacaoTipoEspecificacao, 
 																				Util.formatarData(definirDataPrevistaUnidadeDestinoEspecificacaoHelper.getDataPrevista()),
 																				observacao, idSolicitacaoTipoEspecificacao, 
 																				idUnidadeAtendimento, usuarioLogado, protocoloAtendimento);

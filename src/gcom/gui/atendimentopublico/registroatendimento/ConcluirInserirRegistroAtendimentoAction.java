@@ -419,7 +419,7 @@ public class ConcluirInserirRegistroAtendimentoAction extends GcomAction {
 				}
 				
 				RASolicitanteHelper raSolicitante = new RASolicitanteHelper();
-				RADadosGeraisHelper raDadosGerais = RABuilder.buildRADadosGeraisHelper(form, usuario, idRAJAGerado, 
+				RADadosGeraisHelper raDadosGerais = RABuilder.buildRADadosGerais(form, usuario, idRAJAGerado, 
 																						(String) sessao.getAttribute("protocoloAtendimento"),
 																						colecaoRegistroAtendimentoAnexo);
 				
@@ -509,7 +509,7 @@ public class ConcluirInserirRegistroAtendimentoAction extends GcomAction {
 			}
 			
 			RASolicitanteHelper raSolicitante = new RASolicitanteHelper();
-			RADadosGeraisHelper raDadosGerais = RABuilder.buildRADadosGeraisHelper(form, usuario, idRAJAGerado, 
+			RADadosGeraisHelper raDadosGerais = RABuilder.buildRADadosGerais(form, usuario, idRAJAGerado, 
 																					(String) sessao.getAttribute("protocoloAtendimento"),
 																					colecaoRegistroAtendimentoAnexo);
 			

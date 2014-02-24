@@ -1,9 +1,12 @@
 package gcom.atendimentopublico.registroatendimento;
 
 import gcom.cadastro.ContaBraile;
+import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.imovel.Imovel;
+import gcom.cadastro.unidade.UnidadeOrganizacional;
 import gcom.faturamento.conta.Conta;
 import gcom.gui.atendimentopublico.registroatendimento.InserirRegistroAtendimentoActionForm;
+import gcom.gui.portal.InserirSolicitacaoServicosPortalActionForm;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.Util;
 
@@ -16,7 +19,7 @@ import javax.servlet.http.HttpSession;
 public class RABuilder {
 	
 	@SuppressWarnings("rawtypes")
-	public static RADadosGeraisHelper buildRADadosGeraisHelper(InserirRegistroAtendimentoActionForm form, Usuario usuario, Integer idRAJAGerado, 
+	public static RADadosGeraisHelper buildRADadosGerais(InserirRegistroAtendimentoActionForm form, Usuario usuario, Integer idRAJAGerado, 
 																String protocoloAtendimento, Collection colecaoRegistroAtendimentoAnexo) {
 		RADadosGeraisHelper raDadosGerais = new RADadosGeraisHelper();
 		
@@ -41,7 +44,7 @@ public class RABuilder {
 		return raDadosGerais;
 	}
 	
-	public static RADadosGeraisHelper buildRADadosGeraisHelper(Short indicadorAtendimentoOnline, Integer idMeioSolicitacao, 
+	public static RADadosGeraisHelper buildRADadosGerais(Short indicadorAtendimentoOnline, Integer idMeioSolicitacao, 
 																Integer idSolicitacaoTipoEspecificacao, String dataPrevista, 
 																String observacao, Integer idSolicitacaoTipo,
 																Integer idUnidadeAtendimento, Usuario usuarioLogado,
@@ -98,6 +101,53 @@ public class RABuilder {
 					.idSolicitacaoTipo(idSolicitacaoTipo)
 					.idUnidadeAtendimento(usuarioLogado.getUnidadeOrganizacional().getId())
 					.idUsuarioLogado(usuarioLogado.getId());
+		
+		return raDadosGerais;
+	}
+	
+	public static RADadosGeraisHelper buildRaDadosGeraisHelper(Short indicadorAtendimentoOnline, Integer idMeioSolicitacao, Integer idSolicitacaoTipoEspecificacao,
+															Date dataPrevista, Integer idSolicitacaoTipo, Integer idUnidadeAtendimento, 
+															Integer idUsuarioLogado, String observacao) {
+
+		RADadosGeraisHelper raDadosGerais = new RADadosGeraisHelper();
+		
+		Date dataAtual = new Date();
+
+		raDadosGerais.indicadorAtendimentoOnline(indicadorAtendimentoOnline)
+					.dataAtendimento(Util.formatarData(dataAtual))
+					.horaAtendimento(Util.formatarHoraSemData(dataAtual))
+					.idMeioSolicitacao(idMeioSolicitacao)
+					.idSolicitacaoTipoEspecificacao(idSolicitacaoTipoEspecificacao)
+					.dataPrevista(Util.formatarData(dataPrevista))
+					.idSolicitacaoTipo(idSolicitacaoTipo)
+					.idUnidadeAtendimento(idUnidadeAtendimento)
+					.idUsuarioLogado(idUsuarioLogado)
+					.observacao(observacao);
+		
+		return raDadosGerais;
+					
+	}
+	
+	public static RADadosGeraisHelper buildRaDadosGerais(InserirSolicitacaoServicosPortalActionForm form, Short indicadorAtendimentoOnline, 
+														Integer idMeioSolicitacao, Date dataPrevista, String observacao, Integer idUnidadeAtendimento, 
+														Integer idUsuarioLogado, String protocoloAtendimento, String observacaoOS) {
+		
+		RADadosGeraisHelper raDadosGerais = new RADadosGeraisHelper();
+		
+		Date dataAtual = new Date();
+		
+		raDadosGerais.indicadorAtendimentoOnline(indicadorAtendimentoOnline)
+					.dataAtendimento(Util.formatarData(dataAtual))
+					.horaAtendimento(Util.formatarHoraSemData(dataAtual))
+					.idMeioSolicitacao(idMeioSolicitacao)
+					.idSolicitacaoTipoEspecificacao(new Integer(form.getEspecificacao()))
+					.dataPrevista(Util.formatarData(dataPrevista))
+					.observacao(observacao)
+					.idSolicitacaoTipo(new Integer(form.getSolicitacaoTipo()))
+					.idUnidadeAtendimento(idUnidadeAtendimento)
+					.idUsuarioLogado(idUsuarioLogado)
+					.protocoloAtendimento(protocoloAtendimento)
+					.observacaoOS(observacaoOS);
 		
 		return raDadosGerais;
 	}
@@ -186,6 +236,39 @@ public class RABuilder {
 		return raLocalOcorrencia;
 	}
 	
+	@SuppressWarnings("rawtypes")
+	public static RALocalOcorrenciaHelper buildRALocalOcorrencia(Imovel imovel, Collection colecaoEndereco, Short indicadorCoordenadaSemLogradouro, 
+																Integer idUnidadeDestino) {
+		RALocalOcorrenciaHelper raLocalOcorrencia = new RALocalOcorrenciaHelper();
+		
+		raLocalOcorrencia.idImovel(imovel.getId())
+						.colecaoEndereco(colecaoEndereco)
+						.idLocalidade(imovel.getLocalidade().getId())
+						.idSetorComercial(imovel.getSetorComercia().getId())
+						.idQuadra(imovel.getQuadra().getId())
+						.idPavimentoRua(imovel.getPavimentoRua().getId())
+						.idPavimentoCalcada(imovel.getPavimentoCalcada().getId())
+						.indicadorCoordenadaSemLogradouro(indicadorCoordenadaSemLogradouro)
+						.idUnidadeDestino(idUnidadeDestino);
+	
+		return raLocalOcorrencia;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public static RALocalOcorrenciaHelper buildRALocalOcorrencia(Imovel imovel, Collection colecaoEndereco, Short indicadorCoordenadaSemLogradouro) {
+
+		RALocalOcorrenciaHelper raLocalOcorrencia = new RALocalOcorrenciaHelper();
+		
+		raLocalOcorrencia.idImovel(imovel.getId())
+						.colecaoEndereco(colecaoEndereco)
+						.idLocalidade(imovel.getLocalidade().getId())
+						.idSetorComercial(imovel.getSetorComercia().getId())
+						.idQuadra(imovel.getQuadra().getId())
+						.indicadorCoordenadaSemLogradouro(indicadorCoordenadaSemLogradouro);
+	
+		return raLocalOcorrencia;
+	}
+	
 	public static RASolicitanteHelper buildRASolicitante(InserirRegistroAtendimentoActionForm form, HttpSession sessao, Boolean habilitarCampoSatisfacaoEmail,
 															boolean novoSolicitante){
 		RASolicitanteHelper raSolicitante = new RASolicitanteHelper();
@@ -239,6 +322,32 @@ public class RABuilder {
 					.idClente(idClienteUsuario);
 		
 		return raSolicitante;
+	}
+	
+	public static RASolicitanteHelper buildRASolicitante(boolean novoSolicitante, UnidadeOrganizacional unidadeSolicitante) {
+		
+		RASolicitanteHelper raSolicitante = new RASolicitanteHelper();
+		
+		raSolicitante.novoSolicitante(novoSolicitante)
+					.idUnidadeSolicitante(unidadeSolicitante.getId());
+		
+		return raSolicitante;
+	
+	}
+	
+	public static RASolicitanteHelper buildRASolicitante(InserirSolicitacaoServicosPortalActionForm form, Integer idCliente, String pontoReferenciaSolicitante, 
+														boolean novoSolicitante, Collection<ClienteFone> colecaoFone) {
+		
+		RASolicitanteHelper raSolicitante = new RASolicitanteHelper();
+		
+		raSolicitante.idClente(idCliente)
+					.pontoReferenciaSolicitante(pontoReferenciaSolicitante)
+					.nomeSolicitante(form.getNomeSolicitante())
+					.novoSolicitante(novoSolicitante)
+					.colecaoFone(colecaoFone)
+					.enderecoEmail(form.getEmail());
+		
+		   return raSolicitante;
 	}
 	
 	@SuppressWarnings("rawtypes")

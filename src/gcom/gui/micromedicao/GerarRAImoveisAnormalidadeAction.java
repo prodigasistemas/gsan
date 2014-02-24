@@ -79,6 +79,10 @@ import gcom.atendimentopublico.ordemservico.OrdemServico;
 import gcom.atendimentopublico.registroatendimento.FiltroRegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.FiltroSolicitacaoTipoEspecificacao;
 import gcom.atendimentopublico.registroatendimento.MeioSolicitacao;
+import gcom.atendimentopublico.registroatendimento.RABuilder;
+import gcom.atendimentopublico.registroatendimento.RADadosGeraisHelper;
+import gcom.atendimentopublico.registroatendimento.RALocalOcorrenciaHelper;
+import gcom.atendimentopublico.registroatendimento.RASolicitanteHelper;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.SolicitacaoTipoEspecificacao;
 import gcom.atendimentopublico.registroatendimento.bean.DefinirDataPrevistaUnidadeDestinoEspecificacaoHelper;
@@ -220,135 +224,24 @@ public class GerarRAImoveisAnormalidadeAction extends GcomAction {
 								habilitaGeograficoDivisaoEsgoto.isSolicitacaoTipoRelativoAreaEsgoto());
 					}
 					
+					RADadosGeraisHelper raDadosGerais = RABuilder.buildRaDadosGeraisHelper(new Short("1"), idMeioSolicitacao, 
+							solicitacaoTipoEspecificacao.getId(), definirDataPrevistaUnidadeDestinoEspecificacaoHelper.getDataPrevista(), 
+							solicitacaoTipoEspecificacao.getSolicitacaoTipo().getId(), unidadeAtendimento.getId(), usuarioLogado.getId(), observacao);
+
+					RASolicitanteHelper raSolicitante = RABuilder.buildRASolicitante(false, unidadeAtendimento);
+
 					if(unidadeDestino == null){
 						
-						fachada.inserirRegistroAtendimento(
-								
-								// Indicador Atendimento OnLine
-								new Short("1"), 
-							
-								// Data Atendimento / Hora Atendimento
-								dataAtendimento, horaAtendimento,
-							
-								// Tempo Espera Inicial / Final
-								null, null, 
-							
-								// Meio Solicitação / Solicitação Tipo Especificação
-								idMeioSolicitacao, solicitacaoTipoEspecificacao.getId(), 
-							
-								// Data Prevista / Observação
-								Util.formatarData(definirDataPrevistaUnidadeDestinoEspecificacaoHelper.getDataPrevista()), null,
-							
-								// Imóvel / Descrição do Local da Ocorrência / Solicitação Tipo
-								imovel.getId(), null, solicitacaoTipoEspecificacao.getSolicitacaoTipo().getId(),
-							
-								// Coleção de Endereços / Ponto Referência Local Ocorrência
-								colecaoEnderecos, null, 
-							
-								// Bairro Área
-								null,
-									
-								// Localidade		
-								imovel.getLocalidade().getId(), 
-							
-								// Setor Comercial
-								imovel.getSetorComercial().getId(), 
-									
-								// Quadra		
-								imovel.getQuadra().getId(),
-							
-								// Divisão Esgoto / Local Ocorrência
-								null, null, 
-							
-								// Pavimento Rua / Pavimento Calçada
-								imovel.getPavimentoRua().getId(), imovel.getPavimentoCalcada().getId(),
-							
-								// Unidade Atendimento / Usuário Logado
-								unidadeAtendimento.getId(), usuarioLogado.getId(),
-							
-								// Cliente / Ponto Referência Solicitante
-								null, null, 
-							
-								// Nome Solicitante / Novo Solicitante
-								null, false,
-							
-								// Unidade Solicitante / Funcionário
-								unidadeAtendimento.getId(), null, 
-							
-								// Coleção Telefones / Coleção Endereços Solicitante
-								null, null, 
-							
-								// Unidade Destino / Parecer Unidade Destino
-								null, null, 
-							
-								// Serviço Tipo / Número RA Manual / RA Gerado / Observação OS Fiscalização
-								solicitacaoTipoEspecificacao.getServicoTipo().getId(), null, null,null,null,ConstantesSistema.NAO, null, 
-								null, null, observacao,null, null, null,null,null);
+						RALocalOcorrenciaHelper raLocalOcorrencia = RABuilder.buildRALocalOcorrencia(imovel, colecaoEnderecos, ConstantesSistema.NAO, null);
+						
+						
+						fachada.inserirRegistroAtendimento(raDadosGerais, raLocalOcorrencia, raSolicitante);
 					
 					}else{
 					
-					fachada.inserirRegistroAtendimento(
-						
-							// Indicador Atendimento OnLine
-							new Short("1"), 
-						
-							// Data Atendimento / Hora Atendimento
-							dataAtendimento, horaAtendimento,
-						
-							// Tempo Espera Inicial / Final
-							null, null, 
-						
-							// Meio Solicitação / Solicitação Tipo Especificação
-							idMeioSolicitacao, solicitacaoTipoEspecificacao.getId(), 
-						
-							// Data Prevista / Observação
-							Util.formatarData(definirDataPrevistaUnidadeDestinoEspecificacaoHelper.getDataPrevista()), null,
-						
-							// Imóvel / Descrição do Local da Ocorrência / Solicitação Tipo
-							imovel.getId(), null, solicitacaoTipoEspecificacao.getSolicitacaoTipo().getId(),
-						
-							// Coleção de Endereços / Ponto Referência Local Ocorrência
-							colecaoEnderecos, null, 
-						
-							// Bairro Área
-							null,
-								
-							// Localidade		
-							imovel.getLocalidade().getId(), 
-						
-							// Setor Comercial
-							imovel.getSetorComercial().getId(), 
-								
-							// Quadra		
-							imovel.getQuadra().getId(),
-						
-							// Divisão Esgoto / Local Ocorrência
-							null, null, 
-						
-							// Pavimento Rua / Pavimento Calçada
-							imovel.getPavimentoRua().getId(), imovel.getPavimentoCalcada().getId(),
-						
-							// Unidade Atendimento / Usuário Logado
-							unidadeAtendimento.getId(), usuarioLogado.getId(),
-						
-							// Cliente / Ponto Referência Solicitante
-							null, null, 
-						
-							// Nome Solicitante / Novo Solicitante
-							null, false,
-						
-							// Unidade Solicitante / Funcionário
-							unidadeAtendimento.getId(), null, 
-						
-							// Coleção Telefones / Coleção Endereços Solicitante
-							null, null, 
-						
-							// Unidade Destino / Parecer Unidade Destino
-							unidadeDestino.getId(),	null, 
-						
-							// Serviço Tipo / Número RA Manual / RA Gerado / Observação OS Fiscalização
-							solicitacaoTipoEspecificacao.getServicoTipo().getId(), null, null,null,null,ConstantesSistema.NAO, null, null, null, observacao,
-							null,null, null,null,null);
+						RALocalOcorrenciaHelper raLocalOcorrencia = RABuilder.buildRALocalOcorrencia(imovel, colecaoEnderecos, ConstantesSistema.NAO, unidadeDestino.getId());
+					
+						fachada.inserirRegistroAtendimento(raDadosGerais, raLocalOcorrencia, raSolicitante);
 				
 					}
 					

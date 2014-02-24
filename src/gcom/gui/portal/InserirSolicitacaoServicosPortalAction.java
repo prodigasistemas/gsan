@@ -3,6 +3,10 @@ package gcom.gui.portal;
 import gcom.atendimentopublico.registroatendimento.FiltroRegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.FiltroRegistroAtendimentoSolicitante;
 import gcom.atendimentopublico.registroatendimento.MeioSolicitacao;
+import gcom.atendimentopublico.registroatendimento.RABuilder;
+import gcom.atendimentopublico.registroatendimento.RADadosGeraisHelper;
+import gcom.atendimentopublico.registroatendimento.RALocalOcorrenciaHelper;
+import gcom.atendimentopublico.registroatendimento.RASolicitanteHelper;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimentoSolicitante;
 import gcom.atendimentopublico.registroatendimento.bean.DefinirDataPrevistaUnidadeDestinoEspecificacaoHelper;
@@ -169,8 +173,6 @@ public ActionForward execute(ActionMapping actionMapping,
 			Imovel imovelEndereco = fachada.pesquisarImovelParaEndereco(imovel.getId());
 			colecaoEndereco.add(imovelEndereco);
 			
-			Date date = new Date();
-			
 			String observacao = form.getObservacoes();
 			if(observacao.length() > 400){
 				observacao = observacao.substring(0, 400);
@@ -191,57 +193,15 @@ public ActionForward execute(ActionMapping actionMapping,
 				
 				String protocolo = this.getFachada().obterProtocoloAtendimento();
 				
+				RADadosGeraisHelper raDadosGerais = RABuilder.buildRaDadosGerais(form, ConstantesSistema.SIM, MeioSolicitacao.INTERNET, dataPrevista, observacao,
+																				idUnidadeOrganizacional, idUsuarioLogado, protocolo, observacao);
+				
+				RALocalOcorrenciaHelper raLocalOcorrencia = RABuilder.buildRALocalOcorrencia(imovel, colecaoEndereco, ConstantesSistema.NAO);
+				
+				RASolicitanteHelper raSolicitante = RABuilder.buildRASolicitante(form, clienteImovel.getCliente().getId(), pontoReferencia, false, colecaoTelefone);
 				@SuppressWarnings("unused") 
 				Integer[] idRASolicitada =
-				fachada.inserirRegistroAtendimento(ConstantesSistema.SIM, //indicadorAtendimentoOnLine
-												   Util.formatarData(date), //dataAtendimento
-												   Util.formatarHoraSemData(date), //horaAtendimento
-												   null, //tempoEsperaInicial
-												   null, //tempoEsperaFinal
-												   MeioSolicitacao.INTERNET, //idMeioSolicitacao
-												   new Integer(form.getEspecificacao()), //idSolicitacaoTipoEspecificacao
-												   Util.formatarData(dataPrevista), //dataPrevista 
-												   observacao, //observacao
-												   imovel.getId(), //idImovel
-												   null, //descricaoLocalOcorrencia
-												   new Integer(form.getSolicitacaoTipo()), //idSolicitacaoTipo
-												   colecaoEndereco, //colecaoEndereco
-												   null, //pontoReferenciaLocalOcorrencia
-												   null, //idBairroArea
-												   imovel.getLocalidade().getId(), //idLocalidade 
-												   imovel.getSetorComercial().getId(), //idSetorComercial
-												   imovel.getQuadra().getId(), //idQuadra 
-												   null, //idDivisaoEsgoto
-												   null, //idLocalOcorrencia
-												   null, //idPavimentoRua 
-												   null, //idPavimentoCalcada
-												   idUnidadeOrganizacional, //idUnidadeAtendimento 
-												   idUsuarioLogado, //idUsuarioLogado 
-												   clienteImovel.getCliente().getId(), //idCliente
-												   pontoReferencia, //pontoReferenciaSolicitante 
-												   form.getNomeSolicitante(), //nomeSolicitante
-												   false, //novoSolicitante
-												   null, //idUnidadeSolicitante
-												   null, //idFuncionario
-												   colecaoTelefone, //colecaoFone
-												   null, //colecaoEnderecoSolicitante 
-												   null, //idUnidadeDestino
-												   null, //parecerUnidadeDestino 
-												   new Integer(form.getSolicitacaoTipo()), //idServicoTipo
-												   null, //numeroRAManual 
-												   null, //idRAJAGerado 
-												   null, //nnCoordenadaNorte
-												   null, //nnCoordenadaLeste 
-												   ConstantesSistema.NAO, //indicCoordenadaSemLogradouro
-												   null, //colecaoRegistroAtendimentoAnexo
-												   protocolo, //protocoloAtendimento
-												   null, //colecaoContas
-												   observacao, //observacaoOS
-												   null, //colecaoPagamentos
-												   null, //habilitarCampoSatisfacaoEmail 
-												   null, //enviarEmailSatisfacao 
-												   form.getEmail(), //enderecoEmail
-												   null);
+				fachada.inserirRegistroAtendimento(raDadosGerais, raLocalOcorrencia, raSolicitante);
 				
 				httpServletRequest.setAttribute("RASolicitadaComSucesso", true);
 				httpServletRequest.setAttribute("mensagemRA", protocolo);

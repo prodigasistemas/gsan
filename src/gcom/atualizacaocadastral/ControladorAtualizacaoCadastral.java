@@ -5,7 +5,6 @@ import gcom.atendimentopublico.registroatendimento.RABuilder;
 import gcom.atendimentopublico.registroatendimento.RADadosGeraisHelper;
 import gcom.atendimentopublico.registroatendimento.RALocalOcorrenciaHelper;
 import gcom.atendimentopublico.registroatendimento.RASolicitanteHelper;
-import gcom.atendimentopublico.registroatendimento.SolicitacaoTipo;
 import gcom.batch.ControladorBatchLocal;
 import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.UnidadeProcessamento;
@@ -544,7 +543,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 				raSolicitanteHelper.nomeSolicitante("")
 				                   .criar();
 				
-				RABuilder raBuilder = new RABuilder(raDadosGeraisHelper, raLocalOcorrenciaHelper, raSolicitanteHelper);
+//				RABuilder raBuilder = new RABuilder(raDadosGeraisHelper, raLocalOcorrenciaHelper, raSolicitanteHelper);
 			}
 		} catch (Exception e) {
 			logger.error("Erro ao inserir imóvel " + idImovel);
