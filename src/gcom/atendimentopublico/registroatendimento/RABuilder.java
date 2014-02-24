@@ -269,8 +269,7 @@ public class RABuilder {
 		return raLocalOcorrencia;
 	}
 	
-	public static RASolicitanteHelper buildRASolicitante(InserirRegistroAtendimentoActionForm form, HttpSession sessao, Boolean habilitarCampoSatisfacaoEmail,
-															boolean novoSolicitante){
+	public static RASolicitanteHelper buildRASolicitante(InserirRegistroAtendimentoActionForm form, HttpSession sessao,	boolean novoSolicitante){
 		RASolicitanteHelper raSolicitante = new RASolicitanteHelper();
 		
 		raSolicitante.novoSolicitante(false)
@@ -281,7 +280,7 @@ public class RABuilder {
 					.colecaoFone(getColecaoFone(form, sessao))
 					.colecaoEnderecoSolicitante(getColecaoEnderecoSolicitante(form, sessao))
 					.idServicoTipo(getIdServicoTipo(sessao))
-					.habilitarCampoSatisfacaoEmail(habilitarCampoSatisfacaoEmail.toString())
+					.habilitarCampoSatisfacaoEmail(getHabilitarCampoSatisfacaoEmail(sessao))
 					.enviarEmailSatisfacao(form.getEnviarEmailSatisfacao())
 					.enderecoEmail(form.getEnderecoEmail());
 		
@@ -410,6 +409,16 @@ public class RABuilder {
 		}
 		
 		return idServicoTipo;
+	}
+	
+	private static String getHabilitarCampoSatisfacaoEmail(HttpSession sessao){
+		String habilitarCampoSatisfacaoEmail = null;
+		
+		if (sessao.getAttribute("habilitarCampoSatisfacaoEmail") != null){
+			habilitarCampoSatisfacaoEmail = sessao.getAttribute("habilitarCampoSatisfacaoEmail").toString();
+		}
+		
+		return habilitarCampoSatisfacaoEmail;
 	}
 	
 }

@@ -1,7 +1,5 @@
 package gcom.atendimentopublico.registroatendimento;
 
-import gcom.integracao.webservice.spc.ConsultaWebServiceStub.Endereco;
-
 import java.util.Collection;
 
 public class RASolicitanteHelper {
