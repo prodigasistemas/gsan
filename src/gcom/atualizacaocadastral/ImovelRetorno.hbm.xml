@@ -32,6 +32,7 @@
 		<property name="nomeBairro" type="java.lang.String" column="imac_nmbairro" length="30"/>
 		<property name="codigoCep" type="java.lang.Integer" column="imac_cdcep" length="4"/>
 				
+		<property name="idLocalidade" type="java.lang.Integer" column="loca_id" length="9"/>
 		
 		<many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="true">
 			<column name="last_id"/>
