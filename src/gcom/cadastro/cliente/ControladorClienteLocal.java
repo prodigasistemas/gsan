@@ -961,5 +961,8 @@ public interface ControladorClienteLocal extends javax.ejb.EJBLocalObject {
 	 * @author Wellington Rocha               
 	 */
 	public ClienteTipo pesquisarClienteTipo(Integer idClienteTipo) throws ControladorException;
+	
+	public Collection<ClienteFone> pesquisarClienteFoneDoImovel(Integer idImovel) throws ControladorException;
+	
 }
 

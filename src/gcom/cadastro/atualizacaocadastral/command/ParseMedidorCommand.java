@@ -81,21 +81,21 @@ public class ParseMedidorCommand extends AbstractAtualizacaoCadastralCommand {
 	private void validarValorNumeroHidrometro(AtualizacaoCadastralImovel imovel, Map<String, String> linha) {
 		String numeroHidrometro = linha.get("numeroHidrometro");
 		if(StringUtils.isEmpty(numeroHidrometro)) {
-			imovel.addMensagemErro("Número do hidrômetro não está preenchido");
+			imovel.addMensagemErro("Número do hidrômetro não está preenchido.");
 		}
 	}
 
 	private void validarTipoCaixaProtecaoHidrometro(AtualizacaoCadastralImovel imovel, Map<String, String> linha) {
 		String tipoCaixaProtecao = linha.get("tipoCaixaProtecaoHidrometro");
 		if(StringUtils.isEmpty(tipoCaixaProtecao)){
-			imovel.addMensagemErro("Tipo de caixa de proteção inválida");
+			imovel.addMensagemErro("Tipo de caixa de proteção não está preenchida.");
 		} else {
 			FiltroHidrometroProtecao filtro = new FiltroHidrometroProtecao();
 			filtro.adicionarParametro(new ParametroSimples(FiltroHidrometroProtecao.ID, Integer.parseInt(tipoCaixaProtecao)));
 			try {
 				Collection<HidrometroProtecao> colecaohidrometroProtecao = controladorUtil.pesquisar(filtro, HidrometroProtecao.class.getName());
 				if(colecaohidrometroProtecao.isEmpty())
-					imovel.addMensagemErro("Tipo de caixa de proteção inexistente");
+					imovel.addMensagemErro("Tipo de caixa de proteção inexistente.");
 			} catch (ControladorException e) {
 				e.printStackTrace();
 			}

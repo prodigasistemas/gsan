@@ -139,7 +139,7 @@
 			<table width="100%" border="0">
 				<tr>
 					<td width="100"><strong>Im&oacute;vel:</strong></td>
-					<td align="left"><html:text property="idImovel" readonly="true" size="30"
+					<td align="left"><html:text property="descricaoImovel" readonly="true" size="30"
 						style="background-color:#EFEFEF; border:0; color: #000000" /></td>
 				</tr>
 				<tr>

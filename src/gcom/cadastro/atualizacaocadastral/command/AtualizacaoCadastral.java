@@ -15,6 +15,8 @@ public class AtualizacaoCadastral {
 	
 	private AtualizacaoCadastralImovel imovelAtual = new AtualizacaoCadastralImovel();
 	
+	private List<String> imagens = new ArrayList<String>();
+	
 	private int totalImoveis = 0;
 	
 	public ArquivoTextoAtualizacaoCadastral getArquivoTexto() {
@@ -46,7 +48,7 @@ public class AtualizacaoCadastral {
 		return imovelAtual;
 	}
 	
-	public List<AtualizacaoCadastralImovel> getAtualizacoesImovel(){
+	public List<AtualizacaoCadastralImovel> getImoveisComErro(){
 		return imoveisComErro;
 	}
 
@@ -68,5 +70,13 @@ public class AtualizacaoCadastral {
 
 	public void setTotalImoveis(int totalImoveis) {
 		this.totalImoveis = totalImoveis;
+	}
+
+	public List<String> getImagens() {
+		return imagens;
+	}
+
+	public void setImagens(List<String> imagens) {
+		this.imagens = imagens;
 	}
 }

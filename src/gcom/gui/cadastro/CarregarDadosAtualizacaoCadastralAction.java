@@ -61,6 +61,8 @@ public class CarregarDadosAtualizacaoCadastralAction extends GcomAction {
 			throw new ActionServletException("erro_arquivo_carregado");
 		}
 
+		String nomeArquivo = "";
+		
 		Iterator iterator = items.iterator();
 
 		while (iterator.hasNext()) {
@@ -75,16 +77,18 @@ public class CarregarDadosAtualizacaoCadastralAction extends GcomAction {
 
 						ZipEntry zipEntry = null;
 						BufferedReader buffer = null;
-						ArrayList<String> imagens = new ArrayList<String>();
+						List<String> imagens = new ArrayList<String>();
 
 						while ((zipEntry = zipInputStream.getNextEntry()) != null) {
 							if (zipEntry.getName().startsWith("__")) {
 								continue;
 							}
 
-							System.out.println("Descompactando " + zipEntry.getName());
-
 							if (zipEntry.getName().endsWith(".txt")) {
+								
+								nomeArquivo = zipEntry.getName().substring(0, 10);
+								
+								System.out.println("Descompactando " + zipEntry.getName());
 								
 								buffer = this.lerArquivoTxt(buffer, zipInputStream, zipEntry);
 								
@@ -92,7 +96,7 @@ public class CarregarDadosAtualizacaoCadastralAction extends GcomAction {
 									|| zipEntry.getName().endsWith(".jpg")
 									|| zipEntry.getName().endsWith(".png")) {
 
-								this.lerImagem(zipInputStream, zipEntry, imagens);
+								imagens = this.lerImagem(zipInputStream, zipEntry, imagens, nomeArquivo);
 							}
 						}
 
@@ -102,7 +106,7 @@ public class CarregarDadosAtualizacaoCadastralAction extends GcomAction {
 							HttpSession sessao = httpServletRequest.getSession(false);
 							Map<String, List<String>> mapErros = new HashMap<String, List<String>>();
 							
-							for (AtualizacaoCadastralImovel imovel: atualizacao.getAtualizacoesImovel()){
+							for (AtualizacaoCadastralImovel imovel: atualizacao.getImoveisComErro()){
 								List<String> erros = mapErros.get(String.valueOf(imovel.getMatricula()));
 								if (erros == null){
 									erros = new ArrayList<String>();
@@ -144,11 +148,43 @@ public class CarregarDadosAtualizacaoCadastralAction extends GcomAction {
 
 	}
 
-	private ArrayList<String> lerImagem(ZipInputStream zipInputStream,
-			ZipEntry zipEntry, ArrayList<String> imagens)
+	private List<String> lerImagem(ZipInputStream zipInputStream,
+			ZipEntry zipEntry, List<String> imagens, String nomeArquivo)
 			throws FileNotFoundException, IOException {
 
-		File imagem = new File(zipEntry.getName());
+		try {
+			String caminhoJboss = System.getProperty("jboss.server.home.dir");
+			
+			File pasta = new File(caminhoJboss + "/images/cadastro", nomeArquivo);
+			
+			if (!pasta.exists()) {
+				pasta.mkdir();
+			} else {
+				File arquivos[] = pasta.listFiles();
+				
+				for (File arquivo : arquivos) {
+					if (zipEntry.getName().equals(arquivo.getName())) {
+						arquivo.delete();
+					}
+				}
+			}
+			
+			imagens = this.extrairImagem(zipInputStream, zipEntry, imagens, pasta);
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+		return imagens;
+	}
+
+	private List<String> extrairImagem(ZipInputStream zipInputStream,
+			ZipEntry zipEntry, List<String> imagens, File caminho)
+			throws FileNotFoundException, IOException {
+		
+		File imagem = new File(caminho, zipEntry.getName());
 		imagens.add(imagem.getName());
 
 		FileOutputStream fileOutputStream = new FileOutputStream(imagem);
@@ -158,7 +194,7 @@ public class CarregarDadosAtualizacaoCadastralAction extends GcomAction {
 
 		zipInputStream.closeEntry();
 		fileOutputStream.close();
-
+		
 		return imagens;
 	}
 

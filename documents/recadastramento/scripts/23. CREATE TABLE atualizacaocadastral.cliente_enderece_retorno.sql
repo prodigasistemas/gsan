@@ -1,4 +1,21 @@
-﻿ 
+-- Sequence: atualizacaocadastral.seq_cliente_endereco_retorno
+
+-- DROP SEQUENCE atualizacaocadastral.seq_cliente_endereco_retorno;
+
+CREATE SEQUENCE atualizacaocadastral.seq_cliente_endereco_retorno
+  INCREMENT 1
+  MINVALUE 1
+  MAXVALUE 9223372036854775807
+  START 1
+  CACHE 1;
+ALTER TABLE atualizacaocadastral.seq_cliente_endereco_retorno
+  OWNER TO gsan_admin;
+GRANT ALL ON TABLE atualizacaocadastral.seq_cliente_endereco_retorno TO gsan_admin;
+GRANT SELECT, UPDATE ON TABLE atualizacaocadastral.seq_cliente_endereco_retorno TO pg_aplic;
+GRANT SELECT ON TABLE atualizacaocadastral.seq_cliente_endereco_retorno TO pg_users;
+
+
+ 
 -- Table: atualizacaocadastral.cliente_endereco_retorno
 -- DROP TABLE atualizacaocadastral.cliente_endereco_retorno;
  

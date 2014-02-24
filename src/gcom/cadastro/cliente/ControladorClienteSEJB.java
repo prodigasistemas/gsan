@@ -1069,68 +1069,27 @@ public class ControladorClienteSEJB implements SessionBean {
 		return retorno;
 	}
 
-	/**
-	 * Pesquisa todos os telefones de um cliente
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 23/08/2006
-	 * 
-	 * @param idCliente
-	 * @return Collection
-	 * @throws ControladorException
-	 */
-	public Collection pesquisarClienteFone(Integer idCliente)
+	@SuppressWarnings("unchecked")
+	public Collection<ClienteFone> pesquisarClienteFone(Integer idCliente)
 			throws ControladorException {
 
-		//Collection colecaoFone = null;
-		//Collection colecaoRetorno = null;
-
 		try {
-			return this.repositorioCliente
-					.pesquisarClienteFone(idCliente);
+			return this.repositorioCliente.pesquisarClienteFone(idCliente);
 		} catch (ErroRepositorioException ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}
 
-		/*if (colecaoFone != null && !colecaoFone.isEmpty()) {
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<ClienteFone> pesquisarClienteFoneDoImovel(Integer idImovel) throws ControladorException {
 
-			Iterator foneIterator = colecaoFone.iterator();
-			ClienteFone clienteFone = null;
-			FoneTipo foneTipo = null;
+		try {
+			return this.repositorioCliente.pesquisarClienteFoneDoImovel(idImovel);
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
 
-			colecaoRetorno = new ArrayList();
-
-			while (foneIterator.hasNext()) {
-
-				clienteFone = new ClienteFone();
-
-				Object[] arrayFone = (Object[]) foneIterator.next();
-
-				clienteFone.setId((Integer) arrayFone[0]);
-
-				clienteFone.setUltimaAlteracao((Date) arrayFone[5]);
-
-				if (arrayFone[1] != null) {
-					clienteFone.setDdd((String) arrayFone[1]);
-				}
-
-				clienteFone.setTelefone((String) arrayFone[2]);
-
-				if (arrayFone[3] != null) {
-					clienteFone
-							.setIndicadorTelefonePadrao((Short) arrayFone[3]);
-				}
-
-				foneTipo = new FoneTipo();
-				foneTipo.setDescricao((String) arrayFone[4]);
-
-				clienteFone.setFoneTipo(foneTipo);
-
-				colecaoRetorno.add(clienteFone);
-			}
-		}*/
-
-		//return colecaoRetorno;
 	}
 
 	/**

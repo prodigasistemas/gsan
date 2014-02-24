@@ -43,7 +43,8 @@ CREATE TABLE atualizacaocadastral.imovel_retorno
   last_id integer,
   ftab_id integer,
   hipr_id integer,
-  imov_id integer,
+  imov_id integer
+
   CONSTRAINT imovel_retorno_pkey PRIMARY KEY (imre_id),
   CONSTRAINT fk1_imovel_retorno FOREIGN KEY (last_id)
       REFERENCES atendimentopublico.ligacao_agua_situacao (last_id) MATCH SIMPLE

@@ -43,14 +43,14 @@ public class ParseRamoAtividadeCommand extends AbstractAtualizacaoCadastralComma
 		
 		if (idRamoAtividade > 0) {
 			if (imovel.getDadosImovel().contemApenasResidencial()){
-				imovel.addMensagemErro("Categoria residencial não admite ramo de atividade");
+				imovel.addMensagemErro("Categoria residencial não permite ramo de atividade.");
 				return;
 			}
 			
 			boolean existeRamoAtividade = repositorioCadastro.existeRamoAtividade(idRamoAtividade);
 			
 			if (!existeRamoAtividade){
-				imovel.addMensagemErro("Código inválido do ramo de atividade");
+				imovel.addMensagemErro("Ramo de atividade com código inválido.");
 				return;
 			}
 			
