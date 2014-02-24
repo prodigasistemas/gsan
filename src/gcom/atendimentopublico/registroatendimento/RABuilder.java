@@ -2,6 +2,7 @@ package gcom.atendimentopublico.registroatendimento;
 
 import gcom.cadastro.ContaBraile;
 import gcom.cadastro.cliente.ClienteFone;
+import gcom.cadastro.imovel.IImovel;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.unidade.UnidadeOrganizacional;
 import gcom.faturamento.conta.Conta;
@@ -17,6 +18,28 @@ import java.util.Date;
 import javax.servlet.http.HttpSession;
 
 public class RABuilder {
+	
+	public static Integer UNIDADE_ATENDIMENTO_UNAM = new Integer(17);
+	public static Integer SOLICITACAO_TIPO_MANUTENCAO_CADASTRAL = new Integer(25);
+	public static Integer SOLICITACAO_TIPO_ESPECIFICACAO_ATUALIZACAO_CADASTRAL = new Integer(13);
+	
+	public static RADadosGeraisHelper buildRADadosGerais(IImovel imovelRetorno, Integer alteracaoTipo) {
+		RADadosGeraisHelper raDadosGerais = new RADadosGeraisHelper();
+		
+		Date dataAtual = new Date();
+		
+		raDadosGerais.indicadorAtendimentoOnline(new Short("1"))
+					.dataAtendimento(Util.formatarData(dataAtual))
+					.horaAtendimento(Util.formatarHoraSemSegundos(dataAtual))
+					.idUnidadeAtendimento(UNIDADE_ATENDIMENTO_UNAM)
+					.idMeioSolicitacao(MeioSolicitacao.INTERNO)
+					.idSolicitacaoTipo(SOLICITACAO_TIPO_MANUTENCAO_CADASTRAL)
+					.idSolicitacaoTipoEspecificacao(SOLICITACAO_TIPO_ESPECIFICACAO_ATUALIZACAO_CADASTRAL)
+					.observacao(getObservacaoIncluirImovel(imovelRetorno))
+					.protocoloAtendimento(getProtocoloIncluirImovel(imovelRetorno));
+		
+		return raDadosGerais;
+	}
 	
 	@SuppressWarnings("rawtypes")
 	public static RADadosGeraisHelper buildRADadosGerais(InserirRegistroAtendimentoActionForm form, Usuario usuario, Integer idRAJAGerado, 
@@ -70,7 +93,7 @@ public class RABuilder {
 	}
 	
 	@SuppressWarnings("rawtypes")
-	public static RADadosGeraisHelper buildRADadosGeraisHelper(RegistroAtendimento registroAtendimento, Usuario usuario, 
+	public static RADadosGeraisHelper buildRADadosGerais(RegistroAtendimento registroAtendimento, Usuario usuario, 
 																Integer idUnidadeAtendimento, Collection colecaoRegistroAtendimentoAnexo){
 		RADadosGeraisHelper raDadosGerais = new RADadosGeraisHelper();
 		
@@ -87,7 +110,7 @@ public class RABuilder {
 		return raDadosGerais;
 	}
 	
-	public static RADadosGeraisHelper buildRADadosGeraisHelper(Short indicadorAtendimentoOnline, Date dataAtual, Integer meioSolicitacao, 
+	public static RADadosGeraisHelper buildRADadosGerais(Short indicadorAtendimentoOnline, Date dataAtual, Integer meioSolicitacao, 
 																Integer idSolicitacaoTipoEspecificacao, String dataPrevista, Integer idSolicitacaoTipo,
 																Usuario usuarioLogado){
 		RADadosGeraisHelper raDadosGerais = new RADadosGeraisHelper();
@@ -105,7 +128,7 @@ public class RABuilder {
 		return raDadosGerais;
 	}
 	
-	public static RADadosGeraisHelper buildRaDadosGeraisHelper(Short indicadorAtendimentoOnline, Integer idMeioSolicitacao, Integer idSolicitacaoTipoEspecificacao,
+	public static RADadosGeraisHelper buildRADadosGerais(Short indicadorAtendimentoOnline, Integer idMeioSolicitacao, Integer idSolicitacaoTipoEspecificacao,
 															Date dataPrevista, Integer idSolicitacaoTipo, Integer idUnidadeAtendimento, 
 															Integer idUsuarioLogado, String observacao) {
 
@@ -128,7 +151,7 @@ public class RABuilder {
 					
 	}
 	
-	public static RADadosGeraisHelper buildRaDadosGerais(InserirSolicitacaoServicosPortalActionForm form, Short indicadorAtendimentoOnline, 
+	public static RADadosGeraisHelper buildRADadosGerais(InserirSolicitacaoServicosPortalActionForm form, Short indicadorAtendimentoOnline, 
 														Integer idMeioSolicitacao, Date dataPrevista, String observacao, Integer idUnidadeAtendimento, 
 														Integer idUsuarioLogado, String protocoloAtendimento, String observacaoOS) {
 		
@@ -152,6 +175,17 @@ public class RABuilder {
 		return raDadosGerais;
 	}
 	
+	public static RALocalOcorrenciaHelper buildRALocalOcorencia() {
+		RALocalOcorrenciaHelper raLocalOcorrenciaHelper = new RALocalOcorrenciaHelper();
+		
+		raLocalOcorrenciaHelper.colecaoEndereco(null)
+								.idLocalidade(null)
+								.idSetorComercial(null)
+								.idQuadra(null)
+								.idUnidadeDestino(null)
+								.parecerUnidadeDestino(null);
+		return raLocalOcorrenciaHelper;
+	}
 	@SuppressWarnings("rawtypes")
 	public static RALocalOcorrenciaHelper buildRALocalOcorrencia(InserirRegistroAtendimentoActionForm form, Collection colecaoEnderecoLocalOcorrencia,
 																Short indicadorCoordenadaSemLogradouro, Collection<Conta> colecaoContas){
@@ -419,6 +453,20 @@ public class RABuilder {
 		}
 		
 		return habilitarCampoSatisfacaoEmail;
+	}
+	
+	private static String getObservacaoIncluirImovel(IImovel imovelRetorno) {
+		String observacao = "";
+		
+		return observacao;
+		
+	}
+	
+	private static String getProtocoloIncluirImovel(IImovel imovelRetorno) {
+		String observacao = "";
+		
+		return observacao;
+		
 	}
 	
 }

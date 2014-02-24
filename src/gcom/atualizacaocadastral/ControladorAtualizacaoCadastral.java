@@ -1,6 +1,5 @@
 package gcom.atualizacaocadastral;
 
-import gcom.atendimentopublico.registroatendimento.MeioSolicitacao;
 import gcom.atendimentopublico.registroatendimento.RABuilder;
 import gcom.atendimentopublico.registroatendimento.RADadosGeraisHelper;
 import gcom.atendimentopublico.registroatendimento.RALocalOcorrenciaHelper;
@@ -528,22 +527,23 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			Collection<IImovel> imoveisInclusao = this.obterImoveisParaAtualizar(AlteracaoTipo.INCLUSAO);
 			
 			for (IImovel imovelRetorno : imoveisInclusao) {
-				RADadosGeraisHelper raDadosGeraisHelper = new RADadosGeraisHelper();
-				raDadosGeraisHelper.indicadorAtendimentoOnline((short) 1)
-								   .dataAtendimento((new Date()).toString())
-								   .idMeioSolicitacao(MeioSolicitacao.INTERNO)
-								   .observacao("")
-								   .criar();
+				
+				RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGerais(imovelRetorno, AlteracaoTipo.INCLUSAO);
 				
 				RALocalOcorrenciaHelper raLocalOcorrenciaHelper = new RALocalOcorrenciaHelper();
-				raLocalOcorrenciaHelper.descricaoLocalOcorrencia("")
-									   .criar();
+				
+				raLocalOcorrenciaHelper.colecaoEndereco(null)
+										.idLocalidade(null)
+										.idSetorComercial(null)
+										.idQuadra(null)
+										.idUnidadeDestino(null)
+										.parecerUnidadeDestino(null);
 				
 				RASolicitanteHelper raSolicitanteHelper = new RASolicitanteHelper();
-				raSolicitanteHelper.nomeSolicitante("")
-				                   .criar();
 				
-//				RABuilder raBuilder = new RABuilder(raDadosGeraisHelper, raLocalOcorrenciaHelper, raSolicitanteHelper);
+				raSolicitanteHelper.nomeSolicitante("");
+
+				
 			}
 		} catch (Exception e) {
 			logger.error("Erro ao inserir imóvel " + idImovel);
@@ -552,19 +552,6 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		
 	}
 	
-	private void excluirImoveis() {
-		int idImovel = -1;
-
-		try {
-			Collection<IImovel> imoveisExclusao = this.obterImoveisParaAtualizar(AlteracaoTipo.EXCLUSAO);
-			
-			for (IImovel imovelRetorno : imoveisExclusao) {
-			}
-		} catch (Exception e) {
-			logger.error("Erro ao excluir imóvel " + idImovel);
-		}
+	private void excluirImoveis() {}
 	
-		
-	
-	}
 }

@@ -8752,7 +8752,7 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 		Cliente clienteUsuario = getControladorImovel()
 				.pesquisarClienteUsuarioImovel(idImovel);
 
-		RADadosGeraisHelper raDadosGerais = RABuilder.buildRADadosGeraisHelper(RegistroAtendimento.INDICADOR_ATENDIMENTO_ON_LINE, dataAtual, 
+		RADadosGeraisHelper raDadosGerais = RABuilder.buildRADadosGerais(RegistroAtendimento.INDICADOR_ATENDIMENTO_ON_LINE, dataAtual, 
 																				MeioSolicitacao.INTERNO, idSolicitacaoTipoEspecificacao, 
 																				dataPrevista, idSolicitacaoTipo, usuarioLogado);
 		RALocalOcorrenciaHelper raLocalOcorrencia = RABuilder.buildRALocalOcorrencia(imovelCarregado, colecaoEndereco, idUnidadeDestino, 

@@ -193,7 +193,7 @@ public ActionForward execute(ActionMapping actionMapping,
 				
 				String protocolo = this.getFachada().obterProtocoloAtendimento();
 				
-				RADadosGeraisHelper raDadosGerais = RABuilder.buildRaDadosGerais(form, ConstantesSistema.SIM, MeioSolicitacao.INTERNET, dataPrevista, observacao,
+				RADadosGeraisHelper raDadosGerais = RABuilder.buildRADadosGerais(form, ConstantesSistema.SIM, MeioSolicitacao.INTERNET, dataPrevista, observacao,
 																				idUnidadeOrganizacional, idUsuarioLogado, protocolo, observacao);
 				
 				RALocalOcorrenciaHelper raLocalOcorrencia = RABuilder.buildRALocalOcorrencia(imovel, colecaoEndereco, ConstantesSistema.NAO);

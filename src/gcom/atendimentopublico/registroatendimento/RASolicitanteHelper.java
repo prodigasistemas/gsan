@@ -10,7 +10,9 @@ public class RASolicitanteHelper {
 	private boolean novoSolicitante;
 	private Integer idUnidadeSolicitante; 
 	private Integer idServicoTipo; 
+	@SuppressWarnings("rawtypes")
 	private Collection colecaoFone; 
+	@SuppressWarnings("rawtypes")
 	private Collection colecaoEnderecoSolicitante;
 	private String habilitarCampoSatisfacaoEmail; 
 	private String enviarEmailSatisfacao; 
@@ -94,27 +96,35 @@ public class RASolicitanteHelper {
 		return this;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public Collection getColecaoFone() {
 		return colecaoFone;
 	}
-	
+
+	@SuppressWarnings("rawtypes")
+
 	public void setColecaoFone(Collection colecaoFone) {
 		this.colecaoFone = colecaoFone;
 	}
-	
+
+	@SuppressWarnings("rawtypes")
+
 	public RASolicitanteHelper colecaoFone(Collection colecaoFone) {
 		setColecaoFone(colecaoFone);
 		return this;
 	}
-	
+
+	@SuppressWarnings("rawtypes")
 	public Collection getColecaoEnderecoSolicitante() {
 		return colecaoEnderecoSolicitante;
 	}
-	
+
+	@SuppressWarnings("rawtypes")
 	public void setColecaoEnderecoSolicitante(Collection colecaoEnderecoSolicitante) {
 		this.colecaoEnderecoSolicitante = colecaoEnderecoSolicitante;
 	}
-	
+
+	@SuppressWarnings("rawtypes")
 	public RASolicitanteHelper colecaoEnderecoSolicitante(Collection colecaoEnderecoSolicitante) {
 		setColecaoEnderecoSolicitante(colecaoEnderecoSolicitante);
 		return this;
@@ -156,22 +166,6 @@ public class RASolicitanteHelper {
 	
 	public RASolicitanteHelper enderecoEmail(String enderecoEmail) {
 		setEnderecoEmail(enderecoEmail);
-		return this;
-	}
-	
-	public RASolicitanteHelper criar() throws Exception {
-		StringBuffer mensagemErro = new StringBuffer();
-		if(nomeSolicitante == null){
-			mensagemErro.append("Nome do solicitante não foi preenchido.\n");
-		}
-		if(idServicoTipo == null){
-			mensagemErro.append("Id do tipo de serviço não foi preenchido.\n");
-		}
-		
-		if(mensagemErro.length() > 0){
-			throw new Exception(mensagemErro.toString());
-		}
-		
 		return this;
 	}
 	

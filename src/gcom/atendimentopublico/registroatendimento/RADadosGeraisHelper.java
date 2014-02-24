@@ -222,37 +222,4 @@ public class RADadosGeraisHelper {
 		return this;
 	}
 
-	public RADadosGeraisHelper criar() throws Exception {
-		StringBuffer mensagemErro = new StringBuffer();
-		if(protocoloAtendimento == null){
-			mensagemErro.append("Protocolo de Atendimento não foi preenchido.\n");
-		}
-		if(indicadorAtendimentoOnLine > 0){
-			mensagemErro.append("Indicador de Atendimento não foi preenchido.\n");
-		}
-		if(dataAtendimento == null){
-			mensagemErro.append("Data de Atendimento não foi preenchido.\n");
-		}
-		if(horaAtendimento == null){
-			mensagemErro.append("Hora de Atendimento não foi preenchido.\n");
-		}
-		if(idUnidadeAtendimento == null){
-			mensagemErro.append("Unidade de Atendimento não foi preenchido\n");
-		}
-		if(idMeioSolicitacao == null){
-			mensagemErro.append("Meio de Solicitação não foi preenchido.\n");
-		}
-		if(idSolicitacaoTipo == null){
-			mensagemErro.append("Tipo de Solicitação não foi preenchido.\n");
-		}
-		if(idSolicitacaoTipoEspecificacao == null){
-			mensagemErro.append("Tipo de Especificação não foi preenchido.\n");
-		}
-		
-		if(mensagemErro.length() > 0){
-			throw new Exception(mensagemErro.toString());
-		}
-		
-		return this;
-	}
 }

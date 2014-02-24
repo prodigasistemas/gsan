@@ -2,7 +2,6 @@ package gcom.atendimentopublico.registroatendimento;
 
 import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.faturamento.conta.Conta;
-import gcom.integracao.webservice.spc.ConsultaWebServiceStub.Endereco;
 
 import java.math.BigDecimal;
 import java.util.Collection;
@@ -11,6 +10,7 @@ public class RALocalOcorrenciaHelper {
 
 	private Integer idImovel;
 	private Collection<Conta> colecaoContas;
+	@SuppressWarnings("rawtypes")
 	private Collection colecaoEndereco; 
 	private String pontoReferenciaLocalOcorrencia;
 	private BigDecimal nnCoordenadaNorte;
@@ -56,14 +56,17 @@ public class RALocalOcorrenciaHelper {
 		return this;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public Collection getColecaoEndereco() {
 		return colecaoEndereco;
 	}
-	
+
+	@SuppressWarnings("rawtypes")
 	public void setColecaoEndereco(Collection colecaoEndereco) {
 		this.colecaoEndereco = colecaoEndereco;
 	}
-	
+
+	@SuppressWarnings("rawtypes")
 	public RALocalOcorrenciaHelper colecaoEndereco(Collection colecaoEndereco) {
 		setColecaoEndereco(colecaoEndereco);
 		return this;
@@ -287,33 +290,6 @@ public class RALocalOcorrenciaHelper {
 	
 	public RALocalOcorrenciaHelper nnDiametro(BigDecimal nnDiametro) {
 		setNnDiametro(nnDiametro);
-		return this;
-	}
-	
-	public RALocalOcorrenciaHelper criar() throws Exception {
-		StringBuffer mensagemErro = new StringBuffer();
-		if(idLocalidade == null){
-			mensagemErro.append("Id da localidade não foi preenchido.\n");
-		}
-		if(idBairroArea == null ){
-			mensagemErro.append("Id do bairro não foi preenchido.\n");
-		}
-		if(idSetorComercial == null ){
-			mensagemErro.append("Id do setor comercial não foi preenchido.\n");
-		}
-		
-		if(idQuadra == null ){
-			mensagemErro.append("Id do setor comercial não foi preenchido.\n");
-		}
-		
-		if(parecerUnidadeDestino  == null ){
-			mensagemErro.append("Parecer não foi preenchido.\n");
-		}
-		
-		if(mensagemErro.length() > 0){
-			throw new Exception(mensagemErro.toString());
-		}
-		
 		return this;
 	}
 	

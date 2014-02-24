@@ -7667,7 +7667,7 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 
 				Collection colecaoRegistroAtendimentoAnexo = this.getControladorUtil().pesquisar(filtroRegistroAtendimentoAnexo, RegistroAtendimentoAnexo.class.getName());
 				
-				RADadosGeraisHelper raDadosGerais = RABuilder.buildRADadosGeraisHelper(registroAtendimento, usuarioLogado, unidadeAtendimento.getId(), colecaoRegistroAtendimentoAnexo);
+				RADadosGeraisHelper raDadosGerais = RABuilder.buildRADadosGerais(registroAtendimento, usuarioLogado, unidadeAtendimento.getId(), colecaoRegistroAtendimentoAnexo);
 				RALocalOcorrenciaHelper raLocalOcorrencia = RABuilder.buildRALocalOcorrencia(registroAtendimento, colecaoEnderecos, unidadeAtendimento.getId());
 				RASolicitanteHelper raSolicitante = RABuilder.buildRASolicitante(registroAtendimento, false, unidadeAtendimento.getId());
 				

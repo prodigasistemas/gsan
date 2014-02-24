@@ -224,7 +224,7 @@ public class GerarRAImoveisAnormalidadeAction extends GcomAction {
 								habilitaGeograficoDivisaoEsgoto.isSolicitacaoTipoRelativoAreaEsgoto());
 					}
 					
-					RADadosGeraisHelper raDadosGerais = RABuilder.buildRaDadosGeraisHelper(new Short("1"), idMeioSolicitacao, 
+					RADadosGeraisHelper raDadosGerais = RABuilder.buildRADadosGerais(new Short("1"), idMeioSolicitacao, 
 							solicitacaoTipoEspecificacao.getId(), definirDataPrevistaUnidadeDestinoEspecificacaoHelper.getDataPrevista(), 
 							solicitacaoTipoEspecificacao.getSolicitacaoTipo().getId(), unidadeAtendimento.getId(), usuarioLogado.getId(), observacao);
 
