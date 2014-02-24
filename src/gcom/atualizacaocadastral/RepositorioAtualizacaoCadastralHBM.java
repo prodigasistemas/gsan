@@ -301,7 +301,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		try {
 			String consulta = " SELECT i.imovel.id " 
 					+ " FROM ImovelControleAtualizacaoCadastral i " 
-					+ " WHERE i.dataAprovacao BETWEEN :dataInicial AND :dataFinal "
+					+ " WHERE date(i.dataAprovacao) BETWEEN :dataInicial AND :dataFinal "
 					+ " AND i.situacaoAtualizacaoCadastral.id = :idSituacaoCadastral ";
 			return (Collection<Integer>) session.createQuery(consulta)
 					.setDate("dataInicial", dataInicial)
@@ -322,7 +322,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		try {
 			String consulta = " SELECT i.imovel.id " 
 					+ " FROM ImovelControleAtualizacaoCadastral i " 
-					+ " WHERE i.dataGeracao BETWEEN :dataInicial AND :dataFinal " 
+					+ " WHERE date(i.dataGeracao) BETWEEN :dataInicial AND :dataFinal " 
 					+ " AND i.situacaoAtualizacaoCadastral.id = :idSituacaoCadastral ";
 			return (Collection<Integer>) session.createQuery(consulta)
 					.setDate("dataInicial", dataInicial)
@@ -342,7 +342,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		try {
 			String consulta = " SELECT i.imovel.id " 
 					+ " FROM ImovelControleAtualizacaoCadastral i " 
-					+ " WHERE i.dataRetorno BETWEEN :dataInicial AND :dataFinal " 
+					+ " WHERE date(i.dataRetorno) BETWEEN :dataInicial AND :dataFinal " 
 					+ " AND i.situacaoAtualizacaoCadastral.id = :idSituacaoCadastral ";
 			return (Collection<Integer>) session.createQuery(consulta)
 					.setDate("dataInicial", dataInicial)
