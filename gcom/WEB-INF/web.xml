@@ -890,13 +890,12 @@
     			/WEB-INF/micromedicao/struts-config-ProcessarRequisicaoDispositivoMovelAcompanhamentoServico.xml, 
 				/WEB-INF/portal/struts-config-ExibirCalendarioAbastecimentoPortalCompesa.xml,
 				/WEB-INF/atendimentopublico/ordemservico/struts-config-ConsultarComandoOSSeletivaInspecaoAnormalidade.xml,
-    		    		/WEB-INF/micromedicao/struts-config-ProcessarRequisicaoDispositivoMovelAcompanhamentoServico.xml, 
+    		    /WEB-INF/micromedicao/struts-config-ProcessarRequisicaoDispositivoMovelAcompanhamentoServico.xml, 
 				/WEB-INF/portal/struts-config-ExibirLojasAtendimentoPresencialPortalCompesa.xml,
 				/WEB-INF/relatorio/faturamento/struts-config-GerarRelatorioMultasAutosInfracaoPendentes.xml,
 				/WEB-INF/portal/struts-config-ConsultarEstruturaTarifariaPortal.xml,
 				/WEB-INF/atendimentopublico/ordemservico/struts-config-AcompanhamentoArquivoRoteiro.xml,
 				/WEB-INF/portal/struts-config-ConsultarEstruturaTarifariaPortal.xml,
-				<!--/WEB-INF/micromedicao/struts-config-ProcessarRequisicaoDispositivoMovelAcompanhamentoServico.xml-->
 				/WEB-INF/atendimentopublico/ordemservico/struts-config-ExibirInformarMotivoEncerramento.xml,
 				/WEB-INF/atendimentopublico/ordemservico/struts-config-PesquisarServicoTipoMotivoEncerramento.xml,
 				/WEB-INF/cobranca/contratoparcelamento/struts-config-EmitirExtratoContratoParcelamentoPorCliente.xml,
@@ -907,7 +906,8 @@
 				/WEB-INF/atendimentopublico/ordemservico/struts-config-RelatorioOrdensServicoFiscalizacao.xml,
 				/WEB-INF/arrecadacao/struts-config-InformarAcertoDocumentosNaoAceitos.xml,
 				/WEB-INF/atendimentopublico/ordemservico/struts-config-AtualizarOrdemServicoAcompanhamentoCelular.xml,
-				/WEB-INF/relatorio/big/struts-config-RelatorioBIG.xml
+				/WEB-INF/relatorio/big/struts-config-RelatorioBIG.xml,
+				/WEB-INF/relatorio/cadastro/atualizacaocadastral/struts-config-RelatorioImoveisSituacaoPeriodo.xml
 				
 			</param-value>
 		</init-param>

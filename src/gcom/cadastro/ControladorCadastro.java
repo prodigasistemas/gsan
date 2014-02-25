@@ -16161,8 +16161,11 @@ public class ControladorCadastro implements SessionBean {
 		return idImoveisAprovados;
 	}
 	
-	public void atualizarImoveisAprovados() throws ControladorException {
-		Collection<Integer> idImoveis = pesquisarIdImoveisAprovados();
-		
+	public SituacaoAtualizacaoCadastral pesquisarSituacaoAtualizacaoCadastralPorId(Integer idSituacaoCadastral) throws ControladorException {
+		try {
+			return repositorioCadastro.pesquisarSituacaoAtualizacaoCadastralPorId(idSituacaoCadastral);
+		} catch(ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
 	}
 }

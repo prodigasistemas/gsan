@@ -504,4 +504,20 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 	private void apagarClienteRetorno(Collection<Integer> idsClientesRetorno) throws Exception{
 		repositorioAtualizacaoCadastral.apagarClienteRetorno(idsClientesRetorno);
 	}
+
+	public Collection<Integer> pesquisarImoveisPorSituacaoPeriodo(Date dataInicial, Date dataFinal, Integer idSituacaoCadastral)
+			throws ControladorException {
+		try {
+			if(idSituacaoCadastral.equals(SituacaoAtualizacaoCadastral.APROVADO)) {
+				return repositorioAtualizacaoCadastral.pesquisarImoveisAprovadosPorPeriodo(dataInicial, dataFinal);
+			} else if(idSituacaoCadastral.equals(SituacaoAtualizacaoCadastral.DISPONIVEL)){
+				return repositorioAtualizacaoCadastral.pesquisarImoveisDisponiveisPorPeriodo(dataInicial, dataFinal);
+			} else if(idSituacaoCadastral.equals(SituacaoAtualizacaoCadastral.TRANSMITIDO)){
+				return repositorioAtualizacaoCadastral.pesquisarImoveisTransmitidosPorPeriodo(dataInicial, dataFinal);
+			}
+		} catch (ErroRepositorioException e) {
+			 throw new ControladorException("erro.sistema", e);
+		}
+		return null;
+	}
 }

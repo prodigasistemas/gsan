@@ -1517,4 +1517,6 @@ public interface IRepositorioCadastro {
 	public boolean existePessoaSexo(Integer id) throws ErroRepositorioException;
 
 	public void liberarCadastroImovel(Integer idImovel) throws ErroRepositorioException;
+	
+	public SituacaoAtualizacaoCadastral pesquisarSituacaoAtualizacaoCadastralPorId(Integer idSituacaoCadastral) throws ErroRepositorioException;
 }
