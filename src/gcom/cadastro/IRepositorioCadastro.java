@@ -113,10 +113,6 @@ public interface IRepositorioCadastro {
 	 */	
 	public Object[] pesquisarSetorQuadra(Integer idLocalidade)throws ErroRepositorioException;
 	
-	public Integer pesquisarCEP()throws ErroRepositorioException;
-	
-	public Integer pesquisarBairro() throws ErroRepositorioException;
-	
 	public Integer pesquisarLogradouroBairro(Integer codigoLogradouro) throws ErroRepositorioException;
 	
 	public Integer pesquisarLogradouroCep(Integer codigoLogradouro) throws ErroRepositorioException;

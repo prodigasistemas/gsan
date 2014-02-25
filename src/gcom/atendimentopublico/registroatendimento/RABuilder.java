@@ -9,6 +9,7 @@ import gcom.faturamento.conta.Conta;
 import gcom.gui.atendimentopublico.registroatendimento.InserirRegistroAtendimentoActionForm;
 import gcom.gui.portal.InserirSolicitacaoServicosPortalActionForm;
 import gcom.seguranca.acesso.usuario.Usuario;
+import gcom.seguranca.transacao.AlteracaoTipo;
 import gcom.util.Util;
 
 import java.math.BigDecimal;
@@ -22,6 +23,10 @@ public class RABuilder {
 	public static Integer UNIDADE_ATENDIMENTO_UNAM = new Integer(17);
 	public static Integer SOLICITACAO_TIPO_MANUTENCAO_CADASTRAL = new Integer(25);
 	public static Integer SOLICITACAO_TIPO_ESPECIFICACAO_ATUALIZACAO_CADASTRAL = new Integer(13);
+//	public static Integer LOCAL_OCORRENCIA_RUA = new Integer(2);
+//	public static Integer PAVIMENTO_CALCADA_NAO_INFORMADO = new Integer(0);
+//	public static Integer PAVIMENTO_RUA_NAO_INFORMADO = new Integer(0);
+	public static Integer SERVICO_TIPO_LOCALIZAR_IMOVEL = new Integer(51);
 	
 	public static RADadosGeraisHelper buildRADadosGerais(IImovel imovelRetorno, Integer alteracaoTipo) {
 		RADadosGeraisHelper raDadosGerais = new RADadosGeraisHelper();
@@ -175,17 +180,27 @@ public class RABuilder {
 		return raDadosGerais;
 	}
 	
-	public static RALocalOcorrenciaHelper buildRALocalOcorencia() {
+	public static RALocalOcorrenciaHelper buildRALocalOcorrencia(IImovel imovel, Integer alteracaoTipo){
 		RALocalOcorrenciaHelper raLocalOcorrenciaHelper = new RALocalOcorrenciaHelper();
 		
 		raLocalOcorrenciaHelper.colecaoEndereco(null)
-								.idLocalidade(null)
-								.idSetorComercial(null)
-								.idQuadra(null)
-								.idUnidadeDestino(null)
-								.parecerUnidadeDestino(null);
+								.idLocalidade(imovel.getIdLocalidade())
+								.idSetorComercial(imovel.getCodigoSetorComercial())
+								.idQuadra(imovel.getNumeroQuadra())
+								.idUnidadeDestino(UNIDADE_ATENDIMENTO_UNAM)
+								.parecerUnidadeDestino("");
+								
+		if(alteracaoTipo == AlteracaoTipo.INCLUSAO){
+			raLocalOcorrenciaHelper.parecerUnidadeDestino("inclusão de novo imovel");
+		}
+		
+		if(alteracaoTipo == AlteracaoTipo.EXCLUSAO){
+			raLocalOcorrenciaHelper.parecerUnidadeDestino("Exclusao de imovel");
+		}
+		
 		return raLocalOcorrenciaHelper;
 	}
+	
 	@SuppressWarnings("rawtypes")
 	public static RALocalOcorrenciaHelper buildRALocalOcorrencia(InserirRegistroAtendimentoActionForm form, Collection colecaoEnderecoLocalOcorrencia,
 																Short indicadorCoordenadaSemLogradouro, Collection<Conta> colecaoContas){
@@ -383,6 +398,10 @@ public class RABuilder {
 		   return raSolicitante;
 	}
 	
+	public static RASolicitanteHelper buildRASolicitante(String nomeSolicitante){
+		return new RASolicitanteHelper().nomeSolicitante("COSANPA - Recadastramento").idServicoTipo(SERVICO_TIPO_LOCALIZAR_IMOVEL);
+	}
+	
 	@SuppressWarnings("rawtypes")
 	public static Collection getColecaoEnderecoSolicitante(InserirRegistroAtendimentoActionForm form, HttpSession sessao) {
 		Collection colecaoEnderecoSolicitante = null;
@@ -456,14 +475,14 @@ public class RABuilder {
 	}
 	
 	private static String getObservacaoIncluirImovel(IImovel imovelRetorno) {
-		String observacao = "";
+		String observacao = "RECADASTRAMENTO";
 		
 		return observacao;
 		
 	}
 	
 	private static String getProtocoloIncluirImovel(IImovel imovelRetorno) {
-		String observacao = "";
+		String observacao = "RECADASTRAMENTO";
 		
 		return observacao;
 		

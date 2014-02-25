@@ -1,5 +1,7 @@
 package gcom.atualizacaocadastral;
 
+import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocal;
+import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocalHome;
 import gcom.atendimentopublico.registroatendimento.RABuilder;
 import gcom.atendimentopublico.registroatendimento.RADadosGeraisHelper;
 import gcom.atendimentopublico.registroatendimento.RALocalOcorrenciaHelper;
@@ -92,6 +94,27 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			locator = ServiceLocator.getInstancia();
 
 			localHome = (ControladorBatchLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_BATCH_SEJB);
+			local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+
+	}
+	
+	private ControladorRegistroAtendimentoLocal getControladorRegistroAtendimento() {
+		ControladorRegistroAtendimentoLocalHome localHome = null;
+		ControladorRegistroAtendimentoLocal local = null;
+
+		ServiceLocator locator = null;
+
+		try {
+			locator = ServiceLocator.getInstancia();
+
+			localHome = (ControladorRegistroAtendimentoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_REGISTRO_ATENDIMENTO_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -521,7 +544,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 	}
 	
 	private void incluirImoveis() throws ControladorException {
-		int idImovel = -1;
+		Integer idImovel = null;
 
 		try {
 			Collection<IImovel> imoveisInclusao = this.obterImoveisParaAtualizar(AlteracaoTipo.INCLUSAO);
@@ -529,20 +552,10 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			for (IImovel imovelRetorno : imoveisInclusao) {
 				
 				RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGerais(imovelRetorno, AlteracaoTipo.INCLUSAO);
+				RALocalOcorrenciaHelper raLocalOcorrenciaHelper = RABuilder.buildRALocalOcorrencia(imovelRetorno, AlteracaoTipo.INCLUSAO);
+				RASolicitanteHelper raSolicitanteHelper = RABuilder.buildRASolicitante("COSANPA - Recadastramento"); 
 				
-				RALocalOcorrenciaHelper raLocalOcorrenciaHelper = new RALocalOcorrenciaHelper();
-				
-				raLocalOcorrenciaHelper.colecaoEndereco(null)
-										.idLocalidade(null)
-										.idSetorComercial(null)
-										.idQuadra(null)
-										.idUnidadeDestino(null)
-										.parecerUnidadeDestino(null);
-				
-				RASolicitanteHelper raSolicitanteHelper = new RASolicitanteHelper();
-				
-				raSolicitanteHelper.nomeSolicitante("");
-
+				getControladorRegistroAtendimento().inserirRegistroAtendimento(raDadosGeraisHelper, raLocalOcorrenciaHelper, raSolicitanteHelper);
 				
 			}
 		} catch (Exception e) {

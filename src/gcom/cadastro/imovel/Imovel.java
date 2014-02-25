@@ -2270,4 +2270,20 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 	public void setCodigoCep(Integer codigoCep) {
 		// TODO Auto-generated method stub
 	}
+
+	public Integer getIdLocalidade() {
+		return localidade.getId();
+	}
+
+	public void setIdLocalidade(Integer idLocalidade) {
+		// TODO Auto-generated method stub
+	}
+
+	public int getCodigoSetorComercial() {
+		return setorComercial.getId();
+	}
+
+	public void setCodigoSetorComercial(int idSetorComercial) {
+		// TODO Auto-generated method stub
+	}
 }
