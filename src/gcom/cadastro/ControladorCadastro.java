@@ -315,12 +315,6 @@ public class ControladorCadastro implements SessionBean {
 
 	private IRepositorioMicromedicao repositorioMicromedicao = null;
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @exception CreateException
-	 *                Descrição da exceção
-	 */
 	public void ejbCreate() throws CreateException {
 		repositorioEmpresa = RepositorioEmpresaHBM.getInstancia();
 		repositorioCadastro = RepositorioCadastroHBM.getInstancia();
@@ -333,30 +327,15 @@ public class ControladorCadastro implements SessionBean {
 		repositorioMicromedicao = RepositorioMicromedicaoHBM.getInstancia();
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 */
 	public void ejbRemove() {
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 */
 	public void ejbActivate() {
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 */
 	public void ejbPassivate() {
 	}
 
-	/**
-	 * Seta o valor de sessionContext
-	 * 
-	 * @param sessionContext
-	 *            O novo valor de sessionContext
-	 */
 	public void setSessionContext(SessionContext sessionContext) {
 		this.sessionContext = sessionContext;
 	}
@@ -365,8 +344,6 @@ public class ControladorCadastro implements SessionBean {
 		ControladorFaturamentoLocalHome localHome = null;
 		ControladorFaturamentoLocal local = null;
 
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
@@ -374,8 +351,6 @@ public class ControladorCadastro implements SessionBean {
 
 			localHome = (ControladorFaturamentoLocalHome) locator
 					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -385,17 +360,11 @@ public class ControladorCadastro implements SessionBean {
 			throw new SistemaException(e);
 		}
 	}
-	/**
-	 * Retorna o valor de controladorUtil
-	 * 
-	 * @return O valor de controladorUtil
-	 */
+
 	protected ControladorUtilLocal getControladorUtil() {
 
 		ControladorUtilLocalHome localHome = null;
 		ControladorUtilLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -404,8 +373,6 @@ public class ControladorCadastro implements SessionBean {
 
 			localHome = (ControladorUtilLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_UTIL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -417,16 +384,9 @@ public class ControladorCadastro implements SessionBean {
 
 	}
 
-	/**
-	 * Retorna o valor de controladorAcesso
-	 * 
-	 * @return O valor de controladorAcesso
-	 */
 	protected ControladorArrecadacaoLocal getControladorArrecadacao() {
 		ControladorArrecadacaoLocalHome localHome = null;
 		ControladorArrecadacaoLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -435,8 +395,6 @@ public class ControladorCadastro implements SessionBean {
 
 			localHome = (ControladorArrecadacaoLocalHome) locator
 					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_ARRECADACAO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -802,15 +760,7 @@ public class ControladorCadastro implements SessionBean {
 
 	}
 
-	/**
-	 * Permite inserir um Sistema Alteracao Historico
-	 * 
-	 * [UC0217] Inserir Sistema Alteracao Historico
-	 * 
-	 * @author Thiago Tenório
-	 * @date 30/03/2006
-	 * 
-	 */
+	@SuppressWarnings("rawtypes")
 	public Integer inserirHistoricoAlteracaoSistema(
 			SistemaAlteracaoHistorico sistemaAlteracaoHistorico)
 			throws ControladorException {
@@ -16085,4 +16035,29 @@ public class ControladorCadastro implements SessionBean {
 		Collection<Integer> idImoveis = pesquisarIdImoveisAprovados();
 		
 	}
+	
+	public Integer pesquisarIdSetorComercialPorCodigoELocalidade(Integer idLocalidade, Integer codigoSetor) throws ControladorException {
+		Integer idSetorComercial = null;
+		
+		try {
+			idSetorComercial = repositorioCadastro.pesquisarIdSetorComercialPorCodigoELocalidade(idLocalidade, codigoSetor);
+		} catch (ErroRepositorioException e) {
+			logger.error("Erro ao pesquisar id do setor comercial pela localidade e codigo", e);
+		}
+		return idSetorComercial;
+	}
+	
+	public Integer pesquisarIdQuadraPorNumeroQuadraEIdSetor(Integer idSetorComercial, Integer numeroQuadra) throws ControladorException {
+
+		Integer idQuadra = null;
+		
+		try {
+			idQuadra = repositorioCadastro.pesquisarIdQuadraPorNumeroQuadraEIdSetor(idSetorComercial, numeroQuadra);
+		} catch (ErroRepositorioException e) {
+			logger.error("Erro ao pesquisar id da quadra pelo setor comercial e numero da quadra", e);
+		}
+		return idQuadra;
+	
+	}
+
 }

@@ -9,6 +9,8 @@ import gcom.atendimentopublico.registroatendimento.RASolicitanteHelper;
 import gcom.batch.ControladorBatchLocal;
 import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.UnidadeProcessamento;
+import gcom.cadastro.ControladorCadastroLocal;
+import gcom.cadastro.ControladorCadastroLocalHome;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ControladorClienteLocal;
@@ -188,7 +190,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		}
 	}
 	
-	private ControladorClienteLocal getControladorCliente() {
+	protected ControladorClienteLocal getControladorCliente() {
 
 		ControladorClienteLocalHome localHome = null;
 		ControladorClienteLocal local = null;
@@ -199,6 +201,26 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			locator = ServiceLocator.getInstancia();
 
 			localHome = (ControladorClienteLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_CLIENTE_SEJB);
+			local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}
+	
+	protected ControladorCadastroLocal getControladorCadastro() {
+		ControladorCadastroLocalHome localHome = null;
+		ControladorCadastroLocal local = null;
+
+		ServiceLocator locator = null;
+		try {
+			locator = ServiceLocator.getInstancia();
+			localHome = (ControladorCadastroLocalHome) locator
+					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_CADASTRO_SEJB);
+
 			local = localHome.create();
 
 			return local;
@@ -539,7 +561,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 				}
 			}
 		} catch (Exception e) {
-			logger.error("Erro ao atualizar imóvel " + idImovel);
+			logger.error("Erro ao atualizar imóvel " + idImovel, e);
 		}
 	}
 	
@@ -551,8 +573,11 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			
 			for (IImovel imovelRetorno : imoveisInclusao) {
 				
+				Integer idSetorComercial = getControladorCadastro().pesquisarIdSetorComercialPorCodigoELocalidade(imovelRetorno.getIdLocalidade(), imovelRetorno.getCodigoSetorComercial());
+				Integer idQuadra = null; //getControladorCadastro().pesquisarIdQuadraPorNumeroQuadraEIdSetor(idSetorComercial, imovelRetorno.getNumeroQuadra());
+				
 				RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGerais(imovelRetorno, AlteracaoTipo.INCLUSAO);
-				RALocalOcorrenciaHelper raLocalOcorrenciaHelper = RABuilder.buildRALocalOcorrencia(imovelRetorno, AlteracaoTipo.INCLUSAO);
+				RALocalOcorrenciaHelper raLocalOcorrenciaHelper = RABuilder.buildRALocalOcorrencia(imovelRetorno, idSetorComercial, idQuadra, AlteracaoTipo.INCLUSAO);
 				RASolicitanteHelper raSolicitanteHelper = RABuilder.buildRASolicitante("COSANPA - Recadastramento"); 
 				
 				getControladorRegistroAtendimento().inserirRegistroAtendimento(raDadosGeraisHelper, raLocalOcorrenciaHelper, raSolicitanteHelper);

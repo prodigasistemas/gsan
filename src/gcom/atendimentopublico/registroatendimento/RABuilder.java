@@ -35,13 +35,15 @@ public class RABuilder {
 		
 		raDadosGerais.indicadorAtendimentoOnline(new Short("1"))
 					.dataAtendimento(Util.formatarData(dataAtual))
+					.dataPrevista(Util.formatarData(dataAtual))
 					.horaAtendimento(Util.formatarHoraSemSegundos(dataAtual))
 					.idUnidadeAtendimento(UNIDADE_ATENDIMENTO_UNAM)
 					.idMeioSolicitacao(MeioSolicitacao.INTERNO)
 					.idSolicitacaoTipo(SOLICITACAO_TIPO_MANUTENCAO_CADASTRAL)
 					.idSolicitacaoTipoEspecificacao(SOLICITACAO_TIPO_ESPECIFICACAO_ATUALIZACAO_CADASTRAL)
 					.observacao(getObservacaoIncluirImovel(imovelRetorno))
-					.protocoloAtendimento(getProtocoloIncluirImovel(imovelRetorno));
+					.protocoloAtendimento(getProtocoloIncluirImovel(imovelRetorno))
+					.indicadorRaAtualizacaoCadastral(true);
 		
 		return raDadosGerais;
 	}
@@ -180,12 +182,12 @@ public class RABuilder {
 		return raDadosGerais;
 	}
 	
-	public static RALocalOcorrenciaHelper buildRALocalOcorrencia(IImovel imovel, Integer alteracaoTipo){
+	public static RALocalOcorrenciaHelper buildRALocalOcorrencia(IImovel imovel, Integer idSetorComercial, Integer idQuadra, Integer alteracaoTipo){
 		RALocalOcorrenciaHelper raLocalOcorrenciaHelper = new RALocalOcorrenciaHelper();
 		
 		raLocalOcorrenciaHelper.colecaoEndereco(null)
 								.idLocalidade(imovel.getIdLocalidade())
-								.idSetorComercial(imovel.getCodigoSetorComercial())
+								.idSetorComercial(idSetorComercial)
 								.idQuadra(imovel.getNumeroQuadra())
 								.idUnidadeDestino(UNIDADE_ATENDIMENTO_UNAM)
 								.parecerUnidadeDestino("");

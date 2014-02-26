@@ -7045,8 +7045,8 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 			ra.setCodigoSituacao(RegistroAtendimento.SITUACAO_BLOQUEADO);
 		} else {
 			
-			if (this.especificacaoExigeMatriculaImovel(solicitacaoTipoEspecificacao) 
-					|| (raLocalOcorrencia.getColecaoEndereco() != null && !raLocalOcorrencia.getColecaoEndereco().isEmpty())) {
+			if (!raDadosGerais.getIndicadorRaAtualizacaoCadastral() && (this.especificacaoExigeMatriculaImovel(solicitacaoTipoEspecificacao) 
+					|| (raLocalOcorrencia.getColecaoEndereco() != null && !raLocalOcorrencia.getColecaoEndereco().isEmpty()))) {
 				
 				Imovel imovelEndereco = (Imovel) Util
 				.retonarObjetoDeColecao(raLocalOcorrencia.getColecaoEndereco());

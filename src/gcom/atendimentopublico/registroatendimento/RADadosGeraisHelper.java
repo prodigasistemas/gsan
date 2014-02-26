@@ -25,6 +25,7 @@ public class RADadosGeraisHelper {
 	private String observacaoOS;
 	@SuppressWarnings("rawtypes")
 	private Collection colecaoRegistroAtendimentoAnexo;
+	private boolean indicadorRaAtualizacaoCadastral;
 	
 	public RADadosGeraisHelper() {
 		
@@ -219,6 +220,20 @@ public class RADadosGeraisHelper {
 	@SuppressWarnings("rawtypes")
 	public RADadosGeraisHelper colecaoRegistroAtendimentoAnexo(Collection colecaoRegistroAtendimentoAnexo){
 		setColecaoRegistroAtendimentoAnexo(colecaoRegistroAtendimentoAnexo);
+		return this;
+	}
+
+	public boolean getIndicadorRaAtualizacaoCadastral() {
+		return indicadorRaAtualizacaoCadastral;
+	}
+
+	public void setIndicadorRaAtualizacaoCadastral(
+			boolean indicadorRaAtualizacaoCadastral) {
+		this.indicadorRaAtualizacaoCadastral = indicadorRaAtualizacaoCadastral;
+	}
+	
+	public RADadosGeraisHelper indicadorRaAtualizacaoCadastral(boolean indicadorRaAtualizacaoCadastral) {
+		setIndicadorRaAtualizacaoCadastral(indicadorRaAtualizacaoCadastral);
 		return this;
 	}
 
