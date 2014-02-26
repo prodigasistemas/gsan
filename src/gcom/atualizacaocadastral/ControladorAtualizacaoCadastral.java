@@ -227,6 +227,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		atualizarImovelControle(idImovel);
 		apagarTabelaAtualizacaoCadastralPorIdImovel(idImovel);
 		apagarImovelRetorno(idImovel);
+		apagarImagemRetorno(idImovel);
 		apagarImovelSubcategoriaRetorno(idImovel);
 		apagarImovelRamoAtividade(idImovel);
 		apagarInformacoesRetornoCliente(idImovel);
@@ -519,5 +520,9 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			 throw new ControladorException("erro.sistema", e);
 		}
 		return null;
+	}
+	
+	private void apagarImagemRetorno(Integer idImovel) throws Exception {
+		repositorioAtualizacaoCadastral.apagarImagemRetornoPorIdImovel(idImovel);
 	}
 }
