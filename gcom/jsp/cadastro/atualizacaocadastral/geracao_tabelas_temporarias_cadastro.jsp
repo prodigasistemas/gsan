@@ -660,7 +660,7 @@ method="post" enctype="multipart/form-data">
 					<tr>
 						<td width="11"><img border="0"
 							src="<bean:message key="caminho.imagens"/>parahead_left.gif" /></td>
-						<td class="parabg">Gerar Tabelas Tempor&aacute;rias para Atualiza&ccedil;&atilde;o Cadastral </td>
+						<td class="parabg">Gerar Arquivo de Atualiza&ccedil;&atilde;o Cadastral </td>
 						<td width="11"><img border="0"
 							src="<bean:message key="caminho.imagens"/>parahead_right.gif" /></td>
 					</tr>
@@ -669,7 +669,7 @@ method="post" enctype="multipart/form-data">
 			
 				<table width="100%" border="0">
 					<tr>
-						<td colspan="2">Para filtrar o(s) im&oacute;vel(is) para Atualiza&ccedil;&atilde;o Cadastral, informe os dados abaixo:</td>
+						<td colspan="2">Para gerar o(s) arquivo(s) de Atualiza&ccedil;&atilde;o Cadastral, informe os dados abaixo:</td>
 					</tr>
 
 					<tr>
@@ -683,7 +683,7 @@ method="post" enctype="multipart/form-data">
 										</logic:equal>
 										
 										<logic:notEqual name="helper" property="sugestao" value="1">
-											<input type="radio" value="1" name="sugestao" onclick="habDesabFirmaEQuantMaxima();" />&nbsp;SIMULAR QTD. IM&Oacute;VEIS
+											<input type="radio" value="1" name="sugestao" onclick="habDesabFirmaEQuantMaxima();" />&nbsp;VERIFICAR QTD. IM&Oacute;VEIS
 										</logic:notEqual>
 										
 									</td>
