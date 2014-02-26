@@ -39,18 +39,12 @@ import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ParserUtil;
 
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.NoSuchElementException;
-
-import javax.imageio.ImageIO;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -90,9 +84,9 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	public void salvarObjetosAtualizacaoCadastral() throws Exception {
 		salvarImovel();
 		salvarClienteUsuario();
-		salvarClienteResponsavel();
 		salvarClienteProprietario();
-		salvarImagem(atualizacaoCadastral, atualizacaoCadastralImovel.getMatricula());
+		salvarClienteResponsavel();
+		salvarImagens(atualizacaoCadastral, atualizacaoCadastralImovel.getMatricula());
 		
 		atualizarSituacaoControleImovelAtualizacaoCadastral(SituacaoAtualizacaoCadastral.TRANSMITIDO);
 	}
@@ -121,7 +115,6 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		}
 	}
 
-	
 	private void salvarImovel() throws Exception {
 		ImovelAtualizacaoCadastralBuilder builder = new ImovelAtualizacaoCadastralBuilder(matriculaImovel, atualizacaoCadastralImovel, tipoOperacao);
 		ImovelAtualizacaoCadastral imovelTxt = builder.getImovelAtualizacaoCadastral();
@@ -140,7 +133,6 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		salvarRamoAtividade();
 		salvarImovelSubcategoria();
 	}
-
 
 	@SuppressWarnings("rawtypes")
 	private void salvarImovelSubcategoria() throws ControladorException {
@@ -197,33 +189,30 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	private void salvarClienteProprietario() throws Exception {
 		IClienteAtualizacaoCadastral clienteTxt = new ClienteProprietarioBuilder(atualizacaoCadastralImovel).getClienteTxt();
 		
-		if (matriculaProprietario != 0 || StringUtils.isNotEmpty(atualizacaoCadastralImovel.getLinhaCliente("cnpjCpfProprietario"))) {
-	        boolean existeCliente = repositorioClienteImovel.existeClienteImovelTipo(matriculaProprietario
-	                , matriculaImovel
-	                , (int) ClienteRelacaoTipo.PROPRIETARIO
-	                , clienteTxt.getCpf());
+		if (StringUtils.isNotEmpty(atualizacaoCadastralImovel.getLinhaCliente("nomeProprietario"))) {
+			
+	        boolean existeCliente = repositorioClienteImovel.existeClienteImovelTipo(matriculaProprietario,
+	        		matriculaImovel, (int) ClienteRelacaoTipo.PROPRIETARIO, clienteTxt.getCpf());
 
-	        salvarCliente(matriculaProprietario, ClienteRelacaoTipo.PROPRIETARIO, clienteTxt 
-        			, atualizacaoCadastralImovel.getLinhaCliente("telefoneProprietario")
-        			, atualizacaoCadastralImovel.getLinhaCliente("celularProprietario")
-        			, existeCliente);
+	        salvarCliente(matriculaProprietario, ClienteRelacaoTipo.PROPRIETARIO, clienteTxt,
+	        		atualizacaoCadastralImovel.getLinhaCliente("telefoneProprietario"),
+	        		atualizacaoCadastralImovel.getLinhaCliente("celularProprietario"),
+	        		existeCliente);
 		}
 	}
 
 	private void salvarClienteResponsavel() throws Exception {
 		IClienteAtualizacaoCadastral clienteTxt = new ClienteResponsavelBuilder(atualizacaoCadastralImovel).getClienteTxt();
 		
-		if (matriculaResponsavel != 0 || StringUtils.isNotEmpty(atualizacaoCadastralImovel.getLinhaCliente("cnpjCpfResponsavel"))) {
-	        boolean existeCliente = repositorioClienteImovel.existeClienteImovelTipo(matriculaResponsavel
-	                , matriculaImovel
-	                , (int) ClienteRelacaoTipo.RESPONSAVEL
-	                , clienteTxt.getCpf());
+		if (StringUtils.isNotEmpty(atualizacaoCadastralImovel.getLinhaCliente("nomeResponsavel"))) {
+			
+	        boolean existeCliente = repositorioClienteImovel.existeClienteImovelTipo(matriculaResponsavel,
+	        		matriculaImovel, (int) ClienteRelacaoTipo.RESPONSAVEL, clienteTxt.getCpf());
 	        
-			salvarCliente(matriculaResponsavel, ClienteRelacaoTipo.RESPONSAVEL, clienteTxt
-					, atualizacaoCadastralImovel.getLinhaCliente("telefoneResponsavel")
-					, atualizacaoCadastralImovel.getLinhaCliente("celularResponsavel")
-					, existeCliente);
-
+			salvarCliente(matriculaResponsavel, ClienteRelacaoTipo.RESPONSAVEL, clienteTxt,
+					atualizacaoCadastralImovel.getLinhaCliente("telefoneResponsavel"),
+					atualizacaoCadastralImovel.getLinhaCliente("celularResponsavel"),
+					existeCliente);
 		}
 	}
 	
@@ -231,19 +220,21 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		IClienteAtualizacaoCadastral clienteTxt = new ClienteUsuarioBuilder(atualizacaoCadastralImovel).getClienteTxt();
 		
 		if (matriculaUsuario != 0) {
-	        boolean existeCliente = repositorioClienteImovel.existeClienteImovelTipo(matriculaUsuario
-	                , matriculaImovel
-	                , (int) ClienteRelacaoTipo.USUARIO
-	                , clienteTxt.getCpf());
+			
+	        boolean existeCliente = repositorioClienteImovel.existeClienteImovelTipo(matriculaUsuario,
+	        		matriculaImovel, (int) ClienteRelacaoTipo.USUARIO, clienteTxt.getCpf());
 	
-			salvarCliente(matriculaUsuario, ClienteRelacaoTipo.USUARIO, clienteTxt
-					,atualizacaoCadastralImovel.getLinhaCliente("telefoneUsuario")
-					, atualizacaoCadastralImovel.getLinhaCliente("celularUsuario")
-					, existeCliente);
+			salvarCliente(matriculaUsuario, ClienteRelacaoTipo.USUARIO, clienteTxt,
+					atualizacaoCadastralImovel.getLinhaCliente("telefoneUsuario"),
+					atualizacaoCadastralImovel.getLinhaCliente("celularUsuario"),
+					existeCliente);
 		}		
 	}
 
-	private void salvarCliente(int matricula, Short clienteRelacaoTipo, IClienteAtualizacaoCadastral clienteTxt, String telefone, String celular, boolean existeCliente) throws ControladorException {
+	private void salvarCliente(int matricula, Short clienteRelacaoTipo,
+			IClienteAtualizacaoCadastral clienteTxt, String telefone,
+			String celular, boolean existeCliente) throws ControladorException {
+		
 		Integer idclienteRetorno = salvarClienteRetorno(clienteTxt);
 		salvarClienteImovelRetorno(clienteTxt, matriculaImovel, idclienteRetorno);
 		
@@ -255,18 +246,24 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		
 		IClienteAtualizacaoCadastral clienteAtualizacaoCadastralBase = null;
 		if (existeCliente){
-			clienteAtualizacaoCadastralBase = controladorCliente.pesquisarClienteAtualizacaoCadastral(matricula, matriculaImovel, new Integer(clienteRelacaoTipo));			
+			clienteAtualizacaoCadastralBase = controladorCliente.pesquisarClienteAtualizacaoCadastral(
+					matricula, matriculaImovel, new Integer(clienteRelacaoTipo));			
 		}else{
 			tipoOperacao = AlteracaoTipo.INCLUSAO;
 			clienteAtualizacaoCadastralBase = new ClienteAtualizacaoCadastral();
-			
 		}
 		
-		salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, clienteAtualizacaoCadastralBase, clienteTxt, matriculaImovel, tipoOperacao);
+		salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral,
+				clienteAtualizacaoCadastralBase,clienteTxt, matriculaImovel,
+				tipoOperacao);
 	}
 
 
-	private void salvarClienteFoneAtualizacaoCadastral(String tipoClientFone, Short clienteRelacaoTipo, Integer foneTipo, int matriculaCliente, ArrayList<ClienteFoneAtualizacaoCadastral> clientesFone, Integer idClienteRetorno) {
+	private void salvarClienteFoneAtualizacaoCadastral(String tipoClientFone,
+			Short clienteRelacaoTipo, Integer foneTipo, int matriculaCliente,
+			ArrayList<ClienteFoneAtualizacaoCadastral> clientesFone,
+			Integer idClienteRetorno) {
+		
 		if (!tipoClientFone.trim().equals("")) {
 			ClienteFoneAtualizacaoCadastral clienteFone = new ClienteFoneAtualizacaoCadastral();
 
@@ -320,7 +317,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	private void salvarImovelRetorno(ImovelAtualizacaoCadastral imovelTxt) throws ControladorException {
 		ImovelRetorno imovelRetorno = new ImovelRetorno(imovelTxt);
 		imovelRetorno.setUltimaAlteracao(new Date());
-		idImovelRetorno = (Integer)controladorUtil.inserir(imovelRetorno);
+		idImovelRetorno = (Integer) controladorUtil.inserir(imovelRetorno);
 	}
 	
 	private void salvarImovelSubcategoriaRetorno(ImovelSubcategoriaAtualizacaoCadastral imovelSubcategoriaTxt, Integer idImovelRetorno) throws ControladorException {
@@ -362,32 +359,40 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		controladorUtil.inserirOuAtualizar(controle);
 	}
 	
-	private void salvarImagem(AtualizacaoCadastral atualizacao,
+	private void salvarImagens(AtualizacaoCadastral atualizacao,
 			Integer matricula) throws Exception {
 
-		int contador = 0;
-		
 		for (String nomeImagem : atualizacao.getImagens()) {
 
 			String caminhoJboss = System.getProperty("jboss.server.home.dir");
 			String pasta = "/images/cadastro/" + atualizacao.getArquivoTexto().getDescricaoArquivo();
 			
 			if (nomeImagem.contains(matricula.toString())) {
-				try {
-					contador++;
-					File imagem = new File(caminhoJboss + pasta, nomeImagem);
-
-					ImagemRetorno imagemRetorno = new ImagemRetorno();
-					imagemRetorno.setIdImovel(matricula);
-					imagemRetorno.setNomeImagem(imagem.getName());
-					imagemRetorno.setPathImagem(imagem.getAbsolutePath());
-					imagemRetorno.setUltimaAlteracao(new Date());
-
-					controladorUtil.inserir(imagemRetorno);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
+				inserirImagemImovel(matricula, nomeImagem, caminhoJboss, pasta);
 			}
+		}
+	}
+
+	private void inserirImagemImovel(Integer matricula, String nomeImagem,
+			String caminhoJboss, String pasta) {
+		
+		try {
+			File imagem = new File(caminhoJboss + pasta, nomeImagem);
+			
+			ImagemRetorno imagemRetorno = new ImagemRetorno();
+			imagemRetorno.setIdImovelRetorno(idImovelRetorno);
+			
+			if (matricula > 0) {
+				imagemRetorno.setIdImovel(matricula);
+			}
+			
+			imagemRetorno.setNomeImagem(imagem.getName());
+			imagemRetorno.setPathImagem(imagem.getAbsolutePath());
+			imagemRetorno.setUltimaAlteracao(new Date());
+
+			controladorUtil.inserir(imagemRetorno);
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 }

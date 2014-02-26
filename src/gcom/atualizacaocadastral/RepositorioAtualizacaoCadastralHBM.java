@@ -439,4 +439,16 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		}
 	}
 	
+	public void apagarImagemRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try{
+			String consulta = " DELETE FROM ImagemRetorno imagemRetorno "
+							+ " WHERE imagemRetorno.idImovel = :idImovel ";
+			session.createQuery(consulta).setInteger("idImovel", idImovel).executeUpdate();
+		}catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao excluir imagem retorno");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
 }

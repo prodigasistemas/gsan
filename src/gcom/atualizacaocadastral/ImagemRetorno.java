@@ -15,6 +15,8 @@ public class ImagemRetorno extends ObjetoTransacao {
 	
 	private Integer id;
 	
+	private Integer idImovelRetorno;
+	
 	private Integer idImovel;
 	
 	private String nomeImagem;
@@ -29,6 +31,14 @@ public class ImagemRetorno extends ObjetoTransacao {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public Integer getIdImovelRetorno() {
+		return idImovelRetorno;
+	}
+
+	public void setIdImovelRetorno(Integer idImovelRetorno) {
+		this.idImovelRetorno = idImovelRetorno;
 	}
 
 	public Integer getIdImovel() {

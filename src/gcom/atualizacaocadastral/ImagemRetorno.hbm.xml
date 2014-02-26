@@ -14,6 +14,7 @@
 		</id>
 
 		<property name="idImovel" column="imov_id" type="java.lang.Integer" length="10" />
+		<property name="idImovelRetorno" type="java.lang.Integer" column="imre_id" not-null="true" length="10"/>
 		<property name="nomeImagem" type="java.lang.String" column="imgr_nomeimagem" not-null="true" length="50" />
 		<property name="pathImagem" type="java.lang.String" column="imgr_pathimagem" not-null="true" length="255" />
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="imgr_tmultimaalteracao" not-null="true" length="8" />
