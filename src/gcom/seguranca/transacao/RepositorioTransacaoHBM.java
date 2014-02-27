@@ -716,7 +716,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				sql.append(" and leit.empr_id = " + filtroHelper.getIdEmpresa());
 			}
 
-			if (StringUtils.isNotEmpty(filtroHelper.getIdLeiturista())) {
+			if (StringUtils.isNotEmpty(filtroHelper.getIdLeiturista()) && StringUtils.isNumeric(filtroHelper.getIdLeiturista()) && Integer.valueOf(filtroHelper.getIdLeiturista()) > 0) {
 				sql.append(" and leit.leit_id = " + filtroHelper.getIdLeiturista());
 			}
 
