@@ -37,6 +37,10 @@ public class ImovelRetorno implements IImovel{
 	private String descricaoLogradouro;
 	private String nomeBairro;
 	private Integer codigoCep;
+	
+	private Integer idLocalidade;
+	private int codigoSetorComercial;
+	private int numeroQuadra;
 
 	public ImovelRetorno () {
 		
@@ -71,6 +75,9 @@ public class ImovelRetorno implements IImovel{
 		this.descricaoLogradouro = imovelAtualizacaoCadastral.getDescricaoLogradouro();
 		this.nomeBairro = imovelAtualizacaoCadastral.getNomeBairro();
 		this.codigoCep = imovelAtualizacaoCadastral.getCodigoCep();
+		this.idLocalidade = imovelAtualizacaoCadastral.getIdLocalidade();
+		this.codigoSetorComercial = imovelAtualizacaoCadastral.getCodigoSetorComercial();
+		this.numeroQuadra = imovelAtualizacaoCadastral.getNumeroQuadra();
 	}
 
 	public Integer getId() {
@@ -311,5 +318,29 @@ public class ImovelRetorno implements IImovel{
 
 	public void setCodigoCep(Integer codigoCep) {
 		this.codigoCep = codigoCep;
+	}
+
+	public Integer getIdLocalidade() {
+		return idLocalidade;
+	}
+
+	public void setIdLocalidade(Integer idLocalidade) {
+		this.idLocalidade = idLocalidade;
+	}
+
+	public int getCodigoSetorComercial() {
+		return codigoSetorComercial;
+	}
+
+	public void setCodigoSetorComercial(int codigoSetorComercial) {
+		this.codigoSetorComercial = codigoSetorComercial;
+	}
+
+	public int getNumeroQuadra() {
+		return numeroQuadra;
+	}
+
+	public void setNumeroQuadra(int numeroQuadra) {
+		this.numeroQuadra = numeroQuadra;
 	}
 }

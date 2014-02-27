@@ -222,7 +222,6 @@ import gcom.operacional.abastecimento.AbastecimentoProgramacao;
 import gcom.operacional.abastecimento.FiltroAbastecimentoProgramacao;
 import gcom.operacional.abastecimento.FiltroManutencaoProgramacao;
 import gcom.operacional.abastecimento.ManutencaoProgramacao;
-import gcom.relatorio.atendimentopublico.RelatorioRegistroAtendimentoPorUnidadePorUsuarioBean;
 import gcom.seguranca.ControladorPermissaoEspecialLocal;
 import gcom.seguranca.ControladorPermissaoEspecialLocalHome;
 import gcom.seguranca.acesso.Funcionalidade;
@@ -6603,6 +6602,111 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 		}
 	}
 	
+	public void inserirRegistroAtendimentoSolicitante(RADadosGeraisHelper raDadosGerais, RALocalOcorrenciaHelper raLocalOcorrencia, RASolicitanteHelper raSolicitante) throws ControladorException {
+		
+		RegistroAtendimento ra = new RegistroAtendimento();
+		RegistroAtendimentoSolicitante solicitanteInserir = new RegistroAtendimentoSolicitante();
+		
+		// Registro Atendimento
+		ra.setId(raDadosGerais.getIdRegistroAtendimento());
+		solicitanteInserir.setRegistroAtendimento(ra);
+		
+		// Cliente
+		if (raSolicitante.getIdCliente() != null) {
+			Cliente cliente = new Cliente();
+			cliente.setId(raSolicitante.getIdCliente());
+			solicitanteInserir.setCliente(cliente);
+		}
+		
+		// número do Imóvel, Complemento do endereço, LogradouroCep e
+		// LogradouroBairro
+		if (raSolicitante.getIdCliente() == null) {
+			ClienteEndereco endereco = (ClienteEndereco) Util
+			.retonarObjetoDeColecao(raLocalOcorrencia.getColecaoEndereco());
+			
+			if (endereco != null) {
+				solicitanteInserir.setNumeroImovel(endereco.getNumero());
+				
+				if (endereco.getComplemento() != null) {
+					solicitanteInserir.setComplementoEndereco(endereco
+							.getComplemento());
+				}
+				
+				solicitanteInserir
+				.setLogradouroCep(endereco.getLogradouroCep());
+				solicitanteInserir.setLogradouroBairro(endereco
+						.getLogradouroBairro());
+				solicitanteInserir.setPerimetroInicial(endereco.getPerimetroInicial());
+				solicitanteInserir.setPerimetroFinal(endereco.getPerimetroFinal());
+				
+			}
+			
+		}
+		
+		// Ponto de Referência
+		if (raSolicitante.getPontoReferenciaSolicitante() != null && !raSolicitante.getPontoReferenciaSolicitante().equalsIgnoreCase("")) {
+			solicitanteInserir.setPontoReferencia(raSolicitante.getPontoReferenciaSolicitante());
+		}
+		
+		// Nome do Solicitante
+		if (raSolicitante.getNomeSolicitante() != null && !raSolicitante.getNomeSolicitante().equalsIgnoreCase("")) {
+			solicitanteInserir.setSolicitante(raSolicitante.getNomeSolicitante());
+		}
+		
+		//IndicadorEmailPesquisa e EnderecoEmail
+		if(raSolicitante.getHabilitarCampoSatisfacaoEmail() != null){
+			if(raSolicitante.getEnviarEmailSatisfacao() != null && raSolicitante.getEnviarEmailSatisfacao().equals("2")){
+				solicitanteInserir.setIndicadorEnvioEmailPesquisa(new Short("2"));
+			}else{
+				solicitanteInserir.setIndicadorEnvioEmailPesquisa(new Short("1"));
+				solicitanteInserir.setEnderecoEmail(raSolicitante.getEnderecoEmail());
+			}
+		}else{
+			solicitanteInserir.setIndicadorEnvioEmailPesquisa(new Short("2"));
+			// Magno Gouveia [Gravar o email informado na Loja Virtual]
+			if(Util.verificarNaoVazio(raSolicitante.getEnderecoEmail())){
+				solicitanteInserir.setEnderecoEmail(raSolicitante.getEnderecoEmail());
+			}
+		}
+		
+		// Indicador Solicitante Principal
+		if (raSolicitante.isNovoSolicitante()) {
+			solicitanteInserir
+			.setIndicadorSolicitantePrincipal(ConstantesSistema.INDICADOR_NOVO_SOLICITANTE);
+		} else {
+			solicitanteInserir
+			.setIndicadorSolicitantePrincipal(ConstantesSistema.INDICADOR_INSERIR_SOLICITANTE_RA);
+		}
+		
+		// Ultima alteração
+		solicitanteInserir.setUltimaAlteracao(new Date());
+		
+		// Unidade Solicitante
+		if (raSolicitante.getIdUnidadeSolicitante() != null) {
+			UnidadeOrganizacional unidadeSolicitante = new UnidadeOrganizacional();
+			unidadeSolicitante.setId(raSolicitante.getIdUnidadeSolicitante());
+			solicitanteInserir.setUnidadeOrganizacional(unidadeSolicitante);
+		}
+		
+		if (raDadosGerais.getIdFuncionario() != null) {
+			Funcionario funcionario = new Funcionario();
+			funcionario.setId(raDadosGerais.getIdFuncionario());
+			solicitanteInserir.setFuncionario(funcionario);
+		}
+		
+		//PROTOCOLO DE ATENDIMENTO
+		solicitanteInserir.setNumeroProtocoloAtendimento(raDadosGerais.getProtocoloAtendimento());
+		
+		Integer idRASolicitante = (Integer) this.getControladorUtil().inserir(
+				solicitanteInserir);
+		solicitanteInserir.setID(idRASolicitante);
+		
+		if (raSolicitante.getColecaoFone() != null && !raSolicitante.getColecaoFone().isEmpty() && raSolicitante.getIdCliente() == null) {
+			this.inserirRegistroAtendimentoSolicitanteFone(solicitanteInserir,
+					raSolicitante.getColecaoFone());
+		}
+	}
+	
 	/**
 	 * 
 	 * passa os parametros do registro atendimento solicitante e a coleção de
@@ -6843,323 +6947,194 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 	 * 
 	 * @throws ControladorException
 	 */
-	public Integer[] inserirRegistroAtendimento(
-			short indicadorAtendimentoOnLine, 
-			String dataAtendimento,
-			String horaAtendimento, 
-			String tempoEsperaInicial,
-			String tempoEsperaFinal, 
-			Integer idMeioSolicitacao,
-			Integer idSolicitacaoTipoEspecificacao, 
-			String dataPrevista,
-			String observacao, 
-			Integer idImovel,
-			String descricaoLocalOcorrencia, 
-			Integer idSolicitacaoTipo,
-			Collection colecaoEndereco, 
-			String pontoReferenciaLocalOcorrencia,
-			Integer idBairroArea, 
-			Integer idLocalidade,
-			Integer idSetorComercial, 
-			Integer idQuadra,
-			Integer idDivisaoEsgoto, 
-			Integer idLocalOcorrencia,
-			Integer idPavimentoRua, 
-			Integer idPavimentoCalcada,
-			Integer idUnidadeAtendimento, 
-			Integer idUsuarioLogado,
-			Integer idCliente, 
-			String pontoReferenciaSolicitante,
-			String nomeSolicitante, 
-			boolean novoSolicitante,
-			Integer idUnidadeSolicitante, 
-			Integer idFuncionario,
-			Collection colecaoFone, 
-			Collection colecaoEnderecoSolicitante,
-			Integer idUnidadeDestino, 
-			String parecerUnidadeDestino,
-			Integer idServicoTipo, 
-			String numeroRAManual, 
-			Integer idRAJAGerado,
-			BigDecimal nnCoordenadaNorte,
-			BigDecimal nnCoordenadaLeste,
-			short indicCoordenadaSemLogradouro,
-			Collection colecaoRegistroAtendimentoAnexo, 
-			String protocoloAtendimento,
-			Collection colecaoContas,
-			String observacaoOS,
-			Collection colecaoPagamentos,
-			String habilitarCampoSatisfacaoEmail, String enviarEmailSatisfacao, String enderecoEmail,
-			BigDecimal nnDiametro) throws ControladorException {
+	public Integer[] inserirRegistroAtendimento(RADadosGeraisHelper raDadosGerais, RALocalOcorrenciaHelper raLocalOcorrencia, RASolicitanteHelper raSolicitante) throws ControladorException {
 		
 		Integer[] retorno = null;
 		boolean existeEspecificacaoPavimentacaoServicoTipo = false;
 		
-		if(idLocalOcorrencia != null && idPavimentoCalcada != null && idPavimentoRua != null){
+		if(raLocalOcorrencia.getIdLocalOcorrencia() != null && raLocalOcorrencia.getIdPavimentoCalcada() != null && raLocalOcorrencia.getIdPavimentoRua() != null){
 			FiltroEspecificacaoPavimentacaoServicoTipo filtro = new FiltroEspecificacaoPavimentacaoServicoTipo();
-			filtro.adicionarParametro(
-				new ParametroSimples(FiltroEspecificacaoPavimentacaoServicoTipo.LOCALOCORRENCIA_ID,
-					idLocalOcorrencia));
-			filtro.adicionarParametro(
-				new ParametroSimples(FiltroEspecificacaoPavimentacaoServicoTipo.PAVIMENTOCALCADA_ID,
-					idPavimentoCalcada));
-			filtro.adicionarParametro(
-				new ParametroSimples(FiltroEspecificacaoPavimentacaoServicoTipo.PAVIMENTORUA_ID,
-					idPavimentoRua));
-			
-			filtro.adicionarParametro(
-				new ParametroSimples(FiltroEspecificacaoPavimentacaoServicoTipo.SOLICITACAOTIPOESPECIFICACAO_ID,
-					idSolicitacaoTipoEspecificacao));
+			filtro.adicionarParametro(new ParametroSimples(FiltroEspecificacaoPavimentacaoServicoTipo.LOCALOCORRENCIA_ID, raLocalOcorrencia.getIdLocalOcorrencia()));
+			filtro.adicionarParametro(new ParametroSimples(FiltroEspecificacaoPavimentacaoServicoTipo.PAVIMENTOCALCADA_ID, raLocalOcorrencia.getIdPavimentoCalcada()));
+			filtro.adicionarParametro(new ParametroSimples(FiltroEspecificacaoPavimentacaoServicoTipo.PAVIMENTORUA_ID, raLocalOcorrencia.getIdPavimentoRua()));
+			filtro.adicionarParametro(new ParametroSimples(FiltroEspecificacaoPavimentacaoServicoTipo.SOLICITACAOTIPOESPECIFICACAO_ID, raDadosGerais.getIdSolicitacaoTipoEspecificacao()));
 			
 			filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroEspecificacaoPavimentacaoServicoTipo.SERVICOTIPO);
 			
-			Collection result = 
-				getControladorUtil().pesquisar(filtro, 
-					EspecificacaoPavimentacaoServicoTipo.class.getName());
+			Collection result = getControladorUtil().pesquisar(filtro, EspecificacaoPavimentacaoServicoTipo.class.getName());
 			
 			if(result != null && !result.isEmpty()){
-				EspecificacaoPavimentacaoServicoTipo especificaoPavimento = 
-					(EspecificacaoPavimentacaoServicoTipo) Util.retonarObjetoDeColecao(result);
+				EspecificacaoPavimentacaoServicoTipo especificaoPavimento = (EspecificacaoPavimentacaoServicoTipo) Util.retonarObjetoDeColecao(result);
 				
-				idServicoTipo = especificaoPavimento.getServicoTipo().getId();
+				raSolicitante.idServicoTipo(especificaoPavimento.getServicoTipo().getId());
 				existeEspecificacaoPavimentacaoServicoTipo = true;
 			}
 		}
 		
 		OrdemServico osGeradaAutomatica = null;
-		if (existeEspecificacaoPavimentacaoServicoTipo || 
-			this.gerarOrdemServicoAutomatica(idSolicitacaoTipoEspecificacao)) {
+		if (existeEspecificacaoPavimentacaoServicoTipo || this.gerarOrdemServicoAutomatica(raDadosGerais.getIdSolicitacaoTipoEspecificacao())) {
 			
 			retorno = new Integer[2];
 			
-			osGeradaAutomatica = this.gerarOrdemServicoAutomatica(
-					idServicoTipo, idSolicitacaoTipo);
+			osGeradaAutomatica = this.gerarOrdemServicoAutomatica(raSolicitante.getIdServicoTipo(), raDadosGerais.getIdSolicitacaoTipo());
 		} else {
-			
 			retorno = new Integer[1];
 		}
 		
 		RegistroAtendimento ra = new RegistroAtendimento();
 		
-		ra.setIndicadorAtendimentoOnline(indicadorAtendimentoOnLine);
-		ra.setNnDiametro(nnDiametro);
-		// Numeração manual
-		/*
-		 * if (numeroRAManual != null && !numeroRAManual.equalsIgnoreCase("")) {
-		 * String[] arrayNumeroRAManual = numeroRAManual.split("-");
-		 * ra.setManual(new Integer(arrayNumeroRAManual[0])); }
-		 */
+		ra.setIndicadorAtendimentoOnline(raDadosGerais.getIndicadorAtendimentoOnLine());
+		ra.setNnDiametro(raLocalOcorrencia.getNnDiametro());
 		
-		if (numeroRAManual != null && !numeroRAManual.equalsIgnoreCase("")) {
-			ra.setManual(new Integer(numeroRAManual));
+		if (raDadosGerais.getNumeroRAManual() != null && !raDadosGerais.getNumeroRAManual().equalsIgnoreCase("")) {
+			ra.setManual(Integer.parseInt(raDadosGerais.getNumeroRAManual()));
 		}
 		
-		// Data e Hora do atendimento
-		String dataHoraAtendimento = dataAtendimento + " "
-		+ Util.formatarHoraSemSegundos(horaAtendimento) + ":00";
-		Date dataHoraAtendimentoObjetoDate = Util
-		.converteStringParaDateHora(dataHoraAtendimento);
+		String dataHoraAtendimento = raDadosGerais.getDataAtendimento() + " " + Util.formatarHoraSemSegundos(raDadosGerais.getHoraAtendimento()) + ":00";
+		Date dataHoraAtendimentoObjetoDate = Util.converteStringParaDateHora(dataHoraAtendimento);
 		
 		ra.setRegistroAtendimento(dataHoraAtendimentoObjetoDate);
 		
-		// Tempo de espera inicial
-		if (tempoEsperaInicial != null
-				&& !tempoEsperaInicial.equalsIgnoreCase("")) {
-			Date dataEsperaInicial = Util
-			.converteStringParaDateHora(dataAtendimento + " "
-					+ Util.formatarHoraSemSegundos(tempoEsperaInicial)
-					+ ":00");
+		if (raDadosGerais.getTempoEsperaInicial() != null && !raDadosGerais.getTempoEsperaInicial().equalsIgnoreCase("")) {
+			Date dataEsperaInicial = Util.converteStringParaDateHora(raDadosGerais.getDataAtendimento() + " " + Util.formatarHoraSemSegundos(raDadosGerais.getTempoEsperaInicial()) + ":00");
+			
 			ra.setDataInicioEspera(dataEsperaInicial);
-			if(tempoEsperaFinal != null && !tempoEsperaFinal.equals("")){
-				Date dataEsperaFinal = Util
-				.converteStringParaDateHora(dataAtendimento + " "
-						+ Util.formatarHoraSemSegundos(tempoEsperaFinal)
-						+ ":00");
+			
+			if(raDadosGerais.getTempoEsperaFinal() != null && !raDadosGerais.getTempoEsperaFinal().equals("")){
+				Date dataEsperaFinal = Util.converteStringParaDateHora(raDadosGerais.getDataAtendimento() + " " + Util.formatarHoraSemSegundos(raDadosGerais.getTempoEsperaFinal()) + ":00");
 				ra.setDataFimEspera(dataEsperaFinal);
 			}
 		}
 		
-		// Meio de Solicitação
 		MeioSolicitacao meioSolicitacao = new MeioSolicitacao();
-		meioSolicitacao.setId(idMeioSolicitacao);
+		meioSolicitacao.setId(raDadosGerais.getIdMeioSolicitacao());
 		
 		ra.setMeioSolicitacao(meioSolicitacao);
 		
-		// Especificação
 		SolicitacaoTipoEspecificacao solicitacaoTipoEspecificacao = new SolicitacaoTipoEspecificacao();
-		solicitacaoTipoEspecificacao.setId(idSolicitacaoTipoEspecificacao);
+		solicitacaoTipoEspecificacao.setId(raDadosGerais.getIdSolicitacaoTipoEspecificacao());
 		
 		ra.setSolicitacaoTipoEspecificacao(solicitacaoTipoEspecificacao);
 		
-		// Data Original e Data Prevista
-		Date dataPrevistaObjetoDate = Util.converteStringParaDate(dataPrevista);
+		Date dataPrevistaObjetoDate = Util.converteStringParaDate(raDadosGerais.getDataPrevista());
 		
 		ra.setDataPrevistaOriginal(dataPrevistaObjetoDate);
 		ra.setDataPrevistaAtual(dataPrevistaObjetoDate);
 		
-		// Observação
-		if (observacao != null && !observacao.equalsIgnoreCase("")) {
-			ra.setObservacao(observacao);
+		if (raDadosGerais.getObservacao() != null && !raDadosGerais.getObservacao().equalsIgnoreCase("")) {
+			ra.setObservacao(raDadosGerais.getObservacao());
 		}
 		
-		// Imóvel
-		if (idImovel != null) {
+		if (raLocalOcorrencia.getIdImovel() != null) {
 			Imovel imovel = new Imovel();
-			imovel.setId(idImovel);
+			imovel.setId(raLocalOcorrencia.getIdImovel());
 			ra.setImovel(imovel);
 		}
 		
-		//............................................................
-		//Integração com o Gis
-		//............................................................
-		if(nnCoordenadaNorte != null){
-			ra.setNnCoordenadaNorte(nnCoordenadaNorte);
+		if(raLocalOcorrencia.getNnCoordenadaNorte() != null){
+			ra.setNnCoordenadaNorte(raLocalOcorrencia.getNnCoordenadaNorte());
 		}
-		if(nnCoordenadaLeste!= null){
-			ra.setNnCoordenadaLeste(nnCoordenadaLeste);
+		if(raLocalOcorrencia.getNnCoordenadaLeste() != null){
+			ra.setNnCoordenadaLeste(raLocalOcorrencia.getNnCoordenadaLeste());
 		}
-		//............................................................
 		
-		ra.setIndicadorCoordenadaSemLogradouro(indicCoordenadaSemLogradouro);
+		ra.setIndicadorCoordenadaSemLogradouro(raLocalOcorrencia.getIndicCoordenadaSemLogradouro());
 		
-		/*
-		 * Dados da Identificação do Local da ocorrência (caso a Descrição do
-		 * Local da ocorrência esteja preenchida, todos os Dados da
-		 * Identificação do Local da ocorrência devem ter o valor nulo; caso
-		 * contrário, preencher de acordo com as regras abaixo)
-		 */
-		if (descricaoLocalOcorrencia != null
-				&& !descricaoLocalOcorrencia.equalsIgnoreCase("")) {
-			ra.setDescricaoLocalOcorrencia(descricaoLocalOcorrencia);
-			
-			// Código da Situação
+		if (raLocalOcorrencia.getDescricaoLocalOcorrencia() != null && !raLocalOcorrencia.getDescricaoLocalOcorrencia().equalsIgnoreCase("")) {
+			ra.setDescricaoLocalOcorrencia(raLocalOcorrencia.getDescricaoLocalOcorrencia());
 			ra.setCodigoSituacao(RegistroAtendimento.SITUACAO_BLOQUEADO);
 		} else {
 			
-			/*
-			 * Caso a matrícula do Imóvel seja obrigatória (STEP_ICMATRICULA com
-			 * o valor correspondente a um na tabela
-			 * SOLICITACAO_TIPO_ESPECIFICACAO), nulo.
-			 */
-			if (this
-					.especificacaoExigeMatriculaImovel(solicitacaoTipoEspecificacao)
-					|| (colecaoEndereco != null && !colecaoEndereco.isEmpty())) {
+			if (!raDadosGerais.getIndicadorRaAtualizacaoCadastral() && (this.especificacaoExigeMatriculaImovel(solicitacaoTipoEspecificacao) 
+					|| (raLocalOcorrencia.getColecaoEndereco() != null && !raLocalOcorrencia.getColecaoEndereco().isEmpty()))) {
 				
 				Imovel imovelEndereco = (Imovel) Util
-				.retonarObjetoDeColecao(colecaoEndereco);
+				.retonarObjetoDeColecao(raLocalOcorrencia.getColecaoEndereco());
 				
-				// LogradouroBairro
 				ra.setLogradouroBairro(imovelEndereco.getLogradouroBairro());
 				
-				// LogradouroCep
 				ra.setLogradouroCep(imovelEndereco.getLogradouroCep());
 				
-				// Complemento endereço
 				if (imovelEndereco.getComplementoEndereco() != null) {
 					ra.setComplementoEndereco(imovelEndereco
 							.getComplementoEndereco());
 				}
 				
-				// número do Imóvel
 				ra.setNumeroImovel(imovelEndereco.getNumeroImovel());
 				
-				// Perímetro
 				ra.setPerimetroInicial(imovelEndereco.getPerimetroInicial());
 				ra.setPerimetroFinal(imovelEndereco.getPerimetroFinal());
 			}
 			
-			// Ponto de Referência
-			if (pontoReferenciaLocalOcorrencia != null
-					&& !pontoReferenciaLocalOcorrencia.equalsIgnoreCase("")) {
-				ra.setPontoReferencia(pontoReferenciaLocalOcorrencia);
+			if (raLocalOcorrencia.getPontoReferenciaLocalOcorrencia() != null && !raLocalOcorrencia.getPontoReferenciaLocalOcorrencia().equalsIgnoreCase("")) {
+				ra.setPontoReferencia(raLocalOcorrencia.getPontoReferenciaLocalOcorrencia());
 			}
 			
-			// Área do Bairro
-			if (idBairroArea != null
-					&& !idBairroArea
-					.equals(ConstantesSistema.NUMERO_NAO_INFORMADO)) {
+			if (raLocalOcorrencia.getIdBairroArea() != null && !raLocalOcorrencia.getIdBairroArea().equals(ConstantesSistema.NUMERO_NAO_INFORMADO)) {
 				BairroArea bairroArea = new BairroArea();
-				bairroArea.setId(idBairroArea);
+				bairroArea.setId(raLocalOcorrencia.getIdBairroArea());
 				ra.setBairroArea(bairroArea);
 			}
 			
-			// Localidade
-			if (idLocalidade != null) {
+			if (raLocalOcorrencia.getIdLocalidade() != null) {
 				Localidade localidade = new Localidade();
-				localidade.setId(idLocalidade);
+				localidade.setId(raLocalOcorrencia.getIdLocalidade());
 				ra.setLocalidade(localidade);
 			}
 			
-			// Setor Comercial
-			if (idSetorComercial != null) {
+			if (raLocalOcorrencia.getIdSetorComercial() != null) {
 				SetorComercial setorComercial = new SetorComercial();
-				setorComercial.setId(idSetorComercial);
+				setorComercial.setId(raLocalOcorrencia.getIdSetorComercial());
 				ra.setSetorComercial(setorComercial);
 			}
 			
-			// Quadra
-			if (idQuadra != null) {
+			if (raLocalOcorrencia.getIdQuadra() != null) {
 				Quadra quadra = new Quadra();
-				quadra.setId(idQuadra);
+				quadra.setId(raLocalOcorrencia.getIdQuadra());
 				ra.setQuadra(quadra);
 			}
 			
-			// divisão de Esgoto
-			if (idDivisaoEsgoto != null
-					&& !idDivisaoEsgoto
+			if (raLocalOcorrencia.getIdDivisaoEsgoto() != null
+					&& !raLocalOcorrencia.getIdDivisaoEsgoto()
 					.equals(ConstantesSistema.NUMERO_NAO_INFORMADO)) {
 				DivisaoEsgoto divisaoEsgoto = new DivisaoEsgoto();
-				divisaoEsgoto.setId(idDivisaoEsgoto);
+				divisaoEsgoto.setId(raLocalOcorrencia.getIdDivisaoEsgoto());
 				ra.setDivisaoEsgoto(divisaoEsgoto);
 			}
 			
-			// Local ocorrência
-			if (idLocalOcorrencia != null
-					&& !idLocalOcorrencia
+			if (raLocalOcorrencia.getIdLocalOcorrencia() != null
+					&& !raLocalOcorrencia.getIdLocalOcorrencia()
 					.equals(ConstantesSistema.NUMERO_NAO_INFORMADO)) {
 				LocalOcorrencia localOcorrencia = new LocalOcorrencia();
-				localOcorrencia.setId(idLocalOcorrencia);
+				localOcorrencia.setId(raLocalOcorrencia.getIdLocalOcorrencia());
 				ra.setLocalOcorrencia(localOcorrencia);
 			}
 			
-			// Pavimento Rua
-			if (idPavimentoRua != null
-					&& !idPavimentoRua
+			if (raLocalOcorrencia.getIdPavimentoRua() != null && !raLocalOcorrencia.getIdPavimentoRua()
 					.equals(ConstantesSistema.NUMERO_NAO_INFORMADO)) {
 				PavimentoRua pavimentoRua = new PavimentoRua();
-				pavimentoRua.setId(idPavimentoRua);
+				pavimentoRua.setId(raLocalOcorrencia.getIdPavimentoRua());
 				ra.setPavimentoRua(pavimentoRua);
 			}
 			
-			// Pavimento Calçada
-			if (idPavimentoCalcada != null
-					&& !idPavimentoCalcada
+			if (raLocalOcorrencia.getIdPavimentoCalcada() != null && !raLocalOcorrencia.getIdPavimentoCalcada()
 					.equals(ConstantesSistema.NUMERO_NAO_INFORMADO)) {
 				PavimentoCalcada pavimentoCalcada = new PavimentoCalcada();
-				pavimentoCalcada.setId(idPavimentoCalcada);
+				pavimentoCalcada.setId(raLocalOcorrencia.getIdPavimentoCalcada());
 				ra.setPavimentoCalcada(pavimentoCalcada);
 			}
 			
-			// Código da Situação
 			ra.setCodigoSituacao(RegistroAtendimento.SITUACAO_PENDENTE);
 			
-			// inclusão da coluna unidade atual na tabela REGISTRO_ATENDIMENTO
-			// Vivianne Sousa 10/06/2008 analista:Fátima Sampaio
 			ra.setUnidadeAtual(null);
 		}
 		
 		
-		/*
-		 * Raphael Rossiter em 29/05/2007
-		 * Caso o usuário tente inserir o mesmo RA por mais de uma vez
-		 */
-		if (idRAJAGerado != null){
+		if (raDadosGerais.getIdRAJAGerado() != null){
 			sessionContext.setRollbackOnly();
-			throw new ControladorException("atencao.registro_atendimento_insercao_ja_realizada", null, 
-					idRAJAGerado.toString());
+			throw new ControladorException("atencao.registro_atendimento_insercao_ja_realizada", null, raDadosGerais.getIdRAJAGerado().toString());
 		}
 		
-		// última alteração
 		ra.setUltimaAlteracao(new Date());
 		
 		Integer idRAGerado = (Integer) this.getControladorUtil().inserir(ra);
@@ -7167,76 +7142,49 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 		
 		retorno[0] = idRAGerado;
 		
-		// [SB0028] Inclui Registro de Atendimento
-		// (REGISTRO_ATENDIMENTO_UNIDADE)
-		this.inserirRegistroAtendimentoUnidade(ra, idUnidadeAtendimento,
-				idUsuarioLogado);
+		this.inserirRegistroAtendimentoUnidade(ra, raDadosGerais.getIdUnidadeAtendimento(),
+				raDadosGerais.getIdUsuarioLogado());
 		
-		/*
-		 * [UC0366] Inserir Registro de Atendimento [SB0027] Inclui Solicitante
-		 * do Registro de Atendimento
-		 */
-		this.inserirRegistroAtendimentoSolicitante(idRAGerado, idCliente,
-				colecaoEnderecoSolicitante, pontoReferenciaSolicitante,
-				nomeSolicitante, novoSolicitante, idUnidadeSolicitante,
-				idFuncionario, colecaoFone, protocoloAtendimento,
-				habilitarCampoSatisfacaoEmail, enviarEmailSatisfacao, enderecoEmail	);
+		this.inserirRegistroAtendimentoSolicitante(idRAGerado, raSolicitante.getIdCliente(),
+				raSolicitante.getColecaoEnderecoSolicitante(), raSolicitante.getPontoReferenciaSolicitante(),
+				raSolicitante.getNomeSolicitante(), raSolicitante.isNovoSolicitante(), raSolicitante.getIdUnidadeSolicitante(),
+				raDadosGerais.getIdFuncionario(), raSolicitante.getColecaoFone(), raDadosGerais.getProtocoloAtendimento(),
+				raSolicitante.getHabilitarCampoSatisfacaoEmail(), raSolicitante.getEnviarEmailSatisfacao(), raSolicitante.getEnderecoEmail()	);
 		
-		/*
-		 * Inclui Anexo(s) do Registro de Atendimento
-		 */
-		this.inserirRegistroAtendimentoAnexo(idRAGerado, colecaoRegistroAtendimentoAnexo);
+		this.inserirRegistroAtendimentoAnexo(idRAGerado, raDadosGerais.getColecaoRegistroAtendimentoAnexo());
 		
 		
-		/*
-		 * Inclui Registro Atendimento Conta
-		 */
-		this.inserirRegistroAtendimentoConta(idRAGerado, colecaoContas);
+		this.inserirRegistroAtendimentoConta(idRAGerado, raLocalOcorrencia.getColecaoContas());
 
-		//[SB0028] ? Inclui Registro de Atendimento
-		//Item 3.2
-		this.inserirRegistroAtendimentoPagamentoDuplicidade(idRAGerado,colecaoPagamentos,idSolicitacaoTipoEspecificacao);
+		this.inserirRegistroAtendimentoPagamentoDuplicidade(idRAGerado,raLocalOcorrencia.getColecaoPagamentos(),raDadosGerais.getIdSolicitacaoTipoEspecificacao());
 		
-		// [SB0027] Gerar Trâmite
 		Tramite tramite = new Tramite();
 		
-		// Registro Atendimento
 		tramite.setRegistroAtendimento(ra);
 		
-		// Unidade Origem = Unidade Atendimento
 		UnidadeOrganizacional unidadeOrigem = new UnidadeOrganizacional();
-		unidadeOrigem.setId(idUnidadeAtendimento);
+		unidadeOrigem.setId(raDadosGerais.getIdUnidadeAtendimento());
 		
 		tramite.setUnidadeOrganizacionalOrigem(unidadeOrigem);
 		
-		/*
-		 * Caso a Unidade Destino esteja preenchida, Id da Unidade Destino; caso
-		 * contrário, Id da Unidade de Atendimento
-		 */
-		if (idUnidadeDestino != null) {
+		if (raLocalOcorrencia.getIdUnidadeDestino() != null) {
 			UnidadeOrganizacional unidadeDestino = new UnidadeOrganizacional();
-			unidadeDestino.setId(idUnidadeDestino);
+			unidadeDestino.setId(raLocalOcorrencia.getIdUnidadeDestino());
 			
 			tramite.setUnidadeOrganizacionalDestino(unidadeDestino);
 		} else {
 			tramite.setUnidadeOrganizacionalDestino(unidadeOrigem);
 		}
 		
-		// usuário Logado = Registro e Responsável
 		Usuario usuario = new Usuario();
-		usuario.setId(idUsuarioLogado);
+		usuario.setId(raDadosGerais.getIdUsuarioLogado());
 		
 		tramite.setUsuarioRegistro(usuario);
 		tramite.setUsuarioResponsavel(usuario);
 		
-		/*
-		 * Caso o Parecer para a Unidade Destino esteja preenchido, Parecer para
-		 * a Unidade Destino; caso contrário, tramite gerado pelo sistema na
-		 * abertura do registro de atendimento.
-		 */
-		if (parecerUnidadeDestino != null
-				&& !parecerUnidadeDestino.equalsIgnoreCase("")) {
-			tramite.setParecerTramite(parecerUnidadeDestino);
+		if (raLocalOcorrencia.getParecerUnidadeDestino() != null
+				&& !raLocalOcorrencia.getParecerUnidadeDestino().equalsIgnoreCase("")) {
+			tramite.setParecerTramite(raLocalOcorrencia.getParecerUnidadeDestino());
 		} else {
 			tramite
 			.setParecerTramite("TRAMITE GERADO PELO SISTEMA NA ABERTURA DO REGISTRO DE ATENDIMENTO");
@@ -7245,20 +7193,17 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 		tramite.setDataTramite(new Date());
 		tramite.setUltimaAlteracao(new Date());
 		
-		// [UC0427] Tramitar Registro de Atendimento
 		this.tramitar(tramite, null);
 		
-		// [UC0430] - Gerar Ordem de Serviço
-		if (this.gerarOrdemServicoAutomatica(idSolicitacaoTipoEspecificacao)
+		if (this.gerarOrdemServicoAutomatica(raDadosGerais.getIdSolicitacaoTipoEspecificacao())
 				&& osGeradaAutomatica != null) {
 			
-			// O Imóvel da OS será o mesmo do RA
 			if (ra.getImovel() != null) {
 				osGeradaAutomatica.setImovel(ra.getImovel());
 			}
 			
 			osGeradaAutomatica.setRegistroAtendimento(ra);
-			osGeradaAutomatica.setObservacao(observacaoOS);
+			osGeradaAutomatica.setObservacao(raDadosGerais.getObservacao());
 			Integer idOrdemServico = this.getControladorOrdemServico()
 			.gerarOrdemServico(osGeradaAutomatica, usuario, 
 					Funcionalidade.INSERIR_REGISTRO_ATENDIMENTO);
@@ -7720,54 +7665,13 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 				FiltroRegistroAtendimentoAnexo.REGISTRO_ATENDIMENTO_ID,
 				registroAtendimento.getId()));
 
-				Collection colecaoRegistroAtendimentoAnexo = this.getControladorUtil()
-				.pesquisar(filtroRegistroAtendimentoAnexo, RegistroAtendimentoAnexo.class.getName());
+				Collection colecaoRegistroAtendimentoAnexo = this.getControladorUtil().pesquisar(filtroRegistroAtendimentoAnexo, RegistroAtendimentoAnexo.class.getName());
 				
-				this.inserirRegistroAtendimento( 
-						registroAtendimento.getIndicadorAtendimentoOnline(),
-						Util.formatarData( new Date() ),
-						Util.formatarHoraSemData( new Date() ),
-						null, 
-						null,
-						registroAtendimento.getMeioSolicitacao().getId(),
-						registroAtendimento.getSolicitacaoTipoEspecificacao().getSolicitacaoTipoEspecificacaoNovoRA().getId(),
-						Util.formatarData( registroAtendimento.getDataPrevistaOriginal() ),
-						null,
-						registroAtendimento.getImovel().getId(),
-						null,
-						registroAtendimento.getSolicitacaoTipoEspecificacao().getSolicitacaoTipoEspecificacaoNovoRA().getSolicitacaoTipo().getId(),
-						colecaoEnderecos,
-						null,
-						null,
-						registroAtendimento.getLocalidade().getId(),
-						registroAtendimento.getSetorComercial().getId(),
-						registroAtendimento.getImovel().getQuadra().getId(),
-						null, 
-						null,
-						registroAtendimento.getImovel().getPavimentoRua().getId(),
-						registroAtendimento.getImovel().getPavimentoCalcada().getId(),
-						unidadeAtendimento.getId(),
-						usuarioLogado.getId(),
-						null,
-						null,
-						null,
-						false,
-						unidadeAtendimento.getId(),
-						null,
-						null,
-						null,
-						null,
-						null,
-						( registroAtendimento.getSolicitacaoTipoEspecificacao().getSolicitacaoTipoEspecificacaoNovoRA().getServicoTipo().getId() == null ? 
-								null : 
-									registroAtendimento.getSolicitacaoTipoEspecificacao().getSolicitacaoTipoEspecificacaoNovoRA().getServicoTipo().getId() ),
-									null,
-									null,
-									null,
-									null,
-									ConstantesSistema.NAO, colecaoRegistroAtendimentoAnexo, null, null, null,null, null, null, null
-									,registroAtendimento.getNnDiametro())
-									;
+				RADadosGeraisHelper raDadosGerais = RABuilder.buildRADadosGerais(registroAtendimento, usuarioLogado, unidadeAtendimento.getId(), colecaoRegistroAtendimentoAnexo);
+				RALocalOcorrenciaHelper raLocalOcorrencia = RABuilder.buildRALocalOcorrencia(registroAtendimento, colecaoEnderecos, unidadeAtendimento.getId());
+				RASolicitanteHelper raSolicitante = RABuilder.buildRASolicitante(registroAtendimento, false, unidadeAtendimento.getId());
+				
+				this.inserirRegistroAtendimento(raDadosGerais, raLocalOcorrencia, raSolicitante);
 			}            
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();

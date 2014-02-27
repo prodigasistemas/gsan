@@ -118,4 +118,16 @@ public interface IImovel {
 	public Integer getCodigoCep();
 	
 	public void setCodigoCep(Integer codigoCep);
+	
+	public Integer getIdLocalidade();
+	
+	public void setIdLocalidade(Integer idLocalidade);
+	
+	public int getCodigoSetorComercial();
+	
+	public void setCodigoSetorComercial(int codigoSetorComercial);
+	
+	public int getNumeroQuadra();
+	
+	public void setNumeroQuadra(int numeroQuadra);
 }

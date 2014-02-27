@@ -9,6 +9,7 @@ import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.Date;
@@ -17,7 +18,6 @@ import java.util.List;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.type.Type;
 import org.jboss.logging.Logger;
 
 public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizacaoCadastral {
@@ -35,7 +35,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	}
 
 	@SuppressWarnings("unchecked")
-	public Collection<IImovel> obterImoveisParaAtualizar() throws ErroRepositorioException {
+	public Collection<IImovel> obterImoveisParaAtualizar(Integer tipoOperacao) throws ErroRepositorioException {
 		
 		Collection<IImovel> retorno = null;
 		Session session = HibernateUtil.getSession();
@@ -45,11 +45,14 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		try {
 			
 			consulta = "from ImovelRetorno imovelRetorno"
-					+ " where imovelRetorno.idImovel in "
+					+ " where imovelRetorno.tipoOperacao = :tipoOperacao"
+					+ " and imovelRetorno.idImovel in "
 						+ " ( select imovelControle.imovel.id from ImovelControleAtualizacaoCadastral imovelControle "
-						+ " where imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  + ") " ;
+						+ " where imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  
+						+ " and imovelControle.dataProcessamento is null ) " ;
 			
-			retorno = (Collection<IImovel>) session.createQuery(consulta).list();
+			retorno = (Collection<IImovel>) session.createQuery(consulta).
+					setInteger("tipoOperacao",  tipoOperacao).list();
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis.");
 		} finally {
@@ -450,5 +453,36 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
+	}
+
+	public Collection<ImovelControleAtualizacaoCadastral> obterImoveisControle(Collection<IImovel> listaImoveisRetorno) {
+		Collection<ImovelControleAtualizacaoCadastral> listaImoveisControle = null;
+		
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			String consulta = "select imovelControle "
+							+ " from ImovelControleAtualizacaoCadastral imovelControle "
+							+ " inner join imovelControle.imovelRetorno imovelRetorno "
+							+ " where imovelRetorno.id in (:listaImoveisRetorno)";
+			
+			listaImoveisControle = (Collection<ImovelControleAtualizacaoCadastral>)session.createQuery(consulta)
+										.setParameterList("listaImoveisRetorno", getIdsImovelRetorno(listaImoveisRetorno)).list();
+			
+		} catch (HibernateException e) {
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return listaImoveisControle;
+	}
+	
+	private Collection<Integer> getIdsImovelRetorno(Collection<IImovel> listaImoveisRetorno) {
+		Collection<Integer> listaIds = new ArrayList<Integer>();
+		
+		for (IImovel imovelRetorno : listaImoveisRetorno) {
+			listaIds.add(imovelRetorno.getId());
+		}
+		
+		return listaIds;
 	}
 }

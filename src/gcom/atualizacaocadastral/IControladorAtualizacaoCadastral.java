@@ -11,7 +11,7 @@ import java.util.Date;
 
 public interface IControladorAtualizacaoCadastral {
 	
-	public Collection<IImovel> obterImoveisParaAtualizar() throws Exception;
+	public Collection<IImovel> obterImoveisParaAtualizar(Integer tipoOperacao) throws Exception;
 	
 	public void atualizarImoveisAprovados(Integer idFuncionalidade, Usuario usuarioLogado) throws Exception;
 	

@@ -14,6 +14,7 @@
 		<property name="dataGeracao" type="java.sql.Timestamp" column="icac_tmgeracao" length="8"/>
 		<property name="dataRetorno" type="java.sql.Timestamp" column="icac_tmretorno" length="8"/>
 		<property name="dataAprovacao" type="java.sql.Timestamp" column="icac_tmaprovacao" length="8"/>
+		<property name="dataProcessamento" type="java.sql.Timestamp" column="icac_tmprocessamento" length="8"/>
 		<many-to-one name="situacaoAtualizacaoCadastral" class="gcom.cadastro.SituacaoAtualizacaoCadastral" not-null="true">
 			<column name="siac_id"/>
 		</many-to-one>

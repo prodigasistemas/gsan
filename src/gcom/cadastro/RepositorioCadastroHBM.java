@@ -511,54 +511,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	public Integer pesquisarCEP() throws ErroRepositorioException {
-
-		Integer retorno = null;
-
-		Session session = HibernateUtil.getSession();
-
-		String consulta = "";
-
-		try {
-			consulta = "select cep.cepId " + "from Cep cep "
-					+ "where cep.municipio like 'RIBEIRAO'";
-
-			retorno = (Integer) session.createQuery(consulta).setMaxResults(1)
-					.uniqueResult();
-
-		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
-
-		return retorno;
-	}
-
-	public Integer pesquisarBairro() throws ErroRepositorioException {
-
-		Integer retorno = null;
-
-		Session session = HibernateUtil.getSession();
-
-		String consulta = "";
-
-		try {
-			consulta = "select bair.id " + "from Bairro bair "
-					+ "where bair.municipio.id = 1180";
-
-			retorno = (Integer) session.createQuery(consulta).setMaxResults(1)
-					.uniqueResult();
-
-		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
-
-		return retorno;
-	}
-
 	public Integer pesquisarLogradouroBairro(Integer codigoLogradouro)
 			throws ErroRepositorioException {
 
@@ -10082,5 +10034,53 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
+	}
+	
+	public Integer pesquisarIdSetorComercialPorCodigoELocalidade(Integer idLocalidade, Integer codigoSetor) throws ErroRepositorioException {
+		Integer idSetorComercial = null;
+		
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			String consulta = "select setor.id"
+					+ " from SetorComercial setor "
+					+ " where setor.localidade.id = :idLocalidade "
+					+ " and setor.codigo = :codigoSetor ";
+			
+			idSetorComercial = (Integer) session.createQuery(consulta)
+					.setInteger("idLocalidade", idLocalidade)
+					.setInteger("codigoSetor", codigoSetor).uniqueResult();
+			
+		} catch (HibernateException e) {
+			logger.error("Erro ao pesquisar id do setor pela localidade e codigo", e);
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return idSetorComercial;
+	}
+	
+	public Integer pesquisarIdQuadraPorNumeroQuadraEIdSetor(Integer idSetorComercial, Integer numeroQuadra) throws ErroRepositorioException {
+		Integer idQuadra = null;
+		
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			String consulta = "select quadra.id"
+					+ " from Quadra quadra "
+					+ " where quadra.setorComercial.id = :idSetorComercial "
+					+ " and quadra.numeroQuadra = :numeroQuadra ";
+			
+			idQuadra = (Integer) session.createQuery(consulta)
+					.setInteger("idSetorComercial", idSetorComercial)
+					.setInteger("numeroQuadra", numeroQuadra).uniqueResult();
+			
+		} catch (HibernateException e) {
+			logger.error("Erro ao pesquisar id do setor pela localidade e codigo", e);
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return idQuadra;
 	}
 }

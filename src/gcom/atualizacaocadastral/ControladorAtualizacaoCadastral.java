@@ -1,8 +1,16 @@
 package gcom.atualizacaocadastral;
 
+import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocal;
+import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocalHome;
+import gcom.atendimentopublico.registroatendimento.RABuilder;
+import gcom.atendimentopublico.registroatendimento.RADadosGeraisHelper;
+import gcom.atendimentopublico.registroatendimento.RALocalOcorrenciaHelper;
+import gcom.atendimentopublico.registroatendimento.RASolicitanteHelper;
 import gcom.batch.ControladorBatchLocal;
 import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.UnidadeProcessamento;
+import gcom.cadastro.ControladorCadastroLocal;
+import gcom.cadastro.ControladorCadastroLocalHome;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ControladorClienteLocal;
@@ -21,6 +29,7 @@ import gcom.micromedicao.ControladorMicromedicaoLocalHome;
 import gcom.seguranca.IRepositorioSeguranca;
 import gcom.seguranca.RepositorioSegurancaHBM;
 import gcom.seguranca.acesso.usuario.Usuario;
+import gcom.seguranca.transacao.AlteracaoTipo;
 import gcom.seguranca.transacao.TabelaAtualizacaoCadastral;
 import gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral;
 import gcom.util.ConstantesJNDI;
@@ -98,6 +107,27 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 
 	}
 	
+	private ControladorRegistroAtendimentoLocal getControladorRegistroAtendimento() {
+		ControladorRegistroAtendimentoLocalHome localHome = null;
+		ControladorRegistroAtendimentoLocal local = null;
+
+		ServiceLocator locator = null;
+
+		try {
+			locator = ServiceLocator.getInstancia();
+
+			localHome = (ControladorRegistroAtendimentoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_REGISTRO_ATENDIMENTO_SEJB);
+			local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+
+	}
+	
 	private ControladorMicromedicaoLocal getControladorMicromedicao() {
 		ControladorMicromedicaoLocalHome localHome = null;
 		ControladorMicromedicaoLocal local = null;
@@ -160,7 +190,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		}
 	}
 	
-	private ControladorClienteLocal getControladorCliente() {
+	protected ControladorClienteLocal getControladorCliente() {
 
 		ControladorClienteLocalHome localHome = null;
 		ControladorClienteLocal local = null;
@@ -181,10 +211,30 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		}
 	}
 	
-	public Collection<IImovel> obterImoveisParaAtualizar() throws ControladorException {
+	protected ControladorCadastroLocal getControladorCadastro() {
+		ControladorCadastroLocalHome localHome = null;
+		ControladorCadastroLocal local = null;
+
+		ServiceLocator locator = null;
+		try {
+			locator = ServiceLocator.getInstancia();
+			localHome = (ControladorCadastroLocalHome) locator
+					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_CADASTRO_SEJB);
+
+			local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}
+	
+	public Collection<IImovel> obterImoveisParaAtualizar(Integer tipoOperacao) throws ControladorException {
 		Collection<IImovel> imoveis = null;
 		try {
-			imoveis = repositorioAtualizacaoCadastral.obterImoveisParaAtualizar();
+			imoveis = repositorioAtualizacaoCadastral.obterImoveisParaAtualizar(tipoOperacao);
 		} catch (ErroRepositorioException e) {
 			logger.error("Erro ao pesquisar imoveis para atualizar.", e);
 			throw new ControladorException("Erro ao pesquisar imoveis para atualizar.", e);
@@ -195,29 +245,16 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 	
 	public void atualizarImoveisAprovados(Integer idFuncionalidade, Usuario usuarioLogado) throws ControladorException{
 		int idUnidadeIniciada = 0;
-		int idImovel = -1;
 		
 		try {
 			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidade, UnidadeProcessamento.FUNCIONALIDADE, 0);
 			
-			Collection<IImovel> imoveis = this.obterImoveisParaAtualizar();
-			
-			for (IImovel imovelRetorno : imoveis) {
-				if (isImovelEmCampo(imovelRetorno.getIdImovel())) {
-					idImovel = imovelRetorno.getId();
-					imovelRetorno.setId(imovelRetorno.getIdImovel());
-					Imovel imovel = new Imovel(imovelRetorno.getId());
-					
-					atualizarImovelAtualizacaoCadastral(imovelRetorno);
-					atualizarImovelSubcategoriaAtualizacaoCadastral(imovel);
-					atualizarImovelRamoAtividadeAtualizacaoCadastral(imovel, imovelRetorno);
-					atualizarClienteFoneAtualizacaoCadastral(imovel);
-				}
-			}
+			atualizarImoveis();
+			incluirImoveis();
+			excluirImoveis();
 			
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 		} catch (Exception e) {
-			logger.error("Erro ao atualizar imovel aprovado: " + idImovel, e);
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
 			throw new ControladorException("Erro ao atualizar imóveis aprovados.", e);
 		}
@@ -524,5 +561,112 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 	
 	private void apagarImagemRetorno(Integer idImovel) throws Exception {
 		repositorioAtualizacaoCadastral.apagarImagemRetornoPorIdImovel(idImovel);
+	}
+	
+	private void atualizarImoveis() throws ControladorException {
+		int idImovel = -1;
+
+		try {
+
+			Collection<IImovel> imoveisAlteracao = this.obterImoveisParaAtualizar(AlteracaoTipo.ALTERACAO);
+			for (IImovel imovelRetorno : imoveisAlteracao) {
+				if (!isImovelEmCampo(imovelRetorno.getIdImovel())) {
+					idImovel = imovelRetorno.getId();
+					imovelRetorno.setId(imovelRetorno.getIdImovel());
+					Imovel imovel = new Imovel(imovelRetorno.getId());
+					
+					atualizarImovelAtualizacaoCadastral(imovelRetorno);
+					atualizarImovelSubcategoriaAtualizacaoCadastral(imovel);
+					atualizarImovelRamoAtividadeAtualizacaoCadastral(imovel, imovelRetorno);
+					atualizarClienteFoneAtualizacaoCadastral(imovel);
+					
+					atualizarImovelProcessado(imovelRetorno);
+				}
+			}
+		} catch (Exception e) {
+			logger.error("Erro ao atualizar imóvel " + idImovel, e);
+		}
+	}
+	
+	private void incluirImoveis() throws ControladorException {
+		Integer idImovel = null;
+
+		try {
+			Collection<IImovel> imoveisInclusao = this.obterImoveisParaAtualizar(AlteracaoTipo.INCLUSAO);
+			
+			for (IImovel imovelRetorno : imoveisInclusao) {
+				
+				Integer idSetorComercial = getControladorCadastro().pesquisarIdSetorComercialPorCodigoELocalidade(imovelRetorno.getIdLocalidade(), imovelRetorno.getCodigoSetorComercial());
+				Integer idQuadra = getControladorCadastro().pesquisarIdQuadraPorNumeroQuadraEIdSetor(idSetorComercial, imovelRetorno.getNumeroQuadra());
+				
+				String protocoloAtendimento = getControladorRegistroAtendimento().obterProtocoloAtendimento();
+				
+				RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGeraisAtualizacaoCadastral(imovelRetorno, AlteracaoTipo.INCLUSAO, protocoloAtendimento);
+				RALocalOcorrenciaHelper raLocalOcorrenciaHelper = RABuilder.buildRALocalOcorrenciaAtualizacaoCadastral(imovelRetorno, idSetorComercial, idQuadra, AlteracaoTipo.INCLUSAO);
+				RASolicitanteHelper raSolicitanteHelper = RABuilder.buildRASolicitanteAtualizacaoCadastral(); 
+				
+				getControladorRegistroAtendimento().inserirRegistroAtendimento(raDadosGeraisHelper, raLocalOcorrenciaHelper, raSolicitanteHelper);
+				
+				atualizarImovelProcessado(imovelRetorno);
+			}
+
+		} catch (Exception e) {
+			logger.error("Erro ao inserir imóvel " + idImovel);
+		}
+	
+		
+	}
+	
+	private void excluirImoveis() {
+
+		Integer idImovel = null;
+
+		try {
+			Collection<IImovel> imoveisExclusao = this.obterImoveisParaAtualizar(AlteracaoTipo.EXCLUSAO);
+			
+			for (IImovel imovelRetorno : imoveisExclusao) {
+				
+				Integer idSetorComercial = getControladorCadastro().pesquisarIdSetorComercialPorCodigoELocalidade(imovelRetorno.getIdLocalidade(), imovelRetorno.getCodigoSetorComercial());
+				Integer idQuadra = getControladorCadastro().pesquisarIdQuadraPorNumeroQuadraEIdSetor(idSetorComercial, imovelRetorno.getNumeroQuadra());
+				
+				String protocoloAtendimento = getControladorRegistroAtendimento().obterProtocoloAtendimento();
+				
+				RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGeraisAtualizacaoCadastral(imovelRetorno, AlteracaoTipo.EXCLUSAO, protocoloAtendimento);
+				RALocalOcorrenciaHelper raLocalOcorrenciaHelper = RABuilder.buildRALocalOcorrenciaAtualizacaoCadastral(imovelRetorno, idSetorComercial, idQuadra, AlteracaoTipo.EXCLUSAO);
+				RASolicitanteHelper raSolicitanteHelper = RABuilder.buildRASolicitanteAtualizacaoCadastral(); 
+				
+				getControladorRegistroAtendimento().inserirRegistroAtendimento(raDadosGeraisHelper, raLocalOcorrenciaHelper, raSolicitanteHelper);
+				
+				atualizarImovelProcessado(imovelRetorno);
+			}
+
+		} catch (Exception e) {
+			logger.error("Erro ao inserir imóvel " + idImovel);
+		}
+	
+	}
+	
+	@SuppressWarnings("unused")
+	private void atualizarImoveisProcessados(Collection<IImovel> listaImoveis) throws ControladorException {
+		
+		Collection<ImovelControleAtualizacaoCadastral> listaImoveisControle = repositorioAtualizacaoCadastral.obterImoveisControle(listaImoveis);
+		
+		for (ImovelControleAtualizacaoCadastral imovelControle :  listaImoveisControle) {
+			imovelControle.setDataProcessamento(new Date());
+			getControladorUtil().atualizar(imovelControle);
+		}
+	}
+	
+	private void atualizarImovelProcessado(IImovel imovelRetorno) throws ControladorException {
+		
+		Collection<IImovel> listaImovelRetorno = new ArrayList<IImovel>();
+		listaImovelRetorno.add(imovelRetorno);
+		
+		Collection<ImovelControleAtualizacaoCadastral> listaImoveisControle = repositorioAtualizacaoCadastral.obterImoveisControle(listaImovelRetorno);
+		
+		for (ImovelControleAtualizacaoCadastral imovelControle :  listaImoveisControle) {
+			imovelControle.setDataProcessamento(new Date());
+			getControladorUtil().atualizar(imovelControle);
+		}
 	}
 }
