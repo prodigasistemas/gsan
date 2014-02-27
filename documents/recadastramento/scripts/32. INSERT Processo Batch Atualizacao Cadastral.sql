@@ -1,7 +1,5 @@
-﻿
 insert into batch.processo
 values (507, 'ATUALIZACAO CADASTRAL', 'ATUALCAD' , 1, now() , 4, null, 2)  
-
 	
 insert into seguranca.funcionalidade 
 values 
