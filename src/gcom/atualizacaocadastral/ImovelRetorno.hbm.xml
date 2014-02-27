@@ -33,6 +33,8 @@
 		<property name="codigoCep" type="java.lang.Integer" column="imac_cdcep" length="4"/>
 				
 		<property name="idLocalidade" type="java.lang.Integer" column="loca_id" length="9"/>
+		<property name="codigoSetorComercial" type="java.lang.Integer" column="imre_cdsetorcomercial" length="9"/>
+		<property name="numeroQuadra" type="java.lang.Integer" column="imre_nnquadra" length="9"/>
 		
 		<many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="true">
 			<column name="last_id"/>

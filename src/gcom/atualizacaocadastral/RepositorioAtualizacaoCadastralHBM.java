@@ -9,6 +9,7 @@ import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
 import java.util.List;
@@ -47,7 +48,8 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 					+ " where imovelRetorno.tipoOperacao = :tipoOperacao"
 					+ " and imovelRetorno.idImovel in "
 						+ " ( select imovelControle.imovel.id from ImovelControleAtualizacaoCadastral imovelControle "
-						+ " where imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  + ") " ;
+						+ " where imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  
+						+ " and imovelControle.dataProcessamento is null ) " ;
 			
 			retorno = (Collection<IImovel>) session.createQuery(consulta).
 					setInteger("tipoOperacao",  tipoOperacao).list();
@@ -378,5 +380,38 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<ImovelControleAtualizacaoCadastral> obterImoveisControle(Collection<IImovel> listaImoveisRetorno) {
+		Collection<ImovelControleAtualizacaoCadastral> listaImoveisControle = null;
+		
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			String consulta = "select imovelControle "
+							+ " from ImovelControleAtualizacaoCadastral imovelControle "
+							+ " inner join imovelControle.imovelRetorno imovelRetorno "
+							+ " where imovelRetorno.id in (:listaImoveisRetorno)";
+			
+			listaImoveisControle = (Collection<ImovelControleAtualizacaoCadastral>)session.createQuery(consulta)
+										.setParameterList("listaImoveisRetorno", getIdsImovelRetorno(listaImoveisRetorno)).list();
+			
+		} catch (HibernateException e) {
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return listaImoveisControle;
+	}
+	
+	@SuppressWarnings("unused")
+	private Collection<Integer> getIdsImovelRetorno(Collection<IImovel> listaImoveisRetorno) {
+		Collection<Integer> listaIds = new ArrayList<Integer>();
+		
+		for (IImovel imovelRetorno : listaImoveisRetorno) {
+			listaIds.add(imovelRetorno.getId());
+		}
+		
+		return listaIds;
 	}
 }

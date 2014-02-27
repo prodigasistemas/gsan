@@ -10053,7 +10053,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		try {
 			String consulta = "select quadra.id"
 					+ " from Quadra quadra "
-					+ " where quadra.setor.id = :idSetor "
+					+ " where quadra.setorComercial.id = :idSetorComercial "
 					+ " and quadra.numeroQuadra = :numeroQuadra ";
 			
 			idQuadra = (Integer) session.createQuery(consulta)

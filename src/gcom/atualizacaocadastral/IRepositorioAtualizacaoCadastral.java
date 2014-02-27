@@ -34,7 +34,6 @@ public interface IRepositorioAtualizacaoCadastral {
 
 	public Collection<IClienteFone> obterClienterFoneParaAtualizar(Integer idImovel) throws ErroRepositorioException;
 
-
 	public void apagarImovelRetornoRamoAtividadeRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException;
 	
 	public void apagarClienteImovelRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException;
@@ -50,4 +49,6 @@ public interface IRepositorioAtualizacaoCadastral {
 	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacao(Integer idImovel) throws ErroRepositorioException;
 	
 	public Integer recuperaValorSequenceImovelRetorno() throws ErroRepositorioException;
+	
+	public Collection<ImovelControleAtualizacaoCadastral> obterImoveisControle(Collection<IImovel> listaImoveisRetorno);
 }

@@ -23,12 +23,10 @@ public class RABuilder {
 	public static Integer UNIDADE_ATENDIMENTO_UNAM = new Integer(17);
 	public static Integer SOLICITACAO_TIPO_MANUTENCAO_CADASTRAL = new Integer(25);
 	public static Integer SOLICITACAO_TIPO_ESPECIFICACAO_ATUALIZACAO_CADASTRAL = new Integer(13);
-//	public static Integer LOCAL_OCORRENCIA_RUA = new Integer(2);
-//	public static Integer PAVIMENTO_CALCADA_NAO_INFORMADO = new Integer(0);
-//	public static Integer PAVIMENTO_RUA_NAO_INFORMADO = new Integer(0);
 	public static Integer SERVICO_TIPO_LOCALIZAR_IMOVEL = new Integer(51);
+	public static Integer USUARIO_ADMIN = new Integer(1); 
 	
-	public static RADadosGeraisHelper buildRADadosGerais(IImovel imovelRetorno, Integer alteracaoTipo) {
+	public static RADadosGeraisHelper buildRADadosGeraisAtualizacaoCadastral(IImovel imovelRetorno, Integer alteracaoTipo, String protocoloAtendimento) {
 		RADadosGeraisHelper raDadosGerais = new RADadosGeraisHelper();
 		
 		Date dataAtual = new Date();
@@ -41,9 +39,10 @@ public class RABuilder {
 					.idMeioSolicitacao(MeioSolicitacao.INTERNO)
 					.idSolicitacaoTipo(SOLICITACAO_TIPO_MANUTENCAO_CADASTRAL)
 					.idSolicitacaoTipoEspecificacao(SOLICITACAO_TIPO_ESPECIFICACAO_ATUALIZACAO_CADASTRAL)
-					.observacao(getObservacaoIncluirImovel(imovelRetorno))
-					.protocoloAtendimento(getProtocoloIncluirImovel(imovelRetorno))
-					.indicadorRaAtualizacaoCadastral(true);
+					.observacao(getObservacaoImovel(imovelRetorno, alteracaoTipo))
+					.indicadorRaAtualizacaoCadastral(true)
+					.idUsuarioLogado(USUARIO_ADMIN)
+					.protocoloAtendimento(protocoloAtendimento);
 		
 		return raDadosGerais;
 	}
@@ -182,7 +181,7 @@ public class RABuilder {
 		return raDadosGerais;
 	}
 	
-	public static RALocalOcorrenciaHelper buildRALocalOcorrencia(IImovel imovel, Integer idSetorComercial, Integer idQuadra, Integer alteracaoTipo){
+	public static RALocalOcorrenciaHelper buildRALocalOcorrenciaAtualizacaoCadastral(IImovel imovel, Integer idSetorComercial, Integer idQuadra, Integer alteracaoTipo){
 		RALocalOcorrenciaHelper raLocalOcorrenciaHelper = new RALocalOcorrenciaHelper();
 		
 		raLocalOcorrenciaHelper.colecaoEndereco(null)
@@ -190,14 +189,15 @@ public class RABuilder {
 								.idSetorComercial(idSetorComercial)
 								.idQuadra(imovel.getNumeroQuadra())
 								.idUnidadeDestino(UNIDADE_ATENDIMENTO_UNAM)
-								.parecerUnidadeDestino("");
+								.parecerUnidadeDestino("")
+								.idImovel(imovel.getIdImovel());
 								
 		if(alteracaoTipo == AlteracaoTipo.INCLUSAO){
-			raLocalOcorrenciaHelper.parecerUnidadeDestino("inclusão de novo imovel");
+			raLocalOcorrenciaHelper.parecerUnidadeDestino("Inclusão de novo imóvel. Origem: RECADASTRAMENTO");
 		}
 		
 		if(alteracaoTipo == AlteracaoTipo.EXCLUSAO){
-			raLocalOcorrenciaHelper.parecerUnidadeDestino("Exclusao de imovel");
+			raLocalOcorrenciaHelper.parecerUnidadeDestino("Exclusão de imóvel. Origem: RECADASTRAMENTO");
 		}
 		
 		return raLocalOcorrenciaHelper;
@@ -400,7 +400,7 @@ public class RABuilder {
 		   return raSolicitante;
 	}
 	
-	public static RASolicitanteHelper buildRASolicitante(String nomeSolicitante){
+	public static RASolicitanteHelper buildRASolicitanteAtualizacaoCadastral(){
 		return new RASolicitanteHelper().nomeSolicitante("COSANPA - Recadastramento").idServicoTipo(SERVICO_TIPO_LOCALIZAR_IMOVEL);
 	}
 	
@@ -476,18 +476,44 @@ public class RABuilder {
 		return habilitarCampoSatisfacaoEmail;
 	}
 	
-	private static String getObservacaoIncluirImovel(IImovel imovelRetorno) {
-		String observacao = "RECADASTRAMENTO";
+	private static String getObservacaoImovel(IImovel imovelRetorno, Integer alteracaoTipo) {
+		String observacao = "";
+		
+		if (alteracaoTipo.equals(AlteracaoTipo.INCLUSAO)) {
+			observacao = "INCLUSÃO DE IMÓVEL - RECADASTRAMENTO. ";
+		}
+		
+		if (alteracaoTipo.equals(AlteracaoTipo.EXCLUSAO)) {
+			observacao = "EXCLUSÃO DE IMÓVEL - RECADASTRAMENTO. ";
+		}
+		
+		observacao += getDescricaoEnderecoImovel(imovelRetorno);
+		
 		
 		return observacao;
 		
 	}
 	
-	private static String getProtocoloIncluirImovel(IImovel imovelRetorno) {
-		String observacao = "RECADASTRAMENTO";
+	private static String getDescricaoEnderecoImovel(IImovel imovelRetorno) {
+		StringBuilder descricaoEndereco = new StringBuilder();
 		
-		return observacao;
+		descricaoEndereco.append("Endereco: ");
+		descricaoEndereco.append(imovelRetorno.getDescricaoLogradouro());
+		descricaoEndereco.append(", ");
+		descricaoEndereco.append("n ");
+		descricaoEndereco.append(imovelRetorno.getNumeroImovel());
+		descricaoEndereco.append(", ");
+		descricaoEndereco.append(imovelRetorno.getComplementoEndereco());
+		descricaoEndereco.append(", ");
+		descricaoEndereco.append(imovelRetorno.getNomeBairro());
+		descricaoEndereco.append(", ");
+		descricaoEndereco.append(imovelRetorno.getNomeMunicipio());
+		descricaoEndereco.append(", ");
+		descricaoEndereco.append("CEP: ");
+		descricaoEndereco.append(imovelRetorno.getCodigoCep());
+		descricaoEndereco.append(".");
 		
+		return descricaoEndereco.toString().replaceAll("\\s,", "");
 	}
 	
 }

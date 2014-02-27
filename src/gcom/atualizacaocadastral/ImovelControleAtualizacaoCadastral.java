@@ -12,6 +12,7 @@ public class ImovelControleAtualizacaoCadastral {
 	private Date dataGeracao;
 	private Date dataRetorno;
 	private Date dataAprovacao;
+	private Date dataProcessamento;
 	private SituacaoAtualizacaoCadastral situacaoAtualizacaoCadastral;
 	private ImovelRetorno imovelRetorno;
 	
@@ -58,4 +59,11 @@ public class ImovelControleAtualizacaoCadastral {
 	public void setImovelRetorno(ImovelRetorno imovelRetorno) {
 		this.imovelRetorno = imovelRetorno;
 	}
+	public Date getDataProcessamento() {
+		return dataProcessamento;
+	}
+	public void setDataProcessamento(Date dataProcessamento) {
+		this.dataProcessamento = dataProcessamento;
+	}
+	
 }
