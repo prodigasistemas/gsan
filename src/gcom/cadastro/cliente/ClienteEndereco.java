@@ -284,10 +284,10 @@ public class ClienteEndereco extends ObjetoTransacao implements IClienteEndereco
 					}
 				}
 			}
-			else if(this.getLogradouroCep().hasMunicipio()){
+			else if(this.getLogradouroCep() != null && this.getLogradouroCep().hasMunicipio()){
 				endereco += " - " + this.getLogradouroCep().getLogradouro().getMunicipio().getNome().trim();
 				
-				if (this.getLogradouroBairro().hasUnidadeFederacao()) {
+				if (this.getLogradouroCep().hasUnidadeFederacao()) {
 					endereco += " " + this.getLogradouroCep().getLogradouro().getMunicipio().getUnidadeFederacao().getSigla().trim();
 				}
 				
@@ -297,7 +297,7 @@ public class ClienteEndereco extends ObjetoTransacao implements IClienteEndereco
 				endereco += " " + this.getLogradouroCep().getCep().getCepFormatado().trim();
 			}
 			
-			if (this.getPerimetroInicial() != null) {
+			if (this.getPerimetroInicial() != null && this.getPerimetroFinal() != null) {
 				endereco += " ENTRE " + this.getPerimetroInicial().getDescricaoFormatada() + " E " + this.getPerimetroFinal().getDescricaoFormatada();
 			}
 		}

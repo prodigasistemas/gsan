@@ -196,10 +196,7 @@ public class LogradouroBairro extends ObjetoTransacao {
 	}
 	
 	public boolean hasUnidadeFederacao(){
-		return bairro.getMunicipio().getUnidadeFederacao() != null 
-				&& bairro.getMunicipio().getUnidadeFederacao().getId() != null
-				&& bairro.getMunicipio().getUnidadeFederacao().getId().intValue() != 0
-				&& bairro.getMunicipio().getUnidadeFederacao().getSigla() != null;
+		return hasBairro() && bairro.getMunicipio() != null && bairro.getMunicipio().hasUnidadeFederacao();
 	}
 	
 	public boolean hasMunicipio(){

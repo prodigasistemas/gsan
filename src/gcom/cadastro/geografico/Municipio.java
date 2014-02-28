@@ -301,7 +301,10 @@ public class Municipio extends ObjetoTransacao {
 	}
 	
 	public boolean hasUnidadeFederacao(){
-		return unidadeFederacao != null && unidadeFederacao.getId().intValue() != 0;
+		return this.getUnidadeFederacao() != null 
+				&& this.getUnidadeFederacao().getId() != null
+				&& this.getUnidadeFederacao().getId().intValue() != 0
+				&& this.getUnidadeFederacao().getSigla() != null;
 	}
 	
 }
