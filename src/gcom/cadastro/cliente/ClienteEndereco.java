@@ -293,7 +293,7 @@ public class ClienteEndereco extends ObjetoTransacao implements IClienteEndereco
 				
 			}
 
-			if (this.getLogradouroCep() != null && this.getLogradouroCep().hasLogradouro()) {
+			if (this.getLogradouroCep() != null && this.getLogradouroCep().hasLogradouro() && this.getLogradouroCep().hasCep()) {
 				endereco += " " + this.getLogradouroCep().getCep().getCepFormatado().trim();
 			}
 			
