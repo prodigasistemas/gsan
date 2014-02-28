@@ -16,3 +16,6 @@ scripts/build/build_gcom_desenv.sh
 scripts/build/build_gcom_homolog.sh
 scripts/build/build_gcom_prod_online.sh
 scripts/build/build_gcom_prod_batch.sh
+projects/migrations/environments/development.properties
+projects/migrations/environments/stage.properties
+projects/migrations/environments/production.properties
