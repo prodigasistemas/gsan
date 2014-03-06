@@ -24,6 +24,7 @@ import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelRamoAtividade;
 import gcom.cadastro.imovel.ImovelSubcategoria;
+import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.micromedicao.ControladorMicromedicaoLocal;
 import gcom.micromedicao.ControladorMicromedicaoLocalHome;
 import gcom.seguranca.IRepositorioSeguranca;
@@ -558,6 +559,11 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		}
 		return null;
 	}
+	
+	public Collection<ImovelSubcategoriaAtualizacaoCadastral> pesquisarSubCategoriasAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException{
+		return repositorioAtualizacaoCadastral.pesquisarSubCategoriasAtualizacaoCadastral(idImovel);
+	}
+
 	
 	private void apagarImagemRetorno(Integer idImovel) throws Exception {
 		repositorioAtualizacaoCadastral.apagarImagemRetornoPorIdImovel(idImovel);

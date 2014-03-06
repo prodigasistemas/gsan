@@ -5,6 +5,7 @@ import gcom.cadastro.imovel.IImovel;
 import gcom.cadastro.imovel.IImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoria;
+import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.util.ErroRepositorioException;
 
 import java.util.Collection;
@@ -59,4 +60,6 @@ public interface IRepositorioAtualizacaoCadastral {
 	public void apagarImagemRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException;
 
 	public Collection<ImovelControleAtualizacaoCadastral> obterImoveisControle(Collection<IImovel> listaImoveisRetorno);
+	
+	public Collection<ImovelSubcategoriaAtualizacaoCadastral> pesquisarSubCategoriasAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException;
 }

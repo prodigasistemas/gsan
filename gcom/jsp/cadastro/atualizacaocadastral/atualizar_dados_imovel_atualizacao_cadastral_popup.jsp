@@ -8,6 +8,7 @@
 
 <%@page isELIgnored="false"%>
 <%@ page import="gcom.cadastro.atualizacaocadastral.bean.DadosTabelaAtualizacaoCadastralHelper"%>
+<%@ page import="gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral"%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html:html>
@@ -15,6 +16,7 @@
 <%@ include file="/jsp/util/titulo.jsp"%>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="<bean:message key="caminho.css"/>EstilosCompesa.css" type="text/css">
+<link rel="stylesheet" href="<bean:message key="caminho.css"/>geral.css" type="text/css">
 <script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script>
 <html:javascript staticJavascript="false" formName="ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm" />
 
@@ -140,23 +142,103 @@
 				<tr>
 					<td width="100"><strong>Im&oacute;vel:</strong></td>
 					<td align="left"><html:text property="descricaoImovel" readonly="true" size="30"
-						style="background-color:#EFEFEF; border:0; color: #000000" /></td>
+						styleClass="texto-exibicao" /></td>
 				</tr>
 				<tr>
 					<td><strong>Localidade:</strong></td>
-					<td align="left"><html:text property="descricaoLocalidade" readonly="true" size="60"
-						style="background-color:#EFEFEF; border:0; color: #000000" /></td>
+					<td align="left"><html:text property="descricaoLocalidade" readonly="true" size="60" styleClass="texto-exibicao" /></td>
 				</tr>
 				<tr>
 					<td><strong>Setor Comercial:</strong></td>
-					<td align="left"><html:text property="descricaoSetorComercial" readonly="true" size="60"
-						style="background-color:#EFEFEF; border:0; color: #000000" /></td>
+					<td align="left"><html:text property="descricaoSetorComercial" readonly="true" size="60" styleClass="texto-exibicao"/></td>
 				</tr>
 				<tr>
 					<td><strong>Quadra:</strong></td>
-					<td align="left"><html:text property="numeroQuadra" readonly="true" size="8"
-						style="background-color:#EFEFEF; border:0; color: #000000" /></td>
+					<td align="left"><html:text property="numeroQuadra" readonly="true" size="8" styleClass="texto-exibicao" /></td>
 				</tr>
+        
+                <tr>
+                  <td>
+                    <strong>Situação de Água:</strong>
+                  </td>
+                  <td>
+                    <html:text property="situacaoLigacaoAgua" readonly="true" size="15" styleClass="texto-exibicao"/>
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td>
+                    <strong>Situação de Esgoto:</strong>
+                  </td>
+                  <td>
+                    <html:text property="situacaoLigacaoEsgoto" readonly="true" size="15" styleClass="texto-exibicao"/>
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td width="100%" colspan="3">
+                  <div style="width: 600px; height: 100%; overflow: auto;">
+                  <table width="100%" align="left" bgcolor="#99CCFF">
+                    <tr bordercolor="#000000">
+                      <td width="19%" bgcolor="#90c7fc" align="center">
+                      <div class="style9"><font color="#000000" style="font-size:9px"
+                        face="Verdana, Arial, Helvetica, sans-serif"> <strong>Categoria</strong>
+                      </font></div>
+                      </td>
+                      <td width="56%" bgcolor="#90c7fc" align="center">
+                      <div class="style9"><font color="#000000" style="font-size:9px"
+                        face="Verdana, Arial, Helvetica, sans-serif"> <strong>Subcategoria</strong></font>
+                      </div>
+                      </td>
+                      <td width="25%" bgcolor="#90c7fc" align="center">
+                      <div class="style9"><font color="#000000" style="font-size:9px"
+                        face="Verdana, Arial, Helvetica, sans-serif"> <strong>Quantidade
+                      de Economias</strong> </font></div>
+                      </td>
+                    </tr>
+                  
+                    <!--corpo da segunda tabela-->
+                    <%int cont = 0;%>
+                    <logic:notEmpty  name="imovelSubcategorias">
+                      <logic:iterate name="imovelSubcategorias" id="imovelSubcategoria" type="ImovelSubcategoriaAtualizacaoCadastral">
+                        <%cont = cont + 1;
+                          if (cont % 2 == 0) {%>
+                        <tr bgcolor="#cbe5fe">
+                          <%} else {%>
+                        <tr bgcolor="#FFFFFF">
+                          <%}%>
+
+                          <td width="19%" align="left">
+                          <div align="center">
+                            <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+                              <bean:write name="imovelSubcategoria" property="descricaoCategoria" />
+                            </font>
+                          </div>
+                          </td>
+                          
+                          <td width="56%" align="left">
+                          <div align="center">
+                            <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+                              <bean:write name="imovelSubcategoria" property="descricaoSubcategoria" />
+                            </font>
+                          </div>
+                          </td>
+                          
+                          <td width="25%" align="right">
+                          <div align="right">
+                            <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+                            <bean:write name="imovelSubcategoria" property="quantidadeEconomias" />
+                            </font>
+                          </div>
+                          </td>
+                        </tr>
+                      </logic:iterate>
+                    </logic:notEmpty>
+                  </table>
+                  </div>
+                  </td>
+                </tr>
+                        
 			</table>
 			
 			<hr>
@@ -189,7 +271,7 @@
 								<td>
 
 									<table width="100%" align="center" bgcolor="#99CCFF" border=0>
-									<%int cont = 1;%>
+									<%cont = 1;%>
 									<logic:iterate name="colecaoDadosTabelaAtualizacaoCadastral" id="dadosTabelaAtualizacaoCadastralHelper">
 										<%cont = cont + 1;
 										if (cont % 2 == 0) {%>
