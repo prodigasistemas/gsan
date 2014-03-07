@@ -287,5 +287,13 @@ public class LogradouroCep extends ObjetoTransacao {
 	public boolean hasLogradouroTipo(){
 		return logradouro.getLogradouroTipo() != null && !logradouro.getLogradouroTipo().equals("");
 	}
+
+	public boolean hasCep() {
+		return this.getCep() != null && this.getCep().getCepFormatado() != null;
+	}
+
+	public boolean hasUnidadeFederacao() {
+		return hasLogradouro() && logradouro.getMunicipio() != null && logradouro.getMunicipio().hasUnidadeFederacao();
+	}
 	
 }
