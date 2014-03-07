@@ -6,6 +6,7 @@ import gcom.cadastro.imovel.IImovel;
 import gcom.cadastro.imovel.IImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoria;
+import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
 
@@ -382,38 +383,6 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Collection<ImovelControleAtualizacaoCadastral> obterImoveisControle(Collection<IImovel> listaImoveisRetorno) {
-		Collection<ImovelControleAtualizacaoCadastral> listaImoveisControle = null;
-		
-		Session session = HibernateUtil.getSession();
-		
-		try {
-			String consulta = "select imovelControle "
-							+ " from ImovelControleAtualizacaoCadastral imovelControle "
-							+ " inner join imovelControle.imovelRetorno imovelRetorno "
-							+ " where imovelRetorno.id in (:listaImoveisRetorno)";
-			
-			listaImoveisControle = (Collection<ImovelControleAtualizacaoCadastral>)session.createQuery(consulta)
-										.setParameterList("listaImoveisRetorno", getIdsImovelRetorno(listaImoveisRetorno)).list();
-			
-		} catch (HibernateException e) {
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
-		return listaImoveisControle;
-	}
-	
-	private Collection<Integer> getIdsImovelRetorno(Collection<IImovel> listaImoveisRetorno) {
-		Collection<Integer> listaIds = new ArrayList<Integer>();
-		
-		for (IImovel imovelRetorno : listaImoveisRetorno) {
-			listaIds.add(imovelRetorno.getId());
-		}
-		
-		return listaIds;
-	}
-
-	@SuppressWarnings("unchecked")
 	public Collection<Integer> pesquisarImoveisAprovadosPorPeriodo(Date dataInicial, Date dataFinal) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		try {
@@ -474,4 +443,74 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		}
 	}
 	
+	public void apagarImagemRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try{
+			String consulta = " DELETE FROM ImagemRetorno imagemRetorno "
+							+ " WHERE imagemRetorno.idImovel = :idImovel ";
+			session.createQuery(consulta).setInteger("idImovel", idImovel).executeUpdate();
+		}catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao excluir imagem retorno");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+
+	@SuppressWarnings("unchecked")
+	public Collection<ImovelControleAtualizacaoCadastral> obterImoveisControle(Collection<IImovel> listaImoveisRetorno) {
+		Collection<ImovelControleAtualizacaoCadastral> listaImoveisControle = null;
+		
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			String consulta = "select imovelControle "
+							+ " from ImovelControleAtualizacaoCadastral imovelControle "
+							+ " inner join imovelControle.imovelRetorno imovelRetorno "
+							+ " where imovelRetorno.id in (:listaImoveisRetorno)";
+			
+			listaImoveisControle = (Collection<ImovelControleAtualizacaoCadastral>)session.createQuery(consulta)
+										.setParameterList("listaImoveisRetorno", getIdsImovelRetorno(listaImoveisRetorno)).list();
+			
+		} catch (HibernateException e) {
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return listaImoveisControle;
+	}
+	
+	private Collection<Integer> getIdsImovelRetorno(Collection<IImovel> listaImoveisRetorno) {
+		Collection<Integer> listaIds = new ArrayList<Integer>();
+		
+		for (IImovel imovelRetorno : listaImoveisRetorno) {
+			listaIds.add(imovelRetorno.getId());
+		}
+		
+		return listaIds;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<ImovelSubcategoriaAtualizacaoCadastral> pesquisarSubCategoriasAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException {
+		Collection<ImovelSubcategoriaAtualizacaoCadastral> retorno = null;
+
+		Session session = HibernateUtil.getSession();
+
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+			consulta.append("select sub ")
+				.append(" from ImovelSubcategoriaAtualizacaoCadastral sub ")
+				.append(" where sub.imovel.id = :idImovel");
+
+			retorno = session.createQuery(consulta.toString())
+					.setInteger("idImovel",	idImovel.intValue())
+					.list();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+
+	}	
 }

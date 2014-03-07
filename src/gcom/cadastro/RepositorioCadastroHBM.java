@@ -10021,6 +10021,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		}
 	}
 	
+	
 	public Integer pesquisarIdSetorComercialPorCodigoELocalidade(Integer idLocalidade, Integer codigoSetor) throws ErroRepositorioException {
 		Integer idSetorComercial = null;
 		
@@ -10083,4 +10084,5 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			HibernateUtil.closeSession(session);
 		}
 	}
+	
 }

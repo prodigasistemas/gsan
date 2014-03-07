@@ -24,6 +24,7 @@ import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelRamoAtividade;
 import gcom.cadastro.imovel.ImovelSubcategoria;
+import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.micromedicao.ControladorMicromedicaoLocal;
 import gcom.micromedicao.ControladorMicromedicaoLocalHome;
 import gcom.seguranca.IRepositorioSeguranca;
@@ -264,6 +265,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		atualizarImovelControle(idImovel);
 		apagarTabelaAtualizacaoCadastralPorIdImovel(idImovel);
 		apagarImovelRetorno(idImovel);
+		apagarImagemRetorno(idImovel);
 		apagarImovelSubcategoriaRetorno(idImovel);
 		apagarImovelRamoAtividade(idImovel);
 		apagarInformacoesRetornoCliente(idImovel);
@@ -541,6 +543,15 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 	private void apagarClienteRetorno(Collection<Integer> idsClientesRetorno) throws Exception{
 		repositorioAtualizacaoCadastral.apagarClienteRetorno(idsClientesRetorno);
 	}
+
+	public Collection<ImovelSubcategoriaAtualizacaoCadastral> pesquisarSubCategoriasAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException{
+		return repositorioAtualizacaoCadastral.pesquisarSubCategoriasAtualizacaoCadastral(idImovel);
+	}
+
+	
+	private void apagarImagemRetorno(Integer idImovel) throws Exception {
+		repositorioAtualizacaoCadastral.apagarImagemRetornoPorIdImovel(idImovel);
+	}
 	
 	private void atualizarImoveis() throws ControladorException {
 		int idImovel = -1;
@@ -622,8 +633,6 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		} catch (Exception e) {
 			logger.error("Erro ao inserir imóvel " + idImovel);
 		}
-	
-		
 	
 	}
 	

@@ -23,7 +23,8 @@ GRANT SELECT ON TABLE atualizacaocadastral.seq_imagem_retorno TO pg_users;
 CREATE TABLE atualizacaocadastral.imagem_retorno
 (
   imgr_id integer NOT NULL,
-  imov_id integer NOT NULL,
+  imre_id integer NOT NULL,
+  imov_id integer,
   imgr_nomeimagem character varying(50) NOT NULL,
   imgr_pathimagem character varying(250) NOT NULL,
   imgr_tmultimaalteracao timestamp without time zone NOT NULL DEFAULT now(),
@@ -37,3 +38,4 @@ ALTER TABLE atualizacaocadastral.imagem_retorno
 GRANT ALL ON TABLE atualizacaocadastral.imagem_retorno TO gsan_admin;
 GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE atualizacaocadastral.imagem_retorno TO pg_aplic;
 GRANT SELECT ON TABLE atualizacaocadastral.imagem_retorno TO pg_users;
+

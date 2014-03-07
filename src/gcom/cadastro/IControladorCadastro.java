@@ -67,7 +67,6 @@ import gcom.util.ControladorException;
 
 import java.io.BufferedReader;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -499,14 +498,14 @@ public interface IControladorCadastro {
 
 	public List<HidrometroInstalacaoHistorico> pesquisarHidrometroPeloIdImovel(Integer idImovel) throws ControladorException;
 
+	public AtualizacaoCadastral carregarImovelAtualizacaoCadastral(BufferedReader buffer, List<String> imagens) throws Exception;
+	
+	public SituacaoAtualizacaoCadastral pesquisarSituacaoAtualizacaoCadastralPorId(Integer idSituacaoCadastral) throws ControladorException;
+
 	public Collection<Integer> pesquisarRotasAtualizacaoCadastral(ImovelGeracaoTabelasTemporariasCadastroHelper helper) throws ControladorException;
 	
 	public Integer pesquisarIdSetorComercialPorCodigoELocalidade(Integer idLocalidade, Integer codigoSetor) throws ControladorException;
 	
 	public Integer pesquisarIdQuadraPorNumeroQuadraEIdSetor(Integer idSetorComercial, Integer numeroQuadra) throws ControladorException;
-	
-	public AtualizacaoCadastral carregarImovelAtualizacaoCadastral(BufferedReader buffer, List<String> imagens) throws Exception;
-	
-	public SituacaoAtualizacaoCadastral pesquisarSituacaoAtualizacaoCadastralPorId(Integer idSituacaoCadastral) throws ControladorException;
 
 }
