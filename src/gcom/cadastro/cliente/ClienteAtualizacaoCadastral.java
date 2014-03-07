@@ -1,8 +1,6 @@
 package gcom.cadastro.cliente;
 
 import gcom.cadastro.endereco.EnderecoTipo;
-import gcom.cadastro.endereco.LogradouroBairro;
-import gcom.cadastro.endereco.LogradouroCep;
 import gcom.cadastro.geografico.UnidadeFederacao;
 import gcom.cadastro.imovel.Imovel;
 import gcom.interceptor.ControleAlteracao;
@@ -566,5 +564,15 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 
 	public void setIndicadorNomeConta(Short indicadorNomeConta) {
 		this.indicadorNomeConta = indicadorNomeConta;
+	}
+
+	public Integer getTipoOperacao() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setTipoOperacao(Integer tipoOperacao) {
+		// TODO Auto-generated method stub
+		
 	}
 }

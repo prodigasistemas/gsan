@@ -22,6 +22,7 @@ public class ClienteRetorno implements ICliente {
 	private String email;
 	private Date ultimaAlteracao;
 	private Integer idClienteTipo;
+	private Integer tipoOperacao;
 	
 	private UnidadeFederacao unidadeFederacao;
 	private PessoaSexo pessoaSexo;
@@ -177,7 +178,13 @@ public class ClienteRetorno implements ICliente {
 	public void setCliente(Cliente cliente) {
 		this.cliente = cliente;
 	}
-	
-	
 
+	public Integer getTipoOperacao() {
+		return tipoOperacao;
+	}
+
+	public void setTipoOperacao(Integer tipoOperacao) {
+		this.tipoOperacao = tipoOperacao;
+	}
+	
 }
