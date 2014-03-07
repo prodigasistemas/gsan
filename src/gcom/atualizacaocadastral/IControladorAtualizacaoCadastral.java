@@ -7,6 +7,7 @@ import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorException;
 
 import java.util.Collection;
+import java.util.Date;
 
 public interface IControladorAtualizacaoCadastral {
 	
@@ -16,11 +17,12 @@ public interface IControladorAtualizacaoCadastral {
 	
 	public void apagarInformacoesRetornoImovelAtualizacaoCadastral(Integer idImovel) throws Exception;
 	
+	public Collection<Integer> pesquisarImoveisPorSituacaoPeriodo(Date dataInicial, Date dataFinal, Integer idSituacaoCadastral) throws ControladorException;
+	
 	public Integer recuperaValorSequenceImovelRetorno() throws Exception;
 	
 	public Collection<ImovelSubcategoria> pesquisarImovelSubcategoriaAtualizacaoCadastral(Integer idImovel, Integer idSubcategoria,Integer idCategoria)
 		throws ControladorException;
 		
-	public ImovelAtualizacaoCadastral pesquisarImovelAtualizacaoCadastral(Integer idImovel)
-		throws ControladorException;
+	public ImovelAtualizacaoCadastral pesquisarImovelAtualizacaoCadastral(Integer idImovel)	throws ControladorException;
 }

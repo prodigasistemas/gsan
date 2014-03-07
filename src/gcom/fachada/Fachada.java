@@ -148,6 +148,8 @@ import gcom.atendimentopublico.registroatendimento.bean.RegistroAtendimentoEncer
 import gcom.atendimentopublico.registroatendimento.bean.RegistroAtendimentoFaltaAguaGeneralizadaHelper;
 import gcom.atendimentopublico.registroatendimento.bean.RegistroAtendimentoPendenteLocalOcorrenciaHelper;
 import gcom.atendimentopublico.registroatendimento.bean.VerificarRAFaltaAguaHelper;
+import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
+import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocalHome;
 import gcom.batch.ControladorBatchLocal;
 import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.ProcessoIniciado;
@@ -159,6 +161,7 @@ import gcom.cadastro.ControladorCadastroLocalHome;
 import gcom.cadastro.DbVersaoBase;
 import gcom.cadastro.EnvioEmail;
 import gcom.cadastro.ImovelInscricaoAlteradaHelper;
+import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCadastralHelper;
 import gcom.cadastro.atualizacaocadastral.bean.DadosTabelaAtualizacaoCadastralHelper;
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastral;
@@ -1629,6 +1632,28 @@ public class Fachada {
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_CONTRATO_PARCELAMENTO_SEJB);
 			// guarda a referencia de um objeto capaz de fazer chamadas
 			// objetos remotamente
+			local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}
+	
+	private ControladorAtualizacaoCadastralLocal getControladorAtualizacaoCadastral() {
+		ControladorAtualizacaoCadastralLocalHome localHome = null;
+		ControladorAtualizacaoCadastralLocal local = null;
+
+		ServiceLocator locator = null;
+
+		try {
+			locator = ServiceLocator.getInstancia();
+
+			localHome = (ControladorAtualizacaoCadastralLocalHome) locator
+					.getLocalHome(ConstantesJNDI.CONTROLADOR_ATUALIZACAO_CADASTRAL);
+
 			local = localHome.create();
 
 			return local;
@@ -38929,9 +38954,9 @@ public class Fachada {
 		}
 	}
 
-	public AtualizacaoCadastral carregarImovelAtualizacaoCadastral(BufferedReader buffer, ArrayList<String> nomesImagens) throws Exception {
+	public AtualizacaoCadastral carregarImovelAtualizacaoCadastral(BufferedReader buffer, List<String> imagens) throws Exception {
 		return this.getControladorCadastro().carregarImovelAtualizacaoCadastral(
-				buffer, nomesImagens);
+				buffer, imagens);
 	}
 	
 	/**
@@ -53619,6 +53644,22 @@ public class Fachada {
 			return this.getControladorCadastro().pesquisarRotasAtualizacaoCadastral(helper);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+	}
+	
+	public SituacaoAtualizacaoCadastral pesquisarSituacaoAtualizacaoCadastralPorId(Integer idSituacao) {
+		try{
+			return this.getControladorCadastro().pesquisarSituacaoAtualizacaoCadastralPorId(idSituacao);
+		}catch(ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+	
+	public Collection<Integer> pesquisarImoveisPorSituacaoPeriodo(Date dataInicial, Date dataFinal, Integer idSituacaoCadastral) {
+		try {
+			return this.getControladorAtualizacaoCadastral().pesquisarImoveisPorSituacaoPeriodo(dataInicial, dataFinal, idSituacaoCadastral);
+		}catch(ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
 	}
 }

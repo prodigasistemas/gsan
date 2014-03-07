@@ -5,6 +5,7 @@ import gcom.atualizacaocadastral.ClienteFoneRetorno;
 import gcom.atualizacaocadastral.ClienteImovelRetorno;
 import gcom.atualizacaocadastral.ClienteRetorno;
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
+import gcom.atualizacaocadastral.ImagemRetorno;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.atualizacaocadastral.ImovelRamoAtividadeRetorno;
 import gcom.atualizacaocadastral.ImovelRetorno;
@@ -39,6 +40,7 @@ import gcom.util.ControladorUtilLocal;
 import gcom.util.ErroRepositorioException;
 import gcom.util.ParserUtil;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -85,6 +87,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		salvarClienteUsuario();
 		salvarClienteResponsavel();
 		salvarClienteProprietario();
+		salvarImagem(atualizacaoCadastral, atualizacaoCadastralImovel.getMatricula());
 		
 		atualizarSituacaoControleImovelAtualizacaoCadastral(SituacaoAtualizacaoCadastral.TRANSMITIDO);
 	}
@@ -364,5 +367,26 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		}
 		
 		return tipoOperacao;
+	}
+	
+	private void salvarImagem(AtualizacaoCadastral atualizacao, Integer matricula) throws Exception {
+
+		for (String nomeImagem : atualizacao.getImagens()) {
+
+			String caminhoJboss = System.getProperty("jboss.server.home.dir");
+			String pasta = "/images/cadastro/" + atualizacao.getArquivoTexto().getDescricaoArquivo();
+			
+			if (nomeImagem.contains(matricula.toString())) {
+				File imagem = new File(caminhoJboss + pasta, nomeImagem);
+
+				ImagemRetorno imagemRetorno = new ImagemRetorno();
+				imagemRetorno.setIdImovel(matricula);
+				imagemRetorno.setNomeImagem(imagem.getName());
+				imagemRetorno.setPathImagem(imagem.getAbsolutePath());
+				imagemRetorno.setUltimaAlteracao(new Date());
+
+				controladorUtil.inserir(imagemRetorno);
+			}
+		}
 	}
 }

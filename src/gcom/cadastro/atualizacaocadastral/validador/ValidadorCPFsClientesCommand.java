@@ -13,7 +13,7 @@ import org.apache.commons.lang.StringUtils;
 
 public class ValidadorCPFsClientesCommand extends ValidadorCommand {
 	private final String MSG_FORMATO_CPF_CNPJ_INVALIDO = "Formato do CPF/CNPJ de %S inválido";
-	private final String MSG_CPF_CNPJ_INVALIDO_BASE = "%S possui CPF/CNPJ na base de dados";
+	private final String MSG_CPF_CNPJ_INVALIDO_BASE = "Não é possível apagar cpf/cnpj do %S";
 
 	private IRepositorioClienteImovel repositorioClienteImovel;
 

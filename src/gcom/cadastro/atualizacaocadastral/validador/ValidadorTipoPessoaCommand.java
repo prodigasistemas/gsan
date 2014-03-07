@@ -13,11 +13,11 @@ import org.apache.commons.lang.StringUtils;
 
 public class ValidadorTipoPessoaCommand extends ValidadorCommand {
 
-	private final String MSG_TIPO_PESSOA_USUARIO = "Usuário não é pessoa física ou jurídica";
-	private final String MSG_TIPO_PESSOA_PROPRIETARIO = "Proprietário não é pessoa física ou jurídica";
-	private final String MSG_TIPO_PESSOA_RESPONSAVEL = "Responsável não é pessoa física ou jurídica";
-	private final String MSG_CPF_CNPJ_INCONSISTENTE = "Cpf ou Cnpj incompatível com tipo do %s";
-	private final String MSG_TIPO_PESSOA_INCONSISTENTE = "Pessoa física ou jurídica difere para %s";
+	private final String MSG_TIPO_PESSOA_USUARIO = "Usuário não é pessoa física ou jurídica.";
+	private final String MSG_TIPO_PESSOA_PROPRIETARIO = "Proprietário não é pessoa física ou jurídica.";
+	private final String MSG_TIPO_PESSOA_RESPONSAVEL = "Responsável não é pessoa física ou jurídica.";
+	private final String MSG_CPF_CNPJ_INCONSISTENTE = "Cpf ou Cnpj incompatível com tipo do %s.";
+	private final String MSG_TIPO_PESSOA_INCONSISTENTE = "Pessoa física ou jurídica difere para %s.";
 
 	private IRepositorioClienteImovel repositorioClienteImovel;
 

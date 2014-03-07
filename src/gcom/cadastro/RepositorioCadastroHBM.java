@@ -10068,4 +10068,19 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		}
 		return idQuadra;
 	}
+	
+	public SituacaoAtualizacaoCadastral pesquisarSituacaoAtualizacaoCadastralPorId(Integer idSituacaoCadastral) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try {
+			String consulta = " SELECT situacao " 
+					+ " FROM SituacaoAtualizacaoCadastral situacao"
+					+ " WHERE situacao.id = :idSituacaoCadastral ";
+			return (SituacaoAtualizacaoCadastral)session.createQuery(consulta)
+					.setInteger("idSituacaoCadastral", idSituacaoCadastral).uniqueResult();
+		} catch(HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
 }

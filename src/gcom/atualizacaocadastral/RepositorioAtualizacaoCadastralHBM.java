@@ -12,12 +12,12 @@ import gcom.util.HibernateUtil;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
-import org.hibernate.type.Type;
 import org.jboss.logging.Logger;
 
 public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizacaoCadastral {
@@ -123,8 +123,6 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		}
 		
 		return retorno;
-	
-		
 	}
 	
 	@SuppressWarnings("unchecked")
@@ -352,6 +350,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		}
 	}
 
+	@SuppressWarnings("unchecked")
 	public Collection<Integer> pesquisarIdsClienteRetorno(Integer idImovel) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		Collection<Integer> retorno = null;
@@ -404,7 +403,6 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		return listaImoveisControle;
 	}
 	
-	@SuppressWarnings("unused")
 	private Collection<Integer> getIdsImovelRetorno(Collection<IImovel> listaImoveisRetorno) {
 		Collection<Integer> listaIds = new ArrayList<Integer>();
 		
@@ -414,4 +412,66 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		
 		return listaIds;
 	}
+
+	@SuppressWarnings("unchecked")
+	public Collection<Integer> pesquisarImoveisAprovadosPorPeriodo(Date dataInicial, Date dataFinal) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try {
+			String consulta = " SELECT i.imovel.id " 
+					+ " FROM ImovelControleAtualizacaoCadastral i " 
+					+ " WHERE date(i.dataAprovacao) BETWEEN :dataInicial AND :dataFinal "
+					+ " AND i.situacaoAtualizacaoCadastral.id = :idSituacaoCadastral ";
+			return (Collection<Integer>) session.createQuery(consulta)
+					.setDate("dataInicial", dataInicial)
+					.setDate("dataFinal", dataFinal)
+						.setInteger("idSituacaoCadastral", SituacaoAtualizacaoCadastral.APROVADO)
+					.list();
+
+		}catch(HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+		}finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<Integer> pesquisarImoveisDisponiveisPorPeriodo(Date dataInicial, Date dataFinal) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try {
+			String consulta = " SELECT i.imovel.id " 
+					+ " FROM ImovelControleAtualizacaoCadastral i " 
+					+ " WHERE date(i.dataGeracao) BETWEEN :dataInicial AND :dataFinal " 
+					+ " AND i.situacaoAtualizacaoCadastral.id = :idSituacaoCadastral ";
+			return (Collection<Integer>) session.createQuery(consulta)
+					.setDate("dataInicial", dataInicial)
+					.setDate("dataFinal", dataFinal)
+					.setInteger("idSituacaoCadastral", SituacaoAtualizacaoCadastral.DISPONIVEL)
+					.list();
+		}catch(HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+		}finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<Integer> pesquisarImoveisTransmitidosPorPeriodo(Date dataInicial, Date dataFinal) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try {
+			String consulta = " SELECT i.imovel.id " 
+					+ " FROM ImovelControleAtualizacaoCadastral i " 
+					+ " WHERE date(i.dataRetorno) BETWEEN :dataInicial AND :dataFinal " 
+					+ " AND i.situacaoAtualizacaoCadastral.id = :idSituacaoCadastral ";
+			return (Collection<Integer>) session.createQuery(consulta)
+					.setDate("dataInicial", dataInicial)
+					.setDate("dataFinal", dataFinal)
+					.setInteger("idSituacaoCadastral", SituacaoAtualizacaoCadastral.TRANSMITIDO)
+					.list();
+		}catch(HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+		}finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+	
 }
