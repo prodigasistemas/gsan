@@ -1,36 +1,3 @@
-/*
- * Copyright (C) 2007-2007 the GSAN - Sistema Integrado de Gestão de Serviços de Saneamento
- *
- * This file is part of GSAN, an integrated service management system for Sanitation
- *
- * GSAN is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License.
- *
- * GSAN is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
- */
-
-/* Este programa é software livre; você pode redistribuí-lo e/ou
- * modificá-lo sob os termos de Licença Pública Geral GNU, conforme
- * publicada pela Free Software Foundation; versão 2 da
- * Licença.
- * Este programa é distribuído na expectativa de ser útil, mas SEM
- * QUALQUER GARANTIA; sem mesmo a garantia implícita de
- * COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
- * PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
- * detalhes.
- * Você deve ter recebido uma cópia da Licença Pública Geral GNU
- * junto com este programa; se não, escreva para Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- * 02111-1307, USA.
- */
 package gcom.cadastro;
 
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
@@ -79,13 +46,10 @@ import gcom.relatorio.cadastro.imovel.FiltrarRelatorioImoveisUltimosConsumosAgua
 import gcom.relatorio.cadastro.imovel.RelatorioImoveisConsumoMedioHelper;
 import gcom.relatorio.cadastro.micromedicao.RelatorioColetaMedidorEnergiaHelper;
 import gcom.util.ConstantesSistema;
-import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
-import gcom.util.FachadaException;
 import gcom.util.HibernateUtil;
 import gcom.util.Util;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -109,26 +73,15 @@ import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.jboss.logging.Logger;
 
-/**
- * @author Administrador
- */
 public class RepositorioCadastroHBM implements IRepositorioCadastro {
 	
 	private Logger logger = Logger.getLogger(RepositorioCadastroHBM.class);
 
 	private static IRepositorioCadastro instancia;
 
-	/**
-	 * Construtor da classe RepositorioFaturamentoHBM
-	 */
 	private RepositorioCadastroHBM() {
 	}
 
-	/**
-	 * Retorna o valor de instance
-	 * 
-	 * @return O valor de instance
-	 */
 	public static IRepositorioCadastro getInstancia() {
 		if (instancia == null) {
 			instancia = new RepositorioCadastroHBM();
@@ -136,13 +89,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return instancia;
 	}
 
-	/**
-	 * Pesquisa os feriados(nacionais e municipais)
-	 * 
-	 * @author Kássia Albuquerque
-	 * @date 22/01/2007
-	 * 
-	 */
 	public Collection pesquisarFeriado(Short tipoFeriado, String descricao,
 			Date dataFeriadoInicio, Date dataFeriadoFim, Integer idMunicipio,
 			Integer numeroPagina) throws ErroRepositorioException {
@@ -234,23 +180,14 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			}
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
 		return retorno;
 	}
 
-	/**
-	 * Pesquisar quantidade de registro dos feriados(nacionais e municipais)
-	 * 
-	 * @author Kássia Albuquerque
-	 * @date 22/01/2007
-	 * 
-	 */
 	public Integer pesquisarFeriadoCount(Short tipoFeriado, String descricao,
 			Date dataFeriadoInicio, Date dataFeriadoFim, Integer idMunicipio)
 			throws ErroRepositorioException {
@@ -337,26 +274,14 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			retorno = valor;
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
 		return retorno;
 	}
 
-	/**
-	 * 
-	 * Faz um Update na base
-	 * 
-	 * @author Kassia Albuquerque e Ana Maria
-	 * @date 06/03/2007
-	 * 
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	public void atualizarMensagemSistema(String mensagemSistema)
 			throws ErroRepositorioException {
 
@@ -378,13 +303,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		}
 	}
 
-	/**
-	 * Pesquisa os dados do email do batch para ser enviado
-	 * 
-	 * @author Sávio Luiz
-	 * @date 13/03/2007
-	 * 
-	 */
 	public EnvioEmail pesquisarEnvioEmail(Integer idEnvioEmail)
 			throws ErroRepositorioException {
 
@@ -403,10 +321,8 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -430,27 +346,14 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					.setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
 		return retorno;
 	}
 
-	/**
-	 * Pesquisar todos ids dos setores comerciais.
-	 * 
-	 * [UC0564 - Gerar Resumo das Instalações de Hidrômetros]
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 25/04/2007
-	 * 
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	public Collection<Integer> pesquisarTodosIdsSetorComercial()
 			throws ErroRepositorioException {
 
@@ -473,16 +376,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		}
 		return retorno;
 	}
-
-	/**
-	 * Migração dos dados do município de Ribeirão - O sistema gerar as tabelas
-	 * cliente, cliente_endereço, imovel, cliente_imovel, imovel_subcategoria,
-	 * ligacao_agua a parti da tabela Cadastro_ribeirao;
-	 * 
-	 * @author Ana Maria
-	 * 
-	 * @throws ControladorException
-	 */
 
 	public Object[] pesquisarSetorQuadra(Integer idLocalidade)
 			throws ErroRepositorioException {
@@ -648,14 +541,11 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			stmt.executeUpdate(insert);
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} catch (SQLException e) {
 			throw new ErroRepositorioException(e, "Erro no Insert");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
-
 			try {
 				stmt.close();
 				con.close();
@@ -692,14 +582,11 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			stmt.executeUpdate(insert);
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} catch (SQLException e) {
 			throw new ErroRepositorioException(e, "Erro no Insert");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
-
 			try {
 				stmt.close();
 				con.close();
@@ -736,14 +623,11 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			stmt.executeUpdate(insert);
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} catch (SQLException e) {
 			throw new ErroRepositorioException(e, "Erro no Insert");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
-
 			try {
 				stmt.close();
 				con.close();
@@ -801,31 +685,14 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		}
 	}
 
-	/**
-	 * 
-	 * Pesquisa os imóveis do cliente de acordo com o tipo de relação [UC0251]
-	 * Gerar Atividade de Ação de Cobrança [SB0001] Gerar Atividade de Ação de
-	 * Cobrança para os Imóveis do Cliente
-	 * 
-	 * @author Sávio Luiz
-	 * @created 23/11/2007
-	 * 
-	 * @param cliente
-	 * @param relacaoClienteImovel
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	public Collection pesquisarClientesSubordinados(Integer idCliente)
 
 	throws ErroRepositorioException {
 
-		// cria a coleção de retorno
 		Collection retorno = null;
 
-		// Query
 		String consulta;
 
-		// obtém a sessão
 		Session session = HibernateUtil.getSession();
 
 		try {
@@ -836,21 +703,13 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			retorno = (Collection) session.createQuery(consulta).setInteger(
 					"idCliente", idCliente).list();
 
-			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
-		// retorna a coleção de atividades pesquisada(s)
 		return retorno;
 	}
-
-	/**
-	 * [UC0624] Gerar Relatório para Atualização Cadastral
-	 */
 
 	public Collection pesquisarRelatorioAtualizacaoCadastral(
 			Collection idLocalidades, Collection idSetores,
@@ -949,17 +808,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0725] Gerar Relatório de Imóveis por Situação da Ligação de Agua
-	 * 
-	 * @author Rafael Pinto
-	 * @date 03/12/2007
-	 * 
-	 * @param FiltrarRelatorioImoveisSituacaoLigacaoAguaHelper
-	 * 
-	 * @return Collection<Object[]>
-	 * @throws ErroRepositorioException
-	 */
 	public Collection<Object[]> pesquisarRelatorioImoveisSituacaoLigacaoAgua(
 			FiltrarRelatorioImoveisSituacaoLigacaoAguaHelper filtro)
 			throws ErroRepositorioException {
@@ -1104,19 +952,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0725] Gerar Relatório de Imóveis por Situação da Ligação de Agua
-	 * 
-	 * Pesquisa o Total Registro
-	 * 
-	 * @author Rafael Pinto
-	 * @date 04/12/2007
-	 * 
-	 * @param FiltrarRelatorioImoveisSituacaoLigacaoAguaHelper
-	 * 
-	 * @return Integer
-	 * @throws ErroRepositorioException
-	 */
 	public Integer pesquisarTotalRegistroRelatorioImoveisSituacaoLigacaoAgua(
 			FiltrarRelatorioImoveisSituacaoLigacaoAguaHelper filtro)
 			throws ErroRepositorioException {
@@ -1239,17 +1074,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0726] Gerar Relatório de Imóveis com Faturas em Atraso
-	 * 
-	 * @author Bruno Barros
-	 * @date 06/12/2007
-	 * 
-	 * @param FiltrarRelatorioImoveisFaturasAtraso
-	 * 
-	 * @return Collection<Object[]>
-	 * @throws ErroRepositorioException
-	 */
 	public Collection<Object[]> pesquisarRelatorioImoveisFaturasAtrasoAgrupadasLocalizacao(
 			FiltrarRelatorioImoveisFaturasAtrasoHelper filtro)
 			throws ErroRepositorioException {
@@ -1463,7 +1287,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 				parameters.put("perfisImovel", colecaoPerfisImovel);
 			}
 			
-			//Consulta com o Hidrômetro
 			if (hidrometro != null && !hidrometro.equals("0")) {
 				if(hidrometro.equalsIgnoreCase("S")){
 					consulta += " and imo.ligacaoAgua.hidrometroInstalacaoHistorico is not null \n";
@@ -1478,8 +1301,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 						+ " where ics.imovel.id = imo.id  and ics.dataRetiradaCobranca is null "
 						+ " and ics.cobrancaSituacao.id = :situacaoCobranca )";
 
-				// consulta += " and imo.cobrancaSituacao.id = :situacaoCobranca
-				// ";
 				parameters.put("situacaoCobranca", situacaoCobranca);
 			}
 
@@ -1534,8 +1355,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					+ "   loc.id, \n" + "   sc.codigo, \n"
 					+ "   rot.codigo, \n" + "   imo.numeroSequencialRota ";
 
-			retorno = criarQueryComParametros(consulta, parameters, session)
-					.list();
+			retorno = criarQueryComParametros(consulta, parameters, session).list();
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
@@ -1738,7 +1558,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 				parameters.put("perfisImovel", colecaoPerfisImovel);
 			}
 			
-			// Consulta com o Hidrômetro
 			if (hidrometro != null && !hidrometro.equals("0")) {
 				if(hidrometro.equalsIgnoreCase("S")){
 					consulta += " and imo.ligacaoAgua.hidrometroInstalacaoHistorico is not null \n";
@@ -1752,8 +1571,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 				consulta += " and exists( select ics.id from ImovelCobrancaSituacao ics "
 						+ " where ics.imovel.id = imo.id  and ics.dataRetiradaCobranca is null "
 						+ " and ics.cobrancaSituacao.id = :situacaoCobranca )";
-				// consulta += " and imo.cobrancaSituacao.id in
-				// (:situacaoCobranca) ";
 				parameters.put("situacaoCobranca", situacaoCobranca);
 			}
 
@@ -1802,8 +1619,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					+ "   qua.numeroQuadra, \n" + "   rot.codigo, \n"
 					+ "   imo.numeroSequencialRota ";
 
-			retorno = criarQueryComParametros(consulta, parameters, session)
-					.list();
+			retorno = criarQueryComParametros(consulta, parameters, session).list();
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
@@ -1814,19 +1630,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0726] Gerar Relatório de Imóveis com Faturas em Atraso
-	 * 
-	 * Pesquisa o Total Registro
-	 * 
-	 * @author Bruno Barros
-	 * @date 04/12/2007
-	 * 
-	 * @param FiltrarRelatorioImoveisFaturasAtrasoHelper
-	 * 
-	 * @return Integer
-	 * @throws ErroRepositorioException
-	 */
 	public Integer pesquisarTotalRegistroRelatorioImoveisFaturasAtrasoLocalizacao(
 			FiltrarRelatorioImoveisFaturasAtrasoHelper filtro)
 			throws ErroRepositorioException {
@@ -1960,8 +1763,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 				consulta += " and exists( select ics.id from ImovelCobrancaSituacao ics "
 						+ " where ics.imovel.id = imo.id  and ics.dataRetiradaCobranca is null "
 						+ " and ics.cobrancaSituacao.id = :situacaoCobranca )";
-				// consulta += " and imo.cobrancaSituacao.id in
-				// (:situacaoCobranca)";
 				parameters.put("situacaoCobranca", situacaoCobranca);
 			}
 
@@ -2126,8 +1927,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 				consulta += " and exists( select ics.id from ImovelCobrancaSituacao ics "
 						+ " where ics.imovel.id = imo.id  and ics.dataRetiradaCobranca is null "
 						+ " and ics.cobrancaSituacao.id = :situacaoCobranca )";
-				// consulta += " and imo.cobrancaSituacao.id in
-				// (:situacaoCobranca) ";
 				parameters.put("situacaoCobranca", situacaoCobranca);
 			}
 
@@ -2159,17 +1958,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0727] Gerar Relatório de Imóveis por Consumo Medio
-	 * 
-	 * @author Bruno Barros, Raphael Rossiter
-	 * @date 17/12/2007, 11/06/2008
-	 * 
-	 * @param FiltrarRelatorioImoveisConsumoMedio
-	 * 
-	 * @return Collection<FiltrarRelatorioImoveisConsumoMedio[]>
-	 * @throws ErroRepositorioException
-	 */
 	public Collection<RelatorioImoveisConsumoMedioHelper> pesquisarRelatorioImoveisConsumoMedio(
 			FiltrarRelatorioImoveisConsumoMedioHelper filtro,
 			Integer anoMesFaturamento) throws ErroRepositorioException {
@@ -2209,9 +1997,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 				.getAnoMesReferencia();
 
 		String consulta = "";
-		/*
-		 * Query query = null; Map parameters = new HashMap();
-		 */
 
 		try {
 			consulta = "select greg.greg_id as gerencia, " + // 0
@@ -2258,16 +2043,13 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					+ "inner join cadastro.cliente_relacao_tipo crtp on clim.crtp_id=crtp.crtp_id "
 					+
 
-					// CLIENTE USUÁRIO
 					"and (crtp.crtp_id = 2 ) "
 					+
 
-					// AGUA
 					"left join micromedicao.consumo_historico consumoAgua on imov.imov_id=consumoAgua.imov_id "
 					+ "and (consumoAgua.lgti_id = 1 ) and (consumoAgua.cshi_amfaturamento = :anoMesReferencia ) "
 					+
 
-					// ESGOTO
 					"left join micromedicao.consumo_historico consumoEsgoto on imov.imov_id=consumoEsgoto.imov_id "
 					+ "and (consumoEsgoto.lgti_id = 2 ) and (consumoEsgoto.cshi_amfaturamento = :anoMesReferencia ) ";
 
@@ -2339,7 +2121,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 				consulta += " and lagu.hidi_id is null ";
 			}
 
-			// Ordenamos
 			consulta += " order by greg.greg_id, uneg.uneg_id, loca.loca_id, stcm.stcm_cdsetorcomercial, "
 					+ " rota.rota_cdrota, imov.imov_nnsequencialrota ";
 
@@ -2365,20 +2146,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 						.setInteger("anoMesReferencia", anoMesReferencia.intValue())
 						.list();
 
-			/*
-			 * query = session.createQuery(consulta);
-			 * 
-			 * Set set = parameters.keySet(); Iterator iterMap = set.iterator();
-			 * while (iterMap.hasNext()) { String key = (String) iterMap.next();
-			 * if (parameters.get(key) instanceof Collection) { Collection
-			 * collection = (ArrayList) parameters.get(key);
-			 * query.setParameterList(key, collection); } else {
-			 * query.setParameter(key, parameters.get(key)); }
-			 *  }
-			 * 
-			 * retorno = query.list();
-			 */
-
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
@@ -2388,18 +2155,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0727] Gerar Relatório de Imóveis por Consumo Medio Pesquisa a
-	 * quantidade de imoveis para o relatorio de imoveis por consumo medio
-	 * 
-	 * @author Bruno Barros, Hugo Leonardo
-	 * @data 17/12/2007, 12/07/2010
-	 * 
-	 * @param filtro
-	 * @param anoMesFaturamento
-	 * @return Integer
-	 * @throws ControladorException
-	 */
 	public Integer pesquisarTotalRegistroRelatorioImoveisConsumoMedio(
 			FiltrarRelatorioImoveisConsumoMedioHelper filtro,
 			Integer anoMesFaturamento) throws ErroRepositorioException {
@@ -2438,7 +2193,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		Integer anoMesReferencia = filtro.getAnoMesReferencia();
 
 		String consulta = "";
-		// Map parameters = new HashMap();
 
 		try {
 			consulta = "select count(clim.clim_id) as clienteImo "; // 18
@@ -2562,17 +2316,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0731] Gerar Relatório de Imóveis com os Ultimos Consumos de Agua
-	 * 
-	 * @author Rafael Pinto
-	 * @date 18/12/2007
-	 * 
-	 * @param FiltrarRelatorioImoveisUltimosConsumosAguaHelper
-	 * 
-	 * @return Collection<Object[]>
-	 * @throws ErroRepositorioException
-	 */
 	public Collection<Object[]> pesquisarRelatorioImoveisUltimosConsumosAgua(
 			FiltrarRelatorioImoveisUltimosConsumosAguaHelper filtro)
 			throws ErroRepositorioException {
@@ -2728,17 +2471,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0731] Gerar Relatório de Imóveis com os Ultimos Consumos de Agua
-	 * 
-	 * @author Rafael Pinto
-	 * @date 18/12/2007
-	 * 
-	 * @param FiltrarRelatorioImoveisUltimosConsumosAguaHelper
-	 * 
-	 * @return Integer
-	 * @throws ErroRepositorioException
-	 */
 	public Integer pesquisarTotalRegistroRelatorioImoveisUltimosConsumosAgua(
 			FiltrarRelatorioImoveisUltimosConsumosAguaHelper filtro)
 			throws ErroRepositorioException {
@@ -2871,17 +2603,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC00728] Gerar Relatório de Imóveis Ativos e Não Medidos
-	 * 
-	 * @author Rafael Pinto
-	 * @date 03/01/2008
-	 * 
-	 * @param FiltrarRelatorioImoveisAtivosNaoMedidosHelper
-	 * 
-	 * @return Collection<Object[]>
-	 * @throws ErroRepositorioException
-	 */
 	public Collection<Object[]> pesquisarRelatorioImoveisAtivosNaoMedidos(
 			FiltrarRelatorioImoveisAtivosNaoMedidosHelper filtro)
 			throws ErroRepositorioException {
@@ -3016,17 +2737,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC00728] Gerar Relatório de Imóveis Ativos e Não Medidos
-	 * 
-	 * @author Rafael Pinto
-	 * @date 03/01/2008
-	 * 
-	 * @param FiltrarRelatorioImoveisAtivosNaoMedidosHelper
-	 * 
-	 * @return Collection<Object[]>
-	 * @throws ErroRepositorioException
-	 */
 	public Integer pesquisarTotalRegistroRelatorioImoveisAtivosNaoMedidos(
 			FiltrarRelatorioImoveisAtivosNaoMedidosHelper filtro)
 			throws ErroRepositorioException {
@@ -3137,19 +2847,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC00730] Gerar Relatório de Imóveis com Faturas Recentes em Dia e
-	 * Faturas Antigas em Atraso
-	 * 
-	 * @author Rafael Pinto
-	 * @date 08/01/2008
-	 * 
-	 * @param
-	 * FiltrarRelatorioImoveisFaturasRecentesDiaFaturasAntigasAtrasoHelper
-	 * 
-	 * @return Collection<Object[]>
-	 * @throws ErroRepositorioException
-	 */
 	public Collection<Object[]> pesquisarRelatorioImoveisFaturasRecentesDiaFaturasAntigasAtraso(
 			FiltrarRelatorioImoveisFaturasRecentesDiaFaturasAntigasAtrasoHelper filtro)
 			throws ErroRepositorioException {
@@ -3359,19 +3056,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC00730] Gerar Relatório de Imóveis com Faturas Recentes em Dia e
-	 * Faturas Antigas em Atraso
-	 * 
-	 * @author Rafael Pinto
-	 * @date 08/01/2008
-	 * 
-	 * @param
-	 * FiltrarRelatorioImoveisFaturasRecentesDiaFaturasAntigasAtrasoHelper
-	 * 
-	 * @return Integer
-	 * @throws ErroRepositorioException
-	 */
 	public Integer pesquisarTotalRegistroRelatorioImoveisFaturasRecentesDiaFaturasAntigasAtraso(
 			FiltrarRelatorioImoveisFaturasRecentesDiaFaturasAntigasAtrasoHelper filtro)
 			throws ErroRepositorioException {
@@ -3539,17 +3223,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0729] Gerar Relatório de Imóveis por Tipo Consumo
-	 * 
-	 * @author Bruno Barros
-	 * @date 14/01/2008
-	 * 
-	 * @param FiltrarRelatorioImoveisTipoConsumo
-	 * 
-	 * @return Collection<Object[]>
-	 * @throws ErroRepositorioException
-	 */
 	public Collection<Object[]> pesquisarRelatorioImoveisTipoConsumo(
 			FiltrarRelatorioImoveisTipoConsumoHelper filtro)
 			throws ErroRepositorioException {
@@ -3722,20 +3395,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0762] Gerar Arquivo Texto com Dados Cadastrais - CAERN
-	 * 
-	 * A pesquisa retorna uma colecao de Imoveis para que a partir daí comece a
-	 * geracao das linhas TXTs.
-	 * 
-	 * @author Tiago Moreno
-	 * @date 08/04/2008
-	 * 
-	 * @param ArquivoTextoDadosCadastraisHelper
-	 * 
-	 * @return Collection<Imovel>
-	 * @throws ControladorException
-	 */
 	public Collection<Imovel> pesquisarImovelArquivoTextoDadosCadastrais(
 			ArquivoTextoDadosCadastraisHelper objeto)
 			throws ErroRepositorioException {
@@ -3845,18 +3504,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 		return retorno;
 	}
-
-	/**
-	 * [UC0763] Gerar Arquivo Texto de Ligacoes com Hidrometro - CAERN
-	 * 
-	 * @author Tiago Moreno
-	 * @date 10/04/2008
-	 * 
-	 * @param ArquivoTextoLigacoesHidrometroHelper
-	 * 
-	 * @return
-	 * @throws ControladorException
-	 */
 
 	public Collection<HidrometroInstalacaoHistorico> pesquisarImovelArquivoTextoLigacoesHidrometro(
 			ArquivoTextoLigacoesHidrometroHelper objeto)
@@ -3971,17 +3618,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0729] Gerar Relatório de Imóveis por Tipo Consumo
-	 * 
-	 * @author Bruno Barros
-	 * @date 14/01/2008
-	 * 
-	 * @param FiltrarRelatorioImoveisTipoConsumo
-	 * 
-	 * @return Collection<Object[]>
-	 * @throws ErroRepositorioException
-	 */
 	public Integer pesquisarTotalRegistroRelatorioImoveisTipoConsumo(
 			FiltrarRelatorioImoveisTipoConsumoHelper filtro)
 			throws ErroRepositorioException {
@@ -4111,20 +3747,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 	}
 
-	/**
-	 * Pesquisa o id localidade,codigo setor e codigo da rota apartir do id da
-	 * rota
-	 * 
-	 * @author Rafael Pinto
-	 * 
-	 * @date 02/06/2008
-	 * 
-	 * @throws ErroRepositorioException
-	 * @return Object[3] onde :
-	 * 
-	 * Object[0]=id localidade Object[1]=codigo do setor Object[2]=codigo da
-	 * rota
-	 */
 	public Object[] pesquisarDadosRotaEntregaContaPorRota(Integer idRota)
 			throws ErroRepositorioException {
 
@@ -4132,7 +3754,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 		String consulta = "";
 
-		// obtém a sessão
 		Session session = HibernateUtil.getSession();
 
 		try {
@@ -4146,34 +3767,15 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			retorno = (Object[]) session.createQuery(consulta).setInteger(
 					"idRota", idRota).setMaxResults(1).uniqueResult();
 
-			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
-		// retorna
 		return retorno;
 	}
 
-	/**
-	 * [UC0330] Inserir Mensagem da Conta
-	 * 
-	 * [SB0001] Pesquisar Setor Comercial
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 25/06/2008
-	 * 
-	 * @param tipoArgumento
-	 * @param indiceInicial
-	 * @param indiceFinal
-	 * @param anoMesReferencia
-	 * @return Collection
-	 * @throws ErroRepositorioException
-	 */
 	public Collection pesquisarSetorComercialPorQualidadeAgua(
 			int tipoArgumento, BigDecimal indiceInicial,
 			BigDecimal indiceFinal, Integer anoMesReferencia)
@@ -4248,26 +3850,13 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					"indiceFinal", indiceFinal).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
 		return retorno;
 	}
-
-	/**
-	 * [UC0830] Gerar Tabelas para Atualização Cadastral via celular
-	 * 
-	 * @author Vinicius Medeiros
-	 * @date 25/08/2008
-	 * 
-	 * 
-	 * @return Collection<Object[]>
-	 * @throws ErroRepositorioException
-	 */
 
 	public Object[] obterImovelGeracaoTabelasTemporarias(Integer idImovel)
 			throws ErroRepositorioException {
@@ -4382,16 +3971,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 	}
 
-	/**
-	 * [UC0831] Gerar Tabelas para Atualização Cadastral via celular
-	 * 
-	 * @author Vinicius Medeiros
-	 * @date 20/09/2008
-	 * 
-	 * @return ImovelSubcategoria
-	 * @throws ErroRepositorioException
-	 */
-
 	public Collection obterImovelSubcategoriaAtualizacaoCadastral(
 			Integer idImovel) throws ErroRepositorioException {
 
@@ -4464,15 +4043,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 	}
 
-	/*
-	 * [CRC] - 1672 - Melhorar performance das consultas do relatorio de imóveis
-	 * com faturas em atraso.
-	 * 
-	 * O filtro da qtd de faturas em atraso e valor das Faturas em Atraso não
-	 * são usados nas querys pois para que ela trouxesse o valor correto seria
-	 * necessário um subselect, o que tornaria a consulta mais lenta. Assim,
-	 * esse filtro é usado no momento de preparar os relatoriosBeans.
-	 */
 	public Collection<Object[]> pesquisarRelatorioImoveisFaturasAtrasoDescritasLocalizacao(
 			FiltrarRelatorioImoveisFaturasAtrasoHelper filtro)
 			throws ErroRepositorioException {
@@ -4722,15 +4292,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/*
-	 * [CRC] - 1672 - Melhorar performance das consultas do relatorio de imóveis
-	 * com faturas em atraso.
-	 * 
-	 * O filtro da qtd de faturas em atraso e valor das Faturas em Atraso não
-	 * são usados nas querys pois para que ela trouxesse o valor correto seria
-	 * necessário um subselect, o que tornaria a consulta mais lenta. Assim,
-	 * esse filtro é usado no momento de preparar os relatoriosBeans.
-	 */
 	public Collection<Object[]> pesquisarRelatorioImoveisFaturasAtrasoDescritasCliente(
 			FiltrarRelatorioImoveisFaturasAtrasoHelper filtro)
 			throws ErroRepositorioException {
@@ -4979,13 +4540,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * Metodo seta os parametros numa determinada consulta e retorna um objeto
-	 * Query com o sql/hql já com parametros.
-	 * 
-	 * @since 02/09/2009
-	 * @author Marlon Patrick
-	 */
 	private Query criarQueryComParametros(String consulta,
 			Map<String, Object> parameters, Session session) {
 
@@ -5007,15 +4561,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return query;
 	}
 
-	/**
-	 * 
-	 * [UC0535] Manter Feriado
-	 * 
-	 * @author bruno
-	 * @date 12/01/2009
-	 * 
-	 * @param anoOrigemFeriado
-	 */
 	public Collection<NacionalFeriado> pesquisarFeriadosNacionais(
 			String anoOrigemFeriado) throws ErroRepositorioException {
 		Collection retorno = null;
@@ -5041,15 +4586,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 	}
 
-	/**
-	 * 
-	 * [UC0535] Manter Feriado
-	 * 
-	 * @author bruno
-	 * @date 12/01/2009
-	 * 
-	 * @param anoOrigemFeriado
-	 */
 	public Collection<MunicipioFeriado> pesquisarFeriadosMunicipais(
 			String anoOrigemFeriado) throws ErroRepositorioException {
 		Collection retorno = null;
@@ -5075,16 +4611,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 	}
 
-	/**
-	 * 
-	 * [UC0535] Manter Feriados
-	 * 
-	 * @author bruno
-	 * @date 13/01/2009
-	 * 
-	 * @param anoDestino
-	 * @throws ErroRepositorioException
-	 */
 	public void excluirFeriadosNacionais(String anoDestino)
 			throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
@@ -5105,16 +4631,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		}
 	}
 
-	/**
-	 * 
-	 * [UC0535] Manter Feriados
-	 * 
-	 * @author bruno
-	 * @date 13/01/2009
-	 * 
-	 * @param anoDestino
-	 * @throws ErroRepositorioException
-	 */
 	public void excluirFeriadosMunicipais(String anoDestino)
 			throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
@@ -5135,18 +4651,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		}
 	}
 
-	/**
-	 * [UC0880] - Gerar Movimento de Extensao de Contas em Cobranca por Empresa
-	 * 
-	 * @author Rômulo Aurélio
-	 * @date 09/02/2009
-	 * 
-	 * @param idRota
-	 * @param anoMesReferencia
-	 * @return boolean
-	 * @throws ControladorException
-	 */
-
 	public Collection pesquisarLocalidades() throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		String consulta = "";
@@ -5164,15 +4668,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral
-	 * 
-	 * @author Ana Maria
-	 * @date 04/03/2009
-	 * 
-	 * @return Collection
-	 * @throws ErroRepositorioException
-	 */
 	public Collection pesquisarArquivoTextoAtualizacaoCadastro(
 			String idEmpresa, String idLocalidade, String idAgenteComercial,
 			String idSituacaoTransmissao) throws ErroRepositorioException {
@@ -5221,15 +4716,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral
-	 * 
-	 * @author Ana Maria
-	 * @date 04/03/2009
-	 * 
-	 * @return Collection
-	 * @throws ErroRepositorioException
-	 */
 	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(
 			Integer idArquivoTxt) throws ErroRepositorioException {
 
@@ -5281,15 +4767,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 	
-	/**
-	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral
-	 * 
-	 * @author COSANPA - Felipe Santos
-	 * @date 04/11/2013
-	 * 
-	 * @return Collection
-	 * @throws ErroRepositorioException
-	 */
 	public Collection<ArquivoTextoAtualizacaoCadastral> pesquisarArquivoTextoAtualizacaoCadastro(
 			String[] idsArquivoTxt) throws ErroRepositorioException {
 
@@ -5316,16 +4793,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 	
-	/**
-	 * 
-	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral
-	 * 
-	 * @author Ana Maria
-	 * @date 05/03/2009
-	 * 
-	 * @return void
-	 * @throws ErroRepositorioException
-	 */
 	public void atualizarArquivoTextoAtualizacaoCadstral(Integer idArquivoTxt,
 			Integer idSituacaoTransmissao) throws ErroRepositorioException {
 
@@ -5349,17 +4816,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 		}
 	}
-
-	/**
-	 * [UC0830] Gerar Tabelas para Atualização Cadastral via celular
-	 * 
-	 * @author Vinicius Medeiros
-	 * @date 25/08/2008
-	 * 
-	 * 
-	 * @return Collection<Object[]>
-	 * @throws ErroRepositorioException
-	 */
 
 	public Collection<Integer> obterIdsImovelGeracaoTabelasTemporarias(
 			Integer idRota,
@@ -5494,15 +4950,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0830] Gerar Tabelas para Atualização Cadastral via celular
-	 * 
-	 * @author Ana Maria
-	 * @date 26/03/2009
-	 * 
-	 * @return Collection
-	 * @throws ErroRepositorioException
-	 */
 	public Collection pesquisarImovelDebitoAtualizacaoCadastral(
 			Collection colecaoIdsImovel) throws ErroRepositorioException {
 
@@ -5549,18 +4996,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0893] - Inserir Unidade de Negocio
-	 * 
-	 * Verificar se o Cliente Selecionado existe na tabela Funcionario
-	 * 
-	 * @author Vinicius Medeiros
-	 * @date 08/04/2009
-	 * 
-	 * @param idCliente
-	 * @throws ControladorException
-	 */
-
 	public Integer verificarClienteSelecionadoFuncionario(Integer idCliente)
 			throws ErroRepositorioException {
 
@@ -5586,13 +5021,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * Pesquisa a(s) quadra face associada a quadra
-	 * 
-	 * Autor: Arthur Carvalho
-	 * 
-	 * Data: 28/04/2009
-	 */
 	public Collection<Object[]> pesquisarQuadraFaceAssociadaQuadra(
 			Integer idQuadra) throws ErroRepositorioException {
 
@@ -5625,16 +5053,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 		return retorno;
 	}
-
-	/**
-	 * [UC0830] Gerar Tabelas para Atualização Cadastral via celular
-	 * 
-	 * @author Ana Maria
-	 * @date 22/06/2009
-	 * 
-	 * @return Collection<Object[]>
-	 * @throws ErroRepositorioException
-	 */
 
 	public Collection<Integer> pesquisarSetorComercialGeracaoTabelasTemporarias(
 			ImovelGeracaoTabelasTemporariasCadastroHelper helper)
@@ -5784,19 +5202,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 	}
 
-	/**
-	 * [UC0912] Gerar Boletim de Custo Atualização Cadastral
-	 * 
-	 * O sistema obtém os dados do contrato com a empresa (a partir da tabela
-	 * EMPRESA_CONTRATO_CADASTRO com EMPR_ID=Id da empresa retornado e
-	 * ECCD_DTFINALCONTRATO maior ou igual à data corrente e
-	 * ECCD_DTCANCELCONTRATO com o valor nulo)
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 25/06/2009
-	 * 
-	 * @throws ErroRepositorioException
-	 */
 	public EmpresaContratoCadastro pesquisarEmpresaContratoCadastro(
 			Integer idEmpresa) throws ErroRepositorioException {
 
@@ -5823,19 +5228,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 		return retorno;
 	}
-
-	/**
-	 * [UC0912] Gerar Boletim de Custo Atualização Cadastral
-	 * 
-	 * O sistema seleciona as operações efetuadas pela empresa no período
-	 * informado e com imóvel associado [SB0001 - Selecionar Operações Efetuadas
-	 * com Imóvel Associado].
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 25/06/2009
-	 * 
-	 * @throws ErroRepositorioException
-	 */
+	
 	public Collection pesquisarOperacoesEfetuadasComImovelAssociado(
 			Date dataInicio, Date dataFim, Integer idEmpresa)
 			throws ErroRepositorioException {
@@ -5923,18 +5316,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0912] Gerar Boletim de Custo Atualização Cadastral
-	 * 
-	 * O sistema seleciona as operações efetuadas pela empresa no período
-	 * informado e sem imóvel associado [SB0002] - Selecionar Operações
-	 * Efetuadas sem Imóvel Associado
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 25/06/2009
-	 * 
-	 * @throws ErroRepositorioException
-	 */
 	public Collection pesquisarOperacoesEfetuadasSemImovelAssociado(
 			Date dataInicio, Date dataFim, Integer idEmpresa)
 			throws ErroRepositorioException {
@@ -6029,18 +5410,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0912] Gerar Boletim de Custo Atualização Cadastral
-	 * 
-	 * O sistema seleciona os atributos que compõem o boletim (a partir da
-	 * tabela ATRIBUTO ordenando pelo grupo do atributo (ATGR_ID) e pela ordem
-	 * de emissão (ATRB_NNORDEMEMISSAO)).
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 26/06/2009
-	 * 
-	 * @throws ErroRepositorioException
-	 */
 	public Collection pesquisarAtributosBoletim()
 			throws ErroRepositorioException {
 
@@ -6065,18 +5434,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0912] Gerar Boletim de Custo Atualização Cadastral
-	 * 
-	 * Valor de Atualização do Atributo (ECCA_VLATUALIZACAO da tabela
-	 * EMPRESA_CONTRATO_CADASTRO_ATRIBUTO com ATRB_ID=ATRB_ID da tabela ATRIBUTO
-	 * e ECCD_ID=ECCD_ID da tabela EMPRESA_CONTRATO_CADASTRO);
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 26/06/2009
-	 * 
-	 * @throws ErroRepositorioException
-	 */
 	public BigDecimal pesquisarValorAtualizacaoAtributo(Integer idAtributo,
 			Integer idEmpresaContratoCadastro) throws ErroRepositorioException {
 
@@ -6108,14 +5465,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0925] Emitir Boletos
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 09/07/2009
-	 * 
-	 * @throws ErroRepositorioException
-	 */
 	public Collection pesquisarDadosBoleto(int quantidadeInicio, Integer grupo,
 			String nomeEmpresa) throws ErroRepositorioException {
 
@@ -6277,16 +5626,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0925] Emitir Boletos
-	 * 
-	 * retrona DBTP_VLLIMITE para DBTP_ID = idDebitoTipo
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 09/07/2009
-	 * 
-	 * @throws ErroRepositorioException
-	 */
 	public BigDecimal pesquisarValorLimiteDebitoTipo(Integer idDebitoTipo)
 			throws ErroRepositorioException {
 
@@ -6314,15 +5653,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0407]-Filtrar Imóveis para Inserir ou Manter Conta [FS0011]-Verificar
-	 * a abrangência do código do usuário
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 31/07/2009
-	 * 
-	 * @throws ErroRepositorioException
-	 */
 	public UnidadeNegocio pesquisarUnidadeNegocioUsuario(Integer idUsuario)
 			throws ErroRepositorioException {
 
@@ -6347,14 +5677,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UCXXXX]- Excluir Imoveis Da Tarifa Social CRC - 2113
-	 * 
-	 * @author Genival Barbosa
-	 * @date 15/09/2009
-	 * 
-	 * @throws ErroRepositorioException
-	 */
 	public List pesquisarImoveisExcluirDaTarifaSocial(Integer idSetor,
 			Integer anoMesFaturamento) throws ErroRepositorioException {
 
@@ -6384,15 +5706,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UCXXXX]- Excluir Imoveis Da Tarifa Social CRC - 2113
-	 * 
-	 * @author Genival Barbora
-	 * @date 15/09/2009
-	 * 
-	 * @return void
-	 * @throws ErroRepositorioException
-	 */
 	public void atualizarExcluirDaTarifaSocialTabelaDadoEconomia(String idImovel)
 			throws ErroRepositorioException {
 
@@ -6419,15 +5732,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		}
 	}
 
-	/**
-	 * [UCXXXX]- Excluir Imoveis Da Tarifa Social CRC - 2113
-	 * 
-	 * @author Genival Barbora
-	 * @date 15/09/2009
-	 * 
-	 * @return void
-	 * @throws ErroRepositorioException
-	 */
 	public void atualizarExcluirDaTarifaSocialTabelaImovel(String idImovel)
 			throws ErroRepositorioException {
 
@@ -6450,17 +5754,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		}
 	}
 
-	/**
-	 * [UC0727] Gerar Relatório de Imóveis por Consumo Medio
-	 * 
-	 * @author Bruno Barros, Raphael Rossiter
-	 * @date 17/12/2007, 11/06/2008
-	 * 
-	 * @param FiltrarRelatorioImoveisConsumoMedio
-	 * 
-	 * @return Collection<FiltrarRelatorioImoveisConsumoMedio[]>
-	 * @throws ErroRepositorioException
-	 */
 	public Integer pesquisarRelatorioImoveisConsumoMedioCount(
 			FiltrarRelatorioImoveisConsumoMedioHelper filtro,
 			Integer anoMesFaturamento) throws ErroRepositorioException {
@@ -6589,17 +5882,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0727] Gerar Relatório de Imóveis por Consumo Medio
-	 * 
-	 * @author Bruno Barros, Raphael Rossiter
-	 * @date 17/12/2007, 11/06/2008
-	 * 
-	 * @param FiltrarRelatorioImoveisConsumoMedio
-	 * 
-	 * @return Collection<FiltrarRelatorioImoveisConsumoMedio[]>
-	 * @throws ErroRepositorioException
-	 */
 	public Integer pesquisarImovelAtualizacaoCadastralComIndicadorExclusaoCount()
 			throws ErroRepositorioException {
 
@@ -6718,18 +6000,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * Pesquisa as críticas existentes para um determinado arquivo importado.
-	 * 
-	 * [UC0969] Importar arquivo de atualização cadastral simplificado
-	 * 
-	 * @author Samuel Valerio
-	 * @date 22/10/2009
-	 * 
-	 * @param idArquivo
-	 *            Id do arquivo
-	 * @return Coleção de críticas do arquivo
-	 */
 	public Collection<AtualizacaoCadastralSimplificadoCritica> pesquisarAtualizacaoCadastralSimplificadoCritica(
 			int idArquivo) throws ErroRepositorioException {
 		Collection<AtualizacaoCadastralSimplificadoCritica> retorno = new ArrayList<AtualizacaoCadastralSimplificadoCritica>();
@@ -6757,16 +6027,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0925] Emitir Boletos
-	 * 
-	 * retrona DBTP_VLSUGERIDO para DBTP_ID = idDebitoTipo
-	 * 
-	 * @author Rômulo Aurélio
-	 * @date 22/12/2009
-	 * 
-	 * @throws ErroRepositorioException
-	 */
 	public BigDecimal pesquisarValorSugeridoDebitoTipo(Integer idDebitoTipo)
 			throws ErroRepositorioException {
 
@@ -6794,15 +6054,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral
-	 * 
-	 * @author Ana Maria
-	 * @date 04/03/2009
-	 * 
-	 * @return Collection
-	 * @throws ErroRepositorioException
-	 */
 	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(
 			String idArquivoTxt, Integer idSituacaoTransmissao)
 			throws ErroRepositorioException {
@@ -6831,15 +6082,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * 
-	 * [UC0976] Suspender Imóvel em Programa Especial Batch Pesquisa imoveis
-	 * para execução do batch
-	 * 
-	 * @author Hugo Amorim
-	 * @since 13/01/2010
-	 * 
-	 */
 	public Collection pesquisarImovelEmProgramaEspecial(
 			Integer idPerfilProgramaEspecial, Rota rota, int numeroIndice,
 			int quantidadeRegistros) throws ErroRepositorioException {
@@ -6888,19 +6130,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0979] Gerar Relatório de Imóveis em Programas Especiais Analitico
-	 * 
-	 * @author Hugo Leonardo, Ivan Sergio
-	 * @date 18/01/2010 15/09/2010 - CRC4734: Retirar do filtro o perfil do
-	 *       imóvel e obter as contas a partir de fatura item da fatura
-	 *       selecionada;
-	 * 
-	 * @param RelatorioImoveisProgramasEspeciaisHelper
-	 * 
-	 * @return Collection<RelatorioImoveisProgramasEspeciaisHelper>
-	 * @throws FachadaException
-	 */
 	public Collection pesquisarRelatorioImoveisProgramasEspeciaisAnalitico(
 			FiltrarRelatorioImoveisProgramasEspeciaisHelper helper)
 			throws ErroRepositorioException {
@@ -6980,20 +6209,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0979] Gerar Relatório de Imóveis em Programas Especiais - Relatório
-	 * Analítico
-	 * 
-	 * @author Hugo Leonardo, Ivan Sergio
-	 * @date 18/01/2010 15/09/2010 - CRC4734: Retirar do filtro o perfil do
-	 *       imóvel e obter as contas a partir de fatura item da fatura
-	 *       selecionada;
-	 * 
-	 * @param RelatorioImoveisProgramasEspeciaisHelper
-	 * 
-	 * @return Collection<RelatorioImoveisProgramasEspeciaisHelper>
-	 * @throws FachadaException
-	 */
 	public Integer pesquisarTotalRegistroRelatorioImoveisProgramaEspecial(
 			FiltrarRelatorioImoveisProgramasEspeciaisHelper helper)
 			throws ErroRepositorioException {
@@ -7053,21 +6268,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 		return retorno;
 	}
-
-	/**
-	 * [UC0979] Gerar Relatório de Imóveis em Programas Especiais - Relatório
-	 * Sintético
-	 * 
-	 * @author Hugo Leonardo, Ivan Sergio
-	 * @date 25/01/2010 15/09/2010 - CRC4734: Retirar do filtro o perfil do
-	 *       imóvel e obter as contas a partir de fatura item da fatura
-	 *       selecionada;
-	 * 
-	 * @param RelatorioImoveisProgramasEspeciaisHelper
-	 * 
-	 * @return Collection<RelatorioImoveisProgramasEspeciaisHelper>
-	 * @throws FachadaException
-	 */
 
 	public Collection pesquisarRelatorioImoveisProgramasEspeciaisSintetico(
 			FiltrarRelatorioImoveisProgramasEspeciaisHelper helper)
@@ -7163,17 +6363,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0973] Inserir Imóvel em Programa Especial
-	 * 
-	 * @author Hugo Leonardo
-	 * @date 10/02/2010
-	 * 
-	 * @param idImovel
-	 * 
-	 * @return Quantidade de Parcelamentos do Imóvel
-	 * @throws FachadaException
-	 */
 	public Integer verificarExistenciaParcelamentoImovel(Integer idImovel)
 			throws ErroRepositorioException {
 
@@ -7203,17 +6392,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0999] Gerar Relatório de Coleta de Medidor de Energia.
-	 * 
-	 * Obtém a quantidade de imoveis de acordo com o filtro.
-	 * 
-	 * @author Hugo Leonardo
-	 * @date 09/03/2010
-	 * 
-	 * @return Collection<RelatorioColetaMedidorEnergiaHelper>
-	 * @throws ControladorException
-	 */
 	public Collection<RelatorioColetaMedidorEnergiaHelper> pesquisarRelatorioColetaMedidorEnergia(
 			String faturamentoGrupo, String idLocalidadeInicial,
 			String idLocalidadeFinal, String idSetorComercialInicial,
@@ -7367,19 +6545,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0999] Gerar Relatório de Coleta de Medidor de Energia.
-	 * 
-	 * Obtém a quantidade de imoveis de acordo com o filtro.
-	 * 
-	 * @author Hugo Leonardo
-	 * @date 09/03/2010
-	 * 
-	 * @param FiltrarRelatorioColetaMedidorEnergiaHelper
-	 * 
-	 * @return Integer
-	 * @throws ControladorException
-	 */
 	public Integer pesquisarTotalRegistroRelatorioColetaMedidorEnergia(
 			String faturamentoGrupo, String idLocalidadeInicial,
 			String idLocalidadeFinal, String idSetorComercialInicial,
@@ -7513,14 +6678,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * 
-	 * Batch criado para atualização da coluna codigo debito automatico do
-	 * imovel.
-	 * 
-	 * @author Hugo Amorim
-	 * @date 30/03/2010
-	 */
 	public Collection<Integer> pesquisarIdsImoveisDoSetorComercial(
 			Integer idSetor, int quantidadeInicio, int quantidadeMaxima)
 			throws ErroRepositorioException {
@@ -7546,14 +6703,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * 
-	 * Batch criado para atualização da coluna codigo debito automatico do
-	 * imovel.
-	 * 
-	 * @author Hugo Amorim
-	 * @date 30/03/2010
-	 */
 	public void atualizarCodigoDebitoAutomatico(Integer idImovel,
 			Integer codigoDebitoAutomatico) throws ErroRepositorioException {
 
@@ -7576,17 +6725,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 	}
 
-	/**
-	 * [UC0811] Processar Requisições do Dispositivo Móvel Impressao Simultanea.
-	 * 
-	 * Método que baixa a nova versão do JAD do mobile para o celular
-	 * 
-	 * @author Bruno Barros
-	 * @date 08/06/2010
-	 * 
-	 * @param
-	 * @throws IOException
-	 */
 	public byte[] baixarNovaVersaoJad() throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
@@ -7623,17 +6761,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC0811] Processar Requisições do Dispositivo Móvel Impressao Simultanea.
-	 * 
-	 * Método que baixa a nova versão do JAR do mobile para o celular
-	 * 
-	 * @author Bruno Barros
-	 * @date 08/06/2010
-	 * 
-	 * @param
-	 * @throws IOException
-	 */
 	public byte[] baixarNovaVersaoJar() throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
@@ -7657,15 +6784,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * 
-	 * @author Fernando Fontelles
-	 * @date 07/07/2010
-	 * 
-	 * @param idImovel
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	public boolean verificarSituacaoImovelCobrancaJudicial(Integer idImovel)
 			throws ErroRepositorioException {
 
@@ -7713,15 +6831,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 	}
 
-	/**
-	 * 
-	 * @author Fernando Fontelles
-	 * @date 07/07/2010
-	 * 
-	 * @param idImovel
-	 * @return
-	 * @throws ControladorException
-	 */
 	public boolean verificarSituacaoImovelNegativacao(Integer idImovel)
 			throws ErroRepositorioException {
 
@@ -7765,26 +6874,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 	}
 
-	/**
-	 * 
-	 * [UC1036] - Inserir Cadastro de Email do Cliente
-	 * 
-	 * @author Fernando Fontelles
-	 * @date 09/07/2010
-	 * 
-	 * @param idCliente
-	 * @param nomeClienteAnterior
-	 * @param cpfAnterior
-	 * @param cnpjAnterior
-	 * @param emailAnterior
-	 * @param nomeSolicitante
-	 * @param cpfSolicitante
-	 * @param nomeClienteAtual
-	 * @param cpfClienteAtual
-	 * @param cnpjClienteAtual
-	 * @param emailAtual
-	 * @return
-	 */
 	public Integer inserirCadastroEmailCliente(Integer idCliente,
 			String nomeClienteAnterior, String cpfAnterior,
 			String cnpjAnterior, String emailAnterior, String nomeSolicitante,
@@ -7846,18 +6935,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 	}
 
-	/**
-	 * Atualiza o sequencial de rota do imóvel correspondente ao
-	 * RotaAtualizacaoSeq recebido
-	 * 
-	 * @author Bruno Barros
-	 * @date 11/08/2010
-	 * 
-	 * @param rotaAtualizacaoSeq -
-	 *            Registro da tabela micromedicao.rota_atualizacao_sequencial
-	 * 
-	 * @throws ErroRepositorioException
-	 */
 	public void atualizarSequenciaRotaImovel(RotaAtualizacaoSeq seq)
 			throws ErroRepositorioException {
 
@@ -7880,15 +6957,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		}
 	}
 
-	/**
-	 * 
-	 * @author Rômulo Aurélio
-	 * @date 28/09/2010
-	 * 
-	 * @param idImovel
-	 * @return
-	 * @throws ControladorException
-	 */
 	public ClienteImovel pesquisarClienteResponsavelComEsferaPoderPublico(
 			Integer idImovel) throws ErroRepositorioException {
 
@@ -7928,12 +6996,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 
 	}
 
-	/**
-	 * [UC1074] Gerar Relatório Alterações no Sistema por Coluna
-	 * 
-	 * @author Hugo Amorim
-	 * @date 08/09/2010
-	 */
 	public Collection<Object[]> pesquisarDadosRelatorioAlteracoesSistemaColunaPorUsuario(
 			GerarRelatorioAlteracoesSistemaColunaHelper helper)
 			throws ErroRepositorioException {
@@ -8050,12 +7112,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC1074] Gerar Relatório Alterações no Sistema por Coluna
-	 * 
-	 * @author Hugo Amorim
-	 * @date 08/09/2010
-	 */
 	public Collection<Object[]> pesquisarDadosRelatorioAlteracoesSistemaColunaPorLocalidade(
 			GerarRelatorioAlteracoesSistemaColunaHelper helper)
 			throws ErroRepositorioException {
@@ -8177,14 +7233,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC1074] Gerar Relatório Alterações no Sistema por Coluna
-	 * 
-	 * [FS0007]
-	 * 
-	 * @author Hugo Amorim
-	 * @date 08/09/2010
-	 */
 	public boolean verificarRelacaoColuna(Integer idColuna)
 			throws ErroRepositorioException {
 
@@ -8218,12 +7266,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC1076] Gerar Relatório Atualizações Cadastrais Via Internet.
-	 * 
-	 * @author Daniel Alves
-	 * @date 28/09/2010
-	 */
 	public Collection<Object[]> pesquisarDadosRelatorioAtualizacaoCadastralViaInternet(
 			GerarRelatorioAtualizacaoCadastralViaInternetHelper helper)
 			throws ErroRepositorioException {
@@ -8311,12 +7353,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC1076] Gerar Relatório Atualizações Cadastrais Via Internet.
-	 * 
-	 * @author Daniel Alves
-	 * @date 28/09/2010
-	 */
 	public Collection<Object[]> pesquisarDadosRelatorioResumoAtualizacaoCadastralViaInternet(
 			GerarRelatorioAtualizacaoCadastralViaInternetHelper helper)
 			throws ErroRepositorioException {
@@ -8394,12 +7430,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC1076] Gerar Relatório Atualizações Cadastrais Via Internet.
-	 * 
-	 * @author Hugo Amorim de Lyra
-	 * @date 06/10/2010
-	 */
 	public Integer countRelatorioAtualizacaoCadastralViaInternet(
 			GerarRelatorioAtualizacaoCadastralViaInternetHelper helper)
 			throws ErroRepositorioException {
@@ -8472,12 +7502,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 	
-	/**TODO: COSANPA
-	 * autor: Adriana Muniz
-	 * Data: 12/05/2011
-	 * Pesquisa o id da rota pelo id da quadra - Gerar
-	 * Arquivo da declaração de quitação anual de débito
-	 */
  	public Integer pesquisarIdRotaQuadra(Integer idQuadra) throws ErroRepositorioException {
  		Integer retorno = null;
  		
@@ -8501,18 +7525,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
  		return retorno;
  	}
  	
- 	/**TODO: COSANPA
-	 * autor: Adriana Muniz
-	 * Data: 23/11/2011
-	 * 
-	 * Pesquisa todas as esfera de poder ativas
-	 * 
-	 * Manter Contas de um Conjunto de Imóveis
-	 * 
-	 * @return Collection
-	 * @throws ControladorException
-	 *  
-	 */
  	public Collection pesquisarEsferaPoder() throws ErroRepositorioException {
  		Collection retorno = null;
  		
@@ -8535,14 +7547,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
  		return retorno;
  	}
 
-	/**
-	 * [UC1121] Gerar Relatório de Imóveis com Alteração de Inscrição Via Batch.
-	 * 
-	 * @author Hugo Leonardo
-	 * @date 19/01/2011
-	 * 
-	 * @throws ErroRepositorioException
-	 */
 	public Collection pesquisarRelatorioImoveisAlteracaoInscricaoViaBatch(
 			FiltrarRelatorioImoveisAlteracaoInscricaoViaBatchHelper relatorioHelper)
 			throws ErroRepositorioException {
@@ -8720,14 +7724,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC1121] Gerar Relatório de Imóveis com Alteração de Inscrição Via Batch.
-	 * 
-	 * @author Hugo Leonardo
-	 * @date 19/01/2011
-	 * 
-	 * @throws ErroRepositorioException
-	 */
 	public Integer countTotalRelatorioImoveisAlteracaoInscricaoViaBatch(
 			FiltrarRelatorioImoveisAlteracaoInscricaoViaBatchHelper relatorioHelper)
 			throws ErroRepositorioException {
@@ -8899,12 +7895,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC1124] Gerar Relatório de Alterações de CPF/CNPJ por Usuário
-	 * 
-	 * @author Mariana Victor
-	 * @date 16/02/2011
-	 */
 	public Collection<Object[]> pesquisarDadosRelatorioAlteracoesCpfCnpjPorUsuario(
 			GerarRelatorioAlteracoesCpfCnpjHelper helper)
 			throws ErroRepositorioException {
@@ -9006,12 +7996,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC1124] Gerar Relatório de Alterações de CPF/CNPJ por Localidade
-	 * 
-	 * @author Mariana Victor
-	 * @date 17/02/2011
-	 */
 	public Collection<Object[]> pesquisarDadosRelatorioAlteracoesCpfCnpjPorLocalidade(
 			GerarRelatorioAlteracoesCpfCnpjHelper helper)
 			throws ErroRepositorioException {
@@ -9126,13 +8110,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC1124] Gerar Relatório de Alterações de CPF/CNPJ por Meio de
-	 * Solicitação
-	 * 
-	 * @author Mariana Victor
-	 * @date 16/02/2011
-	 */
 	public Collection<Object[]> pesquisarDadosRelatorioAlteracoesCpfCnpjPorMeio(
 			GerarRelatorioAlteracoesCpfCnpjHelper helper)
 			throws ErroRepositorioException {
@@ -9215,12 +8192,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * UC1162 – AUTORIZAR ALTERACAO INSCRICAO IMOVEL
-	 * 
-	 * @author Rodrigo Cabral
-	 * @date 05/06/2011
-	 */
 	public Collection pesquisaImovelInscricaoAlterada(
 			ImovelInscricaoAlteradaHelper helper)
 			throws ErroRepositorioException {
@@ -9265,14 +8236,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC1160] Processar Comando Gerado Carta Tarifa Social
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 24/03/2011
-	 * 
-	 * @throws ControladorException
-	 */
 	public Collection pesquisarLocalidadesPorGerencia(Integer idGerenciaRegional)
 			throws ErroRepositorioException {
 
@@ -9299,14 +8262,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC1160] Processar Comando Gerado Carta Tarifa Social
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 24/03/2011
-	 * 
-	 * @throws ControladorException
-	 */
 	public Collection pesquisarLocalidadesPorUnidadeNegocio(
 			Integer idUnidadeNegocio) throws ErroRepositorioException {
 
@@ -9333,14 +8288,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC1160] Processar Comando Gerado Carta Tarifa Social
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 24/03/2011
-	 * 
-	 * @throws ControladorException
-	 */
 	public Collection pesquisarLocalidade() throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
@@ -9366,14 +8313,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC1160] Processar Comando Gerado Carta Tarifa Social
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 24/03/2011
-	 * 
-	 * @throws ControladorException
-	 */
 	public TarifaSocialMotivoCarta pesquisarTarifaSocialMotivoCarta(
 			Integer idTarifaSocialMotivoCarta) throws ErroRepositorioException {
 
@@ -9402,14 +8341,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC1160] Processar Comando Gerado Carta Tarifa Social
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 02/05/2011
-	 * 
-	 * @throws ControladorException
-	 */
 	public Collection pesquisarLocalidadesPorGerenciaEUnidade(
 			Integer idGerenciaRegional, Integer idUnidadeNegocio)
 			throws ErroRepositorioException {
@@ -9439,16 +8370,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**
-	 * [UC1170] Gerar Relatório Acesso ao SPC
-	 * 
-	 * @author: Diogo Peixoto
-	 * @date: 06/05/2011
-	 * 
-	 * @param FiltrarRelatorioAcessoSPCHelper
-	 * @return Collection<Object[]>
-	 * @throws ErroRepositorioException
-	 */
 	public Collection<Object[]> filtrarRelatorioAcessoSPC(
 			FiltrarRelatorioAcessoSPCHelper filtro)
 			throws ErroRepositorioException {
@@ -9527,15 +8448,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 	
-	/**
-     * Obtém a coleção de categorias.
-     * 
-     * @author Hugo Azevedo
-     * @date 22/06/2011
-     * 
-     * @throws ErroRepositorioException
-     */
-	
 	public Collection obterCategorias() throws ErroRepositorioException{
 		
 		Session session = HibernateUtil.getSession();
@@ -9555,15 +8467,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 		
 	}
-	
-	/**
-     * Obtém a coleção de perfis dos imóveis.
-     * 
-     * @author Hugo Azevedo
-     * @date 22/06/2011
-     * 
-     * @throws ErroRepositorioException
-     */
 	
 	public Collection obterPerfisImoveis() throws ErroRepositorioException{
 		
@@ -9585,17 +8488,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		}		
 		return retorno;
 	}
-	
 
-
-	/**
-	 * [UC1182] Recepcionar Arquivo TXT Encerramento OS Cobrança
-	 * 
-	 * Consulta chamada pelo "[FS0010 – Validar Identificação do Usuário.]" 
-	 * 
-	 * @author Mariana Victor
-	 * @data 21/06/2011
-	 */
 	public Boolean verificarIdentificacaoUsuario(Integer idUsuario) throws ErroRepositorioException {
 		
 		Integer retorno = null;
@@ -9627,14 +8520,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		
 	}
 
-	/**
-	 * [UC1182] Recepcionar Arquivo TXT Encerramento OS Cobrança
-	 * 
-	 * Consulta chamada pelo "[FS0010 – Validar Identificação do Usuário.]" 
-	 * 
-	 * @author Mariana Victor
-	 * @data 21/06/2011
-	 */
 	public Boolean verificarUsuarioEmpresaComandoCobranca(Integer idUsuario, Integer idComando) throws ErroRepositorioException {
 		
 		Integer retorno = null;
@@ -9670,14 +8555,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		
 	}
 
-	/**
-	 * [UC1182] Recepcionar Arquivo TXT Encerramento OS Cobrança
-	 * 
-	 * Pesquisa o email da Empresa 
-	 * 
-	 * @author Mariana Victor
-	 * @data 22/06/2011
-	 */
 	public String pesquisarEmailEmpresa(Integer idEmpresa) throws ErroRepositorioException {
 
 		String retorno = null;
@@ -9703,14 +8580,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 	
-	/**
-	 * [UC34] Importância Logradouro
-	 * 
-	 * Atualiza a Importância do Logradouro
-	 * 
-	 * @author Fernanda Almeida
-	 * @data 30/06/2011
-	 */
 	public void atualizarGrauImportancia(Integer idLogradouro, Integer grauImportancia)
 	throws ErroRepositorioException {
 
@@ -9734,17 +8603,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		}
 	}
 	
-	/**
-	 * [MA2011061013]
-	 * 
-	 * @author Paulo Diniz
-	 * @date 02/07/2011
-	 * 
-	 * @param idImovel
-	 * 
-	 * @return HidrometroMovimentado
-	 * @throws ErroRepositorioException
-	 */
 	public List<HidrometroInstalacaoHistorico> pesquisarHidrometroPeloIdImovel(Integer idImovel) throws ErroRepositorioException{
 		Session session = HibernateUtil.getSession();
 		List<HidrometroInstalacaoHistorico> retorno = null;
@@ -9765,18 +8623,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 
-	/**TODO: COSANPA
-	 * @author Wellington Rocha
-	 * Data: 21/03/2012
-	 * 
-	 * Pesquisar todas as ocorrencias de cadastro ativas
-	 * 
-	 * Geração de Rotas para Recadastramento
-	 * 
-	 * @return Collection
-	 * @throws ControladorException
-	 *  
-	 */
  	public Collection<CadastroOcorrencia> pesquisarOcorrenciasCadastro() throws ErroRepositorioException {
  		Collection retorno = null;
  		
@@ -9799,18 +8645,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
  		return retorno;
  	}
  	
- 	/**TODO: COSANPA
-	 * @author Wellington Rocha
-	 * Data: 21/03/2012
-	 * 
-	 * Pesquisar todos os ramos de atividade ativos
-	 * 
-	 * Geração de Rotas para Recadastramento
-	 * 
-	 * @return Collection
-	 * @throws ControladorException
-	 *  
-	 */
  	public Collection pesquisarRamosAtividade() throws ErroRepositorioException {
  		Collection retorno = null;
  		
@@ -9833,18 +8667,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
  		return retorno;
  	}
  
- 	/**TODO: COSANPA
-	 * @author Wellington Rocha
-	 * Data: 21/03/2012
-	 * 
-	 * Pesquisar todos as fontes de abastecimento ativas
-	 * 
-	 * Geração de Rotas para Recadastramento
-	 * 
-	 * @return Collection
-	 * @throws ControladorException
-	 *  
-	 */
  	public Collection pesquisarFonteAbastecimento() throws ErroRepositorioException {
  		Collection retorno = null;
  		
@@ -9867,12 +8689,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
  		return retorno;
  	}
 
- 	/**
- 	 * TODO: COSANPA
- 	 * @author Matheus Souza
- 	 * @param idImovel
- 	 * @return Collection
- 	 */
 	public Collection obterImovelRamoAtividadeAtualizacaoCadastral(
 			Integer idImovel) throws ErroRepositorioException {
 		

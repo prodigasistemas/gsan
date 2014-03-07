@@ -510,8 +510,6 @@ public interface IControladorCadastro {
 
 	public List<HidrometroInstalacaoHistorico> pesquisarHidrometroPeloIdImovel(Integer idImovel) throws ControladorException;
 
-	public AtualizacaoCadastral carregarImovelAtualizacaoCadastral(BufferedReader buffer, ArrayList<String> nomesImagens) throws Exception;
-
 	public Collection<Integer> pesquisarRotasAtualizacaoCadastral(ImovelGeracaoTabelasTemporariasCadastroHelper helper) throws ControladorException;
 	
 	public Integer pesquisarIdSetorComercialPorCodigoELocalidade(Integer idLocalidade, Integer codigoSetor) throws ControladorException;
