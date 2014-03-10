@@ -16302,7 +16302,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 				Pagamento pagamento = iteratorPagamentos.next();
 
 				BigInteger pagamentoSituacaoAtual;
-				if (pagamento.getPagamentoSituacaoAtual() != null){
+				if (pagamento.getPagamentoSituacaoAtual() != null 
+						&& !pagamento.getPagamentoSituacaoAtual().getId().equals(pagamentoSituacao) ){
 					pagamentoSituacaoAtual = BigInteger.valueOf(pagamento.getPagamentoSituacaoAtual().getId());
 				}else{
 					pagamentoSituacaoAtual = null;
