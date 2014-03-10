@@ -4,7 +4,6 @@ import gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCada
 import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
-import gcom.util.ConstantesSistema;
 
 import java.util.Collection;
 
@@ -27,14 +26,11 @@ public class FiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction {
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionForm form = (FiltrarAlteracaoAtualizacaoCadastralActionForm) actionForm;
         
-		if (!existeParametroInformado(form)) {
+		if (!form.existeParametroInformado()) {
 			throw new ActionServletException("atencao.filtro.nenhum_parametro_informado");
 		}
 		
-		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro = new FiltrarAlteracaoAtualizacaoCadastralActionHelper(
-				form.getIdEmpresa(), form.getIdLeiturista(), form.getExibirCampos(), form.getColunaImoveisSelecionados(),
-				form.getIdLocalidadeInicial(), form.getCdSetorComercialInicial(), form.getCdRotaInicial(),
-				form.getIdLocalidadeFinal(), form.getCdSetorComercialFinal(), form.getCdRotaFinal());
+		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro = new FiltrarAlteracaoAtualizacaoCadastralActionHelper(form);
 		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> helper = fachada.pesquisarMovimentoAtualizacaoCadastral(filtro);
         
@@ -44,61 +40,5 @@ public class FiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction {
         sessao.setAttribute("colecaoConsultarMovimentoAtualizacaoCadastralHelper",helper);
 
 		return retorno;
-	}
-
-	private boolean existeParametroInformado(FiltrarAlteracaoAtualizacaoCadastralActionForm form) {
-		boolean peloMenosUmParametroInformado = false;
-
-		if (form.getIdEmpresa() != null
-				&& !form.getIdEmpresa().trim().equals(
-						"" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
-			peloMenosUmParametroInformado = true;
-		}
-
-		if (form.getIdLeiturista() != null
-				&& !form.getIdLeiturista().equals("")) {
-			peloMenosUmParametroInformado = true;
-		}
-
-		if (form.getIdLocalidadeInicial() != null
-				&& !form.getIdLocalidadeInicial().equals("")) {
-			peloMenosUmParametroInformado = true;
-		}
-
-		if (form.getCdSetorComercialInicial() != null
-				&& !form.getCdSetorComercialInicial().equals("")) {
-			peloMenosUmParametroInformado = true;
-		}
-
-		if (form.getCdRotaInicial() != null
-				&& !form.getCdRotaInicial().equals("")) {
-			peloMenosUmParametroInformado = true;
-		}
-
-		if (form.getIdLocalidadeFinal() != null
-				&& !form.getIdLocalidadeFinal().equals("")) {
-			peloMenosUmParametroInformado = true;
-		}
-
-		if (form.getCdSetorComercialFinal() != null
-				&& !form.getCdSetorComercialFinal().equals("")) {
-			peloMenosUmParametroInformado = true;
-		}
-
-		if (form.getCdRotaFinal() != null && !form.getCdRotaFinal().equals("")) {
-			peloMenosUmParametroInformado = true;
-		}
-
-		if (form.getExibirCampos() != null
-				&& !form.getExibirCampos().equals("")) {
-			peloMenosUmParametroInformado = true;
-		}
-
-		if (form.getColunaImoveisSelecionados() != null
-				&& !form.getColunaImoveisSelecionados().equals("")) {
-			peloMenosUmParametroInformado = true;
-		}
-
-		return peloMenosUmParametroInformado;
 	}
 }
