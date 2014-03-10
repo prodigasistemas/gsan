@@ -36,9 +36,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-/**
- * @author Administrador 
- */
 public interface IRepositorioCadastro {
 	
  	@SuppressWarnings("rawtypes")
