@@ -19,3 +19,7 @@ scripts/build/build_gcom_prod_batch.sh
 projects/migrations/environments/development.properties
 projects/migrations/environments/stage.properties
 projects/migrations/environments/production.properties
+projects/migrations/comercial/environments/development.properties
+projects/migrations/comercial/environments/stage.properties
+projects/migrations/comercial/environments/production.properties
+
