@@ -1464,8 +1464,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 		return retorno;
 	}
 
-	public Collection<ConsultarMovimentoAtualizacaoCadastralHelper> pesquisarMovimentoAtualizacaoCadastral(
-			FiltrarAlteracaoAtualizacaoCadastralActionHelper helper)throws ControladorException {
+	public Collection<ConsultarMovimentoAtualizacaoCadastralHelper> pesquisarMovimentoAtualizacaoCadastral(FiltrarAlteracaoAtualizacaoCadastralActionHelper helper)throws ControladorException {
 
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> retorno = null;
 
