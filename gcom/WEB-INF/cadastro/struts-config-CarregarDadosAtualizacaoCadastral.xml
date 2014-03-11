@@ -2,31 +2,37 @@
 <!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
 <struts-config>
 
-	
+	<form-beans>
+		<form-bean name="CarregarDadosAtualizacaoCadastralActionForm"
+			type="gcom.gui.cadastro.CarregarDadosAtualizacaoCadastralActionForm" />
+	</form-beans>
+
 	<!--******************* PÁGINAS GLOBAIS *******************-->
 	<global-forwards />
 	<action-mappings>
 
-		<action 
+		<action name="CarregarDadosAtualizacaoCadastralActionForm"
 			type="gcom.gui.cadastro.ExibirCarregarDadosAtualizacaoCadastralAction"
-			scope="request" 
-			path="/exibirCarregarDadosAtualizacaoCadastralAction">
+			scope="request" path="/exibirCarregarDadosAtualizacaoCadastralAction">
 			<forward name="CarregarDadosAtualizacaoCadastralAction"
 				path="/jsp/cadastro/carregar_dados_atualizacao_cadastral.jsp" />
 		</action>
-		
-		<action
+
+		<action name="CarregarDadosAtualizacaoCadastralActionForm"
 			type="gcom.gui.cadastro.CarregarDadosAtualizacaoCadastralAction"
-			validate="true" 
-			path="/carregarDadosAtualizacaoCadastralAction">
-			
+			validate="true" path="/carregarDadosAtualizacaoCadastralAction">
+
 			<forward name="CarregarDadosAtualizacaoCadastralAction"
 				path="/jsp/cadastro/carregar_dados_atualizacao_cadastral.jsp" />
+		</action>
+
+		<action name="CarregarDadosAtualizacaoCadastralActionForm"
+			type="gcom.gui.cadastro.atualizacaocadastral.GerarRelatorioInconsistenciasRetornoAtualizacaoCadastralAction"
+			path="/gerarRelatorioInconsistenciasRetornoAtualizacaoCadastralAction">
 		</action>
 
 	</action-mappings>
 
-	<message-resources null="false"
-		parameter="gcom.properties.application" />
-		
+	<message-resources null="false" parameter="gcom.properties.application" />
+
 </struts-config>
