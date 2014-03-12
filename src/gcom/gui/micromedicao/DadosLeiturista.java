@@ -1,5 +1,7 @@
 package gcom.gui.micromedicao;
 
+import gcom.micromedicao.Leiturista;
+
 import java.io.Serializable;
 
 public class DadosLeiturista implements Serializable,Comparable {
@@ -10,11 +12,21 @@ public class DadosLeiturista implements Serializable,Comparable {
 	
 	private String descricao;
 
+	public DadosLeiturista(Leiturista leiturista){
+		this.id = leiturista.getId();
+		if (leiturista.getFuncionario() != null) {
+			this.descricao = leiturista.getFuncionario().getNome();
+		} else {
+			this.descricao = leiturista.getCliente().getNome();
+		}
+	}
+	
 	/**
 	 * @param id
 	 * @param descricao
 	 */
 	public DadosLeiturista(Integer id, String descricao) {
+		
 		this.id = id;
 		this.descricao = descricao;
 	}

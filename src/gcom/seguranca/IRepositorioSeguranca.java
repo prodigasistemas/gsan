@@ -11,4 +11,6 @@ public interface IRepositorioSeguranca {
 	public List<TabelaAtualizacaoCadastral> pesquisaTabelaAtualizacaoCadastralPorImovel(Integer idImovel) throws ErroRepositorioException;
 
 	public List<TabelaColunaAtualizacaoCadastral> pesquisaTabelaColunaAtualizacaoCadastral(Integer idTabelaAtualizacaoCadastral) throws ErroRepositorioException;
+	
+	public void autorizarAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException;
 }

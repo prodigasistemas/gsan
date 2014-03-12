@@ -43,20 +43,20 @@
 			<band height="132"  isSplitAllowed="true" >
 				<staticText>
 					<reportElement
-						x="164"
-						y="9"
-						width="435"
+						x="117"
+						y="11"
+						width="545"
 						height="26"
 						key="staticText-1"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font pdfFontName="Courier-Bold" size="14" isBold="true"/>
+						<font pdfFontName="Courier" size="12" isBold="false"/>
 					</textElement>
-				<text><![CDATA[COMPANHIA DE SANEAMENTO DO PARÁ]]></text>
+				<text><![CDATA[GSAN - Sistema Integrado de Gestão de Serviços de Saneamento]]></text>
 				</staticText>
 				<image  evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="10"
+						x="20"
 						y="12"
 						width="84"
 						height="80"
@@ -95,16 +95,16 @@
 				</line>
 				<staticText>
 					<reportElement
-						x="126"
-						y="53"
-						width="527"
+						x="117"
+						y="45"
+						width="545"
 						height="32"
 						key="staticText-2"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font pdfFontName="Courier" size="12"/>
+						<font pdfFontName="Courier-Bold" size="12" isBold="true"/>
 					</textElement>
-				<text><![CDATA[RELATORIO DE IMÓVEIS POR SITUAÇÃO E PERÍODO - ATUALIZAÇÃO CADASTRAL]]></text>
+				<text><![CDATA[Relatório de Imóveis por Situação e Período - Atualização Cadastral]]></text>
 				</staticText>
 				<staticText>
 					<reportElement
@@ -253,7 +253,7 @@
 					<reportElement
 						x="0"
 						y="131"
-						width="783"
+						width="782"
 						height="0"
 						key="line-3"/>
 					<graphicElement stretchType="NoStretch"/>

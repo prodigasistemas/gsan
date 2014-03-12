@@ -215,6 +215,7 @@ import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.cadastro.imovel.ImovelProgramaEspecial;
 import gcom.cadastro.imovel.ImovelSituacao;
 import gcom.cadastro.imovel.ImovelSubcategoria;
+import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.imovel.bean.ImovelAbaCaracteristicasHelper;
 import gcom.cadastro.imovel.bean.ImovelAbaCaracteristicasRetornoHelper;
@@ -38959,18 +38960,6 @@ public class Fachada {
 				buffer, imagens);
 	}
 	
-	/**
-	 * 
-	 * [UC0889] - Alterar datas das leituras
-	 * 
-	 * Pesquisamos todos os dados necessários para a alteração das datas
-	 * 
-	 * @author bruno
-	 * @date 26/02/2009
-	 * 
-	 * @param idGrupoFaturamento
-	 * @return
-	 */
 	public Collection<AlterarDatasLeiturasHelper> pesquisarDadosAlterarGruposFaturamento(
 			Integer idGrupoFaturamento) {
 		try {
@@ -38982,18 +38971,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * 
-	 * [UC0889] - Alterar datas das leituras
-	 * 
-	 * Alteramos todos as datas informadas
-	 * 
-	 * @author bruno
-	 * @date 26/02/2009
-	 * 
-	 * @param idGrupoFaturamento
-	 * @return
-	 */
 	public void alterarDatasLeituras(
 			Collection<AlterarDatasLeiturasHelper> colHelper, Integer idGrupo) {
 		try {
@@ -39005,19 +38982,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0215] Consultar Posicao do Faturamento
-	 * 
-	 * Retorna as Leituras não registradas para o Consultar Posicao de
-	 * Faturamento
-	 * 
-	 * @author Vinicius Medeiros
-	 * @date 18/03/2009
-	 * 
-	 * @param faturamentoGrupo
-	 * @throws ErroRepositorioException
-	 * 
-	 */
 	public Collection retornarLeiturasNaoRegistradas(
 			FaturamentoGrupo faturamentoGrupo) {
 		try {
@@ -39029,14 +38993,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral
-	 * 
-	 * @author Ana Maria
-	 * @date 04/03/2009
-	 * 
-	 * @return Collection
-	 */
 	public Collection pesquisarArquivoTextoAtualizacaoCadastro(
 			String idEmpresa, String idLocalidade, String idAgenteComercial,
 			String idSituacaoTransmissao) {
@@ -39051,14 +39007,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral
-	 * 
-	 * @author Ana Maria
-	 * @date 04/03/2009
-	 * 
-	 * @return Collection
-	 */
 	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(
 			Integer idArquivoTxt) {
 		try {
@@ -39069,14 +39017,6 @@ public class Fachada {
 		}
 	}
 	
-	/**
-	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral
-	 * 
-	 * @author COSANPA - Felipe Santos
-	 * @date 04/12/2013
-	 * 
-	 * @return Collection
-	 */
 	public Collection<ArquivoTextoAtualizacaoCadastral> pesquisarArquivoTextoAtualizacaoCadastro(
 			String[] idsArquivoTxt) {
 		try {
@@ -39088,15 +39028,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * 
-	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral
-	 * 
-	 * @author Ana Maria
-	 * @date 05/03/2009
-	 * 
-	 * @return void
-	 */
 	public void atualizarArquivoTextoAtualizacaoCadstral(Integer idArquivoTxt) {
 		try {
 			this.getControladorCadastro()
@@ -39107,12 +39038,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Pesquisa os bancos q tem imoveis cadastrados em debito automatico
-	 * 
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	public Collection<Banco> pesquisarBancoDebitoAutomatico() {
 		try {
 			return this.getControladorArrecadacao()
@@ -39123,14 +39048,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0146] Manter Conta
-	 * 
-	 * FS0028 - Verificar parâmetro consulta e débito automático
-	 * 
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	public Collection pesquisarImoveisBancoDebitoAutomatico(String[] bancos) {
 		try {
 			return this.getControladorArrecadacao()
@@ -39171,12 +39088,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Consultar os dodos cliente usuário do Imovel
-	 * 
-	 * @author Arthur Carvalho
-	 * @date 12/03/2009
-	 */
 	public Object[] consultarDadosClienteUsuarioImovel(String idImovel) {
 		try {
 			return this.getControladorImovel()
@@ -39188,14 +39099,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Gerar Relatório de Imóveis Outros Critérios
-	 * 
-	 * @author Rômulo Aurelio
-	 * @date 13/03/2009
-	 * 
-	 * @throws ControladorException
-	 */
 	public Integer gerarRelatorioCadastroConsumidoresInscricaoCount(
 			String idImovelCondominio, String idImovelPrincipal,
 			String idSituacaoLigacaoAgua, String consumoMinimoInicialAgua,
@@ -39265,14 +39168,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Gerar Relatório de Imóveis Outros Critérios
-	 * 
-	 * @author Rômulo Aurelio
-	 * @date 13/03/2009
-	 * 
-	 * @throws ControladorException
-	 */
 	public Integer gerarRelatorioImovelEnderecoOutrosCriteriosCount(
 			String idImovelCondominio, String idImovelPrincipal,
 			String idSituacaoLigacaoAgua, String consumoMinimoInicialAgua,
@@ -53661,5 +53556,9 @@ public class Fachada {
 		}catch(ControladorException e) {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
+	}
+	
+	public Collection<ImovelSubcategoriaAtualizacaoCadastral> pesquisarSubCategoriasAtualizacaoCadastral(Integer idImovel) throws Exception{
+		return this.getControladorAtualizacaoCadastral().pesquisarSubCategoriasAtualizacaoCadastral(idImovel);
 	}
 }

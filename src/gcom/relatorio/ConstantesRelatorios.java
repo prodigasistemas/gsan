@@ -901,6 +901,8 @@ public class ConstantesRelatorios {
 	
 	public static final String RELATORIO_IMOVEIS_SITUACAO_PERIODO = "/relatorioImoveisSituacaoPeriodo.jasper";
 
+	public static final String RELATORIO_INCONSISTENCIAS_RETORNO_ATUALIZACAO_CADASTRAL = "/relatorioInconsistenciasRetornoAtualizacaoCadastral.jasper";
+
 	private static Map<String, URL> relatorios = new HashMap<String, URL>();
 	
 	static {

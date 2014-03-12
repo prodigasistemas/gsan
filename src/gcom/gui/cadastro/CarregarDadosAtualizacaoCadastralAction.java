@@ -15,7 +15,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.zip.ZipEntry;
@@ -26,12 +25,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
-import org.apache.commons.fileupload.DiskFileUpload;
-import org.apache.commons.fileupload.FileItem;
-import org.apache.commons.fileupload.FileUploadException;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.apache.struts.upload.FormFile;
 import org.jboss.logging.Logger;
 
 /**
@@ -50,102 +47,89 @@ public class CarregarDadosAtualizacaoCadastralAction extends GcomAction {
 			HttpServletResponse httpServletResponse) {
 
 		ActionForward retorno = actionMapping.findForward("telaSucesso");
-
-		DiskFileUpload upload = new DiskFileUpload();
-
-		List items = null;
-		try {
-			items = upload.parseRequest(httpServletRequest);
-		} catch (FileUploadException e) {
-			e.printStackTrace();
-			throw new ActionServletException("erro_arquivo_carregado");
-		}
-
-		String nomeArquivo = "";
 		
-		Iterator iterator = items.iterator();
+		CarregarDadosAtualizacaoCadastralActionForm form = (CarregarDadosAtualizacaoCadastralActionForm) actionForm;
 
-		while (iterator.hasNext()) {
-			FileItem item = (FileItem) iterator.next();
+		FormFile arquivo = form.getArquivo();
+		
+		String nomeArquivoTxt = "";
+		
+			String nomeItem = arquivo.getFileName().toUpperCase();
 
-			if (!item.isFormField()) {
-				String nomeItem = item.getName().toUpperCase();
+			if (nomeItem.endsWith(".ZIP")) {
+				try {
+					ZipInputStream zipInputStream = new ZipInputStream(arquivo.getInputStream());
 
-				if (nomeItem.endsWith(".ZIP")) {
-					try {
-						ZipInputStream zipInputStream = new ZipInputStream(item.getInputStream());
+					ZipEntry zipEntry = null;
+					BufferedReader buffer = null;
+					List<String> imagens = new ArrayList<String>();
 
-						ZipEntry zipEntry = null;
-						BufferedReader buffer = null;
-						List<String> imagens = new ArrayList<String>();
-
-						while ((zipEntry = zipInputStream.getNextEntry()) != null) {
-							if (zipEntry.getName().startsWith("__")) {
-								continue;
-							}
-
-							if (zipEntry.getName().endsWith(".txt")) {
-								
-								nomeArquivo = zipEntry.getName().substring(0, 10);
-								
-								System.out.println("Descompactando " + zipEntry.getName());
-								
-								buffer = this.lerArquivoTxt(buffer, zipInputStream, zipEntry);
-								
-							} else if (zipEntry.getName().endsWith(".jpeg")
-									|| zipEntry.getName().endsWith(".jpg")
-									|| zipEntry.getName().endsWith(".png")) {
-
-								imagens = this.lerImagem(zipInputStream, zipEntry, imagens, nomeArquivo);
-							}
+					while ((zipEntry = zipInputStream.getNextEntry()) != null) {
+						if (zipEntry.getName().startsWith("__")) {
+							continue;
 						}
 
-						AtualizacaoCadastral atualizacao =  Fachada.getInstancia().carregarImovelAtualizacaoCadastral(buffer, imagens);
-						
-						if (atualizacao.existeErroNoArquivo()){
-							HttpSession sessao = httpServletRequest.getSession(false);
-							Map<String, List<String>> mapErros = new HashMap<String, List<String>>();
+						if (zipEntry.getName().endsWith(".txt")) {
 							
-							for (AtualizacaoCadastralImovel imovel: atualizacao.getImoveisComErro()){
-								List<String> erros = mapErros.get(String.valueOf(imovel.getMatricula()));
-								if (erros == null){
-									erros = new ArrayList<String>();
-									mapErros.put(String.valueOf(imovel.getMatricula()), erros);
-								}
-								erros.addAll(imovel.getMensagensErro());
-							}
+							nomeArquivoTxt = zipEntry.getName().substring(0, 10);
 							
-							httpServletRequest.setAttribute("colecaoErrosCadastro", mapErros);
-							httpServletRequest.setAttribute("nomeArquivo", atualizacao.getArquivoTexto().getDescricaoArquivo());
-							httpServletRequest.setAttribute("totalImoveis", atualizacao.getTotalImoveis());
-							httpServletRequest.setAttribute("totalImoveisComErro", atualizacao.getTotalImoveisComErro());
+							System.out.println("Descompactando " + zipEntry.getName());
 							
-							retorno = actionMapping.findForward("CarregarDadosAtualizacaoCadastralAction");
+							buffer = this.lerArquivoTxt(buffer, zipInputStream, zipEntry);
+							
+						} else if (zipEntry.getName().endsWith(".jpeg")
+								|| zipEntry.getName().endsWith(".jpg")
+								|| zipEntry.getName().endsWith(".png")) {
+
+							imagens = this.lerImagem(zipInputStream, zipEntry, imagens, nomeArquivoTxt);
 						}
-						
-						zipInputStream.close();
-					}catch (Exception e) {
-						if (e instanceof EJBException){
-							Throwable t = ((EJBException) e).getCausedByException();
-							if (t instanceof BaseRuntimeException){
-								throw new ActionServletException(t.getMessage(), ((BaseRuntimeException) t).getParametros());
-							}
-						}
-						logger.error("Erro ao carregar arquivo de atualizacao.");
-						throw new ActionServletException("atencao.erro_arquivo_carregado");
 					}
-				} else {
-					throw new ActionServletException("atencao.arquivo_zip_nao_encontrado");
+
+					AtualizacaoCadastral atualizacao =  Fachada.getInstancia().carregarImovelAtualizacaoCadastral(buffer, imagens);
+					
+					if (atualizacao.existeErroNoArquivo()){
+						HttpSession sessao = httpServletRequest.getSession(false);
+						Map<String, List<String>> mapErros = new HashMap<String, List<String>>();
+						
+						for (AtualizacaoCadastralImovel imovel: atualizacao.getImoveisComErro()){
+							List<String> erros = mapErros.get(String.valueOf(imovel.getMatricula()));
+							if (erros == null){
+								erros = new ArrayList<String>();
+								mapErros.put(String.valueOf(imovel.getMatricula()), erros);
+							}
+							erros.addAll(imovel.getMensagensErro());
+						}
+						
+						httpServletRequest.setAttribute("mapErros", mapErros);
+						
+						form.setColecaoErrosCadastro(mapErros);
+						form.setNomeArquivo(arquivo.getFileName());
+						form.setTotalImoveis(atualizacao.getTotalImoveis() + "");
+						form.setTotalImoveisComErro(atualizacao.getTotalImoveisComErro() + "");
+						
+						retorno = actionMapping.findForward("CarregarDadosAtualizacaoCadastralAction");
+					}
+					
+					zipInputStream.close();
+				}catch (Exception e) {
+					if (e instanceof EJBException){
+						Throwable t = ((EJBException) e).getCausedByException();
+						if (t instanceof BaseRuntimeException){
+							throw new ActionServletException(t.getMessage(), ((BaseRuntimeException) t).getParametros());
+						}
+					}
+					logger.error("Erro ao carregar arquivo de atualizacao.");
+					throw new ActionServletException("atencao.erro_arquivo_carregado");
 				}
+			} else {
+				throw new ActionServletException("atencao.arquivo_zip_nao_encontrado");
 			}
-		}
 
 		montarPaginaSucesso(httpServletRequest,
 				"Arquivo carregado com sucesso.", "Carregar outro arquivo",
 				"exibirCarregarDadosAtualizacaoCadastralAction.do?menu=sim");
 
 		return retorno;
-
 	}
 
 	private List<String> lerImagem(ZipInputStream zipInputStream,

@@ -8,8 +8,8 @@ import org.apache.commons.lang.StringUtils;
 
 public class ValidadorTipoEnderecoCommand extends ValidadorCommand{
 
-	private final String MSG_TIPO_ENDERECO_RESPONSAVEL = "Tipo de Endereço do responsável inválido.";
-	private final String MSG_TIPO_ENDERECO_PROPRIETARIO = "Tipo de Endereço do proprietário inválido.";
+	private final String MSG_TIPO_ENDERECO_RESPONSAVEL = "Tipo de Endereço do responsável inválido";
+	private final String MSG_TIPO_ENDERECO_PROPRIETARIO = "Tipo de Endereço do proprietário inválido";
 	
 	public ValidadorTipoEnderecoCommand(AtualizacaoCadastralImovel imovelAtual, Map<String, String> linha) {
 		super(imovelAtual, linha);

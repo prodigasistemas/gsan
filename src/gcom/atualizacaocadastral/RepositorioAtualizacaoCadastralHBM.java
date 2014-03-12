@@ -6,6 +6,7 @@ import gcom.cadastro.imovel.IImovel;
 import gcom.cadastro.imovel.IImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoria;
+import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
 
@@ -485,4 +486,30 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		
 		return listaIds;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<ImovelSubcategoriaAtualizacaoCadastral> pesquisarSubCategoriasAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException {
+		Collection<ImovelSubcategoriaAtualizacaoCadastral> retorno = null;
+
+		Session session = HibernateUtil.getSession();
+
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+			consulta.append("select sub ")
+				.append(" from ImovelSubcategoriaAtualizacaoCadastral sub ")
+				.append(" where sub.imovel.id = :idImovel");
+
+			retorno = session.createQuery(consulta.toString())
+					.setInteger("idImovel",	idImovel.intValue())
+					.list();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+
+	}	
 }

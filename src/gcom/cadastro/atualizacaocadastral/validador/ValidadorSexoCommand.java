@@ -8,9 +8,9 @@ import org.apache.commons.lang.StringUtils;
 
 public class ValidadorSexoCommand extends ValidadorCommand {
 
-	private final String MSG_SEXO_USUARIO = "Sexo de usuário inválido.";
-	private final String MSG_SEXO_PROPRIETARIO = "Sexo de proprietário inválido.";
-	private final String MSG_SEXO_RESPONSAVEL = "Sexo de responsável inválido.";
+	private final String MSG_SEXO_USUARIO = "Sexo de usuário inválido";
+	private final String MSG_SEXO_PROPRIETARIO = "Sexo de proprietário inválido";
+	private final String MSG_SEXO_RESPONSAVEL = "Sexo de responsável inválido";
 	
 	public ValidadorSexoCommand(AtualizacaoCadastralImovel cadastroImovel, Map<String, String> linha) {
 		super(cadastroImovel, linha);

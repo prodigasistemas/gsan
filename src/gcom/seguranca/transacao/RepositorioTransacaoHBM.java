@@ -686,19 +686,19 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 		try {
 			StringBuilder sql = new StringBuilder();
 			sql.append("select distinct tatc.tatc_cdimovel as idImovel ")
-			.append(" , tatc.altp_id as tipoAlteracao")
-			.append(" , func.func_nmfuncionario as nomeFuncionario")
-			.append(" , tatc.tatc_icautorizado as icAutorizado")
-			.append(" from seguranca.tab_atlz_cadastral tatc ")
-			.append(" inner join seguranca.operacao_efetuada opef on(opef.opef_id = tatc.opef_id)")
-			.append(" left join seguranca.tab_col_atlz_cadastral tcac on (tatc.tatc_id = tcac.tatc_id)")
-			.append(" inner join cadastro.arquivo_texto_atlz_cad txac on(tatc.txac_id = txac.txac_id)")
-			.append(" inner join micromedicao.rota rota on(rota.rota_id = txac.rota_id)")
-			.append(" inner join micromedicao.leiturista leit on(tatc.leit_id = leit.leit_id)")
-			.append(" left join cadastro.funcionario func on(leit.func_id = func.func_id)")
-			.append(" left join cadastro.cliente clie on(leit.clie_id = clie.clie_id)")
-			.append(" left join atualizacaocadastral.imovel_controle_atlz_cad ctrl on (ctrl.imov_id = tatc.tatc_cdimovel)") 
-			.append(" where ctrl.siac_id = :situacao");
+				.append(" , tatc.altp_id as tipoAlteracao")
+				.append(" , func.func_nmfuncionario as nomeFuncionario")
+				.append(" , tatc.tatc_icautorizado as icAutorizado")
+				.append(" from seguranca.tab_atlz_cadastral tatc ")
+				.append(" inner join seguranca.operacao_efetuada opef on(opef.opef_id = tatc.opef_id)")
+				.append(" left join seguranca.tab_col_atlz_cadastral tcac on (tatc.tatc_id = tcac.tatc_id)")
+				.append(" inner join cadastro.arquivo_texto_atlz_cad txac on(tatc.txac_id = txac.txac_id)")
+				.append(" inner join micromedicao.rota rota on(rota.rota_id = txac.rota_id)")
+				.append(" inner join micromedicao.leiturista leit on(tatc.leit_id = leit.leit_id)")
+				.append(" left join cadastro.funcionario func on(leit.func_id = func.func_id)")
+				.append(" left join cadastro.cliente clie on(leit.clie_id = clie.clie_id)")
+				.append(" left join atualizacaocadastral.imovel_controle_atlz_cad ctrl on (ctrl.imov_id = tatc.tatc_cdimovel)") 
+				.append(" where ctrl.siac_id = :situacao");
 
 			if (StringUtils.isNotEmpty(filtroHelper.getIdLocalidadeInicial())) {
 				sql.append(" and txac.loca_id between " + filtroHelper.getIdLocalidadeInicial() + " and " + filtroHelper.getIdLocalidadeFinal());
@@ -716,7 +716,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				sql.append(" and leit.empr_id = " + filtroHelper.getIdEmpresa());
 			}
 
-			if (StringUtils.isNotEmpty(filtroHelper.getIdLeiturista())) {
+			if (StringUtils.isNotEmpty(filtroHelper.getIdLeiturista()) && StringUtils.isNumeric(filtroHelper.getIdLeiturista()) && Integer.valueOf(filtroHelper.getIdLeiturista()) > 0) {
 				sql.append(" and leit.leit_id = " + filtroHelper.getIdLeiturista());
 			}
 
