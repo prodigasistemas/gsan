@@ -18,6 +18,7 @@
 	<property name="nomeWAR" value="${jboss.deploy}/gcom.ear/gcom.war" />
 	<property name="jboss.client.home" value="${jboss.home}/client" />
 	<property name="Struts.home" value="lib/Struts1.1" />
+	<property name="deploy.lib.dir" value="lib/deploy" />
 	<property name="Servlet.home" value="lib/Servlet" />
 	<property name="MenuTagLib.home" value="lib/MenuTagLib" />
 	<property name="JasperReports.home" value="lib/JasperReports 1.2.2" />
@@ -84,6 +85,7 @@
 		<pathelement location="${PagerTagLib.home}/pager-taglib.jar" />
 		<pathelement location="${JAF.home}/activation.jar" />
 		<pathelement location="${JavaMail.home}/mail.jar" />
+		<pathelement location="${Axis.home}/commons-httpclient-3.1.jar" />
 		<pathelement location="/reports" />
 
 	</path>
@@ -171,6 +173,9 @@
 				<include name="*.jar" />
 			</fileset>
 			<fileset dir="${JavaHelp.home}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${deploy.lib.dir}">
 				<include name="*.jar" />
 			</fileset>
 		</copy>

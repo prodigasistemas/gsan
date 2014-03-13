@@ -2192,21 +2192,7 @@ public class ControladorAcessoSEJB implements SessionBean {
 	}
 	
 	
-	/**
-	 * Metódo responsável por criar a arvore do menu com todas as permissões do
-	 * usuário de acordo com os grupos que o usuário pertence.
-	 * 
-	 * [UC0287] - Efetuar Login
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 04/07/2006
-	 * 
-	 * @param permissoesUsuario
-	 * @return
-	 * @throws ControladorException
-	 */
-	public FuncionalidadeCategoria pesquisarArvoreFuncionalidades(Integer modulo) 
-		throws ControladorException {
+	public FuncionalidadeCategoria pesquisarArvoreFuncionalidades(Integer modulo) throws ControladorException {
 
 		// Obtém a lista de todas as funcionalidades do sistema
 		Collection funcionalidades = null;
@@ -2246,24 +2232,6 @@ public class ControladorAcessoSEJB implements SessionBean {
 		return menu;
 	}
 
-	/**
-	 * Metódo responsável por atualizar as datas de expiração do login do
-	 * usuário assim como definir uma nova senha para o login
-	 * 
-	 * 
-	 * [UC0289] Efetuar Alteração da Senha
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 13/07/2006
-	 * 
-	 * @param usuarioLogado
-	 * @param dataNascimentoString
-	 * @param cpf
-	 * @param lembreteSenha
-	 * @param novaSenha
-	 * @param confirmacaoNovaSenha
-	 * @throws ControladorException
-	 */
 	public void efetuarAlteracaoSenha(Usuario usuarioLogado,
 			String dataNascimentoString, String cpf, String lembreteSenha,
 			String novaSenha, String confirmacaoNovaSenha)
