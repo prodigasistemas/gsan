@@ -14,7 +14,7 @@ public class ValidadorTamanhoLinhaRamoAtividadeCommand extends ValidadorCommand 
 	@Override
 	public void execute() {
 		if (parser.getFonte().length() != 12){
-			cadastroImovel.addMensagemErroLayout("Linha Tipo 03 (Ramo de Atividade) não compatível com o Layout.");
+			cadastroImovel.addMensagemErroLayout("Linha Tipo 03 (Ramo de Atividade) não compatível com o Layout");
 		}
 	}
 }
