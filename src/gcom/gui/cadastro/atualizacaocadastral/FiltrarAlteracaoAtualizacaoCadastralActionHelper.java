@@ -27,23 +27,18 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 
 	public FiltrarAlteracaoAtualizacaoCadastralActionHelper() {
 	}
-
-	public FiltrarAlteracaoAtualizacaoCadastralActionHelper(String idEmpresa,
-			String idLeiturista, String exibirCampos,
-			String[] colunaImoveisSelecionados, String idLocalidadeInicial,
-			String cdSetorComercialInicial, String cdRotaInicial,
-			String idLocalidadeFinal, String cdSetorComercialFinal,
-			String cdRotaFinal) {
-		this.idEmpresa = idEmpresa;
-		this.idLeiturista = idLeiturista;
-		this.exibirCampos = exibirCampos;
-		this.colunaImoveisSelecionados = colunaImoveisSelecionados;
-		this.idLocalidadeInicial = idLocalidadeInicial;
-		this.cdSetorComercialInicial = cdSetorComercialInicial;
-		this.cdRotaInicial = cdRotaInicial;
-		this.idLocalidadeFinal = idLocalidadeFinal;
-		this.cdSetorComercialFinal = cdSetorComercialFinal;
-		this.cdRotaFinal = cdRotaFinal;
+	
+	public FiltrarAlteracaoAtualizacaoCadastralActionHelper(FiltrarAlteracaoAtualizacaoCadastralActionForm form){
+		this.idEmpresa = form.getIdEmpresa();
+		this.idLeiturista = form.getIdLeiturista();
+		this.exibirCampos = form.getExibirCampos();
+		this.colunaImoveisSelecionados = form.getColunaImoveisSelecionados();
+		this.idLocalidadeInicial = form.getIdLocalidadeInicial();
+		this.cdSetorComercialInicial = form.getCdSetorComercialInicial();
+		this.cdRotaInicial = form.getCdRotaInicial();
+		this.idLocalidadeFinal = form.getIdLocalidadeFinal();
+		this.cdSetorComercialFinal = form.getCdSetorComercialFinal();
+		this.cdRotaFinal = form.getCdRotaFinal();
 	}
 
 	public String getIdEmpresa() {

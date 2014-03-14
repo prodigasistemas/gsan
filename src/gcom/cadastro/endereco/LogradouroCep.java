@@ -295,5 +295,4 @@ public class LogradouroCep extends ObjetoTransacao {
 	public boolean hasUnidadeFederacao() {
 		return hasLogradouro() && logradouro.getMunicipio() != null && logradouro.getMunicipio().hasUnidadeFederacao();
 	}
-	
 }

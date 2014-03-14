@@ -2,6 +2,7 @@ package gcom.seguranca;
 
 import gcom.seguranca.transacao.TabelaAtualizacaoCadastral;
 import gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral;
+import gcom.util.ConstantesSistema;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
 
@@ -34,7 +35,7 @@ public class RepositorioSegurancaHBM implements IRepositorioSeguranca {
 			return (List<TabelaAtualizacaoCadastral>) session.createQuery(consulta)
 					.setInteger("idImovel", idImovel).list();
 		}catch(HibernateException e) {
-			throw new ErroRepositorioException("Erro no Hibernate");
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
@@ -50,10 +51,27 @@ public class RepositorioSegurancaHBM implements IRepositorioSeguranca {
 			return (List<TabelaColunaAtualizacaoCadastral>) session.createQuery(consulta)
 					.setInteger("idTabelaAtualizacaoCadastral", idTabelaAtualizacaoCadastral).list();
 		}catch(HibernateException e) {
-			throw new ErroRepositorioException("Erro no Hibernate");
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
 	}
 
+	public void autorizarAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append(" UPDATE TabelaAtualizacaoCadastral t ")
+				.append(" SET t.indicadorAutorizado = :autorizacao ")
+				.append(" WHERE t.codigoImovel = :idImovel ");
+			session.createQuery(sql.toString())
+				.setShort("autorizacao", ConstantesSistema.SIM)
+				.setInteger("idImovel", idImovel)
+				.executeUpdate();
+		}catch(HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
 }

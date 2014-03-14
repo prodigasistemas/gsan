@@ -128,4 +128,9 @@ public class ImovelSubcategoriaAtualizacaoCadastral extends ObjetoTransacao impl
 	public void setCategoria(Categoria categoria) {
 		this.categoria = categoria;
 	}
+
+	public String toString() {
+		return "ImovelSubcategoriaAtualizacaoCadastral [descricaoCategoria=" + descricaoCategoria + ", descricaoSubcategoria=" + descricaoSubcategoria
+				+ ", quantidadeEconomias=" + quantidadeEconomias + "]";
+	}
 }

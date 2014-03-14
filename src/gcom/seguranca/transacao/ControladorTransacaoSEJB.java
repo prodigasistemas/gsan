@@ -69,6 +69,8 @@ import gcom.micromedicao.hidrometro.HidrometroLocalInstalacao;
 import gcom.micromedicao.hidrometro.HidrometroMarca;
 import gcom.micromedicao.hidrometro.HidrometroProtecao;
 import gcom.seguranca.AtributoGrupo;
+import gcom.seguranca.IRepositorioSeguranca;
+import gcom.seguranca.RepositorioSegurancaHBM;
 import gcom.seguranca.acesso.FiltroOperacao;
 import gcom.seguranca.acesso.FiltroOperacaoTabela;
 import gcom.seguranca.acesso.Operacao;
@@ -127,6 +129,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 	private IRepositorioTransacao repositorioTransacao = null;
 	private IRepositorioCadastro repositorioCadastro = null;
 	private IRepositorioAtualizacaoCadastral repositorioAtualizacaoCadastral = null;
+	private IRepositorioSeguranca repositorioSeguranca = null;
 
 	SessionContext sessionContext;
 
@@ -141,6 +144,8 @@ public class ControladorTransacaoSEJB implements SessionBean {
 		repositorioTransacao            = RepositorioTransacaoHBM.getInstancia();
 		repositorioCadastro             = RepositorioCadastroHBM.getInstancia();
 		repositorioAtualizacaoCadastral = RepositorioAtualizacaoCadastralHBM.getInstancia();
+		repositorioSeguranca            = RepositorioSegurancaHBM.getInstancia();
+		
 	}
 
 	/**
@@ -1459,8 +1464,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 		return retorno;
 	}
 
-	public Collection<ConsultarMovimentoAtualizacaoCadastralHelper> pesquisarMovimentoAtualizacaoCadastral(
-			FiltrarAlteracaoAtualizacaoCadastralActionHelper helper)throws ControladorException {
+	public Collection<ConsultarMovimentoAtualizacaoCadastralHelper> pesquisarMovimentoAtualizacaoCadastral(FiltrarAlteracaoAtualizacaoCadastralActionHelper helper)throws ControladorException {
 
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> retorno = null;
 
@@ -1494,6 +1498,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 			if (!existePendencia){
 				repositorioCadastro.liberarCadastroImovel(idImovel);
 				repositorioAtualizacaoCadastral.liberarCadastroImovel(idImovel);
+				repositorioSeguranca.autorizarAtualizacaoCadastral(idImovel);
 			}
 							
 			// caso o indicador seja para autorizar a atualização vinda do celular
