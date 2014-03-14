@@ -46,7 +46,7 @@ public class ClienteRetorno implements ICliente {
 		this.email = cliente.getEmail();
 		this.unidadeFederacao = cliente.getUnidadeFederacao();
 		this.pessoaSexo = cliente.getPessoaSexo();
-		
+		this.tipoOperacao = cliente.getTipoOperacao();
 		this.clienteTipo = new ClienteTipo(cliente.getIdClienteTipo());
 		this.cliente = new Cliente(cliente.getIdCliente());
 	}

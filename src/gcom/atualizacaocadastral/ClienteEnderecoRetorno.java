@@ -3,6 +3,9 @@ package gcom.atualizacaocadastral;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.IClienteAtualizacaoCadastral;
 import gcom.cadastro.endereco.EnderecoTipo;
+import gcom.cadastro.endereco.Logradouro;
+import gcom.cadastro.endereco.LogradouroBairro;
+import gcom.cadastro.endereco.LogradouroCep;
 
 import java.util.Date;
 
@@ -119,5 +122,45 @@ public class ClienteEnderecoRetorno implements IClienteEndereco {
 
 	public void setIdClienteRetorno(Integer idClienteRetorno) {
 		this.idClienteRetorno = idClienteRetorno;
+	}
+
+	public LogradouroCep getLogradouroCep() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setLogradouroCep(LogradouroCep logradouroCep) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public LogradouroBairro getLogradouroBairro() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setLogradouroBairro(LogradouroBairro logradouroBairro) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Logradouro getPerimetroInicial() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void getPerimetroInicial(Logradouro perimetroInicial) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Logradouro getPerimetroFinal() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setPerimetroFinal(Logradouro perimetroFinal) {
+		// TODO Auto-generated method stub
+		
 	}
 }

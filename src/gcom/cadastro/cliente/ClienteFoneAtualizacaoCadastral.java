@@ -184,4 +184,14 @@ public class ClienteFoneAtualizacaoCadastral  extends ObjetoTransacao implements
 			foneTipo.setId(idFoneTipo);
 		}
 	}
+
+	public Short getIndicadorTelefonePadrao() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setIndicadorTelefonePadrao(Short indicadorTelefonePadrao) {
+		// TODO Auto-generated method stub
+		
+	}
 }

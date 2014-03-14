@@ -61,5 +61,17 @@ public interface IRepositorioAtualizacaoCadastral {
 
 	public Collection<ImovelControleAtualizacaoCadastral> obterImoveisControle(Collection<IImovel> listaImoveisRetorno);
 	
+	public ImovelControleAtualizacaoCadastral obterImovelControle(Integer idImovelRetorno);
+	
 	public Collection<ImovelSubcategoriaAtualizacaoCadastral> pesquisarSubCategoriasAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException;
+	
+	public Collection<ClienteImovelRetorno> obterClientesParaAtualizar(Integer tipoOperacao) throws ErroRepositorioException;
+	
+	public ICliente pesquisarClienteRetorno(ClienteImovelRetorno clienteImovel) throws ErroRepositorioException;
+	
+	public IImovel pesquisarImovelRetorno(Integer idImovel) throws ErroRepositorioException;
+	
+	public Collection<IClienteFone> pesquisarClienteFoneRetorno(Integer idCliente) throws ErroRepositorioException;
+	
+	public Collection<IClienteEndereco> pesquisarClienteEnderecoRetorno(Integer idCliente) throws ErroRepositorioException;
 }

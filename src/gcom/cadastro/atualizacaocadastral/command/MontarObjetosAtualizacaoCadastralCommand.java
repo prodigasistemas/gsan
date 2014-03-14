@@ -229,6 +229,8 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 
 	private void salvarCliente(int matricula, Short clienteRelacaoTipo, IClienteAtualizacaoCadastral clienteTxt, String telefone, String celular, Integer tipoOperacao) throws ControladorException {
 		
+		clienteTxt.setTipoOperacao(tipoOperacao);
+		
 		Integer idclienteRetorno = salvarClienteRetorno(clienteTxt);
 		salvarClienteImovelRetorno(clienteTxt, matriculaImovel, idclienteRetorno);
 		
