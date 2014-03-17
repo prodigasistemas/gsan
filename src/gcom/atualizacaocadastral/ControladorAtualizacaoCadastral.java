@@ -726,6 +726,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			for (ClienteImovelRetorno clienteImovelRetorno : clientesImovelInclusao) {
 				ICliente clienteRetorno = repositorioAtualizacaoCadastral.pesquisarClienteRetorno(clienteImovelRetorno);
 				IImovel imovelRetorno = repositorioAtualizacaoCadastral.pesquisarImovelRetorno(clienteImovelRetorno.getIdImovelRetorno());
+				
 				Collection<IClienteFone> colecaoClienteFoneRetorno = repositorioAtualizacaoCadastral.pesquisarClienteFoneRetorno(clienteImovelRetorno.getIdClienteRetorno());
 				Collection<IClienteEndereco> colecaoClienteEnderecoRetorno = repositorioAtualizacaoCadastral.pesquisarClienteEnderecoRetorno(clienteImovelRetorno.getIdClienteRetorno());
 				

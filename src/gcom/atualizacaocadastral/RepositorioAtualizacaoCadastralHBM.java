@@ -544,14 +544,14 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		String consulta = null;
 		try {
 			consulta = " select clienteImovelRetorno "
-					
 					+ "from ClienteImovelRetorno clienteImovelRetorno "
 					+ " inner join fetch clienteImovelRetorno.clienteRelacaoTipo clienteRelacaoTipo "
 					+ " where clienteImovelRetorno.idClienteRetorno in "
 						+ " (select clienteRetorno.id from ClienteRetorno clienteRetorno where clienteRetorno.tipoOperacao = :tipoOperacao ) "
 					+ " and clienteImovelRetorno.idImovelRetorno in "
-						+ " ( select imovelControle.imovelRetorno.id from ImovelControleAtualizacaoCadastral imovelControle "
+						+ " ( select imovelControle.imovelRetorno.id from ImovelControleAtualizacaoCadastral imovelControle, Imovel imovel "
 						+ " where imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  
+						+ " and imovel.id = imovelControle.imovel.id  "
 						+ " and imovelControle.dataProcessamento is null ) " ;
 			
 			retorno = (Collection<ClienteImovelRetorno>) session.createQuery(consulta).

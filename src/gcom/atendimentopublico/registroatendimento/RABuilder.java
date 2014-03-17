@@ -545,8 +545,7 @@ public class RABuilder {
 		}
 		
 		observacao += getDescricaoInformacoesCliente(clienteRetorno) 
-					+ getInformacoesClienteImovel(clienteImovelRetorno, imovelRetorno)
-					+ getDescricaoEnderecoImovel(imovelRetorno);
+					+ getInformacoesClienteImovel(clienteImovelRetorno, imovelRetorno);
 		
 		return observacao;
 	}
