@@ -16051,7 +16051,7 @@ public class ControladorCadastro implements SessionBean {
 		try {
 			idImoveisAprovados = repositorioImovel.pesquisarIdImoveisAprovados();
 		} catch (ErroRepositorioException e) {
-			e.printStackTrace();
+			logger.error("Erro ao pesquisar id's de imoveis aprovados", e);
 		}
 		return idImoveisAprovados;
 	}
@@ -16087,5 +16087,8 @@ public class ControladorCadastro implements SessionBean {
 		return idQuadra;
 	
 	}
-
+	
+	public String retornaIpServidorOperacional() throws Exception{
+		return repositorioCadastro.retornaIpServidorOperacional();
+	}
 }

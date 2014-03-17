@@ -8,6 +8,10 @@ public class BaseRuntimeException extends RuntimeException {
 	
 	private ArrayList<String> parametros = new ArrayList<String>();
 
+	public BaseRuntimeException(String msg){
+		super(msg);
+	}
+	
 	public BaseRuntimeException(String msg, String... parametroMensagem){
 		super(msg);
 		parametros.addAll(Arrays.asList(parametroMensagem));

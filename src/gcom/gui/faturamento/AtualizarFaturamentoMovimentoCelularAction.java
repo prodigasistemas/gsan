@@ -1,78 +1,3 @@
-/*
-* Copyright (C) 2007-2007 the GSAN - Sistema Integrado de Gestão de Serviços de Saneamento
-*
-* This file is part of GSAN, an integrated service management system for Sanitation
-*
-* GSAN is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License.
-*
-* GSAN is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
-*/
-
-/*
-* GSAN - Sistema Integrado de Gestão de Serviços de Saneamento
-* Copyright (C) <2007> 
-* Adriano Britto Siqueira
-* Alexandre Santos Cabral
-* Ana Carolina Alves Breda
-* Ana Maria Andrade Cavalcante
-* Aryed Lins de Araújo
-* Bruno Leonardo Rodrigues Barros
-* Carlos Elmano Rodrigues Ferreira
-* Cláudio de Andrade Lira
-* Denys Guimarães Guenes Tavares
-* Eduardo Breckenfeld da Rosa Borges
-* Fabíola Gomes de Araújo
-* Flávio Leonardo Cavalcanti Cordeiro
-* Francisco do Nascimento Júnior
-* Homero Sampaio Cavalcanti
-* Ivan Sérgio da Silva Júnior
-* José Edmar de Siqueira
-* José Thiago Tenório Lopes
-* Kássia Regina Silvestre de Albuquerque
-* Leonardo Luiz Vieira da Silva
-* Márcio Roberto Batista da Silva
-* Maria de Fátima Sampaio Leite
-* Micaela Maria Coelho de Araújo
-* Nelson Mendonça de Carvalho
-* Newton Morais e Silva
-* Pedro Alexandre Santos da Silva Filho
-* Rafael Corrêa Lima e Silva
-* Rafael Francisco Pinto
-* Rafael Koury Monteiro
-* Rafael Palermo de Araújo
-* Raphael Veras Rossiter
-* Roberto Sobreira Barbalho
-* Rodrigo Avellar Silveira
-* Rosana Carvalho Barbosa
-* Sávio Luiz de Andrade Cavalcante
-* Tai Mu Shih
-* Thiago Augusto Souza do Nascimento
-* Tiago Moreno Rodrigues
-* Vivianne Barbosa Sousa
-*
-* Este programa é software livre; você pode redistribuí-lo e/ou
-* modificá-lo sob os termos de Licença Pública Geral GNU, conforme
-* publicada pela Free Software Foundation; versão 2 da
-* Licença.
-* Este programa é distribuído na expectativa de ser útil, mas SEM
-* QUALQUER GARANTIA; sem mesmo a garantia implícita de
-* COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
-* PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
-* detalhes.
-* Você deve ter recebido uma cópia da Licença Pública Geral GNU
-* junto com este programa; se não, escreva para Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
-* 02111-1307, USA.
-*/  
 package gcom.gui.faturamento;
 
 import gcom.cadastro.imovel.FiltroImovel;
@@ -116,16 +41,12 @@ import org.apache.commons.fileupload.FileUploadException;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-
-/**
- * [UC0820] Atualizar Faturamento do Movimento do Celular
- * 
- * @author Bruno Barros
- * @date 10/06/2009
- */
+import org.jboss.logging.Logger;
 
 public class AtualizarFaturamentoMovimentoCelularAction extends ExibidorProcessamentoTarefaRelatorioAtualizacaoMovimentoCelular {
 
+	private static Logger logger = Logger.getLogger(AtualizarFaturamentoMovimentoCelularAction.class);
+	
     public ActionForward execute(ActionMapping actionMapping,
             ActionForm actionForm, HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {
@@ -173,7 +94,7 @@ public class AtualizarFaturamentoMovimentoCelularAction extends ExibidorProcessa
                     
                     String registro0 = buffer.readLine();
                     
-                    System.out.println("Linha arquivo String: " + registro0);
+                    logger.info("Linha arquivo String: " + registro0);
                     
                     /**
 					 * TODO : COSANPA
@@ -231,7 +152,7 @@ public class AtualizarFaturamentoMovimentoCelularAction extends ExibidorProcessa
 							int tipoFinalizacao = ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction.FINALIZAR_LEITURA_ARQUIVO_IMOVEIS_FALTANDO;
 							arquivoRetorno.setTipoFinalizacao(new Short(tipoFinalizacao + ""));
 							
-							System.out.println("Finalizando arquivo offline [Localidade: " + localidade + ", Setor: " + setorComercial
+							logger.info("Finalizando arquivo offline [Localidade: " + localidade + ", Setor: " + setorComercial
 											+ ", Rota: " + codRota + "]");
 							
 							
@@ -362,7 +283,7 @@ public class AtualizarFaturamentoMovimentoCelularAction extends ExibidorProcessa
 										+ ", Setor: " + setorComercial
 										+ ", Rota: " + codRota + "]";
 
-								System.out.println(msg);
+								logger.info(msg);
 								
 								mensagemAtualizacao = mensagemPrincipalErroNaoCorresponde;
 								mensagemAtualizacao += "<br />";
@@ -418,7 +339,7 @@ public class AtualizarFaturamentoMovimentoCelularAction extends ExibidorProcessa
 									mensagemAtualizacao += "<br />";
 									mensagemAtualizacao += "Imóveis faltando transmitir: " + diferenca;
 
-									System.out.println(msg);
+									logger.info(msg);
 								} else {								
 									// Verifica se todas as rotas divididas estão com a situação de TRANSMITIDO								 
 									if (!fachada.verificarExistenciaArquivosDivididosSituacaoDiferente(
@@ -488,11 +409,6 @@ public class AtualizarFaturamentoMovimentoCelularAction extends ExibidorProcessa
 						indicadorSucessoAtualizacao, mensagemAtualizacao,
 						httpServletRequest, httpServletResponse, actionMapping);
 			} else {
-				/*
-				 * TODO - COSANPA
-				 * 
-				 * Caso não tenha gerado dados para o relatório, monta a tela de sucesso ou erro.
-				 */
 				montarPaginaSucesso(httpServletRequest, mensagemAtualizacao, "Voltar", "/exibirAtualizarFaturamentoMovimentoCelularAction.do");
 				
 				if (indicadorSucessoAtualizacao) {	
@@ -502,49 +418,11 @@ public class AtualizarFaturamentoMovimentoCelularAction extends ExibidorProcessa
 				 }
 			}
 			
-            return retorno;            
-            
-          
+            return retorno;
         } catch (ActionServletException ex) {
-			throw ex;
-		} catch (FileUploadException ex) {
-			throw new ActionServletException("erro.atualizacao.nao_concluida");
-		} catch (IOException ex) {
-			throw new ActionServletException("erro.atualizacao.nao_concluida");
-		} catch (ErroRepositorioException ex) {
-			throw new ActionServletException("erro.atualizacao.nao_concluida");
-		} catch (ControladorException ex) {			
+        	throw ex;
+		} catch (Exception ex) {			
 			throw new ActionServletException("erro.atualizacao.nao_concluida");
 		}     
     }
-    
-    /**
-     * [UC0820] - Atualizar Faturamento do Movimento Celular
-     * 
-     * [FS0001] - Verificar Existencia do arquivo de faturamento do movimento
-     * celular
-     * 
-     * @author bruno
-     * @date 11/06/2009
-     *
-     * @param arquivo
-     */
-   /* private Boolean verificarExistenciaArquivoFaturamentoCelular( List itens ){        
-        return itens != null;
-    }*/
-    
-    /**
-     * [UC0820] - Atualizar Faturamento do Movimento Celular
-     * 
-     * [FS0002] - Verificar Existencia de Dados no Arquivo
-     * 
-     * @author bruno
-     * @date 11/06/2009
-     *
-     * @param arquivo
-     */
-    /*private Boolean verificarExistenciaDadosArquivoFaturamentoCelular( List itens ){
-        return itens.size() > 0;
-    }*/
-    
 }

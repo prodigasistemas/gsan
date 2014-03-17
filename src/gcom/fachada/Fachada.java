@@ -53561,4 +53561,8 @@ public class Fachada {
 	public Collection<ImovelSubcategoriaAtualizacaoCadastral> pesquisarSubCategoriasAtualizacaoCadastral(Integer idImovel) throws Exception{
 		return this.getControladorAtualizacaoCadastral().pesquisarSubCategoriasAtualizacaoCadastral(idImovel);
 	}
+	
+	public String retornaIpServidorOperacional() throws Exception{
+		return this.getControladorCadastro().retornaIpServidorOperacional();
+	}
 }
