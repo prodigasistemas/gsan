@@ -8899,4 +8899,20 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		}
 		return idQuadra;
 	}
+	
+	public String retornaIpServidorOperacional() throws ErroRepositorioException {
+		String ip = "";
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			String consulta = "select ipServidorModuloOperacional from SistemaParametro ";
+			ip = (String) session.createQuery(consulta).uniqueResult();
+		} catch (HibernateException e) {
+			logger.error("Erro ao pesquisar ip do operacional", e);
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return ip;
+	}
 }

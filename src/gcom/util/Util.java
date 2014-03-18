@@ -6254,7 +6254,6 @@ public class Util {
 			retorno = new BigInteger(1, m.digest()).toString(16);
 
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return retorno;

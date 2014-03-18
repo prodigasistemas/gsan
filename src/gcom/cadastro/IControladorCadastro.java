@@ -67,7 +67,6 @@ import gcom.util.ControladorException;
 
 import java.io.BufferedReader;
 import java.math.BigDecimal;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -515,5 +514,6 @@ public interface IControladorCadastro {
 	public Integer pesquisarIdSetorComercialPorCodigoELocalidade(Integer idLocalidade, Integer codigoSetor) throws ControladorException;
 	
 	public Integer pesquisarIdQuadraPorNumeroQuadraEIdSetor(Integer idSetorComercial, Integer numeroQuadra) throws ControladorException;
-
+	
+	public String retornaIpServidorOperacional() throws Exception;
 }
