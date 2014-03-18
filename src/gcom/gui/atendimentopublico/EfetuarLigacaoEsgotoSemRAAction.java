@@ -106,59 +106,29 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-/**
- * Description of the Class
- * 
- * @author Sávio Luiz
- * @created 06 de Setembro de 2007
- */
 public class EfetuarLigacaoEsgotoSemRAAction extends GcomAction {
 
-	/**
-	 * Description of the Method
-	 * 
-	 * @param actionMapping
-	 *            Description of the Parameter
-	 * @param actionForm
-	 *            Description of the Parameter
-	 * @param httpServletRequest
-	 *            Description of the Parameter
-	 * @param httpServletResponse
-	 *            Description of the Parameter
-	 * @return Description of the Return Value
-	 */
 	public ActionForward execute(ActionMapping actionMapping,
 			ActionForm actionForm, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 
-		// localiza o action no objeto actionmapping
 		ActionForward retorno = actionMapping.findForward("telaSucesso");
 		HttpSession sessao = httpServletRequest.getSession(false);
 
 		EfetuarLigacaoEsgotoSemRAActionForm efetuarLigacaoEsgotoSemRAActionForm = (EfetuarLigacaoEsgotoSemRAActionForm) actionForm;
 
 		Fachada fachada = Fachada.getInstancia();
-
-		// Usuario logado no sistema
 		Usuario usuario = (Usuario) sessao.getAttribute("usuarioLogado");
-
+		
 		LigacaoEsgoto ligacaoEsgoto = new LigacaoEsgoto();
 
-		String matriculaImovel = efetuarLigacaoEsgotoSemRAActionForm
-				.getMatriculaImovel();
+		String matriculaImovel = efetuarLigacaoEsgotoSemRAActionForm.getMatriculaImovel();
 
-		String materialLigacao = efetuarLigacaoEsgotoSemRAActionForm
-				.getMaterialLigacao();
-		String perfilLigacao = efetuarLigacaoEsgotoSemRAActionForm
-				.getPerfilLigacao();
-		String percentual = efetuarLigacaoEsgotoSemRAActionForm
-				.getPercentualColeta().toString().replace(",", ".");
-		String percentualEsgoto = efetuarLigacaoEsgotoSemRAActionForm
-				.getPercentualEsgoto().toString().replace(",", ".");
-		String indicadorCaixaGordura = efetuarLigacaoEsgotoSemRAActionForm
-				.getIndicadorCaixaGordura();
-		String dataLigacao = efetuarLigacaoEsgotoSemRAActionForm
-				.getDataLigacao();
+		String materialLigacao = efetuarLigacaoEsgotoSemRAActionForm.getMaterialLigacao();
+		String perfilLigacao = efetuarLigacaoEsgotoSemRAActionForm.getPerfilLigacao();
+		String percentual = efetuarLigacaoEsgotoSemRAActionForm.getPercentualColeta().toString().replace(",", ".");
+		String percentualEsgoto = efetuarLigacaoEsgotoSemRAActionForm.getPercentualEsgoto().toString().replace(",", ".");
+		String dataLigacao = efetuarLigacaoEsgotoSemRAActionForm.getDataLigacao();
 
 		if (matriculaImovel != null && !matriculaImovel.equals("")) {
 
@@ -166,19 +136,13 @@ public class EfetuarLigacaoEsgotoSemRAAction extends GcomAction {
 			imovel.setId(new Integer(matriculaImovel));
 
 			ligacaoEsgoto.setImovel(imovel);
-
-			/*---------------------  InícioDados da Ligação Esgoto  ------------------------*/
-			// lesg_iccaixagordura
-			ligacaoEsgoto.setIndicadorCaixaGordura(new Short(
-					indicadorCaixaGordura));
-			// lagu_tultimaalteracao
+			ligacaoEsgoto.setIndicadorCaixaGordura(new Short(efetuarLigacaoEsgotoSemRAActionForm.getIndicadorCaixaGordura()));
 			ligacaoEsgoto.setUltimaAlteracao(new Date());
-			// lest_id
 			ligacaoEsgoto.setId(imovel.getId());
-			// LEST_ID
+			ligacaoEsgoto.setIndicadorLigacaoEsgoto(new Short(efetuarLigacaoEsgotoSemRAActionForm.getIndicadorLigacao()));
+
 			LigacaoEsgotoSituacao ligacaoEsgotoSituacao = new LigacaoEsgotoSituacao();
 			ligacaoEsgotoSituacao.setId(LigacaoEsgotoSituacao.LIGADO);
-			// ligacaoEsgoto.setLigacaoEsgotoSituacao(ligacaoEsgotoSituacao);
 
 			String diametroLigacao = efetuarLigacaoEsgotoSemRAActionForm
 					.getDiametroLigacao();
@@ -222,7 +186,7 @@ public class EfetuarLigacaoEsgotoSemRAAction extends GcomAction {
 						"atencao.informe_campo_obrigatorio", null,
 						"Perfil da Ligação");
 			}
-			// item 4.5 - [FS006] caso 1,3
+
 			if (percentual != null && !percentual.equals("")) {
 
 				BigDecimal percentualInformadoColeta = new BigDecimal(
@@ -241,33 +205,23 @@ public class EfetuarLigacaoEsgotoSemRAAction extends GcomAction {
 
 			if (percentualEsgoto != null && !percentualEsgoto.equals("")) {
 
-				BigDecimal percentualEsgotoColeta = new BigDecimal(
-						percentualEsgoto);
+				BigDecimal percentualEsgotoColeta = new BigDecimal(percentualEsgoto);
 				ligacaoEsgoto.setPercentual(percentualEsgotoColeta);
 			}
 
 			if (dataLigacao != null && !dataLigacao.equals("")) {
-				ligacaoEsgoto.setDataLigacao(Util
-						.converteStringParaDate(dataLigacao));
+				ligacaoEsgoto.setDataLigacao(Util.converteStringParaDate(dataLigacao));
 				if (ligacaoEsgoto.getDataLigacao().after(new Date())) {
 					throw new ActionServletException(
 							"atencao.data_menor_que_atual", null, "Ligação");
 				}
 			}
 
-			/*
-			 * [UC0107] Registrar Transação
-			 * 
-			 */
-
 			RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 					Operacao.OPERACAO_LIGACAO_ESGOTO__SEM_RA_EFETUAR,
 					imovel.getId(), imovel.getId(),
 					new UsuarioAcaoUsuarioHelper(usuario,
 							UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-
-			// [UC0107] -Fim- Registrar Transação
-			
 			registradorOperacao.registrarOperacao(ligacaoEsgoto);
 			
 			fachada.atualizarImovelExecucaoOrdemServicoLigacaoEsgoto(imovel,
