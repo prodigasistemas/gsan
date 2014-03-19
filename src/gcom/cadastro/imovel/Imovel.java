@@ -103,6 +103,7 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 	private gcom.faturamento.consumotarifa.ConsumoTarifa consumoTarifa;
 	private Date ultimaAlteracao;
 	private Set<ImovelSubcategoria> imovelSubcategorias;
+	@SuppressWarnings("rawtypes")
 	private Set clienteImoveis;
 	private Set<MedicaoHistorico> medicaoHistoricos;
 	private FaturamentoTipo faturamentoTipo;
@@ -1626,10 +1627,12 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 		this.imovelSubcategorias = imovelSubcategorias;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Set getClienteImoveis() {
 		return clienteImoveis;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setClienteImoveis(Set clienteImoveis) {
 		this.clienteImoveis = clienteImoveis;
 	}
@@ -1878,7 +1881,8 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 		return getId() + "";
 	}
 
-    public Cliente getClienteUsuario(){
+    @SuppressWarnings("rawtypes")
+	public Cliente getClienteUsuario(){
     	if (clienteImoveis != null){
     		for (Iterator iterator = clienteImoveis.iterator(); iterator.hasNext();) {
 				ClienteImovel clienteImovel = (ClienteImovel) iterator.next();
@@ -2285,5 +2289,9 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 
 	public void setCodigoSetorComercial(int idSetorComercial) {
 		// TODO Auto-generated method stub
+	}
+
+	public boolean isImovelNovo() {
+		return this.getId().equals(null);
 	}
 }

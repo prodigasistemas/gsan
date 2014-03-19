@@ -478,7 +478,6 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		return listaImoveisControle;
 	}
 	
-	@SuppressWarnings("unchecked")
 	public ImovelControleAtualizacaoCadastral obterImovelControle(Integer idImovelRetorno) {
 		ImovelControleAtualizacaoCadastral imovelControle = null;
 		
@@ -639,6 +638,29 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		}finally {
 			HibernateUtil.closeSession(session);
 		}
+		return retorno;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<ClienteImovelRetorno> obterClienteImoveisDoImovel(Integer idImovelRetorno) throws ErroRepositorioException {
+		
+		Collection<ClienteImovelRetorno> retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = null;
+		try {
+			consulta = " select clienteImovelRetorno "
+					+ "from ClienteImovelRetorno clienteImovelRetorno "
+					+ " inner join fetch clienteImovelRetorno.clienteRelacaoTipo clienteRelacaoTipo "
+					+ " where clienteImovelRetorno.idImovelRetorno = :idImovelRetorno ";
+			
+			retorno = (Collection<ClienteImovelRetorno>) session.createQuery(consulta).
+					setInteger("idImovelRetorno",  idImovelRetorno).list();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis.");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
 		return retorno;
 	}
 }

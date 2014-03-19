@@ -5,6 +5,7 @@ import gcom.atualizacaocadastral.IClienteEndereco;
 import gcom.atualizacaocadastral.IClienteImovel;
 import gcom.cadastro.ContaBraile;
 import gcom.cadastro.cliente.ClienteFone;
+import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.ClienteTipo;
 import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.imovel.IImovel;
@@ -20,6 +21,7 @@ import gcom.util.Util;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
@@ -48,7 +50,7 @@ public class RABuilder {
 					.idMeioSolicitacao(MeioSolicitacao.INTERNO)
 					.idSolicitacaoTipo(SOLICITACAO_TIPO_MANUTENCAO_CADASTRAL)
 					.idSolicitacaoTipoEspecificacao(SOLICITACAO_TIPO_ESPECIFICACAO_ATUALIZACAO_CADASTRAL)
-					.observacao(getObservacaoImovel(imovelRetorno, alteracaoTipo))
+					.observacao(getObservacaoImovelAntigo(imovelRetorno, alteracaoTipo))
 					.indicadorRaAtualizacaoCadastral(true)
 					.idUsuarioLogado(USUARIO_ADMIN)
 					.protocoloAtendimento(protocoloAtendimento);
@@ -56,7 +58,7 @@ public class RABuilder {
 		return raDadosGerais;
 	}
 	
-	public static RADadosGeraisHelper buildRADadosGeraisAtualizacaoCadastral(IImovel imovelRetorno, ICliente clienteRetorno, 
+	public static RADadosGeraisHelper buildRADadosGeraisAtualizacaoCadastralInclusaoCliente(IImovel imovelRetorno, ICliente clienteRetorno, 
 											IClienteImovel clienteImovelRetorno, Integer alteracaoTipo, String protocoloAtendimento) {
 		RADadosGeraisHelper raDadosGerais = new RADadosGeraisHelper();
 		
@@ -75,6 +77,30 @@ public class RABuilder {
 					.idUsuarioLogado(USUARIO_ADMIN)
 					.protocoloAtendimento(protocoloAtendimento);
 		
+		return raDadosGerais;
+	}
+	
+	public static RADadosGeraisHelper buildRADadosGeraisAtualizacaoCadastralInclusaoImovel(IImovel imovelRetorno, 
+										HashMap<ClienteRelacaoTipo, ICliente> mapClientesImovel, Integer alteracaoTipo,
+										String protocoloAtendimento) {
+		RADadosGeraisHelper raDadosGerais = new RADadosGeraisHelper();
+
+		Date dataAtual = new Date();
+
+		raDadosGerais
+				.indicadorAtendimentoOnline(new Short("1"))
+				.dataAtendimento(Util.formatarData(dataAtual))
+				.dataPrevista(Util.formatarData(dataAtual))
+				.horaAtendimento(Util.formatarHoraSemSegundos(dataAtual))
+				.idUnidadeAtendimento(UNIDADE_ATENDIMENTO_UNAM)
+				.idMeioSolicitacao(MeioSolicitacao.INTERNO)
+				.idSolicitacaoTipo(SOLICITACAO_TIPO_MANUTENCAO_CADASTRAL)
+				.idSolicitacaoTipoEspecificacao(SOLICITACAO_TIPO_ESPECIFICACAO_ATUALIZACAO_CADASTRAL)
+				.observacao(getObservacaoImovelNovo(imovelRetorno, mapClientesImovel, alteracaoTipo))
+				.indicadorRaAtualizacaoCadastral(true)
+				.idUsuarioLogado(USUARIO_ADMIN)
+				.protocoloAtendimento(protocoloAtendimento);
+
 		return raDadosGerais;
 	}
 	
@@ -516,38 +542,57 @@ public class RABuilder {
 		return habilitarCampoSatisfacaoEmail;
 	}
 	
-	
-	private static String getObservacaoImovel(IImovel imovelRetorno, Integer alteracaoTipo) {
-		String observacao = "";
+	private static String getObservacaoImovelNovo(IImovel imovelRetorno,  HashMap<ClienteRelacaoTipo, ICliente> mapClienteImovel, Integer alteracaoTipo) {
+		StringBuilder observacao = new StringBuilder();
 		
-		if (alteracaoTipo.equals(AlteracaoTipo.INCLUSAO)) {
-			observacao = "INCLUSÃO DE IMÓVEL - RECADASTRAMENTO. ";
-		}
+		observacao.append("INCLUSÃO DE IMÓVEL - RECADASTRAMENTO. ");
+		observacao.append(getDescricaoEnderecoImovel(imovelRetorno));
+		observacao.append(getObservacaoCliente(imovelRetorno, mapClienteImovel));
+
+		return observacao.toString();
+	}
+	
+	private static String getObservacaoImovelAntigo(IImovel imovelRetorno, Integer alteracaoTipo) {
+		StringBuilder observacao = new StringBuilder();
 		
 		if (alteracaoTipo.equals(AlteracaoTipo.EXCLUSAO)) {
-			observacao = "EXCLUSÃO DE IMÓVEL - RECADASTRAMENTO. ";
+			observacao.append("EXCLUSÃO DE IMÓVEL - RECADASTRAMENTO. ");
+			observacao.append(getDescricaoEnderecoImovel(imovelRetorno));
 		}
 		
-		observacao += getDescricaoEnderecoImovel(imovelRetorno);
-		
-		return observacao;
+		return observacao.toString();
 	}
 	
 	private static String getObservacaoCliente(ICliente clienteRetorno, IImovel imovelRetorno, IClienteImovel clienteImovelRetorno, Integer alteracaoTipo) {
-		String observacao = "";
+		StringBuilder observacao = new StringBuilder();
 		
 		if (alteracaoTipo.equals(AlteracaoTipo.INCLUSAO)) {
-			observacao = "INCLUSÃO DE CLIENTE - RECADASTRAMENTO. ";
+			observacao.append("INCLUSÃO DE CLIENTE - RECADASTRAMENTO. ");
 		}
 		
 		if (alteracaoTipo.equals(AlteracaoTipo.EXCLUSAO)) {
-			observacao = "EXCLUSÃO DE CLIENTE - RECADASTRAMENTO. ";
+			observacao.append("EXCLUSÃO DE CLIENTE - RECADASTRAMENTO. ");
 		}
 		
-		observacao += getDescricaoInformacoesCliente(clienteRetorno) 
-					+ getInformacoesClienteImovel(clienteImovelRetorno, imovelRetorno);
+		observacao.append(getDescricaoInformacoesCliente(clienteRetorno)); 
+		observacao.append(getInformacoesClienteImovel(clienteImovelRetorno.getClienteRelacaoTipo(), imovelRetorno));
 		
-		return observacao;
+		return observacao.toString();
+	}
+	
+	private static String getObservacaoCliente(IImovel imovelRetorno, HashMap<ClienteRelacaoTipo, ICliente> mapClientesImovel) {
+		StringBuilder observacao = new StringBuilder();
+		
+		observacao.append("CLIENTES: ");
+		
+		for (ClienteRelacaoTipo clienteRelacaoTipo : mapClientesImovel.keySet()) {
+			ICliente cliente = mapClientesImovel.get(clienteRelacaoTipo);
+			observacao.append(getDescricaoInformacoesCliente(cliente)); 
+			observacao.append(getInformacoesClienteImovel(clienteRelacaoTipo, imovelRetorno));
+		}
+		
+		
+		return observacao.toString();
 	}
 	
 	private static String getDescricaoEnderecoImovel(IImovel imovelRetorno) {
@@ -584,11 +629,11 @@ public class RABuilder {
 		return descricaoEndereco.toString().replaceAll("\\s,", "");
 	}
 	
-	private static StringBuilder getInformacoesClienteImovel(IClienteImovel clienteImovelRetorno, IImovel imovelRetorno) {
+	private static StringBuilder getInformacoesClienteImovel(ClienteRelacaoTipo clienteRelacaoTipo, IImovel imovelRetorno) {
 		StringBuilder informacoes = new StringBuilder();
 		
 		informacoes.append("Tipo de relação do cliente:");
-		informacoes.append(clienteImovelRetorno.getClienteRelacaoTipo().getDescricao());
+		informacoes.append(clienteRelacaoTipo.getDescricao());
 		informacoes.append(". ");
 		
 		if (imovelRetorno.getTipoOperacao().equals(AlteracaoTipo.ALTERACAO)){

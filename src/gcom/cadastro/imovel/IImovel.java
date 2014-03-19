@@ -130,4 +130,6 @@ public interface IImovel {
 	public int getNumeroQuadra();
 	
 	public void setNumeroQuadra(int numeroQuadra);
+	
+	public boolean isImovelNovo();
 }
