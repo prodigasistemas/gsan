@@ -129,6 +129,9 @@ public class EfetuarLigacaoEsgotoSemRAAction extends GcomAction {
 		String percentual = efetuarLigacaoEsgotoSemRAActionForm.getPercentualColeta().toString().replace(",", ".");
 		String percentualEsgoto = efetuarLigacaoEsgotoSemRAActionForm.getPercentualEsgoto().toString().replace(",", ".");
 		String dataLigacao = efetuarLigacaoEsgotoSemRAActionForm.getDataLigacao();
+		String indicadorCaixaGordura = efetuarLigacaoEsgotoSemRAActionForm.getIndicadorCaixaGordura();
+		String indicadorLigacaoEsgoto = efetuarLigacaoEsgotoSemRAActionForm.getIndicadorLigacao();
+		String diametroLigacao = efetuarLigacaoEsgotoSemRAActionForm.getDiametroLigacao();
 
 		if (matriculaImovel != null && !matriculaImovel.equals("")) {
 
@@ -136,16 +139,26 @@ public class EfetuarLigacaoEsgotoSemRAAction extends GcomAction {
 			imovel.setId(new Integer(matriculaImovel));
 
 			ligacaoEsgoto.setImovel(imovel);
-			ligacaoEsgoto.setIndicadorCaixaGordura(new Short(efetuarLigacaoEsgotoSemRAActionForm.getIndicadorCaixaGordura()));
 			ligacaoEsgoto.setUltimaAlteracao(new Date());
 			ligacaoEsgoto.setId(imovel.getId());
-			ligacaoEsgoto.setIndicadorLigacaoEsgoto(new Short(efetuarLigacaoEsgotoSemRAActionForm.getIndicadorLigacao()));
 
 			LigacaoEsgotoSituacao ligacaoEsgotoSituacao = new LigacaoEsgotoSituacao();
 			ligacaoEsgotoSituacao.setId(LigacaoEsgotoSituacao.LIGADO);
+			
+			if(indicadorCaixaGordura != null && !indicadorCaixaGordura.equals("")) {
+				ligacaoEsgoto.setIndicadorCaixaGordura(new Short(indicadorCaixaGordura));
+			} else {
+				throw new ActionServletException("atencao.informe_campo_obrigatorio", null,
+						"Caixa de Gordura");
+			}
+			
+			if(indicadorLigacaoEsgoto != null && !indicadorLigacaoEsgoto.equals("")) {
+				ligacaoEsgoto.setIndicadorLigacaoEsgoto(new Short(indicadorLigacaoEsgoto));
+			} else {
+				throw new ActionServletException("atencao.informe_campo_obrigatorio", null,
+						"Ligação");
+			}
 
-			String diametroLigacao = efetuarLigacaoEsgotoSemRAActionForm
-					.getDiametroLigacao();
 			if (diametroLigacao != null
 					&& !diametroLigacao.equals("")
 					&& !diametroLigacao.trim().equalsIgnoreCase(
