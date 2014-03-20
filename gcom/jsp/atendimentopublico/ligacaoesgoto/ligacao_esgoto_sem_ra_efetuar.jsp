@@ -370,8 +370,18 @@
 																property="indicadorCaixaGordura" value="2" /> NÃO</strong></td>
 
 														</tr>
-
-
+														
+														<tr>
+															<td>
+																<strong>Ligação:<font color="#FF0000">*</font></strong>
+															</td>
+															<td>
+																<strong> 
+																	<html:radio property="indicadorLigacao" value="2" /> Disponível
+																	<html:radio property="indicadorLigacao" value="1" /> Efetivado
+																</strong>
+															</td>
+														</tr>
 													</table>
 													</td>
 												</tr>
