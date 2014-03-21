@@ -248,7 +248,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		return imoveis;
 	}
 	
-	public Collection<ClienteImovelRetorno> obterClientesParaAtualizar(Integer tipoOperacao) throws ControladorException {
+	public Collection<ClienteImovelRetorno> obterClientesParaAtualizar() throws ControladorException {
 		Collection<ClienteImovelRetorno> clienteImoveisRetorno = null;
 		try {
 			clienteImoveisRetorno = repositorioAtualizacaoCadastral.obterClientesParaAtualizar(tipoOperacao);
@@ -723,7 +723,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 
 		try {
 
-			Collection<ClienteImovelRetorno> clientesAlteracao = this.obterClientesParaAtualizar(AlteracaoTipo.ALTERACAO);
+			Collection<ClienteImovelRetorno> clientesAlteracao = this.obterClientesParaAtualizar();
 			
 			for (ClienteImovelRetorno clienteImovelRetorno : clientesAlteracao) {
 				
@@ -747,8 +747,13 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 	}
 	
 	private void incluirClientes() throws ControladorException {
+		incluirNovaRelacaoClientes();
+		incluirClientesNovos();
+	}
+	
+	private void incluirClientesNovos() throws ControladorException {
 		Integer idImovel = null;
-
+		
 		try {
 			Collection<ClienteImovelRetorno> clientesImovelInclusao = this.obterClientesParaAtualizar(AlteracaoTipo.INCLUSAO);
 			
@@ -773,7 +778,12 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		} catch (Exception e) {
 			logger.error("Erro ao inserir cliente." + idImovel);
 			throw new ControladorException("Erro ao inserir cliente.", e);
-
+			
 		}
+		
+	}
+	
+	private void incluirNovaRelacaoClientes() {
+		
 	}
 }

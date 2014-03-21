@@ -536,7 +536,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Collection<ClienteImovelRetorno> obterClientesParaAtualizar(Integer tipoOperacao) throws ErroRepositorioException {
+	public Collection<ClienteImovelRetorno> obterClientesParaAtualizar() throws ErroRepositorioException {
 		
 		Collection<ClienteImovelRetorno> retorno = null;
 		Session session = HibernateUtil.getSession();
@@ -546,15 +546,14 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 					+ "from ClienteImovelRetorno clienteImovelRetorno "
 					+ " inner join fetch clienteImovelRetorno.clienteRelacaoTipo clienteRelacaoTipo "
 					+ " where clienteImovelRetorno.idClienteRetorno in "
-						+ " (select clienteRetorno.id from ClienteRetorno clienteRetorno where clienteRetorno.tipoOperacao = :tipoOperacao ) "
+						+ " (select clienteRetorno.id from ClienteRetorno clienteRetorno) "
 					+ " and clienteImovelRetorno.idImovelRetorno in "
 						+ " ( select imovelControle.imovelRetorno.id from ImovelControleAtualizacaoCadastral imovelControle, Imovel imovel "
 						+ " where imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  
 						+ " and imovel.id = imovelControle.imovel.id  "
 						+ " and imovelControle.dataProcessamento is null ) " ;
 			
-			retorno = (Collection<ClienteImovelRetorno>) session.createQuery(consulta).
-					setInteger("tipoOperacao",  tipoOperacao).list();
+			retorno = (Collection<ClienteImovelRetorno>) session.createQuery(consulta).list();
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis.");
 		} finally {
