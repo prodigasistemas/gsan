@@ -27,7 +27,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 
 	private String cdRotaFinal;
 	
-	private Boolean alteracaoSituacaoImovel;
+	private Boolean alteracaoHidrometro;
 
 	private Boolean alteracaoSituacaoAgua;
 	
@@ -51,7 +51,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		this.cdSetorComercialFinal = form.getCdSetorComercialFinal();
 		this.cdRotaFinal = form.getCdRotaFinal();
 		
-		alteracaoSituacaoImovel = consisteAlteracao(form.getAlteracaoSituacaoImovel());
+		alteracaoHidrometro = consisteAlteracao(form.getAlteracaoHidrometro());
 		alteracaoSituacaoAgua   = consisteAlteracao(form.getAlteracaoSituacaoAgua());
 		alteracaoSituacaoEsgoto = consisteAlteracao(form.getAlteracaoSituacaoEsgoto());
 		alteracaoCategoria      = consisteAlteracao(form.getAlteracaoCategoria());
@@ -161,12 +161,12 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		this.cdRotaFinal = cdRotaFinal;
 	}
 
-	public Boolean isAlteracaoSituacaoImovel() {
-		return alteracaoSituacaoImovel;
+	public Boolean isAlteracaoHidrometro() {
+		return alteracaoHidrometro;
 	}
 
-	public void setAlteracaoSituacaoImovel(Boolean alteracaoSituacaoImovel) {
-		this.alteracaoSituacaoImovel = alteracaoSituacaoImovel;
+	public void setAlteracaoHidrometro(Boolean alteracaoHidrometro) {
+		this.alteracaoHidrometro = alteracaoHidrometro;
 	}
 
 	public Boolean isAlteracaoSituacaoAgua() {

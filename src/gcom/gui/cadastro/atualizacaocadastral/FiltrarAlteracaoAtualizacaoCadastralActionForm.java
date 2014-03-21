@@ -50,13 +50,13 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 
 	private String cdRotaFinal;
 	
-	private String alteracaoSituacaoImovel;
+	private String alteracaoHidrometro = "-1";
 	
-	private String alteracaoSituacaoAgua;
+	private String alteracaoSituacaoAgua = "-1";
 	
-	private String alteracaoSituacaoEsgoto;
+	private String alteracaoSituacaoEsgoto = "-1";
 	
-	private String alteracaoCategoria;
+	private String alteracaoCategoria = "-1";
 
 	public String getIdRegistrosAutorizados() {
 		return idRegistrosAutorizados;
@@ -218,12 +218,12 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 		this.cdRotaFinal = codRotaFinal;
 	}
 	
-	public String getAlteracaoSituacaoImovel() {
-		return alteracaoSituacaoImovel;
+	public String getAlteracaoHidrometro() {
+		return alteracaoHidrometro;
 	}
 
-	public void setAlteracaoSituacaoImovel(String alteracaoSituacaoImovel) {
-		this.alteracaoSituacaoImovel = alteracaoSituacaoImovel;
+	public void setAlteracaoHidrometro(String alteracaoHidrometro) {
+		this.alteracaoHidrometro = alteracaoHidrometro;
 	}
 
 	public String getAlteracaoSituacaoAgua() {

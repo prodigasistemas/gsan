@@ -77,7 +77,7 @@ public class RepositorioTransacaoUtil {
 	private boolean passouAlteracaoHidrometro(String numeroHidrometro, List<ColunaAtualizacaoCadastral> dados, FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro) {
 		boolean passou = true;
 
-		if (filtro.isAlteracaoSituacaoImovel() != null){
+		if (filtro.isAlteracaoHidrometro() != null){
 			passou = false;
 			
 			boolean existeInformacaoHidrometro = false;
@@ -89,7 +89,7 @@ public class RepositorioTransacaoUtil {
 				}
 			}
 			
-			if (!filtro.isAlteracaoSituacaoImovel()){
+			if (!filtro.isAlteracaoHidrometro()){
 				if (StringUtils.isEmpty(numeroHidrometro) && !existeInformacaoHidrometro){
 					passou = true; 
 				}else if (StringUtils.isNotEmpty(numeroHidrometro) && existeInformacaoHidrometro){
@@ -97,7 +97,7 @@ public class RepositorioTransacaoUtil {
 				}
 			}
 			
-			if (filtro.isAlteracaoSituacaoImovel()){
+			if (filtro.isAlteracaoHidrometro()){
 				if (StringUtils.isEmpty(numeroHidrometro) && existeInformacaoHidrometro){
 					passou = true; 
 				}else if (StringUtils.isNotEmpty(numeroHidrometro) && !existeInformacaoHidrometro){

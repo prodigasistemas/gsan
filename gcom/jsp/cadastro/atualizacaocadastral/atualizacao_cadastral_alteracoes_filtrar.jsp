@@ -162,7 +162,7 @@
       	<td colspan="3">Para filtrar a(s) atualização(ões) cadastral(is), informe os dados abaixo:</td>
       </tr>
 	  <tr>
-		<td width="150"><strong>Empresa:<font color="#FF0000">*</font></strong></td>
+		<td width="170"><strong>Empresa:<font color="#FF0000">*</font></strong></td>
 		<td colspan="2" align="left">
 			<html:select property="idEmpresa" tabindex="3" onchange="javascript:listarLeiturista()">
 				<html:option value="-1">&nbsp;</html:option>
@@ -172,7 +172,7 @@
 		</td>
 	  </tr>
 	  <tr>
-		<td height="10" width="145"><strong>Agente Cadastral:</strong></td>
+		<td width="170"><strong>Agente Cadastral:</strong></td>
 		<td colspan="2" align="left"><html:select property="idLeiturista"
 			tabindex="4">
 			<html:option value="-1">&nbsp;</html:option>
@@ -192,7 +192,7 @@
 	</tr>
 
     <tr>
-      <td><strong>Localidade:</strong>
+      <td width="170"><strong>Localidade:</strong>
       </td>
       <td><html:text tabindex="5" maxlength="3" property="idLocalidadeInicial" size="5"
         onkeypress="somente_numero(this);form.target='';
@@ -215,7 +215,7 @@
     </tr>
     
     <tr>
-      <td><strong>Setor Comercial :</strong></td>
+      <td width="170"><strong>Setor Comercial :</strong></td>
       <td><html:text maxlength="3" property="cdSetorComercialInicial" size="5" onkeyup="javascript:somente_numero(this);duplicarLocalidade();"
            onkeypress="validaEnterDependencia(event, 
            'exibirFiltrarAlteracaoAtualizacaoCadastralAction.do?filterClass=FiltroSetorComercial&fieldLocalidade=LocalidadeInicial&fieldSetorComercial=SetorComercialInicial', 
@@ -233,7 +233,7 @@
     </tr>
     
     <tr>
-      <td><strong>Rota :</strong></td>
+      <td width="170"><strong>Rota :</strong></td>
       <td><html:text maxlength="3" property="cdRotaInicial" size="5" tabindex="7"
       			onkeyup="javascript:somente_numero(this);duplicarRota();" onblur="javascript:duplicarRota();"/>
       </td>
@@ -250,7 +250,7 @@
   </tr>
 
     <tr>
-      <td><strong>Localidade:</strong>
+      <td width="170"><strong>Localidade:</strong>
       </td>
       <td><html:text tabindex="8" maxlength="3" property="idLocalidadeFinal" size="5"
         onkeypress="somente_numero(this);form.target='';
@@ -273,7 +273,7 @@
     </tr>
     
     <tr>
-      <td><strong>Setor Comercial :</strong></td>
+      <td width="170"><strong>Setor Comercial :</strong></td>
       <td><html:text maxlength="3" property="cdSetorComercialFinal" size="5" onkeyup="javascript:somente_numero(this);"
            onkeypress="validaEnterDependencia(event, 
            'exibirFiltrarAlteracaoAtualizacaoCadastralAction.do?filterClass=FiltroSetorComercial&fieldLocalidade=LocalidadeFinal&fieldSetorComercial=SetorComercialFinal', 
@@ -292,7 +292,7 @@
     </tr>
     
     <tr>
-      <td><strong>Rota :</strong></td>
+      <td width="170"><strong>Rota :</strong></td>
       <td><html:text maxlength="3" property="cdRotaFinal" size="5" onkeyup="javascript:somente_numero(this);" tabindex="10" />
       </td>
     </tr>
@@ -302,7 +302,7 @@
     </tr>
     
     <tr>
-      <td><strong>Exibir im&oacute;veis:</strong></td>
+      <td width="170"><strong>Exibir im&oacute;veis:</strong></td>
       <td>
         <strong> 
           <html:radio property="exibirCampos" value="3" /> Pendentes de Aprova&ccedil;&atilde;o 
@@ -317,18 +317,18 @@
     </tr>
 
     <tr>
-      <td><strong>Altera&ccedil;&atilde;o de Situa&ccedil;&atilde;o do im&oacute;vel:</strong></td>
+      <td width="170"><strong>Altera&ccedil;&atilde;o de Hidr&ocirc;metro:</strong></td>
       <td>
         <strong> 
-          <html:radio property="alteracaoSituacaoImovel" value="1" /> Sim  
-          <html:radio property="alteracaoSituacaoImovel" value="2" /> N&atilde;o 
-          <html:radio property="alteracaoSituacaoImovel" value="-1" /> Todos
+          <html:radio property="alteracaoHidrometro" value="1" /> Sim  
+          <html:radio property="alteracaoHidrometro" value="2" /> N&atilde;o 
+          <html:radio property="alteracaoHidrometro" value="-1" /> Todos
         </strong>
       </td>
     </tr>
 
     <tr>
-      <td><strong>Altera&ccedil;&atilde;o de Situa&ccedil;&atilde;o de &Aacute;gua:</strong></td>
+      <td width="170"><strong>Altera&ccedil;&atilde;o de Situa&ccedil;&atilde;o de &Aacute;gua:</strong></td>
       <td>
         <strong> 
           <html:radio property="alteracaoSituacaoAgua" value="1" /> Sim  
@@ -339,7 +339,7 @@
     </tr>
 
     <tr>
-      <td><strong>Altera&ccedil;&atilde;o de Situa&ccedil;&atilde;o de Esgoto:</strong></td>
+      <td width="170"><strong>Altera&ccedil;&atilde;o de Situa&ccedil;&atilde;o de Esgoto:</strong></td>
       <td>
         <strong> 
           <html:radio property="alteracaoSituacaoEsgoto" value="1" /> Sim  
@@ -350,7 +350,7 @@
     </tr>
 
     <tr>
-      <td><strong>Altera&ccedil&otilde;es relativas &agrave; categoria:</strong></td>
+      <td width="170"><strong>Altera&ccedil&atilde;o de Categoria, Subcategoria e Qtd. de Economias:</strong></td>
       <td>
         <strong> 
           <html:radio property="alteracaoCategoria" value="1" /> Sim  
