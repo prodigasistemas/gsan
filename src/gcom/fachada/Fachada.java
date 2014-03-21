@@ -53565,4 +53565,12 @@ public class Fachada {
 	public String retornaIpServidorOperacional() throws Exception{
 		return this.getControladorCadastro().retornaIpServidorOperacional();
 	}
+	
+	public void atualizarVecimentoFaturaClienteResponsavel(Date dataVencimento, String anoMesReferencia) {
+		try {
+			this.getControladorFaturamento().atualizarVecimentoFaturaClienteResponsavel(dataVencimento, anoMesReferencia);
+		} catch (ControladorException e) {
+			e.printStackTrace();
+		}
+	}
 }

@@ -17054,5 +17054,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		return diferencaDatas;
 	
 	}
+	
+	public void atualizarVecimentoFaturaClienteResponsavel(Date dataVencimento, String anoMesReferencia) throws ControladorException {
+		try {
+			repositorioFaturamento.atualizarVecimentoFaturaClienteResponsavel(dataVencimento, anoMesReferencia);
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
+	}
 
 }
