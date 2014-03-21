@@ -28,6 +28,8 @@ public class AtualizacaoCadastralImovel {
 	
 	private Boolean erroLayout = false;
 	
+	private Boolean existeMedidor = false;
+	
 	public AtualizacaoCadastralImovel(){
 		
 	}
@@ -161,6 +163,14 @@ public class AtualizacaoCadastralImovel {
 		return erroLayout;
 	}
 	
+	public Boolean isExisteMedidor() {
+		return existeMedidor;
+	}
+
+	public void setExisteMedidor(Boolean existeMedidor) {
+		this.existeMedidor = existeMedidor;
+	}
+
 	public void limparDadosUsuario() {
 		linhaCliente.put("matriculaUsuario", "0");
 	}

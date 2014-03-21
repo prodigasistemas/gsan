@@ -307,6 +307,55 @@
         <strong> 
           <html:radio property="exibirCampos" value="3" /> Pendentes de Aprova&ccedil;&atilde;o 
           <html:radio property="exibirCampos" value="4" /> Aprovados
+          <html:radio property="exibirCampos" value="-1" /> Todos
+        </strong>
+      </td>
+    </tr>
+
+    <tr>
+      <td colspan="2"><hr></td>
+    </tr>
+
+    <tr>
+      <td><strong>Altera&ccedil;&atilde;o de Situa&ccedil;&atilde;o do im&oacute;vel:</strong></td>
+      <td>
+        <strong> 
+          <html:radio property="alteracaoSituacaoImovel" value="1" /> Sim  
+          <html:radio property="alteracaoSituacaoImovel" value="2" /> N&atilde;o 
+          <html:radio property="alteracaoSituacaoImovel" value="-1" /> Todos
+        </strong>
+      </td>
+    </tr>
+
+    <tr>
+      <td><strong>Altera&ccedil;&atilde;o de Situa&ccedil;&atilde;o de &Aacute;gua:</strong></td>
+      <td>
+        <strong> 
+          <html:radio property="alteracaoSituacaoAgua" value="1" /> Sim  
+          <html:radio property="alteracaoSituacaoAgua" value="2" /> N&atilde;o 
+          <html:radio property="alteracaoSituacaoAgua" value="-1" /> Todos
+        </strong>
+      </td>
+    </tr>
+
+    <tr>
+      <td><strong>Altera&ccedil;&atilde;o de Situa&ccedil;&atilde;o de Esgoto:</strong></td>
+      <td>
+        <strong> 
+          <html:radio property="alteracaoSituacaoEsgoto" value="1" /> Sim  
+          <html:radio property="alteracaoSituacaoEsgoto" value="2" /> N&atilde;o 
+          <html:radio property="alteracaoSituacaoEsgoto" value="-1" /> Todos
+        </strong>
+      </td>
+    </tr>
+
+    <tr>
+      <td><strong>Altera&ccedil&otilde;es relativas &agrave; categoria:</strong></td>
+      <td>
+        <strong> 
+          <html:radio property="alteracaoCategoria" value="1" /> Sim  
+          <html:radio property="alteracaoCategoria" value="2" /> N&atilde;o 
+          <html:radio property="alteracaoCategoria" value="-1" /> Todos
         </strong>
       </td>
     </tr>

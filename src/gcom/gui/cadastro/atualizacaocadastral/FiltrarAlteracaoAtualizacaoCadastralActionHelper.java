@@ -3,6 +3,8 @@ package gcom.gui.cadastro.atualizacaocadastral;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.commons.lang.StringUtils;
+
 public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	
 	private String idEmpresa;
@@ -24,6 +26,15 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	private String cdSetorComercialFinal;
 
 	private String cdRotaFinal;
+	
+	private Boolean alteracaoSituacaoImovel;
+
+	private Boolean alteracaoSituacaoAgua;
+	
+	private Boolean alteracaoSituacaoEsgoto;
+	
+	private Boolean alteracaoCategoria;
+	
 
 	public FiltrarAlteracaoAtualizacaoCadastralActionHelper() {
 	}
@@ -39,6 +50,25 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		this.idLocalidadeFinal = form.getIdLocalidadeFinal();
 		this.cdSetorComercialFinal = form.getCdSetorComercialFinal();
 		this.cdRotaFinal = form.getCdRotaFinal();
+		
+		alteracaoSituacaoImovel = consisteAlteracao(form.getAlteracaoSituacaoImovel());
+		alteracaoSituacaoAgua   = consisteAlteracao(form.getAlteracaoSituacaoAgua());
+		alteracaoSituacaoEsgoto = consisteAlteracao(form.getAlteracaoSituacaoEsgoto());
+		alteracaoCategoria      = consisteAlteracao(form.getAlteracaoCategoria());
+	}
+	
+	private Boolean consisteAlteracao(String campo){
+		Boolean existeFiltro = null;
+		if (StringUtils.isNotEmpty(campo)){
+			Integer altera = Integer.parseInt(campo);
+			if (altera == 1){
+				existeFiltro = true;
+			}
+			if (altera == 2){
+				existeFiltro = false;
+			}
+		}
+		return existeFiltro;
 	}
 
 	public String getIdEmpresa() {
@@ -129,5 +159,37 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 
 	public void setCdRotaFinal(String cdRotaFinal) {
 		this.cdRotaFinal = cdRotaFinal;
+	}
+
+	public Boolean isAlteracaoSituacaoImovel() {
+		return alteracaoSituacaoImovel;
+	}
+
+	public void setAlteracaoSituacaoImovel(Boolean alteracaoSituacaoImovel) {
+		this.alteracaoSituacaoImovel = alteracaoSituacaoImovel;
+	}
+
+	public Boolean isAlteracaoSituacaoAgua() {
+		return alteracaoSituacaoAgua;
+	}
+
+	public void setAlteracaoSituacaoAgua(Boolean alteracaoSituacaoAgua) {
+		this.alteracaoSituacaoAgua = alteracaoSituacaoAgua;
+	}
+
+	public Boolean isAlteracaoSituacaoEsgoto() {
+		return alteracaoSituacaoEsgoto;
+	}
+
+	public void setAlteracaoSituacaoEsgoto(Boolean alteracaoSituacaoEsgoto) {
+		this.alteracaoSituacaoEsgoto = alteracaoSituacaoEsgoto;
+	}
+
+	public Boolean isAlteracaoCategoria() {
+		return alteracaoCategoria;
+	}
+
+	public void setAlteracaoCategoria(Boolean alteracaoCategoria) {
+		this.alteracaoCategoria = alteracaoCategoria;
 	}
 }

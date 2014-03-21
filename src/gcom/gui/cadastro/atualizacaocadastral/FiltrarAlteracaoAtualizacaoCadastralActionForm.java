@@ -1,5 +1,7 @@
 package gcom.gui.cadastro.atualizacaocadastral;
 
+import java.util.Arrays;
+
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.util.ConstantesSistema;
 
@@ -47,6 +49,14 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 	private String cdRotaInicial;
 
 	private String cdRotaFinal;
+	
+	private String alteracaoSituacaoImovel;
+	
+	private String alteracaoSituacaoAgua;
+	
+	private String alteracaoSituacaoEsgoto;
+	
+	private String alteracaoCategoria;
 
 	public String getIdRegistrosAutorizados() {
 		return idRegistrosAutorizados;
@@ -208,6 +218,38 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 		this.cdRotaFinal = codRotaFinal;
 	}
 	
+	public String getAlteracaoSituacaoImovel() {
+		return alteracaoSituacaoImovel;
+	}
+
+	public void setAlteracaoSituacaoImovel(String alteracaoSituacaoImovel) {
+		this.alteracaoSituacaoImovel = alteracaoSituacaoImovel;
+	}
+
+	public String getAlteracaoSituacaoAgua() {
+		return alteracaoSituacaoAgua;
+	}
+
+	public void setAlteracaoSituacaoAgua(String alteracaoSituacaoAgua) {
+		this.alteracaoSituacaoAgua = alteracaoSituacaoAgua;
+	}
+
+	public String getAlteracaoSituacaoEsgoto() {
+		return alteracaoSituacaoEsgoto;
+	}
+
+	public void setAlteracaoSituacaoEsgoto(String alteracaoSituacaoEsgoto) {
+		this.alteracaoSituacaoEsgoto = alteracaoSituacaoEsgoto;
+	}
+
+	public String getAlteracaoCategoria() {
+		return alteracaoCategoria;
+	}
+
+	public void setAlteracaoCategoria(String alteracaoCategoria) {
+		this.alteracaoCategoria = alteracaoCategoria;
+	}
+
 	public boolean existeParametroInformado() {
 		boolean peloMenosUmParametroInformado = false;
 
@@ -262,5 +304,16 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 		}
 
 		return peloMenosUmParametroInformado;
+	}
+
+	public String toString() {
+		return "FiltrarAlteracaoAtualizacaoCadastralActionForm [idEmpresa=" + idEmpresa + ", nomeEmpresa=" + nomeEmpresa + ", idLeiturista=" + idLeiturista
+				+ ", nomeLeiturista=" + nomeLeiturista + ", periodoRealizacaoInicial=" + periodoRealizacaoInicial + ", periodoRealizacaoFinal="
+				+ periodoRealizacaoFinal + ", idRegistrosNaoAutorizados=" + idRegistrosNaoAutorizados + ", idRegistrosAutorizados=" + idRegistrosAutorizados
+				+ ", exibirCampos=" + exibirCampos + ", colunaImoveisSelecionados=" + Arrays.toString(colunaImoveisSelecionados) + ", idLocalidadeInicial="
+				+ idLocalidadeInicial + ", idLocalidadeFinal=" + idLocalidadeFinal + ", nomeLocalidadeInicial=" + nomeLocalidadeInicial
+				+ ", nomeLocalidadeFinal=" + nomeLocalidadeFinal + ", cdSetorComercialInicial=" + cdSetorComercialInicial + ", cdSetorComercialFinal="
+				+ cdSetorComercialFinal + ", nomeSetorComercialInicial=" + nomeSetorComercialInicial + ", nomeSetorComercialFinal=" + nomeSetorComercialFinal
+				+ ", cdRotaInicial=" + cdRotaInicial + ", cdRotaFinal=" + cdRotaFinal + "]";
 	}
 }

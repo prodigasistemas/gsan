@@ -75,7 +75,7 @@ public class ImovelAtualizacaoCadastralBuilder {
 		imovelAtualizacaoCadastral.setIdLocalInstalacaoRamal(Integer.parseInt(atualizacaoCadastralImovel.getLinhaServicos("localInstalacaoRamal")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaServicos("localInstalacaoRamal")));
 
 		// Linha 5
-		if (atualizacaoCadastralImovel.getLinhaMedidor().size() > 0) {
+		if (atualizacaoCadastralImovel.isExisteMedidor()) {
 			imovelAtualizacaoCadastral.setNumeroHidrometro(atualizacaoCadastralImovel.getLinhaMedidor("numeroHidrometro"));
 			imovelAtualizacaoCadastral.setIdMarcaHidrometro(Integer.parseInt(atualizacaoCadastralImovel.getLinhaMedidor("marcaHidrometro")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaMedidor("marcaHidrometro")));
 			imovelAtualizacaoCadastral.setIdCapacidadeHidrometro(Integer.parseInt(atualizacaoCadastralImovel.getLinhaMedidor("capacidadeHidrometro")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaMedidor("capacidadeHidrometro")));
