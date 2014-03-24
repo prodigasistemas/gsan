@@ -4,36 +4,15 @@ import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastralImovel;
 
 import org.apache.commons.lang.StringUtils;
 
-public class ClienteProprietarioBuilder {
-	private AtualizacaoCadastralImovel atualizacaoCadastralImovel;
-	
-	IClienteAtualizacaoCadastral clienteTxt = null;
-	
+public class ClienteProprietarioBuilder extends ClienteBuilder {
 	public ClienteProprietarioBuilder(AtualizacaoCadastralImovel atualizacaoCadastralImovel){
-		this.atualizacaoCadastralImovel = atualizacaoCadastralImovel;
-		
-		buildCliente();
+		super(atualizacaoCadastralImovel);
 	}
-	
-	private void buildCliente() {
-		clienteTxt = new ClienteAtualizacaoCadastral();
 
-		clienteTxt.setNome(atualizacaoCadastralImovel.getLinhaCliente("nomeProprietario"));
+	public IClienteAtualizacaoCadastral buildCliente(Short clienteRelacaoTipo) {
+		String campo;
 		
-		clienteTxt.setCpf(atualizacaoCadastralImovel.getLinhaCliente("cpfProprietario"));
-		clienteTxt.setCnpj(atualizacaoCadastralImovel.getLinhaCliente("cnpjProprietario"));
-		
-		clienteTxt.setRg(atualizacaoCadastralImovel.getLinhaCliente("rgProprietario"));
-		clienteTxt.setDsUFSiglaOrgaoExpedidorRg(atualizacaoCadastralImovel.getLinhaCliente("ufRgProprietario"));
-		
-		String campo = atualizacaoCadastralImovel.getLinhaCliente("sexoProprietario");
-		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
-			PessoaSexo sexo = new PessoaSexo(Integer.parseInt(campo));
-			clienteTxt.setPessoaSexo(sexo);
-		}
-		
-		clienteTxt.setEmail(atualizacaoCadastralImovel.getLinhaCliente("emailProprietario"));
-		clienteTxt.setIdCliente(new Integer(atualizacaoCadastralImovel.getLinhaCliente("matriculaProprietario")));
+		buildCliente(PROPRIETARIO, clienteRelacaoTipo);
 		
 		campo = atualizacaoCadastralImovel.getLinhaCliente("idTipoLogradouroProprietario");
 		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
@@ -51,20 +30,7 @@ public class ClienteProprietarioBuilder {
 		}
 		
 		clienteTxt.setNomeMunicipio(atualizacaoCadastralImovel.getLinhaCliente("municipioProprietario"));
-		clienteTxt.setIdClienteRelacaoTipo(new Integer(ClienteRelacaoTipo.PROPRIETARIO));
 		
-		campo = atualizacaoCadastralImovel.getLinhaCliente("matriculaImovelCliente");
-		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
-			clienteTxt.setIdImovel(Integer.parseInt(campo));
-		}
-
-		campo = atualizacaoCadastralImovel.getLinhaCliente("tipoPessoaProprietario");
-		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
-			clienteTxt.setIdClienteTipo(Integer.parseInt(campo));
-		}
-	}
-
-	public IClienteAtualizacaoCadastral getClienteTxt() {
 		return clienteTxt;
 	}
 }
