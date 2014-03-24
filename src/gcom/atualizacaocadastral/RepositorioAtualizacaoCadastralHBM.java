@@ -543,10 +543,9 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		String consulta = null;
 		try {
 			consulta = " select clienteImovelRetorno "
-					+ "from ClienteImovelRetorno clienteImovelRetorno "
+					+ "from ClienteImovelRetorno clienteImovelRetorno, Cliente cliente "
 					+ " inner join fetch clienteImovelRetorno.clienteRelacaoTipo clienteRelacaoTipo "
-					+ " where clienteImovelRetorno.idClienteRetorno in "
-						+ " (select clienteRetorno.id from ClienteRetorno clienteRetorno) "
+					+ " where clienteImovelRetorno.cliente.id = cliente.id "
 					+ " and clienteImovelRetorno.idImovelRetorno in "
 						+ " ( select imovelControle.imovelRetorno.id from ImovelControleAtualizacaoCadastral imovelControle, Imovel imovel "
 						+ " where imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  
@@ -654,6 +653,125 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			
 			retorno = (Collection<ClienteImovelRetorno>) session.createQuery(consulta).
 					setInteger("idImovelRetorno",  idImovelRetorno).list();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis.");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		return retorno;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<ClienteImovelRetorno> obterClientesNovaRelacao() throws ErroRepositorioException {
+		
+		Collection<ClienteImovelRetorno> retorno = null;
+		Session session = HibernateUtil.getSession();
+		try {
+			String consulta = " select clienteImovelRetorno "
+					+ "from ClienteImovelRetorno clienteImovelRetorno, Cliente cliente "
+					+ " inner join fetch clienteImovelRetorno.clienteRelacaoTipo clienteRelacaoTipo "
+					+ " where clienteImovelRetorno.cliente.id = cliente.id "
+					+ " and clienteImovelRetorno.idImovelRetorno in "
+						+ " ( select imovelControle.imovelRetorno.id from ImovelControleAtualizacaoCadastral imovelControle, Imovel imovel "
+						+ " where imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  
+						+ " and imovel.id = imovelControle.imovel.id  "
+						+ " and imovelControle.dataProcessamento is null ) " ;
+			
+			retorno = (Collection<ClienteImovelRetorno>) session.createQuery(consulta).list();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis.");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		return retorno;
+	}
+	
+	public boolean existeRelacaoClienteImovel(Integer idImovel, Integer idCliente, Integer idClienteRelacaoTipo) throws ErroRepositorioException {
+		Integer retorno = 0;
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			String consulta = " select count(clienteImovel) "
+							+ " from ClienteImovel clienteImovel " 
+							+ " where clienteImovel.imovel.id = :idImovel "
+							+ " and clienteImovel.cliente.id = :idCliente " 
+							+ " and clienteImovel.clienteRelacaoTipo = :idClienteRelacaoTipo " 
+							+ " and clienteImovel.dataFimRelacao is null " ;
+			
+			retorno = (Integer) session.createQuery(consulta)
+						.setInteger("idImovel", idImovel)
+						.setInteger("idCliente",idCliente)
+						.setInteger("idClienteRelacaoTipo", idClienteRelacaoTipo).uniqueResult();
+			
+			return retorno >0;
+			
+		} catch (HibernateException e) {
+			logger.error("Erro ao pesquisar relacao existente de cliente imovel.", e);
+			throw new ErroRepositorioException("Erro ao pesquisar relacao existente de cliente imovel.");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<ClienteImovelRetorno> obterClientesParaIncluir() throws ErroRepositorioException {
+		
+		Collection<ClienteImovelRetorno> retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = null;
+		try {
+			consulta = " select clienteImovelRetorno "
+					+ "from ClienteImovelRetorno clienteImovelRetorno, Cliente cliente "
+					+ " inner join fetch clienteImovelRetorno.clienteRelacaoTipo clienteRelacaoTipo "
+					+ " where clienteImovelRetorno.cliente.id not in "
+						+ " ( select cliente.id from Cliente ) "
+					+ " and clienteImovelRetorno.idImovelRetorno in "
+						+ " ( select imovelControle.imovelRetorno.id from ImovelControleAtualizacaoCadastral imovelControle, Imovel imovel "
+						+ " where imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  
+						+ " and imovel.id = imovelControle.imovel.id  "
+						+ " and imovelControle.dataProcessamento is null ) " ;
+			
+			retorno = (Collection<ClienteImovelRetorno>) session.createQuery(consulta).list();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis.");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		return retorno;
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<IClienteImovel> obterClientesParaExcluirRelacao() throws ErroRepositorioException {
+		
+		Collection<IClienteImovel> retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = null;
+		
+		String subqueryImoveisAprovados = "select imovelControle.imovelRetorno.id "
+						+ " from ImovelControleAtualizacaoCadastral imovelControle, Imovel imovel "
+						+ " where imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  
+						+ " and imovel.id = imovelControle.imovel.id  "
+						+ " and imovelControle.dataProcessamento is null";
+		
+		String subqueryClientesImovelRetorno = " select clienteImovelRetorno "
+					+ "from ClienteImovelRetorno clienteImovelRetorno, Cliente cliente "
+					+ " where clienteImovelRetorno.cliente.id = cliente.id "
+					+ " and clienteImovelRetorno.idImovelRetorno in "
+					+ " ( " + subqueryImoveisAprovados + " ) ";
+		try {
+			consulta = " select clienteImovel " 
+						+ " from ClienteImovel clienteImovel "
+						+ " inner join fetch clienteImovel.imovel imovel "
+						+ " inner join fetch clienteImovel.cliente cliente "
+						+ " inner join fetch clienteImovel.clienteRelacaoTipo clienteRelacaoTipo "
+						+ " where clienteImovel.imovel.id in ("+ subqueryImoveisAprovados +")"
+						+ " and clienteImovel.cliente.dataFimRelacao is null "
+						+ " and clienteImovel.cliente.id not in ("+ subqueryClientesImovelRetorno +")";
+			
+			retorno = (Collection<IClienteImovel>) session.createQuery(consulta).list();
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis.");
 		} finally {

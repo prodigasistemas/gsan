@@ -13,8 +13,8 @@ import gcom.cadastro.ControladorCadastroLocal;
 import gcom.cadastro.ControladorCadastroLocalHome;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteFone;
+import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
-import gcom.cadastro.cliente.ClienteTipo;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.cliente.ControladorClienteLocalHome;
 import gcom.cadastro.cliente.IClienteFone;
@@ -248,10 +248,10 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		return imoveis;
 	}
 	
-	public Collection<ClienteImovelRetorno> obterClientesParaAtualizar() throws ControladorException {
+	public Collection<ClienteImovelRetorno> obterClientesNovaRelacao() throws ControladorException {
 		Collection<ClienteImovelRetorno> clienteImoveisRetorno = null;
 		try {
-			clienteImoveisRetorno = repositorioAtualizacaoCadastral.obterClientesParaAtualizar(tipoOperacao);
+			clienteImoveisRetorno = repositorioAtualizacaoCadastral.obterClientesParaAtualizar();
 		} catch (ErroRepositorioException e) {
 			logger.error("Erro ao pesquisar clientes para atualizar.", e);
 			throw new ControladorException("Erro ao pesquisar clientes para atualizar.", e);
@@ -480,6 +480,42 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 	private Collection<IImovelRamoAtividade> obterImovelRamoAtividadeParaAtualizar(Integer idImovel) throws Exception {
 		Collection<IImovelRamoAtividade> ramosAtividade = repositorioAtualizacaoCadastral.obterImovelRamoAtividadeParaAtualizar(idImovel);
 		return ramosAtividade;
+	}
+
+	private Collection<ClienteImovelRetorno> obterClientesParaAtualizar() throws ControladorException {
+		Collection<ClienteImovelRetorno> clienteImoveisRetorno = null;
+		try {
+			clienteImoveisRetorno = repositorioAtualizacaoCadastral.obterClientesParaAtualizar();
+		} catch (ErroRepositorioException e) {
+			logger.error("Erro ao pesquisar clientes para atualizar.", e);
+			throw new ControladorException("Erro ao pesquisar clientes para atualizar.", e);
+
+		}
+		return clienteImoveisRetorno;
+	}
+
+	private Collection<ClienteImovelRetorno> obterClientesParaIncluir() throws ControladorException {
+		Collection<ClienteImovelRetorno> clienteImoveisRetorno = null;
+		try {
+			clienteImoveisRetorno = repositorioAtualizacaoCadastral.obterClientesParaIncluir();
+		} catch (ErroRepositorioException e) {
+			logger.error("Erro ao pesquisar clientes para incluir.", e);
+			throw new ControladorException("Erro ao pesquisar clientes para incluir.", e);
+
+		}
+		return clienteImoveisRetorno;
+	}
+	
+	private Collection<IClienteImovel> obterClientesParaExcluirRelacao() throws ControladorException {
+		Collection<IClienteImovel> clienteImoveis = null;
+		try {
+			clienteImoveis = repositorioAtualizacaoCadastral.obterClientesParaExcluirRelacao();
+		} catch (ErroRepositorioException e) {
+			logger.error("Erro ao pesquisar clientes para excluir.", e);
+			throw new ControladorException("Erro ao pesquisar clientes para excluir.", e);
+
+		}
+		return clienteImoveis;
 	}
 
 	private boolean isImovelEmCampo(Integer idImovel) {
@@ -722,40 +758,88 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		int idImovel = -1;
 
 		try {
-
 			Collection<ClienteImovelRetorno> clientesAlteracao = this.obterClientesParaAtualizar();
 			
 			for (ClienteImovelRetorno clienteImovelRetorno : clientesAlteracao) {
-				
 				if (!isImovelEmCampo(clienteImovelRetorno.getImovel().getId())) {
 					
-					ICliente clienteRetorno = repositorioAtualizacaoCadastral.pesquisarClienteRetorno(clienteImovelRetorno);
-					
-					ICliente cliente = getControladorCliente().pesquisarCliente(clienteImovelRetorno.getCliente().getId());
-					
-					if (cliente != null) {
-						MergeProperties.mergeProperties(cliente, clienteRetorno);
-						cliente.setUltimaAlteracao(new Date());
-						getControladorUtil().atualizar(cliente);
+					if (existeRelacaoClienteImovel(clienteImovelRetorno)) {
+						atualizarInformacoesCliente(clienteImovelRetorno);
+					} else {
+						incluirNovaRelacaoCliente(clienteImovelRetorno);
 					}
 				}
 			}
 		} catch (Exception e) {
-			logger.error("Erro ao atualizar imóvel " + idImovel, e);
-			throw new ControladorException("Erro ao atualizar imóvel.", e);
+			logger.error("Erro ao atualizar clientes do imóvel " + idImovel, e);
+			throw new ControladorException("Erro ao atualizar clientes do imóvel.", e);
+		}
+	}
+
+	private void atualizarInformacoesCliente(ClienteImovelRetorno clienteImovelRetorno)	throws ControladorException {
+		ICliente clienteRetorno;
+		try {
+			clienteRetorno = repositorioAtualizacaoCadastral.pesquisarClienteRetorno(clienteImovelRetorno);
+			ICliente cliente = getControladorCliente().pesquisarCliente(clienteImovelRetorno.getCliente().getId());
+	
+			if (cliente != null) {
+				MergeProperties.mergeProperties(cliente, clienteRetorno);
+				cliente.setUltimaAlteracao(new Date());
+				getControladorUtil().atualizar(cliente);
+			}
+		} catch (ErroRepositorioException e) {
+			logger.error("Erro ao atualizar cliente imovel retorno: " + clienteImovelRetorno.getId(), e);
+			throw new ControladorException("Erro ao atualizar cliente imovel retorno.", e);
 		}
 	}
 	
-	private void incluirClientes() throws ControladorException {
-		incluirNovaRelacaoClientes();
-		incluirClientesNovos();
-	}
-	
-	private void incluirClientesNovos() throws ControladorException {
+	private void incluirNovaRelacaoCliente(ClienteImovelRetorno clienteImovelRetorno) throws ControladorException {
 		Integer idImovel = null;
 		
 		try {
-			Collection<ClienteImovelRetorno> clientesImovelInclusao = this.obterClientesParaAtualizar(AlteracaoTipo.INCLUSAO);
+			ICliente clienteRetorno = repositorioAtualizacaoCadastral.pesquisarClienteRetorno(clienteImovelRetorno);
+			IImovel imovelRetorno = repositorioAtualizacaoCadastral.pesquisarImovelRetorno(clienteImovelRetorno.getIdImovelRetorno());
+			
+			Collection<IClienteFone> colecaoClienteFoneRetorno = repositorioAtualizacaoCadastral.pesquisarClienteFoneRetorno(clienteImovelRetorno.getIdClienteRetorno());
+			Collection<IClienteEndereco> colecaoClienteEnderecoRetorno = repositorioAtualizacaoCadastral.pesquisarClienteEnderecoRetorno(clienteImovelRetorno.getIdClienteRetorno());
+			
+			Integer idSetorComercial = getControladorCadastro().pesquisarIdSetorComercialPorCodigoELocalidade(imovelRetorno.getIdLocalidade(), imovelRetorno.getCodigoSetorComercial());
+			Integer idQuadra = getControladorCadastro().pesquisarIdQuadraPorNumeroQuadraEIdSetor(idSetorComercial, imovelRetorno.getNumeroQuadra());
+			
+			String protocoloAtendimento = getControladorRegistroAtendimento().obterProtocoloAtendimento();
+			
+			RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGeraisAtualizacaoCadastral(imovelRetorno, clienteRetorno, clienteImovelRetorno, AlteracaoTipo.INCLUSAO, protocoloAtendimento);
+			RALocalOcorrenciaHelper raLocalOcorrenciaHelper = RABuilder.buildRALocalOcorrenciaAtualizacaoCadastral(imovelRetorno, idSetorComercial, idQuadra, AlteracaoTipo.INCLUSAO);
+			RASolicitanteHelper raSolicitanteHelper = RABuilder.buildRASolicitanteAtualizacaoCadastral(clienteRetorno, colecaoClienteFoneRetorno, colecaoClienteEnderecoRetorno  ); 
+			
+			getControladorRegistroAtendimento().inserirRegistroAtendimento(raDadosGeraisHelper, raLocalOcorrenciaHelper, raSolicitanteHelper);
+		} catch (Exception e) {
+			logger.error("Erro ao incluir nova relacao de cliente para o imovel " + idImovel);
+			throw new ControladorException("Erro ao incluir nova relacao de cliente para o imovel.", e);
+			
+		}
+	}
+	
+	private boolean existeRelacaoClienteImovel(ClienteImovelRetorno clienteImovelRetorno) throws ControladorException {
+		boolean existeRelacao = false;
+		try {
+			existeRelacao = repositorioAtualizacaoCadastral.existeRelacaoClienteImovel(
+								clienteImovelRetorno.getImovel().getId(), 
+								clienteImovelRetorno.getCliente().getId(), 
+								clienteImovelRetorno.getClienteRelacaoTipo().getId());
+		} catch (ErroRepositorioException e) {
+			logger.error("Erro ao verificar existencia de relacao cliente imovel.", e);
+		}
+		
+		return existeRelacao;
+		
+	}
+	
+	private void incluirClientes() throws ControladorException {
+		Integer idImovel = null;
+		
+		try {
+			Collection<ClienteImovelRetorno> clientesImovelInclusao = this.obterClientesParaIncluir();
 			
 			for (ClienteImovelRetorno clienteImovelRetorno : clientesImovelInclusao) {
 				ICliente clienteRetorno = repositorioAtualizacaoCadastral.pesquisarClienteRetorno(clienteImovelRetorno);
@@ -769,7 +853,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 				
 				String protocoloAtendimento = getControladorRegistroAtendimento().obterProtocoloAtendimento();
 				
-				RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGeraisAtualizacaoCadastralInclusaoCliente(imovelRetorno, clienteRetorno, clienteImovelRetorno, AlteracaoTipo.INCLUSAO, protocoloAtendimento);
+				RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGeraisAtualizacaoCadastral(imovelRetorno, clienteRetorno, clienteImovelRetorno, AlteracaoTipo.INCLUSAO, protocoloAtendimento);
 				RALocalOcorrenciaHelper raLocalOcorrenciaHelper = RABuilder.buildRALocalOcorrenciaAtualizacaoCadastral(imovelRetorno, idSetorComercial, idQuadra, AlteracaoTipo.INCLUSAO);
 				RASolicitanteHelper raSolicitanteHelper = RABuilder.buildRASolicitanteAtualizacaoCadastral(clienteRetorno, colecaoClienteFoneRetorno, colecaoClienteEnderecoRetorno  ); 
 				
@@ -780,10 +864,27 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			throw new ControladorException("Erro ao inserir cliente.", e);
 			
 		}
-		
 	}
 	
-	private void incluirNovaRelacaoClientes() {
+	private void excluirClientes() throws ControladorException {
+		Collection<IClienteImovel> clientesImovelExcluirRelacao = this.obterClientesParaExcluirRelacao();
 		
+		for (IClienteImovel clienteImovel : clientesImovelExcluirRelacao) {
+			ICliente clienteRetorno = getControladorCliente().pesquisarCliente(clienteImovel.getCliente().getId());
+			IImovel imovelRetorno = getControladorImovel().pesquisarImovel(clienteImovel.getImovel().getId());
+			
+			Integer idSetorComercial = getControladorCadastro().pesquisarIdSetorComercialPorCodigoELocalidade(imovelRetorno.getIdLocalidade(), imovelRetorno.getCodigoSetorComercial());
+			Integer idQuadra = getControladorCadastro().pesquisarIdQuadraPorNumeroQuadraEIdSetor(idSetorComercial, imovelRetorno.getNumeroQuadra());
+			
+			String protocoloAtendimento = getControladorRegistroAtendimento().obterProtocoloAtendimento();
+			
+			RADadosGeraisHelper raDadosGeraisHelper = RABuilder.buildRADadosGeraisAtualizacaoCadastral(imovelRetorno, clienteRetorno, clienteImovel, AlteracaoTipo.EXCLUSAO, protocoloAtendimento);
+			RALocalOcorrenciaHelper raLocalOcorrenciaHelper = RABuilder.buildRALocalOcorrenciaAtualizacaoCadastral(imovelRetorno, idSetorComercial, idQuadra, AlteracaoTipo.EXCLUSAO);
+			RASolicitanteHelper raSolicitanteHelper = RABuilder.buildRASolicitanteAtualizacaoCadastral(); 
+			
+			getControladorRegistroAtendimento().inserirRegistroAtendimento(raDadosGeraisHelper, raLocalOcorrenciaHelper, raSolicitanteHelper);
+		
+		}
 	}
+	
 }

@@ -58,7 +58,7 @@ public class RABuilder {
 		return raDadosGerais;
 	}
 	
-	public static RADadosGeraisHelper buildRADadosGeraisAtualizacaoCadastralInclusaoCliente(IImovel imovelRetorno, ICliente clienteRetorno, 
+	public static RADadosGeraisHelper buildRADadosGeraisAtualizacaoCadastral(IImovel imovelRetorno, ICliente clienteRetorno, 
 											IClienteImovel clienteImovelRetorno, Integer alteracaoTipo, String protocoloAtendimento) {
 		RADadosGeraisHelper raDadosGerais = new RADadosGeraisHelper();
 		
@@ -566,12 +566,16 @@ public class RABuilder {
 	private static String getObservacaoCliente(ICliente clienteRetorno, IImovel imovelRetorno, IClienteImovel clienteImovelRetorno, Integer alteracaoTipo) {
 		StringBuilder observacao = new StringBuilder();
 		
+		if (alteracaoTipo.equals(AlteracaoTipo.ALTERACAO)) {
+			observacao.append("NOVA RELAÇÃO DE CLIENTE - RECADASTRAMENTO. ");
+		}
+
 		if (alteracaoTipo.equals(AlteracaoTipo.INCLUSAO)) {
 			observacao.append("INCLUSÃO DE CLIENTE - RECADASTRAMENTO. ");
 		}
 		
 		if (alteracaoTipo.equals(AlteracaoTipo.EXCLUSAO)) {
-			observacao.append("EXCLUSÃO DE CLIENTE - RECADASTRAMENTO. ");
+			observacao.append("FIM DA RELAÇÃO DO CLIENTE - RECADASTRAMENTO. ");
 		}
 		
 		observacao.append(getDescricaoInformacoesCliente(clienteRetorno)); 

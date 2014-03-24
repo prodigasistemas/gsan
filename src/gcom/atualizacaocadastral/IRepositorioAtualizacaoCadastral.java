@@ -1,5 +1,6 @@
 package gcom.atualizacaocadastral;
 
+import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.imovel.IImovel;
 import gcom.cadastro.imovel.IImovelSubcategoria;
@@ -74,4 +75,14 @@ public interface IRepositorioAtualizacaoCadastral {
 	public Collection<IClienteFone> pesquisarClienteFoneRetorno(Integer idCliente) throws ErroRepositorioException;
 	
 	public Collection<IClienteEndereco> pesquisarClienteEnderecoRetorno(Integer idCliente) throws ErroRepositorioException;
+	
+	public Collection<ClienteImovelRetorno> obterClienteImoveisDoImovel(Integer idImovelRetorno) throws ErroRepositorioException;
+	
+	public Collection<ClienteImovelRetorno> obterClientesNovaRelacao() throws ErroRepositorioException;
+	
+	public boolean existeRelacaoClienteImovel(Integer idImovel, Integer idCliente, Integer idClienteRelacaoTipo) throws ErroRepositorioException;
+
+	public Collection<ClienteImovelRetorno> obterClientesParaIncluir() throws ErroRepositorioException;
+	
+	public Collection<IClienteImovel> obterClientesParaExcluirRelacao() throws ErroRepositorioException;
 }
