@@ -12178,4 +12178,6 @@ public interface IRepositorioFaturamento {
 			throws ErroRepositorioException;
 	
 	public void atualizarVecimentoFaturaClienteResponsavel(Date dataVencimento, String anoMesReferencia) throws ErroRepositorioException;
+	
+	public Integer countFaturasClienteResponsaveis(String anoMesReferencia) throws ErroRepositorioException;
 }

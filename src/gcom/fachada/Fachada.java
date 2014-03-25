@@ -53573,4 +53573,12 @@ public class Fachada {
 			e.printStackTrace();
 		}
 	}
+	
+	public Integer countFaturasClienteResponsaveis(String anoMesReferencia) {
+		try{
+			return this.getControladorFaturamento().countFaturasClienteResponsaveis(anoMesReferencia);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
 }

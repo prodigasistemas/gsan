@@ -13,35 +13,25 @@
 <%@ include file="/jsp/util/titulo.jsp"%>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="<bean:message key="caminho.css"/>EstilosCompesa.css" type="text/css">
-<script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/ManutencaoRegistro.js" ></script>
 <script language="JavaScript" src="<bean:message key="caminho.js"/>util.js" ></script>
 <script language="JavaScript" src="<bean:message key="caminho.js"/>	Calendario.js"></script>
-<html:javascript staticJavascript="false"  formName="AtualizarVencimentoFaturaClienteResponsavelActionForm"
-dynamicJavascript="true"/>
+
 <script language="JavaScript">
 <!-- Begin
-function validaMesAno(mesAno){
-	if(mesAno.value != ""){
-		return verificaAnoMes(mesAno);
-	}else{
-		return true;
-	}
-}
-	
 function limparForm(){
 	var form = document.forms[0];
 	
 	form.mesAno.value = "";
 }
 
-function atualizar(){
-	var form = document.forms[0];
-	form.submit();
+function validarForm(form){
+	submeterFormPadrao(form);
 }
 
 	-->
 </script>
 </head>
+
 
 <body leftmargin="5" topmargin="5">
 <html:form
@@ -149,7 +139,7 @@ function atualizar(){
 						onclick="window.location.href='<html:rewrite page="/exibirAtualizarVencimentoFaturaClienteResponsavel.do?menu=sim"/>'">
 			</td>
           	<td align="right"><input type="button" name="Button" class="bottonRightCol"
-					value="Atualizar" onclick="javascript:atualizar();" />
+					value="Atualizar" onclick="validarForm(document.forms[0]);" />
 		  	</td>
         </tr>
       </table>

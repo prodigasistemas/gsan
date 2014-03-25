@@ -17063,4 +17063,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 
+	public Integer countFaturasClienteResponsaveis(String anoMesReferencia) throws ControladorException {
+		try {
+			return repositorioFaturamento.countFaturasClienteResponsaveis(anoMesReferencia);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
 }

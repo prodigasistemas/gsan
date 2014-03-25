@@ -5887,4 +5887,6 @@ public interface IControladorFaturamento {
 			DebitoTipo debitoTipo, Usuario usuario) throws ControladorException;
 
 	public void atualizarVecimentoFaturaClienteResponsavel(Date dataVencimento, String anoMesReferencia) throws ControladorException;
+	
+	public Integer countFaturasClienteResponsaveis(String anoMesReferencia) throws ControladorException;
 }

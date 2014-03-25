@@ -25,6 +25,8 @@
 			validate="false"
 			scope="session" 
 			path="/atualizarVencimentoFaturaClienteResponsavelAction">
+			<forward name="exibirAtualizarVencimentoFaturaClienteResponsavel"
+			      path="/jsp/faturamento/atualizar_vencimento_fatura_cliente_responsavel.jsp"/>
 		</action>
 		
 	</action-mappings>
