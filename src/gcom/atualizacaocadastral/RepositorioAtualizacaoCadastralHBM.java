@@ -7,6 +7,7 @@ import gcom.cadastro.imovel.IImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
+import gcom.util.ConstantesSistema;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
 
@@ -45,10 +46,11 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		
 		try {
 			
-			consulta = "from ImovelRetorno imovelRetorno"
+			consulta = " select imovelRetorno "
+					+ "from ImovelRetorno imovelRetorno"
 					+ " where imovelRetorno.tipoOperacao = :tipoOperacao"
-					+ " and imovelRetorno.idImovel in "
-						+ " ( select imovelControle.imovel.id from ImovelControleAtualizacaoCadastral imovelControle "
+					+ " and imovelRetorno.id in "
+						+ " ( select imovelControle.imovelRetorno.id from ImovelControleAtualizacaoCadastral imovelControle "
 						+ " where imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  
 						+ " and imovelControle.dataProcessamento is null ) " ;
 			
@@ -723,15 +725,15 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		String consulta = null;
 		try {
 			consulta = " select clienteImovelRetorno "
-					+ "from ClienteImovelRetorno clienteImovelRetorno, Cliente cliente "
+					+ "from ClienteImovelRetorno clienteImovelRetorno "
 					+ " inner join fetch clienteImovelRetorno.clienteRelacaoTipo clienteRelacaoTipo "
-					+ " where clienteImovelRetorno.cliente.id not in "
-						+ " ( select cliente.id from Cliente ) "
-					+ " and clienteImovelRetorno.idImovelRetorno in "
-						+ " ( select imovelControle.imovelRetorno.id from ImovelControleAtualizacaoCadastral imovelControle, Imovel imovel "
+					+ " where clienteImovelRetorno.cliente.id = " + ConstantesSistema.ZERO
+					+ " and clienteImovelRetorno.imovel.id in "
+						+ " ( select imovelControle.imovelRetorno.idImovel from ImovelControleAtualizacaoCadastral imovelControle, Imovel imovel "
 						+ " where imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  
 						+ " and imovel.id = imovelControle.imovel.id  "
 						+ " and imovelControle.dataProcessamento is null ) " ;
+			
 			
 			retorno = (Collection<ClienteImovelRetorno>) session.createQuery(consulta).list();
 		} catch (HibernateException e) {
@@ -750,16 +752,16 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		Session session = HibernateUtil.getSession();
 		String consulta = null;
 		
-		String subqueryImoveisAprovados = "select imovelControle.imovelRetorno.id "
+		String subqueryImoveisAprovados = "select imovelControle.imovel.id "
 						+ " from ImovelControleAtualizacaoCadastral imovelControle, Imovel imovel "
 						+ " where imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  
 						+ " and imovel.id = imovelControle.imovel.id  "
 						+ " and imovelControle.dataProcessamento is null";
 		
-		String subqueryClientesImovelRetorno = " select clienteImovelRetorno "
+		String subqueryClientesImovelRetorno = " select clienteImovelRetorno.cliente.id "
 					+ "from ClienteImovelRetorno clienteImovelRetorno, Cliente cliente "
 					+ " where clienteImovelRetorno.cliente.id = cliente.id "
-					+ " and clienteImovelRetorno.idImovelRetorno in "
+					+ " and clienteImovelRetorno.imovel.id in "
 					+ " ( " + subqueryImoveisAprovados + " ) ";
 		try {
 			consulta = " select clienteImovel " 
@@ -768,7 +770,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 						+ " inner join fetch clienteImovel.cliente cliente "
 						+ " inner join fetch clienteImovel.clienteRelacaoTipo clienteRelacaoTipo "
 						+ " where clienteImovel.imovel.id in ("+ subqueryImoveisAprovados +")"
-						+ " and clienteImovel.cliente.dataFimRelacao is null "
+						+ " and clienteImovel.dataFimRelacao is null "
 						+ " and clienteImovel.cliente.id not in ("+ subqueryClientesImovelRetorno +")";
 			
 			retorno = (Collection<IClienteImovel>) session.createQuery(consulta).list();

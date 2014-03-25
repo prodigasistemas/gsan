@@ -2091,11 +2091,11 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 	}
 
 	public int getNumeroQuadra() {
-		return numeroQuadraEntrega;
+		return this.quadra.getNumeroQuadra();
 	}
 
 	public void setNumeroQuadra(int numeroQuadra) {
-		this.numeroQuadraEntrega = numeroQuadra;
+		this.quadra.setNumeroQuadra(numeroQuadra);
 	}
 
 	public Integer getIdCapacidadeHidrometro() {

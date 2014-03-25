@@ -1,6 +1,5 @@
 package gcom.atualizacaocadastral;
 
-import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.imovel.IImovel;
 import gcom.cadastro.imovel.IImovelSubcategoria;

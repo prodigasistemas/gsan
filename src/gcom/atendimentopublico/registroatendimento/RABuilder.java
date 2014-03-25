@@ -1,13 +1,11 @@
 package gcom.atendimentopublico.registroatendimento;
 
 import gcom.atualizacaocadastral.ICliente;
-import gcom.atualizacaocadastral.IClienteEndereco;
 import gcom.atualizacaocadastral.IClienteImovel;
 import gcom.cadastro.ContaBraile;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.ClienteTipo;
-import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.imovel.IImovel;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.unidade.UnidadeOrganizacional;
@@ -238,7 +236,7 @@ public class RABuilder {
 		return raDadosGerais;
 	}
 	
-	public static RALocalOcorrenciaHelper buildRALocalOcorrenciaAtualizacaoCadastral(IImovel imovel, Integer idSetorComercial, Integer idQuadra, Integer alteracaoTipo){
+	public static RALocalOcorrenciaHelper buildRALocalOcorrenciaAtualizacaoCadastral(IImovel imovel, Integer idSetorComercial, Integer alteracaoTipo){
 		RALocalOcorrenciaHelper raLocalOcorrenciaHelper = new RALocalOcorrenciaHelper();
 		
 		raLocalOcorrenciaHelper.colecaoEndereco(null)
@@ -461,15 +459,6 @@ public class RABuilder {
 		return new RASolicitanteHelper().nomeSolicitante("COSANPA - Recadastramento").idServicoTipo(SERVICO_TIPO_LOCALIZAR_IMOVEL);
 	}
 	
-	public static RASolicitanteHelper buildRASolicitanteAtualizacaoCadastral(ICliente cliente, Collection<IClienteFone> colecaoClienteFone, 
-																			Collection<IClienteEndereco> colecaoClienteEndereco){
-		return new RASolicitanteHelper().nomeSolicitante("COSANPA - Recadastramento")
-										.idServicoTipo(SERVICO_TIPO_LOCALIZAR_IMOVEL)
-										.enderecoEmail(cliente.getEmail())
-										.colecaoFone(colecaoClienteFone)
-										.colecaoEnderecoSolicitante(colecaoClienteEndereco);
-	}
-	
 	@SuppressWarnings("rawtypes")
 	public static Collection getColecaoEnderecoSolicitante(InserirRegistroAtendimentoActionForm form, HttpSession sessao) {
 		Collection colecaoEnderecoSolicitante = null;
@@ -640,12 +629,18 @@ public class RABuilder {
 		informacoes.append(clienteRelacaoTipo.getDescricao());
 		informacoes.append(". ");
 		
-		if (imovelRetorno.getTipoOperacao().equals(AlteracaoTipo.ALTERACAO)){
+		if (imovelRetorno.getTipoOperacao() != null) {
+			if (imovelRetorno.getTipoOperacao().equals(AlteracaoTipo.ALTERACAO)){
+				informacoes.append("Matrícula do imóvel:");
+				informacoes.append(imovelRetorno.getIdImovel());
+				informacoes.append(".");
+			} else if (imovelRetorno.getTipoOperacao().equals(AlteracaoTipo.INCLUSAO)) {
+				informacoes.append("Imóvel Novo.");
+			}
+		} else if (imovelRetorno.getIdImovel() != null){
 			informacoes.append("Matrícula do imóvel:");
 			informacoes.append(imovelRetorno.getIdImovel());
 			informacoes.append(".");
-		} else if (imovelRetorno.getTipoOperacao().equals(AlteracaoTipo.INCLUSAO)) {
-			informacoes.append("Imóvel Novo.");
 		}
 		
 		return informacoes;
