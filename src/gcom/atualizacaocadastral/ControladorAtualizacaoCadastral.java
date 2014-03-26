@@ -355,11 +355,12 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 	private void atualizarClienteFoneAtualizacaoCadastral(Integer idiIovelRetorno) throws Exception {
 		ImovelRetorno imovelRetorno = (ImovelRetorno) repositorioAtualizacaoCadastral.pesquisarImovelRetorno(idiIovelRetorno);
 
-		this.removerClienteFoneDoImovel(imovelRetorno.getIdImovel());
 
 		Collection<IClienteFone> clienteFonesRetorno = this.obterClientesFoneParaAtualizar(imovelRetorno.getIdImovel());
 		
 		for (IClienteFone clienteFoneRetorno : clienteFonesRetorno) {
+			getControladorCliente().removerTodosTelefonesPorCliente(clienteFoneRetorno.getCliente().getId());
+			
 			ClienteFone clienteFone = new ClienteFone();
 			MergeProperties.mergeProperties(clienteFone, clienteFoneRetorno);
 			clienteFone.setUltimaAlteracao(new Date());
@@ -382,13 +383,6 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		}
 	}
 	
-	private void removerClienteFoneDoImovel(Integer idImovel) throws ControladorException {
-		Collection<ClienteFone> clienteFones = getControladorCliente().pesquisarClienteFoneDoImovel(idImovel);
-		for (ClienteFone clienteFone : clienteFones) {
-			getControladorUtil().remover(clienteFone);
-		}
-	}
-
 	private ImovelRamoAtividade obterRamoAtiviadeDoImovel(IImovel imovel, Integer id) throws ControladorException {
 		Collection<ImovelRamoAtividade> ramosAtividadeImovel = getControladorImovel().pesquisarRamoAtividadeDoImovel(imovel.getId());
 		
@@ -742,6 +736,9 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 				
 				idImovel = clienteImovelRetorno.getImovel().getId();
 				
+				if (idImovel == new Integer("4136691")) {
+					System.out.println("cheguei!!");
+				}
 				if (!isImovelEmCampo(clienteImovelRetorno.getImovel().getId())) {
 					
 					if (existeRelacaoClienteImovel(clienteImovelRetorno)) {
