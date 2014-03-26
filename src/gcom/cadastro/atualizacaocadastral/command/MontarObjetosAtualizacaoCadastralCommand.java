@@ -13,6 +13,7 @@ import gcom.atualizacaocadastral.ImovelSubcategoriaRetorno;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteAtualizacaoCadastral;
+import gcom.cadastro.cliente.ClienteBuilder;
 import gcom.cadastro.cliente.ClienteFoneAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteProprietarioBuilder;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
@@ -37,6 +38,7 @@ import gcom.seguranca.transacao.AlteracaoTipo;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
+import gcom.util.ErroRepositorioException;
 import gcom.util.ParserUtil;
 
 import java.io.File;
@@ -186,54 +188,58 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	}
 	
 
+	private void salvarClienteUsuario() throws Exception {
+		IClienteAtualizacaoCadastral clienteTxt = new ClienteUsuarioBuilder(atualizacaoCadastralImovel).buildCliente(ClienteRelacaoTipo.USUARIO);
+		
+		if (matriculaUsuario != 0) {
+			salvarClienteRetorno(matriculaUsuario, clienteTxt, ClienteRelacaoTipo.USUARIO, ClienteBuilder.USUARIO);
+		}		
+	}
+
 	private void salvarClienteProprietario() throws Exception {
-		IClienteAtualizacaoCadastral clienteTxt = new ClienteProprietarioBuilder(atualizacaoCadastralImovel).getClienteTxt();
+		IClienteAtualizacaoCadastral clienteTxt;
+		
+		// Verifica se o usuario e igual ao proprietario, entao recupera os valores de usuario pois os de proprietario estarao vazios
+		if(atualizacaoCadastralImovel.getLinhaCliente("usuarioProprietario").equals("1")){
+			clienteTxt = new ClienteUsuarioBuilder(atualizacaoCadastralImovel).buildCliente(ClienteRelacaoTipo.PROPRIETARIO);
+		}else{
+			clienteTxt = new ClienteProprietarioBuilder(atualizacaoCadastralImovel).buildCliente(ClienteRelacaoTipo.PROPRIETARIO);
+		}
 		
 		if (StringUtils.isNotEmpty(atualizacaoCadastralImovel.getLinhaCliente("nomeProprietario"))) {
-			
-	        boolean existeCliente = repositorioClienteImovel.existeClienteImovelTipo(matriculaProprietario,
-	        		matriculaImovel, (int) ClienteRelacaoTipo.PROPRIETARIO, clienteTxt.getCpf());
-
-	        salvarCliente(matriculaProprietario, ClienteRelacaoTipo.PROPRIETARIO, clienteTxt,
-	        		atualizacaoCadastralImovel.getLinhaCliente("telefoneProprietario"),
-	        		atualizacaoCadastralImovel.getLinhaCliente("celularProprietario"),
-	        		existeCliente);
+			salvarClienteRetorno(matriculaProprietario, clienteTxt, ClienteRelacaoTipo.PROPRIETARIO, ClienteBuilder.PROPRIETARIO);
 		}
 	}
 
 	private void salvarClienteResponsavel() throws Exception {
-		IClienteAtualizacaoCadastral clienteTxt = new ClienteResponsavelBuilder(atualizacaoCadastralImovel).getClienteTxt();
+		IClienteAtualizacaoCadastral clienteTxt;
+		
+		// Verifica se os dados do responsavel sao os mesmos que o usuario ou proprietario, caso contrario as informacoes estarao em responsavel
+		if(atualizacaoCadastralImovel.getLinhaCliente("tipoResponsavel").equals("0")){
+			clienteTxt = new ClienteUsuarioBuilder(atualizacaoCadastralImovel).buildCliente(ClienteRelacaoTipo.RESPONSAVEL);
+		}else if(atualizacaoCadastralImovel.getLinhaCliente("tipoResponsavel").equals("1")){
+			clienteTxt = new ClienteProprietarioBuilder(atualizacaoCadastralImovel).buildCliente(ClienteRelacaoTipo.RESPONSAVEL);
+		}else{
+			clienteTxt = new ClienteResponsavelBuilder(atualizacaoCadastralImovel).buildCliente(ClienteRelacaoTipo.RESPONSAVEL);
+		}
 		
 		if (StringUtils.isNotEmpty(atualizacaoCadastralImovel.getLinhaCliente("nomeResponsavel"))) {
-			
-	        boolean existeCliente = repositorioClienteImovel.existeClienteImovelTipo(matriculaResponsavel,
-	        		matriculaImovel, (int) ClienteRelacaoTipo.RESPONSAVEL, clienteTxt.getCpf());
-	        
-			salvarCliente(matriculaResponsavel, ClienteRelacaoTipo.RESPONSAVEL, clienteTxt,
-					atualizacaoCadastralImovel.getLinhaCliente("telefoneResponsavel"),
-					atualizacaoCadastralImovel.getLinhaCliente("celularResponsavel"),
-					existeCliente);
+			salvarClienteRetorno(matriculaResponsavel, clienteTxt, ClienteRelacaoTipo.RESPONSAVEL, ClienteBuilder.RESPONSAVEL);
 		}
 	}
 	
-	private void salvarClienteUsuario() throws Exception {
-		IClienteAtualizacaoCadastral clienteTxt = new ClienteUsuarioBuilder(atualizacaoCadastralImovel).getClienteTxt();
+	private void salvarClienteRetorno(int matricula, IClienteAtualizacaoCadastral clienteTxt, Short clienteRelacaoTipo, String tipoCliente) throws Exception{
+		Integer tipoOperacao = getTipoOperacaoCliente(clienteTxt.getCpf(), clienteRelacaoTipo);
 		
-		if (matriculaUsuario != 0) {
-			
-	        boolean existeCliente = repositorioClienteImovel.existeClienteImovelTipo(matriculaUsuario,
-	        		matriculaImovel, (int) ClienteRelacaoTipo.USUARIO, clienteTxt.getCpf());
-	
-			salvarCliente(matriculaUsuario, ClienteRelacaoTipo.USUARIO, clienteTxt,
-					atualizacaoCadastralImovel.getLinhaCliente("telefoneUsuario"),
-					atualizacaoCadastralImovel.getLinhaCliente("celularUsuario"),
-					existeCliente);
-		}		
+		salvarCliente(matricula, clienteRelacaoTipo, clienteTxt
+						,atualizacaoCadastralImovel.getLinhaCliente("telefone" + tipoCliente)
+						, atualizacaoCadastralImovel.getLinhaCliente("celular" + tipoCliente)
+						, tipoOperacao);
 	}
 
-	private void salvarCliente(int matricula, Short clienteRelacaoTipo,
-			IClienteAtualizacaoCadastral clienteTxt, String telefone,
-			String celular, boolean existeCliente) throws ControladorException {
+	private void salvarCliente(int matricula, Short clienteRelacaoTipo, IClienteAtualizacaoCadastral clienteTxt, String telefone, String celular, Integer tipoOperacao) throws ControladorException {
+		
+		clienteTxt.setTipoOperacao(tipoOperacao);
 		
 		Integer idclienteRetorno = salvarClienteRetorno(clienteTxt);
 		salvarClienteImovelRetorno(clienteTxt, matriculaImovel, idclienteRetorno);
@@ -245,11 +251,10 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		salvarClienteEnderecoRetorno(matricula, clienteTxt, idclienteRetorno);
 		
 		IClienteAtualizacaoCadastral clienteAtualizacaoCadastralBase = null;
-		if (existeCliente){
+		if (tipoOperacao != AlteracaoTipo.INCLUSAO) {
 			clienteAtualizacaoCadastralBase = controladorCliente.pesquisarClienteAtualizacaoCadastral(
 					matricula, matriculaImovel, new Integer(clienteRelacaoTipo));			
 		}else{
-			tipoOperacao = AlteracaoTipo.INCLUSAO;
 			clienteAtualizacaoCadastralBase = new ClienteAtualizacaoCadastral();
 		}
 		
@@ -393,6 +398,42 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 			controladorUtil.inserir(imagemRetorno);
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	private Integer getTipoOperacaoCliente(String cpfCliente, Short clienteRelacaoTipo) throws ErroRepositorioException {
+		Integer tipoOperacao = AlteracaoTipo.ALTERACAO;
+		
+		boolean existeCliente = repositorioClienteImovel.existeClienteImovelTipo(matriculaProprietario
+				, matriculaImovel
+				, (int) ClienteRelacaoTipo.PROPRIETARIO
+				, cpfCliente);
+		
+		if (!existeCliente){
+			tipoOperacao = AlteracaoTipo.INCLUSAO;
+		}
+		
+		return tipoOperacao;
+	}
+	
+	private void salvarImagem(AtualizacaoCadastral atualizacao, Integer matricula) throws Exception {
+
+		for (String nomeImagem : atualizacao.getImagens()) {
+
+			String caminhoJboss = System.getProperty("jboss.server.home.dir");
+			String pasta = "/images/cadastro/" + atualizacao.getArquivoTexto().getDescricaoArquivo();
+			
+			if (nomeImagem.contains(matricula.toString())) {
+				File imagem = new File(caminhoJboss + pasta, nomeImagem);
+
+				ImagemRetorno imagemRetorno = new ImagemRetorno();
+				imagemRetorno.setIdImovel(matricula);
+				imagemRetorno.setNomeImagem(imagem.getName());
+				imagemRetorno.setPathImagem(imagem.getAbsolutePath());
+				imagemRetorno.setUltimaAlteracao(new Date());
+
+				controladorUtil.inserir(imagemRetorno);
+			}
 		}
 	}
 }

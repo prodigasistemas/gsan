@@ -476,4 +476,9 @@ public class ClienteEndereco extends ObjetoTransacao implements IClienteEndereco
 	public void setCodigoCep(Integer codigoCep){
 		// TODO Auto-generated method stub
 	}
+
+	public void getPerimetroInicial(Logradouro perimetroInicial) {
+		// TODO Auto-generated method stub
+		
+	}
 }

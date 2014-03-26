@@ -984,4 +984,8 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 	public void setCodigoLogradouro(String codigoLogradouro) {
 		this.idLogradouro = Integer.valueOf(codigoLogradouro);
 	}
+	
+	public boolean isImovelNovo() {
+		return this.idImovel.equals(null);
+	}
 }
