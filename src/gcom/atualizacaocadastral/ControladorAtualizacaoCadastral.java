@@ -12,6 +12,7 @@ import gcom.batch.UnidadeProcessamento;
 import gcom.cadastro.ControladorCadastroLocal;
 import gcom.cadastro.ControladorCadastroLocalHome;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
+import gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCadastralHelper;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.ControladorClienteLocal;
@@ -274,6 +275,12 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 
 	public Integer recuperaValorSequenceImovelRetorno() throws Exception {
 		return repositorioAtualizacaoCadastral.recuperaValorSequenceImovelRetorno();
+	}
+	
+	public void aprovarImoveisEmLote(Usuario usuarioLogado, Collection<ConsultarMovimentoAtualizacaoCadastralHelper> listaImoveis) throws ControladorException {
+		//this.aprovarImoveis(listaImoveis);
+		System.out.println("Aprovando imóveis em lote...");
+		
 	}
 	
 	/************************************************************
@@ -858,6 +865,21 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 				getControladorRegistroAtendimento().inserirRegistroAtendimento(raDadosGeraisHelper, raLocalOcorrenciaHelper, raSolicitanteHelper);
 			}
 		
+		}
+	}
+	
+	private Collection<IImovel> obterImoveisParaAprovarEmLote() {
+		Collection<IImovel> listaImoveisAprovacaoEmLote = null;
+		
+		return listaImoveisAprovacaoEmLote;
+	}
+	
+	private void aprovarImoveis(Collection<IImovel> imoveisParaAprovar) throws ControladorException {
+		try {
+			repositorioAtualizacaoCadastral.aprovarImoveis(imoveisParaAprovar);
+		} catch (Exception e) {
+			logger.error("Erro ao aprovar imóveis em lote. " + e);
+			throw new ControladorException("Erro ao aprovar imóveis em lote.", e);
 		}
 	}
 	

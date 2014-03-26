@@ -307,6 +307,7 @@
         <strong> 
           <html:radio property="exibirCampos" value="3" /> Pendentes de Aprova&ccedil;&atilde;o 
           <html:radio property="exibirCampos" value="4" /> Aprovados
+          <html:radio property="exibirCampos" value="-2" /> Aprovar em lote
           <html:radio property="exibirCampos" value="-1" /> Todos
         </strong>
       </td>

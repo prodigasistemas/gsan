@@ -782,4 +782,28 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		
 		return retorno;
 	}
+	
+	public void aprovarImoveis(Collection<IImovel> listaImoveis) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
+		
+		try {
+			
+			consulta = "update ImovelControleAtualizacaoCadastral controle "
+						+ " set controle.situacaoAtualizacaoCadastral.id = :situacaoAprovado ,"
+						+ " controle.dataAprovacao = :dataAprovacao" 
+						+ " where controle.imovelRetorno.id in (:listaImoveis) ";
+			
+			session.createQuery(consulta)
+						.setInteger("situacaoAprovado", SituacaoAtualizacaoCadastral.APROVADO)
+						.setDate("dataAprovacao", new Date())
+						.setParameterList("listaImoveis", getIdsImovelRetorno(listaImoveis))   .executeUpdate();
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao aprovar imóveis.");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+	
 }

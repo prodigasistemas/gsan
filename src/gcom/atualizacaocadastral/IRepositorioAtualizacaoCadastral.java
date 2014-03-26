@@ -84,4 +84,6 @@ public interface IRepositorioAtualizacaoCadastral {
 	public Collection<ClienteImovelRetorno> obterClientesParaIncluir() throws ErroRepositorioException;
 	
 	public Collection<IClienteImovel> obterClientesParaExcluirRelacao() throws ErroRepositorioException;
+	
+	public void aprovarImoveis(Collection<IImovel> listaImoveis) throws ErroRepositorioException;
 }

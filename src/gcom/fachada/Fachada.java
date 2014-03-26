@@ -53565,4 +53565,12 @@ public class Fachada {
 	public String retornaIpServidorOperacional() throws Exception{
 		return this.getControladorCadastro().retornaIpServidorOperacional();
 	}
+	
+	public void aprovarImoveisEmLote(Usuario usuarioLogado, Collection<ConsultarMovimentoAtualizacaoCadastralHelper> listaImoveis) {
+		try {
+			this.getControladorAtualizacaoCadastral().aprovarImoveisEmLote(usuarioLogado, listaImoveis);
+		}catch(ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
 }

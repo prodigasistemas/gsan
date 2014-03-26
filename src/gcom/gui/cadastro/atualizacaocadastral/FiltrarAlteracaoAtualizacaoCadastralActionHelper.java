@@ -51,24 +51,27 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		this.cdSetorComercialFinal = form.getCdSetorComercialFinal();
 		this.cdRotaFinal = form.getCdRotaFinal();
 		
-		alteracaoHidrometro = consisteAlteracao(form.getAlteracaoHidrometro());
-		alteracaoSituacaoAgua   = consisteAlteracao(form.getAlteracaoSituacaoAgua());
-		alteracaoSituacaoEsgoto = consisteAlteracao(form.getAlteracaoSituacaoEsgoto());
-		alteracaoCategoria      = consisteAlteracao(form.getAlteracaoCategoria());
+		alteracaoHidrometro = consisteAlteracao(form.getAlteracaoHidrometro(), this.exibirCampos);
+		alteracaoSituacaoAgua   = consisteAlteracao(form.getAlteracaoSituacaoAgua(), this.exibirCampos);
+		alteracaoSituacaoEsgoto = consisteAlteracao(form.getAlteracaoSituacaoEsgoto(), this.exibirCampos);
+		alteracaoCategoria      = consisteAlteracao(form.getAlteracaoCategoria(), this.exibirCampos);
 	}
 	
-	private Boolean consisteAlteracao(String campo){
-		Boolean existeFiltro = null;
-		if (StringUtils.isNotEmpty(campo)){
+	private Boolean consisteAlteracao(String campo, String exibirCampos){
+		Boolean aplicaFiltro = null;
+		
+		if (exibirCampos.equals(FiltrarAlteracaoAtualizacaoCadastralActionForm.APROVACAO_EM_LOTE)) {
+			aplicaFiltro = false;
+		} else if (StringUtils.isNotEmpty(campo)){
 			Integer altera = Integer.parseInt(campo);
 			if (altera == 1){
-				existeFiltro = true;
+				aplicaFiltro = true;
 			}
 			if (altera == 2){
-				existeFiltro = false;
+				aplicaFiltro = false;
 			}
 		}
-		return existeFiltro;
+		return aplicaFiltro;
 	}
 
 	public String getIdEmpresa() {
@@ -95,6 +98,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		this.exibirCampos = exibirCampos;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Collection getColunaImoveisSelecionados() {
 		if (colunaImoveisSelecionados != null && colunaImoveisSelecionados.length > 0) {
 			Collection colecaoColunaImoveisSelecionados = new ArrayList();
@@ -192,4 +196,8 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	public void setAlteracaoCategoria(Boolean alteracaoCategoria) {
 		this.alteracaoCategoria = alteracaoCategoria;
 	}
-}
+	
+	public boolean isAprovacaoEmLote() {
+		return this.exibirCampos.equals(FiltrarAlteracaoAtualizacaoCadastralActionForm.APROVACAO_EM_LOTE)? true : false;
+	}
+ }

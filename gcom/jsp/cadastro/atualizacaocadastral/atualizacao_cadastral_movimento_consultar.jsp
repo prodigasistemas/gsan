@@ -64,6 +64,14 @@
 		form.submit();
 		window.close();
 	}
+	
+	function aprovarEmLote(){
+	  	var form = document.forms[0];
+	  	form.action = "/gsan/aprovarImoveisEmLoteAction.do";
+	  	form.submit();
+		
+		alert("aprovando em lote...");
+	}
  
 </script>
 </head>
@@ -221,6 +229,12 @@
 						</logic:iterate>
 					</table>
 					</div>
+					</td>
+				</tr>
+				<tr>
+					<td align="left" width="50%">					
+						<input type="button" name="Button" class="bottonRightCol"
+						value="Aprovar em Lote" onclick="aprovarEmLote();">	
 					</td>
 				</tr>
 				</logic:present>
