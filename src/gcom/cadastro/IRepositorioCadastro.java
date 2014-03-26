@@ -390,12 +390,8 @@ public interface IRepositorioCadastro {
 	public Integer pesquisarIdSetorComercialPorCodigoELocalidade(Integer idLocalidade, Integer codigoSetor) throws ErroRepositorioException;
 	
 	public Integer pesquisarIdQuadraPorNumeroQuadraEIdSetor(Integer idSetorComercial, Integer numeroQuadra) throws ErroRepositorioException;
-<<<<<<< HEAD
 	
 	public String retornaIpServidorOperacional() throws ErroRepositorioException;
-=======
 
 	public SituacaoAtualizacaoCadastral pesquisarSituacaoAtualizacaoCadastralPorId(Integer idSituacaoCadastral) throws ErroRepositorioException;
-
->>>>>>> recadastramento-ra
 }
