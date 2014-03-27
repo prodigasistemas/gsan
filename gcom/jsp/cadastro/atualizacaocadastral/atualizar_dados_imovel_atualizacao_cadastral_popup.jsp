@@ -156,89 +156,6 @@
 					<td><strong>Quadra:</strong></td>
 					<td align="left"><html:text property="numeroQuadra" readonly="true" size="8" styleClass="texto-exibicao" /></td>
 				</tr>
-        
-                <tr>
-                  <td>
-                    <strong>Situação de Água:</strong>
-                  </td>
-                  <td>
-                    <html:text property="situacaoLigacaoAgua" readonly="true" size="15" styleClass="texto-exibicao"/>
-                  </td>
-                </tr>
-                
-                <tr>
-                  <td>
-                    <strong>Situação de Esgoto:</strong>
-                  </td>
-                  <td>
-                    <html:text property="situacaoLigacaoEsgoto" readonly="true" size="15" styleClass="texto-exibicao"/>
-                  </td>
-                </tr>
-                
-                <tr>
-                  <td width="100%" colspan="3">
-                  <div style="width: 600px; height: 100%; overflow: auto;">
-                  <table width="100%" align="left" bgcolor="#99CCFF">
-                    <tr bordercolor="#000000">
-                      <td width="19%" bgcolor="#90c7fc" align="center">
-                      <div class="style9"><font color="#000000" style="font-size:9px"
-                        face="Verdana, Arial, Helvetica, sans-serif"> <strong>Categoria</strong>
-                      </font></div>
-                      </td>
-                      <td width="56%" bgcolor="#90c7fc" align="center">
-                      <div class="style9"><font color="#000000" style="font-size:9px"
-                        face="Verdana, Arial, Helvetica, sans-serif"> <strong>Subcategoria</strong></font>
-                      </div>
-                      </td>
-                      <td width="25%" bgcolor="#90c7fc" align="center">
-                      <div class="style9"><font color="#000000" style="font-size:9px"
-                        face="Verdana, Arial, Helvetica, sans-serif"> <strong>Quantidade
-                      de Economias</strong> </font></div>
-                      </td>
-                    </tr>
-                  
-                    <!--corpo da segunda tabela-->
-                    <%int cont = 0;%>
-                    <logic:notEmpty  name="imovelSubcategorias">
-                      <logic:iterate name="imovelSubcategorias" id="imovelSubcategoria" type="ImovelSubcategoriaAtualizacaoCadastral">
-                        <%cont = cont + 1;
-                          if (cont % 2 == 0) {%>
-                        <tr bgcolor="#cbe5fe">
-                          <%} else {%>
-                        <tr bgcolor="#FFFFFF">
-                          <%}%>
-
-                          <td width="19%" align="left">
-                          <div align="center">
-                            <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-                              <bean:write name="imovelSubcategoria" property="descricaoCategoria" />
-                            </font>
-                          </div>
-                          </td>
-                          
-                          <td width="56%" align="left">
-                          <div align="center">
-                            <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-                              <bean:write name="imovelSubcategoria" property="descricaoSubcategoria" />
-                            </font>
-                          </div>
-                          </td>
-                          
-                          <td width="25%" align="right">
-                          <div align="right">
-                            <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
-                            <bean:write name="imovelSubcategoria" property="quantidadeEconomias" />
-                            </font>
-                          </div>
-                          </td>
-                        </tr>
-                      </logic:iterate>
-                    </logic:notEmpty>
-                  </table>
-                  </div>
-                  </td>
-                </tr>
-                        
 			</table>
 			
 			<hr>
@@ -271,41 +188,46 @@
 								<td>
 
 									<table width="100%" align="center" bgcolor="#99CCFF" border=0>
-									<%cont = 1;%>
-									<logic:iterate name="colecaoDadosTabelaAtualizacaoCadastral" id="dadosTabelaAtualizacaoCadastralHelper">
-										<%cont = cont + 1;
-										if (cont % 2 == 0) {%>
-											<tr bgcolor="#FFFFFF">
-										<%} else {%>
-											<tr bgcolor="#cbe5fe">
-										<%}%>
-												<td width="150">
-													<bean:write name="dadosTabelaAtualizacaoCadastralHelper" property="descricaoTabela" />
-												</td>
-												<td width="150">
-													<bean:write name="dadosTabelaAtualizacaoCadastralHelper" property="descricaoColuna" />
-												</td>
-												<td width="200">
-													<bean:write name="dadosTabelaAtualizacaoCadastralHelper" property="colunaValorAnterior" />
-												</td>
-												<td width="200">
-													<bean:write name="dadosTabelaAtualizacaoCadastralHelper" property="colunaValorAtual" />
-												</td>
-												<td width="200">
-													<bean:write name="dadosTabelaAtualizacaoCadastralHelper" property="dataValidacao" />
-												</td>
+									<%int cont = 1;%>
+									<logic:iterate name="colecaoDadosTabelaAtualizacaoCadastral" id="item">
+                                        <logic:equal name="item" property="informativo" value="true">
+                                            <tr bgcolor="#e9e0e2">
+                                        </logic:equal>
+                                        <logic:notEqual name="item" property="informativo" value="true">
+    										<%cont = cont + 1;
+    										if (cont % 2 == 0) {%>
+    											<tr bgcolor="#FFFFFF">
+    										<%} else {%>
+    											<tr bgcolor="#cbe5fe">
+    										<%}%>
+                                        </logic:notEqual>
+    										<td width="150">
+    											<bean:write name="item" property="descricaoTabela" />
+    										</td>
+    										<td width="150">
+    											<bean:write name="item" property="descricaoColuna" />
+    										</td>
+    										<td width="200">
+    											<bean:write name="item" property="colunaValorAnterior" />
+    										</td>
+    										<td width="200">
+    											<bean:write name="item" property="colunaValorAtual" />
+    										</td>
+    										<td width="200">
+    											<bean:write name="item" property="dataValidacao" />
+    										</td>
                                                 <td width="100">
-                                                  <bean:write name="dadosTabelaAtualizacaoCadastralHelper" property="nomeUsuario" />
+                                                  <bean:write name="item" property="nomeUsuario" />
                                                 </td>
-												<td width="50">
-												<div align="center">
-												  <logic:empty name="dadosTabelaAtualizacaoCadastralHelper" property="dataValidacao">
-													<input type="checkbox" name="chkRegistrosAlteracao" id="chkRegistrosAlteracao" 
-													value="<%=""+((DadosTabelaAtualizacaoCadastralHelper) dadosTabelaAtualizacaoCadastralHelper).getIdTabelaColunaAtualizacaoCadastral()%>" />
-												  </logic:empty>
-												</div>
-												</td>
-											</tr>
+    										<td width="50">
+    										<div align="center">
+                                                  <logic:equal name="item" property="habilitaAlteracao" value="true">
+    											<input type="checkbox" name="chkRegistrosAlteracao" id="chkRegistrosAlteracao" 
+    											value="<%=""+((DadosTabelaAtualizacaoCadastralHelper) item).getIdTabelaColunaAtualizacaoCadastral()%>" />
+    										  </logic:equal>
+    										</div>
+    										</td>
+    									</tr>
 									</logic:iterate>
 									</table>
 
