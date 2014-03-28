@@ -788,15 +788,16 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		String consulta = "";
 		
 		try {
+			Date dataAprovacao = new Date();
 			
 			consulta = "update ImovelControleAtualizacaoCadastral controle "
 						+ " set controle.situacaoAtualizacaoCadastral.id = :situacaoAprovado ,"
-						+ " controle.dataAprovacao = :dataAprovacao" 
+						+ " controle.dataAprovacao = :dataAprovacao "  
 						+ " where controle.imovelRetorno.id in (:listaImoveis) ";
 			
 			session.createQuery(consulta)
 						.setInteger("situacaoAprovado", SituacaoAtualizacaoCadastral.APROVADO)
-						.setDate("dataAprovacao", new Date())
+						.setDate("dataAprovacao", dataAprovacao)
 						.setParameterList("listaImoveis", getIdsImovelRetorno(listaImoveis))   .executeUpdate();
 			
 		} catch (HibernateException e) {

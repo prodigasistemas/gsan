@@ -15,6 +15,7 @@
 */  
 package gcom.seguranca.transacao;
 
+import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.LinkedHashSetAlteracaoCadastral;
 import gcom.cadastro.atualizacaocadastral.bean.CategoriaAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.bean.ColunaAtualizacaoCadastral;
@@ -24,6 +25,7 @@ import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
+import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionForm;
 import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionHelper;
 import gcom.seguranca.acesso.FiltroOperacaoEfetuada;
 import gcom.seguranca.acesso.FiltroOperacaoOrdemExibicao;
@@ -733,10 +735,10 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 
 			if (StringUtils.isNotEmpty(filtroHelper.getExibirCampos()) && Integer.valueOf(filtroHelper.getExibirCampos()) > 0) {
 				sql.append(" and ctrl.siac_id = :situacao ");
-				if (filtroHelper.getExibirCampos().equals("1")) {
-					sql.append(" and tcac.tcac_dtprocessamento is null ");
-				} else if (filtroHelper.getExibirCampos().equals("2")) {
-					sql.append(" and tcac.tcac_dtprocessamento is not null ");
+				if (filtroHelper.getExibirCampos().equals(SituacaoAtualizacaoCadastral.EM_CAMPO.toString())) {
+					sql.append(" and tcac.tcac_dtvalidacao is null ");
+				} else if (filtroHelper.getExibirCampos().equals(SituacaoAtualizacaoCadastral.APROVADO.toString())) {
+					sql.append(" and tcac.tcac_dtvalidacao is not null ");
 				}
 			}
 			
@@ -756,7 +758,12 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 					.addScalar("qtdEconomias", Hibernate.INTEGER);
 			
 			if (StringUtils.isNotEmpty(filtroHelper.getExibirCampos()) && Integer.valueOf(filtroHelper.getExibirCampos()) > 0) {
-				query.setInteger("situacao", Integer.valueOf(filtroHelper.getExibirCampos()));
+				
+				if (Integer.valueOf(filtroHelper.getExibirCampos()) == Integer.valueOf(FiltrarAlteracaoAtualizacaoCadastralActionForm.APROVACAO_EM_LOTE)) {
+					query.setInteger("situacao", SituacaoAtualizacaoCadastral.APROVADO);
+				} else {
+					query.setInteger("situacao", Integer.valueOf(filtroHelper.getExibirCampos()));
+				}
 			}
 			
 			Collection retornoConsulta = query.list();

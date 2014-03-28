@@ -278,8 +278,12 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 	}
 	
 	public void aprovarImoveisEmLote(Usuario usuarioLogado, Collection<ConsultarMovimentoAtualizacaoCadastralHelper> listaImoveis) throws ControladorException {
-		//this.aprovarImoveis(listaImoveis);
-		System.out.println("Aprovando imóveis em lote...");
+		try {
+			this.aprovarImoveis(converterListaEmImovelRetorno(listaImoveis));
+		} catch (ErroRepositorioException e) {
+			logger.error("Erro ao pesquisar atualizar imóveis em lote.", e);
+			throw new ControladorException("Erro ao atualizar imóveis em lote.", e);
+		}
 		
 	}
 	
@@ -881,6 +885,16 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 			logger.error("Erro ao aprovar imóveis em lote. " + e);
 			throw new ControladorException("Erro ao aprovar imóveis em lote.", e);
 		}
+	}
+	
+	private Collection<IImovel> converterListaEmImovelRetorno(Collection<ConsultarMovimentoAtualizacaoCadastralHelper> listaImoveis) throws ErroRepositorioException {
+		Collection<IImovel> listaImoveisRetorno = new ArrayList<IImovel>();
+		
+		for (ConsultarMovimentoAtualizacaoCadastralHelper helper : listaImoveis) {
+			IImovel imovelRetorno = repositorioAtualizacaoCadastral.pesquisarImovelRetorno(helper.getIdImovel());
+			listaImoveisRetorno.add(imovelRetorno);
+		}
+		return listaImoveisRetorno;
 	}
 	
 }

@@ -61,7 +61,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		Boolean aplicaFiltro = null;
 		
 		if (exibirCampos.equals(FiltrarAlteracaoAtualizacaoCadastralActionForm.APROVACAO_EM_LOTE)) {
-			aplicaFiltro = false;
+			aplicaFiltro = true;
 		} else if (StringUtils.isNotEmpty(campo)){
 			Integer altera = Integer.parseInt(campo);
 			if (altera == 1){

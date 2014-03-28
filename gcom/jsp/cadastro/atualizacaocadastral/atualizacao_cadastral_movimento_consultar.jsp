@@ -69,8 +69,6 @@
 	  	var form = document.forms[0];
 	  	form.action = "/gsan/aprovarImoveisEmLoteAction.do";
 	  	form.submit();
-		
-		alert("aprovando em lote...");
 	}
  
 </script>

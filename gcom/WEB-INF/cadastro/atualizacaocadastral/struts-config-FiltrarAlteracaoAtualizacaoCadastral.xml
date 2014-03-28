@@ -63,10 +63,10 @@
 		
 		<action name="FiltrarAlteracaoAtualizacaoCadastralActionForm"
 			type="gcom.gui.cadastro.atualizacaocadastral.AtualizarImoveiEmLoteAction"
-			path="/atualizarImoveisEmLoteAction"	>
+			path="/aprovarImoveisEmLoteAction"	>
 			
-			<forward name="atualizarImoveisEmLoteAction"
-					path="/atualizarImoveisEmLoteAction.do" />		
+			<forward name="aprovarImoveisEmLoteAction"
+					path="/aprovarImoveisEmLoteAction.do" />		
 		</action>
 		
 	<!--FIM FILTRAR ATUALIZACAO CADASTRAL-->
