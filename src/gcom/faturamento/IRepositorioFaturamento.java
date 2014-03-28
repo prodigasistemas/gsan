@@ -12176,4 +12176,8 @@ public interface IRepositorioFaturamento {
 			Integer imovelId, Integer idCreditoTipo, BigDecimal valorCredito,
 			Integer debitoCreditoSituacaoAtualId, Integer anoMesFaturamento)
 			throws ErroRepositorioException;
+	
+	public void atualizarVecimentoFaturaClienteResponsavel(Date dataVencimento, String anoMesReferencia) throws ErroRepositorioException;
+	
+	public Integer countFaturasClienteResponsaveis(String anoMesReferencia) throws ErroRepositorioException;
 }

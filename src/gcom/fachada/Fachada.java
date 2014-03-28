@@ -53550,4 +53550,20 @@ public class Fachada {
 	public String retornaIpServidorOperacional() throws Exception{
 		return this.getControladorCadastro().retornaIpServidorOperacional();
 	}
+	
+	public void atualizarVecimentoFaturaClienteResponsavel(Date dataVencimento, String anoMesReferencia) {
+		try {
+			this.getControladorFaturamento().atualizarVecimentoFaturaClienteResponsavel(dataVencimento, anoMesReferencia);
+		} catch (ControladorException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public Integer countFaturasClienteResponsaveis(String anoMesReferencia) {
+		try{
+			return this.getControladorFaturamento().countFaturasClienteResponsaveis(anoMesReferencia);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
 }

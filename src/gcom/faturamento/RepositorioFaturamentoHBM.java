@@ -60764,4 +60764,40 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		return retorno;
 	}
+	
+	public void atualizarVecimentoFaturaClienteResponsavel(Date dataVencimento, String anoMesReferencia) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try{
+			String query = " UPDATE Fatura " 
+					+ " SET vencimento =:dateVencimento " 
+					+ " WHERE anoMesReferencia = :anoMesReferencia";
+
+			session.createQuery(query).setDate("dateVencimento", dataVencimento)
+			.setString("anoMesReferencia", anoMesReferencia)
+			.executeUpdate();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+	}
+	
+	public Integer countFaturasClienteResponsaveis(String anoMesReferencia) throws ErroRepositorioException{
+		Session session = HibernateUtil.getSession();
+		Integer retorno = null;
+		try{
+			String query = "  SELECT count(*)" 
+					+ " FROM Fatura f " 
+					+ " WHERE f.anoMesReferencia = :anoMesReferencia ";
+
+			retorno = (Integer)session.createQuery(query)
+					.setString("anoMesReferencia", anoMesReferencia).uniqueResult();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
 }
