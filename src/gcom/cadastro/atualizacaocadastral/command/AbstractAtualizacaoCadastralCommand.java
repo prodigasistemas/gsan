@@ -7,8 +7,10 @@ import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.FiltroImovelAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteFoneAtualizacaoCadastral;
+import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.cliente.IClienteAtualizacaoCadastral;
+import gcom.cadastro.cliente.IRepositorioClienteImovel;
 import gcom.cadastro.endereco.ControladorEnderecoLocal;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
@@ -33,6 +35,7 @@ import gcom.seguranca.transacao.TabelaLinhaColunaAlteracao;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
+import gcom.util.ErroRepositorioException;
 import gcom.util.ParserUtil;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
@@ -80,6 +83,7 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 
 	public abstract void execute(AtualizacaoCadastral atualizacao) throws Exception;
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void salvarTabelaColunaAtualizacaoCadastral(AtualizacaoCadastral atualizacaoCadastral,
 			Object objetoAtualizacaoCadastralBase, Object objetoAtualizacaoCadastralTxt,
 			int matriculaImovel, int tipoOperacao) throws ControladorException {
@@ -214,11 +218,27 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 		FiltroImovelAtualizacaoCadastral filtroImovel = new FiltroImovelAtualizacaoCadastral();
 		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovelAtualizacaoCadastral.ID, idImovel));
 
+		@SuppressWarnings("unchecked")
 		ImovelAtualizacaoCadastral imovel = (ImovelAtualizacaoCadastral) Util.retonarObjetoDeColecao(controladorUtil.pesquisar(filtroImovel, ImovelAtualizacaoCadastral.class.getName()));
 		
 		if (imovel != null){
 			imovel.setIdSituacaoAtualizacaoCadastral(situacao);
 			controladorUtil.atualizar(imovel);
 		}
+	}
+	
+	protected Integer getTipoOperacaoCliente(Integer matriculaProprietario, Integer matriculaImovel, String cpfCliente, Short clienteRelacaoTipo, IRepositorioClienteImovel repositorioClienteImovel) throws ErroRepositorioException {
+		Integer tipoOperacao = AlteracaoTipo.ALTERACAO;
+		
+		boolean existeCliente = repositorioClienteImovel.existeClienteImovelTipo(matriculaProprietario
+				, matriculaImovel
+				, (int) ClienteRelacaoTipo.PROPRIETARIO
+				, cpfCliente);
+		
+		if (!existeCliente){
+			tipoOperacao = AlteracaoTipo.INCLUSAO;
+		}
+		
+		return tipoOperacao;
 	}
 }

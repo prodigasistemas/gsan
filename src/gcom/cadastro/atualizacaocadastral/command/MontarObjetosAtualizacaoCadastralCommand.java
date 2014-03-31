@@ -1,15 +1,8 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
-import gcom.atualizacaocadastral.ClienteEnderecoRetorno;
-import gcom.atualizacaocadastral.ClienteFoneRetorno;
-import gcom.atualizacaocadastral.ClienteImovelRetorno;
-import gcom.atualizacaocadastral.ClienteRetorno;
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
-import gcom.atualizacaocadastral.ImagemRetorno;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
-import gcom.atualizacaocadastral.ImovelRamoAtividadeRetorno;
 import gcom.atualizacaocadastral.ImovelRetorno;
-import gcom.atualizacaocadastral.ImovelSubcategoriaRetorno;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteAtualizacaoCadastral;
@@ -37,10 +30,8 @@ import gcom.seguranca.transacao.AlteracaoTipo;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
-import gcom.util.ErroRepositorioException;
 import gcom.util.ParserUtil;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -60,7 +51,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	private int tipoOperacao;
 	private Integer idImovelRetorno;
 	
-	private IRepositorioClienteImovel repositorioClienteImovel = null;
+	private IRepositorioClienteImovel repositorioClienteImovel;
 	
 	private final String USUARIO_IGUAL_PROPRIETARIO = "1";
 	private final String RESPONSAVEL_IGUAL_USUARIO = "0";
@@ -71,6 +62,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, ControladorEnderecoLocal controladorEndereco, 
 			ControladorAtualizacaoCadastralLocal controladorAtualizacaoCadastral, ControladorClienteLocal controladorCliente, IRepositorioClienteImovel repositorioClienteImovel) {
 		super(parser, repositorioCadastro, controladorUtil, controladorTransacao, repositorioImovel, controladorEndereco, controladorAtualizacaoCadastral, controladorCliente);
+		
 		this.repositorioClienteImovel = repositorioClienteImovel;
 	}
 
@@ -88,13 +80,10 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	
 	public void salvarObjetosAtualizacaoCadastral() throws Exception {
 		salvarImovel();
-		salvarImovelRetorno();
 		
 		salvarClienteUsuario();
 		salvarClienteProprietario();
 		salvarClienteResponsavel();
-		
-		salvarImagens(atualizacaoCadastral, atualizacaoCadastralImovel.getMatricula());
 		
 		atualizarSituacaoControleImovelAtualizacaoCadastral(SituacaoAtualizacaoCadastral.TRANSMITIDO);
 	}
@@ -116,15 +105,6 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		salvarImovelSubcategoria();
 	}
 	
-	private void salvarImovelRetorno() throws Exception {
-		ImovelAtualizacaoCadastralBuilder builder = new ImovelAtualizacaoCadastralBuilder(matriculaImovel, atualizacaoCadastralImovel, tipoOperacao);
-		ImovelAtualizacaoCadastral imovelTxt = builder.getImovelAtualizacaoCadastral();
-		
-		salvarImovelRetorno(imovelTxt);
-		salvarRamoAtividadeRetorno();
-		salvarImovelSubcategoriaRetorno();
-	}
-	
 	private void salvarRamoAtividade() throws Exception {
 		for (DadoAtualizacaoRamoAtividade ramo: atualizacaoCadastralImovel.getDadosRamoAtividade()){
 			boolean existeRamoAtividadeAtualizacao = repositorioCadastro.existeImovelRamoAtividadeAtualizacaoCadastral(matriculaImovel, ramo.getId());
@@ -142,21 +122,6 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		}
 	}
 	
-	private void salvarRamoAtividadeRetorno() throws Exception {
-		for (DadoAtualizacaoRamoAtividade ramo: atualizacaoCadastralImovel.getDadosRamoAtividade()){
-			boolean existeRamoAtividadeAtualizacao = repositorioCadastro.existeImovelRamoAtividadeAtualizacaoCadastral(matriculaImovel, ramo.getId());
-			
-			if (!existeRamoAtividadeAtualizacao) {
-				ImovelRamoAtividadeRetorno imovelRamoAtividadeRetorno = new ImovelRamoAtividadeRetorno();
-				imovelRamoAtividadeRetorno.setImovel(new Imovel(matriculaImovel));
-				imovelRamoAtividadeRetorno.setRamoAtividade(new RamoAtividade(ramo.getId()));
-				imovelRamoAtividadeRetorno.setUltimaAlteracao(new Date());
-				imovelRamoAtividadeRetorno.setIdImovelRetorno(idImovelRetorno);
-				controladorUtil.inserir(imovelRamoAtividadeRetorno);
-			}
-		}
-	}
-
 	@SuppressWarnings("rawtypes")
 	private void salvarImovelSubcategoria() throws ControladorException {
 		List<ImovelSubcategoriaAtualizacaoCadastral> subcategorias = getImovelSubcategorias();
@@ -174,14 +139,6 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		}
 	}
 	
-	private void salvarImovelSubcategoriaRetorno() throws ControladorException {
-		List<ImovelSubcategoriaAtualizacaoCadastral> subcategorias = getImovelSubcategorias();
-		
-		for (ImovelSubcategoriaAtualizacaoCadastral subcategoria : subcategorias) {
-			salvarImovelSubcategoriaRetorno(subcategoria, idImovelRetorno);
-		}		
-	}
-
 	private List<ImovelSubcategoriaAtualizacaoCadastral> getImovelSubcategorias() {
 		List<ImovelSubcategoriaAtualizacaoCadastral> subcategorias = new ArrayList<ImovelSubcategoriaAtualizacaoCadastral>();
 		subcategorias.addAll(buildImovelSubcategorias(TipoEconomia.RESIDENCIAL));
@@ -260,13 +217,12 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	}
 	
 	private void salvarCliente(int matricula, IClienteAtualizacaoCadastral clienteTxt, Short clienteRelacaoTipo, String tipoCliente) throws Exception{
-		Integer tipoOperacaoCliente = getTipoOperacaoCliente(clienteTxt.getCpf(), clienteRelacaoTipo);
+		Integer tipoOperacaoCliente = getTipoOperacaoCliente(matriculaProprietario, matriculaImovel, clienteTxt.getCpf(), clienteRelacaoTipo, repositorioClienteImovel);
 		clienteTxt.setTipoOperacao(tipoOperacaoCliente);
 		
 		String telefone = atualizacaoCadastralImovel.getLinhaCliente("telefone" + tipoCliente);
 		String celular = atualizacaoCadastralImovel.getLinhaCliente("celular" + tipoCliente);
 		
-		salvarClienteRetorno(matricula, clienteRelacaoTipo, clienteTxt, telefone, celular);
 		salvarClienteAtualizacaoCadastral(matricula, clienteRelacaoTipo, clienteTxt, telefone, celular);
 	}
 
@@ -285,27 +241,6 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		
 		salvarTabelaColunaAtualizacaoCadastral(atualizacaoCadastral, clienteAtualizacaoCadastralBase, clienteTxt, matriculaImovel, tipoOperacao);
 	}
-
-	private void salvarClienteRetorno(int matricula, Short clienteRelacaoTipo, IClienteAtualizacaoCadastral clienteTxt, String telefone, String celular) throws ControladorException {
-		Integer idclienteRetorno = salvarClienteRetorno(clienteTxt);
-		salvarClienteImovelRetorno(clienteTxt, matriculaImovel, idclienteRetorno);
-		
-		salvarClienteFoneRetorno(telefone, clienteRelacaoTipo, FoneTipo.RESIDENCIAL, matricula, idclienteRetorno);
-		salvarClienteFoneRetorno(celular, clienteRelacaoTipo, FoneTipo.CELULAR, matricula, idclienteRetorno);
-		salvarClienteEnderecoRetorno(matricula, clienteTxt, idclienteRetorno);
-	}
-	
-	private void salvarClienteFoneRetorno(String tipoClientFone, Short clienteRelacaoTipo, Integer foneTipo, int matriculaCliente, Integer idClienteRetorno) throws ControladorException {
-		if (!tipoClientFone.trim().equals("")) {
-			ClienteFoneAtualizacaoCadastral clienteFone = getClienteFoneAtualizacaoCadastral(tipoClientFone, foneTipo, matriculaCliente);
-			
-			ClienteFoneRetorno clienteFoneRetorno = new ClienteFoneRetorno(clienteFone);
-			clienteFoneRetorno.setUltimaAlteracao(new Date());
-			clienteFoneRetorno.setIdClienteRetorno(idClienteRetorno);
-			controladorUtil.inserir(clienteFoneRetorno);
-		}
-	}
-
 
 	private void salvarClienteFoneAtualizacaoCadastral(String tipoClientFone, Short clienteRelacaoTipo, Integer foneTipo, int matriculaCliente) {
 		
@@ -345,44 +280,6 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		return clienteFone;
 	}
 	
-	private void salvarClienteEnderecoRetorno(Integer matriculaCliente, IClienteAtualizacaoCadastral clienteAtualizacaoCadastral, Integer idClienteRetorno) throws ControladorException {
-		ClienteEnderecoRetorno clienteEnderecoRetorno = new ClienteEnderecoRetorno(matriculaCliente, clienteAtualizacaoCadastral);
-		clienteEnderecoRetorno.setUltimaAlteracao(new Date());
-		clienteEnderecoRetorno.setIdClienteRetorno(idClienteRetorno);
-		controladorUtil.inserir(clienteEnderecoRetorno);
-	}
-
-	private void salvarImovelRetorno(ImovelAtualizacaoCadastral imovelTxt) throws ControladorException {
-		ImovelRetorno imovelRetorno = new ImovelRetorno(imovelTxt);
-		imovelRetorno.setUltimaAlteracao(new Date());
-		idImovelRetorno = (Integer) controladorUtil.inserir(imovelRetorno);
-	}
-	
-	private void salvarImovelSubcategoriaRetorno(ImovelSubcategoriaAtualizacaoCadastral imovelSubcategoriaTxt, Integer idImovelRetorno) throws ControladorException {
-		ImovelSubcategoriaRetorno imovelSubcategoriaRetorno = new ImovelSubcategoriaRetorno();
-		imovelSubcategoriaRetorno.setImovel(imovelSubcategoriaTxt.getImovel());
-		imovelSubcategoriaRetorno.setSubcategoria(imovelSubcategoriaTxt.getSubcategoria());
-		imovelSubcategoriaRetorno.setQuantidadeEconomias(imovelSubcategoriaTxt.getQuantidadeEconomias());
-		imovelSubcategoriaRetorno.setUltimaAlteracao(new Date());
-		imovelSubcategoriaRetorno.setIdImovelRetorno(idImovelRetorno);
-		controladorUtil.inserir(imovelSubcategoriaRetorno);
-	}
-	
-	private Integer salvarClienteRetorno(IClienteAtualizacaoCadastral clienteTxt) throws ControladorException {
-		ClienteRetorno clienteRetorno = new ClienteRetorno(clienteTxt);
-		clienteRetorno.setUltimaAlteracao(new Date());
-		return (Integer)controladorUtil.inserir(clienteRetorno);
-		
-	}
-	
-	private void salvarClienteImovelRetorno(IClienteAtualizacaoCadastral clienteTxt, int matriculaImovel, Integer idClienteRetorno) throws ControladorException {
-		ClienteImovelRetorno clienteImovelRetorno = new ClienteImovelRetorno(clienteTxt, matriculaImovel);
-		clienteImovelRetorno.setUltimaAlteracao(new Date());
-		clienteImovelRetorno.setIdClienteRetorno(idClienteRetorno);
-		clienteImovelRetorno.setIdImovelRetorno(idImovelRetorno);
-		controladorUtil.inserir(clienteImovelRetorno);
-	}
-	
 	private void atualizarSituacaoControleImovelAtualizacaoCadastral(Integer situacao) throws Exception {
 		ImovelControleAtualizacaoCadastral controle = repositorioImovel.pesquisarImovelControleAtualizacaoCadastral(matriculaImovel);
 		
@@ -395,54 +292,5 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		controle.setDataRetorno(new Date());
 		controle.setImovelRetorno(new ImovelRetorno(idImovelRetorno));
 		controladorUtil.inserirOuAtualizar(controle);
-	}
-	
-	private void salvarImagens(AtualizacaoCadastral atualizacao, Integer matricula) throws Exception {
-		for (String nomeImagem : atualizacao.getImagens()) {
-
-			String caminhoJboss = System.getProperty("jboss.server.home.dir");
-			String pasta = "/images/cadastro/" + atualizacao.getArquivoTexto().getDescricaoArquivo();
-			
-			if (nomeImagem.contains(matricula.toString())) {
-				inserirImagemImovel(matricula, nomeImagem, caminhoJboss, pasta);
-			}
-		}
-	}
-
-	private void inserirImagemImovel(Integer matricula, String nomeImagem, String caminhoJboss, String pasta) {
-		
-		try {
-			File imagem = new File(caminhoJboss + pasta, nomeImagem);
-			
-			ImagemRetorno imagemRetorno = new ImagemRetorno();
-			imagemRetorno.setIdImovelRetorno(idImovelRetorno);
-			
-			if (matricula > 0) {
-				imagemRetorno.setIdImovel(matricula);
-			}
-			
-			imagemRetorno.setNomeImagem(imagem.getName());
-			imagemRetorno.setPathImagem(imagem.getAbsolutePath());
-			imagemRetorno.setUltimaAlteracao(new Date());
-
-			controladorUtil.inserir(imagemRetorno);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-	private Integer getTipoOperacaoCliente(String cpfCliente, Short clienteRelacaoTipo) throws ErroRepositorioException {
-		Integer tipoOperacao = AlteracaoTipo.ALTERACAO;
-		
-		boolean existeCliente = repositorioClienteImovel.existeClienteImovelTipo(matriculaProprietario
-				, matriculaImovel
-				, (int) ClienteRelacaoTipo.PROPRIETARIO
-				, cpfCliente);
-		
-		if (!existeCliente){
-			tipoOperacao = AlteracaoTipo.INCLUSAO;
-		}
-		
-		return tipoOperacao;
 	}
 }
