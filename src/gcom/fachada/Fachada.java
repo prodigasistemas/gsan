@@ -40000,26 +40000,11 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * @author Ivan Sergio
-	 * @date 03/06/2009
-	 * 
-	 * @param idRegistroAlterado
-	 * @param idArquivo
-	 * @return
-	 */
-	public Collection<DadosTabelaAtualizacaoCadastralHelper> consultarDadosTabelaColunaAtualizacaoCadastral(
+	public Map<String, List<DadosTabelaAtualizacaoCadastralHelper>> consultarDadosTabelaColunaAtualizacaoCadastral(
 			Long idRegistroAlterado, Integer idArquivo, Integer idImovel,
-			Long idCliente,Integer idTipoAlteracao) {
-
-		try {
-			return this.getControladorTransacao()
-					.consultarDadosTabelaColunaAtualizacaoCadastral(
-							idRegistroAlterado, idArquivo, idImovel, idCliente,idTipoAlteracao);
-		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex
-					.getParametroMensagem());
-		}
+			Long idCliente,Integer idTipoAlteracao) throws Exception{
+		return this.getControladorTransacao().consultarDadosTabelaColunaAtualizacaoCadastral(
+						idRegistroAlterado, idArquivo, idImovel, idCliente,idTipoAlteracao);
 	}
 
 	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer idImovel, String[] idsAtualizacaoCadastral,	Short indicador, Usuario usuarioLogado) {
@@ -53564,5 +53549,21 @@ public class Fachada {
 	
 	public String retornaIpServidorOperacional() throws Exception{
 		return this.getControladorCadastro().retornaIpServidorOperacional();
+	}
+	
+	public void atualizarVecimentoFaturaClienteResponsavel(Date dataVencimento, String anoMesReferencia) {
+		try {
+			this.getControladorFaturamento().atualizarVecimentoFaturaClienteResponsavel(dataVencimento, anoMesReferencia);
+		} catch (ControladorException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public Integer countFaturasClienteResponsaveis(String anoMesReferencia) {
+		try{
+			return this.getControladorFaturamento().countFaturasClienteResponsaveis(anoMesReferencia);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
 	}
 }

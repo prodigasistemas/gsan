@@ -168,6 +168,12 @@ public class TabelaColuna extends ObjetoGcom {
 	public final static Integer CODIGO_CLIENTE_ATU_CADASTRAL = 115097;
 
 	public final static Integer ID_CLIENTE_TELEFONE_ATU_CADASTRAL = 115092;
+	
+	public final static String NOME_COLUNA_ECONOMIAS = "isac_qteconomia";
+
+	public static final String NOME_COLUNA_ESGOTO = "lest_id";
+
+	public static final String NOME_COLUNA_AGUA = "last_id";
 
 	/** full constructor */
 	public TabelaColuna(String coluna, String descricaoColuna,
