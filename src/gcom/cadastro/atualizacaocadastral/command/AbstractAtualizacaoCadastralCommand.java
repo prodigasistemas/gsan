@@ -232,7 +232,7 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 			return AlteracaoTipo.INCLUSAO;
 		}
 		      
-		Cliente cliente = controladorCliente.consultarCliente(matricula);
+		Cliente cliente = repositorioClienteImovel.pesquisarClienteImovelTipo(matricula, matriculaImovel, clienteRelacaoTipo.intValue());
 		if (cliente != null){
 			if (StringUtils.equals(cliente.getCnpj(), cpfCliente) || StringUtils.equals(cliente.getCpf(), cpfCliente)){
 				return AlteracaoTipo.ALTERACAO;
