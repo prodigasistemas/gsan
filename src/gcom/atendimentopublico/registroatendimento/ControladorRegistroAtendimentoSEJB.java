@@ -120,6 +120,7 @@ import gcom.atendimentopublico.registroatendimento.bean.RegistroAtendimentoPende
 import gcom.atendimentopublico.registroatendimento.bean.ResumoRegistroAtendimentoHelper;
 import gcom.atendimentopublico.registroatendimento.bean.ResumoRegistroAtendimentoPorAnoHelper;
 import gcom.atendimentopublico.registroatendimento.bean.VerificarRAFaltaAguaHelper;
+import gcom.atualizacaocadastral.IClienteEndereco;
 import gcom.batch.ControladorBatchLocal;
 import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.UnidadeProcessamento;
@@ -135,6 +136,7 @@ import gcom.cadastro.cliente.ControladorClienteLocalHome;
 import gcom.cadastro.cliente.FiltroCliente;
 import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.cliente.FoneTipo;
+import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.endereco.Cep;
 import gcom.cadastro.endereco.ControladorEnderecoLocal;
 import gcom.cadastro.endereco.ControladorEnderecoLocalHome;
@@ -6516,7 +6518,7 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 		// número do Imóvel, Complemento do endereço, LogradouroCep e
 		// LogradouroBairro
 		if (idCliente == null) {
-			ClienteEndereco endereco = (ClienteEndereco) Util
+			IClienteEndereco endereco = (IClienteEndereco) Util
 			.retonarObjetoDeColecao(colecaoEndereco);
 			
 			if (endereco != null) {
@@ -6527,12 +6529,18 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 							.getComplemento());
 				}
 				
-				solicitanteInserir
-				.setLogradouroCep(endereco.getLogradouroCep());
-				solicitanteInserir.setLogradouroBairro(endereco
-						.getLogradouroBairro());
-				solicitanteInserir.setPerimetroInicial(endereco.getPerimetroInicial());
-				solicitanteInserir.setPerimetroFinal(endereco.getPerimetroFinal());
+				if (endereco.getLogradouroCep() != null) {
+					solicitanteInserir.setLogradouroCep(endereco.getLogradouroCep());
+				}
+				if (endereco.getLogradouroBairro() != null) {
+					solicitanteInserir.setLogradouroBairro(endereco.getLogradouroBairro());
+				}
+				if (endereco.getPerimetroInicial() != null) {
+					solicitanteInserir.setPerimetroInicial(endereco.getPerimetroInicial());
+				}
+				if (endereco.getPerimetroFinal() != null) {
+					solicitanteInserir.setPerimetroFinal(endereco.getPerimetroFinal());
+				}
 				
 			}
 			
@@ -6895,11 +6903,11 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 	throws ControladorException {
 		
 		Iterator itaratorClienteFone = colecaoFone.iterator();
-		ClienteFone clienteFone = null;
+		IClienteFone clienteFone = null;
 		SolicitanteFone solicitanteFone = null;
 		
 		while (itaratorClienteFone.hasNext()) {
-			clienteFone = (ClienteFone) itaratorClienteFone.next();
+			clienteFone = (IClienteFone) itaratorClienteFone.next();
 			
 			solicitanteFone = new SolicitanteFone();
 			

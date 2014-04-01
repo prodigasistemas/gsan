@@ -37,6 +37,7 @@ import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastralImovel;
 import gcom.cadastro.atualizacaocadastral.command.EfetuarValidacoesAtualizacaoCadastralCommand;
 import gcom.cadastro.atualizacaocadastral.command.MontarObjetosAtualizacaoCadastralCommand;
+import gcom.cadastro.atualizacaocadastral.command.MontarObjetosRetornoCommand;
 import gcom.cadastro.atualizacaocadastral.command.ParseAnormalidadeCommand;
 import gcom.cadastro.atualizacaocadastral.command.ParseClienteCommand;
 import gcom.cadastro.atualizacaocadastral.command.ParseHeaderCommand;
@@ -7775,6 +7776,12 @@ public class ControladorCadastro implements SessionBean {
 							getControladorUtil(), getControladorTransacao(), repositorioImovel, getControladorEndereco(), 
 							getControladorAtualizacaoCadastral(), getControladorCliente(), repositorioClienteImovel);
 					command.execute(atualizacao);
+					
+					AbstractAtualizacaoCadastralCommand retornoCommand = new MontarObjetosRetornoCommand(parserConteudo, repositorioCadastro, 
+							getControladorUtil(), getControladorTransacao(), repositorioImovel, getControladorEndereco(), 
+							getControladorAtualizacaoCadastral(), getControladorCliente(), repositorioClienteImovel);
+					retornoCommand.execute(atualizacao);
+					
 					atualizacao.excluirImovelSemErros();
 				}
 			}

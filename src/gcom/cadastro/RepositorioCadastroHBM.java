@@ -4793,11 +4793,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 	
-	public void atualizarArquivoTextoAtualizacaoCadstral(Integer idArquivoTxt,
-			Integer idSituacaoTransmissao) throws ErroRepositorioException {
+	public void atualizarArquivoTextoAtualizacaoCadstral(Integer idArquivoTxt, Integer idSituacaoTransmissao) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
-
+		
 		String consulta = " update ArquivoTextoAtualizacaoCadastral txac"
 				+ " set txac.situacaoTransmissaoLeitura.id =:idSituacaoTransmissao,"
 				+ " txac.ultimaAlteracao = :dataAtual" + " where txac.id = "
@@ -4813,7 +4812,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
-
 		}
 	}
 
@@ -8837,20 +8835,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		}
 	}
 	
-	public SituacaoAtualizacaoCadastral pesquisarSituacaoAtualizacaoCadastralPorId(Integer idSituacaoCadastral) throws ErroRepositorioException {
-		Session session = HibernateUtil.getSession();
-		try {
-			String consulta = " SELECT situacao " 
-					+ " FROM SituacaoAtualizacaoCadastral situacao"
-					+ " WHERE situacao.id = :idSituacaoCadastral ";
-			return (SituacaoAtualizacaoCadastral)session.createQuery(consulta)
-					.setInteger("idSituacaoCadastral", idSituacaoCadastral).uniqueResult();
-		} catch(HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro no hibernate");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
-	}
 	
 	public Integer pesquisarIdSetorComercialPorCodigoELocalidade(Integer idLocalidade, Integer codigoSetor) throws ErroRepositorioException {
 		Integer idSetorComercial = null;
@@ -8898,6 +8882,21 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			HibernateUtil.closeSession(session);
 		}
 		return idQuadra;
+	}
+	
+	public SituacaoAtualizacaoCadastral pesquisarSituacaoAtualizacaoCadastralPorId(Integer idSituacaoCadastral) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try {
+			String consulta = " SELECT situacao " 
+					+ " FROM SituacaoAtualizacaoCadastral situacao"
+					+ " WHERE situacao.id = :idSituacaoCadastral ";
+			return (SituacaoAtualizacaoCadastral)session.createQuery(consulta)
+					.setInteger("idSituacaoCadastral", idSituacaoCadastral).uniqueResult();
+		} catch(HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
 	}
 	
 	public String retornaIpServidorOperacional() throws ErroRepositorioException {

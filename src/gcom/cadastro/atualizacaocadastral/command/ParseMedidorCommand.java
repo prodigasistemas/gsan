@@ -32,8 +32,6 @@ public class ParseMedidorCommand extends AbstractAtualizacaoCadastralCommand {
 		Map<String, String> linha = atualizacao.getImovelAtual().getLinhaMedidor();
 		AtualizacaoCadastralImovel imovel = atualizacao.getImovelAtual();
 
-		String matriculaImovelMedidor = parser.obterDadoParser(9);
-		
 		String icImovelPossuiMedidor = parser.obterDadoParser(1);
 		
 		String numeroHidrometro = null;
@@ -43,31 +41,35 @@ public class ParseMedidorCommand extends AbstractAtualizacaoCadastralCommand {
 		
 		new ValidadorTamanhoLinhaMedidorCommand(parser, imovel).execute();
 		
-		if(icImovelPossuiMedidor.equals("1") && !imovel.isErroLayout()){
-			numeroHidrometro = parser.obterDadoParser(10).trim();
-			linha.put("numeroHidrometro", numeroHidrometro);
-
-			marcaHidrometro = parser.obterDadoParser(2).trim();
-			linha.put("marcaHidrometro", marcaHidrometro);
-
-			capacidadeHidrometro = parser.obterDadoParser(2).trim();
-			linha.put("capacidadeHidrometro", capacidadeHidrometro);
-
-			tipoCaixaProtecaoHidrometro = parser.obterDadoParser(2).trim();
-			linha.put("tipoCaixaProtecaoHidrometro", tipoCaixaProtecaoHidrometro);
-
-			String latitude = parser.obterDadoParser(20).trim();
-			linha.put("latitude", latitude);
-
-			String longitude = parser.obterDadoParser(20).trim();
-			linha.put("longitude", longitude);
-
-			String dataServico = parser.obterDadoParser(26).trim();
-			linha.put("dataServico", dataServico);
-
-			validarCampos(atualizacao, imovel);
-		}else{
-			parser.obterDadoParser(16).trim();
+		if (!imovel.isErroLayout()){
+			atualizacao.getImovelAtual().setExisteMedidor(icImovelPossuiMedidor.equals("1") ? true : false);
+			
+			if(icImovelPossuiMedidor.equals("1")){
+				numeroHidrometro = parser.obterDadoParser(10).trim();
+				linha.put("numeroHidrometro", numeroHidrometro);
+				
+				marcaHidrometro = parser.obterDadoParser(2).trim();
+				linha.put("marcaHidrometro", marcaHidrometro);
+				
+				capacidadeHidrometro = parser.obterDadoParser(2).trim();
+				linha.put("capacidadeHidrometro", capacidadeHidrometro);
+				
+				tipoCaixaProtecaoHidrometro = parser.obterDadoParser(2).trim();
+				linha.put("tipoCaixaProtecaoHidrometro", tipoCaixaProtecaoHidrometro);
+				
+				String latitude = parser.obterDadoParser(20).trim();
+				linha.put("latitude", latitude);
+				
+				String longitude = parser.obterDadoParser(20).trim();
+				linha.put("longitude", longitude);
+				
+				String dataServico = parser.obterDadoParser(26).trim();
+				linha.put("dataServico", dataServico);
+				
+				validarCampos(atualizacao, imovel);
+			}else{
+				parser.obterDadoParser(16).trim();
+			}
 		}
 	}
 	

@@ -1,8 +1,14 @@
 package gcom.cadastro.atualizacaocadastral.bean;
 
+import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
-public class ConsultarMovimentoAtualizacaoCadastralHelper {
+public class ConsultarMovimentoAtualizacaoCadastralHelper implements Serializable{
+	private static final long serialVersionUID = 8769003327603590172L;
 
 	private Integer icAutorizado;
 	
@@ -19,6 +25,16 @@ public class ConsultarMovimentoAtualizacaoCadastralHelper {
 	private Long idRegistroAlterado;
 	
 	private Integer idTipoAlteracao;
+	
+	private String numeroHidrometro;
+	
+	private Integer idLigacaoAgua; 
+	
+	private Integer idLigacaoEsgoto;
+	
+	private List<ColunaAtualizacaoCadastral> colunasAtualizacao = new ArrayList<ColunaAtualizacaoCadastral>();
+	
+	private Set<CategoriaAtualizacaoCadastral> categorias = new HashSet<CategoriaAtualizacaoCadastral>();
 	
 	public ConsultarMovimentoAtualizacaoCadastralHelper(Integer icAutorizado, Integer idImovel, String nomeFuncionario, Date dataRealizacao, Integer idArquivo, String inscricao) {
 		this.icAutorizado = icAutorizado;
@@ -94,9 +110,51 @@ public class ConsultarMovimentoAtualizacaoCadastralHelper {
 	public void setIdTipoAlteracao(Integer idTipoAlteracao) {
 		this.idTipoAlteracao = idTipoAlteracao;
 	}
+	
+	public String getNumeroHidrometro() {
+		return numeroHidrometro;
+	}
 
+	public void setNumeroHidrometro(String numeroHidrometro) {
+		this.numeroHidrometro = numeroHidrometro;
+	}
+
+	public Integer getIdLigacaoAgua() {
+		return idLigacaoAgua;
+	}
+
+	public void setIdLigacaoAgua(Integer idLigacaoAgua) {
+		this.idLigacaoAgua = idLigacaoAgua;
+	}
+
+	public Integer getIdLigacaoEsgoto() {
+		return idLigacaoEsgoto;
+	}
+
+	public void setIdLigacaoEsgoto(Integer idLigacaoEsgoto) {
+		this.idLigacaoEsgoto = idLigacaoEsgoto;
+	}
+	
+	public List<ColunaAtualizacaoCadastral> getColunasAtualizacao() {
+		return colunasAtualizacao;
+	}
+
+	public void addColunaAtualizacao(ColunaAtualizacaoCadastral colunaAtualizacao) {
+		this.colunasAtualizacao.add(colunaAtualizacao);
+	}
+
+	public Set<CategoriaAtualizacaoCadastral> getCategorias() {
+		return categorias;
+	}
+
+	public void addCategoria(CategoriaAtualizacaoCadastral categoria) {
+		this.categorias.add(categoria);
+	}
+
+	@Override
 	public String toString() {
-		return "ConsultarMovimentoAtualizacaoCadastralHelper [idImovel=" + idImovel + ", idTipoAlteracao=" + idTipoAlteracao + "]";
+		return "ConsultarMovimentoAtualizacaoCadastralHelper [idImovel=" + idImovel + ", idTipoAlteracao=" + idTipoAlteracao + ", numeroHidrometro="
+				+ numeroHidrometro + ", idLigacaoAgua=" + idLigacaoAgua + ", idLigacaoEsgoto=" + idLigacaoEsgoto + "]";
 	}
 
 	public int hashCode() {
