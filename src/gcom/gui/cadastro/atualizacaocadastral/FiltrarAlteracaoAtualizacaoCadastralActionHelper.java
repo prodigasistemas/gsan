@@ -60,7 +60,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	private Boolean consisteAlteracao(String campo, String exibirCampos){
 		Boolean aplicaFiltro = null;
 		
-		if (exibirCampos.equals(FiltrarAlteracaoAtualizacaoCadastralActionForm.APROVACAO_EM_LOTE)) {
+		if (exibirCampos.equals(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_APROVACAO_EM_LOTE.toString())) {
 			aplicaFiltro = true;
 		} else if (StringUtils.isNotEmpty(campo)){
 			Integer altera = Integer.parseInt(campo);
@@ -198,6 +198,6 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	}
 	
 	public boolean isAprovacaoEmLote() {
-		return this.exibirCampos.equals(FiltrarAlteracaoAtualizacaoCadastralActionForm.APROVACAO_EM_LOTE)? true : false;
+		return this.exibirCampos.equals(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_APROVACAO_EM_LOTE.toString())? true : false;
 	}
  }

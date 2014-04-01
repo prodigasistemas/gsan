@@ -872,12 +872,6 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		}
 	}
 	
-	private Collection<IImovel> obterImoveisParaAprovarEmLote() {
-		Collection<IImovel> listaImoveisAprovacaoEmLote = null;
-		
-		return listaImoveisAprovacaoEmLote;
-	}
-	
 	private void aprovarImoveis(Collection<IImovel> imoveisParaAprovar) throws ControladorException {
 		try {
 			repositorioAtualizacaoCadastral.aprovarImoveis(imoveisParaAprovar);

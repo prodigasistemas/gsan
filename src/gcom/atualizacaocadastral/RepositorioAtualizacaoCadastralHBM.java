@@ -588,15 +588,15 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		return retorno;
 	}
 	
-	public IImovel pesquisarImovelRetorno(Integer idImovelRetorno) throws ErroRepositorioException {
+	public IImovel pesquisarImovelRetorno(Integer idImovel) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		IImovel retorno = null;
 		try {
 			String consulta = "select imovelRetorno "
 					+ " from ImovelRetorno imovelRetorno "
-					+ " where imovelRetorno.id = :idImovelRetorno ";
+					+ " where imovelRetorno.idImovel = :idImovel ";
 			
-			retorno = (IImovel)session.createQuery(consulta).setInteger("idImovelRetorno", idImovelRetorno).uniqueResult();
+			retorno = (IImovel)session.createQuery(consulta).setInteger("idImovel", idImovel).uniqueResult();
 		}catch(HibernateException e) {
 			throw new ErroRepositorioException("Erro ao pesquisar imovel retorno");
 		}finally {

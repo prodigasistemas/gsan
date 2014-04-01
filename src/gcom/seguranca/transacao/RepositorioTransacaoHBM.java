@@ -733,7 +733,8 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				sql.append(" and leit.leit_id = " + filtroHelper.getIdLeiturista());
 			}
 
-			if (StringUtils.isNotEmpty(filtroHelper.getExibirCampos()) && Integer.valueOf(filtroHelper.getExibirCampos()) > 0) {
+			if (StringUtils.isNotEmpty(filtroHelper.getExibirCampos()) 
+					&& Integer.valueOf(filtroHelper.getExibirCampos()) !=  FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_TODOS) {
 				sql.append(" and ctrl.siac_id = :situacao ");
 				if (filtroHelper.getExibirCampos().equals(SituacaoAtualizacaoCadastral.EM_CAMPO.toString())) {
 					sql.append(" and tcac.tcac_dtvalidacao is null ");
@@ -757,10 +758,11 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 					.addScalar("idSubcategoria", Hibernate.INTEGER)
 					.addScalar("qtdEconomias", Hibernate.INTEGER);
 			
-			if (StringUtils.isNotEmpty(filtroHelper.getExibirCampos()) && Integer.valueOf(filtroHelper.getExibirCampos()) > 0) {
+			if (StringUtils.isNotEmpty(filtroHelper.getExibirCampos()) 
+					&& Integer.valueOf(filtroHelper.getExibirCampos()) !=  FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_TODOS) {
 				
-				if (Integer.valueOf(filtroHelper.getExibirCampos()) == Integer.valueOf(FiltrarAlteracaoAtualizacaoCadastralActionForm.APROVACAO_EM_LOTE)) {
-					query.setInteger("situacao", SituacaoAtualizacaoCadastral.APROVADO);
+				if (Integer.valueOf(filtroHelper.getExibirCampos()) == FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_APROVACAO_EM_LOTE) {
+					query.setInteger("situacao", SituacaoAtualizacaoCadastral.TRANSMITIDO);
 				} else {
 					query.setInteger("situacao", Integer.valueOf(filtroHelper.getExibirCampos()));
 				}
