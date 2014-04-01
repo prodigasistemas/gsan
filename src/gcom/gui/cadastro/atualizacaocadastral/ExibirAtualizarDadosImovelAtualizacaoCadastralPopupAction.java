@@ -1,18 +1,26 @@
 package gcom.gui.cadastro.atualizacaocadastral;
 
+import gcom.cadastro.atualizacaocadastral.SituacaoAguaHelper;
+import gcom.cadastro.atualizacaocadastral.SituacaoEsgotoHelper;
+import gcom.cadastro.atualizacaocadastral.SituacaoSubcategoriaHelper;
 import gcom.cadastro.atualizacaocadastral.bean.DadosTabelaAtualizacaoCadastralHelper;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.Imovel;
+import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.localidade.Quadra;
 import gcom.cadastro.localidade.SetorComercial;
 import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
+import gcom.util.AtualizacaoCadastralUtil;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 
 import java.util.Collection;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -42,6 +50,8 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 
 		try {
 			// Realiza o Filtro para o Imovel
+			Collection<DadosTabelaAtualizacaoCadastralHelper> resumoImovel = new LinkedList<DadosTabelaAtualizacaoCadastralHelper>();
+
 			if ( (idImovel != null && !idImovel.equals(""))) {
 				FiltroImovel filtro = new FiltroImovel();
 				
@@ -58,6 +68,7 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 				form.setIdImovel(idImovel);
 				form.setDescricaoImovel("NOVO");
 				
+
 				if (imovel != null) {
 					Localidade localidade = (Localidade) imovel.getLocalidade();
 					SetorComercial setorComercial = (SetorComercial) imovel.getSetorComercial();
@@ -75,19 +86,25 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 					// Quadra
 					form.setIdQuadra(quadra.getId().toString());
 					form.setNumeroQuadra("" + quadra.getNumeroQuadra());
-					form.setSituacaoLigacaoAgua(imovel.getLigacaoAguaSituacao().getDescricao());
-					form.setSituacaoLigacaoEsgoto(imovel.getLigacaoEsgotoSituacao().getDescricao());
-					request.setAttribute("imovelSubcategorias",fachada.pesquisarSubCategoriasAtualizacaoCadastral(imovel.getId()));
+					resumoImovel.add(new SituacaoAguaHelper(imovel.getLigacaoAguaSituacao().getDescricao()));
+					resumoImovel.add(new SituacaoEsgotoHelper(imovel.getLigacaoEsgotoSituacao().getDescricao()));
+					Collection<ImovelSubcategoriaAtualizacaoCadastral> subcategorias = fachada.pesquisarSubCategoriasAtualizacaoCadastral(imovel.getId());
+					for (ImovelSubcategoriaAtualizacaoCadastral economia : subcategorias) {
+						String subcategoria = economia.getDescricaoCategoria() + " - " + economia.getDescricaoSubcategoria();
+						resumoImovel.add(new SituacaoSubcategoriaHelper(String.valueOf(economia.getQuantidadeEconomias()), subcategoria));
+					}
 				}else{
 					form.limparCampos();
 				}
 			}
 			
-			Collection<DadosTabelaAtualizacaoCadastralHelper> colecaoDadosTabelaAtualizacaoCadastral = 
+			Map<String, List<DadosTabelaAtualizacaoCadastralHelper>> map = 
 					fachada.consultarDadosTabelaColunaAtualizacaoCadastral(null, null, new Integer(idImovel), null, null);
 			
-			if (!colecaoDadosTabelaAtualizacaoCadastral.isEmpty()) {
-				sessao.setAttribute("colecaoDadosTabelaAtualizacaoCadastral", colecaoDadosTabelaAtualizacaoCadastral);
+			Collection<DadosTabelaAtualizacaoCadastralHelper> atualizacoes = new AtualizacaoCadastralUtil().linhasAtualizacaoCadastral(resumoImovel, map);
+			
+			if (!atualizacoes.isEmpty()) {
+				sessao.setAttribute("colecaoDadosTabelaAtualizacaoCadastral", atualizacoes);
 			}
 		} catch (Exception e) {
 			throw new ActionServletException("erro.exibir.dados.atualizacao", e, "Dados do Imovel e Cliente");

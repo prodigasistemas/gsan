@@ -653,30 +653,13 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.commons.fileupload.FileItem;
 
-
-
-/**
- * < <Descrição da Classe>>
- * 
- * @author Administrador
- * @created 25 de Abril de 2005
- */
 public class Fachada {
 
 	private static Fachada instancia;
 
-	/**
-	 * Construtor da classe Fachada
-	 */
 	private Fachada() {
-
 	}
 
-	/**
-	 * Retorna o valor de instancia
-	 * 
-	 * @return O valor de instancia
-	 */
 	public static Fachada getInstancia() {
 		if (instancia == null) {
 			instancia = new Fachada();
@@ -684,29 +667,16 @@ public class Fachada {
 		return instancia;
 	}
 
-	// *************----Métodos do SERVICE LOCATOR (CONTROLADORES)
-	// ----*************//
-
-	/**
-	 * Retorna a interface remota de ControladorParametro
-	 * 
-	 * @return A interface remota do controlador de parêmetro
-	 */
 	private ControladorTabelaAuxiliarLocal getControladorTabelaAuxiliar() {
 		ControladorTabelaAuxiliarLocalHome localHome = null;
 		ControladorTabelaAuxiliarLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
 
-			localHome = (ControladorTabelaAuxiliarLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_TABELA_AUXILIAR_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
+			localHome = (ControladorTabelaAuxiliarLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_TABELA_AUXILIAR_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -718,11 +688,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Retorna a interface remota de ControladorUnidade
-	 * 
-	 * @return A interface remota do controlador unidade
-	 */
 	private ControladorUnidadeLocal getControladorUnidade() {
 		ControladorUnidadeLocalHome localHome = null;
 		ControladorUnidadeLocal local = null;
@@ -732,8 +697,7 @@ public class Fachada {
 		try {
 			locator = ServiceLocator.getInstancia();
 
-			localHome = (ControladorUnidadeLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_UNIDADE_SEJB);
+			localHome = (ControladorUnidadeLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_UNIDADE_SEJB);
 
 			local = localHome.create();
 
@@ -746,10 +710,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Retorna o valor de controladorRegistroAtendimento
-	 * 
-	 */
 	private ControladorRegistroAtendimentoLocal getControladorRegistroAtendimento() {
 		ControladorRegistroAtendimentoLocalHome localHome = null;
 		ControladorRegistroAtendimentoLocal local = null;
@@ -759,8 +719,7 @@ public class Fachada {
 		try {
 			locator = ServiceLocator.getInstancia();
 
-			localHome = (ControladorRegistroAtendimentoLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_REGISTRO_ATENDIMENTO_SEJB);
+			localHome = (ControladorRegistroAtendimentoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_REGISTRO_ATENDIMENTO_SEJB);
 
 			local = localHome.create();
 
@@ -772,13 +731,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Retorna o controladorCadastro
-	 * 
-	 * @author Thiago Tenório
-	 * @date 18/08/2006
-	 * 
-	 */
 	private ControladorCadastroLocal getControladorCadastro() {
 		ControladorCadastroLocalHome localHome = null;
 		ControladorCadastroLocal local = null;
@@ -786,8 +738,7 @@ public class Fachada {
 		ServiceLocator locator = null;
 		try {
 			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorCadastroLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_CADASTRO_SEJB);
+			localHome = (ControladorCadastroLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_CADASTRO_SEJB);
 
 			local = localHome.create();
 
@@ -799,13 +750,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Retorna o controladorOrdemServico
-	 * 
-	 * @author Leonardo Regis
-	 * @date 18/08/2006
-	 * 
-	 */
 	private ControladorOrdemServicoLocal getControladorOrdemServico() {
 		ControladorOrdemServicoLocalHome localHome = null;
 		ControladorOrdemServicoLocal local = null;
@@ -826,16 +770,9 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Retorna a interface remota de ControladorParametro
-	 * 
-	 * @return A interface remota do controlador de parâmetro
-	 */
 	private ControladorUsuarioLocal getControladorUsuario() {
 		ControladorUsuarioLocalHome localHome = null;
 		ControladorUsuarioLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -844,8 +781,6 @@ public class Fachada {
 
 			localHome = (ControladorUsuarioLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_USUARIO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -857,16 +792,9 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Retorna a interface remota de ControladorParametro
-	 * 
-	 * @return A interface remota do controlador de parâmetro
-	 */
 	private ControladorGerencialFaturamentoLocal getControladorGerencialFaturamento() {
 		ControladorGerencialFaturamentoLocalHome localHome = null;
 		ControladorGerencialFaturamentoLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -875,8 +803,6 @@ public class Fachada {
 
 			localHome = (ControladorGerencialFaturamentoLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_GERENCIAL_FATURAMENTO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -888,16 +814,9 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Retorna o valor de controladorTarifaSocial
-	 * 
-	 * @return O valor de controladorTarifaSocial
-	 */
 	private ControladorTarifaSocialLocal getControladorTarifaSocial() {
 		ControladorTarifaSocialLocalHome localHome = null;
 		ControladorTarifaSocialLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -906,8 +825,6 @@ public class Fachada {
 
 			localHome = (ControladorTarifaSocialLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_TARIFA_SOCIAL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -919,16 +836,9 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Retorna o valor de controladorTarifaSocial
-	 * 
-	 * @return O valor de controladorTarifaSocial
-	 */
 	private ControladorTransacaoLocal getControladorTransacao() {
 		ControladorTransacaoLocalHome localHome = null;
 		ControladorTransacaoLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -937,8 +847,6 @@ public class Fachada {
 
 			localHome = (ControladorTransacaoLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_TRANSACAO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -950,11 +858,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Retorna o valor de controladorUtil
-	 * 
-	 * @return O valor de controladorUtil
-	 */
 	private ControladorUtilLocal getControladorUtil() {
 
 		ControladorUtilLocalHome localHome = null;
@@ -40000,26 +39903,11 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * @author Ivan Sergio
-	 * @date 03/06/2009
-	 * 
-	 * @param idRegistroAlterado
-	 * @param idArquivo
-	 * @return
-	 */
-	public Collection<DadosTabelaAtualizacaoCadastralHelper> consultarDadosTabelaColunaAtualizacaoCadastral(
+	public Map<String, List<DadosTabelaAtualizacaoCadastralHelper>> consultarDadosTabelaColunaAtualizacaoCadastral(
 			Long idRegistroAlterado, Integer idArquivo, Integer idImovel,
-			Long idCliente,Integer idTipoAlteracao) {
-
-		try {
-			return this.getControladorTransacao()
-					.consultarDadosTabelaColunaAtualizacaoCadastral(
-							idRegistroAlterado, idArquivo, idImovel, idCliente,idTipoAlteracao);
-		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex
-					.getParametroMensagem());
-		}
+			Long idCliente,Integer idTipoAlteracao) throws Exception{
+		return this.getControladorTransacao().consultarDadosTabelaColunaAtualizacaoCadastral(
+						idRegistroAlterado, idArquivo, idImovel, idCliente,idTipoAlteracao);
 	}
 
 	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer idImovel, String[] idsAtualizacaoCadastral,	Short indicador, Usuario usuarioLogado) {
@@ -53438,16 +53326,6 @@ public class Fachada {
 	}
 	
 
-	/**TODO:COSANPA
-	 * @date:11/12/2012
-	 * @autor Adriana Muniz
-	 * 
-	 * Consultar Dados Diários da Arrecadação Auxiliar
-	 * 
-	 * @param filtro
-	 * @return Um TreeMap contendo colecoes de dados diarios por ano mes
-	 * @throws ControladorException
-	 */
 	public Map<Integer, Collection<FiltrarDadosDiariosArrecadacaoHelper>> filtrarDadosDiariosArrecadacaoAuxiliar(
 			int anoMesInicial, int anoMesFinal,
 			FiltroConsultarDadosDiariosArrecadacaoAuxiliar filtro) {
@@ -53463,20 +53341,6 @@ public class Fachada {
 
 	}
 	
-	/**
-	 * TODO:COSANPA
-	 * @author Adriana Muniz 
-	 * @data: 19/12/2012
-	 * 
-	 * Consulta para retornar os dados diários arrecadação auxiliar
-	 * agrupados por formas de arrecadação com tarifa
-	 * 
-	 * @param anoMesInicial
-	 * @param anoMesFinal
-	 * @param filtro
-	 * @return
-	 * @throws ControladorException
-	 */
 	public Map<Integer, Collection<FiltrarDadosDiariosArrecadacaoHelper>> filtrarDadosDiariosArrecadacaoAuxiliarFormasArrecadacaoComTarifa(
 			int anoMesInicial, int anoMesFinal,
 			FiltroConsultarDadosDiariosArrecadacaoAuxiliar filtro){
@@ -53491,16 +53355,6 @@ public class Fachada {
 		}
 	}
 	
-	/**TODO:COSANPA
-	 * @date:03/10/2012
-	 * @autor Adriana Muniz
-	 * 
-	 * Consultar Dados Diários da Arrecadação por formas de arrecadação com tarifa 
-	 * 
-	 * @param filtro
-	 * @return Um TreeMap contendo colecoes de dados diarios por ano mes
-	 * @throws ControladorException
-	 */
 	public Map<Integer, Collection<FiltrarDadosDiariosArrecadacaoHelper>> filtrarDadosDiariosFormasArrecadacaoComTarifa(
 			int anoMesInicial, int anoMesFinal,
 			FiltroConsultarDadosDiariosArrecadacao filtro) {
@@ -53516,15 +53370,6 @@ public class Fachada {
 
 	}
 	
-	/**
-	 * COSANPA - Mantis 414
-	 * @author Felipe Santos
-	 * @date 08/11/2013
-	 * 
-	 * Returna dados do Relatorio BIG
-	 * 
-	 * @param anoMesReferencia
-	 */
 	public Collection pesquisarDadosRelatorioBIG(Integer anoMesReferencia) {
 		try {
 			return this.getControladorArrecadacao().pesquisarDadosRelatorioBIG(anoMesReferencia);
@@ -53570,6 +53415,22 @@ public class Fachada {
 		try {
 			this.getControladorAtualizacaoCadastral().aprovarImoveisEmLote(usuarioLogado, listaImoveis);
 		}catch(ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+
+	public void atualizarVecimentoFaturaClienteResponsavel(Date dataVencimento, String anoMesReferencia) {
+		try {
+			this.getControladorFaturamento().atualizarVecimentoFaturaClienteResponsavel(dataVencimento, anoMesReferencia);
+		} catch (ControladorException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public Integer countFaturasClienteResponsaveis(String anoMesReferencia) {
+		try{
+			return this.getControladorFaturamento().countFaturasClienteResponsaveis(anoMesReferencia);
+		} catch (ControladorException e) {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
 	}

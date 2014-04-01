@@ -50,7 +50,7 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		lista.add(imovel);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		filtroHelper.setAlteracaoSituacaoImovel(false);
+		filtroHelper.setAlteracaoHidrometro(false);
 		
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
 		
@@ -75,7 +75,7 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		imovel.addColunaAtualizacao(coluna);
 		
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		filtroHelper.setAlteracaoSituacaoImovel(false);
+		filtroHelper.setAlteracaoHidrometro(false);
 
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
 		
@@ -100,7 +100,7 @@ public class TesteDadosAtualizacaoCadastral extends TestCase {
 		lista.add(imovel);
 
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
-		filtroHelper.setAlteracaoSituacaoImovel(true);
+		filtroHelper.setAlteracaoHidrometro(true);
 
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> array = repo.imoveisFiltrados(lista, filtroHelper);
 		
