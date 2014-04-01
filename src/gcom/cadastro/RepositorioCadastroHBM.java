@@ -4793,11 +4793,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 	
-	public void atualizarArquivoTextoAtualizacaoCadstral(Integer idArquivoTxt,
-			Integer idSituacaoTransmissao) throws ErroRepositorioException {
+	public void atualizarArquivoTextoAtualizacaoCadstral(Integer idArquivoTxt, Integer idSituacaoTransmissao) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
-
+		
 		String consulta = " update ArquivoTextoAtualizacaoCadastral txac"
 				+ " set txac.situacaoTransmissaoLeitura.id =:idSituacaoTransmissao,"
 				+ " txac.ultimaAlteracao = :dataAtual" + " where txac.id = "
@@ -4813,7 +4812,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
-
 		}
 	}
 

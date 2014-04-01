@@ -8,6 +8,7 @@ import gcom.cadastro.atualizacaocadastral.validador.ValidadorCepClienteProprieta
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorNomesClientesCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorSexoCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorTamanhoLinhaClienteCommand;
+import gcom.cadastro.atualizacaocadastral.validador.ValidadorTipoClientesCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorTipoEnderecoCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorTipoPessoaCommand;
 import gcom.cadastro.cliente.IRepositorioClienteImovel;
@@ -254,5 +255,6 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		new ValidadorCepClienteProprietarioResponsavel(imovelAtual, linha).execute();
 		new ValidadorTipoPessoaCommand(imovelAtual, linha, repositorioClienteImovel).execute();
 		new ValidadorTipoEnderecoCommand(imovelAtual, linha).execute();
+		new ValidadorTipoClientesCommand(imovelAtual, linha).execute();
 	}
 }

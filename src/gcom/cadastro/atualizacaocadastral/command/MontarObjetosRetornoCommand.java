@@ -199,7 +199,7 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 	}
 	
 	private void salvarCliente(int matricula, IClienteAtualizacaoCadastral clienteTxt, Short clienteRelacaoTipo, String tipoCliente) throws Exception{
-		Integer tipoOperacaoCliente = getTipoOperacaoCliente(matriculaProprietario, matriculaImovel, clienteTxt.getCpf(), clienteRelacaoTipo, repositorioClienteImovel);
+		Integer tipoOperacaoCliente = getTipoOperacaoCliente(matricula, matriculaImovel, clienteTxt.getCpf(), clienteRelacaoTipo, repositorioClienteImovel);
 		clienteTxt.setTipoOperacao(tipoOperacaoCliente);
 		
 		String telefone = atualizacaoCadastralImovel.getLinhaCliente("telefone" + tipoCliente);

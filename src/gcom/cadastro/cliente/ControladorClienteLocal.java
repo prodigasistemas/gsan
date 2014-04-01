@@ -927,42 +927,16 @@ public interface ControladorClienteLocal extends javax.ejb.EJBLocalObject {
 	 * @return
 	 * @throws ErroRepositorioException 
 	 */
-	public Integer retornaIdClienteResponsavelIndicadorEnvioConta(Integer idImovel)
-			throws ControladorException;
+	public Integer retornaIdClienteResponsavelIndicadorEnvioConta(Integer idImovel)	throws ControladorException;
 
-	/**
-	 * [UC1139] Atualizar Contrato de Parcelamento por Cliente
-	 * 
-	 * @author Mariana Victor
-	 * @data 05/08/2011
-	 */
-	public Cliente pesquisarDadosCliente(Integer idCliente)
-			throws ControladorException;
+	public Cliente pesquisarDadosCliente(Integer idCliente)	throws ControladorException;
 	
-	/**
-	 * [UC1213] Emitir Relatorio de Ordem de Servico de Fiscalizacao
-	 * 
-	 * 
-	 * @author Paulo Diniz
-	 * @date 06/08/2011
-	 * 
-	 * @throws ErroRepositorioException
-	 */	
-	public ClienteImovel pesquisarClienteImovelOSFiscalizada(
-			Integer idImovel) throws ControladorException;
+	public ClienteImovel pesquisarClienteImovelOSFiscalizada(Integer idImovel) throws ControladorException;
 	
-	/**
-	 * Mantis 494
-	 * 
-	 * @param idClienteTipo
-	 *            
-	 * @exception ErroRepositorioException
-	 *                Erro no BD
-	 * @author Wellington Rocha               
-	 */
 	public ClienteTipo pesquisarClienteTipo(Integer idClienteTipo) throws ControladorException;
 	
 	public Collection<ClienteFone> pesquisarClienteFoneDoImovel(Integer idImovel) throws ControladorException;
-	
+
+	public Collection<Cliente> pesquisarClientePorCpfCnpj(String cpfCnpj) throws Exception;
 }
 

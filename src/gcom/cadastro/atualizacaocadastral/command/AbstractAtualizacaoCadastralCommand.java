@@ -5,9 +5,9 @@ import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.FiltroImovelAtualizacaoCadastral;
+import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteFoneAtualizacaoCadastral;
-import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.cliente.IClienteAtualizacaoCadastral;
 import gcom.cadastro.cliente.IRepositorioClienteImovel;
@@ -35,7 +35,6 @@ import gcom.seguranca.transacao.TabelaLinhaColunaAlteracao;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
-import gcom.util.ErroRepositorioException;
 import gcom.util.ParserUtil;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
@@ -45,6 +44,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.apache.commons.lang.StringUtils;
 import org.jboss.logging.Logger;
 
 public abstract class AbstractAtualizacaoCadastralCommand {
@@ -227,18 +227,25 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 		}
 	}
 	
-	protected Integer getTipoOperacaoCliente(Integer matriculaProprietario, Integer matriculaImovel, String cpfCliente, Short clienteRelacaoTipo, IRepositorioClienteImovel repositorioClienteImovel) throws ErroRepositorioException {
-		Integer tipoOperacao = AlteracaoTipo.ALTERACAO;
-		
-		boolean existeCliente = repositorioClienteImovel.existeClienteImovelTipo(matriculaProprietario
-				, matriculaImovel
-				, (int) ClienteRelacaoTipo.PROPRIETARIO
-				, cpfCliente);
-		
-		if (!existeCliente){
-			tipoOperacao = AlteracaoTipo.INCLUSAO;
+	protected Integer getTipoOperacaoCliente(Integer matricula, Integer matriculaImovel, String cpfCliente, Short clienteRelacaoTipo, IRepositorioClienteImovel repositorioClienteImovel) throws Exception {
+		if (matricula == null || matricula == 0){
+			return AlteracaoTipo.INCLUSAO;
 		}
-		
-		return tipoOperacao;
+		      
+		Cliente cliente = controladorCliente.consultarCliente(matricula);
+		if (cliente != null){
+			if (StringUtils.equals(cliente.getCnpj(), cpfCliente) || StringUtils.equals(cliente.getCpf(), cpfCliente)){
+				return AlteracaoTipo.ALTERACAO;
+			}else{
+				Collection<Cliente> clientes = controladorCliente.pesquisarClientePorCpfCnpj(cpfCliente);
+				if (clientes.isEmpty()){
+					return AlteracaoTipo.ALTERACAO;
+				}else{
+					return AlteracaoTipo.INCLUSAO;
+				}
+			}
+		}else{
+			return AlteracaoTipo.INCLUSAO;
+		}
 	}
 }
