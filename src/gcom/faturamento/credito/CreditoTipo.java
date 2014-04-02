@@ -109,7 +109,7 @@ public class CreditoTipo extends ObjetoTransacao {
 	
 	public final static Integer DESCONTO_TARIFA_SOCIAL = new Integer(11);
 	
-	public final static Integer CREDITO_NITRATO = new Integer(12);
+	public final static Integer CREDITO_NITRATO = new Integer(0);
 	
 	public final static Integer PAGAMENTO_PARCIAL = new Integer(856);
 
