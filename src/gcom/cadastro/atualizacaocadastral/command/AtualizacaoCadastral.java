@@ -1,6 +1,8 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
+import gcom.cadastro.imovel.CadastroOcorrencia;
+import gcom.util.ConstantesSistema;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +20,8 @@ public class AtualizacaoCadastral {
 	private List<String> imagens = new ArrayList<String>();
 	
 	private int totalImoveis = 0;
+	
+	private boolean imovelValidado = false;
 	
 	public ArquivoTextoAtualizacaoCadastral getArquivoTexto() {
 		return arquivoTexto;
@@ -78,5 +82,13 @@ public class AtualizacaoCadastral {
 
 	public void setImagens(List<String> imagens) {
 		this.imagens = imagens;
+	}
+
+	public boolean isImovelValidado() {
+		return imovelValidado;
+	}
+
+	public void setImovelValidado(boolean imovelValidado) {
+		this.imovelValidado = imovelValidado;
 	}
 }

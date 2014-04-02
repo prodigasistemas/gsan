@@ -19,18 +19,18 @@ public class ValidadorTipoClientesCommand extends ValidadorCommand {
 	}
 	
 	public void execute() throws Exception {
-		String tipoProprietario = linha.get("tipoPessoaProprietario");
-		String tipoResponsavel  = linha.get("tipoPessoaResponsavel");
+		String usuarioProprietario = linha.get("usuarioProprietario");
+		String tipoResponsavel  = linha.get("tipoResponsavel");
 		
 		if (!tipoResponsavelValido(tipoResponsavel)){
 			cadastroImovel.addMensagemErro(MSG_TIPO_RESPONSAVEL_INVALIDO);
 		}
 
-		if (!tipoProprietarioValido(tipoProprietario)){
+		if (!tipoProprietarioValido(usuarioProprietario)){
 			cadastroImovel.addMensagemErro(MSG_TIPO_PROPRIETARIO_INVALIDO);
 		}
 		
-		if (responsavelIgualProprietario(tipoResponsavel) && proprietarioIgualUsuario(tipoProprietario)){
+		if (responsavelIgualProprietario(tipoResponsavel) && proprietarioIgualUsuario(usuarioProprietario)){
 			cadastroImovel.addMensagemErro(MSG_TIPO_RESPONSAVEL_INCONSISTENTE);
 		}
 	}
