@@ -20,6 +20,7 @@ public class ParseHeaderCommand extends AbstractAtualizacaoCadastralCommand {
 	}
 
 	public void execute(AtualizacaoCadastral atualizacao) throws Exception {
+		parser.setContador(17);
 		String grupo = parser.obterDadoParser(3);
 		String localidade = parser.obterDadoParser(3);
 		String setor = parser.obterDadoParser(3);

@@ -126,7 +126,7 @@ public class AdicionarAtualizarImovelClienteAction extends GcomAction {
      * @param httpServletResponse
      *            Descrição do parâmetro
      * @return Descrição do retorno
-     */
+     */@SuppressWarnings("rawtypes")
     public ActionForward execute(ActionMapping actionMapping,
             ActionForm actionForm, HttpServletRequest httpServletRequest,
             HttpServletResponse httpServletResponse) {

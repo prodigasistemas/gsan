@@ -17,6 +17,8 @@ public class AtualizacaoCadastral {
 	
 	private List<String> imagens = new ArrayList<String>();
 	
+	private Integer idRota = new Integer(0);
+	
 	private int totalImoveis = 0;
 	
 	public ArquivoTextoAtualizacaoCadastral getArquivoTexto() {
@@ -78,5 +80,13 @@ public class AtualizacaoCadastral {
 
 	public void setImagens(List<String> imagens) {
 		this.imagens = imagens;
+	}
+
+	public Integer getIdRota() {
+		return idRota;
+	}
+
+	public void setIdRota(Integer idRota) {
+		this.idRota = idRota;
 	}
 }
