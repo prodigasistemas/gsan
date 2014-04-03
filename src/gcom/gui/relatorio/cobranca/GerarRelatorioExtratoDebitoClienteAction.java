@@ -188,7 +188,7 @@ public class GerarRelatorioExtratoDebitoClienteAction extends
 		String tipo = (String)httpServletRequest.getParameter("tipo");
 		ExtratoDebitoRelatorioHelper extratoDebitoRelatorioHelper = fachada.gerarEmitirExtratoDebito(
                  null, new Short("0"), colecaoContas, null, null,
-                 acrescimoImpontualidade, new BigDecimal("0.00"), Util.formatarMoedaRealparaBigDecimal( valorContas ), null, cliente,null, null, null);
+                 new BigDecimal("0.00"), new BigDecimal("0.00"), Util.formatarMoedaRealparaBigDecimal( valorContas ), null, cliente,null, null, null);
        
         CobrancaDocumento documentoCobranca = extratoDebitoRelatorioHelper.getColecaoCobrancaDocumentoItemContas().iterator().next().getCobrancaDocumento();
         
@@ -218,7 +218,7 @@ public class GerarRelatorioExtratoDebitoClienteAction extends
           String dataValidade = Util.formatarData(fachada.
           		obterDataValidadeDocumentoCobranca(documentoCobranca, usuario, maiorDataVencimentoContas));
         
-          valorTotalContas = extratoDebitoRelatorioHelper.getValorTotalConta().add(acrescimoImpontualidade);
+          valorTotalContas = extratoDebitoRelatorioHelper.getValorTotalConta();
 		
 		  //Linha 15
 		  relatorioExtratoDebitoCliente.addParametro("dataValidade", dataValidade);
@@ -300,8 +300,6 @@ public class GerarRelatorioExtratoDebitoClienteAction extends
 	       relatorioExtratoDebitoCliente.addParametro("colecaoDebitoACobrar",null);
 	       relatorioExtratoDebitoCliente.addParametro("colecaoCreditoARealizar",null);
 	       relatorioExtratoDebitoCliente.addParametro("colecaoGuiaPagamentoValores",null);
-	       relatorioExtratoDebitoCliente.addParametro("acrescimoImpontualidade", Util.formatarMoedaReal(acrescimoImpontualidade));
-	       
 		  
 		}else{
 			
