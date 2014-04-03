@@ -104,6 +104,8 @@ public class CadastroOcorrencia extends ObjetoTransacao {
     /** nullable persistent field */
     private Date ultimaAlteracao;
     
+    private Short indicadorValidacao;
+    
     private String descricaoComId; 
 
     /** full constructor */
@@ -150,7 +152,15 @@ public class CadastroOcorrencia extends ObjetoTransacao {
         this.ultimaAlteracao = ultimaAlteracao;
     }
 
-    public String toString() {
+    public Short getIndicadorValidacao() {
+		return indicadorValidacao;
+	}
+
+	public void setIndicadorValidacao(Short indicadorValidacao) {
+		this.indicadorValidacao = indicadorValidacao;
+	}
+
+	public String toString() {
         return new ToStringBuilder(this).append("id", getId()).toString();
     }
     public String[] retornaCamposChavePrimaria(){

@@ -8,7 +8,6 @@ import gcom.cadastro.endereco.ControladorEnderecoLocal;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.util.ControladorUtilLocal;
-import gcom.util.ErroRepositorioException;
 import gcom.util.ParserUtil;
 
 import java.util.Map;
@@ -25,7 +24,7 @@ public class ParseRamoAtividadeCommand extends AbstractAtualizacaoCadastralComma
 		Map<String, String> linha = atualizacao.getImovelAtual().getLinhaRamoAtividade();
 		AtualizacaoCadastralImovel imovel = atualizacao.getImovelAtual();
 		
-		new ValidadorTamanhoLinhaRamoAtividadeCommand(parser, imovel).execute();
+		new ValidadorTamanhoLinhaRamoAtividadeCommand(parser, imovel, linha).execute();
 		if(!imovel.isErroLayout()) {
 
 			String matriculaImovelRamoAtividade = parser.obterDadoParser(9).trim();
@@ -33,32 +32,20 @@ public class ParseRamoAtividadeCommand extends AbstractAtualizacaoCadastralComma
 
 			String ramoAtividade = parser.obterDadoParser(3).trim();
 			linha.put("ramoAtividade", ramoAtividade);
-
-			validarCampos(atualizacao, imovel, linha);
+			
+			adicionarRamoAtividade(linha, imovel);
 		}
 	}
 
-	private void validarCampos(AtualizacaoCadastral atualizacao, AtualizacaoCadastralImovel imovel, Map<String, String> linha) throws ErroRepositorioException {
+	private void adicionarRamoAtividade(Map<String, String> linha,
+			AtualizacaoCadastralImovel imovel) throws NumberFormatException {
+		
 		int idRamoAtividade = Integer.parseInt(linha.get("ramoAtividade"));
 		
 		if (idRamoAtividade > 0) {
-			if (imovel.getDadosImovel().contemApenasResidencial()){
-				imovel.addMensagemErro("Categoria residencial não permite ramo de atividade.");
-				return;
-			}
-			
-			boolean existeRamoAtividade = repositorioCadastro.existeRamoAtividade(idRamoAtividade);
-			
-			if (!existeRamoAtividade){
-				imovel.addMensagemErro("Ramo de atividade com código inválido.");
-				return;
-			}
-			
 			DadoAtualizacaoRamoAtividade ramo = new DadoAtualizacaoRamoAtividade();
 			ramo.setId(idRamoAtividade);
-			atualizacao.getImovelAtual().addDadoRamoAtividade(ramo);
+			imovel.addDadoRamoAtividade(ramo);
 		}
-		
 	}
-
 }

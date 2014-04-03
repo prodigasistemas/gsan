@@ -21,6 +21,8 @@ public class AtualizacaoCadastral {
 	
 	private int totalImoveis = 0;
 	
+	private boolean imovelValidado = false;
+	
 	public ArquivoTextoAtualizacaoCadastral getArquivoTexto() {
 		return arquivoTexto;
 	}
@@ -88,5 +90,13 @@ public class AtualizacaoCadastral {
 
 	public void setIdRota(Integer idRota) {
 		this.idRota = idRota;
+	}
+
+	public boolean isImovelValidado() {
+		return imovelValidado;
+	}
+
+	public void setImovelValidado(boolean imovelValidado) {
+		this.imovelValidado = imovelValidado;
 	}
 }

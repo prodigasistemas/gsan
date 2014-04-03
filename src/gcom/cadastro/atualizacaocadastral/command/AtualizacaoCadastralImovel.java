@@ -1,5 +1,7 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
+import gcom.cadastro.imovel.CadastroOcorrencia;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +31,8 @@ public class AtualizacaoCadastralImovel {
 	private Boolean erroLayout = false;
 	
 	private Boolean existeMedidor = false;
+	
+	private CadastroOcorrencia cadastroOcorrencia;
 	
 	public AtualizacaoCadastralImovel(){
 		
@@ -169,6 +173,14 @@ public class AtualizacaoCadastralImovel {
 
 	public void setExisteMedidor(Boolean existeMedidor) {
 		this.existeMedidor = existeMedidor;
+	}
+
+	public CadastroOcorrencia getCadastroOcorrencia() {
+		return cadastroOcorrencia;
+	}
+
+	public void setCadastroOcorrencia(CadastroOcorrencia cadastroOcorrencia) {
+		this.cadastroOcorrencia = cadastroOcorrencia;
 	}
 
 	public void limparDadosUsuario() {

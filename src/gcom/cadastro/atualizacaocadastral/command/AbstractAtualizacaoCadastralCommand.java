@@ -67,10 +67,16 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 		this.parser = parser;
 	}
 
-	public AbstractAtualizacaoCadastralCommand(ParserUtil parser, IRepositorioCadastro repositorioCadastro, ControladorUtilLocal controladorUtil, 
-			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, ControladorEnderecoLocal controladorEndereco,
-			ControladorAtualizacaoCadastralLocal controladorAtualizacaoCadastral, ControladorClienteLocal controladorCliente) {
-		
+	public AbstractAtualizacaoCadastralCommand(
+			ParserUtil parser,
+			IRepositorioCadastro repositorioCadastro,
+			ControladorUtilLocal controladorUtil,
+			ControladorTransacaoLocal controladorTransacao,
+			IRepositorioImovel repositorioImovel,
+			ControladorEnderecoLocal controladorEndereco,
+			ControladorAtualizacaoCadastralLocal controladorAtualizacaoCadastral,
+			ControladorClienteLocal controladorCliente) {
+
 		this.parser = parser;
 		this.repositorioCadastro = repositorioCadastro;
 		this.controladorUtil = controladorUtil;
