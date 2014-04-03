@@ -8,47 +8,19 @@ import gcom.cadastro.endereco.LogradouroTipo;
 import gcom.fachada.Fachada;
 import gcom.util.filtro.ParametroSimples;
 
-public class ClienteUsuarioBuilder{
-	private AtualizacaoCadastralImovel atualizacaoCadastralImovel;
-	
-	IClienteAtualizacaoCadastral clienteTxt = null;
-	
+public class ClienteUsuarioBuilder extends ClienteBuilder {
 	public ClienteUsuarioBuilder(AtualizacaoCadastralImovel atualizacaoCadastralImovel){
-		this.atualizacaoCadastralImovel = atualizacaoCadastralImovel;
-		
-		buildCliente();
+		super(atualizacaoCadastralImovel);
 	}
 	
-	private void buildCliente() {
-		clienteTxt = new ClienteAtualizacaoCadastral();
+	public IClienteAtualizacaoCadastral buildCliente(Short clienteRelacaoTipo) {
+		String campo;
 		
-		clienteTxt.setNome(atualizacaoCadastralImovel.getLinhaCliente("nomeUsuario"));
-		
-		clienteTxt.setCpf(atualizacaoCadastralImovel.getLinhaCliente("cpfUsuario"));
-		clienteTxt.setCnpj(atualizacaoCadastralImovel.getLinhaCliente("cnpjUsuario"));
-
-		clienteTxt.setRg(atualizacaoCadastralImovel.getLinhaCliente("rgUsuario"));
-		clienteTxt.setDsUFSiglaOrgaoExpedidorRg(atualizacaoCadastralImovel.getLinhaCliente("ufRgUsuario"));
-		
-		String campo = atualizacaoCadastralImovel.getLinhaCliente("sexoUsuario");
-		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
-			PessoaSexo sexo = new PessoaSexo(Integer.parseInt(campo));
-			clienteTxt.setPessoaSexo(sexo);
-		}
- 
-		clienteTxt.setEmail(atualizacaoCadastralImovel.getLinhaCliente("emailUsuario"));
-		clienteTxt.setIdClienteRelacaoTipo(new Integer(ClienteRelacaoTipo.USUARIO));
-		clienteTxt.setIdCliente(new Integer(atualizacaoCadastralImovel.getLinhaCliente("matriculaUsuario")));
-
+		buildCliente(USUARIO, clienteRelacaoTipo);
 		
 		campo = atualizacaoCadastralImovel.getLinhaCliente("matriculaImovelCliente");
 		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
 			clienteTxt.setIdImovel(Integer.parseInt(campo));
-		}
-		
-		campo = atualizacaoCadastralImovel.getLinhaCliente("idTipoLogradouroImovel");
-		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
-			clienteTxt.setIdLogradouroTipo(Integer.parseInt(campo));
 		}
 		
 		clienteTxt.setDescricaoLogradouro(atualizacaoCadastralImovel.getLinhaImovel("logradouroImovel"));
@@ -78,6 +50,8 @@ public class ClienteUsuarioBuilder{
 		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
 			clienteTxt.setIdClienteTipo(Integer.parseInt(campo));
 		}
+		
+		return clienteTxt;
 	}
 	
 	private String getDescricaoLogradouro(int idTipoLogradouro) {
@@ -86,9 +60,5 @@ public class ClienteUsuarioBuilder{
 		LogradouroTipo logradouroTipo = (LogradouroTipo) (Fachada.getInstancia().pesquisar(filtro, LogradouroTipo.class.getName()).iterator().next());
 
 		return logradouroTipo.getDescricao();
-	}
-
-	public IClienteAtualizacaoCadastral getClienteTxt() {
-		return clienteTxt;
 	}
 }

@@ -49,12 +49,8 @@ import gcom.cadastro.imovel.ControladorImovelLocal;
 import gcom.cadastro.imovel.ControladorImovelLocalHome;
 import gcom.cadastro.imovel.FiltroCadastroOcorrencia;
 import gcom.cadastro.imovel.FiltroFonteAbastecimento;
-import gcom.cadastro.imovel.FiltroPavimentoCalcada;
-import gcom.cadastro.imovel.FiltroPavimentoRua;
 import gcom.cadastro.imovel.FonteAbastecimento;
 import gcom.cadastro.imovel.Imovel;
-import gcom.cadastro.imovel.PavimentoCalcada;
-import gcom.cadastro.imovel.PavimentoRua;
 import gcom.fachada.Fachada;
 import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionHelper;
 import gcom.interceptor.ControleAlteracao;
@@ -108,6 +104,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -1255,83 +1252,73 @@ public class ControladorTransacaoSEJB implements SessionBean {
 		return retorno;
 	}
 	
-	/**
-	 * @author Ivan Sergio
-	 * @date 03/06/2009
-	 *
-	 * @param idRegistroAlterado
-	 * @param idArquivo
-	 * @return
-	 * @throws ControladorException
-	 */
-	public Collection<DadosTabelaAtualizacaoCadastralHelper> consultarDadosTabelaColunaAtualizacaoCadastral(
-			Long idRegistroAlterado,
-			Integer idArquivo, Integer idImovel, Long idCliente,Integer idTipoAlteracao)
-		throws ControladorException {
-		
-		Collection<DadosTabelaAtualizacaoCadastralHelper> retorno = null;
+	public Map<String, List<DadosTabelaAtualizacaoCadastralHelper>> consultarDadosTabelaColunaAtualizacaoCadastral(Long idRegistroAlterado, Integer idArquivo,
+			Integer idImovel, Long idCliente, Integer idTipoAlteracao) throws Exception {
+
+		Map<String, List<DadosTabelaAtualizacaoCadastralHelper>> retorno = new HashMap<String, List<DadosTabelaAtualizacaoCadastralHelper>>();
 		DadosTabelaAtualizacaoCadastralHelper helper = null;
-		
-		try {
-			List listaDados = repositorioTransacao.consultarDadosTabelaColunaAtualizacaoCadastral(
-					idRegistroAlterado, idArquivo, idImovel, idCliente,idTipoAlteracao);
-			
-			if (listaDados.size() > 0) {
-				retorno = new ArrayList<DadosTabelaAtualizacaoCadastralHelper>();
-				Object obj = null;
-				Object[] dados = null;
-				
-				for (int i = 0; i < listaDados.size(); i++) {
-					obj = listaDados.get(i);
-					if (obj instanceof Object[]) {
-						dados = (Object[]) obj;
-						helper = new DadosTabelaAtualizacaoCadastralHelper();
-						
-						helper.setIdTabelaAtualizacaoCadastral((Integer) dados[0]); // Id da Tabela Atualizacao Cadastral
-						helper.setIdTabela((Integer) dados[1]); // Id da Tabela
-						helper.setDescricaoTabela((String) dados[2]); // Descricao da Tabela
-						if (dados[14] != null){
-							helper.setDescricaoTabela(helper.getDescricaoTabela() + " " + String.valueOf(dados[14]));
-						}
-						helper.setIdTabelaColuna((Integer) dados[3]); // Id da TabelaColuna
-						helper.setDescricaoColuna((String) dados[4]); // Descricao da TabelaColuna
-						helper.setIdTabelaColunaAtualizacaoCadastral((Integer) dados[5]); // Id da Tabela Coluna Atualizacao Cadastral
-						if(dados[6] != null && !dados[6].equals("")){
-							String campoAnterior = getDescricaoCampoAtualizacaoCadastral((String)dados[6], (String)dados[12]);
-							if(campoAnterior != null){
-								helper.setColunaValorAnterior(campoAnterior); // Valor Anterior da Coluna
-							}else{
-								helper.setColunaValorAnterior((String) dados[6]);// Valor Anterior da Coluna
-							}
-						}	
-						if(dados[7] != null && !dados[7].equals("")){
-							String campoAtual = getDescricaoCampoAtualizacaoCadastral((String)dados[7], (String)dados[12]);
-							if(campoAtual != null){
-								helper.setColunaValorAtual(campoAtual); // Valor Atual da Coluna
-							}else{
-								helper.setColunaValorAtual((String) dados[7]); // Valor Atual da Coluna
-							}
-						}
-						helper.setIndicadorAutorizado((Short) dados[8]); // Indicador de Autorizado
-						helper.setUltimaAtualizacao((Date) dados[9]); // Ultima Atualizacao
-						helper.setIdAlteracaoTipo((Integer) dados[10]); // Id da Alteracao Tipo
-						helper.setDescricaoAlteracaoTipo((String) dados[11]); // Descricao da Alteracao Tipo
-						if(dados[13] != null){
-							helper.setDataValidacao((Date)dados[13]);
-						}
-						if(dados[15] != null){
-							helper.setNomeUsuario((String) dados[15]);
-						}
-						
-						retorno.add(helper);
+
+		List listaDados = repositorioTransacao.consultarDadosTabelaColunaAtualizacaoCadastral(idRegistroAlterado, idArquivo, idImovel, idCliente,
+				idTipoAlteracao);
+
+		if (listaDados.size() > 0) {
+			Object obj = null;
+			Object[] dados = null;
+
+			for (int i = 0; i < listaDados.size(); i++) {
+				obj = listaDados.get(i);
+				if (obj instanceof Object[]) {
+					dados = (Object[]) obj;
+					helper = new DadosTabelaAtualizacaoCadastralHelper();
+
+					helper.setIdTabelaAtualizacaoCadastral((Integer) dados[0]); 
+					helper.setIdTabela((Integer) dados[1]); 
+					helper.setDescricaoTabela((String) dados[2]); 
+					if (dados[14] != null) {
+						helper.setDescricaoTabela(helper.getDescricaoTabela() + " " + String.valueOf(dados[14]));
+						helper.setComplemento(String.valueOf(dados[14]));
 					}
+					helper.setIdTabelaColuna((Integer) dados[3]); 
+					helper.setDescricaoColuna((String) dados[4]); 
+					helper.setIdTabelaColunaAtualizacaoCadastral((Integer) dados[5]); 
+					if (dados[6] != null && !dados[6].equals("")) {
+						String campoAnterior = getDescricaoCampoAtualizacaoCadastral((String) dados[6], (String) dados[12]);
+						if (campoAnterior != null) {
+							helper.setColunaValorAnterior(campoAnterior);
+						} else {
+							helper.setColunaValorAnterior((String) dados[6]);
+						}
+					}
+					if (dados[7] != null && !dados[7].equals("")) {
+						String campoAtual = getDescricaoCampoAtualizacaoCadastral((String) dados[7], (String) dados[12]);
+						if (campoAtual != null) {
+							helper.setColunaValorAtual(campoAtual); 
+						} else {
+							helper.setColunaValorAtual((String) dados[7]); 
+						}
+					}
+					helper.setNomeColuna((String) dados[12]);
+					helper.setIndicadorAutorizado((Short) dados[8]); 
+					helper.setUltimaAtualizacao((Date) dados[9]); 
+					helper.setIdAlteracaoTipo((Integer) dados[10]); 
+					helper.setDescricaoAlteracaoTipo((String) dados[11]); 
+					if (dados[13] != null) {
+						helper.setDataValidacao((Date) dados[13]);
+					}
+					if (dados[15] != null) {
+						helper.setNomeUsuario((String) dados[15]);
+					}
+
+					List<DadosTabelaAtualizacaoCadastralHelper> alteracoes = retorno.get(helper.getNomeColuna());
+					if (alteracoes == null){
+						alteracoes = new ArrayList<DadosTabelaAtualizacaoCadastralHelper>();
+						retorno.put(helper.getNomeColuna(), alteracoes);
+					}
+					alteracoes.add(helper);
 				}
 			}
-		} catch (Exception ex) {
-			ex.printStackTrace();
-			throw new ControladorException("erro.sistema", ex);
 		}
-		
+
 		return retorno;
 	}
 	

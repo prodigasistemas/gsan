@@ -1564,18 +1564,19 @@ public class RepositorioClienteImovelHBM implements IRepositorioClienteImovel {
 		return retorno;
 	}
 	
-	public boolean existeClienteImovelTipo(Integer idCliente, Integer idImovel, Integer idTipo, String cpfCnpj)	throws ErroRepositorioException {
+	@SuppressWarnings("rawtypes")
+	public Cliente pesquisarClienteImovelTipo(Integer idCliente, Integer idImovel, Integer idTipo)	throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 
 
 		try {
 			StringBuilder sql = new StringBuilder();
-			sql.append(" select clim.cliente.id, clim.cliente.nome")
-			.append(" from ClienteImovel clim")
-			.append(" left join clim.cliente clie")
+			sql.append(" select clie")
+			.append(" from Cliente clie")
+			.append(" left join clie.clienteImoveis clim")
 			.append(" left join clim.imovel imov")
 			.append(" inner join clim.clienteRelacaoTipo tipo ")
-			.append(" where (clie.id  = :idCliente or clie.cpf = :cpf or clie.cnpj = :cnpj)")
+			.append(" where clie.id  = :idCliente")
 			.append("   AND imov.id = :idImovel ")
 			.append("   AND clim.dataFimRelacao IS NULL ")
 			.append("   AND tipo.id = :idTipo");
@@ -1584,12 +1585,10 @@ public class RepositorioClienteImovelHBM implements IRepositorioClienteImovel {
 					.setInteger("idCliente", idCliente)
 					.setInteger("idImovel", idImovel)
 					.setInteger("idTipo", idTipo)
-					.setString("cpf", cpfCnpj)
-					.setString("cnpj", cpfCnpj)
 					.list();
 			
 			if (retorno.size() > 0){
-				return true;
+				return (Cliente) retorno.iterator().next();
 			}
 
 		} catch (HibernateException e) {
@@ -1598,7 +1597,7 @@ public class RepositorioClienteImovelHBM implements IRepositorioClienteImovel {
 			HibernateUtil.closeSession(session);
 		}
 
-		return false;
+		return null;
 	}
 	
 }

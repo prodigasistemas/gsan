@@ -64,6 +64,12 @@
 		form.submit();
 		window.close();
 	}
+	
+	function aprovarEmLote(){
+	  	var form = document.forms[0];
+	  	form.action = "/gsan/aprovarImoveisEmLoteAction.do";
+	  	form.submit();
+	}
  
 </script>
 </head>
@@ -223,6 +229,8 @@
 					</div>
 					</td>
 				</tr>
+				
+				 
 				</logic:present>
 			</table>
 		</td>
@@ -232,11 +240,24 @@
 	 <td align="left">
 	     <table border="0" width="100%">
 		   <tr>
-			<td align="left" width="50%">					
-			<input type="button" name="Button" class="bottonRightCol"
-				value="Voltar" onclick="window.location.href='/gsan/exibirFiltrarAlteracaoAtualizacaoCadastralAction.do?menu=sim';">	
-			</td>
+				<td align="left" width="50%">					
+					<input type="button" name="Button" class="bottonRightCol"
+						value="Voltar" onclick="window.location.href='/gsan/exibirFiltrarAlteracaoAtualizacaoCadastralAction.do?menu=sim';">	
+				</td>
+			
+		  	<logic:equal name="aprovacaoEmLote" value="true" scope="session">
+				<td align="right" width="50%">					
+					<input type="button" name="Button" class="bottonRightCol"
+						value="Aprovar em Lote" onclick="aprovarEmLote();">	
+				</td>
+			</logic:equal>
 		  </tr>
+					<!-- >tr align="right">
+						<td align="left" width="50%">					
+							<input type="button" name="Button" class="bottonRightCol"
+							value="Aprovar em Lote" onclick="aprovarEmLote();">	
+						</td>
+					</tr -->
 		</table>
 	   </td>
 	 </tr>

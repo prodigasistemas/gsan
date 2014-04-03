@@ -1,7 +1,11 @@
 package gcom.atendimentopublico.registroatendimento;
 
+import gcom.atualizacaocadastral.ICliente;
+import gcom.atualizacaocadastral.IClienteImovel;
 import gcom.cadastro.ContaBraile;
 import gcom.cadastro.cliente.ClienteFone;
+import gcom.cadastro.cliente.ClienteRelacaoTipo;
+import gcom.cadastro.cliente.ClienteTipo;
 import gcom.cadastro.imovel.IImovel;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.unidade.UnidadeOrganizacional;
@@ -15,16 +19,21 @@ import gcom.util.Util;
 import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 
 import javax.servlet.http.HttpSession;
 
 public class RABuilder {
 	
 	public static Integer UNIDADE_ATENDIMENTO_UNAM = new Integer(17);
+	
 	public static Integer SOLICITACAO_TIPO_MANUTENCAO_CADASTRAL = new Integer(25);
 	public static Integer SOLICITACAO_TIPO_ESPECIFICACAO_ATUALIZACAO_CADASTRAL = new Integer(13);
+	
 	public static Integer SERVICO_TIPO_LOCALIZAR_IMOVEL = new Integer(51);
+	
 	public static Integer USUARIO_ADMIN = new Integer(1); 
+	
 	
 	public static RADadosGeraisHelper buildRADadosGeraisAtualizacaoCadastral(IImovel imovelRetorno, Integer alteracaoTipo, String protocoloAtendimento) {
 		RADadosGeraisHelper raDadosGerais = new RADadosGeraisHelper();
@@ -39,11 +48,57 @@ public class RABuilder {
 					.idMeioSolicitacao(MeioSolicitacao.INTERNO)
 					.idSolicitacaoTipo(SOLICITACAO_TIPO_MANUTENCAO_CADASTRAL)
 					.idSolicitacaoTipoEspecificacao(SOLICITACAO_TIPO_ESPECIFICACAO_ATUALIZACAO_CADASTRAL)
-					.observacao(getObservacaoImovel(imovelRetorno, alteracaoTipo))
+					.observacao(getObservacaoImovelAntigo(imovelRetorno, alteracaoTipo))
 					.indicadorRaAtualizacaoCadastral(true)
 					.idUsuarioLogado(USUARIO_ADMIN)
 					.protocoloAtendimento(protocoloAtendimento);
 		
+		return raDadosGerais;
+	}
+	
+	public static RADadosGeraisHelper buildRADadosGeraisAtualizacaoCadastral(IImovel imovelRetorno, ICliente clienteRetorno, 
+											IClienteImovel clienteImovelRetorno, Integer alteracaoTipo, String protocoloAtendimento) {
+		RADadosGeraisHelper raDadosGerais = new RADadosGeraisHelper();
+		
+		Date dataAtual = new Date();
+		
+		raDadosGerais.indicadorAtendimentoOnline(new Short("1"))
+					.dataAtendimento(Util.formatarData(dataAtual))
+					.dataPrevista(Util.formatarData(dataAtual))
+					.horaAtendimento(Util.formatarHoraSemSegundos(dataAtual))
+					.idUnidadeAtendimento(UNIDADE_ATENDIMENTO_UNAM)
+					.idMeioSolicitacao(MeioSolicitacao.INTERNO)
+					.idSolicitacaoTipo(SOLICITACAO_TIPO_MANUTENCAO_CADASTRAL)
+					.idSolicitacaoTipoEspecificacao(SOLICITACAO_TIPO_ESPECIFICACAO_ATUALIZACAO_CADASTRAL)
+					.observacao(getObservacaoCliente(clienteRetorno, imovelRetorno, clienteImovelRetorno, alteracaoTipo))
+					.indicadorRaAtualizacaoCadastral(true)
+					.idUsuarioLogado(USUARIO_ADMIN)
+					.protocoloAtendimento(protocoloAtendimento);
+		
+		return raDadosGerais;
+	}
+	
+	public static RADadosGeraisHelper buildRADadosGeraisAtualizacaoCadastralInclusaoImovel(IImovel imovelRetorno, 
+										HashMap<ClienteRelacaoTipo, ICliente> mapClientesImovel, Integer alteracaoTipo,
+										String protocoloAtendimento) {
+		RADadosGeraisHelper raDadosGerais = new RADadosGeraisHelper();
+
+		Date dataAtual = new Date();
+
+		raDadosGerais
+				.indicadorAtendimentoOnline(new Short("1"))
+				.dataAtendimento(Util.formatarData(dataAtual))
+				.dataPrevista(Util.formatarData(dataAtual))
+				.horaAtendimento(Util.formatarHoraSemSegundos(dataAtual))
+				.idUnidadeAtendimento(UNIDADE_ATENDIMENTO_UNAM)
+				.idMeioSolicitacao(MeioSolicitacao.INTERNO)
+				.idSolicitacaoTipo(SOLICITACAO_TIPO_MANUTENCAO_CADASTRAL)
+				.idSolicitacaoTipoEspecificacao(SOLICITACAO_TIPO_ESPECIFICACAO_ATUALIZACAO_CADASTRAL)
+				.observacao(getObservacaoImovelNovo(imovelRetorno, mapClientesImovel, alteracaoTipo))
+				.indicadorRaAtualizacaoCadastral(true)
+				.idUsuarioLogado(USUARIO_ADMIN)
+				.protocoloAtendimento(protocoloAtendimento);
+
 		return raDadosGerais;
 	}
 	
@@ -181,7 +236,7 @@ public class RABuilder {
 		return raDadosGerais;
 	}
 	
-	public static RALocalOcorrenciaHelper buildRALocalOcorrenciaAtualizacaoCadastral(IImovel imovel, Integer idSetorComercial, Integer idQuadra, Integer alteracaoTipo){
+	public static RALocalOcorrenciaHelper buildRALocalOcorrenciaAtualizacaoCadastral(IImovel imovel, Integer idSetorComercial, Integer alteracaoTipo){
 		RALocalOcorrenciaHelper raLocalOcorrenciaHelper = new RALocalOcorrenciaHelper();
 		
 		raLocalOcorrenciaHelper.colecaoEndereco(null)
@@ -193,11 +248,11 @@ public class RABuilder {
 								.idImovel(imovel.getIdImovel());
 								
 		if(alteracaoTipo == AlteracaoTipo.INCLUSAO){
-			raLocalOcorrenciaHelper.parecerUnidadeDestino("Inclusão de novo imóvel. Origem: RECADASTRAMENTO");
+			raLocalOcorrenciaHelper.parecerUnidadeDestino("Inclusão - Origem: RECADASTRAMENTO");
 		}
 		
 		if(alteracaoTipo == AlteracaoTipo.EXCLUSAO){
-			raLocalOcorrenciaHelper.parecerUnidadeDestino("Exclusão de imóvel. Origem: RECADASTRAMENTO");
+			raLocalOcorrenciaHelper.parecerUnidadeDestino("Exclusão - Origem: RECADASTRAMENTO");
 		}
 		
 		return raLocalOcorrenciaHelper;
@@ -476,22 +531,61 @@ public class RABuilder {
 		return habilitarCampoSatisfacaoEmail;
 	}
 	
-	private static String getObservacaoImovel(IImovel imovelRetorno, Integer alteracaoTipo) {
-		String observacao = "";
+	private static String getObservacaoImovelNovo(IImovel imovelRetorno,  HashMap<ClienteRelacaoTipo, ICliente> mapClienteImovel, Integer alteracaoTipo) {
+		StringBuilder observacao = new StringBuilder();
 		
+		observacao.append("INCLUSÃO DE IMÓVEL - RECADASTRAMENTO. ");
+		observacao.append(getDescricaoEnderecoImovel(imovelRetorno));
+		observacao.append(getObservacaoCliente(imovelRetorno, mapClienteImovel));
+
+		return observacao.toString();
+	}
+	
+	private static String getObservacaoImovelAntigo(IImovel imovelRetorno, Integer alteracaoTipo) {
+		StringBuilder observacao = new StringBuilder();
+		
+		if (alteracaoTipo.equals(AlteracaoTipo.EXCLUSAO)) {
+			observacao.append("EXCLUSÃO DE IMÓVEL - RECADASTRAMENTO. ");
+			observacao.append(getDescricaoEnderecoImovel(imovelRetorno));
+		}
+		
+		return observacao.toString();
+	}
+	
+	private static String getObservacaoCliente(ICliente clienteRetorno, IImovel imovelRetorno, IClienteImovel clienteImovelRetorno, Integer alteracaoTipo) {
+		StringBuilder observacao = new StringBuilder();
+		
+		if (alteracaoTipo.equals(AlteracaoTipo.ALTERACAO)) {
+			observacao.append("NOVA RELAÇÃO DE CLIENTE - RECADASTRAMENTO. ");
+		}
+
 		if (alteracaoTipo.equals(AlteracaoTipo.INCLUSAO)) {
-			observacao = "INCLUSÃO DE IMÓVEL - RECADASTRAMENTO. ";
+			observacao.append("INCLUSÃO DE CLIENTE - RECADASTRAMENTO. ");
 		}
 		
 		if (alteracaoTipo.equals(AlteracaoTipo.EXCLUSAO)) {
-			observacao = "EXCLUSÃO DE IMÓVEL - RECADASTRAMENTO. ";
+			observacao.append("FIM DA RELAÇÃO DO CLIENTE - RECADASTRAMENTO. ");
 		}
 		
-		observacao += getDescricaoEnderecoImovel(imovelRetorno);
+		observacao.append(getDescricaoInformacoesCliente(clienteRetorno)); 
+		observacao.append(getInformacoesClienteImovel(clienteImovelRetorno.getClienteRelacaoTipo(), imovelRetorno));
+		
+		return observacao.toString();
+	}
+	
+	private static String getObservacaoCliente(IImovel imovelRetorno, HashMap<ClienteRelacaoTipo, ICliente> mapClientesImovel) {
+		StringBuilder observacao = new StringBuilder();
+		
+		observacao.append("CLIENTES: ");
+		
+		for (ClienteRelacaoTipo clienteRelacaoTipo : mapClientesImovel.keySet()) {
+			ICliente cliente = mapClientesImovel.get(clienteRelacaoTipo);
+			observacao.append(getDescricaoInformacoesCliente(cliente)); 
+			observacao.append(getInformacoesClienteImovel(clienteRelacaoTipo, imovelRetorno));
+		}
 		
 		
-		return observacao;
-		
+		return observacao.toString();
 	}
 	
 	private static String getDescricaoEnderecoImovel(IImovel imovelRetorno) {
@@ -514,6 +608,58 @@ public class RABuilder {
 		descricaoEndereco.append(".");
 		
 		return descricaoEndereco.toString().replaceAll("\\s,", "");
+	}
+	
+	private static String getDescricaoInformacoesCliente(ICliente clienteRetorno) {
+		StringBuilder descricaoEndereco = new StringBuilder();
+		
+		descricaoEndereco.append("Nome:");
+		descricaoEndereco.append(clienteRetorno.getNome());
+		descricaoEndereco.append(", ");
+		descricaoEndereco.append(getCpfCnpjPorTipoPessoa(clienteRetorno));
+		descricaoEndereco.append(".");
+		
+		return descricaoEndereco.toString().replaceAll("\\s,", "");
+	}
+	
+	private static StringBuilder getInformacoesClienteImovel(ClienteRelacaoTipo clienteRelacaoTipo, IImovel imovelRetorno) {
+		StringBuilder informacoes = new StringBuilder();
+		
+		informacoes.append("Tipo de relação do cliente:");
+		informacoes.append(clienteRelacaoTipo.getDescricao());
+		informacoes.append(". ");
+		
+		if (imovelRetorno.getTipoOperacao() != null) {
+			if (imovelRetorno.getTipoOperacao().equals(AlteracaoTipo.ALTERACAO)){
+				informacoes.append("Matrícula do imóvel:");
+				informacoes.append(imovelRetorno.getIdImovel());
+				informacoes.append(".");
+			} else if (imovelRetorno.getTipoOperacao().equals(AlteracaoTipo.INCLUSAO)) {
+				informacoes.append("Imóvel Novo.");
+			}
+		} else if (imovelRetorno.getIdImovel() != null){
+			informacoes.append("Matrícula do imóvel:");
+			informacoes.append(imovelRetorno.getIdImovel());
+			informacoes.append(".");
+		}
+		
+		return informacoes;
+	}
+	
+	private static StringBuilder getCpfCnpjPorTipoPessoa(ICliente clienteRetorno) {
+		StringBuilder informacoesTipoPessoa = new StringBuilder();
+		if (clienteRetorno.getClienteTipo().getId().equals(ClienteTipo.INDICADOR_PESSOA_FISICA)) {
+			informacoesTipoPessoa.append("CPF:");
+			informacoesTipoPessoa.append(clienteRetorno.getCpf());
+			informacoesTipoPessoa.append(", ");
+			informacoesTipoPessoa.append("RG:");
+			informacoesTipoPessoa.append(clienteRetorno.getRg());
+		} else if (clienteRetorno.getClienteTipo().getId().equals(ClienteTipo.INDICADOR_PESSOA_JURIDICA)) {
+			informacoesTipoPessoa.append("CNPJ:");
+			informacoesTipoPessoa.append(clienteRetorno.getCnpj());
+		}
+		
+		return informacoesTipoPessoa;
 	}
 	
 }

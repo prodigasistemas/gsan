@@ -629,16 +629,6 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 
 	}
 
-	/**
-	 * Pesquisa os dados do Cliente
-	 * 
-	 * @author Rafael Santos
-	 * @date 13/09/2006
-	 * 
-	 * @param idCliente
-	 * @return Collection
-	 * @throws ErroRepositorioException
-	 */
 	public Collection consultarCliente(Integer idCliente)
 			throws ErroRepositorioException {
 
@@ -666,11 +656,6 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 					" ramoAtividade.descricao, " + // 16
 					" clienteResponsavel.id, " + // 17
 					" clienteResponsavel.nome, " +  // 18
-					/**TODO:COSANPA
-					 * @Data 23/10/2013
-					 * @author adriana Muniz e Wellington Rocha
-					 * Adição do id do cliente tipo no retorno da query
-					 * */
 					" clienteTipo.id " + //19
 					"from Cliente cliente "
 					+ "left join cliente.clienteTipo clienteTipo "
@@ -2620,5 +2605,26 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 		}
 
 		return retorno;
+	}
+	
+	public Collection<Cliente> pesquisarClientePorCpfCnpj(String cpfCnpj) throws ErroRepositorioException{
+		Collection<Cliente> retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = null;
+
+		try {
+			consulta = "select c from Cliente c where c.cpf = :cpfCnpj or c.cnpj = :cpfCnpj";
+	
+			retorno = (Collection<Cliente>) session.createQuery(consulta)
+				.setString("cpfCnpj", cpfCnpj)
+				.list();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+		
 	}
 }

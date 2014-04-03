@@ -343,4 +343,8 @@ public class ImovelRetorno implements IImovel{
 	public void setNumeroQuadra(int numeroQuadra) {
 		this.numeroQuadra = numeroQuadra;
 	}
+	
+	public boolean isImovelNovo() {
+		return this.getIdImovel().equals(null);
+	}
 }

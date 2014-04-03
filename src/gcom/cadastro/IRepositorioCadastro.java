@@ -387,11 +387,11 @@ public interface IRepositorioCadastro {
 
 	public void liberarCadastroImovel(Integer idImovel) throws ErroRepositorioException;
 	
-	public SituacaoAtualizacaoCadastral pesquisarSituacaoAtualizacaoCadastralPorId(Integer idSituacaoCadastral) throws ErroRepositorioException;
-
 	public Integer pesquisarIdSetorComercialPorCodigoELocalidade(Integer idLocalidade, Integer codigoSetor) throws ErroRepositorioException;
 	
 	public Integer pesquisarIdQuadraPorNumeroQuadraEIdSetor(Integer idSetorComercial, Integer numeroQuadra) throws ErroRepositorioException;
 	
 	public String retornaIpServidorOperacional() throws ErroRepositorioException;
+
+	public SituacaoAtualizacaoCadastral pesquisarSituacaoAtualizacaoCadastralPorId(Integer idSituacaoCadastral) throws ErroRepositorioException;
 }

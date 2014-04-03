@@ -7,7 +7,7 @@ import gcom.cadastro.imovel.Imovel;
 
 import java.util.Date;
 
-public class ClienteImovelRetorno extends ClienteRetorno implements IClienteImovel {
+public class ClienteImovelRetorno  implements IClienteImovel {
 	
 	private Integer id;
 	private Imovel imovel;

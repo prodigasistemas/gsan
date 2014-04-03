@@ -1,6 +1,7 @@
 package gcom.cadastro.cliente;
 
 import gcom.cadastro.endereco.EnderecoTipo;
+import gcom.cadastro.endereco.Logradouro;
 import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
 import gcom.cadastro.geografico.UnidadeFederacao;
@@ -103,6 +104,8 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 	private String dsUFSiglaMunicipio;
 	
 	private Short indicadorNomeConta;
+	
+	private Integer tipoOperacao;
 	
 	private ClienteTipo clienteTipo;
 	
@@ -567,4 +570,54 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 	public void setIndicadorNomeConta(Short indicadorNomeConta) {
 		this.indicadorNomeConta = indicadorNomeConta;
 	}
+
+	public Integer getTipoOperacao() {
+		return this.tipoOperacao;
+	}
+
+	public void setTipoOperacao(Integer tipoOperacao) {
+		this.tipoOperacao = tipoOperacao;
+	}
+
+	public LogradouroCep getLogradouroCep() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setLogradouroCep(LogradouroCep logradouroCep) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public LogradouroBairro getLogradouroBairro() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setLogradouroBairro(LogradouroBairro logradouroBairro) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Logradouro getPerimetroInicial() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void getPerimetroInicial(Logradouro perimetroInicial) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Logradouro getPerimetroFinal() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setPerimetroFinal(Logradouro perimetroFinal) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	
 }

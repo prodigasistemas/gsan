@@ -75,6 +75,7 @@
 */  
 package gcom.cadastro.cliente;
 
+import gcom.atualizacaocadastral.ICliente;
 import gcom.cadastro.geografico.UnidadeFederacao;
 import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.ObjetoTransacao;
@@ -92,7 +93,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
  * @created 22 de Julho de 2005
  */
 @ControleAlteracao()
-public class Cliente extends ObjetoTransacao {
+public class Cliente extends ObjetoTransacao implements ICliente {
 	
 	public static final int ATRIBUTOS_CLIENTE_INSERIR = 28; //Operacao.OPERACAO_CLIENTE_INSERIR
 	public static final int ATRIBUTOS_CLIENTE_ATUALIZAR = 38; //Operacao.OPERACAO_CLIENTE_ATUALIZAR
@@ -1140,6 +1141,36 @@ public class Cliente extends ObjetoTransacao {
 
 	public void setIndicadorPermiteNegativacao(Short indicadorPermiteNegativacao) {
 		this.indicadorPermiteNegativacao = indicadorPermiteNegativacao;
+	}
+
+	public Integer getIdCliente() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setIdCliente(Integer idCliente) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Integer getIdClienteTipo() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setIdClienteTipo(Integer idClienteTipo) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Integer getTipoOperacao() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setTipoOperacao(Integer tipoOperacao) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	

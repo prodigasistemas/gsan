@@ -1,6 +1,6 @@
 package gcom.atualizacaocadastral;
 
-import gcom.cadastro.imovel.IImovel;
+import gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCadastralHelper;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
@@ -12,8 +12,6 @@ import java.util.Collection;
 import java.util.Date;
 
 public interface IControladorAtualizacaoCadastral {
-	
-	public Collection<IImovel> obterImoveisParaAtualizar(Integer tipoOperacao) throws Exception;
 	
 	public void atualizarImoveisAprovados(Integer idFuncionalidade, Usuario usuarioLogado) throws Exception;
 	
@@ -29,4 +27,6 @@ public interface IControladorAtualizacaoCadastral {
 	public ImovelAtualizacaoCadastral pesquisarImovelAtualizacaoCadastral(Integer idImovel)	throws ControladorException;
 	
 	public Collection<ImovelSubcategoriaAtualizacaoCadastral> pesquisarSubCategoriasAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException;
+
+	public void aprovarImoveisEmLote(Usuario usuarioLogado, Collection<ConsultarMovimentoAtualizacaoCadastralHelper> listaImoveis) throws ControladorException;
 }

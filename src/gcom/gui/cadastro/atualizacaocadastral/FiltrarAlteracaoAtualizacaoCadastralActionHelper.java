@@ -3,6 +3,8 @@ package gcom.gui.cadastro.atualizacaocadastral;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.apache.commons.lang.StringUtils;
+
 public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	
 	private String idEmpresa;
@@ -24,6 +26,15 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	private String cdSetorComercialFinal;
 
 	private String cdRotaFinal;
+	
+	private Boolean alteracaoHidrometro;
+
+	private Boolean alteracaoSituacaoAgua;
+	
+	private Boolean alteracaoSituacaoEsgoto;
+	
+	private Boolean alteracaoCategoria;
+	
 
 	public FiltrarAlteracaoAtualizacaoCadastralActionHelper() {
 	}
@@ -39,6 +50,28 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		this.idLocalidadeFinal = form.getIdLocalidadeFinal();
 		this.cdSetorComercialFinal = form.getCdSetorComercialFinal();
 		this.cdRotaFinal = form.getCdRotaFinal();
+		
+		alteracaoHidrometro = consisteAlteracao(form.getAlteracaoHidrometro(), this.exibirCampos);
+		alteracaoSituacaoAgua   = consisteAlteracao(form.getAlteracaoSituacaoAgua(), this.exibirCampos);
+		alteracaoSituacaoEsgoto = consisteAlteracao(form.getAlteracaoSituacaoEsgoto(), this.exibirCampos);
+		alteracaoCategoria      = consisteAlteracao(form.getAlteracaoCategoria(), this.exibirCampos);
+	}
+	
+	private Boolean consisteAlteracao(String campo, String exibirCampos){
+		Boolean aplicaFiltro = null;
+		
+		if (exibirCampos.equals(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_APROVACAO_EM_LOTE.toString())) {
+			aplicaFiltro = true;
+		} else if (StringUtils.isNotEmpty(campo)){
+			Integer altera = Integer.parseInt(campo);
+			if (altera == 1){
+				aplicaFiltro = true;
+			}
+			if (altera == 2){
+				aplicaFiltro = false;
+			}
+		}
+		return aplicaFiltro;
 	}
 
 	public String getIdEmpresa() {
@@ -65,6 +98,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		this.exibirCampos = exibirCampos;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public Collection getColunaImoveisSelecionados() {
 		if (colunaImoveisSelecionados != null && colunaImoveisSelecionados.length > 0) {
 			Collection colecaoColunaImoveisSelecionados = new ArrayList();
@@ -130,4 +164,40 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	public void setCdRotaFinal(String cdRotaFinal) {
 		this.cdRotaFinal = cdRotaFinal;
 	}
-}
+
+	public Boolean isAlteracaoHidrometro() {
+		return alteracaoHidrometro;
+	}
+
+	public void setAlteracaoHidrometro(Boolean alteracaoHidrometro) {
+		this.alteracaoHidrometro = alteracaoHidrometro;
+	}
+
+	public Boolean isAlteracaoSituacaoAgua() {
+		return alteracaoSituacaoAgua;
+	}
+
+	public void setAlteracaoSituacaoAgua(Boolean alteracaoSituacaoAgua) {
+		this.alteracaoSituacaoAgua = alteracaoSituacaoAgua;
+	}
+
+	public Boolean isAlteracaoSituacaoEsgoto() {
+		return alteracaoSituacaoEsgoto;
+	}
+
+	public void setAlteracaoSituacaoEsgoto(Boolean alteracaoSituacaoEsgoto) {
+		this.alteracaoSituacaoEsgoto = alteracaoSituacaoEsgoto;
+	}
+
+	public Boolean isAlteracaoCategoria() {
+		return alteracaoCategoria;
+	}
+
+	public void setAlteracaoCategoria(Boolean alteracaoCategoria) {
+		this.alteracaoCategoria = alteracaoCategoria;
+	}
+	
+	public boolean isAprovacaoEmLote() {
+		return this.exibirCampos.equals(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_APROVACAO_EM_LOTE.toString())? true : false;
+	}
+ }
