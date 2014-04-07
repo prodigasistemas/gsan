@@ -7,7 +7,6 @@ import gcom.cadastro.imovel.IImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
-import gcom.seguranca.transacao.TabelaColuna;
 import gcom.util.ConstantesSistema;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
@@ -838,39 +837,39 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		return retorno;
 	}
 	
-public Integer obterquantidadeImoveisComAnormalidadeArquivo(Integer idArquivoAtualizacaoCadastral) throws ErroRepositorioException{
-	
-	Integer retorno = null;
-	Session session = HibernateUtil.getSession();
-	
-	String consulta = null;
-	
-	try {
-		
-		consulta = " select count(imovelRetorno) "
-				+ "from ImovelRetorno imovelRetorno, "
-				+ " ArquivoTextoAtualizacaoCadastral arquivo, "
-				+ " ImovelControleAtualizacaoCadastral imovelControle "
-				+ " where imovelRetorno.idLocalidade = arquivo.localidade.id "
-				+ " and imovelRetorno.codigoSetorComercial = arquivo.codigoSetorComercial "
-				+ " and imovelRetorno.numeroQuadra = arquivo.numeroQuadraInicial "
-				+ " and imovelControle.imovelRetorno.id = imovelRetorno.id "
-				+ " and imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  
-				+ " and arquivo.id = :idArquivo " ;
-		
-		retorno = (Integer) session.createQuery(consulta).setInteger("idArquivo",  idArquivoAtualizacaoCadastral).uniqueResult();
-	} catch (HibernateException e) {
-		throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis com anormalidade para tela de análise.");
-	} finally {
-		HibernateUtil.closeSession(session);
-	}
-	
-	return retorno;
-}
-	
-	public Integer obterquantidadeImoveisComAlteracaoHidrometroArquivo(Integer idArquivoAtualizacaoCadastral) throws ErroRepositorioException{
+	public Integer obterquantidadeImoveisComAnormalidadeArquivo(Integer idArquivoAtualizacaoCadastral) throws ErroRepositorioException{
 		
 		Integer retorno = null;
+		Session session = HibernateUtil.getSession();
+		
+		String consulta = null;
+		
+		try {
+			
+			consulta = " select count(imovelRetorno) "
+					+ "from ImovelRetorno imovelRetorno, "
+					+ " ArquivoTextoAtualizacaoCadastral arquivo, "
+					+ " ImovelControleAtualizacaoCadastral imovelControle "
+					+ " where imovelRetorno.idLocalidade = arquivo.localidade.id "
+					+ " and imovelRetorno.codigoSetorComercial = arquivo.codigoSetorComercial "
+					+ " and imovelRetorno.numeroQuadra = arquivo.numeroQuadraInicial "
+					+ " and imovelControle.imovelRetorno.id = imovelRetorno.id "
+					+ " and imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  
+					+ " and arquivo.id = :idArquivo " ;
+			
+			retorno = (Integer) session.createQuery(consulta).setInteger("idArquivo",  idArquivoAtualizacaoCadastral).uniqueResult();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis com anormalidade para tela de análise.");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		return retorno;
+	}
+	
+	public Integer obterquantidadeImoveisComAlteracaoFaturamentoArquivo(Integer idArquivoAtualizacaoCadastral, String colunaAlteracao) throws ErroRepositorioException{
+		
+		Integer retorno = new Integer(0);
 		Session session = HibernateUtil.getSession();
 		
 		String consulta = null;
@@ -884,17 +883,17 @@ public Integer obterquantidadeImoveisComAnormalidadeArquivo(Integer idArquivoAtu
 					+ " TabelaAtualizacaoCadastral tabelaAtualizacaoCadastral, "
 					+ " TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral, "
 					+ " TabelaColuna tabelaColuna "
-					+ " where imovelRetorno.idLocalidade = arquivo.localidade.id "
-					+ " and imovelRetorno.codigoSetorComercial = arquivo.codigoSetorComercial "
-					+ " and imovelRetorno.numeroQuadra = arquivo.numeroQuadraInicial "
+					+ " where imovelRetorno.idRota = arquivo.rota.id "
 					+ " and imovelControle.imovelRetorno.id = imovelRetorno.id "
 					+ " and tabelaAtualizacaoCadastral.codigoImovel = imovelRetorno.idImovel "
 					+ " and tabelaColunaAtualizacaoCadastral.tabelaAtualizacaoCadastral.id = tabelaAtualizacaoCadastral.id "
 					+ " and tabelaColunaAtualizacaoCadastral.tabelaColuna.id = tabelaColuna.id"
-					+ " and tabelaColuna.nomeAbreviado like '" + TabelaColuna.NOME_COLUNA_ESGOTO + "'"  
+					+ " and tabelaColuna.nomeAbreviado like ':colunaAlteracao' "  
 					+ " and arquivo.id = :idArquivo " ;
 			
-			retorno = (Integer) session.createQuery(consulta).setInteger("idArquivo",  idArquivoAtualizacaoCadastral).uniqueResult();
+			retorno = (Integer) session.createQuery(consulta)
+					.setInteger("idArquivo",  idArquivoAtualizacaoCadastral)
+					.setString("colunaAlteracao", colunaAlteracao).uniqueResult();
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis com alteração de hidrômetro para tela de análise.");
 		} finally {
@@ -903,95 +902,5 @@ public Integer obterquantidadeImoveisComAnormalidadeArquivo(Integer idArquivoAtu
 		
 		return retorno;
 	}
-	
-	public Integer obterquantidadeImoveisComAlteracaoLigacaoAguaArquivo(Integer idArquivoAtualizacaoCadastral) throws ErroRepositorioException{
-		
-		Integer retorno = null;
-		Session session = HibernateUtil.getSession();
-		
-		String consulta = null;
-		
-		try {
-			
-			consulta = " select count(imovelRetorno) "
-					+ "from ImovelRetorno imovelRetorno, "
-					+ " ArquivoTextoAtualizacaoCadastral arquivo, "
-					+ " ImovelControleAtualizacaoCadastral imovelControle "
-					+ " where imovelRetorno.idLocalidade = arquivo.localidade.id "
-					+ " and imovelRetorno.codigoSetorComercial = arquivo.codigoSetorComercial "
-					+ " and imovelRetorno.numeroQuadra = arquivo.numeroQuadraInicial "
-					+ " and imovelControle.imovelRetorno.id = imovelRetorno.id "
-					+ " and imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  
-					+ " and arquivo.id = :idArquivo " ;
-			
-			retorno = (Integer) session.createQuery(consulta).setInteger("idArquivo",  idArquivoAtualizacaoCadastral).uniqueResult();
-		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis com alteração de ligacao de água para tela de análise.");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
-		
-		return retorno;
-	}
-	
-	public Integer obterquantidadeImoveisComAlteracaoLigacaoEsgotoArquivo(Integer idArquivoAtualizacaoCadastral) throws ErroRepositorioException{
-		
-		Integer retorno = null;
-		Session session = HibernateUtil.getSession();
-		
-		String consulta = null;
-		
-		try {
-			
-			consulta = " select count(imovelRetorno) "
-					+ "from ImovelRetorno imovelRetorno, "
-					+ " ArquivoTextoAtualizacaoCadastral arquivo, "
-					+ " ImovelControleAtualizacaoCadastral imovelControle "
-					+ " where imovelRetorno.idLocalidade = arquivo.localidade.id "
-					+ " and imovelRetorno.codigoSetorComercial = arquivo.codigoSetorComercial "
-					+ " and imovelRetorno.numeroQuadra = arquivo.numeroQuadraInicial "
-					+ " and imovelControle.imovelRetorno.id = imovelRetorno.id "
-					+ " and imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  
-					+ " and arquivo.id = :idArquivo " ;
-			
-			retorno = (Integer) session.createQuery(consulta).setInteger("idArquivo",  idArquivoAtualizacaoCadastral).uniqueResult();
-		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis com alteração de ligação de esgoto para tela de análise.");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
-		
-		return retorno;
-	}
-	
-	public Integer obterquantidadeImoveisComAlteracaoCategoriaSubcategoriaEconomiasArquivo(Integer idArquivoAtualizacaoCadastral) throws ErroRepositorioException{
-		
-		Integer retorno = null;
-		Session session = HibernateUtil.getSession();
-		
-		String consulta = null;
-		
-		try {
-			
-			consulta = " select count(imovelRetorno) "
-					+ "from ImovelRetorno imovelRetorno, "
-					+ " ArquivoTextoAtualizacaoCadastral arquivo, "
-					+ " ImovelControleAtualizacaoCadastral imovelControle "
-					+ " where imovelRetorno.idLocalidade = arquivo.localidade.id "
-					+ " and imovelRetorno.codigoSetorComercial = arquivo.codigoSetorComercial "
-					+ " and imovelRetorno.numeroQuadra = arquivo.numeroQuadraInicial "
-					+ " and imovelControle.imovelRetorno.id = imovelRetorno.id "
-					+ " and imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  
-					+ " and arquivo.id = :idArquivo " ;
-			
-			retorno = (Integer) session.createQuery(consulta).setInteger("idArquivo",  idArquivoAtualizacaoCadastral).uniqueResult();
-		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis com alteração de categoria/subcategoria/economias para tela de análise.");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
-		
-		return retorno;
-	}
-	
+
 }

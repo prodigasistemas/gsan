@@ -132,4 +132,8 @@ public interface IImovel {
 	public void setNumeroQuadra(int numeroQuadra);
 	
 	public boolean isImovelNovo();
+	
+	public void setIdRota(Integer idRota);
+	
+	public Integer getIdRota();
 }

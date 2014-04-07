@@ -41,6 +41,7 @@ public class ImovelRetorno implements IImovel{
 	private Integer idLocalidade;
 	private int codigoSetorComercial;
 	private int numeroQuadra;
+	private Integer idRota;
 
 	public ImovelRetorno () {
 		
@@ -78,6 +79,7 @@ public class ImovelRetorno implements IImovel{
 		this.idLocalidade = imovelAtualizacaoCadastral.getIdLocalidade();
 		this.codigoSetorComercial = imovelAtualizacaoCadastral.getCodigoSetorComercial();
 		this.numeroQuadra = imovelAtualizacaoCadastral.getNumeroQuadra();
+		this.idRota = imovelAtualizacaoCadastral.getIdRota();
 	}
 
 	public Integer getId() {
@@ -347,4 +349,13 @@ public class ImovelRetorno implements IImovel{
 	public boolean isImovelNovo() {
 		return this.getIdImovel().equals(null);
 	}
+
+	public Integer getIdRota() {
+		return idRota;
+	}
+
+	public void setIdRota(Integer idRota) {
+		this.idRota = idRota;
+	}
+	
 }

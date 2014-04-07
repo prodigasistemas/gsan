@@ -89,13 +89,7 @@ public interface IRepositorioAtualizacaoCadastral {
 	
 	public Integer obterquantidadeImoveisAprovadosArquivo(Integer idArquivoAtualizacaoCadastral) throws ErroRepositorioException;
 	
+	public Integer obterquantidadeImoveisComAlteracaoFaturamentoArquivo(Integer idArquivoAtualizacaoCadastral, String colunaALterada) throws ErroRepositorioException;
+	
 	public Integer obterquantidadeImoveisComAnormalidadeArquivo(Integer idArquivoAtualizacaoCadastral) throws ErroRepositorioException;
-	
-	public Integer obterquantidadeImoveisComAlteracaoHidrometroArquivo(Integer idArquivoAtualizacaoCadastral) throws ErroRepositorioException;
-	
-	public Integer obterquantidadeImoveisComAlteracaoLigacaoAguaArquivo(Integer idArquivoAtualizacaoCadastral) throws ErroRepositorioException;
-	
-	public Integer obterquantidadeImoveisComAlteracaoLigacaoEsgotoArquivo(Integer idArquivoAtualizacaoCadastral) throws ErroRepositorioException;
-	
-	public Integer obterquantidadeImoveisComAlteracaoCategoriaSubcategoriaEconomiasArquivo(Integer idArquivoAtualizacaoCadastral) throws ErroRepositorioException;
 }

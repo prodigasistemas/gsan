@@ -174,6 +174,8 @@ public class TabelaColuna extends ObjetoGcom {
 	public static final String NOME_COLUNA_ESGOTO = "lest_id";
 
 	public static final String NOME_COLUNA_AGUA = "last_id";
+	
+	public static final String NOME_COLUNA_NUMERO_HUDROMETRO = "imac_nnhidrometro";
 
 	/** full constructor */
 	public TabelaColuna(String coluna, String descricaoColuna,
