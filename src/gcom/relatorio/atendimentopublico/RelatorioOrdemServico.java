@@ -536,8 +536,8 @@ public class RelatorioOrdemServico extends TarefaRelatorio {
 				
 				if(ordemServicoRelatorioHelper.getObservacaoOS() != null && !ordemServicoRelatorioHelper.getObservacaoOS().equals("")){
 					if(ordemServicoRelatorioHelper.getObservacaoRA() != null && !ordemServicoRelatorioHelper.getObservacaoRA().equals("")){
-						observacao = ordemServicoRelatorioHelper.getObservacaoOS()
-						+ " / " + ordemServicoRelatorioHelper.getObservacaoRA();
+						observacao = "OS: " + ordemServicoRelatorioHelper.getObservacaoOS()
+						+ " / RA: " + ordemServicoRelatorioHelper.getObservacaoRA();
 					} else {
 						observacao = ordemServicoRelatorioHelper.getObservacaoOS();
 					}							
