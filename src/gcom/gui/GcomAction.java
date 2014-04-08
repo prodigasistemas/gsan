@@ -77,12 +77,16 @@ package gcom.gui;
 
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.fachada.Fachada;
+import gcom.relatorio.AcessoServicoReportException;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesSistema;
 import gcom.util.email.ErroEmailException;
 import gcom.util.email.ServicosEmail;
 import gcom.util.filtro.Filtro;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.lang.reflect.InvocationTargetException;
 import java.util.Collection;
 import java.util.Date;
@@ -90,6 +94,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.struts.action.ActionError;
@@ -97,6 +102,14 @@ import org.apache.struts.action.ActionErrors;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import org.apache.struts.actions.DispatchAction;
+
+import br.com.prodigasistemas.gsan.relatorio.ReportDTO;
+import br.com.prodigasistemas.gsan.relatorio.ReportJsonReturn;
+
+import com.google.gson.Gson;
+import com.sun.jersey.api.client.Client;
+import com.sun.jersey.api.client.ClientResponse;
+import com.sun.jersey.api.client.WebResource;
 
 /**
  * Action pai onde todas as 
@@ -674,26 +687,6 @@ public class GcomAction extends DispatchAction {
 		return actionMapping.findForward("telaConfirmacao");
 	}
 
-	/**
-	 * Controla o mecanismo de paginação trabalhando com os parâmetros do
-	 * paginador no jsp. A pesquisa é feita através deste método e só é
-	 * retornado os dados da página sendo apresentada.
-	 * 
-	 * @author Rodrigo Silveira
-	 * @date 30/03/2006
-	 * 
-	 * @param request
-	 *            Request do Action
-	 * @param actionForward
-	 *            ActionForward original do Action
-	 * @param filtro
-	 *            Filtro da pesquisa
-	 * @param nomePacoteObjeto
-	 *            Nome do pacote e objeto pesquisado
-	 * @return Um Map contendo dois atributos: a chave "colecaoRetorno" com a
-	 *         coleção pesquisada e a chave "destinoActionForward" com o
-	 *         actionForward que deve ser retornado
-	 */
 	protected Map controlarPaginacao(HttpServletRequest request,
 			ActionForward actionForward, Filtro filtro, String nomePacoteObjeto) {
 
@@ -745,21 +738,6 @@ public class GcomAction extends DispatchAction {
 
 	}
 
-	/**
-	 * Controla o mecanismo de paginação trabalhando com os parâmetros do
-	 * paginador no jsp. Nesta versão, o usuário deve fazer a pesquisa com
-	 * paginação na sua própria funcionalidade no action e deve informar o total
-	 * de registros da pesquisa.
-	 * 
-	 * @author Rodrigo Silveira
-	 * @date 05/05/2006
-	 * 
-	 * @param request
-	 *            Request do Action
-	 * @param actionForward
-	 *            ActionForward original do Action
-	 * @return O actionForward modificado com a configuração da paginação
-	 */
 	protected ActionForward controlarPaginacao(HttpServletRequest request,
 			ActionForward actionForward, int totalRegistrosPesquisa) {
 
@@ -807,16 +785,7 @@ public class GcomAction extends DispatchAction {
 
 	}
 
-	/**
-	 * Metodo que retorna a Fachada
-	 * 
-	 * @author Rafael Pinto
-	 * @date 17/11/2006
-	 * 
-	 * @return Fachada
-	 */
 	protected Fachada getFachada() {
-		
 		if(fachada == null){
 			fachada = Fachada.getInstancia(); 	
 		}
@@ -824,42 +793,16 @@ public class GcomAction extends DispatchAction {
 		return fachada;
 	}
 
-	/**
-	 * Metodo que retorna a Sessao
-	 * 
-	 * @author Rafael Pinto
-	 * @date 17/11/2006
-	 * 
-	 * @return HttpSession
-	 */
 	protected HttpSession getSessao(HttpServletRequest request) {
 		return request.getSession(false);
 	}
 
-	/**
-	 * Metodo que retorna o Usuario que esta logado
-	 * 
-	 * @author Rafael Pinto
-	 * @date 17/11/2006
-	 * 
-	 * @return Usuario
-	 */
 	protected Usuario getUsuarioLogado(HttpServletRequest request) {
-
-		Usuario usuario = (Usuario) this.getSessao(request).getAttribute(
-				"usuarioLogado");
+		Usuario usuario = (Usuario) this.getSessao(request).getAttribute("usuarioLogado");
 
 		return usuario;
 	}
 	
-	/**
-	 * Metodo que retorna Sistema Parametro
-	 * 
-	 * @author Rafael Pinto
-	 * @date 30/10/2008
-	 * 
-	 * @return Usuario
-	 */
 	protected SistemaParametro getSistemaParametro() {
 
 		if(sistemaParametro == null){
@@ -869,21 +812,6 @@ public class GcomAction extends DispatchAction {
 		return sistemaParametro;
 	}
 	
-	
-	/**
-	 * Controla o mecanismo de paginação para uma tela que faça
-	 * paginação e que a chama uma
-	 * segunda tela q tambem faça paginação.
-	 * 
-	 * @author Kassia Albuquerque
-	 * @date 27/11/2007
-	 * 
-	 * @param request
-	 *            Request do Action
-	 * @param actionForward
-	 *            ActionForward original do Action
-	 * @return O actionForward modificado com a configuração da paginação
-	 */
 	protected ActionForward controlarPaginacao(HttpServletRequest request,
 			ActionForward actionForward, Integer totalRegistrosPesquisa,
 			Boolean primeiraPaginacao) {
@@ -969,5 +897,39 @@ public class GcomAction extends DispatchAction {
 
 	}
 	
+    public void requestReport(HttpServletResponse httpResponse, ReportDTO report) throws Exception {
+		Gson gson = new Gson();
+		String json = gson.toJson(report);
+		
+		Client client = Client.create();
+		
+		WebResource webResource = client.resource("http://192.168.0.16:3000/produtos_quimicos");
+		
+		ClientResponse response = webResource
+				.type("application/json")
+				.post(ClientResponse.class, json);
+		
+		InputStream input = response.getEntityInputStream();
+		
+		BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+		
+		StringBuilder builder = new StringBuilder();
+		String linha = null;
+		while ((linha = reader.readLine()) != null){
+			builder.append(linha);
+		}
+		
+		if (builder.length() == 0 || response.getStatus() != 200){
+			throw new AcessoServicoReportException();
+		}
+		
+		ReportJsonReturn jsonRetorno = gson.fromJson(builder.toString(), ReportJsonReturn.class);
+		
+		if (jsonRetorno.temErro()){
+			throw new AcessoServicoReportException();
+		}
+		
+		httpResponse.sendRedirect(jsonRetorno.getUrl());
+	}	
 	
 }
