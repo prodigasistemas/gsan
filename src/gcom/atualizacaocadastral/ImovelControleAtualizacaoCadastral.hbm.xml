@@ -18,6 +18,9 @@
 		<many-to-one name="situacaoAtualizacaoCadastral" class="gcom.cadastro.SituacaoAtualizacaoCadastral" not-null="true">
 			<column name="siac_id"/>
 		</many-to-one>
+		<many-to-one name="cadastroOcorrencia" class="gcom.cadastro.imovel.CadastroOcorrencia" >
+			<column name="cocr_id"/>
+		</many-to-one>
 		<many-to-one name="imovelRetorno" class="gcom.atualizacaocadastral.ImovelRetorno">
 			<column name="imre_id"/>
 		</many-to-one>

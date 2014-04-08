@@ -116,7 +116,11 @@ public class CadastroOcorrencia extends ObjetoTransacao {
         this.ultimaAlteracao = ultimaAlteracao;
     }
 
-    /** default constructor */
+    public CadastroOcorrencia(Integer id) {
+		this.id = id;
+	}
+
+	/** default constructor */
     public CadastroOcorrencia() {
     }
 

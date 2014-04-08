@@ -3,6 +3,7 @@ package gcom.atualizacaocadastral;
 import java.util.Date;
 
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
+import gcom.cadastro.imovel.CadastroOcorrencia;
 import gcom.cadastro.imovel.Imovel;
 
 public class ImovelControleAtualizacaoCadastral {
@@ -15,6 +16,7 @@ public class ImovelControleAtualizacaoCadastral {
 	private Date dataProcessamento;
 	private SituacaoAtualizacaoCadastral situacaoAtualizacaoCadastral;
 	private ImovelRetorno imovelRetorno;
+	private CadastroOcorrencia cadastroOcorrencia;
 	
 	public Integer getId() {
 		return id;
@@ -64,6 +66,12 @@ public class ImovelControleAtualizacaoCadastral {
 	}
 	public void setDataProcessamento(Date dataProcessamento) {
 		this.dataProcessamento = dataProcessamento;
+	}
+	public CadastroOcorrencia getCadastroOcorrencia() {
+		return cadastroOcorrencia;
+	}
+	public void setCadastroOcorrencia(CadastroOcorrencia cadastroOcorrencia) {
+		this.cadastroOcorrencia = cadastroOcorrencia;
 	}
 	
 }
