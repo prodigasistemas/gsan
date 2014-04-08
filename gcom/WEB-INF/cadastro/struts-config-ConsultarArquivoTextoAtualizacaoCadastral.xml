@@ -43,7 +43,7 @@
 			path="/exibirAnaliseSituacaoArquivoAtualizacaoCadastralPopupAction">
 
 			<forward name="/exibirAnaliseSituacaoArquivoAtualizacaoCadastralPopupAction"
-				path="/jsp/cadastro/atualizacaocadastral/analise_situacao_arquivo_atualizaca_cadastral_consultar.jsp" />	
+				path="/jsp/cadastro/atualizacaocadastral/situacao_arquivo_atualizaca_cadastral_consultar.jsp" />	
 		</action>
 
 	</action-mappings>

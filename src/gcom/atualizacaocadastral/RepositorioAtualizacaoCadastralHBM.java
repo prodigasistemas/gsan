@@ -888,7 +888,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 					+ " and tabelaAtualizacaoCadastral.codigoImovel = imovelRetorno.idImovel "
 					+ " and tabelaColunaAtualizacaoCadastral.tabelaAtualizacaoCadastral.id = tabelaAtualizacaoCadastral.id "
 					+ " and tabelaColunaAtualizacaoCadastral.tabelaColuna.id = tabelaColuna.id"
-					+ " and tabelaColuna.nomeAbreviado like ':colunaAlteracao' "  
+					+ " and tabelaColuna.nomeAbreviado like :colunaAlteracao "  
 					+ " and arquivo.id = :idArquivo " ;
 			
 			retorno = (Integer) session.createQuery(consulta)
