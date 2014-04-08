@@ -16,10 +16,12 @@ scripts/build/build_gcom_desenv.sh
 scripts/build/build_gcom_homolog.sh
 scripts/build/build_gcom_prod_online.sh
 scripts/build/build_gcom_prod_batch.sh
+migrations/gerencial/environments/local.properties
 migrations/gerencial/environments/development.properties
 migrations/gerencial/environments/stage.properties
 migrations/gerencial/environments/production.properties
 migrations/comercial/environments/development.properties
 migrations/comercial/environments/stage.properties
 migrations/comercial/environments/production.properties
+migrations/comercial/environments/local.properties
 
