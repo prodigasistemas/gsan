@@ -19,7 +19,7 @@ public class ExibirAnaliseSituacaoArquivoAtualizacaoCadastralPopupAction extends
 			ActionForm actionForm, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		
-		ActionForward retorno = actionMapping.findForward("consultarArquivoTextoAtualizacaoCadastral");
+		ActionForward retorno = actionMapping.findForward("/exibirAnaliseSituacaoArquivoAtualizacaoCadastralPopupAction");
 
 		Integer idArquivoAtualizacaoCadastral =  null;
 		ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm form = new ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm();
@@ -32,7 +32,10 @@ public class ExibirAnaliseSituacaoArquivoAtualizacaoCadastralPopupAction extends
 			
 		if ( mapDadosAnalise != null && !mapDadosAnalise.isEmpty()){
 			form.setMapDadosAnalise(mapDadosAnalise);
+			httpServletRequest.setAttribute( "ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm", form );
 		}  
+		
+		Integer totalImoveis = form.getTotalImoveis();
 		
 		return retorno;
 	}
