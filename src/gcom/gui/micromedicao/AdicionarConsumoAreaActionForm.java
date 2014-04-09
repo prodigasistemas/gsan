@@ -1,6 +1,3 @@
-/**
- * 
- */
 package gcom.gui.micromedicao;
 
 import org.apache.struts.validator.ValidatorActionForm;
