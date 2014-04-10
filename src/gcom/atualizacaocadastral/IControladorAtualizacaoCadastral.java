@@ -35,4 +35,5 @@ public interface IControladorAtualizacaoCadastral {
 	
 	public HashMap<String, Integer> obterDadosAnaliseSituacaoArquivoAtualizacaoCadastral(Integer idArquivo) throws ControladorException;
 	
+	public ImovelControleAtualizacaoCadastral obterImovelControle(Integer idImovelRetorno) throws ControladorException;
 }

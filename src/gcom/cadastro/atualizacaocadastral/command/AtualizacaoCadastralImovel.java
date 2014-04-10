@@ -1,5 +1,6 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
+import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.imovel.CadastroOcorrencia;
 
 import java.util.ArrayList;
@@ -33,6 +34,8 @@ public class AtualizacaoCadastralImovel {
 	private Boolean existeMedidor = false;
 	
 	private CadastroOcorrencia cadastroOcorrencia;
+	
+	private ImovelControleAtualizacaoCadastral imovelControle; 
 	
 	public AtualizacaoCadastralImovel(){
 		
@@ -181,6 +184,14 @@ public class AtualizacaoCadastralImovel {
 
 	public void setCadastroOcorrencia(CadastroOcorrencia cadastroOcorrencia) {
 		this.cadastroOcorrencia = cadastroOcorrencia;
+	}
+	
+	public ImovelControleAtualizacaoCadastral getImovelControle() {
+		return imovelControle;
+	}
+
+	public void setImovelControle(ImovelControleAtualizacaoCadastral imovelControle) {
+		this.imovelControle = imovelControle;
 	}
 
 	public void limparDadosUsuario() {

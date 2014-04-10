@@ -290,6 +290,10 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		
 	}
 	
+	public ImovelControleAtualizacaoCadastral obterImovelControle(Integer idImovelRetorno) throws ControladorException {
+		return  repositorioAtualizacaoCadastral.obterImovelControle(idImovelRetorno);
+	}
+	
 	/************************************************************
 	 *PRIVATE METHODS 
 	 ************************************************************/

@@ -6,6 +6,7 @@ import gcom.atualizacaocadastral.ClienteImovelRetorno;
 import gcom.atualizacaocadastral.ClienteRetorno;
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.atualizacaocadastral.ImagemRetorno;
+import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.atualizacaocadastral.ImovelRamoAtividadeRetorno;
 import gcom.atualizacaocadastral.ImovelRetorno;
 import gcom.atualizacaocadastral.ImovelSubcategoriaRetorno;
@@ -77,6 +78,7 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 		this.tipoOperacao = Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("tipoOperacao"));
 		
 		salvarObjetosRetorno();
+		atualizarImovelControle();
 	}
 	
 	public void salvarObjetosRetorno() throws Exception {
@@ -87,6 +89,7 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 		salvarClienteResponsavel();
 		
 		salvarImagens();
+		
 	}
 
 	private void salvarImovelRetorno() throws Exception {
@@ -312,5 +315,12 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	private void atualizarImovelControle() throws ControladorException {
+		ImovelControleAtualizacaoCadastral controle = controladorAtualizacaoCadastral.obterImovelControle(atualizacaoCadastralImovel.getImovelControle().getId());
+		controle.setImovelRetorno(new ImovelRetorno(idImovelRetorno));
+		
+		controladorUtil.atualizar(controle);
 	}
 }

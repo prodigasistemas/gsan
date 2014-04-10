@@ -2,7 +2,6 @@ package gcom.cadastro.atualizacaocadastral.command;
 
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
-import gcom.atualizacaocadastral.ImovelRetorno;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteAtualizacaoCadastral;
@@ -50,7 +49,6 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	private int matriculaResponsavel;
 	private int matriculaProprietario;
 	private int tipoOperacao;
-	private Integer idImovelRetorno;
 	
 	private IRepositorioClienteImovel repositorioClienteImovel;
 	
@@ -291,8 +289,9 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		
 		controle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(situacao));
 		controle.setDataRetorno(new Date());
-		controle.setImovelRetorno(new ImovelRetorno(idImovelRetorno));
 		controle.setCadastroOcorrencia(new CadastroOcorrencia(atualizacaoCadastralImovel.getCadastroOcorrencia().getId()));
-		controladorUtil.inserirOuAtualizar(controle);
+		controle = (ImovelControleAtualizacaoCadastral) controladorUtil.inserirOuAtualizar(controle);
+		
+		atualizacaoCadastralImovel.setImovelControle(controle);
 	}
 }
