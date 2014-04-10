@@ -97,6 +97,13 @@ import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoPerfil;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.FiscalizacaoSituacao;
 import gcom.atendimentopublico.ordemservico.SupressaoMotivo;
+import gcom.atualizacaocadastral.ClienteImovelRetorno;
+import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
+import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocalHome;
+import gcom.atualizacaocadastral.IRepositorioAtualizacaoCadastral;
+import gcom.atualizacaocadastral.ImovelRetorno;
+import gcom.atualizacaocadastral.ImovelSubcategoriaRetorno;
+import gcom.atualizacaocadastral.RepositorioAtualizacaoCadastralHBM;
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteFone;
@@ -108,6 +115,7 @@ import gcom.cadastro.cliente.ClienteTipo;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.cliente.ControladorClienteLocalHome;
 import gcom.cadastro.cliente.FiltroClienteImovel;
+import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.cliente.bean.ClienteImovelEconomiaHelper;
 import gcom.cadastro.endereco.Cep;
 import gcom.cadastro.endereco.ControladorEnderecoLocal;
@@ -212,6 +220,8 @@ import gcom.relatorio.cadastro.RelatorioResumoQtdeImoveisExcluidosTarifaSocialHe
 import gcom.relatorio.micromedicao.FiltrarAnaliseExcecoesLeiturasHelper;
 import gcom.seguranca.ControladorPermissaoEspecialLocal;
 import gcom.seguranca.ControladorPermissaoEspecialLocalHome;
+import gcom.seguranca.IRepositorioSeguranca;
+import gcom.seguranca.RepositorioSegurancaHBM;
 import gcom.seguranca.acesso.Abrangencia;
 import gcom.seguranca.acesso.ControladorAcessoLocal;
 import gcom.seguranca.acesso.ControladorAcessoLocalHome;
@@ -224,6 +234,8 @@ import gcom.seguranca.acesso.usuario.UsuarioAcao;
 import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.seguranca.transacao.ControladorTransacaoLocalHome;
+import gcom.seguranca.transacao.TabelaAtualizacaoCadastral;
+import gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
@@ -279,12 +291,16 @@ public class ControladorImovelSEJB implements SessionBean {
 	SessionContext sessionContext;
 
 	private IRepositorioImovel repositorioImovel;
+	
+	private IRepositorioSeguranca repositorioSeguranca;
 
 	private IRepositorioCategoria repositorioCategoria;
 
 	private IRepositorioFaturamento repositorioFaturamento;
 
 	private IRepositorioCobranca repositorioCobranca;
+	
+	private IRepositorioAtualizacaoCadastral repositorioAtualizacaoCadastral;
 	
 	private Logger logger = Logger.getLogger(ControladorImovelSEJB.class);
 
@@ -569,6 +585,10 @@ public class ControladorImovelSEJB implements SessionBean {
 
 		repositorioCobranca = RepositorioCobrancaHBM.getInstancia();
 		
+		repositorioSeguranca = RepositorioSegurancaHBM.getInstancia();
+		
+		repositorioAtualizacaoCadastral = RepositorioAtualizacaoCadastralHBM.getInstancia();
+		
 	}
 
 	/**
@@ -816,45 +836,10 @@ public class ControladorImovelSEJB implements SessionBean {
 
 		Collection retorno = null;
 
-		// // Filtro para obter o imóvel subcategoria
-		// FiltroImovelSubCategoria filtroImovelSubCategoria = new
-		// FiltroImovelSubCategoria();
-		//
-		// // Objetos que serão retornados pelo Hibernate
-		// filtroImovelSubCategoria
-		// .adicionarCaminhoParaCarregamentoEntidade("comp_id.subcategoria.categoria");
-		//
-		// // Objetos que serão utilizados para formatar o endereço
-		// filtroImovelSubCategoria
-		// .adicionarCaminhoParaCarregamentoEntidade("comp_id.imovel.localidade");
-		// filtroImovelSubCategoria
-		// .adicionarCaminhoParaCarregamentoEntidade("comp_id.imovel.setorComercial.municipio");
-		// filtroImovelSubCategoria
-		// .adicionarCaminhoParaCarregamentoEntidade("comp_id.imovel.logradouroBairro.bairro.municipio.unidadeFederacao");
-		// filtroImovelSubCategoria
-		// .adicionarCaminhoParaCarregamentoEntidade("comp_id.imovel.logradouroCep.cep");
-		// filtroImovelSubCategoria
-		// .adicionarCaminhoParaCarregamentoEntidade("comp_id.imovel.logradouroCep.logradouro.logradouroTipo");
-		// filtroImovelSubCategoria
-		// .adicionarCaminhoParaCarregamentoEntidade("comp_id.imovel.logradouroCep.logradouro.logradouroTitulo");
-		// filtroImovelSubCategoria
-		// .adicionarCaminhoParaCarregamentoEntidade("comp_id.imovel.enderecoReferencia");
-		//		
-		// // filtroImovelSubCategoria
-		// // .setCampoDistinct(FiltroImovelSubCategoria.IMOVEL);
-		//
-		// filtroImovelSubCategoria.adicionarParametro(new ParametroSimples(
-		// FiltroImovelSubCategoria.IMOVEL_ID, imovel.getId()));
-		//
-		// filtroImovelSubCategoria
-		// .adicionarCaminhoParaCarregamentoEntidade(FiltroImovelSubCategoria.IMOVEL_ECONOMIAS);
-
-		// Pesquisa imóvel subcategoria passado como parâmetro um imóvel
 		Collection colecaoImovelSubCategoria = null;
 
 		try {
-			colecaoImovelSubCategoria = repositorioImovel
-					.pesquisarImovelSubcategorias(imovel.getId());
+			colecaoImovelSubCategoria = repositorioImovel.pesquisarImovelSubcategorias(imovel.getId());
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
@@ -868,7 +853,6 @@ public class ControladorImovelSEJB implements SessionBean {
 
 			while (colecaoImovelSubCategoriaIterator.hasNext()) {
 
-				// Obtém o imóvel subcategoria
 				ImovelSubcategoria imovelSubcategoria = (ImovelSubcategoria) colecaoImovelSubCategoriaIterator
 						.next();
 
@@ -6861,7 +6845,7 @@ public class ControladorImovelSEJB implements SessionBean {
 
 			// Numero IPTU- 22
 			if (arrayImovel[22] != null) {
-				imovel.setNumeroIptu((BigDecimal) arrayImovel[22]);
+				imovel.setNumeroIptu((String) arrayImovel[22]);
 			}
 
 			// Numero CELPE- 23
@@ -7141,7 +7125,7 @@ public class ControladorImovelSEJB implements SessionBean {
 				.next();
 
 		Cliente cliente = new Cliente();
-		ClienteFone clienteFone = null;
+		IClienteFone clienteFone = null;
 
 		// 0 - id co cliente
 		if (arrayCliente[0] != null) {
@@ -8918,10 +8902,6 @@ public class ControladorImovelSEJB implements SessionBean {
 					pesquisarImovelCondominio);
 
 		} catch (ErroRepositorioException ex) {
-			/**TODO:COSANPA
-			* autor: Adriana Muniz
-			* data: 17/09/2012
-			* caso seja exceção devido a conversão de alfanumerico para numerico */
 			if (ex.getMessage().equals(ConstantesSistema.ERRO_SQL_CONVERSSAO_ALFANUMERICO_PARA_NUMERICO)){
 				throw new ControladorException("atencao.pesquisa_nao_realizada_devido_caracteres_alfanumericos_campo");
 			}else{
@@ -10394,7 +10374,7 @@ public class ControladorImovelSEJB implements SessionBean {
 	 * @author Rafael Corrêa
 	 * @throws ControladorException
 	 */
-	public Integer verificarNumeroIptu(BigDecimal numeroIptu, Integer idImovel,
+	public Integer verificarNumeroIptu(String numeroIptu, Integer idImovel,
 			Integer idImovelEconomia, Integer idMunicipio)
 			throws ControladorException {
 		try {
@@ -13038,38 +13018,18 @@ public class ControladorImovelSEJB implements SessionBean {
 		}
 	}
 
-	/**
-	 * Obtém a principal categoria da Conta
-	 * 
-	 * [UC0000] Obter Principal Categoria da Conta
-	 * 
-	 * @author Ivan Sérgio
-	 * @date 08/08/2007
-	 * 
-	 * @param idConta
-	 * @return
-	 * @throws ControladorException
-	 */
 	public Categoria obterPrincipalCategoriaConta(Integer idConta)
 			throws ControladorException {
-		// Cria a variável que vai armazenar a categoria principal da Conta
 		Categoria categoriaPrincipal = null;
 
-		// Cria a coleção que vai armazenar as categorias com maiorquantidade de
-		// economias
 		Collection<Categoria> colecaoCategoriasComMaiorQtdEconomias = new ArrayList();
 
-		// Obtém a quantidade de economias por categoria
-		Collection<Categoria> colecaoCategoriasConta = this
-				.obterQuantidadeEconomiasContaCategoria(idConta);
+		Collection<Categoria> colecaoCategoriasConta = this.obterQuantidadeEconomiasContaCategoria(idConta);
 
-		// Inicializa a quantidade de categoria
 		int quantidadeCategoria = -1;
 
-		// Caso a coleção de categorias da Conta não esteja nula
 		if (colecaoCategoriasConta != null) {
-			// Laço para verificar qual a categoria com maior quantidade de
-			// economia
+			// Laço para verificar qual a categoria com maior quantidade de economia
 			for (Categoria categoriaConta : colecaoCategoriasConta) {
 				if (quantidadeCategoria < categoriaConta
 						.getQuantidadeEconomiasCategoria().intValue()) {
@@ -13085,10 +13045,6 @@ public class ControladorImovelSEJB implements SessionBean {
 			}
 		}
 
-		// Caso só exista um objeto na coleção, recuperar a categoria e atribui
-		// a
-		// categoria principal
-		// Caso contrário recupera a categoria com o menor id
 		if (colecaoCategoriasComMaiorQtdEconomias.size() == 1) {
 			categoriaPrincipal = colecaoCategoriasComMaiorQtdEconomias
 					.iterator().next();
@@ -13103,26 +13059,11 @@ public class ControladorImovelSEJB implements SessionBean {
 					categoriaPrincipal = categoriaImovel;
 				}
 
-				/*
-				 * if (idTemp < categoriaImovel.getId().intValue()) { idTemp =
-				 * categoriaImovel.getId().intValue(); categoriaPrincipal =
-				 * categoriaImovel; }
-				 */
 			}
 		}
 
-		// Retorna a categoria principal
 		return categoriaPrincipal;
 	}
-
-	/**
-	 * 
-	 * @author Sávio Luiz
-	 * @date 24/08/2007
-	 * 
-	 * @return String
-	 * @throws ErroRepositorioException
-	 */
 
 	public Integer pesquisarSequencialRota(Integer idImovel)
 			throws ControladorException {
@@ -13137,17 +13078,12 @@ public class ControladorImovelSEJB implements SessionBean {
 		ControladorTransacaoLocalHome localHome = null;
 		ControladorTransacaoLocal local = null;
 
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
 
-			localHome = (ControladorTransacaoLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_TRANSACAO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
+			localHome = (ControladorTransacaoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_TRANSACAO_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -13157,6 +13093,27 @@ public class ControladorImovelSEJB implements SessionBean {
 			throw new SistemaException(e);
 		}
 
+	}
+	
+	protected ControladorAtualizacaoCadastralLocal getControladorAtualizacaoCadastral() {
+
+		ControladorAtualizacaoCadastralLocalHome localHome = null;
+		ControladorAtualizacaoCadastralLocal local = null;
+
+		ServiceLocator locator = null;
+
+		try {
+			locator = ServiceLocator.getInstancia();
+
+			localHome = (ControladorAtualizacaoCadastralLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_ATUALIZACAO_CADASTRAL);
+			local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
 	}
 	
     /**
@@ -13221,6 +13178,14 @@ public class ControladorImovelSEJB implements SessionBean {
     public Collection<ImovelSubcategoria> pesquisarImovelSubcategoria(Imovel imovel) throws ControladorException {
         try {
             return repositorioImovel.pesquisarImovelSubcategoriasMaxCinco(imovel.getId());
+        } catch (ErroRepositorioException ex) {
+            throw new ControladorException("erro.sistema", ex);
+        }
+    }
+    
+    public Collection<ImovelSubcategoria> pesquisarImovelSubcategorias(Imovel imovel) throws ControladorException {
+        try {
+            return repositorioImovel.pesquisarImovelSubcategorias(imovel.getId());
         } catch (ErroRepositorioException ex) {
             throw new ControladorException("erro.sistema", ex);
         }
@@ -14021,45 +13986,6 @@ public class ControladorImovelSEJB implements SessionBean {
         }
 	}
 
-	/**
-	 * Pesquisar dados do Imóvel Atualização Cadastral
-	 * 
-	 * @param idImovel
-	 * @return Imovel
-	 * 
-	 * @author Ana Maria
-     * @date 17/09/2008
-	 * @exception ErroRepositorioException
-	 */
-	
-	public ImovelAtualizacaoCadastral pesquisarImovelAtualizacaoCadastral(Integer idImovel)
-		throws ControladorException {
-        try {
-            return repositorioImovel.pesquisarImovelAtualizacaoCadastral(idImovel);
-        } catch (ErroRepositorioException ex) {
-            throw new ControladorException("erro.sistema", ex);
-        }
-    }
-
-
-	/**
-	 * Pesquisar Imóvel Subcategoria Atualização Cadastral
-	 * 
-	 * @param idImovel
-	 * 
-	 * @author Ana Maria
-     * @date 17/09/2008
-	 * @exception ErroRepositorioException
-	 */
-	public Collection pesquisarImovelSubcategoriaAtualizacaoCadastral(Integer idImovel, Integer idSubcategoria,Integer idCategoria)
-		throws ControladorException {
-        try {
-            return repositorioImovel.pesquisarImovelSubcategoriaAtualizacaoCadastral(idImovel, idSubcategoria, idCategoria);
-        } catch (ErroRepositorioException ex) {
-            throw new ControladorException("erro.sistema", ex);
-        }
-    }
-	
 	/**
 	 * Pesquisar existência de imóvel economia
 	 * 
@@ -17147,7 +17073,7 @@ public class ControladorImovelSEJB implements SessionBean {
 	 * @throws ControladorException
 	 */
 
-	public Collection pesquisarRamoAtividadeDoImovel(Integer idImovel)
+	public Collection<ImovelRamoAtividade> pesquisarRamoAtividadeDoImovel(Integer idImovel)
 			throws ControladorException {
 	
 		try {
@@ -17168,9 +17094,11 @@ public class ControladorImovelSEJB implements SessionBean {
 		ArquivoTextoAtualizacaoCadastral arquitoTexto = new ArquivoTextoAtualizacaoCadastral();
 		arquitoTexto.setId(idArquivoTexto);
 		
-		ImovelAtualizacaoCadastral imovelAtualizacaoCadastral = this.pesquisarImovelAtualizacaoCadastral(idImovel);
+		ImovelAtualizacaoCadastral imovelAtualizacaoCadastral = getControladorAtualizacaoCadastral().pesquisarImovelAtualizacaoCadastral(idImovel);
 		imovelAtualizacaoCadastral.setIdArquivoTexto(idArquivoTexto);
 		
 		this.getControladorUtil().atualizar(imovelAtualizacaoCadastral);
 	}
+
+
 }

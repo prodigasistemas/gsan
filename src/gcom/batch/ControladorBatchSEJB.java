@@ -86,6 +86,7 @@ import gcom.atendimentopublico.ordemservico.ControladorOrdemServicoLocal;
 import gcom.atendimentopublico.ordemservico.ControladorOrdemServicoLocalHome;
 import gcom.atendimentopublico.registroatendimento.FiltroRaEncerramentoComando;
 import gcom.atendimentopublico.registroatendimento.RaEncerramentoComando;
+import gcom.atualizacaocadastral.TarefaBatchAtualizacaoCadastral;
 import gcom.batch.arrecadacao.TarefaBatchAtualizarLigacaoAguaLigadoAnaliseParaLigado;
 import gcom.batch.arrecadacao.TarefaBatchCancelarGuiasPagamentoNaoPagas;
 import gcom.batch.arrecadacao.TarefaBatchClassificarPagamentosDevolucoes;
@@ -4062,6 +4063,15 @@ public class ControladorBatchSEJB implements SessionBean {
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 
 						break;		
+					}
+					
+					case Funcionalidade.ATUALIZACAO_CADASTRAL: {
+						TarefaBatchAtualizacaoCadastral batchAtualizacaoCadastral = new TarefaBatchAtualizacaoCadastral(
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
+						
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(batchAtualizacaoCadastral));
+						getControladorUtil().atualizar(funcionalidadeIniciada);
+						
 					}
 
 					default:
@@ -8350,39 +8360,12 @@ public class ControladorBatchSEJB implements SessionBean {
 								processoIniciado.getUsuario(),
 								funcionalidadeIniciada.getId());
 
-						// Adicionar o conjunto de parametros informados pelo
-						// usuário através da interface do sistema
-						tabela.addParametro(ConstantesSistema.PARAMETROS_BATCH,
-								parametros);
+						tabela.addParametro(ConstantesSistema.PARAMETROS_BATCH, parametros);
 
-						ImovelGeracaoTabelasTemporariasCadastroHelper imovelGeracaoTabelasTemporariasCadastroHelper = (ImovelGeracaoTabelasTemporariasCadastroHelper) parametros
-								.get("imovelGeracaoTabelasTemporariasCadastroHelper");
+						ImovelGeracaoTabelasTemporariasCadastroHelper imovelGeracaoTabelasTemporariasCadastroHelper = 
+								(ImovelGeracaoTabelasTemporariasCadastroHelper) parametros.get("imovelGeracaoTabelasTemporariasCadastroHelper");
 
-						// ----------------------------------------------
-
-						// FAZER CONSULTA DAS LOCALIDADES
-						Collection idsSetor = null;
-						if (imovelGeracaoTabelasTemporariasCadastroHelper
-								.getColecaoMatriculas() == null
-								|| imovelGeracaoTabelasTemporariasCadastroHelper
-										.getColecaoMatriculas().isEmpty()) {
-
-							idsSetor = getControladorCadastro()
-									.pesquisarSetorComercialGeracaoTabelasTemporarias(
-											imovelGeracaoTabelasTemporariasCadastroHelper); // obterLocalidade
-							// ??
-						}
-
-						// ----------------------------------------------
-						tabela
-								.addParametro(
-										ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-										idsSetor);
-
-						// Seta o objeto para ser serializado no banco, onde
-						// depois sera executado por uma thread
-						funcionalidadeIniciada.setTarefaBatch(IoUtil
-								.transformarObjetoParaBytes(tabela));
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(tabela));
 
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 

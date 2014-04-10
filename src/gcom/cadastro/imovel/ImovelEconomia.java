@@ -138,7 +138,7 @@ public class ImovelEconomia extends ObjetoTransacao {
     /** nullable persistent field */
     @ControleAlteracao(funcionalidade={TarifaSocialDadoEconomia.ATRIBUTOS_INSERIR_TARIFA_SOCIAL,
     		TarifaSocialDadoEconomia.ATRIBUTOS_MANTER_TARIFA_SOCIAL})    
-    private BigDecimal numeroIptu;
+    private String numeroIptu;
 
     /** nullable persistent field */
     @ControleAlteracao(funcionalidade={TarifaSocialDadoEconomia.ATRIBUTOS_INSERIR_TARIFA_SOCIAL,
@@ -175,7 +175,7 @@ public class ImovelEconomia extends ObjetoTransacao {
 
     /** full constructor */
     public ImovelEconomia(String complementoEndereco, Short numeroMorador, Short numeroPontosUtilizacao, 
-    		BigDecimal numeroIptu, Long numeroCelpe, BigDecimal areaConstruida, Date ultimaAlteracao, gcom.cadastro.imovel.AreaConstruidaFaixa areaConstruidaFaixa, gcom.cadastro.imovel.ImovelSubcategoria imovelSubcategoria, Set tarifaSocialDadoEconomias, Set clienteImovelEconomias) {
+    		String numeroIptu, Long numeroCelpe, BigDecimal areaConstruida, Date ultimaAlteracao, gcom.cadastro.imovel.AreaConstruidaFaixa areaConstruidaFaixa, gcom.cadastro.imovel.ImovelSubcategoria imovelSubcategoria, Set tarifaSocialDadoEconomias, Set clienteImovelEconomias) {
         this.complementoEndereco = complementoEndereco;
         this.numeroMorador = numeroMorador;
         this.numeroPontosUtilizacao = numeroPontosUtilizacao;
@@ -233,11 +233,11 @@ public class ImovelEconomia extends ObjetoTransacao {
         this.numeroPontosUtilizacao = numeroPontosUtilizacao;
     }
 
-    public BigDecimal getNumeroIptu() {
+    public String getNumeroIptu() {
         return this.numeroIptu;
     }
 
-    public void setNumeroIptu(BigDecimal numeroIptu) {
+    public void setNumeroIptu(String numeroIptu) {
         this.numeroIptu = numeroIptu;
     }
 
@@ -381,7 +381,7 @@ public class ImovelEconomia extends ObjetoTransacao {
 	 */
     
      public ImovelEconomia(String complementoEndereco, Short numeroMorador,
-             Short numeroPontosUtilizacao, BigDecimal numeroIptu,
+             Short numeroPontosUtilizacao, String numeroIptu,
              Long numeroCelpe, BigDecimal areaConstruida, Date ultimaAlteracao,
              gcom.cadastro.imovel.AreaConstruidaFaixa areaConstruidaFaixa,
              gcom.cadastro.imovel.ImovelSubcategoria imovelSubcategoria,

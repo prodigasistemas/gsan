@@ -113,6 +113,10 @@ public class EnderecoTipo extends ObjetoTransacao{
     /** default constructor */
     public EnderecoTipo() {
     }
+    
+    public EnderecoTipo(Integer id){
+    	this.id = id;
+    }
 
     public Integer getId() {
         return this.id;

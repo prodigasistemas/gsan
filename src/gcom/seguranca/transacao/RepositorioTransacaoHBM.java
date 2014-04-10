@@ -1,64 +1,4 @@
 /*
-* Copyright (C) 2007-2007 the GSAN - Sistema Integrado de Gestão de Serviços de Saneamento
-*
-* This file is part of GSAN, an integrated service management system for Sanitation
-*
-* GSAN is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License.
-*
-* GSAN is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
-*/
-
-/*
-* GSAN - Sistema Integrado de Gestão de Serviços de Saneamento
-* Copyright (C) <2007> 
-* Adriano Britto Siqueira
-* Alexandre Santos Cabral
-* Ana Carolina Alves Breda
-* Ana Maria Andrade Cavalcante
-* Aryed Lins de Araújo
-* Bruno Leonardo Rodrigues Barros
-* Carlos Elmano Rodrigues Ferreira
-* Cláudio de Andrade Lira
-* Denys Guimarães Guenes Tavares
-* Eduardo Breckenfeld da Rosa Borges
-* Fabíola Gomes de Araújo
-* Flávio Leonardo Cavalcanti Cordeiro
-* Francisco do Nascimento Júnior
-* Homero Sampaio Cavalcanti
-* Ivan Sérgio da Silva Júnior
-* José Edmar de Siqueira
-* José Thiago Tenório Lopes
-* Kássia Regina Silvestre de Albuquerque
-* Leonardo Luiz Vieira da Silva
-* Márcio Roberto Batista da Silva
-* Maria de Fátima Sampaio Leite
-* Micaela Maria Coelho de Araújo
-* Nelson Mendonça de Carvalho
-* Newton Morais e Silva
-* Pedro Alexandre Santos da Silva Filho
-* Rafael Corrêa Lima e Silva
-* Rafael Francisco Pinto
-* Rafael Koury Monteiro
-* Rafael Palermo de Araújo
-* Raphael Veras Rossiter
-* Roberto Sobreira Barbalho
-* Rodrigo Avellar Silveira
-* Rosana Carvalho Barbosa
-* Sávio Luiz de Andrade Cavalcante
-* Tai Mu Shih
-* Thiago Augusto Souza do Nascimento
-* Tiago Moreno Rodrigues
-* Vivianne Barbosa Sousa
-*
 * Este programa é software livre; você pode redistribuí-lo e/ou
 * modificá-lo sob os termos de Licença Pública Geral GNU, conforme
 * publicada pela Free Software Foundation; versão 2 da
@@ -75,6 +15,8 @@
 */  
 package gcom.seguranca.transacao;
 
+import gcom.cadastro.SituacaoAtualizacaoCadastral;
+import gcom.cadastro.atualizacaocadastral.LinkedHashSetAlteracaoCadastral;
 import gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCadastralHelper;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteFone;
@@ -86,6 +28,7 @@ import gcom.seguranca.acesso.FiltroOperacaoEfetuada;
 import gcom.seguranca.acesso.FiltroOperacaoOrdemExibicao;
 import gcom.seguranca.acesso.Operacao;
 import gcom.seguranca.acesso.OperacaoOrdemExibicao;
+import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
@@ -108,21 +51,23 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Enumeration;
 import java.util.Hashtable;
-import java.util.Iterator;
+import java.util.LinkedHashSet;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 
+import org.apache.commons.lang.StringUtils;
 import org.hibernate.Hibernate;
 import org.hibernate.HibernateException;
+import org.hibernate.Query;
 import org.hibernate.Session;
+import org.jboss.logging.Logger;
 
-/**
- * < <Descrição da Classe>>
- * 
- * @author Administrador
- * @created 22 de Julho de 2005
- */
 public class RepositorioTransacaoHBM implements IRepositorioTransacao {
+	
+	private static Logger logger = Logger.getLogger(RepositorioTransacaoHBM.class);
 
 	private static IRepositorioTransacao instancia;
 
@@ -494,47 +439,6 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 		}
 		// retorna a coleção de atividades pesquisada(s)
 		return retorno;	
-		
-		
-		/*
-		try {
-
-			// pesquisa a coleção de atividades e atribui a variável "retorno"
-			 consulta =	" select distinct operacaoEfetuada " +
-				" from OperacaoEfetuada as operacaoEfetuada " +
-				" inner join operacaoEfetuada.usuarioAlteracoes as usAlt " +
-				" inner join operacaoEfetuada.tabelaLinhaAlteracoes as tabLinAlt " +
-				" inner join tabLinAlt.tabelaLinhaColunaAlteracao as tabLinColAlt " +
-				" inner join tabLinColAlt.tabelaColuna as tabCol " +
-				" inner join usAlt.usuario as usuario " + 
-				" inner join tabCol.tabela as tab " + 
-				" inner join fetch operacaoEfetuada.operacao as operacao " +
-				" inner join usuario.unidadeNegocio as unid " +
-				" LEFT OUTER join operacao.argumentoPesquisa as argumento " +
-				" LEFT OUTER join argumento.tabela as argTab "; 
-			 
-			 consulta += criarCondicionaisUsuarioAlteracaoDasOperacoesEfetuadas(idUsuarioAcao,
-						idOperacoes, idUsuario, dataInicial, dataFinal, 
-						horaInicial, horaFinal, argumentos, id1 , unidadeNegocio);
-			 
-			 if (dataInicial != null) {
-				 retorno = session
-					.createQuery(consulta).list();
-			 } else {
-				 retorno = session
-					.createQuery(consulta).list();
-			 }
-			 
-		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			// fecha a sessão
-			HibernateUtil.closeSession(session);
-		}
-		// retorna a coleção de atividades pesquisada(s)
-		return retorno;
-		*/
 	}
 	
 	/**
@@ -773,216 +677,82 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 		
 	}
 	
-	/**
-	 * Consultar Movimento Atualização Cadastral 
-	 * 
-	 * @author Ana Maria
-	 * @date 02/05/2009
-	 * 
-	 * @return Collection
-	 * @throws ErroRepositorioException
-	 */
-	public Collection<ConsultarMovimentoAtualizacaoCadastralHelper> pesquisarMovimentoAtualizacaoCadastral(
-			FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper)
+	public Collection<ConsultarMovimentoAtualizacaoCadastralHelper> pesquisarMovimentoAtualizacaoCadastral(FiltrarAlteracaoAtualizacaoCadastralActionHelper filtroHelper)
 			throws ErroRepositorioException {
 
-		Collection retornoConsulta = null;
 		Session session = HibernateUtil.getSession();
-		String consulta = "";
-		Collection consultarMovimentoAtualizacaoCadastralHelper = new ArrayList();
+		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> consultarMovimentoAtualizacaoCadastralHelper = new LinkedList<ConsultarMovimentoAtualizacaoCadastralHelper>();
 
 		try {
-			consulta = "select tatc.altp_id as tipoAlteracao ,"// 0
-					+ " tatc.tatc_cdimovel as idImovel,"// 1
-					+ " tatc.tatc_cdcliente as idCliente,"// 2
-					+ " sum(case when (tatc.tabe_id in(661,664,665)) then 1 else 0 end) as qtdImovel,"// 3
-					+ " sum(case when (tatc.tabe_id in(662,663)) then 1 else 0 end) as qtdCliente,"// 4
-					+ " func.func_nmfuncionario as nomeFuncionario," // 5
-					+ " clie.clie_nmcliente as nomeCliente,"// 6
-					+ " txac.txac_id as idArquivo,"// 7
-					+ " tatc.tatc_icautorizado as icAutorizado,"// 8
-					+ " tatc.tatc_idregistroalterado as idRegistroAlterado "// 9
-					+ " from seguranca.tab_atlz_cadastral tatc"
-					+ " inner join seguranca.operacao_efetuada opef on(opef.opef_id = tatc.opef_id)"
-					+ " left join seguranca.tab_col_atlz_cadastral tcac on (tatc.tatc_id = tcac.tatc_id)"
-					+ " inner join cadastro.arquivo_texto_atlz_cad txac on(tatc.txac_id = txac.txac_id)"
-					+ " inner join micromedicao.rota rota on(rota.rota_id = txac.rota_id)"
-					+ " inner join micromedicao.leiturista leit on(tatc.leit_id = leit.leit_id)"
-					+ " left join cadastro.funcionario func on(leit.func_id = func.func_id)"
-					+ " left join cadastro.cliente clie on(leit.clie_id = clie.clie_id)"
-					+ " where 1=1 ";
+			StringBuilder sql = new StringBuilder();
+			sql.append("select distinct tatc.tatc_cdimovel as idImovel ")
+				.append(" , tatc.altp_id as tipoAlteracao")
+				.append(" , func.func_nmfuncionario as nomeFuncionario")
+				.append(" , tatc.tatc_icautorizado as icAutorizado")
+				.append(" from seguranca.tab_atlz_cadastral tatc ")
+				.append(" inner join seguranca.operacao_efetuada opef on(opef.opef_id = tatc.opef_id)")
+				.append(" left join seguranca.tab_col_atlz_cadastral tcac on (tatc.tatc_id = tcac.tatc_id)")
+				.append(" inner join cadastro.arquivo_texto_atlz_cad txac on(tatc.txac_id = txac.txac_id)")
+				.append(" inner join micromedicao.rota rota on(rota.rota_id = txac.rota_id)")
+				.append(" inner join micromedicao.leiturista leit on(tatc.leit_id = leit.leit_id)")
+				.append(" left join cadastro.funcionario func on(leit.func_id = func.func_id)")
+				.append(" left join cadastro.cliente clie on(leit.clie_id = clie.clie_id)")
+				.append(" left join atualizacaocadastral.imovel_controle_atlz_cad ctrl on (ctrl.imov_id = tatc.tatc_cdimovel)") 
+				.append(" where ctrl.siac_id = :situacao");
 
-			if (filtroHelper.getIdLocalidadeInicial() != null
-					&& !filtroHelper.getIdLocalidadeInicial().equals("")) {
-				consulta += " and txac.loca_id between " + filtroHelper.getIdLocalidadeInicial() 
-					+ " and " + filtroHelper.getIdLocalidadeFinal();
+			if (StringUtils.isNotEmpty(filtroHelper.getIdLocalidadeInicial())) {
+				sql.append(" and txac.loca_id between " + filtroHelper.getIdLocalidadeInicial() + " and " + filtroHelper.getIdLocalidadeFinal());
 			}
 			
-			if (filtroHelper.getCdSetorComercialInicial() != null
-					&& !filtroHelper.getCdSetorComercialFinal().equals("")) {
-				consulta += " and txac.txac_cdsetorcomercial between " + filtroHelper.getCdSetorComercialInicial() 
-					+ " and " + filtroHelper.getCdSetorComercialFinal();
+			if (StringUtils.isNotEmpty(filtroHelper.getCdSetorComercialInicial())) {
+				sql.append(" and txac.txac_cdsetorcomercial between " + filtroHelper.getCdSetorComercialInicial() + " and " + filtroHelper.getCdSetorComercialFinal());
 			}
 			
-			if (filtroHelper.getCdRotaInicial() != null
-					&& !filtroHelper.getCdRotaInicial().equals("")) {
-				consulta += " and rota.rota_cdrota between " + filtroHelper.getCdRotaInicial() 
-					+ " and " + filtroHelper.getCdRotaFinal();
+			if (StringUtils.isNotEmpty(filtroHelper.getCdRotaInicial())) {
+				sql.append(" and rota.rota_cdrota between " + filtroHelper.getCdRotaInicial() + " and " + filtroHelper.getCdRotaFinal());
 			}
 
-			if (filtroHelper.getIdEmpresa() != null
-					&& !filtroHelper.getIdEmpresa().trim().equals(
-							"" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
-				consulta += " and leit.empr_id = " + filtroHelper.getIdEmpresa();
+			if (StringUtils.isNotEmpty(filtroHelper.getIdEmpresa())) {
+				sql.append(" and leit.empr_id = " + filtroHelper.getIdEmpresa());
 			}
 
-			if (filtroHelper.getIdLeiturista() != null
-					&& !filtroHelper.getIdLeiturista().trim().equals(
-							"" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
-				consulta += " and leit.leit_id = " + filtroHelper.getIdLeiturista();
+			if (StringUtils.isNotEmpty(filtroHelper.getIdLeiturista()) && StringUtils.isNumeric(filtroHelper.getIdLeiturista()) && Integer.valueOf(filtroHelper.getIdLeiturista()) > 0) {
+				sql.append(" and leit.leit_id = " + filtroHelper.getIdLeiturista());
 			}
 
-			if (filtroHelper.getExibirCampos() != null 
-					&& !filtroHelper.getExibirCampos().trim().equals("")) {
+			if (StringUtils.isNotEmpty(filtroHelper.getExibirCampos())) {
 				if (filtroHelper.getExibirCampos().equals("1")) {
-					consulta += " and tcac.tcac_dtprocessamento is null ";
+					sql.append(" and tcac.tcac_dtprocessamento is null ");
 				} else if (filtroHelper.getExibirCampos().equals("2")) {
-					consulta += " and tcac.tcac_dtprocessamento is not null ";
+					sql.append(" and tcac.tcac_dtprocessamento is not null ");
 				}
 			}
 			
-			Collection colunaImoveisSelecionados = filtroHelper.getColunaImoveisSelecionados();
-			if (colunaImoveisSelecionados != null
-					&& !colunaImoveisSelecionados.isEmpty()) {
-				consulta += " and tcac.tbco_id in (:colunaImoveisSelecionados)";
+			sql.append(" order by tatc.tatc_cdimovel");
+
+			Collection retornoConsulta = session.createSQLQuery(sql.toString())
+					.addScalar("tipoAlteracao", Hibernate.INTEGER)
+					.addScalar("idImovel", Hibernate.INTEGER)
+					.addScalar("nomeFuncionario", Hibernate.STRING)
+					.addScalar("icAutorizado", Hibernate.INTEGER)
+					.setInteger("situacao", Integer.valueOf(filtroHelper.getExibirCampos()))
+					.list();
+			
+			Map<Integer, ConsultarMovimentoAtualizacaoCadastralHelper> map = new LinkedHashSetAlteracaoCadastral();
+			
+			for(Object linha: retornoConsulta){
+				Object[] element = (Object[]) linha;
+				
+				ConsultarMovimentoAtualizacaoCadastralHelper helper =  new ConsultarMovimentoAtualizacaoCadastralHelper();
+				
+				helper.setIdTipoAlteracao((Integer) element[0]);
+				helper.setIdImovel((Integer) element[1]);
+				helper.setNomeFuncionario((String) element[2]);
+				helper.setIcAutorizado((Integer) element[3]);
+				map.put(helper.getIdImovel(), helper);
 			}
-
-			consulta += " group by tatc.altp_id,tatc.tatc_cdimovel,tatc.tatc_cdcliente,func.func_nmfuncionario,clie.clie_nmcliente,txac.txac_id,tatc.tatc_icautorizado,tatc.tatc_idregistroalterado";
-			consulta += " order by tatc.tatc_cdimovel,tatc.tatc_cdcliente,func.func_nmfuncionario,clie.clie_nmcliente,txac.txac_id,tatc.tatc_icautorizado,tatc.tatc_idregistroalterado";
-
-			if (colunaImoveisSelecionados != null
-					&& !colunaImoveisSelecionados.isEmpty()) {
-				retornoConsulta = session.createSQLQuery(consulta).addScalar(
-						"tipoAlteracao", Hibernate.INTEGER).addScalar(
-						"idImovel", Hibernate.INTEGER).addScalar("idCliente",
-						Hibernate.INTEGER).addScalar("qtdImovel",
-						Hibernate.INTEGER).addScalar("qtdCliente",
-						Hibernate.INTEGER).addScalar("nomeFuncionario",
-						Hibernate.STRING).addScalar("nomeCliente",
-						Hibernate.STRING).addScalar("idArquivo",
-						Hibernate.INTEGER).addScalar("icAutorizado",
-						Hibernate.INTEGER).addScalar("idRegistroAlterado",
-						Hibernate.INTEGER).setParameterList(
-						"colunaImoveisSelecionados", colunaImoveisSelecionados)
-						.list();
-			} else {
-
-				retornoConsulta = session.createSQLQuery(consulta).addScalar(
-						"tipoAlteracao", Hibernate.INTEGER).addScalar(
-						"idImovel", Hibernate.INTEGER).addScalar("idCliente",
-						Hibernate.INTEGER).addScalar("qtdImovel",
-						Hibernate.INTEGER).addScalar("qtdCliente",
-						Hibernate.INTEGER).addScalar("nomeFuncionario",
-						Hibernate.STRING).addScalar("nomeCliente",
-						Hibernate.STRING).addScalar("idArquivo",
-						Hibernate.INTEGER).addScalar("icAutorizado",
-						Hibernate.INTEGER).addScalar("idRegistroAlterado",
-						Hibernate.INTEGER).list();
-			}
-
-			Integer ultimoImovel = null;
-			Integer ultimoCliente = null;
-
-			if (retornoConsulta.size() > 0) {
-				Iterator helperIter = retornoConsulta.iterator();
-				while (helperIter.hasNext()) {
-
-					Object[] element = (Object[]) helperIter.next();
-
-					Integer novoImovel = (Integer) element[1];
-					Integer novoCliente = (Integer) element[2];
-
-					if (ultimoImovel != null
-							&& (novoImovel.intValue() == ultimoImovel
-									.intValue() && novoCliente == null)) {
-						novoCliente = ultimoCliente;
-					}
-
-					ConsultarMovimentoAtualizacaoCadastralHelper helper = null;
-
-					if (helper == null) {
-
-						helper = new ConsultarMovimentoAtualizacaoCadastralHelper();
-
-						helper.setIdTipoAlteracao((Integer) element[0]);
-
-						helper.setIdImovel((Integer) element[1]);
-
-						helper.setIdCliente((Integer) element[2]);
-
-						String sql = " select  array_to_string(ARRAY"
-								+ " (select tcac_cnvaloratual"
-								+ " from seguranca.tab_atlz_cadastral tatc"
-								+ " inner join seguranca.tab_col_atlz_cadastral tcac on (tatc.tatc_id = tcac.tatc_id)"
-								+ " inner join seguranca.tabela_coluna tbco on(tcac.tbco_id = tbco.tbco_id)"
-								+ " where tatc_cdimovel = "
-								+ (Integer) element[1]
-								+ " and altp_id = 2 and tbco_nmcoluna in('loca_id','imac_cdsetorcomercial','imac_nnquadra','imac_nnlote','imac_nnsublote')), '.') as inscricao";
-
-						String inscricao = (String) session.createSQLQuery(sql)
-								.addScalar("inscricao", Hibernate.STRING)
-								.setMaxResults(1).uniqueResult();
-
-						if (inscricao != null && !inscricao.equals("")) {
-							helper.setInscricao(inscricao);
-						}
-
-						if (element[2] != null && !element[2].equals("")) {
-							String sqlCliente = " select crtp_dsclienterelacaotipo as clienteTipo"
-									+ " from cadastro.cliente_relacao_tipo"
-									+ " where crtp_id in("
-									+ " select tcac_cnvaloratual"
-									+ " from seguranca.tab_atlz_cadastral tatc"
-									+ " inner join seguranca.tab_col_atlz_cadastral tcac on (tcac.tatc_id = tatc.tatc_id)"
-									+ " inner join seguranca.tabela_coluna tbco on(tcac.tbco_id = tbco.tbco_id)"
-									+ " where tatc_cdcliente = "
-									+ (Integer) element[2]
-									+ " and tbco_nmcoluna = 'crtp_id' and altp_id = 2)";
-
-							String clienteTipo = (String) session
-									.createSQLQuery(sqlCliente).addScalar(
-											"clienteTipo", Hibernate.STRING)
-									.setMaxResults(1).uniqueResult();
-
-							if (clienteTipo != null && !clienteTipo.equals("")) {
-								helper
-										.setTipoClienteNovo("NOVO "
-												+ clienteTipo);
-							}
-						}
-
-						helper.setQtdAlteracaoImovel((Integer) element[3]);
-						helper.setQtdAlteracaoCliente((Integer) element[4]);
-						helper.setNomeFuncionario((String) element[5]);
-						helper.setNomeCliente((String) element[6]);
-						helper.setIdArquivo((Integer) element[7]);
-						helper.setIcAutorizado((Integer) element[8]);
-						helper.setIdRegistroAlterado((Integer) element[9]);
-
-					} else {
-						if (helper.getQtdAlteracaoImovel() == 0) {
-							helper.setQtdAlteracaoImovel((Integer) element[3]);
-						}
-					}
-
-					ultimoImovel = (Integer) element[1];
-					ultimoCliente = (Integer) element[2];
-
-					consultarMovimentoAtualizacaoCadastralHelper.add(helper);
-
-				}
-			}
-
+			
+			consultarMovimentoAtualizacaoCadastralHelper.addAll(map.values());
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
@@ -992,6 +762,12 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 		return consultarMovimentoAtualizacaoCadastralHelper;
 	}
 	
+	public static void main(String[] args) {
+		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro = new FiltrarAlteracaoAtualizacaoCadastralActionHelper();
+		System.out.println(StringUtils.isNotEmpty(filtro.getIdLocalidadeInicial()));
+		Set<ConsultarMovimentoAtualizacaoCadastralHelper> set = new LinkedHashSet<ConsultarMovimentoAtualizacaoCadastralHelper>();
+
+	}
 	/**
 	 * @author Ivan Sergio
 	 * @date 03/06/2009
@@ -1001,8 +777,8 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 	 * @throws ErroRepositorioException
 	 */
 	public List consultarDadosTabelaColunaAtualizacaoCadastral(
-			Integer idRegistroAlterado,
-			Integer idArquivo, Integer idImovel, Integer idCliente,Integer idTipoAlteracao) throws ErroRepositorioException {
+			Long idRegistroAlterado,
+			Integer idArquivo, Integer idImovel, Long idCliente,Integer idTipoAlteracao) throws ErroRepositorioException {
 		List retorno = null;
 		Session session = HibernateUtil.getSession();
 		
@@ -1022,29 +798,20 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			.append("   atp.id,")// 10
 			.append("   atp.descricao, ") // 11
 			.append("   col.coluna, ")//12
-			.append("   tcol.dataProcessamento, ")//13
-			.append("   tac.complemento ")//14
+			.append("   tcol.dataValidacao, ")//13
+			.append("   tac.complemento, ")//14
+			.append("   usu.nomeUsuario ")//15
 			.append(" from gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral tcol")
 			.append(" inner join tcol.tabelaColuna col ")
 			.append(" inner join tcol.tabelaAtualizacaoCadastral tac ")
+			.append(" left join tcol.usuario usu ")
 			.append(" inner join tac.tabela tab ")
 			.append(" inner join tac.alteracaoTipo atp ")
-			.append(" where tac.idRegistroAlterado = :idRegistroAlterado ")
-			.append(" and tac.arquivoTextoAtualizacaoCadastral.id = :idArquivo ")
-			.append(" and tac.codigoImovel = :idImovel ")
-			.append(" and atp.id = :idTipoAlteracao ");
-				if(idCliente != null){
-					builder.append(" and tac.codigoCliente = " +idCliente);
-				}else{
-					builder.append(" and tac.codigoCliente is null");
-				}
-				builder.append(" order by tcol.id");
+			.append(" where tac.codigoImovel = :idImovel ");
+			builder.append(" order by tcol.id");
 			 
 			 retorno = session.createQuery(builder.toString())
-			 	.setInteger("idRegistroAlterado", idRegistroAlterado)
-			 	.setInteger("idArquivo", idArquivo)
 			 	.setInteger("idImovel", idImovel)
-			 	.setInteger("idTipoAlteracao",idTipoAlteracao)
 			 	.list();
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
@@ -1062,30 +829,34 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 	 * @param indicador
 	 * @throws ErroRepositorioException
 	 */
-	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(
-			Integer idAtualizacaoCadastral,
-			Short indicador) throws ErroRepositorioException {
+	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer idAtualizacaoCadastral,	Short indicador, Usuario usuario) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		
-		String hql =
-			"UPDATE gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral tcol " +
-			"SET tcol.indicadorAutorizado = :indicador, " +
-			"tcol.ultimaAlteracao = :dataAtual " ;
-		if(indicador.equals(ConstantesSistema.SIM)){
-			hql = hql + ",tcol.dataProcessamento = :dataAtual ";
-		}
+		StringBuilder query = new StringBuilder();
+		query.append("UPDATE gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral tcol ")
+			.append("SET tcol.indicadorAutorizado = :indicador, ")
+			.append(" tcol.ultimaAlteracao = :dataAtual ");
 		
+		if(indicador.equals(ConstantesSistema.SIM)){
+			query.append(" ,tcol.dataValidacao = :dataAtual ")
+			.append(" , tcol.usuario = :usuario");
+		}
 			
-		hql = hql + "WHERE tcol.id = :idAtualizacaoCadastral";
+		query.append(" WHERE tcol.id = :idAtualizacaoCadastral");
 		
 		try {
-			session.createQuery(hql)
+			Query sql = session.createQuery(query.toString())
 				.setShort("indicador", indicador)
 				.setTimestamp("dataAtual", new Date())
-				.setInteger("idAtualizacaoCadastral", idAtualizacaoCadastral)
-				.executeUpdate();
-
+				.setInteger("idAtualizacaoCadastral", idAtualizacaoCadastral);
+			
+			if(indicador.equals(ConstantesSistema.SIM)){
+				sql.setEntity("usuario", usuario);
+			}
+			
+			sql.executeUpdate();
 		} catch (HibernateException e) {
+			logger.error("Erro ao altera tabela_coluna_atualizacao_cadastral", e);
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
@@ -1600,8 +1371,8 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			    + " from ImovelSubcategoria imSub "
 			    + " left join fetch imSub.comp_id.subcategoria subcategoria "
 				+ " left join fetch subcategoria.categoria "
-			    + " where imSub.comp_id.imovel.id = "+ imovelSubcategoriaAtualizacaoCadastral.getIdImovel()
-			    + " and subcategoria.id = "+ imovelSubcategoriaAtualizacaoCadastral.getIdSubcategoria() ;
+			    + " where imSub.comp_id.imovel.id = "+ imovelSubcategoriaAtualizacaoCadastral.getImovel().getId()
+			    + " and subcategoria.id = "+ imovelSubcategoriaAtualizacaoCadastral.getSubcategoria().getId();
 			
 			imovelSubcategoria = (ImovelSubcategoria)session.createQuery(hql1)
 			           .setMaxResults(1).uniqueResult();
@@ -1875,6 +1646,33 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 		}
 		
 		return retorno;
-
+	}
+	
+	public boolean existeAlteracaoNaoAprovadaParaImovel(Integer idImovel) throws ErroRepositorioException{
+		Session session = HibernateUtil.getSession();
+		Short NAO = 2;
+		boolean retorno = false;
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append(" select tcac ")
+			.append(" from TabelaColunaAtualizacaoCadastral tcac ")
+			.append(" inner join tcac.tabelaAtualizacaoCadastral tac ")
+			.append(" where tac.codigoImovel = :idImovel ")
+			.append(" and tcac.indicadorAutorizado = :indicador ");
+		
+			List<TabelaColunaAtualizacaoCadastral> lista = session.createQuery(sql.toString())
+		           .setInteger("idImovel",idImovel)
+		           .setShort("indicador", NAO)
+		           .list();
+			if (lista.size() > 0){
+				retorno = true;
+			}
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		return retorno;
 	}
 }

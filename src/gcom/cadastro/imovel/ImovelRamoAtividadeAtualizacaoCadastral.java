@@ -1,5 +1,7 @@
 package gcom.cadastro.imovel;
 
+import gcom.atualizacaocadastral.IImovelRamoAtividade;
+import gcom.cadastro.cliente.RamoAtividade;
 import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.ObjetoTransacao;
 import gcom.seguranca.transacao.FiltroTabela;
@@ -9,9 +11,8 @@ import gcom.util.filtro.ParametroSimples;
 import java.util.Date;
 
 
-/** @author Hibernate CodeGenerator */
 @ControleAlteracao()
-public class ImovelRamoAtividadeAtualizacaoCadastral extends ObjetoTransacao {
+public class ImovelRamoAtividadeAtualizacaoCadastral extends ObjetoTransacao implements IImovelRamoAtividade {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -19,14 +20,12 @@ public class ImovelRamoAtividadeAtualizacaoCadastral extends ObjetoTransacao {
 
     private Integer id;
 
-	private Integer idImovel;
-    
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private Integer idRamoAtividade;
+    private Imovel imovel;
 
-    /** persistent field */
+    @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+    private RamoAtividade ramoAtividade;
+
     private Date ultimaAlteracao;
-    
     
     public Integer getId() {
 		return id;
@@ -34,22 +33,6 @@ public class ImovelRamoAtividadeAtualizacaoCadastral extends ObjetoTransacao {
 
 	public void setId(Integer id) {
 		this.id = id;
-	}
-
-	public Integer getIdImovel() {
-		return idImovel;
-	}
-
-	public void setIdImovel(Integer idImovel) {
-		this.idImovel = idImovel;
-	}
-
-	public Integer getIdRamoAtividade() {
-		return idRamoAtividade;
-	}
-
-	public void setIdRamoAtividade(Integer idRamoAtividade) {
-		this.idRamoAtividade = idRamoAtividade;
 	}
 
 	public Date getUltimaAlteracao() {
@@ -60,19 +43,26 @@ public class ImovelRamoAtividadeAtualizacaoCadastral extends ObjetoTransacao {
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
 
-	@Override
 	public Filtro retornaFiltro() {
 		Filtro filtro = retornaFiltro();
-		filtro.adicionarParametro(new ParametroSimples(FiltroTabela.ID, this.getIdImovel()));
+		filtro.adicionarParametro(new ParametroSimples(FiltroTabela.ID, this.getImovel().getId()));
 		return filtro;
 	}
 
-	@Override
 	public String[] retornaCamposChavePrimaria() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
-
-	
+	public Imovel getImovel() {
+		return imovel;
+	}
+	public void setImovel(Imovel imovel) {
+		this.imovel = imovel;
+	}
+	public RamoAtividade getRamoAtividade() {
+		return ramoAtividade;
+	}
+	public void setRamoAtividade(RamoAtividade ramoAtividade) {
+		this.ramoAtividade = ramoAtividade;
+	}
 }

@@ -78,6 +78,7 @@ package gcom.gui.atendimentopublico.registroatendimento;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.cadastro.cliente.ClienteEndereco;
 import gcom.cadastro.cliente.ClienteFone;
+import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.unidade.UnidadeOrganizacional;
 import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
@@ -237,10 +238,10 @@ public class ExibirReiterarRegistroAtendimentoAction extends GcomAction {
     		long objetoRemocao = (Long.valueOf(httpServletRequest.getParameter("removerFone"))).longValue();
     		Collection colecaoFones = (Collection) sessao.getAttribute("colecaoFonesSolicitante");
     		Iterator iteratorColecaoFones = colecaoFones.iterator();
-    		ClienteFone clienteFone = null;
+    		IClienteFone clienteFone = null;
     		
     		while (iteratorColecaoFones.hasNext()){
-    			clienteFone = (ClienteFone) iteratorColecaoFones.next();
+    			clienteFone = (IClienteFone) iteratorColecaoFones.next();
     			
     			if (obterTimestampIdObjeto(clienteFone) == objetoRemocao){
     				colecaoFones.remove(clienteFone);

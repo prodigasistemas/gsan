@@ -135,10 +135,10 @@ public class Logradouro extends ObjetoTransacao {
     private gcom.cadastro.endereco.LogradouroTipo logradouroTipo;
     
     /** persistent field */
-    private Set logradouroBairros;
+    private Set<LogradouroBairro> logradouroBairros;
     
     /** persistent field */
-    private Set logradouroCeps;
+    private Set<LogradouroCep> logradouroCeps;
     
     /** persistent field */
     @ControleAlteracao(value=FiltroLogradouro.OS_PROGRAMA_CALIBRAGEM,funcionalidade={ATUALIZAR_IMPORTANCIA_LOGRADOURO})
@@ -181,19 +181,19 @@ public class Logradouro extends ObjetoTransacao {
     
     
 
-    public Set getLogradouroBairros() {
+    public Set<LogradouroBairro> getLogradouroBairros() {
 		return logradouroBairros;
 	}
 
-	public void setLogradouroBairros(Set logradouroBairros) {
+	public void setLogradouroBairros(Set<LogradouroBairro> logradouroBairros) {
 		this.logradouroBairros = logradouroBairros;
 	}
 
-	public Set getLogradouroCeps() {
+	public Set<LogradouroCep> getLogradouroCeps() {
 		return logradouroCeps;
 	}
 
-	public void setLogradouroCeps(Set logradouroCeps) {
+	public void setLogradouroCeps(Set<LogradouroCep> logradouroCeps) {
 		this.logradouroCeps = logradouroCeps;
 	}
 
@@ -225,7 +225,11 @@ public class Logradouro extends ObjetoTransacao {
         this.logradouroTipo = logradouroTipo;
     }
 
-    public Integer getId() {
+    public Logradouro(Integer idLogradouro) {
+    	this.id = idLogradouro;
+	}
+
+	public Integer getId() {
         return this.id;
     }
 
@@ -330,11 +334,6 @@ public class Logradouro extends ObjetoTransacao {
     	getDescricaoFormatada();
     }
     
-//    @Override
-//    public String getDescricaoParaRegistroTransacao() {
-//    	return getId() + " " + getDescricaoFormatada();
-//    }
-    
     @Override
 	public Filtro retornaFiltroRegistroOperacao() {
 		Filtro filtro = retornaFiltro();
@@ -343,6 +342,17 @@ public class Logradouro extends ObjetoTransacao {
 		return filtro;
 	}
     
+    public boolean hasMunicipio() {
+		return this.municipio != null;
+	}
+    
+    public boolean hasLogradouroTitulo(){
+    	return logradouroTitulo != null && !logradouroTitulo.equals("");
+    }
+    
+    public boolean hasLogradouroTipo(){
+    	return logradouroTipo != null && !logradouroTipo.equals("");
+    }
 }
 
 

@@ -475,7 +475,7 @@ public class InserirImovelAction extends GcomAction {
 		}
 		imovel.setNumeroPontosUtilizacao(naoVazio(pontoUtilizaco) ? new Short(pontoUtilizaco) : null);
 		imovel.setNumeroMorador(naoVazio(numeroMoradores) ? new Short(numeroMoradores) : null);
-		imovel.setNumeroIptu(naoVazio(numeroIptu) ? new BigDecimal(numeroIptu) : null);
+		imovel.setNumeroIptu(naoVazio(numeroIptu) ? Util.formatarIPTU(numeroIptu) : null);
 		imovel.setNumeroCelpe(naoVazio(numeroContratoCelpe) ? new Long(numeroContratoCelpe) : null);
 		imovel.setCoordenadaX(naoVazio(cordenadasX) ? new String(cordenadasX.replace(',','.')) : null);
 		imovel.setCoordenadaY(naoVazio(cordenadasY) ? new String(cordenadasY.replace(',','.')) : null);

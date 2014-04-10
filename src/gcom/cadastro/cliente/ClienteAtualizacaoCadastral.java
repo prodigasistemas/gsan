@@ -1,5 +1,10 @@
 package gcom.cadastro.cliente;
 
+import gcom.cadastro.endereco.EnderecoTipo;
+import gcom.cadastro.endereco.LogradouroBairro;
+import gcom.cadastro.endereco.LogradouroCep;
+import gcom.cadastro.geografico.UnidadeFederacao;
+import gcom.cadastro.imovel.Imovel;
 import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.ObjetoTransacao;
 import gcom.seguranca.transacao.FiltroTabela;
@@ -13,8 +18,8 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 /** @author Hibernate CodeGenerator */
 @ControleAlteracao()
-public class ClienteAtualizacaoCadastral extends ObjetoTransacao {
-	
+public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements IClienteAtualizacaoCadastral {
+
 	private static final long serialVersionUID = 1L;
 	
 	public static final int ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL = 1502;
@@ -25,116 +30,68 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao {
     
     private Integer idImovel;
 
-    /** nullable persistent field */
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private String nomeCliente;
+    private String nome;
 	
-    /** nullable persistent field */
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private Integer idClienteRelacaoTipo;
+    public Integer idClienteRelacaoTipo;
 
-    /** nullable persistent field */
-//	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idClienteTipo;
-	
-    /** nullable persistent field */
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private String cpfCnpj;
 
-    /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+    private String cpf;
+    
+    private String cnpj;
+
     private String rg;
 	
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
 	private String dsAbreviadaOrgaoExpedidorRg;
 	
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
 	private String dsUFSiglaOrgaoExpedidorRg;
 
-    /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Date dataEmissaoRg;
 	
-    /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Date dataNascimento;
 
-    /** nullable persistent field */
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idProfissao;
 	
-//	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idRamoAtividade;
 
-    /** nullable persistent field */
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idPessoaSexo;
 
-    /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private String email;
 	
-    /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private String nomeMae;
 
-    /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Short indicadorUso;
 
-    /** persistent field */
     private Date ultimaAlteracao;
 
-    /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idEnderecoTipo;
 	
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idLogradouroTipo;
     
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private String dsLogradouroTipo;
 	
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idLogradouroTitulo;
     
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private String dsLogradouroTitulo;
 	
-    /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idLogradouro;
 
-    /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private String descricaoLogradouro;
 
-    /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer codigoCep;
 
-    /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idBairro;
 
-    /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private String nomeBairro;
 
-    ///** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private String numeroImovel;
 
-    ///** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private String complementoEndereco;
 	
-    /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idEnderecoReferencia;
 
-    /** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer cnae;
     
 	private Integer idMunicipio;
@@ -144,18 +101,35 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao {
 	private Integer idUinidadeFederacao;
 	
 	private String dsUFSiglaMunicipio;
+	
+	private Short indicadorNomeConta;
+	
+	private ClienteTipo clienteTipo;
+	
+	private UnidadeFederacao unidadeFederacao;
+	
+	private PessoaSexo pessoaSexo;
+	
+	private Imovel imovel;
+	
+	private Cliente cliente;
+	
+	private ClienteRelacaoTipo clienteRelacaoTipo;
 
-	public ClienteAtualizacaoCadastral(){		
+	public ClienteAtualizacaoCadastral(){
+		clienteTipo = new ClienteTipo();
+		unidadeFederacao = new UnidadeFederacao();
+		pessoaSexo = new PessoaSexo();
 	}
 
 	public ClienteAtualizacaoCadastral(Integer id, Integer idCliente, Integer idImovel, String nomeCliente, Integer idClienteRelacaoTipo, Integer idClienteTipo, String cpfCnpj, String rg, String dsAbreviadaOrgaoExpedidorRg, String dsUFSiglaOrgaoExpedidorRg, Date dataEmissaoRg, Date dataNascimento, Integer idProfissao, Integer idRamoAtividade, Integer idPessoaSexo, String email, String nomeMae, Short indicadorUso, Date ultimaAlteracao, Integer idEnderecoTipo, Integer idLogradouroTipo, String dsLogradouroTipo, Integer idLogradouroTitulo, String dsLogradouroTitulo, Integer idLogradouro, String descricaoLogradouro, Integer codigoCep, Integer idBairro, String nomeBairro, String numeroImovel, String complementoEndereco, Integer idEnderecoReferencia, Integer cnae, Integer idMunicipio, String nomeMunicipio, Integer idUinidadeFederacao, String dsUFSiglaMunicipio) {
 		this.id = id;
 		this.idCliente = idCliente;
 		this.idImovel = idImovel;
-		this.nomeCliente = nomeCliente;
+		this.nome = nomeCliente;
 		this.idClienteRelacaoTipo = idClienteRelacaoTipo;
 		this.idClienteTipo = idClienteTipo;
-		this.cpfCnpj = cpfCnpj;
+		this.cpf = cpfCnpj;
 		this.rg = rg;
 		this.dsAbreviadaOrgaoExpedidorRg = dsAbreviadaOrgaoExpedidorRg;
 		this.dsUFSiglaOrgaoExpedidorRg = dsUFSiglaOrgaoExpedidorRg;
@@ -204,21 +178,13 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao {
 		this.idImovel = idImovel;
 	}
 
-	public String getNomeCliente() {
-        return this.nomeCliente;
+	public String getNome() {
+        return this.nome;
     }
 
-    public void setNomeCliente(String nomeCliente) {
-        this.nomeCliente = nomeCliente;
+    public void setNome(String nomeCliente) {
+        this.nome = nomeCliente;
     }
-
-    public Integer getIdClienteTipo() {
-		return idClienteTipo;
-	}
-
-	public void setIdClienteTipo(Integer idClienteTipo) {
-		this.idClienteTipo = idClienteTipo;
-	}
 
 	public String getRg() {
         return this.rg;
@@ -260,12 +226,12 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao {
         this.idPessoaSexo = idPessoaSexo;
     }
 
-    public String getCpfCnpj() {
-        return this.cpfCnpj;
+    public String getCpf() {
+        return this.cpf;
     }
 
-    public void setCpfCnpj(String cpfCnpj) {
-        this.cpfCnpj = cpfCnpj;
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
     }
 
     public String getEmail() {
@@ -436,7 +402,6 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao {
 
 	@Override
 	public String[] retornaCamposChavePrimaria() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
@@ -504,5 +469,102 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao {
 		this.idRamoAtividade = idRamoAtividade;
 	}
 	
+	public ClienteTipo getClienteTipo() {
+		return clienteTipo;
+	}
+
+	public void setClienteTipo(ClienteTipo clienteTipo) {
+		this.clienteTipo = clienteTipo;
+	}
+
+	public String getCnpj() {
+		return cnpj;
+	}
+
+	public void setCnpj(String cnpj) {
+		this.cnpj = cnpj;
+	}
 	
+	public UnidadeFederacao getUnidadeFederacao() {
+		return unidadeFederacao;
+	}
+
+
+	public void setUnidadeFederacao(UnidadeFederacao unidadeFederacao) {
+		this.unidadeFederacao = unidadeFederacao;
+	}
+
+
+	public PessoaSexo getPessoaSexo() {
+		return pessoaSexo;
+	}
+
+
+	public void setPessoaSexo(PessoaSexo pessoaSexo) {
+		this.pessoaSexo = pessoaSexo;
+	}
+
+	public Integer getIdClienteTipo() {
+		return idClienteTipo;
+	}
+
+	public void setIdClienteTipo(Integer idClienteTipo) {
+		this.idClienteTipo = idClienteTipo;
+	}
+	
+	public String getNumero() {
+		return numeroImovel;
+	}
+
+	public void setNumero(String numero) {
+		this.numeroImovel = numero;
+	}
+
+	public String getComplemento() {
+		return complementoEndereco;
+	}
+
+	public void setComplemento(String complemento) {
+		this.complementoEndereco = complemento;
+	}
+
+	public EnderecoTipo getEnderecoTipo() {
+		return new EnderecoTipo(idEnderecoTipo);
+	}
+
+	public void setEnderecoTipo(EnderecoTipo enderecoTipo) {
+		this.idEnderecoTipo = enderecoTipo.getId();
+	}
+	
+	public Cliente getCliente(){
+		return new Cliente(idCliente);
+	}
+
+	public void setCliente(Cliente cliente){
+		this.idCliente = cliente.getId();
+	}
+
+	public Imovel getImovel() {
+		return imovel;
+	}
+	
+	public void setImovel(Imovel imovel) {
+		this.imovel = imovel;
+	}
+	
+	public ClienteRelacaoTipo getClienteRelacaoTipo() {
+		return clienteRelacaoTipo;
+	}
+	
+	public void setClienteRelacaoTipo(ClienteRelacaoTipo clienteRelacaoTipo) {
+		this.clienteRelacaoTipo = clienteRelacaoTipo;
+	}
+	
+	public Short getIndicadorNomeConta() {
+		return indicadorNomeConta;
+	}
+
+	public void setIndicadorNomeConta(Short indicadorNomeConta) {
+		this.indicadorNomeConta = indicadorNomeConta;
+	}
 }

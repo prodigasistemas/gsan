@@ -17251,7 +17251,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 			updateParcelas = "update faturamento.credito_a_realizar set crar_nnprestacaorealizadas=crar_nnprestacaorealizadas - 1, "
 					+ " crar_tmultimaalteracao = ? "
-					+ " where crar_amreferenciaprestacao >= ? and crar_nnprestacaorealizadas > 0 and imov_id in ";
+					+ " where crar_amreferenciaprestacao >= ? and crar_nnprestacaorealizadas > 0 "
+					+ " and (crar_nnprestacaocredito > 1 or (crar_nnprestacaocredito = 1 and crar_vlresidualmesanterior = 0.00)) "
+					+ " and imov_id in ";
 			
 			updateResidual = "update faturamento.credito_a_realizar set crar_vlresidualmesanterior = coalesce(crar_vlresidualconcedidomes,0), "
 				+ "crar_vlresidualconcedidomes = null, crar_tmultimaalteracao = ? "
@@ -60763,45 +60765,82 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		return retorno;
 	}
 	
-	/**
-	 * TODO : COSANPA
-	 * @author Pamela Gatinho
-	 * @date 17/05/2013
-	 * 
-	 * Pesquisa uma lista de contas na tabela conta histórico.
-	 * 
-	 * @param contasIds
-	 * @return Collection de contas em histórico
-	 * @exception ErroRepositorioException
-	 *                Descrição da exceção
-	 */
-	public Collection pesquisarContaOuContaHistorico(Collection idsContas, String className)
-		throws ErroRepositorioException {
-
-		Collection<ContaHistorico> retorno = null;
-
+	public void atualizarVecimentoFaturaClienteResponsavel(Date dataVencimento, String anoMesReferencia) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
-		String consulta;
+		try{
+			String query = " UPDATE Fatura " 
+					+ " SET vencimento =:dateVencimento " 
+					+ " WHERE anoMesReferencia = :anoMesReferencia";
 
-		try {
-			consulta = "select c " + "from "+ className + " c "
-					+ "inner join fetch c.imovel imov "
-					+ "inner join fetch imov.localidade loc "
-					+ "inner join fetch c.debitoCreditoSituacaoAtual "
-					+ "inner join fetch c.quadra "
-					+ "where c.id in (:contasIds) ";
-
-			retorno = (Collection) session.createQuery(consulta)
-					.setParameterList("contasIds", idsContas).list();
-			
+			session.createQuery(query).setDate("dateVencimento", dataVencimento)
+			.setString("anoMesReferencia", anoMesReferencia)
+			.executeUpdate();
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
+	}
+	
+	public Integer countFaturasClienteResponsaveis(String anoMesReferencia) throws ErroRepositorioException{
+		Session session = HibernateUtil.getSession();
+		Integer retorno = null;
+		try{
+			String query = "  SELECT count(*)" 
+					+ " FROM Fatura f " 
+					+ " WHERE f.anoMesReferencia = :anoMesReferencia ";
+
+			retorno = (Integer)session.createQuery(query)
+					.setString("anoMesReferencia", anoMesReferencia).uniqueResult();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
 		return retorno;
 	}
+	
+	  /**
+	   * TODO : COSANPA
+	   * @author Pamela Gatinho
+	   * @date 17/05/2013
+	   * 
+	   * Pesquisa uma lista de contas na tabela conta histórico.
+	   * 
+	   * @param contasIds
+	   * @return Collection de contas em histórico
+	   * @exception ErroRepositorioException
+	   *                Descrição da exceção
+	   */
+	  public Collection pesquisarContaOuContaHistorico(Collection idsContas, String className)
+	    throws ErroRepositorioException {
+
+	    Collection<ContaHistorico> retorno = null;
+
+	    Session session = HibernateUtil.getSession();
+	    String consulta;
+
+	    try {
+	      consulta = "select c " + "from "+ className + " c "
+	          + "inner join fetch c.imovel imov "
+	          + "inner join fetch imov.localidade loc "
+	          + "inner join fetch c.debitoCreditoSituacaoAtual "
+	          + "inner join fetch c.quadra "
+	          + "where c.id in (:contasIds) ";
+
+	      retorno = (Collection) session.createQuery(consulta)
+	          .setParameterList("contasIds", idsContas).list();
+	      
+	    } catch (HibernateException e) {
+	      // levanta a exceção para a próxima camada
+	      throw new ErroRepositorioException(e, "Erro no Hibernate");
+	    } finally {
+	      // fecha a sessão
+	      HibernateUtil.closeSession(session);
+	    }
+	    
+	    return retorno;
+	  }
+
 }

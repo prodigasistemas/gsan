@@ -8,6 +8,7 @@
 
 <%@page isELIgnored="false"%>
 <%@ page import="gcom.cadastro.atualizacaocadastral.bean.DadosTabelaAtualizacaoCadastralHelper"%>
+<%@ page import="gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral"%>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html:html>
@@ -15,6 +16,7 @@
 <%@ include file="/jsp/util/titulo.jsp"%>
 <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 <link rel="stylesheet" href="<bean:message key="caminho.css"/>EstilosCompesa.css" type="text/css">
+<link rel="stylesheet" href="<bean:message key="caminho.css"/>geral.css" type="text/css">
 <script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/regras_validator.js"></script>
 <html:javascript staticJavascript="false" formName="ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm" />
 
@@ -23,8 +25,7 @@
 <script language="JavaScript" src="<bean:message key="caminho.js"/>Calendario.js"></script>
 
 <script language="JavaScript">
-<!-- Begin
-	function confirma() {
+	function confirma() {    
 		var form = document.forms[0];
 		var valoresNao = "";
 		var valoresSim = "";
@@ -69,35 +70,55 @@
 			desmarcarTodos();
 		}
 	}
-	
--->
 </script>
 </head>
 
-<logic:present name="reload">
-	<body leftmargin="5" topmargin="5"
-		onload="window.close();">
-</logic:present>
-
-<logic:notPresent name="reload">
-	<body leftmargin="5" topmargin="5" onload="resizePageSemLink(1060, 480);verificarTipoAlteracao('',0)">
-</logic:notPresent>
+<body leftmargin="5" topmargin="5">
 
 <html:form action="/atualizarDadosImovelAtualizacaoCadastralAction"
 	name="ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm"
-	type="gcom.gui.cadastro.ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm" method="post"
-	onsubmit="">
+	type="gcom.gui.cadastro.ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm" method="post">
+  
+<%@ include file="/jsp/util/cabecalho.jsp"%>
+<%@ include file="/jsp/util/menu.jsp" %>
+  
 	<html:hidden property="idRegistrosNaoAutorizados" />
 	<html:hidden property="idRegistrosAutorizados" />
 
 	<table width="1000" border="0" cellpadding="0" cellspacing="5">
 		<tr>
+      <td width="160" valign="top" class="leftcoltext">
+      <div align="center">
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <%@ include file="/jsp/util/informacoes_usuario.jsp"%>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+
+      <%@ include file="/jsp/util/mensagens.jsp"%>
+
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      <p align="left">&nbsp;</p>
+      </div>
+      </td>
+    
 			<td width="1000" valign="top" class="centercoltext">
-			<table height="100%">
-				<tr>
-					<td></td>
-				</tr>
-			</table>
 			<table width="100%" border="0" align="center" cellpadding="0"
 				cellspacing="0">
 				<tr>
@@ -120,24 +141,104 @@
 			<table width="100%" border="0">
 				<tr>
 					<td width="100"><strong>Im&oacute;vel:</strong></td>
-					<td align="left"><html:text property="idImovel" readonly="true" size="30"
-						style="background-color:#EFEFEF; border:0; color: #000000" /></td>
+					<td align="left"><html:text property="descricaoImovel" readonly="true" size="30"
+						styleClass="texto-exibicao" /></td>
 				</tr>
 				<tr>
 					<td><strong>Localidade:</strong></td>
-					<td align="left"><html:text property="descricaoLocalidade" readonly="true" size="60"
-						style="background-color:#EFEFEF; border:0; color: #000000" /></td>
+					<td align="left"><html:text property="descricaoLocalidade" readonly="true" size="60" styleClass="texto-exibicao" /></td>
 				</tr>
 				<tr>
 					<td><strong>Setor Comercial:</strong></td>
-					<td align="left"><html:text property="descricaoSetorComercial" readonly="true" size="60"
-						style="background-color:#EFEFEF; border:0; color: #000000" /></td>
+					<td align="left"><html:text property="descricaoSetorComercial" readonly="true" size="60" styleClass="texto-exibicao"/></td>
 				</tr>
 				<tr>
 					<td><strong>Quadra:</strong></td>
-					<td align="left"><html:text property="numeroQuadra" readonly="true" size="8"
-						style="background-color:#EFEFEF; border:0; color: #000000" /></td>
+					<td align="left"><html:text property="numeroQuadra" readonly="true" size="8" styleClass="texto-exibicao" /></td>
 				</tr>
+        
+                <tr>
+                  <td>
+                    <strong>Situação de Água:</strong>
+                  </td>
+                  <td>
+                    <html:text property="situacaoLigacaoAgua" readonly="true" size="15" styleClass="texto-exibicao"/>
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td>
+                    <strong>Situação de Esgoto:</strong>
+                  </td>
+                  <td>
+                    <html:text property="situacaoLigacaoEsgoto" readonly="true" size="15" styleClass="texto-exibicao"/>
+                  </td>
+                </tr>
+                
+                <tr>
+                  <td width="100%" colspan="3">
+                  <div style="width: 600px; height: 100%; overflow: auto;">
+                  <table width="100%" align="left" bgcolor="#99CCFF">
+                    <tr bordercolor="#000000">
+                      <td width="19%" bgcolor="#90c7fc" align="center">
+                      <div class="style9"><font color="#000000" style="font-size:9px"
+                        face="Verdana, Arial, Helvetica, sans-serif"> <strong>Categoria</strong>
+                      </font></div>
+                      </td>
+                      <td width="56%" bgcolor="#90c7fc" align="center">
+                      <div class="style9"><font color="#000000" style="font-size:9px"
+                        face="Verdana, Arial, Helvetica, sans-serif"> <strong>Subcategoria</strong></font>
+                      </div>
+                      </td>
+                      <td width="25%" bgcolor="#90c7fc" align="center">
+                      <div class="style9"><font color="#000000" style="font-size:9px"
+                        face="Verdana, Arial, Helvetica, sans-serif"> <strong>Quantidade
+                      de Economias</strong> </font></div>
+                      </td>
+                    </tr>
+                  
+                    <!--corpo da segunda tabela-->
+                    <%int cont = 0;%>
+                    <logic:notEmpty  name="imovelSubcategorias">
+                      <logic:iterate name="imovelSubcategorias" id="imovelSubcategoria" type="ImovelSubcategoriaAtualizacaoCadastral">
+                        <%cont = cont + 1;
+                          if (cont % 2 == 0) {%>
+                        <tr bgcolor="#cbe5fe">
+                          <%} else {%>
+                        <tr bgcolor="#FFFFFF">
+                          <%}%>
+
+                          <td width="19%" align="left">
+                          <div align="center">
+                            <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+                              <bean:write name="imovelSubcategoria" property="descricaoCategoria" />
+                            </font>
+                          </div>
+                          </td>
+                          
+                          <td width="56%" align="left">
+                          <div align="center">
+                            <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+                              <bean:write name="imovelSubcategoria" property="descricaoSubcategoria" />
+                            </font>
+                          </div>
+                          </td>
+                          
+                          <td width="25%" align="right">
+                          <div align="right">
+                            <font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"> 
+                            <bean:write name="imovelSubcategoria" property="quantidadeEconomias" />
+                            </font>
+                          </div>
+                          </td>
+                        </tr>
+                      </logic:iterate>
+                    </logic:notEmpty>
+                  </table>
+                  </div>
+                  </td>
+                </tr>
+                        
 			</table>
 			
 			<hr>
@@ -152,22 +253,15 @@
 							<tr>
 								<td height="0">
 
-									<table width="1000" bgcolor="#90c7fc" border=0>
+									<table width="100%" bgcolor="#90c7fc" border=0>
 										<tr bordercolor="#90c7fc" bgcolor="#90c7fc">
 											<td width="150"><strong>Tabela</strong></td>
 											<td width="150"><strong>Campo</strong></td>
-											<td width="400" colspan="2">
-												<table border=0 cellpadding="0" cellspacing="0" width="100%">
-													<tr><td colspan="2" align="center"><strong>Conte&uacute;do</strong></td></tr>
-													<tr>
-														<td align="center"><strong>Anterior</strong></td>
-														<td align="center"><strong>Atual</strong></td>
-													</tr>
-												</table>
-											</td>
-											<td width="150"><strong>Data/Hora Atualiza&ccedil;&atilde;o</strong></td>
-											<td width="100"><strong>Tipo Opera&ccedil;&atilde;o</strong></td>
-											<td width="50"><strong>Alterar</strong></td>
+    										<td width="200" align="center"><strong>Anterior</strong></td>
+    										<td width="200" align="center"><strong>Atual</strong></td>
+											<td width="200" align="center" ><strong>Data/Hora Valida&ccedil;&atilde;o</strong></td>
+											<td width="100" align="center"><strong>Usu&aacute;rio</strong></td>
+											<td width="50"><strong><a href="javascript:facilitador(this);">Todos</a></strong></td>
 										</tr>
 									</table>
 
@@ -176,8 +270,8 @@
 							<tr>
 								<td>
 
-									<table width="1000" align="center" bgcolor="#99CCFF" border=0>
-									<%int cont = 1;%>
+									<table width="100%" align="center" bgcolor="#99CCFF" border=0>
+									<%cont = 1;%>
 									<logic:iterate name="colecaoDadosTabelaAtualizacaoCadastral" id="dadosTabelaAtualizacaoCadastralHelper">
 										<%cont = cont + 1;
 										if (cont % 2 == 0) {%>
@@ -197,20 +291,17 @@
 												<td width="200">
 													<bean:write name="dadosTabelaAtualizacaoCadastralHelper" property="colunaValorAtual" />
 												</td>
-												<td width="150">
-													<bean:write name="dadosTabelaAtualizacaoCadastralHelper" property="ultimaAtualizacao" />
+												<td width="200">
+													<bean:write name="dadosTabelaAtualizacaoCadastralHelper" property="dataValidacao" />
 												</td>
-												<td width="100">
-													<bean:write name="dadosTabelaAtualizacaoCadastralHelper" property="descricaoAlteracaoTipo" />
-												</td>
+                                                <td width="100">
+                                                  <bean:write name="dadosTabelaAtualizacaoCadastralHelper" property="nomeUsuario" />
+                                                </td>
 												<td width="50">
 												<div align="center">
-												  <logic:empty name="dadosTabelaAtualizacaoCadastralHelper" property="dataProcessamento">
-													<%
-													String checado = "checked";
-													%>
-													<input type="checkbox" name="chkRegistrosAlteracao" id="chkRegistrosAlteracao" <%=checado%>
-													value="<%=""+((DadosTabelaAtualizacaoCadastralHelper) dadosTabelaAtualizacaoCadastralHelper).getIdTabelaColunaAtualizacaoCadastral()%>" onclick="javascript:verificarTipoAlteracao('<%=((DadosTabelaAtualizacaoCadastralHelper) dadosTabelaAtualizacaoCadastralHelper).getIdAlteracaoTipo()%>',this);" />
+												  <logic:empty name="dadosTabelaAtualizacaoCadastralHelper" property="dataValidacao">
+													<input type="checkbox" name="chkRegistrosAlteracao" id="chkRegistrosAlteracao" 
+													value="<%=""+((DadosTabelaAtualizacaoCadastralHelper) dadosTabelaAtualizacaoCadastralHelper).getIdTabelaColunaAtualizacaoCadastral()%>" />
 												  </logic:empty>
 												</div>
 												</td>
@@ -232,13 +323,16 @@
 						name="Button" type="button" class="bottonRightCol" value="Confirmar"
 						onClick="confirma();">
 					<input name="Button2" type="button" class="bottonRightCol"
-						value="Fechar" onClick="window.close();"></div>
+						value="Fechar" onClick="window.location.href='/gsan/filtrarAlteracaoAtualizacaoCadastralAction.do'"></div>
 					</td>
 				</tr>
 			</table>
 			</td>
 		</tr>
 	</table>
+<%@ include file="/jsp/util/rodape.jsp"%>
+  
 </html:form>
+
 </body>
 </html:html>

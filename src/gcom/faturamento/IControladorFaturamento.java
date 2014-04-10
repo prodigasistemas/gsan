@@ -5705,180 +5705,33 @@ public interface IControladorFaturamento {
 	public List<Integer> obterImoveisFaltandoTransmitir(Integer idRota, Integer anoMesFaturamento)
 			throws ControladorException;
 	
-	/**
-	 * TODO : COSANPA
-	 * Pamela Gatinho - 15/09/2011
-	 * 
-	 * Gerar dados para o relatorio de contas retidas
-	 * 
-	 * @param anoMesFaturamento
-	 * @param idFaturamentoGrupo
-	 * @param tipoRelatorio
-	 * @param usuarioLogado
-	 * 
-	 * @return
-	 * 
-	 * @throws ControladorException
-	 */
 	public Collection<RelatorioContasRetidasHelper> pesquisarDadosRelatorioContasRetidas(
 			int anoMesReferencia, Integer idFaturamentoGrupo) throws ControladorException;
 	
-	/**
-	 * TODO : COSANPA
-	 * Pamela Gatinho - 16/09/2011
-	 * 
-	 * Gerar dados para o relatorio de medicao do faturamento
-	 * 
-	 * @param anoMesFaturamento
-	 * @param idFaturamentoGrupo
-	 * @param idEmpresa
-	 * @param tipoRelatorio
-	 * @param usuarioLogado
-	 * 
-	 * @return
-	 * 
-	 * @throws ControladorException
-	 */
 	public Collection pesquisarDadosRelatorioMedicaoFaturamento(
 			int anoMesReferencia, Integer idFaturamentoGrupo, Integer idEmpresa) throws ControladorException;
 	
-	/**
-	 * Atualiza um objeto do tipo conta no BD
-	 * 
-	 * @param conta
-	 * @throws ControladorException
-	 */
 	public void atualizarConta(Conta conta) throws ControladorException;
 	
-	/**
-	 * Verifica se o imóvel tem um percentual de esgoto alternativo
-	 * 
-	 * [UC0113] - Faturar Grupo de Faturamento
-	 * 
-	 * @author Viviane Souza, Raphael Rossiter
-	 * @date 27/03/2008
-	 * 
-	 * @param imovel
-	 * @param consumoFaturadoEsgoto
-	 * @return BigDecimal
-	 * @throws ControladorException
-	 */
 	public BigDecimal verificarPercentualEsgotoAlternativo(Imovel imovel,
 			Integer consumoFaturadoEsgoto) throws ControladorException;
 	
-	
-	/**
-	 * TODO : COSANPA
-	 * 
-	 * Pamela Gatinho - 04/06/2012
-	 * 
-	 * Método para calcular o consumo de rateio de um imóvel, para o mês
-	 * de referência.
-	 * 
-	 * @param imovel
-	 * @param faturamentoGrupo
-	 * 
-	 * @return valorRateioImovel
-	 * 
-	 * @throws ControladorException 
-	 * @throws ErroRepositorioException 
-	 */
 	public BigDecimal[] calcularValorRateioImovel(Imovel imovel,  FaturamentoGrupo faturamentoGrupo) 
 		throws ControladorException, ErroRepositorioException;
 	
-	/**
-	 * TODO : COSANPA
-	 * @author Pamela Gatinho  
-	 * 
-	 * Metodo que obtem o nome do arquivo transmitido
-	 * pelo IS
-	 * 
-	 * @return nomeArquivoRetorno
-	 * @param localidade
-	 * @param codigoSetor
-	 * @param codigoRota
-	 * @param anoMesReferencia
-	 * @param tipoFinalizacao
-	 * @throws ErroRepositorioException
-	 */
 	public StringBuilder obterNomeArquivoRetorno(Localidade localidade, Integer codigoSetor,
     		Integer codigoRota, Integer anoMesReferencia, Short tipoFinalizacao);
 	
-	/**
-	* TODO : COSANPA
-	* @author Pamela Gatinho
-	* @date 24/02/2012
-	*
-	* Metodo que obtem o movimento do imóvel
-	* lido pelo IS
-	*
-	* @return MovimentoContaPreFaturada
-	* @param anoMesReferencia
-	* @param idImovel
-	* @throws ErroRepositorioException
-	*/
 	public MovimentoContaPrefaturada obterMovimentoImovel(Integer idImovel, Integer anoMesReferencia) throws ControladorException;
 	
-	/**
-	 * TODO : COSANPA
-	 * @author Pamela Gatinho  
-	 * @date 06/03/2013
-	 * 
-	 * Metodo que obtem o extrato de quitação
-	 * de débitos de um imóvel para um determinado
-	 * ano.
-	 * 
-	 * @return ExtratoQuitacao
-	 * @param anoReferencia
-	 * @param idImovel
-	 * @throws ControladorException
-	 */
 	public ExtratoQuitacao obterExtratoQuitacaoImovel(Integer idImovel, Integer anoReferencia) throws ControladorException;
 	
-	/**
-	 * Pamela Gatinho - 12/03/2013
-	 * 
-	 * Método que obtem a mensagem de quitação anual de
-	 * débitos. Caso o imóvel não esteja quitado, retorna
-	 * uma mensagem em branco.
-	 * 
-	 * @param imovel
-	 * @param anoMesReferencia
-	 * @param arquivoTextoRegistroTipo01
-	 * @throws ControladorException
-	 */
 	public String obterMsgQuitacaoDebitos(Imovel imovel, Integer anoMesReferencia)
 	throws ControladorException;
 
-	/**
-	 * Metodo para obter a diferenca entre atividades do cronograma,
-	 * do mês atual e mês anterior
-	 * 
-	 * @author Pamela Gatinho
-	 * @date 31/07/2013
-	 * 
-	 * @param anoMesAtual
-	 * @param rota
-	 * @param idFaturamentoAtividade
-	 * 
-	 * @return diferencaDias
-	 * 
-	 * @throws ControladorException
-	 */
 	public long obterDiferencaDiasCronogramas(Integer anoMesAtual, Rota rota, Integer idFaturamentoAtividade)
 		throws ControladorException;
 	
-	/**TODO:COSANPA
-	 * Processar Pagamento com Código de Barras Por Cliente
-	 * 
-	 * [SB0005] - Processar Recebimento de Acrescimos por Impontualidade
-	 * 
-	 * @author Adriana Muniz e Wellington Rocha
-	 * @since 23/10/2013
-	 * @param guiaPagamento
-	 *            GuiaPagamento
-	 * @throws ControladorException
-	 */
 	public Integer inserirGuiaPagamentoCodigoBarrasPorCliente(
 			GuiaPagamento guiaPagamento, Integer idDebitoTipo, Integer idLocalidade)
 			throws ControladorException;
@@ -5887,41 +5740,14 @@ public interface IControladorFaturamento {
 			Short numeroPrestacaoDebito, Short numeroPrestacaoCobradas, Integer anoMesReferenciaDebito, BigDecimal valorDebito, 
 			DebitoTipo debitoTipo, Usuario usuario) throws ControladorException;
 	
-	/**
-	 * TODO : COSANPA
-	 * Pamela Gatinho - 17/05/2013
-	 * @param pagamentos
-	 * 
-	 * Método que inclui novas contas para contas que já estavam no histórico
-	 * e que já estavam prescritas. Retorna um Map, no qual a chave é o id
-	 * da conta em histórico e o valor e a nova conta, para poder saber a qual
-	 * conta do histórico a nova conta pertence.
-	 * 
-	 * @return Map<Integer, Conta> 
-	 * @throws ErroRepositorioException 
-	 * @throws ControladorException 
-	 */
-		public Map<Integer, Conta> incluirContasParaRefaturarPagamentos(Collection<Pagamento> pagamentos, Date dataArrecadacao) throws ControladorException, ErroRepositorioException;
+	public Map<Integer, Conta> incluirContasParaRefaturarPagamentos(Collection<Pagamento> pagamentos, Date dataArrecadacao) throws ControladorException, ErroRepositorioException;
 	
-		/**
-		 * TODO : COSANPA
-		 * Pamela Gatinho - 17/05/2013
-		 * @param pagamentos
-		 * 
-		 * Metodo para retornar uma lista somente com os id's dos pagamentos 
-		 * enviados como parâmetro
-		 */
-		@SuppressWarnings("unchecked")
-		public Collection<Integer> getListaIdContas(Collection<Pagamento> pagamentos);
+	@SuppressWarnings("unchecked")
+	public Collection<Integer> getListaIdContas(Collection<Pagamento> pagamentos);
 		
-		/**
-		 * TODO : COSANPA
-		 * Pamela Gatinho - 17/05/2013
-		 * @param pagamentos
-		 * 
-		 * Metodo que pesquisa os objetos ContaHistorico relacionados aos pagamentos
-		 * enviados como parâmetro.
-		 */
-		public Collection pesquisarContaOuContaHistorico(Collection<Integer> idsPagamentos, String className) throws ControladorException;
+	public Collection pesquisarContaOuContaHistorico(Collection<Integer> idsPagamentos, String className) throws ControladorException;
 
+	public void atualizarVecimentoFaturaClienteResponsavel(Date dataVencimento, String anoMesReferencia) throws ControladorException;
+	
+	public Integer countFaturasClienteResponsaveis(String anoMesReferencia) throws ControladorException;
 }

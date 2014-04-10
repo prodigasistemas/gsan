@@ -16,7 +16,7 @@
 		<property name="complementoEndereco" type="java.lang.String" column="imec_dscomplementoendereco" length="25"/>
 		<property name="numeroMorador" type="java.lang.Short" column="imec_nnmorador" length="2"/>
 		<property name="numeroPontosUtilizacao" type="java.lang.Short" column="imec_nnpontosutilizacao" length="2"/>
-		<property name="numeroIptu" type="java.math.BigDecimal" column="imec_nniptu" length="20"/>
+		<property name="numeroIptu" type="java.lang.String" column="imec_nniptu" length="31"/>
 		<property name="numeroCelpe" type="java.lang.Long" column="imec_nncontratoenergia" length="10"/>
 		<property name="areaConstruida" type="java.math.BigDecimal" column="imec_nnareaconstruida" length="8" unique="false" optimistic-lock="true" lazy="false" generated="never"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="imec_tmultimaalteracao" length="8"/>

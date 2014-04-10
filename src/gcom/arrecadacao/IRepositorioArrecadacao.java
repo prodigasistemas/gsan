@@ -94,8 +94,8 @@ import gcom.arrecadacao.pagamento.PagamentoHistorico;
 import gcom.arrecadacao.pagamento.PagamentoSituacao;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteEndereco;
-import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteImovel;
+import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
 import gcom.cadastro.imovel.Imovel;
@@ -3842,7 +3842,7 @@ public interface IRepositorioArrecadacao {
 	 * @return ClienteFone
 	 * @throws ErroRepositorioException
 	 */
-	public ClienteFone pesquisarClienteFonePagamento(Integer idCliente)
+	public IClienteFone pesquisarClienteFonePagamento(Integer idCliente)
 			throws ErroRepositorioException;
 	
 	/**

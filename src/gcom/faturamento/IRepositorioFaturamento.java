@@ -12177,18 +12177,9 @@ public interface IRepositorioFaturamento {
 			Integer debitoCreditoSituacaoAtualId, Integer anoMesFaturamento)
 			throws ErroRepositorioException;
 	
-	/**
-	 * TODO : COSANPA
-	 * @author Pamela Gatinho
-	 * @date 17/05/2013
-	 * 
-	 * Pesquisa uma lista de contas na tabela conta histórico.
-	 * 
-	 * @param contasIds
-	 * @return Collection de contas em histórico
-	 * @exception ErroRepositorioException
-	 *                Descrição da exceção
-	 */
-	public Collection pesquisarContaOuContaHistorico(Collection idsContas, String className)
-		throws ErroRepositorioException;
+	public Collection pesquisarContaOuContaHistorico(Collection idsContas, String className) throws ErroRepositorioException;
+
+	public void atualizarVecimentoFaturaClienteResponsavel(Date dataVencimento, String anoMesReferencia) throws ErroRepositorioException;
+	
+	public Integer countFaturasClienteResponsaveis(String anoMesReferencia) throws ErroRepositorioException;
 }

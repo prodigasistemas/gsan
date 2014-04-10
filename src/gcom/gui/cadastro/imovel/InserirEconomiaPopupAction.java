@@ -84,6 +84,7 @@ import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.util.ConstantesSistema;
+import gcom.util.Util;
 import gcom.util.filtro.MaiorQue;
 import gcom.util.filtro.MenorQue;
 import gcom.util.filtro.ParametroSimples;
@@ -258,7 +259,7 @@ public class InserirEconomiaPopupAction extends GcomAction {
 						.getNumeroPontosUtilizacao().toString()));
 			}
 			
-			BigDecimal numeroIptu = null;
+			String numeroIptu = null;
 			if (economiaPopupActionForm.getNumeroIptu() != null
 					&& !economiaPopupActionForm.getNumeroIptu().equals("")) {
 				// verifica se existe no imovel, no imovelEconomia ou na coleção
@@ -270,8 +271,8 @@ public class InserirEconomiaPopupAction extends GcomAction {
 						colecaoImovelEconomiasModificadas, imovel,
 						economiaPopupActionForm.getNumeroIptu(), new Date());
 
-				numeroIptu = (new BigDecimal(economiaPopupActionForm
-						.getNumeroIptu().toString()));
+				numeroIptu = Util.formatarIPTU(economiaPopupActionForm
+						.getNumeroIptu().toString());
 
 			}
 

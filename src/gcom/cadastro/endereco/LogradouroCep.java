@@ -154,6 +154,20 @@ public class LogradouroCep extends ObjetoTransacao {
 		this.indicadorUso = indicadorUso;
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
+	
+	public LogradouroCep(Integer idLogradouro, Integer codigoCep) {
+		this.logradouro = new Logradouro(idLogradouro);
+		this.cep = new Cep(codigoCep);
+	}
+
+	public LogradouroCep(Integer id) {
+		this.id = id;
+	}
+
+	public LogradouroCep(Integer idLogradouro, Cep cep) {
+		this.id = idLogradouro;
+		this.cep = cep;
+	}
 
 	/**
 	 * @return Retorna o campo cep.
@@ -236,5 +250,49 @@ public class LogradouroCep extends ObjetoTransacao {
 	public String getDescricaoParaRegistroTransacao(){
 		return this.getLogradouro().getDescricaoParaRegistroTransacao()
 		 + " - " + this.cep.getCepFormatado();
+	}
+	
+	public boolean hasLogradouro(){
+		return logradouro != null && !logradouro.getId().equals(new Integer("0"));
+	}
+	
+	public boolean hasMunicipio(){
+		return logradouro.getMunicipio()!= null;
+	}
+	
+	public boolean hasTitulo(){
+		return logradouro.getLogradouroTitulo() != null && !logradouro.getLogradouroTitulo().equals("");
+	}
+	
+	public boolean hasDescricaoAbreviada(){
+		return logradouro.getLogradouroTitulo().hasDescricaoAbreviada();
+	}
+	
+	public boolean hasTituloDescricao(){
+		return logradouro.getLogradouroTitulo().hasDescricao();
+	}
+
+	public boolean hasTituloDescricaoAbreviada(){
+		return logradouro.getLogradouroTitulo().hasDescricaoAbreviada();
+	}
+	
+	public boolean hasTipoDescricao(){
+		return logradouro.getLogradouroTipo().hasDescricao();
+	}
+
+	public boolean hasTipoDescricaoAbreviada(){
+		return logradouro.getLogradouroTipo().hasDescricaoAbreviada();
+	}
+
+	public boolean hasLogradouroTipo(){
+		return logradouro.getLogradouroTipo() != null && !logradouro.getLogradouroTipo().equals("");
+	}
+
+	public boolean hasCep() {
+		return this.getCep() != null && this.getCep().getCepFormatado() != null;
+	}
+
+	public boolean hasUnidadeFederacao() {
+		return hasLogradouro() && logradouro.getMunicipio() != null && logradouro.getMunicipio().hasUnidadeFederacao();
 	}
 }

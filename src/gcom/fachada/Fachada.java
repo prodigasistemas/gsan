@@ -1,80 +1,3 @@
-/*
- * Copyright (C) 2007-2007 the GSAN - Sistema Integrado de Gestão de Serviços de Saneamento
- *
- * This file is part of GSAN, an integrated service management system for Sanitation
- *
- * GSAN is free software; you can redistribute it and/or modify
- * it under the terms of the GNU General Public License as published by
- * the Free Software Foundation; either version 2 of the License. 
- *
- * GSAN is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
- * GNU General Public License for more details.
- *
- * You should have received a copy of the GNU General Public License
- * along with this program; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
- */
-
-/*
- * GSAN - Sistema Integrado de Gestão de Serviços de Saneamento
- * Copyright (C) <2007> 
- * Adriano Britto Siqueira
- * Alexandre Santos Cabral
- * Ana Carolina Alves Breda
- * Ana Maria Andrade Cavalcante
- * Aryed Lins de Araújo
- * Bruno Leonardo Rodrigues Barros
- * Carlos Elmano Rodrigues Ferreira
- * Cláudio de Andrade Lira
- * Denys Guimarães Guenes Tavares
- * Eduardo Breckenfeld da Rosa Borges
- * Fabíola Gomes de Araújo
- * Flávio Leonardo Cavalcanti Cordeiro
- * Francisco do Nascimento Júnior
- * Homero Sampaio Cavalcanti
- * Ivan Sérgio da Silva Júnior
- * José Edmar de Siqueira
- * José Thiago Tenório Lopes
- * Kássia Regina Silvestre de Albuquerque
- * Leonardo Luiz Vieira da Silva
- * Márcio Roberto Batista da Silva
- * Maria de Fátima Sampaio Leite
- * Micaela Maria Coelho de Araújo
- * Nelson Mendonça de Carvalho
- * Newton Morais e Silva
- * Pedro Alexandre Santos da Silva Filho
- * Rafael Corrêa Lima e Silva
- * Rafael Francisco Pinto
- * Rafael Koury Monteiro
- * Rafael Palermo de Araújo
- * Raphael Veras Rossiter
- * Roberto Sobreira Barbalho
- * Rodrigo Avellar Silveira
- * Rosana Carvalho Barbosa
- * Sávio Luiz de Andrade Cavalcante
- * Tai Mu Shih
- * Thiago Augusto Souza do Nascimento
- * Tiago Moreno Rodrigues
- * Thiago Silva Toscano de Brito
- * Vivianne Barbosa Sousa
- * Anderson Italo Felinto de Lima
- *
- * Este programa é software livre; você pode redistribuí-lo e/ou
- * modificá-lo sob os termos de Licença Pública Geral GNU, conforme
- * publicada pela Free Software Foundation; versão 2 da
- * Licença.
- * Este programa é distribuído na expectativa de ser útil, mas SEM
- * QUALQUER GARANTIA; sem mesmo a garantia implícita de
- * COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
- * PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
- * detalhes.
- * Você deve ter recebido uma cópia da Licença Pública Geral GNU
- * junto com este programa; se não, escreva para Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
- * 02111-1307, USA.
- */
 package gcom.fachada;
 
 import gcom.arrecadacao.ArrecadacaoDadosDiarios;
@@ -195,7 +118,11 @@ import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendiment
 import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocalHome;
 import gcom.atendimentopublico.registroatendimento.EspecificacaoImovSitCriterio;
 import gcom.atendimentopublico.registroatendimento.EspecificacaoImovelSituacao;
+import gcom.atendimentopublico.registroatendimento.RABuilder;
+import gcom.atendimentopublico.registroatendimento.RADadosGeraisHelper;
+import gcom.atendimentopublico.registroatendimento.RALocalOcorrenciaHelper;
 import gcom.atendimentopublico.registroatendimento.RAReiteracao;
+import gcom.atendimentopublico.registroatendimento.RASolicitanteHelper;
 import gcom.atendimentopublico.registroatendimento.RaDadosAgenciaReguladora;
 import gcom.atendimentopublico.registroatendimento.RaEncerramentoComando;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
@@ -221,6 +148,8 @@ import gcom.atendimentopublico.registroatendimento.bean.RegistroAtendimentoEncer
 import gcom.atendimentopublico.registroatendimento.bean.RegistroAtendimentoFaltaAguaGeneralizadaHelper;
 import gcom.atendimentopublico.registroatendimento.bean.RegistroAtendimentoPendenteLocalOcorrenciaHelper;
 import gcom.atendimentopublico.registroatendimento.bean.VerificarRAFaltaAguaHelper;
+import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
+import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocalHome;
 import gcom.batch.ControladorBatchLocal;
 import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.ProcessoIniciado;
@@ -232,15 +161,16 @@ import gcom.cadastro.ControladorCadastroLocalHome;
 import gcom.cadastro.DbVersaoBase;
 import gcom.cadastro.EnvioEmail;
 import gcom.cadastro.ImovelInscricaoAlteradaHelper;
+import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCadastralHelper;
 import gcom.cadastro.atualizacaocadastral.bean.DadosTabelaAtualizacaoCadastralHelper;
+import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificado;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoBinario;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoCritica;
 import gcom.cadastro.atualizacaocadastralsimplificado.AtualizacaoCadastralSimplificadoLinha;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteEndereco;
-import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteTipo;
 import gcom.cadastro.cliente.ControladorClienteLocal;
@@ -249,6 +179,7 @@ import gcom.cadastro.cliente.EsferaPoder;
 import gcom.cadastro.cliente.FiltroCliente;
 import gcom.cadastro.cliente.FiltroClienteEndereco;
 import gcom.cadastro.cliente.FiltroClienteImovel;
+import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.cliente.bean.PesquisarClienteResponsavelSuperiorHelper;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.empresa.EmpresaCobrancaFaixa;
@@ -284,8 +215,8 @@ import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.cadastro.imovel.ImovelProgramaEspecial;
 import gcom.cadastro.imovel.ImovelSituacao;
 import gcom.cadastro.imovel.ImovelSubcategoria;
+import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
 import gcom.cadastro.imovel.Subcategoria;
-import gcom.cadastro.imovel.bean.GerarArquivoTextoAtualizacaoCadastralHelper;
 import gcom.cadastro.imovel.bean.ImovelAbaCaracteristicasHelper;
 import gcom.cadastro.imovel.bean.ImovelAbaCaracteristicasRetornoHelper;
 import gcom.cadastro.imovel.bean.ImovelAbaConclusaoHelper;
@@ -1712,6 +1643,28 @@ public class Fachada {
 			throw new SistemaException(e);
 		}
 	}
+	
+	private ControladorAtualizacaoCadastralLocal getControladorAtualizacaoCadastral() {
+		ControladorAtualizacaoCadastralLocalHome localHome = null;
+		ControladorAtualizacaoCadastralLocal local = null;
+
+		ServiceLocator locator = null;
+
+		try {
+			locator = ServiceLocator.getInstancia();
+
+			localHome = (ControladorAtualizacaoCadastralLocalHome) locator
+					.getLocalHome(ConstantesJNDI.CONTROLADOR_ATUALIZACAO_CADASTRAL);
+
+			local = localHome.create();
+
+			return local;
+		} catch (CreateException e) {
+			throw new SistemaException(e);
+		} catch (ServiceLocatorException e) {
+			throw new SistemaException(e);
+		}
+	}
 
 	// ********************----Métodos TABELA AUXILIAR
 	// ----********************//
@@ -2472,7 +2425,7 @@ public class Fachada {
 	 * @param imovel
 	 */
 	public String[] verificarPreenchimentoInserirDadosTarifaSocialMultiplas(
-			Long numeroCelpe, BigDecimal areaConstruida, BigDecimal numeroIPTU,
+			Long numeroCelpe, BigDecimal areaConstruida, String numeroIPTU,
 			Integer idImovelEconomia, String numeroCartaoSocial,
 			String dataValidadeCartaoSocial, String numeroParcelasCartaoSocial,
 			Integer consumoMedio, BigDecimal valorRendaFamiliar,
@@ -18120,70 +18073,10 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0366] Inserir Registro de Atendimento
-	 * 
-	 * [SB0028] é Inclui Registro de Atendimento
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 28/08/2006
-	 * 
-	 * @throws ControladorException
-	 */
-	public Integer[] inserirRegistroAtendimento(
-			short indicadorAtendimentoOnLine, String dataAtendimento,
-			String horaAtendimento, String tempoEsperaInicial,
-			String tempoEsperaFinal, Integer idMeioSolicitacao,
-			Integer idSolicitacaoTipoEspecificacao, String dataPrevista,
-			String observacao, Integer idImovel,
-			String descricaoLocalOcorrencia, Integer idSolicitacaoTipo,
-			Collection colecaoEndereco, String pontoReferenciaLocalOcorrencia,
-			Integer idBairroArea, Integer idLocalidade,
-			Integer idSetorComercial, Integer idQuadra,
-			Integer idDivisaoEsgoto, Integer idLocalOcorrencia,
-			Integer idPavimentoRua, Integer idPavimentoCalcada,
-			Integer idUnidadeAtendimento, Integer idUsuarioLogado,
-			Integer idCliente, String pontoReferenciaSolicitante,
-			String nomeSolicitante, boolean novoSolicitante,
-			Integer idUnidadeSolicitante, Integer idFuncionario,
-			Collection colecaoFone, Collection colecaoEnderecoSolicitante,
-			Integer idUnidadeDestino, String parecerUnidadeDestino,
-			Integer idServicoTipo, String numeroRAManual, Integer idRAJAGerado,
-			BigDecimal nnCoordenadaNorte, BigDecimal nnCoordenadaLeste,
-			short indicCoordenadaSemLogradouro,
-			Collection colecaoRegistroAtendimentoAnexo,
-			String protocoloAtendimento, Collection colecaoContas,
-			String observacaoOS,Collection colecaoPagamentos,
-			String habilitarCampoSatisfacaoEmail, String enviarEmailSatisfacao, String enderecoEmail,
-			BigDecimal nnDiametro) {
+	public Integer[] inserirRegistroAtendimento(RADadosGeraisHelper raDadosGerais, RALocalOcorrenciaHelper raLocalOcorrencia, RASolicitanteHelper raSolicitante) {
 
 		try {
-			return this.getControladorRegistroAtendimento()
-					.inserirRegistroAtendimento(indicadorAtendimentoOnLine,
-							dataAtendimento, horaAtendimento,
-							tempoEsperaInicial, tempoEsperaFinal,
-							idMeioSolicitacao, idSolicitacaoTipoEspecificacao,
-							dataPrevista, observacao, idImovel,
-							descricaoLocalOcorrencia, idSolicitacaoTipo,
-							colecaoEndereco, pontoReferenciaLocalOcorrencia,
-							idBairroArea, idLocalidade, idSetorComercial,
-							idQuadra, idDivisaoEsgoto, idLocalOcorrencia,
-							idPavimentoRua, idPavimentoCalcada,
-							idUnidadeAtendimento, idUsuarioLogado, idCliente,
-							pontoReferenciaSolicitante, nomeSolicitante,
-							novoSolicitante, idUnidadeSolicitante,
-							idFuncionario, colecaoFone,
-							colecaoEnderecoSolicitante, idUnidadeDestino,
-							parecerUnidadeDestino, idServicoTipo,
-							numeroRAManual, idRAJAGerado, nnCoordenadaNorte,
-							nnCoordenadaLeste, indicCoordenadaSemLogradouro,
-							colecaoRegistroAtendimentoAnexo,
-							protocoloAtendimento, 
-							colecaoContas, 
-							observacaoOS,
-							colecaoPagamentos,
-							habilitarCampoSatisfacaoEmail, enviarEmailSatisfacao, enderecoEmail,
-							nnDiametro);
+			return this.getControladorRegistroAtendimento().inserirRegistroAtendimento(raDadosGerais, raLocalOcorrencia, raSolicitante);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex
 					.getParametroMensagem());
@@ -23396,7 +23289,7 @@ public class Fachada {
 	 *            Descrição do parâmetro
 	 */
 	public String[] verificarPreenchimentoInserirDadosTarifaSocial(
-			Long numeroCelpe, BigDecimal areaConstruida, BigDecimal numeroIPTU,
+			Long numeroCelpe, BigDecimal areaConstruida, String numeroIPTU,
 			Integer idImovel, String numeroCartaoSocial,
 			String dataValidadeCartaoSocial, String numeroParcelasCartaoSocial,
 			Integer consumoMedio, BigDecimal valorRendaFamiliar,
@@ -24442,7 +24335,7 @@ public class Fachada {
 	 * 
 	 * @return ClienteFone
 	 */
-	public ClienteFone pesquisarClienteFonePagamento(Integer idCliente) {
+	public IClienteFone pesquisarClienteFonePagamento(Integer idCliente) {
 		try {
 			return this.getControladorArrecadacao()
 					.pesquisarClienteFonePagamento(idCliente);
@@ -25668,7 +25561,7 @@ public class Fachada {
 	 * @author Rafael Corrêa
 	 * @throws ControladorException
 	 */
-	public Integer verificarNumeroIptu(BigDecimal numeroIptu, Integer idImovel,
+	public Integer verificarNumeroIptu(String numeroIptu, Integer idImovel,
 			Integer idImovelEconomia, Integer idMunicipio) {
 		try {
 			return this.getControladorImovel().verificarNumeroIptu(numeroIptu,
@@ -25731,7 +25624,7 @@ public class Fachada {
 	 * @throws ControladorException
 	 */
 	public void verificarPreenchimentoManterDadosTarifaSocial(Long numeroCelpe,
-			BigDecimal areaConstruida, BigDecimal numeroIPTU, Integer idImovel,
+			BigDecimal areaConstruida, String numeroIPTU, Integer idImovel,
 			String numeroCartaoSocial, String dataValidadeCartaoSocial,
 			String numeroParcelasCartaoSocial, Integer consumoMedio,
 			BigDecimal valorRendaFamiliar, String tarifaSocialCartaoTipo,
@@ -25776,7 +25669,7 @@ public class Fachada {
 	 * @throws ControladorException
 	 */
 	public void verificarPreenchimentoManterDadosTarifaSocialMultiplasEconomias(
-			Long numeroCelpe, BigDecimal areaConstruida, BigDecimal numeroIPTU,
+			Long numeroCelpe, BigDecimal areaConstruida, String numeroIPTU,
 			Integer idImovelEconomia, String numeroCartaoSocial,
 			String dataValidadeCartaoSocial, String numeroParcelasCartaoSocial,
 			Integer consumoMedio, BigDecimal valorRendaFamiliar,
@@ -39063,28 +38956,11 @@ public class Fachada {
 		}
 	}
 
-	public void carregarImovelAtualizacaoCadastral(BufferedReader buffer, ArrayList<String> nomesImagens) {
-		try {
-			this.getControladorCadastro().carregarImovelAtualizacaoCadastral(
-					buffer, nomesImagens);
-		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex
-					.getParametroMensagem());
-		}
+	public AtualizacaoCadastral carregarImovelAtualizacaoCadastral(BufferedReader buffer, List<String> imagens) throws Exception {
+		return this.getControladorCadastro().carregarImovelAtualizacaoCadastral(
+				buffer, imagens);
 	}
 	
-	/**
-	 * 
-	 * [UC0889] - Alterar datas das leituras
-	 * 
-	 * Pesquisamos todos os dados necessários para a alteração das datas
-	 * 
-	 * @author bruno
-	 * @date 26/02/2009
-	 * 
-	 * @param idGrupoFaturamento
-	 * @return
-	 */
 	public Collection<AlterarDatasLeiturasHelper> pesquisarDadosAlterarGruposFaturamento(
 			Integer idGrupoFaturamento) {
 		try {
@@ -39096,18 +38972,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * 
-	 * [UC0889] - Alterar datas das leituras
-	 * 
-	 * Alteramos todos as datas informadas
-	 * 
-	 * @author bruno
-	 * @date 26/02/2009
-	 * 
-	 * @param idGrupoFaturamento
-	 * @return
-	 */
 	public void alterarDatasLeituras(
 			Collection<AlterarDatasLeiturasHelper> colHelper, Integer idGrupo) {
 		try {
@@ -39119,19 +38983,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0215] Consultar Posicao do Faturamento
-	 * 
-	 * Retorna as Leituras não registradas para o Consultar Posicao de
-	 * Faturamento
-	 * 
-	 * @author Vinicius Medeiros
-	 * @date 18/03/2009
-	 * 
-	 * @param faturamentoGrupo
-	 * @throws ErroRepositorioException
-	 * 
-	 */
 	public Collection retornarLeiturasNaoRegistradas(
 			FaturamentoGrupo faturamentoGrupo) {
 		try {
@@ -39143,14 +38994,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral
-	 * 
-	 * @author Ana Maria
-	 * @date 04/03/2009
-	 * 
-	 * @return Collection
-	 */
 	public Collection pesquisarArquivoTextoAtualizacaoCadastro(
 			String idEmpresa, String idLocalidade, String idAgenteComercial,
 			String idSituacaoTransmissao) {
@@ -39165,33 +39008,16 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral
-	 * 
-	 * @author Ana Maria
-	 * @date 04/03/2009
-	 * 
-	 * @return Collection
-	 */
 	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(
-			String idArquivoTxt) {
+			Integer idArquivoTxt) {
 		try {
-			return this.getControladorCadastro()
-					.pesquisarArquivoTextoAtualizacaoCadastro(idArquivoTxt);
+			return this.getControladorCadastro().pesquisarArquivoTextoAtualizacaoCadastro(idArquivoTxt);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex
 					.getParametroMensagem());
 		}
 	}
 	
-	/**
-	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral
-	 * 
-	 * @author COSANPA - Felipe Santos
-	 * @date 04/12/2013
-	 * 
-	 * @return Collection
-	 */
 	public Collection<ArquivoTextoAtualizacaoCadastral> pesquisarArquivoTextoAtualizacaoCadastro(
 			String[] idsArquivoTxt) {
 		try {
@@ -39203,15 +39029,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * 
-	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral
-	 * 
-	 * @author Ana Maria
-	 * @date 05/03/2009
-	 * 
-	 * @return void
-	 */
 	public void atualizarArquivoTextoAtualizacaoCadstral(Integer idArquivoTxt) {
 		try {
 			this.getControladorCadastro()
@@ -39222,12 +39039,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Pesquisa os bancos q tem imoveis cadastrados em debito automatico
-	 * 
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	public Collection<Banco> pesquisarBancoDebitoAutomatico() {
 		try {
 			return this.getControladorArrecadacao()
@@ -39238,14 +39049,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0146] Manter Conta
-	 * 
-	 * FS0028 - Verificar parâmetro consulta e débito automático
-	 * 
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	public Collection pesquisarImoveisBancoDebitoAutomatico(String[] bancos) {
 		try {
 			return this.getControladorArrecadacao()
@@ -39286,12 +39089,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Consultar os dodos cliente usuário do Imovel
-	 * 
-	 * @author Arthur Carvalho
-	 * @date 12/03/2009
-	 */
 	public Object[] consultarDadosClienteUsuarioImovel(String idImovel) {
 		try {
 			return this.getControladorImovel()
@@ -39303,14 +39100,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Gerar Relatório de Imóveis Outros Critérios
-	 * 
-	 * @author Rômulo Aurelio
-	 * @date 13/03/2009
-	 * 
-	 * @throws ControladorException
-	 */
 	public Integer gerarRelatorioCadastroConsumidoresInscricaoCount(
 			String idImovelCondominio, String idImovelPrincipal,
 			String idSituacaoLigacaoAgua, String consumoMinimoInicialAgua,
@@ -39380,14 +39169,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Gerar Relatório de Imóveis Outros Critérios
-	 * 
-	 * @author Rômulo Aurelio
-	 * @date 13/03/2009
-	 * 
-	 * @throws ControladorException
-	 */
 	public Integer gerarRelatorioImovelEnderecoOutrosCriteriosCount(
 			String idImovelCondominio, String idImovelPrincipal,
 			String idSituacaoLigacaoAgua, String consumoMinimoInicialAgua,
@@ -40229,8 +40010,8 @@ public class Fachada {
 	 * @return
 	 */
 	public Collection<DadosTabelaAtualizacaoCadastralHelper> consultarDadosTabelaColunaAtualizacaoCadastral(
-			Integer idRegistroAlterado, Integer idArquivo, Integer idImovel,
-			Integer idCliente,Integer idTipoAlteracao) {
+			Long idRegistroAlterado, Integer idArquivo, Integer idImovel,
+			Long idCliente,Integer idTipoAlteracao) {
 
 		try {
 			return this.getControladorTransacao()
@@ -40242,41 +40023,19 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * @author Ivan Sergio
-	 * @date 12/06/2009
-	 * 
-	 * @param idAtualizacaoCadastral
-	 */
-	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(
-			String[] idsAtualizacaoCadastral,	Short indicador, Usuario usuarioLogado) {
+	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer idImovel, String[] idsAtualizacaoCadastral,	Short indicador, Usuario usuarioLogado) {
 		try {
-			this.getControladorTransacao()
-					.atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(
-							idsAtualizacaoCadastral, indicador,usuarioLogado);
+			this.getControladorTransacao().atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(idImovel, idsAtualizacaoCadastral, indicador, usuarioLogado);
 		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex
-					.getParametroMensagem());
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
 
-	/**
-	 * @author Ana Maria
-	 * @date 16/06/2009
-	 * 
-	 * @param idArgumento
-	 * @param indicador
-	 * @throws ErroRepositorioException
-	 */
-	public void atualizarIndicadorAutorizacaoTabelaAtualizacaoCadastral(
-			Integer idArgumento, Short indicador) {
+	public void atualizarIndicadorAutorizacaoTabelaAtualizacaoCadastral(Integer idArgumento, Short indicador) {
 		try {
-			this.getControladorTransacao()
-					.atualizarIndicadorAutorizacaoTabelaAtualizacaoCadastral(
-							idArgumento, indicador);
+			this.getControladorTransacao().atualizarIndicadorAutorizacaoTabelaAtualizacaoCadastral(idArgumento, indicador);
 		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex
-					.getParametroMensagem());
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
 
@@ -53776,7 +53535,7 @@ public class Fachada {
 		}
 	}
 	
-	public Collection<Integer> pesquisarRotasAtualizacaoCadastral(GerarArquivoTextoAtualizacaoCadastralHelper helper) {
+	public Collection<Integer> pesquisarRotasAtualizacaoCadastral(ImovelGeracaoTabelasTemporariasCadastroHelper helper) {
 		try {
 			return this.getControladorCadastro().pesquisarRotasAtualizacaoCadastral(helper);
 		} catch (ControladorException ex) {
@@ -53784,16 +53543,46 @@ public class Fachada {
 		}
 	}
 	
-	/**
-	 * TODO : COSANPA
-	 * @author Pamela Gatinho
-	 * @date 17/05/2013
-	 * 
-	 * @param pagamentoSituacao
-	 * @param dataInicial
-	 * @param dataFinal
-	 * @return
-	 */
+	public SituacaoAtualizacaoCadastral pesquisarSituacaoAtualizacaoCadastralPorId(Integer idSituacao) {
+		try{
+			return this.getControladorCadastro().pesquisarSituacaoAtualizacaoCadastralPorId(idSituacao);
+		}catch(ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+	
+	public Collection<Integer> pesquisarImoveisPorSituacaoPeriodo(Date dataInicial, Date dataFinal, Integer idSituacaoCadastral) {
+		try {
+			return this.getControladorAtualizacaoCadastral().pesquisarImoveisPorSituacaoPeriodo(dataInicial, dataFinal, idSituacaoCadastral);
+		}catch(ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+	
+	public Collection<ImovelSubcategoriaAtualizacaoCadastral> pesquisarSubCategoriasAtualizacaoCadastral(Integer idImovel) throws Exception{
+		return this.getControladorAtualizacaoCadastral().pesquisarSubCategoriasAtualizacaoCadastral(idImovel);
+	}
+	
+	public String retornaIpServidorOperacional() throws Exception{
+		return this.getControladorCadastro().retornaIpServidorOperacional();
+	}
+	
+	public void atualizarVecimentoFaturaClienteResponsavel(Date dataVencimento, String anoMesReferencia) {
+		try {
+			this.getControladorFaturamento().atualizarVecimentoFaturaClienteResponsavel(dataVencimento, anoMesReferencia);
+		} catch (ControladorException e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public Integer countFaturasClienteResponsaveis(String anoMesReferencia) {
+		try{
+			return this.getControladorFaturamento().countFaturasClienteResponsaveis(anoMesReferencia);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+	
 	public Collection<Pagamento> obterPagamentos(Collection<Integer> idPagamentos) {
 		try {
 			return this.getControladorArrecadacao().obterPagamentos(idPagamentos);
@@ -53803,18 +53592,6 @@ public class Fachada {
 		}
 	}
 	
-	/**
-	 * TODO : COSANPA
-	 * @author Pamela Gatinho
-	 * @date 17/05/2013
-	 * 
-	 * Nova regra para classificar pagamentos em DUPLICIDADE, CANCELADO POR PARCELAMENTO
-	 * @param pagamentoSituacao
-	 * @param dataInicial
-	 * @param dataFinal
-	 * @return
-	 * @throws ControladorException 
-	 */
 	public void classificarPagamentosResolvidos(Collection<Pagamento> pagamentos, Usuario usuarioLogado,
 			CreditoTipo creditoTipo, CreditoOrigem creditoOrigem, boolean indicadorIncluirCredito) 
 		throws ControladorException {
@@ -53826,4 +53603,5 @@ public class Fachada {
 					.getParametroMensagem());
 		}
 	}
+
 }

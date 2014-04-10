@@ -102,9 +102,10 @@ public class DadosTabelaAtualizacaoCadastralHelper implements Serializable{
 	
 	private Integer idAlteracaoTipo;
 	private String descricaoAlteracaoTipo;
-	private Date dataProcessamento;
+	private Date dataValidacao;
 	private String imovelSubcategoria;
 	
+	private String nomeUsuario;
 	
 	/**
 	 * @return Retorna o campo colunaValorAnterior.
@@ -251,16 +252,26 @@ public class DadosTabelaAtualizacaoCadastralHelper implements Serializable{
 	public void setUltimaAtualizacao(Date ultimaAtualizacao) {
 		this.ultimaAtualizacao = ultimaAtualizacao;
 	}
-	public Date getDataProcessamento() {
-		return dataProcessamento;
+	public Date getDataValidacao() {
+		return dataValidacao;
 	}
-	public void setDataProcessamento(Date dataProcessamento) {
-		this.dataProcessamento = dataProcessamento;
+	public void setDataValidacao(Date dataValidacao) {
+		this.dataValidacao = dataValidacao;
 	}
 	public String getImovelSubcategoria() {
 		return imovelSubcategoria;
 	}
 	public void setImovelSubcategoria(String imovelSubcategoria) {
 		this.imovelSubcategoria = imovelSubcategoria;
+	}
+	public String getNomeUsuario() {
+		return nomeUsuario;
+	}
+	public void setNomeUsuario(String nomeUsuario) {
+		this.nomeUsuario = nomeUsuario;
+	}
+	public String toString() {
+		return "DadosTabelaAtualizacaoCadastralHelper [descricaoTabela=" + descricaoTabela + ", descricaoColuna=" + descricaoColuna + ", colunaValorAnterior="
+				+ colunaValorAnterior + ", colunaValorAtual=" + colunaValorAtual + ", dataValidacao=" + dataValidacao + ", nomeUsuario=" + nomeUsuario + "]";
 	}
 }

@@ -565,10 +565,10 @@ public class RepositorioClienteImovelHBM implements IRepositorioClienteImovel {
 	 * @return Colletion
 	 * @throws ErroRepositorioException
 	 */
-	public Collection pesquisarClienteImovel(Integer idCliente, Integer idImovel)
+	public Collection<ClienteImovel> pesquisarClienteImovel(Integer idCliente, Integer idImovel)
 			throws ErroRepositorioException {
 
-		Collection retorno = null;
+		Collection<ClienteImovel> retorno = null;
 
 		Session session = HibernateUtil.getSession();
 
@@ -581,8 +581,9 @@ public class RepositorioClienteImovelHBM implements IRepositorioClienteImovel {
 					+ " left join clim.imovel imov"
 					+ " where clie.id  = :idCliente AND imov.id = :idImovel AND clim.dataFimRelacao IS NULL ";
 
-			retorno = (Collection) session.createQuery(consulta).setInteger(
-					"idCliente", idCliente).setInteger("idImovel", idImovel).list();
+			retorno = (Collection) session.createQuery(consulta)
+					.setInteger("idCliente", idCliente)
+					.setInteger("idImovel", idImovel).list();
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
@@ -1248,22 +1249,22 @@ public class RepositorioClienteImovelHBM implements IRepositorioClienteImovel {
 	 * @return Collection
 	 * @throws ControladorException
 	 */
-	public Collection pesquisarClienteImovel(Integer idImovel)
-		throws ErroRepositorioException {
-
-		Collection retorno = null;
+	public Collection<ClienteImovel> pesquisarClienteImovel(Integer idImovel) throws ErroRepositorioException {
+		Collection<ClienteImovel> retorno = null;
 		Session session = HibernateUtil.getSession();
 		String consulta = null;
-		
 		try {
 			consulta = "SELECT clienteImovel " 
-					 + "from ClienteImovel clienteImovel " 
+					 + "from ClienteImovel clienteImovel "
+					 + " left join fetch clienteImovel.clienteRelacaoTipo relacao " 
+					 + " inner join fetch clienteImovel.cliente cliente " 
+					 + " inner join fetch cliente.clienteTipo tipo " 
 					 + "where clienteImovel.imovel.id = :idImovel " 
 					 + "and clienteImovel.dataFimRelacao is null ";
 		
-			retorno = session.createQuery(consulta).setInteger("idImovel",
-					idImovel.intValue()).list();
-		
+			retorno = session.createQuery(consulta)
+					.setInteger("idImovel",	idImovel.intValue())
+					.list();
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
@@ -1562,5 +1563,43 @@ public class RepositorioClienteImovelHBM implements IRepositorioClienteImovel {
 
 		return retorno;
 	}
+	
+	public boolean existeClienteImovelTipo(Integer idCliente, Integer idImovel, Integer idTipo, String cpfCnpj)	throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+
+
+		try {
+			StringBuilder sql = new StringBuilder();
+			sql.append(" select clim.cliente.id, clim.cliente.nome")
+			.append(" from ClienteImovel clim")
+			.append(" left join clim.cliente clie")
+			.append(" left join clim.imovel imov")
+			.append(" inner join clim.clienteRelacaoTipo tipo ")
+			.append(" where (clie.id  = :idCliente or clie.cpf = :cpf or clie.cnpj = :cnpj)")
+			.append("   AND imov.id = :idImovel ")
+			.append("   AND clim.dataFimRelacao IS NULL ")
+			.append("   AND tipo.id = :idTipo");
+
+			Collection retorno = (Collection) session.createQuery(sql.toString())
+					.setInteger("idCliente", idCliente)
+					.setInteger("idImovel", idImovel)
+					.setInteger("idTipo", idTipo)
+					.setString("cpf", cpfCnpj)
+					.setString("cnpj", cpfCnpj)
+					.list();
+			
+			if (retorno.size() > 0){
+				return true;
+			}
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return false;
+	}
+	
 }
 

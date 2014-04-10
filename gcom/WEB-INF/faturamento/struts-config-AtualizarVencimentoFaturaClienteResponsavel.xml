@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="AtualizarVencimentoFaturaClienteResponsavelActionForm"
+			type="gcom.gui.faturamento.AtualizarVencimentoFaturaClienteResponsavelActionForm" />
+	</form-beans>
+
+	<global-forwards />
+	
+	<action-mappings>
+
+		<action name="AtualizarVencimentoFaturaClienteResponsavelActionForm"
+			type="gcom.gui.faturamento.ExibirAtualizarVencimentoFaturaClienteResponsavelAction"
+			validate="false"
+			scope="session" 
+			path="/exibirAtualizarVencimentoFaturaClienteResponsavel">
+			<forward name="exibirAtualizarVencimentoFaturaClienteResponsavel"
+			      path="/jsp/faturamento/atualizar_vencimento_fatura_cliente_responsavel.jsp"/>
+		</action>
+		
+		
+		<action name="AtualizarVencimentoFaturaClienteResponsavelActionForm"
+			type="gcom.gui.faturamento.AtualizarVencimentoFaturaClienteResponsavelAction"
+			validate="false"
+			scope="session" 
+			path="/atualizarVencimentoFaturaClienteResponsavelAction">
+			<forward name="exibirAtualizarVencimentoFaturaClienteResponsavel"
+			      path="/jsp/faturamento/atualizar_vencimento_fatura_cliente_responsavel.jsp"/>
+		</action>
+		
+	</action-mappings>
+
+</struts-config>

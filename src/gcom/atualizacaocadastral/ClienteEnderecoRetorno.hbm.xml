@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  <!--
+    Created by the Middlegen Hibernate plugin
+
+    http://boss.bekk.no/boss/middlegen/
+    http://hibernate.sourceforge.net/
+-->
+  <class table="atualizacaocadastral.cliente_endereco_retorno" name="gcom.atualizacaocadastral.ClienteEnderecoRetorno">
+    <id name="id" type="java.lang.Integer" column="cler_id">
+      <generator class="sequence">
+        <param name="sequence">atualizacaocadastral.seq_cliente_endereco_retorno</param>
+      </generator>
+    </id>
+    <property name="numero" type="java.lang.String" column="cler_nnimovel" length="5"/>
+    <property name="complemento" type="java.lang.String" column="cler_dscomplementoendereco" length="25"/>
+    <property name="ultimaAlteracao" type="java.sql.Timestamp" column="cler_tmultimaalteracao" length="8"/>
+    <property name="nomeMunicipio" type="java.lang.String" column="cler_nmmunicipio" length="15"/>
+    <property name="nomeBairro" type="java.lang.String" column="cler_nmbairro" length="20"/>
+    <property name="descricaoLogradouro" type="java.lang.String" column="cler_dslogradouro" length="40"/>
+    <property name="codigoCep" type="java.lang.Integer" column="cler_cdcep" length="8"/>
+    <property name="idClienteRetorno" type="java.lang.Integer" column="clir_id" length="8"/>
+    
+    
+    <!-- associations -->
+    <!-- bi-directional many-to-one association to EnderecoTipo -->
+    <many-to-one name="enderecoTipo" class="gcom.cadastro.endereco.EnderecoTipo" not-null="true">
+      <column name="edtp_id"/>
+    </many-to-one>
+    <!-- bi-directional many-to-one association to Cliente -->
+    <many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="true">
+      <column name="clie_id"/>
+    </many-to-one>
+  </class>
+</hibernate-mapping>

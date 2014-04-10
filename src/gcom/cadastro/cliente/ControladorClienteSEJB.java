@@ -90,6 +90,7 @@ import gcom.cadastro.endereco.LogradouroTitulo;
 import gcom.cadastro.geografico.Bairro;
 import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.geografico.UnidadeFederacao;
+import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cadastro.tarifasocial.FiltroTarifaSocialDadoEconomia;
 import gcom.cadastro.tarifasocial.TarifaSocialDadoEconomia;
@@ -1068,68 +1069,27 @@ public class ControladorClienteSEJB implements SessionBean {
 		return retorno;
 	}
 
-	/**
-	 * Pesquisa todos os telefones de um cliente
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 23/08/2006
-	 * 
-	 * @param idCliente
-	 * @return Collection
-	 * @throws ControladorException
-	 */
-	public Collection pesquisarClienteFone(Integer idCliente)
+	@SuppressWarnings("unchecked")
+	public Collection<ClienteFone> pesquisarClienteFone(Integer idCliente)
 			throws ControladorException {
 
-		//Collection colecaoFone = null;
-		//Collection colecaoRetorno = null;
-
 		try {
-			return this.repositorioCliente
-					.pesquisarClienteFone(idCliente);
+			return this.repositorioCliente.pesquisarClienteFone(idCliente);
 		} catch (ErroRepositorioException ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}
 
-		/*if (colecaoFone != null && !colecaoFone.isEmpty()) {
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<ClienteFone> pesquisarClienteFoneDoImovel(Integer idImovel) throws ControladorException {
 
-			Iterator foneIterator = colecaoFone.iterator();
-			ClienteFone clienteFone = null;
-			FoneTipo foneTipo = null;
+		try {
+			return this.repositorioCliente.pesquisarClienteFoneDoImovel(idImovel);
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
 
-			colecaoRetorno = new ArrayList();
-
-			while (foneIterator.hasNext()) {
-
-				clienteFone = new ClienteFone();
-
-				Object[] arrayFone = (Object[]) foneIterator.next();
-
-				clienteFone.setId((Integer) arrayFone[0]);
-
-				clienteFone.setUltimaAlteracao((Date) arrayFone[5]);
-
-				if (arrayFone[1] != null) {
-					clienteFone.setDdd((String) arrayFone[1]);
-				}
-
-				clienteFone.setTelefone((String) arrayFone[2]);
-
-				if (arrayFone[3] != null) {
-					clienteFone
-							.setIndicadorTelefonePadrao((Short) arrayFone[3]);
-				}
-
-				foneTipo = new FoneTipo();
-				foneTipo.setDescricao((String) arrayFone[4]);
-
-				clienteFone.setFoneTipo(foneTipo);
-
-				colecaoRetorno.add(clienteFone);
-			}
-		}*/
-
-		//return colecaoRetorno;
 	}
 
 	/**
@@ -2667,24 +2627,24 @@ public class ControladorClienteSEJB implements SessionBean {
 	 * @throws ErroRepositorioException
 	 */
 
-	public ClienteAtualizacaoCadastral obterClientetuAlizacaoCadastral(Integer idImovel, 
+	public IClienteAtualizacaoCadastral obterClienteAtualizacaoCadastral(Integer idImovel, 
 			Short idClienteRelacaoTipo) throws ControladorException{
 	
 		try {
-			ClienteAtualizacaoCadastral cliente = null;	
+			IClienteAtualizacaoCadastral cliente = null;	
 			
 			Object[] element =  this.repositorioCliente.obterDadosCliente(idImovel, idClienteRelacaoTipo);
 			
 			if (element != null) {				
 
-				cliente = new ClienteAtualizacaoCadastral();		
+				cliente = new ClienteAtualizacaoCadastral();
 			
 				cliente.setIdCliente((Integer) element[0]);					
 				
 				cliente.setIdImovel(idImovel);
 					
 				if (element[1] != null){
-					cliente.setNomeCliente((String) element[1]);
+					cliente.setNome((String) element[1]);
 				}
 				
 				if (element[2] != null){
@@ -2692,9 +2652,9 @@ public class ControladorClienteSEJB implements SessionBean {
 				}
 				
 				if (element[3] != null){
-					cliente.setCpfCnpj((String) element[3]);
+					cliente.setCpf((String) element[3]);
 				}else if(element[4] != null){
-					cliente.setCpfCnpj((String) element[4]);
+					cliente.setCpf((String) element[4]);
 				}
 				
 				if (element[5] != null){
@@ -2731,7 +2691,7 @@ public class ControladorClienteSEJB implements SessionBean {
 				}
 				
 				if (element[11] != null){
-					cliente.setIdPessoaSexo((Integer)element[11]);
+					cliente.getPessoaSexo().setId(((Integer)element[11]));
 				}
 				
 				if (element[12] != null){
@@ -2958,7 +2918,7 @@ public class ControladorClienteSEJB implements SessionBean {
      * @date 15/05/2009
 	 * @exception ErroRepositorioException
 	 */
-	public ClienteAtualizacaoCadastral pesquisarClienteAtualizacaoCadastral(Integer idCliente, Integer idImovel, Integer idClienteRelacaoTipo)
+	public IClienteAtualizacaoCadastral pesquisarClienteAtualizacaoCadastral(Integer idCliente, Integer idImovel, Integer idClienteRelacaoTipo)
 		throws ControladorException {
 	    try {
 	        return repositorioCliente.pesquisarClienteAtualizacaoCadastral(idCliente, idImovel, idClienteRelacaoTipo);

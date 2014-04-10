@@ -16,7 +16,7 @@
 		<property name="colunaValorAnterior" type="java.lang.String" column="tcac_cnvaloranterior" length="100"/>
 		<property name="colunaValorAtual" type="java.lang.String" column="tcac_cnvaloratual" length="100"/>
 		<property name="indicadorAutorizado" type="java.lang.Short" column="tcac_icautorizado" length="2"/>
-		<property name="dataProcessamento" type="java.sql.Date" column="tcac_dtprocessamento" length="4"/>
+		<property name="dataValidacao" type="java.sql.Timestamp" column="tcac_dtvalidacao" length="4"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="tcac_ultimaatualizacao" length="8"/>
 		<!-- Associations -->
 		<!-- bi-directional many-to-one association to Tabela -->
@@ -25,6 +25,9 @@
 		</many-to-one>
 		<many-to-one name="tabelaColuna" class="gcom.seguranca.transacao.TabelaColuna" not-null="true">
 			<column name="tbco_id"/>
+		</many-to-one>
+		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario" not-null="true">
+			<column name="usur_id"/>
 		</many-to-one>
 	</class>
 </hibernate-mapping>

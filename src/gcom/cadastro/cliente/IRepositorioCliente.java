@@ -424,7 +424,7 @@ public interface IRepositorioCliente {
      * @date 15/05/2009
 	 * @exception ErroRepositorioException
 	 */
-	public ClienteAtualizacaoCadastral pesquisarClienteAtualizacaoCadastral(Integer idCliente, Integer idImovel, Integer idClienteRelacaoTipo)
+	public IClienteAtualizacaoCadastral pesquisarClienteAtualizacaoCadastral(Integer idCliente, Integer idImovel, Integer idClienteRelacaoTipo)
 		throws ErroRepositorioException;
 	
 	/**
@@ -577,6 +577,8 @@ public interface IRepositorioCliente {
      * @author Wellington Rocha
      *                
      */
-    public ClienteTipo pesquisarClienteTipo(Integer idClienteTipo)
-            throws ErroRepositorioException;
+    public ClienteTipo pesquisarClienteTipo(Integer idClienteTipo) throws ErroRepositorioException;
+    
+	public Collection<ClienteFone> pesquisarClienteFoneDoImovel(Integer idImovel) throws ErroRepositorioException;
+
 }

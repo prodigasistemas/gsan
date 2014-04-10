@@ -1,78 +1,78 @@
 /*
-* Copyright (C) 2007-2007 the GSAN - Sistema Integrado de Gestão de Serviços de Saneamento
-*
-* This file is part of GSAN, an integrated service management system for Sanitation
-*
-* GSAN is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License.
-*
-* GSAN is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
-*/
+ * Copyright (C) 2007-2007 the GSAN - Sistema Integrado de Gestão de Serviços de Saneamento
+ *
+ * This file is part of GSAN, an integrated service management system for Sanitation
+ *
+ * GSAN is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation; either version 2 of the License.
+ *
+ * GSAN is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
+ */
 
 /*
-* GSAN - Sistema Integrado de Gestão de Serviços de Saneamento
-* Copyright (C) <2007> 
-* Adriano Britto Siqueira
-* Alexandre Santos Cabral
-* Ana Carolina Alves Breda
-* Ana Maria Andrade Cavalcante
-* Aryed Lins de Araújo
-* Bruno Leonardo Rodrigues Barros
-* Carlos Elmano Rodrigues Ferreira
-* Cláudio de Andrade Lira
-* Denys Guimarães Guenes Tavares
-* Eduardo Breckenfeld da Rosa Borges
-* Fabíola Gomes de Araújo
-* Flávio Leonardo Cavalcanti Cordeiro
-* Francisco do Nascimento Júnior
-* Homero Sampaio Cavalcanti
-* Ivan Sérgio da Silva Júnior
-* José Edmar de Siqueira
-* José Thiago Tenório Lopes
-* Kássia Regina Silvestre de Albuquerque
-* Leonardo Luiz Vieira da Silva
-* Márcio Roberto Batista da Silva
-* Maria de Fátima Sampaio Leite
-* Micaela Maria Coelho de Araújo
-* Nelson Mendonça de Carvalho
-* Newton Morais e Silva
-* Pedro Alexandre Santos da Silva Filho
-* Rafael Corrêa Lima e Silva
-* Rafael Francisco Pinto
-* Rafael Koury Monteiro
-* Rafael Palermo de Araújo
-* Raphael Veras Rossiter
-* Roberto Sobreira Barbalho
-* Rodrigo Avellar Silveira
-* Rosana Carvalho Barbosa
-* Sávio Luiz de Andrade Cavalcante
-* Tai Mu Shih
-* Thiago Augusto Souza do Nascimento
-* Tiago Moreno Rodrigues
-* Vivianne Barbosa Sousa
-*
-* Este programa é software livre; você pode redistribuí-lo e/ou
-* modificá-lo sob os termos de Licença Pública Geral GNU, conforme
-* publicada pela Free Software Foundation; versão 2 da
-* Licença.
-* Este programa é distribuído na expectativa de ser útil, mas SEM
-* QUALQUER GARANTIA; sem mesmo a garantia implícita de
-* COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
-* PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
-* detalhes.
-* Você deve ter recebido uma cópia da Licença Pública Geral GNU
-* junto com este programa; se não, escreva para Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
-* 02111-1307, USA.
-*/  
+ * GSAN - Sistema Integrado de Gestão de Serviços de Saneamento
+ * Copyright (C) <2007> 
+ * Adriano Britto Siqueira
+ * Alexandre Santos Cabral
+ * Ana Carolina Alves Breda
+ * Ana Maria Andrade Cavalcante
+ * Aryed Lins de Araújo
+ * Bruno Leonardo Rodrigues Barros
+ * Carlos Elmano Rodrigues Ferreira
+ * Cláudio de Andrade Lira
+ * Denys Guimarães Guenes Tavares
+ * Eduardo Breckenfeld da Rosa Borges
+ * Fabíola Gomes de Araújo
+ * Flávio Leonardo Cavalcanti Cordeiro
+ * Francisco do Nascimento Júnior
+ * Homero Sampaio Cavalcanti
+ * Ivan Sérgio da Silva Júnior
+ * José Edmar de Siqueira
+ * José Thiago Tenório Lopes
+ * Kássia Regina Silvestre de Albuquerque
+ * Leonardo Luiz Vieira da Silva
+ * Márcio Roberto Batista da Silva
+ * Maria de Fátima Sampaio Leite
+ * Micaela Maria Coelho de Araújo
+ * Nelson Mendonça de Carvalho
+ * Newton Morais e Silva
+ * Pedro Alexandre Santos da Silva Filho
+ * Rafael Corrêa Lima e Silva
+ * Rafael Francisco Pinto
+ * Rafael Koury Monteiro
+ * Rafael Palermo de Araújo
+ * Raphael Veras Rossiter
+ * Roberto Sobreira Barbalho
+ * Rodrigo Avellar Silveira
+ * Rosana Carvalho Barbosa
+ * Sávio Luiz de Andrade Cavalcante
+ * Tai Mu Shih
+ * Thiago Augusto Souza do Nascimento
+ * Tiago Moreno Rodrigues
+ * Vivianne Barbosa Sousa
+ *
+ * Este programa é software livre; você pode redistribuí-lo e/ou
+ * modificá-lo sob os termos de Licença Pública Geral GNU, conforme
+ * publicada pela Free Software Foundation; versão 2 da
+ * Licença.
+ * Este programa é distribuído na expectativa de ser útil, mas SEM
+ * QUALQUER GARANTIA; sem mesmo a garantia implícita de
+ * COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
+ * PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
+ * detalhes.
+ * Você deve ter recebido uma cópia da Licença Pública Geral GNU
+ * junto com este programa; se não, escreva para Free Software
+ * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
+ * 02111-1307, USA.
+ */
 package gcom.util;
 
 import gcom.cadastro.geografico.MunicipioFeriado;
@@ -118,6 +118,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.validator.GenericValidator;
 
 import sun.management.ManagementFactory;
@@ -158,6 +159,7 @@ public class Util {
 	public static int getAnoMesComoInt(Date date) {
 		return getAnoMesComoInteger(date).intValue();
 	}
+
 	/**
 	 * Método que retorn o ano mes como Integer
 	 * 
@@ -190,8 +192,7 @@ public class Util {
 		if (numeracao != null) {
 
 			String sequencialString = String.valueOf(numeracao);
-			int digitoModulo11 = Util.obterDigitoVerificadorModulo11(Long
-					.parseLong(sequencialString));
+			int digitoModulo11 = Util.obterDigitoVerificadorModulo11(Long.parseLong(sequencialString));
 
 			if (sequencialString.length() < 9) {
 
@@ -321,7 +322,7 @@ public class Util {
 	 * @return Description of the Return Value
 	 */
 	public static BigDecimal somaBigDecimal(BigDecimal value1, BigDecimal value2) {
-		
+
 		BigDecimal v1 = BigDecimal.ZERO;
 		BigDecimal v2 = BigDecimal.ZERO;
 
@@ -344,7 +345,7 @@ public class Util {
 	 * @return Description of the Return Value
 	 */
 	public static BigDecimal subtrairBigDecimal(BigDecimal value1, BigDecimal value2) {
-		
+
 		BigDecimal v1 = BigDecimal.ZERO;
 		BigDecimal v2 = BigDecimal.ZERO;
 
@@ -355,10 +356,10 @@ public class Util {
 		if (value2 != null) {
 			v2 = value2;
 		}
-		
+
 		return v1.subtract(v2);
 	}
-	
+
 	/**
 	 * Subtrai a data no formato AAAAMM Exemplo 200508 retorna 200507
 	 */
@@ -400,25 +401,25 @@ public class Util {
 
 		String dataFormatacao = "" + anoMes;
 
-        	int ano = new Integer(dataFormatacao.substring(0, 4)).intValue();
-	        int mes = new Integer(dataFormatacao.substring(4, 6)).intValue();
+		int ano = new Integer(dataFormatacao.substring(0, 4)).intValue();
+		int mes = new Integer(dataFormatacao.substring(4, 6)).intValue();
 
-	        int qtdAnosDiminuir = qtdMeses / 12;
-	        int qtdMesesDiminuir = qtdMeses % 12;
-       
-	        ano -= qtdAnosDiminuir;
-	        mes -= qtdMesesDiminuir;
-       
-	        if ( mes < 1 ){
-        	    --ano;
-        	    mes += 12;
-	        }
-       
-	        if ( mes < 10 ){
-        	    return Integer.parseInt( ano + "0" + mes );
-	        } else {
-        	    return Integer.parseInt( ano + "" + mes );
-	        }
+		int qtdAnosDiminuir = qtdMeses / 12;
+		int qtdMesesDiminuir = qtdMeses % 12;
+
+		ano -= qtdAnosDiminuir;
+		mes -= qtdMesesDiminuir;
+
+		if (mes < 1) {
+			--ano;
+			mes += 12;
+		}
+
+		if (mes < 10) {
+			return Integer.parseInt(ano + "0" + mes);
+		} else {
+			return Integer.parseInt(ano + "" + mes);
+		}
 	}
 
 	public static String formatarMesAnoParaAnoMes(String data) {
@@ -587,8 +588,7 @@ public class Util {
 	 *            Descrição do parâmetro
 	 * @return Descrição do retorno
 	 */
-	public static String adicionarZerosEsquedaNumero(int tamanhoMaximoCampo,
-			String numero) {
+	public static String adicionarZerosEsquedaNumero(int tamanhoMaximoCampo, String numero) {
 		String zeros = "";
 
 		String retorno = null;
@@ -658,13 +658,11 @@ public class Util {
 	 * @return Descrição do retorno
 	 * @author fernanda paiva
 	 */
-	public static Date converterStringParaHoraMinutoSegundo(
-			String horaMinutoSegundo) {
+	public static Date converterStringParaHoraMinutoSegundo(String horaMinutoSegundo) {
 
 		Date retorno = null;
 
-		SimpleDateFormat formatoData = new SimpleDateFormat(
-				"dd/MM/yyyy hh:mm:ss");
+		SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
 
 		String dataCompleta = "01/01/2006 " + horaMinutoSegundo;
 
@@ -694,14 +692,14 @@ public class Util {
 		BigDecimal denominador = new BigDecimal(d);
 
 		if (denominador.intValue() != 0) {
-			BigDecimal resultado = numerador.divide(denominador,
-					BigDecimal.ROUND_HALF_UP);
+			BigDecimal resultado = numerador.divide(denominador, BigDecimal.ROUND_HALF_UP);
 
 			retorno = resultado.intValue();
 		}
 
 		return retorno;
 	}
+
 	/**
 	 * < <Descrição do método>>
 	 * 
@@ -719,8 +717,7 @@ public class Util {
 		BigDecimal denominador = new BigDecimal(d);
 
 		if (denominador.intValue() != 0) {
-			BigDecimal resultado = numerador.divide(denominador,
-					BigDecimal.ROUND_UP);
+			BigDecimal resultado = numerador.divide(denominador, BigDecimal.ROUND_UP);
 
 			retorno = resultado.intValue();
 		}
@@ -774,8 +771,7 @@ public class Util {
 		return ano;
 	}
 
-	public static int divideDepoisMultiplica(int numerador, int denominador,
-			int numeroMultiplicado) {
+	public static int divideDepoisMultiplica(int numerador, int denominador, int numeroMultiplicado) {
 
 		BigDecimal n = new BigDecimal(numerador);
 
@@ -810,16 +806,14 @@ public class Util {
 			if (dataCalendar.get(Calendar.DAY_OF_MONTH) > 9) {
 				dataBD.append(dataCalendar.get(Calendar.DAY_OF_MONTH) + "/");
 			} else {
-				dataBD.append("0" + dataCalendar.get(Calendar.DAY_OF_MONTH)
-						+ "/");
+				dataBD.append("0" + dataCalendar.get(Calendar.DAY_OF_MONTH) + "/");
 			}
 
 			// Obs.: Janeiro no Calendar é mês zero
 			if ((dataCalendar.get(Calendar.MONTH) + 1) > 9) {
 				dataBD.append(dataCalendar.get(Calendar.MONTH) + 1 + "/");
 			} else {
-				dataBD.append("0" + (dataCalendar.get(Calendar.MONTH) + 1)
-						+ "/");
+				dataBD.append("0" + (dataCalendar.get(Calendar.MONTH) + 1) + "/");
 			}
 
 			dataBD.append(dataCalendar.get(Calendar.YEAR));
@@ -919,12 +913,12 @@ public class Util {
 		if (data != null) { // 1
 			Calendar dataCalendar = new GregorianCalendar();
 			StringBuffer dataBD = new StringBuffer();
-			
+
 			dataCalendar.setTime(data);
-			
-			dataBD.append(dataCalendar.get(Calendar.YEAR));			
+
+			dataBD.append(dataCalendar.get(Calendar.YEAR));
 			dataBD.append("-");
-			
+
 			// Obs.: Janeiro no Calendar é mês zero
 			if ((dataCalendar.get(Calendar.MONTH) + 1) > 9) {
 				dataBD.append(dataCalendar.get(Calendar.MONTH) + 1);
@@ -958,19 +952,19 @@ public class Util {
 		if (data != null) { // 1
 			Calendar dataCalendar = new GregorianCalendar();
 			StringBuffer dataBD = new StringBuffer();
-			
+
 			dataCalendar.setTime(data);
-			
-			dataBD.append(dataCalendar.get(Calendar.YEAR));			
-//			dataBD.append("-");
-			
+
+			dataBD.append(dataCalendar.get(Calendar.YEAR));
+			// dataBD.append("-");
+
 			// Obs.: Janeiro no Calendar é mês zero
 			if ((dataCalendar.get(Calendar.MONTH) + 1) > 9) {
 				dataBD.append(dataCalendar.get(Calendar.MONTH) + 1);
 			} else {
 				dataBD.append("0" + (dataCalendar.get(Calendar.MONTH) + 1));
 			}
-//			dataBD.append("-");
+			// dataBD.append("-");
 			if (dataCalendar.get(Calendar.DAY_OF_MONTH) > 9) {
 				dataBD.append(dataCalendar.get(Calendar.DAY_OF_MONTH));
 			} else {
@@ -998,7 +992,7 @@ public class Util {
 		Calendar calendario = GregorianCalendar.getInstance();
 
 		calendario.setTime(dataInicial);
-		
+
 		calendario.set(Calendar.HOUR_OF_DAY, 0);
 		calendario.set(Calendar.MINUTE, 0);
 		calendario.set(Calendar.SECOND, 0);
@@ -1046,21 +1040,21 @@ public class Util {
 
 		if (data != null && !data.equals("") && data.trim().length() == 8) {
 
-			retorno = data.substring(6, 8) + "/" + data.substring(4, 6) + "/"
-					+ data.substring(0, 4);
+			retorno = data.substring(6, 8) + "/" + data.substring(4, 6) + "/" + data.substring(0, 4);
 
 		}
 
 		return retorno;
 	}
-	
+
 	/**
 	 * Converte a data passada para o formato "DD/MM/YYYY"
 	 * 
 	 * @author: Rafael Pinto
 	 * @date: 22/01/2008
 	 * 
-	 * @param String data no formato "YYYYMMDD"
+	 * @param String
+	 *            data no formato "YYYYMMDD"
 	 * @return String data no formato "DD/MM/YYYY"
 	 */
 	public static String converterDataSemBarraParaDataComBarra(String data) {
@@ -1068,16 +1062,12 @@ public class Util {
 
 		if (data != null && !data.equals("") && data.trim().length() == 8) {
 
-			retorno = data.substring(0, 2) 
-				+ "/" 
-				+ data.substring(2, 4) 
-				+ "/" 
-				+ data.substring(4, 8);
+			retorno = data.substring(0, 2) + "/" + data.substring(2, 4) + "/" + data.substring(4, 8);
 
 		}
 
 		return retorno;
-	}	
+	}
 
 	/**
 	 * < <Descrição do método>>
@@ -1097,16 +1087,14 @@ public class Util {
 			if (dataCalendar.get(Calendar.DAY_OF_MONTH) > 9) {
 				dataBD.append(dataCalendar.get(Calendar.DAY_OF_MONTH) + "/");
 			} else {
-				dataBD.append("0" + dataCalendar.get(Calendar.DAY_OF_MONTH)
-						+ "/");
+				dataBD.append("0" + dataCalendar.get(Calendar.DAY_OF_MONTH) + "/");
 			}
 
 			// Obs.: Janeiro no Calendar é mês zero
 			if ((dataCalendar.get(Calendar.MONTH) + 1) > 9) {
 				dataBD.append(dataCalendar.get(Calendar.MONTH) + 1 + "/");
 			} else {
-				dataBD.append("0" + (dataCalendar.get(Calendar.MONTH) + 1)
-						+ "/");
+				dataBD.append("0" + (dataCalendar.get(Calendar.MONTH) + 1) + "/");
 			}
 
 			dataBD.append(dataCalendar.get(Calendar.YEAR));
@@ -1209,7 +1197,7 @@ public class Util {
 		return dataBD.toString();
 	}
 
-/**
+	/**
 	 * Compara dois objetos no formato anoMesReferencia de acordo com o sinal
 	 * logico passado.
 	 * 
@@ -1218,47 +1206,34 @@ public class Util {
 	 * @param sinal
 	 * @return um boleano
 	 */
-	public static boolean compararAnoMesReferencia(Integer anoMesReferencia1,
-			Integer anoMesReferencia2, String sinal) {
+	public static boolean compararAnoMesReferencia(Integer anoMesReferencia1, Integer anoMesReferencia2, String sinal) {
 		boolean retorno = true;
 
 		// Separando os valores de mês e ano para realizar a comparação
-		String mesReferencia1 = String.valueOf(anoMesReferencia1.intValue())
-				.substring(4, 6);
-		String anoReferencia1 = String.valueOf(anoMesReferencia1.intValue())
-				.substring(0, 4);
+		String mesReferencia1 = String.valueOf(anoMesReferencia1.intValue()).substring(4, 6);
+		String anoReferencia1 = String.valueOf(anoMesReferencia1.intValue()).substring(0, 4);
 
-		String mesReferencia2 = String.valueOf(anoMesReferencia2.intValue())
-				.substring(4, 6);
-		String anoReferencia2 = String.valueOf(anoMesReferencia2.intValue())
-				.substring(0, 4);
+		String mesReferencia2 = String.valueOf(anoMesReferencia2.intValue()).substring(4, 6);
+		String anoReferencia2 = String.valueOf(anoMesReferencia2.intValue()).substring(0, 4);
 
 		if (sinal.equalsIgnoreCase("=")) {
-			if (!Integer.valueOf(anoReferencia1).equals(
-					Integer.valueOf(anoReferencia2))) {
+			if (!Integer.valueOf(anoReferencia1).equals(Integer.valueOf(anoReferencia2))) {
 				retorno = false;
-			} else if (!Integer.valueOf(mesReferencia1).equals(
-					Integer.valueOf(mesReferencia2))) {
+			} else if (!Integer.valueOf(mesReferencia1).equals(Integer.valueOf(mesReferencia2))) {
 				retorno = false;
 			}
 		} else if (sinal.equalsIgnoreCase(">")) {
-			if (Integer.valueOf(anoReferencia1).intValue() < Integer.valueOf(
-					anoReferencia2).intValue()) {
+			if (Integer.valueOf(anoReferencia1).intValue() < Integer.valueOf(anoReferencia2).intValue()) {
 				retorno = false;
-			} else if (Integer.valueOf(anoReferencia1).equals(
-					Integer.valueOf(anoReferencia2))
-					&& Integer.valueOf(mesReferencia1).intValue() <= Integer
-							.valueOf(mesReferencia2).intValue()) {
+			} else if (Integer.valueOf(anoReferencia1).equals(Integer.valueOf(anoReferencia2))
+					&& Integer.valueOf(mesReferencia1).intValue() <= Integer.valueOf(mesReferencia2).intValue()) {
 				retorno = false;
 			}
 		} else {
-			if (Integer.valueOf(anoReferencia2).intValue() < Integer.valueOf(
-					anoReferencia1).intValue()) {
+			if (Integer.valueOf(anoReferencia2).intValue() < Integer.valueOf(anoReferencia1).intValue()) {
 				retorno = false;
-			} else if (Integer.valueOf(anoReferencia2).equals(
-					Integer.valueOf(anoReferencia1))
-					&& Integer.valueOf(mesReferencia2).intValue() <= Integer
-							.valueOf(mesReferencia1).intValue()) {
+			} else if (Integer.valueOf(anoReferencia2).equals(Integer.valueOf(anoReferencia1))
+					&& Integer.valueOf(mesReferencia2).intValue() <= Integer.valueOf(mesReferencia1).intValue()) {
 				retorno = false;
 			}
 		}
@@ -1275,47 +1250,34 @@ public class Util {
 	 * @param sinal
 	 * @return um boleano
 	 */
-	public static boolean compararAnoMesReferencia(String anoMesReferencia1,
-			String anoMesReferencia2, String sinal) {
+	public static boolean compararAnoMesReferencia(String anoMesReferencia1, String anoMesReferencia2, String sinal) {
 		boolean retorno = true;
 
 		// Separando os valores de mês e ano para realizar a comparação
-		String mesReferencia1 = String.valueOf(anoMesReferencia1).substring(4,
-				6);
-		String anoReferencia1 = String.valueOf(anoMesReferencia1).substring(0,
-				4);
+		String mesReferencia1 = String.valueOf(anoMesReferencia1).substring(4, 6);
+		String anoReferencia1 = String.valueOf(anoMesReferencia1).substring(0, 4);
 
-		String mesReferencia2 = String.valueOf(anoMesReferencia2).substring(4,
-				6);
-		String anoReferencia2 = String.valueOf(anoMesReferencia2).substring(0,
-				4);
+		String mesReferencia2 = String.valueOf(anoMesReferencia2).substring(4, 6);
+		String anoReferencia2 = String.valueOf(anoMesReferencia2).substring(0, 4);
 
 		if (sinal.equalsIgnoreCase("=")) {
-			if (!Integer.valueOf(anoReferencia1).equals(
-					Integer.valueOf(anoReferencia2))) {
+			if (!Integer.valueOf(anoReferencia1).equals(Integer.valueOf(anoReferencia2))) {
 				retorno = false;
-			} else if (!Integer.valueOf(mesReferencia1).equals(
-					Integer.valueOf(mesReferencia2))) {
+			} else if (!Integer.valueOf(mesReferencia1).equals(Integer.valueOf(mesReferencia2))) {
 				retorno = false;
 			}
 		} else if (sinal.equalsIgnoreCase(">")) {
-			if (Integer.valueOf(anoReferencia1).intValue() < Integer.valueOf(
-					anoReferencia2).intValue()) {
+			if (Integer.valueOf(anoReferencia1).intValue() < Integer.valueOf(anoReferencia2).intValue()) {
 				retorno = false;
-			} else if (Integer.valueOf(anoReferencia1).equals(
-					Integer.valueOf(anoReferencia2))
-					&& Integer.valueOf(mesReferencia1).intValue() <= Integer
-							.valueOf(mesReferencia2).intValue()) {
+			} else if (Integer.valueOf(anoReferencia1).equals(Integer.valueOf(anoReferencia2))
+					&& Integer.valueOf(mesReferencia1).intValue() <= Integer.valueOf(mesReferencia2).intValue()) {
 				retorno = false;
 			}
 		} else {
-			if (Integer.valueOf(anoReferencia2).intValue() < Integer.valueOf(
-					anoReferencia1).intValue()) {
+			if (Integer.valueOf(anoReferencia2).intValue() < Integer.valueOf(anoReferencia1).intValue()) {
 				retorno = false;
-			} else if (Integer.valueOf(anoReferencia2).equals(
-					Integer.valueOf(anoReferencia1))
-					&& Integer.valueOf(mesReferencia2).intValue() <= Integer
-							.valueOf(mesReferencia1).intValue()) {
+			} else if (Integer.valueOf(anoReferencia2).equals(Integer.valueOf(anoReferencia1))
+					&& Integer.valueOf(mesReferencia2).intValue() <= Integer.valueOf(mesReferencia1).intValue()) {
 				retorno = false;
 			}
 		}
@@ -1332,8 +1294,7 @@ public class Util {
 	 * @param sinal
 	 * @return um boleano
 	 */
-	public static boolean compararHoraMinuto(String horaMinuto1,
-			String horaMinuto2, String sinal) {
+	public static boolean compararHoraMinuto(String horaMinuto1, String horaMinuto2, String sinal) {
 
 		boolean retorno = true;
 
@@ -1347,26 +1308,19 @@ public class Util {
 		if (sinal.equalsIgnoreCase("=")) {
 			if (!Integer.valueOf(hora1).equals(Integer.valueOf(hora2))) {
 				retorno = false;
-			} else if (!Integer.valueOf(minuto1).equals(
-					Integer.valueOf(minuto2))) {
+			} else if (!Integer.valueOf(minuto1).equals(Integer.valueOf(minuto2))) {
 				retorno = false;
 			}
 		} else if (sinal.equalsIgnoreCase(">")) {
-			if (Integer.valueOf(hora1).intValue() < Integer.valueOf(hora2)
-					.intValue()) {
+			if (Integer.valueOf(hora1).intValue() < Integer.valueOf(hora2).intValue()) {
 				retorno = false;
-			} else if (Integer.valueOf(hora1).equals(Integer.valueOf(hora2))
-					&& Integer.valueOf(minuto1).intValue() <= Integer.valueOf(
-							minuto2).intValue()) {
+			} else if (Integer.valueOf(hora1).equals(Integer.valueOf(hora2)) && Integer.valueOf(minuto1).intValue() <= Integer.valueOf(minuto2).intValue()) {
 				retorno = false;
 			}
 		} else {
-			if (Integer.valueOf(hora2).intValue() < Integer.valueOf(hora1)
-					.intValue()) {
+			if (Integer.valueOf(hora2).intValue() < Integer.valueOf(hora1).intValue()) {
 				retorno = false;
-			} else if (Integer.valueOf(hora2).equals(Integer.valueOf(hora1))
-					&& Integer.valueOf(minuto2).intValue() <= Integer.valueOf(
-							minuto1).intValue()) {
+			} else if (Integer.valueOf(hora2).equals(Integer.valueOf(hora1)) && Integer.valueOf(minuto2).intValue() <= Integer.valueOf(minuto1).intValue()) {
 				retorno = false;
 			}
 		}
@@ -1415,7 +1369,7 @@ public class Util {
 
 		return dataBD.toString();
 	}
-	
+
 	public static String formatarHoraSemDataSemDoisPontos(Date data) {
 		StringBuffer dataBD = new StringBuffer("");
 
@@ -1465,12 +1419,9 @@ public class Util {
 
 		String entradaString = adicionarZerosEsquedaNumero(6, numero);
 
-		Integer digitoCalculo = (new Integer(entradaString.substring(0, 1)) * 35)
-				+ (new Integer(entradaString.substring(1, 2)) * 31)
-				+ (new Integer(entradaString.substring(2, 3)) * 29)
-				+ (new Integer(entradaString.substring(3, 4)) * 23)
-				+ (new Integer(entradaString.substring(4, 5)) * 19)
-				+ (new Integer(entradaString.substring(5, 6)) * 17);
+		Integer digitoCalculo = (new Integer(entradaString.substring(0, 1)) * 35) + (new Integer(entradaString.substring(1, 2)) * 31)
+				+ (new Integer(entradaString.substring(2, 3)) * 29) + (new Integer(entradaString.substring(3, 4)) * 23)
+				+ (new Integer(entradaString.substring(4, 5)) * 19) + (new Integer(entradaString.substring(5, 6)) * 17);
 
 		Integer resultado = digitoCalculo / 11;
 		Integer restoDigito = digitoCalculo - (resultado * 11);
@@ -1518,8 +1469,7 @@ public class Util {
 		for (int i = 0; i < entradaString.length(); i++) {
 
 			// recupera o dígito da string
-			digito = new Integer(entradaString.substring(entradaString.length()
-					- contAuxiliar, entradaString.length() - i)).intValue();
+			digito = new Integer(entradaString.substring(entradaString.length() - contAuxiliar, entradaString.length() - i)).intValue();
 
 			// multiplica o digito pelo sequência e acumula o resultado
 			somaDigitosProduto = somaDigitosProduto + (digito * sequencia);
@@ -1579,8 +1529,7 @@ public class Util {
 			if (param > 9) {
 				param = 2;
 			}
-			soma = soma
-					+ (Integer.parseInt(wnumero.substring(ind, ind + 1)) * param);
+			soma = soma + (Integer.parseInt(wnumero.substring(ind, ind + 1)) * param);
 			param = param + 1;
 		}
 
@@ -1601,21 +1550,21 @@ public class Util {
 		 * múltiplicação de cada dígito int somaDigitosProduto = 0; // contador
 		 * auxiliar contAuxiliar = 1; // laço para calcular a soma da
 		 * múltiplicação de cada dígito for (int i = 0; i <
-		 * entradaString.length(); i++) { // recupera o dígito da string digito =
-		 * new Integer(entradaString.substring(entradaString.length() -
+		 * entradaString.length(); i++) { // recupera o dígito da string digito
+		 * = new Integer(entradaString.substring(entradaString.length() -
 		 * contAuxiliar, entradaString.length() - i)).intValue(); // multiplica
 		 * o digito pelo sequência e acumula o resultado somaDigitosProduto =
 		 * somaDigitosProduto + (digito * sequencia); // se osequência for igual
 		 * a 9(nove) if (sequencia == 9) { // a sequência volta para 2(dois)
-		 * sequencia = 2; } else { // incrementa a sequência mais 1 ++sequencia; } //
-		 * incrementa o contador auxiliar contAuxiliar++; } // calcula o resto
-		 * da divisão int resto = (somaDigitosProduto % 11); // variável que vai
-		 * armazenar o dígito verificador int dac; // se o resto for 0(zero) ou
-		 * 1(1) if (resto == 0 || resto == 1) { // o dígito verificador vai ser
-		 * 0(zero) dac = 0; } else if (resto == 10) { // o dígito verificador
-		 * vai ser 1(um) dac = 1; } else { // o dígito verificador vai ser a
-		 * diferença dac = 11 - resto; } // retorna o dígito verificador
-		 * calculado return new Integer(dac);
+		 * sequencia = 2; } else { // incrementa a sequência mais 1 ++sequencia;
+		 * } // incrementa o contador auxiliar contAuxiliar++; } // calcula o
+		 * resto da divisão int resto = (somaDigitosProduto % 11); // variável
+		 * que vai armazenar o dígito verificador int dac; // se o resto for
+		 * 0(zero) ou 1(1) if (resto == 0 || resto == 1) { // o dígito
+		 * verificador vai ser 0(zero) dac = 0; } else if (resto == 10) { // o
+		 * dígito verificador vai ser 1(um) dac = 1; } else { // o dígito
+		 * verificador vai ser a diferença dac = 11 - resto; } // retorna o
+		 * dígito verificador calculado return new Integer(dac);
 		 */
 	}
 
@@ -1645,9 +1594,8 @@ public class Util {
 
 			boolean temCasaDecimal = false;
 			if (valor.length() > 2
-					&& (valor.substring(valor.length() - 3, valor.length() - 2)
-							.equals(".") || valor.substring(valor.length() - 3,
-							valor.length() - 2).equals(","))) {
+					&& (valor.substring(valor.length() - 3, valor.length() - 2).equals(".") || valor.substring(valor.length() - 3, valor.length() - 2).equals(
+							","))) {
 				temCasaDecimal = true;
 			}
 
@@ -1656,16 +1604,13 @@ public class Util {
 			for (int i = 0; i < valor.length(); i++) {
 				try {
 					Integer.parseInt(valor.substring(i, i + 1));
-					valorSemPontuacao = valorSemPontuacao
-							+ valor.substring(i, i + 1);
+					valorSemPontuacao = valorSemPontuacao + valor.substring(i, i + 1);
 				} catch (Exception e) {
 				}
 			}
 			if (temCasaDecimal) {
 				int tamanho = valorSemPontuacao.length();
-				valorSemPontuacao = valorSemPontuacao.substring(0, tamanho - 2)
-						+ "."
-						+ valorSemPontuacao.substring(tamanho - 2, tamanho);
+				valorSemPontuacao = valorSemPontuacao.substring(0, tamanho - 2) + "." + valorSemPontuacao.substring(tamanho - 2, tamanho);
 			}
 			if (negativo) {
 				valorSemPontuacao = "-" + valorSemPontuacao;
@@ -1690,13 +1635,11 @@ public class Util {
 	 * @return
 	 */
 
-	public static BigDecimal formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(
-			String valor) {
+	public static BigDecimal formatarMoedaRealparaBigDecimalComUltimos2CamposDecimais(String valor) {
 		BigDecimal bigDecimalFormatado = null;
 
 		int tamanho = valor.length();
-		valor = valor.substring(0, tamanho - 2) + "."
-				+ valor.substring(tamanho - 2, tamanho);
+		valor = valor.substring(0, tamanho - 2) + "." + valor.substring(tamanho - 2, tamanho);
 
 		bigDecimalFormatado = new BigDecimal(valor);
 		return bigDecimalFormatado;
@@ -1716,9 +1659,7 @@ public class Util {
 
 		boolean temCasaDecimal = false;
 		if (valor.length() > 2
-				&& (valor.substring(valor.length() - 3, valor.length() - 2)
-						.equals(".") || valor.substring(valor.length() - 3,
-						valor.length() - 2).equals(","))) {
+				&& (valor.substring(valor.length() - 3, valor.length() - 2).equals(".") || valor.substring(valor.length() - 3, valor.length() - 2).equals(","))) {
 			temCasaDecimal = true;
 		}
 		return temCasaDecimal;
@@ -1779,27 +1720,22 @@ public class Util {
 	public static Date converteStringParaDateHora(String data) {
 		Date retorno = null;
 		try {
-			retorno = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", new Locale(
-					"pt", "BR")).parse(data);
+			retorno = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss", new Locale("pt", "BR")).parse(data);
 		} catch (Exception e) {
-			new IllegalArgumentException(data
-					+ " não tem o formato dd/MM/yyyy HH:mm:ss.");
+			new IllegalArgumentException(data + " não tem o formato dd/MM/yyyy HH:mm:ss.");
 		}
 		return retorno;
 	}
-	
+
 	public static Date converteStringParaDateHora(String data, String formato) {
 		Date retorno = null;
 		try {
-			retorno = new SimpleDateFormat( formato, new Locale(
-					"pt", "BR")).parse(data);
+			retorno = new SimpleDateFormat(formato, new Locale("pt", "BR")).parse(data);
 		} catch (Exception e) {
-			new IllegalArgumentException(data
-					+ " não tem o formato " + formato + ".");
+			new IllegalArgumentException(data + " não tem o formato " + formato + ".");
 		}
 		return retorno;
 	}
-	
 
 	/**
 	 * Método que recebe um int e formata para a data de referência no
@@ -1819,8 +1755,7 @@ public class Util {
 		// pelo ano
 		// separados por uma "/"
 		if (referenciaEmString.length() == 6) {
-			return referenciaEmString.substring(4, 6) + "/"
-					+ referenciaEmString.substring(0, 4);
+			return referenciaEmString.substring(4, 6) + "/" + referenciaEmString.substring(0, 4);
 		} else {
 			return "";
 		}
@@ -1873,10 +1808,8 @@ public class Util {
 		}
 
 		// Acumular o Mes
-		while (tempoCorrente.get(GregorianCalendar.YEAR) < tempoBase
-				.get(GregorianCalendar.YEAR)
-				|| tempoCorrente.get(GregorianCalendar.MONTH) < tempoBase
-						.get(GregorianCalendar.MONTH)) {
+		while (tempoCorrente.get(GregorianCalendar.YEAR) < tempoBase.get(GregorianCalendar.YEAR)
+				|| tempoCorrente.get(GregorianCalendar.MONTH) < tempoBase.get(GregorianCalendar.MONTH)) {
 
 			quantidadeMeses = quantidadeMeses + 1;
 			tempoCorrente.add(GregorianCalendar.MONTH, 1);
@@ -1896,8 +1829,7 @@ public class Util {
 
 		if (anoMesReferencia.length() == 7) {
 
-			String mesAnoReferencia = anoMesReferencia.substring(4, 6) + "/"
-					+ anoMesReferencia.substring(0, 4);
+			String mesAnoReferencia = anoMesReferencia.substring(4, 6) + "/" + anoMesReferencia.substring(0, 4);
 
 			SimpleDateFormat dataTxt = new SimpleDateFormat("MM/yyyy");
 
@@ -1948,14 +1880,13 @@ public class Util {
 
 		return anoMesInvalido;
 	}
-	
+
 	/**
-	 * Valida o mês/ano de referência sem a barra
-	 * retornando true se a data for inválida e false se a data for válida
+	 * Valida o mês/ano de referência sem a barra retornando true se a data for
+	 * inválida e false se a data for válida
 	 * 
-	 * Author: Rafael Corrêa 
-	 * Data: 15/07/2009
-	 *  
+	 * Author: Rafael Corrêa Data: 15/07/2009
+	 * 
 	 */
 	public static boolean validarMesAnoSemBarra(String mesAnoReferencia) {
 		boolean mesAnoValido = true;
@@ -2023,8 +1954,7 @@ public class Util {
 	 *            Valor do Dividor
 	 * @return O Valor divido, caso necessário arredondado
 	 */
-	public static BigDecimal dividirArredondando(BigDecimal dividendo,
-			BigDecimal divisor) {
+	public static BigDecimal dividirArredondando(BigDecimal dividendo, BigDecimal divisor) {
 
 		BigDecimal resultado = null;
 
@@ -2037,8 +1967,7 @@ public class Util {
 		return resultado;
 	}
 
-	public static String formatarRGApresentacao(String rg, String orgao,
-			String uf) {
+	public static String formatarRGApresentacao(String rg, String orgao, String uf) {
 		return rg + " " + orgao + "/" + uf;
 	}
 
@@ -2050,8 +1979,7 @@ public class Util {
 	 * @param numero
 	 * @return digito verificador
 	 */
-	public static Integer calculoRepresentacaoNumericaCodigoBarrasModulo10(
-			Integer numero) {
+	public static Integer calculoRepresentacaoNumericaCodigoBarrasModulo10(Integer numero) {
 
 		int entrada = numero.intValue();
 
@@ -2065,17 +1993,13 @@ public class Util {
 		contAuxiliar = 1;
 		for (contEntrada = 0; contEntrada < entradaString.length(); contEntrada++) {
 
-			digito = new Integer(entradaString.substring(entradaString.length()
-					- contAuxiliar, entradaString.length() - contEntrada))
-					.intValue();
+			digito = new Integer(entradaString.substring(entradaString.length() - contAuxiliar, entradaString.length() - contEntrada)).intValue();
 
 			produto = digito * sequencia;
 			produtoString = String.valueOf(produto);
 
 			for (contProduto = 0; contProduto < produtoString.length(); contProduto++) {
-				somaDigitosProduto = somaDigitosProduto
-						+ new Integer(produtoString.substring(contProduto,
-								contProduto + 1)).intValue();
+				somaDigitosProduto = somaDigitosProduto + new Integer(produtoString.substring(contProduto, contProduto + 1)).intValue();
 			}
 
 			if (sequencia == 2) {
@@ -2124,17 +2048,13 @@ public class Util {
 		contAuxiliar = 1;
 		for (contEntrada = 0; contEntrada < entradaString.length(); contEntrada++) {
 
-			digito = new Integer(entradaString.substring(entradaString.length()
-					- contAuxiliar, entradaString.length() - contEntrada))
-					.intValue();
+			digito = new Integer(entradaString.substring(entradaString.length() - contAuxiliar, entradaString.length() - contEntrada)).intValue();
 
 			produto = digito * sequencia;
 			produtoString = String.valueOf(produto);
 
 			for (contProduto = 0; contProduto < produtoString.length(); contProduto++) {
-				somaDigitosProduto = somaDigitosProduto
-						+ new Integer(produtoString.substring(contProduto,
-								contProduto + 1)).intValue();
+				somaDigitosProduto = somaDigitosProduto + new Integer(produtoString.substring(contProduto, contProduto + 1)).intValue();
 			}
 
 			if (sequencia == 2) {
@@ -2181,17 +2101,13 @@ public class Util {
 		contAuxiliar = 1;
 		for (contEntrada = 0; contEntrada < entradaString.length(); contEntrada++) {
 
-			digito = new Integer(entradaString.substring(entradaString.length()
-					- contAuxiliar, entradaString.length() - contEntrada))
-					.intValue();
+			digito = new Integer(entradaString.substring(entradaString.length() - contAuxiliar, entradaString.length() - contEntrada)).intValue();
 
 			produto = digito * sequencia;
 			produtoString = String.valueOf(produto);
 
 			for (contProduto = 0; contProduto < produtoString.length(); contProduto++) {
-				somaDigitosProduto = somaDigitosProduto
-						+ new Integer(produtoString.substring(contProduto,
-								contProduto + 1)).intValue();
+				somaDigitosProduto = somaDigitosProduto + new Integer(produtoString.substring(contProduto, contProduto + 1)).intValue();
 			}
 
 			if (sequencia == 2) {
@@ -2320,8 +2236,7 @@ public class Util {
 		/**
 		 * Símbolos especificos do Real Brasileiro
 		 */
-		DecimalFormatSymbols REAL = new DecimalFormatSymbols(new Locale("pt",
-				"BR"));
+		DecimalFormatSymbols REAL = new DecimalFormatSymbols(new Locale("pt", "BR"));
 		/**
 		 * Mascara de dinheiro para Real Brasileiro
 		 */
@@ -2329,21 +2244,19 @@ public class Util {
 		//
 		// return DINHEIRO_REAL.format(valor);
 		if (valor != null && !"".equals(valor)) {
-			DecimalFormat DINHEIRO_REAL = new DecimalFormat("###,###,##0.00",
-					REAL);
+			DecimalFormat DINHEIRO_REAL = new DecimalFormat("###,###,##0.00", REAL);
 			return DINHEIRO_REAL.format(valor);
 		} else {
 			return "";
 		}
 
 	}
-	
+
 	public static String formatarMoedaReal4Casas(BigDecimal valor) {
 		/**
 		 * Símbolos especificos do Real Brasileiro
 		 */
-		DecimalFormatSymbols REAL = new DecimalFormatSymbols(new Locale("pt",
-				"BR"));
+		DecimalFormatSymbols REAL = new DecimalFormatSymbols(new Locale("pt", "BR"));
 		/**
 		 * Mascara de dinheiro para Real Brasileiro
 		 */
@@ -2351,8 +2264,7 @@ public class Util {
 		//
 		// return DINHEIRO_REAL.format(valor);
 		if (valor != null && !"".equals(valor)) {
-			DecimalFormat DINHEIRO_REAL = new DecimalFormat("###,###,##0.0000",
-					REAL);
+			DecimalFormat DINHEIRO_REAL = new DecimalFormat("###,###,##0.0000", REAL);
 			return DINHEIRO_REAL.format(valor);
 		} else {
 			return "";
@@ -2424,14 +2336,12 @@ public class Util {
 	 */
 	public static Date converteStringInvertidaSemBarraParaDate(String data) {
 		Date retorno = null;
-		String dataInvertida = data.substring(6, 8) + "/"
-				+ data.substring(4, 6) + "/" + data.substring(0, 4);
+		String dataInvertida = data.substring(6, 8) + "/" + data.substring(4, 6) + "/" + data.substring(0, 4);
 		SimpleDateFormat dataTxt = new SimpleDateFormat("dd/MM/yyyy");
 		try {
 			retorno = dataTxt.parse(dataInvertida);
 		} catch (ParseException e) {
-			throw new IllegalArgumentException(data
-					+ " não tem o formato dd/MM/yyyy.");
+			throw new IllegalArgumentException(data + " não tem o formato dd/MM/yyyy.");
 		}
 		return retorno;
 	}
@@ -2476,35 +2386,36 @@ public class Util {
 		}
 		return numeroNaoNumerico;
 	}
-    
-    /**
-     * Método que recebe uma string e verifica se a string só tem numeros ou se o seu valor é zero.
-     * 
-     * @param data
-     * @autor Breno Santos
-     * @date 10/09/2010
-     * @return
-     */
-    public static boolean validarValorDiferenteZero(String valor) {
-        boolean numeroNaoNumerico = false;
-        try {
 
-         if(valor != null){
-             
-            int numero = Integer.parseInt(valor);
-            
-            if(numero == 0){
-                numeroNaoNumerico =  true;
-            }
-          
-          }
-            
-        } catch (NumberFormatException e) {
-            numeroNaoNumerico = true;
-        }
-        
-        return numeroNaoNumerico;
-    }
+	/**
+	 * Método que recebe uma string e verifica se a string só tem numeros ou se
+	 * o seu valor é zero.
+	 * 
+	 * @param data
+	 * @autor Breno Santos
+	 * @date 10/09/2010
+	 * @return
+	 */
+	public static boolean validarValorDiferenteZero(String valor) {
+		boolean numeroNaoNumerico = false;
+		try {
+
+			if (valor != null) {
+
+				int numero = Integer.parseInt(valor);
+
+				if (numero == 0) {
+					numeroNaoNumerico = true;
+				}
+
+			}
+
+		} catch (NumberFormatException e) {
+			numeroNaoNumerico = true;
+		}
+
+		return numeroNaoNumerico;
+	}
 
 	public static Integer formataAnoMes(Date data) {
 
@@ -2524,102 +2435,94 @@ public class Util {
 		return new Integer(anoMesFormatado);
 
 	}
-	
+
 	/**
-	 * Verifica se eh dia util
-	 * (Verifica por feriado nacional,municipal e se final de semana)
+	 * Verifica se eh dia util (Verifica por feriado nacional,municipal e se
+	 * final de semana)
 	 * 
-	 * Auhtor: Rafael Pinto
-	 * Data: 23/08/2007 
+	 * Auhtor: Rafael Pinto Data: 23/08/2007
 	 * 
-	 * @param Date data a ser verificada
-	 * @param Colecao<NacionalFeriado)
-	 * @param Colecao<MunicipioFeriado)
+	 * @param Date
+	 *            data a ser verificada
+	 * @param Colecao
+	 *            <NacionalFeriado)
+	 * @param Colecao
+	 *            <MunicipioFeriado)
 	 * 
 	 * @return boolean (true - eh dia util, false - nao dia util)
 	 */
-	public static boolean ehDiaUtil(Date dataAnalisada,Collection<NacionalFeriado> colecaoNacionalFeriado,
-		Collection<MunicipioFeriado> colecaoMunicipioFeriado){
-		
+	public static boolean ehDiaUtil(Date dataAnalisada, Collection<NacionalFeriado> colecaoNacionalFeriado, Collection<MunicipioFeriado> colecaoMunicipioFeriado) {
+
 		boolean ehDiaUtil = true;
-		
+
 		Calendar calendar = new GregorianCalendar();
 		calendar.setTime(dataAnalisada);
-		
+
 		int diaDaSemana = calendar.get(Calendar.DAY_OF_WEEK);
-		
+
 		// Verifica se eh Sabado ou Domingo
-		if(diaDaSemana == Calendar.SATURDAY || 
-			diaDaSemana == Calendar.SUNDAY){
-			
+		if (diaDaSemana == Calendar.SATURDAY || diaDaSemana == Calendar.SUNDAY) {
+
 			ehDiaUtil = false;
 
-		// Verifica se eh Feriado
-		}else{
-			
-			if(colecaoNacionalFeriado != null && !colecaoNacionalFeriado.isEmpty()){
-				
+			// Verifica se eh Feriado
+		} else {
+
+			if (colecaoNacionalFeriado != null && !colecaoNacionalFeriado.isEmpty()) {
+
 				Iterator itera = colecaoNacionalFeriado.iterator();
-				
+
 				while (itera.hasNext()) {
 					NacionalFeriado nacionalFeriado = (NacionalFeriado) itera.next();
-					
-					if(nacionalFeriado.getData().compareTo(dataAnalisada) == 0){
+
+					if (nacionalFeriado.getData().compareTo(dataAnalisada) == 0) {
 						ehDiaUtil = false;
 						break;
 					}
 				}
 			}
-			
-			if(ehDiaUtil){
 
-				if(colecaoMunicipioFeriado != null && !colecaoMunicipioFeriado.isEmpty()){
-					
+			if (ehDiaUtil) {
+
+				if (colecaoMunicipioFeriado != null && !colecaoMunicipioFeriado.isEmpty()) {
+
 					Iterator itera = colecaoMunicipioFeriado.iterator();
-					
+
 					while (itera.hasNext()) {
 						MunicipioFeriado municipioFeriado = (MunicipioFeriado) itera.next();
-						
-						if(municipioFeriado.getDataFeriado().compareTo(dataAnalisada) == 0){
+
+						if (municipioFeriado.getDataFeriado().compareTo(dataAnalisada) == 0) {
 							ehDiaUtil = false;
 							break;
 						}
 					}
 				}
 			}
-			
-		}//fim do if diaSemana
-		
+
+		}// fim do if diaSemana
+
 		return ehDiaUtil;
 	}
 
 	/**
-	 * Retorna o Ultimo Dia Util do Mês informado 
+	 * Retorna o Ultimo Dia Util do Mês informado
 	 * 
-	 * Auhtor: Rafael Santos 
-	 * Data: 20/02/2006 
+	 * Auhtor: Rafael Santos Data: 20/02/2006
 	 * 
-	 * Indices de Mês 1 - Janiero 
-	 * 2 - Fevereiro 
-	 * 3 - Março 
-	 * 4 - Abril 
-	 * 5 - Maio 
-	 * 6 - Junho 
-	 * 7 - Julho 
-	 * 8 - Agosto 
-	 * 9 - Setembro 
-	 * 10 - Outubro 
-	 * 11 - Novembro 
-	 * 12 - Dezembro
+	 * Indices de Mês 1 - Janiero 2 - Fevereiro 3 - Março 4 - Abril 5 - Maio 6 -
+	 * Junho 7 - Julho 8 - Agosto 9 - Setembro 10 - Outubro 11 - Novembro 12 -
+	 * Dezembro
 	 * 
-	 * @param mes Indice do Mês
-	 * @param ano Ano
-	 * @param colecaoDatasFeriados Coleção de Datas dos Feriados
+	 * @param mes
+	 *            Indice do Mês
+	 * @param ano
+	 *            Ano
+	 * @param colecaoDatasFeriados
+	 *            Coleção de Datas dos Feriados
 	 * 
 	 * @return Ultimo Dia do Mes util
 	 */
-	public static int obterUltimoDiaUtilMes(int mes, int ano,
-			Collection colecaoDatasFeriados) {
+	public static int obterUltimoDiaUtilMes(int mes, int ano, Collection colecaoDatasFeriados) {
 		int ultimoDiaUtil = 0;
 
 		Calendar calendar = new GregorianCalendar();
@@ -2668,14 +2571,11 @@ public class Util {
 		}
 
 		// ultima dia do mes
-		calendar.set(Calendar.DAY_OF_MONTH, calendar
-				.getActualMaximum(Calendar.DAY_OF_MONTH));
+		calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
 
 		boolean feriado = true;
 
-		while (feriado
-				| ((calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) | (calendar
-						.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY))) {
+		while (feriado | ((calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) | (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY))) {
 
 			// se o dia for domingo voltar um dia
 			if (calendar.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY) {
@@ -2700,22 +2600,17 @@ public class Util {
 					}
 				});
 
-				Iterator iteratorColecaoDatasFeriados = colecaoDatasFeriados
-						.iterator();
+				Iterator iteratorColecaoDatasFeriados = colecaoDatasFeriados.iterator();
 
 				while (iteratorColecaoDatasFeriados.hasNext()) {
-					Date dataFeriado = (Date) iteratorColecaoDatasFeriados
-							.next();
+					Date dataFeriado = (Date) iteratorColecaoDatasFeriados.next();
 					Calendar calendarDataFeriado = new GregorianCalendar();
 					calendarDataFeriado.setTime(dataFeriado);
 
 					// verifica se o dia, mes e ano
-					if ((calendar.get(Calendar.DAY_OF_MONTH) == calendarDataFeriado
-							.get(Calendar.DAY_OF_MONTH))
-							&& (calendar.get(Calendar.MONTH) == calendarDataFeriado
-									.get(Calendar.MONTH))
-							&& (calendar.get(Calendar.YEAR) == calendarDataFeriado
-									.get(Calendar.YEAR))) {
+					if ((calendar.get(Calendar.DAY_OF_MONTH) == calendarDataFeriado.get(Calendar.DAY_OF_MONTH))
+							&& (calendar.get(Calendar.MONTH) == calendarDataFeriado.get(Calendar.MONTH))
+							&& (calendar.get(Calendar.YEAR) == calendarDataFeriado.get(Calendar.YEAR))) {
 						calendar.add(Calendar.DAY_OF_MONTH, -1);
 					}
 
@@ -2733,8 +2628,8 @@ public class Util {
 
 	/**
 	 * Retorna o Ultimo Dia do Mês informado Auhtor: Rafael Corrêa Data:
-	 * 02/04/2007 Indices de Mês 1 - Janiero 2 - Fevereiro 3 - Março 4 - Abril 5 -
-	 * Maio 6 - Junho 7 - Julho 8 - Agosto 9 - Setembro 10 - Outubro 11 -
+	 * 02/04/2007 Indices de Mês 1 - Janiero 2 - Fevereiro 3 - Março 4 - Abril 5
+	 * - Maio 6 - Junho 7 - Julho 8 - Agosto 9 - Setembro 10 - Outubro 11 -
 	 * Novembro 12 - Dezembro
 	 * 
 	 * @param mes
@@ -2746,24 +2641,20 @@ public class Util {
 	public static String obterUltimoDiaMes(int mes, int ano) {
 		String ultimoDia = "";
 
-		Calendar calendar = new GregorianCalendar(ano, mes -1, 1);
-		
+		Calendar calendar = new GregorianCalendar(ano, mes - 1, 1);
+
 		// ultima dia do mes
 		calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
 
 		ultimoDia = "" + calendar.get(Calendar.DAY_OF_MONTH);
-		
+
 		return ultimoDia;
 	}
-	
-	
-	
-	
-	
+
 	/**
 	 * Retorna o Ultima Data do Mês informado Auhtor: Yara Taciane Data:
-	 * 20/06/2008 Indices de Mês 1 - Janiero 2 - Fevereiro 3 - Março 4 - Abril 5 -
-	 * Maio 6 - Junho 7 - Julho 8 - Agosto 9 - Setembro 10 - Outubro 11 -
+	 * 20/06/2008 Indices de Mês 1 - Janiero 2 - Fevereiro 3 - Março 4 - Abril 5
+	 * - Maio 6 - Junho 7 - Julho 8 - Agosto 9 - Setembro 10 - Outubro 11 -
 	 * Novembro 12 - Dezembro
 	 * 
 	 * @param mes
@@ -2821,22 +2712,12 @@ public class Util {
 		}
 
 		// ultima data do mes
-		calendar.set(Calendar.DAY_OF_MONTH, calendar
-				.getActualMaximum(Calendar.DAY_OF_MONTH));
+		calendar.set(Calendar.DAY_OF_MONTH, calendar.getActualMaximum(Calendar.DAY_OF_MONTH));
 
-		ultimaData = calendar.getTime();		
-	
+		ultimaData = calendar.getTime();
+
 		return ultimaData;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
 
 	/**
 	 * Método para comparar duas data e retornar o numero de dias da diferença
@@ -2851,8 +2732,7 @@ public class Util {
 	 * 
 	 * @return int Quantidade de Dias
 	 */
-	public static int obterQuantidadeDiasEntreDuasDatas(Date dataInicial,
-			Date dataFinal) {
+	public static int obterQuantidadeDiasEntreDuasDatas(Date dataInicial, Date dataFinal) {
 
 		GregorianCalendar startTime = new GregorianCalendar();
 		GregorianCalendar endTime = new GregorianCalendar();
@@ -2860,15 +2740,14 @@ public class Util {
 		GregorianCalendar curTime = new GregorianCalendar();
 		GregorianCalendar baseTime = new GregorianCalendar();
 
-		
-		if(dataInicial instanceof Timestamp) {
-			dataInicial = new Date(((Date)dataInicial).getTime());	
+		if (dataInicial instanceof Timestamp) {
+			dataInicial = new Date(((Date) dataInicial).getTime());
 		}
-		
-		if(dataFinal instanceof Timestamp) {
-			dataFinal = new Date(((Date)dataFinal).getTime());	
+
+		if (dataFinal instanceof Timestamp) {
+			dataFinal = new Date(((Date) dataFinal).getTime());
 		}
-		
+
 		startTime.setTime(dataInicial);
 		endTime.setTime(dataFinal);
 
@@ -2892,13 +2771,10 @@ public class Util {
 		// Para cada mes e ano, vai de mes em mes pegar o ultimo dia para ir
 		// acumulando
 		// no total de dias. Ja leva em consideracao ano bissesto
-		while (curTime.get(GregorianCalendar.YEAR) < baseTime
-				.get(GregorianCalendar.YEAR)
-				|| curTime.get(GregorianCalendar.MONTH) < baseTime
-						.get(GregorianCalendar.MONTH)) {
+		while (curTime.get(GregorianCalendar.YEAR) < baseTime.get(GregorianCalendar.YEAR)
+				|| curTime.get(GregorianCalendar.MONTH) < baseTime.get(GregorianCalendar.MONTH)) {
 
-			int max_day = curTime
-					.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+			int max_day = curTime.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
 			resultadoMeses += max_day;
 			curTime.add(GregorianCalendar.MONTH, 1);
 
@@ -2908,8 +2784,7 @@ public class Util {
 		resultadoMeses = resultadoMeses * multiplicadorDiferenca;
 
 		// Retirna a diferenca de dias do total dos meses
-		resultadoDias += (endTime.get(GregorianCalendar.DAY_OF_MONTH) - startTime
-				.get(GregorianCalendar.DAY_OF_MONTH));
+		resultadoDias += (endTime.get(GregorianCalendar.DAY_OF_MONTH) - startTime.get(GregorianCalendar.DAY_OF_MONTH));
 
 		return resultadoAno + resultadoMeses + resultadoDias;
 	}
@@ -3065,8 +2940,7 @@ public class Util {
 	 *            Tamanho máximo da string
 	 * @return
 	 */
-	public static String completaStringComEspacoAEsquerda(String str,
-			int tamanhoMaximo) {
+	public static String completaStringComEspacoAEsquerda(String str, int tamanhoMaximo) {
 
 		// Tamanho da string informada
 		int tamanhoString = 0;
@@ -3110,7 +2984,8 @@ public class Util {
 
 	/**
 	 * O metódo completa uma string com espaços em branco (ex: passa a string
-	 * "12.36" e o tamanho máximo 10 e retorna " 12.36" ) apenas se a string não exceder o tamanho máximo
+	 * "12.36" e o tamanho máximo 10 e retorna " 12.36" ) apenas se a string não
+	 * exceder o tamanho máximo
 	 * 
 	 * 
 	 * @author Rodrigo Silveira
@@ -3123,8 +2998,7 @@ public class Util {
 	 *            Tamanho máximo da string
 	 * @return
 	 */
-	public static String completaStringComEspacoAEsquerdaCondicaoTamanhoMaximo(String str,
-			int tamanhoMaximo) {
+	public static String completaStringComEspacoAEsquerdaCondicaoTamanhoMaximo(String str, int tamanhoMaximo) {
 
 		// Tamanho da string informada
 		int tamanhoString = 0;
@@ -3139,7 +3013,7 @@ public class Util {
 
 		if (quantidadeEspacos < 0) {
 			return str;
-			
+
 		}
 
 		// Cria um array de caracteres de espaços em branco
@@ -3152,17 +3026,16 @@ public class Util {
 		// Cria uma strinBuilder para armazenar a string
 		StringBuilder stringBuilder = new StringBuilder(temp);
 
-		
 		stringBuilder.append(str);
-		
 
 		// Retorna a string informada com espaços em branco a esquerda
 		// totalizando o tamanho máximo informado
 		return stringBuilder.toString();
 	}
-	
+
 	/**
 	 * Complementa a string passada com asteriscos a esquerda
+	 * 
 	 * @param str
 	 * @param tamanhoMaximo
 	 * @return
@@ -3207,8 +3080,8 @@ public class Util {
 		// Retorna a string informada com asteriscos a esquerda
 		// totalizando o tamanho máximo informado
 		return stringBuilder.toString();
-	}	
-	
+	}
+
 	/**
 	 * Formatar para MM/AAAA Entrada: MMAAAA Saída: MM/AAAA
 	 * 
@@ -3240,25 +3113,24 @@ public class Util {
 	 * @date 20/04/2006
 	 * 
 	 * @param codigoBarraCom43Posicoes
-	 * @param moduloVerificador 
+	 * @param moduloVerificador
 	 * @return
 	 */
-	public static Integer obterDigitoVerificadorGeral(
-			String codigoBarraCom43Posicoes, Short moduloVerificador) {
+	public static Integer obterDigitoVerificadorGeral(String codigoBarraCom43Posicoes, Short moduloVerificador) {
 		// Recupera o dígito verificador do módulo 11 para o código de barra com
 		// 43 posições
 		// Passando uma string como parâmetro
-		
+
 		Integer digitoVerificadorGeral = null;
-		
-		if(moduloVerificador.compareTo(ConstantesSistema.MODULO_VERIFICADOR_11)==0){
-			
+
+		if (moduloVerificador.compareTo(ConstantesSistema.MODULO_VERIFICADOR_11) == 0) {
+
 			digitoVerificadorGeral = obterDigitoVerificadorModulo11(codigoBarraCom43Posicoes);
-			
-		}else{
-			
+
+		} else {
+
 			digitoVerificadorGeral = obterDigitoVerificadorModulo10(codigoBarraCom43Posicoes);
-			
+
 		}
 
 		// Retorna o dígito verificador calculado
@@ -3361,8 +3233,7 @@ public class Util {
 	 * @param anoMesReferencia
 	 * @return
 	 */
-	public static Integer somaMesAnoMesReferencia(Integer anoMesReferencia,
-			int qtdMeses) {
+	public static Integer somaMesAnoMesReferencia(Integer anoMesReferencia, int qtdMeses) {
 
 		int mes = obterMes(anoMesReferencia.intValue());
 		int ano = obterAno(anoMesReferencia.intValue());
@@ -3381,7 +3252,7 @@ public class Util {
 		}
 		return Integer.parseInt(anoMes);
 	}
-	
+
 	/**
 	 * Subtrair ano ao anoMesReferencia
 	 * 
@@ -3390,8 +3261,7 @@ public class Util {
 	 * @param anoMesReferencia
 	 * @return Integer
 	 */
-	public static Integer subtrairAnoAnoMesReferencia(Integer anoMesReferencia,
-			int qtdAnos) {
+	public static Integer subtrairAnoAnoMesReferencia(Integer anoMesReferencia, int qtdAnos) {
 
 		int mes = obterMes(anoMesReferencia.intValue());
 		int ano = obterAno(anoMesReferencia.intValue());
@@ -3450,8 +3320,7 @@ public class Util {
 	 * @param anoMesReferencia
 	 * @return
 	 */
-	public static Integer subtraiAteSeisMesesAnoMesReferencia(
-			Integer anoMesReferencia, Integer meses) {
+	public static Integer subtraiAteSeisMesesAnoMesReferencia(Integer anoMesReferencia, Integer meses) {
 
 		int mes = obterMes(anoMesReferencia.intValue());
 		int ano = obterAno(anoMesReferencia.intValue());
@@ -3522,8 +3391,7 @@ public class Util {
 
 		BigDecimal primeiroNumero = bigValor1.multiply(numeroCem);
 
-		BigDecimal resultado = primeiroNumero.divide(bigValor2, 2,
-				BigDecimal.ROUND_HALF_UP);
+		BigDecimal resultado = primeiroNumero.divide(bigValor2, 2, BigDecimal.ROUND_HALF_UP);
 
 		return (resultado + "");
 	}
@@ -3532,12 +3400,11 @@ public class Util {
 	// a funcao recebe dois valores, pega o primeiro valor(valor1) multiplica
 	// por 100
 	// e divide pelo segundo valor(valor2)
-	public static BigDecimal calcularPercentualBigDecimal(String valor1,
-			String valor2) {
+	public static BigDecimal calcularPercentualBigDecimal(String valor1, String valor2) {
 
 		BigDecimal bigValor1 = new BigDecimal(valor1);
 		BigDecimal bigValor2 = new BigDecimal(valor2 != null ? valor2 : "1");
-		
+
 		return calcularPercentualBigDecimal(bigValor1, bigValor2);
 	}
 
@@ -3545,19 +3412,17 @@ public class Util {
 	// a funcao recebe dois valores, pega o primeiro valor(valor1) multiplica
 	// por 100
 	// e divide pelo segundo valor(valor2)
-	public static BigDecimal calcularPercentualBigDecimal(BigDecimal bigValor1,
-			BigDecimal bigValor2) {
-		
+	public static BigDecimal calcularPercentualBigDecimal(BigDecimal bigValor1, BigDecimal bigValor2) {
+
 		BigDecimal resultado = new BigDecimal("0.0");
-		
-		if (bigValor2.compareTo(new BigDecimal("0.0")) != 0){
-			
+
+		if (bigValor2.compareTo(new BigDecimal("0.0")) != 0) {
+
 			BigDecimal numeroCem = new BigDecimal("100");
-	
+
 			BigDecimal primeiroNumero = bigValor1.multiply(numeroCem);
-	
-			resultado = primeiroNumero.divide(bigValor2, 2,
-					BigDecimal.ROUND_HALF_UP);
+
+			resultado = primeiroNumero.divide(bigValor2, 2, BigDecimal.ROUND_HALF_UP);
 		}
 		return resultado;
 	}
@@ -3688,8 +3553,8 @@ public class Util {
 	 * @author lms
 	 * @date 10/08/2006
 	 * 
-	 * @param date1,
-	 *            date2 Duas datas
+	 * @param date1
+	 *            , date2 Duas datas
 	 * @return int -1, se a data1 > data2 0, se data1 == data2 1, se data1 <
 	 *         data2
 	 */
@@ -3798,8 +3663,7 @@ public class Util {
 	 * @author Rafael Francisco Pinto
 	 * @return A string no formato especificado
 	 */
-	public static String formataBigDecimal(BigDecimal numero, int casas,
-			boolean agruparMilhares) {
+	public static String formataBigDecimal(BigDecimal numero, int casas, boolean agruparMilhares) {
 
 		if (numero == null) {
 			numero = new BigDecimal("0.0");
@@ -3839,8 +3703,7 @@ public class Util {
 
 	}
 
-	public static BigDecimal calcularValorDebitoComPorcentagem(
-			BigDecimal valorDebito, String percentual) {
+	public static BigDecimal calcularValorDebitoComPorcentagem(BigDecimal valorDebito, String percentual) {
 
 		BigDecimal retorno = new BigDecimal("0");
 
@@ -3922,8 +3785,7 @@ public class Util {
 			if (unidades > 0) {
 				if ((milhares > 100) && (unidades > 100)) {
 					s += ", ";
-				} else if (((unidades % 100) != 0)
-						|| ((unidades % 100 == 0) && (milhares < 10))) {
+				} else if (((unidades % 100) != 0) || ((unidades % 100 == 0) && (milhares < 10))) {
 					s += " E ";
 				} else {
 					s += " ";
@@ -3946,15 +3808,10 @@ public class Util {
 
 	private static String numero(long n) {
 
-		String u[] = { "", "UM", "DOIS", "TRES", "QUATRO", "CINCO", "SEIS",
-				"SETE", "OITO", "NOVE", "DEZ", "ONZE", "DOZE", "TREZE",
-				"CATORZE", "QUINZE", "DEZESSEIS", "DEZESSETE", "DEZOITO",
-				"DEZENOVE" };
-		String d[] = { "", "", "VINTE", "TRINTA", "QUARENTA", "CINQUENTA",
-				"SESSENTA", "SETENTA", "OITENTA", "NOVENTA" };
-		String c[] = { "", "CENTO", "DUZENTOS", "TREZENTOS", "QUATROCENTOS",
-				"QUINHENTOS", "SEISCENTOS", "SETECENTOS", "OITOCENTOS",
-				"NOVECENTOS" };
+		String u[] = { "", "UM", "DOIS", "TRES", "QUATRO", "CINCO", "SEIS", "SETE", "OITO", "NOVE", "DEZ", "ONZE", "DOZE", "TREZE", "CATORZE", "QUINZE",
+				"DEZESSEIS", "DEZESSETE", "DEZOITO", "DEZENOVE" };
+		String d[] = { "", "", "VINTE", "TRINTA", "QUARENTA", "CINQUENTA", "SESSENTA", "SETENTA", "OITENTA", "NOVENTA" };
+		String c[] = { "", "CENTO", "DUZENTOS", "TREZENTOS", "QUATROCENTOS", "QUINHENTOS", "SEISCENTOS", "SETECENTOS", "OITOCENTOS", "NOVECENTOS" };
 
 		String extenso_do_numero = new String();
 
@@ -4090,13 +3947,11 @@ public class Util {
 	 * 
 	 * @return true está no intervalo false não está no intervalo.
 	 */
-	public static boolean verifcarIntervaloHora(Date intervaloInicio,
-			Date intervaloFim, Date dataAnalisada) {
+	public static boolean verifcarIntervaloHora(Date intervaloInicio, Date intervaloFim, Date dataAnalisada) {
 
 		boolean ehIgual = false;
 
-		if (dataAnalisada.compareTo(intervaloInicio) != -1
-				&& dataAnalisada.compareTo(intervaloFim) != 1) {
+		if (dataAnalisada.compareTo(intervaloInicio) != -1 && dataAnalisada.compareTo(intervaloFim) != 1) {
 
 			ehIgual = true;
 		}
@@ -4118,13 +3973,11 @@ public class Util {
 	 * 
 	 * @return true está no intervalo false não está no intervalo.
 	 */
-	public static boolean verifcarIntervaloData(Date intervaloInicio,
-			Date intervaloFim, Date dataAnalisada) {
+	public static boolean verifcarIntervaloData(Date intervaloInicio, Date intervaloFim, Date dataAnalisada) {
 
 		boolean ehIgual = false;
 
-		if (dataAnalisada.compareTo(intervaloInicio) != -1
-				&& dataAnalisada.compareTo(intervaloFim) != 1) {
+		if (dataAnalisada.compareTo(intervaloInicio) != -1 && dataAnalisada.compareTo(intervaloFim) != 1) {
 
 			ehIgual = true;
 		}
@@ -4166,8 +4019,9 @@ public class Util {
 	}
 
 	/**
-	 * Adciona ou subtrai o mes na data ou mesAno. 
-	 * Caso queira subtrair manda o valor dos meses negativo ex.(-5) vai subtrair 5 meses da data ou do mesAno
+	 * Adciona ou subtrai o mes na data ou mesAno. Caso queira subtrair manda o
+	 * valor dos meses negativo ex.(-5) vai subtrair 5 meses da data ou do
+	 * mesAno
 	 * 
 	 * @param data
 	 * @param meses
@@ -4177,8 +4031,7 @@ public class Util {
 	 * 
 	 * @return a descrição do mês
 	 */
-	public static Date adcionarOuSubtrairMesesAData(Date data, int meses,
-			int anoMes) {
+	public static Date adcionarOuSubtrairMesesAData(Date data, int meses, int anoMes) {
 
 		Calendar calendar = Calendar.getInstance();
 
@@ -4188,8 +4041,7 @@ public class Util {
 			String ano = anoMesString.substring(0, 4);
 			String mes = anoMesString.substring(4, 6);
 
-			data = Util.criarData(1, Integer.parseInt(mes), Integer
-					.parseInt(ano));
+			data = Util.criarData(1, Integer.parseInt(mes), Integer.parseInt(ano));
 
 		}
 
@@ -4211,16 +4063,14 @@ public class Util {
 
 	public static String retornaDescricaoMes(int mes) {
 
-		String meses[] = { "Janeiro", "Fevereiro", "Março", "Abril", "Maio",
-				"Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro",
-				"Dezembro" };
+		String meses[] = { "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro" };
 
 		String mesPorExtenso = meses[mes - 1];// mes-1 pq o indice do array
 		// começa no zero
 
 		return mesPorExtenso;
 	}
-	
+
 	/**
 	 * Retorna a descrição abreviado do mes
 	 * 
@@ -4233,9 +4083,7 @@ public class Util {
 
 	public static String retornaDescricaoAbreviadoMes(int mes) {
 
-		String meses[] = { "Jan", "Fev", "Mar", "Abr", "Mai",
-				"Jun", "Jul", "Ago", "Set", "Out", "Nov",
-				"Dez" };
+		String meses[] = { "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez" };
 
 		String mesPorExtenso = meses[mes - 1];// mes-1 pq o indice do array
 		// começa no zero
@@ -4257,12 +4105,12 @@ public class Util {
 		int dia = getDiaMes(data);
 		int mes = getMes(data);
 		int ano = getAno(data);
-		
-		String dataExtenso = dia+" de "+retornaDescricaoMes(mes)+" de "+ano;
-		
+
+		String dataExtenso = dia + " de " + retornaDescricaoMes(mes) + " de " + ano;
+
 		return dataExtenso;
 	}
-	
+
 	/**
 	 * Retorna a descrição abreviada do ano Mes
 	 * 
@@ -4275,24 +4123,26 @@ public class Util {
 
 		int mes = new Integer(anoMes.substring(4, 6));
 		String ano = anoMes.substring(2, 4);
-		
-		String descricao = retornaDescricaoAbreviadoMes(mes)+"/"+ano;
-		
-		return descricao;
-	}	
 
-	/**TODO COSANPA: 
-	 * Método utilizado para emitir contas em impressora térmica
-	 * Data: 22/12/2011*/
+		String descricao = retornaDescricaoAbreviadoMes(mes) + "/" + ano;
+
+		return descricao;
+	}
+
+	/**
+	 * TODO COSANPA: Método utilizado para emitir contas em impressora térmica
+	 * Data: 22/12/2011
+	 */
 	public static String retornaDescricaoAnoMesCompleto(String anoMes) {
 
 		int mes = new Integer(anoMes.substring(4, 6));
 		String ano = anoMes.substring(2, 4);
-		
-		String descricao = retornaDescricaoMes(mes)+"/"+ano;
-		
+
+		String descricao = retornaDescricaoMes(mes) + "/" + ano;
+
 		return descricao;
 	}
+
 	/**
 	 * Retorna a matrícula do imóvel formatada.ex.:1234567 retorna 123456.7
 	 * 
@@ -4305,14 +4155,9 @@ public class Util {
 		String matriculaImovelFormatada = "";
 		if (matriculaImovel != null && !matriculaImovel.equals("")) {
 			matriculaImovelFormatada = "" + matriculaImovel;
-			int quantidadeCaracteresImovel = matriculaImovel.toString()
-					.length();
-			matriculaImovelFormatada = matriculaImovelFormatada.substring(0,
-					quantidadeCaracteresImovel - 1)
-					+ "."
-					+ matriculaImovelFormatada.substring(
-							quantidadeCaracteresImovel - 1,
-							quantidadeCaracteresImovel);
+			int quantidadeCaracteresImovel = matriculaImovel.toString().length();
+			matriculaImovelFormatada = matriculaImovelFormatada.substring(0, quantidadeCaracteresImovel - 1) + "."
+					+ matriculaImovelFormatada.substring(quantidadeCaracteresImovel - 1, quantidadeCaracteresImovel);
 		}
 
 		return matriculaImovelFormatada;
@@ -4396,8 +4241,7 @@ public class Util {
 	 * @param anoMesRefencia
 	 * @return
 	 */
-	public static Date gerarDataInicialApartirAnoMesRefencia(
-			Integer anoMesReferencia) {
+	public static Date gerarDataInicialApartirAnoMesRefencia(Integer anoMesReferencia) {
 
 		Date retorno = null;
 
@@ -4443,8 +4287,7 @@ public class Util {
 	 * Data: 12/04/2007
 	 * 
 	 */
-	public static Collection<Categoria> montarColecaoCategoria(
-			Collection colecaoSubcategorias) {
+	public static Collection<Categoria> montarColecaoCategoria(Collection colecaoSubcategorias) {
 
 		Collection<Categoria> colecaoRetorno = null;
 
@@ -4462,26 +4305,20 @@ public class Util {
 				subcategoria = (Subcategoria) colecaoSubcategoriaIt.next();
 
 				if (categoriaAnterior == null) {
-					totalEconomiasCategoria = subcategoria
-							.getQuantidadeEconomias();
-				} else if (subcategoria.getCategoria()
-						.equals(categoriaAnterior)) {
-					totalEconomiasCategoria = totalEconomiasCategoria
-							+ subcategoria.getQuantidadeEconomias();
+					totalEconomiasCategoria = subcategoria.getQuantidadeEconomias();
+				} else if (subcategoria.getCategoria().equals(categoriaAnterior)) {
+					totalEconomiasCategoria = totalEconomiasCategoria + subcategoria.getQuantidadeEconomias();
 				} else {
-					categoriaAnterior
-							.setQuantidadeEconomiasCategoria(totalEconomiasCategoria);
+					categoriaAnterior.setQuantidadeEconomiasCategoria(totalEconomiasCategoria);
 					colecaoRetorno.add(categoriaAnterior);
 
-					totalEconomiasCategoria = subcategoria
-							.getQuantidadeEconomias();
+					totalEconomiasCategoria = subcategoria.getQuantidadeEconomias();
 				}
 
 				categoriaAnterior = subcategoria.getCategoria();
 			}
 
-			categoriaAnterior
-					.setQuantidadeEconomiasCategoria(totalEconomiasCategoria);
+			categoriaAnterior.setQuantidadeEconomiasCategoria(totalEconomiasCategoria);
 			colecaoRetorno.add(categoriaAnterior);
 		}
 
@@ -4493,14 +4330,9 @@ public class Util {
 	public static String formatarCodigoBarra(String codigoBarra) {
 		String retorno = "";
 
-		retorno = codigoBarra.substring(0, 11) + "-"
-				+ codigoBarra.substring(11, 12) + " "
-				+ codigoBarra.substring(12, 23) + "-"
-				+ codigoBarra.substring(23, 24) + " "
-				+ codigoBarra.substring(24, 35) + "-"
-				+ codigoBarra.substring(35, 36) + " "
-				+ codigoBarra.substring(36, 47) + "-"
-				+ codigoBarra.substring(47, 48);
+		retorno = codigoBarra.substring(0, 11) + "-" + codigoBarra.substring(11, 12) + " " + codigoBarra.substring(12, 23) + "-"
+				+ codigoBarra.substring(23, 24) + " " + codigoBarra.substring(24, 35) + "-" + codigoBarra.substring(35, 36) + " "
+				+ codigoBarra.substring(36, 47) + "-" + codigoBarra.substring(47, 48);
 
 		return retorno;
 	}
@@ -4508,20 +4340,20 @@ public class Util {
 	/**
 	 * Author: Rafael Pinto
 	 * 
-	 * Formata o numero com (.) ponto 
-	 * Ex: Numero = 1000 Resultado = 1.000
+	 * Formata o numero com (.) ponto Ex: Numero = 1000 Resultado = 1.000
 	 * 
 	 * Data: 22/11/2007
 	 * 
 	 */
-	public static String agruparNumeroEmMilhares(Integer numero){
+	public static String agruparNumeroEmMilhares(Integer numero) {
 		String retorno = "0";
-		if(numero != null){
+		if (numero != null) {
 			NumberFormat formato = NumberFormat.getInstance(new Locale("pt", "BR"));
 			retorno = formato.format(numero);
 		}
 		return retorno;
 	}
+
 	/**
 	 * Author: Raphael Rossiter
 	 * 
@@ -4529,12 +4361,12 @@ public class Util {
 	 * 
 	 */
 	public static java.sql.Date getSQLDate(Date data) {
-		
-		java.sql.Date dt = new java.sql.Date( data.getTime() );
-	
+
+		java.sql.Date dt = new java.sql.Date(data.getTime());
+
 		return dt;
 	}
-	
+
 	/**
 	 * Author: Raphael Rossiter
 	 * 
@@ -4542,13 +4374,12 @@ public class Util {
 	 * 
 	 */
 	public static Timestamp getSQLTimesTemp(Date data) {
-		
-		Timestamp dt = new Timestamp( data.getTime() );
-	
+
+		Timestamp dt = new Timestamp(data.getTime());
+
 		return dt;
 	}
 
-	
 	public static String separarStringPorLetraMaiuscula(String target) {
 
 		StringBuilder builder = new StringBuilder(target);
@@ -4576,75 +4407,69 @@ public class Util {
 		return builder.toString();
 	}
 
-    
-    public static boolean validarDiaMesAnoSemBarra(String diaMesAnoReferencia) {
-        boolean diaMesAnoInvalido = false;
+	public static boolean validarDiaMesAnoSemBarra(String diaMesAnoReferencia) {
+		boolean diaMesAnoInvalido = false;
 
-        if (diaMesAnoReferencia.length() == 8) {
+		if (diaMesAnoReferencia.length() == 8) {
 
-            String dia = diaMesAnoReferencia.substring(0, 2);
-            String mes = diaMesAnoReferencia.substring(2, 4);
+			String dia = diaMesAnoReferencia.substring(0, 2);
+			String mes = diaMesAnoReferencia.substring(2, 4);
 
-            try {
-                int mesInt = Integer.parseInt(mes);
-                // int anoInt = Integer.parseInt(ano);
-                int diaInt = Integer.parseInt(dia);
+			try {
+				int mesInt = Integer.parseInt(mes);
+				// int anoInt = Integer.parseInt(ano);
+				int diaInt = Integer.parseInt(dia);
 
-                if (mesInt > 12) {
-                    diaMesAnoInvalido = true;
-                }
-                if (diaInt > 31) {
-                    diaMesAnoInvalido = true;
-                }
-            } catch (NumberFormatException e) {
-                diaMesAnoInvalido = true;
-            }
+				if (mesInt > 12) {
+					diaMesAnoInvalido = true;
+				}
+				if (diaInt > 31) {
+					diaMesAnoInvalido = true;
+				}
+			} catch (NumberFormatException e) {
+				diaMesAnoInvalido = true;
+			}
 
-        } else {
-            diaMesAnoInvalido = true;
-        }
+		} else {
+			diaMesAnoInvalido = true;
+		}
 
-        return diaMesAnoInvalido;
-    }
-    
-    /**
-     * Método que recebe uma data com string no formato DDMMAAAA e converte para
-     * o objeto Date.
-     */
-    public static Date converteStringSemBarraParaDate(String data) {
-        Date retorno = null;
-        String dataInvertida = data.substring(0, 2) + "/"
-                + data.substring(2, 4) + "/" + data.substring(4, 8);
-        SimpleDateFormat dataTxt = new SimpleDateFormat("dd/MM/yyyy");
-        try {
-            retorno = dataTxt.parse(dataInvertida);
-        } catch (ParseException e) {
-            throw new IllegalArgumentException(data
-                    + " não tem o formato dd/MM/yyyy.");
-        }
-        return retorno;
-    }
-    
-    /**
-     * Método que recebe uma data com string no formato DDMMAA e converte para
-     * o objeto Date.
-     */
-    public static Date converteStringSemBarraParaDateAnoSimples(String data) {
-        Date retorno = null;
-        String dataInvertida = data.substring(0, 2) + "/"
-                + data.substring(2, 4) + "/" + data.substring(4, 6);
-        SimpleDateFormat dataTxt = new SimpleDateFormat("dd/MM/yy");
-        try {
-            retorno = dataTxt.parse(dataInvertida);
-        } catch (ParseException e) {
-            throw new IllegalArgumentException(data
-                    + " não tem o formato dd/MM/yy.");
-        }
-        return retorno;
-    }
-    
-    
-    /**
+		return diaMesAnoInvalido;
+	}
+
+	/**
+	 * Método que recebe uma data com string no formato DDMMAAAA e converte para
+	 * o objeto Date.
+	 */
+	public static Date converteStringSemBarraParaDate(String data) {
+		Date retorno = null;
+		String dataInvertida = data.substring(0, 2) + "/" + data.substring(2, 4) + "/" + data.substring(4, 8);
+		SimpleDateFormat dataTxt = new SimpleDateFormat("dd/MM/yyyy");
+		try {
+			retorno = dataTxt.parse(dataInvertida);
+		} catch (ParseException e) {
+			throw new IllegalArgumentException(data + " não tem o formato dd/MM/yyyy.");
+		}
+		return retorno;
+	}
+
+	/**
+	 * Método que recebe uma data com string no formato DDMMAA e converte para o
+	 * objeto Date.
+	 */
+	public static Date converteStringSemBarraParaDateAnoSimples(String data) {
+		Date retorno = null;
+		String dataInvertida = data.substring(0, 2) + "/" + data.substring(2, 4) + "/" + data.substring(4, 6);
+		SimpleDateFormat dataTxt = new SimpleDateFormat("dd/MM/yy");
+		try {
+			retorno = dataTxt.parse(dataInvertida);
+		} catch (ParseException e) {
+			throw new IllegalArgumentException(data + " não tem o formato dd/MM/yy.");
+		}
+		return retorno;
+	}
+
+	/**
 	 * Retorna o valor de cnpjFormatado
 	 * 
 	 * @return O valor de cnpjFormatado
@@ -4652,23 +4477,20 @@ public class Util {
 	public static String formatarCnpj(String cnpj) {
 		String cnpjFormatado = cnpj;
 		String zeros = "";
-		
+
 		if (cnpjFormatado != null) {
-			
+
 			for (int a = 0; a < (14 - cnpjFormatado.length()); a++) {
 				zeros = zeros.concat("0");
 			}
 			// concatena os zeros ao numero
 			// caso o numero seja diferente de nulo
 			cnpjFormatado = zeros.concat(cnpjFormatado);
-			
-			cnpjFormatado = cnpjFormatado.substring(0, 2) + "."
-					+ cnpjFormatado.substring(2, 5) + "."
-					+ cnpjFormatado.substring(5, 8) + "/"
-					+ cnpjFormatado.substring(8, 12) + "-"
-					+ cnpjFormatado.substring(12, 14);
+
+			cnpjFormatado = cnpjFormatado.substring(0, 2) + "." + cnpjFormatado.substring(2, 5) + "." + cnpjFormatado.substring(5, 8) + "/"
+					+ cnpjFormatado.substring(8, 12) + "-" + cnpjFormatado.substring(12, 14);
 		}
-		
+
 		return cnpjFormatado;
 	}
 
@@ -4678,68 +4500,63 @@ public class Util {
 	public static String formatarCPFApresentacao(String cpf) {
 		return cpf;
 	}
-	
-    /**
+
+	/**
 	 * Retorna o valor de cnpjFormatado
 	 * 
 	 * @return O valor de cnpjFormatado
 	 */
 	public static String formatarCpf(String cpf) {
-		
+
 		String cpfFormatado = cpf;
 		String zeros = "";
-		
+
 		if (cpfFormatado != null) {
-			
+
 			for (int a = 0; a < (11 - cpfFormatado.length()); a++) {
 				zeros = zeros.concat("0");
 			}
 			// concatena os zeros ao numero
 			// caso o numero seja diferente de nulo
 			cpfFormatado = zeros.concat(cpfFormatado);
-			
-			cpfFormatado = cpfFormatado.substring(0, 3) + "."
-					+ cpfFormatado.substring(3, 6) + "."
-					+ cpfFormatado.substring(6, 9) + "-"
+
+			cpfFormatado = cpfFormatado.substring(0, 3) + "." + cpfFormatado.substring(3, 6) + "." + cpfFormatado.substring(6, 9) + "-"
 					+ cpfFormatado.substring(9, 11);
 		}
-		
+
 		return cpfFormatado;
 	}
-	
+
 	/**
 	 * Passa a data formatada dd/mm/aaaa e retorna o ano mes.
 	 * 
 	 * Nome:Sávio Luiz
 	 */
-	public static Integer recuperaAnoMesDataString(String dataFormatada){
+	public static Integer recuperaAnoMesDataString(String dataFormatada) {
 		Integer anoMes = null;
-		
-		try{
-			anoMes = new Integer(dataFormatada.substring(6,10) + dataFormatada.substring(3,5));
-		}catch(IllegalArgumentException e){
+
+		try {
+			anoMes = new Integer(dataFormatada.substring(6, 10) + dataFormatada.substring(3, 5));
+		} catch (IllegalArgumentException e) {
 			anoMes = 0;
 		}
-		
+
 		return anoMes;
 	}
-	
+
 	/**
-	 * Verifica se o parametro informado é diferente de null
-	 * e diferente de "" e diferente da constante numero
-	 * nao informado
+	 * Verifica se o parametro informado é diferente de null e diferente de "" e
+	 * diferente da constante numero nao informado
+	 * 
 	 * @param parametro
 	 */
-	public static boolean parametroNumericoValido( String parametro ){
-		return ( parametro != null &&
-		         !parametro.equals( "" ) &&
-		         !parametro.equals( "-1" ) &&
-		         !parametro.equals( ConstantesSistema.NUMERO_NAO_INFORMADO ) );		
+	public static boolean parametroNumericoValido(String parametro) {
+		return (parametro != null && !parametro.equals("") && !parametro.equals("-1") && !parametro.equals(ConstantesSistema.NUMERO_NAO_INFORMADO));
 	}
-	
+
 	/**
-	 * Adiciona zeros a esqueda do número truncando informado tamamho máximo campo 6
-	 * Número 16 retorna 000016
+	 * Adiciona zeros a esqueda do número truncando informado tamamho máximo
+	 * campo 6 Número 16 retorna 000016
 	 * 
 	 * @param tamanhoMaximoCampo
 	 *            Descrição do parâmetro
@@ -4747,14 +4564,12 @@ public class Util {
 	 *            Descrição do parâmetro
 	 * @return Descrição do retorno
 	 */
-	public static String adicionarZerosEsquedaNumeroTruncando(int tamanhoMaximoCampo,
-			String numero) {
-		
-		
+	public static String adicionarZerosEsquedaNumeroTruncando(int tamanhoMaximoCampo, String numero) {
+
 		String zeros = "";
 
 		String retorno = null;
-		
+
 		if (numero != null && !numero.equals("")) {
 			for (int a = 0; a < (tamanhoMaximoCampo - numero.length()); a++) {
 				zeros = zeros.concat("0");
@@ -4777,125 +4592,121 @@ public class Util {
 		}
 		return retorno;
 	}
-	
+
 	/**
 	 * Validação de CPF
-	 *
+	 * 
 	 * @author Raphael Rossiter
 	 * @date 21/10/2008
-	 *
+	 * 
 	 * @param s_aux
 	 * @return boolean
 	 */
-	public static boolean validacaoCPF(String s_aux){
-	    //------- Rotina para CPF        
-	       if (s_aux.length() == 11 )
-	       {
-	           int     d1, d2, d3; 
-	           int     digito1, digito2, resto; 
-	           int     digitoCPF; 
-	           String  nDigResult; 
-	           String  nDigVerif = s_aux.substring(0,1);
-	           d1 = d2 = 0; 
-	           d3 = 1;
-	           digito1 = digito2 = resto = 0; 
-	           boolean digVerifIgual = true;
-	           
-	           for (int n_Count = 1; n_Count < s_aux.length() -1; n_Count++) 
-	           { 
-	              digitoCPF = Integer.valueOf (s_aux.substring(n_Count -1, n_Count)).intValue(); 
-	    //--------- Multiplique a ultima casa por 2 a seguinte por 3 a seguinte por 4 e assim por diante. 
-	              d1 = d1 + ( 11 - n_Count ) * digitoCPF; 
-	    //--------- Para o segundo digito repita o procedimento incluindo o primeiro digito calculado no passo anterior. 
-	              d2 = d2 + ( 12 - n_Count ) * digitoCPF; 
-	           }
-	    //--------- Primeiro resto da divisão por 11. 
-	           resto = (d1 % 11); 
-	    //--------- Se o resultado for 0 ou 1 o digito é 0 caso contrário o digito é 11 menos o resultado anterior. 
-	           if (resto < 2) 
-	              digito1 = 0; 
-	           else 
-	              digito1 = 11 - resto; 
-	           d2 += 2 * digito1; 
-	    //--------- Segundo resto da divisão por 11. 
-	           resto = (d2 % 11); 
-	    //--------- Se o resultado for 0 ou 1 o digito é 0 caso contrário o digito é 11 menos o resultado anterior. 
-	           if (resto < 2) 
-	              digito2 = 0; 
-	           else 
-	              digito2 = 11 - resto; 
-	    //--------- Digito verificador do CPF que está sendo validado. 
-	           String nDigVerific = s_aux.substring (s_aux.length()-2, s_aux.length()); 
-	    //--------- Concatenando o primeiro resto com o segundo. 
-	           nDigResult = String.valueOf(digito1) + String.valueOf(digito2); 
-	    //--------- Comparar o digito verificador do cpf com o primeiro resto + o segundo resto. 
-	    
-	   //---------- Verifica se todos os dígitos estão repetidos
-	           while(d3 < s_aux.length()){
-	        	   
-	        	   if(!s_aux.substring(d3, d3+1).equals(nDigVerif)){
-	        		   digVerifIgual = false;
-	        	   }
-	        	   d3 += 1;
-	           }
-	           
-	           if(digVerifIgual){
-	        	   return false;
-	           }
-	           
-	           return nDigVerific.equals(nDigResult); 
-	        }
-	       else 
-	            return false;	        
+	public static boolean validacaoCPF(String s_aux) {
+		// ------- Rotina para CPF
+		if (s_aux.length() == 11) {
+			int d1, d2, d3;
+			int digito1, digito2, resto;
+			int digitoCPF;
+			String nDigResult;
+			String nDigVerif = s_aux.substring(0, 1);
+			d1 = d2 = 0;
+			d3 = 1;
+			digito1 = digito2 = resto = 0;
+			boolean digVerifIgual = true;
+
+			for (int n_Count = 1; n_Count < s_aux.length() - 1; n_Count++) {
+				digitoCPF = Integer.valueOf(s_aux.substring(n_Count - 1, n_Count)).intValue();
+				// --------- Multiplique a ultima casa por 2 a seguinte por 3 a
+				// seguinte por 4 e assim por diante.
+				d1 = d1 + (11 - n_Count) * digitoCPF;
+				// --------- Para o segundo digito repita o procedimento
+				// incluindo o primeiro digito calculado no passo anterior.
+				d2 = d2 + (12 - n_Count) * digitoCPF;
+			}
+			// --------- Primeiro resto da divisão por 11.
+			resto = (d1 % 11);
+			// --------- Se o resultado for 0 ou 1 o digito é 0 caso contrário o
+			// digito é 11 menos o resultado anterior.
+			if (resto < 2)
+				digito1 = 0;
+			else
+				digito1 = 11 - resto;
+			d2 += 2 * digito1;
+			// --------- Segundo resto da divisão por 11.
+			resto = (d2 % 11);
+			// --------- Se o resultado for 0 ou 1 o digito é 0 caso contrário o
+			// digito é 11 menos o resultado anterior.
+			if (resto < 2)
+				digito2 = 0;
+			else
+				digito2 = 11 - resto;
+			// --------- Digito verificador do CPF que está sendo validado.
+			String nDigVerific = s_aux.substring(s_aux.length() - 2, s_aux.length());
+			// --------- Concatenando o primeiro resto com o segundo.
+			nDigResult = String.valueOf(digito1) + String.valueOf(digito2);
+			// --------- Comparar o digito verificador do cpf com o primeiro
+			// resto + o segundo resto.
+
+			// ---------- Verifica se todos os dígitos estão repetidos
+			while (d3 < s_aux.length()) {
+
+				if (!s_aux.substring(d3, d3 + 1).equals(nDigVerif)) {
+					digVerifIgual = false;
+				}
+				d3 += 1;
+			}
+
+			if (digVerifIgual) {
+				return false;
+			}
+
+			return nDigVerific.equals(nDigResult);
+		} else
+			return false;
 	}
-	
+
 	/**
 	 * Validação de CNPJ
-	 *
+	 * 
 	 * @author Raphael Rossiter
 	 * @date 21/10/2008
-	 *
+	 * 
 	 * @param s_aux
 	 * @return boolean
 	 */
-	public static boolean validacaoCNPJ(String s_aux){
-		
-		 //-------- Rotina para CNPJ         
-        if (s_aux.length() == 14)
-        {
-            int soma = 0, dig; 
-            String cnpj_calc = s_aux.substring(0,12); 
-            char[] chr_cnpj = s_aux.toCharArray(); 
-    //--------- Primeira parte 
-            for( int i = 0; i < 4; i++ ) 
-            if ( chr_cnpj[i]-48 >=0 && chr_cnpj[i]-48 <=9 ) 
-              soma += (chr_cnpj[i] - 48) * (6 - (i + 1)); 
-            for( int i = 0; i < 8; i++ ) 
-            if ( chr_cnpj[i+4]-48 >=0 && chr_cnpj[i+4]-48 <=9 ) 
-                soma += (chr_cnpj[i+4] - 48) * (10 - (i + 1)); 
-            dig = 11 - (soma % 11); 
-            cnpj_calc += ( dig == 10 || dig == 11 ) ?
-                "0" : Integer.toString(dig); 
-    //--------- Segunda parte 
-            soma = 0; 
-            for ( int i = 0; i < 5; i++ ) 
-            if ( chr_cnpj[i]-48 >=0 && chr_cnpj[i]-48 <=9 ) 
-                soma += (chr_cnpj[i] - 48) * (7 - (i + 1)); 
-            for ( int i = 0; i < 8; i++ ) 
-            if ( chr_cnpj[i+5]-48 >=0 && chr_cnpj[i+5]-48 <=9 ) 
-                soma += (chr_cnpj[i+5] - 48) * (10 - (i + 1)); 
-            dig = 11 - (soma % 11); 
-            cnpj_calc += ( dig == 10 || dig == 11 ) ? 
-                        "0" : Integer.toString(dig); 
-            return s_aux.equals(cnpj_calc); 
-        }
-        else 
-            return false;
+	public static boolean validacaoCNPJ(String s_aux) {
+
+		// -------- Rotina para CNPJ
+		if (s_aux.length() == 14) {
+			int soma = 0, dig;
+			String cnpj_calc = s_aux.substring(0, 12);
+			char[] chr_cnpj = s_aux.toCharArray();
+			// --------- Primeira parte
+			for (int i = 0; i < 4; i++)
+				if (chr_cnpj[i] - 48 >= 0 && chr_cnpj[i] - 48 <= 9)
+					soma += (chr_cnpj[i] - 48) * (6 - (i + 1));
+			for (int i = 0; i < 8; i++)
+				if (chr_cnpj[i + 4] - 48 >= 0 && chr_cnpj[i + 4] - 48 <= 9)
+					soma += (chr_cnpj[i + 4] - 48) * (10 - (i + 1));
+			dig = 11 - (soma % 11);
+			cnpj_calc += (dig == 10 || dig == 11) ? "0" : Integer.toString(dig);
+			// --------- Segunda parte
+			soma = 0;
+			for (int i = 0; i < 5; i++)
+				if (chr_cnpj[i] - 48 >= 0 && chr_cnpj[i] - 48 <= 9)
+					soma += (chr_cnpj[i] - 48) * (7 - (i + 1));
+			for (int i = 0; i < 8; i++)
+				if (chr_cnpj[i + 5] - 48 >= 0 && chr_cnpj[i + 5] - 48 <= 9)
+					soma += (chr_cnpj[i + 5] - 48) * (10 - (i + 1));
+			dig = 11 - (soma % 11);
+			cnpj_calc += (dig == 10 || dig == 11) ? "0" : Integer.toString(dig);
+			return s_aux.equals(cnpj_calc);
+		} else
+			return false;
 
 	}
-   
 
-	
 	/**
 	 * Trunca String
 	 * 
@@ -4906,9 +4717,9 @@ public class Util {
 	 * @return Descrição do retorno
 	 */
 	public static String truncarString(String str, int tamanhoMaximoCampo) {
-		
+
 		String retorno = str;
-		
+
 		if (tamanhoMaximoCampo < str.length()) {
 			// trunca a String
 			String strTruncado = retorno.substring(0, tamanhoMaximoCampo);
@@ -4916,8 +4727,7 @@ public class Util {
 		}
 		return retorno;
 	}
-	
-	
+
 	public static String formatarAnoMesParaMesAnoSemZeroNoMes(String anoMes) {
 
 		String anoMesFormatado = "";
@@ -4936,9 +4746,9 @@ public class Util {
 		}
 		return anoMesFormatado;
 	}
-	
+
 	/**
-	 * Converte a data passada em string sem 0 antes do mes 
+	 * Converte a data passada em string sem 0 antes do mes
 	 * 
 	 * 
 	 * @param data
@@ -4956,8 +4766,7 @@ public class Util {
 			if (dataCalendar.get(Calendar.DAY_OF_MONTH) > 9) {
 				dataBD.append(dataCalendar.get(Calendar.DAY_OF_MONTH) + "/");
 			} else {
-				dataBD.append("0" + dataCalendar.get(Calendar.DAY_OF_MONTH)
-						+ "/");
+				dataBD.append("0" + dataCalendar.get(Calendar.DAY_OF_MONTH) + "/");
 			}
 
 			// Obs.: Janeiro no Calendar é mês zero
@@ -4972,21 +4781,19 @@ public class Util {
 		}
 		return retorno;
 	}
-	
+
 	/**
-	 * Author: Vivianne Sousa 
-	 * Data: 21/11/2008
-	 * Adiciona nº de dias uteis para uma data
+	 * Author: Vivianne Sousa Data: 21/11/2008 Adiciona nº de dias uteis para
+	 * uma data
 	 */
-	public static Date adicionarNumeroDiasUteisDeUmaData(Date data, int numeroDias,
-			Collection colecaoFeriadosNacionais, Collection colecaoFeriadosMunicipais) {
-		
+	public static Date adicionarNumeroDiasUteisDeUmaData(Date data, int numeroDias, Collection colecaoFeriadosNacionais, Collection colecaoFeriadosMunicipais) {
+
 		int cont = 0;
 		while (numeroDias != cont) {
-			
-			data = Util.adicionarNumeroDiasDeUmaData(data,+1);
-			
-			if(ehDiaUtil(data,colecaoFeriadosNacionais,colecaoFeriadosMunicipais)){
+
+			data = Util.adicionarNumeroDiasDeUmaData(data, +1);
+
+			if (ehDiaUtil(data, colecaoFeriadosNacionais, colecaoFeriadosMunicipais)) {
 				cont = cont + 1;
 			}
 		}
@@ -4994,66 +4801,61 @@ public class Util {
 		// retorna a nova data
 		return data;
 	}
-	
+
 	public static boolean verificarIdNaoVazio(String id) {
 		if (id == null || id.equals("null") || id.trim().equals("") || id.trim().equals(ConstantesSistema.NUMERO_NAO_INFORMADO + "")) {
 			return false;
 		}
-		return true;		
+		return true;
 	}
-	
+
 	public static boolean verificarNaoVazio(String valor) {
 		if (valor == null || valor.trim().equals("")) {
 			return false;
 		}
-		return true;		
+		return true;
 	}
-	
+
 	/**
-	 * Author: Vinicius Medeiros
-	 * Data: 11/02/2009
-	 * Formatar CEP
+	 * Author: Vinicius Medeiros Data: 11/02/2009 Formatar CEP
 	 */
 	public static String formatarCEP(String codigo) {
 
 		String retornoCEP = null;
-		
+
 		String parte1 = codigo.substring(0, 2);
 		String parte2 = codigo.substring(2, 5);
 		String parte3 = codigo.substring(5, 8);
-						
-		retornoCEP = parte1 + "." + parte2 + "-" + parte3; 
-		
+
+		retornoCEP = parte1 + "." + parte2 + "-" + parte3;
+
 		return retornoCEP;
 	}
-	
+
 	/**
-	 * Author: Vinicius Medeiros
-	 * Data: 11/02/2009
-	 * Retirar formatacao CEP
+	 * Author: Vinicius Medeiros Data: 11/02/2009 Retirar formatacao CEP
 	 */
 	public static String retirarFormatacaoCEP(String codigo) {
 
 		String retornoCEP = null;
-		
+
 		String parte1 = codigo.substring(0, 2);
 		String parte2 = codigo.substring(3, 6);
 		String parte3 = codigo.substring(7, 10);
-						
-		retornoCEP =  parte1+parte2+parte3;
-		
+
+		retornoCEP = parte1 + parte2 + parte3;
+
 		return retornoCEP;
 	}
-	
-	
+
 	/**
 	 * Retorna uma string delimitando as casas decimais com ponto
-	 *
+	 * 
 	 * @author Raphael Rossiter
 	 * @date 18/03/2009
-	 *
+	 * 
 	 * @param numero
-	 * @return String 
+	 * @return String
 	 */
 	public static String formatarBigDecimalComPonto(BigDecimal numero) {
 
@@ -5068,111 +4870,109 @@ public class Util {
 
 		return (formato.format(numero)).replace(",", ".");
 	}
-	
+
 	/**
 	 * Retorna a quantidade de meses entre o primeiro anomês e o segundo anomês
-	 * Observação: O primeiro AnoMês deve ser Maior que o segundo AnoMês 
-	 *
+	 * Observação: O primeiro AnoMês deve ser Maior que o segundo AnoMês
+	 * 
 	 * @author Sávio Luiz
 	 * @date 11/05/2009
-	 *
+	 * 
 	 * @param numero
-	 * @return String 
+	 * @return String
 	 */
-	public static Integer retornaQuantidadeMeses(Integer anoMesMaior,Integer anoMesMenor){
+	public static Integer retornaQuantidadeMeses(Integer anoMesMaior, Integer anoMesMenor) {
 		Integer quantidadeMeses = 0;
-		if(anoMesMaior != null && anoMesMenor != null){
-			String anoMes1String = ""+anoMesMaior;
-			Integer ano1 = new Integer(anoMes1String.substring(0,4));
-			Integer mes1 = new Integer(anoMes1String.substring(4,6));
-			String anoMes2String = ""+anoMesMenor;
-			Integer ano2 = new Integer(anoMes2String.substring(0,4));
-			Integer mes2 = new Integer(anoMes2String.substring(4,6));
-			if(anoMesMaior >anoMesMenor){
-			 	if (ano1.equals(ano2)){
-			 		quantidadeMeses = mes1 - mes2;
-			 	}else{
-			 		if (ano1 > ano2){
-			 			quantidadeMeses = quantidadeMeses + ((12*(ano1-ano2)) - mes2);
-			 			quantidadeMeses = quantidadeMeses + mes1;
-			 		}
-			 	}
+		if (anoMesMaior != null && anoMesMenor != null) {
+			String anoMes1String = "" + anoMesMaior;
+			Integer ano1 = new Integer(anoMes1String.substring(0, 4));
+			Integer mes1 = new Integer(anoMes1String.substring(4, 6));
+			String anoMes2String = "" + anoMesMenor;
+			Integer ano2 = new Integer(anoMes2String.substring(0, 4));
+			Integer mes2 = new Integer(anoMes2String.substring(4, 6));
+			if (anoMesMaior > anoMesMenor) {
+				if (ano1.equals(ano2)) {
+					quantidadeMeses = mes1 - mes2;
+				} else {
+					if (ano1 > ano2) {
+						quantidadeMeses = quantidadeMeses + ((12 * (ano1 - ano2)) - mes2);
+						quantidadeMeses = quantidadeMeses + mes1;
+					}
+				}
 			}
 		}
 		return quantidadeMeses;
 	}
-	
-	
+
 	/**
-	 * Escreve a String indicada no arquivo representado pelo Writer
-	 * Usado na escrita incremental de arquivos 
-	 *
+	 * Escreve a String indicada no arquivo representado pelo Writer Usado na
+	 * escrita incremental de arquivos
+	 * 
 	 * @author Sávio Luiz
 	 * @date 02/06/2009
-	 *
-	*/
+	 * 
+	 */
 	public static void gerarArquivoPorPartes(BufferedWriter out, StringBuilder stringParaGravacao, boolean inserirQuebraLinha) throws IOException {
-		
+
 		if (inserirQuebraLinha) {
-			
+
 			stringParaGravacao.append(System.getProperty("line.separator"));
 		}
 		out.write(stringParaGravacao.toString());
 		out.flush();
 		stringParaGravacao = null;
 	}
-	
+
 	/**
-	 * Calcula a quantidade de anos completos, existentes entre duas datas 
-	 *
+	 * Calcula a quantidade de anos completos, existentes entre duas datas
+	 * 
 	 * @author Raphael Rossiter
 	 * @date 16/06/2009
-	 *
+	 * 
 	 * @param dataInicial
 	 * @param dataFinal
 	 * @return int
 	 */
-	public static int anosEntreDatas(Date dataInicial, Date dataFinal){
-		
+	public static int anosEntreDatas(Date dataInicial, Date dataFinal) {
+
 		int idade = 0;
 
-		while (compararData(dataInicial, dataFinal) == -1){
-			
+		while (compararData(dataInicial, dataFinal) == -1) {
+
 			int sDiaInicial = getDiaMes(dataInicial);
-	        int sMesInicial = getMes(dataInicial);
+			int sMesInicial = getMes(dataInicial);
 			int sAnoInicial = getAno(dataInicial);
 
 			int sDiaFinal = getDiaMes(dataFinal);
-	        int sMesFinal = getMes(dataFinal);
+			int sMesFinal = getMes(dataFinal);
 			int sAnoFinal = getAno(dataFinal);
 
 			sAnoInicial++;
 			dataInicial = criarData(sDiaInicial, sMesInicial, sAnoInicial);
-			
-			if (sAnoInicial == sAnoFinal){
-				
-				if (sMesInicial < sMesFinal ||
-					( sMesInicial == sMesFinal && sDiaInicial <= sDiaFinal )){
-					
+
+			if (sAnoInicial == sAnoFinal) {
+
+				if (sMesInicial < sMesFinal || (sMesInicial == sMesFinal && sDiaInicial <= sDiaFinal)) {
+
 					idade++;
 				}
 
 				break;
 			}
-			
+
 			idade++;
 
 		}
-		
+
 		return idade;
 	}
-	
+
 	/**
 	 * Método que recebe uma string e verifica se a string só tem numeros.
-	 *
+	 * 
 	 * @author Raphael Rossiter
 	 * @date 17/06/2009
-	 *
+	 * 
 	 * @param valor
 	 * @return boolean
 	 */
@@ -5189,145 +4989,145 @@ public class Util {
 
 	/**
 	 * Método retorna true se a coleção for nula ou vazia
-	 *
+	 * 
 	 * @author Marlon Patrick
 	 * @date 11/08/2009
-	 *
+	 * 
 	 */
 	public static boolean isVazioOrNulo(Collection<? extends Object> colecao) {
-		
+
 		return (colecao == null || colecao.isEmpty());
 	}
 
 	/**
 	 * Método retorna true se o array for nulo ou vazio
-	 *
+	 * 
 	 * @author Marlon Patrick
 	 * @date 11/08/2009
-	 *
+	 * 
 	 */
 	public static boolean isVazioOrNulo(Object[] array) {
-		
+
 		return (array == null || array.length == 0);
 	}
 
 	/**
-	 *
+	 * 
 	 * @param str
 	 * @return
 	 */
 	public static String encrypt(String str) {
-        int tab[] = {77,110,70,114,90,100,86,103,111,75};
-        int i;
-        int value = 0;
-        int len = str.length();
-	String response = "";
+		int tab[] = { 77, 110, 70, 114, 90, 100, 86, 103, 111, 75 };
+		int i;
+		int value = 0;
+		int len = str.length();
+		String response = "";
 
-        for (i=0; i < len; i++) {
-            value = (int) str.charAt(i);
-            response += (char) tab[ (value - 48) ];
-        }
-        
-        return response;
+		for (i = 0; i < len; i++) {
+			value = (int) str.charAt(i);
+			response += (char) tab[(value - 48)];
+		}
+
+		return response;
 	}
+
 	/**
 	 * 
 	 * @param str
 	 * @return
 	 */
 	public static String decrypt(String str) {
-        int tab[] = {77,110,70,114,90,100,86,103,111,75};
-        int i;
-        int j;
-        int value = 0;
-        int len = str.length();
-        String response = "";
-        
-        for (i=0; i < len; i++) {
-            value = (int) str.charAt(i);
-            for (j = 0; j < 10; j++) {
-                if (value == tab[j]) {
-                        response += String.valueOf(j).trim();
-                }
-            }
-        }
-        return response;
+		int tab[] = { 77, 110, 70, 114, 90, 100, 86, 103, 111, 75 };
+		int i;
+		int j;
+		int value = 0;
+		int len = str.length();
+		String response = "";
+
+		for (i = 0; i < len; i++) {
+			value = (int) str.charAt(i);
+			for (j = 0; j < 10; j++) {
+				if (value == tab[j]) {
+					response += String.valueOf(j).trim();
+				}
+			}
+		}
+		return response;
 	}
+
 	/**
 	 * Método que recebe um arquivo e retorna a extensão do mesmo.
-	 *
+	 * 
 	 * @author Raphael Rossiter
 	 * @date 29/07/2009
-	 *
+	 * 
 	 * @param FileItem
 	 * @return String
 	 */
-	public static String obterExtensaoDoArquivo(FileItem fileItem){
-		
+	public static String obterExtensaoDoArquivo(FileItem fileItem) {
+
 		String extensao = null;
-		
+
 		String nomeArquivo = fileItem.getName().toUpperCase();
 		String[] nomeArquivoPartido = nomeArquivo.split("\\.");
-		
-		if (nomeArquivoPartido[1] != null){
+
+		if (nomeArquivoPartido[1] != null) {
 			extensao = nomeArquivoPartido[1];
 		}
-		
+
 		return extensao;
 	}
 
 	/**
-	 * Retorna true se o combo(parametro campo) não é branco nem nulo
-	 * e se não é igual a ConstantesSistema.NUMERO_NAO_INFORMADO.
-	 *
-	 *@since 06/10/2009
-	 *@author Marlon Patrick
+	 * Retorna true se o combo(parametro campo) não é branco nem nulo e se não é
+	 * igual a ConstantesSistema.NUMERO_NAO_INFORMADO.
+	 * 
+	 * @since 06/10/2009
+	 * @author Marlon Patrick
 	 */
-	public static boolean isCampoComboboxInformado(String campo){
-		if( !verificarNaoVazio(campo) ){
+	public static boolean isCampoComboboxInformado(String campo) {
+		if (!verificarNaoVazio(campo)) {
 			return false;
 		}
-		
-		if(campo.trim().equals(String.valueOf(ConstantesSistema.NUMERO_NAO_INFORMADO))){
+
+		if (campo.trim().equals(String.valueOf(ConstantesSistema.NUMERO_NAO_INFORMADO))) {
 			return false;
 		}
-		
+
 		return true;
 	}
 
 	/**
-	 * Retorna true se o combo multiplo(parametro campo) tem pelo menos
-	 * tamanho 1 e que esse elemento seja diferente de branco,nulo
-	 * e ConstantesSistema.NUMERO_NAO_INFORMADO.
-	 *
-	 *@since 06/10/2009
-	 *@author Marlon Patrick
+	 * Retorna true se o combo multiplo(parametro campo) tem pelo menos tamanho
+	 * 1 e que esse elemento seja diferente de branco,nulo e
+	 * ConstantesSistema.NUMERO_NAO_INFORMADO.
+	 * 
+	 * @since 06/10/2009
+	 * @author Marlon Patrick
 	 */
-	public static boolean isCampoComboboxMultiploInformado(String[] campo){
-		if(isVazioOrNulo(campo)){
+	public static boolean isCampoComboboxMultiploInformado(String[] campo) {
+		if (isVazioOrNulo(campo)) {
 			return false;
 		}
-		
-		if(campo.length == 1 && !isCampoComboboxInformado(campo[0])){
+
+		if (campo.length == 1 && !isCampoComboboxInformado(campo[0])) {
 			return false;
 		}
-	
+
 		return true;
 	}
-	
-	/** 
-	 * Passa um Timestamp e retorna a HH:mm:ss como String 
+
+	/**
+	 * Passa um Timestamp e retorna a HH:mm:ss como String
 	 */
 	public static String getHoraMinutoSegundoTimestamp(Timestamp timestamp) {
 		Long time = timestamp.getTime();
 
-		String retorno = new SimpleDateFormat("HH:mm:ss",
-				new Locale("pt", "BR")).format(new Date(time));
+		String retorno = new SimpleDateFormat("HH:mm:ss", new Locale("pt", "BR")).format(new Date(time));
 
 		return retorno;
 	}
 
-	
 	public static String milisegundosParaHoraMinuto(long tempo) {
 		int s, m, h;
 		String tempoPronto = "";
@@ -5340,15 +5140,14 @@ public class Util {
 		tempoPronto += (h < 10) ? "0" + h + "h" : h + "h";
 		tempoPronto += (m < 10) ? " 0" + m + "min" : " " + m + "min";
 
-
 		return tempoPronto;
-	} 
-	
+	}
+
 	/**
 	 * Recebe o telefone xxxxxxxx e retorna o telefone no formato xxxx-xxxx
-	 *
-	 *@since 21/10/2009
-	 *@author Rômulo Aurélio
+	 * 
+	 * @since 21/10/2009
+	 * @author Rômulo Aurélio
 	 */
 	public static String formatarTelefone(String telefone) {
 
@@ -5356,24 +5155,18 @@ public class Util {
 
 		if (telefone != null && !telefone.equals("")) {
 
-			telefoneFormatado = telefone.substring(0, 4) + "-"
-					+ telefone.substring(4);
+			telefoneFormatado = telefone.substring(0, 4) + "-" + telefone.substring(4);
 		}
 
 		return telefoneFormatado;
 
 	}
-	
+
 	/**
 	 * Recebe um objeto date e retorna uma String AAAAMMDDHHMMSS
 	 * 
-	 *  AAAA -  Ano;
-	 *	MM   -  Mês;
-	 *	DD   -  Dia;
-	 *	HH   -  Hora;
-	 *	MM   -  Minuto;
-	 *	SS   -  Segundo;
-	 *
+	 * AAAA - Ano; MM - Mês; DD - Dia; HH - Hora; MM - Minuto; SS - Segundo;
+	 * 
 	 */
 	public static String obterAAAAMMDDHHMMSS(Date data) {
 		StringBuffer dataBD = new StringBuffer();
@@ -5382,16 +5175,16 @@ public class Util {
 			Calendar dataCalendar = new GregorianCalendar();
 
 			dataCalendar.setTime(data);
-			
+
 			dataBD.append(dataCalendar.get(Calendar.YEAR));
 			if (dataCalendar.get(Calendar.MONTH) >= 9) {
-				dataBD.append(dataCalendar.get(Calendar.MONTH)+1);
-			}else {
-				dataBD.append("0" + (dataCalendar.get(Calendar.MONTH)+1));
-			}	
+				dataBD.append(dataCalendar.get(Calendar.MONTH) + 1);
+			} else {
+				dataBD.append("0" + (dataCalendar.get(Calendar.MONTH) + 1));
+			}
 			if (dataCalendar.get(Calendar.DAY_OF_MONTH) > 9) {
 				dataBD.append(dataCalendar.get(Calendar.DAY_OF_MONTH));
-			}else {
+			} else {
 				dataBD.append("0" + dataCalendar.get(Calendar.DAY_OF_MONTH));
 			}
 			if (dataCalendar.get(Calendar.HOUR_OF_DAY) > 9) {
@@ -5415,16 +5208,16 @@ public class Util {
 		return dataBD.toString();
 	}
 
-
 	/**
 	 * Esse método retorna a diferença em meses entre dois campos mesAno.<br/>
 	 * Recebe os parametros mesAno no formato MM/yyyy.<br/>
 	 * ex: 10/2000 - 11/2000 = 1 mês de diferença<br/>
-	 *@since 04/11/2009
-	 *@author Marlon Patrick
+	 * 
+	 * @since 04/11/2009
+	 * @author Marlon Patrick
 	 */
-	public static int getDiferencaMeses(String mesAnoInicial, String mesAnoFinal){
-		
+	public static int getDiferencaMeses(String mesAnoInicial, String mesAnoFinal) {
+
 		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
 		Date dtInicial = null;
 		Date dtFinal = null;
@@ -5440,7 +5233,7 @@ public class Util {
 
 		int diferenca = 0;
 
-		while(dtFinal.after(dtInicial)){
+		while (dtFinal.after(dtInicial)) {
 			gc.add(GregorianCalendar.MONTH, 1);
 			dtInicial = gc.getTime();
 			diferenca++;
@@ -5448,27 +5241,27 @@ public class Util {
 
 		return diferenca;
 	}
-	
+
 	/**
 	 * 
 	 * Converte uma String para qualquer encode passado
 	 * 
-	 * @param content String a ser convertida
-	 * @param encode código do encode para conversão
-	 * @return retorna a string convertida 
+	 * @param content
+	 *            String a ser convertida
+	 * @param encode
+	 *            código do encode para conversão
+	 * @return retorna a string convertida
 	 */
-	public static String reencodeString (String content, String encode) {  
-		Charset charset = Charset.forName(encode);  
-		ByteBuffer bb = charset.encode(content);  
-		
+	public static String reencodeString(String content, String encode) {
+		Charset charset = Charset.forName(encode);
+		ByteBuffer bb = charset.encode(content);
+
 		byte[] bytearr = new byte[bb.remaining()];
 		bb.get(bytearr);
 		String s = new String(bytearr);
-		
+
 		return s;
 	}
-	
-
 
 	/**
 	 * Formata um bigDecimal para String tirando os pontos.
@@ -5485,13 +5278,14 @@ public class Util {
 		valorItemAnterior = valorItemAnterior.replace(".", ",");
 		return valorItemAnterior;
 	}
-	
+
 	/**
 	 * O metódo completa uma string com espaços em branco (ex: passa a string
-	 * "12.36" e o tamanho máximo 10 e retorna "12.36    " ) apenas se a string não exceder o tamanho máximo
+	 * "12.36" e o tamanho máximo 10 e retorna "12.36    " ) apenas se a string
+	 * não exceder o tamanho máximo
 	 * 
 	 * 
-	 * @author Hugo Amorim	
+	 * @author Hugo Amorim
 	 * @date 25/01/2010
 	 * 
 	 * @param str
@@ -5501,8 +5295,7 @@ public class Util {
 	 *            Tamanho máximo da string
 	 * @return
 	 */
-	public static String completaStringComEspacoADireitaCondicaoTamanhoMaximo(String str,
-			int tamanhoMaximo) {
+	public static String completaStringComEspacoADireitaCondicaoTamanhoMaximo(String str, int tamanhoMaximo) {
 
 		// Tamanho da string informada
 		int tamanhoString = 0;
@@ -5517,7 +5310,7 @@ public class Util {
 
 		if (quantidadeEspacos < 0) {
 			return str;
-			
+
 		}
 
 		// Cria um array de caracteres de espaços em branco
@@ -5530,55 +5323,52 @@ public class Util {
 		// Cria uma strinBuilder para armazenar a string
 		StringBuilder stringBuilder = new StringBuilder(str);
 
-		
 		stringBuilder.append(temp);
-		
 
 		// Retorna a string informada com espaços em branco a esquerda
 		// totalizando o tamanho máximo informado
 		return stringBuilder.toString();
 	}
-	
+
 	/**
-	 * Converte uma string no formato AAMMDD para um objeto do tipo Date 
-	 *
+	 * Converte uma string no formato AAMMDD para um objeto do tipo Date
+	 * 
 	 * @author Raphael Rossiter
 	 * @date 29/01/2010
-	 *
+	 * 
 	 * @param data
 	 * @return Date
 	 */
 	public static Date converteStringInvertidaSemBarraAAMMDDParaDate(String data) {
 		Date retorno = null;
-		
-		String dataInvertida = data.substring(4, 6) + "/"
-		+ data.substring(2, 4) + "/20" + data.substring(0, 2);
-		
+
+		String dataInvertida = data.substring(4, 6) + "/" + data.substring(2, 4) + "/20" + data.substring(0, 2);
+
 		SimpleDateFormat dataTxt = new SimpleDateFormat("dd/MM/yyyy");
-		
+
 		try {
 			retorno = dataTxt.parse(dataInvertida);
 		} catch (ParseException e) {
-			throw new IllegalArgumentException(data
-					+ " não tem o formato dd/MM/yyyy.");
+			throw new IllegalArgumentException(data + " não tem o formato dd/MM/yyyy.");
 		}
 		return retorno;
 	}
+
 	/**
 	 * 
 	 * Gerar senha forte
-	 *
-	 * @author Hugo Amorim	
+	 * 
+	 * @author Hugo Amorim
 	 * @date 04/02/2010
 	 * 
 	 * @param int tamanho senha
-	 *
+	 * 
 	 * @return String senha forte
 	 */
 	public static String gerarSenhaForte(int length) {
-		
+
 		String senha;
-		
+
 		char[] ALL_CHARS = new char[62];
 		Random RANDOM = new Random();
 		for (int i = 48, j = 0; i < 123; i++) {
@@ -5586,35 +5376,35 @@ public class Util {
 				ALL_CHARS[j] = (char) i;
 				j++;
 			}
-		}	
+		}
 
-	    char[] result = new char[length];
-		for (int i = 0; i < length; i++) {	
+		char[] result = new char[length];
+		for (int i = 0; i < length; i++) {
 			result[i] = ALL_CHARS[RANDOM.nextInt(ALL_CHARS.length)];
 		}
-		
+
 		senha = new String(result);
-		
+
 		// Testa se senha tem seguencias.
 		int count = 0;
 		String letraAnterior = "";
 		for (int i = 0; i < senha.toCharArray().length; i++) {
-			
+
 			String letra = String.valueOf(senha.toCharArray()[i]);
 
 			if (letra.equals(letraAnterior)) {
 				letraAnterior = letra;
 				count++;
-			}else {
+			} else {
 				letraAnterior = letra;
 				count = 0;
 			}
 		}
-		
-		if (count >= 2){
+
+		if (count >= 2) {
 			senha = Util.gerarSenhaForte(length);
 		}
-		
+
 		// Testa se senha possui letras minisculas, maiusculas e numeros
 		Pattern pattern1 = Pattern.compile(".*[0-9].*");
 		Pattern pattern2 = Pattern.compile(".*[a-z].*");
@@ -5624,36 +5414,38 @@ public class Util {
 		Matcher matcher1;
 		Matcher matcher2;
 		Matcher matcher3;
-		
+
 		matcher1 = pattern1.matcher(senha);
 		matcher2 = pattern2.matcher(senha);
 		matcher3 = pattern3.matcher(senha);
 
 		// Testa se falhou em algum teste.
-		if (!matcher1.matches()||!matcher2.matches()||!matcher3.matches()) {
+		if (!matcher1.matches() || !matcher2.matches() || !matcher3.matches()) {
 			senha = Util.gerarSenhaForte(length);
 		}
-		
+
 		return senha;
 	}
-	
+
 	/**
 	 * O metódo completa uma string com espaços em branco (ex: passa a string
-	 * "12.36" e o tamanho máximo 10 e retorna "12.36    " ) apenas se a string não exceder o tamanho máximo
+	 * "12.36" e o tamanho máximo 10 e retorna "12.36    " ) apenas se a string
+	 * não exceder o tamanho máximo
 	 * 
 	 * 
-	 * 	String que vai ser complementada com espaços em branco a
-	 *  esquerda, logo em seguida sera truncada de acordo com o tamanho maximo
+	 * String que vai ser complementada com espaços em branco a esquerda, logo
+	 * em seguida sera truncada de acordo com o tamanho maximo
 	 * 
-	 * @author Hugo Amorim	
+	 * @author Hugo Amorim
 	 * @date 09/03/2010
 	 * 
-	 * @param str String
-	 * @param tm Tamanho máximo da string
+	 * @param str
+	 *            String
+	 * @param tm
+	 *            Tamanho máximo da string
 	 * @return
 	 */
-	public static String completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(String str,
-			int tamanhoMaximo) {
+	public static String completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(String str, int tamanhoMaximo) {
 
 		// Tamanho da string informada
 		int tamanhoString = 0;
@@ -5667,13 +5459,13 @@ public class Util {
 		int quantidadeEspacos = tamanhoMaximo - tamanhoString;
 
 		if (quantidadeEspacos < 0) {
-			
+
 			if (tamanhoMaximo < str.length()) {
 				// trunca a String
 				String strTruncado = str.substring(0, tamanhoMaximo);
 				return strTruncado;
 			}
-			
+
 		}
 
 		// Cria um array de caracteres de espaços em branco
@@ -5686,18 +5478,15 @@ public class Util {
 		// Cria uma strinBuilder para armazenar a string
 		StringBuilder stringBuilder = new StringBuilder(str);
 
-		
 		stringBuilder.append(temp);
-		
+
 		String retorno = stringBuilder.toString();
-		
-		
-		
+
 		// Retorna a string informada com espaços em branco a esquerda
 		// totalizando o tamanho máximo informado
 		return retorno;
 	}
-	
+
 	/**
 	 * 
 	 * [UC0229] Obter Representação Numérica do Código de Barras
@@ -5714,186 +5503,189 @@ public class Util {
 	 * @date 10/03/2010
 	 * 
 	 * @param codigoBarraCom43Posicoes
-	 * @param moduloVerificador 
+	 * @param moduloVerificador
 	 * @return
 	 */
-	public static Integer obterDigitoVerificador(
-			Long codigoBarraCom43Posicoes, Short moduloVerificador) {
-		
+	public static Integer obterDigitoVerificador(Long codigoBarraCom43Posicoes, Short moduloVerificador) {
+
 		Integer digitoVerificadorGeral = null;
-		
-		if(moduloVerificador.compareTo(ConstantesSistema.MODULO_VERIFICADOR_11)==0){
-			
+
+		if (moduloVerificador.compareTo(ConstantesSistema.MODULO_VERIFICADOR_11) == 0) {
+
 			digitoVerificadorGeral = obterDigitoVerificadorModulo11(codigoBarraCom43Posicoes);
-			
-		}else{
-			
+
+		} else {
+
 			digitoVerificadorGeral = obterDigitoVerificadorModulo10(codigoBarraCom43Posicoes);
-			
+
 		}
 
 		// Retorna o dígito verificador calculado
 		return digitoVerificadorGeral;
 	}
-	
+
 	/**
 	 * Retorna matricula sem o digito verificador.
 	 * 
 	 * @author Hugo Amorim
 	 * @date 31/03/2010
 	 */
-	public static String obterMatriculaSemDigitoVerificador(String matriculaComDigito){
-		
+	public static String obterMatriculaSemDigitoVerificador(String matriculaComDigito) {
+
 		String matriculaSemDigito = "";
-		
-		if(matriculaComDigito.length()>0){
-		
+
+		if (matriculaComDigito.length() > 0) {
+
 			int tamanhoMatricula = matriculaComDigito.length();
-		
-			matriculaSemDigito = matriculaComDigito.substring(0, tamanhoMatricula-1);
-		
+
+			matriculaSemDigito = matriculaComDigito.substring(0, tamanhoMatricula - 1);
+
 		}
-		
+
 		return matriculaSemDigito;
 
 	}
-	
+
 	/**
-	 * Recebe uma string no formato ddmmaaaa e validar o dia, mês e ano, incluindo validação para
-	 * fevereiro em anos bissextos ou não.
+	 * Recebe uma string no formato ddmmaaaa e validar o dia, mês e ano,
+	 * incluindo validação para fevereiro em anos bissextos ou não.
 	 * 
 	 * @author Anderson Italo
 	 * @date 08/04/2010
 	 * @return true se a data for valida ou false se for inválida
 	 */
 	public static boolean validarDiaMesAnoSemBarraNovo(String diaMesAnoReferencia) {
-        boolean diaMesAnoValido = true;
+		boolean diaMesAnoValido = true;
 
-        if (diaMesAnoReferencia.length() == 8) {
+		if (diaMesAnoReferencia.length() == 8) {
 
-            String dia = diaMesAnoReferencia.substring(0, 2);
-            String mes = diaMesAnoReferencia.substring(2, 4);
-            String ano = diaMesAnoReferencia.substring(4, 8);
+			String dia = diaMesAnoReferencia.substring(0, 2);
+			String mes = diaMesAnoReferencia.substring(2, 4);
+			String ano = diaMesAnoReferencia.substring(4, 8);
 
-            try {
-                int mesInt = Integer.parseInt(mes);
-                int anoInt = Integer.parseInt(ano);
-                int diaInt = Integer.parseInt(dia);
+			try {
+				int mesInt = Integer.parseInt(mes);
+				int anoInt = Integer.parseInt(ano);
+				int diaInt = Integer.parseInt(dia);
 
-                if (mesInt < 1 || mesInt > 12) {
-                    diaMesAnoValido = false;
-                }
-                if (diaInt < 1 || diaInt > 31) {
-                	diaMesAnoValido = false;
-                }
-                
-                //se fevereiro
-                if (mesInt == 2){
-                	
-                	boolean bissexto = false;
-                	
-                	//verifica se ano é bissexto
-                	if (anoInt % 400 == 0){
-                		//São bissextos todos os anos múltiplos de 400, p.ex: 1600, 2000, 2400, 2800
-                		bissexto = true;
-                	}else if ( (anoInt % 4 == 0) && (anoInt % 100 != 0)){
-                		//São bissextos todos os múltiplos de 4 e não múltiplos de 100, p.ex: 1996, 2004, 2008, 2012, 2016...
-                		bissexto = true;
-                	}
-                	
-                	if (bissexto){
-                		if (diaInt < 1 || diaInt > 29) {
-                        	diaMesAnoValido = false;
-                        }
-                	}else{
-                		if (diaInt < 1 || diaInt > 28) {
-                        	diaMesAnoValido = false;
-                        }
-                	}
-                }
-                
-                if (anoInt == 0){
-                	diaMesAnoValido = false;
-                }
-                
-            } catch (NumberFormatException e) {
-            	diaMesAnoValido = false;
-            }
+				if (mesInt < 1 || mesInt > 12) {
+					diaMesAnoValido = false;
+				}
+				if (diaInt < 1 || diaInt > 31) {
+					diaMesAnoValido = false;
+				}
 
-        } else {
-        	diaMesAnoValido = false;
-        }
+				// se fevereiro
+				if (mesInt == 2) {
 
-        return diaMesAnoValido;
-    }
-	
+					boolean bissexto = false;
+
+					// verifica se ano é bissexto
+					if (anoInt % 400 == 0) {
+						// São bissextos todos os anos múltiplos de 400, p.ex:
+						// 1600, 2000, 2400, 2800
+						bissexto = true;
+					} else if ((anoInt % 4 == 0) && (anoInt % 100 != 0)) {
+						// São bissextos todos os múltiplos de 4 e não múltiplos
+						// de 100, p.ex: 1996, 2004, 2008, 2012, 2016...
+						bissexto = true;
+					}
+
+					if (bissexto) {
+						if (diaInt < 1 || diaInt > 29) {
+							diaMesAnoValido = false;
+						}
+					} else {
+						if (diaInt < 1 || diaInt > 28) {
+							diaMesAnoValido = false;
+						}
+					}
+				}
+
+				if (anoInt == 0) {
+					diaMesAnoValido = false;
+				}
+
+			} catch (NumberFormatException e) {
+				diaMesAnoValido = false;
+			}
+
+		} else {
+			diaMesAnoValido = false;
+		}
+
+		return diaMesAnoValido;
+	}
+
 	/**
-	 * Recebe uma string no formato ddmmaa e validar o dia, mês e ano, incluindo validação para
-	 * fevereiro em anos bissextos ou não.
+	 * Recebe uma string no formato ddmmaa e validar o dia, mês e ano, incluindo
+	 * validação para fevereiro em anos bissextos ou não.
 	 * 
 	 * @return true se a data for valida ou false se for inválida
 	 */
 	public static boolean validarDiaMesAnoSemBarraAnoSimples(String diaMesAnoReferencia) {
-        boolean diaMesAnoValido = true;
+		boolean diaMesAnoValido = true;
 
-        if (diaMesAnoReferencia.length() == 6) {
+		if (diaMesAnoReferencia.length() == 6) {
 
-            String dia = diaMesAnoReferencia.substring(0, 2);
-            String mes = diaMesAnoReferencia.substring(2, 4);
-            String ano = diaMesAnoReferencia.substring(4, 6);
+			String dia = diaMesAnoReferencia.substring(0, 2);
+			String mes = diaMesAnoReferencia.substring(2, 4);
+			String ano = diaMesAnoReferencia.substring(4, 6);
 
-            try {
-                int mesInt = Integer.parseInt(mes);
-                int anoInt = Integer.parseInt(ano);
-                int diaInt = Integer.parseInt(dia);
+			try {
+				int mesInt = Integer.parseInt(mes);
+				int anoInt = Integer.parseInt(ano);
+				int diaInt = Integer.parseInt(dia);
 
-                if (mesInt < 1 || mesInt > 12) {
-                    diaMesAnoValido = false;
-                }
-                if (diaInt < 1 || diaInt > 31) {
-                	diaMesAnoValido = false;
-                }
-                
-                //se fevereiro
-                if (mesInt == 2){
-                	
-                	boolean bissexto = false;
-                	
-                	//verifica se ano é bissexto
-                	if (anoInt % 400 == 0){
-                		//São bissextos todos os anos múltiplos de 400, p.ex: 1600, 2000, 2400, 2800
-                		bissexto = true;
-                	}else if ( (anoInt % 4 == 0) && (anoInt % 100 != 0)){
-                		//São bissextos todos os múltiplos de 4 e não múltiplos de 100, p.ex: 1996, 2004, 2008, 2012, 2016...
-                		bissexto = true;
-                	}
-                	
-                	if (bissexto){
-                		if (diaInt < 1 || diaInt > 29) {
-                        	diaMesAnoValido = false;
-                        }
-                	}else{
-                		if (diaInt < 1 || diaInt > 28) {
-                        	diaMesAnoValido = false;
-                        }
-                	}
-                }
-                
-                if (anoInt == 0){
-                	diaMesAnoValido = false;
-                }
-                
-            } catch (NumberFormatException e) {
-            	diaMesAnoValido = false;
-            }
+				if (mesInt < 1 || mesInt > 12) {
+					diaMesAnoValido = false;
+				}
+				if (diaInt < 1 || diaInt > 31) {
+					diaMesAnoValido = false;
+				}
 
-        } else {
-        	diaMesAnoValido = false;
-        }
+				// se fevereiro
+				if (mesInt == 2) {
 
-        return diaMesAnoValido;
-    }
-	
+					boolean bissexto = false;
+
+					// verifica se ano é bissexto
+					if (anoInt % 400 == 0) {
+						// São bissextos todos os anos múltiplos de 400, p.ex:
+						// 1600, 2000, 2400, 2800
+						bissexto = true;
+					} else if ((anoInt % 4 == 0) && (anoInt % 100 != 0)) {
+						// São bissextos todos os múltiplos de 4 e não múltiplos
+						// de 100, p.ex: 1996, 2004, 2008, 2012, 2016...
+						bissexto = true;
+					}
+
+					if (bissexto) {
+						if (diaInt < 1 || diaInt > 29) {
+							diaMesAnoValido = false;
+						}
+					} else {
+						if (diaInt < 1 || diaInt > 28) {
+							diaMesAnoValido = false;
+						}
+					}
+				}
+
+				if (anoInt == 0) {
+					diaMesAnoValido = false;
+				}
+
+			} catch (NumberFormatException e) {
+				diaMesAnoValido = false;
+			}
+
+		} else {
+			diaMesAnoValido = false;
+		}
+
+		return diaMesAnoValido;
+	}
+
 	/**
 	 * O metódo completa uma string com espaços em branco (ex: passa a string
 	 * "12.36" e o tamanho máximo 10 e retorna " 12.36" )
@@ -5910,8 +5702,7 @@ public class Util {
 	 *            Tamanho máximo da string
 	 * @return
 	 */
-	public static String completaStringComEspacoAEsquerdaTruncandoAoTamanhoMaximoInformado(String str,
-			int tamanhoMaximo) {
+	public static String completaStringComEspacoAEsquerdaTruncandoAoTamanhoMaximoInformado(String str, int tamanhoMaximo) {
 
 		// Tamanho da string informada
 		int tamanhoString = 0;
@@ -5953,135 +5744,132 @@ public class Util {
 		// Retorna a string informada com espaços em branco a esquerda
 		// totalizando o tamanho máximo informado
 		return stringBuilder.toString();
-		
+
 	}
+
 	/**
-	 * Metodo responsavel por retornar o percentual da memoria que esta sendo usada na JVM.
-	 * Verifica a memoria heap responsavel por alo
-	 *
+	 * Metodo responsavel por retornar o percentual da memoria que esta sendo
+	 * usada na JVM. Verifica a memoria heap responsavel por alo
+	 * 
 	 * @author Arthur Carvalho
 	 * @date 03/06/2010
 	 * @return string
 	 */
 	public static String retornaPercentualUsadoDeMemoriaJVM() {
-		
+
 		MemoryMXBean memorymxbean = ManagementFactory.getMemoryMXBean();
 		MemoryUsage heap_usage = memorymxbean.getHeapMemoryUsage();
-		NumberFormat format = NumberFormat.getInstance();		
-		
-		//Retorna o percentual da memoria usada
-		String percentualMemoriaUsada =  format.format(((heap_usage.getUsed() * 100) / heap_usage.getMax()));
-				
+		NumberFormat format = NumberFormat.getInstance();
+
+		// Retorna o percentual da memoria usada
+		String percentualMemoriaUsada = format.format(((heap_usage.getUsed() * 100) / heap_usage.getMax()));
+
 		return percentualMemoriaUsada;
-		
+
 	}
-	
+
 	/**
-	 * Converte uma string no formato AAMMDD para um objeto do tipo Date 
-	 *
+	 * Converte uma string no formato AAMMDD para um objeto do tipo Date
+	 * 
 	 * @author Raphael Rossiter
 	 * @date 29/01/2010
-	 *
+	 * 
 	 * @param data
 	 * @return Date
 	 */
 	public static Date converteStringInvertidaSemBarraAAAAMMDDParaDate(String data) {
 		Date retorno = null;
-		
-		String dataInvertida = data.substring(6, 8) + "/"
-		+ data.substring(4, 6) + "/" + data.substring(0, 4);
-		
+
+		String dataInvertida = data.substring(6, 8) + "/" + data.substring(4, 6) + "/" + data.substring(0, 4);
+
 		SimpleDateFormat dataTxt = new SimpleDateFormat("dd/MM/yyyy");
-		
+
 		try {
 			retorno = dataTxt.parse(dataInvertida);
 		} catch (ParseException e) {
-			throw new IllegalArgumentException(data
-					+ " não tem o formato dd/MM/yyyy.");
+			throw new IllegalArgumentException(data + " não tem o formato dd/MM/yyyy.");
 		}
 		return retorno;
 	}
-	
-    /**
-     * Formatar a Inscrição Estadual da Caema
-     * 
-     * @author Hugo leonardo
-     * @date 11/06/2010
-     * 
-	 * Retorna o valor de inscricaoEstadualFormatado
+
+	/**
+	 * Formatar a Inscrição Estadual da Caema
+	 * 
+	 * @author Hugo leonardo
+	 * @date 11/06/2010
+	 * 
+	 *       Retorna o valor de inscricaoEstadualFormatado
 	 * 
 	 * @return O valor de inscricaoEstadualFormatado
 	 */
 	public static String formatarInscricaoEstadualCaema(String inscricaoEstadualCaema) {
 		String inscricaoEstadua = inscricaoEstadualCaema;
 		String zeros = "";
-		
+
 		if (inscricaoEstadua != null) {
-			
+
 			for (int a = 0; a < (9 - inscricaoEstadua.length()); a++) {
 				zeros = zeros.concat("0");
 			}
 			// concatena os zeros ao numero
 			// caso o numero seja diferente de nulo
 			inscricaoEstadua = zeros.concat(inscricaoEstadua);
-			
-			inscricaoEstadua = inscricaoEstadua.substring(0, 2) + "."
-					+ inscricaoEstadua.substring(2, 5) + "."
-					+ inscricaoEstadua.substring(5, 8) + "-"
+
+			inscricaoEstadua = inscricaoEstadua.substring(0, 2) + "." + inscricaoEstadua.substring(2, 5) + "." + inscricaoEstadua.substring(5, 8) + "-"
 					+ inscricaoEstadua.substring(8, 9);
 		}
-		
+
 		return inscricaoEstadua;
 	}
-	
-	
+
 	/**
-	 * Verifica se a string passada corresponde a uma data válida de acordo com o formato que está sendo passado. 
-	 *
+	 * Verifica se a string passada corresponde a uma data válida de acordo com
+	 * o formato que está sendo passado.
+	 * 
 	 * @author Raphael Rossiter
 	 * @date 03/09/2010
-	 *
+	 * 
 	 * @param data
 	 * @param formato
 	 * @return boolean
 	 */
 	public static boolean validarDataHoraInvalida(String dataHora, String formato) {
-		
+
 		boolean dataHoraInvalida = false;
-		
+
 		try {
-			
-			if (dataHora != null && !dataHora.equals("") && dataHora.length() >= 10){
-				
+
+			if (dataHora != null && !dataHora.equals("") && dataHora.length() >= 10) {
+
 				int anoInt = Integer.parseInt(dataHora.substring(0, 4));
 				int mesInt = Integer.parseInt(dataHora.substring(5, 7));
 				int diaInt = Integer.parseInt(dataHora.substring(8, 10));
-				
+
 				if (mesInt > 12) {
 					dataHoraInvalida = true;
 				}
 				if (diaInt > 31) {
 					dataHoraInvalida = true;
 				}
-				
+
 				int ultimoDiaMes = Integer.valueOf(Util.obterUltimoDiaMes(mesInt, anoInt));
-				
-				if (diaInt > ultimoDiaMes){
+
+				if (diaInt > ultimoDiaMes) {
 					dataHoraInvalida = true;
 				}
-				
-				if (!dataHoraInvalida){
-					
+
+				if (!dataHoraInvalida) {
+
 					int horaInt = 0;
 					int minutoInt = 0;
 					int segundoInt = 0;
 
-					if (dataHora.length() > 10 && dataHora.length() == 19){
-						
+					if (dataHora.length() > 10 && dataHora.length() == 19) {
+
 						horaInt = Integer.parseInt(dataHora.substring(11, 13));
 						minutoInt = Integer.parseInt(dataHora.substring(14, 16));
 						segundoInt = Integer.parseInt(dataHora.substring(17, 19));
-						
+
 						if (horaInt > 23) {
 							dataHoraInvalida = true;
 						}
@@ -6091,246 +5879,243 @@ public class Util {
 						if (segundoInt > 59) {
 							dataHoraInvalida = true;
 						}
-						
+
 						SimpleDateFormat formatacaoData = new SimpleDateFormat(formato, new Locale("pt", "BR"));
 						formatacaoData.parse(dataHora);
-					}
-					else{
-						
+					} else {
+
 						dataHoraInvalida = true;
 					}
 				}
-			}
-			else{
-				
+			} else {
+
 				dataHoraInvalida = true;
 			}
-			
+
 		} catch (Exception e) {
 			dataHoraInvalida = true;
 		}
-		
-		return dataHoraInvalida;		
+
+		return dataHoraInvalida;
 	}
-	
+
 	/**
-	 * Verifica se a string passada corresponde a uma data válida de acordo com o formato que está sendo passado. 
-	 *
+	 * Verifica se a string passada corresponde a uma data válida de acordo com
+	 * o formato que está sendo passado.
+	 * 
 	 * @author Raphael Rossiter
 	 * @date 03/09/2010
-	 *
+	 * 
 	 * @param data
 	 * @param formato
 	 * @return boolean
 	 */
 	public static boolean validarDataInvalida(String data, String formato) {
-		
+
 		boolean dataInvalida = false;
-		
+
 		try {
-			
-			if (data != null && !data.equals("") && data.length() == 10){
-				
+
+			if (data != null && !data.equals("") && data.length() == 10) {
+
 				int anoInt = Integer.parseInt(data.substring(0, 4));
 				int mesInt = Integer.parseInt(data.substring(5, 7));
 				int diaInt = Integer.parseInt(data.substring(8, 10));
-				
+
 				if (mesInt > 12) {
 					dataInvalida = true;
 				}
 				if (diaInt > 31) {
 					dataInvalida = true;
 				}
-				
+
 				int ultimoDiaMes = Integer.valueOf(Util.obterUltimoDiaMes(mesInt, anoInt));
-				
-				if (diaInt > ultimoDiaMes){
+
+				if (diaInt > ultimoDiaMes) {
 					dataInvalida = true;
 				}
-				
+
 				SimpleDateFormat formatacaoData = new SimpleDateFormat(formato, new Locale("pt", "BR"));
 				formatacaoData.parse(data);
-				
-			} else{
-				
+
+			} else {
+
 				dataInvalida = true;
 			}
-			
+
 		} catch (Exception e) {
 			dataInvalida = true;
 		}
-		
-		return dataInvalida;		
+
+		return dataInvalida;
 	}
-	
-	
-    public static InputStream inflateFile(InputStream is, int tamanhoInput) throws IOException {
-    	
-    	DataInputStream disArquivoCompactado = new DataInputStream(is);
-    	byte[] arrayArquivoCompactado = new byte[ tamanhoInput ];
-    	disArquivoCompactado.readFully(arrayArquivoCompactado);
-    	arrayArquivoCompactado = GZIP.inflate(arrayArquivoCompactado);
-    	
-    	ByteArrayInputStream byteArray = new ByteArrayInputStream(arrayArquivoCompactado);
-    	
-    	disArquivoCompactado.close();
-    	disArquivoCompactado = null;
-    	arrayArquivoCompactado = null;
-    	
-    	return byteArray;	
-    }
-    
-    /**
-     * Separa um arquivo texto por linhas.
-     * 
-     * @param arquivo
-     *            Dados do arquivo texto.
-     * @param maxLinhas
-     *            Número máximo de linhas. Caso seja zero, retorna todas as
-     *            linhas
-     * @return Vetor de linhas do arquivo texto.
-     */
-    public static Vector carregaLinhas(InputStream arquivo, int maxLinhas) throws IOException {
-    	Vector vetor = new Vector();
-    	vetor.removeAllElements();
-    	StringBuffer buffer = new StringBuffer();
-    	
-    	final byte EOF = -1;
-    	final byte ENTER = 13;
-    	final byte LINE = 10;
-	
-    	int i = 0;
-    	while (i != EOF && (maxLinhas == 0 || vetor.size() < maxLinhas)) {
-    		i = arquivo.read();
-    		// System.out.println("Valor char: "+(char)i);
-    		// se for enter (0D ou 13)...
-    		if (i == ENTER) {
-    			// ...pula para o próximo caractere
-    			i = arquivo.read();
-    		}
-    		// se for quebra linha (0A ou 10)...
-    		if (i == LINE || i == EOF) {
-    			// ...salva o registro
-    			String line = buffer.toString();
 
-    			if ("".equals(line) || line == null) {
-    				continue;
-    			}
-    			vetor.addElement(line);
-    			buffer.delete(0, buffer.length());
-    		} else {
-    			buffer.append((char) i);
-    		}
-    	}
+	public static InputStream inflateFile(InputStream is, int tamanhoInput) throws IOException {
 
-    	buffer = null;
-    	return vetor;
-    }    
-    
-    /**
-     * Formata a sequence de acordo com o banco de dados (nextval)
-     * 
-     * @param sequence
-     *            nome da sequence que será formatada
-  
-     * @return String da sequence.
-     */
-    
-    public static String obterNextValSequence (String sequence){
-    	String nextvalSequence = " ";
-    	String dialect = HibernateUtil.getDialect();
-		
-		if (dialect.toUpperCase().contains("ORACLE")){
+		DataInputStream disArquivoCompactado = new DataInputStream(is);
+		byte[] arrayArquivoCompactado = new byte[tamanhoInput];
+		disArquivoCompactado.readFully(arrayArquivoCompactado);
+		arrayArquivoCompactado = GZIP.inflate(arrayArquivoCompactado);
+
+		ByteArrayInputStream byteArray = new ByteArrayInputStream(arrayArquivoCompactado);
+
+		disArquivoCompactado.close();
+		disArquivoCompactado = null;
+		arrayArquivoCompactado = null;
+
+		return byteArray;
+	}
+
+	/**
+	 * Separa um arquivo texto por linhas.
+	 * 
+	 * @param arquivo
+	 *            Dados do arquivo texto.
+	 * @param maxLinhas
+	 *            Número máximo de linhas. Caso seja zero, retorna todas as
+	 *            linhas
+	 * @return Vetor de linhas do arquivo texto.
+	 */
+	public static Vector carregaLinhas(InputStream arquivo, int maxLinhas) throws IOException {
+		Vector vetor = new Vector();
+		vetor.removeAllElements();
+		StringBuffer buffer = new StringBuffer();
+
+		final byte EOF = -1;
+		final byte ENTER = 13;
+		final byte LINE = 10;
+
+		int i = 0;
+		while (i != EOF && (maxLinhas == 0 || vetor.size() < maxLinhas)) {
+			i = arquivo.read();
+			// System.out.println("Valor char: "+(char)i);
+			// se for enter (0D ou 13)...
+			if (i == ENTER) {
+				// ...pula para o próximo caractere
+				i = arquivo.read();
+			}
+			// se for quebra linha (0A ou 10)...
+			if (i == LINE || i == EOF) {
+				// ...salva o registro
+				String line = buffer.toString();
+
+				if ("".equals(line) || line == null) {
+					continue;
+				}
+				vetor.addElement(line);
+				buffer.delete(0, buffer.length());
+			} else {
+				buffer.append((char) i);
+			}
+		}
+
+		buffer = null;
+		return vetor;
+	}
+
+	/**
+	 * Formata a sequence de acordo com o banco de dados (nextval)
+	 * 
+	 * @param sequence
+	 *            nome da sequence que será formatada
+	 * 
+	 * @return String da sequence.
+	 */
+
+	public static String obterNextValSequence(String sequence) {
+		String nextvalSequence = " ";
+		String dialect = HibernateUtil.getDialect();
+
+		if (dialect.toUpperCase().contains("ORACLE")) {
 			nextvalSequence = sequence + ".nextval ";
 		} else {
-			nextvalSequence = "nextval('"+ sequence + "') ";
+			nextvalSequence = "nextval('" + sequence + "') ";
 		}
-    	
-    	
-    	return nextvalSequence;
-    	
-    }
-    
-    
-    
-	/**TODO: COSANPA
-     * @author Adriana Muniz
-     * @Date: 22/01/2011
-     * 
-     * Metodo que faz a diferença entre duas datas e retorna o valor em dias
-     * 
-     * */
-    public static long diferencaEntreDatas(Date dataInicial, Date dataFinal) throws ParseException{
-		//váriavel que aramazenará a diferença de dias
+
+		return nextvalSequence;
+
+	}
+
+	/**
+	 * TODO: COSANPA
+	 * 
+	 * @author Adriana Muniz
+	 * @Date: 22/01/2011
+	 * 
+	 *        Metodo que faz a diferença entre duas datas e retorna o valor em
+	 *        dias
+	 * 
+	 * */
+	public static long diferencaEntreDatas(Date dataInicial, Date dataFinal) throws ParseException {
+		// váriavel que aramazenará a diferença de dias
 		long diferenca;
-		
-		//declaração da data inicio e da data fim
-		GregorianCalendar ini = new GregorianCalendar();   
-		GregorianCalendar fim = new GregorianCalendar();   
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");   
-		ini.setTime(sdf.parse(sdf.format(dataInicial)));   
-		fim.setTime(sdf.parse(sdf.format(dataFinal)));   
-		          
-		long dt1 = ini.getTimeInMillis();   
-		long dt2 = fim.getTimeInMillis();   
-		         
-		//86400000 equivale a um dia em milisegundos
-		diferenca = (dt2-dt1)/86400000;
-		 
+
+		// declaração da data inicio e da data fim
+		GregorianCalendar ini = new GregorianCalendar();
+		GregorianCalendar fim = new GregorianCalendar();
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		ini.setTime(sdf.parse(sdf.format(dataInicial)));
+		fim.setTime(sdf.parse(sdf.format(dataFinal)));
+
+		long dt1 = ini.getTimeInMillis();
+		long dt2 = fim.getTimeInMillis();
+
+		// 86400000 equivale a um dia em milisegundos
+		diferenca = (dt2 - dt1) / 86400000;
+
 		return diferenca;
 	}
 
-    /**
-     * Formata a sequence de acordo com o banco de dados (nextval)
-     * 
-     * @param sequence
-     *            nome da sequence que será formatada
-  
-     * @return String da sequence.
-     */
-    
-    public static String obterSQLDataAtual(){
-    	String nowOrSysdate = " ";
-    	String dialect = HibernateUtil.getDialect();
-		
-		if (dialect.toUpperCase().contains("ORACLE")){
+	/**
+	 * Formata a sequence de acordo com o banco de dados (nextval)
+	 * 
+	 * @param sequence
+	 *            nome da sequence que será formatada
+	 * 
+	 * @return String da sequence.
+	 */
+
+	public static String obterSQLDataAtual() {
+		String nowOrSysdate = " ";
+		String dialect = HibernateUtil.getDialect();
+
+		if (dialect.toUpperCase().contains("ORACLE")) {
 			nowOrSysdate = "sysdate";
 		} else {
 			nowOrSysdate = "now()";
 		}
-    	
-    	
-    	return nowOrSysdate;
-    	
-    }
-    
-    /**
-     * 
-     * Formata um campo e o retorna ja com |
-     * 
-     * @param parametro - Qualque object pode ser concatenado
-     * 
-     * @return 
-     */
-    public static String formatarCampoParaConcatenacao( Object parametro ){
-    	if ( parametro == null ){
-    		return "|";
-    	} else {
-    		return parametro + "|"; 
-    	}
-    }
-    
-    /**
-     * Formate um MesANo para um tipo Date
-     */
-    public static Date formatarMesAnoParaData(String mesAno, String dia, String hora){
-    	Date retorno = null;
 
-    	String[] mesAnoArray = mesAno.split("/");
-		SimpleDateFormat formatoData = new SimpleDateFormat(
-				"dd/MM/yyyy hh:mm:ss");
+		return nowOrSysdate;
 
-		String dataCompleta = dia+"/"+mesAnoArray[0] +"/"+mesAnoArray[1]+" " +hora;
+	}
+
+	/**
+	 * 
+	 * Formata um campo e o retorna ja com |
+	 * 
+	 * @param parametro
+	 *            - Qualque object pode ser concatenado
+	 * 
+	 * @return
+	 */
+	public static String formatarCampoParaConcatenacao(Object parametro) {
+		if (parametro == null) {
+			return "|";
+		} else {
+			return parametro + "|";
+		}
+	}
+
+	/**
+	 * Formate um MesANo para um tipo Date
+	 */
+	public static Date formatarMesAnoParaData(String mesAno, String dia, String hora) {
+		Date retorno = null;
+
+		String[] mesAnoArray = mesAno.split("/");
+		SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy hh:mm:ss");
+
+		String dataCompleta = dia + "/" + mesAnoArray[0] + "/" + mesAnoArray[1] + " " + hora;
 
 		try {
 			retorno = formatoData.parse(dataCompleta);
@@ -6339,11 +6124,12 @@ public class Util {
 		}
 
 		return retorno;
-    }
-    
+	}
+
 	/**
 	 * Método para comparar duas data e retornar o numero de dias da diferença
-	 * entre elas positivo (sempre retorna um resultado positivo, indepedente das datas iniciais e finais.
+	 * entre elas positivo (sempre retorna um resultado positivo, indepedente
+	 * das datas iniciais e finais.
 	 * 
 	 * Author: Tiago Moreno - (12/09/2011)
 	 * 
@@ -6354,8 +6140,7 @@ public class Util {
 	 * 
 	 * @return int Quantidade de Dias
 	 */
-	public static int obterQuantidadeDiasEntreDuasDatasPositivo(Date dataInicial,
-			Date dataFinal) {
+	public static int obterQuantidadeDiasEntreDuasDatasPositivo(Date dataInicial, Date dataFinal) {
 
 		GregorianCalendar startTime = new GregorianCalendar();
 		GregorianCalendar endTime = new GregorianCalendar();
@@ -6363,15 +6148,14 @@ public class Util {
 		GregorianCalendar curTime = new GregorianCalendar();
 		GregorianCalendar baseTime = new GregorianCalendar();
 
-		
-		if(dataInicial instanceof Timestamp) {
-			dataInicial = new Date(((Date)dataInicial).getTime());	
+		if (dataInicial instanceof Timestamp) {
+			dataInicial = new Date(((Date) dataInicial).getTime());
 		}
-		
-		if(dataFinal instanceof Timestamp) {
-			dataFinal = new Date(((Date)dataFinal).getTime());	
+
+		if (dataFinal instanceof Timestamp) {
+			dataFinal = new Date(((Date) dataFinal).getTime());
 		}
-		
+
 		startTime.setTime(dataInicial);
 		endTime.setTime(dataFinal);
 
@@ -6395,13 +6179,10 @@ public class Util {
 		// Para cada mes e ano, vai de mes em mes pegar o ultimo dia para ir
 		// acumulando
 		// no total de dias. Ja leva em consideracao ano bissesto
-		while (curTime.get(GregorianCalendar.YEAR) < baseTime
-				.get(GregorianCalendar.YEAR)
-				|| curTime.get(GregorianCalendar.MONTH) < baseTime
-						.get(GregorianCalendar.MONTH)) {
+		while (curTime.get(GregorianCalendar.YEAR) < baseTime.get(GregorianCalendar.YEAR)
+				|| curTime.get(GregorianCalendar.MONTH) < baseTime.get(GregorianCalendar.MONTH)) {
 
-			int max_day = curTime
-					.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
+			int max_day = curTime.getActualMaximum(GregorianCalendar.DAY_OF_MONTH);
 			resultadoMeses += max_day;
 			curTime.add(GregorianCalendar.MONTH, 1);
 
@@ -6411,18 +6192,17 @@ public class Util {
 		resultadoMeses = resultadoMeses * multiplicadorDiferenca;
 
 		// Retirna a diferenca de dias do total dos meses
-		resultadoDias += (endTime.get(GregorianCalendar.DAY_OF_MONTH) - startTime
-				.get(GregorianCalendar.DAY_OF_MONTH));
-		
+		resultadoDias += (endTime.get(GregorianCalendar.DAY_OF_MONTH) - startTime.get(GregorianCalendar.DAY_OF_MONTH));
+
 		int resultado = resultadoAno + resultadoMeses + resultadoDias;
-		
-		if (resultado < 0){
+
+		if (resultado < 0) {
 			resultado = resultado * (-1);
 		}
 
 		return resultado;
 	}
-    
+
 	/**
 	 * Método que recebe uma string e verifica se a string só tem numeros com
 	 * casas decimais
@@ -6449,37 +6229,36 @@ public class Util {
 	 * Retorna data com a hora 00:00:00
 	 * 
 	 * @date 15/02/2013
-	 * @author Felipe Santos 
+	 * @author Felipe Santos
 	 * @param data
 	 * @return Date
 	 */
 	public static Date getData(Date data) {
-	    Calendar calendar = Calendar.getInstance();
-	    
-	    calendar.setTime(data);
-	    calendar.set(Calendar.HOUR_OF_DAY, 0);
-	    calendar.set(Calendar.MINUTE, 0);
-	    calendar.set(Calendar.SECOND, 0);
-	    calendar.set(Calendar.MILLISECOND, 0);
-	    
-	    return calendar.getTime();
+		Calendar calendar = Calendar.getInstance();
+
+		calendar.setTime(data);
+		calendar.set(Calendar.HOUR_OF_DAY, 0);
+		calendar.set(Calendar.MINUTE, 0);
+		calendar.set(Calendar.SECOND, 0);
+		calendar.set(Calendar.MILLISECOND, 0);
+
+		return calendar.getTime();
 	}
-	
+
 	public static String md5(String s) {
-    	MessageDigest m;
-    	String retorno = "";
+		MessageDigest m;
+		String retorno = "";
 		try {
 			m = MessageDigest.getInstance("MD5");
-			m.update(s.getBytes(),0,s.length());
-			retorno = new BigInteger(1,m.digest()).toString(16);
-	    	
+			m.update(s.getBytes(), 0, s.length());
+			retorno = new BigInteger(1, m.digest()).toString(16);
+
 		} catch (NoSuchAlgorithmException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return retorno;
-    }
-	
+	}
+
 	/**
 	 * O metódo completa uma string com espaços em branco (ex: passa a string
 	 * "12.36" e o tamanho máximo 10 e retorna " 12.36" )
@@ -6496,8 +6275,7 @@ public class Util {
 	 *            Tamanho máximo da string
 	 * @return
 	 */
-	public static String completaStringComZeroAEsquerda(String str,
-			int tamanhoMaximo) {
+	public static String completaStringComZeroAEsquerda(String str, int tamanhoMaximo) {
 
 		// Tamanho da string informada
 		int tamanhoString = 0;
@@ -6538,20 +6316,155 @@ public class Util {
 		// totalizando o tamanho máximo informado
 		return stringBuilder.toString();
 	}
-	
+
 	public static String converterDataSemBarraParaDataComBarraAnoSimples(String data) {
 		String retorno = "";
 
 		if (data != null && !data.equals("") && data.trim().length() == 6) {
 
-			retorno = data.substring(0, 2) 
-				+ "/" 
-				+ data.substring(2, 4) 
-				+ "/" 
-				+ data.substring(4, 6);
+			retorno = data.substring(0, 2) + "/" + data.substring(2, 4) + "/" + data.substring(4, 6);
 
 		}
 
 		return retorno;
-	}	
+	}
+
+	public static boolean isCPF(String cpf) {
+		if (cpf.length() > 11)
+			cpf = cpf.substring(3);
+		if (cpf.equals("00000000000") || cpf.equals("11111111111") || cpf.equals("22222222222") || cpf.equals("33333333333") || cpf.equals("44444444444")
+				|| cpf.equals("55555555555") || cpf.equals("66666666666") || cpf.equals("77777777777") || cpf.equals("88888888888")
+				|| cpf.equals("99999999999") || (cpf.length() != 11))
+			return (false);
+
+		char dig10, dig11;
+		int sm, i, r, num, peso;
+		try {
+			sm = 0;
+			peso = 10;
+			for (i = 0; i < 9; i++) {
+				num = (int) (cpf.charAt(i) - 48);
+				sm = sm + (num * peso);
+				peso = peso - 1;
+			}
+			r = 11 - (sm % 11);
+			if ((r == 10) || (r == 11))
+				dig10 = '0';
+			else
+				dig10 = (char) (r + 48);
+
+			sm = 0;
+			peso = 11;
+			for (i = 0; i < 10; i++) {
+				num = (int) (cpf.charAt(i) - 48);
+				sm = sm + (num * peso);
+				peso = peso - 1;
+			}
+			r = 11 - (sm % 11);
+			if ((r == 10) || (r == 11))
+				dig11 = '0';
+			else
+				dig11 = (char) (r + 48);
+
+			if ((dig10 == cpf.charAt(9)) && (dig11 == cpf.charAt(10)))
+				return (true);
+			else
+				return (false);
+		} catch (Exception erro) {
+			return (false);
+		}
+	}
+
+	public static boolean isCNPJ(String CNPJ) {
+		// considera-se erro CNPJ's formados por uma sequencia de numeros iguais
+		if (CNPJ.equals("00000000000000") || CNPJ.equals("11111111111111") || CNPJ.equals("22222222222222") || CNPJ.equals("33333333333333")
+				|| CNPJ.equals("44444444444444") || CNPJ.equals("55555555555555") || CNPJ.equals("66666666666666") || CNPJ.equals("77777777777777")
+				|| CNPJ.equals("88888888888888") || CNPJ.equals("99999999999999") || (CNPJ.length() != 14))
+			return (false);
+
+		char dig13, dig14;
+		int sm, i, r, num, peso;
+
+		try {
+			// Calculo do 1o. Digito Verificador
+			sm = 0;
+			peso = 2;
+			for (i = 11; i >= 0; i--) {
+				// converte o i-ésimo caractere do CNPJ em um número:
+				// por exemplo, transforma o caractere '0' no inteiro 0
+				// (48 eh a posição de '0' na tabela ASCII)
+				num = (int) (CNPJ.charAt(i) - 48);
+				sm = sm + (num * peso);
+				peso = peso + 1;
+				if (peso == 10)
+					peso = 2;
+			}
+
+			r = sm % 11;
+			if ((r == 0) || (r == 1))
+				dig13 = '0';
+			else
+				dig13 = (char) ((11 - r) + 48);
+
+			// Calculo do 2o. Digito Verificador
+			sm = 0;
+			peso = 2;
+			for (i = 12; i >= 0; i--) {
+				num = (int) (CNPJ.charAt(i) - 48);
+				sm = sm + (num * peso);
+				peso = peso + 1;
+				if (peso == 10)
+					peso = 2;
+			}
+
+			r = sm % 11;
+			if ((r == 0) || (r == 1))
+				dig14 = '0';
+			else
+				dig14 = (char) ((11 - r) + 48);
+
+			// Verifica se os dígitos calculados conferem com os dígitos
+			// informados.
+			if ((dig13 == CNPJ.charAt(12)) && (dig14 == CNPJ.charAt(13)))
+				return (true);
+			else
+				return (false);
+		} catch (Exception erro) {
+			return (false);
+		}
+	}
+	
+	public static boolean cpfCnpjInvalido(String campo) {
+		campo = campo.trim();
+		if (StringUtils.isNotEmpty(campo)){
+			String cpf = campo;
+			if (cpf.length() > 11){
+				cpf = cpf.substring(3);
+			}
+			if (Util.isCPF(cpf) || Util.isCNPJ(campo)){
+				return false;
+			}
+		}
+		return true;
+	}
+
+	public static boolean nomeInvalido(String nome){
+		nome = nome.trim();
+		String regexNome = "[a-zA-Z\\s &/]*";
+		if (StringUtils.isNotEmpty(nome) && nome.matches(regexNome)){
+			return false;
+		}
+		return true;
+	}
+
+	public static String formatarIPTU(String numeroIPTU) {
+		return numeroIPTU.substring(0, 3) + "/"
+			 + numeroIPTU.substring(3, 8) + "/"
+			 + numeroIPTU.substring(8, 10) + "/"
+			 + numeroIPTU.substring(10, 12) + "/"
+			 + numeroIPTU.substring(12, 16) + "/"
+			 + numeroIPTU.substring(16, 19) + "/"
+			 + numeroIPTU.substring(19, 22) + "-"
+			 + numeroIPTU.substring(22, 24);
+	}
 }

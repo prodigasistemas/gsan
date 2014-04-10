@@ -17054,5 +17054,164 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		return diferencaDatas;
 	
 	}
+	
+	public void atualizarVecimentoFaturaClienteResponsavel(Date dataVencimento, String anoMesReferencia) throws ControladorException {
+		try {
+			repositorioFaturamento.atualizarVecimentoFaturaClienteResponsavel(dataVencimento, anoMesReferencia);
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
+	}
 
+	public Integer countFaturasClienteResponsaveis(String anoMesReferencia) throws ControladorException {
+		try {
+			return repositorioFaturamento.countFaturasClienteResponsaveis(anoMesReferencia);
+		} catch (ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
+	
+public Map<Integer, Conta> incluirContasParaRefaturarPagamentos(Collection<Pagamento> pagamentos, Date dataArrecadacao) throws ControladorException, ErroRepositorioException {
+		
+		Map<Integer, Conta> mapNovasContas = new HashMap<Integer, Conta>();
+		
+		Collection<Integer> idsContas = getListaIdContas(pagamentos);
+		
+		Collection<ContaHistorico> listaContaHistoricoOrigem = this.pesquisarContaOuContaHistorico(idsContas, ContaHistorico.class.getName());
+		Collection<Conta> listaContaOrigem = this.pesquisarContaOuContaHistorico(idsContas, Conta.class.getName());
+		
+		for (ContaHistorico contaHistorico : listaContaHistoricoOrigem) {
+			
+			ContaGeral contaGeral = new ContaGeral();
+			
+			Short indicadorHistorico = 2;
+			contaGeral.setIndicadorHistorico(indicadorHistorico);
+			contaGeral.setUltimaAlteracao(new Date());
+
+			Integer idConta;
+				try {
+					idConta = (Integer) this.getControladorUtil().inserir(contaGeral);
+					contaGeral.setId(idConta);
+					
+					Conta novaConta = this.copiarContaHistoricoParaConta(contaHistorico);
+					
+					novaConta.setId(idConta);
+					novaConta.setContaGeral(contaGeral);
+					novaConta.setDataVencimentoConta(dataArrecadacao);
+					novaConta.setUltimaAlteracao(new Date());
+					DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao(DebitoCreditoSituacao.INCLUIDA);
+					novaConta.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
+					
+					repositorioUtil.inserir(novaConta);
+					
+					mapNovasContas.put(contaHistorico.getId(), novaConta);
+				} catch (ControladorException e) {
+					e.printStackTrace();
+				}
+		}
+		
+		return mapNovasContas;
+	}
+
+	private Conta copiarContaHistoricoParaConta(ContaHistorico contaHistorico) throws ControladorException {
+		Conta conta = new Conta();
+		
+		conta.setReferencia(contaHistorico.getReferencia());
+		conta.setImovel(contaHistorico.getImovel());
+		conta.setLote(contaHistorico.getLote());
+		conta.setSubLote(contaHistorico.getSublote());
+		conta.setCodigoSetorComercial(contaHistorico.getSetorComercial());
+		conta.setQuadra(contaHistorico.getQuadra().getId());
+		conta.setDigitoVerificadorConta(contaHistorico.getVerificadorConta());
+		conta.setIndicadorCobrancaMulta(contaHistorico.getIndicadorCobrancaMulta());
+		conta.setIndicadorAlteracaoVencimento(contaHistorico.getIndicadorAlteracaoVencimento());
+		conta.setConsumoAgua(contaHistorico.getConsumoAgua());
+		conta.setConsumoEsgoto(contaHistorico.getConsumoEsgoto());
+		conta.setConsumoRateioAgua(contaHistorico.getConsumoRateioAgua());
+		conta.setConsumoRateioEsgoto(contaHistorico.getConsumoRateioEsgoto());
+		conta.setValorAgua(contaHistorico.getValorAgua());
+		conta.setValorEsgoto(contaHistorico.getValorEsgoto());
+		conta.setDebitos(contaHistorico.getValorDebitos());
+		conta.setValorCreditos(contaHistorico.getValorCreditos());
+		conta.setPercentualEsgoto(contaHistorico.getPercentualEsgoto());
+		conta.setDataVencimentoConta(contaHistorico.getDataVencimentoConta());
+		conta.setDataValidadeConta(contaHistorico.getDataValidadeConta());
+		conta.setDataInclusao(contaHistorico.getDataInclusao());
+		conta.setDataRevisao(contaHistorico.getDataRevisao());
+		conta.setDataRetificacao(contaHistorico.getDataRetificacao());
+		conta.setDataCancelamento(contaHistorico.getDataCancelamento());
+		conta.setDataEmissao(contaHistorico.getDataEmissao());
+		conta.setLigacaoEsgotoSituacao(contaHistorico.getLigacaoEsgotoSituacao());
+		conta.setLigacaoAguaSituacao(contaHistorico.getLigacaoAguaSituacao());
+		conta.setMotivoNaoEntregaDocumento(contaHistorico.getMotivoNaoEntregaDocumento());
+		conta.setLocalidade(contaHistorico.getLocalidade());
+		conta.setQuadra(contaHistorico.getNumeroQuadra());
+		conta.setContaMotivoInclusao(contaHistorico.getContaMotivoInclusao());
+		conta.setContaMotivoRevisao(contaHistorico.getContaMotivoRevisao());
+		conta.setContaMotivoRetificacao(contaHistorico.getContaMotivoRetificacao());
+		conta.setContaMotivoCancelamento(contaHistorico.getContaMotivoCancelamento());
+		conta.setFaturamentoTipo(contaHistorico.getFaturamentoTipo());
+		conta.setImovelPerfil(contaHistorico.getImovelPerfil());
+		conta.setRegistroAtendimento(contaHistorico.getRegistroAtendimento());
+		conta.setConsumoTarifa(contaHistorico.getConsumoTarifa());
+		conta.setIndicadorDebitoConta(contaHistorico.getIndicadorDebitoConta());
+		conta.setFuncionarioEntrega(contaHistorico.getFuncionarioEntrega());
+		conta.setFuncionarioLeitura(contaHistorico.getFuncionarioLeitura());
+		conta.setUltimaAlteracao(new Date());
+		conta.setDebitoCreditoSituacaoAtual(contaHistorico.getDebitoCreditoSituacaoAtual());
+		conta.setDebitoCreditoSituacaoAnterior(contaHistorico.getDebitoCreditoSituacaoAnterior());
+		conta.setDocumentoTipo(contaHistorico.getDocumentoTipo());
+		conta.setContaBancaria(contaHistorico.getContaBancaria());
+		conta.setDataVencimentoOriginal(contaHistorico.getDataVencimentoOriginal());
+		conta.setParcelamento(contaHistorico.getParcelamento());
+		conta.setValorImposto(contaHistorico.getValorImposto());
+		conta.setUsuario(contaHistorico.getUsuario());
+		conta.setNumeroRetificacoes(contaHistorico.getNumeroRetificacoes());
+		conta.setNumeroFatura(contaHistorico.getNumeroFatura());
+		conta.setFaturamentoGrupo(contaHistorico.getFaturamentoGrupo());
+		conta.setNumeroLeituraAnterior(contaHistorico.getNumeroLeituraAnterior());
+		conta.setNumeroLeituraAtual(contaHistorico.getNumeroLeituraAtual());
+		conta.setQuadraConta(contaHistorico.getQuadra());
+		
+		Rota rota = getControladorMicromedicao().buscarRotaDoImovel(conta.getImovel().getId());
+		Integer anoMesReferenciaContabil = this.retornaAnoMesFaturamentoGrupoDaRota(rota.getId());
+	
+		conta.setRota(rota);
+		conta.setReferenciaContabil(anoMesReferenciaContabil);
+		
+		return conta;
+	}
+	
+	/**
+	 * TODO : COSANPA
+	 * Pamela Gatinho - 17/05/2013
+	 * @param pagamentos
+	 * 
+	 * Metodo que pesquisa os objetos ContaHistorico relacionados aos pagamentos
+	 * enviados como parâmetro.
+	 */
+	public Collection pesquisarContaOuContaHistorico(Collection<Integer> idsPagamentos, String className) throws ControladorException{
+		try {
+			
+			 return repositorioFaturamento.pesquisarContaOuContaHistorico(idsPagamentos, className);
+	
+		} catch (ErroRepositorioException ex) {
+			ex.printStackTrace();
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	
+	@SuppressWarnings("unchecked")
+	public Collection<Integer> getListaIdContas(Collection<Pagamento> pagamentos) {
+		Collection<Integer> ids = null;
+		
+		if (pagamentos != null && pagamentos.size() > 0) {
+			ids = new ArrayList<Integer>();
+			
+			for (Pagamento pagamento: pagamentos) {
+				ids.add(pagamento.getContaGeral().getId());
+			}
+		}
+		return ids;
+	}
 }

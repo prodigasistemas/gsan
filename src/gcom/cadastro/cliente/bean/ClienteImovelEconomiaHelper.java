@@ -115,7 +115,7 @@ public class ClienteImovelEconomiaHelper implements Serializable {
 	
 	private Short numeroPontosUtilizacao;
 
-	private BigDecimal numeroIptu;
+	private String numeroIptu;
 
 	private String areaConstruida;
 
@@ -223,11 +223,11 @@ public class ClienteImovelEconomiaHelper implements Serializable {
 		this.numeroPontosUtilizacao = numeroPontosUtilizacao;
 	}
 
-	public BigDecimal getNumeroIptu() {
+	public String getNumeroIptu() {
 		return numeroIptu;
 	}
 
-	public void setNumeroIptu(BigDecimal numeroIptu) {
+	public void setNumeroIptu(String numeroIptu) {
 		this.numeroIptu = numeroIptu;
 	}
 

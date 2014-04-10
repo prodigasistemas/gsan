@@ -4,15 +4,14 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 
+import gcom.atualizacaocadastral.IImovelRamoAtividade;
+import gcom.cadastro.cliente.RamoAtividade;
 import gcom.interceptor.ObjetoTransacao;
 import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 
-public class ImovelRamoAtividade extends ObjetoTransacao {
+public class ImovelRamoAtividade extends ObjetoTransacao implements IImovelRamoAtividade {
     
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
 	private ImovelRamoAtividadePK comp_id;
@@ -24,7 +23,9 @@ public class ImovelRamoAtividade extends ObjetoTransacao {
 		
 	}
 	
-	
+	public ImovelRamoAtividade(int idImovel, int idRamoAtividade) {
+	this.comp_id = new ImovelRamoAtividadePK(idImovel, idRamoAtividade);	
+	}
 	
 	public ImovelRamoAtividade(ImovelRamoAtividadePK comp_id, Date ultimaAlteracao) {
 		this.comp_id = comp_id;
@@ -41,17 +42,11 @@ public class ImovelRamoAtividade extends ObjetoTransacao {
 		this.comp_id = comp_id;
 	}
 
-
-
-	@Override
 	public Date getUltimaAlteracao() {
-		// TODO Auto-generated method stub
 		return ultimaAlteracao;
 	}
 
-	@Override
 	public void setUltimaAlteracao(Date ultimaAlteracao) {
-		// TODO Auto-generated method stub
 		this.ultimaAlteracao = ultimaAlteracao;
 
 	}
@@ -101,4 +96,27 @@ public class ImovelRamoAtividade extends ObjetoTransacao {
 		return this.ultimaAlteracao.hashCode();
 	}
 
+
+
+	public Imovel getImovel() {
+		return (comp_id != null) ? comp_id.getImovel(): null;
+	}
+
+	public void setImovel(Imovel imovel) {
+		if (comp_id == null){
+			comp_id = new ImovelRamoAtividadePK();
+		}
+		comp_id.setImovel(imovel);
+	}
+
+	public RamoAtividade getRamoAtividade() {
+		return (comp_id != null) ? comp_id.getRamo_atividade(): null;
+	}
+
+	public void setRamoAtividade(RamoAtividade ramoAtividade) {
+		if (comp_id == null){
+			comp_id = new ImovelRamoAtividadePK();
+		}
+		comp_id.setRamo_atividade(ramoAtividade);
+	}
 }

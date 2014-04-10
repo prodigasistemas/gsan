@@ -8,16 +8,17 @@
 
 	<property file="build.properties" />
 
-	<property name="servidor.tipo" value="Batch" />
+	<property name="servidor.tipo" value="${gsan.tipo}" />
 	<property name="servidor.versao" value="5.1.1.57" />
 
 	<property name="dest" value="bin" />
 	<property name="descriptors" value="descriptors" />
 	<property name="Generated.Source" value="${dest}/Temporary_Files" />
-	<property name="nomeEAR" value="${JBossApplicationServer.3x.deploy}/gcom.ear" />
-	<property name="nomeWAR" value="${JBossApplicationServer.3x.deploy}/gcom.ear/gcom.war" />
-	<property name="JBossApplicationServer.3x.Client.home" value="${JBossApplicationServer.3x.home}/client" />
+	<property name="nomeEAR" value="${jboss.deploy}/gcom.ear" />
+	<property name="nomeWAR" value="${jboss.deploy}/gcom.ear/gcom.war" />
+	<property name="jboss.client.home" value="${jboss.home}/client" />
 	<property name="Struts.home" value="lib/Struts1.1" />
+	<property name="deploy.lib.dir" value="lib/deploy" />
 	<property name="Servlet.home" value="lib/Servlet" />
 	<property name="MenuTagLib.home" value="lib/MenuTagLib" />
 	<property name="JasperReports.home" value="lib/JasperReports 1.2.2" />
@@ -33,37 +34,37 @@
 
 	<path id="project.class.path">
 		<pathelement location="${dest}" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/jboss-common-client.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/jboss-system-client.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/getopt.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/log4j.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/jboss-j2ee.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/jnp-client.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/jboss-transaction-client.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/jmx-rmi-connector-client.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/jmx-ejb-connector-client.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/jboss-client.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/jmx-connector-client-factory.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/jmx-invoker-adaptor-client.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/concurrent.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/gnu-regexp.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/jboss-jaas.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/jbosssx-client.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/jsse.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/jnet.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/jcert.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/jbossmq-client.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/jbosscx-client.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/jbossha-client.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/jbossjmx-ant.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/jboss-net-client.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/xdoclet-module-jboss-net.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/jboss-iiop-client.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/jacorb.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/jboss-jsr77-client.jar" />
-		<pathelement location="${JBossApplicationServer.3x.Client.home}/jbossall-client.jar" />
-		<pathelement location="${JBossApplicationServer.3x.home}/lib/jasper-runtime.jar" />
-		<pathelement location="${JBossApplicationServer.3x.home}/lib/jasper-compiler.jar" />
+		<pathelement location="${jboss.client.home}/jboss-common-client.jar" />
+		<pathelement location="${jboss.client.home}/jboss-system-client.jar" />
+		<pathelement location="${jboss.client.home}/getopt.jar" />
+		<pathelement location="${jboss.client.home}/log4j.jar" />
+		<pathelement location="${jboss.client.home}/jboss-j2ee.jar" />
+		<pathelement location="${jboss.client.home}/jnp-client.jar" />
+		<pathelement location="${jboss.client.home}/jboss-transaction-client.jar" />
+		<pathelement location="${jboss.client.home}/jmx-rmi-connector-client.jar" />
+		<pathelement location="${jboss.client.home}/jmx-ejb-connector-client.jar" />
+		<pathelement location="${jboss.client.home}/jboss-client.jar" />
+		<pathelement location="${jboss.client.home}/jmx-connector-client-factory.jar" />
+		<pathelement location="${jboss.client.home}/jmx-invoker-adaptor-client.jar" />
+		<pathelement location="${jboss.client.home}/concurrent.jar" />
+		<pathelement location="${jboss.client.home}/gnu-regexp.jar" />
+		<pathelement location="${jboss.client.home}/jboss-jaas.jar" />
+		<pathelement location="${jboss.client.home}/jbosssx-client.jar" />
+		<pathelement location="${jboss.client.home}/jsse.jar" />
+		<pathelement location="${jboss.client.home}/jnet.jar" />
+		<pathelement location="${jboss.client.home}/jcert.jar" />
+		<pathelement location="${jboss.client.home}/jbossmq-client.jar" />
+		<pathelement location="${jboss.client.home}/jbosscx-client.jar" />
+		<pathelement location="${jboss.client.home}/jbossha-client.jar" />
+		<pathelement location="${jboss.client.home}/jbossjmx-ant.jar" />
+		<pathelement location="${jboss.client.home}/jboss-net-client.jar" />
+		<pathelement location="${jboss.client.home}/xdoclet-module-jboss-net.jar" />
+		<pathelement location="${jboss.client.home}/jboss-iiop-client.jar" />
+		<pathelement location="${jboss.client.home}/jacorb.jar" />
+		<pathelement location="${jboss.client.home}/jboss-jsr77-client.jar" />
+		<pathelement location="${jboss.client.home}/jbossall-client.jar" />
+		<pathelement location="${jboss.home}/lib/jasper-runtime.jar" />
+		<pathelement location="${jboss.home}/lib/jasper-compiler.jar" />
 		<pathelement location="${Struts.home}/commons-fileupload.jar" />
 		<pathelement location="${Struts.home}/commons-beanutils.jar" />
 		<pathelement location="${Struts.home}/struts-legacy.jar" />
@@ -84,6 +85,7 @@
 		<pathelement location="${PagerTagLib.home}/pager-taglib.jar" />
 		<pathelement location="${JAF.home}/activation.jar" />
 		<pathelement location="${JavaMail.home}/mail.jar" />
+		<pathelement location="${Axis.home}/commons-httpclient-3.1.jar" />
 		<pathelement location="/reports" />
 
 	</path>
@@ -97,6 +99,9 @@
 				<include name="**/rodape.jsp" />
 			</fileset>
 		</replaceregexp>
+		
+		<replaceregexp file="${src}/gcom/properties/version.properties" match="gsan.tipo=(.*)" replace="gsan.tipo=${gsan.tipo}" byline="true"/>
+		
 	</target>
 
 	<target depends="init, alterarDataVersao" name="javacompile">
@@ -114,15 +119,15 @@
 				<include name="**/*.jasper" />
 			</support>
 
-			<dtd publicid="-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN" location="${JBossApplicationServer.3x.home}/docs/dtd/ejb-jar_2_0.dtd" />
+			<dtd publicid="-//Sun Microsystems, Inc.//DTD Enterprise JavaBeans 2.0//EN" location="${jboss.home}/docs/dtd/ejb-jar_2_0.dtd" />
 
-			<dtd publicid="-//JBoss//DTD JBOSS 4.0//EN" location="${JBossApplicationServer.3x.home}/docs/dtd/jboss_4_0.dtd" />
+			<dtd publicid="-//JBoss//DTD JBOSS 4.0//EN" location="${jboss.home}/docs/dtd/jboss_4_0.dtd" />
 
-			<jboss destdir="${JBossApplicationServer.3x.deploy}/gcom.ear">
+			<jboss destdir="${jboss.deploy}/gcom.ear">
 			</jboss>
 		</ejbjar>
 
-		<delete file="${JBossApplicationServer.3x.deploy}/gcom.ear/null.jar" />
+		<delete file="${jboss.deploy}/gcom.ear/null.jar" />
 	</target>
 
 	<target depends="resource" name="war">
@@ -168,6 +173,9 @@
 				<include name="*.jar" />
 			</fileset>
 			<fileset dir="${JavaHelp.home}">
+				<include name="*.jar" />
+			</fileset>
+			<fileset dir="${deploy.lib.dir}">
 				<include name="*.jar" />
 			</fileset>
 		</copy>
@@ -235,11 +243,11 @@
 	</target>
 
 	<target name="clean">
-		<delete dir="${JBossApplicationServer.3x.deploy}/gcom.ear" />
+		<delete dir="${jboss.deploy}/gcom.ear" />
 	</target>
 
 	<target name="update-ear">
-		<touch file="${JBossApplicationServer.3x.deploy}/gcom.ear/META-INF/application.xml" />
+		<touch file="${jboss.deploy}/gcom.ear/META-INF/application.xml" />
 	</target>
 
 

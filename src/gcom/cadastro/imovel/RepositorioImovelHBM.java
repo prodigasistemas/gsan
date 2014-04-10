@@ -81,6 +81,8 @@ import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.FiscalizacaoSituacaoAgua;
 import gcom.atendimentopublico.ordemservico.FiscalizacaoSituacaoEsgoto;
+import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
+import gcom.atualizacaocadastral.ImovelRetorno;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
@@ -90,8 +92,10 @@ import gcom.cadastro.cliente.RamoAtividade;
 import gcom.cadastro.cliente.bean.ClienteImovelEconomiaHelper;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.endereco.Cep;
+import gcom.cadastro.endereco.Logradouro;
 import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
+import gcom.cadastro.endereco.LogradouroTipo;
 import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.imovel.bean.FiltrarImovelOutrosCriteriosHelper;
 import gcom.cadastro.imovel.bean.ImovelEconomiaHelper;
@@ -19033,7 +19037,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	 * 
 	 */
 
-	public Integer verificarNumeroIptu(BigDecimal numeroIptu, Integer idImovel,
+	public Integer verificarNumeroIptu(String numeroIptu, Integer idImovel,
 
 	Integer idImovelEconomia, Integer idMunicipio)
 
@@ -19089,7 +19093,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 				.addScalar("idImovel", Hibernate.INTEGER)
 
-				.setBigDecimal("numeroIptu", numeroIptu).setInteger(
+				.setString("numeroIptu", numeroIptu).setInteger(
 
 				"idImovel", idImovel).setInteger("idMunicipio",
 
@@ -19131,7 +19135,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 				.addScalar("idImovel", Hibernate.INTEGER)
 
-				.setBigDecimal("numeroIptu", numeroIptu).setInteger(
+				.setString("numeroIptu", numeroIptu).setInteger(
 
 				"idImovelEconomia", idImovelEconomia)
 
@@ -27092,88 +27096,6 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * Pesquisar dados do Imóvel Atualização Cadastral
-	 * 
-	 * @param idImovel
-	 * @return Imovel
-	 * 
-	 * @author Ana Maria
-     * @date 17/09/2008
-	 * @exception ErroRepositorioException
-	 */
-	public ImovelAtualizacaoCadastral pesquisarImovelAtualizacaoCadastral(Integer idImovel)
-		throws ErroRepositorioException {
-	
-		ImovelAtualizacaoCadastral imovelAtualizacaoCadastral = null;
-		String consulta = "";
-	
-		Session session = HibernateUtil.getSession();
-	
-		try {
-	
-			consulta = " SELECT imov"
-				     + " FROM ImovelAtualizacaoCadastral imov" 				    				    
-				     + " WHERE imov.idImovel = :idImovel";
-	
-		imovelAtualizacaoCadastral = (ImovelAtualizacaoCadastral)session.createQuery(consulta)
-										.setInteger("idImovel", idImovel)
-										.setMaxResults(1).uniqueResult();
-					
-		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-	
-			HibernateUtil.closeSession(session);
-	
-		}
-	
-		return imovelAtualizacaoCadastral;
-	
-	}
-
-	/**
-	 * Pesquisar Imóvel Subcategoria Atualização Cadastral
-	 * 
-	 * @param idImovel
-	 * 
-	 * @author Ana Maria
-     * @date 17/09/2008
-	 * @exception ErroRepositorioException
-	 */
-	public Collection pesquisarImovelSubcategoriaAtualizacaoCadastral(Integer idImovel, Integer idSubcategoria,Integer idCategoria)
-		throws ErroRepositorioException {
-	
-		Collection retorno = null;
-		Session session = HibernateUtil.getSession();
-		String consulta = null;
-		
-		try {
-			consulta = " SELECT imovelSubcategoria" 
-					 + " FROM ImovelSubcategoriaAtualizacaoCadastral imovelSubcategoria" 
-					 + " WHERE imovelSubcategoria.idImovel = :idImovel";
-			
-			if(idSubcategoria != null){
-				consulta = consulta + " AND imovelSubcategoria.idSubcategoria = "+idSubcategoria;
-			}
-			
-			if(idCategoria != null){
-				consulta = consulta + " AND imovelSubcategoria.idCategoria = "+idCategoria;
-			}
-		
-			retorno = session.createQuery(consulta).setInteger("idImovel",
-					idImovel.intValue()).list();
-		
-		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
-		
-		return retorno;
-
-	}
-	
-	/**
 	 * Pesquisar existência de imóvel economia
 	 * 
 	 * @author Ana Maria
@@ -31448,35 +31370,20 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
      * @date 21/03/2012
 	 * @exception ErroRepositorioException
 	 */
-	public Collection pesquisarRamoAtividadeDoImovel(Integer idImovel)
-			throws ErroRepositorioException {
+	public Collection<ImovelRamoAtividade> pesquisarRamoAtividadeDoImovel(Integer idImovel) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
 		String consulta;
-		Collection<RamoAtividade> colecaoRamoAtividadeImovel = new ArrayList<RamoAtividade>();
-		Collection retornoConsulta = null;
+		Collection<ImovelRamoAtividade> colecaoRamoAtividadeImovel = new ArrayList<ImovelRamoAtividade>();
 
 		try {
-			consulta = "select ratv_id as ramoAtividade "
-					+ "from cadastro.imovel_ramo_atividade "
-					+ "where imov_id = :idImovel";
+			consulta = "from ImovelRamoAtividade ramoAtividade "
+					+ "where ramoAtividade.comp_id.imovel.id = :idImovel";
 
-			retornoConsulta = session.createSQLQuery(consulta)
-					.addScalar("ramoAtividade", Hibernate.INTEGER)
+			colecaoRamoAtividadeImovel = session.createQuery(consulta)
 					.setInteger("idImovel", idImovel)
 					.list();
 
-			if (retornoConsulta.size() > 0) {
-				Iterator imovelRamoAtividadeIter = retornoConsulta.iterator();
-				while (imovelRamoAtividadeIter.hasNext()) {
-					Integer idRamoAtividade = (Integer) imovelRamoAtividadeIter.next();
-
-					RamoAtividade ramoAtividade = new RamoAtividade();
-					ramoAtividade.setId(idRamoAtividade);
-
-					colecaoRamoAtividadeImovel.add(ramoAtividade);
-				}
-			}
 		} catch (HibernateException e) {
 			e.printStackTrace();
 			throw new ErroRepositorioException("Erro no Hibernate");
@@ -31486,4 +31393,88 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		return colecaoRamoAtividadeImovel;
 	}
+	
+	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try {
+
+			String consulta = "SELECT icac "
+					+ "FROM ImovelControleAtualizacaoCadastral icac "
+					+ "INNER JOIN FETCH icac.imovel imovel "
+					+ "INNER JOIN FETCH icac.situacaoAtualizacaoCadastral situacao "
+					+ "WHERE imovel.id = :idImovel ";
+
+			return (ImovelControleAtualizacaoCadastral) session.createQuery(consulta)
+					.setInteger("idImovel", idImovel).uniqueResult();
+		}catch (HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+	
+	public Collection<Integer> pesquisarIdImoveisAprovados() throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try {
+			String consulta = "SELECT imovel.id "
+					+ "FROM ImovelControleAtualizacaoCadastral icac "
+					+ "INNER JOIN icac.imovel imovel "
+					+ "INNER JOIN icac.situacaoAtualizacaoCadastral situacao "
+					+ "WHERE situacao.id = :idSituacao ";
+
+			return (Collection<Integer>) session.createQuery(consulta)
+					.setInteger("idSituacao", SituacaoAtualizacaoCadastral.APROVADO).list();
+		}catch (HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+	
+	public LogradouroTipo pesquisarTipoLogradouro(Integer idTipoLogradouro) throws ErroRepositorioException{
+		Session session = HibernateUtil.getSession();
+		try {
+			String consulta = "SELECT tipo "
+					+ "FROM LogradouroTipo tipo "
+					+ "WHERE tipo.id = :idTipo ";
+
+			return (LogradouroTipo) session.createQuery(consulta)
+					.setInteger("idTipo", idTipoLogradouro).uniqueResult();
+		}catch (HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+
+	public Logradouro pesquisarLogradouro(Integer codigoLogradouro) throws ErroRepositorioException{
+		Session session = HibernateUtil.getSession();
+		try {
+			String consulta = "SELECT logr "
+					+ "FROM Logradouro logr "
+					+ "WHERE logr.id = :codigo ";
+			
+			return (Logradouro) session.createQuery(consulta)
+					.setInteger("codigo", codigoLogradouro).uniqueResult();
+		}catch (HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+	
+	public Integer pesquisarLogradouroImovelAtualizacaoCadastral(Integer matriculaImovel) throws ErroRepositorioException {
+        Session session = HibernateUtil.getSession();
+        try {
+                String consulta = " SELECT imovel.idLogradouro "
+                                + " FROM ImovelAtualizacaoCadastral imovel "
+                                + " WHERE imovel.idImovel = :idImovel ";
+                return (Integer) session.createQuery(consulta).setInteger("idImovel", matriculaImovel).uniqueResult();
+        } catch (HibernateException e) {
+                throw new ErroRepositorioException("Erro no Hibernate");
+        } finally {
+                HibernateUtil.closeSession(session);
+        }
+        
+}
 }

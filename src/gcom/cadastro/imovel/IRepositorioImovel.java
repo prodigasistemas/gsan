@@ -79,13 +79,17 @@ import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.arrecadacao.pagamento.PagamentoHistorico;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
+import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
+import gcom.atualizacaocadastral.ImovelRetorno;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.endereco.Cep;
+import gcom.cadastro.endereco.Logradouro;
 import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
+import gcom.cadastro.endereco.LogradouroTipo;
 import gcom.cadastro.geografico.Municipio;
 import gcom.cadastro.imovel.bean.ImovelSubcategoriaHelper;
 import gcom.cadastro.tarifasocial.TarifaSocialCarta;
@@ -1336,7 +1340,7 @@ public interface IRepositorioImovel {
 	 * @author Rafael Corrêa
 	 * @throws ErroRepositorioException
 	 */
-	public Integer verificarNumeroIptu(BigDecimal numeroIptu, Integer idImovel,
+	public Integer verificarNumeroIptu(String numeroIptu, Integer idImovel,
 			Integer idImovelEconomia, Integer idMunicipio)
 			throws ErroRepositorioException;
 	
@@ -2189,31 +2193,6 @@ public interface IRepositorioImovel {
 	 */
 	public Collection obterImoveisAtualizacaoCadastral(Integer idLocalidade, String codigoSetor,
 			Integer quadraInicial, Integer quadraFinal, Integer idEmpresa, Integer idRota)throws ErroRepositorioException;
-	
-	/**
-	 * Pesquisar dados do Imóvel Atualização Cadastral
-	 * 
-	 * @param idImovel
-	 * @return Imovel
-	 * 
-	 * @author Ana Maria
-     * @date 17/09/2008
-	 * @exception ErroRepositorioException
-	 */
-	public ImovelAtualizacaoCadastral pesquisarImovelAtualizacaoCadastral(Integer idImovel)
-		throws ErroRepositorioException;
-	
-	/**
-	 * Pesquisar Imóvel Subcategoria Atualização Cadastral
-	 * 
-	 * @param idImovel
-	 * 
-	 * @author Ana Maria
-     * @date 17/09/2008
-	 * @exception ErroRepositorioException
-	 */
-	public Collection pesquisarImovelSubcategoriaAtualizacaoCadastral(Integer idImovel, Integer idSubcategoria,Integer idCategoria)
-		throws ErroRepositorioException;
 	
 	/**
 	 * Pesquisar existência de imóvel economia
@@ -3296,6 +3275,15 @@ public interface IRepositorioImovel {
      * @date 21/03/2012
 	 * @exception ErroRepositorioException
 	 */
-	public Collection pesquisarRamoAtividadeDoImovel(Integer idImovel)
-		throws ErroRepositorioException;
+	public Collection<ImovelRamoAtividade> pesquisarRamoAtividadeDoImovel(Integer idImovel) throws ErroRepositorioException;
+	
+	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException;
+	
+	public Collection<Integer> pesquisarIdImoveisAprovados() throws ErroRepositorioException;
+	
+	public LogradouroTipo pesquisarTipoLogradouro(Integer idTipoLogradouro) throws ErroRepositorioException;
+	
+	public Logradouro pesquisarLogradouro(Integer codigoLogradouro) throws ErroRepositorioException;
+	
+	public Integer pesquisarLogradouroImovelAtualizacaoCadastral(Integer matriculaImovel) throws ErroRepositorioException;
 }

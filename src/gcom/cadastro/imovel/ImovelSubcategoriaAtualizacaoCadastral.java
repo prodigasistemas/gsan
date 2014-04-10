@@ -11,7 +11,7 @@ import java.util.Date;
 
 /** @author Hibernate CodeGenerator */
 @ControleAlteracao()
-public class ImovelSubcategoriaAtualizacaoCadastral extends ObjetoTransacao {
+public class ImovelSubcategoriaAtualizacaoCadastral extends ObjetoTransacao implements IImovelSubcategoria {
 	
 	private static final long serialVersionUID = 1L;
 	
@@ -19,18 +19,18 @@ public class ImovelSubcategoriaAtualizacaoCadastral extends ObjetoTransacao {
 
     private Integer id;    
 
-    private Integer idImovel;
-    
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private Integer idCategoria;
+	private Imovel imovel;
 
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+    private Categoria categoria;
+
+	//@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+    private Subcategoria subcategoria;
+
+//	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private String descricaoCategoria;
-    
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
-    private Integer idSubcategoria;
 	
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
+//	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private String descricaoSubcategoria;
 
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
@@ -39,12 +39,12 @@ public class ImovelSubcategoriaAtualizacaoCadastral extends ObjetoTransacao {
     /** persistent field */
     private Date ultimaAlteracao;
 
-    public ImovelSubcategoriaAtualizacaoCadastral(Integer id, Integer idImovel, Integer idCategoria, String descricaoCategoria, Integer idSubcategoria, String descricaoSubcategoria, short quantidadeEconomias, Date ultimaAlteracao) {
+    public ImovelSubcategoriaAtualizacaoCadastral(Integer id, Imovel imovel, Categoria categoria, Subcategoria subcategoria, String descricaoCategoria, String descricaoSubcategoria, short quantidadeEconomias, Date ultimaAlteracao) {
 		this.id = id;
-		this.idImovel = idImovel;
-		this.idCategoria = idCategoria;
+		this.imovel = imovel;
+		this.categoria = categoria;
+		this.subcategoria = subcategoria;
 		this.descricaoCategoria = descricaoCategoria;
-		this.idSubcategoria = idSubcategoria;
 		this.descricaoSubcategoria = descricaoSubcategoria;
 		this.quantidadeEconomias = quantidadeEconomias;
 		this.ultimaAlteracao = ultimaAlteracao;
@@ -78,14 +78,6 @@ public class ImovelSubcategoriaAtualizacaoCadastral extends ObjetoTransacao {
         this.descricaoSubcategoria = descricaoSubcategoria;
     }
 
-    public Integer getIdCategoria() {
-        return this.idCategoria;
-    }
-
-    public void setIdCategoria(Integer idCategoria) {
-        this.idCategoria = idCategoria;
-    }
-
     public String getDescricaoCategoria() {
         return this.descricaoCategoria;
     }
@@ -102,34 +94,43 @@ public class ImovelSubcategoriaAtualizacaoCadastral extends ObjetoTransacao {
 		this.id = id;
 	}
 
-	public Integer getIdImovel() {
-		return idImovel;
-	}
-
-	public void setIdImovel(Integer idImovel) {
-		this.idImovel = idImovel;
-	}
-
-	public Integer getIdSubcategoria() {
-		return idSubcategoria;
-	}
-
-	public void setIdSubcategoria(Integer idSubcategoria) {
-		this.idSubcategoria = idSubcategoria;
-	}
-	
-	@Override
 	public Filtro retornaFiltro() {
 		Filtro filtro = retornaFiltro();
-		filtro.adicionarParametro(new ParametroSimples(FiltroTabela.ID, this.getIdImovel()));
+		filtro.adicionarParametro(new ParametroSimples(FiltroTabela.ID, this.getImovel().getId()));
 		return filtro;
 
 	}
 
-	@Override
 	public String[] retornaCamposChavePrimaria() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
+	public Imovel getImovel() {
+		return imovel;
+	}
+
+	public void setImovel(Imovel imovel) {
+		this.imovel = imovel;
+	}
+
+	public Subcategoria getSubcategoria() {
+		return subcategoria;
+	}
+
+	public void setSubcategoria(Subcategoria subcategoria) {
+		this.subcategoria = subcategoria;
+	}
+
+	public Categoria getCategoria() {
+		return categoria;
+	}
+
+	public void setCategoria(Categoria categoria) {
+		this.categoria = categoria;
+	}
+
+	public String toString() {
+		return "ImovelSubcategoriaAtualizacaoCadastral [descricaoCategoria=" + descricaoCategoria + ", descricaoSubcategoria=" + descricaoSubcategoria
+				+ ", quantidadeEconomias=" + quantidadeEconomias + "]";
+	}
 }

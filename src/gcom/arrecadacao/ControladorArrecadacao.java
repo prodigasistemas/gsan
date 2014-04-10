@@ -173,12 +173,12 @@ import gcom.cadastro.ControladorCadastroLocalHome;
 import gcom.cadastro.EnvioEmail;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteEndereco;
-import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteGuiaPagamento;
 import gcom.cadastro.cliente.ClienteGuiaPagamentoHistorico;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.EsferaPoder;
 import gcom.cadastro.cliente.FiltroCliente;
+import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.cliente.IRepositorioCliente;
 import gcom.cadastro.cliente.RepositorioClienteHBM;
 import gcom.cadastro.empresa.Empresa;
@@ -13693,12 +13693,12 @@ public class ControladorArrecadacao implements SessionBean {
 							&& !colecaoAnoMesReferenciaPagamentos.isEmpty()) {
 
 						colecaoDadosDiariosArrecadacaoInserir = new ArrayList();
+						
 
 						for (Integer anoMesArrecadacaoAtual : colecaoAnoMesReferenciaPagamentos) {
-							// Exclui os dados diários da arrecadação do ano/mês
-							// da
-							// arrecadação
-							// corrente
+
+							logger.info("Ano mes arrecadacao: " + anoMesArrecadacaoAtual);
+
 							repositorioArrecadacao
 									.excluirDadosDiariosArrecadacaoPorAnoMesArrecadacaoPorLocalidade(
 											anoMesArrecadacaoAtual,
@@ -13716,11 +13716,8 @@ public class ControladorArrecadacao implements SessionBean {
 											anoMesArrecadacaoAtual, localidade
 													.getId());
 							
-							// Caso a coleção de pagamentosnão esteja vazia
 							if (colecaoDadosPagamentos != null) {
 
-								// Laço para incluir todos os dados diários da
-								// arrecadação
 								for (Object dadosPagamento : colecaoDadosPagamentos) {
 
 									Object[] arrayDadosPagamento = (Object[]) dadosPagamento;
@@ -39119,7 +39116,7 @@ public class ControladorArrecadacao implements SessionBean {
 	 * @return ClienteFone
 	 * @throws ControladorException
 	 */
-	public ClienteFone pesquisarClienteFonePagamento(Integer idCliente)
+	public IClienteFone pesquisarClienteFonePagamento(Integer idCliente)
 			throws ControladorException {
 
 		try {
@@ -55110,12 +55107,8 @@ public class ControladorArrecadacao implements SessionBean {
 
 		Collection colecaoDadosDiariosArrecadacaoAuxiliarInserir = null;
 
-		SistemaParametro sistemaParametros = getControladorUtil()
-				.pesquisarParametrosDoSistema();
-
 		ArrecadacaoDadosDiariosAuxiliar arrecadacaoDadosDiariosAuxiliar = null;
 
-		// Cria as variáveis referentes a imóvel
 		Imovel imovel = null;
 		Localidade localidade = null;
 		SetorComercial setorComercial = null;
@@ -55165,16 +55158,12 @@ public class ControladorArrecadacao implements SessionBean {
 
 			colecaoDadosDiariosArrecadacaoAuxiliarInserir = new ArrayList();
 			
-			// Caso a coleção de pagamentosnão esteja vazia
 			if (colecaoDadosPagamentos != null) {
 				
-				// Laço para incluir todos os dados diários da
-				// arrecadação
 				for (Object dadosPagamento : colecaoDadosPagamentos) {
 
 					Object[] arrayDadosPagamento = (Object[]) dadosPagamento;
 
-					// ID IMOVEL
 					if (arrayDadosPagamento != null) {
 						// SOMA DO VALOR
 						if (arrayDadosPagamento[0] != null) {
@@ -55282,11 +55271,6 @@ public class ControladorArrecadacao implements SessionBean {
 											arrecadacaoForma.getId());
 						}
 
-						// Cria o objeto ArrecadacaoDadosDiarios e
-						// seta
-						// os
-						// dados
-						// necessários para inclusão
 						arrecadacaoDadosDiariosAuxiliar = new ArrecadacaoDadosDiariosAuxiliar();
 						arrecadacaoDadosDiariosAuxiliar.setAnoMesReferenciaArrecadacao(anoMesArrecadacaoAtual);
 						arrecadacaoDadosDiariosAuxiliar.setArrecadador(arrecadador);
@@ -55326,22 +55310,16 @@ public class ControladorArrecadacao implements SessionBean {
 
 			}
 			
-			// Exclui os dados diários da arrecadação do ano/mês
-			// da arrecadação corrente
-			repositorioArrecadacao
-					.excluirDadosDiariosDevolucaoPorAnoMesArrecadacaoAuxiliarPorLocalidade(
-							anoMesArrecadacaoAtual,
-							idLocalidade);
+			repositorioArrecadacao.excluirDadosDiariosDevolucaoPorAnoMesArrecadacaoAuxiliarPorLocalidade(
+							anoMesArrecadacaoAtual,	idLocalidade);
 
 			// Acumula a quantidade e o valor das devolucoes
 			colecaoDadosDevolucoes = repositorioArrecadacao.
 					acumularQuantidadeEValorDevolucaoPorAnoMesArrecadacaoAuxiliar(
 							anoMesArrecadacaoAtual, localidade.getId());
 										
-			// Caso a coleção de devolucoes não esteja vazia
 			if (colecaoDadosDevolucoes != null) {
-//						 Laço para incluir todos os dados diários da
-				// arrecadação
+				
 				for (Object dadosDevolucao : colecaoDadosDevolucoes) {
 
 					Object[] arrayDadosDevolucao = (Object[]) dadosDevolucao;
@@ -55439,8 +55417,6 @@ public class ControladorArrecadacao implements SessionBean {
 						qtdDocumentosAgregados = (Integer) arrayDadosDevolucao[9];
 					}
 					
-					// Cria o objeto DevolucaoDadosDiarios e seta os dados
-					// necessários para inclusão
 					DevolucaoDadosDiariosAuxiliar devolucaoDadosDiariosAuxiliar = new DevolucaoDadosDiariosAuxiliar();
 					devolucaoDadosDiariosAuxiliar.setAnoMesReferencia(anoMesArrecadacaoAtual);
 					devolucaoDadosDiariosAuxiliar.setArrecadador(arrecadador);

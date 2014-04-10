@@ -10,22 +10,25 @@ import gcom.interceptor.ObjetoGcom;
 public class ImovelRamoAtividadePK extends ObjetoGcom {
 	private static final long serialVersionUID = 1L;
 
-    /** identifier field */
     private gcom.cadastro.imovel.Imovel imovel;
 
-    /** identifier field */
     private RamoAtividade ramo_atividade;
 
-    /** full constructor */
     public ImovelRamoAtividadePK(gcom.cadastro.imovel.Imovel imovel,
             RamoAtividade ramo_atividade) {
         this.imovel = imovel;
         this.ramo_atividade = ramo_atividade;
     }
 
-    /** default constructor */
     public ImovelRamoAtividadePK() {
     }
+    
+    public ImovelRamoAtividadePK(int idImovel, int idRamoAtividade) {
+    	this.imovel = new Imovel(new Integer(idImovel));
+    	this.ramo_atividade = new RamoAtividade(new Integer(idRamoAtividade));
+    	
+    }
+    
 
     public gcom.cadastro.imovel.Imovel getImovel() {
         return this.imovel;

@@ -1,0 +1,1 @@
+ALTER TABLE atualizacaocadastral.imovel_retorno ALTER COLUMN imac_dsoutrasinformacoes TYPE character varying(200);

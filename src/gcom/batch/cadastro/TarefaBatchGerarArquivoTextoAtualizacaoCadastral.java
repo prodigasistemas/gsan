@@ -76,6 +76,7 @@
 package gcom.batch.cadastro;
 
 import gcom.cadastro.imovel.bean.GerarArquivoTextoAtualizacaoCadastralHelper;
+import gcom.cadastro.imovel.bean.ImovelGeracaoTabelasTemporariasCadastroHelper;
 import gcom.fachada.Fachada;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.tarefa.TarefaBatch;
@@ -110,21 +111,17 @@ public class TarefaBatchGerarArquivoTextoAtualizacaoCadastral extends TarefaBatc
 	public Object executar() throws TarefaException {
 
 		Map parametros = (Map) getParametro(ConstantesSistema.PARAMETROS_BATCH);
-		GerarArquivoTextoAtualizacaoCadastralHelper helper = (GerarArquivoTextoAtualizacaoCadastralHelper) 
-				parametros.get("gerarArquivoTextoAtualizacaoCadastralHelper");
+		ImovelGeracaoTabelasTemporariasCadastroHelper helper = (ImovelGeracaoTabelasTemporariasCadastroHelper)
+				parametros.get("imovelGeracaoTabelasTemporariasCadastroHelper");
 		
-		Collection<Integer> colecaoRotas = Fachada.getInstancia().pesquisarRotasAtualizacaoCadastral(helper);
+		Collection<Integer> colecaoIdRotas = Fachada.getInstancia().pesquisarRotasAtualizacaoCadastral(helper);
 		
-		Iterator iterator = colecaoRotas.iterator();
-		
-		while(iterator.hasNext()) {
-			Integer idRota = (Integer) iterator.next();
-			
+		for (Integer idRota : colecaoIdRotas) {
 			enviarMensagemControladorBatch(
 					ConstantesJNDI.BATCH_GERAR_ARQUIVO_TEXTO_ATUALIZACAO_CADASTRAL_MDB,
 					new Object[] { this.getIdFuncionalidadeIniciada(), helper, idRota });
 		}
-
+		
 		return null;
 	}
 

@@ -588,12 +588,18 @@
 				/WEB-INF/operacional/struts-config-InserirBacia.xml,
 				/WEB-INF/operacional/struts-config-ManterBacia.xml,
 				/WEB-INF/operacional/struts-config-FiltrarBacia.xml,
-				/WEB-INF/atendimentopublico/ligacaoesgoto/struts-config-FiltrarLigacaoEsgotoSituacao.xml,
-				/WEB-INF/atendimentopublico/ligacaoesgoto/struts-config-ManterLigacaoEsgotoSituacao.xml,
 				/WEB-INF/operacional/struts-config-InserirZonaPressao.xml,
 				/WEB-INF/operacional/struts-config-FiltrarZonaPressao.xml,
 				/WEB-INF/operacional/struts-config-ManterZonaPressao.xml,
 				/WEB-INF/operacional/struts-config-ManterZonaPressao.xml,
+				/WEB-INF/operacional/struts-config-InserirProducaoAgua.xml,
+				/WEB-INF/operacional/struts-config-FiltrarProducaoAgua.xml,
+				/WEB-INF/operacional/struts-config-ManterProducaoAgua.xml,
+				/WEB-INF/operacional/struts-config-InserirDivisaoEsgoto.xml,
+				/WEB-INF/operacional/struts-config-ManterDivisaoEsgoto.xml,
+				/WEB-INF/operacional/struts-config-FiltrarDivisaoEsgoto.xml,
+				/WEB-INF/atendimentopublico/ligacaoesgoto/struts-config-FiltrarLigacaoEsgotoSituacao.xml,
+				/WEB-INF/atendimentopublico/ligacaoesgoto/struts-config-ManterLigacaoEsgotoSituacao.xml,
 				/WEB-INF/arrecadacao/struts-config-FiltrarDebitoAutomatico.xml,
 				/WEB-INF/atendimentopublico/struts-config-PesquisarAgenciaBancaria.xml,
 				/WEB-INF/micromedicao/struts-config-GerarDadosLeitura.xml,
@@ -604,14 +610,8 @@
 				/WEB-INF/micromedicao/struts-config-InserirConsumoAnormalidade.xml,
 				/WEB-INF/micromedicao/struts-config-FiltrarConsumoAnormalidade.xml,
 				/WEB-INF/micromedicao/struts-config-ManterConsumoAnormalidade.xml,
-				/WEB-INF/operacional/struts-config-InserirProducaoAgua.xml,
-				/WEB-INF/operacional/struts-config-FiltrarProducaoAgua.xml,
-				/WEB-INF/operacional/struts-config-ManterProducaoAgua.xml,
 				/WEB-INF/micromedicao/struts-config-ProcessarLeiturasNaoRegistradas.xml,
 				/WEB-INF/arrecadacao/struts-config-ManterDebitoAutomatico.xml,
-				/WEB-INF/operacional/struts-config-InserirDivisaoEsgoto.xml,
-				/WEB-INF/operacional/struts-config-ManterDivisaoEsgoto.xml,
-				/WEB-INF/operacional/struts-config-FiltrarDivisaoEsgoto.xml,
 				/WEB-INF/batch/struts-config-PesquisarProcesso.xml,
 				/WEB-INF/relatorio/arrecadacao/struts-config-GerarRelatorioAnaliseArrecadacao.xml,
 				/WEB-INF/relatorio/arrecadacao/struts-config-GerarRelatorioAnaliseAvisosBancarios.xml,
@@ -890,13 +890,12 @@
     			/WEB-INF/micromedicao/struts-config-ProcessarRequisicaoDispositivoMovelAcompanhamentoServico.xml, 
 				/WEB-INF/portal/struts-config-ExibirCalendarioAbastecimentoPortalCompesa.xml,
 				/WEB-INF/atendimentopublico/ordemservico/struts-config-ConsultarComandoOSSeletivaInspecaoAnormalidade.xml,
-    		    		/WEB-INF/micromedicao/struts-config-ProcessarRequisicaoDispositivoMovelAcompanhamentoServico.xml, 
+    		    /WEB-INF/micromedicao/struts-config-ProcessarRequisicaoDispositivoMovelAcompanhamentoServico.xml, 
 				/WEB-INF/portal/struts-config-ExibirLojasAtendimentoPresencialPortalCompesa.xml,
 				/WEB-INF/relatorio/faturamento/struts-config-GerarRelatorioMultasAutosInfracaoPendentes.xml,
 				/WEB-INF/portal/struts-config-ConsultarEstruturaTarifariaPortal.xml,
 				/WEB-INF/atendimentopublico/ordemservico/struts-config-AcompanhamentoArquivoRoteiro.xml,
 				/WEB-INF/portal/struts-config-ConsultarEstruturaTarifariaPortal.xml,
-				<!--/WEB-INF/micromedicao/struts-config-ProcessarRequisicaoDispositivoMovelAcompanhamentoServico.xml-->
 				/WEB-INF/atendimentopublico/ordemservico/struts-config-ExibirInformarMotivoEncerramento.xml,
 				/WEB-INF/atendimentopublico/ordemservico/struts-config-PesquisarServicoTipoMotivoEncerramento.xml,
 				/WEB-INF/cobranca/contratoparcelamento/struts-config-EmitirExtratoContratoParcelamentoPorCliente.xml,
@@ -909,7 +908,8 @@
 				/WEB-INF/atendimentopublico/ordemservico/struts-config-AtualizarOrdemServicoAcompanhamentoCelular.xml,
 				/WEB-INF/relatorio/big/struts-config-RelatorioBIG.xml,
 				/WEB-INF/arrecadacao/struts-config-PagamentosAClassificar.xml
-				
+				/WEB-INF/relatorio/cadastro/atualizacaocadastral/struts-config-RelatorioImoveisSituacaoPeriodo.xml,
+				/WEB-INF/faturamento/struts-config-AtualizarVencimentoFaturaClienteResponsavel.xml
 				
 			</param-value>
 		</init-param>
@@ -925,16 +925,24 @@
         <url-pattern>*.do</url-pattern>
     </servlet-mapping>   
 	
-	   <servlet>
-	  	<servlet-name>autocomplete</servlet-name>
-	  	<servlet-class>gcom.gui.AutocompleteGenericoServlet</servlet-class>
-	  </servlet>
-	  <servlet-mapping>
-	  	<servlet-name>autocomplete</servlet-name>
-	  	<url-pattern>/autocomplete</url-pattern>
-	  </servlet-mapping>
+	<servlet>
+		<servlet-name>autocomplete</servlet-name>
+		<servlet-class>gcom.gui.AutocompleteGenericoServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>autocomplete</servlet-name>
+		<url-pattern>/autocomplete</url-pattern>
+	</servlet-mapping>
 	
-
+	<servlet>
+		<servlet-name>acessarOperacional</servlet-name>
+		<servlet-class>gcom.gui.operacional.AcessarOperacionalServlet</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>acessarOperacional</servlet-name>
+		<url-pattern>/acessarOperacional</url-pattern>
+	</servlet-mapping>
+	
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>

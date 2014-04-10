@@ -124,6 +124,10 @@ import gcom.atendimentopublico.registroatendimento.AtendimentoRelacaoTipo;
 import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocal;
 import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocalHome;
 import gcom.atendimentopublico.registroatendimento.MeioSolicitacao;
+import gcom.atendimentopublico.registroatendimento.RABuilder;
+import gcom.atendimentopublico.registroatendimento.RADadosGeraisHelper;
+import gcom.atendimentopublico.registroatendimento.RALocalOcorrenciaHelper;
+import gcom.atendimentopublico.registroatendimento.RASolicitanteHelper;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimentoSolicitante;
 import gcom.atendimentopublico.registroatendimento.Tramite;
@@ -3595,7 +3599,7 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 			//caso dataEncerramento seja menor que dataCorrente menos quantidade de dias parametros.			
 			Integer numOS = Util.converterStringParaInteger(numeroOS);
 			try {
-				Date dataGeracaoOS = repositorioOrdemServico.obterDataGeracaOS(numOS);
+				Date dataGeracaoOS = Util.getData(repositorioOrdemServico.obterDataGeracaOS(numOS));
 				
 				SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 			
@@ -3610,14 +3614,13 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 			    
 			    // -1 se a data1 for menor que a data2, 0 se as datas forem iguais,
 				//  1 se a data1 for maior que a data2.
-				
-			    if(Util.compararData(dataEncerramentoDate, dataGeracaoOS) == -1){
+				if(Util.compararData(dataEncerramentoDate, dataGeracaoOS) == -1){
 					throw new ControladorException(
 							"atencao.data_encerramento_anterior_permitido", null,
 							"Data de Encerramento");
 				}
-			    
-			    if(Util.compararData(dataEncerramentoDate, xData) == -1){
+
+				if(Util.compararData(dataEncerramentoDate, xData) == -1){
 					throw new ControladorException(
 							"atencao.data_encerramento_anterior_permitido", null,
 							"Data de Encerramento");
@@ -8717,9 +8720,7 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 			throws ControladorException {
 
 		Date dataAtual = new Date();
-		String dataAtendimento = Util.formatarData(dataAtual);
-		String horaAtendimento = Util.formatarHoraSemSegundos(dataAtual);
-
+		
 		DefinirDataPrevistaUnidadeDestinoEspecificacaoHelper dataPrevistaUnidadeDestino = getControladorRegistroAtendimento()
 				.definirDataPrevistaUnidadeDestinoEspecificacao(dataAtual,
 						idSolicitacaoTipoEspecificacao);
@@ -8751,22 +8752,14 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 		Cliente clienteUsuario = getControladorImovel()
 				.pesquisarClienteUsuarioImovel(idImovel);
 
-		// [UC0366] - Inserir Registro de Atendimento
-		Integer[] idsGerados = getControladorRegistroAtendimento()
-				.inserirRegistroAtendimento(
-						RegistroAtendimento.INDICADOR_ATENDIMENTO_ON_LINE,
-						dataAtendimento, horaAtendimento, null, null,
-						MeioSolicitacao.INTERNO,
-						idSolicitacaoTipoEspecificacao, dataPrevista, null,
-						idImovel, null, idSolicitacaoTipo, colecaoEndereco,
-						null, null, imovelCarregado.getLocalidade().getId(),
-						imovelCarregado.getSetorComercial().getId(),
-						imovelCarregado.getQuadra().getId(), null, null, null,
-						null, usuarioLogado.getUnidadeOrganizacional().getId(),
-						usuarioLogado.getId(), clienteUsuario.getId(), null,
-						null, false, null, null, null, null, idUnidadeDestino,
-						parecerUnidadeDestino, idServicoTipo, null, null,null,null,
-						ConstantesSistema.NAO, null, null, null, null,null, null, null,null,null);
+		RADadosGeraisHelper raDadosGerais = RABuilder.buildRADadosGerais(RegistroAtendimento.INDICADOR_ATENDIMENTO_ON_LINE, dataAtual, 
+																				MeioSolicitacao.INTERNO, idSolicitacaoTipoEspecificacao, 
+																				dataPrevista, idSolicitacaoTipo, usuarioLogado);
+		RALocalOcorrenciaHelper raLocalOcorrencia = RABuilder.buildRALocalOcorrencia(imovelCarregado, colecaoEndereco, idUnidadeDestino, 
+																						parecerUnidadeDestino, ConstantesSistema.NAO);
+		RASolicitanteHelper raSolicitante = RABuilder.buildRASolicitante(false, clienteUsuario.getId());
+		
+		Integer[] idsGerados = getControladorRegistroAtendimento().inserirRegistroAtendimento(raDadosGerais, raLocalOcorrencia, raSolicitante);
 
 		return idsGerados;
 	}

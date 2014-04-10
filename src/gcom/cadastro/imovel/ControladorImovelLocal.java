@@ -1732,7 +1732,7 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	 * @author Rafael Corrêa
 	 * @throws ControladorException
 	 */
-	public Integer verificarNumeroIptu(BigDecimal numeroIptu, Integer idImovel,
+	public Integer verificarNumeroIptu(String numeroIptu, Integer idImovel,
 			Integer idImovelEconomia, Integer idMunicipio)
 			throws ControladorException;
 	
@@ -2519,31 +2519,6 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	public Collection obterImoveisAtualizacaoCadastral(Integer idLocalidade, String codigoSetor,
 			Integer quadraInicial, Integer quadraFinal, Integer idEmpresa, Integer idRota)throws ControladorException;
 
-	/**
-	 * Pesquisar dados do Imóvel Atualização Cadastral
-	 * 
-	 * @param idImovel
-	 * @return Imovel
-	 * 
-	 * @author Ana Maria
-     * @date 17/09/2008
-	 * @exception ErroRepositorioException
-	 */
-	public ImovelAtualizacaoCadastral pesquisarImovelAtualizacaoCadastral(Integer idImovel)
-		throws ControladorException;
-	
-	/**
-	 * Pesquisar Imóvel Subcategoria Atualização Cadastral
-	 * 
-	 * @param idImovel
-	 * 
-	 * @author Ana Maria
-     * @date 17/09/2008
-	 * @exception ErroRepositorioException
-	 */
-	public Collection pesquisarImovelSubcategoriaAtualizacaoCadastral(Integer idImovel, Integer idSubcategoria,Integer idCategoria)
-		throws ControladorException;
-	
 	/**
 	 * Pesquisar existência de imóvel economia
 	 * 
@@ -3602,9 +3577,11 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	 * @exception ErroRepositorioException
 	 *                Erro no hibernate
 	 */
-	public Collection<RamoAtividade> pesquisarRamoAtividadeDoImovel(Integer idImovel)
+	public Collection<ImovelRamoAtividade> pesquisarRamoAtividadeDoImovel(Integer idImovel)
 		throws ControladorException;
 	
 	public void atualizarIdArquivoTextoImovelAtualizacaoCadastral(
 			Integer idArquivoTexto, Integer idImovel) throws ControladorException;
+	
+    public Collection<ImovelSubcategoria> pesquisarImovelSubcategorias(Imovel imovel) throws ControladorException;
 }

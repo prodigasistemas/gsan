@@ -11695,7 +11695,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 
 		try {
 			
-			StringBuffer hql = new StringBuffer("FROM Rota r where r.id = ");
+			StringBuffer hql = new StringBuffer("FROM Rota r inner join fetch r.faturamentoGrupo grupo where r.id = ");
 			hql.append("(select i.rotaAlternativa.id from Imovel i where i.id =");
 			hql.append(matricula);
 			hql.append(")");

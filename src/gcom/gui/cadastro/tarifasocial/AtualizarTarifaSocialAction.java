@@ -169,7 +169,7 @@ public class AtualizarTarifaSocialAction extends GcomAction {
 		String consumoMedio = atualizarDadosTarifaSocialActionForm.getConsumoCelpe();
 		Integer consumoMedioFormatado = null;
 		String numeroIptu = atualizarDadosTarifaSocialActionForm.getNumeroIPTU();
-		BigDecimal numeroIptuFormatado = null;
+		String numeroIptuFormatado = null;
 		String areaConstruida = atualizarDadosTarifaSocialActionForm.getAreaConstruida();
 		BigDecimal areaConstruidaFormatada = null;
 		String idAreaConstruidaFaixa = atualizarDadosTarifaSocialActionForm.getAreaConstruidaFaixa();
@@ -292,7 +292,7 @@ public class AtualizarTarifaSocialAction extends GcomAction {
 			
 			// Número do IPTU
 			if (numeroIptu != null && !numeroIptu.trim().equals("")) {
-				numeroIptuFormatado = Util.formatarMoedaRealparaBigDecimal(numeroIptu);
+				numeroIptuFormatado = Util.formatarIPTU(numeroIptu);
 				
 				idImovel = fachada.verificarNumeroIptu(numeroIptuFormatado, idImovelTarifaSocial, null, idMunicipio);
 				
@@ -374,7 +374,7 @@ public class AtualizarTarifaSocialAction extends GcomAction {
 		
 			// Número do IPTU
 			if (numeroIptu != null && !numeroIptu.trim().equals("")) {
-				numeroIptuFormatado = Util.formatarMoedaRealparaBigDecimal(numeroIptu);
+				numeroIptuFormatado = Util.formatarIPTU(numeroIptu);
 				
 				if (colecaoTarifaSocialHelper != null && !colecaoTarifaSocialHelper.isEmpty()) {
 					Iterator colecaoTarifaSocialHelperIterator = colecaoTarifaSocialHelper.iterator();

@@ -76,12 +76,12 @@
 package gcom.seguranca.transacao;
 
 import gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCadastralHelper;
-import gcom.cadastro.atualizacaocadastral.bean.DadosTabelaAtualizacaoCadastralHelper;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastralActionHelper;
+import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
 
@@ -194,8 +194,8 @@ public interface IRepositorioTransacao {
 	 * @throws ErroRepositorioException
 	 */
 	public List consultarDadosTabelaColunaAtualizacaoCadastral(
-			Integer idRegistroAlterado,
-			Integer idArquivo, Integer idImovel, Integer idCliente,Integer idTipoAlteracao) throws ErroRepositorioException;
+			Long idRegistroAlterado,
+			Integer idArquivo, Integer idImovel, Long idCliente,Integer idTipoAlteracao) throws ErroRepositorioException;
 	
 	/**
 	 * @author Ivan Sergio
@@ -205,9 +205,7 @@ public interface IRepositorioTransacao {
 	 * @param indicador
 	 * @throws ErroRepositorioException
 	 */
-	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(
-			Integer idAtualizacaoCadastral,
-			Short indicador) throws ErroRepositorioException;
+	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer idAtualizacaoCadastral,	Short indicador, Usuario usuario) throws ErroRepositorioException;
 	
 	/**
 	 * @author Ana Maria
@@ -293,76 +291,19 @@ public interface IRepositorioTransacao {
 	 */
 	public void atualizarTabelaLinhaAlteracaoPendente(Integer idOperacaoEfetuada, Integer idImovel) throws ErroRepositorioException;
 	
-	/**
-	 * @author Ana Maria
-	 * @date 17/12/2009
-	 *
-	 * @param codigoImovel
-	 * @param codigoCliente
-	 * @throws ErroRepositorioException
-	 */
+	public void atualizarClienteRelacaoTipoAtualizacaoCadastral(Integer codigoImovel, Integer codigoCliente) throws ErroRepositorioException;
 	
-	public void atualizarClienteRelacaoTipoAtualizacaoCadastral(Integer codigoImovel, Integer codigoCliente) 
-		throws ErroRepositorioException;
+	public TabelaColunaAtualizacaoCadastral pesquisarTabelaColunaAtualizacaoCadastral(Integer idAtualizacaoCadastral) throws ErroRepositorioException;
 	
-	/**
-	 * @author Sávio Luiz
-	 * @date 19/04/2011
-	 *
-	 * @param idAtualizacaoCadastral
-	 * @param indicador
-	 * @throws ErroRepositorioException
-	 */
-	public TabelaColunaAtualizacaoCadastral pesquisarTabelaColunaAtualizacaoCadastral(
-			Integer idAtualizacaoCadastral) throws ErroRepositorioException;
+	public boolean existeAlteracaoNaoAprovadaParaImovel(Integer idImovel) throws ErroRepositorioException;
 	
-	/**
-	 * [[UC1165] - Confirmar Alterações Cadastrais
-	 * 
-	 * @author Sávio Luiz
-	 * @date 20/04/2011
-	 * 
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
-	public Cliente obterClientePeloCPF(String cpf,Integer idCliente)
-			throws ErroRepositorioException;
+	public Cliente obterClientePeloCPF(String cpf,Integer idCliente) throws ErroRepositorioException;
 	
-	/**
-	 * [[UC1165] - Confirmar Alterações Cadastrais
-	 * 
-	 * @author Sávio Luiz
-	 * @date 20/04/2011
-	 * 
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
-	public Cliente obterClientePeloCNPJ(String cnpj,Integer idCliente)
-			throws ErroRepositorioException;
+	public Cliente obterClientePeloCNPJ(String cnpj,Integer idCliente) throws ErroRepositorioException;
 	
-	/**
-	 * [[UC1165] - Confirmar Alterações Cadastrais
-	 * 
-	 * @author Sávio Luiz
-	 * @date 20/04/2011
-	 * 
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
-	public String obterValorAtualTabelaColunaAtualizacaoCadastral(Integer idAtualizacaoCadastral, Integer idTabelaColuna)
-			throws ErroRepositorioException;
+	public String obterValorAtualTabelaColunaAtualizacaoCadastral(Integer idAtualizacaoCadastral, Integer idTabelaColuna) throws ErroRepositorioException;
 	
-	/**
-	 * [[UC1165] - Confirmar Alterações Cadastrais
-	 * 
-	 * @author Sávio Luiz
-	 * @date 20/04/2011
-	 * 
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
-	public ImovelSubcategoria recuperaImovelSubcategoriaAtualizacaoCadastral(Integer idAtualizacaoCadastral)
-			throws ErroRepositorioException;
+	public ImovelSubcategoria recuperaImovelSubcategoriaAtualizacaoCadastral(Integer idAtualizacaoCadastral) throws ErroRepositorioException;
 	
 	/**
 	 * [[UC1165] - Confirmar Alterações Cadastrais
