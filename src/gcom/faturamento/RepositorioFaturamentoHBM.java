@@ -60822,7 +60822,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	    String consulta;
 
 	    try {
-	      consulta = "select c " + "from "+ className + " c "
+	      consulta = "select c " + " from "+ className + " c "
 	          + "inner join fetch c.imovel imov "
 	          + "inner join fetch imov.localidade loc "
 	          + "inner join fetch c.debitoCreditoSituacaoAtual "

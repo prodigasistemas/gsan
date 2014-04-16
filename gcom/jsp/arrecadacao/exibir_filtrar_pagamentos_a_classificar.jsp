@@ -110,7 +110,7 @@
 
 <html:form name="PagamentosAClassificarActionForm"
 	type="gcom.gui.arrecadacao.PagamentosAClassificarActionForm"
-	action="/filtrarPagamentosAClassificarAction" method="post"
+	action="/filtrarPagamentosRecuperacaoDeCreditoAction.do" method="post"
 	onsubmit="return submeterForm();">
 
 	<%@ include file="/jsp/util/cabecalho.jsp"%>

@@ -17078,7 +17078,11 @@ public Map<Integer, Conta> incluirContasParaRefaturarPagamentos(Collection<Pagam
 		Collection<Integer> idsContas = getListaIdContas(pagamentos);
 		
 		Collection<ContaHistorico> listaContaHistoricoOrigem = this.pesquisarContaOuContaHistorico(idsContas, ContaHistorico.class.getName());
-		Collection<Conta> listaContaOrigem = this.pesquisarContaOuContaHistorico(idsContas, Conta.class.getName());
+		
+		if (listaContaHistoricoOrigem.size() != idsContas.size()) {
+			listaContaHistoricoOrigem.addAll(this.pesquisarContaOuContaHistorico(idsContas, Conta.class.getName()));
+		}
+		//Collection<Conta> listaContaOrigem = this.pesquisarContaOuContaHistorico(idsContas, Conta.class.getName());
 		
 		for (ContaHistorico contaHistorico : listaContaHistoricoOrigem) {
 			

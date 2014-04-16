@@ -654,30 +654,14 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 
 import org.apache.commons.fileupload.FileItem;
 
-
-
-/**
- * < <Descrição da Classe>>
- * 
- * @author Administrador
- * @created 25 de Abril de 2005
- */
 public class Fachada {
 
 	private static Fachada instancia;
 
-	/**
-	 * Construtor da classe Fachada
-	 */
 	private Fachada() {
 
 	}
 
-	/**
-	 * Retorna o valor de instancia
-	 * 
-	 * @return O valor de instancia
-	 */
 	public static Fachada getInstancia() {
 		if (instancia == null) {
 			instancia = new Fachada();
@@ -685,19 +669,9 @@ public class Fachada {
 		return instancia;
 	}
 
-	// *************----Métodos do SERVICE LOCATOR (CONTROLADORES)
-	// ----*************//
-
-	/**
-	 * Retorna a interface remota de ControladorParametro
-	 * 
-	 * @return A interface remota do controlador de parêmetro
-	 */
 	private ControladorTabelaAuxiliarLocal getControladorTabelaAuxiliar() {
 		ControladorTabelaAuxiliarLocalHome localHome = null;
 		ControladorTabelaAuxiliarLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -706,8 +680,6 @@ public class Fachada {
 
 			localHome = (ControladorTabelaAuxiliarLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_TABELA_AUXILIAR_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -719,11 +691,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Retorna a interface remota de ControladorUnidade
-	 * 
-	 * @return A interface remota do controlador unidade
-	 */
 	private ControladorUnidadeLocal getControladorUnidade() {
 		ControladorUnidadeLocalHome localHome = null;
 		ControladorUnidadeLocal local = null;
@@ -747,10 +714,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Retorna o valor de controladorRegistroAtendimento
-	 * 
-	 */
 	private ControladorRegistroAtendimentoLocal getControladorRegistroAtendimento() {
 		ControladorRegistroAtendimentoLocalHome localHome = null;
 		ControladorRegistroAtendimentoLocal local = null;
@@ -773,13 +736,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Retorna o controladorCadastro
-	 * 
-	 * @author Thiago Tenório
-	 * @date 18/08/2006
-	 * 
-	 */
 	private ControladorCadastroLocal getControladorCadastro() {
 		ControladorCadastroLocalHome localHome = null;
 		ControladorCadastroLocal local = null;
@@ -800,13 +756,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Retorna o controladorOrdemServico
-	 * 
-	 * @author Leonardo Regis
-	 * @date 18/08/2006
-	 * 
-	 */
 	private ControladorOrdemServicoLocal getControladorOrdemServico() {
 		ControladorOrdemServicoLocalHome localHome = null;
 		ControladorOrdemServicoLocal local = null;
@@ -827,16 +776,9 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Retorna a interface remota de ControladorParametro
-	 * 
-	 * @return A interface remota do controlador de parâmetro
-	 */
 	private ControladorUsuarioLocal getControladorUsuario() {
 		ControladorUsuarioLocalHome localHome = null;
 		ControladorUsuarioLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -845,8 +787,6 @@ public class Fachada {
 
 			localHome = (ControladorUsuarioLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_USUARIO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -858,16 +798,9 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Retorna a interface remota de ControladorParametro
-	 * 
-	 * @return A interface remota do controlador de parâmetro
-	 */
 	private ControladorGerencialFaturamentoLocal getControladorGerencialFaturamento() {
 		ControladorGerencialFaturamentoLocalHome localHome = null;
 		ControladorGerencialFaturamentoLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -876,8 +809,6 @@ public class Fachada {
 
 			localHome = (ControladorGerencialFaturamentoLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_GERENCIAL_FATURAMENTO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -889,16 +820,9 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Retorna o valor de controladorTarifaSocial
-	 * 
-	 * @return O valor de controladorTarifaSocial
-	 */
 	private ControladorTarifaSocialLocal getControladorTarifaSocial() {
 		ControladorTarifaSocialLocalHome localHome = null;
 		ControladorTarifaSocialLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -907,8 +831,6 @@ public class Fachada {
 
 			localHome = (ControladorTarifaSocialLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_TARIFA_SOCIAL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -920,16 +842,9 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Retorna o valor de controladorTarifaSocial
-	 * 
-	 * @return O valor de controladorTarifaSocial
-	 */
 	private ControladorTransacaoLocal getControladorTransacao() {
 		ControladorTransacaoLocalHome localHome = null;
 		ControladorTransacaoLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -938,8 +853,6 @@ public class Fachada {
 
 			localHome = (ControladorTransacaoLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_TRANSACAO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -951,17 +864,10 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Retorna o valor de controladorUtil
-	 * 
-	 * @return O valor de controladorUtil
-	 */
 	private ControladorUtilLocal getControladorUtil() {
 
 		ControladorUtilLocalHome localHome = null;
 		ControladorUtilLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -970,8 +876,6 @@ public class Fachada {
 
 			localHome = (ControladorUtilLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_UTIL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -983,17 +887,10 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Retorna o valor de controladorMicromedicao
-	 * 
-	 * @return O valor de controladorMicromedicao
-	 */
 	private ControladorGerencialMicromedicaoLocal getControladorGerencialMicromedicao() {
 
 		ControladorGerencialMicromedicaoLocalHome localHome = null;
 		ControladorGerencialMicromedicaoLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -1002,8 +899,6 @@ public class Fachada {
 
 			localHome = (ControladorGerencialMicromedicaoLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_GERENCIAL_MICROMEDICAO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -1015,17 +910,10 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Retorna o valor de controladorCadastro
-	 * 
-	 * @return O valor de controladorCadastro
-	 */
 	private ControladorGerencialCadastroLocal getControladorGerencialCadastro() {
 
 		ControladorGerencialCadastroLocalHome localHome = null;
 		ControladorGerencialCadastroLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -1034,8 +922,6 @@ public class Fachada {
 
 			localHome = (ControladorGerencialCadastroLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_GERENCIAL_CADASTRO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -1047,16 +933,9 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Retorna o valor de controladorEndereco
-	 * 
-	 * @return O valor de controladorEndereco
-	 */
 	private ControladorEnderecoLocal getControladorEndereco() {
 		ControladorEnderecoLocalHome localHome = null;
 		ControladorEnderecoLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -1065,8 +944,6 @@ public class Fachada {
 
 			localHome = (ControladorEnderecoLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_ENDERECO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -1078,16 +955,9 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Retorna o valor de controladorCliente
-	 * 
-	 * @return O valor de controladorCliente
-	 */
 	private ControladorClienteLocal getControladorCliente() {
 		ControladorClienteLocalHome localHome = null;
 		ControladorClienteLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -1096,8 +966,6 @@ public class Fachada {
 
 			localHome = (ControladorClienteLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_CLIENTE_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -1109,17 +977,10 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Retorna o valor de controladorUtil
-	 * 
-	 * @return O valor de controladorUtil
-	 */
 	private ControladorGeograficoLocal getControladorGeografico() {
 
 		ControladorGeograficoLocalHome localHome = null;
 		ControladorGeograficoLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -1128,8 +989,6 @@ public class Fachada {
 
 			localHome = (ControladorGeograficoLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_GEOGRAFICO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -1140,16 +999,9 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Retorna o valor de controladorImovel
-	 * 
-	 * @return O valor de controladorImovel
-	 */
 	private ControladorImovelLocal getControladorImovel() {
 		ControladorImovelLocalHome localHome = null;
 		ControladorImovelLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -1158,8 +1010,6 @@ public class Fachada {
 
 			localHome = (ControladorImovelLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_IMOVEL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -1170,16 +1020,9 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Retorna o valor de controladorMicromedicao
-	 * 
-	 * @return O valor de controladorMicromedicao
-	 */
 	private ControladorMicromedicaoLocal getControladorMicromedicao() {
 		ControladorMicromedicaoLocalHome localHome = null;
 		ControladorMicromedicaoLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -1188,8 +1031,6 @@ public class Fachada {
 
 			localHome = (ControladorMicromedicaoLocalHome) locator
 					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_MICROMEDICAO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -1200,16 +1041,9 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Retorna a interface remota de ControladorParametro
-	 * 
-	 * @return A interface remota do controlador de parâmetro
-	 */
 	private ControladorGerencialCobrancaLocal getControladorGerencialCobranca() {
 		ControladorGerencialCobrancaLocalHome localHome = null;
 		ControladorGerencialCobrancaLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -1218,8 +1052,6 @@ public class Fachada {
 
 			localHome = (ControladorGerencialCobrancaLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_GERENCIAL_COBRANCA_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -1231,13 +1063,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Retorna o controladorLigacaoEsgoto
-	 * 
-	 * @author Leonardo Regis
-	 * @date 18/08/2006
-	 * 
-	 */
 	private ControladorLigacaoEsgotoLocal getControladorLigacaoEsgoto() {
 		ControladorLigacaoEsgotoLocalHome localHome = null;
 		ControladorLigacaoEsgotoLocal local = null;
@@ -1256,13 +1081,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Retorna o controladorLigacaoAgua
-	 * 
-	 * @author Leonardo Regis
-	 * @date 09/09/2006
-	 * 
-	 */
 	private ControladorLigacaoAguaLocal getControladorLigacaoAgua() {
 		ControladorLigacaoAguaLocalHome localHome = null;
 		ControladorLigacaoAguaLocal local = null;
@@ -1284,8 +1102,6 @@ public class Fachada {
 	private void enviarMensagemControladorBatch(int metodo, String queueMDB,
 			Object[] parametros) {
 
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
@@ -1297,16 +1113,9 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Retorna a interface remota de ControladorParametro
-	 * 
-	 * @return A interface remota do controlador de parâmetro
-	 */
 	private ControladorLocalidadeLocal getControladorLocalidade() {
 		ControladorLocalidadeLocalHome localHome = null;
 		ControladorLocalidadeLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -1315,8 +1124,6 @@ public class Fachada {
 
 			localHome = (ControladorLocalidadeLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_LOCALIDADE_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -1327,16 +1134,9 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Retorna o valor de controladorLocalidade
-	 * 
-	 * @return O valor de controladorLocalidade
-	 */
 	private ControladorFaturamentoLocal getControladorFaturamento() {
 		ControladorFaturamentoLocalHome localHome = null;
 		ControladorFaturamentoLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -1345,8 +1145,6 @@ public class Fachada {
 
 			localHome = (ControladorFaturamentoLocalHome) locator
 					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -1357,17 +1155,10 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Retorna o valor de controladorLocalidade
-	 * 
-	 * @return O valor de controladorLocalidade
-	 */
 	private ControladorRelatorioFaturamentoLocal getControladorRelatorioFaturamento() {
 
 		ControladorRelatorioFaturamentoLocalHome localHome = null;
 		ControladorRelatorioFaturamentoLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -1376,8 +1167,6 @@ public class Fachada {
 
 			localHome = (ControladorRelatorioFaturamentoLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_RELATORIO_FATURAMENTO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -1388,17 +1177,9 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Retorna o valor de controladorAtendimentoPublico
-	 * 
-	 * @return O valor de controladorAtendimentoPublico
-	 */
-
 	private ControladorAtendimentoPublicoLocal getControladorAtendimentoPublico() {
 		ControladorAtendimentoPublicoLocalHome localHome = null;
 		ControladorAtendimentoPublicoLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -1407,8 +1188,6 @@ public class Fachada {
 
 			localHome = (ControladorAtendimentoPublicoLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_ATENDIMENTO_PUBLICO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -1419,16 +1198,9 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Retorna o valor de controladorArrecadacao
-	 * 
-	 * @return O valor de controladorCliente
-	 */
 	private ControladorArrecadacaoLocal getControladorArrecadacao() {
 		ControladorArrecadacaoLocalHome localHome = null;
 		ControladorArrecadacaoLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -1437,8 +1209,6 @@ public class Fachada {
 
 			localHome = (ControladorArrecadacaoLocalHome) locator
 					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_ARRECADACAO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -1449,16 +1219,9 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Retorna o valor de controladorAcesso
-	 * 
-	 * @return O valor de controladorAcesso
-	 */
 	private ControladorAcessoLocal getControladorAcesso() {
 		ControladorAcessoLocalHome localHome = null;
 		ControladorAcessoLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -1467,8 +1230,6 @@ public class Fachada {
 
 			localHome = (ControladorAcessoLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_ACESSO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -1483,8 +1244,6 @@ public class Fachada {
 		ControladorPermissaoEspecialLocalHome localHome = null;
 		ControladorPermissaoEspecialLocal local = null;
 
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
@@ -1492,8 +1251,6 @@ public class Fachada {
 
 			localHome = (ControladorPermissaoEspecialLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_PERMISSAO_ESPECIAL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -1504,16 +1261,9 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Retorna o valor de controladorGerencial
-	 * 
-	 * @return O valor de controladorGerencial
-	 */
 	private ControladorGerencialLocal getControladorGerencial() {
 		ControladorGerencialLocalHome localHome = null;
 		ControladorGerencialLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -1522,8 +1272,6 @@ public class Fachada {
 
 			localHome = (ControladorGerencialLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_GERENCIAL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -1532,14 +1280,11 @@ public class Fachada {
 		} catch (ServiceLocatorException e) {
 			throw new SistemaException(e);
 		}
-
 	}
 
 	private ControladorBatchLocal getControladorBatch() {
 		ControladorBatchLocalHome localHome = null;
 		ControladorBatchLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -1563,8 +1308,6 @@ public class Fachada {
 		ControladorOperacionalLocalHome localHome = null;
 		ControladorOperacionalLocal local = null;
 
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
@@ -1584,16 +1327,9 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Retorna a interface remota de ControladorSpcSerasa
-	 * 
-	 * @return A interface remota do controlador de parâmetro
-	 */
 	private ControladorSpcSerasaLocal getControladorSpcSerasa() {
 		ControladorSpcSerasaLocalHome localHome = null;
 		ControladorSpcSerasaLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -1602,8 +1338,6 @@ public class Fachada {
 
 			localHome = (ControladorSpcSerasaLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_SPC_SERASA_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -1614,16 +1348,9 @@ public class Fachada {
 		}
 	}
 	
-	/**
-	 * Retorna a interface remota de ControladorContratoParcelamento
-	 * 
-	 * @return A interface remota do controlador de parâmetro
-	 */
 	private ControladorContratoParcelamentoLocal getControladorContratoParcelamento() {
 		ControladorContratoParcelamentoLocalHome localHome = null;
 		ControladorContratoParcelamentoLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
@@ -1632,8 +1359,6 @@ public class Fachada {
 
 			localHome = (ControladorContratoParcelamentoLocalHome) locator
 					.getLocalHome(ConstantesJNDI.CONTROLADOR_CONTRATO_PARCELAMENTO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
 			local = localHome.create();
 
 			return local;
@@ -1666,15 +1391,6 @@ public class Fachada {
 		}
 	}
 
-	// ********************----Métodos TABELA AUXILIAR
-	// ----********************//
-
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param tabelaAuxiliarAbstrata
-	 *            Descrição do parâmetro
-	 */
 	public void inserirTabelaAuxiliar(
 			TabelaAuxiliarAbstrata tabelaAuxiliarAbstrata) {
 
@@ -1686,12 +1402,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Insere uma marca de hidrometro
-	 * 
-	 * @param hidrometroMarca
-	 * @return
-	 */
 	public Integer inserirHidrometroMarca(HidrometroMarca hidrometroMarca,
 			Usuario usuarioLogado) {
 
@@ -1705,15 +1415,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param filtro
-	 *            Descrição do parâmetro
-	 * @param pacoteNomeObjeto
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
 	public Collection pesquisarTabelaAuxiliar(Filtro filtro,
 			String pacoteNomeObjeto) {
 		try {
@@ -1725,19 +1426,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Pesquisa uma coleção de Imóveis com uma query especifica
-	 * 
-	 * @param idLocalidade
-	 *            parametros para a consulta
-	 * @param idSetorComercial
-	 *            parametros para a consulta
-	 * @param idQuadra
-	 *            parametros para a consulta
-	 * @param lote
-	 *            Descrição do parâmetro
-	 * @return Description of the Return Value
-	 */
 	public Collection pesquisarImovel(Integer idLocalidade,
 			Integer idSetorComercial, Integer idQuadra, Short lote) {
 
@@ -1750,14 +1438,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Remove todos os ids de registros de tabela auxiliar
-	 * 
-	 * @param ids
-	 *            Descrição do parâmetro
-	 * @param pacoteNomeObjeto
-	 *            Descrição do parâmetro
-	 */
 	public void removerTabelaAuxiliar(String[] ids, String pacoteNomeObjeto,
 			OperacaoEfetuada operacaoEfetuada,
 			Collection<UsuarioAcaoUsuarioHelper> acaoUsuarioHelper) {
@@ -1772,14 +1452,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Remove todos os ids de uma determinada classe no sistema
-	 * 
-	 * @param ids
-	 *            Descrição do parâmetro
-	 * @param pacoteNomeObjeto
-	 *            Descrição do parâmetro
-	 */
 	public void remover(String[] ids, String pacoteNomeObjeto,
 			OperacaoEfetuada operacaoEfetuada,
 			Collection<UsuarioAcaoUsuarioHelper> acaoUsuarioHelper) {
@@ -1793,19 +1465,6 @@ public class Fachada {
 		}
 
 	}
-
-	/**
-	 * FAVOR Não USAR!!! método para ser utilizada apenas em logradouro
-	 * (atualizarr
-	 * 
-	 * @author Tiago Moreno
-	 * @date 08/08/2006
-	 * @param id
-	 *            Description of the Parameter
-	 * @param pacoteNomeObjeto
-	 *            Descrição do parâmetro
-	 * @throws ControladorException
-	 */
 
 	public void verificaObjetoRemocao(int id, String pacoteNomeObjeto,
 			OperacaoEfetuada operacaoEfetuada,
@@ -1821,14 +1480,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Remove um objeto de uma determinada classe no sistema
-	 * 
-	 * @param ids
-	 *            Descrição do parâmetro
-	 * @param pacoteNomeObjeto
-	 *            Descrição do parâmetro
-	 */
 	public void remover(Object object) {
 
 		try {
@@ -1840,14 +1491,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Remove todos os ids de uma determinada classe no sistema
-	 * 
-	 * @param id
-	 *            Description of the Parameter
-	 * @param pacoteNomeObjeto
-	 *            Descrição do parâmetro
-	 */
 	public void removerUm(int id, String pacoteNomeObjeto,
 			OperacaoEfetuada operacaoEfetuada,
 			Collection<UsuarioAcaoUsuarioHelper> acaoUsuarioHelper) {
@@ -1862,12 +1505,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param tabelaAuxiliarAbstrata
-	 *            Descrição do parâmetro
-	 */
 	public void atualizarTabelaAuxiliar(
 			TabelaAuxiliarAbstrata tabelaAuxiliarAbstrata) {
 
@@ -1881,15 +1518,6 @@ public class Fachada {
 
 	}
 
-	// ********************----MétODOS DO UTIL----********************//
-
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param classe
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
 	public int registroMaximo(Class classe) {
 		try {
 			return getControladorUtil().registroMaximo(classe);
@@ -1899,15 +1527,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param classe
-	 *            Descrição do parâmetro
-	 * @param atributo
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
 	public int valorMaximo(Class classe, String atributo) {
 		try {
 			return getControladorUtil().valorMaximo(classe, atributo);
@@ -1917,19 +1536,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param classe
-	 *            Descrição do parâmetro
-	 * @param atributo
-	 *            Descrição do parâmetro
-	 * @param parametro1
-	 *            Descrição do parâmetro
-	 * @param parametro2
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
 	public int valorMaximo(Class classe, String atributo, String parametro1,
 			String parametro2) {
 		try {
@@ -1941,17 +1547,6 @@ public class Fachada {
 		}
 	}
 
-	// método de pesquisar genérico.Todos as pesquisas utilizarão esse metodo.
-
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param filtro
-	 *            Descrição do parâmetro
-	 * @param pacoteNomeObjeto
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
 	public Collection pesquisar(Filtro filtro, String pacoteNomeObjeto) {
 		try {
 			return this.getControladorUtil()
@@ -1974,14 +1569,6 @@ public class Fachada {
 
 	}
 
-	// método de inserir genérico.Todos as inserções utilizarão esse metodo.
-
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param objeto
-	 *            Description of the Parameter
-	 */
 	public Object inserir(Object objeto) {
 		try {
 			return this.getControladorUtil().inserir(objeto);
@@ -1992,16 +1579,6 @@ public class Fachada {
 
 	}
 
-	// **************************-----Métodos
-	// IMOVEL-----***************************//
-
-	/**
-	 * Retorna a quantidade de economias de um imóvel
-	 * 
-	 * @param imovel
-	 *            imóvel que seráconsultado
-	 * @return Quantidade de economias
-	 */
 	public int obterQuantidadeEconomias(Imovel imovel) {
 		try {
 			return this.getControladorImovel().obterQuantidadeEconomias(imovel);
@@ -2012,12 +1589,6 @@ public class Fachada {
 	}
 
 
-	/**
-	 * 
-	 * @param imovel
-	 * @return uma coleção de categorias com suas respectivas quantidades de
-	 *         economias.
-	 */
 	public Collection obterQuantidadeEconomiasCategoria(Imovel imovel) {
 		try {
 			return this.getControladorImovel()
@@ -2028,12 +1599,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * 
-	 * @param imovel
-	 * @return uma coleção de categorias com suas respectivas quantidades de
-	 *         economias.
-	 */
 	public Collection obterQuantidadeEconomiasContaCategoria(Conta conta) {
 		try {
 			return this.getControladorImovel()
@@ -2044,18 +1609,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * verifica se existe algum iptu no imovel ou imovelEconomia
-	 * 
-	 * @param imoveisEconomia
-	 *            Descrição do parâmetro
-	 * @param imovel
-	 *            Description of the Parameter
-	 * @param numeroIptu
-	 *            Description of the Parameter
-	 * @param dataUltimaAlteracao
-	 *            Description of the Parameter
-	 */
 	public void verificarExistenciaIPTU(Collection imoveisEconomia,
 			Imovel imovel, String numeroIptu, Date dataUltimaAlteracao) {
 		try {
@@ -2068,18 +1621,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * verifica se existe algum numero da celpe no imovel ou imovelEconomia
-	 * 
-	 * @param imoveisEconomia
-	 *            Descrição do parâmetro
-	 * @param imovel
-	 *            Description of the Parameter
-	 * @param numeroCelpe
-	 *            Description of the Parameter
-	 * @param dataUltimaAlteracao
-	 *            Description of the Parameter
-	 */
 	public void verificarExistenciaCelpe(Collection imoveisEconomia,
 			Imovel imovel, String numeroCelpe, Date dataUltimaAlteracao) {
 		try {
@@ -2092,13 +1633,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Retorna a quantidade de economias de um imóvel
-	 * 
-	 * @param imovel
-	 *            imóvel que será consultado
-	 * @return Quantidade de economias
-	 */
 	public Collection obterColecaoImovelSubcategorias(Imovel imovel,
 			Integer quantidadeMinimaEconomia) {
 		try {
@@ -2110,12 +1644,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Insere imovel
-	 * 
-	 * @param imovel
-	 *            Descrição do parâmetro
-	 */
 	public void inserirImovel(Imovel imovel) {
 		try {
 			this.getControladorUtil().inserir(imovel);
@@ -2126,23 +1654,9 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Permite inserir um imóvel doação e já obter o Código gerado para o imóvel
-	 * doação
-	 * 
-	 * @author César Araújo, Pedro Alexandre
-	 * @date 31/08/2006, 17/11/2006
-	 * @param imovelDoacao -
-	 *            instância de um imóvel doação que servirão de base para a
-	 *            inserção
-	 * @param usuarioLogado
-	 * @return Integer - Código do imóvel doação inserido
-	 * @throw FachadaException
-	 */
 	public Integer inserirImovelDoacaoRetorno(ImovelDoacao imovelDoacao,
 			Usuario usuarioLogado) {
 		try {
-			// return (Integer) this.getControladorUtil().inserir(imovelDoacao);
 			return this.getControladorImovel().inserirImovelDoacaoRetorno(
 					imovelDoacao, usuarioLogado);
 		} catch (ControladorException ex) {
@@ -2151,21 +1665,9 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * inseri o imóvel economia e o cliente imovel economia do imóvel
-	 * subcategoria
-	 * 
-	 * @param imoveisEconomias
-	 *            Descrição do parâmetro
-	 */
 	public void informarImovelEconomia(Collection imoveisEconomias,
 			Usuario usuarioLogado) {
 		try {
-			// this.getControladorImovel().informarImovelEconomias(imoveisEconomias);
-			/**
-			 * alterado por pedro alexandre dia 19/11/2006 alterado para acoplar
-			 * o esquema de segurança de acesso por abragência
-			 */
 			this.getControladorImovel().informarImovelEconomias(
 					imoveisEconomias, usuarioLogado);
 		} catch (ControladorException ex) {
@@ -2175,21 +1677,9 @@ public class Fachada {
 
 	}
 
-	/**
-	 * inseri o imóvel economia e o cliente imovel economia do imóvel
-	 * subcategoria
-	 * 
-	 * @param imovelEconomia
-	 *            Description of the Parameter
-	 */
 	public void removerImovelEconomia(ImovelEconomia imovelEconomia,
 			Usuario usuarioLogado) {
 		try {
-			/**
-			 * alterado por pedro alexandre dia 19/11/2006 alterado para acoplar
-			 * o esquema de segurança de acesso por abragência
-			 */
-			// this.getControladorImovel().removerImovelEconomia(imovelEconomia);
 			this.getControladorImovel().removerImovelEconomia(imovelEconomia,
 					usuarioLogado);
 		} catch (ControladorException ex) {
@@ -2199,15 +1689,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Inserir Imovel
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 19/08/2008
-	 * 
-	 * @param inserirImovelHelper
-	 * @return Integer
-	 */
 	public Integer inserirImovelRetorno(InserirImovelHelper inserirImovelHelper) {
 		try {
 
@@ -2223,12 +1704,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param imovel
-	 *            Descrição do parâmetro
-	 */
 	public void atualizarImovel(Imovel imovel) {
 		try {
 
@@ -2240,16 +1715,6 @@ public class Fachada {
 		
 	}
 	
-	/**
-	 * Transferir o imóvel, registrando a transação
-	 * passando o imóvel e o usuário logado
-	 * 
-	 * @author Davi Menezes
-	 * @date 04/08/2011
-	 * 
-	 * @param imovel, usuario
-	 * @throws ControladorException
-	 */
 	public void transferirImovel(Imovel imovel, Usuario usuarioLogado) throws ControladorException {
 		try{
 			this.getControladorImovel().transferirImovel(imovel, usuarioLogado);
@@ -2258,15 +1723,6 @@ public class Fachada {
 		}
 	}
 	
-	/**
-	 * Atualizar os dados do Faturamento do Imóvel
-	 *
-	 * @author Mariana Victor
-	 * @date 11/11/2010
-	 *
-	 * @param imovel
-	 * @throws ControladorException
-	 */
 	public void atualizarImovelAlterarFaturamento(Imovel imovel, Usuario usuarioLogado) throws ControladorException {
 		try {
 			this.getControladorImovel().atualizarImovelAlterarFaturamento(
@@ -2277,23 +1733,9 @@ public class Fachada {
 		}
 	}
 	
-	/**
-	 * Atualizar Imóvel
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 20/08/2008
-	 * 
-	 * @param inserirImovelHelper
-	 * @throws ControladorException
-	 */
 	public void atualizarImovel(InserirImovelHelper inserirImovelHelper) {
 		try {
-			/**
-			 * alterado por pedro alexandre no dia 17/11/2006 alteração feita
-			 * para acoplar o controle de abrangência de usuário
-			 */
 			this.getControladorImovel().atualizarImovel(inserirImovelHelper);
-			
 			this.getControladorImovel().verificarIndicadorNomeConta(inserirImovelHelper.getImovel().getId());
 			
 		} catch (ControladorException ex) {
@@ -2303,12 +1745,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Atualiza apenas os dados (Localidade, Setor, Quadra e lote) do imóvel
-	 * 
-	 * @param imovel
-	 *            parametros para a consulta
-	 */
 	public void atualizarImovelInscricao(Imovel imovel, Usuario usuario) {
 
 		try {
@@ -2319,12 +1755,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param imovelSubcategoria
-	 *            Descrição do parâmetro
-	 */
 	public void inserirImovelSubCategoria(ImovelSubcategoria imovelSubcategoria) {
 		try {
 			this.getControladorUtil().inserir(imovelSubcategoria);
@@ -2334,19 +1764,6 @@ public class Fachada {
 		}
 
 	}
-
-	// **************************-----Métodos TARIFA
-	// SOCIAL-----***************************//
-
-	/**
-	 * Pesquisa uma coleção de Tarifa Social Dado Economia.
-	 * 
-	 * @param filtroTarifaSocialDadoEconomia
-	 *            Description of the Parameter
-	 * @author Thiago
-	 * @date 12/12/2005
-	 * @return Description of the Return Value
-	 */
 
 	public Collection pesquisarTarifaSocialDadoEconomia(
 			FiltroTarifaSocialDadoEconomia filtroTarifaSocialDadoEconomia) {
@@ -2373,12 +1790,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param tarifaSocialCartaoTipo
-	 *            Descrição do parâmetro
-	 */
 	public void atualizarTarifaSocialCartaoTipo(
 			TarifaSocialCartaoTipo tarifaSocialCartaoTipo) {
 		try {
@@ -2391,17 +1802,9 @@ public class Fachada {
 
 	}
 
-	/**
-	 * [UC0054] - Inserir Dados Tarifa Social [FS0014] - Verificar duplicidade
-	 * do cartão do programa social
-	 * 
-	 * @param numeroCartao
-	 * @throws ControladorException
-	 */
 	public void verificarDuplicidadeCartaoProgramaSocial(Long numeroCartao,
 			TarifaSocialCartaoTipo tipoCartao, Integer idImovel) {
 		try {
-
 			this.getControladorTarifaSocial()
 					.verificarDuplicidadeCartaoProgramaSocial(numeroCartao,
 							tipoCartao, idImovel);
@@ -2412,18 +1815,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * 
-	 * @param clienteImovelEconomia
-	 * @param numeroCartaoSocial
-	 * @param dataValidadeCartaoSocial
-	 * @param numeroParcelasCartaoSocial
-	 * @param consumoMedio
-	 * @param valorRendaFamiliar
-	 * @param tarifaSocialCartaoTipo
-	 * @param tipoRenda
-	 * @param imovel
-	 */
 	public String[] verificarPreenchimentoInserirDadosTarifaSocialMultiplas(
 			Long numeroCelpe, BigDecimal areaConstruida, String numeroIPTU,
 			Integer idImovelEconomia, String numeroCartaoSocial,
@@ -2445,12 +1836,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Atualiza um tarifaSocialDadoEconomia
-	 * 
-	 * @param tarifaSocialDadoEconomia
-	 *            Descrição do parâmetro
-	 */
 	public void atualizarTarifaSocialDadoEconomia(
 			TarifaSocialDadoEconomia tarifaSocialDadoEconomia) {
 		try {
@@ -2462,11 +1847,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Atualiza o perfil do imóvel para tarifa social
-	 * 
-	 * @param imovel
-	 */
 	public void atualizarImovelPerfilTarifaSocial(Imovel imovel) {
 		try {
 
@@ -2480,16 +1860,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Atualiza o enquadramento de um imovel no regime de tarifa social
-	 * 
-	 * @param imovel
-	 *            Descrição do parâmetro
-	 * @param tarifaSocialDado
-	 *            Descrição do parâmetro
-	 * @param tarifaSocialDadoEconomia
-	 *            Descrição do parâmetro
-	 */
 	public void atualizarDadosTarifaSocialImovel(
 			TarifaSocialDadoEconomia tarifaSocialDadoEconomia) {
 		try {
@@ -2503,19 +1873,6 @@ public class Fachada {
 		}
 	}
 
-	// **************************-----Métodos
-	// CLIENTE-----***************************//
-	/**
-	 * Insere um cliente no sistema
-	 * 
-	 * @param cliente
-	 *            Cliente a ser inserido
-	 * @param telefones
-	 *            Telefones do cliente
-	 * @param enderecos
-	 *            endereços do cliente
-	 * @return Descrição do retorno
-	 */
 	public Integer inserirCliente(Cliente cliente, Collection telefones,
 			Collection enderecos, Usuario usuario) {
 		try {
@@ -2527,16 +1884,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Atualiza um cliente no sistema
-	 * 
-	 * @param cliente
-	 *            Cliente a ser atualizado
-	 * @param telefones
-	 *            Telefones do cliente
-	 * @param enderecos
-	 *            endereços do cliente
-	 */
 	public void atualizarCliente(Cliente cliente, Collection telefones,
 			Collection enderecos, Usuario usuario) {
 		try {
@@ -2549,12 +1896,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Atualiza um bairro no sistema
-	 * 
-	 * @param bairro
-	 *            Descrição do parâmetro
-	 */
 	public void atualizarBairro(Bairro bairro, Collection colecaoBairroArea,
 			Collection colecaoBairroAreaRemover, Usuario usuarioLogado) {
 		try {
@@ -2567,17 +1908,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param codigoSetorComercial
-	 *            Descrição do parâmetro
-	 * @param idMunicipio
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 * @exception ErroRepositorioException
-	 *                Descrição da exceção
-	 */
 	public Collection pesquisarMunicipoPeloSetorComercial(
 			String codigoSetorComercial, String idMunicipio)
 			throws ErroRepositorioException {
@@ -2592,16 +1922,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * método que retorna o maior Código do bairro de um Município
-	 * 
-	 * @author Rafael Corrêa
-	 * @date 10/07/2006
-	 * 
-	 * @param idMunicipio
-	 * @return
-	 * @throws ControladorException
-	 */
 	public int pesquisarMaximoCodigoBairro(Integer idMunicipio) {
 		try {
 			return this.getControladorGeografico().pesquisarMaximoCodigoBairro(
@@ -2610,15 +1930,8 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex
 					.getParametroMensagem());
 		}
-
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param clienteImovel
-	 *            Descrição do parâmetro
-	 */
 	public void inserirClienteImovel(ClienteImovel clienteImovel) {
 		try {
 			this.getControladorUtil().inserir(clienteImovel);
@@ -2626,18 +1939,7 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex
 					.getParametroMensagem());
 		}
-
 	}
-	
-	
-	/**
-	 * 
-	 * 
-	 * @author Hugo Azevedo
-	 * @date 02/07/2011
-	 * 
-	 * @throws ControladorException
-	 */
 	
 	public Collection obterClienteImovelporRelacaoTipo(Integer idImovel,Integer idRelacaoTipo){
 		try {
@@ -2649,17 +1951,6 @@ public class Fachada {
 		}
 	}
 	
-	
-
-	/**
-	 * Método que Exclui a negativacao de um imovel [UC0675] Excluir Negativação
-	 * InLine [Fluxo principal] 8.0
-	 * 
-	 * @author Thiago Toscano
-	 * @date 24/01/2008
-	 * 
-	 * @throws ControladorException
-	 */
 	public void excluirNegativacaoOnLine(Imovel imovel,
 			NegativadorMovimentoReg negativadorMovimentoReg,
 			Collection itensConta, Collection itensGuiaPagamento,
@@ -2677,31 +1968,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * 
-	 * Ponto inicial do caso de uso de Executar Comando de Negativação [UC0687]
-	 * Executar Comando de Negativação Fluxo Principal
-	 * 
-	 * @author Thiago Toscano
-	 * @date 21/01/2008
-	 */
-	/*
-	 * public void executaComandoNegativacao() { try {
-	 * this.getControladorSpcSerasa().executaComandoNegativacao(0); } catch
-	 * (ControladorException ex) { throw new FachadaException(ex.getMessage(),
-	 * ex, ex .getParametroMensagem()); } }
-	 */
-
-	/**
-	 * Metodo que retorno todos os clinte do filtro passado
-	 * 
-	 * @param filtroCliente
-	 *            Descrição do parâmetro
-	 * @return Description of the Return Value
-	 * @autor thiago toscano
-	 * @date 15/12/2005
-	 * @throws ControladorException
-	 */
 	public Collection pesquisarCliente(FiltroCliente filtroCliente) {
 		try {
 			return this.getControladorCliente().pesquisarCliente(filtroCliente);
@@ -2710,14 +1976,6 @@ public class Fachada {
 					.getParametroMensagem());
 		}
 	}
-
-	/**
-	 * Pesquisa uma coleção de cliente imovel com uma query especifica
-	 * 
-	 * @param filtroClienteImovel
-	 *            parametros para a consulta
-	 * @return Description of the Return Value
-	 */
 
 	public Collection pesquisarClienteImovel(
 			FiltroClienteImovel filtroClienteImovel, Integer numeroPagina) {
@@ -2744,14 +2002,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Pesquisa uma coleção de cliente imovel com uma query especifica
-	 * 
-	 * @param filtroClienteImovel
-	 *            parametros para a consulta
-	 * @return Description of the Return Value
-	 */
-
 	public Collection pesquisarClienteImovel(
 			FiltroClienteImovel filtroClienteImovel) {
 
@@ -2763,14 +2013,6 @@ public class Fachada {
 					.getParametroMensagem());
 		}
 	}
-
-	/**
-	 * Pesquisa uma coleção de cliente imovel com uma query especifica
-	 * 
-	 * @param filtroClienteImovel
-	 *            parametros para a consulta
-	 * @return Description of the Return Value
-	 */
 
 	public Collection pesquisarClienteImovelRelatorio(
 			FiltroClienteImovel filtroClienteImovel) {
@@ -2784,17 +2026,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Pesquisa uma a quantidade de cliente imovel com uma query especifica
-	 * [UC0015] Filtrar Imovel
-	 * 
-	 * @param filtroClienteImovel
-	 *            parametros para a consulta
-	 * @author Rafael Santos
-	 * @since 26/06/2006
-	 * @return Description of the Return Value
-	 */
-
 	public int pesquisarQuantidadeClienteImovel(
 			FiltroClienteImovel filtroClienteImovel) {
 
@@ -2807,13 +2038,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Pesquisa uma coleção de cliente imovel com uma query especifica
-	 * 
-	 * @param filtroClienteEndereco
-	 *            Descrição do parâmetro
-	 * @return Description of the Return Value
-	 */
 	public Collection pesquisarClienteEndereco(
 			FiltroClienteEndereco filtroClienteEndereco) {
 
@@ -2826,22 +2050,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Este caso de uso permite iniciar processos batch de faturamento ou
-	 * Cobrança previdamento comandados e processos mensais ou eventuais
-	 * 
-	 * [UC0001] - Iniciar Processo
-	 * 
-	 * Este subfluxo inicia os processo batch de Cobrança do sistema
-	 * 
-	 * [SB0002] - Iniciar Process de Cobrança Comandado
-	 * 
-	 * @author Rodrigo Silveira
-	 * @date 17/08/2006
-	 * 
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	public Collection<CobrancaAcaoAtividadeCronograma> pesquisarCobrancaAcaoAtividadeCronogramaComandadosNaoRealizados() {
 
 		Collection<CobrancaAcaoAtividadeCronograma> retorno = null;
@@ -2852,29 +2060,10 @@ public class Fachada {
 
 			throw new FachadaException(ex.getMessage(), ex, ex
 					.getParametroMensagem());
-
 		}
-
 		return retorno;
-
 	}
 
-	/**
-	 * Este caso de uso permite iniciar processos batch de faturamento ou
-	 * Cobrança previdamento comandados e processos mensais ou eventuais
-	 * 
-	 * [UC0001] - Iniciar Processo
-	 * 
-	 * Este subfluxo inicia os processo batch de Cobrança do sistema
-	 * 
-	 * [SB0002] - Iniciar Process de Cobrança Comandado
-	 * 
-	 * @author Rodrigo Silveira
-	 * @date 17/08/2006
-	 * 
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	public Collection<CobrancaAcaoAtividadeComando> pesquisarCobrancaAcaoAtividadeCronogramaEventuaisComandadosNaoRealizados() {
 
 		Collection<CobrancaAcaoAtividadeComando> retorno = null;
@@ -2885,35 +2074,9 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex
 					.getParametroMensagem());
 		}
-
 		return retorno;
-
 	}
 
-	/**
-	 * <Breve descrição sobre o caso de uso>
-	 * 
-	 * [UC0145] - Inserir Conta
-	 * 
-	 * @author Raphael Rossiter, Pedro Alexandre
-	 * @date 05/12/2005, 20/11/2006
-	 * 
-	 * @param mesAnoConta
-	 * @param imovel
-	 * @param colecaoDebitoCobrado
-	 * @param ligacaoAguaSituacao
-	 * @param ligacaoEsgotoSituacao
-	 * @param colecaoCategoria
-	 * @param consumoAgua
-	 * @param consumoEsgoto
-	 * @param percentualEsgoto
-	 * @param dataVencimentoConta
-	 * @param calcularValoresConta
-	 * @param contaMotivoInclusao
-	 * @param requestMap
-	 * @param usuarioLogado
-	 * @return
-	 */
 	public Integer inserirConta(Integer mesAnoConta, Imovel imovel,
 			Collection colecaoDebitoCobrado,
 			LigacaoAguaSituacao ligacaoAguaSituacao,
@@ -2927,16 +2090,6 @@ public class Fachada {
 			Integer leituraAnterior,Integer leituraAtual) {
 
 		try {
-			/**
-			 * alterado por pedro alexandre dia 20/11/2006 alteração realizada
-			 * para acoplar o controle de abrangência
-			 */
-			// Integer id =
-			// this.getControladorFaturamento().inserirConta(mesAnoConta,
-			// imovel, colecaoDebitoCobrado, ligacaoAguaSituacao,
-			// ligacaoEsgotoSituacao, colecaoCategoria, consumoAgua,
-			// consumoEsgoto, percentualEsgoto, dataVencimentoConta,
-			// calcularValoresConta, contaMotivoInclusao, requestMap);
 			Integer id = this.getControladorFaturamento().inserirConta(
 					mesAnoConta, imovel, colecaoDebitoCobrado,
 					ligacaoAguaSituacao, ligacaoEsgotoSituacao,
@@ -2951,23 +2104,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Calcula os valores da conta de acordo com os parâmetros passados
-	 * 
-	 * [UC0145] - Inserir Conta [SF0001] - Determinar Valores para Faturamento
-	 * de Água e/ou Esgoto Author: Raphael Rossiter 05/12/2005
-	 * 
-	 * @param mesAnoConta
-	 * @param imovelID
-	 * @param situacaoAguaConta
-	 * @param situacaoEsgotoConta
-	 * @param colecaoCategoria
-	 * @param consumoAgua
-	 * @param consumoEsgoto
-	 * @param percentualEsgoto
-	 * @return Collection<CalcularValoresAguaEsgotoHelper>
-	 * @throws ControladorException
-	 */
 	public Collection<CalcularValoresAguaEsgotoHelper> calcularValoresConta(
 			String mesAnoConta, String imovelID, Integer situacaoAguaConta,
 			Integer situacaoEsgotoConta,
@@ -2991,17 +2127,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Calcula o valor total dos débitos de uma conta de acordo com o informado
-	 * pelo usuário
-	 * 
-	 * [UC0145] - Inserir Conta Author: Raphael Rossiter Data: 10/01/2006
-	 * 
-	 * @param colecaoDebitoCobrado
-	 * @param requestMap
-	 * @return BigDecimal valorTotalDebitoConta
-	 * @throws ControladorException
-	 */
 	public BigDecimal calcularValorTotalDebitoConta(
 			Collection<DebitoCobrado> colecaoDebitoCobrado,
 			Map<String, String[]> requestMap) {
@@ -3012,25 +2137,14 @@ public class Fachada {
 			retorno = this.getControladorFaturamento()
 					.calcularValorTotalDebitoConta(colecaoDebitoCobrado,
 							requestMap);
-
 			return retorno;
 
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex
 					.getParametroMensagem());
 		}
-
 	}
 
-	/**
-	 * [UC0150] - Retificar Conta Author: Raphael Rossiter Data: 10/01/2006
-	 * Calcula o valor total dos Créditos de uma conta de acordo com o informado
-	 * pelo usuário
-	 * 
-	 * @param colecaoCreditoRealizado
-	 * @param requestMap
-	 * @return BigDecimal valorTotalCreditoConta
-	 */
 	public BigDecimal calcularValorTotalCreditoConta(
 			Collection<CreditoRealizado> colecaoCreditoRealizado,
 			Map<String, String[]> requestMap) {
@@ -3048,27 +2162,8 @@ public class Fachada {
 			throw new FachadaException(ex.getMessage(), ex, ex
 					.getParametroMensagem());
 		}
-
 	}
 
-	/**
-	 * 
-	 * [UC0120 - Calcular Valores de Água e/ou Esgoto]
-	 * 
-	 * @param anoMesReferencia
-	 * @param ligacaoSituacaoAguaId
-	 * @param ligacaoSituacaoEsgotoId
-	 * @param indicadorFaturamentoAgua
-	 * @param indicadorFaturamentoEsgoto
-	 * @param categoriasImovel
-	 * @param consumoFaturadoAguaMes
-	 * @param consumoFaturadoEsgotoMes
-	 * @param consumoMinimoLigacao
-	 * @param dataLeituraAnterior
-	 * @param dataLeituraAtual
-	 * @param percentualEsgoto
-	 * @param tarifaImovel
-	 */
 	public Collection<CalcularValoresAguaEsgotoHelper> calcularValoresAguaEsgoto(
 			Integer anoMesReferencia, Integer ligacaoSituacaoAguaId,
 			Integer ligacaoSituacaoEsgotoId, Short indicadorFaturamentoAgua,
@@ -3096,14 +2191,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * método reponsável pela totalização dos valores de Água e esgoto por
-	 * categoria, a partir da coleção retornada pelo [UC0120] - Calcular Valores
-	 * de Água e/ou Esgoto
-	 * 
-	 * @param colecaoCalcularValoresAguaEsgotoHelper
-	 * @return
-	 */
 	public Collection<CalcularValoresAguaEsgotoHelper> calcularValoresAguaEsgotoTotalizandoPorCategoria(
 			Collection colecaoCalcularValoresAguaEsgotoHelper) {
 		try {
@@ -3119,19 +2206,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * <Breve descrição sobre o caso de uso>
-	 * 
-	 * [UC0147] - Cancelar Conta
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 10/12/2005
-	 * 
-	 * @param colecaoContas
-	 * @param identificadores
-	 * @param contaMotivoCancelamento
-	 * @param usuarioLogado
-	 */
 	public void cancelarConta(Collection<Conta> colecaoContas,
 			String identificadores,
 			ContaMotivoCancelamento contaMotivoCancelamento,
@@ -3147,18 +2221,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * <Breve descrição sobre o caso de uso>
-	 * 
-	 * [UC0148] - Colocar Conta em Revisão
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 21/12/2005
-	 * 
-	 * @param colecaoContas
-	 * @param identificadores
-	 * @param contaMotivoRevisao
-	 */
 	public void colocarRevisaoConta(Collection<Conta> colecaoContas,
 			String identificadores, ContaMotivoRevisao contaMotivoRevisao,
 			Usuario usuarioLogado) {
@@ -3172,16 +2234,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0149] - Retirar Conta de Revisão Author: Raphael Rossiter Data:
-	 * 22/12/2005
-	 * 
-	 * @param colecaoContas -
-	 *            coleção com todas as contas do imóvel
-	 * @param identificadores -
-	 *            identifica através do ID, quais as contas que serão retiradas
-	 *            de revisão
-	 */
 	public void retirarRevisaoConta(Collection<Conta> colecaoContas,
 			String identificadores, Usuario usuario, Integer funcionalidade) {
 		try {
@@ -3194,20 +2246,6 @@ public class Fachada {
 		}
 	}
 	
-	/**
-	 * [UC0149] - Retirar Conta de Revisão Author: Raphael Rossiter Data:
-	 * 11/04/2011
-	 * 
-	 * @param colecaoContas -
-	 *            coleção com todas as contas do imóvel
-	 * @param identificadores -
-	 *            identifica através do ID, quais as contas que serão retiradas
-	 *            de revisão
-	 *            
-	 * @param verificarPermissaoEspecial -
-	 *            booleano que diz se o sistema deverá ou não realizar a checagem de permissão especial da operação.
-	 * 
-	 */
 	public void retirarRevisaoConta(Collection<Conta> colecaoContas,
 			String identificadores, Usuario usuario, boolean verificarPermissaoEspecial, Integer funcionalidade) {
 		try {
@@ -3220,19 +2258,6 @@ public class Fachada {
 		}
 	}
 	
-
-	/**
-	 * [UC0151] - Alterar Vencimento de Conta Author: Raphael Rossiter Data:
-	 * 22/12/2005
-	 * 
-	 * @param colecaoContas -
-	 *            coleção com todas as contas do imóvel
-	 * @param identificadores -
-	 *            identifica através do ID, quais as contas que sofrerão
-	 *            alteração na sua data de vencimento de revisão
-	 * @param dataVencimento -
-	 *            a nova data de vencimento
-	 */
 	public void alterarVencimentoConta(Collection<Conta> colecaoContas,
 			String identificadores, Date dataVencimento, Usuario usuarioLogado) {
 		try {
@@ -3246,12 +2271,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0150] - Retificar Conta Author: Raphael Rossiter Data: 26/12/2005
-	 * 
-	 * @param conta
-	 * @return uma coleção com os débitos cobrados de uma conta
-	 */
 	public Collection obterDebitosCobradosConta(Conta conta) {
 		try {
 			return this.getControladorFaturamento().obterDebitosCobradosConta(
@@ -3262,12 +2281,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0150] - Retificar Conta Author: Raphael Rossiter Data: 28/12/2005
-	 * 
-	 * @param conta
-	 * @return uma coleção com os Créditos realizados de uma conta
-	 */
 	public Collection obterCreditosRealizadosConta(Conta conta) {
 		try {
 			return this.getControladorFaturamento()
@@ -3278,11 +2291,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * 
-	 * @param imovel
-	 * @param situacao
-	 */
 	public Date buscarDataLeituraCronograma(Imovel imovel, boolean situacao,
 			Integer anoMesReferencia) {
 		try {
@@ -3297,14 +2305,6 @@ public class Fachada {
 		}
 	}
 
-	// **********************-----Métodos LOCALIDADE-----******************//
-
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param localidade
-	 *            Descrição do parâmetro
-	 */
 	public void inserirLocalidade(Localidade localidade) {
 		try {
 			this.getControladorUtil().inserir(localidade);
@@ -3315,13 +2315,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param localidade
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
 	public Integer inserirLocalidadeRetorno(Localidade localidade) {
 		try {
 			Integer id = (Integer) this.getControladorUtil()
@@ -3335,16 +2328,9 @@ public class Fachada {
 
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param setorComercial
-	 *            Descrição do parâmetro
-	 */
 	public Integer inserirSetorComercial(SetorComercial setorComercial,
 			Collection colecaoFonteCaptacao) {
 		try {
-
 			return this.getControladorLocalidade().inserirSetorComercial(
 					setorComercial, colecaoFonteCaptacao);
 
@@ -3355,12 +2341,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * atualiza Setor Comercial
-	 * 
-	 * @param setorComercial
-	 *            Descrição do parâmetro
-	 */
 	public void atualizarSetorComercial(SetorComercial setorComercial,
 			Collection colecaoFonteCaptacao) {
 		try {
@@ -3373,12 +2353,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * atualiza Setor Comercial
-	 * 
-	 * @param quadra
-	 *            Descrição do parâmetro
-	 */
 	public void atualizarQuadra(Quadra quadra, Usuario usuarioLogado,
 			Collection colecaoQuadraFace) {
 		try {
@@ -3391,14 +2365,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Pesquisa uma coleção de setor comercial com uma query especifica
-	 * 
-	 * @param idLocalidade
-	 *            Description of the Parameter
-	 * @return Description of the Return Value
-	 */
-
 	public Collection pesquisarSetorComercial(int idLocalidade) {
 
 		try {
@@ -3410,11 +2376,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Esse método consulta um setor comercial pelo seu ID e retorna true caso a
-	 * consulta retorne algum resultado.
-	 * 
-	 */
 	public boolean verificarExistenciaSetorComercial(Integer idSetorComercial) {
 		try {
 			return this.getControladorCadastro()
@@ -3425,12 +2386,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * atualiza Localidade
-	 * 
-	 * @param localidade
-	 *            Descrição do parâmetro
-	 */
 	public void atualizarLocalidade(Localidade localidade) {
 		try {
 			this.getControladorLocalidade().atualizarLocalidade(localidade);
@@ -3440,14 +2395,6 @@ public class Fachada {
 		}
 
 	}
-
-	/**
-	 * Pesquisa uma coleção de quadra com uma query especifica
-	 * 
-	 * @param idSetorComercial
-	 *            Description of the Parameter
-	 * @return Description of the Return Value
-	 */
 
 	public Collection pesquisarQuadra(int idSetorComercial) {
 
@@ -3460,34 +2407,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Description of the Method
-	 * 
-	 * @param quadraParametros
-	 *            Descrição do parâmetro
-	 * @return Description of the Return Value
-	 */
-	/*
-	 * public Collection pesquisarQuadraRelatorio(Quadra quadraParametros) { try {
-	 * return
-	 * this.getControladorLocalidade().pesquisarQuadraRelatorio(quadraParametros); }
-	 * catch (EJBException ex) { throw new
-	 * ControladorException(ex.getCausedByException().getMessage(), ex,
-	 * ((ControladorException)
-	 * ex.getCausedByException()).getParametroMensagem()); } }
-	 */
-
-	// *****************************************************************************
-	// *************************---- Métodos
-	// FATURAMENTO-------*********************
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param faturamentoAtividadeCronogramas
-	 *            Descrição do parâmetro
-	 * @param faturamentoGrupoCronogramaMensal
-	 *            Descrição do parâmetro
-	 */
 	public void inserirFaturamentoCronograma(
 			Collection faturamentoAtividadeCronogramas,
 			FaturamentoGrupoCronogramaMensal faturamentoGrupoCronogramaMensal,
@@ -3502,17 +2421,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * O método recebe uma coleção de faturamento atividades acha as que tem
-	 * atividade predecessora e compara a data desta com a data da sua
-	 * predecessora.
-	 * 
-	 * @param faturamentoAtividadeCronogramas
-	 *            Descrição do parâmetro
-	 * @param faturamentoGrupoCronogramaMensal
-	 *            Descrição do parâmetro
-	 * @throws ControladorException
-	 */
 	public void validarFaturamentoCronograma(
 			Collection faturamentoAtividadeCronogramas) {
 		try {

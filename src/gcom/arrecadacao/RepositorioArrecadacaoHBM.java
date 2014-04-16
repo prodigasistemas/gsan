@@ -113,6 +113,7 @@ import gcom.fachada.Fachada;
 import gcom.faturamento.ImpostoTipo;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaGeral;
+import gcom.faturamento.conta.ContaHistorico;
 import gcom.faturamento.conta.ContaMotivoCancelamento;
 import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.credito.CreditoARealizar;
@@ -31632,34 +31633,63 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 
 			Collection<Pagamento> retorno = new ArrayList<Pagamento>();
 			Collection<Pagamento> pagamentos = null;
-			Collection<Object[]> colecaoPagamentos = null;
 			
 			Session session = HibernateUtil.getSession();
 			String consulta = null;
 			String innerCancelamento = null;
 
 			try {
-				consulta = "select pagamento "
-					+ " from gcom.arrecadacao.pagamento.Pagamento as pagamento "
-					+ " inner join pagamento.contaGeral contaGeral "
-					+ " inner join contaGeral.conta conta "
-					+ " inner join conta.contaMotivoCancelamento contaMotivoCancelamento "
-					+ " where pagamento.id in (:idsPagamentos) "
-					+ " order by pagamento.dataPagamento, pagamento.imovel.id, pagamento.valorPagamento ";
+				consulta = "select pagamento from Pagamento as pagamento "
+						+ " where pagamento.id in ("
+						+ " select p1.id "
+						+ " from gcom.arrecadacao.pagamento.Pagamento as p1 "
+						+ " inner join pagamento.contaGeral contaGeral "
+						+ " inner join contaGeral.conta conta "
+						+ " inner join conta.contaMotivoCancelamento contaMotivoCancelamento "
+						+ " where pagamento.id in (:idsPagamentos) )"
+						+ " or pagamento.id in ( "
+						+ "	select p2.id "
+						+ " from gcom.arrecadacao.pagamento.Pagamento as p2 "
+						+ " inner join pagamento.contaGeral contaGeral "
+						+ " inner join contaGeral.contaHistorico conta "
+						+ " inner join conta.contaMotivoCancelamento contaMotivoCancelamento "
+						+ " where pagamento.id in (:idsPagamentos) )  "
+						+ " order by pagamento.dataPagamento, pagamento.imovel.id, pagamento.valorPagamento ";
 
+				
 				pagamentos = session.createQuery(consulta)
-					.setParameterList("idsPagamentos", idsPagamentos).list();
+					.setParameterList("idsPagamentos", idsPagamentos).setMaxResults(1500).list();
 				
 				for (Pagamento pagamento: pagamentos) {
-					ContaGeral contaGeral = (ContaGeral) session.get(ContaGeral.class, pagamento.getContaGeral().getId());
-					Conta conta = (Conta) session.get(Conta.class, pagamento.getContaGeral().getId());
-					ContaMotivoCancelamento contaMotivoCancelamento = (ContaMotivoCancelamento) session.get(
-							ContaMotivoCancelamento.class, conta.getContaMotivoCancelamento().getId());
+					System.out.println("Pagamento: " + pagamento.getId());
+					if (pagamento.getContaGeral() != null) {
+						ContaGeral contaGeral = (ContaGeral) session.get(ContaGeral.class, pagamento.getContaGeral().getId());
 						
-					conta.setContaMotivoCancelamento(contaMotivoCancelamento);
-					contaGeral.setConta(conta);
-					pagamento.setContaGeral(contaGeral);
-						
+						if (contaGeral.getConta() != null) {
+							Conta conta = (Conta) session.get(Conta.class, pagamento.getContaGeral().getId());
+							contaGeral.setConta(conta);
+							
+							if (conta.getContaMotivoCancelamento() != null) {
+								
+								ContaMotivoCancelamento contaMotivoCancelamento = (ContaMotivoCancelamento) session.get(
+										ContaMotivoCancelamento.class, conta.getContaMotivoCancelamento().getId());
+								
+								conta.setContaMotivoCancelamento(contaMotivoCancelamento);
+							}
+						} else  {
+							ContaHistorico conta = (ContaHistorico) session.get(ContaHistorico.class, pagamento.getContaGeral().getId());
+							contaGeral.setContaHistorico(conta);
+							if (conta.getContaMotivoCancelamento() != null) {
+								
+								ContaMotivoCancelamento contaMotivoCancelamento = (ContaMotivoCancelamento) session.get(
+										ContaMotivoCancelamento.class, conta.getContaMotivoCancelamento().getId());
+								
+								conta.setContaMotivoCancelamento(contaMotivoCancelamento);
+							}
+							
+						}
+						pagamento.setContaGeral(contaGeral);
+					}
 					retorno.add(pagamento);
 				}
 

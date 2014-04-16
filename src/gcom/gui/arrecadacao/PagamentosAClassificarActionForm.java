@@ -65,4 +65,8 @@ public class PagamentosAClassificarActionForm extends ValidatorActionForm {
 		else 
 			return false;
 	}
+	
+	public Integer getQuantidadePagamentos() {
+		return colecaoPagamentosAClassificar.size();
+	}
 }
