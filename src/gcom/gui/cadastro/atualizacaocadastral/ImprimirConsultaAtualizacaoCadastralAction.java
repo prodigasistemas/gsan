@@ -1,6 +1,8 @@
 package gcom.gui.cadastro.atualizacaocadastral;
 
 import gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCadastralHelper;
+import gcom.cadastro.sistemaparametro.SistemaParametro;
+import gcom.fachada.Fachada;
 import gcom.gui.GcomAction;
 import gcom.relatorio.ConstantesRelatorios;
 import gcom.relatorio.RelatorioDataSource;
@@ -49,8 +51,7 @@ public class ImprimirConsultaAtualizacaoCadastralAction extends GcomAction {
 
 			public Object executar() throws TarefaException {
 				RelatorioDataSource ds = new RelatorioDataSource(itensRelatorio);
-				Map<String, String> parametros = new HashMap<String, String>();
-				byte[] dados = gerarRelatorio(ConstantesRelatorios.RELATORIO_CONSULTA_ATUALIZACAO_CADASTRAL, parametros, ds, TarefaRelatorio.TIPO_PDF);
+				byte[] dados = gerarRelatorio(ConstantesRelatorios.RELATORIO_CONSULTA_ATUALIZACAO_CADASTRAL, getParametros(), ds, TarefaRelatorio.TIPO_PDF);
 				exibirRelatorio(httpServletResponse, dados);
 				return null;
 			}
@@ -66,5 +67,14 @@ public class ImprimirConsultaAtualizacaoCadastralAction extends GcomAction {
 		tarefa.executar();
 
 		return null;
+	}
+	
+	private Map<String, String> getParametros() {
+		Map<String, String> parametros = new HashMap<String, String>();
+		
+		SistemaParametro sistemaParametro = Fachada.getInstancia().pesquisarParametrosDoSistema();
+		parametros.put("imagem", sistemaParametro.getImagemRelatorio());
+		
+		return parametros;
 	}
 }
