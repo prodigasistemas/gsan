@@ -290,6 +290,7 @@ public class TestaCargaAlteracoesArquivo extends TestCase {
 		assertEquals("[isac_qteconomia;1;1;COMERCIAL - C2][isac_qteconomia;4;2;RESIDENCIAL - R2][isac_qteconomia;4;2;RESIDENCIAL - R1]", retorno.toString());
 	}
 	
+
 	public void testaCargaComAlteracaoAguaEOutraColuna(){
 		Collection<DadosTabelaAtualizacaoCadastralHelper> existentes = new ArrayList<DadosTabelaAtualizacaoCadastralHelper>();
 		List<DadosTabelaAtualizacaoCadastralHelper> lista = new ArrayList<DadosTabelaAtualizacaoCadastralHelper>();

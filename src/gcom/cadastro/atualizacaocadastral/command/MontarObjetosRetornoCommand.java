@@ -86,11 +86,11 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 		salvarClienteProprietario();
 		salvarClienteResponsavel();
 		
-		salvarImagens(atualizacaoCadastral, atualizacaoCadastralImovel.getMatricula());
+		salvarImagens();
 	}
 
 	private void salvarImovelRetorno() throws Exception {
-		ImovelAtualizacaoCadastralBuilder builder = new ImovelAtualizacaoCadastralBuilder(matriculaImovel, atualizacaoCadastralImovel, tipoOperacao);
+		ImovelAtualizacaoCadastralBuilder builder = new ImovelAtualizacaoCadastralBuilder(matriculaImovel, atualizacaoCadastral, atualizacaoCadastralImovel, tipoOperacao);
 		ImovelAtualizacaoCadastral imovelTxt = builder.getImovelAtualizacaoCadastral();
 		
 		salvarImovelRetorno(imovelTxt);
@@ -280,14 +280,14 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 		controladorUtil.inserir(clienteImovelRetorno);
 	}
 	
-	private void salvarImagens(AtualizacaoCadastral atualizacao, Integer matricula) throws Exception {
-		for (String nomeImagem : atualizacao.getImagens()) {
+	private void salvarImagens() throws Exception {
+		for (String nomeImagem : atualizacaoCadastral.getImagens()) {
 
 			String caminhoJboss = System.getProperty("jboss.server.home.dir");
-			String pasta = "/images/cadastro/" + atualizacao.getArquivoTexto().getDescricaoArquivo();
+			String pasta = "/images/cadastro/" + atualizacaoCadastral.getArquivoTexto().getDescricaoArquivo();
 			
-			if (nomeImagem.contains(matricula.toString())) {
-				inserirImagemImovel(matricula, nomeImagem, caminhoJboss, pasta);
+			if (nomeImagem.contains(Integer.toString(atualizacaoCadastralImovel.getMatricula()))) {
+				inserirImagemImovel(atualizacaoCadastralImovel.getMatricula(), nomeImagem, caminhoJboss, pasta);
 			}
 		}
 	}

@@ -10,6 +10,7 @@ import gcom.util.ErroRepositorioException;
 
 import java.util.Collection;
 import java.util.Date;
+import java.util.HashMap;
 
 public interface IControladorAtualizacaoCadastral {
 	
@@ -29,4 +30,9 @@ public interface IControladorAtualizacaoCadastral {
 	public Collection<ImovelSubcategoriaAtualizacaoCadastral> pesquisarSubCategoriasAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException;
 
 	public void aprovarImoveisEmLote(Usuario usuarioLogado, Collection<ConsultarMovimentoAtualizacaoCadastralHelper> listaImoveis) throws ControladorException;
+	
+	public Integer obterquantidadeImoveisAprovadosArquivo(Integer idArquivoAtualizacaoCadastral) throws ControladorException;
+	
+	public HashMap<String, Integer> obterDadosAnaliseSituacaoArquivoAtualizacaoCadastral(Integer idArquivo) throws ControladorException;
+	
 }

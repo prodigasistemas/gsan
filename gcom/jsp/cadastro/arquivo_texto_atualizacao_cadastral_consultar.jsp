@@ -413,7 +413,11 @@
 											</c:choose></div>
 											</td>
 											<td width="19%">
-											<div align="center">${arquivoTextoAtualizacaoCadastral.situacaoTransmissaoLeitura.descricaoSituacao}</div>
+												<div align="center">
+													<a href="javascript:abrirPopup('exibirAnaliseSituacaoArquivoAtualizacaoCadastralPopupAction.do?idArquivo=${arquivoTextoAtualizacaoCadastral.id}', 480, 800);">
+														${arquivoTextoAtualizacaoCadastral.situacaoTransmissaoLeitura.descricaoSituacao}
+													</a>
+												</div>
 											</td>
 
 											<html:link href="/gsan/liberarArquivoLeituraAction.do"

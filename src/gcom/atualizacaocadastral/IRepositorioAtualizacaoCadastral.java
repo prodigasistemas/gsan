@@ -86,4 +86,10 @@ public interface IRepositorioAtualizacaoCadastral {
 	public Collection<IClienteImovel> obterClientesParaExcluirRelacao() throws ErroRepositorioException;
 	
 	public void aprovarImoveis(Collection<IImovel> listaImoveis) throws ErroRepositorioException;
+	
+	public Integer obterquantidadeImoveisAprovadosArquivo(Integer idArquivoAtualizacaoCadastral) throws ErroRepositorioException;
+	
+	public Integer obterquantidadeImoveisComAlteracaoFaturamentoArquivo(Integer idArquivoAtualizacaoCadastral, String colunaALterada) throws ErroRepositorioException;
+	
+	public Integer obterquantidadeImoveisComAnormalidadeArquivo(Integer idArquivoAtualizacaoCadastral) throws ErroRepositorioException;
 }

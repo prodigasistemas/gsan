@@ -53,14 +53,18 @@ public class ArrecadadorMovimento implements Serializable {
 	/** nullable persistent field */
 	private Date ultimaAlteracao;
 	
+	@SuppressWarnings("rawtypes")
 	private Set arrecadadorMovimentoItens;
 	
+	@SuppressWarnings("rawtypes")
 	private Set avisoBancarios;
 
+	@SuppressWarnings("rawtypes")
 	public Set getAvisoBancarios() {
 		return avisoBancarios;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setAvisoBancarios(Set avisoBancarios) {
 		this.avisoBancarios = avisoBancarios;
 	}
@@ -204,10 +208,12 @@ public class ArrecadadorMovimento implements Serializable {
 		return new ToStringBuilder(this).append("id", getId()).toString();
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Set getArrecadadorMovimentoItens() {
 		return arrecadadorMovimentoItens;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setArrecadadorMovimentoItens(Set arrecadadorMovimentoItens) {
 		this.arrecadadorMovimentoItens = arrecadadorMovimentoItens;
 	}

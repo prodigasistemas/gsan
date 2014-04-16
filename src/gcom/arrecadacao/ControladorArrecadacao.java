@@ -777,6 +777,7 @@ public class ControladorArrecadacao implements SessionBean {
 	 * @author Mariana Victor
 	 * @date 04/08/2011
 	 */
+	@SuppressWarnings("rawtypes")
 	protected PagamentoHelperCodigoBarras processarPagamentosCodigoBarrasContratoParcelamento(
 			RegistroHelperCodigoBarras registroHelperCodigoBarras,
 			SistemaParametro sistemaParametro, Date dataPagamento,
@@ -924,7 +925,8 @@ public class ControladorArrecadacao implements SessionBean {
      * Data: 30/01/2006 , 23/11/2007, 09/01/2007
      */
 
-    public Collection registrarMovimentoArrecadadores(
+    @SuppressWarnings("rawtypes")
+	public Collection registrarMovimentoArrecadadores(
             StringBuilder stringBuilderTxt, Short codigoArrecadador,
             String nomeArrecadador, String idTipoMovimento,
             int quantidadeRegistros, Usuario usuario, Integer idArrecadador,
@@ -3769,7 +3771,8 @@ public class ControladorArrecadacao implements SessionBean {
      * @return RegistroHelperCodigoC
      * @throws ControladorException
      */
-    public RegistroHelperCodigoC processarRegistroCodigoTipoB(RegistroHelperCodigoA registroHelperCodigoA, String linhaRegistro,
+    @SuppressWarnings("rawtypes")
+	public RegistroHelperCodigoC processarRegistroCodigoTipoB(RegistroHelperCodigoA registroHelperCodigoA, String linhaRegistro,
     		ArrecadadorMovimento arrecadadorMovimento) throws ControladorException{
     	
     	/**
@@ -4599,6 +4602,7 @@ public class ControladorArrecadacao implements SessionBean {
 	 * @autor: Raphael Rossiter, Raphael Rossiter 
 	 * @data: 02/05/2007, 09/01/2008
 	 */
+	@SuppressWarnings("rawtypes")
 	protected PagamentoHelperCodigoBarras processarPagamentosCodigoBarrasConta(
 			RegistroHelperCodigoBarras registroHelperCodigoBarras,
 			SistemaParametro sistemaParametro, Date dataPagamento,
@@ -4850,6 +4854,7 @@ public class ControladorArrecadacao implements SessionBean {
 	 * @autor: Raphael Rossiter 
 	 * @data: 02/05/2007
 	 */
+	@SuppressWarnings("rawtypes")
 	protected PagamentoHelperCodigoBarras processarPagamentosCodigoBarrasGuiaPagamento(
 			RegistroHelperCodigoBarras registroHelperCodigoBarras,
 			SistemaParametro sistemaParametro, Date dataPagamento,

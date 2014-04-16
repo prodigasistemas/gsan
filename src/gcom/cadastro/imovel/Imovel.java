@@ -2261,7 +2261,6 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 	}
 
 	public void setIdLocalidade(Integer idLocalidade) {
-		// TODO Auto-generated method stub
 	}
 
 	public int getCodigoSetorComercial() {
@@ -2269,10 +2268,17 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 	}
 
 	public void setCodigoSetorComercial(int idSetorComercial) {
-		// TODO Auto-generated method stub
 	}
 
 	public boolean isImovelNovo() {
 		return this.getId().equals(null);
+	}
+
+	public void setIdRota(Integer idRota) {
+		
+	}
+
+	public Integer getIdRota() {
+		return null;
 	}
 }

@@ -807,4 +807,100 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		}
 	}
 	
+	public Integer obterquantidadeImoveisAprovadosArquivo(Integer idArquivoAtualizacaoCadastral) throws ErroRepositorioException {
+		
+		Integer retorno = null;
+		Session session = HibernateUtil.getSession();
+		
+		String consulta = null;
+		
+		try {
+			
+			consulta = " select count(imovelRetorno) "
+					+ "from ImovelRetorno imovelRetorno, "
+					+ " ArquivoTextoAtualizacaoCadastral arquivo, "
+					+ " ImovelControleAtualizacaoCadastral imovelControle "
+					+ " where imovelRetorno.idLocalidade = arquivo.localidade.id "
+					+ " and imovelRetorno.codigoSetorComercial = arquivo.codigoSetorComercial "
+					+ " and imovelRetorno.numeroQuadra = arquivo.numeroQuadraInicial "
+					+ " and imovelControle.imovelRetorno.id = imovelRetorno.id "
+					+ " and imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  
+					+ " and arquivo.id = :idArquivo " ;
+			
+			retorno = (Integer) session.createQuery(consulta).setInteger("idArquivo",  idArquivoAtualizacaoCadastral).uniqueResult();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis aprovados para tela de análise.");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		return retorno;
+	}
+	
+	public Integer obterquantidadeImoveisComAnormalidadeArquivo(Integer idArquivoAtualizacaoCadastral) throws ErroRepositorioException{
+		
+		Integer retorno = null;
+		Session session = HibernateUtil.getSession();
+		
+		String consulta = null;
+		
+		try {
+			
+			consulta = " select count(imovelRetorno) "
+					+ "from ImovelRetorno imovelRetorno, "
+					+ " ArquivoTextoAtualizacaoCadastral arquivo, "
+					+ " ImovelControleAtualizacaoCadastral imovelControle "
+					+ " where imovelRetorno.idLocalidade = arquivo.localidade.id "
+					+ " and imovelRetorno.codigoSetorComercial = arquivo.codigoSetorComercial "
+					+ " and imovelRetorno.numeroQuadra = arquivo.numeroQuadraInicial "
+					+ " and imovelControle.imovelRetorno.id = imovelRetorno.id "
+					+ " and imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  
+					+ " and arquivo.id = :idArquivo " ;
+			
+			retorno = (Integer) session.createQuery(consulta).setInteger("idArquivo",  idArquivoAtualizacaoCadastral).uniqueResult();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis com anormalidade para tela de análise.");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		return retorno;
+	}
+	
+	public Integer obterquantidadeImoveisComAlteracaoFaturamentoArquivo(Integer idArquivoAtualizacaoCadastral, String colunaAlteracao) throws ErroRepositorioException{
+		
+		Integer retorno = new Integer(0);
+		Session session = HibernateUtil.getSession();
+		
+		String consulta = null;
+		
+		try {
+			
+			consulta = " select count(imovelRetorno) "
+					+ "from ImovelRetorno imovelRetorno, "
+					+ " ArquivoTextoAtualizacaoCadastral arquivo, "
+					+ " ImovelControleAtualizacaoCadastral imovelControle, "
+					+ " TabelaAtualizacaoCadastral tabelaAtualizacaoCadastral, "
+					+ " TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral, "
+					+ " TabelaColuna tabelaColuna "
+					+ " where imovelRetorno.idRota = arquivo.rota.id "
+					+ " and imovelControle.imovelRetorno.id = imovelRetorno.id "
+					+ " and tabelaAtualizacaoCadastral.codigoImovel = imovelRetorno.idImovel "
+					+ " and tabelaColunaAtualizacaoCadastral.tabelaAtualizacaoCadastral.id = tabelaAtualizacaoCadastral.id "
+					+ " and tabelaColunaAtualizacaoCadastral.tabelaColuna.id = tabelaColuna.id"
+					+ " and tabelaColuna.nomeAbreviado like :colunaAlteracao "  
+					+ " and arquivo.id = :idArquivo " ;
+			
+			retorno = (Integer) session.createQuery(consulta)
+					.setInteger("idArquivo",  idArquivoAtualizacaoCadastral)
+					.setString("colunaAlteracao", colunaAlteracao).uniqueResult();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis com alteração de hidrômetro para tela de análise.");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		return retorno;
+	}
+
 }
