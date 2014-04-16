@@ -245,6 +245,11 @@
 						value="Voltar" onclick="window.location.href='/gsan/exibirFiltrarAlteracaoAtualizacaoCadastralAction.do?menu=sim';">	
 				</td>
 			
+                <td align="left" width="50%">         
+                  <input type="button" name="Button" class="bottonRightCol"
+                    value="Imprimir" onclick="window.location.href='/gsan/imprimirConsultaAtualizacaoCadastralAction.do';">  
+                </td>
+
 		  	<logic:equal name="aprovacaoEmLote" value="true" scope="session">
 				<td align="right" width="50%">					
 					<input type="button" name="Button" class="bottonRightCol"

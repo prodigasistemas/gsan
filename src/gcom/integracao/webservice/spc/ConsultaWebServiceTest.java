@@ -1,10 +1,3 @@
-
-/**
- * ConsultaWebServiceTest.java
- *
- * This file was auto-generated from WSDL
- * by the Apache Axis2 version: 1.5.1  Built on : Oct 19, 2009 (10:59:00 EDT)
- */
 package gcom.integracao.webservice.spc;
 
 import gcom.cadastro.sistemaparametro.FiltroSistemaParametro;

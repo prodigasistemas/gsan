@@ -53434,4 +53434,8 @@ public class Fachada {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
 	}
+	
+	public String retornaIpServidorRelatorios() throws Exception{
+		return this.getControladorCadastro().retornaIpServidorRelatorios();
+	}	
 }

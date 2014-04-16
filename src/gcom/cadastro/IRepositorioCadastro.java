@@ -392,6 +392,8 @@ public interface IRepositorioCadastro {
 	public Integer pesquisarIdQuadraPorNumeroQuadraEIdSetor(Integer idSetorComercial, Integer numeroQuadra) throws ErroRepositorioException;
 	
 	public String retornaIpServidorOperacional() throws ErroRepositorioException;
+	
+	public String retornaIpServidorRelatorios() throws ErroRepositorioException;	
 
 	public SituacaoAtualizacaoCadastral pesquisarSituacaoAtualizacaoCadastralPorId(Integer idSituacaoCadastral) throws ErroRepositorioException;
 }

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package gcom.gui.micromedicao;
 
 import gcom.cadastro.imovel.Categoria;import gcom.cadastro.imovel.Subcategoria;import gcom.gui.ActionServletException;import gcom.gui.GcomAction;import gcom.micromedicao.ConsumoMinimoArea;import gcom.util.ConstantesSistema;import java.math.BigDecimal;import java.util.Collection;import java.util.Collections;import java.util.Comparator;import java.util.Date;import java.util.Iterator;import java.util.List;import javax.servlet.http.HttpServletRequest;import javax.servlet.http.HttpServletResponse;import javax.servlet.http.HttpSession;import org.apache.struts.action.ActionForm;import org.apache.struts.action.ActionForward;import org.apache.struts.action.ActionMapping;

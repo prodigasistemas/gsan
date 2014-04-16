@@ -7,7 +7,11 @@ public class ColunaAtualizacaoCadastral implements Serializable{
 
 	private String nomeColuna;
 	
-	private String valorColuna;
+	private String valorAnterior;
+
+	private String valorAtual;
+	
+	private String complemento;
 	
 	public String getNomeColuna() {
 		return nomeColuna;
@@ -17,12 +21,28 @@ public class ColunaAtualizacaoCadastral implements Serializable{
 		this.nomeColuna = nomeColuna;
 	}
 	
-	public String getValorColuna() {
-		return valorColuna;
+	public String getValorAnterior() {
+		return valorAnterior;
 	}
 
-	public void setValorColuna(String valorColuna) {
-		this.valorColuna = valorColuna;
+	public void setValorAnterior(String valorColuna) {
+		this.valorAnterior = valorColuna;
+	}
+	
+	public String getValorAtual() {
+		return valorAtual;
+	}
+
+	public void setValorAtual(String valorAtual) {
+		this.valorAtual = valorAtual;
+	}
+
+	public String getComplemento() {
+		return complemento;
+	}
+
+	public void setComplemento(String complemento) {
+		this.complemento = complemento;
 	}
 
 	public String toString() {

@@ -509,5 +509,6 @@ public interface IControladorCadastro {
 	public Integer pesquisarIdQuadraPorNumeroQuadraEIdSetor(Integer idSetorComercial, Integer numeroQuadra) throws ControladorException;
 	
 	public String retornaIpServidorOperacional() throws Exception;
-
+	
+	public String retornaIpServidorRelatorios() throws Exception;
 }

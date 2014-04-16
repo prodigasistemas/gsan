@@ -8914,4 +8914,20 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		}
 		return ip;
 	}
+	
+	public String retornaIpServidorRelatorios() throws ErroRepositorioException {
+		String ip = "";
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			String consulta = "select parm_valor from operacao.parametro where parm_nmparametro = 'URL_RELATORIO' ";
+			ip = (String) session.createSQLQuery(consulta).uniqueResult();
+		} catch (HibernateException e) {
+			logger.error("Erro ao pesquisar ip do servidor de relatorios", e);
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return ip;
+	}	
 }

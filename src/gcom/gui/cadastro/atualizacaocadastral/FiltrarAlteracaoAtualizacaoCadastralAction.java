@@ -38,6 +38,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction {
 			throw new ActionServletException("atencao.pesquisa.nenhumresultado", "exibirFiltrarAlteracaoAtualizacaoCadastralAction.do", null, new String[] {});
         }
         sessao.setAttribute("colecaoConsultarMovimentoAtualizacaoCadastralHelper",helper);
+        sessao.setAttribute("filtroMovimentoAtualizacaoCadastral", filtro);
         sessao.setAttribute("aprovacaoEmLote", filtro.isAprovacaoEmLote());
 
 		return retorno;

@@ -1,6 +1,3 @@
-/**
- * 
- */
 package gcom.cobranca;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
