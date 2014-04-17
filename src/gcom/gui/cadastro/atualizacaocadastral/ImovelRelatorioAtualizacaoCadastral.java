@@ -1,15 +1,14 @@
 package gcom.gui.cadastro.atualizacaocadastral;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
+import gcom.relatorio.RelatorioBean;
 
-public class ImovelRelatorioAtualizacaoCadastral implements Serializable{
-	private static final long serialVersionUID = 7062418545895587657L;
-	
+import java.util.ArrayList;
+import java.util.Collection;
+
+public class ImovelRelatorioAtualizacaoCadastral implements RelatorioBean{
 	private String descImovel;
 	
-	private List<AlteracaoImovelRelatorioAtualizacaoCadastral> alteracoes = new ArrayList<AlteracaoImovelRelatorioAtualizacaoCadastral>();
+	private Collection<AlteracaoImovelRelatorioAtualizacaoCadastral> alteracoes = new ArrayList<AlteracaoImovelRelatorioAtualizacaoCadastral>();
 
 	public String getDescImovel() {
 		return descImovel;
@@ -19,7 +18,7 @@ public class ImovelRelatorioAtualizacaoCadastral implements Serializable{
 		this.descImovel = descImovel;
 	}
 
-	public List<AlteracaoImovelRelatorioAtualizacaoCadastral> getAlteracoes() {
+	public Collection<AlteracaoImovelRelatorioAtualizacaoCadastral> getAlteracoes() {
 		return alteracoes;
 	}
 

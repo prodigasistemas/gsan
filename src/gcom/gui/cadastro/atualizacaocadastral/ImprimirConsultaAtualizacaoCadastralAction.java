@@ -10,8 +10,6 @@ import gcom.seguranca.transacao.RepositorioTransacaoUtil;
 import gcom.tarefa.TarefaException;
 import gcom.tarefa.TarefaRelatorio;
 
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -39,19 +37,19 @@ public class ImprimirConsultaAtualizacaoCadastralAction extends GcomAction {
 		FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro = (FiltrarAlteracaoAtualizacaoCadastralActionHelper) sessao.getAttribute("filtroMovimentoAtualizacaoCadastral");
 		
 		RepositorioTransacaoUtil repo = new RepositorioTransacaoUtil();
-
+		
+		final String path = sessao.getServletContext().getRealPath("/WEB-INF/classes/") + "/";
+		
 		itensRelatorio = repo.relatorioConsultaAtualizacaoCadastral(atualizacoes, filtro);
 		
-		for (ImovelRelatorioAtualizacaoCadastral item : itensRelatorio) {
-			System.out.println(item);
-		}
-
 		TarefaRelatorio tarefa = new TarefaRelatorio(null, null) {
 			private static final long serialVersionUID = 1L;
 
-			public Object executar() throws TarefaException {
+			public Object executar() throws TarefaException {				
 				RelatorioDataSource ds = new RelatorioDataSource(itensRelatorio);
-				byte[] dados = gerarRelatorio(ConstantesRelatorios.RELATORIO_CONSULTA_ATUALIZACAO_CADASTRAL, getParametros(), ds, TarefaRelatorio.TIPO_PDF);
+				Map<String, String> parametros = getParametros();
+				parametros.put("SUBREPORT_DIR", path);
+				byte[] dados = gerarRelatorio(ConstantesRelatorios.RELATORIO_CONSULTA_ATUALIZACAO_CADASTRAL, parametros, ds, TarefaRelatorio.TIPO_PDF);
 				exibirRelatorio(httpServletResponse, dados);
 				return null;
 			}

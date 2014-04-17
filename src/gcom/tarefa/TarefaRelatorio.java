@@ -28,6 +28,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Locale;
 import java.util.Map;
@@ -38,12 +39,12 @@ import java.util.zip.ZipOutputStream;
 import javax.ejb.CreateException;
 import javax.servlet.http.HttpServletResponse;
 
-import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.export.JRRtfExporter;
 import net.sf.jasperreports.engine.export.JRXlsExporter;
@@ -53,12 +54,6 @@ import net.sf.jasperreports.engine.util.JRLoader;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 
-/**
- * Classe que representa uma tarefa
- * 
- * @author thiago
- * @date 24/01/2006
- */
 public abstract class TarefaRelatorio extends Tarefa {
 
 	private static final long serialVersionUID = 1L;
@@ -83,21 +78,6 @@ public abstract class TarefaRelatorio extends Tarefa {
 
 	protected String nomeRelatorio = null;
 
-
-	/**
-	 * Método que gera todos os relatórios do sistema de acordo com o formato
-	 * selecionado
-	 * 
-	 * @author Rodrigo Silveira
-	 * @date 22/05/2006
-	 * 
-	 * @param nomeRelatorio
-	 * @param parametrosRelatorio
-	 * @param relatorioDataSource
-	 * @param tipoSaidaRelatorio
-	 * @return Um map com o MIME type e a representação binária do relatório
-	 * @throws RelatorioVazioException
-	 */
 	public byte[] gerarRelatorio(String nomeRelatorio, Map parametrosRelatorio,
 			RelatorioDataSource relatorioDataSource, int tipoSaidaRelatorio)
 			throws RelatorioVazioException {
@@ -231,11 +211,7 @@ public abstract class TarefaRelatorio extends Tarefa {
 
 			retornoArray = retorno.toByteArray();
 
-		} catch (JRException ex) {
-			// erro ao cria o relatório
-			ex.printStackTrace();
-			throw new SistemaException(ex, "Erro ao criar relatório");
-		} catch (IOException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			throw new SistemaException(e, "Erro ao criar relatório");
 		}finally{

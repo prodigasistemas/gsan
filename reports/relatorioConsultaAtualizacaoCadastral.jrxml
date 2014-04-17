@@ -17,18 +17,18 @@
 		 whenNoDataType="NoPages"
 		 isTitleNewPage="false"
 		 isSummaryNewPage="false">
-	<property name="ireport.scriptlethandling" value="2" />
+	<property name="ireport.scriptlethandling" value="0" />
 	<property name="ireport.encoding" value="UTF-8" />
 	<import value="java.util.*" />
 	<import value="net.sf.jasperreports.engine.*" />
 	<import value="net.sf.jasperreports.engine.data.*" />
 
 	<parameter name="imagem" isForPrompting="false" class="java.lang.String"/>
+	<parameter name="SubReport" isForPrompting="false" class="java.lang.Object"/>
+	<parameter name="SUBREPORT_DIR" isForPrompting="false" class="java.lang.String"/>
 
-	<field name="getDescImovel" class="java.lang.String"/>
-	<field name="getDescricao" class="java.lang.String"/>
-	<field name="getValorAnterior" class="java.lang.String"/>
-	<field name="getValorAtual" class="java.lang.String"/>
+	<field name="descImovel" class="java.lang.String"/>
+	<field name="alteracoes" class="java.util.Collection"/>
 
 		<background>
 			<band height="0"  isSplitAllowed="true" >
@@ -206,13 +206,13 @@
 				</line>
 				<staticText>
 					<reportElement
-						x="193"
+						x="240"
 						y="9"
-						width="165"
+						width="103"
 						height="15"
 						key="labelAnterior"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
+					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font pdfFontName="Courier-Bold" size="8" isBold="true"/>
 					</textElement>
 				<text><![CDATA[Valor Anterior]]></text>
@@ -228,13 +228,13 @@
 				</line>
 				<staticText>
 					<reportElement
-						x="367"
+						x="390"
 						y="9"
-						width="165"
+						width="112"
 						height="15"
 						key="labelAtual"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
+					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font pdfFontName="Courier-Bold" size="8" isBold="true"/>
 					</textElement>
 				<text><![CDATA[Valor Atual]]></text>
@@ -242,67 +242,34 @@
 			</band>
 		</columnHeader>
 		<detail>
-			<band height="33"  isSplitAllowed="true" >
+			<band height="30"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="5"
-						y="3"
+						y="1"
 						width="180"
-						height="14"
+						height="15"
 						key="campoDescImovel"
-						stretchType="RelativeToTallestObject"
-						positionType="Float"/>
+						stretchType="RelativeToTallestObject"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font pdfFontName="Courier" size="9"/>
+					<textElement textAlignment="Left" verticalAlignment="Top">
+						<font fontName="Arial" pdfFontName="Courier" size="10" isBold="true"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getDescImovel}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.String"><![CDATA[$F{descImovel}]]></textFieldExpression>
 				</textField>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<subreport  isUsingCache="true">
 					<reportElement
-						x="24"
+						x="40"
 						y="19"
-						width="160"
-						height="14"
-						key="campoDescricao"
-						stretchType="RelativeToTallestObject"
-						positionType="Float"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Left" verticalAlignment="Middle">
-						<font pdfFontName="Courier" size="8"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getDescricao}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="197"
-						y="19"
-						width="160"
-						height="14"
-						key="campoValorAnterior"
-						stretchType="RelativeToTallestObject"
-						positionType="Float"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font pdfFontName="Courier" size="8"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getValorAnterior}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="370"
-						y="19"
-						width="160"
-						height="14"
-						key="campoValorAtual"
-						stretchType="RelativeToTallestObject"
-						positionType="Float"/>
-					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
-						<font pdfFontName="Courier" size="8"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.String"><![CDATA[$F{getValorAtual}]]></textFieldExpression>
-				</textField>
+						width="490"
+						height="10"
+						key="subreport-1"/>
+					<subreportParameter  name="alteracoes">
+						<subreportParameterExpression><![CDATA[$F{alteracoes}]]></subreportParameterExpression>
+					</subreportParameter>
+					<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource((java.util.Collection)$F{alteracoes})]]></dataSourceExpression>
+					<subreportExpression  class="java.lang.String"><![CDATA[$P{SUBREPORT_DIR} + "relatorioConsultaAtualizacaoCadastral_detalhe.jasper"]]></subreportExpression>
+				</subreport>
 			</band>
 		</detail>
 		<columnFooter>

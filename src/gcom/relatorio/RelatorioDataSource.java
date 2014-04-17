@@ -7,24 +7,6 @@ import net.sf.jasperreports.engine.JRDataSource;
 import net.sf.jasperreports.engine.JRException;
 import net.sf.jasperreports.engine.JRField;
 
-/**
- * <p>
- * Title: GCOM
- * </p>
- * <p>
- * Description: Sistema de Gestão Comercial
- * </p>
- * <p>
- * Copyright: Copyright (c) 2004
- * </p>
- * <p>
- * Company: COMPESA - Companhia Pernambucana de Saneamento
- * </p>
- * 
- * @author Rafael Corrêa
- * @version 1.0
- */
-
 public class RelatorioDataSource implements JRDataSource {
 	private List data;
 
@@ -33,16 +15,6 @@ public class RelatorioDataSource implements JRDataSource {
 	public RelatorioDataSource(List data) {
 		this.data = data;
 	}
-
-	/**
-	 * Retorna o valor de fieldValue
-	 * 
-	 * @param field
-	 *            Descrição do parâmetro
-	 * @return O valor de fieldValue
-	 * @exception JRException
-	 *                Descrição da exceção
-	 */
 
 	public Object getFieldValue(JRField field) throws JRException {
 		RelatorioBean lineItem = (RelatorioBean) data.get(index);
