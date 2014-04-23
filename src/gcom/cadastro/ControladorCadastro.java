@@ -10235,6 +10235,9 @@ public class ControladorCadastro implements SessionBean {
 					Integer quantidadeImoveisTransmitidos = repositorioCadastro.pesquisarQuantidadeImoveisPorSituacaoAtualizacaoCadastral(
 							SituacaoAtualizacaoCadastral.TRANSMITIDO, arquivoTextoAtualizacaoCadastral.getId());
 					
+					quantidadeImoveisTransmitidos += repositorioCadastro.pesquisarQuantidadeImoveisPorSituacaoAtualizacaoCadastral(
+							SituacaoAtualizacaoCadastral.APROVADO, arquivoTextoAtualizacaoCadastral.getId());
+					
 					arquivoTextoAtualizacaoCadastral.setQuantidadeImoveisTransmitidos(quantidadeImoveisTransmitidos);
 					
 					colecao.add(arquivoTextoAtualizacaoCadastral);
@@ -10247,15 +10250,6 @@ public class ControladorCadastro implements SessionBean {
 		}
 	}
 
-	/**
-	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral
-	 * 
-	 * @author Ana Maria
-	 * @date 04/03/2009
-	 * 
-	 * @return Collection
-	 * @throws ControladorException
-	 */
 	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(
 			Integer idArquivoTxt) throws ControladorException {
 
@@ -10263,6 +10257,15 @@ public class ControladorCadastro implements SessionBean {
 
 		try {
 			retorno = this.repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(idArquivoTxt);
+			
+			Integer quantidadeImoveisTransmitidos = repositorioCadastro.pesquisarQuantidadeImoveisPorSituacaoAtualizacaoCadastral(
+					SituacaoAtualizacaoCadastral.TRANSMITIDO, retorno.getId());
+			
+			quantidadeImoveisTransmitidos += repositorioCadastro.pesquisarQuantidadeImoveisPorSituacaoAtualizacaoCadastral(
+					SituacaoAtualizacaoCadastral.APROVADO, retorno.getId());
+			
+			retorno.setQuantidadeImoveisTransmitidos(quantidadeImoveisTransmitidos);
+			
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
@@ -10270,20 +10273,12 @@ public class ControladorCadastro implements SessionBean {
 		return retorno;
 	}
 	
-	/**
-	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral
-	 * 
-	 * @author COSANPA - Felipe Santos
-	 * @date 04/12/2013
-	 * 
-	 * @return Collection
-	 * @throws ControladorException
-	 */
 	public Collection<ArquivoTextoAtualizacaoCadastral> pesquisarArquivoTextoAtualizacaoCadastro(
 			String[] idsArquivoTxt) throws ControladorException {
 
 		try {
 			return this.repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(idsArquivoTxt);
+			
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
@@ -16161,4 +16156,5 @@ public class ControladorCadastro implements SessionBean {
 	public String retornaIpServidorOperacional() throws Exception{
 		return repositorioCadastro.retornaIpServidorOperacional();
 	}
+	
 }

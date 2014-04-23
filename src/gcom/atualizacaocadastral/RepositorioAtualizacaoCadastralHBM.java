@@ -820,9 +820,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 					+ "from ImovelRetorno imovelRetorno, "
 					+ " ArquivoTextoAtualizacaoCadastral arquivo, "
 					+ " ImovelControleAtualizacaoCadastral imovelControle "
-					+ " where imovelRetorno.idLocalidade = arquivo.localidade.id "
-					+ " and imovelRetorno.codigoSetorComercial = arquivo.codigoSetorComercial "
-					+ " and imovelRetorno.numeroQuadra = arquivo.numeroQuadraInicial "
+					+ " where imovelRetorno.idRota = arquivo.rota.id "
 					+ " and imovelControle.imovelRetorno.id = imovelRetorno.id "
 					+ " and imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  
 					+ " and arquivo.id = :idArquivo " ;
@@ -850,9 +848,11 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 					+ "from ImovelRetorno imovelRetorno, "
 					+ " ArquivoTextoAtualizacaoCadastral arquivo, "
 					+ " ImovelControleAtualizacaoCadastral imovelControle "
+					+ " CadastroOcorrencia cadastroOcorrendia"
 					+ " where imovelRetorno.idRota = arquivo.rota.id "
 					+ " and imovelControle.imovelRetorno.id = imovelRetorno.id "
-					+ " and imovelControle.cadastroOcorrencia.id is not null "  
+					+ " and imovelControle.cadastroOcorrencia.id = cadastroOcorrencia.id "
+					+ " and cadastroOcorrencia.indicadorValidacao = " + ConstantesSistema.NAO
 					+ " and arquivo.id = :idArquivo " ;
 			
 			retorno = (Integer) session.createQuery(consulta).setInteger("idArquivo",  idArquivoAtualizacaoCadastral).uniqueResult();
