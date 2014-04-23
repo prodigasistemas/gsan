@@ -1,6 +1,3 @@
-/**
- * 
- */
 package gcom.gui.micromedicao;
 
 import gcom.cadastro.imovel.Categoria;

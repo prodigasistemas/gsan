@@ -1,6 +1,3 @@
-/**
- * 
- */
 package gcom.tagslib;
 
 import gcom.util.Util;

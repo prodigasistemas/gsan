@@ -323,4 +323,5 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 		
 		controladorUtil.atualizar(controle);
 	}
+	
 }

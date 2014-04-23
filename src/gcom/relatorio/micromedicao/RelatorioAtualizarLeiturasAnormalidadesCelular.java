@@ -1,6 +1,3 @@
-/**
- * 
- */
 package gcom.relatorio.micromedicao;
 
 import gcom.cadastro.sistemaparametro.SistemaParametro;
