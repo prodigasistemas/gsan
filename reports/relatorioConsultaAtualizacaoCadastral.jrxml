@@ -39,20 +39,20 @@
 			</band>
 		</title>
 		<pageHeader>
-			<band height="90"  isSplitAllowed="true" >
+			<band height="70"  isSplitAllowed="true" >
 				<rectangle radius="5" >
 					<reportElement
 						x="0"
 						y="0"
 						width="535"
-						height="90"
+						height="70"
 						key="rectangle-1"/>
 					<graphicElement stretchType="NoStretch"/>
 				</rectangle>
 				<image  evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="12"
-						y="16"
+						y="5"
 						width="65"
 						height="60"
 						key="imagem-1"/>
@@ -65,14 +65,14 @@
 						x="78"
 						y="0"
 						width="0"
-						height="90"
+						height="70"
 						key="separador1-1"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
 				<staticText>
 					<reportElement
 						x="88"
-						y="7"
+						y="15"
 						width="350"
 						height="17"
 						key="tituloCosanpa-1"/>
@@ -85,7 +85,7 @@
 				<staticText>
 					<reportElement
 						x="88"
-						y="24"
+						y="32"
 						width="350"
 						height="17"
 						key="nomeRelatorio-1"/>
@@ -100,14 +100,14 @@
 						x="448"
 						y="0"
 						width="0"
-						height="90"
+						height="70"
 						key="separador2-1"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
 				<staticText>
 					<reportElement
 						x="455"
-						y="22"
+						y="15"
 						width="35"
 						height="15"
 						key="labelPagina-1"/>
@@ -120,7 +120,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="490"
-						y="22"
+						y="15"
 						width="15"
 						height="15"
 						key="paginaAtual-1"/>
@@ -133,7 +133,7 @@
 				<staticText>
 					<reportElement
 						x="507"
-						y="22"
+						y="15"
 						width="5"
 						height="15"
 						key="barra-1"/>
@@ -146,7 +146,7 @@
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Report" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="513"
-						y="22"
+						y="15"
 						width="15"
 						height="15"
 						key="totalPaginas-1"/>
@@ -159,7 +159,7 @@
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="454"
-						y="48"
+						y="40"
 						width="75"
 						height="15"
 						key="dataGeracao-1"/>
@@ -184,20 +184,33 @@
 				</rectangle>
 				<staticText>
 					<reportElement
-						x="5"
-						y="9"
-						width="180"
-						height="15"
+						x="20"
+						y="7"
+						width="30"
+						height="16"
 						key="labelImovel"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle">
+					<textElement textAlignment="Left" verticalAlignment="Middle">
 						<font pdfFontName="Courier-Bold" size="8" isBold="true"/>
 					</textElement>
-				<text><![CDATA[Imóvel  ]]></text>
+				<text><![CDATA[Imóvel]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						x="53"
+						y="7"
+						width="75"
+						height="16"
+						key="labelAlteracoes"/>
+					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font pdfFontName="Courier-Bold" size="8" isBold="true"/>
+					</textElement>
+				<text><![CDATA[/ Alterações]]></text>
 				</staticText>
 				<line direction="TopDown">
 					<reportElement
-						x="188"
+						x="263"
 						y="5"
 						width="0"
 						height="20"
@@ -206,20 +219,20 @@
 				</line>
 				<staticText>
 					<reportElement
-						x="240"
-						y="9"
-						width="103"
-						height="15"
+						x="267"
+						y="7"
+						width="130"
+						height="16"
 						key="labelAnterior"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Left" verticalAlignment="Middle">
+					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font pdfFontName="Courier-Bold" size="8" isBold="true"/>
 					</textElement>
 				<text><![CDATA[Valor Anterior]]></text>
 				</staticText>
 				<line direction="TopDown">
 					<reportElement
-						x="362"
+						x="400"
 						y="5"
 						width="0"
 						height="20"
@@ -228,13 +241,13 @@
 				</line>
 				<staticText>
 					<reportElement
-						x="390"
-						y="9"
-						width="112"
-						height="15"
+						x="403"
+						y="7"
+						width="130"
+						height="16"
 						key="labelAtual"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Left" verticalAlignment="Middle">
+					<textElement textAlignment="Center" verticalAlignment="Middle">
 						<font pdfFontName="Courier-Bold" size="8" isBold="true"/>
 					</textElement>
 				<text><![CDATA[Valor Atual]]></text>
@@ -242,27 +255,26 @@
 			</band>
 		</columnHeader>
 		<detail>
-			<band height="30"  isSplitAllowed="true" >
+			<band height="33"  isSplitAllowed="true" >
 				<textField isStretchWithOverflow="true" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="5"
-						y="1"
+						x="20"
+						y="0"
 						width="180"
 						height="15"
-						key="campoDescImovel"
-						stretchType="RelativeToTallestObject"/>
+						key="campoDescImovel"/>
 					<box topBorder="None" topBorderColor="#000000" leftBorder="None" leftBorderColor="#000000" rightBorder="None" rightBorderColor="#000000" bottomBorder="None" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Left" verticalAlignment="Top">
-						<font fontName="Arial" pdfFontName="Courier" size="10" isBold="true"/>
+					<textElement textAlignment="Left" verticalAlignment="Middle">
+						<font fontName="Arial" pdfFontName="Courier-Bold" size="9" isBold="true"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.String"><![CDATA[$F{descImovel}]]></textFieldExpression>
 				</textField>
 				<subreport  isUsingCache="true">
 					<reportElement
-						x="40"
-						y="19"
-						width="490"
-						height="10"
+						x="60"
+						y="18"
+						width="475"
+						height="15"
 						key="subreport-1"/>
 					<subreportParameter  name="alteracoes">
 						<subreportParameterExpression><![CDATA[$F{alteracoes}]]></subreportParameterExpression>

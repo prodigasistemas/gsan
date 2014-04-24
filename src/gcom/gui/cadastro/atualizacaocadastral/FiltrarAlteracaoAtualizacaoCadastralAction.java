@@ -40,6 +40,11 @@ public class FiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction {
         sessao.setAttribute("colecaoConsultarMovimentoAtualizacaoCadastralHelper",helper);
         sessao.setAttribute("filtroMovimentoAtualizacaoCadastral", filtro);
         sessao.setAttribute("aprovacaoEmLote", filtro.isAprovacaoEmLote());
+        
+        if (filtro.isAlteracaoHidrometro() || filtro.isAlteracaoSituacaoAgua()
+        		|| filtro.isAlteracaoSituacaoEsgoto() || filtro.isAlteracaoCategoria()) {
+        	sessao.setAttribute("relatorio", true);
+        }
 
 		return retorno;
 	}

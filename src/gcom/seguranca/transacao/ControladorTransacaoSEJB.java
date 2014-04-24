@@ -105,7 +105,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -1487,15 +1486,22 @@ public class ControladorTransacaoSEJB implements SessionBean {
 		return retorno;
 	}
 
-	private String trocaValorColuna(Map<String, String> descricoes, String nomeColuna, String valorCampo) throws ControladorException {
-		if (StringUtils.isNotEmpty(valorCampo)){
-			if (descricoes.get(nomeColuna + valorCampo) == null){
-				if (getDescricaoCampoAtualizacaoCadastral(valorCampo, nomeColuna) != null){
-					valorCampo = getDescricaoCampoAtualizacaoCadastral(valorCampo, nomeColuna);
+	private String trocaValorColuna(Map<String, String> descricoes,
+			String nomeColuna, String valorCampo) throws ControladorException {
+
+		if (StringUtils.isNotEmpty(valorCampo)) {
+			if (descricoes.get(nomeColuna + valorCampo) != null) {
+				valorCampo = descricoes.get(nomeColuna + valorCampo);
+			} else {
+				String descricao = getDescricaoCampoAtualizacaoCadastral(valorCampo, nomeColuna);
+				
+				if (descricao != null) {
+					valorCampo = descricao;
 					descricoes.put(nomeColuna + valorCampo, valorCampo);
 				}
 			}
 		}
+		
 		return valorCampo;
 	}
 	
