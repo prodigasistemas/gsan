@@ -510,4 +510,5 @@ public interface IControladorCadastro {
 	
 	public String retornaIpServidorOperacional() throws Exception;
 	
+	public String retornaIpServidorRelatorios() throws Exception;
 }

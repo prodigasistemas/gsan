@@ -7,8 +7,6 @@ import gcom.gui.cadastro.atualizacaocadastral.FiltrarAlteracaoAtualizacaoCadastr
 
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
-
 public class ValidadorAtualizacaoCadastral extends ValidadorAtualizacaoCadastralCallBack {
 	
 	public ValidadorAtualizacaoCadastral(FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro, ConsultarMovimentoAtualizacaoCadastralHelper imovel) {
@@ -29,7 +27,7 @@ public class ValidadorAtualizacaoCadastral extends ValidadorAtualizacaoCadastral
 		
 		List<ColunaAtualizacaoCadastral> dados = imovel.getColunasAtualizacao();
 		
-		passou &= passouAlteracaoHidrometro(imovel.getNumeroHidrometro(), dados, filtro);
+		passou &= passouAlteracaoHidrometro(dados, filtro);
 		passou &= passouAlteracaoSituacaoAgua(dados, filtro);
 		passou &= passouAlteracaoSituacaoEsgoto(dados, filtro);
 		passou &= passouAlteracaoCategoria(dados, filtro);
@@ -42,7 +40,7 @@ public class ValidadorAtualizacaoCadastral extends ValidadorAtualizacaoCadastral
 		
 		List<ColunaAtualizacaoCadastral> dados = imovel.getColunasAtualizacao();
 		
-		boolean passouHidroemtro = passouAlteracaoHidrometro(imovel.getNumeroHidrometro(), dados, filtro);
+		boolean passouHidroemtro = passouAlteracaoHidrometro(dados, filtro);
 		boolean passouSituacaoAgua = passouAlteracaoSituacaoAgua(dados, filtro);
 		boolean passouSituacaoEsgoto = passouAlteracaoSituacaoEsgoto(dados, filtro);
 		boolean passouCategoria = passouAlteracaoCategoria(dados, filtro);
@@ -92,40 +90,7 @@ public class ValidadorAtualizacaoCadastral extends ValidadorAtualizacaoCadastral
 		return passouAlteracao(dados, filtro.isAlteracaoSituacaoEsgoto(), "lest_id");
 	}
 	
-	private boolean passouAlteracaoHidrometro(String numeroHidrometro, List<ColunaAtualizacaoCadastral> dados, FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro) {
-		boolean passou = true;
-
-		if (filtro.isAlteracaoHidrometro() != null){
-			passou = false;
-			
-			boolean existeInformacaoHidrometro = false;
-			
-			for (ColunaAtualizacaoCadastral item : dados) {
-				if (item.getNomeColuna().contains("imac_nnhidrometro")){
-					existeInformacaoHidrometro = true;
-					break;
-				}
-			}
-			
-			if (!filtro.isAlteracaoHidrometro()){
-				if (StringUtils.isEmpty(numeroHidrometro) && !existeInformacaoHidrometro){
-					passou = true; 
-				}else if (StringUtils.isNotEmpty(numeroHidrometro) && existeInformacaoHidrometro){
-					passou = true; 
-				}
-			}
-			
-			if (filtro.isAlteracaoHidrometro()){
-				if (StringUtils.isEmpty(numeroHidrometro) && existeInformacaoHidrometro){
-					passou = true; 
-				}else if (StringUtils.isNotEmpty(numeroHidrometro) && !existeInformacaoHidrometro){
-					passou = true; 
-				}
-			}
-			
-		}
-		
-		return passou;
+	private boolean passouAlteracaoHidrometro(List<ColunaAtualizacaoCadastral> dados, FiltrarAlteracaoAtualizacaoCadastralActionHelper filtro) {
+		return passouAlteracao(dados, filtro.isAlteracaoHidrometro(), "imac_nnhidrometro");
 	}
-
 }

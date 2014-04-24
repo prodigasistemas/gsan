@@ -683,7 +683,9 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				.append(" , isac.catg_id as idCategoria")
 				.append(" , isac.scat_id as idSubcategoria")
 				.append(" , isac.isac_qteconomia as qtdEconomias")
-
+				.append(" , tcac.tcac_cnvaloranterior as valorAnterior ")
+				.append(" , tcac.tcac_cnvaloratual as valorAtual ")
+				.append(" , tatc.tatc_complemento as complemento ")
 				.append(" from seguranca.tab_atlz_cadastral tatc ")
 				.append(" inner join seguranca.operacao_efetuada opef on opef.opef_id = tatc.opef_id")
 				.append(" inner join seguranca.tab_col_atlz_cadastral tcac on  tatc.tatc_id = tcac.tatc_id")
@@ -741,8 +743,11 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 					.addScalar("nomeColuna", Hibernate.STRING)
 					.addScalar("idCategoria", Hibernate.INTEGER)
 					.addScalar("idSubcategoria", Hibernate.INTEGER)
-					.addScalar("qtdEconomias", Hibernate.INTEGER);
-			
+					.addScalar("qtdEconomias", Hibernate.INTEGER)
+					.addScalar("valorAnterior", Hibernate.STRING)
+					.addScalar("valorAtual", Hibernate.STRING)
+					.addScalar("complemento", Hibernate.STRING);
+
 			if (StringUtils.isNotEmpty(filtroHelper.getExibirCampos()) 
 					&& Integer.valueOf(filtroHelper.getExibirCampos()) !=  FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_TODOS) {
 				
@@ -779,6 +784,9 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				
 				ColunaAtualizacaoCadastral coluna = new ColunaAtualizacaoCadastral();
 				coluna.setNomeColuna((String) element[7]);
+				coluna.setValorAnterior((String) element[11]);
+				coluna.setValorAtual((String) element[12]);
+				coluna.setComplemento((String) element[13]);
 				helper.addColunaAtualizacao(coluna);
 				
 				CategoriaAtualizacaoCadastral categoria = new CategoriaAtualizacaoCadastral((Integer) element[8], (Integer) element[9], (Integer) element[10]);

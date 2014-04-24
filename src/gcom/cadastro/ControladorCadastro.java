@@ -16157,4 +16157,7 @@ public class ControladorCadastro implements SessionBean {
 		return repositorioCadastro.retornaIpServidorOperacional();
 	}
 	
+	public String retornaIpServidorRelatorios() throws Exception{
+		return repositorioCadastro.retornaIpServidorRelatorios();
+	}	
 }

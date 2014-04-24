@@ -23,6 +23,7 @@ import gcom.atualizacaocadastral.IRepositorioAtualizacaoCadastral;
 import gcom.atualizacaocadastral.RepositorioAtualizacaoCadastralHBM;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.RepositorioCadastroHBM;
+import gcom.cadastro.atualizacaocadastral.bean.ColunaAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCadastralHelper;
 import gcom.cadastro.atualizacaocadastral.bean.DadosTabelaAtualizacaoCadastralHelper;
 import gcom.cadastro.cliente.Cliente;
@@ -104,7 +105,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Hashtable;
 import java.util.Iterator;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -112,6 +112,8 @@ import java.util.Set;
 import javax.ejb.CreateException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
+
+import org.apache.commons.lang.StringUtils;
 
 /**
  * Definição da lógica de negócio do Session Bean de ControladorCliente
@@ -1325,7 +1327,7 @@ public class ControladorTransacaoSEJB implements SessionBean {
 	private String getDescricaoCampoAtualizacaoCadastral(String campo, String coluna)
 		throws ControladorException {
 		String  retorno = null;
-		if(coluna != null && !coluna.equals("")){
+		if(coluna != null && !coluna.equals("") && StringUtils.isNotEmpty(campo)){
 			if(coluna.equals("last_id")){
 				FiltroLigacaoAguaSituacao filtroLigacaoAguaSituacao = new FiltroLigacaoAguaSituacao();
 				filtroLigacaoAguaSituacao.adicionarParametro(new ParametroSimples(FiltroLigacaoAguaSituacao.ID, campo));
@@ -1454,14 +1456,53 @@ public class ControladorTransacaoSEJB implements SessionBean {
 	public Collection<ConsultarMovimentoAtualizacaoCadastralHelper> pesquisarMovimentoAtualizacaoCadastral(FiltrarAlteracaoAtualizacaoCadastralActionHelper helper)throws ControladorException {
 
 		Collection<ConsultarMovimentoAtualizacaoCadastralHelper> retorno = null;
-
+		
 		try {
 			retorno = repositorioTransacao.pesquisarMovimentoAtualizacaoCadastral(helper);
+			
+			Map<String, String> descricoes = new HashMap<String, String>();
+			
+			String nomeColuna = "";
+			String valorCampo = "";
+			for (ConsultarMovimentoAtualizacaoCadastralHelper item : retorno) {
+				List<ColunaAtualizacaoCadastral> colunas = item.getColunasAtualizacao();
+				
+				for (ColunaAtualizacaoCadastral coluna : colunas) {
+					nomeColuna = coluna.getNomeColuna();
+					valorCampo = coluna.getValorAnterior();
+					valorCampo = trocaValorColuna(descricoes, nomeColuna, valorCampo);
+					coluna.setValorAnterior(valorCampo);
+
+					valorCampo = coluna.getValorAtual();
+					valorCampo = trocaValorColuna(descricoes, nomeColuna, valorCampo);
+					coluna.setValorAtual(valorCampo);
+				}
+			}
+			
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
 
 		return retorno;
+	}
+
+	private String trocaValorColuna(Map<String, String> descricoes,
+			String nomeColuna, String valorCampo) throws ControladorException {
+
+		if (StringUtils.isNotEmpty(valorCampo)) {
+			if (descricoes.get(nomeColuna + valorCampo) != null) {
+				valorCampo = descricoes.get(nomeColuna + valorCampo);
+			} else {
+				String descricao = getDescricaoCampoAtualizacaoCadastral(valorCampo, nomeColuna);
+				
+				if (descricao != null) {
+					valorCampo = descricao;
+					descricoes.put(nomeColuna + valorCampo, valorCampo);
+				}
+			}
+		}
+		
+		return valorCampo;
 	}
 	
 	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer idImovel, String[] idsAtualizacaoCadastral, Short indicador, Usuario usuarioLogado) throws ControladorException {

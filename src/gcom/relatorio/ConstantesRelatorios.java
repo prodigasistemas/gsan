@@ -823,6 +823,8 @@ public class ConstantesRelatorios {
 	 * Relatorio BIG
 	 */
 	public static final String RELATORIO_BIG = "/relatorioBIG.jasper";
+
+	public static final String RELATORIO_CONSULTA_ATUALIZACAO_CADASTRAL = "/relatorioConsultaAtualizacaoCadastral.jasper";
 	
 	public static final String RELATORIO_IMOVEIS_SITUACAO_PERIODO = "/relatorioImoveisSituacaoPeriodo.jasper";
 

@@ -94,6 +94,8 @@ public class TabelaColuna extends ObjetoGcom {
 
 	public final static Integer ID_CLIENTE_TELEFONE_ATU_CADASTRAL = 115092;
 	
+	public final static String NOME_COLUNA_HIDROMETRO = "imac_nnhidrometro";
+
 	public final static String NOME_COLUNA_ECONOMIAS = "isac_qteconomia";
 
 	public static final String NOME_COLUNA_ESGOTO = "lest_id";
