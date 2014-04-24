@@ -290,7 +290,12 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		controle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(situacao));
 		controle.setDataRetorno(new Date());
 		controle.setCadastroOcorrencia(new CadastroOcorrencia(atualizacaoCadastralImovel.getCadastroOcorrencia().getId()));
-		controle = (ImovelControleAtualizacaoCadastral) controladorUtil.inserirOuAtualizar(controle);
+		Integer idImovelControle = (Integer) controladorUtil.inserirOuAtualizar(controle);
+		
+		if (controle != null) {
+			idImovelControle = controle.getId();
+		}
+		controle = controladorAtualizacaoCadastral.obterImovelControle(idImovelControle);
 		
 		atualizacaoCadastralImovel.setImovelControle(controle);
 	}

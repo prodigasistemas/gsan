@@ -480,7 +480,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		return listaImoveisControle;
 	}
 	
-	public ImovelControleAtualizacaoCadastral obterImovelControle(Integer idImovelRetorno) {
+	public ImovelControleAtualizacaoCadastral obterImovelControlePorImovelRetorno(Integer idImovelRetorno) {
 		ImovelControleAtualizacaoCadastral imovelControle = null;
 		
 		Session session = HibernateUtil.getSession();
@@ -493,6 +493,27 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			
 			imovelControle = (ImovelControleAtualizacaoCadastral)session.createQuery(consulta)
 								.setInteger("listaImoveisRetorno", idImovelRetorno).uniqueResult();
+			
+		} catch (HibernateException e) {
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return imovelControle;
+	}
+	
+	public ImovelControleAtualizacaoCadastral obterImovelControle(Integer idImovelControle) {
+		ImovelControleAtualizacaoCadastral imovelControle = null;
+		
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			String consulta = "select imovelControle "
+							+ " from ImovelControleAtualizacaoCadastral imovelControle "
+							+ " left join imovelControle.imovelRetorno imovelRetorno "
+							+ " where imovelControle.id = :idImovelControle";
+			
+			imovelControle = (ImovelControleAtualizacaoCadastral)session.createQuery(consulta)
+								.setInteger("idImovelControle", idImovelControle).uniqueResult();
 			
 		} catch (HibernateException e) {
 		} finally {
@@ -847,8 +868,8 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 			consulta = " select count(imovelRetorno) "
 					+ "from ImovelRetorno imovelRetorno, "
 					+ " ArquivoTextoAtualizacaoCadastral arquivo, "
-					+ " ImovelControleAtualizacaoCadastral imovelControle "
-					+ " CadastroOcorrencia cadastroOcorrendia"
+					+ " ImovelControleAtualizacaoCadastral imovelControle, "
+					+ " CadastroOcorrencia cadastroOcorrencia"
 					+ " where imovelRetorno.idRota = arquivo.rota.id "
 					+ " and imovelControle.imovelRetorno.id = imovelRetorno.id "
 					+ " and imovelControle.cadastroOcorrencia.id = cadastroOcorrencia.id "

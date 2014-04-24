@@ -290,8 +290,12 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		
 	}
 	
-	public ImovelControleAtualizacaoCadastral obterImovelControle(Integer idImovelRetorno) throws ControladorException {
-		return  repositorioAtualizacaoCadastral.obterImovelControle(idImovelRetorno);
+	public ImovelControleAtualizacaoCadastral obterImovelControlePorImovelRetorno(Integer idImovelRetorno) throws ControladorException {
+		return  repositorioAtualizacaoCadastral.obterImovelControlePorImovelRetorno(idImovelRetorno);
+	}
+	
+	public ImovelControleAtualizacaoCadastral obterImovelControle(Integer idImovelControle) throws ControladorException {
+		return  repositorioAtualizacaoCadastral.obterImovelControle(idImovelControle);
 	}
 	
 	/************************************************************
@@ -722,7 +726,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 	
 	private void atualizarImovelProcessado(Integer idImovelRetorno) throws ControladorException {
 		
-		ImovelControleAtualizacaoCadastral imovelControle = repositorioAtualizacaoCadastral.obterImovelControle(idImovelRetorno);
+		ImovelControleAtualizacaoCadastral imovelControle = repositorioAtualizacaoCadastral.obterImovelControlePorImovelRetorno(idImovelRetorno);
 		
 		imovelControle.setDataProcessamento(new Date());
 		getControladorUtil().atualizar(imovelControle);
