@@ -4765,7 +4765,8 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					+ "LEFT JOIN cadastro.subcategoria scat ON scat.scat_id = imsb.scat_id ";
 			}
 
-			consulta += "where imov.imov_icexclusao <> 1 AND (imov.siac_id is null OR imov.siac_id = 0) AND ";
+			consulta += "where imov.imov_icexclusao <> 1 AND (imov.siac_id is null OR imov.siac_id = 0) AND "
+						+ " imov.last_id <> " + LigacaoAguaSituacao.POTENCIAL + " AND ";
 
 			if (idRota != null) {
 				consulta += "qdra.rota_id =:idRota AND ";
