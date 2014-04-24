@@ -182,7 +182,12 @@
 																	<logic:equal name="PagamentosAClassificarActionForm" property="exibirMotivoCancelamento" value="true">
 																	<td width="11%">
 																		<div align="center">
-																			<bean:write name="pagamento" property="contaGeral.conta.contaMotivoCancelamento.descricaoMotivoCancelamentoConta" />
+																			<logic:notEmpty name="pagamento" property="contaGeral.conta">
+																				<bean:write name="pagamento" property="contaGeral.conta.contaMotivoCancelamento.descricaoMotivoCancelamentoConta" />
+																			</logic:notEmpty>
+																			<logic:notEmpty name="pagamento" property="contaGeral.contaHistorico">
+																				<bean:write name="pagamento" property="contaGeral.contaHistorico.contaMotivoCancelamento.descricaoMotivoCancelamentoConta" />
+																			</logic:notEmpty>
 																		</div>
 																	</td>
 																</logic:equal>
