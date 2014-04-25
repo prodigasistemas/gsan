@@ -1,6 +1,3 @@
-/**
- * 
- */
 package gcom.util;
 
 /**

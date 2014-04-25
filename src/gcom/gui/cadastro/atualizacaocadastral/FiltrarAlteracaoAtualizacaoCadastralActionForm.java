@@ -1,5 +1,7 @@
 package gcom.gui.cadastro.atualizacaocadastral;
 
+import java.util.Arrays;
+
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.util.ConstantesSistema;
 
@@ -8,6 +10,11 @@ import org.apache.struts.action.ActionForm;
 public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 	private static final long serialVersionUID = 1L;
 
+	public static Integer FILTRO_APROVACAO_EM_LOTE = -2;
+	public static Integer FILTRO_TODOS = -1;
+	public static String FILTRO_APROVADOS = "1";
+	public static String FILTRO_PENDENTES = "2";
+	
     private String idEmpresa;
     
     private String nomeEmpresa;
@@ -47,6 +54,14 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 	private String cdRotaInicial;
 
 	private String cdRotaFinal;
+	
+	private String alteracaoHidrometro = "-1";
+	
+	private String alteracaoSituacaoAgua = "-1";
+	
+	private String alteracaoSituacaoEsgoto = "-1";
+	
+	private String alteracaoCategoria = "-1";
 
 	public String getIdRegistrosAutorizados() {
 		return idRegistrosAutorizados;
@@ -208,6 +223,38 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 		this.cdRotaFinal = codRotaFinal;
 	}
 	
+	public String getAlteracaoHidrometro() {
+		return alteracaoHidrometro;
+	}
+
+	public void setAlteracaoHidrometro(String alteracaoHidrometro) {
+		this.alteracaoHidrometro = alteracaoHidrometro;
+	}
+
+	public String getAlteracaoSituacaoAgua() {
+		return alteracaoSituacaoAgua;
+	}
+
+	public void setAlteracaoSituacaoAgua(String alteracaoSituacaoAgua) {
+		this.alteracaoSituacaoAgua = alteracaoSituacaoAgua;
+	}
+
+	public String getAlteracaoSituacaoEsgoto() {
+		return alteracaoSituacaoEsgoto;
+	}
+
+	public void setAlteracaoSituacaoEsgoto(String alteracaoSituacaoEsgoto) {
+		this.alteracaoSituacaoEsgoto = alteracaoSituacaoEsgoto;
+	}
+
+	public String getAlteracaoCategoria() {
+		return alteracaoCategoria;
+	}
+
+	public void setAlteracaoCategoria(String alteracaoCategoria) {
+		this.alteracaoCategoria = alteracaoCategoria;
+	}
+
 	public boolean existeParametroInformado() {
 		boolean peloMenosUmParametroInformado = false;
 
@@ -262,5 +309,16 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 		}
 
 		return peloMenosUmParametroInformado;
+	}
+
+	public String toString() {
+		return "FiltrarAlteracaoAtualizacaoCadastralActionForm [idEmpresa=" + idEmpresa + ", nomeEmpresa=" + nomeEmpresa + ", idLeiturista=" + idLeiturista
+				+ ", nomeLeiturista=" + nomeLeiturista + ", periodoRealizacaoInicial=" + periodoRealizacaoInicial + ", periodoRealizacaoFinal="
+				+ periodoRealizacaoFinal + ", idRegistrosNaoAutorizados=" + idRegistrosNaoAutorizados + ", idRegistrosAutorizados=" + idRegistrosAutorizados
+				+ ", exibirCampos=" + exibirCampos + ", colunaImoveisSelecionados=" + Arrays.toString(colunaImoveisSelecionados) + ", idLocalidadeInicial="
+				+ idLocalidadeInicial + ", idLocalidadeFinal=" + idLocalidadeFinal + ", nomeLocalidadeInicial=" + nomeLocalidadeInicial
+				+ ", nomeLocalidadeFinal=" + nomeLocalidadeFinal + ", cdSetorComercialInicial=" + cdSetorComercialInicial + ", cdSetorComercialFinal="
+				+ cdSetorComercialFinal + ", nomeSetorComercialInicial=" + nomeSetorComercialInicial + ", nomeSetorComercialFinal=" + nomeSetorComercialFinal
+				+ ", cdRotaInicial=" + cdRotaInicial + ", cdRotaFinal=" + cdRotaFinal + "]";
 	}
 }

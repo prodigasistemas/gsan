@@ -1,5 +1,8 @@
 package gcom.cadastro.atualizacaocadastral.command;
 
+import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
+import gcom.cadastro.imovel.CadastroOcorrencia;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -27,6 +30,12 @@ public class AtualizacaoCadastralImovel {
 	private AtualizacaoCadastral atualizacaoArquivo;
 	
 	private Boolean erroLayout = false;
+	
+	private Boolean existeMedidor = false;
+	
+	private CadastroOcorrencia cadastroOcorrencia;
+	
+	private ImovelControleAtualizacaoCadastral imovelControle; 
 	
 	public AtualizacaoCadastralImovel(){
 		
@@ -161,6 +170,30 @@ public class AtualizacaoCadastralImovel {
 		return erroLayout;
 	}
 	
+	public Boolean isExisteMedidor() {
+		return existeMedidor;
+	}
+
+	public void setExisteMedidor(Boolean existeMedidor) {
+		this.existeMedidor = existeMedidor;
+	}
+
+	public CadastroOcorrencia getCadastroOcorrencia() {
+		return cadastroOcorrencia;
+	}
+
+	public void setCadastroOcorrencia(CadastroOcorrencia cadastroOcorrencia) {
+		this.cadastroOcorrencia = cadastroOcorrencia;
+	}
+	
+	public ImovelControleAtualizacaoCadastral getImovelControle() {
+		return imovelControle;
+	}
+
+	public void setImovelControle(ImovelControleAtualizacaoCadastral imovelControle) {
+		this.imovelControle = imovelControle;
+	}
+
 	public void limparDadosUsuario() {
 		linhaCliente.put("matriculaUsuario", "0");
 	}

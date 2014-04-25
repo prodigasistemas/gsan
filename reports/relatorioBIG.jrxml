@@ -484,51 +484,6 @@ Contas]]></text>
 						width="140"
 						height="20"
 						backcolor="#CCCCCC"
-						key="txtQtdNovasEsgoto"/>
-					<box topBorder="1Point" topBorderColor="#000000" leftBorder="1Point" leftBorderColor="#000000" rightBorder="1Point" rightBorderColor="#000000" bottomBorder="1Point" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Qtd. Novas Esgoto]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						mode="Opaque"
-						x="2070"
-						y="80"
-						width="70"
-						height="20"
-						backcolor="#CCCCCC"
-						key="txtLigacoesEsgoto"/>
-					<box topBorder="1Point" topBorderColor="#000000" leftBorder="1Point" leftBorderColor="#000000" rightBorder="1Point" rightBorderColor="#000000" bottomBorder="1Point" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Ligações]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						mode="Opaque"
-						x="2140"
-						y="80"
-						width="70"
-						height="20"
-						backcolor="#CCCCCC"
-						key="txtEconomiasEsgoto"/>
-					<box topBorder="1Point" topBorderColor="#000000" leftBorder="1Point" leftBorderColor="#000000" rightBorder="1Point" rightBorderColor="#000000" bottomBorder="1Point" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
-						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
-					</textElement>
-				<text><![CDATA[Economias]]></text>
-				</staticText>
-				<staticText>
-					<reportElement
-						mode="Opaque"
-						x="2210"
-						y="60"
-						width="140"
-						height="20"
-						backcolor="#CCCCCC"
 						key="txtQtdNovasAgua"/>
 					<box topBorder="1Point" topBorderColor="#000000" leftBorder="1Point" leftBorderColor="#000000" rightBorder="1Point" rightBorderColor="#000000" bottomBorder="1Point" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
@@ -539,7 +494,7 @@ Contas]]></text>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="2210"
+						x="2070"
 						y="80"
 						width="70"
 						height="20"
@@ -554,12 +509,57 @@ Contas]]></text>
 				<staticText>
 					<reportElement
 						mode="Opaque"
-						x="2280"
+						x="2140"
 						y="80"
 						width="70"
 						height="20"
 						backcolor="#CCCCCC"
 						key="txtEconomiasAgua"/>
+					<box topBorder="1Point" topBorderColor="#000000" leftBorder="1Point" leftBorderColor="#000000" rightBorder="1Point" rightBorderColor="#000000" bottomBorder="1Point" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Economias]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="2210"
+						y="60"
+						width="140"
+						height="20"
+						backcolor="#CCCCCC"
+						key="txtQtdNovasEsgoto"/>
+					<box topBorder="1Point" topBorderColor="#000000" leftBorder="1Point" leftBorderColor="#000000" rightBorder="1Point" rightBorderColor="#000000" bottomBorder="1Point" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Qtd. Novas Esgoto]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="2210"
+						y="80"
+						width="70"
+						height="20"
+						backcolor="#CCCCCC"
+						key="txtLigacoesEsgoto"/>
+					<box topBorder="1Point" topBorderColor="#000000" leftBorder="1Point" leftBorderColor="#000000" rightBorder="1Point" rightBorderColor="#000000" bottomBorder="1Point" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
+						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
+					</textElement>
+				<text><![CDATA[Ligações]]></text>
+				</staticText>
+				<staticText>
+					<reportElement
+						mode="Opaque"
+						x="2280"
+						y="80"
+						width="70"
+						height="20"
+						backcolor="#CCCCCC"
+						key="txtEconomiasEsgoto"/>
 					<box topBorder="1Point" topBorderColor="#000000" leftBorder="1Point" leftBorderColor="#000000" rightBorder="1Point" rightBorderColor="#000000" bottomBorder="1Point" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Center" verticalAlignment="Middle" lineSpacing="Single">
 						<font pdfFontName="Helvetica-Bold" size="10" isBold="true"/>
@@ -998,32 +998,6 @@ Factíveis]]></text>
 						y="0"
 						width="70"
 						height="17"
-						key="campoQuantidadeNovasLigacoesEsgoto"/>
-					<box topBorder="Thin" topBorderColor="#000000" leftBorder="Thin" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font size="10"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{getQuantidadeNovasLigacoesEsgoto}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="2140"
-						y="0"
-						width="70"
-						height="17"
-						key="campoEconomiasNovasLigacoesEsgoto"/>
-					<box topBorder="Thin" topBorderColor="#000000" leftBorder="Thin" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
-					<textElement textAlignment="Right" verticalAlignment="Middle">
-						<font size="10"/>
-					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{getEconomiasNovasLigacoesEsgoto}]]></textFieldExpression>
-				</textField>
-				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
-					<reportElement
-						x="2210"
-						y="0"
-						width="70"
-						height="17"
 						key="campoQuantidadeNovasLigacoesAgua"/>
 					<box topBorder="Thin" topBorderColor="#000000" leftBorder="Thin" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
 					<textElement textAlignment="Right" verticalAlignment="Middle">
@@ -1033,7 +1007,7 @@ Factíveis]]></text>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
-						x="2280"
+						x="2140"
 						y="0"
 						width="70"
 						height="17"
@@ -1043,6 +1017,32 @@ Factíveis]]></text>
 						<font size="10"/>
 					</textElement>
 				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{getEconomiasNovasLigacoesAgua}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="2210"
+						y="0"
+						width="70"
+						height="17"
+						key="campoQuantidadeNovasLigacoesEsgoto"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="Thin" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{getQuantidadeNovasLigacoesEsgoto}]]></textFieldExpression>
+				</textField>
+				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+					<reportElement
+						x="2280"
+						y="0"
+						width="70"
+						height="17"
+						key="campoEconomiasNovasLigacoesEsgoto"/>
+					<box topBorder="Thin" topBorderColor="#000000" leftBorder="Thin" leftBorderColor="#000000" rightBorder="Thin" rightBorderColor="#000000" bottomBorder="Thin" bottomBorderColor="#000000"/>
+					<textElement textAlignment="Right" verticalAlignment="Middle">
+						<font size="10"/>
+					</textElement>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{getEconomiasNovasLigacoesEsgoto}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="" isBlankWhenNull="true" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement

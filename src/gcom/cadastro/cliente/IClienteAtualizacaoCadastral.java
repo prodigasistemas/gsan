@@ -132,4 +132,8 @@ public interface IClienteAtualizacaoCadastral extends ICliente, IClienteEndereco
     public Integer getIdImovel();
 
 	public void setIdImovel(Integer idImovel);
+	
+	public Integer getTipoOperacao();
+
+	public void setTipoOperacao(Integer tipoOperacao);
 }

@@ -499,12 +499,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			stmt.executeUpdate(insert);
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} catch (SQLException e) {
 			throw new ErroRepositorioException(e, "Erro no Insert");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 
 			try {
@@ -1130,76 +1128,31 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			Map<String, Object> parameters = new HashMap<String, Object>();
 
 			String consulta = " select \n"
-					+
-					// 0
-					"   gr.id, \n"
-					+
-					// 1
-					"   gr.nome, \n"
-					+
-					// 2
-					"   un.id, \n"
-					+
-					// 3
-					"   un.nome, \n"
-					+
-					// 4
-					"   sc.codigo, \n"
-					+
-					// 5
-					"   sc.descricao, \n"
-					+
-					// 6
-					"   loc.id, \n"
-					+
-					// 7
-					"   loc.descricao, \n"
-					+
-					// 8
-					"   cli.nome, \n"
-					+
-					// 9
-					"   las.descricaoAbreviado, \n"
-					+
-					// 10
-					"   rot.codigo, \n"
-					+
-					// 11
-					"   imo.numeroSequencialRota, \n"
-					+
-					// 12
-					"   imo.id, \n"
-					+
-					// 13
-					"   les.id, \n"
-					+
-					// 14
-					"   les.descricaoAbreviado, \n"
-					+
-					// 15
-					"   qua.numeroQuadra, \n"
-					+
-					// 16
-					"   min( c.referencia ) as referenciaMinima, \n"
-					+
-					// 17
-					"   count(*) as quatidadeContas, \n"
-					+
-					// 18
-					"   sum( coalesce( c.valorAgua, 0 ) + coalesce( c.valorEsgoto, 0 ) + coalesce( c.debitos, 0 ) - coalesce( c.valorCreditos, 0 ) ) as total, \n"
-					+
-					// 19
-					"   max( c.referencia ) as referenciaMaxima, \n" +
-					// 20
-					"   imo.lote, \n" +
-					// 21
-					"   imo.subLote, \n" +
-					// 22
-					"   cli.cpf, \n" +
-					// 23
-					"   cli.cnpj \n" +
-
-					" from \n" + "   Conta c, ClienteImovel ci  " + categoria
+					+ "   gr.id, \n"
+					+ "   gr.nome, \n"
+					+ "   un.id, \n"
+					+ "   un.nome, \n"
+					+ "   sc.codigo, \n"
+					+ "   sc.descricao, \n"
+					+ "   loc.id, \n"
+					+ "   loc.descricao, \n"
+					+ "   cli.nome, \n"
+					+ "   las.descricaoAbreviado, \n"
+					+ "   rot.codigo, \n"
+					+ "   imo.numeroSequencialRota, \n"
+					+ "   imo.id, \n"
+					+ "   les.id, \n"
+					+ "   les.descricaoAbreviado, \n"
+					+ "   qua.numeroQuadra, \n"
+					+ "   min( c.referencia ) as referenciaMinima, \n"
+					+ "   count(*) as quatidadeContas, \n"
+					+ "   sum( coalesce( c.valorAgua, 0 ) + coalesce( c.valorEsgoto, 0 ) + coalesce( c.debitos, 0 ) - coalesce( c.valorCreditos, 0 ) ) as total, \n"
+					+ "   max( c.referencia ) as referenciaMaxima, \n" 
+					+ "   imo.lote, \n" 
+					+ "   imo.subLote, \n" 
+					+ "   cli.cpf, \n" 
+					+ "   cli.cnpj \n" 
+					+ " from \n" + "   Conta c, ClienteImovel ci  " + categoria
 					+ " \n" + "   inner join c.imovel imo \n"
 					+ "   inner join imo.localidade loc \n"
 					+ "   inner join loc.gerenciaRegional gr \n"
@@ -1419,49 +1372,22 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			Map<String, Object> parameters = new HashMap<String, Object>();
 
 			consulta = " select \n"
-					+
-					// 1
-					"   cli.id, \n"
-					+
-					// 2
-					"   cli.nome as  cliente, \n"
-					+
-					// 3
-					"   gr.id, \n"
-					+
-					// 4
-					"   loc.id, \n"
-					+
-					// 5
-					"   sc.codigo, \n"
-					+
-					// 6
-					"   qua.numeroQuadra, \n"
-					+
-					// 7
-					"   las.descricaoAbreviado, \n"
-					+
-					// 8
-					"   min( c.referencia ) as referenciaMinima, \n"
-					+
-					// 9
-					"   count(*) as quatidadeContas, \n"
-					+
-					// 10
-					"   sum( coalesce( c.valorAgua, 0 ) + coalesce( c.valorEsgoto, 0 ) + coalesce( c.debitos, 0 ) - coalesce( c.valorCreditos, 0 ) ) as totalSemEncargos, \n"
-					+
-					// 11
-					"   rot.codigo, \n" +
-					// 12
-					"   imo.numeroSequencialRota, \n" +
-					// 13
-					"   imo.id, \n" +
-					// 14
-					"   les.descricaoAbreviado, \n" +
-					// 15
-					"   max( c.referencia ) as referenciaMaxima \n" +
-
-					" from Cliente cli " + categoria + clienteConta + " \n"
+					+ "   cli.id, \n"
+					+ "   cli.nome as  cliente, \n"
+					+ "   gr.id, \n"
+					+ "   loc.id, \n"
+					+ "   sc.codigo, \n"
+					+ "   qua.numeroQuadra, \n"
+					+ "   las.descricaoAbreviado, \n"
+					+ "   min( c.referencia ) as referenciaMinima, \n"
+					+ "   count(*) as quatidadeContas, \n"
+					+ "   sum( coalesce( c.valorAgua, 0 ) + coalesce( c.valorEsgoto, 0 ) + coalesce( c.debitos, 0 ) - coalesce( c.valorCreditos, 0 ) ) as totalSemEncargos, \n"
+					+ "   rot.codigo, \n" 
+					+ "   imo.numeroSequencialRota, \n" 
+					+ "   imo.id, \n" 
+					+ "   les.descricaoAbreviado, \n" 
+					+ "   max( c.referencia ) as referenciaMaxima \n" 
+					+ " from Cliente cli " + categoria + clienteConta + " \n"
 					+ "   inner join cli.clienteImoveis ci \n"
 					+ "   inner join ci.imovel imo \n"
 					+ "	  inner join imo.ligacaoAgua la \n"	
@@ -2195,7 +2121,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		String consulta = "";
 
 		try {
-			consulta = "select count(clim.clim_id) as clienteImo "; // 18
+			consulta = "select count(clim.clim_id) as clienteImo "; 
 
 			consulta += "from cadastro.cliente_imovel clim "
 					+ "inner join cadastro.imovel imov on clim.imov_id=imov.imov_id "
@@ -2216,19 +2142,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					+ "left outer join cadastro.bairro bair on lgbr.bair_id=bair.bair_id "
 					+ "inner join cadastro.cliente clie on clim.clie_id=clie.clie_id "
 					+ "inner join cadastro.cliente_relacao_tipo crtp on clim.crtp_id=crtp.crtp_id "
-					+
-
-					// CLIENTE USUÁRIO
-					"and (crtp.crtp_id = 2 ) "
-					+
-
-					// AGUA
-					"left join micromedicao.consumo_historico consumoAgua on imov.imov_id=consumoAgua.imov_id "
+					+ "and (crtp.crtp_id = 2 ) "
+					+"left join micromedicao.consumo_historico consumoAgua on imov.imov_id=consumoAgua.imov_id "
 					+ "and (consumoAgua.lgti_id = 1 ) and (consumoAgua.cshi_amfaturamento = :anoMesReferencia ) "
-					+
-
-					// ESGOTO
-					"left join micromedicao.consumo_historico consumoEsgoto on imov.imov_id=consumoEsgoto.imov_id "
+					+ "left join micromedicao.consumo_historico consumoEsgoto on imov.imov_id=consumoEsgoto.imov_id "
 					+ "and (consumoEsgoto.lgti_id = 2 ) and (consumoEsgoto.cshi_amfaturamento = :anoMesReferencia ) ";
 
 			consulta += "where clim.clim_dtrelacaofim is null ";
@@ -4793,11 +4710,10 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return retorno;
 	}
 	
-	public void atualizarArquivoTextoAtualizacaoCadstral(Integer idArquivoTxt,
-			Integer idSituacaoTransmissao) throws ErroRepositorioException {
+	public void atualizarArquivoTextoAtualizacaoCadstral(Integer idArquivoTxt, Integer idSituacaoTransmissao) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
-
+		
 		String consulta = " update ArquivoTextoAtualizacaoCadastral txac"
 				+ " set txac.situacaoTransmissaoLeitura.id =:idSituacaoTransmissao,"
 				+ " txac.ultimaAlteracao = :dataAtual" + " where txac.id = "
@@ -4813,7 +4729,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
 			HibernateUtil.closeSession(session);
-
 		}
 	}
 
@@ -4850,7 +4765,8 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 					+ "LEFT JOIN cadastro.subcategoria scat ON scat.scat_id = imsb.scat_id ";
 			}
 
-			consulta += "where imov.imov_icexclusao <> 1 AND (imov.siac_id is null OR imov.siac_id = 0) AND ";
+			consulta += "where imov.imov_icexclusao <> 1 AND (imov.siac_id is null OR imov.siac_id = 0) AND "
+						+ " imov.last_id <> " + LigacaoAguaSituacao.POTENCIAL + " AND ";
 
 			if (idRota != null) {
 				consulta += "qdra.rota_id =:idRota AND ";
@@ -8837,20 +8753,6 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		}
 	}
 	
-	public SituacaoAtualizacaoCadastral pesquisarSituacaoAtualizacaoCadastralPorId(Integer idSituacaoCadastral) throws ErroRepositorioException {
-		Session session = HibernateUtil.getSession();
-		try {
-			String consulta = " SELECT situacao " 
-					+ " FROM SituacaoAtualizacaoCadastral situacao"
-					+ " WHERE situacao.id = :idSituacaoCadastral ";
-			return (SituacaoAtualizacaoCadastral)session.createQuery(consulta)
-					.setInteger("idSituacaoCadastral", idSituacaoCadastral).uniqueResult();
-		} catch(HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro no hibernate");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
-	}
 	
 	public Integer pesquisarIdSetorComercialPorCodigoELocalidade(Integer idLocalidade, Integer codigoSetor) throws ErroRepositorioException {
 		Integer idSetorComercial = null;
@@ -8900,6 +8802,21 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		return idQuadra;
 	}
 	
+	public SituacaoAtualizacaoCadastral pesquisarSituacaoAtualizacaoCadastralPorId(Integer idSituacaoCadastral) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		try {
+			String consulta = " SELECT situacao " 
+					+ " FROM SituacaoAtualizacaoCadastral situacao"
+					+ " WHERE situacao.id = :idSituacaoCadastral ";
+			return (SituacaoAtualizacaoCadastral)session.createQuery(consulta)
+					.setInteger("idSituacaoCadastral", idSituacaoCadastral).uniqueResult();
+		} catch(HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+	
 	public String retornaIpServidorOperacional() throws ErroRepositorioException {
 		String ip = "";
 		Session session = HibernateUtil.getSession();
@@ -8915,4 +8832,20 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 		}
 		return ip;
 	}
+	
+	public String retornaIpServidorRelatorios() throws ErroRepositorioException {
+		String ip = "";
+		Session session = HibernateUtil.getSession();
+		
+		try {
+			String consulta = "select parm_valor from operacao.parametro where parm_nmparametro = 'URL_RELATORIO' ";
+			ip = (String) session.createSQLQuery(consulta).uniqueResult();
+		} catch (HibernateException e) {
+			logger.error("Erro ao pesquisar ip do servidor de relatorios", e);
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return ip;
+	}	
 }

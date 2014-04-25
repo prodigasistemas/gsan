@@ -1,5 +1,7 @@
 package gcom.cadastro.atualizacaocadastral.validador;
 
+import java.util.Map;
+
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastralImovel;
 import gcom.util.ParserUtil;
 
@@ -7,8 +9,10 @@ public class ValidadorTamanhoLinhaImovelCommand extends ValidadorCommand {
 
 	private ParserUtil parser;
 	
-	public ValidadorTamanhoLinhaImovelCommand(ParserUtil parser, AtualizacaoCadastralImovel imovel) {
-		super(imovel, null);
+	public ValidadorTamanhoLinhaImovelCommand(ParserUtil parser,
+			AtualizacaoCadastralImovel cadastroImovel,
+			Map<String, String> linha) {
+		super(cadastroImovel, linha);
 		this.parser = parser;
 		
 	}

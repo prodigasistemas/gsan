@@ -36,5 +36,6 @@ public class ParseHeaderCommand extends AbstractAtualizacaoCadastralCommand {
 		}
 		
 		atualizacao.setArquivoTexto(arquivoTexto);
+		atualizacao.setIdRota(Integer.valueOf(idRota));
 	}
 }

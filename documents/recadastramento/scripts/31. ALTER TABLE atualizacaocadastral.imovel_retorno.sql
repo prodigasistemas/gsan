@@ -16,20 +16,3 @@ ADD COLUMN logr_id integer,
 ADD COLUMN imac_dslogradouro character varying(40),
 ADD COLUMN imac_nmbairro character varying(30),
 ADD COLUMN imac_cdcep integer;
-
-ALTER TABLE atualizacaocadastral.imovel_retorno ADD loca_id integer;
-ALTER TABLE atualizacaocadastral.imovel_retorno ADD imre_cdsetorcomercial integer;
-ALTER TABLE atualizacaocadastral.imovel_retorno ADD imre_nnquadra integer;
-
-/*
-ALTER TABLE atualizacaocadastral.imovel_retorno RENAME COLUMN imac_nnimovel TO imre_nnimovel;
-ALTER TABLE atualizacaocadastral.imovel_retorno RENAME COLUMN imac_dscomplementoendereco TO imre_dscomplementoendereco;
-ALTER TABLE atualizacaocadastral.imovel_retorno RENAME COLUMN imac_nnpontosutilizacao TO imre_nnpontosutilizacao;
-ALTER TABLE atualizacaocadastral.imovel_retorno RENAME COLUMN imac_nnmorador TO imre_nnmorador;
-ALTER TABLE atualizacaocadastral.imovel_retorno RENAME COLUMN imac_nniptu TO imre_nniptu;
-ALTER TABLE atualizacaocadastral.imovel_retorno RENAME COLUMN imac_nncoordenadax TO imre_nncoordenadax;
-ALTER TABLE atualizacaocadastral.imovel_retorno RENAME COLUMN imac_nncoordenaday TO imre_nncoordenaday;
-ALTER TABLE atualizacaocadastral.imovel_retorno RENAME COLUMN imac_tmultimaalteracao TO imre_tmultimaalteracao;
-ALTER TABLE atualizacaocadastral.imovel_retorno RENAME COLUMN imac_nnhidrometro TO imac_nnhidrometro;
-ALTER TABLE atualizacaocadastral.imovel_retorno RENAME COLUMN imac_nnmedidorenergia TO imre_nnmedidorenergia;
-ALTER TABLE atualizacaocadastral.imovel_retorno RENAME COLUMN imac_dsoutrasinformacoes TO imre_dsoutrasinformacoes;

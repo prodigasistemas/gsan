@@ -71,13 +71,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
-/**
- * Interface Controlador Cobranca PADRÃO
- * 
- * @author Rômulo Aurélio
- * @date 24/11/2009
- */
-
 public interface IControladorCadastro {
 
 	public Integer inserirHistoricoAlteracaoSistema(SistemaAlteracaoHistorico sistemaAlteracaoHistorico) throws ControladorException;
@@ -503,11 +496,11 @@ public interface IControladorCadastro {
 
 	public void validarSistemaParametroLojaVirtual(byte[] fileData, String extensao) throws ControladorException;
 
+	public List<HidrometroInstalacaoHistorico> pesquisarHidrometroPeloIdImovel(Integer idImovel) throws ControladorException;
+
 	public AtualizacaoCadastral carregarImovelAtualizacaoCadastral(BufferedReader buffer, List<String> imagens) throws Exception;
 	
 	public SituacaoAtualizacaoCadastral pesquisarSituacaoAtualizacaoCadastralPorId(Integer idSituacaoCadastral) throws ControladorException;
-
-	public List<HidrometroInstalacaoHistorico> pesquisarHidrometroPeloIdImovel(Integer idImovel) throws ControladorException;
 
 	public Collection<Integer> pesquisarRotasAtualizacaoCadastral(ImovelGeracaoTabelasTemporariasCadastroHelper helper) throws ControladorException;
 	
@@ -516,4 +509,6 @@ public interface IControladorCadastro {
 	public Integer pesquisarIdQuadraPorNumeroQuadraEIdSetor(Integer idSetorComercial, Integer numeroQuadra) throws ControladorException;
 	
 	public String retornaIpServidorOperacional() throws Exception;
+	
+	public String retornaIpServidorRelatorios() throws Exception;
 }

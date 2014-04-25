@@ -1,78 +1,3 @@
-/*
-* Copyright (C) 2007-2007 the GSAN - Sistema Integrado de Gestão de Serviços de Saneamento
-*
-* This file is part of GSAN, an integrated service management system for Sanitation
-*
-* GSAN is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License.
-*
-* GSAN is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
-*/
-
-/*
-* GSAN - Sistema Integrado de Gestão de Serviços de Saneamento
-* Copyright (C) <2007> 
-* Adriano Britto Siqueira
-* Alexandre Santos Cabral
-* Ana Carolina Alves Breda
-* Ana Maria Andrade Cavalcante
-* Aryed Lins de Araújo
-* Bruno Leonardo Rodrigues Barros
-* Carlos Elmano Rodrigues Ferreira
-* Cláudio de Andrade Lira
-* Denys Guimarães Guenes Tavares
-* Eduardo Breckenfeld da Rosa Borges
-* Fabíola Gomes de Araújo
-* Flávio Leonardo Cavalcanti Cordeiro
-* Francisco do Nascimento Júnior
-* Homero Sampaio Cavalcanti
-* Ivan Sérgio da Silva Júnior
-* José Edmar de Siqueira
-* José Thiago Tenório Lopes
-* Kássia Regina Silvestre de Albuquerque
-* Leonardo Luiz Vieira da Silva
-* Márcio Roberto Batista da Silva
-* Maria de Fátima Sampaio Leite
-* Micaela Maria Coelho de Araújo
-* Nelson Mendonça de Carvalho
-* Newton Morais e Silva
-* Pedro Alexandre Santos da Silva Filho
-* Rafael Corrêa Lima e Silva
-* Rafael Francisco Pinto
-* Rafael Koury Monteiro
-* Rafael Palermo de Araújo
-* Raphael Veras Rossiter
-* Roberto Sobreira Barbalho
-* Rodrigo Avellar Silveira
-* Rosana Carvalho Barbosa
-* Sávio Luiz de Andrade Cavalcante
-* Tai Mu Shih
-* Thiago Augusto Souza do Nascimento
-* Tiago Moreno Rodrigues
-* Vivianne Barbosa Sousa
-*
-* Este programa é software livre; você pode redistribuí-lo e/ou
-* modificá-lo sob os termos de Licença Pública Geral GNU, conforme
-* publicada pela Free Software Foundation; versão 2 da
-* Licença.
-* Este programa é distribuído na expectativa de ser útil, mas SEM
-* QUALQUER GARANTIA; sem mesmo a garantia implícita de
-* COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
-* PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
-* detalhes.
-* Você deve ter recebido uma cópia da Licença Pública Geral GNU
-* junto com este programa; se não, escreva para Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
-* 02111-1307, USA.
-*/  
 package gcom.gui.faturamento.credito;
 
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
@@ -92,6 +17,7 @@ import gcom.cobranca.CobrancaSituacao;
 import gcom.fachada.Fachada;
 import gcom.faturamento.credito.CreditoOrigem;
 import gcom.faturamento.credito.CreditoTipo;
+import gcom.faturamento.credito.FiltroCreditoARealizar;
 import gcom.faturamento.credito.FiltroCreditoOrigem;
 import gcom.faturamento.credito.FiltroCreditoTipo;
 import gcom.gui.ActionServletException;
@@ -110,53 +36,39 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-/**
- * [UC0194] Inserir Crédito a Realizar Permite inserir um crédito a realizar
- * 
- * @author Roberta Costa
- * @since 12/01/2006
- */
 public class ExibirInserirCreditoARealizarAction extends GcomAction {
 
 	public ActionForward execute(ActionMapping actionMapping,
 			ActionForm actionForm, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 
-		// Seta o mapeamento de retorno
-		ActionForward retorno = actionMapping
-				.findForward("exibirInserirCreditoARealizar");
+		ActionForward retorno = actionMapping.findForward("exibirInserirCreditoARealizar");
 
 		HttpSession sessao = httpServletRequest.getSession(false);
 
 		Fachada fachada = Fachada.getInstancia();
 
-		// Coleção de Tipo de Crédito
 		FiltroCreditoTipo filtroCreditoTipo = new FiltroCreditoTipo();
+		filtroCreditoTipo.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.INDICADORUSO, ConstantesSistema.SIM.intValue()));
 		Collection<CreditoTipo> collectionCreditoTipo = fachada.pesquisar(
 				filtroCreditoTipo, CreditoTipo.class.getName());
 
 		httpServletRequest.setAttribute("collectionCreditoTipo",
 				collectionCreditoTipo);
 
-		// Coleção de Origem do Crédito
 		FiltroCreditoOrigem filtroCreditoOrigem = new FiltroCreditoOrigem();
-		Collection<CreditoOrigem> collectionCreditoOrigem = fachada.pesquisar(
-				filtroCreditoOrigem, CreditoOrigem.class.getName());
+		filtroCreditoOrigem.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.INDICADORUSO, ConstantesSistema.SIM.intValue()));
+		Collection<CreditoOrigem> collectionCreditoOrigem = fachada.pesquisar(filtroCreditoOrigem, CreditoOrigem.class.getName());
 
 		httpServletRequest.setAttribute("collectionCreditoOrigem",
 				collectionCreditoOrigem);
 
-		// Validações do Formulário
 		InserirCreditoARealizarActionForm inserirCreditoARealizarActionForm = (InserirCreditoARealizarActionForm) actionForm;
 
-		String limparForm = (String) httpServletRequest
-				.getParameter("limparForm");
+		String limparForm = (String) httpServletRequest.getParameter("limparForm");
 		String idRegistroAtendimento = inserirCreditoARealizarActionForm.getRegistroAtendimento();
 		String idOrdemSerico = inserirCreditoARealizarActionForm.getOrdemServico();
 		
-		
-		//String codigoImovel = inserirCreditoARealizarActionForm
-			//	.getMatriculaImovel();
 		String idImovel = null;
 		
 	    if (httpServletRequest.getParameter("objetoConsulta") != null
@@ -196,7 +108,6 @@ public class ExibirInserirCreditoARealizarAction extends GcomAction {
 							"atencao.registro_atendimento.nao.permite.geracao.credito");
 					}
 
-					//caso tenha o imovel
 					idImovel = registroAtendimento.getImovel().getId().toString();
 					
 					inserirCreditoARealizarActionForm.setRegistroAtendimento(registroAtendimento.getId().toString());
@@ -218,9 +129,7 @@ public class ExibirInserirCreditoARealizarAction extends GcomAction {
 											
 					sessao.setAttribute("travarTipoCredito",
 					"nao");
-
 					
-					//não encontrou a RA
 				}else{
 					//FS0004-Validar Registro de Atendimento
 					inserirCreditoARealizarActionForm.setMatriculaImovel("");
@@ -269,12 +178,10 @@ public class ExibirInserirCreditoARealizarAction extends GcomAction {
 							"atencao.ordem_servico.imovel.registro_atendimento.nao.associado");
 					}
 					
-					//caso tenha o imovel
 					if(ordemServico.getImovel() != null){
 						idImovel = ordemServico.getImovel().getId().toString();	
 					}
 					
-					//seta a RA
 					inserirCreditoARealizarActionForm.setOrdemServico(ordemServico.getId().toString());
 					inserirCreditoARealizarActionForm.setNomeOrdemServico(ordemServico.getServicoTipo().getDescricao());
 					
@@ -282,28 +189,20 @@ public class ExibirInserirCreditoARealizarAction extends GcomAction {
 					inserirCreditoARealizarActionForm.setNomeRegistroAtendimento(ordemServico.getRegistroAtendimento().getSolicitacaoTipoEspecificacao().getDescricao());
 					inserirCreditoARealizarActionForm.setMatriculaImovel(idImovel);
 
-					httpServletRequest.setAttribute("corRegistroAtendimento",
-					"valor");
-					sessao.setAttribute("travarRegistroAtendimento",
-							null);
+					httpServletRequest.setAttribute("corRegistroAtendimento", "valor");
+					sessao.setAttribute("travarRegistroAtendimento", null);
 					
-					httpServletRequest.setAttribute("corNomeOrdemServico",
-					"valor");
-					sessao.setAttribute("nomeCampo",
-					"tipoCredito");
+					httpServletRequest.setAttribute("corNomeOrdemServico", "valor");
+					sessao.setAttribute("nomeCampo", "tipoCredito");
 					                                 
-					sessao.setAttribute("travarOrdemServico",
-					"nao");
+					sessao.setAttribute("travarOrdemServico", "nao");
 					
 					//validar credito tipo
 					if(ordemServico.getServicoTipo().getCreditoTipo() != null){
 						inserirCreditoARealizarActionForm.setTipoCredito(ordemServico.getServicoTipo().getCreditoTipo().getId().toString());
-						//inserirCreditoARealizarActionForm.setTipoCreditoHidden(ordemServico.getServicoTipo().getDebitoTipo().getId().toString());
-						sessao.setAttribute("travarTipoCredito",
-								null);
+						sessao.setAttribute("travarTipoCredito", null);
 					}else{
-						sessao.setAttribute("travarTipoCredito",
-						"valor");
+						sessao.setAttribute("travarTipoCredito", "valor");
 					}
 					
 					//não encontrou a RA
@@ -358,17 +257,11 @@ public class ExibirInserirCreditoARealizarAction extends GcomAction {
 					.adicionarCaminhoParaCarregamentoEntidade("enderecoReferencia");
             filtroImovel.adicionarCaminhoParaCarregamentoEntidade("ligacaoAguaSituacao");
             filtroImovel.adicionarCaminhoParaCarregamentoEntidade("ligacaoEsgotoSituacao");
-			/*filtroImovel
-					.adicionarCaminhoParaCarregamentoEntidade("ligacaoAguaSituacao.id");
-			filtroImovel
-					.adicionarCaminhoParaCarregamentoEntidade("ligacaoEsgotoSituacao.id");*/
 			
 
 			Collection<Imovel> imovelPesquisado = fachada.pesquisar(
 					filtroImovel, Imovel.class.getName());
 
-			// [FS0001 - Verificar existêncioa da matrícula do imóvel] Imovel
-			// Inxistente
 			if (imovelPesquisado != null && imovelPesquisado.isEmpty()) {
 				sessao.setAttribute("corImovel","exception");
            		inserirCreditoARealizarActionForm
@@ -379,8 +272,6 @@ public class ExibirInserirCreditoARealizarAction extends GcomAction {
            		inserirCreditoARealizarActionForm.setSituacaoEsgoto("");
 			}
 
-			// [FS0001 - Verificar existêncioa da matrícula do imóvel] Imovel
-			// Excluido
 			if (imovelPesquisado != null && !imovelPesquisado.isEmpty()) {
 				Imovel imovel = imovelPesquisado.iterator().next();
 				if (imovel.getIndicadorExclusao() == Imovel.IMOVEL_EXCLUIDO) {

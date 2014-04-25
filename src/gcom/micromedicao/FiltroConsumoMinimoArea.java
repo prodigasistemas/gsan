@@ -1,6 +1,3 @@
-/**
- * 
- */
 package gcom.micromedicao;
 
 import gcom.util.filtro.Filtro;

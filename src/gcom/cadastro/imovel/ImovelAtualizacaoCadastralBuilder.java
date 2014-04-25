@@ -1,5 +1,6 @@
 package gcom.cadastro.imovel;
 
+import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastralImovel;
 import gcom.cadastro.endereco.FiltroLogradouroTipo;
 import gcom.cadastro.endereco.LogradouroTipo;
@@ -13,12 +14,15 @@ public class ImovelAtualizacaoCadastralBuilder {
 
 	private AtualizacaoCadastralImovel atualizacaoCadastralImovel;
 	
+	private AtualizacaoCadastral atualizacaoCadastral;
+	
 	private int tipoOperacao;
 	
-	public ImovelAtualizacaoCadastralBuilder(int matricula, AtualizacaoCadastralImovel atualizacaoCadastralImovel, int tipoOperacao){
+	public ImovelAtualizacaoCadastralBuilder(int matricula,AtualizacaoCadastral atualizacaoCadastral,  AtualizacaoCadastralImovel atualizacaoCadastralImovel, int tipoOperacao){
 		this.matricula = matricula;
 		this.imovelAtualizacaoCadastral = new ImovelAtualizacaoCadastral();
 		this.atualizacaoCadastralImovel = atualizacaoCadastralImovel;
+		this.atualizacaoCadastral = atualizacaoCadastral;
 		this.tipoOperacao = tipoOperacao;
 		
 		buildImovel();
@@ -39,6 +43,7 @@ public class ImovelAtualizacaoCadastralBuilder {
 		imovelAtualizacaoCadastral.setNumeroQuadra(Integer.parseInt(inscricao.substring(6, 10)));
 		imovelAtualizacaoCadastral.setLote(Short.parseShort(inscricao.substring(10, 14)));
 		imovelAtualizacaoCadastral.setSubLote(Short.parseShort(inscricao.substring(14, 17)));
+		imovelAtualizacaoCadastral.setIdRota(atualizacaoCadastral.getIdRota());
 		
 		imovelAtualizacaoCadastral.setNumeroImovel(atualizacaoCadastralImovel.getLinhaImovel("numeroImovel"));
 		imovelAtualizacaoCadastral.setComplementoEndereco(atualizacaoCadastralImovel.getLinhaImovel("complementoImovel"));
@@ -75,7 +80,7 @@ public class ImovelAtualizacaoCadastralBuilder {
 		imovelAtualizacaoCadastral.setIdLocalInstalacaoRamal(Integer.parseInt(atualizacaoCadastralImovel.getLinhaServicos("localInstalacaoRamal")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaServicos("localInstalacaoRamal")));
 
 		// Linha 5
-		if (atualizacaoCadastralImovel.getLinhaMedidor().size() > 0) {
+		if (atualizacaoCadastralImovel.isExisteMedidor()) {
 			imovelAtualizacaoCadastral.setNumeroHidrometro(atualizacaoCadastralImovel.getLinhaMedidor("numeroHidrometro"));
 			imovelAtualizacaoCadastral.setIdMarcaHidrometro(Integer.parseInt(atualizacaoCadastralImovel.getLinhaMedidor("marcaHidrometro")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaMedidor("marcaHidrometro")));
 			imovelAtualizacaoCadastral.setIdCapacidadeHidrometro(Integer.parseInt(atualizacaoCadastralImovel.getLinhaMedidor("capacidadeHidrometro")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaMedidor("capacidadeHidrometro")));

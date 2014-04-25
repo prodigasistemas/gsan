@@ -52,6 +52,7 @@
 			<forward name="exibirAtualizarDadosImovelAtualizacaoCadastralPopup" 
 				path="/jsp/cadastro/atualizacaocadastral/atualizar_dados_imovel_atualizacao_cadastral_popup.jsp" />
 		</action>
+		
 		<action name="ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm"
 			type="gcom.gui.cadastro.atualizacaocadastral.AtualizarDadosImovelAtualizacaoCadastralAction"
 			validate="true" 
@@ -59,6 +60,20 @@
 		
 			<forward name="filtrarAlteracaoAtualizacaoCadastral"
 					path="/filtrarAlteracaoAtualizacaoCadastralAction.do" />		
+		</action>
+		
+		<action name="FiltrarAlteracaoAtualizacaoCadastralActionForm"
+			type="gcom.gui.cadastro.atualizacaocadastral.AtualizarImoveiEmLoteAction"
+			path="/aprovarImoveisEmLoteAction"	>
+			
+			<forward name="aprovarImoveisEmLoteAction"
+					path="/aprovarImoveisEmLoteAction.do" />		
+		</action>
+
+		<action name="FiltrarAlteracaoAtualizacaoCadastralActionForm"
+			type="gcom.gui.cadastro.atualizacaocadastral.ImprimirConsultaAtualizacaoCadastralAction"
+			path="/imprimirConsultaAtualizacaoCadastralAction"	>
+			
 		</action>
 		
 	<!--FIM FILTRAR ATUALIZACAO CADASTRAL-->

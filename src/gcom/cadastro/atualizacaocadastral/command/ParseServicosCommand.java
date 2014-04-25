@@ -24,7 +24,7 @@ public class ParseServicosCommand extends AbstractAtualizacaoCadastralCommand {
 		Map<String, String> linha = atualizacao.getImovelAtual().getLinhaServicos();
 		AtualizacaoCadastralImovel imovel = atualizacao.getImovelAtual();
 		
-		new ValidadorTamanhoLinhaServicosCommand(parser, imovel).execute();
+		new ValidadorTamanhoLinhaServicosCommand(parser, imovel, linha).execute();
 		
 		if(!imovel.isErroLayout()) {
 

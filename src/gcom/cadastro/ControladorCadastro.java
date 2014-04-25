@@ -37,6 +37,7 @@ import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastralImovel;
 import gcom.cadastro.atualizacaocadastral.command.EfetuarValidacoesAtualizacaoCadastralCommand;
 import gcom.cadastro.atualizacaocadastral.command.MontarObjetosAtualizacaoCadastralCommand;
+import gcom.cadastro.atualizacaocadastral.command.MontarObjetosRetornoCommand;
 import gcom.cadastro.atualizacaocadastral.command.ParseAnormalidadeCommand;
 import gcom.cadastro.atualizacaocadastral.command.ParseClienteCommand;
 import gcom.cadastro.atualizacaocadastral.command.ParseHeaderCommand;
@@ -7704,77 +7705,147 @@ public class ControladorCadastro implements SessionBean {
 		}
 	}
 	
-	/**
-	 * TODO: COSANPA
-	 * @author Matheus Souza
-	 * @date 23/01/2013
-	 * @param buffer
-	 * @param nomesImagens
-	 * @throws ControladorException
-	 */
-	public AtualizacaoCadastral carregarImovelAtualizacaoCadastral(BufferedReader buffer, List<String> imagens) throws Exception {
+	public AtualizacaoCadastral carregarImovelAtualizacaoCadastral(
+			BufferedReader buffer, List<String> imagens) throws Exception {
+		
 		AtualizacaoCadastral atualizacao = new AtualizacaoCadastral();
 		atualizacao.setImagens(imagens);
 		
 		try {
-			String line = null;
+			String linha = null;
 
-			while ((line = buffer.readLine()) != null) {
-				ParserUtil parserTipo = new ParserUtil(line);
+			while ((linha = buffer.readLine()) != null) {
+				ParserUtil parserTipo = new ParserUtil(linha);
 				String registroTipo = parserTipo.obterDadoParserTrim(2);
 
-				String conteudo = new String(line.substring(2).getBytes(), "UTF-8");
+				String conteudo = new String(linha.substring(2).getBytes(), "UTF-8");
 				ParserUtil parserConteudo = new ParserUtil(conteudo);
 				
 				if ("00".equals(registroTipo)) {
-					AbstractAtualizacaoCadastralCommand command = new ParseHeaderCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
-							repositorioImovel, getControladorEndereco(), getControladorAtualizacaoCadastral(), getControladorCliente());
+					AbstractAtualizacaoCadastralCommand command = new ParseHeaderCommand(
+							parserConteudo,
+							repositorioCadastro,
+							getControladorUtil(),
+							getControladorTransacao(),
+							repositorioImovel,
+							getControladorEndereco(),
+							getControladorAtualizacaoCadastral(),
+							getControladorCliente());
 					command.execute(atualizacao);
+					
 				} else if ("01".equals(registroTipo)) {
 					atualizacao.novaAtualizacaoImovel();
 
-					AbstractAtualizacaoCadastralCommand command = new ParseClienteCommand(parserConteudo
-							, repositorioImovel
-							, getControladorAtualizacaoCadastral()
-							, repositorioClienteImovel);
+					AbstractAtualizacaoCadastralCommand command = new ParseClienteCommand(
+							parserConteudo,
+							repositorioImovel,
+							getControladorAtualizacaoCadastral());
 					command.execute(atualizacao);
 				}
 				
-				if (!atualizacao.getImovelAtual().isImovelAprovado()){
+				if (!atualizacao.getImovelAtual().isImovelAprovado()) {
+					
 					if ("02".equals(registroTipo)) {
-						AbstractAtualizacaoCadastralCommand command = new ParseImovelCommand(parserConteudo, getControladorUtil(), getControladorAtualizacaoCadastral(), repositorioImovel);
-						command.execute(atualizacao);					
+						AbstractAtualizacaoCadastralCommand command = new ParseImovelCommand(
+								parserConteudo,
+								getControladorUtil(),
+								getControladorAtualizacaoCadastral(),
+								repositorioImovel);
+						command.execute(atualizacao);
+						
 					} else if ("03".equals(registroTipo)) {
-						AbstractAtualizacaoCadastralCommand command = new ParseRamoAtividadeCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
-								repositorioImovel, getControladorEndereco(), getControladorAtualizacaoCadastral(), getControladorCliente());
-						command.execute(atualizacao);					
+						AbstractAtualizacaoCadastralCommand command = new ParseRamoAtividadeCommand(
+								parserConteudo,
+								repositorioCadastro,
+								getControladorUtil(),
+								getControladorTransacao(),
+								repositorioImovel,
+								getControladorEndereco(),
+								getControladorAtualizacaoCadastral(),
+								getControladorCliente());
+						command.execute(atualizacao);
+						
 					} else if ("04".equals(registroTipo)) {
-						AbstractAtualizacaoCadastralCommand command = new ParseServicosCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
-								repositorioImovel, getControladorEndereco(), getControladorAtualizacaoCadastral(), getControladorCliente());
-						command.execute(atualizacao);					
-					}else if ("05".equals(registroTipo)) {
-						AbstractAtualizacaoCadastralCommand command = new ParseMedidorCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
-								repositorioImovel, getControladorEndereco(), getControladorAtualizacaoCadastral(), getControladorCliente());
-						command.execute(atualizacao);					
-					}else if ("06".equals(registroTipo)) {
-						AbstractAtualizacaoCadastralCommand command = new ParseAnormalidadeCommand(parserConteudo, repositorioCadastro, getControladorUtil(), getControladorTransacao(),
-								repositorioImovel, getControladorEndereco(), getControladorAtualizacaoCadastral(), getControladorCliente());
+						AbstractAtualizacaoCadastralCommand command = new ParseServicosCommand(
+								parserConteudo,
+								repositorioCadastro,
+								getControladorUtil(),
+								getControladorTransacao(),
+								repositorioImovel,
+								getControladorEndereco(),
+								getControladorAtualizacaoCadastral(),
+								getControladorCliente());
+						command.execute(atualizacao);
+						
+					} else if ("05".equals(registroTipo)) {
+						AbstractAtualizacaoCadastralCommand command = new ParseMedidorCommand(
+								parserConteudo,
+								repositorioCadastro,
+								getControladorUtil(),
+								getControladorTransacao(),
+								repositorioImovel,
+								getControladorEndereco(),
+								getControladorAtualizacaoCadastral(),
+								getControladorCliente());
+						command.execute(atualizacao);
+						
+					} else if ("06".equals(registroTipo)) {
+						AbstractAtualizacaoCadastralCommand command = new ParseAnormalidadeCommand(
+								parserConteudo,
+								repositorioCadastro,
+								getControladorUtil(),
+								getControladorTransacao(),
+								repositorioImovel,
+								getControladorEndereco(),
+								getControladorAtualizacaoCadastral(),
+								getControladorCliente());
 						command.execute(atualizacao);
 						
 						atualizacao.liberarValidacao();
 					}
 				}
 				
-				if (atualizacao.validacaoLiberada()){
-					AbstractAtualizacaoCadastralCommand validaCommand = new EfetuarValidacoesAtualizacaoCadastralCommand();
+				if (atualizacao.validacaoLiberada()) {
+					AbstractAtualizacaoCadastralCommand validaCommand = new EfetuarValidacoesAtualizacaoCadastralCommand(
+								parserConteudo,
+								repositorioCadastro,
+								getControladorUtil(),
+								getControladorTransacao(),
+								repositorioImovel,
+								getControladorEndereco(),
+								getControladorAtualizacaoCadastral(),
+								getControladorCliente(),
+								repositorioClienteImovel);
 					validaCommand.execute(atualizacao);
 				}
 				
-				if(atualizacao.validacaoLiberada() && !atualizacao.getImovelAtual().cadastroInvalido()){
-					AbstractAtualizacaoCadastralCommand command = new MontarObjetosAtualizacaoCadastralCommand(parserConteudo, repositorioCadastro, 
-							getControladorUtil(), getControladorTransacao(), repositorioImovel, getControladorEndereco(), 
-							getControladorAtualizacaoCadastral(), getControladorCliente(), repositorioClienteImovel);
+				if (atualizacao.validacaoLiberada() && !atualizacao.getImovelAtual().cadastroInvalido()) {
+					AbstractAtualizacaoCadastralCommand command = new MontarObjetosAtualizacaoCadastralCommand(
+							parserConteudo,
+							repositorioCadastro,
+							getControladorUtil(),
+							getControladorTransacao(),
+							repositorioImovel,
+							getControladorEndereco(),
+							getControladorAtualizacaoCadastral(),
+							getControladorCliente(),
+							repositorioClienteImovel);
 					command.execute(atualizacao);
+					
+					if (atualizacao.isImovelValidado()) {
+						AbstractAtualizacaoCadastralCommand retornoCommand = new MontarObjetosRetornoCommand(
+								parserConteudo,
+								repositorioCadastro, 
+								getControladorUtil(),
+								getControladorTransacao(),
+								repositorioImovel,
+								getControladorEndereco(), 
+								getControladorAtualizacaoCadastral(),
+								getControladorCliente(),
+								repositorioClienteImovel);
+						retornoCommand.execute(atualizacao);
+					}
+					
 					atualizacao.excluirImovelSemErros();
 				}
 			}
@@ -7794,8 +7865,7 @@ public class ControladorCadastro implements SessionBean {
 			if (buffer != null) {
 				try {
 					buffer.close();
-				} catch (Exception e) {
-				}
+				} catch (Exception e) {}
 			}
 		}
 		
@@ -10165,6 +10235,9 @@ public class ControladorCadastro implements SessionBean {
 					Integer quantidadeImoveisTransmitidos = repositorioCadastro.pesquisarQuantidadeImoveisPorSituacaoAtualizacaoCadastral(
 							SituacaoAtualizacaoCadastral.TRANSMITIDO, arquivoTextoAtualizacaoCadastral.getId());
 					
+					quantidadeImoveisTransmitidos += repositorioCadastro.pesquisarQuantidadeImoveisPorSituacaoAtualizacaoCadastral(
+							SituacaoAtualizacaoCadastral.APROVADO, arquivoTextoAtualizacaoCadastral.getId());
+					
 					arquivoTextoAtualizacaoCadastral.setQuantidadeImoveisTransmitidos(quantidadeImoveisTransmitidos);
 					
 					colecao.add(arquivoTextoAtualizacaoCadastral);
@@ -10177,15 +10250,6 @@ public class ControladorCadastro implements SessionBean {
 		}
 	}
 
-	/**
-	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral
-	 * 
-	 * @author Ana Maria
-	 * @date 04/03/2009
-	 * 
-	 * @return Collection
-	 * @throws ControladorException
-	 */
 	public ArquivoTextoAtualizacaoCadastral pesquisarArquivoTextoAtualizacaoCadastro(
 			Integer idArquivoTxt) throws ControladorException {
 
@@ -10193,6 +10257,15 @@ public class ControladorCadastro implements SessionBean {
 
 		try {
 			retorno = this.repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(idArquivoTxt);
+			
+			Integer quantidadeImoveisTransmitidos = repositorioCadastro.pesquisarQuantidadeImoveisPorSituacaoAtualizacaoCadastral(
+					SituacaoAtualizacaoCadastral.TRANSMITIDO, retorno.getId());
+			
+			quantidadeImoveisTransmitidos += repositorioCadastro.pesquisarQuantidadeImoveisPorSituacaoAtualizacaoCadastral(
+					SituacaoAtualizacaoCadastral.APROVADO, retorno.getId());
+			
+			retorno.setQuantidadeImoveisTransmitidos(quantidadeImoveisTransmitidos);
+			
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
@@ -10200,20 +10273,12 @@ public class ControladorCadastro implements SessionBean {
 		return retorno;
 	}
 	
-	/**
-	 * [UC0890]Consultar Arquivo Texto Atualização Cadastral
-	 * 
-	 * @author COSANPA - Felipe Santos
-	 * @date 04/12/2013
-	 * 
-	 * @return Collection
-	 * @throws ControladorException
-	 */
 	public Collection<ArquivoTextoAtualizacaoCadastral> pesquisarArquivoTextoAtualizacaoCadastro(
 			String[] idsArquivoTxt) throws ControladorException {
 
 		try {
 			return this.repositorioCadastro.pesquisarArquivoTextoAtualizacaoCadastro(idsArquivoTxt);
+			
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
@@ -16091,4 +16156,8 @@ public class ControladorCadastro implements SessionBean {
 	public String retornaIpServidorOperacional() throws Exception{
 		return repositorioCadastro.retornaIpServidorOperacional();
 	}
+	
+	public String retornaIpServidorRelatorios() throws Exception{
+		return repositorioCadastro.retornaIpServidorRelatorios();
+	}	
 }

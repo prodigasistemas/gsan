@@ -1,12 +1,7 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<!-- 
-    Created by the Middlegen Hibernate plugin
 
-    http://boss.bekk.no/boss/middlegen/
-    http://hibernate.sourceforge.net/
--->
 	<class name="gcom.cadastro.imovel.CadastroOcorrencia" table="cadastro.cadastro_ocorrencia">
 		<id name="id" type="java.lang.Integer" column="cocr_id">
 			<generator class="sequence">
@@ -16,20 +11,6 @@
 		<property name="descricao" type="java.lang.String" column="cocr_dscadastroocorrencia" length="25"/>
 		<property name="indicadorUso" type="java.lang.Short" column="cocr_icuso" length="2"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cocr_tmultimaalteracao" length="8"/>
-		<!-- associations -->
-		<!-- bi-directional one-to-many association to Imovel 
-    <set
-        name="imovels"
-        lazy="true"
-        inverse="true"
-    >
-        <key>
-            <column name="cocr_id" />
-        </key>
-        <one-to-many 
-            class="gcom.cadastro.Imovel"
-        />
-    </set>
-    -->
+		<property name="indicadorValidacao" type="java.lang.Short" column="cocr_icvalidacao" length="2"/>
 	</class>
 </hibernate-mapping>

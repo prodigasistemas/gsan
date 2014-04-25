@@ -61,5 +61,37 @@ public interface IRepositorioAtualizacaoCadastral {
 
 	public Collection<ImovelControleAtualizacaoCadastral> obterImoveisControle(Collection<IImovel> listaImoveisRetorno);
 	
+	public ImovelControleAtualizacaoCadastral obterImovelControlePorImovelRetorno(Integer idImovelRetorno);
+	
+	public ImovelControleAtualizacaoCadastral obterImovelControle(Integer idImovelControle);
+	
 	public Collection<ImovelSubcategoriaAtualizacaoCadastral> pesquisarSubCategoriasAtualizacaoCadastral(Integer idImovel) throws ErroRepositorioException;
+	
+	public Collection<ClienteImovelRetorno> obterClientesParaAtualizar() throws ErroRepositorioException;
+	
+	public ICliente pesquisarClienteRetorno(ClienteImovelRetorno clienteImovel) throws ErroRepositorioException;
+	
+	public IImovel pesquisarImovelRetorno(Integer idImovel) throws ErroRepositorioException;
+	
+	public Collection<IClienteFone> pesquisarClienteFoneRetorno(Integer idCliente) throws ErroRepositorioException;
+	
+	public Collection<IClienteEndereco> pesquisarClienteEnderecoRetorno(Integer idCliente) throws ErroRepositorioException;
+	
+	public Collection<ClienteImovelRetorno> obterClienteImoveisDoImovel(Integer idImovelRetorno) throws ErroRepositorioException;
+	
+	public Collection<ClienteImovelRetorno> obterClientesNovaRelacao() throws ErroRepositorioException;
+	
+	public boolean existeRelacaoClienteImovel(Integer idImovel, Integer idCliente, Integer idClienteRelacaoTipo) throws ErroRepositorioException;
+
+	public Collection<ClienteImovelRetorno> obterClientesParaIncluir() throws ErroRepositorioException;
+	
+	public Collection<IClienteImovel> obterClientesParaExcluirRelacao() throws ErroRepositorioException;
+	
+	public void aprovarImoveis(Collection<IImovel> listaImoveis) throws ErroRepositorioException;
+	
+	public Integer obterquantidadeImoveisAprovadosArquivo(Integer idArquivoAtualizacaoCadastral) throws ErroRepositorioException;
+	
+	public Integer obterquantidadeImoveisComAlteracaoFaturamentoArquivo(Integer idArquivoAtualizacaoCadastral, String colunaALterada) throws ErroRepositorioException;
+	
+	public Integer obterquantidadeImoveisComAnormalidadeArquivo(Integer idArquivoAtualizacaoCadastral) throws ErroRepositorioException;
 }

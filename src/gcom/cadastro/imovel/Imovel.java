@@ -1,22 +1,3 @@
-/*
-* Copyright (C) 2007-2007 the GSAN - Sistema Integrado de Gestão de Serviços de Saneamento
-*
-* This file is part of GSAN, an integrated service management system for Sanitation
-*
-* GSAN is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License.
-*
-* GSAN is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
-*/
-  
 package gcom.cadastro.imovel;
 
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
@@ -103,6 +84,7 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 	private gcom.faturamento.consumotarifa.ConsumoTarifa consumoTarifa;
 	private Date ultimaAlteracao;
 	private Set<ImovelSubcategoria> imovelSubcategorias;
+	@SuppressWarnings("rawtypes")
 	private Set clienteImoveis;
 	private Set<MedicaoHistorico> medicaoHistoricos;
 	private FaturamentoTipo faturamentoTipo;
@@ -1626,10 +1608,12 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 		this.imovelSubcategorias = imovelSubcategorias;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Set getClienteImoveis() {
 		return clienteImoveis;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setClienteImoveis(Set clienteImoveis) {
 		this.clienteImoveis = clienteImoveis;
 	}
@@ -1878,7 +1862,8 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 		return getId() + "";
 	}
 
-    public Cliente getClienteUsuario(){
+    @SuppressWarnings("rawtypes")
+	public Cliente getClienteUsuario(){
     	if (clienteImoveis != null){
     		for (Iterator iterator = clienteImoveis.iterator(); iterator.hasNext();) {
 				ClienteImovel clienteImovel = (ClienteImovel) iterator.next();
@@ -2087,11 +2072,11 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 	}
 
 	public int getNumeroQuadra() {
-		return numeroQuadraEntrega;
+		return this.quadra.getNumeroQuadra();
 	}
 
 	public void setNumeroQuadra(int numeroQuadra) {
-		this.numeroQuadraEntrega = numeroQuadra;
+		this.quadra.setNumeroQuadra(numeroQuadra);
 	}
 
 	public Integer getIdCapacidadeHidrometro() {
@@ -2276,7 +2261,6 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 	}
 
 	public void setIdLocalidade(Integer idLocalidade) {
-		// TODO Auto-generated method stub
 	}
 
 	public int getCodigoSetorComercial() {
@@ -2284,6 +2268,17 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 	}
 
 	public void setCodigoSetorComercial(int idSetorComercial) {
-		// TODO Auto-generated method stub
+	}
+
+	public boolean isImovelNovo() {
+		return this.getId().equals(null);
+	}
+
+	public void setIdRota(Integer idRota) {
+		
+	}
+
+	public Integer getIdRota() {
+		return null;
 	}
 }

@@ -122,7 +122,12 @@
 			form.submit();
 		}
 	}
-	
+
+    function listarLeiturista(){
+		 var form = document.forms[0];
+		 form.action = 'exibirConsultarArquivoTextoAtualizacaoCadastralAction.do';
+	  	 form.submit();
+	}
 </script>
 
 
@@ -207,7 +212,7 @@
 					<td colspan="2" align="left"><logic:equal name="permissao"
 						value="1">
 						<html:select property="idEmpresa" tabindex="3"
-							onchange="javascript:listarLeiturista()" disabled="true">
+							onchange="javascript:listarLeiturista()">
 							<html:option value="-1">&nbsp;</html:option>
 							<html:options collection="colecaoEmpresa"
 								labelProperty="descricao" property="id" />
@@ -408,7 +413,11 @@
 											</c:choose></div>
 											</td>
 											<td width="19%">
-											<div align="center">${arquivoTextoAtualizacaoCadastral.situacaoTransmissaoLeitura.descricaoSituacao}</div>
+												<div align="center">
+													<a href="javascript:abrirPopup('exibirAnaliseSituacaoArquivoAtualizacaoCadastralPopupAction.do?idArquivo=${arquivoTextoAtualizacaoCadastral.id}', 480, 800);">
+														${arquivoTextoAtualizacaoCadastral.situacaoTransmissaoLeitura.descricaoSituacao}
+													</a>
+												</div>
 											</td>
 
 											<html:link href="/gsan/liberarArquivoLeituraAction.do"

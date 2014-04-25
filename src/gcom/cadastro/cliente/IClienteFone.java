@@ -27,4 +27,12 @@ public interface IClienteFone {
 	public abstract Date getUltimaAlteracao();
 	
 	public abstract void setUltimaAlteracao(Date ultimaAlteracao);
+	
+	public abstract String getRamal();
+	
+	public abstract void setRamal(String ramal);
+	
+	public abstract Short getIndicadorTelefonePadrao();
+	
+	public abstract void setIndicadorTelefonePadrao(Short indicadorTelefonePadrao);
 }

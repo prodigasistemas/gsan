@@ -52,4 +52,8 @@ public interface ICliente {
 	
 	public abstract void setIdClienteTipo(Integer idClienteTipo);
 	
+	public abstract Integer getTipoOperacao();
+	
+	public abstract void setTipoOperacao(Integer tipoOperacao);
+	
 }

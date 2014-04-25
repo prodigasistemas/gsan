@@ -36,6 +36,15 @@
 			type="gcom.gui.cadastro.RetornarZipArquivoTxtAtualizacaoCadastralAction"
 			path="/retornarZipArquivoTxtAtualizacaoCadastralAction">
 		</action>	
+		
+		<action name="ExibirAnaliseSituacaoArquivoAtualizacaoCadastralForm"
+			type="gcom.gui.cadastro.atualizacaocadastral.ExibirAnaliseSituacaoArquivoAtualizacaoCadastralPopupAction"
+			validate="true" scope="session"
+			path="/exibirAnaliseSituacaoArquivoAtualizacaoCadastralPopupAction">
+
+			<forward name="/exibirAnaliseSituacaoArquivoAtualizacaoCadastralPopupAction"
+				path="/jsp/cadastro/atualizacaocadastral/situacao_arquivo_atualizaca_cadastral_consultar.jsp" />	
+		</action>
 
 	</action-mappings>
 

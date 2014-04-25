@@ -5,11 +5,17 @@ import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorTamanhoLinhaAnormalidadeCommand;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.endereco.ControladorEnderecoLocal;
+import gcom.cadastro.imovel.CadastroOcorrencia;
+import gcom.cadastro.imovel.FiltroCadastroOcorrencia;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
+import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ParserUtil;
+import gcom.util.Util;
+import gcom.util.filtro.ParametroSimples;
 
+import java.util.Collection;
 import java.util.Map;
 
 public class ParseAnormalidadeCommand extends AbstractAtualizacaoCadastralCommand {
@@ -24,7 +30,7 @@ public class ParseAnormalidadeCommand extends AbstractAtualizacaoCadastralComman
 		Map<String, String> linha = atualizacao.getImovelAtual().getLinhaAnormalidade();
 		AtualizacaoCadastralImovel imovel = atualizacao.getImovelAtual();
 
-		new ValidadorTamanhoLinhaAnormalidadeCommand(parser, imovel).execute();
+		new ValidadorTamanhoLinhaAnormalidadeCommand(parser, imovel, linha).execute();
 
 		if(!imovel.isErroLayout()) {
 
@@ -54,7 +60,23 @@ public class ParseAnormalidadeCommand extends AbstractAtualizacaoCadastralComman
 
 			String tipoEntrevistado = parser.obterDadoParser(20).trim();
 			linha.put("tipoEntrevistado", tipoEntrevistado);
+			
+			validarCodigoAnormalidade(atualizacao.getImovelAtual());
 		}
 
+	}
+
+	private void validarCodigoAnormalidade(AtualizacaoCadastralImovel imovelAtual) throws ControladorException {
+		FiltroCadastroOcorrencia filtroCadastroOcorrencia = new FiltroCadastroOcorrencia();
+		filtroCadastroOcorrencia.adicionarParametro(new ParametroSimples(FiltroCadastroOcorrencia.ID,
+				Integer.parseInt(imovelAtual.getLinhaAnormalidade("codigoAnormalidade"))));
+		
+		Collection pesquisa = controladorUtil.pesquisar(filtroCadastroOcorrencia, CadastroOcorrencia.class.getName());
+		
+		if (pesquisa != null && !pesquisa.isEmpty()) {
+			imovelAtual.setCadastroOcorrencia((CadastroOcorrencia) Util.retonarObjetoDeColecao(pesquisa));
+		} else {
+			imovelAtual.addMensagemErro("Código de Anormalidade Inválido");
+		}
 	}
 }

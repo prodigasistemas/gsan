@@ -1,6 +1,3 @@
-/**
- * 
- */
 package gcom.cobranca;
 
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;

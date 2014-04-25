@@ -64,6 +64,12 @@
 		form.submit();
 		window.close();
 	}
+	
+	function aprovarEmLote(){
+	  	var form = document.forms[0];
+	  	form.action = "/gsan/aprovarImoveisEmLoteAction.do";
+	  	form.submit();
+	}
  
 </script>
 </head>
@@ -200,13 +206,13 @@
                                   <div align="center">
                                     <a href="exibirAtualizarDadosImovelAtualizacaoCadastralPopupAction.do?idImovel=<bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idImovel"/>&idArquivo=<bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idArquivo"/>&idTipoAlteracao=<bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idTipoAlteracao"/>">
                                       <logic:equal name="consultarMovimentoAtualizacaoCadastralHelper" property="idTipoAlteracao" value="1">
-                                          ALTERAR <bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idImovel"/>  
+                                          <bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idImovel"/>  
                                       </logic:equal>                                        
                                       <logic:equal name="consultarMovimentoAtualizacaoCadastralHelper" property="idTipoAlteracao" value="2">
-                                          NOVO IMOVEL 
+                                          NOVO IM&Oacute;VEL 
                                       </logic:equal>
                                       <logic:equal name="consultarMovimentoAtualizacaoCadastralHelper" property="idTipoAlteracao" value="3">
-                                          EXCLUIR <bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idImovel"/>  
+                                          <bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idImovel"/> (EXCLUS&Atilde;O)
                                       </logic:equal>                                        
                                     </a>
                                   </div>                                
@@ -223,6 +229,8 @@
 					</div>
 					</td>
 				</tr>
+				
+				 
 				</logic:present>
 			</table>
 		</td>
@@ -232,10 +240,24 @@
 	 <td align="left">
 	     <table border="0" width="100%">
 		   <tr>
-			<td align="left" width="50%">					
-			<input type="button" name="Button" class="bottonRightCol"
-				value="Voltar" onclick="window.location.href='/gsan/exibirFiltrarAlteracaoAtualizacaoCadastralAction.do?menu=sim';">	
-			</td>
+				<td align="left" width="50%">					
+					<input type="button" name="Button" class="bottonRightCol"
+						value="Voltar" onclick="window.location.href='/gsan/exibirFiltrarAlteracaoAtualizacaoCadastralAction.do?menu=sim';">	
+				</td>
+				
+				<logic:equal name="relatorio" value="true" scope="session">
+	                <td align="right" width="50%">         
+	                  <input type="button" name="Button" class="bottonRightCol"
+	                    value="Imprimir Relat&oacute;rio" onclick="window.location.href='/gsan/imprimirConsultaAtualizacaoCadastralAction.do';">  
+	                </td>
+				</logic:equal>
+				
+			  	<logic:equal name="aprovacaoEmLote" value="true" scope="session">
+					<td align="right" width="50%">					
+						<input type="button" name="Button" class="bottonRightCol"
+							value="Aprovar em Lote" onclick="aprovarEmLote();">	
+					</td>
+				</logic:equal>
 		  </tr>
 		</table>
 	   </td>

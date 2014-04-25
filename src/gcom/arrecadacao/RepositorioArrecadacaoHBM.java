@@ -1,78 +1,3 @@
-/*
-* Copyright (C) 2007-2007 the GSAN - Sistema Integrado de Gestão de Serviços de Saneamento
-*
-* This file is part of GSAN, an integrated service management system for Sanitation
-*
-* GSAN is free software; you can redistribute it and/or modify
-* it under the terms of the GNU General Public License as published by
-* the Free Software Foundation; either version 2 of the License.
-*
-* GSAN is distributed in the hope that it will be useful,
-* but WITHOUT ANY WARRANTY; without even the implied warranty of
-* MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-* GNU General Public License for more details.
-*
-* You should have received a copy of the GNU General Public License
-* along with this program; if not, write to the Free Software
-* Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307, USA
-*/
-
-/*
-* GSAN - Sistema Integrado de Gestão de Serviços de Saneamento
-* Copyright (C) <2007> 
-* Adriano Britto Siqueira
-* Alexandre Santos Cabral
-* Ana Carolina Alves Breda
-* Ana Maria Andrade Cavalcante
-* Aryed Lins de Araújo
-* Bruno Leonardo Rodrigues Barros
-* Carlos Elmano Rodrigues Ferreira
-* Cláudio de Andrade Lira
-* Denys Guimarães Guenes Tavares
-* Eduardo Breckenfeld da Rosa Borges
-* Fabíola Gomes de Araújo
-* Flávio Leonardo Cavalcanti Cordeiro
-* Francisco do Nascimento Júnior
-* Homero Sampaio Cavalcanti
-* Ivan Sérgio da Silva Júnior
-* José Edmar de Siqueira
-* José Thiago Tenório Lopes
-* Kássia Regina Silvestre de Albuquerque
-* Leonardo Luiz Vieira da Silva
-* Márcio Roberto Batista da Silva
-* Maria de Fátima Sampaio Leite
-* Micaela Maria Coelho de Araújo
-* Nelson Mendonça de Carvalho
-* Newton Morais e Silva
-* Pedro Alexandre Santos da Silva Filho
-* Rafael Corrêa Lima e Silva
-* Rafael Francisco Pinto
-* Rafael Koury Monteiro
-* Rafael Palermo de Araújo
-* Raphael Veras Rossiter
-* Roberto Sobreira Barbalho
-* Rodrigo Avellar Silveira
-* Rosana Carvalho Barbosa
-* Sávio Luiz de Andrade Cavalcante
-* Tai Mu Shih
-* Thiago Augusto Souza do Nascimento
-* Tiago Moreno Rodrigues
-* Vivianne Barbosa Sousa
-*
-* Este programa é software livre; você pode redistribuí-lo e/ou
-* modificá-lo sob os termos de Licença Pública Geral GNU, conforme
-* publicada pela Free Software Foundation; versão 2 da
-* Licença.
-* Este programa é distribuído na expectativa de ser útil, mas SEM
-* QUALQUER GARANTIA; sem mesmo a garantia implícita de
-* COMERCIALIZAÇÃO ou de ADEQUAÇÃO A QUALQUER PROPÓSITO EM
-* PARTICULAR. Consulte a Licença Pública Geral GNU para obter mais
-* detalhes.
-* Você deve ter recebido uma cópia da Licença Pública Geral GNU
-* junto com este programa; se não, escreva para Free Software
-* Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA
-* 02111-1307, USA.
-*/  
 package gcom.arrecadacao;
  
 import gcom.arrecadacao.aviso.AvisoBancario;
@@ -29292,1630 +29217,1544 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	  * @return
 	  * @throws ErroRepositorioException
 	  */
-		public Collection pesquisarImoveisBancoDebitoAutomaticoEPorGrupoFaturamento(String[] bancos, 
-				Integer idGrupoFaturamento) throws ErroRepositorioException {
-			
-			Collection retorno = null;
-			
-			Session session = HibernateUtil.getSession();
-			
-			try{
-				String select = "select distinct(da.imovel.id) "
-				 + " from DebitoAutomatico da "
-				 + " inner join da.agencia ag "
-				 + " inner join da.imovel i "
-				 + " inner join i.quadra q "
-				 + " inner join q.rota r "
-				 + " where ag.banco.id in (:idBanco) " 
-				 + " and da.dataExclusao is null " 
-				 + " and r.faturamentoGrupo.id = :idGrupoFaturamento ";
+	public Collection pesquisarImoveisBancoDebitoAutomaticoEPorGrupoFaturamento(String[] bancos, 
+			Integer idGrupoFaturamento) throws ErroRepositorioException {
+		
+		Collection retorno = null;
+		
+		Session session = HibernateUtil.getSession();
+		
+		try{
+			String select = "select distinct(da.imovel.id) "
+			 + " from DebitoAutomatico da "
+			 + " inner join da.agencia ag "
+			 + " inner join da.imovel i "
+			 + " inner join i.quadra q "
+			 + " inner join q.rota r "
+			 + " where ag.banco.id in (:idBanco) " 
+			 + " and da.dataExclusao is null " 
+			 + " and r.faturamentoGrupo.id = :idGrupoFaturamento ";
 
-				retorno = session.createQuery(select)
-					.setParameterList("idBanco", bancos)
-					.setInteger("idGrupoFaturamento", idGrupoFaturamento)
-					.list();
+			retorno = session.createQuery(select)
+				.setParameterList("idBanco", bancos)
+				.setInteger("idGrupoFaturamento", idGrupoFaturamento)
+				.list();
 
-			} catch (HibernateException e) {
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				HibernateUtil.closeSession(session);
-			}
-			
-			return retorno;
-			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
 		}
 		
-		/*
-		 * TODO: COSANPA autor: Adriana Muniz
-		 * 
-		 * Alteração para a conta considerar como filtro grupo de faturamento,
-		 * quando o mesmo estiver preenchido
-		 */
-		/**
-		 * @autor: Adriana Muniz
-		 * @date: 27/04/2011
-		 * 
-		 * [UC0146] Manter Conta
-		 *
-		 * FS0028 - Verificar parâmetro consulta e débito automático
-		 * 
-		 * Método para retornar a quantidade de contas a partir dos imóveis
-		 * com débito automático - Manter Contas de um Conjunto de imóveis.
-		 * 
-		 * @return
-		 * @throws ErroRepositorioException
-		 */
-		public Integer countImoveisBancoDebitoAutomaticoPorGrupoFaturamento(
-				String[] bancos, Integer anoMesInicial, Integer anoMesFinal,
-				Date dataVencimentoInicial, Date dataVencimentoFinal,
-				String indicadorContaPaga, Integer idGrupoFaturamento)
-				throws ErroRepositorioException {
-
-			Integer retorno = null;
-
-			Session session = HibernateUtil.getSession();
-			Map parameters = new HashMap();
-			Query query = null;
-
-			try {
-				String select = "select count(conta.imovel.id) "
-						+ " from DebitoAutomaticoMovimento dam "
-						+ " inner join dam.debitoAutomatico da "
-						+ " inner join dam.contaGeral.conta conta "
-						+ " inner join da.agencia ag"
-						+ " inner join conta.debitoCreditoSituacaoAtual dcst "
-						+ " left  join conta.debitoCreditoSituacaoAnterior dcsan "
-						+ " inner join conta.imovel imov "
-						+ " where ag.banco.id in (:idBanco) "
-						+ " and dcst.id in(:normal, :retificada) "
-						+ " and conta.referencia between :anoMesInicial and :anoMesFinal "
-						+ " and da.dataExclusao is null "
-						+ " and dam.numeroSequenciaArquivoEnviado is null"
-						+ " and conta.faturamentoGrupo.id = :idGrupoFaturamento";
-
-				if (dataVencimentoInicial != null) {
-					select += " and conta.dataVencimentoConta between :vencimentoInicial and :vencimentoFinal ";
-					parameters.put("vencimentoInicial", dataVencimentoInicial);
-					parameters.put("vencimentoFinal", dataVencimentoFinal);
-				}
-
-				if (!indicadorContaPaga.equals("3")) {
-					if (indicadorContaPaga.equals("1")) {
-						select += " and exists ";
-					} else {
-						select += " and not exists ";
-					}
-					select += " (select conta.id " + "from Pagamento pgmt "
-							+ "inner join pgmt.contaGeral cntaGeral "
-							+ "inner join cntaGeral.conta cnta "
-							+ "where cnta.id = conta.id) ";
-				}
-
-				query = session.createQuery(select);
-
-				Set set = parameters.keySet();
-				Iterator iterMap = set.iterator();
-				while (iterMap.hasNext()) {
-					String key = (String) iterMap.next();
-					if (parameters.get(key) instanceof Date) {
-						Date data = (Date) parameters.get(key);
-						query.setDate(key, data);
-					}
-
-				}
-
-				retorno = (Integer) query.setParameterList("idBanco", bancos)
-						.setInteger("anoMesInicial", anoMesInicial)
-						.setInteger("anoMesFinal", anoMesFinal)
-						.setInteger("idGrupoFaturamento", idGrupoFaturamento)
-						.setInteger("normal", DebitoCreditoSituacao.NORMAL)
-						.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
-						.setMaxResults(1).uniqueResult();
-
-			} catch (HibernateException e) {
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				HibernateUtil.closeSession(session);
-			}
-
-			return retorno;
-
-		}
+		return retorno;
 		
-		/**
-		 * TODO: COSANPA
-		 * 
-		 * Mantis 537
-		 * 
-		 * @author Wellington Rocha
-		 * @data 15/04/2012
-		 * 
-		 * @param idConta
-		 * @return pagamento
-		 */
-		public Object[] pesquisarPagamentoDeContaEmHistorico(Integer idConta)
-				throws ErroRepositorioException{
-			Object[] retorno = null;
-
-			Session session = HibernateUtil.getSession();
-			String consulta = null;
-
-			try {
-				consulta = "SELECT pgmt.id,pgmt.valorPagamento, pgmt.dataPagamento " + "FROM PagamentoHistorico as pgmt "
-						+ "WHERE pgmt.contaGeral.id = :idConta ";
-
-				retorno = (Object[]) session.createQuery(consulta).setInteger(
-						"idConta", idConta).setMaxResults(1).uniqueResult();
-
-			} catch (HibernateException e) {
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				HibernateUtil.closeSession(session);
-			}
-
-			return retorno;
-		}
+	}
 	
-		/**TODO:COSANPA
-		 * 
-		 * Relatório Analitico dos valores diários da arrecadação
-		 * 
-		 * @author Adriana Muniz
-		 * data: 05/09/2012
-		 * 
-		 * obtém as formas de arrecadação por dia
-		 * @param helper
-		 * @param filtro
-		 * @return coleção
-		 */
-		public Collection obterFormasDeArrecadacaoPorDia(
-				Object helper, FiltroConsultarDadosDiariosArrecadacao filtro) throws ErroRepositorioException {
+	/*
+	 * TODO: COSANPA autor: Adriana Muniz
+	 * 
+	 * Alteração para a conta considerar como filtro grupo de faturamento,
+	 * quando o mesmo estiver preenchido
+	 */
+	/**
+	 * @autor: Adriana Muniz
+	 * @date: 27/04/2011
+	 * 
+	 * [UC0146] Manter Conta
+	 *
+	 * FS0028 - Verificar parâmetro consulta e débito automático
+	 * 
+	 * Método para retornar a quantidade de contas a partir dos imóveis
+	 * com débito automático - Manter Contas de um Conjunto de imóveis.
+	 * 
+	 * @return
+	 * @throws ErroRepositorioException
+	 */
+	public Integer countImoveisBancoDebitoAutomaticoPorGrupoFaturamento(
+			String[] bancos, Integer anoMesInicial, Integer anoMesFinal,
+			Date dataVencimentoInicial, Date dataVencimentoFinal,
+			String indicadorContaPaga, Integer idGrupoFaturamento)
+			throws ErroRepositorioException {
 
-			Collection retorno = null;
-			String consulta;
-			Session session = HibernateUtil.getSession();
-			try {
-				consulta = "SELECT coalesce(ardd.itemADD, ddd1.itemDDD) as campoAgrupador, "
-						+	" arfm_dsarrecadacaoforma as nomeFormaArrecadacao, "
-						+	" (COALESCE(ARDD.qtdDocumentos,0) + COALESCE(DDD1.qtdDocumentosDescontos,0) + COALESCE(DDD1.qtdDocumentosDevolucoes,0)) as qtdDocumentos, " 
-						+	" (COALESCE(ARDD.qtdPagamentos,0) + COALESCE(DDD1.qtdPagamentosDescontos,0) + COALESCE(DDD1.qtdPagamentosDevolucoes,0)) as qtdPagamentos,  "
-						+	" COALESCE(ARDD.debitos, 0) as debitos,  "
-						+	" COALESCE(DDD1.valorDescontos, 0) as descontos, " 
-						+	" COALESCE(DDD1.valorDevolucoes, 0) as devolucoes "
-						+	" from (SELECT  	ad.arfm_id  as itemADD,  "
-							+	" sum(ad.ardd_qtdocumentos) as qtdDocumentos, " 
-							+	" sum(ad.ardd_qtpagamentos) as qtdPagamentos,  "
-							+	" sum(ad.ardd_vlpagamentos) as debitos   "
-							+	" FROM arrecadacao.arrecadacao_dados_diarios ad "  
-							+	" WHERE ad.ardd_amreferenciaarrecadacao = " + filtro.getAnoMesArrecadacao() ;
-							if(filtro.getIdArrecadador() != null && !filtro.getIdArrecadador().equals(""))
-								consulta +=	" and ad.arrc_id = " + filtro.getIdArrecadador();
-				consulta +=	"    and date(ardd_dtpagamento) = '" + helper.toString()+"'"
-							+	" group by itemADD ) as ARDD   "
-						+	" full join (SELECT  	dd.arfm_id  as itemDDD, " 
-								+	" sum(case when (dd.dvdd_tipodevolucao <> 'N') then dd.dvdd_qtdocumentos else 0 end) as qtdDocumentosDescontos, "   
-								+	" sum(case when (dd.dvdd_tipodevolucao = 'N') then dd.dvdd_qtdocumentos else 0 end) as qtdDocumentosDevolucoes, " 
-								+	" sum(case when (dd.dvdd_tipodevolucao <> 'N') then dd.dvdd_qtdevolucoes else 0 end) as qtdPagamentosDescontos, "
-								+	" sum(case when (dd.dvdd_tipodevolucao = 'N') then dd.dvdd_qtdevolucoes else 0 end) as qtdPagamentosDevolucoes, "   
-								+	" sum(case when (dd.dvdd_tipodevolucao <> 'N') then dd.dvdd_vldevolucoes else 0 end) as valorDescontos, "
-								+	" sum(case when (dd.dvdd_tipodevolucao = 'N') then dd.dvdd_vldevolucoes else 0 end) as valorDevolucoes "
-								+	" FROM arrecadacao.devolucao_dados_diarios dd "
-								+	" WHERE dd.dvdd_amreferenciaarrecadacao = " + filtro.getAnoMesArrecadacao() ;
-								if(filtro.getIdArrecadador() != null && !filtro.getIdArrecadador().equals(""))
-									consulta +=	" and dd.arrc_id = " + filtro.getIdArrecadador();
-						consulta +=	" and date(dvdd_dtdevolucao) = '" + helper.toString()+"'"
-								+	" group by itemDDD ) as DDD1 on (ARDD.itemADD = DDD1.itemDDD) "  
-						+	" inner join arrecadacao.arrecadacao_forma af on (af.arfm_id = coalesce(ardd.itemADD, ddd1.itemDDD)) "
-						+	" order by campoAgrupador ";
-				
-				retorno = session.createSQLQuery(consulta)
-						.addScalar("campoAgrupador", Hibernate.INTEGER)
-						.addScalar("nomeFormaArrecadacao", Hibernate.STRING)
-						.addScalar("qtdDocumentos", Hibernate.INTEGER)
-						.addScalar("qtdPagamentos", Hibernate.INTEGER)
-						.addScalar("debitos", Hibernate.BIG_DECIMAL)
-						.addScalar("descontos", Hibernate.BIG_DECIMAL)
-						.addScalar("devolucoes", Hibernate.BIG_DECIMAL)
-						.list();
-				
-			}catch(HibernateException e) {
-				throw new ErroRepositorioException("Erro no Hibernate");
-			}finally{
-				HibernateUtil.closeSession(session);
+		Integer retorno = null;
+
+		Session session = HibernateUtil.getSession();
+		Map parameters = new HashMap();
+		Query query = null;
+
+		try {
+			String select = "select count(conta.imovel.id) "
+					+ " from DebitoAutomaticoMovimento dam "
+					+ " inner join dam.debitoAutomatico da "
+					+ " inner join dam.contaGeral.conta conta "
+					+ " inner join da.agencia ag"
+					+ " inner join conta.debitoCreditoSituacaoAtual dcst "
+					+ " left  join conta.debitoCreditoSituacaoAnterior dcsan "
+					+ " inner join conta.imovel imov "
+					+ " where ag.banco.id in (:idBanco) "
+					+ " and dcst.id in(:normal, :retificada) "
+					+ " and conta.referencia between :anoMesInicial and :anoMesFinal "
+					+ " and da.dataExclusao is null "
+					+ " and dam.numeroSequenciaArquivoEnviado is null"
+					+ " and conta.faturamentoGrupo.id = :idGrupoFaturamento";
+
+			if (dataVencimentoInicial != null) {
+				select += " and conta.dataVencimentoConta between :vencimentoInicial and :vencimentoFinal ";
+				parameters.put("vencimentoInicial", dataVencimentoInicial);
+				parameters.put("vencimentoFinal", dataVencimentoFinal);
 			}
-			
-			return retorno;
+
+			if (!indicadorContaPaga.equals("3")) {
+				if (indicadorContaPaga.equals("1")) {
+					select += " and exists ";
+				} else {
+					select += " and not exists ";
+				}
+				select += " (select conta.id " + "from Pagamento pgmt "
+						+ "inner join pgmt.contaGeral cntaGeral "
+						+ "inner join cntaGeral.conta cnta "
+						+ "where cnta.id = conta.id) ";
+			}
+
+			query = session.createQuery(select);
+
+			Set set = parameters.keySet();
+			Iterator iterMap = set.iterator();
+			while (iterMap.hasNext()) {
+				String key = (String) iterMap.next();
+				if (parameters.get(key) instanceof Date) {
+					Date data = (Date) parameters.get(key);
+					query.setDate(key, data);
+				}
+
+			}
+
+			retorno = (Integer) query.setParameterList("idBanco", bancos)
+					.setInteger("anoMesInicial", anoMesInicial)
+					.setInteger("anoMesFinal", anoMesFinal)
+					.setInteger("idGrupoFaturamento", idGrupoFaturamento)
+					.setInteger("normal", DebitoCreditoSituacao.NORMAL)
+					.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
+					.setMaxResults(1).uniqueResult();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
 		}
-		
 
-		/**TODO:COSANPA
-	     * DATA:02/10/2012
-	     * @author Adriana Muniz
-	     *
-	     * @param filtro
-	     * @return
-	     * @throws ErroRepositorioException
-	     */
-	    public Collection filtrarDadosDiariosFormasArrecadacaoComTarifa(FiltroConsultarDadosDiariosArrecadacao filtro)
-	            throws ErroRepositorioException {
-	        Collection retorno = new ArrayList();
-	       
-	        Session session = HibernateUtil.getSession();
-	       
-	        String     SQLGeral = null;
-	        String    SQLConsultaADD = " SELECT ad.ardd_dtpagamento AS dataPagamento, " +
-	                " SUM(ad.ardd_qtdocumentos) AS qtdDocumentos, " +
-	                " SUM(ad.ardd_vlpagamentos) AS debitos " +
-	                " FROM ARRECADACAO.ARRECADACAO_DADOS_DIARIOS ad " +
-	                " WHERE ardd_amreferenciaarrecadacao = " + filtro.getAnoMesArrecadacao() +
-	                " AND arrc_id = " + filtro.getIdArrecadador() +
-	                " GROUP BY dataPagamento " +
-	                " ORDER BY dataPagamento ";
+		return retorno;
 
-	        try {
-	            retorno = session.createSQLQuery(SQLGeral)
-	                .addScalar("qtdDocumentos", Hibernate.INTEGER)
-	                .addScalar("qtdPagamentos", Hibernate.INTEGER)
-	                .addScalar("debitos", Hibernate.BIG_DECIMAL)
-	                .addScalar("descontos", Hibernate.BIG_DECIMAL)
-	                .list();
-	        } catch (HibernateException e) {
-	            throw new ErroRepositorioException(e, "Erro no Hibernate");
-	        } finally {
-	            HibernateUtil.closeSession(session);
-	        }
+	}
+	
+	/**
+	 * TODO: COSANPA
+	 * 
+	 * Mantis 537
+	 * 
+	 * @author Wellington Rocha
+	 * @data 15/04/2012
+	 * 
+	 * @param idConta
+	 * @return pagamento
+	 */
+	public Object[] pesquisarPagamentoDeContaEmHistorico(Integer idConta)
+			throws ErroRepositorioException{
+		Object[] retorno = null;
 
-//	        System.out.println("Tempo de execução da query (" + filtro.getAgrupamento() +
-//	                ") " + (System.currentTimeMillis() - t1));
-	       
-	        return retorno;
+		Session session = HibernateUtil.getSession();
+		String consulta = null;
 
-	    }
+		try {
+			consulta = "SELECT pgmt.id,pgmt.valorPagamento, pgmt.dataPagamento " + "FROM PagamentoHistorico as pgmt "
+					+ "WHERE pgmt.contaGeral.id = :idConta ";
 
+			retorno = (Object[]) session.createQuery(consulta).setInteger(
+					"idConta", idConta).setMaxResults(1).uniqueResult();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
 
 	/**TODO:COSANPA
-	     *
-	     * Relatório Analitico dos valores diários da arrecadação
-	     *
-	     * @author Adriana Muniz
-	     * data: 02/10/2012
-	     *
-	     * obtém as formas de arrecadação com tarifa por dia
-	     * @param helper
-	     * @param filtro
-	     * @return coleção
-	     */
-	    public Collection obterFormasDeArrecadacaoComTarifaPorDia(
-	            Object helper, FiltroConsultarDadosDiariosArrecadacao filtro) throws ErroRepositorioException {
+	 * 
+	 * Relatório Analitico dos valores diários da arrecadação
+	 * 
+	 * @author Adriana Muniz
+	 * data: 05/09/2012
+	 * 
+	 * obtém as formas de arrecadação por dia
+	 * @param helper
+	 * @param filtro
+	 * @return coleção
+	 */
+	public Collection obterFormasDeArrecadacaoPorDia(
+			Object helper, FiltroConsultarDadosDiariosArrecadacao filtro) throws ErroRepositorioException {
 
-	        Collection retorno = null;
-	        String consulta;
-	        Session session = HibernateUtil.getSession();
-	        try {
-	            consulta = " SELECT coalesce(ardd.itemADD, ddd1.itemDDD) AS campoAgrupador, "
-	                    +  " arfm_dsarrecadacaoforma AS nomeFormaArrecadacao, "
-	                    +  " ARDD.valorTarifa as valorTarifa, "
-	                    +  " ardd.dataprevista as dataPrevista, "
-	                    +  " (COALESCE(ARDD.qtdDocumentos,0) + COALESCE(DDD1.qtdDocumentosDescontos,0) + COALESCE(DDD1.qtdDocumentosDevolucoes,0)) as qtdDocumentos,"
-	                    +  " (COALESCE(ARDD.qtdPagamentos,0) + COALESCE(DDD1.qtdPagamentosDescontos,0) + COALESCE(DDD1.qtdPagamentosDevolucoes,0)) as qtdPagamentos,  "
-	                    +  " COALESCE(ARDD.debitos, 0) as debitos, "
-	                    +  " COALESCE(DDD1.valorDescontos, 0) as descontos, "
-	                    +  " COALESCE(DDD1.valorDevolucoes, 0) as devolucoes "
-	                    +  " from (SELECT      ad.arfm_id  as itemADD, "
-	                    +  " sum(ardd_vltarifa) as valorTarifa, "
-	                    +  " (date(ad.ardd_dtpagamento) + cast(ad.ardd_nndiafloat as integer)) as dataPrevista, "
-	                    +  " sum(ad.ardd_qtdocumentos) as qtdDocumentos, "
-	                    +  " sum(ad.ardd_qtpagamentos) as qtdPagamentos, "
-	                    +  " sum(ad.ardd_vlpagamentos) as debitos "
-	                    +  " FROM arrecadacao.arrecadacao_dados_diarios ad "
-	                    +  " WHERE ad.ardd_amreferenciaarrecadacao = " + filtro.getAnoMesArrecadacao()
-	                    +  " and ad.arrc_id = " + filtro.getIdArrecadador()
-	                    +  " and date(ardd_dtpagamento) = '" + helper.toString()+"' "
-	                    +  " group by itemADD, dataPrevista) as ARDD    "
-	                    +  " full join (SELECT      dd.arfm_id  as itemDDD,  "
-	                    +  " 0 as valorTarifa, "
-	                    +  " null as dataPrevista, "
-	                    +  " sum(case when (dd.dvdd_tipodevolucao <> 'N') then dd.dvdd_qtdocumentos else 0 end) as qtdDocumentosDescontos, "
-	                    +  " sum(case when (dd.dvdd_tipodevolucao = 'N') then dd.dvdd_qtdocumentos else 0 end) as qtdDocumentosDevolucoes, "
-	                    +  " sum(case when (dd.dvdd_tipodevolucao <> 'N') then dd.dvdd_qtdevolucoes else 0 end) as qtdPagamentosDescontos, "
-	                    +  " sum(case when (dd.dvdd_tipodevolucao = 'N') then dd.dvdd_qtdevolucoes else 0 end) as qtdPagamentosDevolucoes, "
-	                    +  " sum(case when (dd.dvdd_tipodevolucao <> 'N') then dd.dvdd_vldevolucoes else 0 end) as valorDescontos,  "
-	                    +  " sum(case when (dd.dvdd_tipodevolucao = 'N') then dd.dvdd_vldevolucoes else 0 end) as valorDevolucoes "
-	                    +  " FROM arrecadacao.devolucao_dados_diarios dd "
-	                    +  " WHERE dd.dvdd_amreferenciaarrecadacao = " + filtro.getAnoMesArrecadacao()
-	                    +  " and dd.arrc_id = " + filtro.getIdArrecadador()
-	                    +  " and date(dvdd_dtdevolucao) = '" + helper.toString()+"' "
-	                    +  " group by itemDDD ) as DDD1 on (ARDD.itemADD = DDD1.itemDDD) "
-	                    +  " inner join arrecadacao.arrecadacao_forma af on (af.arfm_id = coalesce(ardd.itemADD, ddd1.itemDDD)) "
-	                    +  " order by campoAgrupador  ";
-	           
-	            retorno = session.createSQLQuery(consulta)
-	                    .addScalar("campoAgrupador", Hibernate.INTEGER)
-	                    .addScalar("nomeFormaArrecadacao", Hibernate.STRING)
-	                    .addScalar("valorTarifa", Hibernate.BIG_DECIMAL)
-	                    .addScalar("dataPrevista", Hibernate.DATE)
-	                    .addScalar("qtdDocumentos", Hibernate.INTEGER)
-	                    .addScalar("qtdPagamentos", Hibernate.INTEGER)
-	                    .addScalar("debitos", Hibernate.BIG_DECIMAL)
-	                    .addScalar("descontos", Hibernate.BIG_DECIMAL)
-	                    .addScalar("devolucoes", Hibernate.BIG_DECIMAL)
-	                    .list();
-	           
-	        }catch(HibernateException e) {
-	            throw new ErroRepositorioException("Erro no Hibernate");
-	        }finally{
-	            HibernateUtil.closeSession(session);
-	        }
-	       
-	        return retorno;
-	    }
-	    
-	    /**TODO:COSANPA
-		 * @autor Adriana MUniz
-		 * @date 10/12/2012
-		 * 
-		 * Consultar Dados Diários da Arrecadação a partir da tabela arrecadacao_dados_diarios_aulixiar
-		 * 
-		 * Método para montar a parte WHERE da query de 
-		 * filtrar os dados diários para qualquer aba da funcionalidade
-		 * 
-		 *
-		 * @param filtro
-		 * @param labelTabela
-		 * @return
-		 */
-		private String montarWhereFiltrarDadosDiariosArrecadacaoAuxiliar(FiltroConsultarDadosDiariosArrecadacaoAuxiliar filtro,
-			String labelTabela){
-			String SQLConsultaADD = " WHERE ";
+		Collection retorno = null;
+		String consulta;
+		Session session = HibernateUtil.getSession();
+		try {
+			consulta = "SELECT coalesce(ardd.itemADD, ddd1.itemDDD) as campoAgrupador, "
+					+	" arfm_dsarrecadacaoforma as nomeFormaArrecadacao, "
+					+	" (COALESCE(ARDD.qtdDocumentos,0) + COALESCE(DDD1.qtdDocumentosDescontos,0) + COALESCE(DDD1.qtdDocumentosDevolucoes,0)) as qtdDocumentos, " 
+					+	" (COALESCE(ARDD.qtdPagamentos,0) + COALESCE(DDD1.qtdPagamentosDescontos,0) + COALESCE(DDD1.qtdPagamentosDevolucoes,0)) as qtdPagamentos,  "
+					+	" COALESCE(ARDD.debitos, 0) as debitos,  "
+					+	" COALESCE(DDD1.valorDescontos, 0) as descontos, " 
+					+	" COALESCE(DDD1.valorDevolucoes, 0) as devolucoes "
+					+	" from (SELECT  	ad.arfm_id  as itemADD,  "
+						+	" sum(ad.ardd_qtdocumentos) as qtdDocumentos, " 
+						+	" sum(ad.ardd_qtpagamentos) as qtdPagamentos,  "
+						+	" sum(ad.ardd_vlpagamentos) as debitos   "
+						+	" FROM arrecadacao.arrecadacao_dados_diarios ad "  
+						+	" WHERE ad.ardd_amreferenciaarrecadacao = " + filtro.getAnoMesArrecadacao() ;
+						if(filtro.getIdArrecadador() != null && !filtro.getIdArrecadador().equals(""))
+							consulta +=	" and ad.arrc_id = " + filtro.getIdArrecadador();
+			consulta +=	"    and date(ardd_dtpagamento) = '" + helper.toString()+"'"
+						+	" group by itemADD ) as ARDD   "
+					+	" full join (SELECT  	dd.arfm_id  as itemDDD, " 
+							+	" sum(case when (dd.dvdd_tipodevolucao <> 'N') then dd.dvdd_qtdocumentos else 0 end) as qtdDocumentosDescontos, "   
+							+	" sum(case when (dd.dvdd_tipodevolucao = 'N') then dd.dvdd_qtdocumentos else 0 end) as qtdDocumentosDevolucoes, " 
+							+	" sum(case when (dd.dvdd_tipodevolucao <> 'N') then dd.dvdd_qtdevolucoes else 0 end) as qtdPagamentosDescontos, "
+							+	" sum(case when (dd.dvdd_tipodevolucao = 'N') then dd.dvdd_qtdevolucoes else 0 end) as qtdPagamentosDevolucoes, "   
+							+	" sum(case when (dd.dvdd_tipodevolucao <> 'N') then dd.dvdd_vldevolucoes else 0 end) as valorDescontos, "
+							+	" sum(case when (dd.dvdd_tipodevolucao = 'N') then dd.dvdd_vldevolucoes else 0 end) as valorDevolucoes "
+							+	" FROM arrecadacao.devolucao_dados_diarios dd "
+							+	" WHERE dd.dvdd_amreferenciaarrecadacao = " + filtro.getAnoMesArrecadacao() ;
+							if(filtro.getIdArrecadador() != null && !filtro.getIdArrecadador().equals(""))
+								consulta +=	" and dd.arrc_id = " + filtro.getIdArrecadador();
+					consulta +=	" and date(dvdd_dtdevolucao) = '" + helper.toString()+"'"
+							+	" group by itemDDD ) as DDD1 on (ARDD.itemADD = DDD1.itemDDD) "  
+					+	" inner join arrecadacao.arrecadacao_forma af on (af.arfm_id = coalesce(ardd.itemADD, ddd1.itemDDD)) "
+					+	" order by campoAgrupador ";
 			
-			if (filtro.getAnoMesArrecadacao() != null && !filtro.getAnoMesArrecadacao().equals("")
-					&& !filtro.getAnoMesArrecadacao().equals("-1")){
-				// @TODO: melhorar isso
-				if(labelTabela.equals("ad")){
-					SQLConsultaADD += labelTabela + ".ardd_amreferenciaarrecadacao = " + filtro.getAnoMesArrecadacao() + " and ";	
-				} else {
-					SQLConsultaADD += labelTabela + ".dvdd_amreferenciaarrecadacao = " + filtro.getAnoMesArrecadacao() + " and ";
-				}
-				
-			}
-			
-			if (filtro.getIdGerenciaRegional() != null && !filtro.getIdGerenciaRegional().equals("")
-					&& !filtro.getIdGerenciaRegional().equals("-1")){
-				SQLConsultaADD += labelTabela + ".greg_id = " + filtro.getIdGerenciaRegional() + " and ";
-			}
-			if (filtro.getIdUnidadeNegocio() != null && !filtro.getIdUnidadeNegocio().equals("")
-					&& !filtro.getIdUnidadeNegocio().equals("-1")){
-				SQLConsultaADD += labelTabela + ".uneg_id = " + filtro.getIdUnidadeNegocio() +  " and ";
-			}
-			if (filtro.getIdElo() != null && !filtro.getIdElo().equals("")
-					&& !filtro.getIdElo().equals("-1")){
-				SQLConsultaADD += " loc.loca_cdelo = " + filtro.getIdElo() + " and ";
-			}
-			if (filtro.getIdLocalidade() != null && !filtro.getIdLocalidade().equals("")
-					&& !filtro.getIdLocalidade().equals("-1")){
-				SQLConsultaADD += labelTabela + ".loca_id = " + filtro.getIdLocalidade()  + " and ";
-			}
-			if (filtro.getIdArrecadador() != null && !filtro.getIdArrecadador().equals("")
-					&& !filtro.getIdArrecadador().equals("-1")){
-				SQLConsultaADD += labelTabela + ".arrc_id = " + filtro.getIdArrecadador()  + " and ";
-			}
-			if (filtro.getIdFormaArrecadacao() != null && !filtro.getIdFormaArrecadacao().equals("")){
-				if (filtro.getIdFormaArrecadacao().equals("0")){
-					SQLConsultaADD += labelTabela + ".arfm_id is null and ";
-				} else if (!filtro.getIdFormaArrecadacao().equals("-1")){
-					SQLConsultaADD += labelTabela + ".arfm_id = " + filtro.getIdFormaArrecadacao()  + " and ";
-				}
-			}		
-
-			if (filtro.getIdDocumentoTipo() != null && !filtro.getIdDocumentoTipo().equals("")){
-				
-				if (filtro.getIdDocumentoTipo().equals("0")){
-					SQLConsultaADD += labelTabela + ".dotp_id is null and ";	
-				} else if (!filtro.getIdDocumentoTipo().equals("-1")){
-					SQLConsultaADD += labelTabela + ".dotp_id = " + filtro.getIdDocumentoTipo()  + " and ";
-				}
-			}		
-
-			if (filtro.getIdsDocumentoTipoAgregador() != null && filtro.getIdsDocumentoTipoAgregador().length > 0){
-				
-				String idsDocumentoTipoAgregador[] = filtro.getIdsDocumentoTipoAgregador();
-				
-				if (!idsDocumentoTipoAgregador[0].equals(ConstantesSistema.NUMERO_NAO_INFORMADO + "")) {
-
-					if (idsDocumentoTipoAgregador.length == 1){
-						if (idsDocumentoTipoAgregador[0].equals("0")){
-							SQLConsultaADD += labelTabela + ".dotp_idagregador is null and ";	
-						} else {
-							SQLConsultaADD += labelTabela + ".dotp_idagregador = " + idsDocumentoTipoAgregador[0] + " and ";	
-						}					
-					} else {
-						SQLConsultaADD += labelTabela + ".dotp_idagregador in ( ";
-						for (int j = 0; j < idsDocumentoTipoAgregador.length; j++) {
-							SQLConsultaADD += idsDocumentoTipoAgregador[j] + ", ";
-						}
-						SQLConsultaADD = Util.removerUltimosCaracteres(SQLConsultaADD, 2);
-						SQLConsultaADD += ") and ";				
-					}
-					
-				}
-
-			}		
-
-			return SQLConsultaADD;
-			
-		}
-		
-		/**TODO: COSANPA
-		 * @author Adriana Muniz
-		 * @date 10/12/2012
-		 * 
-		 * Consultar Dados Diários da Arrecadação a partir da tabela arrecadacao_dados_diarios_aulixiar
-		 *
-		 * Verificar se existe dados diarios da arrecadacao de acordo com o filtro 
-		 * passado
-		 *
-		 *
-		 * @param filtro
-		 * @return boolean de existencia dos dados
-		 * @throws ErroRepositorioException
-		 */
-		public boolean verificarExistenciaDadosDiariosArrecadacaoAuxiliar(FiltroConsultarDadosDiariosArrecadacaoAuxiliar filtro)
-			throws ErroRepositorioException{
-			Session session = HibernateUtil.getSession();
-			
-			String join1 = "";
-			String join2 = "";
-			
-			if (filtro.getIdElo() != null && !filtro.getIdElo().equals("")){
-				join1 = " left join cadastro.localidade loc on loc.loca_id = ad.loca_id ";
-				join2 = " left join cadastro.localidade loc on loc.loca_id = dd.loca_id ";
-			}
-			
-			String 	SQLVerificarADD = "SELECT ad.ardd_id as id from arrecadacao.arrecadacao_dados_diarios_auxiliar ad "
-				+ join1 + montarWhereFiltrarDadosDiariosArrecadacaoAuxiliar(filtro, "ad");
-			String 	SQLVerificarDDD1 = "SELECT dd.dvdd_id as id from arrecadacao.devolucao_dados_diarios_auxiliar dd "
-				+ join2 + montarWhereFiltrarDadosDiariosArrecadacaoAuxiliar(filtro, "dd") 
-				+ " dd.dvdd_tipodevolucao <> 'N' ";
-			String 	SQLVerificarDDD2 = "SELECT dd.dvdd_id as id from arrecadacao.devolucao_dados_diarios_auxiliar dd "
-				+ join2 + montarWhereFiltrarDadosDiariosArrecadacaoAuxiliar(filtro, "dd") 
-				+ " dd.dvdd_tipodevolucao = 'N' ";
-
-			Integer retornoSQL = null;
-			boolean retorno = false;
-			try {
-				SQLVerificarADD = Util.removerUltimosCaracteres(SQLVerificarADD, 4);
-				retornoSQL = (Integer) session.createSQLQuery(SQLVerificarADD)
-					.addScalar("id", Hibernate.INTEGER).setMaxResults(1).uniqueResult();
-				
-				if (retornoSQL != null) {
-					retorno = true;
-				} else {
-					retornoSQL = (Integer) session.createSQLQuery(SQLVerificarDDD1)
-						.addScalar("id", Hibernate.INTEGER).setMaxResults(1).uniqueResult();
-					if (retornoSQL != null){
-						retorno = true;
-					} else {
-						retornoSQL = (Integer) session.createSQLQuery(SQLVerificarDDD2)
-						.addScalar("id", Hibernate.INTEGER).setMaxResults(1).uniqueResult();
-						if (retornoSQL != null){
-							retorno = true;
-						}
-					}
-				}
-				
-			} catch (HibernateException e) {
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				HibernateUtil.closeSession(session);
-			}
-			return retorno;
-		}
-		
-	    
-		/**TODO:COSANPA
-		 * @author Adriana Muniz
-		 * @date 11/12/2012
-		 * 
-		 * Consultar Dados Diários da Arrecadação Auxiliar
-		 * 
-		 * @param filtro
-		 * @return
-		 * @throws ErroRepositorioException 
-		 */
-		public Collection filtrarDadosDiariosArrecadacaoAuxiliar(FiltroConsultarDadosDiariosArrecadacaoAuxiliar filtro) throws ErroRepositorioException{
-			Collection retorno = new ArrayList();
-			
-			Session session = HibernateUtil.getSession();
-			String 	SQLGeral = null;
-			String	SQLConsultaADD = "SELECT ";
-			String 	SQLConsultaADD_FROM = " FROM ARRECADACAO.ARRECADACAO_DADOS_DIARIOS_AUXILIAR ad ";
-			String	SQLConsultaDDD1 = "SELECT ";
-			String 	SQLConsultaDDD1_FROM = " FROM ARRECADACAO.DEVOLUCAO_DADOS_DIARIOS_AUXILIAR dd ";
-			Type tipo= null;
-			
-			switch (filtro.getAgrupamento()) {
-			case ANO_MES:
-				
-				SQLConsultaADD += " ad.ardd_amreferenciaarrecadacao ";
-				SQLConsultaDDD1 += " dd.dvdd_amreferenciaarrecadacao ";
-				tipo = Hibernate.INTEGER;
-				break;
-			case ARRECADADOR:
-				
-				SQLConsultaADD += " ad.arrc_id ";
-				SQLConsultaDDD1 += " dd.arrc_id ";
-				tipo = Hibernate.INTEGER;
-				break;
-			case CATEGORIA:
-				
-				SQLConsultaADD += " ad.catg_id ";
-				SQLConsultaDDD1 += " dd.catg_id ";
-				tipo = Hibernate.INTEGER;
-				break;			
-			case ELO:
-				
-				SQLConsultaADD += " loc.loca_cdelo ";
-				SQLConsultaDDD1 += " loc.loca_cdelo ";
-				tipo = Hibernate.INTEGER;
-				break;			
-			case FORMA_ARRECADACAO:
-
-				SQLConsultaADD += " ad.arfm_id ";
-				SQLConsultaDDD1 += " dd.arfm_id ";
-				tipo = Hibernate.INTEGER;
-				break;			
-			case GERENCIA_REGIONAL:
-
-				SQLConsultaADD += " ad.greg_id ";
-				SQLConsultaDDD1 += " dd.greg_id ";
-				tipo = Hibernate.INTEGER;
-				break;			
-			case LOCALIDADE:
-				
-				SQLConsultaADD += " ad.loca_id ";
-				SQLConsultaDDD1 += " dd.loca_id ";
-				tipo = Hibernate.INTEGER;
-				break;			
-			case PERFIL:
-				
-				SQLConsultaADD += " ad.iper_id ";
-				SQLConsultaDDD1 += " dd.iper_id ";
-				tipo = Hibernate.INTEGER;
-				break;			
-			case TIPO_DOCUMENTO:
-
-				SQLConsultaADD += " ad.dotp_id ";
-				SQLConsultaDDD1 += " dd.dotp_id ";
-				tipo = Hibernate.INTEGER;
-				break;			
-			case TIPO_DOCUMENTO_AGREGADOR:
-				
-				SQLConsultaADD += " ad.dotp_idagregador ";
-				SQLConsultaDDD1 += " dd.dotp_idagregador ";
-				tipo = Hibernate.INTEGER;
-				break;			
-			case UNIDADE_NEGOCIO:
-
-				SQLConsultaADD += " ad.uneg_id ";
-				SQLConsultaDDD1 += " dd.uneg_id ";
-				tipo = Hibernate.INTEGER;
-				break;
-			case DATA:
-				
-				SQLConsultaADD += " ad.ardd_dtpagamento ";
-				SQLConsultaDDD1 += " dd.dvdd_dtdevolucao ";
-				tipo = Hibernate.DATE;
-			}
-			
-			// definindo somatorios para o select
-			SQLConsultaADD += " as itemADD, sum(ad.ardd_qtdocumentos) as qtdDocumentos, sum(ad.ardd_qtpagamentos) as qtdPagamentos, " +
-					"sum(ad.ardd_vlpagamentos) as debitos ";
-			
-			SQLConsultaDDD1 += 
-				" as itemDDD, sum(case when (dd.dvdd_tipodevolucao <> 'N') then dd.dvdd_qtdocumentos else 0 end) as qtdDocumentosDescontos, " +
-				"  sum(case when (dd.dvdd_tipodevolucao = 'N') then dd.dvdd_qtdocumentos else 0 end) as qtdDocumentosDevolucoes, " +
-				"  sum(case when (dd.dvdd_tipodevolucao <> 'N') then dd.dvdd_qtdevolucoes else 0 end) as qtdPagamentosDescontos, " +
-				"  sum(case when (dd.dvdd_tipodevolucao = 'N') then dd.dvdd_qtdevolucoes else 0 end) as qtdPagamentosDevolucoes, " +
-				"  sum(case when (dd.dvdd_tipodevolucao <> 'N') then dd.dvdd_vldevolucoes else 0 end) as valorDescontos, " +
-				"  sum(case when (dd.dvdd_tipodevolucao = 'N') then dd.dvdd_vldevolucoes else 0 end) as valorDevolucoes ";
-			
-			// adicionando as tabelas para os joins
-			if (filtro.getAgrupamento().equals(FiltroConsultarDadosDiariosArrecadacao.GROUP_BY.ELO)
-					|| (filtro.getIdElo() != null && !filtro.getIdElo().equals(""))){
-				SQLConsultaADD_FROM += " LEFT JOIN CADASTRO.LOCALIDADE LOC ON AD.LOCA_ID = LOC.LOCA_ID ";
-				SQLConsultaDDD1_FROM += " LEFT JOIN CADASTRO.LOCALIDADE LOC ON DD.LOCA_ID = LOC.LOCA_ID ";
-			}
-				
-			// acrescentando a parte from
-			SQLConsultaADD += SQLConsultaADD_FROM;
-			SQLConsultaDDD1 += SQLConsultaDDD1_FROM;
-			
-			// metodo gera as condicoes de acordo com os valores preenchidos no filtro
-			SQLConsultaADD += montarWhereFiltrarDadosDiariosArrecadacaoAuxiliar(filtro, "ad");
-			SQLConsultaDDD1 += montarWhereFiltrarDadosDiariosArrecadacaoAuxiliar(filtro, "dd");
-			
-			// retirar o and do final, caso exista
-			if (SQLConsultaADD.lastIndexOf("and") >= (SQLConsultaADD.length() - 4)){
-				SQLConsultaADD  = Util.removerUltimosCaracteres(SQLConsultaADD , 4);
-			}		
-			
-			// retirar o and do final, caso exista
-			if (SQLConsultaDDD1.lastIndexOf("and") >= (SQLConsultaDDD1.length() - 4)){
-				SQLConsultaDDD1  = Util.removerUltimosCaracteres(SQLConsultaDDD1, 4);
-			}
-			
-			SQLConsultaADD += " group by itemADD ";
-			SQLConsultaDDD1 += " group by itemDDD ";
-			
-			SQLGeral = "SELECT coalesce(ardd.itemADD, ddd1.itemDDD) as campoAgrupador, " +
-					" (COALESCE(ARDD.qtdDocumentos,0) + COALESCE(DDD1.qtdDocumentosDescontos,0) + COALESCE(DDD1.qtdDocumentosDevolucoes,0)) as qtdDocumentos, " +
-					" (COALESCE(ARDD.qtdPagamentos,0) + COALESCE(DDD1.qtdPagamentosDescontos,0) + COALESCE(DDD1.qtdPagamentosDevolucoes,0)) as qtdPagamentos, " +
-					" COALESCE(ARDD.debitos, 0) as debitos, COALESCE(DDD1.valorDescontos, 0) as descontos, " +
-					" COALESCE(DDD1.valorDevolucoes, 0) as devolucoes " +
-					" FROM (" + SQLConsultaADD + ") as ARDD " +
-					" FULL JOIN (" + SQLConsultaDDD1 + ") as DDD1 on (ARDD.itemADD = DDD1.itemDDD) " +
-					" order by campoAgrupador "; 
-
-			try {
-				retorno = session.createSQLQuery(SQLGeral)
-					.addScalar("campoAgrupador", tipo)
+			retorno = session.createSQLQuery(consulta)
+					.addScalar("campoAgrupador", Hibernate.INTEGER)
+					.addScalar("nomeFormaArrecadacao", Hibernate.STRING)
 					.addScalar("qtdDocumentos", Hibernate.INTEGER)
 					.addScalar("qtdPagamentos", Hibernate.INTEGER)
 					.addScalar("debitos", Hibernate.BIG_DECIMAL)
 					.addScalar("descontos", Hibernate.BIG_DECIMAL)
 					.addScalar("devolucoes", Hibernate.BIG_DECIMAL)
 					.list();
-			} catch (HibernateException e) {
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				HibernateUtil.closeSession(session);
+			
+		}catch(HibernateException e) {
+			throw new ErroRepositorioException("Erro no Hibernate");
+		}finally{
+			HibernateUtil.closeSession(session);
+		}
+		
+		return retorno;
+	}
+	
+
+	/**TODO:COSANPA
+     * DATA:02/10/2012
+     * @author Adriana Muniz
+     *
+     * @param filtro
+     * @return
+     * @throws ErroRepositorioException
+     */
+    public Collection filtrarDadosDiariosFormasArrecadacaoComTarifa(FiltroConsultarDadosDiariosArrecadacao filtro)
+            throws ErroRepositorioException {
+        Collection retorno = new ArrayList();
+       
+        Session session = HibernateUtil.getSession();
+       
+        String     SQLGeral = null;
+        String    SQLConsultaADD = " SELECT ad.ardd_dtpagamento AS dataPagamento, " +
+                " SUM(ad.ardd_qtdocumentos) AS qtdDocumentos, " +
+                " SUM(ad.ardd_vlpagamentos) AS debitos " +
+                " FROM ARRECADACAO.ARRECADACAO_DADOS_DIARIOS ad " +
+                " WHERE ardd_amreferenciaarrecadacao = " + filtro.getAnoMesArrecadacao() +
+                " AND arrc_id = " + filtro.getIdArrecadador() +
+                " GROUP BY dataPagamento " +
+                " ORDER BY dataPagamento ";
+
+        try {
+            retorno = session.createSQLQuery(SQLGeral)
+                .addScalar("qtdDocumentos", Hibernate.INTEGER)
+                .addScalar("qtdPagamentos", Hibernate.INTEGER)
+                .addScalar("debitos", Hibernate.BIG_DECIMAL)
+                .addScalar("descontos", Hibernate.BIG_DECIMAL)
+                .list();
+        } catch (HibernateException e) {
+            throw new ErroRepositorioException(e, "Erro no Hibernate");
+        } finally {
+            HibernateUtil.closeSession(session);
+        }
+
+//	        System.out.println("Tempo de execução da query (" + filtro.getAgrupamento() +
+//	                ") " + (System.currentTimeMillis() - t1));
+       
+        return retorno;
+
+    }
+
+
+/**TODO:COSANPA
+     *
+     * Relatório Analitico dos valores diários da arrecadação
+     *
+     * @author Adriana Muniz
+     * data: 02/10/2012
+     *
+     * obtém as formas de arrecadação com tarifa por dia
+     * @param helper
+     * @param filtro
+     * @return coleção
+     */
+    public Collection obterFormasDeArrecadacaoComTarifaPorDia(
+            Object helper, FiltroConsultarDadosDiariosArrecadacao filtro) throws ErroRepositorioException {
+
+        Collection retorno = null;
+        String consulta;
+        Session session = HibernateUtil.getSession();
+        try {
+            consulta = " SELECT coalesce(ardd.itemADD, ddd1.itemDDD) AS campoAgrupador, "
+                    +  " arfm_dsarrecadacaoforma AS nomeFormaArrecadacao, "
+                    +  " ARDD.valorTarifa as valorTarifa, "
+                    +  " ardd.dataprevista as dataPrevista, "
+                    +  " (COALESCE(ARDD.qtdDocumentos,0) + COALESCE(DDD1.qtdDocumentosDescontos,0) + COALESCE(DDD1.qtdDocumentosDevolucoes,0)) as qtdDocumentos,"
+                    +  " (COALESCE(ARDD.qtdPagamentos,0) + COALESCE(DDD1.qtdPagamentosDescontos,0) + COALESCE(DDD1.qtdPagamentosDevolucoes,0)) as qtdPagamentos,  "
+                    +  " COALESCE(ARDD.debitos, 0) as debitos, "
+                    +  " COALESCE(DDD1.valorDescontos, 0) as descontos, "
+                    +  " COALESCE(DDD1.valorDevolucoes, 0) as devolucoes "
+                    +  " from (SELECT      ad.arfm_id  as itemADD, "
+                    +  " sum(ardd_vltarifa) as valorTarifa, "
+                    +  " (date(ad.ardd_dtpagamento) + cast(ad.ardd_nndiafloat as integer)) as dataPrevista, "
+                    +  " sum(ad.ardd_qtdocumentos) as qtdDocumentos, "
+                    +  " sum(ad.ardd_qtpagamentos) as qtdPagamentos, "
+                    +  " sum(ad.ardd_vlpagamentos) as debitos "
+                    +  " FROM arrecadacao.arrecadacao_dados_diarios ad "
+                    +  " WHERE ad.ardd_amreferenciaarrecadacao = " + filtro.getAnoMesArrecadacao()
+                    +  " and ad.arrc_id = " + filtro.getIdArrecadador()
+                    +  " and date(ardd_dtpagamento) = '" + helper.toString()+"' "
+                    +  " group by itemADD, dataPrevista) as ARDD    "
+                    +  " full join (SELECT      dd.arfm_id  as itemDDD,  "
+                    +  " 0 as valorTarifa, "
+                    +  " null as dataPrevista, "
+                    +  " sum(case when (dd.dvdd_tipodevolucao <> 'N') then dd.dvdd_qtdocumentos else 0 end) as qtdDocumentosDescontos, "
+                    +  " sum(case when (dd.dvdd_tipodevolucao = 'N') then dd.dvdd_qtdocumentos else 0 end) as qtdDocumentosDevolucoes, "
+                    +  " sum(case when (dd.dvdd_tipodevolucao <> 'N') then dd.dvdd_qtdevolucoes else 0 end) as qtdPagamentosDescontos, "
+                    +  " sum(case when (dd.dvdd_tipodevolucao = 'N') then dd.dvdd_qtdevolucoes else 0 end) as qtdPagamentosDevolucoes, "
+                    +  " sum(case when (dd.dvdd_tipodevolucao <> 'N') then dd.dvdd_vldevolucoes else 0 end) as valorDescontos,  "
+                    +  " sum(case when (dd.dvdd_tipodevolucao = 'N') then dd.dvdd_vldevolucoes else 0 end) as valorDevolucoes "
+                    +  " FROM arrecadacao.devolucao_dados_diarios dd "
+                    +  " WHERE dd.dvdd_amreferenciaarrecadacao = " + filtro.getAnoMesArrecadacao()
+                    +  " and dd.arrc_id = " + filtro.getIdArrecadador()
+                    +  " and date(dvdd_dtdevolucao) = '" + helper.toString()+"' "
+                    +  " group by itemDDD ) as DDD1 on (ARDD.itemADD = DDD1.itemDDD) "
+                    +  " inner join arrecadacao.arrecadacao_forma af on (af.arfm_id = coalesce(ardd.itemADD, ddd1.itemDDD)) "
+                    +  " order by campoAgrupador  ";
+           
+            retorno = session.createSQLQuery(consulta)
+                    .addScalar("campoAgrupador", Hibernate.INTEGER)
+                    .addScalar("nomeFormaArrecadacao", Hibernate.STRING)
+                    .addScalar("valorTarifa", Hibernate.BIG_DECIMAL)
+                    .addScalar("dataPrevista", Hibernate.DATE)
+                    .addScalar("qtdDocumentos", Hibernate.INTEGER)
+                    .addScalar("qtdPagamentos", Hibernate.INTEGER)
+                    .addScalar("debitos", Hibernate.BIG_DECIMAL)
+                    .addScalar("descontos", Hibernate.BIG_DECIMAL)
+                    .addScalar("devolucoes", Hibernate.BIG_DECIMAL)
+                    .list();
+           
+        }catch(HibernateException e) {
+            throw new ErroRepositorioException("Erro no Hibernate");
+        }finally{
+            HibernateUtil.closeSession(session);
+        }
+       
+        return retorno;
+    }
+    
+    /**TODO:COSANPA
+	 * @autor Adriana MUniz
+	 * @date 10/12/2012
+	 * 
+	 * Consultar Dados Diários da Arrecadação a partir da tabela arrecadacao_dados_diarios_aulixiar
+	 * 
+	 * Método para montar a parte WHERE da query de 
+	 * filtrar os dados diários para qualquer aba da funcionalidade
+	 * 
+	 *
+	 * @param filtro
+	 * @param labelTabela
+	 * @return
+	 */
+	private String montarWhereFiltrarDadosDiariosArrecadacaoAuxiliar(FiltroConsultarDadosDiariosArrecadacaoAuxiliar filtro,
+		String labelTabela){
+		String SQLConsultaADD = " WHERE ";
+		
+		if (filtro.getAnoMesArrecadacao() != null && !filtro.getAnoMesArrecadacao().equals("")
+				&& !filtro.getAnoMesArrecadacao().equals("-1")){
+			// @TODO: melhorar isso
+			if(labelTabela.equals("ad")){
+				SQLConsultaADD += labelTabela + ".ardd_amreferenciaarrecadacao = " + filtro.getAnoMesArrecadacao() + " and ";	
+			} else {
+				SQLConsultaADD += labelTabela + ".dvdd_amreferenciaarrecadacao = " + filtro.getAnoMesArrecadacao() + " and ";
 			}
+			
+		}
+		
+		if (filtro.getIdGerenciaRegional() != null && !filtro.getIdGerenciaRegional().equals("")
+				&& !filtro.getIdGerenciaRegional().equals("-1")){
+			SQLConsultaADD += labelTabela + ".greg_id = " + filtro.getIdGerenciaRegional() + " and ";
+		}
+		if (filtro.getIdUnidadeNegocio() != null && !filtro.getIdUnidadeNegocio().equals("")
+				&& !filtro.getIdUnidadeNegocio().equals("-1")){
+			SQLConsultaADD += labelTabela + ".uneg_id = " + filtro.getIdUnidadeNegocio() +  " and ";
+		}
+		if (filtro.getIdElo() != null && !filtro.getIdElo().equals("")
+				&& !filtro.getIdElo().equals("-1")){
+			SQLConsultaADD += " loc.loca_cdelo = " + filtro.getIdElo() + " and ";
+		}
+		if (filtro.getIdLocalidade() != null && !filtro.getIdLocalidade().equals("")
+				&& !filtro.getIdLocalidade().equals("-1")){
+			SQLConsultaADD += labelTabela + ".loca_id = " + filtro.getIdLocalidade()  + " and ";
+		}
+		if (filtro.getIdArrecadador() != null && !filtro.getIdArrecadador().equals("")
+				&& !filtro.getIdArrecadador().equals("-1")){
+			SQLConsultaADD += labelTabela + ".arrc_id = " + filtro.getIdArrecadador()  + " and ";
+		}
+		if (filtro.getIdFormaArrecadacao() != null && !filtro.getIdFormaArrecadacao().equals("")){
+			if (filtro.getIdFormaArrecadacao().equals("0")){
+				SQLConsultaADD += labelTabela + ".arfm_id is null and ";
+			} else if (!filtro.getIdFormaArrecadacao().equals("-1")){
+				SQLConsultaADD += labelTabela + ".arfm_id = " + filtro.getIdFormaArrecadacao()  + " and ";
+			}
+		}		
+
+		if (filtro.getIdDocumentoTipo() != null && !filtro.getIdDocumentoTipo().equals("")){
+			
+			if (filtro.getIdDocumentoTipo().equals("0")){
+				SQLConsultaADD += labelTabela + ".dotp_id is null and ";	
+			} else if (!filtro.getIdDocumentoTipo().equals("-1")){
+				SQLConsultaADD += labelTabela + ".dotp_id = " + filtro.getIdDocumentoTipo()  + " and ";
+			}
+		}		
+
+		if (filtro.getIdsDocumentoTipoAgregador() != null && filtro.getIdsDocumentoTipoAgregador().length > 0){
+			
+			String idsDocumentoTipoAgregador[] = filtro.getIdsDocumentoTipoAgregador();
+			
+			if (!idsDocumentoTipoAgregador[0].equals(ConstantesSistema.NUMERO_NAO_INFORMADO + "")) {
+
+				if (idsDocumentoTipoAgregador.length == 1){
+					if (idsDocumentoTipoAgregador[0].equals("0")){
+						SQLConsultaADD += labelTabela + ".dotp_idagregador is null and ";	
+					} else {
+						SQLConsultaADD += labelTabela + ".dotp_idagregador = " + idsDocumentoTipoAgregador[0] + " and ";	
+					}					
+				} else {
+					SQLConsultaADD += labelTabela + ".dotp_idagregador in ( ";
+					for (int j = 0; j < idsDocumentoTipoAgregador.length; j++) {
+						SQLConsultaADD += idsDocumentoTipoAgregador[j] + ", ";
+					}
+					SQLConsultaADD = Util.removerUltimosCaracteres(SQLConsultaADD, 2);
+					SQLConsultaADD += ") and ";				
+				}
+				
+			}
+
+		}		
+
+		return SQLConsultaADD;
+		
+	}
+	
+	/**TODO: COSANPA
+	 * @author Adriana Muniz
+	 * @date 10/12/2012
+	 * 
+	 * Consultar Dados Diários da Arrecadação a partir da tabela arrecadacao_dados_diarios_aulixiar
+	 *
+	 * Verificar se existe dados diarios da arrecadacao de acordo com o filtro 
+	 * passado
+	 *
+	 *
+	 * @param filtro
+	 * @return boolean de existencia dos dados
+	 * @throws ErroRepositorioException
+	 */
+	public boolean verificarExistenciaDadosDiariosArrecadacaoAuxiliar(FiltroConsultarDadosDiariosArrecadacaoAuxiliar filtro)
+		throws ErroRepositorioException{
+		Session session = HibernateUtil.getSession();
+		
+		String join1 = "";
+		String join2 = "";
+		
+		if (filtro.getIdElo() != null && !filtro.getIdElo().equals("")){
+			join1 = " left join cadastro.localidade loc on loc.loca_id = ad.loca_id ";
+			join2 = " left join cadastro.localidade loc on loc.loca_id = dd.loca_id ";
+		}
+		
+		String 	SQLVerificarADD = "SELECT ad.ardd_id as id from arrecadacao.arrecadacao_dados_diarios_auxiliar ad "
+			+ join1 + montarWhereFiltrarDadosDiariosArrecadacaoAuxiliar(filtro, "ad");
+		String 	SQLVerificarDDD1 = "SELECT dd.dvdd_id as id from arrecadacao.devolucao_dados_diarios_auxiliar dd "
+			+ join2 + montarWhereFiltrarDadosDiariosArrecadacaoAuxiliar(filtro, "dd") 
+			+ " dd.dvdd_tipodevolucao <> 'N' ";
+		String 	SQLVerificarDDD2 = "SELECT dd.dvdd_id as id from arrecadacao.devolucao_dados_diarios_auxiliar dd "
+			+ join2 + montarWhereFiltrarDadosDiariosArrecadacaoAuxiliar(filtro, "dd") 
+			+ " dd.dvdd_tipodevolucao = 'N' ";
+
+		Integer retornoSQL = null;
+		boolean retorno = false;
+		try {
+			SQLVerificarADD = Util.removerUltimosCaracteres(SQLVerificarADD, 4);
+			retornoSQL = (Integer) session.createSQLQuery(SQLVerificarADD)
+				.addScalar("id", Hibernate.INTEGER).setMaxResults(1).uniqueResult();
+			
+			if (retornoSQL != null) {
+				retorno = true;
+			} else {
+				retornoSQL = (Integer) session.createSQLQuery(SQLVerificarDDD1)
+					.addScalar("id", Hibernate.INTEGER).setMaxResults(1).uniqueResult();
+				if (retornoSQL != null){
+					retorno = true;
+				} else {
+					retornoSQL = (Integer) session.createSQLQuery(SQLVerificarDDD2)
+					.addScalar("id", Hibernate.INTEGER).setMaxResults(1).uniqueResult();
+					if (retornoSQL != null){
+						retorno = true;
+					}
+				}
+			}
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
+    
+	/**TODO:COSANPA
+	 * @author Adriana Muniz
+	 * @date 11/12/2012
+	 * 
+	 * Consultar Dados Diários da Arrecadação Auxiliar
+	 * 
+	 * @param filtro
+	 * @return
+	 * @throws ErroRepositorioException 
+	 */
+	public Collection filtrarDadosDiariosArrecadacaoAuxiliar(FiltroConsultarDadosDiariosArrecadacaoAuxiliar filtro) throws ErroRepositorioException{
+		Collection retorno = new ArrayList();
+		
+		Session session = HibernateUtil.getSession();
+		String 	SQLGeral = null;
+		String	SQLConsultaADD = "SELECT ";
+		String 	SQLConsultaADD_FROM = " FROM ARRECADACAO.ARRECADACAO_DADOS_DIARIOS_AUXILIAR ad ";
+		String	SQLConsultaDDD1 = "SELECT ";
+		String 	SQLConsultaDDD1_FROM = " FROM ARRECADACAO.DEVOLUCAO_DADOS_DIARIOS_AUXILIAR dd ";
+		Type tipo= null;
+		
+		switch (filtro.getAgrupamento()) {
+		case ANO_MES:
+			
+			SQLConsultaADD += " ad.ardd_amreferenciaarrecadacao ";
+			SQLConsultaDDD1 += " dd.dvdd_amreferenciaarrecadacao ";
+			tipo = Hibernate.INTEGER;
+			break;
+		case ARRECADADOR:
+			
+			SQLConsultaADD += " ad.arrc_id ";
+			SQLConsultaDDD1 += " dd.arrc_id ";
+			tipo = Hibernate.INTEGER;
+			break;
+		case CATEGORIA:
+			
+			SQLConsultaADD += " ad.catg_id ";
+			SQLConsultaDDD1 += " dd.catg_id ";
+			tipo = Hibernate.INTEGER;
+			break;			
+		case ELO:
+			
+			SQLConsultaADD += " loc.loca_cdelo ";
+			SQLConsultaDDD1 += " loc.loca_cdelo ";
+			tipo = Hibernate.INTEGER;
+			break;			
+		case FORMA_ARRECADACAO:
+
+			SQLConsultaADD += " ad.arfm_id ";
+			SQLConsultaDDD1 += " dd.arfm_id ";
+			tipo = Hibernate.INTEGER;
+			break;			
+		case GERENCIA_REGIONAL:
+
+			SQLConsultaADD += " ad.greg_id ";
+			SQLConsultaDDD1 += " dd.greg_id ";
+			tipo = Hibernate.INTEGER;
+			break;			
+		case LOCALIDADE:
+			
+			SQLConsultaADD += " ad.loca_id ";
+			SQLConsultaDDD1 += " dd.loca_id ";
+			tipo = Hibernate.INTEGER;
+			break;			
+		case PERFIL:
+			
+			SQLConsultaADD += " ad.iper_id ";
+			SQLConsultaDDD1 += " dd.iper_id ";
+			tipo = Hibernate.INTEGER;
+			break;			
+		case TIPO_DOCUMENTO:
+
+			SQLConsultaADD += " ad.dotp_id ";
+			SQLConsultaDDD1 += " dd.dotp_id ";
+			tipo = Hibernate.INTEGER;
+			break;			
+		case TIPO_DOCUMENTO_AGREGADOR:
+			
+			SQLConsultaADD += " ad.dotp_idagregador ";
+			SQLConsultaDDD1 += " dd.dotp_idagregador ";
+			tipo = Hibernate.INTEGER;
+			break;			
+		case UNIDADE_NEGOCIO:
+
+			SQLConsultaADD += " ad.uneg_id ";
+			SQLConsultaDDD1 += " dd.uneg_id ";
+			tipo = Hibernate.INTEGER;
+			break;
+		case DATA:
+			
+			SQLConsultaADD += " ad.ardd_dtpagamento ";
+			SQLConsultaDDD1 += " dd.dvdd_dtdevolucao ";
+			tipo = Hibernate.DATE;
+		}
+		
+		// definindo somatorios para o select
+		SQLConsultaADD += " as itemADD, sum(ad.ardd_qtdocumentos) as qtdDocumentos, sum(ad.ardd_qtpagamentos) as qtdPagamentos, " +
+				"sum(ad.ardd_vlpagamentos) as debitos ";
+		
+		SQLConsultaDDD1 += 
+			" as itemDDD, sum(case when (dd.dvdd_tipodevolucao <> 'N') then dd.dvdd_qtdocumentos else 0 end) as qtdDocumentosDescontos, " +
+			"  sum(case when (dd.dvdd_tipodevolucao = 'N') then dd.dvdd_qtdocumentos else 0 end) as qtdDocumentosDevolucoes, " +
+			"  sum(case when (dd.dvdd_tipodevolucao <> 'N') then dd.dvdd_qtdevolucoes else 0 end) as qtdPagamentosDescontos, " +
+			"  sum(case when (dd.dvdd_tipodevolucao = 'N') then dd.dvdd_qtdevolucoes else 0 end) as qtdPagamentosDevolucoes, " +
+			"  sum(case when (dd.dvdd_tipodevolucao <> 'N') then dd.dvdd_vldevolucoes else 0 end) as valorDescontos, " +
+			"  sum(case when (dd.dvdd_tipodevolucao = 'N') then dd.dvdd_vldevolucoes else 0 end) as valorDevolucoes ";
+		
+		// adicionando as tabelas para os joins
+		if (filtro.getAgrupamento().equals(FiltroConsultarDadosDiariosArrecadacao.GROUP_BY.ELO)
+				|| (filtro.getIdElo() != null && !filtro.getIdElo().equals(""))){
+			SQLConsultaADD_FROM += " LEFT JOIN CADASTRO.LOCALIDADE LOC ON AD.LOCA_ID = LOC.LOCA_ID ";
+			SQLConsultaDDD1_FROM += " LEFT JOIN CADASTRO.LOCALIDADE LOC ON DD.LOCA_ID = LOC.LOCA_ID ";
+		}
+			
+		// acrescentando a parte from
+		SQLConsultaADD += SQLConsultaADD_FROM;
+		SQLConsultaDDD1 += SQLConsultaDDD1_FROM;
+		
+		// metodo gera as condicoes de acordo com os valores preenchidos no filtro
+		SQLConsultaADD += montarWhereFiltrarDadosDiariosArrecadacaoAuxiliar(filtro, "ad");
+		SQLConsultaDDD1 += montarWhereFiltrarDadosDiariosArrecadacaoAuxiliar(filtro, "dd");
+		
+		// retirar o and do final, caso exista
+		if (SQLConsultaADD.lastIndexOf("and") >= (SQLConsultaADD.length() - 4)){
+			SQLConsultaADD  = Util.removerUltimosCaracteres(SQLConsultaADD , 4);
+		}		
+		
+		// retirar o and do final, caso exista
+		if (SQLConsultaDDD1.lastIndexOf("and") >= (SQLConsultaDDD1.length() - 4)){
+			SQLConsultaDDD1  = Util.removerUltimosCaracteres(SQLConsultaDDD1, 4);
+		}
+		
+		SQLConsultaADD += " group by itemADD ";
+		SQLConsultaDDD1 += " group by itemDDD ";
+		
+		SQLGeral = "SELECT coalesce(ardd.itemADD, ddd1.itemDDD) as campoAgrupador, " +
+				" (COALESCE(ARDD.qtdDocumentos,0) + COALESCE(DDD1.qtdDocumentosDescontos,0) + COALESCE(DDD1.qtdDocumentosDevolucoes,0)) as qtdDocumentos, " +
+				" (COALESCE(ARDD.qtdPagamentos,0) + COALESCE(DDD1.qtdPagamentosDescontos,0) + COALESCE(DDD1.qtdPagamentosDevolucoes,0)) as qtdPagamentos, " +
+				" COALESCE(ARDD.debitos, 0) as debitos, COALESCE(DDD1.valorDescontos, 0) as descontos, " +
+				" COALESCE(DDD1.valorDevolucoes, 0) as devolucoes " +
+				" FROM (" + SQLConsultaADD + ") as ARDD " +
+				" FULL JOIN (" + SQLConsultaDDD1 + ") as DDD1 on (ARDD.itemADD = DDD1.itemDDD) " +
+				" order by campoAgrupador "; 
+
+		try {
+			retorno = session.createSQLQuery(SQLGeral)
+				.addScalar("campoAgrupador", tipo)
+				.addScalar("qtdDocumentos", Hibernate.INTEGER)
+				.addScalar("qtdPagamentos", Hibernate.INTEGER)
+				.addScalar("debitos", Hibernate.BIG_DECIMAL)
+				.addScalar("descontos", Hibernate.BIG_DECIMAL)
+				.addScalar("devolucoes", Hibernate.BIG_DECIMAL)
+				.list();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
 
 //			System.out.println("Tempo de execução da query (" + filtro.getAgrupamento() +
 //					") " + (System.currentTimeMillis() - t1));
-			
-			return retorno;
-
-		}
 		
-		/**TODO:COSANPA
-		 * @author Adriana Muniz
-		 * @date 05/12/2012
-		 * 
-		 * Exclui os dados diários da arrecadação do ano/mês da arrecadação corrente
-		 * por localidade da a tabela arrecadacao_dados_diarios_auxiliar
-		 * 
-		 * [UC0301] Gerar Dados Diários da Arrecadação
-		 * 
-		 * @param anoMesReferenciaArrecadacao
-		 * @param idLocalidade
-		 * @throws ErroRepositorioException
-		 */
-		public void excluirDadosDiariosArrecadacaoAuxiliarPorAnoMesArrecadacaoPorLocalidade(
-				int anoMesReferenciaArrecadacao, Integer idLocalidade)
-				throws ErroRepositorioException {
+		return retorno;
 
-			// Cria uma sessão com o hibernate
-			Session session = HibernateUtil.getSession();
+	}
+	
+	/**TODO:COSANPA
+	 * @author Adriana Muniz
+	 * @date 05/12/2012
+	 * 
+	 * Exclui os dados diários da arrecadação do ano/mês da arrecadação corrente
+	 * por localidade da a tabela arrecadacao_dados_diarios_auxiliar
+	 * 
+	 * [UC0301] Gerar Dados Diários da Arrecadação
+	 * 
+	 * @param anoMesReferenciaArrecadacao
+	 * @param idLocalidade
+	 * @throws ErroRepositorioException
+	 */
+	public void excluirDadosDiariosArrecadacaoAuxiliarPorAnoMesArrecadacaoPorLocalidade(
+			int anoMesReferenciaArrecadacao, Integer idLocalidade)
+			throws ErroRepositorioException {
 
-			// Cria a variável que vai conter o hql
-			String consulta;
+		// Cria uma sessão com o hibernate
+		Session session = HibernateUtil.getSession();
 
-			try {
+		// Cria a variável que vai conter o hql
+		String consulta;
 
-				// Constroi o hql para remover os dados diários da arrecadação
-				// referentes ao ano/mês de arrecadação atual
-				consulta = " DELETE ArrecadacaoDadosDiariosAuxiliar ardd " +
-						" WHERE ardd.anoMesReferenciaArrecadacao = :anoMesReferenciaArrecadacao " +
-						" AND ardd.localidade.id = :idLocalidade";
+		try {
 
-				// Executa o hql
-				session.createQuery(consulta)
-						.setInteger("anoMesReferenciaArrecadacao", anoMesReferenciaArrecadacao)
-						.setInteger("idLocalidade", idLocalidade).executeUpdate();
+			// Constroi o hql para remover os dados diários da arrecadação
+			// referentes ao ano/mês de arrecadação atual
+			consulta = " DELETE ArrecadacaoDadosDiariosAuxiliar ardd " +
+					" WHERE ardd.anoMesReferenciaArrecadacao = :anoMesReferenciaArrecadacao " +
+					" AND ardd.localidade.id = :idLocalidade";
 
-				// Erro no hibernate
-			} catch (HibernateException e) {
-				// Levanta a exceção para a próxima camada
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				// Fecha a sessão com o hibernate
-				HibernateUtil.closeSession(session);
-			}
+			// Executa o hql
+			session.createQuery(consulta)
+					.setInteger("anoMesReferenciaArrecadacao", anoMesReferenciaArrecadacao)
+					.setInteger("idLocalidade", idLocalidade).executeUpdate();
+
+			// Erro no hibernate
+		} catch (HibernateException e) {
+			// Levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// Fecha a sessão com o hibernate
+			HibernateUtil.closeSession(session);
 		}
+	}
 
-		/**TODO:COSANPA
-		 * @author Adriana Muniz
-		 * @date 12/12/2012
-		 * 
-		 * Exclui os dados diários da devolucao auxiliar do ano/mês da arrecadação corrente
-		 * por localidade
-		 * 
-		 * [UC0301] Gerar Dados Diários da Arrecadação
-		 * 
-		 * @param anoMesReferenciaArrecadacao
-		 * @param idLocalidade
-		 * @throws ErroRepositorioException
-		 */
-		public void excluirDadosDiariosDevolucaoPorAnoMesArrecadacaoAuxiliarPorLocalidade(
-				int anoMesReferenciaArrecadacao, Integer idLocalidade)
-				throws ErroRepositorioException {
+	/**TODO:COSANPA
+	 * @author Adriana Muniz
+	 * @date 12/12/2012
+	 * 
+	 * Exclui os dados diários da devolucao auxiliar do ano/mês da arrecadação corrente
+	 * por localidade
+	 * 
+	 * [UC0301] Gerar Dados Diários da Arrecadação
+	 * 
+	 * @param anoMesReferenciaArrecadacao
+	 * @param idLocalidade
+	 * @throws ErroRepositorioException
+	 */
+	public void excluirDadosDiariosDevolucaoPorAnoMesArrecadacaoAuxiliarPorLocalidade(
+			int anoMesReferenciaArrecadacao, Integer idLocalidade)
+			throws ErroRepositorioException {
 
-			// Cria uma sessão com o hibernate
-			Session session = HibernateUtil.getSession();
+		// Cria uma sessão com o hibernate
+		Session session = HibernateUtil.getSession();
 
-			// Cria a variável que vai conter o hql
-			String consulta;
+		// Cria a variável que vai conter o hql
+		String consulta;
 
-			try {
+		try {
 
-				// Constroi o hql para remover os dados diários de devolucao
-				// referentes ao ano/mês de arrecadação atual
-				consulta = "delete DevolucaoDadosDiariosAuxiliar dvdd where dvdd.anoMesReferencia = :anoMesReferenciaArrecadacao and dvdd.localidade.id = :idLocalidade";
+			// Constroi o hql para remover os dados diários de devolucao
+			// referentes ao ano/mês de arrecadação atual
+			consulta = "delete DevolucaoDadosDiariosAuxiliar dvdd where dvdd.anoMesReferencia = :anoMesReferenciaArrecadacao and dvdd.localidade.id = :idLocalidade";
 
-				// Executa o hql
-				session.createQuery(consulta)
-						.setInteger("anoMesReferenciaArrecadacao", anoMesReferenciaArrecadacao)
-						.setInteger("idLocalidade", idLocalidade).executeUpdate();
+			// Executa o hql
+			session.createQuery(consulta)
+					.setInteger("anoMesReferenciaArrecadacao", anoMesReferenciaArrecadacao)
+					.setInteger("idLocalidade", idLocalidade).executeUpdate();
 
-				// Erro no hibernate
-			} catch (HibernateException e) {
-				// Levanta a exceção para a próxima camada
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				// Fecha a sessão com o hibernate
-				HibernateUtil.closeSession(session);
-			}
+			// Erro no hibernate
+		} catch (HibernateException e) {
+			// Levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// Fecha a sessão com o hibernate
+			HibernateUtil.closeSession(session);
 		}
-		
-		/**TODO:COSANPA
-		 * @author Adriana Muniz
-		 * @date 05/12/2012
-		 * 
-		 * Acumula a quantidade e o valor dos pagamentos com ano/mês de referência
-		 * da arrecadação igual ao ano/mês de referência da arrecadação corrente,
-		 * 
-		 * 
-		 * [UC0301] Gerar Dados Diários da Arrecadação
-		 * 
-		 * @param anoMesReferenciaArrecadacao
-		 * @param idLocalidade
-		 * @return
-		 * @throws ErroRepositorioException
-		 */
-		public Collection acumularQuantidadeEValorPagamentoPorAnoMesArrecadacaoAuxiliar(
-				int anoMesReferenciaArrecadacao, Integer idLocalidade)
-				throws ErroRepositorioException {
+	}
+	
+	/**TODO:COSANPA
+	 * @author Adriana Muniz
+	 * @date 05/12/2012
+	 * 
+	 * Acumula a quantidade e o valor dos pagamentos com ano/mês de referência
+	 * da arrecadação igual ao ano/mês de referência da arrecadação corrente,
+	 * 
+	 * 
+	 * [UC0301] Gerar Dados Diários da Arrecadação
+	 * 
+	 * @param anoMesReferenciaArrecadacao
+	 * @param idLocalidade
+	 * @return
+	 * @throws ErroRepositorioException
+	 */
+	public Collection acumularQuantidadeEValorPagamentoPorAnoMesArrecadacaoAuxiliar(
+			int anoMesReferenciaArrecadacao, Integer idLocalidade)
+			throws ErroRepositorioException {
 
-			// Cria a variávelque vai armazenar a coleção de pagamentos
-			Collection retorno = new ArrayList();
+		// Cria a variávelque vai armazenar a coleção de pagamentos
+		Collection retorno = new ArrayList();
 
-			// Cria uma sessão com o hibernate
-			Session session = HibernateUtil.getSession();
+		// Cria uma sessão com o hibernate
+		Session session = HibernateUtil.getSession();
 
-			// Cria a variável que vai conter o hql
-			String consulta;
+		// Cria a variável que vai conter o hql
+		String consulta;
 
-			try {
+		try {
 
 //				 Cria o hql para acumular o valor e quantidade de pagamentos
-				consulta = acumularQuantidadeEValorPagamentoPorAnoMesArrecadacaoAuxiliarMontarQuery();
-				retorno = session.createSQLQuery(consulta)
-					.addScalar("somaValor", Hibernate.BIG_DECIMAL)
-					.addScalar("qtdPagamento", Hibernate.INTEGER)
-					.addScalar("idGreg", Hibernate.INTEGER)
-					.addScalar("idAviso", Hibernate.INTEGER)
-					.addScalar("idArrecadador", Hibernate.INTEGER)
-					.addScalar("idTipoDocumento", Hibernate.INTEGER)
-					.addScalar("idFormaArrec", Hibernate.INTEGER)
-					.addScalar("dataPagamento", Hibernate.DATE)
-					.addScalar("idUN", Hibernate.INTEGER)
-					.addScalar("idTipoDocumentoAgregador", Hibernate.INTEGER)
-					.addScalar("qtdDocumentosAgregados", Hibernate.INTEGER)
-					.setInteger("anoMesReferenciaArrecadacao", anoMesReferenciaArrecadacao)
-					.setInteger("idLocalidade", idLocalidade)				
+			consulta = acumularQuantidadeEValorPagamentoPorAnoMesArrecadacaoAuxiliarMontarQuery();
+			retorno = session.createSQLQuery(consulta)
+				.addScalar("somaValor", Hibernate.BIG_DECIMAL)
+				.addScalar("qtdPagamento", Hibernate.INTEGER)
+				.addScalar("idGreg", Hibernate.INTEGER)
+				.addScalar("idAviso", Hibernate.INTEGER)
+				.addScalar("idArrecadador", Hibernate.INTEGER)
+				.addScalar("idTipoDocumento", Hibernate.INTEGER)
+				.addScalar("idFormaArrec", Hibernate.INTEGER)
+				.addScalar("dataPagamento", Hibernate.DATE)
+				.addScalar("idUN", Hibernate.INTEGER)
+				.addScalar("idTipoDocumentoAgregador", Hibernate.INTEGER)
+				.addScalar("qtdDocumentosAgregados", Hibernate.INTEGER)
+				.setInteger("anoMesReferenciaArrecadacao", anoMesReferenciaArrecadacao)
+				.setInteger("idLocalidade", idLocalidade)				
+				.list();
+			
+		} catch (HibernateException e) {
+			// Levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// Fecha a sessão com o hibernate
+			HibernateUtil.closeSession(session);
+		}
+
+		// Retorna a coleção de pagamentos
+		return retorno;
+	}
+
+	/**TODO:COSANPA
+	 * @author Adriana Muniz
+	 * @date 05/12/2012
+	 * 
+	 * Contrucao da query usada no metodo acumularQuantidadeEValorPagamentoPorAnoMesArrecadacao
+	 *  
+	 * @see acumularQuantidadeEValorPagamentoPorAnoMesArrecadacaoAuxiliar
+	 */
+	private String acumularQuantidadeEValorPagamentoPorAnoMesArrecadacaoAuxiliarMontarQuery(){
+		String queryFinal = "";
+		String parteSelect = "select sum(pgmt.pgmt_vlpagamento) as somaValor,"
+			+ "count(pgmt.pgmt_id) as qtdPagamento,"
+			+ "uneg.greg_id as idGreg,"
+			+ "avbc.avbc_id as idAviso,"
+			+ "avbc.arrc_id as idArrecadador,"
+			+ "pgmt.dotp_id as idTipoDocumento,"
+			+ "pgmt.arfm_id as idFormaArrec,"
+			+ "pgmt.pgmt_dtpagamento as dataPagamento,"
+			+ "uneg.uneg_id  as idUN, "
+			+ "pgmt.dotp_idagregador as idTipoDocumentoAgregador ";
+			
+		String parteFrom = " from arrecadacao.pagamento pgmt "
+			+ "left join arrecadacao.aviso_bancario avbc on pgmt.avbc_id = avbc.avbc_id "
+			+ "left join cadastro.localidade loca on pgmt.loca_id = loca.loca_id "
+			+ "left join cadastro.unidade_negocio uneg on uneg.uneg_id = loca.uneg_id ";
+		
+			
+		String parteWhere = "where pgmt.pgmt_amreferenciaarrecadacao = :anoMesReferenciaArrecadacao " +
+				"and loca.loca_id = :idLocalidade ";
+		
+		String parteGroupBy = "group by uneg.greg_id, avbc.avbc_id, avbc.arrc_id, pgmt.dotp_id, " +
+				"pgmt.arfm_id, pgmt.pgmt_dtpagamento, uneg.uneg_id, " +				
+				"pgmt.dotp_idagregador "; 
+		
+		// Caso o tipo do documento agregador seja igual ao tipo de documento do pagamento
+		// DocumentoTipoAgregador, IdDocumento, CountDocumento
+		queryFinal = parteSelect +	", count(distinct pgmt.pgmt_id) as qtdDocumentosAgregados "  
+			+ parteFrom + parteWhere 
+			+ " and (pgmt.dotp_id = pgmt.dotp_idagregador or (pgmt.cbdo_id is null and pgmt.fatu_id is null)) "
+			+ parteGroupBy 
+			
+		// UNION > Caso a identificacao do documento agregador seja diferente de nulo
+			+ " UNION "
+			+ parteSelect + ", count(distinct pgmt.cbdo_id) as qtdDocumentosAgregados "
+			+ parteFrom + parteWhere 
+			+ " and pgmt.dotp_id <> pgmt.dotp_idagregador and pgmt.cbdo_id is not null "
+			+ parteGroupBy 
+
+		// UNION > Caso a identificacao da fatura seja diferente de nulo
+			+ " UNION "
+			+ parteSelect + ", count(distinct pgmt.fatu_id) as qtdDocumentosAgregados "
+			+ parteFrom + parteWhere 
+			+ " and pgmt.dotp_id <> pgmt.dotp_idagregador and pgmt.fatu_id is not null "
+			+ parteGroupBy 			
+			;		  
+
+		return queryFinal;
+
+	}
+	
+	/** TODO:COSANPA
+	 * @author Adriana Muniz
+	 * @date 12/12/2012
+	 * 
+	 * Acumula a quantidade e o valor das devolucoes com ano/mês de referência
+	 * da arrecadação igual ao ano/mês de referência da arrecadação corrente 
+	 * para ser persistido na tabela devolucao_dados_diarios_auxiliar
+	 * 
+	 * [UC0301] Gerar Dados Diários da Arrecadação
+	 * 
+	 * @param anoMesReferenciaArrecadacao
+	 * @param idLocalidade
+	 * @return
+	 * @throws ErroRepositorioException
+	 */
+	public Collection acumularQuantidadeEValorDevolucaoPorAnoMesArrecadacaoAuxiliar(
+			int anoMesReferenciaArrecadacao, Integer idLocalidade)
+			throws ErroRepositorioException {
+
+		// Cria a variávelque vai armazenar a coleção de pagamentos
+		Collection retorno = new ArrayList();
+
+		// Cria uma sessão com o hibernate
+		Session session = HibernateUtil.getSession();
+
+		// Cria a variável que vai conter o hql
+		String consulta;
+
+		try {
+
+			// Cria o hql para acumular o valor e quantidade de pagamentos
+			consulta = acumularQuantidadeEValorDevolucaoPorAnoMesArrecadacaoMontarQuery();
+			retorno = session.createSQLQuery(consulta)
+				.addScalar("somaValor", Hibernate.BIG_DECIMAL)
+				.addScalar("qtdDevolucoes", Hibernate.INTEGER)
+				.addScalar("idGreg", Hibernate.INTEGER)
+				.addScalar("idAviso", Hibernate.INTEGER)
+				.addScalar("idArrecadador", Hibernate.INTEGER)
+				.addScalar("idFormaArrec", Hibernate.INTEGER)
+				.addScalar("dataDevolucao", Hibernate.DATE)
+				.addScalar("idUN", Hibernate.INTEGER)
+				.addScalar("idTipoDocumentoAgregador", Hibernate.INTEGER)
+				.addScalar("qtdDocumentosAgregados", Hibernate.INTEGER)
+				.addScalar("tipoDevolucao", Hibernate.STRING)
+				.setInteger("anoMesReferenciaArrecadacao", anoMesReferenciaArrecadacao)
+				.setInteger("idLocalidade", idLocalidade).list();
+
+			// Erro no hibernate
+		} catch (HibernateException e) {
+			// Levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// Fecha a sessão com o hibernate
+			HibernateUtil.closeSession(session);
+		}
+
+		// Retorna a coleção de pagamentos
+		return retorno;
+	}
+
+	/** TODO:COSANPA
+	 * @author Adriana Muniz
+	 * @date 12/12/2012
+	 * 
+	 * Contrucao da query usada no metodo acumularQuantidadeEValorDevolucaoPorAnoMesArrecadacaoAuxiliar
+	 *  
+	 * @see acumularQuantidadeEValorDevolucaoPorAnoMesArrecadacaoAuxiliar
+	 */
+	private String acumularQuantidadeEValorDevolucaoPorAnoMesArrecadacaoAuxiliarMontarQuery(){
+		String queryFinal = "";
+		String parteSelect = "select sum(dev.devl_vldevolucao) as somaValor,"
+			+ "count(dev.devl_id) as qtdDevolucoes,"
+			+ "uneg.greg_id as idGreg,"
+			+ "avbc.avbc_id as idAviso,"
+			+ "avbc.arrc_id as idArrecadador,"
+			+ "avbc.arfm_id as idFormaArrec,"
+			+ "dev.devl_dtdevolucao as dataDevolucao,"
+			+ "uneg.uneg_id as idUN, " 
+			+ "dev.dotp_idagregador as idTipoDocumentoAgregador ";
+			
+		String parteFrom = " from arrecadacao.devolucao dev "
+			+ "left join arrecadacao.aviso_bancario avbc on dev.avbc_id=avbc.avbc_id "
+			+ "left join cadastro.localidade loca on dev.loca_id = loca.loca_id "
+			+ "left join cadastro.unidade_negocio uneg on uneg.uneg_id = loca.uneg_id "
+		    ;
+			
+		String parteWhere = "where dev.devl_amreferenciaarrecadacao = :anoMesReferenciaArrecadacao " +
+							"and dev.loca_id = :idLocalidade ";
+
+		String parteGroupBy = "group by uneg.greg_id, avbc.avbc_id, avbc.arrc_id," +
+							  "avbc.arfm_id, dev.devl_dtdevolucao, uneg.uneg_id, dev.dotp_idagregador ";
+		
+		// Caso o tipo do documento agregador seja nulo => Tipo de Devolucao Normal
+		queryFinal = parteSelect +	", count(dev.devl_id) as qtdDocumentosAgregados, 'N' as tipoDevolucao " // DocumentoTipoAgregador, IdDocumento, CountDocumento 
+			+ parteFrom + parteWhere 
+			+ " and dev.dotp_idagregador is null "
+			+ parteGroupBy 
+			
+		// UNION > Caso a identificacao do documento agregador seja diferente de nulo e a identificacao do Credito a 
+			// Realizar seja diferente de nulo => Tipo de Devolucao Credito
+			
+			+ " UNION "
+			+ parteSelect + ", count(distinct dev.cbdo_id) as qtdDocumentosAgregados, 'C' as tipoDevolucao "
+			+ parteFrom 
+			+ parteWhere 
+			+ " and dev.dotp_idagregador is not null and dev.cbdo_id is not null and dev.crar_id is not null "
+			+ parteGroupBy 
+
+		// UNION > Caso a identificacao do Credito a realizar seja nula => Tipo de Devolucao Desconto
+			+ " UNION "
+			+ parteSelect + ", count(distinct dev.cbdo_id) as qtdDocumentosAgregados, 'D' as tipoDevolucao "
+			+ parteFrom 
+			+ parteWhere
+			+ " and dev.dotp_idagregador is not null and dev.cbdo_id is not null and dev.crar_id is null "
+			+ parteGroupBy 			
+			;		  
+
+		return queryFinal;
+
+	}
+	
+	/**TODO:COSANPA
+    *
+    * Relatório Analitico dos valores diários da arrecadação com tarifa
+    *
+    * @author Adriana Muniz
+    * data: 19/12/2012
+    *
+    * obtém as formas de arrecadação com tarifa por dia
+    * @param helper
+    * @param filtro
+    * @return coleção
+    */
+   public Collection obterFormasDeArrecadacaoComTarifaPorDiaAuxiliar(
+           Object helper, FiltroConsultarDadosDiariosArrecadacaoAuxiliar filtro) throws ErroRepositorioException {
+
+       Collection retorno = null;
+       String consulta;
+       Session session = HibernateUtil.getSession();
+       try {
+           consulta = " SELECT coalesce(ardd.itemADD, ddd1.itemDDD) AS campoAgrupador, "
+                   +  " arfm_dsarrecadacaoforma AS nomeFormaArrecadacao, "
+                   +  " ARDD.valorTarifa as valorTarifa, "
+                   +  " ardd.dataprevista as dataPrevista, "
+                   +  " (COALESCE(ARDD.qtdDocumentos,0) + COALESCE(DDD1.qtdDocumentosDescontos,0) + COALESCE(DDD1.qtdDocumentosDevolucoes,0)) as qtdDocumentos,"
+                   +  " (COALESCE(ARDD.qtdPagamentos,0) + COALESCE(DDD1.qtdPagamentosDescontos,0) + COALESCE(DDD1.qtdPagamentosDevolucoes,0)) as qtdPagamentos,  "
+                   +  " COALESCE(ARDD.debitos, 0) as debitos, "
+                   +  " COALESCE(DDD1.valorDescontos, 0) as descontos, "
+                   +  " COALESCE(DDD1.valorDevolucoes, 0) as devolucoes "
+                   +  " from (SELECT      ad.arfm_id  as itemADD, "
+                   +  " sum(ardd_vltarifa) as valorTarifa, "
+                   +  " (date(ad.ardd_dtpagamento) + cast(ad.ardd_nndiafloat as integer)) as dataPrevista, "
+                   +  " sum(ad.ardd_qtdocumentos) as qtdDocumentos, "
+                   +  " sum(ad.ardd_qtpagamentos) as qtdPagamentos, "
+                   +  " sum(ad.ardd_vlpagamentos) as debitos "
+                   +  " FROM arrecadacao.arrecadacao_dados_diarios_auxiliar ad "
+                   +  " WHERE ad.ardd_amreferenciaarrecadacao = " + filtro.getAnoMesArrecadacao()
+                   +  " and ad.arrc_id = " + filtro.getIdArrecadador()
+           		   +  " and date(ardd_dtpagamento) = '" + helper.toString()+"' "
+                   +  " group by itemADD, dataPrevista) as ARDD    "
+                   +  " full join (SELECT      dd.arfm_id  as itemDDD,  "
+                   +  " 0 as valorTarifa, "
+                   +  " null as dataPrevista, "
+                   +  " sum(case when (dd.dvdd_tipodevolucao <> 'N') then dd.dvdd_qtdocumentos else 0 end) as qtdDocumentosDescontos, "
+                   +  " sum(case when (dd.dvdd_tipodevolucao = 'N') then dd.dvdd_qtdocumentos else 0 end) as qtdDocumentosDevolucoes, "
+                   +  " sum(case when (dd.dvdd_tipodevolucao <> 'N') then dd.dvdd_qtdevolucoes else 0 end) as qtdPagamentosDescontos, "
+                   +  " sum(case when (dd.dvdd_tipodevolucao = 'N') then dd.dvdd_qtdevolucoes else 0 end) as qtdPagamentosDevolucoes, "
+                   +  " sum(case when (dd.dvdd_tipodevolucao <> 'N') then dd.dvdd_vldevolucoes else 0 end) as valorDescontos,  "
+                   +  " sum(case when (dd.dvdd_tipodevolucao = 'N') then dd.dvdd_vldevolucoes else 0 end) as valorDevolucoes "
+                   +  " FROM arrecadacao.devolucao_dados_diarios_auxiliar dd "
+                   +  " WHERE dd.dvdd_amreferenciaarrecadacao = " + filtro.getAnoMesArrecadacao()
+                   +  " and dd.arrc_id = " + filtro.getIdArrecadador()
+                   +  " and date(dvdd_dtdevolucao) = '" + helper.toString()+"' "
+                   +  " group by itemDDD ) as DDD1 on (ARDD.itemADD = DDD1.itemDDD) "
+                   +  " inner join arrecadacao.arrecadacao_forma af on (af.arfm_id = coalesce(ardd.itemADD, ddd1.itemDDD)) "
+                   +  " order by campoAgrupador  ";
+          
+           retorno = session.createSQLQuery(consulta)
+                   .addScalar("campoAgrupador", Hibernate.INTEGER)
+                   .addScalar("nomeFormaArrecadacao", Hibernate.STRING)
+                   .addScalar("valorTarifa", Hibernate.BIG_DECIMAL)
+                   .addScalar("dataPrevista", Hibernate.DATE)
+                   .addScalar("qtdDocumentos", Hibernate.INTEGER)
+                   .addScalar("qtdPagamentos", Hibernate.INTEGER)
+                   .addScalar("debitos", Hibernate.BIG_DECIMAL)
+                   .addScalar("descontos", Hibernate.BIG_DECIMAL)
+                   .addScalar("devolucoes", Hibernate.BIG_DECIMAL)
+                   .list();
+          
+       }catch(HibernateException e) {
+           throw new ErroRepositorioException("Erro no Hibernate");
+       }finally{
+           HibernateUtil.closeSession(session);
+       }
+      
+       return retorno;
+   }
+   
+   /**
+	 * TODO: COSANPA
+	 * 
+	 * Mantis: ***
+	 * 
+	 * Mudança de conta contábil de recebimentos até 12/2012 classificados no mês atual;
+	 * 
+	 * @author Wellington Rocha
+	 * 
+	 * @param idLocalidade
+	 * @param anoMesReferenciaArrecadacao
+	 * @param idImpostoTipo
+	 * @return
+	 * @throws ErroRepositorioException
+	 */
+	public Collection pesquisarContasImpostosDeduzidosPagamentosContasEfetuadosAte122012ClassificadosMesPorTipoImposto(
+			Integer idLocalidade, 
+			Integer anoMesReferenciaArrecadacao,
+			Integer idImpostoTipo) throws ErroRepositorioException {
+
+		Collection retorno = new ArrayList();
+
+		// cria uma sessão com o hibernate
+		Session session = HibernateUtil.getSession();
+
+		// cria a variável que vai conter o hql
+		String consulta = "";
+
+		try {
+
+			
+			consulta = "select " +
+					 " sum(cnid.cnid_vlimposto) as col_0, " +
+					 " cnta.imov_id as col_1 " + 
+					 "from " +
+					 " faturamento.conta_impostos_deduzidos cnid  " +
+					 "inner join faturamento.conta cnta on cnid.cnta_id=cnta.cnta_id " + 
+					 "where " +
+					 " cnid.imtp_id= :idImpostoTipo  " +
+					 " and (cnta.cnta_id in (" +
+											 "select " +
+											 "distinct pgmt.cnta_id " + 
+											 "from " +
+											 "arrecadacao.pagamento pgmt " + 
+											 "where " +
+											 "pgmt.pgmt_amreferenciaarrecadacao < 201301  " + 
+											 "and pgmt.loca_id= :idLocalidade  " +
+											 "and (pgmt.pgst_idatual= :idPagamentoClassificado or pgmt.pgst_idatual= :idPagamentoValorABaixar) " + 
+											 "and (pgmt.cnta_id is not null) "		+	
+					 ")) " +
+					 " group by cnta.imov_id ";
+			
+			retorno = session.createSQLQuery(consulta)
+			 		.addScalar("col_0", Hibernate.BIG_DECIMAL)
+			 		.addScalar("col_1", Hibernate.INTEGER)
+					.setInteger("idImpostoTipo",idImpostoTipo)
+					.setInteger("idLocalidade", idLocalidade)
+					.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
+					.setInteger("idPagamentoValorABaixar",PagamentoSituacao.VALOR_A_BAIXAR)
 					.list();
-				
-			} catch (HibernateException e) {
-				// Levanta a exceção para a próxima camada
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				// Fecha a sessão com o hibernate
-				HibernateUtil.closeSession(session);
-			}
 
-			// Retorna a coleção de pagamentos
-			return retorno;
-		}
-
-		/**TODO:COSANPA
-		 * @author Adriana Muniz
-		 * @date 05/12/2012
-		 * 
-		 * Contrucao da query usada no metodo acumularQuantidadeEValorPagamentoPorAnoMesArrecadacao
-		 *  
-		 * @see acumularQuantidadeEValorPagamentoPorAnoMesArrecadacaoAuxiliar
-		 */
-		private String acumularQuantidadeEValorPagamentoPorAnoMesArrecadacaoAuxiliarMontarQuery(){
-			String queryFinal = "";
-			String parteSelect = "select sum(pgmt.pgmt_vlpagamento) as somaValor,"
-				+ "count(pgmt.pgmt_id) as qtdPagamento,"
-				+ "uneg.greg_id as idGreg,"
-				+ "avbc.avbc_id as idAviso,"
-				+ "avbc.arrc_id as idArrecadador,"
-				+ "pgmt.dotp_id as idTipoDocumento,"
-				+ "pgmt.arfm_id as idFormaArrec,"
-				+ "pgmt.pgmt_dtpagamento as dataPagamento,"
-				+ "uneg.uneg_id  as idUN, "
-				+ "pgmt.dotp_idagregador as idTipoDocumentoAgregador ";
-				
-			String parteFrom = " from arrecadacao.pagamento pgmt "
-				+ "left join arrecadacao.aviso_bancario avbc on pgmt.avbc_id = avbc.avbc_id "
-				+ "left join cadastro.localidade loca on pgmt.loca_id = loca.loca_id "
-				+ "left join cadastro.unidade_negocio uneg on uneg.uneg_id = loca.uneg_id ";
-			
-				
-			String parteWhere = "where pgmt.pgmt_amreferenciaarrecadacao = :anoMesReferenciaArrecadacao " +
-					"and loca.loca_id = :idLocalidade ";
-			
-			String parteGroupBy = "group by uneg.greg_id, avbc.avbc_id, avbc.arrc_id, pgmt.dotp_id, " +
-					"pgmt.arfm_id, pgmt.pgmt_dtpagamento, uneg.uneg_id, " +				
-					"pgmt.dotp_idagregador "; 
-			
-			// Caso o tipo do documento agregador seja igual ao tipo de documento do pagamento
-			// DocumentoTipoAgregador, IdDocumento, CountDocumento
-			queryFinal = parteSelect +	", count(distinct pgmt.pgmt_id) as qtdDocumentosAgregados "  
-				+ parteFrom + parteWhere 
-				+ " and (pgmt.dotp_id = pgmt.dotp_idagregador or (pgmt.cbdo_id is null and pgmt.fatu_id is null)) "
-				+ parteGroupBy 
-				
-			// UNION > Caso a identificacao do documento agregador seja diferente de nulo
-				+ " UNION "
-				+ parteSelect + ", count(distinct pgmt.cbdo_id) as qtdDocumentosAgregados "
-				+ parteFrom + parteWhere 
-				+ " and pgmt.dotp_id <> pgmt.dotp_idagregador and pgmt.cbdo_id is not null "
-				+ parteGroupBy 
-
-			// UNION > Caso a identificacao da fatura seja diferente de nulo
-				+ " UNION "
-				+ parteSelect + ", count(distinct pgmt.fatu_id) as qtdDocumentosAgregados "
-				+ parteFrom + parteWhere 
-				+ " and pgmt.dotp_id <> pgmt.dotp_idagregador and pgmt.fatu_id is not null "
-				+ parteGroupBy 			
-				;		  
-
-			return queryFinal;
-
-		}
 		
-		/** TODO:COSANPA
-		 * @author Adriana Muniz
-		 * @date 12/12/2012
-		 * 
-		 * Acumula a quantidade e o valor das devolucoes com ano/mês de referência
-		 * da arrecadação igual ao ano/mês de referência da arrecadação corrente 
-		 * para ser persistido na tabela devolucao_dados_diarios_auxiliar
-		 * 
-		 * [UC0301] Gerar Dados Diários da Arrecadação
-		 * 
-		 * @param anoMesReferenciaArrecadacao
-		 * @param idLocalidade
-		 * @return
-		 * @throws ErroRepositorioException
-		 */
-		public Collection acumularQuantidadeEValorDevolucaoPorAnoMesArrecadacaoAuxiliar(
-				int anoMesReferenciaArrecadacao, Integer idLocalidade)
-				throws ErroRepositorioException {
-
-			// Cria a variávelque vai armazenar a coleção de pagamentos
-			Collection retorno = new ArrayList();
-
-			// Cria uma sessão com o hibernate
-			Session session = HibernateUtil.getSession();
-
-			// Cria a variável que vai conter o hql
-			String consulta;
-
-			try {
-
-				// Cria o hql para acumular o valor e quantidade de pagamentos
-				consulta = acumularQuantidadeEValorDevolucaoPorAnoMesArrecadacaoMontarQuery();
-				retorno = session.createSQLQuery(consulta)
-					.addScalar("somaValor", Hibernate.BIG_DECIMAL)
-					.addScalar("qtdDevolucoes", Hibernate.INTEGER)
-					.addScalar("idGreg", Hibernate.INTEGER)
-					.addScalar("idAviso", Hibernate.INTEGER)
-					.addScalar("idArrecadador", Hibernate.INTEGER)
-					.addScalar("idFormaArrec", Hibernate.INTEGER)
-					.addScalar("dataDevolucao", Hibernate.DATE)
-					.addScalar("idUN", Hibernate.INTEGER)
-					.addScalar("idTipoDocumentoAgregador", Hibernate.INTEGER)
-					.addScalar("qtdDocumentosAgregados", Hibernate.INTEGER)
-					.addScalar("tipoDevolucao", Hibernate.STRING)
-					.setInteger("anoMesReferenciaArrecadacao", anoMesReferenciaArrecadacao)
-					.setInteger("idLocalidade", idLocalidade).list();
-
-				// Erro no hibernate
-			} catch (HibernateException e) {
-				// Levanta a exceção para a próxima camada
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				// Fecha a sessão com o hibernate
-				HibernateUtil.closeSession(session);
-			}
-
-			// Retorna a coleção de pagamentos
-			return retorno;
+			// erro no hibernate
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão com o hibernate
+			HibernateUtil.closeSession(session);
 		}
 
-		/** TODO:COSANPA
-		 * @author Adriana Muniz
-		 * @date 12/12/2012
-		 * 
-		 * Contrucao da query usada no metodo acumularQuantidadeEValorDevolucaoPorAnoMesArrecadacaoAuxiliar
-		 *  
-		 * @see acumularQuantidadeEValorDevolucaoPorAnoMesArrecadacaoAuxiliar
-		 */
-		private String acumularQuantidadeEValorDevolucaoPorAnoMesArrecadacaoAuxiliarMontarQuery(){
-			String queryFinal = "";
-			String parteSelect = "select sum(dev.devl_vldevolucao) as somaValor,"
-				+ "count(dev.devl_id) as qtdDevolucoes,"
-				+ "uneg.greg_id as idGreg,"
-				+ "avbc.avbc_id as idAviso,"
-				+ "avbc.arrc_id as idArrecadador,"
-				+ "avbc.arfm_id as idFormaArrec,"
-				+ "dev.devl_dtdevolucao as dataDevolucao,"
-				+ "uneg.uneg_id as idUN, " 
-				+ "dev.dotp_idagregador as idTipoDocumentoAgregador ";
-				
-			String parteFrom = " from arrecadacao.devolucao dev "
-				+ "left join arrecadacao.aviso_bancario avbc on dev.avbc_id=avbc.avbc_id "
-				+ "left join cadastro.localidade loca on dev.loca_id = loca.loca_id "
-				+ "left join cadastro.unidade_negocio uneg on uneg.uneg_id = loca.uneg_id "
-			    ;
-				
-			String parteWhere = "where dev.devl_amreferenciaarrecadacao = :anoMesReferenciaArrecadacao " +
-								"and dev.loca_id = :idLocalidade ";
+		return retorno;
+	}
+	
+	/**
+	 * TODO: COSANPA
+	 * 
+	 * Mantis *** 
+	 * 
+	 * Contabilizar valores arrecadados até dezembro de 2012 em contas diferentes.
+	 * 
+	 * @author Wellington Rocha
+	 * 
+	 * @param idLocalidade
+	 * @param anoMesReferenciaArrecadacao
+	 * @param idCategoria
+	 * @return
+	 * @throws ErroRepositorioException
+	 */
+	public Object[] acumularValorAguaEsgotoPagamentosContasEfetuadosAte122012ClassificadosNoMes(
+			Integer idLocalidade, 
+			Integer anoMesReferenciaArrecadacao,
+			Integer idCategoria) throws ErroRepositorioException {
 
-			String parteGroupBy = "group by uneg.greg_id, avbc.avbc_id, avbc.arrc_id," +
-								  "avbc.arfm_id, dev.devl_dtdevolucao, uneg.uneg_id, dev.dotp_idagregador ";
+		Object[] retorno = null;
+
+		// cria uma sessão com o hibernate
+		Session session = HibernateUtil.getSession();
+
+		// cria a variável que vai conter o hql
+		String consulta = "";
+
+		try {
+
+			consulta = "select " +
+					  "sum(ctcg.ctcg_vlagua) as col_0,  " +
+					  "sum(ctcg.ctcg_vlesgoto) as col_1  " +
+					  "from " +
+					   "faturamento.conta_categoria ctcg " + 
+					  "where " +
+					   "ctcg.catg_id= :idCategoria  " +
+					   "and (ctcg.cnta_id in (" +
+										   "select " +
+										   "distinct pgmt.cnta_id " + 
+										   "from " +
+										   "arrecadacao.pagamento pgmt " + 
+										   "where " +
+										   "pgmt.pgmt_amreferenciaarrecadacao < 201301 " + 
+										   "and pgmt.loca_id= :idLocalidade  " +
+										   "and (pgmt.pgst_idatual= :idPagamentoClassificado or pgmt.pgst_idatual= :idPagamentoValorABaixar) " + 
+										   "and (pgmt.cnta_id is not null) "	+		
+					   ") ) " ;
 			
-			// Caso o tipo do documento agregador seja nulo => Tipo de Devolucao Normal
-			queryFinal = parteSelect +	", count(dev.devl_id) as qtdDocumentosAgregados, 'N' as tipoDevolucao " // DocumentoTipoAgregador, IdDocumento, CountDocumento 
-				+ parteFrom + parteWhere 
-				+ " and dev.dotp_idagregador is null "
-				+ parteGroupBy 
-				
-			// UNION > Caso a identificacao do documento agregador seja diferente de nulo e a identificacao do Credito a 
-				// Realizar seja diferente de nulo => Tipo de Devolucao Credito
-				
-				+ " UNION "
-				+ parteSelect + ", count(distinct dev.cbdo_id) as qtdDocumentosAgregados, 'C' as tipoDevolucao "
-				+ parteFrom 
-				+ parteWhere 
-				+ " and dev.dotp_idagregador is not null and dev.cbdo_id is not null and dev.crar_id is not null "
-				+ parteGroupBy 
-
-			// UNION > Caso a identificacao do Credito a realizar seja nula => Tipo de Devolucao Desconto
-				+ " UNION "
-				+ parteSelect + ", count(distinct dev.cbdo_id) as qtdDocumentosAgregados, 'D' as tipoDevolucao "
-				+ parteFrom 
-				+ parteWhere
-				+ " and dev.dotp_idagregador is not null and dev.cbdo_id is not null and dev.crar_id is null "
-				+ parteGroupBy 			
-				;		  
-
-			return queryFinal;
-
+			retorno = (Object[]) session.createSQLQuery(consulta)
+			 		.addScalar("col_0",Hibernate.BIG_DECIMAL)
+			 		.addScalar("col_1",Hibernate.BIG_DECIMAL)
+					.setInteger("idCategoria", idCategoria)
+					.setInteger("idLocalidade", idLocalidade)
+					.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
+					.setInteger("idPagamentoValorABaixar",PagamentoSituacao.VALOR_A_BAIXAR)
+					.setMaxResults(1)
+					.uniqueResult();
+			
+			// erro no hibernate
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão com o hibernate
+			HibernateUtil.closeSession(session);
 		}
-		
-		/**TODO:COSANPA
-	    *
-	    * Relatório Analitico dos valores diários da arrecadação com tarifa
-	    *
-	    * @author Adriana Muniz
-	    * data: 19/12/2012
-	    *
-	    * obtém as formas de arrecadação com tarifa por dia
-	    * @param helper
-	    * @param filtro
-	    * @return coleção
-	    */
-	   public Collection obterFormasDeArrecadacaoComTarifaPorDiaAuxiliar(
-	           Object helper, FiltroConsultarDadosDiariosArrecadacaoAuxiliar filtro) throws ErroRepositorioException {
 
-	       Collection retorno = null;
-	       String consulta;
-	       Session session = HibernateUtil.getSession();
-	       try {
-	           consulta = " SELECT coalesce(ardd.itemADD, ddd1.itemDDD) AS campoAgrupador, "
-	                   +  " arfm_dsarrecadacaoforma AS nomeFormaArrecadacao, "
-	                   +  " ARDD.valorTarifa as valorTarifa, "
-	                   +  " ardd.dataprevista as dataPrevista, "
-	                   +  " (COALESCE(ARDD.qtdDocumentos,0) + COALESCE(DDD1.qtdDocumentosDescontos,0) + COALESCE(DDD1.qtdDocumentosDevolucoes,0)) as qtdDocumentos,"
-	                   +  " (COALESCE(ARDD.qtdPagamentos,0) + COALESCE(DDD1.qtdPagamentosDescontos,0) + COALESCE(DDD1.qtdPagamentosDevolucoes,0)) as qtdPagamentos,  "
-	                   +  " COALESCE(ARDD.debitos, 0) as debitos, "
-	                   +  " COALESCE(DDD1.valorDescontos, 0) as descontos, "
-	                   +  " COALESCE(DDD1.valorDevolucoes, 0) as devolucoes "
-	                   +  " from (SELECT      ad.arfm_id  as itemADD, "
-	                   +  " sum(ardd_vltarifa) as valorTarifa, "
-	                   +  " (date(ad.ardd_dtpagamento) + cast(ad.ardd_nndiafloat as integer)) as dataPrevista, "
-	                   +  " sum(ad.ardd_qtdocumentos) as qtdDocumentos, "
-	                   +  " sum(ad.ardd_qtpagamentos) as qtdPagamentos, "
-	                   +  " sum(ad.ardd_vlpagamentos) as debitos "
-	                   +  " FROM arrecadacao.arrecadacao_dados_diarios_auxiliar ad "
-	                   +  " WHERE ad.ardd_amreferenciaarrecadacao = " + filtro.getAnoMesArrecadacao()
-	                   +  " and ad.arrc_id = " + filtro.getIdArrecadador()
-	           		   +  " and date(ardd_dtpagamento) = '" + helper.toString()+"' "
-	                   +  " group by itemADD, dataPrevista) as ARDD    "
-	                   +  " full join (SELECT      dd.arfm_id  as itemDDD,  "
-	                   +  " 0 as valorTarifa, "
-	                   +  " null as dataPrevista, "
-	                   +  " sum(case when (dd.dvdd_tipodevolucao <> 'N') then dd.dvdd_qtdocumentos else 0 end) as qtdDocumentosDescontos, "
-	                   +  " sum(case when (dd.dvdd_tipodevolucao = 'N') then dd.dvdd_qtdocumentos else 0 end) as qtdDocumentosDevolucoes, "
-	                   +  " sum(case when (dd.dvdd_tipodevolucao <> 'N') then dd.dvdd_qtdevolucoes else 0 end) as qtdPagamentosDescontos, "
-	                   +  " sum(case when (dd.dvdd_tipodevolucao = 'N') then dd.dvdd_qtdevolucoes else 0 end) as qtdPagamentosDevolucoes, "
-	                   +  " sum(case when (dd.dvdd_tipodevolucao <> 'N') then dd.dvdd_vldevolucoes else 0 end) as valorDescontos,  "
-	                   +  " sum(case when (dd.dvdd_tipodevolucao = 'N') then dd.dvdd_vldevolucoes else 0 end) as valorDevolucoes "
-	                   +  " FROM arrecadacao.devolucao_dados_diarios_auxiliar dd "
-	                   +  " WHERE dd.dvdd_amreferenciaarrecadacao = " + filtro.getAnoMesArrecadacao()
-	                   +  " and dd.arrc_id = " + filtro.getIdArrecadador()
-	                   +  " and date(dvdd_dtdevolucao) = '" + helper.toString()+"' "
-	                   +  " group by itemDDD ) as DDD1 on (ARDD.itemADD = DDD1.itemDDD) "
-	                   +  " inner join arrecadacao.arrecadacao_forma af on (af.arfm_id = coalesce(ardd.itemADD, ddd1.itemDDD)) "
-	                   +  " order by campoAgrupador  ";
-	          
-	           retorno = session.createSQLQuery(consulta)
-	                   .addScalar("campoAgrupador", Hibernate.INTEGER)
-	                   .addScalar("nomeFormaArrecadacao", Hibernate.STRING)
-	                   .addScalar("valorTarifa", Hibernate.BIG_DECIMAL)
-	                   .addScalar("dataPrevista", Hibernate.DATE)
-	                   .addScalar("qtdDocumentos", Hibernate.INTEGER)
-	                   .addScalar("qtdPagamentos", Hibernate.INTEGER)
-	                   .addScalar("debitos", Hibernate.BIG_DECIMAL)
-	                   .addScalar("descontos", Hibernate.BIG_DECIMAL)
-	                   .addScalar("devolucoes", Hibernate.BIG_DECIMAL)
-	                   .list();
-	          
-	       }catch(HibernateException e) {
-	           throw new ErroRepositorioException("Erro no Hibernate");
-	       }finally{
-	           HibernateUtil.closeSession(session);
-	       }
-	      
-	       return retorno;
-	   }
-	   
-	   /**
-		 * TODO: COSANPA
-		 * 
-		 * Mantis: ***
-		 * 
-		 * Mudança de conta contábil de recebimentos até 12/2012 classificados no mês atual;
-		 * 
-		 * @author Wellington Rocha
-		 * 
-		 * @param idLocalidade
-		 * @param anoMesReferenciaArrecadacao
-		 * @param idImpostoTipo
-		 * @return
-		 * @throws ErroRepositorioException
-		 */
-		public Collection pesquisarContasImpostosDeduzidosPagamentosContasEfetuadosAte122012ClassificadosMesPorTipoImposto(
-				Integer idLocalidade, 
-				Integer anoMesReferenciaArrecadacao,
-				Integer idImpostoTipo) throws ErroRepositorioException {
+		return retorno;
+	}
+	
+	
+	/**
+	 * Mantis ***
+	 * 
+	 * [UC0276] - Encerrar Arrecadação do Mês
+	 * 
+	 * Contabilizar valores arrecadados até 31/12/2012 em contas diferentes
+	 * 
+	 * @author Wellington Rocha
+	 * 
+	 * @param idLocalidade
+	 * @param anoMesReferenciaArrecadacao
+	 * @param idCategoria
+	 * @param idFinanciamentoTipo
+	 * @return
+	 * @throws ErroRepositorioException
+	 */
+	public BigDecimal acumularValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesPorFinanciamentoTipo(
+			Integer idLocalidade, 
+			Integer anoMesReferenciaArrecadacao,
+			Integer idCategoria, 
+			Integer idFinanciamentoTipo)
+			throws ErroRepositorioException {
 
-			Collection retorno = new ArrayList();
+		BigDecimal retorno = null;
 
-			// cria uma sessão com o hibernate
-			Session session = HibernateUtil.getSession();
+		// cria uma sessão com o hibernate
+		Session session = HibernateUtil.getSession();
 
-			// cria a variável que vai conter o hql
-			String consulta = "";
+		// cria a variável que vai conter o hql
+		String consulta = "";
 
-			try {
+		try {
 
-				
-				consulta = "select " +
-						 " sum(cnid.cnid_vlimposto) as col_0, " +
-						 " cnta.imov_id as col_1 " + 
-						 "from " +
-						 " faturamento.conta_impostos_deduzidos cnid  " +
-						 "inner join faturamento.conta cnta on cnid.cnta_id=cnta.cnta_id " + 
-						 "where " +
-						 " cnid.imtp_id= :idImpostoTipo  " +
-						 " and (cnta.cnta_id in (" +
-												 "select " +
-												 "distinct pgmt.cnta_id " + 
-												 "from " +
-												 "arrecadacao.pagamento pgmt " + 
-												 "where " +
-												 "pgmt.pgmt_amreferenciaarrecadacao < 201301  " + 
-												 "and pgmt.loca_id= :idLocalidade  " +
-												 "and (pgmt.pgst_idatual= :idPagamentoClassificado or pgmt.pgst_idatual= :idPagamentoValorABaixar) " + 
-												 "and (pgmt.cnta_id is not null) "		+	
-						 ")) " +
-						 " group by cnta.imov_id ";
-				
-				retorno = session.createSQLQuery(consulta)
-				 		.addScalar("col_0", Hibernate.BIG_DECIMAL)
-				 		.addScalar("col_1", Hibernate.INTEGER)
-						.setInteger("idImpostoTipo",idImpostoTipo)
-						.setInteger("idLocalidade", idLocalidade)
-						.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
-						.setInteger("idPagamentoValorABaixar",PagamentoSituacao.VALOR_A_BAIXAR)
-						.list();
+			consulta = "select " +
+					  "sum(dccg.dccg_vlcategoria) as col_0 " + 
+					  "from " +
+					   "faturamento.debito_cobrado_categoria dccg " + 
+					  "where " +
+					   "dccg.catg_id= :idCategoria  " +
+					   "and (dccg.dbcb_id in ( " +
+					 				"select " +
+					 				"dbcb.dbcb_id " + 
+					 				"from " +
+					 				"faturamento.debito_cobrado dbcb " + 
+					 				"where " +
+					 				"dbcb.fntp_id= :idFinanciamentoTipo  " +
+					 				"and (dbcb.cnta_id in (" +
+										 				"select " +
+										 				"distinct pgmt.cnta_id " + 
+										 				"from " +
+										 				"arrecadacao.pagamento pgmt " + 
+										 				"where " +
+										 				"pgmt.pgmt_amreferenciaarrecadacao < 201301 " + 
+										 				"and pgmt.loca_id= :idLocalidade  " +
+										 				"and (pgmt.pgst_idatual= :idPagamentoClassificado or pgmt.pgst_idatual= :idPagamentoValorABaixar) " + 
+										 				"and (pgmt.cnta_id is not null) "			+
+					 				")) " +
+					 			") " +
+					   ")";
+			
+			retorno = (BigDecimal) session.createSQLQuery(consulta)
+			  		.addScalar("col_0", Hibernate.BIG_DECIMAL)
+					.setInteger("idCategoria", idCategoria)
+					.setInteger("idFinanciamentoTipo", idFinanciamentoTipo)
+					.setInteger("idLocalidade", idLocalidade)
+					.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
+					.setInteger("idPagamentoValorABaixar",PagamentoSituacao.VALOR_A_BAIXAR)
+					.setMaxResults(1)
+					.uniqueResult();
+
+			// erro no hibernate
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão com o hibernate
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+
+	/**
+	 * Mantis ***
+	 * 
+	 * [UC0276] - Encerrar Arrecadação do Mês
+	 * 
+	 * Alteração na contabilização de contas arrecadadas até 31/12/2012
+	 * 
+	 * @author Wellington Rocha
+	 * 
+	 * @param idLocalidade
+	 * @param anoMesReferenciaArrecadacao
+	 * @param idCategoria
+	 * @param idOrigemCredito
+	 * @return
+	 * @throws ErroRepositorioException
+	 */
+	public BigDecimal acumularValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesPorOrigemCredito(
+			Integer idLocalidade, 
+			Integer anoMesReferenciaArrecadacao,
+			Integer idCategoria, 
+			Integer idOrigemCredito)
+			throws ErroRepositorioException {
+
+		BigDecimal retorno = null;
+
+		// cria uma sessão com o hibernate
+		Session session = HibernateUtil.getSession();
+
+		// cria a variável que vai conter o hql
+		String consulta = "";
+
+		try {
+
+			consulta = "select " +
+					  "sum(crcg.crcg_vlcategoria) as col_0 " + 
+					  "from " +
+					   "faturamento.cred_realizado_catg crcg " + 
+					  "where " +
+					   "crcg.catg_id=:idCategoria " + 
+					   "and (crcg.crrz_id in ( " +
+					 			"select " +
+					 			"crrz.crrz_id " + 
+					 			"from " +
+					 			"faturamento.credito_realizado crrz " + 
+					 			"where " +
+					 			"crrz.crog_id= :idOrigemCredito " +
+					 			"and (crrz.cnta_id in (" +
+									 			"select " +
+									 			"distinct pgmt.cnta_id " + 
+									 			"from " +
+									 			"arrecadacao.pagamento pgmt " + 
+									 			"where " +
+									 			"pgmt.pgmt_amreferenciaarrecadacao < 201301 " + 
+									 			"and pgmt.loca_id= :idLocalidade  " +
+									 			"and (pgmt.pgst_idatual= :idPagamentoClassificado or pgmt.pgst_idatual= :idPagamentoValorABaixar) " + 
+									 			"and (pgmt.cnta_id is not null) "	+		
+					 			")) " +
+					 	") " +
+					   ")";
+			
+			retorno = (BigDecimal) session.createSQLQuery(consulta)
+					.addScalar("col_0", Hibernate.BIG_DECIMAL)	
+					.setInteger("idCategoria", idCategoria)
+					.setInteger("idOrigemCredito",idOrigemCredito)
+					.setInteger("idLocalidade",idLocalidade)
+					.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
+					.setInteger("idPagamentoValorABaixar",PagamentoSituacao.VALOR_A_BAIXAR)
+					.setMaxResults(1)
+					.uniqueResult();
 
 			
-				// erro no hibernate
-			} catch (HibernateException e) {
-				// levanta a exceção para a próxima camada
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				// fecha a sessão com o hibernate
-				HibernateUtil.closeSession(session);
-			}
-
-			return retorno;
-		}
-		
-		/**
-		 * TODO: COSANPA
-		 * 
-		 * Mantis *** 
-		 * 
-		 * Contabilizar valores arrecadados até dezembro de 2012 em contas diferentes.
-		 * 
-		 * @author Wellington Rocha
-		 * 
-		 * @param idLocalidade
-		 * @param anoMesReferenciaArrecadacao
-		 * @param idCategoria
-		 * @return
-		 * @throws ErroRepositorioException
-		 */
-		public Object[] acumularValorAguaEsgotoPagamentosContasEfetuadosAte122012ClassificadosNoMes(
-				Integer idLocalidade, 
-				Integer anoMesReferenciaArrecadacao,
-				Integer idCategoria) throws ErroRepositorioException {
-
-			Object[] retorno = null;
-
-			// cria uma sessão com o hibernate
-			Session session = HibernateUtil.getSession();
-
-			// cria a variável que vai conter o hql
-			String consulta = "";
-
-			try {
-
-				consulta = "select " +
-						  "sum(ctcg.ctcg_vlagua) as col_0,  " +
-						  "sum(ctcg.ctcg_vlesgoto) as col_1  " +
-						  "from " +
-						   "faturamento.conta_categoria ctcg " + 
-						  "where " +
-						   "ctcg.catg_id= :idCategoria  " +
-						   "and (ctcg.cnta_id in (" +
-											   "select " +
-											   "distinct pgmt.cnta_id " + 
-											   "from " +
-											   "arrecadacao.pagamento pgmt " + 
-											   "where " +
-											   "pgmt.pgmt_amreferenciaarrecadacao < 201301 " + 
-											   "and pgmt.loca_id= :idLocalidade  " +
-											   "and (pgmt.pgst_idatual= :idPagamentoClassificado or pgmt.pgst_idatual= :idPagamentoValorABaixar) " + 
-											   "and (pgmt.cnta_id is not null) "	+		
-						   ") ) " ;
-				
-				retorno = (Object[]) session.createSQLQuery(consulta)
-				 		.addScalar("col_0",Hibernate.BIG_DECIMAL)
-				 		.addScalar("col_1",Hibernate.BIG_DECIMAL)
-						.setInteger("idCategoria", idCategoria)
-						.setInteger("idLocalidade", idLocalidade)
-						.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
-						.setInteger("idPagamentoValorABaixar",PagamentoSituacao.VALOR_A_BAIXAR)
-						.setMaxResults(1)
-						.uniqueResult();
-				
-				// erro no hibernate
-			} catch (HibernateException e) {
-				// levanta a exceção para a próxima camada
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				// fecha a sessão com o hibernate
-				HibernateUtil.closeSession(session);
-			}
-
-			return retorno;
-		}
-		
-		
-		/**
-		 * Mantis ***
-		 * 
-		 * [UC0276] - Encerrar Arrecadação do Mês
-		 * 
-		 * Contabilizar valores arrecadados até 31/12/2012 em contas diferentes
-		 * 
-		 * @author Wellington Rocha
-		 * 
-		 * @param idLocalidade
-		 * @param anoMesReferenciaArrecadacao
-		 * @param idCategoria
-		 * @param idFinanciamentoTipo
-		 * @return
-		 * @throws ErroRepositorioException
-		 */
-		public BigDecimal acumularValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesPorFinanciamentoTipo(
-				Integer idLocalidade, 
-				Integer anoMesReferenciaArrecadacao,
-				Integer idCategoria, 
-				Integer idFinanciamentoTipo)
-				throws ErroRepositorioException {
-
-			BigDecimal retorno = null;
-
-			// cria uma sessão com o hibernate
-			Session session = HibernateUtil.getSession();
-
-			// cria a variável que vai conter o hql
-			String consulta = "";
-
-			try {
-
-				consulta = "select " +
-						  "sum(dccg.dccg_vlcategoria) as col_0 " + 
-						  "from " +
-						   "faturamento.debito_cobrado_categoria dccg " + 
-						  "where " +
-						   "dccg.catg_id= :idCategoria  " +
-						   "and (dccg.dbcb_id in ( " +
-						 				"select " +
-						 				"dbcb.dbcb_id " + 
-						 				"from " +
-						 				"faturamento.debito_cobrado dbcb " + 
-						 				"where " +
-						 				"dbcb.fntp_id= :idFinanciamentoTipo  " +
-						 				"and (dbcb.cnta_id in (" +
-											 				"select " +
-											 				"distinct pgmt.cnta_id " + 
-											 				"from " +
-											 				"arrecadacao.pagamento pgmt " + 
-											 				"where " +
-											 				"pgmt.pgmt_amreferenciaarrecadacao < 201301 " + 
-											 				"and pgmt.loca_id= :idLocalidade  " +
-											 				"and (pgmt.pgst_idatual= :idPagamentoClassificado or pgmt.pgst_idatual= :idPagamentoValorABaixar) " + 
-											 				"and (pgmt.cnta_id is not null) "			+
-						 				")) " +
-						 			") " +
-						   ")";
-				
-				retorno = (BigDecimal) session.createSQLQuery(consulta)
-				  		.addScalar("col_0", Hibernate.BIG_DECIMAL)
-						.setInteger("idCategoria", idCategoria)
-						.setInteger("idFinanciamentoTipo", idFinanciamentoTipo)
-						.setInteger("idLocalidade", idLocalidade)
-						.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
-						.setInteger("idPagamentoValorABaixar",PagamentoSituacao.VALOR_A_BAIXAR)
-						.setMaxResults(1)
-						.uniqueResult();
-
-				// erro no hibernate
-			} catch (HibernateException e) {
-				// levanta a exceção para a próxima camada
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				// fecha a sessão com o hibernate
-				HibernateUtil.closeSession(session);
-			}
-
-			return retorno;
+			// erro no hibernate
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão com o hibernate
+			HibernateUtil.closeSession(session);
 		}
 
-		/**
-		 * Mantis ***
-		 * 
-		 * [UC0276] - Encerrar Arrecadação do Mês
-		 * 
-		 * Alteração na contabilização de contas arrecadadas até 31/12/2012
-		 * 
-		 * @author Wellington Rocha
-		 * 
-		 * @param idLocalidade
-		 * @param anoMesReferenciaArrecadacao
-		 * @param idCategoria
-		 * @param idOrigemCredito
-		 * @return
-		 * @throws ErroRepositorioException
-		 */
-		public BigDecimal acumularValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesPorOrigemCredito(
-				Integer idLocalidade, 
-				Integer anoMesReferenciaArrecadacao,
-				Integer idCategoria, 
-				Integer idOrigemCredito)
-				throws ErroRepositorioException {
+		return retorno;
+	}
+	
+	
+	/**
+	 * TODO: COSANPA
+	 * 
+	 * [UC0276] - Encerrar Arrecadação do Mês
+	 * 
+	 * Mantis ***
+	 * 
+	 * Contabilizar em contas diferentes os valores arrecadados até 31/12/2012
+	 * 
+	 * @author Wellington Rocha
+	 * 
+	 * @param idLocalidade
+	 * @param anoMesReferenciaArrecadacao
+	 * @param idCategoria
+	 * @return
+	 * @throws ErroRepositorioException
+	 */
+	public BigDecimal acumularValorEntradaParcelamentoPagamentosGuiaPagamentoEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoEntradaParcelamento(
+			Integer idLocalidade, 
+			Integer anoMesReferenciaArrecadacao,
+			Integer idCategoria) throws ErroRepositorioException {
 
-			BigDecimal retorno = null;
+		BigDecimal retorno = null;
 
-			// cria uma sessão com o hibernate
-			Session session = HibernateUtil.getSession();
+		// cria uma sessão com o hibernate
+		Session session = HibernateUtil.getSession();
 
-			// cria a variável que vai conter o hql
-			String consulta = "";
+		// cria a variável que vai conter o hql
+		String consulta = "";
 
-			try {
+		try {
 
-				consulta = "select " +
-						  "sum(crcg.crcg_vlcategoria) as col_0 " + 
-						  "from " +
-						   "faturamento.cred_realizado_catg crcg " + 
-						  "where " +
-						   "crcg.catg_id=:idCategoria " + 
-						   "and (crcg.crrz_id in ( " +
-						 			"select " +
-						 			"crrz.crrz_id " + 
-						 			"from " +
-						 			"faturamento.credito_realizado crrz " + 
-						 			"where " +
-						 			"crrz.crog_id= :idOrigemCredito " +
-						 			"and (crrz.cnta_id in (" +
+			consulta = "select " +
+					  "sum(gpcg.gpcg_vlcategoria) as col_0 " + 
+					  "from " +
+					   "faturamento.guia_pagamento_categoria gpcg " + 
+					  "where " +
+					   "gpcg.catg_id= :idCategoria  " +
+					   "and (gpcg.gpag_id in ( " +
+					 			"select " +
+					 			"gpag.gpag_id " + 
+					 			"from " +
+					 			"faturamento.guia_pagamento gpag " + 
+					 			"where " +
+					 			"gpag.fntp_id= :idFinanciamentoTipo  " +
+					 			"and (gpag.gpag_id in (" +
 										 			"select " +
-										 			"distinct pgmt.cnta_id " + 
+										 			"distinct pgmt.gpag_id as col_0 " + 
 										 			"from " +
 										 			"arrecadacao.pagamento pgmt " + 
 										 			"where " +
 										 			"pgmt.pgmt_amreferenciaarrecadacao < 201301 " + 
 										 			"and pgmt.loca_id= :idLocalidade  " +
 										 			"and (pgmt.pgst_idatual= :idPagamentoClassificado or pgmt.pgst_idatual= :idPagamentoValorABaixar) " + 
-										 			"and (pgmt.cnta_id is not null) "	+		
-						 			")) " +
-						 	") " +
-						   ")";
-				
-				retorno = (BigDecimal) session.createSQLQuery(consulta)
-						.addScalar("col_0", Hibernate.BIG_DECIMAL)	
-						.setInteger("idCategoria", idCategoria)
-						.setInteger("idOrigemCredito",idOrigemCredito)
-						.setInteger("idLocalidade",idLocalidade)
-						.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
-						.setInteger("idPagamentoValorABaixar",PagamentoSituacao.VALOR_A_BAIXAR)
-						.setMaxResults(1)
-						.uniqueResult();
+										 			"and (pgmt.gpag_id is not null) " +
+					 			")) " +
+					 			") " +
+					   ")";
+			
+			retorno = (BigDecimal) session.createSQLQuery(consulta)
+					.addScalar("col_0",Hibernate.BIG_DECIMAL)
+					.setInteger("idCategoria", idCategoria)
+					.setInteger("idFinanciamentoTipo",FinanciamentoTipo.ENTRADA_PARCELAMENTO)
+					.setInteger("idLocalidade", idLocalidade)
+					.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
+					.setInteger("idPagamentoValorABaixar",PagamentoSituacao.VALOR_A_BAIXAR)
+					.setMaxResults(1)
+					.uniqueResult();
 
-				
-				// erro no hibernate
-			} catch (HibernateException e) {
-				// levanta a exceção para a próxima camada
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				// fecha a sessão com o hibernate
-				HibernateUtil.closeSession(session);
-			}
-
-			return retorno;
-		}
-		
-		
-		/**
-		 * TODO: COSANPA
-		 * 
-		 * [UC0276] - Encerrar Arrecadação do Mês
-		 * 
-		 * Mantis ***
-		 * 
-		 * Contabilizar em contas diferentes os valores arrecadados até 31/12/2012
-		 * 
-		 * @author Wellington Rocha
-		 * 
-		 * @param idLocalidade
-		 * @param anoMesReferenciaArrecadacao
-		 * @param idCategoria
-		 * @return
-		 * @throws ErroRepositorioException
-		 */
-		public BigDecimal acumularValorEntradaParcelamentoPagamentosGuiaPagamentoEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoEntradaParcelamento(
-				Integer idLocalidade, 
-				Integer anoMesReferenciaArrecadacao,
-				Integer idCategoria) throws ErroRepositorioException {
-
-			BigDecimal retorno = null;
-
-			// cria uma sessão com o hibernate
-			Session session = HibernateUtil.getSession();
-
-			// cria a variável que vai conter o hql
-			String consulta = "";
-
-			try {
-
-				consulta = "select " +
-						  "sum(gpcg.gpcg_vlcategoria) as col_0 " + 
-						  "from " +
-						   "faturamento.guia_pagamento_categoria gpcg " + 
-						  "where " +
-						   "gpcg.catg_id= :idCategoria  " +
-						   "and (gpcg.gpag_id in ( " +
-						 			"select " +
-						 			"gpag.gpag_id " + 
-						 			"from " +
-						 			"faturamento.guia_pagamento gpag " + 
-						 			"where " +
-						 			"gpag.fntp_id= :idFinanciamentoTipo  " +
-						 			"and (gpag.gpag_id in (" +
-											 			"select " +
-											 			"distinct pgmt.gpag_id as col_0 " + 
-											 			"from " +
-											 			"arrecadacao.pagamento pgmt " + 
-											 			"where " +
-											 			"pgmt.pgmt_amreferenciaarrecadacao < 201301 " + 
-											 			"and pgmt.loca_id= :idLocalidade  " +
-											 			"and (pgmt.pgst_idatual= :idPagamentoClassificado or pgmt.pgst_idatual= :idPagamentoValorABaixar) " + 
-											 			"and (pgmt.gpag_id is not null) " +
-						 			")) " +
-						 			") " +
-						   ")";
-				
-				retorno = (BigDecimal) session.createSQLQuery(consulta)
-						.addScalar("col_0",Hibernate.BIG_DECIMAL)
-						.setInteger("idCategoria", idCategoria)
-						.setInteger("idFinanciamentoTipo",FinanciamentoTipo.ENTRADA_PARCELAMENTO)
-						.setInteger("idLocalidade", idLocalidade)
-						.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
-						.setInteger("idPagamentoValorABaixar",PagamentoSituacao.VALOR_A_BAIXAR)
-						.setMaxResults(1)
-						.uniqueResult();
-
-		
-				// erro no hibernate
-			} catch (HibernateException e) {
-				// levanta a exceção para a próxima camada
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				// fecha a sessão com o hibernate
-				HibernateUtil.closeSession(session);
-			}
-
-			return retorno;
+	
+			// erro no hibernate
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão com o hibernate
+			HibernateUtil.closeSession(session);
 		}
 
-		
-		/**
-		 * Mantis ***
-		 * 
-		 * [UC0276] - Encerrar Arrecadação do Mês
-		 * 
-		 * Contabilizar em contas diferentes valores arrecadados até 31/12/2012
-		 * 
-		 * @author Wellington Rocha
-		 * 
-		 * @param idLocalidade
-		 * @param anoMesReferenciaArrecadacao
-		 * @param idLancamentoItemContabil
-		 * @param idCategoria
-		 * @param idsFinanciamentoTipos
-		 * @return
-		 * @throws ErroRepositorioException
-		 */
-		public BigDecimal acumularValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesPorFinanciamentoTipo(
-				Integer idLocalidade, 
-				Integer anoMesReferenciaArrecadacao,
-				Integer idLancamentoItemContabil, 
-				Integer idCategoria,
-				Collection<Integer> idsFinanciamentoTipos)
-				throws ErroRepositorioException {
+		return retorno;
+	}
 
-			BigDecimal retorno = null;
+	
+	/**
+	 * Mantis ***
+	 * 
+	 * [UC0276] - Encerrar Arrecadação do Mês
+	 * 
+	 * Contabilizar em contas diferentes valores arrecadados até 31/12/2012
+	 * 
+	 * @author Wellington Rocha
+	 * 
+	 * @param idLocalidade
+	 * @param anoMesReferenciaArrecadacao
+	 * @param idLancamentoItemContabil
+	 * @param idCategoria
+	 * @param idsFinanciamentoTipos
+	 * @return
+	 * @throws ErroRepositorioException
+	 */
+	public BigDecimal acumularValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesPorFinanciamentoTipo(
+			Integer idLocalidade, 
+			Integer anoMesReferenciaArrecadacao,
+			Integer idLancamentoItemContabil, 
+			Integer idCategoria,
+			Collection<Integer> idsFinanciamentoTipos)
+			throws ErroRepositorioException {
 
-			// cria uma sessão com o hibernate
-			Session session = HibernateUtil.getSession();
+		BigDecimal retorno = null;
 
-			// cria a variável que vai conter o hql
-			String consulta = "";
+		// cria uma sessão com o hibernate
+		Session session = HibernateUtil.getSession();
 
-			try {
-				
-				consulta  = "select " +
-							 " sum(dccg.dccg_vlcategoria) as col_0 " +
-							 " from " +
-							 "  faturamento.debito_cobrado_categoria dccg " + 
-							 " where " +
-							 "  dccg.catg_id= :idCategoria  " +
-							 "  and (dccg.dbcb_id in ( " +
-							 			"select " +
-							 			"dbcb.dbcb_id " + 
-							 			"from " +
-							 			"faturamento.debito_cobrado dbcb " + 
-							 			"where " +
-							 			"dbcb.lict_id= :idLancamentoItemContabil  " +
-							 			"and (dbcb.fntp_id in (:idsFinanciamentoTipos)) " + 
-							 			"and (dbcb.cnta_id in (" +
-												 			"select " +
-												 			"distinct pgmt.cnta_id " + 
-												 			"from " +
-												 			"arrecadacao.pagamento pgmt " + 
-												 			"where " +
-												 			"pgmt.pgmt_amreferenciaarrecadacao < 201301 " + 
-												 			"and pgmt.loca_id= :idLocalidade  " +
-												 			"and (pgmt.pgst_idatual= :idPagamentoClassificado or pgmt.pgst_idatual= :idPagamentoValorABaixar) " + 
-												 			"and (pgmt.cnta_id is not null) "	+		
-							 			")) " +
-						 				") " +
-							   ")";
+		// cria a variável que vai conter o hql
+		String consulta = "";
 
-				retorno = (BigDecimal) session.createSQLQuery(consulta)
-						.addScalar("col_0",Hibernate.BIG_DECIMAL)
-						.setInteger("idCategoria", idCategoria)
-						.setInteger("idLancamentoItemContabil", idLancamentoItemContabil)
-						.setParameterList("idsFinanciamentoTipos",idsFinanciamentoTipos)
-						.setInteger("idLocalidade", idLocalidade)
-						.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
-						.setInteger("idPagamentoValorABaixar",PagamentoSituacao.VALOR_A_BAIXAR)
-						.setMaxResults(1)
-						.uniqueResult();
-				
-				
-
-				// erro no hibernate
-			} catch (HibernateException e) {
-				// levanta a exceção para a próxima camada
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				// fecha a sessão com o hibernate
-				HibernateUtil.closeSession(session);
-			}
-
-			return retorno;
-		}
-
-		/**
-		 * Mantis ***
-		 * 
-		 * [UC0276] - Encerrar Arrecadação do Mês
-		 * 
-		 * Contabilizar em contas separadas valores arrecadados até 31/12/2012
-		 * 
-		 * @author Wellington Rocha
-		 * 
-		 * @param idLocalidade
-		 * @param anoMesReferenciaArrecadacao
-		 * @param idCategoria
-		 * @param idLancamentoItemContabil
-		 * @return
-		 * @throws ErroRepositorioException
-		 */
-		public BigDecimal acumularValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoDoacoes(
-				Integer idLocalidade, 
-				Integer anoMesReferenciaArrecadacao,
-				Integer idCategoria, 
-				Integer idLancamentoItemContabil)
-				throws ErroRepositorioException {
-
-			BigDecimal retorno = null;
-
-			// cria uma sessão com o hibernate
-			Session session = HibernateUtil.getSession();
-
-			// cria a variável que vai conter o hql
-			String consulta = "";
-
-			try {
-
-				consulta = "select " +
-						  "sum(dccg.dccg_vlcategoria) as col_0 " + 
-						  "from " +
-						   "faturamento.debito_cobrado_categoria dccg " + 
-						  "where " +
-						   "dccg.catg_id= :idCategoria  " +
-						   "and (dccg.dbcb_id in ( " +
+		try {
+			
+			consulta  = "select " +
+						 " sum(dccg.dccg_vlcategoria) as col_0 " +
+						 " from " +
+						 "  faturamento.debito_cobrado_categoria dccg " + 
+						 " where " +
+						 "  dccg.catg_id= :idCategoria  " +
+						 "  and (dccg.dbcb_id in ( " +
 						 			"select " +
 						 			"dbcb.dbcb_id " + 
 						 			"from " +
 						 			"faturamento.debito_cobrado dbcb " + 
 						 			"where " +
 						 			"dbcb.lict_id= :idLancamentoItemContabil  " +
-						 			"and dbcb.fntp_id= :idFinanciamentoTipo  " +
+						 			"and (dbcb.fntp_id in (:idsFinanciamentoTipos)) " + 
 						 			"and (dbcb.cnta_id in (" +
 											 			"select " +
 											 			"distinct pgmt.cnta_id " + 
@@ -30927,778 +30766,857 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 											 			"and (pgmt.pgst_idatual= :idPagamentoClassificado or pgmt.pgst_idatual= :idPagamentoValorABaixar) " + 
 											 			"and (pgmt.cnta_id is not null) "	+		
 						 			")) " +
-						 			") " +
+					 				") " +
 						   ")";
 
-				retorno = (BigDecimal) session.createSQLQuery(consulta)
-						.addScalar("col_0",Hibernate.BIG_DECIMAL)
-						.setInteger("idCategoria", idCategoria)
-						.setInteger("idLancamentoItemContabil", idLancamentoItemContabil)
-						.setInteger("idFinanciamentoTipo",FinanciamentoTipo.DOACOES)
-						.setInteger("idLocalidade", idLocalidade)
-						.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
-						.setInteger("idPagamentoValorABaixar",PagamentoSituacao.VALOR_A_BAIXAR)
-						.setMaxResults(1)
-						.uniqueResult();
-				
+			retorno = (BigDecimal) session.createSQLQuery(consulta)
+					.addScalar("col_0",Hibernate.BIG_DECIMAL)
+					.setInteger("idCategoria", idCategoria)
+					.setInteger("idLancamentoItemContabil", idLancamentoItemContabil)
+					.setParameterList("idsFinanciamentoTipos",idsFinanciamentoTipos)
+					.setInteger("idLocalidade", idLocalidade)
+					.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
+					.setInteger("idPagamentoValorABaixar",PagamentoSituacao.VALOR_A_BAIXAR)
+					.setMaxResults(1)
+					.uniqueResult();
+			
+			
 
-				// erro no hibernate
-			} catch (HibernateException e) {
-				// levanta a exceção para a próxima camada
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				// fecha a sessão com o hibernate
-				HibernateUtil.closeSession(session);
-			}
-
-			return retorno;
+			// erro no hibernate
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão com o hibernate
+			HibernateUtil.closeSession(session);
 		}
 
+		return retorno;
+	}
+
+	/**
+	 * Mantis ***
+	 * 
+	 * [UC0276] - Encerrar Arrecadação do Mês
+	 * 
+	 * Contabilizar em contas separadas valores arrecadados até 31/12/2012
+	 * 
+	 * @author Wellington Rocha
+	 * 
+	 * @param idLocalidade
+	 * @param anoMesReferenciaArrecadacao
+	 * @param idCategoria
+	 * @param idLancamentoItemContabil
+	 * @return
+	 * @throws ErroRepositorioException
+	 */
+	public BigDecimal acumularValorDebitoCobradoPagamentosContasEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoDoacoes(
+			Integer idLocalidade, 
+			Integer anoMesReferenciaArrecadacao,
+			Integer idCategoria, 
+			Integer idLancamentoItemContabil)
+			throws ErroRepositorioException {
+
+		BigDecimal retorno = null;
+
+		// cria uma sessão com o hibernate
+		Session session = HibernateUtil.getSession();
+
+		// cria a variável que vai conter o hql
+		String consulta = "";
+
+		try {
+
+			consulta = "select " +
+					  "sum(dccg.dccg_vlcategoria) as col_0 " + 
+					  "from " +
+					   "faturamento.debito_cobrado_categoria dccg " + 
+					  "where " +
+					   "dccg.catg_id= :idCategoria  " +
+					   "and (dccg.dbcb_id in ( " +
+					 			"select " +
+					 			"dbcb.dbcb_id " + 
+					 			"from " +
+					 			"faturamento.debito_cobrado dbcb " + 
+					 			"where " +
+					 			"dbcb.lict_id= :idLancamentoItemContabil  " +
+					 			"and dbcb.fntp_id= :idFinanciamentoTipo  " +
+					 			"and (dbcb.cnta_id in (" +
+										 			"select " +
+										 			"distinct pgmt.cnta_id " + 
+										 			"from " +
+										 			"arrecadacao.pagamento pgmt " + 
+										 			"where " +
+										 			"pgmt.pgmt_amreferenciaarrecadacao < 201301 " + 
+										 			"and pgmt.loca_id= :idLocalidade  " +
+										 			"and (pgmt.pgst_idatual= :idPagamentoClassificado or pgmt.pgst_idatual= :idPagamentoValorABaixar) " + 
+										 			"and (pgmt.cnta_id is not null) "	+		
+					 			")) " +
+					 			") " +
+					   ")";
+
+			retorno = (BigDecimal) session.createSQLQuery(consulta)
+					.addScalar("col_0",Hibernate.BIG_DECIMAL)
+					.setInteger("idCategoria", idCategoria)
+					.setInteger("idLancamentoItemContabil", idLancamentoItemContabil)
+					.setInteger("idFinanciamentoTipo",FinanciamentoTipo.DOACOES)
+					.setInteger("idLocalidade", idLocalidade)
+					.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
+					.setInteger("idPagamentoValorABaixar",PagamentoSituacao.VALOR_A_BAIXAR)
+					.setMaxResults(1)
+					.uniqueResult();
+			
+
+			// erro no hibernate
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão com o hibernate
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+
+	
+	/**
+	 * Mantis ****
+	 * 
+	 * [UC0276] - Encerrar Arrecadação do Mês
+	 * 
+	 * Contabilizar em contas separadas valores arrecadados até 31/12/2012
+	 * 
+	 * @author Wellington Rocha
+	 * 
+	 * @param idLocalidade
+	 * @param anoMesReferenciaArrecadacao
+	 * @param idCategoria
+	 * @param idLancamentoItemContabil
+	 * @return
+	 * @throws ErroRepositorioException
+	 */
+	public BigDecimal acumularValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesOrigemCreditoValoresCobradosIndevidamente(
+			Integer idLocalidade, 
+			Integer anoMesReferenciaArrecadacao,
+			Integer idCategoria, 
+			Integer idLancamentoItemContabil)
+			throws ErroRepositorioException {
+
+		BigDecimal retorno = null;
+
+		// cria uma sessão com o hibernate
+		Session session = HibernateUtil.getSession();
+
+		// Coleção de crédito origem de valores cobrados indevidamente
+		Collection idsCreditosOrigem = new ArrayList();
+		idsCreditosOrigem.add(CreditoOrigem.DEVOLUCAO_TARIFA_AGUA);
+		idsCreditosOrigem.add(CreditoOrigem.DEVOLUCAO_TARIFA_ESGOTO);
+		idsCreditosOrigem.add(CreditoOrigem.SERVICOS_INDIRETOS_PAGOS_INDEVIDAMENTE);
+		idsCreditosOrigem.add(CreditoOrigem.DEVOLUCAO_JUROS_PARCELAMENTO);
+
+		// cria a variável que vai conter o hql
+		String consulta = "";
+
+		try {
+			
+			consulta = "select " +
+					  "sum(crcg.crcg_vlcategoria) as col_0  " +
+					  "from " +
+					   "faturamento.cred_realizado_catg crcg  " +
+					  "where " +
+					   "crcg.catg_id= :idCategoria  " +
+					   "and (crcg.crrz_id in ( " +
+					 			"select " +
+					 			"crrz.crrz_id  " +
+					 			"from " +
+					 			"faturamento.credito_realizado crrz  " +
+					 			"where " +
+					 			"crrz.lict_id= :idLancamentoItemContabil  " +
+					 			"and (crrz.crog_id in (:idsCreditosOrigem))  " +
+					 			"and (crrz.cnta_id in (" +
+										 			"select " +
+										 			"distinct pgmt.cnta_id " + 
+										 			"from " +
+										 			"arrecadacao.pagamento pgmt " + 
+										 			"where " +
+										 			"pgmt.pgmt_amreferenciaarrecadacao < 201301 " + 
+										 			"and pgmt.loca_id= :idLocalidade  " +
+										 			"and (pgmt.pgst_idatual= :idPagamentoClassificado or pgmt.pgst_idatual= :idPagamentoValorABaixar) " + 
+										 			"and (pgmt.cnta_id is not null) "	+		
+					 			")) " +
+					 			") " +
+					  ")";
+
+			retorno = (BigDecimal) session.createSQLQuery(consulta)
+					.addScalar("col_0",Hibernate.BIG_DECIMAL)
+					.setInteger("idCategoria", idCategoria)
+					.setInteger("idLancamentoItemContabil", idLancamentoItemContabil)
+					.setParameterList("idsCreditosOrigem", idsCreditosOrigem)
+					.setInteger("idLocalidade", idLocalidade)
+					.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
+					.setInteger("idPagamentoValorABaixar",PagamentoSituacao.VALOR_A_BAIXAR)
+					.setMaxResults(1)
+					.uniqueResult();
+			
+			// erro no hibernate
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão com o hibernate
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+	
+	/**
+	 * Mantis ****
+	 * 
+	 * [UC0276] - Encerrar Arrecadação do Mês
+	 * 
+	 * Contabilizar em contas separadas valores arrecadados até 31/12/2012
+	 * 
+	 * @author Wellington Rocha
+	 * 
+	 * @param idLocalidade
+	 * @param anoMesReferenciaArrecadacao
+	 * @param idLancamentoItemContabil
+	 * @param idCategoria
+	 * @return
+	 * @throws ErroRepositorioException
+	 */
+	public BigDecimal acumularValorEntradaParcelamentoPagamentosGuiaPagamentoEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoServico(
+			Integer idLocalidade, 
+			Integer anoMesReferenciaArrecadacao,
+			Integer idLancamentoItemContabil, 
+			Integer idCategoria)
+			throws ErroRepositorioException {
+
+		BigDecimal retorno = null;
+
+		// cria uma sessão com o hibernate
+		Session session = HibernateUtil.getSession();
+
+		// cria a variável que vai conter o hql
+		String consulta = "";
+
+		try {
+
+			consulta  = "select " +
+					  "sum(gpcg.gpcg_vlcategoria) as col_0  " +
+					  "from " +
+					   "faturamento.guia_pagamento_categoria gpcg  " +
+					  "where " +
+					   "gpcg.catg_id= :idCategoria  " +
+					   "and (gpcg.gpag_id in (  " +   
+					 			"select " +
+					 			"gpag.gpag_id  " +
+					 			"from " +
+					 			"faturamento.guia_pagamento gpag  " +
+					 			"where " +
+					 			"gpag.lict_id= :idLancamentoItemContabil  " +
+					 			"and gpag.fntp_id= :idFinanciamentoTipo  " +
+					 			"and (gpag.gpag_id in (" +
+										 			"select " +
+										 			"distinct pgmt.gpag_id as col_0 " + 
+										 			"from " +
+										 			"arrecadacao.pagamento pgmt " + 
+										 			"where " +
+										 			"pgmt.pgmt_amreferenciaarrecadacao < 201301 " + 
+										 			"and pgmt.loca_id= :idLocalidade  " +
+										 			"and (pgmt.pgst_idatual= :idPagamentoClassificado or pgmt.pgst_idatual= :idPagamentoValorABaixar) " + 
+										 			"and (pgmt.gpag_id is not null) " +
+					 			"))    " +  
+					 			") " +
+					   ")";
+
+			retorno = (BigDecimal) session.createSQLQuery(consulta)
+					.addScalar("col_0",Hibernate.BIG_DECIMAL)
+					.setInteger("idCategoria", idCategoria)
+					.setInteger("idLancamentoItemContabil", idLancamentoItemContabil)
+					.setInteger("idFinanciamentoTipo",FinanciamentoTipo.SERVICO_NORMAL)
+					.setInteger("idLocalidade", idLocalidade)
+					.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
+					.setInteger("idPagamentoValorABaixar",PagamentoSituacao.VALOR_A_BAIXAR)
+					.uniqueResult();
+			
+			
+			
+			
+			// erro no hibernate
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão com o hibernate
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+	
+	/**
+	 * Mantis ****
+	 * 
+	 * [UC0276] - Encerrar Arrecadação do Mês
+	 * 
+	 * Contabilizar em contas separadas valores arrecadados até 31/12/2012
+	 * 
+	 * @author Wellington Rocha
+	 * 
+	 * @param idLocalidade
+	 * @param anoMesReferenciaArrecadacao
+	 * @param idLancamentoItemContabil
+	 * @param idCategoria
+	 * @return
+	 * @throws ErroRepositorioException
+	 */
+	public BigDecimal acumularValorQueFaltaSerCobradoPagamentosDebitoACobrarEfetuadosAte122012(
+			Integer idLocalidade, 
+			Integer anoMesReferenciaArrecadacao,
+			Integer idLancamentoItemContabil, 
+			Integer idCategoria)
+			throws ErroRepositorioException {
+
+		// Cria a varável que vai armazenar a coleção de retorno da pesquisa
+		BigDecimal retorno = null;
+
+		// Cria uma instância da sessão
+		Session session = HibernateUtil.getSession();
+
+		// Cria a variável que vai conter o hql
+		String consulta = "";
+
+		try {
+
+			consulta = "select " +
+					  "sum(dbcg.dbcg_vlcategoria-(trunc(dbcg.dbcg_vlcategoria/dbac.dbac_nnprestacaodebito,2)*dbac.dbac_nnprestacaocobradas)) as col_0 " +
+					  "from " +
+					   "faturamento.deb_a_cobrar_catg dbcg  " +
+					  "inner join  faturamento.debito_a_cobrar dbac on dbcg.dbac_id=dbac.dbac_id  " +
+					  "where " +
+					   "dbcg.dbac_id=dbac.dbac_id  " +
+					   "and dbac.lict_id=:idLancamentoItemContabil  " +
+					   "and dbac.loca_id= :idLocalidade  " +
+					   "and dbcg.catg_id=:idCategoria  " +
+					   "and (dbac.dbac_id in (" +
+										   "select " +
+										   "distinct pgmt.dbac_id as col_0 " + 
+										   "from " +
+										   "arrecadacao.pagamento pgmt " + 
+										   "where " +
+										   "pgmt.pgmt_amreferenciaarrecadacao < 201301 " + 
+										   "and pgmt.loca_id= :idLocalidade  " +
+										   "and (pgmt.pgst_idatual= :idPagamentoClassificado or pgmt.pgst_idatual= :idPagamentoValorABaixar) " + 
+										   "and (pgmt.dbac_id is not null) " +
+					   ")) " ;
+
+			retorno = (BigDecimal) session.createSQLQuery(consulta)
+					.addScalar("col_0",Hibernate.BIG_DECIMAL)
+					.setInteger("idLancamentoItemContabil", idLancamentoItemContabil)
+					.setInteger("idLocalidade", idLocalidade)
+					.setInteger("idCategoria", idCategoria)
+					.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
+					.setInteger("idPagamentoValorABaixar",PagamentoSituacao.VALOR_A_BAIXAR)
+					.setMaxResults(1)
+					.uniqueResult();
+
+			// Erro no hibernate
+		} catch (HibernateException e) {
+			// Levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// Fecha a sessão com o hibernate
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+
+	/**
+	 * COSANPA - Mantis 414 - Felipe Santos - 22/10/2013
+	 * 
+	 * Retorna o total de Arrecadação por referência e localidade
+	 * 
+	 * @param anoMesReferencia
+	 * @param idLocalidade
+	 * @return BigDecimal
+	 * @throws ErroRepositorioException
+	 */
+	public BigDecimal pesquisarTotalArrecadacaoRelatorioBIG(
+			Integer anoMesReferencia, Integer idLocalidade) throws ErroRepositorioException {
+
+		BigDecimal retorno = null;
+
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
+
+		try {
+			consulta = "SELECT coalesce(sum(vlpag), 0) as total "
+				+ "FROM ("
+				+ "SELECT coalesce(sum(pgmt_vlpagamento), 0) as vlpag "
+				+ "FROM arrecadacao.pagamento "
+				+ "WHERE loca_id = :idLocalidade "
+				+ "AND pgmt_amreferenciaarrecadacao = :anoMesReferencia "
+				
+				+ "UNION "
+				
+				+ "SELECT coalesce(sum(pghi_vlpagamento), 0) as vlpag "
+				+ "FROM arrecadacao.pagamento_historico "
+				+ "WHERE loca_id = :idLocalidade "
+				+ "AND pghi_amreferenciaarrecadacao = :anoMesReferencia "
+				
+				+ "UNION "
+				
+				+ "SELECT coalesce(sum(devl_vldevolucao * -1), 0) as vlpag "
+				+ "FROM arrecadacao.devolucao "
+				+ "WHERE loca_id = :idLocalidade "
+				+ "AND devl_amreferenciaarrecadacao = :anoMesReferencia "
+
+				+ "UNION "
+
+				+ "SELECT coalesce(sum(dehi_vldevolucao * -1), 0) as vlpag "
+				+ "FROM arrecadacao.devolucao_historico "
+				+ "WHERE loca_id = :idLocalidade "
+				+ "AND dehi_amreferenciaarrecadacao = :anoMesReferencia"
+				
+				+ ") as arrecadacao";
+
+			retorno = (BigDecimal) session.createSQLQuery(consulta)
+					.addScalar("total",Hibernate.BIG_DECIMAL)
+					.setInteger("idLocalidade", idLocalidade)
+					.setInteger("anoMesReferencia", anoMesReferencia)
+					.setMaxResults(1)
+					.uniqueResult();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+	
+	/**
+	 * COSANPA - Mantis 414 - Felipe Santos - 22/10/2013
+	 * 
+	 * Retorna diferença de datas e quantidade de pagamentos para
+	 * Prazo Medio de Recebimento de Contas
+	 * 
+	 * @param anoMesReferencia
+	 * @param idLocalidade
+	 * @return Object[]
+	 * @throws ErroRepositorioException
+	 */
+	public Object[] pesquisarPrazoMedioRecebimentoContasRelatorioBIG(
+			Integer anoMesReferencia, Integer idLocalidade) throws ErroRepositorioException {
+
+		Object[] retorno = null;
+
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
+
+		try {
+			consulta = "SELECT sum(difDatas) as difDatas, "
+				+ "sum(qtdPag) as qtdPag "
+				+ "FROM ("
+				
+				+ "SELECT coalesce(sum(pgmt_dtpagamento - cnta_dtvencimentoconta), 0) as difDatas, "
+				+ "count(pgmt_id) as qtdPag "
+				+ "FROM arrecadacao.pagamento "
+				+ "INNER JOIN faturamento.conta on conta.cnta_id = pagamento.cnta_id "
+				+ "WHERE conta.loca_id = :idLocalidade "
+				+ "AND pgmt_amreferenciaarrecadacao = :anoMesReferencia "
+				
+				+ "UNION " 
+
+				+ "SELECT coalesce(sum(pghi_dtpagamento - cnhi_dtvencimentoconta), 0) as difDatas, "
+				+ "count(pghi_id) as qtdPag "
+				+ "FROM arrecadacao.pagamento_historico pagamento "
+				+ "INNER JOIN faturamento.conta_historico conta on conta.cnta_id = pagamento.cnta_id "
+				+ "WHERE conta.loca_id = :idLocalidade "
+				+ "AND pghi_amreferenciaarrecadacao = :anoMesReferencia "
+
+				+ ") as prazoMedio";
+
+			retorno = (Object[]) session.createSQLQuery(consulta)
+					.addScalar("difDatas",Hibernate.INTEGER)
+					.addScalar("qtdPag",Hibernate.INTEGER)
+					.setInteger("idLocalidade", idLocalidade)
+					.setInteger("anoMesReferencia", anoMesReferencia)
+					.setMaxResults(1)
+					.uniqueResult();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+	
+	/**
+	 * COSANPA - Mantis 414 - Felipe Santos - 08/11/2013
+	 * 
+	 * Retorna os dados para o Relatorio BIG
+	 * 
+	 * @param anoMesReferencia
+	 * @return Collection
+	 * @throws ErroRepositorioException
+	 */
+	public Collection pesquisarDadosRelatorioBIG(
+			Integer anoMesReferencia) throws ErroRepositorioException {
 		
-		/**
-		 * Mantis ****
-		 * 
-		 * [UC0276] - Encerrar Arrecadação do Mês
-		 * 
-		 * Contabilizar em contas separadas valores arrecadados até 31/12/2012
-		 * 
-		 * @author Wellington Rocha
-		 * 
-		 * @param idLocalidade
-		 * @param anoMesReferenciaArrecadacao
-		 * @param idCategoria
-		 * @param idLancamentoItemContabil
-		 * @return
-		 * @throws ErroRepositorioException
-		 */
-		public BigDecimal acumularValorCreditoRealizadoPagamentosContasEfetuadosAte122012ClassificadosNoMesOrigemCreditoValoresCobradosIndevidamente(
-				Integer idLocalidade, 
-				Integer anoMesReferenciaArrecadacao,
-				Integer idCategoria, 
-				Integer idLancamentoItemContabil)
-				throws ErroRepositorioException {
+		Collection retorno = null;
 
-			BigDecimal retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
 
-			// cria uma sessão com o hibernate
-			Session session = HibernateUtil.getSession();
+		try {
+			consulta = "SELECT greg.greg_nmregional as gerencia, "
+				+ "loca.loca_nmlocalidade as localidade, "
+				+ "boig_qtdcontas as quantidadeContas, "
+				+ "boig_vlfaturamento as valorFaturamento, "
+				+ "boig_vlarrecadacao as valorArrecadacao, "
+				+ "boig_eficarrecadacao as eficienciaArrecadacao, "
+				+ "boig_vlmediofaturamento as valorMedioFaturamento, "
+				+ "boig_icqtderroscontas as indicadorQuantidadeErrosContas, "
+				+ "boig_icvlerroscontas as indicadorValorErrosContas, "
+				+ "boig_icrecebimentomedio as indicadorRecebimentoMedio, "
+				+ "boig_icqtdinadimplenciaate30 as indicadorQuantidadeInadimplenciaAte30, "
+				+ "boig_icvlinadimplenciaate30 as indicadorValorInadimplenciaAte30, "
+				+ "boig_icqtdinadimplenciaate90 as indicadorQuantidadeInadimplenciaAte90, "
+				+ "boig_icvlinadimplenciaate90 as indicadorValorInadimplenciaAte90, "
+				+ "boig_icqtdinadimplenciamaior90 as indicadorQuantidadeInadimplenciaMaior90, "
+				+ "boig_icvlinadimplenciamaior90 as indicadorValorInadimplenciaMaior90, "
+				+ "boig_qtdfatcomprometidos as quantidadeFaturamentosComprometidos, "
+				+ "boig_indicehidrometracao as indiceHidrometracao, "
+				+ "boig_qtdhidrometrosinstalados as quantidadeHidrometrosInstalados, "
+				+ "boig_qtdhidrometrossubstituidos as quantidadeHidrometrosSubstituidos, "
+				+ "boig_prazomedioatendimentoos as prazoMedioAtendimentoOS, "
+				+ "boig_qtdnovasligesgoto as quantidadeNovasLigacoesEsgoto, "
+				+ "boig_economiasnovasligesgoto as economiasNovasLigacoesEsgoto, "
+				+ "boig_qtdnovasligagua as quantidadeNovasLigacoesAgua, "
+				+ "boig_economiasnovasligagua as economiasNovasLigacoesAgua, "
+				+ "boig_qtdconsligados as quantidadeConsumidoresLigados, "
+				+ "boig_qtdconscortados as quantidadeConsumidoresCortados, "
+				+ "boig_qtdconssuprimidos as quantidadeConsumidoresSuprimidos, "
+				+ "boig_qtdconsfactiveis as quantidadeConsumidoresFactiveis, "
+				+ "boig_qtdconstotal as quantidadeConsumidoresTotal, "
+				+ "boig_indicecortados as indiceCortados, "
+				+ "boig_indicesuprimidos as indiceSuprimidos, "
+				+ "boig_indicefactiveis as indiceFactiveis "
+				+ "FROM arrecadacao.boletim_informacoes_gerenciais big "
+				+ "INNER JOIN cadastro.localidade loca ON loca.loca_id = big.loca_id "
+				+ "INNER JOIN cadastro.gerencia_regional greg ON greg.greg_id = loca.greg_id "
+				+ "WHERE big.boig_amreferencia = :anoMesReferencia "
+				+ "ORDER BY loca.loca_nmlocalidade";
 
-			// Coleção de crédito origem de valores cobrados indevidamente
-			Collection idsCreditosOrigem = new ArrayList();
-			idsCreditosOrigem.add(CreditoOrigem.DEVOLUCAO_TARIFA_AGUA);
-			idsCreditosOrigem.add(CreditoOrigem.DEVOLUCAO_TARIFA_ESGOTO);
-			idsCreditosOrigem.add(CreditoOrigem.SERVICOS_INDIRETOS_PAGOS_INDEVIDAMENTE);
-			idsCreditosOrigem.add(CreditoOrigem.DEVOLUCAO_JUROS_PARCELAMENTO);
+			retorno = (Collection) session.createSQLQuery(consulta)
+					.addScalar("gerencia", Hibernate.STRING)
+					.addScalar("localidade", Hibernate.STRING)
+					.addScalar("quantidadeContas", Hibernate.INTEGER)
+					.addScalar("valorFaturamento", Hibernate.BIG_DECIMAL)
+					.addScalar("valorArrecadacao", Hibernate.BIG_DECIMAL)
+					.addScalar("eficienciaArrecadacao", Hibernate.BIG_DECIMAL)
+					.addScalar("valorMedioFaturamento", Hibernate.BIG_DECIMAL)
+					.addScalar("indicadorQuantidadeErrosContas", Hibernate.BIG_DECIMAL)
+					.addScalar("indicadorValorErrosContas", Hibernate.BIG_DECIMAL)
+					.addScalar("indicadorRecebimentoMedio", Hibernate.BIG_DECIMAL)
+					.addScalar("indicadorQuantidadeInadimplenciaAte30", Hibernate.BIG_DECIMAL)
+					.addScalar("indicadorValorInadimplenciaAte30", Hibernate.BIG_DECIMAL)
+					.addScalar("indicadorQuantidadeInadimplenciaAte90", Hibernate.BIG_DECIMAL)
+					.addScalar("indicadorValorInadimplenciaAte90", Hibernate.BIG_DECIMAL)
+					.addScalar("indicadorQuantidadeInadimplenciaMaior90", Hibernate.BIG_DECIMAL)
+					.addScalar("indicadorValorInadimplenciaMaior90", Hibernate.BIG_DECIMAL)
+					.addScalar("quantidadeFaturamentosComprometidos", Hibernate.BIG_DECIMAL)
+					.addScalar("indiceHidrometracao", Hibernate.BIG_DECIMAL)
+					.addScalar("quantidadeHidrometrosInstalados", Hibernate.INTEGER)
+					.addScalar("quantidadeHidrometrosSubstituidos", Hibernate.INTEGER)
+					.addScalar("prazoMedioAtendimentoOS", Hibernate.BIG_DECIMAL)
+					.addScalar("quantidadeNovasLigacoesEsgoto", Hibernate.INTEGER)
+					.addScalar("economiasNovasLigacoesEsgoto", Hibernate.INTEGER)
+					.addScalar("quantidadeNovasLigacoesAgua", Hibernate.INTEGER)
+					.addScalar("economiasNovasLigacoesAgua", Hibernate.INTEGER)
+					.addScalar("quantidadeConsumidoresLigados", Hibernate.INTEGER)
+					.addScalar("quantidadeConsumidoresCortados", Hibernate.INTEGER)
+					.addScalar("quantidadeConsumidoresSuprimidos", Hibernate.INTEGER)
+					.addScalar("quantidadeConsumidoresFactiveis", Hibernate.INTEGER)
+					.addScalar("quantidadeConsumidoresTotal", Hibernate.INTEGER)
+					.addScalar("indiceCortados", Hibernate.BIG_DECIMAL)
+					.addScalar("indiceSuprimidos", Hibernate.BIG_DECIMAL)
+					.addScalar("indiceFactiveis", Hibernate.BIG_DECIMAL)
+					.setInteger("anoMesReferencia", anoMesReferencia)
+					.list();
 
-			// cria a variável que vai conter o hql
-			String consulta = "";
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
 
-			try {
-				
-				consulta = "select " +
-						  "sum(crcg.crcg_vlcategoria) as col_0  " +
-						  "from " +
-						   "faturamento.cred_realizado_catg crcg  " +
-						  "where " +
-						   "crcg.catg_id= :idCategoria  " +
-						   "and (crcg.crrz_id in ( " +
-						 			"select " +
-						 			"crrz.crrz_id  " +
-						 			"from " +
-						 			"faturamento.credito_realizado crrz  " +
-						 			"where " +
-						 			"crrz.lict_id= :idLancamentoItemContabil  " +
-						 			"and (crrz.crog_id in (:idsCreditosOrigem))  " +
-						 			"and (crrz.cnta_id in (" +
-											 			"select " +
-											 			"distinct pgmt.cnta_id " + 
-											 			"from " +
-											 			"arrecadacao.pagamento pgmt " + 
-											 			"where " +
-											 			"pgmt.pgmt_amreferenciaarrecadacao < 201301 " + 
-											 			"and pgmt.loca_id= :idLocalidade  " +
-											 			"and (pgmt.pgst_idatual= :idPagamentoClassificado or pgmt.pgst_idatual= :idPagamentoValorABaixar) " + 
-											 			"and (pgmt.cnta_id is not null) "	+		
-						 			")) " +
-						 			") " +
-						  ")";
+		return retorno;
+	}
+	
+	public Collection<PagamentoHelper> pesquisarValoresPagamentos(Integer pagamentoSituacao, Integer idLocalidade,
+			Integer anoMesReferenciaArrecadacao) throws ErroRepositorioException {
+		
+		
+		Collection<PagamentoHelper> retorno = new ArrayList();
 
-				retorno = (BigDecimal) session.createSQLQuery(consulta)
-						.addScalar("col_0",Hibernate.BIG_DECIMAL)
-						.setInteger("idCategoria", idCategoria)
-						.setInteger("idLancamentoItemContabil", idLancamentoItemContabil)
-						.setParameterList("idsCreditosOrigem", idsCreditosOrigem)
-						.setInteger("idLocalidade", idLocalidade)
-						.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
-						.setInteger("idPagamentoValorABaixar",PagamentoSituacao.VALOR_A_BAIXAR)
-						.setMaxResults(1)
-						.uniqueResult();
-				
-				// erro no hibernate
-			} catch (HibernateException e) {
-				// levanta a exceção para a próxima camada
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				// fecha a sessão com o hibernate
-				HibernateUtil.closeSession(session);
+		Session session = HibernateUtil.getSession();
+		StringBuilder consulta = new StringBuilder();
+
+		try {
+			consulta.append("select p.pgmt_id as idPagamento, p.dotp_id as tipoDocumento, p.pgmt_vlpagamento as valorPagamento")
+					.append(", coalesce((c.cnta_vlagua + c.cnta_vlesgoto + c.cnta_vldebitos - c.cnta_vlcreditos - c.cnta_vlimpostos)") 
+					.append(", d.dbac_vldebito, g.gpag_vldebito) as valorDocumento")
+					.append(", coalesce( c.cnta_amreferenciaconta, d.dbac_amreferenciadebito, g.gpag_amreferenciacontabil ) as dataPagamento ")
+					.append(", p.imov_id as idImovel")
+					.append(" from arrecadacao.pagamento p")
+					.append(" inner join cadastro.localidade l on p.loca_id = l.loca_id") 
+					.append(" left join faturamento.conta c on p.cnta_id = c.cnta_id")
+					.append(" left join faturamento.debito_a_cobrar d on p.dbac_id = d.dbac_id")
+					.append("   and d.dbac_nnprestacaodebito = :qtdPrestacoes")
+					.append(" left join faturamento.guia_pagamento g on p.gpag_id = g.gpag_id")
+					.append(" where p.pgmt_amreferenciaarrecadacao <= :anoMesReferenciaArrecadacao") 
+					.append(" and pgst_idatual = :pagamentoSituacao")
+					.append(" and p.loca_id = :idLocalidade");
+
+			Collection result = session.createSQLQuery(consulta.toString())
+					.addScalar("idPagamento", Hibernate.INTEGER)
+					.addScalar("tipoDocumento", Hibernate.INTEGER)
+					.addScalar("valorPagamento", Hibernate.BIG_DECIMAL)
+					.addScalar("valorDocumento", Hibernate.BIG_DECIMAL)
+					.addScalar("dataPagamento", Hibernate.STRING)
+					.addScalar("idImovel", Hibernate.INTEGER)
+					.setInteger("qtdPrestacoes", 1)
+					.setInteger("anoMesReferenciaArrecadacao", anoMesReferenciaArrecadacao)
+					.setInteger("pagamentoSituacao", pagamentoSituacao)
+					.setInteger("idLocalidade", idLocalidade)
+					.list();
+			
+			for (Object item : result) {
+				Object[] registro = (Object[]) item;
+				PagamentoHelper pagamento = new PagamentoHelper();
+				pagamento.setIdPagamento((Integer)registro[0]);
+				pagamento.setIdTipoDocumento((Integer)registro[1]);
+				pagamento.setValorPagamento((BigDecimal)registro[2]);
+				pagamento.setValorDocumento((BigDecimal)registro[3]);
+				pagamento.setDataPagamento((String)registro[4]);
+				pagamento.setIdImovel((Integer)registro[5]);
+				retorno.add(pagamento);
 			}
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
 
-			return retorno;
+		return retorno;
+	}
+	
+	public void atualizarSituacaoPagamento(Integer pagamentoSituacao, Integer idPagamento) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+
+		StringBuilder sql = new StringBuilder();
+
+		try {
+
+			sql.append("UPDATE Pagamento")
+			   .append(" SET pgst_idatual = :pagamentoSituacao, pgmt_tmultimaalteracao = :dataAlteracao")
+			   .append(" WHERE pgmt_id = :idPagamento");
+
+			session.createQuery(sql.toString())
+					.setInteger("pagamentoSituacao", pagamentoSituacao)
+					.setInteger("idPagamento", idPagamento)
+					.setTimestamp("dataAlteracao", new Date()).executeUpdate();
+
+		} catch (HibernateException e) {
+
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	}
+	
+	public void atualizarGuiasPagamentoNaoPagasAtePeriodo(Integer financiamentoTipoServico, 
+			Collection<Integer> idsGuiasPagamentoNaoPagas, Integer anoMesReferencia) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		
+		StringBuilder sql = new StringBuilder();
+		
+		try {
+			if(idsGuiasPagamentoNaoPagas != null && !idsGuiasPagamentoNaoPagas.isEmpty()){
+				 sql.append(" UPDATE GuiaPagamento as gpag")
+                    .append(" SET gpag.debitoCreditoSituacaoAnterior = gpag.debitoCreditoSituacaoAtual, ")
+                    .append(" gpag.debitoCreditoSituacaoAtual = :situacaoCancelada, ")
+                    .append(" gpag.ultimaAlteracao = :ultimaAlteracao, ")
+                    .append(" gpag.anoMesReferenciaContabil = :anoMesReferencia ")
+                    .append(" WHERE gpag.id IN (:guiasPagamentoNaoPagasAtePeriodo)");
+				
+				 session.createQuery(sql.toString())
+					.setInteger("situacaoCancelada", DebitoCreditoSituacao.CANCELADA)
+					.setDate("ultimaAlteracao", new Date())
+					.setInteger("anoMesReferencia", anoMesReferencia)
+					.setParameterList("guiasPagamentoNaoPagasAtePeriodo", idsGuiasPagamentoNaoPagas)
+					.executeUpdate();
+			}
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			session.close();
+		}
+	}
+	
+	public Collection<Integer> pesquisarIdsGuiasPagamentoNaoPagas(Date dataVencimentoLimite,  Integer idLocalidade) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		
+		Collection<Integer> guiasPagamentoNaoPagasAtePeriodo = new ArrayList<Integer>();
+		
+		StringBuilder sql = new StringBuilder();
+		
+		try{
+			sql.append("SELECT pgmt_gpag.id ")
+            	.append(" FROM Pagamento as pgmt ")
+            	.append(" RIGHT JOIN pgmt.guiaPagamento as pgmt_gpag ")
+            	.append(" WHERE pgmt_gpag.dataVencimento < :dataVencimentoLimite ")
+            	.append(" AND pgmt.id IS NULL ")
+            	.append(" AND pgmt_gpag.financiamentoTipo.id in (:financiamentoTipoServicoNormal) ")
+            	.append(" AND pgmt_gpag.localidade.id = :idLocalidade ")
+            	.append(" AND pgmt_gpag.debitoCreditoSituacaoAtual in (:situacaoNormal,:situacaoRetificada,:situacaoIncluida)");
+			
+			Collection ids = session.createQuery(sql.toString())
+									.setDate("dataVencimentoLimite", dataVencimentoLimite)
+									.setInteger("idLocalidade", idLocalidade)
+									.setInteger("financiamentoTipoServicoNormal", FinanciamentoTipo.SERVICO_NORMAL)
+									.setInteger("situacaoNormal", DebitoCreditoSituacao.NORMAL)
+									.setInteger("situacaoRetificada", DebitoCreditoSituacao.RETIFICADA)
+									.setInteger("situacaoIncluida", DebitoCreditoSituacao.INCLUIDA)
+									.list();
+			
+			for (Object object : ids) {
+				guiasPagamentoNaoPagasAtePeriodo.add((Integer) object);
+			}
+			
+			return guiasPagamentoNaoPagasAtePeriodo;
+			
+		} catch(HibernateException e){
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			session.close();
+		}
+	}
+	
+	public Collection<Integer> pesquisarIdsLocalidadeComGuiasPagamentoNaoPagas(Integer financiamentoTipoServico, 
+			Date dataVencimentoLimite) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		
+		StringBuilder sql = new StringBuilder();
+		
+		Collection<Integer> retorno = new ArrayList<Integer>();
+		try {
+			sql.append("SELECT distinct gpag.loca_id as localidade ")
+	           .append(" FROM faturamento.guia_pagamento gpag ")
+	           .append(" LEFT JOIN arrecadacao.pagamento pgmt ON pgmt.gpag_id = gpag.gpag_id ")
+	           .append(" WHERE gpag_dtvencimento < :dataVencimentoLimite ")
+	           .append(" AND pgmt_id IS NULL ")
+	           .append(" AND fntp_id in (:financiamentoTipoServicoNormal) ")
+	           .append(" AND dcst_idatual in (:situacaoNormal,:situacaoRetificada,:situacaoIncluida)");
+			
+			retorno = session.createSQLQuery(sql.toString())
+				.addScalar("localidade", Hibernate.INTEGER)
+				.setDate("dataVencimentoLimite", dataVencimentoLimite)
+				.setInteger("financiamentoTipoServicoNormal", FinanciamentoTipo.SERVICO_NORMAL)
+				.setInteger("situacaoNormal", DebitoCreditoSituacao.NORMAL)
+				.setInteger("situacaoRetificada", DebitoCreditoSituacao.RETIFICADA)
+				.setInteger("situacaoIncluida", DebitoCreditoSituacao.INCLUIDA).list();
+			
+		} catch (HibernateException e) {
+
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+			
 		}
 		
-		/**
-		 * Mantis ****
-		 * 
-		 * [UC0276] - Encerrar Arrecadação do Mês
-		 * 
-		 * Contabilizar em contas separadas valores arrecadados até 31/12/2012
-		 * 
-		 * @author Wellington Rocha
-		 * 
-		 * @param idLocalidade
-		 * @param anoMesReferenciaArrecadacao
-		 * @param idLancamentoItemContabil
-		 * @param idCategoria
-		 * @return
-		 * @throws ErroRepositorioException
-		 */
-		public BigDecimal acumularValorEntradaParcelamentoPagamentosGuiaPagamentoEfetuadosAte122012ClassificadosNoMesFinanciamentoTipoServico(
-				Integer idLocalidade, 
-				Integer anoMesReferenciaArrecadacao,
-				Integer idLancamentoItemContabil, 
-				Integer idCategoria)
-				throws ErroRepositorioException {
-
-			BigDecimal retorno = null;
-
-			// cria uma sessão com o hibernate
-			Session session = HibernateUtil.getSession();
-
-			// cria a variável que vai conter o hql
-			String consulta = "";
-
-			try {
-
-				consulta  = "select " +
-						  "sum(gpcg.gpcg_vlcategoria) as col_0  " +
-						  "from " +
-						   "faturamento.guia_pagamento_categoria gpcg  " +
-						  "where " +
-						   "gpcg.catg_id= :idCategoria  " +
-						   "and (gpcg.gpag_id in (  " +   
-						 			"select " +
-						 			"gpag.gpag_id  " +
-						 			"from " +
-						 			"faturamento.guia_pagamento gpag  " +
-						 			"where " +
-						 			"gpag.lict_id= :idLancamentoItemContabil  " +
-						 			"and gpag.fntp_id= :idFinanciamentoTipo  " +
-						 			"and (gpag.gpag_id in (" +
-											 			"select " +
-											 			"distinct pgmt.gpag_id as col_0 " + 
-											 			"from " +
-											 			"arrecadacao.pagamento pgmt " + 
-											 			"where " +
-											 			"pgmt.pgmt_amreferenciaarrecadacao < 201301 " + 
-											 			"and pgmt.loca_id= :idLocalidade  " +
-											 			"and (pgmt.pgst_idatual= :idPagamentoClassificado or pgmt.pgst_idatual= :idPagamentoValorABaixar) " + 
-											 			"and (pgmt.gpag_id is not null) " +
-						 			"))    " +  
-						 			") " +
-						   ")";
-
-				retorno = (BigDecimal) session.createSQLQuery(consulta)
-						.addScalar("col_0",Hibernate.BIG_DECIMAL)
-						.setInteger("idCategoria", idCategoria)
-						.setInteger("idLancamentoItemContabil", idLancamentoItemContabil)
-						.setInteger("idFinanciamentoTipo",FinanciamentoTipo.SERVICO_NORMAL)
-						.setInteger("idLocalidade", idLocalidade)
-						.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
-						.setInteger("idPagamentoValorABaixar",PagamentoSituacao.VALOR_A_BAIXAR)
-						.uniqueResult();
-				
-				
-				
-				
-				// erro no hibernate
-			} catch (HibernateException e) {
-				// levanta a exceção para a próxima camada
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				// fecha a sessão com o hibernate
-				HibernateUtil.closeSession(session);
-			}
-
-			return retorno;
-		}
+		return retorno;
 		
-		/**
-		 * Mantis ****
-		 * 
-		 * [UC0276] - Encerrar Arrecadação do Mês
-		 * 
-		 * Contabilizar em contas separadas valores arrecadados até 31/12/2012
-		 * 
-		 * @author Wellington Rocha
-		 * 
-		 * @param idLocalidade
-		 * @param anoMesReferenciaArrecadacao
-		 * @param idLancamentoItemContabil
-		 * @param idCategoria
-		 * @return
-		 * @throws ErroRepositorioException
-		 */
-		public BigDecimal acumularValorQueFaltaSerCobradoPagamentosDebitoACobrarEfetuadosAte122012(
-				Integer idLocalidade, 
-				Integer anoMesReferenciaArrecadacao,
-				Integer idLancamentoItemContabil, 
-				Integer idCategoria)
-				throws ErroRepositorioException {
+	}
+	
+	public Collection<Pagamento> obterPagamentos(Collection<Integer> idsPagamentos) throws ErroRepositorioException {
 
-			// Cria a varável que vai armazenar a coleção de retorno da pesquisa
-			BigDecimal retorno = null;
+		Collection<Pagamento> retorno = new ArrayList<Pagamento>();
+		Collection<Pagamento> pagamentos = null;
+		
+		Session session = HibernateUtil.getSession();
+		String consulta = null;
+		String innerCancelamento = null;
 
-			// Cria uma instância da sessão
-			Session session = HibernateUtil.getSession();
+		try {
+			consulta = "select pagamento from Pagamento as pagamento "
+					+ " where pagamento.id in ("
+					+ " select p1.id "
+					+ " from gcom.arrecadacao.pagamento.Pagamento as p1 "
+					+ " inner join pagamento.contaGeral contaGeral "
+					+ " inner join contaGeral.conta conta "
+					+ " inner join conta.contaMotivoCancelamento contaMotivoCancelamento "
+					+ " where pagamento.id in (:idsPagamentos) )"
+					+ " or pagamento.id in ( "
+					+ "	select p2.id "
+					+ " from gcom.arrecadacao.pagamento.Pagamento as p2 "
+					+ " inner join pagamento.contaGeral contaGeral "
+					+ " inner join contaGeral.contaHistorico conta "
+					+ " inner join conta.contaMotivoCancelamento contaMotivoCancelamento "
+					+ " where pagamento.id in (:idsPagamentos) )  "
+					+ " order by pagamento.dataPagamento, pagamento.imovel.id, pagamento.valorPagamento ";
 
-			// Cria a variável que vai conter o hql
-			String consulta = "";
-
-			try {
-
-				consulta = "select " +
-						  "sum(dbcg.dbcg_vlcategoria-(trunc(dbcg.dbcg_vlcategoria/dbac.dbac_nnprestacaodebito,2)*dbac.dbac_nnprestacaocobradas)) as col_0 " +
-						  "from " +
-						   "faturamento.deb_a_cobrar_catg dbcg  " +
-						  "inner join  faturamento.debito_a_cobrar dbac on dbcg.dbac_id=dbac.dbac_id  " +
-						  "where " +
-						   "dbcg.dbac_id=dbac.dbac_id  " +
-						   "and dbac.lict_id=:idLancamentoItemContabil  " +
-						   "and dbac.loca_id= :idLocalidade  " +
-						   "and dbcg.catg_id=:idCategoria  " +
-						   "and (dbac.dbac_id in (" +
-											   "select " +
-											   "distinct pgmt.dbac_id as col_0 " + 
-											   "from " +
-											   "arrecadacao.pagamento pgmt " + 
-											   "where " +
-											   "pgmt.pgmt_amreferenciaarrecadacao < 201301 " + 
-											   "and pgmt.loca_id= :idLocalidade  " +
-											   "and (pgmt.pgst_idatual= :idPagamentoClassificado or pgmt.pgst_idatual= :idPagamentoValorABaixar) " + 
-											   "and (pgmt.dbac_id is not null) " +
-						   ")) " ;
-
-				retorno = (BigDecimal) session.createSQLQuery(consulta)
-						.addScalar("col_0",Hibernate.BIG_DECIMAL)
-						.setInteger("idLancamentoItemContabil", idLancamentoItemContabil)
-						.setInteger("idLocalidade", idLocalidade)
-						.setInteger("idCategoria", idCategoria)
-						.setInteger("idPagamentoClassificado",PagamentoSituacao.PAGAMENTO_CLASSIFICADO)
-						.setInteger("idPagamentoValorABaixar",PagamentoSituacao.VALOR_A_BAIXAR)
-						.setMaxResults(1)
-						.uniqueResult();
-
-				// Erro no hibernate
-			} catch (HibernateException e) {
-				// Levanta a exceção para a próxima camada
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				// Fecha a sessão com o hibernate
-				HibernateUtil.closeSession(session);
-			}
-
-			return retorno;
-		}
-
-		/**
-		 * COSANPA - Mantis 414 - Felipe Santos - 22/10/2013
-		 * 
-		 * Retorna o total de Arrecadação por referência e localidade
-		 * 
-		 * @param anoMesReferencia
-		 * @param idLocalidade
-		 * @return BigDecimal
-		 * @throws ErroRepositorioException
-		 */
-		public BigDecimal pesquisarTotalArrecadacaoRelatorioBIG(
-				Integer anoMesReferencia, Integer idLocalidade) throws ErroRepositorioException {
-
-			BigDecimal retorno = null;
-
-			Session session = HibernateUtil.getSession();
-			String consulta = "";
-
-			try {
-				consulta = "SELECT coalesce(sum(vlpag), 0) as total "
-					+ "FROM ("
-					+ "SELECT coalesce(sum(pgmt_vlpagamento), 0) as vlpag "
-					+ "FROM arrecadacao.pagamento "
-					+ "WHERE loca_id = :idLocalidade "
-					+ "AND pgmt_amreferenciaarrecadacao = :anoMesReferencia "
+			
+			pagamentos = session.createQuery(consulta)
+				.setParameterList("idsPagamentos", idsPagamentos).setMaxResults(1500).list();
+			
+			for (Pagamento pagamento: pagamentos) {
+				System.out.println("Pagamento: " + pagamento.getId());
+				if (pagamento.getContaGeral() != null) {
+					ContaGeral contaGeral = (ContaGeral) session.get(ContaGeral.class, pagamento.getContaGeral().getId());
 					
-					+ "UNION "
-					
-					+ "SELECT coalesce(sum(pghi_vlpagamento), 0) as vlpag "
-					+ "FROM arrecadacao.pagamento_historico "
-					+ "WHERE loca_id = :idLocalidade "
-					+ "AND pghi_amreferenciaarrecadacao = :anoMesReferencia "
-					
-					+ "UNION "
-					
-					+ "SELECT coalesce(sum(devl_vldevolucao * -1), 0) as vlpag "
-					+ "FROM arrecadacao.devolucao "
-					+ "WHERE loca_id = :idLocalidade "
-					+ "AND devl_amreferenciaarrecadacao = :anoMesReferencia "
-
-					+ "UNION "
-
-					+ "SELECT coalesce(sum(dehi_vldevolucao * -1), 0) as vlpag "
-					+ "FROM arrecadacao.devolucao_historico "
-					+ "WHERE loca_id = :idLocalidade "
-					+ "AND dehi_amreferenciaarrecadacao = :anoMesReferencia"
-					
-					+ ") as arrecadacao";
-
-				retorno = (BigDecimal) session.createSQLQuery(consulta)
-						.addScalar("total",Hibernate.BIG_DECIMAL)
-						.setInteger("idLocalidade", idLocalidade)
-						.setInteger("anoMesReferencia", anoMesReferencia)
-						.setMaxResults(1)
-						.uniqueResult();
-
-			} catch (HibernateException e) {
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				HibernateUtil.closeSession(session);
-			}
-
-			return retorno;
-		}
-		
-		/**
-		 * COSANPA - Mantis 414 - Felipe Santos - 22/10/2013
-		 * 
-		 * Retorna diferença de datas e quantidade de pagamentos para
-		 * Prazo Medio de Recebimento de Contas
-		 * 
-		 * @param anoMesReferencia
-		 * @param idLocalidade
-		 * @return Object[]
-		 * @throws ErroRepositorioException
-		 */
-		public Object[] pesquisarPrazoMedioRecebimentoContasRelatorioBIG(
-				Integer anoMesReferencia, Integer idLocalidade) throws ErroRepositorioException {
-
-			Object[] retorno = null;
-
-			Session session = HibernateUtil.getSession();
-			String consulta = "";
-
-			try {
-				consulta = "SELECT sum(difDatas) as difDatas, "
-					+ "sum(qtdPag) as qtdPag "
-					+ "FROM ("
-					
-					+ "SELECT coalesce(sum(pgmt_dtpagamento - cnta_dtvencimentoconta), 0) as difDatas, "
-					+ "count(pgmt_id) as qtdPag "
-					+ "FROM arrecadacao.pagamento "
-					+ "INNER JOIN faturamento.conta on conta.cnta_id = pagamento.cnta_id "
-					+ "WHERE conta.loca_id = :idLocalidade "
-					+ "AND pgmt_amreferenciaarrecadacao = :anoMesReferencia "
-					
-					+ "UNION " 
-
-					+ "SELECT coalesce(sum(pghi_dtpagamento - cnhi_dtvencimentoconta), 0) as difDatas, "
-					+ "count(pghi_id) as qtdPag "
-					+ "FROM arrecadacao.pagamento_historico pagamento "
-					+ "INNER JOIN faturamento.conta_historico conta on conta.cnta_id = pagamento.cnta_id "
-					+ "WHERE conta.loca_id = :idLocalidade "
-					+ "AND pghi_amreferenciaarrecadacao = :anoMesReferencia "
-
-					+ ") as prazoMedio";
-
-				retorno = (Object[]) session.createSQLQuery(consulta)
-						.addScalar("difDatas",Hibernate.INTEGER)
-						.addScalar("qtdPag",Hibernate.INTEGER)
-						.setInteger("idLocalidade", idLocalidade)
-						.setInteger("anoMesReferencia", anoMesReferencia)
-						.setMaxResults(1)
-						.uniqueResult();
-
-			} catch (HibernateException e) {
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				HibernateUtil.closeSession(session);
-			}
-
-			return retorno;
-		}
-		
-		/**
-		 * COSANPA - Mantis 414 - Felipe Santos - 08/11/2013
-		 * 
-		 * Retorna os dados para o Relatorio BIG
-		 * 
-		 * @param anoMesReferencia
-		 * @return Collection
-		 * @throws ErroRepositorioException
-		 */
-		public Collection pesquisarDadosRelatorioBIG(
-				Integer anoMesReferencia) throws ErroRepositorioException {
-			
-			Collection retorno = null;
-
-			Session session = HibernateUtil.getSession();
-			String consulta = "";
-
-			try {
-				consulta = "SELECT greg.greg_nmregional as gerencia, "
-					+ "loca.loca_nmlocalidade as localidade, "
-					+ "boig_qtdcontas as quantidadeContas, "
-					+ "boig_vlfaturamento as valorFaturamento, "
-					+ "boig_vlarrecadacao as valorArrecadacao, "
-					+ "boig_eficarrecadacao as eficienciaArrecadacao, "
-					+ "boig_vlmediofaturamento as valorMedioFaturamento, "
-					+ "boig_icqtderroscontas as indicadorQuantidadeErrosContas, "
-					+ "boig_icvlerroscontas as indicadorValorErrosContas, "
-					+ "boig_icrecebimentomedio as indicadorRecebimentoMedio, "
-					+ "boig_icqtdinadimplenciaate30 as indicadorQuantidadeInadimplenciaAte30, "
-					+ "boig_icvlinadimplenciaate30 as indicadorValorInadimplenciaAte30, "
-					+ "boig_icqtdinadimplenciaate90 as indicadorQuantidadeInadimplenciaAte90, "
-					+ "boig_icvlinadimplenciaate90 as indicadorValorInadimplenciaAte90, "
-					+ "boig_icqtdinadimplenciamaior90 as indicadorQuantidadeInadimplenciaMaior90, "
-					+ "boig_icvlinadimplenciamaior90 as indicadorValorInadimplenciaMaior90, "
-					+ "boig_qtdfatcomprometidos as quantidadeFaturamentosComprometidos, "
-					+ "boig_indicehidrometracao as indiceHidrometracao, "
-					+ "boig_qtdhidrometrosinstalados as quantidadeHidrometrosInstalados, "
-					+ "boig_qtdhidrometrossubstituidos as quantidadeHidrometrosSubstituidos, "
-					+ "boig_prazomedioatendimentoos as prazoMedioAtendimentoOS, "
-					+ "boig_qtdnovasligesgoto as quantidadeNovasLigacoesEsgoto, "
-					+ "boig_economiasnovasligesgoto as economiasNovasLigacoesEsgoto, "
-					+ "boig_qtdnovasligagua as quantidadeNovasLigacoesAgua, "
-					+ "boig_economiasnovasligagua as economiasNovasLigacoesAgua, "
-					+ "boig_qtdconsligados as quantidadeConsumidoresLigados, "
-					+ "boig_qtdconscortados as quantidadeConsumidoresCortados, "
-					+ "boig_qtdconssuprimidos as quantidadeConsumidoresSuprimidos, "
-					+ "boig_qtdconsfactiveis as quantidadeConsumidoresFactiveis, "
-					+ "boig_qtdconstotal as quantidadeConsumidoresTotal, "
-					+ "boig_indicecortados as indiceCortados, "
-					+ "boig_indicesuprimidos as indiceSuprimidos, "
-					+ "boig_indicefactiveis as indiceFactiveis "
-					+ "FROM arrecadacao.boletim_informacoes_gerenciais big "
-					+ "INNER JOIN cadastro.localidade loca ON loca.loca_id = big.loca_id "
-					+ "INNER JOIN cadastro.gerencia_regional greg ON greg.greg_id = loca.greg_id "
-					+ "WHERE big.boig_amreferencia = :anoMesReferencia "
-					+ "ORDER BY loca.loca_nmlocalidade";
-
-				retorno = (Collection) session.createSQLQuery(consulta)
-						.addScalar("gerencia", Hibernate.STRING)
-						.addScalar("localidade", Hibernate.STRING)
-						.addScalar("quantidadeContas", Hibernate.INTEGER)
-						.addScalar("valorFaturamento", Hibernate.BIG_DECIMAL)
-						.addScalar("valorArrecadacao", Hibernate.BIG_DECIMAL)
-						.addScalar("eficienciaArrecadacao", Hibernate.BIG_DECIMAL)
-						.addScalar("valorMedioFaturamento", Hibernate.BIG_DECIMAL)
-						.addScalar("indicadorQuantidadeErrosContas", Hibernate.BIG_DECIMAL)
-						.addScalar("indicadorValorErrosContas", Hibernate.BIG_DECIMAL)
-						.addScalar("indicadorRecebimentoMedio", Hibernate.BIG_DECIMAL)
-						.addScalar("indicadorQuantidadeInadimplenciaAte30", Hibernate.BIG_DECIMAL)
-						.addScalar("indicadorValorInadimplenciaAte30", Hibernate.BIG_DECIMAL)
-						.addScalar("indicadorQuantidadeInadimplenciaAte90", Hibernate.BIG_DECIMAL)
-						.addScalar("indicadorValorInadimplenciaAte90", Hibernate.BIG_DECIMAL)
-						.addScalar("indicadorQuantidadeInadimplenciaMaior90", Hibernate.BIG_DECIMAL)
-						.addScalar("indicadorValorInadimplenciaMaior90", Hibernate.BIG_DECIMAL)
-						.addScalar("quantidadeFaturamentosComprometidos", Hibernate.BIG_DECIMAL)
-						.addScalar("indiceHidrometracao", Hibernate.BIG_DECIMAL)
-						.addScalar("quantidadeHidrometrosInstalados", Hibernate.INTEGER)
-						.addScalar("quantidadeHidrometrosSubstituidos", Hibernate.INTEGER)
-						.addScalar("prazoMedioAtendimentoOS", Hibernate.BIG_DECIMAL)
-						.addScalar("quantidadeNovasLigacoesEsgoto", Hibernate.INTEGER)
-						.addScalar("economiasNovasLigacoesEsgoto", Hibernate.INTEGER)
-						.addScalar("quantidadeNovasLigacoesAgua", Hibernate.INTEGER)
-						.addScalar("economiasNovasLigacoesAgua", Hibernate.INTEGER)
-						.addScalar("quantidadeConsumidoresLigados", Hibernate.INTEGER)
-						.addScalar("quantidadeConsumidoresCortados", Hibernate.INTEGER)
-						.addScalar("quantidadeConsumidoresSuprimidos", Hibernate.INTEGER)
-						.addScalar("quantidadeConsumidoresFactiveis", Hibernate.INTEGER)
-						.addScalar("quantidadeConsumidoresTotal", Hibernate.INTEGER)
-						.addScalar("indiceCortados", Hibernate.BIG_DECIMAL)
-						.addScalar("indiceSuprimidos", Hibernate.BIG_DECIMAL)
-						.addScalar("indiceFactiveis", Hibernate.BIG_DECIMAL)
-						.setInteger("anoMesReferencia", anoMesReferencia)
-						.list();
-
-			} catch (HibernateException e) {
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				HibernateUtil.closeSession(session);
-			}
-
-			return retorno;
-		}
-		
-		public Collection<PagamentoHelper> pesquisarValoresPagamentos(Integer pagamentoSituacao, Integer idLocalidade,
-				Integer anoMesReferenciaArrecadacao) throws ErroRepositorioException {
-			
-			
-			Collection<PagamentoHelper> retorno = new ArrayList();
-
-			Session session = HibernateUtil.getSession();
-			StringBuilder consulta = new StringBuilder();
-
-			try {
-				consulta.append("select p.pgmt_id as idPagamento, p.dotp_id as tipoDocumento, p.pgmt_vlpagamento as valorPagamento")
-						.append(", coalesce((c.cnta_vlagua + c.cnta_vlesgoto + c.cnta_vldebitos - c.cnta_vlcreditos - c.cnta_vlimpostos)") 
-						.append(", d.dbac_vldebito, g.gpag_vldebito) as valorDocumento")
-						.append(", coalesce( c.cnta_amreferenciaconta, d.dbac_amreferenciadebito, g.gpag_amreferenciacontabil ) as dataPagamento ")
-						.append(", p.imov_id as idImovel")
-						.append(" from arrecadacao.pagamento p")
-						.append(" inner join cadastro.localidade l on p.loca_id = l.loca_id") 
-						.append(" left join faturamento.conta c on p.cnta_id = c.cnta_id")
-						.append(" left join faturamento.debito_a_cobrar d on p.dbac_id = d.dbac_id")
-						.append("   and d.dbac_nnprestacaodebito = :qtdPrestacoes")
-						.append(" left join faturamento.guia_pagamento g on p.gpag_id = g.gpag_id")
-						.append(" where p.pgmt_amreferenciaarrecadacao <= :anoMesReferenciaArrecadacao") 
-						.append(" and pgst_idatual = :pagamentoSituacao")
-						.append(" and p.loca_id = :idLocalidade");
-
-				Collection result = session.createSQLQuery(consulta.toString())
-						.addScalar("idPagamento", Hibernate.INTEGER)
-						.addScalar("tipoDocumento", Hibernate.INTEGER)
-						.addScalar("valorPagamento", Hibernate.BIG_DECIMAL)
-						.addScalar("valorDocumento", Hibernate.BIG_DECIMAL)
-						.addScalar("dataPagamento", Hibernate.STRING)
-						.addScalar("idImovel", Hibernate.INTEGER)
-						.setInteger("qtdPrestacoes", 1)
-						.setInteger("anoMesReferenciaArrecadacao", anoMesReferenciaArrecadacao)
-						.setInteger("pagamentoSituacao", pagamentoSituacao)
-						.setInteger("idLocalidade", idLocalidade)
-						.list();
-				
-				for (Object item : result) {
-					Object[] registro = (Object[]) item;
-					PagamentoHelper pagamento = new PagamentoHelper();
-					pagamento.setIdPagamento((Integer)registro[0]);
-					pagamento.setIdTipoDocumento((Integer)registro[1]);
-					pagamento.setValorPagamento((BigDecimal)registro[2]);
-					pagamento.setValorDocumento((BigDecimal)registro[3]);
-					pagamento.setDataPagamento((String)registro[4]);
-					pagamento.setIdImovel((Integer)registro[5]);
-					retorno.add(pagamento);
-				}
-			} catch (HibernateException e) {
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				HibernateUtil.closeSession(session);
-			}
-
-			return retorno;
-		}
-		
-		public void atualizarSituacaoPagamento(Integer pagamentoSituacao, Integer idPagamento) throws ErroRepositorioException {
-			Session session = HibernateUtil.getSession();
-
-			StringBuilder sql = new StringBuilder();
-
-			try {
-
-				sql.append("UPDATE Pagamento")
-				   .append(" SET pgst_idatual = :pagamentoSituacao, pgmt_tmultimaalteracao = :dataAlteracao")
-				   .append(" WHERE pgmt_id = :idPagamento");
-
-				session.createQuery(sql.toString())
-						.setInteger("pagamentoSituacao", pagamentoSituacao)
-						.setInteger("idPagamento", idPagamento)
-						.setTimestamp("dataAlteracao", new Date()).executeUpdate();
-
-			} catch (HibernateException e) {
-
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-
-			} finally {
-				HibernateUtil.closeSession(session);
-			}
-		}
-		
-		public void atualizarGuiasPagamentoNaoPagasAtePeriodo(Integer financiamentoTipoServico, 
-				Collection<Integer> idsGuiasPagamentoNaoPagas, Integer anoMesReferencia) throws ErroRepositorioException {
-			Session session = HibernateUtil.getSession();
-			
-			StringBuilder sql = new StringBuilder();
-			
-			try {
-				if(idsGuiasPagamentoNaoPagas != null && !idsGuiasPagamentoNaoPagas.isEmpty()){
-					 sql.append(" UPDATE GuiaPagamento as gpag")
-	                    .append(" SET gpag.debitoCreditoSituacaoAnterior = gpag.debitoCreditoSituacaoAtual, ")
-	                    .append(" gpag.debitoCreditoSituacaoAtual = :situacaoCancelada, ")
-	                    .append(" gpag.ultimaAlteracao = :ultimaAlteracao, ")
-	                    .append(" gpag.anoMesReferenciaContabil = :anoMesReferencia ")
-	                    .append(" WHERE gpag.id IN (:guiasPagamentoNaoPagasAtePeriodo)");
-					
-					 session.createQuery(sql.toString())
-						.setInteger("situacaoCancelada", DebitoCreditoSituacao.CANCELADA)
-						.setDate("ultimaAlteracao", new Date())
-						.setInteger("anoMesReferencia", anoMesReferencia)
-						.setParameterList("guiasPagamentoNaoPagasAtePeriodo", idsGuiasPagamentoNaoPagas)
-						.executeUpdate();
-				}
-			} catch (HibernateException e) {
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				session.close();
-			}
-		}
-		
-		public Collection<Integer> pesquisarIdsGuiasPagamentoNaoPagas(Date dataVencimentoLimite,  Integer idLocalidade) throws ErroRepositorioException {
-			Session session = HibernateUtil.getSession();
-			
-			Collection<Integer> guiasPagamentoNaoPagasAtePeriodo = new ArrayList<Integer>();
-			
-			StringBuilder sql = new StringBuilder();
-			
-			try{
-				sql.append("SELECT pgmt_gpag.id ")
-	            	.append(" FROM Pagamento as pgmt ")
-	            	.append(" RIGHT JOIN pgmt.guiaPagamento as pgmt_gpag ")
-	            	.append(" WHERE pgmt_gpag.dataVencimento < :dataVencimentoLimite ")
-	            	.append(" AND pgmt.id IS NULL ")
-	            	.append(" AND pgmt_gpag.financiamentoTipo.id in (:financiamentoTipoServicoNormal) ")
-	            	.append(" AND pgmt_gpag.localidade.id = :idLocalidade ")
-	            	.append(" AND pgmt_gpag.debitoCreditoSituacaoAtual in (:situacaoNormal,:situacaoRetificada,:situacaoIncluida)");
-				
-				Collection ids = session.createQuery(sql.toString())
-										.setDate("dataVencimentoLimite", dataVencimentoLimite)
-										.setInteger("idLocalidade", idLocalidade)
-										.setInteger("financiamentoTipoServicoNormal", FinanciamentoTipo.SERVICO_NORMAL)
-										.setInteger("situacaoNormal", DebitoCreditoSituacao.NORMAL)
-										.setInteger("situacaoRetificada", DebitoCreditoSituacao.RETIFICADA)
-										.setInteger("situacaoIncluida", DebitoCreditoSituacao.INCLUIDA)
-										.list();
-				
-				for (Object object : ids) {
-					guiasPagamentoNaoPagasAtePeriodo.add((Integer) object);
-				}
-				
-				return guiasPagamentoNaoPagasAtePeriodo;
-				
-			} catch(HibernateException e){
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				session.close();
-			}
-		}
-		
-		public Collection<Integer> pesquisarIdsLocalidadeComGuiasPagamentoNaoPagas(Integer financiamentoTipoServico, 
-				Date dataVencimentoLimite) throws ErroRepositorioException {
-			Session session = HibernateUtil.getSession();
-			
-			StringBuilder sql = new StringBuilder();
-			
-			Collection<Integer> retorno = new ArrayList<Integer>();
-			try {
-				sql.append("SELECT distinct gpag.loca_id as localidade ")
-		           .append(" FROM faturamento.guia_pagamento gpag ")
-		           .append(" LEFT JOIN arrecadacao.pagamento pgmt ON pgmt.gpag_id = gpag.gpag_id ")
-		           .append(" WHERE gpag_dtvencimento < :dataVencimentoLimite ")
-		           .append(" AND pgmt_id IS NULL ")
-		           .append(" AND fntp_id in (:financiamentoTipoServicoNormal) ")
-		           .append(" AND dcst_idatual in (:situacaoNormal,:situacaoRetificada,:situacaoIncluida)");
-				
-				retorno = session.createSQLQuery(sql.toString())
-					.addScalar("localidade", Hibernate.INTEGER)
-					.setDate("dataVencimentoLimite", dataVencimentoLimite)
-					.setInteger("financiamentoTipoServicoNormal", FinanciamentoTipo.SERVICO_NORMAL)
-					.setInteger("situacaoNormal", DebitoCreditoSituacao.NORMAL)
-					.setInteger("situacaoRetificada", DebitoCreditoSituacao.RETIFICADA)
-					.setInteger("situacaoIncluida", DebitoCreditoSituacao.INCLUIDA).list();
-				
-			} catch (HibernateException e) {
-
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-				
-			}
-			
-			return retorno;
-			
-		}
-		
-		/**
-		 * TODO : COSANPA
-		 * @author Pamela Gatinho
-		 * @date 17/05/2013
-		 * 
-		 * Método para pesquisar pagamentos por ids passados como parâmetro
-		 */
-		public Collection<Pagamento> obterPagamentos(Collection<Integer> idsPagamentos) throws ErroRepositorioException {
-
-			Collection<Pagamento> retorno = new ArrayList<Pagamento>();
-			Collection<Pagamento> pagamentos = null;
-			
-			Session session = HibernateUtil.getSession();
-			String consulta = null;
-			String innerCancelamento = null;
-
-			try {
-				consulta = "select pagamento from Pagamento as pagamento "
-						+ " where pagamento.id in ("
-						+ " select p1.id "
-						+ " from gcom.arrecadacao.pagamento.Pagamento as p1 "
-						+ " inner join pagamento.contaGeral contaGeral "
-						+ " inner join contaGeral.conta conta "
-						+ " inner join conta.contaMotivoCancelamento contaMotivoCancelamento "
-						+ " where pagamento.id in (:idsPagamentos) )"
-						+ " or pagamento.id in ( "
-						+ "	select p2.id "
-						+ " from gcom.arrecadacao.pagamento.Pagamento as p2 "
-						+ " inner join pagamento.contaGeral contaGeral "
-						+ " inner join contaGeral.contaHistorico conta "
-						+ " inner join conta.contaMotivoCancelamento contaMotivoCancelamento "
-						+ " where pagamento.id in (:idsPagamentos) )  "
-						+ " order by pagamento.dataPagamento, pagamento.imovel.id, pagamento.valorPagamento ";
-
-				
-				pagamentos = session.createQuery(consulta)
-					.setParameterList("idsPagamentos", idsPagamentos).setMaxResults(1500).list();
-				
-				for (Pagamento pagamento: pagamentos) {
-					System.out.println("Pagamento: " + pagamento.getId());
-					if (pagamento.getContaGeral() != null) {
-						ContaGeral contaGeral = (ContaGeral) session.get(ContaGeral.class, pagamento.getContaGeral().getId());
+					if (contaGeral.getConta() != null) {
+						Conta conta = (Conta) session.get(Conta.class, pagamento.getContaGeral().getId());
+						contaGeral.setConta(conta);
 						
-						if (contaGeral.getConta() != null) {
-							Conta conta = (Conta) session.get(Conta.class, pagamento.getContaGeral().getId());
-							contaGeral.setConta(conta);
+						if (conta.getContaMotivoCancelamento() != null) {
 							
-							if (conta.getContaMotivoCancelamento() != null) {
-								
-								ContaMotivoCancelamento contaMotivoCancelamento = (ContaMotivoCancelamento) session.get(
-										ContaMotivoCancelamento.class, conta.getContaMotivoCancelamento().getId());
-								
-								conta.setContaMotivoCancelamento(contaMotivoCancelamento);
-							}
-						} else  {
-							ContaHistorico conta = (ContaHistorico) session.get(ContaHistorico.class, pagamento.getContaGeral().getId());
-							contaGeral.setContaHistorico(conta);
-							if (conta.getContaMotivoCancelamento() != null) {
-								
-								ContaMotivoCancelamento contaMotivoCancelamento = (ContaMotivoCancelamento) session.get(
-										ContaMotivoCancelamento.class, conta.getContaMotivoCancelamento().getId());
-								
-								conta.setContaMotivoCancelamento(contaMotivoCancelamento);
-							}
+							ContaMotivoCancelamento contaMotivoCancelamento = (ContaMotivoCancelamento) session.get(
+									ContaMotivoCancelamento.class, conta.getContaMotivoCancelamento().getId());
 							
+							conta.setContaMotivoCancelamento(contaMotivoCancelamento);
 						}
-						pagamento.setContaGeral(contaGeral);
+					} else  {
+						ContaHistorico conta = (ContaHistorico) session.get(ContaHistorico.class, pagamento.getContaGeral().getId());
+						contaGeral.setContaHistorico(conta);
+						if (conta.getContaMotivoCancelamento() != null) {
+							
+							ContaMotivoCancelamento contaMotivoCancelamento = (ContaMotivoCancelamento) session.get(
+									ContaMotivoCancelamento.class, conta.getContaMotivoCancelamento().getId());
+							
+							conta.setContaMotivoCancelamento(contaMotivoCancelamento);
+						}
+						
 					}
-					retorno.add(pagamento);
+					pagamento.setContaGeral(contaGeral);
 				}
-
-			} catch (HibernateException e) {
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				HibernateUtil.closeSession(session);
+				retorno.add(pagamento);
 			}
 
-			return retorno;
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
 		}
+
+		return retorno;
+	}
 }

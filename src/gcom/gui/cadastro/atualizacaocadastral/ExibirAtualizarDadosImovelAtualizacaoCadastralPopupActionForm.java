@@ -16,8 +16,6 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm exten
 	private String numeroQuadra;
 	private String idRegistrosNaoAutorizados;
 	private String idRegistrosAutorizados;
-	private String situacaoLigacaoAgua;
-	private String situacaoLigacaoEsgoto;
 	
 	public String getIdImovel() {
 		return idImovel;
@@ -85,23 +83,9 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm exten
 	public void setIdRegistrosAutorizados(String idRegistrosAutorizados) {
 		this.idRegistrosAutorizados = idRegistrosAutorizados;
 	}
-	public String getSituacaoLigacaoAgua() {
-		return situacaoLigacaoAgua;
-	}
-	public void setSituacaoLigacaoAgua(String situacaoLigacaoAgua) {
-		this.situacaoLigacaoAgua = situacaoLigacaoAgua;
-	}
-	public String getSituacaoLigacaoEsgoto() {
-		return situacaoLigacaoEsgoto;
-	}
-	public void setSituacaoLigacaoEsgoto(String situacaoLigacaoEsgoto) {
-		this.situacaoLigacaoEsgoto = situacaoLigacaoEsgoto;
-	}
 	public void limparCampos() {
 		this.setDescricaoLocalidade("");
 		this.setDescricaoSetorComercial("");
 		this.setNumeroQuadra("");
-		this.setSituacaoLigacaoAgua("");
-		this.setSituacaoLigacaoEsgoto("");		
 	}
 }

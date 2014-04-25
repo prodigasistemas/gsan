@@ -3,14 +3,7 @@ package gcom.cadastro.atualizacaocadastral.command;
 import gcom.atualizacaocadastral.IControladorAtualizacaoCadastral;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
-import gcom.cadastro.atualizacaocadastral.validador.ValidadorCPFsClientesCommand;
-import gcom.cadastro.atualizacaocadastral.validador.ValidadorCepClienteProprietarioResponsavel;
-import gcom.cadastro.atualizacaocadastral.validador.ValidadorNomesClientesCommand;
-import gcom.cadastro.atualizacaocadastral.validador.ValidadorSexoCommand;
 import gcom.cadastro.atualizacaocadastral.validador.ValidadorTamanhoLinhaClienteCommand;
-import gcom.cadastro.atualizacaocadastral.validador.ValidadorTipoEnderecoCommand;
-import gcom.cadastro.atualizacaocadastral.validador.ValidadorTipoPessoaCommand;
-import gcom.cadastro.cliente.IRepositorioClienteImovel;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.util.ParserUtil;
 import gcom.util.exception.MatriculaProprietarioException;
@@ -26,18 +19,15 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 	private static Logger logger = Logger.getLogger(ParseClienteCommand.class);
 	
 	private IRepositorioImovel repositorioImovel;
-	private IRepositorioClienteImovel repositorioClienteImovel;
 	private IControladorAtualizacaoCadastral controladorAtualizacaoCadastral;
 	
-	public ParseClienteCommand(ParserUtil parser
-			, IRepositorioImovel repositorioImovel
-			, IControladorAtualizacaoCadastral controladorAtualizacaoCadastral
-			, IRepositorioClienteImovel repositorioClienteImovel) {
-		
+	public ParseClienteCommand(ParserUtil parser,
+			IRepositorioImovel repositorioImovel,
+			IControladorAtualizacaoCadastral controladorAtualizacaoCadastral) {
+
 		super(parser);
-		
+
 		this.repositorioImovel = repositorioImovel;
-		this.repositorioClienteImovel = repositorioClienteImovel;
 		this.controladorAtualizacaoCadastral = controladorAtualizacaoCadastral;
 	}
 
@@ -45,7 +35,7 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 		Map<String, String> linha = atualizacao.getImovelAtual().getLinhaCliente();
 		AtualizacaoCadastralImovel imovelAtual = atualizacao.getImovelAtual();
 		
-		new ValidadorTamanhoLinhaClienteCommand(parser,imovelAtual).execute();;
+		new ValidadorTamanhoLinhaClienteCommand(parser, imovelAtual, linha).execute();;
 		
 		if(!imovelAtual.isErroLayout()) {
 
@@ -228,31 +218,22 @@ public class ParseClienteCommand extends AbstractAtualizacaoCadastralCommand {
 			String data = parser.obterDadoParser(26).trim();
 			linha.put("data", data);
 
-			validaCampos(atualizacao, imovelAtual);
+			verificarImovel(atualizacao, imovelAtual);
 		}
 	}
 	
-	private void validaCampos(AtualizacaoCadastral atualizacao, AtualizacaoCadastralImovel imovelAtual) throws Exception {
-		Map<String, String> linha = imovelAtual.getLinhaCliente();
+	private void verificarImovel(AtualizacaoCadastral atualizacao, AtualizacaoCadastralImovel imovelAtual) throws Exception {
+		ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral = repositorioImovel.pesquisarImovelControleAtualizacaoCadastral(
+				atualizacao.getImovelAtual().getMatricula());
 		
-		ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral = repositorioImovel.pesquisarImovelControleAtualizacaoCadastral(atualizacao.getImovelAtual().getMatricula());
-		
-		if (imovelControleAtualizacaoCadastral != null && imovelControleAtualizacaoCadastral.getSituacaoAtualizacaoCadastral().getId() == SituacaoAtualizacaoCadastral.APROVADO){
+		if (imovelControleAtualizacaoCadastral != null
+				&& imovelControleAtualizacaoCadastral.getSituacaoAtualizacaoCadastral().getId() == SituacaoAtualizacaoCadastral.APROVADO){
 			atualizacao.getImovelAtual().addMensagemErro("Imóvel com situação 'APROVADO'");
 			atualizacao.getImovelAtual().setImovelAprovado(true);
 		} else {
-			//Quando a matrícula não existe, ela é enviada com o valor negativo
 			if(atualizacao.getImovelAtual().getMatricula() > 0) {
 				controladorAtualizacaoCadastral.apagarInformacoesRetornoImovelAtualizacaoCadastral(atualizacao.getImovelAtual().getMatricula());
 			}
 		}
-		
-		
-		new ValidadorSexoCommand(imovelAtual, linha).execute();
-		new ValidadorNomesClientesCommand(imovelAtual, linha).execute();
-		new ValidadorCPFsClientesCommand(imovelAtual, linha, repositorioClienteImovel).execute();
-		new ValidadorCepClienteProprietarioResponsavel(imovelAtual, linha).execute();
-		new ValidadorTipoPessoaCommand(imovelAtual, linha, repositorioClienteImovel).execute();
-		new ValidadorTipoEnderecoCommand(imovelAtual, linha).execute();
 	}
 }

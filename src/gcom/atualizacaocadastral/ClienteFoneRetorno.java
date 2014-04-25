@@ -80,4 +80,24 @@ public class ClienteFoneRetorno implements IClienteFone{
 	public void setIdClienteRetorno(Integer idClienteRetorno) {
 		this.idClienteRetorno = idClienteRetorno;
 	}
+
+	public String getRamal() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setRamal(String ramal) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public Short getIndicadorTelefonePadrao() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public void setIndicadorTelefonePadrao(Short indicadorTelefonePadrao) {
+		// TODO Auto-generated method stub
+		
+	}
 }

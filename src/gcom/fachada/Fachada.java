@@ -118,7 +118,6 @@ import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendiment
 import gcom.atendimentopublico.registroatendimento.ControladorRegistroAtendimentoLocalHome;
 import gcom.atendimentopublico.registroatendimento.EspecificacaoImovSitCriterio;
 import gcom.atendimentopublico.registroatendimento.EspecificacaoImovelSituacao;
-import gcom.atendimentopublico.registroatendimento.RABuilder;
 import gcom.atendimentopublico.registroatendimento.RADadosGeraisHelper;
 import gcom.atendimentopublico.registroatendimento.RALocalOcorrenciaHelper;
 import gcom.atendimentopublico.registroatendimento.RAReiteracao;
@@ -659,7 +658,6 @@ public class Fachada {
 	private static Fachada instancia;
 
 	private Fachada() {
-
 	}
 
 	public static Fachada getInstancia() {
@@ -678,8 +676,7 @@ public class Fachada {
 		try {
 			locator = ServiceLocator.getInstancia();
 
-			localHome = (ControladorTabelaAuxiliarLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_TABELA_AUXILIAR_SEJB);
+			localHome = (ControladorTabelaAuxiliarLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_TABELA_AUXILIAR_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -700,8 +697,7 @@ public class Fachada {
 		try {
 			locator = ServiceLocator.getInstancia();
 
-			localHome = (ControladorUnidadeLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_UNIDADE_SEJB);
+			localHome = (ControladorUnidadeLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_UNIDADE_SEJB);
 
 			local = localHome.create();
 
@@ -723,8 +719,7 @@ public class Fachada {
 		try {
 			locator = ServiceLocator.getInstancia();
 
-			localHome = (ControladorRegistroAtendimentoLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_REGISTRO_ATENDIMENTO_SEJB);
+			localHome = (ControladorRegistroAtendimentoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_REGISTRO_ATENDIMENTO_SEJB);
 
 			local = localHome.create();
 
@@ -743,8 +738,7 @@ public class Fachada {
 		ServiceLocator locator = null;
 		try {
 			locator = ServiceLocator.getInstancia();
-			localHome = (ControladorCadastroLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_CADASTRO_SEJB);
+			localHome = (ControladorCadastroLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_CADASTRO_SEJB);
 
 			local = localHome.create();
 
@@ -1415,6 +1409,7 @@ public class Fachada {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarTabelaAuxiliar(Filtro filtro,
 			String pacoteNomeObjeto) {
 		try {
@@ -1426,6 +1421,7 @@ public class Fachada {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarImovel(Integer idLocalidade,
 			Integer idSetorComercial, Integer idQuadra, Short lote) {
 
@@ -1518,6 +1514,9 @@ public class Fachada {
 
 	}
 
+	// ********************----MétODOS DO UTIL----********************//
+
+	@SuppressWarnings("rawtypes")
 	public int registroMaximo(Class classe) {
 		try {
 			return getControladorUtil().registroMaximo(classe);
@@ -1527,6 +1526,7 @@ public class Fachada {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public int valorMaximo(Class classe, String atributo) {
 		try {
 			return getControladorUtil().valorMaximo(classe, atributo);
@@ -1536,6 +1536,7 @@ public class Fachada {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public int valorMaximo(Class classe, String atributo, String parametro1,
 			String parametro2) {
 		try {
@@ -1547,16 +1548,17 @@ public class Fachada {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisar(Filtro filtro, String pacoteNomeObjeto) {
 		try {
-			return this.getControladorUtil()
-					.pesquisar(filtro, pacoteNomeObjeto);
+			return this.getControladorUtil().pesquisar(filtro, pacoteNomeObjeto);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex
 					.getParametroMensagem());
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisar(Collection ids, Filtro filtro,
 			String pacoteNomeObjeto) {
 		try {
@@ -1588,7 +1590,7 @@ public class Fachada {
 		}
 	}
 
-
+	@SuppressWarnings("rawtypes")
 	public Collection obterQuantidadeEconomiasCategoria(Imovel imovel) {
 		try {
 			return this.getControladorImovel()
@@ -1599,6 +1601,7 @@ public class Fachada {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection obterQuantidadeEconomiasContaCategoria(Conta conta) {
 		try {
 			return this.getControladorImovel()
@@ -1609,6 +1612,7 @@ public class Fachada {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void verificarExistenciaIPTU(Collection imoveisEconomia,
 			Imovel imovel, String numeroIptu, Date dataUltimaAlteracao) {
 		try {
@@ -1621,6 +1625,7 @@ public class Fachada {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void verificarExistenciaCelpe(Collection imoveisEconomia,
 			Imovel imovel, String numeroCelpe, Date dataUltimaAlteracao) {
 		try {
@@ -1633,14 +1638,13 @@ public class Fachada {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection obterColecaoImovelSubcategorias(Imovel imovel,
 			Integer quantidadeMinimaEconomia) {
 		try {
-			return this.getControladorImovel().obterColecaoImovelSubcategorias(
-					imovel, quantidadeMinimaEconomia);
+			return this.getControladorImovel().obterColecaoImovelSubcategorias(imovel, quantidadeMinimaEconomia);
 		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex
-					.getParametroMensagem());
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
 
@@ -1648,43 +1652,35 @@ public class Fachada {
 		try {
 			this.getControladorUtil().inserir(imovel);
 		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex
-					.getParametroMensagem());
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 
 	}
 
-	public Integer inserirImovelDoacaoRetorno(ImovelDoacao imovelDoacao,
-			Usuario usuarioLogado) {
+	public Integer inserirImovelDoacaoRetorno(ImovelDoacao imovelDoacao, Usuario usuarioLogado) {
 		try {
-			return this.getControladorImovel().inserirImovelDoacaoRetorno(
-					imovelDoacao, usuarioLogado);
+			return this.getControladorImovel().inserirImovelDoacaoRetorno(imovelDoacao, usuarioLogado);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex
 					.getParametroMensagem());
 		}
 	}
 
-	public void informarImovelEconomia(Collection imoveisEconomias,
-			Usuario usuarioLogado) {
+	@SuppressWarnings("rawtypes")
+	public void informarImovelEconomia(Collection imoveisEconomias,	Usuario usuarioLogado) {
 		try {
-			this.getControladorImovel().informarImovelEconomias(
-					imoveisEconomias, usuarioLogado);
+			this.getControladorImovel().informarImovelEconomias(imoveisEconomias, usuarioLogado);
 		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex
-					.getParametroMensagem());
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 
 	}
 
-	public void removerImovelEconomia(ImovelEconomia imovelEconomia,
-			Usuario usuarioLogado) {
+	public void removerImovelEconomia(ImovelEconomia imovelEconomia,Usuario usuarioLogado) {
 		try {
-			this.getControladorImovel().removerImovelEconomia(imovelEconomia,
-					usuarioLogado);
+			this.getControladorImovel().removerImovelEconomia(imovelEconomia,usuarioLogado);
 		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex
-					.getParametroMensagem());
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 
 	}
@@ -1693,7 +1689,6 @@ public class Fachada {
 		try {
 
 			Integer idImovel =  this.getControladorImovel().inserirImovelRetorno(inserirImovelHelper);
-			
 			this.getControladorImovel().verificarIndicadorNomeConta(idImovel);
 			
 			return idImovel;
@@ -1884,6 +1879,7 @@ public class Fachada {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void atualizarCliente(Cliente cliente, Collection telefones,
 			Collection enderecos, Usuario usuario) {
 		try {
@@ -1896,6 +1892,7 @@ public class Fachada {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void atualizarBairro(Bairro bairro, Collection colecaoBairroArea,
 			Collection colecaoBairroAreaRemover, Usuario usuarioLogado) {
 		try {
@@ -1908,6 +1905,7 @@ public class Fachada {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarMunicipoPeloSetorComercial(
 			String codigoSetorComercial, String idMunicipio)
 			throws ErroRepositorioException {
@@ -1968,6 +1966,7 @@ public class Fachada {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarCliente(FiltroCliente filtroCliente) {
 		try {
 			return this.getControladorCliente().pesquisarCliente(filtroCliente);
@@ -1977,6 +1976,7 @@ public class Fachada {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarClienteImovel(
 			FiltroClienteImovel filtroClienteImovel, Integer numeroPagina) {
 
@@ -1989,6 +1989,7 @@ public class Fachada {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarImovelTarfiaSocial(
 			FiltroClienteImovel filtroClienteImovel, Integer numeroPagina) {
 
@@ -2038,6 +2039,7 @@ public class Fachada {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarClienteEndereco(
 			FiltroClienteEndereco filtroClienteEndereco) {
 
@@ -2104,6 +2106,7 @@ public class Fachada {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection<CalcularValoresAguaEsgotoHelper> calcularValoresConta(
 			String mesAnoConta, String imovelID, Integer situacaoAguaConta,
 			Integer situacaoEsgotoConta,
@@ -2164,6 +2167,7 @@ public class Fachada {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection<CalcularValoresAguaEsgotoHelper> calcularValoresAguaEsgoto(
 			Integer anoMesReferencia, Integer ligacaoSituacaoAguaId,
 			Integer ligacaoSituacaoEsgotoId, Short indicadorFaturamentoAgua,
@@ -2191,6 +2195,7 @@ public class Fachada {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection<CalcularValoresAguaEsgotoHelper> calcularValoresAguaEsgotoTotalizandoPorCategoria(
 			Collection colecaoCalcularValoresAguaEsgotoHelper) {
 		try {
@@ -2271,6 +2276,7 @@ public class Fachada {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection obterDebitosCobradosConta(Conta conta) {
 		try {
 			return this.getControladorFaturamento().obterDebitosCobradosConta(
@@ -2281,6 +2287,7 @@ public class Fachada {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection obterCreditosRealizadosConta(Conta conta) {
 		try {
 			return this.getControladorFaturamento()
@@ -2328,6 +2335,7 @@ public class Fachada {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Integer inserirSetorComercial(SetorComercial setorComercial,
 			Collection colecaoFonteCaptacao) {
 		try {
@@ -2341,6 +2349,7 @@ public class Fachada {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void atualizarSetorComercial(SetorComercial setorComercial,
 			Collection colecaoFonteCaptacao) {
 		try {
@@ -2353,6 +2362,7 @@ public class Fachada {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void atualizarQuadra(Quadra quadra, Usuario usuarioLogado,
 			Collection colecaoQuadraFace) {
 		try {
@@ -2365,6 +2375,7 @@ public class Fachada {
 
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarSetorComercial(int idLocalidade) {
 
 		try {
@@ -2421,6 +2432,7 @@ public class Fachada {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void validarFaturamentoCronograma(
 			Collection faturamentoAtividadeCronogramas) {
 		try {
@@ -2432,17 +2444,7 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Metodo para validar: Caso usuário informe uma data prevista, de qualquer
-	 * atividade, com o mês/ano maior que o mês ]/ano do cronograma+1, exibir a
-	 * mensagem: "A data prevista da atividade não pode ser superior a <<mês/ano
-	 * do cronograma+1>>"
-	 * 
-	 * @param faturamentoAtividadeCronogramas
-	 *            Descrição do parâmetro
-	 * @param mesAno
-	 * @throws ControladorException
-	 */
+	@SuppressWarnings("rawtypes")
 	public void validarFaturamentoCronogramaAtividadeMaiorQueMesAnoCronograma(
 			int anoMes, Collection faturamentoAtividadeCronogramas) {
 		try {
@@ -2455,14 +2457,7 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param faturamentoGrupoCronogramaMensal
-	 *            Descrição do parâmetro
-	 * @param faturamentoAtividadeCronogramas
-	 *            Descrição do parâmetro
-	 */
+	@SuppressWarnings("rawtypes")
 	public void inserirFaturamentoGrupoCronogramaMensal(
 			FaturamentoGrupoCronogramaMensal faturamentoGrupoCronogramaMensal,
 			Collection faturamentoAtividadeCronogramas, Usuario usuarioLogado, Integer anoMesInformado) {
@@ -2477,14 +2472,7 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param faturamentoGrupoCronogramaMensal
-	 *            Descrição do parâmetro
-	 * @param faturamentoAtividadeCronogramas
-	 *            Descrição do parâmetro
-	 */
+	@SuppressWarnings("rawtypes")
 	public void atualizarFaturamentoGrupoCronogramaMensal(
 			FaturamentoGrupoCronogramaMensal faturamentoGrupoCronogramaMensal,
 			Collection faturamentoAtividadeCronogramas,
@@ -2563,6 +2551,7 @@ public class Fachada {
 	 * @param bairro
 	 *            Description of the Parameter
 	 */
+	@SuppressWarnings("rawtypes")
 	public void atualizarLogradouro(
 			Logradouro logradouro,
 			Collection colecaoBairros,
@@ -2917,17 +2906,7 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param filtro
-	 *            Descrição do parâmetro
-	 * @param pacoteNomeObjeto
-	 *            Descrição do parâmetro
-	 * @param limite
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
+	@SuppressWarnings("rawtypes")
 	public Collection limiteMaximoFiltroPesquisa(Filtro filtro,
 			String pacoteNomeObjeto, int limite) {
 		try {
@@ -2940,12 +2919,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Verifica a existência de cronograma para o grupo de faturamento
-	 * 
-	 * @param FaturamentoGrupo
-	 *            Descrição do parâmetro
-	 */
 	public void verificarExistenciaCronogramaGrupo(
 			FaturamentoGrupo faturamentoGrupo) {
 		try {
@@ -2958,12 +2931,6 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Verificar existência da atividade no cronograma do grupo do mês corrente
-	 * 
-	 * @param faturamentoGrupo
-	 * @param faturamentoAtividade
-	 */
 	public boolean verificarExistenciaCronogramaAtividadeGrupo(
 			FaturamentoAtividade faturamentoAtividade,
 			FaturamentoGrupo faturamentoGrupo) {
@@ -2978,11 +2945,7 @@ public class Fachada {
 
 	}
 
-	/**
-	 * O sistema seleciona as atividades que podem ser comandadas
-	 * 
-	 * @return Uma coleção de atividade de faturamento
-	 */
+	@SuppressWarnings("rawtypes")
 	public Collection selecionarAtividadeFaturamentoQuePodeSerComandada(
 			FaturamentoGrupo faturamentoGrupo) {
 		try {
@@ -2995,12 +2958,7 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * Verificar existência de rotas para o grupo
-	 * 
-	 * @param FaturamentoGrupo
-	 *            Descrição do parâmetro
-	 */
+	@SuppressWarnings("rawtypes")
 	public Collection verificarExistenciaRotaGrupo(
 			FaturamentoGrupo faturamentoGrupo) {
 		try {
@@ -3013,12 +2971,7 @@ public class Fachada {
 
 	}
 
-	/**
-	 * Verificar existência de rotas para o grupo
-	 * 
-	 * @param FaturamentoGrupo
-	 *            Descrição do parâmetro
-	 */
+	@SuppressWarnings("rawtypes")
 	public Collection verificarSituacaoAtividadeRota(
 			Collection colecaoRotasGrupo,
 			FaturamentoAtividade faturamentoAtividade,
@@ -3034,12 +2987,7 @@ public class Fachada {
 
 	}
 
-	/**
-	 * 
-	 * [UC0144] Inserir Comando Atividade de Faturamento
-	 * 
-	 */
-
+	@SuppressWarnings("rawtypes")
 	public Integer inserirComandoAtividadeFaturamento(
 			FaturamentoGrupo faturamentoGrupo,
 			FaturamentoAtividade faturamentoAtividade, Collection colecaoRotas,
@@ -3063,6 +3011,7 @@ public class Fachada {
 	 *         realizadas
 	 * 
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection buscarAtividadeComandadaNaoRealizada(Integer numeroPagina) {
 		try {
 			return this.getControladorFaturamento()
@@ -3126,7 +3075,7 @@ public class Fachada {
 	 * 
 	 * Atualizar Comando de Atividade de Faturamento
 	 */
-
+	@SuppressWarnings("rawtypes")
 	public void atualizarComandoAtividadeFaturamento(
 			FaturamentoAtividadeCronograma faturamentoAtividadeCronograma,
 			Collection colecaoFaturamentoAtividadeCronogramaRota) {
@@ -3368,6 +3317,7 @@ public class Fachada {
 	 * @param percentualAbatimento
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	public ArrayList calcularValorPrestacao(BigDecimal taxaJurosFinanciamento,
 			Integer numeroPrestacoes, BigDecimal valorTotalServico,
 			BigDecimal valorEntrada, BigDecimal percentualAbatimento,
@@ -4235,7 +4185,7 @@ public class Fachada {
 	 * @created 16/01/2006
 	 * 
 	 */
-
+	@SuppressWarnings("rawtypes")
 	public void atualizarFaturamentoSituacaoTipo(Collection colecaoIdsImoveis,
 			Integer idFaturamentoTipo) {
 		try {
@@ -4475,6 +4425,7 @@ public class Fachada {
 	 * @return
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection consultarResumoFaturamentoRelatorio(
 			String opcaoTotalizacao, int anoMesReferencia,
 			Integer gerenciaRegional, Integer localidade,
@@ -4500,8 +4451,7 @@ public class Fachada {
 	 *            CreditoARealizar
 	 * @throws ControladorException
 	 */
-	public void inserirCreditoARealizar(Imovel imovel,
-			CreditoARealizar creditoARealizar, Usuario usuarioLogado) {
+	public void inserirCreditoARealizar(Imovel imovel,	CreditoARealizar creditoARealizar, Usuario usuarioLogado) {
 
 		try {
 			this.getControladorFaturamento().inserirCreditoARealizar(imovel,
@@ -4533,6 +4483,7 @@ public class Fachada {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarHidrometroPorHidrometroMovimentacao(Filtro filtro) {
 
 		try {
@@ -4556,6 +4507,7 @@ public class Fachada {
 	 * @return
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection obterContasImovelManter(Imovel imovel,
 			Integer situacaoNormal, Integer situacaoIncluida,
 			Integer situacaoRetificada) {
@@ -4598,6 +4550,7 @@ public class Fachada {
 	 * @param requestMap
 	 * @param colecaoClientes 
 	 */
+	@SuppressWarnings("rawtypes")
 	public Integer retificarConta(Integer mesAnoConta, Conta contaAtual,
 			Imovel imovel, Collection colecaoDebitoCobrado,
 			Collection colecaoCreditoRealizado,
@@ -4647,6 +4600,7 @@ public class Fachada {
 	 * @return Dados do Historico Medição Individualizada
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection consultarHistoricoMedicaoIndividualizada(
 			Imovel imovelCondominio, String anoMesFaturamento,
 			LigacaoTipo ligacaoTipoInformado) {
@@ -4681,29 +4635,6 @@ public class Fachada {
 		 */
 	}
 
-	/**
-	 * <Breve descrição sobre o caso de uso>
-	 * 
-	 * <Identificador e nome do caso de uso>
-	 * 
-	 * <Breve descrição sobre o subfluxo>
-	 * 
-	 * <Identificador e nome do subfluxo>
-	 * 
-	 * <Breve descrição sobre o fluxo secundário>
-	 * 
-	 * <Identificador e nome do fluxo secundário>
-	 * 
-	 * @author Administrador
-	 * @date 17/03/2006
-	 * 
-	 * @param codigoBarras
-	 * @param dataPagamento
-	 * @param idFormaPagamento
-	 * @param sistemaParametro
-	 * @param idArrecadadorMovimentoItem
-	 * @return
-	 */
 	public PagamentoHelperCodigoBarras processarPagamentosCodigoBarras(
 			String codigoBarras, Date dataPagamento, Integer idFormaPagamento,
 			SistemaParametro sistemaParametro, Usuario usuarioLogado) {
@@ -4720,27 +4651,7 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * <Breve descrição sobre o caso de uso>
-	 * 
-	 * <Identificador e nome do caso de uso>
-	 * 
-	 * <Breve descrição sobre o subfluxo>
-	 * 
-	 * <Identificador e nome do subfluxo>
-	 * 
-	 * <Breve descrição sobre o fluxo secundário>
-	 * 
-	 * <Identificador e nome do fluxo secundário>
-	 * 
-	 * @author Administrador
-	 * @date 17/03/2006
-	 * 
-	 * @param codigoBarras
-	 * @return
-	 */
-	public RegistroHelperCodigoBarras distribuirDadosCodigoBarras(
-			String codigoBarras) {
+	public RegistroHelperCodigoBarras distribuirDadosCodigoBarras(String codigoBarras) {
 		try {
 
 			return this.getControladorArrecadacao()
@@ -4759,6 +4670,7 @@ public class Fachada {
 	 * registra movimento dos arrecadadores no sistema
 	 * 
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection registrarMovimentoArrecadadores(
 			StringBuilder stringBuilderTxt, Short codigoArrecadador,
 			String nomeArrecadador, String idTipoMovimento,
@@ -5226,6 +5138,7 @@ public class Fachada {
 	 * @created 07/03/2006
 	 * 
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarImovelSituacaoEspecialCobranca(String valor,
 			SituacaoEspecialCobrancaHelper situacaoEspecialCobrancaHelper) {
 		try {
@@ -5238,56 +5151,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0177] Informar Situacao Especial de Cobrança
-	 * 
-	 * @author Sávio Luiz
-	 * @created 07/03/2006 / public int validarMesAnoReferenciaCobranca(
-	 *          SituacaoEspecialCobrancaHelper situacaoEspecialCobrancaHelper) {
-	 *          try { return
-	 *          this.getControladorImovel().validarMesAnoReferenciaCobranca(
-	 *          situacaoEspecialCobrancaHelper); } catch (ControladorException
-	 *          ex) { throw new FachadaException(ex.getMessage(), ex, ex
-	 *          .getParametroMensagem()); } }
-	 */
-	/**
-	 * [UC0177] Informar Situacao Especial de Cobrança
-	 * 
-	 * @author Sávio Luiz
-	 * @created 07/03/2006 / public Collection atualizarCobrancaSituacaoTipo(
-	 *          SituacaoEspecialCobrancaHelper situacaoEspecialCobrancaHelper) {
-	 * 
-	 * try { return this.getControladorImovel().atualizarCobrancaSituacaoTipo(
-	 * situacaoEspecialCobrancaHelper); } catch (ControladorException ex) {
-	 * throw new FachadaException(ex.getMessage(), ex, ex
-	 * .getParametroMensagem()); } }
-	 */
-	/**
-	 * [UC0177] Informar Situacao Especial de Cobrança
-	 * 
-	 * @author Sávio Luiz
-	 * @created 17/01/2006 / public void retirarSituacaoEspecialCobranca(
-	 *          SituacaoEspecialCobrancaHelper situacaoEspecialCobrancaHelper) {
-	 *          try {
-	 *          this.getControladorImovel().retirarSituacaoEspecialCobranca(
-	 *          situacaoEspecialCobrancaHelper); } catch (ControladorException
-	 *          ex) { throw new FachadaException(ex.getMessage(), ex, ex
-	 *          .getParametroMensagem()); } }
-	 */
-	/**
-	 * Este caso de uso cria um filtro do movimento dos arrecadadores
-	 * 
-	 * [UC0263] - Filtrar Movimento dos Arrecadadores
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 23/02/2006
-	 * 
-	 * @param filtroArrecadadorMovimento
-	 * @param movimentoOcorrencia
-	 * @param movimentoAceito
-	 * @param movimentoAbertoFechado
-	 * @return Uma coleção com os movimentos selecionados
-	 */
 	public FiltroArrecadadorMovimento filtrarMovimentoArrecadadores(
 			FiltroArrecadadorMovimento filtroArrecadadorMovimento,
 			String movimentoOcorrencia, String movimentoAceito,
@@ -5518,35 +5381,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0113 - Faturar Grupo de Faturamento] Autor: Leonardo Vieira, Raphael
-	 * Rossiter,Rafael Santos Data: 16/02/2006
-	 * 
-	 * @param colecaoRotas
-	 *            Lista de Rotas
-	 * @param sistemaParametro
-	 *            Sistema Paramentro - Para obter o ANo/mês do Faturamento
-	 * @param atividade
-	 *            Atividade a Ser executada - Geração ou Simulação do
-	 *            Faturamento
-	 * @throws ControladorException
-	 */
-	// public void faturarGrupoFaturamento(
-	// Collection colecaoFaturamentoAtividadeCronogramaRota,
-	// FaturamentoGrupo faturamentoGrupo,
-	// SistemaParametro sistemaParametro, int atividade)
-	// {
-	//
-	// try {
-	// this.getControladorFaturamento().faturarGrupoFaturamento(
-	// colecaoFaturamentoAtividadeCronogramaRota,
-	// faturamentoGrupo, sistemaParametro, atividade);
-	// } catch (ControladorException ex) {
-	// throw new FachadaException(ex.getMessage(), ex, ex
-	// .getParametroMensagem());
-	// }
-	//
-	// }
 	public void removerFaturamentoCronograma(String[] ids,
 			String pacoteNomeObjeto) throws ControladorException {
 		try {
@@ -5656,6 +5490,7 @@ public class Fachada {
 	 * @param acertos
 	 * @param acertosParaRemover
 	 */
+	@SuppressWarnings("rawtypes")
 	public void atualizarAvisoBancario(AvisoBancario avisoBancario,
 			Collection duducoes, Collection deducoesParaRemover,
 			Collection acertos, Collection acertosParaRemover,
@@ -5685,7 +5520,7 @@ public class Fachada {
 	 * return collection<AvisoBancario>
 	 * @throws ControladorException
 	 */
-
+	@SuppressWarnings("rawtypes")
 	public Collection<AvisoBancarioHelper> filtrarAvisoBancarioAbertoFechado(
 			Collection collectionAvisoBancario, String indicadorAbertoFechado,
 			String tipoAviso) {
@@ -5788,6 +5623,7 @@ public class Fachada {
 	 * @param situacaoEspecialCobrancaHelper
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	public void atualizarCobrancaSituacaoTipo(Collection colecaoIdsImoveis,
 			Integer idCobrancaTipo, Usuario usuario) {
 		try {
@@ -5810,6 +5646,7 @@ public class Fachada {
 	 * @param situacaoEspecialCobrancaHelper
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	public void retirarSituacaoEspecialCobranca(
 			SituacaoEspecialCobrancaHelper situacaoEspecialCobrancaHelper,
 			Collection imoveisParaSerRetirados, Usuario usuario) {
@@ -5837,6 +5674,7 @@ public class Fachada {
 	 * @param collectionCobrancaSituacaoHistorico
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	public void inserirCobrancaSituacaoHistorico(
 			Collection collectionCobrancaSituacaoHistorico) {
 		try {
@@ -6028,6 +5866,7 @@ public class Fachada {
 	 * @return
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection getTabelaColunaPertencenteOperacao() {
 		try {
 			return this.getControladorAcesso()
@@ -6049,6 +5888,7 @@ public class Fachada {
 	 * @return
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection getTabelaColunaDasOperacaoTabela(Integer idOperacao) {
 		try {
 			return this.getControladorAcesso()
@@ -6076,6 +5916,7 @@ public class Fachada {
 	 * @return
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection obterListaAtividadeCronogramaAcaoCobrancaComandadas()
 			throws FachadaException {
 		try {
@@ -6104,6 +5945,7 @@ public class Fachada {
 	 * @return
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection obterListaAtividadesEventuaisAcaoCobrancaComandadas()
 			throws FachadaException {
 		try {
@@ -6600,6 +6442,7 @@ public class Fachada {
 	 * @return
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection obterListasRotas(String idRotaInicial,
 			String idRotaFinal, 
 			String idSetorComercialInicial,
@@ -6655,6 +6498,7 @@ public class Fachada {
 	 * @return
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public GerarAtividadeAcaoCobrancaHelper executarComandoEventual(
 			CobrancaAtividade cobrancaAtividade,
 			CobrancaAcaoAtividadeComando cobrancaAcaoAtividadeComando,
@@ -6743,6 +6587,7 @@ public class Fachada {
 	 * @return
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection consultarLinhasCriterio(String idCriterioCobranca) {
 		try {
 			return this.getControladorCobranca().consultarLinhasCriterio(
@@ -6773,6 +6618,7 @@ public class Fachada {
 	 * @return
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection consultarCriteriosComando(String idCobrancaAcao) {
 		try {
 			return this.getControladorCobranca().consultarCriteriosComando(
@@ -6852,6 +6698,7 @@ public class Fachada {
 	 * @return
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection obterColecaoCobrancaGrupo() {
 		try {
 			return this.getControladorCobranca().obterColecaoCobrancaGrupo();
@@ -6877,6 +6724,7 @@ public class Fachada {
 	 * @return
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection obterColecaoCobrancaAtividade() {
 		try {
 			return this.getControladorCobranca()
@@ -6903,6 +6751,7 @@ public class Fachada {
 	 * @return
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection obterColecaoCobrancaAcao() {
 		try {
 			return this.getControladorCobranca().obterColecaoCobrancaAcao();
@@ -6927,6 +6776,7 @@ public class Fachada {
 	 * @return
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection obterColecaoGerenciaRegional() {
 		try {
 			return this.getControladorCobranca().obterColecaoGerenciaRegional();
@@ -6951,6 +6801,7 @@ public class Fachada {
 	 * @return
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection obterColecaoUnidadeNegocio() {
 		try {
 			return this.getControladorCobranca().obterColecaoUnidadeNegocio();
@@ -6975,6 +6826,7 @@ public class Fachada {
 	 * @return
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection obterColecaoClienteRelacaoTipo() {
 		try {
 			return this.getControladorCobranca()
@@ -7026,6 +6878,7 @@ public class Fachada {
 	 * @return
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection obterColecaoRota(String idSetorComercial) {
 		try {
 			return this.getControladorCobranca().obterColecaoRota(
@@ -7109,6 +6962,7 @@ public class Fachada {
 	 * @return Coleção dos resultados da pesquisa
 	 */
 
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisar(Filtro filtro, int pageOffset,
 			String pacoteNomeObjeto) {
 		try {
@@ -7549,6 +7403,7 @@ public class Fachada {
 	 * @return void
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public void atualizarRota(Rota rota, String idLocalidade,
 			Collection collectionRotaAcaoCriterio, Usuario usuarioLogado) {
 		try {
@@ -7573,6 +7428,7 @@ public class Fachada {
 	 * @return idRota
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Integer inserirRota(Rota rota, String idLocalidade,
 			Collection collectionRotaAcaoCriterio, Usuario usuarioLogado) {
 		try {
@@ -7683,6 +7539,7 @@ public class Fachada {
 	 * @return
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection executarComandoAcaoCobranca(String periodoInicialConta,
 			String periodoFinalConta, String periodoVencimentoContaInicial,
 			String periodoVencimentoContaFinal, String[] idsCobrancaAcao,
@@ -7738,6 +7595,7 @@ public class Fachada {
 	 * @return
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection concluirComandoAcaoCobranca(String periodoInicialConta,
 			String periodoFinalConta, String periodoVencimentoContaInicial,
 			String periodoVencimentoContaFinal, String[] idsCobrancaAcao,
@@ -7829,63 +7687,7 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * método que efetua o Rateio do consumo para todos os Imóveis de uma rota
-	 * que sejam imóvel condominio
-	 * 
-	 * [UC0103] - Efetuar Rateio de Consumo
-	 * 
-	 * @author Thiago Toscano
-	 * @date 07/04/2006
-	 * 
-	 * @param colecaoRotas
-	 * @param anoMesFaturamento
-	 */
-
-	/*
-	 * public void efetuarRateioDeConsumo(Collection rotas, Integer
-	 * anoMesFaturamento) { try {
-	 * this.getControladorMicromedicao().efetuarRateioDeConsumo(rotas,
-	 * anoMesFaturamento); } catch (ControladorException ex) { throw new
-	 * FachadaException(ex.getMessage(), ex, ex .getParametroMensagem()); } }
-	 */
-
-	/**
-	 * [UC0319] Gerar Movimento de débito automático para o banco
-	 * 
-	 * pesquisa todos os bancos que tenham contrato vigente para arrecadador
-	 * contas com forma de arrecadação correspondente a debito automático
-	 * 
-	 * [SB0002] - Carregar Lista de Bancos
-	 * 
-	 * @author Sávio Luiz
-	 * @date 18/04/2006
-	 * 
-	 * @return Coleção de Bancos
-	 */
-
-	/*
-	 * public Collection<Banco> pesquisaBancosDebitoAutomatico() { try { return
-	 * this.getControladorArrecadacao() .pesquisaBancosDebitoAutomatico(); }
-	 * catch (ControladorException ex) { throw new
-	 * FachadaException(ex.getMessage(), ex, ex .getParametroMensagem()); } }
-	 */
-
-	/**
-	 * [UC0319] Gerar Movimento de débito automático para o banco
-	 * 
-	 * pesquisa os movimentos de débito automático para o banco,referentes ao
-	 * grupo e ano/mês de faturamento informados
-	 * 
-	 * [SB0002] - Carregar Lista de Bancos
-	 * 
-	 * @author Sávio Luiz
-	 * @date 18/04/2006
-	 * 
-	 * @param idFaturamentoGrupo,anoMesReferenciaFaturamento,idBanco
-	 * @return Coleção de DebitoAutomaticoMovimento
-	 */
-
+	@SuppressWarnings("rawtypes")
 	public Map<Banco, Collection<DebitoAutomaticoMovimento>> pesquisaDebitoAutomaticoMovimento(
 			Collection colecaoIdsFaturamentoGrupo,
 			Integer anoMesReferenciaFaturamento) {
@@ -7911,7 +7713,7 @@ public class Fachada {
 	 * @return Coleção de DebitoAutomaticoMovimento
 	 * @throws ErroRepositorioException
 	 */
-
+	@SuppressWarnings("rawtypes")
 	public Collection filtrarAvisoBancarioAbertoFechado(
 			AvisoBancarioHelper avisoBancarioHelper) {
 		try {
@@ -8294,6 +8096,7 @@ public class Fachada {
 	 * @param funcionalidade
 	 */
 
+	@SuppressWarnings("rawtypes")
 	public Integer inserirFuncionalidade(Funcionalidade funcionalidade,
 			Collection colecaoFuncionalidadeDependencia) {
 		try {
@@ -8316,7 +8119,7 @@ public class Fachada {
 	 * 
 	 * @param funcionalidade
 	 */
-
+	@SuppressWarnings("rawtypes")
 	public void atualizarFuncionalidade(Funcionalidade funcionalidade,
 			Collection colecaoFuncionalidadeDependencia) {
 		try {
@@ -8365,6 +8168,7 @@ public class Fachada {
 	 *            cobrancaAcaoCronograma,
 	 *            cobrancasAtividadesParaInsercao(Collection)
 	 */
+	@SuppressWarnings("rawtypes")
 	public void inserirCobrancaCronograma(
 			Collection colecaoCobrancaCronogramaHelper, Usuario usuarioLogado) {
 		try {
@@ -8596,6 +8400,7 @@ public class Fachada {
 	 * @throws ControladorException
 	 *             Controlador Exception
 	 */
+	@SuppressWarnings("rawtypes")
 	public void atualizarCobrancaCriterio(CobrancaCriterio cobrancaCriterio,
 			Collection colecaoCobrancaCriterioLinha,
 			Collection colecaoCobrancaCriterioLinhaRemovidas,
@@ -8683,6 +8488,7 @@ public class Fachada {
 	 * @param registrosRemocao
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public void restabelecerSituacaoAnteriorConta(Collection colecaoContas,
 			Usuario usuarioLogado) {
 		try {
@@ -8807,6 +8613,7 @@ public class Fachada {
 	 *            cobrancaAcaoCronograma,
 	 *            cobrancasAtividadesParaInsercao(Collection)
 	 */
+	@SuppressWarnings("rawtypes")
 	public void atualizarCobrancaCronograma(
 			Collection colecaoCobrancaCronogramaHelper,
 			Collection colecaoCronogramaHelperErroAtualizacao,
@@ -8839,6 +8646,7 @@ public class Fachada {
 	 * @param grupo
 	 * @param grupoFuncionalidadeOperacao
 	 */
+	@SuppressWarnings("rawtypes")
 	public void inserirGrupo(Grupo grupo, Collection grupoFuncionalidadeOperacao, Usuario usuarioLogado) {
 		try {
 			this.getControladorAcesso().inserirGrupo(grupo,
@@ -8860,6 +8668,7 @@ public class Fachada {
 	 * @param grupo
 	 * @param grupoFuncionalidadeOperacao
 	 */
+	@SuppressWarnings("rawtypes")
 	public void atualizarGrupo(Grupo grupo,
 			Collection grupoFuncionalidadeOperacao, Usuario usuarioLogado) {
 		try {
@@ -9029,6 +8838,7 @@ public class Fachada {
 	 * @param collectionParcelamentoDescontoAntiguidade
 	 * @return o idPerfilParcelamneto
 	 */
+	@SuppressWarnings("rawtypes")
 	public Integer inserirPerfilParcelamento(
 			ParcelamentoPerfil parcelamentoPerfilNova,
 			Collection collectionParcelamentoQuantidadeReparcelamentoHelper,
@@ -9091,6 +8901,7 @@ public class Fachada {
 	 * @param collectionParcelamentoQuantidadePrestacaoLinhaRemovidas
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	public void atualizarPerfilParcelamento(
 			ParcelamentoPerfil parcelamentoPerfil,
 			Collection collectionParcelamentoQuantidadeReparcelamentoHelper,
@@ -10531,6 +10342,7 @@ public class Fachada {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarLogradouro(FiltroLogradouro filtroLogradouro,
 			Integer numeroPaginas) {
 
@@ -11895,6 +11707,7 @@ public class Fachada {
 	 * @param idImovel
 	 * @return Collection
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarMedicaoConsumoHistoricoExcecoesApresentaDadosConsultarImovel(
 			Integer anoMesReferencia, Integer idImovel, boolean ligacaoAgua) {
 		try {
@@ -11997,6 +11810,7 @@ public class Fachada {
 	 * @param CobrancaDocumento
 	 * @return Collection<CobrancaDocumentoItem>
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarCobrancaCriterioLinha(Integer idCriterioCobranca) {
 		try {
 			return this.getControladorCobranca()
@@ -12319,6 +12133,7 @@ public class Fachada {
 	 * @author Rafael Corrêa
 	 * @data 22/08/2006
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarParcelamentoDescontoAntiguidade(
 			Integer idParcelamentoPerfil) {
 		try {
@@ -12340,6 +12155,7 @@ public class Fachada {
 	 * @author Rafael Corrêa
 	 * @data 22/08/2006
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarParcelamentoDescontoInatividade(
 			Integer idParcelamentoPerfil) {
 		try {
@@ -12361,6 +12177,7 @@ public class Fachada {
 	 * @author Rafael Corrêa
 	 * @data 22/08/2006
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarReparcelamentoConsecutivo(
 			Integer idParcelamentoPerfil) {
 		try {
@@ -12624,6 +12441,7 @@ public class Fachada {
 	 * @return Collection
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarPagamentoImovelRelatorio(String idImovel,
 			String idCliente, String idTipoRelacao, String localidadeInicial,
 			String localidadeFinal, String idAvisoBancario,
@@ -12666,6 +12484,7 @@ public class Fachada {
 	 * @return Collection
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarPagamentoImovelAmbosRelatorio(String idImovel) {
 		try {
 			return this.getControladorArrecadacao()
@@ -12691,6 +12510,7 @@ public class Fachada {
 	 * @return Collection
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarPagamentoClienteRelatorio(String idImovel,
 			String idCliente, String idTipoRelacao, String localidadeInicial,
 			String localidadeFinal, String idAvisoBancario,
@@ -12733,6 +12553,7 @@ public class Fachada {
 	 * @return Collection
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarPagamentoAvisoBancarioRelatorio(String idImovel,
 			String idCliente, String idTipoRelacao, String localidadeInicial,
 			String localidadeFinal, String idAvisoBancario,
@@ -12775,6 +12596,7 @@ public class Fachada {
 	 * @return Collection
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarPagamentoMovimentoArrecadadorRelatorio(
 			String idImovel, String idCliente, String idTipoRelacao,
 			String localidadeInicial, String localidadeFinal,
@@ -12817,6 +12639,7 @@ public class Fachada {
 	 * @return Collection
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarPagamentoLocalidadeRelatorio(String idImovel,
 			String idCliente, String idTipoRelacao, String localidadeInicial,
 			String localidadeFinal, String idAvisoBancario,
@@ -13425,6 +13248,7 @@ public class Fachada {
 	 * @author Sávio Luiz
 	 * @date 27/06/2006
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarGruposUsuario(Integer idUsuario) {
 		try {
 			return this.getControladorUsuario().pesquisarGruposUsuario(
@@ -13442,6 +13266,7 @@ public class Fachada {
 	 * @author Sávio Luiz
 	 * @date 21/02/2007
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarGruposUsuarioAcesso(
 			Collection colecaoUsuarioGrupos) {
 		try {
@@ -13504,6 +13329,7 @@ public class Fachada {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarLogradouroCompleto(String codigoMunicipio,
 			String codigoBairro, String nome, String nomePopular,
 			String logradouroTipo, String logradouroTitulo, String cep,
@@ -13522,6 +13348,7 @@ public class Fachada {
 		}
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarLogradouroCompletoRelatorio(
 			String codigoMunicipio, String codigoBairro, String nome,
 			String nomePopular, String logradouroTipo, String logradouroTitulo,
@@ -13758,7 +13585,7 @@ public class Fachada {
 	 * @author Sávio Luiz
 	 * @date 11/07/2006
 	 */
-
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarGruposFuncionalidadeOperacoes(Integer[] idsGrupos) {
 		try {
 
@@ -13777,6 +13604,7 @@ public class Fachada {
 	 * @author Sávio Luiz
 	 * @date 11/07/2006
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarGruposFuncionalidadesOperacoesPelaFuncionalidade(
 			Integer[] idsGrupos, Integer idFuncionalidade) {
 		try {
@@ -13881,6 +13709,7 @@ public class Fachada {
 	 * @author Sávio Luiz
 	 * @date 12/07/2006
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarFuncionanidadesDependencia(
 			Collection idsFuncionalidades) {
 		try {
@@ -13899,6 +13728,7 @@ public class Fachada {
 	 * @author Sávio Luiz
 	 * @date 12/07/2006
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarOperacoes(Collection idsFuncionalidades) {
 		try {
 			return this.getControladorUsuario().pesquisarOperacoes(
@@ -16290,6 +16120,7 @@ public class Fachada {
 	 * @return Collection
 	 * @throws ErroRepositorioException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarEnderecosClienteAbreviado(Integer idCliente) {
 
 		try {
@@ -17869,6 +17700,7 @@ public class Fachada {
 	 * @return Collection
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarClientesImovel(Integer idImovel) {
 		try {
 			return this.getControladorImovel()
@@ -17890,6 +17722,7 @@ public class Fachada {
 	 * @return Collection
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarClientesImovelDataMax(Integer idImovel) {
 		try {
 			return this.getControladorImovel()
@@ -18084,6 +17917,7 @@ public class Fachada {
 	 * @exception ErroRepositorioException
 	 *                Description of the Exception
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDebitosAutomaticosImovel(Integer idImovel) {
 		try {
 			return this.getControladorImovel()
@@ -18104,6 +17938,7 @@ public class Fachada {
 	 * @exception ErroRepositorioException
 	 *                Description of the Exception
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarFaturamentosSituacaoHistorico(Integer idImovel) {
 		try {
 			return this.getControladorImovel()
@@ -18146,6 +17981,7 @@ public class Fachada {
 	 * @return idRASolicitante
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarParmsFoneRegistroAtendimentoSolicitante(
 			Integer idRASolicitante) {
 		try {
@@ -18782,6 +18618,7 @@ public class Fachada {
 	 * @return Collection
 	 * @throws ErroRepositorioException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarEnderecoCliente(Integer idCliente) {
 		try {
 			return this.getControladorCliente().pesquisarEnderecoCliente(
@@ -19169,6 +19006,7 @@ public class Fachada {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarClientesEnderecosAbreviado(Integer idCliente) {
 		try {
 
@@ -20250,6 +20088,7 @@ public class Fachada {
 	 * 
 	 * @return Collection
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarParcelamentoItemPorIdParcelamentoRelatorio(
 			Integer idParcelamento) {
 		try {
@@ -20970,6 +20809,7 @@ public class Fachada {
 	 * 
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarOrdemServicoProgramacaoRelatorio(
 			Integer idEquipe, Date dataRoteiro) {
 		try {
@@ -21121,6 +20961,7 @@ public class Fachada {
 	 * @return Collection
 	 * @throws ErroRepositorioException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarPagamentoHistoricoLocalidadeRelatorio(
 			String idImovel, String idCliente, String idTipoRelacao,
 			String localidadeInicial, String localidadeFinal,
@@ -21161,6 +21002,7 @@ public class Fachada {
 	 * @param idOrdemServico
 	 * @return OSRelatorioHelper
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarOSRelatorio(Collection idsOrdemServico) {
 		try {
 			return this.getControladorOrdemServico().pesquisarOSRelatorio(
@@ -21590,6 +21432,7 @@ public class Fachada {
 	 * @param idOrdemServicoAtividade
 	 * @throws ErroRepositorioException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarOsAtividadeMaterialExecucao(
 			Integer idOrdemServicoAtividade) {
 
@@ -21703,6 +21546,7 @@ public class Fachada {
 	 * @param tipoOrdenacao
 	 * @return Collection
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarOSGerarRelatorioAcompanhamentoExecucao(
 			String origemServico, String situacaoOS, String[] idsServicosTipos,
 			String idUnidadeAtendimento, String idUnidadeAtual,
@@ -21895,6 +21739,7 @@ public class Fachada {
 	 * @param numeroPagina
 	 * @return Collection
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarEquipes(String idEquipe, String nome,
 			String placa, String cargaTrabalho, String codigoDdd, 
 			String numeroTelefone, String numeroImei, String idUnidade,
@@ -22610,6 +22455,7 @@ public class Fachada {
 	 * @author Rafael Santos
 	 * @date 27/11/2006
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarImovel(String idImovel, String idLocalidade,
 			String codigoSetorComercial, String numeroQuadra, String lote,
 			String subLote, String codigoCliente, String idMunicipio,
@@ -22665,6 +22511,7 @@ public class Fachada {
 	 * @author Rafael Santos
 	 * @date 27/11/2006
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarImovelInscricao(String idImovel,
 			String idLocalidade, String codigoSetorComercial,
 			String numeroQuadra, String lote, String subLote,
@@ -23143,6 +22990,7 @@ public class Fachada {
 	 * @return Collection
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarPagamentoLocalidadeAmbosRelatorio(
 			String idImovel, String idCliente, String idTipoRelacao,
 			String localidadeInicial, String localidadeFinal,
@@ -23571,7 +23419,7 @@ public class Fachada {
 	 *            idTarifaAnterior
 	 * 
 	 */
-
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarImoveisTarifaConsumo(String idLocalidadeInicial,
 			String idLocalidadeFinal, String codigoSetorComercialInicial,
 			String codigoSetorComercialFinal, String quadraInicial,
@@ -23651,6 +23499,7 @@ public class Fachada {
 	 * 
 	 * Data: 27/12/2006
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarClienteImovelPeloImovelTarifaSocial(
 			Integer idImovel) {
 
@@ -24258,6 +24107,7 @@ public class Fachada {
 	 * 
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarFaturamentoLigacoesMedicaoIndividualizadaRelatorio(
 			FiltroMedicaoHistoricoSql filtroMedicaoHistoricoSql,
 			String anoMesfaturamentoGrupo) {
@@ -24283,6 +24133,7 @@ public class Fachada {
 	 * @param colecaoLigacoesMedicao
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarFaturamentoLigacoesMedicaoIndividualizadaRelatorio(
 			Collection<Imovel> colecaoImoveisGerarRelatorio,
 			String anoMesfaturamentoGrupo) {
@@ -24721,6 +24572,7 @@ public class Fachada {
 	 * @date 22/01/2007
 	 * 
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarFeriado(Short tipoFeriado, String descricao,
 			Date dataFeriadoInicio, Date dataFeriadoFim, Integer idMunicipio,
 			Integer numeroPagina) {
@@ -26226,6 +26078,7 @@ public class Fachada {
 	 * @return Collection
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarPagamentoHistoricoAvisoBancario(
 			Integer idAvisoBancario) {
 		try {
@@ -26342,6 +26195,7 @@ public class Fachada {
 	 * 
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarMovimentoArrecadadoresRelatorio(
 			Integer mesAnoReferencia, Integer idArrecadador,
 			Integer idFormaArrecadacao, Date dataPagamentoInicial,
@@ -27329,6 +27183,7 @@ public class Fachada {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDadosRelatorioAnaliticoFaturamento(
 			int anoMesFaturamento, Integer idFaturamentoGrupo,
 			int indicadorLocalidadeInformatizada, Collection idLocalidades,
@@ -27350,6 +27205,7 @@ public class Fachada {
 	 * @return Collection
 	 * @throws ErroRepositorioException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarProtocoloDocumentoCobrancaCronograma(
 			Integer idCobrancaAcaoAtividadeCronograma) {
 
@@ -27373,6 +27229,7 @@ public class Fachada {
 	 * @return Collection
 	 * @throws ErroRepositorioException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarProtocoloDocumentoCobrancaEventual(
 			Integer idCobrancaAcaoAtividadeComand) {
 
@@ -27774,6 +27631,7 @@ public class Fachada {
 	 * @author Rafael Corrêa
 	 * @date 31/05/2007
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarImovelClientesEspeciaisRelatorio(
 			String idUnidadeNegocio, String idGerenciaRegional,
 			String idLocalidadeInicial, String idLocalidadeFinal,
@@ -28265,6 +28123,7 @@ public class Fachada {
 	 * @return Collection
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarImovelFaixaFalsa(Integer anoMesReferencia) {
 
 		try {
@@ -29130,6 +28989,7 @@ public class Fachada {
 	 * @param idsConta
 	 * @return
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDataRevisaoConta(Collection idsConta) {
 
 		try {
@@ -29398,6 +29258,7 @@ public class Fachada {
 	 * @return Description of the Return Value
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarQuadrasPorSetorComercialFaturamentoGrupo(
 			int localidade, int[] idsSetorComercial, Integer idFaturamentoGrupo) {
 
@@ -30240,6 +30101,7 @@ public class Fachada {
 	 * @param numeroPagina
 	 * @return Collection
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarRoteiroEmpresa(String idEmpresa,
 			String idLocalidade, String codigoSetorComercial,
 			String idLeiturista, String indicadorUso, Integer numeroPagina) {
@@ -30684,6 +30546,7 @@ public class Fachada {
 	 * @exception ErroRepositorioException
 	 *                Repositorio Exception
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarDebitoFaixaValores(Integer idFaixaValor,
 			Double valorFaixa) {
 
@@ -30721,6 +30584,7 @@ public class Fachada {
 	 * @return coleção de quadras
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarQuadrasPorRoteiroEmpresa(int idRoteiroEmpresa) {
 
 		try {
@@ -31687,8 +31551,7 @@ public class Fachada {
 		}
 	}
 
-	// Flávio Cordeiro
-	// caso de uso [UC0543] Associar Conjunto de Rotas a Criterio de Cobranca
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarRotasIntervaloLocalidade(
 			String idLocalidadeInicial, String idLocalidadeFinal,
 			String idCobrancaAcao) {
@@ -31720,6 +31583,7 @@ public class Fachada {
 
 	// Flávio Cordeiro
 	// caso de uso [UC0543] Associar Conjunto de Rotas a Criterio de Cobranca
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarRotas(String codigoSetorComercial,
 			String rotaInicial, String rotaFinal, String idLocalidade,
 			String idCobrancaAcao) {
@@ -31733,8 +31597,7 @@ public class Fachada {
 		}
 	}
 
-	// Flávio Cordeiro
-	// caso de uso [UC0543] Associar Conjunto de Rotas a Criterio de Cobranca
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarRotasIntervaloUnidadeNegocio(
 			String idUnidadeNegocio, String idCobrancaAcao) {
 		try {
@@ -31747,7 +31610,7 @@ public class Fachada {
 		}
 	}
 
-	// caso de uso [UC0543] Associar Conjunto de Rotas a Criterio de Cobranca
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarRotasIntervaloGrupo(String idGrupoCobranca,
 			String idCobrancaAcao) {
 		try {
@@ -32075,6 +31938,7 @@ public class Fachada {
 	 * @return
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarOrdemServicoGerarRelatorioAcompanhamentoHidrometro(
 			String idEmpresa, String tipoOrdem, String situacaoOrdemServico,
 			String idLocalidadeInicial, String idLocalidadeFinal, String dataEncerramentoInicial,
@@ -32253,7 +32117,7 @@ public class Fachada {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
-
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarLeiturasImovel(String idImovel, String anoMes)
 			throws ControladorException {
 		try {
@@ -33066,6 +32930,7 @@ public class Fachada {
 	 * @param
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public void associarConjuntoRotasCriterioCobranca(Collection colecaoRotas,
 			Usuario usuarioLogado, RotaAcaoCriterioHelper rotaAcaoCriterioHelper)
 			throws FachadaException {
@@ -33326,7 +33191,7 @@ public class Fachada {
 	 * @return Collection
 	 * @throws ErroRepositorioException
 	 */
-
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarNegativadorMovimentoRegistroAceito(
 			NegativadorMovimentoHelper negativadorMovimentoHelper) {
 
@@ -33408,7 +33273,7 @@ public class Fachada {
 	 * @return Collection
 	 * @throws ErroRepositorioException
 	 */
-
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarNegativadorMovimento(
 			NegativadorMovimentoHelper negativadorMovimentoHelper,
 			Integer numeroPagina) {
@@ -33434,7 +33299,7 @@ public class Fachada {
 	 * @return Collection
 	 * @throws ErroRepositorioException
 	 */
-
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarNegativadorMovimentoRegistroAceito(
 			NegativadorMovimentoHelper negativadorMovimentoHelper,
 			Integer numeroPagina) {
@@ -33683,6 +33548,7 @@ public class Fachada {
 	 * @throws ErroRepositorioException
 	 */
 
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarNegatiacaoParaImovel(Imovel imovel,
 			Negativador negativador) {
 
@@ -33727,7 +33593,7 @@ public class Fachada {
 	 * @author Yara Taciane
 	 * @date 17/03/2008
 	 */
-
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarRelatorioAcompanhamentoClientesNegativador(
 			DadosConsultaNegativacaoHelper helper) {
 
@@ -34393,6 +34259,7 @@ public class Fachada {
 	 * @return
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarResumoOrdensServicoConcluidas(Integer idEmpresa,
 			Integer idLocalidade, String anoMesReferenciaBoletim) {
 
@@ -34593,6 +34460,7 @@ public class Fachada {
 	 * @param idNegativacaoComando
 	 * @return NegativadorResultadoSimulacao
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarNegativadorResultadoSimulacao(
 			Integer idNegativacaoComando) {
 		try {
@@ -34723,6 +34591,7 @@ public class Fachada {
 	 * @author Vivianne Sousa
 	 * @date 23/05/2008
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarImovelPerfilDiferenteCorporativo() {
 		try {
 			return this.getControladorImovel()
@@ -34937,6 +34806,7 @@ public class Fachada {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
+    @SuppressWarnings("rawtypes")
     public Collection pesquisarRelatorioOrdemProcessoRepavimentacao(OSPavimentoHelper pavimentoHelper, 
     		String relatorioCompletoOuDivergente){
         
@@ -35100,6 +34970,7 @@ public class Fachada {
 	 * @author Vivianne Sousa
 	 * @date 23/05/2008
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarImovelPerfilTarifaSocialDiferenteCorporativo() {
 		try {
 			return this.getControladorImovel()
@@ -36573,6 +36444,7 @@ public class Fachada {
 	 * @return Integer
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarQuantidadeContas(
 			ComandoEmpresaCobrancaContaHelper comandoEmpresaCobrancaContaHelper) {
 
@@ -36593,6 +36465,7 @@ public class Fachada {
 	 * 
 	 * Data: 27/10/2008
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarImovelEconomia(Integer idImovel) {
 		try {
 			return this.getControladorTarifaSocial().pesquisarImovelEconomia(
@@ -37355,6 +37228,7 @@ public class Fachada {
 	 * @author Yara T. Souza
 	 * @date 16/01/2009
 	 */
+	@SuppressWarnings("rawtypes")
 	public List pesquisarNegativadorMovimentoRegItens(
 			Integer idNegativadorMovimentoReg) {
 		try {
@@ -38516,6 +38390,7 @@ public class Fachada {
 	 * 
 	 * 
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarNumeroHidrometroSituacaoInstaladoPaginacao(
 			FiltrarHidrometroHelper helper, Integer numeroPagina) {
 		try {
@@ -38536,6 +38411,7 @@ public class Fachada {
 	 * 
 	 * 
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarNumeroHidrometroSituacaoInstaladoRelatorio(
 			FiltrarHidrometroHelper helper) {
 		try {
@@ -38909,26 +38785,11 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * @author Ivan Sergio
-	 * @date 03/06/2009
-	 * 
-	 * @param idRegistroAlterado
-	 * @param idArquivo
-	 * @return
-	 */
-	public Collection<DadosTabelaAtualizacaoCadastralHelper> consultarDadosTabelaColunaAtualizacaoCadastral(
+	public Map<String, List<DadosTabelaAtualizacaoCadastralHelper>> consultarDadosTabelaColunaAtualizacaoCadastral(
 			Long idRegistroAlterado, Integer idArquivo, Integer idImovel,
-			Long idCliente,Integer idTipoAlteracao) {
-
-		try {
-			return this.getControladorTransacao()
-					.consultarDadosTabelaColunaAtualizacaoCadastral(
-							idRegistroAlterado, idArquivo, idImovel, idCliente,idTipoAlteracao);
-		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex
-					.getParametroMensagem());
-		}
+			Long idCliente,Integer idTipoAlteracao) throws Exception{
+		return this.getControladorTransacao().consultarDadosTabelaColunaAtualizacaoCadastral(
+						idRegistroAlterado, idArquivo, idImovel, idCliente,idTipoAlteracao);
 	}
 
 	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer idImovel, String[] idsAtualizacaoCadastral,	Short indicador, Usuario usuarioLogado) {
@@ -40106,6 +39967,7 @@ public class Fachada {
 	 * @return Collection
 	 * 
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarLeituristasDasRotas(
 			RelatorioAcompanhamentoLeituristaHelper helper) {
 		try {
@@ -40258,6 +40120,7 @@ public class Fachada {
 	 *            Colecao de ids de situacao de ligação de água
 	 * @return Colecao no formato [idGrupo, idLocalidade, qtdImoveis]
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarQuantidadeImoveisPorGrupoLocalidade(
 			Collection colecaoIdsSituacaoLigacaoAgua) {
 		try {
@@ -41102,6 +40965,7 @@ public class Fachada {
 	 *            relatorio idUnidadeBeneficente idGerenciaRegional
 	 *            idUnidadeNegocio idLocalidade
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarPagamentoEntidadesBeneficentesAnalitico(
 			String mesAnoInicial, String mesAnoFinal,
 			String idEntidadeBeneficente, String idGerenciaRegional,
@@ -41129,6 +40993,7 @@ public class Fachada {
 	 *            relatorio idUnidadeBeneficente idGerenciaRegional
 	 *            idUnidadeNegocio idLocalidade
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarPagamentoEntidadesBeneficentesSintetico(
 			String mesAnoInicial, String mesAnoFinal,
 			String idEntidadeBeneficente, String idGerenciaRegional,
@@ -41818,6 +41683,7 @@ public class Fachada {
 	 * @date 24/02/2010
 	 *
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarRelatorioDocumentosAReceber(
 			FiltroRelatorioDocumentosAReceberHelper helper) {
 		try {
@@ -42075,6 +41941,7 @@ public class Fachada {
 	 *
 	 * @date 29/03/2010
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarRelatorioResumoLigacoesCapacidadeHidrometro(
 				RelatorioResumoLigacoesCapacidadeHidrometroHelper helper){
 		
@@ -42629,6 +42496,7 @@ public class Fachada {
 	 * @author Vivianne Sousa
 	 * @date 29/04/2010
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarImovelCobrancaSituacaoPorImovel(Integer idImovel){
 		try {
 			return this.getControladorCobranca().pesquisarImovelCobrancaSituacaoPorImovel(idImovel);
@@ -42974,7 +42842,7 @@ public class Fachada {
 	 * @author Daniel Alves
 	 * @date 19/05/2010
 	 */
-	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarNotificacaoDebitosImpressaoSimultanea(
 			RelatorioNotificacaoDebitosImpressaoSimultaneaHelper filtro){
 		
@@ -42997,6 +42865,7 @@ public class Fachada {
 		}
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarResumoReceitaRelatorioAnalitico(ResumoReceitaHelper resumo){
 		try {
 			 return	this.getControladorFinanceiro()
@@ -43773,6 +43642,7 @@ public class Fachada {
 	 * @throws ErroRepositorioException
 	 *             Exceção do repositório
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarGrupos( FiltroGrupo filtroGrupo, Integer numeroPagina) {
 		
 		try {
@@ -44191,66 +44061,27 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * 
- 	 * [UC0629] Consultar Arquivo Texto para Leitura
- 	 * 	
- 	 * 	[FS0011 - Verificar Leituras];
- 	 * 
-	 * @author Hugo Amorim
-	 * @date 20/08/2010
-	 */
 	public SituacaoLeituraHelper pesquisarSituacaoLeitura(Integer anoMes,Integer idGrupo,Integer idRota){
 		try {
-			return getControladorMicromedicao()
-					.pesquisarSituacaoLeitura(
-							anoMes,idGrupo,idRota);
+			return getControladorMicromedicao().pesquisarSituacaoLeitura(anoMes,idGrupo,idRota);
 		} catch (ControladorException e) {
-			throw new FachadaException(e.getMessage(), e, e
-					.getParametroMensagem());
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
 	}
 	
-	/**
-	 * 
-	 * Remove os imóveis que ja foram enviados para uma
-	 * determinada rota em impressão simultanea
-	 * 
-	 * @autor Bruno Barros.
-	 * @date 24/08/2010 
-	 * 
-	 * @param idRota - Id da rota a ser pesquisada
-	 * @param BufferedReader - Buffer com TODOS os imóveis da rota
-	 * 
-	 * @return BufferedReader Novo buffer apenas com as matriculas que ainda precisam ser
-	 * processadas
-	 */
 	public BufferedReader removerImoveisJaProcessadosBufferImpressaoSimultanea( Integer idRota, BufferedReader reader ){
 		try {
-			return getControladorFaturamento().
-			removerImoveisJaProcessadosBufferImpressaoSimultanea( idRota, reader );					
+			return getControladorFaturamento().removerImoveisJaProcessadosBufferImpressaoSimultanea( idRota, reader );					
 		} catch (ControladorException e) {
-			throw new FachadaException(e.getMessage(), e, e
-					.getParametroMensagem());
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}		
 	}	
 
-	/**
-	 * Metodo que retornar o grupo de faturamento a partir do id do Imovel
-	 * 
-	 * @author Rômulo Aurélio
-	 * @date 24/08/2010
-	 * @param idImovel
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	public FaturamentoGrupo recuperaGrupoFaturamentoDoImovel(Integer idImovel){
 		try {
-			return getControladorFaturamento()
-					.recuperaGrupoFaturamentoDoImovel(idImovel);
+			return getControladorFaturamento().recuperaGrupoFaturamentoDoImovel(idImovel);
 		} catch (ControladorException e) {
-			throw new FachadaException(e.getMessage(), e, e
-					.getParametroMensagem());
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
 	}
 	
@@ -45310,6 +45141,7 @@ public class Fachada {
 	 * @return Collection
 	 * 
 	 */  
+	@SuppressWarnings("rawtypes")
     public Collection pesquisarMunicipiosAssociadoLocalidade(){
     	try {
 			return this.getControladorGeografico().pesquisarMunicipiosAssociadoLocalidade();
@@ -45742,6 +45574,7 @@ public class Fachada {
      * @author Vivianne Sousa
      * @data 03/12/2010
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarNegativadorRetornoMotivoDoReg(
 			Integer idImovel)  {
 		
@@ -46028,6 +45861,7 @@ public class Fachada {
 	 * @return Collection RelatorioBoletimCustoPavimentoHelper
 	 * @throws ErroRepositorioException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarRelatorioBoletimCustoPavimento(FiltrarBoletimCustoPavimentoHelper relatorioHelper){
 	    
 		try {
@@ -46142,6 +45976,7 @@ public class Fachada {
 	 * @return Collection RelatorioImoveisAlteracaoInscricaoViaBatchHelper
 	 * @throws ErroRepositorioException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarRelatorioImoveisAlteracaoInscricaoViaBatch( 
 			FiltrarRelatorioImoveisAlteracaoInscricaoViaBatchHelper relatorioHelper){
 	    
@@ -46752,6 +46587,7 @@ public class Fachada {
 	 * @author Vivianne Sousa
 	 * @date 16/02/2011
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarGrupoUsuario(Integer idUsuario){
 	    
 		try {
@@ -47841,6 +47677,7 @@ public class Fachada {
 	 * 
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarQtdeImoveisExcluidostarifaSocial(
 			Integer codigoTipoCarta,Integer idGerencia,Integer idUnidade,Integer idLocalidade, 
 			Integer referenciaInicial, Integer refereciaFinal) {
@@ -47861,6 +47698,7 @@ public class Fachada {
 	 * 
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarQtdeTarifaSocialDadoEconomia(Integer idtarifaSocialExclusaoMotivo,
 			Integer referenciaInicial, Integer refereciaFinal,Integer idGerencia,Integer idUnidade,
 			Integer idLocalidade)  {
@@ -48674,6 +48512,7 @@ public class Fachada {
 	 * @author Erivan Sousa	
 	 * @data 13/06/2011
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarImoveisDoacoes(
 			GerarRelatorioImoveisDoacoesHelper gerarRelatorioImoveisDoacoesHelper) {
 		try {			
@@ -49815,6 +49654,7 @@ public class Fachada {
 	 * @param matricula
 	 * @return Collection
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarParcelamentosSituacaoNormal(Integer matricula){
 		try{
 			return this.getControladorCobranca().pesquisarParcelamentosSituacaoNormal(matricula);
@@ -50264,6 +50104,7 @@ public class Fachada {
      * @exception ErroRepositorioException
      *                Description of the Exception
      */
+	@SuppressWarnings("rawtypes")
 	 public Collection pesquisarNumeroHidrometroMovimentacaoPorFaixaPaginacao(
             String faixaInicial, String faixaFinal, Integer numeroPagina){
         try{
@@ -50753,6 +50594,7 @@ public class Fachada {
 	 * 
 	 * @throws ControladorException
 	 */	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarOrdensServicoFiscalizacao(int tipoRelatorio, String periodoInicial, String periodoFinal, String idGerenciaRegional, String idUnidadeNegocios,String idLocalidadeInicial, String idLocalidadeFinal, String situacaoOS, String idOSReferidaRetornoTipo, String aceitacaoDaOS) {
 		try {
 			return this.getControladorOrdemServico().pesquisarOrdensServicoFiscalizacao(tipoRelatorio, periodoInicial, periodoFinal, idGerenciaRegional, idUnidadeNegocios, idLocalidadeInicial, idLocalidadeFinal, situacaoOS, idOSReferidaRetornoTipo, aceitacaoDaOS);
@@ -51702,6 +51544,7 @@ public class Fachada {
 	 * @return Collection
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarPagamentoHistoricoClienteRelatorio(String idImovel,
 			String idCliente, String idTipoRelacao, String localidadeInicial,
 			String localidadeFinal, String idAvisoBancario,
@@ -52058,6 +51901,7 @@ public class Fachada {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarImoveisBancoDebitoAutomaticoEPorGrupoFaturamento(String[] bancos, Integer idGrupoFaturamento) {
 		try {
 			return this.getControladorArrecadacao()
@@ -52347,16 +52191,6 @@ public class Fachada {
 	}
 	
 
-	/**TODO:COSANPA
-	 * @date:11/12/2012
-	 * @autor Adriana Muniz
-	 * 
-	 * Consultar Dados Diários da Arrecadação Auxiliar
-	 * 
-	 * @param filtro
-	 * @return Um TreeMap contendo colecoes de dados diarios por ano mes
-	 * @throws ControladorException
-	 */
 	public Map<Integer, Collection<FiltrarDadosDiariosArrecadacaoHelper>> filtrarDadosDiariosArrecadacaoAuxiliar(
 			int anoMesInicial, int anoMesFinal,
 			FiltroConsultarDadosDiariosArrecadacaoAuxiliar filtro) {
@@ -52372,20 +52206,6 @@ public class Fachada {
 
 	}
 	
-	/**
-	 * TODO:COSANPA
-	 * @author Adriana Muniz 
-	 * @data: 19/12/2012
-	 * 
-	 * Consulta para retornar os dados diários arrecadação auxiliar
-	 * agrupados por formas de arrecadação com tarifa
-	 * 
-	 * @param anoMesInicial
-	 * @param anoMesFinal
-	 * @param filtro
-	 * @return
-	 * @throws ControladorException
-	 */
 	public Map<Integer, Collection<FiltrarDadosDiariosArrecadacaoHelper>> filtrarDadosDiariosArrecadacaoAuxiliarFormasArrecadacaoComTarifa(
 			int anoMesInicial, int anoMesFinal,
 			FiltroConsultarDadosDiariosArrecadacaoAuxiliar filtro){
@@ -52400,16 +52220,6 @@ public class Fachada {
 		}
 	}
 	
-	/**TODO:COSANPA
-	 * @date:03/10/2012
-	 * @autor Adriana Muniz
-	 * 
-	 * Consultar Dados Diários da Arrecadação por formas de arrecadação com tarifa 
-	 * 
-	 * @param filtro
-	 * @return Um TreeMap contendo colecoes de dados diarios por ano mes
-	 * @throws ControladorException
-	 */
 	public Map<Integer, Collection<FiltrarDadosDiariosArrecadacaoHelper>> filtrarDadosDiariosFormasArrecadacaoComTarifa(
 			int anoMesInicial, int anoMesFinal,
 			FiltroConsultarDadosDiariosArrecadacao filtro) {
@@ -52425,15 +52235,6 @@ public class Fachada {
 
 	}
 	
-	/**
-	 * COSANPA - Mantis 414
-	 * @author Felipe Santos
-	 * @date 08/11/2013
-	 * 
-	 * Returna dados do Relatorio BIG
-	 * 
-	 * @param anoMesReferencia
-	 */
 	public Collection pesquisarDadosRelatorioBIG(Integer anoMesReferencia) {
 		try {
 			return this.getControladorArrecadacao().pesquisarDadosRelatorioBIG(anoMesReferencia);
@@ -52475,6 +52276,14 @@ public class Fachada {
 		return this.getControladorCadastro().retornaIpServidorOperacional();
 	}
 	
+	public void aprovarImoveisEmLote(Usuario usuarioLogado, Collection<ConsultarMovimentoAtualizacaoCadastralHelper> listaImoveis) {
+		try {
+			this.getControladorAtualizacaoCadastral().aprovarImoveisEmLote(usuarioLogado, listaImoveis);
+		}catch(ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+
 	public void atualizarVecimentoFaturaClienteResponsavel(Date dataVencimento, String anoMesReferencia) {
 		try {
 			this.getControladorFaturamento().atualizarVecimentoFaturaClienteResponsavel(dataVencimento, anoMesReferencia);
@@ -52486,6 +52295,14 @@ public class Fachada {
 	public Integer countFaturasClienteResponsaveis(String anoMesReferencia) {
 		try{
 			return this.getControladorFaturamento().countFaturasClienteResponsaveis(anoMesReferencia);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+	
+	public HashMap<String, Integer> obterDadosAnaliseSituacaoArquivoAtualizacaoCadastral(Integer idArquivo){
+		try {
+			return getControladorAtualizacaoCadastral().obterDadosAnaliseSituacaoArquivoAtualizacaoCadastral(idArquivo);
 		} catch (ControladorException e) {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
@@ -52512,4 +52329,7 @@ public class Fachada {
 		}
 	}
 
+	public String retornaIpServidorRelatorios() throws Exception{
+		return this.getControladorCadastro().retornaIpServidorRelatorios();
+	}	
 }

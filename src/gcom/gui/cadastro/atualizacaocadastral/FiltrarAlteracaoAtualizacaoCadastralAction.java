@@ -38,6 +38,15 @@ public class FiltrarAlteracaoAtualizacaoCadastralAction extends GcomAction {
 			throw new ActionServletException("atencao.pesquisa.nenhumresultado", "exibirFiltrarAlteracaoAtualizacaoCadastralAction.do", null, new String[] {});
         }
         sessao.setAttribute("colecaoConsultarMovimentoAtualizacaoCadastralHelper",helper);
+        sessao.setAttribute("filtroMovimentoAtualizacaoCadastral", filtro);
+        sessao.setAttribute("aprovacaoEmLote", filtro.isAprovacaoEmLote());
+        
+        if ((filtro.isAlteracaoHidrometro() != null && filtro.isAlteracaoHidrometro()) 
+        		|| (filtro.isAlteracaoSituacaoAgua() != null && filtro.isAlteracaoSituacaoAgua())
+        		|| (filtro.isAlteracaoSituacaoEsgoto() != null && filtro.isAlteracaoSituacaoEsgoto())
+        		|| (filtro.isAlteracaoCategoria() != null && filtro.isAlteracaoCategoria())) {
+        	sessao.setAttribute("relatorio", true);
+        }
 
 		return retorno;
 	}

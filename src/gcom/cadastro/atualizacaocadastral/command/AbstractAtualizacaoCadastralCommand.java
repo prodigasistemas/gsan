@@ -5,10 +5,12 @@ import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.FiltroImovelAtualizacaoCadastral;
+import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteAtualizacaoCadastral;
 import gcom.cadastro.cliente.ClienteFoneAtualizacaoCadastral;
 import gcom.cadastro.cliente.ControladorClienteLocal;
 import gcom.cadastro.cliente.IClienteAtualizacaoCadastral;
+import gcom.cadastro.cliente.IRepositorioClienteImovel;
 import gcom.cadastro.endereco.ControladorEnderecoLocal;
 import gcom.cadastro.imovel.IRepositorioImovel;
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
@@ -42,6 +44,7 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.Iterator;
 
+import org.apache.commons.lang.StringUtils;
 import org.jboss.logging.Logger;
 
 public abstract class AbstractAtualizacaoCadastralCommand {
@@ -64,10 +67,16 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 		this.parser = parser;
 	}
 
-	public AbstractAtualizacaoCadastralCommand(ParserUtil parser, IRepositorioCadastro repositorioCadastro, ControladorUtilLocal controladorUtil, 
-			ControladorTransacaoLocal controladorTransacao, IRepositorioImovel repositorioImovel, ControladorEnderecoLocal controladorEndereco,
-			ControladorAtualizacaoCadastralLocal controladorAtualizacaoCadastral, ControladorClienteLocal controladorCliente) {
-		
+	public AbstractAtualizacaoCadastralCommand(
+			ParserUtil parser,
+			IRepositorioCadastro repositorioCadastro,
+			ControladorUtilLocal controladorUtil,
+			ControladorTransacaoLocal controladorTransacao,
+			IRepositorioImovel repositorioImovel,
+			ControladorEnderecoLocal controladorEndereco,
+			ControladorAtualizacaoCadastralLocal controladorAtualizacaoCadastral,
+			ControladorClienteLocal controladorCliente) {
+
 		this.parser = parser;
 		this.repositorioCadastro = repositorioCadastro;
 		this.controladorUtil = controladorUtil;
@@ -80,6 +89,7 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 
 	public abstract void execute(AtualizacaoCadastral atualizacao) throws Exception;
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void salvarTabelaColunaAtualizacaoCadastral(AtualizacaoCadastral atualizacaoCadastral,
 			Object objetoAtualizacaoCadastralBase, Object objetoAtualizacaoCadastralTxt,
 			int matriculaImovel, int tipoOperacao) throws ControladorException {
@@ -214,11 +224,34 @@ public abstract class AbstractAtualizacaoCadastralCommand {
 		FiltroImovelAtualizacaoCadastral filtroImovel = new FiltroImovelAtualizacaoCadastral();
 		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovelAtualizacaoCadastral.ID, idImovel));
 
+		@SuppressWarnings("unchecked")
 		ImovelAtualizacaoCadastral imovel = (ImovelAtualizacaoCadastral) Util.retonarObjetoDeColecao(controladorUtil.pesquisar(filtroImovel, ImovelAtualizacaoCadastral.class.getName()));
 		
 		if (imovel != null){
 			imovel.setIdSituacaoAtualizacaoCadastral(situacao);
 			controladorUtil.atualizar(imovel);
+		}
+	}
+	
+	protected Integer getTipoOperacaoCliente(Integer matricula, Integer matriculaImovel, String cpfCliente, Short clienteRelacaoTipo, IRepositorioClienteImovel repositorioClienteImovel) throws Exception {
+		if (matricula == null || matricula == 0){
+			return AlteracaoTipo.INCLUSAO;
+		}
+		      
+		Cliente cliente = repositorioClienteImovel.pesquisarClienteImovelTipo(matricula, matriculaImovel, clienteRelacaoTipo.intValue());
+		if (cliente != null){
+			if (StringUtils.equals(cliente.getCnpj(), cpfCliente) || StringUtils.equals(cliente.getCpf(), cpfCliente)){
+				return AlteracaoTipo.ALTERACAO;
+			}else{
+				Collection<Cliente> clientes = controladorCliente.pesquisarClientePorCpfCnpj(cpfCliente);
+				if (clientes.isEmpty()){
+					return AlteracaoTipo.ALTERACAO;
+				}else{
+					return AlteracaoTipo.INCLUSAO;
+				}
+			}
+		}else{
+			return AlteracaoTipo.INCLUSAO;
 		}
 	}
 }
