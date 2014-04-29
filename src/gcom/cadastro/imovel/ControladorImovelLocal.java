@@ -4,11 +4,11 @@ import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.arrecadacao.pagamento.PagamentoHistorico;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
+import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.FiltroClienteImovel;
-import gcom.cadastro.cliente.RamoAtividade;
 import gcom.cadastro.endereco.Cep;
 import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
@@ -48,12 +48,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-/**
- * < <Descrição da Interface>>
- * 
- * @author Administrador
- * @created 7 de Junho de 2004
- */
 public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 
 	/**
@@ -3509,4 +3503,6 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 			Integer idArquivoTexto, Integer idImovel) throws ControladorException;
 	
     public Collection<ImovelSubcategoria> pesquisarImovelSubcategorias(Imovel imovel) throws ControladorException;
+    
+    public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacaoCadastral(Integer idImovel) throws ControladorException;
 }

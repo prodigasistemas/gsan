@@ -21,12 +21,10 @@ import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoPerfil;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.FiscalizacaoSituacao;
 import gcom.atendimentopublico.ordemservico.SupressaoMotivo;
-import gcom.atualizacaocadastral.ClienteImovelRetorno;
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocalHome;
 import gcom.atualizacaocadastral.IRepositorioAtualizacaoCadastral;
-import gcom.atualizacaocadastral.ImovelRetorno;
-import gcom.atualizacaocadastral.ImovelSubcategoriaRetorno;
+import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.atualizacaocadastral.RepositorioAtualizacaoCadastralHBM;
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.cliente.Cliente;
@@ -158,8 +156,6 @@ import gcom.seguranca.acesso.usuario.UsuarioAcao;
 import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
 import gcom.seguranca.transacao.ControladorTransacaoLocal;
 import gcom.seguranca.transacao.ControladorTransacaoLocalHome;
-import gcom.seguranca.transacao.TabelaAtualizacaoCadastral;
-import gcom.seguranca.transacao.TabelaColunaAtualizacaoCadastral;
 import gcom.util.ConstantesJNDI;
 import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
@@ -195,9 +191,7 @@ import java.util.TreeSet;
 import javax.ejb.CreateException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
-import javax.transaction.NotSupportedException;
 import javax.transaction.SystemException;
-import javax.transaction.UserTransaction;
 
 import org.jboss.logging.Logger;
 
@@ -16999,17 +16993,13 @@ public class ControladorImovelSEJB implements SessionBean {
 
 	public Collection<ImovelRamoAtividade> pesquisarRamoAtividadeDoImovel(Integer idImovel)
 			throws ControladorException {
-	
 		try {
-
 			return this.repositorioImovel.pesquisarRamoAtividadeDoImovel(idImovel);
-
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
-		
 	}
 	
 	public void atualizarIdArquivoTextoImovelAtualizacaoCadastral(
@@ -17024,5 +17014,14 @@ public class ControladorImovelSEJB implements SessionBean {
 		this.getControladorUtil().atualizar(imovelAtualizacaoCadastral);
 	}
 
-
+	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacaoCadastral(
+			Integer idImovel) throws ControladorException {
+		try {
+			return this.repositorioImovel.pesquisarImovelControleAtualizacaoCadastral(idImovel);
+		} catch (ErroRepositorioException ex) {
+			ex.printStackTrace();
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
 }
