@@ -32902,10 +32902,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 												// recuperados
 												// anteriormente
 												obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-														emitirContaHelper
-																.getIdImovel(),
-														emitirContaHelper
-																.getAmReferencia(),
+														emitirContaHelper,
 														1, tipoLigacao,
 														tipoMedicao);
 												contaTxt.append(obterDadosConsumoMedicaoAnterior);
@@ -32930,10 +32927,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 												// recuperados
 												// anteriormente
 												obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-														emitirContaHelper
-																.getIdImovel(),
-														emitirContaHelper
-																.getAmReferencia(),
+														emitirContaHelper,
 														4, tipoLigacao,
 														tipoMedicao);
 												contaTxt.append(obterDadosConsumoMedicaoAnterior);
@@ -32972,10 +32966,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 												// recuperados
 												// anteriormente
 												obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-														emitirContaHelper
-																.getIdImovel(),
-														emitirContaHelper
-																.getAmReferencia(),
+														emitirContaHelper,
 														2, tipoLigacao,
 														tipoMedicao);
 												contaTxt.append(obterDadosConsumoMedicaoAnterior);
@@ -33000,10 +32991,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 												// recuperados
 												// anteriormente
 												obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-														emitirContaHelper
-																.getIdImovel(),
-														emitirContaHelper
-																.getAmReferencia(),
+														emitirContaHelper,
 														5, tipoLigacao,
 														tipoMedicao);
 												contaTxt.append(obterDadosConsumoMedicaoAnterior);
@@ -33193,10 +33181,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 												// recuperados
 												// anteriormente
 												obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-														emitirContaHelper
-																.getIdImovel(),
-														emitirContaHelper
-																.getAmReferencia(),
+														emitirContaHelper,
 														3, tipoLigacao,
 														tipoMedicao);
 												contaTxt.append(obterDadosConsumoMedicaoAnterior);
@@ -33221,10 +33206,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 												// recuperados
 												// anteriormente
 												obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-														emitirContaHelper
-																.getIdImovel(),
-														emitirContaHelper
-																.getAmReferencia(),
+														emitirContaHelper,
 														6, tipoLigacao,
 														tipoMedicao);
 												contaTxt.append(obterDadosConsumoMedicaoAnterior);
@@ -35536,15 +35518,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @param colecaoConta
 	 * @throws ControladorException
 	 */
-	public StringBuilder obterDadosConsumoAnterior(Integer idImovel,
-			int anoMes, int qtdMeses, Integer tipoLigacao, Integer tipoMedicao)
+	public StringBuilder obterDadosConsumoAnterior(EmitirContaHelper emitirConta, int qtdMeses, Integer tipoLigacao, Integer tipoMedicao)
 			throws ControladorException {
 
 		StringBuilder dadosConsumoAnterior = new StringBuilder();
 
-		int anoMesSubtraido = Util.subtrairMesDoAnoMes(anoMes, qtdMeses);
-		String mesAnoFormatado = Util.formatarAnoMesParaMesAno(anoMesSubtraido)
-				+ " -";
+		int anoMesSubtraido = Util.subtrairMesDoAnoMes(emitirConta.getAmReferencia(), qtdMeses);
+		String mesAnoFormatado = Util.formatarAnoMesParaMesAno(anoMesSubtraido)	+ " -";
 
 		// adiciona o mes/ano formatado com o traço
 		dadosConsumoAnterior.append(Util.completaString(mesAnoFormatado, 9));
@@ -35553,7 +35533,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			Object[] parmsConsumoHistorico = null;
 			Integer idLeituraAnormalidade = null;
 			parmsConsumoHistorico = getControladorMicromedicao()
-					.obterConsumoAnteriorAnormalidadeDoImovel(idImovel,
+					.obterConsumoAnteriorAnormalidadeDoImovel(emitirConta.getIdImovel(),
 							anoMesSubtraido, tipoLigacao);
 			Integer numeroConsumoFaturadoMes = null;
 			String descricaoAbreviadaAnormalidadeAnterior = null;
@@ -35570,14 +35550,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				// caso o tipo de medição seja agua
 				if (tipoLigacao.equals(MedicaoTipo.LIGACAO_AGUA)) {
 					idLeituraAnormalidade = repositorioMicromedicao
-							.pesquisarIdLeituraAnormalidadeTipoAgua(idImovel,
+							.pesquisarIdLeituraAnormalidadeTipoAgua(emitirConta.getIdImovel(),
 									anoMesSubtraido);
 				} else {
 					// senão caso o tipo de medição seja poco
 					if (tipoMedicao.equals(MedicaoTipo.POCO)) {
 						idLeituraAnormalidade = repositorioMicromedicao
 								.pesquisarIdLeituraAnormalidadeTipoEsgoto(
-										idImovel, anoMesSubtraido);
+										emitirConta.getIdImovel(), anoMesSubtraido);
 					}
 				}
 			} catch (ErroRepositorioException e) {
@@ -39973,8 +39953,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 1
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(),
-					emitirContaHelper.getAmReferencia(), 1, tipoLigacao,
+					emitirContaHelper, 1, tipoLigacao,
 					tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes1(obterDadosConsumoMedicaoAnterior
@@ -39983,8 +39962,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 4
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(),
-					emitirContaHelper.getAmReferencia(), 4, tipoLigacao,
+					emitirContaHelper, 4, tipoLigacao,
 					tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes4(obterDadosConsumoMedicaoAnterior
@@ -39996,8 +39974,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 2
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(),
-					emitirContaHelper.getAmReferencia(), 2, tipoLigacao,
+					emitirContaHelper, 2, tipoLigacao,
 					tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes2(obterDadosConsumoMedicaoAnterior
@@ -40006,8 +39983,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 5
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(),
-					emitirContaHelper.getAmReferencia(), 5, tipoLigacao,
+					emitirContaHelper, 5, tipoLigacao,
 					tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes5(obterDadosConsumoMedicaoAnterior
@@ -40100,8 +40076,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 3
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(),
-					emitirContaHelper.getAmReferencia(), 3, tipoLigacao,
+					emitirContaHelper, 3, tipoLigacao,
 					tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes3(obterDadosConsumoMedicaoAnterior
@@ -40110,8 +40085,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 6
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(),
-					emitirContaHelper.getAmReferencia(), 6, tipoLigacao,
+					emitirContaHelper, 6, tipoLigacao,
 					tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes6(obterDadosConsumoMedicaoAnterior
@@ -40531,32 +40505,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 	}
 
-	/**
-	 * Método que retorna a soma de quantidade economia
-	 * 
-	 * [UC0348] Emitir Contas [UC0482]Emitir 2ª Via de Conta
-	 * 
-	 * [SB0007] Obter Quantidade de Economias da Conta
-	 * 
-	 * @author Sávio Luiz, Vivianne Sousa, Raphael Rossiter
-	 * @date 19/05/2006, 22/05/2007, 30/01/2009
-	 * 
-	 * 
-	 * @param idConta
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
-	public Short obterQuantidadeEconomiasConta(Integer idConta,
-			boolean contaHistorico) throws ControladorException {
+	public Short obterQuantidadeEconomiasConta(Integer idConta, boolean contaHistorico) throws ControladorException {
 
 		try {
-
 			if (!contaHistorico) {
-				return repositorioFaturamento
-						.obterQuantidadeEconomiasConta(idConta);
+				return repositorioFaturamento.obterQuantidadeEconomiasConta(idConta);
 			} else {
-				return repositorioFaturamento
-						.obterQuantidadeEconomiasContaHistorico(idConta);
+				return repositorioFaturamento.obterQuantidadeEconomiasContaHistorico(idConta);
 			}
 
 		} catch (ErroRepositorioException e) {
@@ -40564,20 +40519,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		}
 	}
 
-	/**
-	 * Método que retorna uma array de object de qualidade de agua
-	 * 
-	 * 
-	 * [UC0348] Emitir Contas
-	 * 
-	 * @author Sávio Luiz
-	 * @date 25/05/2006
-	 * 
-	 * 
-	 * @param idConta
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	public Object[] pesquisarParmsQualidadeAgua(
 			EmitirContaHelper emitirContaHelper) throws ControladorException {
 
@@ -40894,8 +40835,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		// e medição
 		// recuperados anteriormente
 		obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-				emitirContaHelper.getIdImovel(),
-				emitirContaHelper.getAmReferencia(), 6, tipoLigacao,
+				emitirContaHelper, 6, tipoLigacao,
 				tipoMedicao);
 		linhasArquivoTxtCartas.append(obterDadosConsumoMedicaoAnterior);
 		// chama o [SB0004] -Obter Dados do Consumo e
@@ -40907,8 +40847,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		// e medição
 		// recuperados anteriormente
 		obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-				emitirContaHelper.getIdImovel(),
-				emitirContaHelper.getAmReferencia(), 4, tipoLigacao,
+				emitirContaHelper, 4, tipoLigacao,
 				tipoMedicao);
 		linhasArquivoTxtCartas.append(obterDadosConsumoMedicaoAnterior);
 		// chama o [SB0004] -Obter Dados do Consumo e
@@ -40920,8 +40859,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		// e medição
 		// recuperados anteriormente
 		obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-				emitirContaHelper.getIdImovel(),
-				emitirContaHelper.getAmReferencia(), 2, tipoLigacao,
+				emitirContaHelper, 2, tipoLigacao,
 				tipoMedicao);
 		linhasArquivoTxtCartas.append(obterDadosConsumoMedicaoAnterior);
 		linhasArquivoTxtCartas.append(System.getProperty("line.separator"));
@@ -40939,8 +40877,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		// e medição
 		// recuperados anteriormente
 		obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-				emitirContaHelper.getIdImovel(),
-				emitirContaHelper.getAmReferencia(), 5, tipoLigacao,
+				emitirContaHelper, 5, tipoLigacao,
 				tipoMedicao);
 		linhasArquivoTxtCartas.append(obterDadosConsumoMedicaoAnterior);
 		// chama o [SB0004] -Obter Dados do Consumo e
@@ -40952,8 +40889,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		// e medição
 		// recuperados anteriormente
 		obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-				emitirContaHelper.getIdImovel(),
-				emitirContaHelper.getAmReferencia(), 3, tipoLigacao,
+				emitirContaHelper, 3, tipoLigacao,
 				tipoMedicao);
 		linhasArquivoTxtCartas.append(obterDadosConsumoMedicaoAnterior);
 		// chama o [SB0004] -Obter Dados do Consumo e
@@ -40965,8 +40901,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		// e medição
 		// recuperados anteriormente
 		obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-				emitirContaHelper.getIdImovel(),
-				emitirContaHelper.getAmReferencia(), 1, tipoLigacao,
+				emitirContaHelper, 1, tipoLigacao,
 				tipoMedicao);
 		linhasArquivoTxtCartas.append(obterDadosConsumoMedicaoAnterior);
 		linhasArquivoTxtCartas.append(System.getProperty("line.separator"));
@@ -46140,18 +46075,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 									// Fonte
 									txt.append("1");
 									// Dados do consumo do mes anterior 1
-									txt.append(this.obterDadosConsumoAnterior(
-											emitirConsumoImovelCondominimoHelper
-													.getIdImovel(),
-											new Integer(anoMesFaturamento), 1,
+									EmitirContaHelper emitirConta = new EmitirContaHelper(
+											emitirConsumoImovelCondominimoHelper.getIdImovel(), new Integer(anoMesFaturamento));
+									txt.append(this.obterDadosConsumoAnterior(emitirConta, 1,
 											LigacaoTipo.LIGACAO_AGUA,
 											MedicaoTipo.LIGACAO_AGUA)
 											.toString());
 									// Dados do consumo do mes anterior 4
-									txt.append(this.obterDadosConsumoAnterior(
-											emitirConsumoImovelCondominimoHelper
-													.getIdImovel(),
-											new Integer(anoMesFaturamento), 4,
+									txt.append(this.obterDadosConsumoAnterior(emitirConta, 4,
 											LigacaoTipo.LIGACAO_AGUA,
 											MedicaoTipo.LIGACAO_AGUA)
 											.toString());
@@ -46179,18 +46110,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 									// Fonte
 									txt.append("1");
 									// Dados do consumo do mes anterior 2
-									txt.append(this.obterDadosConsumoAnterior(
-											emitirConsumoImovelCondominimoHelper
-													.getIdImovel(),
-											new Integer(anoMesFaturamento), 2,
+									txt.append(this.obterDadosConsumoAnterior(emitirConta, 2,
 											LigacaoTipo.LIGACAO_AGUA,
 											MedicaoTipo.LIGACAO_AGUA)
 											.toString());
 									// Dados do consumo do mes anterior 5
-									txt.append(this.obterDadosConsumoAnterior(
-											emitirConsumoImovelCondominimoHelper
-													.getIdImovel(),
-											new Integer(anoMesFaturamento), 5,
+									txt.append(this.obterDadosConsumoAnterior(emitirConta, 5,
 											LigacaoTipo.LIGACAO_AGUA,
 											MedicaoTipo.LIGACAO_AGUA)
 											.toString());
@@ -46204,18 +46129,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 									// Fonte
 									txt.append("1");
 									// Dados do consumo do mes anterior 3
-									txt.append(this.obterDadosConsumoAnterior(
-											emitirConsumoImovelCondominimoHelper
-													.getIdImovel(),
-											new Integer(anoMesFaturamento), 3,
+									txt.append(this.obterDadosConsumoAnterior(emitirConta, 3,
 											LigacaoTipo.LIGACAO_AGUA,
 											MedicaoTipo.LIGACAO_AGUA)
 											.toString());
 									// Dados do consumo do mes anterior 6
-									txt.append(this.obterDadosConsumoAnterior(
-											emitirConsumoImovelCondominimoHelper
-													.getIdImovel(),
-											new Integer(anoMesFaturamento), 6,
+									txt.append(this.obterDadosConsumoAnterior(emitirConta, 6,
 											LigacaoTipo.LIGACAO_AGUA,
 											MedicaoTipo.LIGACAO_AGUA)
 											.toString());
@@ -52518,8 +52437,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 1
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(),
-					emitirContaHelper.getAmReferencia(), 1, tipoLigacao,
+					emitirContaHelper, 1, tipoLigacao,
 					tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes1(obterDadosConsumoMedicaoAnterior
@@ -52528,8 +52446,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 4
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(),
-					emitirContaHelper.getAmReferencia(), 4, tipoLigacao,
+					emitirContaHelper, 4, tipoLigacao,
 					tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes4(obterDadosConsumoMedicaoAnterior
@@ -52541,8 +52458,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 2
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(),
-					emitirContaHelper.getAmReferencia(), 2, tipoLigacao,
+					emitirContaHelper, 2, tipoLigacao,
 					tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes2(obterDadosConsumoMedicaoAnterior
@@ -52551,8 +52467,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 5
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(),
-					emitirContaHelper.getAmReferencia(), 5, tipoLigacao,
+					emitirContaHelper, 5, tipoLigacao,
 					tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes5(obterDadosConsumoMedicaoAnterior
@@ -52645,8 +52560,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 3
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(),
-					emitirContaHelper.getAmReferencia(), 3, tipoLigacao,
+					emitirContaHelper, 3, tipoLigacao,
 					tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes3(obterDadosConsumoMedicaoAnterior
@@ -52655,8 +52569,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 6
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(),
-					emitirContaHelper.getAmReferencia(), 6, tipoLigacao,
+					emitirContaHelper, 6, tipoLigacao,
 					tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes6(obterDadosConsumoMedicaoAnterior
@@ -53064,13 +52977,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			.pesquisarImovel(
 					emitirContaHelper
 							.getIdImovel());
-				String[] qualidadeAgua = this.obterDadosQualidadeAguaCosanpa(
-						localidade.getId(),
-						emitirContaHelper
-								.getIdSetorComercial(),
-						emitirContaHelper.getAmReferencia(),
-						imovelQuadraFace.getQuadraFace()
-								.getId());
+				String[] qualidadeAgua = this.obterDadosQualidadeAguaCosanpa(emitirContaHelper,imovelQuadraFace.getQuadraFace().getId());
 				
 				//Padrão
 				emitirContaHelper.setPadraoCor(qualidadeAgua[0]);
@@ -66071,8 +65978,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							// Igual a 1 e o tipo de ligação e medição
 							// recuperados anteriormente
 							obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-									emitirContaHelper.getIdImovel(),
-									emitirContaHelper.getAmReferencia(), 1,
+									emitirContaHelper, 1,
 									tipoLigacao, tipoMedicao);
 							contaTxt.append(Util.completaString(
 									obterDadosConsumoMedicaoAnterior.toString(),
@@ -66084,8 +65990,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							// de Meses Igual a 4 e o tipo de ligação e medição
 							// recuperados anteriormente
 							obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-									emitirContaHelper.getIdImovel(),
-									emitirContaHelper.getAmReferencia(), 4,
+									emitirContaHelper, 4,
 									tipoLigacao, tipoMedicao);
 							contaTxt.append(Util.completaString(
 									obterDadosConsumoMedicaoAnterior.toString(),
@@ -66097,8 +66002,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							// de Meses Igual a 2 e o tipo de ligação e medição
 							// recuperados anteriormente
 							obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-									emitirContaHelper.getIdImovel(),
-									emitirContaHelper.getAmReferencia(), 2,
+									emitirContaHelper, 2,
 									tipoLigacao, tipoMedicao);
 							contaTxt.append(Util.completaString(
 									obterDadosConsumoMedicaoAnterior.toString(),
@@ -66110,8 +66014,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							// de Meses Igual a 5 e o tipode ligação e medição
 							// recuperados anteriormente
 							obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-									emitirContaHelper.getIdImovel(),
-									emitirContaHelper.getAmReferencia(), 5,
+									emitirContaHelper, 5,
 									tipoLigacao, tipoMedicao);
 							contaTxt.append(Util.completaString(
 									obterDadosConsumoMedicaoAnterior.toString(),
@@ -66227,8 +66130,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							// Igual a 3 e o tipo de ligação e medição
 							// recuperados anteriormente
 							obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-									emitirContaHelper.getIdImovel(),
-									emitirContaHelper.getAmReferencia(), 3,
+									emitirContaHelper, 3,
 									tipoLigacao, tipoMedicao);
 							contaTxt.append(Util.completaString(
 									obterDadosConsumoMedicaoAnterior.toString(),
@@ -66240,8 +66142,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							// de Meses Igual a 6 e o tipo de ligação e medição
 							// recuperados anteriormente
 							obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-									emitirContaHelper.getIdImovel(),
-									emitirContaHelper.getAmReferencia(), 6,
+									emitirContaHelper, 6,
 									tipoLigacao, tipoMedicao);
 							contaTxt.append(Util.completaString(
 									obterDadosConsumoMedicaoAnterior.toString(),
@@ -78799,8 +78700,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		return valoresRateioImovel;
 	}
 	
-	public String[] obterDadosQualidadeAguaCosanpa(Integer idLocalidade,
-			Integer idSetorComercial, Integer amReferencia, Integer idQuadraFace)
+	public String[] obterDadosQualidadeAguaCosanpa(EmitirContaHelper emitirConta, Integer idQuadraFace)
 			throws ControladorException {
 
 		String[] retornoQualidade = new String[25];
@@ -78896,7 +78796,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							.getSistemaAbastecimento().getId()));
 
 			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(
-					FiltroQualidadeAgua.ANO_MES_REFERENCIA, amReferencia));
+					FiltroQualidadeAgua.ANO_MES_REFERENCIA, emitirConta.getAmReferencia()));
 
 			if (quadraFace.getDistritoOperacional().getSetorAbastecimento()
 					.getSistemaAbastecimento().getFonteCaptacao() != null
@@ -78926,13 +78826,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			filtroQualidadeAgua.limparListaParametros();
 
 			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(
-					FiltroQualidadeAgua.LOCALIDADE_ID, idLocalidade));
+					FiltroQualidadeAgua.LOCALIDADE_ID, emitirConta.getIdLocalidade()));
 
 			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(
-					FiltroQualidadeAgua.SETOR_COMERCIAL_ID, idSetorComercial));
+					FiltroQualidadeAgua.SETOR_COMERCIAL_ID, emitirConta.getIdSetorComercial()));
 
 			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(
-					FiltroQualidadeAgua.ANO_MES_REFERENCIA, amReferencia));
+					FiltroQualidadeAgua.ANO_MES_REFERENCIA, emitirConta.getAmReferencia()));
 
 			filtroQualidadeAgua
 					.adicionarCaminhoParaCarregamentoEntidade("fonteCaptacao");
@@ -78950,13 +78850,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 			colecaoQualidadeAgua = null;
 			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(
-					FiltroQualidadeAgua.LOCALIDADE_ID, idLocalidade));
+					FiltroQualidadeAgua.LOCALIDADE_ID, emitirConta.getIdLocalidade()));
 
 			filtroQualidadeAgua.adicionarParametro(new ParametroNulo(
 					FiltroQualidadeAgua.SETOR_COMERCIAL_ID));
 
 			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(
-					FiltroQualidadeAgua.ANO_MES_REFERENCIA, amReferencia));
+					FiltroQualidadeAgua.ANO_MES_REFERENCIA, emitirConta.getAmReferencia()));
 
 			filtroQualidadeAgua
 					.adicionarCaminhoParaCarregamentoEntidade("fonteCaptacao");
@@ -78973,7 +78873,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			filtroQualidadeAgua.limparListaParametros();
 
 			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(
-					FiltroQualidadeAgua.ANO_MES_REFERENCIA, amReferencia));
+					FiltroQualidadeAgua.ANO_MES_REFERENCIA, emitirConta.getAmReferencia()));
 
 			filtroQualidadeAgua.adicionarParametro(new ParametroNulo(
 					FiltroQualidadeAgua.LOCALIDADE_ID));

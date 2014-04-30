@@ -19174,8 +19174,9 @@ public class Fachada {
 	public StringBuilder obterDadosConsumoAnterior(Integer idImovel,
 			int anoMes, int qtdMeses, Integer tipoLigacao, Integer tipoMedicao) {
 		try {
+			EmitirContaHelper emitirConta = new EmitirContaHelper(idImovel, anoMes);
 			return this.getControladorFaturamento().obterDadosConsumoAnterior(
-					idImovel, anoMes, qtdMeses, tipoLigacao, tipoMedicao);
+					emitirConta, qtdMeses, tipoLigacao, tipoMedicao);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex
 					.getParametroMensagem());

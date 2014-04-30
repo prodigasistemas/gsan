@@ -363,6 +363,11 @@ public class EmitirContaHelper implements Serializable {
 	public EmitirContaHelper() {
 	}
 	
+	public EmitirContaHelper(Integer idImovel, Integer amReferencia) {
+		this.idImovel = idImovel;
+		this.amReferencia = amReferencia;
+	}
+	
 	//utilizado no Emitir Segunda Via de Conta Compesa
 	//repositorioFaturamento.pesquisarConta
 	//Vivianne Sousa

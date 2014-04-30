@@ -406,11 +406,9 @@ public class Conta extends ObjetoTransacao implements IConta {
 		
 	}
 
-	/** default constructor */
 	public Conta() {
 	}
 
-	/** minimal constructor */
 	public Conta(
 			int referencia,
 			short digitoVerificadorConta,
@@ -473,12 +471,6 @@ public class Conta extends ObjetoTransacao implements IConta {
 		
 	}
 	
-	/**
-	 * Construtor responsavel pelo Resumo devodores duvidosos
-	 * @author Arthur Carvalho
-	 * @date 06/10/2010
-	 * @return
-	 */
 	public Conta(Integer id, Integer referencia, Date dataVencimentoConta, BigDecimal valorAgua, BigDecimal valorEsgoto,
 			BigDecimal debitos, BigDecimal valorCreditos, BigDecimal valorImposto, Integer consumoAgua, Integer consumoEsgoto,
 			Date dataValidadeConta, Date dataRevisao, Integer referenciaContabil, Imovel imovel, Integer referenciaBaixaContabil) {
@@ -498,11 +490,15 @@ public class Conta extends ObjetoTransacao implements IConta {
 		this.referenciaContabil = referenciaContabil;
 		this.imovel = imovel;
 		this.referenciaBaixaContabil = referenciaBaixaContabil;
-		
-		
 	}
 	
-	
+	public Conta(BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal valorCreditos, BigDecimal valorDebitos, BigDecimal valorImpostos) {
+		this.valorAgua = valorAgua;
+		this.valorEsgoto = valorEsgoto;
+		this.valorCreditos = valorCreditos;
+		this.debitos = valorDebitos;
+		this.valorImposto = valorImpostos;
+	}
 
 	public Integer getId() {
 		return this.id;
