@@ -500,6 +500,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 								contaTxt = preencherMediaConsumoMesAnterior(contaTxt, consumoMesAnterior6, diasConsumoMes6);
 
 								contaTxt = preencherDadosRateioAguaEsgoto(emitirContaHelper, contaTxt);
+								
 								if (imovelEmitido.getQuadra().getRota().getIndicadorImpressaoTermicaFinalGrupo().equals(ConstantesSistema.SIM)
 										&& municipioEntrega.equals(municipioImovel)) {
 
@@ -758,14 +759,14 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		
 		if (emitirConta.getValorRateioAgua() != null) {
 			contaTxt.append(Util.completaString("VALOR RATEIO ÁGUA", 50));
-			contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal(emitirConta.getValorRateioAgua()), 13));
+			contaTxt.append(Util.completaString(emitirConta.getValorRateioAgua() + "", 13));
 		} else {
 			contaTxt.append(Util.completaString(" ", 63));
 		}
 		
 		if (emitirConta.getValorRateioEsgoto() != null) {
 			contaTxt.append(Util.completaString("VALOR RATEIO ESGOTO", 50));
-			contaTxt.append(Util.completaStringComEspacoAEsquerda(Util.formatarMoedaReal(emitirConta.getValorRateioEsgoto()), 13));
+			contaTxt.append(Util.completaString(emitirConta.getValorRateioEsgoto() + "", 13));
 		} else {
 			contaTxt.append(Util.completaString(" ", 63));
 		}

@@ -44910,274 +44910,171 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 	}
 
-	/**
-	 * [UC0348] Emitir Contas
-	 * 
-	 * @author Sávio Luiz, Mariana Victor
-	 * @date 08/01/2007, 11/03/2011
-	 * 
-	 * @return
-	 * @throws ControladorException
-	 * @throws ControladorException
-	 */
-	public Collection<EmitirContaHelper> formatarEmitirContasHelper(
-			Collection colecaoPamsContas, int i) throws ControladorException {
+	public Collection<EmitirContaHelper> formatarEmitirContasHelper(Collection colecaoPamsContas, int i) throws ControladorException {
 		Collection<EmitirContaHelper> colecaoContas = new ArrayList();
+		
 		if (colecaoPamsContas != null) {
 			Iterator iteColecaoContas = colecaoPamsContas.iterator();
+			
 			while (iteColecaoContas.hasNext()) {
 				Object[] parmsConta = (Object[]) iteColecaoContas.next();
 				if (parmsConta != null) {
 					EmitirContaHelper emitirContaHelper = new EmitirContaHelper();
-					// id da conta
+
 					if (parmsConta[0] != null) {
 						emitirContaHelper.setIdConta((Integer) parmsConta[0]);
 					}
+
 					if (i == 3 || i == 4 || i == 7 || i == 8) {
-						// nome cliente
 						if (parmsConta[1] != null) {
-							String nomeCliente = this
-									.obterNomeCliente(emitirContaHelper
-											.getIdConta());
+							String nomeCliente = this.obterNomeCliente(emitirContaHelper.getIdConta());
 							emitirContaHelper.setNomeCliente(nomeCliente);
 						}
-						// nome cliente
+
 						if (parmsConta[32] != null) {
-							emitirContaHelper
-									.setNomeImovel((String) parmsConta[32]);
+							emitirContaHelper.setNomeImovel((String) parmsConta[32]);
 						}
 					} else {
-//						if (parmsConta[32] != null) {
-//							emitirContaHelper
-//									.setNomeCliente((String) parmsConta[32]);
-//						} else {
-							// nome cliente
 							if (parmsConta[1] != null) {
-								String nomeCliente = this
-										.obterNomeCliente(emitirContaHelper
-												.getIdConta());
+								String nomeCliente = this.obterNomeCliente(emitirContaHelper.getIdConta());
 								emitirContaHelper.setNomeCliente(nomeCliente);
 							}
-//						}
 					}
 
-					// data vencimento da conta
 					if (parmsConta[2] != null) {
-						emitirContaHelper
-								.setDataVencimentoConta((Date) parmsConta[2]);
+						emitirContaHelper.setDataVencimentoConta((Date) parmsConta[2]);
 					}
-					// ano mes referencia da conta
 					if (parmsConta[3] != null) {
-						emitirContaHelper
-								.setAmReferencia((Integer) parmsConta[3]);
+						emitirContaHelper.setAmReferencia((Integer) parmsConta[3]);
 					}
-					// digito verificador da conta
 					if (parmsConta[4] != null) {
-						emitirContaHelper
-								.setDigitoVerificadorConta((Short) parmsConta[4]);
+						emitirContaHelper.setDigitoVerificadorConta((Short) parmsConta[4]);
 					}
-					// codigo setor comercial da conta
 					if (parmsConta[5] != null) {
-						emitirContaHelper
-								.setCodigoSetorComercialConta((Integer) parmsConta[5]);
+						emitirContaHelper.setCodigoSetorComercialConta((Integer) parmsConta[5]);
 					}
-					// id da quadra da conta
 					if (parmsConta[6] != null) {
-						emitirContaHelper
-								.setIdQuadraConta((Integer) parmsConta[6]);
+						emitirContaHelper.setIdQuadraConta((Integer) parmsConta[6]);
 					}
-					// lote da conta
 					if (parmsConta[7] != null) {
 						emitirContaHelper.setLoteConta((Short) parmsConta[7]);
 					}
-					// sublote da conta
 					if (parmsConta[8] != null) {
-						emitirContaHelper
-								.setSubLoteConta((Short) parmsConta[8]);
+						emitirContaHelper.setSubLoteConta((Short) parmsConta[8]);
 					}
-					// consumo agua
 					if (parmsConta[9] != null) {
-						emitirContaHelper
-								.setConsumoAgua((Integer) parmsConta[9]);
+						emitirContaHelper.setConsumoAgua((Integer) parmsConta[9]);
 					}
-					// consumo esgoto
 					if (parmsConta[10] != null) {
-						emitirContaHelper
-								.setConsumoEsgoto((Integer) parmsConta[10]);
+						emitirContaHelper.setConsumoEsgoto((Integer) parmsConta[10]);
 					}
-					// valor agua
 					if (parmsConta[11] != null) {
-						emitirContaHelper
-								.setValorAgua((BigDecimal) parmsConta[11]);
+						emitirContaHelper.setValorAgua((BigDecimal) parmsConta[11]);
 					}
-					// valor esgoto
 					if (parmsConta[12] != null) {
-						emitirContaHelper
-								.setValorEsgoto((BigDecimal) parmsConta[12]);
+						emitirContaHelper.setValorEsgoto((BigDecimal) parmsConta[12]);
 					}
-					// id da conta
 					if (parmsConta[13] != null) {
-						emitirContaHelper
-								.setDebitos((BigDecimal) parmsConta[13]);
+						emitirContaHelper.setDebitos((BigDecimal) parmsConta[13]);
 					}
-					// id da conta
 					if (parmsConta[14] != null) {
-						emitirContaHelper
-								.setValorCreditos((BigDecimal) parmsConta[14]);
+						emitirContaHelper.setValorCreditos((BigDecimal) parmsConta[14]);
 					}
-					// id da conta
 					if (parmsConta[15] != null) {
-						emitirContaHelper
-								.setValorImpostos((BigDecimal) parmsConta[15]);
+						emitirContaHelper.setValorImpostos((BigDecimal) parmsConta[15]);
 					}
-					// id da conta
 					if (parmsConta[16] != null) {
-						emitirContaHelper
-								.setDataValidadeConta((Date) parmsConta[16]);
+						emitirContaHelper.setDataValidadeConta((Date) parmsConta[16]);
 					}
-					// id da conta
 					if (parmsConta[17] != null) {
 						emitirContaHelper.setIdImovel((Integer) parmsConta[17]);
 					}
-					// id da conta
 					if (parmsConta[18] != null) {
-						emitirContaHelper
-								.setIdLocalidade((Integer) parmsConta[18]);
+						emitirContaHelper.setIdLocalidade((Integer) parmsConta[18]);
 					}
-					// id da conta
 					if (parmsConta[19] != null) {
-						emitirContaHelper
-								.setIdGerenciaRegional((Integer) parmsConta[19]);
+						emitirContaHelper.setIdGerenciaRegional((Integer) parmsConta[19]);
 					}
-					// id da conta
 					if (parmsConta[20] != null) {
-						emitirContaHelper
-								.setNomeGerenciaRegional((String) parmsConta[20]);
+						emitirContaHelper.setNomeGerenciaRegional((String) parmsConta[20]);
 					}
-					// id da conta
 					if (parmsConta[21] != null) {
-						emitirContaHelper
-								.setIdLigacaoAguaSituacao((Integer) parmsConta[21]);
+						emitirContaHelper.setIdLigacaoAguaSituacao((Integer) parmsConta[21]);
 					}
-					// id da conta
 					if (parmsConta[22] != null) {
-						emitirContaHelper
-								.setIdLigacaoEsgotoSituacao((Integer) parmsConta[22]);
+						emitirContaHelper.setIdLigacaoEsgotoSituacao((Integer) parmsConta[22]);
 					}
-					// id da conta
 					if (parmsConta[23] != null) {
-						emitirContaHelper
-								.setIdImovelPerfil((Integer) parmsConta[23]);
+						emitirContaHelper.setIdImovelPerfil((Integer) parmsConta[23]);
 					}
-					// id da conta
 					if (parmsConta[24] != null) {
-						emitirContaHelper
-								.setIdSetorComercial((Integer) parmsConta[24]);
+						emitirContaHelper.setIdSetorComercial((Integer) parmsConta[24]);
 					}
-					// id da conta
 					if (parmsConta[25] != null) {
-						emitirContaHelper
-								.setIdFaturamentoGrupo((Integer) parmsConta[25]);
+						emitirContaHelper.setIdFaturamentoGrupo((Integer) parmsConta[25]);
 					}
-					// id da conta
 					if (parmsConta[26] != null) {
-						emitirContaHelper
-								.setIdEmpresa((Integer) parmsConta[26]);
+						emitirContaHelper.setIdEmpresa((Integer) parmsConta[26]);
 					}
-					// id da conta
 					if (parmsConta[27] != null) {
-						emitirContaHelper
-								.setDescricaoLocalidade((String) parmsConta[27]);
+						emitirContaHelper.setDescricaoLocalidade((String) parmsConta[27]);
 					}
-					// id da conta
 					if (parmsConta[28] != null) {
-						emitirContaHelper
-								.setDescricaoLigacaoAguaSituacao((String) parmsConta[28]);
+						emitirContaHelper.setDescricaoLigacaoAguaSituacao((String) parmsConta[28]);
 					}
-					// id da conta
 					if (parmsConta[29] != null) {
-						emitirContaHelper
-								.setDescricaoLigacaoEsgotoSituacao((String) parmsConta[29]);
+						emitirContaHelper.setDescricaoLigacaoEsgotoSituacao((String) parmsConta[29]);
 					}
-					// id da conta
 					if (parmsConta[30] != null) {
-						emitirContaHelper
-								.setPercentualEsgotoConta((BigDecimal) parmsConta[30]);
+						emitirContaHelper.setPercentualEsgotoConta((BigDecimal) parmsConta[30]);
 					}
-
-					// id do cliente
 					if (parmsConta[31] != null) {
-						emitirContaHelper.setIdClienteResponsavel(""
-								+ (Integer) parmsConta[31]);
+						emitirContaHelper.setIdClienteResponsavel(""+ (Integer) parmsConta[31]);
 					}
-
-					// Nome no imovel
 					if (parmsConta[32] != null) {
-						emitirContaHelper
-								.setNomeImovel((String) parmsConta[32]);
+						emitirContaHelper.setNomeImovel((String) parmsConta[32]);
 					}
 
 					int tam = parmsConta.length;
 
 					if (tam > 34) {
-						// id da rota
 						if (parmsConta[33] != null) {
-							emitirContaHelper
-									.setCodigoRota((Short) parmsConta[33]);
+							emitirContaHelper.setCodigoRota((Short) parmsConta[33]);
 						}
-
-						// numero sequencial rota
 						if (parmsConta[34] != null) {
-							emitirContaHelper
-									.setNumeroSequencialRota((Integer) parmsConta[34]);
+							emitirContaHelper.setNumeroSequencialRota((Integer) parmsConta[34]);
 						}
-
-						// origem
 						if (parmsConta[35] != null) {
-							emitirContaHelper
-									.setIdOrigem((Integer) parmsConta[35]);
+							emitirContaHelper.setIdOrigem((Integer) parmsConta[35]);
 						}
-
-						// debitoCreditoSituacaoAtual
 						if (parmsConta[36] != null) {
-							emitirContaHelper
-									.setDebitoCreditoSituacaoAtualConta((Integer) parmsConta[36]);
+							emitirContaHelper.setDebitoCreditoSituacaoAtualConta((Integer) parmsConta[36]);
 						}
-
-						// id do funcionario
 						if (parmsConta[37] != null) {
-							emitirContaHelper
-									.setIdFuncionario((Integer) parmsConta[37]);
+							emitirContaHelper.setIdFuncionario((Integer) parmsConta[37]);
 						}
-
-						// nome do funcionario
 						if (parmsConta[38] != null) {
-							emitirContaHelper
-									.setNomeFuncionario((String) parmsConta[38]);
+							emitirContaHelper.setNomeFuncionario((String) parmsConta[38]);
 						}
-
-						// Tipo de Conta
 						if (parmsConta[39] != null) {
-							emitirContaHelper
-									.setContaTipo((Integer) parmsConta[39]);
+							emitirContaHelper.setContaTipo((Integer) parmsConta[39]);
 						}
-
-						// Id da Rota de Entrega
 						if (parmsConta[40] != null) {
-							emitirContaHelper
-									.setIdRotaEntrega((Integer) parmsConta[40]);
+							emitirContaHelper.setIdRotaEntrega((Integer) parmsConta[40]);
 						}
-
-						// Numero sequencial rota entrega
 						if (parmsConta[41] != null) {
-							emitirContaHelper
-									.setNumeroSequencialRotaEntrega((Integer) parmsConta[41]);
+							emitirContaHelper.setNumeroSequencialRotaEntrega((Integer) parmsConta[41]);
 						}
+						
 						if (tam > 42) {
-							// Numero quadra entrega
 							if (parmsConta[42] != null) {
-								emitirContaHelper
-										.setNumeroQuadraEntrega((Integer) parmsConta[42]);
+								emitirContaHelper.setNumeroQuadraEntrega((Integer) parmsConta[42]);
+							}
+							if (parmsConta[43] != null) {
+								emitirContaHelper.setValorRateioAgua((BigDecimal) parmsConta[43]);
+							}
+							if (parmsConta[44] != null) {
+								emitirContaHelper.setValorRateioEsgoto((BigDecimal) parmsConta[44]);
 							}
 						}
 
