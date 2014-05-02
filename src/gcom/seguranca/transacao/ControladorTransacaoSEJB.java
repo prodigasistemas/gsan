@@ -80,7 +80,6 @@ import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
 import gcom.seguranca.acesso.usuario.UsuarioAlteracao;
 import gcom.util.ConstantesJNDI;
-import gcom.util.ConstantesSistema;
 import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ControladorUtilLocalHome;
@@ -1505,18 +1504,24 @@ public class ControladorTransacaoSEJB implements SessionBean {
 		return valorCampo;
 	}
 	
-	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer idImovel, String[] idsAtualizacaoCadastral, Short indicador, Usuario usuarioLogado) throws ControladorException {
+	public void atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(
+			Integer idImovel, String[] idsAtualizacaoCadastral,
+			Short indicador, Usuario usuarioLogado) throws ControladorException {
+		
 		try {
 			Integer tipoAlteracaoCadastral = null;
 			
-			// Varre a lista para recuperar os ids SIM selecionados
 			for (int i = 0; i < idsAtualizacaoCadastral.length; i++) {
+				
 				Integer idAtualizacaoCadastral = new Integer(idsAtualizacaoCadastral[i]);
-				// atualiza o indicador de autorizado para sim 
-				this.repositorioTransacao.atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(idAtualizacaoCadastral, indicador, usuarioLogado);
-				//verifica qual o tipo de atualização cadastral
-				if(tipoAlteracaoCadastral == null){
-					TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral = this.repositorioTransacao.pesquisarTabelaColunaAtualizacaoCadastral(idAtualizacaoCadastral);
+				
+				this.repositorioTransacao.atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(
+						idAtualizacaoCadastral, indicador, usuarioLogado);
+				
+				if(tipoAlteracaoCadastral == null) {
+					TabelaColunaAtualizacaoCadastral tabelaColunaAtualizacaoCadastral = 
+						this.repositorioTransacao.pesquisarTabelaColunaAtualizacaoCadastral(idAtualizacaoCadastral);
+					
 					tipoAlteracaoCadastral = tabelaColunaAtualizacaoCadastral.getTabelaAtualizacaoCadastral().getAlteracaoTipo().getId();
 				}
 			}
@@ -1527,23 +1532,6 @@ public class ControladorTransacaoSEJB implements SessionBean {
 				repositorioCadastro.liberarCadastroImovel(idImovel);
 				repositorioAtualizacaoCadastral.liberarCadastroImovel(idImovel);
 				repositorioSeguranca.autorizarAtualizacaoCadastral(idImovel);
-			}
-							
-			// caso o indicador seja para autorizar a atualização vinda do celular
-			if(indicador != null && indicador.equals(ConstantesSistema.SIM)){			
-				//Caso a opção seja ALTERAÇÃO
-				if(tipoAlteracaoCadastral.equals(AlteracaoTipo.ALTERACAO)){
-					
-//					alteracaoImovelClienteAtualizacaoCadastral(idsAtualizacaoCadastral,usuarioLogado);
-					
-				}else{
-//					if(tipoAlteracaoCadastral.equals(AlteracaoTipo.INCLUSAO)){
-//						inclusaoImovelClienteAtualizacaoCadastral(idsAtualizacaoCadastral,usuarioLogado);
-//					}else{
-//						remocaoImovelClienteAtualizacaoCadastral(idsAtualizacaoCadastral,usuarioLogado);
-//						
-//					}
-				}
 			}
 		} catch (ErroRepositorioException e) {
 			sessionContext.setRollbackOnly();

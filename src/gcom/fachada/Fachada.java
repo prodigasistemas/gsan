@@ -149,6 +149,7 @@ import gcom.atendimentopublico.registroatendimento.bean.RegistroAtendimentoPende
 import gcom.atendimentopublico.registroatendimento.bean.VerificarRAFaltaAguaHelper;
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocalHome;
+import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.batch.ControladorBatchLocal;
 import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.ProcessoIniciado;
@@ -52331,5 +52332,13 @@ public class Fachada {
 
 	public String retornaIpServidorRelatorios() throws Exception{
 		return this.getControladorCadastro().retornaIpServidorRelatorios();
-	}	
+	}
+	
+	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacaoCadastral(Integer idImovel) {
+		try {
+			return this.getControladorImovel().pesquisarImovelControleAtualizacaoCadastral(idImovel);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
 }
