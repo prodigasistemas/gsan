@@ -7388,6 +7388,7 @@ public class ControladorArrecadacao implements SessionBean {
 	 * 
 	 * Autor: Raphael Rossiter Data: 02/05/2007
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected PagamentoHelperCodigoBarras processarPagamentosCodigoBarrasDocumentoCobrancaTipo8(
 			RegistroHelperCodigoBarras registroHelperCodigoBarras,
 			SistemaParametro sistemaParametro, Date dataPagamento,
@@ -7463,8 +7464,14 @@ public class ControladorArrecadacao implements SessionBean {
 				//pesquisar o doc de cobrança
 				FiltroCobrancaDocumento filtro = new FiltroCobrancaDocumento();
 				filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaDocumento.ID, numeroSequencialDocumento));
-				CobrancaDocumento cobrancaDocumento = (CobrancaDocumento)getControladorUtil().pesquisar(filtro, CobrancaDocumento.class.getName()).iterator().next();
 				
+				Collection<CobrancaDocumento> listaDocumentosCobranca = getControladorUtil().pesquisar(filtro, CobrancaDocumento.class.getName());
+		        
+		        CobrancaDocumento cobrancaDocumento = null; 
+		        
+		        if (!listaDocumentosCobranca.isEmpty()) {
+		          cobrancaDocumento = listaDocumentosCobranca.iterator().next();
+		        }
 				if(cobrancaDocumento != null && cobrancaDocumento.getValorAcrescimos() != null 
 						&& cobrancaDocumento.getValorAcrescimos().compareTo(new BigDecimal("0.00")) != 0) {
 					colecaoPagamentos.addAll(processarRecebimentoAcrescimosImpontualidadePorCliente(
