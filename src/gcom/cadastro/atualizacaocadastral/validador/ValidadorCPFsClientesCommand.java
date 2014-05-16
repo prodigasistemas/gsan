@@ -4,6 +4,7 @@ import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastralImovel;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.IRepositorioClienteImovel;
+import gcom.util.ConstantesSistema;
 import gcom.util.Util;
 
 import java.util.Collection;
@@ -17,46 +18,70 @@ public class ValidadorCPFsClientesCommand extends ValidadorCommand {
 
 	private IRepositorioClienteImovel repositorioClienteImovel;
 
-	public ValidadorCPFsClientesCommand(AtualizacaoCadastralImovel cadastroImovel
-			, Map<String, String> linha
-			, IRepositorioClienteImovel repositorioClienteImovel) {
+	public ValidadorCPFsClientesCommand(AtualizacaoCadastralImovel cadastroImovel,
+			Map<String, String> linha,
+			IRepositorioClienteImovel repositorioClienteImovel) {
 		super(cadastroImovel, linha);
 		this.repositorioClienteImovel = repositorioClienteImovel;
 	}
 	
-	public void execute() throws Exception{
-		validaCampoCpfCnpj("Usuario");
-		validaCampoCpfCnpj("Proprietario");
-		validaCampoCpfCnpj("Responsavel");
+	public void execute() throws Exception {
+		validarCampoCpfCnpj("Usuario");
+		validarCampoCpfCnpj("Proprietario");
+		validarCampoCpfCnpj("Responsavel");
 		
 		Collection<ClienteImovel> clientes = repositorioClienteImovel.pesquisarClienteImovel(cadastroImovel.getMatricula());
 		
-		validaCpfCnpjComBase(linha, clientes, "Usuario", ClienteRelacaoTipo.USUARIO);
-		validaCpfCnpjComBase(linha, clientes, "Proprietario", ClienteRelacaoTipo.PROPRIETARIO);
-		validaCpfCnpjComBase(linha, clientes, "Responsavel", ClienteRelacaoTipo.RESPONSAVEL);
+		validarCpfCnpjComBase(linha, clientes, "Usuario", ClienteRelacaoTipo.USUARIO);
+		validarCpfCnpjComBase(linha, clientes, "Proprietario", ClienteRelacaoTipo.PROPRIETARIO);
+		validarCpfCnpjComBase(linha, clientes, "Responsavel", ClienteRelacaoTipo.RESPONSAVEL);
 	}
 	
-	private void validaCampoCpfCnpj(String cliente){
-		if (StringUtils.isNotEmpty(linha.get("cnpjCpf" + cliente)) && Util.cpfCnpjInvalido(linha.get("cnpjCpf" + cliente))){
+	private void validarCampoCpfCnpj(String cliente) {
+		
+		if (StringUtils.isNotEmpty(linha.get("cnpjCpf" + cliente))
+				&& Util.cpfCnpjInvalido(linha.get("cnpjCpf" + cliente))) {
 			cadastroImovel.addMensagemErro(String.format(MSG_FORMATO_CPF_CNPJ_INVALIDO, cliente.toLowerCase()));
 		}
 	}
 
-	private void validaCpfCnpjComBase(Map<String, String> linha, Collection<ClienteImovel> clientes, String cliente, Short relacao) {
-		if (StringUtils.isEmpty(linha.get("cnpjCpf" + cliente))){
-			String cpfCnpj = "";
+	private void validarCpfCnpjComBase(Map<String, String> linha,
+			Collection<ClienteImovel> clientes,  String cliente, Short relacao) {
+		
+		Integer matriculaRetorno = Integer.valueOf(linha.get("matricula" + cliente));
+		String cpfCpnjRetorno = linha.get("cnpjCpf" + cliente);
+		
+		if (StringUtils.isEmpty(cpfCpnjRetorno)) {
+			
 			for (ClienteImovel clienteImovel : clientes) {
-				if (clienteImovel.getClienteRelacaoTipo().getId().intValue() == (int) relacao){
-					cpfCnpj = clienteImovel.getCliente().getCpf();
-					if (StringUtils.isEmpty(cpfCnpj)){
-						cpfCnpj = clienteImovel.getCliente().getCnpj();
-					}
-					if (StringUtils.isNotEmpty(cpfCnpj)){
-						cadastroImovel.addMensagemErro(String.format(MSG_CPF_CNPJ_INVALIDO_BASE, cliente));
+				
+				int relacaoTipoBase = clienteImovel.getClienteRelacaoTipo().getId().intValue();
+				
+				if ((relacao.equals(ClienteRelacaoTipo.USUARIO))
+						|| (relacao.equals(ClienteRelacaoTipo.PROPRIETARIO)
+								&& linha.get("usuarioProprietario").equals(String.valueOf(ConstantesSistema.NAO)))
+						|| (relacao.equals(ClienteRelacaoTipo.RESPONSAVEL) 
+								&& linha.get("tipoResponsavel").equals(String.valueOf(ConstantesSistema.NAO)))) {
+
+					if (relacaoTipoBase == (int) relacao && matriculaRetorno.equals(clienteImovel.getCliente().getId())) {
+						verificarCpfCnpjVazio(cliente, clienteImovel);
 					}
 				}
 			}
-			
+		}
+	}
+
+	private void verificarCpfCnpjVazio(String cliente,
+			ClienteImovel clienteImovel) {
+		
+		String cpfCnpj = clienteImovel.getCliente().getCpf();
+		
+		if (StringUtils.isEmpty(cpfCnpj)) {
+			cpfCnpj = clienteImovel.getCliente().getCnpj();
+		}
+		
+		if (StringUtils.isNotEmpty(cpfCnpj)) {
+			cadastroImovel.addMensagemErro(String.format(MSG_CPF_CNPJ_INVALIDO_BASE, cliente));
 		}
 	}
 }
