@@ -299,20 +299,9 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 		}
 	}
 
-	/**
-	 * [UC0631] Processar Requisições do Dispositivo Móvel.
-	 * 
-	 * Método que finaliza as movimentações.
-	 * 
-	 * @author Bruno Barros
-	 * @date 10/11/2009
-	 * 
-	 * @throws IOException
-	 * 
-	 */
-	public void finalizarMovimentacao(DataInputStream data,
-			HttpServletResponse response, OutputStream out, int tipoFinalizacao)
-			throws IOException {
+	@SuppressWarnings("unchecked")
+	public void finalizarMovimentacao(DataInputStream data, HttpServletResponse response, OutputStream out, int tipoFinalizacao) throws IOException {
+		
 		Fachada fachada = Fachada.getInstancia();
 		long imei = data.readLong();
 		Integer idRota = 0;
@@ -335,41 +324,30 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 			codRota = Integer.parseInt(registro0.substring(8,15));
 
 			if (registro0.length() == 17) {
-				numeroSequenciaArquivo = Integer.parseInt(registro0.substring(
-						15, 17));
-				idRota = fachada.obterIdRotaPorSetorComercialELocalidade(
-						codRota, setorComercial, idLocalidade);
+				numeroSequenciaArquivo = Integer.parseInt(registro0.substring(15, 17));
+				idRota = fachada.obterIdRotaPorSetorComercialELocalidade(codRota, setorComercial, idLocalidade);
 			} else {
 				idRota = Integer.parseInt(registro0.substring(15, 19));
-				numeroSequenciaArquivo = Integer.parseInt(registro0.substring(
-						19, 21));
+				numeroSequenciaArquivo = Integer.parseInt(registro0.substring(19, 21));
 			}
 
-			// Caso não encotremos essa rota, pesquisamos
-			// assumindo que o imovel possue rota alternativa
 			if (idRota == null) {
 				String primeiroRegistro = buffer.readLine();
-				Integer matricula = Integer.parseInt(primeiroRegistro
-						.substring(1, 10));
+				Integer matricula = Integer.parseInt(primeiroRegistro.substring(1, 10));
 
 				FiltroImovel filtroImovel = new FiltroImovel();
-				filtroImovel
-						.adicionarCaminhoParaCarregamentoEntidade("rotaAlternativa.setorComercial");
-				filtroImovel.adicionarParametro(new ParametroSimples(
-						FiltroImovel.ID, matricula));
-				Collection<Imovel> colImovel = Fachada.getInstancia()
-						.pesquisar(filtroImovel, Imovel.class.getName());
+				filtroImovel.adicionarCaminhoParaCarregamentoEntidade("rotaAlternativa.setorComercial");
+				filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, matricula));
+				
+				Collection<Imovel> colImovel = Fachada.getInstancia().pesquisar(filtroImovel, Imovel.class.getName());
 				Imovel imo = (Imovel) Util.retonarObjetoDeColecao(colImovel);
 
 				idLocalidade = imo.getLocalidade().getId();
-				setorComercial = imo.getRotaAlternativa().getSetorComercial()
-						.getCodigo();
+				setorComercial = imo.getRotaAlternativa().getSetorComercial().getCodigo();
 				codRota = imo.getRotaAlternativa().getCodigo().intValue();
 
-				idRota = fachada.obterIdRotaPorSetorComercialELocalidade(
-						codRota, setorComercial, idLocalidade);
+				idRota = fachada.obterIdRotaPorSetorComercialELocalidade(codRota, setorComercial, idLocalidade);
 
-				// Remontamos o buffer
 				String linha;
 				StringBuffer arquivo = new StringBuffer();
 				arquivo.append(primeiroRegistro + "\n");
@@ -378,42 +356,24 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 					arquivo.append(linha + "\n");
 				}
 
-				InputStream is = new ByteArrayInputStream(arquivo.toString()
-						.getBytes());
+				InputStream is = new ByteArrayInputStream(arquivo.toString().getBytes());
 				InputStreamReader readerRetorno = new InputStreamReader(is);
 				buffer = new BufferedReader(readerRetorno);
 			}
 
-			// Verificamos se a quantidade de imóveis que chegaram é mesma
-			// gerada no arquivo de ida
-			Integer anoMesFaturamento = fachada
-					.retornaAnoMesFaturamentoGrupoDaRota(idRota);
+			Integer anoMesFaturamento = fachada.retornaAnoMesFaturamentoGrupoDaRota(idRota);
 
-			/**
-			 * Informaçõea para salvar o arquivo de retorno do IS Pamela Gatinho
-			 * 20/03/2012
-			 */
+			Localidade localidade = new Localidade(idLocalidade);
+
 			ArquivoTextoRetornoIS arquivoRetorno = new ArquivoTextoRetornoIS();
 			arquivoRetorno.setAnoMesReferencia(anoMesFaturamento);
 			arquivoRetorno.setCodigoRota(codRota);
 			arquivoRetorno.setCodigoSetorComercial(setorComercial);
-
-			Localidade localidade = new Localidade();
-			localidade.setId(idLocalidade);
 			arquivoRetorno.setLocalidade(localidade);
-
+			arquivoRetorno.setNomeArquivo(fachada.obterNomeArquivoRetorno(arquivoRetorno).toString());
 			arquivoRetorno.setTempoRetornoArquivo(new Date());
 			arquivoRetorno.setTipoFinalizacao(new Short(tipoFinalizacao + ""));
 			arquivoRetorno.setUltimaAlteracao(new Date());
-
-			String nomeArquivo = fachada.obterNomeArquivoRetorno(
-					arquivoRetorno.getLocalidade(),
-					arquivoRetorno.getCodigoSetorComercial(),
-					arquivoRetorno.getCodigoRota(),
-					arquivoRetorno.getAnoMesReferencia(),
-					arquivoRetorno.getTipoFinalizacao()).toString();
-
-			arquivoRetorno.setNomeArquivo(nomeArquivo);
 
 			/**
 			 * TODO - COSANPA Adicionando informacoes da rota para ser mostradas
