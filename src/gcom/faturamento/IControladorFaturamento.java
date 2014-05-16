@@ -5644,8 +5644,7 @@ public interface IControladorFaturamento {
 	public BigDecimal[] calcularValorRateioImovel(Imovel imovel,  FaturamentoGrupo faturamentoGrupo) 
 		throws ControladorException, ErroRepositorioException;
 	
-	public StringBuilder obterNomeArquivoRetorno(Localidade localidade, Integer codigoSetor,
-    		Integer codigoRota, Integer anoMesReferencia, Short tipoFinalizacao);
+	public StringBuilder obterNomeArquivoRetorno(ArquivoTextoRetornoIS arquivoRetorno);
 	
 	public MovimentoContaPrefaturada obterMovimentoImovel(Integer idImovel, Integer anoMesReferencia) throws ControladorException;
 	
