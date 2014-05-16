@@ -56450,7 +56450,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * @return MovimentoContaPrefaturada
 	 * @throws ErroRepositorioException
 	 */
-	public MovimentoContaPrefaturada pesquisarMovimentoContaPrefaturada(Integer idConta, Integer idMedicaoTipo)
+	public MovimentoContaPrefaturada pesquisarMovimentoContaPrefaturadaPorIdConta(Integer idConta, Integer idMedicaoTipo)
 		throws ErroRepositorioException {
 	
 		MovimentoContaPrefaturada retorno = null;
