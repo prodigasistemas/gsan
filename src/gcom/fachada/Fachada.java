@@ -51858,10 +51858,9 @@ public class Fachada {
 	 * @param tipoFinalizacao
 	 * @throws ErroRepositorioException
 	 */
-	public StringBuilder obterNomeArquivoRetorno(Localidade localidade, Integer codigoSetor,
-    		Integer codigoRota, Integer anoMesReferencia, Short tipoFinalizacao) {
+	public StringBuilder obterNomeArquivoRetorno(ArquivoTextoRetornoIS arquivoRetorno) {
 		
-		return getControladorFaturamento().obterNomeArquivoRetorno(localidade, codigoSetor, codigoRota, anoMesReferencia, tipoFinalizacao);
+		return getControladorFaturamento().obterNomeArquivoRetorno(arquivoRetorno);
 	}
 	
 	/**
