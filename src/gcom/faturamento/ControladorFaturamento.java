@@ -201,6 +201,8 @@ import java.util.Map;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipOutputStream;
 
+import org.jboss.logging.Logger;
+
 import javax.ejb.EJBException;
 
 import org.hibernate.LazyInitializationException;
@@ -209,20 +211,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	private static final long serialVersionUID = 1L;
 
-	/**
-	 * [UC0146] Manter Conta
-	 * 
-	 * [SB0008] Retificar Conjunto Conta
-	 * 
-	 * [FS0033] Verificar permissão especial para informar apenas volume de
-	 * esgoto
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 02/07/2009
-	 * 
-	 * @param helper
-	 * @throws ControladorException
-	 */
+	private static Logger logger = Logger.getLogger(ControladorFaturamento.class);
+	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void retificarConjuntoContaConsumos(
 			Integer idFuncionalidadeIniciada, Map parametros)
 			throws ControladorException {
@@ -1584,118 +1575,58 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	}
 
-	/**
-	 * 
-	 * [UC0923] Incluir Movimento Conta Pré-Faturada
-	 * 
-	 * @author bruno
-	 * @date 30/06/2009
-	 * 
-	 * 
-	 */
-		/*
-		* TODO : COSANPA
-		* 02/05/2011 - Pamela Gatinho
-		* Adicionando o ID da rota como informacao para finalizar o arquivo de rota.
-		*/
-		private Object[] incluirMovimentoContaPreFaturada( BufferedReader buffer, Integer idRota,
-			ArquivoTextoRetornoIS arquivoTextoRetornoIS, BufferedReader bufferOriginal)
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	private Object[] incluirMovimentoContaPreFaturada( BufferedReader buffer, Integer idRota,
+		ArquivoTextoRetornoIS arquivoTextoRetornoIS, BufferedReader bufferOriginal)
 			throws ControladorException, MobileComunicationException {
-
-		// Criamos o arquivo de retorno ou então inserimos os dados
+		
 		byte[] relatorioRetorno = null;
-
+		
 		Object[] retorno = new Object[3];
-
+		
 		try {
-			// Convertemos o arquivo em uma coleção de Helpers
 			AtualizarContaPreFaturadaHelper helper = new AtualizarContaPreFaturadaHelper();
 			Collection<AtualizarContaPreFaturadaHelper> colecaoAtualizarContaPreFaturadaHelper = new ArrayList();
 			AtualizarContaPreFaturadaHelper helperDadosCabecalho = null;
-
-			Collection<AtualizarContaPreFaturadaHelper> colHelper = helper
-					.parseHelper(buffer);
-
-			// 2. O sistema valida os dados.
-			// Coletamos todos os erros
+		
+			Collection<AtualizarContaPreFaturadaHelper> colHelper = helper.parseHelper(buffer);
+		
 			Collection<String> errors = new ArrayList();
-
-			// [FS0008 - Verificar seqüência dos tipos de registro]
-			// Para essa validação, precisamos ler todo o arquivo
+		
 			errors.addAll(verificarSequenciaTiposRegistros(colHelper));
-
-			// Para as outras, validamos linha a linha para economizar
-			// processamento
-			// Verificamos que:
+		
 			Integer matriculaImovel = null;
 			for (AtualizarContaPreFaturadaHelper helperLaco : colHelper) {
-
-				if (helperLaco.getTipoRegistro() == 1
-						&& (matriculaImovel == null || !matriculaImovel
-								.equals(helperLaco.getMatriculaImovel()))) {
+		
+				if (helperLaco.getTipoRegistro() == 1 && (matriculaImovel == null || !matriculaImovel.equals(helperLaco.getMatriculaImovel()))) {
 					matriculaImovel = helperLaco.getMatriculaImovel();
 					colecaoAtualizarContaPreFaturadaHelper.add(helperLaco);
 					helperDadosCabecalho = helperLaco;
 				}
-
-				// [FS0009] - Verificar valor do tipo de registro]
+		
 				errors.addAll(verificarValorTipoRegistro(helperLaco));
-
-				// [FS0002 - Verificar existência da matrícula do imóvel]
 				errors.addAll(verificarExistenciaMatriculaImovel(helperLaco));
-
-				// [FS0003] - Verificar tipo de medição
 				errors.addAll(verificarTipoMedicao(helperLaco));
-
-				// [FS0001] - Verificar existência do grupo de faturamento
-				// de leitura
 				errors.addAll(verificarExistenciaFaturamentoGrupo(helperLaco));
-
-				// [FS0005] - Verificar existência do código da anormalidade
-				// de leitura
 				errors.addAll(verificarExistenciaCodigoAnormalidadeLeitura(helperLaco));
-
-				// [FS0004 - Verificar data e hora da leitura]
 				errors.addAll(verificarDataHoraLeitura(helperLaco));
-
-				// [FS0006] - Validar indicador de confirmação de leitura
 				errors.addAll(validarIndicadorConfirmacaoLeitura(helperLaco));
-
-				// [FS0012] - Verificar existência do código da anormalidade de
-				// consumo
 				errors.addAll(verificarExistenciaCodigoAnormalidadeConsumo(helperLaco));
-
-				// [FS0011] - Verificar existência da categoria
 				errors.addAll(verificarExistenciaCategoria(helperLaco));
-
-				// [FS0010] - Verificar existência do tipo do imposto
 				errors.addAll(verificarExistenciaImpostoTipo(helperLaco));
 			}
-
-			if (errors != null && errors.size() > 0
-					&& helperDadosCabecalho != null) {
-				// [SB0001] - Gera Tela Resumo das leituras e anormalidades da
-				// impressão simultânea com Problemas
-				relatorioRetorno = geraResumoInconsistenciasLeiturasAnormalidades(
-						errors, helperDadosCabecalho);
+		
+			if (errors != null && errors.size() > 0 && helperDadosCabecalho != null) {
+				relatorioRetorno = geraResumoInconsistenciasLeiturasAnormalidades(errors, helperDadosCabecalho);
 			} else {
 				try {
-                    // [SB0002] - Inclui Dados Movimentos Conta Pré-Faturada
-                    incluiDadosMovimentosContaPreFaturada( colHelper, idRota);
-                    
-                    /**
-                     * TODO : COSANPA
-                     * Pamela Gatinho - 08/03/2012
-                     * Adicionando parser para salvar o arquivo de retorno
-                     * do IS no Gsan.
-                     */
-                    incluiDadosArquivoRetorno(arquivoTextoRetornoIS, bufferOriginal, colHelper, idRota);
+		            incluiDadosMovimentosContaPreFaturada( colHelper, idRota);
+		            incluiDadosArquivoRetorno(arquivoTextoRetornoIS, bufferOriginal, colHelper, idRota);
 					} catch (ErroRepositorioException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
+						logger.error("Erro ao incluir movimento conta pre faturada", e);
 					}
 			}
-
+		
 			retorno[0] = relatorioRetorno;
 			retorno[1] = colecaoAtualizarContaPreFaturadaHelper;
 		} catch (IOException e) {
@@ -2643,131 +2574,75 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 						parametros, ds, TarefaRelatorio.TIPO_PDF);
 	}
 
-	/**
-	 * 
-	 * Este caso de uso permite a inserção de dados na tabela movimento conta
-	 * pré-faturada.
-	 * 
-	 * [UC0923] Incluir Movimento Conta Pré-Faturada
-	 * 
-	 * [SB0002] - Inclui Dados Movimentos Conta Pré-Faturada
-	 * 
-	 * @author bruno
-	 * @date 30/06/2009
-	 * 
-	 * @param colErrors
-	 */
-	/*
-     * TODO : COSANPA
-     * 02/05/2011 - Pamela Gatinho
-     * Adicionando o ID da rota como informacao para finalizar o arquivo de rota.
-     */
-	private void incluiDadosMovimentosContaPreFaturada(
-			Collection<AtualizarContaPreFaturadaHelper> colHelper, Integer idRota ) 
+	@SuppressWarnings({ "unchecked", "rawtypes", "rawtypes" })
+	private void incluiDadosMovimentosContaPreFaturada(Collection<AtualizarContaPreFaturadaHelper> colHelper, Integer idRota ) 
     		throws ControladorException, MobileComunicationException{
 
 		String matriculaImovel = "";
-
-		Collection<RotaAtualizacaoSeq> colAtuSeq = new ArrayList();
-
-		// Pesquisamos o ano mes de faturamento do grupo
 		Integer anoMesFaturamentoGrupoFaturamento = null;
 		Rota rota = null;
+
+		Collection<RotaAtualizacaoSeq> colAtuSeq = new ArrayList();
 		Collection moviContaPF = new ArrayList();
 
 		try {
 			MovimentoContaPrefaturada movimentoContaPreFaturadaIncluido = null;
 			MovimentoContaPrefaturadaCategoria movimentoContaPrefaturadaCategoriaIncluido = null;
 
-			SistemaParametro sistemaParametro = getControladorUtil()
-					.pesquisarParametrosDoSistema();
+			SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
 			boolean jaSelecionouRegistroTipo1 = false;
 			Object[] dadosArquivoTextoRoteiroEmpresa = null;
 
 			for (AtualizarContaPreFaturadaHelper helper : colHelper) {
 				
-				if (helper.getTipoRegistro().equals(
-						AtualizarContaPreFaturadaHelper.REGISTRO_TIPO_1)) {
+				if (helper.getTipoRegistro().equals(AtualizarContaPreFaturadaHelper.REGISTRO_TIPO_1)) {
 					
-					/*Com essa condição impede-se que em casos do imóvel ter ligação de agua e esgoto, 
-	        		essa consulta seja realizada mais de uma vez */
 	        		if(moviContaPF.isEmpty()) {
-	        			/**TODO:COSANPA
-	        			 * Data: 11/10/2011
-	        			 * Autor: Adriana Muniz
-	        			 * 
-	        			 * Verifica se já algum registro para o imóvel para uma determinada referência
-	        			 * Essa verificação é realizada aqui, pois toda vez que o imóvel é retransmitido
-	        			 * os dados da tabela mov_conta_prefaturada são deletados, então nesse ponto
-	        			 * essa ação de exclusão ainda não foi realizada.
-	        			 * */
-	        			//pesquisa a referencia do grupo
-	        			Imovel imovelMovimentoContaPF = this.getControladorImovel().pesquisarImovel(
-	        					helper.getMatriculaImovel());
-	        			Integer amReferenciaGrupo = repositorioFaturamento.retornaAnoMesFaturamentoGrupo(
-	        					imovelMovimentoContaPF.getId());
+	        			Imovel imovelMovimentoContaPF = this.getControladorImovel().pesquisarImovel(helper.getMatriculaImovel());
+	        			Integer amReferenciaGrupo = repositorioFaturamento.retornaAnoMesFaturamentoGrupo(imovelMovimentoContaPF.getId());
 
-	        			//verifico se já há algum registro para o imovel naquela referência
-	        			moviContaPF = repositorioFaturamento.pesquisaMovimentoContaPF(
-	        					imovelMovimentoContaPF.getId(), amReferenciaGrupo);
+	        			moviContaPF = repositorioFaturamento.pesquisaMovimentoContaPF(imovelMovimentoContaPF.getId(), amReferenciaGrupo);
 	        		}
 	        		
 					if ((rota == null || rota.equals(""))) {
 						if (idRota != null) {
-							rota = this.getControladorMicromedicao()
-									.pesquisarRota(idRota);
+							rota = this.getControladorMicromedicao().pesquisarRota(idRota);
 						} else {
 							rota = pesquisarRotaImpressaoSimultanea(helper);
 						}
+						
 						if (rota != null && !rota.equals("")) {
-							dadosArquivoTextoRoteiroEmpresa = repositorioFaturamento
-									.pesquisarArquivoTextoRoteiroEmpresa(
-											rota.getId(),
-											helper.getAnoMesFaturamento());
+							dadosArquivoTextoRoteiroEmpresa = repositorioFaturamento.pesquisarArquivoTextoRoteiroEmpresa(rota.getId(),helper.getAnoMesFaturamento());
+							
 							if (dadosArquivoTextoRoteiroEmpresa != null) {
 								Integer idSituacaoTransmissaoLeitura = (Integer) dadosArquivoTextoRoteiroEmpresa[1];
-								if (!idSituacaoTransmissaoLeitura
-										.equals(SituacaoTransmissaoLeitura.DISPONIVEL)
-										&& !idSituacaoTransmissaoLeitura
-												.equals(SituacaoTransmissaoLeitura.LIBERADO)
-										&& !idSituacaoTransmissaoLeitura
-												.equals(SituacaoTransmissaoLeitura.EM_CAMPO)
-										&& !idSituacaoTransmissaoLeitura
-												.equals(SituacaoTransmissaoLeitura.FINALIZADO_NAO_TRANSMITIDO)) {
-									matriculaImovel = ""
-											+ helper.getMatriculaImovel();
-									throw new MobileComunicationException(
-											"atencao.arquivo_ja_finalizado",
-											null);
+							
+								if (!idSituacaoTransmissaoLeitura.equals(SituacaoTransmissaoLeitura.DISPONIVEL)
+										&& !idSituacaoTransmissaoLeitura.equals(SituacaoTransmissaoLeitura.LIBERADO)
+										&& !idSituacaoTransmissaoLeitura.equals(SituacaoTransmissaoLeitura.EM_CAMPO)
+										&& !idSituacaoTransmissaoLeitura.equals(SituacaoTransmissaoLeitura.FINALIZADO_NAO_TRANSMITIDO)) {
+									
+									matriculaImovel = "" + helper.getMatriculaImovel();
+									throw new MobileComunicationException("atencao.arquivo_ja_finalizado", null);
 								}
 							}
 
-							if (rota.getFaturamentoGrupo() != null
-									&& !rota.getFaturamentoGrupo().equals("")) {
-								Integer anoMesGrupo = rota
-										.getFaturamentoGrupo()
-										.getAnoMesReferencia();
-								if (helper.getAnoMesFaturamento() != null
-										&& helper.getAnoMesFaturamento() != 0) {
-									if (!anoMesGrupo.equals(helper
-											.getAnoMesFaturamento())) {
-										matriculaImovel = ""
-												+ helper.getMatriculaImovel();
-										throw new MobileComunicationException(
-												"atencao.grupo_ja_faturado",
-												null);
+							if (rota.getFaturamentoGrupo() != null 	&& !rota.getFaturamentoGrupo().equals("")) {
+								Integer anoMesGrupo = rota.getFaturamentoGrupo().getAnoMesReferencia();
+								
+								if (helper.getAnoMesFaturamento() != null && helper.getAnoMesFaturamento() != 0) {
+									
+									if (!anoMesGrupo.equals(helper.getAnoMesFaturamento())) {
+										matriculaImovel = "" + helper.getMatriculaImovel();
+										throw new MobileComunicationException("atencao.grupo_ja_faturado",	null);
 									}
 								}
 							}
 						}
 					}
 
-					// Limpamos
-					this.removerDadosMovimentosContaPreFaturada(
-							helper.getNumeroConta(),
-							helper.getMatriculaImovel(),
-							helper.getAnoMesFaturamento());
+					this.removerDadosMovimentosContaPreFaturada(helper);
 
 				}
 			}
@@ -6714,111 +6589,58 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 
-	/**
-	 * 
-	 * Este caso de uso permite a inserção de dados na tabela movimento conta
-	 * pré-faturada.
-	 * 
-	 * [UC0923] Incluir Movimento Conta Pré-Faturada
-	 * 
-	 * [SB000X] - Remove todos os dados incluidos
-	 * 
-	 * @author bruno
-	 * @date 30/06/2009
-	 * 
-	 * @param colErrors
-	 */
-	private void removerDadosMovimentosContaPreFaturada(Integer idConta,
-			Integer idImovel, Integer anoMes) throws ControladorException {
-
+	private void removerDadosMovimentosContaPreFaturada(AtualizarContaPreFaturadaHelper helper) throws ControladorException {
 		try {
 
-			FiltroMovimentoContaPrefaturada filtroMovimentoContaPrefaturada = new FiltroMovimentoContaPrefaturada();
-			filtroMovimentoContaPrefaturada
-					.adicionarParametro(new ParametroSimples(
-							FiltroMovimentoContaPrefaturada.MATRICULA, idImovel));
-			filtroMovimentoContaPrefaturada
-					.adicionarParametro(new ParametroSimples(
-							FiltroMovimentoContaPrefaturada.ANO_MES_REFERENCIA_PRE_FATURAMENTO,
-							anoMes));
+			Integer idConta = helper.getNumeroConta();
+			
+			FiltroMovimentoContaPrefaturada filtroMovContaPF = new FiltroMovimentoContaPrefaturada();
+			filtroMovContaPF.adicionarParametro(new ParametroSimples(FiltroMovimentoContaPrefaturada.MATRICULA, helper.getMatriculaImovel()));
+			filtroMovContaPF.adicionarParametro(new ParametroSimples(FiltroMovimentoContaPrefaturada.ANO_MES_REFERENCIA_PRE_FATURAMENTO,	helper.getAnoMesFaturamento()));
 
-			Collection<MovimentoContaPrefaturada> colMovimento = getControladorUtil()
-					.pesquisar(filtroMovimentoContaPrefaturada,
-							MovimentoContaPrefaturada.class.getName());
+			Collection<MovimentoContaPrefaturada> colMovimento = getControladorUtil().pesquisar(filtroMovContaPF,	MovimentoContaPrefaturada.class.getName());
 
 			for (MovimentoContaPrefaturada movimento : colMovimento) {
 
-				// Pesquisamos mov_conta_prefat_catg
-				FiltroMovimentoContaPrefaturadaCategoria filtroMovimentoContaPrefaturadaCategoria = new FiltroMovimentoContaPrefaturadaCategoria();
-				filtroMovimentoContaPrefaturadaCategoria
-						.adicionarParametro(new ParametroSimples(
-								FiltroMovimentoContaPrefaturadaCategoria.MOVIMENTO_CONTA_PREFATURADA_ID,
-								movimento.getId()));
+				FiltroMovimentoContaPrefaturadaCategoria filtroMovContaPFCategoria = new FiltroMovimentoContaPrefaturadaCategoria();
+				filtroMovContaPFCategoria.adicionarParametro(new ParametroSimples(FiltroMovimentoContaPrefaturadaCategoria.MOVIMENTO_CONTA_PREFATURADA_ID, movimento.getId()));
 
-				Collection<MovimentoContaPrefaturadaCategoria> colMovimentoContaPrefaturadaCategoria = getControladorUtil()
-						.pesquisar(
-								filtroMovimentoContaPrefaturadaCategoria,
-								MovimentoContaPrefaturadaCategoria.class
-										.getName());
+				Collection<MovimentoContaPrefaturadaCategoria> colMovimentoContaPFCategoria = getControladorUtil()
+						.pesquisar(filtroMovContaPFCategoria, MovimentoContaPrefaturadaCategoria.class.getName());
 
-				for (MovimentoContaPrefaturadaCategoria movimentoCategoria : colMovimentoContaPrefaturadaCategoria) {
+				for (MovimentoContaPrefaturadaCategoria movimentoCategoria : colMovimentoContaPFCategoria) {
 
-					FiltroMovimentoContaCategoriaConsumoFaixa filtroMovimentoContaCategoriaConsumoFaixa = new FiltroMovimentoContaCategoriaConsumoFaixa();
-					filtroMovimentoContaCategoriaConsumoFaixa
-							.adicionarParametro(new ParametroSimples(
-									FiltroMovimentoContaCategoriaConsumoFaixa.MOVIMENTO_CONTA_PREFATURADA_ID,
-									movimento.getId()));
+					FiltroMovimentoContaCategoriaConsumoFaixa filtroMovContaCategoriaConsumoFaixa = new FiltroMovimentoContaCategoriaConsumoFaixa();
+					filtroMovContaCategoriaConsumoFaixa.adicionarParametro(new ParametroSimples(FiltroMovimentoContaCategoriaConsumoFaixa.MOVIMENTO_CONTA_PREFATURADA_ID, movimento.getId()));
 
 					Collection<MovimentoContaCategoriaConsumoFaixa> colMovimentoContaCategoriaConsumoFaixa = getControladorUtil()
-							.pesquisar(
-									filtroMovimentoContaCategoriaConsumoFaixa,
-									MovimentoContaCategoriaConsumoFaixa.class
-											.getName());
+							.pesquisar(filtroMovContaCategoriaConsumoFaixa, MovimentoContaCategoriaConsumoFaixa.class.getName());
 
-					// Removemos movimento_conta_categoria_consumo_faixa
-					getControladorBatch()
-							.removerColecaoObjetoParaBatchSemTransacao(
-									colMovimentoContaCategoriaConsumoFaixa);
-
-					getControladorBatch().removerObjetoParaBatchSemTransacao(
-							movimentoCategoria);
+					getControladorBatch().removerColecaoObjetoParaBatchSemTransacao(colMovimentoContaCategoriaConsumoFaixa);
+					getControladorBatch().removerObjetoParaBatchSemTransacao(movimentoCategoria);
 				}
 
-				// Pesquisamos movimento_conta_imposto_deduzido
-				FiltroMovimentoContaImpostoDeduzido filtroMovimentoContaImpostoDeduzido = new FiltroMovimentoContaImpostoDeduzido();
-				filtroMovimentoContaImpostoDeduzido
-						.adicionarParametro(new ParametroSimples(
-								FiltroMovimentoContaImpostoDeduzido.MOVIMENTO_CONTA_PREFATURADA_ID,
-								movimento.getId()));
+				FiltroMovimentoContaImpostoDeduzido filtroMovContaImpostoDeduzido = new FiltroMovimentoContaImpostoDeduzido();
+				filtroMovContaImpostoDeduzido.adicionarParametro(new ParametroSimples(FiltroMovimentoContaImpostoDeduzido.MOVIMENTO_CONTA_PREFATURADA_ID, movimento.getId()));
 
 				Collection<MovimentoContaImpostoDeduzido> colMovimentoContaImpostoDeduzido = getControladorUtil()
-						.pesquisar(filtroMovimentoContaImpostoDeduzido,
-								MovimentoContaImpostoDeduzido.class.getName());
+						.pesquisar(filtroMovContaImpostoDeduzido, MovimentoContaImpostoDeduzido.class.getName());
 
-				// Removemos movimento_conta_imposto_deduzidos
-				if (colMovimentoContaImpostoDeduzido != null
-						&& !colMovimentoContaImpostoDeduzido.isEmpty()) {
-					getControladorBatch()
-							.removerColecaoObjetoParaBatchSemTransacao(
-									colMovimentoContaImpostoDeduzido);
+				if (colMovimentoContaImpostoDeduzido != null && !colMovimentoContaImpostoDeduzido.isEmpty()) {
+					getControladorBatch().removerColecaoObjetoParaBatchSemTransacao(colMovimentoContaImpostoDeduzido);
 				}
 
-				getControladorBatch().removerObjetoParaBatchSemTransacao(
-						movimento);
+				getControladorBatch().removerObjetoParaBatchSemTransacao(movimento);
 			}
 
 			FiltroConta filtroConta = new FiltroConta();
-			filtroConta.adicionarParametro(new ParametroSimples(FiltroConta.ID,
-					idConta));
+			filtroConta.adicionarParametro(new ParametroSimples(FiltroConta.ID, idConta));
 
-			Collection<Conta> colConta = getControladorUtil().pesquisar(
-					filtroConta, Conta.class.getName());
+			Collection<Conta> colConta = getControladorUtil().pesquisar(filtroConta, Conta.class.getName());
 
 			if (colConta == null || colConta.isEmpty()) {
 
-				Conta contaAtualizacao = repositorioFaturamento
-						.pesquisarContaPreFaturada(idImovel, anoMes,
-								DebitoCreditoSituacao.NORMAL);
+				Conta contaAtualizacao = repositorioFaturamento.pesquisarContaPreFaturada(helper.getMatriculaImovel(), helper.getAnoMesFaturamento(), DebitoCreditoSituacao.NORMAL);
 
 				colConta = new ArrayList();
 
@@ -6828,9 +6650,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 					colConta.add(contaAtualizacao);
 
 				} else {
-					contaAtualizacao = repositorioFaturamento
-							.pesquisarContaPreFaturada(idImovel, anoMes,
-									DebitoCreditoSituacao.PRE_FATURADA);
+					contaAtualizacao = repositorioFaturamento.pesquisarContaPreFaturada(helper.getMatriculaImovel(), helper.getAnoMesFaturamento(), DebitoCreditoSituacao.PRE_FATURADA);
 					if (contaAtualizacao != null) {
 						idConta = contaAtualizacao.getId();
 						colConta.add(contaAtualizacao);
@@ -6839,27 +6659,15 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 			}
 
-			// Caso o imóvel tenha situação especial de nitrato e exista um
-			// crédito com a situação igual a Normal
-			// atualiza o valor para 0 e a situação para PRE-FATURADA.
-			// pesquisa o crédito a realizar
-			/*
-			 * Object[] dadosCreditoARealizarNitrato = repositorioFaturamento
-			 * .pesquisarCreditoARealizar(idImovel, CreditoTipo.CREDITO_NITRATO,
-			 * DebitoCreditoSituacao.NORMAL, anoMes);
-			 */BigDecimal valorCreditoNitrato = null;
-
+			BigDecimal valorCreditoNitrato = null;
 			CreditoRealizado creditoRealizado = null;
 
-			Conta contaCreditos = new Conta();
-			contaCreditos.setId(idConta);
+			Conta contaCreditos = new Conta(idConta);
 
-			Collection<CreditoRealizado> colCreditos = Fachada.getInstancia()
-					.obterCreditosRealizadosConta(contaCreditos);
+			Collection<CreditoRealizado> colCreditos = Fachada.getInstancia().obterCreditosRealizadosConta(contaCreditos);
 
 			for (CreditoRealizado objeto : (Collection<CreditoRealizado>) colCreditos) {
-				if (objeto.getCreditoTipo().getId()
-						.equals(CreditoTipo.CREDITO_NITRATO)) {
+				if (objeto.getCreditoTipo().getId().equals(CreditoTipo.CREDITO_NITRATO)) {
 					creditoRealizado = objeto;
 				}
 			}
@@ -6867,85 +6675,53 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Object[] dadosCreditoARealizarNitrato = null;
 
 			if (creditoRealizado != null) {
-				dadosCreditoARealizarNitrato = repositorioFaturamento
-						.pesquisarCreditoARealizar(creditoRealizado
-								.getCreditoARealizarGeral().getId(), anoMes);
+				dadosCreditoARealizarNitrato = repositorioFaturamento.pesquisarCreditoARealizar(creditoRealizado.getCreditoARealizarGeral().getId(), helper.getAnoMesFaturamento());
 			}
 
-			if (dadosCreditoARealizarNitrato != null
-					&& !dadosCreditoARealizarNitrato.equals("")) {
+			if (dadosCreditoARealizarNitrato != null && !dadosCreditoARealizarNitrato.equals("")) {
 				BigDecimal valorCredito = new BigDecimal("0.00");
 				valorCreditoNitrato = new BigDecimal("0.00");
 				Integer idCreditoARealizarNitrato = (Integer) dadosCreditoARealizarNitrato[0];
 				valorCreditoNitrato = (BigDecimal) dadosCreditoARealizarNitrato[1];
-				// atualiza o crédito a realizar com o valor do crédito
-				// calculado
-				repositorioFaturamento.atualizarValorCreditoARealizar(
-						idCreditoARealizarNitrato, valorCredito,
-						DebitoCreditoSituacao.PRE_FATURADA);
+				repositorioFaturamento.atualizarValorCreditoARealizar(idCreditoARealizarNitrato, valorCredito, DebitoCreditoSituacao.PRE_FATURADA);
 			}
 
-			// Conta Categoria Consumo Faixa
 			FiltroContaCategoriaConsumoFaixa filtroContaCategoriaConsumoFaixa = new FiltroContaCategoriaConsumoFaixa();
-			filtroContaCategoriaConsumoFaixa
-					.adicionarParametro(new ParametroSimples(
-							FiltroContaCategoriaConsumoFaixa.CONTA_ID, idConta));
-			Collection<Object> colContaCategoriaConsumoFaixa = getControladorUtil()
-					.pesquisar(filtroContaCategoriaConsumoFaixa,
-							ContaCategoriaConsumoFaixa.class.getName());
+			filtroContaCategoriaConsumoFaixa.adicionarParametro(new ParametroSimples(FiltroContaCategoriaConsumoFaixa.CONTA_ID, idConta));
+			Collection<Object> colContaCategoriaConsumoFaixa = getControladorUtil().pesquisar(filtroContaCategoriaConsumoFaixa, ContaCategoriaConsumoFaixa.class.getName());
+			getControladorBatch().removerColecaoObjetoParaBatchSemTransacao(colContaCategoriaConsumoFaixa);
 
-			getControladorBatch().removerColecaoObjetoParaBatchSemTransacao(
-					colContaCategoriaConsumoFaixa);
-
-			// Faturamento Imediato Ajuste
 			FiltroFaturamentoImediatoAjuste filtroFaturamentoImediatoAjuste = new FiltroFaturamentoImediatoAjuste();
-			filtroFaturamentoImediatoAjuste
-					.adicionarParametro(new ParametroSimples(
-							FiltroFaturamentoImediatoAjuste.ID_CONTA, idConta));
+			filtroFaturamentoImediatoAjuste.adicionarParametro(new ParametroSimples(FiltroFaturamentoImediatoAjuste.ID_CONTA, idConta));
 
-			Collection<Object> colFaturamentoImediatoAjuste = getControladorUtil()
-					.pesquisar(filtroFaturamentoImediatoAjuste,
-							FaturamentoImediatoAjuste.class.getName());
+			Collection<Object> colFaturamentoImediatoAjuste = getControladorUtil().pesquisar(filtroFaturamentoImediatoAjuste, FaturamentoImediatoAjuste.class.getName());
+			getControladorBatch().removerColecaoObjetoParaBatchSemTransacao(colFaturamentoImediatoAjuste);
 
-			getControladorBatch().removerColecaoObjetoParaBatchSemTransacao(
-					colFaturamentoImediatoAjuste);
-
-			// Conta Impressao
 			FiltroContaImpressao filtroContaImpressao = new FiltroContaImpressao();
-			filtroContaImpressao.adicionarParametro(new ParametroSimples(
-					FiltroContaImpressao.ID, idConta));
+			filtroContaImpressao.adicionarParametro(new ParametroSimples(FiltroContaImpressao.ID, idConta));
 
-			Collection<Object> colContaImpressao = getControladorUtil()
-					.pesquisar(filtroContaImpressao,
-							ContaImpressao.class.getName());
-
-			getControladorBatch().removerColecaoObjetoParaBatchSemTransacao(
-					colContaImpressao);
+			Collection<Object> colContaImpressao = getControladorUtil().pesquisar(filtroContaImpressao,	ContaImpressao.class.getName());
+			getControladorBatch().removerColecaoObjetoParaBatchSemTransacao(colContaImpressao);
 
 			for (Conta conta : colConta) {
 
 				if (conta.getDebitoCreditoSituacaoAtual().getId() != DebitoCreditoSituacao.PRE_FATURADA) {
 
-					DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
-					debitoCreditoSituacao
-							.setId(DebitoCreditoSituacao.PRE_FATURADA);
+					DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao(DebitoCreditoSituacao.PRE_FATURADA);
 
 					conta.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
 					conta.setValorAgua(BigDecimal.ZERO);
 					conta.setValorEsgoto(BigDecimal.ZERO);
 					conta.setValorImposto(BigDecimal.ZERO);
 
-					// caso já exista valor de crédito
 					if (valorCreditoNitrato != null) {
 						BigDecimal valorCreditos = conta.getValorCreditos();
-						valorCreditos = valorCreditos
-								.subtract(valorCreditoNitrato);
+						valorCreditos = valorCreditos.subtract(valorCreditoNitrato);
 						conta.setValorCreditos(valorCreditos);
 					}
 
 					try {
-						repositorioFaturamento
-								.zerarValoresContaPassarDebitoCreditoSituacaoAtualPreFaturadaMOBILE(conta);
+						repositorioFaturamento.zerarValoresContaPassarDebitoCreditoSituacaoAtualPreFaturadaMOBILE(conta);
 					} catch (ErroRepositorioException e) {
 						throw new ControladorException("erro.sistema", e);
 					}
@@ -15492,7 +15268,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				try {
 
 					movimentoContaPrefaturadaAgua = repositorioFaturamento
-							.pesquisarMovimentoContaPrefaturada(conta.getId(),
+							.pesquisarMovimentoContaPrefaturadaPorIdConta(conta.getId(),
 									MedicaoTipo.LIGACAO_AGUA);
 
 				} catch (ErroRepositorioException ex) {
@@ -15566,7 +15342,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				try {
 
 					movimentoContaPrefaturadaEsgoto = repositorioFaturamento
-							.pesquisarMovimentoContaPrefaturada(conta.getId(),
+							.pesquisarMovimentoContaPrefaturadaPorIdConta(conta.getId(),
 									MedicaoTipo.POCO);
 
 				} catch (ErroRepositorioException ex) {
@@ -16721,21 +16497,14 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
     		Localidade localidade = new Localidade();
     		localidade.setId(helper.getLocalidade());
     		
-    		
     		if (arquivoRetornoIS != null) {
     			arquivoRetornoIS.setFaturamentoGrupo(rota.getFaturamentoGrupo());
-    			
     			arquivoRetornoIS.setLocalidade(localidade);
-    			
-//    			if (arquivoRetornoIS.getTipoFinalizacao().intValue() == 
-//    				ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction.FINALIZAR_LEITURA_ARQUIVO_IMOVEIS_FALTANDO) {
-    					
-    				arquivoRetornoIS.setArquivoTexto(arquivoRetorno.toString());
-    					
-//    			}
+    			arquivoRetornoIS.setArquivoTexto(arquivoRetorno.toString());
+
+    			System.out.println("Salvando arquivo retorno " + arquivoRetornoIS.getNomeArquivo() + ", conteudo vazio? " + arquivoRetorno.equals(null));
     			
     			Integer idArquivoTextoRetornoIS = (Integer) repositorioUtil.inserir(arquivoRetornoIS);
-    			
     			arquivoRetornoIS.setId(idArquivoTextoRetornoIS);
     			
     		} else {
@@ -16752,9 +16521,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
     	}
     }
     
-    private Collection<MovimentoArquivoTextoRetornoIS> inserirMovimentoArquivoRetornoIS(
-    		Collection<AtualizarContaPreFaturadaHelper> colHelper, 
+    private Collection<MovimentoArquivoTextoRetornoIS> inserirMovimentoArquivoRetornoIS(Collection<AtualizarContaPreFaturadaHelper> colHelper, 
     		ArquivoTextoRetornoIS arquivoTextoRetornoIS, Rota rota) throws IOException, ErroRepositorioException {
+    	
     	Collection<MovimentoArquivoTextoRetornoIS> colecaoMovimentos = null;
     	
     	for (AtualizarContaPreFaturadaHelper helper : colHelper) {
@@ -16763,65 +16532,39 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
     			
     			MovimentoArquivoTextoRetornoIS movimento = new MovimentoArquivoTextoRetornoIS();
     			movimento.setAnoMesMovimento(helper.getAnoMesFaturamento());
-    			
-    			String nomeArquivo = this.obterNomeArquivoRetorno(arquivoTextoRetornoIS.getLocalidade(), 
-    					arquivoTextoRetornoIS.getCodigoSetorComercial(), arquivoTextoRetornoIS.getCodigoRota(), 
-    					arquivoTextoRetornoIS.getAnoMesReferencia(), arquivoTextoRetornoIS.getTipoFinalizacao()).toString();
-    			
-    			arquivoTextoRetornoIS.setNomeArquivo(nomeArquivo);
-    			
-    			if (arquivoTextoRetornoIS != null && arquivoTextoRetornoIS.getId() != null) {
-    				
-    				movimento.setArquivoTextoRetornoIS(arquivoTextoRetornoIS);
-    			}
-    				
-    			if (arquivoTextoRetornoIS.getTipoFinalizacao() == null || arquivoTextoRetornoIS.getTipoFinalizacao().intValue() == 
-    					ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction.FINALIZAR_LEITURA_ARQUIVO_IMOVEIS_FALTANDO) {
-    					movimento.setArquivoTexto(helper.getArquivoImovel().toString());
-    					movimento.setNomeArquivo(arquivoTextoRetornoIS.getNomeArquivo());
-    			}
-    			
     			movimento.setCodigoRota(helper.getCodigoRota());
     			movimento.setCodigoSetorComercial(helper.getCodigoSetorComercial());
+    			movimento.setFaturamentoGrupo(rota.getFaturamentoGrupo());
+    			movimento.setImovel(new Imovel(helper.getMatriculaImovel()));
+    			movimento.setLocalidade(new Localidade(helper.getLocalidade()));
+    			movimento.setMedicaoTipo(new MedicaoTipo(helper.getTipoMedicao()));
+    			movimento.setTempoRetornoArquivo(new Date());
+    			movimento.setUltimaAlteracao(new Date());
     			
     			
-    			if (helper.getAnormalidadeConsumo() != null) {
-    				ConsumoAnormalidade consumoAnormalidade = new ConsumoAnormalidade();
-    				consumoAnormalidade.setId(helper.getAnormalidadeConsumo());
+    			if (arquivoTextoRetornoIS != null && arquivoTextoRetornoIS.getId() != null) {
+    				arquivoTextoRetornoIS.setNomeArquivo(this.obterNomeArquivoRetorno(arquivoTextoRetornoIS).toString());
+
+    				movimento.setArquivoTextoRetornoIS(arquivoTextoRetornoIS);
     				
-    				movimento.setConsumoAnormalidade(consumoAnormalidade);
+	    			if (arquivoTextoRetornoIS.getTipoFinalizacao() == null || 
+	    					arquivoTextoRetornoIS.getTipoFinalizacao().intValue() == ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction.FINALIZAR_LEITURA_ARQUIVO_IMOVEIS_FALTANDO) {
+	    					movimento.setArquivoTexto(helper.getArquivoImovel().toString());
+	    					movimento.setNomeArquivo(arquivoTextoRetornoIS.getNomeArquivo());
+	    			}
     			}
     			
-    			movimento.setFaturamentoGrupo(rota.getFaturamentoGrupo());
-    			
-    			Imovel imovel = new Imovel();
-    			imovel.setId(helper.getMatriculaImovel());
-    			
-    			movimento.setImovel(imovel);
+    			if (helper.getAnormalidadeConsumo() != null) {
+    				movimento.setConsumoAnormalidade(new ConsumoAnormalidade(helper.getAnormalidadeConsumo()));
+    			}
     			
     			if (helper.getAnormalidadeLeitura() != null) {
-    				LeituraAnormalidade leituraAnormalidade = new LeituraAnormalidade();
-    				leituraAnormalidade.setId(helper.getAnormalidadeLeitura());
-    				
-    				movimento.setLeituraAnormalidade(leituraAnormalidade);
+    				movimento.setLeituraAnormalidade(new LeituraAnormalidade(helper.getAnormalidadeLeitura()));
     			}
     			
     			if (helper.getLeituraHidrometro() != null) {
     				movimento.setLeituraHidrometro(helper.getLeituraHidrometro());
     			}
-    			
-    			Localidade localidade = new Localidade();
-    			localidade.setId(helper.getLocalidade());
-    			
-    			movimento.setLocalidade(localidade);
-    			
-    			MedicaoTipo tipoMedicao = new MedicaoTipo();
-    			tipoMedicao.setId(helper.getTipoMedicao());
-    			movimento.setMedicaoTipo(tipoMedicao);
-    			
-    			
-    			movimento.setTempoRetornoArquivo(new Date());
-    			movimento.setUltimaAlteracao(new Date());
     			
     			repositorioUtil.inserir(movimento);
     		}
@@ -16831,22 +16574,21 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
     	
     }
     
-    public StringBuilder obterNomeArquivoRetorno(Localidade localidade, Integer codigoSetor,
-    		Integer codigoRota, Integer anoMesReferencia, Short tipoFinalizacao) {
+    public StringBuilder obterNomeArquivoRetorno(ArquivoTextoRetornoIS arquivoRetorno) {
     	StringBuilder nomeArquivo = new StringBuilder();
     	
     		
-    	if (tipoFinalizacao != null && tipoFinalizacao.intValue() == 
+    	if (arquivoRetorno.getTipoFinalizacao() != null && arquivoRetorno.getTipoFinalizacao().intValue() == 
     		ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction.FINALIZAR_LEITURA_ARQUIVO_IMOVEIS_FALTANDO) {
     		nomeArquivo.append("GCOMPLETO");
     	} else {
     		nomeArquivo.append("G");
     	}
     	
-    	nomeArquivo.append(Util.completaStringComZeroAEsquerda(localidade.getId().toString(), 3));
-    	nomeArquivo.append(Util.completaStringComZeroAEsquerda(codigoSetor.toString(), 3));
-    	nomeArquivo.append(Util.completaStringComZeroAEsquerda(codigoRota.toString(), 3));
-    	nomeArquivo.append(Util.completaString(anoMesReferencia.toString(), 6));
+    	nomeArquivo.append(Util.completaStringComZeroAEsquerda(arquivoRetorno.getLocalidade().getId().toString(), 3));
+    	nomeArquivo.append(Util.completaStringComZeroAEsquerda(arquivoRetorno.getCodigoSetorComercial().toString(), 3));
+    	nomeArquivo.append(Util.completaStringComZeroAEsquerda(arquivoRetorno.getCodigoRota().toString(), 3));
+    	nomeArquivo.append(Util.completaString(arquivoRetorno.getAnoMesReferencia().toString(), 6));
     	nomeArquivo.append(".txt");
     			
     	return nomeArquivo;
