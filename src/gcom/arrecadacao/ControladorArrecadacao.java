@@ -3684,9 +3684,7 @@ public class ControladorArrecadacao implements SessionBean {
 
 	private SistemaParametro getSistemaParametro() throws ControladorException {
 		try {
-			if(sistemaParametro == null){
-				sistemaParametro = repositorioUtil.pesquisarParametrosDoSistema();
-			}
+			sistemaParametro = repositorioUtil.pesquisarParametrosDoSistema();
 		} catch (ErroRepositorioException e) {
 		    throw new ControladorException("erro.sistema", e);
 		}
@@ -13575,8 +13573,7 @@ public class ControladorArrecadacao implements SessionBean {
 				.pesquisarParametrosDoSistema();
 
 		// recupera o ano/mês de referência da arrecadação int
-		int anoMesArrecadacaoSistemaParametro = getSistemaParametro()
-				.getAnoMesArrecadacao();
+		int anoMesArrecadacaoSistemaParametro = getSistemaParametro().getAnoMesArrecadacao();
 
 		ArrecadacaoDadosDiarios arrecadacaoDadosDiarios = null;
 		DevolucaoDadosDiarios devolucaoDadosDiarios = null;
