@@ -170,7 +170,8 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
     private Integer idEmpresa;
 
 	private Integer idMunicipio;
-	
+
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
 	private String nomeMunicipio;
 	
 	private Integer idUinidadeFederacao;

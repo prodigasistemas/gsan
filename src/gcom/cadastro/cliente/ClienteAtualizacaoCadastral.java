@@ -26,7 +26,7 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 	public static final int ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL = 1502;
 	
     private Integer id;
-	
+
     private Integer idCliente;
     
     private Integer idImovel;
@@ -39,14 +39,18 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 
     private Integer idClienteTipo;
 
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private String cpf;
-    
+
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private String cnpj;
 
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private String rg;
 	
 	private String dsAbreviadaOrgaoExpedidorRg;
-	
+
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
 	private String dsUFSiglaOrgaoExpedidorRg;
 
     private Date dataEmissaoRg;
@@ -59,6 +63,7 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 
     private Integer idPessoaSexo;
 
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private String email;
 	
     private String nomeMae;
@@ -70,7 +75,8 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
     private Integer idEnderecoTipo;
 	
     private Integer idLogradouroTipo;
-    
+
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private String dsLogradouroTipo;
 	
     private Integer idLogradouroTitulo;
@@ -79,16 +85,21 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 	
     private Integer idLogradouro;
 
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private String descricaoLogradouro;
 
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer codigoCep;
 
     private Integer idBairro;
 
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private String nomeBairro;
 
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private String numeroImovel;
 
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private String complementoEndereco;
 	
     private Integer idEnderecoReferencia;
@@ -96,7 +107,8 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
     private Integer cnae;
     
 	private Integer idMunicipio;
-	
+
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
 	private String nomeMunicipio;
 	
 	private Integer idUinidadeFederacao;
@@ -110,7 +122,7 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 	private ClienteTipo clienteTipo;
 	
 	private UnidadeFederacao unidadeFederacao;
-	
+
 	private PessoaSexo pessoaSexo;
 	
 	private Imovel imovel;
