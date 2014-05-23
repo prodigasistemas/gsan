@@ -817,11 +817,6 @@ public class ConstantesRelatorios {
 	
 	public static final String RELATORIO_TRANSFERENCIA_PAGAMENTO = "/relatorioTransferenciaPagamento.jasper";
 	
-	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 08/11/2013
-	 * 
-	 * Relatorio BIG
-	 */
 	public static final String RELATORIO_BIG = "/relatorioBIG.jasper";
 
 	public static final String RELATORIO_CONSULTA_ATUALIZACAO_CADASTRAL = "/relatorioConsultaAtualizacaoCadastral.jasper";
@@ -829,6 +824,8 @@ public class ConstantesRelatorios {
 	public static final String RELATORIO_IMOVEIS_SITUACAO_PERIODO = "/relatorioImoveisSituacaoPeriodo.jasper";
 
 	public static final String RELATORIO_INCONSISTENCIAS_RETORNO_ATUALIZACAO_CADASTRAL = "/relatorioInconsistenciasRetornoAtualizacaoCadastral.jasper";
+	
+	public static final String RELATORIO_FICHA_FISCALIZACAO_CADASTRAL = "/relatorioFichaFiscalizacaoCadastral.jasper";
 
 	private static Map<String, URL> relatorios = new HashMap<String, URL>();
 	

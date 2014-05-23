@@ -73,7 +73,20 @@
 		<action name="FiltrarAlteracaoAtualizacaoCadastralActionForm"
 			type="gcom.gui.cadastro.atualizacaocadastral.ImprimirConsultaAtualizacaoCadastralAction"
 			path="/imprimirConsultaAtualizacaoCadastralAction"	>
-			
+		</action>
+		
+		<action name="ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm"
+			type="gcom.gui.cadastro.atualizacaocadastral.FiscalizarImovelAtualizacaoCadastralAction"
+			validate="true" 
+			path="/fiscalizarImovelAtualizacaoCadastralAction">	
+		
+			<forward name="filtrarAlteracaoAtualizacaoCadastral"
+					path="/filtrarAlteracaoAtualizacaoCadastralAction.do" />		
+		</action>
+		
+		<action name="FiltrarAlteracaoAtualizacaoCadastralActionForm"
+			type="gcom.gui.cadastro.atualizacaocadastral.ImprimirFichaFiscalizacaoCadastralAction"
+			path="/imprimirFichaFiscalizacaoCadastralAction"	>
 		</action>
 		
 	<!--FIM FILTRAR ATUALIZACAO CADASTRAL-->
