@@ -8,49 +8,20 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class ClienteRelacaoTipo extends ObjetoTransacao {
 	
 	private static final long serialVersionUID = 1L;
 
-    /** identifier field */
     private Integer id;
-
-    /** nullable persistent field */
     private String descricao;
-
-    /** nullable persistent field */
     private Short indicadorUso;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-    
-    /**
-     * @since 19/09/2007
-     */
     private String descricaoComId;
+
+    public final static Short PROPRIETARIO = new Short("1");
+    public final static Short USUARIO = new Short("2");
+    public final static Short RESPONSAVEL = new Short("3");
     
-    /**
-      * Description of the Field
-      */
-
-     public final static Short RESPONSAVEL = new Short("3");
-
- 
-     /**
-      * Description of the Field
-      */
-
-     public final static Short USUARIO = new Short("2");
-
- 
-     /**
-      * Description of the Field
-      */
-     public final static Short PROPRIETARIO = new Short("1");
-
-     /** full constructor */
     public ClienteRelacaoTipo(String descricao, Short indicadorUso, Date ultimaAlteracao) {
         this.descricao = descricao;
         this.indicadorUso = indicadorUso;
@@ -61,7 +32,6 @@ public class ClienteRelacaoTipo extends ObjetoTransacao {
         this.id = id;
     }
 
-    /** default constructor */
     public ClienteRelacaoTipo() {
     }
 
@@ -117,16 +87,6 @@ public class ClienteRelacaoTipo extends ObjetoTransacao {
 		return retorno;
 	}
 	
-	/**
-	 * <Breve descrição sobre o caso de uso>
-	 *
-	 * <Identificador e nome do caso de uso>
-	 *
-	 * @author Pedro Alexandre
-	 * @date 19/09/2007
-	 *
-	 * @return
-	 */
 	public String getDescricaoComId() {
 		
 		if(this.getId().compareTo(10) == -1){
@@ -140,7 +100,6 @@ public class ClienteRelacaoTipo extends ObjetoTransacao {
 	
 	@Override
 	public void initializeLazy() {
-		// TODO Auto-generated method stub
 		retornaCamposChavePrimaria();
 	}
 }
