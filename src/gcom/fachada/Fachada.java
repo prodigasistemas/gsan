@@ -52323,4 +52323,28 @@ public class Fachada {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
 	}
+	
+	public void fiscalizarImovel(Integer idImovel) {
+		try {
+			this.getControladorAtualizacaoCadastral().fiscalizarImovel(idImovel);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+
+	public Collection pesquisarDadosFichaFiscalizacaoCadastral(List<Integer> listaIdImoveis) {
+		try {
+			return this.getControladorAtualizacaoCadastral().pesquisarDadosFichaFiscalizacaoCadastral(listaIdImoveis);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+	
+	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacao(Integer idImovel) {
+		try {
+			return this.getControladorAtualizacaoCadastral().pesquisarImovelControleAtualizacao(idImovel);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
 }

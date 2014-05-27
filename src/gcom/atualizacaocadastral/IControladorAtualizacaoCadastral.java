@@ -11,6 +11,7 @@ import gcom.util.ErroRepositorioException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 
 public interface IControladorAtualizacaoCadastral {
 	
@@ -38,4 +39,10 @@ public interface IControladorAtualizacaoCadastral {
 	public ImovelControleAtualizacaoCadastral obterImovelControlePorImovelRetorno(Integer idImovelRetorno) throws ControladorException;
 	
 	public ImovelControleAtualizacaoCadastral obterImovelControle(Integer idImovelControle) throws ControladorException;
+	
+	public void fiscalizarImovel(Integer idImovel) throws ControladorException;
+	
+	public Collection pesquisarDadosFichaFiscalizacaoCadastral(List<Integer> listaIdImoveis) throws ControladorException;
+	
+	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacao(Integer idImovel) throws ControladorException;
 }
