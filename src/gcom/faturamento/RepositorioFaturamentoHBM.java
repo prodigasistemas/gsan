@@ -60767,5 +60767,38 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	    
 	    return retorno;
 	  }
+	  
+	public Date obterDataVencimentoContasFaturarGrupo(FaturamentoGrupo faturamentoGrupo) throws ErroRepositorioException {
+	
+		Date retorno = null;
+	
+		Session session = HibernateUtil.getSession();
+	
+		try {
+			String consulta = "select distinct fatAtivCronRota.dataContaVencimento "
+					+ " from FaturamentoAtivCronRota fatAtivCronRota "
+					+ " left join fatAtivCronRota.FaturamentoAtividadeCronograma faturamentoAtividadeCronograma "
+					+ " left join faturamentoAtividadeCronograma.faturamentoAtividade faturamentoAtividade "
+					+ " left join faturamentoAtividadeCronograma.faturamentoGrupoCronogramaMensal faturamentoGrupoCronogramaMensal "
+					+ " left join faturamentoGrupoCronogramaMensal.faturamentoGrupo faturamentoGrupo "
+					+ " where faturamentoGrupo.id = :idFaturamentoGrupo "
+					+ " and faturamentoGrupoCronogramaMensal.anoMesReferencia = :anoMesReferencia "
+					+ " and faturamentoAtividade.id = :idFaturamentoAtividade ";
+	
+			retorno = (Date) session
+					.createQuery(consulta)
+					.setInteger("idFaturamentoGrupo", faturamentoGrupo.getId())
+					.setInteger("anoMesReferencia", faturamentoGrupo.getAnoMesReferencia())
+					.setInteger("idFaturamentoAtividade", FaturamentoAtividade.FATURAR_GRUPO).uniqueResult();
+	
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate!");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+	
+		return retorno;
+	
+	}
 
 }

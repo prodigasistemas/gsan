@@ -2959,4 +2959,6 @@ public interface IRepositorioFaturamento {
 	public void atualizarVecimentoFaturaClienteResponsavel(Date dataVencimento, String anoMesReferencia) throws ErroRepositorioException;
 	
 	public Integer countFaturasClienteResponsaveis(String anoMesReferencia) throws ErroRepositorioException;
+	
+	public Date obterDataVencimentoContasFaturarGrupo(FaturamentoGrupo faturamentoGrupo) throws ErroRepositorioException;
 }

@@ -154,7 +154,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			numeroIndice = 0;
 			numeroIndiceAntecipado = 0;
 			Integer sequencialImpressao = 0;
-			Collection colecaoConta = null;
+			Collection<EmitirContaHelper> colecaoConta = null;
 			int cont = 1;
 
 			contasTxtLista = new StringBuilder();
@@ -174,6 +174,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 					numeroIndice = numeroIndiceAntecipado;
 				}
 
+				this.alterarVencimentoContasFaturarGrupo(ContaTipo.CONTA_NORMAL, idEmpresa, numeroIndice, faturamentoGrupo);
+				
 				colecaoContaParms = repositorioFaturamento.pesquisarContasEmitirCOSANPA(ContaTipo.CONTA_NORMAL, idEmpresa, numeroIndice,
 						anoMesReferenciaFaturamento, faturamentoGrupo.getId());
 				colecaoConta = formatarEmitirContasHelper(colecaoContaParms, ContaTipo.CONTA_NORMAL);
@@ -185,7 +187,7 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 					}
 
 					EmitirContaHelper emitirContaHelper = null;
-					Iterator iteratorConta = colecaoConta.iterator();
+					Iterator<EmitirContaHelper> iteratorConta = colecaoConta.iterator();
 
 					// int count = 0;
 					while (iteratorConta.hasNext()) {
@@ -1603,6 +1605,41 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			throw new EJBException(e);
 		}
 	}
+	
+	private void alterarVencimentoContasFaturarGrupo(Integer contaTipo, Integer idEmpresa, Integer numeroIndice, FaturamentoGrupo faturamentoGrupo) {
+		Collection<Conta> colecaoContasNovoVencimento = new ArrayList<Conta>();
+		try {
+			
+			Collection colecaoContaParms = repositorioFaturamento.pesquisarContasEmitirCOSANPA(contaTipo, idEmpresa, numeroIndice, faturamentoGrupo.getAnoMesReferencia(), faturamentoGrupo.getId());
+			Collection<EmitirContaHelper> colecaoConta = formatarEmitirContasHelper(colecaoContaParms, ContaTipo.CONTA_NORMAL);
+
+			Date novaDataVencimento = repositorioFaturamento.obterDataVencimentoContasFaturarGrupo(faturamentoGrupo);
+			
+			for (EmitirContaHelper emitirConta : colecaoConta) {
+				
+				int comparacaoData = Util.compararData(emitirConta.getDataVencimentoConta(), novaDataVencimento);
+
+				System.out.println("Imóvel " + emitirConta.getIdImovel() + ": [" + emitirConta.getDataVencimentoConta() + " < " + novaDataVencimento + "? " + comparacaoData);
+				
+				if (comparacaoData == -1) {
+					Conta conta = (Conta) repositorioFaturamento.obterConta(emitirConta.getIdConta()).iterator().next();
+					conta.setDataVencimentoConta(novaDataVencimento);
+					conta.setUltimaAlteracao(new Date());
+					
+					colecaoContasNovoVencimento.add(conta);
+				}
+				
+			}
+			
+			getControladorBatch().atualizarColecaoObjetoParaBatch(colecaoContasNovoVencimento);
+		} catch (ErroRepositorioException e) {
+			logger.error("Erro ao atualizar nova data de vencimento para contas.");
+		} catch (ControladorException e) {
+			logger.error("Erro ao atualizar nova data de vencimento para contas.");
+		}
+		
+	}
+	
 
 	/**
 	 * Metodo utilizado para adicionar os dados das contas categorias no txt no
