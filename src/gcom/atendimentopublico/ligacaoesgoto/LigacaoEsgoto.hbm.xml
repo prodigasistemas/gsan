@@ -56,26 +56,5 @@
 		<many-to-one name="ligacaoOrigem" class="gcom.atendimentopublico.LigacaoOrigem" not-null="false">
 			<column name="lgor_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to LigacaoEsgotoSituacao 
-    <many-to-one
-        name="ligacaoEsgotoSituacao"
-        class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao"
-        not-null="true"
-    >
-        <column name="lest_id" />
-    </many-to-one> -->
-		<!-- bi-directional one-to-many association to ConsumoHistorico
-    <set
-        name="consumoHistoricos"
-        lazy="true"
-        inverse="true"
-    >
-        <key>
-            <column name="lesg_id" />
-        </key>
-        <one-to-many
-            class="gcom.cadastro.ConsumoHistorico"
-        />
-    </set> -->
 	</class>
 </hibernate-mapping>
