@@ -26,8 +26,12 @@ public abstract class ClienteBuilder {
 		clienteTxt.setDsUFSiglaOrgaoExpedidorRg(atualizacaoCadastralImovel.getLinhaCliente("ufRg" + tipoCliente));
 		String campo = atualizacaoCadastralImovel.getLinhaCliente("sexo" + tipoCliente);
 		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
-			PessoaSexo sexo = new PessoaSexo(Integer.parseInt(campo));
-			clienteTxt.setPessoaSexo(sexo);
+			int idSexo = Integer.parseInt(campo);
+			
+			if (idSexo == 1 || idSexo == 2) {
+				PessoaSexo sexo = new PessoaSexo(idSexo);
+				clienteTxt.setPessoaSexo(sexo);
+			}
 		}
 		campo = atualizacaoCadastralImovel.getLinhaCliente("tipoPessoa" + tipoCliente);
 		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){

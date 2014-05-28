@@ -7,13 +7,11 @@ import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ordemservico.FiscalizacaoSituacaoAgua;
 import gcom.atendimentopublico.ordemservico.FiscalizacaoSituacaoEsgoto;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
-import gcom.atualizacaocadastral.ImovelRetorno;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteImovel;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.FiltroClienteImovel;
-import gcom.cadastro.cliente.RamoAtividade;
 import gcom.cadastro.cliente.bean.ClienteImovelEconomiaHelper;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.endereco.Cep;
@@ -31327,7 +31325,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					+ "FROM ImovelControleAtualizacaoCadastral icac "
 					+ "INNER JOIN FETCH icac.imovel imovel "
 					+ "INNER JOIN FETCH icac.situacaoAtualizacaoCadastral situacao "
-					+ "INNER JOIN FETCH icac.cadastroOcorrencia cadastroOcorrencia "
+					+ "LEFT JOIN icac.cadastroOcorrencia cadastroOcorrencia "
 					+ "WHERE imovel.id = :idImovel ";
 
 			return (ImovelControleAtualizacaoCadastral) session.createQuery(consulta)
