@@ -44968,11 +44968,32 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					if (parmsConta[10] != null) {
 						emitirContaHelper.setConsumoEsgoto((Integer) parmsConta[10]);
 					}
+					
+					int tam = parmsConta.length;
+					
 					if (parmsConta[11] != null) {
-						emitirContaHelper.setValorAgua((BigDecimal) parmsConta[11]);
+						BigDecimal valorAgua = (BigDecimal) parmsConta[11];
+						if (tam > 42) {
+							if (parmsConta[43] != null) {
+								BigDecimal valorRateio = (BigDecimal) parmsConta[43];
+								valorAgua = valorAgua.subtract(valorRateio);
+								if (valorAgua.compareTo(BigDecimal.ZERO) == -1)
+									valorAgua = valorAgua.negate();
+							}
+						}
+						emitirContaHelper.setValorAgua(valorAgua);
 					}
 					if (parmsConta[12] != null) {
-						emitirContaHelper.setValorEsgoto((BigDecimal) parmsConta[12]);
+						BigDecimal valorEsgoto = (BigDecimal) parmsConta[12];
+						if (tam > 42) {
+							if (parmsConta[44] != null) {
+								BigDecimal valorRateio = (BigDecimal) parmsConta[44];
+								valorEsgoto = valorEsgoto.subtract(valorRateio);
+								if (valorEsgoto.compareTo(BigDecimal.ZERO) == -1)
+									valorEsgoto = valorEsgoto.negate();
+							}
+						}
+						emitirContaHelper.setValorAgua(valorEsgoto);
 					}
 					if (parmsConta[13] != null) {
 						emitirContaHelper.setDebitos((BigDecimal) parmsConta[13]);
@@ -45033,10 +45054,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					}
 					if (parmsConta[32] != null) {
 						emitirContaHelper.setNomeImovel((String) parmsConta[32]);
-					}
-
-					int tam = parmsConta.length;
-
+					}			
+					
 					if (tam > 34) {
 						if (parmsConta[33] != null) {
 							emitirContaHelper.setCodigoRota((Short) parmsConta[33]);
