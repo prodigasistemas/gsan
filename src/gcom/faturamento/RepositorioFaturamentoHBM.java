@@ -60777,7 +60777,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		try {
 			String consulta = "select distinct fatAtivCronRota.dataContaVencimento "
 					+ " from FaturamentoAtivCronRota fatAtivCronRota "
-					+ " left join fatAtivCronRota.FaturamentoAtividadeCronograma faturamentoAtividadeCronograma "
+					+ " left join fatAtivCronRota.faturamentoAtividadeCronograma faturamentoAtividadeCronograma "
 					+ " left join faturamentoAtividadeCronograma.faturamentoAtividade faturamentoAtividade "
 					+ " left join faturamentoAtividadeCronograma.faturamentoGrupoCronogramaMensal faturamentoGrupoCronogramaMensal "
 					+ " left join faturamentoGrupoCronogramaMensal.faturamentoGrupo faturamentoGrupo "
