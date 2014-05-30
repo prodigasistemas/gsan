@@ -21,122 +21,49 @@ import java.util.Date;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 
-/** @author Hibernate CodeGenerator */
 public class CobrancaDocumento implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-    /** identifier field */
     private Integer id;
-
-    /** persistent field */
     private int numeroSequenciaDocumento;
-
-    /** nullable persistent field */
     private Date emissao;
-
-    /** nullable persistent field */
     private BigDecimal valorDesconto;
-
-    /** nullable persistent field */
     private Integer numeroQuadra;
-
-    /** nullable persistent field */
     private BigDecimal valorDocumento;
-
-    /** nullable persistent field */
     private BigDecimal valorTaxa;
-
-    /** nullable persistent field */
     private Integer codigoSetorComercial;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-
-    /** persistent field */
     private gcom.cobranca.DocumentoEmissaoForma documentoEmissaoForma;
-
-    /** persistent field */
     private gcom.cobranca.CobrancaAcaoAtividadeComando cobrancaAcaoAtividadeComando;
-
-    /** persistent field */
     private Imovel imovel;
-
-    /** persistent field */
     private Empresa empresa;
-
-    /** persistent field */
     private gcom.cobranca.DocumentoTipo documentoTipo;
-
-    /** persistent field */
     private ImovelPerfil imovelPerfil;
-
-    /** persistent field */
     private Quadra quadra;
-
-    /** persistent field */
     private Localidade localidade;
-
-    /** persistent field */
     private gcom.cobranca.CobrancaAcaoAtividadeCronograma cobrancaAcaoAtividadeCronograma;
-
-    /** persistent field */
     private MotivoNaoEntregaDocumento motivoNaoEntregaDocumento;
-    
     private CobrancaCriterio cobrancaCriterio;
-    
     private CobrancaAcao cobrancaAcao;
-    
-    /** nullable persistent field */
     private BigDecimal valorAcrescimos;
-    
-    /** nullable persistent field */
     private Date dataSituacaoAcao;
-
-    /** nullable persistent field */
     private Date dataSituacaoDebito;
-    
-    /** nullable persistent field */
     private Integer sequencialImpressao;
-    
-    /** nullable persistent field */
     private Short indicadorAntesApos;
-    
-    /** nullable persistent field */
     private Short indicadorLimite;
-    
-    /** persistent field */
     private CobrancaDebitoSituacao cobrancaDebitoSituacao;
-
-    /** persistent field */
     private CobrancaAcaoSituacao cobrancaAcaoSituacao;
-    
-    
-    /** persistent field */
     private Cliente cliente;
-    
-    /** persistent field */
     private Categoria categoria;
-    
-    /** persistent field */
     private EsferaPoder esferaPoder;
-    
-    /** persistent field */
     private FiscalizacaoSituacao fiscalizacaoSituacao;
-    
     private AtendimentoMotivoEncerramento motivoEncerramento;
-
     private ResolucaoDiretoria resolucaoDiretoria;
-    
     private LigacaoAguaSituacao ligacaoAguaSituacao;
-    
     private LigacaoEsgotoSituacao ligacaoEsgotoSituacao;
-    
     private Date dataEmissaoPredecessor;
-    
     private String numeroDocumentoFatura;
-    
-    /** nullable persistent field */
     private BigDecimal valorImpostos;
     
     // Constantes
@@ -145,32 +72,6 @@ public class CobrancaDocumento implements Serializable {
     public final static String INCLUIR_ACRESCIMOS_COM_DESCONTO = "3";
     
     
-    /**
-	 * Construtor de CobrancaDocumento 
-	 * 
-	 * @param id
-	 * @param numeroSequenciaDocumento
-	 * @param emissao
-	 * @param valorDesconto
-	 * @param numeroQuadra
-	 * @param valorDocumento
-	 * @param valorTaxa
-	 * @param codigoSetorComercial
-	 * @param ultimaAlteracao
-	 * @param documentoEmissaoForma
-	 * @param cobrancaAcaoAtividadeComando
-	 * @param imovel
-	 * @param empresa
-	 * @param documentoTipo
-	 * @param imovelPerfil
-	 * @param quadra
-	 * @param localidade
-	 * @param cobrancaAcaoAtividadeCronograma
-	 * @param motivoNaoEntregaDocumento
-	 * @param cobrancaCriterio
-	 * @param cobrancaAcao
-	 * @param valorAcrescimos
-	 */
 	public CobrancaDocumento(Integer id, int numeroSequenciaDocumento, Date emissao, BigDecimal valorDesconto, Integer numeroQuadra, BigDecimal valorDocumento, BigDecimal valorTaxa, Integer codigoSetorComercial, Date ultimaAlteracao, DocumentoEmissaoForma documentoEmissaoForma, CobrancaAcaoAtividadeComando cobrancaAcaoAtividadeComando, Imovel imovel, Empresa empresa, DocumentoTipo documentoTipo, ImovelPerfil imovelPerfil, Quadra quadra, Localidade localidade, CobrancaAcaoAtividadeCronograma cobrancaAcaoAtividadeCronograma, MotivoNaoEntregaDocumento motivoNaoEntregaDocumento, CobrancaCriterio cobrancaCriterio, CobrancaAcao cobrancaAcao, BigDecimal valorAcrescimos) {
 		super();
 		// TODO Auto-generated constructor stub
@@ -198,7 +99,6 @@ public class CobrancaDocumento implements Serializable {
 		this.valorAcrescimos = valorAcrescimos;
 	}
 
-	/** full constructor */
     public CobrancaDocumento(int numeroSequenciaDocumento, Date emissao, BigDecimal valorDesconto, Integer numeroQuadra, BigDecimal valorDocumento, BigDecimal valorTaxa, Integer codigoSetorComercial, Date ultimaAlteracao, gcom.cobranca.DocumentoEmissaoForma documentoEmissaoForma, gcom.cobranca.CobrancaAcaoAtividadeComando cobrancaAcaoAtividadeComando, Imovel imovel, Empresa empresa, gcom.cobranca.DocumentoTipo documentoTipo, ImovelPerfil imovelPerfil, Quadra quadra, Localidade localidade, gcom.cobranca.CobrancaAcaoAtividadeCronograma cobrancaAcaoAtividadeCronograma, MotivoNaoEntregaDocumento motivoNaoEntregaDocumento,CobrancaCriterio cobrancaCriterio) {
         this.numeroSequenciaDocumento = numeroSequenciaDocumento;
         this.emissao = emissao;
@@ -221,11 +121,9 @@ public class CobrancaDocumento implements Serializable {
         this.cobrancaCriterio = cobrancaCriterio;
     }
 
-    /** default constructor */
     public CobrancaDocumento() {
     }
 
-    /** minimal constructor */
     public CobrancaDocumento(int numeroSequenciaDocumento, gcom.cobranca.DocumentoEmissaoForma documentoEmissaoForma, gcom.cobranca.CobrancaAcaoAtividadeComando cobrancaAcaoAtividadeComando, Imovel imovel, Empresa empresa, gcom.cobranca.DocumentoTipo documentoTipo, ImovelPerfil imovelPerfil, Quadra quadra, Localidade localidade, gcom.cobranca.CobrancaAcaoAtividadeCronograma cobrancaAcaoAtividadeCronograma, MotivoNaoEntregaDocumento motivoNaoEntregaDocumento) {
         this.numeroSequenciaDocumento = numeroSequenciaDocumento;
         this.documentoEmissaoForma = documentoEmissaoForma;
