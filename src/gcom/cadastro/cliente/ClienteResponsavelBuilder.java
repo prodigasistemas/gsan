@@ -3,6 +3,7 @@ package gcom.cadastro.cliente;
 import org.apache.commons.lang.StringUtils;
 
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastralImovel;
+import gcom.cadastro.endereco.EnderecoTipo;
 
 public class ClienteResponsavelBuilder extends ClienteBuilder{
 
@@ -32,6 +33,9 @@ public class ClienteResponsavelBuilder extends ClienteBuilder{
 		}
 		
 		clienteTxt.setNomeMunicipio(atualizacaoCadastralImovel.getLinhaCliente("municipioResponsavel"));
+		
+		campo = atualizacaoCadastralImovel.getLinhaCliente("tipoEnderecoResponsavel");
+		clienteTxt.setEnderecoTipo(new EnderecoTipo(Integer.parseInt(campo) == 0 ? null : Integer.parseInt(campo)));
 		
 		return clienteTxt;
 	}

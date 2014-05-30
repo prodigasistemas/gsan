@@ -45,11 +45,9 @@ public class ImovelAtualizacaoCadastralBuilder {
 		imovelAtualizacaoCadastral.setSubLote(Short.parseShort(inscricao.substring(14, 17)));
 		imovelAtualizacaoCadastral.setIdRota(atualizacaoCadastral.getIdRota());
 		
-		imovelAtualizacaoCadastral.setNumeroImovel(atualizacaoCadastralImovel.getLinhaImovel("numeroImovel"));
-		imovelAtualizacaoCadastral.setComplementoEndereco(atualizacaoCadastralImovel.getLinhaImovel("complementoImovel"));
-		imovelAtualizacaoCadastral.setIdFonteAbastecimento(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("fonteAbastecimento")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("fonteAbastecimento")));
+		imovelAtualizacaoCadastral.setCodigoMunicipio(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("codigoMunicipio")));
+
 		imovelAtualizacaoCadastral.setNumeroIptu(atualizacaoCadastralImovel.getLinhaImovel("numeroIPTU"));
-		
 		String contratoEnergia = atualizacaoCadastralImovel.getLinhaImovel("numeroCelpa");
 		
 		if (contratoEnergia.equals("")) {
@@ -62,17 +60,19 @@ public class ImovelAtualizacaoCadastralBuilder {
 			}
 		}
 		
+		imovelAtualizacaoCadastral.setNumeroPontosUtilizacao(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("numeroPontosUteis")) == 0 ? null : Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("numeroPontosUteis")));
+		imovelAtualizacaoCadastral.setNumeroMorador(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("numeroOcupantes")) == 0 ? null : Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("numeroOcupantes")));
+		
 		imovelAtualizacaoCadastral.setIdLogradouroTipo(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("idTipoLogradouroImovel")));
 		imovelAtualizacaoCadastral.setDsLogradouroTipo(getDescricaoLogradouro(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("idTipoLogradouroImovel"))));
 		imovelAtualizacaoCadastral.setDescricaoLogradouro(atualizacaoCadastralImovel.getLinhaImovel("logradouroImovel"));
-		imovelAtualizacaoCadastral.setCodigoCep(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("cep")));
+		imovelAtualizacaoCadastral.setNumeroImovel(atualizacaoCadastralImovel.getLinhaImovel("numeroImovel"));
+		imovelAtualizacaoCadastral.setComplementoEndereco(atualizacaoCadastralImovel.getLinhaImovel("complementoImovel"));
 		imovelAtualizacaoCadastral.setNomeBairro(atualizacaoCadastralImovel.getLinhaImovel("bairro"));
-		imovelAtualizacaoCadastral.setCodigoMunicipio(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("codigoMunicipio")));
+		imovelAtualizacaoCadastral.setCodigoCep(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("cep")));
 		imovelAtualizacaoCadastral.setNomeMunicipio(atualizacaoCadastralImovel.getLinhaImovel("municipio"));
 		imovelAtualizacaoCadastral.setIdLogradouro(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("codigoLogradouro")));
-		imovelAtualizacaoCadastral.setNumeroPontosUtilizacao(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("numeroPontosUteis")) == 0 ? null : Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("numeroPontosUteis")));
-		imovelAtualizacaoCadastral.setNumeroMorador(Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("numeroOcupantes")) == 0 ? null : Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("numeroOcupantes")));
-		imovelAtualizacaoCadastral.setTipoOperacao(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("tipoOperacao")));
+		imovelAtualizacaoCadastral.setIdFonteAbastecimento(Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("fonteAbastecimento")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaImovel("fonteAbastecimento")));
 
 		// Linha 4
 		imovelAtualizacaoCadastral.setIdLigacaoAguaSituacao(Integer.parseInt(atualizacaoCadastralImovel.getLinhaServicos("ligacaoAguaSituacao")) == 0 ? null : Integer.parseInt(atualizacaoCadastralImovel.getLinhaServicos("ligacaoAguaSituacao")));

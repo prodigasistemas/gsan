@@ -5,10 +5,12 @@ import gcom.atendimentopublico.ligacaoagua.FiltroCorteTipo;
 import gcom.atendimentopublico.ligacaoagua.FiltroLigacaoAgua;
 import gcom.atendimentopublico.ligacaoagua.FiltroLigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoagua.FiltroMotivoCorte;
+import gcom.atendimentopublico.ligacaoagua.FiltroRamalLocalInstalacao;
 import gcom.atendimentopublico.ligacaoagua.FiltroSupressaoTipo;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoagua.MotivoCorte;
+import gcom.atendimentopublico.ligacaoagua.RamalLocalInstalacao;
 import gcom.atendimentopublico.ligacaoagua.SupressaoTipo;
 import gcom.atendimentopublico.ligacaoesgoto.FiltroLigacaoEsgotoSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
@@ -1446,6 +1448,14 @@ public class ControladorTransacaoSEJB implements SessionBean {
 				if (pesquisa != null && !pesquisa.isEmpty()) {
 					HidrometroProtecao hidrometroProtecao = (HidrometroProtecao) Util.retonarObjetoDeColecao(pesquisa);
 					retorno = hidrometroProtecao.getDescricao();				
+				}
+			} else if (coluna.equals("rlin_id")) {
+				FiltroRamalLocalInstalacao filtroRamalLocalInstalacao = new FiltroRamalLocalInstalacao();
+				filtroRamalLocalInstalacao.adicionarParametro(new ParametroSimples(FiltroRamalLocalInstalacao.ID, campo));
+				Collection pesquisa = getControladorUtil().pesquisar(filtroRamalLocalInstalacao, RamalLocalInstalacao.class.getName());
+				if (pesquisa != null && !pesquisa.isEmpty()) {
+					RamalLocalInstalacao ramalLocalInstalacao = (RamalLocalInstalacao) Util.retonarObjetoDeColecao(pesquisa);
+					retorno = ramalLocalInstalacao.getDescricao();				
 				}
 			}
 		}

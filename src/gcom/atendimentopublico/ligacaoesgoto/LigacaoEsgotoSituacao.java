@@ -107,6 +107,10 @@ public class LigacaoEsgotoSituacao extends ObjetoTransacao {
 	/** default constructor */
 	public LigacaoEsgotoSituacao() {
 	}
+	
+	public LigacaoEsgotoSituacao(Integer id) {
+		this.id = id;
+	}
 
 	/**
 	 * @return Retorna o campo descricaoAbreviado.

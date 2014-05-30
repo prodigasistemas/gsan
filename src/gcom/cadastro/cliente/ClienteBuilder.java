@@ -1,6 +1,13 @@
 package gcom.cadastro.cliente;
 
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastralImovel;
+import gcom.cadastro.geografico.FiltroUnidadeFederacao;
+import gcom.cadastro.geografico.UnidadeFederacao;
+import gcom.fachada.Fachada;
+import gcom.util.Util;
+import gcom.util.filtro.ParametroSimples;
+
+import java.util.Collection;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -20,10 +27,18 @@ public abstract class ClienteBuilder {
 	
 	protected void buildCliente(String tipoCliente, Short clienteRelacaoTipo) {
 		clienteTxt.setNome(atualizacaoCadastralImovel.getLinhaCliente("nome" + tipoCliente));
-		clienteTxt.setCpf(atualizacaoCadastralImovel.getLinhaCliente("cpf" + tipoCliente));
-		clienteTxt.setCnpj(atualizacaoCadastralImovel.getLinhaCliente("cnpj" + tipoCliente));
+		
+		String cnpjCpf = atualizacaoCadastralImovel.getLinhaCliente("cnpjCpf" + tipoCliente);
+		if (cnpjCpf.length() == 11) {
+			clienteTxt.setCpf(cnpjCpf);
+		} else if (cnpjCpf.length() == 14) {
+			clienteTxt.setCnpj(cnpjCpf);
+		}
+		
 		clienteTxt.setRg(atualizacaoCadastralImovel.getLinhaCliente("rg" + tipoCliente));
-		clienteTxt.setDsUFSiglaOrgaoExpedidorRg(atualizacaoCadastralImovel.getLinhaCliente("ufRg" + tipoCliente));
+		
+		clienteTxt.setUnidadeFederacao(getUnidadeFederecao(atualizacaoCadastralImovel.getLinhaCliente("ufRg" + tipoCliente)));
+		
 		String campo = atualizacaoCadastralImovel.getLinhaCliente("sexo" + tipoCliente);
 		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
 			int idSexo = Integer.parseInt(campo);
@@ -33,10 +48,12 @@ public abstract class ClienteBuilder {
 				clienteTxt.setPessoaSexo(sexo);
 			}
 		}
+		
 		campo = atualizacaoCadastralImovel.getLinhaCliente("tipoPessoa" + tipoCliente);
 		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
 			clienteTxt.setIdClienteTipo(Integer.parseInt(campo));
 		}
+		
 		clienteTxt.setEmail(atualizacaoCadastralImovel.getLinhaCliente("email" + tipoCliente));
 		clienteTxt.setIdCliente(new Integer(atualizacaoCadastralImovel.getLinhaCliente("matricula" + tipoCliente)));
 		
@@ -48,5 +65,18 @@ public abstract class ClienteBuilder {
 		}
 	}
 	
+	private UnidadeFederacao getUnidadeFederecao(String uf) {
+		UnidadeFederacao retorno = null;
+		
+		FiltroUnidadeFederacao filtroUF = new FiltroUnidadeFederacao();
+		filtroUF.adicionarParametro(new ParametroSimples(FiltroUnidadeFederacao.SIGLA, uf));
+		Collection pesquisa = Fachada.getInstancia().pesquisar(filtroUF, UnidadeFederacao.class.getName());
+		if (pesquisa != null && !pesquisa.isEmpty()) {
+			retorno = (UnidadeFederacao) Util.retonarObjetoDeColecao(pesquisa);
+		}
+		
+		return retorno;
+	}
+
 	public abstract IClienteAtualizacaoCadastral buildCliente(Short clienteRelacaoTipo);
 }

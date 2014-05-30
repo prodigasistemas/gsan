@@ -68,7 +68,11 @@ public class HidrometroMarca extends ObjetoTransacao {
         this.intervaloDiasRevisao = intervaloDiasRevisao;
     }
 
-    public Integer getId() {
+    public HidrometroMarca(Integer id) {
+		this.id = id;
+	}
+
+	public Integer getId() {
         return this.id;
     }
 
