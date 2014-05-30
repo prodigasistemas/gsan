@@ -15,6 +15,7 @@ public class SituacaoAtualizacaoCadastral extends ObjetoGcom {
 	public static final Integer EM_CAMPO = 2;
 	public static final Integer TRANSMITIDO = 3;
 	public static final Integer APROVADO = 4;
+	public static final Integer EM_FISCALIZACAO = 5;
 
     private Integer id;
 

@@ -70,6 +70,12 @@
 			desmarcarTodos();
 		}
 	}
+
+	function fiscalizar() {
+		var form = document.forms[0];
+		form.action = 'fiscalizarImovelAtualizacaoCadastralAction.do';
+	  	form.submit();
+	}
 </script>
 </head>
 
@@ -156,6 +162,13 @@
 					<td><strong>Quadra:</strong></td>
 					<td align="left"><html:text property="numeroQuadra" readonly="true" size="8" styleClass="texto-exibicao" /></td>
 				</tr>
+				
+				<logic:equal name="fiscalizado" value="false" scope="session">
+					<tr>
+						<td>&nbsp;</td>
+						<td align="right"><input name="Button" type="button" class="bottonRightCol" value="Fiscalizar" onClick="fiscalizar();"></td>
+					</tr>
+				</logic:equal>
 			</table>
 			
 			<hr>

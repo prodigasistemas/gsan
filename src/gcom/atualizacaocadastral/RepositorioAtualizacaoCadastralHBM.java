@@ -92,7 +92,8 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		ImovelControleAtualizacaoCadastral retorno = null;
 		try{
 			String consulta = " SELECT e FROM ImovelControleAtualizacaoCadastral e "
-							+ " WHERE e.imovelRetorno.idImovel = :idImovel ";
+							+ " LEFT JOIN FETCH e.situacaoAtualizacaoCadastral s "
+							+ " WHERE e.imovel.id = :idImovel ";
 			retorno = (ImovelControleAtualizacaoCadastral) session.createQuery(consulta)
 					.setInteger("idImovel", idImovel)
 					.uniqueResult();
@@ -922,4 +923,103 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		return retorno;
 	}
 
+	public Collection pesquisarDadosFichaFiscalizacaoCadastral(
+			List<Integer> listaIdImoveis) throws ErroRepositorioException {
+		
+		Collection retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = null;
+		
+		try {
+			consulta = "SELECT imac.imov_id as idImovel, "
+				+ "loca.loca_nmlocalidade as nomeLocalidade, "
+				+ "imac.imac_cdsetorcomercial as codigoSetor, "
+				+ "imac.imac_nnquadra as numeroQuadra, " 
+				+ "imac.imac_nnlote as numeroLote, "
+				+ "imac.imac_nnsublote as numeroSublote, "        
+				+ "imac.imac_dslogradouro as descricaoLogradouroImovel, "       
+				+ "imac.logr_id as idLogradouroImovel, "
+				+ "imac.imac_nnimovel as numeroImovel, " 
+				+ "imac.imac_dscomplementoendereco as complementoEnderecoImovel, "
+				+ "imac.imac_nmbairro as bairroImovel, "
+				+ "imac.imac_cdcep as cepImovel, "
+				+ "rota.rota_cdrota as codigoRota, "
+				+ "face.qdfa_nnfacequadra as numeroFace, "
+				+ "imac.imac_nmmunicipio as nomeMunicipioImovel, "
+				+ "imac.muni_id as idMunicipioImovel, "
+			    + "clac.clie_id as idCliente, "
+			    + "clac.clac_nmcliente as nomeCliente, "
+			    + "clac.clac_nncpfcnpj as cpfCnpj, "
+			    + "clac.clac_nnrg as rg, "
+			    + "clac.clac_dsufsiglaoerg as uf, "
+			    + "clac.psex_id as sexo, "
+			    + "clac.clac_dslogradouro as descricaoLogradouroCliente, "
+			    + "clac.clac_nnimovel as numeroImovelCliente, "
+			    + "clac.edtp_id as enderecoTipoCliente, "
+			    + "clac.clac_nmmunicipio as nomeMunicipioCliente, "
+			    + "clac.clac_dscomplementoendereco as complementoEnderecoCliente, "
+			    + "clac.clac_nmbairro as bairroCliente, "
+			    + "clac.clac_cdcep as cepCliente, "
+			    + "clac.clac_dsemail as emailCliente, "
+			    + "cfac_cdddd as ddd, "
+			    + "CASE WHEN fnet_id IN (1,2,4) THEN cfac.cfac_nnfone END as telefone, "
+			    + "CASE WHEN fnet_id = 3 THEN cfac.cfac_nnfone END as celular "
+			    + "FROM cadastro.imovel_atlz_cadastral imac "
+			    + "INNER JOIN atualizacaocadastral.imovel_controle_atlz_cad icac ON icac.imov_id = imac.imov_id "
+			    + "INNER JOIN cadastro.imovel imov ON imov.imov_id = imac.imov_id "
+			    + "INNER JOIN cadastro.quadra qdra ON qdra.qdra_id = imov.qdra_id "
+			    + "INNER JOIN cadastro.quadra_face face ON face.qdra_id = qdra.qdra_id "
+			    + "INNER JOIN micromedicao.rota rota ON rota.rota_id = qdra.rota_id "
+			    + "INNER JOIN cadastro.localidade loca ON loca.loca_id = imac.loca_id "
+			    + "INNER JOIN cadastro.cliente_atlz_cadastral clac ON clac.imov_id = imac.imov_id "
+			    + "LEFT JOIN cadastro.cliente_fone_atlz_cad cfac ON cfac.clac_id = clac.clac_id "
+			    + "WHERE icac.siac_id = :situacao "
+			    + "AND imac.imov_id IN (:listaIdImoveis)";
+			
+			retorno = (Collection) session.createSQLQuery(consulta)
+					.addScalar("idImovel", Hibernate.INTEGER)
+					.addScalar("nomeLocalidade", Hibernate.STRING)
+					.addScalar("codigoSetor", Hibernate.INTEGER)
+					.addScalar("numeroQuadra", Hibernate.INTEGER)
+					.addScalar("numeroLote", Hibernate.INTEGER)
+					.addScalar("numeroSublote", Hibernate.INTEGER)
+					.addScalar("descricaoLogradouroImovel", Hibernate.STRING)
+					.addScalar("idLogradouroImovel", Hibernate.INTEGER)
+					.addScalar("numeroImovel", Hibernate.STRING)
+					.addScalar("complementoEnderecoImovel", Hibernate.STRING)
+					.addScalar("bairroImovel", Hibernate.STRING)
+					.addScalar("cepImovel", Hibernate.INTEGER)
+					.addScalar("codigoRota", Hibernate.INTEGER)
+					.addScalar("numeroFace", Hibernate.INTEGER)
+					.addScalar("nomeMunicipioImovel", Hibernate.STRING)
+					.addScalar("idMunicipioImovel", Hibernate.INTEGER)
+					.addScalar("idCliente", Hibernate.INTEGER)
+					.addScalar("nomeCliente", Hibernate.STRING)
+					.addScalar("cpfCnpj", Hibernate.STRING)
+					.addScalar("rg", Hibernate.STRING)
+					.addScalar("uf", Hibernate.STRING)
+					.addScalar("sexo", Hibernate.INTEGER)
+					.addScalar("descricaoLogradouroCliente", Hibernate.STRING)
+					.addScalar("numeroImovelCliente", Hibernate.STRING)
+					.addScalar("enderecoTipoCliente", Hibernate.INTEGER)
+					.addScalar("nomeMunicipioCliente", Hibernate.STRING)
+					.addScalar("complementoEnderecoCliente", Hibernate.STRING)
+					.addScalar("bairroCliente", Hibernate.STRING)
+					.addScalar("cepCliente", Hibernate.INTEGER)
+					.addScalar("emailCliente", Hibernate.STRING)
+					.addScalar("ddd", Hibernate.STRING)
+					.addScalar("telefone", Hibernate.STRING)
+					.addScalar("celular", Hibernate.STRING)
+					.setInteger("situacao", SituacaoAtualizacaoCadastral.EM_FISCALIZACAO)
+					.setParameterList("listaIdImoveis", listaIdImoveis)
+					.list();
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro ao pesquisar imoveis para fiscalizacao.");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		
+		return retorno;
+	}
 }

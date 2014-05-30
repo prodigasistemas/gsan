@@ -55,14 +55,6 @@
 		<many-to-one name="ligacaoAguaMaterial" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaMaterial" not-null="true">
 			<column name="lagm_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to LigacaoAguaSituacao 
-			<many-to-one
-			name="ligacaoAguaSituacao"
-			class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao"
-			not-null="true"
-			>
-			<column name="last_id" />
-			</many-to-one> -->
 		<!-- bi-directional many-to-one association to MotivoCorte -->
 		<many-to-one name="motivoCorte" class="gcom.atendimentopublico.ligacaoagua.MotivoCorte" not-null="false">
 			<column name="mtco_id"/>
@@ -82,45 +74,6 @@
 			</key>
 			<one-to-many class="gcom.micromedicao.medicao.MedicaoHistorico"/>
 		</set>
-		<!-- bi-directional one-to-many association to ConsumoHistorico
-			<set
-			name="consumoHistoricos"
-			lazy="true"
-			inverse="true"
-			>
-			<key>
-			<column name="lagu_id" />
-			</key>
-			<one-to-many
-			class="gcom.cadastro.ConsumoHistorico"
-			/>
-			</set>
-			bi-directional one-to-many association to MedicaoHistorico
-			<set
-			name="medicaoHistoricos"
-			lazy="true"
-			inverse="true"
-			>
-			<key>
-			<column name="lagu_id" />
-			</key>
-			<one-to-many
-			class="gcom.cadastro.MedicaoHistorico"
-			/>
-			</set>
-			bi-directional one-to-many association to HidrometroInstalacaoHistorico
-			<set
-			name="hidrometroInstalacaoHistoricos"
-			lazy="true"
-			inverse="true"
-			>
-			<key>
-			<column name="lagu_id" />
-			</key>
-			<one-to-many
-			class="gcom.cadastro.HidrometroInstalacaoHistorico"
-			/>
-			</set>-->
 		<!-- bi-directional many-to-one association to LigacaoOrigem -->
 		<many-to-one name="ligacaoOrigem" class="gcom.atendimentopublico.LigacaoOrigem" not-null="false">
 			<column name="lgor_id"/>

@@ -7881,7 +7881,7 @@ public class ControladorCadastro implements SessionBean {
 			
 			for (String nomeImagem : atualizacao.getImagens()) {
 				String caminhoJboss = System.getProperty("jboss.server.home.dir");
-				String pasta = "/images/cadastro/" + atualizacao.getArquivoTexto().getDescricaoArquivo();
+				String pasta = "/images/" + atualizacao.getArquivoTexto().getDescricaoArquivo();
 				
 				if (nomeImagem.contains(matricula.toString())) {
 					File arquivo = new File(caminhoJboss + pasta, nomeImagem);
