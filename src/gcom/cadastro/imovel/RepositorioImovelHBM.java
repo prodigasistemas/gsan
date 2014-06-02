@@ -31325,7 +31325,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					+ "FROM ImovelControleAtualizacaoCadastral icac "
 					+ "INNER JOIN FETCH icac.imovel imovel "
 					+ "INNER JOIN FETCH icac.situacaoAtualizacaoCadastral situacao "
-					+ "LEFT JOIN icac.cadastroOcorrencia cadastroOcorrencia "
+					+ "LEFT JOIN FETCH icac.cadastroOcorrencia cadastroOcorrencia "
 					+ "WHERE imovel.id = :idImovel ";
 
 			return (ImovelControleAtualizacaoCadastral) session.createQuery(consulta)
