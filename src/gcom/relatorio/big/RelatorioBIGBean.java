@@ -3,75 +3,76 @@ package gcom.relatorio.big;
 import gcom.relatorio.RelatorioBean;
 
 import java.math.BigDecimal;
-import java.text.DecimalFormat;
 
 public class RelatorioBIGBean implements RelatorioBean {
 
-	private String gerenciaRegional; // A
+	private String gerenciaRegional;
 	
-	private String localidade; // B
+	private String localidade;
 	
-	private Integer quantidadeContas; // C
+	private Integer quantidadeContas;
 	
-	private BigDecimal valorFaturamento; // D
+	private BigDecimal valorFaturamento;
 	
-	private BigDecimal valorArrecadacao; // E
+	private BigDecimal valorArrecadacao;
 	
-	private BigDecimal eficienciaArrecadacao; // F
+	private BigDecimal eficienciaArrecadacao;
 	
-	private BigDecimal valorMedioFaturamento; // G
+	private BigDecimal valorMedioFaturamento;
 	
-	private BigDecimal indicadorQuantidadeErrosContas; // H
+	private BigDecimal indicadorQuantidadeErrosContas;
 	
-	private BigDecimal indicadorValorErrosContas; // I 
+	private BigDecimal indicadorValorErrosContas;
 	
-	private BigDecimal indicadorRecebimentoMedio; // J
+	private BigDecimal indicadorRecebimentoMedio;
 	
-	private BigDecimal indicadorQuantidadeInadimplenciaAte30; // K
+	private BigDecimal indicadorQuantidadeInadimplenciaAte30;
 	
-	private BigDecimal indicadorValorInadimplenciaAte30; // L
+	private BigDecimal indicadorValorInadimplenciaAte30;
 	
-	private BigDecimal indicadorQuantidadeInadimplenciaAte90; // M
+	private BigDecimal indicadorQuantidadeInadimplenciaAte90;
 	
-	private BigDecimal indicadorValorInadimplenciaAte90; // N
+	private BigDecimal indicadorValorInadimplenciaAte90;
 	
-	private BigDecimal indicadorQuantidadeInadimplenciaMaior90; // O
+	private BigDecimal indicadorQuantidadeInadimplenciaMaior90;
 	
-	private BigDecimal indicadorValorInadimplenciaMaior90; // P
+	private BigDecimal indicadorValorInadimplenciaMaior90;
 	
-	private BigDecimal quantidadeFaturamentosComprometidos; // Q
+	private BigDecimal quantidadeFaturamentosComprometidos;
 	
-	private BigDecimal indiceHidrometracao; // R
+	private BigDecimal indiceHidrometracao;
 	
-	private Integer quantidadeHidrometrosInstalados; // S
+	private Integer quantidadeHidrometrosInstalados;
 	
-	private Integer quantidadeHidrometrosSubstituidos; // T
+	private Integer quantidadeHidrometrosSubstituidos;
 	
-	private BigDecimal prazoMedioAtendimentoOS; // U
+	private BigDecimal prazoMedioAtendimentoOS;
 	
-	private Integer quantidadeNovasLigacoesEsgoto; // V
+	private Integer quantidadeNovasLigacoesEsgoto;
 	
-	private Integer economiasNovasLigacoesEsgoto; // W
+	private Integer economiasNovasLigacoesEsgoto;
 	
-	private Integer quantidadeNovasLigacoesAgua; // X
+	private Integer quantidadeNovasLigacoesAgua;
 	
-	private Integer economiasNovasLigacoesAgua; // Y
+	private Integer economiasNovasLigacoesAgua;
 	
-	private Integer quantidadeConsumidoresLigados; // Z
+	private Integer quantidadeConsumidoresLigados;
 	
-	private Integer quantidadeConsumidoresCortados; // AA
+	private Integer quantidadeConsumidoresCortados;
 	
-	private Integer quantidadeConsumidoresSuprimidos; // AB
+	private Integer quantidadeConsumidoresSuprimidos;
 	
-	private Integer quantidadeConsumidoresFactiveis; // AC
+	private Integer quantidadeConsumidoresFactiveis;
 	
-	private Integer quantidadeConsumidoresTotal; // AD
+	private Integer quantidadeConsumidoresTotal;
 	
-	private BigDecimal indiceCortados; // AE
+	private BigDecimal indiceCortados;
 	
-	private BigDecimal indiceSuprimidos; // AF
+	private BigDecimal indiceSuprimidos;
 	
-	private BigDecimal indiceFactiveis; // AG
+	private BigDecimal indiceFactiveis;
+	
+	private Integer idLocalidade;
 	
 	public RelatorioBIGBean() {
 	}
@@ -111,6 +112,7 @@ public class RelatorioBIGBean implements RelatorioBean {
 		this.indiceCortados = helper.getIndiceCortados();
 		this.indiceSuprimidos = helper.getIndiceSuprimidos();
 		this.indiceFactiveis = helper.getIndiceFactiveis();
+		this.idLocalidade = helper.getIdLocalidade();
 	}
 
 	public String getGerenciaRegional() {
@@ -391,6 +393,12 @@ public class RelatorioBIGBean implements RelatorioBean {
 	public void setIndiceFactiveis(BigDecimal indiceFactiveis) {
 		this.indiceFactiveis = indiceFactiveis;
 	}
-	
-	
+
+	public Integer getIdLocalidade() {
+		return idLocalidade;
+	}
+
+	public void setIdLocalidade(Integer idLocalidade) {
+		this.idLocalidade = idLocalidade;
+	}
 }

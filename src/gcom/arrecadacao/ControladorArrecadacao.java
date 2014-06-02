@@ -56495,6 +56495,7 @@ public class ControladorArrecadacao implements SessionBean {
 					helper.setIndiceCortados((BigDecimal) objetoBIG[30]);
 					helper.setIndiceSuprimidos((BigDecimal) objetoBIG[31]);
 					helper.setIndiceFactiveis((BigDecimal) objetoBIG[32]);
+					helper.setIdLocalidade((Integer) objetoBIG[33]);
 					
 					retorno.add(helper);
 				}
