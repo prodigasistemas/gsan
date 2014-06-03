@@ -44993,7 +44993,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 									valorEsgoto = valorEsgoto.negate();
 							}
 						}
-						emitirContaHelper.setValorAgua(valorEsgoto);
+						emitirContaHelper.setValorEsgoto(valorEsgoto);
 					}
 					if (parmsConta[13] != null) {
 						emitirContaHelper.setDebitos((BigDecimal) parmsConta[13]);
