@@ -376,8 +376,8 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		}
 	}
 	
-	private void atualizarClienteFoneAtualizacaoCadastral(Integer idiIovelRetorno) throws Exception {
-		ImovelRetorno imovelRetorno = (ImovelRetorno) repositorioAtualizacaoCadastral.pesquisarImovelRetorno(idiIovelRetorno);
+	private void atualizarClienteFoneAtualizacaoCadastral(Integer idImovel) throws Exception {
+		ImovelRetorno imovelRetorno = (ImovelRetorno) repositorioAtualizacaoCadastral.pesquisarImovelRetorno(idImovel);
 
 
 		Collection<IClienteFone> clienteFonesRetorno = this.obterClientesFoneParaAtualizar(imovelRetorno.getIdImovel());
@@ -767,7 +767,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 					
 					if (existeRelacaoClienteImovel(clienteImovelRetorno)) {
 						atualizarInformacoesCliente(clienteImovelRetorno);
-						atualizarClienteFoneAtualizacaoCadastral(clienteImovelRetorno.getIdImovelRetorno());
+						atualizarClienteFoneAtualizacaoCadastral(clienteImovelRetorno.getImovel().getId());
 						
 					} else {
 						incluirNovaRelacaoCliente(clienteImovelRetorno);
@@ -801,7 +801,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		
 		try {
 			ICliente clienteRetorno = repositorioAtualizacaoCadastral.pesquisarClienteRetorno(clienteImovelRetorno);
-			IImovel imovelRetorno = repositorioAtualizacaoCadastral.pesquisarImovelRetorno(clienteImovelRetorno.getIdImovelRetorno());
+			IImovel imovelRetorno = repositorioAtualizacaoCadastral.pesquisarImovelRetorno(clienteImovelRetorno.getImovel().getId());
 			
 			Integer idSetorComercial = getControladorCadastro().pesquisarIdSetorComercialPorCodigoELocalidade(imovelRetorno.getIdLocalidade(), imovelRetorno.getCodigoSetorComercial());
 			
@@ -843,7 +843,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 				
 				if (!isImovelEmCampo(clienteImovelRetorno.getImovel().getId())) {
 					ICliente clienteRetorno = repositorioAtualizacaoCadastral.pesquisarClienteRetorno(clienteImovelRetorno);
-					IImovel imovelRetorno = repositorioAtualizacaoCadastral.pesquisarImovelRetorno(clienteImovelRetorno.getIdImovelRetorno());
+					IImovel imovelRetorno = repositorioAtualizacaoCadastral.pesquisarImovelRetorno(clienteImovelRetorno.getImovel().getId());
 					
 					Integer idSetorComercial = getControladorCadastro().pesquisarIdSetorComercialPorCodigoELocalidade(imovelRetorno.getIdLocalidade(), imovelRetorno.getCodigoSetorComercial());
 					

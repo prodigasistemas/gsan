@@ -1,12 +1,8 @@
 package gcom.cadastro.cliente;
 
-import org.apache.commons.lang.StringUtils;
-
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastralImovel;
-import gcom.cadastro.endereco.FiltroLogradouroTipo;
-import gcom.cadastro.endereco.LogradouroTipo;
-import gcom.fachada.Fachada;
-import gcom.util.filtro.ParametroSimples;
+
+import org.apache.commons.lang.StringUtils;
 
 public class ClienteUsuarioBuilder extends ClienteBuilder {
 	public ClienteUsuarioBuilder(AtualizacaoCadastralImovel atualizacaoCadastralImovel){
@@ -14,9 +10,9 @@ public class ClienteUsuarioBuilder extends ClienteBuilder {
 	}
 	
 	public IClienteAtualizacaoCadastral buildCliente(Short clienteRelacaoTipo) {
-		String campo;
-		
 		buildCliente(USUARIO, clienteRelacaoTipo);
+
+		String campo;
 		
 		campo = atualizacaoCadastralImovel.getLinhaCliente("matriculaImovelCliente");
 		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
@@ -27,8 +23,7 @@ public class ClienteUsuarioBuilder extends ClienteBuilder {
 		
 		campo = atualizacaoCadastralImovel.getLinhaImovel("idTipoLogradouroImovel");
 		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
-			clienteTxt.setIdLogradouroTipo(Integer.parseInt(campo));
-			clienteTxt.setDsLogradouroTipo(getDescricaoLogradouroTipo(Integer.parseInt(campo)));
+			clienteTxt.setIdLogradouroTipo(Integer.parseInt(campo) == 0 ? null : Integer.parseInt(campo));
 		}
 
 		clienteTxt.setNumeroImovel(atualizacaoCadastralImovel.getLinhaImovel("numeroImovel"));
@@ -48,13 +43,5 @@ public class ClienteUsuarioBuilder extends ClienteBuilder {
 		}
 		
 		return clienteTxt;
-	}
-	
-	private String getDescricaoLogradouroTipo(int idTipoLogradouro) {
-		FiltroLogradouroTipo filtro = new FiltroLogradouroTipo();
-		filtro.adicionarParametro(new ParametroSimples(FiltroLogradouroTipo.ID, idTipoLogradouro));
-		LogradouroTipo logradouroTipo = (LogradouroTipo) (Fachada.getInstancia().pesquisar(filtro, LogradouroTipo.class.getName()).iterator().next());
-
-		return logradouroTipo.getDescricao();
 	}
 }

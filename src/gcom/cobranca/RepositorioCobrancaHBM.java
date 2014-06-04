@@ -1035,7 +1035,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 			}
 				
 			consulta += " GROUP BY guia.gpag_id, guia.gpag_vldebito, guia.gpag_amreferenciacontabil, guia.gpag_dtvencimento, guia.gpag_iccobrancamulta, debtipo.dbtp_dsdebitotipo, guia.gpag_dtemissao, "
-				+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal ";
+				+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal, guia.dotp_id ";
 			
 			if (indicadorPagamento == 1) {
 				consulta += " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) = 0 ";
@@ -1059,7 +1059,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 				+ "and guia.gpag_dtvencimento between :inicialVencimento and :finalVencimento ";
 			
 			consulta += " GROUP BY guia.gpag_id, guia.gpag_vldebito, guia.gpag_amreferenciacontabil, guia.gpag_dtvencimento, guia.gpag_iccobrancamulta, debtipo.dbtp_dsdebitotipo, guia.gpag_dtemissao, "
-				+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal  ";
+				+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal, guia.dotp_id  ";
 			
 			if (indicadorPagamento == 1) {
 				consulta += " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) = 0 ";
@@ -1260,7 +1260,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 				+ "and guia.gpag_dtvencimento between :inicialVencimento and :finalVencimento ";
 				
 			consulta += " GROUP BY guia.gpag_id, guia.gpag_vldebito, guia.gpag_amreferenciacontabil, guia.gpag_dtvencimento, guia.gpag_iccobrancamulta, debtipo.dbtp_dsdebitotipo, guia.gpag_dtemissao, "
-				+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal  ";
+				+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal, guia.dotp_id  ";
 			
 			if (indicadorPagamento == 1) {
 				consulta += " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) = 0 ";
@@ -11865,7 +11865,7 @@ return retorno;
 				+ "and guia.gpag_dtvencimento between :inicialVencimento and :finalVencimento ";
 			
 			consulta += " GROUP BY guia.gpag_id, guia.gpag_vldebito, guia.gpag_amreferenciacontabil, guia.gpag_dtvencimento, guia.gpag_iccobrancamulta, debtipo.dbtp_dsdebitotipo, guia.gpag_dtemissao, "
-				+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal ";
+				+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal, guia.dotp_id ";
 			
 			if (indicadorPagamento == 1) {
 				consulta += " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) = 0 ";
@@ -11891,7 +11891,7 @@ return retorno;
 					+ "and guia.gpag_dtvencimento between :inicialVencimento and :finalVencimento ";
 				
 				consulta += " GROUP BY guia.gpag_id, guia.gpag_vldebito, guia.gpag_amreferenciacontabil, guia.gpag_dtvencimento, guia.gpag_iccobrancamulta, debtipo.dbtp_dsdebitotipo, guia.gpag_dtemissao, "
-					+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal";
+					+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal, guia.dotp_id ";
 				
 				if (indicadorPagamento == 1) {
 					consulta += " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) = 0 ";
@@ -12043,7 +12043,7 @@ return retorno;
 			}
 			
 			consulta += " GROUP BY guia.gpag_id, guia.gpag_vldebito, guia.gpag_amreferenciacontabil, guia.gpag_dtvencimento, guia.gpag_iccobrancamulta, debtipo.dbtp_dsdebitotipo, guia.gpag_dtemissao, "
-				+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal";
+				+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal, guia.dotp_id";
 			
 			if (indicadorPagamento == 1) {
 				consulta += " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) = 0 ";
@@ -12067,7 +12067,7 @@ return retorno;
 				+ "and guia.gpag_dtvencimento between :inicialVencimento and :finalVencimento ";
 			
 			consulta += " GROUP BY guia.gpag_id, guia.gpag_vldebito, guia.gpag_amreferenciacontabil, guia.gpag_dtvencimento, guia.gpag_iccobrancamulta, debtipo.dbtp_dsdebitotipo, guia.gpag_dtemissao, "
-				+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal";
+				+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal, guia.dotp_id";
 			
 			if (indicadorPagamento == 1) {
 				consulta += " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) = 0 ";
@@ -12093,7 +12093,7 @@ return retorno;
 					+ "and guia.gpag_dtvencimento between :inicialVencimento and :finalVencimento ";
 				
 				consulta += " GROUP BY guia.gpag_id, guia.gpag_vldebito, guia.gpag_amreferenciacontabil, guia.gpag_dtvencimento, guia.gpag_iccobrancamulta, debtipo.dbtp_dsdebitotipo, guia.gpag_dtemissao, "
-					+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal";
+					+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal, guia.dotp_id";
 				
 				if (indicadorPagamento == 1) {
 					consulta += " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) = 0 ";
