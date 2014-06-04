@@ -11,8 +11,10 @@ import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.gui.ManutencaoRegistroActionForm;
+import gcom.micromedicao.ControladorMicromedicao;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesSistema;
+import gcom.util.ControladorException;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
@@ -49,10 +51,11 @@ public class RemoverManterImovelAction extends GcomAction {
      * @param httpServletResponse
      *            Descrição do parâmetro
      * @return Descrição do retorno
+     * @throws ControladorException 
      */
     public ActionForward execute(ActionMapping actionMapping,
             ActionForm actionForm, HttpServletRequest httpServletRequest,
-            HttpServletResponse httpServletResponse) {
+            HttpServletResponse httpServletResponse) throws ControladorException {
 
         ManutencaoRegistroActionForm manutencaoRegistroActionForm = (ManutencaoRegistroActionForm) actionForm;
 
@@ -89,7 +92,9 @@ public class RemoverManterImovelAction extends GcomAction {
 			Calendar dataFim = new GregorianCalendar();
 			dataFim.set(Calendar.YEAR,9999);
 			dataFim.set(Calendar.MONTH,11);
-			dataFim.set(Calendar.DATE,31);			
+			dataFim.set(Calendar.DATE,31);		
+			
+        	fachada.validarImovelEmCampo(Integer.parseInt(idImovel));
 			
 			ObterDebitoImovelOuClienteHelper obterDebitoImovelOuClienteHelper =  fachada.obterDebitoImovelOuCliente(1,idImovel,null,null,"190001","999912",dataInicio.getTime(),dataFim.getTime(),1,1,1,1,1,1,1,null);
         	boolean existeDebito = false;
@@ -115,8 +120,7 @@ public class RemoverManterImovelAction extends GcomAction {
         	
         	//Se existir debito para o imovel
         	if(existeDebito){
-        		throw new ActionServletException(
-				"atencao.imovel.possui.debito.nao.excluir");
+        		throw new ActionServletException("atencao.imovel.possui.debito.nao.excluir");
         	}
         	
         	FiltroImovel filtroImovel = new FiltroImovel();

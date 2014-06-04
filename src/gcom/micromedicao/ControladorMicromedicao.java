@@ -42538,11 +42538,8 @@ public class ControladorMicromedicao implements SessionBean {
 					rota.getFaturamentoGrupo().getAnoMesReferencia(), rota.getId(), rota.getFaturamentoGrupo().getId());
 
 			if (arquivo != null) {
-				throw new ControladorException("atencao.imovel_em_campo",
-						null, Util.formatarAnoMesParaMesAno(rota.getFaturamentoGrupo().getAnoMesReferencia()).toString());
+				throw new ControladorException("atencao.imovel_em_campo", null, Util.formatarAnoMesParaMesAno(rota.getFaturamentoGrupo().getAnoMesReferencia()).toString());
 			}
-			
-		
 		} catch (ControladorException ex) {
 			throw ex;
 		} catch (Exception e) {
