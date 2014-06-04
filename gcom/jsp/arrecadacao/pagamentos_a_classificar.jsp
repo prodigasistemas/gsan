@@ -23,7 +23,7 @@
 			}
 			
 			function devolver(form) {
-				form.action = 'refaturarPagamentosNaoClassificadosAction.do?devolver=1';
+				form.action = 'classificarPagamentosAction.do?devolver=1';
 		  		form.submit();
 			}
 		</script>

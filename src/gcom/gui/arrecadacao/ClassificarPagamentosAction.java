@@ -31,22 +31,36 @@ public class ClassificarPagamentosAction extends GcomAction {
 			ActionForm actionForm, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 		
-		// Seta o retorno
 		ActionForward retorno = actionMapping.findForward("telaSucesso");
-		
-		// Obtém a instância da fachada
 		Fachada fachada = Fachada.getInstancia();
-		
-		// Obtém a sessão
 		HttpSession sessao = httpServletRequest.getSession(false);
-		
-		PagamentosAClassificarActionForm classificarPagamentosActionForm = (PagamentosAClassificarActionForm) actionForm;
-		
+		PagamentosAClassificarActionForm form = (PagamentosAClassificarActionForm) actionForm;
 		Usuario usuarioLogado = this.getUsuarioLogado(httpServletRequest);
-		
-		// Saber se vai liberar ou nao liberar
 		String parametroDevolver = (String) httpServletRequest.getParameter("devolver");
 		
+		this.setParametros(new Integer(form.getIdSituacaoPagamento()));
+		
+		String[] registrosClassificacao = form.getIdRegistrosClassificacao();
+		Collection<Pagamento> colecaoPagamentos = obterPagamentosSelecionados(form, registrosClassificacao);
+		
+		try {
+			
+			fachada.classificarPagamentosResolvidos(colecaoPagamentos, usuarioLogado, this.creditoTipo, this.creditoOrigem, isDevolucao(sessao, parametroDevolver));
+			
+		} catch (ControladorException e) {
+			e.printStackTrace();
+		}
+		
+		montarPaginaSucesso(httpServletRequest,
+				"Pagamentos selecionados já classificados",
+				"Voltar",
+				"exibirFiltrarPagamentosAClassificarAction.do?menu=sim");
+		
+		sessao.removeAttribute("contas");
+		return retorno;
+	}
+
+	private boolean isDevolucao(HttpSession sessao, String parametroDevolver) {
 		boolean devolver = true;
 		
 		if(parametroDevolver == null){
@@ -56,15 +70,13 @@ public class ClassificarPagamentosAction extends GcomAction {
 		if (parametroDevolver.equals("0")) {
 			devolver = false;
 		}
-		
-		this.setParametros(new Integer(classificarPagamentosActionForm.getIdSituacaoPagamento()));
-		
-		String[] registrosClassificacao = classificarPagamentosActionForm.getIdRegistrosClassificacao();
-		
+		return devolver;
+	}
+
+	private Collection<Pagamento> obterPagamentosSelecionados(PagamentosAClassificarActionForm form, String[] registrosClassificacao) {
 		Collection<Pagamento> colecaoPagamentos = new ArrayList<Pagamento>();
-		
-		if(!classificarPagamentosActionForm.getColecaoPagamentosAClassificar().isEmpty()){
-			Collection<Pagamento> pagamentos =	(Collection<Pagamento>) classificarPagamentosActionForm.getColecaoPagamentosAClassificar();
+		if(!form.getColecaoPagamentosAClassificar().isEmpty()){
+			Collection<Pagamento> pagamentos =	(Collection<Pagamento>) form.getColecaoPagamentosAClassificar();
 			
 			Iterator<Pagamento> iteratorPagamentos = pagamentos.iterator();
 			while (iteratorPagamentos.hasNext()) {
@@ -79,32 +91,9 @@ public class ClassificarPagamentosAction extends GcomAction {
 			}
 		}
 		
-		try {
-			
-			fachada.classificarPagamentosResolvidos(colecaoPagamentos, usuarioLogado, 
-					this.creditoTipo, this.creditoOrigem, devolver);
-			
-		} catch (ControladorException e) {
-			e.printStackTrace();
-		}
-		
-		montarPaginaSucesso(httpServletRequest,
-				"Pagamentos selecionados já classificados",
-				"Voltar",
-				"exibirFiltrarPagamentosAClassificarAction.do?menu=sim");
-		
-		sessao.removeAttribute("contas");
-		return retorno;
+		return colecaoPagamentos;
 	}
 	
-	/**
-	 * Método que seta os ids de: 
-	 *  situação do pagamento resolvido
-	 *  credito tipo
-	 *  credito origem
-	 *  
-	 * @param idPagamentoOriginal
-	 */
 	private void setParametros(Integer idPagamentoOriginal) {
 		
 		if (idPagamentoOriginal.equals(PagamentoSituacao.DOCUMENTO_INEXISTENTE_CONTA_PARCELADA)) {
