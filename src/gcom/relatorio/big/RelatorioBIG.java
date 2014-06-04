@@ -1,13 +1,11 @@
 package gcom.relatorio.big;
 
-import gcom.batch.Relatorio;
 import gcom.relatorio.ConstantesRelatorios;
 import gcom.relatorio.RelatorioDataSource;
 import gcom.relatorio.RelatorioVazioException;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.tarefa.TarefaException;
 import gcom.tarefa.TarefaRelatorio;
-import gcom.util.ControladorException;
 import gcom.util.agendadortarefas.AgendadorTarefas;
 
 import java.util.ArrayList;

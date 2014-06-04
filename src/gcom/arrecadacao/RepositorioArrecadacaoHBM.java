@@ -94,27 +94,13 @@ import org.hibernate.StatelessSession;
 import org.hibernate.type.Type;
 
 
-/**
- * O repositório faz a comunicação com a base de dados através do hibernate. O
- * cliente usa o repositório como fonte de dados.
- * 
- * @author Sávio Luiz
- */
 public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 
 	protected static IRepositorioArrecadacao instancia;
 
-	/** 
-	 * Construtor da classe RepositorioCargaFuncionalidadesHBM
-	 */
 	protected RepositorioArrecadacaoHBM() {
 	}
 
-	/**
-	 * Retorna o valor de instancia
-	 * 
-	 * @return O valor de instancia
-	 */
 	public static IRepositorioArrecadacao getInstancia() {
 
 		String dialect = HibernateUtil.getDialect();
@@ -270,13 +256,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 
 	}
 
-	/*
-	 * [UC0235] Inserir Aviso Bancário [FS0003] Verificar existência de avisos
-	 * bancários não realizados [FS0004] Verificar seleção de aviso Retorna o
-	 * valor do maior número sequencial do arrecadador selecionado @author
-	 * Rafael Corrêa
-	 */
-
 	public Short pesquisarValorMaximoNumeroSequencial(Date dataLancamento,
 			String idArrecadador) throws ErroRepositorioException {
 
@@ -347,10 +326,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -393,10 +370,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -439,10 +414,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -474,36 +447,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 
 		return retorno;
 	}
-
-	/*public ArrecadadorContrato pesquisarNumeroSequecialArrecadadorContrato(
-			Short idArrecadador) throws ErroRepositorioException {
-
-		ArrecadadorContrato retorno = null;
-
-		Session session = HibernateUtil.getSession();
-
-		String consulta;
-
-		try {
-			consulta = "SELECT ac " + "FROM ArrecadadorContrato ac "
-					+ "INNER JOIN ac.arrecadador arr "
-					//+ "WHERE arr.codigoAgente = :codigoAgente AND "
-					+ "WHERE arr.id = :codigoAgente AND "
-					+ "ac.dataContratoEncerramento is null";
-
-			retorno = (ArrecadadorContrato) session.createQuery(consulta)
-					.setShort("codigoAgente", idArrecadador).setMaxResults(1)
-					.uniqueResult();
-
-		} catch (HibernateException e) {
-
-			throw new ErroRepositorioException("Erro no Hibernate");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
-
-		return retorno;
-	}*/
 	
 	public ArrecadadorContrato pesquisarNumeroSequecialArrecadadorContrato(
 			Integer idArrecadadorContrato) throws ErroRepositorioException {
@@ -516,8 +459,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 
 		try {
 			consulta = "SELECT ac " + "FROM ArrecadadorContrato ac "
-					//+ "INNER JOIN ac.arrecadador arr "
-					//+ "WHERE arr.codigoAgente = :codigoAgente AND "
 					+ "WHERE ac.id = :idArrecadadorContrato AND "
 					+ "ac.dataContratoEncerramento is null";
 
@@ -535,10 +476,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		return retorno;
 	}
 
-	/*
-	 * Verifica a Existência do Banco na Base de Dados @author Roberta Costa
-	 * @created 23/02/2006
-	 */
 	public Integer verificarExistenciaBanco(Integer idBanco)
 			throws ErroRepositorioException {
 		Integer retorno = null;
@@ -553,19 +490,13 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
 	}
 
-	/*
-	 * Verifica a Existência da Agência bancária na Base de Dados @author
-	 * Roberta Costa @created 23/02/2006
-	 */
 	public Integer verificarExistenciaAgencia(String codigoAgencia,
 			Integer idBanco) throws ErroRepositorioException {
 		Integer retorno = null;
@@ -581,10 +512,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					idBanco).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -615,10 +544,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					idBanco).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -31309,7 +31236,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 				+ "boig_qtdconstotal as quantidadeConsumidoresTotal, "
 				+ "boig_indicecortados as indiceCortados, "
 				+ "boig_indicesuprimidos as indiceSuprimidos, "
-				+ "boig_indicefactiveis as indiceFactiveis "
+				+ "boig_indicefactiveis as indiceFactiveis, "
+				+ "loca.loca_id as idLocalidade "
 				+ "FROM arrecadacao.boletim_informacoes_gerenciais big "
 				+ "INNER JOIN cadastro.localidade loca ON loca.loca_id = big.loca_id "
 				+ "INNER JOIN cadastro.gerencia_regional greg ON greg.greg_id = loca.greg_id "
@@ -31350,6 +31278,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.addScalar("indiceCortados", Hibernate.BIG_DECIMAL)
 					.addScalar("indiceSuprimidos", Hibernate.BIG_DECIMAL)
 					.addScalar("indiceFactiveis", Hibernate.BIG_DECIMAL)
+					.addScalar("idLocalidade", Hibernate.INTEGER)
 					.setInteger("anoMesReferencia", anoMesReferencia)
 					.list();
 
