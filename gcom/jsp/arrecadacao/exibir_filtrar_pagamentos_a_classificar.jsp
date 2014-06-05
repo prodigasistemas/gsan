@@ -198,6 +198,15 @@
 						</td>
 					</tr>
 					
+					<tr>
+						<td><strong>Matrícula:</strong></td>
+						<td>
+							
+							<html:text name="PagamentosAClassificarActionForm" property="matriculaImovel" 
+									size="10" maxlength="10" onkeypress="javascript:return isCampoNumerico(event);"/> 
+						</td>
+					</tr>
+					
 				</table>
 	
 				<table width="100%">

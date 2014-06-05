@@ -34,19 +34,24 @@ public class FiltrarPagamentosAClassificarAction extends GcomAction {
 
 		Integer situacaoPagamento = new Integer(form.getIdSituacaoPagamento());
 		Integer referenciaArrecadacao = Util.formatarMesAnoComBarraParaAnoMes(form.getReferenciaArrecadacao());
-		
+		Integer matriculaImovel = new Integer (form.getReferenciaArrecadacao());
+		Integer motivoCancelamento = new Integer (form.getIdMotivoCancelamento());
 
-		FiltroClassificarPagamentos filtroClassificarPagamentos = 
-			new FiltroClassificarPagamentos(FiltroClassificarPagamentos.ORDER_BY);
+		FiltroClassificarPagamentos filtroClassificarPagamentos = new FiltroClassificarPagamentos(FiltroClassificarPagamentos.ORDER_BY);
 
 		
 		if ( situacaoPagamento != null && referenciaArrecadacao != null ) {
 			
-			filtroClassificarPagamentos.adicionarParametro(new ParametroSimples(
-					FiltroClassificarPagamentos.ID_SITUACAO_PAGAMENTO, situacaoPagamento));
+			filtroClassificarPagamentos.adicionarParametro(new ParametroSimples(FiltroClassificarPagamentos.ID_SITUACAO_PAGAMENTO, situacaoPagamento));
+			filtroClassificarPagamentos.adicionarParametro(new ParametroSimples(FiltroClassificarPagamentos.REFERENCIA_ARRECADACAO, referenciaArrecadacao));
 			
-			filtroClassificarPagamentos.adicionarParametro(new ParametroSimples(
-					FiltroClassificarPagamentos.REFERENCIA_ARRECADACAO, referenciaArrecadacao));
+			if (isMatriculaImovelPreenchida(matriculaImovel)) {
+				filtroClassificarPagamentos.adicionarParametro(new ParametroSimples(FiltroClassificarPagamentos.ID_IMOVEL, matriculaImovel));
+			}
+			
+			if (isMotivoCanelamentoPreenchido(motivoCancelamento)) {
+				filtroClassificarPagamentos.adicionarParametro(new ParametroSimples(FiltroClassificarPagamentos.ID_MOTIVO_CANCELAMENTO, matriculaImovel));
+			}
 		}
 
 		@SuppressWarnings("unchecked")
@@ -55,6 +60,7 @@ public class FiltrarPagamentosAClassificarAction extends GcomAction {
 				
 		form.setColecaoPagamentosAClassificar(colecaoPagamentosAClassificar);
 		form.setSituacaoPagamento(getDescricaoSituacaoPagamento(situacaoPagamento));
+		
 		if ( colecaoPagamentosAClassificar != null && colecaoPagamentosAClassificar.isEmpty() ) {
 			throw new ActionServletException("atencao.pesquisa.nenhumresultado");
 		
@@ -87,5 +93,13 @@ public class FiltrarPagamentosAClassificarAction extends GcomAction {
 		
 		PagamentoSituacao pagamentoSituacao = (PagamentoSituacao) (getFachada().pesquisar(filtroSituacao, PagamentoSituacao.class.getName()).iterator().next());
 		return pagamentoSituacao.getDescricao();
+	}
+	
+	private boolean isMatriculaImovelPreenchida(Integer matriculaImovel) {
+		return matriculaImovel != null && matriculaImovel > 0;
+	}
+	
+	private boolean isMotivoCanelamentoPreenchido(Integer motivoCancelamento) {
+		return motivoCancelamento != null && motivoCancelamento > 0;
 	}
 }

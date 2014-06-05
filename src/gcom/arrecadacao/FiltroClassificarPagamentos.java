@@ -28,7 +28,9 @@ public class FiltroClassificarPagamentos extends Filtro implements Serializable 
 	
 	public final static String REFERENCIA_PAGAMENTO = "pagamento.getAnoMesReferenciaPagamento";
 	
-	public final static String MOTIVO_CANCELAMENTO = "contaGeral.conta.contaMotivoCancelamento.descricaoMotivoCancelamentoConta";
+	public final static String ID_MOTIVO_CANCELAMENTO = "contaGeral.conta.contaMotivoCancelamento.id";
+	
+	public final static String DESCRICAO_MOTIVO_CANCELAMENTO = "contaGeral.conta.contaMotivoCancelamento.descricaoMotivoCancelamentoConta";
 	
 	public final static String ORDER_BY = "dataPagamento, objeto.imovel.id, objeto.valorPagamento";
 }
