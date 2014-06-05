@@ -1,6 +1,5 @@
 package gcom.gui.micromedicao;
 
-import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelPerfil;
@@ -21,7 +20,6 @@ import gcom.micromedicao.FiltroReleituraMobile;
 import gcom.micromedicao.ReleituraMobile;
 import gcom.micromedicao.SituacaoTransmissaoLeitura;
 import gcom.micromedicao.bean.CalculoConsumoHelper;
-import gcom.micromedicao.consumo.ConsumoAnormalidade;
 import gcom.micromedicao.leitura.FiltroLeituraAnormalidade;
 import gcom.micromedicao.leitura.LeituraAnormalidade;
 import gcom.micromedicao.leitura.LeituraTipo;
@@ -51,41 +49,18 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-/**
- * Action responsável pela pre-exibição da pagina de inserir bairro
- * 
- * @author Sávio Luiz, Ivan Sérgio
- * @created 28 de Junho de 2004
- * @date 06/03/2008
- * @alteracao: Verificar poco_id para indicar que o imovel possui poco em vez de hidi_id
- */
 public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction {
-	/**
-	 * Description of the Method
-	 * 
-	 * @param actionMapping
-	 *            Description of the Parameter
-	 * @param actionForm
-	 *            Description of the Parameter
-	 * @param httpServletRequest
-	 *            Description of the Parameter
-	 * @param httpServletResponse
-	 *            Description of the Parameter
-	 * @return Description of the Return Value
-	 */
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 
-		// Seta o mapeamento de retorno
-		ActionForward retorno = actionMapping
-				.findForward("dadosAnaliseMedicaoConsumoResumo");
+		ActionForward retorno = actionMapping.findForward("dadosAnaliseMedicaoConsumoResumo");
 
 		LeituraConsumoActionForm leituraConsumoActionForm = (LeituraConsumoActionForm) actionForm;
 
 		Fachada fachada = Fachada.getInstancia();
 		
-		// Mudar isso quando tiver esquema de segurança
 		HttpSession sessao = httpServletRequest.getSession(false);
 		
 		Usuario usuarioLogado = this.getUsuarioLogado(httpServletRequest);
@@ -93,82 +68,39 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 		FaturamentoGrupo faturamentoGrupo = (FaturamentoGrupo)sessao.getAttribute("faturamentoGrupo");
 		String mesAnoPesquisa = (String) sessao.getAttribute("mesAnoPesquisa");
 		
-		if(leituraConsumoActionForm.getIdAnormalidade() != null && 
-			!leituraConsumoActionForm.getIdAnormalidade().trim().equals("") && 
-			httpServletRequest.getParameter("pesquisarAnormalidade") != null){
+		if(possuiAnormalidade(httpServletRequest, leituraConsumoActionForm)){
 			
 			String codigoAnormalidadeLeituraDigitadoEnter = leituraConsumoActionForm.getIdAnormalidade();
-			// Verifica se o usuário alterou a Anormalidade de Leitura
-				FiltroLeituraAnormalidade filtroLeituraAnormalidade = new FiltroLeituraAnormalidade();
-				filtroLeituraAnormalidade
-						.adicionarParametro(new ParametroSimples(
-								FiltroLeituraAnormalidade.ID,
-								codigoAnormalidadeLeituraDigitadoEnter));
 
-				Collection anormalidadeLeituraEncontrada = fachada
-						.pesquisar(filtroLeituraAnormalidade,
-								LeituraAnormalidade.class.getName());
+			FiltroLeituraAnormalidade filtroLeituraAnormalidade = new FiltroLeituraAnormalidade();
+			filtroLeituraAnormalidade.adicionarParametro(new ParametroSimples(FiltroLeituraAnormalidade.ID, codigoAnormalidadeLeituraDigitadoEnter));
 
-				if (anormalidadeLeituraEncontrada != null
-						&& !anormalidadeLeituraEncontrada.isEmpty()) {
+			Collection anormalidadeLeituraEncontrada = fachada.pesquisar(filtroLeituraAnormalidade, LeituraAnormalidade.class.getName());
 
-					leituraConsumoActionForm
-							.setIdAnormalidade(""
-									+ ((LeituraAnormalidade) ((List) anormalidadeLeituraEncontrada)
-											.get(0)).getId());
-					leituraConsumoActionForm
-							.setDescricaoAnormalidade(((LeituraAnormalidade) ((List) anormalidadeLeituraEncontrada)
-									.get(0)).getDescricao());
-					
-					leituraConsumoActionForm.
-							setIndicadorLeitura(""
-									+ ((LeituraAnormalidade) ((List) anormalidadeLeituraEncontrada)
-											.get(0)).getIndicadorLeitura());
+			if (anormalidadeLeituraEncontrada != null && !anormalidadeLeituraEncontrada.isEmpty()) {
 
-				} else {
-					leituraConsumoActionForm
-							.setIdAnormalidade("");
-					httpServletRequest.setAttribute(
-							"idAnormalidadeNaoEncontrada", "true");
-					leituraConsumoActionForm
-							.setDescricaoAnormalidade("Anormalidade de leitura inexistente");
-					httpServletRequest.setAttribute("nomeCampo",
-							"idAnormalidade");
-					leituraConsumoActionForm.setIndicadorLeitura("");
-				}	
+				leituraConsumoActionForm.setIdAnormalidade("" + ((LeituraAnormalidade) ((List) anormalidadeLeituraEncontrada).get(0)).getId());
+				leituraConsumoActionForm.setDescricaoAnormalidade(((LeituraAnormalidade) ((List) anormalidadeLeituraEncontrada).get(0)).getDescricao());
+				leituraConsumoActionForm.setIndicadorLeitura(""	+ ((LeituraAnormalidade) ((List) anormalidadeLeituraEncontrada).get(0)).getIndicadorLeitura());
+
+			} else {
+				leituraConsumoActionForm.setIdAnormalidade("");
+				httpServletRequest.setAttribute("idAnormalidadeNaoEncontrada", "true");
+				leituraConsumoActionForm.setDescricaoAnormalidade("Anormalidade de leitura inexistente");
+				httpServletRequest.setAttribute("nomeCampo","idAnormalidade");
+				leituraConsumoActionForm.setIndicadorLeitura("");
+			}	
 		} else {
-			leituraConsumoActionForm.setDataLeituraAnteriorFaturamento("");
-			leituraConsumoActionForm.setDataLeituraAtualFaturamento("");
-			leituraConsumoActionForm.setDataLeituraAtualInformada("");
-			leituraConsumoActionForm.setConsumo("");
-			leituraConsumoActionForm.setLeituraAnterior("");
-			leituraConsumoActionForm.setLeituraAnteriorFaturamento("");
-			leituraConsumoActionForm.setLeituraAtualFaturada("");
-			leituraConsumoActionForm.setLeituraAtualInformada("");
-			leituraConsumoActionForm.setIdAnormalidade("");
-			leituraConsumoActionForm.setDescricaoAnormalidade("");
-			leituraConsumoActionForm.setIndicadorLeitura("");
-			leituraConsumoActionForm.setConsumoMedioImovel("");
-			leituraConsumoActionForm.setDiasConsumo("");
-			leituraConsumoActionForm.setVarConsumo("");
-			leituraConsumoActionForm.setLeituraSituacaoAtual("");
-			leituraConsumoActionForm.setIdFuncionario("");
-			leituraConsumoActionForm.setConsumoInformado("");
-			leituraConsumoActionForm.setConsumoTipo("");
-			leituraConsumoActionForm.setConsumoAnormalidadeAbreviada("");
-			leituraConsumoActionForm.setMedido("");
-			leituraConsumoActionForm.setMotivoInterferenciaTipo(-1);
-			leituraConsumoActionForm.setObservacao("");
+			leituraConsumoActionForm = limparLeituraConsumo(leituraConsumoActionForm);
 			
-			Integer idAnormalidadeConsumo = 0;
-			
-			String codigoImovel = httpServletRequest
-					.getParameter("idRegistroAtualizacao");
+			String codigoImovel = httpServletRequest.getParameter("idRegistroAtualizacao");
 			
 			if(httpServletRequest.getParameter("consultaImovelLista") != null){
+				
 				Collection colecaoTeste = (Collection)sessao.getAttribute("colecaoIdsImovelTotal");
 				Iterator iteratorTeste = colecaoTeste.iterator();
 				int contem = 0;
+				
 				while(iteratorTeste.hasNext()){
 					ImovelMicromedicao imovelMicromedicaoTeste = (ImovelMicromedicao)iteratorTeste.next();
 					Integer codigoImovelTeste = imovelMicromedicaoTeste.getImovel().getId();
@@ -177,76 +109,40 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 						break;
 					}
 				}
+				
 				if(contem != 1){
-					throw new ActionServletException(
-							"atencao.pesquisa.nenhumresultado");
+					throw new ActionServletException("atencao.pesquisa.nenhumresultado");
 				}
 			}
 			
-			String idMedicaoTipo = httpServletRequest
-					.getParameter("medicaoTipo");
+			String idMedicaoTipo = httpServletRequest.getParameter("medicaoTipo");
 	
-			//================ parte de controle de paginas (Avançar e Voltar) ===
 			FiltroMedicaoHistoricoSql filtroMedicaoHistoricoSql = new FiltroMedicaoHistoricoSql();
 			
 			if (sessao.getAttribute("filtroMedicaoHistoricoSql") != null) {
-				filtroMedicaoHistoricoSql = (FiltroMedicaoHistoricoSql) sessao
-						.getAttribute("filtroMedicaoHistoricoSql");
+				filtroMedicaoHistoricoSql = (FiltroMedicaoHistoricoSql) sessao.getAttribute("filtroMedicaoHistoricoSql");
 			}
 			
-			Integer totalRegistros = null;
-			if (sessao.getAttribute("totalRegistros") != null
-					&& !sessao.getAttribute("totalRegistros").equals("")) {
-				totalRegistros = (Integer) sessao
-						.getAttribute("totalRegistros");
-			} else {
-				totalRegistros = fachada.filtrarExcecoesLeiturasConsumosCount(
-						faturamentoGrupo, filtroMedicaoHistoricoSql,
-						(String) sessao.getAttribute("mesAnoPesquisa"),
-						(String)sessao.getAttribute("valorAguaEsgotoInicial"), 
-						(String)sessao.getAttribute("valorAguaEsgotoFinal"));
-				sessao.setAttribute("totalRegistros", totalRegistros);
-			}
-			
-			if (totalRegistros == 0) {
-				throw new ActionServletException(
-						"atencao.pesquisa.nenhumresultado");
-			}
+			Integer totalRegistros = obterTotalRegistros(fachada, sessao, faturamentoGrupo, filtroMedicaoHistoricoSql);
 	
 			int numeroPaginasPesquisa = 0;
-			//numeroPaginasPesquisa é inicialmente passado pela sessao pelo ExibirManterAnaliseExcecoesConsumosAction
-			//depois é sobreposto nesse action
-			if (sessao.getAttribute("numeroPaginasPesquisa") != null
-					&& !sessao.getAttribute("numeroPaginasPesquisa").equals("")) {
-				numeroPaginasPesquisa = (Integer) sessao
-						.getAttribute("numeroPaginasPesquisa");
+
+			if (sessao.getAttribute("numeroPaginasPesquisa") != null && !sessao.getAttribute("numeroPaginasPesquisa").equals("")) {
+				numeroPaginasPesquisa = (Integer) sessao.getAttribute("numeroPaginasPesquisa");
 			}
 	
-			//index é a variavel q guarda a posição do objeto imovel dentro da colecao de imoveis
 			int index = 0;
 			if (sessao.getAttribute("index") != null) {
 				index = (Integer) sessao.getAttribute("index");
 			}
 
-			Collection colecaoIdsImovel = null;
-			if(sessao.getAttribute("colecaoIdsImovelTotal") != null){
-				 colecaoIdsImovel = (Collection)sessao.getAttribute("colecaoIdsImovelTotal");
-			}else{
-				
-				colecaoIdsImovel =  fachada.filtrarExcecoesLeiturasConsumos(faturamentoGrupo,
-						filtroMedicaoHistoricoSql, totalRegistros, true, (String)sessao.getAttribute("mesAnoPesquisa"),
-								(String)sessao.getAttribute("valorAguaEsgotoInicial"), (String)sessao.getAttribute("valorAguaEsgotoFinal"));
-				sessao.setAttribute("colecaoIdsImovelTotal", colecaoIdsImovel);
-			}
+			Collection colecaoIdsImovel = obterColecaoIdsImovel(fachada, sessao, faturamentoGrupo, filtroMedicaoHistoricoSql, totalRegistros);
 	
-			Imovel imovelAtual = ((ImovelMicromedicao) ((List) colecaoIdsImovel)
-					.get(index)).getImovel();
+			Imovel imovelAtual = ((ImovelMicromedicao) ((List) colecaoIdsImovel).get(index)).getImovel();
 			
-			// Adiciona os objeto selecionados
 			String observacao = (String)httpServletRequest.getParameter("observacao");
 			adicionarObjetosSelecionadosColecoes(httpServletRequest, sessao, imovelAtual, observacao);
 			
-			// Limpa a sessao para não marcar o checkbox caso o novo imóvel não esteja na coleção
 			sessao.setAttribute("analisado", "");
 			sessao.setAttribute("gerarAviso", "");
 			sessao.setAttribute("gerarOS", "");
@@ -256,23 +152,15 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 			// Atualiza os dados de medição histórico colocando como analisado
 			if (sessao.getAttribute("habilitaCampos") == null) {
 				
-				
-				String analisado = httpServletRequest
-						.getParameter("analisado");
+				String analisado = httpServletRequest.getParameter("analisado");
 
-				// Verifica se o usuário marcou a opção de analisado
 				if (analisado != null && !analisado.trim().equals("")) {
 
-					MedicaoHistorico medicaoHistorico = ((ImovelMicromedicao) ((List) colecaoIdsImovel)
-							.get(index)).getMedicaoHistorico();
+					MedicaoHistorico medicaoHistorico = ((ImovelMicromedicao) ((List) colecaoIdsImovel).get(index)).getMedicaoHistorico();
 
-					if (medicaoHistorico.getIndicadorAnalisado().equals(
-							MedicaoHistorico.INDICADOR_ANALISADO_NAO)) {
+					if (medicaoHistorico.getIndicadorAnalisado().equals(MedicaoHistorico.INDICADOR_ANALISADO_NAO)) {
 
-						fachada
-								.atualizarIndicadorAnalisadoMedicaoHistorico(
-										medicaoHistorico.getId(),
-										usuarioLogado);
+						fachada.atualizarIndicadorAnalisadoMedicaoHistorico(medicaoHistorico.getId(), usuarioLogado);
 						
 						medicaoHistorico.setUsuarioAlteracao(usuarioLogado);
 						medicaoHistorico.setIndicadorAnalisado(MedicaoHistorico.INDICADOR_ANALISADO_SIM);
@@ -281,17 +169,14 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 				}
 			}
 			
-			// verifica se é a primeira vez.Se for então pesquisa o index do id do
-			// imovel na coleção para não precisar ficar rodando a coleção toda vez
-			// que o usuário quiser o imovel anterior ou o proximo imovel
 			if (codigoImovel != null && !codigoImovel.equals("")) {
 				int i = 0;
 				Iterator iterator = colecaoIdsImovel.iterator();
+
 				while (iterator.hasNext()) {
-					ImovelMicromedicao imovelMicromedicao = (ImovelMicromedicao) iterator
-							.next();
-					if (!imovelMicromedicao.getImovel().getId().equals(
-							new Integer(codigoImovel))) {
+					ImovelMicromedicao imovelMicromedicao = (ImovelMicromedicao) iterator.next();
+					
+					if (!imovelMicromedicao.getImovel().getId().equals(new Integer(codigoImovel))) {
 						i = i + 1;
 					} else {
 						break;
@@ -299,52 +184,35 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 				}
 				index = i;
 				sessao.setAttribute("index", index);
-				// caso não seja a primeira vez então, dependendo do parametro que
-				// foi passado, recupera o id do imóvel para ser pesquisado
 			} else {
 				
 				if (httpServletRequest.getParameter("imovelAnterior") != null) {
 					index = index - 1;
-					leituraConsumoActionForm.setAnalisado("");
-					leituraConsumoActionForm.setGerarAviso("");
-					leituraConsumoActionForm.setGerarOS("");
-					leituraConsumoActionForm.setGerarRelatorio("");
-					leituraConsumoActionForm.setMotivoInterferenciaTipo(-1);
+					limparFormPaginacao(leituraConsumoActionForm);
+					
 				} else if (httpServletRequest.getParameter("proximoImovel") != null) {
 					index = index + 1;
-					leituraConsumoActionForm.setAnalisado("");
-					leituraConsumoActionForm.setGerarAviso("");
-					leituraConsumoActionForm.setGerarOS("");
-					leituraConsumoActionForm.setGerarRelatorio("");
-					leituraConsumoActionForm.setMotivoInterferenciaTipo(-1);
+					limparFormPaginacao(leituraConsumoActionForm);
 				}
 				
-			// caso
-			if (index == colecaoIdsImovel.size() || index == -1) {
+				if (index == colecaoIdsImovel.size() || index == -1) {
 					if (colecaoIdsImovel != null && !colecaoIdsImovel.isEmpty()) {
 	
-						// recupera o id do imovel
-						codigoImovel = ((ImovelMicromedicao) ((List) colecaoIdsImovel)
-								.get(index)).getImovel().getId().toString();
-						if(((ImovelMicromedicao) ((List) colecaoIdsImovel)
-								.get(index)).getMedicaoHistorico().getMedicaoTipo() != null){
-							idMedicaoTipo = ((ImovelMicromedicao) ((List) colecaoIdsImovel)
-									.get(index)).getMedicaoHistorico().getMedicaoTipo().getId().toString();
+						codigoImovel = ((ImovelMicromedicao) ((List) colecaoIdsImovel).get(index)).getImovel().getId().toString();
+						
+						if(((ImovelMicromedicao) ((List) colecaoIdsImovel).get(index)).getMedicaoHistorico().getMedicaoTipo() != null){
+							idMedicaoTipo = ((ImovelMicromedicao) ((List) colecaoIdsImovel).get(index)).getMedicaoHistorico().getMedicaoTipo().getId().toString();
 						}
 						sessao.setAttribute("index", index);
 					}
 				} else {
 	
-					// recupera o id do imovel
-					codigoImovel = ((ImovelMicromedicao) ((List) colecaoIdsImovel)
-							.get(index)).getImovel().getId().toString();
+					codigoImovel = ((ImovelMicromedicao) ((List) colecaoIdsImovel).get(index)).getImovel().getId().toString();
 					
-					if(((ImovelMicromedicao) ((List) colecaoIdsImovel)
-							.get(index)).getMedicaoHistorico().getMedicaoTipo() != null){
-						if(((ImovelMicromedicao) ((List) colecaoIdsImovel)
-								.get(index)).getMedicaoHistorico().getMedicaoTipo().getId() != null){
-							idMedicaoTipo = ((ImovelMicromedicao) ((List) colecaoIdsImovel)
-									.get(index)).getMedicaoHistorico().getMedicaoTipo().getId().toString();	
+					if(((ImovelMicromedicao) ((List) colecaoIdsImovel).get(index)).getMedicaoHistorico().getMedicaoTipo() != null){
+						
+						if(((ImovelMicromedicao) ((List) colecaoIdsImovel).get(index)).getMedicaoHistorico().getMedicaoTipo().getId() != null){
+							idMedicaoTipo = ((ImovelMicromedicao) ((List) colecaoIdsImovel).get(index)).getMedicaoHistorico().getMedicaoTipo().getId().toString();	
 						}
 					}
 					sessao.setAttribute("index", index);
@@ -353,59 +221,22 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 			
 			imovelAtual = ((ImovelMicromedicao) ((List) colecaoIdsImovel).get(index)).getImovel();
 
-			//	Pesquisa perfil do imovel para liberar acesso a alterar leitura anterior e atual
+			ImovelPerfil imovelPerfil = fachada.recuperaPerfilImovel(new Integer(codigoImovel));
 			
-			ImovelPerfil imovelPerfil = fachada.recuperaPerfilImovel(
-					new Integer(codigoImovel));
-			
-			
-			/**
-			 * CRC_5084
-			 * Autor: Hugo Leonardo
-			 * Analista: Adriana Ribeiro.
-			 * Data: 26/10/2010
-			 * 
-			 * */
-			FiltroMovimentoContaPrefaturada filtroMovimentoContaPrefaturada = new FiltroMovimentoContaPrefaturada();
-			filtroMovimentoContaPrefaturada.adicionarParametro(new ParametroSimples(
-					FiltroMovimentoContaPrefaturada.MATRICULA, codigoImovel));
-			filtroMovimentoContaPrefaturada.adicionarParametro(new ParametroSimples(
-					FiltroMovimentoContaPrefaturada.ID_MEDICAO_TIPO, idMedicaoTipo));
-			filtroMovimentoContaPrefaturada.adicionarParametro(new ParametroSimples(
-					FiltroMovimentoContaPrefaturada.ANO_MES_REFERENCIA_PRE_FATURAMENTO, Util.formatarMesAnoComBarraParaAnoMes(mesAnoPesquisa)));
-			
-//			filtroMovimentoContaPrefaturada.adicionarCaminhoParaCarregamentoEntidade(FiltroMovimentoContaPrefaturada.CONTA);
-//			filtroMovimentoContaPrefaturada.adicionarParametro(new ParametroNaoNulo(FiltroMovimentoContaPrefaturada.CONTA));
-//			filtroMovimentoContaPrefaturada.adicionarParametro(new ParametroSimples(
-//					FiltroMovimentoContaPrefaturada.ID_CONTA_DEBITO_CREDITO_SITUACAO_ATUAL, DebitoCreditoSituacao.PRE_FATURADA));
-			
-			
-			Collection movimentoContaPrefaturadaEncontrada = fachada.pesquisar(
-					filtroMovimentoContaPrefaturada, MovimentoContaPrefaturada.class.getName());
+			MovimentoContaPrefaturada movimentoContaPrefaturada = obterMovimentoContaPreFaturada(fachada, mesAnoPesquisa, codigoImovel, idMedicaoTipo);
 			
 			Imovel imovelFiltro = null;
 			
 			if (codigoImovel != null && !codigoImovel.equals("") ) {
-				//obtem dados de sistema parametros
 				
-				// Rota e Seq de Rota
-				FiltroImovel filtroImovel = new FiltroImovel();
-				filtroImovel.adicionarCaminhoParaCarregamentoEntidade("quadra.rota");
-				filtroImovel.adicionarCaminhoParaCarregamentoEntidade("rotaAlternativa");
+				imovelFiltro = obterImovel(fachada, codigoImovel);
 				
-				filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, new Integer(codigoImovel)));
-				Collection imoveis = fachada.pesquisar(filtroImovel, Imovel.class.getName());
-				
-				if(!imoveis.isEmpty()){
-					
-					imovelFiltro = (Imovel) imoveis.iterator().next();
+				if(imovelFiltro != null){
 					
 					if (imovelFiltro.getRotaAlternativa() != null){
-						
 						leituraConsumoActionForm.setRota(imovelFiltro.getRotaAlternativa().getCodigo() + "");
 					}
 					else{
-						
 						leituraConsumoActionForm.setRota(imovelFiltro.getQuadra().getRota().getCodigo() + "");
 					}
 					
@@ -416,50 +247,16 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 			}
 			
 			boolean existeContaPreFaturada = false;
-			Integer idDebitoCreditoSituacaoAtualDaConta = fachada.pesquisarDebitoCreditoSituacaoAtualDaConta(
-					new Integer(codigoImovel), Util.formatarMesAnoComBarraParaAnoMes(mesAnoPesquisa));
+			Integer idDebitoCreditoSituacaoAtualDaConta = fachada.pesquisarDebitoCreditoSituacaoAtualDaConta(new Integer(codigoImovel), Util.formatarMesAnoComBarraParaAnoMes(mesAnoPesquisa));
+			
 			if(idDebitoCreditoSituacaoAtualDaConta != null){
 				existeContaPreFaturada = true;
 			}
 			
-//			boolean emissaoConta = false;
-//			
-//			if(!Util.isVazioOrNulo(movimentoContaPrefaturadaEncontrada)){
-//				
-//				MovimentoContaPrefaturada mcpf = (MovimentoContaPrefaturada) movimentoContaPrefaturadaEncontrada.iterator().next();
-//				
-//				if(mcpf.getIndicadorEmissaoConta().compareTo(ConstantesSistema.NAO) == 0){
-//					if(imovelFiltro != null && ( imovelFiltro.getImovelCondominio() != null 
-//							|| imovelFiltro.getIndicadorImovelCondominio().compareTo(ConstantesSistema.SIM) == 0 )){
-//						
-//						emissaoConta = true;
-//					}
-//				}
-//
-//			}else{
-//				if(imovelFiltro != null && ( imovelFiltro.getImovelCondominio() != null 
-//						|| imovelFiltro.getIndicadorImovelCondominio().compareTo(ConstantesSistema.SIM) == 0 )){
-//					
-//					emissaoConta = true;
-//				}
-//			}
-//			
-//			boolean desabilitaAtualizarImovel = false;
-//			if(imovelAtual.getQuadra().getRota().getLeituraTipo().getId().intValue() == LeituraTipo.LEITURA_E_ENTRADA_SIMULTANEA.intValue()
-//					&& imovelPerfil.getIndicadorGerarDadosLeitura().intValue() == ConstantesSistema.INDICADOR_USO_ATIVO.intValue()
-//					&& !existeContaPreFaturada && emissaoConta){
-//				
-//				desabilitaAtualizarImovel = true;
-//			}
-			
-			
 			boolean desabilitaAtualizarImovel = true;
 			
-			if(imovelAtual.getQuadra().getRota().getLeituraTipo().getId().intValue() == LeituraTipo.LEITURA_E_ENTRADA_SIMULTANEA.intValue() && 
-					imovelPerfil.getIndicadorGerarDadosLeitura().intValue() == ConstantesSistema.INDICADOR_USO_ATIVO.intValue()){
-
-				//Caso o tipo de leitura da rota do imóvel seja igual a LEIT.E ENTR.SIMULTAN 
-				//(LTTP_ID = 3 da tabela ROTA), então desabilita os campos de atualização da tela. 
+			if(isTipoLeituraImpressaoSimultanea(imovelAtual, imovelPerfil)){
+				//Caso o tipo de leitura da rota do imóvel seja LEIT.E ENTR.SIMULTAN (tabela ROTA), então desabilita os campos de atualização da tela. 
 				desabilitaAtualizarImovel = true;
 			}
 			
@@ -469,12 +266,9 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 			
 			}
 			
-			if(!Util.isVazioOrNulo(movimentoContaPrefaturadaEncontrada)){
-				//Caso o imóvel não esteja em MOVIMENTO_CONTA_PREFATURADA para o ano/mês de referencia
-				//ou MCPF_ICEMISSAOCONTA esteja como 2, habilitar campos para alteração
-				
-				MovimentoContaPrefaturada mcpf = (MovimentoContaPrefaturada) movimentoContaPrefaturadaEncontrada.iterator().next();
-				if(mcpf.getIndicadorEmissaoConta().compareTo(ConstantesSistema.NAO) == 0){
+			if(movimentoContaPrefaturada != null){
+				//Caso o imóvel não esteja em MOVIMENTO_CONTA_PREFATURADA para o ano/mês de referencia ou MCPF_ICEMISSAOCONTA esteja como 2, habilitar campos para alteração
+				if(movimentoContaPrefaturada.getIndicadorEmissaoConta().compareTo(ConstantesSistema.NAO) == 0){
 					desabilitaAtualizarImovel = false;
 				}
 			}else{
@@ -482,45 +276,31 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 			}
 			
 			
-			if(imovelFiltro != null && ( imovelFiltro.getImovelCondominio() != null 
-					|| imovelFiltro.getIndicadorImovelCondominio().compareTo(ConstantesSistema.SIM) == 0 )){
-				//Caso o imóvel seja condomínio (IMOV_IDIMOVELCONDOMINIO seja diferente de NULL
-				//ou IMOV_ICIMOVELCONDOMINIO possua valor 1), não permitir alterar
+			if(isImovelCondominio(imovelFiltro)){
+				//Caso o imóvel seja condomínio, não permitir alterar
 				desabilitaAtualizarImovel = true;
 			}
 			
-			//Caso o imovel possua conta com situação diferente de pre-faturada para referencia informada
-			//não sera possivel atualizar a medição(desabilita o botao Atualizar). 
-			boolean imovelPossuiContaDiferentePreFaturada = fachada.pesquisarContaDoImovelDiferentePreFaturada(
-					new Integer(codigoImovel), Util.formatarMesAnoComBarraParaAnoMes(mesAnoPesquisa));
+			//Caso o imovel possua conta com situação diferente de pre-faturada para referencia informada, não sera possivel atualizar a medição 
+			boolean imovelPossuiContaDiferentePreFaturada = fachada.pesquisarContaDoImovelDiferentePreFaturada(new Integer(codigoImovel), Util.formatarMesAnoComBarraParaAnoMes(mesAnoPesquisa));
 			
-			//imovelPossuiContaDiferentePreFaturada = true é por que o imovel possui conta diferente de prefaturada.
 			if ( imovelPossuiContaDiferentePreFaturada ) {
 				desabilitaAtualizarImovel = true;
 			}
 			
-			
 			httpServletRequest.setAttribute("desabilitaAtualizarImovel",desabilitaAtualizarImovel);
-			
-//			if(emissaoConta){
-			
-				verificarAbrangenciaUsuario(httpServletRequest, usuarioLogado, imovelAtual);
-//			}
+			verificarAbrangenciaUsuario(httpServletRequest, usuarioLogado, imovelAtual);
 			
 			Collection colecaoFaturamentoSituacaoEspecial = fachada.pesquisarSituacaoEspecialFaturamentoVigente(imovelAtual.getId(), Util.formatarMesAnoComBarraParaAnoMes(mesAnoPesquisa));
-			
 			httpServletRequest.setAttribute("colecaoFaturamentoSituacaoEspecial", colecaoFaturamentoSituacaoEspecial);
 			
-			// Verifica se o objeto está na coleção para deixar o checkbox marcado
 			Collection colecaoImoveisGerarAviso = (Collection) sessao.getAttribute("colecaoImoveisGerarAviso");
-			Collection colecaoImoveisGerarOS = (Collection) sessao.getAttribute("colecaoImoveisGerarOS");
-			Collection colecaoImoveisGerarRelatorio = (Collection) sessao.getAttribute("colecaoImoveisGerarRelatorio");
-			HashMap<Integer, String> colecaoObservacaoOS = (HashMap<Integer, String>) sessao.getAttribute("colecaoObservacaoOS");
-			
 			if (colecaoImoveisGerarAviso != null && colecaoImoveisGerarAviso.contains(imovelAtual.getId())) {
 				sessao.setAttribute("gerarAviso", "1");
 			}
 			
+			Collection colecaoImoveisGerarOS = (Collection) sessao.getAttribute("colecaoImoveisGerarOS");
+			HashMap<Integer, String> colecaoObservacaoOS = (HashMap<Integer, String>) sessao.getAttribute("colecaoObservacaoOS");
 			if (colecaoImoveisGerarOS != null && colecaoImoveisGerarOS.contains(imovelAtual)) {
 				sessao.setAttribute("gerarOS", "1");
 				String observacao2 = colecaoObservacaoOS.get(imovelAtual.getId());
@@ -528,50 +308,14 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 				leituraConsumoActionForm.setObservacao(observacao2);
 			}
 			
+			Collection colecaoImoveisGerarRelatorio = (Collection) sessao.getAttribute("colecaoImoveisGerarRelatorio");
 			if (colecaoImoveisGerarRelatorio != null && colecaoImoveisGerarRelatorio.contains(imovelAtual)) {
 				sessao.setAttribute("gerarRelatorio", "1");
 			}
 			
 			sessao.setAttribute("indiceImovel", ""+(index+1));
-			//====================================================================
 			
 			if (codigoImovel != null && !codigoImovel.equals("") ) {
-				//obtem dados de sistema parametros
-				
-				/* 
-				 * Comentado
-				 * 
-				 * CRC_5084
-				 * Autor: Hugo Leonardo
-				 * Analista: Adriana Ribeiro.
-				 * Data: 26/10/2010
-				 */
-				// Rota e Seq de Rota
-//				FiltroImovel filtroImovel = new FiltroImovel();
-//				filtroImovel.adicionarCaminhoParaCarregamentoEntidade("quadra.rota");
-//				filtroImovel.adicionarCaminhoParaCarregamentoEntidade("rotaAlternativa");
-//				
-//				filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, new Integer(codigoImovel)));
-//				Collection imoveis = fachada.pesquisar(filtroImovel, Imovel.class.getName());
-//				
-//				if(!imoveis.isEmpty()){
-//					
-//					Imovel imovel = (Imovel) imoveis.iterator().next();
-//					
-//					if (imovel.getRotaAlternativa() != null){
-//						
-//						leituraConsumoActionForm.setRota(imovel.getRotaAlternativa().getCodigo() + "");
-//					}
-//					else{
-//						
-//						leituraConsumoActionForm.setRota(imovel.getQuadra().getRota().getCodigo() + "");
-//					}
-//					
-//					if (imovel.getNumeroSequencialRota() != null) {
-//						leituraConsumoActionForm.setSeqRota(imovel.getNumeroSequencialRota().toString());
-//					}
-//				}
-				
 				
 				boolean ligacaoAgua = false;
 				if(idMedicaoTipo != null && idMedicaoTipo.trim().equals("" + MedicaoTipo.LIGACAO_AGUA)){
@@ -583,10 +327,10 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 				
 				// Cria as istancias dos objetos q receberam os dados q iram compor a tela
 				ImovelMicromedicao imovelMicromedicaoDadosResumo = new ImovelMicromedicao();
-				ImovelMicromedicao imovelMicromedicaoCarregaMedicaoResumo = new ImovelMicromedicao();
+				ImovelMicromedicao imovelMicromedicaoMedicaoResumo = new ImovelMicromedicao();
 				
 				imovelMicromedicaoDadosResumo = fachada.pesquiarImovelExcecoesApresentaDadosResumido(new Integer(codigoImovel), ligacaoAgua);
-				imovelMicromedicaoCarregaMedicaoResumo = fachada.carregarDadosMedicaoResumido(new Integer(codigoImovel), ligacaoAgua, Util.formatarMesAnoParaAnoMesSemBarra((String)sessao.getAttribute("mesAnoPesquisa")));
+				imovelMicromedicaoMedicaoResumo = fachada.carregarDadosMedicaoResumido(new Integer(codigoImovel), ligacaoAgua, Util.formatarMesAnoParaAnoMesSemBarra((String)sessao.getAttribute("mesAnoPesquisa")));
 				
 				String mesAnoDigitado = Util.formatarMesAnoParaAnoMesSemBarra((String)sessao.getAttribute("mesAnoPesquisa"));
 				
@@ -600,27 +344,20 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 				imovelMicromedicaoDadosResumo.getImovel().setId(new Integer(codigoImovel));
 				sessao.setAttribute("imovelMicromedicaoDadosResumo",imovelMicromedicaoDadosResumo);
 				sessao.setAttribute("idImovel", codigoImovel);
-				sessao.setAttribute("imovelMicromedicaoCarregaMedicaoResumo", imovelMicromedicaoCarregaMedicaoResumo);
+				sessao.setAttribute("imovelMicromedicaoCarregaMedicaoResumo", imovelMicromedicaoMedicaoResumo);
 
-				if(imovelMicromedicaoDadosResumo.getImovel() != null 
-						&& imovelMicromedicaoDadosResumo.getImovel().getPocoTipo() != null 
-						&& imovelMicromedicaoDadosResumo.getImovel().getPocoTipo().getId() != null
-						&& imovelMicromedicaoDadosResumo.getImovel().getPocoTipo().getId() != 0){
+				if(imovelPossuiPoco(imovelMicromedicaoDadosResumo)){
 					sessao.setAttribute("poco",true);
 				}else{
 					sessao.removeAttribute("poco");
 				}
 				
-				Imovel imovel = new Imovel();
-				imovel.setId(new Integer(codigoImovel));
-				Categoria categoria = fachada.obterDescricoesCategoriaImovel(imovel);
-				sessao.setAttribute("categoria", categoria);
+				Imovel imovel = new Imovel(new Integer(codigoImovel));
 				
-				String inscricaoImovel = fachada.pesquisarInscricaoImovel(new Integer(codigoImovel));
-				sessao.setAttribute("inscricaoFormatada", inscricaoImovel);
+				sessao.setAttribute("categoria", fachada.obterDescricoesCategoriaImovel(imovel));
+				sessao.setAttribute("inscricaoFormatada", fachada.pesquisarInscricaoImovel(new Integer(codigoImovel)));
 				
-				Collection colecaoMedicaoHistorico = fachada.carregarDadosMedicaoResumo(new Integer(
-						codigoImovel), ligacaoAgua);
+				Collection colecaoMedicaoHistorico = fachada.carregarDadosMedicaoResumo(new Integer(codigoImovel), ligacaoAgua);
 	
 				Collection imoveisMicromedicaoCarregamento = null;
 				Collection colecaoImovelMicromedicao = new ArrayList();
@@ -628,9 +365,7 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 				MedicaoHistorico medicaoHistoricoAnoMesAtual = new MedicaoHistorico();
 				ImovelMicromedicao imovelMicromedicaoConsumo = new ImovelMicromedicao();
 
-				// Pega a medição histórico da pesquisa para setar leitura do campo e leiturista
-				MedicaoHistorico medicaoHistorico = ((ImovelMicromedicao) ((List) colecaoIdsImovel)
-						.get(index)).getMedicaoHistorico();
+				MedicaoHistorico medicaoHistorico = ((ImovelMicromedicao) ((List) colecaoIdsImovel).get(index)).getMedicaoHistorico();
 
 				if (medicaoHistorico.getIndicadorAnalisado() != null){
 					leituraConsumoActionForm.setAnalisado(medicaoHistorico.getIndicadorAnalisado().toString());
@@ -657,9 +392,9 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 					leituraConsumoActionForm.setNomeLeiturista(medicaoHistorico.getLeiturista().getFuncionario().getNome());
 				}
 				
-				if (imovelMicromedicaoCarregaMedicaoResumo.getMedicaoHistorico().getMotivoInterferenciaTipo() != null){
+				if (imovelMicromedicaoMedicaoResumo.getMedicaoHistorico().getMotivoInterferenciaTipo() != null){
 					leituraConsumoActionForm.setMotivoInterferenciaTipo(
-							imovelMicromedicaoCarregaMedicaoResumo.getMedicaoHistorico().getMotivoInterferenciaTipo().getId());
+							imovelMicromedicaoMedicaoResumo.getMedicaoHistorico().getMotivoInterferenciaTipo().getId());
 				} 
 				
 				// Carrega o combo de calculo de consumo
@@ -672,21 +407,16 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 							.iterator();
 	
 					while (iteratorMedicaoHistorico.hasNext()) {
-						MedicaoHistorico medicaoHistoricoConsumo = (MedicaoHistorico) iteratorMedicaoHistorico
-								.next();
+						MedicaoHistorico medicaoHistoricoConsumo = (MedicaoHistorico) iteratorMedicaoHistorico.next();
 						if (medicaoHistoricoConsumo.getAnoMesReferencia() != 0) {
 							
 							
-							imoveisMicromedicaoCarregamento = fachada
-									.carregarDadosConsumo(
-											new Integer(codigoImovel),
-											medicaoHistoricoConsumo
-													.getAnoMesReferencia(), ligacaoAgua);
+							imoveisMicromedicaoCarregamento = fachada.carregarDadosConsumo(new Integer(codigoImovel),
+											medicaoHistoricoConsumo.getAnoMesReferencia(), ligacaoAgua);
 	
 							if (imoveisMicromedicaoCarregamento != null) {
 								ImovelMicromedicao imovelMicromedicao = (ImovelMicromedicao)imoveisMicromedicaoCarregamento.iterator().next();
-								if(imovelMicromedicao.getMedicaoHistorico() != null 
-										&& imovelMicromedicao.getMedicaoHistorico().getNumeroConsumoMes() != null){
+								if(imovelMicromedicao.getMedicaoHistorico() != null && imovelMicromedicao.getMedicaoHistorico().getNumeroConsumoMes() != null){
 									medicaoHistoricoConsumo.setNumeroConsumoMes(imovelMicromedicao.getMedicaoHistorico().getNumeroConsumoMes());
 								}
 								
@@ -716,6 +446,7 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 							if(mesAnoDigitado.equals(medicaoHistoricoConsumo.getAnoMesReferencia()+"")){
 								medicaoHistoricoAnoMesAtual = medicaoHistoricoConsumo;
 								sessao.setAttribute("medicaoHistoricoAnoMesAtual", medicaoHistoricoAnoMesAtual);
+								
 								if (imoveisMicromedicaoCarregamento != null){
 									imovelMicromedicaoConsumo = (ImovelMicromedicao)imoveisMicromedicaoCarregamento.iterator().next();
 
@@ -723,19 +454,18 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 										leituraConsumoActionForm.setDiasConsumo(imovelMicromedicaoConsumo.getQtdDias());
 									}
 									
-									//fazer a parte de montagem do form aki e tirar os value no jsp
-									if(imovelMicromedicaoCarregaMedicaoResumo.getMedicaoHistorico().getDataLeituraAnteriorFaturamento() != null){
-										leituraConsumoActionForm.setDataLeituraAnteriorFaturamento(Util.formatarData(imovelMicromedicaoCarregaMedicaoResumo.getMedicaoHistorico().getDataLeituraAnteriorFaturamento()));
+									if(imovelMicromedicaoMedicaoResumo.getMedicaoHistorico().getDataLeituraAnteriorFaturamento() != null){
+										leituraConsumoActionForm.setDataLeituraAnteriorFaturamento(Util.formatarData(imovelMicromedicaoMedicaoResumo.getMedicaoHistorico().getDataLeituraAnteriorFaturamento()));
 									}else{
 										leituraConsumoActionForm.setDataLeituraAnteriorFaturamento("");
 									}
-									if(imovelMicromedicaoCarregaMedicaoResumo.getMedicaoHistorico().getDataLeituraAtualInformada() != null){
-										leituraConsumoActionForm.setDataLeituraAtualInformada(Util.formatarData(imovelMicromedicaoCarregaMedicaoResumo.getMedicaoHistorico().getDataLeituraAtualInformada()));
+									if(imovelMicromedicaoMedicaoResumo.getMedicaoHistorico().getDataLeituraAtualInformada() != null){
+										leituraConsumoActionForm.setDataLeituraAtualInformada(Util.formatarData(imovelMicromedicaoMedicaoResumo.getMedicaoHistorico().getDataLeituraAtualInformada()));
 									}else{
 										leituraConsumoActionForm.setDataLeituraAtualInformada("");
 									}
-									if(imovelMicromedicaoCarregaMedicaoResumo.getMedicaoHistorico().getConsumoMedioHidrometro() != null){
-										leituraConsumoActionForm.setConsumoMedioHidrometro(imovelMicromedicaoCarregaMedicaoResumo.getMedicaoHistorico().getConsumoMedioHidrometro()+"");
+									if(imovelMicromedicaoMedicaoResumo.getMedicaoHistorico().getConsumoMedioHidrometro() != null){
+										leituraConsumoActionForm.setConsumoMedioHidrometro(imovelMicromedicaoMedicaoResumo.getMedicaoHistorico().getConsumoMedioHidrometro()+"");
 									}else{
 										leituraConsumoActionForm.setConsumoMedioHidrometro("");
 									}
@@ -747,7 +477,7 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 									}
 									
 									leituraConsumoActionForm
-											.setLeituraAnteriorFaturamento(imovelMicromedicaoCarregaMedicaoResumo
+											.setLeituraAnteriorFaturamento(imovelMicromedicaoMedicaoResumo
 													.getMedicaoHistorico()
 													.getLeituraAnteriorFaturamento()
 													+ "");
@@ -762,13 +492,13 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 									if(medicaoHistoricoAnoMesAtual.getLeituraSituacaoAtual() != null){
 										leituraConsumoActionForm.setLeituraSituacaoAtual(medicaoHistoricoAnoMesAtual.getLeituraSituacaoAtual().getDescricao());
 									}
-//									value="${medicaoHistoricoAnoMesAtual.funcionario.id}"
+									
 									if(medicaoHistoricoAnoMesAtual.getFuncionario() != null){
 										leituraConsumoActionForm.setIdFuncionario(medicaoHistoricoAnoMesAtual.getFuncionario().getId().toString());
 									}
 									
-									if(imovelMicromedicaoCarregaMedicaoResumo.getMedicaoHistorico().getNumeroConsumoInformado() != null){
-										leituraConsumoActionForm.setConsumoInformado(imovelMicromedicaoCarregaMedicaoResumo.getMedicaoHistorico().getNumeroConsumoInformado().toString());
+									if(imovelMicromedicaoMedicaoResumo.getMedicaoHistorico().getNumeroConsumoInformado() != null){
+										leituraConsumoActionForm.setConsumoInformado(imovelMicromedicaoMedicaoResumo.getMedicaoHistorico().getNumeroConsumoInformado().toString());
 									} else {
 										leituraConsumoActionForm.setConsumoInformado("");
 										
@@ -780,32 +510,18 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 										leituraConsumoActionForm.setMedido("");
 									}
 									
-									if(imovelMicromedicaoCarregaMedicaoResumo.getMedicaoHistorico() != null
-										&& imovelMicromedicaoCarregaMedicaoResumo.getMedicaoHistorico().getLeituraAnormalidadeFaturamento() != null
-										&& imovelMicromedicaoCarregaMedicaoResumo.getMedicaoHistorico().getLeituraAnormalidadeFaturamento().getId() != null){
-										FiltroLeituraAnormalidade filtroLeituraAnormalidade = new FiltroLeituraAnormalidade();
-										filtroLeituraAnormalidade
-												.adicionarParametro(new ParametroSimples(
-														FiltroLeituraAnormalidade.ID,
-														imovelMicromedicaoCarregaMedicaoResumo.getMedicaoHistorico().getLeituraAnormalidadeFaturamento().getId()));
+									if(imovelMicromedicaoMedicaoResumo.getMedicaoHistorico() != null
+										&& imovelMicromedicaoMedicaoResumo.getMedicaoHistorico().getLeituraAnormalidadeFaturamento() != null
+										&& imovelMicromedicaoMedicaoResumo.getMedicaoHistorico().getLeituraAnormalidadeFaturamento().getId() != null){
+										
+										LeituraAnormalidade leituraAnormalidade = obterAnormalidadeLeituraEncontrada(fachada, imovelMicromedicaoMedicaoResumo);
 
-										Collection anormalidadeLeituraEncontrada = fachada
-												.pesquisar(filtroLeituraAnormalidade,
-														LeituraAnormalidade.class.getName());
-
-										if (anormalidadeLeituraEncontrada != null
-												&& !anormalidadeLeituraEncontrada.isEmpty()) {
-
-											LeituraAnormalidade leituraAnormalidade = (LeituraAnormalidade) Util.retonarObjetoDeColecao(anormalidadeLeituraEncontrada);
-											imovelMicromedicaoCarregaMedicaoResumo.getMedicaoHistorico().setLeituraAnormalidadeFaturamento(leituraAnormalidade);
+										if (leituraAnormalidade != null) {
+											imovelMicromedicaoMedicaoResumo.getMedicaoHistorico().setLeituraAnormalidadeFaturamento(leituraAnormalidade);
 											
-											leituraConsumoActionForm
-													.setIdAnormalidade(""
-															+ leituraAnormalidade.getId());
-											leituraConsumoActionForm
-													.setDescricaoAnormalidade(leituraAnormalidade.getDescricao());
-											leituraConsumoActionForm.
-													setIndicadorLeitura("" + leituraAnormalidade.getIndicadorLeitura());
+											leituraConsumoActionForm.setIdAnormalidade(""+ leituraAnormalidade.getId());
+											leituraConsumoActionForm.setDescricaoAnormalidade(leituraAnormalidade.getDescricao());
+											leituraConsumoActionForm.setIndicadorLeitura("" + leituraAnormalidade.getIndicadorLeitura());
 										}
 									}
 
@@ -823,10 +539,9 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 														BigDecimal.ROUND_HALF_UP);
 										String valorPercentual = "" + percentual;
 										leituraConsumoActionForm.setVarConsumo(valorPercentual.replace(".", ",") + "%");
-//										sessao.setAttribute("varConsumo",valorPercentual.replace(".", ",") + "%");
-	
 									}
 								}
+								
 								if(imovelMicromedicaoConsumo.getConsumoHistorico() != null
 										&& imovelMicromedicaoConsumo.getConsumoHistorico().getConsumoAnormalidade() != null){
 									leituraConsumoActionForm.setConsumoAnormalidadeAbreviada(imovelMicromedicaoConsumo.getConsumoHistorico().getConsumoAnormalidade().getDescricaoAbreviada());
@@ -841,47 +556,33 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 					}
 					
 //					 Organizar a coleção de Conta
-					if (colecaoImovelMicromedicao != null
-							&& !colecaoImovelMicromedicao.isEmpty()) {
+					if (colecaoImovelMicromedicao != null && !colecaoImovelMicromedicao.isEmpty()) {
 						
-						Collections.sort((List) colecaoImovelMicromedicao,
-								new Comparator() {
+						Collections.sort((List) colecaoImovelMicromedicao, new Comparator() {
 									public int compare(Object a, Object b) {
 										
 										int retorno = 0;
-										Integer anoMesReferencia1 = ((ImovelMicromedicao) a).getMedicaoHistorico()
-												.getAnoMesReferencia();
-										Integer anoMesReferencia2 = ((ImovelMicromedicao) b).getMedicaoHistorico()
-												.getAnoMesReferencia();
+										Integer anoMesReferencia1 = ((ImovelMicromedicao) a).getMedicaoHistorico().getAnoMesReferencia();
+										Integer anoMesReferencia2 = ((ImovelMicromedicao) b).getMedicaoHistorico().getAnoMesReferencia();
 
 										if(anoMesReferencia1.compareTo(anoMesReferencia2) == 1){
 											retorno = -1;
 										}else if(anoMesReferencia1.compareTo(anoMesReferencia2) == -1){
 											retorno = 1;
 										}
-										
 										return retorno;
-
 									}
 							});
 					}
 					
-					
-	//				 --- fim variavel
 									
-					// coloca a colecao de medicao historico no request
 					sessao.setAttribute("medicoesHistoricos", colecaoMedicaoHistorico);
-					// coloca colecao de consumo historico no request
 					sessao.setAttribute("imoveisMicromedicao", colecaoImovelMicromedicao);
 				} 
 				
 				if ( httpServletRequest.getParameter("solicitarReleitura") != null ){
 					fachada.solicitarReleitura( codigoImovel,  usuarioLogado );
-					
-					// Caso tudo tenha ido ok, informamos ao usuário
-					httpServletRequest.setAttribute(
-							"mensagemReleitura", "Releitura do imóvel foi solicitada com sucesso.");
-					
+					httpServletRequest.setAttribute("mensagemReleitura", "Releitura do imóvel foi solicitada com sucesso.");
 				}
 				
 				if ( fachada.releituraJaRealizada( codigoImovel ) ){
@@ -896,37 +597,22 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 				if (verificarReleitura(Util.formatarMesAnoComBarraParaAnoMes(mesAnoPesquisa), imovelFiltro.getId())){
 					httpServletRequest.setAttribute( "solicitarReleitura", Boolean.TRUE );
 				}
-				
-				
 			}
 			
-			
-			
-			sessao.setAttribute("leituraConsumoActionForm",
-					leituraConsumoActionForm);
+			sessao.setAttribute("leituraConsumoActionForm", leituraConsumoActionForm);
 			if (index == 0 && numeroPaginasPesquisa == 0) {
 				sessao.setAttribute("desabilitaBotaoAnterior", 1);
 			}else{
 				sessao.removeAttribute("desabilitaBotaoAnterior");
 			}
+			
 			if (index >= (colecaoIdsImovel.size() - 1)) {
 				sessao.setAttribute("desabilitaBotaoProximo", 1);
 			}else{
 				sessao.removeAttribute("desabilitaBotaoProximo");
 			}
 			
-			/**
-			 * TODO : COSANPA
-			 * Alteração feita para permitir que os imóveis que estão em rotas do IS
-			 * possam ser alterados na tela de análise de exceções.
-			 */
 			Integer anoMes = Util.formatarMesAnoComBarraParaAnoMes(mesAnoPesquisa);
-			
-			Conta conta = this.getFachada().obterContaImovel(imovelAtual.getId(), anoMes);
-			
-			MovimentoContaPrefaturada movimentoConta = this.getFachada().obterMovimentoImovel(imovelAtual.getId(), anoMes);
-			
-			MedicaoHistorico medicaoHistorico = this.getFachada().pesquisarMedicaoHistorico(imovelAtual.getId(), anoMes, new Integer(idMedicaoTipo));
 			
 			if (imovelAtual.getQuadra().getRota().getLeituraTipo().getId().intValue() != LeituraTipo.LEITURA_E_ENTRADA_SIMULTANEA.intValue()) {
 				if (!isFaturamentoGrupoAberto(Util.formatarMesAnoComBarraParaAnoMes(mesAnoPesquisa), faturamentoGrupo)) {
@@ -934,60 +620,213 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 					desabilitaAtualizarImovel = true;
 				}
 			}
-			else if(imovelAtual.getQuadra().getRota().getLeituraTipo().getId().intValue() == LeituraTipo.LEITURA_E_ENTRADA_SIMULTANEA.intValue()
-					&& imovelPerfil.getIndicadorGerarDadosLeitura().intValue() == ConstantesSistema.INDICADOR_USO_ATIVO.intValue()) {
+			else if(isTipoLeituraImpressaoSimultanea(imovelAtual, imovelPerfil)) {
 				if (isFaturamentoGrupoAberto(Util.formatarMesAnoComBarraParaAnoMes(mesAnoPesquisa), faturamentoGrupo)
-						&& medicaoHistorico != null && medicaoHistorico.getId() != null 
-						&& conta != null && conta.getId() != null
-						&& conta.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.PRE_FATURADA)
-						&& ((movimentoConta != null && movimentoConta.getId() != null
-						&& movimentoConta.getIndicadorEmissaoConta().shortValue() == ConstantesSistema.NAO.shortValue()
-						&& movimentoConta.getIndicadorGeracaoConta().shortValue() == ConstantesSistema.NAO.shortValue())
-							|| movimentoConta == null)){
+						&& imovelPossuiMedicaoHistorico(idMedicaoTipo, imovelAtual, anoMes) 
+						&& imovelPossuiContaPreFaturada(imovelAtual, anoMes)
+						&& imovelPossuiContaGerada(imovelAtual, anoMes)){
 					desabilitaAtualizarImovel = false;
 				} else {
 					httpServletRequest.setAttribute("habilitaCampos", false);
 					desabilitaAtualizarImovel = true;
 				}
 			}
-			
 			httpServletRequest.setAttribute("desabilitaAtualizarImovel",desabilitaAtualizarImovel);
 			
 		}
-		
-		/**
-		 * Alteracao Feita por Tiago Moreno 19/02/2010
-		 */
 		
 		FiltroMotivoInterferenciaTipo filtroMotivoInterferenciaTipo = new FiltroMotivoInterferenciaTipo();
 		filtroMotivoInterferenciaTipo.adicionarParametro(new ParametroSimples(
 				FiltroMotivoInterferenciaTipo.INDICADOR_USO, ConstantesSistema.SIM));
 		
-		Collection colecaoMotivoInterferenciaTipo = fachada.pesquisar(
-				filtroMotivoInterferenciaTipo, MotivoInterferenciaTipo.class.getName());
+		Collection colecaoMotivoInterferenciaTipo = fachada.pesquisar(filtroMotivoInterferenciaTipo, MotivoInterferenciaTipo.class.getName());
 		
 		if (colecaoMotivoInterferenciaTipo!= null && !colecaoMotivoInterferenciaTipo.isEmpty()){
 			sessao.setAttribute("colecaoMotivoInterferenciaTipo", colecaoMotivoInterferenciaTipo);
 		}
 		
-		
-		
 		return retorno;
 	}
 
-	private boolean isAnormalidadeConsumoPermitidaHabilitarAlteracao(Integer idAnormalidadeConsumo) {
+	private boolean imovelPossuiContaGerada(Imovel imovelAtual, Integer anoMes) {
+		MovimentoContaPrefaturada mcpf = this.getFachada().obterMovimentoImovel(imovelAtual.getId(), anoMes);
 		
-		if (idAnormalidadeConsumo != null &&
-				(idAnormalidadeConsumo.equals(ConsumoAnormalidade.ESTOURO_CONSUMO_COBRANCA_MEDIA)
-				|| idAnormalidadeConsumo.equals(ConsumoAnormalidade.ESTOURO_CONSUMO)
-				|| idAnormalidadeConsumo.equals(ConsumoAnormalidade.ALTO_CONSUMO)
-				|| idAnormalidadeConsumo.equals(ConsumoAnormalidade.BAIXO_CONSUMO))) {
+		if ((mcpf != null && mcpf.getId() != null
+				&& mcpf.getIndicadorEmissaoConta().shortValue() == ConstantesSistema.NAO.shortValue()
+				&& mcpf.getIndicadorGeracaoConta().shortValue() == ConstantesSistema.NAO.shortValue())
+				|| mcpf == null) {
 			return true;
 		} else {
 			return false;
 		}
 	}
-	
+
+	private boolean imovelPossuiContaPreFaturada(Imovel imovelAtual, Integer anoMes) {
+		Conta conta = this.getFachada().obterContaImovel(imovelAtual.getId(), anoMes);
+		
+		if(conta != null && conta.getId() != null && conta.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private boolean imovelPossuiMedicaoHistorico(String idMedicaoTipo, Imovel imovelAtual, Integer anoMes) {
+		MedicaoHistorico medicaoHistorico = this.getFachada().pesquisarMedicaoHistorico(imovelAtual.getId(), anoMes, new Integer(idMedicaoTipo));
+		
+		if (medicaoHistorico != null && medicaoHistorico.getId() != null) {
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	private boolean imovelPossuiPoco(
+			ImovelMicromedicao imovelMicromedicaoDadosResumo) {
+		return imovelMicromedicaoDadosResumo.getImovel() != null 
+				&& imovelMicromedicaoDadosResumo.getImovel().getPocoTipo() != null 
+				&& imovelMicromedicaoDadosResumo.getImovel().getPocoTipo().getId() != null
+				&& imovelMicromedicaoDadosResumo.getImovel().getPocoTipo().getId() != 0;
+	}
+
+	private boolean isImovelCondominio(Imovel imovelFiltro) {
+		return imovelFiltro != null && ( imovelFiltro.getImovelCondominio() != null || imovelFiltro.getIndicadorImovelCondominio().compareTo(ConstantesSistema.SIM) == 0 );
+	}
+
+	private boolean isTipoLeituraImpressaoSimultanea(Imovel imovelAtual,
+			ImovelPerfil imovelPerfil) {
+		return imovelAtual.getQuadra().getRota().getLeituraTipo().getId().intValue() == LeituraTipo.LEITURA_E_ENTRADA_SIMULTANEA.intValue() && 
+				imovelPerfil.getIndicadorGerarDadosLeitura().intValue() == ConstantesSistema.INDICADOR_USO_ATIVO.intValue();
+	}
+
+	@SuppressWarnings("rawtypes")
+	private Imovel obterImovel(Fachada fachada, String codigoImovel) {
+		Imovel imovel = null;
+		
+		FiltroImovel filtroImovel = new FiltroImovel();
+		filtroImovel.adicionarCaminhoParaCarregamentoEntidade("quadra.rota");
+		filtroImovel.adicionarCaminhoParaCarregamentoEntidade("rotaAlternativa");
+		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, new Integer(codigoImovel)));
+		Collection imoveis = fachada.pesquisar(filtroImovel, Imovel.class.getName());
+		
+		if(!imoveis.isEmpty()){
+			imovel = (Imovel) imoveis.iterator().next();
+		}
+		return imovel;
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private MovimentoContaPrefaturada obterMovimentoContaPreFaturada(Fachada fachada, String mesAnoPesquisa, String codigoImovel, String idMedicaoTipo) {
+		MovimentoContaPrefaturada mcpf = null;
+		
+		FiltroMovimentoContaPrefaturada filtroMovimentoContaPrefaturada = new FiltroMovimentoContaPrefaturada();
+		filtroMovimentoContaPrefaturada.adicionarParametro(new ParametroSimples(FiltroMovimentoContaPrefaturada.MATRICULA, codigoImovel));
+		filtroMovimentoContaPrefaturada.adicionarParametro(new ParametroSimples(FiltroMovimentoContaPrefaturada.ID_MEDICAO_TIPO, idMedicaoTipo));
+		filtroMovimentoContaPrefaturada.adicionarParametro(new ParametroSimples(FiltroMovimentoContaPrefaturada.ANO_MES_REFERENCIA_PRE_FATURAMENTO, Util.formatarMesAnoComBarraParaAnoMes(mesAnoPesquisa)));
+		
+		Collection colecaoMovimentoContaPF = fachada.pesquisar(filtroMovimentoContaPrefaturada, MovimentoContaPrefaturada.class.getName());
+		
+		if(!Util.isVazioOrNulo(colecaoMovimentoContaPF)){
+			mcpf = (MovimentoContaPrefaturada) colecaoMovimentoContaPF.iterator().next();
+		}
+		return mcpf;
+	}
+
+	private void limparFormPaginacao(
+			LeituraConsumoActionForm leituraConsumoActionForm) {
+		leituraConsumoActionForm.setAnalisado("");
+		leituraConsumoActionForm.setGerarAviso("");
+		leituraConsumoActionForm.setGerarOS("");
+		leituraConsumoActionForm.setGerarRelatorio("");
+		leituraConsumoActionForm.setMotivoInterferenciaTipo(-1);
+	}
+
+	@SuppressWarnings("rawtypes")
+	private Collection obterColecaoIdsImovel(Fachada fachada, HttpSession sessao, FaturamentoGrupo faturamentoGrupo,
+			FiltroMedicaoHistoricoSql filtroMedicaoHistoricoSql, Integer totalRegistros) {
+		
+		Collection colecaoIdsImovel;
+		if(sessao.getAttribute("colecaoIdsImovelTotal") != null){
+			 colecaoIdsImovel = (Collection)sessao.getAttribute("colecaoIdsImovelTotal");
+		}else{
+			colecaoIdsImovel =  fachada.filtrarExcecoesLeiturasConsumos(faturamentoGrupo,
+					filtroMedicaoHistoricoSql, totalRegistros, true, (String)sessao.getAttribute("mesAnoPesquisa"),
+							(String)sessao.getAttribute("valorAguaEsgotoInicial"), (String)sessao.getAttribute("valorAguaEsgotoFinal"));
+			sessao.setAttribute("colecaoIdsImovelTotal", colecaoIdsImovel);
+		}
+		return colecaoIdsImovel;
+	}
+
+	private Integer obterTotalRegistros(Fachada fachada, HttpSession sessao, FaturamentoGrupo faturamentoGrupo, FiltroMedicaoHistoricoSql filtroMedicaoHistoricoSql) {
+		Integer totalRegistros = null;
+		if (sessao.getAttribute("totalRegistros") != null && !sessao.getAttribute("totalRegistros").equals("")) {
+			totalRegistros = (Integer) sessao.getAttribute("totalRegistros");
+		} else {
+			totalRegistros = fachada.filtrarExcecoesLeiturasConsumosCount(faturamentoGrupo, filtroMedicaoHistoricoSql,
+					(String) sessao.getAttribute("mesAnoPesquisa"),
+					(String)sessao.getAttribute("valorAguaEsgotoInicial"), 
+					(String)sessao.getAttribute("valorAguaEsgotoFinal"));
+			
+			sessao.setAttribute("totalRegistros", totalRegistros);
+		}
+		
+		if (totalRegistros == 0) {
+			throw new ActionServletException("atencao.pesquisa.nenhumresultado");
+		}
+		return totalRegistros;
+	}
+
+	private LeituraConsumoActionForm limparLeituraConsumo(LeituraConsumoActionForm leituraConsumoActionForm) {
+		
+		leituraConsumoActionForm.setDataLeituraAnteriorFaturamento("");
+		leituraConsumoActionForm.setDataLeituraAtualFaturamento("");
+		leituraConsumoActionForm.setDataLeituraAtualInformada("");
+		leituraConsumoActionForm.setConsumo("");
+		leituraConsumoActionForm.setLeituraAnterior("");
+		leituraConsumoActionForm.setLeituraAnteriorFaturamento("");
+		leituraConsumoActionForm.setLeituraAtualFaturada("");
+		leituraConsumoActionForm.setLeituraAtualInformada("");
+		leituraConsumoActionForm.setIdAnormalidade("");
+		leituraConsumoActionForm.setDescricaoAnormalidade("");
+		leituraConsumoActionForm.setIndicadorLeitura("");
+		leituraConsumoActionForm.setConsumoMedioImovel("");
+		leituraConsumoActionForm.setDiasConsumo("");
+		leituraConsumoActionForm.setVarConsumo("");
+		leituraConsumoActionForm.setLeituraSituacaoAtual("");
+		leituraConsumoActionForm.setIdFuncionario("");
+		leituraConsumoActionForm.setConsumoInformado("");
+		leituraConsumoActionForm.setConsumoTipo("");
+		leituraConsumoActionForm.setConsumoAnormalidadeAbreviada("");
+		leituraConsumoActionForm.setMedido("");
+		leituraConsumoActionForm.setMotivoInterferenciaTipo(-1);
+		leituraConsumoActionForm.setObservacao("");
+		
+		return leituraConsumoActionForm;
+	}
+
+	private boolean possuiAnormalidade(HttpServletRequest httpServletRequest,
+			LeituraConsumoActionForm leituraConsumoActionForm) {
+		return leituraConsumoActionForm.getIdAnormalidade() != null && !leituraConsumoActionForm.getIdAnormalidade().trim().equals("") 
+				&& httpServletRequest.getParameter("pesquisarAnormalidade") != null;
+	}
+
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	private LeituraAnormalidade obterAnormalidadeLeituraEncontrada(Fachada fachada, ImovelMicromedicao imovelMicromedicaoMedicaoResumo) {
+		LeituraAnormalidade leituraAnormalidade = null;
+		
+		FiltroLeituraAnormalidade filtroLeituraAnormalidade = new FiltroLeituraAnormalidade();
+		filtroLeituraAnormalidade.adicionarParametro(new ParametroSimples(FiltroLeituraAnormalidade.ID,
+						imovelMicromedicaoMedicaoResumo.getMedicaoHistorico().getLeituraAnormalidadeFaturamento().getId()));
+
+		Collection anormalidadeLeituraEncontrada = fachada.pesquisar(filtroLeituraAnormalidade, LeituraAnormalidade.class.getName());
+		
+		if (anormalidadeLeituraEncontrada != null && !anormalidadeLeituraEncontrada.isEmpty()) {
+
+			leituraAnormalidade = (LeituraAnormalidade) Util.retonarObjetoDeColecao(anormalidadeLeituraEncontrada);
+		}
+		return leituraAnormalidade;
+	}
+
 	private boolean isFaturamentoGrupoAberto(Integer anoMesConsulta, FaturamentoGrupo grupoFaturamento) {
 		if (anoMesConsulta >= grupoFaturamento.getAnoMesReferencia())
 			return true;
@@ -995,6 +834,7 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 			return false;
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private void verificarAbrangenciaUsuario(HttpServletRequest httpServletRequest, Usuario usuarioLogado, Imovel imovelAtual) {
 		
 		Fachada fachada = Fachada.getInstancia();
@@ -1047,17 +887,7 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 		}
 	}
 
-	/**
-	 * Adiciona o imóvel aos coleções selecionadas pelo usuário
-	 *
-	 * @author Rafael Corrêa
-	 * @date 30/05/2008
-	 *
-	 * @param httpServletRequest
-	 * @param sessao
-	 * @param imovel
-	 */
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void adicionarObjetosSelecionadosColecoes(HttpServletRequest httpServletRequest, HttpSession sessao, Imovel imovel, String observacao) {
 		String gerarAviso = httpServletRequest.getParameter("gerarAviso");
 		String gerarOS = httpServletRequest.getParameter("gerarOS");
@@ -1067,7 +897,6 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 		Collection colecaoImoveisGerarRelatorio = (Collection) sessao.getAttribute("colecaoImoveisGerarRelatorio");
 		HashMap<Integer, String> colecaoObservacaoOS = (HashMap<Integer, String>) sessao.getAttribute("colecaoObservacaoOS");
 		
-		// Verifica se o usuário selecionou este imóvel para geração dos avisos
 		if (gerarAviso != null && !gerarAviso.trim().equals("")) {
 			
 			if (colecaoImoveisGerarAviso == null) {
@@ -1144,16 +973,7 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 		}
 	}
 	
-	/**
-	 * Carrega o com de cálculo de consumo colocando o e tipo de consumo e o seu valor
-	 *
-	 * @author Rafael Corrêa
-	 * @date 29/05/2008
-	 *
-	 * @param medicaoHistorico
-	 * @param imovel
-	 * @return
-	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Collection<CalculoConsumoHelper> carregarComboCalculoConsumo(MedicaoHistorico medicaoHistorico, Imovel imovel, Integer anoMesReferencia) {
 
 		Fachada fachada = Fachada.getInstancia();
@@ -1220,19 +1040,17 @@ public class ExibirDadosAnaliseExcecoesLeituraResumidoAction extends GcomAction 
 		return false;
 	}
 	
+	@SuppressWarnings("unchecked")
 	private boolean verificarReleitura(Integer anoMesFaturamento, Integer idImovel) {
 		
 		Fachada fachada = Fachada.getInstancia();
 			
 		FiltroReleituraMobile filtroReleituraMobile = new FiltroReleituraMobile();
-		filtroReleituraMobile.adicionarParametro(new ParametroSimples(
-				FiltroReleituraMobile.ANO_MES_FATURAMENTO, anoMesFaturamento));
-		filtroReleituraMobile.adicionarParametro(new ParametroSimples(
-				FiltroReleituraMobile.ID_IMOVEL, idImovel));
+		filtroReleituraMobile.adicionarParametro(new ParametroSimples(FiltroReleituraMobile.ANO_MES_FATURAMENTO, anoMesFaturamento));
+		filtroReleituraMobile.adicionarParametro(new ParametroSimples(FiltroReleituraMobile.ID_IMOVEL, idImovel));
 		
         
-		Collection<ReleituraMobile> colecaoReleituraMobile = 
-			fachada.pesquisar( filtroReleituraMobile, ReleituraMobile.class.getName());
+		Collection<ReleituraMobile> colecaoReleituraMobile = fachada.pesquisar( filtroReleituraMobile, ReleituraMobile.class.getName());
 		
 		if (colecaoReleituraMobile != null && !colecaoReleituraMobile.isEmpty()){
 			return true;

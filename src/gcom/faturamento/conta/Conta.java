@@ -37,15 +37,6 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 public class Conta extends ObjetoTransacao implements IConta {
 	private static final long serialVersionUID = 1L;
 
-	/* Constantes que relatam os grupos de atributos 
-	 desta classe para controle de altera��o
-	
-	 Isto surgiu pq cada funcionalidade pode ter um conjunto diferente de atributos definidos 
-	 para serem controlados quanto a altera��o.
-	 Ent�o para cada funcionalidade ser� definida uma constante que ser� usada no Annotation dos
-	 atributos referentes a esta funcionalidade
-	 Ex.: conta.setIdGrupoAtributosRegistro(Conta.ATRIBUTOS_DESFAZER_CONTA_CANCELAR);
-	 */
 	public static final int ATRIBUTOS_RETIFICAR_CONTA = 261; //Operacao.OPERACAO_CONTA_RETIFICAR;
 	public static final int ATRIBUTOS_RETIFICAR_CONTA_CANCELAR = 230;//Operacao.OPERACAO_CANCELAR_CONTA;
 	public static final int ATRIBUTOS_RETIFICAR_CONTA_REVISAO = 56; //Operacao.OPERACAO_COLOCAR_CONTA_REVISAO
@@ -56,242 +47,133 @@ public class Conta extends ObjetoTransacao implements IConta {
 		
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_CONTA,ATRIBUTOS_RETIFICAR_CONTA_CANCELAR})
 	private Integer id;
-
-	/** nullable persistent field */
 	private Integer referenciaContabil;
-
-	/** persistent field */
 	private int referencia;
-
-	/** nullable persistent field */
 	private Short lote;
-
-	/** nullable persistent field */
 	private Short subLote;
-
-	/** nullable persistent field */
 	private Integer codigoSetorComercial;
-
-	/** nullable persistent field */
 	private Integer quadra;
-
-	/** persistent field */
 	private short digitoVerificadorConta;
-
-	/** persistent field */
 	private short indicadorCobrancaMulta;
-
-	/** nullable persistent field */
 	private Short indicadorAlteracaoVencimento;
-
-	/** nullable persistent field */
-	@ControleAlteracao(funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
-	private Integer consumoAgua;
-
-	/** nullable persistent field */
-	@ControleAlteracao(funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
-	private Integer consumoEsgoto;
-
-	/** nullable persistent field */
 	private Integer consumoRateioAgua;
-
-	/** nullable persistent field */
 	private Integer consumoRateioEsgoto;
-
-	/** persistent field */
-	@ControleAlteracao(funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
-	private BigDecimal valorAgua;
-
-	/** persistent field */
-	@ControleAlteracao(funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
-	private BigDecimal valorEsgoto;
-
-	/** persistent field */
-	@ControleAlteracao(funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
-	private BigDecimal debitos;
-
-	/** nullable persistent field */
-	@ControleAlteracao(funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
-	private BigDecimal valorCreditos;
-
-	/** persistent field */
-	@ControleAlteracao(funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
-	private BigDecimal percentualEsgoto;
-	
 	private BigDecimal valorImposto;
-
-	/** persistent field */
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_RETIFICAR_CONTA,ATRIBUTOS_RETIFICAR_CONTA_ALTERAR_VENCIMENTO})
-	private Date dataVencimentoConta;
-	
-	/** nullable persistent field */
 	private Date dataValidadeConta;
-
-	/** nullable persistent field */
 	private Date dataInclusao;
-
-	/** nullable persistent field */
 	private Date dataRevisao;
-
-	/** nullable persistent field */
 	private Date dataRetificacao;
-
-	/** nullable persistent field */
 	private Date dataCancelamento;
-
-	/** nullable persistent field */
 	private Date dataEmissao;
-
-	/** nullable persistent field */
 	private Integer referenciaBaixaContabil;
-
-	/** nullable persistent field */
 	private Short indicadorDebitoConta;
-
-	/** nullable persistent field */
 	private Date ultimaAlteracao;
-	
-	/** nullable persistent field */
 	private Integer numeroRetificacoes;
-	
 	private Integer numeroAlteracoesVencimento;
-	
-	/** nullable persistent field */
 	private String numeroFatura;
-
-	/** nullable persistent field */
-	@ControleAlteracao(value=FiltroConta.CONTA_MOTIVO_CANCELAMENTO, 
-			funcionalidade=ATRIBUTOS_RETIFICAR_CONTA_CANCELAR)
-	private gcom.faturamento.conta.ContaMotivoCancelamento contaMotivoCancelamento;
-
-	/** nullable persistent field */
-	@ControleAlteracao(value=FiltroConta.CONTA_MOTIVO_INCLUSAO, 
-			funcionalidade=ATRIBUTOS_INSERIR_CONTA)
-	private gcom.faturamento.conta.ContaMotivoInclusao contaMotivoInclusao;
-
-	/** persistent field */
 	private DocumentoTipo documentoTipo;
-
-	/** persistent field */
 	private ContaBancaria contaBancaria;
-
-	/** persistent field */
 	private FaturamentoTipo faturamentoTipo;
-
-	/** persistent field */
 	private RegistroAtendimento registroAtendimento;
-
-	/** persistent field */
 	private Imovel imovel;
-
-	/** persistent field */
-	@ControleAlteracao(value=FiltroConta.LIGACAO_ESGOTO_SITUACAO,
-			funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
-	private LigacaoEsgotoSituacao ligacaoEsgotoSituacao;
-
-	/** persistent field */
-	private ConsumoTarifa consumoTarifa;
-
-	/** persistent field */
-	private ImovelPerfil imovelPerfil;
-
-	/** persistent field */
-	private Quadra quadraConta;
-
-	/** persistent field */
-	private Localidade localidade;
-
-	/** persistent field */
-	private gcom.faturamento.conta.MotivoNaoEntregaDocumento motivoNaoEntregaDocumento;
-
-	/** persistent field */
-	@ControleAlteracao(value=FiltroConta.LIGACAO_AGUA_SITUACAO,
-			funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
-	private LigacaoAguaSituacao ligacaoAguaSituacao;
-
-	/** persistent field */
-	private Funcionario funcionarioEntrega;
-
-	/** persistent field */
-	@ControleAlteracao(value=FiltroConta.CONTA_MOTIVO_REVISAO, 
-			funcionalidade={ATRIBUTOS_RETIFICAR_CONTA_REVISAO, ATRIBUTOS_RETIFICAR_CONTA_RETIRAR_REVISAO})	
-	private gcom.faturamento.conta.ContaMotivoRevisao contaMotivoRevisao;
-
-	/** persistent field */
-	@ControleAlteracao(value=FiltroConta.CONTA_MOTIVO_RETIFICACAO,funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
-	private gcom.faturamento.conta.ContaMotivoRetificacao contaMotivoRetificacao;
-
-	/** persistent field */
-	@ControleAlteracao(value=FiltroConta.DEBITO_CREDITO_SITUACAO_ATUAL, 
-			funcionalidade={ATRIBUTOS_DESFAZER_CONTA_CANCELAR})
-	private DebitoCreditoSituacao debitoCreditoSituacaoAtual;
-
-	/** persistent field */
-	private DebitoCreditoSituacao debitoCreditoSituacaoAnterior;
-
-	/** persistent field */
-	private Funcionario funcionarioLeitura;
-
-	/** persistent field */
-	@ControleAlteracao(value=FiltroConta.CONTA_CATEGORIA,funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
-	private Set contaCategorias;
-
-	/** persistent field */
-	@ControleAlteracao(value=FiltroConta.CREDITOS_REALIZADOS,funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
-	private Set debitoCobrados;
-
-	/** persistent field */
-	@ControleAlteracao(value=FiltroConta.DEBITOS_COBRADOS,funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
-	private Set creditoRealizados;
-
-	/** persistent field */
-	private Set clienteContas;	
-	
-	/** persistent field */
-	private Set contaImpostosDeduzidos;
-	
-	private Set debitoAutomaticoMovimento;
-	
-	private gcom.faturamento.conta.ContaGeral contaGeral;
-	
-	
 	private Date dataVencimentoOriginal;
-	
-	private Parcelamento parcelamento;
-	
-	private ContaGeral origem;
-	
-	private Usuario usuario;
-	
-	private FaturamentoGrupo faturamentoGrupo;
-	
-	private Rota rota;
-	
 	private Integer anoMesReferenciaBaixaSocial;
-	
 	private Integer numeroLeituraAtual;
 	private Integer numeroLeituraAnterior;
-	
 	private BigDecimal percentualColeta;
 	private Integer numeroLeituraAtualPoco;
 	private Integer numeroLeituraAnteriorPoco;
 	private Integer numeroVolumePoco;
-	
 	private Integer numeroBoleto;
-	 
 	private Date dataEnvioEmailConta;
-	
 	private BigDecimal valorRateioAgua;
 	private BigDecimal valorRateioEsgoto;
 	
-	// Constantes
-	public static final Short INDICADOR_ALTERACAO_VENCIMENTO_ATIVO = new Short(
-			"1");
+	@ControleAlteracao(funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
+	private Integer consumoAgua;
 
-	public static final Short INDICADOR_DEBITO_CONTA_SIM = new Short(
-			"1");
+	@ControleAlteracao(funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
+	private Integer consumoEsgoto;
 
-	/** full constructor */
+	@ControleAlteracao(funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
+	private BigDecimal valorAgua;
+
+	@ControleAlteracao(funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
+	private BigDecimal valorEsgoto;
+
+	@ControleAlteracao(funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
+	private BigDecimal debitos;
+
+	@ControleAlteracao(funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
+	private BigDecimal valorCreditos;
+
+	@ControleAlteracao(funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
+	private BigDecimal percentualEsgoto;
+	
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_RETIFICAR_CONTA,ATRIBUTOS_RETIFICAR_CONTA_ALTERAR_VENCIMENTO})
+	private Date dataVencimentoConta;
+	
+	@ControleAlteracao(value=FiltroConta.CONTA_MOTIVO_CANCELAMENTO, funcionalidade=ATRIBUTOS_RETIFICAR_CONTA_CANCELAR)
+	private gcom.faturamento.conta.ContaMotivoCancelamento contaMotivoCancelamento;
+
+	@ControleAlteracao(value=FiltroConta.CONTA_MOTIVO_INCLUSAO, funcionalidade=ATRIBUTOS_INSERIR_CONTA)
+	private gcom.faturamento.conta.ContaMotivoInclusao contaMotivoInclusao;
+
+	@ControleAlteracao(value=FiltroConta.LIGACAO_ESGOTO_SITUACAO, funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
+	private LigacaoEsgotoSituacao ligacaoEsgotoSituacao;
+
+	@ControleAlteracao(value=FiltroConta.LIGACAO_AGUA_SITUACAO, funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
+	private LigacaoAguaSituacao ligacaoAguaSituacao;
+
+	private ConsumoTarifa consumoTarifa;
+	private ImovelPerfil imovelPerfil;
+	private Quadra quadraConta;
+	private Localidade localidade;
+	private MotivoNaoEntregaDocumento motivoNaoEntregaDocumento;
+	private Funcionario funcionarioEntrega;
+	private DebitoCreditoSituacao debitoCreditoSituacaoAnterior;
+	private Funcionario funcionarioLeitura;
+	private ContaGeral contaGeral;
+	private Parcelamento parcelamento;
+	private ContaGeral origem;
+	private Usuario usuario;
+	private FaturamentoGrupo faturamentoGrupo;
+	private Rota rota;
+
+	@ControleAlteracao(value=FiltroConta.CONTA_MOTIVO_REVISAO, funcionalidade={ATRIBUTOS_RETIFICAR_CONTA_REVISAO, ATRIBUTOS_RETIFICAR_CONTA_RETIRAR_REVISAO})	
+	private gcom.faturamento.conta.ContaMotivoRevisao contaMotivoRevisao;
+
+	@ControleAlteracao(value=FiltroConta.CONTA_MOTIVO_RETIFICACAO,funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
+	private gcom.faturamento.conta.ContaMotivoRetificacao contaMotivoRetificacao;
+
+	@ControleAlteracao(value=FiltroConta.DEBITO_CREDITO_SITUACAO_ATUAL, funcionalidade={ATRIBUTOS_DESFAZER_CONTA_CANCELAR})
+	private DebitoCreditoSituacao debitoCreditoSituacaoAtual;
+
+	@SuppressWarnings("rawtypes")
+	@ControleAlteracao(value=FiltroConta.CONTA_CATEGORIA,funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
+	private Set contaCategorias;
+
+	@SuppressWarnings("rawtypes")
+	@ControleAlteracao(value=FiltroConta.CREDITOS_REALIZADOS,funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
+	private Set debitoCobrados;
+
+	@SuppressWarnings("rawtypes")
+	@ControleAlteracao(value=FiltroConta.DEBITOS_COBRADOS,funcionalidade=ATRIBUTOS_RETIFICAR_CONTA)
+	private Set creditoRealizados;
+
+	@SuppressWarnings("rawtypes")
+	private Set clienteContas;	
+	
+	@SuppressWarnings("rawtypes")
+	private Set contaImpostosDeduzidos;
+	
+	@SuppressWarnings("rawtypes")
+	private Set debitoAutomaticoMovimento;
+	
+	public static final Short INDICADOR_ALTERACAO_VENCIMENTO_ATIVO = new Short("1");
+	public static final Short INDICADOR_DEBITO_CONTA_SIM = new Short("1");
+
+	@SuppressWarnings("rawtypes")
 	public Conta(
 			Integer referenciaContabil,
 			int referencia,
@@ -401,14 +283,16 @@ public class Conta extends ObjetoTransacao implements IConta {
 		this.dataVencimentoOriginal = dataVencimentoOriginal;
 		this.valorImposto = valorImposto;
 		this.numeroRetificacoes = numeroRetificacoes;
-		
-		
-		
 	}
 
 	public Conta() {
 	}
+	
+	public Conta(Integer id) {
+		this.id = id;
+	}
 
+	@SuppressWarnings("rawtypes")
 	public Conta(
 			int referencia,
 			short digitoVerificadorConta,
@@ -580,8 +464,7 @@ public class Conta extends ObjetoTransacao implements IConta {
 		return this.indicadorAlteracaoVencimento;
 	}
 
-	public void setIndicadorAlteracaoVencimento(
-			Short indicadorAlteracaoVencimento) {
+	public void setIndicadorAlteracaoVencimento(Short indicadorAlteracaoVencimento) {
 		this.indicadorAlteracaoVencimento = indicadorAlteracaoVencimento;
 	}
 
@@ -905,26 +788,32 @@ public class Conta extends ObjetoTransacao implements IConta {
 		this.funcionarioLeitura = funcionarioLeitura;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Set getContaCategorias() {
 		return this.contaCategorias;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setContaCategorias(Set contaCategorias) {
 		this.contaCategorias = contaCategorias;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Set getDebitoCobrados() {
 		return this.debitoCobrados;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setDebitoCobrados(Set debitoCobrados) {
 		this.debitoCobrados = debitoCobrados;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Set getCreditoRealizados() {
 		return this.creditoRealizados;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setCreditoRealizados(Set creditoRealizados) {
 		this.creditoRealizados = creditoRealizados;
 	}
@@ -933,16 +822,10 @@ public class Conta extends ObjetoTransacao implements IConta {
 		return new ToStringBuilder(this).append("id", getId()).toString();
 	}
 
-	/**
-	 * @return Retorna o campo valorImposto.
-	 */
 	public BigDecimal getValorImposto() {
 		return valorImposto;
 	}
 
-	/**
-	 * @param valorImposto O valorImposto a ser setado.
-	 */
 	public void setValorImposto(BigDecimal valorImposto) {
 		this.valorImposto = valorImposto;
 	}
@@ -963,140 +846,38 @@ public class Conta extends ObjetoTransacao implements IConta {
 		this.parcelamento = parcelamento;
 	}
 
-	/**
-	 * Soma todos os valores de uma conta para obter o seu valor total
-	 * 
-	 * @param conta
-	 * @return o valor total de uma conta
-	 */
 	public String getValorTotalConta() {
-		BigDecimal valorTotalConta = new BigDecimal("0.00");
-
-		// Valor de �gua
-		if (this.getValorAgua() != null) {
-			valorTotalConta = valorTotalConta.add(this.getValorAgua());
-		}
-
-		// Valor de esgoto
-		if (this.getValorEsgoto() != null) {
-			valorTotalConta = valorTotalConta.add(this.getValorEsgoto());
-		}
-
-		// Valor dos d�bitos
-		if (this.getDebitos() != null) {
-			valorTotalConta = valorTotalConta.add(this.getDebitos());
-		}
-
-		// Valor dos cr�ditos
-		if (this.getValorCreditos() != null) {
-			valorTotalConta = valorTotalConta.subtract(this.getValorCreditos());
-		}
-		
-		
-
-		//----------------------------------------------------------------------
-		// Alterado por: Yara Taciane
-		// data : 15/08/2008
-		//----------------------------------------------------------------------
-		// Valor dos impostos	
-		if (this.getValorImposto() != null) {
-			valorTotalConta = valorTotalConta.subtract(this.getValorImposto());
-		}
-		//----------------------------------------------------------------------
-
-		return valorTotalConta.toString();
+		return this.getValorTotalContaBigDecimal().toString();
 	}
 
-	/**
-	 * Soma todos os valores de uma conta para obter o seu valor total
-	 * 
-	 * @param conta
-	 * @return o valor total de uma conta
-	 */
 	public BigDecimal getValorTotalContaBigDecimal() {
 		BigDecimal valorTotalConta = new BigDecimal("0.00");
 
-		// Valor de �gua
 		if (this.getValorAgua() != null) {
 			valorTotalConta = valorTotalConta.add(this.getValorAgua());
 		}
 
-		// Valor de esgoto
 		if (this.getValorEsgoto() != null) {
 			valorTotalConta = valorTotalConta.add(this.getValorEsgoto());
 		}
 
-		// Valor dos d�bitos
 		if (this.getDebitos() != null) {
 			valorTotalConta = valorTotalConta.add(this.getDebitos());
 		}
 
-		// Valor dos cr�ditos
 		if (this.getValorCreditos() != null) {
 			valorTotalConta = valorTotalConta.subtract(this.getValorCreditos());
 		}
 		
-
-		//----------------------------------------------------------------------
-		// Alterado por: Yara Taciane
-		// data : 15/08/2008
-		//----------------------------------------------------------------------
-		// Valor dos impostos
 		if (this.getValorImposto() != null) {
 			valorTotalConta = valorTotalConta.subtract(this.getValorImposto());
 		}
-        //----------------------------------------------------------------------
 		
 		return valorTotalConta;
 	}
 	
-	/**
-	 * Este m�todo retorna o valor total da conta 
-	 * (VALOR_AGUA + VALOR_ESGOTO + VALOR_DEBITOS) - VALOR_CREDITOS - VALOR_IMPOSTOS
-	 *
-	 * OBS - Este m�todo foi alterado por Raphael pois n�o estava refletindo corretamente o valor da conta
-	 *
-	 * @author Raphael Rossiter, Yara Taciane 
-	 * @date 14/03/2006
-	 *
-	 */
 	public BigDecimal getValorTotal() {
-
-		BigDecimal valorTotalConta = new BigDecimal("0.00");
-
-		// Valor de �gua
-		if (this.getValorAgua() != null) {
-			valorTotalConta = valorTotalConta.add(this.getValorAgua());
-		}
-
-		// Valor de esgoto
-		if (this.getValorEsgoto() != null) {
-			valorTotalConta = valorTotalConta.add(this.getValorEsgoto());
-		}
-
-		// Valor dos d�bitos
-		if (this.getDebitos() != null) {
-			valorTotalConta = valorTotalConta.add(this.getDebitos());
-		}
-
-		// Valor dos cr�ditos
-		if (this.getValorCreditos() != null) {
-			valorTotalConta = valorTotalConta.subtract(this.getValorCreditos());
-		}
-		
-		//----------------------------------------------------------------------
-		// Alterado por: Yara Taciane
-		// data : 15/08/2008
-		//----------------------------------------------------------------------
-		// Valor dos impostos
-		if (this.getValorImposto() != null) {
-			valorTotalConta = valorTotalConta.subtract(this.getValorImposto());
-		}
-		//----------------------------------------------------------------------
-		
-		valorTotalConta = valorTotalConta.setScale(2, BigDecimal.ROUND_HALF_UP);
-		
-		return valorTotalConta;	
+		return getValorTotalContaBigDecimal().setScale(2, BigDecimal.ROUND_HALF_UP);	
 	}
 
 	public String getFormatarAnoMesParaMesAno() {
@@ -1109,29 +890,24 @@ public class Conta extends ObjetoTransacao implements IConta {
 		return anoMesFormatado.toString();
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Set getClienteContas() {
 		return clienteContas;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setClienteContas(Set clienteContas) {
 		this.clienteContas = clienteContas;
 	}
 	
-	 public ContaGeral getContaGeral() {
-	        return this.contaGeral;
-	    }
+	public ContaGeral getContaGeral() {
+        return this.contaGeral;
+    }
 	 
 	 public void setContaGeral(ContaGeral contaGeral) {
-	        this.contaGeral = contaGeral;
-	    }
+        this.contaGeral = contaGeral;
+    }
 	 
-	/**
-	 * < <Descri��o do m�todo>>
-	 * 
-	 * @param other
-	 *            Descri��o do par�metro
-	 * @return Descri��o do retorno
-	 */
 	public boolean equals(Object other) {
 		if ((this == other)) {
 			return true;
@@ -1172,29 +948,17 @@ public class Conta extends ObjetoTransacao implements IConta {
 		filtroConta.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.PARCELAMENTO);
 		filtroConta.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.USUARIO);
 		
-		// os campos abaixo s�o apenas para o regsitro 
-		// criar um m�todo especifico para o filtro do registro, ap�s os testes  
-//		filtroConta.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.CONTA_CATEGORIA);
-//		filtroConta.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.CONTA_CATEGORIA_CATEGORIA);
-//		filtroConta.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.CONTA_CATEGORIA_SUBCATEGORIA);
-//		filtroConta.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.DEBITOS_COBRADOS);
-//		filtroConta.adicionarCaminhoParaCarregamentoEntidade(FiltroConta.CREDITOS_REALIZADOS);
+		filtroConta.adicionarParametro(new ParametroSimples(FiltroConta.ID, this.getId()));
 		
-		filtroConta.adicionarParametro(
-				new ParametroSimples(FiltroConta.ID, this.getId()));
 		return filtroConta; 
 	}
 	
-	/**
-	 * @return Retorna o campo contaImpostosDeduzidos.
-	 */
+	@SuppressWarnings("rawtypes")
 	public Set getContaImpostosDeduzidos() {
 		return contaImpostosDeduzidos;
 	}
 
-	/**
-	 * @param contaImpostosDeduzidos O contaImpostosDeduzidos a ser setado.
-	 */
+	@SuppressWarnings("rawtypes")
 	public void setContaImpostosDeduzidos(Set contaImpostosDeduzidos) {
 		this.contaImpostosDeduzidos = contaImpostosDeduzidos;
 	}
@@ -1215,47 +979,35 @@ public class Conta extends ObjetoTransacao implements IConta {
 		this.usuario = usuario;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public Set getDebitoAutomaticoMovimento() {
 		return debitoAutomaticoMovimento;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public void setDebitoAutomaticoMovimento(Set debitoAutomaticoMovimento) {
 		this.debitoAutomaticoMovimento = debitoAutomaticoMovimento;
 	}
 	
 	public String[] retornarAtributosInformacoesOperacaoEfetuada(){
-		String []atributos = {
-				"referenciaFormatada"
-				, "localidade.descricao"
-				};
-			return atributos;		
+		String []atributos = { "referenciaFormatada" , "localidade.descricao" };
+		return atributos;		
 	}
 	
 	public String[] retornarLabelsInformacoesOperacaoEfetuada(){
-		String []labels = {"Referencia"
-				, "Localidade"
-				};
-			return labels;		
+		String []labels = {"Referencia" , "Localidade" };
+		return labels;		
 	}
 	
 	public String getReferenciaFormatada(){
 		return Util.formatarAnoMesParaMesAno(this.referencia);
 	}
 	
-//	public Filtro retornaFiltroRegistroOperacao(){
-//		FiltroContaCategoria filtro = new FiltroContaCategoria();
-//		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroContaCategoria.CATEGORIA);
-//		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroContaCategoria.SUBCATEGORIA);
-//		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroContaCategoria.CONTA);
-//		filtro.adicionarParametro(
-//				new ParametroSimples(FiltroContaCategoria.CONTA_ID, this.getId()));		
-//		return retornaFiltroRegistroOperacao();
-//	}
-	
 	public void initializeLazy(){
 		initilizarCollectionLazy(this.getContaCategorias());
 		initilizarCollectionLazy(this.getDebitoCobrados());
 		initilizarCollectionLazy(getCreditoRealizados());		
+
 		if (debitoCreditoSituacaoAtual != null){
 			debitoCreditoSituacaoAtual.initializeLazy();
 		}
@@ -1264,16 +1016,10 @@ public class Conta extends ObjetoTransacao implements IConta {
 		}		
 	}
 
-	/**
-	 * @return Retorna o campo numeroRetificacoes.
-	 */
 	public Integer getNumeroRetificacoes() {
 		return numeroRetificacoes;
 	}
 
-	/**
-	 * @param numeroRetificacoes O numeroRetificacoes a ser setado.
-	 */
 	public void setNumeroRetificacoes(Integer numeroRetificacoes) {
 		this.numeroRetificacoes = numeroRetificacoes;
 	}
@@ -1310,16 +1056,10 @@ public class Conta extends ObjetoTransacao implements IConta {
 		this.numeroAlteracoesVencimento = numeroAlteracoesVencimento;
 	}
 
-	/**
-	 * @return Returns the anoMesReferenciaBaixaSocial.
-	 */
 	public Integer getAnoMesReferenciaBaixaSocial() {
 		return anoMesReferenciaBaixaSocial;
 	}
 
-	/**
-	 * @param anoMesReferenciaBaixaSocial The anoMesReferenciaBaixaSocial to set.
-	 */
 	public void setAnoMesReferenciaBaixaSocial(Integer anoMesReferenciaBaixaSocial) {
 		this.anoMesReferenciaBaixaSocial = anoMesReferenciaBaixaSocial;
 	}

@@ -231,26 +231,6 @@
 		}
   	}
   	
-  	function validaCheckCredito(){
-    	var form = document.forms[0];  	
-  	
-  		var idCreditos = form.idsCredito.value;
-		myString = new String(idCreditos);
-		splitString = myString.split(",");
-		
-		for (i=0; i< splitString.length; i++) {
-			chave  = splitString[i];
-			for(indice = 0; indice < form.elements.length; indice++){
-				if (form.elements[indice].type == "checkbox" && 
-					form.elements[indice].name == 'credito' && 
-					form.elements[indice].value.trim() == chave.trim()) {
-
-					form.elements[indice].checked = true;
-				}
-			}
-		}
-  	}
-  	
   	function validaCheckGuia(){
     	var form = document.forms[0];  	
   	
@@ -1081,168 +1061,6 @@ function totalizarDebito(objeto){
 			
 			<table width="100%" cellpadding="0" cellspacing="0">
 			<tr>
-				<td>
-				
-					<table width="100%" cellpadding="0" cellspacing="0">
-					<tr bgcolor="#79bbfd">
-						<td colspan="6" height="20"><strong>Créditos</strong></td>
-					</tr>
-					<tr bgcolor="#90c7fc">
-
-						<td width="5%" height="20">
-							<strong><a href="javascript:facilitador(document.forms[0].checkCredito,'credito');"id="0">Todos</a></strong>
-						</td>
-						<td width="35%">
-							<div align="center"><strong>Tipo do Crédito</strong></div>
-						</td>
-						<td width="15%">
-							<div align="center"><strong>Mês/Ano Ref.</strong></div>
-						</td>
-						<td width="15%">
-							<div align="center"><strong>Mês/Ano Cobr.</strong></div>
-						</td>
-						<td width="15%">
-							<div align="center"><strong>Prestação</strong></div>
-						</td>
-						<td width="15%">
-							<div align="center"><strong>Vl. Restante</strong></div>
-						</td>
-
-					</tr>
-					</table>
-
-				</td>
-			</tr>
-			
-			
-			<%BigDecimal valorTotalCredito = new BigDecimal("0.00");%>
-			
-			<logic:present name="colecaoCreditoARealizar">
-			
-			<logic:notEmpty name="colecaoCreditoARealizar">
-
-			<tr>
-				<td>
-										
-					<% String cor2 = "#cbe5fe";%>
-
-					<div style="width: 100%; height: 100; overflow: auto;">
-										
-					<table width="100%" align="center" bgcolor="#90c7fc">
-										
-					<logic:iterate name="colecaoCreditoARealizar" id="creditoARealizar" type="CreditoARealizar">
-
-						<%valorTotalCredito = valorTotalCredito.add(creditoARealizar.getValorTotalComBonus()); %>
-						
-						<%	if (cor2.equalsIgnoreCase("#cbe5fe")){
-							cor2 = "#FFFFFF";%>
-							<tr bgcolor="#FFFFFF">
-						<%} else{
-							cor2 = "#cbe5fe";%>
-							<tr bgcolor="#cbe5fe">
-						<%}%>
-												
-												
-						<td align="center" width="5%">
-							<INPUT TYPE="checkbox" NAME="credito"
-							value="<%="" + creditoARealizar.getId().intValue() %>"
-							alt="<%="" + Util.formatarMoedaReal(creditoARealizar.getValorTotalComBonus()).trim()%>"
-							onclick="totalizarDebito(this);">
-						</td>
-						<td width="35%" align="left">
-							<a href="javascript:abrirPopup('exibirConsultarCreditoARealizarAction.do?imovelID=<%="" + creditoARealizar.getImovel().getId().intValue() %>&creditoID=<%="" + creditoARealizar.getId().intValue() %>', 570, 720);">
-							<bean:write name="creditoARealizar" property="creditoTipo.descricao" /></a>
-						</td>
-						<td width="15%">
-							<div align="center">
-							
-								<logic:present name="creditoARealizar" property="anoMesReferenciaCredito">
-									<span style="color: #000000;">
-										<%=""+ Util.formatarMesAnoReferencia(creditoARealizar.getAnoMesReferenciaCredito())%>
-									</span>
-								</logic:present> 
-								
-								<logic:notPresent name="creditoARealizar" property="anoMesReferenciaCredito">
-									&nbsp;
-								</logic:notPresent>	
-							
-							</div>
-						</td>
-						<td width="15%">
-							<div align="center">
-								
-								<logic:present name="creditoARealizar" property="anoMesCobrancaCredito">
-									<span style="color: #000000;">
-										<%=""+ Util.formatarMesAnoReferencia(creditoARealizar.getAnoMesCobrancaCredito())%>
-									</span>
-								</logic:present> 
-								
-								<logic:notPresent name="creditoARealizar" property="anoMesCobrancaCredito">
-									&nbsp;
-								</logic:notPresent>	
-							
-							</div>
-						</td>
-						<td width="15%">
-							<div align="center">
-								
-								<bean:write name="creditoARealizar" property="numeroPrestacaoRealizada" /> /
-								<bean:write name="creditoARealizar" property="numeroPrestacaoCreditoMenosBonus" />
-								
-							</div>
-						</td>
-						<td width="15%">
-							<div align="right">
-													
-								<%="" + Util.formatarMoedaReal(creditoARealizar.getValorTotalComBonus()).trim()%>
-													
-							</div>
-						</td>
-					</tr>
-			
-					</logic:iterate>
-					
-						<%if (cor2.equalsIgnoreCase("#cbe5fe")){
-							cor2 = "#FFFFFF";%>
-							<tr bgcolor="#FFFFFF">
-						<%} else{
-							cor2 = "#cbe5fe";%>
-							<tr bgcolor="#cbe5fe">
-						<%}%>
-
-						<td width="5%" height="20"></td>
-						<td width="35%">
-							<div align="center"><strong>Total:</strong></div>
-						</td>
-						<td width="15%"></td>
-						<td width="15%"></td>
-						<td width="15%"></td>
-						<td width="15%">
-							<div align="right">
-								<strong>				
-								<%="" + Util.formatarMoedaReal(valorTotalCredito).trim()%>
-								</strong>				
-							</div>
-						</td>
-
-					</tr>
-										
-					</table>
-										
-					</div>
-					<input type="hidden" name="valorTotalCredito" ID="valorTotalCredito" value="<%="" + valorTotalCredito %>">
-				</td>
-			</tr>
-
-			</logic:notEmpty>
-			
-			</logic:present>
-
-			</table>
-			
-			
-			<table width="100%" cellpadding="0" cellspacing="0">
-			<tr>
 				<td HEIGHT="5"></td>
 			</tr>
 			</table>
@@ -1582,7 +1400,6 @@ function totalizarDebito(objeto){
 	
 	<%BigDecimal valorTotalDebitosFinal = valorTotalConta.add(valorTotalDebito); %>
 	<%valorTotalDebitosFinal = valorTotalDebitosFinal.add(valorTotalGuiaPagamento); %>
-	<%valorTotalDebitosFinal = valorTotalDebitosFinal.subtract(valorTotalCredito); %>
 	<%valorTotalDebitosFinal = valorTotalDebitosFinal.add(valorTotalParcelamento); %>
 	
 	

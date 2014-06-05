@@ -32,6 +32,7 @@ import gcom.cadastro.imovel.ImovelSubcategoriaPK;
 import gcom.gui.cadastro.atualizacaocadastral.ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm;
 import gcom.micromedicao.ControladorMicromedicaoLocal;
 import gcom.micromedicao.ControladorMicromedicaoLocalHome;
+import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioFichaFiscalizacaoCadastralHelper;
 import gcom.seguranca.IRepositorioSeguranca;
 import gcom.seguranca.RepositorioSegurancaHBM;
 import gcom.seguranca.acesso.usuario.Usuario;
@@ -54,6 +55,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.ejb.CreateException;
@@ -374,8 +376,8 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		}
 	}
 	
-	private void atualizarClienteFoneAtualizacaoCadastral(Integer idiIovelRetorno) throws Exception {
-		ImovelRetorno imovelRetorno = (ImovelRetorno) repositorioAtualizacaoCadastral.pesquisarImovelRetorno(idiIovelRetorno);
+	private void atualizarClienteFoneAtualizacaoCadastral(Integer idImovel) throws Exception {
+		ImovelRetorno imovelRetorno = (ImovelRetorno) repositorioAtualizacaoCadastral.pesquisarImovelRetorno(idImovel);
 
 
 		Collection<IClienteFone> clienteFonesRetorno = this.obterClientesFoneParaAtualizar(imovelRetorno.getIdImovel());
@@ -765,7 +767,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 					
 					if (existeRelacaoClienteImovel(clienteImovelRetorno)) {
 						atualizarInformacoesCliente(clienteImovelRetorno);
-						atualizarClienteFoneAtualizacaoCadastral(clienteImovelRetorno.getIdImovelRetorno());
+						atualizarClienteFoneAtualizacaoCadastral(clienteImovelRetorno.getImovel().getId());
 						
 					} else {
 						incluirNovaRelacaoCliente(clienteImovelRetorno);
@@ -799,7 +801,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		
 		try {
 			ICliente clienteRetorno = repositorioAtualizacaoCadastral.pesquisarClienteRetorno(clienteImovelRetorno);
-			IImovel imovelRetorno = repositorioAtualizacaoCadastral.pesquisarImovelRetorno(clienteImovelRetorno.getIdImovelRetorno());
+			IImovel imovelRetorno = repositorioAtualizacaoCadastral.pesquisarImovelRetorno(clienteImovelRetorno.getImovel().getId());
 			
 			Integer idSetorComercial = getControladorCadastro().pesquisarIdSetorComercialPorCodigoELocalidade(imovelRetorno.getIdLocalidade(), imovelRetorno.getCodigoSetorComercial());
 			
@@ -841,7 +843,7 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 				
 				if (!isImovelEmCampo(clienteImovelRetorno.getImovel().getId())) {
 					ICliente clienteRetorno = repositorioAtualizacaoCadastral.pesquisarClienteRetorno(clienteImovelRetorno);
-					IImovel imovelRetorno = repositorioAtualizacaoCadastral.pesquisarImovelRetorno(clienteImovelRetorno.getIdImovelRetorno());
+					IImovel imovelRetorno = repositorioAtualizacaoCadastral.pesquisarImovelRetorno(clienteImovelRetorno.getImovel().getId());
 					
 					Integer idSetorComercial = getControladorCadastro().pesquisarIdSetorComercialPorCodigoELocalidade(imovelRetorno.getIdLocalidade(), imovelRetorno.getCodigoSetorComercial());
 					
@@ -928,4 +930,102 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		return mapDadosAnalise;
 	}
 	
+	private void atualizarImovelControlePorSituacao(Integer idImovel, Integer situacao) throws ControladorException {
+		try {
+			ImovelControleAtualizacaoCadastral controle = repositorioAtualizacaoCadastral.pesquisarImovelControleAtualizacao(idImovel);
+			
+			if (controle != null){
+				controle.setImovelRetorno(null);
+				controle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(situacao));
+				
+				this.getControladorUtil().atualizar(controle);
+			}
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		}
+		
+	}
+	
+	public void fiscalizarImovel(Integer idImovel) throws ControladorException {
+		try {
+			
+			ImovelControleAtualizacaoCadastral controle = repositorioAtualizacaoCadastral.pesquisarImovelControleAtualizacao(idImovel);
+			
+			if (controle != null){
+				controle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(
+						SituacaoAtualizacaoCadastral.EM_FISCALIZACAO));
+				this.getControladorUtil().atualizar(controle);
+			}
+		} catch (Exception ex) {
+			ex.printStackTrace();
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	
+	public Collection pesquisarDadosFichaFiscalizacaoCadastral(List<Integer> listaIdImoveis) throws ControladorException {
+		
+		Collection retorno = new ArrayList();
+		
+		try {
+			Collection colecaoDadosFicha = repositorioAtualizacaoCadastral.pesquisarDadosFichaFiscalizacaoCadastral(listaIdImoveis);
+			
+			if (colecaoDadosFicha != null && !colecaoDadosFicha.isEmpty()) {
+				Iterator iterator = colecaoDadosFicha.iterator();
+				
+				while (iterator.hasNext()) {
+					RelatorioFichaFiscalizacaoCadastralHelper helper = new RelatorioFichaFiscalizacaoCadastralHelper();
+					Object[] objeto = (Object[]) iterator.next();
+					
+					helper.setIdImovel((Integer) objeto[0]);
+					helper.setNomeLocalidade((String) objeto[1]);
+					helper.setCodigoSetor((Integer) objeto[2]);
+					helper.setNumeroQuadra((Integer) objeto[3]);
+					helper.setNumeroLote((Integer) objeto[4]);
+					helper.setNumeroSublote((Integer) objeto[5]);
+					helper.setDescricaoLogradouroImovel((String) objeto[6]);
+					helper.setIdLogradouroImovel((Integer) objeto[7]);
+					helper.setNumeroImovel((String) objeto[8]);
+					helper.setComplementoEnderecoImovel((String) objeto[9]);
+					helper.setBairroImovel((String) objeto[10]);
+					helper.setCepImovel((Integer) objeto[11]);
+					helper.setCodigoRota((Integer) objeto[12]);
+					helper.setNumeroFace((Integer) objeto[13]);
+					helper.setNomeMunicipioImovel((String) objeto[14]);
+					helper.setIdMunicipioImovel((Integer) objeto[15]);
+					helper.setIdCliente((Integer) objeto[16]);
+					helper.setNomeCliente((String) objeto[17]);
+					helper.setCpfCnpj((String) objeto[18]);
+					helper.setRg((String) objeto[19]);
+					helper.setUf((String) objeto[20]);
+					helper.setSexo((Integer) objeto[21]);
+					helper.setDescricaoLogradouroCliente((String) objeto[22]);
+					helper.setNumeroImovelCliente((String) objeto[23]);
+					helper.setEnderecoTipoCliente((Integer) objeto[24]);
+					helper.setNomeMunicipioCliente((String) objeto[25]);
+					helper.setComplementoEnderecoCliente((String) objeto[26]);
+					helper.setBairroCliente((String) objeto[27]);
+					helper.setCepCliente((Integer) objeto[28]);
+					helper.setEmailCliente((String) objeto[29]);
+					helper.setDdd((String) objeto[30]);
+					helper.setTelefone((String) objeto[31]);
+					helper.setCelular((String) objeto[32]);
+					
+					retorno.add(helper);
+				}
+			}
+			
+			return retorno;
+		} catch(ErroRepositorioException e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+	}
+	
+	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacao(
+			Integer idImovel) throws ControladorException {
+		try {
+			return repositorioAtualizacaoCadastral.pesquisarImovelControleAtualizacao(idImovel);
+		} catch (Exception e) {
+			throw new ControladorException("Erro ao pesquisar ImovelControleAtualizacaoCadastral.", e);
+		}
+	}
 }

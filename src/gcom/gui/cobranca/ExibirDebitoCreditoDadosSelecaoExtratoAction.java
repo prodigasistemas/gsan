@@ -38,17 +38,6 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-
-/**
- * [UC0630]Solicitar Emissão do Extrato de Débitos
- * 
- * Esta classe tem por finalidade exibir para o usuário a tela que exibirá
- * as contas, débitos, créditos e guias para seleção e posteriormente 
- * emissao do extrato de débito dos selecionados
- * 
- * @author Vivianne Sousa
- * @date 02/08/2007
- */
 public class ExibirDebitoCreditoDadosSelecaoExtratoAction extends GcomAction {
 	
 	public ActionForward execute(ActionMapping actionMapping,
@@ -149,23 +138,12 @@ public class ExibirDebitoCreditoDadosSelecaoExtratoAction extends GcomAction {
 					 form.setDescricaoLigacaoEsgotoSituacaoImovel(ligacaoEsgotoSituacao.getDescricao());
 					 form.setIdLigacaoEsgotoSituacaoImovel(ligacaoEsgotoSituacao.getId().toString());
 					 
-					 //[SB0001] - Apresentar Débitos/Créditos do Imóvel de Origem
 					ObterDebitoImovelOuClienteHelper obterDebitoImovelOuClienteHelper = 
 					fachada.apresentarDebitoCreditoImovelExtratoDebito(new Integer(idImovel),false);
 					
-					//CONTA
 					sessao.setAttribute("colecaoConta", obterDebitoImovelOuClienteHelper.getColecaoContasValoresImovel());
-					
-					//DEBITO_A_COBRAR
 					sessao.setAttribute("colecaoDebitoACobrar", obterDebitoImovelOuClienteHelper.getColecaoDebitoACobrar());
-					
-					//CREDITO_A_REALIZAR
-					sessao.setAttribute("colecaoCreditoARealizar", obterDebitoImovelOuClienteHelper.getColecaoCreditoARealizar());
-					
-					//GUIA_PAGAMENTO
-					sessao.setAttribute("colecaoGuiaPagamento", obterDebitoImovelOuClienteHelper.getColecaoGuiasPagamentoValores());
-					
-					//PARCELAMENTO
+					sessao.setAttribute("colecaoGuiaPagamento", obterDebitoImovelOuClienteHelper.getColecaoGuiasPagamentoValoresSemFichaCompensacao());
 					sessao.setAttribute("colecaoDebitoCreditoParcelamento", obterDebitoImovelOuClienteHelper.getColecaoDebitoCreditoParcelamentoHelper());
 					
 					httpServletRequest.setAttribute("habilitaIncluirDebito", 1);
@@ -242,6 +220,7 @@ public class ExibirDebitoCreditoDadosSelecaoExtratoAction extends GcomAction {
 		return retorno;
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private Object[] obterContasSelecionadas(String idsContas, HttpSession sessao){
 		
 		Object[] retorno = null;
@@ -305,6 +284,7 @@ public class ExibirDebitoCreditoDadosSelecaoExtratoAction extends GcomAction {
 		return retorno;
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Object[] obterDebitosSelecionados(String idsDebitos, HttpSession sessao){
 		
 		Object[] retorno = null;
@@ -341,6 +321,7 @@ public class ExibirDebitoCreditoDadosSelecaoExtratoAction extends GcomAction {
 		return retorno;
 	}
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Object[] obterCreditosSelecionadas(String idsCreditos, HttpSession sessao){
 		
 		Object[] retorno = null;
@@ -377,6 +358,7 @@ public class ExibirDebitoCreditoDadosSelecaoExtratoAction extends GcomAction {
 		return retorno;
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private Object[] obterGuiasSelecionadas(String idsGuias, HttpSession sessao){
 		
 		Object[] retorno = null;
@@ -434,6 +416,7 @@ public class ExibirDebitoCreditoDadosSelecaoExtratoAction extends GcomAction {
 	}
 
 	
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Object[] obterParcelamentosSelecionados(String idsParcelamentos, HttpSession sessao){
 		
 		Object[] retorno = null;
@@ -501,12 +484,12 @@ public class ExibirDebitoCreditoDadosSelecaoExtratoAction extends GcomAction {
 		return retorno;
 	}
 	
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	private void calcularDescontos(DebitoCreditoDadosSelecaoExtratoActionForm form,
 			HttpServletRequest httpServletRequest, HttpSession sessao,Fachada fachada,
 			SistemaParametro sistemaParametro, Usuario usuarioLogado){
 		
 		String indicadorIncluirAcrescimosImpontualidade = form.getIndicadorIncluirAcrescimosImpontualidade();
-//		String indicadorTaxaCobranca = form.getIndicadorTaxaCobranca();
 		
 		Collection<ContaValoresHelper> colecaoContas =  null;
 		Collection<GuiaPagamentoValoresHelper> colecaoGuiasPagamento = null;
@@ -514,11 +497,8 @@ public class ExibirDebitoCreditoDadosSelecaoExtratoAction extends GcomAction {
 		Collection<CreditoARealizar> colecaoCreditoARealizar = null;
 		Collection<DebitoACobrar> colecaoDebitosACobrarParcelamento = null;
 		Collection<CreditoARealizar> colecaoCreditoARealizarParcelamento = null;
-//		Collection<DebitoCreditoParcelamentoHelper> colecaoAntecipacaoDebitosDeParcelamento = null;
-//		Collection<DebitoCreditoParcelamentoHelper> colecaoAntecipacaoCreditosDeParcelamento = null;
 		BigDecimal valorAcrescimosImpontualidade = new BigDecimal("0.00");
 		BigDecimal valorDebitoTotalAtualizado = new BigDecimal("0.00");
-//		BigDecimal valorDesconto =  new BigDecimal("0.00");
 		
 		String idsContas = httpServletRequest.getParameter("conta");
 		String idsDebitos = httpServletRequest.getParameter("debito");
@@ -640,17 +620,6 @@ public class ExibirDebitoCreditoDadosSelecaoExtratoAction extends GcomAction {
         BigDecimal valorCreditoDocumento = valorTotalCreditoARealizar.add(valorTotalCreditoParcelamento);
         valorCreditoDocumento = valorCreditoDocumento.add(valorTotalAntecipacaoCreditoParcelamento);
         
-		
-//        if(indicadorIncluirAcrescimosImpontualidade.equals(CobrancaDocumento.INCLUIR_ACRESCIMOS)){
-//        	valorDocumento = valorDocumento.add(valorAcrescimosImpontualidade);
-//        }
-//        
-//		if(indicadorIncluirAcrescimosImpontualidade.equals(CobrancaDocumento.INCLUIR_ACRESCIMOS_COM_DESCONTO)){
-//			valorDesconto = valorDesconto.add(valorAcrescimosImpontualidade);
-//		}
-        
-		///////////////////////////////////////////////////////////
-		
 		ImovelPerfil imovelPerfil = fachada.obterImovelPerfil(new Integer(form.getIdImovel())); 
 		Short numeroReparcelamentoConsecutivos = fachada.consultarNumeroReparcelamentoConsecutivosImovel(new Integer(form.getIdImovel()));
 		if(numeroReparcelamentoConsecutivos == null){
@@ -708,17 +677,7 @@ public class ExibirDebitoCreditoDadosSelecaoExtratoAction extends GcomAction {
 	}
 	
 	
-	/**
-	 * [UC0630] Solicitar Emissão do Extrato de Débitos 
-	 *
-	 * @author Raphael Rossiter
-	 * @date 30/03/2010
-	 *
-	 * @param sessao
-	 * @param requestMap
-	 * @param fachada
-	 * @return Object[]
-	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private Object[] obterAntecipacaoParcelasParcelamentosSelecionados(HttpSession sessao, 
 			Map<String, String[]> requestMap, Fachada fachada){
 		

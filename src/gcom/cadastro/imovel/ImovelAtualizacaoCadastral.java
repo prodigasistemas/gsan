@@ -6,6 +6,8 @@ import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.cadastro.endereco.LogradouroCep;
 import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.ObjetoTransacao;
+import gcom.micromedicao.hidrometro.HidrometroCapacidade;
+import gcom.micromedicao.hidrometro.HidrometroMarca;
 import gcom.micromedicao.hidrometro.HidrometroProtecao;
 import gcom.seguranca.transacao.FiltroTabela;
 import gcom.util.filtro.Filtro;
@@ -18,7 +20,6 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 
-/** @author Hibernate CodeGenerator */
 @ControleAlteracao()
 public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImovel {
 	
@@ -137,7 +138,6 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
     @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idMarcaHidrometro;
 
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
     private Integer idLocalInstalacaoHidrometro;
 
     @ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
@@ -170,7 +170,8 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
     private Integer idEmpresa;
 
 	private Integer idMunicipio;
-	
+
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_CARREGAR_DADOS_ATUALIZACAO_CADASTRAL})
 	private String nomeMunicipio;
 	
 	private Integer idUinidadeFederacao;
@@ -947,12 +948,10 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 	}
 
 	public HidrometroProtecao getHidrometroProtecao() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public void setHidrometroProtecao(HidrometroProtecao hidrometroProtecao) {
-		// TODO Auto-generated method stub
 	}
 
 	public Integer getTipoOperacao() {
@@ -997,5 +996,19 @@ public class ImovelAtualizacaoCadastral extends ObjetoTransacao implements IImov
 
 	public void setIdRota(Integer idRota) {
 		this.idRota = idRota;
+	}
+
+	public HidrometroCapacidade getHidrometroCapacidade() {
+		return null;
+	}
+
+	public HidrometroMarca getHidrometroMarca() {
+		return null;
+	}
+
+	public void setHidrometroCapacidade(HidrometroCapacidade hidrometroCapacidade) {
+	}
+
+	public void setHidrometroMarca(HidrometroMarca hidrometroMarca) {
 	}
 }

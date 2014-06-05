@@ -1020,7 +1020,8 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 				+ "debTipo.dbtp_dsdebitotipo as descricaoDebitoTipo, guia.gpag_dtemissao as dataEmissao, "
 				+ "debTipo.dbtp_id as idDebitoTipo, "
 				+ "guia.gpag_nnprestacaodebito as numeroPrestacoesDebito, guia.gpag_nnprestacaototal as numeroPrestacoesTotal, "
-				+ "sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) as valorPagamento, min(pagto.pgmt_dtpagamento) as dataPagamento "
+				+ "sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) as valorPagamento, min(pagto.pgmt_dtpagamento) as dataPagamento, "
+				+ " guia.dotp_id as idDocumentoTipo "
 				+ "FROM cadastro.cliente_guia_pagamento clieGuia "
 				+ "INNER JOIN faturamento.guia_pagamento guia on guia.gpag_id = clieGuia.gpag_id "
 				+ "INNER JOIN faturamento.debito_tipo debTipo on debTipo.dbtp_id = guia.dbtp_id "
@@ -1034,17 +1035,9 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 			}
 				
 			consulta += " GROUP BY guia.gpag_id, guia.gpag_vldebito, guia.gpag_amreferenciacontabil, guia.gpag_dtvencimento, guia.gpag_iccobrancamulta, debtipo.dbtp_dsdebitotipo, guia.gpag_dtemissao, "
-				+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal ";
+				+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal, guia.dotp_id ";
 			
 			if (indicadorPagamento == 1) {
-//				consulta += " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) < (coalesce(guia.gpag_vldebito, 0)) ";
-				
-				/*
-				 * TODO - COSANPA - 24/07/2012 - Mantis 610 - Felipe Santos e Wellington Rocha
-				 * 
-				 * Alteração para ser emitidos Documentos de Cobrança apenas para pagamentos igual a 0
-				 * 
-				 */
 				consulta += " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) = 0 ";
 			}
 			
@@ -1056,7 +1049,8 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 				+ "debTipo.dbtp_dsdebitotipo as descricaoDebitoTipo, guia.gpag_dtemissao as dataEmissao, "
 				+ "debTipo.dbtp_id as idDebitoTipo, "
 				+ "guia.gpag_nnprestacaodebito as numeroPrestacoesDebito, guia.gpag_nnprestacaototal as numeroPrestacoesTotal, "
-				+ "sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) as valorPagamento, min(pagto.pgmt_dtpagamento) as dataPagamento "
+				+ "sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) as valorPagamento, min(pagto.pgmt_dtpagamento) as dataPagamento, "
+				+ " guia.dotp_id as idDocumentoTipo "
 				+ "FROM faturamento.guia_pagamento guia "
 				+ "INNER JOIN faturamento.debito_tipo debTipo on debTipo.dbtp_id = guia.dbtp_id "
 				+ "LEFT JOIN arrecadacao.pagamento pagto on pagto.gpag_id = guia.gpag_id "
@@ -1065,17 +1059,9 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 				+ "and guia.gpag_dtvencimento between :inicialVencimento and :finalVencimento ";
 			
 			consulta += " GROUP BY guia.gpag_id, guia.gpag_vldebito, guia.gpag_amreferenciacontabil, guia.gpag_dtvencimento, guia.gpag_iccobrancamulta, debtipo.dbtp_dsdebitotipo, guia.gpag_dtemissao, "
-				+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal  ";
+				+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal, guia.dotp_id  ";
 			
 			if (indicadorPagamento == 1) {
-//				consulta += " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) < (coalesce(guia.gpag_vldebito, 0)) ";
-				
-				/*
-				 * TODO - COSANPA - 24/07/2012 - Mantis 610 - Felipe Santos e Wellington Rocha
-				 * 
-				 * Alteração para ser emitidos Documentos de Cobrança apenas para pagamentos igual a 0
-				 * 
-				 */
 				consulta += " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) = 0 ";
 			}
 
@@ -1092,6 +1078,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					.addScalar("numeroPrestacoesTotal", Hibernate.SHORT)
 					.addScalar("valorPagamento", Hibernate.BIG_DECIMAL)
 					.addScalar("dataPagamento", Hibernate.DATE)
+					.addScalar("idDocumentoTipo", Hibernate.INTEGER)
 					.setInteger("idCliente", idCliente)
 					.setInteger("situacaoNormal", new Integer(situacaoNormal))
 					.setDate("inicialVencimento", dataVencimentoInicial)
@@ -1246,19 +1233,6 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 		return retornoIndicesAcrescimosImpontualidade;
 	}
 
-	/**
-	 * Faz parte de [UC0067] Obter Débito do Imovel ou Cliente Author: Rafael
-	 * Santos Data: 07/01/2006
-	 * 
-	 * @param idImovel
-	 *            Matricula do Imovel
-	 * @prarm dataVencimentoInicial Data Vencimento Inicial
-	 * @param situacaoNormal
-	 *            Situação Normal
-	 * @parm dataVencimentoFinal Data Vecimento Final
-	 * @return Coleção de Guias de Pagamentos
-	 * @throws ErroRepositorioException
-	 */
 	public Collection pesquisarGuiasPagamentoImovel(Integer idImovel, int indicadorPagamento,
 			String situacaoNormal, Date dataVencimentoInicial,
 			Date dataVencimentoFinal) throws ErroRepositorioException {
@@ -1276,7 +1250,8 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 				+ "debTipo.dbtp_id as idDebitoTipo, "
 				+ "guia.gpag_nnprestacaodebito as numeroPrestacoesDebito, guia.gpag_nnprestacaototal as numeroPrestacoesTotal, "
 				+ "sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) as valorPagamento, "
-				+ "min(pagto.pgmt_dtpagamento) as dataPagamento "
+				+ "min(pagto.pgmt_dtpagamento) as dataPagamento, "
+				+ " guia.dotp_id as idDocumentoTipo "
 				+ "FROM faturamento.guia_pagamento guia "
 				+ "INNER JOIN faturamento.debito_tipo debTipo on debTipo.dbtp_id = guia.dbtp_id "
 				+ "LEFT JOIN arrecadacao.pagamento pagto on pagto.gpag_id = guia.gpag_id "
@@ -1285,17 +1260,9 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 				+ "and guia.gpag_dtvencimento between :inicialVencimento and :finalVencimento ";
 				
 			consulta += " GROUP BY guia.gpag_id, guia.gpag_vldebito, guia.gpag_amreferenciacontabil, guia.gpag_dtvencimento, guia.gpag_iccobrancamulta, debtipo.dbtp_dsdebitotipo, guia.gpag_dtemissao, "
-				+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal  ";
+				+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal, guia.dotp_id  ";
 			
 			if (indicadorPagamento == 1) {
-//				consulta += " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) < (coalesce(guia.gpag_vldebito, 0)) ";
-				
-				/*
-				 * TODO - COSANPA - 24/07/2012 - Mantis 610 - Felipe Santos e Wellington Rocha
-				 * 
-				 * Alteração para ser emitidos Documentos de Cobrança apenas para pagamentos igual a 0
-				 * 
-				 */
 				consulta += " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) = 0 ";
 			}
 
@@ -1312,6 +1279,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					.addScalar("numeroPrestacoesTotal", Hibernate.SHORT)
 					.addScalar("valorPagamento", Hibernate.BIG_DECIMAL)
 					.addScalar("dataPagamento", Hibernate.DATE)
+					.addScalar("idDocumentoTipo", Hibernate.INTEGER)
 					.setInteger("idImovel", idImovel)
 					.setInteger("situacaoNormal", new Integer(situacaoNormal))
 					.setDate("inicialVencimento", dataVencimentoInicial)
@@ -1319,10 +1287,8 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					.list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -11889,7 +11855,8 @@ return retorno;
 				+ "debTipo.dbtp_dsdebitotipo as descricaoDebitoTipo, guia.gpag_dtemissao as dataEmissao, "
 				+ "debTipo.dbtp_id as idDebitoTipo, "
 				+ "guia.gpag_nnprestacaodebito as numeroPrestacoesDebito, guia.gpag_nnprestacaototal as numeroPrestacoesTotal, "
-				+ "sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) as valorPagamento, min(pagto.pgmt_dtpagamento) as dataPagamento "
+				+ "sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) as valorPagamento, min(pagto.pgmt_dtpagamento) as dataPagamento, "
+				+ " guia.dotp_id as idDocumentoTipo "
 				+ "FROM faturamento.guia_pagamento guia "
 				+ "INNER JOIN faturamento.debito_tipo debTipo on debTipo.dbtp_id = guia.dbtp_id "
 				+ "LEFT JOIN arrecadacao.pagamento pagto on pagto.gpag_id = guia.gpag_id "
@@ -11898,17 +11865,9 @@ return retorno;
 				+ "and guia.gpag_dtvencimento between :inicialVencimento and :finalVencimento ";
 			
 			consulta += " GROUP BY guia.gpag_id, guia.gpag_vldebito, guia.gpag_amreferenciacontabil, guia.gpag_dtvencimento, guia.gpag_iccobrancamulta, debtipo.dbtp_dsdebitotipo, guia.gpag_dtemissao, "
-				+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal ";
+				+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal, guia.dotp_id ";
 			
 			if (indicadorPagamento == 1) {
-//				consulta += " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) < (coalesce(guia.gpag_vldebito, 0)) ";
-				
-				/*
-				 * TODO - COSANPA - 24/07/2012 - Mantis 610 - Felipe Santos e Wellington Rocha
-				 * 
-				 * Alteração para ser emitidos Documentos de Cobrança apenas para pagamentos igual a 0
-				 * 
-				 */
 				consulta += " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) = 0 ";
 			}
 			
@@ -11922,7 +11881,8 @@ return retorno;
 					+ "debTipo.dbtp_dsdebitotipo as descricaoDebitoTipo, guia.gpag_dtemissao as dataEmissao, "
 					+ "debTipo.dbtp_id as idDebitoTipo, "
 					+ "guia.gpag_nnprestacaodebito as numeroPrestacoesDebito, guia.gpag_nnprestacaototal as numeroPrestacoesTotal, "
-					+ "sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) as valorPagamento, min(pagto.pgmt_dtpagamento) as dataPagamento "
+					+ "sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) as valorPagamento, min(pagto.pgmt_dtpagamento) as dataPagamento, "
+					+ " guia.dotp_id as idDocumentoTipo "
 					+ "FROM faturamento.guia_pagamento guia "
 					+ "INNER JOIN faturamento.debito_tipo debTipo on debTipo.dbtp_id = guia.dbtp_id "
 					+ "LEFT JOIN arrecadacao.pagamento pagto on pagto.gpag_id = guia.gpag_id "
@@ -11931,17 +11891,9 @@ return retorno;
 					+ "and guia.gpag_dtvencimento between :inicialVencimento and :finalVencimento ";
 				
 				consulta += " GROUP BY guia.gpag_id, guia.gpag_vldebito, guia.gpag_amreferenciacontabil, guia.gpag_dtvencimento, guia.gpag_iccobrancamulta, debtipo.dbtp_dsdebitotipo, guia.gpag_dtemissao, "
-					+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal";
+					+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal, guia.dotp_id ";
 				
 				if (indicadorPagamento == 1) {
-//					consulta += " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) < (coalesce(guia.gpag_vldebito, 0)) ";
-					
-					/*
-					 * TODO - COSANPA - 24/07/2012 - Mantis 610 - Felipe Santos e Wellington Rocha
-					 * 
-					 * Alteração para ser emitidos Documentos de Cobrança apenas para pagamentos igual a 0
-					 * 
-					 */
 					consulta += " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) = 0 ";
 				}
 				
@@ -11979,6 +11931,7 @@ return retorno;
 						.addScalar("numeroPrestacoesTotal", Hibernate.SHORT)
 						.addScalar("valorPagamento", Hibernate.BIG_DECIMAL)
 						.addScalar("dataPagamento", Hibernate.DATE)
+						.addScalar("idDocumentoTipo", Hibernate.INTEGER)
 						.setInteger("idCliente", idCliente)
 						.setParameterList("idsImoveis", particoes.get(i))
 						.setInteger("situacaoNormal", new Integer(situacaoNormal))
@@ -12004,6 +11957,7 @@ return retorno;
 					.addScalar("numeroPrestacoesTotal", Hibernate.SHORT)
 					.addScalar("valorPagamento", Hibernate.BIG_DECIMAL)
 					.addScalar("dataPagamento", Hibernate.DATE)
+					.addScalar("idDocumentoTipo", Hibernate.INTEGER)
 					.setInteger("idCliente", idCliente)
 					.setParameterList("idsImoveis", idsImoveis)
 					.setInteger("situacaoNormal", new Integer(situacaoNormal))
@@ -12026,6 +11980,7 @@ return retorno;
 						.addScalar("numeroPrestacoesTotal", Hibernate.SHORT)
 						.addScalar("valorPagamento", Hibernate.BIG_DECIMAL)
 						.addScalar("dataPagamento", Hibernate.DATE)
+						.addScalar("idDocumentoTipo", Hibernate.INTEGER)
 						.setInteger("idCliente", idCliente)
 						.setInteger("situacaoNormal", new Integer(situacaoNormal))
 						.setDate("inicialVencimento", dataVencimentoInicial)
@@ -12073,7 +12028,8 @@ return retorno;
 				+ "debTipo.dbtp_dsdebitotipo as descricaoDebitoTipo, guia.gpag_dtemissao as dataEmissao, "
 				+ "debTipo.dbtp_id as idDebitoTipo, "
 				+ "guia.gpag_nnprestacaodebito as numeroPrestacoesDebito, guia.gpag_nnprestacaototal as numeroPrestacoesTotal, "
-				+ "sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) as valorPagamento, min(pagto.pgmt_dtpagamento) as dataPagamento "
+				+ "sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) as valorPagamento, min(pagto.pgmt_dtpagamento) as dataPagamento, "
+				+ " guia.dotp_id as idDocumentoTipo "
 				+ "FROM cadastro.cliente_guia_pagamento clieGuia "
 				+ "INNER JOIN faturamento.guia_pagamento guia on guia.gpag_id = clieGuia.gpag_id "
 				+ "INNER JOIN faturamento.debito_tipo debTipo on debTipo.dbtp_id = guia.dbtp_id "
@@ -12087,17 +12043,9 @@ return retorno;
 			}
 			
 			consulta += " GROUP BY guia.gpag_id, guia.gpag_vldebito, guia.gpag_amreferenciacontabil, guia.gpag_dtvencimento, guia.gpag_iccobrancamulta, debtipo.dbtp_dsdebitotipo, guia.gpag_dtemissao, "
-				+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal";
+				+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal, guia.dotp_id";
 			
 			if (indicadorPagamento == 1) {
-//				consulta += " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) < (coalesce(guia.gpag_vldebito, 0)) ";
-				
-				/*
-				 * TODO - COSANPA - 24/07/2012 - Mantis 610 - Felipe Santos e Wellington Rocha
-				 * 
-				 * Alteração para ser emitidos Documentos de Cobrança apenas para pagamentos igual a 0
-				 * 
-				 */
 				consulta += " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) = 0 ";
 			}
 			
@@ -12109,7 +12057,8 @@ return retorno;
 				+ "debTipo.dbtp_dsdebitotipo as descricaoDebitoTipo, guia.gpag_dtemissao as dataEmissao, "
 				+ "debTipo.dbtp_id as idDebitoTipo, "
 				+ "guia.gpag_nnprestacaodebito as numeroPrestacoesDebito, guia.gpag_nnprestacaototal as numeroPrestacoesTotal, "
-				+ "sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) as valorPagamento, min(pagto.pgmt_dtpagamento) as dataPagamento "
+				+ "sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) as valorPagamento, min(pagto.pgmt_dtpagamento) as dataPagamento, "
+				+ " guia.dotp_id as idDocumentoTipo "
 				+ "FROM faturamento.guia_pagamento guia "
 				+ "INNER JOIN faturamento.debito_tipo debTipo on debTipo.dbtp_id = guia.dbtp_id "
 				+ "LEFT JOIN arrecadacao.pagamento pagto on pagto.gpag_id = guia.gpag_id "
@@ -12118,17 +12067,9 @@ return retorno;
 				+ "and guia.gpag_dtvencimento between :inicialVencimento and :finalVencimento ";
 			
 			consulta += " GROUP BY guia.gpag_id, guia.gpag_vldebito, guia.gpag_amreferenciacontabil, guia.gpag_dtvencimento, guia.gpag_iccobrancamulta, debtipo.dbtp_dsdebitotipo, guia.gpag_dtemissao, "
-				+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal";
+				+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal, guia.dotp_id";
 			
 			if (indicadorPagamento == 1) {
-//				consulta += " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) < (coalesce(guia.gpag_vldebito, 0)) ";
-				
-				/*
-				 * TODO - COSANPA - 24/07/2012 - Mantis 610 - Felipe Santos e Wellington Rocha
-				 * 
-				 * Alteração para ser emitidos Documentos de Cobrança apenas para pagamentos igual a 0
-				 * 
-				 */
 				consulta += " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) = 0 ";
 			}
 			
@@ -12142,7 +12083,8 @@ return retorno;
 					+ "debTipo.dbtp_dsdebitotipo as descricaoDebitoTipo, guia.gpag_dtemissao as dataEmissao, "
 					+ "debTipo.dbtp_id as idDebitoTipo, "
 					+ "guia.gpag_nnprestacaodebito as numeroPrestacoesDebito, guia.gpag_nnprestacaototal as numeroPrestacoesTotal, "
-					+ "sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) as valorPagamento, min(pagto.pgmt_dtpagamento) as dataPagamento "
+					+ "sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) as valorPagamento, min(pagto.pgmt_dtpagamento) as dataPagamento, "
+					+ " guia.dotp_id as idDocumentoTipo "
 					+ "FROM faturamento.guia_pagamento guia "
 					+ "INNER JOIN faturamento.debito_tipo debTipo on debTipo.dbtp_id = guia.dbtp_id "
 					+ "LEFT JOIN arrecadacao.pagamento pagto on pagto.gpag_id = guia.gpag_id "
@@ -12151,17 +12093,9 @@ return retorno;
 					+ "and guia.gpag_dtvencimento between :inicialVencimento and :finalVencimento ";
 				
 				consulta += " GROUP BY guia.gpag_id, guia.gpag_vldebito, guia.gpag_amreferenciacontabil, guia.gpag_dtvencimento, guia.gpag_iccobrancamulta, debtipo.dbtp_dsdebitotipo, guia.gpag_dtemissao, "
-					+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal";
+					+ "debtipo.dbtp_id, guia.gpag_nnprestacaodebito, guia.gpag_nnprestacaototal, guia.dotp_id";
 				
 				if (indicadorPagamento == 1) {
-//					consulta += " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) < (coalesce(guia.gpag_vldebito, 0)) ";
-					
-					/*
-					 * TODO - COSANPA - 24/07/2012 - Mantis 610 - Felipe Santos e Wellington Rocha
-					 * 
-					 * Alteração para ser emitidos Documentos de Cobrança apenas para pagamentos igual a 0
-					 * 
-					 */
 					consulta += " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) = 0 ";
 				}
 				
@@ -12199,6 +12133,7 @@ return retorno;
 						.addScalar("numeroPrestacoesTotal", Hibernate.SHORT)
 						.addScalar("valorPagamento", Hibernate.BIG_DECIMAL)
 						.addScalar("dataPagamento", Hibernate.DATE)
+						.addScalar("idDocumentoTipo", Hibernate.INTEGER)
 						.setInteger("idCliente", idCliente)
 						.setParameterList("idsImoveis", particoes.get(i))
 						.setInteger("situacaoNormal", new Integer(situacaoNormal))
@@ -12224,6 +12159,7 @@ return retorno;
 					.addScalar("numeroPrestacoesTotal", Hibernate.SHORT)
 					.addScalar("valorPagamento", Hibernate.BIG_DECIMAL)
 					.addScalar("dataPagamento", Hibernate.DATE)
+					.addScalar("idDocumentoTipo", Hibernate.INTEGER)
 					.setInteger("idCliente", idCliente)
 					.setParameterList("idsImoveis", idsImoveis)
 					.setInteger("situacaoNormal", new Integer(situacaoNormal))
@@ -12246,6 +12182,7 @@ return retorno;
 						.addScalar("numeroPrestacoesTotal", Hibernate.SHORT)
 						.addScalar("valorPagamento", Hibernate.BIG_DECIMAL)
 						.addScalar("dataPagamento", Hibernate.DATE)
+						.addScalar("idDocumentoTipo", Hibernate.INTEGER)
 						.setInteger("idCliente", idCliente)
 						.setInteger("situacaoNormal", new Integer(situacaoNormal))
 						.setDate("inicialVencimento", dataVencimentoInicial)

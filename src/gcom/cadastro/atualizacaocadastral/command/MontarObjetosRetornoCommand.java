@@ -234,7 +234,7 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 	private ClienteFoneAtualizacaoCadastral getClienteFoneAtualizacaoCadastral(String tipoClientFone, Integer foneTipo, int matriculaCliente) {
 		ClienteFoneAtualizacaoCadastral clienteFone = new ClienteFoneAtualizacaoCadastral();
 
-		if (tipoClientFone.length() > 2) {
+		if (tipoClientFone.length() == 10) {
 			clienteFone.setDdd(tipoClientFone.substring(0, 2));
 			clienteFone.setTelefone(tipoClientFone.substring(2));
 		} else {
@@ -287,7 +287,7 @@ public class MontarObjetosRetornoCommand extends AbstractAtualizacaoCadastralCom
 		for (String nomeImagem : atualizacaoCadastral.getImagens()) {
 
 			String caminhoJboss = System.getProperty("jboss.server.home.dir");
-			String pasta = "/images/cadastro/" + atualizacaoCadastral.getArquivoTexto().getDescricaoArquivo();
+			String pasta = "/images/" + atualizacaoCadastral.getArquivoTexto().getDescricaoArquivo();
 			
 			if (nomeImagem.contains(Integer.toString(atualizacaoCadastralImovel.getMatricula()))) {
 				inserirImagemImovel(atualizacaoCadastralImovel.getMatricula(), nomeImagem, caminhoJboss, pasta);

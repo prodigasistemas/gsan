@@ -157,20 +157,19 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 		for (int j = 1; j < 5; j++) {
 			codigoSubcategoria = descricaoSubcategoria + j;
 			short qtdEconomias = Short.parseShort(atualizacaoCadastralImovel.getLinhaImovel("subcategoria" + codigoSubcategoria));
-			if(qtdEconomias != 0){
-				ImovelSubcategoriaAtualizacaoCadastral subcategoria = new ImovelSubcategoriaAtualizacaoCadastral();
-				
-				subcategoria.setImovel(new Imovel(matriculaImovel));
-				subcategoria.setQuantidadeEconomias(qtdEconomias);
-				subcategoria.setDescricaoSubcategoria(codigoSubcategoria);
-				subcategoria.setDescricaoCategoria(tipoEconomia.getDescricao());
 
-				TipoSubcategoria tipoSubcategoria = TipoSubcategoria.getByCodigo(codigoSubcategoria);
-				subcategoria.setCategoria(new Categoria(tipoSubcategoria.getIdCategoria()));
-				subcategoria.setSubcategoria(new Subcategoria(tipoSubcategoria.getIdSubcategoria()));
-				
-				subcategorias.add(subcategoria);
-			}
+			ImovelSubcategoriaAtualizacaoCadastral subcategoria = new ImovelSubcategoriaAtualizacaoCadastral();
+			
+			subcategoria.setImovel(new Imovel(matriculaImovel));
+			subcategoria.setQuantidadeEconomias(qtdEconomias);
+			subcategoria.setDescricaoSubcategoria(codigoSubcategoria);
+			subcategoria.setDescricaoCategoria(tipoEconomia.getDescricao());
+
+			TipoSubcategoria tipoSubcategoria = TipoSubcategoria.getByCodigo(codigoSubcategoria);
+			subcategoria.setCategoria(new Categoria(tipoSubcategoria.getIdCategoria()));
+			subcategoria.setSubcategoria(new Subcategoria(tipoSubcategoria.getIdSubcategoria()));
+			
+			subcategorias.add(subcategoria);
 		}
 		
 		return subcategorias;
@@ -268,7 +267,7 @@ public class MontarObjetosAtualizacaoCadastralCommand extends AbstractAtualizaca
 	private ClienteFoneAtualizacaoCadastral getClienteFoneAtualizacaoCadastral(String tipoClientFone, Integer foneTipo, int matriculaCliente) {
 		ClienteFoneAtualizacaoCadastral clienteFone = new ClienteFoneAtualizacaoCadastral();
 
-		if (tipoClientFone.length() > 2) {
+		if (tipoClientFone.length() == 10) {
 			clienteFone.setDdd(tipoClientFone.substring(0, 2));
 			clienteFone.setTelefone(tipoClientFone.substring(2));
 		} else {

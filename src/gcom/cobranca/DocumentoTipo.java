@@ -8,47 +8,34 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 public class DocumentoTipo extends ObjetoTransacao {
 	private static final long serialVersionUID = 1L;
 
-	/** identifier field */
 	private Integer id;
-
-	/** nullable persistent field */
 	private String descricaoDocumentoTipo;
-
-	/** nullable persistent field */
 	private String descricaoAbreviado;
-
-	/** nullable persistent field */
 	private Short indicadorPagavel;
-
-	/** nullable persistent field */
 	private Short indicadorUso;
-	
-	/** nullable persistent field */
 	private Short indicadorAgregador;
-
-	/** nullable persistent field */
 	private Date ultimaAlteracao;
 
 
 	//constantes
 	public final static Integer CONTA = new Integer("1");
-	public final static Integer GUIA_PAGAMENTO = new Integer("7");
-	public final static Integer DEBITO_A_COBRAR = new Integer("6");
-	public final static Integer FATURA_CLIENTE = new Integer("5");
-	public final static Integer CREDITO_A_REALIZAR = new Integer("10");
 	public final static Integer ENTRADA_DE_PARCELAMENTO = new Integer("2");
+	public final static Integer DOCUMENTO_COBRANCA = new Integer("3");
+	public final static Integer FATURA_CLIENTE = new Integer("5");
+	public final static Integer DEBITO_A_COBRAR = new Integer("6");
+	public final static Integer GUIA_PAGAMENTO = new Integer("7");
 	public final static Integer DEVOLUCAO_VALOR = new Integer("8");
+	public final static Integer CREDITO_A_REALIZAR = new Integer("10");
 	public final static Integer EXTRATO_DE_DEBITO = new Integer("14");
 	public final static Integer CARTA_COBRANCA_SUPRIMIDO = new Integer("21");
 	public final static Integer CARTA_COBRANCA_CORTADO = new Integer("22");
+	public final static Integer CARTA_COBRANCA_TARIFA_SOCIAL_LIGADO = new Integer("23");
+	public final static Integer CARTA_COBRANCA_TARIFA_SOCIAL_CORTADO = new Integer("24");
 	public final static Integer CARTA_COBRANCA_LIGADO = new Integer("25");
-	public final static Integer CARTA_COBRANCA_TARIFA_SOCIAL_LIGADO = 23;
-	public final static Integer CARTA_COBRANCA_TARIFA_SOCIAL_CORTADO = 24;
-	public final static Integer DOCUMENTO_COBRANCA = new Integer("3");
+	
 	public final static int ORDEM_FISCALIZACAO_FACTIVEL = 27;
 	public final static int ORDEM_FISCALIZACAO_SUPRIMIDO = 16;
 	public final static int ORDEM_FISCALIZACAO_CORTADO = 17;
@@ -78,7 +65,6 @@ public class DocumentoTipo extends ObjetoTransacao {
 		AVISO_CORTE
 	};
 	
-	/** full constructor */
 	public DocumentoTipo(String descricaoDocumentoTipo,
 			String descricaoAbreviado, Short indicadorPagavel,
 			Short indicadorUso, Date ultimaAlteracao) {
@@ -89,10 +75,13 @@ public class DocumentoTipo extends ObjetoTransacao {
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
 
-	/** default constructor */
 	public DocumentoTipo() {
 	}
 
+	public DocumentoTipo(Integer id) {
+		this.id = id;
+	}
+	
 	public Integer getId() {
 		return this.id;
 	}

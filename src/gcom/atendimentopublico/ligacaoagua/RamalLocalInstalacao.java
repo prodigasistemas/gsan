@@ -36,7 +36,11 @@ public class RamalLocalInstalacao extends ObjetoTransacao {
 
     public RamalLocalInstalacao() { }
 
-    public Integer getId() {
+    public RamalLocalInstalacao(Integer id) {
+		this.id = id;
+	}
+
+	public Integer getId() {
         return this.id;
     }
 

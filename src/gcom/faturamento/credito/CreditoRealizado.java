@@ -17,74 +17,38 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 
-/** @author Hibernate CodeGenerator */
 @ControleAlteracao("")
 public class CreditoRealizado extends ObjetoTransacao {
 	private static final long serialVersionUID = 1L;
-    /** identifier field */
+
     private Integer id;
-
-    /** persistent field */
     private Date creditoRealizado;
-
-    /** nullable persistent field */
     private Integer codigoSetorComercial;
-
-    /** nullable persistent field */
     private Integer numeroQuadra;
-
-    /** nullable persistent field */
     private Short numeroLote;
-
-    /** nullable persistent field */
     private Short numeroSubLote;
-
-    /** nullable persistent field */
     private Integer anoMesReferenciaCredito;
-
-    /** nullable persistent field */
     private Integer anoMesCobrancaCredito;
 
-    /** nullable persistent field */
     @ControleAlteracao("")
     private BigDecimal valorCredito;
-
-    /** nullable persistent field */
     private Short numeroPrestacao;
-
-    /** nullable persistent field */
     private Short numeroPrestacaoCredito;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-    
     private Short numeroParcelaBonus;
-    
-    /** persistent field */
+
     private Conta conta;
-
-    /** persistent field */
     private Quadra quadra;
-
-    /** persistent field */
     private Localidade localidade;
-
-    /** nullable persistent field */    
-    private gcom.faturamento.credito.CreditoTipo creditoTipo;
-
-    /** persistent field */
+    private CreditoTipo creditoTipo;
     private LancamentoItemContabil lancamentoItemContabil;
-    
-    /** persistent field */
     private CreditoOrigem creditoOrigem;
-    
-    /** persistent field */
     private CreditoARealizarGeral creditoARealizarGeral;
 
-    /** persistent field */
-    private Set creditoRealizadoCategorias;
+    @SuppressWarnings("rawtypes")
+	private Set creditoRealizadoCategorias;
 
-    /** full constructor */
+    @SuppressWarnings("rawtypes")
     public CreditoRealizado(Date creditoRealizado, Integer codigoSetorComercial, Integer numeroQuadra, Short numeroLote, Short numeroSubLote, Integer anoMesReferenciaCredito, Integer anoMesCobrancaCredito, BigDecimal valorCredito, Short numeroPrestacao, Short numeroPrestacaoCredito, Date ultimaAlteracao, Conta conta, Quadra quadra, Localidade localidade, gcom.faturamento.credito.CreditoTipo creditoTipo, LancamentoItemContabil lancamentoItemContabil, Set creditoRealizadoCategorias, CreditoOrigem creditoOrigem) {
         this.creditoRealizado = creditoRealizado;
         this.codigoSetorComercial = codigoSetorComercial;
@@ -106,11 +70,10 @@ public class CreditoRealizado extends ObjetoTransacao {
         this.creditoOrigem = creditoOrigem;
     }
 
-    /** default constructor */
     public CreditoRealizado() {
     }
 
-    /** minimal constructor */
+    @SuppressWarnings("rawtypes")
     public CreditoRealizado(Date creditoRealizado, Conta conta, Quadra quadra, Localidade localidade, LancamentoItemContabil lancamentoItemContabil, Set creditoRealizadoCategorias) {
         this.creditoRealizado = creditoRealizado;
         this.conta = conta;
@@ -265,10 +228,12 @@ public class CreditoRealizado extends ObjetoTransacao {
         this.lancamentoItemContabil = lancamentoItemContabil;
     }
 
+    @SuppressWarnings("rawtypes")
     public Set getCreditoRealizadoCategorias() {
         return this.creditoRealizadoCategorias;
     }
 
+    @SuppressWarnings("rawtypes")
     public void setCreditoRealizadoCategorias(Set creditoRealizadoCategorias) {
         this.creditoRealizadoCategorias = creditoRealizadoCategorias;
     }
@@ -279,16 +244,10 @@ public class CreditoRealizado extends ObjetoTransacao {
             .toString();
     }
 
-	/**
-	 * @return Retorna o campo creditoOrigem.
-	 */
 	public CreditoOrigem getCreditoOrigem() {
 		return creditoOrigem;
 	}
 
-	/**
-	 * @param creditoOrigem O creditoOrigem a ser setado.
-	 */
 	public void setCreditoOrigem(CreditoOrigem creditoOrigem) {
 		this.creditoOrigem = creditoOrigem;
 	}
@@ -298,10 +257,7 @@ public class CreditoRealizado extends ObjetoTransacao {
 		FiltroCreditoRealizado filtro = new FiltroCreditoRealizado();
 		
 		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroCreditoRealizado.CREDITO_TIPO);
-		//filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroCreditoRealizado.LANCAMENTO_ITEM_CONTABIL);
-	
-		filtro.adicionarParametro(
-				new ParametroSimples(FiltroCreditoRealizado.CODIGO, this.getId()));
+		filtro.adicionarParametro(new ParametroSimples(FiltroCreditoRealizado.CODIGO, this.getId()));
 		return filtro; 
 	}
 
@@ -356,10 +312,6 @@ public class CreditoRealizado extends ObjetoTransacao {
 		this.creditoARealizarGeral = creditoARealizarGeral;
 	}
 
-	/**
-     * @author Vivianne Sousa
-     * @created 05/03/2008
-    */
     public short getNumeroTotalParcelasMenosBonus() {
         short retorno = getNumeroPrestacao();
         

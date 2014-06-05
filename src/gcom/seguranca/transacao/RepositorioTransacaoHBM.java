@@ -58,50 +58,20 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 
 	private static IRepositorioTransacao instancia;
 
-	/**
-	 * Constructor for the RepositorioClienteTipoHBM object
-	 */
 	public RepositorioTransacaoHBM() {
 	}
 
-	/**
-	 * Retorna o valor de instancia
-	 * 
-	 * @return O valor de instancia
-	 */
 	public static IRepositorioTransacao getInstancia() {
-
 		if (instancia == null) {
 			instancia = new RepositorioTransacaoHBM();
 		}
-
 		return instancia;
 	}
-
-	/**
-	 * Método que consulta os usuario alteracao de uma determinada operacao com
-	 * as restricoes passadas
-	 * 
-	 * @param idOperacao
-	 * @param idUsuario
-	 * @param dataInicial
-	 * @param dataFinal
-	 * @param horaInicial
-	 * @param hotaFinal
-	 * @param idTabela
-	 * @param idTabelaColuna
-	 * @param id
-	 * @return
-	 * @throws ControladorException
-	 * 
-	 * @author thiago toscano
-	 * @date 17/02/2006
-	 */	
 	
 	public Collection pesquisarUsuarioAlteracaoDasOperacoesEfetuadas(Integer idUsuarioAcao,
 		Integer idFuncionalidade, Integer idUsuario,Date dataInicial, Date dataFinal, 
 		Date horaInicial, Date horaFinal, Hashtable<String,String> argumentos, Integer id1, String unidadeNegocio)
-		throws ErroRepositorioException{
+		throws ErroRepositorioException {
 
         FiltroOperacaoEfetuada filtroOperacaoEfetuada = new FiltroOperacaoEfetuada(FiltroOperacaoEfetuada.ULTIMA_ALTERACAO);
         filtroOperacaoEfetuada.adicionarCaminhoParaCarregamentoEntidade(FiltroOperacaoEfetuada.OPERACAO);
@@ -111,10 +81,12 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
         if (idUsuarioAcao != null) {
         	filtroOperacaoEfetuada.adicionarParametro(new ParametroSimplesColecao("ua.usuarioAcao.id",idUsuarioAcao));
         }
+        
         if (idFuncionalidade != null) {
         	filtroOperacaoEfetuada.adicionarParametro(new ParametroSimples(FiltroOperacaoEfetuada.OPERACAO_FUNCIONALIDADE_ID,
         		idFuncionalidade));
         }
+        
         if (idUsuario != null) {
         	filtroOperacaoEfetuada.adicionarParametro(new ParametroSimplesColecao("ua.usuario.id",idUsuario));
         }
@@ -122,16 +94,14 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
         	filtroOperacaoEfetuada.adicionarParametro(new ParametroSimplesColecao(FiltroOperacaoEfetuada.TABELA_LINHA_ALTERACAO_ID1,id1));
         }
         
-        //Unidade Negocio
         if(unidadeNegocio != null){
         	filtroOperacaoEfetuada.adicionarParametro(new ParametroSimples("ua.usuario.unidadeNegocio", unidadeNegocio));
         }
 
-// Date inicio = null;
 		if (dataInicial != null) {
-		
 			Calendar di = Calendar.getInstance();
 			di.setTime(dataInicial);
+			
 			if (horaInicial != null) {
 				Calendar hi = Calendar.getInstance();
 				hi.setTime(horaInicial);
@@ -142,8 +112,9 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				di.set(Calendar.MINUTE, 0);
 				di.set(Calendar.SECOND, 0);
 			}
+			
 			filtroOperacaoEfetuada.adicionarParametro(new MaiorQue(FiltroOperacaoEfetuada.ULTIMA_ALTERACAO,di.getTime()));
-		}else{
+		} else {
 			
 			if (horaInicial != null) {
 				Calendar di = Calendar.getInstance();
@@ -155,18 +126,16 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				di.set(Calendar.HOUR, hi.get(Calendar.HOUR));
 				di.set(Calendar.MINUTE, hi.get(Calendar.MINUTE));
 				di.set(Calendar.SECOND, 0);
-				// di.set(Calendar.)
 				
 				filtroOperacaoEfetuada.adicionarParametro(new MaiorQue(FiltroOperacaoEfetuada.ULTIMA_ALTERACAO,di.getTime()));
 			}
-			
 		}
 
-      
-// Date inicio = null;
 		if (dataFinal != null) {
+			
 			Calendar df = Calendar.getInstance();
 			df.setTime(dataFinal);
+			
 			if (horaFinal != null) {
 				Calendar hf = Calendar.getInstance();
 				hf.setTime(horaFinal);
@@ -177,8 +146,9 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				df.set(Calendar.MINUTE, 59);
 				df.set(Calendar.SECOND, 59);
 			}
+			
 			filtroOperacaoEfetuada.adicionarParametro(new MenorQue(FiltroOperacaoEfetuada.ULTIMA_ALTERACAO,df.getTime()));
-		}else{
+		} else {
 			if (horaFinal != null) {
 				Calendar df = Calendar.getInstance();
 				Date dataFim = new Date();
@@ -187,15 +157,15 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				hf.setTime(horaFinal);
 				df.set(Calendar.HOUR, hf.get(Calendar.HOUR));
 				df.set(Calendar.MINUTE, hf.get(Calendar.MINUTE));
-				// di.set
 				
 				filtroOperacaoEfetuada.adicionarParametro(new MenorQue(FiltroOperacaoEfetuada.ULTIMA_ALTERACAO,df.getTime()));
 			}
 		}
-		// adicionando no filtro a coleção de pares de (argumento, valor) .:.
-		// (operacao.idargumento, operacaoefetuada.valorargumento)
-		if (argumentos != null && argumentos.size() > 0 ){
+		
+		if (argumentos != null && argumentos.size() > 0 ) {
+			
 			int i = 0;
+			
 			for(Enumeration e = argumentos.keys(); e.hasMoreElements();) {
 				String idArgumento = (String) e.nextElement();
 				String valorArgumento = argumentos.get(idArgumento);
@@ -225,14 +195,11 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			}
 		}
 
-		// cria a coleção de retorno
 		Collection retorno = null;
-		// obtém a sessão
 		Session session = HibernateUtil.getSession();
 
 		try {
 
-			// pesquisa a coleção de atividades e atribui a variável "retorno"
 			retorno = new ArrayList(
 				new CopyOnWriteArraySet(
 					GeradorHQLCondicional.gerarCondicionalQuery(filtroOperacaoEfetuada, "operacaoEfetuada",
@@ -243,38 +210,13 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 						" left join tla.tabelaLinhaColunaAlteracao as "  + FiltroOperacaoEfetuada.TABELA_LINHA_COLUNA_ALTERACAO +
 						"", session).list()));
 
-			// erro no hibernate
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
-		// retorna a coleção de atividades pesquisada(s)
 		return retorno;
 	}
-	
-	/**
-	 * Método que consulta os usuario alteracao de uma determinada operacao com
-	 * as restricoes passadas
-	 * 
-	 * 
-	 * @param idUsuarioAcao
-	 * @param idOperacao
-	 * @param idUsuario
-	 * @param dataInicial
-	 * @param dataFinal
-	 * @param horaInicial
-	 * @param horaFinal
-	 * @param idTabela
-	 * @param idTabelaColuna
-	 * @param id1
-	 * @return
-	 * @throws ErroRepositorioException
-	 * 
-	 * @author Rômulo Aurélio / Rafael Correa
-	 */
 	
 	public Integer pesquisarUsuarioAlteracaoDasOperacoesEfetuadasHqlCount(Integer idUsuarioAcao,
 			String[] idOperacoes, String idUsuario,Date dataInicial, Date dataFinal, 
@@ -282,15 +224,12 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			Integer id1, String unidadeNegocio)
 			throws ErroRepositorioException {
 	
-		// cria a coleção de retorno
 		Integer retorno = null;
 		String consulta;
-		// obtém a sessão
 		Session session = HibernateUtil.getSession();
 		
 		try {
 
-			// pesquisa a coleção de atividades e atribui a variável "retorno"
 			 consulta =	" select count(distinct operacaoEfetuada.id)  " +
 				" from OperacaoEfetuada operacaoEfetuada " +
 				" inner join operacaoEfetuada.usuarioAlteracoes as usAlt " +
@@ -319,15 +258,11 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			 }
 			 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
-		// retorna a coleção de atividades pesquisada(s)
 		return retorno;
-		
 	}
 	
 	
@@ -337,15 +272,12 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			Integer id1, Integer numeroPagina, String unidadeNegocio)
 			throws ErroRepositorioException {
 	
-		// cria a coleção de retorno
 		Collection retorno = null;
 		String consulta;
-		// obtém a sessão
 		Session session = HibernateUtil.getSession();
 		
 		try {
 
-			// pesquisa a coleção de atividades e atribui a variável "retorno"
 			 consulta =	" select distinct operacaoEfetuada " +
 				" from OperacaoEfetuada operacaoEfetuada " +
 				" inner join operacaoEfetuada.usuarioAlteracoes as usAlt " +
@@ -369,15 +301,11 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				.setFirstResult(10 * numeroPagina).setMaxResults(10).list();
 			 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
-		// retorna a coleção de atividades pesquisada(s)
 		return retorno;
-		
 	}
 	
 	
@@ -387,15 +315,11 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			Integer id1, String unidadeNegocio)
 			throws ErroRepositorioException {
 	
-		// cria a coleção de retorno
 		Collection retorno = null;
 		String consulta;
-		// obtém a sessão
 		Session session = HibernateUtil.getSession();
 		
 		try {
-
-			// pesquisa a coleção de atividades e atribui a variável "retorno"
 			 consulta =	" select distinct operacaoEfetuada " +
 				" from OperacaoEfetuada operacaoEfetuada " +
 				" inner join operacaoEfetuada.usuarioAlteracoes as usAlt " +
@@ -414,41 +338,15 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 						horaInicial, horaFinal, argumentos, 
 						id1, unidadeNegocio);
 			 
-			 retorno = session
-				.createQuery(consulta).list();
-			 
+			 retorno = session.createQuery(consulta).list();
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
-		// retorna a coleção de atividades pesquisada(s)
 		return retorno;	
 	}
 	
-	/**
-	 * Método que cria condicionais para o metodo
-	 * pesquisarUsuarioAlteracaoDasOperacoesEfetuadasHql
-	 * 
-	 * 
-	 * @param idUsuarioAcao
-	 * @param idOperacao
-	 * @param idUsuario
-	 * @param dataInicial
-	 * @param dataFinal
-	 * @param horaInicial
-	 * @param horaFinal
-	 * @param idTabela
-	 * @param idTabelaColuna
-	 * @param id1
-	 * @return
-	 * @throws ErroRepositorioException
-	 * 
-	 * @author Rômulo Aurélio / Rafael Correa
-	 */					
-		
 	public String criarCondicionaisUsuarioAlteracaoDasOperacoesEfetuadas(Integer idUsuarioAcao,
 				String[] idOperacoes, String idUsuario, Date dataInicial, Date dataFinal, 
 				Date horaInicial, Date horaFinal, Hashtable<String,String> argumentos, Integer id1,String unidadeNegocio){
@@ -529,10 +427,8 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 	public Collection pesquisarOperacaoOrdemExibicao(int[] idTabelaColuna, int idOperacao) 
 		throws ErroRepositorioException{
 		
-		// cria a coleção de retorno
 		Collection retorno = null;
 		String consulta;
-		// obtém a sessão
 		Session session = HibernateUtil.getSession();
 		
 		try {
@@ -560,10 +456,8 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 			retorno = new ArrayList(new CopyOnWriteArraySet<OperacaoOrdemExibicao>(
 					session.createQuery(consulta).list()));						
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 		return retorno;
@@ -722,7 +616,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 
 			if (StringUtils.isNotEmpty(filtroHelper.getExibirCampos()) 
 					&& Integer.valueOf(filtroHelper.getExibirCampos()) !=  FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_TODOS) {
-				sql.append(" and ctrl.siac_id = :situacao ");
+				sql.append(" and ctrl.siac_id in (:listaSituacao) ");
 				if (filtroHelper.getExibirCampos().equals(SituacaoAtualizacaoCadastral.EM_CAMPO.toString())) {
 					sql.append(" and tcac.tcac_dtvalidacao is null ");
 				} else if (filtroHelper.getExibirCampos().equals(SituacaoAtualizacaoCadastral.APROVADO.toString())) {
@@ -748,13 +642,24 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 					.addScalar("valorAtual", Hibernate.STRING)
 					.addScalar("complemento", Hibernate.STRING);
 
+			Integer exibirCampos = Integer.valueOf(filtroHelper.getExibirCampos());
+			
 			if (StringUtils.isNotEmpty(filtroHelper.getExibirCampos()) 
-					&& Integer.valueOf(filtroHelper.getExibirCampos()) !=  FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_TODOS) {
+					&& exibirCampos !=  FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_TODOS) {
 				
-				if (Integer.valueOf(filtroHelper.getExibirCampos()) == FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_APROVACAO_EM_LOTE) {
-					query.setInteger("situacao", SituacaoAtualizacaoCadastral.TRANSMITIDO);
+				List<Integer> listaSituacao = new ArrayList<Integer>();
+				
+				if (exibirCampos == FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_APROVACAO_EM_LOTE) {
+					listaSituacao.add(SituacaoAtualizacaoCadastral.TRANSMITIDO);
+					query.setParameterList("listaSituacao", listaSituacao);
 				} else {
-					query.setInteger("situacao", Integer.valueOf(filtroHelper.getExibirCampos()));
+					listaSituacao.add(exibirCampos);
+					
+					if (exibirCampos.equals(SituacaoAtualizacaoCadastral.TRANSMITIDO)) {
+						listaSituacao.add(SituacaoAtualizacaoCadastral.EM_FISCALIZACAO);
+					}
+					
+					query.setParameterList("listaSituacao", listaSituacao);
 				}
 			}
 			

@@ -16,7 +16,6 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 @ControleAlteracao()
 public class ConsumoHistorico extends ObjetoTransacao {
 	
@@ -24,108 +23,44 @@ public class ConsumoHistorico extends ObjetoTransacao {
 	
 	private static final long serialVersionUID = 1L;
 	
-	/** identifier field */
 	private Integer id;
-
-	/** persistent field */
 	private int referenciaFaturamento;
-
-	/** nullable persistent field */
 	private Short indicadorAlteracaoUltimosConsumos;
-
-	/** nullable persistent field */
 	private Short indicadorAjuste;
-
-	/** nullable persistent field */
 	private Integer numeroConsumoFaturadoMes;
-
-	/** nullable persistent field */
 	private Integer consumoRateio;
-
-	/** nullable persistent field */
 	private Short indicadorImovelCondominio;
-
-	/** nullable persistent field */
 	private Integer consumoMedio;
-
-	/** nullable persistent field */
 	private Integer consumoMinimo;
-
-	/** nullable persistent field */
 	private Short indicadorFaturamento;
-
-	/** nullable persistent field */
 	private BigDecimal percentualColeta;
 
-	/** nullable persistent field */
 	@ControleAlteracao(funcionalidade={ATUALIZA_LEITURA_CONSUMO_EXCECOES})
 	private Date ultimaAlteracao;
 
-	/** nullable persistent field */
 	private Integer consumoImovelCondominio;
-	
-	/** nullable persistent field */
 	private Integer consumoImovelVinculadosCondominio;
-	
-	/** nullable persistent field */
 	private Integer numeroConsumoCalculoMedia;
-
 	
 	private Rota rota;
 
-	/**
-	 * A constante INDICADOR_FATURAMENTO_FATURAR_ESGOTO é usada pelo caso de uso
-	 * [UC0153] - Apresentar Dados Para Análise da Medição e Consumo e contém o
-	 * id do tipo de ligação Água(lgtp_id = 1 - ÁGUA - da tabela ligacaoTipo) Só
-	 * mudar a constante se o id de ÁGUA(lgtp_id) mudar.
-	 */
-	public final static Short INDICADOR_FATURAMENTO_FATURAR_AGUA = new Short(
-			"1");
-
-	/**
-	 * A constante INDICADOR_FATURAMENTO_FATURAR_ESGOTO é usada pelo caso de uso
-	 * [UC0153] - Apresentar Dados Para Análise da Medição e Consumo e contém o
-	 * id do tipo de ligação Esgoto(lgtp_id = 2 - ESGOTO - da tabela
-	 * ligacaoTipo) Só mudar a constante se o id de Esgoto(lgtp_id) mudar.
-	 */
-	public final static Short INDICADOR_FATURAMENTO_FATURAR_ESGOTO = new Short(
-			"2");
+	public final static Short INDICADOR_FATURAMENTO_FATURAR_AGUA = new Short("1");
+	public final static Short INDICADOR_FATURAMENTO_FATURAR_ESGOTO = new Short("2");
 
 	public final static Short FATURAR_AGUA = new Short("1");
-
 	public final static Short FATURAR_ESGOTO = new Short("1");
 
-	/**
-	 * Description of the Field
-	 */
-	public final static Integer NUMERO_CONSUMO_FATURADO_MES_PADRAO = new Integer(
-			0);
+	public final static Integer NUMERO_CONSUMO_FATURADO_MES_PADRAO = new Integer(0);
 
-	/** persistent field */
-	private gcom.micromedicao.consumo.ConsumoHistorico consumoHistoricoCondominio;
-
-	/** persistent field */
-	private gcom.micromedicao.consumo.ConsumoTipo consumoTipo;
-
-	/** persistent field */
+	private ConsumoHistorico consumoHistoricoCondominio;
+	private ConsumoTipo consumoTipo;
 	private RateioTipo rateioTipo;
-
-	/** persistent field */
-	private gcom.micromedicao.consumo.LigacaoTipo ligacaoTipo;
-
-	/** persistent field */
-	private gcom.micromedicao.consumo.ConsumoAnormalidade consumoAnormalidade;
-
-	/** persistent field */
+	private LigacaoTipo ligacaoTipo;
+	private ConsumoAnormalidade consumoAnormalidade;
 	private PocoTipo pocoTipo;
-
-	/** persistent field */
 	private FaturamentoSituacaoTipo faturamentoSituacaoTipo;
-
-	/** persistent field */
 	private Imovel imovel;
 
-	/** full constructor */
 	public ConsumoHistorico(
 			int referenciaFaturamento,
 			Short indicadorAlteracaoUltimosConsumos,
@@ -196,11 +131,9 @@ public class ConsumoHistorico extends ObjetoTransacao {
 		this.numeroConsumoCalculoMedia = consumoHistorico.getNumeroConsumoCalculoMedia();
 	}
 
-	/** default constructor */
 	public ConsumoHistorico() {
 	}
 
-	/** minimal constructor */
 	public ConsumoHistorico(
 			int referenciaFaturamento,
 			gcom.micromedicao.consumo.ConsumoHistorico consumoHistoricoCondominio,
@@ -402,15 +335,7 @@ public class ConsumoHistorico extends ObjetoTransacao {
 		return new ToStringBuilder(this).append("id", getId()).toString();
 	}
 
-	/**
-	 * Retorna o valor de mesAno
-	 * 
-	 * @return O valor de mesAno
-	 */
 	public String getMesAno() {
-		// o metodo serve para transformar o AnoMesReferencia do banco
-		// em mes/Ano para demonstraçao para o usuario.
-		// Ex.: 200508 para 08/2005
 		String mesAno = null;
 
 		String mes = null;
@@ -426,46 +351,26 @@ public class ConsumoHistorico extends ObjetoTransacao {
 		return mesAno;
 	}
 
-	/**
-	 * @return Retorna o campo rota.
-	 */
 	public Rota getRota() {
 		return rota;
 	}
 
-	/**
-	 * @param rota
-	 *            O rota a ser setado.
-	 */
 	public void setRota(Rota rota) {
 		this.rota = rota;
 	}
 
-	/**
-	 * @return Retorna o campo consumoImovelVinculadosCondominio.
-	 */
 	public Integer getConsumoImovelVinculadosCondominio() {
 		return consumoImovelVinculadosCondominio;
 	}
 
-	/**
-	 * @param consumoImovelVinculadosCondominio O consumoImovelVinculadosCondominio a ser setado.
-	 */
-	public void setConsumoImovelVinculadosCondominio(
-			Integer consumoImovelVinculadosCondominio) {
+	public void setConsumoImovelVinculadosCondominio(Integer consumoImovelVinculadosCondominio) {
 		this.consumoImovelVinculadosCondominio = consumoImovelVinculadosCondominio;
 	}
 
-	/**
-	 * @return Retorna o campo numeroConsumoCalculoMedia.
-	 */
 	public Integer getNumeroConsumoCalculoMedia() {
 		return numeroConsumoCalculoMedia;
 	}
 
-	/**
-	 * @param numeroConsumoCalculoMedia O numeroConsumoCalculoMedia a ser setado.
-	 */
 	public void setNumeroConsumoCalculoMedia(Integer numeroConsumoCalculoMedia) {
 		this.numeroConsumoCalculoMedia = numeroConsumoCalculoMedia;
 	}

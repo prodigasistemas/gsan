@@ -28,7 +28,9 @@ import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.ObjetoTransacao;
 import gcom.micromedicao.Rota;
 import gcom.micromedicao.consumo.ConsumoHistorico;
+import gcom.micromedicao.hidrometro.HidrometroCapacidade;
 import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
+import gcom.micromedicao.hidrometro.HidrometroMarca;
 import gcom.micromedicao.hidrometro.HidrometroProtecao;
 import gcom.micromedicao.leitura.LeituraAnormalidade;
 import gcom.micromedicao.medicao.MedicaoHistorico;
@@ -44,10 +46,6 @@ import java.util.Set;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/**
- * @author Hibernate CodeGenerator
- * @created 1 de Junho de 2004
- */
 @ControleAlteracao()
 public class Imovel extends ObjetoTransacao implements IImovel {
 	
@@ -2201,7 +2199,6 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 	}
 
 	public void setCodigoMunicipio(Integer codigoMunicipio) {
-		// TODO Auto-generated method stub
 	}
 
 	public Integer getLogradouroTipo() {
@@ -2212,8 +2209,6 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 	}
 
 	public void setLogradouroTipo(Integer logradouroTipo) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public String getCodigoLogradouro() {
@@ -2224,7 +2219,6 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 	}
 
 	public void setCodigoLogradouro(String codigoLogradouro) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -2236,7 +2230,6 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 	}
 
 	public void setDescricaoLogradouro(String descricaoLogradouro) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -2248,7 +2241,6 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 	}
 
 	public void setNomeBairro(String nomeBairro) {
-		// TODO Auto-generated method stub
 	}
 
 	public Integer getCodigoCep() {
@@ -2259,7 +2251,6 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 	}
 
 	public void setCodigoCep(Integer codigoCep) {
-		// TODO Auto-generated method stub
 	}
 
 	public Integer getIdLocalidade() {
@@ -2286,5 +2277,36 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 
 	public Integer getIdRota() {
 		return null;
+	}
+
+	public Integer getIdLigacaoEsgotoSituacao() {
+		return null;
+	}
+
+	public void setIdLigacaoEsgotoSituacao(Integer idLigacaoEsgotoSituacao) {
+	}
+
+	public Integer getIdLocalInstalacaoRamal() {
+		return null;
+	}
+
+	public void setIdLocalInstalacaoRamal(Integer idRamalLocalInstalacao) {
+		
+	}
+
+	public HidrometroCapacidade getHidrometroCapacidade() {
+		return null;
+	}
+
+	public HidrometroMarca getHidrometroMarca() {
+		return null;
+	}
+
+	public void setHidrometroCapacidade(
+			HidrometroCapacidade hidrometroCapacidade) {
+		
+	}
+
+	public void setHidrometroMarca(HidrometroMarca hidrometroMarca) {
 	}
 }

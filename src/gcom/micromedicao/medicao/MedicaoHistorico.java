@@ -20,116 +20,70 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 @ControleAlteracao()
 public class MedicaoHistorico extends ObjetoTransacao {
 	
 	private static final long serialVersionUID = 1L;
 	
 	public static final int ATUALIZA_LEITURA_CONSUMO_EXCECOES = 353;
-	
 	public static final int ALTERAR_DADOS_DO_FATURAMENTO = 436;
 	
 	public final static Short INDICADOR_CONFIRMACAO_LEITURA_ZERO = new Short("0");
-
 	public final static Short INDICADOR_CONFIRMACAO_LEITURA_UM = new Short("1");
-	
 	public final static Short INDICADOR_ANALISADO_ATUALIZADO = new Short("1");
-	
 	public final static Short INDICADOR_ANALISADO_NAO = new Short("2");
-	
 	public final static Short INDICADOR_ANALISADO_SIM = new Short("3");
 
-	
-	/** identifier field */
 	private Integer id;
-
-	/** persistent field */
 	private int anoMesReferencia;
-
-	/** nullable persistent field */
 	private Short numeroVezesConsecutivasOcorrenciaAnormalidade;
 
-	/** persistent field */
 	@ControleAlteracao(funcionalidade={ATUALIZA_LEITURA_CONSUMO_EXCECOES, ALTERAR_DADOS_DO_FATURAMENTO})
 	private Date dataLeituraAnteriorFaturamento;
 
-	/** persistent field */
 	@ControleAlteracao(funcionalidade={ATUALIZA_LEITURA_CONSUMO_EXCECOES, ALTERAR_DADOS_DO_FATURAMENTO})
 	private Integer leituraAnteriorFaturamento;
 
-	/** nullable persistent field */
 	private Integer leituraAnteriorInformada;
 
-	/** persistent field */
 	@ControleAlteracao(funcionalidade={ATUALIZA_LEITURA_CONSUMO_EXCECOES, ALTERAR_DADOS_DO_FATURAMENTO})
 	private Date dataLeituraAtualInformada;
 
-	/** persistent field */
 	@ControleAlteracao(funcionalidade={ATUALIZA_LEITURA_CONSUMO_EXCECOES, ALTERAR_DADOS_DO_FATURAMENTO})
 	private Integer leituraAtualInformada;
 
-	/** persistent field */
 	private Date dataLeituraAtualFaturamento;
-
-	/** persistent field */
 	private int leituraAtualFaturamento;
-
-	/** nullable persistent field */
 	private Integer numeroConsumoMes;
 
-	/** nullable persistent field */
 	@ControleAlteracao(funcionalidade={ATUALIZA_LEITURA_CONSUMO_EXCECOES, ALTERAR_DADOS_DO_FATURAMENTO})
 	private Integer numeroConsumoInformado;
 
-	/** nullable persistent field */
 	@ControleAlteracao(funcionalidade={ATUALIZA_LEITURA_CONSUMO_EXCECOES})
 	private Date ultimaAlteracao;
 
-	/** nullable persistent field */
 	private Integer consumoMedioHidrometro;
-	
-	/** nullable persistent field */
 	private Integer leituraCampo;
-	
-	/** persistent field */
 	private Date dataLeituraCampo;
-
-	/** nullable persistent field */
 	private LeituraFaixaFalsa leituraFaixaFalsa;
-
-	/** nullable persistent field */
 	private LeituraFiscalizacao leituraFiscalizacao;
-
-	/** persistent field */
 	private Imovel imovel;
-
-	/** persistent field */
 	private LeituraSituacao leituraSituacaoAnterior;
 
-	/** persistent field */
 	@ControleAlteracao(FiltroMedicaoHistorico.LEITURA_SITUACAO_ATUAL)
 	private LeituraSituacao leituraSituacaoAtual;
 
-	/** persistent field */
 	private HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico;
 
-	/** persistent field */
 	@ControleAlteracao(FiltroMedicaoHistorico.FATURADA_ANORMALIDADE)
 	private LeituraAnormalidade leituraAnormalidadeFaturamento;
 
-	/** persistent field */
 	@ControleAlteracao(value=FiltroMedicaoHistorico.INFORMADA_ANORMALIDADE, funcionalidade={ALTERAR_DADOS_DO_FATURAMENTO})
 	private LeituraAnormalidade leituraAnormalidadeInformada;
 
-	/** persistent field */
 	private LigacaoAgua ligacaoAgua;
-
-	/** persistent field */
 	private Funcionario funcionario;
-
-	/** persistent field */
-	private gcom.micromedicao.medicao.MedicaoTipo medicaoTipo;
+	private MedicaoTipo medicaoTipo;
 
 	private Date leituraProcessamentoMovimento;
 	
@@ -137,7 +91,6 @@ public class MedicaoHistorico extends ObjetoTransacao {
 	private Short indicadorAnalisado;
 	
 	@ControleAlteracao(funcionalidade={ATUALIZA_LEITURA_CONSUMO_EXCECOES})
-	//@ControleAlteracao(value=FiltroMedicaoHistorico.USUARIO,funcionalidade={ATUALIZA_LEITURA_CONSUMO_EXCECOES})
 	private Usuario usuarioAlteracao;
 	
 	private Leiturista leiturista;
@@ -145,31 +98,12 @@ public class MedicaoHistorico extends ObjetoTransacao {
 	@ControleAlteracao(FiltroMedicaoHistorico.MOTIVO_INTERFERENCIA_TIPO)
 	private MotivoInterferenciaTipo motivoInterferenciaTipo;
 	
-	/**
-	 * [UC0082] - INICIO Registrar Leituras e Anormalidades Autor: Sávio Luiz
-	 * Data: 04/01/2006
-	 */
-	// responsável para criar uma string com o(s) motivo(s) das leituras e
-	// anormalidades não serem registradas no banco.
 	private String gerarRelatorio;
-
-	// responsável para criar uma string com a data de leitura do txt
-	// para quando chegar no controlador saber se a data é valida ou não.
 	private String dataLeituraParaRegistrar;
 
-	// responsável para criar uma string com o indicador de confirmação de
-	// leitura do txt
-	// para quando chegar no controlador saber se o indicador é 0 ou 1.
 	@ControleAlteracao(funcionalidade={ALTERAR_DADOS_DO_FATURAMENTO})
 	private String indicadorConfirmacaoLeitura;
 
-
-	/**
-	 * [UC0082] - FIM Registrar Leituras e Anormalidades Autor: Sávio Luiz Data:
-	 * 04/01/2006
-	 */
-
-	/** full constructor */
 	public MedicaoHistorico(int anoMesReferencia,
 			Short numeroVezesConsecutivasOcorrenciaAnormalidade,
 			Date dataLeituraAnteriorFaturamento,
@@ -215,11 +149,9 @@ public class MedicaoHistorico extends ObjetoTransacao {
 		this.leituraProcessamentoMovimento = leituraProcessamentoMovimento;
 	}
 
-	/** default constructor */
 	public MedicaoHistorico() {
 	}
 
-	/** minimal constructor */
 	public MedicaoHistorico(int anoMesReferencia,
 			Date dataLeituraAnteriorFaturamento,
 			Integer leituraAnteriorFaturamento, Date dataLeituraAtualInformada,
@@ -494,72 +426,42 @@ public class MedicaoHistorico extends ObjetoTransacao {
 		this.leituraProcessamentoMovimento = leituraProcessamentoMovimento;
 	}
 	
-	/**
-	 * @return Retorna o campo indicadorAnalisado.
-	 */
 	public Short getIndicadorAnalisado() {
 		return indicadorAnalisado;
 	}
 
-	/**
-	 * @param indicadorAnalisado O indicadorAnalisado a ser setado.
-	 */
 	public void setIndicadorAnalisado(Short indicadorAnalisado) {
 		this.indicadorAnalisado = indicadorAnalisado;
 	}
 
-	/**
-	 * @return Retorna o campo usuarioAlteracao.
-	 */
 	public Usuario getUsuarioAlteracao() {
 		return usuarioAlteracao;
 	}
 
-	/**
-	 * @param usuarioAlteracao O usuarioAlteracao a ser setado.
-	 */
 	public void setUsuarioAlteracao(Usuario usuarioAlteracao) {
 		this.usuarioAlteracao = usuarioAlteracao;
 	}
 
-	/**
-	 * @return Retorna o campo leiturista.
-	 */
 	public Leiturista getLeiturista() {
 		return leiturista;
 	}
 
-	/**
-	 * @param leiturista O leiturista a ser setado.
-	 */
 	public void setLeiturista(Leiturista leiturista) {
 		this.leiturista = leiturista;
 	}
 
-	/**
-	 * @return Retorna o campo leituraCampo.
-	 */
 	public Integer getLeituraCampo() {
 		return leituraCampo;
 	}
 
-	/**
-	 * @param leituraCampo O leituraCampo a ser setado.
-	 */
 	public void setLeituraCampo(Integer leituraCampo) {
 		this.leituraCampo = leituraCampo;
 	}
 
-	/**
-	 * @return Retorna o campo dataLeituraCampo.
-	 */
 	public Date getDataLeituraCampo() {
 		return dataLeituraCampo;
 	}
 
-	/**
-	 * @param dataLeituraCampo O dataLeituraCampo a ser setado.
-	 */
 	public void setDataLeituraCampo(Date dataLeituraCampo) {
 		this.dataLeituraCampo = dataLeituraCampo;
 	}
@@ -573,15 +475,7 @@ public class MedicaoHistorico extends ObjetoTransacao {
 		this.motivoInterferenciaTipo = motivoInterferenciaTipo;
 	}
 	
-	/**
-	 * Retorna o valor de mesAno
-	 * 
-	 * @return O valor de mesAno
-	 */
 	public String getMesAno() {
-		// o metodo serve para transformar o AnoMesReferencia do banco
-		// em mes/Ano para demonstraçao para o usuario.
-		// Ex.: 200508 para 08/2005
 		String mesAno = null;
 
 		String mes = null;
@@ -597,13 +491,6 @@ public class MedicaoHistorico extends ObjetoTransacao {
 		return mesAno;
 	}
 	
-	/**
-     * Description of the Method
-     * 
-     * @param other
-     *            Description of the Parameter
-     * @return Description of the Return Value
-     */
     public boolean equals(Object other) {
     	if ((this == other)) {
 			return true;
@@ -683,14 +570,6 @@ public class MedicaoHistorico extends ObjetoTransacao {
 	@Override
 	public Filtro retornaFiltroRegistroOperacao() {
 		Filtro filtro = retornaFiltro();
-		
-//		filtro.adicionarCaminhoParaCarregamentoEntidade("imovel");
-//		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroMedicaoHistorico.LEITURA_SITUACAO_ATUAL);
-//		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroMedicaoHistorico.MOTIVO_INTERFERENCIA_TIPO);
-//		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroMedicaoHistorico.FATURADA_ANORMALIDADE);
-//		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroMedicaoHistorico.INFORMADA_ANORMALIDADE);
-//		filtro.adicionarCaminhoParaCarregamentoEntidade(FiltroMedicaoHistorico.USUARIO);
-		
 		return filtro;
 	}
 	

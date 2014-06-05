@@ -4580,7 +4580,6 @@ public class ControladorCobranca implements SessionBean {
 							.setNumeroPrestacaoTotal((Short) dadosGuiaPagamento[9]);
 				}
 				
-				guiaPagamentoValores.setGuiaPagamento(guiaPagamento);
 
 				Date dataPagamento = null;
 				
@@ -4591,6 +4590,11 @@ public class ControladorCobranca implements SessionBean {
 				if (dadosGuiaPagamento[11] != null) {
 					dataPagamento = (Date) dadosGuiaPagamento[11];
 				}
+				
+				if (dadosGuiaPagamento[12] != null) {
+					guiaPagamento.setDocumentoTipo(new DocumentoTipo((Integer) dadosGuiaPagamento[12]));
+				}
+				guiaPagamentoValores.setGuiaPagamento(guiaPagamento);
 				
 				// calcular acrescimo por impontualidade
 				if (indicadorCalcularAcrescimoImpontualidade == 1) {
@@ -29972,35 +29976,24 @@ public class ControladorCobranca implements SessionBean {
 				CreditoARealizarGeral creditoARealizarGeral = new CreditoARealizarGeral();
 				creditoARealizarGeral.setCreditoARealizar(creditoARealizar);
 				creditoARealizarGeral.setId(creditoARealizar.getId());
-				cobrancaDocumentoItem
-						.setCreditoARealizarGeral(creditoARealizarGeral);
+				cobrancaDocumentoItem.setCreditoARealizarGeral(creditoARealizarGeral);
 				cobrancaDocumentoItem.setGuiaPagamentoGeral(null);
 				cobrancaDocumentoItem.setDebitoACobrarGeral(null);
-				cobrancaDocumentoItem.setValorItemCobrado(creditoARealizar
-						.getValorTotalComBonus());
+				cobrancaDocumentoItem.setValorItemCobrado(creditoARealizar.getValorTotalComBonus());
 				cobrancaDocumentoItem.setUltimaAlteracao(new Date());
 
-				// Documento item ja iniciado com situacao de debito PENDENTE
-				// Alterado por Francisco, 27/06/08 
 				CobrancaDebitoSituacao situacaoDebito = new CobrancaDebitoSituacao();
 				situacaoDebito.setId(CobrancaDebitoSituacao.PENDENTE);
+
 				cobrancaDocumentoItem.setCobrancaDebitoSituacao(situacaoDebito);				
-				
 				cobrancaDocumentoItem.setValorAcrescimos(valorAcrescimos);
 				
-				// inseri o item de documento de cobrança
 				getControladorUtil().inserir(cobrancaDocumentoItem);
 
-				extratoDebitoRelatorioHelper
-						.getColecaoCobrancaDocumentoItemCreditoARealizar().add(
-								cobrancaDocumentoItem);
+				extratoDebitoRelatorioHelper.getColecaoCobrancaDocumentoItemCreditoARealizar().add(cobrancaDocumentoItem);
 			}
 		}
 
-		// Fim item 3
-		
-		
-		
 		/*
 		 * ANTECIPAÇÃO DE PARCELAS DE PARCELAMENTO (DÉBITOS)
 		 */
@@ -30164,7 +30157,7 @@ public class ControladorCobranca implements SessionBean {
 
 		return extratoDebitoRelatorioHelper;
 	}
-
+	
 	/**
 	 * Este caso de uso permite iniciar processos batch de faturamento ou
 	 * cobrança previdamento comandados e processos mensais ou eventuais

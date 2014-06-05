@@ -6,6 +6,7 @@ CURRENT_PATH=$(pwd)
 rm -rf $JBOSS_GSAN/server/default/work
 rm -rf $JBOSS_GSAN/server/default/tmp
 rm -rf $JBOSS_GSAN/server/default/deploy/gcom*.ear
+rm -rf $JBOSS_GSAN/server/default/deploy/gsan*.ear
 
 # Constroi o build
 cd $GSAN_PATH
@@ -25,9 +26,9 @@ fi
 # Compacta o build
 cd $JBOSS_GSAN/server/default/deploy
 
-mv $JBOSS_GSAN/server/default/deploy/gcom.ear $JBOSS_GSAN/server/default/deploy/gcom$SUFIXO$versao.ear
+mv $JBOSS_GSAN/server/default/deploy/gcom.ear $JBOSS_GSAN/server/default/deploy/gsan$SUFIXO$versao.ear
 
-zip -vr gcom$SUFIXO$versao.ear.zip gcom$SUFIXO$versao.ear/
+zip -vr gsan$SUFIXO$versao.ear.zip gsan$SUFIXO$versao.ear/
 
 # Transfere o build para o servidor de homologacao
 echo "Porta SSH (22):"
@@ -70,9 +71,9 @@ else
   caminho_remoto=$CAMINHO_REMOTO
 fi
 
-scp -P $porta $JBOSS_GSAN/server/default/deploy/gcom$SUFIXO$versao.ear.zip $usuario@$ip_remoto:$caminho_remoto
+scp -P $porta $JBOSS_GSAN/server/default/deploy/gsan$SUFIXO$versao.ear.zip $usuario@$ip_remoto:$caminho_remoto
 
 # Apaga o build transferido e volta ao local inicial
-rm -rf gcom$SUFIXO$versao.ear.zip
+rm -rf gsan$SUFIXO$versao.ear.zip
 
 cd $CURRENT_PATH

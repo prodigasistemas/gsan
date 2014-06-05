@@ -3,6 +3,7 @@ package gcom.cadastro.cliente;
 import org.apache.commons.lang.StringUtils;
 
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastralImovel;
+import gcom.cadastro.endereco.EnderecoTipo;
 
 public class ClienteResponsavelBuilder extends ClienteBuilder{
 
@@ -16,12 +17,13 @@ public class ClienteResponsavelBuilder extends ClienteBuilder{
 		
 		String campo;
 		
+		clienteTxt.setDescricaoLogradouro(atualizacaoCadastralImovel.getLinhaCliente("logradouroResponsavel"));
+		
 		campo = atualizacaoCadastralImovel.getLinhaCliente("idTipoLogradouroResponsavel");
 		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
-			clienteTxt.setIdLogradouroTipo(Integer.parseInt(campo));
+			clienteTxt.setIdLogradouroTipo(Integer.parseInt(campo) == 0 ? null : Integer.parseInt(campo));
 		}
 		
-		clienteTxt.setDescricaoLogradouro(atualizacaoCadastralImovel.getLinhaCliente("logradouroResponsavel"));
 		clienteTxt.setNumeroImovel(atualizacaoCadastralImovel.getLinhaCliente("numeroResponsavel"));
 		clienteTxt.setComplementoEndereco(atualizacaoCadastralImovel.getLinhaCliente("complementoResponsavel"));
 		clienteTxt.setNomeBairro(atualizacaoCadastralImovel.getLinhaCliente("bairroResponsavel"));
@@ -32,6 +34,9 @@ public class ClienteResponsavelBuilder extends ClienteBuilder{
 		}
 		
 		clienteTxt.setNomeMunicipio(atualizacaoCadastralImovel.getLinhaCliente("municipioResponsavel"));
+		
+		campo = atualizacaoCadastralImovel.getLinhaCliente("tipoEnderecoResponsavel");
+		clienteTxt.setEnderecoTipo(new EnderecoTipo(Integer.parseInt(campo) == 0 ? null : Integer.parseInt(campo)));
 		
 		return clienteTxt;
 	}

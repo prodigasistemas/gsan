@@ -4,9 +4,9 @@
 INSERT INTO seguranca.funcionalidade(
         fncd_id, modu_id, fncd_dsfuncionalidade, fncd_tmultimaalteracao, 
         fncd_dscaminhomenu, fncd_dscaminhourl, fncd_icpontoentrada, fncd_dsabreviado, 
-        fncd_nnordemmenu, fncd_icnovajanela, fncd_icolap)
+        fncd_nnordemmenu, fncd_icnovajanela, fncd_icolap, fncg_id)
 VALUES (nextval('seguranca.seq_funcionalidade'),2,'Recuperar Credito',now(),
-'Gsan/','exibirFiltrarPagamentosAClassificar.do',1,'ExRecCre',1,2,2);
+'Gsan/','exibirFiltrarPagamentosAClassificar.do',1,'ExRecCre',1,2,2, 13);
 
 insert into seguranca.operacao
 (oper_id, fncd_id, oper_dsoperacao, oper_dsabreviado, oper_dscaminhourl,  optp_id)

@@ -433,7 +433,7 @@ public class ConcluirInserirRegistroAtendimentoAction extends GcomAction {
 				throw new ActionServletException("atencao.execedeu_limit_observacao",null,msg);
 			}
 			
-			RASolicitanteHelper raSolicitante = new RASolicitanteHelper();
+			RASolicitanteHelper raSolicitante = RABuilder.buildRASolicitante(form, sessao, false);
 			RADadosGeraisHelper raDadosGerais = RABuilder.buildRADadosGerais(form, usuario, idRAJAGerado, 
 																					(String) sessao.getAttribute("protocoloAtendimento"),
 																					colecaoRegistroAtendimentoAnexo);

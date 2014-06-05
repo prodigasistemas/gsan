@@ -71,6 +71,10 @@ public class HidrometroCapacidade extends ObjetoTransacao {
 	public HidrometroCapacidade() {
 	}
 
+	public HidrometroCapacidade(Integer id) {
+		this.id = id;
+	}
+
 	public Integer getId() {
 		return this.id;
 	}

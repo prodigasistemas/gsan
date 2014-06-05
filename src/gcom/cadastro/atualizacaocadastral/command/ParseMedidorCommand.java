@@ -25,6 +25,9 @@ public class ParseMedidorCommand extends AbstractAtualizacaoCadastralCommand {
 		Map<String, String> linha = atualizacao.getImovelAtual().getLinhaMedidor();
 		AtualizacaoCadastralImovel imovel = atualizacao.getImovelAtual();
 
+		String matriculaImovel = parser.obterDadoParser(9).trim();
+		linha.put("matriculaImovel", matriculaImovel);
+		
 		String icImovelPossuiMedidor = parser.obterDadoParser(1);
 		
 		String numeroHidrometro = null;

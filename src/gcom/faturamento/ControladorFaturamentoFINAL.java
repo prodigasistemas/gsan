@@ -2130,22 +2130,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 	}
 
-	/**
-	 * Este caso de uso realiza o faturamento do imóvel.
-	 * 
-	 * [UC0113] - Faturar Grupo de Faturamento
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 26/03/2008
-	 * 
-	 * @param anoMesFaturamento
-	 * @param atividade
-	 * @param sistemaParametro
-	 * @param faturamentoAtivCronRota
-	 * @param colecaoResumoFaturamento
-	 * @param imovel
-	 * @throws ControladorException
-	 */
+	@SuppressWarnings("rawtypes")
 	protected void faturarImovel(Integer anoMesFaturamento, int atividade,
 			SistemaParametro sistemaParametro,
 			FaturamentoAtivCronRota faturamentoAtivCronRota,
@@ -2153,9 +2138,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			boolean faturamentoAntecipado, FaturamentoGrupo faturamentoGrupo)
 			throws ControladorException {
 
-		// Verifica se existe conta para o imóvel para o ano/mês de faturamento.
-		Integer existeImovelConta = (Integer) getControladorImovel()
-				.pesquisarImovelIdComConta(imovel.getId(), anoMesFaturamento);
+		Integer existeImovelConta = (Integer) getControladorImovel().pesquisarImovelIdComConta(imovel.getId(), anoMesFaturamento);
 
 		Conta conta = null;
 
@@ -2173,40 +2156,25 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		}
 		
-		// CASO NÃO EXISTA CONTA PARA O IMOVEL NO ANO/MES DE REFERENCIA
 		if (existeImovelConta == null
 				|| (conta != null
-						&& conta.getDebitoCreditoSituacaoAtual() != null && conta
-						.getDebitoCreditoSituacaoAtual().getId()
-						.equals(DebitoCreditoSituacao.PRE_FATURADA))) {
+						&& conta.getDebitoCreditoSituacaoAtual() != null 
+						&& conta.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.PRE_FATURADA))) {
 
-			// VERIFICA O TIPO DE ATIVIDADE
 			boolean gerarAtividadeGrupoFaturamento = false;
 
 			if (atividade == FaturamentoAtividade.FATURAR_GRUPO.intValue()) {
-				// Gerar Faturamento Grupo
 				gerarAtividadeGrupoFaturamento = true;
-			} else if (atividade == FaturamentoAtividade.SIMULAR_FATURAMENTO
-					.intValue()) {
-				// Simular Faturamento
+			} else if (atividade == FaturamentoAtividade.SIMULAR_FATURAMENTO.intValue()) {
 				gerarAtividadeGrupoFaturamento = false;
 			}
 
-			// [SF0001] - Determinar Faturamento para o Imóvel
 			this.determinarFaturamentoImovel(imovel,
 					gerarAtividadeGrupoFaturamento, faturamentoAtivCronRota,
 					colecaoResumoFaturamento, sistemaParametro,
 					faturamentoAntecipado, anoMesFaturamento, faturamentoGrupo);
 		}
 
-		/*
-		 * IMPRESSÃO SIMULTÂNEA
-		 * 
-		 * Verificar os casos onde as contas não foram atualizadas
-		 */
-		else if (atividade == FaturamentoAtividade.FATURAR_GRUPO.intValue()) {
-
-		}
 	}
 
 	public void atualizarAnoMesReferenciaFaturamentoGrupo(
@@ -2484,7 +2452,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					.setGerarImpostosDeduzidosContaHelper(gerarImpostosDeduzidosContaHelper);
 					
 					// [SB0006] - Gerar Dados da Conta
-					// -----------------------------------------------------------------------------------------------------
 					Conta conta = this.gerarConta(imovel, anoMesFaturamento,
 							sistemaParametro, faturamentoAtivCronRota,
 							helperValoresAguaEsgoto, gerarDebitoCobradoHelper,
@@ -4482,20 +4449,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		}
 	}
 
-	/**
-	 * [UC0113] - Gerar Faturamento Grupo
-	 * 
-	 * [SB0007] - Determinar Vencimento da Conta
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 30/09/2009
-	 * 
-	 * @param imovel
-	 * @param faturamentoAtivCronRota
-	 * @param sistemaParametro
-	 * @return Date
-	 * @throws ControladorException
-	 */
 	public Date determinarVencimentoConta(Imovel imovel,
 			FaturamentoAtivCronRota faturamentoAtivCronRota,
 			SistemaParametro sistemaParametro, Integer anoMesFaturamento)
@@ -4507,36 +4460,19 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		Short indicadorVencimentoMesSeguinte = ConstantesSistema.NAO;
 
 		Cliente clienteResponsavel = null;
-		// boolean diaVencimentoAlternativoCliente = false;
 		Short ultimoDiaMes = null;
 
-		int diaDataVencimentoRota = Util.getDiaMes(faturamentoAtivCronRota
-				.getDataContaVencimento());
-		int mesDataVencimentoRota = Util.getMes(faturamentoAtivCronRota
-				.getDataContaVencimento());
-		int anoDataVencimentoRota = Util.getAno(faturamentoAtivCronRota
-				.getDataContaVencimento());
+		int diaDataVencimentoRota = Util.getDiaMes(faturamentoAtivCronRota.getDataContaVencimento());
+		int mesDataVencimentoRota = Util.getMes(faturamentoAtivCronRota.getDataContaVencimento());
+		int anoDataVencimentoRota = Util.getAno(faturamentoAtivCronRota.getDataContaVencimento());
 
-		// VENCIMENTO ALTERNATIVO
 
-		/*
-		 * Caso IMOV_DDVENCIMENTO esteja com o valor diferente de nulo e
-		 * IMOV_ICEMISSAOEXTRATOFATURAMENTO esteja com o valor correspondente a
-		 * dois (2), o dia do vencimento alternativo será o do imóvel
-		 * (IMOV_DDVENCIMENTO).
-		 */
 		if (imovel.getDiaVencimento() != null
 				&& imovel.getDiaVencimento().intValue() != 0
-				&& (imovel.getIndicadorEmissaoExtratoFaturamento() == null || imovel
-						.getIndicadorEmissaoExtratoFaturamento().equals(
-								ConstantesSistema.NAO))) {
+				&& (imovel.getIndicadorEmissaoExtratoFaturamento() == null || imovel.getIndicadorEmissaoExtratoFaturamento().equals(ConstantesSistema.NAO))) {
 
-			// DIA DO VENCIMENTO ALTERNATIVO DO IMÓVEL
 			diaVencimentoAlternativo = imovel.getDiaVencimento();
-
-			// INDICADOR DE GERAÇÃO PARA O MÊS SEGUINTE
-			indicadorVencimentoMesSeguinte = imovel
-					.getIndicadorVencimentoMesSeguinte();
+			indicadorVencimentoMesSeguinte = imovel.getIndicadorVencimentoMesSeguinte();
 		} else {
 
 			/*
@@ -4606,74 +4542,44 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		if (diaVencimentoAlternativo == null
 				|| diaVencimentoAlternativo.intValue() == 0) {
 
-			dataVencimentoConta = faturamentoAtivCronRota
-					.getDataContaVencimento();
+			dataVencimentoConta = faturamentoAtivCronRota.getDataContaVencimento();
 		} else {
 
-			// Caso o indicador de vencimento no mês seguinte corresponda a 2
-			// (NÃO)
 			if (indicadorVencimentoMesSeguinte.equals(ConstantesSistema.NAO)) {
 
-				/*
-				 * Caso o dia da Data de Vencimento da Rota seja menor ou igual
-				 * ao dia do vencimento alternativo, a Data de Vencimento da
-				 * Conta será igual ao dia do vencimento alternativo mais o mês
-				 * e ano da Data de Vencimento da Rota.
-				 */
-				if (diaDataVencimentoRota <= diaVencimentoAlternativo
-						.intValue()) {
+				if (diaDataVencimentoRota <= diaVencimentoAlternativo.intValue()) {
 
-					ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(
-							mesDataVencimentoRota, anoDataVencimentoRota));
+					ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(mesDataVencimentoRota, anoDataVencimentoRota));
 
-					if (diaVencimentoAlternativo.intValue() > ultimoDiaMes
-							.intValue()) {
+					if (diaVencimentoAlternativo.intValue() > ultimoDiaMes.intValue()) {
 						diaVencimentoAlternativo = ultimoDiaMes;
 					}
 
-					dataVencimentoConta = Util.criarData(
-							diaVencimentoAlternativo.intValue(),
-							mesDataVencimentoRota, anoDataVencimentoRota);
+					dataVencimentoConta = Util.criarData(diaVencimentoAlternativo.intValue(),mesDataVencimentoRota, anoDataVencimentoRota);
 				} else {
 
-					ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(
-							mesDataVencimentoRota, anoDataVencimentoRota));
+					diaVencimentoAlternativo = new Integer(diaDataVencimentoRota).shortValue();
+					
+					ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(mesDataVencimentoRota, anoDataVencimentoRota));
 
-					if (diaVencimentoAlternativo.intValue() > ultimoDiaMes
-							.intValue()) {
+					if (diaVencimentoAlternativo.intValue() > ultimoDiaMes.intValue()) {
 						diaVencimentoAlternativo = ultimoDiaMes;
 					}
 
-					Date dataVencimentoAlternativo = Util.criarData(
-							diaVencimentoAlternativo.intValue(),
-							mesDataVencimentoRota, anoDataVencimentoRota);
-
-					Date dataAtualMaisDiasMinimoEmissao = Util
-							.adicionarNumeroDiasDeUmaData(
-									new Date(),
-									sistemaParametro
-											.getNumeroMinimoDiasEmissaoVencimento());
+					Date dataVencimentoAlternativo = Util.criarData(diaVencimentoAlternativo.intValue(),mesDataVencimentoRota, anoDataVencimentoRota);
+					Date dataAtualMaisDiasMinimoEmissao = Util.adicionarNumeroDiasDeUmaData(new Date(), sistemaParametro.getNumeroMinimoDiasEmissaoVencimento());
 
 					/*
-					 * Caso a data formada pelo dia do vencimento alternativo
-					 * mais o mês e o ano da data de vencimento da rota seja
-					 * menor que a data corrente mais o número mínimo de dias
-					 * entre a data de emissão e a data de vencimento da conta
-					 * (PARM_NNMINIMODIASEMISSAOVENCIMENTO da tabela
-					 * SISTEMA_PARAMETROS)
+					 * Caso a data formada pelo dia do vencimento alternativo mais o mês e o ano da data de vencimento da rota seja
+					 * menor que a data corrente mais o número mínimo de dias entre a data de emissão e a data de vencimento da conta
+					 * (PARM_NNMINIMODIASEMISSAOVENCIMENTO da tabela SISTEMA_PARAMETROS)
 					 */
-					if (dataVencimentoAlternativo
-							.compareTo(dataAtualMaisDiasMinimoEmissao) <= 0) {
+					if (dataVencimentoAlternativo.compareTo(dataAtualMaisDiasMinimoEmissao) <= 0) {
 
-						/*
-						 * A Data de Vencimento da Conta será igual ao dia do
-						 * vencimento alternativo mais o mês e ano seguinte ao
+						/* A Data de Vencimento da Conta será igual ao dia do vencimento alternativo mais o mês e ano seguinte ao
 						 * da Data de Vencimento da Rota.
 						 */
-						Date dataVencimentoRotaMesSeguinte = Util
-								.adcionarOuSubtrairMesesAData(
-										faturamentoAtivCronRota
-												.getDataContaVencimento(), 1, 0);
+						Date dataVencimentoRotaMesSeguinte = Util.adcionarOuSubtrairMesesAData(faturamentoAtivCronRota.getDataContaVencimento(), 1, 0);
 
 						ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(
 								Util.getMes(dataVencimentoRotaMesSeguinte),
@@ -4696,17 +4602,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				}
 			} else {
 
-				/*
-				 * Caso o indicador de vencimento no mês seguinte corresponda a
-				 * 1 (SIM)
-				 * 
-				 * Data de Vencimento da Conta será igual ao dia do vencimento
-				 * alternativo mais o mês e ano seguinte ao da Data de
-				 * Vencimento da Rota
-				 */
-				Date dataVencimentoRotaMesSeguinte = Util
-						.adcionarOuSubtrairMesesAData(faturamentoAtivCronRota
-								.getDataContaVencimento(), 1, 0);
+				Date dataVencimentoRotaMesSeguinte = Util.adcionarOuSubtrairMesesAData(faturamentoAtivCronRota.getDataContaVencimento(), 1, 0);
 
 				ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(
 						Util.getMes(dataVencimentoRotaMesSeguinte),
@@ -4726,18 +4622,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		}
 
 		// ENTREGA CONTA VIA CORREIO
-		if ((imovel.getImovelContaEnvio().getId()
-				.equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL) || imovel
-				.getImovelContaEnvio()
-				.getId()
-				.equals(ImovelContaEnvio.NAO_PAGAVEL_IMOVEL_PAGAVEL_RESPONSAVEL))
+		if ((imovel.getImovelContaEnvio().getId().equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL) 
+			|| imovel.getImovelContaEnvio().getId().equals(ImovelContaEnvio.NAO_PAGAVEL_IMOVEL_PAGAVEL_RESPONSAVEL))
 				&& diaVencimentoAlternativo == null
-				&& imovel.getIndicadorDebitoConta().equals(
-						ConstantesSistema.NAO)) {
+				&& imovel.getIndicadorDebitoConta().equals(ConstantesSistema.NAO)) {
 
-			dataVencimentoConta = Util.adicionarNumeroDiasDeUmaData(
-					dataVencimentoConta,
-					sistemaParametro.getNumeroDiasAdicionaisCorreios());
+			dataVencimentoConta = Util.adicionarNumeroDiasDeUmaData(dataVencimentoConta, sistemaParametro.getNumeroDiasAdicionaisCorreios());
 		}
 
 		return dataVencimentoConta;
@@ -70152,26 +70042,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		return helper;
 	}
 
-	/**
-	 * [UC0113] Faturar Grupo de Faturamento
-	 * 
-	 * [SB0006] - Gerar Dados da Conta
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 02/04/2008
-	 * 
-	 * @param imovel
-	 * @param anoMesFaturamento
-	 * @param sistemaParametro
-	 * @param faturamentoAtivCronRota
-	 * @param helperValoresAguaEsgoto
-	 * @param helperDebito
-	 * @param helperCredito
-	 * @param gerarImpostosDeduzidosContaHelper
-	 * @param faturamentoAntecipado
-	 * @return
-	 * @throws ControladorException
-	 */
 	public Conta gerarConta(
 			Imovel imovel,
 			Integer anoMesFaturamento,
@@ -70190,8 +70060,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		contaGeral.setUltimaAlteracao(new Date());
 
 		// INSERINDO CONTA_GERAL NA BASE
-		Integer idContaGeral = (Integer) getControladorUtil().inserir(
-				contaGeral);
+		Integer idContaGeral = (Integer) getControladorUtil().inserir(contaGeral);
 		contaGeral.setId(idContaGeral);
 
 		// CONTA
@@ -70207,28 +70076,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		conta.setLote(imovel.getLote());
 		conta.setCodigoSetorComercial(imovel.getSetorComercial().getCodigo());
 		conta.setQuadra(imovel.getQuadra().getNumeroQuadra());
-
-		conta.setDigitoVerificadorConta(new Short(
-				String.valueOf(Util
-						.calculoRepresentacaoNumericaCodigoBarrasModulo10(anoMesFaturamento))));
-
+		conta.setDigitoVerificadorConta(new Short(String.valueOf(Util.calculoRepresentacaoNumericaCodigoBarrasModulo10(anoMesFaturamento))));
 		conta.setIndicadorCobrancaMulta((short) 2);
 
 		if (faturamentoAntecipado) {
-
-			/*
-			 * Caso seja faturamento antecipado, a Data de Vencimento da Conta
-			 * será o último dia útil do ano e mês de referência.
-			 */
-			conta.setDataVencimentoConta(this
-					.determinarVencimentoContaAntecipado(imovel,
-							anoMesFaturamento));
+			conta.setDataVencimentoConta(this.determinarVencimentoContaAntecipado(imovel,anoMesFaturamento));
 		} else {
 
-			// [SB0007] - Determinar Vencimento da Conta.
-			conta.setDataVencimentoConta(this.determinarVencimentoConta(imovel,
-					faturamentoAtivCronRota, sistemaParametro,
-					anoMesFaturamento));
+			conta.setDataVencimentoConta(this.determinarVencimentoConta(imovel,faturamentoAtivCronRota, sistemaParametro, anoMesFaturamento));
 		}
 
 		conta.setDataVencimentoOriginal(conta.getDataVencimentoConta());

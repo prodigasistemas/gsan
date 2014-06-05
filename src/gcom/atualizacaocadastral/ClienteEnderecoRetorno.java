@@ -6,6 +6,7 @@ import gcom.cadastro.endereco.EnderecoTipo;
 import gcom.cadastro.endereco.Logradouro;
 import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
+import gcom.cadastro.endereco.LogradouroTipo;
 
 import java.util.Date;
 
@@ -22,6 +23,7 @@ public class ClienteEnderecoRetorno implements IClienteEndereco {
 	private String descricaoLogradouro;
 	private Integer codigoCep;
 	private Integer idClienteRetorno;
+	private LogradouroTipo logradouroTipo;
 	
 	public ClienteEnderecoRetorno(){}
 	
@@ -34,6 +36,7 @@ public class ClienteEnderecoRetorno implements IClienteEndereco {
 		this.nomeBairro = clienteAtualizacaoCadastral.getNomeBairro();
 		this.descricaoLogradouro = clienteAtualizacaoCadastral.getDescricaoLogradouro();
 		this.codigoCep = clienteAtualizacaoCadastral.getCodigoCep();
+		this.logradouroTipo = new LogradouroTipo(clienteAtualizacaoCadastral.getIdLogradouroTipo());
 	}
 
 	public Integer getId() {
@@ -124,43 +127,39 @@ public class ClienteEnderecoRetorno implements IClienteEndereco {
 		this.idClienteRetorno = idClienteRetorno;
 	}
 
+	public LogradouroTipo getLogradouroTipo() {
+		return logradouroTipo;
+	}
+
+	public void setLogradouroTipo(LogradouroTipo logradouroTipo) {
+		this.logradouroTipo = logradouroTipo;
+	}
+
 	public LogradouroCep getLogradouroCep() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public void setLogradouroCep(LogradouroCep logradouroCep) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public LogradouroBairro getLogradouroBairro() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public void setLogradouroBairro(LogradouroBairro logradouroBairro) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public Logradouro getPerimetroInicial() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public void getPerimetroInicial(Logradouro perimetroInicial) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public Logradouro getPerimetroFinal() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public void setPerimetroFinal(Logradouro perimetroFinal) {
-		// TODO Auto-generated method stub
-		
 	}
 }

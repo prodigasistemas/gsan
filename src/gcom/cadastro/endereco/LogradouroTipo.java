@@ -49,7 +49,11 @@ public class LogradouroTipo extends TabelaAuxiliarAbreviada {
         this.descricao = descricao;
     }
 
-    public Integer getId() {
+    public LogradouroTipo(Integer id) {
+		this.id = id;
+	}
+
+	public Integer getId() {
         return this.id;
     }
 

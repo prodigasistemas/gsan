@@ -1,5 +1,7 @@
 package gcom.gui.cadastro.atualizacaocadastral;
 
+import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
+import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.SituacaoAguaHelper;
 import gcom.cadastro.atualizacaocadastral.SituacaoEsgotoHelper;
 import gcom.cadastro.atualizacaocadastral.SituacaoSubcategoriaHelper;
@@ -34,22 +36,17 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 
 	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
 
-		// Prepara o retorno da Ação
 		ActionForward retorno = actionMapping.findForward("exibirAtualizarDadosImovelAtualizacaoCadastralPopup");
 		
-		// Cria a sessão
 		HttpSession sessao = request.getSession(false);
 		
-		// Obtém o action form
 		ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm form = (ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm) actionForm;
 
-		// Obtém a fachada
 		Fachada fachada = Fachada.getInstancia();
 		
 		String idImovel = (String) request.getParameter("idImovel");
 
 		try {
-			// Realiza o Filtro para o Imovel
 			Collection<DadosTabelaAtualizacaoCadastralHelper> resumoImovel = new LinkedList<DadosTabelaAtualizacaoCadastralHelper>();
 
 			if ( (idImovel != null && !idImovel.equals(""))) {
@@ -74,20 +71,17 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 					SetorComercial setorComercial = (SetorComercial) imovel.getSetorComercial();
 					Quadra quadra = (Quadra) imovel.getQuadra();
 					
-					// Imovel
 					form.setDescricaoImovel(imovel.getId().toString());
-					// Localidade
 					form.setIdLocalidade(localidade.getId().toString());
 					form.setDescricaoLocalidade(localidade.getDescricao());
-					// Setor Comercial
 					form.setIdSetorComercial(setorComercial.getId().toString());
 					form.setCodigoSetorComercial("" + setorComercial.getCodigo());
 					form.setDescricaoSetorComercial(setorComercial.getDescricao());
-					// Quadra
 					form.setIdQuadra(quadra.getId().toString());
 					form.setNumeroQuadra("" + quadra.getNumeroQuadra());
 					resumoImovel.add(new SituacaoAguaHelper(imovel.getLigacaoAguaSituacao().getDescricao()));
 					resumoImovel.add(new SituacaoEsgotoHelper(imovel.getLigacaoEsgotoSituacao().getDescricao()));
+					
 					Collection<ImovelSubcategoriaAtualizacaoCadastral> subcategorias = fachada.pesquisarSubCategoriasAtualizacaoCadastral(imovel.getId());
 					for (ImovelSubcategoriaAtualizacaoCadastral economia : subcategorias) {
 						String subcategoria = economia.getDescricaoCategoria() + " - " + economia.getDescricaoSubcategoria();
@@ -98,14 +92,27 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 				}
 			}
 			
-			Map<String, List<DadosTabelaAtualizacaoCadastralHelper>> map = 
-					fachada.consultarDadosTabelaColunaAtualizacaoCadastral(null, null, new Integer(idImovel), null, null);
+			Map<String, List<DadosTabelaAtualizacaoCadastralHelper>> map = fachada.consultarDadosTabelaColunaAtualizacaoCadastral(
+					null, null, Integer.valueOf(idImovel), null, null);
 			
-			Collection<DadosTabelaAtualizacaoCadastralHelper> atualizacoes = new AtualizacaoCadastralUtil().linhasAtualizacaoCadastral(resumoImovel, map);
+			Collection<DadosTabelaAtualizacaoCadastralHelper> atualizacoes = new AtualizacaoCadastralUtil().linhasAtualizacaoCadastral(
+					resumoImovel, map);
 			
 			if (!atualizacoes.isEmpty()) {
 				sessao.setAttribute("colecaoDadosTabelaAtualizacaoCadastral", atualizacoes);
 			}
+			
+			ImovelControleAtualizacaoCadastral controle = fachada.pesquisarImovelControleAtualizacao(Integer.valueOf(idImovel));
+			
+			boolean fiscalizado = false;
+			
+			if (controle != null) {
+				if (controle.getSituacaoAtualizacaoCadastral().getId().equals(SituacaoAtualizacaoCadastral.EM_FISCALIZACAO)) {
+					fiscalizado = true;
+				}
+			}
+			
+			sessao.setAttribute("fiscalizado", fiscalizado);
 		} catch (Exception e) {
 			throw new ActionServletException("erro.exibir.dados.atualizacao", e, "Dados do Imovel e Cliente");
 		}

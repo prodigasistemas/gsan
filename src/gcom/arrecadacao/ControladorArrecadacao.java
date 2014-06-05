@@ -3684,9 +3684,7 @@ public class ControladorArrecadacao implements SessionBean {
 
 	private SistemaParametro getSistemaParametro() throws ControladorException {
 		try {
-			if(sistemaParametro == null){
-				sistemaParametro = repositorioUtil.pesquisarParametrosDoSistema();
-			}
+			sistemaParametro = repositorioUtil.pesquisarParametrosDoSistema();
 		} catch (ErroRepositorioException e) {
 		    throw new ControladorException("erro.sistema", e);
 		}
@@ -7388,6 +7386,7 @@ public class ControladorArrecadacao implements SessionBean {
 	 * 
 	 * Autor: Raphael Rossiter Data: 02/05/2007
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	protected PagamentoHelperCodigoBarras processarPagamentosCodigoBarrasDocumentoCobrancaTipo8(
 			RegistroHelperCodigoBarras registroHelperCodigoBarras,
 			SistemaParametro sistemaParametro, Date dataPagamento,
@@ -7463,8 +7462,14 @@ public class ControladorArrecadacao implements SessionBean {
 				//pesquisar o doc de cobrança
 				FiltroCobrancaDocumento filtro = new FiltroCobrancaDocumento();
 				filtro.adicionarParametro(new ParametroSimples(FiltroCobrancaDocumento.ID, numeroSequencialDocumento));
-				CobrancaDocumento cobrancaDocumento = (CobrancaDocumento)getControladorUtil().pesquisar(filtro, CobrancaDocumento.class.getName()).iterator().next();
 				
+				Collection<CobrancaDocumento> listaDocumentosCobranca = getControladorUtil().pesquisar(filtro, CobrancaDocumento.class.getName());
+		        
+		        CobrancaDocumento cobrancaDocumento = null; 
+		        
+		        if (!listaDocumentosCobranca.isEmpty()) {
+		          cobrancaDocumento = listaDocumentosCobranca.iterator().next();
+		        }
 				if(cobrancaDocumento != null && cobrancaDocumento.getValorAcrescimos() != null 
 						&& cobrancaDocumento.getValorAcrescimos().compareTo(new BigDecimal("0.00")) != 0) {
 					colecaoPagamentos.addAll(processarRecebimentoAcrescimosImpontualidadePorCliente(
@@ -13568,8 +13573,7 @@ public class ControladorArrecadacao implements SessionBean {
 				.pesquisarParametrosDoSistema();
 
 		// recupera o ano/mês de referência da arrecadação int
-		int anoMesArrecadacaoSistemaParametro = getSistemaParametro()
-				.getAnoMesArrecadacao();
+		int anoMesArrecadacaoSistemaParametro = getSistemaParametro().getAnoMesArrecadacao();
 
 		ArrecadacaoDadosDiarios arrecadacaoDadosDiarios = null;
 		DevolucaoDadosDiarios devolucaoDadosDiarios = null;
@@ -56491,6 +56495,7 @@ public class ControladorArrecadacao implements SessionBean {
 					helper.setIndiceCortados((BigDecimal) objetoBIG[30]);
 					helper.setIndiceSuprimidos((BigDecimal) objetoBIG[31]);
 					helper.setIndiceFactiveis((BigDecimal) objetoBIG[32]);
+					helper.setIdLocalidade((Integer) objetoBIG[33]);
 					
 					retorno.add(helper);
 				}

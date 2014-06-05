@@ -5,37 +5,29 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 public class LigacaoTipo implements Serializable {
 	private static final long serialVersionUID = 1L;
-    /** identifier field */
+
     private Integer id;
-
-    /** nullable persistent field */
     private String descricao;
-
-    /** nullable persistent field */
     private Short indicadorUso;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
 
     public final static Integer LIGACAO_AGUA = new Integer(1);
-
     public final static Integer LIGACAO_ESGOTO = new Integer(2);
 
-    /** full constructor */
-    public LigacaoTipo(String descricao, Short indicadorUso,
-            Date ultimaAlteracao) {
+    public LigacaoTipo(String descricao, Short indicadorUso, Date ultimaAlteracao) {
         this.descricao = descricao;
         this.indicadorUso = indicadorUso;
         this.ultimaAlteracao = ultimaAlteracao;
     }
 
-    /** default constructor */
     public LigacaoTipo() {
     }
 
+    public LigacaoTipo(Integer id) {
+    	this.id = id;
+    }
     public Integer getId() {
         return this.id;
     }

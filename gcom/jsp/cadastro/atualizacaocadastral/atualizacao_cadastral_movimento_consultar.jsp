@@ -134,52 +134,55 @@
 				border="0"></td>
 		</tr>
 	</table>
-	<!--Fim Tabela Reference a P&aacute;gina&ccedil;&atilde;o da Tela de Processo-->
 	<p>&nbsp;</p>
 	<table>
 	  <tr>
-		<td width="100"><strong>Empresa:</strong></td>
-		<td width="432"><html:text tabindex="10" maxlength="40"
-			property="nomeEmpresa" size="40" disabled="true"/> 
+		<td width="20%"><strong>Empresa:</strong></td>
+		<td width="80%"><html:text tabindex="10" maxlength="40" property="nomeEmpresa" size="40" disabled="true"/> 
 		</td>
 	  </tr>
 	</table>
+	<p>&nbsp;</p>
 	<table>		
 	 <tr>
 		<td colspan="2">
-			<table width="100%" cellpadding="0" cellspacing="0">
+			<table width="600" cellpadding="0" cellspacing="0">
 				<tr>
-					<td colspan="2" height="23"><font color="#000000"
-						style="font-size:10px"
-						face="Verdana, Arial, Helvetica, sans-serif"><strong>Movimento de Atualização Cadastral:</strong></font></td>
+					<td width="50%"><strong>Movimento de Atualização Cadastral:</strong></td>
+					<td width="50%" align="right">
+		  				<input type="button" name="Button" class="bottonRightCol" value="Gerar Fichas de Fiscalização"
+		  					onclick="window.location.href='/gsan/imprimirFichaFiscalizacaoCadastralAction.do';">  
+					</td>
 				</tr>
 				<tr>
 					<td colspan="2" bgcolor="#000000" height="2"></td>
 				</tr>
 		
 				<tr>
-					<td>
-					<table width="620" bgcolor="#99CCFF" border="0">
+					<td width="600" colspan="5">
+					<div style="width: 100%; overflow: auto;">
+					<table width="100%" align="center" bgcolor="#99CCFF" border="0">
 						<tr bgcolor="#99CCFF">
-							<td width="40" bgcolor="#90c7fc">
+							<td width="10%" bgcolor="#90c7fc">
   							  <div align="center">
                                 <strong><a href="javascript:facilitador(this);">Todos</a></strong>
                               </div>
 							</td>
-							<td width="150" bgcolor="#90c7fc">
+							<td width="30%" bgcolor="#90c7fc">
 							  <div align="center"><strong>Imóvel</strong></div>
 							</td>
-							<td width="200" bgcolor="#90c7fc">
+							<td width="60%" bgcolor="#90c7fc">
 							  <div align="center"><strong>Agente Cadastral</strong></div>
 							</td>
 						</tr>
 					</table>
+					</div>
 					</td>
 				</tr>
 				<%int cont = 0;%>
 				<logic:present name="colecaoConsultarMovimentoAtualizacaoCadastralHelper">
 				<tr>
-					<td width="620" colspan="5">
+					<td width="600" colspan="5">
 					<div style="width: 100%; height: 300; overflow: auto;">
 					<table width="100%" align="center" bgcolor="#99CCFF" border="0">
 						<logic:iterate name="colecaoConsultarMovimentoAtualizacaoCadastralHelper" id="consultarMovimentoAtualizacaoCadastralHelper"
@@ -190,7 +193,7 @@
 							<%} else {%>
 							<tr bgcolor="#FFFFFF">
 							<%}%>
-						        <td width="40" align="center">
+						        <td width="10%" align="center">
  						        <%		
 						                String checado = "";
 										if (consultarMovimentoAtualizacaoCadastralHelper.getIcAutorizado() == 1) {
@@ -202,7 +205,7 @@
 
 								</td>
                 
-                                <td width="150">
+                                <td width="30%">
                                   <div align="center">
                                     <a href="exibirAtualizarDadosImovelAtualizacaoCadastralPopupAction.do?idImovel=<bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idImovel"/>&idArquivo=<bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idArquivo"/>&idTipoAlteracao=<bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idTipoAlteracao"/>">
                                       <logic:equal name="consultarMovimentoAtualizacaoCadastralHelper" property="idTipoAlteracao" value="1">
@@ -218,7 +221,7 @@
                                   </div>                                
                                 </td>
                 
-								<td width="200">
+								<td width="60%">
                                   <div align="center">
 									<bean:write name="consultarMovimentoAtualizacaoCadastralHelper"	property="nomeFuncionario" />
                                   </div>

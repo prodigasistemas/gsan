@@ -1,6 +1,9 @@
 package gcom.cadastro.imovel;
 
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
+import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
+import gcom.micromedicao.hidrometro.HidrometroCapacidade;
+import gcom.micromedicao.hidrometro.HidrometroMarca;
 import gcom.micromedicao.hidrometro.HidrometroProtecao;
 
 import java.util.Date;
@@ -42,6 +45,10 @@ public interface IImovel {
 	public LigacaoAguaSituacao getLigacaoAguaSituacao();
 
 	public void setLigacaoAguaSituacao(LigacaoAguaSituacao ligacaoAguaSituacao);
+	
+	public LigacaoEsgotoSituacao getLigacaoEsgotoSituacao();
+
+	public void setLigacaoEsgotoSituacao(LigacaoEsgotoSituacao ligacaoEsgotoSituacao);
 
 	public String getNumeroMedidorEnergia();
 
@@ -59,6 +66,14 @@ public interface IImovel {
 
 	public void setUltimaAlteracao(Date ultimaAlteracao);
 
+	public Integer getIdMarcaHidrometro();
+
+	public void setIdMarcaHidrometro(Integer idMarcaHidrometro);
+	
+	public Integer getIdCapacidadeHidrometro();
+
+	public void setIdCapacidadeHidrometro(Integer idCapacidadeHidrometro);
+	
 	public Integer getIdProtecaoHidrometro();
 
 	public void setIdProtecaoHidrometro(Integer idProtecaoHidrometro);
@@ -75,6 +90,10 @@ public interface IImovel {
 	
 	public void setIdLigacaoAguaSituacao(Integer idLigacaoAguaSituacao);
 	
+	public Integer getIdLigacaoEsgotoSituacao();
+	
+	public void setIdLigacaoEsgotoSituacao(Integer idLigacaoEsgotoSituacao);
+	
 	public Integer getIdFonteAbastecimento();
 
     public void setIdFonteAbastecimento(Integer idFonteAbastecimento);
@@ -83,6 +102,14 @@ public interface IImovel {
     
     public void setIdImovel(Integer idImovel);
     
+    public HidrometroMarca getHidrometroMarca();
+
+	public void setHidrometroMarca(HidrometroMarca hidrometroMarca);
+
+    public HidrometroCapacidade getHidrometroCapacidade();
+
+	public void setHidrometroCapacidade(HidrometroCapacidade hidrometroCapacidade);
+
     public HidrometroProtecao getHidrometroProtecao();
 
 	public void setHidrometroProtecao(HidrometroProtecao hidrometroProtecao);
@@ -136,4 +163,8 @@ public interface IImovel {
 	public void setIdRota(Integer idRota);
 	
 	public Integer getIdRota();
+	
+	public void setIdLocalInstalacaoRamal(Integer idRamalLocalInstalacao);
+	
+	public Integer getIdLocalInstalacaoRamal();
 }

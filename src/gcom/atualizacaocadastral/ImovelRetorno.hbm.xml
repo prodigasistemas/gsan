@@ -10,44 +10,63 @@
 		</id>
 
 		<property name="idImovel" type="java.lang.Integer" column="imov_id" not-null="true" length="5"/>
-		<property name="numeroImovel" type="java.lang.String" column="imac_nnimovel" not-null="true" length="5"/>
-		<property name="complementoEndereco" type="java.lang.String" column="imac_dscomplementoendereco" length="25"/>
-		<property name="numeroPontosUtilizacao" type="java.lang.Short" column="imac_nnpontosutilizacao" length="2"/>
-		<property name="numeroMorador" type="java.lang.Short" column="imac_nnmorador" length="2"/>
-		<property name="numeroIptu" type="java.lang.String" column="imac_nniptu" length="31"/>
-		<property name="coordenadaX" type="java.lang.String" column="imac_nncoordenadax" length="20"/>
-		<property name="coordenadaY" type="java.lang.String" column="imac_nncoordenaday" length="20"/>
-		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="imac_tmultimaalteracao" not-null="true" length="8"/>
-		<property name="numeroHidrometro" type="java.lang.String" column="imac_nnhidrometro" length="10"/>
-		<property name="numeroMedidorEnergia" type="java.lang.String" column="imac_nnmedidorenergia" length="10"/>
-		<property name="informacoesComplementares" type="java.lang.String" column="imac_dsoutrasinformacoes" length="100"/>
-		<property name="tipoEntrevistado" type="java.lang.String" column="imac_tipoentrevistado" length="50"/>
 		<property name="tipoOperacao" type="java.lang.Integer" column="imac_tipooperacao" length="1"/>
 		
-		<property name="codigoMunicipio" type="java.lang.Integer" column="muni_id" length="4"/>
-		<property name="nomeMunicipio" type="java.lang.String" column="imac_nmmunicipio" length="30"/>
-		<property name="idLogradouroTipo" type="java.lang.Integer" column="lgtp_id" length="9"/>
-		<property name="idLogradouro" type="java.lang.Integer" column="logr_id" length="4"/>
-		<property name="descricaoLogradouro" type="java.lang.String" column="imac_dslogradouro" length="40"/>
-		<property name="nomeBairro" type="java.lang.String" column="imac_nmbairro" length="30"/>
-		<property name="codigoCep" type="java.lang.Integer" column="imac_cdcep" length="4"/>
-				
 		<property name="idLocalidade" type="java.lang.Integer" column="loca_id" length="9"/>
 		<property name="codigoSetorComercial" type="java.lang.Integer" column="imre_cdsetorcomercial" length="9"/>
 		<property name="numeroQuadra" type="java.lang.Integer" column="imre_nnquadra" length="9"/>
 		<property name="idRota" type="java.lang.Integer" column="rota_id" length="9"/>
-		
-		<many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="true">
-			<column name="last_id"/>
-		</many-to-one>
-		
-		<many-to-one name="fonteAbastecimento" class="gcom.cadastro.imovel.FonteAbastecimento" not-null="true">
+
+		<property name="codigoMunicipio" type="java.lang.Integer" column="muni_id" length="4"/>
+
+		<property name="numeroIptu" type="java.lang.String" column="imac_nniptu" length="31"/>
+		<property name="numeroMedidorEnergia" type="java.lang.String" column="imac_nnmedidorenergia" length="10"/>
+
+		<property name="numeroPontosUtilizacao" type="java.lang.Short" column="imac_nnpontosutilizacao" length="2"/>
+		<property name="numeroMorador" type="java.lang.Short" column="imac_nnmorador" length="2"/>
+
+
+		<property name="idLogradouroTipo" type="java.lang.Integer" column="lgtp_id" length="9"/>
+		<property name="descricaoLogradouro" type="java.lang.String" column="imac_dslogradouro" length="40"/>
+		<property name="numeroImovel" type="java.lang.String" column="imac_nnimovel" not-null="true" length="5"/>
+		<property name="complementoEndereco" type="java.lang.String" column="imac_dscomplementoendereco" length="25"/>
+		<property name="nomeBairro" type="java.lang.String" column="imac_nmbairro" length="30"/>
+		<property name="codigoCep" type="java.lang.Integer" column="imac_cdcep" length="4"/>
+		<property name="nomeMunicipio" type="java.lang.String" column="imac_nmmunicipio" length="30"/>
+		<property name="idLogradouro" type="java.lang.Integer" column="logr_id" length="4"/>
+
+		<many-to-one name="fonteAbastecimento" class="gcom.cadastro.imovel.FonteAbastecimento">
 			<column name="ftab_id"/>
 		</many-to-one>
+
+		<property name="coordenadaX" type="java.lang.String" column="imac_nncoordenadax" length="20"/>
+		<property name="coordenadaY" type="java.lang.String" column="imac_nncoordenaday" length="20"/>
 		
-		<many-to-one name="hidrometroProtecao" class="gcom.micromedicao.hidrometro.HidrometroProtecao" not-null="true">
+		<many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao">
+			<column name="last_id"/>
+		</many-to-one>
+		<many-to-one name="ligacaoEsgotoSituacao" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao">
+			<column name="lest_id"/>
+		</many-to-one>
+		<many-to-one name="ramalLocalInstalacao" class="gcom.atendimentopublico.ligacaoagua.RamalLocalInstalacao">
+			<column name="rlin_id"/>
+		</many-to-one>
+		
+		<property name="numeroHidrometro" type="java.lang.String" column="imac_nnhidrometro" length="10"/>
+		<many-to-one name="hidrometroMarca" class="gcom.micromedicao.hidrometro.HidrometroMarca">
+			<column name="himc_id"/>
+		</many-to-one>
+		<many-to-one name="hidrometroCapacidade" class="gcom.micromedicao.hidrometro.HidrometroCapacidade">
+			<column name="hicp_id"/>
+		</many-to-one>
+		<many-to-one name="hidrometroProtecao" class="gcom.micromedicao.hidrometro.HidrometroProtecao">
 			<column name="hipr_id"/>
 		</many-to-one>
 		
+		
+		<property name="informacoesComplementares" type="java.lang.String" column="imac_dsoutrasinformacoes" length="100"/>
+		<property name="tipoEntrevistado" type="java.lang.String" column="imac_tipoentrevistado" length="50"/>
+		
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="imac_tmultimaalteracao" not-null="true" length="8"/>
 	</class>
 </hibernate-mapping>
