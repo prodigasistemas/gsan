@@ -34,8 +34,8 @@ public class FiltrarPagamentosAClassificarAction extends GcomAction {
 
 		Integer situacaoPagamento = new Integer(form.getIdSituacaoPagamento());
 		Integer referenciaArrecadacao = Util.formatarMesAnoComBarraParaAnoMes(form.getReferenciaArrecadacao());
-		Integer matriculaImovel = new Integer (form.getReferenciaArrecadacao());
-		Integer motivoCancelamento = new Integer (form.getIdMotivoCancelamento());
+		String matriculaImovel = new String (form.getMatriculaImovel());
+		String dataPagamento = new String (form.getDataPagamento());
 
 		FiltroClassificarPagamentos filtroClassificarPagamentos = new FiltroClassificarPagamentos(FiltroClassificarPagamentos.ORDER_BY);
 
@@ -49,26 +49,27 @@ public class FiltrarPagamentosAClassificarAction extends GcomAction {
 				filtroClassificarPagamentos.adicionarParametro(new ParametroSimples(FiltroClassificarPagamentos.ID_IMOVEL, matriculaImovel));
 			}
 			
-			if (isMotivoCanelamentoPreenchido(motivoCancelamento)) {
-				filtroClassificarPagamentos.adicionarParametro(new ParametroSimples(FiltroClassificarPagamentos.ID_MOTIVO_CANCELAMENTO, matriculaImovel));
+			if (isDataPagementoPreenchida(dataPagamento)) {
+				filtroClassificarPagamentos.adicionarParametro(new ParametroSimples(FiltroClassificarPagamentos.DATA_PAGAMENTO, Util.converteStringParaDate(dataPagamento)));
 			}
+			
 		}
 
 		@SuppressWarnings("unchecked")
 		Collection<Pagamento> colecaoPagamentos = (Collection<Pagamento>) getFachada().pesquisar(filtroClassificarPagamentos, Pagamento.class.getName());;
-		Collection<Pagamento> colecaoPagamentosAClassificar = fachada.obterPagamentos(getIdPagamentos(colecaoPagamentos));
-				
-		form.setColecaoPagamentosAClassificar(colecaoPagamentosAClassificar);
-		form.setSituacaoPagamento(getDescricaoSituacaoPagamento(situacaoPagamento));
 		
-		if ( colecaoPagamentosAClassificar != null && colecaoPagamentosAClassificar.isEmpty() ) {
+		if (colecaoPagamentos == null || colecaoPagamentos.isEmpty() ) {
 			throw new ActionServletException("atencao.pesquisa.nenhumresultado");
-		
-		}else{
 			
+		}else{
+			Collection<Pagamento> colecaoPagamentosAClassificar = fachada.obterPagamentos(getIdPagamentos(colecaoPagamentos));
+					
+			form.setColecaoPagamentosAClassificar(colecaoPagamentosAClassificar);
+			form.setSituacaoPagamento(getDescricaoSituacaoPagamento(situacaoPagamento));
+				
 			httpServletRequest.setAttribute("colecaoPagamentosAClassificar",colecaoPagamentosAClassificar);
 			httpServletRequest.setAttribute("totalRegistros",colecaoPagamentosAClassificar.size());
-
+	
 			httpServletRequest.setAttribute("situacaoPesquisada",colecaoPagamentosAClassificar.size());
 			httpServletRequest.setAttribute("qtdPagamentos",colecaoPagamentosAClassificar.size());
 			
@@ -95,11 +96,12 @@ public class FiltrarPagamentosAClassificarAction extends GcomAction {
 		return pagamentoSituacao.getDescricao();
 	}
 	
-	private boolean isMatriculaImovelPreenchida(Integer matriculaImovel) {
-		return matriculaImovel != null && matriculaImovel > 0;
+	private boolean isMatriculaImovelPreenchida(String matriculaImovel) {
+		return matriculaImovel != null && !matriculaImovel.equals("");
 	}
 	
-	private boolean isMotivoCanelamentoPreenchido(Integer motivoCancelamento) {
-		return motivoCancelamento != null && motivoCancelamento > 0;
+	private boolean isDataPagementoPreenchida(String dataPagamento) {
+		return dataPagamento != null && !dataPagamento.equals("");
 	}
+	
 }

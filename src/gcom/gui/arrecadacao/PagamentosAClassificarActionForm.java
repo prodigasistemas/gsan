@@ -16,6 +16,7 @@ public class PagamentosAClassificarActionForm extends ValidatorActionForm {
 	private String referenciaArrecadacao = "";
 	private String matriculaImovel = "";
 	private String idMotivoCancelamento;
+	private String dataPagamento;
 	private String[] idRegistrosClassificacao;
 
 	private Collection<Pagamento> colecaoPagamentosAClassificar;
@@ -86,6 +87,14 @@ public class PagamentosAClassificarActionForm extends ValidatorActionForm {
 
 	public void setIdMotivoCancelamento(String idMotivoCancelamento) {
 		this.idMotivoCancelamento = idMotivoCancelamento;
+	}
+
+	public String getDataPagamento() {
+		return dataPagamento;
+	}
+
+	public void setDataPagamento(String dataPagamento) {
+		this.dataPagamento = dataPagamento;
 	}
 	
 }

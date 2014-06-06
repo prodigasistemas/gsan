@@ -20763,35 +20763,18 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		return retorno;
 	}
 
-	/**
-	 * [UC0150] Retificar Conta
-	 * 
-	 * @author Vivianne Sousa
-	 * @data 23/04/2006
-	 * 
-	 * @param idConta
-	 * @return idParcelamento
-	 */
-	public Object[] pesquisarPagamentoDeConta(Integer idConta)
+	public Pagamento pesquisarPagamentoDeConta(Integer idConta)
 			throws ErroRepositorioException {
 
-		Object[] retorno = null;
+		Pagamento retorno = null;
 
 		Session session = HibernateUtil.getSession();
 		String consulta = null;
 
-		/**TODO: COSANPA
-		 * Mantis 537
-		 * Retornando também a data do pagamento para que seja informado na impressão da segunda via
-		 * 
-		 * @author Wellington Rocha
-		 * @date 14/03/2012*/
 		try {
-			consulta = "SELECT pgmt.id,pgmt.valorPagamento, pgmt.dataPagamento " + "FROM Pagamento as pgmt "
-			+ "WHERE pgmt.contaGeral.id = :idConta ";
+			consulta = "SELECT pgmt FROM Pagamento as pgmt WHERE pgmt.contaGeral.id = :idConta ";
 
-			retorno = (Object[]) session.createQuery(consulta).setInteger(
-			"idConta", idConta).setMaxResults(1).uniqueResult();
+			retorno = (Pagamento) session.createQuery(consulta).setInteger("idConta", idConta).setMaxResults(1).uniqueResult();
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
@@ -31508,7 +31491,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 				.setParameterList("idsPagamentos", idsPagamentos).setMaxResults(1500).list();
 			
 			for (Pagamento pagamento: pagamentos) {
-				System.out.println("Pagamento: " + pagamento.getId());
 				if (pagamento.getContaGeral() != null) {
 					ContaGeral contaGeral = (ContaGeral) session.get(ContaGeral.class, pagamento.getContaGeral().getId());
 					

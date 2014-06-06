@@ -4897,20 +4897,12 @@ public interface IRepositorioArrecadacao {
      * @return Collection
      * @throws ErroRepositorioException
      */
-    public Collection pesquisarPagamentoHistoricoAvisoBancario(Integer idAvisoBancario) 
+    @SuppressWarnings("rawtypes")
+	public Collection pesquisarPagamentoHistoricoAvisoBancario(Integer idAvisoBancario) 
     	throws ErroRepositorioException;
 
     
-    /**
-	 * [UC0150] Retificar Conta
-	 * 
-	 * @author Vivianne Sousa
-	 * @data 23/04/2006
-	 * 
-	 * @param idConta
-	 * @return idParcelamento
-	 */
-	public Object[] pesquisarPagamentoDeConta(Integer idConta)
+	public Pagamento pesquisarPagamentoDeConta(Integer idConta)
 		throws ErroRepositorioException ;
 	
 	

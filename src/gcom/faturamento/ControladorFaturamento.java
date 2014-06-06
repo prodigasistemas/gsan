@@ -69,6 +69,7 @@ import gcom.faturamento.conta.ContaGeral;
 import gcom.faturamento.conta.ContaHistorico;
 import gcom.faturamento.conta.ContaImpostosDeduzidos;
 import gcom.faturamento.conta.ContaImpressao;
+import gcom.faturamento.conta.ContaMotivoInclusao;
 import gcom.faturamento.conta.ContaMotivoRetificacao;
 import gcom.faturamento.conta.ContaTipo;
 import gcom.faturamento.conta.FiltroConta;
@@ -201,11 +202,10 @@ import java.util.Map;
 import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipOutputStream;
 
-import org.jboss.logging.Logger;
-
 import javax.ejb.EJBException;
 
 import org.hibernate.LazyInitializationException;
+import org.jboss.logging.Logger;
 
 public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
@@ -16738,7 +16738,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 	
-public Map<Integer, Conta> incluirContasParaRefaturarPagamentos(Collection<Pagamento> pagamentos, Date dataArrecadacao) throws ControladorException, ErroRepositorioException {
+public Map<Integer, Conta> incluirContasParaRefaturarPagamentos(Collection<Pagamento> pagamentos, Usuario usuarioLogado) throws ControladorException, ErroRepositorioException {
 		
 		Map<Integer, Conta> mapNovasContas = new HashMap<Integer, Conta>();
 		
@@ -16749,8 +16749,6 @@ public Map<Integer, Conta> incluirContasParaRefaturarPagamentos(Collection<Pagam
 		if (listaContaHistoricoOrigem.size() != idsContas.size()) {
 			listaContaHistoricoOrigem.addAll(this.pesquisarContaOuContaHistorico(idsContas, Conta.class.getName()));
 		}
-		//Collection<Conta> listaContaOrigem = this.pesquisarContaOuContaHistorico(idsContas, Conta.class.getName());
-		
 		for (ContaHistorico contaHistorico : listaContaHistoricoOrigem) {
 			
 			ContaGeral contaGeral = new ContaGeral();
@@ -16768,11 +16766,11 @@ public Map<Integer, Conta> incluirContasParaRefaturarPagamentos(Collection<Pagam
 					
 					novaConta.setId(idConta);
 					novaConta.setContaGeral(contaGeral);
-					novaConta.setDataVencimentoConta(dataArrecadacao);
+					novaConta.setDataVencimentoConta(new Date());
 					novaConta.setUltimaAlteracao(new Date());
-					DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao(DebitoCreditoSituacao.INCLUIDA);
-					novaConta.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
-					
+					novaConta.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.INCLUIDA));
+					novaConta.setUsuario(usuarioLogado);
+					novaConta.setContaMotivoInclusao(new ContaMotivoInclusao(ContaMotivoInclusao.RECUPERACAO_DE_CREDITO));
 					repositorioUtil.inserir(novaConta);
 					
 					mapNovasContas.put(contaHistorico.getId(), novaConta);
@@ -16808,9 +16806,6 @@ public Map<Integer, Conta> incluirContasParaRefaturarPagamentos(Collection<Pagam
 		conta.setDataVencimentoConta(contaHistorico.getDataVencimentoConta());
 		conta.setDataValidadeConta(contaHistorico.getDataValidadeConta());
 		conta.setDataInclusao(contaHistorico.getDataInclusao());
-		conta.setDataRevisao(contaHistorico.getDataRevisao());
-		conta.setDataRetificacao(contaHistorico.getDataRetificacao());
-		conta.setDataCancelamento(contaHistorico.getDataCancelamento());
 		conta.setDataEmissao(contaHistorico.getDataEmissao());
 		conta.setLigacaoEsgotoSituacao(contaHistorico.getLigacaoEsgotoSituacao());
 		conta.setLigacaoAguaSituacao(contaHistorico.getLigacaoAguaSituacao());
@@ -16818,9 +16813,6 @@ public Map<Integer, Conta> incluirContasParaRefaturarPagamentos(Collection<Pagam
 		conta.setLocalidade(contaHistorico.getLocalidade());
 		conta.setQuadra(contaHistorico.getNumeroQuadra());
 		conta.setContaMotivoInclusao(contaHistorico.getContaMotivoInclusao());
-		conta.setContaMotivoRevisao(contaHistorico.getContaMotivoRevisao());
-		conta.setContaMotivoRetificacao(contaHistorico.getContaMotivoRetificacao());
-		conta.setContaMotivoCancelamento(contaHistorico.getContaMotivoCancelamento());
 		conta.setFaturamentoTipo(contaHistorico.getFaturamentoTipo());
 		conta.setImovelPerfil(contaHistorico.getImovelPerfil());
 		conta.setRegistroAtendimento(contaHistorico.getRegistroAtendimento());
@@ -16828,7 +16820,6 @@ public Map<Integer, Conta> incluirContasParaRefaturarPagamentos(Collection<Pagam
 		conta.setIndicadorDebitoConta(contaHistorico.getIndicadorDebitoConta());
 		conta.setFuncionarioEntrega(contaHistorico.getFuncionarioEntrega());
 		conta.setFuncionarioLeitura(contaHistorico.getFuncionarioLeitura());
-		conta.setUltimaAlteracao(new Date());
 		conta.setDebitoCreditoSituacaoAtual(contaHistorico.getDebitoCreditoSituacaoAtual());
 		conta.setDebitoCreditoSituacaoAnterior(contaHistorico.getDebitoCreditoSituacaoAnterior());
 		conta.setDocumentoTipo(contaHistorico.getDocumentoTipo());
@@ -16836,19 +16827,14 @@ public Map<Integer, Conta> incluirContasParaRefaturarPagamentos(Collection<Pagam
 		conta.setDataVencimentoOriginal(contaHistorico.getDataVencimentoOriginal());
 		conta.setParcelamento(contaHistorico.getParcelamento());
 		conta.setValorImposto(contaHistorico.getValorImposto());
-		conta.setUsuario(contaHistorico.getUsuario());
 		conta.setNumeroRetificacoes(contaHistorico.getNumeroRetificacoes());
 		conta.setNumeroFatura(contaHistorico.getNumeroFatura());
 		conta.setFaturamentoGrupo(contaHistorico.getFaturamentoGrupo());
 		conta.setNumeroLeituraAnterior(contaHistorico.getNumeroLeituraAnterior());
 		conta.setNumeroLeituraAtual(contaHistorico.getNumeroLeituraAtual());
 		conta.setQuadraConta(contaHistorico.getQuadra());
-		
-		Rota rota = getControladorMicromedicao().buscarRotaDoImovel(conta.getImovel().getId());
-		Integer anoMesReferenciaContabil = this.retornaAnoMesFaturamentoGrupoDaRota(rota.getId());
-	
-		conta.setRota(rota);
-		conta.setReferenciaContabil(anoMesReferenciaContabil);
+		conta.setRota(getControladorMicromedicao().buscarRotaDoImovel(conta.getImovel().getId()));
+		conta.setReferenciaContabil(this.retornaAnoMesFaturamentoGrupoDaRota(conta.getRota().getId()));
 		
 		return conta;
 	}

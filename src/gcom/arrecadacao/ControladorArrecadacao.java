@@ -40547,52 +40547,15 @@ public class ControladorArrecadacao implements SessionBean {
 
 	}
 
-	/**
-	 * [UC0150] Retificar Conta
-	 * 
-	 * @author Vivianne Sousa
-	 * @data 23/04/2006
-	 * 
-	 * @param idConta
-	 * @return idParcelamento
-	 */
-	public Pagamento pesquisarPagamentoDeConta(Integer idConta)
-			throws ControladorException {
+	public Pagamento pesquisarPagamentoDeConta(Integer idConta) throws ControladorException {
 
 		Pagamento pagamento = null;
-		Object[] pagamentoDaConta = null;
 
 		try {
-
-			pagamentoDaConta = repositorioArrecadacao
-					.pesquisarPagamentoDeConta(idConta);
+			pagamento = repositorioArrecadacao.pesquisarPagamentoDeConta(idConta);
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
-		}
-
-		if (pagamentoDaConta != null && !(pagamentoDaConta.length < 0)) {
-
-			pagamento = new Pagamento();
-
-			// Seta o id do pagamento
-			if (pagamentoDaConta[0] != null) {
-				pagamento.setId((Integer) pagamentoDaConta[0]);
-			}
-			// Seta o valor do pagamento
-			if (pagamentoDaConta[1] != null) {
-				pagamento.setValorPagamento((BigDecimal) pagamentoDaConta[1]);
-			}
-			/**TODO: COSANPA
-			 * Mantis 537
-			 * Retornando também a data de pagamento para que possa ser impressa na segunda via da conta
-			 * 
-			 * @author Wellington Rocha
-			 * @date 14/03/2012*/
-			//Seta a data do pagamento
-			if (pagamentoDaConta[2] != null) {
-				pagamento.setDataPagamento((Date) pagamentoDaConta[2]);
-			}
 		}
 
 		return pagamento;
@@ -56718,14 +56681,6 @@ public class ControladorArrecadacao implements SessionBean {
 
     }
 	
-	/**
-	 * TODO : COSANPA
-	 * @author Pamela Gatinho
-	 * @date 17/05/2013
-	 * 
-	 * @param idsPagamentos
-	 * @return
-	 */
 	public Collection<Pagamento> obterPagamentos(Collection<Integer> idsPagamentos) 
 		throws ControladorException {
 		Collection<Pagamento> pagamentos = null;
@@ -56739,18 +56694,6 @@ public class ControladorArrecadacao implements SessionBean {
 		return pagamentos;
 	}
 	
-	/**
-	 * TODO : COSANPA
-	 * @author Pamela Gatinho
-	 * @date 17/05/2013
-	 * 
-	 * Nova regra para classificar pagamentos em DUPLICIDADE, CANCELADO POR PARCELAMENTO
-	 * @param pagamentoSituacao
-	 * @param dataInicial
-	 * @param dataFinal
-	 * @return
-	 * @throws ControladorException 
-	 */
 	public void classificarPagamentosResolvidos(Collection<Pagamento> pagamentos, Usuario usuarioLogado,
 			CreditoTipo creditoTipo, CreditoOrigem creditoOrigem, boolean indicadorIncluirCredito) 
 		throws ControladorException {
@@ -56760,7 +56703,7 @@ public class ControladorArrecadacao implements SessionBean {
 			if (indicadorIncluirCredito) {
 				incluirCreditoPagamentosResolvidos(pagamentos, usuarioLogado, creditoTipo, creditoOrigem);
 			} else {
-				refaturarContaParaClassificarPagamentos(pagamentos, new Date());
+				refaturarContaParaClassificarPagamentos(pagamentos, usuarioLogado);
 			}
 			
 			repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(pagamentos, PagamentoSituacao.PAGAMENTO_CLASSIFICADO);
@@ -56771,27 +56714,18 @@ public class ControladorArrecadacao implements SessionBean {
 		
 	}
 	
-	/**
-	 * TODO : COSANPA
-	 * Pamela Gatinho - 26/06/2013
-	 * @param idsContas
-	 * @throws ErroRepositorioException 
-	 */
-	private void refaturarContaParaClassificarPagamentos(Collection<Pagamento> pagamentos, Date dataArrecadacao) 
-		throws ErroRepositorioException {
+	private void refaturarContaParaClassificarPagamentos(Collection<Pagamento> pagamentos, Usuario usuarioLogado) 
+		throws ControladorException {
 		
 		try{
-			Map<Integer, Conta> mapContasNovas = getControladorFaturamento().incluirContasParaRefaturarPagamentos(pagamentos, dataArrecadacao);
+			Map<Integer, Conta> mapContasNovas = getControladorFaturamento().incluirContasParaRefaturarPagamentos(pagamentos, usuarioLogado);
 			
 			Collection<Integer> idsContas = getControladorFaturamento().getListaIdContas(pagamentos);
 
-			Collection<ContaHistorico> listaContaHistoricoOrigem = getControladorFaturamento().pesquisarContaOuContaHistorico(idsContas, ContaHistorico.class.toString());
-			
 			Set<Integer> listaIdsContaHistorico = mapContasNovas.keySet();
 			
 			for (Integer idContaHistorico : listaIdsContaHistorico) {
 				Pagamento pagamento = this.pesquisarPagamentoDeConta(idContaHistorico);
-				
 				if (pagamento != null) {
 					Conta novaConta = mapContasNovas.get(idContaHistorico);
 					pagamento.setContaGeral(novaConta.getContaGeral());
@@ -56801,7 +56735,8 @@ public class ControladorArrecadacao implements SessionBean {
 				
 			}
 		} catch (Exception e) {
-			
+			logger.error("Erro ao refaturar conta para recuperação de crédito.", e);
+			throw new ControladorException("Erro ao refaturar conta para recuperação de crédito.", e);
 		}
 		
 	}
@@ -56844,6 +56779,7 @@ public class ControladorArrecadacao implements SessionBean {
 			credito.setValorCredito(pagamento.getValorPagamento());
 			credito.setGeracaoCredito(new Date());
 			credito.setUltimaAlteracao(new Date());
+			credito.setUsuario(usuarioLogado);
 			
 			LancamentoItemContabil lancamentoItemContabil = new LancamentoItemContabil(LancamentoItemContabil.OUTROS_SERVICOS_AGUA);
 			credito.setLancamentoItemContabil(lancamentoItemContabil);
@@ -56851,7 +56787,6 @@ public class ControladorArrecadacao implements SessionBean {
 			DebitoCreditoSituacao debitoCreditoSituacaoAtual =  new DebitoCreditoSituacao(DebitoCreditoSituacao.NORMAL);
 			credito.setDebitoCreditoSituacaoAtual(debitoCreditoSituacaoAtual);
 			
-			//getControladorFaturamento().inserirCreditoARealizar(imovel, credito, usuarioLogado);
 			getControladorFaturamento().gerarCreditoARealizar(credito, imovel, usuarioLogado);
 		}
 	}

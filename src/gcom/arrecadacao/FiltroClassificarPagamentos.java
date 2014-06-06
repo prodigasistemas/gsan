@@ -32,5 +32,7 @@ public class FiltroClassificarPagamentos extends Filtro implements Serializable 
 	
 	public final static String DESCRICAO_MOTIVO_CANCELAMENTO = "contaGeral.conta.contaMotivoCancelamento.descricaoMotivoCancelamentoConta";
 	
+	public final static String DATA_PAGAMENTO = "dataPagamento";
+	
 	public final static String ORDER_BY = "dataPagamento, objeto.imovel.id, objeto.valorPagamento";
 }
