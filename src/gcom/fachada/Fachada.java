@@ -52347,4 +52347,12 @@ public class Fachada {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
 	}
+	
+	public void validarImovelEmCampo(Integer idImovel) {
+		try {
+			this.getControladorMicromedicao().validarImovelEmCampo(idImovel);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
 }

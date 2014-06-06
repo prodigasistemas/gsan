@@ -11611,8 +11611,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
-	public Rota buscarRotaDoImovel(Integer matricula)
-			throws ErroRepositorioException {
+	public Rota buscarRotaDoImovel(Integer matricula) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		Rota rota = null;
 
