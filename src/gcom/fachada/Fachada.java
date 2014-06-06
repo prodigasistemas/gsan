@@ -3860,29 +3860,6 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * [UC0201] Excluir débito automático
-	 * 
-	 * @author Bruno Barros
-	 * @since 11/06/2008
-	 */
-	public void removerDebitoAutomatico(String[] ids) {
-		try {
-			this.getControladorCobranca().removerDebitoAutomatico(ids);
-		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex
-					.getParametroMensagem());
-		}
-	}
-
-	/**
-	 * [UC0156] Informar Situacao Especial Faturamento
-	 * 
-	 * @author Rhawi Dantas
-	 * @created 09/01/2006
-	 * 
-	 */
-
 	public Collection pesquisarImovelSituacaoEspecialFaturamento(String valor,
 			SituacaoEspecialFaturamentoHelper situacaoEspecialFaturamentoHelper) {
 		try {
@@ -52351,6 +52328,14 @@ public class Fachada {
 	public void validarImovelEmCampo(Integer idImovel) {
 		try {
 			this.getControladorMicromedicao().validarImovelEmCampo(idImovel);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+	
+	public void atualizarIndicadorDebitoAutomaticoComDataExclusao(Integer idImovel) {
+		try {
+			this.getControladorArrecadacao().atualizarIndicadorDebitoAutomaticoComDataExclusao(idImovel);
 		} catch (ControladorException e) {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
