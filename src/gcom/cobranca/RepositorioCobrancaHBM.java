@@ -1434,56 +1434,56 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 				idDebitoAutomatico = ((Integer) retorno).toString();
 			}
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
 		return idDebitoAutomatico;
 	}
 
-	/**
-	 * [UC0200] Inserir Débito Automático Atualiza a data da exclusão com a data
-	 * corrente em Débio Automático
-	 * 
-	 * @author Roberta Costa
-	 * @created 05/01/2006
-	 * 
-	 * @param matriculaImovel
-	 *            Matrícula do Imovel
-	 * @exception ErroRepositorioException
-	 *                Repositorio Exception
-	 */
-	public void atualizarDataExclusao(String matriculaImovel)
-			throws ErroRepositorioException {
-
+	public void atualizarDataExclusao(String matriculaImovel, Integer idAgencia) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 
-		String atualizaDataExclusao;
+		String update;
 
 		try {
-			// Atualiza em débito automático a Data Exclusão com a data corrente
-			atualizaDataExclusao = "UPDATE gcom.arrecadacao.debitoautomatico.DebitoAutomatico "
+			update = "UPDATE gcom.arrecadacao.debitoautomatico.DebitoAutomatico "
 					+ "SET deba_dtexclusao = :data, deba_tmultimaalteracao = :ultimaAlteracao "
 					+ "WHERE imov_id = :matricula "
-					/*
-					 * TODO - COSANPA - Mantis 22 - Felipe Santos
-					 * 
-					 * Alteração para atualizar o Debito Automatico com data de exclusão nula.
-					 */
-					+ "AND deba_dtexclusao is null";
+					+ "AND deba_dtexclusao is null "
+					+ "AND agen_id = :idAgencia";
 
-			session.createQuery(atualizaDataExclusao).setInteger("matricula",
-					new Integer(matriculaImovel).intValue()).setDate("data",
-					new Date()).setTimestamp("ultimaAlteracao", new Date())
-					.executeUpdate();
+			session.createQuery(update)
+					.setInteger("matricula", new Integer(matriculaImovel).intValue())
+					.setDate("data", new Date())
+					.setTimestamp("ultimaAlteracao", new Date())
+					.setInteger("idAgencia", idAgencia).executeUpdate();
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
+			HibernateUtil.closeSession(session);
+		}
+	}
+	
+	public void atualizarDataExclusao(String matriculaImovel) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+
+		String update;
+
+		try {
+			update = "UPDATE gcom.arrecadacao.debitoautomatico.DebitoAutomatico "
+					+ "SET deba_dtexclusao = :data, deba_tmultimaalteracao = :ultimaAlteracao "
+					+ "WHERE imov_id = :matricula "
+					+ "AND deba_dtexclusao is null";
+
+			session.createQuery(update)
+					.setInteger("matricula", new Integer(matriculaImovel).intValue())
+					.setDate("data", new Date())
+					.setTimestamp("ultimaAlteracao", new Date()).executeUpdate();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
 			HibernateUtil.closeSession(session);
 		}
 	}

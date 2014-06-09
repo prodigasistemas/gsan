@@ -4398,5 +4398,6 @@ public interface IControladorArrecadacao {
 		public void classificarPagamentosResolvidos(Collection<Pagamento> pagamentos, Usuario usuarioLogado,
 				CreditoTipo creditoTipo, CreditoOrigem creditoOrigem, boolean indicadorIncluirCredito) 
 			throws ControladorException;
-}	
-
+		
+		public void atualizarIndicadorDebitoAutomaticoComDataExclusao(Integer idImovel) throws ControladorException;
+}

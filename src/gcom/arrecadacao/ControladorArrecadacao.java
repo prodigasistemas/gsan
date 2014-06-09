@@ -62,6 +62,7 @@ import gcom.arrecadacao.bean.RegistroHelperCodigoZ;
 import gcom.arrecadacao.bean.RegistroHelperFichaCompensacao;
 import gcom.arrecadacao.bean.ResumoArrecadacaoRelatorioHelper;
 import gcom.arrecadacao.big.BoletimInformacoesGerenciais;
+import gcom.arrecadacao.debitoautomatico.DebitoAutomatico;
 import gcom.arrecadacao.debitoautomatico.DebitoAutomaticoMovimento;
 import gcom.arrecadacao.debitoautomatico.DebitoAutomaticoRetornoCodigo;
 import gcom.arrecadacao.debitoautomatico.FiltroDebitoAutomaticoRetornoCodigo;
@@ -1138,15 +1139,10 @@ public class ControladorArrecadacao implements SessionBean {
                                     getTotalRegistrosArquivo().trim()) != countRegistros) {
                                 throw new ControladorException("atencao.total.registros.invalido");
                             }
-    
-                            
-                            
-                            
                             
                             // [SF0002] - Inserir o movimento do arrecadador 
                             // Autor: Sávio Luiz 
                             // Data: 31/01/2006
-    
                             arrecadadorMovimento = inserirMovimentoArrecadador(
                                     registroHelperCodigoA, registroHelperCodigoZ,idTipoMovimento);
                             arrecadadoresMovimento.add(arrecadadorMovimento);
@@ -1173,8 +1169,6 @@ public class ControladorArrecadacao implements SessionBean {
     
                                 Date dataDebito = null;
     
-                                //String matriculaImovel = null;
-    
                                 // recupera a linha da coelção
                                 String linhaRegistro = (String) linhaIterator.next();
     
@@ -1183,10 +1177,6 @@ public class ControladorArrecadacao implements SessionBean {
                                 final char g = 'G';
                                 final char x = 'X';
                                 
-                                if (aux == 34){
-                                	System.out.print("PARA AQUI");
-                                }
-    
                                 // recupera o código do registro de cada linha
                                 char codigoRegistroChar = linhaRegistro.substring(0, 1).toUpperCase().charAt(0);
                                 switch (codigoRegistroChar) {
@@ -1210,13 +1200,11 @@ public class ControladorArrecadacao implements SessionBean {
                                 	break;
     
                                 case f:
-                                    
                                 	/**
                                      * [SF0004] - Processar Registro Código F 
                                      * Autor: Sávio Luiz 
                                      * Data: 31/01/2006
                                      */
-    
                                     RegistroHelperCodigoF registroHelperCodigoF = (RegistroHelperCodigoF) distribuirdadosRegistroMovimentoArrecadador(
                                             linhaRegistro, null);
     
@@ -1237,13 +1225,8 @@ public class ControladorArrecadacao implements SessionBean {
                                         
                                         
                                         if (dataDebito.after(new Date())
-                                        		// Alteracao CRC 
-                                        		// Analista: Roberto
-                                        		// Author: Rômulo Aurélio
                                         		&& (registroHelperCodigoF.getCodigoRetorno().equals("00") 
-                                        		|| registroHelperCodigoF.getCodigoRetorno().equals("31"))
-                                        		//Fim Alteracao		
-                                        ) {
+                                        		|| registroHelperCodigoF.getCodigoRetorno().equals("31"))) {
                                             descricaoOcorrenciaMovimento = "DATA DE DÉBITO/PAGAMENTO POSTERIOR A DATA CORRENTE";
                                         }
                                     }
@@ -1267,9 +1250,6 @@ public class ControladorArrecadacao implements SessionBean {
                                     if (valorDebitoInvalido) {
                                         descricaoOcorrenciaMovimento = "VALOR DEBITADO/RECEBIDO NÃO NUMÉRICO";
                                     }
-                                    // matricula do imóvel com os 8 primeiros digitos da
-                                    // identificação do cliente na empresa
-                                    //matriculaImovel = registroHelperCodigoF.getIdClienteEmpresa().substring(0, 8);
                                     
                                     // verifica se existe a matricula do imóvel na base
                                     Integer idImovelNaBase = null;
@@ -1316,33 +1296,6 @@ public class ControladorArrecadacao implements SessionBean {
                                   		}
                              		}                                                        		                                
     
-                                   
-                                    
-                                    // Comentado Para inclusão da nova forma de obter a matricula do
-                                	// imovel atravez do codigo do debito automatico.
-                                  	//
-                                	// Author:Hugo Amorim Data:22/03/2010 
-                                    
-                                    /*
-                                    // valida a matricula do imóvel
-                                    boolean matriculaImovelInvalida = Util.validarValorNaoNumerico(matriculaImovel);
-                                    if (matriculaImovelInvalida) {
-                                        descricaoOcorrenciaMovimento = "MÁTRICULA DO IMÓVEL INVÁLIDA";
-                                    } else {
-    
-                                        try {
-                                            idImovelNaBase = repositorioImovel
-                                                    .recuperarMatriculaImovel(new Integer(matriculaImovel));
-                                        } catch (ErroRepositorioException e) {
-                                            throw new ControladorException("erro.sistema", e);
-                                        }
-                                    	
-                                    	if (idImovelNaBase == null) {
-                                            descricaoOcorrenciaMovimento = "MÁTRICULA DO IMÓVEL NÃO CADASTRADA";
-                                        }
-                                    }
-                                    */
-    
                                     // caso a descricao de movimento seja igual a OK
                                     if (descricaoOcorrenciaMovimento.equals("OK")) {
     
@@ -1354,7 +1307,6 @@ public class ControladorArrecadacao implements SessionBean {
                                         if (idImovelNaBase != null) {
                                             
                                         	try {
-                                                
                                         		Imovel imovel = new Imovel();
                                                 imovel.setId(idImovelNaBase);
                                                 
@@ -1414,23 +1366,13 @@ public class ControladorArrecadacao implements SessionBean {
                                                 throw new ControladorException("erro.sistema", e);
                                             }
                                             
-                                            /*
-                                             * TODO - COSANPA - Mantis 22 - Felipe Santos - 09/02/2012
-                                             * 
-                                             * Caso o código de retorno do registro seja 30 (Cliente Sem
-                                             * Contrato de Débito Automático), exclui do sistema o debito
-                                             * automático para o cliente.
-                                             * 
-                                             */
                                             if (idImovelNaBase != null) {
-                                            	
-                                            	String[] imovelRemoverDebitoAutomatico = {idImovelNaBase.toString()};
-                                            	
                                             	if (registroHelperCodigoF.getCodigoRetorno().equals("30")) {
-                                            		this.getControladorCobranca().removerDebitoAutomatico(imovelRemoverDebitoAutomatico);
+                                            		this.getControladorCobranca().removerDebitoAutomatico(idImovelNaBase.toString(), 
+                                            				registroHelperCodigoA.getCodigoBanco(), registroHelperCodigoF.getAgenciaDebito(),
+                                            				registroHelperCodigoF.getIdClienteBanco(), new Date());
                                             	}
                                             }
-                                            // fim da alteração
                                         }
     
                                         
@@ -3878,9 +3820,8 @@ public class ControladorArrecadacao implements SessionBean {
          			matriculaImovel = codigoDebitoAutomatico;
          		}
          		
-            	// processar exclusão
-                descricaoOcorrenciaMovimento = this.getControladorCobranca()
-                .removerDebitoAutomatico(matriculaImovel.toString(), codigoBanco, codigoAgencia, identificacaoCliente, dataExcluso);
+                descricaoOcorrenciaMovimento = this.getControladorCobranca().removerDebitoAutomatico(matriculaImovel.toString(),
+                		codigoBanco, codigoAgencia, identificacaoCliente, dataExcluso);
             } 
             else if (registroHelperCodigoB.getCodigoMovimento().equals(RegistroHelperCodigoB.INCLUSAO_DEBITO_AUTOMATICO)) {
                 
@@ -56853,6 +56794,19 @@ public class ControladorArrecadacao implements SessionBean {
 			
 			//getControladorFaturamento().inserirCreditoARealizar(imovel, credito, usuarioLogado);
 			getControladorFaturamento().gerarCreditoARealizar(credito, imovel, usuarioLogado);
+		}
+	}
+	
+	public void atualizarIndicadorDebitoAutomaticoComDataExclusao(Integer idImovel) throws ControladorException {
+		try {
+			Collection<DebitoAutomatico> colecaoDebitoAutomatico = repositorioArrecadacao.pesquisarDebitoAutomaticoSemDataExclusao(idImovel);
+
+			if (colecaoDebitoAutomatico == null || colecaoDebitoAutomatico.isEmpty()) {
+				repositorioCobranca.atualizarIndicadorDebitoAutomatico(idImovel.toString(), Integer.valueOf(ConstantesSistema.NAO));
+			}
+		} catch (ErroRepositorioException ex) {
+			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", ex);
 		}
 	}
 }

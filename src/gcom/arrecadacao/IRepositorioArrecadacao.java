@@ -11,12 +11,12 @@ import gcom.arrecadacao.bean.MovimentoArrecadadoresPorNSAHelper;
 import gcom.arrecadacao.bean.PesquisarAnaliseArrecadacaoHelper;
 import gcom.arrecadacao.bean.PesquisarAnaliseAvisosBancariosHelper;
 import gcom.arrecadacao.bean.PesquisarAvisoBancarioPorContaCorrenteHelper;
+import gcom.arrecadacao.debitoautomatico.DebitoAutomatico;
 import gcom.arrecadacao.pagamento.FiltroPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.arrecadacao.pagamento.PagamentoCartaoDebito;
 import gcom.arrecadacao.pagamento.PagamentoHistorico;
-import gcom.arrecadacao.pagamento.PagamentoSituacao;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteEndereco;
 import gcom.cadastro.cliente.ClienteImovel;
@@ -24,7 +24,6 @@ import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
 import gcom.cadastro.imovel.Imovel;
-import gcom.cadastro.localidade.Localidade;
 import gcom.cobranca.CobrancaDocumento;
 import gcom.cobranca.CobrancaDocumentoItem;
 import gcom.cobranca.DocumentoTipo;
@@ -7060,12 +7059,7 @@ public interface IRepositorioArrecadacao {
 	public Collection<Integer> pesquisarIdsLocalidadeComGuiasPagamentoNaoPagas(Integer financiamentoTipoServico, 
 			Date dataVencimentoLimite) throws ErroRepositorioException;
 	
-	/**
-	 * TODO : COSANPA
-	 * @author Pamela Gatinho
-	 * @date 17/05/2013
-	 * 
-	 * Método para pesquisar pagamentos por ids passados como parâmetro
-	 */
 	public Collection<Pagamento> obterPagamentos(Collection<Integer> idsPagamentos) throws ErroRepositorioException;
+	
+	public Collection<DebitoAutomatico> pesquisarDebitoAutomaticoSemDataExclusao(Integer idImovel) throws ErroRepositorioException;
 }

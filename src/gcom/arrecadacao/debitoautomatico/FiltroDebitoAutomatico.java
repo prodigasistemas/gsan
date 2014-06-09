@@ -4,4 +4,4 @@ import gcom.util.filtro.Filtro;
 	private static final long serialVersionUID = 1L;
 	public FiltroDebitoAutomatico() {}
 	public FiltroDebitoAutomatico(String campoOrderBy) {		this.campoOrderBy = campoOrderBy;	}
-	public final static String ID = "id";    public final static String BANCO_ID = "agencia.banco.id";    public final static String AGENCIA_CODIGO = "agencia.codigoAgencia";    public final static String IMOVEL_MATRICULA = "imovel.id";	    public final static String DATA_EXCLUSAO = "dataExclusao";}
+	public final static String ID = "id";    public final static String BANCO_ID = "agencia.banco.id";    public final static String AGENCIA_CODIGO = "agencia.codigoAgencia";    public final static String IMOVEL = "imovel";    public final static String IMOVEL_MATRICULA = "imovel.id";	    public final static String DATA_EXCLUSAO = "dataExclusao";}

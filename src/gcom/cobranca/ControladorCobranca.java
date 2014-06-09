@@ -68,6 +68,7 @@ import gcom.cadastro.EnvioEmail;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.RepositorioCadastroHBM;
 import gcom.cadastro.cliente.Cliente;
+import gcom.cadastro.cliente.ClienteConta;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteGuiaPagamento;
 import gcom.cadastro.cliente.ClienteImovel;
@@ -257,7 +258,6 @@ import gcom.faturamento.debito.FiltroDebitoTipo;
 import gcom.financeiro.FinanciamentoTipo;
 import gcom.gerencial.bean.InformarDadosGeracaoResumoAcaoConsultaEventualHelper;
 import gcom.gerencial.bean.InformarDadosGeracaoResumoAcaoConsultaHelper;
-import gcom.gerencial.cobranca.bean.ResumoPendenciaContasGerenciaHelper;
 import gcom.gui.ActionServletException;
 import gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoEncerrarOSHelper;
 import gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoGerarOSHelper;
@@ -356,7 +356,7 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 import gcom.util.filtro.ParametroSimplesIn;
-import gcom.cadastro.cliente.ClienteConta;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -5647,73 +5647,17 @@ public class ControladorCobranca implements SessionBean {
 		return descricaoOcorrencia;
 	}
 	
-	/**
-	 * [UC0201] Remover Débito Automático
-	 * 
-	 * @author Bruno Barros
-	 * @created 11/06/2008
-	 * 
-	 * @param matriculaImovel
-	 *            Matrícula do Imovel
-	 */
-	public void removerDebitoAutomatico( String[] ids )
-			throws ControladorException {
-		try {
-			
-			for ( int i = 0; i < ids.length; i++ ){			
-				// Atualiza a data da exclusão com a data
-				// corrente em Débio Automático
-				repositorioCobranca
-						.atualizarDataExclusao(ids[i]);
-	
-				// Atualiza o indicador de débio automático
-				// em Imóvel
-				Integer indicadorDebito = 2;
-				repositorioCobranca
-						.atualizarIndicadorDebitoAutomatico(
-								ids[i],
-								indicadorDebito);
-			}
-		} catch (ErroRepositorioException ex) {
-			sessionContext.setRollbackOnly();
-			throw new ControladorException("erro.sistema", ex);
-		}
-	}	
-
-	/**
-	 * [UC0201] Remover Débito Automático
-	 * 
-	 * @author
-	 * @created 09/01/2006
-	 * 
-	 * @param matriculaImovel
-	 *            Matrícula do Imovel
-	 * @param codigoBanco
-	 *            Código do Banco
-	 * @param codigoAgencia
-	 *            Código da Agência
-	 * @param identificacaoCliente
-	 *            Identificação do Cliente no Banco
-	 * @param dataOpcao
-	 *            Data da Opção
-	 * @throws ControladorException
-	 *             Controlador Exception
-	 */
 	public String removerDebitoAutomatico(String matriculaImovel,
 			String codigoBanco, String codigoAgencia,
-			String identificacaoCliente, Date dataOpcao)
-			throws ControladorException {
+			String identificacaoCliente, Date dataOpcao) throws ControladorException {
 
-		// Variável de mensagem de retorno
 		String descricaoOcorrencia = "OK";
 
 		try {
-			// [FS0001] - Verificar existência da matrícula do imóvel
 			Integer existeImovel = null;
+			
 			try {
-
-				existeImovel = repositorioImovel
-						.verificarExistenciaImovel(new Integer(matriculaImovel));
+				existeImovel = repositorioImovel.verificarExistenciaImovel(new Integer(matriculaImovel));
 			} catch (NumberFormatException e) {
 				existeImovel = null;
 			}
@@ -5721,11 +5665,10 @@ public class ControladorCobranca implements SessionBean {
 			if (existeImovel == null) {
 				descricaoOcorrencia = "IDENTIFICAÇÃO DO IMÓVEL NÃO CADASTRADA";
 			} else {
-				// [FS0002] - Verificar existência do Banco
 				Integer existeBanco = null;
+				
 				try {
-					existeBanco = repositorioarrecadacao
-							.verificarExistenciaBanco(new Integer(codigoBanco));
+					existeBanco = repositorioarrecadacao.verificarExistenciaBanco(new Integer(codigoBanco));
 				} catch (NumberFormatException e) {
 					existeBanco = null;
 				}
@@ -5733,52 +5676,32 @@ public class ControladorCobranca implements SessionBean {
 				if (existeBanco == null) {
 					descricaoOcorrencia = "BANCO NÃO CADASTRADO";
 				} else {
-					// [FS0003] - Verificar existência do Agência
 					Integer existeAgencia = null;
 
-					existeAgencia = repositorioarrecadacao
-							.verificarExistenciaAgencia(codigoAgencia,
-									new Integer(codigoBanco));
+					existeAgencia = repositorioarrecadacao.verificarExistenciaAgencia(codigoAgencia, new Integer(codigoBanco));
 
 					if (existeAgencia == null) {
 						descricaoOcorrencia = "AGÊNCIA NÃO CADASTRADA";
 					} else {
-						// Verifica se o Imóvel já é Débito Automático
-						String idAgenciaDebitoAutomatico = repositorioCobranca
-								.verificarDebitoAutomatico(matriculaImovel);
+						String idAgenciaDebitoAutomatico = repositorioCobranca.verificarDebitoAutomatico(matriculaImovel);
 
 						if (idAgenciaDebitoAutomatico == null) {
 							descricaoOcorrencia = "IMÓVEL NÃO É DÉBITO AUTOMÁTICO";
 						} else {
-
-							// Insere o Imóvel em Débito Automático
-							String idAgencia = repositorioCobranca
-									.verificarDebitoAutomaticoBancoAgencia(
-											codigoBanco, codigoAgencia);
+							String idAgencia = repositorioCobranca.verificarDebitoAutomaticoBancoAgencia(codigoBanco, codigoAgencia);
+							
 							if (!idAgenciaDebitoAutomatico.equals(idAgencia)) {
 								descricaoOcorrencia = "IMÓVEL É DÉBITO AUTOMÁTICO DE OUTRO BANCO/AGÊNCIA";
 							} else {
-								// Verifica a data de Opção posterior já
-								// informanda
-								String resultadoDataOpcao = repositorioCobranca
-										.verificarDataOpcaoExclusao(
-												matriculaImovel, dataOpcao,
-												identificacaoCliente);
+								String resultadoDataOpcao = repositorioCobranca.verificarDataOpcaoExclusao(
+										matriculaImovel, dataOpcao, identificacaoCliente);
+								
 								if (resultadoDataOpcao != null) {
 									descricaoOcorrencia = "DATA OPÇÃO DO DEB. AUT. MAIOR QUE DATA INFORMADA";
 								} else {
-									// Atualiza a data da exclusão com a data
-									// corrente em Débio Automático
-									repositorioCobranca
-											.atualizarDataExclusao(matriculaImovel);
-
-									// Atualiza o indicador de débio automático
-									// em Imóvel
-									Integer indicadorDebito = 2;
-									repositorioCobranca
-											.atualizarIndicadorDebitoAutomatico(
-													matriculaImovel,
-													indicadorDebito);
+									repositorioCobranca.atualizarDataExclusao(matriculaImovel, Integer.valueOf(idAgencia));
+									
+									getControladorArrecadacao().atualizarIndicadorDebitoAutomaticoComDataExclusao(Integer.valueOf(matriculaImovel));
 								}
 							}
 						}
@@ -76607,5 +76530,4 @@ public class ControladorCobranca implements SessionBean {
 
 		return colecaoImoveis;
 	}
-	
 }

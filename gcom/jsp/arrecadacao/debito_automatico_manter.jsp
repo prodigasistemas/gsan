@@ -160,7 +160,7 @@ function facilitador(objeto){
 												<%}%>
 													<td width="7%">
 													<div align="center"><input type="checkbox"
-														name="idRegistrosRemocao" value="${manterDebitoAutomaticoHelper.matriculaImovel}"></div>
+														name="idRegistrosRemocao" value="${manterDebitoAutomaticoHelper.idDebitoAutomatico}"></div>
 													</td>
 													<td width="12%" align="center">${manterDebitoAutomaticoHelper.matriculaImovelFormatada}</td>
 													<td width="50%" align="center">${manterDebitoAutomaticoHelper.nomeCliente}</td>
