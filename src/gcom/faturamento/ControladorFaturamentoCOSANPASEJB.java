@@ -760,14 +760,14 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	
 	private StringBuilder preencherDadosRateioAguaEsgoto(EmitirContaHelper emitirConta, StringBuilder contaTxt) {
 		
-		if (emitirConta.getValorRateioAgua() != null) {
+		if (emitirConta.getValorRateioAgua() != null && emitirConta.getValorRateioAgua().compareTo(BigDecimal.ZERO) == 1) {
 			contaTxt.append(Util.completaString("VALOR RATEIO ÁGUA", 50));
 			contaTxt.append(Util.completaString(emitirConta.getValorRateioAgua() + "", 13));
 		} else {
 			contaTxt.append(Util.completaString(" ", 63));
 		}
 		
-		if (emitirConta.getValorRateioEsgoto() != null) {
+		if (emitirConta.getValorRateioEsgoto() != null && emitirConta.getValorRateioEsgoto().compareTo(BigDecimal.ZERO) == 1) {
 			contaTxt.append(Util.completaString("VALOR RATEIO ESGOTO", 50));
 			contaTxt.append(Util.completaString(emitirConta.getValorRateioEsgoto() + "", 13));
 		} else {
@@ -833,10 +833,15 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	}
 
 	private StringBuilder preencherCodigoBarrasConta(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) throws ControladorException {
-		Conta conta = new Conta(emitirContaHelper.getValorAgua(), emitirContaHelper.getValorEsgoto(), emitirContaHelper.getValorCreditos(),
-				emitirContaHelper.getDebitos(), emitirContaHelper.getValorImpostos());
-
+		Conta conta = new Conta(emitirContaHelper.getValorAgua(), emitirContaHelper.getValorEsgoto(), emitirContaHelper.getValorCreditos(), emitirContaHelper.getDebitos(), emitirContaHelper.getValorImpostos());
+		
+		if (emitirContaHelper.getValorRateioAgua() != null)
+			conta.setValorRateioAgua(emitirContaHelper.getValorRateioAgua());
+		if (emitirContaHelper.getValorRateioEsgoto() != null)
+			conta.setValorRateioEsgoto(emitirContaHelper.getValorRateioEsgoto());		
+		
 		BigDecimal valorConta = conta.getValorTotalContaBigDecimal();
+		
 		emitirContaHelper.setValorConta(valorConta);
 
 		String anoMesString = "" + emitirContaHelper.getAmReferencia();
