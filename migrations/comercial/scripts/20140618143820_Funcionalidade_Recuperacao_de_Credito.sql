@@ -1,4 +1,4 @@
--- // Add operacao - Aprovar imoveis em lote
+-- // Funcionalidade Recuperacao de Credito
 -- Migration SQL that makes the change goes here.
 
 insert into seguranca.funcionalidade  (fncd_id,modu_id,fncd_dsfuncionalidade,fncd_tmultimaalteracao,fncd_dscaminhomenu,fncd_dscaminhourl,fncd_icpontoentrada,fncd_dsabreviado,fncd_nnordemmenu,fncd_icnovajanela,fncd_icolap,fncg_id) 
@@ -49,6 +49,7 @@ now());
 
 
 insert into faturamento.credito_origem values (7, 'VALORES COBRADOS INDEVIDAMENTE', 'VALCOBIN', 1, now()); 
+insert into faturamento.conta_motivo_inclusao values (46, 'RECUPERACAO DE CREDITO', 1, now());
 
 -- //@UNDO
 -- SQL to undo the change goes here.
@@ -83,3 +84,4 @@ delete from seguranca.funcionalidade where fncd_dsfuncionalidade like 'Recuperar
 delete from seguranca.funcionalidade where fncd_dsfuncionalidade like 'Filtrar Pagamentos Recuperacao de Credito';
 
 delete from faturamento.credito_origem where crog_id = 7;
+delete from faturamento.conta_motivo_inclusao where cmic_id = 46;
