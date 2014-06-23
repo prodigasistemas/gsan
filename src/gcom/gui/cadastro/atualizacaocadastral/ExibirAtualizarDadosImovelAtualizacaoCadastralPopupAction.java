@@ -1,5 +1,6 @@
 package gcom.gui.cadastro.atualizacaocadastral;
 
+import gcom.atualizacaocadastral.ImagemRetorno;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.SituacaoAguaHelper;
@@ -19,6 +20,7 @@ import gcom.util.AtualizacaoCadastralUtil;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -92,15 +94,19 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 				}
 			}
 			
+			Collection<ImagemRetorno> colecaoImagens = fachada.pesquisarImagensRetornoPorIdImovel(Integer.parseInt(idImovel));
+			if (!colecaoImagens.isEmpty()) {
+				sessao.setAttribute("colecaoImagens", colecaoImagens);
+			}
+			
 			Map<String, List<DadosTabelaAtualizacaoCadastralHelper>> map = fachada.consultarDadosTabelaColunaAtualizacaoCadastral(
 					null, null, Integer.valueOf(idImovel), null, null);
 			
-			Collection<DadosTabelaAtualizacaoCadastralHelper> atualizacoes = new AtualizacaoCadastralUtil().linhasAtualizacaoCadastral(
-					resumoImovel, map);
+			Collection<DadosTabelaAtualizacaoCadastralHelper> atualizacoes = new AtualizacaoCadastralUtil().linhasAtualizacaoCadastral(resumoImovel, map);
 			
 			if (!atualizacoes.isEmpty()) {
 				sessao.setAttribute("colecaoDadosTabelaAtualizacaoCadastral", atualizacoes);
-			}
+			}		
 			
 			ImovelControleAtualizacaoCadastral controle = fachada.pesquisarImovelControleAtualizacao(Integer.valueOf(idImovel));
 			

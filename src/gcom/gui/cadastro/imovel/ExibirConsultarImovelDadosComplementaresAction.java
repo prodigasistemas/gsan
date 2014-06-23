@@ -5,10 +5,12 @@ import gcom.arrecadacao.bean.ContratoDemandaHelper;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.FiltroImovelCadastroOcorrencia;
 import gcom.cadastro.imovel.FiltroImovelEloAnormalidade;
+import gcom.cadastro.imovel.FiltroImovelImagem;
 import gcom.cadastro.imovel.FiltroImovelRamoAtividade;
 import gcom.cadastro.imovel.Imovel;
 import gcom.cadastro.imovel.ImovelCadastroOcorrencia;
 import gcom.cadastro.imovel.ImovelEloAnormalidade;
+import gcom.cadastro.imovel.ImovelImagem;
 import gcom.cadastro.imovel.ImovelRamoAtividade;
 import gcom.fachada.Fachada;
 import gcom.faturamento.FiltroContratoDemanda;
@@ -219,6 +221,7 @@ public class ExibirConsultarImovelDadosComplementaresAction extends GcomAction {
     	
     	setarColecaoMatriculasAssociadas(imovel,sessao);
     	
+    	pesquisarImovelImagens(imovel, sessao);
 	}
 
 	/**
@@ -516,7 +519,7 @@ public class ExibirConsultarImovelDadosComplementaresAction extends GcomAction {
 	 *@since 06/01/2011
 	 *@author Mariana Victor
 	 */
-	private void setarColecaoMatriculasAssociadas(Imovel imovel,HttpSession sessao) {
+	private void setarColecaoMatriculasAssociadas(Imovel imovel, HttpSession sessao) {
 		FiltroImovel filtroImovel = new FiltroImovel();
 		filtroImovel.adicionarParametro(
 				new ParametroSimples(FiltroImovel.ID, imovel.getId()));
@@ -537,4 +540,11 @@ public class ExibirConsultarImovelDadosComplementaresAction extends GcomAction {
 		
 	}
 	
+	@SuppressWarnings("unchecked")
+	private void pesquisarImovelImagens(Imovel imovel, HttpSession sessao) {
+		FiltroImovelImagem filtro = new FiltroImovelImagem();
+		filtro.adicionarParametro(new ParametroSimples(FiltroImovelImagem.IMOVEL_ID, imovel.getId()));
+		
+		sessao.setAttribute("colecaoImagens", Fachada.getInstancia().pesquisar(filtro, ImovelImagem.class.getName()));
+	}
 }
