@@ -731,6 +731,8 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 		ImovelControleAtualizacaoCadastral imovelControle = repositorioAtualizacaoCadastral.obterImovelControlePorImovelRetorno(idImovelRetorno);
 		
 		imovelControle.setDataProcessamento(new Date());
+		imovelControle.setSituacaoAtualizacaoCadastral(new SituacaoAtualizacaoCadastral(SituacaoAtualizacaoCadastral.ATUALIZADO));
+		
 		getControladorUtil().atualizar(imovelControle);
 	}
 
