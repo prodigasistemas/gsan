@@ -923,8 +923,7 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		return retorno;
 	}
 
-	public Collection pesquisarDadosFichaFiscalizacaoCadastral(
-			List<Integer> listaIdImoveis) throws ErroRepositorioException {
+	public Collection pesquisarDadosFichaFiscalizacaoCadastral(List<Integer> listaIdImoveis) throws ErroRepositorioException {
 		
 		Collection retorno = null;
 		Session session = HibernateUtil.getSession();

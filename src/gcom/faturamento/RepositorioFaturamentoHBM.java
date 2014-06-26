@@ -9744,17 +9744,6 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		return retorno;
 	}
 
-	/**
-	 * Método que retorna as contas para impressao
-	 * 
-	 * Pesquisar Contas Emitir Caern
-	 * 
-	 * @author Tiago Moreno
-	 * @date 05/05/2007
-	 * 
-	 * 
-	 * @throws ErroRepositorioException
-	 */
 	public Collection pesquisarContasEmitirCOSANPA(Integer idTipoConta,
 			Integer idEmpresa, Integer numeroPaginas, Integer anoMesReferencia,
 			Integer idFaturamentoGrupo) throws ErroRepositorioException {
@@ -9797,7 +9786,19 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "ligacaoEsgotoSituacao.lest_dsligacaoesgotosituacao as descricaoLigEsgotoSit, "// 29
 					+ "cnt.cnta_pcesgoto as percentualEsgoto, "// 30
 					+ "contaImpressao.clie_idresponsavel as idClienteResponsavel, "// 31
-					+ "imovel.imov_nmimovel as nomeImovel "// 32
+					+ "imovel.imov_nmimovel as nomeImovel, "// 32
+					+ "rota.rota_cdrota as codigoRota, "// 33
+					+ "imovel.imov_nnsequencialrota as sequencialRota, "// 34
+					+ "cnt.cnta_idorigem as origem, "// 35
+					+ "cnt.dcst_idatual as debitoCreditoSituacaoAtual, "// 36
+					+ "func.func_id as idFuncionario, "// 37
+					+ "func.func_nmfuncionario as nomeFuncionario, "// 38
+					+ "contaImpressao.cttp_id as tipoConta, "// 39
+					+ "imovel.rota_identrega as rotaEntrega, "// 40
+					+ "imovel.imov_nnsequencialrotaentrega as seqRotaEntrega, "// 41
+					+ "imovel.imov_nnquadraentrega as numeroQuadraEntrega, "// 42
+					+ "cnt.cnta_vlrateioagua as valorRateioAgua, " //43
+					+ "cnt.cnta_vlrateioesgoto as valorRateioEsgoto " //44
 					+ "from cadastro.cliente_conta cliCnt "
 					+ "inner join faturamento.conta cnt on cliCnt.cnta_id=cnt.cnta_id "
 					+ "inner join faturamento.conta_impressao contaImpressao on cnt.cnta_id = contaImpressao.cnta_id "
@@ -9814,80 +9815,74 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "inner join cadastro.imovel imovel on cnt.imov_id=imovel.imov_id "
 					+ "inner join cadastro.cliente cli on cliCnt.clie_id=cli.clie_id "
 					+ "inner join cadastro.quadra_face quadraFace on imovel.qdfa_id=quadraFace.qdfa_id "
+					+ "left join cadastro.funcionario func on imovel.func_id=func.func_id "
 					+ "where "
 					+ "contaImpressao.cnti_amreferenciaconta = :referencia AND "
 					+ "cnt.cnta_tmultimaalteracao > :data AND "
 					+ "contaImpressao.ftgr_id = :idFaturamentoGrupoParms AND "
-//					+ "cliCnt.crtp_id = :idUsuario AND imovel.icte_id not in (4,9) "
-					
-					/*
-					 * TODO - COSANPA - Felipe Santos
-					 * 
-					 * Imprimir segunda via de conta com o cliente responsável pela conta
-					 */
 					+ "cliCnt.clct_icnomeconta = :indicadorNomeConta AND "
-					
 					+ "imovel.icte_id not in (4,9) "
-					 /**
-					* TODO : COSANPA
-					* Pamela Gatinho - 02/09/2013
-					* Correção para imprimir somente contar as sittuações NORMAL e RETIFICADA,
-					* pois estava imprimindo contas na situação CANCELADA POR RETIFICAÇÃO
-					*/
 					+ " AND cnt.dcst_idatual in (" + DebitoCreditoSituacao.NORMAL + "," + DebitoCreditoSituacao.RETIFICADA + ") "
-
 					+ "order by  loc.loca_id,cnt.cnta_cdsetorcomercial,"
 					+ "rota.rota_cdrota, quadraFace.qdfa_nnfacequadra, imovel.imov_nnlote";
 
-			retorno = session.createSQLQuery(consulta).addScalar("idConta",
-					Hibernate.INTEGER).addScalar("nomeCliente",
-					Hibernate.STRING).addScalar("dataVencimentoConta",
-					Hibernate.DATE)
-					.addScalar("amReferencia", Hibernate.INTEGER).addScalar(
-							"digitoVerificador", Hibernate.SHORT).addScalar(
-							"codigoSetorComercial", Hibernate.INTEGER)
-					.addScalar("numeroQuadra", Hibernate.INTEGER).addScalar(
-							"lote", Hibernate.SHORT).addScalar("sublote",
-							Hibernate.SHORT).addScalar("consumoAgua",
-							Hibernate.INTEGER).addScalar("consumoEsgoto",
-							Hibernate.INTEGER).addScalar("valorAgua",
-							Hibernate.BIG_DECIMAL).addScalar("valorEsgoto",
-							Hibernate.BIG_DECIMAL).addScalar("debitos",
-							Hibernate.BIG_DECIMAL).addScalar("valorCreditos",
-							Hibernate.BIG_DECIMAL).addScalar("valorImpostos",
-							Hibernate.BIG_DECIMAL).addScalar("dataValidade",
-							Hibernate.DATE).addScalar("idImovel",
-							Hibernate.INTEGER).addScalar("idLocalidade",
-							Hibernate.INTEGER).addScalar("idGerenciaRegional",
-							Hibernate.INTEGER).addScalar("nomeGerencia",
-							Hibernate.STRING).addScalar(
-							"idLigacaoAguaSituacao", Hibernate.INTEGER)
+			retorno = session.createSQLQuery(consulta)
+					.addScalar("idConta", Hibernate.INTEGER)
+					.addScalar("nomeCliente",Hibernate.STRING)
+					.addScalar("dataVencimentoConta",Hibernate.DATE)
+					.addScalar("amReferencia", Hibernate.INTEGER)
+					.addScalar("digitoVerificador", Hibernate.SHORT)
+					.addScalar("codigoSetorComercial", Hibernate.INTEGER)
+					.addScalar("numeroQuadra", Hibernate.INTEGER)
+					.addScalar("lote", Hibernate.SHORT)
+					.addScalar("sublote",Hibernate.SHORT)
+					.addScalar("consumoAgua",Hibernate.INTEGER)
+					.addScalar("consumoEsgoto",Hibernate.INTEGER)
+					.addScalar("valorAgua",Hibernate.BIG_DECIMAL)
+					.addScalar("valorEsgoto",Hibernate.BIG_DECIMAL)
+					.addScalar("debitos",Hibernate.BIG_DECIMAL)
+					.addScalar("valorCreditos",Hibernate.BIG_DECIMAL)
+					.addScalar("valorImpostos",Hibernate.BIG_DECIMAL)
+					.addScalar("dataValidade",Hibernate.DATE)
+					.addScalar("idImovel",Hibernate.INTEGER)
+					.addScalar("idLocalidade",Hibernate.INTEGER)
+					.addScalar("idGerenciaRegional",Hibernate.INTEGER)
+					.addScalar("nomeGerencia",Hibernate.STRING)
+					.addScalar("idLigacaoAguaSituacao", Hibernate.INTEGER)
 					.addScalar("idLigacaoEsgotoSituacao", Hibernate.INTEGER)
-					.addScalar("idImovelPrefil", Hibernate.INTEGER).addScalar(
-							"idSetorComercial", Hibernate.INTEGER).addScalar(
-							"idFaturamentoGrupo", Hibernate.INTEGER).addScalar(
-							"idEmpresa", Hibernate.INTEGER).addScalar(
-							"descricaoLocalidade", Hibernate.STRING).addScalar(
-							"descricaoLigAguaSit", Hibernate.STRING).addScalar(
-							"descricaoLigEsgotoSit", Hibernate.STRING)
+					.addScalar("idImovelPrefil", Hibernate.INTEGER)
+					.addScalar("idSetorComercial", Hibernate.INTEGER)
+					.addScalar("idFaturamentoGrupo", Hibernate.INTEGER)
+					.addScalar("idEmpresa", Hibernate.INTEGER)
+					.addScalar("descricaoLocalidade", Hibernate.STRING)
+					.addScalar("descricaoLigAguaSit", Hibernate.STRING)
+					.addScalar("descricaoLigEsgotoSit", Hibernate.STRING)
 					.addScalar("percentualEsgoto", Hibernate.BIG_DECIMAL)
 					.addScalar("idClienteResponsavel", Hibernate.INTEGER)
-					.addScalar("nomeImovel", Hibernate.STRING).setDate("data",
-							Util.criarData(16, 05, 2007))
-//					.setInteger("idUsuario", ClienteRelacaoTipo.USUARIO)
+					.addScalar("nomeImovel", Hibernate.STRING)
+					.addScalar("codigoRota", Hibernate.SHORT)
+					.addScalar("sequencialRota", Hibernate.INTEGER)
+					.addScalar("origem", Hibernate.INTEGER)
+					.addScalar("debitoCreditoSituacaoAtual", Hibernate.INTEGER)
+					.addScalar("idFuncionario", Hibernate.INTEGER)
+					.addScalar("nomeFuncionario", Hibernate.STRING)
+					.addScalar("tipoConta", Hibernate.INTEGER)
+					.addScalar("rotaEntrega", Hibernate.INTEGER)
+					.addScalar("seqRotaEntrega", Hibernate.INTEGER)
+					.addScalar("numeroQuadraEntrega", Hibernate.INTEGER)
+					.addScalar("valorRateioAgua",Hibernate.BIG_DECIMAL)
+					.addScalar("valorRateioEsgoto",Hibernate.BIG_DECIMAL)
+					.setDate("data",Util.criarData(16, 05, 2007))
 					.setInteger("indicadorNomeConta", ConstantesSistema.SIM)
-					.setInteger("referencia", anoMesReferencia).setInteger(
-							"idFaturamentoGrupoParms", idFaturamentoGrupo)
+					.setInteger("referencia", anoMesReferencia)
+					.setInteger("idFaturamentoGrupoParms", idFaturamentoGrupo)
 					.setMaxResults(1000).setFirstResult(numeroPaginas).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
-
 		return retorno;
 	}
 

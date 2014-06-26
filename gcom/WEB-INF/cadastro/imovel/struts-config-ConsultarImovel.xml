@@ -141,6 +141,15 @@
 				path="/jsp/cadastro/ocorrencia_cadastro_foto.jsp" />
 		</action>
 		
+		<action 
+			type="gcom.gui.cadastro.imovel.ExibirImovelImagemAction"
+			path="/exibirImovelImagemAction"
+			validate="false"
+			scope="session" >
+			<forward name="/exibirImovelImagemAction"
+				path="/jsp/cadastro/imovel/exibir_imovel_imagem.jsp" />
+		</action>
+		
 		<!-- PopUp Atualizar dados Cadastrais de Clientes - PROMAIS -->		
 		<action 
 		    name="ExibirAtualizarDadosClientesPopupActionForm"

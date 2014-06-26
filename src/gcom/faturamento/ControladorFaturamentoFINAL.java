@@ -32792,10 +32792,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 												// recuperados
 												// anteriormente
 												obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-														emitirContaHelper
-																.getIdImovel(),
-														emitirContaHelper
-																.getAmReferencia(),
+														emitirContaHelper,
 														1, tipoLigacao,
 														tipoMedicao);
 												contaTxt.append(obterDadosConsumoMedicaoAnterior);
@@ -32820,10 +32817,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 												// recuperados
 												// anteriormente
 												obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-														emitirContaHelper
-																.getIdImovel(),
-														emitirContaHelper
-																.getAmReferencia(),
+														emitirContaHelper,
 														4, tipoLigacao,
 														tipoMedicao);
 												contaTxt.append(obterDadosConsumoMedicaoAnterior);
@@ -32862,10 +32856,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 												// recuperados
 												// anteriormente
 												obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-														emitirContaHelper
-																.getIdImovel(),
-														emitirContaHelper
-																.getAmReferencia(),
+														emitirContaHelper,
 														2, tipoLigacao,
 														tipoMedicao);
 												contaTxt.append(obterDadosConsumoMedicaoAnterior);
@@ -32890,10 +32881,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 												// recuperados
 												// anteriormente
 												obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-														emitirContaHelper
-																.getIdImovel(),
-														emitirContaHelper
-																.getAmReferencia(),
+														emitirContaHelper,
 														5, tipoLigacao,
 														tipoMedicao);
 												contaTxt.append(obterDadosConsumoMedicaoAnterior);
@@ -33083,10 +33071,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 												// recuperados
 												// anteriormente
 												obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-														emitirContaHelper
-																.getIdImovel(),
-														emitirContaHelper
-																.getAmReferencia(),
+														emitirContaHelper,
 														3, tipoLigacao,
 														tipoMedicao);
 												contaTxt.append(obterDadosConsumoMedicaoAnterior);
@@ -33111,10 +33096,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 												// recuperados
 												// anteriormente
 												obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-														emitirContaHelper
-																.getIdImovel(),
-														emitirContaHelper
-																.getAmReferencia(),
+														emitirContaHelper,
 														6, tipoLigacao,
 														tipoMedicao);
 												contaTxt.append(obterDadosConsumoMedicaoAnterior);
@@ -35426,15 +35408,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @param colecaoConta
 	 * @throws ControladorException
 	 */
-	public StringBuilder obterDadosConsumoAnterior(Integer idImovel,
-			int anoMes, int qtdMeses, Integer tipoLigacao, Integer tipoMedicao)
+	public StringBuilder obterDadosConsumoAnterior(EmitirContaHelper emitirConta, int qtdMeses, Integer tipoLigacao, Integer tipoMedicao)
 			throws ControladorException {
 
 		StringBuilder dadosConsumoAnterior = new StringBuilder();
 
-		int anoMesSubtraido = Util.subtrairMesDoAnoMes(anoMes, qtdMeses);
-		String mesAnoFormatado = Util.formatarAnoMesParaMesAno(anoMesSubtraido)
-				+ " -";
+		int anoMesSubtraido = Util.subtrairMesDoAnoMes(emitirConta.getAmReferencia(), qtdMeses);
+		String mesAnoFormatado = Util.formatarAnoMesParaMesAno(anoMesSubtraido)	+ " -";
 
 		// adiciona o mes/ano formatado com o traço
 		dadosConsumoAnterior.append(Util.completaString(mesAnoFormatado, 9));
@@ -35443,7 +35423,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			Object[] parmsConsumoHistorico = null;
 			Integer idLeituraAnormalidade = null;
 			parmsConsumoHistorico = getControladorMicromedicao()
-					.obterConsumoAnteriorAnormalidadeDoImovel(idImovel,
+					.obterConsumoAnteriorAnormalidadeDoImovel(emitirConta.getIdImovel(),
 							anoMesSubtraido, tipoLigacao);
 			Integer numeroConsumoFaturadoMes = null;
 			String descricaoAbreviadaAnormalidadeAnterior = null;
@@ -35460,14 +35440,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				// caso o tipo de medição seja agua
 				if (tipoLigacao.equals(MedicaoTipo.LIGACAO_AGUA)) {
 					idLeituraAnormalidade = repositorioMicromedicao
-							.pesquisarIdLeituraAnormalidadeTipoAgua(idImovel,
+							.pesquisarIdLeituraAnormalidadeTipoAgua(emitirConta.getIdImovel(),
 									anoMesSubtraido);
 				} else {
 					// senão caso o tipo de medição seja poco
 					if (tipoMedicao.equals(MedicaoTipo.POCO)) {
 						idLeituraAnormalidade = repositorioMicromedicao
 								.pesquisarIdLeituraAnormalidadeTipoEsgoto(
-										idImovel, anoMesSubtraido);
+										emitirConta.getIdImovel(), anoMesSubtraido);
 					}
 				}
 			} catch (ErroRepositorioException e) {
@@ -39863,8 +39843,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 1
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(),
-					emitirContaHelper.getAmReferencia(), 1, tipoLigacao,
+					emitirContaHelper, 1, tipoLigacao,
 					tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes1(obterDadosConsumoMedicaoAnterior
@@ -39873,8 +39852,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 4
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(),
-					emitirContaHelper.getAmReferencia(), 4, tipoLigacao,
+					emitirContaHelper, 4, tipoLigacao,
 					tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes4(obterDadosConsumoMedicaoAnterior
@@ -39886,8 +39864,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 2
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(),
-					emitirContaHelper.getAmReferencia(), 2, tipoLigacao,
+					emitirContaHelper, 2, tipoLigacao,
 					tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes2(obterDadosConsumoMedicaoAnterior
@@ -39896,8 +39873,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 5
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(),
-					emitirContaHelper.getAmReferencia(), 5, tipoLigacao,
+					emitirContaHelper, 5, tipoLigacao,
 					tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes5(obterDadosConsumoMedicaoAnterior
@@ -39990,8 +39966,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 3
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(),
-					emitirContaHelper.getAmReferencia(), 3, tipoLigacao,
+					emitirContaHelper, 3, tipoLigacao,
 					tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes3(obterDadosConsumoMedicaoAnterior
@@ -40000,8 +39975,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 6
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(),
-					emitirContaHelper.getAmReferencia(), 6, tipoLigacao,
+					emitirContaHelper, 6, tipoLigacao,
 					tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes6(obterDadosConsumoMedicaoAnterior
@@ -40421,32 +40395,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 	}
 
-	/**
-	 * Método que retorna a soma de quantidade economia
-	 * 
-	 * [UC0348] Emitir Contas [UC0482]Emitir 2ª Via de Conta
-	 * 
-	 * [SB0007] Obter Quantidade de Economias da Conta
-	 * 
-	 * @author Sávio Luiz, Vivianne Sousa, Raphael Rossiter
-	 * @date 19/05/2006, 22/05/2007, 30/01/2009
-	 * 
-	 * 
-	 * @param idConta
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
-	public Short obterQuantidadeEconomiasConta(Integer idConta,
-			boolean contaHistorico) throws ControladorException {
+	public Short obterQuantidadeEconomiasConta(Integer idConta, boolean contaHistorico) throws ControladorException {
 
 		try {
-
 			if (!contaHistorico) {
-				return repositorioFaturamento
-						.obterQuantidadeEconomiasConta(idConta);
+				return repositorioFaturamento.obterQuantidadeEconomiasConta(idConta);
 			} else {
-				return repositorioFaturamento
-						.obterQuantidadeEconomiasContaHistorico(idConta);
+				return repositorioFaturamento.obterQuantidadeEconomiasContaHistorico(idConta);
 			}
 
 		} catch (ErroRepositorioException e) {
@@ -40454,20 +40409,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		}
 	}
 
-	/**
-	 * Método que retorna uma array de object de qualidade de agua
-	 * 
-	 * 
-	 * [UC0348] Emitir Contas
-	 * 
-	 * @author Sávio Luiz
-	 * @date 25/05/2006
-	 * 
-	 * 
-	 * @param idConta
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	public Object[] pesquisarParmsQualidadeAgua(
 			EmitirContaHelper emitirContaHelper) throws ControladorException {
 
@@ -40784,8 +40725,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		// e medição
 		// recuperados anteriormente
 		obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-				emitirContaHelper.getIdImovel(),
-				emitirContaHelper.getAmReferencia(), 6, tipoLigacao,
+				emitirContaHelper, 6, tipoLigacao,
 				tipoMedicao);
 		linhasArquivoTxtCartas.append(obterDadosConsumoMedicaoAnterior);
 		// chama o [SB0004] -Obter Dados do Consumo e
@@ -40797,8 +40737,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		// e medição
 		// recuperados anteriormente
 		obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-				emitirContaHelper.getIdImovel(),
-				emitirContaHelper.getAmReferencia(), 4, tipoLigacao,
+				emitirContaHelper, 4, tipoLigacao,
 				tipoMedicao);
 		linhasArquivoTxtCartas.append(obterDadosConsumoMedicaoAnterior);
 		// chama o [SB0004] -Obter Dados do Consumo e
@@ -40810,8 +40749,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		// e medição
 		// recuperados anteriormente
 		obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-				emitirContaHelper.getIdImovel(),
-				emitirContaHelper.getAmReferencia(), 2, tipoLigacao,
+				emitirContaHelper, 2, tipoLigacao,
 				tipoMedicao);
 		linhasArquivoTxtCartas.append(obterDadosConsumoMedicaoAnterior);
 		linhasArquivoTxtCartas.append(System.getProperty("line.separator"));
@@ -40829,8 +40767,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		// e medição
 		// recuperados anteriormente
 		obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-				emitirContaHelper.getIdImovel(),
-				emitirContaHelper.getAmReferencia(), 5, tipoLigacao,
+				emitirContaHelper, 5, tipoLigacao,
 				tipoMedicao);
 		linhasArquivoTxtCartas.append(obterDadosConsumoMedicaoAnterior);
 		// chama o [SB0004] -Obter Dados do Consumo e
@@ -40842,8 +40779,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		// e medição
 		// recuperados anteriormente
 		obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-				emitirContaHelper.getIdImovel(),
-				emitirContaHelper.getAmReferencia(), 3, tipoLigacao,
+				emitirContaHelper, 3, tipoLigacao,
 				tipoMedicao);
 		linhasArquivoTxtCartas.append(obterDadosConsumoMedicaoAnterior);
 		// chama o [SB0004] -Obter Dados do Consumo e
@@ -40855,8 +40791,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		// e medição
 		// recuperados anteriormente
 		obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-				emitirContaHelper.getIdImovel(),
-				emitirContaHelper.getAmReferencia(), 1, tipoLigacao,
+				emitirContaHelper, 1, tipoLigacao,
 				tipoMedicao);
 		linhasArquivoTxtCartas.append(obterDadosConsumoMedicaoAnterior);
 		linhasArquivoTxtCartas.append(System.getProperty("line.separator"));
@@ -44865,274 +44800,190 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 	}
 
-	/**
-	 * [UC0348] Emitir Contas
-	 * 
-	 * @author Sávio Luiz, Mariana Victor
-	 * @date 08/01/2007, 11/03/2011
-	 * 
-	 * @return
-	 * @throws ControladorException
-	 * @throws ControladorException
-	 */
-	public Collection<EmitirContaHelper> formatarEmitirContasHelper(
-			Collection colecaoPamsContas, int i) throws ControladorException {
+	public Collection<EmitirContaHelper> formatarEmitirContasHelper(Collection colecaoPamsContas, int i) throws ControladorException {
 		Collection<EmitirContaHelper> colecaoContas = new ArrayList();
+		
 		if (colecaoPamsContas != null) {
 			Iterator iteColecaoContas = colecaoPamsContas.iterator();
+			
 			while (iteColecaoContas.hasNext()) {
 				Object[] parmsConta = (Object[]) iteColecaoContas.next();
 				if (parmsConta != null) {
 					EmitirContaHelper emitirContaHelper = new EmitirContaHelper();
-					// id da conta
+
 					if (parmsConta[0] != null) {
 						emitirContaHelper.setIdConta((Integer) parmsConta[0]);
 					}
+
 					if (i == 3 || i == 4 || i == 7 || i == 8) {
-						// nome cliente
 						if (parmsConta[1] != null) {
-							String nomeCliente = this
-									.obterNomeCliente(emitirContaHelper
-											.getIdConta());
+							String nomeCliente = this.obterNomeCliente(emitirContaHelper.getIdConta());
 							emitirContaHelper.setNomeCliente(nomeCliente);
 						}
-						// nome cliente
+
 						if (parmsConta[32] != null) {
-							emitirContaHelper
-									.setNomeImovel((String) parmsConta[32]);
+							emitirContaHelper.setNomeImovel((String) parmsConta[32]);
 						}
 					} else {
-//						if (parmsConta[32] != null) {
-//							emitirContaHelper
-//									.setNomeCliente((String) parmsConta[32]);
-//						} else {
-							// nome cliente
 							if (parmsConta[1] != null) {
-								String nomeCliente = this
-										.obterNomeCliente(emitirContaHelper
-												.getIdConta());
+								String nomeCliente = this.obterNomeCliente(emitirContaHelper.getIdConta());
 								emitirContaHelper.setNomeCliente(nomeCliente);
 							}
-//						}
 					}
 
-					// data vencimento da conta
 					if (parmsConta[2] != null) {
-						emitirContaHelper
-								.setDataVencimentoConta((Date) parmsConta[2]);
+						emitirContaHelper.setDataVencimentoConta((Date) parmsConta[2]);
 					}
-					// ano mes referencia da conta
 					if (parmsConta[3] != null) {
-						emitirContaHelper
-								.setAmReferencia((Integer) parmsConta[3]);
+						emitirContaHelper.setAmReferencia((Integer) parmsConta[3]);
 					}
-					// digito verificador da conta
 					if (parmsConta[4] != null) {
-						emitirContaHelper
-								.setDigitoVerificadorConta((Short) parmsConta[4]);
+						emitirContaHelper.setDigitoVerificadorConta((Short) parmsConta[4]);
 					}
-					// codigo setor comercial da conta
 					if (parmsConta[5] != null) {
-						emitirContaHelper
-								.setCodigoSetorComercialConta((Integer) parmsConta[5]);
+						emitirContaHelper.setCodigoSetorComercialConta((Integer) parmsConta[5]);
 					}
-					// id da quadra da conta
 					if (parmsConta[6] != null) {
-						emitirContaHelper
-								.setIdQuadraConta((Integer) parmsConta[6]);
+						emitirContaHelper.setIdQuadraConta((Integer) parmsConta[6]);
 					}
-					// lote da conta
 					if (parmsConta[7] != null) {
 						emitirContaHelper.setLoteConta((Short) parmsConta[7]);
 					}
-					// sublote da conta
 					if (parmsConta[8] != null) {
-						emitirContaHelper
-								.setSubLoteConta((Short) parmsConta[8]);
+						emitirContaHelper.setSubLoteConta((Short) parmsConta[8]);
 					}
-					// consumo agua
 					if (parmsConta[9] != null) {
-						emitirContaHelper
-								.setConsumoAgua((Integer) parmsConta[9]);
+						emitirContaHelper.setConsumoAgua((Integer) parmsConta[9]);
 					}
-					// consumo esgoto
 					if (parmsConta[10] != null) {
-						emitirContaHelper
-								.setConsumoEsgoto((Integer) parmsConta[10]);
+						emitirContaHelper.setConsumoEsgoto((Integer) parmsConta[10]);
 					}
-					// valor agua
+					
+					int tam = parmsConta.length;
+					
 					if (parmsConta[11] != null) {
-						emitirContaHelper
-								.setValorAgua((BigDecimal) parmsConta[11]);
+						BigDecimal valorAgua = (BigDecimal) parmsConta[11];
+						if (tam > 42) {
+							if (parmsConta[43] != null) {
+								BigDecimal valorRateio = (BigDecimal) parmsConta[43];
+								valorAgua = valorAgua.subtract(valorRateio);
+								if (valorAgua.compareTo(BigDecimal.ZERO) == -1)
+									valorAgua = valorAgua.negate();
+							}
+						}
+						emitirContaHelper.setValorAgua(valorAgua);
 					}
-					// valor esgoto
 					if (parmsConta[12] != null) {
-						emitirContaHelper
-								.setValorEsgoto((BigDecimal) parmsConta[12]);
+						BigDecimal valorEsgoto = (BigDecimal) parmsConta[12];
+						if (tam > 42) {
+							if (parmsConta[44] != null) {
+								BigDecimal valorRateio = (BigDecimal) parmsConta[44];
+								valorEsgoto = valorEsgoto.subtract(valorRateio);
+								if (valorEsgoto.compareTo(BigDecimal.ZERO) == -1)
+									valorEsgoto = valorEsgoto.negate();
+							}
+						}
+						emitirContaHelper.setValorEsgoto(valorEsgoto);
 					}
-					// id da conta
 					if (parmsConta[13] != null) {
-						emitirContaHelper
-								.setDebitos((BigDecimal) parmsConta[13]);
+						emitirContaHelper.setDebitos((BigDecimal) parmsConta[13]);
 					}
-					// id da conta
 					if (parmsConta[14] != null) {
-						emitirContaHelper
-								.setValorCreditos((BigDecimal) parmsConta[14]);
+						emitirContaHelper.setValorCreditos((BigDecimal) parmsConta[14]);
 					}
-					// id da conta
 					if (parmsConta[15] != null) {
-						emitirContaHelper
-								.setValorImpostos((BigDecimal) parmsConta[15]);
+						emitirContaHelper.setValorImpostos((BigDecimal) parmsConta[15]);
 					}
-					// id da conta
 					if (parmsConta[16] != null) {
-						emitirContaHelper
-								.setDataValidadeConta((Date) parmsConta[16]);
+						emitirContaHelper.setDataValidadeConta((Date) parmsConta[16]);
 					}
-					// id da conta
 					if (parmsConta[17] != null) {
 						emitirContaHelper.setIdImovel((Integer) parmsConta[17]);
 					}
-					// id da conta
 					if (parmsConta[18] != null) {
-						emitirContaHelper
-								.setIdLocalidade((Integer) parmsConta[18]);
+						emitirContaHelper.setIdLocalidade((Integer) parmsConta[18]);
 					}
-					// id da conta
 					if (parmsConta[19] != null) {
-						emitirContaHelper
-								.setIdGerenciaRegional((Integer) parmsConta[19]);
+						emitirContaHelper.setIdGerenciaRegional((Integer) parmsConta[19]);
 					}
-					// id da conta
 					if (parmsConta[20] != null) {
-						emitirContaHelper
-								.setNomeGerenciaRegional((String) parmsConta[20]);
+						emitirContaHelper.setNomeGerenciaRegional((String) parmsConta[20]);
 					}
-					// id da conta
 					if (parmsConta[21] != null) {
-						emitirContaHelper
-								.setIdLigacaoAguaSituacao((Integer) parmsConta[21]);
+						emitirContaHelper.setIdLigacaoAguaSituacao((Integer) parmsConta[21]);
 					}
-					// id da conta
 					if (parmsConta[22] != null) {
-						emitirContaHelper
-								.setIdLigacaoEsgotoSituacao((Integer) parmsConta[22]);
+						emitirContaHelper.setIdLigacaoEsgotoSituacao((Integer) parmsConta[22]);
 					}
-					// id da conta
 					if (parmsConta[23] != null) {
-						emitirContaHelper
-								.setIdImovelPerfil((Integer) parmsConta[23]);
+						emitirContaHelper.setIdImovelPerfil((Integer) parmsConta[23]);
 					}
-					// id da conta
 					if (parmsConta[24] != null) {
-						emitirContaHelper
-								.setIdSetorComercial((Integer) parmsConta[24]);
+						emitirContaHelper.setIdSetorComercial((Integer) parmsConta[24]);
 					}
-					// id da conta
 					if (parmsConta[25] != null) {
-						emitirContaHelper
-								.setIdFaturamentoGrupo((Integer) parmsConta[25]);
+						emitirContaHelper.setIdFaturamentoGrupo((Integer) parmsConta[25]);
 					}
-					// id da conta
 					if (parmsConta[26] != null) {
-						emitirContaHelper
-								.setIdEmpresa((Integer) parmsConta[26]);
+						emitirContaHelper.setIdEmpresa((Integer) parmsConta[26]);
 					}
-					// id da conta
 					if (parmsConta[27] != null) {
-						emitirContaHelper
-								.setDescricaoLocalidade((String) parmsConta[27]);
+						emitirContaHelper.setDescricaoLocalidade((String) parmsConta[27]);
 					}
-					// id da conta
 					if (parmsConta[28] != null) {
-						emitirContaHelper
-								.setDescricaoLigacaoAguaSituacao((String) parmsConta[28]);
+						emitirContaHelper.setDescricaoLigacaoAguaSituacao((String) parmsConta[28]);
 					}
-					// id da conta
 					if (parmsConta[29] != null) {
-						emitirContaHelper
-								.setDescricaoLigacaoEsgotoSituacao((String) parmsConta[29]);
+						emitirContaHelper.setDescricaoLigacaoEsgotoSituacao((String) parmsConta[29]);
 					}
-					// id da conta
 					if (parmsConta[30] != null) {
-						emitirContaHelper
-								.setPercentualEsgotoConta((BigDecimal) parmsConta[30]);
+						emitirContaHelper.setPercentualEsgotoConta((BigDecimal) parmsConta[30]);
 					}
-
-					// id do cliente
 					if (parmsConta[31] != null) {
-						emitirContaHelper.setIdClienteResponsavel(""
-								+ (Integer) parmsConta[31]);
+						emitirContaHelper.setIdClienteResponsavel(""+ (Integer) parmsConta[31]);
 					}
-
-					// Nome no imovel
 					if (parmsConta[32] != null) {
-						emitirContaHelper
-								.setNomeImovel((String) parmsConta[32]);
-					}
-
-					int tam = parmsConta.length;
-
+						emitirContaHelper.setNomeImovel((String) parmsConta[32]);
+					}			
+					
 					if (tam > 34) {
-						// id da rota
 						if (parmsConta[33] != null) {
-							emitirContaHelper
-									.setCodigoRota((Short) parmsConta[33]);
+							emitirContaHelper.setCodigoRota((Short) parmsConta[33]);
 						}
-
-						// numero sequencial rota
 						if (parmsConta[34] != null) {
-							emitirContaHelper
-									.setNumeroSequencialRota((Integer) parmsConta[34]);
+							emitirContaHelper.setNumeroSequencialRota((Integer) parmsConta[34]);
 						}
-
-						// origem
 						if (parmsConta[35] != null) {
-							emitirContaHelper
-									.setIdOrigem((Integer) parmsConta[35]);
+							emitirContaHelper.setIdOrigem((Integer) parmsConta[35]);
 						}
-
-						// debitoCreditoSituacaoAtual
 						if (parmsConta[36] != null) {
-							emitirContaHelper
-									.setDebitoCreditoSituacaoAtualConta((Integer) parmsConta[36]);
+							emitirContaHelper.setDebitoCreditoSituacaoAtualConta((Integer) parmsConta[36]);
 						}
-
-						// id do funcionario
 						if (parmsConta[37] != null) {
-							emitirContaHelper
-									.setIdFuncionario((Integer) parmsConta[37]);
+							emitirContaHelper.setIdFuncionario((Integer) parmsConta[37]);
 						}
-
-						// nome do funcionario
 						if (parmsConta[38] != null) {
-							emitirContaHelper
-									.setNomeFuncionario((String) parmsConta[38]);
+							emitirContaHelper.setNomeFuncionario((String) parmsConta[38]);
 						}
-
-						// Tipo de Conta
 						if (parmsConta[39] != null) {
-							emitirContaHelper
-									.setContaTipo((Integer) parmsConta[39]);
+							emitirContaHelper.setContaTipo((Integer) parmsConta[39]);
 						}
-
-						// Id da Rota de Entrega
 						if (parmsConta[40] != null) {
-							emitirContaHelper
-									.setIdRotaEntrega((Integer) parmsConta[40]);
+							emitirContaHelper.setIdRotaEntrega((Integer) parmsConta[40]);
 						}
-
-						// Numero sequencial rota entrega
 						if (parmsConta[41] != null) {
-							emitirContaHelper
-									.setNumeroSequencialRotaEntrega((Integer) parmsConta[41]);
+							emitirContaHelper.setNumeroSequencialRotaEntrega((Integer) parmsConta[41]);
 						}
+						
 						if (tam > 42) {
-							// Numero quadra entrega
 							if (parmsConta[42] != null) {
-								emitirContaHelper
-										.setNumeroQuadraEntrega((Integer) parmsConta[42]);
+								emitirContaHelper.setNumeroQuadraEntrega((Integer) parmsConta[42]);
+							}
+							if (parmsConta[43] != null) {
+								emitirContaHelper.setValorRateioAgua((BigDecimal) parmsConta[43]);
+							}
+							if (parmsConta[44] != null) {
+								emitirContaHelper.setValorRateioEsgoto((BigDecimal) parmsConta[44]);
 							}
 						}
 
@@ -46030,18 +45881,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 									// Fonte
 									txt.append("1");
 									// Dados do consumo do mes anterior 1
-									txt.append(this.obterDadosConsumoAnterior(
-											emitirConsumoImovelCondominimoHelper
-													.getIdImovel(),
-											new Integer(anoMesFaturamento), 1,
+									EmitirContaHelper emitirConta = new EmitirContaHelper(
+											emitirConsumoImovelCondominimoHelper.getIdImovel(), new Integer(anoMesFaturamento));
+									txt.append(this.obterDadosConsumoAnterior(emitirConta, 1,
 											LigacaoTipo.LIGACAO_AGUA,
 											MedicaoTipo.LIGACAO_AGUA)
 											.toString());
 									// Dados do consumo do mes anterior 4
-									txt.append(this.obterDadosConsumoAnterior(
-											emitirConsumoImovelCondominimoHelper
-													.getIdImovel(),
-											new Integer(anoMesFaturamento), 4,
+									txt.append(this.obterDadosConsumoAnterior(emitirConta, 4,
 											LigacaoTipo.LIGACAO_AGUA,
 											MedicaoTipo.LIGACAO_AGUA)
 											.toString());
@@ -46069,18 +45916,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 									// Fonte
 									txt.append("1");
 									// Dados do consumo do mes anterior 2
-									txt.append(this.obterDadosConsumoAnterior(
-											emitirConsumoImovelCondominimoHelper
-													.getIdImovel(),
-											new Integer(anoMesFaturamento), 2,
+									txt.append(this.obterDadosConsumoAnterior(emitirConta, 2,
 											LigacaoTipo.LIGACAO_AGUA,
 											MedicaoTipo.LIGACAO_AGUA)
 											.toString());
 									// Dados do consumo do mes anterior 5
-									txt.append(this.obterDadosConsumoAnterior(
-											emitirConsumoImovelCondominimoHelper
-													.getIdImovel(),
-											new Integer(anoMesFaturamento), 5,
+									txt.append(this.obterDadosConsumoAnterior(emitirConta, 5,
 											LigacaoTipo.LIGACAO_AGUA,
 											MedicaoTipo.LIGACAO_AGUA)
 											.toString());
@@ -46094,18 +45935,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 									// Fonte
 									txt.append("1");
 									// Dados do consumo do mes anterior 3
-									txt.append(this.obterDadosConsumoAnterior(
-											emitirConsumoImovelCondominimoHelper
-													.getIdImovel(),
-											new Integer(anoMesFaturamento), 3,
+									txt.append(this.obterDadosConsumoAnterior(emitirConta, 3,
 											LigacaoTipo.LIGACAO_AGUA,
 											MedicaoTipo.LIGACAO_AGUA)
 											.toString());
 									// Dados do consumo do mes anterior 6
-									txt.append(this.obterDadosConsumoAnterior(
-											emitirConsumoImovelCondominimoHelper
-													.getIdImovel(),
-											new Integer(anoMesFaturamento), 6,
+									txt.append(this.obterDadosConsumoAnterior(emitirConta, 6,
 											LigacaoTipo.LIGACAO_AGUA,
 											MedicaoTipo.LIGACAO_AGUA)
 											.toString());
@@ -52408,8 +52243,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 1
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(),
-					emitirContaHelper.getAmReferencia(), 1, tipoLigacao,
+					emitirContaHelper, 1, tipoLigacao,
 					tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes1(obterDadosConsumoMedicaoAnterior
@@ -52418,8 +52252,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 4
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(),
-					emitirContaHelper.getAmReferencia(), 4, tipoLigacao,
+					emitirContaHelper, 4, tipoLigacao,
 					tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes4(obterDadosConsumoMedicaoAnterior
@@ -52431,8 +52264,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 2
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(),
-					emitirContaHelper.getAmReferencia(), 2, tipoLigacao,
+					emitirContaHelper, 2, tipoLigacao,
 					tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes2(obterDadosConsumoMedicaoAnterior
@@ -52441,8 +52273,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 5
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(),
-					emitirContaHelper.getAmReferencia(), 5, tipoLigacao,
+					emitirContaHelper, 5, tipoLigacao,
 					tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes5(obterDadosConsumoMedicaoAnterior
@@ -52535,8 +52366,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 3
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(),
-					emitirContaHelper.getAmReferencia(), 3, tipoLigacao,
+					emitirContaHelper, 3, tipoLigacao,
 					tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes3(obterDadosConsumoMedicaoAnterior
@@ -52545,8 +52375,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 6
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(),
-					emitirContaHelper.getAmReferencia(), 6, tipoLigacao,
+					emitirContaHelper, 6, tipoLigacao,
 					tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes6(obterDadosConsumoMedicaoAnterior
@@ -52954,13 +52783,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			.pesquisarImovel(
 					emitirContaHelper
 							.getIdImovel());
-				String[] qualidadeAgua = this.obterDadosQualidadeAguaCosanpa(
-						localidade.getId(),
-						emitirContaHelper
-								.getIdSetorComercial(),
-						emitirContaHelper.getAmReferencia(),
-						imovelQuadraFace.getQuadraFace()
-								.getId());
+				String[] qualidadeAgua = this.obterDadosQualidadeAguaCosanpa(emitirContaHelper,imovelQuadraFace.getQuadraFace().getId());
 				
 				//Padrão
 				emitirContaHelper.setPadraoCor(qualidadeAgua[0]);
@@ -65961,8 +65784,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							// Igual a 1 e o tipo de ligação e medição
 							// recuperados anteriormente
 							obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-									emitirContaHelper.getIdImovel(),
-									emitirContaHelper.getAmReferencia(), 1,
+									emitirContaHelper, 1,
 									tipoLigacao, tipoMedicao);
 							contaTxt.append(Util.completaString(
 									obterDadosConsumoMedicaoAnterior.toString(),
@@ -65974,8 +65796,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							// de Meses Igual a 4 e o tipo de ligação e medição
 							// recuperados anteriormente
 							obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-									emitirContaHelper.getIdImovel(),
-									emitirContaHelper.getAmReferencia(), 4,
+									emitirContaHelper, 4,
 									tipoLigacao, tipoMedicao);
 							contaTxt.append(Util.completaString(
 									obterDadosConsumoMedicaoAnterior.toString(),
@@ -65987,8 +65808,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							// de Meses Igual a 2 e o tipo de ligação e medição
 							// recuperados anteriormente
 							obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-									emitirContaHelper.getIdImovel(),
-									emitirContaHelper.getAmReferencia(), 2,
+									emitirContaHelper, 2,
 									tipoLigacao, tipoMedicao);
 							contaTxt.append(Util.completaString(
 									obterDadosConsumoMedicaoAnterior.toString(),
@@ -66000,8 +65820,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							// de Meses Igual a 5 e o tipode ligação e medição
 							// recuperados anteriormente
 							obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-									emitirContaHelper.getIdImovel(),
-									emitirContaHelper.getAmReferencia(), 5,
+									emitirContaHelper, 5,
 									tipoLigacao, tipoMedicao);
 							contaTxt.append(Util.completaString(
 									obterDadosConsumoMedicaoAnterior.toString(),
@@ -66117,8 +65936,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							// Igual a 3 e o tipo de ligação e medição
 							// recuperados anteriormente
 							obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-									emitirContaHelper.getIdImovel(),
-									emitirContaHelper.getAmReferencia(), 3,
+									emitirContaHelper, 3,
 									tipoLigacao, tipoMedicao);
 							contaTxt.append(Util.completaString(
 									obterDadosConsumoMedicaoAnterior.toString(),
@@ -66130,8 +65948,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							// de Meses Igual a 6 e o tipo de ligação e medição
 							// recuperados anteriormente
 							obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-									emitirContaHelper.getIdImovel(),
-									emitirContaHelper.getAmReferencia(), 6,
+									emitirContaHelper, 6,
 									tipoLigacao, tipoMedicao);
 							contaTxt.append(Util.completaString(
 									obterDadosConsumoMedicaoAnterior.toString(),
@@ -78654,8 +78471,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		return valoresRateioImovel;
 	}
 	
-	public String[] obterDadosQualidadeAguaCosanpa(Integer idLocalidade,
-			Integer idSetorComercial, Integer amReferencia, Integer idQuadraFace)
+	public String[] obterDadosQualidadeAguaCosanpa(EmitirContaHelper emitirConta, Integer idQuadraFace)
 			throws ControladorException {
 
 		String[] retornoQualidade = new String[25];
@@ -78751,7 +78567,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							.getSistemaAbastecimento().getId()));
 
 			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(
-					FiltroQualidadeAgua.ANO_MES_REFERENCIA, amReferencia));
+					FiltroQualidadeAgua.ANO_MES_REFERENCIA, emitirConta.getAmReferencia()));
 
 			if (quadraFace.getDistritoOperacional().getSetorAbastecimento()
 					.getSistemaAbastecimento().getFonteCaptacao() != null
@@ -78781,13 +78597,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			filtroQualidadeAgua.limparListaParametros();
 
 			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(
-					FiltroQualidadeAgua.LOCALIDADE_ID, idLocalidade));
+					FiltroQualidadeAgua.LOCALIDADE_ID, emitirConta.getIdLocalidade()));
 
 			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(
-					FiltroQualidadeAgua.SETOR_COMERCIAL_ID, idSetorComercial));
+					FiltroQualidadeAgua.SETOR_COMERCIAL_ID, emitirConta.getIdSetorComercial()));
 
 			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(
-					FiltroQualidadeAgua.ANO_MES_REFERENCIA, amReferencia));
+					FiltroQualidadeAgua.ANO_MES_REFERENCIA, emitirConta.getAmReferencia()));
 
 			filtroQualidadeAgua
 					.adicionarCaminhoParaCarregamentoEntidade("fonteCaptacao");
@@ -78805,13 +78621,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 			colecaoQualidadeAgua = null;
 			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(
-					FiltroQualidadeAgua.LOCALIDADE_ID, idLocalidade));
+					FiltroQualidadeAgua.LOCALIDADE_ID, emitirConta.getIdLocalidade()));
 
 			filtroQualidadeAgua.adicionarParametro(new ParametroNulo(
 					FiltroQualidadeAgua.SETOR_COMERCIAL_ID));
 
 			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(
-					FiltroQualidadeAgua.ANO_MES_REFERENCIA, amReferencia));
+					FiltroQualidadeAgua.ANO_MES_REFERENCIA, emitirConta.getAmReferencia()));
 
 			filtroQualidadeAgua
 					.adicionarCaminhoParaCarregamentoEntidade("fonteCaptacao");
@@ -78828,7 +78644,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			filtroQualidadeAgua.limparListaParametros();
 
 			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(
-					FiltroQualidadeAgua.ANO_MES_REFERENCIA, amReferencia));
+					FiltroQualidadeAgua.ANO_MES_REFERENCIA, emitirConta.getAmReferencia()));
 
 			filtroQualidadeAgua.adicionarParametro(new ParametroNulo(
 					FiltroQualidadeAgua.LOCALIDADE_ID));

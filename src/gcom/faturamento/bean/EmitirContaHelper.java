@@ -363,6 +363,11 @@ public class EmitirContaHelper implements Serializable {
 	public EmitirContaHelper() {
 	}
 	
+	public EmitirContaHelper(Integer idImovel, Integer amReferencia) {
+		this.idImovel = idImovel;
+		this.amReferencia = amReferencia;
+	}
+	
 	//utilizado no Emitir Segunda Via de Conta Compesa
 	//repositorioFaturamento.pesquisarConta
 	//Vivianne Sousa
@@ -2028,48 +2033,36 @@ public class EmitirContaHelper implements Serializable {
 		this.numeroQuadraEntrega = numeroQuadraEntrega;
 	}
 	
-	/*public BigDecimal getValorTotalConta(){
-		
-		BigDecimal valorTotalConta = new BigDecimal(0);
-		
-		valorTotalConta.add(valorAgua);
-		valorTotalConta.add(valorEsgoto);
-		valorTotalConta.add(debitos);
-		valorTotalConta.subtract(valorCreditos);
-		valorTotalConta.subtract(valorImpostos);
-	
-		return valorTotalConta;
-		
-	}*/
-	
 	public String getValorTotalConta() {
 		BigDecimal valorTotalConta = new BigDecimal("0.00");
 
-		// Valor de �gua
 		if (this.getValorAgua() != null) {
 			valorTotalConta = valorTotalConta.add(this.getValorAgua());
 		}
 
-		// Valor de esgoto
 		if (this.getValorEsgoto() != null) {
 			valorTotalConta = valorTotalConta.add(this.getValorEsgoto());
 		}
+		
+		if (this.getValorRateioAgua() != null) {
+			valorTotalConta = valorTotalConta.add(this.getValorRateioAgua());
+		}
 
-		// Valor dos d�bitos
+		if (this.getValorRateioEsgoto() != null) {
+			valorTotalConta = valorTotalConta.add(this.getValorRateioEsgoto());
+		}
+
 		if (this.getDebitos() != null) {
 			valorTotalConta = valorTotalConta.add(this.getDebitos());
 		}
 
-		// Valor dos cr�ditos
 		if (this.getValorCreditos() != null) {
 			valorTotalConta = valorTotalConta.subtract(this.getValorCreditos());
 		}
 		
-
 		if (this.getValorImpostos() != null) {
 			valorTotalConta = valorTotalConta.subtract(this.getValorImpostos());
 		}
-		//----------------------------------------------------------------------
 
 		return valorTotalConta.toString();
 	}

@@ -1447,8 +1447,7 @@ public interface IControladorFaturamento {
 	 * @param colecaoConta
 	 * @throws ControladorException
 	 */
-	public StringBuilder obterDadosConsumoAnterior(Integer idImovel,
-			int anoMes, int qtdMeses, Integer tipoLigacao, Integer tipoMedicao)
+	public StringBuilder obterDadosConsumoAnterior(EmitirContaHelper emitirConta, int qtdMeses, Integer tipoLigacao, Integer tipoMedicao)
 			throws ControladorException;
 
 	/**

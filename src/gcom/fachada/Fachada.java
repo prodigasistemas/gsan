@@ -149,6 +149,7 @@ import gcom.atendimentopublico.registroatendimento.bean.RegistroAtendimentoPende
 import gcom.atendimentopublico.registroatendimento.bean.VerificarRAFaltaAguaHelper;
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocalHome;
+import gcom.atualizacaocadastral.ImagemRetorno;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.batch.ControladorBatchLocal;
 import gcom.batch.ControladorBatchLocalHome;
@@ -19152,8 +19153,9 @@ public class Fachada {
 	public StringBuilder obterDadosConsumoAnterior(Integer idImovel,
 			int anoMes, int qtdMeses, Integer tipoLigacao, Integer tipoMedicao) {
 		try {
+			EmitirContaHelper emitirConta = new EmitirContaHelper(idImovel, anoMes);
 			return this.getControladorFaturamento().obterDadosConsumoAnterior(
-					idImovel, anoMes, qtdMeses, tipoLigacao, tipoMedicao);
+					emitirConta, qtdMeses, tipoLigacao, tipoMedicao);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex
 					.getParametroMensagem());
@@ -52336,6 +52338,14 @@ public class Fachada {
 	public void atualizarIndicadorDebitoAutomaticoComDataExclusao(Integer idImovel) {
 		try {
 			this.getControladorArrecadacao().atualizarIndicadorDebitoAutomaticoComDataExclusao(idImovel);
+		} catch (ControladorException e) {
+			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
+		}
+	}
+	
+	public Collection pesquisarImagensRetornoPorIdImovel(Integer idImovel) {
+		try {
+			return this.getControladorAtualizacaoCadastral().pesquisarImagensRetornoPorIdImovel(idImovel);
 		} catch (ControladorException e) {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}

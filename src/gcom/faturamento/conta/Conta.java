@@ -374,10 +374,16 @@ public class Conta extends ObjetoTransacao implements IConta {
 		this.referenciaContabil = referenciaContabil;
 		this.imovel = imovel;
 		this.referenciaBaixaContabil = referenciaBaixaContabil;
-		
-		
 	}
 	
+	public Conta(BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal valorCreditos, BigDecimal valorDebitos, BigDecimal valorImpostos) {
+		this.valorAgua = valorAgua;
+		this.valorEsgoto = valorEsgoto;
+		this.valorCreditos = valorCreditos;
+		this.debitos = valorDebitos;
+		this.valorImposto = valorImpostos;
+	}
+
 	public Integer getId() {
 		return this.id;
 	}
@@ -855,6 +861,14 @@ public class Conta extends ObjetoTransacao implements IConta {
 			valorTotalConta = valorTotalConta.add(this.getValorEsgoto());
 		}
 
+		if (this.getValorRateioAgua() != null) {
+			valorTotalConta = valorTotalConta.add(this.getValorRateioAgua());
+		}
+
+		if (this.getValorRateioEsgoto() != null) {
+			valorTotalConta = valorTotalConta.add(this.getValorRateioEsgoto());
+		}
+
 		if (this.getDebitos() != null) {
 			valorTotalConta = valorTotalConta.add(this.getDebitos());
 		}
@@ -862,11 +876,11 @@ public class Conta extends ObjetoTransacao implements IConta {
 		if (this.getValorCreditos() != null) {
 			valorTotalConta = valorTotalConta.subtract(this.getValorCreditos());
 		}
-		
+
 		if (this.getValorImposto() != null) {
 			valorTotalConta = valorTotalConta.subtract(this.getValorImposto());
 		}
-		
+
 		return valorTotalConta;
 	}
 	
