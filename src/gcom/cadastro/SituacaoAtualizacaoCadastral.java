@@ -10,8 +10,8 @@ public class SituacaoAtualizacaoCadastral extends ObjetoGcom {
 	
 	private static final long serialVersionUID = 1L;
 	
-	public static final Integer BLOQUEADO = 1;
 	public static final Integer DISPONIVEL = 0;
+	public static final Integer BLOQUEADO = 1;
 	public static final Integer EM_CAMPO = 2;
 	public static final Integer TRANSMITIDO = 3;
 	public static final Integer APROVADO = 4;
