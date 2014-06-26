@@ -17,12 +17,13 @@ public class ClienteResponsavelBuilder extends ClienteBuilder{
 		
 		String campo;
 		
+		clienteTxt.setDescricaoLogradouro(atualizacaoCadastralImovel.getLinhaCliente("logradouroResponsavel"));
+		
 		campo = atualizacaoCadastralImovel.getLinhaCliente("idTipoLogradouroResponsavel");
 		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
-			clienteTxt.setIdLogradouroTipo(Integer.parseInt(campo));
+			clienteTxt.setIdLogradouroTipo(Integer.parseInt(campo) == 0 ? null : Integer.parseInt(campo));
 		}
 		
-		clienteTxt.setDescricaoLogradouro(atualizacaoCadastralImovel.getLinhaCliente("logradouroResponsavel"));
 		clienteTxt.setNumeroImovel(atualizacaoCadastralImovel.getLinhaCliente("numeroResponsavel"));
 		clienteTxt.setComplementoEndereco(atualizacaoCadastralImovel.getLinhaCliente("complementoResponsavel"));
 		clienteTxt.setNomeBairro(atualizacaoCadastralImovel.getLinhaCliente("bairroResponsavel"));

@@ -255,80 +255,7 @@ public interface IControladorCobranca {
 			String identificacaoCliente, Date dataOpcao)
 			throws ControladorException;
 
-	/**
-	 * [UC0201] Remover Débito Automático
-	 * 
-	 * @author Roberta Costa
-	 * @created 09/01/2006
-	 * 
-	 * @param matriculaImovel
-	 *            Matrícula do Imovel
-	 * @param codigoBanco
-	 *            Código do Banco
-	 * @param codigoAgencia
-	 *            Código da Agência
-	 * @param identificacaoCliente
-	 *            Identificação do Cliente no Banco
-	 * @param dataOpcao
-	 *            Data da Opção
-	 * @throws ControladorException
-	 *             Controlador Exception
-	 */
-	public String removerDebitoAutomatico(String matriculaImovel,
-			String codigoBanco, String codigoAgencia,
-			String identificacaoCliente, Date dataOpcao)
-			throws ControladorException;
-
-	/**
-	 * [UC0251] Gerar Atividade de Ação de Cobrança
-	 * 
-	 * @author Pedro Alexandre
-	 * @created 01/02/2006
-	 * 
-	 * @param grupoCobranca
-	 *            Grupo de Cobrança
-	 * @param anoMesReferencia
-	 *            Ano/Mês de referência do ciclo de cobrança
-	 * @param idCronogramaAtividadeAcaoCobranca
-	 *            Código do cronograma da atividade da ação de cobrança
-	 * @param idComandoAtividadeAcaoCobranca
-	 *            Código do comando da atividade da ação de cobrança
-	 * @param rotas
-	 *            Coleção de rotas
-	 * @param acaoCobranca
-	 *            Ação de cobrança
-	 * @param atividadeCobranca
-	 *            Atividade de cobrança
-	 * @param indicadorCriterio
-	 *            Indicador do critério a ser utilizado
-	 * @param criterioCobranca
-	 *            Critério de cobrança
-	 * @param cliente
-	 *            Cliente
-	 * @param relacaoClienteImovel
-	 *            Tipo de relação entre cliente e imóvel
-	 * @param anoMesReferenciaInicial
-	 *            Ano/Mês de referência inicial
-	 * @param anoMesReferenciaFinal
-	 *            Ano/Mês de referência final
-	 * @param dataVencimentoInicial
-	 *            Data de vencimento inicial
-	 * @param dataVencimentoFinal
-	 *            Data de vencimento final
-	 * @throws ControladorException
-	 *             Controlador Exception
-	 */
-	/*
-	 * public void gerarAtividadeAcaoCobranca(CobrancaGrupo grupoCobranca, int
-	 * anoMesReferencia, Integer idCronogramaAtividadeAcaoCobranca, Integer
-	 * idComandoAtividadeAcaoCobranca, Collection<Rota> rotas, CobrancaAcao
-	 * acaoCobranca, CobrancaAtividade atividadeCobranca, Integer
-	 * indicadorCriterio, CobrancaCriterio criterioCobranca, Cliente cliente,
-	 * Integer relacaoClienteImovel, int anoMesReferenciaInicial, int
-	 * anoMesReferenciaFinal, Date dataVencimentoInicial, Date
-	 * dataVencimentoFinal) throws ControladorException;
-	 * 
-	 */
+	public String removerDebitoAutomatico(String matriculaImovel, String codigoBanco, String codigoAgencia, String identificacaoCliente, Date dataOpcao) throws ControladorException;
 
 	/**
 	 * Consultar Dados do Cliente Imovel Vinculado Auhtor: Rafael Santos Data:
@@ -3662,18 +3589,6 @@ public interface IControladorCobranca {
 			Integer idCobrancaDebitoSituacao) throws ControladorException;	
 	
 	/**
-	 * [UC0201] Remover Débito Automático
-	 * 
-	 * @author Bruno Barros
-	 * @created 11/06/2008
-	 * 
-	 * @param matriculaImovel
-	 *            Matrícula do Imovel
-	 */
-	public void removerDebitoAutomatico( String[] ids )
-			throws ControladorException;
-	
-	/**
 	 * Consulta as contas transferidas
 	 * 
 	 * [UC0204] - Consultar Transferências do Débito
@@ -5526,6 +5441,4 @@ public interface IControladorCobranca {
 	 */
 	
 	public Collection pesquisarDadosPopupExtensaoComandoAguaSituacao(Integer idComando) throws ControladorException;
-	
-	
 }

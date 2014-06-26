@@ -1,6 +1,8 @@
 package gcom.cadastro.cliente;
 
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastralImovel;
+import gcom.cadastro.endereco.FiltroLogradouroTipo;
+import gcom.cadastro.endereco.LogradouroTipo;
 import gcom.cadastro.geografico.FiltroUnidadeFederacao;
 import gcom.cadastro.geografico.UnidadeFederacao;
 import gcom.fachada.Fachada;

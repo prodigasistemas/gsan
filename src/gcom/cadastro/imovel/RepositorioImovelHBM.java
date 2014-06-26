@@ -31323,10 +31323,10 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 			String consulta = "SELECT icac "
 					+ "FROM ImovelControleAtualizacaoCadastral icac "
-					+ "INNER JOIN FETCH icac.imovel imovel "
-					+ "INNER JOIN FETCH icac.situacaoAtualizacaoCadastral situacao "
+					+ "LEFT JOIN FETCH icac.imovel imovel "
+					+ "LEFT JOIN FETCH icac.situacaoAtualizacaoCadastral situacao "
 					+ "LEFT JOIN FETCH icac.cadastroOcorrencia cadastroOcorrencia "
-					+ "WHERE imovel.id = :idImovel ";
+					+ "WHERE icac.imovel.id = :idImovel ";
 
 			return (ImovelControleAtualizacaoCadastral) session.createQuery(consulta)
 					.setInteger("idImovel", idImovel).uniqueResult();

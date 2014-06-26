@@ -1,17 +1,12 @@
 package gcom.gui.cadastro.atualizacaocadastral;
 
-import java.util.Collection;
-
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.imovel.CadastroOcorrencia;
-import gcom.cadastro.imovel.FiltroCadastroOcorrencia;
 import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ConstantesSistema;
-import gcom.util.Util;
-import gcom.util.filtro.ParametroSimples;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -36,30 +31,33 @@ public class AtualizarDadosImovelAtualizacaoCadastralAction extends GcomAction {
 		
 		CadastroOcorrencia cadastroOcorrencia = this.pesquisarCadastroOcorrencia(Integer.parseInt(form.getIdImovel()));
 		
-		if (cadastroOcorrencia.getIndicadorValidacao().equals(ConstantesSistema.SIM)) {
-			
-			if (!form.getIdRegistrosAutorizados().equals("")) {
-				String registrosAutorizados = form.getIdRegistrosAutorizados();
+		if (cadastroOcorrencia != null) {
+			if (cadastroOcorrencia.getIndicadorValidacao().equals(ConstantesSistema.SIM)) {
 				
-				String[] listaIdRegistrosSim = registrosAutorizados.split(",");
-				
-				if (listaIdRegistrosSim != null && !listaIdRegistrosSim.equals("")) {
-					fachada.atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer.valueOf(form.getIdImovel()),
-							listaIdRegistrosSim, ConstantesSistema.SIM, usuario);
+				if (!form.getIdRegistrosAutorizados().equals("")) {
+					String registrosAutorizados = form.getIdRegistrosAutorizados();
+					
+					String[] listaIdRegistrosSim = registrosAutorizados.split(",");
+					
+					if (listaIdRegistrosSim != null && !listaIdRegistrosSim.equals("")) {
+						fachada.atualizarIndicadorAutorizacaoColunaAtualizacaoCadastral(Integer.valueOf(form.getIdImovel()),
+								listaIdRegistrosSim, ConstantesSistema.SIM, usuario);
+					}
 				}
+				
+				httpServletRequest.setAttribute("reload", true);
+			} else {
+				throw new ActionServletException("atencao.cadastro_ocorrencia_invalido", cadastroOcorrencia.getDescricao());
 			}
-			
-			httpServletRequest.setAttribute("reload", true);
 		} else {
-			throw new ActionServletException("atencao.cadastro_ocorrencia_invalido", cadastroOcorrencia.getDescricao());
+			throw new ActionServletException("atencao.cadastro_ocorrencia_invalido", "NULO. Carregue o imóvel novamente");
 		}
 		
         return retorno;
     }
 
 	private CadastroOcorrencia pesquisarCadastroOcorrencia(Integer idImovel) {
-		ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral = fachada.pesquisarImovelControleAtualizacaoCadastral(
-				Integer.valueOf(idImovel));
+		ImovelControleAtualizacaoCadastral imovelControleAtualizacaoCadastral = fachada.pesquisarImovelControleAtualizacaoCadastral(idImovel);
 		
 		return imovelControleAtualizacaoCadastral.getCadastroOcorrencia();
 	}

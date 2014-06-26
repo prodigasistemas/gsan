@@ -11,16 +11,17 @@ public class ClienteProprietarioBuilder extends ClienteBuilder {
 	}
 
 	public IClienteAtualizacaoCadastral buildCliente(Short clienteRelacaoTipo) {
+		buildCliente(PROPRIETARIO, clienteRelacaoTipo);
+		
 		String campo;
 		
-		buildCliente(PROPRIETARIO, clienteRelacaoTipo);
+		clienteTxt.setDescricaoLogradouro(atualizacaoCadastralImovel.getLinhaCliente("logradouroProprietario"));
 		
 		campo = atualizacaoCadastralImovel.getLinhaCliente("idTipoLogradouroProprietario");
 		if (StringUtils.isNotEmpty(campo) && StringUtils.isNumeric(campo)){
-			clienteTxt.setIdLogradouroTipo(Integer.parseInt(campo));
+			clienteTxt.setIdLogradouroTipo(Integer.parseInt(campo) == 0 ? null : Integer.parseInt(campo));
 		}
 
-		clienteTxt.setDescricaoLogradouro(atualizacaoCadastralImovel.getLinhaCliente("logradouroProprietario"));
 		clienteTxt.setNumeroImovel(atualizacaoCadastralImovel.getLinhaCliente("numeroProprietario"));
 		clienteTxt.setComplementoEndereco(atualizacaoCadastralImovel.getLinhaCliente("complementoProprietario"));
 		clienteTxt.setNomeBairro(atualizacaoCadastralImovel.getLinhaCliente("bairroProprietario"));
