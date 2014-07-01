@@ -69607,10 +69607,106 @@ public class ControladorCobranca implements SessionBean {
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
-
-		return retorno;
+		
+		return inserirTotalDeContasEGuias(retorno);
 	}
 	
+	private Collection<RelatorioDocumentosAReceberBean> inserirTotalDeContasEGuias(Collection<RelatorioDocumentosAReceberBean> retorno) {
+		int qntContaRes = 0;
+		int qntContaCom = 0;
+		int qntContaInd = 0;
+		int qntContaTot = 0;
+		int qntContaPub = 0;
+		BigDecimal totalContaRes = new BigDecimal(0.00);
+		BigDecimal totalContaCom = new BigDecimal(0.00);
+		BigDecimal totalContaInd = new BigDecimal(0.00);
+		BigDecimal totalContaTot = new BigDecimal(0.00);
+		BigDecimal totalContaPub = new BigDecimal(0.00);
+		
+		int qntGuiaRes = 0;
+		int qntGuiaCom = 0;
+		int qntGuiaInd = 0;
+		int qntGuiaTot = 0;
+		int qntGuiaPub = 0;
+		BigDecimal totalGuiaRes = new BigDecimal(0.00);
+		BigDecimal totalGuiaCom = new BigDecimal(0.00);
+		BigDecimal totalGuiaInd = new BigDecimal(0.00);
+		BigDecimal totalGuiaTot = new BigDecimal(0.00);
+		BigDecimal totalGuiaPub = new BigDecimal(0.00);
+		
+		for (RelatorioDocumentosAReceberBean relatorio : retorno) {
+			if(relatorio.getNomeDocumentoTipo().equals("conta") && relatorio.getIdSituacao() == 2) {
+				qntContaRes += relatorio.getQtdDocumentosRes();
+				qntContaCom += relatorio.getQtdDocumentosCom();
+				qntContaInd += relatorio.getQtdDocumentosInd();
+				qntContaTot += relatorio.getQtdDocumentosTot();
+				qntContaPub += relatorio.getQtdDocumentosPub();
+				totalContaRes = totalContaRes.add(relatorio.getValorDocumentosRes());
+				totalContaCom = totalContaCom.add(relatorio.getValorDocumentosCom());
+				totalContaInd = totalContaInd.add(relatorio.getValorDocumentosInd());
+				totalContaTot = totalContaTot.add(relatorio.getValorDocumentosTot());
+				totalContaPub = totalContaPub.add(relatorio.getValorDocumentosPub());
+			}
+			if(relatorio.getNomeDocumentoTipo().equals("guia de pagamento") && relatorio.getIdSituacao() == 2) {
+				qntGuiaRes += relatorio.getQtdDocumentosRes();
+				qntGuiaCom += relatorio.getQtdDocumentosCom();
+				qntGuiaInd += relatorio.getQtdDocumentosInd();
+				qntGuiaTot += relatorio.getQtdDocumentosTot();
+				qntGuiaPub += relatorio.getQtdDocumentosPub();
+				totalGuiaRes = totalGuiaRes.add(relatorio.getValorDocumentosRes());
+				totalGuiaCom = totalGuiaCom.add(relatorio.getValorDocumentosCom());
+				totalGuiaInd = totalGuiaInd.add(relatorio.getValorDocumentosInd());
+				totalGuiaTot = totalGuiaTot.add(relatorio.getValorDocumentosTot());
+				totalGuiaPub = totalGuiaPub.add(relatorio.getValorDocumentosPub());
+			}
+		}
+		
+		RelatorioDocumentosAReceberBean documentoComTotalConta = new RelatorioDocumentosAReceberBean();
+		documentoComTotalConta.setQtdDocumentosRes(qntContaRes);
+		documentoComTotalConta.setQtdDocumentosCom(qntContaCom);
+		documentoComTotalConta.setQtdDocumentosInd(qntContaInd);
+		documentoComTotalConta.setQtdDocumentosTot(qntContaTot);
+		documentoComTotalConta.setQtdDocumentosPub(qntContaPub);
+		documentoComTotalConta.setValorDocumentosRes(totalContaRes);
+		documentoComTotalConta.setValorDocumentosCom(totalContaCom);
+		documentoComTotalConta.setValorDocumentosInd(totalContaInd);
+		documentoComTotalConta.setValorDocumentosTot(totalContaTot);
+		documentoComTotalConta.setValorDocumentosPub(totalContaPub);
+		documentoComTotalConta.setNomeDocumentoTipo("conta");
+		documentoComTotalConta.setIdSituacao(2);
+		documentoComTotalConta.setDescricaoSituacao("CONTA");
+		
+		RelatorioDocumentosAReceberBean documentoComTotalGuia = new RelatorioDocumentosAReceberBean();
+		documentoComTotalGuia.setQtdDocumentosRes(qntGuiaRes);
+		documentoComTotalGuia.setQtdDocumentosCom(qntGuiaCom);
+		documentoComTotalGuia.setQtdDocumentosInd(qntGuiaInd);
+		documentoComTotalGuia.setQtdDocumentosTot(qntGuiaTot);
+		documentoComTotalGuia.setQtdDocumentosPub(qntGuiaPub);
+		documentoComTotalGuia.setValorDocumentosRes(totalGuiaRes);
+		documentoComTotalGuia.setValorDocumentosCom(totalGuiaCom);
+		documentoComTotalGuia.setValorDocumentosInd(totalGuiaInd);
+		documentoComTotalGuia.setValorDocumentosTot(totalGuiaTot);
+		documentoComTotalGuia.setValorDocumentosPub(totalGuiaPub);
+		documentoComTotalGuia.setNomeDocumentoTipo("guia de pagamento");
+		documentoComTotalGuia.setIdSituacao(2);
+		documentoComTotalGuia.setDescricaoSituacao("GUIA");
+		
+		
+		
+		Collection<RelatorioDocumentosAReceberBean> retornoComTotalContaEGuia = new ArrayList<RelatorioDocumentosAReceberBean>();
+		for (RelatorioDocumentosAReceberBean relatorio : retorno) {
+			retornoComTotalContaEGuia.add(relatorio);
+			if(relatorio.getNomeDocumentoTipo().equals("conta") && relatorio.getIdSituacao() == 2 && relatorio.getFaixa().equals("< 180")) {
+				retornoComTotalContaEGuia.add(documentoComTotalConta);
+			}
+			if(relatorio.getNomeDocumentoTipo().equals("guia de pagamento") && relatorio.getIdSituacao() == 2 && relatorio.getFaixa().equals("< 180")) {
+				retornoComTotalContaEGuia.add(documentoComTotalGuia);
+			}
+		}
+		
+		return retornoComTotalContaEGuia;
+	}
+
 	private RelatorioDocumentosAReceberBean criarBeanRelatorioDocumentosAReceber(
 			Integer idGerencia, String nomeGerencia, Integer idUnidade,
 			String nomeUnidade, Integer idLocalidade, String nomeLocalidade,
