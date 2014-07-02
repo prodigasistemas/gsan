@@ -69635,7 +69635,7 @@ public class ControladorCobranca implements SessionBean {
 		BigDecimal totalGuiaPub = new BigDecimal(0.00);
 		
 		for (RelatorioDocumentosAReceberBean relatorio : retorno) {
-			if(relatorio.getNomeDocumentoTipo().equals("conta") && relatorio.getIdSituacao() == 2) {
+			if(relatorio.getNomeDocumentoTipo().equalsIgnoreCase("CONTA") && relatorio.getIdSituacao() == 2) {
 				qntContaRes += relatorio.getQtdDocumentosRes();
 				qntContaCom += relatorio.getQtdDocumentosCom();
 				qntContaInd += relatorio.getQtdDocumentosInd();
@@ -69647,7 +69647,7 @@ public class ControladorCobranca implements SessionBean {
 				totalContaTot = totalContaTot.add(relatorio.getValorDocumentosTot());
 				totalContaPub = totalContaPub.add(relatorio.getValorDocumentosPub());
 			}
-			if(relatorio.getNomeDocumentoTipo().equals("guia de pagamento") && relatorio.getIdSituacao() == 2) {
+			if(relatorio.getNomeDocumentoTipo().equalsIgnoreCase("GUIA DE PAGAMENTO") && relatorio.getIdSituacao() == 2) {
 				qntGuiaRes += relatorio.getQtdDocumentosRes();
 				qntGuiaCom += relatorio.getQtdDocumentosCom();
 				qntGuiaInd += relatorio.getQtdDocumentosInd();
@@ -69672,9 +69672,13 @@ public class ControladorCobranca implements SessionBean {
 		documentoComTotalConta.setValorDocumentosInd(totalContaInd);
 		documentoComTotalConta.setValorDocumentosTot(totalContaTot);
 		documentoComTotalConta.setValorDocumentosPub(totalContaPub);
-		documentoComTotalConta.setNomeDocumentoTipo("conta");
+		documentoComTotalConta.setDescricaoSituacao("VENCIDOS");
+		documentoComTotalConta.setIdDocumentoTipo(1);
+		documentoComTotalConta.setNomeDocumentoTipo("CONTA");
 		documentoComTotalConta.setIdSituacao(2);
-		documentoComTotalConta.setDescricaoSituacao("CONTA");
+		documentoComTotalConta.setDescricaTotalizacao("ESTADO - PARA");
+		documentoComTotalConta.setIndicadorTotal(ConstantesSistema.TODOS.toString());
+		documentoComTotalConta.setFaixa("TOTAL");
 		
 		RelatorioDocumentosAReceberBean documentoComTotalGuia = new RelatorioDocumentosAReceberBean();
 		documentoComTotalGuia.setQtdDocumentosRes(qntGuiaRes);
@@ -69687,23 +69691,30 @@ public class ControladorCobranca implements SessionBean {
 		documentoComTotalGuia.setValorDocumentosInd(totalGuiaInd);
 		documentoComTotalGuia.setValorDocumentosTot(totalGuiaTot);
 		documentoComTotalGuia.setValorDocumentosPub(totalGuiaPub);
-		documentoComTotalGuia.setNomeDocumentoTipo("guia de pagamento");
+		documentoComTotalGuia.setDescricaoSituacao("VENCIDOS");
+		documentoComTotalGuia.setIdDocumentoTipo(7);
+		documentoComTotalGuia.setNomeDocumentoTipo("GUIA DE PAGAMENTO");
 		documentoComTotalGuia.setIdSituacao(2);
-		documentoComTotalGuia.setDescricaoSituacao("GUIA");
-		
+		documentoComTotalGuia.setDescricaTotalizacao("ESTADO - PARA");
+		documentoComTotalGuia.setIndicadorTotal(ConstantesSistema.NAO.toString());
+		documentoComTotalGuia.setFaixa("TOTAL");
 		
 		
 		Collection<RelatorioDocumentosAReceberBean> retornoComTotalContaEGuia = new ArrayList<RelatorioDocumentosAReceberBean>();
 		for (RelatorioDocumentosAReceberBean relatorio : retorno) {
+			
+			if(relatorio.getNomeDocumentoTipo().equalsIgnoreCase("GUIA DE PAGAMENTO") && relatorio.getIdSituacao() == 2 && relatorio.getFaixa().equals("> 180"))
+				relatorio.setIndicadorTotal(ConstantesSistema.TODOS.toString());
+			
 			retornoComTotalContaEGuia.add(relatorio);
-			if(relatorio.getNomeDocumentoTipo().equals("conta") && relatorio.getIdSituacao() == 2 && relatorio.getFaixa().equals("< 180")) {
+						
+			if(relatorio.getNomeDocumentoTipo().equalsIgnoreCase("CONTA") && relatorio.getIdSituacao() == 2 && relatorio.getFaixa().equals("> 180")) {
 				retornoComTotalContaEGuia.add(documentoComTotalConta);
 			}
-			if(relatorio.getNomeDocumentoTipo().equals("guia de pagamento") && relatorio.getIdSituacao() == 2 && relatorio.getFaixa().equals("< 180")) {
+			if(relatorio.getNomeDocumentoTipo().equalsIgnoreCase("GUIA DE PAGAMENTO") && relatorio.getIdSituacao() == 2 && relatorio.getFaixa().equals("> 180")) {
 				retornoComTotalContaEGuia.add(documentoComTotalGuia);
 			}
 		}
-		
 		return retornoComTotalContaEGuia;
 	}
 
