@@ -5706,9 +5706,11 @@ public class ControladorFinanceiro implements SessionBean {
 	 * @param data
 	 * @throws ControladorException
 	 */
-	public void gerarIntegracaoContabilidade(String idLancamentoOrigem, String anoMes, String data) throws ControladorException{
+	public void gerarIntegracaoContabilidade(
+			String idLancamentoOrigem, String anoMes, String data) throws ControladorException {
 	       
         Collection<Object[]> colecaoDadosGerarIntegracao = null;
+        
         try {
             colecaoDadosGerarIntegracao = repositorioFinanceiro.pesquisarGerarIntegracaoContabilidade(idLancamentoOrigem, anoMes);
         } catch (ErroRepositorioException ex) {
@@ -5716,59 +5718,43 @@ public class ControladorFinanceiro implements SessionBean {
             throw new ControladorException("erro.sistema", ex);
         }
        
-       
-        /** definição das variáveis */
         StringBuilder gerarIntegracaoTxt = new StringBuilder();
         String ano = data.substring(6,10);
         String mes = data.substring(3,5);
         String dia = data.substring(0,2);
-        String anoMesDia = ano+"/"+mes+"/"+dia;       
+        String anoMesDia = ano + "/" + mes + "/" + dia;       
         String descricaoMes = Util.retornaDescricaoMes(new Integer(mes).intValue());
        
-        /*
-         * Determina se o arquivo é de faturamento ou arrecadação
-         * para concatenar no nome do arquivo .zip
-         */
         String descricaoLancamento = "";
         String historico = "VALOR ";
-        if(idLancamentoOrigem.equals(LancamentoOrigem.FATURAMENTO + "")){
-            descricaoLancamento = "FATURAMENTO";
-            historico += "FATURAMENTO DO MES DE " + descricaoMes + "/"+ano;
-        }else if(idLancamentoOrigem.equals(LancamentoOrigem.ARRECADACAO + "")){
-            descricaoLancamento = "ARRECADACAO";
-            historico += "ARRECADACAO DO MES DE " + descricaoMes + "/"+ano;
-        }else if(idLancamentoOrigem.equals(LancamentoOrigem.DEVEDORES_DUVIDOSOS + "")){
-            descricaoLancamento = "DEVEDORES_DUVIDOSOS";
-            historico += "DEVEDORES DUVIDOSOS DO MES DE " + descricaoMes + "/"+ano;
-        }
+        
+        if (idLancamentoOrigem.equals(LancamentoOrigem.FATURAMENTO + "")) {
+			descricaoLancamento = "FATURAMENTO";
+			historico += "FATURAMENTO DO MES DE " + descricaoMes + "/" + ano;
+			
+		} else if (idLancamentoOrigem.equals(LancamentoOrigem.ARRECADACAO + "")) {
+			descricaoLancamento = "ARRECADACAO";
+			historico += "ARRECADACAO DO MES DE " + descricaoMes + "/" + ano;
+			
+		} else if (idLancamentoOrigem.equals(LancamentoOrigem.DEVEDORES_DUVIDOSOS + "")) {
+			descricaoLancamento = "DEVEDORES_DUVIDOSOS";
+			historico += "DEVEDORES DUVIDOSOS DO MES DE " + descricaoMes + "/" + ano;
+		}
        
-       
-        /*
-         * Caso a coleção dos dados não esteja vazia
-         */
-        if(colecaoDadosGerarIntegracao != null && !colecaoDadosGerarIntegracao.isEmpty()){
+        if(colecaoDadosGerarIntegracao != null && !colecaoDadosGerarIntegracao.isEmpty()) {
            
-            /** definição das variáveis */
             String numeroConta = null;
             String centroCusto = null;
-//            String nomeLocalidade = null;
-//            String nomeMunicipio = null;
             BigDecimal valorDebito = null;
             BigDecimal valorCredito = null;
             String moeda = "BRL";
            
-            /*
-             * Laço para gerar o txt
-             */
+            // Laço para gerar o txt
             for(Object[] dadosGerarIntegracao : colecaoDadosGerarIntegracao){
-               
-               
                 numeroConta = (String) dadosGerarIntegracao[0];                           
                 centroCusto = (String) dadosGerarIntegracao[1];                           
                 valorDebito  = (BigDecimal) dadosGerarIntegracao[2];                       
                 valorCredito = (BigDecimal) dadosGerarIntegracao[3];                           
-//                nomeLocalidade = (String) dadosGerarIntegracao[4];
-//                nomeMunicipio = (String) dadosGerarIntegracao[5];
                
                 /*
                  * Inicio da geração do txt
@@ -5778,7 +5764,6 @@ public class ControladorFinanceiro implements SessionBean {
                 // CAMPO = DISPONIVEL
                 // INICIO = 1 FIM = 1
                 // TAMANHO = 1
-                //gerarIntegracaoTxt.append(Util.completaString("",1));
                 gerarIntegracaoTxt.append(";");
                
                 // SEQ = 2
@@ -5799,29 +5784,22 @@ public class ControladorFinanceiro implements SessionBean {
                 // CAMPO = CENTRO CUSTO
                 // INICIO = 14 FIM = 23
                 // TAMANHO = 10
-                if(centroCusto!=null){
+                if(centroCusto!=null) {
                     gerarIntegracaoTxt.append(centroCusto);
                 }
-                gerarIntegracaoTxt.append(";");               
+                
+                gerarIntegracaoTxt.append(";");
+                
                 // SEQ = 5
                 // CAMPO = LOCALIDADE
                 // INICIO = 24 FIM = 73
                 // TAMANHO = 50
-//                if ( nomeLocalidade.length() >= 50 ) {
-//                    gerarIntegracaoTxt.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximo(nomeLocalidade,50));
-//                } else {
-//                    gerarIntegracaoTxt.append(nomeLocalidade);
-//                }
                 gerarIntegracaoTxt.append(";");
                
                 // SEQ = 6
                 // CAMPO = MUNICIPIO
                 // INICIO = 74 FIM = 123
                 // TAMANHO = 50
-//                if ( nomeMunicipio.length() >= 50 ) {
-//                    gerarIntegracaoTxt.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximo(nomeMunicipio,50));   
-//                } else {
-//                    gerarIntegracaoTxt.append(nomeMunicipio);
 //                }
                 gerarIntegracaoTxt.append(";");
                
@@ -5829,9 +5807,6 @@ public class ControladorFinanceiro implements SessionBean {
                 // CAMPO = DISPONIVEL
                 // INICIO = 124 FIM = 129
                 // TAMANHO = 6
-               
-//                gerarIntegracaoTxt.append(Util.completaString("",6));
-//                gerarIntegracaoTxt.append(";");
                 gerarIntegracaoTxt.append(";");
                 gerarIntegracaoTxt.append(";");
                 gerarIntegracaoTxt.append(";");
@@ -5850,50 +5825,52 @@ public class ControladorFinanceiro implements SessionBean {
                 // CAMPO = VALOR DEBITO
                 // INICIO = 133 FIM = 143
                 // TAMANHO = 11
-                if(valorDebito!= null){
+                if(valorDebito!= null) {
                     gerarIntegracaoTxt.append(valorDebito.toString());
                 }
+                
                 gerarIntegracaoTxt.append(";");
                
                 // SEQ = 10
                 // CAMPO = VALOR CREDITO
                 // INICIO = 144 FIM = 154
                 // TAMANHO = 11
-                if(valorCredito!=null){
+                if(valorCredito!=null) {
                     gerarIntegracaoTxt.append(valorCredito.toString());   
                 }
+                
                 gerarIntegracaoTxt.append(";");
                
                 // SEQ = 11
                 // CAMPO = DISPONIVEL
                 // INICIO = 155 FIM = 155
                 // TAMANHO = 1
-//                gerarIntegracaoTxt.append(Util.completaString("",1));
                 gerarIntegracaoTxt.append(";");
                
                 // SEQ = 12
                 // CAMPO = VALOR DEBITO
                 // INICIO = 156 FIM = 166
                 // TAMANHO = 11
-                if(valorDebito!= null){
+                if(valorDebito!= null) {
                     gerarIntegracaoTxt.append(valorDebito.toString());
                 }
+                
                 gerarIntegracaoTxt.append(";");
                
                 // SEQ = 13
                 // CAMPO = VALOR CREDITO
                 // INICIO = 167 FIM = 177
                 // TAMANHO = 11
-                if(valorCredito!=null){
+                if(valorCredito!=null) {
                     gerarIntegracaoTxt.append(valorCredito.toString());   
                 }
+                
                 gerarIntegracaoTxt.append(";");
                
                 // SEQ = 14
                 // CAMPO = DISPONIVEL
                 // INICIO = 178 FIM = 182
                 // TAMANHO = 5
-//                gerarIntegracaoTxt.append(Util.completaString("",5));
                 gerarIntegracaoTxt.append(";");
                 gerarIntegracaoTxt.append(";");
                 gerarIntegracaoTxt.append(";");
@@ -5907,12 +5884,10 @@ public class ControladorFinanceiro implements SessionBean {
                 gerarIntegracaoTxt.append(historico);
                 gerarIntegracaoTxt.append(";");
                
-               
                 // SEQ = 16
                 // CAMPO = DISPONIVEL
                 // INICIO = 439 FIM = 443
                 // TAMANHO = 5
-//                gerarIntegracaoTxt.append(Util.completaString("",6));
                 gerarIntegracaoTxt.append(";");
                 gerarIntegracaoTxt.append(";");
                 gerarIntegracaoTxt.append(";");
@@ -5930,22 +5905,15 @@ public class ControladorFinanceiro implements SessionBean {
                
             }           
            
-            /*
-             * Gerando o arquivo zip
-             */
+            // Gerando o arquivo zip
             String nomeZip = "CONTABILIDADE_" + descricaoLancamento + "_" + (data.replace("/","_"));
             BufferedWriter out = null;
             ZipOutputStream zos = null;
             File compactadoTipo = new File(nomeZip + ".zip");
             File leituraTipo = new File(nomeZip + ".txt");
 
-            /*
-             * Caso oarquivo txt não esteja vazio
-             * adiciona o txt ao arquivo zip.
-             */
             if (gerarIntegracaoTxt != null && gerarIntegracaoTxt.length() != 0) {
                 try {
-                   
                     System.out.println("CRIANDO ZIP");
                     zos = new ZipOutputStream(new FileOutputStream(compactadoTipo));
 
@@ -5956,37 +5924,32 @@ public class ControladorFinanceiro implements SessionBean {
                     zos.close();
                     leituraTipo.delete();
                     out.close();
-                   
                 } catch (IOException ex) {
                     throw new ControladorException("erro.sistema", ex);
                 }
                
                 try {
-                               
                     // Envia de Arquivo por email
-                    EnvioEmail envioEmail = this.getControladorCadastro()
-                        .pesquisarEnvioEmail(
-                            EnvioEmail.GERAR_INTEGRACAO_PARA_CONTABILIDADE);
+                    EnvioEmail envioEmail = this.getControladorCadastro().pesquisarEnvioEmail(
+                    		EnvioEmail.GERAR_INTEGRACAO_PARA_CONTABILIDADE);
 
                     String emailRemetente = envioEmail.getEmailRemetente();
                     String tituloMensagem = envioEmail.getTituloMensagem();
                     String corpoMensagem = envioEmail.getCorpoMensagem();
                     String emailReceptor = envioEmail.getEmailReceptor();
                    
-                    ServicosEmail.enviarMensagemArquivoAnexado(
-                            emailReceptor,emailRemetente, tituloMensagem, corpoMensagem,
-                            compactadoTipo);
+                    ServicosEmail.enviarMensagemArquivoAnexado(emailReceptor, emailRemetente,
+                    		tituloMensagem, corpoMensagem, compactadoTipo);
                 } catch (Exception e) {
                     System.out.println("Erro ao enviar email.");
                 }           
             }
-            //caso não exista informação para os dados informados
-        }else{
-            if(idLancamentoOrigem.equals(LancamentoOrigem.FATURAMENTO + "")){
-                throw new ControladorException("atencao.pesquisa.nenhum_registro_tabela", null,"Resumo Faturamento");
-            }else if(idLancamentoOrigem.equals(LancamentoOrigem.ARRECADACAO + "")){
+        }else {
+            if (idLancamentoOrigem.equals(LancamentoOrigem.FATURAMENTO + "")) {
+                throw new ControladorException("atencao.pesquisa.nenhum_registro_tabela", null, "Resumo Faturamento");
+            } else if (idLancamentoOrigem.equals(LancamentoOrigem.ARRECADACAO + "")) {
                 throw new ControladorException("atencao.pesquisa.nenhum_registro_tabela", null,"Resumo Arrecadação");
-            }else if(idLancamentoOrigem.equals(LancamentoOrigem.DEVEDORES_DUVIDOSOS + "")){
+            } else if (idLancamentoOrigem.equals(LancamentoOrigem.DEVEDORES_DUVIDOSOS + "")) {
                 throw new ControladorException("atencao.pesquisa.nenhum_registro_tabela", null,"Resumo Devedores Duvidosos");
             }
         }
