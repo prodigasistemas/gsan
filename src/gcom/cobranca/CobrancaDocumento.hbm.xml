@@ -44,38 +44,6 @@
 		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="false">
 			<column name="imov_id"/>
 		</many-to-one>
-		<!-- bi-directional one-to-many association to CobrancaDocumentoItem -->
-		<!--  
-    <set
-        name="cobrancaDocumentoItems"
-        lazy="true"
-        inverse="true"
-		cascade="all"
-    >
-        <key>
-            <column name="cbdo_id" />
-        </key>
-        <one-to-many 
-            class="gcom.CobrancaDocumentoItem"
-        />
-    </set>
-	-->
-		<!-- bi-directional one-to-many association to OrdemServico -->
-		<!--  
-    <set
-        name="ordemServicos"
-        lazy="true"
-        inverse="true"
-		cascade="all"
-    >
-        <key>
-            <column name="cbdo_id" />
-        </key>
-        <one-to-many 
-            class="gcom.OrdemServico"
-        />
-    </set>
-    -->
 		<!-- bi-directional many-to-one association to Empresa -->
 		<many-to-one name="empresa" class="gcom.cadastro.empresa.Empresa" not-null="true">
 			<column name="empr_id"/>
@@ -144,6 +112,10 @@
 		<!-- bi-directional many-to-one association to LigacaoEsgotoSituacao -->
 		<many-to-one name="ligacaoEsgotoSituacao" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao" not-null="true">
 			<column name="lest_id"/>
+		</many-to-one>
+		
+		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario" not-null="false">
+			<column name="usur_id"/>
 		</many-to-one>
 	</class>
 </hibernate-mapping>
