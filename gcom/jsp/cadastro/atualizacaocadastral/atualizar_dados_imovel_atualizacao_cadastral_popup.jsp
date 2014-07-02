@@ -175,41 +175,44 @@
 			
 			<table width="100%" border="0">
 			
-				<tr><td><hr></td></tr>
+				<logic:present name="colecaoImagens">
+
+					<tr><td><hr></td></tr>
+					
+					<tr>
+						<td colspan="2">Imagens Carregadas:</td>
+					</tr>
 				
-				<tr>
-					<td colspan="2">Imagens Carregadas:</td>
-				</tr>
-				
-				<tr>
-					<td colspan="2">
-						<table bgcolor="#90c7fc" border=0>
-							<tr bordercolor="#90c7fc" bgcolor="#90c7fc">
-								<td align="center"><strong>Nome da Imagem</strong></td>
-								<td align="center"><strong>Download</strong></td>
-							</tr>
-							<%int i = 1;%>
-							<logic:iterate name="colecaoImagens" id="item">
-								<tr>
-									<%i = i + 1;
-									if (i % 2 == 0) {%>
-										<tr bgcolor="#FFFFFF">
-									<%} else {%>
-										<tr bgcolor="#cbe5fe">
-									<%}%>
-									<td align="center">
-										<bean:write name="item" property="nomeImagem" />
-									</td>
-									<td align="center">
-										<a href="javascript:abrirPopup('exibirImagemRetornoAtualizacaoCadastralAction.do?id=<bean:write name="item" property="id"/>', 400, 800);">
-											<img width="18" height="18" src="<bean:message key="caminho.imagens"/>imgfolder.gif" border="0" />
-										</a> 
-									</td>
+					<tr>
+						<td colspan="2">
+							<table bgcolor="#90c7fc" border=0>
+								<tr bordercolor="#90c7fc" bgcolor="#90c7fc">
+									<td align="center"><strong>Nome da Imagem</strong></td>
+									<td align="center"><strong>Download</strong></td>
 								</tr>
-							</logic:iterate>
-						</table>
-					</td>
-				</tr>
+								<%int i = 1;%>
+								<logic:iterate name="colecaoImagens" id="item">
+									<tr>
+										<%i = i + 1;
+										if (i % 2 == 0) {%>
+											<tr bgcolor="#FFFFFF">
+										<%} else {%>
+											<tr bgcolor="#cbe5fe">
+										<%}%>
+										<td align="center">
+											<bean:write name="item" property="nomeImagem" />
+										</td>
+										<td align="center">
+											<a href="javascript:abrirPopup('exibirImagemRetornoAtualizacaoCadastralAction.do?id=<bean:write name="item" property="id"/>', 400, 800);">
+												<img width="18" height="18" src="<bean:message key="caminho.imagens"/>imgfolder.gif" border="0" />
+											</a> 
+										</td>
+									</tr>
+								</logic:iterate>
+							</table>
+						</td>
+					</tr>
+				</logic:present>
 				
 				<tr><td><hr></td></tr>
 			

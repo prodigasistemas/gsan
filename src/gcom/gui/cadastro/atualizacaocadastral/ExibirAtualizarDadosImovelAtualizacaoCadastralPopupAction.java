@@ -20,7 +20,6 @@ import gcom.util.AtualizacaoCadastralUtil;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedList;
 import java.util.List;
@@ -95,8 +94,10 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 			}
 			
 			Collection<ImagemRetorno> colecaoImagens = fachada.pesquisarImagensRetornoPorIdImovel(Integer.parseInt(idImovel));
-			if (!colecaoImagens.isEmpty()) {
+			if (colecaoImagens != null && !colecaoImagens.isEmpty()) {
 				sessao.setAttribute("colecaoImagens", colecaoImagens);
+			} else {
+				sessao.setAttribute("colecaoImagens", null);
 			}
 			
 			Map<String, List<DadosTabelaAtualizacaoCadastralHelper>> map = fachada.consultarDadosTabelaColunaAtualizacaoCadastral(
@@ -104,7 +105,7 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 			
 			Collection<DadosTabelaAtualizacaoCadastralHelper> atualizacoes = new AtualizacaoCadastralUtil().linhasAtualizacaoCadastral(resumoImovel, map);
 			
-			if (!atualizacoes.isEmpty()) {
+			if (atualizacoes != null && !atualizacoes.isEmpty()) {
 				sessao.setAttribute("colecaoDadosTabelaAtualizacaoCadastral", atualizacoes);
 			}		
 			
