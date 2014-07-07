@@ -7711,9 +7711,9 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
                             anoMesAnteriorFaturamento, idGerenciaRegionalConta,
                             idUnidadeNegocioConta, idLocalidadeConta,
                             idCategoriaConta, valorCategoria.multiply(new BigDecimal("-1")),
-                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 300,
+                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 100,
                             LancamentoItem.CONTAS_PAGA_EM_DUPLICIDADE_EXCESSO,
-                            10, null);
+                            50, null);
 
                     colecaoContasAReceberContabil.add(contaAReceberContabil);
                 }
@@ -7761,9 +7761,9 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
                             idCategoriaConta,
                             valorCategoria.multiply(new BigDecimal("-1")),
                             LancamentoTipo.DOCUMENTOS_EMITIDOS,
-                            300,
+                            100,
                             LancamentoItem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO,
-                            20, null);
+                            60, null);
 
                     colecaoContasAReceberContabil.add(contaAReceberContabil);
                 }
@@ -7806,8 +7806,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
                             anoMesAnteriorFaturamento, idGerenciaRegionalConta,
                             idUnidadeNegocioConta, idLocalidadeConta,
                             idCategoriaConta, valorCategoria.multiply(new BigDecimal("-1")),
-                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 300,
-                            LancamentoItem.DESCONTOS_CONDICIONAIS, 30, null);
+                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 100,
+                            LancamentoItem.DESCONTOS_CONDICIONAIS, 70, null);
 
                     colecaoContasAReceberContabil.add(contaAReceberContabil);
                 }
@@ -7851,8 +7851,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
                             anoMesAnteriorFaturamento, idGerenciaRegionalConta,
                             idUnidadeNegocioConta, idLocalidadeConta,
                             idCategoriaConta, valorCategoria.multiply(new BigDecimal("-1")),
-                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 300,
-                            LancamentoItem.DESCONTOS_INCONDICIONAIS, 40, null);
+                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 100,
+                            LancamentoItem.DESCONTOS_INCONDICIONAIS, 80, null);
 
                     colecaoContasAReceberContabil.add(contaAReceberContabil);
                 }
@@ -7895,8 +7895,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
                             anoMesAnteriorFaturamento, idGerenciaRegionalConta,
                             idUnidadeNegocioConta, idLocalidadeConta,
                             idCategoriaConta, valorCategoria.multiply(new BigDecimal("-1")),
-                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 300,
-                            LancamentoItem.AJUSTES_PARA_ZERAR_CONTA, 50, null);
+                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 100,
+                            LancamentoItem.AJUSTES_PARA_ZERAR_CONTA, 90, null);
 
                     colecaoContasAReceberContabil.add(contaAReceberContabil);
                 }
@@ -7938,8 +7938,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
                             anoMesAnteriorFaturamento, idGerenciaRegionalConta,
                             idUnidadeNegocioConta, idLocalidadeConta,
                             idCategoriaConta, valorCategoria.multiply(new BigDecimal("-1")),
-                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 300,
-                            LancamentoItem.VALORES_COBRADOS_INDEVIDAMENTE, 60, null);
+                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 100,
+                            LancamentoItem.VALORES_COBRADOS_INDEVIDAMENTE, 95, null);
 
                     colecaoContasAReceberContabil.add(contaAReceberContabil);
                 }
@@ -11560,16 +11560,15 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 		return dados;
 	}
 		
-	public Collection consultarDadosRelatorioSaldoContasAReceberContabil(String opcaoTotalizacao,
-			int mesAno, Integer gerencia, Integer unidadeNegocio, Integer localidade, Integer municipio) 
-	throws ControladorException{
+	public Collection consultarDadosRelatorioSaldoContasAReceberContabil(String opcaoTotalizacao, int mesAno, Integer gerencia, Integer unidadeNegocio, Integer localidade, Integer municipio)
+			throws ControladorException {
+		
 		Collection pesquisaDados = new ArrayList();
-		HashMap<String, RelatorioSaldoContasAReceberContabilBean> dadosAgrupados = 
-			new HashMap<String, RelatorioSaldoContasAReceberContabilBean>();
+		HashMap<String, RelatorioSaldoContasAReceberContabilBean> dadosAgrupados = new HashMap<String, RelatorioSaldoContasAReceberContabilBean>();
 		int anoMes = Util.formatarMesAnoParaAnoMes(mesAno);
+		
 		try {
-			pesquisaDados = repositorioFinanceiro.consultarDadosRelatorioSaldoContasAReceberContabil(
-					opcaoTotalizacao, anoMes, gerencia, unidadeNegocio, localidade, municipio);
+			pesquisaDados = repositorioFinanceiro.consultarDadosRelatorioSaldoContasAReceberContabil(opcaoTotalizacao, anoMes, gerencia, unidadeNegocio, localidade, municipio);
 			
 			String tipoGrupo = "";
 			if(opcaoTotalizacao.equalsIgnoreCase("estadoGerencia")){
@@ -11592,7 +11591,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 			BigDecimal totalizadorSomaSemPerdaPublico = new BigDecimal("0");
 			BigDecimal totalizadorSomaSemPerda = new BigDecimal("0");
 			
-			BigDecimal totalizadorSomaSemPerdaResidendial = new BigDecimal("0");
+			BigDecimal totalizadorSomaSemPerdaResidencial = new BigDecimal("0");
 			BigDecimal totalizadorSomaSemPerdaComercial = new BigDecimal("0");
 			BigDecimal totalizadorSomaSemPerdaIndustrial = new BigDecimal("0");
 			
@@ -11616,10 +11615,16 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 			//************************************************************
 			int indicadorFinCobCurtoPrazo = 0;
 			int indicadorFinCobLongoPrazo = 0;
+			int indicadorConta = 0;
+			int indicadorGuia = 0;
 			RelatorioSaldoContasAReceberContabilBean beanFinCobCurtoPrazo = null;
 			RelatorioSaldoContasAReceberContabilBean beanFinCobLongoPrazo = null;
+			RelatorioSaldoContasAReceberContabilBean beanConta = null;
+			RelatorioSaldoContasAReceberContabilBean beanGuia = null;
 			String chaveFinCobCurtoPrazo = "";
 			String chaveFinCobLongoPrazo = "";
+			String chaveConta = "";
+			String chaveGuia = "";
 			Boolean primeiraVez = true;
 			Integer idItemGrupoAnterior = null;
 			
@@ -11658,7 +11663,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 					totalizadorSomaSemPerdaPublico = new BigDecimal("0");
 					totalizadorSomaSemPerda = new BigDecimal("0");
 					
-					totalizadorSomaSemPerdaResidendial = new BigDecimal("0");
+					totalizadorSomaSemPerdaResidencial = new BigDecimal("0");
 					totalizadorSomaSemPerdaComercial = new BigDecimal("0");
 					totalizadorSomaSemPerdaIndustrial = new BigDecimal("0");
 				}
@@ -11666,8 +11671,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 				//*****************************************************************************
 				// Verifica se adiciona o subtotal para Financiamento Cobrar CURTO Prazo
 				//*****************************************************************************
-				if (numSequenciaTipoLancamento.equals(400) && numSequenciaLancamentoItem.equals(10) &&
-						indicadorFinCobCurtoPrazo == 0) {
+				if (numSequenciaTipoLancamento.equals(400) && numSequenciaLancamentoItem.equals(10) && indicadorFinCobCurtoPrazo == 0) {
 					
 					indicadorFinCobCurtoPrazo = 1;
 					beanFinCobCurtoPrazo = new RelatorioSaldoContasAReceberContabilBean(
@@ -11681,7 +11685,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 					beanFinCobCurtoPrazo.setSequenciaLancamentoTipo(400);
 					beanFinCobCurtoPrazo.setSequenciaLancamentoItem(11); // Serve apenas para ordenacao
 					
-					if (tipoCategoria.intValue() == CategoriaTipo.PARTICULAR.intValue()){
+					if (tipoCategoria.intValue() == CategoriaTipo.PARTICULAR.intValue()) {
 						beanFinCobCurtoPrazo.setValorItemParticular(somaValor); // PARTICULAR
 						
 						if (idCategoria.equals(Categoria.RESIDENCIAL)) {
@@ -11695,12 +11699,11 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 						beanFinCobCurtoPrazo.setValorItemPublico(somaValor); // PUBLICO	
 					}
 					
-				}else if (numSequenciaTipoLancamento.equals(400) && numSequenciaLancamentoItem.equals(10) &&
-						indicadorFinCobCurtoPrazo == 1) {
+				} else if (numSequenciaTipoLancamento.equals(400) && numSequenciaLancamentoItem.equals(10) && indicadorFinCobCurtoPrazo == 1) {
 					
 					chaveFinCobCurtoPrazo = "z" + nomeItemGrupo + descricaoLancamentoTipo + descricaoLancamentoItem + descricaoItemContabil;
 					
-					if (tipoCategoria.intValue() == CategoriaTipo.PARTICULAR.intValue()){
+					if (tipoCategoria.intValue() == CategoriaTipo.PARTICULAR.intValue()) {
 						beanFinCobCurtoPrazo.setValorItemParticular(beanFinCobCurtoPrazo.getValorItemParticular().add(somaValor)); // PARTICULAR
 						
 						if (idCategoria.equals(Categoria.RESIDENCIAL)) {
@@ -11787,6 +11790,125 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 				//*****************************************************************************
 				
 				
+				//*****************************************************************************
+				// Verifica se adiciona o subtotal para itens referentes a Contas (Documentos Emitidos)
+				//*****************************************************************************
+				if (numSequenciaTipoLancamento.equals(100) && indicadorConta == 0) {
+					
+					indicadorConta = 1;
+					beanConta = new RelatorioSaldoContasAReceberContabilBean(
+							idGerenciaRegional, nomeGerenciaRegional, idUnidadeNegocio,
+							nomeUnidadeNegocio, codigoCentroCusto, tipoGrupo, idItemGrupo,
+							nomeItemGrupo, descricaoLancamentoTipo, descricaoLancamentoItem,
+							"                            SUBTOTAL",
+							totalizadorSomaSemPerdaParticular, totalizadorSomaSemPerdaPublico,
+							totalizadorSomaSemPerda);
+					
+					beanConta.setSequenciaLancamentoTipo(100);
+					beanConta.setSequenciaLancamentoItem(101); // Serve apenas para ordenacao
+					
+					if (tipoCategoria.intValue() == CategoriaTipo.PARTICULAR.intValue()){
+						beanConta.setValorItemParticular(somaValor); // PARTICULAR
+						
+						if (idCategoria.equals(Categoria.RESIDENCIAL)) {
+							beanConta.setValorItemResidencial(somaValor);
+						}else if (idCategoria.equals(Categoria.COMERCIAL)) {
+							beanConta.setValorItemComercial(somaValor);
+						}else if (idCategoria.equals(Categoria.INDUSTRIAL)) {
+							beanConta.setValorItemIndustrial(somaValor);
+						}
+					} else {
+						beanConta.setValorItemPublico(somaValor); // PUBLICO	
+					}
+					
+				} else if (numSequenciaTipoLancamento.equals(100) && indicadorConta == 1) {
+					beanConta.setDescricaoLancamentoItem(descricaoLancamentoItem);
+					
+					chaveConta = "zzz" + nomeItemGrupo + descricaoLancamentoTipo + descricaoLancamentoItem + descricaoItemContabil;
+					if (tipoCategoria.intValue() == CategoriaTipo.PARTICULAR.intValue()){
+						beanConta.setValorItemParticular(beanConta.getValorItemParticular().add(somaValor)); // PARTICULAR
+						
+						if (idCategoria.equals(Categoria.RESIDENCIAL)) {
+							beanConta.setValorItemResidencial(
+									beanConta.getValorItemResidencial().add(somaValor));
+						}else if (idCategoria.equals(Categoria.COMERCIAL)) {
+							beanConta.setValorItemComercial(
+									beanConta.getValorItemComercial().add(somaValor));
+						}else if (idCategoria.equals(Categoria.INDUSTRIAL)) {
+							beanConta.setValorItemIndustrial(
+									beanConta.getValorItemIndustrial().add(somaValor));
+						}
+					}else {
+						beanConta.setValorItemPublico(
+								beanConta.getValorItemPublico().add(somaValor)); // PUBLICO
+					}
+					
+				} else if (indicadorConta == 1) {
+					dadosAgrupados.put(chaveConta, beanConta);
+					indicadorConta = 2;
+				}
+				//*****************************************************************************
+				
+			
+				//*****************************************************************************
+				// Verifica se adiciona o subtotal para itens referentes a Guias (Documentos Emitidos)
+				//*****************************************************************************
+				if (numSequenciaTipoLancamento.equals(200) && indicadorGuia == 0) {
+					
+					indicadorGuia = 1;
+					beanGuia = new RelatorioSaldoContasAReceberContabilBean(
+							idGerenciaRegional, nomeGerenciaRegional, idUnidadeNegocio,
+							nomeUnidadeNegocio, codigoCentroCusto, tipoGrupo, idItemGrupo,
+							nomeItemGrupo, descricaoLancamentoTipo, descricaoLancamentoItem,
+							"                            SUBTOTAL",
+							totalizadorSomaSemPerdaParticular, totalizadorSomaSemPerdaPublico,
+							totalizadorSomaSemPerda);
+					
+					beanGuia.setSequenciaLancamentoTipo(200);
+					beanGuia.setSequenciaLancamentoItem(99); // Serve apenas para ordenacao
+					
+					if (tipoCategoria.intValue() == CategoriaTipo.PARTICULAR.intValue()){
+						beanGuia.setValorItemParticular(somaValor); // PARTICULAR
+						
+						if (idCategoria.equals(Categoria.RESIDENCIAL)) {
+							beanGuia.setValorItemResidencial(somaValor);
+						}else if (idCategoria.equals(Categoria.COMERCIAL)) {
+							beanGuia.setValorItemComercial(somaValor);
+						}else if (idCategoria.equals(Categoria.INDUSTRIAL)) {
+							beanGuia.setValorItemIndustrial(somaValor);
+						}
+					}else {
+						beanGuia.setValorItemPublico(somaValor); // PUBLICO	
+					}
+					
+				}else if (numSequenciaTipoLancamento.equals(200) && indicadorGuia == 1) {
+					beanGuia.setDescricaoLancamentoItem(descricaoLancamentoItem);
+					
+					chaveGuia = "zzzz" + nomeItemGrupo + descricaoLancamentoTipo + descricaoLancamentoItem + descricaoItemContabil;
+					if (tipoCategoria.intValue() == CategoriaTipo.PARTICULAR.intValue()){
+						beanGuia.setValorItemParticular(beanGuia.getValorItemParticular().add(somaValor)); // PARTICULAR
+						
+						if (idCategoria.equals(Categoria.RESIDENCIAL)) {
+							beanGuia.setValorItemResidencial(
+									beanGuia.getValorItemResidencial().add(somaValor));
+						}else if (idCategoria.equals(Categoria.COMERCIAL)) {
+							beanGuia.setValorItemComercial(
+									beanGuia.getValorItemComercial().add(somaValor));
+						}else if (idCategoria.equals(Categoria.INDUSTRIAL)) {
+							beanGuia.setValorItemIndustrial(
+									beanGuia.getValorItemIndustrial().add(somaValor));
+						}
+					}else {
+						beanGuia.setValorItemPublico(
+								beanGuia.getValorItemPublico().add(somaValor)); // PUBLICO
+					}
+					
+				} else if (indicadorGuia == 1) {
+					dadosAgrupados.put(chaveGuia, beanGuia);
+					indicadorGuia = 2;
+				}
+				//*****************************************************************************
+				
 				String chave = nomeItemGrupo + descricaoLancamentoTipo + descricaoLancamentoItem + descricaoItemContabil;
 				
 				RelatorioSaldoContasAReceberContabilBean bean = dadosAgrupados.get(chave);
@@ -11839,8 +11961,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 							totalizadorSomaSemPerdaParticular = totalizadorSomaSemPerdaParticular.add(somaValor);
 							
 							if (idCategoria.equals(Categoria.RESIDENCIAL)) {
-								totalizadorSomaSemPerdaResidendial = 
-									totalizadorSomaSemPerdaResidendial.add(somaValor);
+								totalizadorSomaSemPerdaResidencial = 
+									totalizadorSomaSemPerdaResidencial.add(somaValor);
 							}else if (idCategoria.equals(Categoria.COMERCIAL)) {
 								totalizadorSomaSemPerdaComercial =
 									totalizadorSomaSemPerdaComercial.add(somaValor);
@@ -11853,7 +11975,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 						totalizadorSomaSemPerda = totalizadorSomaSemPerdaParticular.add(totalizadorSomaSemPerdaPublico);
 						bean.setTotalGeralSemPerdas(totalizadorSomaSemPerda);
 						
-						bean.setTotalGeralSemPerdasResidencial(totalizadorSomaSemPerdaResidendial);
+						bean.setTotalGeralSemPerdasResidencial(totalizadorSomaSemPerdaResidencial);
 						bean.setTotalGeralSemPerdasComercial(totalizadorSomaSemPerdaComercial);
 						bean.setTotalGeralSemPerdasIndustrial(totalizadorSomaSemPerdaIndustrial);
 					}
@@ -11879,6 +12001,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);
 		}
+		
 		return new ArrayList(dadosAgrupados.values());
 	}
 	
