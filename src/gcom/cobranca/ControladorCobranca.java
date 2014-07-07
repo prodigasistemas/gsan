@@ -15380,120 +15380,79 @@ public class ControladorCobranca implements SessionBean {
 		filtroCobrancaDocumento.adicionarParametro(new ParametroSimples(
 				FiltroCobrancaDocumento.ID, cobrancaDocumento.getId()));
 
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.localidade");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.quadra");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.setorComercial.municipio.unidadeFederacao");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroBairro.bairro.municipio.unidadeFederacao");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.ligacaoAguaSituacao");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.ligacaoEsgotoSituacao");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.logradouro.logradouroTipo");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.logradouro.logradouroTitulo");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.enderecoReferencia");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.cep");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("documentoEmissaoForma");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("motivoNaoEntregaDocumento");
-		/**
-		 * TODO - COSANPA
-		 * Adicionado os Filtros para os atributos perimetroInicial e perimetroFinal.
-		 */
-		filtroCobrancaDocumento
-		.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTipo");
-		filtroCobrancaDocumento
-		.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTitulo");
-		filtroCobrancaDocumento
-		.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTipo");
-		filtroCobrancaDocumento
-		.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTitulo");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.localidade");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.quadra");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.setorComercial.municipio.unidadeFederacao");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroBairro.bairro.municipio.unidadeFederacao");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.ligacaoAguaSituacao");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.ligacaoEsgotoSituacao");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.logradouro.logradouroTipo");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.logradouro.logradouroTitulo");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.enderecoReferencia");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.cep");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("documentoEmissaoForma");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("motivoNaoEntregaDocumento");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTipo");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTitulo");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTipo");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTitulo");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("usuario");
 
-		Collection colecaoCobrancaDocumento = getControladorUtil().pesquisar(
-				filtroCobrancaDocumento, CobrancaDocumento.class.getName());
+		Collection colecaoCobrancaDocumento = getControladorUtil().pesquisar(filtroCobrancaDocumento, CobrancaDocumento.class.getName());
 
-		CobrancaDocumento cobrancaDocumentoCarregado = (CobrancaDocumento) Util
-				.retonarObjetoDeColecao(colecaoCobrancaDocumento);
+		CobrancaDocumento cobrancaDocumentoCarregado = (CobrancaDocumento) Util.retonarObjetoDeColecao(colecaoCobrancaDocumento);
 
 		retorno.setCobrancaDocumento(cobrancaDocumentoCarregado);
 
 		FiltroCobrancaDocumentoItem filtroCobrancaDocumentoItem = new FiltroCobrancaDocumentoItem();
 		filtroCobrancaDocumentoItem.setConsultaSemLimites(true);
 
-		filtroCobrancaDocumentoItem
-				.adicionarCaminhoParaCarregamentoEntidade("contaGeral.conta.debitoCreditoSituacaoAtual");
-		filtroCobrancaDocumentoItem
-				.adicionarCaminhoParaCarregamentoEntidade("contaGeral.contaHistorico.debitoCreditoSituacaoAtual");
-		filtroCobrancaDocumentoItem
-				.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrar.debitoTipo");
-		filtroCobrancaDocumentoItem
-				.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrarHistorico.debitoTipo");
-		filtroCobrancaDocumentoItem
-				.adicionarCaminhoParaCarregamentoEntidade("guiaPagamentoGeral.guiaPagamento.debitoTipo");
-		filtroCobrancaDocumentoItem
-				.adicionarCaminhoParaCarregamentoEntidade("guiaPagamentoGeral.guiaPagamentoHistorico.debitoTipo");
-		filtroCobrancaDocumentoItem
-				.adicionarCaminhoParaCarregamentoEntidade("documentoTipo");
+		filtroCobrancaDocumentoItem.adicionarCaminhoParaCarregamentoEntidade("contaGeral.conta.debitoCreditoSituacaoAtual");
+		filtroCobrancaDocumentoItem.adicionarCaminhoParaCarregamentoEntidade("contaGeral.contaHistorico.debitoCreditoSituacaoAtual");
+		filtroCobrancaDocumentoItem.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrar.debitoTipo");
+		filtroCobrancaDocumentoItem.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrarHistorico.debitoTipo");
+		filtroCobrancaDocumentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizar.creditoTipo");
+		filtroCobrancaDocumentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizarHistorico.creditoTipo");
+		filtroCobrancaDocumentoItem.adicionarCaminhoParaCarregamentoEntidade("guiaPagamentoGeral.guiaPagamento.debitoTipo");
+		filtroCobrancaDocumentoItem.adicionarCaminhoParaCarregamentoEntidade("guiaPagamentoGeral.guiaPagamentoHistorico.debitoTipo");
+		filtroCobrancaDocumentoItem.adicionarCaminhoParaCarregamentoEntidade("documentoTipo");
 
 		filtroCobrancaDocumentoItem.adicionarParametro(new ParametroSimples(
-				FiltroCobrancaDocumentoItem.COBRANCA_DOCUMENTO_ID,
-				cobrancaDocumentoCarregado.getId()));
+				FiltroCobrancaDocumentoItem.COBRANCA_DOCUMENTO_ID, cobrancaDocumentoCarregado.getId()));
 
-		Collection colecaoCobrancaDocumentoItem = getControladorUtil()
-				.pesquisar(filtroCobrancaDocumentoItem,
-						CobrancaDocumentoItem.class.getName());
+		Collection colecaoCobrancaDocumentoItem = getControladorUtil().pesquisar(filtroCobrancaDocumentoItem, CobrancaDocumentoItem.class.getName());
 
-		if (colecaoCobrancaDocumentoItem != null
-				&& !colecaoCobrancaDocumentoItem.isEmpty()) {
+		if (colecaoCobrancaDocumentoItem != null && !colecaoCobrancaDocumentoItem.isEmpty()) {
 
-			retorno
-					.setQuantidadeItensCobrancaDocumento(colecaoCobrancaDocumentoItem
-							.size());
+			retorno.setQuantidadeItensCobrancaDocumento(colecaoCobrancaDocumentoItem.size());
 
-			Iterator iteratorColecaoCobrancaDocumentoItem = colecaoCobrancaDocumentoItem
-					.iterator();
+			Iterator iteratorColecaoCobrancaDocumentoItem = colecaoCobrancaDocumentoItem.iterator();
 			CobrancaDocumentoItem cobrancaDocumentoItem = null;
 
 			Collection colecaoCobrancaDocumentoItemConta = new ArrayList();
 			Collection colecaoCobrancaDocumentoItemDebitoACobrar = new ArrayList();
+			Collection colecaoCobrancaDocumentoItemCreditoARealizar = new ArrayList();
 			Collection colecaoCobrancaDocumentoItemGuiaPagamento = new ArrayList();
 
 			while (iteratorColecaoCobrancaDocumentoItem.hasNext()) {
 
-				cobrancaDocumentoItem = (CobrancaDocumentoItem) iteratorColecaoCobrancaDocumentoItem
-						.next();
+				cobrancaDocumentoItem = (CobrancaDocumentoItem) iteratorColecaoCobrancaDocumentoItem.next();
 
-				// cobrancaDocumentoItem.getContaGeral().getConta();
-				// cobrancaDocumentoItem.getContaGeral().getContaHistorico();
-				if (cobrancaDocumentoItem.getDocumentoTipo().getId().equals(
-						DocumentoTipo.CONTA)) {
-					colecaoCobrancaDocumentoItemConta
-							.add(cobrancaDocumentoItem);
-				} else if (cobrancaDocumentoItem.getDocumentoTipo().getId()
-						.equals(DocumentoTipo.DEBITO_A_COBRAR)) {
-					colecaoCobrancaDocumentoItemDebitoACobrar
-							.add(cobrancaDocumentoItem);
-				} else if (cobrancaDocumentoItem.getDocumentoTipo().getId()
-						.equals(DocumentoTipo.GUIA_PAGAMENTO)) {
-					colecaoCobrancaDocumentoItemGuiaPagamento
-							.add(cobrancaDocumentoItem);
+				if (cobrancaDocumentoItem.getDocumentoTipo().getId().equals(DocumentoTipo.CONTA)) {
+					colecaoCobrancaDocumentoItemConta.add(cobrancaDocumentoItem);
+				} else if (cobrancaDocumentoItem.getDocumentoTipo().getId().equals(DocumentoTipo.DEBITO_A_COBRAR)) {
+					colecaoCobrancaDocumentoItemDebitoACobrar.add(cobrancaDocumentoItem);
+				} else if (cobrancaDocumentoItem.getDocumentoTipo().getId().equals(DocumentoTipo.CREDITO_A_REALIZAR)) {
+					colecaoCobrancaDocumentoItemCreditoARealizar.add(cobrancaDocumentoItem);
+				} else if (cobrancaDocumentoItem.getDocumentoTipo().getId().equals(DocumentoTipo.GUIA_PAGAMENTO)) {
+					colecaoCobrancaDocumentoItemGuiaPagamento.add(cobrancaDocumentoItem);
 				}
 			}
 
-			retorno
-					.setColecaoCobrancaDocumentoItemConta(colecaoCobrancaDocumentoItemConta);
-			retorno
-					.setColecaoCobrancaDocumentoItemDebitoACobrar(colecaoCobrancaDocumentoItemDebitoACobrar);
-			retorno
-					.setColecaoCobrancaDocumentoItemGuiaPagamento(colecaoCobrancaDocumentoItemGuiaPagamento);
+			retorno.setColecaoCobrancaDocumentoItemConta(colecaoCobrancaDocumentoItemConta);
+			retorno.setColecaoCobrancaDocumentoItemDebitoACobrar(colecaoCobrancaDocumentoItemDebitoACobrar);
+			retorno.setColecaoCobrancaDocumentoItemCreditoARealizar(colecaoCobrancaDocumentoItemCreditoARealizar);
+			retorno.setColecaoCobrancaDocumentoItemGuiaPagamento(colecaoCobrancaDocumentoItemGuiaPagamento);
 		} else {
 			retorno.setQuantidadeItensCobrancaDocumento(0);
 		}
