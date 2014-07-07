@@ -147,20 +147,28 @@
 			<table width="100%" border="0">
 				<tr>
 					<td width="100"><strong>Im&oacute;vel:</strong></td>
-					<td align="left"><html:text property="descricaoImovel" readonly="true" size="30"
+					<td align="left"><html:text property="descricaoImovel" readonly="true" size="20"
 						styleClass="texto-exibicao" /></td>
 				</tr>
 				<tr>
 					<td><strong>Localidade:</strong></td>
-					<td align="left"><html:text property="descricaoLocalidade" readonly="true" size="60" styleClass="texto-exibicao" /></td>
+					<td align="left"><html:text property="descricaoLocalidade" readonly="true" size="20" styleClass="texto-exibicao" /></td>
 				</tr>
 				<tr>
 					<td><strong>Setor Comercial:</strong></td>
-					<td align="left"><html:text property="descricaoSetorComercial" readonly="true" size="60" styleClass="texto-exibicao"/></td>
+					<td align="left"><html:text property="descricaoSetorComercial" readonly="true" size="10" styleClass="texto-exibicao"/></td>
 				</tr>
 				<tr>
 					<td><strong>Quadra:</strong></td>
-					<td align="left"><html:text property="numeroQuadra" readonly="true" size="8" styleClass="texto-exibicao" /></td>
+					<td align="left"><html:text property="numeroQuadra" readonly="true" size="10" styleClass="texto-exibicao" /></td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td><strong>Situa&ccedil;&atilde;o:</strong></td>
+					<td align="left"><html:text property="situacao" readonly="true" size="20" styleClass="texto-exibicao" /></td>
 				</tr>
 				
 				<logic:equal name="fiscalizado" value="false" scope="session">

@@ -36,13 +36,19 @@ public class ConsultarMovimentoAtualizacaoCadastralHelper implements Serializabl
 	
 	private Set<CategoriaAtualizacaoCadastral> categorias = new HashSet<CategoriaAtualizacaoCadastral>();
 	
-	public ConsultarMovimentoAtualizacaoCadastralHelper(Integer icAutorizado, Integer idImovel, String nomeFuncionario, Date dataRealizacao, Integer idArquivo, String inscricao) {
+	private Integer idSituacao;
+	
+	private String descricaoSituacao;
+	
+	public ConsultarMovimentoAtualizacaoCadastralHelper(Integer icAutorizado, Integer idImovel, String nomeFuncionario, Date dataRealizacao, Integer idArquivo, String inscricao, Integer idSituacao, String descricaoSituacao) {
 		this.icAutorizado = icAutorizado;
 		this.idImovel = idImovel;
 		this.nomeFuncionario = nomeFuncionario;
 		this.dataRealizacao = dataRealizacao;
 		this.idArquivo = idArquivo;
 		this.inscricao = inscricao;
+		this.idSituacao = idSituacao;
+		this.descricaoSituacao = descricaoSituacao;
 	}
 
 	public ConsultarMovimentoAtualizacaoCadastralHelper(){}
@@ -149,6 +155,22 @@ public class ConsultarMovimentoAtualizacaoCadastralHelper implements Serializabl
 
 	public void addCategoria(CategoriaAtualizacaoCadastral categoria) {
 		this.categorias.add(categoria);
+	}
+
+	public Integer getIdSituacao() {
+		return idSituacao;
+	}
+
+	public void setIdSituacao(Integer idSituacao) {
+		this.idSituacao = idSituacao;
+	}
+
+	public String getDescricaoSituacao() {
+		return descricaoSituacao;
+	}
+
+	public void setDescricaoSituacao(String descricaoSituacao) {
+		this.descricaoSituacao = descricaoSituacao;
 	}
 
 	@Override
