@@ -43,7 +43,7 @@
 				<table width="100%" border="0" align="center" cellpadding="0" cellspacing="0">
 					<tr>
 						<td width="11"><img border="0" src="<bean:message key="caminho.imagens"/>parahead_left.gif" /></td>
-						<td class="parabg">Situação de Leitura - Arquivos de Atualização Cadastral</td>
+						<td class="parabg">Situação de Transmissão - Arquivos de Atualização Cadastral</td>
 						<td width="11"><img border="0" src="<bean:message key="caminho.imagens"/>parahead_right.gif" /></td>
 					</tr>
 				</table>
@@ -53,14 +53,14 @@
 				<table width="100%" border="0">
 					<tr bordercolor="#000000" bgcolor="#90c7fc" class="styleFontePeqNegrito">
 						<td width="10%" bgcolor="#90c7fc"> <strong>Descrição</strong> </td>
-						<td width="10%" bgcolor="#90c7fc"> <strong>Quantidade de imóveis</strong> </td>	
+						<td width="10%" bgcolor="#90c7fc"> <strong>Quantidade de Imóveis</strong> </td>	
 					</tr>
 					<tr bgcolor="#FFFFFF" class="styleFontePequena">
-						<td colspan="1"> Total de imóveis na rota </td>
+						<td colspan="1"> Total de Imóveis na Rota </td>
 						<td colspan="1" > <bean:write name="ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm" property="totalImoveis"/> </td>
 					</tr>
 					<tr bgcolor="#FFFFFF" class="styleFontePequena">
-						<td colspan="1"> Imóveis transmitidos </td>
+						<td colspan="1"> Imóveis Transmitidos </td>
 						<td colspan="1" > <bean:write name="ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm" property="imoveisTransmitidos"/> </td>
 					</tr>
 	
@@ -69,23 +69,23 @@
 						<td colspan="1" > <bean:write name="ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm" property="imoveisAprovados"/> </td>
 					</tr>
 					<tr bgcolor="#FFFFFF" class="styleFontePequena">
-						<td colspan="1"> Imóveis com anormalidade </td>
+						<td colspan="1"> Imóveis com Anormalidade </td>
 						<td colspan="1" > <bean:write name="ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm" property="imoveisComAnormalidade"/> </td>
 					</tr>
 					<tr bgcolor="#FFFFFF" class="styleFontePequena">
-						<td colspan="1"> Imóveis com alteração de hidrômetro </td>
+						<td colspan="1"> Imóveis com Alteração de Hidrômetro </td>
 						<td colspan="1" > <bean:write name="ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm" property="imoveisComAlteracaoHidrometro"/> </td>
 					</tr>
 					<tr bgcolor="#FFFFFF" class="styleFontePequena">
-						<td colspan="1"> Imóveis com alteração de situação da ligação de água </td>
+						<td colspan="1"> Imóveis com Alteração de Situação da Ligação de Água </td>
 						<td colspan="1" > <bean:write name="ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm" property="imoveisComAlteracaoLigacaoAgua"/> </td>
 					</tr>
 					<tr bgcolor="#FFFFFF" class="styleFontePequena">
-						<td colspan="1"> Imóveis com alteração de situação da ligação de esgoto </td>
+						<td colspan="1"> Imóveis com Alteração de Situação da Ligação de Esgoto </td>
 						<td colspan="1" > <bean:write name="ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm" property="imoveisComAlteracaoLigacaoEsgoto"/> </td>
 					</tr>
 					<tr bgcolor="#FFFFFF" class="styleFontePequena">
-						<td colspan="1"> Imóveis com alteração de categoria/subcategoria/quantidade de economias </td>
+						<td colspan="1"> Imóveis com Alteração de Categoria/Subcategoria/Qtd. de Economias </td>
 						<td colspan="1" > <bean:write name="ExibirAnaliseSituacaoArquivoAtualizacaoCadastralActionForm" property="imoveisComAlteracaoCategoriaSubEconomias"/> </td>
 					</tr>
 				</table>
