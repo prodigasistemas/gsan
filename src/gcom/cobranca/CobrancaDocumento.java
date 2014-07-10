@@ -13,6 +13,7 @@ import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.localidade.Quadra;
 import gcom.faturamento.conta.MotivoNaoEntregaDocumento;
+import gcom.seguranca.acesso.usuario.Usuario;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -20,61 +21,79 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
 public class CobrancaDocumento implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
 
-    private Integer id;
-    private int numeroSequenciaDocumento;
-    private Date emissao;
-    private BigDecimal valorDesconto;
-    private Integer numeroQuadra;
-    private BigDecimal valorDocumento;
-    private BigDecimal valorTaxa;
-    private Integer codigoSetorComercial;
-    private Date ultimaAlteracao;
-    private gcom.cobranca.DocumentoEmissaoForma documentoEmissaoForma;
-    private gcom.cobranca.CobrancaAcaoAtividadeComando cobrancaAcaoAtividadeComando;
-    private Imovel imovel;
-    private Empresa empresa;
-    private gcom.cobranca.DocumentoTipo documentoTipo;
-    private ImovelPerfil imovelPerfil;
-    private Quadra quadra;
-    private Localidade localidade;
-    private gcom.cobranca.CobrancaAcaoAtividadeCronograma cobrancaAcaoAtividadeCronograma;
-    private MotivoNaoEntregaDocumento motivoNaoEntregaDocumento;
-    private CobrancaCriterio cobrancaCriterio;
-    private CobrancaAcao cobrancaAcao;
-    private BigDecimal valorAcrescimos;
-    private Date dataSituacaoAcao;
-    private Date dataSituacaoDebito;
-    private Integer sequencialImpressao;
-    private Short indicadorAntesApos;
-    private Short indicadorLimite;
-    private CobrancaDebitoSituacao cobrancaDebitoSituacao;
-    private CobrancaAcaoSituacao cobrancaAcaoSituacao;
-    private Cliente cliente;
-    private Categoria categoria;
-    private EsferaPoder esferaPoder;
-    private FiscalizacaoSituacao fiscalizacaoSituacao;
-    private AtendimentoMotivoEncerramento motivoEncerramento;
-    private ResolucaoDiretoria resolucaoDiretoria;
-    private LigacaoAguaSituacao ligacaoAguaSituacao;
-    private LigacaoEsgotoSituacao ligacaoEsgotoSituacao;
-    private Date dataEmissaoPredecessor;
-    private String numeroDocumentoFatura;
-    private BigDecimal valorImpostos;
-    
-    // Constantes
-    public final static String INCLUIR_ACRESCIMOS = "1";
-    public final static String NAO_INCLUIR_ACRESCIMOS = "2";
-    public final static String INCLUIR_ACRESCIMOS_COM_DESCONTO = "3";
-    
-    
-	public CobrancaDocumento(Integer id, int numeroSequenciaDocumento, Date emissao, BigDecimal valorDesconto, Integer numeroQuadra, BigDecimal valorDocumento, BigDecimal valorTaxa, Integer codigoSetorComercial, Date ultimaAlteracao, DocumentoEmissaoForma documentoEmissaoForma, CobrancaAcaoAtividadeComando cobrancaAcaoAtividadeComando, Imovel imovel, Empresa empresa, DocumentoTipo documentoTipo, ImovelPerfil imovelPerfil, Quadra quadra, Localidade localidade, CobrancaAcaoAtividadeCronograma cobrancaAcaoAtividadeCronograma, MotivoNaoEntregaDocumento motivoNaoEntregaDocumento, CobrancaCriterio cobrancaCriterio, CobrancaAcao cobrancaAcao, BigDecimal valorAcrescimos) {
+	private Integer id;
+	private int numeroSequenciaDocumento;
+	private Date emissao;
+	private BigDecimal valorDesconto;
+	private Integer numeroQuadra;
+	private BigDecimal valorDocumento;
+	private BigDecimal valorTaxa;
+	private Integer codigoSetorComercial;
+	private Date ultimaAlteracao;
+	private DocumentoEmissaoForma documentoEmissaoForma;
+	private CobrancaAcaoAtividadeComando cobrancaAcaoAtividadeComando;
+	private Imovel imovel;
+	private Empresa empresa;
+	private DocumentoTipo documentoTipo;
+	private ImovelPerfil imovelPerfil;
+	private Quadra quadra;
+	private Localidade localidade;
+	private CobrancaAcaoAtividadeCronograma cobrancaAcaoAtividadeCronograma;
+	private MotivoNaoEntregaDocumento motivoNaoEntregaDocumento;
+	private CobrancaCriterio cobrancaCriterio;
+	private CobrancaAcao cobrancaAcao;
+	private BigDecimal valorAcrescimos;
+	private Date dataSituacaoAcao;
+	private Date dataSituacaoDebito;
+	private Integer sequencialImpressao;
+	private Short indicadorAntesApos;
+	private Short indicadorLimite;
+	private CobrancaDebitoSituacao cobrancaDebitoSituacao;
+	private CobrancaAcaoSituacao cobrancaAcaoSituacao;
+	private Cliente cliente;
+	private Categoria categoria;
+	private EsferaPoder esferaPoder;
+	private FiscalizacaoSituacao fiscalizacaoSituacao;
+	private AtendimentoMotivoEncerramento motivoEncerramento;
+	private ResolucaoDiretoria resolucaoDiretoria;
+	private LigacaoAguaSituacao ligacaoAguaSituacao;
+	private LigacaoEsgotoSituacao ligacaoEsgotoSituacao;
+	private Date dataEmissaoPredecessor;
+	private String numeroDocumentoFatura;
+	private BigDecimal valorImpostos;
+	private Usuario usuario;
+
+	public final static String INCLUIR_ACRESCIMOS = "1";
+	public final static String NAO_INCLUIR_ACRESCIMOS = "2";
+	public final static String INCLUIR_ACRESCIMOS_COM_DESCONTO = "3";
+
+	public CobrancaDocumento(
+			Integer id,
+			int numeroSequenciaDocumento,
+			Date emissao, 
+			BigDecimal valorDesconto, 
+			Integer numeroQuadra,
+			BigDecimal valorDocumento, 
+			BigDecimal valorTaxa,
+			Integer codigoSetorComercial, 
+			Date ultimaAlteracao,
+			DocumentoEmissaoForma documentoEmissaoForma,
+			CobrancaAcaoAtividadeComando cobrancaAcaoAtividadeComando,
+			Imovel imovel, 
+			Empresa empresa, 
+			DocumentoTipo documentoTipo,
+			ImovelPerfil imovelPerfil, 
+			Quadra quadra, Localidade localidade,
+			CobrancaAcaoAtividadeCronograma cobrancaAcaoAtividadeCronograma,
+			MotivoNaoEntregaDocumento motivoNaoEntregaDocumento,
+			CobrancaCriterio cobrancaCriterio, 
+			CobrancaAcao cobrancaAcao,
+			BigDecimal valorAcrescimos) {
 		super();
-		// TODO Auto-generated constructor stub
 		this.id = id;
 		this.numeroSequenciaDocumento = numeroSequenciaDocumento;
 		this.emissao = emissao;
@@ -99,198 +118,230 @@ public class CobrancaDocumento implements Serializable {
 		this.valorAcrescimos = valorAcrescimos;
 	}
 
-    public CobrancaDocumento(int numeroSequenciaDocumento, Date emissao, BigDecimal valorDesconto, Integer numeroQuadra, BigDecimal valorDocumento, BigDecimal valorTaxa, Integer codigoSetorComercial, Date ultimaAlteracao, gcom.cobranca.DocumentoEmissaoForma documentoEmissaoForma, gcom.cobranca.CobrancaAcaoAtividadeComando cobrancaAcaoAtividadeComando, Imovel imovel, Empresa empresa, gcom.cobranca.DocumentoTipo documentoTipo, ImovelPerfil imovelPerfil, Quadra quadra, Localidade localidade, gcom.cobranca.CobrancaAcaoAtividadeCronograma cobrancaAcaoAtividadeCronograma, MotivoNaoEntregaDocumento motivoNaoEntregaDocumento,CobrancaCriterio cobrancaCriterio) {
-        this.numeroSequenciaDocumento = numeroSequenciaDocumento;
-        this.emissao = emissao;
-        this.valorDesconto = valorDesconto;
-        this.numeroQuadra = numeroQuadra;
-        this.valorDocumento = valorDocumento;
-        this.valorTaxa = valorTaxa;
-        this.codigoSetorComercial = codigoSetorComercial;
-        this.ultimaAlteracao = ultimaAlteracao;
-        this.documentoEmissaoForma = documentoEmissaoForma;
-        this.cobrancaAcaoAtividadeComando = cobrancaAcaoAtividadeComando;
-        this.imovel = imovel;
-        this.empresa = empresa;
-        this.documentoTipo = documentoTipo;
-        this.imovelPerfil = imovelPerfil;
-        this.quadra = quadra;
-        this.localidade = localidade;
-        this.cobrancaAcaoAtividadeCronograma = cobrancaAcaoAtividadeCronograma;
-        this.motivoNaoEntregaDocumento = motivoNaoEntregaDocumento;
-        this.cobrancaCriterio = cobrancaCriterio;
-    }
+	public CobrancaDocumento(
+			int numeroSequenciaDocumento,
+			Date emissao,
+			BigDecimal valorDesconto,
+			Integer numeroQuadra,
+			BigDecimal valorDocumento,
+			BigDecimal valorTaxa,
+			Integer codigoSetorComercial,
+			Date ultimaAlteracao,
+			DocumentoEmissaoForma documentoEmissaoForma,
+			CobrancaAcaoAtividadeComando cobrancaAcaoAtividadeComando,
+			Imovel imovel,
+			Empresa empresa,
+			DocumentoTipo documentoTipo,
+			ImovelPerfil imovelPerfil,
+			Quadra quadra,
+			Localidade localidade,
+			CobrancaAcaoAtividadeCronograma cobrancaAcaoAtividadeCronograma,
+			MotivoNaoEntregaDocumento motivoNaoEntregaDocumento,
+			CobrancaCriterio cobrancaCriterio) {
+		this.numeroSequenciaDocumento = numeroSequenciaDocumento;
+		this.emissao = emissao;
+		this.valorDesconto = valorDesconto;
+		this.numeroQuadra = numeroQuadra;
+		this.valorDocumento = valorDocumento;
+		this.valorTaxa = valorTaxa;
+		this.codigoSetorComercial = codigoSetorComercial;
+		this.ultimaAlteracao = ultimaAlteracao;
+		this.documentoEmissaoForma = documentoEmissaoForma;
+		this.cobrancaAcaoAtividadeComando = cobrancaAcaoAtividadeComando;
+		this.imovel = imovel;
+		this.empresa = empresa;
+		this.documentoTipo = documentoTipo;
+		this.imovelPerfil = imovelPerfil;
+		this.quadra = quadra;
+		this.localidade = localidade;
+		this.cobrancaAcaoAtividadeCronograma = cobrancaAcaoAtividadeCronograma;
+		this.motivoNaoEntregaDocumento = motivoNaoEntregaDocumento;
+		this.cobrancaCriterio = cobrancaCriterio;
+	}
 
-    public CobrancaDocumento() {
-    }
+	public CobrancaDocumento() {
+	}
 
-    public CobrancaDocumento(int numeroSequenciaDocumento, gcom.cobranca.DocumentoEmissaoForma documentoEmissaoForma, gcom.cobranca.CobrancaAcaoAtividadeComando cobrancaAcaoAtividadeComando, Imovel imovel, Empresa empresa, gcom.cobranca.DocumentoTipo documentoTipo, ImovelPerfil imovelPerfil, Quadra quadra, Localidade localidade, gcom.cobranca.CobrancaAcaoAtividadeCronograma cobrancaAcaoAtividadeCronograma, MotivoNaoEntregaDocumento motivoNaoEntregaDocumento) {
-        this.numeroSequenciaDocumento = numeroSequenciaDocumento;
-        this.documentoEmissaoForma = documentoEmissaoForma;
-        this.cobrancaAcaoAtividadeComando = cobrancaAcaoAtividadeComando;
-        this.imovel = imovel;
-        this.empresa = empresa;
-        this.documentoTipo = documentoTipo;
-        this.imovelPerfil = imovelPerfil;
-        this.quadra = quadra;
-        this.localidade = localidade;
-        this.cobrancaAcaoAtividadeCronograma = cobrancaAcaoAtividadeCronograma;
-        this.motivoNaoEntregaDocumento = motivoNaoEntregaDocumento;
-    }
+	public CobrancaDocumento(
+			int numeroSequenciaDocumento,
+			DocumentoEmissaoForma documentoEmissaoForma,
+			CobrancaAcaoAtividadeComando cobrancaAcaoAtividadeComando,
+			Imovel imovel,
+			Empresa empresa,
+			DocumentoTipo documentoTipo,
+			ImovelPerfil imovelPerfil,
+			Quadra quadra,
+			Localidade localidade,
+			CobrancaAcaoAtividadeCronograma cobrancaAcaoAtividadeCronograma,
+			MotivoNaoEntregaDocumento motivoNaoEntregaDocumento) {
+		this.numeroSequenciaDocumento = numeroSequenciaDocumento;
+		this.documentoEmissaoForma = documentoEmissaoForma;
+		this.cobrancaAcaoAtividadeComando = cobrancaAcaoAtividadeComando;
+		this.imovel = imovel;
+		this.empresa = empresa;
+		this.documentoTipo = documentoTipo;
+		this.imovelPerfil = imovelPerfil;
+		this.quadra = quadra;
+		this.localidade = localidade;
+		this.cobrancaAcaoAtividadeCronograma = cobrancaAcaoAtividadeCronograma;
+		this.motivoNaoEntregaDocumento = motivoNaoEntregaDocumento;
+	}
 
-    public Integer getId() {
-        return this.id;
-    }
+	public Integer getId() {
+		return this.id;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public int getNumeroSequenciaDocumento() {
-        return this.numeroSequenciaDocumento;
-    }
+	public int getNumeroSequenciaDocumento() {
+		return this.numeroSequenciaDocumento;
+	}
 
-    public void setNumeroSequenciaDocumento(int numeroSequenciaDocumento) {
-        this.numeroSequenciaDocumento = numeroSequenciaDocumento;
-    }
+	public void setNumeroSequenciaDocumento(int numeroSequenciaDocumento) {
+		this.numeroSequenciaDocumento = numeroSequenciaDocumento;
+	}
 
-    public Date getEmissao() {
-        return this.emissao;
-    }
+	public Date getEmissao() {
+		return this.emissao;
+	}
 
-    public void setEmissao(Date emissao) {
-        this.emissao = emissao;
-    }
+	public void setEmissao(Date emissao) {
+		this.emissao = emissao;
+	}
 
-    public BigDecimal getValorDesconto() {
-        return this.valorDesconto;
-    }
+	public BigDecimal getValorDesconto() {
+		return this.valorDesconto;
+	}
 
-    public void setValorDesconto(BigDecimal valorDesconto) {
-        this.valorDesconto = valorDesconto;
-    }
+	public void setValorDesconto(BigDecimal valorDesconto) {
+		this.valorDesconto = valorDesconto;
+	}
 
-    public Integer getNumeroQuadra() {
-        return this.numeroQuadra;
-    }
+	public Integer getNumeroQuadra() {
+		return this.numeroQuadra;
+	}
 
-    public void setNumeroQuadra(Integer numeroQuadra) {
-        this.numeroQuadra = numeroQuadra;
-    }
+	public void setNumeroQuadra(Integer numeroQuadra) {
+		this.numeroQuadra = numeroQuadra;
+	}
 
-    public BigDecimal getValorDocumento() {
-        return this.valorDocumento;
-    }
+	public BigDecimal getValorDocumento() {
+		return this.valorDocumento;
+	}
 
-    public void setValorDocumento(BigDecimal valorDocumento) {
-        this.valorDocumento = valorDocumento;
-    }
+	public void setValorDocumento(BigDecimal valorDocumento) {
+		this.valorDocumento = valorDocumento;
+	}
 
-    public BigDecimal getValorTaxa() {
-        return this.valorTaxa;
-    }
+	public BigDecimal getValorTaxa() {
+		return this.valorTaxa;
+	}
 
-    public void setValorTaxa(BigDecimal valorTaxa) {
-        this.valorTaxa = valorTaxa;
-    }
+	public void setValorTaxa(BigDecimal valorTaxa) {
+		this.valorTaxa = valorTaxa;
+	}
 
-    public Integer getCodigoSetorComercial() {
-        return this.codigoSetorComercial;
-    }
+	public Integer getCodigoSetorComercial() {
+		return this.codigoSetorComercial;
+	}
 
-    public void setCodigoSetorComercial(Integer codigoSetorComercial) {
-        this.codigoSetorComercial = codigoSetorComercial;
-    }
+	public void setCodigoSetorComercial(Integer codigoSetorComercial) {
+		this.codigoSetorComercial = codigoSetorComercial;
+	}
 
-    public Date getUltimaAlteracao() {
-        return this.ultimaAlteracao;
-    }
+	public Date getUltimaAlteracao() {
+		return this.ultimaAlteracao;
+	}
 
-    public void setUltimaAlteracao(Date ultimaAlteracao) {
-        this.ultimaAlteracao = ultimaAlteracao;
-    }
+	public void setUltimaAlteracao(Date ultimaAlteracao) {
+		this.ultimaAlteracao = ultimaAlteracao;
+	}
 
-    public gcom.cobranca.DocumentoEmissaoForma getDocumentoEmissaoForma() {
-        return this.documentoEmissaoForma;
-    }
+	public DocumentoEmissaoForma getDocumentoEmissaoForma() {
+		return this.documentoEmissaoForma;
+	}
 
-    public void setDocumentoEmissaoForma(gcom.cobranca.DocumentoEmissaoForma documentoEmissaoForma) {
-        this.documentoEmissaoForma = documentoEmissaoForma;
-    }
+	public void setDocumentoEmissaoForma(
+			DocumentoEmissaoForma documentoEmissaoForma) {
+		this.documentoEmissaoForma = documentoEmissaoForma;
+	}
 
-    public gcom.cobranca.CobrancaAcaoAtividadeComando getCobrancaAcaoAtividadeComando() {
-        return this.cobrancaAcaoAtividadeComando;
-    }
+	public CobrancaAcaoAtividadeComando getCobrancaAcaoAtividadeComando() {
+		return this.cobrancaAcaoAtividadeComando;
+	}
 
-    public void setCobrancaAcaoAtividadeComando(gcom.cobranca.CobrancaAcaoAtividadeComando cobrancaAcaoAtividadeComando) {
-        this.cobrancaAcaoAtividadeComando = cobrancaAcaoAtividadeComando;
-    }
+	public void setCobrancaAcaoAtividadeComando(CobrancaAcaoAtividadeComando cobrancaAcaoAtividadeComando) {
+		this.cobrancaAcaoAtividadeComando = cobrancaAcaoAtividadeComando;
+	}
 
-    public Imovel getImovel() {
-        return this.imovel;
-    }
+	public Imovel getImovel() {
+		return this.imovel;
+	}
 
-    public void setImovel(Imovel imovel) {
-        this.imovel = imovel;
-    }
+	public void setImovel(Imovel imovel) {
+		this.imovel = imovel;
+	}
 
-    public Empresa getEmpresa() {
-        return this.empresa;
-    }
+	public Empresa getEmpresa() {
+		return this.empresa;
+	}
 
-    public void setEmpresa(Empresa empresa) {
-        this.empresa = empresa;
-    }
+	public void setEmpresa(Empresa empresa) {
+		this.empresa = empresa;
+	}
 
-    public gcom.cobranca.DocumentoTipo getDocumentoTipo() {
-        return this.documentoTipo;
-    }
+	public DocumentoTipo getDocumentoTipo() {
+		return this.documentoTipo;
+	}
 
-    public void setDocumentoTipo(gcom.cobranca.DocumentoTipo documentoTipo) {
-        this.documentoTipo = documentoTipo;
-    }
+	public void setDocumentoTipo(DocumentoTipo documentoTipo) {
+		this.documentoTipo = documentoTipo;
+	}
 
-    public ImovelPerfil getImovelPerfil() {
-        return this.imovelPerfil;
-    }
+	public ImovelPerfil getImovelPerfil() {
+		return this.imovelPerfil;
+	}
 
-    public void setImovelPerfil(ImovelPerfil imovelPerfil) {
-        this.imovelPerfil = imovelPerfil;
-    }
+	public void setImovelPerfil(ImovelPerfil imovelPerfil) {
+		this.imovelPerfil = imovelPerfil;
+	}
 
-    public Quadra getQuadra() {
-        return this.quadra;
-    }
+	public Quadra getQuadra() {
+		return this.quadra;
+	}
 
-    public void setQuadra(Quadra quadra) {
-        this.quadra = quadra;
-    }
+	public void setQuadra(Quadra quadra) {
+		this.quadra = quadra;
+	}
 
-    public Localidade getLocalidade() {
-        return this.localidade;
-    }
+	public Localidade getLocalidade() {
+		return this.localidade;
+	}
 
-    public void setLocalidade(Localidade localidade) {
-        this.localidade = localidade;
-    }
+	public void setLocalidade(Localidade localidade) {
+		this.localidade = localidade;
+	}
 
-    public gcom.cobranca.CobrancaAcaoAtividadeCronograma getCobrancaAcaoAtividadeCronograma() {
-        return this.cobrancaAcaoAtividadeCronograma;
-    }
+	public CobrancaAcaoAtividadeCronograma getCobrancaAcaoAtividadeCronograma() {
+		return this.cobrancaAcaoAtividadeCronograma;
+	}
 
-    public void setCobrancaAcaoAtividadeCronograma(gcom.cobranca.CobrancaAcaoAtividadeCronograma cobrancaAcaoAtividadeCronograma) {
-        this.cobrancaAcaoAtividadeCronograma = cobrancaAcaoAtividadeCronograma;
-    }
+	public void setCobrancaAcaoAtividadeCronograma(CobrancaAcaoAtividadeCronograma cobrancaAcaoAtividadeCronograma) {
+		this.cobrancaAcaoAtividadeCronograma = cobrancaAcaoAtividadeCronograma;
+	}
 
-    public MotivoNaoEntregaDocumento getMotivoNaoEntregaDocumento() {
-        return this.motivoNaoEntregaDocumento;
-    }
+	public MotivoNaoEntregaDocumento getMotivoNaoEntregaDocumento() {
+		return this.motivoNaoEntregaDocumento;
+	}
 
-    public void setMotivoNaoEntregaDocumento(MotivoNaoEntregaDocumento motivoNaoEntregaDocumento) {
-        this.motivoNaoEntregaDocumento = motivoNaoEntregaDocumento;
-    }
+	public void setMotivoNaoEntregaDocumento(
+			MotivoNaoEntregaDocumento motivoNaoEntregaDocumento) {
+		this.motivoNaoEntregaDocumento = motivoNaoEntregaDocumento;
+	}
 
-    public CobrancaCriterio getCobrancaCriterio() {
+	public CobrancaCriterio getCobrancaCriterio() {
 		return cobrancaCriterio;
 	}
 
@@ -299,10 +350,8 @@ public class CobrancaDocumento implements Serializable {
 	}
 
 	public String toString() {
-        return new ToStringBuilder(this)
-            .append("id", getId())
-            .toString();
-    }
+		return new ToStringBuilder(this).append("id", getId()).toString();
+	}
 
 	public CobrancaAcao getCobrancaAcao() {
 		return cobrancaAcao;
@@ -311,8 +360,8 @@ public class CobrancaDocumento implements Serializable {
 	public void setCobrancaAcao(CobrancaAcao cobrancaAcao) {
 		this.cobrancaAcao = cobrancaAcao;
 	}
-	
-    public BigDecimal getValorAcrescimos() {
+
+	public BigDecimal getValorAcrescimos() {
 		return valorAcrescimos;
 	}
 
@@ -320,78 +369,36 @@ public class CobrancaDocumento implements Serializable {
 		this.valorAcrescimos = valorAcrescimos;
 	}
 
-//	public Date getDataValidade(){
-//		
-//		Date dataValidade = this.getEmissao();
-//		
-//		if (dataValidade != null && this.getCobrancaAcao() != null && 
-//			this.getCobrancaAcao().getNumeroDiasValidade() != null){
-//			
-//			Calendar dataCalendar = Calendar.getInstance();
-//			dataCalendar.setTime(dataValidade);
-//			dataCalendar.add(Calendar.DAY_OF_MONTH, this.getCobrancaAcao().getNumeroDiasValidade().intValue());
-//		
-//			dataValidade = dataCalendar.getTime();
-//		}else{
-//			dataValidade = Util.adicionarNumeroDiasDeUmaData(dataValidade, 7);
-//		}
-//		
-//		return dataValidade;
-//	}
-
-	/**
-	 * @return Retorna o campo cobrancaAcaoSituacao.
-	 */
 	public CobrancaAcaoSituacao getCobrancaAcaoSituacao() {
 		return cobrancaAcaoSituacao;
 	}
 
-	/**
-	 * @param cobrancaAcaoSituacao O cobrancaAcaoSituacao a ser setado.
-	 */
-	public void setCobrancaAcaoSituacao(CobrancaAcaoSituacao cobrancaAcaoSituacao) {
+	public void setCobrancaAcaoSituacao(
+			CobrancaAcaoSituacao cobrancaAcaoSituacao) {
 		this.cobrancaAcaoSituacao = cobrancaAcaoSituacao;
 	}
 
-	/**
-	 * @return Retorna o campo cobrancaDebitoSituacao.
-	 */
 	public CobrancaDebitoSituacao getCobrancaDebitoSituacao() {
 		return cobrancaDebitoSituacao;
 	}
 
-	/**
-	 * @param cobrancaDebitoSituacao O cobrancaDebitoSituacao a ser setado.
-	 */
 	public void setCobrancaDebitoSituacao(
 			CobrancaDebitoSituacao cobrancaDebitoSituacao) {
 		this.cobrancaDebitoSituacao = cobrancaDebitoSituacao;
 	}
 
-	/**
-	 * @return Retorna o campo dataSituacaoAcao.
-	 */
 	public Date getDataSituacaoAcao() {
 		return dataSituacaoAcao;
 	}
 
-	/**
-	 * @param dataSituacaoAcao O dataSituacaoAcao a ser setado.
-	 */
 	public void setDataSituacaoAcao(Date dataSituacaoAcao) {
 		this.dataSituacaoAcao = dataSituacaoAcao;
 	}
 
-	/**
-	 * @return Retorna o campo dataSituacaoDebito.
-	 */
 	public Date getDataSituacaoDebito() {
 		return dataSituacaoDebito;
 	}
 
-	/**
-	 * @param dataSituacaoDebito O dataSituacaoDebito a ser setado.
-	 */
 	public void setDataSituacaoDebito(Date dataSituacaoDebito) {
 		this.dataSituacaoDebito = dataSituacaoDebito;
 	}
@@ -424,7 +431,8 @@ public class CobrancaDocumento implements Serializable {
 		return fiscalizacaoSituacao;
 	}
 
-	public void setFiscalizacaoSituacao(FiscalizacaoSituacao fiscalizacaoSituacao) {
+	public void setFiscalizacaoSituacao(
+			FiscalizacaoSituacao fiscalizacaoSituacao) {
 		this.fiscalizacaoSituacao = fiscalizacaoSituacao;
 	}
 
@@ -469,44 +477,27 @@ public class CobrancaDocumento implements Serializable {
 		this.resolucaoDiretoria = resolucaoDiretoria;
 	}
 
-	/**
-	 * @return Retorna o campo ligacaoAguaSituacao.
-	 */
 	public LigacaoAguaSituacao getLigacaoAguaSituacao() {
 		return ligacaoAguaSituacao;
 	}
 
-	/**
-	 * @param ligacaoAguaSituacao O ligacaoAguaSituacao a ser setado.
-	 */
 	public void setLigacaoAguaSituacao(LigacaoAguaSituacao ligacaoAguaSituacao) {
 		this.ligacaoAguaSituacao = ligacaoAguaSituacao;
 	}
 
-	/**
-	 * @return Retorna o campo ligacaoEsgotoSituacao.
-	 */
 	public LigacaoEsgotoSituacao getLigacaoEsgotoSituacao() {
 		return ligacaoEsgotoSituacao;
 	}
 
-	/**
-	 * @param ligacaoEsgotoSituacao O ligacaoEsgotoSituacao a ser setado.
-	 */
-	public void setLigacaoEsgotoSituacao(LigacaoEsgotoSituacao ligacaoEsgotoSituacao) {
+	public void setLigacaoEsgotoSituacao(
+			LigacaoEsgotoSituacao ligacaoEsgotoSituacao) {
 		this.ligacaoEsgotoSituacao = ligacaoEsgotoSituacao;
 	}
 
-	/**
-	 * @return Retorna o campo dataEmissaoPredecessor.
-	 */
 	public Date getDataEmissaoPredecessor() {
 		return dataEmissaoPredecessor;
 	}
 
-	/**
-	 * @param dataEmissaoPredecessor O dataEmissaoPredecessor a ser setado.
-	 */
 	public void setDataEmissaoPredecessor(Date dataEmissaoPredecessor) {
 		this.dataEmissaoPredecessor = dataEmissaoPredecessor;
 	}
@@ -526,5 +517,12 @@ public class CobrancaDocumento implements Serializable {
 	public void setValorImpostos(BigDecimal valorImpostos) {
 		this.valorImpostos = valorImpostos;
 	}
-	
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
 }

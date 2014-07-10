@@ -22,8 +22,8 @@
 	src="<bean:message key="caminho.js"/>util.js"></script>
 <script language="JavaScript"
 	src="<bean:message key="caminho.js"/>Calendario.js"></script>
-<%@ page
-	import="gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCadastralHelper"%>
+<%@ page import="gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCadastralHelper"%>
+<%@ page import="gcom.cadastro.SituacaoAtualizacaoCadastral"%>
 
 	<script language="JavaScript">
 
@@ -163,16 +163,14 @@
 					<div style="width: 100%; overflow: auto;">
 					<table width="100%" align="center" bgcolor="#99CCFF" border="0">
 						<tr bgcolor="#99CCFF">
-							<td width="10%" bgcolor="#90c7fc">
-  							  <div align="center">
-                                <strong><a href="javascript:facilitador(this);">Todos</a></strong>
-                              </div>
+							<td width="25%" bgcolor="#90c7fc">
+							  <div align="center"><strong>Im&oacute;vel</strong></div>
 							</td>
-							<td width="30%" bgcolor="#90c7fc">
-							  <div align="center"><strong>Imóvel</strong></div>
-							</td>
-							<td width="60%" bgcolor="#90c7fc">
+							<td width="50%" bgcolor="#90c7fc">
 							  <div align="center"><strong>Agente Cadastral</strong></div>
+							</td>
+							<td width="25%" bgcolor="#90c7fc">
+							  <div align="center"><strong>Situa&ccedil;&atilde;o</strong></div>
 							</td>
 						</tr>
 					</table>
@@ -185,45 +183,45 @@
 					<td width="600" colspan="5">
 					<div style="width: 100%; height: 300; overflow: auto;">
 					<table width="100%" align="center" bgcolor="#99CCFF" border="0">
-						<logic:iterate name="colecaoConsultarMovimentoAtualizacaoCadastralHelper" id="consultarMovimentoAtualizacaoCadastralHelper"
+						<logic:iterate name="colecaoConsultarMovimentoAtualizacaoCadastralHelper" id="helper"
 							type="ConsultarMovimentoAtualizacaoCadastralHelper">
 							<%cont = cont + 1;
 							if (cont % 2 == 0) {%>
-							<tr bgcolor="#cbe5fe">
+							<tr bgcolor="#cbe5fe" height="22">
 							<%} else {%>
-							<tr bgcolor="#FFFFFF">
+							<tr bgcolor="#FFFFFF" height="22">
 							<%}%>
-						        <td width="10%" align="center">
- 						        <%		
-						                String checado = "";
-										if (consultarMovimentoAtualizacaoCadastralHelper.getIcAutorizado() == 1) {
-												checado = "checked";
-										}
-								%>						    
-						         <input type="checkbox" name="chkRegistrosAlteracao" id="chkRegistrosAlteracao" <%=checado%>
- 									value="<bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="icAutorizado"/>" /> 								 
-
-								</td>
-                
-                                <td width="30%">
+                                <td width="25%">
                                   <div align="center">
-                                    <a href="exibirAtualizarDadosImovelAtualizacaoCadastralPopupAction.do?idImovel=<bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idImovel"/>&idArquivo=<bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idArquivo"/>&idTipoAlteracao=<bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idTipoAlteracao"/>">
-                                      <logic:equal name="consultarMovimentoAtualizacaoCadastralHelper" property="idTipoAlteracao" value="1">
-                                          <bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idImovel"/>  
-                                      </logic:equal>                                        
-                                      <logic:equal name="consultarMovimentoAtualizacaoCadastralHelper" property="idTipoAlteracao" value="2">
-                                          NOVO IM&Oacute;VEL 
-                                      </logic:equal>
-                                      <logic:equal name="consultarMovimentoAtualizacaoCadastralHelper" property="idTipoAlteracao" value="3">
-                                          <bean:write name="consultarMovimentoAtualizacaoCadastralHelper" property="idImovel"/> (EXCLUS&Atilde;O)
-                                      </logic:equal>                                        
+                                    <a href="exibirAtualizarDadosImovelAtualizacaoCadastralPopupAction.do?idImovel=<bean:write name="helper" property="idImovel"/>&idArquivo=<bean:write name="helper" property="idArquivo"/>&idTipoAlteracao=<bean:write name="helper" property="idTipoAlteracao"/>">
+	                                    <logic:equal name="helper" property="idTipoAlteracao" value="1">
+	                                        <bean:write name="helper" property="idImovel"/>  
+	                                    </logic:equal>                                        
+	                                    <logic:equal name="helper" property="idTipoAlteracao" value="2">
+	                                        NOVO IM&Oacute;VEL 
+	                                    </logic:equal>
+	                                    <logic:equal name="helper" property="idTipoAlteracao" value="3">
+	                                        <bean:write name="helper" property="idImovel"/> (EXCLUS&Atilde;O)
+	                                    </logic:equal>                                        
                                     </a>
                                   </div>                                
                                 </td>
                 
-								<td width="60%">
+								<td width="50%">
                                   <div align="center">
-									<bean:write name="consultarMovimentoAtualizacaoCadastralHelper"	property="nomeFuncionario" />
+									<bean:write name="helper" property="nomeFuncionario" />
+                                  </div>
+								</td>
+								
+								<td width="25%">
+                                  <div align="center">
+									<%if (helper.getIdSituacao().equals(SituacaoAtualizacaoCadastral.EM_FISCALIZACAO)) {%>
+									<font color="#FF0000">
+									<%} else {%>
+									<font color="#000000">
+									<%}%>
+										<bean:write name="helper" property="descricaoSituacao" />
+									</font>
                                   </div>
 								</td>
 							</tr>

@@ -580,6 +580,8 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				.append(" , tcac.tcac_cnvaloranterior as valorAnterior ")
 				.append(" , tcac.tcac_cnvaloratual as valorAtual ")
 				.append(" , tatc.tatc_complemento as complemento ")
+				.append(" , ctrl.siac_id as idSituacao ")
+				.append(" , siac_dssituacao as descricaoSituacao ")
 				.append(" from seguranca.tab_atlz_cadastral tatc ")
 				.append(" inner join seguranca.operacao_efetuada opef on opef.opef_id = tatc.opef_id")
 				.append(" inner join seguranca.tab_col_atlz_cadastral tcac on  tatc.tatc_id = tcac.tatc_id")
@@ -590,6 +592,7 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 				.append(" left join cadastro.funcionario func on leit.func_id = func.func_id")
 				.append(" left join cadastro.cliente clie on leit.clie_id = clie.clie_id")
 				.append(" left join atualizacaocadastral.imovel_controle_atlz_cad ctrl on ctrl.imov_id = tatc.tatc_cdimovel")
+				.append(" left join cadastro.situacao_atlz_cadastral siac on siac.siac_id = ctrl.siac_id")
 				.append(" left join cadastro.imovel_atlz_cadastral im on im.imov_id = tatc_cdimovel")
 				.append(" left join cadastro.imovel_subcatg_atlz_cad isac on isac.imov_id = tatc.tatc_cdimovel")
 				.append(" where 1 = 1 ");
@@ -640,7 +643,9 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 					.addScalar("qtdEconomias", Hibernate.INTEGER)
 					.addScalar("valorAnterior", Hibernate.STRING)
 					.addScalar("valorAtual", Hibernate.STRING)
-					.addScalar("complemento", Hibernate.STRING);
+					.addScalar("complemento", Hibernate.STRING)
+					.addScalar("idSituacao", Hibernate.INTEGER)
+					.addScalar("descricaoSituacao", Hibernate.STRING);
 
 			Integer exibirCampos = Integer.valueOf(filtroHelper.getExibirCampos());
 			
@@ -682,6 +687,8 @@ public class RepositorioTransacaoHBM implements IRepositorioTransacao {
 					helper.setNumeroHidrometro((String) element[4]);
 					helper.setIdLigacaoAgua((Integer) element[5]);
 					helper.setIdLigacaoEsgoto((Integer) element[6]);
+					helper.setIdSituacao((Integer) element[14]);
+					helper.setDescricaoSituacao((String) element[15]);
 					
 					map.put(helper.getIdImovel(), helper);
 				}

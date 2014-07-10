@@ -4620,7 +4620,7 @@ public class RepositorioCadastroHBM implements IRepositorioCadastro {
 				consulta = consulta + " and situacao.id = " + idSituacaoTransmissao;
 			}
 
-			consulta = consulta + " order by localidade.id, setorComercial.codigo, rota.codigo";
+			consulta = consulta + " order by localidade.id, setorComercial.codigo, rota.codigo, txac.descricaoArquivo ";
 
 			retorno = session.createQuery(consulta).list();
 

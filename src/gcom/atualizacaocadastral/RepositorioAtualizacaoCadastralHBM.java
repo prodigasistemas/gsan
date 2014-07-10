@@ -386,62 +386,33 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 	}
 	
 	@SuppressWarnings("unchecked")
-	public Collection<Integer> pesquisarImoveisAprovadosPorPeriodo(Date dataInicial, Date dataFinal) throws ErroRepositorioException {
+	public Collection<Integer> pesquisarImoveisPorSituacaoPeriodo(
+			Integer idSituacaoCadastral, Date dataInicial, Date dataFinal) throws ErroRepositorioException {
+		
 		Session session = HibernateUtil.getSession();
+		
 		try {
 			String consulta = " SELECT i.imovel.id " 
 					+ " FROM ImovelControleAtualizacaoCadastral i " 
-					+ " WHERE date(i.dataAprovacao) BETWEEN :dataInicial AND :dataFinal "
-					+ " AND i.situacaoAtualizacaoCadastral.id = :idSituacaoCadastral ";
+					+ " WHERE i.situacaoAtualizacaoCadastral.id = :idSituacaoCadastral ";
+			
+			if (idSituacaoCadastral.equals(SituacaoAtualizacaoCadastral.DISPONIVEL)) {
+				consulta += " AND date(i.dataGeracao) BETWEEN :dataInicial AND :dataFinal ";
+			} else if (idSituacaoCadastral.equals(SituacaoAtualizacaoCadastral.TRANSMITIDO)) {
+				consulta += " AND date(i.dataRetorno) BETWEEN :dataInicial AND :dataFinal ";
+			} else if (idSituacaoCadastral.equals(SituacaoAtualizacaoCadastral.APROVADO)) {
+				consulta += " AND date(i.dataAprovacao) BETWEEN :dataInicial AND :dataFinal ";
+			} else if (idSituacaoCadastral.equals(SituacaoAtualizacaoCadastral.ATUALIZADO)) {
+				consulta += " AND date(i.dataProcessamento) BETWEEN :dataInicial AND :dataFinal ";
+			}
+			
 			return (Collection<Integer>) session.createQuery(consulta)
 					.setDate("dataInicial", dataInicial)
 					.setDate("dataFinal", dataFinal)
-						.setInteger("idSituacaoCadastral", SituacaoAtualizacaoCadastral.APROVADO)
-					.list();
-
-		}catch(HibernateException e) {
+					.setInteger("idSituacaoCadastral", idSituacaoCadastral).list();
+		} catch(HibernateException e) {
 			throw new ErroRepositorioException("Erro no Hibernate");
-		}finally {
-			HibernateUtil.closeSession(session);
-		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	public Collection<Integer> pesquisarImoveisDisponiveisPorPeriodo(Date dataInicial, Date dataFinal) throws ErroRepositorioException {
-		Session session = HibernateUtil.getSession();
-		try {
-			String consulta = " SELECT i.imovel.id " 
-					+ " FROM ImovelControleAtualizacaoCadastral i " 
-					+ " WHERE date(i.dataGeracao) BETWEEN :dataInicial AND :dataFinal " 
-					+ " AND i.situacaoAtualizacaoCadastral.id = :idSituacaoCadastral ";
-			return (Collection<Integer>) session.createQuery(consulta)
-					.setDate("dataInicial", dataInicial)
-					.setDate("dataFinal", dataFinal)
-					.setInteger("idSituacaoCadastral", SituacaoAtualizacaoCadastral.DISPONIVEL)
-					.list();
-		}catch(HibernateException e) {
-			throw new ErroRepositorioException("Erro no Hibernate");
-		}finally {
-			HibernateUtil.closeSession(session);
-		}
-	}
-	
-	@SuppressWarnings("unchecked")
-	public Collection<Integer> pesquisarImoveisTransmitidosPorPeriodo(Date dataInicial, Date dataFinal) throws ErroRepositorioException {
-		Session session = HibernateUtil.getSession();
-		try {
-			String consulta = " SELECT i.imovel.id " 
-					+ " FROM ImovelControleAtualizacaoCadastral i " 
-					+ " WHERE date(i.dataRetorno) BETWEEN :dataInicial AND :dataFinal " 
-					+ " AND i.situacaoAtualizacaoCadastral.id = :idSituacaoCadastral ";
-			return (Collection<Integer>) session.createQuery(consulta)
-					.setDate("dataInicial", dataInicial)
-					.setDate("dataFinal", dataFinal)
-					.setInteger("idSituacaoCadastral", SituacaoAtualizacaoCadastral.TRANSMITIDO)
-					.list();
-		}catch(HibernateException e) {
-			throw new ErroRepositorioException("Erro no Hibernate");
-		}finally {
+		} finally {
 			HibernateUtil.closeSession(session);
 		}
 	}

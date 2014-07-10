@@ -147,20 +147,28 @@
 			<table width="100%" border="0">
 				<tr>
 					<td width="100"><strong>Im&oacute;vel:</strong></td>
-					<td align="left"><html:text property="descricaoImovel" readonly="true" size="30"
+					<td align="left"><html:text property="descricaoImovel" readonly="true" size="20"
 						styleClass="texto-exibicao" /></td>
 				</tr>
 				<tr>
 					<td><strong>Localidade:</strong></td>
-					<td align="left"><html:text property="descricaoLocalidade" readonly="true" size="60" styleClass="texto-exibicao" /></td>
+					<td align="left"><html:text property="descricaoLocalidade" readonly="true" size="20" styleClass="texto-exibicao" /></td>
 				</tr>
 				<tr>
 					<td><strong>Setor Comercial:</strong></td>
-					<td align="left"><html:text property="descricaoSetorComercial" readonly="true" size="60" styleClass="texto-exibicao"/></td>
+					<td align="left"><html:text property="descricaoSetorComercial" readonly="true" size="10" styleClass="texto-exibicao"/></td>
 				</tr>
 				<tr>
 					<td><strong>Quadra:</strong></td>
-					<td align="left"><html:text property="numeroQuadra" readonly="true" size="8" styleClass="texto-exibicao" /></td>
+					<td align="left"><html:text property="numeroQuadra" readonly="true" size="10" styleClass="texto-exibicao" /></td>
+				</tr>
+				<tr>
+					<td>&nbsp;</td>
+					<td>&nbsp;</td>
+				</tr>
+				<tr>
+					<td><strong>Situa&ccedil;&atilde;o:</strong></td>
+					<td align="left"><html:text property="situacao" readonly="true" size="20" styleClass="texto-exibicao" /></td>
 				</tr>
 				
 				<logic:equal name="fiscalizado" value="false" scope="session">
@@ -175,41 +183,44 @@
 			
 			<table width="100%" border="0">
 			
-				<tr><td><hr></td></tr>
+				<logic:present name="colecaoImagens">
+
+					<tr><td><hr></td></tr>
+					
+					<tr>
+						<td colspan="2">Imagens Carregadas:</td>
+					</tr>
 				
-				<tr>
-					<td colspan="2">Imagens Carregadas:</td>
-				</tr>
-				
-				<tr>
-					<td colspan="2">
-						<table bgcolor="#90c7fc" border=0>
-							<tr bordercolor="#90c7fc" bgcolor="#90c7fc">
-								<td align="center"><strong>Nome da Imagem</strong></td>
-								<td align="center"><strong>Download</strong></td>
-							</tr>
-							<%int i = 1;%>
-							<logic:iterate name="colecaoImagens" id="item">
-								<tr>
-									<%i = i + 1;
-									if (i % 2 == 0) {%>
-										<tr bgcolor="#FFFFFF">
-									<%} else {%>
-										<tr bgcolor="#cbe5fe">
-									<%}%>
-									<td align="center">
-										<bean:write name="item" property="nomeImagem" />
-									</td>
-									<td align="center">
-										<a href="javascript:abrirPopup('exibirImagemRetornoAtualizacaoCadastralAction.do?id=<bean:write name="item" property="id"/>', 400, 800);">
-											<img width="18" height="18" src="<bean:message key="caminho.imagens"/>imgfolder.gif" border="0" />
-										</a> 
-									</td>
+					<tr>
+						<td colspan="2">
+							<table bgcolor="#90c7fc" border=0>
+								<tr bordercolor="#90c7fc" bgcolor="#90c7fc">
+									<td align="center"><strong>Nome da Imagem</strong></td>
+									<td align="center"><strong>Download</strong></td>
 								</tr>
-							</logic:iterate>
-						</table>
-					</td>
-				</tr>
+								<%int i = 1;%>
+								<logic:iterate name="colecaoImagens" id="item">
+									<tr>
+										<%i = i + 1;
+										if (i % 2 == 0) {%>
+											<tr bgcolor="#FFFFFF">
+										<%} else {%>
+											<tr bgcolor="#cbe5fe">
+										<%}%>
+										<td align="center">
+											<bean:write name="item" property="nomeImagem" />
+										</td>
+										<td align="center">
+											<a href="javascript:abrirPopup('exibirImagemRetornoAtualizacaoCadastralAction.do?id=<bean:write name="item" property="id"/>', 400, 800);">
+												<img width="18" height="18" src="<bean:message key="caminho.imagens"/>imgfolder.gif" border="0" />
+											</a> 
+										</td>
+									</tr>
+								</logic:iterate>
+							</table>
+						</td>
+					</tr>
+				</logic:present>
 				
 				<tr><td><hr></td></tr>
 			

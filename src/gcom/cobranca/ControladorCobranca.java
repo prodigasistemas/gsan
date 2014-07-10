@@ -15380,120 +15380,79 @@ public class ControladorCobranca implements SessionBean {
 		filtroCobrancaDocumento.adicionarParametro(new ParametroSimples(
 				FiltroCobrancaDocumento.ID, cobrancaDocumento.getId()));
 
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.localidade");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.quadra");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.setorComercial.municipio.unidadeFederacao");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroBairro.bairro.municipio.unidadeFederacao");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.ligacaoAguaSituacao");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.ligacaoEsgotoSituacao");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.logradouro.logradouroTipo");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.logradouro.logradouroTitulo");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.enderecoReferencia");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.cep");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("documentoEmissaoForma");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("motivoNaoEntregaDocumento");
-		/**
-		 * TODO - COSANPA
-		 * Adicionado os Filtros para os atributos perimetroInicial e perimetroFinal.
-		 */
-		filtroCobrancaDocumento
-		.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTipo");
-		filtroCobrancaDocumento
-		.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTitulo");
-		filtroCobrancaDocumento
-		.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTipo");
-		filtroCobrancaDocumento
-		.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTitulo");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.localidade");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.quadra");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.setorComercial.municipio.unidadeFederacao");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroBairro.bairro.municipio.unidadeFederacao");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.ligacaoAguaSituacao");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.ligacaoEsgotoSituacao");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.logradouro.logradouroTipo");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.logradouro.logradouroTitulo");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.enderecoReferencia");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.cep");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("documentoEmissaoForma");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("motivoNaoEntregaDocumento");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTipo");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTitulo");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTipo");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTitulo");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("usuario");
 
-		Collection colecaoCobrancaDocumento = getControladorUtil().pesquisar(
-				filtroCobrancaDocumento, CobrancaDocumento.class.getName());
+		Collection colecaoCobrancaDocumento = getControladorUtil().pesquisar(filtroCobrancaDocumento, CobrancaDocumento.class.getName());
 
-		CobrancaDocumento cobrancaDocumentoCarregado = (CobrancaDocumento) Util
-				.retonarObjetoDeColecao(colecaoCobrancaDocumento);
+		CobrancaDocumento cobrancaDocumentoCarregado = (CobrancaDocumento) Util.retonarObjetoDeColecao(colecaoCobrancaDocumento);
 
 		retorno.setCobrancaDocumento(cobrancaDocumentoCarregado);
 
 		FiltroCobrancaDocumentoItem filtroCobrancaDocumentoItem = new FiltroCobrancaDocumentoItem();
 		filtroCobrancaDocumentoItem.setConsultaSemLimites(true);
 
-		filtroCobrancaDocumentoItem
-				.adicionarCaminhoParaCarregamentoEntidade("contaGeral.conta.debitoCreditoSituacaoAtual");
-		filtroCobrancaDocumentoItem
-				.adicionarCaminhoParaCarregamentoEntidade("contaGeral.contaHistorico.debitoCreditoSituacaoAtual");
-		filtroCobrancaDocumentoItem
-				.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrar.debitoTipo");
-		filtroCobrancaDocumentoItem
-				.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrarHistorico.debitoTipo");
-		filtroCobrancaDocumentoItem
-				.adicionarCaminhoParaCarregamentoEntidade("guiaPagamentoGeral.guiaPagamento.debitoTipo");
-		filtroCobrancaDocumentoItem
-				.adicionarCaminhoParaCarregamentoEntidade("guiaPagamentoGeral.guiaPagamentoHistorico.debitoTipo");
-		filtroCobrancaDocumentoItem
-				.adicionarCaminhoParaCarregamentoEntidade("documentoTipo");
+		filtroCobrancaDocumentoItem.adicionarCaminhoParaCarregamentoEntidade("contaGeral.conta.debitoCreditoSituacaoAtual");
+		filtroCobrancaDocumentoItem.adicionarCaminhoParaCarregamentoEntidade("contaGeral.contaHistorico.debitoCreditoSituacaoAtual");
+		filtroCobrancaDocumentoItem.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrar.debitoTipo");
+		filtroCobrancaDocumentoItem.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrarHistorico.debitoTipo");
+		filtroCobrancaDocumentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizar.creditoTipo");
+		filtroCobrancaDocumentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizarHistorico.creditoTipo");
+		filtroCobrancaDocumentoItem.adicionarCaminhoParaCarregamentoEntidade("guiaPagamentoGeral.guiaPagamento.debitoTipo");
+		filtroCobrancaDocumentoItem.adicionarCaminhoParaCarregamentoEntidade("guiaPagamentoGeral.guiaPagamentoHistorico.debitoTipo");
+		filtroCobrancaDocumentoItem.adicionarCaminhoParaCarregamentoEntidade("documentoTipo");
 
 		filtroCobrancaDocumentoItem.adicionarParametro(new ParametroSimples(
-				FiltroCobrancaDocumentoItem.COBRANCA_DOCUMENTO_ID,
-				cobrancaDocumentoCarregado.getId()));
+				FiltroCobrancaDocumentoItem.COBRANCA_DOCUMENTO_ID, cobrancaDocumentoCarregado.getId()));
 
-		Collection colecaoCobrancaDocumentoItem = getControladorUtil()
-				.pesquisar(filtroCobrancaDocumentoItem,
-						CobrancaDocumentoItem.class.getName());
+		Collection colecaoCobrancaDocumentoItem = getControladorUtil().pesquisar(filtroCobrancaDocumentoItem, CobrancaDocumentoItem.class.getName());
 
-		if (colecaoCobrancaDocumentoItem != null
-				&& !colecaoCobrancaDocumentoItem.isEmpty()) {
+		if (colecaoCobrancaDocumentoItem != null && !colecaoCobrancaDocumentoItem.isEmpty()) {
 
-			retorno
-					.setQuantidadeItensCobrancaDocumento(colecaoCobrancaDocumentoItem
-							.size());
+			retorno.setQuantidadeItensCobrancaDocumento(colecaoCobrancaDocumentoItem.size());
 
-			Iterator iteratorColecaoCobrancaDocumentoItem = colecaoCobrancaDocumentoItem
-					.iterator();
+			Iterator iteratorColecaoCobrancaDocumentoItem = colecaoCobrancaDocumentoItem.iterator();
 			CobrancaDocumentoItem cobrancaDocumentoItem = null;
 
 			Collection colecaoCobrancaDocumentoItemConta = new ArrayList();
 			Collection colecaoCobrancaDocumentoItemDebitoACobrar = new ArrayList();
+			Collection colecaoCobrancaDocumentoItemCreditoARealizar = new ArrayList();
 			Collection colecaoCobrancaDocumentoItemGuiaPagamento = new ArrayList();
 
 			while (iteratorColecaoCobrancaDocumentoItem.hasNext()) {
 
-				cobrancaDocumentoItem = (CobrancaDocumentoItem) iteratorColecaoCobrancaDocumentoItem
-						.next();
+				cobrancaDocumentoItem = (CobrancaDocumentoItem) iteratorColecaoCobrancaDocumentoItem.next();
 
-				// cobrancaDocumentoItem.getContaGeral().getConta();
-				// cobrancaDocumentoItem.getContaGeral().getContaHistorico();
-				if (cobrancaDocumentoItem.getDocumentoTipo().getId().equals(
-						DocumentoTipo.CONTA)) {
-					colecaoCobrancaDocumentoItemConta
-							.add(cobrancaDocumentoItem);
-				} else if (cobrancaDocumentoItem.getDocumentoTipo().getId()
-						.equals(DocumentoTipo.DEBITO_A_COBRAR)) {
-					colecaoCobrancaDocumentoItemDebitoACobrar
-							.add(cobrancaDocumentoItem);
-				} else if (cobrancaDocumentoItem.getDocumentoTipo().getId()
-						.equals(DocumentoTipo.GUIA_PAGAMENTO)) {
-					colecaoCobrancaDocumentoItemGuiaPagamento
-							.add(cobrancaDocumentoItem);
+				if (cobrancaDocumentoItem.getDocumentoTipo().getId().equals(DocumentoTipo.CONTA)) {
+					colecaoCobrancaDocumentoItemConta.add(cobrancaDocumentoItem);
+				} else if (cobrancaDocumentoItem.getDocumentoTipo().getId().equals(DocumentoTipo.DEBITO_A_COBRAR)) {
+					colecaoCobrancaDocumentoItemDebitoACobrar.add(cobrancaDocumentoItem);
+				} else if (cobrancaDocumentoItem.getDocumentoTipo().getId().equals(DocumentoTipo.CREDITO_A_REALIZAR)) {
+					colecaoCobrancaDocumentoItemCreditoARealizar.add(cobrancaDocumentoItem);
+				} else if (cobrancaDocumentoItem.getDocumentoTipo().getId().equals(DocumentoTipo.GUIA_PAGAMENTO)) {
+					colecaoCobrancaDocumentoItemGuiaPagamento.add(cobrancaDocumentoItem);
 				}
 			}
 
-			retorno
-					.setColecaoCobrancaDocumentoItemConta(colecaoCobrancaDocumentoItemConta);
-			retorno
-					.setColecaoCobrancaDocumentoItemDebitoACobrar(colecaoCobrancaDocumentoItemDebitoACobrar);
-			retorno
-					.setColecaoCobrancaDocumentoItemGuiaPagamento(colecaoCobrancaDocumentoItemGuiaPagamento);
+			retorno.setColecaoCobrancaDocumentoItemConta(colecaoCobrancaDocumentoItemConta);
+			retorno.setColecaoCobrancaDocumentoItemDebitoACobrar(colecaoCobrancaDocumentoItemDebitoACobrar);
+			retorno.setColecaoCobrancaDocumentoItemCreditoARealizar(colecaoCobrancaDocumentoItemCreditoARealizar);
+			retorno.setColecaoCobrancaDocumentoItemGuiaPagamento(colecaoCobrancaDocumentoItemGuiaPagamento);
 		} else {
 			retorno.setQuantidadeItensCobrancaDocumento(0);
 		}
@@ -69607,10 +69566,117 @@ public class ControladorCobranca implements SessionBean {
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
-
-		return retorno;
+		
+		return inserirTotalDeContasEGuias(retorno);
 	}
 	
+	private Collection<RelatorioDocumentosAReceberBean> inserirTotalDeContasEGuias(Collection<RelatorioDocumentosAReceberBean> retorno) {
+		int qntContaRes = 0;
+		int qntContaCom = 0;
+		int qntContaInd = 0;
+		int qntContaTot = 0;
+		int qntContaPub = 0;
+		BigDecimal totalContaRes = new BigDecimal(0.00);
+		BigDecimal totalContaCom = new BigDecimal(0.00);
+		BigDecimal totalContaInd = new BigDecimal(0.00);
+		BigDecimal totalContaTot = new BigDecimal(0.00);
+		BigDecimal totalContaPub = new BigDecimal(0.00);
+		
+		int qntGuiaRes = 0;
+		int qntGuiaCom = 0;
+		int qntGuiaInd = 0;
+		int qntGuiaTot = 0;
+		int qntGuiaPub = 0;
+		BigDecimal totalGuiaRes = new BigDecimal(0.00);
+		BigDecimal totalGuiaCom = new BigDecimal(0.00);
+		BigDecimal totalGuiaInd = new BigDecimal(0.00);
+		BigDecimal totalGuiaTot = new BigDecimal(0.00);
+		BigDecimal totalGuiaPub = new BigDecimal(0.00);
+		
+		for (RelatorioDocumentosAReceberBean relatorio : retorno) {
+			if(relatorio.getNomeDocumentoTipo().equalsIgnoreCase("CONTA") && relatorio.getIdSituacao() == 2) {
+				qntContaRes += relatorio.getQtdDocumentosRes();
+				qntContaCom += relatorio.getQtdDocumentosCom();
+				qntContaInd += relatorio.getQtdDocumentosInd();
+				qntContaTot += relatorio.getQtdDocumentosTot();
+				qntContaPub += relatorio.getQtdDocumentosPub();
+				totalContaRes = totalContaRes.add(relatorio.getValorDocumentosRes());
+				totalContaCom = totalContaCom.add(relatorio.getValorDocumentosCom());
+				totalContaInd = totalContaInd.add(relatorio.getValorDocumentosInd());
+				totalContaTot = totalContaTot.add(relatorio.getValorDocumentosTot());
+				totalContaPub = totalContaPub.add(relatorio.getValorDocumentosPub());
+			}
+			if(relatorio.getNomeDocumentoTipo().equalsIgnoreCase("GUIA DE PAGAMENTO") && relatorio.getIdSituacao() == 2) {
+				qntGuiaRes += relatorio.getQtdDocumentosRes();
+				qntGuiaCom += relatorio.getQtdDocumentosCom();
+				qntGuiaInd += relatorio.getQtdDocumentosInd();
+				qntGuiaTot += relatorio.getQtdDocumentosTot();
+				qntGuiaPub += relatorio.getQtdDocumentosPub();
+				totalGuiaRes = totalGuiaRes.add(relatorio.getValorDocumentosRes());
+				totalGuiaCom = totalGuiaCom.add(relatorio.getValorDocumentosCom());
+				totalGuiaInd = totalGuiaInd.add(relatorio.getValorDocumentosInd());
+				totalGuiaTot = totalGuiaTot.add(relatorio.getValorDocumentosTot());
+				totalGuiaPub = totalGuiaPub.add(relatorio.getValorDocumentosPub());
+			}
+		}
+		
+		RelatorioDocumentosAReceberBean documentoComTotalConta = new RelatorioDocumentosAReceberBean();
+		documentoComTotalConta.setQtdDocumentosRes(qntContaRes);
+		documentoComTotalConta.setQtdDocumentosCom(qntContaCom);
+		documentoComTotalConta.setQtdDocumentosInd(qntContaInd);
+		documentoComTotalConta.setQtdDocumentosTot(qntContaTot);
+		documentoComTotalConta.setQtdDocumentosPub(qntContaPub);
+		documentoComTotalConta.setValorDocumentosRes(totalContaRes);
+		documentoComTotalConta.setValorDocumentosCom(totalContaCom);
+		documentoComTotalConta.setValorDocumentosInd(totalContaInd);
+		documentoComTotalConta.setValorDocumentosTot(totalContaTot);
+		documentoComTotalConta.setValorDocumentosPub(totalContaPub);
+		documentoComTotalConta.setDescricaoSituacao("VENCIDOS");
+		documentoComTotalConta.setIdDocumentoTipo(1);
+		documentoComTotalConta.setNomeDocumentoTipo("CONTA");
+		documentoComTotalConta.setIdSituacao(2);
+		documentoComTotalConta.setDescricaTotalizacao("ESTADO - PARA");
+		documentoComTotalConta.setIndicadorTotal(ConstantesSistema.TODOS.toString());
+		documentoComTotalConta.setFaixa("TOTAL");
+		
+		RelatorioDocumentosAReceberBean documentoComTotalGuia = new RelatorioDocumentosAReceberBean();
+		documentoComTotalGuia.setQtdDocumentosRes(qntGuiaRes);
+		documentoComTotalGuia.setQtdDocumentosCom(qntGuiaCom);
+		documentoComTotalGuia.setQtdDocumentosInd(qntGuiaInd);
+		documentoComTotalGuia.setQtdDocumentosTot(qntGuiaTot);
+		documentoComTotalGuia.setQtdDocumentosPub(qntGuiaPub);
+		documentoComTotalGuia.setValorDocumentosRes(totalGuiaRes);
+		documentoComTotalGuia.setValorDocumentosCom(totalGuiaCom);
+		documentoComTotalGuia.setValorDocumentosInd(totalGuiaInd);
+		documentoComTotalGuia.setValorDocumentosTot(totalGuiaTot);
+		documentoComTotalGuia.setValorDocumentosPub(totalGuiaPub);
+		documentoComTotalGuia.setDescricaoSituacao("VENCIDOS");
+		documentoComTotalGuia.setIdDocumentoTipo(7);
+		documentoComTotalGuia.setNomeDocumentoTipo("GUIA DE PAGAMENTO");
+		documentoComTotalGuia.setIdSituacao(2);
+		documentoComTotalGuia.setDescricaTotalizacao("ESTADO - PARA");
+		documentoComTotalGuia.setIndicadorTotal(ConstantesSistema.NAO.toString());
+		documentoComTotalGuia.setFaixa("TOTAL");
+		
+		
+		Collection<RelatorioDocumentosAReceberBean> retornoComTotalContaEGuia = new ArrayList<RelatorioDocumentosAReceberBean>();
+		for (RelatorioDocumentosAReceberBean relatorio : retorno) {
+			
+			if(relatorio.getNomeDocumentoTipo().equalsIgnoreCase("GUIA DE PAGAMENTO") && relatorio.getIdSituacao() == 2 && relatorio.getFaixa().equals("> 180"))
+				relatorio.setIndicadorTotal(ConstantesSistema.TODOS.toString());
+			
+			retornoComTotalContaEGuia.add(relatorio);
+						
+			if(relatorio.getNomeDocumentoTipo().equalsIgnoreCase("CONTA") && relatorio.getIdSituacao() == 2 && relatorio.getFaixa().equals("> 180")) {
+				retornoComTotalContaEGuia.add(documentoComTotalConta);
+			}
+			if(relatorio.getNomeDocumentoTipo().equalsIgnoreCase("GUIA DE PAGAMENTO") && relatorio.getIdSituacao() == 2 && relatorio.getFaixa().equals("> 180")) {
+				retornoComTotalContaEGuia.add(documentoComTotalGuia);
+			}
+		}
+		return retornoComTotalContaEGuia;
+	}
+
 	private RelatorioDocumentosAReceberBean criarBeanRelatorioDocumentosAReceber(
 			Integer idGerencia, String nomeGerencia, Integer idUnidade,
 			String nomeUnidade, Integer idLocalidade, String nomeLocalidade,
