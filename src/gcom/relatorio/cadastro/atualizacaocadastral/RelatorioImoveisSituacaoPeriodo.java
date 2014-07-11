@@ -27,6 +27,7 @@ public class RelatorioImoveisSituacaoPeriodo extends TarefaRelatorio {
 		super(usuario, ConstantesRelatorios.RELATORIO_IMOVEIS_SITUACAO_PERIODO);
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
 	public Object executar() throws TarefaException {
 		Fachada fachada = Fachada.getInstancia();
@@ -36,10 +37,10 @@ public class RelatorioImoveisSituacaoPeriodo extends TarefaRelatorio {
 		String descricaoSituacaoCadastral = (String) getParametro("descricaoSituacaoCadastral");
 		Collection<Integer> colecaoImoveis = (Collection) getParametro("colecaoImoveis");
 		if (colecaoImoveis == null || colecaoImoveis.isEmpty()) {
-			throw new RelatorioVazioException("atencao.pesquisa.nenhumresultado");
+			throw new RelatorioVazioException("atencao.relatorio.vazio");
 		} else {
 		Integer qtdeImoveis = colecaoImoveis.size();
-		Collection<RelatorioImoveisSituacaoPeriodoBean> colecaoBean = this.inicializarBeanRelatório(colecaoImoveis);
+		Collection<RelatorioImoveisSituacaoPeriodoBean> colecaoBean = this.inicializarBeanRelatorio(colecaoImoveis);
 		
 
 		Map<String, String> parametros = getParametros(dataInicial, dataFinal, descricaoSituacaoCadastral, qtdeImoveis, sistemaParametro);
@@ -81,7 +82,8 @@ public class RelatorioImoveisSituacaoPeriodo extends TarefaRelatorio {
 		AgendadorTarefas.agendarTarefa("RelatorioImoveisSituacaoPeriodo", this);
 	}
 	
-	private Collection<RelatorioImoveisSituacaoPeriodoBean> inicializarBeanRelatório(Collection<Integer> colecaoImoveis) {
+	@SuppressWarnings({ "rawtypes" })
+	private Collection<RelatorioImoveisSituacaoPeriodoBean> inicializarBeanRelatorio(Collection<Integer> colecaoImoveis) {
 		Collection<RelatorioImoveisSituacaoPeriodoBean> retorno = new ArrayList<RelatorioImoveisSituacaoPeriodoBean>();
 		Iterator iter = colecaoImoveis.iterator();
 		
