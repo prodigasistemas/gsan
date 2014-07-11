@@ -117,6 +117,8 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 				if (controle.getSituacaoAtualizacaoCadastral().getId().equals(SituacaoAtualizacaoCadastral.EM_FISCALIZACAO)) {
 					fiscalizado = true;
 				}
+				
+				form.setSituacao(controle.getSituacaoAtualizacaoCadastral().getDescricao());
 			}
 			
 			sessao.setAttribute("fiscalizado", fiscalizado);

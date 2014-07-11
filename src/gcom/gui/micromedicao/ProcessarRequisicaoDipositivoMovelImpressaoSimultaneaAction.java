@@ -1,10 +1,9 @@
 package gcom.gui.micromedicao;
 
-import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.imovel.FiltroImovel;
 import gcom.cadastro.imovel.Imovel;
+import gcom.cadastro.localidade.Localidade;
 import gcom.fachada.Fachada;
-import gcom.faturamento.FaturamentoGrupo;
 import gcom.faturamento.bean.RetornoAtualizarFaturamentoMovimentoCelularHelper;
 import gcom.gui.GcomAction;
 import gcom.micromedicao.ArquivoTextoRetornoIS;
@@ -299,7 +298,7 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "resource" })
 	public void finalizarMovimentacao(DataInputStream data, HttpServletResponse response, OutputStream out, int tipoFinalizacao) throws IOException {
 		
 		Fachada fachada = Fachada.getInstancia();
@@ -307,8 +306,9 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 		Integer idRota = 0;
 
 		InputStreamReader reader = new InputStreamReader(data);
+		InputStreamReader readerOriginal = new InputStreamReader(data);
 		BufferedReader buffer = new BufferedReader(reader);
-		BufferedReader bufferOriginal = new BufferedReader(reader);
+		BufferedReader bufferOriginal = new BufferedReader(readerOriginal);
 
 		Integer codRota = null;
 		Integer setorComercial = null;
