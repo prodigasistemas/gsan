@@ -40,6 +40,7 @@ public class GeradorHQLCondicional {
 	 *                Erro no Hibernate
 	 * @throws ErroRepositorioException
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public static Query gerarCondicionalQuery(Filtro filtro,
 			String aliasTabela, String query, Session session)
 			throws HibernateException, ErroRepositorioException {
@@ -361,6 +362,7 @@ public class GeradorHQLCondicional {
 	 * @exception HibernateException
 	 *                Erro no hibernate
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	private static Query efetuarQuery(CondicionalQuery condicionalQuery,
 			Session session) throws HibernateException {
 		// Cria a query do hibernate
@@ -406,9 +408,14 @@ public class GeradorHQLCondicional {
 
 				if (!parametroString.startsWith("0")) {			
 					
-					query.setParameter("a" + i, parametro);
-					i++;
-
+					try {
+						Integer parametroInteger = Integer.parseInt(parametroString);
+						query.setInteger("a" + i, parametroInteger);
+					} catch (NumberFormatException e) {
+						query.setParameter("a" + i, parametro);
+					} finally {
+						i++;
+					}
 				} else {
 					query.setString("a" + i, parametroString);
 					i++;
@@ -863,6 +870,7 @@ public class GeradorHQLCondicional {
 	 * @exception HibernateException
 	 *                Erro na query
 	 */
+	@SuppressWarnings("rawtypes")
 	public static Collection gerarQueryCriteriaExpression(Session session,
 			Filtro filtro, Class classe) throws HibernateException {
 
