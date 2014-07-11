@@ -68,6 +68,7 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 	 *                Erro no mecanismo hibernate
 	 */
 
+	@SuppressWarnings("rawtypes")
 	public int registroMaximo(Class classe) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 
@@ -315,6 +316,7 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 	 * @exception ErroRepositorioException
 	 *                Descrição da exceção
 	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Collection pesquisar(Filtro filtro, String pacoteNomeObjeto)
 			throws ErroRepositorioException {
 		// cria a coleção de retorno
