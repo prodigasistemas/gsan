@@ -7,6 +7,7 @@
 			<destination-jndi-name>
 				BatchGerarResumoAcoesCobrancaCronogramaEncerrarOSMDB
 			</destination-jndi-name>
+			<!-- 
 			<invoker-bindings>
 				<invoker>
 					<invoker-proxy-binding-name>
@@ -14,6 +15,7 @@
 					</invoker-proxy-binding-name>
 				</invoker>
 			</invoker-bindings>
+			-->
 		</message-driven>
 	</enterprise-beans>
 </jboss>
