@@ -12,30 +12,17 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
-public class DebitoCobradoCategoria extends ObjetoTransacao{
+public class DebitoCobradoCategoria extends ObjetoTransacao implements IDebitoCobradoCategoria {
 	private static final long serialVersionUID = 1L;
-    /** identifier field */
-    private gcom.faturamento.debito.DebitoCobradoCategoriaPK comp_id;
-
-    /** nullable persistent field */
+  
+    private DebitoCobradoCategoriaPK comp_id;
     private Integer quantidadeEconomia;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-
-    /** nullable persistent field */
     private BigDecimal valorCategoria;
-
-    /** nullable persistent field */
-    private gcom.faturamento.debito.DebitoCobrado debitoCobrado;
-
-    /** nullable persistent field */
+    private DebitoCobrado debitoCobrado;
     private Categoria categoria;
 
-    /** full constructor */
-    public DebitoCobradoCategoria(gcom.faturamento.debito.DebitoCobradoCategoriaPK comp_id, Integer quantidadeEconomia, Date ultimaAlteracao, BigDecimal valorCategoria, gcom.faturamento.debito.DebitoCobrado debitoCobrado, Categoria categoria) {
+    public DebitoCobradoCategoria(DebitoCobradoCategoriaPK comp_id, Integer quantidadeEconomia, Date ultimaAlteracao, BigDecimal valorCategoria, gcom.faturamento.debito.DebitoCobrado debitoCobrado, Categoria categoria) {
         this.comp_id = comp_id;
         this.quantidadeEconomia = quantidadeEconomia;
         this.ultimaAlteracao = ultimaAlteracao;
@@ -44,20 +31,18 @@ public class DebitoCobradoCategoria extends ObjetoTransacao{
         this.categoria = categoria;
     }
 
-    /** default constructor */
     public DebitoCobradoCategoria() {
     }
 
-    /** minimal constructor */
-    public DebitoCobradoCategoria(gcom.faturamento.debito.DebitoCobradoCategoriaPK comp_id) {
+    public DebitoCobradoCategoria(DebitoCobradoCategoriaPK comp_id) {
         this.comp_id = comp_id;
     }
 
-    public gcom.faturamento.debito.DebitoCobradoCategoriaPK getComp_id() {
+    public DebitoCobradoCategoriaPK getComp_id() {
         return this.comp_id;
     }
 
-    public void setComp_id(gcom.faturamento.debito.DebitoCobradoCategoriaPK comp_id) {
+    public void setComp_id(DebitoCobradoCategoriaPK comp_id) {
         this.comp_id = comp_id;
     }
 
@@ -85,12 +70,8 @@ public class DebitoCobradoCategoria extends ObjetoTransacao{
         this.valorCategoria = valorCategoria;
     }
 
-    public gcom.faturamento.debito.DebitoCobrado getDebitoCobrado() {
+    public DebitoCobrado getDebitoCobrado() {
         return this.debitoCobrado;
-    }
-
-    public void setDebitoCobrado(gcom.faturamento.debito.DebitoCobrado debitoCobrado) {
-        this.debitoCobrado = debitoCobrado;
     }
 
     public Categoria getCategoria() {
@@ -98,6 +79,11 @@ public class DebitoCobradoCategoria extends ObjetoTransacao{
     }
 
     public void setCategoria(Categoria categoria) {
+    	if (comp_id == null) {
+    		comp_id = new DebitoCobradoCategoriaPK();
+    	}
+    	
+    	comp_id.setCategoriaId(categoria != null ? categoria.getId() : null);
         this.categoria = categoria;
     }
 
@@ -133,6 +119,15 @@ public class DebitoCobradoCategoria extends ObjetoTransacao{
 		filtro.adicionarParametro(
 				new ParametroSimples(FiltroDebitoCobradoCategoria.DEBITO_COBRADO_ID, this.getComp_id()));
 		return filtro; 
+	}
+
+	public void setDebitoCobrado(IDebitoCobrado debitoCobrado) {
+		if (comp_id == null) {
+    		comp_id = new DebitoCobradoCategoriaPK();
+    	}
+    	
+    	comp_id.setDebitoCobradoId(debitoCobrado != null ? debitoCobrado.getId() : null);
+        this.debitoCobrado = (DebitoCobrado)debitoCobrado;
 	}
 	   
 }

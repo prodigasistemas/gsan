@@ -1,11 +1,12 @@
-package gcom.faturamento;
 
+package gcom.faturamento;
 import gcom.arrecadacao.debitoautomatico.DebitoAutomaticoMovimento;
 import gcom.arrecadacao.pagamento.FiltroGuiaPagamento;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgoto;
 import gcom.atendimentopublico.ordemservico.ServicoCobrancaValor;
 import gcom.atendimentopublico.registroatendimento.RegistroAtendimento;
 import gcom.cadastro.cliente.Cliente;
+import gcom.cadastro.cliente.IClienteConta;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.Imovel;
@@ -35,14 +36,20 @@ import gcom.faturamento.conta.ContaImpostosDeduzidos;
 import gcom.faturamento.conta.ContaMotivoRevisao;
 import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.conta.FaturaItem;
+import gcom.faturamento.conta.IContaCategoria;
+import gcom.faturamento.conta.IContaImpostosDeduzidos;
 import gcom.faturamento.credito.CreditoARealizar;
 import gcom.faturamento.credito.CreditoRealizado;
 import gcom.faturamento.credito.CreditoRealizadoHistorico;
+import gcom.faturamento.credito.ICreditoRealizado;
+import gcom.faturamento.credito.ICreditoRealizadoCategoria;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoACobrarGeral;
 import gcom.faturamento.debito.DebitoCobrado;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.faturamento.debito.DebitoTipoVigencia;
+import gcom.faturamento.debito.IDebitoCobrado;
+import gcom.faturamento.debito.IDebitoCobradoCategoria;
 import gcom.financeiro.ResumoFaturamento;
 import gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoEmitirOSHelper;
 import gcom.micromedicao.Rota;
@@ -584,7 +591,7 @@ public interface IRepositorioFaturamento {
 
 	public Short obterQuantidadeEconomiasConta(Integer idConta) throws ErroRepositorioException;
 
-	public Collection<ContaCategoria> pesquisarContaCategoria(Integer idConta) throws ErroRepositorioException;
+	public Collection<IContaCategoria> pesquisarContaCategoria(Integer idConta) throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarContaCategoriaFaixas(Integer idConta, Integer idCategoria) throws ErroRepositorioException;
@@ -739,11 +746,13 @@ public interface IRepositorioFaturamento {
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarCreditoARealizarCategoria(CreditoARealizar creditoARealizar) throws ErroRepositorioException;
 
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarContaImpostosDeduzidos(Integer idConta)	throws ErroRepositorioException;
+	public Collection<IContaImpostosDeduzidos> pesquisarContaImpostosDeduzidos(Integer idConta)	throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarContaCategoriaConsumoFaixa(Integer idConta) throws ErroRepositorioException;
+	
+	@SuppressWarnings("rawtypes")
+	public Collection pesquisarContaCategoriaConsumoFaixaHistorico(Integer idConta) throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
 	public void atualizarIndicadorContaNoHistorico(Collection idsContas) throws ErroRepositorioException;
@@ -757,8 +766,7 @@ public interface IRepositorioFaturamento {
 	@SuppressWarnings("rawtypes")
 	public Collection pesquisarFaturamentoGrupoNaoFaturados(Integer anoMesReferenciaFaturamento) throws ErroRepositorioException;
 
-	@SuppressWarnings("rawtypes")
-	public Collection pesquisarClienteConta(Integer idConta) throws ErroRepositorioException;
+	public Collection<IClienteConta> pesquisarClienteConta(Integer idConta) throws ErroRepositorioException;
 
 	public void inserirDebitoAutomaticoMovimento(DebitoAutomaticoMovimento debitoAutomaticoMovimento) throws ErroRepositorioException;
 
@@ -974,9 +982,9 @@ public interface IRepositorioFaturamento {
 			ConsumoTarifaVigencia consumoTarifaVigencia,
 			Subcategoria subcategoria) throws ErroRepositorioException;
 
-	public Collection<DebitoCobrado> pesquisarDebitosCobrados(Integer idConta) throws ErroRepositorioException;
+	public Collection<IDebitoCobrado> pesquisarDebitosCobrados(Integer idConta) throws ErroRepositorioException;
 
-	public Collection<CreditoRealizado> pesquisarCreditosRealizados(Integer idConta) throws ErroRepositorioException;
+	public Collection<ICreditoRealizado> pesquisarCreditosRealizados(Integer idConta) throws ErroRepositorioException;
 
 	public int pesquisarQuantidadeDebitosCobradosComParcelamento(Collection<ContaValoresHelper> colecaoContasValores) throws ErroRepositorioException;
 
@@ -2961,4 +2969,16 @@ public interface IRepositorioFaturamento {
 	public Integer countFaturasClienteResponsaveis(String anoMesReferencia) throws ErroRepositorioException;
 	
 	public Date obterDataVencimentoContasFaturarGrupo(FaturamentoGrupo faturamentoGrupo) throws ErroRepositorioException;
+	
+	public Collection<IDebitoCobrado> pesquisarDebitosCobradosHistorico(Integer idConta) throws ErroRepositorioException;
+	
+	public Collection<IDebitoCobradoCategoria> pesquisarDebitosCobradosCategoriaHistorico(Integer idDebitoCobradoHistorico) throws ErroRepositorioException;
+	
+	public Collection<ICreditoRealizado> pesquisarCreditosRealizadosHistorico(Integer idConta) throws ErroRepositorioException;
+	
+	public Collection<ICreditoRealizadoCategoria> pesquisarCreditoRealizadoCategoriaHistorico(Integer idCreditoRealizado) throws ErroRepositorioException;
+	
+	public Collection<IContaImpostosDeduzidos> pesquisarContaImpostosDeduzidosHistorico(Integer idConta) throws ErroRepositorioException;
+	
+	public Collection<IClienteConta> pesquisarClienteContaHistorico(Integer idConta) throws ErroRepositorioException;
 }

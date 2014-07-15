@@ -68,7 +68,6 @@ import gcom.cadastro.EnvioEmail;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.RepositorioCadastroHBM;
 import gcom.cadastro.cliente.Cliente;
-import gcom.cadastro.cliente.ClienteConta;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteGuiaPagamento;
 import gcom.cadastro.cliente.ClienteImovel;
@@ -82,6 +81,7 @@ import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.cliente.FiltroClienteRelacaoTipo;
 import gcom.cadastro.cliente.FiltroEsferaPoder;
 import gcom.cadastro.cliente.FoneTipo;
+import gcom.cadastro.cliente.IClienteConta;
 import gcom.cadastro.cliente.IRepositorioClienteImovel;
 import gcom.cadastro.cliente.RepositorioClienteImovelHBM;
 import gcom.cadastro.empresa.Empresa;
@@ -76520,11 +76520,11 @@ public class ControladorCobranca implements SessionBean {
 					}
 				}
 
-				Collection<ClienteConta> clientesConta = this.repositorioFaturamento
+				Collection<IClienteConta> clientesConta = this.repositorioFaturamento
 						.pesquisarClienteConta(idConta);
 
 				Cliente clienteResponsavelConta = null;
-				for (ClienteConta clienteConta : clientesConta) {
+				for (IClienteConta clienteConta : clientesConta) {
 
 					if (clienteConta.getIndicadorNomeConta().equals(
 							ConstantesSistema.SIM)) {

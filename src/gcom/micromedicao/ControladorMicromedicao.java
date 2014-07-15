@@ -42532,12 +42532,8 @@ public class ControladorMicromedicao implements SessionBean {
 	 */
 	public void validarImovelEmCampo(Integer idImovel) throws ControladorException {
 		try {
-			Rota rota = this.buscarRotaDoImovel(idImovel);
-
-			ArquivoTextoRoteiroEmpresa arquivo = this.repositorioMicromedicao.pesquisaArquivoTextoParaLeituristaPorRota(
-					rota.getFaturamentoGrupo().getAnoMesReferencia(), rota.getId(), rota.getFaturamentoGrupo().getId());
-
-			if (arquivo != null) {
+			if (isImovelEmCampo(idImovel)) {
+				Rota rota = this.buscarRotaDoImovel(idImovel);
 				throw new ControladorException("atencao.imovel_em_campo", null, Util.formatarAnoMesParaMesAno(rota.getFaturamentoGrupo().getAnoMesReferencia()).toString());
 			}
 		} catch (ControladorException ex) {
@@ -42545,6 +42541,16 @@ public class ControladorMicromedicao implements SessionBean {
 		} catch (Exception e) {
 			throw new ControladorException("erro.sistema");
 		}
+	}
+	
+	public boolean isImovelEmCampo(Integer idImovel) throws Exception {
+		Rota rota = this.buscarRotaDoImovel(idImovel);
+
+		ArquivoTextoRoteiroEmpresa arquivo;
+			arquivo = this.repositorioMicromedicao.pesquisaArquivoTextoParaLeituristaPorRota(
+					rota.getFaturamentoGrupo().getAnoMesReferencia(), rota.getId(), rota.getFaturamentoGrupo().getId());
+
+		return (arquivo != null);
 	}
 	
 	/**
