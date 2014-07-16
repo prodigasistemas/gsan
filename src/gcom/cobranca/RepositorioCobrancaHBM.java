@@ -2285,8 +2285,21 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 							new Integer(id).intValue()).executeUpdate();
 				}
 			}
+			
+			if (collectionIdCredito != null && !collectionIdCredito.isEmpty()) {
 
-			// deleta o debito a cobrar
+				Iterator icolecaoCreditos = collectionIdCredito.iterator();
+
+				while (icolecaoCreditos.hasNext()) {
+
+					String id = ((Integer) icolecaoCreditos.next()).toString();
+					consulta = "delete CobrancaDocumentoItem cobrancaDocumentoItem "
+							+ "where cobrancaDocumentoItem.creditoARealizarGeral.id = :credito ";
+
+					session.createQuery(consulta).setInteger("credito", new Integer(id).intValue()).executeUpdate();
+				}
+			}
+
 			removerCreditoARealizarDoParcelamento = "delete CreditoARealizar "
 					+ "where imov_id = :codigoImovel and parc_id = :codigoParcelamento ";
 
@@ -14759,72 +14772,68 @@ return retorno;
 	 * @date 26/05/2008
 	 * 
 	 */
-	public void atualizarSituacaoCobrancaDocumentoItem(Integer situacaoDebito, Date dataSituacao, 
-			Integer idConta, Integer idGuiaPagamento, Integer idDebitoACobrar) throws ErroRepositorioException{
+	public void atualizarSituacaoCobrancaDocumentoItem(Integer situacaoDebito, Date dataSituacao, Integer idConta, Integer idGuiaPagamento,
+			Integer idDebitoACobrar) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
 
-		// Atualizar apenas o item do documento do cobranca com a maior data de emissao
+		// Atualizar apenas o item do documento do cobranca com a maior data de
+		// emissao
 		String queryAtualizar = "";
 		String queryConsultar = "";
 		try {
 
 			/*
-			 * * Alteração em 10/02/09 Por Francisco / Ana Breda
-			 * Alterado para atualizar apenas itens contidos em documentos do tipo
-			 *  Aviso de corte, corte administrativo e corte fisico, por conta do 
-			 *  Resumo de Ação de cobrança.
+			 * * Alteração em 10/02/09 Por Francisco / Ana Breda Alterado para
+			 * atualizar apenas itens contidos em documentos do tipo Aviso de
+			 * corte, corte administrativo e corte fisico, por conta do Resumo
+			 * de Ação de cobrança.
 			 */
 			String dataSituacaoParaSQL = Util.formatarDataComTracoAAAAMMDD(dataSituacao);
-			
-			queryConsultar = "select cobrancado1_.cdit_id as idItem " 
-				+ " from cobranca.cobranca_documento_item cobrancado1_ "
-				+ " inner join cobranca.cobranca_documento cobrancado0_ on cobrancado0_.cbdo_id = cobrancado1_.cbdo_id ";
-				
-			if (idConta != null){
-					
-				queryConsultar = queryConsultar + " inner join (select conta3_.cnta_id as idConta "
-					+ " from faturamento.conta conta2_, faturamento.conta conta3_ "
-					+ " where conta2_.cnta_id = " + idConta + " and conta2_.imov_id = conta3_.imov_id "
-					+ " and conta2_.cnta_amreferenciaconta = conta3_.cnta_amreferenciaconta) conta on conta.idConta = cobrancado1_.cnta_id ";
-			
+
+			queryConsultar = "select cobrancado1_.cdit_id as idItem " + " from cobranca.cobranca_documento_item cobrancado1_ "
+					+ " inner join cobranca.cobranca_documento cobrancado0_ on cobrancado0_.cbdo_id = cobrancado1_.cbdo_id ";
+
+			if (idConta != null) {
+
+				queryConsultar = queryConsultar
+						+ " inner join (select conta3_.cnta_id as idConta "
+						+ " from faturamento.conta conta2_, faturamento.conta conta3_ "
+						+ " where conta2_.cnta_id = "
+						+ idConta
+						+ " and conta2_.imov_id = conta3_.imov_id "
+						+ " and conta2_.cnta_amreferenciaconta = conta3_.cnta_amreferenciaconta) conta on conta.idConta = cobrancado1_.cnta_id ";
+
 				queryConsultar = queryConsultar + " where cobrancado0_.dotp_id <> " + DocumentoTipo.EXTRATO_DE_DEBITO + " and "
-				+ "cobrancado0_.cbdo_tmemissao <= to_date('" + dataSituacaoParaSQL + "','YYYY-MM-DD HH24:MI:SS')  ";
-			}
-			else if (idGuiaPagamento != null){
-				
+						+ "cobrancado0_.cbdo_tmemissao <= to_date('" + dataSituacaoParaSQL + "','YYYY-MM-DD HH24:MI:SS')  ";
+			} else if (idGuiaPagamento != null) {
+
 				queryConsultar = queryConsultar + " where cobrancado0_.dotp_id <> " + DocumentoTipo.EXTRATO_DE_DEBITO + " and "
-				+ "cobrancado0_.cbdo_tmemissao <= to_date('" + dataSituacaoParaSQL + "','YYYY-MM-DD HH24:MI:SS') "
-				+ "and cobrancado1_.gpag_id = " + idGuiaPagamento;
-			}
-			else if (idDebitoACobrar != null){
-				
+						+ "cobrancado0_.cbdo_tmemissao <= to_date('" + dataSituacaoParaSQL + "','YYYY-MM-DD HH24:MI:SS') "
+						+ "and cobrancado1_.gpag_id = " + idGuiaPagamento;
+			} else if (idDebitoACobrar != null) {
+
 				queryConsultar = queryConsultar + " where cobrancado0_.dotp_id <> " + DocumentoTipo.EXTRATO_DE_DEBITO + " and "
-				+ "cobrancado0_.cbdo_tmemissao <= to_date('" + dataSituacaoParaSQL + "','YYYY-MM-DD HH24:MI:SS') "
-				+ "and cobrancado1_.dbac_id = " + idDebitoACobrar;
-			}
-			else{
+						+ "cobrancado0_.cbdo_tmemissao <= to_date('" + dataSituacaoParaSQL + "','YYYY-MM-DD HH24:MI:SS') "
+						+ "and cobrancado1_.dbac_id = " + idDebitoACobrar;
+			} else {
 				return;
 			}
-			
-			queryConsultar = queryConsultar + " order by cobrancado0_.cbdo_tmemissao desc ";
-			
 
-			Collection pesquisa = session.createSQLQuery(queryConsultar)
-			.addScalar("idItem", Hibernate.INTEGER).setMaxResults(1).list();
-			
+			queryConsultar = queryConsultar + " order by cobrancado0_.cbdo_tmemissao desc ";
+
+			Collection pesquisa = session.createSQLQuery(queryConsultar).addScalar("idItem", Hibernate.INTEGER).setMaxResults(1).list();
+
 			session.clear();
-			
-			if (pesquisa != null && !pesquisa.isEmpty()){
+
+			if (pesquisa != null && !pesquisa.isEmpty()) {
 				Integer idItem = (Integer) pesquisa.iterator().next();
-				queryAtualizar= "update gcom.cobranca.CobrancaDocumentoItem cdi "
-					+ " set cobrancaDebitoSituacao = :situacaoDebito, dataSituacaoDebito = :dataSituacaoDebito ," 
-					+ " ultimaAlteracao = :ultimaAlteracao " 
-					+ "	where cdit_id = " + idItem;
-				
-				session.createQuery(queryAtualizar).setInteger("situacaoDebito",
-						situacaoDebito).setDate("dataSituacaoDebito", dataSituacao).
-						setTimestamp("ultimaAlteracao",new Date()).executeUpdate();
+				queryAtualizar = "update gcom.cobranca.CobrancaDocumentoItem cdi "
+						+ " set cobrancaDebitoSituacao = :situacaoDebito, dataSituacaoDebito = :dataSituacaoDebito ,"
+						+ " ultimaAlteracao = :ultimaAlteracao " + "	where cdit_id = " + idItem;
+
+				session.createQuery(queryAtualizar).setInteger("situacaoDebito", situacaoDebito)
+						.setDate("dataSituacaoDebito", dataSituacao).setTimestamp("ultimaAlteracao", new Date()).executeUpdate();
 
 			}
 			session.flush();
@@ -14837,7 +14846,7 @@ return retorno;
 			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
-	
+
 	}
 
 	/**
