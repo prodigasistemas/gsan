@@ -12,6 +12,7 @@ import gcom.arrecadacao.bean.MovimentoArrecadadoresPorNSAHelper;
 import gcom.arrecadacao.bean.PesquisarAnaliseArrecadacaoHelper;
 import gcom.arrecadacao.bean.PesquisarAnaliseAvisosBancariosHelper;
 import gcom.arrecadacao.bean.PesquisarAvisoBancarioPorContaCorrenteHelper;
+import gcom.arrecadacao.debitoautomatico.DebitoAutomatico;
 import gcom.arrecadacao.debitoautomatico.DebitoAutomaticoMovimento;
 import gcom.arrecadacao.pagamento.FiltroPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
@@ -31496,6 +31497,10 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					
 					if (contaGeral.getConta() != null) {
 						Conta conta = (Conta) session.get(Conta.class, pagamento.getContaGeral().getId());
+						
+						if (conta.getImovel().getId().equals(new Integer(2697408))) {
+							System.out.println("Debug...");
+						}
 						contaGeral.setConta(conta);
 						
 						if (conta.getContaMotivoCancelamento() != null) {
@@ -31508,6 +31513,9 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					} else  {
 						ContaHistorico conta = (ContaHistorico) session.get(ContaHistorico.class, pagamento.getContaGeral().getId());
 						contaGeral.setContaHistorico(conta);
+						if (conta.getImovel().getId().equals(new Integer(2697408))) {
+							System.out.println("Debug...");
+						}
 						if (conta.getContaMotivoCancelamento() != null) {
 							
 							ContaMotivoCancelamento contaMotivoCancelamento = (ContaMotivoCancelamento) session.get(
@@ -31522,6 +31530,29 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 				retorno.add(pagamento);
 			}
 
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+	
+	public Collection<DebitoAutomatico> pesquisarDebitoAutomaticoSemDataExclusao(
+			Integer idImovel) throws ErroRepositorioException {
+
+		Collection<DebitoAutomatico> retorno = new ArrayList<DebitoAutomatico>();
+		
+		Session session = HibernateUtil.getSession();
+		String consulta = null;
+
+		try {
+			consulta = "FROM DebitoAutomatico AS debitoAutomatico "
+				+ "WHERE debitoAutomatico.imovel.id = :idImovel "
+				+ "and debitoAutomatico.dataExclusao is null";
+
+			retorno = session.createQuery(consulta).setInteger("idImovel", idImovel).list();
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {

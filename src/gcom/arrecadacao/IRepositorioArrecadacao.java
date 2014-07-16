@@ -11,12 +11,12 @@ import gcom.arrecadacao.bean.MovimentoArrecadadoresPorNSAHelper;
 import gcom.arrecadacao.bean.PesquisarAnaliseArrecadacaoHelper;
 import gcom.arrecadacao.bean.PesquisarAnaliseAvisosBancariosHelper;
 import gcom.arrecadacao.bean.PesquisarAvisoBancarioPorContaCorrenteHelper;
+import gcom.arrecadacao.debitoautomatico.DebitoAutomatico;
 import gcom.arrecadacao.pagamento.FiltroPagamento;
 import gcom.arrecadacao.pagamento.GuiaPagamento;
 import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.arrecadacao.pagamento.PagamentoCartaoDebito;
 import gcom.arrecadacao.pagamento.PagamentoHistorico;
-import gcom.arrecadacao.pagamento.PagamentoSituacao;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteEndereco;
 import gcom.cadastro.cliente.ClienteImovel;
@@ -24,7 +24,6 @@ import gcom.cadastro.cliente.IClienteFone;
 import gcom.cadastro.endereco.LogradouroBairro;
 import gcom.cadastro.endereco.LogradouroCep;
 import gcom.cadastro.imovel.Imovel;
-import gcom.cadastro.localidade.Localidade;
 import gcom.cobranca.CobrancaDocumento;
 import gcom.cobranca.CobrancaDocumentoItem;
 import gcom.cobranca.DocumentoTipo;
@@ -4901,10 +4900,7 @@ public interface IRepositorioArrecadacao {
 	public Collection pesquisarPagamentoHistoricoAvisoBancario(Integer idAvisoBancario) 
     	throws ErroRepositorioException;
 
-    
-	public Pagamento pesquisarPagamentoDeConta(Integer idConta)
-		throws ErroRepositorioException ;
-	
+	public Pagamento pesquisarPagamentoDeConta(Integer idConta) throws ErroRepositorioException ;
 	
 	/**
 	 * [UC0150] Retificar Conta
@@ -4917,83 +4913,19 @@ public interface IRepositorioArrecadacao {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
-	public void atualizarContaEmPagamento(Integer idPagamento, Integer idConta)
-		throws ErroRepositorioException;
+	public void atualizarContaEmPagamento(Integer idPagamento, Integer idConta) throws ErroRepositorioException;
 	
-	 /**
-	 *  
-	 * @author Sávio Luiz
-	 * @data 28/04/2007
-	 * 
-	 * @param idConta
-	 * @return idParcelamento
-	 */
-	public Integer pesquisarIdPagamentoDaGuia(
-			Integer idGuiaPagamento) throws ErroRepositorioException;
+	public Integer pesquisarIdPagamentoDaGuia(Integer idGuiaPagamento) throws ErroRepositorioException;
 	
-	 /**
-	 *  
-	 * @author Sávio Luiz
-	 * @data 28/04/2007
-	 * 
-	 * @param idConta
-	 * @return idParcelamento
-	 */
-	public Integer pesquisarIdPagamentoDoDebitoACobrar(
-			Integer idDebitoACobrar) throws ErroRepositorioException;
+	public Integer pesquisarIdPagamentoDoDebitoACobrar(Integer idDebitoACobrar) throws ErroRepositorioException;
 	
-	/**
-	 * Consulta ResumoArrecadacao para a geração do relatório '[UC0345] Gerar
-	 * Relatório de Resumo Arrecadação' de acordo com a opção de totalização.
-	 * 
-	 * @author Vivianne Sousa
-	 * @created 04/06/2007
-	 * 
-	 * 
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
-	public Collection consultarResumoArrecadacaoRelatorioPorEstadoPorUnidadeNegocio(
-			int anoMesReferencia) throws ErroRepositorioException;
+	public Collection consultarResumoArrecadacaoRelatorioPorEstadoPorUnidadeNegocio(int anoMesReferencia) throws ErroRepositorioException;
 	
-	/**
-	 * Consulta ResumoArrecadacao para a geração do relatório '[UC0345] Gerar
-	 * Relatório de Resumo Arrecadação' de acordo com a opção de totalização.
-	 * 
-	 * @author Vivianne Sousa
-	 * @created 04/06/2007
-	 * 
-	 * 
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
-	public Collection consultarResumoArrecadacaoRelatorioPorUnidadeNegocio(
-			int anoMesReferencia, Integer localidade)
-			throws ErroRepositorioException;
+	public Collection consultarResumoArrecadacaoRelatorioPorUnidadeNegocio(int anoMesReferencia, Integer localidade) throws ErroRepositorioException;
 	
-	/**
-	 * Pesquisar pagamentos pelo aviso bancário
-	 * 
-	 * @author Ana Maria
-	 * @date 11/06/2007
-	 * 
-	 * @return Collection
-	 * @throws ErroRepositorioException
-	 */
-	public PagamentosDevolucoesHelper filtrarPagamentos(FiltroPagamento filtroPagamento)
-			throws ErroRepositorioException;
+	public PagamentosDevolucoesHelper filtrarPagamentos(FiltroPagamento filtroPagamento) throws ErroRepositorioException;
 	
-	/**
-	 * Pesquisar devoluçãoes pelo aviso bancário
-	 * 
-	 * @author Ana Maria
-	 * @date 11/06/2007
-	 * 
-	 * @return Collection
-	 * @throws ErroRepositorioException
-	 */
-	public PagamentosDevolucoesHelper filtrarDevolucoes(FiltroDevolucao filtroDevolucao)
-			throws ErroRepositorioException;	
+	public PagamentosDevolucoesHelper filtrarDevolucoes(FiltroDevolucao filtroDevolucao) throws ErroRepositorioException;	
 	
 	/**
 	 * Pesquisar valores de arrecadação e devolução do aviso bancário
@@ -7052,12 +6984,7 @@ public interface IRepositorioArrecadacao {
 	public Collection<Integer> pesquisarIdsLocalidadeComGuiasPagamentoNaoPagas(Integer financiamentoTipoServico, 
 			Date dataVencimentoLimite) throws ErroRepositorioException;
 	
-	/**
-	 * TODO : COSANPA
-	 * @author Pamela Gatinho
-	 * @date 17/05/2013
-	 * 
-	 * Método para pesquisar pagamentos por ids passados como parâmetro
-	 */
 	public Collection<Pagamento> obterPagamentos(Collection<Integer> idsPagamentos) throws ErroRepositorioException;
+	
+	public Collection<DebitoAutomatico> pesquisarDebitoAutomaticoSemDataExclusao(Integer idImovel) throws ErroRepositorioException;
 }

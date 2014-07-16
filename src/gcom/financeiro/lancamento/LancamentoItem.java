@@ -8,7 +8,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 /** @author Hibernate CodeGenerator */
 public class LancamentoItem implements Serializable {
 	private static final long serialVersionUID = 1L;
-	//Constantes >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	
 	public static final Integer AGUA = new Integer(1);
 	public static final Integer ESGOTO = new Integer(2);
 	public static final Integer GRUPO_CONTABIL = new Integer(3);
@@ -37,7 +37,6 @@ public class LancamentoItem implements Serializable {
 	public static final Integer DESCONTOS_CONCEDIDOS = new Integer(26);
 	public static final Integer TOTAL_CREDITOS_REALIZADOS = new Integer(27);
 	public static final Integer ENTRADAS_PARCELAMENTO = new Integer(28);
-
 	public static final Integer VALOR_NAO_CONFERE = new Integer(29);
 	public static final Integer PAGAMENTO_EM_DUPLICIDADE_EXCESSO_NAO_ENCONTRADO = new Integer(30);
 	public static final Integer GUIA_DEVOLUCAO_NAO_INFORMADA = new Integer(31);
@@ -58,86 +57,58 @@ public class LancamentoItem implements Serializable {
 	public static final Integer DESCONTOS_CONDICIONAIS = new Integer(46);
 	public static final Integer DESCONTOS_INCONDICIONAIS = new Integer(47);
 	public static final Integer AJUSTES_PARA_ZERAR_CONTA = new Integer(48);
-	public static final Integer INDIRETA = new Integer(75);
-	public static final Integer TOTAL = new Integer(76);
-	//>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-	
-	
-	/* ITEMS NOVOS */
+	public static final Integer CREDITOS_PARA_COBRANCA_INDEVIDA_CANCELADOS = new Integer(49);
+	public static final Integer DESCONTOS_INCONDICIONAIS_CANCELADOS = new Integer(50);
+	public static final Integer CREDITOS_PARA_COBRANCA_INDEVIDA_INCLUIDOS = new Integer(51);
+	public static final Integer DESCONTOS_INCONDICIONAIS_INCLUIDOS = new Integer(52);
+	public static final Integer TOTAL_RECEITA_CANCELADA = new Integer(53);
+	public static final Integer DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO = new Integer(56);
+	public final static Integer TOTAL_VALORES_DEVOLVIDOS_NAS_CONTAS = new Integer(57);
 	public static final Integer POR_REFATURAMENTO = new Integer(58);
 	public static final Integer POR_PARCELAMENTO = new Integer(59);
-	public static final Integer DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO = new Integer(56);
-	public static final Integer DESCONTOS_INCONDICIONAIS_CANCELADOS = new Integer(50);
-	public static final Integer DESCONTOS_INCONDICIONAIS_INCLUIDOS = new Integer(52);
 	public static final Integer CREDITOS_PARA_COBRANCA_INDEVIDA = new Integer(60);
-	public static final Integer CREDITOS_PARA_COBRANCA_INDEVIDA_CANCELADOS = new Integer(49);
-	public static final Integer CREDITOS_PARA_COBRANCA_INDEVIDA_INCLUIDOS = new Integer(51);
-	public static final Integer TOTAL_RECEITA_CANCELADA = new Integer(53);
-	public final static Integer TOTAL_VALORES_DEVOLVIDOS_NAS_CONTAS = new Integer(57);
 	public final static Integer TOTAL_DEBITOS_CANCELADOS_POR_PRESCRICAO = new Integer(61);
-	
 	public static final Integer PARCELAMENTOS_COBRADOS = new Integer(62);
 	public static final Integer GUIAS_PAGAMENTO = new Integer(63);
 	public static final Integer IMPOSTOS_DEDUZIDOS = new Integer(64);
-	
 	public final static Integer DESCONTOS_PAGAMENTO_A_VISTA = new Integer(65);	
 	public final static Integer DESCONTOS_CREDITOS = new Integer(66);
-	
 	public final static Integer TOTAL_DESCONTOS = new Integer(67);
-	
 	public final static Integer BONUS_CONCEDIDOS_PARCELAMENTO = new Integer(68);
-	
 	public final static Integer VALORES_DA_CAMPANHA_DA_CRIANCA = new Integer(69);
 	public final static Integer PELA_CAMPANHA_DA_CRIANCA = new Integer(70);
 	public final static Integer OUTROS = new Integer(71);
 	public final static Integer VALOR_CAMPANHA_DA_CRIANCA_COM_DIREITO_AO_DESCONTO = new Integer(72);
 	public final static Integer TOTAL_POR_PAGAMENTO_A_VISTA = new Integer(73);
-	
 	public final static Integer RECEBIMENTOS_NAO_IDENTIFICADOS = new Integer(74);
-	
-	/**
-	* TODO: COSANPA
-	* Mantis 615 - Detalhar contabilização de documentos inexistentes
-	*
-	* @author Wellington Rocha
-	* @author Felipe Santos
-	* @date 02/08/2012
-	*/
+	public static final Integer INDIRETA = new Integer(75);
+	public static final Integer TOTAL = new Integer(76);
 	public final static Integer DOCUMENTO_INEXISTENTE_DEBITO_PRESCRITO = new Integer(78);
 	public final static Integer DOCUMENTO_INEXISTENTE_CONTA_PARCELADA = new Integer(79);
 	public final static Integer DOCUMENTO_INEXISTENTE_CONTA_CANCELADA = new Integer(80);
 	public final static Integer DOCUMENTO_INEXISTENTE_ERRO_PROCESSAMENTO = new Integer(81);
-	//********************************************
 	public final static Integer CONTAS_PAGAS_EM_EXCESSO = new Integer(82);
+	public final static Integer RECUPERACAO_CREDITO_CONTA_CANCELADA = new Integer(83);
+	public final static Integer RECUPERACAO_CREDITO_CONTA_PARCELADA = new Integer(84);
 	
-	/* FIM ITEMS NOVOS */
-	
-	
-    /** identifier field */
     private Integer id;
-
-    /** nullable persistent field */
     private String descricao;
-
-    /** nullable persistent field */
     private String descricaoAbreviada;
-
-    /** nullable persistent field */
     private Short indicadorItemContabil;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
+    
+    public LancamentoItem() {
+    }
 
-    /** full constructor */
+    public LancamentoItem(Integer id) {
+    	this.id = id;
+    }
+    
     public LancamentoItem(String descricao, String descricaoAbreviada, Short indicadorItemContabil, Date ultimaAlteracao) {
         this.descricao = descricao;
         this.descricaoAbreviada = descricaoAbreviada;
         this.indicadorItemContabil = indicadorItemContabil;
         this.ultimaAlteracao = ultimaAlteracao;
-    }
-
-    /** default constructor */
-    public LancamentoItem() {
     }
 
     public Integer getId() {
@@ -181,9 +152,7 @@ public class LancamentoItem implements Serializable {
     }
 
     public String toString() {
-        return new ToStringBuilder(this)
-            .append("id", getId())
-            .toString();
+        return new ToStringBuilder(this).append("id", getId()).toString();
     }
 
 }

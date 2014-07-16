@@ -175,7 +175,7 @@
 																	</td>
 																	<td width="11%">
 																		<div align="center">
-																			<%= Util.formatarAnoMesParaMesAno(pagamento.getAnoMesReferenciaPagamento()) %>
+																			<%= pagamento.getFormatarAnoMesParaMesAno() %>
 																		</div>
 																	</td>
 																

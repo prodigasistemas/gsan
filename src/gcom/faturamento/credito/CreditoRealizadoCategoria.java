@@ -1,37 +1,27 @@
 package gcom.faturamento.credito;
 
 import gcom.cadastro.imovel.Categoria;
+import gcom.faturamento.debito.DebitoCobradoCategoriaPK;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
-public class CreditoRealizadoCategoria implements Serializable {
+public class CreditoRealizadoCategoria implements Serializable, ICreditoRealizadoCategoria {
 	private static final long serialVersionUID = 1L;
-    /** identifier field */
-    private gcom.faturamento.credito.CreditoRealizadoCategoriaPK comp_id;
 
-    /** nullable persistent field */
+    private CreditoRealizadoCategoriaPK comp_id;
     private Integer quantidadeEconomia;
-
-    /** nullable persistent field */
     private BigDecimal valorCategoria;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-
-    /** nullable persistent field */
-    private gcom.faturamento.credito.CreditoRealizado creditoRealizado;
-
-    /** nullable persistent field */
+    private CreditoRealizado creditoRealizado;
     private Categoria categoria;
 
-    /** full constructor */
-    public CreditoRealizadoCategoria(gcom.faturamento.credito.CreditoRealizadoCategoriaPK comp_id, Integer quantidadeEconomia, BigDecimal valorCategoria, Date ultimaAlteracao, gcom.faturamento.credito.CreditoRealizado creditoRealizado, Categoria categoria) {
+    public CreditoRealizadoCategoria(CreditoRealizadoCategoriaPK comp_id, Integer quantidadeEconomia, BigDecimal valorCategoria, Date ultimaAlteracao, CreditoRealizado creditoRealizado, Categoria categoria) {
         this.comp_id = comp_id;
         this.quantidadeEconomia = quantidadeEconomia;
         this.valorCategoria = valorCategoria;
@@ -40,20 +30,18 @@ public class CreditoRealizadoCategoria implements Serializable {
         this.categoria = categoria;
     }
 
-    /** default constructor */
     public CreditoRealizadoCategoria() {
     }
 
-    /** minimal constructor */
-    public CreditoRealizadoCategoria(gcom.faturamento.credito.CreditoRealizadoCategoriaPK comp_id) {
+    public CreditoRealizadoCategoria(CreditoRealizadoCategoriaPK comp_id) {
         this.comp_id = comp_id;
     }
 
-    public gcom.faturamento.credito.CreditoRealizadoCategoriaPK getComp_id() {
+    public CreditoRealizadoCategoriaPK getComp_id() {
         return this.comp_id;
     }
 
-    public void setComp_id(gcom.faturamento.credito.CreditoRealizadoCategoriaPK comp_id) {
+    public void setComp_id(CreditoRealizadoCategoriaPK comp_id) {
         this.comp_id = comp_id;
     }
 
@@ -81,12 +69,20 @@ public class CreditoRealizadoCategoria implements Serializable {
         this.ultimaAlteracao = ultimaAlteracao;
     }
 
-    public gcom.faturamento.credito.CreditoRealizado getCreditoRealizado() {
+    public CreditoRealizado getCreditoRealizado() {
         return this.creditoRealizado;
     }
 
-    public void setCreditoRealizado(gcom.faturamento.credito.CreditoRealizado creditoRealizado) {
-        this.creditoRealizado = creditoRealizado;
+    public void setCreditoRealizado(ICreditoRealizado creditoRealizado) {
+        if (comp_id == null) {
+    		comp_id = new CreditoRealizadoCategoriaPK();
+    	}
+    	
+        if (comp_id.getCreditoRealizado() == null) {
+        	comp_id.setCreditoRealizado(new CreditoRealizado());
+        }
+    	comp_id.getCreditoRealizado().setId((creditoRealizado != null ? creditoRealizado.getId() : null));
+        this.creditoRealizado  = (CreditoRealizado) creditoRealizado ;
     }
 
     public Categoria getCategoria() {
@@ -94,6 +90,13 @@ public class CreditoRealizadoCategoria implements Serializable {
     }
 
     public void setCategoria(Categoria categoria) {
+    	if (comp_id == null) {
+    		comp_id = new CreditoRealizadoCategoriaPK();
+    	}
+    	if (comp_id.getCategoria() == null) {
+        	comp_id.setCategoria(new Categoria());
+        }
+    	comp_id.getCategoria().setId((categoria != null ? categoria.getId() : null));
         this.categoria = categoria;
     }
 

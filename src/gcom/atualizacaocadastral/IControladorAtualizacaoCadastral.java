@@ -23,8 +23,7 @@ public interface IControladorAtualizacaoCadastral {
 	
 	public Integer recuperaValorSequenceImovelRetorno() throws Exception;
 	
-	public Collection<ImovelSubcategoria> pesquisarImovelSubcategoriaAtualizacaoCadastral(Integer idImovel, Integer idSubcategoria,Integer idCategoria)
-		throws ControladorException;
+	public Collection<ImovelSubcategoria> pesquisarImovelSubcategoriaAtualizacaoCadastral(Integer idImovel, Integer idSubcategoria,Integer idCategoria) throws ControladorException;
 		
 	public ImovelAtualizacaoCadastral pesquisarImovelAtualizacaoCadastral(Integer idImovel)	throws ControladorException;
 	
@@ -45,4 +44,6 @@ public interface IControladorAtualizacaoCadastral {
 	public Collection pesquisarDadosFichaFiscalizacaoCadastral(List<Integer> listaIdImoveis) throws ControladorException;
 	
 	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacao(Integer idImovel) throws ControladorException;
+	
+	public Collection<ImagemRetorno> pesquisarImagensRetornoPorIdImovel(Integer idImovel) throws ControladorException;
 }

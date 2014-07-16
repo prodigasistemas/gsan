@@ -18,10 +18,12 @@ public class CreditoOrigem extends ObjetoTransacao {
 	public final static Integer DEVOLUCAO_JUROS_PARCELAMENTO = new Integer(5);
 	public final static Integer DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO = new Integer(6);
 	public final static Integer VALORES_COBRADOS_INDEVIDAMENTE = new Integer(7);
-	public final static Integer DESCONTOS_CONDICIONAIS = new Integer(7);
 	public final static Integer DESCONTOS_INCONDICIONAIS = new Integer(8);
 	public final static Integer AJUSTES_PARA_ZERAR_CONTA = new Integer(9);
 	public final static Integer CONTAS_PAGAS_EM_EXCESSO = new Integer (10);
+	public final static Integer DESCONTOS_CONDICIONAIS = new Integer(11);
+	public final static Integer RECUPERACAO_CREDITO_CONTA_CANCELADA = new Integer(12);
+	public final static Integer RECUPERACAO_CREDITO_CONTA_PARCELADA = new Integer(13);
 
 	private Integer id;
 	private String descricaoCreditoOrigem;

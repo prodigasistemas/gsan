@@ -9,19 +9,15 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 /** @author Hibernate CodeGenerator */
 public class DebitoCobradoCategoriaHistoricoPK implements Serializable {
 	private static final long serialVersionUID = 1L;
-    /** identifier field */
+   
     private Integer debitoCobradoHistoricoId;
-
-    /** identifier field */
     private Integer categoriaId;
 
-    /** full constructor */
     public DebitoCobradoCategoriaHistoricoPK(Integer debitoCobradoHistoricoId, Integer categoriaId) {
         this.debitoCobradoHistoricoId = debitoCobradoHistoricoId;
         this.categoriaId = categoriaId;
     }
 
-    /** default constructor */
     public DebitoCobradoCategoriaHistoricoPK() {
     }
 

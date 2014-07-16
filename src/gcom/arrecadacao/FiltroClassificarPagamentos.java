@@ -17,22 +17,15 @@ public class FiltroClassificarPagamentos extends Filtro implements Serializable 
 	}
 	
 	public final static String ID_SITUACAO_PAGAMENTO = "pagamentoSituacaoAtual.id";
-
 	public final static String REFERENCIA_ARRECADACAO = "anoMesReferenciaArrecadacao";
-
 	public final static String ID = "id";
-	
 	public final static String VALOR_PAGAMENTO = "valorPagamento";
-	
 	public final static String ID_IMOVEL = "imovel.id";
-	
 	public final static String REFERENCIA_PAGAMENTO = "pagamento.getAnoMesReferenciaPagamento";
-	
 	public final static String ID_MOTIVO_CANCELAMENTO = "contaGeral.conta.contaMotivoCancelamento.id";
-	
 	public final static String DESCRICAO_MOTIVO_CANCELAMENTO = "contaGeral.conta.contaMotivoCancelamento.descricaoMotivoCancelamentoConta";
-	
 	public final static String DATA_PAGAMENTO = "dataPagamento";
+	public final static String ID_CONTA = "contaGeral.id";
 	
 	public final static String ORDER_BY = "dataPagamento, objeto.imovel.id, objeto.valorPagamento";
 }

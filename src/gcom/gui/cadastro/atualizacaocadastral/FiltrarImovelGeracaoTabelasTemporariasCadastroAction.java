@@ -36,13 +36,15 @@ import org.apache.struts.action.ActionMapping;
 public class FiltrarImovelGeracaoTabelasTemporariasCadastroAction extends GcomAction {
 	
 	private static Fachada fachada = Fachada.getInstancia();
-	private ImovelGeracaoTabelasTemporariasCadastroHelper helper = new ImovelGeracaoTabelasTemporariasCadastroHelper();
+	private ImovelGeracaoTabelasTemporariasCadastroHelper helper;
 	
 	public ActionForward execute(ActionMapping actionMapping,
 			ActionForm actionForm, HttpServletRequest httpServletRequest,
 			HttpServletResponse httpServletResponse) {
 
 		ActionForward retorno = actionMapping.findForward("telaSucesso");
+		
+		helper = new ImovelGeracaoTabelasTemporariasCadastroHelper();
 		
 		String linha = null;
 

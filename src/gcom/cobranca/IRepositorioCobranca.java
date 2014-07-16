@@ -420,39 +420,12 @@ public interface IRepositorioCobranca {
 	public String verificarDebitoAutomatico(String matriculaImovel)
 			throws ErroRepositorioException;
 
-	/**
-	 * [UC0200] Inserir Débito Automático Atualiza a data da exclusão com a data
-	 * corrente em Débio Automático
-	 * 
-	 * @author Roberta Costa
-	 * @created 05/01/2006
-	 * 
-	 * @param matriculaImovel
-	 *            Matrícula do Imovel
-	 * @exception ErroRepositorioException
-	 *                Repositorio Exception
-	 */
-	public void atualizarDataExclusao(String matriculaImovel)
-			throws ErroRepositorioException;
+	public void atualizarDataExclusao(String matriculaImovel, Integer idAgencia) throws ErroRepositorioException;
+	
+	public void atualizarDataExclusao(String matriculaImovel) throws ErroRepositorioException;
 
 	/**
 	 * [UC0200] Inserir Débito Automático
-	 * 
-	 * @author Roberta Costa
-	 * @created 04/01/2006
-	 * 
-	 * @param matriculaImovel
-	 *            Matrícula do Imovel
-	 * @param codigoBanco
-	 *            Código do Banco
-	 * @param codigoAgencia
-	 *            Código da Agência
-	 * @param identificacaoCliente
-	 *            Identificação do Cliente no Banco
-	 * @param dataOpcao
-	 *            Data da Opção
-	 * @exception ErroRepositorioException
-	 *                Repositorio Exception
 	 */
 	public void inserirDebitoAutomatico(DebitoAutomatico debitoAutomatic)
 			throws ErroRepositorioException;
@@ -460,14 +433,6 @@ public interface IRepositorioCobranca {
 	/**
 	 * [UC0200] Inserir Débito Automático Atualiza o indicador de débio
 	 * automático em Imóvel
-	 * 
-	 * @author Roberta Costa
-	 * @created 05/01/2006
-	 * 
-	 * @param matriculaImovel
-	 *            Matrícula do Imovel
-	 * @exception ErroRepositorioException
-	 *                Repositorio Exception
 	 */
 	public void atualizarIndicadorDebitoAutomatico(String matriculaImovel,
 			Integer indicadorDebito) throws ErroRepositorioException;

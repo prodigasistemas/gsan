@@ -33,6 +33,7 @@ public class ClassificarPagamentosAction extends GcomAction {
 		
 		ActionForward retorno = actionMapping.findForward("telaSucesso");
 		Fachada fachada = Fachada.getInstancia();
+
 		HttpSession sessao = httpServletRequest.getSession(false);
 		PagamentosAClassificarActionForm form = (PagamentosAClassificarActionForm) actionForm;
 		Usuario usuarioLogado = this.getUsuarioLogado(httpServletRequest);
@@ -50,6 +51,7 @@ public class ClassificarPagamentosAction extends GcomAction {
 		} catch (ControladorException e) {
 			e.printStackTrace();
 		}
+		
 		
 		montarPaginaSucesso(httpServletRequest,
 				"Pagamentos selecionados já classificados",
@@ -95,16 +97,21 @@ public class ClassificarPagamentosAction extends GcomAction {
 	}
 	
 	private void setParametros(Integer idPagamentoOriginal) {
-		
-		if (idPagamentoOriginal.equals(PagamentoSituacao.DOCUMENTO_INEXISTENTE_CONTA_PARCELADA)) {
-			
-			this.creditoTipo = new CreditoTipo(CreditoTipo.DEVOLUCAO_OUTROS_VALORES);
-			this.creditoOrigem = new CreditoOrigem(CreditoOrigem.VALORES_COBRADOS_INDEVIDAMENTE);
-			
-		} else if (idPagamentoOriginal.equals(PagamentoSituacao.PAGAMENTO_EM_DUPLICIDADE)) {
+		if (idPagamentoOriginal.equals(PagamentoSituacao.PAGAMENTO_EM_DUPLICIDADE)) {
 			
 			this.creditoTipo = new CreditoTipo(CreditoTipo.DEVOLUCAO_PAGAMENTOS_DUPLICIDADE);
 			this.creditoOrigem = new CreditoOrigem(CreditoOrigem.CONTAS_PAGAS_EM_DUPLICIDADE_EXCESSO);
+
+		} else if (idPagamentoOriginal.equals(PagamentoSituacao.DOCUMENTO_INEXISTENTE_CONTA_CANCELADA)) {
+			
+			this.creditoTipo = new CreditoTipo(CreditoTipo.DEVOLUCAO_OUTROS_VALORES);
+			this.creditoOrigem = new CreditoOrigem(CreditoOrigem.RECUPERACAO_CREDITO_CONTA_CANCELADA);
+
+		} else if (idPagamentoOriginal.equals(PagamentoSituacao.DOCUMENTO_INEXISTENTE_CONTA_PARCELADA)) {
+
+			this.creditoTipo = new CreditoTipo(CreditoTipo.DEVOLUCAO_OUTROS_VALORES);
+			this.creditoOrigem = new CreditoOrigem(CreditoOrigem.RECUPERACAO_CREDITO_CONTA_PARCELADA);
+			
 		}
 	}
 

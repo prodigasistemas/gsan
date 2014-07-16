@@ -25,7 +25,7 @@ public class DocumentoCobrancaItemActionForm extends ActionForm {
 	private String dataHoraEmissao;
 	private String motivoNaoEntregaDocumento;
 	private String qtdItens;
-	
+	private String nomeUsuario;
 	
 	public String getFormaEmissao() {
 		return formaEmissao;
@@ -89,7 +89,6 @@ public class DocumentoCobrancaItemActionForm extends ActionForm {
 	}
 	
 	public ActionErrors validate(ActionMapping actionMapping, HttpServletRequest httpServletRequest) {
-	    /**@todo: finish this method, this is just the skeleton.*/
 	    return null;
 	}
 	public void reset(ActionMapping actionMapping, HttpServletRequest httpServletRequest) {
@@ -99,5 +98,11 @@ public class DocumentoCobrancaItemActionForm extends ActionForm {
 	}
 	public void setDataHoraEmissao(String dataHoraEmissao) {
 		this.dataHoraEmissao = dataHoraEmissao;
+	}
+	public String getNomeUsuario() {
+		return nomeUsuario;
+	}
+	public void setNomeUsuario(String nomeUsuario) {
+		this.nomeUsuario = nomeUsuario;
 	}
 }

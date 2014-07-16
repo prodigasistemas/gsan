@@ -3,6 +3,7 @@ package gcom.faturamento.credito;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.localidade.Quadra;
 import gcom.faturamento.conta.Conta;
+import gcom.faturamento.conta.IConta;
 import gcom.financeiro.lancamento.LancamentoItemContabil;
 import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.ObjetoTransacao;
@@ -18,7 +19,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 
 
 @ControleAlteracao("")
-public class CreditoRealizado extends ObjetoTransacao {
+public class CreditoRealizado extends ObjetoTransacao implements ICreditoRealizado{
 	private static final long serialVersionUID = 1L;
 
     private Integer id;
@@ -71,6 +72,10 @@ public class CreditoRealizado extends ObjetoTransacao {
     }
 
     public CreditoRealizado() {
+    }
+    
+    public CreditoRealizado(Integer id) {
+    	this.id = id;
     }
 
     @SuppressWarnings("rawtypes")
@@ -192,8 +197,8 @@ public class CreditoRealizado extends ObjetoTransacao {
         return this.conta;
     }
 
-    public void setConta(Conta conta) {
-        this.conta = conta;
+    public void setConta(IConta conta) {
+    	this.conta = new Conta(conta.getId());
     }
 
     public Quadra getQuadra() {

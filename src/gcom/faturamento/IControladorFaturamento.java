@@ -1447,8 +1447,7 @@ public interface IControladorFaturamento {
 	 * @param colecaoConta
 	 * @throws ControladorException
 	 */
-	public StringBuilder obterDadosConsumoAnterior(Integer idImovel,
-			int anoMes, int qtdMeses, Integer tipoLigacao, Integer tipoMedicao)
+	public StringBuilder obterDadosConsumoAnterior(EmitirContaHelper emitirConta, int qtdMeses, Integer tipoLigacao, Integer tipoMedicao)
 			throws ControladorException;
 
 	/**
@@ -5669,7 +5668,7 @@ public interface IControladorFaturamento {
 	@SuppressWarnings("unchecked")
 	public Collection<Integer> getListaIdContas(Collection<Pagamento> pagamentos);
 		
-	public Collection pesquisarContaOuContaHistorico(Collection<Integer> idsPagamentos, String className) throws ControladorException;
+	public Collection<ContaHistorico> pesquisarContaOuContaHistorico(Collection<Pagamento> pagamentos) throws ControladorException;
 
 	public void atualizarVecimentoFaturaClienteResponsavel(Date dataVencimento, String anoMesReferencia) throws ControladorException;
 	

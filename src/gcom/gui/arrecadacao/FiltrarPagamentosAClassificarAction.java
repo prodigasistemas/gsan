@@ -8,6 +8,7 @@ import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.util.Util;
+import gcom.util.filtro.ParametroNaoNulo;
 import gcom.util.filtro.ParametroSimples;
 
 import java.util.ArrayList;
@@ -44,6 +45,7 @@ public class FiltrarPagamentosAClassificarAction extends GcomAction {
 			
 			filtroClassificarPagamentos.adicionarParametro(new ParametroSimples(FiltroClassificarPagamentos.ID_SITUACAO_PAGAMENTO, situacaoPagamento));
 			filtroClassificarPagamentos.adicionarParametro(new ParametroSimples(FiltroClassificarPagamentos.REFERENCIA_ARRECADACAO, referenciaArrecadacao));
+			filtroClassificarPagamentos.adicionarParametro(new ParametroNaoNulo(FiltroClassificarPagamentos.ID_CONTA));
 			
 			if (isMatriculaImovelPreenchida(matriculaImovel)) {
 				filtroClassificarPagamentos.adicionarParametro(new ParametroSimples(FiltroClassificarPagamentos.ID_IMOVEL, matriculaImovel));

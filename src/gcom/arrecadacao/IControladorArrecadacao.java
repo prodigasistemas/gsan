@@ -4343,60 +4343,23 @@ public interface IControladorArrecadacao {
 				FiltroConsultarDadosDiariosArrecadacaoAuxiliar filtro)
 				throws ControladorException;
 		
-		/**
-		 * COSANPA - Mantis 414 - Felipe Santos - 25/10/2013
-		 * 
-		 * Gera dados para o Relatorio BIG
-		 * 
-		 * @param localidades
-		 * @param idFuncionalidadeIniciada
-		 */
-		public void gerarDadosRelatorioBIG(Integer anoMesReferencia, Localidade localidade,
-				Integer idFuncionalidadeIniciada) throws ControladorException;
+		public void gerarDadosRelatorioBIG(Integer anoMesReferencia, Localidade localidade, Integer idFuncionalidadeIniciada) throws ControladorException;
 		
-		/**
-		 * COSANPA - Mantis 414 - Felipe Santos - 08/11/2013
-		 * 
-		 * Returna dados do Relatorio BIG
-		 * 
-		 * @param anoMesReferencia
-		 */
-		public Collection pesquisarDadosRelatorioBIG(
-				Integer anoMesReferencia) throws ControladorException;
+		@SuppressWarnings("rawtypes")
+		public Collection pesquisarDadosRelatorioBIG(Integer anoMesReferencia) throws ControladorException;
 		
 		public void atualizarGuiasPagamentoNaoPagasAtePeriodo(Integer idFuncionalidadeIniciada, Date dataVencimentoLimite, 
 				Integer financiamentoTipoServico, Integer idLocalidade) throws ControladorException;
 				
-		public Collection<Integer> pesquisarIdsLocalidadeComGuiasPagamentoNaoPagas(Date dataVencimentoLimite, 
-				Integer financiamentoTipoServico) throws ControladorException;
+		public Collection<Integer> pesquisarIdsLocalidadeComGuiasPagamentoNaoPagas(Date dataVencimentoLimite, Integer financiamentoTipoServico) throws ControladorException;
 		
 		public void processarPagamentosDiferencaDoisReais(Integer anoMesReferenciaArrecadacao, Localidade localidade, Integer idFuncionalidadeIniciada) throws Exception;
 
-		/**
-		 * TODO : COSANPA
-		 * @author Pamela Gatinho
-		 * @date 17/05/2013
-		 * 
-		 * @param idsPagamentos
-		 * @return
-		 */
-		public Collection<Pagamento> obterPagamentos(Collection<Integer> pagamentos) 
-		throws ControladorException;
+		public Collection<Pagamento> obterPagamentos(Collection<Integer> pagamentos) throws ControladorException;
 		
-		/**
-		 * TODO : COSANPA
-		 * @author Pamela Gatinho
-		 * @date 17/05/2013
-		 * 
-		 * Nova regra para classificar pagamentos de débitos prescritos
-		 * @param pagamentoSituacao
-		 * @param dataInicial
-		 * @param dataFinal
-		 * @return
-		 * @throws ControladorException 
-		 */
-		public void classificarPagamentosResolvidos(Collection<Pagamento> pagamentos, Usuario usuarioLogado,
+		public void recuperarCredito(Collection<Pagamento> pagamentos, Usuario usuarioLogado,
 				CreditoTipo creditoTipo, CreditoOrigem creditoOrigem, boolean indicadorIncluirCredito) 
 			throws ControladorException;
-}	
-
+		
+		public void atualizarIndicadorDebitoAutomaticoComDataExclusao(Integer idImovel) throws ControladorException;
+}

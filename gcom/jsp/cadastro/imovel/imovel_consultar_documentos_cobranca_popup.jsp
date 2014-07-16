@@ -81,13 +81,13 @@
 						<tr> 
 							<td height="10"><strong>Situação de Água:</strong></td>
 							<td>
-								<html:text property="situacaoAguaImovel" size="45" readonly="true" style="background-color:#EFEFEF; border:0"/>
+								<html:text property="situacaoAguaImovel" size="25" readonly="true" style="background-color:#EFEFEF; border:0"/>
 							</td>
 						</tr>
 						<tr> 
 							<td height="10"><strong>Situação de Esgoto:</strong></td>
 							<td>
-								<html:text property="situacaoEsgotoImovel" size="45" readonly="true" style="background-color:#EFEFEF; border:0"/>
+								<html:text property="situacaoEsgotoImovel" size="25" readonly="true" style="background-color:#EFEFEF; border:0"/>
 							</td>
 						</tr>
 						<tr> 
@@ -166,18 +166,29 @@
 						<table width="100%" border="0">
 						<tr> 
 							<td height="10" width="150"><strong>Forma:</strong></td>
-					        <td width="150">
+					        <td>
 								<html:text property="formaEmissao" size="25" readonly="true" style="background-color:#EFEFEF; border:0;"/>
 					        </td>
-					        <td height="10" width="110"><strong>Data/Hora:</strong></td>
+					        
+						</tr>
+						
+						<tr>
+							<td height="10" width="150"><strong>Data/Hora:</strong></td>
 					        <td>
-								<html:text property="dataHoraEmissao" size="17" readonly="true" style="background-color:#EFEFEF; border:0;"/>
+								<html:text property="dataHoraEmissao" size="25" readonly="true" style="background-color:#EFEFEF; border:0;"/>
 					        </td>
-						</tr>						
+						</tr>
+						
+						<tr>
+							<td height="10" width="150"><strong>Usu&aacute;rio:</strong></td>
+					        <td>
+								<html:text property="nomeUsuario" size="50" readonly="true" style="background-color:#EFEFEF; border:0;"/>
+					        </td>
+						</tr>
 						</table>
-
 					</td>
 				</tr>
+				
 				</table>
 		  </td>
       </tr>
@@ -655,8 +666,8 @@
 															
 															/
 															
-															<logic:present name="debitoACobrar" property="debitoACobrar.numeroPrestacaoDebitoMenosBonus">
-																<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="debitoACobrar" property="numeroPrestacaoDebitoMenosBonus"/></font>
+															<logic:present name="debitoACobrar" property="numeroPrestacaoDebito">
+																<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="debitoACobrar" property="numeroPrestacaoDebito"/></font>
 															</logic:present>
 													</logic:present>		
 
@@ -669,8 +680,8 @@
 															
 															/
 															
-															<logic:present name="debitoACobrarHistorico" property="debitoACobrar.numeroPrestacaoDebitoMenosBonus">
-																<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="debitoACobrarHistorico" property="numeroPrestacaoDebitoMenosBonus"/></font>
+															<logic:present name="debitoACobrarHistorico" property="numeroPrestacaoDebito">
+																<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="debitoACobrarHistorico" property="numeroPrestacaoDebito"/></font>
 															</logic:present>
 
 													</logic:present>
@@ -743,15 +754,8 @@
 				</td>
 			</tr>
 			
-      <tr>
-      	<td colspan="5" height="5"></td>
-      </tr>
-      <tr>
-      	<td colspan="5">
-      	
-      		<table width="100%" border="0">
-	  		<tr> 
-          		<td height="17" colspan="5"><strong>Guias de Pagamento:</strong></td>
+			<tr> 
+          		<td height="17" colspan="5"><strong>Cr&eacute;ditos A Realizar:</strong></td>
           	</tr>
       		<tr> 
           		<td colspan="5">
@@ -763,10 +767,11 @@
 							<table width="100%" bgcolor="#99CCFF" border="0">
                     		<tr bgcolor="#99CCFF"> 
 
-								<td align="center" width="30%"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><strong>Tipo do Débito</strong></font></td>
-								<td width="15%"><div align="center"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><strong>Emissão</strong></font></div></td>
-								<td width="15%"><div align="center"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><strong>Vencimento</strong></font></div></td>
-								<td width="20%"><div align="center"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><strong>Vl. Guia de Pagamento</strong></font></div></td>
+								<td align="center" width="30%"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><strong>Tipo do Crédito</strong></font></td>
+								<td width="10%"><div align="center"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><strong>Mês/Ano Referência</strong></font></div></td>
+								<td width="10%"><div align="center"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><strong>Mês/Ano Cobrança</strong></font></div></td>
+								<td width="10%"><div align="center"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><strong>Parcela</strong></font></div></td>
+								<td width="20%"><div align="center"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><strong>Vl. Crédito</strong></font></div></td>
 								<td width="20%"><div align="center"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><strong>Vl. Item Cobrado</strong></font></div></td>
 							</tr>
                     		</table>
@@ -774,7 +779,7 @@
 						
             		</tr>
             		
-            		<logic:notEmpty name="cobrancaDocumentoHelper" property="colecaoCobrancaDocumentoItemGuiaPagamento">
+            		<logic:notEmpty name="cobrancaDocumentoHelper" property="colecaoCobrancaDocumentoItemCreditoARealizar">
             
             		<tr> 
 						<td> 
@@ -785,9 +790,7 @@
 							
 							<table width="100%" align="center" bgcolor="#99CCFF">
 
-								<logic:iterate name="cobrancaDocumentoHelper" property="colecaoCobrancaDocumentoItemGuiaPagamento" id="cobrancaDocumentoItemGuiaPagamento" type="CobrancaDocumentoItem">
-                            
-									
+								<logic:iterate name="cobrancaDocumentoHelper" property="colecaoCobrancaDocumentoItemCreditoARealizar" id="cobrancaDocumentoItemCreditoARealizar" type="CobrancaDocumentoItem">
 									
 									<%	if (cor.equalsIgnoreCase("#FFFFFF")){
 											cor = "#cbe5fe";%>
@@ -799,65 +802,120 @@
 									 
 										<td width="30%">
 										<div align="center">
-
-											<logic:present name="cobrancaDocumentoItemConta" property="guiaPagamentoGeral">	
-												<bean:define name="cobrancaDocumentoItemConta" property="guiaPagamentoGeral" id="guiaPagamentoGeral"/>
-													<logic:present name="guiaPagamentoGeral" property="guiaPagamento">											
-														<bean:define name="guiaPagamentoGeral" property="guiaPagamento" id="guiaPagamento"/>
-															<logic:present name="guiaPagamento" property="debitoTipo">	
-																<a href="javascript:abrirPopup('exibirConsultarGuiaPagamentoAction.do?guiaPagamentoId=<%="" + cobrancaDocumentoItemGuiaPagamento.getGuiaPagamentoGeral().getGuiaPagamento().getId() %>')" title="<%="" + cobrancaDocumentoItemGuiaPagamento.getGuiaPagamentoGeral().getGuiaPagamento().getDebitoTipo().getDescricao() %>"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="guiaPagamento" property="debitoTipo.descricao"/></font></a>
-															</logic:present>
-													</logic:present>		
+											<logic:present name="cobrancaDocumentoItemCreditoARealizar" property="creditoARealizarGeral">	
+											
+												<bean:define name="cobrancaDocumentoItemCreditoARealizar" property="creditoARealizarGeral" id="creditoARealizarGeral"/>
+													<logic:present name="creditoARealizarGeral" property="creditoARealizar">
 													
-													<logic:present name="guiaPagamentoGeral" property="guiaPagamentoHistorico">
-														<bean:define name="guiaPagamentoGeral" property="guiaPagamentoHistorico" id="guiaPagamentoHistorico"/>
-															<logic:present name="guiaPagamentoHistorico" property="debitoTipo">	
-																<a href="javascript:abrirPopup('exibirConsultarGuiaPagamentoAction.do?guiaPagamentoId=<%="" + cobrancaDocumentoItemGuiaPagamento.getGuiaPagamentoGeral().getGuiaPagamentoHistorico().getId() %>')" title="<%="" + cobrancaDocumentoItemGuiaPagamento.getGuiaPagamentoGeral().getGuiaPagamentoHistorico().getDebitoTipo().getDescricao() %>"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="guiaPagamentoHistorico" property="debitoTipo.descricao"/></font></a>
+														<bean:define name="creditoARealizarGeral" property="creditoARealizar" id="creditoARealizar"/>
+															<logic:present name="creditoARealizar" property="creditoTipo">	
+															
+																<a href="javascript:abrirPopup('exibirConsultarCreditoARealizarAction.do?imovelID=${requestScope.imovel}&creditoID=<%="" + cobrancaDocumentoItemCreditoARealizar.getCreditoARealizarGeral().getCreditoARealizar().getId() %>' , 500, 800);" title="<%="" + cobrancaDocumentoItemCreditoARealizar.getCreditoARealizarGeral().getCreditoARealizar().getCreditoTipo().getDescricao() %>"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="creditoARealizar" property="creditoTipo.descricao"/></font></a>
 															</logic:present>
+														</logic:present>		
 
-													</logic:present>
-											</logic:present>
-										
-										</div>
-										</td>
-										<td width="15%">
-										<div align="center">
-					
-											<logic:present name="cobrancaDocumentoItemConta" property="guiaPagamentoGeral">	
-												<bean:define name="cobrancaDocumentoItemConta" property="guiaPagamentoGeral" id="guiaPagamentoGeral"/>
-													<logic:present name="guiaPagamentoGeral" property="guiaPagamento">											
-														<bean:define name="guiaPagamentoGeral" property="guiaPagamento" id="guiaPagamento"/>
-															<logic:present name="guiaPagamento" property="dataEmissao">
-																<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="guiaPagamento" property="dataEmissao" formatKey="date.format"/></font>
-															</logic:present>
-													</logic:present>		
-
-													<logic:present name="guiaPagamentoGeral" property="guiaPagamentoHistorico">
-														<bean:define name="guiaPagamentoGeral" property="guiaPagamentoHistorico" id="guiaPagamentoHistorico"/>
-															<logic:present name="guiaPagamentoHistorico" property="dataEmissao">
-																<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="guiaPagamentoHistorico" property="dataEmissao" formatKey="date.format"/></font>
+													<logic:present name="creditoARealizarGeral" property="creditoARealizarHistorico">
+														<bean:define name="creditoARealizarGeral" property="creditoARealizarHistorico" id="creditoARealizarHistorico"/>
+															<logic:present name="creditoARealizarHistorico" property="creditoTipo">	
+																<a href="javascript:abrirPopup('exibirConsultarCreditoARealizarAction.do?imovelID=${requestScope.imovel}&debitoID=<%="" + cobrancaDocumentoItemCreditoARealizar.getCreditoARealizarGeral().getCreditoARealizarHistorico().getId() %>' , 500, 800);" title="<%="" + cobrancaDocumentoItemCreditoARealizar.getCreditoARealizarGeral().getCreditoARealizarHistorico().getCreditoTipo().getDescricao() %>"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="creditoARealizarHistorico" property="creditoTipo.descricao"/></font></a>
 															</logic:present>
 													</logic:present>
 											</logic:present>
-											
 										</div>
 										</td>
-										<td width="15%">
+										<td width="10%">
 										<div align="center">
-											<logic:present name="cobrancaDocumentoItemConta" property="guiaPagamentoGeral">	
-												<bean:define name="cobrancaDocumentoItemConta" property="guiaPagamentoGeral" id="guiaPagamentoGeral"/>
-													<logic:present name="guiaPagamentoGeral" property="guiaPagamento">											
-														<bean:define name="guiaPagamentoGeral" property="guiaPagamento" id="guiaPagamento"/>
-															<logic:present name="guiaPagamento" property="dataVencimento">
-																<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="guiaPagamento" property="dataVencimento" formatKey="date.format"/></font>
+
+											<logic:present name="cobrancaDocumentoItemCreditoARealizar" property="creditoARealizarGeral">	
+												<bean:define name="cobrancaDocumentoItemCreditoARealizar" property="creditoARealizarGeral" id="creditoARealizarGeral"/>
+													<logic:present name="creditoARealizarGeral" property="creditoARealizar">
+														<bean:define name="creditoARealizarGeral" property="creditoARealizar" id="creditoARealizar"/>
+															<logic:present name="creditoARealizar" property="anoMesReferenciaCredito">
+																<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><%=""+ Util.formatarMesAnoReferencia(cobrancaDocumentoItemCreditoARealizar.getCreditoARealizarGeral().getCreditoARealizar().getAnoMesReferenciaCredito())%></font>
 															</logic:present>
+														
+															<logic:notPresent name="creditoARealizar" property="anoMesReferenciaCredito">
+																&nbsp;
+															</logic:notPresent>
+													</logic:present>												
+
+													<logic:present name="creditoARealizarGeral" property="creditoARealizarHistorico">
+														<bean:define name="creditoARealizarGeral" property="creditoARealizarHistorico" id="creditoARealizarHistorico"/>
+															<logic:present name="creditoARealizarHistorico" property="anoMesReferenciaCredito">
+																<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><%=""+ Util.formatarMesAnoReferencia(cobrancaDocumentoItemCreditoARealizar.getCreditoARealizarGeral().getCreditoARealizarHistorico().getAnoMesReferenciaCredito())%></font>
+															</logic:present>
+														
+															<logic:notPresent name="creditoARealizar" property="anoMesReferenciaCredito">
+																&nbsp;
+															</logic:notPresent>
+													</logic:present>
+											</logic:present>
+												
+										</div>
+										</td>
+										<td width="10%">
+										<div align="center">
+
+											<logic:present name="cobrancaDocumentoItemCreditoARealizar" property="creditoARealizarGeral">	
+												<bean:define name="cobrancaDocumentoItemCreditoARealizar" property="creditoARealizarGeral" id="creditoARealizarGeral"/>
+													<logic:present name="creditoARealizarGeral" property="creditoARealizar">
+														<bean:define name="creditoARealizarGeral" property="creditoARealizar" id="creditoARealizar"/>
+															<logic:present name="creditoARealizar" property="anoMesCobrancaCredito">
+																<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><%=""+ Util.formatarMesAnoReferencia(cobrancaDocumentoItemCreditoARealizar.getCreditoARealizarGeral().getCreditoARealizar().getAnoMesCobrancaCredito())%></font>
+															</logic:present>
+														
+															<logic:notPresent name="creditoARealizar" property="anoMesCobrancaCredito">
+																&nbsp;
+															</logic:notPresent>
 
 													</logic:present>		
 
-													<logic:present name="guiaPagamentoGeral" property="guiaPagamentoHistorico">
-														<bean:define name="guiaPagamentoGeral" property="guiaPagamentoHistorico" id="guiaPagamentoHistorico"/>
-															<logic:present name="guiaPagamentoHistorico" property="dataVencimento">
-																<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="guiaPagamentoHistorico" property="dataVencimento" formatKey="date.format"/></font>
+													<logic:present name="creditoARealizarGeral" property="creditoARealizarHistorico">
+														<bean:define name="creditoARealizarGeral" property="creditoARealizarHistorico" id="creditoARealizarHistorico"/>
+
+															<logic:present name="creditoARealizarHistorico" property="anoMesCobrancaCredito">
+																<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><%=""+ Util.formatarMesAnoReferencia(cobrancaDocumentoItemCreditoARealizar.getCreditoARealizarGeral().getCreditoARealizarHistorico().getAnoMesCobrancaCredito())%></font>
+															</logic:present>
+														
+															<logic:notPresent name="creditoARealizarHistorico" property="anoMesCobrancaCredito">
+																&nbsp;
+															</logic:notPresent>
+
+
+													</logic:present>
+											</logic:present>
+										</div>
+										</td>
+										<td width="10%">
+										<div align="center">
+
+											<logic:present name="cobrancaDocumentoItemCreditoARealizar" property="creditoARealizarGeral">	
+												<bean:define name="cobrancaDocumentoItemCreditoARealizar" property="creditoARealizarGeral" id="creditoARealizarGeral"/>
+													<logic:present name="creditoARealizarGeral" property="creditoARealizar">
+														<bean:define name="creditoARealizarGeral" property="creditoARealizar" id="creditoARealizar"/>
+
+															<logic:present name="creditoARealizar" property="numeroPrestacaoRealizada">
+																<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="creditoARealizar" property="numeroPrestacaoRealizada"/></font>
+															</logic:present>
+															
+															/
+															
+															<logic:present name="creditoARealizar" property="numeroPrestacaoCredito">
+																<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="creditoARealizar" property="numeroPrestacaoCredito"/></font>
+															</logic:present>
+													</logic:present>		
+
+													<logic:present name="creditoARealizarGeral" property="creditoARealizarHistorico">
+														<bean:define name="creditoARealizarGeral" property="creditoARealizarHistorico" id="creditoARealizarHistorico"/>
+
+															<logic:present name="creditoARealizarHistorico" property="numeroPrestacaoRealizada">
+																<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="creditoARealizarHistorico" property="numeroPrestacaoRealizada"/></font>
+															</logic:present>
+															
+															/
+															
+															<logic:present name="creditoARealizarHistorico" property="numeroPrestacaoCredito">
+																<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="creditoARealizarHistorico" property="numeroPrestacaoCredito"/></font>
 															</logic:present>
 													</logic:present>
 											</logic:present>
@@ -866,39 +924,49 @@
 										</td>
 										<td width="20%">
 										<div align="right">
+										
+											<logic:present name="cobrancaDocumentoItemCreditoARealizar" property="creditoARealizarGeral">	
+												<bean:define name="cobrancaDocumentoItemCreditoARealizar" property="creditoARealizarGeral" id="creditoARealizarGeral"/>
+													<logic:present name="creditoARealizarGeral" property="creditoARealizar">
+														<bean:define name="creditoARealizarGeral" property="creditoARealizar" id="creditoARealizar"/>
 
-											<logic:present name="cobrancaDocumentoItemConta" property="guiaPagamentoGeral">	
-												<bean:define name="cobrancaDocumentoItemConta" property="guiaPagamentoGeral" id="guiaPagamentoGeral"/>
-													<logic:present name="guiaPagamentoGeral" property="guiaPagamento">											
-														<bean:define name="guiaPagamentoGeral" property="guiaPagamento" id="guiaPagamento"/>
-										
-														<logic:present name="guiaPagamento" property="valorDebito">
-															<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="guiaPagamento" property="valorDebito" formatKey="money.format" /></font>
-														</logic:present>
-										
+															<logic:present name="creditoARealizar" property="valorCredito">
+																<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="creditoARealizar" property="valorCredito" formatKey="money.format" /></font>
+															</logic:present>
+														
+															<logic:notPresent name="creditoARealizar" property="valorCredito">
+																&nbsp;
+															</logic:notPresent>
 													</logic:present>		
 
-													<logic:present name="guiaPagamentoGeral" property="guiaPagamentoHistorico">
-														<bean:define name="guiaPagamentoGeral" property="guiaPagamentoHistorico" id="guiaPagamentoHistorico"/>
-															<logic:present name="guiaPagamentoHistorico" property="valorDebito">
-																<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="guiaPagamentoHistorico" property="valorDebito" formatKey="money.format" /></font>
+													<logic:present name="creditoARealizarGeral" property="creditoARealizarHistorico">
+														<bean:define name="creditoARealizarGeral" property="creditoARealizarHistorico" id="creditoARealizarHistorico"/>
+
+
+															<logic:present name="creditoARealizarHistorico" property="valorCredito">
+																<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="creditoARealizarHistorico" property="valorCredito" formatKey="money.format" /></font>
 															</logic:present>
+														
+															<logic:notPresent name="creditoARealizarHistorico" property="valorCredito">
+																&nbsp;
+															</logic:notPresent>
+
 													</logic:present>
 											</logic:present>
+											
 											
 										</div>
 										</td>
 										<td width="20%">
 										<div align="right">
-
-											<logic:present name="cobrancaDocumentoItemGuiaPagamento" property="valorItemCobrado">
-												<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="cobrancaDocumentoItemGuiaPagamento" property="valorItemCobrado" formatKey="money.format" /></font>
+										
+											<logic:present name="cobrancaDocumentoItemCreditoARealizar" property="valorItemCobrado">
+												<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="cobrancaDocumentoItemCreditoARealizar" property="valorItemCobrado" formatKey="money.format" /></font>
 											</logic:present>
-
-											<logic:notPresent name="cobrancaDocumentoItemGuiaPagamento" property="valorItemCobrado">
+										
+											<logic:notPresent name="cobrancaDocumentoItemConta" property="valorItemCobrado">
 												&nbsp;
 											</logic:notPresent>
-											
 											
 										</div>
 										</td>
@@ -919,12 +987,189 @@
 				</td>
 			</tr>
 			
-			</table>
+			<tr>
+				<td colspan="5" height="5"></td>
+			</tr>
+      
+	     	<tr>
+		      	<td colspan="5">
+		      	
+		      		<table width="100%" border="0">
+			  		<tr> 
+		          		<td height="17" colspan="5"><strong>Guias de Pagamento:</strong></td>
+		          	</tr>
+		      		<tr> 
+		          		<td colspan="5">
+				  
+							<table width="100%" cellpadding="0" cellspacing="0">
+							<tr> 
+		                		<td> 
+							
+									<table width="100%" bgcolor="#99CCFF" border="0">
+		                    		<tr bgcolor="#99CCFF"> 
+		
+										<td align="center" width="30%"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><strong>Tipo do Débito</strong></font></td>
+										<td width="15%"><div align="center"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><strong>Emissão</strong></font></div></td>
+										<td width="15%"><div align="center"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><strong>Vencimento</strong></font></div></td>
+										<td width="20%"><div align="center"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><strong>Vl. Guia de Pagamento</strong></font></div></td>
+										<td width="20%"><div align="center"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><strong>Vl. Item Cobrado</strong></font></div></td>
+									</tr>
+		                    		</table>
+							
+								
+		            		</tr>
+		            		
+		            		<logic:notEmpty name="cobrancaDocumentoHelper" property="colecaoCobrancaDocumentoItemGuiaPagamento">
+		            
+		            		<tr> 
+								<td> 
+							
+									<div style="width: 100%; height: 100; overflow: auto;">	
+									
+									<%cor = "#FFFFFF";%>
+									
+									<table width="100%" align="center" bgcolor="#99CCFF">
+		
+										<logic:iterate name="cobrancaDocumentoHelper" property="colecaoCobrancaDocumentoItemGuiaPagamento" id="cobrancaDocumentoItemGuiaPagamento" type="CobrancaDocumentoItem">
+		                            
+											
+											
+											<%	if (cor.equalsIgnoreCase("#FFFFFF")){
+													cor = "#cbe5fe";%>
+													<tr bgcolor="#FFFFFF">
+											<%} else{
+													cor = "#FFFFFF";%>
+													<tr bgcolor="#cbe5fe">
+											<%}%>
+											 
+												<td width="30%">
+												<div align="center">
+		
+													<logic:present name="cobrancaDocumentoItemConta" property="guiaPagamentoGeral">	
+														<bean:define name="cobrancaDocumentoItemConta" property="guiaPagamentoGeral" id="guiaPagamentoGeral"/>
+															<logic:present name="guiaPagamentoGeral" property="guiaPagamento">											
+																<bean:define name="guiaPagamentoGeral" property="guiaPagamento" id="guiaPagamento"/>
+																	<logic:present name="guiaPagamento" property="debitoTipo">	
+																		<a href="javascript:abrirPopup('exibirConsultarGuiaPagamentoAction.do?guiaPagamentoId=<%="" + cobrancaDocumentoItemGuiaPagamento.getGuiaPagamentoGeral().getGuiaPagamento().getId() %>')" title="<%="" + cobrancaDocumentoItemGuiaPagamento.getGuiaPagamentoGeral().getGuiaPagamento().getDebitoTipo().getDescricao() %>"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="guiaPagamento" property="debitoTipo.descricao"/></font></a>
+																	</logic:present>
+															</logic:present>		
+															
+															<logic:present name="guiaPagamentoGeral" property="guiaPagamentoHistorico">
+																<bean:define name="guiaPagamentoGeral" property="guiaPagamentoHistorico" id="guiaPagamentoHistorico"/>
+																	<logic:present name="guiaPagamentoHistorico" property="debitoTipo">	
+																		<a href="javascript:abrirPopup('exibirConsultarGuiaPagamentoAction.do?guiaPagamentoId=<%="" + cobrancaDocumentoItemGuiaPagamento.getGuiaPagamentoGeral().getGuiaPagamentoHistorico().getId() %>')" title="<%="" + cobrancaDocumentoItemGuiaPagamento.getGuiaPagamentoGeral().getGuiaPagamentoHistorico().getDebitoTipo().getDescricao() %>"><font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="guiaPagamentoHistorico" property="debitoTipo.descricao"/></font></a>
+																	</logic:present>
+		
+															</logic:present>
+													</logic:present>
+												
+												</div>
+												</td>
+												<td width="15%">
+												<div align="center">
+							
+													<logic:present name="cobrancaDocumentoItemConta" property="guiaPagamentoGeral">	
+														<bean:define name="cobrancaDocumentoItemConta" property="guiaPagamentoGeral" id="guiaPagamentoGeral"/>
+															<logic:present name="guiaPagamentoGeral" property="guiaPagamento">											
+																<bean:define name="guiaPagamentoGeral" property="guiaPagamento" id="guiaPagamento"/>
+																	<logic:present name="guiaPagamento" property="dataEmissao">
+																		<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="guiaPagamento" property="dataEmissao" formatKey="date.format"/></font>
+																	</logic:present>
+															</logic:present>		
+		
+															<logic:present name="guiaPagamentoGeral" property="guiaPagamentoHistorico">
+																<bean:define name="guiaPagamentoGeral" property="guiaPagamentoHistorico" id="guiaPagamentoHistorico"/>
+																	<logic:present name="guiaPagamentoHistorico" property="dataEmissao">
+																		<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="guiaPagamentoHistorico" property="dataEmissao" formatKey="date.format"/></font>
+																	</logic:present>
+															</logic:present>
+													</logic:present>
+													
+												</div>
+												</td>
+												<td width="15%">
+												<div align="center">
+													<logic:present name="cobrancaDocumentoItemConta" property="guiaPagamentoGeral">	
+														<bean:define name="cobrancaDocumentoItemConta" property="guiaPagamentoGeral" id="guiaPagamentoGeral"/>
+															<logic:present name="guiaPagamentoGeral" property="guiaPagamento">											
+																<bean:define name="guiaPagamentoGeral" property="guiaPagamento" id="guiaPagamento"/>
+																	<logic:present name="guiaPagamento" property="dataVencimento">
+																		<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="guiaPagamento" property="dataVencimento" formatKey="date.format"/></font>
+																	</logic:present>
+		
+															</logic:present>		
+		
+															<logic:present name="guiaPagamentoGeral" property="guiaPagamentoHistorico">
+																<bean:define name="guiaPagamentoGeral" property="guiaPagamentoHistorico" id="guiaPagamentoHistorico"/>
+																	<logic:present name="guiaPagamentoHistorico" property="dataVencimento">
+																		<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="guiaPagamentoHistorico" property="dataVencimento" formatKey="date.format"/></font>
+																	</logic:present>
+															</logic:present>
+													</logic:present>
+													
+												</div>
+												</td>
+												<td width="20%">
+												<div align="right">
+		
+													<logic:present name="cobrancaDocumentoItemConta" property="guiaPagamentoGeral">	
+														<bean:define name="cobrancaDocumentoItemConta" property="guiaPagamentoGeral" id="guiaPagamentoGeral"/>
+															<logic:present name="guiaPagamentoGeral" property="guiaPagamento">											
+																<bean:define name="guiaPagamentoGeral" property="guiaPagamento" id="guiaPagamento"/>
+												
+																<logic:present name="guiaPagamento" property="valorDebito">
+																	<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="guiaPagamento" property="valorDebito" formatKey="money.format" /></font>
+																</logic:present>
+												
+															</logic:present>		
+		
+															<logic:present name="guiaPagamentoGeral" property="guiaPagamentoHistorico">
+																<bean:define name="guiaPagamentoGeral" property="guiaPagamentoHistorico" id="guiaPagamentoHistorico"/>
+																	<logic:present name="guiaPagamentoHistorico" property="valorDebito">
+																		<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="guiaPagamentoHistorico" property="valorDebito" formatKey="money.format" /></font>
+																	</logic:present>
+															</logic:present>
+													</logic:present>
+													
+												</div>
+												</td>
+												<td width="20%">
+												<div align="right">
+		
+													<logic:present name="cobrancaDocumentoItemGuiaPagamento" property="valorItemCobrado">
+														<font color="#000000" style="font-size:9px" face="Verdana, Arial, Helvetica, sans-serif"><bean:write name="cobrancaDocumentoItemGuiaPagamento" property="valorItemCobrado" formatKey="money.format" /></font>
+													</logic:present>
+		
+													<logic:notPresent name="cobrancaDocumentoItemGuiaPagamento" property="valorItemCobrado">
+														&nbsp;
+													</logic:notPresent>
+													
+													
+												</div>
+												</td>
+											</tr>
+											
+		
+										</logic:iterate>
+										
+										</table>
+		
+									</div>
+								</td>
+		            		</tr>
+		            		
+		            		</logic:notEmpty>
+		            		
+		            		</table>
+						</td>
+					</tr>
+					
+					</table>
+					
+		      	</td>
+	      </tr>			
 			
-      	</td>
-      </tr>			
-			
-			</table>
+		  </table>
 			
       	</td>
       </tr>

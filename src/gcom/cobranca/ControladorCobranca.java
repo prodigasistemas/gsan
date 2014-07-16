@@ -81,6 +81,7 @@ import gcom.cadastro.cliente.FiltroClienteImovel;
 import gcom.cadastro.cliente.FiltroClienteRelacaoTipo;
 import gcom.cadastro.cliente.FiltroEsferaPoder;
 import gcom.cadastro.cliente.FoneTipo;
+import gcom.cadastro.cliente.IClienteConta;
 import gcom.cadastro.cliente.IRepositorioClienteImovel;
 import gcom.cadastro.cliente.RepositorioClienteImovelHBM;
 import gcom.cadastro.empresa.Empresa;
@@ -257,7 +258,6 @@ import gcom.faturamento.debito.FiltroDebitoTipo;
 import gcom.financeiro.FinanciamentoTipo;
 import gcom.gerencial.bean.InformarDadosGeracaoResumoAcaoConsultaEventualHelper;
 import gcom.gerencial.bean.InformarDadosGeracaoResumoAcaoConsultaHelper;
-import gcom.gerencial.cobranca.bean.ResumoPendenciaContasGerenciaHelper;
 import gcom.gui.ActionServletException;
 import gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoEncerrarOSHelper;
 import gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoGerarOSHelper;
@@ -356,7 +356,7 @@ import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
 import gcom.util.filtro.ParametroSimplesDiferenteDe;
 import gcom.util.filtro.ParametroSimplesIn;
-import gcom.cadastro.cliente.ClienteConta;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -5647,73 +5647,17 @@ public class ControladorCobranca implements SessionBean {
 		return descricaoOcorrencia;
 	}
 	
-	/**
-	 * [UC0201] Remover Débito Automático
-	 * 
-	 * @author Bruno Barros
-	 * @created 11/06/2008
-	 * 
-	 * @param matriculaImovel
-	 *            Matrícula do Imovel
-	 */
-	public void removerDebitoAutomatico( String[] ids )
-			throws ControladorException {
-		try {
-			
-			for ( int i = 0; i < ids.length; i++ ){			
-				// Atualiza a data da exclusão com a data
-				// corrente em Débio Automático
-				repositorioCobranca
-						.atualizarDataExclusao(ids[i]);
-	
-				// Atualiza o indicador de débio automático
-				// em Imóvel
-				Integer indicadorDebito = 2;
-				repositorioCobranca
-						.atualizarIndicadorDebitoAutomatico(
-								ids[i],
-								indicadorDebito);
-			}
-		} catch (ErroRepositorioException ex) {
-			sessionContext.setRollbackOnly();
-			throw new ControladorException("erro.sistema", ex);
-		}
-	}	
-
-	/**
-	 * [UC0201] Remover Débito Automático
-	 * 
-	 * @author
-	 * @created 09/01/2006
-	 * 
-	 * @param matriculaImovel
-	 *            Matrícula do Imovel
-	 * @param codigoBanco
-	 *            Código do Banco
-	 * @param codigoAgencia
-	 *            Código da Agência
-	 * @param identificacaoCliente
-	 *            Identificação do Cliente no Banco
-	 * @param dataOpcao
-	 *            Data da Opção
-	 * @throws ControladorException
-	 *             Controlador Exception
-	 */
 	public String removerDebitoAutomatico(String matriculaImovel,
 			String codigoBanco, String codigoAgencia,
-			String identificacaoCliente, Date dataOpcao)
-			throws ControladorException {
+			String identificacaoCliente, Date dataOpcao) throws ControladorException {
 
-		// Variável de mensagem de retorno
 		String descricaoOcorrencia = "OK";
 
 		try {
-			// [FS0001] - Verificar existência da matrícula do imóvel
 			Integer existeImovel = null;
+			
 			try {
-
-				existeImovel = repositorioImovel
-						.verificarExistenciaImovel(new Integer(matriculaImovel));
+				existeImovel = repositorioImovel.verificarExistenciaImovel(new Integer(matriculaImovel));
 			} catch (NumberFormatException e) {
 				existeImovel = null;
 			}
@@ -5721,11 +5665,10 @@ public class ControladorCobranca implements SessionBean {
 			if (existeImovel == null) {
 				descricaoOcorrencia = "IDENTIFICAÇÃO DO IMÓVEL NÃO CADASTRADA";
 			} else {
-				// [FS0002] - Verificar existência do Banco
 				Integer existeBanco = null;
+				
 				try {
-					existeBanco = repositorioarrecadacao
-							.verificarExistenciaBanco(new Integer(codigoBanco));
+					existeBanco = repositorioarrecadacao.verificarExistenciaBanco(new Integer(codigoBanco));
 				} catch (NumberFormatException e) {
 					existeBanco = null;
 				}
@@ -5733,52 +5676,32 @@ public class ControladorCobranca implements SessionBean {
 				if (existeBanco == null) {
 					descricaoOcorrencia = "BANCO NÃO CADASTRADO";
 				} else {
-					// [FS0003] - Verificar existência do Agência
 					Integer existeAgencia = null;
 
-					existeAgencia = repositorioarrecadacao
-							.verificarExistenciaAgencia(codigoAgencia,
-									new Integer(codigoBanco));
+					existeAgencia = repositorioarrecadacao.verificarExistenciaAgencia(codigoAgencia, new Integer(codigoBanco));
 
 					if (existeAgencia == null) {
 						descricaoOcorrencia = "AGÊNCIA NÃO CADASTRADA";
 					} else {
-						// Verifica se o Imóvel já é Débito Automático
-						String idAgenciaDebitoAutomatico = repositorioCobranca
-								.verificarDebitoAutomatico(matriculaImovel);
+						String idAgenciaDebitoAutomatico = repositorioCobranca.verificarDebitoAutomatico(matriculaImovel);
 
 						if (idAgenciaDebitoAutomatico == null) {
 							descricaoOcorrencia = "IMÓVEL NÃO É DÉBITO AUTOMÁTICO";
 						} else {
-
-							// Insere o Imóvel em Débito Automático
-							String idAgencia = repositorioCobranca
-									.verificarDebitoAutomaticoBancoAgencia(
-											codigoBanco, codigoAgencia);
+							String idAgencia = repositorioCobranca.verificarDebitoAutomaticoBancoAgencia(codigoBanco, codigoAgencia);
+							
 							if (!idAgenciaDebitoAutomatico.equals(idAgencia)) {
 								descricaoOcorrencia = "IMÓVEL É DÉBITO AUTOMÁTICO DE OUTRO BANCO/AGÊNCIA";
 							} else {
-								// Verifica a data de Opção posterior já
-								// informanda
-								String resultadoDataOpcao = repositorioCobranca
-										.verificarDataOpcaoExclusao(
-												matriculaImovel, dataOpcao,
-												identificacaoCliente);
+								String resultadoDataOpcao = repositorioCobranca.verificarDataOpcaoExclusao(
+										matriculaImovel, dataOpcao, identificacaoCliente);
+								
 								if (resultadoDataOpcao != null) {
 									descricaoOcorrencia = "DATA OPÇÃO DO DEB. AUT. MAIOR QUE DATA INFORMADA";
 								} else {
-									// Atualiza a data da exclusão com a data
-									// corrente em Débio Automático
-									repositorioCobranca
-											.atualizarDataExclusao(matriculaImovel);
-
-									// Atualiza o indicador de débio automático
-									// em Imóvel
-									Integer indicadorDebito = 2;
-									repositorioCobranca
-											.atualizarIndicadorDebitoAutomatico(
-													matriculaImovel,
-													indicadorDebito);
+									repositorioCobranca.atualizarDataExclusao(matriculaImovel, Integer.valueOf(idAgencia));
+									
+									getControladorArrecadacao().atualizarIndicadorDebitoAutomaticoComDataExclusao(Integer.valueOf(matriculaImovel));
 								}
 							}
 						}
@@ -15457,120 +15380,79 @@ public class ControladorCobranca implements SessionBean {
 		filtroCobrancaDocumento.adicionarParametro(new ParametroSimples(
 				FiltroCobrancaDocumento.ID, cobrancaDocumento.getId()));
 
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.localidade");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.quadra");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.setorComercial.municipio.unidadeFederacao");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroBairro.bairro.municipio.unidadeFederacao");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.ligacaoAguaSituacao");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.ligacaoEsgotoSituacao");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.logradouro.logradouroTipo");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.logradouro.logradouroTitulo");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.enderecoReferencia");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.cep");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("documentoEmissaoForma");
-		filtroCobrancaDocumento
-				.adicionarCaminhoParaCarregamentoEntidade("motivoNaoEntregaDocumento");
-		/**
-		 * TODO - COSANPA
-		 * Adicionado os Filtros para os atributos perimetroInicial e perimetroFinal.
-		 */
-		filtroCobrancaDocumento
-		.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTipo");
-		filtroCobrancaDocumento
-		.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTitulo");
-		filtroCobrancaDocumento
-		.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTipo");
-		filtroCobrancaDocumento
-		.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTitulo");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.localidade");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.quadra");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.setorComercial.municipio.unidadeFederacao");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroBairro.bairro.municipio.unidadeFederacao");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.ligacaoAguaSituacao");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.ligacaoEsgotoSituacao");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.logradouro.logradouroTipo");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.logradouro.logradouroTitulo");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.enderecoReferencia");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.logradouroCep.cep");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("documentoEmissaoForma");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("motivoNaoEntregaDocumento");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTipo");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroInicial.logradouroTitulo");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTipo");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("imovel.perimetroFinal.logradouroTitulo");
+		filtroCobrancaDocumento.adicionarCaminhoParaCarregamentoEntidade("usuario");
 
-		Collection colecaoCobrancaDocumento = getControladorUtil().pesquisar(
-				filtroCobrancaDocumento, CobrancaDocumento.class.getName());
+		Collection colecaoCobrancaDocumento = getControladorUtil().pesquisar(filtroCobrancaDocumento, CobrancaDocumento.class.getName());
 
-		CobrancaDocumento cobrancaDocumentoCarregado = (CobrancaDocumento) Util
-				.retonarObjetoDeColecao(colecaoCobrancaDocumento);
+		CobrancaDocumento cobrancaDocumentoCarregado = (CobrancaDocumento) Util.retonarObjetoDeColecao(colecaoCobrancaDocumento);
 
 		retorno.setCobrancaDocumento(cobrancaDocumentoCarregado);
 
 		FiltroCobrancaDocumentoItem filtroCobrancaDocumentoItem = new FiltroCobrancaDocumentoItem();
 		filtroCobrancaDocumentoItem.setConsultaSemLimites(true);
 
-		filtroCobrancaDocumentoItem
-				.adicionarCaminhoParaCarregamentoEntidade("contaGeral.conta.debitoCreditoSituacaoAtual");
-		filtroCobrancaDocumentoItem
-				.adicionarCaminhoParaCarregamentoEntidade("contaGeral.contaHistorico.debitoCreditoSituacaoAtual");
-		filtroCobrancaDocumentoItem
-				.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrar.debitoTipo");
-		filtroCobrancaDocumentoItem
-				.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrarHistorico.debitoTipo");
-		filtroCobrancaDocumentoItem
-				.adicionarCaminhoParaCarregamentoEntidade("guiaPagamentoGeral.guiaPagamento.debitoTipo");
-		filtroCobrancaDocumentoItem
-				.adicionarCaminhoParaCarregamentoEntidade("guiaPagamentoGeral.guiaPagamentoHistorico.debitoTipo");
-		filtroCobrancaDocumentoItem
-				.adicionarCaminhoParaCarregamentoEntidade("documentoTipo");
+		filtroCobrancaDocumentoItem.adicionarCaminhoParaCarregamentoEntidade("contaGeral.conta.debitoCreditoSituacaoAtual");
+		filtroCobrancaDocumentoItem.adicionarCaminhoParaCarregamentoEntidade("contaGeral.contaHistorico.debitoCreditoSituacaoAtual");
+		filtroCobrancaDocumentoItem.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrar.debitoTipo");
+		filtroCobrancaDocumentoItem.adicionarCaminhoParaCarregamentoEntidade("debitoACobrarGeral.debitoACobrarHistorico.debitoTipo");
+		filtroCobrancaDocumentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizar.creditoTipo");
+		filtroCobrancaDocumentoItem.adicionarCaminhoParaCarregamentoEntidade("creditoARealizarGeral.creditoARealizarHistorico.creditoTipo");
+		filtroCobrancaDocumentoItem.adicionarCaminhoParaCarregamentoEntidade("guiaPagamentoGeral.guiaPagamento.debitoTipo");
+		filtroCobrancaDocumentoItem.adicionarCaminhoParaCarregamentoEntidade("guiaPagamentoGeral.guiaPagamentoHistorico.debitoTipo");
+		filtroCobrancaDocumentoItem.adicionarCaminhoParaCarregamentoEntidade("documentoTipo");
 
 		filtroCobrancaDocumentoItem.adicionarParametro(new ParametroSimples(
-				FiltroCobrancaDocumentoItem.COBRANCA_DOCUMENTO_ID,
-				cobrancaDocumentoCarregado.getId()));
+				FiltroCobrancaDocumentoItem.COBRANCA_DOCUMENTO_ID, cobrancaDocumentoCarregado.getId()));
 
-		Collection colecaoCobrancaDocumentoItem = getControladorUtil()
-				.pesquisar(filtroCobrancaDocumentoItem,
-						CobrancaDocumentoItem.class.getName());
+		Collection colecaoCobrancaDocumentoItem = getControladorUtil().pesquisar(filtroCobrancaDocumentoItem, CobrancaDocumentoItem.class.getName());
 
-		if (colecaoCobrancaDocumentoItem != null
-				&& !colecaoCobrancaDocumentoItem.isEmpty()) {
+		if (colecaoCobrancaDocumentoItem != null && !colecaoCobrancaDocumentoItem.isEmpty()) {
 
-			retorno
-					.setQuantidadeItensCobrancaDocumento(colecaoCobrancaDocumentoItem
-							.size());
+			retorno.setQuantidadeItensCobrancaDocumento(colecaoCobrancaDocumentoItem.size());
 
-			Iterator iteratorColecaoCobrancaDocumentoItem = colecaoCobrancaDocumentoItem
-					.iterator();
+			Iterator iteratorColecaoCobrancaDocumentoItem = colecaoCobrancaDocumentoItem.iterator();
 			CobrancaDocumentoItem cobrancaDocumentoItem = null;
 
 			Collection colecaoCobrancaDocumentoItemConta = new ArrayList();
 			Collection colecaoCobrancaDocumentoItemDebitoACobrar = new ArrayList();
+			Collection colecaoCobrancaDocumentoItemCreditoARealizar = new ArrayList();
 			Collection colecaoCobrancaDocumentoItemGuiaPagamento = new ArrayList();
 
 			while (iteratorColecaoCobrancaDocumentoItem.hasNext()) {
 
-				cobrancaDocumentoItem = (CobrancaDocumentoItem) iteratorColecaoCobrancaDocumentoItem
-						.next();
+				cobrancaDocumentoItem = (CobrancaDocumentoItem) iteratorColecaoCobrancaDocumentoItem.next();
 
-				// cobrancaDocumentoItem.getContaGeral().getConta();
-				// cobrancaDocumentoItem.getContaGeral().getContaHistorico();
-				if (cobrancaDocumentoItem.getDocumentoTipo().getId().equals(
-						DocumentoTipo.CONTA)) {
-					colecaoCobrancaDocumentoItemConta
-							.add(cobrancaDocumentoItem);
-				} else if (cobrancaDocumentoItem.getDocumentoTipo().getId()
-						.equals(DocumentoTipo.DEBITO_A_COBRAR)) {
-					colecaoCobrancaDocumentoItemDebitoACobrar
-							.add(cobrancaDocumentoItem);
-				} else if (cobrancaDocumentoItem.getDocumentoTipo().getId()
-						.equals(DocumentoTipo.GUIA_PAGAMENTO)) {
-					colecaoCobrancaDocumentoItemGuiaPagamento
-							.add(cobrancaDocumentoItem);
+				if (cobrancaDocumentoItem.getDocumentoTipo().getId().equals(DocumentoTipo.CONTA)) {
+					colecaoCobrancaDocumentoItemConta.add(cobrancaDocumentoItem);
+				} else if (cobrancaDocumentoItem.getDocumentoTipo().getId().equals(DocumentoTipo.DEBITO_A_COBRAR)) {
+					colecaoCobrancaDocumentoItemDebitoACobrar.add(cobrancaDocumentoItem);
+				} else if (cobrancaDocumentoItem.getDocumentoTipo().getId().equals(DocumentoTipo.CREDITO_A_REALIZAR)) {
+					colecaoCobrancaDocumentoItemCreditoARealizar.add(cobrancaDocumentoItem);
+				} else if (cobrancaDocumentoItem.getDocumentoTipo().getId().equals(DocumentoTipo.GUIA_PAGAMENTO)) {
+					colecaoCobrancaDocumentoItemGuiaPagamento.add(cobrancaDocumentoItem);
 				}
 			}
 
-			retorno
-					.setColecaoCobrancaDocumentoItemConta(colecaoCobrancaDocumentoItemConta);
-			retorno
-					.setColecaoCobrancaDocumentoItemDebitoACobrar(colecaoCobrancaDocumentoItemDebitoACobrar);
-			retorno
-					.setColecaoCobrancaDocumentoItemGuiaPagamento(colecaoCobrancaDocumentoItemGuiaPagamento);
+			retorno.setColecaoCobrancaDocumentoItemConta(colecaoCobrancaDocumentoItemConta);
+			retorno.setColecaoCobrancaDocumentoItemDebitoACobrar(colecaoCobrancaDocumentoItemDebitoACobrar);
+			retorno.setColecaoCobrancaDocumentoItemCreditoARealizar(colecaoCobrancaDocumentoItemCreditoARealizar);
+			retorno.setColecaoCobrancaDocumentoItemGuiaPagamento(colecaoCobrancaDocumentoItemGuiaPagamento);
 		} else {
 			retorno.setQuantidadeItensCobrancaDocumento(0);
 		}
@@ -69684,10 +69566,117 @@ public class ControladorCobranca implements SessionBean {
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
-
-		return retorno;
+		
+		return inserirTotalDeContasEGuias(retorno);
 	}
 	
+	private Collection<RelatorioDocumentosAReceberBean> inserirTotalDeContasEGuias(Collection<RelatorioDocumentosAReceberBean> retorno) {
+		int qntContaRes = 0;
+		int qntContaCom = 0;
+		int qntContaInd = 0;
+		int qntContaTot = 0;
+		int qntContaPub = 0;
+		BigDecimal totalContaRes = new BigDecimal(0.00);
+		BigDecimal totalContaCom = new BigDecimal(0.00);
+		BigDecimal totalContaInd = new BigDecimal(0.00);
+		BigDecimal totalContaTot = new BigDecimal(0.00);
+		BigDecimal totalContaPub = new BigDecimal(0.00);
+		
+		int qntGuiaRes = 0;
+		int qntGuiaCom = 0;
+		int qntGuiaInd = 0;
+		int qntGuiaTot = 0;
+		int qntGuiaPub = 0;
+		BigDecimal totalGuiaRes = new BigDecimal(0.00);
+		BigDecimal totalGuiaCom = new BigDecimal(0.00);
+		BigDecimal totalGuiaInd = new BigDecimal(0.00);
+		BigDecimal totalGuiaTot = new BigDecimal(0.00);
+		BigDecimal totalGuiaPub = new BigDecimal(0.00);
+		
+		for (RelatorioDocumentosAReceberBean relatorio : retorno) {
+			if(relatorio.getNomeDocumentoTipo().equalsIgnoreCase("CONTA") && relatorio.getIdSituacao() == 2) {
+				qntContaRes += relatorio.getQtdDocumentosRes();
+				qntContaCom += relatorio.getQtdDocumentosCom();
+				qntContaInd += relatorio.getQtdDocumentosInd();
+				qntContaTot += relatorio.getQtdDocumentosTot();
+				qntContaPub += relatorio.getQtdDocumentosPub();
+				totalContaRes = totalContaRes.add(relatorio.getValorDocumentosRes());
+				totalContaCom = totalContaCom.add(relatorio.getValorDocumentosCom());
+				totalContaInd = totalContaInd.add(relatorio.getValorDocumentosInd());
+				totalContaTot = totalContaTot.add(relatorio.getValorDocumentosTot());
+				totalContaPub = totalContaPub.add(relatorio.getValorDocumentosPub());
+			}
+			if(relatorio.getNomeDocumentoTipo().equalsIgnoreCase("GUIA DE PAGAMENTO") && relatorio.getIdSituacao() == 2) {
+				qntGuiaRes += relatorio.getQtdDocumentosRes();
+				qntGuiaCom += relatorio.getQtdDocumentosCom();
+				qntGuiaInd += relatorio.getQtdDocumentosInd();
+				qntGuiaTot += relatorio.getQtdDocumentosTot();
+				qntGuiaPub += relatorio.getQtdDocumentosPub();
+				totalGuiaRes = totalGuiaRes.add(relatorio.getValorDocumentosRes());
+				totalGuiaCom = totalGuiaCom.add(relatorio.getValorDocumentosCom());
+				totalGuiaInd = totalGuiaInd.add(relatorio.getValorDocumentosInd());
+				totalGuiaTot = totalGuiaTot.add(relatorio.getValorDocumentosTot());
+				totalGuiaPub = totalGuiaPub.add(relatorio.getValorDocumentosPub());
+			}
+		}
+		
+		RelatorioDocumentosAReceberBean documentoComTotalConta = new RelatorioDocumentosAReceberBean();
+		documentoComTotalConta.setQtdDocumentosRes(qntContaRes);
+		documentoComTotalConta.setQtdDocumentosCom(qntContaCom);
+		documentoComTotalConta.setQtdDocumentosInd(qntContaInd);
+		documentoComTotalConta.setQtdDocumentosTot(qntContaTot);
+		documentoComTotalConta.setQtdDocumentosPub(qntContaPub);
+		documentoComTotalConta.setValorDocumentosRes(totalContaRes);
+		documentoComTotalConta.setValorDocumentosCom(totalContaCom);
+		documentoComTotalConta.setValorDocumentosInd(totalContaInd);
+		documentoComTotalConta.setValorDocumentosTot(totalContaTot);
+		documentoComTotalConta.setValorDocumentosPub(totalContaPub);
+		documentoComTotalConta.setDescricaoSituacao("VENCIDOS");
+		documentoComTotalConta.setIdDocumentoTipo(1);
+		documentoComTotalConta.setNomeDocumentoTipo("CONTA");
+		documentoComTotalConta.setIdSituacao(2);
+		documentoComTotalConta.setDescricaTotalizacao("ESTADO - PARA");
+		documentoComTotalConta.setIndicadorTotal(ConstantesSistema.TODOS.toString());
+		documentoComTotalConta.setFaixa("TOTAL");
+		
+		RelatorioDocumentosAReceberBean documentoComTotalGuia = new RelatorioDocumentosAReceberBean();
+		documentoComTotalGuia.setQtdDocumentosRes(qntGuiaRes);
+		documentoComTotalGuia.setQtdDocumentosCom(qntGuiaCom);
+		documentoComTotalGuia.setQtdDocumentosInd(qntGuiaInd);
+		documentoComTotalGuia.setQtdDocumentosTot(qntGuiaTot);
+		documentoComTotalGuia.setQtdDocumentosPub(qntGuiaPub);
+		documentoComTotalGuia.setValorDocumentosRes(totalGuiaRes);
+		documentoComTotalGuia.setValorDocumentosCom(totalGuiaCom);
+		documentoComTotalGuia.setValorDocumentosInd(totalGuiaInd);
+		documentoComTotalGuia.setValorDocumentosTot(totalGuiaTot);
+		documentoComTotalGuia.setValorDocumentosPub(totalGuiaPub);
+		documentoComTotalGuia.setDescricaoSituacao("VENCIDOS");
+		documentoComTotalGuia.setIdDocumentoTipo(7);
+		documentoComTotalGuia.setNomeDocumentoTipo("GUIA DE PAGAMENTO");
+		documentoComTotalGuia.setIdSituacao(2);
+		documentoComTotalGuia.setDescricaTotalizacao("ESTADO - PARA");
+		documentoComTotalGuia.setIndicadorTotal(ConstantesSistema.NAO.toString());
+		documentoComTotalGuia.setFaixa("TOTAL");
+		
+		
+		Collection<RelatorioDocumentosAReceberBean> retornoComTotalContaEGuia = new ArrayList<RelatorioDocumentosAReceberBean>();
+		for (RelatorioDocumentosAReceberBean relatorio : retorno) {
+			
+			if(relatorio.getNomeDocumentoTipo().equalsIgnoreCase("GUIA DE PAGAMENTO") && relatorio.getIdSituacao() == 2 && relatorio.getFaixa().equals("> 180"))
+				relatorio.setIndicadorTotal(ConstantesSistema.TODOS.toString());
+			
+			retornoComTotalContaEGuia.add(relatorio);
+						
+			if(relatorio.getNomeDocumentoTipo().equalsIgnoreCase("CONTA") && relatorio.getIdSituacao() == 2 && relatorio.getFaixa().equals("> 180")) {
+				retornoComTotalContaEGuia.add(documentoComTotalConta);
+			}
+			if(relatorio.getNomeDocumentoTipo().equalsIgnoreCase("GUIA DE PAGAMENTO") && relatorio.getIdSituacao() == 2 && relatorio.getFaixa().equals("> 180")) {
+				retornoComTotalContaEGuia.add(documentoComTotalGuia);
+			}
+		}
+		return retornoComTotalContaEGuia;
+	}
+
 	private RelatorioDocumentosAReceberBean criarBeanRelatorioDocumentosAReceber(
 			Integer idGerencia, String nomeGerencia, Integer idUnidade,
 			String nomeUnidade, Integer idLocalidade, String nomeLocalidade,
@@ -76531,11 +76520,11 @@ public class ControladorCobranca implements SessionBean {
 					}
 				}
 
-				Collection<ClienteConta> clientesConta = this.repositorioFaturamento
+				Collection<IClienteConta> clientesConta = this.repositorioFaturamento
 						.pesquisarClienteConta(idConta);
 
 				Cliente clienteResponsavelConta = null;
-				for (ClienteConta clienteConta : clientesConta) {
+				for (IClienteConta clienteConta : clientesConta) {
 
 					if (clienteConta.getIndicadorNomeConta().equals(
 							ConstantesSistema.SIM)) {
@@ -76607,5 +76596,4 @@ public class ControladorCobranca implements SessionBean {
 
 		return colecaoImoveis;
 	}
-	
 }

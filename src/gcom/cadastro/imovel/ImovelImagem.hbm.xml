@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+
+<hibernate-mapping>
+	<class name="gcom.cadastro.imovel.ImovelImagem" table="cadastro.imovel_imagem">
+
+		<id name="id" type="java.lang.Integer" column="imim_id">
+
+			<generator class="sequence">
+				<param name="sequence">cadastro.seq_imovel_imagem</param>
+			</generator>
+		</id>
+
+		<property name="idImovel" column="imov_id" type="java.lang.Integer" not-null="true" length="10" />
+		<property name="nomeImagem" type="java.lang.String" column="imim_nmimagem" not-null="true" length="50" />
+		<property name="caminhoImagem" type="java.lang.String" column="imim_caminhoimagem" not-null="true" length="255" />
+		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="imim_tmultimaalteracao" length="8" />
+	</class>
+</hibernate-mapping>
