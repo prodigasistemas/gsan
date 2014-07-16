@@ -16819,7 +16819,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			repositorioUtil.inserir(novoDebitoCobrado);
 
 			this.criarDebitoCobradoCategoriaParaRecuperacaoCredito(debitoCobradoAntivo, novoDebitoCobrado);
-
 		}
 	}
 	
@@ -16907,7 +16906,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		novaConta.setDataVencimentoConta(new Date());
 		
 		Rota rota = getControladorMicromedicao().buscarRotaDoImovel(novaConta.getImovel().getId());
-		
+
 		novaConta.setRota(rota);
 		novaConta.setReferenciaContabil(getControladorUtil().pesquisarParametrosDoSistema().getAnoMesArrecadacao());
 

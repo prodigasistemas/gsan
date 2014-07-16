@@ -56516,12 +56516,6 @@ public class ControladorArrecadacao implements SessionBean {
 			credito.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.NORMAL));
 			credito.setUsuario(usuarioLogado);
 			
-			LancamentoItemContabil lancamentoItemContabil = new LancamentoItemContabil(LancamentoItemContabil.OUTROS_SERVICOS_AGUA);
-			credito.setLancamentoItemContabil(lancamentoItemContabil);
-			
-			DebitoCreditoSituacao debitoCreditoSituacaoAtual =  new DebitoCreditoSituacao(DebitoCreditoSituacao.NORMAL);
-			credito.setDebitoCreditoSituacaoAtual(debitoCreditoSituacaoAtual);
-			
 			getControladorFaturamento().gerarCreditoARealizar(credito, imovel, usuarioLogado);
 		}
 	}
