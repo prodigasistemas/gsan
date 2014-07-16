@@ -3592,371 +3592,69 @@ public interface IControladorMicromedicao {
 	public Integer obterConsumoNaoMedidoSemTarifa(Integer idImovel, Integer anoMesReferencia) 
 		throws ControladorException;
 	
-	/**TODO:COSANPA
-	 * @author Pamela Gatinho
-	 * 
-	 * @param imovel
-	 * @param medicaoHistorico
-	 * @param sistemaParametro
-	 * 
-	 * @throws ControladorException
-	 */
-	public boolean verificarSubstituicaoHidrometro(Imovel imovel,
-			MedicaoHistorico medicaoHistorico, SistemaParametro sistemaParametro)
-			throws ControladorException;
+	public boolean verificarSubstituicaoHidrometro(Imovel imovel, MedicaoHistorico medicaoHistorico, SistemaParametro sistemaParametro) throws ControladorException;
 	
-	/*
-	 * TODO - COSANPA
-	 * Adição do médoto pesquisarImovelHidrometroInstaladoMaiorDataInstalacao()
-	 * 
-	 * Pesquisa o imóvel no qual o hidrômetro está instalado por maior data de instalação
-	 */
+	public String pesquisarImovelHidrometroInstaladoMaiorDataInstalacao(Integer idHidrometro) throws ControladorException;
 	
-	public String pesquisarImovelHidrometroInstaladoMaiorDataInstalacao(Integer idHidrometro)
-			throws ControladorException;
+	public void atualizarArquivoTextoDividido(Integer idRota, Integer anoMesFaturamento, Integer numeroSequenciaArquivo, int situacaoAnterior, int situacaoNova) throws ControladorException;
 	
-	/**
-	 * TODO : Cosanpa
-	 * Alteracao feita para a rota dividida não finalizar os imoveis por IMEI, 
-	 * e sim, pelo numero do arquivo dividido.
-	 */
-	/**
-	 * Metodo para atualizar a rota dividida por partes
-	 * 
-	 * @author Pamela Gatinho
-	 * @date 04/02/2011
-	 * 
-	 * @param idRota 
-	 * @param anoMesFaturamento
-	 * @param numeroSequenciaArquivo
-	 * @param situacaoAnterior
-	 * @param situacaoNova
-	 * @throws ControladorException
-	 */
-	public void atualizarArquivoTextoDividido(Integer idRota, Integer anoMesFaturamento, Integer numeroSequenciaArquivo, 
-			int situacaoAnterior, int situacaoNova) throws ControladorException;
-	
-	/*
-	 * TODO : COSANPA
-	 * Criação do método para obter uma rota. 
-	 */
-	/**
-	 * Método para buscar uma rota pelo id
-	 * 
-	 * @author Pamela Gatinho
-	 * @date 14/04/2011
-	 * 
-	 * @param idRota 
-	 * @throws ControladorException
-	 */
 	public Rota pesquisarRota(Integer idRota) throws ControladorException;
 	
-	/**
-	 * TODO : COSANPA
-	 * Pamela Gatinho - 06/06/2011
-	 * Adicionando o método para verificar se houve
-	 * substituicao de hidrometro no período da leitura
-	 * anterior faturada até a data atual
-	 */
 	public boolean verificarInstalacaoSubstituicaoHidrometro(Integer idImovel, MedicaoTipo medicaoTipo) throws ControladorException;
 	
-	/**
-	 * TODO : COSANPA
-	 * 27/06/2011 - Pamela Gatinho
-	 * Metodo para salvar no banco as informacoes que foram 
-	 * processadas pelo IS, sem refazer os cálculos já feitos no IS.
-	 * @throws ControladorException 
-	 */
-	public void processarImoveisImpressaoSimultanea(FaturamentoGrupo faturamentoGrupo, MovimentoContaPrefaturada movimentoContaPreFaturada) 
-		throws ControladorException;
+	public void processarImoveisImpressaoSimultanea(FaturamentoGrupo faturamentoGrupo, MovimentoContaPrefaturada movimentoContaPreFaturada) throws ControladorException;
+
+	public void atualizarLeituraRetificarConta( Integer leituraAtual, int anoMesReferencia, Integer idImovel) throws ControladorException;
+	
+	public Rota obterRotaPorLocalidadeSetorComercial(Integer idLocalidade, Integer codigoSetorComercial) throws ControladorException;
+	
+	public FaturamentoSituacaoHistorico obterSituacaoEspecialFaturamentoImovel(Imovel imovel) throws ControladorException;
+	
+	public MedicaoHistorico pesquisarMedicaoHistoricoAnterior(Integer idImovel, Integer anoMes, Integer idMedicaoTipo) throws ControladorException;
+	
+	@SuppressWarnings("rawtypes")
+	public Collection pesquisarArquivosTextoRoteiroEmpresaCompletoParaArquivoZip(String[] ids) throws ControladorException;
+	
+	public ArquivoTextoRoteiroEmpresa pesquisarArquivosTextoRoteiroEmpresaTransmissaoOffline(Integer idLocalidade,Integer idRota, Integer anoMesReferencia) throws ControladorException;	
+	
+	public ArquivoTextoRoteiroEmpresaDivisao pesquisarArquivosTextoRoteiroEmpresaDivisao(Integer atreId, Integer numeroSequenciaArquivo) throws ControladorException;
+	
+	@SuppressWarnings("rawtypes")
+	public Collection pesquisarDadosRelatorioLeiturasRealizadas(int anoMesFaturamento, Integer idFaturamentoGrupo) throws ControladorException;
 
 	/**
-	 * TODO:COSANPA
-	 * Método para atualizar a leitura atual faturada no medição histórico,
-	 * na retificação da conta
-	 * 
-	 * Autor: Adriana Muniz
-	 * Data: 22/07/2011
-	 * 
-	 * @param leituraAtual
-	 * @param anoMesReferencia
-	 * @param idImovel
-	 * @throws ControladorException
-	 */
-	public void atualizarLeituraRetificarConta( Integer leituraAtual,
-			int anoMesReferencia, Integer idImovel) throws ControladorException;
-	
-	/**
-	 * TODO : COSANPA 
-	 * relatório de extrato de debito
-	 * 
-	 * Pesquisa uma rota pelo id da localidade e do setor comercial
-	 * 
-	 * @author Pamela Gatinho
-	 * @date 01/08/2011
-	 * 
-	 * @param idLocalidade
-	 * @param codigoSetorComercial
-	 * @throws ControladorException
-	 */
-	public Rota obterRotaPorLocalidadeSetorComercial(Integer idLocalidade,
-			Integer codigoSetorComercial)
-			throws ControladorException;
-	
-	/**
-	 * TODO : COSANPA
-	 * Essa consulta se transformou em método, para ser acessado
-	 * por outros controladores.
-	 * 
-	 * @param imovel
-	 * @return
-	 * @throws ControladorException
-	 */
-	public FaturamentoSituacaoHistorico obterSituacaoEspecialFaturamentoImovel(
-			Imovel imovel) throws ControladorException;
-	
-	
-	public MedicaoHistorico pesquisarMedicaoHistoricoAnterior(Integer idImovel,
-			Integer anoMes, Integer idMedicaoTipo) throws ControladorException;
-	
-	/**
-	 * TODO: COSANPA
-	 * Retornar Arquivo Texto Roteiro Empresa completo
-	 * 
-	 * @author Felipe Santos
-	 * @date 28/07/2011
-	 * 
-	 */
-	public Collection pesquisarArquivosTextoRoteiroEmpresaCompletoParaArquivoZip(
-			String[] ids) throws ControladorException;
-	
-	/**
-	 * Retornar Arquivo Texto Roteiro Empresa por 
-	 * Localidade, Id da Rota e Ano/Mês de Referência
-	 * 
-	 * @author Felipe Santos
-	 * @date 05/08/2011
-	 * 
-	 */
-	public ArquivoTextoRoteiroEmpresa pesquisarArquivosTextoRoteiroEmpresaTransmissaoOffline(
-			Integer idLocalidade,Integer idRota, Integer anoMesReferencia) throws ControladorException;	
-	
-	/**
-	 * Retornar Arquivo Texto Roteiro Empresa Divisão
-	 * 
-	 * @author Felipe Santos
-	 * @date 05/08/2011
-	 */
-	public ArquivoTextoRoteiroEmpresaDivisao pesquisarArquivosTextoRoteiroEmpresaDivisao(Integer atreId, 
-			Integer numeroSequenciaArquivo) throws ControladorException;
-	
-	/**
-	 * TODO : COSANPA
-	 * Pamela Gatinho - 08/09/2011
-	 * 
-	 * Gerar dados para o relatorio de leituras realizadas
-	 * 
-	 * @param anoMesFaturamento
-	 * @param idFaturamentoGrupo
-	 * @param tipoRelatorio
-	 * @param usuarioLogado
-	 * 
-	 * @return
-	 * 
-	 * @throws ControladorException
-	 */
-	public Collection pesquisarDadosRelatorioLeiturasRealizadas(
-			int anoMesFaturamento, Integer idFaturamentoGrupo) throws ControladorException;
-
-	/**TODO: COSANPA
-	 * Autor: Adriana Muniz
-	 * Data: 22/07/2011
-	 * 
 	 * Verifica se há diferença entre a leitura persistida e a passada como parametro
-	 * 
 	 * Utilizado na retificação de contas
-	 * 
-	 * @param leituraAtual
-	 * @param anoMesReferencia
-	 * @param idImovel
-	 * @return
-	 * @throws ControladorException
 	 */
 	public boolean verificarLeituraAtualFaturadaImovel(Integer leituraAtual, int anoMesReferencia, Integer idImovel) throws ControladorException;
 	
-	/**TODO: COSANPA
-	 * Autor: Adriana Muniz
-	 * Data: 22/07/2011
-	 * 
-	 * Consulta arquivo de rota por ano/mes referencia e grupo
-	 * 
-	 * Utilizado na retificação de contas
-	 * 
-	 * @param idGrupo
-	 * @param referencia
-	 * @return
-	 * @throws ControladorException
-	 */
-	public boolean pesquisaArquivoRotaPorGrupoEReferencia(Integer idGrupo, int referencia)
-			throws ControladorException;
+	public boolean pesquisaArquivoRotaPorGrupoEReferencia(Integer idGrupo, int referencia) throws ControladorException;
 			
+	public MedicaoHistorico pesquisarMedicaoHistoricoTipoPocoLeituraAnormalidade(Integer imovel, Integer anoMes) throws ControladorException;
 	
-		/**
-	 * Método utilizado na impressao das contas via Impressora Térmica
-	 * 
-	 * @param imovel
-	 * @param anoMes
-	 * @return
-	 * @author Wellington Vernech Rocha
-	 * @date 22/08/2011
-	 * @throws ControladorException
-	 */
-	public MedicaoHistorico pesquisarMedicaoHistoricoTipoPocoLeituraAnormalidade(Integer imovel,
-			Integer anoMes) throws ControladorException;
+	public MedicaoHistorico pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(Integer imovel, Integer anoMes) throws ControladorException;
 	
-	/**
-	 * Método utilizado na impressao das contas via Impressora Térmica
-	 * 
-	 * @param imovel
-	 * @param anoMes
-	 * @return
-	 * @author Wellington Vernech Rocha
-	 * @date 22/08/2011
-	 * @throws ControladorException
-	 */
-	public MedicaoHistorico pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(Integer imovel,
-			Integer anoMes) throws ControladorException;
-	
-	/**
-	 * TODO : COSANPA 
-	 * Pamela Gatinho - 31/05/2012
-	 * 
-	 * Metodo que soma a quantidade de economias de
-	 * todos os imóveis micros do condomínio
-	 * 
-	 * @param idImovelCondominio
-	 * @param anoMesFaturamento
-	 * @return quantidadeEconomias
-	 * @throws ErroRepositorioException 
-	 */
 	public int obterQuantidadeEconomiasCondominio (Integer idImovelCondominio, Integer anoMesFaturamento);
 	
-	/**
-	 * TODO : COSANPA
-	 * Pamela Gatinho - 31/05/2012
-	 * 
-	 * Metodo que calcula o consumo do a ser rateado de agua e 
-	 * esgoto do condominio.
-	 *  
-	 * @param idImovelCondominio
-	 * @param anoMesFaturamento
-	 * @param ligacaoTipo
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	public int obterConsumoASerRateado(Integer idImovelCondominio, Integer anoMesFaturamento, Integer ligacaoTipo);
 	
-	/**
-	 * Método que obtem o consumo do imóvel não medido,
-	 * através da verificação do parâmetro que define
-	 * como será o cálculo de consumo para imóvel
-	 * não medido.
-	 * 
-	 * @param imovel
-	 * @return consumoNaoMedido
-	 * @throws ControladorException
-	 * @throws ErroRepositorioException
-	 */
 	public int obterConsumoNaoMedido(Imovel imovel) throws ControladorException;
 	
-	/**
-	 * TODO - COSANPA
-	 * 
-	 * Método para obter todos os imóveis que faltam ser processados
-	 * na transmissão offline do arquivo de retorno do IS 
-	 * 
-	 * @author Felipe Santos
-	 * @date 26/01/2012
-	 * 
-	 * @param idRota
-	 * @return List<Integer> retorno
-	 * @throws ErroRepositorioException
-	 */
-	public List<Integer> obterImoveisNaoEnviadosMovimentoContaPreFaturada(Integer idRota, Integer anoMesFaturamento)
-			throws ControladorException;
+	public List<Integer> obterImoveisNaoEnviadosMovimentoContaPreFaturada(Integer idRota, Integer anoMesFaturamento) throws ControladorException;
 	
-	/**TODO:COSANPA
-	 * @author Adriana Muniz
-	 * @date 15/02/2013
-	 * 
-	 * @param leituraAnterior
-	 * @param leituraAtual
-	 * @param leituraSituacao
-	 * @param idImovel
-	 * @param anoMes
-	 * @param faturamentoGrupo
-	 * @param sistemaParametro
-	 * @param dataLeituraAtualInformada
-	 * @param idLeituraAnormalidade
-	 * @param alterouAnormalidade
-	 * 
-	 * @throws ControladorException
-	 */
 	public void calcularLeituraConfirmada(Integer leituraAnterior,
 			Integer leituraAtual, LeituraSituacao leituraSituacao, Integer idImovel, Integer anoMes, 
 			FaturamentoGrupo faturamentoGrupo, SistemaParametro sistemaParametro, String dataLeituraAtualInformada, 
 			Integer idLeituraAnormalidade, boolean alterouAnormalidade)  throws ControladorException;
 
-	/**
-	 * Buscar Rota a qual o imóvel pertence.
-	 * 
-	 * @param matricula
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	public Rota buscarRotaDoImovel(Integer matricula) throws ControladorException ;
 	
-	/**
-	 * TODO : COSANPA
-	 * Verificar se o imóvel está com o arquivo de leitura em campo.
-	 * 
-	 * @author Pamela Gatinho
-	 * @date 01/10/2013
-	 * 
-	 * @param idImovel
-	 * @param anoMesReferencia
-	 * @return
-	 * @throws ControladorException
-	 */
 	public void validarImovelEmCampo(Integer idImovel) throws ControladorException;
 	
-	/**
-     * TODO: COSANPA
-     * 
-     * @autor: Wellington Rocha
-     * @date: 21/03/2012
-     * 
-     * 
-     * @return Collection
-     * @throws ControladorException
-     * 
-     */
-    public Collection<HidrometroProtecao> pesquisarHidrometroProtecao()
-    		throws ControladorException;
+    public Collection<HidrometroProtecao> pesquisarHidrometroProtecao() throws ControladorException;
     
-    /**
-     * TODO: COSANPA
-     * 
-     * @autor: Wellington Rocha
-     * @date: 30/04/2012
-     * 
-     * 
-     * 
-     * @return Collection
-     * @throws ControladorException
-     * 
-     */
-    public Collection<HidrometroMarca> pesquisarHidrometroMarca()
-    		throws ControladorException;
+    public Collection<HidrometroMarca> pesquisarHidrometroMarca() throws ControladorException;
+    
+    public boolean isImovelEmCampo(Integer idImovel) throws Exception;
 
 }

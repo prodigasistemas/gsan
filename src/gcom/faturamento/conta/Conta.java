@@ -48,13 +48,13 @@ public class Conta extends ObjetoTransacao implements IConta {
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_CONTA,ATRIBUTOS_RETIFICAR_CONTA_CANCELAR})
 	private Integer id;
 	private Integer referenciaContabil;
-	private int referencia;
+	private Integer referencia;
 	private Short lote;
 	private Short subLote;
 	private Integer codigoSetorComercial;
 	private Integer quadra;
-	private short digitoVerificadorConta;
-	private short indicadorCobrancaMulta;
+	private Short digitoVerificadorConta;
+	private Short indicadorCobrancaMulta;
 	private Short indicadorAlteracaoVencimento;
 	private Integer consumoRateioAgua;
 	private Integer consumoRateioEsgoto;
@@ -400,15 +400,15 @@ public class Conta extends ObjetoTransacao implements IConta {
 		this.referenciaContabil = referenciaContabil;
 	}
 
-	public int getReferencia() {
+	public Integer getReferencia() {
 		return this.referencia;
 	}
 	
-	public int getAnoMesReferenciaConta() {
+	public Integer getAnoMesReferenciaConta() {
 		return this.referencia;
 	}
 
-	public void setReferencia(int referencia) {
+	public void setReferencia(Integer referencia) {
 		this.referencia = referencia;
 	}
 
@@ -452,11 +452,11 @@ public class Conta extends ObjetoTransacao implements IConta {
 		this.digitoVerificadorConta = digitoVerificadorConta;
 	}
 
-	public short getIndicadorCobrancaMulta() {
+	public Short getIndicadorCobrancaMulta() {
 		return this.indicadorCobrancaMulta;
 	}
 
-	public void setIndicadorCobrancaMulta(short indicadorCobrancaMulta) {
+	public void setIndicadorCobrancaMulta(Short indicadorCobrancaMulta) {
 		this.indicadorCobrancaMulta = indicadorCobrancaMulta;
 	}
 
@@ -1150,5 +1150,17 @@ public class Conta extends ObjetoTransacao implements IConta {
 
 	public void setValorRateioEsgoto(BigDecimal valorRateioEsgoto) {
 		this.valorRateioEsgoto = valorRateioEsgoto;
+	}
+	
+	public void setValorDebitos(BigDecimal valor){
+		debitos = valor;
+	}
+	
+	public BigDecimal getValorDebitos(){
+		return debitos;
+	}
+	
+	public Conta buildConta(Conta conta){
+		return conta;
 	}
 }

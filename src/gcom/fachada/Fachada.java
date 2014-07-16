@@ -149,7 +149,6 @@ import gcom.atendimentopublico.registroatendimento.bean.RegistroAtendimentoPende
 import gcom.atendimentopublico.registroatendimento.bean.VerificarRAFaltaAguaHelper;
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocalHome;
-import gcom.atualizacaocadastral.ImagemRetorno;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.batch.ControladorBatchLocal;
 import gcom.batch.ControladorBatchLocalHome;
@@ -52283,11 +52282,9 @@ public class Fachada {
 			CreditoTipo creditoTipo, CreditoOrigem creditoOrigem, boolean indicadorIncluirCredito) 
 		throws ControladorException {
 		try {
-			this.getControladorArrecadacao().classificarPagamentosResolvidos(pagamentos, usuarioLogado, 
-					creditoTipo, creditoOrigem, indicadorIncluirCredito);
+			this.getControladorArrecadacao().recuperarCredito(pagamentos, usuarioLogado, creditoTipo, creditoOrigem, indicadorIncluirCredito);
 		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex
-					.getParametroMensagem());
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 	}
 

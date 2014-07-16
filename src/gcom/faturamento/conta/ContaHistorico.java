@@ -18,7 +18,6 @@ import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.micromedicao.Rota;
 import gcom.seguranca.acesso.usuario.Usuario;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
@@ -42,7 +41,7 @@ public class ContaHistorico implements IConta {
     private Short lote;
 
     /** persistent field */
-    private Short sublote;
+    private Short subLote;
 
     /** persistent field */
     private Integer setorComercial;
@@ -310,7 +309,7 @@ public class ContaHistorico implements IConta {
         this.anoMesReferenciaConta = anoMesReferenciaConta;
         this.contaHistorico = contaHistorico;
         this.lote = lote;
-        this.sublote = sublote;
+        this.subLote = sublote;
         this.setorComercial = setorComercial;
         this.numeroQuadra = numeroQuadra;
         this.verificadorConta = verificadorConta;
@@ -366,6 +365,10 @@ public class ContaHistorico implements IConta {
     public ContaHistorico() {
     }
 
+    public ContaHistorico(Integer id) {
+    	this.id = id;
+    }
+    
     /** minimal constructor */
     public ContaHistorico(Integer id, int anoMesReferenciaConta, Short lote, Short sublote, 
     		Integer setorComercial, Integer numeroQuadra, short verificadorConta, short indicadorCobrancaMulta, 
@@ -464,14 +467,18 @@ public class ContaHistorico implements IConta {
 		return anoMesReferenciaConta;
 	}
 	
-	public int getReferencia(){
+	public Integer getReferencia(){
 		return anoMesReferenciaConta;
+	}
+	
+	public void setReferencia(Integer ref){
+		anoMesReferenciaConta = ref;
 	}
 
 	/**
 	 * @param anoMesReferenciaConta The anoMesReferenciaConta to set.
 	 */
-	public void setAnoMesReferenciaConta(int anoMesReferenciaConta) {
+	public void setAnoMesReferenciaConta(Integer anoMesReferenciaConta) {
 		this.anoMesReferenciaConta = anoMesReferenciaConta;
 	}
 
@@ -492,14 +499,14 @@ public class ContaHistorico implements IConta {
 	/**
 	 * @return Returns the cobrancaMulta.
 	 */
-	public short getIndicadorCobrancaMulta() {
+	public Short getIndicadorCobrancaMulta() {
 		return indicadorCobrancaMulta;
 	}
 
 	/**
 	 * @param cobrancaMulta The cobrancaMulta to set.
 	 */
-	public void setIndicadorCobrancaMulta(short indicadorCobrancaMulta) {
+	public void setIndicadorCobrancaMulta(Short indicadorCobrancaMulta) {
 		this.indicadorCobrancaMulta = indicadorCobrancaMulta;
 	}
 
@@ -1012,15 +1019,15 @@ public class ContaHistorico implements IConta {
 	/**
 	 * @return Returns the numeroSublote.
 	 */
-	public Short getSublote() {
-		return sublote;
+	public Short getSubLote() {
+		return subLote;
 	}
 
 	/**
 	 * @param numeroSublote The numeroSublote to set.
 	 */
-	public void setSublote(Short sublote) {
-		this.sublote = sublote;
+	public void setSubLote(Short sublote) {
+		this.subLote = sublote;
 	}
 
 	/**
@@ -1369,12 +1376,6 @@ public class ContaHistorico implements IConta {
 		this.dataEnvioEmailConta = dataEnvioEmailConta;
 	}
 
-	/**TODO: COSANPA
-     * Mantis 648 - Atualização de rotina que transfere contas para histórico.
-     * 
-     * @author: Wellington Rocha
-     * @date: 07/11/2012*/
-	
 	public BigDecimal getValorRateioAgua() {
 		return valorRateioAgua;
 	}
@@ -1395,7 +1396,20 @@ public class ContaHistorico implements IConta {
 		this.valorDebitos = debitos;
 	}
 
+	public Integer getReferenciaContabil() {
+		return this.anoMesReferenciaContabil;
+	}
+	
 	public void setReferenciaContabil(Integer referenciaContabil) {
 		this.anoMesReferenciaContabil = referenciaContabil;
+	}
+	
+	public Conta buildConta(Conta conta){
+		conta.setCodigoSetorComercial(this.getSetorComercial());
+		conta.setQuadra(this.getQuadra().getId());
+		conta.setDigitoVerificadorConta(this.getVerificadorConta());
+		conta.setQuadra(this.getNumeroQuadra());
+		conta.setQuadraConta(this.getQuadra());
+		return conta;
 	}
 }

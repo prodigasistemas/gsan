@@ -18,7 +18,6 @@ import javax.jms.Session;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 public class Localidade extends ObjetoTransacao implements DescriptorEntity{
 
 
@@ -30,87 +29,35 @@ public class Localidade extends ObjetoTransacao implements DescriptorEntity{
     public final static Short BLOQUEIO_INSERIR_IMOVEL_SIM = new Short("1");
 	public final static Short BLOQUEIO_INSERIR_IMOVEL_NAO = new Short("2");
 	
-	/**
-	 * 
-	 */
-	
-
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
-	/** identifier field */
 	private Integer id;
-
-	/** persistent field */
 	private String descricao;
-
-	/** nullable persistent field */
 	private String numeroImovel;
-
-	/** nullable persistent field */
 	private String complementoEndereco;
-
-	/** persistent field */
 	private String fone;
-
-	/** persistent field */
 	private String ramalfone;
-
-	/** nullable persistent field */
 	private String fax;
-
-	/** nullable persistent field */
 	private String email;
-
-	/** persistent field */
 	private int consumoGrandeUsuario;
-
-	/** nullable persistent field */
 	private Short indicadorUso;
-
-	/** nullable persistent field */
 	private Date ultimaAlteracao;
-
-	/** persistent field */
-	private gcom.cadastro.localidade.LocalidadePorte localidadePorte;
-
-	/** persistent field */
-	private gcom.cadastro.localidade.Localidade localidade;
-
-	/** persistent field */
-	private gcom.cadastro.localidade.GerenciaRegional gerenciaRegional;
-
-	/** persistent field */
+	private LocalidadePorte localidadePorte;
+	private Localidade localidade;
+	private GerenciaRegional gerenciaRegional;
 	private EnderecoReferencia enderecoReferencia;
-
-	/** persistent field */
-	private gcom.cadastro.localidade.LocalidadeClasse localidadeClasse;
-
+	private LocalidadeClasse localidadeClasse;
 	private LogradouroCep logradouroCep;
-
 	private LogradouroBairro logradouroBairro;
-
 	private Integer codigoICMS;
-
 	private String codigoCentroCusto;
-	
 	private Short indicadorLocalidadeInformatizada;
-	
 	private Cliente cliente;
-	
 	private HidrometroLocalArmazenagem hidrometroLocalArmazenagem;
-
-	/** persistent field */
 	private UnidadeNegocio unidadeNegocio;
-	
 	private Short indicadorBloqueio = BLOQUEIO_INSERIR_IMOVEL_NAO;
-
 	private Short indicadorLocalidadeSede;
-
 	private String codigoCentroCustoEsgoto;
-
 	private Municipio municipio;
 	
 	public Short getIndicadorBloqueio() {
@@ -319,13 +266,6 @@ public class Localidade extends ObjetoTransacao implements DescriptorEntity{
 		return new ToStringBuilder(this).append("id", getId()).toString();
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param session
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
 	public boolean onSave(Session session) {
 		if (this.localidade == null) {
 			Localidade localidadeElo = new Localidade();
@@ -336,36 +276,14 @@ public class Localidade extends ObjetoTransacao implements DescriptorEntity{
 		return false;
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param session
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
 	public boolean onUpdate(Session session) {
 		return false;
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param session
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
 	public boolean onDelete(Session session) {
 		return false;
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param session
-	 *            Descrição do parâmetro
-	 * @param serializable
-	 *            Descrição do parâmetro
-	 */
 	public void onLoad(Session session, Serializable serializable) {
 	}
 
@@ -385,11 +303,6 @@ public class Localidade extends ObjetoTransacao implements DescriptorEntity{
 		this.logradouroCep = logradouroCep;
 	}
 
-	/**
-	 * Gets the endereco attribute of the Imovel object
-	 * 
-	 * @return The endereco value
-	 */
 	public String getEnderecoFormatado() {
 		String endereco = null;
 

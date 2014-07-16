@@ -7,32 +7,17 @@ import java.math.BigDecimal;
 import java.util.Date;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
-public class ContaImpostosDeduzidosHistorico implements Serializable {
+public class ContaImpostosDeduzidosHistorico implements Serializable, IContaImpostosDeduzidos {
 	private static final long serialVersionUID = 1L;
-    /** identifier field */
-    private Integer id;
 
-    /** persistent field */
+	private Integer id;
     private BigDecimal valorImposto;
-
-    /** persistent field */
     private BigDecimal percentualAliquota;
-
-    /** persistent field */
     private Date ultimaAlteracao;
-    
-    /** persistent field */
     private BigDecimal valorBaseCalculo;
+    private ImpostoTipo impostoTipo;
+    private ContaHistorico contaHistorico;
 
-    /** persistent field */
-    private gcom.faturamento.ImpostoTipo impostoTipo;
-
-    /** persistent field */
-    private gcom.faturamento.conta.ContaHistorico contaHistorico;
-
-    /** full constructor */
     public ContaImpostosDeduzidosHistorico(Integer id, BigDecimal valorImposto, BigDecimal percentualAliquota, Date ultimaAlteracao,BigDecimal valorBaseCalculo ,ImpostoTipo impostoTipo, ContaHistorico contaHistorico) {
         this.id = id;
         this.valorImposto = valorImposto;
@@ -43,10 +28,8 @@ public class ContaImpostosDeduzidosHistorico implements Serializable {
         this.contaHistorico = contaHistorico;
     }
 
-    /** default constructor */
     public ContaImpostosDeduzidosHistorico() {
     }
-
     
     public String toString() {
         return new ToStringBuilder(this)
@@ -109,5 +92,13 @@ public class ContaImpostosDeduzidosHistorico implements Serializable {
     public void setValorBaseCalculo(BigDecimal valorBaseCalculo) {
         this.valorBaseCalculo = valorBaseCalculo;
     }
+
+	public IConta getConta() {
+		return new Conta(this.contaHistorico.getId());
+	}
+
+	public void setConta(IConta conta) {
+		this.contaHistorico = new ContaHistorico(conta.getId());
+	}
 
 }

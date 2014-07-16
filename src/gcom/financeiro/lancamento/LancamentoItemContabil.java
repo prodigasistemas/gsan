@@ -12,31 +12,19 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 /** @author Hibernate CodeGenerator */
 public class LancamentoItemContabil extends ObjetoTransacao {
 	private static final long serialVersionUID = 1L;
-	// constantes de item contábil >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	
 	public final static Integer LIGACOES_AGUA = new Integer(1);
-
 	public final static Integer ACRESCIMOS_POR_IMPONTUALIDADE = new Integer(2);
-
-	public final static Integer RELIGACOES_E_SANCOES = new Integer(3);
-
-	public final static Integer AFERICAO_DE_HIDROMETROS = new Integer(4);
-
-	public final static Integer EXTENSOES_REDE_AGUA = new Integer(5);
-
-	public final static Integer OUTROS_SERVICOS_AGUA = new Integer(6);
-
-	public final static Integer LIGACOES_ESGOTO = new Integer(7);
-
-	public final static Integer EXTENSOES_REDE_ESGOTO = new Integer(8);
-
-	public final static Integer OUTROS_SERVICOS_ESGOTO = new Integer(9);
-	
-	public final static Integer TARIFA_DE_AGUA = new Integer(10);
-	
-	public final static Integer TARIFA_DE_ESGOTO = new Integer(11);
-	
 	public final static Integer JUROS_SOBRE_CONTRATO_PARCELAMENTO = new Integer(2);
-	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+	public final static Integer RELIGACOES_E_SANCOES = new Integer(3);
+	public final static Integer AFERICAO_DE_HIDROMETROS = new Integer(4);
+	public final static Integer EXTENSOES_REDE_AGUA = new Integer(5);
+	public final static Integer OUTROS_SERVICOS_AGUA = new Integer(6);
+	public final static Integer LIGACOES_ESGOTO = new Integer(7);
+	public final static Integer EXTENSOES_REDE_ESGOTO = new Integer(8);
+	public final static Integer OUTROS_SERVICOS_ESGOTO = new Integer(9);
+	public final static Integer TARIFA_DE_AGUA = new Integer(10);
+	public final static Integer TARIFA_DE_ESGOTO = new Integer(11);
 
 	/** identifier field */
 	private Integer id;
@@ -72,16 +60,13 @@ public class LancamentoItemContabil extends ObjetoTransacao {
 
 	}
 
-	/** default constructor */
 	public LancamentoItemContabil() {
 	}
 
-	// Construido por Sávio Luiz para setar o id no objeto
 	public LancamentoItemContabil(Integer id) {
 		this.id = id;
 	}
 
-	/** minimal constructor */
 	public LancamentoItemContabil(String descricao, String descricaoAbreviada,
 			gcom.financeiro.lancamento.LancamentoItem lancamentoItem,
 			ContaContabil contaContabil) {
@@ -150,17 +135,10 @@ public class LancamentoItemContabil extends ObjetoTransacao {
 		return retorno;
 	}
 
-	/**
-	 * @return Retorna o campo indicadorUso.
-	 */
 	public Short getIndicadorUso() {
 		return indicadorUso;
 	}
 
-	/**
-	 * @param indicadorUso
-	 *            O indicadorUso a ser setado.
-	 */
 	public void setIndicadorUso(Short indicadorUso) {
 		this.indicadorUso = indicadorUso;
 	}

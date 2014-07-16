@@ -57,7 +57,7 @@ public class InicializadorSistema extends HttpServlet{
 
             propriedades.load(stream);
 
-            String gsanTipo = propriedades.getProperty("gsan.tipo");
+            String gsanTipo = propriedades.getProperty("gsan.tipo").trim();
 
             if(gsanTipo != null){
             	tipo = gsanTipo;

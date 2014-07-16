@@ -4,6 +4,7 @@ import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.localidade.Quadra;
 import gcom.cobranca.ParcelamentoGrupo;
 import gcom.faturamento.conta.Conta;
+import gcom.faturamento.conta.IConta;
 import gcom.financeiro.FinanciamentoTipo;
 import gcom.financeiro.lancamento.LancamentoItemContabil;
 import gcom.interceptor.ControleAlteracao;
@@ -17,79 +18,40 @@ import java.util.Set;
 
 import org.apache.commons.lang.builder.EqualsBuilder;
 
-/** @author Hibernate CodeGenerator */
 @ControleAlteracao()
-public class DebitoCobrado extends ObjetoTransacao{
+public class DebitoCobrado extends ObjetoTransacao implements IDebitoCobrado {
 	private static final long serialVersionUID = 1L;
-	/** identifier field */
+
 	private Integer id;
-
-	/** persistent field */
 	private Date debitoCobrado;
-
-	/** nullable persistent field */
 	private Integer codigoSetorComercial;
-
-	/** nullable persistent field */
 	private Integer numeroQuadra;
-
-	/** nullable persistent field */
 	private Short numeroLote;
-
-	/** nullable persistent field */
 	private Short numeroSubLote;
-
-	/** nullable persistent field */
 	private Integer anoMesReferenciaDebito;
-
-	/** nullable persistent field */
 	private Integer anoMesCobrancaDebito;
 
-	/** persistent field */
 	@ControleAlteracao(funcionalidade=Conta.ATRIBUTOS_RETIFICAR_CONTA)
 	private BigDecimal valorPrestacao;
 
-	/** persistent field */
 	private short numeroPrestacao;
-
-	/** persistent field */
 	private short numeroPrestacaoDebito;
-
-	/** nullable persistent field */
 	private Date ultimaAlteracao;
-
-	/** persistent field */
 	private int lictId;
-    
     private Short numeroParcelaBonus;
-
-	/** persistent field */
 	private LancamentoItemContabil lancamentoItemContabil;
-
-	/** persistent field */
 	private Conta conta;
-
-	/** persistent field */
 	private FinanciamentoTipo financiamentoTipo;
-
-	/** persistent field */
 	private Quadra quadra;
-
-	/** persistent field */
 	private Localidade localidade;
-
-	/** persistent field */	
 	private gcom.faturamento.debito.DebitoTipo debitoTipo;
-
-	/** persistent field */
 	private ParcelamentoGrupo parcelamentoGrupo;
-	
 	private DebitoACobrarGeral debitoACobrarGeral;
 
-	/** persistent field */
+	@SuppressWarnings("rawtypes")
 	private Set debitoCobradoCategorias;
 
-	/** full constructor */
+	@SuppressWarnings("rawtypes")
 	public DebitoCobrado(Date debitoCobrado, Integer codigoSetorComercial,
 			Integer numeroQuadra, Short numeroLote, Short numeroSubLote,
 			Integer anoMesReferenciaDebito, Integer anoMesCobrancaDebito,
@@ -122,11 +84,14 @@ public class DebitoCobrado extends ObjetoTransacao{
 		this.debitoCobradoCategorias = debitoCobradoCategorias;
 	}
 
-	/** default constructor */
 	public DebitoCobrado() {
 	}
 
-	/** minimal constructor */
+	public DebitoCobrado(Integer id) {
+		this.id = id;
+	}
+	
+	@SuppressWarnings("rawtypes")
 	public DebitoCobrado(Date debitoCobrado, BigDecimal valorPrestacao,
 			short numeroPrestacao, short numeroPrestacaoDebito,
 			LancamentoItemContabil lancamentoItemContabil, Conta conta,
@@ -148,16 +113,6 @@ public class DebitoCobrado extends ObjetoTransacao{
 		this.debitoCobradoCategorias = debitoCobradoCategorias;
 	}
 	
-	/**
-	 * [UC0745] - Gerar Arquivo Texto para Faturamento
-	 * 
-	 * Construtor de DebitoCobrado 
-	 * 
-	 * @param anoMesReferenciaDebito
-	 * @param numeroPrestacaoDebito
-	 * @param numeroPrestacao
-	 * @param valorPrestacao
-	 */
 	public DebitoCobrado(Integer anoMesReferenciaDebito, short numeroPrestacaoDebito, short numeroPrestacao,
 			BigDecimal valorPrestacao, DebitoTipo debitoTipo) {
 		this.anoMesReferenciaDebito = anoMesReferenciaDebito;
@@ -239,19 +194,19 @@ public class DebitoCobrado extends ObjetoTransacao{
 		this.valorPrestacao = valorPrestacao;
 	}
 
-	public short getNumeroPrestacao() {
+	public Short getNumeroPrestacao() {
 		return this.numeroPrestacao;
 	}
 
-	public void setNumeroPrestacao(short numeroPrestacao) {
+	public void setNumeroPrestacao(Short numeroPrestacao) {
 		this.numeroPrestacao = numeroPrestacao;
 	}
 
-	public short getNumeroPrestacaoDebito() {
+	public Short getNumeroPrestacaoDebito() {
 		return this.numeroPrestacaoDebito;
 	}
 
-	public void setNumeroPrestacaoDebito(short numeroPrestacaoDebito) {
+	public void setNumeroPrestacaoDebito(Short numeroPrestacaoDebito) {
 		this.numeroPrestacaoDebito = numeroPrestacaoDebito;
 	}
 
@@ -280,12 +235,12 @@ public class DebitoCobrado extends ObjetoTransacao{
 		this.lancamentoItemContabil = lancamentoItemContabil;
 	}
 
-	public Conta getConta() {
+	public IConta getConta() {
 		return this.conta;
 	}
 
-	public void setConta(Conta conta) {
-		this.conta = conta;
+	public void setConta(IConta conta) {
+		this.conta = new Conta(conta.getId());
 	}
 
 	public FinanciamentoTipo getFinanciamentoTipo() {
@@ -328,10 +283,12 @@ public class DebitoCobrado extends ObjetoTransacao{
 		this.parcelamentoGrupo = parcelamentoGrupo;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Set getDebitoCobradoCategorias() {
 		return this.debitoCobradoCategorias;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setDebitoCobradoCategorias(Set debitoCobradoCategorias) {
 		this.debitoCobradoCategorias = debitoCobradoCategorias;
 	}

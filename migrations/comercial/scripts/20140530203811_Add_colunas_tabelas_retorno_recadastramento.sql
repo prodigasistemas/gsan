@@ -30,12 +30,7 @@ ALTER TABLE atualizacaocadastral.cliente_endereco_retorno ADD COLUMN lgtp_id INT
 -- //@UNDO
 -- SQL to undo the change goes here.
 ALTER TABLE atualizacaocadastral.imovel_retorno DROP COLUMN lest_id;
-ALTER TABLE atualizacaocadastral.imovel_retorno DROP CONSTRAINT fk4_imovel_retorno;
 ALTER TABLE atualizacaocadastral.imovel_retorno DROP COLUMN rlin_id;
-ALTER TABLE atualizacaocadastral.imovel_retorno DROP CONSTRAINT fk5_imovel_retorno;
 ALTER TABLE atualizacaocadastral.imovel_retorno DROP COLUMN himc_id;
-ALTER TABLE atualizacaocadastral.imovel_retorno DROP CONSTRAINT fk6_imovel_retorno;
 ALTER TABLE atualizacaocadastral.imovel_retorno DROP COLUMN hicp_id;
-ALTER TABLE atualizacaocadastral.imovel_retorno DROP CONSTRAINT fk7_imovel_retorno;
 ALTER TABLE atualizacaocadastral.cliente_endereco_retorno DROP COLUMN lgtp_id;
-ALTER TABLE atualizacaocadastral.cliente_endereco_retorno DROP CONSTRAINT fk3_cliente_endereco_retorno;

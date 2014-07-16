@@ -23,9 +23,7 @@ import gcom.atendimentopublico.ordemservico.FiscalizacaoSituacao;
 import gcom.atendimentopublico.ordemservico.SupressaoMotivo;
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocal;
 import gcom.atualizacaocadastral.ControladorAtualizacaoCadastralLocalHome;
-import gcom.atualizacaocadastral.IRepositorioAtualizacaoCadastral;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
-import gcom.atualizacaocadastral.RepositorioAtualizacaoCadastralHBM;
 import gcom.cadastro.ArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteFone;
@@ -142,8 +140,6 @@ import gcom.relatorio.cadastro.RelatorioResumoQtdeImoveisExcluidosTarifaSocialHe
 import gcom.relatorio.micromedicao.FiltrarAnaliseExcecoesLeiturasHelper;
 import gcom.seguranca.ControladorPermissaoEspecialLocal;
 import gcom.seguranca.ControladorPermissaoEspecialLocalHome;
-import gcom.seguranca.IRepositorioSeguranca;
-import gcom.seguranca.RepositorioSegurancaHBM;
 import gcom.seguranca.acesso.Abrangencia;
 import gcom.seguranca.acesso.ControladorAcessoLocal;
 import gcom.seguranca.acesso.ControladorAcessoLocalHome;
@@ -195,13 +191,6 @@ import javax.transaction.SystemException;
 
 import org.jboss.logging.Logger;
 
-
-/**
- * < <Descrição da Classe>>
- * 
- * @author Administrador
- * @created 7 de Junho de 2004
- */
 public class ControladorImovelSEJB implements SessionBean {
 
 	private static final long serialVersionUID = 1L;
@@ -209,28 +198,13 @@ public class ControladorImovelSEJB implements SessionBean {
 	SessionContext sessionContext;
 
 	private IRepositorioImovel repositorioImovel;
-	
-	private IRepositorioSeguranca repositorioSeguranca;
-
 	private IRepositorioCategoria repositorioCategoria;
-
 	private IRepositorioFaturamento repositorioFaturamento;
-
 	private IRepositorioCobranca repositorioCobranca;
-	
-	private IRepositorioAtualizacaoCadastral repositorioAtualizacaoCadastral;
 	
 	private Logger logger = Logger.getLogger(ControladorImovelSEJB.class);
 
-	/**
-	 * [SB001] Atualizar Imóvel Campos Atualiza campos de imovel na execução de
-	 * ordem Serviço
-	 * 
-	 * @author Leandro Cavalcanti
-	 * @throws ControladorException
-	 */
-	public void atualizarImovelLigacaoAgua(Imovel imovel,
-			Integer idLigacaoAguaSituacao) throws ControladorException {
+	public void atualizarImovelLigacaoAgua(Imovel imovel, Integer idLigacaoAguaSituacao) throws ControladorException {
 
 		try {
 			repositorioImovel.atualizarImovelLigacaoAgua(imovel,
@@ -241,62 +215,35 @@ public class ControladorImovelSEJB implements SessionBean {
 		}
 	}
 
-	/**
-	 * Atualiza campos de imovel na execução de ordem Serviço
-	 * 
-	 * @author Leandro Cavalcanti
-	 * @throws ControladorException
-	 */
-	public void atualizarImovelExecucaoOrdemServicoLigacaoAgua(Imovel imovel,
-			LigacaoAguaSituacao situacaoAgua) throws ControladorException {
+	public void atualizarImovelExecucaoOrdemServicoLigacaoAgua(Imovel imovel, LigacaoAguaSituacao situacaoAgua) throws ControladorException {
 
 		try {
-			repositorioImovel.atualizarImovelExecucaoOrdemServicoLigacaoAgua(
-					imovel, situacaoAgua);
+			repositorioImovel.atualizarImovelExecucaoOrdemServicoLigacaoAgua(imovel, situacaoAgua);
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
 
-	/**
-	 * Atualiza campos de imovel na execução de ordem Serviço
-	 * 
-	 * @author Leandro Cavalcanti
-	 * @throws ControladorException
-	 */
-	public void atualizarImovelExecucaoOrdemServicoLigacaoEsgoto(Imovel imovel,
-			LigacaoEsgotoSituacao situacaoEsgoto) throws ControladorException {
+	public void atualizarImovelExecucaoOrdemServicoLigacaoEsgoto(Imovel imovel, LigacaoEsgotoSituacao situacaoEsgoto) throws ControladorException {
 
 		try {
-			repositorioImovel.atualizarImovelExecucaoOrdemServicoLigacaoEsgoto(
-					imovel, situacaoEsgoto);
+			repositorioImovel.atualizarImovelExecucaoOrdemServicoLigacaoEsgoto(imovel, situacaoEsgoto);
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
 
-	/**
-	 * Retorna o valor de controladorMicromedicao
-	 * 
-	 * @return O valor de controladorMicromedicao
-	 */
 	private ControladorMicromedicaoLocal getControladorMicromedicao() {
 		ControladorMicromedicaoLocalHome localHome = null;
 		ControladorMicromedicaoLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorMicromedicaoLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_MICROMEDICAO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
+			localHome = (ControladorMicromedicaoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_MICROMEDICAO_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -307,27 +254,15 @@ public class ControladorImovelSEJB implements SessionBean {
 		}
 	}
 	
-	/**
-	 * Retorna o valor de controladorCliente
-	 * 
-	 * @return O valor de controladorCliente
-	 */
 	private ControladorClienteLocal getControladorCliente() {
-
 		ControladorClienteLocalHome localHome = null;
 		ControladorClienteLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorClienteLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_CLIENTE_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorClienteLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_CLIENTE_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -339,21 +274,14 @@ public class ControladorImovelSEJB implements SessionBean {
 	}
 	
 	private ControladorPermissaoEspecialLocal getControladorPermissaoEspecial() {
-
 		ControladorPermissaoEspecialLocalHome localHome = null;
 		ControladorPermissaoEspecialLocal local = null;
-
-		// pega a instância do ServiceLocator.
 
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorPermissaoEspecialLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_PERMISSAO_ESPECIAL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorPermissaoEspecialLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_PERMISSAO_ESPECIAL_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -364,26 +292,15 @@ public class ControladorImovelSEJB implements SessionBean {
 		}
 	}
 
-	/**
-	 * Retorna o valor de controladorAcesso
-	 * 
-	 * @return O valor de controladorAcesso
-	 */
 	private ControladorAcessoLocal getControladorAcesso() {
 		ControladorAcessoLocalHome localHome = null;
 		ControladorAcessoLocal local = null;
 
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorAcessoLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_ACESSO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorAcessoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_ACESSO_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -394,27 +311,15 @@ public class ControladorImovelSEJB implements SessionBean {
 		}
 	}
 
-	/**
-	 * Retorna o valor de controladorCobranca
-	 * 
-	 * @return O valor de controladorCobranca
-	 */
 	private ControladorCobrancaLocal getControladorCobranca() {
-
 		ControladorCobrancaLocalHome localHome = null;
 		ControladorCobrancaLocal local = null;
 
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorCobrancaLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_COBRANCA_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorCobrancaLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_COBRANCA_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -425,27 +330,15 @@ public class ControladorImovelSEJB implements SessionBean {
 		}
 	}
 
-	/**
-	 * Retorna o valor de controladorCobranca
-	 * 
-	 * @return O valor de controladorCobranca
-	 */
 	private ControladorFaturamentoLocal getControladorFaturamento() {
-
 		ControladorFaturamentoLocalHome localHome = null;
 		ControladorFaturamentoLocal local = null;
 
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorFaturamentoLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorFaturamentoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -456,27 +349,16 @@ public class ControladorImovelSEJB implements SessionBean {
 		}
 	}
 
-	/**
-	 * Retorna o valor de controladorEndereco
-	 * 
-	 * @return O valor de controladorEndereco
-	 */
 	private ControladorEnderecoLocal getControladorEndereco() {
 
 		ControladorEnderecoLocalHome localHome = null;
 		ControladorEnderecoLocal local = null;
 
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorEnderecoLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_ENDERECO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorEnderecoLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_ENDERECO_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -487,67 +369,28 @@ public class ControladorImovelSEJB implements SessionBean {
 		}
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @exception CreateException
-	 *                Descrição da exceção
-	 */
 	public void ejbCreate() throws CreateException {
-
 		repositorioImovel = RepositorioImovelHBM.getInstancia();
-
 		repositorioCategoria = RepositorioCategoriaHBM.getInstancia();
-
 		repositorioFaturamento = RepositorioFaturamentoHBM.getInstancia();
-
 		repositorioCobranca = RepositorioCobrancaHBM.getInstancia();
-		
-		repositorioSeguranca = RepositorioSegurancaHBM.getInstancia();
-		
-		repositorioAtualizacaoCadastral = RepositorioAtualizacaoCadastralHBM.getInstancia();
-		
 	}
 
-	/**
-	 * Método chamado no momento que o bean é removido do contexto do container
-	 */
 	public void ejbRemove() {
 	}
 
-	/**
-	 * Método chamado no momento que o bean é ativado no container
-	 */
 	public void ejbActivate() {
 	}
 
-	/**
-	 * Método chamado no momento que o bean é passivado no container
-	 */
 	public void ejbPassivate() {
 	}
-
-	/**
-	 * * Seta o valor de sessionContext
-	 * 
-	 * @param sessionContext
-	 *            O novo valor de sessionContext
-	 */
 
 	public void setSessionContext(SessionContext sessionContext) {
 		this.sessionContext = sessionContext;
 	}
 
-	/**
-	 * inseri um imvoel na base
-	 * 
-	 * @param imovel
-	 *            Descrição do parâmetro
-	 * @throws ControladorException
-	 */
 	public void inserirImovel(Imovel imovel) throws ControladorException {
 		try {
-			
 			repositorioImovel.inserirImovel(imovel);
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
@@ -555,157 +398,73 @@ public class ControladorImovelSEJB implements SessionBean {
 		}
 	}
 
-	/**
-	 * inseri o imoóvel economia e o cliente imovel economia do imóvel
-	 * subcategoria
-	 * 
-	 * @param imoveisEconomias
-	 *            Description of the Parameter
-	 * @throws ControladorException
-	 */
-	public void informarImovelEconomias(Collection imoveisEconomias,
-			Usuario usuarioLogado) throws ControladorException {
-		// cria um iterator para a coleção de imoveis subcategorias
-		Iterator imovelEconomiasIterator = imoveisEconomias.iterator();
+	@SuppressWarnings({ "rawtypes", "unchecked" })
+	public void informarImovelEconomias(Collection<ImovelEconomia> imoveisEconomias, Usuario usuarioLogado) throws ControladorException {
+		Iterator<ImovelEconomia> imovelEconomiasIterator = imoveisEconomias.iterator();
 
-		// percorre a coleção de imoveis subcategoria para inserir os imoveis
-		// economias e c
-		// cliente imoveis economia
 		while (imovelEconomiasIterator.hasNext()) {
-			ImovelEconomia imovelEconomia = (ImovelEconomia) imovelEconomiasIterator
-					.next();
+			ImovelEconomia imovelEconomia = (ImovelEconomia) imovelEconomiasIterator.next();
 
-			Collection clienteImovelEconomias = imovelEconomia
-					.getClienteImovelEconomias();
+			Collection clienteImovelEconomias = imovelEconomia.getClienteImovelEconomias();
+			Iterator clienteImovelEconomiaIterator = clienteImovelEconomias.iterator();
 
-			Iterator clienteImovelEconomiaIterator = clienteImovelEconomias
-					.iterator();
-
-			// cria uma coleção dos clientes imoveis economia que serão
-			// atualizadas.
 			Collection clientesImovelsAtualizadas = new HashSet();
-
-			// cria uma coleção dos clientes imoveis economia que serão
-			// atualizadas.
 			Collection clientesImovelsInseridas = new HashSet();
-
-			// coleção de clientes imoveis economia que vai ser inserido no
-			// Set de
-			// fr imovel economia
 			Collection<ClienteImovelEconomia> clientesImoveisEconomiasHashSet = new HashSet();
 
-			// cria um laço para a inserção dos clientes imovel economia
-			// objeto de imovel economia contém uma coleção de clientes
-			// imovel economia
 			while (clienteImovelEconomiaIterator.hasNext()) {
-				ClienteImovelEconomia clienteImovelEconomia = (ClienteImovelEconomia) clienteImovelEconomiaIterator
-						.next();
-
+				ClienteImovelEconomia clienteImovelEconomia = (ClienteImovelEconomia) clienteImovelEconomiaIterator.next();
 				clienteImovelEconomia.setImovelEconomia(imovelEconomia);
-				if (clienteImovelEconomia.getId() != null
-						&& !clienteImovelEconomia.getId().equals("")) {
-					// adiciona o cliente imovel economia na coleção que
-					// serão atualizadas
+				
+				if (clienteImovelEconomia.getId() != null && !clienteImovelEconomia.getId().equals("")) {
 					clientesImovelsAtualizadas.add(clienteImovelEconomia);
 				} else {
-					// adiciona o cliente imovel economia na coleção que
-					// serão inseridas
 					clientesImovelsInseridas.add(clienteImovelEconomia);
 				}
-				if (clienteImovelEconomia != null
-						&& !clienteImovelEconomia.equals("")) {
+				if (clienteImovelEconomia != null && !clienteImovelEconomia.equals("")) {
 					clientesImoveisEconomiasHashSet.add(clienteImovelEconomia);
 				}
 			}
 
-			if (clientesImovelsAtualizadas != null
-					&& !clientesImovelsAtualizadas.isEmpty()) {
-				this.getControladorCliente().atualizarClienteImovelEconomia(
-						clientesImovelsAtualizadas);
+			if (clientesImovelsAtualizadas != null && !clientesImovelsAtualizadas.isEmpty()) {
+				this.getControladorCliente().atualizarClienteImovelEconomia(clientesImovelsAtualizadas);
 			}
 
-			// remove todos os clientes imoveis economias do imovel economia
-			/*
-			 * if (imovelEconomia.getId() != null &&
-			 * !imovelEconomia.getId().equals("")) { repositorioImovel
-			 * .removerClienteImovelEconomia(imovelEconomia .getId()); }
-			 */
-
-			// seta para null a coleção de clientes imoveis economia
 			imovelEconomia.setClienteImovelEconomias(null);
 
 			Integer idImovelEconomia = null;
 
-			/**
-			 * alterado por pedro alexandre dia 19/11/2006 alterado para acoplar
-			 * o esquema de segurança de acesso por abragência
-			 */
-			// ------------ CONTROLE DE ABRANGENCIA ----------------
-			Abrangencia abrangencia = new Abrangencia(usuarioLogado,
-					imovelEconomia.getImovelSubcategoria().getComp_id()
-							.getImovel());
+			Abrangencia abrangencia = new Abrangencia(usuarioLogado,imovelEconomia.getImovelSubcategoria().getComp_id().getImovel());
 
 			if (!getControladorAcesso().verificarAcessoAbrangencia(abrangencia)) {
 				sessionContext.setRollbackOnly();
-				throw new ControladorException(
-						"atencao.acesso.negado.abrangencia");
+				throw new ControladorException("atencao.acesso.negado.abrangencia");
 			} else {
-				// recupera o id do imovel economia
-				// para ser inserido no cliente imovel economia
-				idImovelEconomia = (Integer) getControladorUtil()
-						.inserirOuAtualizar(imovelEconomia);
+				idImovelEconomia = (Integer) getControladorUtil().inserirOuAtualizar(imovelEconomia);
 			}
-			// ------------ FIM CONTROLE DE ABRANGENCIA ----------------
 
-			// caso o id do imovel economia for diferente de nulo
-			// ou seja caso seja atualização não precisa setar o id
 			if (idImovelEconomia != null) {
-
 				imovelEconomia.setId(idImovelEconomia);
 			}
-			Iterator clienteImovelEconomiaInserirIterator = clientesImovelsInseridas
-					.iterator();
 
-			// cria um laço para a inserção dos clientes imovel economia
-			// objeto de imovel economia contém uma coleção de clientes
-			// imovel economia
+			Iterator clienteImovelEconomiaInserirIterator = clientesImovelsInseridas.iterator();
+
 			while (clienteImovelEconomiaInserirIterator.hasNext()) {
-				ClienteImovelEconomia clienteImovelEconomia = (ClienteImovelEconomia) clienteImovelEconomiaInserirIterator
-						.next();
+				ClienteImovelEconomia clienteImovelEconomia = (ClienteImovelEconomia) clienteImovelEconomiaInserirIterator.next();
 
 				clienteImovelEconomia.setImovelEconomia(imovelEconomia);
-				if (clienteImovelEconomia.getDataFimRelacao() == null
-						|| clienteImovelEconomia.getDataFimRelacao().equals("")) {
+				if (clienteImovelEconomia.getDataFimRelacao() == null || clienteImovelEconomia.getDataFimRelacao().equals("")) {
 					getControladorUtil().inserir(clienteImovelEconomia);
 				}
 			}
 
-			imovelEconomia.setClienteImovelEconomias(new HashSet(
-					clientesImoveisEconomiasHashSet));
-
+			imovelEconomia.setClienteImovelEconomias(new HashSet(clientesImoveisEconomiasHashSet));
 		}
-
 	}
 	
-	/**
-	 * Retorna o cep do imóvel
-	 * 
-	 * @param imovel
-	 * 
-	 * @return Descrição do retorno
-	 * 
-	 * @exception ControladorException
-	 * 
-	 */
-	public Cep pesquisarCepImovel(Imovel imovel)
-			throws ControladorException {
-
+	public Cep pesquisarCepImovel(Imovel imovel) throws ControladorException {
 		try {
-
-			// Pesquisa e retornar o CEP
-			return repositorioImovel
-					.pesquisarCepImovel(imovel);
-
+			return repositorioImovel.pesquisarCepImovel(imovel);
 		} catch (ErroRepositorioException ex) {        
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
@@ -713,47 +472,22 @@ public class ControladorImovelSEJB implements SessionBean {
 		
 	}
 
-	/**
-	 * Retorna a quantidade de economias de um imóvel
-	 * 
-	 * @param imovel
-	 *            Imóvel que será consultado
-	 * @return Quantidade de economias
-	 * @throws ControladorException
-	 */
-	public int obterQuantidadeEconomias(Imovel imovel)
-			throws ControladorException {
-
+	public int obterQuantidadeEconomias(Imovel imovel) throws ControladorException {
 		Short quantidadeEconomias = null;
 
 		try {
-
-			// Pesquisa e retornar a quantidade de economias em um objeto
-			Object objetoQuantidadeEconomias = repositorioImovel
-					.pesquisarObterQuantidadeEconomias(imovel);
-
-			// Obtém a quantidade de economias em integer
+			Object objetoQuantidadeEconomias = repositorioImovel.pesquisarObterQuantidadeEconomias(imovel);
 			quantidadeEconomias = (Short) objetoQuantidadeEconomias;
 		} catch (ErroRepositorioException ex) {        
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
+		return quantidadeEconomias.intValue();	
+	}
 
-		return quantidadeEconomias.intValue();	}
-
-	/**
-	 * Retorna a coleção de economias de um imóvel
-	 * 
-	 * @param imovel
-	 *            Imóvel que será consultado
-	 * @return Quantidade de economias
-	 * @throws ControladorException
-	 */
-	public Collection obterColecaoImovelSubcategorias(Imovel imovel,
-			Integer quantidadeMinimaEconomia) throws ControladorException {
-
+	@SuppressWarnings("rawtypes")
+	public Collection obterColecaoImovelSubcategorias(Imovel imovel, Integer quantidadeMinimaEconomia) throws ControladorException {
 		Collection retorno = null;
-
 		Collection colecaoImovelSubCategoria = null;
 
 		try {
@@ -763,86 +497,55 @@ public class ControladorImovelSEJB implements SessionBean {
 			throw new ControladorException("erro.sistema", ex);
 		}
 
-		if (colecaoImovelSubCategoria != null
-				&& !colecaoImovelSubCategoria.isEmpty()) {
+		if (colecaoImovelSubCategoria != null && !colecaoImovelSubCategoria.isEmpty()) {
 
-			Iterator colecaoImovelSubCategoriaIterator = colecaoImovelSubCategoria
-					.iterator();
+			Iterator colecaoImovelSubCategoriaIterator = colecaoImovelSubCategoria.iterator();
 
 			while (colecaoImovelSubCategoriaIterator.hasNext()) {
-
-				ImovelSubcategoria imovelSubcategoria = (ImovelSubcategoria) colecaoImovelSubCategoriaIterator
-						.next();
+				ImovelSubcategoria imovelSubcategoria = (ImovelSubcategoria) colecaoImovelSubCategoriaIterator.next();
 
 				if (colecaoImovelSubCategoria.size() < quantidadeMinimaEconomia
 						&& imovelSubcategoria.getQuantidadeEconomias() < quantidadeMinimaEconomia) {
 					sessionContext.setRollbackOnly();
-					throw new ControladorException(
-							"atencao.quantidade_economia_por_subcategoria");
+					throw new ControladorException("atencao.quantidade_economia_por_subcategoria");
 				}
 			}
 
 		} else {
-			// Caso a coleção não tenha retornado objetos
 			sessionContext.setRollbackOnly();
-			throw new ControladorException("atencao.pesquisa.nenhumresultado",
-					null, "imóvel subcategoria");
+			throw new ControladorException("atencao.pesquisa.nenhumresultado",null, "imóvel subcategoria");
 		}
-
 		retorno = colecaoImovelSubCategoria;
 
 		return retorno;
 	}
 
-	/**
-	 * remove o imóvel economia e o cliente imovel economia do imóvel
-	 * subcategoria
-	 * 
-	 * @param imovelEconomia
-	 *            Description of the Parameter
-	 * @throws ControladorException
-	 */
-	public void removerImovelEconomia(ImovelEconomia imovelEconomia,
-			Usuario usuarioLogado) throws ControladorException {
+	@SuppressWarnings("rawtypes")
+	public void removerImovelEconomia(ImovelEconomia imovelEconomia, Usuario usuarioLogado) throws ControladorException {
 
 		if (!imovelEconomia.getImovelSubcategoria().getComp_id().getImovel()
 				.getImovelPerfil().getId().equals(ImovelPerfil.TARIFA_SOCIAL)) {
-			/**
-			 * alterado por pedro alexandre dia 19/11/2006 alteração feita para
-			 * acoplar o controle de abrangência de usuário
-			 */
-			// ------------ CONTROLE DE ABRANGENCIA ----------------
-			Abrangencia abrangencia = new Abrangencia(usuarioLogado,
-					imovelEconomia.getImovelSubcategoria().getComp_id()
-							.getImovel());
+			Abrangencia abrangencia = new Abrangencia(usuarioLogado, imovelEconomia.getImovelSubcategoria().getComp_id().getImovel());
 
 			if (!getControladorAcesso().verificarAcessoAbrangencia(abrangencia)) {
 				sessionContext.setRollbackOnly();
-				throw new ControladorException(
-						"atencao.acesso.negado.abrangencia");
+				throw new ControladorException("atencao.acesso.negado.abrangencia");
 			} else {
 
 				FiltroTarifaSocialDadoEconomia filtroTarifaSocialDadoEconomia = new FiltroTarifaSocialDadoEconomia();
-				filtroTarifaSocialDadoEconomia
-						.adicionarParametro(new ParametroSimples(
+				filtroTarifaSocialDadoEconomia.adicionarParametro(new ParametroSimples(
 								FiltroTarifaSocialDadoEconomia.IMOVEL_ECONOMIA_ID,
 								imovelEconomia.getId()));
 
-				Collection colecaoTarifaSocial = getControladorUtil()
-						.pesquisar(filtroTarifaSocialDadoEconomia,
+				Collection colecaoTarifaSocial = getControladorUtil().pesquisar(filtroTarifaSocialDadoEconomia,
 								TarifaSocialDadoEconomia.class.getName());
 
-				if (colecaoTarifaSocial != null
-						&& !colecaoTarifaSocial.isEmpty()) {
+				if (colecaoTarifaSocial != null && !colecaoTarifaSocial.isEmpty()) {
 
-					Iterator colecaoTarifaSocialIterator = colecaoTarifaSocial
-							.iterator();
+					Iterator colecaoTarifaSocialIterator = colecaoTarifaSocial.iterator();
 
 					while (colecaoTarifaSocialIterator.hasNext()) {
-
-						TarifaSocialDadoEconomia tarifaSocialDadoEconomia = (TarifaSocialDadoEconomia) colecaoTarifaSocialIterator
-								.next();
-
+						TarifaSocialDadoEconomia tarifaSocialDadoEconomia = (TarifaSocialDadoEconomia) colecaoTarifaSocialIterator.next();
 						getControladorUtil().remover(tarifaSocialDadoEconomia);
 					}
 				}
@@ -851,25 +554,20 @@ public class ControladorImovelSEJB implements SessionBean {
 						Integer.parseInt(imovelEconomia.getId().toString()),
 						ImovelEconomia.class.getName(), null, null);
 			}
-			// ------------ FIM CONTROLE DE ABRANGENCIA ----------------
 		} else {
 			sessionContext.setRollbackOnly();
-			throw new ControladorException(
-					"atencao.nao_exclusao_dados_economia");
+			throw new ControladorException("atencao.nao_exclusao_dados_economia");
 		}
-
 	}
 
 	/**
 	 * [UC0011] Inserir Imóvel
 	 *
-	 * @author Raphael Rossiter, Raphael Rossiter
-	 * @date 19/08/2008, 22/05/2009
-	 *
 	 * @param inserirImovelHelper
 	 * @return Integer
 	 * @throws ControladorException
 	 */
+	@SuppressWarnings("rawtypes")
 	public Integer inserirImovelRetorno(InserirImovelHelper inserirImovelHelper)
 			throws ControladorException {
 
@@ -3672,15 +3370,7 @@ public class ControladorImovelSEJB implements SessionBean {
 		}
 	}
 
-	/**
-	 * Pesquisa uma coleção de categorias
-	 * 
-	 * @return Coleção de Categorias
-	 * @exception ErroRepositorioException
-	 *                Erro no hibernate
-	 */
-	public Collection<Categoria> pesquisarCategoria()
-			throws ControladorException {
+	public Collection<Categoria> pesquisarCategoria() throws ControladorException {
 		try {
 			return repositorioCategoria.pesquisarCategoria();
 		} catch (ErroRepositorioException ex) {

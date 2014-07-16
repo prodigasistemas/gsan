@@ -1,37 +1,26 @@
 package gcom.faturamento.debito;
 
 import gcom.cadastro.imovel.Categoria;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
-public class DebitoCobradoCategoriaHistorico implements Serializable {
+public class DebitoCobradoCategoriaHistorico implements Serializable, IDebitoCobradoCategoria {
 	private static final long serialVersionUID = 1L;
-    /** identifier field */
-    private gcom.faturamento.debito.DebitoCobradoCategoriaHistoricoPK comp_id;
-
-    /** nullable persistent field */
+   
+    private DebitoCobradoCategoriaHistoricoPK comp_id;
     private Integer quantidadeEconomia;
-
-    /** nullable persistent field */
     private BigDecimal valorCategoria;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-
-    /** nullable persistent field */
-    private gcom.faturamento.debito.DebitoCobradoHistorico debitoCobradoHistorico;
-
-    /** nullable persistent field */
+    private DebitoCobradoHistorico debitoCobradoHistorico;
     private Categoria categoria;
 
-    /** full constructor */
-    public DebitoCobradoCategoriaHistorico(gcom.faturamento.debito.DebitoCobradoCategoriaHistoricoPK comp_id, Integer quantidadeEconomia, BigDecimal valorCategoria, Date ultimaAlteracao, gcom.faturamento.debito.DebitoCobradoHistorico debitoCobradoHistorico, Categoria categoria) {
+    public DebitoCobradoCategoriaHistorico(DebitoCobradoCategoriaHistoricoPK comp_id, Integer quantidadeEconomia, BigDecimal valorCategoria, Date ultimaAlteracao, DebitoCobradoHistorico debitoCobradoHistorico, Categoria categoria) {
         this.comp_id = comp_id;
         this.quantidadeEconomia = quantidadeEconomia;
         this.valorCategoria = valorCategoria;
@@ -40,20 +29,18 @@ public class DebitoCobradoCategoriaHistorico implements Serializable {
         this.categoria = categoria;
     }
 
-    /** default constructor */
     public DebitoCobradoCategoriaHistorico() {
     }
 
-    /** minimal constructor */
-    public DebitoCobradoCategoriaHistorico(gcom.faturamento.debito.DebitoCobradoCategoriaHistoricoPK comp_id) {
+    public DebitoCobradoCategoriaHistorico(DebitoCobradoCategoriaHistoricoPK comp_id) {
         this.comp_id = comp_id;
     }
 
-    public gcom.faturamento.debito.DebitoCobradoCategoriaHistoricoPK getComp_id() {
+    public DebitoCobradoCategoriaHistoricoPK getComp_id() {
         return this.comp_id;
     }
 
-    public void setComp_id(gcom.faturamento.debito.DebitoCobradoCategoriaHistoricoPK comp_id) {
+    public void setComp_id(DebitoCobradoCategoriaHistoricoPK comp_id) {
         this.comp_id = comp_id;
     }
 
@@ -81,15 +68,25 @@ public class DebitoCobradoCategoriaHistorico implements Serializable {
         this.ultimaAlteracao = ultimaAlteracao;
     }
 
-    public gcom.faturamento.debito.DebitoCobradoHistorico getDebitoCobradoHistorico() {
+    public DebitoCobradoHistorico getDebitoCobradoHistorico() {
         return this.debitoCobradoHistorico;
     }
 
-    public void setDebitoCobradoHistorico(gcom.faturamento.debito.DebitoCobradoHistorico debitoCobradoHistorico) {
-        this.debitoCobradoHistorico = debitoCobradoHistorico;
+    public void setDebitoCobradoHistorico(DebitoCobradoHistorico debitoCobradoHistorico) {
+    	if (comp_id == null) {
+    		comp_id = new DebitoCobradoCategoriaHistoricoPK();
+    	}
+    	
+    	comp_id.setDebitoCobradoHistoricoId(debitoCobradoHistorico != null ? debitoCobradoHistorico.getId() : null);
+    	this.debitoCobradoHistorico = debitoCobradoHistorico;
     }
 
     public Categoria getCategoria() {
+    	if (comp_id == null) {
+    		comp_id = new DebitoCobradoCategoriaHistoricoPK();
+    	}
+    	
+    	comp_id.setCategoriaId(categoria != null ? categoria.getId() : null);
         return this.categoria;
     }
 
@@ -117,5 +114,18 @@ public class DebitoCobradoCategoriaHistorico implements Serializable {
             .append(getComp_id())
             .toHashCode();
     }
+
+	public DebitoCobrado getDebitoCobrado() {
+		return new DebitoCobrado(this.getDebitoCobradoHistorico().getId());
+	}
+
+	public void setDebitoCobrado(IDebitoCobrado debitoCobrado) {
+		if (comp_id == null) {
+			comp_id = new DebitoCobradoCategoriaHistoricoPK();
+		}
+		
+		comp_id.setDebitoCobradoHistoricoId(debitoCobradoHistorico != null ? debitoCobradoHistorico.getId() : null);
+		this.comp_id.getDebitoCobradoHistoricoId();
+	}
 
 }

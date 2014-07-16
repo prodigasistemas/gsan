@@ -16,64 +16,29 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 public class GerenciaRegional extends ObjetoTransacao implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	/** identifier field */
 	private Integer id;
-
-	/** persistent field */
 	private String nome;
-
-	/** persistent field */
 	private String nomeAbreviado;
-
-	/** nullable persistent field */
 	private String numeroImovel;
-
-	/** nullable persistent field */
 	private String complementoEndereco;
-
-	/** persistent field */
 	private String fone;
-
-	/** nullable persistent field */
 	private String ramalFone;
-
-	/** nullable persistent field */
 	private String fax;
-
-	/** nullable persistent field */
 	private String email;
-
-	/** nullable persistent field */
 	private Short indicadorUso;
-
-	/** nullable persistent field */
 	private Date ultimaAlteracao;
-
-	/** persistent field */
-	private Logradouro logradouro;
-
-	/** persistent field */
-	private Bairro bairro;
-
-	/** persistent field */
-	private EnderecoReferencia enderecoReferencia;
-	
-	/** persistent field */
-	private Cliente cliente;
-	
-	/** persistent field */
 	private String cnpjGerenciaRegional;
-	
-	/** persistent field */
+
+	private Logradouro logradouro;
+	private Bairro bairro;
+	private EnderecoReferencia enderecoReferencia;
+	private Cliente cliente;
 	private Cep cep;
-
 	private LogradouroCep logradouroCep;
-
 	private LogradouroBairro logradouroBairro;
 
 	public String[] retornaCamposChavePrimaria() {
@@ -81,7 +46,13 @@ public class GerenciaRegional extends ObjetoTransacao implements Serializable {
 		return retorno;
 	}
 
-	/** full constructor */
+	public GerenciaRegional() {
+	}
+	
+	public GerenciaRegional(Integer id) {
+		this.id = id;
+	}
+
 	public GerenciaRegional(String nome, String nomeAbreviado,
 			String numeroImovel, String complementoEndereco, String fone,
 			String ramalFone, String fax, String email, Short indicadorUso,
@@ -106,11 +77,7 @@ public class GerenciaRegional extends ObjetoTransacao implements Serializable {
 		this.logradouroBairro = logradouroBairro;
 	}
 
-	/** default constructor */
-	public GerenciaRegional() {
-	}
 
-	/** minimal constructor */
 	public GerenciaRegional(String nome, String nomeAbreviado, String fone,
 			Logradouro logradouro, Bairro bairro,
 			EnderecoReferencia enderecoReferencia, Cep cep) {
@@ -259,11 +226,6 @@ public class GerenciaRegional extends ObjetoTransacao implements Serializable {
 		this.logradouroCep = logradouroCep;
 	}
 
-	/**
-	 * Gets the endereco attribute of the Imovel object
-	 * 
-	 * @return The endereco value
-	 */
 	public String getEnderecoFormatado() {
 		String endereco = null;
 
