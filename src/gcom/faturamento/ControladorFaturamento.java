@@ -16904,6 +16904,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		novaConta.setContaGeral(contaGeral);
 		novaConta.setUltimaAlteracao(new Date());
 		novaConta.setDataVencimentoConta(new Date());
+		novaConta.setContaMotivoInclusao(new ContaMotivoInclusao(ContaMotivoInclusao.RECUPERACAO_DE_CREDITO));
 		
 		Rota rota = getControladorMicromedicao().buscarRotaDoImovel(novaConta.getImovel().getId());
 
