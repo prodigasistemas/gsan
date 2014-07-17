@@ -1592,7 +1592,7 @@ public class ControladorAcessoSEJB implements SessionBean {
 
 		// Cria a primeira parte da arvore
 		StringBuffer menu = new StringBuffer();
-		menu.append("<link rel=\"StyleSheet\" href=\"/sgcq/css/dtree.css\" type=\"text/css\" /><script type=\"text/javascript\" src=\"/sgcq/javascript/dtree.js\"></script>\n");
+		menu.append("<link rel=\"StyleSheet\" href=\"/gsan/css/dtree.css\" type=\"text/css\" /><script type=\"text/javascript\" src=\"/gsan/javascript/dtree.js\"></script>\n");
 		menu.append("<div class=\"dtree\">\n");
 		menu.append("<script><!--\n p = new dTree('p');\n");
 		menu.append("p.add(0,-1,'Funcionalidades');\n");
