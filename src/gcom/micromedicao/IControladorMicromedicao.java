@@ -1861,30 +1861,14 @@ public interface IControladorMicromedicao {
 	 * 
 	 * [UC0153] Apresentar dados para Analise da medição e Consumo
 	 */
+	@SuppressWarnings("rawtypes")
 	public Collection carregarDadosConsumo(Integer idImovel, boolean ligacaoAgua) throws ControladorException;
 	
-	/**
-	 * 
-	 * Busca uma Lista de Imoveis por Rota
-	 * 
-	 * @param idRota
-	 * @return
-	 * @throws ControladorException
-	 */
-	public Collection<DadosMovimentacao> buscarImoveisPorRota(Rota idRota,
-			Integer anoMesReferencia, boolean manter) throws ControladorException;
+	public Collection<DadosMovimentacao> buscarImoveisPorRota(Integer idImovel, Rota idRota, boolean manter) throws ControladorException;
 
 	/**
-	 * 
-	 * Método que atualiza as leituras e Anormalidades sem utilizar o Celular.
-	 * 
 	 * [UC0712] Atualizar Leituras e Anormalidades do Celular
-	 * 
-	 * @author Thiago Nascimento
-	 * @date 05/12/2007
-	 * 
-	 * @param dados
-	 * @throws ControladorException
+	 * Método que atualiza as leituras e Anormalidades sem utilizar o Celular.
 	 */
 	public void atualizarLeituraAnormalidadeSemCelular(Vector<DadosMovimentacao> dados) throws ControladorException;
 	

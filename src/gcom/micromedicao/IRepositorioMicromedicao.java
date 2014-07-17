@@ -2224,85 +2224,23 @@ public interface IRepositorioMicromedicao {
 	public Object[] obterDadosTiposMedicao(Integer idImovel,Integer idLigacaoAgua, 
 			Integer anoMesReferencia) throws ErroRepositorioException;
 	
-	/**
-	 * 
-	 * Busca uma Lista de Imoveis por Rota
-	 * 
-	 * @param idRota
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
-	public Collection buscarImoveisPorRota(Integer idRota, String empresa, Integer anoMesFaturamento) throws ErroRepositorioException;
+	@SuppressWarnings("rawtypes")
+	public Collection buscarImoveisPorRota(Integer idImovel, Integer idRota, String empresa, Integer anoMesFaturamento) throws ErroRepositorioException;
 	
-
-	/**
-	 * Remove a Relação de Leiturista com a Rota
-	 * 
-	 * @autor Thiago Nascimento
-	 * 
-	 * @param rotas
-	 * @throws ErroRepositorioException
-	 */
+	@SuppressWarnings("rawtypes")
 	public void removerRelacaoRotaLeiturista(Collection rotas) throws ErroRepositorioException;
 	
-	/**
-	 * Avalia se existe algum arquivo liberado para o leiturista do arquivo passado
-	 * no parametro.
-	 * 
-	 * @autor Thiago Nascimento
-	 * 
-	 * @param idArquivo
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	public boolean temArquivoLiberado(Integer idArquivo) throws ErroRepositorioException;
 	
-	/**
-	 * 
-	 * Retorno o valor maximo da Sequencia de Rota do Leiturista
-	 * 
-	 * @author Thiago Nascimento 
-	 * 
-	 * @param leiturista
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	public Integer numeroSequenciaUltimaRota(Integer leiturista) throws ErroRepositorioException;
 	
-	/**
-	 * 
-	 * Retorno o valor máximo do Id do Leiturista.
-	 * 
-	 * @author Thiago Nascimento
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	public Integer maximoIdLeiturista() throws ErroRepositorioException;
 	
-	/**
-	 * 
-	 * Retorna a quantidade de Leitura feitas na Rota para o AnoMes de referencia.
-	 * 
-	 * @author Thiago Nascimento
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
 	public Integer quantidadeLeiturasRealizada(Integer rota, Integer anoMes,Integer idServicoTipoCelular) throws ErroRepositorioException;
 	
 	/**
 	 * [UC0800] - Obter Consumo Não Medido
-	 *
 	 * Obter o consumo mínimo associado à faixa de área do imóvel e a categoria ou subcategoria informada
-	 *
-	 * @author Raphael Rossiter
-	 * @date 22/05/2008
-	 *
-	 * @param areaConstruida
-	 * @param anoMesReferencia
-	 * @param idSubcategoria
-	 * @param idCategoria
-	 * @return Integer
-	 * @throws ErroRepositorioException
 	 */
 	public Integer pesquisarConsumoMinimoArea(BigDecimal areaConstruida, Integer anoMesReferencia,
 			Integer idSubcategoria, Integer idCategoria) throws ErroRepositorioException ;

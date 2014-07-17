@@ -11748,15 +11748,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 
 	}
 
-	/**
-     * Busca uma Lista de Imoveis por Rota
-     * 
-     * @autor Thiago Nascimento
-     * @param idRota
-     * @return
-     * @throws ErroRepositorioException
-     */
-    public Collection buscarImoveisPorRota(Integer idRota, String empresa, Integer anoMesFaturamento)
+    public Collection buscarImoveisPorRota(Integer idImovel, Integer idRota, String empresa, Integer anoMesFaturamento)
                                                                                                      throws ErroRepositorioException {
         Collection retorno = null;
         Session session = HibernateUtil.getSession();
@@ -11822,33 +11814,21 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
             consulta.append("   LEFT JOIN localidade.gerenciaRegional gerenciaRegional ");
             consulta.append("   LEFT JOIN movimento.leituraAnormalidade leituraAnormalidade ");
             consulta.append("WHERE rota.id = :idRota AND movimento.anoMesMovimento = :anoMesFaturamento ");
-			/**TODO: COSANPA
-			 * Mantis 631 - Alterações para carregar apenas imóveis com hidrometro no momento
-			 * da geração da rota.
-			 * 
-			 * @author Wellington Rocha
-			 * @date 12/09/2012*/
             consulta.append(" and (movimento.numeroHidrometro is not null and movimento.numeroHidrometro <> '') ");
+
+            if (idImovel != null) {
+            	consulta.append("and imovel.id = " + idImovel);
+            }
             
             if (empresa.toUpperCase().equals("COMPESA")) {
                 consulta.append(" ORDER BY movimento.numeroSequencialRota,empresa.id,localidade.id,movimento,movimento.numeroQuadra,movimento.numeroLoteImovel,movimento.numeroSubloteImovel");
             } else {
                 if (empresa.toUpperCase().equals("COSAMA")) {
                     consulta.append(" ORDER BY localidade.id, movimento.codigoSetorComercial, imovel.quadra.numeroQuadra, imovel.lote, imovel.subLote");
-                } else { // if (empresa.toUpperCase().equals("CAERN")) {
-                	/**
-    				 * TODO : COSANPA
-    				 * 06/05/2011 - Pamela Gatinho
-    				 * Alteração emergencial para poder finalizar a leitura do mês de abril dos grupos 101 e 401,
-    				 * poir foram feitas na planilha e ela está ordenada pela inscrição do imóvel.
-    				 */
+                } else { 
                 	consulta.append(" order by imovel.localidade.id, imovel.setorComercial.codigo, imovel.quadra.numeroQuadra, imovel.lote, imovel.subLote ");
                 }
             }
-
-            // + "order by
-            // localidade.id,setorComercial.codigo,quadra.numeroQuadra,imovel.lote,imovel.subLote,
-            // imovel.numeroImovel";
 
             retorno = session.createQuery(consulta.toString())
                              .setInteger("idRota", idRota)

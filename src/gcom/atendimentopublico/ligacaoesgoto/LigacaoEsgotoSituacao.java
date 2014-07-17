@@ -8,82 +8,44 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 public class LigacaoEsgotoSituacao extends ObjetoTransacao {
 	
 	private static final long serialVersionUID = 1L;
 
-	/** identifier field */
 	private Integer id;
-
-	/** nullable persistent field */
 	private String descricao;
-
-	/** nullable persistent field */
 	private String descricaoAbreviado;
-
-	/** nullable persistent field */
 	private Short indicadorUso;
-
-	/** nullable persistent field */
 	private Date ultimaAlteracao;
-	
-	/** nullable persistent field */
 	private Short indicadorFaturamentoSituacao;
-	
-	/** nullable persistent field */
 	private Integer volumeMinimoFaturamento;
-	
 	private Short indicadorExistenciaRede;
-	
 	private Short indicadorExistenciaLigacao;
-	
-	/**
-	 * @since 19/09/2007
-	 */
 	private String descricaoComId;
 
-	// ---CONSTANTES SISTEMA
-
 	public final static Integer POTENCIAL = new Integer(1);
-
 	public final static Integer FACTIVEL = new Integer(2);
-
 	public final static Integer LIGADO = new Integer(3);
-
 	public final static Integer EM_FISCALIZACAO = new Integer(4);
-
 	public final static Integer LIG_FORA_DE_USO = new Integer(5);
-
 	public final static Integer TAMPONADO = new Integer(6);
 
-	// Descrição Tipo de Serviços
-
-	public final static String SITUACAO_LIGADO_FORA_DE_USO = new String(
-			"LIGADO FORA DE USO");
-
+	public final static String SITUACAO_LIGADO_FORA_DE_USO = new String("LIGADO FORA DE USO");
 	public final static String SITUACAO_LIGADO = new String("LIGADO");
 
-	// Descrição Tipo de Serviços
 	public final static Integer SITUACAO_TAMPONADO = new Integer(1);
-
 	public final static Integer SITUACAO_DESATIVACAO = new Integer(2);
-
 	public final static Integer SITUACAO_RESTABELECIMENTO = new Integer(3);
-
 	public final static Integer SITUACAO_REATIVACAO = new Integer(4);
 	
 	public final static Short FATURAMENTO_ATIVO = new Short("1");
 	
 	public final static Short INDICADOR_EXISTENCIA_REDE_SIM = new Short("1");
-    
     public final static Short INDICADOR_EXISTENCIA_REDE_NAO = new Short("2");
     
     public final static Short INDICADOR_EXISTENCIA_LIGACAO_SIM = new Short("1");
-    
     public final static Short INDICADOR_EXISTENCIA_LIGACAO_NAO = new Short("2");
 
-	/** full constructor */
 	public LigacaoEsgotoSituacao(String descricao, Short indicadorUso,
 			Date ultimaAlteracao, Short indicadorFaturamentoSituacao, Integer volumeMinimoFaturamento) {
 		this.descricao = descricao;
@@ -93,7 +55,6 @@ public class LigacaoEsgotoSituacao extends ObjetoTransacao {
 		this.volumeMinimoFaturamento = volumeMinimoFaturamento;
 	}
 
-	/** full constructor */
 	public LigacaoEsgotoSituacao(String descricao, String descricaoAbreviado,
 			Short indicadorUso, Date ultimaAlteracao, Short indicadorFaturamentoSituacao, Integer volumeMinimoFaturamento) {
 		this.descricao = descricao;
@@ -104,7 +65,6 @@ public class LigacaoEsgotoSituacao extends ObjetoTransacao {
 		this.volumeMinimoFaturamento = volumeMinimoFaturamento;
 	}
 
-	/** default constructor */
 	public LigacaoEsgotoSituacao() {
 	}
 	
@@ -112,9 +72,6 @@ public class LigacaoEsgotoSituacao extends ObjetoTransacao {
 		this.id = id;
 	}
 
-	/**
-	 * @return Retorna o campo descricaoAbreviado.
-	 */
 	public String getDescricaoAbreviado() {
 		return descricaoAbreviado;
 	}
@@ -135,10 +92,6 @@ public class LigacaoEsgotoSituacao extends ObjetoTransacao {
 		this.volumeMinimoFaturamento = volumeMinimoFaturamento;
 	}
 
-	/**
-	 * @param descricaoAbreviado
-	 *            O descricaoAbreviado a ser setado.
-	 */
 	public void setDescricaoAbreviado(String descricaoAbreviado) {
 		this.descricaoAbreviado = descricaoAbreviado;
 	}
@@ -194,16 +147,6 @@ public class LigacaoEsgotoSituacao extends ObjetoTransacao {
 		return filtro;
 	}
 	
-	/**
-	 * <Breve descrição sobre o caso de uso>
-	 *
-	 * <Identificador e nome do caso de uso>
-	 *
-	 * @author Pedro Alexandre
-	 * @date 19/09/2007
-	 *
-	 * @return
-	 */
 	public String getDescricaoComId() {
 		
 		if(this.getId().compareTo(10) == -1){
@@ -225,30 +168,18 @@ public class LigacaoEsgotoSituacao extends ObjetoTransacao {
 		getDescricaoParaRegistroTransacao();
 	}
 
-	/**
-	 * @return Retorna o campo indicadorExistenciaLigacao.
-	 */
 	public Short getIndicadorExistenciaLigacao() {
 		return indicadorExistenciaLigacao;
 	}
 
-	/**
-	 * @param indicadorExistenciaLigacao O indicadorExistenciaLigacao a ser setado.
-	 */
 	public void setIndicadorExistenciaLigacao(Short indicadorExistenciaLigacao) {
 		this.indicadorExistenciaLigacao = indicadorExistenciaLigacao;
 	}
 
-	/**
-	 * @return Retorna o campo indicadorExistenciaRede.
-	 */
 	public Short getIndicadorExistenciaRede() {
 		return indicadorExistenciaRede;
 	}
 
-	/**
-	 * @param indicadorExistenciaRede O indicadorExistenciaRede a ser setado.
-	 */
 	public void setIndicadorExistenciaRede(Short indicadorExistenciaRede) {
 		this.indicadorExistenciaRede = indicadorExistenciaRede;
 	}

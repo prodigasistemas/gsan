@@ -33438,20 +33438,9 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * 
-	 * Busca uma Lista de Imoveis por Rota
-	 * 
-	 * @param idRota
-	 * @return
-	 * @throws ControladorException
-	 */
-	public Collection<DadosMovimentacao> buscarImoveisPorRota(Rota idRota,
-			Integer anoMesReferencia, boolean manter) throws FachadaException {
-
+	public Collection<DadosMovimentacao> buscarImoveisPorRota(Integer idImovel, Rota rota, boolean manter) throws FachadaException {
 		try {
-			return this.getControladorMicromedicao().buscarImoveisPorRota(
-					idRota, anoMesReferencia, manter);
+			return this.getControladorMicromedicao().buscarImoveisPorRota(idImovel, rota, manter);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex
 					.getParametroMensagem());
