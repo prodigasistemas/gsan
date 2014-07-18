@@ -15,6 +15,7 @@ import gcom.cadastro.localidade.Quadra;
 import gcom.cadastro.localidade.SetorComercial;
 import gcom.cadastro.unidade.UnidadeOrganizacional;
 import gcom.fachada.Fachada;
+import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.operacional.DivisaoEsgoto;
 import gcom.util.ConstantesSistema;
@@ -118,58 +119,61 @@ public class ExibirInformarRaDadosAgenciaReguladoraAction extends GcomAction {
 			ObterDadosRegistroAtendimentoHelper registroAtendimentoHelper) {
 		RegistroAtendimento registroAtendimento = registroAtendimentoHelper.getRegistroAtendimento();
 		// Dados Gerais do Registro de Atendimento
-		
-		form.setNumeroRADados("" + registroAtendimento.getId());
-		form.setSituacaoRA(registroAtendimentoHelper.getDescricaoSituacaoRA());
-		form.setNumeroSituacaoRA(""+registroAtendimentoHelper.getRegistroAtendimento().getCodigoSituacao());
-		if (registroAtendimentoHelper.getRAAssociado() != null) {
-			form.setNumeroRaAssociado(""+ registroAtendimentoHelper.getRAAssociado().getId());
-			form.setSituacaoRaAssociado(registroAtendimentoHelper.getDescricaoSituacaoRAAssociado());
-		}
-		SolicitacaoTipoEspecificacao solicitacaoTipoEspecificacao = registroAtendimento.getSolicitacaoTipoEspecificacao();
-		if (solicitacaoTipoEspecificacao != null) {
-			if (solicitacaoTipoEspecificacao.getSolicitacaoTipo() != null) {
-				form.setTipoSolicitacaoId(solicitacaoTipoEspecificacao.getSolicitacaoTipo().getId()+ "");
-				form.setTipoSolicitacaoDescricao(solicitacaoTipoEspecificacao.getSolicitacaoTipo().getDescricao());
+		if (registroAtendimento == null) {
+			throw new ActionServletException("atencao.registro.atendimento.inexistente");
+		} else {	
+			form.setNumeroRADados("" + registroAtendimento.getId());
+			form.setSituacaoRA(registroAtendimentoHelper.getDescricaoSituacaoRA());
+			form.setNumeroSituacaoRA(""+registroAtendimentoHelper.getRegistroAtendimento().getCodigoSituacao());
+			if (registroAtendimentoHelper.getRAAssociado() != null) {
+				form.setNumeroRaAssociado(""+ registroAtendimentoHelper.getRAAssociado().getId());
+				form.setSituacaoRaAssociado(registroAtendimentoHelper.getDescricaoSituacaoRAAssociado());
 			}
-			form.setEspecificacaoId(solicitacaoTipoEspecificacao.getId() + "");
-			form.setEspecificacaoDescricao(solicitacaoTipoEspecificacao.getDescricao());
+			SolicitacaoTipoEspecificacao solicitacaoTipoEspecificacao = registroAtendimento.getSolicitacaoTipoEspecificacao();
+			if (solicitacaoTipoEspecificacao != null) {
+				if (solicitacaoTipoEspecificacao.getSolicitacaoTipo() != null) {
+					form.setTipoSolicitacaoId(solicitacaoTipoEspecificacao.getSolicitacaoTipo().getId()+ "");
+					form.setTipoSolicitacaoDescricao(solicitacaoTipoEspecificacao.getSolicitacaoTipo().getDescricao());
+				}
+				form.setEspecificacaoId(solicitacaoTipoEspecificacao.getId() + "");
+				form.setEspecificacaoDescricao(solicitacaoTipoEspecificacao.getDescricao());
+			}
+			if (registroAtendimento.getMeioSolicitacao() != null) {
+				form.setMeioSolicitacaoId(registroAtendimento.getMeioSolicitacao().getId()+ "");
+				form.setMeioSolicitacaoDescricao(registroAtendimento.getMeioSolicitacao().getDescricao());
+			}
+			// Imovel
+			Imovel imovel = registroAtendimento.getImovel();
+			if (imovel != null) {
+				form.setMatriculaImovel("" + imovel.getId());
+				form.setInscricaoImovel(imovel.getInscricaoFormatada());
+			}
+			Date dataAtendimento = registroAtendimento.getRegistroAtendimento();
+			form.setDataAtendimento(Util.formatarData(dataAtendimento));
+			form.setHoraAtendimento(Util.formatarHoraSemData(dataAtendimento));
+			form.setDataPrevista(Util.formatarData(registroAtendimento.getDataPrevistaAtual()));
+			// Encerramento
+			setDadosEncerramento(form, registroAtendimento);
+	
+			// Dados necessário p/ inserir o novo RA
+			if (registroAtendimento.getLogradouroBairro() != null) {
+				form.setLogradouroBairro(registroAtendimento.getLogradouroBairro().getId());
+			}
+			if (registroAtendimento.getLogradouroCep() != null) {
+				form.setLogradouroCep(registroAtendimento.getLogradouroCep().getId());
+			}
+			form.setComplementoEndereco(registroAtendimento.getComplementoEndereco());
+			if (registroAtendimento.getLocalOcorrencia() != null) {
+				form.setLocalOcorrencia(registroAtendimento.getLocalOcorrencia().getId());
+			}
+			if (registroAtendimento.getPavimentoRua() != null) {
+				form.setPavimentoRua(registroAtendimento.getPavimentoRua().getId());
+			}
+			if (registroAtendimento.getPavimentoCalcada() != null) {
+				form.setPavimentoCalcada(registroAtendimento.getPavimentoCalcada().getId());
+			}
+			form.setDescricaoLocalOcorrencia(registroAtendimento.getDescricaoLocalOcorrencia());
 		}
-		if (registroAtendimento.getMeioSolicitacao() != null) {
-			form.setMeioSolicitacaoId(registroAtendimento.getMeioSolicitacao().getId()+ "");
-			form.setMeioSolicitacaoDescricao(registroAtendimento.getMeioSolicitacao().getDescricao());
-		}
-		// Imovel
-		Imovel imovel = registroAtendimento.getImovel();
-		if (imovel != null) {
-			form.setMatriculaImovel("" + imovel.getId());
-			form.setInscricaoImovel(imovel.getInscricaoFormatada());
-		}
-		Date dataAtendimento = registroAtendimento.getRegistroAtendimento();
-		form.setDataAtendimento(Util.formatarData(dataAtendimento));
-		form.setHoraAtendimento(Util.formatarHoraSemData(dataAtendimento));
-		form.setDataPrevista(Util.formatarData(registroAtendimento.getDataPrevistaAtual()));
-		// Encerramento
-		setDadosEncerramento(form, registroAtendimento);
-
-		// Dados necessário p/ inserir o novo RA
-		if (registroAtendimento.getLogradouroBairro() != null) {
-			form.setLogradouroBairro(registroAtendimento.getLogradouroBairro().getId());
-		}
-		if (registroAtendimento.getLogradouroCep() != null) {
-			form.setLogradouroCep(registroAtendimento.getLogradouroCep().getId());
-		}
-		form.setComplementoEndereco(registroAtendimento.getComplementoEndereco());
-		if (registroAtendimento.getLocalOcorrencia() != null) {
-			form.setLocalOcorrencia(registroAtendimento.getLocalOcorrencia().getId());
-		}
-		if (registroAtendimento.getPavimentoRua() != null) {
-			form.setPavimentoRua(registroAtendimento.getPavimentoRua().getId());
-		}
-		if (registroAtendimento.getPavimentoCalcada() != null) {
-			form.setPavimentoCalcada(registroAtendimento.getPavimentoCalcada().getId());
-		}
-		form.setDescricaoLocalOcorrencia(registroAtendimento.getDescricaoLocalOcorrencia());
 	}
 
 	/**
