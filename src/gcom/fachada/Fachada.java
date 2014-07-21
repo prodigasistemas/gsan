@@ -26846,12 +26846,12 @@ public class Fachada {
 			Collection idsImovel, Integer codigoCliente, Short relacaoTipo,
 			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
 			Integer idGrupoFaturamento, Integer anoMesFim,
-			String indicadorContaPaga) {
+			String indicadorContaPaga, Integer somenteDebitoAutomatico) {
 		try {
 			return this.getControladorFaturamento().obterContasConjuntoImoveis(
 					anoMes, idsImovel, codigoCliente, relacaoTipo,
 					dataVencimentoContaInicio, dataVencimentoContaFim,
-					idGrupoFaturamento, anoMesFim, indicadorContaPaga);
+					idGrupoFaturamento, anoMesFim, indicadorContaPaga, somenteDebitoAutomatico);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex
 					.getParametroMensagem());
@@ -37827,12 +37827,12 @@ public class Fachada {
 	public Integer countImoveisBancoDebitoAutomatico(String[] bancos,
 			Integer anoMesInicial, Integer anoMesFinal,
 			Date dataVencimentoInicial, Date dataVencimentoFinal,
-			String indicadorContaPaga) {
+			String indicadorContaPaga, Integer somenteDebitoAutomatico) {
 		try {
 			return this.getControladorArrecadacao()
 					.countImoveisBancoDebitoAutomatico(bancos, anoMesInicial,
 							anoMesFinal, dataVencimentoInicial,
-							dataVencimentoFinal, indicadorContaPaga);
+							dataVencimentoFinal, indicadorContaPaga, somenteDebitoAutomatico);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex
 					.getParametroMensagem());
@@ -51895,12 +51895,12 @@ public class Fachada {
 	public Integer countImoveisBancoDebitoAutomaticoPorGrupoFaturamento(String[] bancos,
 			Integer anoMesInicial, Integer anoMesFinal,
 			Date dataVencimentoInicial, Date dataVencimentoFinal,
-			String indicadorContaPaga, Integer idGrupoFaturamento) {
+			String indicadorContaPaga, Integer idGrupoFaturamento, Integer somenteDebitoAutomatico) {
 		try {
 			return this.getControladorArrecadacao()
 					.countImoveisBancoDebitoAutomaticoPorGrupoFaturamento(bancos, anoMesInicial,
 							anoMesFinal, dataVencimentoInicial,
-							dataVencimentoFinal, indicadorContaPaga, idGrupoFaturamento);
+							dataVencimentoFinal, indicadorContaPaga, idGrupoFaturamento, somenteDebitoAutomatico);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex
 					.getParametroMensagem());

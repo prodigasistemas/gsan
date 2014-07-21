@@ -3565,7 +3565,7 @@ public interface IControladorArrecadacao {
 			
 			public Integer countImoveisBancoDebitoAutomatico(String[] bancos, 
 					Integer anoMesInicial,Integer anoMesFinal, Date dataVencimentoInicial,
-					Date dataVencimentoFinal, String indicadorContaPaga)
+					Date dataVencimentoFinal, String indicadorContaPaga, Integer somenteDebitoAutomatico)
 				throws ControladorException;
 			
 			public Collection selecionarImoveisBancoDebitoAutomatico(String[] bancos, 
@@ -4258,7 +4258,7 @@ public interface IControladorArrecadacao {
 		 * */
 		public Integer countImoveisBancoDebitoAutomaticoPorGrupoFaturamento(String[] bancos, 
 				Integer anoMesInicial,Integer anoMesFinal, Date dataVencimentoInicial,
-				Date dataVencimentoFinal, String indicadorContaPaga, Integer idGrupoFaturamento)
+				Date dataVencimentoFinal, String indicadorContaPaga, Integer idGrupoFaturamento, Integer somenteDebitoAutomatico)
 			throws ControladorException;
 		
 

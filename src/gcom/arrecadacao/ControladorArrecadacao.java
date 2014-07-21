@@ -47837,7 +47837,7 @@ public class ControladorArrecadacao implements SessionBean {
 		  */
 			public Integer countImoveisBancoDebitoAutomatico(String[] bancos, 
 					Integer anoMesInicial,Integer anoMesFinal, Date dataVencimentoInicial,
-					Date dataVencimentoFinal, String indicadorContaPaga)
+					Date dataVencimentoFinal, String indicadorContaPaga, Integer somenteDebitoAutomatico)
 				throws ControladorException{
 				
 				Integer retorno = null;
@@ -47845,7 +47845,7 @@ public class ControladorArrecadacao implements SessionBean {
 				try{
 					
 					retorno = repositorioArrecadacao.countImoveisBancoDebitoAutomatico(bancos, 
-							anoMesInicial, anoMesFinal, dataVencimentoInicial, dataVencimentoFinal, indicadorContaPaga);
+							anoMesInicial, anoMesFinal, dataVencimentoInicial, dataVencimentoFinal, indicadorContaPaga, somenteDebitoAutomatico);
 					
 				} catch (ErroRepositorioException e) {
 					e.printStackTrace();
@@ -54252,7 +54252,7 @@ public class ControladorArrecadacao implements SessionBean {
 	 * */
 	public Integer countImoveisBancoDebitoAutomaticoPorGrupoFaturamento(String[] bancos, 
 			Integer anoMesInicial,Integer anoMesFinal, Date dataVencimentoInicial,
-			Date dataVencimentoFinal, String indicadorContaPaga, Integer idGrupoFaturamento)
+			Date dataVencimentoFinal, String indicadorContaPaga, Integer idGrupoFaturamento, Integer somenteDebitoAutomatico)
 		throws ControladorException{
 		
 		Integer retorno = null;
@@ -54260,7 +54260,7 @@ public class ControladorArrecadacao implements SessionBean {
 		try{
 			
 			retorno = repositorioArrecadacao.countImoveisBancoDebitoAutomaticoPorGrupoFaturamento(bancos, 
-					anoMesInicial, anoMesFinal, dataVencimentoInicial, dataVencimentoFinal, indicadorContaPaga, idGrupoFaturamento);
+					anoMesInicial, anoMesFinal, dataVencimentoInicial, dataVencimentoFinal, indicadorContaPaga, idGrupoFaturamento, somenteDebitoAutomatico);
 			
 		} catch (ErroRepositorioException e) {
 			// TODO Auto-generated catch block
