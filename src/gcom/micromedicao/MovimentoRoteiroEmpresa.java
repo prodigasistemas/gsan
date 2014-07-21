@@ -24,195 +24,81 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class MovimentoRoteiroEmpresa implements Serializable {
 
-    /**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 
-	/** identifier field */
     private Integer id;
-
-    /** persistent field */
     private Integer anoMesMovimento;
-
-    /** persistent field */
     private Integer codigoSetorComercial;
-
-    /** nullable persistent field */
     private String nomeCliente;
-
-    /** persistent field */
     private Integer numeroQuadra;
-
-    /** persistent field */
     private String numeroLoteImovel;
-
-    /** persistent field */
     private String numeroSubloteImovel;
-
-    /** nullable persistent field */
     private String enderecoImovel;
-
-    /** nullable persistent field */
     private String descricaoAbreviadaCategoriaImovel;
-
-    /** nullable persistent field */
     private String numeroHidrometro;
-
-    /** nullable persistent field */
     private Short quantidadeEconomias;
-
-    /** nullable persistent field */
     private Integer numeroLeituraAnterior;
-
-    /** nullable persistent field */
     private Integer numeroFaixaLeituraEsperadaInicial;
-
-    /** nullable persistent field */
     private Integer numeroFaixaLeituraEsperadaFinal;
-
-    /** nullable persistent field */
     private Integer numeroLeituraHidrometro;
-
-    /** nullable persistent field */
     private Short indicadorConfirmacaoLeitura;
-
-    /** nullable persistent field */
     private Date tempoLeitura;
-
-    /** persistent field */
     private Date ultimaAlteracao;
-
-    /** nullable persistent field */
     private Date dataInstalacaoHidrometro;
-
-    /** persistent field */
     private LeituraAnormalidade leituraAnormalidade;
-
-    /** persistent field */
     private Localidade localidade;
-
-    /** persistent field */
     private Imovel imovel;
-
-    /** persistent field */
     private LigacaoEsgotoSituacao ligacaoEsgotoSituacao;
-
-    /** persistent field */
     private ImovelPerfil imovelPerfil;
-
-    /** persistent field */
     private FaturamentoGrupo faturamentoGrupo;
-
-    /** persistent field */
     private HidrometroProtecao hidrometroProtecao;
-
-    /** persistent field */
     private HidrometroMarca hidrometroMarca;
-
-    /** persistent field */
     private HidrometroLocalInstalacao hidrometroLocalInstalacao;
-
-    /** persistent field */
-    private gcom.micromedicao.RoteiroEmpresa roteiroEmpresa;
-
-    /** persistent field */
+    private RoteiroEmpresa roteiroEmpresa;
     private LigacaoAguaSituacao ligacaoAguaSituacao;
-
-    /** persistent field */
     private Empresa empresa;
-
-    /** persistent field */
     private HidrometroCapacidade hidrometroCapacidade;
-
-    /** persistent field */
     private MedicaoTipo medicaoTipo;
-    
     private Rota rota;
-    
     private Date dataHoraProcessamento;
-    
-    /** nullable persistent field */
     private Integer indicadorAtualizacaoLeitura;
-    
     private Integer codigoSubcategoria1;
-    
-   // private String descricaoAbreviadaCategoriaImovel2;
-    
-    //private Integer idCategoriaImovel2;
-    
     private Categoria categoria2;
-    
     private Short quantidadeEconomias2;
-    
     private Integer codigoSubcategoria2;
-    
     private Integer numeroConsumoFaturadoMenos1Mes;
-    
     private Integer numeroConsumoFaturadoMenos2Meses;
-    
     private Integer numeroConsumoFaturadoMenos3Meses;
-    
     private String descricaoConsumoTipo;
-    
     private String numeroLacreLigacaoAgua;
-    
     private Integer numeroSequencialRota;
-    
     private Integer numeroConsumoFaturadoMenos4Meses;
-    
     private Integer numeroConsumoFaturadoMenos5Meses;
-    
     private Integer numeroConsumoFaturadoMenos6Meses;
-    
     private Integer numeroConsumoMedio;
-    
     private Short codigoRota;
-    
     private Logradouro logradouro;
-    
     private String nomeLogradouro;
-    
     private String numeroImovel;
-     
     private String complementoEndereco;
-    
     private String inscricaoImovel;
-    
     private String nomeLeiturista;
-    
     private GerenciaRegional gerenciaRegional;
-    
     private String nomeBairro;
-    
     private Categoria categoriaPrincipal;
-    
     private LeituraTipo leituraTipo;
-    
     private String descricaoAbreviadaLogradouroTitulo;
-    
     private String descricaoAbreviadaLogradouroTipo;
-    
     private Integer codigoQuadraFace;
-    
     private String descricaoLigacaoAguaSituacao;
-    
     private Integer numeroMoradores;
-    
     private Integer codigoAnormalidadeAnterior;
-    
     private String descricaoAnormalidadeAnterior;
-    
     private String nomeLocalidade;
-   
 	private String descricaoHidrometroMarca;
-	
 	private Leiturista leiturista;
-	
 	private Date dataLeituraAnterior;
 
 	public String getDescricaoAbreviadaLogradouroTipo() {
@@ -644,16 +530,10 @@ public class MovimentoRoteiroEmpresa implements Serializable {
 		this.rota = rota;
 	}
 
-	/**
-	 * @return Returns the indicadorAtualizacaoLeitura.
-	 */
 	public Integer getIndicadorAtualizacaoLeitura() {
 		return indicadorAtualizacaoLeitura;
 	}
 
-	/**
-	 * @param indicadorAtualizacaoLeitura The indicadorAtualizacaoLeitura to set.
-	 */
 	public void setIndicadorAtualizacaoLeitura(Integer indicadorAtualizacaoLeitura) {
 		this.indicadorAtualizacaoLeitura = indicadorAtualizacaoLeitura;
 	}
@@ -704,8 +584,6 @@ public class MovimentoRoteiroEmpresa implements Serializable {
 	public void setComplementoEndereco(String complementoEndereco) {
 		this.complementoEndereco = complementoEndereco;
 	}
-
-	
 
 	public String getDescricaoConsumoTipo() {
 		return descricaoConsumoTipo;
@@ -865,7 +743,6 @@ public class MovimentoRoteiroEmpresa implements Serializable {
 			String nomeBairro,LeituraTipo leituraTipo, String descricaoAbreviadaLogradouroTitulo, String descricaoAbreviadaLogradouroTipo) {
 		  
 		super();
-		// TODO Auto-generated constructor stub
 		this.id = id;
 		this.anoMesMovimento = anoMesMovimento;
 		this.codigoSetorComercial = codigoSetorComercial;
@@ -929,8 +806,6 @@ public class MovimentoRoteiroEmpresa implements Serializable {
 		this.descricaoAbreviadaLogradouroTitulo = descricaoAbreviadaLogradouroTitulo;
 		this.descricaoAbreviadaLogradouroTipo = descricaoAbreviadaLogradouroTipo;
 	}
-
-	
 
 	public Categoria getCategoria2() {
 		return categoria2;

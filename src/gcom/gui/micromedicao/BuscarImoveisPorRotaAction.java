@@ -95,7 +95,7 @@ public class BuscarImoveisPorRotaAction extends GcomAction {
                         + "." + rota.getCodigo();
                 form.setDescricaoRota(descricao);
 
-                Collection<DadosMovimentacao> dados = fachada.buscarImoveisPorRota(null, rota, form.getTipo().trim().equals("1"));
+                Collection<DadosMovimentacao> dados = fachada.buscarImoveisPorRota(rota, form.getTipo().trim().equals("1"));
 
                 if (dados != null && !dados.isEmpty()) {
 

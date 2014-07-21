@@ -100,6 +100,7 @@ import gcom.faturamento.conta.FiltroContaCategoria;
 import gcom.faturamento.conta.FiltroContaCategoriaConsumoFaixa;
 import gcom.faturamento.conta.FiltroContaImpressao;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
+import gcom.gui.faturamento.ImovelFaturamentoSeletivoHelper;
 import gcom.gui.faturamento.bean.AnalisarImoveisReleituraHelper;
 import gcom.gui.micromedicao.ColetaMedidorEnergiaHelper;
 import gcom.gui.micromedicao.DadosMovimentacao;
@@ -26399,7 +26400,7 @@ public class ControladorMicromedicao implements SessionBean {
 
 	}
 
-	public Collection<DadosMovimentacao> buscarImoveisPorRota(Integer idImovel, Rota rota, boolean manter) throws ControladorException, ErroRepositorioException {
+	public Collection<DadosMovimentacao> buscarImoveisPorRota(Rota rota, boolean manter) throws ControladorException, ErroRepositorioException {
 		Collection<DadosMovimentacao> colecao = new ArrayList<DadosMovimentacao>();
 
 		Integer anoMesReferencia = rota.getFaturamentoGrupo().getAnoMesReferencia();
@@ -26407,7 +26408,7 @@ public class ControladorMicromedicao implements SessionBean {
 		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 		sistemaParametro.setAnoMesFaturamento(anoMesReferencia);
 
-		Collection<ImovelPorRotaHelper> colecaoImoveisPorRotaHelper = buscarImoveisPorRotaHelper(idImovel, rota, sistemaParametro);
+		Collection<ImovelPorRotaHelper> colecaoImoveisPorRotaHelper = buscarImoveisPorRotaHelper(rota, sistemaParametro);
 
 		Iterator<ImovelPorRotaHelper> iteratorImovelPorRotaHelper = colecaoImoveisPorRotaHelper.iterator();
 		while (iteratorImovelPorRotaHelper.hasNext()) {
@@ -26587,11 +26588,11 @@ public class ControladorMicromedicao implements SessionBean {
 		return null;
 	}
 
-	private Collection<ImovelPorRotaHelper> buscarImoveisPorRotaHelper(Integer idImovel, Rota rota, SistemaParametro sistemaParametro) throws ControladorException {
+	private Collection<ImovelPorRotaHelper> buscarImoveisPorRotaHelper(Rota rota, SistemaParametro sistemaParametro) throws ControladorException {
 		Collection imoveisPorRota = null;
 		Collection<ImovelPorRotaHelper> objetosImoveis = new ArrayList<ImovelPorRotaHelper>();
 		try {
-			imoveisPorRota = repositorioMicromedicao.buscarImoveisPorRota(idImovel, rota.getId(), sistemaParametro.getNomeAbreviadoEmpresa(), rota.getFaturamentoGrupo().getAnoMesReferencia());
+			imoveisPorRota = repositorioMicromedicao.buscarImoveisPorRota(rota.getId(), sistemaParametro.getNomeAbreviadoEmpresa(), rota.getFaturamentoGrupo().getAnoMesReferencia());
 
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
@@ -42444,5 +42445,28 @@ public class ControladorMicromedicao implements SessionBean {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);
 		}
+	}
+	
+	public Collection<DadosMovimentacao> buscarImoveisFaturamentoSeletivo(Integer matriculaImovel, Rota rota, boolean manter) throws ControladorException, ErroRepositorioException {
+		Collection<DadosMovimentacao> colecao = new ArrayList<DadosMovimentacao>();
+		
+		Integer anoMesReferencia = rota.getFaturamentoGrupo().getAnoMesReferencia();
+		
+		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+		sistemaParametro.setAnoMesFaturamento(anoMesReferencia);
+		
+		Collection<ImovelPorRotaHelper> colecaoImoveisPorRotaHelper = repositorioMicromedicao.buscarImoveisFaturamentoSeletivo(matriculaImovel, rota.getId(), rota.getFaturamentoGrupo().getAnoMesReferencia());
+
+		Iterator<ImovelPorRotaHelper> iteratorImovelPorRotaHelper = colecaoImoveisPorRotaHelper.iterator();
+		while (iteratorImovelPorRotaHelper.hasNext()) {
+			
+			DadosMovimentacao dado = obterDadosMedicaoImovelPorRota(rota, anoMesReferencia, manter, sistemaParametro, iteratorImovelPorRotaHelper);
+			
+			if (dado != null) {
+				colecao.add(dado);
+			}
+		}
+
+		return colecao;
 	}
 }

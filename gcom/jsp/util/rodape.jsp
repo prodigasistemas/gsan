@@ -16,7 +16,7 @@
 					</logic:notPresent>
 				</td>
 				
-          		<td align="right">Vers&atilde;o: 5.1.1.57 (Online) 17/07/2014 - 15:12:55 </td>
+          		<td align="right">Vers&atilde;o: 5.1.1.57 (Online) 18/07/2014 - 9:16:25 </td>
         	</tr>
       	</table>
 		</td>

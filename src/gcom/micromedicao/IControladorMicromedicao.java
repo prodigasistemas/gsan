@@ -23,6 +23,7 @@ import gcom.micromedicao.bean.AssociarConjuntoRotasCriterioCobrancaHelper;
 import gcom.micromedicao.bean.FiltrarLeiturasTelemetriaHelper;
 import gcom.micromedicao.bean.HidrometroRelatorioOSHelper;
 import gcom.micromedicao.bean.ImovelFaltandoSituacaoLeituraHelper;
+import gcom.micromedicao.bean.ImovelPorRotaHelper;
 import gcom.micromedicao.bean.InformarSubdivisoesDeRotaHelper;
 import gcom.micromedicao.bean.MonitorarLeituraMobilePopupHelper;
 import gcom.micromedicao.bean.PesquisarRelatorioRotasOnlinePorEmpresaHelper;
@@ -1864,7 +1865,7 @@ public interface IControladorMicromedicao {
 	@SuppressWarnings("rawtypes")
 	public Collection carregarDadosConsumo(Integer idImovel, boolean ligacaoAgua) throws ControladorException;
 	
-	public Collection<DadosMovimentacao> buscarImoveisPorRota(Integer idImovel, Rota idRota, boolean manter) throws ControladorException;
+	public Collection<DadosMovimentacao> buscarImoveisPorRota(Rota idRota, boolean manter) throws ControladorException;
 
 	/**
 	 * [UC0712] Atualizar Leituras e Anormalidades do Celular
@@ -3640,5 +3641,7 @@ public interface IControladorMicromedicao {
     public Collection<HidrometroMarca> pesquisarHidrometroMarca() throws ControladorException;
     
     public boolean isImovelEmCampo(Integer idImovel) throws Exception;
+    
+    public Collection<DadosMovimentacao> buscarImoveisFaturamentoSeletivo(Integer matriculaImovel, Rota rota, boolean manter) throws ControladorException;
 
 }

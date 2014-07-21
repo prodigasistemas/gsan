@@ -1,7 +1,9 @@
 package gcom.gui.faturamento;
 
 import gcom.gui.micromedicao.DadosMovimentacao;
+
 import java.util.Vector;
+
 import org.apache.struts.action.ActionForm;
 
 public class FaturamentoSeletivoActionForm extends ActionForm  {
@@ -22,6 +24,7 @@ public class FaturamentoSeletivoActionForm extends ActionForm  {
 	private String bloquearCampos;
 	private String tipo;
 	private String matriculaImovel;
+	private String[] idImoveisSelecionados;
 	
 	public String getRota() {
 		return rota;
@@ -142,6 +145,13 @@ public class FaturamentoSeletivoActionForm extends ActionForm  {
 	public void setMatriculaImovel(String matriculaImovel) {
 		this.matriculaImovel = matriculaImovel;
 	}
-	
+
+	public String[] getIdImoveisSelecionados() {
+		return idImoveisSelecionados;
+	}
+
+	public void setIdImoveisSelecionados(String[] idImoveisSelecionados) {
+		this.idImoveisSelecionados = idImoveisSelecionados;
+	}
 	
 }

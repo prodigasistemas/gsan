@@ -11,11 +11,13 @@ import gcom.faturamento.FaturamentoSituacaoHistorico;
 import gcom.faturamento.FaturamentoSituacaoTipo;
 import gcom.faturamento.MotivoInterferenciaTipo;
 import gcom.faturamento.consumotarifa.ConsumoTarifaVigencia;
+import gcom.gui.faturamento.ImovelFaturamentoSeletivoHelper;
 import gcom.gui.micromedicao.ColetaMedidorEnergiaHelper;
 import gcom.gui.micromedicao.DadosMovimentacao;
 import gcom.gui.relatorio.micromedicao.FiltroRelatorioLeituraConsultarArquivosTextoHelper;
 import gcom.gui.relatorio.micromedicao.RelatorioNotificacaoDebitosImpressaoSimultaneaHelper;
 import gcom.micromedicao.bean.FiltrarLeiturasTelemetriaHelper;
+import gcom.micromedicao.bean.ImovelPorRotaHelper;
 import gcom.micromedicao.bean.LigacaoMedicaoIndividualizadaHelper;
 import gcom.micromedicao.bean.PesquisarRelatorioRotasOnlinePorEmpresaHelper;
 import gcom.micromedicao.consumo.ConsumoAnormalidadeAcao;
@@ -2225,7 +2227,7 @@ public interface IRepositorioMicromedicao {
 			Integer anoMesReferencia) throws ErroRepositorioException;
 	
 	@SuppressWarnings("rawtypes")
-	public Collection buscarImoveisPorRota(Integer idImovel, Integer idRota, String empresa, Integer anoMesFaturamento) throws ErroRepositorioException;
+	public Collection buscarImoveisPorRota(Integer idRota, String empresa, Integer anoMesFaturamento) throws ErroRepositorioException;
 	
 	@SuppressWarnings("rawtypes")
 	public void removerRelacaoRotaLeiturista(Collection rotas) throws ErroRepositorioException;
@@ -4205,267 +4207,48 @@ public interface IRepositorioMicromedicao {
 			throws ErroRepositorioException;
 	
 	/** [MA2011061010]
-	 * 
-	 * pesquisa uma colecao de HidrometroMovimentacao
-	 * 
-	 * @author Paulo Diniz
-	 * @date 02/07/2011
-	 * 
-	 * @param faixaInicial
-	 *            Descricao do parametro
-	 * @param faixaFinal
-	 *            Descricao do parametro
-	 * @return Description of the Return Value
-	 * @exception ErroRepositorioException
-	 *                Description of the Exception
 	 */
-	public Collection pesquisarNumeroHidrometroMovimentacaoPorFaixa(
-			String faixaInicial, String faixaFinal)
-			throws ErroRepositorioException;
-	/**
-	 * Obtem os dados 
-	 * 
-	 * @param idImovel
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
-	public LigacaoAguaSituacao obterDadosSituacaoLigacaoAgua(Integer idLigacao)
-		throws ErroRepositorioException;
+	public Collection pesquisarNumeroHidrometroMovimentacaoPorFaixa(String faixaInicial, String faixaFinal) throws ErroRepositorioException;
+
+	public LigacaoAguaSituacao obterDadosSituacaoLigacaoAgua(Integer idLigacao) throws ErroRepositorioException;
 
     /**
-     * <p>
      * [UC0936]
-     * </p>
-     * 
-     * @author Magno Gouveia
-     * @since 02/09/2011
      */
     public Integer pesquisarAnoMesFaturamentoSituacaoInicio(Integer idImovel, Integer idFaturamentoSituacao) throws ErroRepositorioException;
     
-    /*
-	 * TODO - COSANPA
-	 * Adição do médoto pesquisarImovelHidrometroInstaladoMaiorDataInstalacao()
-	 * 
-	 * Pesquisa o imóvel no qual o hidrômetro está instalado por maior data de instalação
-	 */
+	public Object[] pesquisarImovelHidrometroInstaladoMaiorDataInstalacao(Integer idHidrometro) throws ErroRepositorioException;
 	
-	public Object[] pesquisarImovelHidrometroInstaladoMaiorDataInstalacao(Integer idHidrometro)
-			throws ErroRepositorioException;
+	public void atualizarArquivoTextoDividido(Integer idRota, Integer anoMesFaturamento, Integer numeroSequenciaArquivo, int situacaoAnterior, int situacaoNova) throws ErroRepositorioException;
 	
-	/**
-	 * TODO : Cosanpa
-	 * Alteracao feita para a rota dividida não finalizar os imoveis por IMEI, 
-	 * e sim, pelo numero do arquivo dividido.
-	 */
-	/**
-	 * Metodo para atualizar a rota dividida por partes
-	 * 
-	 * @author Pamela Gatinho
-	 * @date 04/02/2011
-	 * 
-	 * @param idRota
-	 * @param anoMesFaturamento
-	 * @param numeroSequenciaArquivo
-	 * @param situacaoAnterior
-	 * @param situacaoNova
-	 * @throws ErroRepositorioException
-	 */
-	public void atualizarArquivoTextoDividido(Integer idRota, Integer anoMesFaturamento, Integer numeroSequenciaArquivo, 
-			int situacaoAnterior, int situacaoNova) throws ErroRepositorioException;
+	public Rota pesquisarRota(Integer idRota) throws ErroRepositorioException;
 	
-	/*
-	 * TODO : COSANPA
-	 * Criação do método para obter uma rota. 
-	 */
-	/**
-	 * Método para buscar uma rota pelo id
-	 * 
-	 * @author Pamela Gatinho
-	 * @date 14/04/2011
-	 * 
-	 * @param idRota 
-	 * @throws ControladorException
-	 */
-	public Rota pesquisarRota(Integer idRota)
-		throws ErroRepositorioException;
+	public void atualizarLeituraRetificaConta(Integer leituraAtual, int anoMesReferencia, Integer idImovel) throws ErroRepositorioException;
 	
-	/*TODO:COSANPA
-	 * 
-	 * Atualizar campos em Medição Histórico e Consumo Histórico na retificação da conta
-	 * */
-	/**
-	 * Método para atualizar a leitura atual faturada no medição histórico,
-	 * na retificação da conta
-	 * 
-	 * 
-	 * Autor: Adriana Muniz
-	 * Data: 22/07/2011
-	 * 
-	 * @param leituraAtual
-	 * @param anoMesReferencia
-	 * @param idImovel
-	 * @throws ErroRepositorioException
-	 */
-	public void atualizarLeituraRetificaConta(Integer leituraAtual, 
-			int anoMesReferencia, Integer idImovel) throws ErroRepositorioException;
+	public Rota obterRotaPorLocalidadeSetorComercial(Integer idLocalidade, Integer codigoSetorComercial) throws ErroRepositorioException;
 	
-	/**
-	 * TODO : COSANPA
-	 * Método para buscar uma rota pelo id
-	 * da localidade e do setor comercial.
-	 * 
-	 * @author Pamela Gatinho
-	 * @date 01/08/2011
-	 * 
-	 * @param idLocalidade
-	 * @param codigoSetorComercial
-	 * @throws ErroRepositorioException
-	 */
-	public Rota obterRotaPorLocalidadeSetorComercial(Integer idLocalidade, 
-			Integer codigoSetorComercial) throws ErroRepositorioException;
+	public Collection pesquisarArquivosTextoRoteiroEmpresaCompletoParaArquivoZip(String[] ids) throws ErroRepositorioException;
 	
+	public ArquivoTextoRoteiroEmpresa pesquisarArquivosTextoRoteiroEmpresaTransmissaoOffline(Integer idLocalidade,Integer idRota, Integer anoMesReferencia) throws ErroRepositorioException;
 	
-	/**
-	 * TODO : COSANPA
-	 * Retornar Arquivo Texto Roteiro Empresa completo
-	 * 
-	 * @author Felipe Santos
-	 * @date 28/07/2011
-	 */
-	public Collection pesquisarArquivosTextoRoteiroEmpresaCompletoParaArquivoZip(
-			String[] ids) throws ErroRepositorioException;
+	public ArquivoTextoRoteiroEmpresaDivisao pesquisarArquivoTextoRoteiroEmpresaDivisao(Integer atreId, Integer numeroSequenciaArquivo) throws ErroRepositorioException;
 	
-	/**
-	 * Retornar Arquivo Texto Roteiro Empresa por 
-	 * Localidade, Id da Rota e Ano/Mês de Referência
-	 * 
-	 * @author Felipe Santos
-	 * @date 05/08/2011
-	 */
-	public ArquivoTextoRoteiroEmpresa pesquisarArquivosTextoRoteiroEmpresaTransmissaoOffline(
-			Integer idLocalidade,Integer idRota, Integer anoMesReferencia) throws ErroRepositorioException;
-	
-	
-	/**
-	 * Retornar Arquivo Texto Roteiro Empresa Divisão
-	 * 
-	 * @author Felipe Santos
-	 * @date 05/08/2011
-	 */
-	public ArquivoTextoRoteiroEmpresaDivisao pesquisarArquivoTextoRoteiroEmpresaDivisao(
-			Integer atreId, Integer numeroSequenciaArquivo) throws ErroRepositorioException;
-	
-	/**
-	 * TODO : COSANPA
-	 * Pamela Gatinho - 08/09/2011
-	 * 
-	 * Gerar dados para o relatorio de leituras realizadas
-	 * 
-	 * @param anoMesFaturamento
-	 * @param idFaturamentoGrupo
-	 * @param tipoRelatorio
-	 * @param usuarioLogado
-	 * 
-	 * @return
-	 * 
-	 * @throws ControladorException
-	 */
-	public Collection pesquisarDadosRelatorioLeiturasRealizadas(
-			int anoMesReferencia, Integer idFaturamentoGrupo) throws ErroRepositorioException;
+	public Collection pesquisarDadosRelatorioLeiturasRealizadas(int anoMesReferencia, Integer idFaturamentoGrupo) throws ErroRepositorioException;
 
-	/**TODO:COSANPA
-	 * 
-	 * Utilizado na retificação de conta
-	 * 
-	 * Método para consultar se há arquivo de rota gerado para o proximo mês 
-	 * a partir do grupo e da referência
-	 * 
-	 * Autor: Adriana Muniz
-	 * Data:01/08/2011
-	 * 
-	 * @param idGrupo
-	 * @param referencia
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
-	public boolean pesquisaArquivoRotaPorGrupoEReferencia(Integer idGrupo, Integer referencia)
-		throws ErroRepositorioException;
+	public boolean pesquisaArquivoRotaPorGrupoEReferencia(Integer idGrupo, Integer referencia) throws ErroRepositorioException;
 		
-	
-	/**
-	 * Método utilizado para a impressao da conta em impressora térmica
-	 *
-	 * @param imovel
-	 * @param anoMes
-	 * @return
-	 * 
-	 * @author Wellington Vernech Rocha
-	 * @date 22/08/2011
-	 * @throws ErroRepositorioException
-	 */
-	public MedicaoHistorico pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(
-			Integer imovel, Integer anoMes) throws ErroRepositorioException;
+	public MedicaoHistorico pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(Integer imovel, Integer anoMes) throws ErroRepositorioException;
 
-	/**
-	 * 
-	 * Método utilizado para a impressao da conta em impressora térmica
-	 * @param imovel
-	 * @param anoMes
-	 * @return
-	 * 
-	 * @author Wellington Vernech Rocha
-	 * @date 22/08/2011
-	 * @throws ErroRepositorioException
-	 */
-	public MedicaoHistorico pesquisarMedicaoHistoricoTipoPocoLeituraAnormalidade(
-			Integer imovel, Integer anoMes) throws ErroRepositorioException;
+	public MedicaoHistorico pesquisarMedicaoHistoricoTipoPocoLeituraAnormalidade(Integer imovel, Integer anoMes) throws ErroRepositorioException;
 	
-	/**TODO:COSANPA
-	 * @author Adriana Muniz
-	 * @date 26/02/2013
-	 * 
-	 * Retorna o valor do campo indicador analisado da tabea Medição Historico
-	 * 
-	 * @param idImovel
-	 * @param anoMesReferenciaGrupoFaturamento
-	 * @param idMedicaoTipo
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
-	public Short pesquisarMedicaoHistoricoLigacaoAguaAnalisado(Integer idImovel, 
-			Integer anoMesReferenciaGrupoFaturamento, Integer idMedicaoTipo) throws ErroRepositorioException;
+	public Short pesquisarMedicaoHistoricoLigacaoAguaAnalisado(Integer idImovel, Integer anoMesReferenciaGrupoFaturamento, Integer idMedicaoTipo) throws ErroRepositorioException;
 
-	public Integer pesquisarQuantidadeHidrometrosRelatorioBIG(Date dataInicial,
-			Date dataFinal, Integer idLocalidade, Integer situacao)
-			throws ErroRepositorioException;
+	public Integer pesquisarQuantidadeHidrometrosRelatorioBIG(Date dataInicial, Date dataFinal, Integer idLocalidade, Integer situacao) throws ErroRepositorioException;
 	
-	/**TODO: COSANPA
-     * @author Wellington Rocha
-     * Data: 21/03/2012
-     * 
-     * Pesquisar todos os Hidrometro Protecao ativos
-     * 
-     * Geracao de Rotas para Recadastramento
-     * 
-     * @return Collection
-     * @throws ControladorException
-     *  
-     */
      public Collection pesquisarHidrometroProtecao() throws ErroRepositorioException;
     
-     
-     /**TODO: COSANPA
-     * @author Wellington Rocha
-     * Data: 30/04/2012
-     * 
-     * Pesquisar todos os Hidrometro Marca ativos
-     * 
-     * Geracao de Rotas para Recadastramento
-     * 
-     * @return Collection
-     * @throws ControladorException
-     *  
-     */
      public Collection pesquisarHidrometroMarca() throws ErroRepositorioException;
+     
+     public Collection<ImovelPorRotaHelper> buscarImoveisFaturamentoSeletivo(Integer matriculaImovel, Integer idRota, Integer anoMesFaturamento) throws ErroRepositorioException;
 	
 }

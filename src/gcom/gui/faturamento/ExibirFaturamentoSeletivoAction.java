@@ -66,7 +66,7 @@ public class ExibirFaturamentoSeletivoAction extends GcomAction {
         if (rota != null) {
             form.setDescricaoRota(getDescricaoRota(rota));
 
-            Collection<DadosMovimentacao> dados = fachada.buscarImoveisPorRota(matriculaImovel, rota, form.getTipo().trim().equals("1"));
+            Collection<DadosMovimentacao> dados = fachada.buscarImoveisFaturamentoSeletivo(matriculaImovel, rota, form.getTipo().trim().equals("1"));
 
             if (dados != null && !dados.isEmpty()) {
 
@@ -124,6 +124,7 @@ public class ExibirFaturamentoSeletivoAction extends GcomAction {
         filtroRota.adicionarCaminhoParaCarregamentoEntidade(FiltroRota.SETOR_COMERCIAL);
         filtroRota.adicionarCaminhoParaCarregamentoEntidade(FiltroRota.LOCALIDADE);
         filtroRota.adicionarCaminhoParaCarregamentoEntidade(FiltroRota.LEITURA_TIPO);
+        
         filtroRota.adicionarParametro(new ParametroSimples(FiltroRota.LOCALIDADE_ID, form.getIdLocalidade()));
         filtroRota.adicionarParametro(new ParametroSimples(FiltroRota.SETOR_COMERCIAL_CODIGO, form.getCodigoSetorComercial()));
         filtroRota.adicionarParametro(new ParametroSimples(FiltroRota.CODIGO_ROTA, form.getRota()));

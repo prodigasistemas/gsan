@@ -352,15 +352,14 @@ function passarComEnter(tecla, nomeCampoForm, posicao) {
 								<table width="100%" bgcolor="#99CCFF">
 									<tr bordercolor="#000000" bgcolor="#90c7fc">
 										<td width="20%" bgcolor="#90c7fc">
+											<div align="center"></div>
+										</td>
+										<td width="20%" bgcolor="#90c7fc">
 											<div align="center"><strong>Inscrição</strong></div>
 										</td>
 										
 										<td width="15%" bgcolor="#90c7fc">
 											<div align="center"><strong>Matrícula</strong></div>
-										</td>
-										
-										<td width="7%" bgcolor="#90c7fc">
-											<div align="center"><strong>Sequencial de Rota</strong></div>
 										</td>
 										
 										<td width="7%" bgcolor="#90c7fc">
@@ -389,11 +388,9 @@ function passarComEnter(tecla, nomeCampoForm, posicao) {
 											<%} else {%>
 												<tr bgcolor="#FFFFFF">
 											<%}%>
-													<!--  td width="7%">
-														<div align="center">
+													<td width="1%">
 															<input type="checkbox" name="idImoveisSelecionados" value="<bean:write name="dado" property="matriculaImovel"/>"/>
-														</div>
-													</td -->
+													</td>
 													
 													<td width="20%">
 														<bean:write name="dado" property="inscricao" />
@@ -401,10 +398,6 @@ function passarComEnter(tecla, nomeCampoForm, posicao) {
 		
 													<td width="15%" align="center">
 														<bean:write name="dado" property="matriculaImovel" />
-													</td>
-													
-													<td width="7%" align="center">
-														<bean:write name="dado" property="numeroSequencialRota" />
 													</td>
 													
 													<td width="7%" align="center">

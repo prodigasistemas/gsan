@@ -20,12 +20,14 @@ import gcom.faturamento.FaturamentoSituacaoTipo;
 import gcom.faturamento.MotivoInterferenciaTipo;
 import gcom.faturamento.consumotarifa.ConsumoTarifaVigencia;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
+import gcom.gui.faturamento.ImovelFaturamentoSeletivoHelper;
 import gcom.gui.micromedicao.ColetaMedidorEnergiaHelper;
 import gcom.gui.micromedicao.DadosMovimentacao;
 import gcom.gui.relatorio.micromedicao.FiltroRelatorioLeituraConsultarArquivosTextoHelper;
 import gcom.gui.relatorio.micromedicao.RelatorioNotificacaoDebitosImpressaoSimultaneaHelper;
 import gcom.interceptor.ObjetoTransacao;
 import gcom.micromedicao.bean.FiltrarLeiturasTelemetriaHelper;
+import gcom.micromedicao.bean.ImovelPorRotaHelper;
 import gcom.micromedicao.bean.LigacaoMedicaoIndividualizadaHelper;
 import gcom.micromedicao.bean.PesquisarRelatorioRotasOnlinePorEmpresaHelper;
 import gcom.micromedicao.consumo.ConsumoAnormalidade;
@@ -11748,7 +11750,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 
 	}
 
-    public Collection buscarImoveisPorRota(Integer idImovel, Integer idRota, String empresa, Integer anoMesFaturamento)
+    public Collection buscarImoveisPorRota(Integer idRota, String empresa, Integer anoMesFaturamento)
                                                                                                      throws ErroRepositorioException {
         Collection retorno = null;
         Session session = HibernateUtil.getSession();
@@ -11816,10 +11818,6 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
             consulta.append("WHERE rota.id = :idRota AND movimento.anoMesMovimento = :anoMesFaturamento ");
             consulta.append(" and (movimento.numeroHidrometro is not null and movimento.numeroHidrometro <> '') ");
 
-            if (idImovel != null) {
-            	consulta.append("and imovel.id = " + idImovel);
-            }
-            
             if (empresa.toUpperCase().equals("COMPESA")) {
                 consulta.append(" ORDER BY movimento.numeroSequencialRota,empresa.id,localidade.id,movimento,movimento.numeroQuadra,movimento.numeroLoteImovel,movimento.numeroSubloteImovel");
             } else {
@@ -23694,39 +23692,6 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 	
 	/**TODO:COSANPA
 	 * @author Adriana Muniz
-	 * @date 15/02/2013
-	 * 
-	 * @param medicaoHistorico
-	 * @throws ErroRepositorioException
-	 */
-	/*public void atualizarMedicaoHistoricorLeituraConfirmada(MedicaoHistorico medicaoHistorico) 
-			throws ErroRepositorioException {
-		Session session = HibernateUtil.getSession();
-		
-		try{
-			String query = "update gcom.micromedicao.medicao.MedicaoHistorico"+
-					" set mdhi_nnleituraatualfaturamento = :leituraAtual," +
-					" mdhi_tmultimaalteracao = :data, " +
-					" mdhi_nnconsumomedidomes = :numeroConsumoMes " +
-					" where mdhi_amleitura = :anoMesReferencia " +
-					" and lagu_id = :idImovel ";
-			
-			session.createQuery(query).setInteger("leituraAtual", medicaoHistorico.getLeituraAtualFaturamento())
-										.setInteger("anoMesReferencia", medicaoHistorico.getAnoMesReferencia())
-										.setInteger("numeroConsumoMes", medicaoHistorico.getNumeroConsumoMes())
-										.setInteger("idImovel", medicaoHistorico.getLigacaoAgua().getId())
-										.setTimestamp("data", new Date())
-										.executeUpdate();
-
-		}catch(HibernateException e) {
-			throw new ErroRepositorioException(e, "Erro no hibernate");
-		}finally {
-			HibernateUtil.closeSession(session);
-		}
-	}
-	*/
-	/**TODO:COSANPA
-	 * @author Adriana Muniz
 	 * @date 26/02/2013
 	 * 
 	 * Retorna o valor do campo indicador analisado da tabea Medição Historico
@@ -23882,4 +23847,61 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
          
          return retorno;
      }
+     
+     public Collection<ImovelPorRotaHelper> buscarImoveisFaturamentoSeletivo(Integer matriculaImovel, Integer idRota, Integer anoMesFaturamento) throws ErroRepositorioException {
+		Collection<ImovelPorRotaHelper> retorno = null;
+		Session session = HibernateUtil.getSession();
+
+		try {
+			StringBuilder consulta = new StringBuilder();
+			consulta.append("SELECT new gcom.micromedicao.bean.ImovelPorRotaHelper(imovel, movimento) ");
+			//consulta.append("SELECT imovel ");
+			consulta.append("FROM MovimentoRoteiroEmpresa movimento ");
+			consulta.append("   LEFT JOIN FETCH movimento.localidade localidade ");
+			consulta.append("   LEFT JOIN FETCH movimento.imovel imovel ");
+			consulta.append("   LEFT JOIN FETCH imovel.imovelPerfil imovelPerfil ");
+			consulta.append("   LEFT JOIN FETCH imovel.ligacaoAgua ligacaoAgua ");
+			consulta.append("   LEFT JOIN FETCH imovel.hidrometroInstalacaoHistorico hidInstHistoricoPoco ");
+			consulta.append("   LEFT JOIN FETCH ligacaoAgua.hidrometroInstalacaoHistorico hidInstHistoricoAgua ");
+			consulta.append("   LEFT JOIN FETCH hidInstHistoricoAgua.hidrometroProtecao ");
+			consulta.append("   LEFT JOIN FETCH hidInstHistoricoAgua.hidrometroLocalInstalacao ");
+			consulta.append("   LEFT JOIN FETCH hidInstHistoricoPoco.hidrometroProtecao ");
+			consulta.append("   LEFT JOIN FETCH hidInstHistoricoPoco.hidrometroLocalInstalacao ");
+			consulta.append("   LEFT JOIN FETCH hidInstHistoricoAgua.medicaoTipo medTipoAgua ");
+			consulta.append("   LEFT JOIN FETCH hidInstHistoricoPoco.medicaoTipo medTipoPoco ");
+			consulta.append("   LEFT JOIN FETCH movimento.rota rota ");
+			consulta.append("   LEFT JOIN FETCH rota.empresa empresaRota ");
+			consulta.append("   LEFT JOIN FETCH movimento.roteiroEmpresa roteiroEmpresa ");
+			consulta.append("   LEFT JOIN FETCH rota.empresa empresa ");
+			consulta.append("   LEFT JOIN FETCH rota.faturamentoGrupo faturamentoGrupo ");
+			consulta.append("   LEFT JOIN FETCH imovel.ligacaoAguaSituacao ligacaoAguaSituacao ");
+			consulta.append("   LEFT JOIN FETCH imovel.ligacaoEsgotoSituacao ligacaoEsgotoSituacao ");
+			consulta.append("   LEFT JOIN FETCH imovel.faturamentoSituacaoTipo faturamentoSituacaoTipo ");
+			consulta.append("   LEFT JOIN FETCH rota.leituraTipo leituraTipo ");
+			consulta.append("   LEFT JOIN FETCH localidade.gerenciaRegional gerenciaRegional ");
+			consulta.append("   LEFT JOIN FETCH movimento.leituraAnormalidade leituraAnormalidade ");
+			consulta.append("   LEFT JOIN FETCH imovel.setorComercial setorComercial ");
+			consulta.append("   LEFT JOIN FETCH imovel.quadra quadra ");
+			consulta.append("WHERE rota.id = :idRota AND movimento.anoMesMovimento = :anoMesFaturamento ");
+			consulta.append(" and (movimento.numeroHidrometro is not null and movimento.numeroHidrometro <> '') ");
+			consulta.append(" and imovel.id in (select c.imovel.id from Conta c where c.rota.id = :idRota and c.referencia = :anoMesFaturamento and c.debitoCreditoSituacaoAtual.id = :preFaturada ) ");
+			
+			if (matriculaImovel != null) {
+				consulta.append(" and imovel.id = " + matriculaImovel);
+			}
+			consulta.append(" order by imovel.localidade.id, imovel.setorComercial.codigo, imovel.quadra.numeroQuadra, imovel.lote, imovel.subLote ");
+
+			retorno = session.createQuery(consulta.toString())
+					.setInteger("idRota", idRota)
+					.setInteger("anoMesFaturamento", anoMesFaturamento)//.list();
+					.setInteger("preFaturada", DebitoCreditoSituacao.PRE_FATURADA).list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate - Buscar Imoveis faturamento seletivo.");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
 }
