@@ -5628,7 +5628,7 @@ public interface IRepositorioArrecadacao {
 	
 	public Integer countImoveisBancoDebitoAutomatico(String[] bancos, 
 			Integer anoMesInicial,Integer anoMesFinal, Date dataVencimentoInicial,
-			Date dataVencimentoFinal, String indicadorContaPaga)
+			Date dataVencimentoFinal, String indicadorContaPaga, Integer somenteDebitoAutomatico)
 		throws ErroRepositorioException;
 	
 	public Collection selecionarImoveisBancoDebitoAutomatico(String[] bancos, 
@@ -6557,7 +6557,7 @@ public interface IRepositorioArrecadacao {
 	 */
 	public Integer countImoveisBancoDebitoAutomaticoPorGrupoFaturamento(String[] bancos, 
 			Integer anoMesInicial,Integer anoMesFinal, Date dataVencimentoInicial,
-			Date dataVencimentoFinal, String indicadorContaPaga, Integer idGrupoFaturamento)
+			Date dataVencimentoFinal, String indicadorContaPaga, Integer idGrupoFaturamento, Integer somenteDebitoAutomatico)
 		throws ErroRepositorioException;
 	
 

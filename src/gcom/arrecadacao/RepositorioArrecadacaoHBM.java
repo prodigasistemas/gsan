@@ -24601,7 +24601,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	  */
 		public Integer countImoveisBancoDebitoAutomatico(String[] bancos, 
 				Integer anoMesInicial,Integer anoMesFinal, Date dataVencimentoInicial,
-				Date dataVencimentoFinal, String indicadorContaPaga)
+				Date dataVencimentoFinal, String indicadorContaPaga, Integer somenteDebitoAutomatico)
 			throws ErroRepositorioException {
 			
 			Integer retorno = null;
@@ -24619,11 +24619,16 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 				 + " inner join conta.debitoCreditoSituacaoAtual dcst "
 				 + " left  join conta.debitoCreditoSituacaoAnterior dcsan "
 				 + " inner join conta.imovel imov "
+				 + " inner join conta c "
 				 + " where ag.banco.id in (:idBanco) " 
 				 + " and dcst.id in(:normal, :retificada) "
 				 + " and conta.referencia between :anoMesInicial and :anoMesFinal " 
 				 + " and da.dataExclusao is null "
 				 + " and dam.numeroSequenciaArquivoEnviado is null";
+				
+				if (somenteDebitoAutomatico != null && somenteDebitoAutomatico == 1) {
+					select += " and c.indicadorDebitoConta = 1 ";
+				}
 				
 				if(dataVencimentoInicial != null){
 					select += " and conta.dataVencimentoConta between :vencimentoInicial and :vencimentoFinal ";
@@ -29184,7 +29189,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	public Integer countImoveisBancoDebitoAutomaticoPorGrupoFaturamento(
 			String[] bancos, Integer anoMesInicial, Integer anoMesFinal,
 			Date dataVencimentoInicial, Date dataVencimentoFinal,
-			String indicadorContaPaga, Integer idGrupoFaturamento)
+			String indicadorContaPaga, Integer idGrupoFaturamento, Integer somenteDebitoAutomatico)
 			throws ErroRepositorioException {
 
 		Integer retorno = null;
@@ -29200,6 +29205,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					+ " inner join dam.contaGeral.conta conta "
 					+ " inner join da.agencia ag"
 					+ " inner join conta.debitoCreditoSituacaoAtual dcst "
+					+ " inner join conta c "
 					+ " left  join conta.debitoCreditoSituacaoAnterior dcsan "
 					+ " inner join conta.imovel imov "
 					+ " where ag.banco.id in (:idBanco) "
@@ -29209,6 +29215,10 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					+ " and dam.numeroSequenciaArquivoEnviado is null"
 					+ " and conta.faturamentoGrupo.id = :idGrupoFaturamento";
 
+			if (somenteDebitoAutomatico != null && somenteDebitoAutomatico == 1) {
+				select += " and c.indicadorDebitoConta = 1 ";
+			}
+			
 			if (dataVencimentoInicial != null) {
 				select += " and conta.dataVencimentoConta between :vencimentoInicial and :vencimentoFinal ";
 				parameters.put("vencimentoInicial", dataVencimentoInicial);

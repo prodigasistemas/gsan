@@ -19844,7 +19844,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	public Integer pesquisarQuantidadeContasImoveis(Integer anoMes,
 			Collection idsImovel, Date dataVencimentoContaInicio,
 			Date dataVencimentoContaFim, Integer anoMesFim,
-			String indicadorContaPaga) throws ErroRepositorioException {
+			String indicadorContaPaga, Integer somenteDebitoAutomatico) throws ErroRepositorioException {
 
 		Integer retorno = 0;
 
@@ -19908,6 +19908,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					consulta += "where cnta.referencia BETWEEN :anoMes AND :anoMesFim "
 						+ "and imov.id in (:idsImovel) "
 						+ "and dcst.id in(:normal, :incluida, :retificada) ";
+				}
+				
+				if (somenteDebitoAutomatico != null && somenteDebitoAutomatico == 1) {
+					consulta += " and cnta.indicadorDebitoConta = 1 ";
 				}
 				
 				if (dataVencimentoContaInicio != null) {
@@ -26401,7 +26405,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 */
 	public Integer pesquisarQuantidadeContasGrupoFaturamento(Integer anoMes,
 			Integer idGrupoFaturamento, Date dataVencimentoContaInicio,
-			Date dataVencimentoContaFim, Integer anoMesFim)
+			Date dataVencimentoContaFim, Integer anoMesFim, Integer somenteDebitoAutomatico)
 			throws ErroRepositorioException {
 
 		Integer retorno = 0;
@@ -26447,6 +26451,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				consulta += "WHERE cnta.referencia BETWEEN :anoMes AND :anoMesFim "
 					+ "AND ftgr.id = :idGrupoFaturamento "
 					+ "AND dcst.id IN(:normal, :incluida, :retificada) ";
+			}
+			
+			if (somenteDebitoAutomatico != null && somenteDebitoAutomatico == 1) {
+				consulta += " and cnta.indicadorDebitoConta = 1 ";
 			}
 			
 			if (dataVencimentoContaInicio != null) {

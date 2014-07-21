@@ -48932,7 +48932,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			Collection idsImovel, Integer codigoCliente, Short relacaoTipo,
 			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
 			Integer idGrupoFaturamento, Integer anoMesFinal,
-			String indicadorContaPaga) throws ControladorException {
+			String indicadorContaPaga, Integer somenteDebitoAutomatico) throws ControladorException {
 
 		Integer quantidadeConta = 0;
 		try {
@@ -48940,13 +48940,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				quantidadeConta = repositorioFaturamento
 						.pesquisarQuantidadeContasGrupoFaturamento(anoMes,
 								idGrupoFaturamento, dataVencimentoContaInicio,
-								dataVencimentoContaFim, anoMesFinal);
+								dataVencimentoContaFim, anoMesFinal, somenteDebitoAutomatico);
 			} else {
 				quantidadeConta = repositorioFaturamento
 						.pesquisarQuantidadeContasImoveis(anoMes, idsImovel,
 								dataVencimentoContaInicio,
 								dataVencimentoContaFim, anoMesFinal,
-								indicadorContaPaga);
+								indicadorContaPaga, somenteDebitoAutomatico);
 			}
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();

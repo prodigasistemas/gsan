@@ -2344,7 +2344,7 @@ public interface IControladorFaturamento {
 	public Integer obterContasConjuntoImoveis(Integer anoMes,
 			Collection idsImovel, Integer codigoCliente, Short relacaoTipo,
 			Date dataVencimentoContaInicio, Date dataVencimentoContaFim, Integer idGrupoFaturamento,
-			Integer anoMesFinal, String indicadorContaPaga) 
+			Integer anoMesFinal, String indicadorContaPaga, Integer somenteDebitoAutomatico) 
 			throws ControladorException;
 	
 	/**

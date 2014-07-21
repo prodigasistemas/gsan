@@ -941,7 +941,7 @@ public interface IRepositorioFaturamento {
 	public Integer pesquisarQuantidadeContasImoveis(Integer anoMes,
 			Collection idsImovel, Date dataVencimentoContaInicio,
 			Date dataVencimentoContaFim, Integer anoMesFim,
-			String indicadorContaPaga) throws ErroRepositorioException;
+			String indicadorContaPaga, Integer somenteDebitoAutomatico) throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
 	public Integer pesquisarQuantidadeContasRevisaoImoveis(Integer anoMes,
@@ -1184,7 +1184,7 @@ public interface IRepositorioFaturamento {
 
 	public Integer pesquisarQuantidadeContasGrupoFaturamento(Integer anoMes, 
 			Integer idGrupoFaturamento, Date dataVencimentoContaInicio,
-			Date dataVencimentoContaFim, Integer anoMesFim)
+			Date dataVencimentoContaFim, Integer anoMesFim, Integer somenteDebitoAutomatico)
 			throws ErroRepositorioException;
 
 	public Integer pesquisarQuantidadeContasRevisaoGrupoFaturamento(
