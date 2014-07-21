@@ -18,4 +18,4 @@ DELETE FROM financeiro.lancamento_tipo
 WHERE lctp_id in (99, 100, 101, 102, 103, 104); 
 
 DELETE FROM financeiro.lancamento_item
-WHERE lcit_id in (83);
+WHERE lcit_id in (83, 84);

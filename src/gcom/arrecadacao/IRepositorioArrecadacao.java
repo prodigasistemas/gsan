@@ -4901,7 +4901,18 @@ public interface IRepositorioArrecadacao {
     	throws ErroRepositorioException;
 
 	public Pagamento pesquisarPagamentoDeConta(Integer idConta) throws ErroRepositorioException ;
-    
+	
+	/**
+	 * [UC0150] Retificar Conta
+	 * 
+	 * @author Vivianne Sousa
+	 * @data 23/04/2006
+	 * 
+	 * @param idPagamento
+	 * @param idConta
+	 * @return
+	 * @throws ErroRepositorioException
+	 */
 	public void atualizarContaEmPagamento(Integer idPagamento, Integer idConta) throws ErroRepositorioException;
 	
 	public Integer pesquisarIdPagamentoDaGuia(Integer idGuiaPagamento) throws ErroRepositorioException;

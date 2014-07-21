@@ -32,7 +32,6 @@ public class ClassificarPagamentosAction extends GcomAction {
 			HttpServletResponse httpServletResponse) {
 		
 		ActionForward retorno = actionMapping.findForward("telaSucesso");
-
 		Fachada fachada = Fachada.getInstancia();
 
 		HttpSession sessao = httpServletRequest.getSession(false);
@@ -52,6 +51,7 @@ public class ClassificarPagamentosAction extends GcomAction {
 		} catch (ControladorException e) {
 			e.printStackTrace();
 		}
+		
 		
 		montarPaginaSucesso(httpServletRequest,
 				"Pagamentos selecionados já classificados",
