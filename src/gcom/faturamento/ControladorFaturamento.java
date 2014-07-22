@@ -16768,17 +16768,17 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		
 		repositorioUtil.inserir(novaConta);
 		
-		this.criarContaCategoriaParaRecuperacaoCredito(contaOrigem, novaConta);
-		this.criarDebitoCobradoParaRecuperacaoCredito(contaOrigem, novaConta);
-		this.criarCreditoRealizadoParaRecuperacaoCredito(contaOrigem, novaConta);
-		this.criarClienteContaParaRecuperacaoCredito(contaOrigem, novaConta);
-		this.criarContaImpostosDeduzidosParaRecuperacaoCredito(contaOrigem, novaConta);
-		this.criarConsumoFaixaCategoriaParaRecuperacaoCredito(contaOrigem, novaConta);
+		this.copiarContaCategoria(contaOrigem, novaConta);
+		this.copiarDebitoCobrado(contaOrigem, novaConta);
+		this.copiarCreditoRealizado(contaOrigem, novaConta);
+		this.copiarClienteConta(contaOrigem, novaConta);
+		this.copiarContaImpostosDeduzidos(contaOrigem, novaConta);
+		this.copiarConsumoFaixaCategoria(contaOrigem, novaConta);
 		
 		return novaConta;
 	}
 	
-	private void criarConsumoFaixaCategoriaParaRecuperacaoCredito(IConta contaAntiga, Conta contaNova) throws Exception {
+	private void copiarConsumoFaixaCategoria(IConta contaAntiga, Conta contaNova) throws Exception {
 		Collection<IContaCategoriaConsumoFaixa> listaContaCategoriaConsumoFaixaOrigem = repositorioFaturamento.pesquisarContaCategoriaConsumoFaixa(contaAntiga.getId());
 		listaContaCategoriaConsumoFaixaOrigem.addAll(repositorioFaturamento.pesquisarContaCategoriaConsumoFaixaHistorico(contaAntiga.getId()));
 				
@@ -16794,7 +16794,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 	
-	private void criarContaCategoriaParaRecuperacaoCredito(IConta contaAntiga, Conta contaNova) throws Exception {
+	private void copiarContaCategoria(IConta contaAntiga, Conta contaNova) throws Exception {
 		Collection<IContaCategoria> listaContaCategoriaOrigem = repositorioFaturamento.pesquisarContaCategoria(contaAntiga.getId());
 		listaContaCategoriaOrigem.addAll(repositorioFaturamento.pesquisarContaCategoriaHistorico(contaAntiga.getId()));
 				
@@ -16807,7 +16807,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 	
-	private void criarDebitoCobradoParaRecuperacaoCredito(IConta contaAntiga, Conta contaNova) throws Exception {
+	private void copiarDebitoCobrado(IConta contaAntiga, Conta contaNova) throws Exception {
 		Collection<IDebitoCobrado> listaDebitoCobradoOrigem = repositorioFaturamento.pesquisarDebitosCobrados(contaAntiga.getId());
 		listaDebitoCobradoOrigem.addAll(repositorioFaturamento.pesquisarDebitosCobradosHistorico(contaAntiga.getId()));
 				
@@ -16836,7 +16836,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 	
-	private void criarCreditoRealizadoParaRecuperacaoCredito(IConta contaAntiga, Conta contaNova) throws Exception {
+	private void copiarCreditoRealizado(IConta contaAntiga, Conta contaNova) throws Exception {
 		Collection<ICreditoRealizado> listaCreditosOrigem = repositorioFaturamento.pesquisarCreditosRealizados(contaAntiga.getId());
 		listaCreditosOrigem.addAll(repositorioFaturamento.pesquisarCreditosRealizadosHistorico(contaAntiga.getId()));
 				
@@ -16865,7 +16865,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 	
-	private void criarContaImpostosDeduzidosParaRecuperacaoCredito(IConta contaAntiga, Conta contaNova) throws Exception {
+	private void copiarContaImpostosDeduzidos(IConta contaAntiga, Conta contaNova) throws Exception {
 		Collection<IContaImpostosDeduzidos> listaContaImpostoOrigem = repositorioFaturamento.pesquisarContaImpostosDeduzidos(contaAntiga.getId());
 		listaContaImpostoOrigem.addAll(repositorioFaturamento.pesquisarContaImpostosDeduzidosHistorico(contaAntiga.getId()));
 				
@@ -16878,7 +16878,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 	
-	private void criarClienteContaParaRecuperacaoCredito(IConta contaAntiga, Conta contaNova) throws Exception {
+	private void copiarClienteConta(IConta contaAntiga, Conta contaNova) throws Exception {
 		Collection<IClienteConta> listaClienteContaOrigem = repositorioFaturamento.pesquisarClienteConta(contaAntiga.getId());
 		listaClienteContaOrigem.addAll(repositorioFaturamento.pesquisarClienteContaHistorico(contaAntiga.getId()));
 				
@@ -16892,6 +16892,19 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 	
 	private Conta criarContaParaRecuperacaoCredito(IConta contaOrigem) throws ControladorException {
+		Conta novaConta = this.copiarConta(contaOrigem);
+		
+		novaConta.setDataVencimentoConta(new Date());
+		novaConta.setContaMotivoInclusao(new ContaMotivoInclusao(ContaMotivoInclusao.RECUPERACAO_DE_CREDITO));
+		novaConta.setReferenciaContabil(getControladorUtil().pesquisarParametrosDoSistema().getAnoMesArrecadacao());
+		novaConta.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.INCLUIDA));
+		
+		return novaConta;
+	}
+	
+	private Conta copiarConta(IConta contaOrigem) throws ControladorException {
+		Rota rota = getControladorMicromedicao().buscarRotaDoImovel(contaOrigem.getImovel().getId());
+
 		ContaGeral contaGeral = new ContaGeral();
 		contaGeral.setIndicadorHistorico((short) 2);
 		contaGeral.setUltimaAlteracao(new Date());
@@ -16900,20 +16913,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		Conta novaConta = new Conta();
 		MergeProperties.mergeInterfaceProperties(novaConta, contaOrigem);
 		contaOrigem.buildConta(novaConta);
+		
 		novaConta.setId(contaGeral.getId());
 		novaConta.setContaGeral(contaGeral);
 		novaConta.setUltimaAlteracao(new Date());
-		novaConta.setDataVencimentoConta(new Date());
-		novaConta.setContaMotivoInclusao(new ContaMotivoInclusao(ContaMotivoInclusao.RECUPERACAO_DE_CREDITO));
-		
-		Rota rota = getControladorMicromedicao().buscarRotaDoImovel(novaConta.getImovel().getId());
-
 		novaConta.setRota(rota);
-		novaConta.setReferenciaContabil(getControladorUtil().pesquisarParametrosDoSistema().getAnoMesArrecadacao());
-
-		DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao(DebitoCreditoSituacao.INCLUIDA);
-		novaConta.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
-		
 		
 		return novaConta;
 	}
@@ -16949,5 +16953,30 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			}
 		}
 		return ids;
+	}
+	
+	public Conta retificarContaPagamentosDiferenca2Reais(Integer idConta) throws ControladorException {
+		
+		Conta contaOriginal  = (Conta)(this.consultarConta(idConta)).iterator().next();
+		DebitoCreditoSituacao situacaoOriginal = contaOriginal.getDebitoCreditoSituacaoAtual();
+		
+		Conta novaConta = this.copiarConta(contaOriginal);
+		
+		novaConta.setDataVencimentoConta(new Date());
+		novaConta.setReferenciaContabil(getControladorUtil().pesquisarParametrosDoSistema().getAnoMesArrecadacao());
+		novaConta.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.RETIFICADA));
+		novaConta.setUsuario(Usuario.USUARIO_BATCH);
+		
+		contaOriginal.setDebitoCreditoSituacaoAnterior(situacaoOriginal);
+		contaOriginal.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO));
+		contaOriginal.setUltimaAlteracao(new Date());
+		this.atualizarConta(contaOriginal);
+		
+		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CONTA_RETIFICAR, novaConta.getImovel()
+				.getId(), novaConta.getId(), new UsuarioAcaoUsuarioHelper(Usuario.USUARIO_BATCH, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+
+		registradorOperacao.registrarOperacao(novaConta);
+
+		return novaConta;
 	}
 }

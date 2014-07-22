@@ -5673,4 +5673,6 @@ public interface IControladorFaturamento {
 	public void atualizarVecimentoFaturaClienteResponsavel(Date dataVencimento, String anoMesReferencia) throws ControladorException;
 	
 	public Integer countFaturasClienteResponsaveis(String anoMesReferencia) throws ControladorException;
+	
+	public Conta retificarContaPagamentosDiferenca2Reais(Integer idConta) throws ControladorException;
 }

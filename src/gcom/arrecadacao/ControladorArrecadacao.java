@@ -175,6 +175,7 @@ import gcom.faturamento.bean.CalcularValoresAguaEsgotoHelper;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaGeral;
 import gcom.faturamento.conta.ContaHistorico;
+import gcom.faturamento.conta.ContaMotivoRetificacao;
 import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.conta.FiltroConta;
 import gcom.faturamento.conta.FiltroContaHistorico;
@@ -29867,7 +29868,9 @@ public class ControladorArrecadacao implements SessionBean {
 						inserirCreditoARealizar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca);
 					}else if (diferenca.doubleValue() < 0.0){
 						inserirDebitoACobrar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca.abs());
-					}				
+					}	
+					
+					getControladorFaturamento().retificarContaPagamentosDiferenca2Reais(pagamentoHelper.getIdConta());
 				}
 			}
 			
