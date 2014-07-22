@@ -59936,6 +59936,10 @@ public class ControladorCobranca implements SessionBean {
 		return inserirTotalDeContasEGuias(retorno);
 	}
 
+	/**
+	 * Este método serve unicamente para inserir os subtotais de contas e guias de pagamento vencidas, facilitando a leitura.
+	 * Considerando que o relatório é gerado a partir e uma lista ordenada, foi necessário iterar pela coleção para inserir os subtotais
+	 * corretamente.*/
 	private Collection<RelatorioDocumentosAReceberBean> inserirTotalDeContasEGuias(Collection<RelatorioDocumentosAReceberBean> retorno) {
 		int qntContaRes = 0;
 		int qntContaCom = 0;
@@ -59988,15 +59992,25 @@ public class ControladorCobranca implements SessionBean {
 
 		RelatorioDocumentosAReceberBean documentoComTotalConta = new RelatorioDocumentosAReceberBean();
 		documentoComTotalConta.setQtdDocumentosRes(qntContaRes);
+		documentoComTotalConta.setQtdDocumentosResTotal(qntContaRes);
 		documentoComTotalConta.setQtdDocumentosCom(qntContaCom);
+		documentoComTotalConta.setQtdDocumentosComTotal(qntContaCom);
 		documentoComTotalConta.setQtdDocumentosInd(qntContaInd);
+		documentoComTotalConta.setQtdDocumentosIndTotal(qntContaInd);
 		documentoComTotalConta.setQtdDocumentosTot(qntContaTot);
+		documentoComTotalConta.setQtdDocumentosTotTotal(qntContaTot);
 		documentoComTotalConta.setQtdDocumentosPub(qntContaPub);
+		documentoComTotalConta.setQtdDocumentosPubTotal(qntContaPub);
 		documentoComTotalConta.setValorDocumentosRes(totalContaRes);
+		documentoComTotalConta.setValorDocumentosResTotal(totalContaRes);
 		documentoComTotalConta.setValorDocumentosCom(totalContaCom);
+		documentoComTotalConta.setValorDocumentosComTotal(totalContaCom);
 		documentoComTotalConta.setValorDocumentosInd(totalContaInd);
+		documentoComTotalConta.setValorDocumentosIndTotal(totalContaInd);
 		documentoComTotalConta.setValorDocumentosTot(totalContaTot);
+		documentoComTotalConta.setValorDocumentosTotTotal(totalContaTot);
 		documentoComTotalConta.setValorDocumentosPub(totalContaPub);
+		documentoComTotalConta.setValorDocumentosPubTotal(totalContaPub);
 		documentoComTotalConta.setDescricaoSituacao("VENCIDOS");
 		documentoComTotalConta.setIdDocumentoTipo(1);
 		documentoComTotalConta.setNomeDocumentoTipo("CONTA");
@@ -60007,15 +60021,25 @@ public class ControladorCobranca implements SessionBean {
 
 		RelatorioDocumentosAReceberBean documentoComTotalGuia = new RelatorioDocumentosAReceberBean();
 		documentoComTotalGuia.setQtdDocumentosRes(qntGuiaRes);
+		documentoComTotalGuia.setQtdDocumentosResTotal(qntGuiaRes);
 		documentoComTotalGuia.setQtdDocumentosCom(qntGuiaCom);
+		documentoComTotalGuia.setQtdDocumentosComTotal(qntGuiaCom);
 		documentoComTotalGuia.setQtdDocumentosInd(qntGuiaInd);
+		documentoComTotalGuia.setQtdDocumentosIndTotal(qntGuiaInd);
 		documentoComTotalGuia.setQtdDocumentosTot(qntGuiaTot);
+		documentoComTotalGuia.setQtdDocumentosTotTotal(qntGuiaTot);
 		documentoComTotalGuia.setQtdDocumentosPub(qntGuiaPub);
+		documentoComTotalGuia.setQtdDocumentosPubTotal(qntGuiaPub);
 		documentoComTotalGuia.setValorDocumentosRes(totalGuiaRes);
+		documentoComTotalGuia.setValorDocumentosResTotal(totalGuiaRes);
 		documentoComTotalGuia.setValorDocumentosCom(totalGuiaCom);
+		documentoComTotalGuia.setValorDocumentosComTotal(totalGuiaCom);
 		documentoComTotalGuia.setValorDocumentosInd(totalGuiaInd);
+		documentoComTotalGuia.setValorDocumentosIndTotal(totalGuiaInd);
 		documentoComTotalGuia.setValorDocumentosTot(totalGuiaTot);
+		documentoComTotalGuia.setValorDocumentosTotTotal(totalGuiaTot);
 		documentoComTotalGuia.setValorDocumentosPub(totalGuiaPub);
+		documentoComTotalGuia.setValorDocumentosPubTotal(totalGuiaPub);
 		documentoComTotalGuia.setDescricaoSituacao("VENCIDOS");
 		documentoComTotalGuia.setIdDocumentoTipo(7);
 		documentoComTotalGuia.setNomeDocumentoTipo("GUIA DE PAGAMENTO");

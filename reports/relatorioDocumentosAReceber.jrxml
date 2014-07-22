@@ -50,6 +50,16 @@
 	<field name="getValorDocumentosTot" class="java.math.BigDecimal"/>
 	<field name="getIndicadorTotal" class="java.lang.String"/>
 	<field name="getFaixa" class="java.lang.String"/>
+	<field name="getQtdDocumentosResTotal" class="java.lang.Integer"/>
+	<field name="getQtdDocumentosIndTotal" class="java.lang.Integer"/>
+	<field name="getQtdDocumentosComTotal" class="java.lang.Integer"/>
+	<field name="getQtdDocumentosPubTotal" class="java.lang.Integer"/>
+	<field name="getQtdDocumentosTotTotal" class="java.lang.Integer"/>
+	<field name="getValorDocumentosResTotal" class="java.math.BigDecimal"/>
+	<field name="getValorDocumentosComTotal" class="java.math.BigDecimal"/>
+	<field name="getValorDocumentosIndTotal" class="java.math.BigDecimal"/>
+	<field name="getValorDocumentosPubTotal" class="java.math.BigDecimal"/>
+	<field name="getValorDocumentosTotTotal" class="java.math.BigDecimal"/>
 
 	<variable name="qtdSituacaoRes" class="java.lang.Integer" resetType="Group" resetGroup="TotalSituacao" calculation="Sum">
 		<variableExpression><![CDATA[$F{getQtdDocumentosRes}]]></variableExpression>
@@ -213,6 +223,46 @@
 	</variable>
 	<variable name="totalGeral" class="java.lang.Integer" resetType="Report" calculation="Nothing">
 		<variableExpression><![CDATA[new Integer($F{getQtdDocumentosTot}.intValue() + $F{getQtdDocumentosPub}.intValue())]]></variableExpression>
+	</variable>
+	<variable name="valorDocumentosResTotal" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$F{getValorDocumentosResTotal}]]></variableExpression>
+		<initialValueExpression><![CDATA[new BigDecimal("0.0")]]></initialValueExpression>
+	</variable>
+	<variable name="valorDocumentosComTotal" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$F{getValorDocumentosComTotal}]]></variableExpression>
+		<initialValueExpression><![CDATA[new BigDecimal("0.0")]]></initialValueExpression>
+	</variable>
+	<variable name="valorDocumentosIndTotal" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$F{getValorDocumentosIndTotal}]]></variableExpression>
+		<initialValueExpression><![CDATA[new BigDecimal("0.0")]]></initialValueExpression>
+	</variable>
+	<variable name="valorDocumentosTotTotal" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$F{getValorDocumentosTotTotal}]]></variableExpression>
+		<initialValueExpression><![CDATA[new BigDecimal("0.0")]]></initialValueExpression>
+	</variable>
+	<variable name="valorDocumentosPubTotal" class="java.math.BigDecimal" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$F{getValorDocumentosPubTotal}]]></variableExpression>
+		<initialValueExpression><![CDATA[new BigDecimal("0.0")]]></initialValueExpression>
+	</variable>
+	<variable name="gtdQuebraResTotal" class="java.lang.Integer" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$F{getQtdDocumentosResTotal}]]></variableExpression>
+		<initialValueExpression><![CDATA[new Integer(0)]]></initialValueExpression>
+	</variable>
+	<variable name="gtdQuebraComTotal" class="java.lang.Integer" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$F{getQtdDocumentosComTotal}]]></variableExpression>
+		<initialValueExpression><![CDATA[new Integer(0)]]></initialValueExpression>
+	</variable>
+	<variable name="gtdQuebraIndTotal" class="java.lang.Integer" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$F{getQtdDocumentosIndTotal}]]></variableExpression>
+		<initialValueExpression><![CDATA[new Integer(0)]]></initialValueExpression>
+	</variable>
+	<variable name="gtdQuebraTotTotal" class="java.lang.Integer" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$F{getQtdDocumentosTotTotal}]]></variableExpression>
+		<initialValueExpression><![CDATA[new Integer(0)]]></initialValueExpression>
+	</variable>
+	<variable name="gtdQuebraPubTotal" class="java.lang.Integer" resetType="Report" calculation="Sum">
+		<variableExpression><![CDATA[$F{getQtdDocumentosPubTotal}]]></variableExpression>
+		<initialValueExpression><![CDATA[new Integer(0)]]></initialValueExpression>
 	</variable>
 
 		<group  name="Quebra" isStartNewPage="true" >
@@ -855,7 +905,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{gtdQuebraRes}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[new Integer($V{gtdQuebraRes}.intValue()-$V{gtdQuebraResTotal}.intValue())]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -868,7 +918,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{valorTotalQuebraRes}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{valorTotalQuebraRes}.subtract($V{valorDocumentosResTotal})]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -881,7 +931,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{gtdQuebraInd}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[new Integer($V{gtdQuebraInd}.intValue()-$V{gtdQuebraIndTotal}.intValue())]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -894,7 +944,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{valorTotalQuebraInd}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{valorTotalQuebraInd}.subtract($V{valorDocumentosIndTotal})]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -907,7 +957,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{gtdQuebraCom}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[new Integer($V{gtdQuebraCom}.intValue()-$V{gtdQuebraComTotal}.intValue())]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -920,7 +970,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{valorTotalQuebraCom}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{valorTotalQuebraCom}.subtract($V{valorDocumentosComTotal})]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -933,7 +983,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{gtdQuebraTot}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[new Integer($V{gtdQuebraTot}.intValue()-$V{gtdQuebraTotTotal}.intValue())]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -946,7 +996,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{valorTotalQuebraTot}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{valorTotalQuebraTot}.subtract($V{valorDocumentosTotTotal})]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -959,7 +1009,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{gtdQuebraPub}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[new Integer($V{gtdQuebraPub}.intValue()-$V{gtdQuebraPubTotal}.intValue())]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -972,7 +1022,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{valorTotalQuebraPub}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{valorTotalQuebraPub}.subtract($V{valorDocumentosPubTotal})]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -1022,7 +1072,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[new Integer($V{gtdQuebraTot}.intValue() + $V{gtdQuebraPub}.intValue())]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[new Integer($V{gtdQuebraTot}.intValue()+$V{gtdQuebraPub}.intValue()-$V{gtdQuebraTotTotal}.intValue()-$V{gtdQuebraPubTotal}.intValue())]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -1035,7 +1085,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{valorTotalQuebraTot}.add($V{valorTotalQuebraPub})]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[(($V{valorTotalQuebraTot}.add($V{valorTotalQuebraPub})).subtract($V{valorDocumentosTotTotal})).subtract($V{valorDocumentosPubTotal})]]></textFieldExpression>
 				</textField>
 			</band>
 			</groupFooter>
@@ -1113,7 +1163,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{qtdSituacaoRes}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{getDescricaoSituacao}.equals("VENCIDOS")?new Integer($V{qtdSituacaoRes}.intValue()-$V{gtdQuebraResTotal}.intValue()):$V{qtdSituacaoRes}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -1126,7 +1176,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{valorTotalSituacaoRes}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{getDescricaoSituacao}.equals("VENCIDOS")?$V{valorTotalSituacaoRes}.subtract($V{valorDocumentosResTotal}):$V{valorTotalSituacaoRes}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -1139,7 +1189,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{qtdSituacaoInd}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{getDescricaoSituacao}.equals("VENCIDOS")?new Integer($V{qtdSituacaoInd}.intValue()-$V{gtdQuebraIndTotal}.intValue()):$V{qtdSituacaoInd}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -1152,7 +1202,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{valorTotalSituacaoInd}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{getDescricaoSituacao}.equals("VENCIDOS")?$V{valorTotalSituacaoInd}.subtract($V{valorDocumentosIndTotal}):$V{valorTotalSituacaoInd}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -1165,7 +1215,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{qtdSituacaoCom}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{getDescricaoSituacao}.equals("VENCIDOS")?new Integer($V{qtdSituacaoCom}.intValue()-$V{gtdQuebraComTotal}.intValue()):$V{qtdSituacaoCom}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -1178,7 +1228,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{valorTotalSituacaoCom}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{getDescricaoSituacao}.equals("VENCIDOS")?$V{valorTotalSituacaoCom}.subtract($V{valorDocumentosComTotal}):$V{valorTotalSituacaoCom}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -1191,7 +1241,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{qtdSituacaoTot}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{getDescricaoSituacao}.equals("VENCIDOS")?new Integer($V{qtdSituacaoTot}.intValue()-$V{gtdQuebraTotTotal}.intValue()):$V{qtdSituacaoTot}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -1204,7 +1254,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{valorTotalSituacaoTot}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{getDescricaoSituacao}.equals("VENCIDOS")?$V{valorTotalSituacaoTot}.subtract($V{valorDocumentosTotTotal}):$V{valorTotalSituacaoTot}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -1217,7 +1267,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[$V{qtdSituacaoPub}]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[$F{getDescricaoSituacao}.equals("VENCIDOS")?new Integer($V{qtdSituacaoPub}.intValue()-$V{gtdQuebraPubTotal}.intValue()):$V{qtdSituacaoPub}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -1230,7 +1280,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{valorTotalSituacaoPub}]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$F{getDescricaoSituacao}.equals("VENCIDOS")?$V{valorTotalSituacaoPub}.subtract($V{valorDocumentosPubTotal}):$V{valorTotalSituacaoPub}]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -1265,7 +1315,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.lang.Integer"><![CDATA[new Integer($V{qtdSituacaoTot}.intValue() + $V{qtdSituacaoPub}.intValue())]]></textFieldExpression>
+				<textFieldExpression   class="java.lang.Integer"><![CDATA[new Integer($V{qtdSituacaoTot}.intValue()+$V{qtdSituacaoPub}.intValue()-$V{gtdQuebraTotTotal}.intValue()-$V{gtdQuebraPubTotal}.intValue())]]></textFieldExpression>
 				</textField>
 				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
@@ -1278,7 +1328,7 @@
 					<textElement textAlignment="Right" verticalAlignment="Middle">
 						<font fontName="Courier New" pdfFontName="Courier" isBold="false"/>
 					</textElement>
-				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[$V{valorTotalSituacaoTot}.add($V{valorTotalSituacaoPub})]]></textFieldExpression>
+				<textFieldExpression   class="java.math.BigDecimal"><![CDATA[(($V{valorTotalSituacaoTot}.add($V{valorTotalSituacaoPub})).subtract($V{valorDocumentosTotTotal})).subtract($V{valorDocumentosPubTotal})]]></textFieldExpression>
 				</textField>
 			</band>
 			</groupFooter>
@@ -1585,7 +1635,7 @@
 						key="line-38"/>
 					<graphicElement stretchType="NoStretch"/>
 				</line>
-				<textField isStretchWithOverflow="false" pattern="#,##0" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
+				<textField isStretchWithOverflow="false" pattern="#,##0.00" isBlankWhenNull="false" evaluationTime="Now" hyperlinkType="None"  hyperlinkTarget="Self" >
 					<reportElement
 						x="685"
 						y="18"
