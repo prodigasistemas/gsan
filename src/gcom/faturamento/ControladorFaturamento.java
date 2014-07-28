@@ -16956,27 +16956,44 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 	
 	public Conta retificarContaPagamentosDiferenca2Reais(Integer idConta) throws ControladorException {
-		
-		Conta contaOriginal  = (Conta)(this.consultarConta(idConta)).iterator().next();
+		Integer idNovaConta = 0;
+		Conta contaOriginal  = (Conta)(this.obterConta(idConta)).iterator().next();
+		Conta novaConta  = null;
 		DebitoCreditoSituacao situacaoOriginal = contaOriginal.getDebitoCreditoSituacaoAtual();
 		
-		Conta novaConta = this.copiarConta(contaOriginal);
+		if (!situacaoOriginal.getId().equals(DebitoCreditoSituacao.RETIFICADA) && !situacaoOriginal.getId().equals(DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)) {
+			novaConta = this.copiarConta(contaOriginal);
+			
+			try {
+				
+				novaConta.setDataVencimentoConta(new Date());
+				novaConta.setReferenciaContabil(getControladorUtil().pesquisarParametrosDoSistema().getAnoMesArrecadacao());
+				novaConta.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.RETIFICADA));
+				novaConta.setUsuario(Usuario.USUARIO_BATCH);
+				novaConta.setUltimaAlteracao(new Date());
+				this.getControladorUtil().inserir(novaConta);
+				
+				contaOriginal.setDebitoCreditoSituacaoAnterior(situacaoOriginal);
+				contaOriginal.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO));
+				contaOriginal.setUltimaAlteracao(new Date());
+				this.atualizarConta(contaOriginal);
+				
+				RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CONTA_RETIFICAR, novaConta.getImovel()
+						.getId(), novaConta.getId(), new UsuarioAcaoUsuarioHelper(Usuario.USUARIO_BATCH, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+				
+				registradorOperacao.registrarOperacao(novaConta);
+				
+				return novaConta;
+			} catch (Exception e) {
+				
+				if (novaConta.getId() != null) {
+					this.getControladorUtil().remover(novaConta);
+				}
+				return null;
+			}
+			
+		} 
 		
-		novaConta.setDataVencimentoConta(new Date());
-		novaConta.setReferenciaContabil(getControladorUtil().pesquisarParametrosDoSistema().getAnoMesArrecadacao());
-		novaConta.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.RETIFICADA));
-		novaConta.setUsuario(Usuario.USUARIO_BATCH);
-		
-		contaOriginal.setDebitoCreditoSituacaoAnterior(situacaoOriginal);
-		contaOriginal.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO));
-		contaOriginal.setUltimaAlteracao(new Date());
-		this.atualizarConta(contaOriginal);
-		
-		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CONTA_RETIFICAR, novaConta.getImovel()
-				.getId(), novaConta.getId(), new UsuarioAcaoUsuarioHelper(Usuario.USUARIO_BATCH, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-
-		registradorOperacao.registrarOperacao(novaConta);
-
 		return novaConta;
 	}
 }

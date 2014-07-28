@@ -48,13 +48,23 @@ public class Conta extends ObjetoTransacao implements IConta {
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_CONTA,ATRIBUTOS_RETIFICAR_CONTA_CANCELAR})
 	private Integer id;
 	private Integer referenciaContabil;
-	private Integer referencia;
+
+	/** persistent field */
+	private int referencia;
+
+	/** nullable persistent field */
 	private Short lote;
 	private Short subLote;
 	private Integer codigoSetorComercial;
 	private Integer quadra;
-	private Short digitoVerificadorConta;
-	private Short indicadorCobrancaMulta;
+
+	/** persistent field */
+	private short digitoVerificadorConta;
+
+	/** persistent field */
+	private short indicadorCobrancaMulta;
+
+	/** nullable persistent field */
 	private Short indicadorAlteracaoVencimento;
 	private Integer consumoRateioAgua;
 	private Integer consumoRateioEsgoto;
@@ -1161,6 +1171,11 @@ public class Conta extends ObjetoTransacao implements IConta {
 	}
 	
 	public Conta buildConta(Conta conta){
+		conta.setCodigoSetorComercial(this.getCodigoSetorComercial());
+		conta.setQuadra(this.getQuadra());
+		conta.setDigitoVerificadorConta(this.getDigitoVerificadorConta());
+		conta.setQuadra(this.getQuadra());
+		conta.setQuadraConta(this.getQuadraConta());
 		return conta;
 	}
 }

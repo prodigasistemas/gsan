@@ -31299,7 +31299,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.append(", coalesce((c.cnta_vlagua + c.cnta_vlesgoto + c.cnta_vldebitos - c.cnta_vlcreditos - c.cnta_vlimpostos)") 
 					.append(", d.dbac_vldebito, g.gpag_vldebito) as valorDocumento")
 					.append(", coalesce( c.cnta_amreferenciaconta, d.dbac_amreferenciadebito, g.gpag_amreferenciacontabil ) as dataPagamento ")
-					.append(", p.imov_id as idImovel")
+					.append(", p.imov_id as idImovel, p.cnta_id as idConta")
 					.append(" from arrecadacao.pagamento p")
 					.append(" inner join cadastro.localidade l on p.loca_id = l.loca_id") 
 					.append(" left join faturamento.conta c on p.cnta_id = c.cnta_id")
@@ -31317,6 +31317,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.addScalar("valorDocumento", Hibernate.BIG_DECIMAL)
 					.addScalar("dataPagamento", Hibernate.STRING)
 					.addScalar("idImovel", Hibernate.INTEGER)
+					.addScalar("idConta", Hibernate.INTEGER)
 					.setInteger("qtdPrestacoes", 1)
 					.setInteger("anoMesReferenciaArrecadacao", anoMesReferenciaArrecadacao)
 					.setInteger("pagamentoSituacao", pagamentoSituacao)
@@ -31332,6 +31333,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 				pagamento.setValorDocumento((BigDecimal)registro[3]);
 				pagamento.setDataPagamento((String)registro[4]);
 				pagamento.setIdImovel((Integer)registro[5]);
+				pagamento.setIdConta((Integer)registro[6]);
 				retorno.add(pagamento);
 			}
 		} catch (HibernateException e) {

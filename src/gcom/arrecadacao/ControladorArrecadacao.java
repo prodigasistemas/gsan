@@ -29870,7 +29870,11 @@ public class ControladorArrecadacao implements SessionBean {
 						inserirDebitoACobrar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca.abs());
 					}	
 					
-					getControladorFaturamento().retificarContaPagamentosDiferenca2Reais(pagamentoHelper.getIdConta());
+					System.out.println("Pagamentos: " + pagamentoHelper.getIdPagamento() + ", conta: " + (pagamentoHelper.getIdConta() != null) + ", debito: " + (pagamentoHelper.getIdDebitoACobrar() != null)
+							+ ", guia: " + (pagamentoHelper.getIdGuiaPagamento() != null));
+					if (pagamentoHelper.getIdConta() != null) {
+						getControladorFaturamento().retificarContaPagamentosDiferenca2Reais(pagamentoHelper.getIdConta());
+					}
 				}
 			}
 			
