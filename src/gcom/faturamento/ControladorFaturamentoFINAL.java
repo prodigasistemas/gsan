@@ -10053,14 +10053,9 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @param colecaoCategoria
 	 * @throws ControladorException
 	 */
-	public void inserirObjetoDebitoCobradoCategoria(
-			DebitoCobrado debitoCobrado, Collection colecaoCategoria)
-			throws ControladorException {
+	public void inserirObjetoDebitoCobradoCategoria(DebitoCobrado debitoCobrado, Collection colecaoCategoria)throws ControladorException {
 
-		// [UC0185] - Obter Valor Por Categoria
-		Collection valorPorCategoria = this.getControladorImovel()
-				.obterValorPorCategoria(colecaoCategoria,
-						debitoCobrado.getValorPrestacao());
+		Collection valorPorCategoria = this.getControladorImovel().obterValorPorCategoria(colecaoCategoria,debitoCobrado.getValorPrestacao());
 
 		Iterator colecaoCategoriaIt = colecaoCategoria.iterator();
 		Iterator colecaoValorPorCategoriaIt = valorPorCategoria.iterator();
@@ -10069,39 +10064,17 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		while (colecaoCategoriaIt.hasNext()) {
 			categoriaColecao = (Categoria) colecaoCategoriaIt.next();
 
-			// Gerando o objeto DebitoCobradoCategoriaPK
 			DebitoCobradoCategoriaPK debitoCobradoCategoriaPKInserir = new DebitoCobradoCategoriaPK();
-			// Categoria
-			// debitoCobradoCategoriaPKInserir.setCategoria(categoriaColecao);
-			debitoCobradoCategoriaPKInserir.setCategoriaId(categoriaColecao
-					.getId());
+			debitoCobradoCategoriaPKInserir.setCategoriaId(categoriaColecao.getId());
+			debitoCobradoCategoriaPKInserir.setDebitoCobradoId(debitoCobrado.getId());
 
-			// Debito Cobrado
-			// debitoCobradoCategoriaPKInserir.setDebitoCobrado(debitoCobrado);
-			debitoCobradoCategoriaPKInserir.setDebitoCobradoId(debitoCobrado
-					.getId());
-
-			// Gerando o objeto que será inserido no BD
 			DebitoCobradoCategoria debitoCobradoCategoriaInserir = new DebitoCobradoCategoria();
 
-			// Comp_ID
-			debitoCobradoCategoriaInserir
-					.setComp_id(debitoCobradoCategoriaPKInserir);
-
-			// Quantidade de economias da categoria
-			debitoCobradoCategoriaInserir
-					.setQuantidadeEconomia(categoriaColecao
-							.getQuantidadeEconomiasCategoria());
-
-			// Última alteração
+			debitoCobradoCategoriaInserir.setComp_id(debitoCobradoCategoriaPKInserir);
+			debitoCobradoCategoriaInserir.setQuantidadeEconomia(categoriaColecao.getQuantidadeEconomiasCategoria());
 			debitoCobradoCategoriaInserir.setUltimaAlteracao(new Date());
+			debitoCobradoCategoriaInserir.setValorCategoria((BigDecimal) colecaoValorPorCategoriaIt.next());
 
-			// Valor categoria
-			debitoCobradoCategoriaInserir
-					.setValorCategoria((BigDecimal) colecaoValorPorCategoriaIt
-							.next());
-
-			// INSERINDO...
 			this.getControladorUtil().inserir(debitoCobradoCategoriaInserir);
 		}
 	}
@@ -69307,19 +69280,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @param colecaoCategoria
 	 * @throws ControladorException
 	 */
-	public void inserirDebitoCobradoCategoria(DebitoCobrado debitoCobrado,
-			Collection colecaoCategoriaOuSubcategoria)
-			throws ControladorException {
-		SistemaParametro sistemaParametro = getControladorUtil()
-				.pesquisarParametrosDoSistema();
+	public void inserirDebitoCobradoCategoria(DebitoCobrado debitoCobrado, Collection colecaoCategoriaOuSubcategoria) throws ControladorException {
+		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
-		if (sistemaParametro.getIndicadorTarifaCategoria().equals(
-				SistemaParametro.INDICADOR_TARIFA_CATEGORIA)) {
-			inserirObjetoDebitoCobradoCategoria(debitoCobrado,
-					colecaoCategoriaOuSubcategoria);
+		if (sistemaParametro.getIndicadorTarifaCategoria().equals(SistemaParametro.INDICADOR_TARIFA_CATEGORIA)) {
+			inserirObjetoDebitoCobradoCategoria(debitoCobrado, colecaoCategoriaOuSubcategoria);
 		} else {
-			inserirObjetoDebitoCobradoSubcategoria(debitoCobrado,
-					colecaoCategoriaOuSubcategoria);
+			inserirObjetoDebitoCobradoSubcategoria(debitoCobrado, colecaoCategoriaOuSubcategoria);
 		}
 	}
 

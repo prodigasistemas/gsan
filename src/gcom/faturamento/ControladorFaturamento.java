@@ -16764,16 +16764,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	
 	private Conta refaturarContaParaClassificar(IConta contaOrigem) throws Exception  {
-		Conta novaConta = this.criarContaParaRecuperacaoCredito(contaOrigem);
+		ContaMotivoInclusao motivoInclusao = new ContaMotivoInclusao(ContaMotivoInclusao.RECUPERACAO_DE_CREDITO);
+		Integer referenciaContabil = getControladorUtil().pesquisarParametrosDoSistema().getAnoMesArrecadacao();
+		DebitoCreditoSituacao situacao = new DebitoCreditoSituacao(DebitoCreditoSituacao.INCLUIDA);
 		
-		repositorioUtil.inserir(novaConta);
-		
-		this.copiarContaCategoria(contaOrigem, novaConta);
-		this.copiarDebitoCobrado(contaOrigem, novaConta);
-		this.copiarCreditoRealizado(contaOrigem, novaConta);
-		this.copiarClienteConta(contaOrigem, novaConta);
-		this.copiarContaImpostosDeduzidos(contaOrigem, novaConta);
-		this.copiarConsumoFaixaCategoria(contaOrigem, novaConta);
+		Conta novaConta = this.copiarContaCompleta(contaOrigem, motivoInclusao, referenciaContabil, situacao);
 		
 		return novaConta;
 	}
@@ -16891,13 +16886,23 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 	
-	private Conta criarContaParaRecuperacaoCredito(IConta contaOrigem) throws ControladorException {
+	private Conta copiarContaCompleta(IConta contaOrigem, ContaMotivoInclusao motivoInclusao, Integer referenciaContabil, DebitoCreditoSituacao situacao) throws Exception {
 		Conta novaConta = this.copiarConta(contaOrigem);
 		
 		novaConta.setDataVencimentoConta(new Date());
-		novaConta.setContaMotivoInclusao(new ContaMotivoInclusao(ContaMotivoInclusao.RECUPERACAO_DE_CREDITO));
-		novaConta.setReferenciaContabil(getControladorUtil().pesquisarParametrosDoSistema().getAnoMesArrecadacao());
-		novaConta.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.INCLUIDA));
+		novaConta.setContaMotivoInclusao(motivoInclusao);
+		novaConta.setReferenciaContabil(referenciaContabil);
+		novaConta.setDebitoCreditoSituacaoAtual(situacao);
+		novaConta.setUltimaAlteracao(new Date());
+		
+		repositorioUtil.inserir(novaConta);
+		
+		this.copiarContaCategoria(contaOrigem, novaConta);
+		this.copiarDebitoCobrado(contaOrigem, novaConta);
+		this.copiarCreditoRealizado(contaOrigem, novaConta);
+		this.copiarClienteConta(contaOrigem, novaConta);
+		this.copiarContaImpostosDeduzidos(contaOrigem, novaConta);
+		this.copiarConsumoFaixaCategoria(contaOrigem, novaConta);
 		
 		return novaConta;
 	}
@@ -16955,45 +16960,123 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		return ids;
 	}
 	
-	public Conta retificarContaPagamentosDiferenca2Reais(Integer idConta) throws ControladorException {
-		Integer idNovaConta = 0;
-		Conta contaOriginal  = (Conta)(this.obterConta(idConta)).iterator().next();
+	public void incluirDebitoContaRetificadaPagamentosDiferenca2Reais(Integer idConta, DebitoACobrar debito) throws Exception {
+		if (idConta != null) {
+			Conta novaConta = this.retificarContaPagamentosDiferenca2Reais(idConta);
+			incluirDebitoCobradoContaRetificadaDiferenca2Reais(novaConta, debito);
+		}
+	}
+	
+	public void incluirCreditoContaRetificadaPagamentosDiferenca2Reais(Integer idConta, CreditoARealizar credito) throws Exception {
+		if (idConta != null) {
+			Conta novaConta = this.retificarContaPagamentosDiferenca2Reais(idConta);
+			incluirCreditoRealizadoContaRetificadaDiferenca2Reais(novaConta, credito);
+		}
+	}
+	
+	private Conta retificarContaPagamentosDiferenca2Reais(Integer idConta) throws Exception {
+		Conta novaConta = null;
+		
+		if (idConta != null) {
+			Conta contaOriginal  = (Conta)(this.obterConta(idConta)).iterator().next();
+			novaConta = inserirContaRetificadaDiferenca2Reais(contaOriginal);
+			alterarContaDiferenca2Reais(contaOriginal);
+			registrarTransacaoRetificacaoContaDiferenca2Reais(novaConta);
+		}
+		
+		return novaConta;
+	}
+	
+	private void incluirCreditoRealizadoContaRetificadaDiferenca2Reais(Conta conta, CreditoARealizar creditoARealizar) throws Exception {
+		Collection<Categoria> categoriasImovel = getControladorImovel().pesquisarCategoriasImovel(conta.getImovel().getId());
+		
+		Collection<CreditoRealizado> colecaoCreditoRealizado = new ArrayList<CreditoRealizado>();
+		
+		CreditoRealizado creditoRealizado = new CreditoRealizado();
+
+		this.inserirCreditoRealizado(conta,colecaoCreditoRealizado, conta.getImovel(), categoriasImovel);
+	}
+	
+	private void incluirDebitoCobradoContaRetificadaDiferenca2Reais(Conta conta, DebitoACobrar debitoACobrar) throws Exception {
+		Collection<Categoria> categoriasImovel = getControladorImovel().pesquisarCategoriasImovel(conta.getImovel().getId());
+		
+		Collection<DebitoCobrado> colecaoDebitoCobrado = new ArrayList<DebitoCobrado>();
+		
+		DebitoCobrado debitoCobrado = new DebitoCobrado();
+
+		debitoCobrado.setDebitoTipo(debitoACobrar.getDebitoTipo());
+		debitoCobrado.setDebitoCobrado(new Date());
+		debitoCobrado.setConta(conta);
+		debitoCobrado.setLancamentoItemContabil(debitoACobrar.getDebitoTipo().getLancamentoItemContabil());
+		debitoCobrado.setLocalidade(conta.getImovel().getLocalidade());
+		debitoCobrado.setQuadra(conta.getImovel().getQuadra());
+		debitoCobrado.setCodigoSetorComercial(new Integer(conta.getCodigoSetorComercial()));
+		debitoCobrado.setNumeroQuadra(new Integer(conta.getImovel().getQuadra().getNumeroQuadra()));
+		debitoCobrado.setNumeroLote(new Short(conta.getImovel().getLote()));
+		debitoCobrado.setNumeroSubLote(new Short(conta.getImovel().getSubLote()));
+
+		if (debitoACobrar.getAnoMesReferenciaDebito() != null) {
+			debitoCobrado.setAnoMesReferenciaDebito(debitoACobrar.getAnoMesReferenciaDebito());
+		}
+
+		if (debitoACobrar.getAnoMesCobrancaDebito() != null) {
+			debitoCobrado.setAnoMesCobrancaDebito(debitoACobrar.getAnoMesCobrancaDebito());
+		}
+
+		debitoCobrado.setValorPrestacao(debitoACobrar.getValorPrestacao());
+		debitoCobrado.setNumeroPrestacao(new Short("1").shortValue());
+		debitoCobrado.setNumeroPrestacaoDebito(new Short("1").shortValue());
+		debitoCobrado.setFinanciamentoTipo(debitoACobrar.getDebitoTipo().getFinanciamentoTipo());
+		debitoCobrado.setNumeroParcelaBonus(debitoACobrar.getNumeroParcelaBonus());
+		debitoCobrado.setUltimaAlteracao(new Date());
+		debitoCobrado.setOperacaoEfetuada(null);
+		debitoCobrado.setUsuarioAcaoUsuarioHelp(null);
+
+		debitoCobrado.setId((Integer) this.getControladorUtil().inserir(debitoCobrado));
+		
+		colecaoDebitoCobrado.add(debitoCobrado);
+		this.inserirDebitoCobrado(conta, colecaoDebitoCobrado, conta.getImovel(), categoriasImovel);
+	}
+	
+	private Conta inserirContaRetificadaDiferenca2Reais(Conta contaOriginal) throws Exception{
 		Conta novaConta  = null;
 		DebitoCreditoSituacao situacaoOriginal = contaOriginal.getDebitoCreditoSituacaoAtual();
+		DebitoCreditoSituacao novaSituacao = new DebitoCreditoSituacao(DebitoCreditoSituacao.RETIFICADA);
+		ContaMotivoInclusao motivoInclusao = new ContaMotivoInclusao(ContaMotivoInclusao.NAO_INFORMADO);
+		
+		Integer referenciaContabil = getControladorUtil().pesquisarParametrosDoSistema().getAnoMesArrecadacao();
 		
 		if (!situacaoOriginal.getId().equals(DebitoCreditoSituacao.RETIFICADA) && !situacaoOriginal.getId().equals(DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)) {
-			novaConta = this.copiarConta(contaOriginal);
-			
 			try {
-				
-				novaConta.setDataVencimentoConta(new Date());
-				novaConta.setReferenciaContabil(getControladorUtil().pesquisarParametrosDoSistema().getAnoMesArrecadacao());
-				novaConta.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.RETIFICADA));
-				novaConta.setUsuario(Usuario.USUARIO_BATCH);
-				novaConta.setUltimaAlteracao(new Date());
-				this.getControladorUtil().inserir(novaConta);
-				
-				contaOriginal.setDebitoCreditoSituacaoAnterior(situacaoOriginal);
-				contaOriginal.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO));
-				contaOriginal.setUltimaAlteracao(new Date());
-				this.atualizarConta(contaOriginal);
-				
-				RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CONTA_RETIFICAR, novaConta.getImovel()
-						.getId(), novaConta.getId(), new UsuarioAcaoUsuarioHelper(Usuario.USUARIO_BATCH, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-				
-				registradorOperacao.registrarOperacao(novaConta);
+				novaConta = this.copiarContaCompleta(contaOriginal, motivoInclusao, referenciaContabil, novaSituacao);
 				
 				return novaConta;
 			} catch (Exception e) {
-				
-				if (novaConta.getId() != null) {
-					this.getControladorUtil().remover(novaConta);
-				}
+				//this.getControladorUtil().remover(novaConta);
+				logger.error("Erro ao retificar conta para pagamentos om diferença de R$2,00", e);
 				return null;
 			}
 			
 		} 
-		
 		return novaConta;
+	}
+	
+	private Conta alterarContaDiferenca2Reais(Conta contaOriginal) throws ControladorException{
+		DebitoCreditoSituacao situacaoOriginal = contaOriginal.getDebitoCreditoSituacaoAtual();
+		
+		contaOriginal.setDebitoCreditoSituacaoAnterior(situacaoOriginal);
+		contaOriginal.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO));
+		contaOriginal.setUltimaAlteracao(new Date());
+		this.atualizarConta(contaOriginal);
+		
+		return contaOriginal;
+	}
+	
+	private void registrarTransacaoRetificacaoContaDiferenca2Reais(Conta novaConta) {
+		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CONTA_RETIFICAR, novaConta.getImovel()
+				.getId(), novaConta.getId(), new UsuarioAcaoUsuarioHelper(Usuario.USUARIO_BATCH, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+		
+		registradorOperacao.registrarOperacao(novaConta);
+		
 	}
 }

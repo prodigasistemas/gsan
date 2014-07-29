@@ -29759,7 +29759,7 @@ public class ControladorArrecadacao implements SessionBean {
 		
 		ResumoArrecadacao resumoArrecadacao = null;
 		if (valorCreditos != null && valorCreditos.doubleValue() > 0.00) {
-
+			
 			resumoArrecadacao = new ResumoArrecadacao();
 			
 			resumoArrecadacao.setGerenciaRegional(localidade.getGerenciaRegional());
@@ -29849,8 +29849,7 @@ public class ControladorArrecadacao implements SessionBean {
 
 		try {
 			
-			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(
-					idFuncionalidadeIniciada, UnidadeProcessamento.LOCALIDADE, idLocalidade);
+			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.LOCALIDADE, idLocalidade);
 		
 			logger.info("Geracao de debito ou credito para pgtos classificados em " + anoMesReferenciaArrecadacao + " da localidade " + idLocalidade);
 			
@@ -29865,16 +29864,13 @@ public class ControladorArrecadacao implements SessionBean {
 					BigDecimal diferenca = pagamentoHelper.getValorPagamento().subtract(pagamentoHelper.getValorDocumento());
 					
 					if (diferenca.doubleValue() > 0.0){
-						inserirCreditoARealizar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca);
+						Integer idCredito = inserirCreditoARealizar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca);
+						//getControladorFaturamento().retificarContaPagamentosDiferenca2Reais(pagamentoHelper.getIdConta(), new CreditoARealizar(idCredito));
 					}else if (diferenca.doubleValue() < 0.0){
-						inserirDebitoACobrar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca.abs());
+						DebitoACobrar debito = inserirDebitoACobrar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca.abs());
+						getControladorFaturamento().incluirDebitoContaRetificadaPagamentosDiferenca2Reais(pagamentoHelper.getIdConta(), debito);
 					}	
 					
-					System.out.println("Pagamentos: " + pagamentoHelper.getIdPagamento() + ", conta: " + (pagamentoHelper.getIdConta() != null) + ", debito: " + (pagamentoHelper.getIdDebitoACobrar() != null)
-							+ ", guia: " + (pagamentoHelper.getIdGuiaPagamento() != null));
-					if (pagamentoHelper.getIdConta() != null) {
-						getControladorFaturamento().retificarContaPagamentosDiferenca2Reais(pagamentoHelper.getIdConta());
-					}
 				}
 			}
 			
@@ -29886,7 +29882,7 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 	
-	private void inserirDebitoACobrar(Integer anoMesReferenciaArrecadacao, PagamentoHelper pagamentoHelper, BigDecimal valor) throws Exception {
+	private DebitoACobrar inserirDebitoACobrar(Integer anoMesReferenciaArrecadacao, PagamentoHelper pagamentoHelper, BigDecimal valor) throws Exception {
 		
 		Imovel imovel = null;
 		if (pagamentoHelper.getIdImovel() != null){
@@ -29898,7 +29894,7 @@ public class ControladorArrecadacao implements SessionBean {
 		
 		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
-		getControladorFaturamento().gerarDebitoACobrar(anoMesReferenciaArrecadacao
+		return getControladorFaturamento().gerarDebitoACobrar(anoMesReferenciaArrecadacao
 				, sistemaParametro.getAnoMesFaturamento()
 				, imovel
 				, (short) 1, (short) 0
@@ -29917,7 +29913,7 @@ public class ControladorArrecadacao implements SessionBean {
 		return anoMesReferenciaContabil;
 	}
 	
-	private void inserirCreditoARealizar(Integer anoMesReferenciaArrecadacao, PagamentoHelper pagamentoHelper, BigDecimal valor) throws Exception {
+	private Integer inserirCreditoARealizar(Integer anoMesReferenciaArrecadacao, PagamentoHelper pagamentoHelper, BigDecimal valor) throws Exception {
 		CreditoARealizar credito = new CreditoARealizar();
 		credito.setGeracaoCredito(Calendar.getInstance().getTime());
 		credito.setAnoMesReferenciaCredito(pagamentoHelper.getDataPagamento());
@@ -29961,7 +29957,7 @@ public class ControladorArrecadacao implements SessionBean {
 		credito.setUltimaAlteracao(Calendar.getInstance().getTime());
 		credito.setAnoMesReferenciaPrestacao(Util.somaMesAnoMesReferencia(anoMesReferenciaArrecadacao, 1));
 		
-		getControladorFaturamento().gerarCreditoARealizar(credito, imovel, null);
+		return getControladorFaturamento().gerarCreditoARealizar(credito, imovel, null);
 	}
 
 	/**

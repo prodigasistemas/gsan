@@ -5674,5 +5674,8 @@ public interface IControladorFaturamento {
 	
 	public Integer countFaturasClienteResponsaveis(String anoMesReferencia) throws ControladorException;
 	
-	public Conta retificarContaPagamentosDiferenca2Reais(Integer idConta) throws ControladorException;
+	public void incluirDebitoContaRetificadaPagamentosDiferenca2Reais(Integer idConta, DebitoACobrar debito) throws Exception;
+	
+	public void incluirCreditoContaRetificadaPagamentosDiferenca2Reais(Integer idConta, CreditoARealizar credito) throws Exception;
+	
 }
