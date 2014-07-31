@@ -13345,77 +13345,47 @@ public class ControladorArrecadacao implements SessionBean {
 	 * Responsável pela manutenção das informações de pagamento
 	 * 
 	 * [UC0266] Manter Pagamentos
-	 * 
-	 * Atualiza um pagamento no sistema, verificando se a atualização já foi
-	 * executada por outro usuário
-	 * 
 	 * [SB0001] Atualizar Pagamento
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 25/03/2006
 	 * 
 	 * @param pagamento
 	 * @throws ControladorException
 	 */
-	public void atualizarPagamento(Pagamento pagamento)
-			throws ControladorException {
-		
-		try{
+	public void atualizarPagamento(Pagamento pagamento) throws ControladorException {
 
-			// Cria o filtro de pagamento para pesquisar o pagamento na base
+		try{
 			FiltroPagamento filtroPagamento = new FiltroPagamento();
-	
-			// Parte de Validação com Timestamp
-	
-			// Seta no filtro o códigodo pagamento que está sendo atualizado
-			filtroPagamento.adicionarParametro(new ParametroSimples(
-					FiltroPagamento.ID, pagamento.getId()));
-			
+			filtroPagamento.adicionarParametro(new ParametroSimples(FiltroPagamento.ID, pagamento.getId()));
 			filtroPagamento.adicionarCaminhoParaCarregamentoEntidade("contaGeral.conta");
 			filtroPagamento.adicionarCaminhoParaCarregamentoEntidade("guiaPagamento");
 			filtroPagamento.adicionarCaminhoParaCarregamentoEntidade(FiltroPagamento.CONTA_HISTORICO);
 			
-			// Procura o pagamento na base
-			Pagamento pagamentoNaBase = (Pagamento) ((List) (getControladorUtil()
-					.pesquisar(filtroPagamento, Pagamento.class.getName()))).get(0);
+			Pagamento pagamentoNaBase = (Pagamento) ((List) (getControladorUtil().pesquisar(filtroPagamento, Pagamento.class.getName()))).get(0);
 	
 			// [FS0017] Atualização realizada por outro usuário
-			// Caso o usuário esteja tentando atualizar um pagamento e o mesmo já
-			// tenha
+			// Caso o usuário esteja tentando atualizar um pagamento e o mesmo já tenha
 			// sido atualizado durante a manutençaõ corrente
 			if (pagamentoNaBase.getUltimaAlteracao().after(pagamento.getUltimaAlteracao())) {
 				sessionContext.setRollbackOnly();
 				throw new ControladorException("atencao.atualizacao.timestamp");
 			}
 	
-			if (!pagamento.getValorPagamento().equals(
-					pagamentoNaBase.getValorPagamento())) {
+			if (!pagamento.getValorPagamento().equals(pagamentoNaBase.getValorPagamento())) {
 	
-				BigDecimal valorAModificar = pagamento.getValorPagamento()
-						.subtract(pagamentoNaBase.getValorPagamento());
+				BigDecimal valorAModificar = pagamento.getValorPagamento().subtract(pagamentoNaBase.getValorPagamento());
 	
 				AvisoBancario avisoBancario = pagamento.getAvisoBancario();
-				BigDecimal valorArrecadacao = avisoBancario
-						.getValorArrecadacaoCalculado();
+				BigDecimal valorArrecadacao = avisoBancario.getValorArrecadacaoCalculado();
 				valorArrecadacao = valorArrecadacao.add(valorAModificar);
 				avisoBancario.setValorArrecadacaoCalculado(valorArrecadacao);
 				avisoBancario.setUltimaAlteracao(new Date());
 	
 				getControladorUtil().atualizar(avisoBancario);
-	
 			}
 	
 			pagamento.setUltimaAlteracao(new Date());
 	
-			// Caso o pagamento não tenha sido atualizado por outro usuário durante
-			// a manutenção corrente
-			// atualiza pagamento no sistema
 			getControladorUtil().atualizar(pagamento);
 			
-			//CRC2725 - alterado por Vivianne Sousa - 15/09/2009 analista:Fátima
-			//[SB0005 - Verifica Associação Pagamento da Conta com Itens de Negativação].
-			//[SB0006 - Verifica Associação Pagamento da Guia com Itens de Negativação].
-			//[SB0010 - Verifica Associação Novo Tipo Documento do Pagamento com Itens de Negativação].
 			getControladorSpcSerasa().verificaAssociacaoPagamentoComItensNegativacao(pagamento, pagamentoNaBase);
 
 		} catch (ControladorException e) {
@@ -29862,15 +29832,19 @@ public class ControladorArrecadacao implements SessionBean {
 			for (PagamentoHelper pagamentoHelper : pagamentos) {
 				if (possuiDiferencaAte2(pagamentoHelper)) {
 					BigDecimal diferenca = pagamentoHelper.getValorPagamento().subtract(pagamentoHelper.getValorDocumento());
-					
+					Conta novaConta = null;
 					if (diferenca.doubleValue() > 0.0){
 						Integer idCredito = inserirCreditoARealizar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca);
-						//getControladorFaturamento().retificarContaPagamentosDiferenca2Reais(pagamentoHelper.getIdConta(), new CreditoARealizar(idCredito));
 					}else if (diferenca.doubleValue() < 0.0){
 						DebitoACobrar debito = inserirDebitoACobrar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca.abs());
-						getControladorFaturamento().incluirDebitoContaRetificadaPagamentosDiferenca2Reais(pagamentoHelper.getIdConta(), debito);
-					}	
+						//novaConta = getControladorFaturamento().incluirDebitoContaRetificadaPagamentosDiferenca2Reais(pagamentoHelper.getIdConta(), debito);
+						novaConta.setId(pagamentoHelper.getIdConta());
+					}
 					
+					if (novaConta != null) {
+						Pagamento pagamento = this.pesquisarPagamentoDeConta(pagamentoHelper.getIdConta());
+						this.alterarContaDoPagamento(pagamento, novaConta);
+					}
 				}
 			}
 			
@@ -29880,6 +29854,15 @@ public class ControladorArrecadacao implements SessionBean {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
 			throw new EJBException(ex);
 		}
+	}
+	
+	private void alterarContaDoPagamento(Pagamento pagamento, Conta novaConta) throws ErroRepositorioException {
+		if (pagamento != null && novaConta != null) {
+			pagamento.setContaGeral(novaConta.getContaGeral());
+			pagamento.setUltimaAlteracao(new Date());
+			repositorioUtil.atualizar(pagamento);
+		}
+		
 	}
 	
 	private DebitoACobrar inserirDebitoACobrar(Integer anoMesReferenciaArrecadacao, PagamentoHelper pagamentoHelper, BigDecimal valor) throws Exception {
@@ -40292,13 +40275,16 @@ public class ControladorArrecadacao implements SessionBean {
 	public Pagamento pesquisarPagamentoDeConta(Integer idConta) throws ControladorException {
 
 		Pagamento pagamento = null;
-
-		try {
-			pagamento = repositorioArrecadacao.pesquisarPagamentoDeConta(idConta);
-		} catch (ErroRepositorioException ex) {
-			sessionContext.setRollbackOnly();
-			throw new ControladorException("erro.sistema", ex);
+		
+		if (idConta != null) {
+			try {
+				pagamento = repositorioArrecadacao.pesquisarPagamentoDeConta(idConta);
+			} catch (ErroRepositorioException ex) {
+				sessionContext.setRollbackOnly();
+				throw new ControladorException("erro.sistema", ex);
+			}
 		}
+
 
 		return pagamento;
 	}
@@ -56476,11 +56462,9 @@ public class ControladorArrecadacao implements SessionBean {
 				if (pagamento != null) {
 					Conta novaConta = mapContasNovas.get(idContaHistorico);
 					pagamento.setContaGeral(novaConta.getContaGeral());
-					
+					pagamento.setUltimaAlteracao(new Date());
 					repositorioUtil.atualizar(pagamento);
 				}
-				
-				repositorioUtil.atualizar(pagamento);
 			}
 		} catch (Exception e) {
 			logger.error("Erro ao refaturar conta para recuperação de crédito.", e);

@@ -26,6 +26,7 @@ import gcom.cadastro.imovel.ImovelContaEnvio;
 import gcom.cadastro.imovel.ImovelDoacao;
 import gcom.cadastro.imovel.ImovelInscricaoAlterada;
 import gcom.cadastro.imovel.ImovelPerfil;
+import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.RepositorioImovelHBM;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.imovel.bean.ImovelCobrarDoacaoHelper;
@@ -117,7 +118,9 @@ import gcom.faturamento.debito.FiltroDebitoCobradoHistorico;
 import gcom.faturamento.debito.FiltroDebitoTipo;
 import gcom.faturamento.debito.IDebitoCobrado;
 import gcom.faturamento.debito.IDebitoCobradoCategoria;
+import gcom.financeiro.FiltroFinanciamentoTipo;
 import gcom.financeiro.FinanciamentoTipo;
+import gcom.financeiro.lancamento.FiltroLancamentoItemContabil;
 import gcom.financeiro.lancamento.LancamentoItemContabil;
 import gcom.gui.ActionServletException;
 import gcom.gui.faturamento.FaturamentoImediatoAjusteHelper;
@@ -16960,18 +16963,28 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		return ids;
 	}
 	
-	public void incluirDebitoContaRetificadaPagamentosDiferenca2Reais(Integer idConta, DebitoACobrar debito) throws Exception {
+	public Conta incluirDebitoContaRetificadaPagamentosDiferenca2Reais(Integer idConta, DebitoACobrar debito) throws Exception {
+		Conta novaConta = null;
+		
 		if (idConta != null) {
-			Conta novaConta = this.retificarContaPagamentosDiferenca2Reais(idConta);
+			novaConta = this.retificarContaPagamentosDiferenca2Reais(idConta);
 			incluirDebitoCobradoContaRetificadaDiferenca2Reais(novaConta, debito);
+			registrarTransacaoRetificacaoContaDiferenca2Reais(novaConta);
 		}
+		
+		return novaConta;
 	}
 	
-	public void incluirCreditoContaRetificadaPagamentosDiferenca2Reais(Integer idConta, CreditoARealizar credito) throws Exception {
+	public Conta incluirCreditoContaRetificadaPagamentosDiferenca2Reais(Integer idConta, CreditoARealizar credito) throws Exception {
+		Conta novaConta = null;
+		
 		if (idConta != null) {
-			Conta novaConta = this.retificarContaPagamentosDiferenca2Reais(idConta);
+			novaConta = this.retificarContaPagamentosDiferenca2Reais(idConta);
 			incluirCreditoRealizadoContaRetificadaDiferenca2Reais(novaConta, credito);
+			registrarTransacaoRetificacaoContaDiferenca2Reais(novaConta);
 		}
+		
+		return novaConta;
 	}
 	
 	private Conta retificarContaPagamentosDiferenca2Reais(Integer idConta) throws Exception {
@@ -16981,14 +16994,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			Conta contaOriginal  = (Conta)(this.obterConta(idConta)).iterator().next();
 			novaConta = inserirContaRetificadaDiferenca2Reais(contaOriginal);
 			alterarContaDiferenca2Reais(contaOriginal);
-			registrarTransacaoRetificacaoContaDiferenca2Reais(novaConta);
 		}
 		
 		return novaConta;
 	}
 	
 	private void incluirCreditoRealizadoContaRetificadaDiferenca2Reais(Conta conta, CreditoARealizar creditoARealizar) throws Exception {
-		Collection<Categoria> categoriasImovel = getControladorImovel().pesquisarCategoriasImovel(conta.getImovel().getId());
+		Collection<Categoria> categoriasImovel = getControladorImovel().obterQuantidadeEconomiasCategoria(conta.getImovel());
 		
 		Collection<CreditoRealizado> colecaoCreditoRealizado = new ArrayList<CreditoRealizado>();
 		
@@ -16998,16 +17010,17 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 	
 	private void incluirDebitoCobradoContaRetificadaDiferenca2Reais(Conta conta, DebitoACobrar debitoACobrar) throws Exception {
-		Collection<Categoria> categoriasImovel = getControladorImovel().pesquisarCategoriasImovel(conta.getImovel().getId());
+		Collection<Categoria> categoriasImovel = getControladorImovel().obterQuantidadeEconomiasCategoria(conta.getImovel());
 		
 		Collection<DebitoCobrado> colecaoDebitoCobrado = new ArrayList<DebitoCobrado>();
 		
 		DebitoCobrado debitoCobrado = new DebitoCobrado();
 
+		conta.setImovel(getControladorImovel().pesquisarImovel(conta.getImovel().getId()));
+		
 		debitoCobrado.setDebitoTipo(debitoACobrar.getDebitoTipo());
 		debitoCobrado.setDebitoCobrado(new Date());
 		debitoCobrado.setConta(conta);
-		debitoCobrado.setLancamentoItemContabil(debitoACobrar.getDebitoTipo().getLancamentoItemContabil());
 		debitoCobrado.setLocalidade(conta.getImovel().getLocalidade());
 		debitoCobrado.setQuadra(conta.getImovel().getQuadra());
 		debitoCobrado.setCodigoSetorComercial(new Integer(conta.getCodigoSetorComercial()));
@@ -17026,16 +17039,38 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		debitoCobrado.setValorPrestacao(debitoACobrar.getValorPrestacao());
 		debitoCobrado.setNumeroPrestacao(new Short("1").shortValue());
 		debitoCobrado.setNumeroPrestacaoDebito(new Short("1").shortValue());
-		debitoCobrado.setFinanciamentoTipo(debitoACobrar.getDebitoTipo().getFinanciamentoTipo());
 		debitoCobrado.setNumeroParcelaBonus(debitoACobrar.getNumeroParcelaBonus());
 		debitoCobrado.setUltimaAlteracao(new Date());
 		debitoCobrado.setOperacaoEfetuada(null);
 		debitoCobrado.setUsuarioAcaoUsuarioHelp(null);
 
-		debitoCobrado.setId((Integer) this.getControladorUtil().inserir(debitoCobrado));
+		FiltroDebitoTipo filtro = new FiltroDebitoTipo();
+		filtro.adicionarParametro(new ParametroSimples(FiltroDebitoTipo.ID, debitoACobrar.getDebitoTipo().getId()));
+		Collection<DebitoTipo> colecaoDebitoTipo = getControladorUtil().pesquisar(filtro, DebitoTipo.class.getName());
+		DebitoTipo debitoTipo = (DebitoTipo) Util.retonarObjetoDeColecao(colecaoDebitoTipo);
+		
+		
+		FiltroLancamentoItemContabil filtroLancamentoItem = new FiltroLancamentoItemContabil();
+		filtroLancamentoItem.adicionarParametro(new ParametroSimples(FiltroLancamentoItemContabil.ID, debitoTipo.getLancamentoItemContabil().getId()));
+		Collection<LancamentoItemContabil> colecaoLancamentoItem = getControladorUtil().pesquisar(filtroLancamentoItem, LancamentoItemContabil.class.getName());
+		LancamentoItemContabil lancamentoItem = (LancamentoItemContabil) Util.retonarObjetoDeColecao(colecaoLancamentoItem);
+		
+		debitoTipo.setLancamentoItemContabil(lancamentoItem);
+		debitoCobrado.setDebitoTipo(debitoTipo);
+		debitoCobrado.setLancamentoItemContabil(lancamentoItem);
+
+		FiltroFinanciamentoTipo filtroFinanciamentoTipo = new FiltroFinanciamentoTipo();
+		filtroFinanciamentoTipo.adicionarParametro(new ParametroSimples(FiltroFinanciamentoTipo.ID, debitoACobrar.getFinanciamentoTipo().getId()));
+		Collection<FinanciamentoTipo> colecaoFinanciamentoTipo = getControladorUtil().pesquisar(filtroFinanciamentoTipo, FinanciamentoTipo.class.getName());
+		FinanciamentoTipo financiamentoTipo = (FinanciamentoTipo) Util.retonarObjetoDeColecao(colecaoFinanciamentoTipo);
+
+		debitoCobrado.setFinanciamentoTipo(financiamentoTipo);
 		
 		colecaoDebitoCobrado.add(debitoCobrado);
 		this.inserirDebitoCobrado(conta, colecaoDebitoCobrado, conta.getImovel(), categoriasImovel);
+		
+		conta.setValorDebitos(conta.getValorDebitos().add(debitoCobrado.getValorPrestacao()));
+		getControladorUtil().atualizar(conta);
 	}
 	
 	private Conta inserirContaRetificadaDiferenca2Reais(Conta contaOriginal) throws Exception{
@@ -17049,26 +17084,29 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		if (!situacaoOriginal.getId().equals(DebitoCreditoSituacao.RETIFICADA) && !situacaoOriginal.getId().equals(DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)) {
 			try {
 				novaConta = this.copiarContaCompleta(contaOriginal, motivoInclusao, referenciaContabil, novaSituacao);
-				
 				return novaConta;
 			} catch (Exception e) {
-				//this.getControladorUtil().remover(novaConta);
 				logger.error("Erro ao retificar conta para pagamentos om diferença de R$2,00", e);
 				return null;
 			}
 			
-		} 
+		} else {
+			novaConta = contaOriginal;
+		}
 		return novaConta;
 	}
 	
 	private Conta alterarContaDiferenca2Reais(Conta contaOriginal) throws ControladorException{
 		DebitoCreditoSituacao situacaoOriginal = contaOriginal.getDebitoCreditoSituacaoAtual();
 		
-		contaOriginal.setDebitoCreditoSituacaoAnterior(situacaoOriginal);
-		contaOriginal.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO));
-		contaOriginal.setUltimaAlteracao(new Date());
+		if (situacaoOriginal.getId().equals(DebitoCreditoSituacao.RETIFICADA)) {
+			contaOriginal.setUltimaAlteracao(new Date());
+		} else if (!situacaoOriginal.getId().equals(DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)) {
+			contaOriginal.setDebitoCreditoSituacaoAnterior(situacaoOriginal);
+			contaOriginal.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO));
+			contaOriginal.setUltimaAlteracao(new Date());
+		}
 		this.atualizarConta(contaOriginal);
-		
 		return contaOriginal;
 	}
 	
@@ -17079,4 +17117,5 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		registradorOperacao.registrarOperacao(novaConta);
 		
 	}
+	
 }

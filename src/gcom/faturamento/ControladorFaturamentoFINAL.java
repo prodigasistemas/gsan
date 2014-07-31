@@ -9961,7 +9961,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				Integer idDebitoCobradoGerado = (Integer) this.getControladorUtil().inserir(debitoCobradoInserir);
 
 				debitoCobradoInserir.setId(idDebitoCobradoGerado);
-
+				logger.info("	Debito cobrado: " + debitoCobradoInserir.getId());
 				this.inserirDebitoCobradoCategoria(debitoCobradoInserir, colecaoCategoria);
 
 			}
@@ -10074,7 +10074,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			debitoCobradoCategoriaInserir.setQuantidadeEconomia(categoriaColecao.getQuantidadeEconomiasCategoria());
 			debitoCobradoCategoriaInserir.setUltimaAlteracao(new Date());
 			debitoCobradoCategoriaInserir.setValorCategoria((BigDecimal) colecaoValorPorCategoriaIt.next());
-
+			logger.info("		Debito cobrado categoria : [cag: " + debitoCobradoCategoriaInserir.getComp_id().getCategoriaId() + " / deb: " + debitoCobradoCategoriaInserir.getComp_id().getDebitoCobradoId() + "]");
 			this.getControladorUtil().inserir(debitoCobradoCategoriaInserir);
 		}
 	}
