@@ -42,6 +42,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -79,6 +80,8 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 	private BigDecimal parcelamentoValorDebitoACobrarParcelamento = null;
 	
 	private ResolucaoDiretoria resolucaoDiretoria = null;
+	
+	private static Logger logger = Logger.getLogger(GerarRelatorioExtratoDebitoAction.class);
 	
 	public ActionForward execute(ActionMapping actionMapping, ActionForm form,
 			HttpServletRequest request, HttpServletResponse response) {
@@ -298,6 +301,7 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 	}
 
 	private ExtratoDebitoRelatorioHelper gerarDocumentoCobranca(Fachada fachada) {
+		
 		return fachada.gerarEmitirExtratoDebito(imovel, indicadorGeracaoTaxaCobranca,
 				colecaoContas, colecaoGuiasPagamento, colecaoDebitosACobrar,
 				valorAcrescimosImpontualidade, valorDesconto, valorDocumento,
@@ -400,6 +404,7 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 	private void setDadosEfetuarParcelamento(ActionForm actionForm, HttpServletRequest request, HttpSession sessao) {
 		imovel = (Imovel) sessao.getAttribute("imovel");
 		
+		logger.info("[ " + imovel.getId() + "	- setDadosEfetuarParcelamento -  RD: " + request.getParameter("RD") + "]");
 		if (request.getParameter("RD") != null) {
 			resolucaoDiretoria = new ResolucaoDiretoria();
 			resolucaoDiretoria.setId(new Integer(request.getParameter("RD")));
@@ -461,6 +466,7 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 	private void setDadosExtratoDebito(Fachada fachada, HttpSession sessao) {
 		Integer idImovel = new Integer((String) sessao.getAttribute("idImovelExtrato"));
 		
+		logger.info("[ " + idImovel + "	- GERANDO EXTRATO DE DEBITO ]");
 		imovel = fachada.pesquisarImovel(idImovel);
 		inscricao = imovel.getInscricaoFormatada();
 		matricula = imovel.getId().toString();
@@ -483,6 +489,10 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 		valorDocumento = (BigDecimal) sessao.getAttribute("valorDocumentoExtrato");
 		valorDesconto = (BigDecimal) sessao.getAttribute("valorDescontoExtrato");
 		valorDescontoCredito = (BigDecimal) sessao.getAttribute("valorCreditoARealizar");
+		logger.info("[ " + idImovel + "	- valorAcrescimosImpontualidade: " + valorAcrescimosImpontualidade + "]");
+		logger.info("[ " + idImovel + "	- valorDocumento: " + valorDocumento + "]");
+		logger.info("[ " + idImovel + "	- valorDesconto: " + valorDesconto + "]");
+		logger.info("[ " + idImovel + "	- valorDescontoCredito: " + valorDescontoCredito + "]");
 	}
 
 	private Collection obterColecaoDebitosACobrarDoParcelamento(Collection<DebitoACobrar> colecaoDebitosACobrar) {
