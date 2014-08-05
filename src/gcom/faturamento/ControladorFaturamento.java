@@ -17005,8 +17005,46 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		Collection<CreditoRealizado> colecaoCreditoRealizado = new ArrayList<CreditoRealizado>();
 		
 		CreditoRealizado creditoRealizado = new CreditoRealizado();
+		conta.setImovel(getControladorImovel().pesquisarImovel(conta.getImovel().getId()));
+		
+		creditoRealizado.setCreditoTipo(creditoARealizar.getCreditoTipo());
+		creditoRealizado.setCreditoRealizado(creditoARealizar.getGeracaoCredito());
+		creditoRealizado.setLancamentoItemContabil(creditoARealizar.getLancamentoItemContabil());
+		creditoRealizado.setLocalidade(creditoARealizar.getLocalidade());
+		creditoRealizado.setQuadra(creditoARealizar.getQuadra());
+		creditoRealizado.setCodigoSetorComercial(creditoARealizar.getCodigoSetorComercial());
+		creditoRealizado.setNumeroQuadra(creditoARealizar.getNumeroQuadra());
+		creditoRealizado.setNumeroLote(creditoARealizar.getNumeroLote());
+		creditoRealizado.setNumeroSubLote(creditoARealizar.getNumeroSubLote());
+		creditoRealizado.setAnoMesReferenciaCredito(creditoARealizar.getAnoMesReferenciaCredito());
+		creditoRealizado.setAnoMesCobrancaCredito(creditoARealizar.getAnoMesCobrancaCredito());
+		creditoRealizado.setValorCredito(creditoARealizar.getValorCredito());
+		creditoRealizado.setCreditoOrigem(creditoARealizar.getCreditoOrigem());
+		creditoRealizado.setNumeroPrestacao(creditoARealizar.getNumeroPrestacaoCredito());
+		creditoRealizado.setNumeroParcelaBonus(creditoARealizar.getNumeroParcelaBonus());
+		creditoRealizado.setNumeroPrestacaoCredito(creditoARealizar.getNumeroPrestacaoRealizada());
+		creditoRealizado.setCreditoARealizarGeral(creditoARealizar.getCreditoARealizarGeral());
 
+		FiltroCreditoTipo filtro = new FiltroCreditoTipo();
+		filtro.adicionarParametro(new ParametroSimples(FiltroCreditoTipo.ID, creditoARealizar.getCreditoTipo().getId()));
+		Collection<CreditoTipo> colecaoCreditoTipo = getControladorUtil().pesquisar(filtro, CreditoTipo.class.getName());
+		CreditoTipo creditoTipo = (CreditoTipo) Util.retonarObjetoDeColecao(colecaoCreditoTipo);
+		
+		
+		FiltroLancamentoItemContabil filtroLancamentoItem = new FiltroLancamentoItemContabil();
+		filtroLancamentoItem.adicionarParametro(new ParametroSimples(FiltroLancamentoItemContabil.ID, creditoTipo.getLancamentoItemContabil().getId()));
+		Collection<LancamentoItemContabil> colecaoLancamentoItem = getControladorUtil().pesquisar(filtroLancamentoItem, LancamentoItemContabil.class.getName());
+		LancamentoItemContabil lancamentoItem = (LancamentoItemContabil) Util.retonarObjetoDeColecao(colecaoLancamentoItem);
+		
+		creditoTipo.setLancamentoItemContabil(lancamentoItem);
+		creditoRealizado.setCreditoTipo(creditoTipo);
+		creditoRealizado.setLancamentoItemContabil(lancamentoItem);
+
+		colecaoCreditoRealizado.add(creditoRealizado);
 		this.inserirCreditoRealizado(conta,colecaoCreditoRealizado, conta.getImovel(), categoriasImovel);
+		
+		conta.setValorCreditos(conta.getValorCreditos().add(creditoRealizado.getValorCredito()));
+		getControladorUtil().atualizar(conta);
 	}
 	
 	private void incluirDebitoCobradoContaRetificadaDiferenca2Reais(Conta conta, DebitoACobrar debitoACobrar) throws Exception {

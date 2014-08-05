@@ -9961,9 +9961,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				Integer idDebitoCobradoGerado = (Integer) this.getControladorUtil().inserir(debitoCobradoInserir);
 
 				debitoCobradoInserir.setId(idDebitoCobradoGerado);
-				logger.info("	Debito cobrado: " + debitoCobradoInserir.getId());
-				this.inserirDebitoCobradoCategoria(debitoCobradoInserir, colecaoCategoria);
 
+				this.inserirDebitoCobradoCategoria(debitoCobradoInserir, colecaoCategoria);
 			}
 		}
 	}
@@ -10035,7 +10034,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				Integer idCreditoRealizadoGerado = (Integer) this.getControladorUtil().inserir(creditoRealizadoInserir);
 
 				creditoRealizadoInserir.setId(idCreditoRealizadoGerado);
-
 				this.inserirCreditoRealizadoCategoria(creditoRealizadoInserir,
 						colecaoCategoria);
 
@@ -10089,14 +10087,9 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @param colecaoCategoria
 	 * @throws ControladorException
 	 */
-	public void inserirObjetoCreditoRealizadoCategoria(
-			CreditoRealizado creditoRealizado, Collection colecaoCategoria)
-			throws ControladorException {
+	public void inserirObjetoCreditoRealizadoCategoria(CreditoRealizado creditoRealizado, Collection colecaoCategoria) throws ControladorException {
 
-		// [UC0185] - Obter Valor Por Categoria
-		Collection valorPorCategoria = this.getControladorImovel()
-				.obterValorPorCategoria(colecaoCategoria,
-						creditoRealizado.getValorCredito());
+		Collection valorPorCategoria = this.getControladorImovel().obterValorPorCategoria(colecaoCategoria,	creditoRealizado.getValorCredito());
 
 		Iterator colecaoCategoriaIt = colecaoCategoria.iterator();
 		Iterator colecaoValorPorCategoriaIt = valorPorCategoria.iterator();
@@ -10105,35 +10098,16 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		while (colecaoCategoriaIt.hasNext()) {
 			categoriaColecao = (Categoria) colecaoCategoriaIt.next();
 
-			// Gerando o objeto CreditoRealizadoCategoriaPK
 			CreditoRealizadoCategoriaPK creditoRealizadoCategoriaPKInserir = new CreditoRealizadoCategoriaPK();
-			// Categoria
 			creditoRealizadoCategoriaPKInserir.setCategoria(categoriaColecao);
-			// Crédito Realizado
-			creditoRealizadoCategoriaPKInserir
-					.setCreditoRealizado(creditoRealizado);
+			creditoRealizadoCategoriaPKInserir.setCreditoRealizado(creditoRealizado);
 
-			// Gerando o objeto que será inserido no BD
 			CreditoRealizadoCategoria creditoRealizadoCategoriaInserir = new CreditoRealizadoCategoria();
-
-			// Comp_ID
-			creditoRealizadoCategoriaInserir
-					.setComp_id(creditoRealizadoCategoriaPKInserir);
-
-			// Quantidade de economias da categoria
-			creditoRealizadoCategoriaInserir
-					.setQuantidadeEconomia(categoriaColecao
-							.getQuantidadeEconomiasCategoria());
-
-			// Última alteração
+			creditoRealizadoCategoriaInserir.setComp_id(creditoRealizadoCategoriaPKInserir);
+			creditoRealizadoCategoriaInserir.setQuantidadeEconomia(categoriaColecao.getQuantidadeEconomiasCategoria());
 			creditoRealizadoCategoriaInserir.setUltimaAlteracao(new Date());
+			creditoRealizadoCategoriaInserir.setValorCategoria((BigDecimal) colecaoValorPorCategoriaIt.next());
 
-			// Valor categoria
-			creditoRealizadoCategoriaInserir
-					.setValorCategoria((BigDecimal) colecaoValorPorCategoriaIt
-							.next());
-
-			// INSERINDO...
 			this.getControladorUtil().inserir(creditoRealizadoCategoriaInserir);
 		}
 	}

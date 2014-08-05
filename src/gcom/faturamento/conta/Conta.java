@@ -871,14 +871,6 @@ public class Conta extends ObjetoTransacao implements IConta {
 			valorTotalConta = valorTotalConta.add(this.getValorEsgoto());
 		}
 
-		if (this.getValorRateioAgua() != null) {
-			valorTotalConta = valorTotalConta.add(this.getValorRateioAgua());
-		}
-
-		if (this.getValorRateioEsgoto() != null) {
-			valorTotalConta = valorTotalConta.add(this.getValorRateioEsgoto());
-		}
-
 		if (this.getDebitos() != null) {
 			valorTotalConta = valorTotalConta.add(this.getDebitos());
 		}

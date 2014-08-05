@@ -195,6 +195,7 @@ import gcom.faturamento.debito.DebitoTipo;
 import gcom.faturamento.debito.FiltroDebitoACobrar;
 import gcom.faturamento.debito.FiltroDebitoACobrarHistorico;
 import gcom.faturamento.debito.FiltroDebitoTipo;
+import gcom.financeiro.FiltroFinanciamentoTipo;
 import gcom.financeiro.FinanciamentoTipo;
 import gcom.financeiro.lancamento.LancamentoItem;
 import gcom.financeiro.lancamento.LancamentoItemContabil;
@@ -29811,7 +29812,7 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 
-	public void processarPagamentosDiferencaDoisReais(Integer anoMesReferenciaArrecadacao, Localidade localidade, Integer idFuncionalidadeIniciada) throws Exception{
+	public void processarPagamentosDiferencaDoisReais(Integer referenciaArrecadacao, Localidade localidade, Integer idFuncionalidadeIniciada) throws Exception{
 		
 		int idUnidadeIniciada = 0;
 		
@@ -29821,24 +29822,29 @@ public class ControladorArrecadacao implements SessionBean {
 			
 			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.LOCALIDADE, idLocalidade);
 		
-			logger.info("Geracao de debito ou credito para pgtos classificados em " + anoMesReferenciaArrecadacao + " da localidade " + idLocalidade);
+			logger.info("Geracao de debito ou credito para pgtos classificados em " + referenciaArrecadacao + " da localidade " + idLocalidade);
 			
 			Collection<PagamentoHelper> pagamentos = repositorioArrecadacao.pesquisarValoresPagamentos(PagamentoSituacao.PAGAMENTO_CLASSIFICADO, 
 					idLocalidade,
-					anoMesReferenciaArrecadacao);
+					referenciaArrecadacao);
 			
 			logger.info("    Qtd de pagamentos: " + pagamentos.size() + " na localidade: " + idLocalidade);
 			
+			Integer referenciaContabil = Util.somaMesAnoMesReferencia(referenciaArrecadacao, 1);
+
 			for (PagamentoHelper pagamentoHelper : pagamentos) {
-				if (possuiDiferencaAte2(pagamentoHelper)) {
+				if (pagamentoHelper.isPagamentoDeConta() && possuiDiferencaAte2(pagamentoHelper)) {
+					
 					BigDecimal diferenca = pagamentoHelper.getValorPagamento().subtract(pagamentoHelper.getValorDocumento());
 					Conta novaConta = null;
 					if (diferenca.doubleValue() > 0.0){
-						Integer idCredito = inserirCreditoARealizar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca);
+						CreditoARealizar credito = inserirCreditoARealizar(referenciaArrecadacao, referenciaContabil, pagamentoHelper, diferenca);
+						novaConta = this.retificarContaComDebitoDiferenca2Reais(referenciaArrecadacao, pagamentoHelper, diferenca);
+						
 					}else if (diferenca.doubleValue() < 0.0){
-						DebitoACobrar debito = inserirDebitoACobrar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca.abs());
-						//novaConta = getControladorFaturamento().incluirDebitoContaRetificadaPagamentosDiferenca2Reais(pagamentoHelper.getIdConta(), debito);
-						novaConta.setId(pagamentoHelper.getIdConta());
+						
+						DebitoACobrar debito = inserirDebitoACobrar(referenciaContabil, referenciaArrecadacao, pagamentoHelper, diferenca.abs(), (short) 0);
+						novaConta = this.retificarContaComCreditoDiferenca2Reais(referenciaArrecadacao, pagamentoHelper, diferenca);
 					}
 					
 					if (novaConta != null) {
@@ -29856,6 +29862,24 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 	
+	private Conta retificarContaComDebitoDiferenca2Reais(Integer referenciaArrecadacao, PagamentoHelper pagamentoHelper, BigDecimal diferenca) throws Exception {
+		Conta novaConta = null;
+		
+		DebitoACobrar debito = inserirDebitoACobrar(referenciaArrecadacao, referenciaArrecadacao, pagamentoHelper, diferenca.abs(), (short) 1);
+		novaConta = getControladorFaturamento().incluirDebitoContaRetificadaPagamentosDiferenca2Reais(pagamentoHelper.getIdConta(), debito);
+		
+		return novaConta;
+	}
+	
+	private Conta retificarContaComCreditoDiferenca2Reais(Integer referenciaArrecadacao, PagamentoHelper pagamentoHelper, BigDecimal diferenca) throws Exception {
+		Conta novaConta = null;
+		
+		CreditoARealizar credito = inserirCreditoARealizar(referenciaArrecadacao, referenciaArrecadacao, pagamentoHelper, diferenca);
+		novaConta = getControladorFaturamento().incluirCreditoContaRetificadaPagamentosDiferenca2Reais(pagamentoHelper.getIdConta(), credito);
+		
+		return novaConta;
+	}
+	
 	private void alterarContaDoPagamento(Pagamento pagamento, Conta novaConta) throws ErroRepositorioException {
 		if (pagamento != null && novaConta != null) {
 			pagamento.setContaGeral(novaConta.getContaGeral());
@@ -29865,23 +29889,21 @@ public class ControladorArrecadacao implements SessionBean {
 		
 	}
 	
-	private DebitoACobrar inserirDebitoACobrar(Integer anoMesReferenciaArrecadacao, PagamentoHelper pagamentoHelper, BigDecimal valor) throws Exception {
+	private DebitoACobrar inserirDebitoACobrar(Integer referenciaArrecadacao, Integer referenciaDebito, PagamentoHelper pagamentoHelper, BigDecimal valor, short qtdParcelasCobradas) throws Exception {
 		
 		Imovel imovel = null;
 		if (pagamentoHelper.getIdImovel() != null){
 			imovel = repositorioImovel.pesquisarDadosImovel(pagamentoHelper.getIdImovel());
 		}
 		
-		DebitoTipo tipo = new DebitoTipo();
-		tipo.setId(DebitoTipo.VALOR_NAO_CONFERE);
-		
+		DebitoTipo tipo = new DebitoTipo(DebitoTipo.VALOR_NAO_CONFERE);
 		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
-		return getControladorFaturamento().gerarDebitoACobrar(anoMesReferenciaArrecadacao
+		return getControladorFaturamento().gerarDebitoACobrar(referenciaArrecadacao
 				, sistemaParametro.getAnoMesFaturamento()
 				, imovel
-				, (short) 1, (short) 0
-				, Util.somaMesAnoMesReferencia(anoMesReferenciaArrecadacao, 1)
+				, (short) 1, qtdParcelasCobradas
+				, referenciaDebito
 				, valor, tipo, null);
 	}
 	
@@ -29896,16 +29918,21 @@ public class ControladorArrecadacao implements SessionBean {
 		return anoMesReferenciaContabil;
 	}
 	
-	private Integer inserirCreditoARealizar(Integer anoMesReferenciaArrecadacao, PagamentoHelper pagamentoHelper, BigDecimal valor) throws Exception {
+	private CreditoARealizar inserirCreditoARealizar(Integer referenciaArrecadacao, Integer referenciaContabil, PagamentoHelper pagamentoHelper, BigDecimal valor) throws Exception {
 		CreditoARealizar credito = new CreditoARealizar();
 		credito.setGeracaoCredito(Calendar.getInstance().getTime());
 		credito.setAnoMesReferenciaCredito(pagamentoHelper.getDataPagamento());
-		credito.setAnoMesReferenciaContabil(anoMesReferenciaArrecadacao);
-		credito.setAnoMesCobrancaCredito(Util.somaMesAnoMesReferencia(anoMesReferenciaArrecadacao, 1));
+		credito.setAnoMesReferenciaContabil(referenciaContabil);
+		credito.setAnoMesCobrancaCredito(referenciaArrecadacao);
 		credito.setValorResidualMesAnterior(BigDecimal.ZERO);
 		credito.setNumeroPrestacaoCredito((short) 1);
-		credito.setNumeroPrestacaoRealizada((short) 0);
-		credito.setValorCredito(valor);
+		
+		if (referenciaArrecadacao.equals(referenciaContabil)) {
+			credito.setNumeroPrestacaoRealizada((short) 1);
+		} else {
+			credito.setNumeroPrestacaoRealizada((short) 0);
+		}
+		credito.setValorCredito(valor.abs());
 		
 		CreditoTipo tipo = new CreditoTipo();
 		tipo.setId(CreditoTipo.PAGAMENTO_NAO_CONFERE);
@@ -29938,9 +29965,15 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 		
 		credito.setUltimaAlteracao(Calendar.getInstance().getTime());
-		credito.setAnoMesReferenciaPrestacao(Util.somaMesAnoMesReferencia(anoMesReferenciaArrecadacao, 1));
+		credito.setAnoMesReferenciaPrestacao(Util.somaMesAnoMesReferencia(referenciaArrecadacao, 1));
 		
-		return getControladorFaturamento().gerarCreditoARealizar(credito, imovel, null);
+		Integer idCredito = getControladorFaturamento().gerarCreditoARealizar(credito, imovel, null);
+		
+		FiltroCreditoARealizar filtroCreditoARealizar = new FiltroCreditoARealizar();
+		filtroCreditoARealizar.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.ID, idCredito));
+		Collection<CreditoARealizar> colecaoCreditoARealizar = getControladorUtil().pesquisar(filtroCreditoARealizar, CreditoARealizar.class.getName());
+
+		return (CreditoARealizar) Util.retonarObjetoDeColecao(colecaoCreditoARealizar);
 	}
 
 	/**
