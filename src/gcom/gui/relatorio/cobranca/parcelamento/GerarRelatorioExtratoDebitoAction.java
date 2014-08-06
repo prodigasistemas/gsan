@@ -225,6 +225,8 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 			retorno = processarExibicaoRelatorio(relatorioExtratoDebito, TarefaRelatorio.TIPO_PDF + "",
 					request, response, actionMapping);
 
+			//limparSessao(request);
+
 		} catch (RelatorioVazioException ex) {
 			reportarErros(request, "atencao.relatorio.vazio");
 			retorno = actionMapping.findForward("telaAtencaoPopup");
@@ -531,5 +533,48 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 		}
 		
 		return colecaoDebitosACobrarParcelamento;
+	}
+	
+	private void limparSessao(HttpServletRequest request) {
+		
+		HttpSession sessao = request.getSession(false);
+		
+		sessao.removeAttribute("formParcelamento");
+		sessao.removeAttribute("idImovel");
+		sessao.removeAttribute("idImovelExtrato");
+		sessao.removeAttribute("idImovelPrincipalAba");
+		sessao.removeAttribute("imovel");
+		sessao.removeAttribute("nomeClienteExtrato");
+		sessao.removeAttribute("cpfCnpj");
+		sessao.removeAttribute("colecaoAntecipacaoCreditosDeParcelamento");
+		sessao.removeAttribute("colecaoAntecipacaoDebitosDeParcelamento");
+		sessao.removeAttribute("colecaoCreditoARealizarExtrato");
+		sessao.removeAttribute("colecaoContaValoresNegociacao");
+		sessao.removeAttribute("colecaoCreditoARealizar");
+		sessao.removeAttribute("colecaoContasExtrato");
+		sessao.removeAttribute("colecaoContaValores");
+		sessao.removeAttribute("colecaoContaValoresSemContasNB");
+		sessao.removeAttribute("colecaoDebitosACobrarExtrato");
+		sessao.removeAttribute("colecaoDebitoACobrar");
+		sessao.removeAttribute("colecaoGuiasPagamento");
+		sessao.removeAttribute("colecaoGuiaPagamentoValores");
+		sessao.removeAttribute("colecaoGuiaPagamentoNegociacao");
+		sessao.removeAttribute("colecaoGuiasPagamentoExtrato");
+		sessao.removeAttribute("valorAcrescimo");
+		sessao.removeAttribute("valorAcrescimosImpontualidade");
+		sessao.removeAttribute("valorAcrescimosImpontualidadeNegociacao");
+		sessao.removeAttribute("valorAcrescimosImpontualidadeExtrato");
+		sessao.removeAttribute("valorCreditoARealizar");
+		sessao.removeAttribute("valorDocumentoExtrato");
+		sessao.removeAttribute("valorDescontoExtrato");
+		sessao.removeAttribute("valorPagamentoAVista");
+		sessao.removeAttribute("valorToralSemAcrescimoESemJurosParcelamento");
+		sessao.removeAttribute("valorTotalDescontoPagamentoAVista");
+
+		request.removeAttribute("extratoDebito");
+		request.removeAttribute("parcelamento");
+		request.removeAttribute("consultarDebito");
+		request.removeAttribute("RD");
+		request.removeAttribute("parcelamentoPortal");
 	}
 }
