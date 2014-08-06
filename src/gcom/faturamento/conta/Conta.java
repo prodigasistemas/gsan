@@ -53,8 +53,14 @@ public class Conta extends ObjetoTransacao implements IConta {
 	private Short subLote;
 	private Integer codigoSetorComercial;
 	private Integer quadra;
-	private Short digitoVerificadorConta;
-	private Short indicadorCobrancaMulta;
+
+	/** persistent field */
+	private short digitoVerificadorConta;
+
+	/** persistent field */
+	private short indicadorCobrancaMulta;
+
+	/** nullable persistent field */
 	private Short indicadorAlteracaoVencimento;
 	private Integer consumoRateioAgua;
 	private Integer consumoRateioEsgoto;
@@ -861,14 +867,6 @@ public class Conta extends ObjetoTransacao implements IConta {
 			valorTotalConta = valorTotalConta.add(this.getValorEsgoto());
 		}
 
-		if (this.getValorRateioAgua() != null) {
-			valorTotalConta = valorTotalConta.add(this.getValorRateioAgua());
-		}
-
-		if (this.getValorRateioEsgoto() != null) {
-			valorTotalConta = valorTotalConta.add(this.getValorRateioEsgoto());
-		}
-
 		if (this.getDebitos() != null) {
 			valorTotalConta = valorTotalConta.add(this.getDebitos());
 		}
@@ -1161,6 +1159,11 @@ public class Conta extends ObjetoTransacao implements IConta {
 	}
 	
 	public Conta buildConta(Conta conta){
+		conta.setCodigoSetorComercial(this.getCodigoSetorComercial());
+		conta.setQuadra(this.getQuadra());
+		conta.setDigitoVerificadorConta(this.getDigitoVerificadorConta());
+		conta.setQuadra(this.getQuadra());
+		conta.setQuadraConta(this.getQuadraConta());
 		return conta;
 	}
 }

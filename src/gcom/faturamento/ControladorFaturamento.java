@@ -26,6 +26,7 @@ import gcom.cadastro.imovel.ImovelContaEnvio;
 import gcom.cadastro.imovel.ImovelDoacao;
 import gcom.cadastro.imovel.ImovelInscricaoAlterada;
 import gcom.cadastro.imovel.ImovelPerfil;
+import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.RepositorioImovelHBM;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.imovel.bean.ImovelCobrarDoacaoHelper;
@@ -117,7 +118,9 @@ import gcom.faturamento.debito.FiltroDebitoCobradoHistorico;
 import gcom.faturamento.debito.FiltroDebitoTipo;
 import gcom.faturamento.debito.IDebitoCobrado;
 import gcom.faturamento.debito.IDebitoCobradoCategoria;
+import gcom.financeiro.FiltroFinanciamentoTipo;
 import gcom.financeiro.FinanciamentoTipo;
+import gcom.financeiro.lancamento.FiltroLancamentoItemContabil;
 import gcom.financeiro.lancamento.LancamentoItemContabil;
 import gcom.gui.ActionServletException;
 import gcom.gui.faturamento.FaturamentoImediatoAjusteHelper;
@@ -16764,21 +16767,16 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 	
 	private Conta refaturarContaParaClassificar(IConta contaOrigem) throws Exception  {
-		Conta novaConta = this.criarContaParaRecuperacaoCredito(contaOrigem);
+		ContaMotivoInclusao motivoInclusao = new ContaMotivoInclusao(ContaMotivoInclusao.RECUPERACAO_DE_CREDITO);
+		Integer referenciaContabil = getControladorUtil().pesquisarParametrosDoSistema().getAnoMesArrecadacao();
+		DebitoCreditoSituacao situacao = new DebitoCreditoSituacao(DebitoCreditoSituacao.INCLUIDA);
 		
-		repositorioUtil.inserir(novaConta);
-		
-		this.criarContaCategoriaParaRecuperacaoCredito(contaOrigem, novaConta);
-		this.criarDebitoCobradoParaRecuperacaoCredito(contaOrigem, novaConta);
-		this.criarCreditoRealizadoParaRecuperacaoCredito(contaOrigem, novaConta);
-		this.criarClienteContaParaRecuperacaoCredito(contaOrigem, novaConta);
-		this.criarContaImpostosDeduzidosParaRecuperacaoCredito(contaOrigem, novaConta);
-		this.criarConsumoFaixaCategoriaParaRecuperacaoCredito(contaOrigem, novaConta);
+		Conta novaConta = this.copiarContaCompleta(contaOrigem, motivoInclusao, referenciaContabil, situacao);
 		
 		return novaConta;
 	}
 	
-	private void criarConsumoFaixaCategoriaParaRecuperacaoCredito(IConta contaAntiga, Conta contaNova) throws Exception {
+	private void copiarConsumoFaixaCategoria(IConta contaAntiga, Conta contaNova) throws Exception {
 		Collection<IContaCategoriaConsumoFaixa> listaContaCategoriaConsumoFaixaOrigem = repositorioFaturamento.pesquisarContaCategoriaConsumoFaixa(contaAntiga.getId());
 		listaContaCategoriaConsumoFaixaOrigem.addAll(repositorioFaturamento.pesquisarContaCategoriaConsumoFaixaHistorico(contaAntiga.getId()));
 				
@@ -16794,7 +16792,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 	
-	private void criarContaCategoriaParaRecuperacaoCredito(IConta contaAntiga, Conta contaNova) throws Exception {
+	private void copiarContaCategoria(IConta contaAntiga, Conta contaNova) throws Exception {
 		Collection<IContaCategoria> listaContaCategoriaOrigem = repositorioFaturamento.pesquisarContaCategoria(contaAntiga.getId());
 		listaContaCategoriaOrigem.addAll(repositorioFaturamento.pesquisarContaCategoriaHistorico(contaAntiga.getId()));
 				
@@ -16807,7 +16805,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 	
-	private void criarDebitoCobradoParaRecuperacaoCredito(IConta contaAntiga, Conta contaNova) throws Exception {
+	private void copiarDebitoCobrado(IConta contaAntiga, Conta contaNova) throws Exception {
 		Collection<IDebitoCobrado> listaDebitoCobradoOrigem = repositorioFaturamento.pesquisarDebitosCobrados(contaAntiga.getId());
 		listaDebitoCobradoOrigem.addAll(repositorioFaturamento.pesquisarDebitosCobradosHistorico(contaAntiga.getId()));
 				
@@ -16836,7 +16834,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 	
-	private void criarCreditoRealizadoParaRecuperacaoCredito(IConta contaAntiga, Conta contaNova) throws Exception {
+	private void copiarCreditoRealizado(IConta contaAntiga, Conta contaNova) throws Exception {
 		Collection<ICreditoRealizado> listaCreditosOrigem = repositorioFaturamento.pesquisarCreditosRealizados(contaAntiga.getId());
 		listaCreditosOrigem.addAll(repositorioFaturamento.pesquisarCreditosRealizadosHistorico(contaAntiga.getId()));
 				
@@ -16865,7 +16863,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 	
-	private void criarContaImpostosDeduzidosParaRecuperacaoCredito(IConta contaAntiga, Conta contaNova) throws Exception {
+	private void copiarContaImpostosDeduzidos(IConta contaAntiga, Conta contaNova) throws Exception {
 		Collection<IContaImpostosDeduzidos> listaContaImpostoOrigem = repositorioFaturamento.pesquisarContaImpostosDeduzidos(contaAntiga.getId());
 		listaContaImpostoOrigem.addAll(repositorioFaturamento.pesquisarContaImpostosDeduzidosHistorico(contaAntiga.getId()));
 				
@@ -16878,7 +16876,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 	
-	private void criarClienteContaParaRecuperacaoCredito(IConta contaAntiga, Conta contaNova) throws Exception {
+	private void copiarClienteConta(IConta contaAntiga, Conta contaNova) throws Exception {
 		Collection<IClienteConta> listaClienteContaOrigem = repositorioFaturamento.pesquisarClienteConta(contaAntiga.getId());
 		listaClienteContaOrigem.addAll(repositorioFaturamento.pesquisarClienteContaHistorico(contaAntiga.getId()));
 				
@@ -16891,7 +16889,30 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 	
-	private Conta criarContaParaRecuperacaoCredito(IConta contaOrigem) throws ControladorException {
+	private Conta copiarContaCompleta(IConta contaOrigem, ContaMotivoInclusao motivoInclusao, Integer referenciaContabil, DebitoCreditoSituacao situacao) throws Exception {
+		Conta novaConta = this.copiarConta(contaOrigem);
+		
+		novaConta.setDataVencimentoConta(new Date());
+		novaConta.setContaMotivoInclusao(motivoInclusao);
+		novaConta.setReferenciaContabil(referenciaContabil);
+		novaConta.setDebitoCreditoSituacaoAtual(situacao);
+		novaConta.setUltimaAlteracao(new Date());
+		
+		repositorioUtil.inserir(novaConta);
+		
+		this.copiarContaCategoria(contaOrigem, novaConta);
+		this.copiarDebitoCobrado(contaOrigem, novaConta);
+		this.copiarCreditoRealizado(contaOrigem, novaConta);
+		this.copiarClienteConta(contaOrigem, novaConta);
+		this.copiarContaImpostosDeduzidos(contaOrigem, novaConta);
+		this.copiarConsumoFaixaCategoria(contaOrigem, novaConta);
+		
+		return novaConta;
+	}
+	
+	private Conta copiarConta(IConta contaOrigem) throws ControladorException {
+		Rota rota = getControladorMicromedicao().buscarRotaDoImovel(contaOrigem.getImovel().getId());
+
 		ContaGeral contaGeral = new ContaGeral();
 		contaGeral.setIndicadorHistorico((short) 2);
 		contaGeral.setUltimaAlteracao(new Date());
@@ -16900,20 +16921,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		Conta novaConta = new Conta();
 		MergeProperties.mergeInterfaceProperties(novaConta, contaOrigem);
 		contaOrigem.buildConta(novaConta);
+		
 		novaConta.setId(contaGeral.getId());
 		novaConta.setContaGeral(contaGeral);
 		novaConta.setUltimaAlteracao(new Date());
-		novaConta.setDataVencimentoConta(new Date());
-		novaConta.setContaMotivoInclusao(new ContaMotivoInclusao(ContaMotivoInclusao.RECUPERACAO_DE_CREDITO));
-		
-		Rota rota = getControladorMicromedicao().buscarRotaDoImovel(novaConta.getImovel().getId());
-
 		novaConta.setRota(rota);
-		novaConta.setReferenciaContabil(getControladorUtil().pesquisarParametrosDoSistema().getAnoMesArrecadacao());
-
-		DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao(DebitoCreditoSituacao.INCLUIDA);
-		novaConta.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
-		
 		
 		return novaConta;
 	}
@@ -16950,4 +16962,200 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 		return ids;
 	}
+	
+	public Conta incluirDebitoContaRetificadaPagamentosDiferenca2Reais(Integer idConta, DebitoACobrar debito) throws Exception {
+		Conta novaConta = null;
+		
+		if (idConta != null) {
+			novaConta = this.retificarContaPagamentosDiferenca2Reais(idConta);
+			incluirDebitoCobradoContaRetificadaDiferenca2Reais(novaConta, debito);
+			registrarTransacaoRetificacaoContaDiferenca2Reais(novaConta);
+		}
+		
+		return novaConta;
+	}
+	
+	public Conta incluirCreditoContaRetificadaPagamentosDiferenca2Reais(Integer idConta, CreditoARealizar credito) throws Exception {
+		Conta novaConta = null;
+		
+		if (idConta != null) {
+			novaConta = this.retificarContaPagamentosDiferenca2Reais(idConta);
+			incluirCreditoRealizadoContaRetificadaDiferenca2Reais(novaConta, credito);
+			registrarTransacaoRetificacaoContaDiferenca2Reais(novaConta);
+		}
+		
+		return novaConta;
+	}
+	
+	private Conta retificarContaPagamentosDiferenca2Reais(Integer idConta) throws Exception {
+		Conta novaConta = null;
+		
+		if (idConta != null) {
+			Conta contaOriginal  = (Conta)(this.obterConta(idConta)).iterator().next();
+			novaConta = inserirContaRetificadaDiferenca2Reais(contaOriginal);
+			alterarContaDiferenca2Reais(contaOriginal);
+		}
+		
+		return novaConta;
+	}
+	
+	private void incluirCreditoRealizadoContaRetificadaDiferenca2Reais(Conta conta, CreditoARealizar creditoARealizar) throws Exception {
+		Collection<Categoria> categoriasImovel = getControladorImovel().obterQuantidadeEconomiasCategoria(conta.getImovel());
+		
+		Collection<CreditoRealizado> colecaoCreditoRealizado = new ArrayList<CreditoRealizado>();
+		
+		CreditoRealizado creditoRealizado = new CreditoRealizado();
+		conta.setImovel(getControladorImovel().pesquisarImovel(conta.getImovel().getId()));
+		
+		creditoRealizado.setCreditoTipo(creditoARealizar.getCreditoTipo());
+		creditoRealizado.setCreditoRealizado(creditoARealizar.getGeracaoCredito());
+		creditoRealizado.setLancamentoItemContabil(creditoARealizar.getLancamentoItemContabil());
+		creditoRealizado.setLocalidade(creditoARealizar.getLocalidade());
+		creditoRealizado.setQuadra(creditoARealizar.getQuadra());
+		creditoRealizado.setCodigoSetorComercial(creditoARealizar.getCodigoSetorComercial());
+		creditoRealizado.setNumeroQuadra(creditoARealizar.getNumeroQuadra());
+		creditoRealizado.setNumeroLote(creditoARealizar.getNumeroLote());
+		creditoRealizado.setNumeroSubLote(creditoARealizar.getNumeroSubLote());
+		creditoRealizado.setAnoMesReferenciaCredito(creditoARealizar.getAnoMesReferenciaCredito());
+		creditoRealizado.setAnoMesCobrancaCredito(creditoARealizar.getAnoMesCobrancaCredito());
+		creditoRealizado.setValorCredito(creditoARealizar.getValorCredito());
+		creditoRealizado.setCreditoOrigem(creditoARealizar.getCreditoOrigem());
+		creditoRealizado.setNumeroPrestacao(creditoARealizar.getNumeroPrestacaoCredito());
+		creditoRealizado.setNumeroParcelaBonus(creditoARealizar.getNumeroParcelaBonus());
+		creditoRealizado.setNumeroPrestacaoCredito(creditoARealizar.getNumeroPrestacaoRealizada());
+		creditoRealizado.setCreditoARealizarGeral(creditoARealizar.getCreditoARealizarGeral());
+
+		FiltroCreditoTipo filtro = new FiltroCreditoTipo();
+		filtro.adicionarParametro(new ParametroSimples(FiltroCreditoTipo.ID, creditoARealizar.getCreditoTipo().getId()));
+		Collection<CreditoTipo> colecaoCreditoTipo = getControladorUtil().pesquisar(filtro, CreditoTipo.class.getName());
+		CreditoTipo creditoTipo = (CreditoTipo) Util.retonarObjetoDeColecao(colecaoCreditoTipo);
+		
+		
+		FiltroLancamentoItemContabil filtroLancamentoItem = new FiltroLancamentoItemContabil();
+		filtroLancamentoItem.adicionarParametro(new ParametroSimples(FiltroLancamentoItemContabil.ID, creditoTipo.getLancamentoItemContabil().getId()));
+		Collection<LancamentoItemContabil> colecaoLancamentoItem = getControladorUtil().pesquisar(filtroLancamentoItem, LancamentoItemContabil.class.getName());
+		LancamentoItemContabil lancamentoItem = (LancamentoItemContabil) Util.retonarObjetoDeColecao(colecaoLancamentoItem);
+		
+		creditoTipo.setLancamentoItemContabil(lancamentoItem);
+		creditoRealizado.setCreditoTipo(creditoTipo);
+		creditoRealizado.setLancamentoItemContabil(lancamentoItem);
+
+		colecaoCreditoRealizado.add(creditoRealizado);
+		this.inserirCreditoRealizado(conta,colecaoCreditoRealizado, conta.getImovel(), categoriasImovel);
+		
+		conta.setValorCreditos(conta.getValorCreditos().add(creditoRealizado.getValorCredito()));
+		getControladorUtil().atualizar(conta);
+	}
+	
+	private void incluirDebitoCobradoContaRetificadaDiferenca2Reais(Conta conta, DebitoACobrar debitoACobrar) throws Exception {
+		Collection<Categoria> categoriasImovel = getControladorImovel().obterQuantidadeEconomiasCategoria(conta.getImovel());
+		
+		Collection<DebitoCobrado> colecaoDebitoCobrado = new ArrayList<DebitoCobrado>();
+		
+		DebitoCobrado debitoCobrado = new DebitoCobrado();
+
+		conta.setImovel(getControladorImovel().pesquisarImovel(conta.getImovel().getId()));
+		
+		debitoCobrado.setDebitoTipo(debitoACobrar.getDebitoTipo());
+		debitoCobrado.setDebitoCobrado(new Date());
+		debitoCobrado.setConta(conta);
+		debitoCobrado.setLocalidade(conta.getImovel().getLocalidade());
+		debitoCobrado.setQuadra(conta.getImovel().getQuadra());
+		debitoCobrado.setCodigoSetorComercial(new Integer(conta.getCodigoSetorComercial()));
+		debitoCobrado.setNumeroQuadra(new Integer(conta.getImovel().getQuadra().getNumeroQuadra()));
+		debitoCobrado.setNumeroLote(new Short(conta.getImovel().getLote()));
+		debitoCobrado.setNumeroSubLote(new Short(conta.getImovel().getSubLote()));
+		
+		debitoCobrado.setDebitoACobrarGeral(debitoACobrar.getDebitoACobrarGeral());
+		
+		if (debitoACobrar.getAnoMesReferenciaDebito() != null) {
+			debitoCobrado.setAnoMesReferenciaDebito(debitoACobrar.getAnoMesReferenciaDebito());
+		}
+
+		if (debitoACobrar.getAnoMesCobrancaDebito() != null) {
+			debitoCobrado.setAnoMesCobrancaDebito(debitoACobrar.getAnoMesCobrancaDebito());
+		}
+
+		debitoCobrado.setValorPrestacao(debitoACobrar.getValorPrestacao());
+		debitoCobrado.setNumeroPrestacao(new Short("1").shortValue());
+		debitoCobrado.setNumeroPrestacaoDebito(new Short("1").shortValue());
+		debitoCobrado.setNumeroParcelaBonus(debitoACobrar.getNumeroParcelaBonus());
+		debitoCobrado.setUltimaAlteracao(new Date());
+		debitoCobrado.setOperacaoEfetuada(null);
+		debitoCobrado.setUsuarioAcaoUsuarioHelp(null);
+
+		FiltroDebitoTipo filtro = new FiltroDebitoTipo();
+		filtro.adicionarParametro(new ParametroSimples(FiltroDebitoTipo.ID, debitoACobrar.getDebitoTipo().getId()));
+		Collection<DebitoTipo> colecaoDebitoTipo = getControladorUtil().pesquisar(filtro, DebitoTipo.class.getName());
+		DebitoTipo debitoTipo = (DebitoTipo) Util.retonarObjetoDeColecao(colecaoDebitoTipo);
+		
+		
+		FiltroLancamentoItemContabil filtroLancamentoItem = new FiltroLancamentoItemContabil();
+		filtroLancamentoItem.adicionarParametro(new ParametroSimples(FiltroLancamentoItemContabil.ID, debitoTipo.getLancamentoItemContabil().getId()));
+		Collection<LancamentoItemContabil> colecaoLancamentoItem = getControladorUtil().pesquisar(filtroLancamentoItem, LancamentoItemContabil.class.getName());
+		LancamentoItemContabil lancamentoItem = (LancamentoItemContabil) Util.retonarObjetoDeColecao(colecaoLancamentoItem);
+		
+		debitoTipo.setLancamentoItemContabil(lancamentoItem);
+		debitoCobrado.setDebitoTipo(debitoTipo);
+		debitoCobrado.setLancamentoItemContabil(lancamentoItem);
+
+		FiltroFinanciamentoTipo filtroFinanciamentoTipo = new FiltroFinanciamentoTipo();
+		filtroFinanciamentoTipo.adicionarParametro(new ParametroSimples(FiltroFinanciamentoTipo.ID, debitoACobrar.getFinanciamentoTipo().getId()));
+		Collection<FinanciamentoTipo> colecaoFinanciamentoTipo = getControladorUtil().pesquisar(filtroFinanciamentoTipo, FinanciamentoTipo.class.getName());
+		FinanciamentoTipo financiamentoTipo = (FinanciamentoTipo) Util.retonarObjetoDeColecao(colecaoFinanciamentoTipo);
+
+		debitoCobrado.setFinanciamentoTipo(financiamentoTipo);
+		
+		colecaoDebitoCobrado.add(debitoCobrado);
+		this.inserirDebitoCobrado(conta, colecaoDebitoCobrado, conta.getImovel(), categoriasImovel);
+		
+		conta.setValorDebitos(conta.getValorDebitos().add(debitoCobrado.getValorPrestacao()));
+		getControladorUtil().atualizar(conta);
+	}
+	
+	private Conta inserirContaRetificadaDiferenca2Reais(Conta contaOriginal) throws Exception{
+		Conta novaConta  = null;
+		DebitoCreditoSituacao situacaoOriginal = contaOriginal.getDebitoCreditoSituacaoAtual();
+		DebitoCreditoSituacao novaSituacao = new DebitoCreditoSituacao(DebitoCreditoSituacao.RETIFICADA);
+		ContaMotivoInclusao motivoInclusao = new ContaMotivoInclusao(ContaMotivoInclusao.NAO_INFORMADO);
+		
+		Integer referenciaContabil = getControladorUtil().pesquisarParametrosDoSistema().getAnoMesArrecadacao();
+		
+		if (!situacaoOriginal.getId().equals(DebitoCreditoSituacao.RETIFICADA) && !situacaoOriginal.getId().equals(DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)) {
+			try {
+				novaConta = this.copiarContaCompleta(contaOriginal, motivoInclusao, referenciaContabil, novaSituacao);
+				return novaConta;
+			} catch (Exception e) {
+				logger.error("Erro ao retificar conta para pagamentos om diferença de R$2,00", e);
+				return null;
+			}
+			
+		} else {
+			novaConta = contaOriginal;
+		}
+		return novaConta;
+	}
+	
+	private Conta alterarContaDiferenca2Reais(Conta contaOriginal) throws ControladorException{
+		DebitoCreditoSituacao situacaoOriginal = contaOriginal.getDebitoCreditoSituacaoAtual();
+		
+		if (situacaoOriginal.getId().equals(DebitoCreditoSituacao.RETIFICADA)) {
+			contaOriginal.setUltimaAlteracao(new Date());
+		} else if (!situacaoOriginal.getId().equals(DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)) {
+			contaOriginal.setDebitoCreditoSituacaoAnterior(situacaoOriginal);
+			contaOriginal.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO));
+			contaOriginal.setUltimaAlteracao(new Date());
+		}
+		this.atualizarConta(contaOriginal);
+		return contaOriginal;
+	}
+	
+	private void registrarTransacaoRetificacaoContaDiferenca2Reais(Conta novaConta) {
+		RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CONTA_RETIFICAR, novaConta.getImovel()
+				.getId(), novaConta.getId(), new UsuarioAcaoUsuarioHelper(Usuario.USUARIO_BATCH, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+		
+		registradorOperacao.registrarOperacao(novaConta);
+		
+	}
+	
 }

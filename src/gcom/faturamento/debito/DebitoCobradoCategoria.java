@@ -84,9 +84,14 @@ public class DebitoCobradoCategoria extends ObjetoTransacao implements IDebitoCo
     	}
     	
     	if (comp_id.getCategoriaId() == null) {
-    		comp_id.setCategoriaId(categoria != null ? categoria.getId() : null);
-    	}
-        this.categoria = categoria;
+        	comp_id.setCategoriaId(categoria != null ? categoria.getId() : null);
+        }
+
+    	if (categoria != null) {
+        	comp_id.setCategoriaId(categoria.getId());
+        }
+    	
+    	this.categoria = categoria;
     }
 
     public String toString() {
@@ -129,8 +134,12 @@ public class DebitoCobradoCategoria extends ObjetoTransacao implements IDebitoCo
     	}
     	
 		if (comp_id.getDebitoCobradoId() == null) {
-    		comp_id.setDebitoCobradoId(debitoCobrado != null ? debitoCobrado.getId() : null);
-    	}
+			comp_id.setDebitoCobradoId(debitoCobrado != null ? debitoCobrado.getId() : null);
+		}
+		
+		if (debitoCobrado != null) {
+			comp_id.setDebitoCobradoId(debitoCobrado.getId());
+		}
         this.debitoCobrado = (DebitoCobrado)debitoCobrado;
 	}
 	   
