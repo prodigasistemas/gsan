@@ -4434,13 +4434,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		int mesDataVencimentoRota = Util.getMes(faturamentoAtivCronRota.getDataContaVencimento());
 		int anoDataVencimentoRota = Util.getAno(faturamentoAtivCronRota.getDataContaVencimento());
 
-
+		logger.info("Imovel: " + imovel.getId() + " - " + imovel.getDiaVencimento() + " - " + imovel.getIndicadorEmissaoExtratoFaturamento() + " - " + imovel.getIndicadorVencimentoMesSeguinte());
 		if (imovel.getDiaVencimento() != null
 				&& imovel.getDiaVencimento().intValue() != 0
 				&& (imovel.getIndicadorEmissaoExtratoFaturamento() == null || imovel.getIndicadorEmissaoExtratoFaturamento().equals(ConstantesSistema.NAO))) {
 
 			diaVencimentoAlternativo = imovel.getDiaVencimento();
 			indicadorVencimentoMesSeguinte = imovel.getIndicadorVencimentoMesSeguinte();
+			logger.info("Entrou v. alternativo");
 		} else {
 
 			/*
@@ -4543,7 +4544,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					 * (PARM_NNMINIMODIASEMISSAOVENCIMENTO da tabela SISTEMA_PARAMETROS)
 					 */
 					if (dataVencimentoAlternativo.compareTo(dataAtualMaisDiasMinimoEmissao) <= 0) {
-
+						logger.info("Vencimento alternativo menor que mínimo");
 						/* A Data de Vencimento da Conta será igual ao dia do vencimento alternativo mais o mês e ano seguinte ao
 						 * da Data de Vencimento da Rota.
 						 */

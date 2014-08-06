@@ -87,6 +87,10 @@ public class DebitoCobradoCategoria extends ObjetoTransacao implements IDebitoCo
         	comp_id.setCategoriaId(categoria != null ? categoria.getId() : null);
         }
 
+    	if (categoria != null) {
+        	comp_id.setCategoriaId(categoria.getId());
+        }
+    	
     	this.categoria = categoria;
     }
 

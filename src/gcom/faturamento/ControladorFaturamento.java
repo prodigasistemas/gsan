@@ -17065,7 +17065,8 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		debitoCobrado.setNumeroQuadra(new Integer(conta.getImovel().getQuadra().getNumeroQuadra()));
 		debitoCobrado.setNumeroLote(new Short(conta.getImovel().getLote()));
 		debitoCobrado.setNumeroSubLote(new Short(conta.getImovel().getSubLote()));
-
+		debitoCobrado.setDebitoACobrarGeral(debitoACobrar.getDebitoACobrarGeral());
+		
 		if (debitoACobrar.getAnoMesReferenciaDebito() != null) {
 			debitoCobrado.setAnoMesReferenciaDebito(debitoACobrar.getAnoMesReferenciaDebito());
 		}

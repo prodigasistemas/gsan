@@ -82,6 +82,10 @@ public class CreditoRealizadoCategoria implements Serializable, ICreditoRealizad
         	comp_id.setCreditoRealizado(new CreditoRealizado());
         	comp_id.getCreditoRealizado().setId((creditoRealizado != null ? creditoRealizado.getId() : null));
         }
+        
+        if (creditoRealizado != null) {
+        	comp_id.setCreditoRealizado(new CreditoRealizado(creditoRealizado.getId()));
+        }
         this.creditoRealizado  = (CreditoRealizado) creditoRealizado ;
     }
 
@@ -96,6 +100,10 @@ public class CreditoRealizadoCategoria implements Serializable, ICreditoRealizad
     	if (comp_id.getCategoria() == null) {
         	comp_id.setCategoria(new Categoria());
         	comp_id.getCategoria().setId((categoria != null ? categoria.getId() : null));
+        }
+    	
+    	if (categoria != null) {
+        	comp_id.setCategoria(new Categoria(categoria.getId()));
         }
         this.categoria = categoria;
     }
