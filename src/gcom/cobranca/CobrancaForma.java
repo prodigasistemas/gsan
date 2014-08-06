@@ -8,33 +8,19 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class CobrancaForma extends ObjetoTransacao {
 	
 	private static final long serialVersionUID = 1L;
 
-	//Constantes de formade cobrança >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> 
     public final static Integer COBRANCA_EM_CONTA = new Integer(1);
     public final static Integer COBRANCA_EM_CARTAO_CREDITO = new Integer(3);
     public final static Integer COBRANCA_POR_ICMS = new Integer(4);
     public final static Integer COBRANCA_POR_EXTRATO = new Integer(5);
-    //>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>	
 	
-	
-    /**  identifier field */
     private Integer id;
-
-    /** nullable persistent field */
     private String descricao;
-
-    /** nullable persistent field */
     private String descricaoAbreviada;
-
-    /** nullable persistent field */
     private Short indicadorUso;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
     
     private Short indicadorUsoContratoParcelamentoCliente;
@@ -45,7 +31,6 @@ public class CobrancaForma extends ObjetoTransacao {
 		return retorno;
 	}
     
-    /** full constructor */
     public CobrancaForma(String descricao, String descricaoAbreviada, Short indicadorUso, Date ultimaAlteracao) {
         this.descricao = descricao;
         this.descricaoAbreviada = descricaoAbreviada;
@@ -53,10 +38,13 @@ public class CobrancaForma extends ObjetoTransacao {
         this.ultimaAlteracao = ultimaAlteracao;
     }
 
-    /** default constructor */
     public CobrancaForma() {
     }
 
+    public CobrancaForma(Integer id) {
+    	this.id = id;
+    }
+    
     public Integer getId() {
         return this.id;
     }

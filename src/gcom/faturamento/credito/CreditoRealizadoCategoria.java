@@ -1,7 +1,6 @@
 package gcom.faturamento.credito;
 
 import gcom.cadastro.imovel.Categoria;
-import gcom.faturamento.debito.DebitoCobradoCategoriaPK;
 
 import java.io.Serializable;
 import java.math.BigDecimal;

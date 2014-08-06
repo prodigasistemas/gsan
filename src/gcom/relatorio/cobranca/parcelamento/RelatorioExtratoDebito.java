@@ -34,27 +34,13 @@ import java.util.Map;
 
 /**
  * [UC0444] Gerar e Emitir Extrato de Débito
- * @author Vivianne Sousa
- * @date 07/09/2006
  */
-
 public class RelatorioExtratoDebito extends TarefaRelatorio {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -7034984685957706140L;
 	
-	/**
-	 * Quantidade máxima de linhas do detail da primeira página do relatorio
-	 */
 	public final static int NUMERO_MAX_lINHAS_DETAIL_PRIMEIRA_PAGINA = 19;
-	
-	/**
-	 * Quantidade máxima de linhas do detail a partir da segunda página do relátorio
-	 */
 	public final static int NUMERO_MAX_lINHAS_DETAIL_OUTRAS_PAGINAS = 44;
-	
 	public final static int NUMERO_MAX_lINHAS_DETAIL_PRIMEIRA_PAGINA_BOLETO = 12;
 
 	public RelatorioExtratoDebito(Usuario usuario) {
@@ -83,7 +69,7 @@ public class RelatorioExtratoDebito extends TarefaRelatorio {
 		
 		//CRC0959 - Vivianne Sousa - 08/09/2010 - analista:Fatima Sampaio
 		int numeroMaxLinhasDetailPrimeiraPagina = NUMERO_MAX_lINHAS_DETAIL_PRIMEIRA_PAGINA;
-		//Verifica se o extrato vai ser um Boleto Bancário
+		
 		if(extratoDebitoRelatorioHelper.getDocumentoCobranca().getValorDocumento()!= null 
 			&& sistemaParametro.getValorExtratoFichaComp() != null
 			&& !sistemaParametro.getValorExtratoFichaComp().equals(new BigDecimal("0.00"))

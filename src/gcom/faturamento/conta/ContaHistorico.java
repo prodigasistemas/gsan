@@ -327,15 +327,15 @@ public class ContaHistorico implements IConta {
 		return anoMesReferenciaConta;
 	}
 	
-	public Integer getReferencia(){
+	public int getReferencia(){
 		return anoMesReferenciaConta;
 	}
 	
-	public void setReferencia(Integer ref){
+	public void setReferencia(int ref){
 		anoMesReferenciaConta = ref;
 	}
 
-	public void setAnoMesReferenciaConta(Integer anoMesReferenciaConta) {
+	public void setAnoMesReferenciaConta(int anoMesReferenciaConta) {
 		this.anoMesReferenciaConta = anoMesReferenciaConta;
 	}
 

@@ -48,11 +48,7 @@ public class Conta extends ObjetoTransacao implements IConta {
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_CONTA,ATRIBUTOS_RETIFICAR_CONTA_CANCELAR})
 	private Integer id;
 	private Integer referenciaContabil;
-
-	/** persistent field */
 	private int referencia;
-
-	/** nullable persistent field */
 	private Short lote;
 	private Short subLote;
 	private Integer codigoSetorComercial;
@@ -410,7 +406,7 @@ public class Conta extends ObjetoTransacao implements IConta {
 		this.referenciaContabil = referenciaContabil;
 	}
 
-	public Integer getReferencia() {
+	public int getReferencia() {
 		return this.referencia;
 	}
 	
@@ -418,7 +414,7 @@ public class Conta extends ObjetoTransacao implements IConta {
 		return this.referencia;
 	}
 
-	public void setReferencia(Integer referencia) {
+	public void setReferencia(int referencia) {
 		this.referencia = referencia;
 	}
 

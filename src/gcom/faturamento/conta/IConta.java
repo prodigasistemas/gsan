@@ -23,7 +23,7 @@ import java.util.Date;
 public interface IConta extends Serializable {
 
 	public void setId(Integer id);
-	public void setReferencia(Integer referencia);
+	public void setReferencia(int referencia);
 	public void setImovel(Imovel imovel);
 	public void setLote(Short lote);
 	public void setSubLote(Short sublote);
@@ -76,7 +76,7 @@ public interface IConta extends Serializable {
 	public void setReferenciaContabil(Integer referenciaContabil);
 
 	public Integer getId();
-	public Integer getReferencia();
+	public int getReferencia();
 	public Imovel getImovel();
 	public Short getLote();
 	public Short getSubLote();
