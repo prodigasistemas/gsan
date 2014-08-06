@@ -4417,10 +4417,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		}
 	}
 
-	public Date determinarVencimentoConta(Imovel imovel,
-			FaturamentoAtivCronRota faturamentoAtivCronRota,
-			SistemaParametro sistemaParametro, Integer anoMesFaturamento)
-			throws ControladorException {
+	public Date determinarVencimentoConta(Imovel imovel, FaturamentoAtivCronRota faturamentoAtivCronRota, SistemaParametro sistemaParametro,
+			Integer anoMesFaturamento) throws ControladorException {
 
 		Date dataVencimentoConta = null;
 
@@ -4434,168 +4432,87 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		int mesDataVencimentoRota = Util.getMes(faturamentoAtivCronRota.getDataContaVencimento());
 		int anoDataVencimentoRota = Util.getAno(faturamentoAtivCronRota.getDataContaVencimento());
 
-		logger.info("Imovel: " + imovel.getId() + " - " + imovel.getDiaVencimento() + " - " + imovel.getIndicadorEmissaoExtratoFaturamento() + " - " + imovel.getIndicadorVencimentoMesSeguinte());
-		if (imovel.getDiaVencimento() != null
-				&& imovel.getDiaVencimento().intValue() != 0
+		if (imovel.getDiaVencimento() != null && imovel.getDiaVencimento().intValue() != 0
 				&& (imovel.getIndicadorEmissaoExtratoFaturamento() == null || imovel.getIndicadorEmissaoExtratoFaturamento().equals(ConstantesSistema.NAO))) {
 
 			diaVencimentoAlternativo = imovel.getDiaVencimento();
 			indicadorVencimentoMesSeguinte = imovel.getIndicadorVencimentoMesSeguinte();
-			logger.info("Entrou v. alternativo");
 		} else {
-
-			/*
-			 * Caso contrário: Caso o imóvel tenha cliente responsável (existe
-			 * ocorrência na tabela CLIENTE_IMOVEL para IMOV_ID=Id do imóvel e
-			 * CRTP_ID com o valor correspondente a responsável e
-			 * CLIM_DTRELACAOFIM com o valor correspondente a nulo).
-			 * 
-			 * Caso contrário, o imóvel não possui vencimento alternativo (dia
-			 * do vencimento alternativo=nulo).
-			 */
 			try {
-
-				clienteResponsavel = repositorioFaturamento
-						.pesquisarClienteImovelGrupoFaturamento(imovel.getId(),
-								ClienteRelacaoTipo.RESPONSAVEL);
-
+				clienteResponsavel = repositorioFaturamento.pesquisarClienteImovelGrupoFaturamento(imovel.getId(), ClienteRelacaoTipo.RESPONSAVEL);
 			} catch (ErroRepositorioException ex) {
 				throw new ControladorException("erro.sistema", ex);
 			}
 
 			if (clienteResponsavel != null) {
-
-				/*
-				 * Caso o cliente responsável tenha vencimento alternativo
-				 * (CLIE_DDVENCIMENTO com o valor diferente de nulo na tabela
-				 * CLIENTE para CLIE_ID=CLIE_ID da tabela CLIENTE_IMOVEL), o dia
-				 * do vencimento alternativo será o do cliente (CLIE
-				 * DDVENCIMENTO).
-				 */
-				if (clienteResponsavel.getDataVencimento() != null
-						&& clienteResponsavel.getDataVencimento().intValue() != 0) {
-
-					// DIA DO VENCIMENTO ALTERNATIVO DO CLIENTE
-					diaVencimentoAlternativo = clienteResponsavel
-							.getDataVencimento();
-
-					// INDICADOR DE GERAÇÃO PARA O MÊS SEGUINTE
-					// diaVencimentoAlternativoCliente = true;
-					indicadorVencimentoMesSeguinte = clienteResponsavel
-							.getIndicadorVencimentoMesSeguinte();
+				if (clienteResponsavel.getDataVencimento() != null && clienteResponsavel.getDataVencimento().intValue() != 0) {
+					diaVencimentoAlternativo = clienteResponsavel.getDataVencimento();
+					indicadorVencimentoMesSeguinte = clienteResponsavel.getIndicadorVencimentoMesSeguinte();
 				}
-				/*
-				 * Caso contrário: Caso, IMOV_ICEMISSAOEXTRATOFATURAMENTO esteja
-				 * com o valor correspondente a um (1), o dia do vencimento
-				 * alternativo será o último dia do mês e ano da Data de
-				 * Vencimento da Rota.
-				 */
-				else if (imovel.getIndicadorEmissaoExtratoFaturamento() != null
-						&& imovel.getIndicadorEmissaoExtratoFaturamento()
-								.equals(ConstantesSistema.SIM)) {
-
-					diaVencimentoAlternativo = Short.valueOf(Util
-							.obterUltimoDiaMes(mesDataVencimentoRota,
-									anoDataVencimentoRota));
+				else if (imovel.getIndicadorEmissaoExtratoFaturamento() != null && imovel.getIndicadorEmissaoExtratoFaturamento().equals(ConstantesSistema.SIM)) {
+					diaVencimentoAlternativo = Short.valueOf(Util.obterUltimoDiaMes(mesDataVencimentoRota, anoDataVencimentoRota));
 				}
 			}
 		}
 
-		// DATA DE VENCIMENTO DA CONTA
-
-		/*
-		 * Caso o imóvel não possua vencimento alternativo (dia do vencimento
-		 * alternativo=nulo), a Data de Vencimento da Conta será a Data de
-		 * Vencimento da Rota.
-		 */
-		if (diaVencimentoAlternativo == null
-				|| diaVencimentoAlternativo.intValue() == 0) {
-
+		if (diaVencimentoAlternativo == null || diaVencimentoAlternativo.intValue() == 0) {
 			dataVencimentoConta = faturamentoAtivCronRota.getDataContaVencimento();
-			logger.info("sem Vencimento alternativo");
 		} else {
-
 			if (indicadorVencimentoMesSeguinte.equals(ConstantesSistema.NAO)) {
-				logger.info("Vencimento mes seguinte nao");
 				if (diaDataVencimentoRota <= diaVencimentoAlternativo.intValue()) {
-
 					ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(mesDataVencimentoRota, anoDataVencimentoRota));
-					logger.info("diaDataVencimentoRota <= diaVencimentoAlternativo.intValue()" );
 					if (diaVencimentoAlternativo.intValue() > ultimoDiaMes.intValue()) {
 						diaVencimentoAlternativo = ultimoDiaMes;
 					}
 
-					dataVencimentoConta = Util.criarData(diaVencimentoAlternativo.intValue(),mesDataVencimentoRota, anoDataVencimentoRota);
+					dataVencimentoConta = Util.criarData(diaVencimentoAlternativo.intValue(), mesDataVencimentoRota, anoDataVencimentoRota);
 				} else {
-					logger.info("altrnativo > rota");
 					diaVencimentoAlternativo = new Integer(diaDataVencimentoRota).shortValue();
-					
+
 					ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(mesDataVencimentoRota, anoDataVencimentoRota));
 
 					if (diaVencimentoAlternativo.intValue() > ultimoDiaMes.intValue()) {
 						diaVencimentoAlternativo = ultimoDiaMes;
 					}
 
-					Date dataVencimentoAlternativo = Util.criarData(diaVencimentoAlternativo.intValue(),mesDataVencimentoRota, anoDataVencimentoRota);
-					Date dataAtualMaisDiasMinimoEmissao = Util.adicionarNumeroDiasDeUmaData(new Date(), sistemaParametro.getNumeroMinimoDiasEmissaoVencimento());
+					Date dataVencimentoAlternativo = Util.criarData(diaVencimentoAlternativo.intValue(), mesDataVencimentoRota, anoDataVencimentoRota);
+					Date dataAtualMaisDiasMinimoEmissao = Util
+							.adicionarNumeroDiasDeUmaData(new Date(), sistemaParametro.getNumeroMinimoDiasEmissaoVencimento());
 
-					/*
-					 * Caso a data formada pelo dia do vencimento alternativo mais o mês e o ano da data de vencimento da rota seja
-					 * menor que a data corrente mais o número mínimo de dias entre a data de emissão e a data de vencimento da conta
-					 * (PARM_NNMINIMODIASEMISSAOVENCIMENTO da tabela SISTEMA_PARAMETROS)
-					 */
 					if (dataVencimentoAlternativo.compareTo(dataAtualMaisDiasMinimoEmissao) <= 0) {
-						logger.info("Vencimento alternativo menor que mínimo");
-						/* A Data de Vencimento da Conta será igual ao dia do vencimento alternativo mais o mês e ano seguinte ao
-						 * da Data de Vencimento da Rota.
-						 */
 						Date dataVencimentoRotaMesSeguinte = Util.adcionarOuSubtrairMesesAData(faturamentoAtivCronRota.getDataContaVencimento(), 1, 0);
 
-						ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(
-								Util.getMes(dataVencimentoRotaMesSeguinte),
+						ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(Util.getMes(dataVencimentoRotaMesSeguinte),
 								Util.getAno(dataVencimentoRotaMesSeguinte)));
 
-						if (diaVencimentoAlternativo.intValue() > ultimoDiaMes
-								.intValue()) {
+						if (diaVencimentoAlternativo.intValue() > ultimoDiaMes.intValue()) {
 							diaVencimentoAlternativo = ultimoDiaMes;
 						}
 
-						dataVencimentoConta = Util.criarData(
-								diaVencimentoAlternativo.intValue(),
-								Util.getMes(dataVencimentoRotaMesSeguinte),
+						dataVencimentoConta = Util.criarData(diaVencimentoAlternativo.intValue(), Util.getMes(dataVencimentoRotaMesSeguinte),
 								Util.getAno(dataVencimentoRotaMesSeguinte));
 					} else {
-
 						dataVencimentoConta = dataVencimentoAlternativo;
 					}
-
 				}
 			} else {
-
 				Date dataVencimentoRotaMesSeguinte = Util.adcionarOuSubtrairMesesAData(faturamentoAtivCronRota.getDataContaVencimento(), 1, 0);
 
-				ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(
-						Util.getMes(dataVencimentoRotaMesSeguinte),
-						Util.getAno(dataVencimentoRotaMesSeguinte)));
+				ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(Util.getMes(dataVencimentoRotaMesSeguinte), Util.getAno(dataVencimentoRotaMesSeguinte)));
 
-				if (diaVencimentoAlternativo.intValue() > ultimoDiaMes
-						.intValue()) {
+				if (diaVencimentoAlternativo.intValue() > ultimoDiaMes.intValue()) {
 					diaVencimentoAlternativo = ultimoDiaMes;
 				}
 
-				dataVencimentoConta = Util.criarData(
-						diaVencimentoAlternativo.intValue(),
-						Util.getMes(dataVencimentoRotaMesSeguinte),
+				dataVencimentoConta = Util.criarData(diaVencimentoAlternativo.intValue(), Util.getMes(dataVencimentoRotaMesSeguinte),
 						Util.getAno(dataVencimentoRotaMesSeguinte));
-
 			}
 		}
 
 		// ENTREGA CONTA VIA CORREIO
-		if ((imovel.getImovelContaEnvio().getId().equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL) 
-			|| imovel.getImovelContaEnvio().getId().equals(ImovelContaEnvio.NAO_PAGAVEL_IMOVEL_PAGAVEL_RESPONSAVEL))
-				&& diaVencimentoAlternativo == null
-				&& imovel.getIndicadorDebitoConta().equals(ConstantesSistema.NAO)) {
+		if ((imovel.getImovelContaEnvio().getId().equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL) || imovel.getImovelContaEnvio().getId()
+				.equals(ImovelContaEnvio.NAO_PAGAVEL_IMOVEL_PAGAVEL_RESPONSAVEL))
+				&& diaVencimentoAlternativo == null && imovel.getIndicadorDebitoConta().equals(ConstantesSistema.NAO)) {
 
 			dataVencimentoConta = Util.adicionarNumeroDiasDeUmaData(dataVencimentoConta, sistemaParametro.getNumeroDiasAdicionaisCorreios());
 		}
