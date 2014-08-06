@@ -4512,21 +4512,22 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				|| diaVencimentoAlternativo.intValue() == 0) {
 
 			dataVencimentoConta = faturamentoAtivCronRota.getDataContaVencimento();
+			logger.info("sem Vencimento alternativo");
 		} else {
 
 			if (indicadorVencimentoMesSeguinte.equals(ConstantesSistema.NAO)) {
-
+				logger.info("Vencimento mes seguinte nao");
 				if (diaDataVencimentoRota <= diaVencimentoAlternativo.intValue()) {
 
 					ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(mesDataVencimentoRota, anoDataVencimentoRota));
-
+					logger.info("diaDataVencimentoRota <= diaVencimentoAlternativo.intValue()" );
 					if (diaVencimentoAlternativo.intValue() > ultimoDiaMes.intValue()) {
 						diaVencimentoAlternativo = ultimoDiaMes;
 					}
 
 					dataVencimentoConta = Util.criarData(diaVencimentoAlternativo.intValue(),mesDataVencimentoRota, anoDataVencimentoRota);
 				} else {
-
+					logger.info("altrnativo > rota");
 					diaVencimentoAlternativo = new Integer(diaDataVencimentoRota).shortValue();
 					
 					ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(mesDataVencimentoRota, anoDataVencimentoRota));
@@ -9953,6 +9954,10 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					debitoCobradoInserir.setNumeroPrestacaoDebito(debitoCobradoColecao.getNumeroPrestacaoDebito());
 				}
 
+				if (debitoCobradoColecao.getDebitoACobrarGeral() != null) {
+					debitoCobradoInserir.setDebitoACobrarGeral(debitoCobradoColecao.getDebitoACobrarGeral());
+				}
+				
 				debitoCobradoInserir.setFinanciamentoTipo(debitoCobradoColecao.getDebitoTipo().getFinanciamentoTipo());
 				debitoCobradoInserir.setNumeroParcelaBonus(debitoCobradoColecao.getNumeroParcelaBonus());
 				debitoCobradoInserir.setUltimaAlteracao(new Date());
