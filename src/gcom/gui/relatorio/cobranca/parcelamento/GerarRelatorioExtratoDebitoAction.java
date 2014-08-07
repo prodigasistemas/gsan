@@ -225,7 +225,7 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 			retorno = processarExibicaoRelatorio(relatorioExtratoDebito, TarefaRelatorio.TIPO_PDF + "",
 					request, response, actionMapping);
 
-			//limparSessao(request);
+			limparSessao(request);
 
 		} catch (RelatorioVazioException ex) {
 			reportarErros(request, "atencao.relatorio.vazio");
