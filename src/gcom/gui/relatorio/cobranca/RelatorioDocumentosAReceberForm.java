@@ -49,6 +49,7 @@ public class RelatorioDocumentosAReceberForm extends ActionForm {
 	 * Acrescimo de mais um filtro na geração do relatório R0990 
 	 * */
 	private String indicadorGuiaPagamento;
+	private String indicadorInclusaoValorSemParcelas;
 	
 	public String getMesAno() {
 		return mesAno;
@@ -171,5 +172,11 @@ public class RelatorioDocumentosAReceberForm extends ActionForm {
 	}
 	public void setIndicadorGuiaPagamento(String indicadorGuiaPagamento) {
 		this.indicadorGuiaPagamento = indicadorGuiaPagamento;
+	}
+	public String getIndicadorInclusaoValorSemParcelas() {
+		return indicadorInclusaoValorSemParcelas;
+	}
+	public void setIndicadorInclusaoValorSemParcelas(String indicadorInclusaoValorSemParcelas) {
+		this.indicadorInclusaoValorSemParcelas = indicadorInclusaoValorSemParcelas;
 	}
 }

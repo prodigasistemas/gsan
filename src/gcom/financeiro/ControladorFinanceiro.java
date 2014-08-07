@@ -72,6 +72,7 @@ import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ControladorUtilLocalHome;
 import gcom.util.ErroRepositorioException;
+import gcom.util.HibernateUtil;
 import gcom.util.IoUtil;
 import gcom.util.ServiceLocator;
 import gcom.util.ServiceLocatorException;
@@ -102,6 +103,8 @@ import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
+
+import org.hibernate.Session;
 
 /**
  * Controlador Financeiro PADRÃO
@@ -13256,6 +13259,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
         // -------------------------
         idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(
         idFuncionalidadeIniciada, UnidadeProcessamento.LOCALIDADE, idLocalidade);
+        
+        Session session = HibernateUtil.getSession();
 
         try {
 
@@ -13272,24 +13277,24 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
         	int anoMesReferenciaFaturamentoMenosUm = Util.subtrairMesDoAnoMes(
         	sistemaParametro.getAnoMesFaturamento(), 1);
 
-        	this.removerDocumentosAReceberFaixaResumo(anoMesReferenciaFaturamentoMenosUm, idLocalidade);
-        	this.removerDocumentosAReceberResumo(anoMesReferenciaFaturamentoMenosUm, idLocalidade);
+        	this.removerDocumentosAReceberFaixaResumo(anoMesReferenciaFaturamentoMenosUm, idLocalidade, session);
+        	this.removerDocumentosAReceberResumo(anoMesReferenciaFaturamentoMenosUm, idLocalidade, session);
         	
         	//[SB0001 – Gerar resumo a partir de contas];
             this.gerarResumoAPartirConta(anoMesReferenciaFaturamentoMenosUm, idLocalidade, 
-            		colecaoDocumentosAReceberResumo);
+            		colecaoDocumentosAReceberResumo, session);
             
             //[SB0002 – Gerar resumo a partir de guias de pagamento]
             this.gerarResumoAPartirGuiaPagamento(anoMesReferenciaFaturamentoMenosUm, idLocalidade, 
-            		colecaoDocumentosAReceberResumo);
+            		colecaoDocumentosAReceberResumo, session);
             
             //[SB0003 – Gerar resumo a partir de débitos a cobrar]
             this.gerarResumoAPartirDebitoACobrar(anoMesReferenciaFaturamentoMenosUm, idLocalidade, 
-            		colecaoDocumentosAReceberResumo);
+            		colecaoDocumentosAReceberResumo, session);
             
             //[SB0004 – Gerar resumo a partir de créditos a realizar]
             this.gerarResumoAPartirCreditoARealizar(anoMesReferenciaFaturamentoMenosUm, idLocalidade, 
-            		colecaoDocumentosAReceberResumo);
+            		colecaoDocumentosAReceberResumo, session);
 
             //ENCERRANDO A UNIDADE DE PROCESSAMENTO
             getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
@@ -13297,13 +13302,13 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
             System.out.println("FIM DA GERAÇÃO - Localidade " + idLocalidade);
 
-        } 
-        catch (Exception e) {
-
+        } catch (Exception e) {
             getControladorBatch().encerrarUnidadeProcessamentoBatch(e,
             idUnidadeIniciada, true);
             
             throw new EJBException(e);
+        } finally {
+        	HibernateUtil.closeSession(session);
         }
     }
 	
@@ -13318,12 +13323,12 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @throws ErroRepositorioException
 	 */
 	public void removerDocumentosAReceberResumo(int anoMesReferenciaFaturamento, 
-		Integer idLocalidade) throws ControladorException {
+		Integer idLocalidade, Session session) throws ControladorException {
 		
 		try {
 			
 			repositorioFinanceiro.removerDocumentosAReceberResumo(anoMesReferenciaFaturamento, 
-			idLocalidade);
+			idLocalidade, session);
 			
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
@@ -13345,14 +13350,14 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @throws ControladorException
 	 */
 	public void gerarResumoAPartirConta(int anoMesReferenciaFaturamento, Integer idLocalidade,
-		Collection<DocumentosAReceberResumo> colecaoDocumentosAReceberResumo) throws ControladorException{
+		Collection<DocumentosAReceberResumo> colecaoDocumentosAReceberResumo, Session session) throws ControladorException{
 		
 		Collection<Object[]> colecaoResumoContas = null;
 		
 		try {
 			
 			colecaoResumoContas = repositorioFinanceiro.pesquisarContasAReceberParaResumo(
-			anoMesReferenciaFaturamento, idLocalidade);
+			anoMesReferenciaFaturamento, idLocalidade, session);
 			
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
@@ -13377,14 +13382,14 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @throws ControladorException
 	 */
 	public void gerarResumoAPartirGuiaPagamento(int anoMesReferenciaFaturamento, Integer idLocalidade,
-		Collection<DocumentosAReceberResumo> colecaoDocumentosAReceberResumo) throws ControladorException{
+		Collection<DocumentosAReceberResumo> colecaoDocumentosAReceberResumo, Session session) throws ControladorException{
 			
 		Collection<Object[]> colecaoResumoGuiasPagamento = null;
 			
 		try {
 				
 			colecaoResumoGuiasPagamento = repositorioFinanceiro.pesquisarGuiasPagamentoAReceberParaResumo(
-			anoMesReferenciaFaturamento, idLocalidade);
+			anoMesReferenciaFaturamento, idLocalidade, session);
 				
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
@@ -13409,14 +13414,14 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @throws ControladorException
 	 */
 	public void gerarResumoAPartirDebitoACobrar(int anoMesReferenciaFaturamento, Integer idLocalidade,
-		Collection<DocumentosAReceberResumo> colecaoDocumentosAReceberResumo) throws ControladorException{
+		Collection<DocumentosAReceberResumo> colecaoDocumentosAReceberResumo, Session session) throws ControladorException{
 				
 		Collection<Object[]> colecaoResumoDebitosACobrar = null;
 				
 		try {
 					
 			colecaoResumoDebitosACobrar = repositorioFinanceiro.pesquisarDebitosACobrarAReceberParaResumo(
-			anoMesReferenciaFaturamento, idLocalidade);
+			anoMesReferenciaFaturamento, idLocalidade, session);
 					
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
@@ -13441,14 +13446,14 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @throws ControladorException
 	 */
 	public void gerarResumoAPartirCreditoARealizar(int anoMesReferenciaFaturamento, Integer idLocalidade,
-		Collection<DocumentosAReceberResumo> colecaoDocumentosAReceberResumo) throws ControladorException{
+		Collection<DocumentosAReceberResumo> colecaoDocumentosAReceberResumo, Session session) throws ControladorException{
 					
 		Collection<Object[]> colecaoResumoCreditoARealizar = null;
 					
 		try {
 						
 			colecaoResumoCreditoARealizar = repositorioFinanceiro.pesquisarCreditosARealizarAReceberParaResumo(
-			anoMesReferenciaFaturamento, idLocalidade);
+			anoMesReferenciaFaturamento, idLocalidade, session);
 						
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
@@ -13688,10 +13693,14 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 						documentosAReceberFaixaResumo.setValorDocumentos((BigDecimal) dadosAcumulados[8]);
 						
 						if (documentosAReceberResumo.getValorDocumentos() != null && !documentosAReceberResumo.getValorDocumentos().equals(BigDecimal.ZERO)) {
-							documentosAReceberResumo.setValorDocumentos(documentosAReceberResumo.getValorDocumentos()
-									.add((BigDecimal) dadosAcumulados[8]));
+							documentosAReceberResumo.setValorDocumentos(documentosAReceberResumo.getValorDocumentos().add((BigDecimal) dadosAcumulados[8]));
 						} else {
 							documentosAReceberResumo.setValorDocumentos((BigDecimal) dadosAcumulados[8]);
+						}
+						if (documentosAReceberResumo.getValorDocumentosSemParcelaAtual() != null && !documentosAReceberResumo.getValorDocumentosSemParcelaAtual().equals(BigDecimal.ZERO)) {
+							documentosAReceberResumo.setValorDocumentosSemParcelaAtual(documentosAReceberResumo.getValorDocumentosSemParcelaAtual().add((BigDecimal) dadosAcumulados[10]));
+						} else {
+							documentosAReceberResumo.setValorDocumentosSemParcelaAtual((BigDecimal) dadosAcumulados[10]);
 						}
 					}
 					
@@ -17909,12 +17918,12 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @throws ErroRepositorioException
 	 */
 	public void removerDocumentosAReceberFaixaResumo(int anoMesReferenciaFaturamento, 
-		Integer idLocalidade) throws ControladorException {
+		Integer idLocalidade, Session session) throws ControladorException {
 		
 		try {
 			
 			repositorioFinanceiro.removerDocumentosAReceberFaixaResumo(anoMesReferenciaFaturamento, 
-			idLocalidade);
+			idLocalidade, session);
 			
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
