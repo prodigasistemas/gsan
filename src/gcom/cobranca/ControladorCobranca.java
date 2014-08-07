@@ -3,6 +3,7 @@ package gcom.cobranca;
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.Arrecadador;
 import gcom.arrecadacao.ArrecadadorContratoTarifa;
+import gcom.arrecadacao.ControladorArrecadacao;
 import gcom.arrecadacao.ControladorArrecadacaoLocal;
 import gcom.arrecadacao.ControladorArrecadacaoLocalHome;
 import gcom.arrecadacao.DeducaoTipo;
@@ -393,6 +394,7 @@ import javax.ejb.SessionContext;
 import javax.mail.SendFailedException;
 
 import org.apache.commons.fileupload.FileItem;
+import org.apache.log4j.Logger;
 import org.hibernate.cache.HashtableCache;
 
 import br.com.danhil.BarCode.Interleaved2of5;
@@ -426,6 +428,8 @@ public class ControladorCobranca implements SessionBean {
 	protected IRepositorioAtendimentoPublico repositorioAtendimentoPublico = null;
 
 	protected IRepositorioCadastro repositorioCadastro = null;
+	
+	private static Logger logger = Logger.getLogger(ControladorCobranca.class);
 
 	/**
 	 * < <Descrição do método>>
@@ -25043,22 +25047,8 @@ public class ControladorCobranca implements SessionBean {
 	}
 
 	/**
-	 * Este caso de uso permite gerar e emitir o extrato dos débitos de um
-	 * imóvel
-	 * 
 	 * [UC0444] Gerar e Emitir Extrato de Débitos
-	 * 
-	 * Este caso de uso permite gerar atividade de ação de cobrança com base nos
-	 * parâmetros recebidos
-	 * 
 	 * [UC0251] Gerar Atividade de Ação de Cobranca
-	 * 
-	 * Gera o documento de cobrança
-	 * 
-	 * gerarDocumentoCobranca
-	 * 
-	 * @author COMPESA
-	 * @date 08/09/2006
 	 * 
 	 * @param imovel
 	 * @param indicadorGeracaoTaxaCobranca
@@ -25078,8 +25068,6 @@ public class ControladorCobranca implements SessionBean {
 	 * @param valorDocumento
 	 * @throws ControladorException
 	 */
-	// Vai ser um caso de uso a parte, depois colocar o número nos casos de usos
-	// e no comentário
 	public ExtratoDebitoRelatorioHelper gerarDocumentoCobranca(Imovel imovel, Short indicadorGeracaoTaxaCobranca,
 			Collection<ContaValoresHelper> colecaoContas, Collection<GuiaPagamentoValoresHelper> colecaoGuiasPagamento,
 			Collection<DebitoACobrar> colecaoDebitosACobrar, BigDecimal valorAcrescimosImpontualidade, BigDecimal valorDesconto,
@@ -25090,22 +25078,25 @@ public class ControladorCobranca implements SessionBean {
 			Date dataEmissaoPredecessor, Collection<DebitoCreditoParcelamentoHelper> colecaoAntecipacaoDebitosDeParcelamento,
 			Collection<DebitoCreditoParcelamentoHelper> colecaoAntecipacaoCreditosDeParcelamento) throws ControladorException {
 
-		ExtratoDebitoRelatorioHelper extratoDebitoRelatorioHelper = new ExtratoDebitoRelatorioHelper(new ArrayList(), new ArrayList(),
-				new ArrayList(), new ArrayList());
+		ExtratoDebitoRelatorioHelper extratoDebitoRelatorioHelper = new ExtratoDebitoRelatorioHelper(new ArrayList(), new ArrayList(), new ArrayList(), new ArrayList());
 
-		// Pesquisando Sistemas Parâmetros
 		SistemaParametro sistemaParametro = this.getControladorUtil().pesquisarParametrosDoSistema();
 
-		// Item 1
-		// Variável que vai armazenar o valor da taxa para o cálculo do valor do
-		// débito
 		BigDecimal valorTaxa = new BigDecimal("0.00");
-
+		
+		if(imovel != null) {
+			logger.info("[ imovel: " + imovel.getId() + "	- gerarDocumentoCobranca]");
+			
+		}
+		
+		if(cliente != null) {
+			logger.info("[ cliente: " + cliente.getId() + "	- gerarDocumentoCobranca]");
+			
+		}
+		
 		/*
-		 * Caso tenha sido passado o parâmetro imovel, bem como esteja indicado
-		 * que é para gerar a taxa de cobrança (indicador de geração de taxa de
-		 * cobrança = 1 ou 3), o sistema gera o debito a cobrar para o imóvel
-		 * relativo a taxa de cobrança
+		 * Caso tenha sido passado o parâmetro imovel, bem como esteja indicado que é para gerar a taxa de cobrança (indicador de geração de taxa de
+		 * cobrança = 1 ou 3), o sistema gera o debito a cobrar para o imóvel relativo a taxa de cobrança
 		 */
 		if (indicadorGeracaoTaxaCobranca.intValue() != ConstantesSistema.NAO.intValue() && imovel != null) {
 
@@ -25113,49 +25104,31 @@ public class ControladorCobranca implements SessionBean {
 
 			DebitoTipo debitoTipo = null;
 
-			// Pesquisa o tipo de débito no sistema
 			try {
-
 				debitoTipo = repositorioCobranca.pesquisarDebitoTipo(DebitoTipo.TAXA_COBRANCA);
-
 			} catch (ErroRepositorioException ex) {
 				ex.printStackTrace();
 				throw new ControladorException("erro.sistema", ex);
 			}
 
-			// Cria a variável que vai armazenar a situação de crédito/débito
-			DebitoCreditoSituacao debitoCreditoSituacaoAtual = new DebitoCreditoSituacao();
-			debitoCreditoSituacaoAtual.setId(DebitoCreditoSituacao.NORMAL);
+			DebitoCreditoSituacao debitoCreditoSituacaoAtual = new DebitoCreditoSituacao(DebitoCreditoSituacao.NORMAL);
+			CobrancaForma cobrancaForma = new CobrancaForma(CobrancaForma.COBRANCA_EM_CONTA);
 
-			// Cria a variável que vai armazenar a forma de cobrança
-			CobrancaForma cobrancaForma = new CobrancaForma();
-			cobrancaForma.setId(CobrancaForma.COBRANCA_EM_CONTA);
-
-			/** Cria o débito a cobrar geral */
 			DebitoACobrarGeral debitoACobrarGeral = new DebitoACobrarGeral();
 			debitoACobrarGeral.setIndicadorHistorico(new Short("2"));
 			debitoACobrarGeral.setUltimaAlteracao(new Date());
 			Integer idDebitoACobrarGeral = (Integer) getControladorUtil().inserir(debitoACobrarGeral);
 
-			// Cria o débito a cobrar
-			// Seta as informações necessárias para criar o débito a cobrar
 			DebitoACobrar debitoACobrar = new DebitoACobrar();
 			debitoACobrar.setImovel(imovel);
 			debitoACobrar.setDebitoTipo(debitoTipo);
 			debitoACobrar.setGeracaoDebito(new Date());
 			debitoACobrar.setAnoMesReferenciaDebito(anoMesReferenciaDebito);
 			debitoACobrar.setAnoMesCobrancaDebito(sistemaParametro.getAnoMesArrecadacao());
-			// debitoACobrar.setAnoMesReferenciaContabil(sistemaParametro
-			// .getAnoMesFaturamento());
-			// Alterado por: Rômulo Aurélio 17/03/2009
-			// Analista responsavel: Rosana Carvalho
 
 			int anoMesParametros = sistemaParametro.getAnoMesFaturamento();
 			int anoMesCorrente = Util.getAnoMesComoInt(new Date());
 
-			// anoMesReferenciaContabil recebe o maior valor entre ano/mes da
-			// data corrente
-			// e o ano/mes de referencia do faturamento
 			if (anoMesParametros > anoMesCorrente) {
 				debitoACobrar.setAnoMesReferenciaContabil(anoMesParametros);
 			} else {
@@ -25186,30 +25159,20 @@ public class ControladorCobranca implements SessionBean {
 
 			getControladorUtil().inserir(debitoACobrar);
 
-			// [UC0108] Obter Quantidade de Economias por Categoria
 			Collection<Categoria> colecaoCategoriasImovel = getControladorImovel().obterQuantidadeEconomiasCategoria(imovel);
+			Collection<BigDecimal> colecaoValorePorCategoria = getControladorImovel().obterValorPorCategoria(colecaoCategoriasImovel, valorTaxa);
 
-			// [UC0185] Obter Valor por Categoria, passando o valor da taxa
-			Collection<BigDecimal> colecaoValorePorCategoria = getControladorImovel().obterValorPorCategoria(colecaoCategoriasImovel,
-					valorTaxa);
-
-			// Cria as iterações de categoria e valor
 			Iterator iteratorCategoria = colecaoCategoriasImovel.iterator();
 			Iterator iteratorValorPorCategoria = colecaoValorePorCategoria.iterator();
 
-			// Inclui na tabela DEBITO_A_COBRAR_CATEGORIA a(s) categoria(s) e
-			// sua(s)
-			// respectiva(s) quantidade(s) de economia retornados pels [UC0108]
-			// e os
-			// valores retornados pelo [UC0185] para cada categoria
+			// Inclui na tabela DEBITO_A_COBRAR_CATEGORIA a(s) categoria(s) e sua(s) respectiva(s) quantidade(s) de 
+			// economia retornados pels [UC0108] e os valores retornados pelo [UC0185] para cada categoria
 			while (iteratorCategoria.hasNext()) {
-				// Recupera a categoria
+
 				Categoria categoria = (Categoria) iteratorCategoria.next();
 
-				// Recupera o valor da categoria
 				BigDecimal valorPorCategoria = (BigDecimal) iteratorValorPorCategoria.next();
 
-				// Cria o débito a cobrar categoria
 				DebitoACobrarCategoria debitoACobrarCategoria = new DebitoACobrarCategoria();
 
 				DebitoACobrarCategoriaPK debitoACobrarCategoriaPK = new DebitoACobrarCategoriaPK(debitoACobrar, categoria);
@@ -25218,20 +25181,13 @@ public class ControladorCobranca implements SessionBean {
 				debitoACobrarCategoria.setValorCategoria(valorPorCategoria);
 				debitoACobrarCategoria.setUltimaAlteracao(new Date());
 
-				// Inserindo o DEBITO_A_COBRAR_CATEGORIA no banco de dados
 				getControladorUtil().inserir(debitoACobrarCategoria);
 			}
 		}
-		// Fim item 1
 
-		// Item 2
-		// Cria o documento de cobrança
-		// Seta as informações necessárias para criar o documento de cobrança
 		CobrancaDocumento documentoCobranca = new CobrancaDocumento();
 
 		documentoCobranca.setDocumentoTipo(documentoTipo);
-		// Seta com qualquer valor para inserir, depois da inserção pegar o id
-		// do documentoCobranca gerado para atualizar o mesmo registro
 		documentoCobranca.setNumeroSequenciaDocumento((new Integer(1)).intValue());
 		documentoCobranca.setCobrancaAcaoAtividadeComando(cobrancaAcaoAtividadeComando);
 		documentoCobranca.setCobrancaAcaoAtividadeCronograma(cobrancaAcaoAtividadeCronograma);
@@ -25247,12 +25203,8 @@ public class ControladorCobranca implements SessionBean {
 			documentoCobranca.setLigacaoAguaSituacao(imovel.getLigacaoAguaSituacao());
 			documentoCobranca.setLigacaoEsgotoSituacao(imovel.getLigacaoEsgotoSituacao());
 
-			// adicionado por Vivianne Sousa - 13/08/2009 - Francisco
-			// De acordo com o metodo
-			// ControladorImovel.obterPrincipalCategoriaImovel
-			// caso seja a empresa FEBRABAN, a categoria principal sera a que
-			// tiver o maior codigo,
-			// caso contrario, a principal será a que tiver menor codigo
+			// De acordo com o metodo ControladorImovel.obterPrincipalCategoriaImovel caso seja a empresa FEBRABAN, 
+			// a categoria principal sera a que tiver o maior codigo, caso contrario, a principal será a que tiver menor codigo
 			boolean ehFEBRABAN = sistemaParametro.getCodigoEmpresaFebraban().equals(SistemaParametro.CODIGO_EMPRESA_FEBRABAN_CAERN);
 			try {
 				Integer idCategoria = repositorioImovel.obterIdCategoriaPrincipal(imovel.getId(), ehFEBRABAN);
@@ -25260,11 +25212,8 @@ public class ControladorCobranca implements SessionBean {
 				categoria.setId(idCategoria);
 				documentoCobranca.setCategoria(categoria);
 
-				// pesquisa os imovel para ser usado para gravar o Resumo
-				// Cobrança Ação
 				Integer idEsferaPoder = repositorioImovel.obterIdEsferaPoder(imovel.getId());
-				EsferaPoder esferaPoder = new EsferaPoder();
-				esferaPoder.setId(idEsferaPoder);
+				EsferaPoder esferaPoder = new EsferaPoder(idEsferaPoder);
 				documentoCobranca.setEsferaPoder(esferaPoder);
 
 			} catch (ErroRepositorioException e) {
@@ -25278,13 +25227,9 @@ public class ControladorCobranca implements SessionBean {
 		documentoCobranca.setValorTaxa(new BigDecimal("0.00"));
 		documentoCobranca.setValorDocumento(valorDocumento);
 
-		// Inicio Alterado por Sávio Luiz Data:27/07/2007
-
 		/*
-		 * Alterado por Raphael Rossiter em 18/09/2007 (Analistas: Aryed Lins e
-		 * Rosana Carvalho) OBJ: Gravar o valor dos acréscimos e o valor do
-		 * desconto para os documentos de cobranca que forem de EXTRATO DE
-		 * DÉBITO
+		 * Alterado por Raphael Rossiter em 18/09/2007 (Analistas: Aryed Lins e Rosana Carvalho) OBJ: Gravar o valor dos acréscimos e o valor do
+		 * desconto para os documentos de cobranca que forem de EXTRATO DE DÉBITO
 		 */
 		if (documentoTipo.getId() != null
 				&& (documentoTipo.getId().equals(DocumentoTipo.CARTA_COBRANCA_SUPRIMIDO)
@@ -25300,8 +25245,17 @@ public class ControladorCobranca implements SessionBean {
 		} else {
 			documentoCobranca.setValorAcrescimos(new BigDecimal("0.00"));
 		}
-		// Fim Alterado por Sávio Luiz Data:27/07/2007
-
+		
+		if(imovel != null) {
+			logger.info("[ " + imovel.getId() + "	- documentoCobranca.getValorAcrescimos:  " + documentoCobranca.getValorAcrescimos() + "]");
+			logger.info("[ " + imovel.getId() + "	- documentoCobranca.getValorDocumento:  " + documentoCobranca.getValorDocumento() + "]");
+		}
+		
+		if(cliente != null) {
+			logger.info("[ " + cliente.getId() + "	- documentoCobranca.getValorAcrescimos:  " + documentoCobranca.getValorAcrescimos() + "]");
+			logger.info("[ " + cliente.getId() + "	- documentoCobranca.getValorDocumento:  " + documentoCobranca.getValorDocumento() + "]");
+		}
+		
 		documentoCobranca.setDocumentoEmissaoForma(documentoEmissaoForma);
 		documentoCobranca.setMotivoNaoEntregaDocumento(null);
 
@@ -25327,50 +25281,78 @@ public class ControladorCobranca implements SessionBean {
 		} else {
 			cds.setId(CobrancaDebitoSituacao.SEM_DEBITOS);
 		}
+		
 		documentoCobranca.setCobrancaDebitoSituacao(cds);
-
 		documentoCobranca.setCliente(cliente);
-
 		documentoCobranca.setResolucaoDiretoria(resolucaoDiretoria);
+		
+		if (resolucaoDiretoria != null) {
+			if (resolucaoDiretoria.getId() != null) {
+				if(imovel != null) {
+					logger.info("[ " + imovel.getId() + "	- documentoCobranca.getResolucaoDiretoria:  " + documentoCobranca.getResolucaoDiretoria().getId() + "]");
+				}
+				
+				if(cliente != null) {
+					logger.info("[ " + cliente.getId() + "	- documentoCobranca.getResolucaoDiretoria:  " + documentoCobranca.getResolucaoDiretoria().getId() + "]");
+				}
+			} else {
+				if(imovel != null) {
+					logger.info("[ " + imovel.getId() + "	- documentoCobranca.getResolucaoDiretoria:  NULL ]");
+				}
+				
+				if(cliente != null) {
+					logger.info("[ " + cliente.getId() + "	- documentoCobranca.getResolucaoDiretoria:  NULL ]");
+				}
+			}
+		} else {
+			if(imovel != null) {
+				logger.info("[ " + imovel.getId() + "	- documentoCobranca.getResolucaoDiretoria:  NULL ]");
+			}
+			
+			if(cliente != null) {
+				logger.info("[ " + cliente.getId() + "	- documentoCobranca.getResolucaoDiretoria:  NULL ]");
+			}
+		}
 
 		documentoCobranca.setDataEmissaoPredecessor(dataEmissaoPredecessor);
 
-		// Recupera o código do documento de cobrança
 		Integer idDocumentoCobranca = (Integer) getControladorUtil().inserir(documentoCobranca);
-
-		// Seta o código no objeto
 		documentoCobranca.setId(idDocumentoCobranca);
 
-		/** Atualizado por pedro alexandre dia 16/11/2006 */
+		if(imovel != null) {
+			logger.info("[ " + imovel.getId() + "	- documentoCobranca.getId:  " + documentoCobranca.getId() + "]");
+		}
+		
+		if(cliente != null) {
+			logger.info("[ " + cliente.getId() + "	- documentoCobranca.getId:  " + documentoCobranca.getId() + "]");
+		}
+		
 		extratoDebitoRelatorioHelper.setDocumentoCobranca(documentoCobranca);
-		// Fim item 2
 
-		// Item 3
-		// Para cada ocorrência das listas recebidas ( conts, guias de
-		// pagamento, débito a cobrar),
-		// o sistema gera os items do documento de cobrança na tabela
-		// COBRANCA_DOCUMENTO_ITEM
-
-		// Cria a variável que vai armazenar os itens de cobrança de documento
 		CobrancaDocumentoItem cobrancaDocumentoItem = new CobrancaDocumentoItem();
 
 		// Contas
-		DocumentoTipo documentoTipoConta = new DocumentoTipo();
-		documentoTipoConta.setId(DocumentoTipo.CONTA);
+		DocumentoTipo documentoTipoConta = new DocumentoTipo(DocumentoTipo.CONTA);
 		BigDecimal valorAcrescimos = null;
 		BigDecimal valorImpostos = null;
 		if (colecaoContas != null && !colecaoContas.isEmpty()) {
-
+			
+			if(imovel != null) {
+				logger.info("[ " + imovel.getId() + "	- 	CONTAS:  ]");
+			}
+			
+			if(cliente != null) {
+				logger.info("[ " + cliente.getId() + "	- 	CONTAS:  ]");
+			}
+			
 			valorImpostos = new BigDecimal("0.00");
 
-			// Cria os itens de cobrança de documento para contas
 			for (ContaValoresHelper contaValorHelper : colecaoContas) {
 				cobrancaDocumentoItem = new CobrancaDocumentoItem();
 				valorAcrescimos = new BigDecimal("0.00");
-				// Cria a variável que vai conter o valor do item cobrado
+
 				BigDecimal valorItemCobrado = new BigDecimal("0.00");
 
-				// Calcula o valor do item cobrado
 				valorItemCobrado = valorItemCobrado.add(contaValorHelper.getConta().getValorAgua());
 				valorItemCobrado = valorItemCobrado.add(contaValorHelper.getConta().getValorEsgoto());
 				valorItemCobrado = valorItemCobrado.add(contaValorHelper.getConta().getDebitos());
@@ -25378,12 +25360,9 @@ public class ControladorCobranca implements SessionBean {
 
 				if (contaValorHelper.getConta().getValorImposto() != null) {
 					valorItemCobrado = valorItemCobrado.subtract(contaValorHelper.getConta().getValorImposto());
-
 					valorImpostos = Util.somaBigDecimal(valorImpostos, contaValorHelper.getConta().getValorImposto());
-
 				}
 
-				// alterado por Sávio Luiz data:03/04/2007
 				if (contaValorHelper.getValorMulta() != null) {
 					valorAcrescimos = valorAcrescimos.add(contaValorHelper.getValorMulta());
 				}
@@ -25394,42 +25373,42 @@ public class ControladorCobranca implements SessionBean {
 					valorAcrescimos = valorAcrescimos.add(contaValorHelper.getValorAtualizacaoMonetaria());
 				}
 
-				// Caso seja extrato de débito conta não deve-se gerar
-				// acréscimos
-				// CDDO_VLACESCIMOS e CDIT_VLACRESCIMOS
+				// Caso seja extrato de débito conta não deve-se gerar acréscimos CDDO_VLACESCIMOS e CDIT_VLACRESCIMOS
 				if (valorAcrescimosImpontualidade != null && valorAcrescimosImpontualidade.equals(new BigDecimal("0.00"))) {
 					valorAcrescimos = new BigDecimal("0.00");
 				}
 
 				cobrancaDocumentoItem.setValorAcrescimos(valorAcrescimos);
 
-				// valoresTotalAcrescimos = valoresTotalAcrescimos
-				// .add(valorAcrescimos);
-
-				// Cria o item de documento de cobrança
 				cobrancaDocumentoItem.setCobrancaDocumento(documentoCobranca);
 				cobrancaDocumentoItem.setDocumentoTipo(documentoTipoConta);
+				
 				ContaGeral contaGeral = new ContaGeral();
 				if (contaValorHelper.getConta() != null && !contaValorHelper.getConta().equals("")) {
 					contaGeral.setId(contaValorHelper.getConta().getId());
 					contaGeral.setConta(contaValorHelper.getConta());
 					cobrancaDocumentoItem.setContaGeral(contaGeral);
 				}
+				
 				cobrancaDocumentoItem.setDebitoACobrarGeral(null);
 				cobrancaDocumentoItem.setGuiaPagamentoGeral(null);
 				cobrancaDocumentoItem.setCreditoARealizarGeral(null);
 				cobrancaDocumentoItem.setValorItemCobrado(valorItemCobrado);
 				cobrancaDocumentoItem.setUltimaAlteracao(new Date());
 
-				// Documento item ja iniciado com situacao de debito PENDENTE
-				// Alterado por Francisco, 27/06/08
-				CobrancaDebitoSituacao situacaoDebito = new CobrancaDebitoSituacao();
-				situacaoDebito.setId(CobrancaDebitoSituacao.PENDENTE);
+				// Documento item ja iniciado com situacao de debito PENDENTE - Alterado por Francisco, 27/06/08
+				CobrancaDebitoSituacao situacaoDebito = new CobrancaDebitoSituacao(CobrancaDebitoSituacao.PENDENTE);
 				cobrancaDocumentoItem.setCobrancaDebitoSituacao(situacaoDebito);
 
-				// Inseri o item de documento de cobrança
 				getControladorUtil().inserir(cobrancaDocumentoItem);
-
+				
+				if(imovel != null) {
+					logger.info("[ " + imovel.getId() + "	-		ITEM: " + contaValorHelper.getConta().getId() + " , valorItemCobrado:  " + cobrancaDocumentoItem.getValorItemCobrado() + " , valorAcrescimo:  " + cobrancaDocumentoItem.getValorAcrescimos() + "]");
+				}
+				
+				if(cliente != null) {
+					logger.info("[ " + cliente.getId() + "	-		ITEM: " + contaValorHelper.getConta().getId() + " , valorItemCobrado:  " + cobrancaDocumentoItem.getValorItemCobrado() + " , valorAcrescimo:  " + cobrancaDocumentoItem.getValorAcrescimos() + "]");
+				}
 				extratoDebitoRelatorioHelper.getColecaoCobrancaDocumentoItemContas().add(cobrancaDocumentoItem);
 			}
 
@@ -25447,31 +25426,25 @@ public class ControladorCobranca implements SessionBean {
 		} else {
 			documentoCobranca.setValorImpostos(null);
 		}
-		// Débitos a Cobrar
+		
 		DocumentoTipo documentoTipoDebito = new DocumentoTipo();
 		documentoTipoDebito.setId(DocumentoTipo.DEBITO_A_COBRAR);
 		if (colecaoDebitosACobrar != null && !colecaoDebitosACobrar.isEmpty()) {
-			// Cria os itens de cobrança de documento para os débitos a cobrar
+
+			if(imovel != null) {
+				logger.info("[ " + imovel.getId() + "	- 	DEBITOS A COBRAR:  ]");
+			}
+			
+			if(cliente != null) {
+				logger.info("[ " + cliente.getId() + "	- 	DEBITOS A COBRAR:  ]");
+			}
 			for (DebitoACobrar debitoACobrar : colecaoDebitosACobrar) {
 				cobrancaDocumentoItem = new CobrancaDocumentoItem();
 				valorAcrescimos = new BigDecimal("0.00");
-				// Cria a variável que vai conter o valor do item cobrado
+
 				BigDecimal valorItemCobrado = new BigDecimal("0.00");
-
-				// // Calcula o valor da prestação
-				// double valorPrestacao = (debitoACobrar.getValorDebito()
-				// .doubleValue() / debitoACobrar
-				// .getNumeroPrestacaoDebito())
-				// * debitoACobrar.getNumeroPrestacaoCobradas();
-				//
-				// // Calcula o valor do item cobrado
-				// valorItemCobrado = valorItemCobrado.add(debitoACobrar
-				// .getValorDebito().subtract(
-				// new BigDecimal(valorPrestacao)));
-
 				valorItemCobrado = debitoACobrar.getValorTotalComBonus();
 
-				// cria o item de documento de cobrança
 				cobrancaDocumentoItem.setCobrancaDocumento(documentoCobranca);
 				cobrancaDocumentoItem.setDocumentoTipo(documentoTipoDebito);
 				cobrancaDocumentoItem.setContaGeral(null);
@@ -25494,7 +25467,15 @@ public class ControladorCobranca implements SessionBean {
 
 				// inseri o item de documento de cobrança
 				getControladorUtil().inserir(cobrancaDocumentoItem);
-
+				
+				if(imovel != null) {
+					logger.info("[ " + imovel.getId() + "	-		ITEM: " + cobrancaDocumentoItem.getDebitoACobrarGeral().getId() + " , valorItemCobrado:  " + cobrancaDocumentoItem.getValorItemCobrado() + " , valorAcrescimo:  " + cobrancaDocumentoItem.getValorAcrescimos() + "]");
+				}
+				
+				if(cliente != null) {
+					logger.info("[ " + cliente.getId() + "	-		ITEM: " + cobrancaDocumentoItem.getDebitoACobrarGeral().getId() + " , valorItemCobrado:  " + cobrancaDocumentoItem.getValorItemCobrado() + " , valorAcrescimo:  " + cobrancaDocumentoItem.getValorAcrescimos() + "]");
+				}
+				
 				extratoDebitoRelatorioHelper.getColecaoCobrancaDocumentoItemDebitosACobrar().add(cobrancaDocumentoItem);
 			}
 		}
@@ -25503,7 +25484,16 @@ public class ControladorCobranca implements SessionBean {
 		DocumentoTipo documentoTipoGuia = new DocumentoTipo();
 		documentoTipoGuia.setId(DocumentoTipo.GUIA_PAGAMENTO);
 		if (colecaoGuiasPagamento != null && !colecaoGuiasPagamento.isEmpty()) {
-			// cria os itens de cobrança de documento para as guias de pagamento
+			
+			
+			if(imovel != null) {
+				logger.info("[ " + imovel.getId() + "	- 	GUIAS DE PAGAMENTO:  ]");
+			}
+			
+			if(cliente != null) {
+				logger.info("[ " + cliente.getId() + "	- 	GUIAS DE PAGAMENTO:  ]");
+			}
+			
 			for (GuiaPagamentoValoresHelper guiaPagamentoValorHelper : colecaoGuiasPagamento) {
 				cobrancaDocumentoItem = new CobrancaDocumentoItem();
 				valorAcrescimos = new BigDecimal("0.00");
@@ -25546,6 +25536,16 @@ public class ControladorCobranca implements SessionBean {
 
 				// inseri o item de documento de cobrança
 				getControladorUtil().inserir(cobrancaDocumentoItem);
+				
+				
+				if(imovel != null) {
+					logger.info("[ " + imovel.getId() + "	-		ITEM: " + cobrancaDocumentoItem.getGuiaPagamentoGeral().getId() + " , valorItemCobrado:  " + cobrancaDocumentoItem.getValorItemCobrado() + " , valorAcrescimo:  " + cobrancaDocumentoItem.getValorAcrescimos() + "]");
+				}
+				
+				if(cliente != null) {
+					logger.info("[ " + cliente.getId() + "	-		ITEM: " + cobrancaDocumentoItem.getGuiaPagamentoGeral().getId() + " , valorItemCobrado:  " + cobrancaDocumentoItem.getValorItemCobrado() + " , valorAcrescimo:  " + cobrancaDocumentoItem.getValorAcrescimos() + "]");
+				}
+				
 				extratoDebitoRelatorioHelper.getColecaoCobrancaDocumentoItemGuiasPagamento().add(cobrancaDocumentoItem);
 			}
 		}
@@ -25829,7 +25829,17 @@ public class ControladorCobranca implements SessionBean {
 			Collection<CreditoARealizar> colecaoCreditoARealizar, Cliente cliente, ResolucaoDiretoria resolucaoDiretoria,
 			Collection<DebitoCreditoParcelamentoHelper> colecaoAntecipacaoDebitosDeParcelamento,
 			Collection<DebitoCreditoParcelamentoHelper> colecaoAntecipacaoCreditosDeParcelamento) throws ControladorException {
-
+		
+		if(imovel != null) {
+			logger.info("[ imovel: " + imovel.getId() + "	- gerarEmitirExtratoDebito]");
+			
+		}
+		
+		if(cliente!= null) {
+			logger.info("[ cliente: " + cliente.getId() + "	- gerarEmitirExtratoDebito]");
+			
+		}
+		
 		// [SB0001] - Gerar Documento de Cobrança
 		DocumentoEmissaoForma documentoEmissaoForma = new DocumentoEmissaoForma();
 		documentoEmissaoForma.setId(DocumentoEmissaoForma.INDIVIDUAL);

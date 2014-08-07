@@ -100,6 +100,7 @@ import gcom.faturamento.conta.FiltroContaCategoria;
 import gcom.faturamento.conta.FiltroContaCategoriaConsumoFaixa;
 import gcom.faturamento.conta.FiltroContaImpressao;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
+import gcom.gui.faturamento.ImovelFaturamentoSeletivoHelper;
 import gcom.gui.faturamento.bean.AnalisarImoveisReleituraHelper;
 import gcom.gui.micromedicao.ColetaMedidorEnergiaHelper;
 import gcom.gui.micromedicao.DadosMovimentacao;
@@ -26399,37 +26400,199 @@ public class ControladorMicromedicao implements SessionBean {
 
 	}
 
-	/**
-	 * 
-	 * Busca uma Lista de Imoveis por uma Rota especificada.
-	 * 
-	 * @author Thiago Nascimento
-	 * 
-	 * @param idRota
-	 * @return
-	 * @throws ControladorException
-	 */
-	public Collection<DadosMovimentacao> buscarImoveisPorRota(Rota rota,
-			Integer anoMesReferencia, boolean manter)
-			throws ControladorException {
+	public Collection<DadosMovimentacao> buscarImoveisPorRota(Rota rota, boolean manter) throws ControladorException, ErroRepositorioException {
 		Collection<DadosMovimentacao> colecao = new ArrayList<DadosMovimentacao>();
 
-		SistemaParametro sistemaParametro = getControladorUtil()
-				.pesquisarParametrosDoSistema();
-
-		MedicaoTipo medicaoTipo = new MedicaoTipo();
+		Integer anoMesReferencia = rota.getFaturamentoGrupo().getAnoMesReferencia();
 		
+		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 		sistemaParametro.setAnoMesFaturamento(anoMesReferencia);
 
-		// inicializa uma coleção de imoveis
-		Collection<ImovelPorRotaHelper> objetosImoveis = new ArrayList<ImovelPorRotaHelper>();
+		Collection<ImovelPorRotaHelper> colecaoImoveisPorRotaHelper = buscarImoveisPorRotaHelper(rota, sistemaParametro);
 
-		// cria uma coleção de imóvel por rota
+		Iterator<ImovelPorRotaHelper> iteratorImovelPorRotaHelper = colecaoImoveisPorRotaHelper.iterator();
+		while (iteratorImovelPorRotaHelper.hasNext()) {
+			
+			DadosMovimentacao dado = obterDadosMedicaoImovelPorRota(rota, anoMesReferencia, manter, sistemaParametro, iteratorImovelPorRotaHelper);
+			
+			if (dado != null) {
+				colecao.add(dado);
+			}
+		}
+
+		return colecao;
+	}
+	
+	private DadosMovimentacao obterDadosMedicaoImovelPorRota(Rota rota,
+			Integer anoMesReferencia, boolean manter,
+			SistemaParametro sistemaParametro,
+			Iterator<ImovelPorRotaHelper> iteratorImovelPorRotaHelper)
+			throws ControladorException, ErroRepositorioException {
+		ImovelPorRotaHelper imovelPorRotaHelper = iteratorImovelPorRotaHelper.next();
+
+		Imovel imovel = imovelPorRotaHelper.getImovel();
+		MedicaoTipo medicaoTipo = null;
+		
+		MovimentoRoteiroEmpresa movimentoRoteiroEmpresa = imovelPorRotaHelper.getMovimentoRoteiroEmpresa();
+
+		boolean achouImovel = this.validarImovelGerarDadosLeituraConvencional(imovel, movimentoRoteiroEmpresa.getAnoMesMovimento());
+
+		if (achouImovel) {
+			Integer idMedicaoTipo = null;
+			idMedicaoTipo = repositorioMicromedicao.pesquisarMedicaoTipo(imovel.getId(), anoMesReferencia);
+			medicaoTipo = new MedicaoTipo(idMedicaoTipo);
+			
+			DadosMovimentacao dado = new DadosMovimentacao();
+			dado.setMatriculaImovel(imovel.getId());
+			dado.setLocalidade(imovel.getLocalidade().getId());
+			dado.setSetorComercial(imovel.getSetorComercial().getCodigo());
+			dado.setNumeroQuadra(imovel.getQuadra().getNumeroQuadra());
+			dado.setNumeroLote(new Integer(imovel.getLote()));
+			dado.setNumeroSubLote(new Integer(imovel.getSubLote()));
+			dado.setEndereco(imovel.getNumeroImovel());
+			dado.setNumeroSequencialRota(imovel.getNumeroSequencialRota());
+			dado.setGrupoFaturamento(rota.getFaturamentoGrupo().getId());
+
+			boolean houveIntslacaoHidrometro = this.verificarInstalacaoSubstituicaoHidrometro(imovel.getId(), medicaoTipo);
+
+			int idLigacaoTipo = verificarTipoLigacao(imovel);
+			int[] media = obterVolumeMedioAguaEsgoto(imovel.getId(),movimentoRoteiroEmpresa.getAnoMesMovimento(),idLigacaoTipo, houveIntslacaoHidrometro);
+			Integer anoMesAnterior = Util.subtrairData(sistemaParametro.getAnoMesFaturamento());
+			Integer leituraAnterior = new Integer(0);
+
+			boolean ligacaoAgua = false;
+			boolean ligacaoPoco = false;
+
+			if (imovel.getLigacaoAgua() != null && imovel.getLigacaoAgua().getId() != null && imovel.getLigacaoAgua() .getHidrometroInstalacaoHistorico() != null
+					&& imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico().getId() != null) {
+				ligacaoAgua = true;
+			}
+			if (imovel.getHidrometroInstalacaoHistorico() != null && imovel.getHidrometroInstalacaoHistorico().getId() != null) {
+				ligacaoPoco = true;
+			}
+
+			Object[] retorno = pesquisaLeituraAnterior(ligacaoAgua, ligacaoPoco, anoMesAnterior, imovel);
+			
+			if (retorno[0] != null) {
+				leituraAnterior = new Integer(retorno[0].toString());
+			}
+
+			if (media[0] <= 10) {
+				dado.setFaixaLeituraEsperadaInferior(leituraAnterior);
+				dado.setFaixaLeituraEsperadaSuperior(leituraAnterior.intValue() + media[0] + 10);
+			} else if (media[0] > 10 && media[0] <= 20) {
+				dado.setFaixaLeituraEsperadaInferior(leituraAnterior + (int) (0.4 * media[0]));
+				dado.setFaixaLeituraEsperadaSuperior(leituraAnterior + (int) (1.6 * media[0]));
+			} else if (media[0] > 20 && media[0] <= 45) {
+				dado.setFaixaLeituraEsperadaInferior(leituraAnterior + (int) (0.5 * media[0]));
+				dado.setFaixaLeituraEsperadaSuperior(leituraAnterior + (int) (1.5 * media[0]));
+			} else if (media[0] > 45 && media[0] <= 100) {
+				dado.setFaixaLeituraEsperadaInferior(leituraAnterior + (int) (0.6 * media[0]));
+				dado.setFaixaLeituraEsperadaSuperior(leituraAnterior + (int) (1.4 * media[0]));
+			} else if (media[0] > 100) {
+				dado.setFaixaLeituraEsperadaInferior(leituraAnterior + (int) (0.7 * media[0]));
+				dado.setFaixaLeituraEsperadaSuperior(leituraAnterior + (int) (1.3 * media[0]));
+			}
+
+			try {
+				if (imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico() == null && idMedicaoTipo != null && idMedicaoTipo.equals(MedicaoTipo.LIGACAO_AGUA)) {
+
+					dado.setTipoMedicao(idMedicaoTipo);
+
+					medicaoTipo.setId(idMedicaoTipo);
+					HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico = repositorioMicromedicao.verificaExistenciaDeHidrometroInstalado(imovel.getId(), medicaoTipo);
+
+					 // Caso o Imovel seja suprimido, exibir a mensagem informando com a data.
+					if (imovel.getLigacaoAguaSituacao() != null && imovel.getLigacaoAguaSituacao().getId() != null 
+							&& imovel.getLigacaoAguaSituacao().getId().equals(LigacaoAguaSituacao.SUPRIMIDO)) {
+
+						dado.setMsgImovelSuprimidoOuHidrometroRetirado("Imóvel suprimido no dia "+ Util.formatarData(imovel.getLigacaoAgua().getDataSupressao()));
+
+					} else if (hidrometroInstalacaoHistorico != null && hidrometroInstalacaoHistorico.getDataRetirada() != null) {
+						dado.setMsgImovelSuprimidoOuHidrometroRetirado("Hidrômetro retirado no dia " + Util.formatarData(hidrometroInstalacaoHistorico.getDataRetirada()));
+					}
+				} else if (imovel.getHidrometroInstalacaoHistorico() == null && idMedicaoTipo != null && idMedicaoTipo == MedicaoTipo.POCO) {
+
+					dado.setTipoMedicao(idMedicaoTipo);
+
+					medicaoTipo.setId(idMedicaoTipo);
+					HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico = repositorioMicromedicao.verificaExistenciaDeHidrometroInstalado(imovel.getId(), medicaoTipo);
+
+					if (hidrometroInstalacaoHistorico != null && hidrometroInstalacaoHistorico .getDataRetirada() != null) {
+						dado.setMsgImovelSuprimidoOuHidrometroRetirado("Hidrômetro retirado no dia "
+								+ Util.formatarData(hidrometroInstalacaoHistorico.getDataRetirada()));
+					}
+				} else if (idMedicaoTipo != null) {
+					dado.setTipoMedicao(idMedicaoTipo);
+					medicaoTipo.setId(idMedicaoTipo);
+				}
+
+				if (movimentoRoteiroEmpresa != null) {
+
+					dado.setLeituraHidrometro(movimentoRoteiroEmpresa.getNumeroLeituraHidrometro());
+					dado.setDataLeituraCampo(movimentoRoteiroEmpresa.getTempoLeitura());
+
+					if (movimentoRoteiroEmpresa.getLeituraAnormalidade() != null) {
+						dado.setCodigoAnormalidade(movimentoRoteiroEmpresa.getLeituraAnormalidade().getId());
+					}
+
+					if (movimentoRoteiroEmpresa.getDataHoraProcessamento() != null) {
+						dado.setNaoPermitirAlterar(true);
+					}
+
+					ArquivoTextoRoteiroEmpresa arquivoTextoRoteiroEmpresa = this.repositorioMicromedicao
+							.pesquisarArquivosTextoRoteiroEmpresa(movimentoRoteiroEmpresa.getLocalidade().getId(),
+									movimentoRoteiroEmpresa.getRota().getId(),
+									movimentoRoteiroEmpresa.getFaturamentoGrupo().getId(),
+									movimentoRoteiroEmpresa.getAnoMesMovimento());
+
+					if (arquivoTextoRoteiroEmpresa != null) {
+
+						dado.setArquivoTextoRoteiroEmpresa(arquivoTextoRoteiroEmpresa);
+
+						if (arquivoTextoRoteiroEmpresa.getSituacaoTransmissaoLeitura() != null
+								&& arquivoTextoRoteiroEmpresa.getSituacaoTransmissaoLeitura().getId().compareTo(SituacaoTransmissaoLeitura.TRANSMITIDO) == 0) {
+							dado.setNaoPermitirAlterar(true);
+						}
+
+					}
+				}
+
+				if (medicaoTipo != null && medicaoTipo.getId() != null) {
+
+					Collection colecaoMedicaoHistorico = null;
+
+					try {
+						colecaoMedicaoHistorico = repositorioMicromedicao.pesquisarObterDadosHistoricoMedicao(imovel, medicaoTipo,rota.getFaturamentoGrupo());
+					} catch (ErroRepositorioException ex) {
+						sessionContext.setRollbackOnly();
+						throw new ControladorException("erro.sistema", ex);
+					}
+
+					MedicaoHistorico medicaoHistorico = obterHistoricoMedicao(colecaoMedicaoHistorico, imovel, medicaoTipo);
+
+					if (medicaoHistorico != null && !medicaoHistorico.getLeituraSituacaoAtual().getId().equals(LeituraSituacao.NAO_REALIZADA)) {
+						if (manter) {
+							return dado;
+						}
+					} else {
+						return dado;
+					}
+				}
+
+			} catch (ErroRepositorioException e) {
+				e.printStackTrace();
+				throw new ControladorException("erro.sistema", e);
+			}
+		}
+		return null;
+	}
+
+	private Collection<ImovelPorRotaHelper> buscarImoveisPorRotaHelper(Rota rota, SistemaParametro sistemaParametro) throws ControladorException {
 		Collection imoveisPorRota = null;
+		Collection<ImovelPorRotaHelper> objetosImoveis = new ArrayList<ImovelPorRotaHelper>();
 		try {
-			imoveisPorRota = repositorioMicromedicao.buscarImoveisPorRota(
-					rota.getId(), sistemaParametro.getNomeAbreviadoEmpresa(),
-					rota.getFaturamentoGrupo().getAnoMesReferencia());
+			imoveisPorRota = repositorioMicromedicao.buscarImoveisPorRota(rota.getId(), sistemaParametro.getNomeAbreviadoEmpresa(), rota.getFaturamentoGrupo().getAnoMesReferencia());
 
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
@@ -26438,496 +26601,157 @@ public class ControladorMicromedicao implements SessionBean {
 		if (imoveisPorRota != null && !imoveisPorRota.isEmpty()) {
 
 			Iterator imovelporRotaIterator = imoveisPorRota.iterator();
+			
 			while (imovelporRotaIterator.hasNext()) {
-				/*
-				 * cria um array de objetos para pegar os parametros de retorno
-				 * da pesquisa
-				 */
-				Object[] arrayImoveisPorRota = (Object[]) imovelporRotaIterator
-						.next();
-
-				// instancia um imóvel
-				Imovel imovel = new Imovel();
-				MovimentoRoteiroEmpresa movimentoRoteiroEmpresa = new MovimentoRoteiroEmpresa();
-
-				if (arrayImoveisPorRota[0] != null) {
-					// seta o id no imovel
-					imovel.setId((Integer) arrayImoveisPorRota[0]);
-				}
-
-				if (arrayImoveisPorRota[1] != null) {
-					/*
-					 * instancia uma localidade para ser setado no imóvel
-					 */
-					Localidade localidade = new Localidade();
-					localidade.setId((Integer) arrayImoveisPorRota[1]);
-					imovel.setLocalidade(localidade);
-				}
-
-				if (arrayImoveisPorRota[2] != null) {
-					/*
-					 * instancia um setor comercial para ser setado no imóvel
-					 */
-					SetorComercial setorComercial = new SetorComercial();
-					setorComercial.setCodigo(Integer
-							.parseInt(arrayImoveisPorRota[2].toString()));
-					imovel.setSetorComercial(setorComercial);
-				}
-				Quadra quadra = new Quadra();
-				if (arrayImoveisPorRota[3] != null) {
-					/*
-					 * instancia uma quadra para ser setado no imóvel
-					 */
-					Integer numeroQuadra = (Integer) arrayImoveisPorRota[3];
-					quadra.setNumeroQuadra(numeroQuadra);
-					imovel.setQuadra(quadra);
-				}
-
-				if (arrayImoveisPorRota[4] != null) {
-					// seta o lote no imóvel
-					imovel.setLote(Short.parseShort(arrayImoveisPorRota[4]
-							.toString()));
-				}
-
-				if (arrayImoveisPorRota[5] != null) {
-					// seta o lote no imóvel
-					imovel.setSubLote(Short.parseShort(arrayImoveisPorRota[5]
-							.toString()));
-				}
-
-				LigacaoAgua ligacaoAgua = new LigacaoAgua();
-				if (arrayImoveisPorRota[6] != null) {
-					/*
-					 * instancia uma ligação agua para ser setado no imóvel
-					 */
-					ligacaoAgua.setId((Integer) arrayImoveisPorRota[6]);
-				}
-
-				/*
-				 * instancia um hidrometro instalação histórico para ser
-				 * colocado na ligacao agua
-				 */
-				if (arrayImoveisPorRota[16] != null) {
-
-					HidrometroInstalacaoHistorico hidrometroInstalacaoHistoricoLigacaoAgua = (HidrometroInstalacaoHistorico) arrayImoveisPorRota[16];
-					medicaoTipo.setId((Integer) arrayImoveisPorRota[14]);
-					hidrometroInstalacaoHistoricoLigacaoAgua
-							.setMedicaoTipo(medicaoTipo);
-					ligacaoAgua
-							.setHidrometroInstalacaoHistorico(hidrometroInstalacaoHistoricoLigacaoAgua);
-
-				}
-
-				if (arrayImoveisPorRota[22] != null) {
-					ligacaoAgua
-							.setDataSupressao((Date) arrayImoveisPorRota[22]);
-				}
-
-				imovel.setLigacaoAgua(ligacaoAgua);
-
-				/*
-				 * instancia um hidrometro instalação historico para ser
-				 * colocado no imovel
-				 */
-				if (arrayImoveisPorRota[17] != null) {
-
-					HidrometroInstalacaoHistorico hidrometroInstalacaoHistoricoImovel = (HidrometroInstalacaoHistorico) arrayImoveisPorRota[17];
-					medicaoTipo.setId((Integer) arrayImoveisPorRota[15]);
-					hidrometroInstalacaoHistoricoImovel
-							.setMedicaoTipo(medicaoTipo);
-					imovel.setHidrometroInstalacaoHistorico(hidrometroInstalacaoHistoricoImovel);
-
-				}
-				// instancia a rota
-				Rota rotaImovel = new Rota();
-				rotaImovel.setId(rota.getId());
-
-				if (arrayImoveisPorRota[9] != null) {
-					/*
-					 * seta o indicador fiscalizador suprimido na rota
-					 */
-					rotaImovel.setIndicadorFiscalizarSuprimido(Short
-							.parseShort(arrayImoveisPorRota[9].toString()));
-				}
-				if (arrayImoveisPorRota[10] != null) {
-					// seta o indicador fiscalizador cortado na rota
-					rotaImovel.setIndicadorFiscalizarCortado(Short
-							.parseShort(arrayImoveisPorRota[10].toString()));
-				}
-
-				// seta a rota na quadra
-				quadra.setRota(rotaImovel);
-
-				// seta a quadra no imovel
-				imovel.setQuadra(quadra);
-
-				if (arrayImoveisPorRota[11] != null) {
-					// instancia a ligação agua situação
-					LigacaoAguaSituacao ligacaoAguaSituacao = new LigacaoAguaSituacao();
-					// seta o id na ligação agua situação
-					ligacaoAguaSituacao
-							.setId((Integer) arrayImoveisPorRota[11]);
-					// seta a ligação agua situação no imovel
-					imovel.setLigacaoAguaSituacao(ligacaoAguaSituacao);
-				}
-				if (arrayImoveisPorRota[12] != null) {
-					// instancia a ligação esgoto situação
-					LigacaoEsgotoSituacao ligacaoEsgotoSituacao = new LigacaoEsgotoSituacao();
-					// seta o id na ligação esgoto situação
-					ligacaoEsgotoSituacao
-							.setId((Integer) arrayImoveisPorRota[12]);
-					// seta a ligação esgoto situação no imovel
-					imovel.setLigacaoEsgotoSituacao(ligacaoEsgotoSituacao);
-				}
-
-				if (arrayImoveisPorRota[33] != null) {
-					// instancia o faturamento situacao tipo
-					FaturamentoSituacaoTipo faturamentoSituacaoTipo = new FaturamentoSituacaoTipo();
-					// seta o id no faturamento situacao tipo
-					faturamentoSituacaoTipo
-							.setId((Integer) arrayImoveisPorRota[33]);
-					// seta o Indicador Paralisacao Leitura
-					faturamentoSituacaoTipo
-							.setIndicadorParalisacaoLeitura((Short) arrayImoveisPorRota[13]);
-					// seta o Indicador Paralisacao Leitura
-					faturamentoSituacaoTipo
-							.setIndicadorValidoAgua((Short) arrayImoveisPorRota[31]);
-					// seta o Indicador Paralisacao Leitura
-					faturamentoSituacaoTipo
-							.setIndicadorValidoEsgoto((Short) arrayImoveisPorRota[32]);
-					// seta faturamento situacao tipo
-					imovel.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
-				}
-
-				if (arrayImoveisPorRota[18] != null) {
-					imovel.getLigacaoAguaSituacao()
-							.setIndicadorFaturamentoSituacao(
-									(Short) arrayImoveisPorRota[18]);
-				}
-
-				if (arrayImoveisPorRota[19] != null) {
-					imovel.getLigacaoEsgotoSituacao()
-							.setIndicadorFaturamentoSituacao(
-									(Short) arrayImoveisPorRota[19]);
-				}
-
-				if (arrayImoveisPorRota[20] != null) {
-					imovel.setNumeroImovel(arrayImoveisPorRota[20].toString());
-				}
-
-				if (arrayImoveisPorRota[21] != null) {
-					imovel.setNumeroSequencialRota((Integer) arrayImoveisPorRota[21]);
-				}
-				if (arrayImoveisPorRota[21] != null) {
-					imovel.setNumeroSequencialRota((Integer) arrayImoveisPorRota[21]);
-				}
-				if (arrayImoveisPorRota[23] != null) {
-					movimentoRoteiroEmpresa
-							.setNumeroLeituraHidrometro((Integer) arrayImoveisPorRota[23]);
-				}
-				if (arrayImoveisPorRota[24] != null) {
-					movimentoRoteiroEmpresa
-							.setTempoLeitura((Date) arrayImoveisPorRota[24]);
-				}
-				if (arrayImoveisPorRota[25] != null) {
-					movimentoRoteiroEmpresa
-							.setLeituraAnormalidade((LeituraAnormalidade) arrayImoveisPorRota[25]);
-				}
-				if (arrayImoveisPorRota[26] != null) {
-					movimentoRoteiroEmpresa
-							.setDataHoraProcessamento((Date) arrayImoveisPorRota[26]);
-				}
-				if (arrayImoveisPorRota[27] != null) {
-					movimentoRoteiroEmpresa
-							.setLocalidade((Localidade) arrayImoveisPorRota[27]);
-				}
-				if (arrayImoveisPorRota[28] != null) {
-					movimentoRoteiroEmpresa
-							.setFaturamentoGrupo((FaturamentoGrupo) arrayImoveisPorRota[28]);
-				}
-				if (arrayImoveisPorRota[29] != null) {
-					movimentoRoteiroEmpresa
-							.setRota((Rota) arrayImoveisPorRota[29]);
-				}
-				if (arrayImoveisPorRota[30] != null) {
-					movimentoRoteiroEmpresa
-							.setAnoMesMovimento((Integer) arrayImoveisPorRota[30]);
-				}
-
-				// adiciona na coleção de imoveis
-				ImovelPorRotaHelper helper = new ImovelPorRotaHelper();
-
-				helper.setImovel(imovel);
-				helper.setMovimentoRoteiroEmpresa(movimentoRoteiroEmpresa);
-
+				ImovelPorRotaHelper helper = buildImovelPorRotaHelper(rota, (Object[]) imovelporRotaIterator.next());
 				objetosImoveis.add(helper);
-				arrayImoveisPorRota = null;
-
-			}
-
-		}
-
-		Iterator<ImovelPorRotaHelper> imovelIterator = objetosImoveis
-				.iterator();
-		while (imovelIterator.hasNext()) {
-			// Recupera o imovel da coleção
-			ImovelPorRotaHelper iteratorHelper = imovelIterator.next();
-
-			Imovel imovel = iteratorHelper.getImovel();
-			MovimentoRoteiroEmpresa movimentoRoteiroEmpresa = iteratorHelper
-					.getMovimentoRoteiroEmpresa();
-
-			/*
-			 * variavel responsável para entrar em uma das 4 condicões abaixo
-			 */
-			boolean achouImovel = false;
-
-			achouImovel = this.validarImovelGerarDadosLeituraConvencional(
-					imovel, movimentoRoteiroEmpresa.getAnoMesMovimento());
-
-			if (achouImovel) {
-				DadosMovimentacao dado = new DadosMovimentacao();
-				dado.setMatriculaImovel(imovel.getId());
-				dado.setLocalidade(imovel.getLocalidade().getId());
-				dado.setSetorComercial(imovel.getSetorComercial().getCodigo());
-				dado.setNumeroQuadra(imovel.getQuadra().getNumeroQuadra());
-				dado.setNumeroLote(new Integer(imovel.getLote()));
-				dado.setNumeroSubLote(new Integer(imovel.getSubLote()));
-				dado.setEndereco(imovel.getNumeroImovel());
-				dado.setNumeroSequencialRota(imovel.getNumeroSequencialRota());
-				dado.setGrupoFaturamento(rota.getFaturamentoGrupo().getId());
-
-				boolean houveIntslacaoHidrometro = this.verificarInstalacaoSubstituicaoHidrometro(imovel.getId(), medicaoTipo);
-				// Calcular a Faixa
-				int idLigacaoTipo = verificarTipoLigacao(imovel);
-				int[] media = obterVolumeMedioAguaEsgoto(imovel.getId(),
-						movimentoRoteiroEmpresa.getAnoMesMovimento(),
-						idLigacaoTipo, houveIntslacaoHidrometro);
-				Integer anoMesAnterior = Util.subtrairData(sistemaParametro
-						.getAnoMesFaturamento());
-				Integer leituraAnterior = new Integer(0);
-
-				boolean ligacaoAgua = false;
-				boolean ligacaoPoco = false;
-
-				if (imovel.getLigacaoAgua() != null
-						&& imovel.getLigacaoAgua().getId() != null
-						&& imovel.getLigacaoAgua()
-								.getHidrometroInstalacaoHistorico() != null
-						&& imovel.getLigacaoAgua()
-								.getHidrometroInstalacaoHistorico().getId() != null) {
-					ligacaoAgua = true;
-				}
-				if (imovel.getHidrometroInstalacaoHistorico() != null
-						&& imovel.getHidrometroInstalacaoHistorico().getId() != null) {
-					ligacaoPoco = true;
-				}
-
-				Object[] retorno = pesquisaLeituraAnterior(ligacaoAgua,
-						ligacaoPoco, anoMesAnterior, imovel);
-				/*
-				 * verifica se a leitura anterior é diferente de nula
-				 */
-				if (retorno[0] != null) {
-					leituraAnterior = new Integer(retorno[0].toString());
-				}
-
-				if (media[0] <= 10) {
-					dado.setFaixaLeituraEsperadaInferior(leituraAnterior);
-					dado.setFaixaLeituraEsperadaSuperior(leituraAnterior
-							.intValue() + media[0] + 10);
-
-				} else if (media[0] > 10 && media[0] <= 20) {
-					dado.setFaixaLeituraEsperadaInferior(leituraAnterior
-							+ (int) (0.4 * media[0]));
-					dado.setFaixaLeituraEsperadaSuperior(leituraAnterior
-							+ (int) (1.6 * media[0]));
-				} else if (media[0] > 20 && media[0] <= 45) {
-					dado.setFaixaLeituraEsperadaInferior(leituraAnterior
-							+ (int) (0.5 * media[0]));
-					dado.setFaixaLeituraEsperadaSuperior(leituraAnterior
-							+ (int) (1.5 * media[0]));
-				} else if (media[0] > 45 && media[0] <= 100) {
-					dado.setFaixaLeituraEsperadaInferior(leituraAnterior
-							+ (int) (0.6 * media[0]));
-					dado.setFaixaLeituraEsperadaSuperior(leituraAnterior
-							+ (int) (1.4 * media[0]));
-				} else if (media[0] > 100) {
-					dado.setFaixaLeituraEsperadaInferior(leituraAnterior
-							+ (int) (0.7 * media[0]));
-					dado.setFaixaLeituraEsperadaSuperior(leituraAnterior
-							+ (int) (1.3 * media[0]));
-				}
-
-				/**
-				 * Pesquisa a Medição tipo atraves do movimento roteiro empresa
-				 * 
-				 * @desenvolvedor Arthur Carvalho
-				 * @analista Romulo Aurelio
-				 * @date 24/05/2010
-				 */
-				Integer idMedicaoTipo = null;
-				try {
-
-					idMedicaoTipo = repositorioMicromedicao
-							.pesquisarMedicaoTipo(imovel.getId(),
-									anoMesReferencia);
-
-					// Ligação de agua
-					if (imovel.getLigacaoAgua()
-							.getHidrometroInstalacaoHistorico() == null
-							&& idMedicaoTipo != null
-							&& idMedicaoTipo.equals(MedicaoTipo.LIGACAO_AGUA)) {
-
-						dado.setTipoMedicao(idMedicaoTipo);
-
-						// Verificar caso o hidrometro tenha sido retirado.
-						medicaoTipo.setId(idMedicaoTipo);
-						HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico = repositorioMicromedicao
-								.verificaExistenciaDeHidrometroInstalado(
-										imovel.getId(), medicaoTipo);
-
-						/*
-						 * Caso o Imovel seja suprimido, exibir a mensagem
-						 * informando com a data.
-						 */
-						if (imovel.getLigacaoAguaSituacao() != null
-								&& imovel.getLigacaoAguaSituacao().getId() != null
-								&& imovel.getLigacaoAguaSituacao().getId()
-										.equals(LigacaoAguaSituacao.SUPRIMIDO)) {
-
-							dado.setMsgImovelSuprimidoOuHidrometroRetirado("Imóvel suprimido no dia "
-									+ Util.formatarData(imovel.getLigacaoAgua()
-											.getDataSupressao()));
-
-						} else if (hidrometroInstalacaoHistorico != null
-								&& hidrometroInstalacaoHistorico
-										.getDataRetirada() != null) {
-							/*
-							 * Caso o Hidrometro seja removido, não sendo
-							 * possivel informar os dados de leitura. exibir a
-							 * msg informando a data
-							 */
-							dado.setMsgImovelSuprimidoOuHidrometroRetirado("Hidrômetro retirado no dia "
-									+ Util.formatarData(hidrometroInstalacaoHistorico
-											.getDataRetirada()));
-						}
-					} else if (imovel.getHidrometroInstalacaoHistorico() == null
-							&& idMedicaoTipo != null
-							&& idMedicaoTipo == MedicaoTipo.POCO) {
-
-						dado.setTipoMedicao(idMedicaoTipo);
-
-						// Verificar caso o hidrometro tenha sido retirado.
-						medicaoTipo.setId(idMedicaoTipo);
-						HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico = repositorioMicromedicao
-								.verificaExistenciaDeHidrometroInstalado(
-										imovel.getId(), medicaoTipo);
-
-						if (hidrometroInstalacaoHistorico != null
-								&& hidrometroInstalacaoHistorico
-										.getDataRetirada() != null) {
-							/*
-							 * Caso o Hidrometro seja removido, não sendo
-							 * possivel informar os dados de leitura. exibir a
-							 * msg informando a data
-							 */
-							dado.setMsgImovelSuprimidoOuHidrometroRetirado("Hidrômetro retirado no dia "
-									+ Util.formatarData(hidrometroInstalacaoHistorico
-											.getDataRetirada()));
-						}
-					} else if (idMedicaoTipo != null) {
-						dado.setTipoMedicao(idMedicaoTipo);
-						// Verificar caso o hidrometro tenha sido retirado.
-						medicaoTipo.setId(idMedicaoTipo);
-					}
-
-					if (movimentoRoteiroEmpresa != null) {
-
-						dado.setLeituraHidrometro(movimentoRoteiroEmpresa
-								.getNumeroLeituraHidrometro());
-						dado.setDataLeituraCampo(movimentoRoteiroEmpresa
-								.getTempoLeitura());
-
-						if (movimentoRoteiroEmpresa.getLeituraAnormalidade() != null) {
-							dado.setCodigoAnormalidade(movimentoRoteiroEmpresa
-									.getLeituraAnormalidade().getId());
-						}
-
-						if (movimentoRoteiroEmpresa.getDataHoraProcessamento() != null) {
-							dado.setNaoPermitirAlterar(true);
-						}
-
-						ArquivoTextoRoteiroEmpresa arquivoTextoRoteiroEmpresa = this.repositorioMicromedicao
-								.pesquisarArquivosTextoRoteiroEmpresa(
-										movimentoRoteiroEmpresa.getLocalidade()
-												.getId(),
-										movimentoRoteiroEmpresa.getRota()
-												.getId(),
-										movimentoRoteiroEmpresa
-												.getFaturamentoGrupo().getId(),
-										movimentoRoteiroEmpresa
-												.getAnoMesMovimento());
-
-						if (arquivoTextoRoteiroEmpresa != null) {
-
-							dado.setArquivoTextoRoteiroEmpresa(arquivoTextoRoteiroEmpresa);
-
-							if (arquivoTextoRoteiroEmpresa
-									.getSituacaoTransmissaoLeitura() != null
-									&& arquivoTextoRoteiroEmpresa
-											.getSituacaoTransmissaoLeitura()
-											.getId()
-											.compareTo(
-													SituacaoTransmissaoLeitura.TRANSMITIDO) == 0) {
-								dado.setNaoPermitirAlterar(true);
-							}
-
-						}
-					}
-
-					// Criação das coleções
-					if (medicaoTipo != null && medicaoTipo.getId() != null) {
-
-						Collection colecaoMedicaoHistorico = null;
-
-						// Pesquisa o histórico de medicao
-						try {
-
-							colecaoMedicaoHistorico = repositorioMicromedicao
-									.pesquisarObterDadosHistoricoMedicao(
-											imovel, medicaoTipo,
-											rota.getFaturamentoGrupo());
-						} catch (ErroRepositorioException ex) {
-							sessionContext.setRollbackOnly();
-							throw new ControladorException("erro.sistema", ex);
-						}
-
-						// Pega a coleção e cria o objeto medição histórico
-						MedicaoHistorico medicaoHistorico = obterHistoricoMedicao(
-								colecaoMedicaoHistorico, imovel, medicaoTipo);
-
-						if (medicaoHistorico != null
-								&& !medicaoHistorico.getLeituraSituacaoAtual()
-										.getId()
-										.equals(LeituraSituacao.NAO_REALIZADA)) {
-
-							if (manter) {
-								colecao.add(dado);
-							}
-						} else {
-							colecao.add(dado);
-						}
-					}
-
-				} catch (ErroRepositorioException e) {
-					e.printStackTrace();
-					throw new ControladorException("erro.sistema", e);
-				}
 			}
 		}
+		
+		return objetosImoveis;
+	}
 
-		return colecao;
+	private ImovelPorRotaHelper buildImovelPorRotaHelper(Rota rota, Object[] arrayImoveisPorRota) {
+
+		Imovel imovel = new Imovel();
+		MedicaoTipo medicaoTipo = new MedicaoTipo();
+		MovimentoRoteiroEmpresa movimentoRoteiroEmpresa = new MovimentoRoteiroEmpresa();
+
+		if (arrayImoveisPorRota[0] != null) {
+			imovel.setId((Integer) arrayImoveisPorRota[0]);
+		}
+
+		if (arrayImoveisPorRota[1] != null) {
+			Localidade localidade = new Localidade((Integer) arrayImoveisPorRota[1]);
+			imovel.setLocalidade(localidade);
+		}
+
+		if (arrayImoveisPorRota[2] != null) {
+			SetorComercial setorComercial = new SetorComercial();
+			setorComercial.setCodigo(Integer.parseInt(arrayImoveisPorRota[2].toString()));
+			imovel.setSetorComercial(setorComercial);
+		}
+		Quadra quadra = new Quadra();
+		if (arrayImoveisPorRota[3] != null) {
+			Integer numeroQuadra = (Integer) arrayImoveisPorRota[3];
+			quadra.setNumeroQuadra(numeroQuadra);
+			imovel.setQuadra(quadra);
+		}
+
+		if (arrayImoveisPorRota[4] != null) {
+			imovel.setLote(Short.parseShort(arrayImoveisPorRota[4].toString()));
+		}
+
+		if (arrayImoveisPorRota[5] != null) {
+			imovel.setSubLote(Short.parseShort(arrayImoveisPorRota[5].toString()));
+		}
+
+		LigacaoAgua ligacaoAgua = new LigacaoAgua();
+		if (arrayImoveisPorRota[6] != null) {
+			ligacaoAgua.setId((Integer) arrayImoveisPorRota[6]);
+		}
+
+		if (arrayImoveisPorRota[16] != null) {
+			HidrometroInstalacaoHistorico hidrometroInstalacaoHistoricoLigacaoAgua = (HidrometroInstalacaoHistorico) arrayImoveisPorRota[16];
+			medicaoTipo.setId((Integer) arrayImoveisPorRota[14]);
+			hidrometroInstalacaoHistoricoLigacaoAgua.setMedicaoTipo(medicaoTipo);
+			ligacaoAgua.setHidrometroInstalacaoHistorico(hidrometroInstalacaoHistoricoLigacaoAgua);
+		}
+
+		if (arrayImoveisPorRota[22] != null) {
+			ligacaoAgua.setDataSupressao((Date) arrayImoveisPorRota[22]);
+		}
+
+		imovel.setLigacaoAgua(ligacaoAgua);
+
+		if (arrayImoveisPorRota[17] != null) {
+			HidrometroInstalacaoHistorico hidrometroInstalacaoHistoricoImovel = (HidrometroInstalacaoHistorico) arrayImoveisPorRota[17];
+			medicaoTipo.setId((Integer) arrayImoveisPorRota[15]);
+			hidrometroInstalacaoHistoricoImovel.setMedicaoTipo(medicaoTipo);
+			imovel.setHidrometroInstalacaoHistorico(hidrometroInstalacaoHistoricoImovel);
+		}
+		
+		Rota rotaImovel = new Rota(rota.getId());
+
+		if (arrayImoveisPorRota[9] != null) {
+			rotaImovel.setIndicadorFiscalizarSuprimido(Short.parseShort(arrayImoveisPorRota[9].toString()));
+		}
+		if (arrayImoveisPorRota[10] != null) {
+			rotaImovel.setIndicadorFiscalizarCortado(Short.parseShort(arrayImoveisPorRota[10].toString()));
+		}
+
+		quadra.setRota(rotaImovel);
+		imovel.setQuadra(quadra);
+
+		if (arrayImoveisPorRota[11] != null) {
+			LigacaoAguaSituacao ligacaoAguaSituacao = new LigacaoAguaSituacao((Integer) arrayImoveisPorRota[11]);
+			imovel.setLigacaoAguaSituacao(ligacaoAguaSituacao);
+		}
+		if (arrayImoveisPorRota[12] != null) {
+			LigacaoEsgotoSituacao ligacaoEsgotoSituacao = new LigacaoEsgotoSituacao((Integer) arrayImoveisPorRota[12]);
+			imovel.setLigacaoEsgotoSituacao(ligacaoEsgotoSituacao);
+		}
+
+		if (arrayImoveisPorRota[33] != null) {
+			FaturamentoSituacaoTipo faturamentoSituacaoTipo = new FaturamentoSituacaoTipo();
+			faturamentoSituacaoTipo.setId((Integer) arrayImoveisPorRota[33]);
+			faturamentoSituacaoTipo.setIndicadorParalisacaoLeitura((Short) arrayImoveisPorRota[13]);
+			faturamentoSituacaoTipo.setIndicadorValidoAgua((Short) arrayImoveisPorRota[31]);
+			faturamentoSituacaoTipo.setIndicadorValidoEsgoto((Short) arrayImoveisPorRota[32]);
+			imovel.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
+		}
+
+		if (arrayImoveisPorRota[18] != null) {
+			imovel.getLigacaoAguaSituacao().setIndicadorFaturamentoSituacao((Short) arrayImoveisPorRota[18]);
+		}
+
+		if (arrayImoveisPorRota[19] != null) {
+			imovel.getLigacaoEsgotoSituacao().setIndicadorFaturamentoSituacao((Short) arrayImoveisPorRota[19]);
+		}
+
+		if (arrayImoveisPorRota[20] != null) {
+			imovel.setNumeroImovel(arrayImoveisPorRota[20].toString());
+		}
+
+		if (arrayImoveisPorRota[21] != null) {
+			imovel.setNumeroSequencialRota((Integer) arrayImoveisPorRota[21]);
+		}
+		if (arrayImoveisPorRota[21] != null) {
+			imovel.setNumeroSequencialRota((Integer) arrayImoveisPorRota[21]);
+		}
+		if (arrayImoveisPorRota[23] != null) {
+			movimentoRoteiroEmpresa.setNumeroLeituraHidrometro((Integer) arrayImoveisPorRota[23]);
+		}
+		if (arrayImoveisPorRota[24] != null) {
+			movimentoRoteiroEmpresa.setTempoLeitura((Date) arrayImoveisPorRota[24]);
+		}
+		if (arrayImoveisPorRota[25] != null) {
+			movimentoRoteiroEmpresa.setLeituraAnormalidade((LeituraAnormalidade) arrayImoveisPorRota[25]);
+		}
+		if (arrayImoveisPorRota[26] != null) {
+			movimentoRoteiroEmpresa.setDataHoraProcessamento((Date) arrayImoveisPorRota[26]);
+		}
+		if (arrayImoveisPorRota[27] != null) {
+			movimentoRoteiroEmpresa.setLocalidade((Localidade) arrayImoveisPorRota[27]);
+		}
+		if (arrayImoveisPorRota[28] != null) {
+			movimentoRoteiroEmpresa.setFaturamentoGrupo((FaturamentoGrupo) arrayImoveisPorRota[28]);
+		}
+		if (arrayImoveisPorRota[29] != null) {
+			movimentoRoteiroEmpresa.setRota((Rota) arrayImoveisPorRota[29]);
+		}
+		if (arrayImoveisPorRota[30] != null) {
+			movimentoRoteiroEmpresa.setAnoMesMovimento((Integer) arrayImoveisPorRota[30]);
+		}
+
+		ImovelPorRotaHelper helper = new ImovelPorRotaHelper();
+
+		helper.setImovel(imovel);
+		helper.setMovimentoRoteiroEmpresa(movimentoRoteiroEmpresa);
+		
+		arrayImoveisPorRota = null;
+		
+		return helper;
 	}
 
 	public void atualizarLeituraAnormalidadeSemCelular(Vector<DadosMovimentacao> dados) throws ControladorException {
@@ -42621,5 +42445,28 @@ public class ControladorMicromedicao implements SessionBean {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);
 		}
+	}
+	
+	public Collection<DadosMovimentacao> buscarImoveisFaturamentoSeletivo(Integer matriculaImovel, Rota rota, boolean manter) throws ControladorException, ErroRepositorioException {
+		Collection<DadosMovimentacao> colecao = new ArrayList<DadosMovimentacao>();
+		
+		Integer anoMesReferencia = rota.getFaturamentoGrupo().getAnoMesReferencia();
+		
+		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+		sistemaParametro.setAnoMesFaturamento(anoMesReferencia);
+		
+		Collection<ImovelPorRotaHelper> colecaoImoveisPorRotaHelper = repositorioMicromedicao.buscarImoveisFaturamentoSeletivo(matriculaImovel, rota.getId(), rota.getFaturamentoGrupo().getAnoMesReferencia());
+
+		Iterator<ImovelPorRotaHelper> iteratorImovelPorRotaHelper = colecaoImoveisPorRotaHelper.iterator();
+		while (iteratorImovelPorRotaHelper.hasNext()) {
+			
+			DadosMovimentacao dado = obterDadosMedicaoImovelPorRota(rota, anoMesReferencia, manter, sistemaParametro, iteratorImovelPorRotaHelper);
+			
+			if (dado != null) {
+				colecao.add(dado);
+			}
+		}
+
+		return colecao;
 	}
 }

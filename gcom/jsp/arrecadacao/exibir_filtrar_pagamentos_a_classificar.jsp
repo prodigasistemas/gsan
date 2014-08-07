@@ -23,11 +23,11 @@
 
 <script>
 
-	function limparCampos() {
-	    document.forms[0].idSituacaoPagamento.value = "";
-		document.forms[0].referenciaArrecadacao.value = "";
-		document.forms[0].dataPagamento.value = "";
-		document.forms[0].matriculaImovel.value = "";
+	function limparCampos(form) {
+	    form.idSituacaoPagamento.value = "";
+		form.referenciaArrecadacao.value = "";
+		form.dataPagamento.value = "";
+		form.matriculaImovel.value = "";
 	}
 	
 	function required() {

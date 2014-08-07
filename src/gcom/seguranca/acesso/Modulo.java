@@ -4,33 +4,22 @@ import java.io.Serializable;
 import java.util.Date;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class Modulo implements Serializable {
+
 	private static final long serialVersionUID = 1L;
-    /** identifier field */
-    private Integer id;
-
-    /** nullable persistent field */
-    private String descricaoModulo;
-
-    /** nullable persistent field */
-    private String descricaoAbreviado;
-
-    /** nullable persistent field */
-    private Date ultimaAlteracao;
     
+    private Integer id;
+    private String descricaoModulo;
+    private String descricaoAbreviado;
+    private Date ultimaAlteracao;
     private Short numeroOrdemMenu;
     
-
-    /** full constructor */
     public Modulo(String descricaoModulo, String descricaoAbreviado, Date ultimaAlteracao) {
         this.descricaoModulo = descricaoModulo;
         this.descricaoAbreviado = descricaoAbreviado;
         this.ultimaAlteracao = ultimaAlteracao;
     }
 
-    /** default constructor */
     public Modulo() {
     }
 
@@ -79,7 +68,5 @@ public class Modulo implements Serializable {
 	public void setNumeroOrdemMenu(Short numeroOrdemMenu) {
 		this.numeroOrdemMenu = numeroOrdemMenu;
 	}
-    
-    
 
 }

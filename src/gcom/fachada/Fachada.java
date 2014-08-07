@@ -33438,20 +33438,9 @@ public class Fachada {
 		}
 	}
 
-	/**
-	 * 
-	 * Busca uma Lista de Imoveis por Rota
-	 * 
-	 * @param idRota
-	 * @return
-	 * @throws ControladorException
-	 */
-	public Collection<DadosMovimentacao> buscarImoveisPorRota(Rota idRota,
-			Integer anoMesReferencia, boolean manter) throws FachadaException {
-
+	public Collection<DadosMovimentacao> buscarImoveisPorRota(Rota rota, boolean manter) throws FachadaException {
 		try {
-			return this.getControladorMicromedicao().buscarImoveisPorRota(
-					idRota, anoMesReferencia, manter);
+			return this.getControladorMicromedicao().buscarImoveisPorRota(rota, manter);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex
 					.getParametroMensagem());
@@ -52347,4 +52336,15 @@ public class Fachada {
 			throw new FachadaException(e.getMessage(), e, e.getParametroMensagem());
 		}
 	}
+	
+	public Collection<DadosMovimentacao> buscarImoveisFaturamentoSeletivo(Integer matriculaImovel, Rota rota, boolean manter) throws FachadaException {
+		try {
+			return this.getControladorMicromedicao().buscarImoveisFaturamentoSeletivo(matriculaImovel, rota, manter);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex
+					.getParametroMensagem());
+		}
+
+	}
+	
 }

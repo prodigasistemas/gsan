@@ -43,6 +43,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.log4j.Logger;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
@@ -54,6 +55,8 @@ import org.apache.struts.action.ActionMapping;
  * @date 24/08/2007
  */
 public class EmissaoExtratoDebitoAction extends GcomAction {
+	
+	private static Logger logger = Logger.getLogger(EmissaoExtratoDebitoAction.class);
 	
 	public ActionForward execute(ActionMapping actionMapping,
 			ActionForm actionForm, HttpServletRequest httpServletRequest,
@@ -392,6 +395,7 @@ public class EmissaoExtratoDebitoAction extends GcomAction {
         sessao.setAttribute("colecaoAntecipacaoCreditosDeParcelamento",colecaoAntecipacaoCreditosDeParcelamento);
         sessao.setAttribute("indicadorContasRevisao",indicadorContasRevisao);	
         
+        logger.info("[EMISSAO EXTRATO DE DEBITO PARA O IMOVEL " + idImovel + "]");
 		return retorno;
 	}
 	
