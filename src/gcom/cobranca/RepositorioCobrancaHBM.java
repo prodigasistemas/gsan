@@ -15151,7 +15151,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ "	 left join cadastro.cliente_fone clieFone on ( clieFone.clie_id = clie.clie_id and \n"
 					+ "	 clieFone.cfon_icfonepadrao = 1 ) \n"
 					+ "	 left join faturamento.conta cnta on ( cnta.imov_id = parc.imov_id and cnta. \n"
-					+ "	 cnta_amreferenciaconta = :anoMesReferenciaFaturamento ) \n"
+					+ "	 cnta_amreferenciaconta = :anoMesReferenciaFaturamento and dcst_idatual <> 4) \n"
 					+ "	 left join faturamento.debito_a_cobrar deAC on ( deAC.parc_id = parc.parc_id \n"
 					+ "	 and deAC.dcst_idatual in (1,0) and deAC.dbtp_id in ( 40, 41,42, 43, 45, 47,50 ) \n"
 					+ "	 and \n"
