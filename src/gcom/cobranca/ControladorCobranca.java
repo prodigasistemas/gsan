@@ -58398,17 +58398,22 @@ public class ControladorCobranca implements SessionBean {
 
 						// Dados Pesquisa
 						idCategoriaLoc = (Integer) dados[0];
-						idGerenciaLoc = (Integer) dados[2];
-						nomeGerenciaLoc = (String) dados[3];
-						idUnidadeLoc = (Integer) dados[4];
-						nomeUnidadeLoc = (String) dados[5];
-						idLocalidadeLoc = (Integer) dados[6];
-						nomeLocalidadeLoc = (String) dados[7];
-						idDocumentoTipoLoc = (Integer) dados[8];
-						nomeDocumentoTipoLoc = (String) dados[9];
-						idSituacaoLoc = (Integer) dados[10];
-						descricaoSituacaoLoc = (String) dados[11];
-						faixaLoc = (String) dados[12];
+						idDocumentoTipoLoc = (Integer) dados[2];
+						nomeDocumentoTipoLoc = (String) dados[3];
+						idSituacaoLoc = (Integer) dados[4];
+						descricaoSituacaoLoc = (String) dados[5];
+						faixaLoc = (String) dados[6];
+						qtDocumentosLoc = (Integer) dados[7];
+						valorDocumentosLoc = (BigDecimal) dados[8];
+						valorDocumentosSemParcAtualLoc = (BigDecimal) dados[9];
+						idGerenciaLoc = (Integer) dados[10];
+						nomeGerenciaLoc = (String) dados[11];
+						idUnidadeLoc = (Integer) dados[12];
+						nomeUnidadeLoc = (String) dados[13];
+						idLocalidadeLoc = (Integer) dados[14];
+						nomeLocalidadeLoc = (String) dados[15];
+						
+						
 
 						if (!faixaLoc.equals("0")) {
 							// Verifica se a faixa não existia na base,
@@ -58428,10 +58433,6 @@ public class ControladorCobranca implements SessionBean {
 						} else {
 							faixaLoc = "A VENCER";
 						}
-
-						qtDocumentosLoc = (Integer) dados[13];
-						valorDocumentosLoc = (BigDecimal) dados[14];
-						valorDocumentosSemParcAtualLoc = (BigDecimal) dados[15];
 
 						if (primeiraVezLoc) {
 
@@ -58972,15 +58973,18 @@ public class ControladorCobranca implements SessionBean {
 
 						// Dados Pesquisa
 						idCategoriaUni = (Integer) dados[0];
-						idGerenciaUni = (Integer) dados[2];
-						nomeGerenciaUni = (String) dados[3];
-						idUnidadeUni = (Integer) dados[4];
-						nomeUnidadeUni = (String) dados[5];
-						idDocumentoTipoUni = (Integer) dados[6];
-						nomeDocumentoTipoUni = (String) dados[7];
-						idSituacaoUni = (Integer) dados[8];
-						descricaoSituacaoUni = (String) dados[9];
-						faixaUni = (String) dados[10];
+						idDocumentoTipoUni = (Integer) dados[2];
+						nomeDocumentoTipoUni = (String) dados[3];
+						idSituacaoUni = (Integer) dados[4];
+						descricaoSituacaoUni = (String) dados[5];
+						faixaUni = (String) dados[6];
+						qtDocumentosUni = (Integer) dados[7];
+						valorDocumentosUni = (BigDecimal) dados[8];
+						valorDocumentosSemParcAtualUni = (BigDecimal) dados[9];
+						idGerenciaUni = (Integer) dados[10];
+						nomeGerenciaUni = (String) dados[11];
+						idUnidadeUni = (Integer) dados[12];
+						nomeUnidadeUni = (String) dados[13];
 
 						if (!faixaUni.equals("0")) {
 							// Verifica se a faixa não existia na base,
@@ -59000,10 +59004,6 @@ public class ControladorCobranca implements SessionBean {
 						} else {
 							faixaUni = "A VENCER";
 						}
-
-						qtDocumentosUni = (Integer) dados[11];
-						valorDocumentosUni = (BigDecimal) dados[12];
-						valorDocumentosSemParcAtualUni = (BigDecimal) dados[13];
 
 						if (primeiraVezUni) {
 
@@ -59521,13 +59521,16 @@ public class ControladorCobranca implements SessionBean {
 
 						// Dados Pesquisa
 						idCategoriaGer = (Integer) dados[0];
-						idGerenciaGer = (Integer) dados[2];
-						nomeGerenciaGer = (String) dados[3];
-						idDocumentoTipoGer = (Integer) dados[4];
-						nomeDocumentoTipoGer = (String) dados[5];
-						idSituacaoGer = (Integer) dados[6];
-						descricaoSituacaoGer = (String) dados[7];
-						faixaGer = (String) dados[8];
+						idDocumentoTipoGer = (Integer) dados[2];
+						nomeDocumentoTipoGer = (String) dados[3];
+						idSituacaoGer = (Integer) dados[4];
+						descricaoSituacaoGer = (String) dados[5];
+						faixaGer = (String) dados[6];
+						qtDocumentosGer = (Integer) dados[7];
+						valorDocumentosGer = (BigDecimal) dados[8];
+						valorDocumentosSemParcAtualGer = (BigDecimal) dados[9];
+						idGerenciaGer = (Integer) dados[10];
+						nomeGerenciaGer = (String) dados[11];
 
 						if (!faixaGer.equals("0")) {
 							// Verifica se a faixa não existia na base,
@@ -59547,10 +59550,6 @@ public class ControladorCobranca implements SessionBean {
 						} else {
 							faixaGer = "A VENCER";
 						}
-
-						qtDocumentosGer = (Integer) dados[9];
-						valorDocumentosGer = (BigDecimal) dados[10];
-						valorDocumentosSemParcAtualGer = (BigDecimal) dados[11];
 
 						if (primeiraVezGer) {
 

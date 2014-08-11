@@ -21074,23 +21074,23 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 		try {
 
-			consulta += " SELECT " + " dar.catg_id as idCat, " + " cat.catg_dscategoria as dsCat, ";
+			consulta += " SELECT " + " dar.catg_id as idCat, " + " cat.catg_dscategoria as dsCat, "
+					+ " dar.dotp_id as idDt, " + " dt.dotp_dsdocumentotipo as dsDt, " + " drrs_icsituacaodocumentos as icSit, "
+					+ " case drrs_icsituacaodocumentos " + "    when 1 then 'A VENCER' " + "    when 2 then 'VENCIDOS' "
+					+ " end as dsSit,  " + " drrs_qtdiasvencidos as faixa, " + " sum(drrs_qtdocumentos) as qtDoc,  "
+					+ " sum(drrs_vldocumentos) as vlDoc, " + " sum(drrs_vldocumentossemparcelaatual) as vlDocSemParcAtual ";
 
-			if (tipoTotalizacao.equals("LOCALIDADE")) {
-				consulta += " dar.greg_id as idGer, " + " gr.greg_nmregional as dsGer, " + " dar.uneg_id as idUn , "
-						+ " un.uneg_nmunidadenegocio as dsUn, " + " dar.loca_id as idLoca, " + " loc.loca_nmlocalidade as dsLoca,  ";
-			} else if (tipoTotalizacao.equals("UNIDADE")) {
-				consulta += " dar.greg_id as idGer, " + " gr.greg_nmregional as dsGer, " + " dar.uneg_id as idUn , "
-						+ " un.uneg_nmunidadenegocio as dsUn, ";
-			} else if (tipoTotalizacao.equals("GERENCIA")) {
-				consulta += " dar.greg_id as idGer, " + " gr.greg_nmregional as dsGer, ";
+			if (tipoTotalizacao.equals("LOCALIDADE")) {//10, 11, 12, 13, 14, 15
+				consulta += ", dar.greg_id as idGer, " + " gr.greg_nmregional as dsGer, " + " dar.uneg_id as idUn , "
+						+ " un.uneg_nmunidadenegocio as dsUn, " + " dar.loca_id as idLoca, " + " loc.loca_nmlocalidade as dsLoca  ";
+			} else if (tipoTotalizacao.equals("UNIDADE")) {//10, 11, 12, 13
+				consulta += ", dar.greg_id as idGer, " + " gr.greg_nmregional as dsGer, " + " dar.uneg_id as idUn , "
+						+ " un.uneg_nmunidadenegocio as dsUn ";
+			} else if (tipoTotalizacao.equals("GERENCIA")) {//10, 11
+				consulta += ", dar.greg_id as idGer, " + " gr.greg_nmregional as dsGer ";
 			}
 
-			consulta += " dar.dotp_id as idDt, " + " dt.dotp_dsdocumentotipo as dsDt, " + " drrs_icsituacaodocumentos as icSit, "
-					+ "  case drrs_icsituacaodocumentos " + "    when 1 then 'A VENCER' " + "    when 2 then 'VENCIDOS' "
-					+ "  end as dsSit,  " + " drrs_qtdiasvencidos as faixa, " + " sum(drrs_qtdocumentos) as qtDoc,  "
-					+ " sum(drrs_vldocumentos) as vlDoc, " + " sum(drrs_vldocumentossemparcelaatual) as vlDocSemParcAtual "
-					+ " FROM financeiro.docs_a_rec_resumo dar "
+			consulta += " FROM financeiro.docs_a_rec_resumo dar "
 					+ " INNER JOIN cobranca.documento_tipo dt on dt.dotp_id = dar.dotp_id "
 					+ " INNER JOIN cadastro.categoria cat on cat.catg_id = dar.catg_id "
 					+ " LEFT JOIN cadastro.categoria_tipo catTipo on catTipo.cgtp_id = cat.cgtp_id "
