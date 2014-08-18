@@ -3395,33 +3395,18 @@ public class ControladorMicromedicao implements SessionBean {
 			throws ControladorException {
 
 		MedicaoHistorico retorno = null;
+		Collection<MedicaoHistorico> colecaoMedicaoHistorico = null;
 
-		// Criação das coleções
-		Collection colecaoMedicaoHistorico = null;
-		// Comentado por Rômulo Aurélio
-		// Data: 02/10/2010
-		// Analista:Eduardo Borges
-		// Motivo: Problema na referencia de faturamento para o faturamento
-		// antecipado
-		// sistemaParametro.setAnoMesFaturamento(faturamentoGrupo.getAnoMesReferencia());
-
-		// Pesquisa o histórico de medicao
 		try {
-			colecaoMedicaoHistorico = repositorioMicromedicao
-					.pesquisarObterDadosHistoricoMedicao(imovel, medicaoTipo,
-							faturamentoGrupo);
+			colecaoMedicaoHistorico = repositorioMicromedicao.pesquisarObterDadosHistoricoMedicao(imovel, medicaoTipo,faturamentoGrupo);
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
 
-		// Pega a coleção e cria o objeto medição histórico
-		MedicaoHistorico medicaoHistorico = obterHistoricoMedicao(
-				colecaoMedicaoHistorico, imovel, medicaoTipo);
+		MedicaoHistorico medicaoHistorico = obterHistoricoMedicao(colecaoMedicaoHistorico);
 
-		// [FS0003 - Verificar Existência do Histórico de Medição
-		retorno = verificarExistenciaHistoricoMedicao(faturamentoGrupo,
-				medicaoHistorico, imovel, medicaoTipo, sistemaParametro);
+		retorno = verificarExistenciaHistoricoMedicao(faturamentoGrupo,medicaoHistorico, imovel, medicaoTipo, sistemaParametro);
 
 		/**
 		 * Recupera a data de leitura informada para a data de leitura faturada.
@@ -3439,21 +3424,12 @@ public class ControladorMicromedicao implements SessionBean {
 		return retorno;
 	}
 
-	/**
-	 * Método utilizado para receber uma coleção e criar e retornar um objeto do
-	 * tipo medição histórico
-	 */
-	public MedicaoHistorico obterHistoricoMedicao(
-			Collection colecaoMedicaoHistorico, Imovel imovel,
-			MedicaoTipo medicaoTipo) {
+	public MedicaoHistorico obterHistoricoMedicao(Collection<MedicaoHistorico> colecaoMedicaoHistorico) {
 
 		MedicaoHistorico retorno = null;
 
-		if (colecaoMedicaoHistorico != null
-				&& !colecaoMedicaoHistorico.isEmpty()) {
-
-			retorno = (MedicaoHistorico) Util
-					.retonarObjetoDeColecao(colecaoMedicaoHistorico);
+		if (colecaoMedicaoHistorico != null && !colecaoMedicaoHistorico.isEmpty()) {
+			retorno = (MedicaoHistorico) Util.retonarObjetoDeColecao(colecaoMedicaoHistorico);
 		}
 
 		return retorno;
@@ -3816,23 +3792,15 @@ public class ControladorMicromedicao implements SessionBean {
 	 * [UC0101] - Consistir Leituras e Calcular Consumos [FS0003] - Verificar
 	 * Existência do Histórico de Medição
 	 */
-	protected MedicaoHistorico verificarExistenciaHistoricoMedicao(
-			FaturamentoGrupo faturamentoGrupo,
-			MedicaoHistorico medicaoHistorico, Imovel imovel,
-			MedicaoTipo medicaoTipo, SistemaParametro sistemaParametro)
-			throws ControladorException {
+	protected MedicaoHistorico verificarExistenciaHistoricoMedicao(FaturamentoGrupo faturamentoGrupo, MedicaoHistorico medicaoHistorico, Imovel imovel,
+			MedicaoTipo medicaoTipo, SistemaParametro sistemaParametro) throws ControladorException {
 
 		MedicaoHistorico retorno = null;
 
-		// Caso não exista histórico de medição para o hidrometro da ligação de
-		// água
 		if (medicaoHistorico == null || medicaoHistorico.getId() == null) {
-
-			retorno = gerarHistoricoMedicao(medicaoTipo, imovel,
-					faturamentoGrupo, sistemaParametro);
+			retorno = gerarHistoricoMedicao(medicaoTipo, imovel, faturamentoGrupo, sistemaParametro);
 
 		} else {
-			// existe histórico de medição
 			retorno = medicaoHistorico;
 		}
 
@@ -21143,73 +21111,48 @@ public class ControladorMicromedicao implements SessionBean {
 	 * @return
 	 * @throws ControladorException
 	 */
-	public MedicaoHistorico gerarHistoricoMedicao(MedicaoTipo medicaoTipo,
-			Imovel imovel, FaturamentoGrupo faturamentoGrupo,
+	public MedicaoHistorico gerarHistoricoMedicao(MedicaoTipo medicaoTipo, Imovel imovel, FaturamentoGrupo faturamentoGrupo,
 			SistemaParametro sistemaParametro) throws ControladorException {
 
-		// Criação de coleções
 		Collection colecaoMedicaoHistoricoMesAnterior = null;
 
 		MedicaoHistorico medicaoHistorico = new MedicaoHistorico();
 
-		// Caso seja ligação de água
-		if (medicaoTipo.getId().intValue() == MedicaoTipo.LIGACAO_AGUA
-				.intValue()) {
-
+		if (medicaoTipo.getId().intValue() == MedicaoTipo.LIGACAO_AGUA.intValue()) {
 			medicaoHistorico.setLigacaoAgua(imovel.getLigacaoAgua());
-			medicaoHistorico.setHidrometroInstalacaoHistorico(imovel
-					.getLigacaoAgua().getHidrometroInstalacaoHistorico());
+			medicaoHistorico.setHidrometroInstalacaoHistorico(imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico());
 
-			// Caso seja ligação de poço
-		} else if (medicaoTipo.getId().intValue() == MedicaoTipo.POCO
-				.intValue()) {
-
+		} else if (medicaoTipo.getId().intValue() == MedicaoTipo.POCO.intValue()) {
 			medicaoHistorico.setImovel(imovel);
-			medicaoHistorico.setHidrometroInstalacaoHistorico(imovel
-					.getHidrometroInstalacaoHistorico());
+			medicaoHistorico.setHidrometroInstalacaoHistorico(imovel.getHidrometroInstalacaoHistorico());
 
 		}
 
-		medicaoHistorico
-				.setNumeroVezesConsecutivasOcorrenciaAnormalidade(new Short("0"));
-
+		medicaoHistorico.setNumeroVezesConsecutivasOcorrenciaAnormalidade(new Short("0"));
 		medicaoHistorico.setMedicaoTipo(medicaoTipo);
 		medicaoHistorico.setAnoMesReferencia(sistemaParametro.getAnoMesFaturamento());
 
 		String anoMes = "" + faturamentoGrupo.getAnoMesReferencia();
 
-		int anoMesAnterior = 
-			Util.subtrairMesDoAnoMes(new Integer(anoMes).intValue(), 1);
+		int anoMesAnterior = Util.subtrairMesDoAnoMes(new Integer(anoMes).intValue(), 1);
 
 		FaturamentoGrupo faturamentoGrupoAuxiliar = new FaturamentoGrupo();
 		faturamentoGrupoAuxiliar.setAnoMesReferencia(new Integer(anoMesAnterior).intValue());
 
-		// Pesquisa historico medição do mês anterior
 		try {
-			colecaoMedicaoHistoricoMesAnterior = repositorioMicromedicao
-					.pesquisarObterDadosHistoricoMedicao(imovel, medicaoTipo,
-							faturamentoGrupoAuxiliar);
+			colecaoMedicaoHistoricoMesAnterior = repositorioMicromedicao.pesquisarObterDadosHistoricoMedicao(imovel, medicaoTipo,faturamentoGrupoAuxiliar);
 		} catch (ErroRepositorioException ex) {
-			// sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
 
-		// caso não seja o ano mes anterior, então pesquisa os dados
-		// anteriores de dois meses atrás
-		if (colecaoMedicaoHistoricoMesAnterior == null || 
-			colecaoMedicaoHistoricoMesAnterior.isEmpty()) {
+		if (colecaoMedicaoHistoricoMesAnterior == null || colecaoMedicaoHistoricoMesAnterior.isEmpty()) {
 
-			int anoMesDoisMesesAnteriores = 
-				Util.subtrairMesDoAnoMes(new Integer(anoMes).intValue(), 2);
+			int anoMesDoisMesesAnteriores =  Util.subtrairMesDoAnoMes(new Integer(anoMes).intValue(), 2);
 			
 			faturamentoGrupoAuxiliar.setAnoMesReferencia(anoMesDoisMesesAnteriores);
 
-			// Pesquisa historico medição do mês anterior
 			try {
-				colecaoMedicaoHistoricoMesAnterior = repositorioMicromedicao
-						.pesquisarObterDadosHistoricoMedicao(imovel,
-								medicaoTipo,
-								faturamentoGrupoAuxiliar);
+				colecaoMedicaoHistoricoMesAnterior = repositorioMicromedicao.pesquisarObterDadosHistoricoMedicao(imovel, medicaoTipo, faturamentoGrupoAuxiliar);
 			} catch (ErroRepositorioException ex) {
 				throw new ControladorException("erro.sistema", ex);
 			}
@@ -21218,23 +21161,15 @@ public class ControladorMicromedicao implements SessionBean {
 		LeituraSituacao leituraSituacao = new LeituraSituacao();
 
 		FiltroLeituraSituacao filtro = new FiltroLeituraSituacao();
-		filtro.adicionarParametro(new ParametroSimples(
-				FiltroLeituraSituacao.ID, LeituraSituacao.NAO_REALIZADA));
+		filtro.adicionarParametro(new ParametroSimples(FiltroLeituraSituacao.ID, LeituraSituacao.NAO_REALIZADA));
 
-		Collection colFiltros = getControladorUtil().pesquisar(filtro,
-				leituraSituacao.getClass().getName());
+		Collection colFiltros = getControladorUtil().pesquisar(filtro, leituraSituacao.getClass().getName());
 
-		// Selecionamos a situacao da leitura
 		leituraSituacao = (LeituraSituacao) colFiltros.toArray()[0];
 
-		
-		
-		// Com o valor da Data Prevista para a atividade de efetuar leitura
-		// no cronograma do
-		// grupo de faturamento do mês corrente (FTAC_DTPREVISTA), limitada
-		// à data corrente
-		Object[] datas = obterDataPrevistaRealizadaFaturamentoAtividadeCronograma(
-				faturamentoGrupo, sistemaParametro.getAnoMesFaturamento());
+		// Com o valor da Data Prevista para a atividade de efetuar leitura no cronograma do
+		// grupo de faturamento do mês corrente (FTAC_DTPREVISTA), limitada à data corrente
+		Object[] datas = obterDataPrevistaRealizadaFaturamentoAtividadeCronograma(faturamentoGrupo, sistemaParametro.getAnoMesFaturamento());
 
 		Date dataPrevista = null;
 
@@ -21242,35 +21177,21 @@ public class ControladorMicromedicao implements SessionBean {
 			dataPrevista = (Date) datas[0];
 		}
 
-		// Caso exista histórico de medição do mês anterior
 		if (colecaoMedicaoHistoricoMesAnterior != null && !colecaoMedicaoHistoricoMesAnterior.isEmpty()) {
 
-			// Pega coleção e cria o histórico de medição
-			MedicaoHistorico medicaoHistoricoMesAnterior = obterHistoricoMedicao(
-					colecaoMedicaoHistoricoMesAnterior, imovel, medicaoTipo);
+			MedicaoHistorico medicaoHistoricoMesAnterior = obterHistoricoMedicao(colecaoMedicaoHistoricoMesAnterior);
 
-			// Recebe a data de leitura atual faturada do mês anterior
-			medicaoHistorico.setDataLeituraAnteriorFaturamento(
-					medicaoHistoricoMesAnterior.getDataLeituraAtualFaturamento());
-			// Recebe a leitura atual faturada no mês anterior
-			medicaoHistorico.setLeituraAnteriorFaturamento(
-					medicaoHistoricoMesAnterior.getLeituraAtualFaturamento());
-			// Recebe a leitura atual informada no mês anterior
-			medicaoHistorico.setLeituraAnteriorInformada(
-					medicaoHistoricoMesAnterior.getLeituraAtualInformada());
-			// Recebe a situaçao da leitura atual do mês anterior
-			medicaoHistorico.setLeituraSituacaoAnterior(
-					medicaoHistoricoMesAnterior.getLeituraSituacaoAtual());
+			medicaoHistorico.setDataLeituraAnteriorFaturamento(medicaoHistoricoMesAnterior.getDataLeituraAtualFaturamento());
+			medicaoHistorico.setLeituraAnteriorFaturamento(medicaoHistoricoMesAnterior.getLeituraAtualFaturamento());
+			medicaoHistorico.setLeituraAnteriorInformada(medicaoHistoricoMesAnterior.getLeituraAtualInformada());
+			medicaoHistorico.setLeituraSituacaoAnterior(medicaoHistoricoMesAnterior.getLeituraSituacaoAtual());
 
 		} else {
 
 			Object[] maiorMedicaoHistorico = null;
 
-			// Pesquisa a maior medicao histórico para o imóvel
 			try {
-				maiorMedicaoHistorico = (Object[]) repositorioMicromedicao
-						.pesquisarObterDadosMaiorHistoricoMedicao(imovel,
-								medicaoTipo, sistemaParametro);
+				maiorMedicaoHistorico = (Object[]) repositorioMicromedicao.pesquisarObterDadosMaiorHistoricoMedicao(imovel,medicaoTipo, sistemaParametro);
 			} catch (ErroRepositorioException ex) {
 				throw new ControladorException("erro.sistema", ex);
 			}
@@ -21281,32 +21202,28 @@ public class ControladorMicromedicao implements SessionBean {
 				medicaoHistorico.setLeituraAnteriorFaturamento(((Integer) maiorMedicaoHistorico[1]).intValue());
 				medicaoHistorico.setLeituraAnteriorInformada((Integer) maiorMedicaoHistorico[2]);
 			}
-			// Caso não exista a maior medição historico
+			
 			else {
 
-				// e a data de Realização para a atividade de efetuar
-				// leitura no cronograma do grupo
-				// de faturamento do mês anterior (FTAC_TMREALIZACAO).
+				// e a data de Realização para a atividade de efetuar leitura no cronograma do grupo de faturamento do mês anterior (FTAC_TMREALIZACAO).
 				Integer anoMesFaturamentoAnterior = Util.subtrairMesDoAnoMes(sistemaParametro.getAnoMesFaturamento(), 1);
 
-				Object[] datasAnterior = obterDataPrevistaRealizadaFaturamentoAtividadeCronograma(
-						faturamentoGrupo, anoMesFaturamentoAnterior);
+				Object[] datasAnterior = obterDataPrevistaRealizadaFaturamentoAtividadeCronograma(faturamentoGrupo, anoMesFaturamentoAnterior);
 
-				/*
-				 * Alterado por Raphael Rossiter em 06/08/2007 / Rafael Corrêa
-				 * em 14/05/2008 OBJ: Consistir imóveis sem leitura anterior
-				 */
 				Date dataRealizada = null;
 
 				if (datasAnterior == null) {
 					dataRealizada = this.gerarDataRealizacaoLeituraAnterior(faturamentoGrupo, sistemaParametro);
+
 				} else if (datasAnterior.length == 1 && datasAnterior[0] != null && datasAnterior[1] == null) {
-					// Alterado por Rômulo Aurelio 28/09/2010
 					dataRealizada = (Date) datasAnterior[0];
+				
 				} else if(datasAnterior.length > 1 && datasAnterior[1] != null) {
 					dataRealizada = (Date) datasAnterior[1];
+				
 				}else if(datasAnterior.length > 1 && datasAnterior[0] != null && datasAnterior[1] == null) {
 					dataRealizada = (Date) datasAnterior[0];
+				
 				}else{
 					dataRealizada = this.gerarDataRealizacaoLeituraAnterior(faturamentoGrupo, sistemaParametro);
 				}
@@ -21314,66 +21231,46 @@ public class ControladorMicromedicao implements SessionBean {
 				
 				Date dataLeituraAnteriorFaturamento = null;
 
-				// Caso seja ligação de água
 				if (medicaoTipo.getId().intValue() == MedicaoTipo.LIGACAO_AGUA.intValue()) {
 
-					if (Util.compararData(dataRealizada, imovel.getLigacaoAgua()
-							.getHidrometroInstalacaoHistorico().getDataInstalacao()) == 1) {
-
+					if (Util.compararData(dataRealizada, imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico().getDataInstalacao()) == 1) {
 						dataLeituraAnteriorFaturamento = dataRealizada;
+					
 					} else {
-						dataLeituraAnteriorFaturamento = imovel.getLigacaoAgua()
-								.getHidrometroInstalacaoHistorico().getDataInstalacao();
+						dataLeituraAnteriorFaturamento = imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico().getDataInstalacao();
 					}
 
-					// adicionado por Vivianne Sousa 13/08/2009 - analista :Aryed Lins
-					if (imovel.getLigacaoAgua() != null && 
-							imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico() != null) {
-						medicaoHistorico.setLeituraAnteriorFaturamento(imovel.getLigacaoAgua()
-								.getHidrometroInstalacaoHistorico().getNumeroLeituraInstalacao());
+					if (imovel.getLigacaoAgua() != null && imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico() != null) {
+						medicaoHistorico.setLeituraAnteriorFaturamento(imovel.getLigacaoAgua().getHidrometroInstalacaoHistorico().getNumeroLeituraInstalacao());
 					}
 
-					// Caso seja ligação de poço
 				} else if (medicaoTipo.getId().intValue() == MedicaoTipo.POCO.intValue()) {
 
-					if (Util.compararData(dataRealizada, 
-							imovel.getHidrometroInstalacaoHistorico().getDataInstalacao()) == 1) {
-
+					if (Util.compararData(dataRealizada, imovel.getHidrometroInstalacaoHistorico().getDataInstalacao()) == 1) {
 						dataLeituraAnteriorFaturamento = dataRealizada;
+					
 					} else {
-						dataLeituraAnteriorFaturamento = 
-							imovel.getHidrometroInstalacaoHistorico().getDataInstalacao();
+						dataLeituraAnteriorFaturamento =imovel.getHidrometroInstalacaoHistorico().getDataInstalacao();
 					}
 
-					//adicionado por Vivianne Sousa 13/08/2009 - analista :Aryed Lins
 					if(imovel.getHidrometroInstalacaoHistorico() != null) {
-						medicaoHistorico.setLeituraAnteriorFaturamento(imovel
-								.getHidrometroInstalacaoHistorico().getNumeroLeituraInstalacao());
+						medicaoHistorico.setLeituraAnteriorFaturamento(imovel.getHidrometroInstalacaoHistorico().getNumeroLeituraInstalacao());
 					}
 				}
-
 				medicaoHistorico.setDataLeituraAnteriorFaturamento(dataLeituraAnteriorFaturamento);
-
-				
 			}
 
-			// Seta a situação da leitura anterior como não realizada
 			medicaoHistorico.setLeituraSituacaoAnterior(leituraSituacao);
-
 		}
 
 		if (dataPrevista != null) {
 			medicaoHistorico.setDataLeituraAtualFaturamento(dataPrevista);
 		} else {
-			medicaoHistorico.setDataLeituraAtualFaturamento(Util
-					.adicionarNumeroDiasDeUmaData(medicaoHistorico
-							.getDataLeituraAnteriorFaturamento(), 30));
+			medicaoHistorico.setDataLeituraAtualFaturamento(Util.adicionarNumeroDiasDeUmaData(medicaoHistorico.getDataLeituraAnteriorFaturamento(), 30));
 		}
 
 		medicaoHistorico.setLeituraSituacaoAtual(leituraSituacao);
 		medicaoHistorico.setIndicadorAnalisado(MedicaoHistorico.INDICADOR_ANALISADO_NAO);
-
-		// Seja o timestamp
 		medicaoHistorico.setUltimaAlteracao(new Date());
 
 		return medicaoHistorico;
@@ -26569,7 +26466,7 @@ public class ControladorMicromedicao implements SessionBean {
 						throw new ControladorException("erro.sistema", ex);
 					}
 
-					MedicaoHistorico medicaoHistorico = obterHistoricoMedicao(colecaoMedicaoHistorico, imovel, medicaoTipo);
+					MedicaoHistorico medicaoHistorico = obterHistoricoMedicao(colecaoMedicaoHistorico);
 
 					if (medicaoHistorico != null && !medicaoHistorico.getLeituraSituacaoAtual().getId().equals(LeituraSituacao.NAO_REALIZADA)) {
 						if (manter) {
@@ -42468,5 +42365,14 @@ public class ControladorMicromedicao implements SessionBean {
 		}
 
 		return colecao;
+	}
+	
+	public LigacaoAgua obterLigacaoAgua(Integer idLigacao) throws ControladorException {
+		try {
+			return repositorioMicromedicao.obterLigacaoAgua(idLigacao);
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+
 	}
 }

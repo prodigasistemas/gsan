@@ -1,5 +1,6 @@
 package gcom.micromedicao;
 
+import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.empresa.Empresa;
 import gcom.cadastro.imovel.Categoria;
@@ -3644,4 +3645,5 @@ public interface IControladorMicromedicao {
     
     public Collection<DadosMovimentacao> buscarImoveisFaturamentoSeletivo(Integer matriculaImovel, Rota rota, boolean manter) throws ControladorException;
 
+    public LigacaoAgua obterLigacaoAgua(Integer idLigacao) throws ControladorException;
 }

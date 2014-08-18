@@ -146,6 +146,7 @@ public class RemoverImovesJaProcessadorImpressaoSimultaneaHelper {
 		return colDadosFormatados;
 	}
 
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public RemoverImovesJaProcessadorImpressaoSimultaneaHelper( BufferedReader buffer ) throws IOException{
 		
 		String linha = null;

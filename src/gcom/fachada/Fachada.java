@@ -422,6 +422,7 @@ import gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoGerarOSHelpe
 import gcom.gui.cobranca.contratoparcelamento.DebitosClienteHelper;
 import gcom.gui.cobranca.spcserasa.RelatorioNegativacoesExcluidasSomatorioDadosParcelamentoHelper;
 import gcom.gui.faturamento.FaturamentoImediatoAjusteHelper;
+import gcom.gui.faturamento.ImovelFaturamentoSeletivo;
 import gcom.gui.faturamento.bean.AnalisarImoveisReleituraHelper;
 import gcom.gui.faturamento.bean.FiltrarImovelInserirManterContaHelper;
 import gcom.gui.faturamento.consumotarifa.bean.CategoriaFaixaConsumoTarifaHelper;
@@ -39041,29 +39042,13 @@ public class Fachada {
 
 	/**
      *  [UC0820] - Atualizar Faturamento do Movimento Celular
-     *  
      *  Atualiza o movimento pre faturado baseado no arquivo informado
-     * 
-     * @author bruno
-     * @date 15/06/2009
-     * 
-     * @param buffer - Arquivo a ser processado
-     * @param offLine - Caso seja offline, não retorna o relatorio de processamento.
-     * 
-     * @return RetornoAtualizarFaturamentoMovimentoCelularHelper
-     *  
-	 */
-	/*
-	 * TODO : COSANPA
-	 * 02/05/2011 - Pamela Gatinho
-	 * Adicionando o ID da rota como informacao para finalizar o arquivo de rota.
 	 */
 	public RetornoAtualizarFaturamentoMovimentoCelularHelper atualizarFaturamentoMovimentoCelular(BufferedReader buffer,
 			boolean offLine,boolean finalizarArquivo, Integer idRota, ArquivoTextoRetornoIS arquivoTextoRetortnoIS,
 			BufferedReader bufferOriginal) {
 		try {
-			return this.getControladorFaturamento()
-					.atualizarFaturamentoMovimentoCelular(buffer, "teste.txt",
+			return this.getControladorFaturamento().atualizarFaturamentoMovimentoCelular(buffer, "teste.txt",
 							offLine,finalizarArquivo, idRota, arquivoTextoRetortnoIS, bufferOriginal);
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex
@@ -52341,8 +52326,16 @@ public class Fachada {
 		try {
 			return this.getControladorMicromedicao().buscarImoveisFaturamentoSeletivo(matriculaImovel, rota, manter);
 		} catch (ControladorException ex) {
-			throw new FachadaException(ex.getMessage(), ex, ex
-					.getParametroMensagem());
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
+		}
+
+	}
+	
+	public void faturarImoveisSeletivo(Collection<ImovelFaturamentoSeletivo> colecaoImoveis) throws FachadaException {
+		try {
+			this.getControladorFaturamento().faturarImoveisSeletivo(colecaoImoveis);
+		} catch (ControladorException ex) {
+			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
 
 	}

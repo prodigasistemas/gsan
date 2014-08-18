@@ -860,38 +860,22 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 		return retorno;
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param imovel
-	 *            Descrição do parâmetro
-	 * @param medicaoTipo
-	 *            Descrição do parâmetro
-	 * @param sistemaParametro
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 * @exception ErroRepositorioException
-	 *                Descrição da exceção
-	 */
-	public Collection pesquisarObterDadosHistoricoMedicao(Imovel imovel,
-			MedicaoTipo medicaoTipo, FaturamentoGrupo faturamentoGrupo)
-			throws ErroRepositorioException {
+	@SuppressWarnings("unchecked")
+	public Collection<MedicaoHistorico> pesquisarObterDadosHistoricoMedicao(Imovel imovel,MedicaoTipo medicaoTipo, FaturamentoGrupo faturamentoGrupo) throws ErroRepositorioException {
 
-		Collection retorno = null;
+		Collection<MedicaoHistorico> retorno = null;
 
 		Session session = HibernateUtil.getSession();
 		String consulta;
 
 		String composicao = null;
 
-		// Caso seja ligação de água
-		if (medicaoTipo.getId().intValue() == MedicaoTipo.LIGACAO_AGUA
-				.intValue()) {
+		if (medicaoTipo.getId().intValue() == MedicaoTipo.LIGACAO_AGUA.intValue()) {
 			composicao = "where mh.medicaoTipo.id = :medicaoTipoId"
 					+ " and mh.ligacaoAgua.id = :imovelId"
 					+ " and mh.anoMesReferencia = :amReferencia";
-		} else if (medicaoTipo.getId().intValue() == MedicaoTipo.POCO
-				.intValue()) {
+		
+		} else if (medicaoTipo.getId().intValue() == MedicaoTipo.POCO.intValue()) {
 			composicao = "where mh.medicaoTipo.id = :medicaoTipoId"
 					+ " and mh.imovel.id = :imovelId "
 					+ " and mh.anoMesReferencia = :amReferencia";
@@ -907,16 +891,14 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 					+ " LEFT JOIN FETCH mh.hidrometroInstalacaoHistorico hih "
 					+ composicao;
 
-			retorno = session.createQuery(consulta).setInteger("medicaoTipoId",
-					medicaoTipo.getId()).setInteger("imovelId", imovel.getId())
-					.setInteger("amReferencia",
-							faturamentoGrupo.getAnoMesReferencia()).list();
+			retorno = (Collection<MedicaoHistorico>)session.createQuery(consulta)
+					.setInteger("medicaoTipoId",medicaoTipo.getId())
+					.setInteger("imovelId", imovel.getId())
+					.setInteger("amReferencia",faturamentoGrupo.getAnoMesReferencia()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -23904,4 +23886,27 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 
 		return retorno;
 	}
+     
+     public LigacaoAgua obterLigacaoAgua(Integer idLigacao) throws ErroRepositorioException {
+
+ 		LigacaoAgua retorno = new LigacaoAgua();
+ 		Session session = HibernateUtil.getSession();
+ 		String consulta;
+ 		
+ 		try {
+ 			
+ 			consulta = "select ligacao from LigacaoAgua ligacao "
+ 					+ " where ligacao.id = :idLigacao ";
+ 			
+ 			retorno = (LigacaoAgua) session.createQuery(consulta).setInteger("idLigacao",idLigacao).setMaxResults(1).uniqueResult();
+ 			
+
+ 		} catch (HibernateException e) {
+ 			throw new ErroRepositorioException(e, "Erro no Hibernate");
+ 		} finally {
+ 			HibernateUtil.closeSession(session);
+ 		}
+
+ 		return retorno;
+ 	}
 }
