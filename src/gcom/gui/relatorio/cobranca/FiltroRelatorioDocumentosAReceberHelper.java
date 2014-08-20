@@ -29,6 +29,8 @@ public class FiltroRelatorioDocumentosAReceberHelper implements Serializable {
 	 * Acrescimo de mais um filtro na geração do relatório R0990 
 	 * */
 	private String indicadorGuiaPagamento;
+	private boolean exibirDebitoSemParcela = false;
+	private boolean exibirCreditoSemParcela = false;
 	
 	private Collection<FaixaHelper> colecaoFaixas;
 	
@@ -157,8 +159,6 @@ public class FiltroRelatorioDocumentosAReceberHelper implements Serializable {
 	public void setDescricaoEstado(String descricaoEstado) {
 		this.descricaoEstado = descricaoEstado;
 	}
-	
-	
 
 	public String getIndicadorGuiaPagamento() {
 		return indicadorGuiaPagamento;
@@ -166,5 +166,21 @@ public class FiltroRelatorioDocumentosAReceberHelper implements Serializable {
 
 	public void setIndicadorGuiaPagamento(String indicadorGuiaPagamento) {
 		this.indicadorGuiaPagamento = indicadorGuiaPagamento;
+	}
+
+	public boolean isExibirDebitoSemParcela() {
+		return exibirDebitoSemParcela;
+	}
+
+	public void setExibirDebitoSemParcela(boolean exibirDebitoSemParcela) {
+		this.exibirDebitoSemParcela = exibirDebitoSemParcela;
+	}
+
+	public boolean isExibirCreditoSemParcela() {
+		return exibirCreditoSemParcela;
+	}
+
+	public void setExibirCreditoSemParcela(boolean exibirCreditoSemParcela) {
+		this.exibirCreditoSemParcela = exibirCreditoSemParcela;
 	}
 }

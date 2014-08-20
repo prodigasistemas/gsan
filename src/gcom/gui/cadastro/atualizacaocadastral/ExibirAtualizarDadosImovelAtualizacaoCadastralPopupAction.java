@@ -1,5 +1,6 @@
 package gcom.gui.cadastro.atualizacaocadastral;
 
+import gcom.atualizacaocadastral.ImagemRetorno;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.cadastro.SituacaoAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.SituacaoAguaHelper;
@@ -92,15 +93,21 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 				}
 			}
 			
+			Collection<ImagemRetorno> colecaoImagens = fachada.pesquisarImagensRetornoPorIdImovel(Integer.parseInt(idImovel));
+			if (colecaoImagens != null && !colecaoImagens.isEmpty()) {
+				sessao.setAttribute("colecaoImagens", colecaoImagens);
+			} else {
+				sessao.setAttribute("colecaoImagens", null);
+			}
+			
 			Map<String, List<DadosTabelaAtualizacaoCadastralHelper>> map = fachada.consultarDadosTabelaColunaAtualizacaoCadastral(
 					null, null, Integer.valueOf(idImovel), null, null);
 			
-			Collection<DadosTabelaAtualizacaoCadastralHelper> atualizacoes = new AtualizacaoCadastralUtil().linhasAtualizacaoCadastral(
-					resumoImovel, map);
+			Collection<DadosTabelaAtualizacaoCadastralHelper> atualizacoes = new AtualizacaoCadastralUtil().linhasAtualizacaoCadastral(resumoImovel, map);
 			
-			if (!atualizacoes.isEmpty()) {
+			if (atualizacoes != null && !atualizacoes.isEmpty()) {
 				sessao.setAttribute("colecaoDadosTabelaAtualizacaoCadastral", atualizacoes);
-			}
+			}		
 			
 			ImovelControleAtualizacaoCadastral controle = fachada.pesquisarImovelControleAtualizacao(Integer.valueOf(idImovel));
 			
@@ -110,6 +117,8 @@ public class ExibirAtualizarDadosImovelAtualizacaoCadastralPopupAction extends G
 				if (controle.getSituacaoAtualizacaoCadastral().getId().equals(SituacaoAtualizacaoCadastral.EM_FISCALIZACAO)) {
 					fiscalizado = true;
 				}
+				
+				form.setSituacao(controle.getSituacaoAtualizacaoCadastral().getDescricao());
 			}
 			
 			sessao.setAttribute("fiscalizado", fiscalizado);

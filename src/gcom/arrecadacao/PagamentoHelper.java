@@ -78,4 +78,8 @@ public class PagamentoHelper {
 	public void setIdImovel(Integer idImovel) {
 		this.idImovel = idImovel;
 	}
+	
+	public boolean isPagamentoDeConta() {
+		return this.getIdConta() != null;
+	}
 }

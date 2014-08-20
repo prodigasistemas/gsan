@@ -1,10 +1,11 @@
 package gcom.atualizacaocadastral;
 
-import java.util.Date;
-
 import gcom.interceptor.ControleAlteracao;
 import gcom.interceptor.ObjetoTransacao;
 import gcom.util.filtro.Filtro;
+import gcom.util.filtro.ParametroSimples;
+
+import java.util.Date;
 
 @ControleAlteracao()
 public class ImagemRetorno extends ObjetoTransacao {
@@ -75,11 +76,15 @@ public class ImagemRetorno extends ObjetoTransacao {
 
 	@Override
 	public Filtro retornaFiltro() {
-		return null;
+		FiltroImagemRetorno filtro = new FiltroImagemRetorno(FiltroImagemRetorno.IMOVEL_ID);
+		filtro.adicionarParametro(new ParametroSimples(FiltroImagemRetorno.ID, this.getId()));
+		
+		return filtro;
 	}
 
 	@Override
 	public String[] retornaCamposChavePrimaria() {
-		return null;
+		String[] retorno = { "id" };
+		return retorno;
 	}
 }

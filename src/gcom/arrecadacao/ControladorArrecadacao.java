@@ -175,6 +175,7 @@ import gcom.faturamento.bean.CalcularValoresAguaEsgotoHelper;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaGeral;
 import gcom.faturamento.conta.ContaHistorico;
+import gcom.faturamento.conta.ContaMotivoRetificacao;
 import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.conta.FiltroConta;
 import gcom.faturamento.conta.FiltroContaHistorico;
@@ -194,6 +195,7 @@ import gcom.faturamento.debito.DebitoTipo;
 import gcom.faturamento.debito.FiltroDebitoACobrar;
 import gcom.faturamento.debito.FiltroDebitoACobrarHistorico;
 import gcom.faturamento.debito.FiltroDebitoTipo;
+import gcom.financeiro.FiltroFinanciamentoTipo;
 import gcom.financeiro.FinanciamentoTipo;
 import gcom.financeiro.lancamento.LancamentoItem;
 import gcom.financeiro.lancamento.LancamentoItemContabil;
@@ -13344,77 +13346,47 @@ public class ControladorArrecadacao implements SessionBean {
 	 * Responsável pela manutenção das informações de pagamento
 	 * 
 	 * [UC0266] Manter Pagamentos
-	 * 
-	 * Atualiza um pagamento no sistema, verificando se a atualização já foi
-	 * executada por outro usuário
-	 * 
 	 * [SB0001] Atualizar Pagamento
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 25/03/2006
 	 * 
 	 * @param pagamento
 	 * @throws ControladorException
 	 */
-	public void atualizarPagamento(Pagamento pagamento)
-			throws ControladorException {
-		
-		try{
+	public void atualizarPagamento(Pagamento pagamento) throws ControladorException {
 
-			// Cria o filtro de pagamento para pesquisar o pagamento na base
+		try{
 			FiltroPagamento filtroPagamento = new FiltroPagamento();
-	
-			// Parte de Validação com Timestamp
-	
-			// Seta no filtro o códigodo pagamento que está sendo atualizado
-			filtroPagamento.adicionarParametro(new ParametroSimples(
-					FiltroPagamento.ID, pagamento.getId()));
-			
+			filtroPagamento.adicionarParametro(new ParametroSimples(FiltroPagamento.ID, pagamento.getId()));
 			filtroPagamento.adicionarCaminhoParaCarregamentoEntidade("contaGeral.conta");
 			filtroPagamento.adicionarCaminhoParaCarregamentoEntidade("guiaPagamento");
 			filtroPagamento.adicionarCaminhoParaCarregamentoEntidade(FiltroPagamento.CONTA_HISTORICO);
 			
-			// Procura o pagamento na base
-			Pagamento pagamentoNaBase = (Pagamento) ((List) (getControladorUtil()
-					.pesquisar(filtroPagamento, Pagamento.class.getName()))).get(0);
+			Pagamento pagamentoNaBase = (Pagamento) ((List) (getControladorUtil().pesquisar(filtroPagamento, Pagamento.class.getName()))).get(0);
 	
 			// [FS0017] Atualização realizada por outro usuário
-			// Caso o usuário esteja tentando atualizar um pagamento e o mesmo já
-			// tenha
+			// Caso o usuário esteja tentando atualizar um pagamento e o mesmo já tenha
 			// sido atualizado durante a manutençaõ corrente
 			if (pagamentoNaBase.getUltimaAlteracao().after(pagamento.getUltimaAlteracao())) {
 				sessionContext.setRollbackOnly();
 				throw new ControladorException("atencao.atualizacao.timestamp");
 			}
 	
-			if (!pagamento.getValorPagamento().equals(
-					pagamentoNaBase.getValorPagamento())) {
+			if (!pagamento.getValorPagamento().equals(pagamentoNaBase.getValorPagamento())) {
 	
-				BigDecimal valorAModificar = pagamento.getValorPagamento()
-						.subtract(pagamentoNaBase.getValorPagamento());
+				BigDecimal valorAModificar = pagamento.getValorPagamento().subtract(pagamentoNaBase.getValorPagamento());
 	
 				AvisoBancario avisoBancario = pagamento.getAvisoBancario();
-				BigDecimal valorArrecadacao = avisoBancario
-						.getValorArrecadacaoCalculado();
+				BigDecimal valorArrecadacao = avisoBancario.getValorArrecadacaoCalculado();
 				valorArrecadacao = valorArrecadacao.add(valorAModificar);
 				avisoBancario.setValorArrecadacaoCalculado(valorArrecadacao);
 				avisoBancario.setUltimaAlteracao(new Date());
 	
 				getControladorUtil().atualizar(avisoBancario);
-	
 			}
 	
 			pagamento.setUltimaAlteracao(new Date());
 	
-			// Caso o pagamento não tenha sido atualizado por outro usuário durante
-			// a manutenção corrente
-			// atualiza pagamento no sistema
 			getControladorUtil().atualizar(pagamento);
 			
-			//CRC2725 - alterado por Vivianne Sousa - 15/09/2009 analista:Fátima
-			//[SB0005 - Verifica Associação Pagamento da Conta com Itens de Negativação].
-			//[SB0006 - Verifica Associação Pagamento da Guia com Itens de Negativação].
-			//[SB0010 - Verifica Associação Novo Tipo Documento do Pagamento com Itens de Negativação].
 			getControladorSpcSerasa().verificaAssociacaoPagamentoComItensNegativacao(pagamento, pagamentoNaBase);
 
 		} catch (ControladorException e) {
@@ -14946,7 +14918,7 @@ public class ControladorArrecadacao implements SessionBean {
 					conta.setId((Integer) dadosConta[0]);
 					conta.setValorAgua((BigDecimal) dadosConta[1]);
 					conta.setValorEsgoto((BigDecimal) dadosConta[2]);
-					conta.setDebitos((BigDecimal) dadosConta[3]);
+					conta.setValorDebitos((BigDecimal) dadosConta[3]);
 					conta.setValorCreditos((BigDecimal) dadosConta[4]);
 					conta.setValorImposto((BigDecimal) dadosConta[5]);
 					conta.setReferenciaContabil((Integer) dadosConta[6]);
@@ -19155,53 +19127,27 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 
 	/**
-	 * Metódo responsável por encerrar a arrecadação do mês.
-	 * 
 	 * [UC0276] Encerrar Arrecadação do Mês
-	 * 
-	 * @author Pedro Alexandre, Pedro Alexandre
-	 * @date 15/12/2006, 15/05/2008
 	 * 
 	 * @param colecaoIdsLocalidades
 	 * @throws ControladorException
 	 */
-	public void encerrarArrecadacaoMes(
-			Collection<Integer> colecaoIdsLocalidades,
-			int idFuncionalidadeIniciada) throws ControladorException {
+	public void encerrarArrecadacaoMes(Collection<Integer> colecaoIdsLocalidades, int idFuncionalidadeIniciada) throws ControladorException {
 
 		int idUnidadeIniciada = 0;
 
-		// -------------------------
-		//
-		// Registrar o início do processamento da Unidade de
-		// Processamento
-		// do Batch
-		//
-		// -------------------------
-
-		idUnidadeIniciada = getControladorBatch()
-				.iniciarUnidadeProcessamentoBatch(
+		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(
 						idFuncionalidadeIniciada,
 						UnidadeProcessamento.LOCALIDADE,
-						((Integer) Util
-								.retonarObjetoDeColecao(colecaoIdsLocalidades)));
+						((Integer) Util.retonarObjetoDeColecao(colecaoIdsLocalidades)));
 
 		try {
 
-			// Pesquisa os lançamento de item contábil cadastrados no sistema
-			Collection colecaoDadosLancamentosItemContabil = this.repositorioArrecadacao
-					.pesquisarDadosLancamentosItemContabil();
+			Collection colecaoDadosLancamentosItemContabil = this.repositorioArrecadacao.pesquisarDadosLancamentosItemContabil();
+			Collection<Integer> colecaoIdsCategorias = this.repositorioArrecadacao.pesquisarIdsCategorias();
 
-			// Pesquisa a coleção de categorias no sistema
-			Collection<Integer> colecaoIdsCategorias = this.repositorioArrecadacao
-					.pesquisarIdsCategorias();
-
-			// Cria a coleção que vai armazenar todos os resumos de arrecadação
-			// gerados
 			Collection<ResumoArrecadacao> colecaoResumoArrecadacao = new ArrayList();
 
-			// Cria as variaveis temporárias que serão utilizadas para gerar os
-			// resumos da arrecadação
 			ResumoArrecadacao resumoArrecadacaoTemp = new ResumoArrecadacao();
 			RecebimentoTipo recebimentoTipoTemp = new RecebimentoTipo();
 			LancamentoTipo lancamentoTipoTemp = new LancamentoTipo();
@@ -19216,8 +19162,7 @@ public class ControladorArrecadacao implements SessionBean {
 			BigDecimal valorExcedente = null;
 			Integer idImovel = null;
 
-			// Cria as variáveis para acumular os valores para gerar o resumo da
-			// arrecadação
+			// Cria as variáveis para acumular os valores para gerar o resumo da arrecadação
 			// Seqüêncial de Tipo de Lançamento 1100
 			BigDecimal valorAcumuladoSequenciaTipoLancamentoEntre800e1099 = BigDecimal.ZERO;
 			// Seqüêncial de Tipo de Lançamento 1600
@@ -19278,15 +19223,6 @@ public class ControladorArrecadacao implements SessionBean {
 			Map<Integer, BigDecimal> mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorPagamentoEmDuplicidade = new HashMap();
 			// Seqüêncial de Tipo de Lançamento 2200
 			Map<Integer, BigDecimal> mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorDocumentoInexistente = new HashMap();
-			
-			/**
-			 * TODO: COSANPA Mantis 615 - Detalhar contabilização de documentos
-			 * inexistentes
-			 * 
-			 * @author Wellington Rocha
-			 * @author Felipe Santos
-			 * @date 02/08/2012
-			 */
 			// Seqüêncial de Tipo de Lançamento 2210
 			Map<Integer, BigDecimal> mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorDocumentoInexistenteDebitoPrescrito = new HashMap();
 			// Seqüêncial de Tipo de Lançamento 2220
@@ -19295,9 +19231,6 @@ public class ControladorArrecadacao implements SessionBean {
 			Map<Integer, BigDecimal> mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorDocumentoInexistenteContaCancelada = new HashMap();
 			// Seqüêncial de Tipo de Lançamento 2240
 			Map<Integer, BigDecimal> mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorDocumentoInexistenteErroProcessamento = new HashMap();
-			
-			// ****************************************************************
-			
 			// Seqüêncial de Tipo de Lançamento 2300
 			Map<Integer, BigDecimal> mapValorPagamentoNaoClassificadoNoMesSituacaoAtualESituacaoAnteriorValorNaoConfere = new HashMap();
 			// Seqüêncial de Tipo de Lançamento 2440
@@ -19336,15 +19269,6 @@ public class ControladorArrecadacao implements SessionBean {
 			Map<Integer, BigDecimal> mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorPagamentoEmDuplicidade = new HashMap();
 			// Seqüêncial de Tipo de Lançamento 5900
 			Map<Integer, BigDecimal> mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoInexistente = new HashMap();
-			
-			/**
-			 * TODO: COSANPA Mantis 615 - Detalhar contabilização de documentos
-			 * inexistentes
-			 * 
-			 * @author Wellington Rocha
-			 * @author Felipe Santos
-			 * @date 02/08/2012
-			 */
 			// Seqüêncial de Tipo de Lançamento 5910
 			Map<Integer, BigDecimal> mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoInexistenteDebitoPrescrito = new HashMap();
 			// Seqüêncial de Tipo de Lançamento 5920
@@ -19353,9 +19277,6 @@ public class ControladorArrecadacao implements SessionBean {
 			Map<Integer, BigDecimal> mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoInexistenteContaCancelada = new HashMap();
 			// Seqüêncial de Tipo de Lançamento 5940
 			Map<Integer, BigDecimal> mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorDocumentoInexistenteErroProcessamento = new HashMap();
-			
-			// ****************************************************************
-			
 			// Seqüêncial de Tipo de Lançamento 6000
 			Map<Integer, BigDecimal> mapValorExcedentePagamentoNaoClassificadosComBaixaComandadaSituacaoAnteriorValorNaoConfere = new HashMap();
 			// Seqüêncial de Tipo de Lançamento 6200
@@ -19368,15 +19289,6 @@ public class ControladorArrecadacao implements SessionBean {
 			Map<Integer, BigDecimal> mapValorPagamentoAVistaCampanhaCriancaComDireitoDesconto = new HashMap();
 			// Seqüêncial de Tipo de Lançamento 6400
 			Map<Integer, BigDecimal> mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualDocumentoInexistente = new HashMap();
-			
-			/**
-			 * TODO: COSANPA Mantis 615 - Detalhar contabilização de documentos
-			 * inexistentes
-			 * 
-			 * @author Wellington Rocha
-			 * @author Felipe Santos
-			 * @date 02/08/2012
-			 */
 			// Seqüêncial de Tipo de Lançamento 6410
 			Map<Integer, BigDecimal> mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualDocumentoInexistenteDebitoPrescrito = new HashMap();
 			// Seqüêncial de Tipo de Lançamento 6420
@@ -19385,9 +19297,6 @@ public class ControladorArrecadacao implements SessionBean {
 			Map<Integer, BigDecimal> mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualDocumentoInexistenteContaCancelada = new HashMap();
 			// Seqüêncial de Tipo de Lançamento 6440
 			Map<Integer, BigDecimal> mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualDocumentoInexistenteErroProcessamento = new HashMap();
-			
-			// ****************************************************************
-			
 			// Seqüêncial de Tipo de Lançamento 6500
 			Map<Integer, BigDecimal> mapValorPagamentoNaoClassificadoNoMesEMesesAnterioresSituacaoAtualValorNaoConfere = new HashMap();
 			// Seqüêncial de Tipo de Lançamento 6700
@@ -19397,152 +19306,93 @@ public class ControladorArrecadacao implements SessionBean {
 			// Seqüêncial de Tipo de Lançamento 6900
 			Map<Integer, BigDecimal> mapValorDevolucaoNaoClassificadaMesEMesesAnterioresSituacaoAtualValorNaoConfere = new HashMap();
 
-			// Recupera os parâmetros do sistema
-			SistemaParametro sistemaParametro = getControladorUtil()
-					.pesquisarParametrosDoSistema();
+			SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
-			// [FS0001] - Verificar existência de dados
-			// Caso não exista dados no sistema de parâmetros levantauma exceção
 			if (getSistemaParametro() == null) {
-				throw new ControladorException(
-						"atencao.entidade_sem_dados_para_selecao", null,
-						"Sistema Parâmetro");
+				throw new ControladorException("atencao.entidade_sem_dados_para_selecao", null, "Sistema Parâmetro");
 			}
 
-			// Recupera o ano/mês da data atual
 			Integer anoMesCorrente = Util.recuperaAnoMesDaData(new Date());
+			Integer anoMesReferenciaArrecadacao = getSistemaParametro().getAnoMesArrecadacao();
 
-			// Recupera o ano/mês de referência da arrecadação dos parâmetros de
-			// sistema
-			Integer anoMesReferenciaArrecadacao = getSistemaParametro()
-					.getAnoMesArrecadacao();
-
-			// [FS0002 - Verificar ano/mês da data corrente maior que o ano/mês
-			// da arrecadação
-			if (anoMesCorrente.intValue() <= anoMesReferenciaArrecadacao
-					.intValue()) {
-				throw new ControladorException(
-						"atencao.arrecadacao.nao.pode.ser.fechada");
+			if (anoMesCorrente.intValue() <= anoMesReferenciaArrecadacao.intValue()) {
+				throw new ControladorException("atencao.arrecadacao.nao.pode.ser.fechada");
 			}
 
 			if (colecaoIdsLocalidades != null && !colecaoIdsLocalidades.isEmpty()) {
 
-				// Laço para gerar os resumos da arrecadação por localidade
 				for (Integer idLocalidade : colecaoIdsLocalidades) {
-
-					//Vivianne Sousa 11/08/2008
 					repositorioArrecadacao.excluirResumoArrecadacaoPorAnoMesArrecadacaoPorLocalidade(anoMesReferenciaArrecadacao,idLocalidade);
 					
-					// [FS0003] - Verificar a existência do resumo da arrecadação
 					Collection colecaoResumoArrecadacaoNaBase = repositorioArrecadacao.pesquisarResumoArrecadacaoPorAnoMesArrecadacao(anoMesReferenciaArrecadacao, idLocalidade);
 
-					// Caso já exista dados do resumo da arrecadação para o
-					// ano/mês de referência da arrecadação
-					if (colecaoResumoArrecadacaoNaBase != null
-							&& !colecaoResumoArrecadacaoNaBase.isEmpty()) {
-						throw new ControladorException(
-								"atencao.resumo.arrecadacao.ja.existe.dados");
+					if (colecaoResumoArrecadacaoNaBase != null && !colecaoResumoArrecadacaoNaBase.isEmpty()) {
+						throw new ControladorException("atencao.resumo.arrecadacao.ja.existe.dados");
 					}
 
-					Localidade localidade = new Localidade();
-					localidade.setId(idLocalidade);
+					Localidade localidade = new Localidade(idLocalidade);
 
-					Integer idGerenciaRegional = this
-							.getControladorLocalidade()
-							.pesquisarIdGerenciaParaLocalidade(idLocalidade);
-					GerenciaRegional gerenciaRegional = new GerenciaRegional();
-					gerenciaRegional.setId(idGerenciaRegional);
+					Integer idGerenciaRegional = this.getControladorLocalidade().pesquisarIdGerenciaParaLocalidade(idLocalidade);
+					GerenciaRegional gerenciaRegional = new GerenciaRegional(idGerenciaRegional);
 
-					// Seqüêncial de Tipo de Lançamento 2700
-					// Este map vai armazenar para cada item lançamento contábil
-					// um map
-					// para cada categoria um valor de devolução correspondente
+					localidade.setGerenciaRegional(gerenciaRegional);
+					// Seqüêncial de Tipo de Lançamento 2700 - Este map vai armazenar para cada item lançamento contábil
+					// um map para cada categoria um valor de devolução correspondente
 					Map<Integer, Map> mapValorDevolucaoSituacaoAtualDevolucaoOutrosValoresPorLancamentoContabil = new HashMap();
 
-					// Seqüêncial de Tipo de Lançamento 5600
-					// Este map vai armazenar para cada item lançamento contábil
-					// um map
-					// para cada categoria um valor de devolução correspondente
+					// Seqüêncial de Tipo de Lançamento 5600 - Este map vai armazenar para cada item lançamento contábil
+					// um map para cada categoria um valor de devolução correspondente
 					Map<Integer, Map> mapValorDevolucaoEfetuadasEmMesesAtenrioresSituacaoAtualDevolucaoOutrosValoresPorLancamentoContabil = new HashMap();
 
 					/*
-					 * Essa parte vem antes do laço de categorias porque os
-					 * items aqui não estão relacionados diretamente com a
-					 * categoria. Os valores serão armazenados no map
-					 * correspondente do item com a chave com o id de categoria
-					 * e o valor correspondente, Depois esses valores serão
-					 * recuperados para gerar o resumo da arrecadação
+					 * Essa parte vem antes do laço de categorias porque os items aqui não estão relacionados diretamente com a
+					 * categoria. Os valores serão armazenados no map correspondente do item com a chave com o id de categoria
+					 * e o valor correspondente, Depois esses valores serão recuperados para gerar o resumo da arrecadação
 					 */
 
 					/*
-					 * Seqüêncial de Tipo de Lançamento 1200 Para cada grupo de
-					 * pagamentos classificados acumula o valor do imposto de
-					 * renda pesquisando as contas impostos de duzidos e obtém
-					 * as categorias do imóvel da conta relacionada e para cada
+					 * Seqüêncial de Tipo de Lançamento 1200 Para cada grupo de pagamentos classificados acumula o valor do imposto de
+					 * renda pesquisando as contas impostos de duzidos e obtém as categorias do imóvel da conta relacionada e para cada
 					 * categoria retornada obtém o valor por categoria.
 					 */
 					Collection colecaoContasImpostosDeduzidosPagamentosClassificadosContaImpostoTipoIR = repositorioArrecadacao
 							.pesquisarContasImpostosDeduzidosPagamentosClassificadosContaPorTipoImposto(
-									idLocalidade, anoMesReferenciaArrecadacao,
-									ImpostoTipo.IR);
+									idLocalidade, anoMesReferenciaArrecadacao, ImpostoTipo.IR);
 
 					if (colecaoContasImpostosDeduzidosPagamentosClassificadosContaImpostoTipoIR != null
-							&& colecaoContasImpostosDeduzidosPagamentosClassificadosContaImpostoTipoIR
-									.size() > 0) {
+							&& colecaoContasImpostosDeduzidosPagamentosClassificadosContaImpostoTipoIR.size() > 0) {
 						for (Object dadosContaImpostosDeduzidos : colecaoContasImpostosDeduzidosPagamentosClassificadosContaImpostoTipoIR) {
 
 							arrayDadosContaImpostosDeduzidos = (Object[]) dadosContaImpostosDeduzidos;
 
 							valorImposto = (BigDecimal) arrayDadosContaImpostosDeduzidos[0];
 							idImovel = (Integer) arrayDadosContaImpostosDeduzidos[1];
-							imovel = new Imovel();
-							imovel.setId(idImovel);
+							imovel = new Imovel(idImovel);
 
 							if (idImovel != null) {
 
-								// [UC0108 - Obter Quantidade de Economias por
-								// Categoria]
-								Collection colecaoCategoriasImovel = getControladorImovel()
-										.obterQuantidadeEconomiasCategoria(
-												imovel);
-								Iterator iteratorColecaoCategoriasImovel = colecaoCategoriasImovel
-										.iterator();
+								Collection colecaoCategoriasImovel = getControladorImovel().obterQuantidadeEconomiasCategoria(imovel);
+								Iterator iteratorColecaoCategoriasImovel = colecaoCategoriasImovel.iterator();
 
-								// [UC0185 - Obter Valor por Categoria]
-								Iterator iteratorColecaoValorIRPorCategoria = (getControladorImovel()
-										.obterValorPorCategoria(
-												colecaoCategoriasImovel,
-												valorImposto)).iterator();
+								Iterator iteratorColecaoValorIRPorCategoria = (getControladorImovel().obterValorPorCategoria(
+												colecaoCategoriasImovel, valorImposto)).iterator();
 
-								while (iteratorColecaoCategoriasImovel
-										.hasNext()
-										&& iteratorColecaoValorIRPorCategoria
-												.hasNext()) {
-									Categoria categoria = (Categoria) iteratorColecaoCategoriasImovel
-											.next();
+								while (iteratorColecaoCategoriasImovel.hasNext() && iteratorColecaoValorIRPorCategoria.hasNext()) {
+									
+									Categoria categoria = (Categoria) iteratorColecaoCategoriasImovel.next();
+									BigDecimal valorIR = (BigDecimal) iteratorColecaoValorIRPorCategoria.next();
 
-									BigDecimal valorIR = (BigDecimal) iteratorColecaoValorIRPorCategoria
-											.next();
-
-									if (!mapValorIRPagamentosClassificadosConta
-											.containsKey(categoria.getId())) {
-										mapValorIRPagamentosClassificadosConta
-												.put(categoria.getId(),
-														BigDecimal.ZERO);
+									if (!mapValorIRPagamentosClassificadosConta.containsKey(categoria.getId())) {
+										mapValorIRPagamentosClassificadosConta.put(categoria.getId(), BigDecimal.ZERO);
 									}
 
 									mapValorIRPagamentosClassificadosConta.put(
 											categoria.getId(),
-											mapValorIRPagamentosClassificadosConta
-													.get(categoria.getId())
-													.add(valorIR));
+											mapValorIRPagamentosClassificadosConta.get(categoria.getId()).add(valorIR));
 								}
 							} else {
-								if (!mapValorIRPagamentosClassificadosConta
-										.containsKey(Categoria.RESIDENCIAL)) {
-									mapValorIRPagamentosClassificadosConta.put(
-											Categoria.RESIDENCIAL,
-											BigDecimal.ZERO);
+								if (!mapValorIRPagamentosClassificadosConta.containsKey(Categoria.RESIDENCIAL)) {
+									mapValorIRPagamentosClassificadosConta.put(Categoria.RESIDENCIAL, BigDecimal.ZERO);
 								}
 								mapValorIRPagamentosClassificadosConta.put(
 										Categoria.RESIDENCIAL,
@@ -19554,10 +19404,8 @@ public class ControladorArrecadacao implements SessionBean {
 					}
 
 					/*
-					 * Seqüêncial de Tipo de Lançamento 1300 Para cada grupo de
-					 * pagamentos classificados acumula o valor da CSLL
-					 * pesquisando as contas impostos de duzidos e obtém as
-					 * categorias do imóvel da conta relacionada e para cada
+					 * Seqüêncial de Tipo de Lançamento 1300 Para cada grupo de pagamentos classificados acumula o valor da CSLL
+					 * pesquisando as contas impostos de duzidos e obtém as categorias do imóvel da conta relacionada e para cada
 					 * categoria retornada obtém o valor por categoria.
 					 */
 					Collection colecaoContasImpostosDeduzidosPagamentosClassificadosContaImpostoTipoCSLL = repositorioArrecadacao
@@ -19579,35 +19427,20 @@ public class ControladorArrecadacao implements SessionBean {
 
 							if (idImovel != null) {
 
-								// [UC0108 - Obter Quantidade de Economias por
-								// Categoria]
-								Collection colecaoCategoriasImovel = getControladorImovel()
-										.obterQuantidadeEconomiasCategoria(
-												imovel);
-								Iterator iteratorColecaoCategoriasImovel = colecaoCategoriasImovel
-										.iterator();
+								Collection colecaoCategoriasImovel = getControladorImovel().obterQuantidadeEconomiasCategoria(imovel);
+								Iterator iteratorColecaoCategoriasImovel = colecaoCategoriasImovel.iterator();
 
-								// [UC0185 - Obter Valor por Categoria]
 								Iterator iteratorColecaoValorCSLLPorCategoria = (getControladorImovel()
 										.obterValorPorCategoria(
 												colecaoCategoriasImovel,
 												valorImposto)).iterator();
 
-								while (iteratorColecaoCategoriasImovel
-										.hasNext()
-										&& iteratorColecaoValorCSLLPorCategoria
-												.hasNext()) {
-									Categoria categoria = (Categoria) iteratorColecaoCategoriasImovel
-											.next();
+								while (iteratorColecaoCategoriasImovel.hasNext() && iteratorColecaoValorCSLLPorCategoria.hasNext()) {
+									Categoria categoria = (Categoria) iteratorColecaoCategoriasImovel.next();
+									BigDecimal valorCSLL = (BigDecimal) iteratorColecaoValorCSLLPorCategoria.next();
 
-									BigDecimal valorCSLL = (BigDecimal) iteratorColecaoValorCSLLPorCategoria
-											.next();
-
-									if (!mapValorCSLLPagamentosClassificadosConta
-											.containsKey(categoria.getId())) {
-										mapValorCSLLPagamentosClassificadosConta
-												.put(categoria.getId(),
-														BigDecimal.ZERO);
+									if (!mapValorCSLLPagamentosClassificadosConta.containsKey(categoria.getId())) {
+										mapValorCSLLPagamentosClassificadosConta.put(categoria.getId(),	BigDecimal.ZERO);
 									}
 
 									mapValorCSLLPagamentosClassificadosConta
@@ -22343,82 +22176,6 @@ public class ControladorArrecadacao implements SessionBean {
 												
 					}
 					
-					/*
-					 * Autor: Vivianne sousa  Data: 01/06/2009
-					 *  
-					 * Seqüêncial de Tipo de Lançamento 6360 Para as devoluções
-					 * do tipo desconto por pagamento a vista pela campanha da criança, caracterizadas pelo 
-					 * tipo de documento agregador = 14 e credito a realizar nulo. 
-					 */
-//					if (colecaoDevolucoesDescontosPagamentoAVistaCampanhaCrianca != null && colecaoDevolucoesDescontosPagamentoAVistaCampanhaCrianca.size() > 0) {
-//							
-//						BigDecimal valorDevolucaoComDireitoDesconto = BigDecimal.ZERO;
-//						BigDecimal valorCem = new BigDecimal("100.00");
-//						Categoria categoriaPrincipal = null;
-//						for (Object dadosDevolucao : colecaoDevolucoesDescontosPagamentoAVistaCampanhaCrianca) {
-//	
-//							arrayDadosDevolucao = (Object[]) dadosDevolucao;
-//	
-//							valorDevolucao = (BigDecimal) arrayDadosDevolucao[0];
-//							idImovel = (Integer) arrayDadosDevolucao[1];
-//							imovel = new Imovel();
-//							imovel.setId(idImovel);
-//							
-//							categoriaPrincipal  = getControladorImovel().obterPrincipalCategoriaImovel(idImovel);
-//							
-//							//[SB0008] Obter perfil
-//							ParcelamentoPerfil parcelamentoPerfil = getControladorCobranca().obterPerfilParcelamento(
-//									null,null,null,null,idRDComPercentualDoacao,categoriaPrincipal.getId());
-//							
-//							if(parcelamentoPerfil != null){
-//								
-//								//PCPF_PCDESCONTOTARSOC da tabela PARCELAMENTO_PERFIL
-//								BigDecimal parcentualDescontoAVista = parcelamentoPerfil.getPercentualDescontoAVista();
-//							
-//								
-//								//[SB0009] - Calcula o valor com Direito ao Desconto
-//								//O valor com direito ao desconto será 
-//								//o devl_vldevolucao da tabela DEVOLUÇÃO x 100 /  PCPF_PCDESCONTOTARSOC da tabela PARCELAMENTO_PERFIL.
-//								valorDevolucaoComDireitoDesconto = (valorDevolucao.multiply(valorCem)).divide(parcentualDescontoAVista);
-////								valorDevolucaoComDireitoDesconto.setScale(2,BigDecimal.ROUND_DOWN);
-//								if (idImovel != null) {
-//									
-//									// [UC0108 - Obter Quantidade de Economias por Categoria]
-//									Collection colecaoCategoriasImovel = getControladorImovel().obterQuantidadeEconomiasCategoria(imovel);
-//									Iterator iteratorColecaoCategoriasImovel = colecaoCategoriasImovel.iterator();
-//		
-//									// [UC0185 - Obter Valor por Categoria]
-//									Iterator iteratorColecaoValorDevolucaoDescontosPagamentoAVistaCampanhaCrianca = (getControladorImovel().obterValorPorCategoria(colecaoCategoriasImovel,valorDevolucaoComDireitoDesconto)).iterator();
-//		
-//									while (iteratorColecaoCategoriasImovel.hasNext() && iteratorColecaoValorDevolucaoDescontosPagamentoAVistaCampanhaCrianca.hasNext()) {
-//										Categoria categoria = (Categoria) iteratorColecaoCategoriasImovel.next();
-//		
-//										valorDevolucaoComDireitoDesconto = (BigDecimal) iteratorColecaoValorDevolucaoDescontosPagamentoAVistaCampanhaCrianca.next();
-//										
-//										if (!mapValorPagamentoAVistaCampanhaCriancaComDireitoDesconto.containsKey(categoria.getId())) {
-//											mapValorPagamentoAVistaCampanhaCriancaComDireitoDesconto.put(categoria.getId(),BigDecimal.ZERO);
-//										}
-//		
-//										mapValorPagamentoAVistaCampanhaCriancaComDireitoDesconto.put(categoria.getId(), 
-//												mapValorPagamentoAVistaCampanhaCriancaComDireitoDesconto.get(categoria.getId()).add(valorDevolucaoComDireitoDesconto));
-//									}
-//		
-//								} else {
-//									if (!mapValorPagamentoAVistaCampanhaCriancaComDireitoDesconto.containsKey(Categoria.RESIDENCIAL)) {
-//										mapValorPagamentoAVistaCampanhaCriancaComDireitoDesconto.put(Categoria.RESIDENCIAL,BigDecimal.ZERO);
-//									}
-//									mapValorPagamentoAVistaCampanhaCriancaComDireitoDesconto.put(Categoria.RESIDENCIAL,
-//											mapValorPagamentoAVistaCampanhaCriancaComDireitoDesconto.get(Categoria.RESIDENCIAL).add(valorDevolucaoComDireitoDesconto));
-//								}
-//								
-//							}
-//							
-//						}
-//							
-//						
-//					}
-					
-					
 					//////////////////////////////////VIVI //////////////////////////////////////////////
 					
 					/*
@@ -23260,38 +23017,43 @@ public class ControladorArrecadacao implements SessionBean {
 					lancamentoItemTemp = new LancamentoItem();
 
 					resumoArrecadacaoTemp = new ResumoArrecadacao();
-					recebimentoTipoTemp
-							.setId(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
-					lancamentoTipoTemp
-							.setId(LancamentoTipo.CREDITOS_REALIZADOS_SUP_CONTAS);
-					lancamentoItemTemp
-							.setId(LancamentoItem.CONTAS_PAGAS_EM_EXCESSO);
-					resumoArrecadacaoTemp
-							.setGerenciaRegional(gerenciaRegional);
+					recebimentoTipoTemp.setId(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
+					lancamentoTipoTemp.setId(LancamentoTipo.CREDITOS_REALIZADOS_SUP_CONTAS);
+					lancamentoItemTemp.setId(LancamentoItem.CONTAS_PAGAS_EM_EXCESSO);
+					resumoArrecadacaoTemp.setGerenciaRegional(gerenciaRegional);
 					resumoArrecadacaoTemp.setLocalidade(localidade);
 					resumoArrecadacaoTemp.setCategoria(categoria);
-					resumoArrecadacaoTemp
-							.setAnoMesReferencia(anoMesReferenciaArrecadacao);
-					resumoArrecadacaoTemp
-							.setRecebimentoTipo(recebimentoTipoTemp);
-					resumoArrecadacaoTemp
-							.setLancamentoTipo(lancamentoTipoTemp);
-					resumoArrecadacaoTemp
-							.setLancamentoItem(lancamentoItemTemp);
-					resumoArrecadacaoTemp
-							.setLancamentoItemContabil(null);
-					resumoArrecadacaoTemp
-							.setSequenciaTipoLancamento(new Short("800"));
-					resumoArrecadacaoTemp
-							.setSequenciaItemTipoLancamento(new Short(
-									"0"));
-					resumoArrecadacaoTemp
-							.setUltimaAlteracao(new Date());
-					resumoArrecadacaoTemp
-							.setValorItemArrecadacao(somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoContasPagasEmExcesso);
+					resumoArrecadacaoTemp.setAnoMesReferencia(anoMesReferenciaArrecadacao);
+					resumoArrecadacaoTemp.setRecebimentoTipo(recebimentoTipoTemp);
+					resumoArrecadacaoTemp.setLancamentoTipo(lancamentoTipoTemp);
+					resumoArrecadacaoTemp.setLancamentoItem(lancamentoItemTemp);
+					resumoArrecadacaoTemp.setLancamentoItemContabil(null);
+					resumoArrecadacaoTemp.setSequenciaTipoLancamento(new Short("800"));
+					resumoArrecadacaoTemp.setSequenciaItemTipoLancamento(new Short("0"));
+					resumoArrecadacaoTemp.setUltimaAlteracao(new Date());
+					resumoArrecadacaoTemp.setValorItemArrecadacao(somaValorCreditoRealizadoPagamentosClassificadosContaOrigemCreditoContasPagasEmExcesso);
+					
 					colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
 				}
-						/*
+				
+				resumoArrecadacaoTemp = this.contabilizarRecuperacaoCredito(anoMesReferenciaArrecadacao, localidade, categoria, 
+						CreditoOrigem.RECUPERACAO_CREDITO_CONTA_CANCELADA, LancamentoItem.RECUPERACAO_CREDITO_CONTA_CANCELADA);
+				
+				if (resumoArrecadacaoTemp != null) {
+					colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
+					valorAcumuladoSequenciaTipoLancamentoEntre800e1099 = valorAcumuladoSequenciaTipoLancamentoEntre800e1099
+							.add(resumoArrecadacaoTemp.getValorItemArrecadacao());
+				}
+				
+				resumoArrecadacaoTemp = this.contabilizarRecuperacaoCredito(anoMesReferenciaArrecadacao, localidade, categoria, 
+						CreditoOrigem.RECUPERACAO_CREDITO_CONTA_PARCELADA, LancamentoItem.RECUPERACAO_CREDITO_CONTA_PARCELADA);
+				
+				if (resumoArrecadacaoTemp != null) {
+					colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
+					valorAcumuladoSequenciaTipoLancamentoEntre800e1099 = valorAcumuladoSequenciaTipoLancamentoEntre800e1099
+							.add(resumoArrecadacaoTemp.getValorItemArrecadacao());
+				}
+				/*
 						 * Seqüêncial de Tipo de Lançamento 1000 Para os
 						 * pagamento classificados de conta acumula o valor dos
 						 * créditos realizados por categoria para a origem do
@@ -28750,15 +28512,11 @@ public class ControladorArrecadacao implements SessionBean {
 							valorAcumuladoSequenciaTipoLancamentoEntre800e1099 = BigDecimal.ZERO;
 						}
 
-						// Seqüêncial de Tipo de Lançamento 2000 (Seqüêncial de
-						// Tipo de
-						// Lançamento 1600 + 1700 a 1999)
+						// Seqüêncial de Tipo de Lançamento 2000 (Seqüêncial de Tipo de Lançamento 1600 + 1700 a 1999)
 						valorAcumuladoSequenciaTipoLancamentoEntre0e799Subtraindo1100eEntre1200e1599SomandoSequenciaEntre1700e1999 = valorAcumuladoSequenciaTipoLancamentoEntre0e799Subtraindo1100eEntre1200e1599SomandoSequenciaEntre1700e1999
 								.add(valorAcumuladoSequenciaTipoLancamentoEntre0e799Subtraindo1100eEntre1200e1599);
 
-						// Seqüêncial de Tipo de Lançamento 2500 (Seqüêncial de
-						// Tipo de
-						// Lançamento 2000 e 2400)
+						// Seqüêncial de Tipo de Lançamento 2500 (Seqüêncial de Tipo de Lançamento 2000 e 2400)
 						// Soma de 2000 a 2400 e subtrair a soma de 2440 e 2470
 						valorAcumuladoSequenciaTipoLancamentoIgual2000e2400 = valorAcumuladoSequenciaTipoLancamentoIgual2000e2400
 								.add(valorAcumuladoSequenciaTipoLancamentoEntre0e799Subtraindo1100eEntre1200e1599SomandoSequenciaEntre1700e1999);
@@ -28768,41 +28526,25 @@ public class ControladorArrecadacao implements SessionBean {
 						if (valorAcumuladoSequenciaTipoLancamentoEntre0e799Subtraindo1100eEntre1200e1599SomandoSequenciaEntre1700e1999 != null
 								&& valorAcumuladoSequenciaTipoLancamentoEntre0e799Subtraindo1100eEntre1200e1599SomandoSequenciaEntre1700e1999
 										.doubleValue() > 0.00) {
-							recebimentoTipoTemp = new RecebimentoTipo();
-							lancamentoTipoTemp = new LancamentoTipo();
-							lancamentoItemTemp = new LancamentoItem();
+							recebimentoTipoTemp = new RecebimentoTipo(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
+							lancamentoTipoTemp = new LancamentoTipo(LancamentoTipo.TOTAL_DOS_RECEBIMENTOS_CLASSIFICADOS);
+							lancamentoItemTemp = new LancamentoItem(LancamentoItem.TOTAL_DOS_RECEBIMENTOS_CLASSIFICADOS);
 
 							resumoArrecadacaoTemp = new ResumoArrecadacao();
-							recebimentoTipoTemp
-									.setId(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS);
-							lancamentoTipoTemp
-									.setId(LancamentoTipo.TOTAL_DOS_RECEBIMENTOS_CLASSIFICADOS);
-							lancamentoItemTemp
-									.setId(LancamentoItem.TOTAL_DOS_RECEBIMENTOS_CLASSIFICADOS);
-							resumoArrecadacaoTemp
-									.setGerenciaRegional(gerenciaRegional);
+							
+							resumoArrecadacaoTemp.setGerenciaRegional(gerenciaRegional);
 							resumoArrecadacaoTemp.setLocalidade(localidade);
 							resumoArrecadacaoTemp.setCategoria(categoria);
-							resumoArrecadacaoTemp
-									.setAnoMesReferencia(anoMesReferenciaArrecadacao);
-							resumoArrecadacaoTemp
-									.setRecebimentoTipo(recebimentoTipoTemp);
-							resumoArrecadacaoTemp
-									.setLancamentoTipo(lancamentoTipoTemp);
-							resumoArrecadacaoTemp
-									.setLancamentoItem(lancamentoItemTemp);
-							resumoArrecadacaoTemp
-									.setLancamentoItemContabil(null);
-							resumoArrecadacaoTemp
-									.setSequenciaTipoLancamento(new Short(
-											"2000"));
-							resumoArrecadacaoTemp
-									.setSequenciaItemTipoLancamento(new Short(
-											"0"));
-							resumoArrecadacaoTemp
-									.setUltimaAlteracao(new Date());
-							resumoArrecadacaoTemp
-									.setValorItemArrecadacao(valorAcumuladoSequenciaTipoLancamentoEntre0e799Subtraindo1100eEntre1200e1599SomandoSequenciaEntre1700e1999);
+							resumoArrecadacaoTemp.setAnoMesReferencia(anoMesReferenciaArrecadacao);
+							resumoArrecadacaoTemp.setRecebimentoTipo(recebimentoTipoTemp);
+							resumoArrecadacaoTemp.setLancamentoTipo(lancamentoTipoTemp);
+							resumoArrecadacaoTemp.setLancamentoItem(lancamentoItemTemp);
+							resumoArrecadacaoTemp.setLancamentoItemContabil(null);
+							resumoArrecadacaoTemp.setSequenciaTipoLancamento(new Short("2000"));
+							resumoArrecadacaoTemp.setSequenciaItemTipoLancamento(new Short("0"));
+							resumoArrecadacaoTemp.setUltimaAlteracao(new Date());
+							resumoArrecadacaoTemp.setValorItemArrecadacao(valorAcumuladoSequenciaTipoLancamentoEntre0e799Subtraindo1100eEntre1200e1599SomandoSequenciaEntre1700e1999);
+							
 							colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
 
 							valorAcumuladoSequenciaTipoLancamentoEntre0e799Subtraindo1100eEntre1200e1599SomandoSequenciaEntre1700e1999 = BigDecimal.ZERO;
@@ -29979,6 +29721,34 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 
 	}
+	
+	private ResumoArrecadacao contabilizarRecuperacaoCredito(Integer referenciaArrecadacao, Localidade localidade, Categoria categoria, 
+			Integer idCreditoOrigem, Integer idLancamentoItem) throws ErroRepositorioException {
+		
+		BigDecimal valorCreditos = repositorioArrecadacao.acumularValorCreditoRealizadoPagamentosClassificadosContaOrigemCredito(
+						localidade.getId(), referenciaArrecadacao, categoria.getId(), idCreditoOrigem);
+		
+		ResumoArrecadacao resumoArrecadacao = null;
+		if (valorCreditos != null && valorCreditos.doubleValue() > 0.00) {
+			
+			resumoArrecadacao = new ResumoArrecadacao();
+			
+			resumoArrecadacao.setGerenciaRegional(localidade.getGerenciaRegional());
+			resumoArrecadacao.setLocalidade(localidade);
+			resumoArrecadacao.setCategoria(categoria);
+			resumoArrecadacao.setAnoMesReferencia(referenciaArrecadacao);
+			resumoArrecadacao.setRecebimentoTipo(new RecebimentoTipo(RecebimentoTipo.RECEBIMENTOS_CLASSIFICADOS));
+			resumoArrecadacao.setLancamentoTipo(new LancamentoTipo(LancamentoTipo.CREDITOS_REALIZADOS_SUP_CONTAS));
+			resumoArrecadacao.setLancamentoItem(new LancamentoItem(idLancamentoItem));
+			resumoArrecadacao.setLancamentoItemContabil(null);
+			resumoArrecadacao.setSequenciaTipoLancamento(null);
+			resumoArrecadacao.setSequenciaItemTipoLancamento(null);
+			resumoArrecadacao.setUltimaAlteracao(new Date());
+			resumoArrecadacao.setValorItemArrecadacao(valorCreditos);
+		}
+		
+		return resumoArrecadacao;
+	}
 
 	/**
 	 * [UC0276] Encerrar Arrecadação do Mês
@@ -30042,7 +29812,7 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 
-	public void processarPagamentosDiferencaDoisReais(Integer anoMesReferenciaArrecadacao, Localidade localidade, Integer idFuncionalidadeIniciada) throws Exception{
+	public void processarPagamentosDiferencaDoisReais(Integer referenciaArrecadacao, Localidade localidade, Integer idFuncionalidadeIniciada) throws Exception{
 		
 		int idUnidadeIniciada = 0;
 		
@@ -30050,26 +29820,37 @@ public class ControladorArrecadacao implements SessionBean {
 
 		try {
 			
-			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(
-					idFuncionalidadeIniciada, UnidadeProcessamento.LOCALIDADE, idLocalidade);
+			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.LOCALIDADE, idLocalidade);
 		
-			logger.info("Geracao de debito ou credito para pgtos classificados em " + anoMesReferenciaArrecadacao + " da localidade " + idLocalidade);
+			logger.info("Geracao de debito ou credito para pgtos classificados em " + referenciaArrecadacao + " da localidade " + idLocalidade);
 			
 			Collection<PagamentoHelper> pagamentos = repositorioArrecadacao.pesquisarValoresPagamentos(PagamentoSituacao.PAGAMENTO_CLASSIFICADO, 
 					idLocalidade,
-					anoMesReferenciaArrecadacao);
+					referenciaArrecadacao);
 			
 			logger.info("    Qtd de pagamentos: " + pagamentos.size() + " na localidade: " + idLocalidade);
 			
+			Integer referenciaContabil = Util.somaMesAnoMesReferencia(referenciaArrecadacao, 1);
+
 			for (PagamentoHelper pagamentoHelper : pagamentos) {
-				if (possuiDiferencaAte2(pagamentoHelper)) {
-					BigDecimal diferenca = pagamentoHelper.getValorPagamento().subtract(pagamentoHelper.getValorDocumento());
+				if (pagamentoHelper.isPagamentoDeConta() && possuiDiferencaAte2(pagamentoHelper)) {
 					
+					BigDecimal diferenca = pagamentoHelper.getValorPagamento().subtract(pagamentoHelper.getValorDocumento());
+					Conta novaConta = null;
 					if (diferenca.doubleValue() > 0.0){
-						inserirCreditoARealizar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca);
+						CreditoARealizar credito = inserirCreditoARealizar(referenciaArrecadacao, referenciaContabil, pagamentoHelper, diferenca);
+						novaConta = this.retificarContaComDebitoDiferenca2Reais(referenciaArrecadacao, pagamentoHelper, diferenca);
+						
 					}else if (diferenca.doubleValue() < 0.0){
-						inserirDebitoACobrar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca.abs());
-					}				
+						
+						DebitoACobrar debito = inserirDebitoACobrar(referenciaContabil, referenciaArrecadacao, pagamentoHelper, diferenca.abs(), (short) 0);
+						novaConta = this.retificarContaComCreditoDiferenca2Reais(referenciaArrecadacao, pagamentoHelper, diferenca);
+					}
+					
+					if (novaConta != null) {
+						Pagamento pagamento = this.pesquisarPagamentoDeConta(pagamentoHelper.getIdConta());
+						this.alterarContaDoPagamento(pagamento, novaConta);
+					}
 				}
 			}
 			
@@ -30081,23 +29862,48 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 	
-	private void inserirDebitoACobrar(Integer anoMesReferenciaArrecadacao, PagamentoHelper pagamentoHelper, BigDecimal valor) throws Exception {
+	private Conta retificarContaComDebitoDiferenca2Reais(Integer referenciaArrecadacao, PagamentoHelper pagamentoHelper, BigDecimal diferenca) throws Exception {
+		Conta novaConta = null;
+		
+		DebitoACobrar debito = inserirDebitoACobrar(referenciaArrecadacao, referenciaArrecadacao, pagamentoHelper, diferenca.abs(), (short) 1);
+		novaConta = getControladorFaturamento().incluirDebitoContaRetificadaPagamentosDiferenca2Reais(pagamentoHelper.getIdConta(), debito);
+		
+		return novaConta;
+	}
+	
+	private Conta retificarContaComCreditoDiferenca2Reais(Integer referenciaArrecadacao, PagamentoHelper pagamentoHelper, BigDecimal diferenca) throws Exception {
+		Conta novaConta = null;
+		
+		CreditoARealizar credito = inserirCreditoARealizar(referenciaArrecadacao, referenciaArrecadacao, pagamentoHelper, diferenca);
+		novaConta = getControladorFaturamento().incluirCreditoContaRetificadaPagamentosDiferenca2Reais(pagamentoHelper.getIdConta(), credito);
+		
+		return novaConta;
+	}
+	
+	private void alterarContaDoPagamento(Pagamento pagamento, Conta novaConta) throws ErroRepositorioException {
+		if (pagamento != null && novaConta != null) {
+			pagamento.setContaGeral(novaConta.getContaGeral());
+			pagamento.setUltimaAlteracao(new Date());
+			repositorioUtil.atualizar(pagamento);
+		}
+		
+	}
+	
+	private DebitoACobrar inserirDebitoACobrar(Integer referenciaArrecadacao, Integer referenciaDebito, PagamentoHelper pagamentoHelper, BigDecimal valor, short qtdParcelasCobradas) throws Exception {
 		
 		Imovel imovel = null;
 		if (pagamentoHelper.getIdImovel() != null){
 			imovel = repositorioImovel.pesquisarDadosImovel(pagamentoHelper.getIdImovel());
 		}
 		
-		DebitoTipo tipo = new DebitoTipo();
-		tipo.setId(DebitoTipo.VALOR_NAO_CONFERE);
-		
+		DebitoTipo tipo = new DebitoTipo(DebitoTipo.VALOR_NAO_CONFERE);
 		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
-		getControladorFaturamento().gerarDebitoACobrar(anoMesReferenciaArrecadacao
+		return getControladorFaturamento().gerarDebitoACobrar(referenciaArrecadacao
 				, sistemaParametro.getAnoMesFaturamento()
 				, imovel
-				, (short) 1, (short) 0
-				, Util.somaMesAnoMesReferencia(anoMesReferenciaArrecadacao, 1)
+				, (short) 1, qtdParcelasCobradas
+				, referenciaDebito
 				, valor, tipo, null);
 	}
 	
@@ -30112,16 +29918,21 @@ public class ControladorArrecadacao implements SessionBean {
 		return anoMesReferenciaContabil;
 	}
 	
-	private void inserirCreditoARealizar(Integer anoMesReferenciaArrecadacao, PagamentoHelper pagamentoHelper, BigDecimal valor) throws Exception {
+	private CreditoARealizar inserirCreditoARealizar(Integer referenciaArrecadacao, Integer referenciaContabil, PagamentoHelper pagamentoHelper, BigDecimal valor) throws Exception {
 		CreditoARealizar credito = new CreditoARealizar();
 		credito.setGeracaoCredito(Calendar.getInstance().getTime());
 		credito.setAnoMesReferenciaCredito(pagamentoHelper.getDataPagamento());
-		credito.setAnoMesReferenciaContabil(anoMesReferenciaArrecadacao);
-		credito.setAnoMesCobrancaCredito(Util.somaMesAnoMesReferencia(anoMesReferenciaArrecadacao, 1));
+		credito.setAnoMesReferenciaContabil(referenciaContabil);
+		credito.setAnoMesCobrancaCredito(referenciaArrecadacao);
 		credito.setValorResidualMesAnterior(BigDecimal.ZERO);
 		credito.setNumeroPrestacaoCredito((short) 1);
-		credito.setNumeroPrestacaoRealizada((short) 0);
-		credito.setValorCredito(valor);
+		
+		if (referenciaArrecadacao.equals(referenciaContabil)) {
+			credito.setNumeroPrestacaoRealizada((short) 1);
+		} else {
+			credito.setNumeroPrestacaoRealizada((short) 0);
+		}
+		credito.setValorCredito(valor.abs());
 		
 		CreditoTipo tipo = new CreditoTipo();
 		tipo.setId(CreditoTipo.PAGAMENTO_NAO_CONFERE);
@@ -30154,9 +29965,15 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 		
 		credito.setUltimaAlteracao(Calendar.getInstance().getTime());
-		credito.setAnoMesReferenciaPrestacao(Util.somaMesAnoMesReferencia(anoMesReferenciaArrecadacao, 1));
+		credito.setAnoMesReferenciaPrestacao(Util.somaMesAnoMesReferencia(referenciaArrecadacao, 1));
 		
-		getControladorFaturamento().gerarCreditoARealizar(credito, imovel, null);
+		Integer idCredito = getControladorFaturamento().gerarCreditoARealizar(credito, imovel, null);
+		
+		FiltroCreditoARealizar filtroCreditoARealizar = new FiltroCreditoARealizar();
+		filtroCreditoARealizar.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.ID, idCredito));
+		Collection<CreditoARealizar> colecaoCreditoARealizar = getControladorUtil().pesquisar(filtroCreditoARealizar, CreditoARealizar.class.getName());
+
+		return (CreditoARealizar) Util.retonarObjetoDeColecao(colecaoCreditoARealizar);
 	}
 
 	/**
@@ -40488,53 +40305,19 @@ public class ControladorArrecadacao implements SessionBean {
 
 	}
 
-	/**
-	 * [UC0150] Retificar Conta
-	 * 
-	 * @author Vivianne Sousa
-	 * @data 23/04/2006
-	 * 
-	 * @param idConta
-	 * @return idParcelamento
-	 */
-	public Pagamento pesquisarPagamentoDeConta(Integer idConta)
-			throws ControladorException {
+	public Pagamento pesquisarPagamentoDeConta(Integer idConta) throws ControladorException {
 
 		Pagamento pagamento = null;
-		Object[] pagamentoDaConta = null;
-
-		try {
-
-			pagamentoDaConta = repositorioArrecadacao
-					.pesquisarPagamentoDeConta(idConta);
-		} catch (ErroRepositorioException ex) {
-			sessionContext.setRollbackOnly();
-			throw new ControladorException("erro.sistema", ex);
-		}
-
-		if (pagamentoDaConta != null && !(pagamentoDaConta.length < 0)) {
-
-			pagamento = new Pagamento();
-
-			// Seta o id do pagamento
-			if (pagamentoDaConta[0] != null) {
-				pagamento.setId((Integer) pagamentoDaConta[0]);
-			}
-			// Seta o valor do pagamento
-			if (pagamentoDaConta[1] != null) {
-				pagamento.setValorPagamento((BigDecimal) pagamentoDaConta[1]);
-			}
-			/**TODO: COSANPA
-			 * Mantis 537
-			 * Retornando também a data de pagamento para que possa ser impressa na segunda via da conta
-			 * 
-			 * @author Wellington Rocha
-			 * @date 14/03/2012*/
-			//Seta a data do pagamento
-			if (pagamentoDaConta[2] != null) {
-				pagamento.setDataPagamento((Date) pagamentoDaConta[2]);
+		
+		if (idConta != null) {
+			try {
+				pagamento = repositorioArrecadacao.pesquisarPagamentoDeConta(idConta);
+			} catch (ErroRepositorioException ex) {
+				sessionContext.setRollbackOnly();
+				throw new ControladorException("erro.sistema", ex);
 			}
 		}
+
 
 		return pagamento;
 	}
@@ -44547,7 +44330,7 @@ public class ControladorArrecadacao implements SessionBean {
                     Pagamento pagamento = new Pagamento();
                     Integer anoMesPagamento = Util.recuperaAnoMesDaData(registroTipo7.getDataLiquidacaoFormatado());
                     
-                    pagamento.setAnoMesReferenciaPagamento(conta.getAnoMesReferenciaConta());
+                    pagamento.setAnoMesReferenciaPagamento(conta.getReferencia());
                     
                     if (anoMesPagamento > getSistemaParametro().getAnoMesArrecadacao()) {
                         pagamento.setAnoMesReferenciaArrecadacao(anoMesPagamento);
@@ -48076,7 +47859,7 @@ public class ControladorArrecadacao implements SessionBean {
 		  */
 			public Integer countImoveisBancoDebitoAutomatico(String[] bancos, 
 					Integer anoMesInicial,Integer anoMesFinal, Date dataVencimentoInicial,
-					Date dataVencimentoFinal, String indicadorContaPaga)
+					Date dataVencimentoFinal, String indicadorContaPaga, Integer somenteDebitoAutomatico)
 				throws ControladorException{
 				
 				Integer retorno = null;
@@ -48084,7 +47867,7 @@ public class ControladorArrecadacao implements SessionBean {
 				try{
 					
 					retorno = repositorioArrecadacao.countImoveisBancoDebitoAutomatico(bancos, 
-							anoMesInicial, anoMesFinal, dataVencimentoInicial, dataVencimentoFinal, indicadorContaPaga);
+							anoMesInicial, anoMesFinal, dataVencimentoInicial, dataVencimentoFinal, indicadorContaPaga, somenteDebitoAutomatico);
 					
 				} catch (ErroRepositorioException e) {
 					e.printStackTrace();
@@ -54491,7 +54274,7 @@ public class ControladorArrecadacao implements SessionBean {
 	 * */
 	public Integer countImoveisBancoDebitoAutomaticoPorGrupoFaturamento(String[] bancos, 
 			Integer anoMesInicial,Integer anoMesFinal, Date dataVencimentoInicial,
-			Date dataVencimentoFinal, String indicadorContaPaga, Integer idGrupoFaturamento)
+			Date dataVencimentoFinal, String indicadorContaPaga, Integer idGrupoFaturamento, Integer somenteDebitoAutomatico)
 		throws ControladorException{
 		
 		Integer retorno = null;
@@ -54499,7 +54282,7 @@ public class ControladorArrecadacao implements SessionBean {
 		try{
 			
 			retorno = repositorioArrecadacao.countImoveisBancoDebitoAutomaticoPorGrupoFaturamento(bancos, 
-					anoMesInicial, anoMesFinal, dataVencimentoInicial, dataVencimentoFinal, indicadorContaPaga, idGrupoFaturamento);
+					anoMesInicial, anoMesFinal, dataVencimentoInicial, dataVencimentoFinal, indicadorContaPaga, idGrupoFaturamento, somenteDebitoAutomatico);
 			
 		} catch (ErroRepositorioException e) {
 			// TODO Auto-generated catch block
@@ -56659,14 +56442,6 @@ public class ControladorArrecadacao implements SessionBean {
 
     }
 	
-	/**
-	 * TODO : COSANPA
-	 * @author Pamela Gatinho
-	 * @date 17/05/2013
-	 * 
-	 * @param idsPagamentos
-	 * @return
-	 */
 	public Collection<Pagamento> obterPagamentos(Collection<Integer> idsPagamentos) 
 		throws ControladorException {
 		Collection<Pagamento> pagamentos = null;
@@ -56681,10 +56456,6 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 	
 	/**
-	 * TODO : COSANPA
-	 * @author Pamela Gatinho
-	 * @date 17/05/2013
-	 * 
 	 * Nova regra para classificar pagamentos em DUPLICIDADE, CANCELADO POR PARCELAMENTO
 	 * @param pagamentoSituacao
 	 * @param dataInicial
@@ -56692,84 +56463,60 @@ public class ControladorArrecadacao implements SessionBean {
 	 * @return
 	 * @throws ControladorException 
 	 */
-	public void classificarPagamentosResolvidos(Collection<Pagamento> pagamentos, Usuario usuarioLogado,
-			CreditoTipo creditoTipo, CreditoOrigem creditoOrigem, boolean indicadorIncluirCredito) 
-		throws ControladorException {
-		
+	public void recuperarCredito(Collection<Pagamento> pagamentos, Usuario usuarioLogado, CreditoTipo creditoTipo, CreditoOrigem creditoOrigem, 
+			boolean indicadorIncluirCredito) throws ControladorException {
 		try {
 			
 			if (indicadorIncluirCredito) {
 				incluirCreditoPagamentosResolvidos(pagamentos, usuarioLogado, creditoTipo, creditoOrigem);
 			} else {
-				refaturarContaParaClassificarPagamentos(pagamentos, new Date());
+				refaturarContaParaClassificarPagamentos(pagamentos, usuarioLogado);
 			}
 			
 			repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(pagamentos, PagamentoSituacao.PAGAMENTO_CLASSIFICADO);
 			
-		} catch(ErroRepositorioException e) {
-			e.printStackTrace();
+		} catch(Exception e) {
+			throw new ControladorException("Erro ao recuperar credito", e);
 		}
-		
 	}
 	
-	/**
-	 * TODO : COSANPA
-	 * Pamela Gatinho - 26/06/2013
-	 * @param idsContas
-	 * @throws ErroRepositorioException 
-	 */
-	private void refaturarContaParaClassificarPagamentos(Collection<Pagamento> pagamentos, Date dataArrecadacao) 
-		throws ErroRepositorioException {
+	private void refaturarContaParaClassificarPagamentos(Collection<Pagamento> pagamentos, Usuario usuarioLogado) 
+		throws ControladorException {
 		
 		try{
-			Map<Integer, Conta> mapContasNovas = getControladorFaturamento().incluirContasParaRefaturarPagamentos(pagamentos, dataArrecadacao);
+			Map<Integer, Conta> mapContasNovas = getControladorFaturamento().incluirContasParaRefaturarPagamentos(pagamentos, usuarioLogado);
 			
 			Collection<Integer> idsContas = getControladorFaturamento().getListaIdContas(pagamentos);
 
-			Collection<ContaHistorico> listaContaHistoricoOrigem = getControladorFaturamento().pesquisarContaOuContaHistorico(idsContas, ContaHistorico.class.toString());
-			
 			Set<Integer> listaIdsContaHistorico = mapContasNovas.keySet();
 			
 			for (Integer idContaHistorico : listaIdsContaHistorico) {
 				Pagamento pagamento = this.pesquisarPagamentoDeConta(idContaHistorico);
-				
 				if (pagamento != null) {
 					Conta novaConta = mapContasNovas.get(idContaHistorico);
 					pagamento.setContaGeral(novaConta.getContaGeral());
-					
+					pagamento.setUltimaAlteracao(new Date());
 					repositorioUtil.atualizar(pagamento);
 				}
-				
 			}
 		} catch (Exception e) {
-			
+			logger.error("Erro ao refaturar conta para recuperação de crédito.", e);
+			throw new ControladorException("Erro ao refaturar conta para recuperação de crédito.", e);
 		}
-		
 	}
 	
-	/**
-	 * TODO : COSANPA
-	 * @author Pamela Gatinho
-	 * @date 17/05/2013
-	 * 
-	 * Método para criar um crédito para pagamentos em devolução
-	 * 
-	 * @param pagamentos
-	 * @param usuarioLogado
-	 * @throws ControladorException
-	 */
-	public void incluirCreditoPagamentosResolvidos(Collection<Pagamento> pagamentos, Usuario usuarioLogado,
-			CreditoTipo creditoTipo, CreditoOrigem creditoOrigem) 
-		throws ControladorException {
+	public void incluirCreditoPagamentosResolvidos(Collection<Pagamento> pagamentos, Usuario usuarioLogado, CreditoTipo creditoTipo, CreditoOrigem creditoOrigem) throws Exception {
 		
+		SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();	
+
 		for (Pagamento pagamento : pagamentos){
+			Imovel imovel = getControladorImovel().pesquisarImovel(pagamento.getImovel().getId());
+
 			CreditoARealizar credito = new CreditoARealizar();
 			
-			Imovel imovel = getControladorImovel().pesquisarImovel(pagamento.getImovel().getId());
-			
-			SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();	
-			credito.setAnoMesReferenciaCredito(sistemaParametros.getAnoMesArrecadacao());
-			
+			credito.setAnoMesReferenciaCredito(pagamento.getAnoMesReferenciaPagamento());
+			credito.setAnoMesCobrancaCredito(this.obterReferenciaCobrancaCreditoRecuperacaoCredito(imovel.getId()));
+			credito.setAnoMesReferenciaContabil(sistemaParametros.getAnoMesFaturamento());
 			credito.setCreditoTipo(creditoTipo);
 			credito.setCreditoOrigem(creditoOrigem);
 			credito.setImovel(imovel);
@@ -56785,16 +56532,25 @@ public class ControladorArrecadacao implements SessionBean {
 			credito.setValorCredito(pagamento.getValorPagamento());
 			credito.setGeracaoCredito(new Date());
 			credito.setUltimaAlteracao(new Date());
+			credito.setLancamentoItemContabil(new LancamentoItemContabil(LancamentoItemContabil.OUTROS_SERVICOS_AGUA));
+			credito.setDebitoCreditoSituacaoAtual(new DebitoCreditoSituacao(DebitoCreditoSituacao.NORMAL));
+			credito.setUsuario(usuarioLogado);
 			
-			LancamentoItemContabil lancamentoItemContabil = new LancamentoItemContabil(LancamentoItemContabil.OUTROS_SERVICOS_AGUA);
-			credito.setLancamentoItemContabil(lancamentoItemContabil);
-			
-			DebitoCreditoSituacao debitoCreditoSituacaoAtual =  new DebitoCreditoSituacao(DebitoCreditoSituacao.NORMAL);
-			credito.setDebitoCreditoSituacaoAtual(debitoCreditoSituacaoAtual);
-			
-			//getControladorFaturamento().inserirCreditoARealizar(imovel, credito, usuarioLogado);
 			getControladorFaturamento().gerarCreditoARealizar(credito, imovel, usuarioLogado);
 		}
+	}
+	
+	private Integer obterReferenciaCobrancaCreditoRecuperacaoCredito(Integer idImovel) throws Exception {
+		Integer referenciaCobranca = null;
+		Rota rota = getControladorMicromedicao().buscarRotaDoImovel(idImovel);
+		
+		if (getControladorMicromedicao().isImovelEmCampo(idImovel)) {
+			referenciaCobranca = Util.somaUmMesAnoMesReferencia(rota.getFaturamentoGrupo().getAnoMesReferencia());
+		} else {
+			referenciaCobranca = rota.getFaturamentoGrupo().getAnoMesReferencia();
+		}
+		
+		return referenciaCobranca;
 	}
 	
 	public void atualizarIndicadorDebitoAutomaticoComDataExclusao(Integer idImovel) throws ControladorException {

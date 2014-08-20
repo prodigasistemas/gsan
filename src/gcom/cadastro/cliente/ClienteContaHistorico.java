@@ -1,35 +1,23 @@
 package gcom.cadastro.cliente;
 
 import gcom.faturamento.conta.ContaHistorico;
+import gcom.faturamento.conta.IConta;
 
 import java.io.Serializable;
 import java.util.Date;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
-public class ClienteContaHistorico implements Serializable {
+public class ClienteContaHistorico implements Serializable, IClienteConta {
 	private static final long serialVersionUID = 1L;
 
-    /** identifier field */
     private Integer id;
-
-    /** persistent field */
-    private short indicadorNomeConta;
-
-    /** persistent field */
+    private Short indicadorNomeConta;
     private Date ultimaAlteracao;
-
-    /** persistent field */
     private Cliente cliente;
-
-    /** persistent field */
     private ClienteRelacaoTipo clienteRelacaoTipo;
-
-    /** persistent field */
     private ContaHistorico contaHistorico;
 
-    /** full constructor */
     public ClienteContaHistorico(Integer id, short indicadorNomeConta, Date ultimaAlteracao, Cliente cliente, ClienteRelacaoTipo clienteRelacaoTipo, ContaHistorico contaHistorico) {
         this.id = id;
         this.indicadorNomeConta = indicadorNomeConta;
@@ -39,10 +27,8 @@ public class ClienteContaHistorico implements Serializable {
         this.contaHistorico = contaHistorico;
     }
 
-    /** default constructor */
     public ClienteContaHistorico() {
     }
-
     
     public Cliente getCliente() {
         return cliente;
@@ -76,11 +62,11 @@ public class ClienteContaHistorico implements Serializable {
         this.id = id;
     }
 
-    public short getIndicadorNomeConta() {
+    public Short getIndicadorNomeConta() {
         return indicadorNomeConta;
     }
 
-    public void setIndicadorNomeConta(short indicadorNomeConta) {
+    public void setIndicadorNomeConta(Short indicadorNomeConta) {
         this.indicadorNomeConta = indicadorNomeConta;
     }
 
@@ -97,5 +83,15 @@ public class ClienteContaHistorico implements Serializable {
             .append("id", getId())
             .toString();
     }
+
+	public IConta getConta() {
+		return contaHistorico;
+	}
+
+	public void setConta(IConta conta) {
+		if (conta != null) {
+			this.contaHistorico = new ContaHistorico(conta.getId());
+		}
+	}
 
 }

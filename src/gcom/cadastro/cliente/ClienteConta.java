@@ -1,45 +1,31 @@
 package gcom.cadastro.cliente;
 
 import gcom.faturamento.conta.Conta;
+import gcom.faturamento.conta.ContaHistorico;
+import gcom.faturamento.conta.IConta;
+
 import java.io.Serializable;
 import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
-public class ClienteConta implements Serializable {
+public class ClienteConta implements Serializable, IClienteConta {
 	
 	private static final long serialVersionUID = 1L;
 
-    /** identifier field */
     private Integer id;
-
-	/**
-	 * persistent field
-	 */
 	private Short indicadorNomeConta;
-    
-	/** nullable persistent field */
     private Date ultimaAlteracao;
-    
-    /** persistent field */
-    private gcom.cadastro.cliente.Cliente cliente;
-
-    /** persistent field */
-    private gcom.cadastro.cliente.ClienteRelacaoTipo clienteRelacaoTipo;
-
-    /** persistent field */
+    private Cliente cliente;
+    private ClienteRelacaoTipo clienteRelacaoTipo;
     private Conta conta;
 
-    /** full constructor */
-    public ClienteConta(gcom.cadastro.cliente.Cliente cliente, gcom.cadastro.cliente.ClienteRelacaoTipo clienteRelacaoTipo, Conta conta) {
+    public ClienteConta(Cliente cliente, ClienteRelacaoTipo clienteRelacaoTipo, Conta conta) {
         this.cliente = cliente;
         this.clienteRelacaoTipo = clienteRelacaoTipo;
         this.conta = conta;
     }
 
-    /** default constructor */
     public ClienteConta() {
     }
 
@@ -51,28 +37,30 @@ public class ClienteConta implements Serializable {
         this.id = id;
     }
 
-    public gcom.cadastro.cliente.Cliente getCliente() {
+    public Cliente getCliente() {
         return this.cliente;
     }
 
-    public void setCliente(gcom.cadastro.cliente.Cliente cliente) {
+    public void setCliente(Cliente cliente) {
         this.cliente = cliente;
     }
 
-    public gcom.cadastro.cliente.ClienteRelacaoTipo getClienteRelacaoTipo() {
+    public ClienteRelacaoTipo getClienteRelacaoTipo() {
         return this.clienteRelacaoTipo;
     }
 
-    public void setClienteRelacaoTipo(gcom.cadastro.cliente.ClienteRelacaoTipo clienteRelacaoTipo) {
+    public void setClienteRelacaoTipo(ClienteRelacaoTipo clienteRelacaoTipo) {
         this.clienteRelacaoTipo = clienteRelacaoTipo;
     }
 
-    public Conta getConta() {
+    public IConta getConta() {
         return this.conta;
     }
 
-    public void setConta(Conta conta) {
-        this.conta = conta;
+    public void setConta(IConta conta) {
+    	if (conta != null) {
+    		this.conta = new Conta(conta.getId());
+    	}
     }
 
     public String toString() {

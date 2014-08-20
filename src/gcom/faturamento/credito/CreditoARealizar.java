@@ -22,7 +22,6 @@ import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 @ControleAlteracao()
 public class CreditoARealizar extends ObjetoTransacao {
 	private static final long serialVersionUID = 1L;
@@ -30,122 +29,64 @@ public class CreditoARealizar extends ObjetoTransacao {
 	public static final int ATRIBUTOS_CREDITO_A_REALIZAR_INSERIR = 62; //Operacao.OPERACAO_CREDITO_A_REALIZAR_INSERIR
 	public static final int ATRIBUTOS_CREDITO_A_REALIZAR_CANCELAR = 66; //Operacao.OPERACAO_CREDITO_A_REALIZAR_CANCELAR
 	
-	/** identifier field */
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CREDITO_A_REALIZAR_INSERIR})
 	private Integer id;
-
-	/** persistent field */
 	private Date geracaoCredito;
+	private Integer anoMesReferenciaContabil;
+	private Integer anoMesCobrancaCredito;
+	private BigDecimal valorResidualMesAnterior;
+	private Integer codigoSetorComercial;
+	private Integer numeroQuadra;
+	private Short numeroLote;
+	private Short numeroSubLote;
+	private Date ultimaAlteracao;
+	private Short numeroParcelaBonus;
+	private BigDecimal valorResidualConcedidoMes;
 
-	/** nullable persistent field */
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CREDITO_A_REALIZAR_INSERIR,ATRIBUTOS_CREDITO_A_REALIZAR_CANCELAR})
 	private Integer anoMesReferenciaCredito;
 
-	/** nullable persistent field */
-	private Integer anoMesReferenciaContabil;
-
-	/** nullable persistent field */
-	private Integer anoMesCobrancaCredito;
-
-	/** nullable persistent field */
-	private BigDecimal valorResidualMesAnterior;
-
-	/** nullable persistent field */
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CREDITO_A_REALIZAR_INSERIR,ATRIBUTOS_CREDITO_A_REALIZAR_CANCELAR})
 	private BigDecimal valorCredito;
 
-	/** nullable persistent field */
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CREDITO_A_REALIZAR_INSERIR,ATRIBUTOS_CREDITO_A_REALIZAR_CANCELAR})
 	private Short numeroPrestacaoCredito;
 
-	/** nullable persistent field */
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_CREDITO_A_REALIZAR_INSERIR})
 	private Short numeroPrestacaoRealizada;
 
-	/** nullable persistent field */
-	private Integer codigoSetorComercial;
-
-	/** nullable persistent field */
-	private Integer numeroQuadra;
-
-	/** nullable persistent field */
-	private Short numeroLote;
-
-	/** nullable persistent field */
-	private Short numeroSubLote;
-
-	/** nullable persistent field */
-	private Date ultimaAlteracao;
-    
-    private Short numeroParcelaBonus;
-    
-    /** nullable persistent field */
-	private BigDecimal valorResidualConcedidoMes;
-
-	/** persistent field */
-	@ControleAlteracao(value=FiltroCreditoARealizar.REGISTRO_ATENDIMENTO,
-			funcionalidade={ATRIBUTOS_CREDITO_A_REALIZAR_INSERIR,ATRIBUTOS_CREDITO_A_REALIZAR_CANCELAR})
+	@ControleAlteracao(value=FiltroCreditoARealizar.REGISTRO_ATENDIMENTO, funcionalidade={ATRIBUTOS_CREDITO_A_REALIZAR_INSERIR,ATRIBUTOS_CREDITO_A_REALIZAR_CANCELAR})
 	private RegistroAtendimento registroAtendimento;
 
-	/** persistent field */
 	private Imovel imovel;
-
-	/** persistent field */
-	@ControleAlteracao(value=FiltroCreditoARealizar.ORDEM_SERVICO,
-			funcionalidade={ATRIBUTOS_CREDITO_A_REALIZAR_INSERIR,ATRIBUTOS_CREDITO_A_REALIZAR_CANCELAR})
-	private OrdemServico ordemServico;
-
-	/** persistent field */
 	private Quadra quadra;
-
-	/** persistent field */
 	private Localidade localidade;
 
-	/** nullable persistent field */
-	@ControleAlteracao(value=FiltroCreditoARealizar.CREDITO_TIPO,
-			funcionalidade={ATRIBUTOS_CREDITO_A_REALIZAR_INSERIR,ATRIBUTOS_CREDITO_A_REALIZAR_CANCELAR})
+	@ControleAlteracao(value=FiltroCreditoARealizar.ORDEM_SERVICO, funcionalidade={ATRIBUTOS_CREDITO_A_REALIZAR_INSERIR,ATRIBUTOS_CREDITO_A_REALIZAR_CANCELAR})
+	private OrdemServico ordemServico;
+
+	@ControleAlteracao(value=FiltroCreditoARealizar.CREDITO_TIPO, funcionalidade={ATRIBUTOS_CREDITO_A_REALIZAR_INSERIR,ATRIBUTOS_CREDITO_A_REALIZAR_CANCELAR})
 	private gcom.faturamento.credito.CreditoTipo creditoTipo;
 
-	/** persistent field */
 	private LancamentoItemContabil lancamentoItemContabil;
 
-	/** persistent field */
-	@ControleAlteracao(value=FiltroCreditoARealizar.DEBITO_CREDITO_SITUACAO_ATUAL_,
-			funcionalidade={ATRIBUTOS_CREDITO_A_REALIZAR_CANCELAR})
+	@ControleAlteracao(value=FiltroCreditoARealizar.DEBITO_CREDITO_SITUACAO_ATUAL_, funcionalidade={ATRIBUTOS_CREDITO_A_REALIZAR_CANCELAR})
 	private DebitoCreditoSituacao debitoCreditoSituacaoAtual;
 
-	/** persistent field */
 	private DebitoCreditoSituacao debitoCreditoSituacaoAnterior;
 
-	/** persistent field */
-	@ControleAlteracao(value=FiltroCreditoARealizar.CREDITO_ORIGEM,
-			funcionalidade={ATRIBUTOS_CREDITO_A_REALIZAR_INSERIR,ATRIBUTOS_CREDITO_A_REALIZAR_CANCELAR})
+	@ControleAlteracao(value=FiltroCreditoARealizar.CREDITO_ORIGEM, funcionalidade={ATRIBUTOS_CREDITO_A_REALIZAR_INSERIR,ATRIBUTOS_CREDITO_A_REALIZAR_CANCELAR})
 	private gcom.faturamento.credito.CreditoOrigem creditoOrigem;
 
-	/** persistent field */
 	private Parcelamento parcelamento;
-
-	/** persistent field */
 	private DocumentoTipo documentoTipo;
-	
-	/** persistent field */
 	private Usuario usuario;
-
-	/** persistent field */
 	private Set creditoARealizarCategoria;
-	
-	/** persistent field */
 	private CreditoARealizarGeral origem;
-	
-	
 	private CreditoARealizarGeral creditoARealizarGeral;
-	
 	private Integer anoMesReferenciaPrestacao;
-	
 	private Integer numeroParcelasAntecipadas;
 	
-
-	/** full constructor */
 	public CreditoARealizar(Date geracaoCredito,
 			Integer anoMesReferenciaCredito, Integer anoMesReferenciaContabil,
 			Integer anoMesCobrancaCredito, BigDecimal valorResidualMesAnterior,
@@ -191,11 +132,9 @@ public class CreditoARealizar extends ObjetoTransacao {
 		this.creditoARealizarCategoria = creditoARealizarCategoria;
 	}
 
-	/** default constructor */
 	public CreditoARealizar() {
 	}
 
-	/** minimal constructor */
 	public CreditoARealizar(Date geracaoCredito,
 			RegistroAtendimento registroAtendimento, Imovel imovel,
 			OrdemServico ordemServico, Quadra quadra, Localidade localidade,
@@ -220,8 +159,6 @@ public class CreditoARealizar extends ObjetoTransacao {
 		this.creditoARealizarCategoria = creditoARealizarCategoria;
 	}
 	
-
-
 	public Integer getId() {
 		return this.id;
 	}
@@ -505,12 +442,6 @@ public class CreditoARealizar extends ObjetoTransacao {
 		return retorno;
 	}
 	
-	/**
- 	 * Realiza o calculo de quantas parcelas falta para creditar  
- 	 * 
- 	 * @author Fernanda Paiva
- 	 * @created 7 de Abril de 2006
- 	*/
  	public short getParcelasRestante(){
  		
  	   short retorno = Short.parseShort(""+
@@ -548,16 +479,10 @@ public class CreditoARealizar extends ObjetoTransacao {
 		return filtroCreditoARealizar; 
 	}
 
-	/**
-	 * @return Retorna o campo creditoARealizarGeral.
-	 */
 	public CreditoARealizarGeral getCreditoARealizarGeral() {
 		return creditoARealizarGeral;
 	}
 
-	/**
-	 * @param creditoARealizarGeral O creditoARealizarGeral a ser setado.
-	 */
 	public void setCreditoARealizarGeral(CreditoARealizarGeral creditoARealizarGeral) {
 		this.creditoARealizarGeral = creditoARealizarGeral;
 	}
@@ -610,15 +535,6 @@ public class CreditoARealizar extends ObjetoTransacao {
         this.numeroParcelaBonus = numeroParcelaBonus;
     }
    
-    /**
-     * Realiza o calculo de quantas parcelas falta para creditar  
-     * numero total de prestações menos
-     * numero de parcelas realizadas menos
-     * numero de parcelas bonus
-     * 
-     * @author Vivianne Sousa
-     * @created 21/02/2008
-    */
     public short getParcelasRestanteComBonus(){
         
        short retorno = Short.parseShort(""+
@@ -631,10 +547,6 @@ public class CreditoARealizar extends ObjetoTransacao {
         return retorno;
     }
     
-    /**
-     * @author Vivianne Sousa
-     * @created 21/02/2008
-    */
     public BigDecimal getValorTotalComBonus() {
 
         BigDecimal retornoDivisao = new BigDecimal("0.00");
@@ -661,10 +573,6 @@ public class CreditoARealizar extends ObjetoTransacao {
         return retorno;
     }
     
-    /**
-     * @author Vivianne Sousa
-     * @created 21/02/2008
-    */
     public short getNumeroPrestacaoCreditoMenosBonus() {
         short retorno = getNumeroPrestacaoCredito();
         
@@ -675,16 +583,10 @@ public class CreditoARealizar extends ObjetoTransacao {
         return retorno;
     }
 
-	/**
-	 * @return Retorna o campo usuario.
-	 */
 	public Usuario getUsuario() {
 		return usuario;
 	}
 
-	/**
-	 * @param usuario O usuario a ser setado.
-	 */
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}

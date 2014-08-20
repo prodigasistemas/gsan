@@ -53,8 +53,14 @@ public class Conta extends ObjetoTransacao implements IConta {
 	private Short subLote;
 	private Integer codigoSetorComercial;
 	private Integer quadra;
+
+	/** persistent field */
 	private short digitoVerificadorConta;
+
+	/** persistent field */
 	private short indicadorCobrancaMulta;
+
+	/** nullable persistent field */
 	private Short indicadorAlteracaoVencimento;
 	private Integer consumoRateioAgua;
 	private Integer consumoRateioEsgoto;
@@ -374,10 +380,16 @@ public class Conta extends ObjetoTransacao implements IConta {
 		this.referenciaContabil = referenciaContabil;
 		this.imovel = imovel;
 		this.referenciaBaixaContabil = referenciaBaixaContabil;
-		
-		
 	}
 	
+	public Conta(BigDecimal valorAgua, BigDecimal valorEsgoto, BigDecimal valorCreditos, BigDecimal valorDebitos, BigDecimal valorImpostos) {
+		this.valorAgua = valorAgua;
+		this.valorEsgoto = valorEsgoto;
+		this.valorCreditos = valorCreditos;
+		this.debitos = valorDebitos;
+		this.valorImposto = valorImpostos;
+	}
+
 	public Integer getId() {
 		return this.id;
 	}
@@ -398,7 +410,7 @@ public class Conta extends ObjetoTransacao implements IConta {
 		return this.referencia;
 	}
 	
-	public int getAnoMesReferenciaConta() {
+	public Integer getAnoMesReferenciaConta() {
 		return this.referencia;
 	}
 
@@ -446,11 +458,11 @@ public class Conta extends ObjetoTransacao implements IConta {
 		this.digitoVerificadorConta = digitoVerificadorConta;
 	}
 
-	public short getIndicadorCobrancaMulta() {
+	public Short getIndicadorCobrancaMulta() {
 		return this.indicadorCobrancaMulta;
 	}
 
-	public void setIndicadorCobrancaMulta(short indicadorCobrancaMulta) {
+	public void setIndicadorCobrancaMulta(Short indicadorCobrancaMulta) {
 		this.indicadorCobrancaMulta = indicadorCobrancaMulta;
 	}
 
@@ -862,11 +874,11 @@ public class Conta extends ObjetoTransacao implements IConta {
 		if (this.getValorCreditos() != null) {
 			valorTotalConta = valorTotalConta.subtract(this.getValorCreditos());
 		}
-		
+
 		if (this.getValorImposto() != null) {
 			valorTotalConta = valorTotalConta.subtract(this.getValorImposto());
 		}
-		
+
 		return valorTotalConta;
 	}
 	
@@ -1136,5 +1148,22 @@ public class Conta extends ObjetoTransacao implements IConta {
 
 	public void setValorRateioEsgoto(BigDecimal valorRateioEsgoto) {
 		this.valorRateioEsgoto = valorRateioEsgoto;
+	}
+	
+	public void setValorDebitos(BigDecimal valor){
+		debitos = valor;
+	}
+	
+	public BigDecimal getValorDebitos(){
+		return debitos;
+	}
+	
+	public Conta buildConta(Conta conta){
+		conta.setCodigoSetorComercial(this.getCodigoSetorComercial());
+		conta.setQuadra(this.getQuadra());
+		conta.setDigitoVerificadorConta(this.getDigitoVerificadorConta());
+		conta.setQuadra(this.getQuadra());
+		conta.setQuadraConta(this.getQuadraConta());
+		return conta;
 	}
 }

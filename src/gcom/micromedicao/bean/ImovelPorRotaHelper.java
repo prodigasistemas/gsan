@@ -6,13 +6,19 @@ import gcom.micromedicao.MovimentoRoteiroEmpresa;
 import java.io.Serializable;
 
 public class ImovelPorRotaHelper implements Serializable {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	private Imovel imovel;
 	private MovimentoRoteiroEmpresa movimentoRoteiroEmpresa;
 
+	public ImovelPorRotaHelper() {
+	}
+	
+	public ImovelPorRotaHelper(Imovel imovel, MovimentoRoteiroEmpresa movimento) {
+		this.imovel = imovel;
+		this.movimentoRoteiroEmpresa = movimento;
+	}
+	
 	public Imovel getImovel() {
 		return imovel;
 	}

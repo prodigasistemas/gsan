@@ -15,134 +15,63 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 @ControleAlteracao()
 public class Rota extends ObjetoTransacao {
 	
 	public static final int TRANSFERIR_ROTA_ENTRE_GRUPO_EMPRESA = 1559;
 	
 	private static final long serialVersionUID = 1L;
-    /** identifier field */
-    private Integer id;
-    
+
+	private Integer id;
     private Short codigo;
-    
-    /** nullable persistent field */
     private Short indicadorAjusteConsumo;
-    
     private Short indicadorRotaAlternativa = new Short("2");
-
-    /** nullable persistent field */
     private Date dataAjusteLeitura;
-
-    /** nullable persistent field */
     private Short indicadorFiscalizarCortado;
-
-    /** nullable persistent field */
     private Short indicadorFiscalizarSuprimido;
-
-    /** nullable persistent field */
     private Short indicadorGerarFalsaFaixa;
-
-    /** nullable persistent field */
     private BigDecimal percentualGeracaoFaixaFalsa;
-
-    /** nullable persistent field */
     private Short indicadorGerarFiscalizacao;
-
-    /** nullable persistent field */
     private BigDecimal percentualGeracaoFiscalizacao;
-
-    /** nullable persistent field */
     private Short indicadorUso;
-    
     private Short indicadorTransmissaoOffline;
 
-    /** nullable persistent field */
     @ControleAlteracao(funcionalidade={TRANSFERIR_ROTA_ENTRE_GRUPO_EMPRESA})
     private Date ultimaAlteracao;
 
-    /** persistent field */
-    @ControleAlteracao(value=FiltroRota.EMPRESA, 
-    		funcionalidade={TRANSFERIR_ROTA_ENTRE_GRUPO_EMPRESA})
+    @ControleAlteracao(value=FiltroRota.EMPRESA,funcionalidade={TRANSFERIR_ROTA_ENTRE_GRUPO_EMPRESA})
     private Empresa empresa;
 
-    /** persistent field */
-    @ControleAlteracao(value=FiltroRota.FATURAMENTO_GRUPO, 
-    		funcionalidade={TRANSFERIR_ROTA_ENTRE_GRUPO_EMPRESA})
+    @ControleAlteracao(value=FiltroRota.FATURAMENTO_GRUPO, funcionalidade={TRANSFERIR_ROTA_ENTRE_GRUPO_EMPRESA})
     private FaturamentoGrupo faturamentoGrupo;
 
-    /** persistent field */
     private LeituraTipo leituraTipo;
-
-    /** persistent field */
     private SetorComercial setorComercial;
 
-    /** persistent field */
-    @ControleAlteracao(value=FiltroRota.COBRANCA_GRUPO, 
-    		funcionalidade={TRANSFERIR_ROTA_ENTRE_GRUPO_EMPRESA})
+    @ControleAlteracao(value=FiltroRota.COBRANCA_GRUPO, funcionalidade={TRANSFERIR_ROTA_ENTRE_GRUPO_EMPRESA})
     private CobrancaGrupo cobrancaGrupo;
     
-    /** persistent field */
-    @ControleAlteracao(value=FiltroRota.EMPRESA, 
-	funcionalidade={TRANSFERIR_ROTA_ENTRE_GRUPO_EMPRESA})
+    @ControleAlteracao(value=FiltroRota.EMPRESA, funcionalidade={TRANSFERIR_ROTA_ENTRE_GRUPO_EMPRESA})
     private Empresa empresaCobranca;
     
-    /** persistent field */
     private Leiturista leiturista;
-    
-    /** persistent field */
     private Integer numeroSequenciaLeitura;
-    
-    /** persistent field */
     private Empresa empresaEntregaContas;
-    
-    
-    /** persistent field */
     private Integer numeroLimiteImoveis;
-    
     private Integer indicadorSequencialLeitura;
-    
     private Integer numeroDiasConsumoAjuste;
-    
     private Short indicadorImpressaoTermicaFinalGrupo;
     
-
-    /** persistent field */
-    //private CobrancaCriterio cobrancaCriterio;
-    
-     /**
-      * Description of the Field
-      */
      public final static int INDICADOR_AJUSTE_MENSAL = 1;
-     
-     /**
-      * Description of the Field
-      */
      public final static int INDICADOR_SUPRIMIDO_ATIVO = 1;
-     
-     /**
-      * Description of the Field
-      */
      public final static int INDICADOR_CORTADO_ATIVO = 1;
-     
-     /**
-      * Description of the Field
-      */
      public final static int LEITURA_TIPO_CONVENCIONAL = 1;
-     
-     /**
-      * Description of the Field
-      */
      public final static int LEITURA_TIPO_RELACAO = 2;
      
      public final static Short  INDICADOR_GERAR_FISCALIZACAO = new Short("1");
-     
      public final static Short INDICADOR_NAO_GERAR_FAIXA_FALSA = new Short("2");
 
 
-    /** full constructor */
     public Rota(Short indicadorAjusteConsumo, Date dataAjusteLeitura, Short indicadorFiscalizarCortado, Short indicadorFiscalizarSuprimido, Short indicadorGerarFalsaFaixa, BigDecimal percentualGeracaoFaixaFalsa, Short indicadorGerarFiscalizacao, BigDecimal percentualGeracaoFiscalizacao, Short indicadorUso, Date ultimaAlteracao, Empresa empresa, FaturamentoGrupo faturamentoGrupo, LeituraTipo leituraTipo, SetorComercial setorComercial, CobrancaGrupo cobrancaGrupo) {
         this.indicadorAjusteConsumo = indicadorAjusteConsumo;
         this.dataAjusteLeitura = dataAjusteLeitura;
@@ -161,7 +90,6 @@ public class Rota extends ObjetoTransacao {
         this.cobrancaGrupo = cobrancaGrupo;
     }
     
-    /** full constructor */
     public Rota(Short codigo, Short indicadorAjusteConsumo, Date dataAjusteLeitura, Short indicadorFiscalizarCortado, Short indicadorFiscalizarSuprimido, Short indicadorGerarFalsaFaixa, BigDecimal percentualGeracaoFaixaFalsa, Short indicadorGerarFiscalizacao, BigDecimal percentualGeracaoFiscalizacao, Short indicadorUso, Date ultimaAlteracao, Empresa empresa, FaturamentoGrupo faturamentoGrupo, LeituraTipo leituraTipo, SetorComercial setorComercial, CobrancaGrupo cobrancaGrupo) {
         this.codigo = codigo;
     	this.indicadorAjusteConsumo = indicadorAjusteConsumo;
@@ -181,7 +109,6 @@ public class Rota extends ObjetoTransacao {
         this.cobrancaGrupo = cobrancaGrupo;
     }
     
-    /** full constructor */
     public Rota(Short codigo, Short indicadorAjusteConsumo, Date dataAjusteLeitura, Short indicadorFiscalizarCortado, Short indicadorFiscalizarSuprimido, Short indicadorGerarFalsaFaixa, BigDecimal percentualGeracaoFaixaFalsa, Short indicadorGerarFiscalizacao, BigDecimal percentualGeracaoFiscalizacao, Short indicadorUso, Date ultimaAlteracao, Empresa empresa, FaturamentoGrupo faturamentoGrupo, LeituraTipo leituraTipo, SetorComercial setorComercial, CobrancaGrupo cobrancaGrupo, Short indicadorTransmissaoOffline) {
         this.codigo = codigo;
     	this.indicadorAjusteConsumo = indicadorAjusteConsumo;
@@ -202,11 +129,13 @@ public class Rota extends ObjetoTransacao {
         this.indicadorTransmissaoOffline = indicadorTransmissaoOffline; 
     }
 
-	/** default constructor */
     public Rota() {
     }
+    
+    public Rota(Integer id) {
+    	this.id = id;
+    }
 
-    /** minimal constructor */
     public Rota(Empresa empresa, FaturamentoGrupo faturamentoGrupo, LeituraTipo leituraTipo, SetorComercial setorComercial, CobrancaGrupo cobrancaGrupo) {
         this.empresa = empresa;
         this.faturamentoGrupo = faturamentoGrupo;
@@ -351,15 +280,7 @@ public class Rota extends ObjetoTransacao {
     public void setCobrancaGrupo(CobrancaGrupo cobrancaGrupo) {
         this.cobrancaGrupo = cobrancaGrupo;
     }
-/*
-    public CobrancaCriterio getCobrancaCriterio() {
-        return this.cobrancaCriterio;
-    }
 
-    public void setCobrancaCriterio(CobrancaCriterio cobrancaCriterio) {
-        this.cobrancaCriterio = cobrancaCriterio;
-    }
-*/
     public String toString() {
         return new ToStringBuilder(this)
             .append("id", getId())
@@ -390,16 +311,10 @@ public class Rota extends ObjetoTransacao {
 		this.leiturista = leiturista;
 	}
 
-	/**
-	 * @return Returns the numeroSequenciaLeitura.
-	 */
 	public Integer getNumeroSequenciaLeitura() {
 		return numeroSequenciaLeitura;
 	}
 
-	/**
-	 * @param leituraSequencia The numeroSequenciaLeitura to set.
-	 */
 	public void setNumeroSequenciaLeitura(Integer leituraSequencia) {
 		this.numeroSequenciaLeitura = leituraSequencia;
 	}
@@ -420,8 +335,6 @@ public class Rota extends ObjetoTransacao {
 		this.indicadorTransmissaoOffline = indicadorTransmissaoOffline;
 	}
 	
-	
-
 	public Short getIndicadorImpressaoTermicaFinalGrupo() {
 		return indicadorImpressaoTermicaFinalGrupo;
 	}
@@ -505,7 +418,4 @@ public class Rota extends ObjetoTransacao {
     public void setNumeroDiasConsumoAjuste(Integer numeroDiasConsumoAjuste) {
         this.numeroDiasConsumoAjuste = numeroDiasConsumoAjuste;
     }
-
-
-	
 }

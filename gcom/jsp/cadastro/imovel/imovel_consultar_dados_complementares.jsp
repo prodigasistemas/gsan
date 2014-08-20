@@ -894,6 +894,62 @@
 									</logic:iterate>
 								</logic:present>
 							</table>
+							
+							<br/>
+							
+							<table width="100%" align="center" bgcolor="#90c7fc" border="0">
+								<tr bordercolor="#79bbfd">
+									<td colspan="3" align="center" bgcolor="#79bbfd">
+										<strong>Fotos</strong>
+									</td>
+								</tr>
+								<tr bordercolor="#000000">
+									<td width="75%" bgcolor="#90c7fc" align="center">
+										<div class="style9">
+											<font color="#000000" style="font-size:9px"
+												face="Verdana, Arial, Helvetica, sans-serif"> 
+													<strong>Nome da foto</strong></font>
+										</div>
+									</td>
+	
+									<td width="25%" align="center" bgcolor="#90c7fc">
+										<span class="style9">
+											<font color="#000000" style="font-size:9px"
+												face="Verdana, Arial, Helvetica, sans-serif">
+													<strong>Foto</strong>
+											</font>
+										</span>
+									</td>
+								</tr>
+								<%String cor10 = "#FFFFFF";%>
+								
+								<logic:present name="colecaoImagens" scope="session">
+									<logic:iterate name="colecaoImagens" id="imagem">
+										<%if (cor10.equalsIgnoreCase("#FFFFFF")) {
+											cor10 = "#cbe5fe";%>
+										<tr bgcolor="#FFFFFF">
+											<%} else {
+												cor10 = "#FFFFFF";%>
+										<tr bgcolor="#cbe5fe">
+											<%}%>
+											<td bordercolor="#90c7fc" align="left">
+												<font style="font-size: 9px;"
+													color="#000000" face="Verdana, Arial, Helvetica, sans-serif">
+														<bean:write name="imagem" property="nomeImagem"/>
+												</font>
+											</td>
+											<td align="center">
+												<logic:notEmpty name="imagem" property="caminhoImagem">
+													<a href="javascript:abrirPopup('exibirImovelImagemAction.do?id=<bean:write name="imagem" property="id"/>', 400, 800);">
+														<img width="18" height="18"
+															src="<bean:message key="caminho.imagens"/>imgfolder.gif" border="0" />
+													</a> 
+												</logic:notEmpty>
+											</td>
+									    </tr>
+									</logic:iterate>
+								</logic:present>
+							</table>
 						
 						<br>
 						<table width="100%" align="center" bgcolor="#90c7fc" border="0">

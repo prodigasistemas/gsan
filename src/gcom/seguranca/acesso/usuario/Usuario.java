@@ -17,38 +17,30 @@ import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 @ControleAlteracao()
 public class Usuario extends ObjetoTransacao{
 
 	private static final long serialVersionUID = 1L;
 
 	public static final int ATRIBUTOS_INSERIR_USUARIO = 58;
-	
 	public static final int ATRIBUTOS_ATUALIZAR_USUARIO = 59;
-	
 	public static final int ATRIBUTOS_REMOVER_USUARIO = 60;
-	
 	public static final int ATRIBUTOS_USUARIO_ALTERAR_SENHA = 52;
-	
 	public static final int ATRIBUTOS_USUARIO_ALTERAR_SENHA_LOGIN = 818;
 	
-    /** Constante usada para recuperar o usuário logado no sistema */
 	public static final String USUARIO_LOGADO = "usuarioLogado";
 
     /** Usuário utilizado para o processamento batch*/
     public static final Usuario USUARIO_BATCH;
-    //public static final Usuario USUARIO_MIGRACAO;
 
     static {
         USUARIO_BATCH = new Usuario();
-        USUARIO_BATCH.setId(new Integer(1));//MUDAR O IDENTIFICADOR QUANDO INSERIR O USUARIO BATCH NA BASE
+        USUARIO_BATCH.setId(new Integer(1));
         UsuarioAbrangencia usuarioAbrangencia = new UsuarioAbrangencia();
 		usuarioAbrangencia.setId(1);
 		USUARIO_BATCH.setUsuarioAbrangencia(usuarioAbrangencia);
 	}
     
-	/** Operacao de teste */
 	public static final Usuario USUARIO_TESTE;
 
 	static {
@@ -65,126 +57,92 @@ public class Usuario extends ObjetoTransacao{
 		USUARIO_TESTE.setUsuarioAbrangencia(usuarioAbrangencia);
 	}
 
-	/** identifier field */
 	private Integer id;
 
-	/** nullable persistent field */
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_USUARIO, ATRIBUTOS_REMOVER_USUARIO, 
 			ATRIBUTOS_USUARIO_ALTERAR_SENHA, ATRIBUTOS_USUARIO_ALTERAR_SENHA_LOGIN})
 	private String login;
-
-	/** nullable persistent field */
 	private String senha;
-
-	/** nullable persistent field */
 	private Integer numeroAcessos;
-
-	/** nullable persistent field */
 	private Short bloqueioAcesso;
 
-	/** nullable persistent field */
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_USUARIO})
 	private Date dataExpiracaoAcesso;
 
-	/** nullable persistent field */
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_USUARIO})
 	private Date dataPrazoMensagemExpiracao;
 
-	/** nullable persistent field */
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_USUARIO})
 	private Date dataCadastroAcesso;
 
-	/** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_USUARIO,ATRIBUTOS_ATUALIZAR_USUARIO})
 	private Date dataCadastroInicio;
-
-	/** nullable persistent field */
-	//@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_USUARIO,ATRIBUTOS_ATUALIZAR_USUARIO})
 	private Date dataCadastroFim;
 
-	/** nullable persistent field */
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_USUARIO,ATRIBUTOS_ATUALIZAR_USUARIO})
 	private String descricaoEmail;
 
-	/** nullable persistent field */
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_ATUALIZAR_USUARIO, ATRIBUTOS_USUARIO_ALTERAR_SENHA,
-			ATRIBUTOS_USUARIO_ALTERAR_SENHA_LOGIN})
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_ATUALIZAR_USUARIO, ATRIBUTOS_USUARIO_ALTERAR_SENHA,ATRIBUTOS_USUARIO_ALTERAR_SENHA_LOGIN})
 	private Date ultimaAlteracao;
 
-	/** nullable persistent field */
 	private Date ultimoAcesso;
 
-	/** persistent field */
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_USUARIO,ATRIBUTOS_ATUALIZAR_USUARIO})
 	private UnidadeOrganizacional unidadeOrganizacional;
 
-	/** persistent field */
 	@ControleAlteracao(value=FiltroUsuarioSituacao.DESCRICAO, funcionalidade={ATRIBUTOS_ATUALIZAR_USUARIO})
 	private UsuarioSituacao usuarioSituacao;
 
-	/** persistent field */
 	@ControleAlteracao(value=FiltroUsuario.EMPRESA, funcionalidade={ATRIBUTOS_INSERIR_USUARIO, ATRIBUTOS_ATUALIZAR_USUARIO})
 	private Empresa empresa;
 
-	/** persistent field */
 	@ControleAlteracao(value=FiltroUsuario.GERENCIA_REGIONAL, funcionalidade={ATRIBUTOS_INSERIR_USUARIO,ATRIBUTOS_ATUALIZAR_USUARIO})
 	private GerenciaRegional gerenciaRegional;
 	
-	/** persistent field */
 	@ControleAlteracao(value=FiltroUsuario.UNIDADE_NEGOCIO, funcionalidade={ATRIBUTOS_INSERIR_USUARIO,ATRIBUTOS_ATUALIZAR_USUARIO})
 	private UnidadeNegocio unidadeNegocio;
 
-	/** persistent field */
 	@ControleAlteracao(value=FiltroUsuario.LOCALIDADE_ELO, funcionalidade={ATRIBUTOS_INSERIR_USUARIO,ATRIBUTOS_ATUALIZAR_USUARIO})
 	private Localidade localidadeElo;
 
-	/** persistent field */
 	@ControleAlteracao(value=FiltroUsuario.LOCALIDADE, funcionalidade={ATRIBUTOS_INSERIR_USUARIO,ATRIBUTOS_ATUALIZAR_USUARIO})
 	private Localidade localidade;
 
-	/** persistent field */
 	@ControleAlteracao(value=FiltroUsuarioTipo.DESCRICAO, funcionalidade={ATRIBUTOS_INSERIR_USUARIO,ATRIBUTOS_ATUALIZAR_USUARIO})
 	private UsuarioTipo usuarioTipo;
 
-	/** persistent field */
 	@ControleAlteracao(value=FiltroUsuario.USUARIO_ABRANGENCIA, funcionalidade={ATRIBUTOS_INSERIR_USUARIO,ATRIBUTOS_ATUALIZAR_USUARIO})
 	private UsuarioAbrangencia usuarioAbrangencia;
 
-	/** persistent field */
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_USUARIO})
 	private Funcionario funcionario;
 
-	/** persistent field */
 	private String nomeUsuario;
 
-	/** persistent field */
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_USUARIO})
 	private Date dataNascimento;
 
-	/** persistent field */
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_USUARIO, ATRIBUTOS_ATUALIZAR_USUARIO, ATRIBUTOS_USUARIO_ALTERAR_SENHA})
 	private String lembreteSenha;
 
-	/** persistent field */
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_INSERIR_USUARIO})
 	private String cpf;
 
 	private Short indicadorTipoRelatorioPadrao;
-
 	private Short indicadorExibeMensagem;
-	
 	private Short indicadorUsuarioBatch;
-	
 	private Short indicadorUsuarioInternet;
 	
+	@SuppressWarnings("rawtypes")
 	private Set usuarioGrupos;
 	
 	private String ipLogado;
 	
+	@SuppressWarnings("rawtypes")
 	public Set getUsuarioGrupos() {
 		return usuarioGrupos;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setUsuarioGrupos(Set usuarioGrupos) {
 		this.usuarioGrupos = usuarioGrupos;
 	}

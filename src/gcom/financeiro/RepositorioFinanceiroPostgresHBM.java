@@ -31,11 +31,11 @@ import org.hibernate.StatelessSession;
 public class RepositorioFinanceiroPostgresHBM extends RepositorioFinanceiroHBM {
 
 	public Collection<Object[]> pesquisarContasAReceberParaResumo(
-			int anoMesReferenciaContabil, Integer idLocalidade) throws ErroRepositorioException {
+			int anoMesReferenciaContabil, Integer idLocalidade, Session session) throws ErroRepositorioException {
 		
 		Collection<Object[]> retorno = null;
 
-		Session session = HibernateUtil.getSession();
+//		Session session = HibernateUtil.getSession();
 
 		String consulta;
 
@@ -126,19 +126,20 @@ public class RepositorioFinanceiroPostgresHBM extends RepositorioFinanceiroHBM {
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			HibernateUtil.closeSession(session);
 		}
+//		finally {
+//			HibernateUtil.closeSession(session);
+//		}
 
 		return retorno;
 	}
 	
 	public Collection<Object[]> pesquisarGuiasPagamentoAReceberParaResumo(
-			int anoMesReferenciaContabil, Integer idLocalidade) throws ErroRepositorioException {
+			int anoMesReferenciaContabil, Integer idLocalidade, Session session) throws ErroRepositorioException {
 		
 		Collection<Object[]> retorno = null;
 
-		Session session = HibernateUtil.getSession();
+//		Session session = HibernateUtil.getSession();
 
 		String consulta;
 
@@ -218,19 +219,20 @@ public class RepositorioFinanceiroPostgresHBM extends RepositorioFinanceiroHBM {
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
+		} 
+//		finally {
+//			HibernateUtil.closeSession(session);
+//		}
 
 		return retorno;
 	}
 	
 	public Collection<Object[]> pesquisarDebitosACobrarAReceberParaResumo(
-			int anoMesReferenciaContabil, Integer idLocalidade) throws ErroRepositorioException {
+			int anoMesReferenciaContabil, Integer idLocalidade, Session session) throws ErroRepositorioException {
 		
 		Collection<Object[]> retorno = null;
 
-		Session session = HibernateUtil.getSession();
+//		Session session = HibernateUtil.getSession();
 
 		String consulta;
 
@@ -257,7 +259,14 @@ public class RepositorioFinanceiroPostgresHBM extends RepositorioFinanceiroHBM {
 					+ " sum(( coalesce(dbac.dbac_vldebito,0) - " +
 					" (trunc(( coalesce(dbac.dbac_vldebito,0) /dbac.dbac_nnprestacaodebito ),2) " +
 					" * dbac.dbac_nnprestacaocobradas))) as valorCategoria, "//8
-					+ " fdrc.fdrc_id AS idFaixa " //9
+					
+					+ " fdrc.fdrc_id AS idFaixa, " //9
+					
+					+ " sum(( coalesce(dbac.dbac_vldebito,0) - " +
+					" (trunc(( coalesce(dbac.dbac_vldebito,0) /dbac.dbac_nnprestacaodebito ),2) " +
+					" * (dbac.dbac_nnprestacaocobradas-(CASE WHEN(dbac.dbac_amreferenciaprestacao is not null " +
+					" and dbac.dbac_amreferenciaprestacao > :anoMesReferenciaContabil) THEN 1 ELSE 0 END))))) " +
+					" as valorCategoriaSemParcelaAtual "//10
 					
 					+ " FROM cadastro.localidade loca "
 					+ " INNER JOIN faturamento.debito_a_cobrar dbac on loca.loca_id = dbac.loca_id "
@@ -297,6 +306,7 @@ public class RepositorioFinanceiroPostgresHBM extends RepositorioFinanceiroHBM {
 					.addScalar("quantidadeDocumentos", Hibernate.INTEGER)
 					.addScalar("valorCategoria", Hibernate.BIG_DECIMAL)
 					.addScalar("idFaixa", Hibernate.INTEGER)
+					.addScalar("valorCategoriaSemParcelaAtual", Hibernate.BIG_DECIMAL)
 					
 					.setInteger("idLocalidade", idLocalidade)
 					.setInteger("anoMesReferenciaContabil", anoMesReferenciaContabil)
@@ -312,19 +322,20 @@ public class RepositorioFinanceiroPostgresHBM extends RepositorioFinanceiroHBM {
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
+		} 
+//		finally {
+//			HibernateUtil.closeSession(session);
+//		}
 
 		return retorno;
 	}
 	
 	public Collection<Object[]> pesquisarCreditosARealizarAReceberParaResumo(
-			int anoMesReferenciaContabil, Integer idLocalidade) throws ErroRepositorioException {
+			int anoMesReferenciaContabil, Integer idLocalidade, Session session) throws ErroRepositorioException {
 		
 		Collection<Object[]> retorno = null;
 
-		Session session = HibernateUtil.getSession();
+//		Session session = HibernateUtil.getSession();
 
 		String consulta;
 
@@ -348,9 +359,15 @@ public class RepositorioFinanceiroPostgresHBM extends RepositorioFinanceiroHBM {
 					+ DocumentoTipo.CREDITO_A_REALIZAR.toString() + " as idDocumentoTipo, "//6
 					
 					+ " count(crar.crar_id) as quantidadeDocumentos, "//7 
-					+ " sum( ( ( coalesce(crar.crar_vlcredito,0) - trunc((coalesce(crar.crar_vlcredito,0) /  crar.crar_nnprestacaocredito),2) " 
+					+ " sum( ( ( coalesce(crar.crar_vlcredito,0) - trunc((coalesce(crar.crar_vlcredito,0) / crar.crar_nnprestacaocredito),2) " 
 					+ " * crar.crar_nnprestacaorealizadas ) + coalesce(crar.crar_vlresidualmesanterior,0) )) as valorCategoria, "//8
-					+ " fdrc.fdrc_id AS idFaixa " //9
+					
+					+ " fdrc.fdrc_id AS idFaixa, " //9
+					
+					+ " sum( ( ( coalesce(crar.crar_vlcredito,0) - trunc((coalesce(crar.crar_vlcredito,0) / crar.crar_nnprestacaocredito),2) " 
+					+ " * (crar.crar_nnprestacaorealizadas - (CASE WHEN(crar.crar_amreferenciaprestacao is not null " 
+					+ " and crar.crar_amreferenciaprestacao > :anoMesReferenciaContabil) THEN 1 ELSE 0 END ) ) ) "
+					+ " + coalesce(crar.crar_vlresidualmesanterior,0 ) ) ) as valorCategoriaSemParcelaAtual "//10
 					
 					+ " FROM cadastro.localidade loca "
 					+ " INNER JOIN faturamento.credito_a_realizar crar on loca.loca_id = crar.loca_id "
@@ -390,6 +407,7 @@ public class RepositorioFinanceiroPostgresHBM extends RepositorioFinanceiroHBM {
 					.addScalar("quantidadeDocumentos", Hibernate.INTEGER)
 					.addScalar("valorCategoria", Hibernate.BIG_DECIMAL)
 					.addScalar("idFaixa", Hibernate.INTEGER)
+					.addScalar("valorCategoriaSemParcelaAtual", Hibernate.BIG_DECIMAL)
 					
 					.setInteger("idLocalidade", idLocalidade)
 					.setInteger("anoMesReferenciaContabil", anoMesReferenciaContabil)
@@ -405,9 +423,10 @@ public class RepositorioFinanceiroPostgresHBM extends RepositorioFinanceiroHBM {
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			HibernateUtil.closeSession(session);
-		}
+		} 
+//		finally {
+//			HibernateUtil.closeSession(session);
+//		}
 
 		return retorno;
 	}

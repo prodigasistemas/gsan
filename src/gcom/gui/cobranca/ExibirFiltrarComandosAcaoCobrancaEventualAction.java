@@ -20,9 +20,6 @@ import org.apache.struts.action.ActionMapping;
 /**
  * Permite consultar comandos de ação de cobrança [UC0326] Filtrar Comandos de
  * Ação de Conbrança - Eventual
- * 
- * @author Rafael Santos
- * @since 08/05/2006
  */
 public class ExibirFiltrarComandosAcaoCobrancaEventualAction extends GcomAction {
 
@@ -32,225 +29,160 @@ public class ExibirFiltrarComandosAcaoCobrancaEventualAction extends GcomAction 
 
 	private HttpSession sessao;
 
-	/**
-	 * 
-	 * @param actionMapping
-	 * @param actionForm
-	 * @param httpServletRequest
-	 * @param httpServletResponse
-	 * @return
-	 */
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm,
+			HttpServletRequest request, HttpServletResponse response) {
 
-		// Seta o mapeamento de retorno
-		ActionForward retorno = actionMapping
-				.findForward("exibirFiltrarComandosAcaoCobrancaEventual");
+		ActionForward retorno = actionMapping.findForward("exibirFiltrarComandosAcaoCobrancaEventual");
 
 		Fachada fachada = Fachada.getInstancia();
 
-		FiltrarComandosAcaoCobrancaEventualActionForm filtrarComandosAcaoCobrancaEventualActionForm = (FiltrarComandosAcaoCobrancaEventualActionForm) actionForm;
+		FiltrarComandosAcaoCobrancaEventualActionForm form = (FiltrarComandosAcaoCobrancaEventualActionForm) actionForm;
 
-		String situacaoComando = filtrarComandosAcaoCobrancaEventualActionForm
-		.getSituacaoComando();
-		
-		if(situacaoComando == null){
-			filtrarComandosAcaoCobrancaEventualActionForm
-			.setSituacaoComando("Todos");	
-		}
-		
-		String indicadorCriterio = filtrarComandosAcaoCobrancaEventualActionForm
-		.getIndicadorCriterio();
-		
-		if(indicadorCriterio == null){
-			filtrarComandosAcaoCobrancaEventualActionForm
-			.setIndicadorCriterio("Todos");
+		String situacaoComando = form.getSituacaoComando();
+
+		if (situacaoComando == null) {
+			form.setSituacaoComando("Todos");
 		}
 
-		sessao = httpServletRequest.getSession(false);
-		
+		String indicadorCriterio = form.getIndicadorCriterio();
+
+		if (indicadorCriterio == null) {
+			form.setIndicadorCriterio("Todos");
+		}
+
+		sessao = request.getSession(false);
+
 		sessao.removeAttribute("filtroCobrancaAcaoAtividadeComando");
-		
-		String carregando = httpServletRequest.getParameter("carregando");
-		
-		if(carregando != null && !carregando.equals("")){
-			
-			if (sessao.getAttribute("filtrarComandosAcaoCobrancaEventualActionForm") != null) {
-				
-				FiltrarComandosAcaoCobrancaEventualActionForm filtrarComandosAcaoCobrancaEventualActionFormRecarregar = 
-		        	(FiltrarComandosAcaoCobrancaEventualActionForm) sessao.getAttribute("filtrarComandosAcaoCobrancaEventualActionForm");
 
-				
-				filtrarComandosAcaoCobrancaEventualActionForm.setAcaoCobranca(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getAcaoCobranca());
-				filtrarComandosAcaoCobrancaEventualActionForm.setIndicadorCriterio(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getIndicadorCriterio());
-				filtrarComandosAcaoCobrancaEventualActionForm.setCriterioCobranca(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getCriterioCobranca());
-				filtrarComandosAcaoCobrancaEventualActionForm.setAtividadeCobranca(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getAtividadeCobranca());
-				filtrarComandosAcaoCobrancaEventualActionForm.setGrupoCobranca(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getGrupoCobranca());
-				filtrarComandosAcaoCobrancaEventualActionForm.setGerenciaRegional(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getGerenciaRegional());
-				filtrarComandosAcaoCobrancaEventualActionForm.setLocalidadeOrigemID(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getLocalidadeOrigemID());
-				filtrarComandosAcaoCobrancaEventualActionForm.setLocalidadeDestinoID(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getLocalidadeDestinoID());
-				filtrarComandosAcaoCobrancaEventualActionForm.setNomeLocalidadeOrigem(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getNomeLocalidadeOrigem());				
-				filtrarComandosAcaoCobrancaEventualActionForm.setNomeLocalidadeDestino(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getNomeLocalidadeDestino());
-				filtrarComandosAcaoCobrancaEventualActionForm.setSetorComercialOrigemCD(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getSetorComercialOrigemCD());
-				filtrarComandosAcaoCobrancaEventualActionForm.setSetorComercialOrigemID(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getSetorComercialOrigemID());
-				filtrarComandosAcaoCobrancaEventualActionForm.setSetorComercialDestinoCD(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getSetorComercialDestinoCD());
-				filtrarComandosAcaoCobrancaEventualActionForm.setSetorComercialDestinoID(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getSetorComercialDestinoID());
-				filtrarComandosAcaoCobrancaEventualActionForm.setNomeSetorComercialOrigem(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getNomeSetorComercialOrigem());
-				filtrarComandosAcaoCobrancaEventualActionForm.setNomeSetorComercialDestino(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getNomeSetorComercialDestino());
-				filtrarComandosAcaoCobrancaEventualActionForm.setUnidadeNegocio(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getUnidadeNegocio());
-				
-				filtrarComandosAcaoCobrancaEventualActionForm.setDataEmissaoInicio(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getDataEmissaoInicio());
-				filtrarComandosAcaoCobrancaEventualActionForm.setDataEmissaoFim(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getDataEmissaoFim());
-				filtrarComandosAcaoCobrancaEventualActionForm.setIdCobrancaAcaoAtividadeComando(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getIdCobrancaAcaoAtividadeComando());
-				
-				if(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getRotaInicial() != null &&
-						!filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getRotaInicial().equals("")){
-					carregarRota(
-							filtrarComandosAcaoCobrancaEventualActionForm,
-							fachada, filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getSetorComercialOrigemCD(),
-							filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getLocalidadeOrigemID());	
-					filtrarComandosAcaoCobrancaEventualActionForm.setRotaInicial(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getRotaInicial());
-					
-				}else{
-					filtrarComandosAcaoCobrancaEventualActionForm.setRotaInicial(null);
-					sessao.setAttribute("colecaoRota", null);
-				}
-				if(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getRotaFinal() != null &&
-						!filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getRotaFinal().equals("")){
-				
-					filtrarComandosAcaoCobrancaEventualActionForm.setRotaFinal(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getRotaFinal());
-				}else{
-					filtrarComandosAcaoCobrancaEventualActionForm.setRotaFinal(null);
+		String carregando = request.getParameter("carregando");
+
+		if (carregando != null && !carregando.equals("")) {
+
+			if (sessao.getAttribute("filtrarComandosAcaoCobrancaEventualActionForm") != null) {
+
+				FiltrarComandosAcaoCobrancaEventualActionForm formRecarregar = (FiltrarComandosAcaoCobrancaEventualActionForm) 
+						sessao.getAttribute("filtrarComandosAcaoCobrancaEventualActionForm");
+
+				form.setAcaoCobranca(formRecarregar.getAcaoCobranca());
+				form.setIndicadorCriterio(formRecarregar.getIndicadorCriterio());
+				form.setCriterioCobranca(formRecarregar.getCriterioCobranca());
+				form.setAtividadeCobranca(formRecarregar.getAtividadeCobranca());
+				form.setGrupoCobranca(formRecarregar.getGrupoCobranca());
+				form.setGerenciaRegional(formRecarregar.getGerenciaRegional());
+				form.setLocalidadeOrigemID(formRecarregar.getLocalidadeOrigemID());
+				form.setLocalidadeDestinoID(formRecarregar.getLocalidadeDestinoID());
+				form.setNomeLocalidadeOrigem(formRecarregar.getNomeLocalidadeOrigem());
+				form.setNomeLocalidadeDestino(formRecarregar.getNomeLocalidadeDestino());
+				form.setSetorComercialOrigemCD(formRecarregar.getSetorComercialOrigemCD());
+				form.setSetorComercialOrigemID(formRecarregar.getSetorComercialOrigemID());
+				form.setSetorComercialDestinoCD(formRecarregar.getSetorComercialDestinoCD());
+				form.setSetorComercialDestinoID(formRecarregar.getSetorComercialDestinoID());
+				form.setNomeSetorComercialOrigem(formRecarregar.getNomeSetorComercialOrigem());
+				form.setNomeSetorComercialDestino(formRecarregar.getNomeSetorComercialDestino());
+				form.setUnidadeNegocio(formRecarregar.getUnidadeNegocio());
+				form.setDataEmissaoInicio(formRecarregar.getDataEmissaoInicio());
+				form.setDataEmissaoFim(formRecarregar.getDataEmissaoFim());
+				form.setIdCobrancaAcaoAtividadeComando(formRecarregar.getIdCobrancaAcaoAtividadeComando());
+
+				if (formRecarregar.getRotaInicial() != null && !formRecarregar.getRotaInicial().equals("")) {
+					carregarRota(form, fachada, formRecarregar.getSetorComercialOrigemCD(), formRecarregar.getLocalidadeOrigemID());
+					form.setRotaInicial(formRecarregar.getRotaInicial());
+				} else {
+					form.setRotaInicial(null);
 					sessao.setAttribute("colecaoRota", null);
 				}
 				
-				
-				filtrarComandosAcaoCobrancaEventualActionForm.setClienteRelacaoTipo(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getClienteRelacaoTipo());
-				filtrarComandosAcaoCobrancaEventualActionForm.setIdCliente(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getIdCliente());
-				filtrarComandosAcaoCobrancaEventualActionForm.setNomeCliente(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getNomeCliente());
-				filtrarComandosAcaoCobrancaEventualActionForm.setPeriodoComandoInicial(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getPeriodoComandoInicial());
-				filtrarComandosAcaoCobrancaEventualActionForm.setPeriodoComandoFinal(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getPeriodoComandoFinal());
-				filtrarComandosAcaoCobrancaEventualActionForm.setPeriodoRealizacaoComandoInicial(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getPeriodoRealizacaoComandoInicial());
-				filtrarComandosAcaoCobrancaEventualActionForm.setPeriodoRealizacaoComandoFinal(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getPeriodoRealizacaoComandoFinal());
-				filtrarComandosAcaoCobrancaEventualActionForm.setPeriodoReferenciaContasInicial(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getPeriodoReferenciaContasInicial());
-				filtrarComandosAcaoCobrancaEventualActionForm.setPeriodoReferenciaContasFinal(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getPeriodoReferenciaContasFinal());
-				filtrarComandosAcaoCobrancaEventualActionForm.setPeriodoVencimentoContasInicial(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getPeriodoVencimentoContasInicial());
-				filtrarComandosAcaoCobrancaEventualActionForm.setPeriodoVencimentoContasFinal(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getPeriodoVencimentoContasFinal());
-				filtrarComandosAcaoCobrancaEventualActionForm.setIntervaloValorDocumentosInicial(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getIntervaloValorDocumentosInicial());
-		        filtrarComandosAcaoCobrancaEventualActionForm.setIntervaloValorDocumentosFinal(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getIntervaloValorDocumentosFinal());
-		        filtrarComandosAcaoCobrancaEventualActionForm.setIntervaloQuantidadeDocumentosInicial(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getIntervaloQuantidadeDocumentosInicial());
-		        filtrarComandosAcaoCobrancaEventualActionForm.setIntervaloQuantidadeDocumentosFinal(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getIntervaloQuantidadeDocumentosFinal());
-		        filtrarComandosAcaoCobrancaEventualActionForm.setIntervaloQuantidadeItensDocumentosInicial(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getIntervaloQuantidadeItensDocumentosInicial());
-		        filtrarComandosAcaoCobrancaEventualActionForm.setIntervaloQuantidadeItensDocumentosFinal(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getIntervaloQuantidadeItensDocumentosFinal());
-		        filtrarComandosAcaoCobrancaEventualActionForm.setSituacaoComando(filtrarComandosAcaoCobrancaEventualActionFormRecarregar.getSituacaoComando());
+				if (formRecarregar.getRotaFinal() != null && !formRecarregar.getRotaFinal().equals("")) {
+					form.setRotaFinal(formRecarregar.getRotaFinal());
+				} else {
+					form.setRotaFinal(null);
+					sessao.setAttribute("colecaoRota", null);
+				}
+
+				form.setClienteRelacaoTipo(formRecarregar.getClienteRelacaoTipo());
+				form.setIdCliente(formRecarregar.getIdCliente());
+				form.setNomeCliente(formRecarregar.getNomeCliente());
+				form.setPeriodoComandoInicial(formRecarregar.getPeriodoComandoInicial());
+				form.setPeriodoComandoFinal(formRecarregar.getPeriodoComandoFinal());
+				form.setPeriodoRealizacaoComandoInicial(formRecarregar.getPeriodoRealizacaoComandoInicial());
+				form.setPeriodoRealizacaoComandoFinal(formRecarregar.getPeriodoRealizacaoComandoFinal());
+				form.setPeriodoReferenciaContasInicial(formRecarregar.getPeriodoReferenciaContasInicial());
+				form.setPeriodoReferenciaContasFinal(formRecarregar.getPeriodoReferenciaContasFinal());
+				form.setPeriodoVencimentoContasInicial(formRecarregar.getPeriodoVencimentoContasInicial());
+				form.setPeriodoVencimentoContasFinal(formRecarregar.getPeriodoVencimentoContasFinal());
+				form.setIntervaloValorDocumentosInicial(formRecarregar.getIntervaloValorDocumentosInicial());
+				form.setIntervaloValorDocumentosFinal(formRecarregar.getIntervaloValorDocumentosFinal());
+				form.setIntervaloQuantidadeDocumentosInicial(formRecarregar.getIntervaloQuantidadeDocumentosInicial());
+				form.setIntervaloQuantidadeDocumentosFinal(formRecarregar.getIntervaloQuantidadeDocumentosFinal());
+				form.setIntervaloQuantidadeItensDocumentosInicial(formRecarregar.getIntervaloQuantidadeItensDocumentosInicial());
+				form.setIntervaloQuantidadeItensDocumentosFinal(formRecarregar.getIntervaloQuantidadeItensDocumentosFinal());
+				form.setSituacaoComando(formRecarregar.getSituacaoComando());
 			}
-			
+
 		}
-		
-		//sessao = httpServletRequest.getSession(false);
 
 		// CARREGAR AS COBRANÇAS GRUPO
 		if (sessao.getAttribute("colecaoGrupoCobranca") == null) {
-			sessao.setAttribute("colecaoGrupoCobranca", fachada
-					.obterColecaoCobrancaGrupo());
+			sessao.setAttribute("colecaoGrupoCobranca", fachada.obterColecaoCobrancaGrupo());
 		}
 
 		// CARREGAR AS COBRANÇAS ATIVIDADE
 		if (sessao.getAttribute("colecaoAtividadeCobranca") == null) {
-			sessao.setAttribute("colecaoAtividadeCobranca", fachada
-					.obterColecaoCobrancaAtividade());
+			sessao.setAttribute("colecaoAtividadeCobranca", fachada.obterColecaoCobrancaAtividade());
 		}
 
 		// CARREGAR AS COBRANÇAS ACAO
 		if (sessao.getAttribute("colecaoAcaoCobranca") == null) {
-			sessao.setAttribute("colecaoAcaoCobranca", fachada
-					.obterColecaoCobrancaAcao());
+			sessao.setAttribute("colecaoAcaoCobranca", fachada.obterColecaoCobrancaAcao());
 		}
 
 		// CARREGAR AS GERENCIAIS REGIONAIS
 		if (sessao.getAttribute("colecaoGerenciaRegional") == null) {
-			sessao.setAttribute("colecaoGerenciaRegional", fachada
-					.obterColecaoGerenciaRegional());
+			sessao.setAttribute("colecaoGerenciaRegional", fachada.obterColecaoGerenciaRegional());
 		}
 
 		// CARREGAR AS UNIDADE NEGOCIO
 		if (sessao.getAttribute("colecaoUnidadeNegocio") == null) {
-			sessao.setAttribute("colecaoUnidadeNegocio", fachada
-					.obterColecaoGerenciaRegional());
+			sessao.setAttribute("colecaoUnidadeNegocio", fachada.obterColecaoGerenciaRegional());
 		}
-		
-		
+
 		// CARREGAR OS CLIENTE RELACAO TIPO
 		if (sessao.getAttribute("colecaoClienteRelacaoTipo") == null) {
-			sessao.setAttribute("colecaoClienteRelacaoTipo", fachada
-					.obterColecaoClienteRelacaoTipo());
+			sessao.setAttribute("colecaoClienteRelacaoTipo", fachada.obterColecaoClienteRelacaoTipo());
 		}
-		
-		//CARREGAR OS TITULOS DE COBRANCA ACAO ATIVIDAD COMAND
+
+		// CARREGAR OS TITULOS DE COBRANCA ACAO ATIVIDAD COMAND
 		if (sessao.getAttribute("colecaoCobrancaAcaoAtividadeComando") == null) {
-			
 			Collection colecaoAtividadesEventuaisAcaoCobrancaComandadas = fachada.obterListaAtividadesEventuaisAcaoCobrancaComandadas();
-			
 			sessao.setAttribute("colecaoCobrancaAcaoAtividadeComando", colecaoAtividadesEventuaisAcaoCobrancaComandadas);
 		}
 
-		String objetoConsulta = (String) httpServletRequest
-				.getParameter("objetoConsulta");
+		String objetoConsulta = (String) request.getParameter("objetoConsulta");
+		String inscricaoTipo = (String) request.getParameter("inscricaoTipo");
+		String rota = (String) request.getParameter("rota");
 
-		String inscricaoTipo = (String) httpServletRequest
-				.getParameter("inscricaoTipo");
-
-		String rota = (String) httpServletRequest
-		.getParameter("rota");
-		
-		
-		//String idAcaoCobranca = (String) httpServletRequest
-		//.getParameter("idAcaoCobranca");
-
-		//String limparCriterioCobranca = (String) httpServletRequest
-		//.getParameter("limparCriterioCobranca");
-		
-		//carregar as rotas
-		if (rota != null && !rota.trim().equalsIgnoreCase("")){
-			
-			carregarRota(
-					filtrarComandosAcaoCobrancaEventualActionForm,
-					fachada, filtrarComandosAcaoCobrancaEventualActionForm.getSetorComercialOrigemCD(),
-					filtrarComandosAcaoCobrancaEventualActionForm.getLocalidadeOrigemID());
-			
+		// carregar as rotas
+		if (rota != null && !rota.trim().equalsIgnoreCase("")) {
+			carregarRota(form, fachada, form.getSetorComercialOrigemCD(), form.getLocalidadeOrigemID());
 		}
-		
-		if (objetoConsulta != null
-				&& !objetoConsulta.trim().equalsIgnoreCase("")
-				&& inscricaoTipo != null
-				&& !inscricaoTipo.trim().equalsIgnoreCase("")) {
+
+		if (objetoConsulta != null && !objetoConsulta.trim().equalsIgnoreCase("")
+				&& inscricaoTipo != null && !inscricaoTipo.trim().equalsIgnoreCase("")) {
 
 			switch (Integer.parseInt(objetoConsulta)) {
 			// Localidade
 			case 1:
-
-				pesquisarLocalidade(inscricaoTipo,
-						filtrarComandosAcaoCobrancaEventualActionForm, fachada,
-						httpServletRequest);
+				pesquisarLocalidade(inscricaoTipo, form, fachada, request);
 
 				break;
 			// Setor Comercial
 			case 2:
-
-				pesquisarLocalidade(inscricaoTipo,
-						filtrarComandosAcaoCobrancaEventualActionForm, fachada,
-						httpServletRequest);
-
-				pesquisarSetorComercial(inscricaoTipo,
-						filtrarComandosAcaoCobrancaEventualActionForm, fachada,
-						httpServletRequest);
+				pesquisarLocalidade(inscricaoTipo, form, fachada, request);
+				pesquisarSetorComercial(inscricaoTipo, form, fachada, request);
 
 				break;
 			case 3:
-				pesquisarCliente(inscricaoTipo,
-						filtrarComandosAcaoCobrancaEventualActionForm, fachada,
-						httpServletRequest);
+				pesquisarCliente(inscricaoTipo, form, fachada, request);
 				break;
 
 			default:
@@ -258,38 +190,23 @@ public class ExibirFiltrarComandosAcaoCobrancaEventualAction extends GcomAction 
 			}
 		}
 
-		String criterioCobranca = filtrarComandosAcaoCobrancaEventualActionForm
-				.getCriterioCobranca();
+		String criterioCobranca = form.getCriterioCobranca();
 		// pesquisar o critério de cobrança
 		if (criterioCobranca != null && !criterioCobranca.equals("")) {
 
-			CobrancaCriterio cobrancaCriterio = fachada
-					.obterCobrancaCriterio(criterioCobranca);
+			CobrancaCriterio cobrancaCriterio = fachada.obterCobrancaCriterio(criterioCobranca);
 
 			if (cobrancaCriterio == null) {
-
-				filtrarComandosAcaoCobrancaEventualActionForm
-						.setCriterioCobranca("");
-				filtrarComandosAcaoCobrancaEventualActionForm
-						.setNomeCriterioCobranca("Critério de Cobrança Inexistente");
-				httpServletRequest.setAttribute("corCriterioCobranca",
-						"exception");
-				httpServletRequest
-						.setAttribute("nomeCampo", "criterioCobranca");
-
+				form.setCriterioCobranca("");
+				form.setNomeCriterioCobranca("Critério de Cobrança Inexistente");
+				request.setAttribute("corCriterioCobranca", "exception");
+				request.setAttribute("nomeCampo", "criterioCobranca");
 			} else {
-				filtrarComandosAcaoCobrancaEventualActionForm
-						.setCriterioCobranca(String.valueOf(cobrancaCriterio
-								.getId()));
-				filtrarComandosAcaoCobrancaEventualActionForm
-						.setNomeCriterioCobranca(cobrancaCriterio
-								.getDescricaoCobrancaCriterio());
-				httpServletRequest.setAttribute("corCriterioCobranca", "valor");
-
-				httpServletRequest.setAttribute("nomeCampo", "grupoCobranca");
-
+				form.setCriterioCobranca(String.valueOf(cobrancaCriterio.getId()));
+				form.setNomeCriterioCobranca(cobrancaCriterio.getDescricaoCobrancaCriterio());
+				request.setAttribute("corCriterioCobranca", "valor");
+				request.setAttribute("nomeCampo", "grupoCobranca");
 			}
-
 		}
 
 		return retorno;
@@ -301,159 +218,99 @@ public class ExibirFiltrarComandosAcaoCobrancaEventualAction extends GcomAction 
 	 * @param inscricaoTipo
 	 * @param imovelOutrosCriteriosActionForm
 	 * @param fachada
-	 * @param httpServletRequest
+	 * @param request
 	 */
-	private void pesquisarLocalidade(
-			String inscricaoTipo,
-			FiltrarComandosAcaoCobrancaEventualActionForm filtrarComandosAcaoCobrancaEventualActionForm,
-			Fachada fachada, HttpServletRequest httpServletRequest) {
+	private void pesquisarLocalidade(String inscricaoTipo,
+			FiltrarComandosAcaoCobrancaEventualActionForm form,
+			Fachada fachada, HttpServletRequest request) {
 
 		if (inscricaoTipo.equalsIgnoreCase("origem")) {
-			filtrarComandosAcaoCobrancaEventualActionForm
-					.setInscricaoTipo("origem");
+			form.setInscricaoTipo("origem");
 			// Recebe o valor do campo localidadeOrigemID do formulário.
-			localidadeID = (String) filtrarComandosAcaoCobrancaEventualActionForm
-					.getLocalidadeOrigemID();
+			localidadeID = (String) form.getLocalidadeOrigemID();
 
-			Localidade objetoLocalidade = fachada
-					.obterLocalidadeGerenciaRegional(localidadeID);
+			Localidade objetoLocalidade = fachada.obterLocalidadeGerenciaRegional(localidadeID);
 
 			if (objetoLocalidade == null) {
 				// Localidade nao encontrada
 				// Limpa os campos localidadeOrigemID e nomeLocalidadeOrigem do
 				// formulário
-				filtrarComandosAcaoCobrancaEventualActionForm
-						.setLocalidadeOrigemID("");
-				filtrarComandosAcaoCobrancaEventualActionForm
-						.setNomeLocalidadeOrigem("Localidade Inexistente");
-				httpServletRequest.setAttribute("corLocalidadeOrigem",
-						"exception");
-				httpServletRequest.setAttribute("nomeCampo",
-						"localidadeOrigemID");
+				form.setLocalidadeOrigemID("");
+				form.setNomeLocalidadeOrigem("Localidade Inexistente");
+				request.setAttribute("corLocalidadeOrigem", "exception");
+				request.setAttribute("nomeCampo", "localidadeOrigemID");
 
 			} else {
-				filtrarComandosAcaoCobrancaEventualActionForm
-						.setLocalidadeOrigemID(String.valueOf(objetoLocalidade
-								.getId()));
-				filtrarComandosAcaoCobrancaEventualActionForm
-						.setNomeLocalidadeOrigem(objetoLocalidade
-								.getDescricao());
-				httpServletRequest.setAttribute("corLocalidadeOrigem", "valor");
+				form.setLocalidadeOrigemID(String.valueOf(objetoLocalidade.getId()));
+				form.setNomeLocalidadeOrigem(objetoLocalidade.getDescricao());
+				request.setAttribute("corLocalidadeOrigem", "valor");
 
-				String localidadeDestinoID = (String) filtrarComandosAcaoCobrancaEventualActionForm
-						.getLocalidadeDestinoID();
+				String localidadeDestinoID = (String) form.getLocalidadeDestinoID();
 				// verifica o valor das localidades, origem e final
 				if (localidadeDestinoID != null) {
 
 					if (localidadeDestinoID.equals("")) {
-						filtrarComandosAcaoCobrancaEventualActionForm
-								.setLocalidadeDestinoID(String
-										.valueOf(objetoLocalidade.getId()));
-						filtrarComandosAcaoCobrancaEventualActionForm
-								.setNomeLocalidadeDestino(objetoLocalidade
-										.getDescricao());
+						form.setLocalidadeDestinoID(String.valueOf(objetoLocalidade.getId()));
+						form.setNomeLocalidadeDestino(objetoLocalidade.getDescricao());
 					} else {
-						int localidadeDestino = new Integer(localidadeDestinoID)
-								.intValue();
-						int localidadeOrigem = objetoLocalidade.getId()
-								.intValue();
+						int localidadeDestino = new Integer(localidadeDestinoID).intValue();
+						int localidadeOrigem = objetoLocalidade.getId().intValue();
 						if (localidadeOrigem > localidadeDestino) {
-							filtrarComandosAcaoCobrancaEventualActionForm
-									.setLocalidadeDestinoID(String
-											.valueOf(objetoLocalidade.getId()));
-							filtrarComandosAcaoCobrancaEventualActionForm
-									.setNomeLocalidadeDestino(objetoLocalidade
-											.getDescricao());
+							form.setLocalidadeDestinoID(String.valueOf(objetoLocalidade.getId()));
+							form.setNomeLocalidadeDestino(objetoLocalidade.getDescricao());
 						}
 					}
 				}
-				httpServletRequest.setAttribute("nomeCampo",
-						"localidadeDestinoID");
-
+				
+				request.setAttribute("nomeCampo", "localidadeDestinoID");
 			}
 		} else {
 			// Recebe o valor do campo localidadeDestinoID do formulário.
-			localidadeID = (String) filtrarComandosAcaoCobrancaEventualActionForm
-					.getLocalidadeDestinoID();
+			localidadeID = (String) form.getLocalidadeDestinoID();
 
-			Localidade objetoLocalidade = fachada
-					.obterLocalidadeGerenciaRegional(localidadeID);
+			Localidade objetoLocalidade = fachada.obterLocalidadeGerenciaRegional(localidadeID);
 
-			filtrarComandosAcaoCobrancaEventualActionForm
-					.setInscricaoTipo("destino");
+			form.setInscricaoTipo("destino");
 
 			if (objetoLocalidade == null) {
 				// Localidade nao encontrada
 				// Limpa os campos localidadeDestinoID e nomeLocalidadeDestino
 				// do formulário
-				filtrarComandosAcaoCobrancaEventualActionForm
-						.setLocalidadeDestinoID("");
-				filtrarComandosAcaoCobrancaEventualActionForm
-						.setNomeLocalidadeDestino("Localidade inexistente");
-				httpServletRequest.setAttribute("corLocalidadeDestino",
-						"exception");
-				httpServletRequest.setAttribute("nomeCampo",
-						"localidadeDestinoID");
+				form.setLocalidadeDestinoID("");
+				form.setNomeLocalidadeDestino("Localidade inexistente");
+				request.setAttribute("corLocalidadeDestino", "exception");
+				request.setAttribute("nomeCampo", "localidadeDestinoID");
 			} else {
 				int localidadeDestino = objetoLocalidade.getId().intValue();
 
-				String localidade = (String) filtrarComandosAcaoCobrancaEventualActionForm
-						.getLocalidadeOrigemID();
+				String localidade = (String) form.getLocalidadeOrigemID();
 
 				if (localidade != null && !localidade.equals("")) {
 
 					int localidadeOrigem = new Integer(localidade).intValue();
 					if (localidadeDestino < localidadeOrigem) {
-						filtrarComandosAcaoCobrancaEventualActionForm
-								.setLocalidadeDestinoID("");
-						// inserirComandoAcaoCobrancaEventualCriterioRotaActionForm
-						// .setNomeLocalidadeDestino("Loc. Final maior que a
-						// Inicial");
-						httpServletRequest.setAttribute("mensagem",
-								"Localidae Final menor que o Inicial");
-						filtrarComandosAcaoCobrancaEventualActionForm
-								.setNomeLocalidadeDestino("");
-						httpServletRequest.setAttribute("corLocalidadeDestino",
-								"valor");
-
-						httpServletRequest.setAttribute("nomeCampo",
-								"localidadeDestinoID");
-
+						form.setLocalidadeDestinoID("");
+						request.setAttribute("mensagem", "Localidae Final menor que o Inicial");
+						form.setNomeLocalidadeDestino("");
+						request.setAttribute("corLocalidadeDestino", "valor");
+						request.setAttribute("nomeCampo", "localidadeDestinoID");
 					} else {
-						filtrarComandosAcaoCobrancaEventualActionForm
-								.setLocalidadeDestinoID(String
-										.valueOf(objetoLocalidade.getId()));
-						filtrarComandosAcaoCobrancaEventualActionForm
-								.setNomeLocalidadeDestino(objetoLocalidade
-										.getDescricao());
-						httpServletRequest.setAttribute("corLocalidadeDestino",
-								"valor");
-						httpServletRequest.setAttribute("nomeCampo",
-								"setorComercialOrigemCD");
+						form.setLocalidadeDestinoID(String.valueOf(objetoLocalidade.getId()));
+						form.setNomeLocalidadeDestino(objetoLocalidade.getDescricao());
+						request.setAttribute("corLocalidadeDestino", "valor");
+						request.setAttribute("nomeCampo", "setorComercialOrigemCD");
 
-						pesquisarLocalidade("origem",
-								filtrarComandosAcaoCobrancaEventualActionForm,
-								fachada, httpServletRequest);
+						pesquisarLocalidade("origem", form, fachada, request);
 					}
 				} else {
-					filtrarComandosAcaoCobrancaEventualActionForm
-							.setLocalidadeDestinoID(String
-									.valueOf(objetoLocalidade.getId()));
-					filtrarComandosAcaoCobrancaEventualActionForm
-							.setNomeLocalidadeDestino(objetoLocalidade
-									.getDescricao());
-					httpServletRequest.setAttribute("corLocalidadeDestino",
-							"valor");
-					httpServletRequest.setAttribute("nomeCampo",
-							"setorComercialOrigemCD");
-					pesquisarLocalidade("origem",
-							filtrarComandosAcaoCobrancaEventualActionForm,
-							fachada, httpServletRequest);
-
+					form.setLocalidadeDestinoID(String.valueOf(objetoLocalidade.getId()));
+					form.setNomeLocalidadeDestino(objetoLocalidade.getDescricao());
+					request.setAttribute("corLocalidadeDestino", "valor");
+					request.setAttribute("nomeCampo", "setorComercialOrigemCD");
+					pesquisarLocalidade("origem", form, fachada, request);
 				}
 			}
 		}
-
 	}
 
 	/**
@@ -461,73 +318,48 @@ public class ExibirFiltrarComandosAcaoCobrancaEventualAction extends GcomAction 
 	 * Cobrança
 	 * 
 	 * @param inscricaoTipo
-	 * @param filtrarComandosAcaoCobrancaEventualActionForm
+	 * @param form
 	 * @param fachada
-	 * @param httpServletRequest
+	 * @param request
 	 */
-	private void pesquisarSetorComercial(
-			String inscricaoTipo,
-			FiltrarComandosAcaoCobrancaEventualActionForm filtrarComandosAcaoCobrancaEventualActionForm,
-			Fachada fachada, HttpServletRequest httpServletRequest) {
+	private void pesquisarSetorComercial(String inscricaoTipo,
+			FiltrarComandosAcaoCobrancaEventualActionForm form,
+			Fachada fachada, HttpServletRequest request) {
 
 		if (inscricaoTipo.equalsIgnoreCase("origem")) {
-			filtrarComandosAcaoCobrancaEventualActionForm
-					.setInscricaoTipo("origem");
+			form.setInscricaoTipo("origem");
 			// Recebe o valor do campo localidadeOrigemID do formulário.
-			localidadeID = (String) filtrarComandosAcaoCobrancaEventualActionForm
-					.getLocalidadeOrigemID();
+			localidadeID = (String) form.getLocalidadeOrigemID();
 
 			// Recebe o valor do campo localidadeOrigemID do formulário.
-			setorComercialCD = (String) filtrarComandosAcaoCobrancaEventualActionForm
-					.getSetorComercialOrigemCD();
+			setorComercialCD = (String) form.getSetorComercialOrigemCD();
 
 			// O campo localidadeOrigemID será obrigatório
-			if (localidadeID != null
-					&& !localidadeID.trim().equalsIgnoreCase("")) {
+			if (localidadeID != null && !localidadeID.trim().equalsIgnoreCase("")) {
 
-				SetorComercial objetoSetorComercial = fachada
-						.obterSetorComercialLocalidade(localidadeID,
-								setorComercialCD);
+				SetorComercial objetoSetorComercial = fachada.obterSetorComercialLocalidade(localidadeID, setorComercialCD);
 
 				if (objetoSetorComercial == null) {
 					// Setor Comercial nao encontrado
 					// Limpa os campos setorComercialOrigemCD,
 					// nomeSetorComercialOrigem e setorComercialOrigemID do
 					// formulário
-					filtrarComandosAcaoCobrancaEventualActionForm
-							.setSetorComercialOrigemCD("");
-					filtrarComandosAcaoCobrancaEventualActionForm
-							.setSetorComercialOrigemID("");
-					filtrarComandosAcaoCobrancaEventualActionForm
-							.setNomeSetorComercialOrigem("Setor Comercial Inexistente");
-					httpServletRequest.setAttribute("corSetorComercialOrigem",
-							"exception");
-					filtrarComandosAcaoCobrancaEventualActionForm
-							.setRotaInicial(null);
-					filtrarComandosAcaoCobrancaEventualActionForm
-							.setRotaFinal(null);
-
-					httpServletRequest.setAttribute("nomeCampo",
-							"setorComercialOrigemCD");
+					form.setSetorComercialOrigemCD("");
+					form.setSetorComercialOrigemID("");
+					form.setNomeSetorComercialOrigem("Setor Comercial Inexistente");
+					request.setAttribute("corSetorComercialOrigem", "exception");
+					form.setRotaInicial(null);
+					form.setRotaFinal(null);
+					request.setAttribute("nomeCampo", "setorComercialOrigemCD");
 
 				} else {
-					// setorComercialID =
-					// objetoSetorComercial.getId().toString();
 					// setorComercialOrigem
-					filtrarComandosAcaoCobrancaEventualActionForm
-							.setSetorComercialOrigemCD(String
-									.valueOf(objetoSetorComercial.getCodigo()));
-					filtrarComandosAcaoCobrancaEventualActionForm
-							.setSetorComercialOrigemID(String
-									.valueOf(objetoSetorComercial.getId()));
-					filtrarComandosAcaoCobrancaEventualActionForm
-							.setNomeSetorComercialOrigem(objetoSetorComercial
-									.getDescricao());
-					httpServletRequest.setAttribute("corSetorComercialOrigem",
-							"valor");
+					form.setSetorComercialOrigemCD(String.valueOf(objetoSetorComercial.getCodigo()));
+					form.setSetorComercialOrigemID(String.valueOf(objetoSetorComercial.getId()));
+					form.setNomeSetorComercialOrigem(objetoSetorComercial.getDescricao());
+					request.setAttribute("corSetorComercialOrigem", "valor");
 
-					String setorComercialDestinoCD = (String) filtrarComandosAcaoCobrancaEventualActionForm
-							.getSetorComercialDestinoCD();
+					String setorComercialDestinoCD = (String) form.getSetorComercialDestinoCD();
 
 					// verifica o valor dos setores comerciais, origem e final
 					if (setorComercialDestinoCD != null) {
@@ -535,196 +367,110 @@ public class ExibirFiltrarComandosAcaoCobrancaEventualAction extends GcomAction 
 						if (setorComercialDestinoCD.equals("")) {
 
 							// setorComercialDestino
-							filtrarComandosAcaoCobrancaEventualActionForm
-									.setSetorComercialDestinoCD(String
-											.valueOf(objetoSetorComercial
-													.getCodigo()));
-							filtrarComandosAcaoCobrancaEventualActionForm
-									.setSetorComercialDestinoID(String
-											.valueOf(objetoSetorComercial
-													.getId()));
-							filtrarComandosAcaoCobrancaEventualActionForm
-									.setNomeSetorComercialDestino(objetoSetorComercial
-											.getDescricao());
+							form.setSetorComercialDestinoCD(String.valueOf(objetoSetorComercial.getCodigo()));
+							form.setSetorComercialDestinoID(String.valueOf(objetoSetorComercial.getId()));
+							form.setNomeSetorComercialDestino(objetoSetorComercial.getDescricao());
 
-							carregarRota(
-									filtrarComandosAcaoCobrancaEventualActionForm,
-									fachada, objetoSetorComercial.getCodigo()
-											+ "",localidadeID);
+							carregarRota(form, fachada, objetoSetorComercial.getCodigo() + "", localidadeID);
 
 						} else {
-
-							int setorDestino = new Integer(
-									setorComercialDestinoCD).intValue();
+							int setorDestino = new Integer(setorComercialDestinoCD).intValue();
 							int setorOrigem = objetoSetorComercial.getCodigo();
 							if (setorOrigem > setorDestino) {
 
 								// setorComercialDestino
-								filtrarComandosAcaoCobrancaEventualActionForm
-										.setSetorComercialDestinoCD(String
-												.valueOf(objetoSetorComercial
-														.getCodigo()));
-								filtrarComandosAcaoCobrancaEventualActionForm
-										.setSetorComercialDestinoID(String
-												.valueOf(objetoSetorComercial
-														.getId()));
-								filtrarComandosAcaoCobrancaEventualActionForm
-										.setNomeSetorComercialDestino(objetoSetorComercial
-												.getDescricao());
+								form.setSetorComercialDestinoCD(String.valueOf(objetoSetorComercial.getCodigo()));
+								form.setSetorComercialDestinoID(String.valueOf(objetoSetorComercial.getId()));
+								form.setNomeSetorComercialDestino(objetoSetorComercial.getDescricao());
 
-								carregarRota(
-										filtrarComandosAcaoCobrancaEventualActionForm,
-										fachada, objetoSetorComercial
-												.getCodigo()
-												+ "",localidadeID);
+								carregarRota(form, fachada,objetoSetorComercial.getCodigo() + "", localidadeID);
 							}
 						}
-						httpServletRequest.setAttribute("nomeCampo",
-								"setorComercialDestinoCD");
+						
+						request.setAttribute("nomeCampo", "setorComercialDestinoCD");
 					}
 				}
 			} else {
 				// Limpa o campo setorComercialOrigemCD do formulário
-				filtrarComandosAcaoCobrancaEventualActionForm
-						.setSetorComercialOrigemCD("");
-				filtrarComandosAcaoCobrancaEventualActionForm
-						.setNomeSetorComercialOrigem("Informe a localidade da inscrição de origem.");
-				httpServletRequest.setAttribute("corSetorComercialOrigem",
-						"exception");
-				httpServletRequest.setAttribute("nomeCampo",
-						"setorComercialOrigemCD");
+				form.setSetorComercialOrigemCD("");
+				form.setNomeSetorComercialOrigem("Informe a localidade da inscrição de origem.");
+				request.setAttribute("corSetorComercialOrigem", "exception");
+				request.setAttribute("nomeCampo", "setorComercialOrigemCD");
 			}
 		} else {
-
-			filtrarComandosAcaoCobrancaEventualActionForm
-					.setInscricaoTipo("destino");
+			form.setInscricaoTipo("destino");
 
 			// Recebe o valor do campo localidadeDestinoID do formulário.
-			localidadeID = (String) filtrarComandosAcaoCobrancaEventualActionForm
-					.getLocalidadeDestinoID();
+			localidadeID = (String) form.getLocalidadeDestinoID();
 
 			// O campo localidadeOrigem será obrigatório
-			if (localidadeID != null
-					&& !localidadeID.trim().equalsIgnoreCase("")) {
+			if (localidadeID != null && !localidadeID.trim().equalsIgnoreCase("")) {
 
-				setorComercialCD = (String) filtrarComandosAcaoCobrancaEventualActionForm
-						.getSetorComercialDestinoCD();
+				setorComercialCD = (String) form.getSetorComercialDestinoCD();
 
-				SetorComercial objetoSetorComercial = fachada
-						.obterSetorComercialLocalidade(localidadeID,
-								setorComercialCD);
+				SetorComercial objetoSetorComercial = fachada.obterSetorComercialLocalidade(localidadeID, setorComercialCD);
 
 				if (objetoSetorComercial == null) {
 					// Setor Comercial nao encontrado
 					// Limpa os campos setorComercialDestinoCD,
 					// nomeSetorComercialDestino e setorComercialDestinoID do
 					// formulário
-					filtrarComandosAcaoCobrancaEventualActionForm
-							.setSetorComercialDestinoCD("");
-					filtrarComandosAcaoCobrancaEventualActionForm
-							.setSetorComercialDestinoID("");
-					filtrarComandosAcaoCobrancaEventualActionForm
-							.setNomeSetorComercialDestino("Setor Comercial Inexistente");
-					httpServletRequest.setAttribute("corSetorComercialDestino",
-							"exception");
-					filtrarComandosAcaoCobrancaEventualActionForm
-							.setRotaInicial(null);
-					filtrarComandosAcaoCobrancaEventualActionForm
-							.setRotaFinal(null);
-					httpServletRequest.setAttribute("nomeCampo",
-							"setorComercialDestinoCD");
+					form.setSetorComercialDestinoCD("");
+					form.setSetorComercialDestinoID("");
+					form.setNomeSetorComercialDestino("Setor Comercial Inexistente");
+					request.setAttribute("corSetorComercialDestino", "exception");
+					form.setRotaInicial(null);
+					form.setRotaFinal(null);
+					request.setAttribute("nomeCampo", "setorComercialDestinoCD");
 				} else {
 					int setorDestino = objetoSetorComercial.getCodigo();
 
-					String setor = (String) filtrarComandosAcaoCobrancaEventualActionForm
-							.getSetorComercialOrigemCD();
+					String setor = (String) form.getSetorComercialOrigemCD();
 
 					if (setor != null && !setor.equals("")) {
 
 						int setorOrigem = new Integer(setor).intValue();
+						
 						if (setorDestino < setorOrigem) {
 
-							filtrarComandosAcaoCobrancaEventualActionForm
-									.setSetorComercialDestinoCD("");
-							filtrarComandosAcaoCobrancaEventualActionForm
-									.setSetorComercialDestinoID("");
-							// inserirComandoAcaoCobrancaEventualCriterioRotaActionForm
-							// .setNomeSetorComercialDestino("Setor Final maior
-							// que Inicial");
-							httpServletRequest
-									.setAttribute("mensagem",
-											"Setor Comercial Final menor que o Inicial");
-							filtrarComandosAcaoCobrancaEventualActionForm
-									.setNomeSetorComercialDestino("");
-							httpServletRequest.setAttribute(
-									"corSetorComercialDestino", "valor");
-
-							filtrarComandosAcaoCobrancaEventualActionForm
-									.setRotaInicial(null);
-							filtrarComandosAcaoCobrancaEventualActionForm
-									.setRotaFinal(null);
-							httpServletRequest.setAttribute("nomeCampo",
-									"setorComercialDestinoCD");
-
+							form.setSetorComercialDestinoCD("");
+							form.setSetorComercialDestinoID("");
+							request.setAttribute("mensagem", "Setor Comercial Final menor que o Inicial");
+							form.setNomeSetorComercialDestino("");
+							request.setAttribute("corSetorComercialDestino", "valor");
+							form.setRotaInicial(null);
+							form.setRotaFinal(null);
+							request.setAttribute("nomeCampo", "setorComercialDestinoCD");
 						} else {
 							// rota
-							carregarRota(
-									filtrarComandosAcaoCobrancaEventualActionForm,
-									fachada, objetoSetorComercial.getCodigo()
-											+ "",localidadeID);
+							carregarRota(form, fachada, objetoSetorComercial.getCodigo() + "", localidadeID);
 
 							// setor comercial destino
-							filtrarComandosAcaoCobrancaEventualActionForm
-									.setSetorComercialDestinoCD(String
-											.valueOf(objetoSetorComercial
-													.getCodigo()));
-							filtrarComandosAcaoCobrancaEventualActionForm
-									.setSetorComercialDestinoID(String
-											.valueOf(objetoSetorComercial
-													.getId()));
-							filtrarComandosAcaoCobrancaEventualActionForm
-									.setNomeSetorComercialDestino(objetoSetorComercial
-											.getDescricao());
-							httpServletRequest.setAttribute(
-									"corSetorComercialDestino", "valor");
-							httpServletRequest.setAttribute("nomeCampo",
-									"rotaFinal");
+							form.setSetorComercialDestinoCD(String.valueOf(objetoSetorComercial.getCodigo()));
+							form.setSetorComercialDestinoID(String.valueOf(objetoSetorComercial.getId()));
+							form.setNomeSetorComercialDestino(objetoSetorComercial.getDescricao());
+							request.setAttribute("corSetorComercialDestino", "valor");
+							request.setAttribute("nomeCampo", "rotaFinal");
 						}
 					} else {
 
-						carregarRota(
-								filtrarComandosAcaoCobrancaEventualActionForm,
-								fachada, objetoSetorComercial.getCodigo() + "",localidadeID);
+						carregarRota(form, fachada, objetoSetorComercial.getCodigo() + "", localidadeID);
 
 						// setor comercial destino
-						filtrarComandosAcaoCobrancaEventualActionForm
-								.setSetorComercialDestinoCD(String
-										.valueOf(objetoSetorComercial
-												.getCodigo()));
-						filtrarComandosAcaoCobrancaEventualActionForm
-								.setSetorComercialDestinoID(String
-										.valueOf(objetoSetorComercial.getId()));
-						filtrarComandosAcaoCobrancaEventualActionForm
-								.setNomeSetorComercialDestino(objetoSetorComercial
-										.getDescricao());
-						httpServletRequest.setAttribute(
-								"corSetorComercialDestino", "valor");
-						httpServletRequest.setAttribute("nomeCampo",
-								"rotaFinal");
+						form.setSetorComercialDestinoCD(String.valueOf(objetoSetorComercial.getCodigo()));
+						form.setSetorComercialDestinoID(String.valueOf(objetoSetorComercial.getId()));
+						form.setNomeSetorComercialDestino(objetoSetorComercial.getDescricao());
+						request.setAttribute("corSetorComercialDestino", "valor");
+						request.setAttribute("nomeCampo", "rotaFinal");
 
 					}
 				}
 			} else {
 				// Limpa o campo setorComercialDestinoCD do formulário
-				filtrarComandosAcaoCobrancaEventualActionForm
-						.setSetorComercialDestinoCD("");
-				filtrarComandosAcaoCobrancaEventualActionForm
-						.setNomeSetorComercialDestino("Informe a localidade da inscrição de destino.");
-				httpServletRequest.setAttribute("corSetorComercialDestino",
-						"exception");
-				httpServletRequest.setAttribute("nomeCampo",
-						"setorComercialDestinoCD");
-
+				form.setSetorComercialDestinoCD("");
+				form.setNomeSetorComercialDestino("Informe a localidade da inscrição de destino.");
+				request.setAttribute("corSetorComercialDestino", "exception");
+				request.setAttribute("nomeCampo", "setorComercialDestinoCD");
 			}
 		}
 
@@ -737,17 +483,13 @@ public class ExibirFiltrarComandosAcaoCobrancaEventualAction extends GcomAction 
 	 * @param fachada
 	 * @param objetoSetorComercial
 	 */
-	public void carregarRota(
-			FiltrarComandosAcaoCobrancaEventualActionForm filtrarComandosAcaoCobrancaEventualActionForm,
-			Fachada fachada, String codigoSetorComercial,String idLocalidade) {
-
-		Collection colecaoRota = fachada
-				.obterColecaoRotaSetorComercial(codigoSetorComercial,idLocalidade);
+	public void carregarRota(FiltrarComandosAcaoCobrancaEventualActionForm form, Fachada fachada,
+			String codigoSetorComercial, String idLocalidade) {
+		Collection colecaoRota = fachada.obterColecaoRotaSetorComercial(codigoSetorComercial, idLocalidade);
 
 		sessao.setAttribute("colecaoRota", colecaoRota);
-		filtrarComandosAcaoCobrancaEventualActionForm.setRotaInicial("");
-		filtrarComandosAcaoCobrancaEventualActionForm.setRotaFinal("");
-
+		form.setRotaInicial("");
+		form.setRotaFinal("");
 	}
 
 	/**
@@ -756,41 +498,31 @@ public class ExibirFiltrarComandosAcaoCobrancaEventualAction extends GcomAction 
 	 * @param inscricaoTipo
 	 * @param imovelOutrosCriteriosActionForm
 	 * @param fachada
-	 * @param httpServletRequest
+	 * @param request
 	 */
-	private void pesquisarCliente(
-			String inscricaoTipo,
-			FiltrarComandosAcaoCobrancaEventualActionForm filtrarComandosAcaoCobrancaEventualActionForm,
-			Fachada fachada, HttpServletRequest httpServletRequest) {
+	private void pesquisarCliente(String inscricaoTipo,
+			FiltrarComandosAcaoCobrancaEventualActionForm form,
+			Fachada fachada, HttpServletRequest request) {
 
-		String idCliente = filtrarComandosAcaoCobrancaEventualActionForm
-				.getIdCliente();
+		String idCliente = form.getIdCliente();
 
 		// -------Parte que trata do código quando o usuário tecla enter
 		// se o id do cliente for diferente de nulo
-		if (idCliente != null
-				&& !idCliente.toString().trim().equalsIgnoreCase("")) {
+		if (idCliente != null && !idCliente.toString().trim().equalsIgnoreCase("")) {
 
 			Cliente cliente = fachada.obterCliente(idCliente);
 
 			if (cliente != null) {
 				// O cliente foi encontrado
-				filtrarComandosAcaoCobrancaEventualActionForm
-						.setIdCliente(cliente.getId().toString());
-				filtrarComandosAcaoCobrancaEventualActionForm
-						.setNomeCliente(cliente.getNome());
+				form.setIdCliente(cliente.getId().toString());
+				form.setNomeCliente(cliente.getNome());
 
 				sessao.setAttribute("clienteObj", cliente);
 			} else {
-				httpServletRequest.setAttribute("codigoClienteNaoEncontrado",
-						"true");
-				filtrarComandosAcaoCobrancaEventualActionForm
-						.setNomeCliente("Cliente Inexistente");
-				httpServletRequest.setAttribute("nomeCampo", "idCliente");
+				request.setAttribute("codigoClienteNaoEncontrado", "true");
+				form.setNomeCliente("Cliente Inexistente");
+				request.setAttribute("nomeCampo", "idCliente");
 			}
-
 		}
-
 	}
-
 }

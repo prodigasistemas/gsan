@@ -904,7 +904,8 @@
 				/WEB-INF/relatorio/big/struts-config-RelatorioBIG.xml,
 				/WEB-INF/arrecadacao/struts-config-PagamentosAClassificar.xml,
 				/WEB-INF/relatorio/cadastro/atualizacaocadastral/struts-config-RelatorioImoveisSituacaoPeriodo.xml,
-				/WEB-INF/faturamento/struts-config-AtualizarVencimentoFaturaClienteResponsavel.xml
+				/WEB-INF/faturamento/struts-config-AtualizarVencimentoFaturaClienteResponsavel.xml,
+				/WEB-INF/faturamento/struts-config-FaturamentoSeletivo.xml
 				
 			</param-value>
 		</init-param>

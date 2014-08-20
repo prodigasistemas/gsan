@@ -1,6 +1,7 @@
 package gcom.gui.cadastro.imovel;
 
 import gcom.cobranca.CobrancaDocumento;
+import gcom.cobranca.FiltroCobrancaDocumento;
 import gcom.cobranca.bean.CobrancaDocumentoHelper;
 import gcom.fachada.Fachada;
 import gcom.gui.GcomAction;
@@ -12,6 +13,7 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 import gcom.util.Util;
+import gcom.util.filtro.ParametroSimples;
 
 /**
  * Visualiza em PopUp dos dados do Documento de Cobranca 
@@ -33,8 +35,7 @@ public class ExibirDocumentoCobrancaItemAction extends GcomAction {
     	
     	Fachada fachada = Fachada.getInstancia();
     	
-    	DocumentoCobrancaItemActionForm documentoCobrancaItemActionForm = 
-        (DocumentoCobrancaItemActionForm) actionForm;
+    	DocumentoCobrancaItemActionForm documentoCobrancaItemActionForm = (DocumentoCobrancaItemActionForm) actionForm;
     	
     	String cobrancaDocumentoID = httpServletRequest.getParameter("cobrancaDocumentosID");
     	
@@ -42,36 +43,41 @@ public class ExibirDocumentoCobrancaItemAction extends GcomAction {
     	cobrancaDocumento.setId(new Integer(cobrancaDocumentoID));
     	
     	CobrancaDocumentoHelper cobrancaDocumentoHelper = fachada.apresentaItensDocumentoCobranca(cobrancaDocumento);
-    	if(httpServletRequest.getParameter("numeroOS") != null && 
-    			!httpServletRequest.getParameter("numeroOS").equals("")){
+    	
+    	if(httpServletRequest.getParameter("numeroOS") != null && !httpServletRequest.getParameter("numeroOS").equals("")){
     		cobrancaDocumentoHelper.setIdOrdemServico(new Integer((String) httpServletRequest.getParameter("numeroOS")));
     	}
     	
+    	cobrancaDocumento = cobrancaDocumentoHelper.getCobrancaDocumento();
     	
-    	documentoCobrancaItemActionForm.setMatriculaImovel(cobrancaDocumentoHelper.getCobrancaDocumento().getImovel().getId().toString());
-    	documentoCobrancaItemActionForm.setInscricaoImovel(cobrancaDocumentoHelper.getCobrancaDocumento().getImovel().getInscricaoFormatada());
-    	documentoCobrancaItemActionForm.setSituacaoAguaImovel(cobrancaDocumentoHelper.getCobrancaDocumento().getImovel().getLigacaoAguaSituacao().getDescricao());
-    	documentoCobrancaItemActionForm.setSituacaoEsgotoImovel(cobrancaDocumentoHelper.getCobrancaDocumento().getImovel().getLigacaoEsgotoSituacao().getDescricao());
-    	documentoCobrancaItemActionForm.setSequencial(String.valueOf(cobrancaDocumentoHelper.getCobrancaDocumento().getNumeroSequenciaDocumento()));
+    	documentoCobrancaItemActionForm.setMatriculaImovel(cobrancaDocumento.getImovel().getId().toString());
+    	documentoCobrancaItemActionForm.setInscricaoImovel(cobrancaDocumento.getImovel().getInscricaoFormatada());
+    	documentoCobrancaItemActionForm.setSituacaoAguaImovel(cobrancaDocumento.getImovel().getLigacaoAguaSituacao().getDescricao());
+    	documentoCobrancaItemActionForm.setSituacaoEsgotoImovel(cobrancaDocumento.getImovel().getLigacaoEsgotoSituacao().getDescricao());
+    	documentoCobrancaItemActionForm.setSequencial(String.valueOf(cobrancaDocumento.getNumeroSequenciaDocumento()));
     	
-    	if (cobrancaDocumentoHelper.getCobrancaDocumento().getValorDocumento() != null){
-    		documentoCobrancaItemActionForm.setValorDocumento(Util.formatarMoedaReal(cobrancaDocumentoHelper.getCobrancaDocumento().getValorDocumento()));
+    	if (cobrancaDocumento.getValorDocumento() != null){
+    		documentoCobrancaItemActionForm.setValorDocumento(Util.formatarMoedaReal(cobrancaDocumento.getValorDocumento()));
     	}
     	
-    	if (cobrancaDocumentoHelper.getCobrancaDocumento().getValorDesconto() != null){
+    	if (cobrancaDocumento.getValorDesconto() != null){
     		documentoCobrancaItemActionForm.setValorDesconto(Util.formatarMoedaReal(cobrancaDocumentoHelper.getCobrancaDocumento().getValorDesconto()));
     	}
     	
-    	if (cobrancaDocumentoHelper.getCobrancaDocumento().getDocumentoEmissaoForma() != null){
+    	if (cobrancaDocumento.getDocumentoEmissaoForma() != null){
     		documentoCobrancaItemActionForm.setFormaEmissao(cobrancaDocumentoHelper.getCobrancaDocumento().getDocumentoEmissaoForma().getDescricaoDocumentoEmissaoForma());
     	}
     	
-    	if (cobrancaDocumentoHelper.getCobrancaDocumento().getEmissao() != null){
+    	if (cobrancaDocumento.getEmissao() != null){
     		documentoCobrancaItemActionForm.setDataHoraEmissao(Util.formatarDataComHora(cobrancaDocumentoHelper.getCobrancaDocumento().getEmissao()));
     	} 
     	
-    	if (cobrancaDocumentoHelper.getCobrancaDocumento().getMotivoNaoEntregaDocumento() != null){
+    	if (cobrancaDocumento.getMotivoNaoEntregaDocumento() != null){
     		documentoCobrancaItemActionForm.setMotivoNaoEntregaDocumento(cobrancaDocumentoHelper.getCobrancaDocumento().getMotivoNaoEntregaDocumento().getMotivoNaoeEntregaDocumento());
+    	}
+    	
+    	if (cobrancaDocumento.getUsuario() != null){
+    		documentoCobrancaItemActionForm.setNomeUsuario(cobrancaDocumento.getUsuario().getNomeUsuario());
     	}
     	
     	documentoCobrancaItemActionForm.setQtdItens(cobrancaDocumentoHelper.getQuantidadeItensCobrancaDocumento().toString());

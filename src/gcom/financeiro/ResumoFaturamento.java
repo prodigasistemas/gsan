@@ -7,6 +7,7 @@ import gcom.cadastro.localidade.UnidadeNegocio;
 import gcom.financeiro.lancamento.LancamentoItem;
 import gcom.financeiro.lancamento.LancamentoItemContabil;
 import gcom.financeiro.lancamento.LancamentoTipo;
+import gcom.util.SequenciaRelatorioContabilidade;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
@@ -14,115 +15,61 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class ResumoFaturamento implements Serializable {
 	private static final long serialVersionUID = 1L;
-    /** identifier field */
-    private Integer id;
-
-    /** nullable persistent field */
-    private Integer anoMesReferencia;
-
-    /** nullable persistent field */
-    private BigDecimal valorItemFaturamento;
-
-    /** nullable persistent field */
-    private Short sequenciaTipoLancamento;
-
-    /** nullable persistent field */
-    private Short sequenciaItemTipoLancamento;
-
-    /** nullable persistent field */
-    private Date ultimaAlteracao;
-
-    /** persistent field */
-    private LancamentoItemContabil lancamentoItemContabil;
-
-    /** persistent field */
-    private LancamentoTipo lancamentoTipo;
-
-    /** persistent field */
-    private LancamentoItem lancamentoItem;
-
-    /** persistent field */
-    private Localidade localidade;
-
-    /** persistent field */
-    private GerenciaRegional gerenciaRegional;
-
-    /** persistent field */
-    private Categoria categoria;
     
-    /** persistent field */
+    private Integer id;
+    private Integer anoMesReferencia;
+    private BigDecimal valorItemFaturamento;
+    private Short sequenciaTipoLancamento;
+    private Short sequenciaItemTipoLancamento;
+    private Date ultimaAlteracao;
+    private LancamentoItemContabil lancamentoItemContabil;
+    private LancamentoTipo lancamentoTipo;
+    private LancamentoItem lancamentoItem;
+    private Localidade localidade;
+    private GerenciaRegional gerenciaRegional;
+    private Categoria categoria;
     private UnidadeNegocio unidadeNegocio;
     
 
-    public static final short FATURAMENTO_AGUA_SEQUENCIA_TIPO_LANCAMENTO = 100;
-    
-    public static final short FATURAMENTO_ESGOTO_SEQUENCIA_TIPO_LANCAMENTO = 200;
-    
-    public static final short FINANCIAMENTOS_INCLUIDOS_SEQUENCIA_TIPO_LANCAMENTO_1 = 300;
-    
-    public static final short FINANCIAMENTOS_INCLUIDOS_SEQUENCIA_TIPO_LANCAMENTO_2 = 400;
-    
-    public static final short JUROS_PARCELAMENTO_SEQUENCIA_TIPO_LANCAMENTO_1 = 410;
-    
-    public static final short JUROS_PARCELAMENTO_SEQUENCIA_TIPO_LANCAMENTO_2 = 420;
-    
-    public static final short GUIAS_PAGAMENTO_SEQUENCIA_TIPO_LANCAMENTO = 500;
-    
-    public static final short INCLUSOES_POR_REFATURAMENTO_SEQUENCIA_TIPO_LANCAMENTO_1 = 510;
-    
-    public static final short INCLUSOES_POR_REFATURAMENTO_SEQUENCIA_TIPO_LANCAMENTO_2 = 599;
-    
-    public static final short FINANCIAMENTOS_CANCELADOS_SEQUENCIA_TIPO_LANCAMENTO_1 = 700;
-    
-    public static final short FINANCIAMENTOS_CANCELADOS_SEQUENCIA_TIPO_LANCAMENTO_2 = 800;
-    
-    public static final short PARCELAMENTOS_CANCELADOS_SEQUENCIA_TIPO_LANCAMENTO_1 = 810;
-    
-    public static final short PARCELAMENTOS_CANCELADOS_SEQUENCIA_TIPO_LANCAMENTO_2 = 820;
-    
-    public static final short CANCELAMENTOS_POR_REFATURAMENTO_SEQUENCIA_TIPO_LANCAMENTO_1 = 900;
-    
-    public static final short CANCELAMENTOS_POR_REFATURAMENTO_SEQUENCIA_TIPO_LANCAMENTO_2 = 1020;
-    
-    public static final short CREDITOS_A_REALIZAR_POR_COBRANCA_INDEVIDA_SEQUENCIA_TIPO_LANCAMENTO = 1030;
-    
-    public static final short DESCONTOS_INCONDICIONAIS_INCLUIDOS_SEQUENCIA_TIPO_LANCAMENTO = 1040;
-    
-    public static final short GUIAS_DE_DEVOLUCOES_DE_VALORES_COBRADOS_SEQUENCIA_TIPO_LANCAMENTO = 1050;
-    
-    public static final short DOACOES_COBRADAS_EM_CONTA_SEQUENCIA_TIPO_LANCAMENTO = 1800;
-    
-    public static final short VALORES_DEVOLVIDOS_SEQUENCIA_TIPO_LANCAMENTO = 2400;
-    
-    public static final short IMPOSTOS_DEDUZIDOS_SEQUENCIA_TIPO_LANCAMENTO = 2150;
-    
-    public static final short DESCONTOS_CONCEDIDOS_PARCELAMENTO_SEQUENCIA_TIPO_LANCAMENTO_1 = 1500;
-    
-    public static final short DESCONTOS_CONCEDIDOS_PARCELAMENTO_SEQUENCIA_TIPO_LANCAMENTO_2 = 1600;
-    
     public static final short DESCONTOS_CONCEDIDOS_PARCELAMENTO_SEQUENCIA_ITEM_TIPO_LANCAMENTO = 90;
-    
-    public static final short IMPOSTOS_CANCELADOS_POR_REFATURAMENTO_SEQUENCIA_TIPO_LANCAMENTO = 2800;
-    
-    public static final short IMPOSTOS_INCLUIDOS_POR_REFATURAMENTO_SEQUENCIA_TIPO_LANCAMENTO = 2900;
-    
-    public static final short OUTROS_CREDITOS_CANCELADOS_POR_REFATURAMENTO_SEQUENCIA_TIPO_LANCAMENTO = 3000;
-    
-    public static final short OUTROS_CREDITOS_CONCEDIDOS_POR_REFATURAMENTO_SEQUENCIA_TIPO_LANCAMENTO = 3100;
-    
-    public static final short CANCELAMENTOS_POR_PRESCRICAO_SEQUENCIA_TIPO_LANCAMENTO = 4200;
-    
+    public static final short FATURAMENTO_AGUA_SEQUENCIA_TIPO_LANCAMENTO = 100;
+    public static final short FATURAMENTO_ESGOTO_SEQUENCIA_TIPO_LANCAMENTO = 200;
+    public static final short FINANCIAMENTOS_INCLUIDOS_SEQUENCIA_TIPO_LANCAMENTO_1 = 300;
+    public static final short FINANCIAMENTOS_INCLUIDOS_SEQUENCIA_TIPO_LANCAMENTO_2 = 400;
+    public static final short JUROS_PARCELAMENTO_SEQUENCIA_TIPO_LANCAMENTO_1 = 410;
+    public static final short JUROS_PARCELAMENTO_SEQUENCIA_TIPO_LANCAMENTO_2 = 420;
+    public static final short GUIAS_PAGAMENTO_SEQUENCIA_TIPO_LANCAMENTO = 500;
+    public static final short INCLUSOES_POR_REFATURAMENTO_SEQUENCIA_TIPO_LANCAMENTO_1 = 510;
+    public static final short INCLUSOES_POR_REFATURAMENTO_SEQUENCIA_TIPO_LANCAMENTO_2 = 599;
+    public static final short FINANCIAMENTOS_CANCELADOS_SEQUENCIA_TIPO_LANCAMENTO_1 = 700;
+    public static final short FINANCIAMENTOS_CANCELADOS_SEQUENCIA_TIPO_LANCAMENTO_2 = 800;
+    public static final short PARCELAMENTOS_CANCELADOS_SEQUENCIA_TIPO_LANCAMENTO_1 = 810;
+    public static final short PARCELAMENTOS_CANCELADOS_SEQUENCIA_TIPO_LANCAMENTO_2 = 820;
+    public static final short CANCELAMENTOS_POR_REFATURAMENTO_SEQUENCIA_TIPO_LANCAMENTO_1 = 900;
+    public static final short CANCELAMENTOS_POR_REFATURAMENTO_SEQUENCIA_TIPO_LANCAMENTO_2 = 1020;
+
+    public static final short CREDITOS_A_REALIZAR_POR_COBRANCA_INDEVIDA_SEQUENCIA_TIPO_LANCAMENTO = 1030;
     public static final short VALORES_CREDITADOS_SEQUENCIA_TIPO_LANCAMENTO_1 = 1030;
     
+    public static final short DESCONTOS_INCONDICIONAIS_INCLUIDOS_SEQUENCIA_TIPO_LANCAMENTO = 1040;
     public static final short VALORES_CREDITADOS_SEQUENCIA_TIPO_LANCAMENTO_2 = 1040;
     
+    public static final short GUIAS_DE_DEVOLUCOES_DE_VALORES_COBRADOS_SEQUENCIA_TIPO_LANCAMENTO = 1050;
+    public static final short DESCONTOS_CONCEDIDOS_PARCELAMENTO_SEQUENCIA_TIPO_LANCAMENTO_1 = 1500;
+    public static final short DESCONTOS_CONCEDIDOS_PARCELAMENTO_SEQUENCIA_TIPO_LANCAMENTO_2 = 1600;
     public static final short VALORES_CREDITADOS_SEQUENCIA_TIPO_LANCAMENTO_3 = 1610;
+    public static final short DOACOES_COBRADAS_EM_CONTA_SEQUENCIA_TIPO_LANCAMENTO = 1800;
+    public static final short VALORES_DEVOLVIDOS_SEQUENCIA_TIPO_LANCAMENTO = 2400;
+    public static final short IMPOSTOS_DEDUZIDOS_SEQUENCIA_TIPO_LANCAMENTO = 2150;
+    public static final short IMPOSTOS_CANCELADOS_POR_REFATURAMENTO_SEQUENCIA_TIPO_LANCAMENTO = 2800;
+    public static final short IMPOSTOS_INCLUIDOS_POR_REFATURAMENTO_SEQUENCIA_TIPO_LANCAMENTO = 2900;
+    public static final short OUTROS_CREDITOS_CANCELADOS_POR_REFATURAMENTO_SEQUENCIA_TIPO_LANCAMENTO = 3000;
+    public static final short OUTROS_CREDITOS_CONCEDIDOS_POR_REFATURAMENTO_SEQUENCIA_TIPO_LANCAMENTO = 3100;
+    public static final short CANCELAMENTOS_POR_PRESCRICAO_SEQUENCIA_TIPO_LANCAMENTO = 4200;
     
-    /** full constructor */
+    
     public ResumoFaturamento(Integer anoMesReferencia, BigDecimal valorItemFaturamento, Short sequenciaTipoLancamento, Short sequenciaItemTipoLancamento, Date ultimaAlteracao, LancamentoItemContabil lancamentoItemContabil, LancamentoTipo lancamentoTipo, LancamentoItem lancamentoItem, Localidade localidade, GerenciaRegional gerenciaRegional, Categoria categoria) {
         this.anoMesReferencia = anoMesReferencia;
         this.valorItemFaturamento = valorItemFaturamento;
@@ -152,11 +99,9 @@ public class ResumoFaturamento implements Serializable {
         this.unidadeNegocio = unidadeNegocio;
     }
 
-    /** default constructor */
     public ResumoFaturamento() {
     }
 
-    /** minimal constructor */
     public ResumoFaturamento(LancamentoItemContabil lancamentoItemContabil, LancamentoTipo lancamentoTipo, LancamentoItem lancamentoItem, Localidade localidade, GerenciaRegional gerenciaRegional, Categoria categoria) {
         this.lancamentoItemContabil = lancamentoItemContabil;
         this.lancamentoTipo = lancamentoTipo;
@@ -248,7 +193,11 @@ public class ResumoFaturamento implements Serializable {
     }
 
     public void setSequenciaTipoLancamento(Short sequenciaTipoLancamento) {
-        this.sequenciaTipoLancamento = sequenciaTipoLancamento;
+    	if (sequenciaTipoLancamento == null) {
+    		this.sequenciaTipoLancamento = SequenciaRelatorioContabilidade.getSequencia(getLancamentoTipo().getId());
+    	} else {
+    		this.sequenciaTipoLancamento = sequenciaTipoLancamento;
+    	}
     }
 
     public Short getSequenciaItemTipoLancamento() {
@@ -256,7 +205,11 @@ public class ResumoFaturamento implements Serializable {
     }
 
     public void setSequenciaItemTipoLancamento(Short sequenciaItemTipoLancamento) {
-        this.sequenciaItemTipoLancamento = sequenciaItemTipoLancamento;
+    	if (sequenciaItemTipoLancamento == null) {
+    		this.sequenciaItemTipoLancamento = SequenciaRelatorioContabilidade.getSequencia(getLancamentoItem().getId());
+    	} else {
+    		this.sequenciaItemTipoLancamento = sequenciaItemTipoLancamento;
+    	}
     }
 
     public Date getUltimaAlteracao() {
@@ -324,11 +277,7 @@ public class ResumoFaturamento implements Serializable {
 	}
 
 	public String toString() {
-        return new ToStringBuilder(this)
-            .append("id", getId())
-            .toString();
+        return new ToStringBuilder(this).append("id", getId()).toString();
     }
-
-	
 
 }

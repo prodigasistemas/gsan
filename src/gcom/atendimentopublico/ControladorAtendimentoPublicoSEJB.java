@@ -7897,7 +7897,6 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 				quadra.setNumeroQuadra((Integer) objeto[4]);
 				imovel.setQuadra(quadra);
 
-				// Lote e sublote
 				imovel.setLote((Short) objeto[5]);
 				imovel.setSubLote((Short) objeto[6]);
 

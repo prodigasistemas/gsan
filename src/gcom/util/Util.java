@@ -952,12 +952,7 @@ public class Util {
 	/**
 	 * Converte a data passada para o formato "DD/MM/YYYY"
 	 * 
-	 * @author: Raphael Rossiter
-	 * @date: 22/03/2006
-	 * 
-	 * @param String
-	 *            data no formato "YYYYMMDD"
-	 * 
+	 * @param String data no formato "YYYYMMDD"
 	 * @return String data no formato "DD/MM/YYYY"
 	 */
 	public static String formatarData(String data) {

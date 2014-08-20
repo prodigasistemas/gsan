@@ -42,6 +42,8 @@ public class DocumentosAReceberResumo implements Serializable {
 	
 	private BigDecimal valorDocumentos;
 	
+	private BigDecimal valorDocumentosSemParcelaAtual;
+	
 	private Date ultimaAlteracao;
 	
 	
@@ -160,5 +162,13 @@ public class DocumentosAReceberResumo implements Serializable {
 
 	public void setValorDocumentos(BigDecimal valorDocumentos) {
 		this.valorDocumentos = valorDocumentos;
+	}
+
+	public BigDecimal getValorDocumentosSemParcelaAtual() {
+		return valorDocumentosSemParcelaAtual;
+	}
+
+	public void setValorDocumentosSemParcelaAtual(BigDecimal valorDocumentosSemParcelaAtual) {
+		this.valorDocumentosSemParcelaAtual = valorDocumentosSemParcelaAtual;
 	}
 }

@@ -6,37 +6,19 @@ import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 public class ContaGeral implements Serializable {
 	private static final long serialVersionUID = 1L;
-	/** identifier field */
-	private Integer id;
-
-	/** persistent field */
-	private short indicadorHistorico;
-
-	/** persistent field */
-	private Date ultimaAlteracao;
-
-	/** nullable persistent field */
-	private gcom.faturamento.conta.ContaImpressao contaImpressao;
-
-	/** persistent field */
-	private Set debitoAutomaticoMovimentos;
-
-	/** nullable persistent field */
-	private gcom.faturamento.conta.Conta conta;
-
-	/** nullable persistent field */
-	private ContaHistorico contaHistorico;
 	
-	 /**
-     * Description of the Field
-     */
-
+	private Integer id;
+	private short indicadorHistorico;
+	private Date ultimaAlteracao;
+	private ContaImpressao contaImpressao;
+	private gcom.faturamento.conta.Conta conta;
+	private ContaHistorico contaHistorico;
+	private Set debitoAutomaticoMovimentos;
+	
     public final static short INDICADOR_HISTORICO = 1;
 
-	/** full constructor */
 	public ContaGeral(Integer id, short indicadorHistorico,
 			Date ultimaAlteracao, ContaImpressao contaImpressao,
 			Set debitoAutomaticoMovimentos, Conta conta) {

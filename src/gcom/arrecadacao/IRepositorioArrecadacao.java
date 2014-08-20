@@ -4896,22 +4896,11 @@ public interface IRepositorioArrecadacao {
      * @return Collection
      * @throws ErroRepositorioException
      */
-    public Collection pesquisarPagamentoHistoricoAvisoBancario(Integer idAvisoBancario) 
+    @SuppressWarnings("rawtypes")
+	public Collection pesquisarPagamentoHistoricoAvisoBancario(Integer idAvisoBancario) 
     	throws ErroRepositorioException;
 
-    
-    /**
-	 * [UC0150] Retificar Conta
-	 * 
-	 * @author Vivianne Sousa
-	 * @data 23/04/2006
-	 * 
-	 * @param idConta
-	 * @return idParcelamento
-	 */
-	public Object[] pesquisarPagamentoDeConta(Integer idConta)
-		throws ErroRepositorioException ;
-	
+	public Pagamento pesquisarPagamentoDeConta(Integer idConta) throws ErroRepositorioException ;
 	
 	/**
 	 * [UC0150] Retificar Conta
@@ -4924,83 +4913,19 @@ public interface IRepositorioArrecadacao {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
-	public void atualizarContaEmPagamento(Integer idPagamento, Integer idConta)
-		throws ErroRepositorioException;
+	public void atualizarContaEmPagamento(Integer idPagamento, Integer idConta) throws ErroRepositorioException;
 	
-	 /**
-	 *  
-	 * @author Sávio Luiz
-	 * @data 28/04/2007
-	 * 
-	 * @param idConta
-	 * @return idParcelamento
-	 */
-	public Integer pesquisarIdPagamentoDaGuia(
-			Integer idGuiaPagamento) throws ErroRepositorioException;
+	public Integer pesquisarIdPagamentoDaGuia(Integer idGuiaPagamento) throws ErroRepositorioException;
 	
-	 /**
-	 *  
-	 * @author Sávio Luiz
-	 * @data 28/04/2007
-	 * 
-	 * @param idConta
-	 * @return idParcelamento
-	 */
-	public Integer pesquisarIdPagamentoDoDebitoACobrar(
-			Integer idDebitoACobrar) throws ErroRepositorioException;
+	public Integer pesquisarIdPagamentoDoDebitoACobrar(Integer idDebitoACobrar) throws ErroRepositorioException;
 	
-	/**
-	 * Consulta ResumoArrecadacao para a geração do relatório '[UC0345] Gerar
-	 * Relatório de Resumo Arrecadação' de acordo com a opção de totalização.
-	 * 
-	 * @author Vivianne Sousa
-	 * @created 04/06/2007
-	 * 
-	 * 
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
-	public Collection consultarResumoArrecadacaoRelatorioPorEstadoPorUnidadeNegocio(
-			int anoMesReferencia) throws ErroRepositorioException;
+	public Collection consultarResumoArrecadacaoRelatorioPorEstadoPorUnidadeNegocio(int anoMesReferencia) throws ErroRepositorioException;
 	
-	/**
-	 * Consulta ResumoArrecadacao para a geração do relatório '[UC0345] Gerar
-	 * Relatório de Resumo Arrecadação' de acordo com a opção de totalização.
-	 * 
-	 * @author Vivianne Sousa
-	 * @created 04/06/2007
-	 * 
-	 * 
-	 * @return
-	 * @throws ErroRepositorioException
-	 */
-	public Collection consultarResumoArrecadacaoRelatorioPorUnidadeNegocio(
-			int anoMesReferencia, Integer localidade)
-			throws ErroRepositorioException;
+	public Collection consultarResumoArrecadacaoRelatorioPorUnidadeNegocio(int anoMesReferencia, Integer localidade) throws ErroRepositorioException;
 	
-	/**
-	 * Pesquisar pagamentos pelo aviso bancário
-	 * 
-	 * @author Ana Maria
-	 * @date 11/06/2007
-	 * 
-	 * @return Collection
-	 * @throws ErroRepositorioException
-	 */
-	public PagamentosDevolucoesHelper filtrarPagamentos(FiltroPagamento filtroPagamento)
-			throws ErroRepositorioException;
+	public PagamentosDevolucoesHelper filtrarPagamentos(FiltroPagamento filtroPagamento) throws ErroRepositorioException;
 	
-	/**
-	 * Pesquisar devoluçãoes pelo aviso bancário
-	 * 
-	 * @author Ana Maria
-	 * @date 11/06/2007
-	 * 
-	 * @return Collection
-	 * @throws ErroRepositorioException
-	 */
-	public PagamentosDevolucoesHelper filtrarDevolucoes(FiltroDevolucao filtroDevolucao)
-			throws ErroRepositorioException;	
+	public PagamentosDevolucoesHelper filtrarDevolucoes(FiltroDevolucao filtroDevolucao) throws ErroRepositorioException;	
 	
 	/**
 	 * Pesquisar valores de arrecadação e devolução do aviso bancário
@@ -5714,7 +5639,7 @@ public interface IRepositorioArrecadacao {
 	
 	public Integer countImoveisBancoDebitoAutomatico(String[] bancos, 
 			Integer anoMesInicial,Integer anoMesFinal, Date dataVencimentoInicial,
-			Date dataVencimentoFinal, String indicadorContaPaga)
+			Date dataVencimentoFinal, String indicadorContaPaga, Integer somenteDebitoAutomatico)
 		throws ErroRepositorioException;
 	
 	public Collection selecionarImoveisBancoDebitoAutomatico(String[] bancos, 
@@ -6643,7 +6568,7 @@ public interface IRepositorioArrecadacao {
 	 */
 	public Integer countImoveisBancoDebitoAutomaticoPorGrupoFaturamento(String[] bancos, 
 			Integer anoMesInicial,Integer anoMesFinal, Date dataVencimentoInicial,
-			Date dataVencimentoFinal, String indicadorContaPaga, Integer idGrupoFaturamento)
+			Date dataVencimentoFinal, String indicadorContaPaga, Integer idGrupoFaturamento, Integer somenteDebitoAutomatico)
 		throws ErroRepositorioException;
 	
 
