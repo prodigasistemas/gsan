@@ -89,6 +89,15 @@
 			path="/imprimirFichaFiscalizacaoCadastralAction"	>
 		</action>
 		
+		<action 
+			type="gcom.gui.cadastro.atualizacaocadastral.ExibirImagemRetornoAtualizacaoCadastralAction"
+			path="/exibirImagemRetornoAtualizacaoCadastralAction"
+			validate="false"
+			scope="session" >
+			<forward name="/exibirImagemRetornoAtualizacaoCadastralAction"
+				path="/jsp/cadastro/atualizacaocadastral/exibir_imagem_retorno.jsp" />
+		</action>
+		
 	<!--FIM FILTRAR ATUALIZACAO CADASTRAL-->
 
 </action-mappings>

@@ -8,32 +8,22 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class ContaMotivoRetificacao extends TabelaAuxiliar {
 	private static final long serialVersionUID = 1L;
-    /** identifier field */
+    
     private Integer id;
-
-    /** nullable persistent field */
     private String descricao;
-
-    /** nullable persistent field */
     private Short indicadorUso;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-    
     private Integer numeroOcorrenciasNoAno;
-    
     private Short indicadorCompetenciaConsumo;
     
     public final static Integer VALOR_SERVICO_ERRADO = 4;
     public final static Integer DEVOLUCAO_CREDITADA_EM_CONTA = 12;
     
     public final static Integer DEVOLUCAO_PAGAMENTO_CREDITADO_EM_CONTA = 41;
+    public final static Integer ALTERACAO_DE_LEITURA_FATURADA = 104;
 
-    /** full constructor */
     public ContaMotivoRetificacao(String descricao, Short indicadorUso, Date ultimaAlteracao) {
         this.descricao = descricao;
         this.indicadorUso = indicadorUso;

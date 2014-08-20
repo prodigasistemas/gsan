@@ -72,6 +72,7 @@ import gcom.util.ControladorException;
 import gcom.util.ControladorUtilLocal;
 import gcom.util.ControladorUtilLocalHome;
 import gcom.util.ErroRepositorioException;
+import gcom.util.HibernateUtil;
 import gcom.util.IoUtil;
 import gcom.util.ServiceLocator;
 import gcom.util.ServiceLocatorException;
@@ -102,6 +103,8 @@ import javax.ejb.CreateException;
 import javax.ejb.EJBException;
 import javax.ejb.SessionBean;
 import javax.ejb.SessionContext;
+
+import org.hibernate.Session;
 
 /**
  * Controlador Financeiro PADRÃO
@@ -5706,9 +5709,11 @@ public class ControladorFinanceiro implements SessionBean {
 	 * @param data
 	 * @throws ControladorException
 	 */
-	public void gerarIntegracaoContabilidade(String idLancamentoOrigem, String anoMes, String data) throws ControladorException{
+	public void gerarIntegracaoContabilidade(
+			String idLancamentoOrigem, String anoMes, String data) throws ControladorException {
 	       
         Collection<Object[]> colecaoDadosGerarIntegracao = null;
+        
         try {
             colecaoDadosGerarIntegracao = repositorioFinanceiro.pesquisarGerarIntegracaoContabilidade(idLancamentoOrigem, anoMes);
         } catch (ErroRepositorioException ex) {
@@ -5716,59 +5721,43 @@ public class ControladorFinanceiro implements SessionBean {
             throw new ControladorException("erro.sistema", ex);
         }
        
-       
-        /** definição das variáveis */
         StringBuilder gerarIntegracaoTxt = new StringBuilder();
         String ano = data.substring(6,10);
         String mes = data.substring(3,5);
         String dia = data.substring(0,2);
-        String anoMesDia = ano+"/"+mes+"/"+dia;       
+        String anoMesDia = ano + "/" + mes + "/" + dia;       
         String descricaoMes = Util.retornaDescricaoMes(new Integer(mes).intValue());
        
-        /*
-         * Determina se o arquivo é de faturamento ou arrecadação
-         * para concatenar no nome do arquivo .zip
-         */
         String descricaoLancamento = "";
         String historico = "VALOR ";
-        if(idLancamentoOrigem.equals(LancamentoOrigem.FATURAMENTO + "")){
-            descricaoLancamento = "FATURAMENTO";
-            historico += "FATURAMENTO DO MES DE " + descricaoMes + "/"+ano;
-        }else if(idLancamentoOrigem.equals(LancamentoOrigem.ARRECADACAO + "")){
-            descricaoLancamento = "ARRECADACAO";
-            historico += "ARRECADACAO DO MES DE " + descricaoMes + "/"+ano;
-        }else if(idLancamentoOrigem.equals(LancamentoOrigem.DEVEDORES_DUVIDOSOS + "")){
-            descricaoLancamento = "DEVEDORES_DUVIDOSOS";
-            historico += "DEVEDORES DUVIDOSOS DO MES DE " + descricaoMes + "/"+ano;
-        }
+        
+        if (idLancamentoOrigem.equals(LancamentoOrigem.FATURAMENTO + "")) {
+			descricaoLancamento = "FATURAMENTO";
+			historico += "FATURAMENTO DO MES DE " + descricaoMes + "/" + ano;
+			
+		} else if (idLancamentoOrigem.equals(LancamentoOrigem.ARRECADACAO + "")) {
+			descricaoLancamento = "ARRECADACAO";
+			historico += "ARRECADACAO DO MES DE " + descricaoMes + "/" + ano;
+			
+		} else if (idLancamentoOrigem.equals(LancamentoOrigem.DEVEDORES_DUVIDOSOS + "")) {
+			descricaoLancamento = "DEVEDORES_DUVIDOSOS";
+			historico += "DEVEDORES DUVIDOSOS DO MES DE " + descricaoMes + "/" + ano;
+		}
        
-       
-        /*
-         * Caso a coleção dos dados não esteja vazia
-         */
-        if(colecaoDadosGerarIntegracao != null && !colecaoDadosGerarIntegracao.isEmpty()){
+        if(colecaoDadosGerarIntegracao != null && !colecaoDadosGerarIntegracao.isEmpty()) {
            
-            /** definição das variáveis */
             String numeroConta = null;
             String centroCusto = null;
-//            String nomeLocalidade = null;
-//            String nomeMunicipio = null;
             BigDecimal valorDebito = null;
             BigDecimal valorCredito = null;
             String moeda = "BRL";
            
-            /*
-             * Laço para gerar o txt
-             */
+            // Laço para gerar o txt
             for(Object[] dadosGerarIntegracao : colecaoDadosGerarIntegracao){
-               
-               
                 numeroConta = (String) dadosGerarIntegracao[0];                           
                 centroCusto = (String) dadosGerarIntegracao[1];                           
                 valorDebito  = (BigDecimal) dadosGerarIntegracao[2];                       
                 valorCredito = (BigDecimal) dadosGerarIntegracao[3];                           
-//                nomeLocalidade = (String) dadosGerarIntegracao[4];
-//                nomeMunicipio = (String) dadosGerarIntegracao[5];
                
                 /*
                  * Inicio da geração do txt
@@ -5778,7 +5767,6 @@ public class ControladorFinanceiro implements SessionBean {
                 // CAMPO = DISPONIVEL
                 // INICIO = 1 FIM = 1
                 // TAMANHO = 1
-                //gerarIntegracaoTxt.append(Util.completaString("",1));
                 gerarIntegracaoTxt.append(";");
                
                 // SEQ = 2
@@ -5799,29 +5787,22 @@ public class ControladorFinanceiro implements SessionBean {
                 // CAMPO = CENTRO CUSTO
                 // INICIO = 14 FIM = 23
                 // TAMANHO = 10
-                if(centroCusto!=null){
+                if(centroCusto!=null) {
                     gerarIntegracaoTxt.append(centroCusto);
                 }
-                gerarIntegracaoTxt.append(";");               
+                
+                gerarIntegracaoTxt.append(";");
+                
                 // SEQ = 5
                 // CAMPO = LOCALIDADE
                 // INICIO = 24 FIM = 73
                 // TAMANHO = 50
-//                if ( nomeLocalidade.length() >= 50 ) {
-//                    gerarIntegracaoTxt.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximo(nomeLocalidade,50));
-//                } else {
-//                    gerarIntegracaoTxt.append(nomeLocalidade);
-//                }
                 gerarIntegracaoTxt.append(";");
                
                 // SEQ = 6
                 // CAMPO = MUNICIPIO
                 // INICIO = 74 FIM = 123
                 // TAMANHO = 50
-//                if ( nomeMunicipio.length() >= 50 ) {
-//                    gerarIntegracaoTxt.append(Util.completaStringComEspacoADireitaCondicaoTamanhoMaximo(nomeMunicipio,50));   
-//                } else {
-//                    gerarIntegracaoTxt.append(nomeMunicipio);
 //                }
                 gerarIntegracaoTxt.append(";");
                
@@ -5829,9 +5810,6 @@ public class ControladorFinanceiro implements SessionBean {
                 // CAMPO = DISPONIVEL
                 // INICIO = 124 FIM = 129
                 // TAMANHO = 6
-               
-//                gerarIntegracaoTxt.append(Util.completaString("",6));
-//                gerarIntegracaoTxt.append(";");
                 gerarIntegracaoTxt.append(";");
                 gerarIntegracaoTxt.append(";");
                 gerarIntegracaoTxt.append(";");
@@ -5850,50 +5828,52 @@ public class ControladorFinanceiro implements SessionBean {
                 // CAMPO = VALOR DEBITO
                 // INICIO = 133 FIM = 143
                 // TAMANHO = 11
-                if(valorDebito!= null){
+                if(valorDebito!= null) {
                     gerarIntegracaoTxt.append(valorDebito.toString());
                 }
+                
                 gerarIntegracaoTxt.append(";");
                
                 // SEQ = 10
                 // CAMPO = VALOR CREDITO
                 // INICIO = 144 FIM = 154
                 // TAMANHO = 11
-                if(valorCredito!=null){
+                if(valorCredito!=null) {
                     gerarIntegracaoTxt.append(valorCredito.toString());   
                 }
+                
                 gerarIntegracaoTxt.append(";");
                
                 // SEQ = 11
                 // CAMPO = DISPONIVEL
                 // INICIO = 155 FIM = 155
                 // TAMANHO = 1
-//                gerarIntegracaoTxt.append(Util.completaString("",1));
                 gerarIntegracaoTxt.append(";");
                
                 // SEQ = 12
                 // CAMPO = VALOR DEBITO
                 // INICIO = 156 FIM = 166
                 // TAMANHO = 11
-                if(valorDebito!= null){
+                if(valorDebito!= null) {
                     gerarIntegracaoTxt.append(valorDebito.toString());
                 }
+                
                 gerarIntegracaoTxt.append(";");
                
                 // SEQ = 13
                 // CAMPO = VALOR CREDITO
                 // INICIO = 167 FIM = 177
                 // TAMANHO = 11
-                if(valorCredito!=null){
+                if(valorCredito!=null) {
                     gerarIntegracaoTxt.append(valorCredito.toString());   
                 }
+                
                 gerarIntegracaoTxt.append(";");
                
                 // SEQ = 14
                 // CAMPO = DISPONIVEL
                 // INICIO = 178 FIM = 182
                 // TAMANHO = 5
-//                gerarIntegracaoTxt.append(Util.completaString("",5));
                 gerarIntegracaoTxt.append(";");
                 gerarIntegracaoTxt.append(";");
                 gerarIntegracaoTxt.append(";");
@@ -5907,12 +5887,10 @@ public class ControladorFinanceiro implements SessionBean {
                 gerarIntegracaoTxt.append(historico);
                 gerarIntegracaoTxt.append(";");
                
-               
                 // SEQ = 16
                 // CAMPO = DISPONIVEL
                 // INICIO = 439 FIM = 443
                 // TAMANHO = 5
-//                gerarIntegracaoTxt.append(Util.completaString("",6));
                 gerarIntegracaoTxt.append(";");
                 gerarIntegracaoTxt.append(";");
                 gerarIntegracaoTxt.append(";");
@@ -5930,22 +5908,15 @@ public class ControladorFinanceiro implements SessionBean {
                
             }           
            
-            /*
-             * Gerando o arquivo zip
-             */
+            // Gerando o arquivo zip
             String nomeZip = "CONTABILIDADE_" + descricaoLancamento + "_" + (data.replace("/","_"));
             BufferedWriter out = null;
             ZipOutputStream zos = null;
             File compactadoTipo = new File(nomeZip + ".zip");
             File leituraTipo = new File(nomeZip + ".txt");
 
-            /*
-             * Caso oarquivo txt não esteja vazio
-             * adiciona o txt ao arquivo zip.
-             */
             if (gerarIntegracaoTxt != null && gerarIntegracaoTxt.length() != 0) {
                 try {
-                   
                     System.out.println("CRIANDO ZIP");
                     zos = new ZipOutputStream(new FileOutputStream(compactadoTipo));
 
@@ -5956,37 +5927,32 @@ public class ControladorFinanceiro implements SessionBean {
                     zos.close();
                     leituraTipo.delete();
                     out.close();
-                   
                 } catch (IOException ex) {
                     throw new ControladorException("erro.sistema", ex);
                 }
                
                 try {
-                               
                     // Envia de Arquivo por email
-                    EnvioEmail envioEmail = this.getControladorCadastro()
-                        .pesquisarEnvioEmail(
-                            EnvioEmail.GERAR_INTEGRACAO_PARA_CONTABILIDADE);
+                    EnvioEmail envioEmail = this.getControladorCadastro().pesquisarEnvioEmail(
+                    		EnvioEmail.GERAR_INTEGRACAO_PARA_CONTABILIDADE);
 
                     String emailRemetente = envioEmail.getEmailRemetente();
                     String tituloMensagem = envioEmail.getTituloMensagem();
                     String corpoMensagem = envioEmail.getCorpoMensagem();
                     String emailReceptor = envioEmail.getEmailReceptor();
                    
-                    ServicosEmail.enviarMensagemArquivoAnexado(
-                            emailReceptor,emailRemetente, tituloMensagem, corpoMensagem,
-                            compactadoTipo);
+                    ServicosEmail.enviarMensagemArquivoAnexado(emailReceptor, emailRemetente,
+                    		tituloMensagem, corpoMensagem, compactadoTipo);
                 } catch (Exception e) {
                     System.out.println("Erro ao enviar email.");
                 }           
             }
-            //caso não exista informação para os dados informados
-        }else{
-            if(idLancamentoOrigem.equals(LancamentoOrigem.FATURAMENTO + "")){
-                throw new ControladorException("atencao.pesquisa.nenhum_registro_tabela", null,"Resumo Faturamento");
-            }else if(idLancamentoOrigem.equals(LancamentoOrigem.ARRECADACAO + "")){
+        }else {
+            if (idLancamentoOrigem.equals(LancamentoOrigem.FATURAMENTO + "")) {
+                throw new ControladorException("atencao.pesquisa.nenhum_registro_tabela", null, "Resumo Faturamento");
+            } else if (idLancamentoOrigem.equals(LancamentoOrigem.ARRECADACAO + "")) {
                 throw new ControladorException("atencao.pesquisa.nenhum_registro_tabela", null,"Resumo Arrecadação");
-            }else if(idLancamentoOrigem.equals(LancamentoOrigem.DEVEDORES_DUVIDOSOS + "")){
+            } else if (idLancamentoOrigem.equals(LancamentoOrigem.DEVEDORES_DUVIDOSOS + "")) {
                 throw new ControladorException("atencao.pesquisa.nenhum_registro_tabela", null,"Resumo Devedores Duvidosos");
             }
         }
@@ -7748,9 +7714,9 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
                             anoMesAnteriorFaturamento, idGerenciaRegionalConta,
                             idUnidadeNegocioConta, idLocalidadeConta,
                             idCategoriaConta, valorCategoria.multiply(new BigDecimal("-1")),
-                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 300,
+                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 100,
                             LancamentoItem.CONTAS_PAGA_EM_DUPLICIDADE_EXCESSO,
-                            10, null);
+                            50, null);
 
                     colecaoContasAReceberContabil.add(contaAReceberContabil);
                 }
@@ -7798,9 +7764,9 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
                             idCategoriaConta,
                             valorCategoria.multiply(new BigDecimal("-1")),
                             LancamentoTipo.DOCUMENTOS_EMITIDOS,
-                            300,
+                            100,
                             LancamentoItem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO,
-                            20, null);
+                            60, null);
 
                     colecaoContasAReceberContabil.add(contaAReceberContabil);
                 }
@@ -7843,8 +7809,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
                             anoMesAnteriorFaturamento, idGerenciaRegionalConta,
                             idUnidadeNegocioConta, idLocalidadeConta,
                             idCategoriaConta, valorCategoria.multiply(new BigDecimal("-1")),
-                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 300,
-                            LancamentoItem.DESCONTOS_CONDICIONAIS, 30, null);
+                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 100,
+                            LancamentoItem.DESCONTOS_CONDICIONAIS, 70, null);
 
                     colecaoContasAReceberContabil.add(contaAReceberContabil);
                 }
@@ -7888,8 +7854,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
                             anoMesAnteriorFaturamento, idGerenciaRegionalConta,
                             idUnidadeNegocioConta, idLocalidadeConta,
                             idCategoriaConta, valorCategoria.multiply(new BigDecimal("-1")),
-                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 300,
-                            LancamentoItem.DESCONTOS_INCONDICIONAIS, 40, null);
+                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 100,
+                            LancamentoItem.DESCONTOS_INCONDICIONAIS, 80, null);
 
                     colecaoContasAReceberContabil.add(contaAReceberContabil);
                 }
@@ -7932,8 +7898,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
                             anoMesAnteriorFaturamento, idGerenciaRegionalConta,
                             idUnidadeNegocioConta, idLocalidadeConta,
                             idCategoriaConta, valorCategoria.multiply(new BigDecimal("-1")),
-                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 300,
-                            LancamentoItem.AJUSTES_PARA_ZERAR_CONTA, 50, null);
+                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 100,
+                            LancamentoItem.AJUSTES_PARA_ZERAR_CONTA, 90, null);
 
                     colecaoContasAReceberContabil.add(contaAReceberContabil);
                 }
@@ -7975,8 +7941,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
                             anoMesAnteriorFaturamento, idGerenciaRegionalConta,
                             idUnidadeNegocioConta, idLocalidadeConta,
                             idCategoriaConta, valorCategoria.multiply(new BigDecimal("-1")),
-                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 300,
-                            LancamentoItem.VALORES_COBRADOS_INDEVIDAMENTE, 60, null);
+                            LancamentoTipo.DOCUMENTOS_EMITIDOS, 100,
+                            LancamentoItem.VALORES_COBRADOS_INDEVIDAMENTE, 95, null);
 
                     colecaoContasAReceberContabil.add(contaAReceberContabil);
                 }
@@ -11597,16 +11563,15 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 		return dados;
 	}
 		
-	public Collection consultarDadosRelatorioSaldoContasAReceberContabil(String opcaoTotalizacao,
-			int mesAno, Integer gerencia, Integer unidadeNegocio, Integer localidade, Integer municipio) 
-	throws ControladorException{
+	public Collection consultarDadosRelatorioSaldoContasAReceberContabil(String opcaoTotalizacao, int mesAno, Integer gerencia, Integer unidadeNegocio, Integer localidade, Integer municipio)
+			throws ControladorException {
+		
 		Collection pesquisaDados = new ArrayList();
-		HashMap<String, RelatorioSaldoContasAReceberContabilBean> dadosAgrupados = 
-			new HashMap<String, RelatorioSaldoContasAReceberContabilBean>();
+		HashMap<String, RelatorioSaldoContasAReceberContabilBean> dadosAgrupados = new HashMap<String, RelatorioSaldoContasAReceberContabilBean>();
 		int anoMes = Util.formatarMesAnoParaAnoMes(mesAno);
+		
 		try {
-			pesquisaDados = repositorioFinanceiro.consultarDadosRelatorioSaldoContasAReceberContabil(
-					opcaoTotalizacao, anoMes, gerencia, unidadeNegocio, localidade, municipio);
+			pesquisaDados = repositorioFinanceiro.consultarDadosRelatorioSaldoContasAReceberContabil(opcaoTotalizacao, anoMes, gerencia, unidadeNegocio, localidade, municipio);
 			
 			String tipoGrupo = "";
 			if(opcaoTotalizacao.equalsIgnoreCase("estadoGerencia")){
@@ -11629,7 +11594,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 			BigDecimal totalizadorSomaSemPerdaPublico = new BigDecimal("0");
 			BigDecimal totalizadorSomaSemPerda = new BigDecimal("0");
 			
-			BigDecimal totalizadorSomaSemPerdaResidendial = new BigDecimal("0");
+			BigDecimal totalizadorSomaSemPerdaResidencial = new BigDecimal("0");
 			BigDecimal totalizadorSomaSemPerdaComercial = new BigDecimal("0");
 			BigDecimal totalizadorSomaSemPerdaIndustrial = new BigDecimal("0");
 			
@@ -11653,10 +11618,16 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 			//************************************************************
 			int indicadorFinCobCurtoPrazo = 0;
 			int indicadorFinCobLongoPrazo = 0;
+			int indicadorConta = 0;
+			int indicadorGuia = 0;
 			RelatorioSaldoContasAReceberContabilBean beanFinCobCurtoPrazo = null;
 			RelatorioSaldoContasAReceberContabilBean beanFinCobLongoPrazo = null;
+			RelatorioSaldoContasAReceberContabilBean beanConta = null;
+			RelatorioSaldoContasAReceberContabilBean beanGuia = null;
 			String chaveFinCobCurtoPrazo = "";
 			String chaveFinCobLongoPrazo = "";
+			String chaveConta = "";
+			String chaveGuia = "";
 			Boolean primeiraVez = true;
 			Integer idItemGrupoAnterior = null;
 			
@@ -11695,7 +11666,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 					totalizadorSomaSemPerdaPublico = new BigDecimal("0");
 					totalizadorSomaSemPerda = new BigDecimal("0");
 					
-					totalizadorSomaSemPerdaResidendial = new BigDecimal("0");
+					totalizadorSomaSemPerdaResidencial = new BigDecimal("0");
 					totalizadorSomaSemPerdaComercial = new BigDecimal("0");
 					totalizadorSomaSemPerdaIndustrial = new BigDecimal("0");
 				}
@@ -11703,8 +11674,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 				//*****************************************************************************
 				// Verifica se adiciona o subtotal para Financiamento Cobrar CURTO Prazo
 				//*****************************************************************************
-				if (numSequenciaTipoLancamento.equals(400) && numSequenciaLancamentoItem.equals(10) &&
-						indicadorFinCobCurtoPrazo == 0) {
+				if (numSequenciaTipoLancamento.equals(400) && numSequenciaLancamentoItem.equals(10) && indicadorFinCobCurtoPrazo == 0) {
 					
 					indicadorFinCobCurtoPrazo = 1;
 					beanFinCobCurtoPrazo = new RelatorioSaldoContasAReceberContabilBean(
@@ -11718,7 +11688,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 					beanFinCobCurtoPrazo.setSequenciaLancamentoTipo(400);
 					beanFinCobCurtoPrazo.setSequenciaLancamentoItem(11); // Serve apenas para ordenacao
 					
-					if (tipoCategoria.intValue() == CategoriaTipo.PARTICULAR.intValue()){
+					if (tipoCategoria.intValue() == CategoriaTipo.PARTICULAR.intValue()) {
 						beanFinCobCurtoPrazo.setValorItemParticular(somaValor); // PARTICULAR
 						
 						if (idCategoria.equals(Categoria.RESIDENCIAL)) {
@@ -11732,12 +11702,11 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 						beanFinCobCurtoPrazo.setValorItemPublico(somaValor); // PUBLICO	
 					}
 					
-				}else if (numSequenciaTipoLancamento.equals(400) && numSequenciaLancamentoItem.equals(10) &&
-						indicadorFinCobCurtoPrazo == 1) {
+				} else if (numSequenciaTipoLancamento.equals(400) && numSequenciaLancamentoItem.equals(10) && indicadorFinCobCurtoPrazo == 1) {
 					
 					chaveFinCobCurtoPrazo = "z" + nomeItemGrupo + descricaoLancamentoTipo + descricaoLancamentoItem + descricaoItemContabil;
 					
-					if (tipoCategoria.intValue() == CategoriaTipo.PARTICULAR.intValue()){
+					if (tipoCategoria.intValue() == CategoriaTipo.PARTICULAR.intValue()) {
 						beanFinCobCurtoPrazo.setValorItemParticular(beanFinCobCurtoPrazo.getValorItemParticular().add(somaValor)); // PARTICULAR
 						
 						if (idCategoria.equals(Categoria.RESIDENCIAL)) {
@@ -11824,6 +11793,125 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 				//*****************************************************************************
 				
 				
+				//*****************************************************************************
+				// Verifica se adiciona o subtotal para itens referentes a Contas (Documentos Emitidos)
+				//*****************************************************************************
+				if (numSequenciaTipoLancamento.equals(100) && indicadorConta == 0) {
+					
+					indicadorConta = 1;
+					beanConta = new RelatorioSaldoContasAReceberContabilBean(
+							idGerenciaRegional, nomeGerenciaRegional, idUnidadeNegocio,
+							nomeUnidadeNegocio, codigoCentroCusto, tipoGrupo, idItemGrupo,
+							nomeItemGrupo, descricaoLancamentoTipo, descricaoLancamentoItem,
+							"                            SUBTOTAL",
+							totalizadorSomaSemPerdaParticular, totalizadorSomaSemPerdaPublico,
+							totalizadorSomaSemPerda);
+					
+					beanConta.setSequenciaLancamentoTipo(100);
+					beanConta.setSequenciaLancamentoItem(101); // Serve apenas para ordenacao
+					
+					if (tipoCategoria.intValue() == CategoriaTipo.PARTICULAR.intValue()){
+						beanConta.setValorItemParticular(somaValor); // PARTICULAR
+						
+						if (idCategoria.equals(Categoria.RESIDENCIAL)) {
+							beanConta.setValorItemResidencial(somaValor);
+						}else if (idCategoria.equals(Categoria.COMERCIAL)) {
+							beanConta.setValorItemComercial(somaValor);
+						}else if (idCategoria.equals(Categoria.INDUSTRIAL)) {
+							beanConta.setValorItemIndustrial(somaValor);
+						}
+					} else {
+						beanConta.setValorItemPublico(somaValor); // PUBLICO	
+					}
+					
+				} else if (numSequenciaTipoLancamento.equals(100) && indicadorConta == 1) {
+					beanConta.setDescricaoLancamentoItem(descricaoLancamentoItem);
+					
+					chaveConta = "zzz" + nomeItemGrupo + descricaoLancamentoTipo + descricaoLancamentoItem + descricaoItemContabil;
+					if (tipoCategoria.intValue() == CategoriaTipo.PARTICULAR.intValue()){
+						beanConta.setValorItemParticular(beanConta.getValorItemParticular().add(somaValor)); // PARTICULAR
+						
+						if (idCategoria.equals(Categoria.RESIDENCIAL)) {
+							beanConta.setValorItemResidencial(
+									beanConta.getValorItemResidencial().add(somaValor));
+						}else if (idCategoria.equals(Categoria.COMERCIAL)) {
+							beanConta.setValorItemComercial(
+									beanConta.getValorItemComercial().add(somaValor));
+						}else if (idCategoria.equals(Categoria.INDUSTRIAL)) {
+							beanConta.setValorItemIndustrial(
+									beanConta.getValorItemIndustrial().add(somaValor));
+						}
+					}else {
+						beanConta.setValorItemPublico(
+								beanConta.getValorItemPublico().add(somaValor)); // PUBLICO
+					}
+					
+				} else if (indicadorConta == 1) {
+					dadosAgrupados.put(chaveConta, beanConta);
+					indicadorConta = 2;
+				}
+				//*****************************************************************************
+				
+			
+				//*****************************************************************************
+				// Verifica se adiciona o subtotal para itens referentes a Guias (Documentos Emitidos)
+				//*****************************************************************************
+				if (numSequenciaTipoLancamento.equals(200) && indicadorGuia == 0) {
+					
+					indicadorGuia = 1;
+					beanGuia = new RelatorioSaldoContasAReceberContabilBean(
+							idGerenciaRegional, nomeGerenciaRegional, idUnidadeNegocio,
+							nomeUnidadeNegocio, codigoCentroCusto, tipoGrupo, idItemGrupo,
+							nomeItemGrupo, descricaoLancamentoTipo, descricaoLancamentoItem,
+							"                            SUBTOTAL",
+							totalizadorSomaSemPerdaParticular, totalizadorSomaSemPerdaPublico,
+							totalizadorSomaSemPerda);
+					
+					beanGuia.setSequenciaLancamentoTipo(200);
+					beanGuia.setSequenciaLancamentoItem(99); // Serve apenas para ordenacao
+					
+					if (tipoCategoria.intValue() == CategoriaTipo.PARTICULAR.intValue()){
+						beanGuia.setValorItemParticular(somaValor); // PARTICULAR
+						
+						if (idCategoria.equals(Categoria.RESIDENCIAL)) {
+							beanGuia.setValorItemResidencial(somaValor);
+						}else if (idCategoria.equals(Categoria.COMERCIAL)) {
+							beanGuia.setValorItemComercial(somaValor);
+						}else if (idCategoria.equals(Categoria.INDUSTRIAL)) {
+							beanGuia.setValorItemIndustrial(somaValor);
+						}
+					}else {
+						beanGuia.setValorItemPublico(somaValor); // PUBLICO	
+					}
+					
+				}else if (numSequenciaTipoLancamento.equals(200) && indicadorGuia == 1) {
+					beanGuia.setDescricaoLancamentoItem(descricaoLancamentoItem);
+					
+					chaveGuia = "zzzz" + nomeItemGrupo + descricaoLancamentoTipo + descricaoLancamentoItem + descricaoItemContabil;
+					if (tipoCategoria.intValue() == CategoriaTipo.PARTICULAR.intValue()){
+						beanGuia.setValorItemParticular(beanGuia.getValorItemParticular().add(somaValor)); // PARTICULAR
+						
+						if (idCategoria.equals(Categoria.RESIDENCIAL)) {
+							beanGuia.setValorItemResidencial(
+									beanGuia.getValorItemResidencial().add(somaValor));
+						}else if (idCategoria.equals(Categoria.COMERCIAL)) {
+							beanGuia.setValorItemComercial(
+									beanGuia.getValorItemComercial().add(somaValor));
+						}else if (idCategoria.equals(Categoria.INDUSTRIAL)) {
+							beanGuia.setValorItemIndustrial(
+									beanGuia.getValorItemIndustrial().add(somaValor));
+						}
+					}else {
+						beanGuia.setValorItemPublico(
+								beanGuia.getValorItemPublico().add(somaValor)); // PUBLICO
+					}
+					
+				} else if (indicadorGuia == 1) {
+					dadosAgrupados.put(chaveGuia, beanGuia);
+					indicadorGuia = 2;
+				}
+				//*****************************************************************************
+				
 				String chave = nomeItemGrupo + descricaoLancamentoTipo + descricaoLancamentoItem + descricaoItemContabil;
 				
 				RelatorioSaldoContasAReceberContabilBean bean = dadosAgrupados.get(chave);
@@ -11876,8 +11964,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 							totalizadorSomaSemPerdaParticular = totalizadorSomaSemPerdaParticular.add(somaValor);
 							
 							if (idCategoria.equals(Categoria.RESIDENCIAL)) {
-								totalizadorSomaSemPerdaResidendial = 
-									totalizadorSomaSemPerdaResidendial.add(somaValor);
+								totalizadorSomaSemPerdaResidencial = 
+									totalizadorSomaSemPerdaResidencial.add(somaValor);
 							}else if (idCategoria.equals(Categoria.COMERCIAL)) {
 								totalizadorSomaSemPerdaComercial =
 									totalizadorSomaSemPerdaComercial.add(somaValor);
@@ -11890,7 +11978,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 						totalizadorSomaSemPerda = totalizadorSomaSemPerdaParticular.add(totalizadorSomaSemPerdaPublico);
 						bean.setTotalGeralSemPerdas(totalizadorSomaSemPerda);
 						
-						bean.setTotalGeralSemPerdasResidencial(totalizadorSomaSemPerdaResidendial);
+						bean.setTotalGeralSemPerdasResidencial(totalizadorSomaSemPerdaResidencial);
 						bean.setTotalGeralSemPerdasComercial(totalizadorSomaSemPerdaComercial);
 						bean.setTotalGeralSemPerdasIndustrial(totalizadorSomaSemPerdaIndustrial);
 					}
@@ -11916,6 +12004,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);
 		}
+		
 		return new ArrayList(dadosAgrupados.values());
 	}
 	
@@ -12132,7 +12221,6 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
                     imovel.setLote((Short) arrayDados[6]);
                 }
                 
-                //sublote
                 if (arrayDados[7] != null) {
                     imovel.setLote((Short) arrayDados[7]);
                 }
@@ -13171,6 +13259,8 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
         // -------------------------
         idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(
         idFuncionalidadeIniciada, UnidadeProcessamento.LOCALIDADE, idLocalidade);
+        
+        Session session = HibernateUtil.getSession();
 
         try {
 
@@ -13187,24 +13277,24 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
         	int anoMesReferenciaFaturamentoMenosUm = Util.subtrairMesDoAnoMes(
         	sistemaParametro.getAnoMesFaturamento(), 1);
 
-        	this.removerDocumentosAReceberFaixaResumo(anoMesReferenciaFaturamentoMenosUm, idLocalidade);
-        	this.removerDocumentosAReceberResumo(anoMesReferenciaFaturamentoMenosUm, idLocalidade);
+        	this.removerDocumentosAReceberFaixaResumo(anoMesReferenciaFaturamentoMenosUm, idLocalidade, session);
+        	this.removerDocumentosAReceberResumo(anoMesReferenciaFaturamentoMenosUm, idLocalidade, session);
         	
         	//[SB0001 – Gerar resumo a partir de contas];
             this.gerarResumoAPartirConta(anoMesReferenciaFaturamentoMenosUm, idLocalidade, 
-            		colecaoDocumentosAReceberResumo);
+            		colecaoDocumentosAReceberResumo, session);
             
             //[SB0002 – Gerar resumo a partir de guias de pagamento]
             this.gerarResumoAPartirGuiaPagamento(anoMesReferenciaFaturamentoMenosUm, idLocalidade, 
-            		colecaoDocumentosAReceberResumo);
+            		colecaoDocumentosAReceberResumo, session);
             
             //[SB0003 – Gerar resumo a partir de débitos a cobrar]
             this.gerarResumoAPartirDebitoACobrar(anoMesReferenciaFaturamentoMenosUm, idLocalidade, 
-            		colecaoDocumentosAReceberResumo);
+            		colecaoDocumentosAReceberResumo, session);
             
             //[SB0004 – Gerar resumo a partir de créditos a realizar]
             this.gerarResumoAPartirCreditoARealizar(anoMesReferenciaFaturamentoMenosUm, idLocalidade, 
-            		colecaoDocumentosAReceberResumo);
+            		colecaoDocumentosAReceberResumo, session);
 
             //ENCERRANDO A UNIDADE DE PROCESSAMENTO
             getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
@@ -13212,13 +13302,13 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
             System.out.println("FIM DA GERAÇÃO - Localidade " + idLocalidade);
 
-        } 
-        catch (Exception e) {
-
+        } catch (Exception e) {
             getControladorBatch().encerrarUnidadeProcessamentoBatch(e,
             idUnidadeIniciada, true);
             
             throw new EJBException(e);
+        } finally {
+        	HibernateUtil.closeSession(session);
         }
     }
 	
@@ -13233,12 +13323,12 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @throws ErroRepositorioException
 	 */
 	public void removerDocumentosAReceberResumo(int anoMesReferenciaFaturamento, 
-		Integer idLocalidade) throws ControladorException {
+		Integer idLocalidade, Session session) throws ControladorException {
 		
 		try {
 			
 			repositorioFinanceiro.removerDocumentosAReceberResumo(anoMesReferenciaFaturamento, 
-			idLocalidade);
+			idLocalidade, session);
 			
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
@@ -13260,14 +13350,14 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @throws ControladorException
 	 */
 	public void gerarResumoAPartirConta(int anoMesReferenciaFaturamento, Integer idLocalidade,
-		Collection<DocumentosAReceberResumo> colecaoDocumentosAReceberResumo) throws ControladorException{
+		Collection<DocumentosAReceberResumo> colecaoDocumentosAReceberResumo, Session session) throws ControladorException{
 		
 		Collection<Object[]> colecaoResumoContas = null;
 		
 		try {
 			
 			colecaoResumoContas = repositorioFinanceiro.pesquisarContasAReceberParaResumo(
-			anoMesReferenciaFaturamento, idLocalidade);
+			anoMesReferenciaFaturamento, idLocalidade, session);
 			
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
@@ -13292,14 +13382,14 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @throws ControladorException
 	 */
 	public void gerarResumoAPartirGuiaPagamento(int anoMesReferenciaFaturamento, Integer idLocalidade,
-		Collection<DocumentosAReceberResumo> colecaoDocumentosAReceberResumo) throws ControladorException{
+		Collection<DocumentosAReceberResumo> colecaoDocumentosAReceberResumo, Session session) throws ControladorException{
 			
 		Collection<Object[]> colecaoResumoGuiasPagamento = null;
 			
 		try {
 				
 			colecaoResumoGuiasPagamento = repositorioFinanceiro.pesquisarGuiasPagamentoAReceberParaResumo(
-			anoMesReferenciaFaturamento, idLocalidade);
+			anoMesReferenciaFaturamento, idLocalidade, session);
 				
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
@@ -13324,14 +13414,14 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @throws ControladorException
 	 */
 	public void gerarResumoAPartirDebitoACobrar(int anoMesReferenciaFaturamento, Integer idLocalidade,
-		Collection<DocumentosAReceberResumo> colecaoDocumentosAReceberResumo) throws ControladorException{
+		Collection<DocumentosAReceberResumo> colecaoDocumentosAReceberResumo, Session session) throws ControladorException{
 				
 		Collection<Object[]> colecaoResumoDebitosACobrar = null;
 				
 		try {
 					
 			colecaoResumoDebitosACobrar = repositorioFinanceiro.pesquisarDebitosACobrarAReceberParaResumo(
-			anoMesReferenciaFaturamento, idLocalidade);
+			anoMesReferenciaFaturamento, idLocalidade, session);
 					
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
@@ -13356,14 +13446,14 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @throws ControladorException
 	 */
 	public void gerarResumoAPartirCreditoARealizar(int anoMesReferenciaFaturamento, Integer idLocalidade,
-		Collection<DocumentosAReceberResumo> colecaoDocumentosAReceberResumo) throws ControladorException{
+		Collection<DocumentosAReceberResumo> colecaoDocumentosAReceberResumo, Session session) throws ControladorException{
 					
 		Collection<Object[]> colecaoResumoCreditoARealizar = null;
 					
 		try {
 						
 			colecaoResumoCreditoARealizar = repositorioFinanceiro.pesquisarCreditosARealizarAReceberParaResumo(
-			anoMesReferenciaFaturamento, idLocalidade);
+			anoMesReferenciaFaturamento, idLocalidade, session);
 						
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
@@ -13603,10 +13693,14 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 						documentosAReceberFaixaResumo.setValorDocumentos((BigDecimal) dadosAcumulados[8]);
 						
 						if (documentosAReceberResumo.getValorDocumentos() != null && !documentosAReceberResumo.getValorDocumentos().equals(BigDecimal.ZERO)) {
-							documentosAReceberResumo.setValorDocumentos(documentosAReceberResumo.getValorDocumentos()
-									.add((BigDecimal) dadosAcumulados[8]));
+							documentosAReceberResumo.setValorDocumentos(documentosAReceberResumo.getValorDocumentos().add((BigDecimal) dadosAcumulados[8]));
 						} else {
 							documentosAReceberResumo.setValorDocumentos((BigDecimal) dadosAcumulados[8]);
+						}
+						if (documentosAReceberResumo.getValorDocumentosSemParcelaAtual() != null && !documentosAReceberResumo.getValorDocumentosSemParcelaAtual().equals(BigDecimal.ZERO)) {
+							documentosAReceberResumo.setValorDocumentosSemParcelaAtual(documentosAReceberResumo.getValorDocumentosSemParcelaAtual().add((BigDecimal) dadosAcumulados[10]));
+						} else {
+							documentosAReceberResumo.setValorDocumentosSemParcelaAtual((BigDecimal) dadosAcumulados[10]);
 						}
 					}
 					
@@ -17824,12 +17918,12 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 	 * @throws ErroRepositorioException
 	 */
 	public void removerDocumentosAReceberFaixaResumo(int anoMesReferenciaFaturamento, 
-		Integer idLocalidade) throws ControladorException {
+		Integer idLocalidade, Session session) throws ControladorException {
 		
 		try {
 			
 			repositorioFinanceiro.removerDocumentosAReceberFaixaResumo(anoMesReferenciaFaturamento, 
-			idLocalidade);
+			idLocalidade, session);
 			
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();

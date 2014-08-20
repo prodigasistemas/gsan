@@ -31,6 +31,7 @@ import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
 import gcom.batch.ControladorBatchLocal;
 import gcom.batch.ControladorBatchLocalHome;
 import gcom.batch.UnidadeProcessamento;
+import gcom.cadastro.atualizacaocadastral.FiltroArquivoTextoAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.FiltroImovelAtualizacaoCadastral;
 import gcom.cadastro.atualizacaocadastral.command.AbstractAtualizacaoCadastralCommand;
 import gcom.cadastro.atualizacaocadastral.command.AtualizacaoCadastral;
@@ -7552,7 +7553,7 @@ public class ControladorCadastro implements SessionBean {
 					leiturista.getEmpresa().getId(), idRota);
 
 			if (idsImoveis == null || idsImoveis.isEmpty()) {
-				System.out.println("Nenhum im√≥vel encontrado. ARQUIVO N√ÉO GERADO");
+				System.out.println("Nenhum imÛvel encontrado. ARQUIVO N√O GERADO");
 				getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
 			} else {
 				Rota rota = getControladorMicromedicao().pesquisarRota(idRota);
@@ -7568,6 +7569,19 @@ public class ControladorCadastro implements SessionBean {
 						+ Util.adicionarZerosEsquedaNumero(3, setor.getCodigo() + "")
 						+ "_"
 						+ Util.adicionarZerosEsquedaNumero(2, rota.getCodigo() + "");
+				
+				FiltroArquivoTextoAtualizacaoCadastral filtro = new FiltroArquivoTextoAtualizacaoCadastral();
+				filtro.adicionarParametro(new ParametroSimples(FiltroArquivoTextoAtualizacaoCadastral.LOCALIDADE_ID, localidade.getId()));
+				filtro.adicionarParametro(new ParametroSimples(FiltroArquivoTextoAtualizacaoCadastral.SETOR_COMERCIAL_CODIGO, setor.getCodigo()));
+				filtro.adicionarParametro(new ParametroSimples(FiltroArquivoTextoAtualizacaoCadastral.ROTA_ID, rota.getId()));
+				
+				Collection colecaoArquivo = getControladorUtil().pesquisar(filtro, ArquivoTextoAtualizacaoCadastral.class.getName());
+				
+				if (colecaoArquivo != null && !colecaoArquivo.isEmpty()) {
+					int ordem = colecaoArquivo.size() + 1;
+					descricaoArquivoTxt += "-parte" + ordem;
+				}
+				
 				arquivoTextoAtualizacaoCadastral.setDescricaoArquivo(descricaoArquivoTxt);
 				
 				// Leiturista

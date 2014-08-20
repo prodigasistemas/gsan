@@ -3,82 +3,42 @@ package gcom.faturamento.credito;
 import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.localidade.Quadra;
 import gcom.faturamento.conta.ContaHistorico;
+import gcom.faturamento.conta.IConta;
 import gcom.financeiro.lancamento.LancamentoItemContabil;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
-public class CreditoRealizadoHistorico implements Serializable {
+public class CreditoRealizadoHistorico implements Serializable, ICreditoRealizado {
 	private static final long serialVersionUID = 1L;
-    /** identifier field */
-    private Integer id;
-
-    /** persistent field */
-    private Date creditoRealizado;
-
-    /** persistent field */
-    //private Date geracaoHistoricoCredito;
-
-    /** nullable persistent field */
-    private Integer codigoSetorComercial;
-
-    /** nullable persistent field */
-    private Integer numeroQuadra;
-
-    /** nullable persistent field */
-    private Short numeroLote;
-
-    /** nullable persistent field */
-    private Short numeroSubLote;
-
-    /** nullable persistent field */
-    private Integer anoMesReferenciaCredito;
-
-    /** nullable persistent field */
-    private Integer anoMesCobrancaCredito;
-
-    /** nullable persistent field */
-    private BigDecimal valorCredito;
-
-    /** nullable persistent field */
-    private Short numeroPrestacao;
-
-    /** nullable persistent field */
-    private Short numeroPrestacaoCredito;
-
-    /** nullable persistent field */
-    private Date ultimaAlteracao;
     
+    private Integer id;
+    private Date creditoRealizado;
+    private Integer codigoSetorComercial;
+    private Integer numeroQuadra;
+    private Short numeroLote;
+    private Short numeroSubLote;
+    private Integer anoMesReferenciaCredito;
+    private Integer anoMesCobrancaCredito;
+    private BigDecimal valorCredito;
+    private Short numeroPrestacao;
+    private Short numeroPrestacaoCredito;
+    private Date ultimaAlteracao;
     private Short numeroParcelaBonus;
 
-    /** persistent field */
     private Quadra quadra;
-
-    /** persistent field */
     private Localidade localidade;
-
-    /** nullable persistent field */
-    private gcom.faturamento.credito.CreditoTipo creditoTipo;
-
-    /** persistent field */
+    private CreditoTipo creditoTipo;
     private ContaHistorico contaHistorico;
-
-    /** persistent field */
     private LancamentoItemContabil lancamentoItemContabil;
-    
-    /** persistent field */
     private CreditoOrigem creditoOrigem;
-    
-    /** persistent field */
     private CreditoARealizarGeral creditoARealizarGeral;
 
-    /** full constructor */
     public CreditoRealizadoHistorico(Date creditoRealizado, Integer codigoSetorComercial, Integer numeroQuadra, Short numeroLote, Short numeroSubLote, Integer anoMesReferenciaCredito, Integer anoMesCobrancaCredito, BigDecimal valorCredito, Short numeroPrestacao, Short numeroPrestacaoCredito, Date ultimaAlteracao, Quadra quadra, Localidade localidade, CreditoTipo creditoTipo, ContaHistorico contaHistorico, LancamentoItemContabil lancamentoItemContabil, CreditoOrigem creditoOrigem) {
         this.creditoRealizado = creditoRealizado;
-        //this.geracaoHistoricoCredito = geracaoHistoricoCredito;
         this.codigoSetorComercial = codigoSetorComercial;
         this.numeroQuadra = numeroQuadra;
         this.numeroLote = numeroLote;
@@ -97,14 +57,11 @@ public class CreditoRealizadoHistorico implements Serializable {
         this.creditoOrigem = creditoOrigem;
     }
 
-    /** default constructor */
     public CreditoRealizadoHistorico() {
     }
 
-    /** minimal constructor */
     public CreditoRealizadoHistorico(Date creditoRealizado, Quadra quadra, Localidade localidade, ContaHistorico contaHistorico, LancamentoItemContabil lancamentoItemContabil) {
         this.creditoRealizado = creditoRealizado;
-        //this.geracaoHistoricoCredito = geracaoHistoricoCredito;
         this.quadra = quadra;
         this.localidade = localidade;
         this.contaHistorico = contaHistorico;
@@ -126,14 +83,6 @@ public class CreditoRealizadoHistorico implements Serializable {
     public void setCreditoRealizado(Date creditoRealizado) {
         this.creditoRealizado = creditoRealizado;
     }
-
-    /*public Date getGeracaoHistoricoCredito() {
-        return this.geracaoHistoricoCredito;
-    }
-
-    public void setGeracaoHistoricoCredito(Date geracaoHistoricoCredito) {
-        this.geracaoHistoricoCredito = geracaoHistoricoCredito;
-    }*/
 
     public Integer getCodigoSetorComercial() {
         return this.codigoSetorComercial;
@@ -182,14 +131,6 @@ public class CreditoRealizadoHistorico implements Serializable {
     public void setAnoMesCobrancaCredito(Integer anoMesCobrancaCredito) {
         this.anoMesCobrancaCredito = anoMesCobrancaCredito;
     }
-
-    /*public BigDecimal getValorPrestacao() {
-        return this.valorPrestacao;
-    }
-
-    public void setValorPrestacao(BigDecimal valorPrestacao) {
-        this.valorPrestacao = valorPrestacao;
-    }*/
 
     public Short getNumeroPrestacao() {
         return this.numeroPrestacao;
@@ -261,16 +202,10 @@ public class CreditoRealizadoHistorico implements Serializable {
             .toString();
     }
     
-    /**
-     * @return Retorna o campo creditoOrigem.
-     */
     public CreditoOrigem getCreditoOrigem() {
         return creditoOrigem;
     }
 
-    /**
-     * @param creditoOrigem O creditoOrigem a ser setado.
-     */
     public void setCreditoOrigem(CreditoOrigem creditoOrigem) {
         this.creditoOrigem = creditoOrigem;
     }
@@ -291,8 +226,6 @@ public class CreditoRealizadoHistorico implements Serializable {
         this.numeroParcelaBonus = numeroParcelaBonus;
     }
     
-    
-
 	public CreditoARealizarGeral getCreditoARealizarGeral() {
 		return creditoARealizarGeral;
 	}
@@ -301,10 +234,6 @@ public class CreditoRealizadoHistorico implements Serializable {
 		this.creditoARealizarGeral = creditoARealizarGeral;
 	}
 
-	/**
-     * @author Vivianne Sousa
-     * @created 05/03/2008
-    */
     public short getNumeroTotalParcelasMenosBonus() {
         short retorno = getNumeroPrestacao();
         
@@ -314,4 +243,13 @@ public class CreditoRealizadoHistorico implements Serializable {
              
         return retorno;
     }
+
+	public IConta getConta() {
+		return this.contaHistorico;
+	}
+
+	public void setConta(IConta conta) {
+		this.contaHistorico = new ContaHistorico(conta.getId());		
+	}
+
 }

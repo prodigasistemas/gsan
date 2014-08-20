@@ -145,51 +145,41 @@ public class ExibirInserirGuiaPagamentoAction extends GcomAction {
 
 				inserirGuiaPagamentoActionForm.setIdImovel(""+ ((Imovel) ((List) imovelEncontrado).get(0)).getId());
 				inserirGuiaPagamentoActionForm.setInscricaoImovel(((Imovel) ((List) imovelEncontrado).get(0)).getInscricaoFormatada());
-				inserirGuiaPagamentoActionForm.setSituacaoAgua(((Imovel) ((List) imovelEncontrado)
-					.get(0)).getLigacaoAguaSituacao().getDescricao());
-				
-				inserirGuiaPagamentoActionForm.setSituacaoEsgoto(((Imovel) ((List) imovelEncontrado)
-					.get(0)).getLigacaoEsgotoSituacao().getDescricao());
-				
-				inserirGuiaPagamentoActionForm.setLocalidade(""+ ((Imovel) ((List) imovelEncontrado).get(0))
-						.getLocalidade().getId());
+				inserirGuiaPagamentoActionForm.setSituacaoAgua(((Imovel) ((List) imovelEncontrado).get(0)).getLigacaoAguaSituacao().getDescricao());
+				inserirGuiaPagamentoActionForm.setSituacaoEsgoto(((Imovel) ((List) imovelEncontrado).get(0)).getLigacaoEsgotoSituacao().getDescricao());
+				inserirGuiaPagamentoActionForm.setLocalidade(""+ ((Imovel) ((List) imovelEncontrado).get(0)).getLocalidade().getId());
 				
 				httpServletRequest.setAttribute("nomeCampo", "registroAtendimento");
 
 				FiltroClienteImovel filtroClienteImovel = new FiltroClienteImovel();
 				filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade("cliente");
 				filtroClienteImovel.adicionarCaminhoParaCarregamentoEntidade("clienteRelacaoTipo");
-
-				filtroClienteImovel.adicionarParametro(
-					new ParametroSimples(FiltroClienteImovel.IMOVEL_ID,codigoDigitadoImovelEnter));
+				filtroClienteImovel.adicionarParametro(new ParametroSimples(
+						FiltroClienteImovel.IMOVEL_ID, codigoDigitadoImovelEnter));
+				filtroClienteImovel.adicionarParametro(new ParametroSimples(
+						FiltroClienteImovel.CLIENTE_RELACAO_TIPO_ID, ClienteRelacaoTipo.USUARIO));
 				
-				Collection clientesImovelEncontrado = 
-					fachada.pesquisar(filtroClienteImovel, ClienteImovel.class.getName());
+				Collection clientesImovelEncontrado = fachada.pesquisar(filtroClienteImovel, ClienteImovel.class.getName());
 				
 				ClienteImovel clienteImovel = null;
-
+				
 				if (clientesImovelEncontrado != null && !clientesImovelEncontrado.isEmpty()) {
 
-					// O cliente imovel foi encontrado
 					Iterator clienteImovelEncontradoIterator = clientesImovelEncontrado.iterator();
 
 					while (clienteImovelEncontradoIterator.hasNext()) {
 						
 						clienteImovel = (ClienteImovel) clienteImovelEncontradoIterator.next();
 
-						if (clienteImovel.getClienteRelacaoTipo().getId().equals(ClienteRelacaoTipo.USUARIO)) {
-							break;
+						if (clienteImovel.getDataFimRelacao() == null) {
+							inserirGuiaPagamentoActionForm.setNomeClienteUsuario(clienteImovel.getCliente().getNome());
 						}
 					}
-					inserirGuiaPagamentoActionForm.setNomeClienteUsuario(clienteImovel.getCliente().getNome());
 				}
-
 			} else {
 				inserirGuiaPagamentoActionForm.setIdImovel("");
 				throw new ActionServletException("atencao.pesquisa.imovel.inexistente.guia");
 			}
-			
-			
 		}
 
 		// Verifica se o do cliente código foi digitado

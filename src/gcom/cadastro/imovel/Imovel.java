@@ -604,7 +604,13 @@ public class Imovel extends ObjetoTransacao implements IImovel {
 	public Imovel() {
 	}
 
-	
+	public Imovel(Localidade localidade, SetorComercial setor, Quadra quadra, short lote, short sublote ) {
+		this.localidade = localidade;
+		this.setorComercial = setor;
+		this.quadra = quadra;
+		this.lote = lote;
+		this.subLote = sublote;
+	}
 	public Imovel(
 			short lote,
 			short subLote,

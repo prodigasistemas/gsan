@@ -1,17 +1,16 @@
 package gcom.gui.relatorio.cadastro.atualizacaocadastral;
 
+import gcom.relatorio.ExibidorProcessamentoTarefaRelatorio;
+import gcom.relatorio.RelatorioVazioException;
+import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioImoveisSituacaoPeriodo;
+import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioImoveisSituacaoPeriodoBO;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
-
-import gcom.relatorio.ExibidorProcessamentoTarefaRelatorio;
-import gcom.relatorio.RelatorioVazioException;
-import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioImoveisSituacaoPeriodo;
-import gcom.relatorio.cadastro.atualizacaocadastral.RelatorioImoveisSituacaoPeriodoBO;
-import gcom.util.SistemaException;
 
 public class GerarRelatorioImoveisSituacaoPeriodoAction extends ExibidorProcessamentoTarefaRelatorio {
 	
@@ -38,7 +37,7 @@ public class GerarRelatorioImoveisSituacaoPeriodoAction extends ExibidorProcessa
 					httpServletRequest, httpServletResponse, actionMapping);
 
 		} catch (RelatorioVazioException ex) {
-			throw new RelatorioVazioException("teste");
+			throw new RelatorioVazioException("atencao.relatorio.vazio");
 		} 
 	}
 	

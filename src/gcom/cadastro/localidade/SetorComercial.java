@@ -58,11 +58,9 @@ public class SetorComercial extends ObjetoTransacao implements Serializable, Des
         this.indicadorSetorAlternativo = indicadorSetorAlternativo;
     }
 
-    /** default constructor */
     public SetorComercial() {
     }
 
-    /** minimal constructor */
     public SetorComercial(int codigo, String descricao, Municipio municipio,
             gcom.cadastro.localidade.Localidade localidade) {
         this.codigo = codigo;

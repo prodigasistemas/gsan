@@ -31,6 +31,7 @@ import gcom.faturamento.conta.ContaHistorico;
 import gcom.faturamento.conta.ContaTipo;
 import gcom.faturamento.conta.FiltroConta;
 import gcom.faturamento.conta.FiltroContaHistorico;
+import gcom.faturamento.conta.IContaCategoria;
 import gcom.faturamento.debito.DebitoACobrar;
 import gcom.faturamento.debito.DebitoACobrarGeral;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
@@ -575,9 +576,7 @@ public class ControladorFaturamentoCAEMASEJB extends ControladorFaturamento impl
 									// Colocado por Rafael Correa em 14/11/2008
 									StringBuilder dadosContaCategoria = null;
 									
-									Collection<ContaCategoria> cContaCategoria = 
-										repositorioFaturamento.pesquisarContaCategoria(
-											emitirContaHelper.getIdConta());
+									Collection<IContaCategoria> cContaCategoria = repositorioFaturamento.pesquisarContaCategoria(emitirContaHelper.getIdConta());
 									
 									// Caso tenha mais de uma categoria (misto)
 									if (cContaCategoria.size() > 1) {
@@ -1818,18 +1817,18 @@ public class ControladorFaturamentoCAEMASEJB extends ControladorFaturamento impl
 	 * @return
 	 * @throws ControladorException
 	 */
-	private StringBuilder obterDadosContaCategoriaMisto(Collection<ContaCategoria> cContaCategoria) {
+	private StringBuilder obterDadosContaCategoriaMisto(Collection<IContaCategoria> cContaCategoria) {
 		
 		StringBuilder retorno = new StringBuilder();
 		
-		for (ContaCategoria contaCategoria : cContaCategoria) {
+		for (IContaCategoria contaCategoria : cContaCategoria) {
 			
 			Integer consumoAgua = contaCategoria.getConsumoAgua();
 			BigDecimal valorAgua = contaCategoria.getValorAgua();
 			
 			if (valorAgua != null && !valorAgua.equals(new BigDecimal("0.00"))) {
 			
-				String subcategoriaFormatada = Util.completaString(contaCategoria.getComp_id().getSubcategoria().getDescricaoAbreviada(), 15);
+				String subcategoriaFormatada = Util.completaString(contaCategoria.getSubcategoria().getDescricaoAbreviada(), 15);
 				String quantidadeEconomias = contaCategoria.getQuantidadeEconomia() + " UNIDADE(S)";
 			
 				retorno.append(Util.completaString(subcategoriaFormatada + " " + quantidadeEconomias, 31));
@@ -3085,14 +3084,12 @@ public class ControladorFaturamentoCAEMASEJB extends ControladorFaturamento impl
 			// chama o [SB0003] -Obter Dados do Consumo e Medicao Anterior
 			// passando a quantidade de Meses Igual a 1
 			// e o tipo de ligacao e medicao recuperados anteriormente
-			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(emitirContaHelper.getIdImovel(), 
-				emitirContaHelper.getAmReferencia(), 1, tipoLigacao, tipoMedicao);
+			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(emitirContaHelper, 1, tipoLigacao, tipoMedicao);
 			emitirContaHelper.setDadosConsumoMes1(obterDadosConsumoMedicaoAnterior.toString());
 			// chama o [SB0003] -Obter Dados do Consumo e Medicao Anterior
 			// passando a quantidade de Meses Igual a 4
 			// e o tipo de ligacao e medicao recuperados anteriormente
-			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-				emitirContaHelper.getIdImovel(), emitirContaHelper.getAmReferencia(), 4, tipoLigacao, tipoMedicao);
+			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(emitirContaHelper, 4, tipoLigacao, tipoMedicao);
 			emitirContaHelper.setDadosConsumoMes4(obterDadosConsumoMedicaoAnterior.toString());
 
 			// Linha 10
@@ -3100,14 +3097,12 @@ public class ControladorFaturamentoCAEMASEJB extends ControladorFaturamento impl
 			// chama o [SB0003] -Obter Dados do Consumo e Medicao Anterior
 			// passando a quantidade de Meses Igual a 2
 			// e o tipo de ligacao e medicao recuperados anteriormente
-			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-				emitirContaHelper.getIdImovel(), emitirContaHelper.getAmReferencia(), 2, tipoLigacao, tipoMedicao);
+			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(emitirContaHelper, 2, tipoLigacao, tipoMedicao);
 			emitirContaHelper.setDadosConsumoMes2(obterDadosConsumoMedicaoAnterior.toString());
 			// chama o [SB0003] -Obter Dados do Consumo e Medicao Anterior
 			// passando a quantidade de Meses Igual a 5
 			// e o tipo de ligaca e medicao recuperados anteriormente
-			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-				emitirContaHelper.getIdImovel(), emitirContaHelper.getAmReferencia(), 5, tipoLigacao, tipoMedicao);
+			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(emitirContaHelper, 5, tipoLigacao, tipoMedicao);
 			emitirContaHelper.setDadosConsumoMes5(obterDadosConsumoMedicaoAnterior.toString());
 			// Inicio Chamar Sub-Fluxo
 			// recupera os parametros da medicao historico do
@@ -3189,16 +3184,12 @@ public class ControladorFaturamentoCAEMASEJB extends ControladorFaturamento impl
 			// chama o [SB0003] -Obter Dados do Consumo e Medicao Anterior
 			// passando a quantidade de Meses Igual a 3
 			// e o tipo de ligacao e medicao recuperados anteriormente
-			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(), emitirContaHelper
-							.getAmReferencia(), 3, tipoLigacao, tipoMedicao);
+			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(emitirContaHelper, 3, tipoLigacao, tipoMedicao);
 			emitirContaHelper.setDadosConsumoMes3(obterDadosConsumoMedicaoAnterior.toString());
 			// chama o [SB0003] -Obter Dados do Consumo e Medicao Anterior
 			// passando a quantidade de Meses Igual a 6
 			// e o tipo de ligacao e medicao recuperados anteriormente
-			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(), emitirContaHelper
-							.getAmReferencia(), 6, tipoLigacao, tipoMedicao);
+			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(emitirContaHelper, 6, tipoLigacao, tipoMedicao);
 			emitirContaHelper.setDadosConsumoMes6(obterDadosConsumoMedicaoAnterior.toString());
 
 			// Linha 12

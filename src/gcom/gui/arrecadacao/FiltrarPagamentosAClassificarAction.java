@@ -8,6 +8,7 @@ import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.util.Util;
+import gcom.util.filtro.ParametroNaoNulo;
 import gcom.util.filtro.ParametroSimples;
 
 import java.util.ArrayList;
@@ -34,35 +35,43 @@ public class FiltrarPagamentosAClassificarAction extends GcomAction {
 
 		Integer situacaoPagamento = new Integer(form.getIdSituacaoPagamento());
 		Integer referenciaArrecadacao = Util.formatarMesAnoComBarraParaAnoMes(form.getReferenciaArrecadacao());
-		
+		String matriculaImovel = new String (form.getMatriculaImovel());
+		String dataPagamento = new String (form.getDataPagamento());
 
-		FiltroClassificarPagamentos filtroClassificarPagamentos = 
-			new FiltroClassificarPagamentos(FiltroClassificarPagamentos.ORDER_BY);
+		FiltroClassificarPagamentos filtroClassificarPagamentos = new FiltroClassificarPagamentos(FiltroClassificarPagamentos.ORDER_BY);
 
 		
 		if ( situacaoPagamento != null && referenciaArrecadacao != null ) {
 			
-			filtroClassificarPagamentos.adicionarParametro(new ParametroSimples(
-					FiltroClassificarPagamentos.ID_SITUACAO_PAGAMENTO, situacaoPagamento));
+			filtroClassificarPagamentos.adicionarParametro(new ParametroSimples(FiltroClassificarPagamentos.ID_SITUACAO_PAGAMENTO, situacaoPagamento));
+			filtroClassificarPagamentos.adicionarParametro(new ParametroSimples(FiltroClassificarPagamentos.REFERENCIA_ARRECADACAO, referenciaArrecadacao));
+			filtroClassificarPagamentos.adicionarParametro(new ParametroNaoNulo(FiltroClassificarPagamentos.ID_CONTA));
 			
-			filtroClassificarPagamentos.adicionarParametro(new ParametroSimples(
-					FiltroClassificarPagamentos.REFERENCIA_ARRECADACAO, referenciaArrecadacao));
+			if (isMatriculaImovelPreenchida(matriculaImovel)) {
+				filtroClassificarPagamentos.adicionarParametro(new ParametroSimples(FiltroClassificarPagamentos.ID_IMOVEL, matriculaImovel));
+			}
+			
+			if (isDataPagementoPreenchida(dataPagamento)) {
+				filtroClassificarPagamentos.adicionarParametro(new ParametroSimples(FiltroClassificarPagamentos.DATA_PAGAMENTO, Util.converteStringParaDate(dataPagamento)));
+			}
+			
 		}
 
 		@SuppressWarnings("unchecked")
 		Collection<Pagamento> colecaoPagamentos = (Collection<Pagamento>) getFachada().pesquisar(filtroClassificarPagamentos, Pagamento.class.getName());;
-		Collection<Pagamento> colecaoPagamentosAClassificar = fachada.obterPagamentos(getIdPagamentos(colecaoPagamentos));
-				
-		form.setColecaoPagamentosAClassificar(colecaoPagamentosAClassificar);
-		form.setSituacaoPagamento(getDescricaoSituacaoPagamento(situacaoPagamento));
-		if ( colecaoPagamentosAClassificar != null && colecaoPagamentosAClassificar.isEmpty() ) {
-			throw new ActionServletException("atencao.pesquisa.nenhumresultado");
 		
-		}else{
+		if (colecaoPagamentos == null || colecaoPagamentos.isEmpty() ) {
+			throw new ActionServletException("atencao.pesquisa.nenhumresultado");
 			
+		}else{
+			Collection<Pagamento> colecaoPagamentosAClassificar = fachada.obterPagamentos(getIdPagamentos(colecaoPagamentos));
+					
+			form.setColecaoPagamentosAClassificar(colecaoPagamentosAClassificar);
+			form.setSituacaoPagamento(getDescricaoSituacaoPagamento(situacaoPagamento));
+				
 			httpServletRequest.setAttribute("colecaoPagamentosAClassificar",colecaoPagamentosAClassificar);
 			httpServletRequest.setAttribute("totalRegistros",colecaoPagamentosAClassificar.size());
-
+	
 			httpServletRequest.setAttribute("situacaoPesquisada",colecaoPagamentosAClassificar.size());
 			httpServletRequest.setAttribute("qtdPagamentos",colecaoPagamentosAClassificar.size());
 			
@@ -88,4 +97,13 @@ public class FiltrarPagamentosAClassificarAction extends GcomAction {
 		PagamentoSituacao pagamentoSituacao = (PagamentoSituacao) (getFachada().pesquisar(filtroSituacao, PagamentoSituacao.class.getName()).iterator().next());
 		return pagamentoSituacao.getDescricao();
 	}
+	
+	private boolean isMatriculaImovelPreenchida(String matriculaImovel) {
+		return matriculaImovel != null && !matriculaImovel.equals("");
+	}
+	
+	private boolean isDataPagementoPreenchida(String dataPagamento) {
+		return dataPagamento != null && !dataPagamento.equals("");
+	}
+	
 }

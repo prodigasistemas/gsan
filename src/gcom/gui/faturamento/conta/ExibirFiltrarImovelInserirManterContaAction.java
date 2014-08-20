@@ -1,6 +1,5 @@
 package gcom.gui.faturamento.conta;
 
-
 import gcom.arrecadacao.banco.Banco;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
@@ -39,180 +38,144 @@ import org.apache.struts.action.ActionMapping;
  * @created 12/03/2007
  */
 public class ExibirFiltrarImovelInserirManterContaAction extends GcomAction {
-	
 
-    private Collection colecaoPesquisa = null;
+	private Collection colecaoPesquisa = null;
 
-    private String localidadeIDOrigem = null;
-    
-    private String localidadeIDDestino = null;
-    
-    private String setorComercialCDOrigem = null;
-    
-    private String setorComercialCDDestino = null;
+	private String localidadeIDOrigem = null;
 
-    private String setorComercialIDOrigem = null;
-    
-    private String setorComercialIDDestino = null;
+	private String localidadeIDDestino = null;
 
-    private String quadraNMOrigem = null;
-    
-    private String quadraNMDestino = null;
-    
-	public ActionForward execute(ActionMapping actionMapping,ActionForm actionForm, 
-		HttpServletRequest httpServletRequest,HttpServletResponse httpServletResponse) {
+	private String setorComercialCDOrigem = null;
+
+	private String setorComercialCDDestino = null;
+
+	private String setorComercialIDOrigem = null;
+
+	private String setorComercialIDDestino = null;
+
+	private String quadraNMOrigem = null;
+
+	private String quadraNMDestino = null;
+
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest httpServletRequest,
+			HttpServletResponse httpServletResponse) {
 
 		// Seta o mapeamento de retorno
 		ActionForward retorno = actionMapping.findForward("filtrarImovelInserirManterConta");
 
 		Fachada fachada = Fachada.getInstancia();
 		HttpSession sessao = httpServletRequest.getSession(false);
-		
-		//novo CRC1258 - Flávio Leonardo
+
+		// novo CRC1258 - Flávio Leonardo
 		Collection<Banco> colecaoBancos = fachada.pesquisarBancoDebitoAutomatico();
 		sessao.setAttribute("colecaoBancos", colecaoBancos);
-		
-		/**TODO:COSANPA
+
+		/**
+		 * TODO:COSANPA
+		 * 
 		 * @author Adriana Muniz
-		 * @date: 23/11/2011
-		 * Pesquisa a esfera de poder
+		 * @date: 23/11/2011 Pesquisa a esfera de poder
 		 * */
 		Collection<EsferaPoder> colecaoEsferasPoder = fachada.pesquisarEsferaPoder();
 		sessao.setAttribute("colecaoEsferasPoder", colecaoEsferasPoder);
-		
-		boolean habilitaBanco = fachada.verificarPermissaoEspecial(
-				PermissaoEspecial.HABILITAR_BANCO_MANTER_CONTA, 
-				this.getUsuarioLogado(httpServletRequest));
-		
-		sessao.setAttribute("habilitaBanco",habilitaBanco);
-		
-		FiltrarImovelContaActionForm filtrarImovelContaActionForm = (FiltrarImovelContaActionForm) actionForm;
-		
-		String codigoCliente = (String) filtrarImovelContaActionForm.getCodigoCliente();
-		
-        FiltroClienteRelacaoTipo filtroClienteRelacaoTipo = new FiltroClienteRelacaoTipo();
-        
-        filtroClienteRelacaoTipo.adicionarParametro(new ParametroSimples(FiltroClienteRelacaoTipo.INDICADOR_USO,
-				ConstantesSistema.INDICADOR_USO_ATIVO));
-        
-		Collection<ClienteRelacaoTipo> collectionClienteRelacaoTipo = fachada.pesquisar(filtroClienteRelacaoTipo, ClienteRelacaoTipo.class.getName() );
-		
-		if (collectionClienteRelacaoTipo != null && !collectionClienteRelacaoTipo.isEmpty()) 
-		{
-			httpServletRequest.setAttribute("collectionClienteRelacaoTipo", collectionClienteRelacaoTipo);
-		}
-		else
-		{
-	        throw new ActionServletException(
-	        		"atencao.collectionClienteRelacaoTipo_inexistente", null, "id");
-		}
-		
-		String idDigitadoEnterClienteSuperior = (String) filtrarImovelContaActionForm.getCodigoClienteSuperior();
-        // verifica se o codigo do cliente superior foi digitado
-        if (idDigitadoEnterClienteSuperior != null
-                && !idDigitadoEnterClienteSuperior.trim().equals("")
-                && Integer.parseInt(idDigitadoEnterClienteSuperior) > 0) {
-            
-        	FiltroCliente filtroCliente = new FiltroCliente();
-			
-			filtroCliente.adicionarParametro(new ParametroSimples(
-					FiltroCliente.ID, idDigitadoEnterClienteSuperior));
-			filtroCliente.adicionarParametro(new ParametroSimples(
-					FiltroCliente.INDICADOR_USO,
-					ConstantesSistema.INDICADOR_USO_ATIVO));
 
-			Collection clienteEncontrado = fachada.pesquisar(filtroCliente,
-					Cliente.class.getName());
+		boolean habilitaBanco = fachada.verificarPermissaoEspecial(PermissaoEspecial.HABILITAR_BANCO_MANTER_CONTA,
+				this.getUsuarioLogado(httpServletRequest));
+
+		sessao.setAttribute("habilitaBanco", habilitaBanco);
+
+		FiltrarImovelContaActionForm filtrarImovelContaActionForm = (FiltrarImovelContaActionForm) actionForm;
+
+		String codigoCliente = (String) filtrarImovelContaActionForm.getCodigoCliente();
+
+		FiltroClienteRelacaoTipo filtroClienteRelacaoTipo = new FiltroClienteRelacaoTipo();
+
+		filtroClienteRelacaoTipo.adicionarParametro(new ParametroSimples(FiltroClienteRelacaoTipo.INDICADOR_USO,
+				ConstantesSistema.INDICADOR_USO_ATIVO));
+
+		Collection<ClienteRelacaoTipo> collectionClienteRelacaoTipo = fachada.pesquisar(filtroClienteRelacaoTipo,
+				ClienteRelacaoTipo.class.getName());
+
+		if (collectionClienteRelacaoTipo != null && !collectionClienteRelacaoTipo.isEmpty()) {
+			httpServletRequest.setAttribute("collectionClienteRelacaoTipo", collectionClienteRelacaoTipo);
+		} else {
+			throw new ActionServletException("atencao.collectionClienteRelacaoTipo_inexistente", null, "id");
+		}
+
+		String idDigitadoEnterClienteSuperior = (String) filtrarImovelContaActionForm.getCodigoClienteSuperior();
+		// verifica se o codigo do cliente superior foi digitado
+		if (idDigitadoEnterClienteSuperior != null && !idDigitadoEnterClienteSuperior.trim().equals("")
+				&& Integer.parseInt(idDigitadoEnterClienteSuperior) > 0) {
+
+			FiltroCliente filtroCliente = new FiltroCliente();
+
+			filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, idDigitadoEnterClienteSuperior));
+			filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
+
+			Collection clienteEncontrado = fachada.pesquisar(filtroCliente, Cliente.class.getName());
 
 			if (clienteEncontrado != null && !clienteEncontrado.isEmpty()) {
 				// O Cliente foi encontrado
-				if (((Cliente) ((List) clienteEncontrado).get(0))
-						.getIndicadorUso().equals(
-								ConstantesSistema.INDICADOR_USO_DESATIVO)) {
-					throw new ActionServletException("atencao.cliente.inativo",
-							null, ""
-									+ ((Cliente) ((List) clienteEncontrado)
-											.get(0)).getId());
+				if (((Cliente) ((List) clienteEncontrado).get(0)).getIndicadorUso().equals(ConstantesSistema.INDICADOR_USO_DESATIVO)) {
+					throw new ActionServletException("atencao.cliente.inativo", null, ""
+							+ ((Cliente) ((List) clienteEncontrado).get(0)).getId());
 				}
 
-				filtrarImovelContaActionForm
-						.setCodigoClienteSuperior(((Cliente) ((List) clienteEncontrado)
-								.get(0)).getId().toString());
-				filtrarImovelContaActionForm
-						.setNomeClienteSuperior(((Cliente) ((List) clienteEncontrado)
-								.get(0)).getNome());
+				filtrarImovelContaActionForm.setCodigoClienteSuperior(((Cliente) ((List) clienteEncontrado).get(0)).getId().toString());
+				filtrarImovelContaActionForm.setNomeClienteSuperior(((Cliente) ((List) clienteEncontrado).get(0)).getNome());
 
 			} else {
-				httpServletRequest.setAttribute("corClienteSuperior","exception");
-				filtrarImovelContaActionForm
-				.setCodigoClienteSuperior("");				
-				filtrarImovelContaActionForm
-               			.setNomeClienteSuperior(ConstantesSistema.CODIGO_CLIENTE_INEXISTENTE);
+				httpServletRequest.setAttribute("corClienteSuperior", "exception");
+				filtrarImovelContaActionForm.setCodigoClienteSuperior("");
+				filtrarImovelContaActionForm.setNomeClienteSuperior(ConstantesSistema.CODIGO_CLIENTE_INEXISTENTE);
 
 			}
-        }
-		
+		}
+
 		// PESQUISAR CLIENTE
-		if (codigoCliente != null
-				&& !codigoCliente.toString().trim().equalsIgnoreCase("")) {
+		if (codigoCliente != null && !codigoCliente.toString().trim().equalsIgnoreCase("")) {
 			this.pesquisarCliente(codigoCliente, filtrarImovelContaActionForm, fachada, httpServletRequest);
 		}
-		
-        String objetoConsulta = (String) httpServletRequest
-				.getParameter("objetoConsulta");
-		String inscricaoTipo = (String) httpServletRequest
-				.getParameter("inscricaoTipo");
 
-		if (objetoConsulta != null
-				&& !objetoConsulta.trim().equalsIgnoreCase("")
-				&& inscricaoTipo != null
+		String objetoConsulta = (String) httpServletRequest.getParameter("objetoConsulta");
+		String inscricaoTipo = (String) httpServletRequest.getParameter("inscricaoTipo");
+
+		if (objetoConsulta != null && !objetoConsulta.trim().equalsIgnoreCase("") && inscricaoTipo != null
 				&& !inscricaoTipo.trim().equalsIgnoreCase("")) {
 
 			switch (Integer.parseInt(objetoConsulta)) {
 			// Localidade
 			case 1:
 
-				pesquisarLocalidade(inscricaoTipo,
-						filtrarImovelContaActionForm, fachada,
-						httpServletRequest);
+				pesquisarLocalidade(inscricaoTipo, filtrarImovelContaActionForm, fachada, httpServletRequest);
 
 				break;
 			// Setor Comercial
 			case 2:
 
-				pesquisarLocalidade(inscricaoTipo,
-						filtrarImovelContaActionForm, fachada,
-						httpServletRequest);
+				pesquisarLocalidade(inscricaoTipo, filtrarImovelContaActionForm, fachada, httpServletRequest);
 
-				pesquisarSetorComercial(inscricaoTipo,
-						filtrarImovelContaActionForm, fachada,
-						httpServletRequest);
+				pesquisarSetorComercial(inscricaoTipo, filtrarImovelContaActionForm, fachada, httpServletRequest);
 
 				break;
 			// Quadra
 			case 3:
 
-				pesquisarLocalidade(inscricaoTipo,
-						filtrarImovelContaActionForm, fachada,
-						httpServletRequest);
+				pesquisarLocalidade(inscricaoTipo, filtrarImovelContaActionForm, fachada, httpServletRequest);
 
-				pesquisarSetorComercial(inscricaoTipo,
-						filtrarImovelContaActionForm, fachada,
-						httpServletRequest);
+				pesquisarSetorComercial(inscricaoTipo, filtrarImovelContaActionForm, fachada, httpServletRequest);
 
-				pesquisarQuadra(inscricaoTipo,
-						filtrarImovelContaActionForm, fachada,
-						httpServletRequest);
+				pesquisarQuadra(inscricaoTipo, filtrarImovelContaActionForm, fachada, httpServletRequest);
 
 				break;
 			default:
 				break;
 			}
 		}
-		
+
 		return retorno;
 	}
-	
+
 	/**
 	 * Pesquisar Clientes
 	 * 
@@ -223,426 +186,341 @@ public class ExibirFiltrarImovelInserirManterContaAction extends GcomAction {
 	 * @param fachada
 	 * @param httpServletRequest
 	 */
-	public void pesquisarCliente(String idCliente,
-			FiltrarImovelContaActionForm form,
-			Fachada fachada, HttpServletRequest httpServletRequest) {
+	public void pesquisarCliente(String idCliente, FiltrarImovelContaActionForm form, Fachada fachada, HttpServletRequest httpServletRequest) {
 		FiltroCliente filtroCliente = new FiltroCliente();
 
-		filtroCliente.adicionarParametro(new ParametroSimples(
-				FiltroCliente.ID, idCliente));
-		filtroCliente.adicionarParametro(new ParametroSimples(
-				FiltroCliente.INDICADOR_USO,
-				ConstantesSistema.INDICADOR_USO_ATIVO));
+		filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, idCliente));
+		filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.INDICADOR_USO, ConstantesSistema.INDICADOR_USO_ATIVO));
 
-		Collection clienteEncontrado = fachada.pesquisar(filtroCliente,
-				Cliente.class.getName());
+		Collection clienteEncontrado = fachada.pesquisar(filtroCliente, Cliente.class.getName());
 
 		if (clienteEncontrado != null && !clienteEncontrado.isEmpty()) {
 			// O Cliente foi encontrado
-			if (((Cliente) ((List) clienteEncontrado).get(0))
-					.getIndicadorUso().equals(
-							ConstantesSistema.INDICADOR_USO_DESATIVO)) {
-				throw new ActionServletException("atencao.cliente.inativo",
-						null, ""
-								+ ((Cliente) ((List) clienteEncontrado).get(0)).getId());
+			if (((Cliente) ((List) clienteEncontrado).get(0)).getIndicadorUso().equals(ConstantesSistema.INDICADOR_USO_DESATIVO)) {
+				throw new ActionServletException("atencao.cliente.inativo", null, ""
+						+ ((Cliente) ((List) clienteEncontrado).get(0)).getId());
 			}
 
-			form.setCodigoCliente(((Cliente) ((List) clienteEncontrado)
-							.get(0)).getId().toString());
-			form.setNomeCliente(((Cliente) ((List) clienteEncontrado)
-							.get(0)).getNome());
+			form.setCodigoCliente(((Cliente) ((List) clienteEncontrado).get(0)).getId().toString());
+			form.setNomeCliente(((Cliente) ((List) clienteEncontrado).get(0)).getNome());
 
 		} else {
-			httpServletRequest.setAttribute("corCliente","exception");
+			httpServletRequest.setAttribute("corCliente", "exception");
 			form.setCodigoCliente("");
 			form.setNomeCliente(ConstantesSistema.CODIGO_CLIENTE_INEXISTENTE);
 		}
-	}	
-	
-    private void pesquisarLocalidade(String inscricaoTipo,
-    		FiltrarImovelContaActionForm form,
-            Fachada fachada, HttpServletRequest httpServletRequest) {
+	}
 
-        FiltroLocalidade filtroLocalidade = new FiltroLocalidade();
+	private void pesquisarLocalidade(String inscricaoTipo, FiltrarImovelContaActionForm form, Fachada fachada,
+			HttpServletRequest httpServletRequest) {
 
-        //Recebe o valor do campo localidadeOrigemID do formulário.
-        localidadeIDOrigem = (String) form.getLocalidadeOrigemID();
+		FiltroLocalidade filtroLocalidade = new FiltroLocalidade();
 
-        filtroLocalidade.adicionarParametro(new ParametroSimples(
-                FiltroLocalidade.ID, localidadeIDOrigem));
+		// Recebe o valor do campo localidadeOrigemID do formulário.
+		localidadeIDOrigem = (String) form.getLocalidadeOrigemID();
 
-        filtroLocalidade.adicionarParametro(new ParametroSimples(
-                FiltroLocalidade.INDICADORUSO,
-                ConstantesSistema.INDICADOR_USO_ATIVO));
+		filtroLocalidade.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, localidadeIDOrigem));
 
-        //Retorna localidade
-        colecaoPesquisa = fachada.pesquisar(filtroLocalidade,
-                Localidade.class.getName());
+		filtroLocalidade.adicionarParametro(new ParametroSimples(FiltroLocalidade.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
 
-        if (colecaoPesquisa == null || colecaoPesquisa.isEmpty() && !localidadeIDOrigem.equalsIgnoreCase("")) {
-            //Localidade nao encontrada
-            //Limpa os campos localidadeOrigemID e nomeLocalidadeOrigem do
-            // formulário
-        	if(form.getLocalidadeOrigemID().equals(form.getLocalidadeDestinoID()))
-            {
-            	form.setLocalidadeDestinoID("");
-            }
-        	form.setLocalidadeOrigemID("");
-            form.setNomeLocalidadeOrigem("Localidade inexistente");
-            httpServletRequest.setAttribute("corLocalidadeOrigem",
-            		"exception");
-        } else if (colecaoPesquisa != null && !colecaoPesquisa.isEmpty()) {
-            Localidade objetoLocalidade = (Localidade) Util
-                    .retonarObjetoDeColecao(colecaoPesquisa);
-            form.setLocalidadeOrigemID(String.valueOf(objetoLocalidade.getId()));
-            form.setNomeLocalidadeOrigem(objetoLocalidade.getDescricao());
-            if(form.getLocalidadeDestinoID() == null || form.getLocalidadeDestinoID().equals("") || 
-            		form.getLocalidadeOrigemID().equals(form.getLocalidadeDestinoID()))
-            {
-            	form.setLocalidadeDestinoID(String.valueOf(objetoLocalidade.getId()));
-            	form.setNomeLocalidadeDestino(objetoLocalidade.getDescricao());
-            }
-            httpServletRequest.setAttribute("corLocalidadeOrigem", "valor");
-            httpServletRequest.setAttribute("nomeCampo", "setorComercialOrigemCD");
-        }
-        //Recebe o valor do campo localidadeDestinoID do formulário.
-        localidadeIDDestino = (String) form.getLocalidadeDestinoID();
+		// Retorna localidade
+		colecaoPesquisa = fachada.pesquisar(filtroLocalidade, Localidade.class.getName());
 
-        
-        /*
-         * Alterado por Raphael Rossiter em 26/12/2007
-         * OBJ: Corrigir bug aberto por Rosana Carvalho por email em 26/12/2007
-         */
-        if (localidadeIDDestino != null
-            && !localidadeIDDestino.trim().equalsIgnoreCase("")) {
-        	
-        	//Limpa os parametros do filtro
-            filtroLocalidade.limparListaParametros();
-            
-            filtroLocalidade.adicionarParametro(new ParametroSimples(
-                    FiltroLocalidade.ID, localidadeIDDestino));
+		if (colecaoPesquisa == null || colecaoPesquisa.isEmpty() && !localidadeIDOrigem.equalsIgnoreCase("")) {
+			// Localidade nao encontrada
+			// Limpa os campos localidadeOrigemID e nomeLocalidadeOrigem do
+			// formulário
+			if (form.getLocalidadeOrigemID().equals(form.getLocalidadeDestinoID())) {
+				form.setLocalidadeDestinoID("");
+			}
+			form.setLocalidadeOrigemID("");
+			form.setNomeLocalidadeOrigem("Localidade inexistente");
+			httpServletRequest.setAttribute("corLocalidadeOrigem", "exception");
+		} else if (colecaoPesquisa != null && !colecaoPesquisa.isEmpty()) {
+			Localidade objetoLocalidade = (Localidade) Util.retonarObjetoDeColecao(colecaoPesquisa);
+			form.setLocalidadeOrigemID(String.valueOf(objetoLocalidade.getId()));
+			form.setNomeLocalidadeOrigem(objetoLocalidade.getDescricao());
+			if (form.getLocalidadeDestinoID() == null || form.getLocalidadeDestinoID().equals("")
+					|| form.getLocalidadeOrigemID().equals(form.getLocalidadeDestinoID())) {
+				form.setLocalidadeDestinoID(String.valueOf(objetoLocalidade.getId()));
+				form.setNomeLocalidadeDestino(objetoLocalidade.getDescricao());
+			}
+			httpServletRequest.setAttribute("corLocalidadeOrigem", "valor");
+			httpServletRequest.setAttribute("nomeCampo", "setorComercialOrigemCD");
+		}
+		// Recebe o valor do campo localidadeDestinoID do formulário.
+		localidadeIDDestino = (String) form.getLocalidadeDestinoID();
 
-            filtroLocalidade.adicionarParametro(new ParametroSimples(
-                    FiltroLocalidade.INDICADORUSO,
-                    ConstantesSistema.INDICADOR_USO_ATIVO));
+		/*
+		 * Alterado por Raphael Rossiter em 26/12/2007 OBJ: Corrigir bug aberto
+		 * por Rosana Carvalho por email em 26/12/2007
+		 */
+		if (localidadeIDDestino != null && !localidadeIDDestino.trim().equalsIgnoreCase("")) {
 
-            //Retorna localidade
-            colecaoPesquisa = fachada.pesquisar(filtroLocalidade,
-                    Localidade.class.getName());
+			// Limpa os parametros do filtro
+			filtroLocalidade.limparListaParametros();
 
-            if (colecaoPesquisa == null || colecaoPesquisa.isEmpty()) {
-                //Localidade nao encontrada
-                //Limpa os campos localidadeDestinoID e nomeLocalidadeDestino
-                // do formulário
-                form.setLocalidadeDestinoID("");
-                form.setNomeLocalidadeDestino("Localidade inexistente");
-                httpServletRequest.setAttribute("corLocalidadeDestino",
-                        "exception");
-                httpServletRequest.setAttribute("nomeCampo", "localidadeDestinoID");
-            } else {
-                Localidade objetoLocalidade = (Localidade) Util
-                        .retonarObjetoDeColecao(colecaoPesquisa);
-                form.setLocalidadeDestinoID(String.valueOf(objetoLocalidade.getId()));
-                form.setNomeLocalidadeDestino(objetoLocalidade.getDescricao());
-                httpServletRequest
-                        .setAttribute("corLocalidadeDestino", "valor");
-                if(!form.getSetorComercialOrigemCD().equals(""))
-                {
-                	httpServletRequest.setAttribute("nomeCampo", "setorComercialDestinoCD");
-                }
-            }
-        }
-        
-    }
-    
-    private void pesquisarSetorComercial(String inscricaoTipo,
-    		FiltrarImovelContaActionForm form,
-            Fachada fachada, HttpServletRequest httpServletRequest) {
+			filtroLocalidade.adicionarParametro(new ParametroSimples(FiltroLocalidade.ID, localidadeIDDestino));
 
-        FiltroSetorComercial filtroSetorComercial = new FiltroSetorComercial();
+			filtroLocalidade.adicionarParametro(new ParametroSimples(FiltroLocalidade.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
 
-        //Recebe o valor do campo localidadeOrigemID do formulário.
-        localidadeIDOrigem = (String) form.getLocalidadeOrigemID();
+			// Retorna localidade
+			colecaoPesquisa = fachada.pesquisar(filtroLocalidade, Localidade.class.getName());
 
-        // O campo localidadeOrigemID será obrigatório
-        if (localidadeIDOrigem != null
-                && !localidadeIDOrigem.trim().equalsIgnoreCase("")) {
+			if (colecaoPesquisa == null || colecaoPesquisa.isEmpty()) {
+				// Localidade nao encontrada
+				// Limpa os campos localidadeDestinoID e nomeLocalidadeDestino
+				// do formulário
+				form.setLocalidadeDestinoID("");
+				form.setNomeLocalidadeDestino("Localidade inexistente");
+				httpServletRequest.setAttribute("corLocalidadeDestino", "exception");
+				httpServletRequest.setAttribute("nomeCampo", "localidadeDestinoID");
+			} else {
+				Localidade objetoLocalidade = (Localidade) Util.retonarObjetoDeColecao(colecaoPesquisa);
+				form.setLocalidadeDestinoID(String.valueOf(objetoLocalidade.getId()));
+				form.setNomeLocalidadeDestino(objetoLocalidade.getDescricao());
+				httpServletRequest.setAttribute("corLocalidadeDestino", "valor");
+				if (!form.getSetorComercialOrigemCD().equals("")) {
+					httpServletRequest.setAttribute("nomeCampo", "setorComercialDestinoCD");
+				}
+			}
+		}
 
-            setorComercialCDOrigem = (String) form.getSetorComercialOrigemCD();
+	}
 
-            //Adiciona o id da localidade que está no formulário para
-            // compor a pesquisa.
-            filtroSetorComercial.adicionarParametro(new ParametroSimples(
-                    FiltroSetorComercial.ID_LOCALIDADE, localidadeIDOrigem));
+	private void pesquisarSetorComercial(String inscricaoTipo, FiltrarImovelContaActionForm form, Fachada fachada,
+			HttpServletRequest httpServletRequest) {
 
-            //Adiciona o código do setor comercial que esta no formulário
-            // para compor a pesquisa.
-            filtroSetorComercial.adicionarParametro(new ParametroSimples(
-                    FiltroSetorComercial.CODIGO_SETOR_COMERCIAL,
-                    setorComercialCDOrigem));
+		FiltroSetorComercial filtroSetorComercial = new FiltroSetorComercial();
 
-            filtroSetorComercial.adicionarParametro(new ParametroSimples(
-                    FiltroSetorComercial.INDICADORUSO,
-                    ConstantesSistema.INDICADOR_USO_ATIVO));
+		// Recebe o valor do campo localidadeOrigemID do formulário.
+		localidadeIDOrigem = (String) form.getLocalidadeOrigemID();
 
-            //Retorna setorComercial
-            colecaoPesquisa = fachada.pesquisar(filtroSetorComercial,
-                    SetorComercial.class.getName());
+		// O campo localidadeOrigemID será obrigatório
+		if (localidadeIDOrigem != null && !localidadeIDOrigem.trim().equalsIgnoreCase("")) {
 
-            if (colecaoPesquisa == null || colecaoPesquisa.isEmpty() && 
-            		!form.getSetorComercialOrigemCD().equals("")) {
-                //Setor Comercial nao encontrado
-                //Limpa os campos setorComercialOrigemCD,
-                // nomeSetorComercialOrigem e setorComercialOrigemID do
-                // formulário
-            	if(form.getSetorComercialOrigemCD().equals(form.getSetorComercialDestinoCD()))
-                {
-                	form.setSetorComercialDestinoCD("");
-                }
-            	form.setSetorComercialOrigemCD("");
-                form.setSetorComercialOrigemID("");
-                form.setNomeSetorComercialOrigem("Setor comercial inexistente");
-                httpServletRequest.setAttribute("corSetorComercialOrigem",
-                        "exception");
-            } else if (colecaoPesquisa != null && !colecaoPesquisa.isEmpty()){
-                SetorComercial objetoSetorComercial = (SetorComercial) Util
-                        .retonarObjetoDeColecao(colecaoPesquisa);
-                form.setSetorComercialOrigemCD(String
-                                .valueOf(objetoSetorComercial.getCodigo()));
-                form.setSetorComercialOrigemID(String
-                                .valueOf(objetoSetorComercial.getId()));
-                form.setNomeSetorComercialOrigem(objetoSetorComercial
-                                .getDescricao());
-                if(form.getSetorComercialDestinoCD() == null || form.getSetorComercialDestinoCD().equals("") ||
-                		form.getSetorComercialDestinoCD().equals(form.getSetorComercialOrigemCD()))
-                {
-                    form.setSetorComercialDestinoCD(String
-                                    .valueOf(objetoSetorComercial.getCodigo()));
-                    form.setSetorComercialDestinoID(String
-                                    .valueOf(objetoSetorComercial.getId()));
-                    form.setNomeSetorComercialDestino(objetoSetorComercial
-                                    .getDescricao());
-                }
-                httpServletRequest.setAttribute("corSetorComercialOrigem",
-                        "valor");
-               	httpServletRequest.setAttribute("nomeCampo", "quadraOrigemNM");
-            }
-        } else {
-            //Limpa o campo setorComercialOrigemCD do formulário
-        	if (!form.getSetorComercialOrigemCD().equals(""))
-        	{
-        		form.setSetorComercialOrigemCD("");
-        		form.setNomeSetorComercialOrigem("Informe a localidade da inscrição de origem.");
-        		httpServletRequest.setAttribute("corSetorComercialOrigem",
-                    "exception");
-        	}
-        }
-        //Recebe o valor do campo localidadeDestinoID do formulário.
-        localidadeIDDestino = (String) form.getLocalidadeDestinoID();
+			setorComercialCDOrigem = (String) form.getSetorComercialOrigemCD();
 
-        // O campo localidadeOrigem será obrigatório
-        if (localidadeIDDestino != null
-                && !localidadeIDDestino.trim().equalsIgnoreCase("")) {
+			// Adiciona o id da localidade que está no formulário para
+			// compor a pesquisa.
+			filtroSetorComercial.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID_LOCALIDADE, localidadeIDOrigem));
 
-            setorComercialCDDestino = (String) form.getSetorComercialDestinoCD();
+			// Adiciona o código do setor comercial que esta no formulário
+			// para compor a pesquisa.
+			filtroSetorComercial.adicionarParametro(new ParametroSimples(FiltroSetorComercial.CODIGO_SETOR_COMERCIAL,
+					setorComercialCDOrigem));
 
-            //limpa o filtro
-            filtroSetorComercial.limparListaParametros();
-            
-            //Adiciona o id da localidade que está no formulário para
-            // compor a pesquisa.
-            filtroSetorComercial.adicionarParametro(new ParametroSimples(
-                    FiltroSetorComercial.ID_LOCALIDADE, localidadeIDDestino));
+			filtroSetorComercial.adicionarParametro(new ParametroSimples(FiltroSetorComercial.INDICADORUSO,
+					ConstantesSistema.INDICADOR_USO_ATIVO));
 
-            //Adiciona o código do setor comercial que esta no formulário
-            // para compor a pesquisa.
-            filtroSetorComercial.adicionarParametro(new ParametroSimples(
-                    FiltroSetorComercial.CODIGO_SETOR_COMERCIAL,
-                    setorComercialCDDestino));
+			// Retorna setorComercial
+			colecaoPesquisa = fachada.pesquisar(filtroSetorComercial, SetorComercial.class.getName());
 
-            filtroSetorComercial.adicionarParametro(new ParametroSimples(
-                    FiltroSetorComercial.INDICADORUSO,
-                    ConstantesSistema.INDICADOR_USO_ATIVO));
+			if (colecaoPesquisa == null || colecaoPesquisa.isEmpty() && !form.getSetorComercialOrigemCD().equals("")) {
+				// Setor Comercial nao encontrado
+				// Limpa os campos setorComercialOrigemCD,
+				// nomeSetorComercialOrigem e setorComercialOrigemID do
+				// formulário
+				if (form.getSetorComercialOrigemCD().equals(form.getSetorComercialDestinoCD())) {
+					form.setSetorComercialDestinoCD("");
+				}
+				form.setSetorComercialOrigemCD("");
+				form.setSetorComercialOrigemID("");
+				form.setNomeSetorComercialOrigem("Setor comercial inexistente");
+				httpServletRequest.setAttribute("corSetorComercialOrigem", "exception");
+			} else if (colecaoPesquisa != null && !colecaoPesquisa.isEmpty()) {
+				SetorComercial objetoSetorComercial = (SetorComercial) Util.retonarObjetoDeColecao(colecaoPesquisa);
+				form.setSetorComercialOrigemCD(String.valueOf(objetoSetorComercial.getCodigo()));
+				form.setSetorComercialOrigemID(String.valueOf(objetoSetorComercial.getId()));
+				form.setNomeSetorComercialOrigem(objetoSetorComercial.getDescricao());
+				if (form.getSetorComercialDestinoCD() == null || form.getSetorComercialDestinoCD().equals("")
+						|| form.getSetorComercialDestinoCD().equals(form.getSetorComercialOrigemCD())) {
+					form.setSetorComercialDestinoCD(String.valueOf(objetoSetorComercial.getCodigo()));
+					form.setSetorComercialDestinoID(String.valueOf(objetoSetorComercial.getId()));
+					form.setNomeSetorComercialDestino(objetoSetorComercial.getDescricao());
+				}
+				httpServletRequest.setAttribute("corSetorComercialOrigem", "valor");
+				httpServletRequest.setAttribute("nomeCampo", "quadraOrigemNM");
+			}
+		} else {
+			// Limpa o campo setorComercialOrigemCD do formulário
+			if (!form.getSetorComercialOrigemCD().equals("")) {
+				form.setSetorComercialOrigemCD("");
+				form.setNomeSetorComercialOrigem("Informe a localidade da inscrição de origem.");
+				httpServletRequest.setAttribute("corSetorComercialOrigem", "exception");
+			}
+		}
+		// Recebe o valor do campo localidadeDestinoID do formulário.
+		localidadeIDDestino = (String) form.getLocalidadeDestinoID();
 
-            //Retorna setorComercial
-            colecaoPesquisa = fachada.pesquisar(filtroSetorComercial,
-                    SetorComercial.class.getName());
+		// O campo localidadeOrigem será obrigatório
+		if (localidadeIDDestino != null && !localidadeIDDestino.trim().equalsIgnoreCase("")) {
 
-            if (colecaoPesquisa == null || colecaoPesquisa.isEmpty()) {
-                //Setor Comercial nao encontrado
-                //Limpa os campos setorComercialDestinoCD,
-                // nomeSetorComercialDestino e setorComercialDestinoID do
-                // formulário
-                form.setSetorComercialDestinoCD("");
-                form.setSetorComercialDestinoID("");
-                form.setNomeSetorComercialDestino("Setor comercial inexistente");
-                httpServletRequest.setAttribute("corSetorComercialDestino",
-                        "exception");
-            } else {
-                SetorComercial objetoSetorComercial = (SetorComercial) Util
-                        .retonarObjetoDeColecao(colecaoPesquisa);
-                form.setSetorComercialDestinoCD(String.valueOf(objetoSetorComercial.getCodigo()));
-                form.setSetorComercialDestinoID(String.valueOf(objetoSetorComercial.getId()));
-                form.setNomeSetorComercialDestino(objetoSetorComercial
-                                .getDescricao());
-                httpServletRequest.setAttribute("corSetorComercialDestino",
-                        "valor");
-                if(!form.getQuadraOrigemNM().equals(""))
-                {
-                	httpServletRequest.setAttribute("nomeCampo", "quadraDestinoNM");
-                }
-            }
-        } else {
-            //Limpa o campo setorComercialDestinoCD do formulário
-            form.setSetorComercialDestinoCD("");
-            form.setNomeSetorComercialDestino("Informe a localidade da inscrição de destino.");
-            httpServletRequest.setAttribute("corSetorComercialDestino",
-                    "exception");
-        }
-    }
+			setorComercialCDDestino = (String) form.getSetorComercialDestinoCD();
 
-    private void pesquisarQuadra(String inscricaoTipo,
-    		FiltrarImovelContaActionForm form,
-            Fachada fachada, HttpServletRequest httpServletRequest) {
+			// limpa o filtro
+			filtroSetorComercial.limparListaParametros();
 
-        FiltroQuadra filtroQuadra = new FiltroQuadra();
-        
-        //Objetos que serão retornados pelo hibernate.
-        filtroQuadra.adicionarCaminhoParaCarregamentoEntidade("bairro");
+			// Adiciona o id da localidade que está no formulário para
+			// compor a pesquisa.
+			filtroSetorComercial.adicionarParametro(new ParametroSimples(FiltroSetorComercial.ID_LOCALIDADE, localidadeIDDestino));
 
-        //Recebe os valores dos campos setorComercialOrigemCD e
-        // setorComercialOrigemID do formulário.
-        setorComercialCDOrigem = (String) form.getSetorComercialOrigemCD();
+			// Adiciona o código do setor comercial que esta no formulário
+			// para compor a pesquisa.
+			filtroSetorComercial.adicionarParametro(new ParametroSimples(FiltroSetorComercial.CODIGO_SETOR_COMERCIAL,
+					setorComercialCDDestino));
 
-        setorComercialIDOrigem = (String) form.getSetorComercialOrigemID();
+			filtroSetorComercial.adicionarParametro(new ParametroSimples(FiltroSetorComercial.INDICADORUSO,
+					ConstantesSistema.INDICADOR_USO_ATIVO));
 
-        // Os campos setorComercialOrigemCD e setorComercialID serão
-        // obrigatórios
-        if (setorComercialCDOrigem != null
-                && !setorComercialCDOrigem.trim().equalsIgnoreCase("")
-                && setorComercialIDOrigem != null
-                && !setorComercialIDOrigem.trim().equalsIgnoreCase("")) {
+			// Retorna setorComercial
+			colecaoPesquisa = fachada.pesquisar(filtroSetorComercial, SetorComercial.class.getName());
 
-            quadraNMOrigem = (String) form.getQuadraOrigemNM();
+			if (colecaoPesquisa == null || colecaoPesquisa.isEmpty()) {
+				// Setor Comercial nao encontrado
+				// Limpa os campos setorComercialDestinoCD,
+				// nomeSetorComercialDestino e setorComercialDestinoID do
+				// formulário
+				form.setSetorComercialDestinoCD("");
+				form.setSetorComercialDestinoID("");
+				form.setNomeSetorComercialDestino("Setor comercial inexistente");
+				httpServletRequest.setAttribute("corSetorComercialDestino", "exception");
+			} else {
+				SetorComercial objetoSetorComercial = (SetorComercial) Util.retonarObjetoDeColecao(colecaoPesquisa);
+				form.setSetorComercialDestinoCD(String.valueOf(objetoSetorComercial.getCodigo()));
+				form.setSetorComercialDestinoID(String.valueOf(objetoSetorComercial.getId()));
+				form.setNomeSetorComercialDestino(objetoSetorComercial.getDescricao());
+				httpServletRequest.setAttribute("corSetorComercialDestino", "valor");
+				if (!form.getQuadraOrigemNM().equals("")) {
+					httpServletRequest.setAttribute("nomeCampo", "quadraDestinoNM");
+				}
+			}
+		} else {
+			// Limpa o campo setorComercialDestinoCD do formulário
+			form.setSetorComercialDestinoCD("");
+			form.setNomeSetorComercialDestino("Informe a localidade da inscrição de destino.");
+			httpServletRequest.setAttribute("corSetorComercialDestino", "exception");
+		}
+	}
 
-            //Adiciona o id do setor comercial que está no formulário para
-            // compor a pesquisa.
-            filtroQuadra.adicionarParametro(new ParametroSimples(
-                    FiltroQuadra.ID_SETORCOMERCIAL, setorComercialIDOrigem));
+	private void pesquisarQuadra(String inscricaoTipo, FiltrarImovelContaActionForm form, Fachada fachada,
+			HttpServletRequest httpServletRequest) {
 
-            //Adiciona o número da quadra que esta no formulário para
-            // compor a pesquisa.
-            filtroQuadra.adicionarParametro(new ParametroSimples(
-                    FiltroQuadra.NUMERO_QUADRA, quadraNMOrigem));
+		FiltroQuadra filtroQuadra = new FiltroQuadra();
 
-            filtroQuadra.adicionarParametro(new ParametroSimples(
-                    FiltroQuadra.INDICADORUSO,
-                    ConstantesSistema.INDICADOR_USO_ATIVO));
+		// Objetos que serão retornados pelo hibernate.
+		filtroQuadra.adicionarCaminhoParaCarregamentoEntidade("bairro");
 
-            //Retorna quadra
-            colecaoPesquisa = fachada.pesquisar(filtroQuadra, Quadra.class
-                    .getName());
+		// Recebe os valores dos campos setorComercialOrigemCD e
+		// setorComercialOrigemID do formulário.
+		setorComercialCDOrigem = (String) form.getSetorComercialOrigemCD();
 
-            if (colecaoPesquisa == null || colecaoPesquisa.isEmpty() && !form.getQuadraOrigemNM().equals("")) {
-                //Quadra nao encontrada
-                //Limpa os campos quadraOrigemNM e quadraOrigemID do
-                // formulário
-            	if(form.getQuadraOrigemNM().equals(form.getQuadraDestinoNM()))
-                {
-                	form.setQuadraDestinoNM("");
-                }
-            	form.setQuadraOrigemNM("");
-                form.setQuadraOrigemID("");
-                //Mensagem de tela
-                form.setQuadraMensagemOrigem("Quadra inexistente");
-                httpServletRequest.setAttribute("corQuadraOrigem", "exception");
-            } else if (colecaoPesquisa != null && !colecaoPesquisa.isEmpty()){
-                Quadra objetoQuadra = (Quadra) Util
-                        .retonarObjetoDeColecao(colecaoPesquisa);
-                form.setQuadraOrigemNM(String.valueOf(objetoQuadra.getNumeroQuadra()));
-                form.setQuadraOrigemID(String.valueOf(objetoQuadra.getId()));
-                if(form.getQuadraDestinoNM() == null || form.getQuadraDestinoNM().equals("") || 
-                		form.getQuadraOrigemNM().equals(form.getQuadraDestinoNM()))
-                {
-	                form.setQuadraDestinoNM(String.valueOf(objetoQuadra.getNumeroQuadra()));
-                    form.setQuadraDestinoID(String.valueOf(objetoQuadra.getId()));
-                }
-                httpServletRequest.setAttribute("corQuadraOrigem", "valor");
-                httpServletRequest.setAttribute("nomeCampo", "loteOrigem");
-            }
-        } else {
-        	if (!form.getQuadraOrigemNM().equals(""))
-        	{
-        		//Limpa o campo quadraOrigemNM do formulário
-        		form.setQuadraOrigemNM("");
-        		form.setQuadraMensagemOrigem("Informe o setor comercial da inscrição de origem.");
-        		httpServletRequest.setAttribute("corQuadraOrigem", "exception");
-        	}
-        }
-        //Recebe os valores dos campos setorComercialOrigemCD e
-        // setorComercialOrigemID do formulário.
-        setorComercialCDDestino = (String) form.getSetorComercialDestinoCD();
-        setorComercialIDDestino = (String) form.getSetorComercialDestinoID();
+		setorComercialIDOrigem = (String) form.getSetorComercialOrigemID();
 
-        // Os campos setorComercialOrigemCD e setorComercialID serão
-        // obrigatórios
-        if (setorComercialCDDestino != null
-                && !setorComercialCDDestino.trim().equalsIgnoreCase("")
-                && setorComercialIDDestino != null
-                && !setorComercialIDDestino.trim().equalsIgnoreCase("")) {
+		// Os campos setorComercialOrigemCD e setorComercialID serão
+		// obrigatórios
+		if (setorComercialCDOrigem != null && !setorComercialCDOrigem.trim().equalsIgnoreCase("") && setorComercialIDOrigem != null
+				&& !setorComercialIDOrigem.trim().equalsIgnoreCase("")) {
 
-            quadraNMDestino = (String) form.getQuadraDestinoNM();
+			quadraNMOrigem = (String) form.getQuadraOrigemNM();
 
-            //Limpa os parametros do filtro
-            filtroQuadra.limparListaParametros();
-            
-            //Adiciona o id do setor comercial que está no formulário para
-            // compor a pesquisa.
-            filtroQuadra.adicionarParametro(new ParametroSimples(
-                    FiltroQuadra.ID_SETORCOMERCIAL, setorComercialIDDestino));
+			// Adiciona o id do setor comercial que está no formulário para
+			// compor a pesquisa.
+			filtroQuadra.adicionarParametro(new ParametroSimples(FiltroQuadra.ID_SETORCOMERCIAL, setorComercialIDOrigem));
 
-            //Adiciona o número da quadra que esta no formulário para
-            // compor a pesquisa.
-            filtroQuadra.adicionarParametro(new ParametroSimples(
-                    FiltroQuadra.NUMERO_QUADRA, quadraNMDestino));
+			// Adiciona o número da quadra que esta no formulário para
+			// compor a pesquisa.
+			filtroQuadra.adicionarParametro(new ParametroSimples(FiltroQuadra.NUMERO_QUADRA, quadraNMOrigem));
 
-            filtroQuadra.adicionarParametro(new ParametroSimples(
-                    FiltroQuadra.INDICADORUSO,
-                    ConstantesSistema.INDICADOR_USO_ATIVO));
+			filtroQuadra.adicionarParametro(new ParametroSimples(FiltroQuadra.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
 
-            //Retorna quadra
-            colecaoPesquisa = fachada.pesquisar(filtroQuadra, Quadra.class
-                    .getName());
+			// Retorna quadra
+			colecaoPesquisa = fachada.pesquisar(filtroQuadra, Quadra.class.getName());
 
-            if (colecaoPesquisa == null || colecaoPesquisa.isEmpty()) {
-                //Quadra nao encontrada
-                //Limpa os campos quadraOrigemNM e quadraOrigemID do
-                // formulário
-                form.setQuadraDestinoNM("");
-                form.setQuadraDestinoID("");
-                //Mensagem de tela
-                form.setQuadraMensagemDestino("Quadra inexistente");
-                httpServletRequest.setAttribute("corQuadraDestino",
-                        "exception");
-            } else {
-                Quadra objetoQuadra = (Quadra) Util
-                        .retonarObjetoDeColecao(colecaoPesquisa);
-                form.setQuadraDestinoNM(String.valueOf(objetoQuadra.getNumeroQuadra()));
-                form.setQuadraDestinoID(String.valueOf(objetoQuadra.getId()));
-                httpServletRequest
-                        .setAttribute("corQuadraDestino", "valor");
-                if(!form.getLoteOrigem().equals(""))
-                {
-                	httpServletRequest.setAttribute("nomeCampo", "loteDestino");
-                }
-            }
-        } else {
-            //Limpa o campo setorComercialOrigemCD do formulário
-            form.setQuadraDestinoNM("");
-            //Mensagem de tela
-            form.setQuadraMensagemDestino("Informe o setor comercial da inscrição.");
-            httpServletRequest
-                    .setAttribute("corQuadraDestino", "exception");
-        }
-    }	
+			if (colecaoPesquisa == null || colecaoPesquisa.isEmpty() && !form.getQuadraOrigemNM().equals("")) {
+				// Quadra nao encontrada
+				// Limpa os campos quadraOrigemNM e quadraOrigemID do
+				// formulário
+				if (form.getQuadraOrigemNM().equals(form.getQuadraDestinoNM())) {
+					form.setQuadraDestinoNM("");
+				}
+				form.setQuadraOrigemNM("");
+				form.setQuadraOrigemID("");
+				// Mensagem de tela
+				form.setQuadraMensagemOrigem("Quadra inexistente");
+				httpServletRequest.setAttribute("corQuadraOrigem", "exception");
+			} else if (colecaoPesquisa != null && !colecaoPesquisa.isEmpty()) {
+				Quadra objetoQuadra = (Quadra) Util.retonarObjetoDeColecao(colecaoPesquisa);
+				form.setQuadraOrigemNM(String.valueOf(objetoQuadra.getNumeroQuadra()));
+				form.setQuadraOrigemID(String.valueOf(objetoQuadra.getId()));
+				if (form.getQuadraDestinoNM() == null || form.getQuadraDestinoNM().equals("")
+						|| form.getQuadraOrigemNM().equals(form.getQuadraDestinoNM())) {
+					form.setQuadraDestinoNM(String.valueOf(objetoQuadra.getNumeroQuadra()));
+					form.setQuadraDestinoID(String.valueOf(objetoQuadra.getId()));
+				}
+				httpServletRequest.setAttribute("corQuadraOrigem", "valor");
+				httpServletRequest.setAttribute("nomeCampo", "loteOrigem");
+			}
+		} else {
+			if (!form.getQuadraOrigemNM().equals("")) {
+				// Limpa o campo quadraOrigemNM do formulário
+				form.setQuadraOrigemNM("");
+				form.setQuadraMensagemOrigem("Informe o setor comercial da inscrição de origem.");
+				httpServletRequest.setAttribute("corQuadraOrigem", "exception");
+			}
+		}
+		// Recebe os valores dos campos setorComercialOrigemCD e
+		// setorComercialOrigemID do formulário.
+		setorComercialCDDestino = (String) form.getSetorComercialDestinoCD();
+		setorComercialIDDestino = (String) form.getSetorComercialDestinoID();
+
+		// Os campos setorComercialOrigemCD e setorComercialID serão
+		// obrigatórios
+		if (setorComercialCDDestino != null && !setorComercialCDDestino.trim().equalsIgnoreCase("") && setorComercialIDDestino != null
+				&& !setorComercialIDDestino.trim().equalsIgnoreCase("")) {
+
+			quadraNMDestino = (String) form.getQuadraDestinoNM();
+
+			// Limpa os parametros do filtro
+			filtroQuadra.limparListaParametros();
+
+			// Adiciona o id do setor comercial que está no formulário para
+			// compor a pesquisa.
+			filtroQuadra.adicionarParametro(new ParametroSimples(FiltroQuadra.ID_SETORCOMERCIAL, setorComercialIDDestino));
+
+			// Adiciona o número da quadra que esta no formulário para
+			// compor a pesquisa.
+			filtroQuadra.adicionarParametro(new ParametroSimples(FiltroQuadra.NUMERO_QUADRA, quadraNMDestino));
+
+			filtroQuadra.adicionarParametro(new ParametroSimples(FiltroQuadra.INDICADORUSO, ConstantesSistema.INDICADOR_USO_ATIVO));
+
+			// Retorna quadra
+			colecaoPesquisa = fachada.pesquisar(filtroQuadra, Quadra.class.getName());
+
+			if (colecaoPesquisa == null || colecaoPesquisa.isEmpty()) {
+				// Quadra nao encontrada
+				// Limpa os campos quadraOrigemNM e quadraOrigemID do
+				// formulário
+				form.setQuadraDestinoNM("");
+				form.setQuadraDestinoID("");
+				// Mensagem de tela
+				form.setQuadraMensagemDestino("Quadra inexistente");
+				httpServletRequest.setAttribute("corQuadraDestino", "exception");
+			} else {
+				Quadra objetoQuadra = (Quadra) Util.retonarObjetoDeColecao(colecaoPesquisa);
+				form.setQuadraDestinoNM(String.valueOf(objetoQuadra.getNumeroQuadra()));
+				form.setQuadraDestinoID(String.valueOf(objetoQuadra.getId()));
+				httpServletRequest.setAttribute("corQuadraDestino", "valor");
+				if (!form.getLoteOrigem().equals("")) {
+					httpServletRequest.setAttribute("nomeCampo", "loteDestino");
+				}
+			}
+		} else {
+			// Limpa o campo setorComercialOrigemCD do formulário
+			form.setQuadraDestinoNM("");
+			// Mensagem de tela
+			form.setQuadraMensagemDestino("Informe o setor comercial da inscrição.");
+			httpServletRequest.setAttribute("corQuadraDestino", "exception");
+		}
+	}
 }

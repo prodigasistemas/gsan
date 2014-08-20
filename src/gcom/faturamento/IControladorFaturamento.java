@@ -1447,8 +1447,7 @@ public interface IControladorFaturamento {
 	 * @param colecaoConta
 	 * @throws ControladorException
 	 */
-	public StringBuilder obterDadosConsumoAnterior(Integer idImovel,
-			int anoMes, int qtdMeses, Integer tipoLigacao, Integer tipoMedicao)
+	public StringBuilder obterDadosConsumoAnterior(EmitirContaHelper emitirConta, int qtdMeses, Integer tipoLigacao, Integer tipoMedicao)
 			throws ControladorException;
 
 	/**
@@ -2345,7 +2344,7 @@ public interface IControladorFaturamento {
 	public Integer obterContasConjuntoImoveis(Integer anoMes,
 			Collection idsImovel, Integer codigoCliente, Short relacaoTipo,
 			Date dataVencimentoContaInicio, Date dataVencimentoContaFim, Integer idGrupoFaturamento,
-			Integer anoMesFinal, String indicadorContaPaga) 
+			Integer anoMesFinal, String indicadorContaPaga, Integer somenteDebitoAutomatico) 
 			throws ControladorException;
 	
 	/**
@@ -5664,14 +5663,19 @@ public interface IControladorFaturamento {
 			Short numeroPrestacaoDebito, Short numeroPrestacaoCobradas, Integer anoMesReferenciaDebito, BigDecimal valorDebito, 
 			DebitoTipo debitoTipo, Usuario usuario) throws ControladorException;
 	
-	public Map<Integer, Conta> incluirContasParaRefaturarPagamentos(Collection<Pagamento> pagamentos, Date dataArrecadacao) throws ControladorException, ErroRepositorioException;
+	public Map<Integer, Conta> incluirContasParaRefaturarPagamentos(Collection<Pagamento> pagamentos, Usuario usuarioLogado) throws ControladorException, ErroRepositorioException;
 	
 	@SuppressWarnings("unchecked")
 	public Collection<Integer> getListaIdContas(Collection<Pagamento> pagamentos);
 		
-	public Collection pesquisarContaOuContaHistorico(Collection<Integer> idsPagamentos, String className) throws ControladorException;
+	public Collection<ContaHistorico> pesquisarContaOuContaHistorico(Collection<Pagamento> pagamentos) throws ControladorException;
 
 	public void atualizarVecimentoFaturaClienteResponsavel(Date dataVencimento, String anoMesReferencia) throws ControladorException;
 	
 	public Integer countFaturasClienteResponsaveis(String anoMesReferencia) throws ControladorException;
+	
+	public Conta incluirDebitoContaRetificadaPagamentosDiferenca2Reais(Integer idConta, DebitoACobrar debito) throws Exception;
+	
+	public Conta incluirCreditoContaRetificadaPagamentosDiferenca2Reais(Integer idConta, CreditoARealizar credito) throws Exception;
+	
 }

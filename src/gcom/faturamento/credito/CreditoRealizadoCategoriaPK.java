@@ -6,31 +6,25 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class CreditoRealizadoCategoriaPK implements Serializable {
 	private static final long serialVersionUID = 1L;
-    /** identifier field */
-    private gcom.faturamento.credito.CreditoRealizado creditoRealizado;
-
-    /** identifier field */
+    
+    private CreditoRealizado creditoRealizado;
     private Categoria categoria;
 
-    /** full constructor */
-    public CreditoRealizadoCategoriaPK(gcom.faturamento.credito.CreditoRealizado creditoRealizado, Categoria categoria) {
+    public CreditoRealizadoCategoriaPK(CreditoRealizado creditoRealizado, Categoria categoria) {
         this.creditoRealizado = creditoRealizado;
         this.categoria = categoria;
     }
 
-    /** default constructor */
     public CreditoRealizadoCategoriaPK() {
     }
 
-    public gcom.faturamento.credito.CreditoRealizado getCreditoRealizado() {
+    public CreditoRealizado getCreditoRealizado() {
         return this.creditoRealizado;
     }
 
-    public void setCreditoRealizado(gcom.faturamento.credito.CreditoRealizado creditoRealizado) {
+    public void setCreditoRealizado(CreditoRealizado creditoRealizado) {
         this.creditoRealizado = creditoRealizado;
     }
 

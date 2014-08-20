@@ -28,7 +28,7 @@ public class RABuilder {
 	public static Integer UNIDADE_ATENDIMENTO_UNAM = new Integer(17);
 	
 	public static Integer SOLICITACAO_TIPO_MANUTENCAO_CADASTRAL = new Integer(25);
-	public static Integer SOLICITACAO_TIPO_ESPECIFICACAO_ATUALIZACAO_CADASTRAL = new Integer(13);
+	public static Integer SOLICITACAO_TIPO_ESPECIFICACAO_ATUALIZACAO_CADASTRAL = new Integer(1227);
 	
 	public static Integer SERVICO_TIPO_LOCALIZAR_IMOVEL = new Integer(51);
 	

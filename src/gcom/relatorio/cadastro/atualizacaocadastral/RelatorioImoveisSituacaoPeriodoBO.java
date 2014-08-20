@@ -36,9 +36,14 @@ public class RelatorioImoveisSituacaoPeriodoBO {
 	}
 	
 	public RelatorioImoveisSituacaoPeriodo getRelatorioImoveisSituacaoPeriodo() {
-		if(idSituacaoCadastral.equals("") || dataInicial.equals("") || dataFinal.equals("")){
-			throw new ActionServletException("Campo(s) obrigatório(s) não preenchido(s).");
-		}
+		if(idSituacaoCadastral.equals("-1"))
+			throw new ActionServletException("atencao.campo_texto.obrigatorio", "Situação");
+		
+		if (dataInicial.equals(""))
+			throw new ActionServletException("atencao.data.inicial.invalida");
+		
+		if (dataFinal.equals(""))
+			throw new ActionServletException("atencao.data.final.invalida");
 		
 		RelatorioImoveisSituacaoPeriodo relatorio = new RelatorioImoveisSituacaoPeriodo(usuario);
 		Date dInicial = Util.converteStringParaDate(dataInicial);

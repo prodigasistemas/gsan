@@ -98,6 +98,11 @@ public class GerarRelatorioDocumentosAReceberAction extends
 							form.getIndicadorGuiaPagamento():null
 				);
 		
+		if(form.getIndicadorInclusaoValorSemParcelas().equals("1")) {
+			helper.setExibirDebitoSemParcela(true);
+			helper.setExibirCreditoSemParcela(true);
+		}
+		
 		RelatorioDocumentosAReceber relatorio = new RelatorioDocumentosAReceber(usuario);
 		
 		// chama o metódo de gerar relatório passando o código da analise
