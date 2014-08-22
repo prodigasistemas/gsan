@@ -16,11 +16,7 @@
 					</logic:notPresent>
 				</td>
 				
-<<<<<<< HEAD
-          		<td align="right">Vers&atilde;o: 5.1.1.58 (Online) 21/08/2014 - 14:34:21 </td>
-=======
           		<td align="right">Vers&atilde;o: 5.1.1.57 (Online) 18/07/2014 - 9:16:25 </td>
->>>>>>> branch 'master' of https://github.com/JulianFernando/gsan.git
         	</tr>
       	</table>
 		</td>
