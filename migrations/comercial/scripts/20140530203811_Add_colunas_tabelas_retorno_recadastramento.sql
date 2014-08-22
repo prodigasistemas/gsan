@@ -1,10 +1,17 @@
 -- // Add colunas tabelas retorno recadastramento
 -- Migration SQL that makes the change goes here.
+
+--ALTER TABLE atendimentopublico.ligacao_esgoto_situacao ADD PRIMARY KEY (lest_id);
+--ALTER TABLE atendimentopublico.ramal_local_instalacao ADD PRIMARY KEY (rlin_id);
+--ALTER TABLE micromedicao.hidrometro_marca  ADD PRIMARY KEY (himc_id);
+--ALTER TABLE micromedicao.hidrometro_capacidade ADD PRIMARY KEY (hicp_id);
+--ALTER TABLE cadastro.logradouro_tipo ADD PRIMARY KEY (lgtp_id);
+
 ALTER TABLE atualizacaocadastral.imovel_retorno ADD COLUMN lest_id INTEGER
 	CONSTRAINT fk4_imovel_retorno REFERENCES atendimentopublico.ligacao_esgoto_situacao (lest_id)
 	MATCH SIMPLE ON UPDATE RESTRICT ON DELETE RESTRICT;
 
-
+	
 ALTER TABLE atualizacaocadastral.imovel_retorno ADD COLUMN rlin_id INTEGER
 	CONSTRAINT fk5_imovel_retorno REFERENCES atendimentopublico.ramal_local_instalacao (rlin_id)
 	MATCH SIMPLE ON UPDATE RESTRICT ON DELETE RESTRICT;
