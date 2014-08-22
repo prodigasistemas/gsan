@@ -18346,7 +18346,7 @@ public class ControladorCobranca implements SessionBean {
 				parcelamentoItem = (ParcelamentoItem) parcelamentoItemIterator.next();
 
 				codigoImovel = parcelamentoItem.getParcelamento().getImovel().getId();
-
+				
 				if (parcelamentoItem.getContaGeral() != null && parcelamentoItem.getContaGeral().getConta() != null) {
 					int situacaoAtual = 0;
 
@@ -18474,6 +18474,8 @@ public class ControladorCobranca implements SessionBean {
 							anoMesReferenciaContabil);
 				}
 			}
+			
+			repositorioCobranca.atualizarDocumentoDeCobrancaHistorico(codigoImovel, codigo);
 
 			if (codigoImovel != null) {
 				FiltroConta filtroConta = new FiltroConta();
