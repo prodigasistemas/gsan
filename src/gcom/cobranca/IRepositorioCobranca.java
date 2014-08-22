@@ -6052,4 +6052,8 @@ public interface IRepositorioCobranca {
 			Date dataEmissao, Integer idCobrancaAcao)
 			throws ErroRepositorioException;
 	
+	public void atualizarDocumentoDeCobrancaHistorico(Integer codigoImovel, Integer codigoParcelamento) throws ErroRepositorioException;
+	
+	
+	
 }
