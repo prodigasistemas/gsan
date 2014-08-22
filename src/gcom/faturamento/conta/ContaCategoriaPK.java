@@ -8,29 +8,27 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
-public class ContaCategoriaPK extends ObjetoGcom{
+public class ContaCategoriaPK extends ObjetoGcom implements IContaCategoriaPK{
 	private static final long serialVersionUID = 1L;
-    /** identifier field */
-    private gcom.faturamento.conta.Conta conta;
-
-    /** identifier field */
+   
+    private Conta conta;
     private Categoria categoria;
-    
-    /** identifier field */
     private Subcategoria subcategoria;
 
-    /** full constructor */
-    public ContaCategoriaPK(gcom.faturamento.conta.Conta conta, Categoria categoria) {
+    public ContaCategoriaPK(Conta conta, Categoria categoria) {
         this.conta = conta;
         this.categoria = categoria;
     }
 
-    /** default constructor */
     public ContaCategoriaPK() {
     }
 
+    public ContaCategoriaPK(Integer idConta, Categoria categoria, Subcategoria subcategoria) {
+        this.conta = new Conta(idConta);
+        this.categoria = categoria;
+        this.subcategoria = subcategoria;
+    }
+    
     public gcom.faturamento.conta.Conta getConta() {
         return this.conta;
     }
@@ -68,7 +66,6 @@ public class ContaCategoriaPK extends ObjetoGcom{
         if ( !(other instanceof ContaCategoriaPK) ) return false;
         ContaCategoriaPK castOther = (ContaCategoriaPK) other;
         return new EqualsBuilder()
-//            .append(this.getConta(), castOther.getConta())
             .append(this.getCategoria(), castOther.getCategoria())
             .append(this.getSubcategoria(),castOther.getSubcategoria())
             .isEquals();
@@ -100,5 +97,17 @@ public class ContaCategoriaPK extends ObjetoGcom{
 		if (this.getSubcategoria() != null){
 			this.getSubcategoria().initializeLazy();
 		}		
+	}
+
+	public Integer getIdConta() {
+		return this.conta.getId();
+	}
+
+	public void setIdConta(Integer id) {
+		this.conta.setId(id);
+	}
+
+	public void setConta(IConta conta) {
+		this.conta = new Conta(conta.getId());
 	}
 }

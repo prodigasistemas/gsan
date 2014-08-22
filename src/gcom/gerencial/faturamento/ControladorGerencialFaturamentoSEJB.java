@@ -37,6 +37,7 @@ import gcom.faturamento.conta.ContaCategoria;
 import gcom.faturamento.conta.ContaCategoriaPK;
 import gcom.faturamento.conta.ContaImpostosDeduzidos;
 import gcom.faturamento.conta.FiltroContaImpostosDeduzidos;
+import gcom.faturamento.conta.IContaCategoria;
 import gcom.faturamento.credito.CreditoARealizarCategoria;
 import gcom.faturamento.credito.CreditoOrigem;
 import gcom.faturamento.credito.CreditoRealizado;
@@ -11022,7 +11023,7 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
 	
 	public Collection pesquisarContaCategoria(Integer idConta){
 		
-		Collection<ContaCategoria> colContaCategoria = null;
+		Collection<IContaCategoria> colContaCategoria = null;
 		
 		try {
 			

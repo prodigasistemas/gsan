@@ -17,10 +17,8 @@
 	type="text/css">
 
 
-<script language="JavaScript"
-	src="<bean:message key="caminho.js"/>util.js"></script>
-<script language="JavaScript"
-	src="<bean:message key="caminho.js"/>validacao/ManutencaoRegistro.js"></script>
+<script language="JavaScript" src="<bean:message key="caminho.js"/>util.js"></script>
+<script language="JavaScript" src="<bean:message key="caminho.js"/>validacao/ManutencaoRegistro.js"></script>
 	
 <script language="JavaScript" src="<bean:message key="caminho.js"/>Calendario.js" ></script>
 
@@ -628,7 +626,17 @@ function retificarConjuntoConta(){
 									<html:radio	property="indicadorContaPaga" value="2"/>NÃO
 									<html:radio	property="indicadorContaPaga" value="3" disabled="true"/>AMBOS								
 								</strong></td>
-							</logic:equal>														
+							</logic:equal>
+						  </tr>
+						  <tr>
+							<td><strong>Somente Debito Automático:</strong></td>
+							<td>
+								<strong> 
+								<html:radio property="somenteDebitoAutomatico" value="1" />SIM 
+								<html:radio	property="somenteDebitoAutomatico" value="2" />NÃO
+								</strong>
+							</td>
+						  </tr>														
 							<!-- //////////////////////////////////////////////////////////////////////////// -->						  
 						  <tr>
 							<td height="10" width="160">

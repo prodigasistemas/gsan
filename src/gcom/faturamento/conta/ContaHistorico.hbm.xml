@@ -17,7 +17,7 @@
 		<property name="anoMesReferenciaConta" type="int" column="cnhi_amreferenciaconta" not-null="true" length="4"/>
 		<property name="contaHistorico" type="java.sql.Timestamp" column="cnhi_tmcontahistorico" length="8"/>
 		<property name="lote" type="java.lang.Short" column="cnhi_nnlote" length="2"/>
-		<property name="sublote" type="java.lang.Short" column="cnhi_nnsublote" length="2"/>
+		<property name="subLote" type="java.lang.Short" column="cnhi_nnsublote" length="2"/>
 		<property name="setorComercial" type="java.lang.Integer" column="cnhi_cdsetorcomercial" length="4"/>
 		<property name="numeroQuadra" type="java.lang.Integer" column="cnhi_nnquadra" not-null="true" length="4"/>
 		<property name="verificadorConta" type="short" column="cnhi_dgverificadorconta" not-null="true" length="2"/>

@@ -20,6 +20,7 @@ public class ManterContaConjuntoImovelActionForm extends ActionForm {
 	private String mesAnoContaFinal;
 	
 	private String indicadorContaPaga;
+	private String somenteDebitoAutomatico;
 	
 	
 	/**
@@ -156,5 +157,12 @@ public class ManterContaConjuntoImovelActionForm extends ActionForm {
 	}
 	
 	
-
+	public String getSomenteDebitoAutomatico() {
+		return somenteDebitoAutomatico;
+	}
+	
+	public void setSomenteDebitoAutomatico(String somenteDebitoAutomatico) {
+		this.somenteDebitoAutomatico = somenteDebitoAutomatico;
+	}
+	
 }

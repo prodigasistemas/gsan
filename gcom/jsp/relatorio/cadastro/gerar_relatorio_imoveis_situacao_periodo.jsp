@@ -37,14 +37,30 @@
 
 <script language="JavaScript">
 	
-function gerar(){
-	var form = document.forms[0];
-	if(form.idSituacaoCadastral.value == '') {
-		alert('Informe a Situação');
-	} else {
-		form.submit();
+	function gerar() {
+		var form = document.forms[0];
+		if(form.idSituacaoCadastral.value == '') {
+			alert('Informe a Situação');
+		} else {
+			form.submit();
+		}
 	}
-}
+	
+	function desabilitarDatas() {
+		var form = document.forms[0];
+		if(form.idSituacaoCadastral.value == '1'
+			|| form.idSituacaoCadastral.value == '2'
+			|| form.idSituacaoCadastral.value == '5') {
+
+			form.dataInicial.disabled=true;
+			form.dataInicial.value = '';
+			form.dataFinal.disabled=true;
+			form.dataFinal.value = '';
+		} else {
+			form.dataInicial.disabled=false;
+			form.dataFinal.disabled=false;
+		}
+	}
 </script>
 
 </head>
@@ -119,11 +135,9 @@ function gerar(){
 				<tr>
           			<td width="30%"><strong>Situa&ccedil;&atilde;o:<font color="#FF0000">*</font></strong> </td>
           			<td width="70%">
-          				<html:select property="idSituacaoCadastral">
+          				<html:select property="idSituacaoCadastral" onchange="javascript:desabilitarDatas();">
           					<html:option value="-1">&nbsp;</html:option>
-             	 			<html:option value="4">APROVADO</html:option>
-             	 			<html:option value="0">DISPONIVEL</html:option>
-             	 			<html:option value="3">TRANSMITIDO</html:option>
+             	 			<html:options collection="colecaoSituacoes" labelProperty="descricao" property="id" />
              			</html:select>
           			</td>
         		</tr>

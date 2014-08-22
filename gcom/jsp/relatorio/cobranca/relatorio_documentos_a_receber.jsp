@@ -427,7 +427,7 @@ function verificarFaixa(aux){
 				</tr>
 				
 				<tr>
-				<td width="20%">
+					<td width="20%">
 						<strong>
 							Com Guia de Pagamento?
 						</strong>
@@ -436,6 +436,20 @@ function verificarFaixa(aux){
 						<strong>
 							<html:radio property="indicadorGuiaPagamento" value="1"/>Sim
 							<html:radio property="indicadorGuiaPagamento" value="2"/>N&atilde;o
+						</strong>
+					</td>
+				</tr>
+				
+				<tr>
+					<td width="20%">
+						<strong>
+							Com Valores de Debito e Credito Sem A Parcela Atual?
+						</strong>
+					</td>					
+					<td>
+						<strong>
+							<html:radio property="indicadorInclusaoValorSemParcelas" value="1"/>Sim
+							<html:radio property="indicadorInclusaoValorSemParcelas" value="2"/>N&atilde;o
 						</strong>
 					</td>
 				</tr>

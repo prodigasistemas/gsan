@@ -268,6 +268,7 @@ import gcom.cadastro.imovel.ImovelDoacao;
 import gcom.cadastro.imovel.ImovelEconomia;
 import gcom.cadastro.imovel.ImovelEloAnormalidade;
 import gcom.cadastro.imovel.ImovelEnderecoAnterior;
+import gcom.cadastro.imovel.ImovelImagem;
 import gcom.cadastro.imovel.ImovelInscricaoAlterada;
 import gcom.cadastro.imovel.ImovelPerfil;
 import gcom.cadastro.imovel.ImovelProgramaEspecial;
@@ -1083,6 +1084,7 @@ public class HibernateUtil {
 							.addClass(ImovelInscricaoAlterada.class)
 							.addClass(ImovelRamoAtividadeAtualizacaoCadastral.class)
 							.addClass(ImagemRetorno.class)
+							.addClass(ImovelImagem.class)
 					// gcom.cadastro.localidade
 					.addClass(GerenciaRegional.class)
 					.addClass(Localidade.class).addClass(LocalidadePorte.class)

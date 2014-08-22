@@ -19,6 +19,7 @@ import gcom.faturamento.bean.EmitirContaHelper;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaCategoria;
 import gcom.faturamento.conta.ContaCategoriaConsumoFaixa;
+import gcom.faturamento.conta.IContaCategoria;
 import gcom.faturamento.credito.CreditoRealizado;
 import gcom.faturamento.debito.DebitoCobrado;
 import gcom.micromedicao.ControladorMicromedicaoLocal;
@@ -440,20 +441,13 @@ public class ImpressaoContaImpressoraTermica {
 		}
 		int qtdLinhas = 0;
 		
-		Collection<ContaCategoria> cContaCategoria;
+		Collection<IContaCategoria> cContaCategoria;
 		try {
-			cContaCategoria = repositorioFaturamento
-			.pesquisarContaCategoria(emitirContaHelper
-					.getIdConta());
+			cContaCategoria = repositorioFaturamento.pesquisarContaCategoria(emitirContaHelper.getIdConta());
 		
 
 		if (cContaCategoria != null) {
-			for (ContaCategoria contaCategoria : cContaCategoria) {
-				/**TODO: COSANPA
-				 * Mantis 876 - Contas impressas sem a descrição da tarifa de água
-				 * 
-				 * @author Wellington Rocha
-				 * @date 17/09/2013*/
+			for (IContaCategoria contaCategoria : cContaCategoria) {
 				if (contaCategoria.getConsumoAgua() == null || (contaCategoria.getConsumoAgua()== 0 
 						&& (contaCategoria.getValorAgua() == null || contaCategoria.getValorAgua().equals(new BigDecimal("0.00"))))) {
 				    continue;

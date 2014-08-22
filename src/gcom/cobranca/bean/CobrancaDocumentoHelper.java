@@ -21,13 +21,14 @@ public class CobrancaDocumentoHelper implements Serializable{
 	
 	private Collection<CobrancaDocumentoItem> colecaoCobrancaDocumentoItemConta;
 	private Collection<CobrancaDocumentoItem> colecaoCobrancaDocumentoItemDebitoACobrar;
+	private Collection<CobrancaDocumentoItem> colecaoCobrancaDocumentoItemCreditoARealizar;
 	private Collection<CobrancaDocumentoItem> colecaoCobrancaDocumentoItemGuiaPagamento;
-
+	
 	public CobrancaDocumentoHelper() {
 		
 	}
 	
-	public Collection getColecaoCobrancaDocumentoItem() {
+	public Collection<CobrancaDocumentoItem> getColecaoCobrancaDocumentoItem() {
 		return colecaoCobrancaDocumentoItem;
 	}
 
@@ -68,6 +69,15 @@ public class CobrancaDocumentoHelper implements Serializable{
 		this.colecaoCobrancaDocumentoItemDebitoACobrar = colecaoCobrancaDocumentoItemDebitoACobrar;
 	}
 
+	public Collection<CobrancaDocumentoItem> getColecaoCobrancaDocumentoItemCreditoARealizar() {
+		return colecaoCobrancaDocumentoItemCreditoARealizar;
+	}
+
+	public void setColecaoCobrancaDocumentoItemCreditoARealizar(
+			Collection<CobrancaDocumentoItem> colecaoCobrancaDocumentoItemCreditoARealizar) {
+		this.colecaoCobrancaDocumentoItemCreditoARealizar = colecaoCobrancaDocumentoItemCreditoARealizar;
+	}
+
 	public Collection<CobrancaDocumentoItem> getColecaoCobrancaDocumentoItemGuiaPagamento() {
 		return colecaoCobrancaDocumentoItemGuiaPagamento;
 	}
@@ -92,5 +102,4 @@ public class CobrancaDocumentoHelper implements Serializable{
 	public void setSituacaoOrdemServico(String situacaoOrdemServico) {
 		this.situacaoOrdemServico = situacaoOrdemServico;
 	}
-	
 }

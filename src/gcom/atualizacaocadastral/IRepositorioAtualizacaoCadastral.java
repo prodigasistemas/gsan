@@ -14,7 +14,6 @@ import java.util.List;
 
 public interface IRepositorioAtualizacaoCadastral {
 
-	
 	public void apagarImovelRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException;
 	
 	public List<ImovelSubcategoriaRetorno> pesquisarImovelSubcategoriaRetornoPorIdImovel(Integer idImovel) throws ErroRepositorioException;
@@ -47,11 +46,7 @@ public interface IRepositorioAtualizacaoCadastral {
 	
 	public void liberarCadastroImovel(Integer idImovel) throws ErroRepositorioException;
 
-	public Collection<Integer> pesquisarImoveisAprovadosPorPeriodo(Date dataInicial, Date dataFinal) throws ErroRepositorioException;
-	
-	public Collection<Integer> pesquisarImoveisDisponiveisPorPeriodo(Date dataInicial, Date dataFinal) throws ErroRepositorioException;
-	
-	public Collection<Integer> pesquisarImoveisTransmitidosPorPeriodo(Date dataInicial, Date dataFinal) throws ErroRepositorioException;
+	public Collection<Integer> pesquisarImoveisPorSituacaoPeriodo(Integer idSituacaoCadastral, Date dataInicial, Date dataFinal) throws ErroRepositorioException;
 	
 	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacao(Integer idImovel) throws ErroRepositorioException;
 	

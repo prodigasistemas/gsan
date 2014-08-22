@@ -46,7 +46,8 @@ public class ControladorFinanceiroCOSANPASEJB extends ControladorFinanceiro impl
 	 * @param data
 	 * @throws ControladorException
 	 */
-	public void gerarIntegracaoContabilidade(String idLancamentoOrigem, String anoMes, String data) throws ControladorException{
+	public void gerarIntegracaoContabilidade(
+			String idLancamentoOrigem, String anoMes, String data) throws ControladorException {
 		
 		/*
 		 * Pesquisa os dados para gerar a integração para a contabilidade.
@@ -60,25 +61,17 @@ public class ControladorFinanceiroCOSANPASEJB extends ControladorFinanceiro impl
 		Collection<Object[]> colecaoDadosGerarIntegracao = null;
 		
 		try {
-			
 			colecaoDadosGerarIntegracao = repositorioFinanceiro.pesquisarGerarIntegracaoContabilidadeCOSANPA(
 			idLancamentoOrigem, anoMes);
-		} 
-		catch (ErroRepositorioException ex) {
+		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
 		
-		/** definição das variáveis */
 		StringBuilder gerarIntegracaoTxt = new StringBuilder();
 		Date dataInformada = Util.converteStringParaDate(data);
 		
-		/*
-		 * Caso a coleção dos dados não esteja vazia
-		 */
 		if(colecaoDadosGerarIntegracao != null && !colecaoDadosGerarIntegracao.isEmpty()){
-			
-			/** definição das variáveis */
 			int sequencialLancamento = 1;
 			
 			String numeroConta = "";
@@ -94,241 +87,207 @@ public class ControladorFinanceiroCOSANPASEJB extends ControladorFinanceiro impl
 			Integer codigoTerceiro = null;
 			Short indicadorCentroCusto = null;
 			
-			/*
-			 * Determina se o arquivo é de faturamento ou arrecadação 
-			 */
+			// Determina se o arquivo é de faturamento ou arrecadação 
 			int mesLancamento = 0;
 			Integer anoMesInteger = Integer.valueOf(anoMes);
 			
-			if(idLancamentoOrigem.equals(LancamentoOrigem.FATURAMENTO + "")){
-				
+			if (idLancamentoOrigem.equals(LancamentoOrigem.FATURAMENTO + "")) {
 				descricaoLancamento = "FATURAMENTO";
 				nomeLote = "FT" + Util.formatarAnoMesParaMesAnoCom2Digitos(anoMesInteger);
-				
 				mesLancamento = Util.obterMes(anoMesInteger);
-			}
-			else if(idLancamentoOrigem.equals(LancamentoOrigem.ARRECADACAO + "")){
-				
+			} else if (idLancamentoOrigem.equals(LancamentoOrigem.ARRECADACAO + "")) {
 				nomeLote = "AD" + Util.formatarAnoMesParaMesAnoCom2Digitos(anoMesInteger);
 				descricaoLancamento = "ARRECADACAO";
-				
 				mesLancamento = Util.obterMes(anoMesInteger);
-			}
-			else if(idLancamentoOrigem.equals(LancamentoOrigem.AVISO_BANCARIO + "")){
-				
+			} else if(idLancamentoOrigem.equals(LancamentoOrigem.AVISO_BANCARIO + "")) {
 				nomeLote = "AB" + Util.formatarAnoMesParaMesAnoCom2Digitos(anoMesInteger);
 				descricaoLancamento = "AVISO_BANCARIO";
-				
 				mesLancamento = Util.obterMes(anoMesInteger);
 			}
 			
-			/*
-			 * Laço para gerar o txt 
-			 */
-			for(Object[] dadosGerarIntegracao : colecaoDadosGerarIntegracao){
-				
+			// Laço para gerar o txt 
+			for(Object[] dadosGerarIntegracao : colecaoDadosGerarIntegracao) {
 				//CONTA CONTABIL - NUMERO CONTA
-				if (dadosGerarIntegracao[0] != null){
+				if (dadosGerarIntegracao[0] != null) {
 					numeroConta = (String) dadosGerarIntegracao[0];
-				}
-				else{
+				} else {
 					numeroConta = "";
 				}
-				
-				//LOCALIDADE - CODIGO DO CENTRO DE CUSTO
-				if (dadosGerarIntegracao[1] != null){
+
+				// LOCALIDADE - CODIGO DO CENTRO DE CUSTO
+				if (dadosGerarIntegracao[1] != null) {
 					codigoCentroCusto = (String) dadosGerarIntegracao[1];
-				}
-				else{
+				} else {
 					codigoCentroCusto = "";
 				}
-				
-				//LANCAMENTO CONTABIL ITEM - INDICADOR DEBITO CREDTIO
-				if (dadosGerarIntegracao[2] != null){
+
+				// LANCAMENTO CONTABIL ITEM - INDICADOR DEBITO CREDTIO
+				if (dadosGerarIntegracao[2] != null) {
 					indicadorDebitoCredito = (Short) dadosGerarIntegracao[2];
 				}
-				
-				//LANCAMENTO CONTABIL ITEM - VALOR LANCAMENTO
-				if (dadosGerarIntegracao[4] != null){
+
+				// LANCAMENTO CONTABIL ITEM - VALOR LANCAMENTO
+				if (dadosGerarIntegracao[4] != null) {
 					valorLancamento = (BigDecimal) dadosGerarIntegracao[4];
-				}
-				else{
+				} else {
 					valorLancamento = new BigDecimal("0.00");
 				}
-				
-				//CONTA CONTABIL - PREFIXO CONTABIL
-				if (dadosGerarIntegracao[5] != null){
+
+				// CONTA CONTABIL - PREFIXO CONTABIL
+				if (dadosGerarIntegracao[5] != null) {
 					prefixoContabil = (String) dadosGerarIntegracao[5];
-				}
-				else{
+				} else {
 					prefixoContabil = "";
 				}
-				
-				//CONTA CONTABIL - NOME CONTA
-				if (dadosGerarIntegracao[6] != null){
+
+				// CONTA CONTABIL - NOME CONTA
+				if (dadosGerarIntegracao[6] != null) {
 					nomeConta = (String) dadosGerarIntegracao[6];
-				}
-				else{
+				} else {
 					nomeConta = "";
 				}
-				
-				//DATA CONTABILIZAÇÃO - DATA DO LANÇAMENTO
-				if (dadosGerarIntegracao[7] != null){
+
+				// DATA CONTABILIZAÇÃO - DATA DO LANÇAMENTO
+				if (dadosGerarIntegracao[7] != null) {
 					dataLancamento = (Date) dadosGerarIntegracao[7];
-				}
-				else{
+				} else {
 					dataLancamento = null;
 				}
-				
-				//DESCRITIVO DO HISTORICO PADRAO 2 - DESCRIÇÃO HISTORICO
-				if (dadosGerarIntegracao[8] != null){
+
+				// DESCRITIVO DO HISTORICO PADRAO 2 - DESCRIÇÃO HISTORICO
+				if (dadosGerarIntegracao[8] != null) {
 					descricaoHistorico = (String) dadosGerarIntegracao[8];
-				}
-				else{
+				} else {
 					descricaoHistorico = "";
 				}
-				
-				//SUBCONTA - CÓDIGO TERCEIRO
-				if (dadosGerarIntegracao[9] != null){
+
+				// SUBCONTA - CÓDIGO TERCEIRO
+				if (dadosGerarIntegracao[9] != null) {
 					codigoTerceiro = (Integer) dadosGerarIntegracao[9];
-				}
-				else{
+				} else {
 					codigoTerceiro = null;
 				}
-				
-				//CONTA CONTABIL - INDICADOR CENTRO DE CUSTO
-				if (dadosGerarIntegracao[10] != null){
+
+				// CONTA CONTABIL - INDICADOR CENTRO DE CUSTO
+				if (dadosGerarIntegracao[10] != null) {
 					indicadorCentroCusto = (Short) dadosGerarIntegracao[10];
-				}
-				else{
+				} else {
 					indicadorCentroCusto = null;
 				}
 				
-				//1 - CÓDIGO COMPANHIA
-				gerarIntegracaoTxt.append("120");
-				
-				//2 - PLANO DE CONTAS
+				// 1 - CÓDIGO COMPANHIA
+				gerarIntegracaoTxt.append("130");
+
+				// 2 - PLANO DE CONTAS
 				gerarIntegracaoTxt.append(" ");
-				
+
 				/*
-				 *3 - NOME DO LOTE
+				 * 3 - NOME DO LOTE
 				 * 
-				 * Caso a origem do lançamento (LCOR_ID) corresponda a FATURAMENTO, concatenar FT com o mês e ano 
-				 * do faturamento no formato MMAA (PARM_AMREFERENCIAFATURAMENTO da tabela SISTEMA_PARAMETROS.
+				 * Caso a origem do lançamento (LCOR_ID) corresponda a
+				 * FATURAMENTO, concatenar FT com o mês e ano do faturamento no
+				 * formato MMAA (PARM_AMREFERENCIAFATURAMENTO da tabela
+				 * SISTEMA_PARAMETROS.
 				 * 
-				 * Caso a origem do lançamento  (LCOR_ID) corresponda a ARRECADACAO, concatenar AD com o mês e 
-				 * ano da arrecadação no formato MMAA (PARM_AMREFERENCIAARRECADACAO da tabela SISTEMA_PARAMETROS.
+				 * Caso a origem do lançamento (LCOR_ID) corresponda a
+				 * ARRECADACAO, concatenar AD com o mês e ano da arrecadação no
+				 * formato MMAA (PARM_AMREFERENCIAARRECADACAO da tabela
+				 * SISTEMA_PARAMETROS.
 				 */
 				gerarIntegracaoTxt.append(nomeLote);
-				
-				//4 - SEQUÊNCIA DO LANÇAMENTO
+
+				// 4 - SEQUÊNCIA DO LANÇAMENTO
 				gerarIntegracaoTxt.append(Util.adicionarZerosEsquedaNumero(6, "" + sequencialLancamento));
-				
+
 				/*
-				 *5 - MÊS DO LANÇAMENTO
-				 * Preencher com o mês (MM) do campo 3
+				 * 5 - MÊS DO LANÇAMENTO Preencher com o mês (MM) do campo 3
 				 */
 				gerarIntegracaoTxt.append(Util.adicionarZerosEsquedaNumero(2, "" + mesLancamento));
-				
-				//6 - ORIGEM TRANSAÇÃO
+
+				// 6 - ORIGEM TRANSAÇÃO
 				gerarIntegracaoTxt.append("02");
-				
+
 				/*
-				 *7 - DATA DA CONTABILIZAÇÃO
-				 *
-				 * Preencher com LCTI_DTLANCAMENTO da tabela LANCAMENTO_CONTABIL_ITEM caso seja diferente de nulo, 
-				 * caso contrário preencher com a Data do Lançamento informada no início do caso de uso 
-				 * no formato AAAAMMDD.
+				 * 7 - DATA DA CONTABILIZAÇÃO
+				 * 
+				 * Preencher com LCTI_DTLANCAMENTO da tabela
+				 * LANCAMENTO_CONTABIL_ITEM caso seja diferente de nulo, caso
+				 * contrário preencher com a Data do Lançamento informada no
+				 * início do caso de uso no formato AAAAMMDD.
 				 */
-				if (dataLancamento != null){
+				if (dataLancamento != null) {
 					gerarIntegracaoTxt.append(Util.formatarDataAAAAMMDD(dataLancamento));
-				}
-				else{
+				} else {
 					gerarIntegracaoTxt.append(Util.formatarDataAAAAMMDD(dataInformada));
 				}
-				
-				
+
 				/*
-				 *8 - PERÍODO DA TRANSAÇÃO
-				 * Preencher com o mês (MM) do campo 3
+				 * 8 - PERÍODO DA TRANSAÇÃO Preencher com o mês (MM) do campo 3
 				 */
 				gerarIntegracaoTxt.append(Util.adicionarZerosEsquedaNumero(2, "" + mesLancamento));
-				
-				//9 - CÓDIGO DA COMPANHIA DA TRANSAÇÃO
-				gerarIntegracaoTxt.append("120");
-				
-				//10 - PLANO DE CONTAS DA TRANSAÇÃO
+
+				// 9 - CÓDIGO DA COMPANHIA DA TRANSAÇÃO
+				gerarIntegracaoTxt.append("130");
+
+				// 10 - PLANO DE CONTAS DA TRANSAÇÃO
 				gerarIntegracaoTxt.append(" ");
-				
+
 				/*
-				 *11 - CONTA CONTÁBIL
+				 * 11 - CONTA CONTÁBIL
 				 * 
-				 * CNCT_NNCONTA da tabela CONTA_CONTABIL para CNCT_ID = CNCT_ID da tabela 
-				 * LANCAMENTO_CONTABIL_ITEM
+				 * CNCT_NNCONTA da tabela CONTA_CONTABIL para CNCT_ID = CNCT_ID
+				 * da tabela LANCAMENTO_CONTABIL_ITEM
 				 */
-				if (numeroConta.length() >= 9){
-					
+				if (numeroConta.length() >= 9) {
 					gerarIntegracaoTxt.append(Util.completaString(numeroConta.substring(0, 9), 16));
-				}
-				else{
-					
+				} else {
 					gerarIntegracaoTxt.append(Util.completaString(numeroConta, 16));
 				}
-				
-				
+
 				/*
-				 *12 - UNIDADE DE NEGÓCIO
+				 * 12 - UNIDADE DE NEGÓCIO
 				 * 
-				 * Caso CNCT_ICCUSTO da tabela CONTA_CONTABIL para CNCT_ID = CNCT_ID da tabela 
-				 * LANCAMENTO_CONTABIL_ITEM corresponda a não (2) preencher fixo 10000, caso contrário,  
-				 * cinco primeiros caracteres da coluna LOCA_CDCENTROCUSTO  da tabela LOCALIDADE para 
-				 * LOCA_ID = LOCA_ID da tabela LANCAMENTO_CONTABIL
+				 * Caso CNCT_ICCUSTO da tabela CONTA_CONTABIL para CNCT_ID =
+				 * CNCT_ID da tabela LANCAMENTO_CONTABIL_ITEM corresponda a não
+				 * (2) preencher fixo 10000, caso contrário, cinco primeiros
+				 * caracteres da coluna LOCA_CDCENTROCUSTO da tabela LOCALIDADE
+				 * para LOCA_ID = LOCA_ID da tabela LANCAMENTO_CONTABIL
 				 */
-				if(indicadorCentroCusto != null && indicadorCentroCusto.equals(ConstantesSistema.NAO)){
+				if (indicadorCentroCusto != null && indicadorCentroCusto.equals(ConstantesSistema.NAO)) {
 					gerarIntegracaoTxt.append("10000");
-				}
-				else if (codigoCentroCusto.length() >= 5){
-					
+				} else if (codigoCentroCusto.length() >= 5) {
 					gerarIntegracaoTxt.append(codigoCentroCusto.substring(0, 5));
-				}
-				else{
-					
+				} else {
 					gerarIntegracaoTxt.append(Util.completaString("", 5));
 				}
-				
+
 				/*
-				 *13 - CENTRO DE RESPONSABILIDADE
+				 * 13 - CENTRO DE RESPONSABILIDADE
 				 * 
-				 * Caso CNCT_ICCUSTO da tabela CONTA_CONTABIL para CNCT_ID = CNCT_ID da tabela 
-				 * LANCAMENTO_CONTABIL_ITEM corresponda a não (2) preencher fixo 0000, caso contrário,  
-				 * quatro caracteres a partir da sexta posição da coluna LOCA_CDCENTROCUSTO  da tabela 
-				 * LOCALIDADE para LOCA_ID = LOCA_ID da tabela LANCAMENTO_CONTABIL
+				 * Caso CNCT_ICCUSTO da tabela CONTA_CONTABIL para CNCT_ID =
+				 * CNCT_ID da tabela LANCAMENTO_CONTABIL_ITEM corresponda a não
+				 * (2) preencher fixo 0000, caso contrário, quatro caracteres a
+				 * partir da sexta posição da coluna LOCA_CDCENTROCUSTO da
+				 * tabela LOCALIDADE para LOCA_ID = LOCA_ID da tabela
+				 * LANCAMENTO_CONTABIL
 				 */
-				if(indicadorCentroCusto != null && indicadorCentroCusto.equals(ConstantesSistema.NAO)){
+				if (indicadorCentroCusto != null && indicadorCentroCusto.equals(ConstantesSistema.NAO)) {
 					gerarIntegracaoTxt.append("0000");
-				}
-				else if (codigoCentroCusto.length() >= 9){
-					
+				} else if (codigoCentroCusto.length() >= 9) {
 					gerarIntegracaoTxt.append(codigoCentroCusto.substring(5, 9));
-				}
-				else{
-					
+				} else {
 					gerarIntegracaoTxt.append(Util.completaString("", 4));
 				}
-				
-				//14 - PRODUTO E SERVIÇO
+
+				// 14 - PRODUTO E SERVIÇO
 				gerarIntegracaoTxt.append(Util.completaString(prefixoContabil, 3));
 				
 				/*
 				 *15 - INDICADOR DEB/CRED
-				 * 
-				 * Igual a ”C” se LCTI_ICDEBITOCREDITO da tabela LANCAMENTO_CONTABIL_ITEM = 1 e  
-				 * igual a “D” se igual a 2
 				 */
-				if(indicadorDebitoCredito.equals(ConstantesSistema.SIM)){
+				if (indicadorDebitoCredito.equals(ConstantesSistema.SIM)) {
 					gerarIntegracaoTxt.append("C");
-				}
-				else{
+				} else {
 					gerarIntegracaoTxt.append("D");
 				}
 				
@@ -346,13 +305,11 @@ public class ControladorFinanceiroCOSANPASEJB extends ControladorFinanceiro impl
 				 * LANCAMENTO_CONTABIL_ITEM, caso contrário CNCT_NMCONTA da tabela CONTA_CONTABIL para 
 				 * CNCT_ID = CNCT_ID da tabela 
 				 */
-				if(idLancamentoOrigem.equals(LancamentoOrigem.AVISO_BANCARIO + "")){
+				if (idLancamentoOrigem.equals(LancamentoOrigem.AVISO_BANCARIO + "")) {
 					gerarIntegracaoTxt.append(Util.completaString(descricaoHistorico, 50));
-				}
-				else{
+				} else {
 					gerarIntegracaoTxt.append(Util.completaString(nomeConta, 50));
 				}
-				
 				
 				/*
 				 * 18 - DESCRITIVO DO HISTORICO PADRAO 2
@@ -360,7 +317,6 @@ public class ControladorFinanceiroCOSANPASEJB extends ControladorFinanceiro impl
 				 * NÃO PREENCHER
 				 */
 				gerarIntegracaoTxt.append(Util.completaString("", 50));
-				
 				
 				/*
 				 *19 - VALOR DO LANCAMENTO
@@ -381,12 +337,10 @@ public class ControladorFinanceiroCOSANPASEJB extends ControladorFinanceiro impl
 				 * Dois caracteres a partir da décima posição da coluna CNCT_NNCONTA da tabela 
 				 * CONTA_CONTABIL para CNCT_ID = CNCT_ID da tabela 
 				 */
-				if (numeroConta.length() >= 11){
-					
+				if (numeroConta.length() >= 11) {
 					gerarIntegracaoTxt.append(numeroConta.substring(9, 11));
-				}
-				else{
-					
+				} else {
+
 					gerarIntegracaoTxt.append(Util.completaString("", 2));
 				}
 				
@@ -398,22 +352,15 @@ public class ControladorFinanceiroCOSANPASEJB extends ControladorFinanceiro impl
 				 * posição da coluna CNCT_NNCONTA da tabela CONTA_CONTABIL para CNCT_ID = CNCT_ID da tabela 
 				 * LANCAMENTO_CONTABIL_ITEM
 				 */
-				if(idLancamentoOrigem.equals(LancamentoOrigem.AVISO_BANCARIO + "")){
-					
-					if (codigoTerceiro != null){
+				if (idLancamentoOrigem.equals(LancamentoOrigem.AVISO_BANCARIO + "")) {
+					if (codigoTerceiro != null) {
 						gerarIntegracaoTxt.append(Util.completaString(codigoTerceiro.toString(), 12));
-					}
-					else{
+					} else {
 						gerarIntegracaoTxt.append(Util.completaString("", 12));
 					}
-					
-				}
-				else if (numeroConta.length() >= 17){
-						
+				} else if (numeroConta.length() >= 17) {
 					gerarIntegracaoTxt.append(Util.completaString(numeroConta.substring(11, 17), 12));
-				}
-				else{
-						
+				} else {
 					gerarIntegracaoTxt.append(Util.completaString("", 12));
 				}
 				
@@ -502,25 +449,16 @@ public class ControladorFinanceiroCOSANPASEJB extends ControladorFinanceiro impl
 				
 				//Iniciar com o valor 1 e incrementar com 1 a cada registro gerado.
 				sequencialLancamento++;
-				
 			}
 			
-			
-			/*
-			 * Gerando o arquivo zip
-			 */
+			//Gerando o arquivo zip
 			String nomeZip = "CONTABILIDADE_" + descricaoLancamento + "_" + (data.replace("/","_"));
 			BufferedWriter out = null;
 			ZipOutputStream zos = null;
 			File compactadoTipo = new File(nomeZip + ".zip");
 			File leituraTipo = new File(nomeZip + ".txt");
 
-			/*
-			 * Caso o arquivo txt não esteja vazio 
-			 * adiciona o txt ao arquivo zip.
-			 */
 			if (gerarIntegracaoTxt != null && gerarIntegracaoTxt.length() != 0) {
-				
 				try {
 					System.out.println("CRIANDO ZIP");
 					zos = new ZipOutputStream(new FileOutputStream(compactadoTipo));
@@ -539,19 +477,12 @@ public class ControladorFinanceiroCOSANPASEJB extends ControladorFinanceiro impl
 					sessionContext.setRollbackOnly();
 					throw new ControladorException("erro.sistema", e);
 				}
-				
 			}
-			
-		}
-		else{
-			
-			//Caso não exista informação para os dados informados
-			
-			if(idLancamentoOrigem.equals(LancamentoOrigem.FATURAMENTO + "")){
-				throw new ControladorException("atencao.pesquisa.nenhum_registro_tabela", null,"Resumo Faturamento");
-			}
-			else if(idLancamentoOrigem.equals(LancamentoOrigem.ARRECADACAO + "")){
-				throw new ControladorException("atencao.pesquisa.nenhum_registro_tabela", null,"Resumo Arrecadação");
+		} else{
+			if (idLancamentoOrigem.equals(LancamentoOrigem.FATURAMENTO + "")) {
+				throw new ControladorException("atencao.pesquisa.nenhum_registro_tabela", null, "Resumo Faturamento");
+			} else if (idLancamentoOrigem.equals(LancamentoOrigem.ARRECADACAO + "")) {
+				throw new ControladorException("atencao.pesquisa.nenhum_registro_tabela", null, "Resumo Arrecadação");
 			}
 		}
 	}

@@ -66,6 +66,10 @@ public class ExibirGerarRelatorioDocumentosAReceberAction extends GcomAction {
 	
 		}
 		
+		if(form.getIndicadorInclusaoValorSemParcelas() == null) {
+			form.setIndicadorInclusaoValorSemParcelas("2");
+		}
+		
 		carregarComboboxEListbox(form,httpServletRequest);
 		
 		return actionMapping.findForward("exibirGerarRelatorioDocumentosAReceberAction");

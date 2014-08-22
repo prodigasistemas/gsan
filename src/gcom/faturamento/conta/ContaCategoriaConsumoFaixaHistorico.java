@@ -6,49 +6,25 @@ import gcom.cadastro.imovel.Subcategoria;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
-public class ContaCategoriaConsumoFaixaHistorico implements Serializable {
+public class ContaCategoriaConsumoFaixaHistorico implements Serializable, IContaCategoriaConsumoFaixa {
 	private static final long serialVersionUID = 1L;
-    /** identifier field */
+
     private Integer id;
-
-    /** nullable persistent field */
     private BigDecimal valorAgua;
-
-    /** nullable persistent field */
     private Integer consumoAgua;
-
-    /** nullable persistent field */
     private BigDecimal valorEsgoto;
-
-    /** nullable persistent field */
     private Integer consumoEsgoto;
-
-    /** nullable persistent field */
     private Integer consumoFaixaInicio;
-
-    /** nullable persistent field */
     private Integer consumoFaixaFim;
-
-    /** nullable persistent field */
     private BigDecimal valorTarifaFaixa;
-
-    /** persistent field */
     private Date ultimaAlteracao;
-
-    /** persistent field */
     private Categoria categoria;
-    
-    /** persistent field */
     private ContaCategoriaHistorico contaCategoriaHistorico;
-
-    /** persistent field */
     private Subcategoria subcategoria;
     
-    /** full constructor */
     public ContaCategoriaConsumoFaixaHistorico(Integer id, BigDecimal valorAgua, Integer consumoAgua, BigDecimal valorEsgoto, Integer consumoEsgoto, Integer consumoFaixaInicio, Integer consumoFaixaFim, BigDecimal valorTarifaFaixa, Date ultimaAlteracao, Categoria categoria, ContaCategoriaHistorico contaCategoriaHistorico, Subcategoria subcategoria) {
         this.id = id;
         this.valorAgua = valorAgua;
@@ -64,11 +40,9 @@ public class ContaCategoriaConsumoFaixaHistorico implements Serializable {
         this.subcategoria = subcategoria;
     }
 
-    /** default constructor */
     public ContaCategoriaConsumoFaixaHistorico() {
     }
 
-    /** minimal constructor */
     public ContaCategoriaConsumoFaixaHistorico(Integer id, Date ultimaAlteracao, ContaCategoriaHistorico contaCategoriaHistorico) {
         this.id = id;
         this.ultimaAlteracao = ultimaAlteracao;
@@ -162,16 +136,10 @@ public class ContaCategoriaConsumoFaixaHistorico implements Serializable {
         this.valorTarifaFaixa = valorTarifaFaixa;
     }
     
-    /**
-     * @return Retorna o campo subcategoria.
-     */
     public Subcategoria getSubcategoria() {
         return subcategoria;
     }
 
-    /**
-     * @param subcategoria O subcategoria a ser setado.
-     */
     public void setSubcategoria(Subcategoria subcategoria) {
         this.subcategoria = subcategoria;
     }
@@ -183,4 +151,24 @@ public class ContaCategoriaConsumoFaixaHistorico implements Serializable {
     public void setCategoria(Categoria categoria) {
         this.categoria = categoria;
     }
+
+	public IContaCategoria getContaCategoria() {
+		return contaCategoriaHistorico;
+	}
+
+	public void setContaCategoria(IContaCategoria contaCategoria) {
+    	if (contaCategoriaHistorico == null) {
+    		contaCategoriaHistorico = new ContaCategoriaHistorico();
+    		
+    	}
+    	
+    	if (contaCategoriaHistorico.getComp_id() == null) {
+    		ContaCategoriaHistoricoPK comp_id = new ContaCategoriaHistoricoPK();
+    		contaCategoriaHistorico.setComp_id(comp_id);
+    	}
+    	
+    	contaCategoriaHistorico.getComp_id().setConta(contaCategoria.getConta());
+    	contaCategoriaHistorico.getComp_id().setCategoria(contaCategoria.getCategoria());
+    	contaCategoriaHistorico.getComp_id().setSubcategoria(contaCategoria.getSubcategoria());
+	}
 }

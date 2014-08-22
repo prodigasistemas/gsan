@@ -213,18 +213,14 @@ public class ControladorFaturamentoCAERNSEJB extends ControladorFaturamento
 			// chama o [SB0003] -Obter Dados do Consumo e Medição Anterior
 			// passando a quantidade de Meses Igual a 1
 			// e o tipo de ligação e medição recuperados anteriormente
-			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(), emitirContaHelper
-							.getAmReferencia(), 1, tipoLigacao, tipoMedicao);
+			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(emitirContaHelper, 1, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes1(obterDadosConsumoMedicaoAnterior
 							.toString());
 			// chama o [SB0003] -Obter Dados do Consumo e Medição Anterior
 			// passando a quantidade de Meses Igual a 4
 			// e o tipo de ligação e medição recuperados anteriormente
-			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(), emitirContaHelper
-							.getAmReferencia(), 4, tipoLigacao, tipoMedicao);
+			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(emitirContaHelper, 4, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes4(obterDadosConsumoMedicaoAnterior
 							.toString());
@@ -234,18 +230,14 @@ public class ControladorFaturamentoCAERNSEJB extends ControladorFaturamento
 			// chama o [SB0003] -Obter Dados do Consumo e Medição Anterior
 			// passando a quantidade de Meses Igual a 2
 			// e o tipo de ligação e medição recuperados anteriormente
-			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(), emitirContaHelper
-							.getAmReferencia(), 2, tipoLigacao, tipoMedicao);
+			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(emitirContaHelper, 2, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes2(obterDadosConsumoMedicaoAnterior
 							.toString());
 			// chama o [SB0003] -Obter Dados do Consumo e Medição Anterior
 			// passando a quantidade de Meses Igual a 5
 			// e o tipo de ligação e medição recuperados anteriormente
-			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(), emitirContaHelper
-							.getAmReferencia(), 5, tipoLigacao, tipoMedicao);
+			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(emitirContaHelper, 5, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes5(obterDadosConsumoMedicaoAnterior
 							.toString());
@@ -336,18 +328,14 @@ public class ControladorFaturamentoCAERNSEJB extends ControladorFaturamento
 			// chama o [SB0003] -Obter Dados do Consumo e Medição Anterior
 			// passando a quantidade de Meses Igual a 3
 			// e o tipo de ligação e medição recuperados anteriormente
-			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(), emitirContaHelper
-							.getAmReferencia(), 3, tipoLigacao, tipoMedicao);
+			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(emitirContaHelper, 3, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes3(obterDadosConsumoMedicaoAnterior
 							.toString());
 			// chama o [SB0003] -Obter Dados do Consumo e Medição Anterior
 			// passando a quantidade de Meses Igual a 6
 			// e o tipo de ligação e medição recuperados anteriormente
-			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(), emitirContaHelper
-							.getAmReferencia(), 6, tipoLigacao, tipoMedicao);
+			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(emitirContaHelper, 6, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes6(obterDadosConsumoMedicaoAnterior
 							.toString());
@@ -6772,18 +6760,14 @@ public class ControladorFaturamentoCAERNSEJB extends ControladorFaturamento
 			// chama o [SB0003] -Obter Dados do Consumo e Medição Anterior
 			// passando a quantidade de Meses Igual a 1
 			// e o tipo de ligação e medição recuperados anteriormente
-			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(), emitirContaHelper
-							.getAmReferencia(), 1, tipoLigacao, tipoMedicao);
+			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(emitirContaHelper, 1, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes1(obterDadosConsumoMedicaoAnterior
 							.toString());
 			// chama o [SB0003] -Obter Dados do Consumo e Medição Anterior
 			// passando a quantidade de Meses Igual a 4
 			// e o tipo de ligação e medição recuperados anteriormente
-			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(), emitirContaHelper
-							.getAmReferencia(), 4, tipoLigacao, tipoMedicao);
+			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(emitirContaHelper, 4, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes4(obterDadosConsumoMedicaoAnterior
 							.toString());
@@ -6793,18 +6777,14 @@ public class ControladorFaturamentoCAERNSEJB extends ControladorFaturamento
 			// chama o [SB0003] -Obter Dados do Consumo e Medição Anterior
 			// passando a quantidade de Meses Igual a 2
 			// e o tipo de ligação e medição recuperados anteriormente
-			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(), emitirContaHelper
-							.getAmReferencia(), 2, tipoLigacao, tipoMedicao);
+			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(emitirContaHelper, 2, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes2(obterDadosConsumoMedicaoAnterior
 							.toString());
 			// chama o [SB0003] -Obter Dados do Consumo e Medição Anterior
 			// passando a quantidade de Meses Igual a 5
 			// e o tipo de ligação e medição recuperados anteriormente
-			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(), emitirContaHelper
-							.getAmReferencia(), 5, tipoLigacao, tipoMedicao);
+			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(emitirContaHelper, 5, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes5(obterDadosConsumoMedicaoAnterior
 							.toString());
@@ -6895,18 +6875,14 @@ public class ControladorFaturamentoCAERNSEJB extends ControladorFaturamento
 			// chama o [SB0003] -Obter Dados do Consumo e Medição Anterior
 			// passando a quantidade de Meses Igual a 3
 			// e o tipo de ligação e medição recuperados anteriormente
-			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(), emitirContaHelper
-							.getAmReferencia(), 3, tipoLigacao, tipoMedicao);
+			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(emitirContaHelper, 3, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes3(obterDadosConsumoMedicaoAnterior
 							.toString());
 			// chama o [SB0003] -Obter Dados do Consumo e Medição Anterior
 			// passando a quantidade de Meses Igual a 6
 			// e o tipo de ligação e medição recuperados anteriormente
-			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper.getIdImovel(), emitirContaHelper
-							.getAmReferencia(), 6, tipoLigacao, tipoMedicao);
+			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(emitirContaHelper, 6, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes6(obterDadosConsumoMedicaoAnterior
 							.toString());

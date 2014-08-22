@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.1//EN" "http://jakarta.apache.org/struts/dtds/struts-config_1_1.dtd">
+<struts-config>
+
+	<form-beans>
+		<form-bean name="FaturamentoSeletivoActionForm" type="gcom.gui.faturamento.FaturamentoSeletivoActionForm" />
+	</form-beans>
+
+	<action-mappings>
+	
+		<action name="FaturamentoSeletivoActionForm"
+			type="gcom.gui.faturamento.FiltrarFaturamentoSeletivoAction"
+			validate="true" scope="session"
+			path="/filtrarFaturamentoSeletivo">
+
+			<forward name="filtrarFaturamentoSeletivo"
+				path="/jsp/faturamento/filtrar_faturamento_seletivo.jsp" />
+		</action>
+		
+		<action name="FaturamentoSeletivoActionForm"
+			type="gcom.gui.faturamento.ExibirFaturamentoSeletivoAction"
+			validate="true" scope="session"
+			path="/exibirFaturamentoSeletivo">
+
+			<forward name="exibirFaturamentoSeletivo"
+				path="/jsp/faturamento/exibir_faturamento_seletivo.jsp" />
+		</action>
+		
+		<action name="FaturamentoSeletivoActionForm"
+			type="gcom.gui.faturamento.FaturamentoSeletivoAction"
+			validate="true" scope="session"
+			path="/faturamentoSeletivo">
+
+			<forward name="faturamentoSeletivo"
+				path="/jsp/faturamento/exibir_faturamento_seletivo.jsp" />
+		</action>
+
+	</action-mappings>
+
+
+	<message-resources null="false" parameter="gcom.properties.application" />
+
+</struts-config>

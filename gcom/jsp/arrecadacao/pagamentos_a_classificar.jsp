@@ -23,7 +23,7 @@
 			}
 			
 			function devolver(form) {
-				form.action = 'refaturarPagamentosNaoClassificadosAction.do?devolver=1';
+				form.action = 'classificarPagamentosAction.do?devolver=1';
 		  		form.submit();
 			}
 		</script>
@@ -175,7 +175,7 @@
 																	</td>
 																	<td width="11%">
 																		<div align="center">
-																			<%= Util.formatarAnoMesParaMesAno(pagamento.getAnoMesReferenciaPagamento()) %>
+																			<%= pagamento.getFormatarAnoMesParaMesAno() %>
 																		</div>
 																	</td>
 																

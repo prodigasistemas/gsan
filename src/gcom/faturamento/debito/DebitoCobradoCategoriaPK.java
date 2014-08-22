@@ -5,22 +5,17 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 public class DebitoCobradoCategoriaPK implements Serializable {
 	private static final long serialVersionUID = 1L;
-	/** identifier field */
-	private Integer categoriaId;
 
-	/** identifier field */
+	private Integer categoriaId;
 	private Integer debitoCobradoId;
 
-	/** full constructor */
 	public DebitoCobradoCategoriaPK(Integer categoriaId, Integer debitoCobradoId) {
 		this.categoriaId = categoriaId;
 		this.debitoCobradoId = debitoCobradoId;
 	}
 
-	/** default constructor */
 	public DebitoCobradoCategoriaPK() {
 	}
 

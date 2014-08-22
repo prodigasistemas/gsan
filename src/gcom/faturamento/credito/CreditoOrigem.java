@@ -8,59 +8,29 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 public class CreditoOrigem extends ObjetoTransacao {
 	private static final long serialVersionUID = 1L;
-	// constantes de origem de crédito >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-	public final static Integer CONTAS_PAGAS_EM_DUPLICIDADE_EXCESSO = new Integer(
-			1);
 
+	public final static Integer CONTAS_PAGAS_EM_DUPLICIDADE_EXCESSO = new Integer(1);
 	public final static Integer DEVOLUCAO_TARIFA_AGUA = new Integer(2);
-
 	public final static Integer DEVOLUCAO_TARIFA_ESGOTO = new Integer(3);
-
-	public final static Integer SERVICOS_INDIRETOS_PAGOS_INDEVIDAMENTE = new Integer(
-			4);
-
+	public final static Integer SERVICOS_INDIRETOS_PAGOS_INDEVIDAMENTE = new Integer(4);
 	public final static Integer DEVOLUCAO_JUROS_PARCELAMENTO = new Integer(5);
-
-	public final static Integer DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO = new Integer(
-			6);
-
+	public final static Integer DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO = new Integer(6);
 	public final static Integer VALORES_COBRADOS_INDEVIDAMENTE = new Integer(7);
-
-	public final static Integer DESCONTOS_CONDICIONAIS = new Integer(7);
-
 	public final static Integer DESCONTOS_INCONDICIONAIS = new Integer(8);
-
 	public final static Integer AJUSTES_PARA_ZERAR_CONTA = new Integer(9);
-	
-	/**TODO: COSANPA
-	 * Mantis 615 - Contabilizar créditos com crédito origem correspondente 
-	 * a Contas Pagas em Excesso
-	 * 
-	 * @author Wellington Rocha
-	 * @date */
 	public final static Integer CONTAS_PAGAS_EM_EXCESSO = new Integer (10);
+	public final static Integer DESCONTOS_CONDICIONAIS = new Integer(11);
+	public final static Integer RECUPERACAO_CREDITO_CONTA_CANCELADA = new Integer(12);
+	public final static Integer RECUPERACAO_CREDITO_CONTA_PARCELADA = new Integer(13);
 
-	// >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
-
-	/** identifier field */
 	private Integer id;
-
-	/** nullable persistent field */
 	private String descricaoCreditoOrigem;
-
-	/** nullable persistent field */
 	private String descricaoAbreviada;
-
-	/** nullable persistent field */
 	private Short indicadorUso;
-
-	/** nullable persistent field */
 	private Date ultimaAlteracao;
 
-	/** full constructor */
 	public CreditoOrigem(String descricaoCreditoOrigem,
 			String descricaoAbreviada, Short indicadorUso, Date ultimaAlteracao) {
 		this.descricaoCreditoOrigem = descricaoCreditoOrigem;
@@ -69,11 +39,9 @@ public class CreditoOrigem extends ObjetoTransacao {
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
 
-	/** default constructor */
 	public CreditoOrigem() {
 	}
 
-	// Construido por Sávio Luiz para setar o id no objeto
 	public CreditoOrigem(Integer id) {
 		this.id = id;
 	}

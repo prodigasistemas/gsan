@@ -12,21 +12,15 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 public class ContaMotivoInclusao extends ObjetoTransacao {
 	private static final long serialVersionUID = 1L;
 	
+	public final static Integer NAO_INFORMADO = new Integer(0);
 	public final static Integer TRASFERENCIA_DE_DEBITO = new Integer(41);
+	public final static Integer RECUPERACAO_DE_CREDITO = new Integer(46);
 	
-	/** identifier field */
 	private Integer id;
-
-	/** nullable persistent field */
 	private String descricaoMotivoInclusaoConta;
-
-	/** nullable persistent field */
 	private Short indicadorUso;
-
-	/** nullable persistent field */
 	private Date ultimaAlteracao;
 
-	/** full constructor */
 	public ContaMotivoInclusao(String descricaoMotivoInclusaoConta,
 			Short indicadorUso, Date ultimaAlteracao) {
 		this.descricaoMotivoInclusaoConta = descricaoMotivoInclusaoConta;
@@ -34,8 +28,11 @@ public class ContaMotivoInclusao extends ObjetoTransacao {
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
 
-	/** default constructor */
 	public ContaMotivoInclusao() {
+	}
+	
+	public ContaMotivoInclusao(Integer id) {
+		this.id = id;
 	}
 
 	public Integer getId() {
