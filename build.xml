@@ -7,9 +7,9 @@
 	</tstamp>
 
 	<property file="build.properties" />
-
+	
 	<property name="servidor.tipo" value="${gsan.tipo}" />
-	<property name="servidor.versao" value="5.1.1.58" />
+	<property name="servidor.versao" value="5.1.1.57" />
 
 	<property name="dest" value="bin" />
 	<property name="descriptors" value="descriptors" />
@@ -24,9 +24,6 @@
 	<property name="MenuTagLib.home" value="lib/MenuTagLib" />
 	<property name="Axis2.home" value="lib/Axis2" />
 	<property name="Apache-Ant-1.6.2.home" value="lib/apache-ant-1.6.2" />
-	<!--
-	<property name="JasperReports.home" value="lib/JasperReports 1.2.2" />
-	-->
 	<property name="JasperReports-3.1.2.home" value="lib/JasperReports-3.1.2" />
 	<property name="JAF.home" value="lib/JAF" />
 	<property name="JavaMail.home" value="lib/Javamail" />
@@ -86,17 +83,12 @@
 		<pathelement location="${Servlet.home}/servlet-api.jar" />
 		<pathelement location="${Servlet.home}/servlets-common.jar" />
 		<pathelement location="${JasperReports.home}/itext-1.01.jar" />
-		<!--
-		<pathelement location="${JasperReports.home}/jasperreports-1.2.2.jar" />
-		<pathelement location="${JasperReports.home}/jasperreports-1.2.8.jar" />
-		-->
 		<pathelement location="${JasperReports-3.1.2.home}/jasperreports-3.1.2.jar" />
 		<pathelement location="${Properties.home}/properties" />
 		<pathelement location="${PagerTagLib.home}/pager-taglib.jar" />
 		<pathelement location="${JAF.home}/activation.jar" />
 		<pathelement location="${JavaMail.home}/mail.jar" />
 		<pathelement location="${Axis2.home}/commons-httpclient-3.1.jar" />
-		<pathelement location="${Apache-Ant-1.6.2.home}/ant-apache-bcel.jar" />
 		<pathelement location="${Apache-Ant-1.6.2.home}/bcel-5.1.jar" />
 		<pathelement location="/reports" />
 	</path>
