@@ -6,32 +6,14 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/**
- * @author Hibernate CodeGenerator
- */
 public class LeituraTipo extends ObjetoGcom {
 	private static final long serialVersionUID = 1L;
-    /**
-     * identifier field
-     */
+
     private Integer id;
-
-    /**
-     * nullable persistent field
-     */
     private String descricao;
-
-    /**
-     * nullable persistent field
-     */
     private Short indicadorUso;
-
-    /**
-     * nullable persistent field
-     */
     private Date ultimaAlteracao;
 
-    //--CONSTANTES
     public final static Integer CONVENCIONAL = new Integer(1);
     public final static Integer MICROCOLETOR = new Integer(2);
     public final static Integer LEITURA_E_ENTRADA_SIMULTANEA = new Integer(3);

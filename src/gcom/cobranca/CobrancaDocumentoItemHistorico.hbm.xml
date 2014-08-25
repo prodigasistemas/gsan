@@ -8,13 +8,7 @@
     http://www.hibernate.org/
 -->
 	<class name="gcom.cobranca.CobrancaDocumentoItemHistorico" table="cobranca.cobranca_doc_item_hist">
-		<id name="id" type="java.lang.Integer" column="cdit_id">
-			<generator class="sequence">
-				<param name="sequence">
-				cobranca.sequence_cobranca_documento_item_historico
-			</param>
-			</generator>
-		</id>
+		<id name="id" type="java.lang.Integer" column="cdit_id" />
 		<property name="valorItemCobrado" type="java.math.BigDecimal" column="cihi_vlitemcobrado" length="13"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="cihi_tmultimaalteracao" length="8" not-null="true"/>
 		<property name="dataSituacaoDebito" type="java.sql.Date" column="cihi_dtsituacaodebito" length="4"/>

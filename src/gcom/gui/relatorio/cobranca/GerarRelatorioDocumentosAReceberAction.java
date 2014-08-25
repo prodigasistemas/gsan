@@ -1,5 +1,10 @@
 package gcom.gui.relatorio.cobranca;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
@@ -103,6 +108,8 @@ public class GerarRelatorioDocumentosAReceberAction extends
 			helper.setExibirCreditoSemParcela(true);
 		}
 		
+		definirMaiorFaixa(helper, form.getColecaoFaixas());		
+		
 		RelatorioDocumentosAReceber relatorio = new RelatorioDocumentosAReceber(usuario);
 		
 		// chama o metódo de gerar relatório passando o código da analise
@@ -127,5 +134,12 @@ public class GerarRelatorioDocumentosAReceberAction extends
 		
 		
 		return retorno;
+	}
+
+	private void definirMaiorFaixa(FiltroRelatorioDocumentosAReceberHelper helper, Collection<FaixaHelper> faixas) {
+		List lista = Arrays.asList(faixas.toArray());
+		FaixaHelper faixaHelper = (FaixaHelper) lista.get(lista.size()-1);
+		String maiorFaixa = faixaHelper.getDescricao();
+		helper.setMaiorFaixa(maiorFaixa);
 	}
 }

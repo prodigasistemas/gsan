@@ -18346,7 +18346,7 @@ public class ControladorCobranca implements SessionBean {
 				parcelamentoItem = (ParcelamentoItem) parcelamentoItemIterator.next();
 
 				codigoImovel = parcelamentoItem.getParcelamento().getImovel().getId();
-
+				
 				if (parcelamentoItem.getContaGeral() != null && parcelamentoItem.getContaGeral().getConta() != null) {
 					int situacaoAtual = 0;
 
@@ -18474,6 +18474,8 @@ public class ControladorCobranca implements SessionBean {
 							anoMesReferenciaContabil);
 				}
 			}
+			
+			repositorioCobranca.atualizarDocumentoDeCobrancaHistorico(codigoImovel, codigo);
 
 			if (codigoImovel != null) {
 				FiltroConta filtroConta = new FiltroConta();
@@ -60691,14 +60693,15 @@ public class ControladorCobranca implements SessionBean {
 			throw new ControladorException("erro.sistema", e);
 		}
 
-		return inserirTotalDeContasEGuias(retorno);
+		return inserirTotalDeContasEGuias(retorno, helper);
 	}
 
 	/**
 	 * Este método serve unicamente para inserir os subtotais de contas e guias de pagamento vencidas, facilitando a leitura.
 	 * Considerando que o relatório é gerado a partir e uma lista ordenada, foi necessário iterar pela coleção para inserir os subtotais
 	 * corretamente.*/
-	private Collection<RelatorioDocumentosAReceberBean> inserirTotalDeContasEGuias(Collection<RelatorioDocumentosAReceberBean> retorno) {
+	private Collection<RelatorioDocumentosAReceberBean> inserirTotalDeContasEGuias(Collection<RelatorioDocumentosAReceberBean> retorno,
+			FiltroRelatorioDocumentosAReceberHelper helper) {
 		int qntContaRes = 0;
 		int qntContaCom = 0;
 		int qntContaInd = 0;
@@ -60810,17 +60813,17 @@ public class ControladorCobranca implements SessionBean {
 		for (RelatorioDocumentosAReceberBean relatorio : retorno) {
 
 			if (relatorio.getNomeDocumentoTipo().equalsIgnoreCase("GUIA DE PAGAMENTO") && relatorio.getIdSituacao() == 2
-					&& relatorio.getFaixa().equals("> 180"))
+					&& relatorio.getFaixa().equals(helper.getMaiorFaixa()))
 				relatorio.setIndicadorTotal(ConstantesSistema.TODOS.toString());
 
 			retornoComTotalContaEGuia.add(relatorio);
 
 			if (relatorio.getNomeDocumentoTipo().equalsIgnoreCase("CONTA") && relatorio.getIdSituacao() == 2
-					&& relatorio.getFaixa().equals("> 180")) {
+					&& relatorio.getFaixa().equals(helper.getMaiorFaixa())) {
 				retornoComTotalContaEGuia.add(documentoComTotalConta);
 			}
 			if (relatorio.getNomeDocumentoTipo().equalsIgnoreCase("GUIA DE PAGAMENTO") && relatorio.getIdSituacao() == 2
-					&& relatorio.getFaixa().equals("> 180")) {
+					&& relatorio.getFaixa().equals(helper.getMaiorFaixa())) {
 				retornoComTotalContaEGuia.add(documentoComTotalGuia);
 			}
 		}

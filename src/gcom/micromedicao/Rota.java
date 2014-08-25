@@ -418,4 +418,8 @@ public class Rota extends ObjetoTransacao {
     public void setNumeroDiasConsumoAjuste(Integer numeroDiasConsumoAjuste) {
         this.numeroDiasConsumoAjuste = numeroDiasConsumoAjuste;
     }
+    
+    public boolean isRotaImpressaoSimultanea() {
+    	return leituraTipo.getId() == LeituraTipo.LEITURA_E_ENTRADA_SIMULTANEA;
+    }
 }
