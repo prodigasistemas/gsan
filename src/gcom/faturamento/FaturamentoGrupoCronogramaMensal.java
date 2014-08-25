@@ -11,27 +11,17 @@ import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class FaturamentoGrupoCronogramaMensal extends ObjetoTransacao {
 	private static final long serialVersionUID = 1L;
-    /** identifier field */
+
     private Integer id;
-
-    /** persistent field */
     private int anoMesReferencia;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-
-    /** persistent field */
-    private gcom.faturamento.FaturamentoGrupo faturamentoGrupo;
-    
-    /** persistent field */
+    private FaturamentoGrupo faturamentoGrupo;
     private Usuario usuario;
-
-    /** persistent field */
-    private Set faturamentoAtividadeCronogramas;
+    
+    @SuppressWarnings("rawtypes")
+	private Set faturamentoAtividadeCronogramas;
 
 	public String[] retornaCamposChavePrimaria(){
 		String[] retorno = new String[1];
@@ -49,7 +39,6 @@ public class FaturamentoGrupoCronogramaMensal extends ObjetoTransacao {
 		return filtroFaturamentoGrupoCronogramaMensal; 
 	}
     
-    /** full constructor */
     public FaturamentoGrupoCronogramaMensal(Integer anoMesReferencia, Date ultimaAlteracao, gcom.faturamento.FaturamentoGrupo faturamentoGrupo, Usuario usuario) {
         this.anoMesReferencia = anoMesReferencia;
         this.ultimaAlteracao = ultimaAlteracao;
@@ -57,11 +46,9 @@ public class FaturamentoGrupoCronogramaMensal extends ObjetoTransacao {
         this.usuario = usuario;
     }
 
-    /** default constructor */
     public FaturamentoGrupoCronogramaMensal() {
     }
 
-    /** minimal constructor */
     public FaturamentoGrupoCronogramaMensal(Integer anoMesReferencia, gcom.faturamento.FaturamentoGrupo faturamentoGrupo) {
         this.anoMesReferencia = anoMesReferencia;
         this.faturamentoGrupo = faturamentoGrupo;
@@ -99,16 +86,12 @@ public class FaturamentoGrupoCronogramaMensal extends ObjetoTransacao {
         this.faturamentoGrupo = faturamentoGrupo;
     }
     
-    /**
-	 * @return Retorna o campo faturamentoAtividadeCronogramas.
-	 */
+	@SuppressWarnings("rawtypes")
 	public Set getFaturamentoAtividadeCronogramas() {
 		return faturamentoAtividadeCronogramas;
 	}
 
-	/**
-	 * @param faturamentoAtividadeCronogramas O faturamentoAtividadeCronogramas a ser setado.
-	 */
+	@SuppressWarnings("rawtypes")
 	public void setFaturamentoAtividadeCronogramas(
 			Set faturamentoAtividadeCronogramas) {
 		if (faturamentoAtividadeCronogramas != null && !faturamentoAtividadeCronogramas.isEmpty()) {
@@ -122,11 +105,6 @@ public class FaturamentoGrupoCronogramaMensal extends ObjetoTransacao {
 		this.faturamentoAtividadeCronogramas = faturamentoAtividadeCronogramas;
 	}
 
-	/**
-     * Retorna o valor de mesAno
-     * 
-     * @return O valor de mesAno
-     */
     public String getMesAno() {
         //o metodo serve para transformar o AnoMesReferencia do banco
         //em mes/Ano para demonstraçao para o usuario.
@@ -152,23 +130,14 @@ public class FaturamentoGrupoCronogramaMensal extends ObjetoTransacao {
             .toString();
     }
 
-	/**
-	 * @return Retorna o campo usuario.
-	 */
 	public Usuario getUsuario() {
 		return usuario;
 	}
 
-	/**
-	 * @param usuario O usuario a ser setado.
-	 */
 	public void setUsuario(Usuario usuario) {
 		this.usuario = usuario;
 	}
 
-	/**
-	 * @param anoMesReferencia O anoMesReferencia a ser setado.
-	 */
 	public void setAnoMesReferencia(int anoMesReferencia) {
 		this.anoMesReferencia = anoMesReferencia;
 	}

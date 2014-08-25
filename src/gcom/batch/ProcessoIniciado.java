@@ -1,49 +1,31 @@
 package gcom.batch;
 
 import gcom.seguranca.acesso.usuario.Usuario;
+
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 public class ProcessoIniciado implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-	/** identifier field */
 	private Integer id;
-
-	/** nullable persistent field */
 	private Date dataHoraAgendamento;
-
-	/** nullable persistent field */
 	private Date dataHoraInicio;
-
-	/** nullable persistent field */
 	private Date dataHoraTermino;
-
-	/** nullable persistent field */
 	private Date dataHoraComando;
-
-	/** persistent field */
-	private gcom.batch.Processo processo;
-
-	/** persistent field */
-	private Usuario usuario;
-
-	/** persistent field */
-	private gcom.batch.ProcessoIniciado processoIniciadoPrecedente;
-
-	/** persistent field */
-	private gcom.batch.ProcessoSituacao processoSituacao;
-
 	private Integer codigoGrupoProcesso;
-
-	/** persistent field */
+	private Processo processo;
+	private Usuario usuario;
+	private ProcessoIniciado processoIniciadoPrecedente;
+	private ProcessoSituacao processoSituacao;
+	@SuppressWarnings("rawtypes")
 	private Set funcionalidadesIniciadas;
 
-	/** full constructor */
+	@SuppressWarnings("rawtypes")
 	public ProcessoIniciado(Date dataHoraAgendamento, Date dataHoraInicio,
 			Date dataHoraTermino, Date dataHoraComando,
 			gcom.batch.Processo processo, Usuario usuario,
@@ -61,11 +43,10 @@ public class ProcessoIniciado implements Serializable {
 		this.funcionalidadesIniciadas = funcionalidadesIniciadas;
 	}
 
-	/** default constructor */
 	public ProcessoIniciado() {
 	}
 
-	/** minimal constructor */
+	@SuppressWarnings("rawtypes")
 	public ProcessoIniciado(gcom.batch.Processo processo, Usuario usuario,
 			gcom.batch.ProcessoIniciado processoIniciado,
 			gcom.batch.ProcessoSituacao processoSituacao,
@@ -150,10 +131,12 @@ public class ProcessoIniciado implements Serializable {
 		this.processoSituacao = processoSituacao;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public Set getFuncionalidadesIniciadas() {
 		return this.funcionalidadesIniciadas;
 	}
 
+	@SuppressWarnings("rawtypes")
 	public void setFuncionalidadesIniciadas(Set funcionalidadesIniciadas) {
 		this.funcionalidadesIniciadas = funcionalidadesIniciadas;
 	}
@@ -162,17 +145,10 @@ public class ProcessoIniciado implements Serializable {
 		return new ToStringBuilder(this).append("id", getId()).toString();
 	}
 
-	/**
-	 * @return Retorna o campo codigoProcessoIniciado.
-	 */
 	public Integer getCodigoGrupoProcesso() {
 		return codigoGrupoProcesso;
 	}
 
-	/**
-	 * @param codigoProcessoIniciado
-	 *            O codigoProcessoIniciado a ser setado.
-	 */
 	public void setCodigoGrupoProcesso(Integer codigoProcessoIniciado) {
 		this.codigoGrupoProcesso = codigoProcessoIniciado;
 	}

@@ -6,6 +6,7 @@ import gcom.arrecadacao.pagamento.GuiaPagamentoCategoria;
 import gcom.arrecadacao.pagamento.Pagamento;
 import gcom.cadastro.cliente.ClienteConta;
 import gcom.cadastro.cliente.ClienteGuiaPagamento;
+import gcom.faturamento.FaturamentoAtividadeCronograma;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaCategoria;
 import gcom.faturamento.conta.ContaCategoriaConsumoFaixa;
@@ -41,13 +42,6 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.StatelessSession;
 
-/**
- * O repositório faz a comunicação com a base de dados através do hibernate. O
- * cliente usa o repositório como fonte de dados.
- * 
- * @author Rodrigo Silveira
- * @date 15/08/2006
- */
 public class RepositorioBatchHBM implements IRepositorioBatch {
 
 	private static IRepositorioBatch instancia;
@@ -55,11 +49,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 	private RepositorioBatchHBM() {
 	}
 
-	/**
-	 * Retorna o valor de instancia
-	 * 
-	 * @return O valor de instancia
-	 */
 	public static IRepositorioBatch getInstancia() {
 
 		if (instancia == null) {
@@ -69,6 +58,8 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		return instancia;
 	}
 
+	
+	@SuppressWarnings("rawtypes")
 	public Collection pesquisarRotasProcessamentoBatchFaturamentoComandado(
 			Integer idFaturamentoAtividadeCronograma)
 			throws ErroRepositorioException {
@@ -96,10 +87,8 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 					idFaturamentoAtividadeCronograma).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -107,16 +96,8 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 
 	}
 
-	/**
-	 * Encerra os Processos Iniciados no sistema quando todas as funcionalidades
-	 * do mesmo finalizarem a execução
-	 * 
-	 * @author Rodrigo Silveira
-	 * @date 22/08/2006
-	 * 
-	 */
-	public Collection<ProcessoIniciado> pesquisarProcessosIniciadosProntosParaEncerramento()
-			throws ErroRepositorioException {
+	@SuppressWarnings("unchecked")
+	public Collection<ProcessoIniciado> pesquisarProcessosIniciadosProntosParaEncerramento() throws ErroRepositorioException {
 		Collection<ProcessoIniciado> retorno = null;
 
 		Session session = HibernateUtil.getSession();
@@ -148,14 +129,7 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 
 	}
 
-	/**
-	 * Busca as Funcionalidades Iniciadas no sistema que falharam para marcar o
-	 * Processo Iniciado como falho
-	 * 
-	 * @author Rodrigo Silveira
-	 * @date 24/08/2006
-	 * 
-	 */
+	@SuppressWarnings("unchecked")
 	public Collection<ProcessoIniciado> pesquisarProcessosIniciadosExecucaoFalha()
 			throws ErroRepositorioException {
 		Collection<ProcessoIniciado> retorno = null;
@@ -188,14 +162,7 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 
 	}
 
-	/**
-	 * Encerra as Funcionalidades Iniciadas no sistema quando todas as unidades
-	 * de processamento do mesmo finalizarem a execução
-	 * 
-	 * @author Rodrigo Silveira, Tiago Moreno
-	 * @date 22/08/2006, 13/08/2010
-	 * 
-	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Collection<FuncionalidadeIniciada> pesquisarFuncionaldadesIniciadasProntasParaEncerramento()
 	throws ErroRepositorioException {
 		Collection<FuncionalidadeIniciada> retorno = new ArrayList();
@@ -247,14 +214,8 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 	
 	}
 
-	/**
-	 * Busca as Unidades Iniciadas no sistema que falharam para marcar o
-	 * Funcionalidade Iniciada como falha
-	 * 
-	 * @author Rodrigo Silveira, Tiago Moreno
-	 * @date 24/08/2006, 13/08/2010
-	 * 
-	 */
+
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Collection<FuncionalidadeIniciada> pesquisarFuncionaldadesIniciadasExecucaoFalha()
 			throws ErroRepositorioException {
 		Collection<FuncionalidadeIniciada> retorno = new ArrayList();
@@ -304,14 +265,7 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 	}
 
 
-	/**
-	 * Busca as Funcionalidades Iniciadas no sistema que estão prontas para
-	 * execução
-	 * 
-	 * @author Rodrigo Silveira
-	 * @date 29/08/2006
-	 * 
-	 */
+	@SuppressWarnings("unchecked")
 	public Collection<Object[]> pesquisarFuncionaldadesIniciadasProntasExecucao()
 			throws ErroRepositorioException {
 		Collection<Object[]> retorno = null;
@@ -355,15 +309,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 
 	}
 
-	/**
-	 * Verifica se a Funcionalidade Iniciada no sistema que está na ordem
-	 * correta de execução dentro do processoFuncionalidade, as funcionalidades
-	 * só podem iniciar se estiverem na ordem correta do sequencial de execução
-	 * 
-	 * @author Rodrigo Silveira
-	 * @date 19/09/2006
-	 * 
-	 */
 	public Integer pesquisarQuantidadeFuncionaldadesIniciadasForaOrdemExecucao(
 			int idSequencialExecucao, int idProcessoIniciado)
 			throws ErroRepositorioException {
@@ -398,14 +343,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 
 	}
 
-	/**
-	 * Verifica se a FuncionalidadeIniciada foi concluida com erro para evitar a
-	 * execução da UnidadeIniciada relacionada
-	 * 
-	 * @author Rodrigo Silveira
-	 * @date 01/09/2006
-	 * 
-	 */
 	public int pesquisarFuncionaldadesIniciadasConcluidasErro(
 			int idFuncionalidadeIniciada) throws ErroRepositorioException {
 		int retorno = 0;
@@ -436,16 +373,7 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 
 	}
 
-	/**
-	 * Insere uma coleção de objetos genéricos na base com um flush para cada 50
-	 * registros inseridos.
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 11/09/2006
-	 * 
-	 * @param colecaoObjetos
-	 * @throws ErroRepositorioException
-	 */
+	@SuppressWarnings("rawtypes")
 	public void inserirColecaoObjetoParaBatch(Collection<? extends Object> colecaoObjetos)
 			throws ErroRepositorioException {
 		// obtém uma instância com o hibernate
@@ -486,15 +414,7 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		}
 	}
 
-	/**
-	 * Insere uma coleção de objetos genéricos na base
-	 * 
-	 * @author Rafael Pinto
-	 * @date 20/05/2008
-	 * 
-	 * @param colecaoObjetos
-	 * @throws ErroRepositorioException
-	 */
+	@SuppressWarnings("rawtypes")
 	public void inserirColecaoObjetoParaBatchTransacao(Collection<Object> colecaoObjetos)
 			throws ErroRepositorioException {
 		// obtém uma instância com o hibernate
@@ -519,16 +439,7 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		}
 	}
 	
-	/**
-	 * Inseri uma coleção de objetos genéricos na base com um flush para cada 50
-	 * registros inseridos.
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 11/09/2006
-	 * 
-	 * @param colecaoObjetos
-	 * @throws ErroRepositorioException
-	 */
+	@SuppressWarnings("rawtypes")
 	public void inserirColecaoObjetoParaBatchGerencial(Collection<? extends Object> colecaoObjetos)
 			throws ErroRepositorioException {
 		// obtém uma instância com o hibernate
@@ -553,16 +464,7 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		}
 	}	
 
-	/**
-	 * Atualiza uma coleção de objetos genéricos na base com um flush para cada
-	 * 50 registros inseridos.
-	 * 
-	 * @author Leonardo Vieira
-	 * @date 12/10/2006
-	 * 
-	 * @param colecaoObjetos
-	 * @throws ErroRepositorioException
-	 */
+	@SuppressWarnings("rawtypes")
 	public void atualizarColecaoObjetoParaBatch(
 			Collection<? extends Object> colecaoObjetos) throws ErroRepositorioException {
 		// obtém uma instância com o hibernate
@@ -585,13 +487,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		}
 	}
 
-	/**
-	 * Inicia uma funcionalidade iniciada de um relatório
-	 * 
-	 * @author Rodrigo Silveira
-	 * @date 26/09/2006
-	 * 
-	 */
 	public void iniciarFuncionalidadeIniciadaRelatorio(
 			int idFuncionalidadeIniciada) throws ErroRepositorioException {
 
@@ -619,13 +514,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		}
 	}
 
-	/**
-	 * Inicia uma processo iniciado de um relatório
-	 * 
-	 * @author Rodrigo Silveira
-	 * @date 26/09/2006
-	 * 
-	 */
 	public void iniciarProcessoIniciadoRelatorio(int idFuncionalidadeIniciada)
 			throws ErroRepositorioException {
 
@@ -654,13 +542,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		}
 	}
 
-	/**
-	 * Encerra uma funcionalidade iniciada de um relatório
-	 * 
-	 * @author Rodrigo Silveira
-	 * @date 26/09/2006
-	 * 
-	 */
 	public void encerrarFuncionalidadeIniciadaRelatorio(int idFuncionalidadeIniciada, 
 		int situacaoConclusaoFuncionalidade) throws ErroRepositorioException {
 
@@ -688,13 +569,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		}
 	}
 
-	/**
-	 * Inicia uma processo iniciado de um relatório
-	 * 
-	 * @author Rodrigo Silveira
-	 * @date 26/09/2006
-	 * 
-	 */
 	public void encerrarProcessoIniciadoRelatorio(int idFuncionalidadeIniciada,
 			int situacaoConclusaoFuncionalidade)
 			throws ErroRepositorioException {
@@ -724,13 +598,7 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		}
 	}
 
-	/**
-	 * Inicia todos os relatórios agendados
-	 * 
-	 * @author Rodrigo Silveira
-	 * @date 26/09/2006
-	 * 
-	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Collection<byte[]> iniciarRelatoriosAgendados()
 			throws ErroRepositorioException {
 
@@ -763,14 +631,7 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		}
 	}
 
-	/**
-	 * Pesquisa todos as funcionalidades iniciadas que representam os relatórios
-	 * batch do sistema
-	 * 
-	 * @author Rodrigo Silveira
-	 * @date 09/10/2006
-	 * 
-	 */
+	@SuppressWarnings("unchecked")
 	public Collection<Object[]> pesquisarRelatoriosBatchSistema()
 			throws ErroRepositorioException {
 
@@ -831,16 +692,7 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		}
 	}
 
-	/**
-	 * Remove uma coleção de objetos genéricos na base com um flush para cada 50
-	 * registros removidos.
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 09/10/2006
-	 * 
-	 * @param colecaoObjetos
-	 * @throws ErroRepositorioException
-	 */
+	@SuppressWarnings("rawtypes")
 	public void removerColecaoObjetoParaBatch(Collection<Object> colecaoObjetos)
 			throws ErroRepositorioException {
 		
@@ -866,16 +718,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		}	
 	}
 	
-	/**
-	 * Remove uma coleção de objetos genéricos na base com um flush para cada 50
-	 * registros removidos.
-	 * 
-	 * @author Sávio Luiz
-	 * @date 31/03/2010
-	 * 
-	 * @param colecaoObjetos
-	 * @throws ErroRepositorioException
-	 */
 	public void removerObjetoParaBatch(Object objeto)
 			throws ErroRepositorioException {
 		
@@ -896,15 +738,7 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		}
 	}	
 	
-
-	/**
-	 * Pesquisa todos as funcionalidades iniciadas que representam os relatórios
-	 * batch do sistema por Usuário
-	 * 
-	 * @author Rodrigo Silveira
-	 * @date 25/10/2006
-	 * 
-	 */
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Collection<Object[]> pesquisarRelatoriosBatchPorUsuarioSistema(
 			int idProcesso) throws ErroRepositorioException {
 
@@ -945,14 +779,7 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 
 	}
 
-	/**
-	 * Remove do sistema todos os relatórios batch que estão na data de
-	 * expiração
-	 * 
-	 * @author Rodrigo Silveira
-	 * @date 26/10/2006
-	 * 
-	 */
+	@SuppressWarnings("unchecked")
 	public void deletarRelatoriosBatchDataExpiracao(Date dataDeExpiracao)
 			throws ErroRepositorioException {
 
@@ -1013,13 +840,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 
 	}
 	
-	/**
-	 * Remove do sistema as unidades iniciadas de uma funcionalidade
-	 * 
-	 * @author Rafael Corrêa
-	 * @date 06/11/2006
-	 * 
-	 */
 	public void removerUnidadesIniciadas(Integer idFuncionalidadeIniciada)
 			throws ErroRepositorioException {
 
@@ -1045,6 +865,7 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public Collection<Rota> pesquisarRotasProcessamentoBatchCobrancaGrupoNaoInformado(
 			Integer idCobrancaAcaoAtividadeComando)
 			throws ErroRepositorioException {
@@ -1074,15 +895,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 
 	}
 	
-	/**
-	 * Inseri uma objeto genérico na base 
-	 * 
-	 * @author Marcio Roberto
-	 * @date 18/05/2007
-	 * 
-	 * @param Objeto
-	 * @throws ErroRepositorioException
-	 */
 	public Object inserirObjetoParaBatchGerencial(Object objeto)
 			throws ErroRepositorioException {
 		// obtém uma instância com o hibernate
@@ -1105,20 +917,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		}
 	}
 
-	
-	
-	
-	/**
-	 * Remove uma coleção de GuiaPagamentoCategoria
-	 * 
-	 * [UC0276] Encerrar Arrecadação do Mês
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 12/02/2008
-	 * 
-	 * @param colecaoGuiaPagamentoCategoria
-	 * @throws ErroRepositorioException
-	 */
 	public void removerColecaoGuiaPagamentoCategoriaParaBatch(Collection<GuiaPagamentoCategoria> colecaoGuiaPagamentoCategoria) throws ErroRepositorioException {
 		
 		String delete;
@@ -1169,18 +967,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		
 	}
 
-	
-	/**
-	 * Remove uma coleção de ClienteGuiaPagamento
-	 * 
-	 * [UC0276] Encerrar Arrecadação do Mês
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 12/02/2008
-	 * 
-	 * @param colecaoClienteGuiaPagamento
-	 * @throws ErroRepositorioException
-	 */
 	public void removerColecaoClienteGuiaPagamentoParaBatch(Collection<ClienteGuiaPagamento> colecaoClienteGuiaPagamento) throws ErroRepositorioException {
 		
 		String delete;
@@ -1228,19 +1014,7 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		}
 
 	}
-	
-	
-	/**
-	 * Remove uma coleção de GuiaPagamento
-	 * 
-	 * [UC0276] Encerrar Arrecadação do Mês
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 12/02/2008
-	 * 
-	 * @param colecaoGuiaPagamento
-	 * @throws ErroRepositorioException
-	 */
+
 	public void removerColecaoGuiaPagamentoParaBatch(Collection<GuiaPagamento> colecaoGuiaPagamento) throws ErroRepositorioException {
 		
 		String delete;
@@ -1293,17 +1067,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 	}
 
 	
-	/**
-	 * Remove uma coleção de DebitoACobrar
-	 * 
-	 * [UC0276] Encerrar Arrecadação do Mês
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 12/02/2008
-	 * 
-	 * @param colecaoDebitoACobrar
-	 * @throws ErroRepositorioException
-	 */
 	public void removerColecaoDebitoACobrarParaBatch(Collection<DebitoACobrar> colecaoDebitoACobrar) throws ErroRepositorioException {
 		
 		String delete;
@@ -1352,18 +1115,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		
 	}
 
-	
-	/**
-	 * Remove uma coleção de DebitoACobrarCategoria
-	 * 
-	 * [UC0276] Encerrar Arrecadação do Mês
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 12/02/2008
-	 * 
-	 * @param colecaoDebitoACobrarCategoria
-	 * @throws ErroRepositorioException
-	 */
 	public void removerColecaoDebitoACobrarCategoriaParaBatch(Collection<DebitoACobrarCategoria> colecaoDebitoACobrarCategoria) throws ErroRepositorioException {
 		
 		String delete;
@@ -1414,18 +1165,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 
 	}
 
-	
-	/**
-	 * Remove uma coleção de Pagamento
-	 * 
-	 * [UC0276] Encerrar Arrecadação do Mês
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 12/02/2008
-	 * 
-	 * @param colecaoPagamento
-	 * @throws ErroRepositorioException
-	 */
 	public void removerColecaoPagamentoParaBatch(Collection<Pagamento> colecaoPagamento) throws ErroRepositorioException {
 		
 		String delete;
@@ -1475,18 +1214,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		
 	}
 
-	
-	/**
-	 * Remove uma coleção de Devolução
-	 * 
-	 * [UC0276] Encerrar Arrecadação do Mês
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 12/02/2008
-	 * 
-	 * @param colecaoDevolucao
-	 * @throws ErroRepositorioException
-	 */
 	public void removerColecaoDevolucaoParaBatch(Collection<Devolucao> colecaoDevolucao) throws ErroRepositorioException {
 
 		String delete;
@@ -1535,18 +1262,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		
 	}
 
-	
-	/**
-	 * Remove uma coleção de Conta
-	 * 
-	 * [UC0276] Encerrar Arrecadação do Mês
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 12/02/2008
-	 * 
-	 * @param colecaoConta
-	 * @throws ErroRepositorioException
-	 */
 	public void removerColecaoContaParaBatch(Collection<Conta> colecaoConta) throws ErroRepositorioException {
 
 		String delete;
@@ -1595,18 +1310,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 
 	}
 
-	
-	/**
-	 * Remove uma coleção de ContaCategoria
-	 * 
-	 * [UC0276] Encerrar Arrecadação do Mês
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 12/02/2008
-	 * 
-	 * @param colecaoContaCategoria
-	 * @throws ErroRepositorioException
-	 */
 	public void removerColecaoContaCategoriaParaBatch(Collection<ContaCategoria> colecaoContaCategoria) throws ErroRepositorioException {
 		
 		String delete;
@@ -1656,18 +1359,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 
 	}
 	
-	
-	/**
-	 * Remove uma coleção de ContaCategoriaConsumoFaixa
-	 * 
-	 * [UC0276] Encerrar Arrecadação do Mês
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 12/02/2008
-	 * 
-	 * @param colecaoContaCategoria
-	 * @throws ErroRepositorioException
-	 */
 	public void removerColecaoContaCategoriaConsumoFaixaParaBatch(Collection<ContaCategoriaConsumoFaixa> colecaoContaCategoriaConsumoFaixa) throws ErroRepositorioException {
 		
 		String delete;
@@ -1715,18 +1406,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		
 	}
 	
-	
-	/**
-	 * Remove uma coleção de CreditoRealizado
-	 * 
-	 * [UC0276] Encerrar Arrecadação do Mês
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 12/02/2008
-	 * 
-	 * @param colecaoCreditoRealizado
-	 * @throws ErroRepositorioException
-	 */
 	public void removerColecaoCreditoRealizadoParaBatch(Collection<CreditoRealizado> colecaoCreditoRealizado) throws ErroRepositorioException {
 	
 		String delete;
@@ -1774,18 +1453,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 	
 	}
 	
-	
-	/**
-	 * Remove uma coleção de DebitoCobrado
-	 * 
-	 * [UC0276] Encerrar Arrecadação do Mês
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 12/02/2008
-	 * 
-	 * @param colecaoDebitoCobrado
-	 * @throws ErroRepositorioException
-	 */
 	public void removerColecaoDebitoCobradoParaBatch(Collection<DebitoCobrado> colecaoDebitoCobrado) throws ErroRepositorioException {
 		
 		String delete;
@@ -1833,18 +1500,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 
 	}
 
-	
-	/**
-	 * Remove uma coleção de ContaImpostosDeduzidos
-	 * 
-	 * [UC0276] Encerrar Arrecadação do Mês
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 12/02/2008
-	 * 
-	 * @param colecaoContaImpostosDeduzidos
-	 * @throws ErroRepositorioException
-	 */
 	public void removerColecaoContaImpostosDeduzidosParaBatch(Collection<ContaImpostosDeduzidos> colecaoContaImpostosDeduzidos) throws ErroRepositorioException {
 		
 		
@@ -1893,18 +1548,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 
 	}
 
-	
-	/**
-	 * Remove uma coleção de ClienteConta
-	 * 
-	 * [UC0276] Encerrar Arrecadação do Mês
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 12/02/2008
-	 * 
-	 * @param colecaoClienteConta
-	 * @throws ErroRepositorioException
-	 */
 	public void removerColecaoClienteContaParaBatch(Collection<ClienteConta> colecaoClienteConta) throws ErroRepositorioException {
 		
 		String delete;
@@ -1952,18 +1595,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 
 	}
 
-	
-	/**
-	 * Remove uma coleção de DebitoCobradoCategoria
-	 * 
-	 * [UC0276] Encerrar Arrecadação do Mês
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 12/02/2008
-	 * 
-	 * @param colecaoDebitoCobradoCategoria
-	 * @throws ErroRepositorioException
-	 */
 	public void removerColecaoDebitoCobradoCategoriaParaBatch(Collection<DebitoCobradoCategoria> colecaoDebitoCobradoCategoria) throws ErroRepositorioException {
 		
 		String delete;
@@ -2012,18 +1643,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 
 	}
 	
-	
-	/**
-	 * Remove uma coleção de CreditoRealizadoCategoria
-	 * 
-	 * [UC0276] Encerrar Arrecadação do Mês
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 12/02/2008
-	 * 
-	 * @param colecaoCreditoRealizadoCategoria
-	 * @throws ErroRepositorioException
-	 */
 	public void removerColecaoCreditoRealizadoCategoriaParaBatch(Collection<CreditoRealizadoCategoria> colecaoCreditoRealizadoCategoria) throws ErroRepositorioException {
 		
 		String delete;
@@ -2072,15 +1691,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		}
 	}
 	
-	
-	/**
-	 * Pesquisa e registra as queries demoradas do sistema
-	 * 
-	 * @author Rodrigo Silveira
-	 * @date 27/02/2008
-	 * 
-	 * @throws ErroRepositorioException
-	 */
 	public void pesquisarQueriesDemoradasSistema()
 			throws ErroRepositorioException {
 
@@ -2150,17 +1760,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 
 	}
 
-	/**
-	 * Remove uma coleção de CreditoARealizar
-	 * 
-	 * [UC0276] Encerrar Arrecadação do Mês
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 12/02/2008
-	 * 
-	 * @param colecaoCreditoARealizar
-	 * @throws ErroRepositorioException
-	 */
 	public void removerColecaoCreditoARealizarParaBatch(Collection<CreditoARealizar> colecaoCreditoARealizar) 
 		throws ErroRepositorioException {
 	
@@ -2210,17 +1809,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 	
 	}
 	
-	/**
-	 * Remove uma coleção de CreditoARealizarCategoria
-	 * 
-	 * [UC0276] Encerrar Arrecadação do Mês
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 09/04/2008
-	 * 
-	 * @param colecaoIdsCreditoARealizar
-	 * @throws ErroRepositorioException
-	 */
 	public void removerColecaoCreditoARealizarCategoriaParaBatch(Collection<Integer> colecaoIdsCreditoARealizar) throws ErroRepositorioException {
 		
 		String delete;
@@ -2352,13 +1940,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		
 	}
 	
-	/**
-	 * Verifica se o processo está em execução
-	 * 
-	 * @author Ana Maria
-	 * @date 18/12/2008
-	 * 
-	 */
 	public boolean verificarProcessoEmExecucao(Integer idProcesso)
 			throws ErroRepositorioException {
 		boolean retorno = false;
@@ -2422,14 +2003,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		
 	}
 	
-	/**
-	 * Autorizar Processo Iniciado
-	 * 
-	 * @author Genival Barbosa
-	 * @date 06/08/2009
-	 * 
-	 * @param ProcessoIniciado
-	 */
 	public void autorizarProcessoIniciado(ProcessoIniciado processoIniciado, Integer processoSituacao) throws ErroRepositorioException 
 	{		
 		Session session = HibernateUtil.getSession();
@@ -2450,14 +2023,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		}
 	}
 	
-	/**
-	 * Autorizar Funcionalidade Iniciada
-	 * 
-	 * @author Genival Barbosa
-	 * @date 06/08/2009
-	 * 
-	 * @param ProcessoIniciado
-	 */
 	public void autorizarFuncionalidadeIniciada(ProcessoIniciado processoIniciado,Integer funcionalidadeSituacao) throws ErroRepositorioException 
 	{		
 		Session session = HibernateUtil.getSession();
@@ -2478,16 +2043,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		}
 	}
 	
-	
-	/**
-	 * Atualiza um objeto genérico na base 
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 03/02/2009
-	 * 
-	 * @param objetoParaAtualizar
-	 * @throws ErroRepositorioException
-	 */
 	public void atualizarObjetoParaBatch(
 			Object objetoParaAtualizar) throws ErroRepositorioException {
 		// obtém uma instância com o hibernate
@@ -2507,15 +2062,6 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		}
 	}
 	
-	/**
-	 * Insere uma objeto genérico na base 
-	 * 
-	 * @author Vivianne Sousa
-	 * @date 03/02/2009
-	 * 
-	 * @param Objeto
-	 * @throws ErroRepositorioException
-	 */
 	public Object inserirObjetoParaBatch(Object objeto)
 			throws ErroRepositorioException {
 		// obtém uma instância com o hibernate
@@ -2537,13 +2083,7 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		}
 	}
 	
-	/**
-	 * Retorna o(s) processo(s) que está em execução
-	 * 
-	 * @author Arthur Carvalho
-	 * @date 04/06/2010
-	 * 
-	 */
+	@SuppressWarnings("rawtypes")
 	public Collection retornaProcessoFuncionalidadeEmExecucao() throws ErroRepositorioException {
 		
 		Session session = HibernateUtil.getSession();
@@ -2571,6 +2111,36 @@ public class RepositorioBatchHBM implements IRepositorioBatch {
 		}
 
 		return retornoHQL;
+
+	}
+	
+	public FaturamentoAtividadeCronograma pesquisarProcessoIniciadoParaGrupo(Integer idGrupo, Integer referencia, Integer idAtividadeFaturamento) throws ErroRepositorioException {
+		Session session = HibernateUtil.getSession();
+		StringBuilder consulta = new StringBuilder();
+		
+		FaturamentoAtividadeCronograma retorno = null;
+
+		try {
+			consulta.append(" select faturamentoAtividadeCronograma from FaturamentoAtividadeCronograma faturamentoAtividadeCronograma ");
+			consulta.append(" inner join faturamentoAtividadeCronograma.faturamentoGrupoCronogramaMensal faturamentoGrupoCronogramaMensal ");
+			consulta.append(" inner join faturamentoAtividadeCronograma.faturamentoAtividade faturamentoAtividade ");
+			consulta.append(" where faturamentoGrupoCronogramaMensal.faturamentoGrupo.id = :idGrupo ");
+			consulta.append(" and faturamentoGrupoCronogramaMensal.anoMesReferencia = :referencia ");
+			consulta.append(" and faturamentoAtividade.id = :idAtividadeFaturamento ");
+			
+			retorno = (FaturamentoAtividadeCronograma)session.createQuery(consulta.toString())
+						.setInteger("idGrupo",idGrupo)
+						.setInteger("referencia",referencia)
+						.setInteger("idAtividadeFaturamento",idAtividadeFaturamento)
+						.uniqueResult();
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
 
 	}
 	

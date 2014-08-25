@@ -1453,8 +1453,7 @@ public class ControladorImovelSEJB implements SessionBean {
 		}	
 	}
 
-	private void verificarAlteracaoImovelEmCampo(InserirImovelHelper imovelHelper) {
-		try {
+	private void verificarAlteracaoImovelEmCampo(InserirImovelHelper imovelHelper) throws ControladorException {
 			Imovel imovelnaBase = this.pesquisarImovel(imovelHelper.getImovel().getId());
 			Rota rota = getControladorMicromedicao().buscarRotaDoImovel(imovelHelper.getImovel().getId());
 			
@@ -1467,9 +1466,6 @@ public class ControladorImovelSEJB implements SessionBean {
 					|| !imovelnaBase.getQuantidadeEconomias().equals(imovelHelper.getImovel().getQuantidadeEconomias())) {
 				getControladorMicromedicao().validarImovelEmCampo(imovelHelper.getImovel().getId());
 			}
-		} catch (ControladorException e) {
-			e.printStackTrace();
-		}
 	}
 	/**
 	 * Atualiza a Ligação de Esgoto quando o imóvel é inserido com o indicador de faturamento igual a sim
