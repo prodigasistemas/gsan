@@ -11408,19 +11408,14 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 
 		try {
 			
-			//Buscando o Sistema de Parametros
 			String hql1 = "FROM SistemaParametro";
 			SistemaParametro sistemaParametro = (SistemaParametro) session.createQuery(hql1).uniqueResult();
 			
-			//Buscando o Movimento roteiro Empresa para o ano Mes de Moviemnto
 			StringBuffer hql = new StringBuffer("FROM MovimentoRoteiroEmpresa m where m.anoMesMovimento =");
-			
-			//IMOVEL
 			hql.append(anoMesReferencia);
 			hql.append(" and m.imovel.id =");
 			hql.append(dado.getMatriculaImovel());
 	
-			//MEDICAO TIPO
 			if (dado.getTipoMedicao() != null && dado.getTipoMedicao() != 0) {
 				hql.append(" and m.medicaoTipo.id = ");
 				hql.append(dado.getTipoMedicao());
@@ -11428,13 +11423,10 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 				hql.append(" and m.medicaoTipo.id is null ");
 			}
 			
-			
-			//PESQUISANDO MOVIMENTO ROTEIRO EMPRESA
 			movimento = (MovimentoRoteiroEmpresa) session.createQuery(hql.toString()).uniqueResult();
 
 			if (movimento != null) {
 				
-				//Atualizando o Movimento Roteiro Empresa
 				if (dado.getLeituraHidrometro() != null && dado.getLeituraHidrometro().intValue() != -1) {
 					movimento.setNumeroLeituraHidrometro(dado.getLeituraHidrometro());
 				} 
@@ -11442,11 +11434,9 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 					movimento.setNumeroLeituraHidrometro(null);
 				}
 	
-				//PESQUISANDO LEITURA ANORMALIDADE
 				hql1 = "FROM LeituraAnormalidade l where l.id =" + dado.getCodigoAnormalidade();
 	
 				movimento.setLeituraAnormalidade((LeituraAnormalidade) session.createQuery(hql1).uniqueResult());
-	
 				movimento.setIndicadorConfirmacaoLeitura(new Short((short) dado.getIndicadorConfirmacaoLeitura()));
 
 				//	 Compara se data de leitura está dentro do intervalo
@@ -11464,9 +11454,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 				if (anoMesFaturamento != null) {
 				
 					Integer anoMesDataLeitura = Util.formataAnoMes(dado.getDataLeituraCampo());
-				
 					Integer anoMesFaturamentoAnterior = Util.subtrairMesDoAnoMes(anoMesFaturamento, 1);
-				
 					Integer anoMesFaturamentoPosterior = Util.somaUmMesAnoMesReferencia(anoMesFaturamento);
 
 					if (anoMesDataLeitura != null && anoMesFaturamentoAnterior != null && anoMesFaturamentoPosterior != null) {
@@ -11478,70 +11466,51 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 							movimento.setTempoLeitura(dado.getDataLeituraCampo());
 						} 
 						else {
-							
 							movimento.setTempoLeitura(new Date());
 						}	
 					}
 				}
 
-				//ULTIMA ALTERAÇÃO
 				movimento.setUltimaAlteracao(new Date());
-				
-				//DATA DE PROCESSAMENTO
 				movimento.setDataHoraProcessamento(new Date());
-				
-				//INDICADOR ATUALIZACAO LEITURA
 				movimento.setIndicadorAtualizacaoLeitura(new Integer(1));
 				
-				//MONTANDO SQL PARA UPDATE
-				String update =
-				"update gcom.micromedicao.MovimentoRoteiroEmpresa set \n";
-			
+				StringBuilder update = new StringBuilder("update gcom.micromedicao.MovimentoRoteiroEmpresa set \n");
 			
 				if ( movimento.getNumeroLeituraHidrometro() != null ){
-					update +=
-					 " numeroLeituraHidrometro = :numeroLeituraHidrometro, \n";
+					update.append(" numeroLeituraHidrometro = :numeroLeituraHidrometro, \n");
 				}else{
-					update +=
-				    " numeroLeituraHidrometro = null, \n";
+					update.append(" numeroLeituraHidrometro = null, \n");
 				}
 			
 				if ( movimento.getLeituraAnormalidade() != null ){
-				update +=
-				" leituraAnormalidade = :leituraAnormalidade, \n";
+					update.append(" leituraAnormalidade = :leituraAnormalidade, \n");
 				} else {
-					update += " leituraAnormalidade = null, \n";
+					update.append(" leituraAnormalidade = null, \n");
 				}
 			
 				if ( movimento.getIndicadorConfirmacaoLeitura() != null ){
-				update +=
-				" indicadorConfirmacaoLeitura = :indicadorConfirmacaoLeitura, \n";
+					update.append(" indicadorConfirmacaoLeitura = :indicadorConfirmacaoLeitura, \n");
 				}
 			
 				if ( movimento.getTempoLeitura() != null ){
-				update +=
-				" tempoLeitura = :tempoLeitura, \n";
+					update.append(" tempoLeitura = :tempoLeitura, \n");
 				}
 				
 				if (isCelular){
-					
-					update +=
-						" indicadorAtualizacaoLeitura = :indicadorAtualizacaoLeitura, \n" +
-						" ultimaAlteracao = :ultimaAlteracao, \n" +
-						" dataHoraProcessamento = :dataHoraProcessamento \n " +
-						"where id = :id ";
+					update.append(" indicadorAtualizacaoLeitura = :indicadorAtualizacaoLeitura, \n");
+					update.append(" ultimaAlteracao = :ultimaAlteracao, \n");
+					update.append(" dataHoraProcessamento = :dataHoraProcessamento \n ");
+					update.append("where id = :id ");
 				}
 				else{
-					
-					update +=
-						" indicadorAtualizacaoLeitura = :indicadorAtualizacaoLeitura, \n" +
-						" ultimaAlteracao = :ultimaAlteracao \n" +
-						"where id = :id ";
+					update.append(" indicadorAtualizacaoLeitura = :indicadorAtualizacaoLeitura, \n");
+					update.append(" ultimaAlteracao = :ultimaAlteracao \n");
+					update.append("where id = :id ");
 				}
 				
-
 				session.clear();
-				Query query = session.createQuery(update);
+				Query query = session.createQuery(update.toString());
 			
 				if ( movimento.getNumeroLeituraHidrometro() != null ){
 					query.setInteger("numeroLeituraHidrometro", movimento.getNumeroLeituraHidrometro() );
@@ -11560,16 +11529,13 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 				}
 
 				if (isCelular){
-					
-					query
-					.setInteger("indicadorAtualizacaoLeitura", movimento.getIndicadorAtualizacaoLeitura() )
-					.setTimestamp("ultimaAlteracao", movimento.getUltimaAlteracao() )
-					.setTimestamp("dataHoraProcessamento", movimento.getDataHoraProcessamento() )
-					.setInteger("id", movimento.getId() )
-					.executeUpdate();
+					query.setInteger("indicadorAtualizacaoLeitura", movimento.getIndicadorAtualizacaoLeitura() )
+						.setTimestamp("ultimaAlteracao", movimento.getUltimaAlteracao() )
+						.setTimestamp("dataHoraProcessamento", movimento.getDataHoraProcessamento() )
+						.setInteger("id", movimento.getId() )
+						.executeUpdate();
 				}
 				else{
-					
 					query
 					.setInteger("indicadorAtualizacaoLeitura", movimento.getIndicadorAtualizacaoLeitura() )
 					.setTimestamp("ultimaAlteracao", movimento.getUltimaAlteracao() )

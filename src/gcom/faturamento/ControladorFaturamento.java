@@ -121,6 +121,7 @@ import gcom.financeiro.FinanciamentoTipo;
 import gcom.financeiro.lancamento.LancamentoItemContabil;
 import gcom.gui.ActionServletException;
 import gcom.gui.faturamento.FaturamentoImediatoAjusteHelper;
+import gcom.gui.faturamento.ImovelFaturamentoSeletivo;
 import gcom.gui.faturamento.bean.Emitir2ViaDeclaracaoAnualQuitacaoDebitosHelper;
 import gcom.gui.micromedicao.DadosMovimentacao;
 import gcom.gui.micromedicao.ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction;
@@ -583,27 +584,18 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 *            chamado via a funcionalidade de consistir, atualiza a situação
 	 *            atual da conta.
 	 */
-	private void atualizarMovimentoCelular(
-			Collection<MovimentoContaPrefaturada> colMovimentoContaPrefaturada,
-			boolean efetuarRateio) throws ControladorException {
+	private void atualizarMovimentoCelular(Collection<MovimentoContaPrefaturada> colMovimentoContaPrefaturada, boolean efetuarRateio) throws ControladorException {
 
 		String matriculaImovel = "";
 		try {
-			// Obter os dados da tabela movimento conta pré-faturada e suas
-			// tabelas dependentes
-			SistemaParametro sistemaParametro = this.getControladorUtil()
-					.pesquisarParametrosDoSistema();
+			SistemaParametro sistemaParametro = this.getControladorUtil().pesquisarParametrosDoSistema();
 
 			for (MovimentoContaPrefaturada helper : colMovimentoContaPrefaturada) {
 
-				if (helper.getMovimentoContaPrefaturadaCategorias() != null
-						&& helper.getMovimentoContaPrefaturadaCategorias()
-								.size() > 0) {
+				if (helper.getMovimentoContaPrefaturadaCategorias() != null && helper.getMovimentoContaPrefaturadaCategorias().size() > 0) {
 
 					/**
-		        	 * TODO : COSANPA
-		        	 * Alteracao para quando a conta não tiver sido emitida
-		        	 * pelo IS, não altera nenhuma informação da conta, continua
+		        	 * Alteracao para quando a conta não tiver sido emitida pelo IS, não altera nenhuma informação da conta, continua
 		        	 * PRE FATURADA
 		        	 */
 	        		 if(helper.getIndicadorGeracaoConta().shortValue() == ConstantesSistema.SIM.shortValue()){        	
@@ -612,7 +604,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        				 continue;
 	        			 }
 	        			 
-	        			 //recupera a conta
 	        			 Conta contaAtualizacao = helper.getConta();
 	        			 
 	        			 matriculaImovel = ""+helper.getImovel().getId();
@@ -643,7 +634,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        				 }			
 	        			 }
 	        			 
-	        			 // Para cada imóvel da tabela movimento conta pré-faturada,
+	        			 // Para cada imóvel da tabela movimento conta pré-faturada, 
 	        			 // realizar os seguintes procedimentos:
 	        			 // O sistema calcula os valores de faturamento para o imóvel
 	        			 // obtendo os valores faturados e de consumo de água e
@@ -655,161 +646,64 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        			 filtro.adicionarCaminhoParaCarregamentoEntidade("quadra.rota.faturamentoGrupo");
 	        			 filtro.adicionarCaminhoParaCarregamentoEntidade("ligacaoAguaSituacao");
 	        			 filtro.adicionarCaminhoParaCarregamentoEntidade("ligacaoEsgotoSituacao");
-	        			 filtro.adicionarParametro(new ParametroSimples(
-	        					 FiltroImovel.ID, helper.getImovel()));
-	        			 Collection<Imovel> colImo = Fachada.getInstancia()
-	        			 .pesquisar(filtro, Imovel.class.getName());
+	        			 filtro.adicionarParametro(new ParametroSimples(FiltroImovel.ID, helper.getImovel()));
+	        			 Collection<Imovel> colImo = Fachada.getInstancia().pesquisar(filtro, Imovel.class.getName());
 	        			 Imovel imo = (Imovel) Util.retonarObjetoDeColecao(colImo);
 	        			 
 	        			 FiltroConsumoHistorico filtroConsumoHistorico = new FiltroConsumoHistorico();
-	        			 filtroConsumoHistorico
-	        			 .adicionarParametro(new ParametroSimples(
-	        					 FiltroConsumoHistorico.IMOVEL_ID, helper
-	        					 .getImovel().getId()));
-	        			 filtroConsumoHistorico
-	        			 .adicionarParametro(new ParametroSimples(
-	        					 FiltroConsumoHistorico.LIGACAO_TIPO_ID,
-	        					 LigacaoTipo.LIGACAO_AGUA));
-	        			 filtroConsumoHistorico
-	        			 .adicionarParametro(new ParametroSimples(
-	        					 FiltroConsumoHistorico.ANO_MES_FATURAMENTO,
-	        					 helper.getFaturamentoGrupo()
-	        					 .getAnoMesReferencia()));
-	        			 Collection<ConsumoHistorico> colConsumoHistorico = Fachada
-	        			 .getInstancia().pesquisar(filtroConsumoHistorico,
-	        					 ConsumoHistorico.class.getName());
-	        			 ConsumoHistorico consumoHistoricoAgua = (ConsumoHistorico) Util
-	        			 .retonarObjetoDeColecao(colConsumoHistorico);
+	        			 filtroConsumoHistorico.adicionarParametro(new ParametroSimples(FiltroConsumoHistorico.IMOVEL_ID, helper.getImovel().getId()));
+	        			 filtroConsumoHistorico.adicionarParametro(new ParametroSimples(FiltroConsumoHistorico.LIGACAO_TIPO_ID,LigacaoTipo.LIGACAO_AGUA));
+	        			 filtroConsumoHistorico.adicionarParametro(new ParametroSimples(FiltroConsumoHistorico.ANO_MES_FATURAMENTO,helper.getFaturamentoGrupo().getAnoMesReferencia()));
+	        			 Collection<ConsumoHistorico> colConsumoHistorico = Fachada.getInstancia().pesquisar(filtroConsumoHistorico,ConsumoHistorico.class.getName());
+	        			 ConsumoHistorico consumoHistoricoAgua = (ConsumoHistorico) Util.retonarObjetoDeColecao(colConsumoHistorico);
 	        			 
-	        			 // Consumo de Água
-	        			 // Integer consumoRateioAguaCalculado =
-	        			 // consumoHistoricoAgua.getConsumoRateio();
 	        			 
 	        			 filtroConsumoHistorico.limparListaParametros();
-	        			 filtroConsumoHistorico
-	        			 .adicionarParametro(new ParametroSimples(
-	        					 FiltroConsumoHistorico.IMOVEL_ID, helper
-	        					 .getImovel().getId()));
-	        			 filtroConsumoHistorico
-	        			 .adicionarParametro(new ParametroSimples(
-	        					 FiltroConsumoHistorico.LIGACAO_TIPO_ID,
-	        					 LigacaoTipo.LIGACAO_ESGOTO));
-	        			 filtroConsumoHistorico
-	        			 .adicionarParametro(new ParametroSimples(
-	        					 FiltroConsumoHistorico.ANO_MES_FATURAMENTO,
-	        					 helper.getFaturamentoGrupo()
-	        					 .getAnoMesReferencia()));
-	        			 colConsumoHistorico = Fachada.getInstancia().pesquisar(
-	        					 filtroConsumoHistorico,
-	        					 ConsumoHistorico.class.getName());
-	        			 ConsumoHistorico consumoHistoricoEsgoto = (ConsumoHistorico) Util
-	        			 .retonarObjetoDeColecao(colConsumoHistorico);
+	        			 filtroConsumoHistorico.adicionarParametro(new ParametroSimples(FiltroConsumoHistorico.IMOVEL_ID, helper.getImovel().getId()));
+	        			 filtroConsumoHistorico.adicionarParametro(new ParametroSimples(FiltroConsumoHistorico.LIGACAO_TIPO_ID,LigacaoTipo.LIGACAO_ESGOTO));
+	        			 filtroConsumoHistorico.adicionarParametro(new ParametroSimples(FiltroConsumoHistorico.ANO_MES_FATURAMENTO,helper.getFaturamentoGrupo().getAnoMesReferencia()));
+	        			 colConsumoHistorico = Fachada.getInstancia().pesquisar(filtroConsumoHistorico,ConsumoHistorico.class.getName());
+	        			 ConsumoHistorico consumoHistoricoEsgoto = (ConsumoHistorico) Util.retonarObjetoDeColecao(colConsumoHistorico);
 	        			 
-	        			 // Consumo de Água
-	        			 // Integer consumoRateioEsgotoCalculado =
-	        			 // consumoHistoricoEsgoto.getConsumoRateio();
-	        			 
-	        			 // 1.6 Caso o indicador de tarifa categoria seja igual a 2
-	        			 // ( PARM_ICTARIFACATEGORIA = 2 da tabela SISTEMA_PARAMETROS
-	        			 // )
-	        			 // o sistema passa as subcategorias e as repectivas
-	        			 // quantidades
-	        			 // de economias do imóvel ( SCAT_ID e IMSB_QTECONOMIA da
-	        			 // tabela
-	        			 // IMOVEL_SUBCATEGORIA com IMOV_ID da tabela IMOVEL )
-	        			 // Caso contrátio, categoria(s) do imovel de sua(s)
-	        			 // respectiva(s)
-	        			 // quantidade(s) de economia retornada pelo
-	        			 // [UC0108 - Obter Quantidade de Economias por Categoria]
 	        			 Collection colecaoCategoriaOUSubcategoria = getControladorImovel().obterColecaoCategoriaOuSubcategoriaDoImovel(imo);
 	        			 
-	        			 // Verificando se a empresa fatura por CATEGORIA ou
-	        			 // SUBCATEGORIA
-	        			 if (sistemaParametro.getIndicadorTarifaCategoria().equals(
-	        					 SistemaParametro.INDICADOR_TARIFA_CATEGORIA)) {
+	        			 if (sistemaParametro.getIndicadorTarifaCategoria().equals(SistemaParametro.INDICADOR_TARIFA_CATEGORIA)) {
 	        				 if (contaAtualizacao != null) {
-	        					 
-	        					 // PESQUISANDO A PARTIR DA TABELA CONTA_CATEGORIA
-	        					 colecaoCategoriaOUSubcategoria = this
-	        					 .getControladorImovel()
-	        					 .obterQuantidadeEconomiasContaCategoria(
-	        							 contaAtualizacao);
+	        					 colecaoCategoriaOUSubcategoria = this.getControladorImovel().obterQuantidadeEconomiasContaCategoria(contaAtualizacao);
 	        				 } else {
-	        					 
-	        					 // PESQUISANDO A PARTIR DA TABELA
-	        					 // IMOVEL_SUBCATEGORIA
-	        					 colecaoCategoriaOUSubcategoria = this
-	        					 .getControladorImovel()
-	        					 .obterQuantidadeEconomiasCategoria(imo);
+	        					 colecaoCategoriaOUSubcategoria = this.getControladorImovel().obterQuantidadeEconomiasCategoria(imo);
 	        				 }
 	        			 } else {
-	        				 // [UC0108] - Obter Quantidade de Economias por
-	        				 // Subcategoria
 	        				 if (contaAtualizacao != null) {
-	        					 
-	        					 // PESQUISANDO A PARTIR DA TABELA CONTA_CATEGORIA
-	        					 colecaoCategoriaOUSubcategoria = this
-	        					 .getControladorImovel()
-	        					 .obterQuantidadeEconomiasContaCategoriaPorSubcategoria(
-	        							 contaAtualizacao.getId());
+	        					 colecaoCategoriaOUSubcategoria = this.getControladorImovel().obterQuantidadeEconomiasContaCategoriaPorSubcategoria(contaAtualizacao.getId());
 	        				 } else {
-	        					 
-	        					 // PESQUISANDO A PARTIR DA TABELA
-	        					 // IMOVEL_SUBCATEGORIA
-	        					 colecaoCategoriaOUSubcategoria = this
-	        					 .getControladorImovel()
-	        					 .obterQuantidadeEconomiasSubCategoria(
-	        							 imo.getId());
+	        					 colecaoCategoriaOUSubcategoria = this.getControladorImovel().obterQuantidadeEconomiasSubCategoria(imo.getId());
 	        				 }
 	        				 
 	        			 }
 	        			 
-	        			 // Inicializando o objeto que armazenará as informações que
-	        			 // serão utilizadas no cálculo da conta
-	        			 DeterminarValoresFaturamentoAguaEsgotoHelper helperValoresAguaEsgoto = this
-	        			 .determinarValoresFaturamentoAguaEsgoto(imo, helper
-	        					 .getFaturamentoGrupo()
-	        					 .getAnoMesReferencia(),
-	        					 colecaoCategoriaOUSubcategoria, imo
-	        					 .getQuadra().getRota()
-	        					 .getFaturamentoGrupo(),
+	        			 DeterminarValoresFaturamentoAguaEsgotoHelper helperValoresAguaEsgoto = this.determinarValoresFaturamentoAguaEsgoto(imo, 
+	        					 helper.getFaturamentoGrupo().getAnoMesReferencia(),
+	        					 colecaoCategoriaOUSubcategoria, 
+	        					 imo.getQuadra().getRota().getFaturamentoGrupo(),
 	        					 consumoHistoricoAgua,
 	        					 consumoHistoricoEsgoto);
 	        			 
-	        			 // [UC0120] - Calcular Valores de Água e/ou Esgoto
 	        			 Collection<CalcularValoresAguaEsgotoHelper> colecaoCalcularValoresAguaEsgotoHelper = helperValoresAguaEsgoto
 	        			 .getColecaoCalcularValoresAguaEsgotoHelper();
 	        			 
-	        			 // Valor total de água
-	        			 BigDecimal valorTotalAguaCalculado = this
-	        			 .calcularValorTotalAguaOuEsgotoPorCategoria(
-	        					 colecaoCalcularValoresAguaEsgotoHelper,
-	        					 ConstantesSistema.CALCULAR_AGUA);
+	        			 BigDecimal valorTotalAguaCalculado = this.calcularValorTotalAguaOuEsgotoPorCategoria(colecaoCalcularValoresAguaEsgotoHelper,ConstantesSistema.CALCULAR_AGUA);
+	        			 BigDecimal valorTotalEsgotoCalculado = this.calcularValorTotalAguaOuEsgotoPorCategoria(colecaoCalcularValoresAguaEsgotoHelper,ConstantesSistema.CALCULAR_ESGOTO);
 	        			 
-	        			 // Valor total de esgoto
-	        			 BigDecimal valorTotalEsgotoCalculado = this
-	        			 .calcularValorTotalAguaOuEsgotoPorCategoria(
-	        					 colecaoCalcularValoresAguaEsgotoHelper,
-	        					 ConstantesSistema.CALCULAR_ESGOTO);
-	        			 
-	        			 // Consumo de Agua
 	        			 Integer consumoAguaCalculado = null;
 	        			 
-	        			 consumoAguaCalculado = this
-	        			 .calcularConsumoTotalAguaOuEsgotoPorCategoria(
-	        					 colecaoCalcularValoresAguaEsgotoHelper,
-	        					 ConstantesSistema.CALCULAR_AGUA);
+	        			 consumoAguaCalculado = this.calcularConsumoTotalAguaOuEsgotoPorCategoria(colecaoCalcularValoresAguaEsgotoHelper, ConstantesSistema.CALCULAR_AGUA);
 	        			 
-	        			 // Consumo de Esgoto
 	        			 Integer consumoEsgotoCalculado = null;
 	        			 
-	        			 consumoEsgotoCalculado = this
-	        			 .calcularConsumoTotalAguaOuEsgotoPorCategoria(
-	        					 colecaoCalcularValoresAguaEsgotoHelper,
-	        					 ConstantesSistema.CALCULAR_ESGOTO);
+	        			 consumoEsgotoCalculado = this.calcularConsumoTotalAguaOuEsgotoPorCategoria(colecaoCalcularValoresAguaEsgotoHelper, ConstantesSistema.CALCULAR_ESGOTO);
 	        			 
-	        			 Collection<MovimentoContaPrefaturadaCategoria> colMovimentoContaPrefaturadaCategoria = helper
-	        			 .getMovimentoContaPrefaturadaCategorias();
+	        			 Collection<MovimentoContaPrefaturadaCategoria> colMovimentoContaPrefaturadaCategoria = helper.getMovimentoContaPrefaturadaCategorias();
 	        			 
 	        			 BigDecimal valorAgua = new BigDecimal(0);
 	        			 BigDecimal valorEsgoto = new BigDecimal(0);
@@ -822,60 +716,31 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        			 BigDecimal valorImposto = new BigDecimal(0);
 	        			 
 	        			 for (MovimentoContaPrefaturadaCategoria helperCategoria : colMovimentoContaPrefaturadaCategoria) {
-	        				 // Somamos os valores
-	        				 valorAgua = valorAgua.add(helperCategoria
-	        						 .getValorFaturadoAgua());
-	        				 valorEsgoto = valorEsgoto.add(helperCategoria
-	        						 .getValorFaturadoEsgoto());
+	        				 valorAgua = valorAgua.add(helperCategoria.getValorFaturadoAgua());
+	        				 valorEsgoto = valorEsgoto.add(helperCategoria.getValorFaturadoEsgoto());
 	        				 consumoAgua += helperCategoria.getConsumoFaturadoAgua();
-	        				 consumoEsgoto += helperCategoria
-	        				 .getConsumoFaturadoEsgoto();
+	        				 consumoEsgoto += helperCategoria.getConsumoFaturadoEsgoto();
 	        			 }
 	        			 
-	        			 BigDecimal diferencaValorAgua = valorAgua
-	        			 .subtract(valorTotalAguaCalculado);
-	        			 BigDecimal diferencaValorEsgoto = valorEsgoto
-	        			 .subtract(valorTotalEsgotoCalculado);
+	        			 BigDecimal diferencaValorAgua = valorAgua.subtract(valorTotalAguaCalculado);
+	        			 BigDecimal diferencaValorEsgoto = valorEsgoto.subtract(valorTotalEsgotoCalculado);
 	        			 
 	        			 if (efetuarRateio
-	        					 && ((diferencaValorAgua.doubleValue() > .01d || diferencaValorAgua
-	        							 .doubleValue() < -.01d)
-	        							 || (diferencaValorEsgoto.doubleValue() > .01d || diferencaValorEsgoto
-	        									 .doubleValue() < -.01d)
-	        									 || consumoAguaCalculado.intValue() != consumoAgua
-	        									 .intValue() || consumoEsgotoCalculado
-	        									 .intValue() != consumoEsgoto.intValue())) {
+	        					 && ((diferencaValorAgua.doubleValue() > .01d || diferencaValorAgua.doubleValue() < -.01d)
+	        							 || (diferencaValorEsgoto.doubleValue() > .01d || diferencaValorEsgoto.doubleValue() < -.01d)
+    									 || consumoAguaCalculado.intValue() != consumoAgua.intValue() 
+    									 || consumoEsgotoCalculado.intValue() != consumoEsgoto.intValue())) {
+	        				 
 	        				 FaturamentoImediatoAjuste faturamentoImediatoAjuste = new FaturamentoImediatoAjuste();
-	        				 
 	        				 faturamentoImediatoAjuste.setConta(contaAtualizacao);
+	        				 faturamentoImediatoAjuste.setNumeroConsumoAgua(consumoAgua - consumoAguaCalculado);
+	        				 faturamentoImediatoAjuste.setNumeroConsumoEsgoto(consumoEsgoto - consumoEsgotoCalculado);
+	        				 faturamentoImediatoAjuste.setValorCobradoAgua(valorAgua.subtract(valorTotalAguaCalculado));
+	        				 faturamentoImediatoAjuste.setValorCobradoEsgoto(valorEsgoto.subtract(valorTotalEsgotoCalculado));
+	        				 faturamentoImediatoAjuste.setUltimaAlteracao(new Date());
 	        				 
-	        				 faturamentoImediatoAjuste
-	        				 .setNumeroConsumoAgua(consumoAgua
-	        						 - consumoAguaCalculado);
-	        				 
-	        				 faturamentoImediatoAjuste
-	        				 .setNumeroConsumoEsgoto(consumoEsgoto
-	        						 - consumoEsgotoCalculado);
-	        				 
-	        				 faturamentoImediatoAjuste.setValorCobradoAgua(valorAgua
-	        						 .subtract(valorTotalAguaCalculado));
-	        				 
-	        				 faturamentoImediatoAjuste
-	        				 .setValorCobradoEsgoto(valorEsgoto
-	        						 .subtract(valorTotalEsgotoCalculado));
-	        				 
-	        				 faturamentoImediatoAjuste
-	        				 .setUltimaAlteracao(new Date());
-	        				 
-	        				 // Inserimos os dados
-	        				 this.getControladorBatch().inserirObjetoParaBatch(
-	        						 faturamentoImediatoAjuste);
-	        				 
-	        				 // Atualizando o consumo de acordo com o movimento do
-	        				 // celular
-	        				 this.atualizarConsumoMovimentoCelular(contaAtualizacao,
-	        						 consumoAgua, consumoAguaCalculado,
-	        						 consumoEsgoto, consumoEsgotoCalculado);
+	        				 this.getControladorBatch().inserirObjetoParaBatch(faturamentoImediatoAjuste);
+	        				 this.atualizarConsumoMovimentoCelular(contaAtualizacao,consumoAgua, consumoAguaCalculado, consumoEsgoto, consumoEsgotoCalculado);
 	        			 }
 	        			 
 	        			 if (contaAtualizacao != null) {
@@ -5644,211 +5509,124 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	 * @param rota
 	 * @throws ErroRepositorioException
 	 */
-	private void incluirMedicaoHistorico(
-			MovimentoContaPrefaturada movimentoContaPreFaturada)
-			throws ErroRepositorioException, ControladorException {
-		// FS0005 Verificar Existência do histórico de Medição
-		// 1.
-		MedicaoHistorico medicaoHistorico = this
-				.verificarExistenciaHistoricoMedicao(movimentoContaPreFaturada);
+	private void incluirMedicaoHistorico(MovimentoContaPrefaturada movimentoContaPreFaturada) throws ErroRepositorioException, ControladorException {
+
+		MedicaoHistorico medicaoHistorico = this.verificarExistenciaHistoricoMedicao(movimentoContaPreFaturada);
 
 		if (medicaoHistorico == null) {
 
-			/*
-			 * [UC0595] Gerar Histórico de Medicao
-			 * ------------------------------
-			 * ------------------------------------
-			 * --------------------------------------------------------------
-			 */
-			SistemaParametro sistemaParametro = this.getControladorUtil()
-					.pesquisarParametrosDoSistema();
+			SistemaParametro sistemaParametro = this.getControladorUtil().pesquisarParametrosDoSistema();
 
 			FiltroImovel filtroImovel = new FiltroImovel();
-			filtroImovel
-					.adicionarCaminhoParaCarregamentoEntidade("hidrometroInstalacaoHistorico");
-			filtroImovel
-					.adicionarCaminhoParaCarregamentoEntidade("ligacaoAgua.hidrometroInstalacaoHistorico");
+			filtroImovel.adicionarCaminhoParaCarregamentoEntidade("hidrometroInstalacaoHistorico");
+			filtroImovel.adicionarCaminhoParaCarregamentoEntidade("ligacaoAgua.hidrometroInstalacaoHistorico");
+			filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID, movimentoContaPreFaturada.getImovel().getId()));
 
-			filtroImovel.adicionarParametro(new ParametroSimples(
-					FiltroImovel.ID, movimentoContaPreFaturada.getImovel()
-							.getId()));
-
-			Imovel imovel = (Imovel) Util.retonarObjetoDeColecao(this
-					.getControladorUtil().pesquisar(filtroImovel,
-							Imovel.class.getName()));
+			Imovel imovel = (Imovel) Util.retonarObjetoDeColecao(this.getControladorUtil().pesquisar(filtroImovel,Imovel.class.getName()));
 
 			if (movimentoContaPreFaturada.getFaturamentoGrupo() != null) {
-				sistemaParametro.setAnoMesFaturamento(movimentoContaPreFaturada
-						.getFaturamentoGrupo().getAnoMesReferencia());
+				sistemaParametro.setAnoMesFaturamento(movimentoContaPreFaturada.getFaturamentoGrupo().getAnoMesReferencia());
 			}
 
-			medicaoHistorico = this.getControladorMicromedicao()
-					.gerarHistoricoMedicao(
-							movimentoContaPreFaturada.getMedicaoTipo(), imovel,
-							movimentoContaPreFaturada.getFaturamentoGrupo(),
-							sistemaParametro);
-			/*
-			 * FIM [UC0595] Gerar Histórico de Medicao
-			 * --------------------------
-			 * ----------------------------------------
-			 * --------------------------------------------------------------
-			 */
+			medicaoHistorico = this.getControladorMicromedicao().gerarHistoricoMedicao(movimentoContaPreFaturada.getMedicaoTipo(), imovel,
+							movimentoContaPreFaturada.getFaturamentoGrupo(),sistemaParametro);
 
-			medicaoHistorico
-					.setImovel((movimentoContaPreFaturada.getMedicaoTipo()
-							.getId().intValue() == MedicaoTipo.POCO) ? movimentoContaPreFaturada
-							.getImovel() : null);
+			medicaoHistorico.setImovel(
+					(movimentoContaPreFaturada.getMedicaoTipo().getId().intValue() == MedicaoTipo.POCO) ? movimentoContaPreFaturada.getImovel() : null);
 
-			// 1.2
 			if (movimentoContaPreFaturada.getMedicaoTipo().getId().intValue() == MedicaoTipo.LIGACAO_AGUA) {
 				LigacaoAgua ligacaoAgua = new LigacaoAgua();
-				ligacaoAgua
-						.setId(movimentoContaPreFaturada.getImovel().getId());
+				ligacaoAgua.setId(movimentoContaPreFaturada.getImovel().getId());
 				medicaoHistorico.setLigacaoAgua(ligacaoAgua);
 			} else {
 				medicaoHistorico.setLigacaoAgua(null);
 			}
 
-			// 1.3
-			medicaoHistorico.setMedicaoTipo(movimentoContaPreFaturada
-					.getMedicaoTipo());
-			// 1.4
-			medicaoHistorico.setAnoMesReferencia(movimentoContaPreFaturada
-					.getFaturamentoGrupo().getAnoMesReferencia());
-			// 1.5
-			medicaoHistorico
-					.setNumeroVezesConsecutivasOcorrenciaAnormalidade(null);
+			medicaoHistorico.setMedicaoTipo(movimentoContaPreFaturada.getMedicaoTipo());
+			medicaoHistorico.setAnoMesReferencia(movimentoContaPreFaturada.getFaturamentoGrupo().getAnoMesReferencia());
+			medicaoHistorico.setNumeroVezesConsecutivasOcorrenciaAnormalidade(null);
+			medicaoHistorico.setDataLeituraAtualInformada(movimentoContaPreFaturada.getDataHoraLeitura());
+			medicaoHistorico.setDataLeituraCampo(movimentoContaPreFaturada.getDataHoraLeitura());
+			medicaoHistorico.setDataLeituraAtualFaturamento(movimentoContaPreFaturada.getDataHoraLeitura());
 
-			// 1.9
-			medicaoHistorico
-					.setDataLeituraAtualInformada(movimentoContaPreFaturada
-							.getDataHoraLeitura());
-			medicaoHistorico.setDataLeituraCampo(movimentoContaPreFaturada
-					.getDataHoraLeitura());
-
-			// 1.11
-			medicaoHistorico
-					.setDataLeituraAtualFaturamento(movimentoContaPreFaturada
-							.getDataHoraLeitura());
-
-			// 1.10, 1.12
 			if (movimentoContaPreFaturada.getLeituraFaturamento() != null) {
-				medicaoHistorico
-						.setLeituraAtualFaturamento(movimentoContaPreFaturada
-								.getLeituraFaturamento());
+				medicaoHistorico.setLeituraAtualFaturamento(movimentoContaPreFaturada.getLeituraFaturamento());
 			} else {
 				medicaoHistorico.setLeituraAtualFaturamento(0);
 			}
 
 			if (movimentoContaPreFaturada.getLeituraHidrometro() != null) {
-				medicaoHistorico
-						.setLeituraAtualInformada(movimentoContaPreFaturada
-								.getLeituraHidrometro());
-				medicaoHistorico.setLeituraCampo(movimentoContaPreFaturada
-						.getLeituraHidrometro());
+				medicaoHistorico.setLeituraAtualInformada(movimentoContaPreFaturada.getLeituraHidrometro());
+				medicaoHistorico.setLeituraCampo(movimentoContaPreFaturada.getLeituraHidrometro());
 			} else {
 				medicaoHistorico.setLeituraAtualInformada(null);
 				medicaoHistorico.setLeituraCampo(null);
 			}
 
-			// 1.13
-			if (movimentoContaPreFaturada.getConsumoMedido() != null
-					&& movimentoContaPreFaturada.getConsumoMedido() > ConstantesSistema.ZERO) {
-				medicaoHistorico.setNumeroConsumoMes(movimentoContaPreFaturada
-						.getConsumoMedido());
+			if (movimentoContaPreFaturada.getConsumoMedido() != null && movimentoContaPreFaturada.getConsumoMedido() > ConstantesSistema.ZERO) {
+				medicaoHistorico.setNumeroConsumoMes(movimentoContaPreFaturada.getConsumoMedido());
 			} else {
 				medicaoHistorico.setNumeroConsumoMes(null);
 			}
 
-			// Adicionamos o leiturista da rota na medicao historico
 			FiltroRota filtroRota = new FiltroRota();
-			filtroRota.adicionarParametro(new ParametroSimples(
-					FiltroRota.ID_ROTA, movimentoContaPreFaturada.getRota()
-							.getId()));
-			Collection<Rota> colRota = this.getControladorUtil().pesquisar(
-					filtroRota, Rota.class.getName());
+			filtroRota.adicionarParametro(new ParametroSimples(FiltroRota.ID_ROTA, movimentoContaPreFaturada.getRota().getId()));
+			
+			Collection<Rota> colRota = this.getControladorUtil().pesquisar(filtroRota, Rota.class.getName());
 			Rota rota = (Rota) colRota.iterator().next();
 			medicaoHistorico.setLeiturista(rota.getLeiturista());
 
-			// 1.15
 			medicaoHistorico.setLeituraProcessamentoMovimento(new Date());
-
 			medicaoHistorico.setFuncionario(null);
 
-			// 1.17
-			if (movimentoContaPreFaturada.getLeituraAnormalidadeLeitura() != null
-					&& !movimentoContaPreFaturada
-							.getLeituraAnormalidadeLeitura().equals("")) {
-				medicaoHistorico
-						.setLeituraAnormalidadeInformada(movimentoContaPreFaturada
-								.getLeituraAnormalidadeLeitura());
+			if (movimentoContaPreFaturada.getLeituraAnormalidadeLeitura() != null && !movimentoContaPreFaturada.getLeituraAnormalidadeLeitura().equals("")) {
+				medicaoHistorico.setLeituraAnormalidadeInformada(movimentoContaPreFaturada.getLeituraAnormalidadeLeitura());
 			} else {
 				medicaoHistorico.setLeituraAnormalidadeInformada(null);
 
 			}
 
-			if (movimentoContaPreFaturada.getLeituraAnormalidadeLeitura() != null
-					&& !movimentoContaPreFaturada
-							.getLeituraAnormalidadeLeitura().equals("")) {
-				medicaoHistorico
-						.setLeituraAnormalidadeFaturamento(movimentoContaPreFaturada
-								.getLeituraAnormalidadeFaturamento());
+			if (movimentoContaPreFaturada.getLeituraAnormalidadeLeitura() != null && !movimentoContaPreFaturada.getLeituraAnormalidadeLeitura().equals("")) {
+				medicaoHistorico.setLeituraAnormalidadeFaturamento(movimentoContaPreFaturada.getLeituraAnormalidadeFaturamento());
 			} else {
 				medicaoHistorico.setLeituraAnormalidadeFaturamento(null);
 
 			}
 
-			// 1.19
 			LeituraSituacao leituraSituacao = new LeituraSituacao();
 
-			if (movimentoContaPreFaturada.getLeituraHidrometro() == null
-					|| movimentoContaPreFaturada.getLeituraHidrometro() == 0) {
-
+			if (movimentoContaPreFaturada.getLeituraHidrometro() == null|| movimentoContaPreFaturada.getLeituraHidrometro() == 0) {
 				leituraSituacao.setId(LeituraSituacao.NAO_REALIZADA);
-			} else if (movimentoContaPreFaturada.getIndicadorSituacaoLeitura() != null
-					&& movimentoContaPreFaturada.getIndicadorSituacaoLeitura()
-							.equals(ConstantesSistema.INDICADOR_USO_ATIVO)) {
+			
+			} else if (movimentoContaPreFaturada.getIndicadorSituacaoLeitura() != null 
+					&& movimentoContaPreFaturada.getIndicadorSituacaoLeitura().equals(ConstantesSistema.INDICADOR_USO_ATIVO)) {
 
 				leituraSituacao.setId(LeituraSituacao.CONFIRMADA);
-
 			} else {
 				leituraSituacao.setId(LeituraSituacao.REALIZADA);
 			}
 
 			medicaoHistorico.setLeituraSituacaoAtual(leituraSituacao);
 
-			// 1.20 - Ja setado mais acima
-			// 1.21
 			HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico = new HidrometroInstalacaoHistorico();
 
-			// TODO Verificar se o devemos salvar assim
 			if (movimentoContaPreFaturada.getMedicaoTipo().getId().intValue() == MedicaoTipo.LIGACAO_AGUA) {
-				hidrometroInstalacaoHistorico.setId(movimentoContaPreFaturada
-						.getImovel().getLigacaoAgua()
-						.getHidrometroInstalacaoHistorico().getId());
-				medicaoHistorico
-						.setHidrometroInstalacaoHistorico(hidrometroInstalacaoHistorico);
+				hidrometroInstalacaoHistorico.setId(movimentoContaPreFaturada.getImovel().getLigacaoAgua().getHidrometroInstalacaoHistorico().getId());
+				medicaoHistorico.setHidrometroInstalacaoHistorico(hidrometroInstalacaoHistorico);
+
 			} else {
-				hidrometroInstalacaoHistorico
-						.setId(movimentoContaPreFaturada.getImovel()
-								.getHidrometroInstalacaoHistorico().getId());
-				medicaoHistorico
-						.setHidrometroInstalacaoHistorico(hidrometroInstalacaoHistorico);
+				hidrometroInstalacaoHistorico.setId(movimentoContaPreFaturada.getImovel().getHidrometroInstalacaoHistorico().getId());
+				medicaoHistorico.setHidrometroInstalacaoHistorico(hidrometroInstalacaoHistorico);
 			}
 
-			// 1.22
 			medicaoHistorico.setConsumoMedioHidrometro(null);
 			medicaoHistorico.setIndicadorAnalisado(ConstantesSistema.NAO);
 			medicaoHistorico.setUltimaAlteracao(new Date());
 
 			if (medicaoHistorico.getId() != null) {
-				// repositorioUtil.atualizar( medicaoHistorico );
-				RepositorioMicromedicaoHBM.getInstancia()
-						.atualizarMedicaoHistoricoProcessoMOBILE(
-								medicaoHistorico);
+				RepositorioMicromedicaoHBM.getInstancia().atualizarMedicaoHistoricoProcessoMOBILE(medicaoHistorico);
 			} else {
-				getControladorBatch().inserirObjetoParaBatchSemTransacao(
-						medicaoHistorico);
+				getControladorBatch().inserirObjetoParaBatchSemTransacao(medicaoHistorico);
 			}
 		}
 	}
@@ -16243,30 +16021,13 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		return mensagem;
 	}
 	
-	/**
-	 * Metodo para obter a diferenca entre atividades do cronograma,
-	 * do mês atual e mês anterior
-	 * 
-	 * @author Pamela Gatinho
-	 * @date 31/07/2013
-	 * 
-	 * @param anoMesAtual
-	 * @param rota
-	 * @param idFaturamentoAtividade
-	 * 
-	 * @return diferencaDias
-	 * 
-	 * @throws ControladorException
-	 */
-	public long obterDiferencaDiasCronogramas(Integer anoMesAtual, Rota rota, Integer idFaturamentoAtividade)
-		throws ControladorException {
+	public long obterDiferencaDiasCronogramas(Integer anoMesAtual, Rota rota, Integer idFaturamentoAtividade) throws ControladorException {
 
 		long diferencaDatas = 0;
 		
 		anoMesAtual = rota.getFaturamentoGrupo().getAnoMesReferencia();
 		try {
-			Date dataCronogramaMesAtual = this.pesquisarFaturamentoAtividadeCronogramaDataPrevista(
-					rota.getFaturamentoGrupo().getId(),idFaturamentoAtividade, anoMesAtual);
+			Date dataCronogramaMesAtual = this.pesquisarFaturamentoAtividadeCronogramaDataPrevista(rota.getFaturamentoGrupo().getId(),idFaturamentoAtividade, anoMesAtual);
 			
 			Integer anoMesAnterior = Util.subtrairMesDoAnoMes(anoMesAtual, 1);
 			
@@ -16507,5 +16268,96 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			}
 		}
 		return ids;
+	}
+	
+public void faturarImoveisSeletivo(Collection<ImovelFaturamentoSeletivo> colecaoImoveis) throws ControladorException, ParseException {
+		
+		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+		
+		for (ImovelFaturamentoSeletivo imovelFaturamentoSeletivo : colecaoImoveis) {
+			
+			LigacaoAgua ligacaoAgua = getControladorMicromedicao().obterLigacaoAgua(imovelFaturamentoSeletivo.getIdImovel());
+			Imovel imovel = getControladorImovel().pesquisarImovel(imovelFaturamentoSeletivo.getIdImovel());
+			
+			Rota rota = getControladorMicromedicao().buscarRotaDoImovel(imovel.getId());
+			
+			Collection<Integer> idsImoveis = new ArrayList<Integer>();
+			idsImoveis.add(imovelFaturamentoSeletivo.getIdImovel());
+			
+			if (ligacaoAgua != null) {
+				
+				//this.prepararFaturamentoImovel(FaturamentoAtividade.FATURAR_GRUPO, rota, imovel.getId());
+				
+				MedicaoTipo medicaoTipo = new MedicaoTipo(MedicaoTipo.LIGACAO_AGUA);
+				Collection colecaoResumoFaturamento = new ArrayList();
+				
+				this.incluirMedicaoHistoricoFaturamentoSeletivo(ligacaoAgua, medicaoTipo, LigacaoTipo.LIGACAO_AGUA, imovelFaturamentoSeletivo.getLeitura(), imovelFaturamentoSeletivo.getAnormalidade(), imovelFaturamentoSeletivo.getDataLeitura());
+				
+				FaturamentoGrupo grupo = getControladorImovel().pesquisarGrupoImovel(ligacaoAgua.getId());
+				
+				FaturamentoAtivCronRota cronogramaFaturamentoRota = this.pesquisarFaturamentoAtivCronRotaPara(
+						rota.getId(), FaturamentoAtividade.FATURAR_GRUPO, grupo.getId(), grupo.getAnoMesReferencia()); 
+				
+				this.getControladorMicromedicao().consistirLeiturasCalcularConsumosImoveis(rota.getFaturamentoGrupo(), idsImoveis);
+				this.faturarImovel(grupo.getAnoMesReferencia(), FaturamentoAtividade.FATURAR_GRUPO.intValue(), 
+						sistemaParametro, cronogramaFaturamentoRota, colecaoResumoFaturamento, imovel, false, grupo);
+				
+				if (colecaoResumoFaturamento != null && !colecaoResumoFaturamento.isEmpty()) {
+					this.inserirResumoSimulacaoFaturamento(colecaoResumoFaturamento);
+
+					if (colecaoResumoFaturamento != null) {
+						colecaoResumoFaturamento.clear();
+						colecaoResumoFaturamento = null;
+					}
+				}
+
+			}
+		}
+	}
+	
+	private MedicaoHistorico incluirMedicaoHistoricoFaturamentoSeletivo(LigacaoAgua ligacaoAgua, MedicaoTipo medicaoTipo,
+			Integer idLigacaoTipo, Integer leituraAtualInformada, Integer anormalidade, String dataLeitura) throws ControladorException, ParseException {
+		
+		FaturamentoGrupo grupo = getControladorImovel().pesquisarGrupoImovel(ligacaoAgua.getId());
+		Integer anoMesAnterior = Util.subtrairMesDoAnoMes(new Integer(grupo.getAnoMesReferencia()).intValue(), 1);
+
+		MedicaoHistorico medicaoAnterior = getControladorMicromedicao().pesquisarMedicaoHistoricoAnterior(ligacaoAgua.getId(),anoMesAnterior, medicaoTipo.getId());
+
+		boolean houveIntslacaoHidrometro = getControladorMicromedicao().verificarInstalacaoSubstituicaoHidrometro(ligacaoAgua.getId(),medicaoTipo);
+
+		int[] consumoMedioHidrometro = getControladorMicromedicao().obterVolumeMedioAguaEsgoto(ligacaoAgua.getId(),
+						grupo.getAnoMesReferencia(), idLigacaoTipo,houveIntslacaoHidrometro);
+
+		MedicaoHistorico medicaoHistorico = new MedicaoHistorico();
+
+		logger.info("ligacaoAgua: " + ligacaoAgua.getId() + ", anormalidade: " + anormalidade + ", data leitura:" + dataLeitura );
+		SimpleDateFormat dataFormatada = new SimpleDateFormat("dd/MM/yyyy");
+		Date dataLeituraInformada = dataFormatada.parse(dataLeitura);
+		
+		medicaoHistorico.setAnoMesReferencia(grupo.getAnoMesReferencia());
+		medicaoHistorico.setConsumoMedioHidrometro(consumoMedioHidrometro[0]);
+		medicaoHistorico.setDataLeituraAnteriorFaturamento(medicaoAnterior.getDataLeituraAtualFaturamento());
+		medicaoHistorico.setLeituraAnteriorFaturamento(medicaoAnterior.getLeituraAtualFaturamento());
+		medicaoHistorico.setLeituraAnteriorInformada(medicaoAnterior.getLeituraAnteriorInformada());
+		medicaoHistorico.setLeituraSituacaoAnterior(medicaoAnterior.getLeituraSituacaoAtual());
+		medicaoHistorico.setDataLeituraAtualInformada(dataLeituraInformada);
+		medicaoHistorico.setHidrometroInstalacaoHistorico(ligacaoAgua.getHidrometroInstalacaoHistorico());
+		medicaoHistorico.setLeituraSituacaoAtual(new LeituraSituacao(LeituraSituacao.REALIZADA));
+		medicaoHistorico.setLeituraAtualInformada(leituraAtualInformada);
+		medicaoHistorico.setLigacaoAgua(ligacaoAgua);
+		medicaoHistorico.setMedicaoTipo(medicaoTipo);
+		medicaoHistorico.setUltimaAlteracao(new Date());
+		medicaoHistorico.setIndicadorAnalisado(ConstantesSistema.NAO);
+		medicaoHistorico.setDataLeituraAtualFaturamento(dataLeituraInformada);
+		medicaoHistorico.setLeituraAtualFaturamento(leituraAtualInformada);
+		
+		if (anormalidade != null && !anormalidade.equals(new Integer(0))) {
+			medicaoHistorico.setLeituraAnormalidadeInformada(new LeituraAnormalidade(anormalidade));
+		}
+		
+		Integer idMedicao = (Integer) getControladorUtil().inserir(medicaoHistorico);
+		medicaoHistorico.setId(idMedicao);
+
+		return medicaoHistorico;
 	}
 }

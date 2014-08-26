@@ -14,176 +14,98 @@ import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 @ControleAlteracao
 public class LigacaoAgua extends ObjetoTransacao {
 	
-	
 	private static final long serialVersionUID = 1L;
 
-	
-	public static final int ATRIBUTOS_EFETUAR_LIGACAO = 257; // Operacao.OPERACAO_LIGACAO_AGUA_EFETUAR
-	public static final int ATRIBUTOS_ATUALIZAR_CONSUMO_MINIMO = 393; //Operacao.OPERACAO_CONSUMO_MINIMO_LIGACAO_AGUA_ATUALIZAR
-	public static final int ATRIBUTOS_EFETUAR_CORTE_LIGACAO_AGUA = 48; //Operacao.OPERACAO_CORTE_LIGACAO_AGUA_EFETUAR
-	public static final int ATRIBUTOS_EFETUAR_CORTE_ADMINISTRATIVO_LIGACAO_AGUA = 358;
-		//	Operacao.OPERACAO_CORTE_ADMINISTRATIVO_LIGACAO_AGUA_EFETUAR	
+	public static final int ATRIBUTOS_EFETUAR_LIGACAO = 257; 
+	public static final int ATRIBUTOS_ATUALIZAR_CONSUMO_MINIMO = 393; 
+	public static final int ATRIBUTOS_EFETUAR_CORTE_LIGACAO_AGUA = 48;
+	public static final int ATRIBUTOS_EFETUAR_CORTE_ADMINISTRATIVO_LIGACAO_AGUA = 358; 	
 	public static final int ATRIBUTOS_EFETUAR_LIGACAO_AGUA_INSTALACAO_HIDROMETRO = 706;
-			// Operacao.OPERACAO_EFETUAR_LIGACAO_AGUA_COM_INSTALACAO_HIDROMETRO_INT
 	public static final int ATRIBUTOS_EFETUAR_LIGACAO_AGUA_INSTALACAO_HIDROMETRO_SEM_RA = 882;
-			
 	public static final int ATRIBUTOS_EFETUAR_RESTABELECIMENTO_LIGACAO_AGUA_INSTALACAO_HIDROMETRO = 879;
-		// Operacao.OPERACAO_EFETUAR_RESTABELECIMENTO_LIGACAO_AGUA_COM_INSTALACAO_DE_HIDROMETRO
 	public static final int ATRIBUTOS_EFETUAR_RESTABELECIMENTO_LIGACAO_AGUA = 51;
-		// Operacao.OPERACAO_RESTABELECIMENTO_LIGACAO_AGUA_EFETUAR
 	public static final int ATRIBUTOS_EFETUAR_SUPRESSAO_LIGACAO_AGUA = 685;
-		// Operacao.OPERACAO_SUPRESSAO_LIGACAO_AGUA_EFETUAR
 	public static final int ATRIBUTOS_EFETUAR_RELIGACAO_AGUA = 50;
-		// Operacao.OPERACAO_RELIGACAO_AGUA_EFETUAR
 	public static final int ATRIBUTOS_ATUALIZAR_LIGACAO_AGUA = 422;
-		// Operacao.OPERACAO_ATUALIZAR_LIGACAO_AGUA
 	public static final int ATRIBUTOS_RELIGAR_IMOVEIS_CORTADOS_COM_CONSUMO_REAL = 1685; 
-		//Operacao.OPERACAO_RELIGAR_IMOVEIS_CORTADOS_COM_CONSUMO_REAL
 	
-	/** identifier field */
 	private Integer id;
-
-	/** nullable persistent field */
 	private Date dataImplantacao;
 
-	/** nullable persistent field */
 	@ControleAlteracao(funcionalidade=ATRIBUTOS_ATUALIZAR_LIGACAO_AGUA)
 	private Date dataLigacao;
 
-	/** nullable persistent field */
 	@ControleAlteracao(funcionalidade=ATRIBUTOS_EFETUAR_SUPRESSAO_LIGACAO_AGUA)	
 	private Date dataSupressao;
 
-	/** nullable persistent field */
 	private Date dataCorte;
 
-	/** nullable persistent field */
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_EFETUAR_RELIGACAO_AGUA, ATRIBUTOS_RELIGAR_IMOVEIS_CORTADOS_COM_CONSUMO_REAL})	
 	private Date dataReligacao;
 
-	/** nullable persistent field */
 	@ControleAlteracao(funcionalidade=ATRIBUTOS_ATUALIZAR_LIGACAO_AGUA)	
 	private Integer numeroSeloCorte;
 
-	/** nullable persistent field */
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_EFETUAR_SUPRESSAO_LIGACAO_AGUA, ATRIBUTOS_ATUALIZAR_LIGACAO_AGUA})	
 	private Integer numeroSeloSupressao;
 
-	/** nullable persistent field */	
 	private Date ultimaAlteracao;
+	private Short laguIcemissaocortesupressao;
+	private Imovel imovel;
+	private gcom.atendimentopublico.ligacaoagua.EmissaoOrdemCobrancaTipo emissaoOrdemCobrancaTipo;
+	private HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico;
+	private Date dataCorteAdministrativo;
+	private LigacaoOrigem ligacaoOrigem;
 
-	/** nullable persistent field */
 	@ControleAlteracao(funcionalidade=ATRIBUTOS_EFETUAR_RESTABELECIMENTO_LIGACAO_AGUA_INSTALACAO_HIDROMETRO)	
 	private Date dataRestabelecimentoAgua;
 
-	/** nullable persistent field */
 	@ControleAlteracao(funcionalidade=ATRIBUTOS_ATUALIZAR_CONSUMO_MINIMO)	
 	private Integer numeroConsumoMinimoAgua;
 
-	/** nullable persistent field */
-	private Short laguIcemissaocortesupressao;
-
-	/** nullable persistent field */
-	private Imovel imovel;
-
-	/** persistent field */
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_EFETUAR_SUPRESSAO_LIGACAO_AGUA,ATRIBUTOS_ATUALIZAR_LIGACAO_AGUA})	
-	private gcom.atendimentopublico.ligacaoagua.SupressaoTipo supressaoTipo;
+	private SupressaoTipo supressaoTipo;
 
-	/** persistent field */
-	private gcom.atendimentopublico.ligacaoagua.EmissaoOrdemCobrancaTipo emissaoOrdemCobrancaTipo;
 
-	/** persistent field */
-	@ControleAlteracao(value=FiltroLigacaoAgua.LIGACAO_AGUA_PERFIL,
-			funcionalidade={ATRIBUTOS_EFETUAR_LIGACAO, ATRIBUTOS_EFETUAR_LIGACAO_AGUA_INSTALACAO_HIDROMETRO,
+	@ControleAlteracao(value=FiltroLigacaoAgua.LIGACAO_AGUA_PERFIL,funcionalidade={ATRIBUTOS_EFETUAR_LIGACAO, ATRIBUTOS_EFETUAR_LIGACAO_AGUA_INSTALACAO_HIDROMETRO,
 				ATRIBUTOS_ATUALIZAR_LIGACAO_AGUA, ATRIBUTOS_EFETUAR_LIGACAO_AGUA_INSTALACAO_HIDROMETRO_SEM_RA})		
-	private gcom.atendimentopublico.ligacaoagua.LigacaoAguaPerfil ligacaoAguaPerfil;
+	private LigacaoAguaPerfil ligacaoAguaPerfil;
 
-	/** persistent field */
-	private HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico;
-
-	/** persistent field */
-	@ControleAlteracao(value=FiltroLigacaoAgua.LIGACAO_AGUA_DIAMETRO,
-			funcionalidade={ATRIBUTOS_EFETUAR_LIGACAO, ATRIBUTOS_EFETUAR_LIGACAO_AGUA_INSTALACAO_HIDROMETRO,
+	@ControleAlteracao(value=FiltroLigacaoAgua.LIGACAO_AGUA_DIAMETRO, funcionalidade={ATRIBUTOS_EFETUAR_LIGACAO, ATRIBUTOS_EFETUAR_LIGACAO_AGUA_INSTALACAO_HIDROMETRO,
 				ATRIBUTOS_ATUALIZAR_LIGACAO_AGUA, ATRIBUTOS_EFETUAR_LIGACAO_AGUA_INSTALACAO_HIDROMETRO_SEM_RA})	
-	private gcom.atendimentopublico.ligacaoagua.LigacaoAguaDiametro ligacaoAguaDiametro;
+	private LigacaoAguaDiametro ligacaoAguaDiametro;
 
-	/** persistent field */
-	@ControleAlteracao(value=FiltroLigacaoAgua.CORTE_TIPO,
-			funcionalidade={ATRIBUTOS_EFETUAR_CORTE_LIGACAO_AGUA,ATRIBUTOS_EFETUAR_CORTE_ADMINISTRATIVO_LIGACAO_AGUA,
+	@ControleAlteracao(value=FiltroLigacaoAgua.CORTE_TIPO, funcionalidade={ATRIBUTOS_EFETUAR_CORTE_LIGACAO_AGUA,ATRIBUTOS_EFETUAR_CORTE_ADMINISTRATIVO_LIGACAO_AGUA,
 				ATRIBUTOS_ATUALIZAR_LIGACAO_AGUA})		
-	private gcom.atendimentopublico.ligacaoagua.CorteTipo corteTipo;
+	private CorteTipo corteTipo;
 
-	/** persistent field */
-	@ControleAlteracao(value=FiltroLigacaoAgua.LIGACAO_AGUA_MATERIAL,
-			funcionalidade={ATRIBUTOS_EFETUAR_LIGACAO,ATRIBUTOS_EFETUAR_LIGACAO_AGUA_INSTALACAO_HIDROMETRO,
+	@ControleAlteracao(value=FiltroLigacaoAgua.LIGACAO_AGUA_MATERIAL, funcionalidade={ATRIBUTOS_EFETUAR_LIGACAO,ATRIBUTOS_EFETUAR_LIGACAO_AGUA_INSTALACAO_HIDROMETRO,
 				ATRIBUTOS_ATUALIZAR_LIGACAO_AGUA, ATRIBUTOS_EFETUAR_LIGACAO_AGUA_INSTALACAO_HIDROMETRO_SEM_RA})	
-	private gcom.atendimentopublico.ligacaoagua.LigacaoAguaMaterial ligacaoAguaMaterial;
+	private LigacaoAguaMaterial ligacaoAguaMaterial;
 
-	/** nullable persistent field */
-	@ControleAlteracao(value=FiltroLigacaoAgua.CORTE_MOTIVO,
-			funcionalidade={ATRIBUTOS_EFETUAR_CORTE_LIGACAO_AGUA,
-				ATRIBUTOS_ATUALIZAR_LIGACAO_AGUA})		
-	private gcom.atendimentopublico.ligacaoagua.MotivoCorte motivoCorte;
+	@ControleAlteracao(value=FiltroLigacaoAgua.CORTE_MOTIVO, funcionalidade={ATRIBUTOS_EFETUAR_CORTE_LIGACAO_AGUA, ATRIBUTOS_ATUALIZAR_LIGACAO_AGUA})		
+	private MotivoCorte motivoCorte;
 
-	/** nullable persistent field */
 	@ControleAlteracao(funcionalidade={ATRIBUTOS_EFETUAR_SUPRESSAO_LIGACAO_AGUA,ATRIBUTOS_ATUALIZAR_LIGACAO_AGUA})	
 	private SupressaoMotivo supressaoMotivo;
 
-	/** nullable persistent field */
-	private Date dataCorteAdministrativo;
-	
-	@ControleAlteracao(value=FiltroLigacaoAgua.RAMAL_LOCAL_LIGACAO,
-			funcionalidade={ATRIBUTOS_EFETUAR_LIGACAO,ATRIBUTOS_EFETUAR_LIGACAO_AGUA_INSTALACAO_HIDROMETRO,
+	@ControleAlteracao(value=FiltroLigacaoAgua.RAMAL_LOCAL_LIGACAO, funcionalidade={ATRIBUTOS_EFETUAR_LIGACAO,ATRIBUTOS_EFETUAR_LIGACAO_AGUA_INSTALACAO_HIDROMETRO,
 				ATRIBUTOS_ATUALIZAR_LIGACAO_AGUA, ATRIBUTOS_EFETUAR_LIGACAO_AGUA_INSTALACAO_HIDROMETRO_SEM_RA})
 	private RamalLocalInstalacao ramalLocalInstalacao;
 	
-	/** nullable persistent field */
-	@ControleAlteracao(funcionalidade={ATRIBUTOS_EFETUAR_LIGACAO,
-			ATRIBUTOS_EFETUAR_LIGACAO_AGUA_INSTALACAO_HIDROMETRO,ATRIBUTOS_ATUALIZAR_LIGACAO_AGUA,
+	@ControleAlteracao(funcionalidade={ATRIBUTOS_EFETUAR_LIGACAO, ATRIBUTOS_EFETUAR_LIGACAO_AGUA_INSTALACAO_HIDROMETRO,ATRIBUTOS_ATUALIZAR_LIGACAO_AGUA,
 			ATRIBUTOS_EFETUAR_LIGACAO_AGUA_INSTALACAO_HIDROMETRO_SEM_RA})			
 	private String numeroLacre;
 	
-	/** nullable persistent field */
-	private LigacaoOrigem ligacaoOrigem;
-
-	public LigacaoOrigem getLigacaoOrigem() {
-		return ligacaoOrigem;
-	}
-
-	public void setLigacaoOrigem(LigacaoOrigem ligacaoOrigem) {
-		this.ligacaoOrigem = ligacaoOrigem;
-	}
-
-	/**
-	 * @return Retorna o campo numeroLacre.
-	 */
-	public String getNumeroLacre() {
-		return numeroLacre;
-	}
-
-	/**
-	 * @param numeroLacre O numeroLacre a ser setado.
-	 */
-	public void setNumeroLacre(String numeroLacre) {
-		this.numeroLacre = numeroLacre;
-	}
-	
+	@SuppressWarnings("rawtypes")
 	public Set medicaoHistoricos;
 	
-	public Set getMedicaoHistoricos() {
-		return medicaoHistoricos;
+	public LigacaoAgua() {
 	}
-
-	public void setMedicaoHistoricos(Set medicaoHistoricos) {
-		this.medicaoHistoricos = medicaoHistoricos;
-	}
-
-	/** full constructor */
+	
 	public LigacaoAgua(
 			Date dataImplantacao,
 			Date dataLigacao,
@@ -231,11 +153,6 @@ public class LigacaoAgua extends ObjetoTransacao {
 		this.supressaoMotivo = supressaoMotivo;
 	}
 
-	/** default constructor */
-	public LigacaoAgua() {
-	}
-
-	/** minimal constructor */
 	public LigacaoAgua(
 			gcom.atendimentopublico.ligacaoagua.SupressaoTipo supressaoTipo,
 			gcom.atendimentopublico.ligacaoagua.EmissaoOrdemCobrancaTipo emissaoOrdemCobrancaTipo,
@@ -357,30 +274,27 @@ public class LigacaoAgua extends ObjetoTransacao {
 		this.imovel = imovel;
 	}
 
-	public gcom.atendimentopublico.ligacaoagua.SupressaoTipo getSupressaoTipo() {
+	public SupressaoTipo getSupressaoTipo() {
 		return this.supressaoTipo;
 	}
 
-	public void setSupressaoTipo(
-			gcom.atendimentopublico.ligacaoagua.SupressaoTipo supressaoTipo) {
+	public void setSupressaoTipo(SupressaoTipo supressaoTipo) {
 		this.supressaoTipo = supressaoTipo;
 	}
 
-	public gcom.atendimentopublico.ligacaoagua.EmissaoOrdemCobrancaTipo getEmissaoOrdemCobrancaTipo() {
+	public EmissaoOrdemCobrancaTipo getEmissaoOrdemCobrancaTipo() {
 		return this.emissaoOrdemCobrancaTipo;
 	}
 
-	public void setEmissaoOrdemCobrancaTipo(
-			gcom.atendimentopublico.ligacaoagua.EmissaoOrdemCobrancaTipo emissaoOrdemCobrancaTipo) {
+	public void setEmissaoOrdemCobrancaTipo(EmissaoOrdemCobrancaTipo emissaoOrdemCobrancaTipo) {
 		this.emissaoOrdemCobrancaTipo = emissaoOrdemCobrancaTipo;
 	}
 
-	public gcom.atendimentopublico.ligacaoagua.LigacaoAguaPerfil getLigacaoAguaPerfil() {
+	public LigacaoAguaPerfil getLigacaoAguaPerfil() {
 		return this.ligacaoAguaPerfil;
 	}
 
-	public void setLigacaoAguaPerfil(
-			gcom.atendimentopublico.ligacaoagua.LigacaoAguaPerfil ligacaoAguaPerfil) {
+	public void setLigacaoAguaPerfil(LigacaoAguaPerfil ligacaoAguaPerfil) {
 		this.ligacaoAguaPerfil = ligacaoAguaPerfil;
 	}
 
@@ -388,8 +302,7 @@ public class LigacaoAgua extends ObjetoTransacao {
 		return this.hidrometroInstalacaoHistorico;
 	}
 
-	public void setHidrometroInstalacaoHistorico(
-			HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico) {
+	public void setHidrometroInstalacaoHistorico(HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico) {
 		this.hidrometroInstalacaoHistorico = hidrometroInstalacaoHistorico;
 	}
 
@@ -397,35 +310,31 @@ public class LigacaoAgua extends ObjetoTransacao {
 		return this.ligacaoAguaDiametro;
 	}
 
-	public void setLigacaoAguaDiametro(
-			gcom.atendimentopublico.ligacaoagua.LigacaoAguaDiametro ligacaoAguaDiametro) {
+	public void setLigacaoAguaDiametro(LigacaoAguaDiametro ligacaoAguaDiametro) {
 		this.ligacaoAguaDiametro = ligacaoAguaDiametro;
 	}
 
-	public gcom.atendimentopublico.ligacaoagua.CorteTipo getCorteTipo() {
+	public CorteTipo getCorteTipo() {
 		return this.corteTipo;
 	}
 
-	public void setCorteTipo(
-			gcom.atendimentopublico.ligacaoagua.CorteTipo corteTipo) {
+	public void setCorteTipo(CorteTipo corteTipo) {
 		this.corteTipo = corteTipo;
 	}
 
-	public gcom.atendimentopublico.ligacaoagua.LigacaoAguaMaterial getLigacaoAguaMaterial() {
+	public LigacaoAguaMaterial getLigacaoAguaMaterial() {
 		return this.ligacaoAguaMaterial;
 	}
 
-	public void setLigacaoAguaMaterial(
-			gcom.atendimentopublico.ligacaoagua.LigacaoAguaMaterial ligacaoAguaMaterial) {
+	public void setLigacaoAguaMaterial(LigacaoAguaMaterial ligacaoAguaMaterial) {
 		this.ligacaoAguaMaterial = ligacaoAguaMaterial;
 	}
 
-	public gcom.atendimentopublico.ligacaoagua.MotivoCorte getMotivoCorte() {
+	public MotivoCorte getMotivoCorte() {
 		return this.motivoCorte;
 	}
 
-	public void setMotivoCorte(
-			gcom.atendimentopublico.ligacaoagua.MotivoCorte motivoCorte) {
+	public void setMotivoCorte(MotivoCorte motivoCorte) {
 		this.motivoCorte = motivoCorte;
 	}
 
@@ -462,24 +371,15 @@ public class LigacaoAgua extends ObjetoTransacao {
 		filtroLigacaoAgua.adicionarCaminhoParaCarregamentoEntidade("motivoCorte");
 		filtroLigacaoAgua.adicionarCaminhoParaCarregamentoEntidade("supressaoMotivo");
 
-		filtroLigacaoAgua.adicionarParametro(
-			new ParametroSimples(FiltroLigacaoAgua.ID, 
-				this.getId()));
+		filtroLigacaoAgua.adicionarParametro(new ParametroSimples(FiltroLigacaoAgua.ID, this.getId()));
 		
 		return filtroLigacaoAgua;
 	}
 
-	/**
-	 * @return Retorna o campo dataRestabelecimentoAgua.
-	 */
 	public Date getDataRestabelecimentoAgua() {
 		return dataRestabelecimentoAgua;
 	}
 
-	/**
-	 * @param dataRestabelecimentoAgua
-	 *            O dataRestabelecimentoAgua a ser setado.
-	 */
 	public void setDataRestabelecimentoAgua(Date dataRestabelecimentoAgua) {
 		this.dataRestabelecimentoAgua = dataRestabelecimentoAgua;
 	}
@@ -492,4 +392,29 @@ public class LigacaoAgua extends ObjetoTransacao {
 		this.ramalLocalInstalacao = ramalLocalInstalacao;
 	}
 	
+	public LigacaoOrigem getLigacaoOrigem() {
+		return ligacaoOrigem;
+	}
+
+	public void setLigacaoOrigem(LigacaoOrigem ligacaoOrigem) {
+		this.ligacaoOrigem = ligacaoOrigem;
+	}
+
+	public String getNumeroLacre() {
+		return numeroLacre;
+	}
+
+	public void setNumeroLacre(String numeroLacre) {
+		this.numeroLacre = numeroLacre;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public Set getMedicaoHistoricos() {
+		return medicaoHistoricos;
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public void setMedicaoHistoricos(Set medicaoHistoricos) {
+		this.medicaoHistoricos = medicaoHistoricos;
+	}
 }
