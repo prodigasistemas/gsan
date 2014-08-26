@@ -78,6 +78,12 @@ public class ExibirDocumentoCobrancaItemAction extends GcomAction {
     	
     	if (cobrancaDocumento.getUsuario() != null){
     		documentoCobrancaItemActionForm.setNomeUsuario(cobrancaDocumento.getUsuario().getNomeUsuario());
+    	} else {
+    		documentoCobrancaItemActionForm.setNomeUsuario("");
+    	}
+    	
+    	if (cobrancaDocumento.getValorAcrescimos() != null){
+    		documentoCobrancaItemActionForm.setValorAcrescimo(Util.formatarMoedaReal(cobrancaDocumentoHelper.getCobrancaDocumento().getValorAcrescimos()));
     	}
     	
     	documentoCobrancaItemActionForm.setQtdItens(cobrancaDocumentoHelper.getQuantidadeItensCobrancaDocumento().toString());
