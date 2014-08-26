@@ -21,6 +21,7 @@ public class DocumentoCobrancaItemActionForm extends ActionForm {
 	private String sequencial;
 	private String valorDocumento;
 	private String valorDesconto;
+	private String valorAcrescimo;
 	private String formaEmissao;
 	private String dataHoraEmissao;
 	private String motivoNaoEntregaDocumento;
@@ -80,6 +81,12 @@ public class DocumentoCobrancaItemActionForm extends ActionForm {
 	}
 	public void setValorDesconto(String valorDesconto) {
 		this.valorDesconto = valorDesconto;
+	}
+	public String getValorAcrescimo() {
+		return valorAcrescimo;
+	}
+	public void setValorAcrescimo(String valorAcrescimo) {
+		this.valorAcrescimo = valorAcrescimo;
 	}
 	public String getValorDocumento() {
 		return valorDocumento;
