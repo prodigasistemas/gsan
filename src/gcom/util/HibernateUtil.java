@@ -344,9 +344,11 @@ import gcom.cobranca.CobrancaCriterio;
 import gcom.cobranca.CobrancaCriterioLinha;
 import gcom.cobranca.CobrancaDebitoSituacao;
 import gcom.cobranca.CobrancaDocumento;
+import gcom.cobranca.CobrancaDocumentoHistorico;
 import gcom.cobranca.CobrancaDocumentoFisc;
 import gcom.cobranca.CobrancaDocumentoImpressao;
 import gcom.cobranca.CobrancaDocumentoItem;
+import gcom.cobranca.CobrancaDocumentoItemHistorico;
 import gcom.cobranca.CobrancaForma;
 import gcom.cobranca.CobrancaGrupo;
 import gcom.cobranca.CobrancaGrupoCronogramaMes;
@@ -1511,7 +1513,9 @@ public class HibernateUtil {
 					.addClass(ContratoMotivoCancelamento.class).addClass(
 							CobrancaGrupoCronogramaMes.class).addClass(
 							CobrancaDocumentoItem.class).addClass(
+							CobrancaDocumentoItemHistorico.class).addClass(
 							CobrancaDocumento.class).addClass(
+							CobrancaDocumentoHistorico.class).addClass(
 							ImovelSituacaoTipo.class).addClass(
 							ImovelSituacao.class).addClass(ContaBancaria.class)
 					.addClass(ArrecadacaoDadosDiarios.class).addClass(

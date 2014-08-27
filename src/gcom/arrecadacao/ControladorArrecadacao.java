@@ -175,6 +175,7 @@ import gcom.faturamento.bean.CalcularValoresAguaEsgotoHelper;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaGeral;
 import gcom.faturamento.conta.ContaHistorico;
+import gcom.faturamento.conta.ContaMotivoRetificacao;
 import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.conta.FiltroConta;
 import gcom.faturamento.conta.FiltroContaHistorico;
@@ -194,6 +195,7 @@ import gcom.faturamento.debito.DebitoTipo;
 import gcom.faturamento.debito.FiltroDebitoACobrar;
 import gcom.faturamento.debito.FiltroDebitoACobrarHistorico;
 import gcom.faturamento.debito.FiltroDebitoTipo;
+import gcom.financeiro.FiltroFinanciamentoTipo;
 import gcom.financeiro.FinanciamentoTipo;
 import gcom.financeiro.lancamento.LancamentoItem;
 import gcom.financeiro.lancamento.LancamentoItemContabil;
@@ -13344,77 +13346,47 @@ public class ControladorArrecadacao implements SessionBean {
 	 * Responsável pela manutenção das informações de pagamento
 	 * 
 	 * [UC0266] Manter Pagamentos
-	 * 
-	 * Atualiza um pagamento no sistema, verificando se a atualização já foi
-	 * executada por outro usuário
-	 * 
 	 * [SB0001] Atualizar Pagamento
-	 * 
-	 * @author Pedro Alexandre
-	 * @date 25/03/2006
 	 * 
 	 * @param pagamento
 	 * @throws ControladorException
 	 */
-	public void atualizarPagamento(Pagamento pagamento)
-			throws ControladorException {
-		
-		try{
+	public void atualizarPagamento(Pagamento pagamento) throws ControladorException {
 
-			// Cria o filtro de pagamento para pesquisar o pagamento na base
+		try{
 			FiltroPagamento filtroPagamento = new FiltroPagamento();
-	
-			// Parte de Validação com Timestamp
-	
-			// Seta no filtro o códigodo pagamento que está sendo atualizado
-			filtroPagamento.adicionarParametro(new ParametroSimples(
-					FiltroPagamento.ID, pagamento.getId()));
-			
+			filtroPagamento.adicionarParametro(new ParametroSimples(FiltroPagamento.ID, pagamento.getId()));
 			filtroPagamento.adicionarCaminhoParaCarregamentoEntidade("contaGeral.conta");
 			filtroPagamento.adicionarCaminhoParaCarregamentoEntidade("guiaPagamento");
 			filtroPagamento.adicionarCaminhoParaCarregamentoEntidade(FiltroPagamento.CONTA_HISTORICO);
 			
-			// Procura o pagamento na base
-			Pagamento pagamentoNaBase = (Pagamento) ((List) (getControladorUtil()
-					.pesquisar(filtroPagamento, Pagamento.class.getName()))).get(0);
+			Pagamento pagamentoNaBase = (Pagamento) ((List) (getControladorUtil().pesquisar(filtroPagamento, Pagamento.class.getName()))).get(0);
 	
 			// [FS0017] Atualização realizada por outro usuário
-			// Caso o usuário esteja tentando atualizar um pagamento e o mesmo já
-			// tenha
+			// Caso o usuário esteja tentando atualizar um pagamento e o mesmo já tenha
 			// sido atualizado durante a manutençaõ corrente
 			if (pagamentoNaBase.getUltimaAlteracao().after(pagamento.getUltimaAlteracao())) {
 				sessionContext.setRollbackOnly();
 				throw new ControladorException("atencao.atualizacao.timestamp");
 			}
 	
-			if (!pagamento.getValorPagamento().equals(
-					pagamentoNaBase.getValorPagamento())) {
+			if (!pagamento.getValorPagamento().equals(pagamentoNaBase.getValorPagamento())) {
 	
-				BigDecimal valorAModificar = pagamento.getValorPagamento()
-						.subtract(pagamentoNaBase.getValorPagamento());
+				BigDecimal valorAModificar = pagamento.getValorPagamento().subtract(pagamentoNaBase.getValorPagamento());
 	
 				AvisoBancario avisoBancario = pagamento.getAvisoBancario();
-				BigDecimal valorArrecadacao = avisoBancario
-						.getValorArrecadacaoCalculado();
+				BigDecimal valorArrecadacao = avisoBancario.getValorArrecadacaoCalculado();
 				valorArrecadacao = valorArrecadacao.add(valorAModificar);
 				avisoBancario.setValorArrecadacaoCalculado(valorArrecadacao);
 				avisoBancario.setUltimaAlteracao(new Date());
 	
 				getControladorUtil().atualizar(avisoBancario);
-	
 			}
 	
 			pagamento.setUltimaAlteracao(new Date());
 	
-			// Caso o pagamento não tenha sido atualizado por outro usuário durante
-			// a manutenção corrente
-			// atualiza pagamento no sistema
 			getControladorUtil().atualizar(pagamento);
 			
-			//CRC2725 - alterado por Vivianne Sousa - 15/09/2009 analista:Fátima
-			//[SB0005 - Verifica Associação Pagamento da Conta com Itens de Negativação].
-			//[SB0006 - Verifica Associação Pagamento da Guia com Itens de Negativação].
-			//[SB0010 - Verifica Associação Novo Tipo Documento do Pagamento com Itens de Negativação].
 			getControladorSpcSerasa().verificaAssociacaoPagamentoComItensNegativacao(pagamento, pagamentoNaBase);
 
 		} catch (ControladorException e) {
@@ -29758,7 +29730,7 @@ public class ControladorArrecadacao implements SessionBean {
 		
 		ResumoArrecadacao resumoArrecadacao = null;
 		if (valorCreditos != null && valorCreditos.doubleValue() > 0.00) {
-
+			
 			resumoArrecadacao = new ResumoArrecadacao();
 			
 			resumoArrecadacao.setGerenciaRegional(localidade.getGerenciaRegional());
@@ -29840,7 +29812,7 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 
-	public void processarPagamentosDiferencaDoisReais(Integer anoMesReferenciaArrecadacao, Localidade localidade, Integer idFuncionalidadeIniciada) throws Exception{
+	public void processarPagamentosDiferencaDoisReais(Integer referenciaArrecadacao, Localidade localidade, Integer idFuncionalidadeIniciada) throws Exception{
 		
 		int idUnidadeIniciada = 0;
 		
@@ -29848,26 +29820,37 @@ public class ControladorArrecadacao implements SessionBean {
 
 		try {
 			
-			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(
-					idFuncionalidadeIniciada, UnidadeProcessamento.LOCALIDADE, idLocalidade);
+			idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.LOCALIDADE, idLocalidade);
 		
-			logger.info("Geracao de debito ou credito para pgtos classificados em " + anoMesReferenciaArrecadacao + " da localidade " + idLocalidade);
+			logger.info("Geracao de debito ou credito para pgtos classificados em " + referenciaArrecadacao + " da localidade " + idLocalidade);
 			
 			Collection<PagamentoHelper> pagamentos = repositorioArrecadacao.pesquisarValoresPagamentos(PagamentoSituacao.PAGAMENTO_CLASSIFICADO, 
 					idLocalidade,
-					anoMesReferenciaArrecadacao);
+					referenciaArrecadacao);
 			
 			logger.info("    Qtd de pagamentos: " + pagamentos.size() + " na localidade: " + idLocalidade);
 			
+			Integer referenciaContabil = Util.somaMesAnoMesReferencia(referenciaArrecadacao, 1);
+
 			for (PagamentoHelper pagamentoHelper : pagamentos) {
-				if (possuiDiferencaAte2(pagamentoHelper)) {
-					BigDecimal diferenca = pagamentoHelper.getValorPagamento().subtract(pagamentoHelper.getValorDocumento());
+				if (pagamentoHelper.isPagamentoDeConta() && possuiDiferencaAte2(pagamentoHelper)) {
 					
+					BigDecimal diferenca = pagamentoHelper.getValorPagamento().subtract(pagamentoHelper.getValorDocumento());
+					Conta novaConta = null;
 					if (diferenca.doubleValue() > 0.0){
-						inserirCreditoARealizar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca);
+						CreditoARealizar credito = inserirCreditoARealizar(referenciaArrecadacao, referenciaContabil, pagamentoHelper, diferenca);
+						novaConta = this.retificarContaComDebitoDiferenca2Reais(referenciaArrecadacao, pagamentoHelper, diferenca);
+						
 					}else if (diferenca.doubleValue() < 0.0){
-						inserirDebitoACobrar(anoMesReferenciaArrecadacao, pagamentoHelper, diferenca.abs());
-					}				
+						
+						DebitoACobrar debito = inserirDebitoACobrar(referenciaContabil, referenciaArrecadacao, pagamentoHelper, diferenca.abs(), (short) 0);
+						novaConta = this.retificarContaComCreditoDiferenca2Reais(referenciaArrecadacao, pagamentoHelper, diferenca);
+					}
+					
+					if (novaConta != null) {
+						Pagamento pagamento = this.pesquisarPagamentoDeConta(pagamentoHelper.getIdConta());
+						this.alterarContaDoPagamento(pagamento, novaConta);
+					}
 				}
 			}
 			
@@ -29879,23 +29862,48 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 	
-	private void inserirDebitoACobrar(Integer anoMesReferenciaArrecadacao, PagamentoHelper pagamentoHelper, BigDecimal valor) throws Exception {
+	private Conta retificarContaComDebitoDiferenca2Reais(Integer referenciaArrecadacao, PagamentoHelper pagamentoHelper, BigDecimal diferenca) throws Exception {
+		Conta novaConta = null;
+		
+		DebitoACobrar debito = inserirDebitoACobrar(referenciaArrecadacao, referenciaArrecadacao, pagamentoHelper, diferenca.abs(), (short) 1);
+		novaConta = getControladorFaturamento().incluirDebitoContaRetificadaPagamentosDiferenca2Reais(pagamentoHelper.getIdConta(), debito);
+		
+		return novaConta;
+	}
+	
+	private Conta retificarContaComCreditoDiferenca2Reais(Integer referenciaArrecadacao, PagamentoHelper pagamentoHelper, BigDecimal diferenca) throws Exception {
+		Conta novaConta = null;
+		
+		CreditoARealizar credito = inserirCreditoARealizar(referenciaArrecadacao, referenciaArrecadacao, pagamentoHelper, diferenca);
+		novaConta = getControladorFaturamento().incluirCreditoContaRetificadaPagamentosDiferenca2Reais(pagamentoHelper.getIdConta(), credito);
+		
+		return novaConta;
+	}
+	
+	private void alterarContaDoPagamento(Pagamento pagamento, Conta novaConta) throws ErroRepositorioException {
+		if (pagamento != null && novaConta != null) {
+			pagamento.setContaGeral(novaConta.getContaGeral());
+			pagamento.setUltimaAlteracao(new Date());
+			repositorioUtil.atualizar(pagamento);
+		}
+		
+	}
+	
+	private DebitoACobrar inserirDebitoACobrar(Integer referenciaArrecadacao, Integer referenciaDebito, PagamentoHelper pagamentoHelper, BigDecimal valor, short qtdParcelasCobradas) throws Exception {
 		
 		Imovel imovel = null;
 		if (pagamentoHelper.getIdImovel() != null){
 			imovel = repositorioImovel.pesquisarDadosImovel(pagamentoHelper.getIdImovel());
 		}
 		
-		DebitoTipo tipo = new DebitoTipo();
-		tipo.setId(DebitoTipo.VALOR_NAO_CONFERE);
-		
+		DebitoTipo tipo = new DebitoTipo(DebitoTipo.VALOR_NAO_CONFERE);
 		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
-		getControladorFaturamento().gerarDebitoACobrar(anoMesReferenciaArrecadacao
+		return getControladorFaturamento().gerarDebitoACobrar(referenciaArrecadacao
 				, sistemaParametro.getAnoMesFaturamento()
 				, imovel
-				, (short) 1, (short) 0
-				, Util.somaMesAnoMesReferencia(anoMesReferenciaArrecadacao, 1)
+				, (short) 1, qtdParcelasCobradas
+				, referenciaDebito
 				, valor, tipo, null);
 	}
 	
@@ -29910,16 +29918,21 @@ public class ControladorArrecadacao implements SessionBean {
 		return anoMesReferenciaContabil;
 	}
 	
-	private void inserirCreditoARealizar(Integer anoMesReferenciaArrecadacao, PagamentoHelper pagamentoHelper, BigDecimal valor) throws Exception {
+	private CreditoARealizar inserirCreditoARealizar(Integer referenciaArrecadacao, Integer referenciaContabil, PagamentoHelper pagamentoHelper, BigDecimal valor) throws Exception {
 		CreditoARealizar credito = new CreditoARealizar();
 		credito.setGeracaoCredito(Calendar.getInstance().getTime());
 		credito.setAnoMesReferenciaCredito(pagamentoHelper.getDataPagamento());
-		credito.setAnoMesReferenciaContabil(anoMesReferenciaArrecadacao);
-		credito.setAnoMesCobrancaCredito(Util.somaMesAnoMesReferencia(anoMesReferenciaArrecadacao, 1));
+		credito.setAnoMesReferenciaContabil(referenciaContabil);
+		credito.setAnoMesCobrancaCredito(referenciaArrecadacao);
 		credito.setValorResidualMesAnterior(BigDecimal.ZERO);
 		credito.setNumeroPrestacaoCredito((short) 1);
-		credito.setNumeroPrestacaoRealizada((short) 0);
-		credito.setValorCredito(valor);
+		
+		if (referenciaArrecadacao.equals(referenciaContabil)) {
+			credito.setNumeroPrestacaoRealizada((short) 1);
+		} else {
+			credito.setNumeroPrestacaoRealizada((short) 0);
+		}
+		credito.setValorCredito(valor.abs());
 		
 		CreditoTipo tipo = new CreditoTipo();
 		tipo.setId(CreditoTipo.PAGAMENTO_NAO_CONFERE);
@@ -29952,9 +29965,15 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 		
 		credito.setUltimaAlteracao(Calendar.getInstance().getTime());
-		credito.setAnoMesReferenciaPrestacao(Util.somaMesAnoMesReferencia(anoMesReferenciaArrecadacao, 1));
+		credito.setAnoMesReferenciaPrestacao(Util.somaMesAnoMesReferencia(referenciaArrecadacao, 1));
 		
-		getControladorFaturamento().gerarCreditoARealizar(credito, imovel, null);
+		Integer idCredito = getControladorFaturamento().gerarCreditoARealizar(credito, imovel, null);
+		
+		FiltroCreditoARealizar filtroCreditoARealizar = new FiltroCreditoARealizar();
+		filtroCreditoARealizar.adicionarParametro(new ParametroSimples(FiltroCreditoARealizar.ID, idCredito));
+		Collection<CreditoARealizar> colecaoCreditoARealizar = getControladorUtil().pesquisar(filtroCreditoARealizar, CreditoARealizar.class.getName());
+
+		return (CreditoARealizar) Util.retonarObjetoDeColecao(colecaoCreditoARealizar);
 	}
 
 	/**
@@ -40289,13 +40308,16 @@ public class ControladorArrecadacao implements SessionBean {
 	public Pagamento pesquisarPagamentoDeConta(Integer idConta) throws ControladorException {
 
 		Pagamento pagamento = null;
-
-		try {
-			pagamento = repositorioArrecadacao.pesquisarPagamentoDeConta(idConta);
-		} catch (ErroRepositorioException ex) {
-			sessionContext.setRollbackOnly();
-			throw new ControladorException("erro.sistema", ex);
+		
+		if (idConta != null) {
+			try {
+				pagamento = repositorioArrecadacao.pesquisarPagamentoDeConta(idConta);
+			} catch (ErroRepositorioException ex) {
+				sessionContext.setRollbackOnly();
+				throw new ControladorException("erro.sistema", ex);
+			}
 		}
+
 
 		return pagamento;
 	}
@@ -56473,11 +56495,9 @@ public class ControladorArrecadacao implements SessionBean {
 				if (pagamento != null) {
 					Conta novaConta = mapContasNovas.get(idContaHistorico);
 					pagamento.setContaGeral(novaConta.getContaGeral());
-					
+					pagamento.setUltimaAlteracao(new Date());
 					repositorioUtil.atualizar(pagamento);
 				}
-				
-				repositorioUtil.atualizar(pagamento);
 			}
 		} catch (Exception e) {
 			logger.error("Erro ao refaturar conta para recuperação de crédito.", e);

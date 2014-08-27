@@ -10136,5 +10136,20 @@ public class ControladorBatchSEJB implements SessionBean {
 		
 		return situacaoBatch;
 	}
+	
+	public FaturamentoAtividadeCronograma pesquisarProcessoIniciadoParaGrupo(Integer idGrupo, Integer referencia, Integer idAtividadeFaturamento) throws ControladorException {
+		FaturamentoAtividadeCronograma faturamentoAtividadeCronograma = null;
+	
+		try {
+	
+			faturamentoAtividadeCronograma = this.repositorioBatch.pesquisarProcessoIniciadoParaGrupo(idGrupo, referencia, idAtividadeFaturamento);
+	
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+			throw new ControladorException("erro.sistema", e);
+		}
+	
+		return faturamentoAtividadeCronograma;
+	}
 
 }

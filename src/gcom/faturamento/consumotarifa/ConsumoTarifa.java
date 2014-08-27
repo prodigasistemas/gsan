@@ -9,48 +9,35 @@ import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class ConsumoTarifa implements Serializable {
 	private static final long serialVersionUID = 1L;
-    /** identifier field */
+
     private Integer id;
-
-    /** nullable persistent field */
     private String descricao;
-
-    /** nullable persistent field */
     private Short indicadorUso;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-    
-    /** nullable persistent field */
     private Set consumoTarifaVigencias;
-    
-    /** nullable persistent field */
     private LigacaoAguaPerfil ligacaoAguaPerfil;
-    
-    /** nullable persistent field */
     private TarifaTipoCalculo tarifaTipoCalculo;
     
     public static final Integer CONSUMO_NORMAL  = new Integer("1");
-    
     public static final Integer CONSUMO_SOCIAL  = new Integer("2");
 
     public static final Integer AGUA_BRUTA_ADUTORA = new Integer("21");
     
-    /** full constructor */
     public ConsumoTarifa(String descricao, Short indicadorUso, Date ultimaAlteracao) {
         this.descricao = descricao;
         this.indicadorUso = indicadorUso;
         this.ultimaAlteracao = ultimaAlteracao;
     }
 
-    /** default constructor */
     public ConsumoTarifa() {
     }
 
+    public ConsumoTarifa(Integer id) {
+    	this.id = id;
+    }
+    
     public Integer getId() {
         return this.id;
     }

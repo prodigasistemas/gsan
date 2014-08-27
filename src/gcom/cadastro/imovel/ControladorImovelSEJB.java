@@ -1453,8 +1453,7 @@ public class ControladorImovelSEJB implements SessionBean {
 		}	
 	}
 
-	private void verificarAlteracaoImovelEmCampo(InserirImovelHelper imovelHelper) {
-		try {
+	private void verificarAlteracaoImovelEmCampo(InserirImovelHelper imovelHelper) throws ControladorException {
 			Imovel imovelnaBase = this.pesquisarImovel(imovelHelper.getImovel().getId());
 			Rota rota = getControladorMicromedicao().buscarRotaDoImovel(imovelHelper.getImovel().getId());
 			
@@ -1467,9 +1466,6 @@ public class ControladorImovelSEJB implements SessionBean {
 					|| !imovelnaBase.getQuantidadeEconomias().equals(imovelHelper.getImovel().getQuantidadeEconomias())) {
 				getControladorMicromedicao().validarImovelEmCampo(imovelHelper.getImovel().getId());
 			}
-		} catch (ControladorException e) {
-			e.printStackTrace();
-		}
 	}
 	/**
 	 * Atualiza a Ligação de Esgoto quando o imóvel é inserido com o indicador de faturamento igual a sim
@@ -1712,87 +1708,48 @@ public class ControladorImovelSEJB implements SessionBean {
 	/**
 	 * < <Descrição do método>>
 	 * 
-	 * @param imovel
-	 *            Descrição do parâmetro
+	 * @param imovel Descrição do parâmetro
 	 * @return Descrição do retorno
 	 * @throws ControladorException
 	 */
-	public Collection obterQuantidadeEconomiasCategoria(Integer imovel)
-			throws ControladorException {
-		// Criação das coleções
+	public Collection obterQuantidadeEconomiasCategoria(Integer imovel) throws ControladorException {
 		Collection colecaoCategoria = new ArrayList();
 		Collection colecaoImovelSubCategoriaArray = null;
 
 		try {
-			colecaoImovelSubCategoriaArray = repositorioImovel
-					.pesquisarObterQuantidadeEconomiasCategoria(imovel);
+			colecaoImovelSubCategoriaArray = repositorioImovel.pesquisarObterQuantidadeEconomiasCategoria(imovel);
 		} catch (ErroRepositorioException ex) {
-			// sessionContext.setRollbackOnly();
 			new ControladorException("erro.sistema", ex);
 		}
 
-		if (colecaoImovelSubCategoriaArray != null
-				&& !colecaoImovelSubCategoriaArray.isEmpty()) {
+		if (colecaoImovelSubCategoriaArray != null && !colecaoImovelSubCategoriaArray.isEmpty()) {
 
-			Iterator colecaoImovelSubCategoriaArrayIterator = colecaoImovelSubCategoriaArray
-					.iterator();
+			Iterator colecaoImovelSubCategoriaArrayIterator = colecaoImovelSubCategoriaArray.iterator();
 
 			while (colecaoImovelSubCategoriaArrayIterator.hasNext()) {
 
-				// Obtém o imóvel subcategoria
-				Object[] imovelSubcategoriaArray = (Object[]) colecaoImovelSubCategoriaArrayIterator
-						.next();
+				Object[] imovelSubcategoriaArray = (Object[]) colecaoImovelSubCategoriaArrayIterator.next();
 
-				// Cria os objetos categoria
 				Categoria categoria = new Categoria();
-
-				// Seta a categoria
 				categoria.setId((Integer) imovelSubcategoriaArray[0]);
-
-				// Seta a descrição
-				categoria.setDescricao(String
-						.valueOf(imovelSubcategoriaArray[1]));
-
-				// Seta o consumo estouro
-				categoria
-						.setConsumoEstouro((Integer) imovelSubcategoriaArray[2]);
-				// Seta número de vezes média estouro
-				categoria
-						.setVezesMediaEstouro((BigDecimal) imovelSubcategoriaArray[3]);
-				// Seta a quantidade de economias por categoria
-				categoria
-						.setQuantidadeEconomiasCategoria(((Short) imovelSubcategoriaArray[4])
-								.intValue());
-				// Seta o consumo alto
+				categoria.setDescricao(String.valueOf(imovelSubcategoriaArray[1]));
+				categoria.setConsumoEstouro((Integer) imovelSubcategoriaArray[2]);
+				categoria.setVezesMediaEstouro((BigDecimal) imovelSubcategoriaArray[3]);
+				categoria.setQuantidadeEconomiasCategoria(((Short) imovelSubcategoriaArray[4]).intValue());
 				categoria.setConsumoAlto((Integer) imovelSubcategoriaArray[6]);
+				categoria.setMediaBaixoConsumo((Integer) imovelSubcategoriaArray[7]);
+				categoria.setVezesMediaAltoConsumo((BigDecimal) imovelSubcategoriaArray[8]);
+				categoria.setPorcentagemMediaBaixoConsumo((BigDecimal) imovelSubcategoriaArray[9]);
 
-				// Seta a média baixo consumo
-				categoria
-						.setMediaBaixoConsumo((Integer) imovelSubcategoriaArray[7]);
-				// Seta o número de vezes média consumo alto
-				categoria
-						.setVezesMediaAltoConsumo((BigDecimal) imovelSubcategoriaArray[8]);
-				// Seta o percentual da média baixo consumo
-				categoria
-						.setPorcentagemMediaBaixoConsumo((BigDecimal) imovelSubcategoriaArray[9]);
-
-				// Seta a descricao abreviada
 				if ((String) imovelSubcategoriaArray[10] != null) {
-					categoria
-							.setDescricaoAbreviada((String) imovelSubcategoriaArray[10]);
+					categoria.setDescricaoAbreviada((String) imovelSubcategoriaArray[10]);
 				}
-				categoria
-						.setNumeroConsumoMaximoEc((Integer) imovelSubcategoriaArray[11]);
-
-				categoria
-						.setIndicadorCobrancaAcrescimos((Short) imovelSubcategoriaArray[12]);
-				
+				categoria.setNumeroConsumoMaximoEc((Integer) imovelSubcategoriaArray[11]);
+				categoria.setIndicadorCobrancaAcrescimos((Short) imovelSubcategoriaArray[12]);
 				categoria.setFatorEconomias((Short) imovelSubcategoriaArray[13]);
-				
+
 				CategoriaTipo categoriaTipo = new CategoriaTipo();
-				
 				categoriaTipo.setId((Integer) imovelSubcategoriaArray[14]);
-				
 				categoriaTipo.setDescricao((String) imovelSubcategoriaArray[15]);
 				
 				categoria.setCategoriaTipo(categoriaTipo);
@@ -1803,10 +1760,8 @@ public class ControladorImovelSEJB implements SessionBean {
 			}
 
 		} else {
-			// Caso a coleção não tenha retornado objetos
 			sessionContext.setRollbackOnly();
-			throw new ControladorException(
-					"atencao.nao_cadastrado.imovel_subcategoria", null);
+			throw new ControladorException("atencao.nao_cadastrado.imovel_subcategoria", null);
 		}
 
 		return colecaoCategoria;

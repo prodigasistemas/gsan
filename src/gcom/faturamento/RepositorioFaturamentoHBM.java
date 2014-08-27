@@ -18995,6 +18995,9 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			consulta = "SELECT conta "
 				+ "FROM Conta conta "
 				+ "INNER JOIN conta.debitoCreditoSituacaoAtual debitoCreditoSituacaoAtual "
+				+ "INNER JOIN FETCH conta.imovel imov "
+	            + "INNER JOIN FETCH imov.localidade loc "
+	            + "INNER JOIN FETCH conta.quadraConta "
 				+ "WHERE conta.id = :idConta ";
 
 			retorno = session.createQuery(consulta).setInteger("idConta",

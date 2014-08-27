@@ -12,6 +12,7 @@ import org.apache.commons.lang.builder.ToStringBuilder;
 public class ContaMotivoInclusao extends ObjetoTransacao {
 	private static final long serialVersionUID = 1L;
 	
+	public final static Integer NAO_INFORMADO = new Integer(0);
 	public final static Integer TRASFERENCIA_DE_DEBITO = new Integer(41);
 	public final static Integer RECUPERACAO_DE_CREDITO = new Integer(46);
 	

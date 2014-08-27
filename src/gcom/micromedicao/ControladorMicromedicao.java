@@ -77,6 +77,7 @@ import gcom.faturamento.ControladorFaturamentoCOSANPASEJB;
 import gcom.faturamento.ControladorFaturamentoLocal;
 import gcom.faturamento.ControladorFaturamentoLocalHome;
 import gcom.faturamento.FaturamentoAtividade;
+import gcom.faturamento.FaturamentoAtividadeCronograma;
 import gcom.faturamento.FaturamentoGrupo;
 import gcom.faturamento.FaturamentoSituacaoHistorico;
 import gcom.faturamento.FaturamentoSituacaoTipo;
@@ -41916,11 +41917,10 @@ public class ControladorMicromedicao implements SessionBean {
 	public boolean isImovelEmCampo(Integer idImovel) throws Exception {
 		Rota rota = this.buscarRotaDoImovel(idImovel);
 
-		ArquivoTextoRoteiroEmpresa arquivo;
-			arquivo = this.repositorioMicromedicao.pesquisaArquivoTextoParaLeituristaPorRota(
-					rota.getFaturamentoGrupo().getAnoMesReferencia(), rota.getId(), rota.getFaturamentoGrupo().getId());
+		FaturamentoAtividadeCronograma faturamentoAtividadeCronograma = getControladorBatch().pesquisarProcessoIniciadoParaGrupo(rota.getFaturamentoGrupo().getId(), 
+				rota.getFaturamentoGrupo().getAnoMesReferencia(), FaturamentoAtividade.GERAR_ARQUIVO_LEITURA);
 
-		return (arquivo != null);
+		return (rota.isRotaImpressaoSimultanea() && faturamentoAtividadeCronograma != null && faturamentoAtividadeCronograma.getDataRealizacao() != null);
 	}
 	
 	/**
