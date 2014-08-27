@@ -413,23 +413,20 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 		}
 		
 		// Verifica se a aba 3 é chamada pela aba 2 (colecaoContaValores) ou pela aba 1 (colecaoContaValoresImovel)
-		if (sessao.getAttribute("colecaoContaValoresSemContasNB") != null 
-				|| sessao.getAttribute("colecaoGuiasPagamento") != null) {
+		if (sessao.getAttribute("colecaoContaValoresSemContasNB") != null || sessao.getAttribute("colecaoGuiasPagamento") != null) {
 			
 			colecaoContas = (Collection<ContaValoresHelper>)sessao.getAttribute("colecaoContaValoresSemContasNB");
 			colecaoGuiasPagamento = (Collection<GuiaPagamentoValoresHelper>)sessao.getAttribute("colecaoGuiaPagamentoValores");
 			valorAcrescimosImpontualidade = (BigDecimal) sessao.getAttribute("valorAcrescimosImpontualidade");
-			colecaoDebitosACobrar = (Collection<DebitoACobrar>) sessao.getAttribute("colecaoDebitoACobrar");
 			
-		} else if (sessao.getAttribute("colecaoContaValoresNegociacao") != null 
-				|| (sessao.getAttribute("colecaoContaValoresNegociacao") != null)) {
+		} else if (sessao.getAttribute("colecaoContaValoresNegociacao") != null || (sessao.getAttribute("colecaoContaValoresNegociacao") != null)) {
 			
 			colecaoContas = (Collection<ContaValoresHelper>)sessao.getAttribute("colecaoContaValoresNegociacao");
 			colecaoGuiasPagamento = (Collection<GuiaPagamentoValoresHelper>)sessao.getAttribute("colecaoGuiaPagamentoNegociacao");
 			valorAcrescimosImpontualidade = (BigDecimal) sessao.getAttribute("valorAcrescimosImpontualidadeNegociacao");
-			colecaoDebitosACobrar = (Collection<DebitoACobrar>) sessao.getAttribute("colecaoDebitoACobrar");
 		}
 		
+		colecaoDebitosACobrar = (Collection<DebitoACobrar>) sessao.getAttribute("colecaoDebitoACobrar");
 		colecaoCreditoARealizar = (Collection<CreditoARealizar>)sessao.getAttribute("colecaoCreditoARealizar");
 		colecaoDebitosACobrar = obterColecaoDebitosACobrarDoParcelamento(colecaoDebitosACobrar);
 		
