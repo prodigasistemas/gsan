@@ -21,6 +21,7 @@ public class FiltroRelatorioDocumentosAReceberHelper implements Serializable {
 	private String idLocalidade;
 	private String idOpcaoTotalizacao;
 	private String descricaoEstado;
+	private String maiorFaixa;
 	
 	/**TODO:COSANPA
 	 * @author Adriana Muniz
@@ -183,4 +184,13 @@ public class FiltroRelatorioDocumentosAReceberHelper implements Serializable {
 	public void setExibirCreditoSemParcela(boolean exibirCreditoSemParcela) {
 		this.exibirCreditoSemParcela = exibirCreditoSemParcela;
 	}
+
+	public String getMaiorFaixa() {
+		return maiorFaixa;
+	}
+
+	public void setMaiorFaixa(String maiorFaixa) {
+		this.maiorFaixa = maiorFaixa;
+	}
+	
 }
