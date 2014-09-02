@@ -1845,7 +1845,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					Rota rota = faturamentoAtivCronRota.getRota();
 					rota.setFaturamentoGrupo(faturamentoGrupo);
 					
-					prepararFaturamentoImovel(atividade, rota, null);
+					this.prepararFaturamentoImovel(atividade, rota, null);
 
 					// Variáveis para a paginação da pesquisa de Imovel por
 					// Grupo Faturamento
@@ -1994,45 +1994,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			throw new EJBException(e);
 		}
 
-	}
-
-	private void prepararFaturamentoImovel(int atividade, Rota rota, Integer idImovel) throws ControladorException {
-		
-		ApagarDadosFaturamentoHelper helper = new ApagarDadosFaturamentoHelper();
-		
-		helper.setRota(rota);
-		helper.setAnoMesFaturamento(rota.getFaturamentoGrupo().getAnoMesReferencia());
-		helper.setIdImovel(idImovel);
-
-		this.atualizarLigacaoEsgotoPorRota(rota, atividade);
-
-		helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.NORMAL);
-
-		this.apagarDadosGeradosFaturarGrupoFaturamento(helper,atividade);
-		this.apagarDadosGeradosResumoFaturamentoSimulacaoDetalhe(rota.getFaturamentoGrupo().getId(), helper);
-		this.apagarDadosGeradosResumoFaturamentoSimulacao(rota.getFaturamentoGrupo().getId(), helper);
-
-		helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.PRE_FATURADA);
-
-		this.apagarDadosGeradosFaturarGrupoFaturamento(helper, atividade);
-
-		/*
-		 * Caso o mês de faturamento corresponda ao mês de novembro, o sistema exclui também os dados do resumo da simulação do faturamento do mês de dezembro.
-		 */
-		if (Util.obterMes(rota.getFaturamentoGrupo().getAnoMesReferencia()) == ConstantesSistema.NOVEMBRO) {
-
-			helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.NORMAL);
-			helper.setAnoMesFaturamento(Util.somaUmMesAnoMesReferencia(rota.getFaturamentoGrupo().getAnoMesReferencia()));
-
-			this.apagarDadosGeradosFaturarGrupoFaturamento(helper, atividade);
-			this.apagarDadosGeradosResumoFaturamentoSimulacaoDetalhe(rota.getFaturamentoGrupo().getId(), helper);
-			this.apagarDadosGeradosResumoFaturamentoSimulacao(rota.getFaturamentoGrupo().getId(), helper);
-
-			helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.PRE_FATURADA);
-
-			this.apagarDadosGeradosFaturarGrupoFaturamento(helper, atividade);
-
-		}
 	}
 
 	@SuppressWarnings("rawtypes")
@@ -77303,4 +77264,40 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		return idGuiaPagamentoGerado;
 	}
 
+	public void prepararFaturamentoImovel(int atividade, Rota rota, Integer idImovel) throws ControladorException {
+		
+		ApagarDadosFaturamentoHelper helper = new ApagarDadosFaturamentoHelper();
+		
+		helper.setRota(rota);
+		helper.setAnoMesFaturamento(rota.getFaturamentoGrupo().getAnoMesReferencia());
+		helper.setIdImovel(idImovel);
+
+		this.atualizarLigacaoEsgotoPorRota(rota, atividade);
+
+		helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.NORMAL);
+
+		this.apagarDadosGeradosFaturarGrupoFaturamento(helper,atividade);
+		this.apagarDadosGeradosResumoFaturamentoSimulacaoDetalhe(rota.getFaturamentoGrupo().getId(), helper);
+		this.apagarDadosGeradosResumoFaturamentoSimulacao(rota.getFaturamentoGrupo().getId(), helper);
+
+		helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.PRE_FATURADA);
+
+		this.apagarDadosGeradosFaturarGrupoFaturamento(helper, atividade);
+
+		// Caso o mês de faturamento corresponda ao mês de novembro, o sistema exclui também os dados do resumo da simulação do faturamento do mês de dezembro.
+		if (Util.obterMes(rota.getFaturamentoGrupo().getAnoMesReferencia()) == ConstantesSistema.NOVEMBRO) {
+
+			helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.NORMAL);
+			helper.setAnoMesFaturamento(Util.somaUmMesAnoMesReferencia(rota.getFaturamentoGrupo().getAnoMesReferencia()));
+
+			this.apagarDadosGeradosFaturarGrupoFaturamento(helper, atividade);
+			this.apagarDadosGeradosResumoFaturamentoSimulacaoDetalhe(rota.getFaturamentoGrupo().getId(), helper);
+			this.apagarDadosGeradosResumoFaturamentoSimulacao(rota.getFaturamentoGrupo().getId(), helper);
+
+			helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.PRE_FATURADA);
+
+			this.apagarDadosGeradosFaturarGrupoFaturamento(helper, atividade);
+
+		}
+	}
 }

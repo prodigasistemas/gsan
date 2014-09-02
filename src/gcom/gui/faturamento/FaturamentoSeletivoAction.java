@@ -1,6 +1,8 @@
 package gcom.gui.faturamento;
 
 import gcom.fachada.Fachada;
+import gcom.faturamento.bo.FaturamentoSeletivoBO;
+import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 
 import java.util.ArrayList;
@@ -22,13 +24,12 @@ public class FaturamentoSeletivoAction extends GcomAction {
 
         ActionForward retorno = actionMapping.findForward("telaSucesso");
 
-        Fachada fachada = Fachada.getInstancia();
-
-        //Usuario usuarioLogado = this.getUsuarioLogado(httpServletRequest);
-
         FaturamentoSeletivoActionForm form = (FaturamentoSeletivoActionForm) actionForm;
-       // obterImoveisParaFaturar(form);
-        fachada.faturarImoveisSeletivo(obterImoveisParaFaturar(form));
+        
+        FaturamentoSeletivoBO faturamentoSeletivo = new FaturamentoSeletivoBO(form);
+        faturamentoSeletivo.faturar();
+
+        //this.faturar(form);
 
  		montarPaginaSucesso(httpServletRequest, "Imóveis selecionados faturados com sucesso.", "Faturar outro imóvel", "filtrarFaturamentoSeletivo.do?menu=sim");
      		
@@ -39,9 +40,9 @@ public class FaturamentoSeletivoAction extends GcomAction {
 		
 		Collection<ImovelFaturamentoSeletivo> imoveisParaFaturar = new ArrayList<ImovelFaturamentoSeletivo>();
 		
-//		if (form.getColecaoImoveisFaturamentoSeletivo().size() == form.getIdImoveisSelecionados().length) {
-//			imoveisParaFaturar = form.getColecaoImoveisFaturamentoSeletivo();
-//		} else {
+		if (form.getColecaoImoveisFaturamentoSeletivo().size() == form.getIdImoveisSelecionados().length) {
+			imoveisParaFaturar = form.getColecaoImoveisFaturamentoSeletivo();
+		} else {
 			
 			for (ImovelFaturamentoSeletivo imovelFaturamentoSeletivo : form.getColecaoImoveisFaturamentoSeletivo()) {
 				for (String imovelSelecionado : form.getIdImoveisSelecionados()) {
@@ -53,8 +54,26 @@ public class FaturamentoSeletivoAction extends GcomAction {
 					}
 				}
 			}
-//		}
+		}
 		return imoveisParaFaturar;
+	}
+	
+	private void faturar(FaturamentoSeletivoActionForm form) {
+		
+		Collection<ImovelFaturamentoSeletivo> colecaoImoveis = obterImoveisParaFaturar(form);
+
+		Fachada fachada = Fachada.getInstancia();
+		
+		for (ImovelFaturamentoSeletivo imovel : colecaoImoveis) {
+			try {
+
+				fachada.incluirMedicaoHistoricoFaturamentoSeletivo(imovel);
+				fachada.faturarImovelSeletivo(imovel);
+			
+			} catch (Exception e) {
+				throw new ActionServletException("Erro ao faturar seletivamente imóvel " + imovel.getIdImovel());
+			}
+		}
 	}
 		
 }

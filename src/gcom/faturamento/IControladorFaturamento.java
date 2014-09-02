@@ -83,6 +83,7 @@ import gcom.util.FachadaException;
 
 import java.io.BufferedReader;
 import java.math.BigDecimal;
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -5682,4 +5683,5 @@ public interface IControladorFaturamento {
 	
 	public Conta incluirCreditoContaRetificadaPagamentosDiferenca2Reais(Integer idConta, CreditoARealizar credito) throws Exception;
 	
+	public void faturarImovelSeletivo(ImovelFaturamentoSeletivo imovelFaturamentoSeletivo) throws ControladorException;
 }

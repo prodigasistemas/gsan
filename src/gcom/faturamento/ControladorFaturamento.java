@@ -185,6 +185,7 @@ import gcom.util.MergeProperties;
 import gcom.util.Util;
 import gcom.util.ZipUtil;
 import gcom.util.email.ServicosEmail;
+import gcom.util.filtro.ColecaoUtil;
 import gcom.util.filtro.ParametroNaoNulo;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
@@ -219,6 +220,11 @@ import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipOutputStream;
 
 import javax.ejb.EJBException;
+import javax.transaction.HeuristicMixedException;
+import javax.transaction.HeuristicRollbackException;
+import javax.transaction.NotSupportedException;
+import javax.transaction.RollbackException;
+import javax.transaction.SystemException;
 
 import org.hibernate.LazyInitializationException;
 import org.jboss.logging.Logger;
@@ -16282,97 +16288,47 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		return ids;
 	}
 	
-	public void faturarImoveisSeletivo(Collection<ImovelFaturamentoSeletivo> colecaoImoveis) throws ControladorException, ParseException {
+	public void faturarImovelSeletivo(ImovelFaturamentoSeletivo imovelFaturamentoSeletivo) throws ControladorException, ParseException {
 		
 		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 		
-		for (ImovelFaturamentoSeletivo imovelFaturamentoSeletivo : colecaoImoveis) {
+		LigacaoAgua ligacaoAgua = getControladorMicromedicao().obterLigacaoAgua(imovelFaturamentoSeletivo.getIdImovel());
+		Imovel imovel = getControladorImovel().pesquisarImovel(imovelFaturamentoSeletivo.getIdImovel());
+		
+		Rota rota = getControladorMicromedicao().buscarRotaDoImovel(imovel.getId());
+		
+		Collection<Integer> idsImoveis = new ArrayList<Integer>();
+		idsImoveis.add(imovelFaturamentoSeletivo.getIdImovel());
+		
+		if (ligacaoAgua != null) {
 			
-			LigacaoAgua ligacaoAgua = getControladorMicromedicao().obterLigacaoAgua(imovelFaturamentoSeletivo.getIdImovel());
-			Imovel imovel = getControladorImovel().pesquisarImovel(imovelFaturamentoSeletivo.getIdImovel());
+			this.prepararFaturamentoImovel(FaturamentoAtividade.FATURAR_GRUPO, rota, imovel.getId());
 			
-			Rota rota = getControladorMicromedicao().buscarRotaDoImovel(imovel.getId());
+			MedicaoTipo medicaoTipo = new MedicaoTipo(MedicaoTipo.LIGACAO_AGUA);
+			Collection colecaoResumoFaturamento = new ArrayList();
 			
-			Collection<Integer> idsImoveis = new ArrayList<Integer>();
-			idsImoveis.add(imovelFaturamentoSeletivo.getIdImovel());
+			FaturamentoGrupo grupo = getControladorImovel().pesquisarGrupoImovel(ligacaoAgua.getId());
 			
-			if (ligacaoAgua != null) {
-				
-				//this.prepararFaturamentoImovel(FaturamentoAtividade.FATURAR_GRUPO, rota, imovel.getId());
-				
-				MedicaoTipo medicaoTipo = new MedicaoTipo(MedicaoTipo.LIGACAO_AGUA);
-				Collection colecaoResumoFaturamento = new ArrayList();
-				
-				this.incluirMedicaoHistoricoFaturamentoSeletivo(ligacaoAgua, medicaoTipo, LigacaoTipo.LIGACAO_AGUA, imovelFaturamentoSeletivo.getLeitura(), imovelFaturamentoSeletivo.getAnormalidade(), imovelFaturamentoSeletivo.getDataLeitura());
-				
-				FaturamentoGrupo grupo = getControladorImovel().pesquisarGrupoImovel(ligacaoAgua.getId());
-				
-				FaturamentoAtivCronRota cronogramaFaturamentoRota = this.pesquisarFaturamentoAtivCronRotaPara(
-						rota.getId(), FaturamentoAtividade.FATURAR_GRUPO, grupo.getId(), grupo.getAnoMesReferencia()); 
-				
-				this.getControladorMicromedicao().consistirLeiturasCalcularConsumosImoveis(rota.getFaturamentoGrupo(), idsImoveis);
-				this.faturarImovel(grupo.getAnoMesReferencia(), FaturamentoAtividade.FATURAR_GRUPO.intValue(), 
-						sistemaParametro, cronogramaFaturamentoRota, colecaoResumoFaturamento, imovel, false, grupo);
-				
-				if (colecaoResumoFaturamento != null && !colecaoResumoFaturamento.isEmpty()) {
-					this.inserirResumoSimulacaoFaturamento(colecaoResumoFaturamento);
+			FaturamentoAtivCronRota cronogramaFaturamentoRota = this.pesquisarFaturamentoAtivCronRotaPara(
+					rota.getId(), FaturamentoAtividade.FATURAR_GRUPO, grupo.getId(), grupo.getAnoMesReferencia()); 
+			
+			this.getControladorMicromedicao().consistirLeiturasCalcularConsumosImoveis(rota.getFaturamentoGrupo(), idsImoveis);
+			
+			this.faturarImovel(grupo.getAnoMesReferencia(), FaturamentoAtividade.FATURAR_GRUPO.intValue(), 
+					sistemaParametro, cronogramaFaturamentoRota, colecaoResumoFaturamento, imovel, false, grupo);
+			
+			if (colecaoResumoFaturamento != null && !colecaoResumoFaturamento.isEmpty()) {
+				this.inserirResumoSimulacaoFaturamento(colecaoResumoFaturamento);
 
-					if (colecaoResumoFaturamento != null) {
-						colecaoResumoFaturamento.clear();
-						colecaoResumoFaturamento = null;
-					}
+				if (colecaoResumoFaturamento != null) {
+					colecaoResumoFaturamento.clear();
+					colecaoResumoFaturamento = null;
 				}
-
 			}
+
 		}
 	}
 	
-	private MedicaoHistorico incluirMedicaoHistoricoFaturamentoSeletivo(LigacaoAgua ligacaoAgua, MedicaoTipo medicaoTipo,
-			Integer idLigacaoTipo, Integer leituraAtualInformada, Integer anormalidade, String dataLeitura) throws ControladorException, ParseException {
-		
-		FaturamentoGrupo grupo = getControladorImovel().pesquisarGrupoImovel(ligacaoAgua.getId());
-		Integer anoMesAnterior = Util.subtrairMesDoAnoMes(new Integer(grupo.getAnoMesReferencia()).intValue(), 1);
-
-		MedicaoHistorico medicaoAnterior = getControladorMicromedicao().pesquisarMedicaoHistoricoAnterior(ligacaoAgua.getId(),anoMesAnterior, medicaoTipo.getId());
-
-		boolean houveIntslacaoHidrometro = getControladorMicromedicao().verificarInstalacaoSubstituicaoHidrometro(ligacaoAgua.getId(),medicaoTipo);
-
-		int[] consumoMedioHidrometro = getControladorMicromedicao().obterVolumeMedioAguaEsgoto(ligacaoAgua.getId(),
-						grupo.getAnoMesReferencia(), idLigacaoTipo,houveIntslacaoHidrometro);
-
-		MedicaoHistorico medicaoHistorico = new MedicaoHistorico();
-
-		logger.info("ligacaoAgua: " + ligacaoAgua.getId() + ", anormalidade: " + anormalidade + ", data leitura:" + dataLeitura );
-		SimpleDateFormat dataFormatada = new SimpleDateFormat("dd/MM/yyyy");
-		Date dataLeituraInformada = dataFormatada.parse(dataLeitura);
-		
-		medicaoHistorico.setAnoMesReferencia(grupo.getAnoMesReferencia());
-		medicaoHistorico.setConsumoMedioHidrometro(consumoMedioHidrometro[0]);
-		medicaoHistorico.setDataLeituraAnteriorFaturamento(medicaoAnterior.getDataLeituraAtualFaturamento());
-		medicaoHistorico.setLeituraAnteriorFaturamento(medicaoAnterior.getLeituraAtualFaturamento());
-		medicaoHistorico.setLeituraAnteriorInformada(medicaoAnterior.getLeituraAnteriorInformada());
-		medicaoHistorico.setLeituraSituacaoAnterior(medicaoAnterior.getLeituraSituacaoAtual());
-		medicaoHistorico.setDataLeituraAtualInformada(dataLeituraInformada);
-		medicaoHistorico.setHidrometroInstalacaoHistorico(ligacaoAgua.getHidrometroInstalacaoHistorico());
-		medicaoHistorico.setLeituraSituacaoAtual(new LeituraSituacao(LeituraSituacao.REALIZADA));
-		medicaoHistorico.setLeituraAtualInformada(leituraAtualInformada);
-		medicaoHistorico.setLigacaoAgua(ligacaoAgua);
-		medicaoHistorico.setMedicaoTipo(medicaoTipo);
-		medicaoHistorico.setUltimaAlteracao(new Date());
-		medicaoHistorico.setIndicadorAnalisado(ConstantesSistema.NAO);
-		medicaoHistorico.setDataLeituraAtualFaturamento(dataLeituraInformada);
-		medicaoHistorico.setLeituraAtualFaturamento(leituraAtualInformada);
-		
-		if (anormalidade != null && !anormalidade.equals(new Integer(0))) {
-			medicaoHistorico.setLeituraAnormalidadeInformada(new LeituraAnormalidade(anormalidade));
-		}
-		
-		Integer idMedicao = (Integer) getControladorUtil().inserir(medicaoHistorico);
-		medicaoHistorico.setId(idMedicao);
-
-		return medicaoHistorico;
-	}
-
 	public Conta incluirDebitoContaRetificadaPagamentosDiferenca2Reais(Integer idConta, DebitoACobrar debito) throws Exception {
 		Conta novaConta = null;
 		
