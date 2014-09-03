@@ -26,7 +26,6 @@ import gcom.cadastro.imovel.ImovelContaEnvio;
 import gcom.cadastro.imovel.ImovelDoacao;
 import gcom.cadastro.imovel.ImovelInscricaoAlterada;
 import gcom.cadastro.imovel.ImovelPerfil;
-import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.RepositorioImovelHBM;
 import gcom.cadastro.imovel.Subcategoria;
 import gcom.cadastro.imovel.bean.ImovelCobrarDoacaoHelper;
@@ -185,7 +184,6 @@ import gcom.util.MergeProperties;
 import gcom.util.Util;
 import gcom.util.ZipUtil;
 import gcom.util.email.ServicosEmail;
-import gcom.util.filtro.ColecaoUtil;
 import gcom.util.filtro.ParametroNaoNulo;
 import gcom.util.filtro.ParametroNulo;
 import gcom.util.filtro.ParametroSimples;
@@ -220,11 +218,6 @@ import java.util.zip.GZIPOutputStream;
 import java.util.zip.ZipOutputStream;
 
 import javax.ejb.EJBException;
-import javax.transaction.HeuristicMixedException;
-import javax.transaction.HeuristicRollbackException;
-import javax.transaction.NotSupportedException;
-import javax.transaction.RollbackException;
-import javax.transaction.SystemException;
 
 import org.hibernate.LazyInitializationException;
 import org.jboss.logging.Logger;
@@ -16524,4 +16517,11 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		
 	}
 	
+	public Collection pesquisarClienteContaECliente(Integer idConta, String cnpjEmpresa) throws ControladorException {
+		try{
+		  return repositorioFaturamento.pesquisarClienteContaECliente(idConta, cnpjEmpresa);
+		} catch (ErroRepositorioException ex) {
+	        throw new ControladorException("erro.sistema", ex);
+	    }
+	}
 }

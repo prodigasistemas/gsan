@@ -1,38 +1,33 @@
 package gcom.cobranca;
 
+import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.imovel.Imovel;
+
 import java.io.Serializable;
 import java.util.Date;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class NegativacaoImoveis implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-    /** identifier field */
     private Integer id;
 
-    /** persistent field */
     private Date ultimaAlteracao;
 
-    /** persistent field */
     private short indicadorExcluido;
 
-    /** nullable persistent field */
     private Date dataExclusao;
     
-    /** nullable persistent field */
     private Date dataConfirmacao;
 
-    /** persistent field */
     private Imovel imovel;
 
-    /** persistent field */
-    private gcom.cobranca.NegativacaoComando negativacaoComando;
+    private NegativacaoComando negativacaoComando;
+    
+    private Cliente cliente;
 
-    /** full constructor */
     public NegativacaoImoveis(Integer id, Date ultimaAlteracao, short indicadorExcluido, Date dataExclusao, Imovel imovel, gcom.cobranca.NegativacaoComando negativacaoComando) {
         this.id = id;
         this.ultimaAlteracao = ultimaAlteracao;
@@ -42,11 +37,8 @@ public class NegativacaoImoveis implements Serializable {
         this.negativacaoComando = negativacaoComando;
     }
 
-    /** default constructor */
-    public NegativacaoImoveis() {
-    }
+    public NegativacaoImoveis() {}
 
-    /** minimal constructor */
     public NegativacaoImoveis(Integer id, Date ultimaAlteracao, short indicadorExcluido, Imovel imovel, gcom.cobranca.NegativacaoComando negativacaoComando) {
         this.id = id;
         this.ultimaAlteracao = ultimaAlteracao;
@@ -104,9 +96,7 @@ public class NegativacaoImoveis implements Serializable {
     }
 
     public String toString() {
-        return new ToStringBuilder(this)
-            .append("id", getId())
-            .toString();
+        return new ToStringBuilder(this).append("id", getId()).toString();
     }
 
 	public Date getDataConfirmacao() {
@@ -117,4 +107,11 @@ public class NegativacaoImoveis implements Serializable {
 		this.dataConfirmacao = dataConfirmacao;
 	}
 
+	public Cliente getCliente() {
+		return cliente;
+	}
+
+	public void setCliente(Cliente cliente) {
+		this.cliente = cliente;
+	}
 }

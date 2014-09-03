@@ -18,6 +18,8 @@ public class ObterDebitoImovelOuClienteHelper {
 	private Collection<CreditoARealizar> colecaoCreditoARealizar;
 	private Collection<GuiaPagamentoValoresHelper> colecaoGuiasPagamentoValores;
 	private Collection<DebitoCreditoParcelamentoHelper> colecaoDebitoCreditoParcelamentoHelper;
+	private Integer anoMesReferenciaInicioDebito;
+	private Integer anoMesReferenciaFinalDebito;
 
 	public ObterDebitoImovelOuClienteHelper() {
 		
@@ -137,5 +139,21 @@ public class ObterDebitoImovelOuClienteHelper {
 			}
 		}
 		return valorTotalImpostos;
+	}
+
+	public Integer getAnoMesReferenciaInicioDebito() {
+		return anoMesReferenciaInicioDebito;
+	}
+
+	public void setAnoMesReferenciaInicioDebito(Integer anoMesReferenciaInicioDebito) {
+		this.anoMesReferenciaInicioDebito = anoMesReferenciaInicioDebito;
+	}
+
+	public Integer getAnoMesReferenciaFinalDebito() {
+		return anoMesReferenciaFinalDebito;
+	}
+
+	public void setAnoMesReferenciaFinalDebito(Integer anoMesReferenciaFinalDebito) {
+		this.anoMesReferenciaFinalDebito = anoMesReferenciaFinalDebito;
 	}
 }

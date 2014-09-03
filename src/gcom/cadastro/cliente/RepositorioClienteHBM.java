@@ -1,6 +1,7 @@
 package gcom.cadastro.cliente;
 
 import gcom.cadastro.cliente.bean.PesquisarClienteResponsavelSuperiorHelper;
+import gcom.cadastro.geografico.UnidadeFederacao;
 import gcom.util.ConstantesSistema;
 import gcom.util.ErroRepositorioException;
 import gcom.util.HibernateUtil;
@@ -2550,6 +2551,89 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 		}
 
 		return retorno;
-		
+	}
+	
+	public Integer pesquisarEnderecoClienteParaNegativacao(Integer idCliente)throws ErroRepositorioException {
+
+		Session session = HibernateUtil.getSession();
+		String consulta = null;
+		Integer retorno = null;
+
+		try {
+			consulta = "SELECT cled.id " 
+			     	+ " from ClienteEndereco cled "
+					+ " inner join  cled.logradouroCep as logCep "
+					+ " inner join  cled.cliente as clie "
+					+ " inner join  logCep.cep "
+					+ " where clie.id = :idCliente "
+					+ " and cled.indicadorEnderecoCorrespondencia = :indicadorEnderecoCorrespondencia ";
+
+			retorno = (Integer)session.createQuery(consulta)
+					.setInteger("idCliente",idCliente)
+					.setShort("indicadorEnderecoCorrespondencia", ConstantesSistema.SIM)
+				    .setMaxResults(1).uniqueResult();
+			
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
+	
+	public Cliente pesquisarDadosClienteParaNegativacao(Integer idCliente, String cnpjEmpresa) throws ErroRepositorioException {
+		Object[] arrayCliente = null;
+		Session session = HibernateUtil.getSession();
+		String consulta = null;
+		Cliente cliente = null;
+
+		try {
+			consulta = "SELECT cliente.id, " // 0
+					+ "cliente.nome, " // 1
+					+ "cliente.cnpj, " // 2
+					+ "cliente.cpf, " // 3
+					+ "unfe.id, " // 4
+					+ "cliente.indicadorPermiteNegativacao " // 5
+					+ "from Cliente cliente "
+					+ "left join cliente.unidadeFederacao unfe "
+					+ "where cliente.id = :idCliente "
+					+ "and (cliente.cnpj is not null or cliente.cpf is not null)"
+					+ "and (cliente.cnpj is null or cliente.cnpj <>:cnpjEmpresa)";
+
+			arrayCliente = (Object[]) session.createQuery(consulta)
+					.setInteger("idCliente", idCliente)
+					.setString("cnpjEmpresa", cnpjEmpresa)
+					.setMaxResults(1).uniqueResult();
+
+			if (arrayCliente != null) {
+				cliente = new Cliente();
+
+				if (arrayCliente[0] != null) {
+					cliente.setId((Integer) arrayCliente[0]);
+				}
+				if (arrayCliente[1] != null) {
+					cliente.setNome((String) arrayCliente[1]);
+				}
+				if (arrayCliente[2] != null) {
+					cliente.setCnpj((String) arrayCliente[2]);
+				}
+				if (arrayCliente[3] != null) {
+					cliente.setCpf((String) arrayCliente[3]);
+				}
+				if (arrayCliente[4] != null) {
+					UnidadeFederacao unidadeFederacao = new UnidadeFederacao();
+					unidadeFederacao.setId((Integer) arrayCliente[4]);
+					cliente.setUnidadeFederacao(unidadeFederacao);
+				}
+				if (arrayCliente[5] != null) {
+					cliente.setIndicadorPermiteNegativacao((Short) arrayCliente[5]);
+				}
+			}
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return cliente;
 	}
 }

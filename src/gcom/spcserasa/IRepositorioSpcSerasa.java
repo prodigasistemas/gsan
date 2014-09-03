@@ -2955,5 +2955,5 @@ public interface IRepositorioSpcSerasa {
 	 */
 	public void atualizarDataRetiradaSituacaoCartaEnviada(Date dataExlusao, Integer idImovel) throws ErroRepositorioException;
 	
-	
+	public boolean verificarExistenciaNegativacaoImovelECliente(Integer idImovel,Integer idCliente) throws ErroRepositorioException;
 }

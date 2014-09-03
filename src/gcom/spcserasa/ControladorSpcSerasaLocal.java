@@ -842,8 +842,7 @@ public interface ControladorSpcSerasaLocal extends javax.ejb.EJBLocalObject {
 	public Object[] pesquisarQuantidadeInclusaoNegativacaoSimulacao(Integer idNegComando)
 	throws ControladorException;
 	
-	public void gerarArquivoInclusao(Integer idNegtComando, Integer idMovimento, 
-			Integer idNegativador) throws ControladorException;
+	public void gerarArquivoNegativacao(Integer idComando, Integer idMovimento, Integer idNegativador, NegativadorMovimento negativadorMovimento, boolean trailler) throws ControladorException;
 	
 	/**
 	 * Método que gera os movimento de inclusao de negativacao por Matricula de Imovel

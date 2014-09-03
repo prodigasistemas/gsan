@@ -31571,4 +31571,27 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 
 		return retorno;
 	}
+	
+	public Collection pesquisarClienteGuiaPagamentoECliente(Integer idGuiaPagamento) throws ErroRepositorioException {
+		Collection retorno = null;
+		Session session = HibernateUtil.getSession();
+
+		try {
+			String consulta = "select cgp "
+					+ "from ClienteGuiaPagamento cgp "
+					+ "inner join fetch cgp.cliente cli "
+					+ "inner join cgp.guiaPagamento guia "
+					+ "where guia.id =:idGuiaPagamento ";
+
+			retorno = (Collection) session.createQuery(consulta)
+					.setInteger("idGuiaPagamento", idGuiaPagamento.intValue())
+					.list();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
 }
