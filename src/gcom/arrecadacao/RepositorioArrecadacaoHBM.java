@@ -24281,13 +24281,11 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					+ "FROM Pagamento as pgmt "
 					+ "LEFT JOIN pgmt.documentoTipo as dotp "
 					+ "LEFT JOIN pgmt.localidade as loca "
-//					+ "LEFT JOIN pgmt.imovel as imov "
-//					+ "LEFT JOIN pgmt.pagamentoSituacaoAtual as pgst "
 					+ "LEFT JOIN pgmt.guiaPagamento as gpag "
 					+ "WHERE pgmt.anoMesReferenciaArrecadacao <= :anoMesReferencia AND " 
 					+ " dotp.id in (:guiaPagamento, :entradaParcelamento ) "
 					+ "AND pgmt.guiaPagamento IS NOT NULL AND loca.id = :idLocalidade "
-					+ "AND gpag.anoMesReferenciaContabil >= :referenciafaturamento "
+					+ "AND gpag.anoMesReferenciaContabil > :referenciafaturamento "
 					+ "ORDER BY gpag.id, pgmt.dataPagamento ";
 
 			retorno = session.createQuery(consulta)
@@ -24348,7 +24346,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					+ " dotp.id in (:guiaPagamento, :entradaParcelamento ) "
 					+ "AND pgmt.guiaPagamento IS NOT NULL "
 					+ "AND loca.id = :idLocalidade "
-					+ "AND gpag.anoMesReferenciaContabil < :referenciafaturamento "
+					+ "AND gpag.anoMesReferenciaContabil <= :referenciafaturamento "
 					+ "ORDER BY gpag.id, pgmt.dataPagamento ";
 
 			retorno = session.createQuery(consulta)

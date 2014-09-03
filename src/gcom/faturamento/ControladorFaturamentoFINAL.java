@@ -253,6 +253,7 @@ import gcom.financeiro.lancamento.LancamentoTipo;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
 import gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoEmitirOSHelper;
+import gcom.gui.faturamento.ImovelFaturamentoSeletivo;
 import gcom.gui.faturamento.consumotarifa.bean.CategoriaFaixaConsumoTarifaHelper;
 import gcom.interceptor.Interceptador;
 import gcom.interceptor.ObjetoTransacao;
@@ -278,6 +279,8 @@ import gcom.micromedicao.consumo.LigacaoTipo;
 import gcom.micromedicao.hidrometro.HidrometroInstalacaoHistorico;
 import gcom.micromedicao.hidrometro.HidrometroLocalInstalacao;
 import gcom.micromedicao.hidrometro.HidrometroProtecao;
+import gcom.micromedicao.leitura.LeituraAnormalidade;
+import gcom.micromedicao.leitura.LeituraSituacao;
 import gcom.micromedicao.leitura.LeituraTipo;
 import gcom.micromedicao.medicao.FiltroMedicaoHistoricoSql;
 import gcom.micromedicao.medicao.MedicaoHistorico;
@@ -392,7 +395,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	protected IRepositorioClienteImovel repositorioClienteImovel;
 	protected IRepositorioCadastro repositorioCadastro;
 	protected IRepositorioImovel repositorioImovel;
-	
+
 	private Logger logger = Logger.getLogger(ControladorFaturamentoFINAL.class);
 
 	public void ejbCreate() throws CreateException {
@@ -1816,138 +1819,33 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * Este caso de uso permite faturar um conjunto de rotas de um grupo de
-	 * faturamento.
-	 * 
 	 * [UC0113] - Faturar Grupo de Faturamento
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 26/03/2008
-	 * 
-	 * @param colecaoFaturamentoAtividadeCronogramaRota
-	 * @param faturamentoGrupo
-	 * @param anoMesReferenciaFaturamento
-	 * @param atividade
-	 * @param idFuncionalidadeIniciada
-	 * @throws ControladorException
 	 */
-	public void faturarGrupoFaturamento(
-			Collection colecaoFaturamentoAtividadeCronogramaRota,
-			FaturamentoGrupo faturamentoGrupo, int atividade,
+	public void faturarGrupoFaturamento(Collection colecaoFaturamentoAtividadeCronogramaRota, FaturamentoGrupo faturamentoGrupo, int atividade,
 			int idFuncionalidadeIniciada) throws ControladorException {
 
-		// -------------------------
-		//
-		// Registrar o início do processamento da Unidade de
-		// Processamento
-		// do Batch
-		//
-		// -------------------------
 		int idUnidadeIniciada = 0;
-		idUnidadeIniciada = getControladorBatch()
-				.iniciarUnidadeProcessamentoBatch(
-						idFuncionalidadeIniciada,
-						UnidadeProcessamento.ROTA,
-						((FaturamentoAtivCronRota) Util
-								.retonarObjetoDeColecao(colecaoFaturamentoAtividadeCronogramaRota))
-								.getRota().getId());
+		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
+						UnidadeProcessamento.ROTA, ((FaturamentoAtivCronRota) Util.retonarObjetoDeColecao(colecaoFaturamentoAtividadeCronogramaRota)).getRota().getId());
 
 		try {
 
-			SistemaParametro sistemaParametro = getControladorUtil()
-					.pesquisarParametrosDoSistema();
+			SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
-			/*
-			 * Caso a coleção de atividade de faturamento de cronograma para
-			 * rota não esteja nula para cada rota informada seleciona as
-			 * quadras da rota e para cada quadra os imóveis
-			 */
-			if (colecaoFaturamentoAtividadeCronogramaRota != null
-					&& !colecaoFaturamentoAtividadeCronogramaRota.isEmpty()) {
+			if (colecaoFaturamentoAtividadeCronogramaRota != null && !colecaoFaturamentoAtividadeCronogramaRota.isEmpty()) {
 
-				Iterator iteratorColecaoFaturamentoAtividadeCronogramaRota = colecaoFaturamentoAtividadeCronogramaRota
-						.iterator();
+				Iterator iteratorColecaoFaturamentoAtividadeCronogramaRota = colecaoFaturamentoAtividadeCronogramaRota.iterator();
 
-				// Objeto que armazenará as informações para deleção das contas
 				ApagarDadosFaturamentoHelper helper = new ApagarDadosFaturamentoHelper();
 
-				// LAÇO PARA FATURAR TODAS AS ROTAS
-				while (iteratorColecaoFaturamentoAtividadeCronogramaRota
-						.hasNext()) {
+				while (iteratorColecaoFaturamentoAtividadeCronogramaRota.hasNext()) {
 
-					FaturamentoAtivCronRota faturamentoAtivCronRota = (FaturamentoAtivCronRota) iteratorColecaoFaturamentoAtividadeCronogramaRota
-							.next();
+					FaturamentoAtivCronRota faturamentoAtivCronRota = (FaturamentoAtivCronRota) iteratorColecaoFaturamentoAtividadeCronogramaRota.next();
 
-					helper.setRota(faturamentoAtivCronRota.getRota());
-					helper.setAnoMesFaturamento(faturamentoGrupo
-							.getAnoMesReferencia());
-
-					this.atualizarLigacaoEsgotoPorRota(faturamentoAtivCronRota.getRota(), atividade);
-
-					// APAGAR DADOS GERADOS PARA A ROTA NO ANO/MES DE REFERENCIA
-					// DO FATURAMENTO
-					// =================================================================================================
-
-					helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.NORMAL);
-
-					this.apagarDadosGeradosFaturarGrupoFaturamento(helper,
-							atividade);
-
-					// =================================================================================================
-
-					// APAGAR DADOS GERADOS DO RESUMO DA SIMULAÇÃO PARA A ROTA
-					// NO ANO/MES DE REFERENCIA DO FATURAMENTO
-					// =================================================================================================
-					this.apagarDadosGeradosResumoFaturamentoSimulacaoDetalhe(
-							faturamentoGrupo.getId(), helper);
-					this.apagarDadosGeradosResumoFaturamentoSimulacao(
-							faturamentoGrupo.getId(), helper);
-					// =================================================================================================
-
-					helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.PRE_FATURADA);
-
-					this.apagarDadosGeradosFaturarGrupoFaturamento(helper,
-							atividade);
-
-					/*
-					 * Caso o mês de faturamento corresponda ao mês de novembro,
-					 * o sistema exclui também os dados do resumo da simulação
-					 * do faturamento do mês de dezembro.
-					 */
-					if (Util.obterMes(faturamentoGrupo.getAnoMesReferencia()) == ConstantesSistema.NOVEMBRO) {
-
-						helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.NORMAL);
-
-						// Cria o ano/mês de referência para dezembro do ano
-						// informado
-						helper.setAnoMesFaturamento(Util
-								.somaUmMesAnoMesReferencia(faturamentoGrupo
-										.getAnoMesReferencia()));
-
-						// APAGAR DADOS GERADOS PARA A ROTA NO ANO/MES DE
-						// REFERENCIA DO FATURAMENTO
-						// =================================================================================================
-
-						this.apagarDadosGeradosFaturarGrupoFaturamento(helper,
-								atividade);
-
-						// =================================================================================================
-
-						// APAGAR DADOS GERADOS DO RESUMO DA SIMULAÇÃO PARA A
-						// ROTA NO ANO/MES DE REFERENCIA DO FATURAMENTO
-						// =================================================================================================
-						this.apagarDadosGeradosResumoFaturamentoSimulacaoDetalhe(
-								faturamentoGrupo.getId(), helper);
-						this.apagarDadosGeradosResumoFaturamentoSimulacao(
-								faturamentoGrupo.getId(), helper);
-						// =================================================================================================
-
-						helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.PRE_FATURADA);
-
-						this.apagarDadosGeradosFaturarGrupoFaturamento(helper,
-								atividade);
-
-					}
+					Rota rota = faturamentoAtivCronRota.getRota();
+					rota.setFaturamentoGrupo(faturamentoGrupo);
+					
+					this.prepararFaturamentoImovel(atividade, rota, null);
 
 					// Variáveis para a paginação da pesquisa de Imovel por
 					// Grupo Faturamento
@@ -2123,17 +2021,18 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			}
 
 		}
-		
+
 		if (existeImovelConta == null
 				|| (conta != null
-						&& conta.getDebitoCreditoSituacaoAtual() != null 
-						&& conta.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.PRE_FATURADA))) {
+					&& conta.getDebitoCreditoSituacaoAtual() != null 
+					&& conta.getDebitoCreditoSituacaoAtual().getId().equals(DebitoCreditoSituacao.PRE_FATURADA))) {
 
 			boolean gerarAtividadeGrupoFaturamento = false;
 
 			if (atividade == FaturamentoAtividade.FATURAR_GRUPO.intValue()) {
 				gerarAtividadeGrupoFaturamento = true;
-			} else if (atividade == FaturamentoAtividade.SIMULAR_FATURAMENTO.intValue()) {
+			} else if (atividade == FaturamentoAtividade.SIMULAR_FATURAMENTO
+					.intValue()) {
 				gerarAtividadeGrupoFaturamento = false;
 			}
 
@@ -2241,31 +2140,10 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 	/**
 	 * Determina os dados do faturamento do imóvel.
-	 * 
 	 * [UC0113] - Faturar Grupo de Faturamento
-	 * 
 	 * [SB0001 - Determinar Faturamento para o Imóvel]
-	 * 
-	 * @author Raphael Rossiter
-	 * @date 27/03/2008
-	 * 
-	 * @param imovel
-	 * @param gerarAtividadeGrupoFaturamento
-	 * @param faturamentoAtivCronRota
-	 * @param colecaoResumoFaturamento
-	 * @param sistemaParametro
-	 * @param faturamentoAntecipado
-	 * @param anoMesFaturamento
-	 * @throws ControladorException
 	 */
-	// protected void determinarFaturamentoImovel(Imovel imovel,
-	// boolean gerarAtividadeGrupoFaturamento, FaturamentoAtivCronRota
-	// faturamentoAtivCronRota,
-	// Collection colecaoResumoFaturamento, SistemaParametro sistemaParametro,
-	// boolean faturamentoAntecipado,
-	// Integer anoMesFaturamento, FaturamentoGrupo faturamentoGrupo)
-	// throws ControladorException {
-
+	@SuppressWarnings("unchecked")
 	public void determinarFaturamentoImovel(Imovel imovel,
 			boolean gerarAtividadeGrupoFaturamento,
 			FaturamentoAtivCronRota faturamentoAtivCronRota,
@@ -2277,25 +2155,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		Collection colecaoCategorias = getControladorImovel().obterQuantidadeEconomiasCategoria(imovel);
 		Collection colecaoCategoriaOUSubcategoria = getControladorImovel().obterColecaoCategoriaOuSubcategoriaDoImovel(imovel);
 
-		// Inicializando o objeto que armazenará as informações que serão
-		// utilizadas no cálculo da conta
 		DeterminarValoresFaturamentoAguaEsgotoHelper helperValoresAguaEsgoto = new DeterminarValoresFaturamentoAguaEsgotoHelper();
 
-		// Obtendo os consumos de água e esgoto do imóvel a ser faturado
+		LigacaoTipo ligacaoTipoAgua = new LigacaoTipo(LigacaoTipo.LIGACAO_AGUA);
+		LigacaoTipo ligacaoTipoEsgoto = new LigacaoTipo(LigacaoTipo.LIGACAO_ESGOTO);
 
-		// LIGACAO_TIPO_AGUA
-		LigacaoTipo ligacaoTipoAgua = new LigacaoTipo();
-		ligacaoTipoAgua.setId(LigacaoTipo.LIGACAO_AGUA);
-
-		// LIGACAO_TIPO_ESGOTO
-		LigacaoTipo ligacaoTipoEsgoto = new LigacaoTipo();
-		ligacaoTipoEsgoto.setId(LigacaoTipo.LIGACAO_ESGOTO);
-
-		// CONSUMO_HISTORICO_AGUA
-		ConsumoHistorico consumoHistoricoAgua = this
-				.getControladorMicromedicao()
-				.obterConsumoHistoricoMedicaoIndividualizada(imovel,
-						ligacaoTipoAgua, anoMesFaturamento);
+		ConsumoHistorico consumoHistoricoAgua = this.getControladorMicromedicao().obterConsumoHistoricoMedicaoIndividualizada(imovel, ligacaoTipoAgua, anoMesFaturamento);
 
 		Integer consumoAgua = null;
 		ConsumoTipo consumoTipoAgua = null;
@@ -2305,224 +2170,110 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			consumoTipoAgua = consumoHistoricoAgua.getConsumoTipo();
 		}
 
-		// CONSUMO_HISTORICO_ESGOTO
-		ConsumoHistorico consumoHistoricoEsgoto = this
-				.getControladorMicromedicao()
-				.obterConsumoHistoricoMedicaoIndividualizada(imovel,
-						ligacaoTipoEsgoto, anoMesFaturamento);
+		ConsumoHistorico consumoHistoricoEsgoto = this.getControladorMicromedicao().obterConsumoHistoricoMedicaoIndividualizada(imovel,ligacaoTipoEsgoto, anoMesFaturamento);
 
 		Integer consumoEsgoto = null;
 		ConsumoTipo consumoTipoEsgoto = null;
 
 		if (consumoHistoricoEsgoto != null) {
-			consumoEsgoto = consumoHistoricoEsgoto
-					.getNumeroConsumoFaturadoMes();
+			consumoEsgoto = consumoHistoricoEsgoto.getNumeroConsumoFaturadoMes();
 			consumoTipoEsgoto = consumoHistoricoEsgoto.getConsumoTipo();
 		}
 
-		/**TODO:COSANPA
-		 * @author Adriana Muniz
-		 * date: 28/06/2012 
-		 * 
-		 * Verificar se o imovel situação especial de faturamento e se o indicador de paralisação 
-		 * do faturamento igual é 1
-		 * */
-		boolean faturar = true;
-		
-		// Verificar se é para faturar pela situação especial de faturamento
-		FiltroFaturamentoSituacaoHistorico filtroFaturamentoSituacaoHistorico = new FiltroFaturamentoSituacaoHistorico();
-		filtroFaturamentoSituacaoHistorico
-				.adicionarParametro(new ParametroSimples(
-						FiltroFaturamentoSituacaoHistorico.ID_IMOVEL,
-						imovel.getId()));
-		filtroFaturamentoSituacaoHistorico
-				.adicionarParametro(new ParametroNulo(
-						FiltroFaturamentoSituacaoHistorico.ANO_MES_FATURAMENTO_RETIRADA));
-		Collection<FaturamentoSituacaoHistorico> colFiltroFaturamentoSituacaoHistorico = this
-				.getControladorUtil().pesquisar(
-						filtroFaturamentoSituacaoHistorico,
-						FaturamentoSituacaoHistorico.class.getName());
+		if (permiteFaturarSituacaoEspecialFaturamento(imovel, anoMesFaturamento)) {
 
-		FaturamentoSituacaoHistorico faturamentoSituacaoHistorico = (FaturamentoSituacaoHistorico) Util
-				.retonarObjetoDeColecao(colFiltroFaturamentoSituacaoHistorico);
+			if (this.permiteFaturamentoParaAgua(imovel.getLigacaoAguaSituacao(), consumoAgua, consumoTipoAgua)
+					|| this.permiteFaturamentoParaEsgoto(imovel.getLigacaoEsgotoSituacao(), consumoEsgoto,consumoTipoEsgoto)) {
 
-
-		if (imovel.getFaturamentoSituacaoTipo() != null
-				&& !imovel.getFaturamentoSituacaoTipo().equals("")) {
-
-			if ((faturamentoSituacaoHistorico != null
-					&& anoMesFaturamento >= faturamentoSituacaoHistorico
-							.getAnoMesFaturamentoSituacaoInicio() && anoMesFaturamento <= faturamentoSituacaoHistorico
-					.getAnoMesFaturamentoSituacaoFim())
-					&& (imovel.getFaturamentoSituacaoTipo() != null
-							&& imovel.getFaturamentoSituacaoTipo()
-									.getIndicadorParalisacaoFaturamento()
-									.intValue() == 1 
-							&& imovel.getFaturamentoSituacaoTipo().getIndicadorValidoAgua().intValue() == 1)) {
-				faturar = false;
+				helperValoresAguaEsgoto = this.determinarValoresFaturamentoAguaEsgoto(imovel, anoMesFaturamento, colecaoCategoriaOUSubcategoria,
+								faturamentoGrupo, consumoHistoricoAgua, consumoHistoricoEsgoto);
 			}
-		}
 
-		if(faturar) {
-			
-			if (this.permiteFaturamentoParaAgua(imovel.getLigacaoAguaSituacao(),
-					consumoAgua, consumoTipoAgua)
-					|| this.permiteFaturamentoParaEsgoto(
-							imovel.getLigacaoEsgotoSituacao(), consumoEsgoto,
-							consumoTipoEsgoto)) {
-				
-				// [SB0002] - Determinar Valores para Faturamento de Água e/ou
-				// Esgoto
-				helperValoresAguaEsgoto = this
-				.determinarValoresFaturamentoAguaEsgoto(imovel,
-						anoMesFaturamento, colecaoCategoriaOUSubcategoria,
-						faturamentoGrupo, consumoHistoricoAgua,
-						consumoHistoricoEsgoto);
-				
-			}
-			
-			// [SB0003] - Verificar Não Geração da Conta
-			boolean gerarConta = this.verificarNaoGeracaoConta(imovel,
-					helperValoresAguaEsgoto.getValorTotalAgua(),
-					helperValoresAguaEsgoto.getValorTotalEsgoto(),
-					anoMesFaturamento, false);
-			
+			boolean gerarConta = this.verificarNaoGeracaoConta(imovel, helperValoresAguaEsgoto.getValorTotalAgua(), 
+					helperValoresAguaEsgoto.getValorTotalEsgoto(), anoMesFaturamento, false);
+
 			if (gerarConta) {
-				
+
 				boolean preFaturamento = false;
+
+				GerarDebitoCobradoHelper gerarDebitoCobradoHelper = this.gerarDebitoCobrado(imovel, anoMesFaturamento, 
+						sistemaParametro,gerarAtividadeGrupoFaturamento);
 				
-				// [SB0004] - Gerar os Débitos Cobrados
-				GerarDebitoCobradoHelper gerarDebitoCobradoHelper = this
-				.gerarDebitoCobrado(imovel, anoMesFaturamento,
-						sistemaParametro, gerarAtividadeGrupoFaturamento);
-				
-				// [SB0005] - Gerar os Créditos Realizados
-				GerarCreditoRealizadoHelper gerarCreditoRealizadoHelper = this
-				.gerarCreditoRealizado(imovel, anoMesFaturamento,
-						helperValoresAguaEsgoto,
-						gerarDebitoCobradoHelper.getValorTotalDebito(),
-						gerarAtividadeGrupoFaturamento, preFaturamento);
-				
-				// ATIVIDADE FATURAR GRUPO
+				GerarCreditoRealizadoHelper gerarCreditoRealizadoHelper = this.gerarCreditoRealizado(imovel, anoMesFaturamento,helperValoresAguaEsgoto,
+						gerarDebitoCobradoHelper.getValorTotalDebito(), gerarAtividadeGrupoFaturamento, preFaturamento);
+
 				if (gerarAtividadeGrupoFaturamento) {
-					
-					// [UC0351] - Gerar Impostos Deduzidos da Conta
-					GerarImpostosDeduzidosContaHelper gerarImpostosDeduzidosContaHelper = this
-					.gerarImpostosDeduzidosConta(imovel.getId(),
-							anoMesFaturamento, helperValoresAguaEsgoto
-							.getValorTotalAgua(),
-							helperValoresAguaEsgoto.getValorTotalEsgoto(),
-							gerarDebitoCobradoHelper.getValorTotalDebito(),
-							gerarCreditoRealizadoHelper
-							.getValorTotalCredito(), preFaturamento);
-					
-					gerarDebitoCobradoHelper
-					.setGerarImpostosDeduzidosContaHelper(gerarImpostosDeduzidosContaHelper);
-					
-					// [SB0006] - Gerar Dados da Conta
+
+					GerarImpostosDeduzidosContaHelper gerarImpostosDeduzidosContaHelper = this.gerarImpostosDeduzidosConta(imovel.getId(),
+									anoMesFaturamento, helperValoresAguaEsgoto.getValorTotalAgua(),
+									helperValoresAguaEsgoto.getValorTotalEsgoto(),
+									gerarDebitoCobradoHelper.getValorTotalDebito(),
+									gerarCreditoRealizadoHelper.getValorTotalCredito(),
+									preFaturamento);
+
+					gerarDebitoCobradoHelper.setGerarImpostosDeduzidosContaHelper(gerarImpostosDeduzidosContaHelper);
+
 					Conta conta = this.gerarConta(imovel, anoMesFaturamento,
 							sistemaParametro, faturamentoAtivCronRota,
 							helperValoresAguaEsgoto, gerarDebitoCobradoHelper,
 							gerarCreditoRealizadoHelper,
-							gerarImpostosDeduzidosContaHelper, faturamentoGrupo,
-							faturamentoAntecipado, preFaturamento);
-					
-					GerarContaCategoriaHelper gerarContaCategoriaHelper = this
-					.gerarContaCategoria(
-							conta,
-							colecaoCategoriaOUSubcategoria,
-							helperValoresAguaEsgoto
-							.getColecaoCalcularValoresAguaEsgotoHelper(),
-							sistemaParametro);
-					
+							gerarImpostosDeduzidosContaHelper,
+							faturamentoGrupo, faturamentoAntecipado,
+							preFaturamento);
+
+					GerarContaCategoriaHelper gerarContaCategoriaHelper = this.gerarContaCategoria(conta, colecaoCategoriaOUSubcategoria,
+									helperValoresAguaEsgoto.getColecaoCalcularValoresAguaEsgotoHelper(), sistemaParametro);
+
 					// INSERINDO CONTA_CATEGORIA NA BASE
 					if (gerarContaCategoriaHelper.getColecaoContaCategoria() != null
-							&& !gerarContaCategoriaHelper
-							.getColecaoContaCategoria().isEmpty()) {
-						
-						this.getControladorBatch().inserirColecaoObjetoParaBatch(
-								gerarContaCategoriaHelper
-								.getColecaoContaCategoria());
+							&& !gerarContaCategoriaHelper.getColecaoContaCategoria().isEmpty()) {
+						this.getControladorBatch().inserirColecaoObjetoParaBatch(gerarContaCategoriaHelper.getColecaoContaCategoria());
 					}
-					
+
 					// INSERINDO CONTA_CATEGORIA_CONSUMO_FAIXA
-					if (gerarContaCategoriaHelper
-							.getColecaoContaCategoriaConsumoFaixa() != null
-							&& !gerarContaCategoriaHelper
-							.getColecaoContaCategoriaConsumoFaixa()
-							.isEmpty()) {
-						
-						this.getControladorBatch().inserirColecaoObjetoParaBatch(
-								gerarContaCategoriaHelper
-								.getColecaoContaCategoriaConsumoFaixa());
+					if (gerarContaCategoriaHelper.getColecaoContaCategoriaConsumoFaixa() != null
+							&& !gerarContaCategoriaHelper.getColecaoContaCategoriaConsumoFaixa().isEmpty()) {
+
+						this.getControladorBatch().inserirColecaoObjetoParaBatch(gerarContaCategoriaHelper.getColecaoContaCategoriaConsumoFaixa());
 					}
-					
-					// INSERINDO CLIENTE_CONTA
+
 					this.inserirClienteConta(conta, imovel);
+					this.inserirContaImpostosDeduzidos(conta,gerarImpostosDeduzidosContaHelper);
+					this.inserirDebitoCobrado(gerarDebitoCobradoHelper.getMapDebitosCobrados(),conta);
 					
-					// INSERINDO CONTA_IMPOSTOS_DEDUZIDOS
-					this.inserirContaImpostosDeduzidos(conta,
-							gerarImpostosDeduzidosContaHelper);
-					
-					// INSERINDO DEBITO_COBRADO E DEBITO_COBRADO_CATEGORIA
-					this.inserirDebitoCobrado(
-							gerarDebitoCobradoHelper.getMapDebitosCobrados(), conta);
-					
-					// ATUALIZANDO DEBITO_A_COBRAR
-					this.atualizarDebitoACobrarFaturamento(gerarDebitoCobradoHelper
-							.getColecaoDebitoACobrar());
-					
-					// INSERINDO CREDITO_REALIZADO E CREDITO_REALIZADO_CATEGORIA
-					this.inserirCreditoRealizado(
-							gerarCreditoRealizadoHelper.getMapCreditoRealizado(),
-							conta);
-					
-					// ATUALIZANDO CREDITO_A_REALIZAR
-					this.atualizarCreditoARealizar(gerarCreditoRealizadoHelper
-							.getColecaoCreditoARealizar());
-					
-					// INSERINDO CONTA_IMPRESSAO
-					this.gerarContaImpressao(conta, faturamentoGrupo, imovel,
-							faturamentoAtivCronRota.getRota());
-					
-					// -----------------------------------------------------------------------------------------------------
-					
-					// [SF0008] - Gerar Movimento De Débito Automático
-					if (imovel.getIndicadorDebitoConta().equals(
-							ConstantesSistema.SIM)
-							&& conta.getContaMotivoRevisao() == null) {
-						
-						this.gerarMovimentoDebitoAutomatico(imovel, conta,
-								faturamentoGrupo);
+					this.atualizarDebitoACobrarFaturamento(gerarDebitoCobradoHelper.getColecaoDebitoACobrar());
+
+					this.inserirCreditoRealizado(gerarCreditoRealizadoHelper.getMapCreditoRealizado(), conta);
+
+					this.atualizarCreditoARealizar(gerarCreditoRealizadoHelper.getColecaoCreditoARealizar());
+
+					this.gerarContaImpressao(conta, faturamentoGrupo, imovel,faturamentoAtivCronRota.getRota());
+
+					if (imovel.getIndicadorDebitoConta().equals(ConstantesSistema.SIM) && conta.getContaMotivoRevisao() == null) {
+						this.gerarMovimentoDebitoAutomatico(imovel, conta, faturamentoGrupo);
 					}
 				}
-				
-				// Atividade Simular Faturamento Grupo
+
 				if (!gerarAtividadeGrupoFaturamento) {
-					
-					// [UC0351] - Gerar Impostos Deduzidos da Conta
-					GerarImpostosDeduzidosContaHelper gerarImpostosDeduzidosContaHelper = this
-					.gerarImpostosDeduzidosConta(imovel.getId(),
-							anoMesFaturamento, helperValoresAguaEsgoto
-							.getValorTotalAgua(),
-							helperValoresAguaEsgoto.getValorTotalEsgoto(),
-							gerarDebitoCobradoHelper.getValorTotalDebito(),
-							gerarCreditoRealizadoHelper
-							.getValorTotalCredito(), preFaturamento);
-					
-					gerarDebitoCobradoHelper
-					.setGerarImpostosDeduzidosContaHelper(gerarImpostosDeduzidosContaHelper);
-					
+					GerarImpostosDeduzidosContaHelper gerarImpostosDeduzidosContaHelper = this.gerarImpostosDeduzidosConta(imovel.getId(),
+									anoMesFaturamento, helperValoresAguaEsgoto.getValorTotalAgua(),
+									helperValoresAguaEsgoto.getValorTotalEsgoto(),
+									gerarDebitoCobradoHelper.getValorTotalDebito(),
+									gerarCreditoRealizadoHelper.getValorTotalCredito(),
+									preFaturamento);
+
+					gerarDebitoCobradoHelper.setGerarImpostosDeduzidosContaHelper(gerarImpostosDeduzidosContaHelper);
+
 					Integer anoMesReferenciaResumoFaturamento = null;
-					
+
 					if (faturamentoAntecipado) {
 						anoMesReferenciaResumoFaturamento = anoMesFaturamento;
 					}
-					// [SB0009] - Gerar Resumo da Simulação do Faturamento
+					
 					this.gerarResumoFaturamentoSimulacao(colecaoCategorias,
-							helperValoresAguaEsgoto
-							.getColecaoCalcularValoresAguaEsgotoHelper(),
-							gerarDebitoCobradoHelper, gerarCreditoRealizadoHelper,
+							helperValoresAguaEsgoto.getColecaoCalcularValoresAguaEsgotoHelper(),
+							gerarDebitoCobradoHelper,
+							gerarCreditoRealizadoHelper,
 							colecaoResumoFaturamento, imovel,
 							gerarAtividadeGrupoFaturamento,
 							faturamentoAtivCronRota, faturamentoGrupo,
@@ -2530,6 +2281,34 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				}
 			}
 		}
+	}
+
+	private boolean permiteFaturarSituacaoEspecialFaturamento(Imovel imovel,
+			Integer anoMesFaturamento) throws ControladorException {
+		boolean faturar = true;
+
+		// Verificar se é para faturar pela situação especial de faturamento
+		FiltroFaturamentoSituacaoHistorico filtroFaturamentoSituacaoHistorico = new FiltroFaturamentoSituacaoHistorico();
+		filtroFaturamentoSituacaoHistorico.adicionarParametro(new ParametroSimples(FiltroFaturamentoSituacaoHistorico.ID_IMOVEL, imovel.getId()));
+		filtroFaturamentoSituacaoHistorico.adicionarParametro(new ParametroNulo(FiltroFaturamentoSituacaoHistorico.ANO_MES_FATURAMENTO_RETIRADA));
+		Collection<FaturamentoSituacaoHistorico> colFiltroFaturamentoSituacaoHistorico = this.getControladorUtil().pesquisar(
+						filtroFaturamentoSituacaoHistorico,
+						FaturamentoSituacaoHistorico.class.getName());
+
+		FaturamentoSituacaoHistorico faturamentoSituacaoHistorico = (FaturamentoSituacaoHistorico) Util.retonarObjetoDeColecao(colFiltroFaturamentoSituacaoHistorico);
+
+		if (imovel.getFaturamentoSituacaoTipo() != null && !imovel.getFaturamentoSituacaoTipo().equals("")) {
+
+			if ((faturamentoSituacaoHistorico != null
+					&& anoMesFaturamento >= faturamentoSituacaoHistorico.getAnoMesFaturamentoSituacaoInicio() 
+					&& anoMesFaturamento <= faturamentoSituacaoHistorico.getAnoMesFaturamentoSituacaoFim())
+					&& (imovel.getFaturamentoSituacaoTipo() != null
+							&& imovel.getFaturamentoSituacaoTipo().getIndicadorParalisacaoFaturamento().intValue() == 1 
+							&& imovel.getFaturamentoSituacaoTipo().getIndicadorValidoAgua().intValue() == 1)) {
+				faturar = false;
+			}
+		}
+		return faturar;
 	}
 
 	/**
@@ -4166,43 +3945,34 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 	/**
 	 * [UC0113] - Faturar Grupo de Faturamento
-	 * 
 	 * Verifica se o imóvel gera conta ou não.
-	 * 
 	 * [SF0003] - Verificar Não Geração da Conta
-	 * 
-	 * @author Leonardo Vieira, Pedro Alexandre, Ivan Sergio
-	 * @date 17/01/2006,13/09/2006, 27/07/2010
-	 * 
-	 * @param imovel
-	 * @param valorTotalAgua
-	 * @param valorTotalEsgoto
-	 * @param isPreFaturamento boolean - Indica se essa verificacao de geracao de conta esta 
-	 * sendo feita para um prefaturamento ou nao
-	 * @return <true> se for para gerar conta, <false> caso contrário
-	 * @throws ControladorException
 	 */
 	public boolean verificarNaoGeracaoConta(Imovel imovel,
 			BigDecimal valorTotalAgua, BigDecimal valorTotalEsgoto,
-			int anoMesFaturamento, boolean isPreFaturamento) throws ControladorException {
+			int anoMesFaturamento, boolean isPreFaturamento)
+			throws ControladorException {
 
 		boolean retorno = true;
 		boolean primeiraCondicaoNaoGerarConta = false;
 		boolean segundaCondicaoNaoGerarConta = false;
 
 		/*
-		 * TODO : COSANPA
-		 * Alteração para gerar a rota com imóveis ativos ou inativos com débitos
+		 * TODO : COSANPA Alteração para gerar a rota com imóveis ativos ou
+		 * inativos com débitos
 		 */
 		// 1.1 Caso o valor total da água e o valor total do esgoto seja igual a
 		// zero. Satisfaz a primeira condição.
-		if ((valorTotalAgua.compareTo(ConstantesSistema.VALOR_ZERO) == 0 && 
-				valorTotalEsgoto.compareTo(ConstantesSistema.VALOR_ZERO) == 0)
-				|| (valorTotalAgua.compareTo(ConstantesSistema.VALOR_ZERO) != 0 && 
-					valorTotalEsgoto.compareTo(ConstantesSistema.VALOR_ZERO) != 0 &&
-					!imovel.getLigacaoAguaSituacao().getId().equals(LigacaoAguaSituacao.LIGADO) &&
-					!imovel.getLigacaoEsgotoSituacao().getId().equals(LigacaoEsgotoSituacao.LIGADO) &&
-					(isPreFaturamento && imovel.getImovelCondominio() == null))) {
+		if ((valorTotalAgua.compareTo(ConstantesSistema.VALOR_ZERO) == 0 && valorTotalEsgoto
+				.compareTo(ConstantesSistema.VALOR_ZERO) == 0)
+				|| (valorTotalAgua.compareTo(ConstantesSistema.VALOR_ZERO) != 0
+						&& valorTotalEsgoto
+								.compareTo(ConstantesSistema.VALOR_ZERO) != 0
+						&& !imovel.getLigacaoAguaSituacao().getId()
+								.equals(LigacaoAguaSituacao.LIGADO)
+						&& !imovel.getLigacaoEsgotoSituacao().getId()
+								.equals(LigacaoEsgotoSituacao.LIGADO) && (isPreFaturamento && imovel
+						.getImovelCondominio() == null))) {
 
 			primeiraCondicaoNaoGerarConta = true;
 		}
@@ -4220,15 +3990,19 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		if (colecaoDebitosACobrar == null || colecaoDebitosACobrar.isEmpty()) {
 			segundaCondicaoNaoGerarConta = true;
 		}
-		/**TODO:COSANPA
-		 * @author Adriana Muniz
-		 * date: 28/06/2012 
+		/**
+		 * TODO:COSANPA
 		 * 
-		 * Condição para não gerar conta para imóvel na situação especial como o indicador de paralisação 
-		 * do faturamento igual a 1
+		 * @author Adriana Muniz date: 28/06/2012
+		 * 
+		 *         Condição para não gerar conta para imóvel na situação
+		 *         especial como o indicador de paralisação do faturamento igual
+		 *         a 1
 		 * */
-		else if(imovel.getFaturamentoSituacaoTipo()!= null
-				&& imovel.getFaturamentoSituacaoTipo().getIndicadorParalisacaoFaturamento().equals(ConstantesSistema.SIM))
+		else if (imovel.getFaturamentoSituacaoTipo() != null
+				&& imovel.getFaturamentoSituacaoTipo()
+						.getIndicadorParalisacaoFaturamento()
+						.equals(ConstantesSistema.SIM))
 			segundaCondicaoNaoGerarConta = true;
 		else {
 			// 1.2.2 OU, Caso existam Debitos a Cobrar E existam Pagamentos
@@ -4436,7 +4210,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				&& (imovel.getIndicadorEmissaoExtratoFaturamento() == null || imovel.getIndicadorEmissaoExtratoFaturamento().equals(ConstantesSistema.NAO))) {
 
 			diaVencimentoAlternativo = imovel.getDiaVencimento();
-			indicadorVencimentoMesSeguinte = imovel.getIndicadorVencimentoMesSeguinte();
+			indicadorVencimentoMesSeguinte = imovel
+					.getIndicadorVencimentoMesSeguinte();
 		} else {
 			try {
 				clienteResponsavel = repositorioFaturamento.pesquisarClienteImovelGrupoFaturamento(imovel.getId(), ClienteRelacaoTipo.RESPONSAVEL);
@@ -4459,6 +4234,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			dataVencimentoConta = faturamentoAtivCronRota.getDataContaVencimento();
 		} else {
 			if (indicadorVencimentoMesSeguinte.equals(ConstantesSistema.NAO)) {
+
 				if (diaDataVencimentoRota <= diaVencimentoAlternativo.intValue()) {
 					ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(mesDataVencimentoRota, anoDataVencimentoRota));
 					if (diaVencimentoAlternativo.intValue() > ultimoDiaMes.intValue()) {
@@ -4471,9 +4247,11 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 					ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(mesDataVencimentoRota, anoDataVencimentoRota));
 
-					if (diaVencimentoAlternativo.intValue() > ultimoDiaMes.intValue()) {
+					if (diaVencimentoAlternativo.intValue() > ultimoDiaMes
+							.intValue()) {
 						diaVencimentoAlternativo = ultimoDiaMes;
 					}
+
 
 					Date dataVencimentoAlternativo = Util.criarData(diaVencimentoAlternativo.intValue(), mesDataVencimentoRota, anoDataVencimentoRota);
 					Date dataAtualMaisDiasMinimoEmissao = Util
@@ -4496,6 +4274,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					}
 				}
 			} else {
+
 				Date dataVencimentoRotaMesSeguinte = Util.adcionarOuSubtrairMesesAData(faturamentoAtivCronRota.getDataContaVencimento(), 1, 0);
 
 				ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(Util.getMes(dataVencimentoRotaMesSeguinte), Util.getAno(dataVencimentoRotaMesSeguinte)));
@@ -4514,7 +4293,9 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				.equals(ImovelContaEnvio.NAO_PAGAVEL_IMOVEL_PAGAVEL_RESPONSAVEL))
 				&& diaVencimentoAlternativo == null && imovel.getIndicadorDebitoConta().equals(ConstantesSistema.NAO)) {
 
-			dataVencimentoConta = Util.adicionarNumeroDiasDeUmaData(dataVencimentoConta, sistemaParametro.getNumeroDiasAdicionaisCorreios());
+			dataVencimentoConta = Util.adicionarNumeroDiasDeUmaData(
+					dataVencimentoConta,
+					sistemaParametro.getNumeroDiasAdicionaisCorreios());
 		}
 
 		return dataVencimentoConta;
@@ -8024,77 +7805,115 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			BigDecimal valorEntrada, Usuario usuarioLogado,
 			boolean debitoParaPagamentoAntecipado) throws ControladorException {
 
-		boolean temPermissaoDebitoACobrar = getControladorPermissaoEspecial().verificarPermissaoInserirDebitoACobrarSemEntradaSemJuros(usuarioLogado);
+		boolean temPermissaoDebitoACobrar = getControladorPermissaoEspecial()
+				.verificarPermissaoInserirDebitoACobrarSemEntradaSemJuros(
+						usuarioLogado);
 
 		if (!temPermissaoDebitoACobrar) {
 			if (debitoACobrar.getPercentualTaxaJurosFinanciamento() != null) {
-				BigDecimal percentualTaxaJurosFinanciamento = this.getControladorUtil().pesquisarParametrosDoSistema()
-																											.getPercentualTaxaJurosFinanciamento();
+				BigDecimal percentualTaxaJurosFinanciamento = this
+						.getControladorUtil().pesquisarParametrosDoSistema()
+						.getPercentualTaxaJurosFinanciamento();
 
 				// no caso de numero de prestacões == 1 , permitir juros = 0
-				if (numeroPrestacoes.intValue() != 1 || (debitoACobrar.getPercentualTaxaJurosFinanciamento().compareTo(BigDecimal.ZERO) != 0
-															&& numeroPrestacoes.intValue() == 1)) {
-					if (debitoACobrar.getPercentualTaxaJurosFinanciamento().compareTo(percentualTaxaJurosFinanciamento) == -1) {
-						throw new ControladorException("atencao.taxa_juros.nao.permitida", null, (this.getControladorUtil().pesquisarParametrosDoSistema()
-																															.getPercentualTaxaJurosFinanciamento()
-																															.toString()).replace(".", ","));
+				if (numeroPrestacoes.intValue() != 1
+						|| (debitoACobrar.getPercentualTaxaJurosFinanciamento()
+								.compareTo(BigDecimal.ZERO) != 0 && numeroPrestacoes
+								.intValue() == 1)) {
+					if (debitoACobrar.getPercentualTaxaJurosFinanciamento()
+							.compareTo(percentualTaxaJurosFinanciamento) == -1) {
+						throw new ControladorException(
+								"atencao.taxa_juros.nao.permitida", null,
+								(this.getControladorUtil()
+										.pesquisarParametrosDoSistema()
+										.getPercentualTaxaJurosFinanciamento()
+										.toString()).replace(".", ","));
 					}
 				}
 			}
 		}
 
-		if (numeroPrestacoes.shortValue() > getControladorUtil().pesquisarParametrosDoSistema().getNumeroMaximoParcelasFinanciamento().shortValue()) {
-			throw new ControladorException("atencao.valor_prestacoes", null, getControladorUtil().pesquisarParametrosDoSistema().getNumeroMaximoParcelasFinanciamento().toString());
+		if (numeroPrestacoes.shortValue() > getControladorUtil()
+				.pesquisarParametrosDoSistema()
+				.getNumeroMaximoParcelasFinanciamento().shortValue()) {
+			throw new ControladorException("atencao.valor_prestacoes", null,
+					getControladorUtil().pesquisarParametrosDoSistema()
+							.getNumeroMaximoParcelasFinanciamento().toString());
 		}
 
 		FiltroDebitoTipo filtroDebitoTipo = new FiltroDebitoTipo();
-		filtroDebitoTipo.adicionarParametro(new ParametroSimples(FiltroDebitoTipo.ID, debitoACobrar.getDebitoTipo().getId()));
-		
-		Collection colecaoDebitosTipos = getControladorUtil().pesquisar(filtroDebitoTipo, DebitoTipo.class.getName());
+		filtroDebitoTipo.adicionarParametro(new ParametroSimples(
+				FiltroDebitoTipo.ID, debitoACobrar.getDebitoTipo().getId()));
 
-		DebitoTipo debitoTipo = (DebitoTipo) colecaoDebitosTipos.iterator().next();
+		Collection colecaoDebitosTipos = getControladorUtil().pesquisar(
+				filtroDebitoTipo, DebitoTipo.class.getName());
 
-		if (debitoACobrar.getValorDebito().compareTo(debitoTipo.getValorLimite()) == 1) {
-			throw new ControladorException("atencao.debito_a_cobrar.valor_total_servico", null, debitoTipo.getValorLimite().toString().replace(".", ","));
+		DebitoTipo debitoTipo = (DebitoTipo) colecaoDebitosTipos.iterator()
+				.next();
+
+		if (debitoACobrar.getValorDebito().compareTo(
+				debitoTipo.getValorLimite()) == 1) {
+			throw new ControladorException(
+					"atencao.debito_a_cobrar.valor_total_servico", null,
+					debitoTipo.getValorLimite().toString().replace(".", ","));
 		}
 
-		if (percentualAbatimento != null && !(percentualAbatimento.compareTo(new BigDecimal("0.00")) == 0)) {
+		if (percentualAbatimento != null
+				&& !(percentualAbatimento.compareTo(new BigDecimal("0.00")) == 0)) {
 			if ((imovel.getLigacaoAguaSituacao().getId().intValue() == LigacaoAguaSituacao.SUPRIMIDO)
 					| (imovel.getLigacaoAguaSituacao().getId().intValue() == LigacaoAguaSituacao.SUPR_PARC)
 					| (imovel.getLigacaoAguaSituacao().getId().intValue() == LigacaoAguaSituacao.SUPR_PARC_PEDIDO)) {
 
-				Collection colecaoCategorias = getControladorImovel().obterQuantidadeEconomiasCategoria(imovel);
+				Collection colecaoCategorias = getControladorImovel()
+						.obterQuantidadeEconomiasCategoria(imovel);
 
-				Iterator colecaoCategoriasIterator = colecaoCategorias.iterator();
+				Iterator colecaoCategoriasIterator = colecaoCategorias
+						.iterator();
 
 				while (colecaoCategoriasIterator.hasNext()) {
-					Categoria categoria = (Categoria) colecaoCategoriasIterator.next();
+					Categoria categoria = (Categoria) colecaoCategoriasIterator
+							.next();
 					if (categoria.getId().compareTo(Categoria.RESIDENCIAL) != 0) {
-						throw new ControladorException("atencao.imovel.nao_suprimido.categoria.nao_residencial");
+						throw new ControladorException(
+								"atencao.imovel.nao_suprimido.categoria.nao_residencial");
 					}
 				}
 			} else {
-				throw new ControladorException("atencao.imovel.nao_suprimido.categoria.nao_residencial");
+				throw new ControladorException(
+						"atencao.imovel.nao_suprimido.categoria.nao_residencial");
 			}
 
-			if (percentualAbatimento.compareTo(getControladorUtil().pesquisarParametrosDoSistema().getPercentualMaximoAbatimento()) == 1) {
-				throw new ControladorException("atencao.imovel.percentual_abatimento", null, getControladorUtil().pesquisarParametrosDoSistema()
-																													.getPercentualMaximoAbatimento().toString()
-																													.replace(".", ","));
+			if (percentualAbatimento.compareTo(getControladorUtil()
+					.pesquisarParametrosDoSistema()
+					.getPercentualMaximoAbatimento()) == 1) {
+				throw new ControladorException(
+						"atencao.imovel.percentual_abatimento", null,
+						getControladorUtil().pesquisarParametrosDoSistema()
+								.getPercentualMaximoAbatimento().toString()
+								.replace(".", ","));
 			}
 		}
 
-		if (valorEntrada != null && valorEntrada.compareTo(valorTotalServico) == 1) {
-			throw new ControladorException("atencao.debito_a_cobrar.valor_entrada.valor_total_servico");
+		if (valorEntrada != null
+				&& valorEntrada.compareTo(valorTotalServico) == 1) {
+			throw new ControladorException(
+					"atencao.debito_a_cobrar.valor_entrada.valor_total_servico");
 		}
 
 		if (!temPermissaoDebitoACobrar) {
 			if (valorEntrada != null && numeroPrestacoes.intValue() > 1) {
-				BigDecimal parte1 = getControladorUtil().pesquisarParametrosDoSistema().getPercentualFinanciamentoEntradaMinima().divide(new BigDecimal(100));
+				BigDecimal parte1 = getControladorUtil()
+						.pesquisarParametrosDoSistema()
+						.getPercentualFinanciamentoEntradaMinima()
+						.divide(new BigDecimal(100));
 
 				if ((valorEntrada.compareTo(valorTotalServico.multiply(parte1)) == -1)) {
-					throw new ControladorException("atencao.debito_a_cobrar.valor_entrada", null, getControladorUtil().pesquisarParametrosDoSistema()
-																		.getPercentualFinanciamentoEntradaMinima().toString().replace(".", ",") + "");
+					throw new ControladorException(
+							"atencao.debito_a_cobrar.valor_entrada", null,
+							getControladorUtil().pesquisarParametrosDoSistema()
+									.getPercentualFinanciamentoEntradaMinima()
+									.toString().replace(".", ",")
+									+ "");
 				}
 			}
 		}
@@ -8106,12 +7925,15 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		 */
 		if (!debitoParaPagamentoAntecipado) {
 
-			SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+			SistemaParametro sistemaParametro = getControladorUtil()
+					.pesquisarParametrosDoSistema();
 
 			debitoACobrar.setAnoMesReferenciaDebito(null);
-			debitoACobrar.setAnoMesCobrancaDebito(sistemaParametro.getAnoMesArrecadacao());
+			debitoACobrar.setAnoMesCobrancaDebito(sistemaParametro
+					.getAnoMesArrecadacao());
 
-			int anoMesReferenciaContabil = sistemaParametro.getAnoMesFaturamento();
+			int anoMesReferenciaContabil = sistemaParametro
+					.getAnoMesFaturamento();
 			int anoMesCorrente = Util.getAnoMesComoInt(new Date());
 
 			if (sistemaParametro.getAnoMesFaturamento() < anoMesCorrente) {
@@ -8153,8 +7975,10 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		debitoACobrar.setDebitoACobrarGeral(debitoACobrarGeral);
 		debitoACobrar.setId(idDebitoGerado);
 
-		registrarTransacao(debitoACobrar, Operacao.OPERACAO_DEBITO_A_COBRAR_INSERIR, imovel, usuarioLogado, debitoACobrar.getId());
-		
+		registrarTransacao(debitoACobrar,
+				Operacao.OPERACAO_DEBITO_A_COBRAR_INSERIR, imovel,
+				usuarioLogado, debitoACobrar.getId());
+
 		getControladorUtil().inserir(debitoACobrar);
 
 		inserirDebitoACobrarCategoria(debitoACobrar, imovel);
@@ -8397,23 +8221,32 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @param debitoACobrar
 	 *            Debito A Cobrar
 	 */
-	public void inserirDebitoACobrarCategoria(DebitoACobrar debitoACobrar, Imovel imovel) throws ControladorException {
+	public void inserirDebitoACobrarCategoria(DebitoACobrar debitoACobrar,
+			Imovel imovel) throws ControladorException {
 
 		// [UC0108] - Obter Quantidade de Economias por Categoria
-		Collection colecaoCategorias = getControladorImovel().obterQuantidadeEconomiasCategoria(imovel);
+		Collection colecaoCategorias = getControladorImovel()
+				.obterQuantidadeEconomiasCategoria(imovel);
 
-		Collection colecaoValoresPorCategoria = getControladorImovel().obterValorPorCategoria(colecaoCategorias, debitoACobrar.getValorDebito());
+		Collection colecaoValoresPorCategoria = getControladorImovel()
+				.obterValorPorCategoria(colecaoCategorias,
+						debitoACobrar.getValorDebito());
 		Iterator icolecaoCategorias = colecaoCategorias.iterator();
-		Iterator icolecaoValoresPorCategoria = colecaoValoresPorCategoria.iterator();
+		Iterator icolecaoValoresPorCategoria = colecaoValoresPorCategoria
+				.iterator();
 
-		while (icolecaoValoresPorCategoria.hasNext() && icolecaoCategorias.hasNext()) {
+		while (icolecaoValoresPorCategoria.hasNext()
+				&& icolecaoCategorias.hasNext()) {
 
 			DebitoACobrarCategoria debitoACobrarCategoria = new DebitoACobrarCategoria();
 			Categoria categoria = (Categoria) icolecaoCategorias.next();
-			BigDecimal valorPorCategoria = (BigDecimal) icolecaoValoresPorCategoria.next();
+			BigDecimal valorPorCategoria = (BigDecimal) icolecaoValoresPorCategoria
+					.next();
 
-			debitoACobrarCategoria.setComp_id(new DebitoACobrarCategoriaPK(debitoACobrar, categoria));
-			debitoACobrarCategoria.setQuantidadeEconomia(categoria.getQuantidadeEconomiasCategoria());
+			debitoACobrarCategoria.setComp_id(new DebitoACobrarCategoriaPK(
+					debitoACobrar, categoria));
+			debitoACobrarCategoria.setQuantidadeEconomia(categoria
+					.getQuantidadeEconomiasCategoria());
 			debitoACobrarCategoria.setUltimaAlteracao(new Date());
 			debitoACobrarCategoria.setValorCategoria(valorPorCategoria);
 			getControladorUtil().inserir(debitoACobrarCategoria);
@@ -10190,7 +10023,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 				boolean imovelHidrometrado = repositorioMicromedicao.verificaExistenciaHidrometro(contaAtual.getImovel().getId());
 
-				System.out.println("Motivo da retificação: ALTERAÇÃO DA LEITURA FATURADA");
+				System.out
+						.println("Motivo da retificação: ALTERAÇÃO DA LEITURA FATURADA");
 				System.out.println("Imóvel: " + imovel.getId());
 				
 				if (imovelHidrometrado) {
@@ -10217,6 +10051,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								leituraAlterada = getControladorMicromedicao().verificarLeituraAtualFaturadaImovel(leituraAtual, contaAtual.getReferencia(),imovel.getId());
 
 								if (leituraAlterada) {
+
 									FaturamentoGrupo grupo = repositorioImovel.pesquisarGrupoImovel(imovel.getId());
 									boolean arquivoProximaReferenciaGerado = getControladorMicromedicao()
 											.pesquisaArquivoRotaPorGrupoEReferencia(grupo.getId(), contaAtual.getReferencia());
@@ -10238,6 +10073,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 				}
 			}
+
+			if (contaAtual.getDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.DEBITO_PRESCRITO)
+					|| contaAtual.getDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.DEBITO_PRESCRITO_CONTAS_INCLUIDAS)) {
+				throw new ControladorException("atencao.contas_prescritas_nao_podem_ser_retificadas", 
+						"exibirRetificarContaAction.do?contaID=" + contaAtual.getId() + "&idImovel=" + imovel.getId(), null);
+			}
+
 			
 			RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CONTA_RETIFICAR, contaAtual.getImovel()
 							.getId(), contaAtual.getId(), new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
@@ -10289,14 +10131,27 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						repositorioFaturamento.atualizarContaCanceladaOuRetificada(contaAtual, raParaRetificacao);
 					}
 
-					System.out.println("==============================================");
+					System.out
+							.println("==============================================");
 					System.out.println("Antes da Atualização no banco ");
 					System.out.println("Imóvel: " + imovel.getId());
-					System.out.println("Referência da conta: " + contaAtual.getReferencia());
-					System.out.println("Situação anterior da conta : " + (contaAtual.getDebitoCreditoSituacaoAnterior() != null ? contaAtual.getDebitoCreditoSituacaoAnterior().getId() : "" ));
-					System.out.println("Situação atual da conta : " + (contaAtual.getDebitoCreditoSituacaoAtual() != null ? contaAtual.getDebitoCreditoSituacaoAtual().getId() : "" ));
-					System.out.println("==============================================");
-					
+					System.out.println("Referência da conta: "
+							+ contaAtual.getReferencia());
+					System.out
+							.println("Situação anterior da conta : "
+									+ (contaAtual
+											.getDebitoCreditoSituacaoAnterior() != null ? contaAtual
+											.getDebitoCreditoSituacaoAnterior()
+											.getId() : ""));
+					System.out
+							.println("Situação atual da conta : "
+									+ (contaAtual
+											.getDebitoCreditoSituacaoAtual() != null ? contaAtual
+											.getDebitoCreditoSituacaoAtual()
+											.getId() : ""));
+					System.out
+							.println("==============================================");
+
 					if (contaAtual.getDebitoCreditoSituacaoAnterior() == null) {
 						repositorioFaturamento.retificarContaAtualizarSituacao(contaAtual, null);
 					} else {
@@ -11020,71 +10875,78 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						// Situação Atual
 						DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 						// Situação Atual
-						/**TODO: COSANPA
-						 * Caso motivo de retificação seja débito prescrito, alterar a situação da conta 
-						 * para 8.
+						/**
+						 * TODO: COSANPA Caso motivo de retificação seja débito
+						 * prescrito, alterar a situação da conta para 8.
 						 * 
 						 * @author Wellington Rocha
 						 * @date 01/06/2012
 						 * 
 						 * */
 						boolean contaPodeSerPrescrita = true;
-						if(contaMotivoCancelamento.getId().equals(ContaMotivoCancelamento.DEBITO_PRESCRITO)
-								|| contaMotivoCancelamento.getId().equals(ContaMotivoCancelamento.PRESCRICAO)){
-							
-							contaPodeSerPrescrita = this.verificarPossibilidadePrescricaoConta(contaColecao.getId());
-							if (contaPodeSerPrescrita){
+						if (contaMotivoCancelamento.getId().equals(
+								ContaMotivoCancelamento.DEBITO_PRESCRITO)
+								|| contaMotivoCancelamento.getId().equals(
+										ContaMotivoCancelamento.PRESCRICAO)) {
+
+							contaPodeSerPrescrita = this
+									.verificarPossibilidadePrescricaoConta(contaColecao
+											.getId());
+							if (contaPodeSerPrescrita) {
 								debitoCreditoSituacao
-									.setId(DebitoCreditoSituacao.DEBITO_PRESCRITO);
+										.setId(DebitoCreditoSituacao.DEBITO_PRESCRITO);
 							}
-						}else{
+						} else {
 							debitoCreditoSituacao
-							.setId(DebitoCreditoSituacao.CANCELADA);
+									.setId(DebitoCreditoSituacao.CANCELADA);
 						}
-						
-						if(!contaPodeSerPrescrita){
+
+						if (!contaPodeSerPrescrita) {
 							throw new ControladorException(
 									"erro.conta_nao_satisfaz_criterios_para_prescricao",
 									"exibirCancelarContaAction.do?contaID="
-									+ contaColecao.getId() + "&idImovel="
-									+ contaColecao.getImovel().getId(), null);
-						}else{
-							
+											+ contaColecao.getId()
+											+ "&idImovel="
+											+ contaColecao.getImovel().getId(),
+									null);
+						} else {
+
 							contaColecao
-							.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
-							
+									.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
+
 							// última alteração
 							contaColecao.setUltimaAlteracao(new Date());
-							
+
 							/*
 							 * Alterado por Raphael Rossiter em 30/07/2007
 							 * (Analista: Rosana Carvalho)
 							 * 
-							 * OBJETIVO: Quando o mes/ano de faturamento for maior
-							 * que o mes/ano de faturamento atual, não alterar o
-							 * mes/ano contábil
+							 * OBJETIVO: Quando o mes/ano de faturamento for
+							 * maior que o mes/ano de faturamento atual, não
+							 * alterar o mes/ano contábil
 							 */
-							
+
 							// alterado por Vivianne Sousa 07/05/2008
 							// analista :Aryed
 							Integer referenciaContabil = obterReferenciaContabilConta(sistemaParametro);
-							contaColecao.setReferenciaContabil(referenciaContabil);
-							
+							contaColecao
+									.setReferenciaContabil(referenciaContabil);
+
 							/*
-							 * Colocado por Raphael Rossiter em 09/08/2007 OBJETIVO:
-							 * Gravar na tabela de conta o usuário que está logado
-							 * no sistema
+							 * Colocado por Raphael Rossiter em 09/08/2007
+							 * OBJETIVO: Gravar na tabela de conta o usuário que
+							 * está logado no sistema
 							 */
-							
+
 							// Usuario
 							contaColecao.setUsuario(usuarioLogado);
-							
+
 							// UPDATE
 							try {
-								
+
 								// ------------ <REGISTRAR
 								// TRANSAÇÃO>----------------------------
-								
+
 								RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 										Operacao.OPERACAO_CANCELAR_CONTA,
 										contaColecao.getImovel().getId(),
@@ -11092,59 +10954,62 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 										new UsuarioAcaoUsuarioHelper(
 												usuarioLogado,
 												UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-								
-								registradorOperacao.registrarOperacao(contaColecao);
-								
+
+								registradorOperacao
+										.registrarOperacao(contaColecao);
+
 								getControladorTransacao().registrarTransacao(
 										contaColecao);
-								
+
 								// ------------ </REGISTRAR
 								// TRANSAÇÃO>----------------------------
-								
-								if (contaColecao.getDebitoCreditoSituacaoAnterior() == null) {
+
+								if (contaColecao
+										.getDebitoCreditoSituacaoAnterior() == null) {
 									repositorioFaturamento
-									.cancelarContaReferenciaContabilMenorSistemaParametro(
-											contaColecao, null);
-									
+											.cancelarContaReferenciaContabilMenorSistemaParametro(
+													contaColecao, null);
+
 								} else {
 									repositorioFaturamento
-									.cancelarContaReferenciaContabilMenorSistemaParametro(
-											contaColecao,
-											contaColecao
-											.getDebitoCreditoSituacaoAnterior()
-											.getId());
+											.cancelarContaReferenciaContabilMenorSistemaParametro(
+													contaColecao,
+													contaColecao
+															.getDebitoCreditoSituacaoAnterior()
+															.getId());
 								}
-								
+
 								// Colocado por Raphael Rossiter em 17/06/2008
 								// Analista: Roberto Souza
 								if (!usuarioPermissaoCancelarSemRA) {
-									
+
 									// Verificar Existência de RA
 									RegistroAtendimento registroAtendimento = this
-									.getControladorRegistroAtendimento()
-									.verificarExistenciaRegistroAtendimentoSemLevantarExcecao(
-											contaColecao.getImovel()
-											.getId(),
-											EspecificacaoTipoValidacao.ALTERACAO_CONTA);
-									
+											.getControladorRegistroAtendimento()
+											.verificarExistenciaRegistroAtendimentoSemLevantarExcecao(
+													contaColecao.getImovel()
+															.getId(),
+													EspecificacaoTipoValidacao.ALTERACAO_CONTA);
+
 									if (registroAtendimento != null) {
 										// Atualizando a conta com o registro de
 										// atendimento que autoriza esta ação
 										repositorioFaturamento
-										.atualizarContaCanceladaOuRetificada(
-												contaColecao,
-												registroAtendimento);
+												.atualizarContaCanceladaOuRetificada(
+														contaColecao,
+														registroAtendimento);
 									}
 								}
-								
+
 								// CRC2725 - alterado por Vivianne Sousa -
 								// 17/09/2009 analista:Fátima
-								// 1.1.2.Verificar se há relação do cancelamento com
+								// 1.1.2.Verificar se há relação do cancelamento
+								// com
 								// itens de negativação
 								getControladorSpcSerasa()
-								.verificarRelacaoDoCancelamentoComItensNegativacao(
-										contaColecao, null);
-								
+										.verificarRelacaoDoCancelamentoComItensNegativacao(
+												contaColecao, null);
+
 							} catch (ErroRepositorioException ex) {
 								sessionContext.setRollbackOnly();
 								new ControladorException("erro.sistema", ex);
@@ -11153,7 +11018,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								throw ex;
 							} catch (Exception ex) {
 								sessionContext.setRollbackOnly();
-								throw new ControladorException("erro.sistema", ex);
+								throw new ControladorException("erro.sistema",
+										ex);
 							}
 						}
 
@@ -15063,7 +14929,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								&& tempItemContabel == null
 								|| (itemContabel != null
 										&& tempItemContabel != null && itemContabel
-										.equals(tempItemContabel))) {
+											.equals(tempItemContabel))) {
 
 							// se for agrupado por gerencia
 							// compara se o registro atual eh da
@@ -15939,9 +15805,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * 
 	 * @throws ControladorException
 	 */
-	public void encerrarFaturamentoMes(Collection<Integer> colecaoIdsLocalidades, int idFuncionalidadeIniciada) throws ControladorException {
+	public void encerrarFaturamentoMes(
+			Collection<Integer> colecaoIdsLocalidades,
+			int idFuncionalidadeIniciada) throws ControladorException {
 
-		SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();
+		SistemaParametro sistemaParametros = getControladorUtil()
+				.pesquisarParametrosDoSistema();
 
 		final Short ZERO = 0;
 		BigDecimal menosUm = new BigDecimal("-1");
@@ -15949,26 +15818,31 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		int anoMesFaturamento = sistemaParametros.getAnoMesFaturamento();
 		int idUnidadeIniciada = 0;
 
-		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada, UnidadeProcessamento.LOCALIDADE,
-						((Integer) Util.retonarObjetoDeColecao(colecaoIdsLocalidades)));
+		idUnidadeIniciada = getControladorBatch()
+				.iniciarUnidadeProcessamentoBatch(
+						idFuncionalidadeIniciada,
+						UnidadeProcessamento.LOCALIDADE,
+						((Integer) Util
+								.retonarObjetoDeColecao(colecaoIdsLocalidades)));
 
 		try {
 			validarGruposFaturadosParaEncerrarFaturamentoMensal(anoMesFaturamento);
 
-			Short maxSequencialImpressaoMais10 = repositorioFaturamento.recuperarValorMaximoSequencialImpressaoMais10();
+			Short maxSequencialImpressaoMais10 = repositorioFaturamento
+					.recuperarValorMaximoSequencialImpressaoMais10();
 			ResumoFaturamento resumoFaturamentoTemporario = null;
 
 			final int indiceValorAgua = 0;
 
 			Object[] arrayValoresAguaEsgoto = null;
 			Object[] arrayValoresCurtoLongoPrazo = null;
-			
+
 			BigDecimal valorAgua = null;
 			BigDecimal valorEsgoto = null;
 			BigDecimal valorItemFaturamento = null;
 			BigDecimal somaValorCurtoPrazo = BigDecimal.ZERO;
 			BigDecimal somaValorLongoPrazo = BigDecimal.ZERO;
-			
+
 			Integer[] idsSituacaoAtual = null;
 			Integer[] idsCreditosOrigem = null;
 			Integer[] idsTipoFinanciamento = null;
@@ -15983,32 +15857,44 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			LancamentoTipo lancamentoTipo = new LancamentoTipo();
 			LancamentoItem lancamentoItem = new LancamentoItem();
 
-			Collection<LancamentoItemContabil> colecaoLancamentosItemContabil = getControladorFinanceiro().pesquisarLancamentoItemContabil();
-			Collection<Categoria> colecaoCategorias = getControladorImovel().pesquisarCategoria();
+			Collection<LancamentoItemContabil> colecaoLancamentosItemContabil = getControladorFinanceiro()
+					.pesquisarLancamentoItemContabil();
+			Collection<Categoria> colecaoCategorias = getControladorImovel()
+					.pesquisarCategoria();
 
 			for (Integer idLocalidade : colecaoIdsLocalidades) {
 
 				BigDecimal valorCreditosRealizadosRecuperacaoCredito = null;
-				
-				repositorioFaturamento.excluirResumoFaturamentoPorAnoMesArrecadacaoPorLocalidade(anoMesFaturamento, idLocalidade);
 
-				Integer idGerenciaRegional = this.getControladorLocalidade().pesquisarIdGerenciaParaLocalidade(idLocalidade);
-				Integer idUnidadeNegocio = this.getControladorLocalidade().pesquisarIdUnidadeNegocioParaLocalidade(idLocalidade);
+				repositorioFaturamento
+						.excluirResumoFaturamentoPorAnoMesArrecadacaoPorLocalidade(
+								anoMesFaturamento, idLocalidade);
+
+				Integer idGerenciaRegional = this.getControladorLocalidade()
+						.pesquisarIdGerenciaParaLocalidade(idLocalidade);
+				Integer idUnidadeNegocio = this.getControladorLocalidade()
+						.pesquisarIdUnidadeNegocioParaLocalidade(idLocalidade);
 
 				Localidade localidade = new Localidade(idLocalidade);
-				GerenciaRegional gerenciaRegional = new GerenciaRegional(idGerenciaRegional);
-				UnidadeNegocio unidadeNegocio = new UnidadeNegocio(idUnidadeNegocio);
+				GerenciaRegional gerenciaRegional = new GerenciaRegional(
+						idGerenciaRegional);
+				UnidadeNegocio unidadeNegocio = new UnidadeNegocio(
+						idUnidadeNegocio);
 
 				localidade.setGerenciaRegional(gerenciaRegional);
 				localidade.setUnidadeNegocio(unidadeNegocio);
-				
-				Collection colecaoResumoFaturamento = repositorioFaturamento.pesquisarResumoFaturamentoPorAnoMes(anoMesFaturamento, idLocalidade);
+
+				Collection colecaoResumoFaturamento = repositorioFaturamento
+						.pesquisarResumoFaturamentoPorAnoMes(anoMesFaturamento,
+								idLocalidade);
 
 				if (!colecaoResumoFaturamento.isEmpty()) {
-					throw new ControladorException("atencao.resumofaturamento_ja_existente");
+					throw new ControladorException(
+							"atencao.resumofaturamento_ja_existente");
 				}
 
-				 //declaração das variáveis que serão utilizadas nos sequencias 560 e 1050
+				// declaração das variáveis que serão utilizadas nos sequencias
+				// 560 e 1050
 				Collection<Object[]> colecaoDadosGuiaDevolucao = null;
 				Map<Integer, BigDecimal> mapValorGuiaDevolucaoPorCategoriaSequencial560 = null;
 				Map<Integer, BigDecimal> mapValorGuiaDevolucaoPorCategoriaSequencial1050 = null;
@@ -16022,63 +15908,96 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					mapValorGuiaDevolucaoPorCategoriaSequencial560 = new HashMap();
 					mapValorGuiaDevolucaoPorCategoriaSequencial1050 = new HashMap();
 
-					//Acumula o valor da guia de devolução para situação da guia igual a cancelada
-					colecaoDadosGuiaDevolucao = repositorioFaturamento.acumularValorGuiaDevolucaoPorLancamentoItemContabil(
-									anoMesFaturamento,
-									idLocalidade,
+					// Acumula o valor da guia de devolução para situação da
+					// guia igual a cancelada
+					colecaoDadosGuiaDevolucao = repositorioFaturamento
+							.acumularValorGuiaDevolucaoPorLancamentoItemContabil(
+									anoMesFaturamento, idLocalidade,
 									DebitoCreditoSituacao.CANCELADA,
 									lancamentoItemContabilTemp.getId());
 
-					 //caso a coleção de dados não esteja nula acumula o valor da guia pela principal categoria do imóvel.
-					if (colecaoDadosGuiaDevolucao != null && !colecaoDadosGuiaDevolucao.isEmpty()) {
+					// caso a coleção de dados não esteja nula acumula o valor
+					// da guia pela principal categoria do imóvel.
+					if (colecaoDadosGuiaDevolucao != null
+							&& !colecaoDadosGuiaDevolucao.isEmpty()) {
 						mapValorGuiaDevolucaoPorCategoriaSequencial560 = obterMapValorGuiaDevolucaoPorCategoria(colecaoDadosGuiaDevolucao);
 					}
 
-					for (Integer idCategoria : mapValorGuiaDevolucaoPorCategoriaSequencial560.keySet()) {
+					for (Integer idCategoria : mapValorGuiaDevolucaoPorCategoriaSequencial560
+							.keySet()) {
 
 						Categoria categoria = new Categoria(idCategoria);
-						BigDecimal valorGuiaDevolucao = mapValorGuiaDevolucaoPorCategoriaSequencial560.get(idCategoria);
+						BigDecimal valorGuiaDevolucao = mapValorGuiaDevolucaoPorCategoriaSequencial560
+								.get(idCategoria);
 
-						mapAcumularValorPorCategoriaReceitaBruta = acumularValorPorCategoriaReceitaBruta(mapAcumularValorPorCategoriaReceitaBruta, idCategoria, valorGuiaDevolucao);
+						mapAcumularValorPorCategoriaReceitaBruta = acumularValorPorCategoriaReceitaBruta(
+								mapAcumularValorPorCategoriaReceitaBruta,
+								idCategoria, valorGuiaDevolucao);
 
-						lancamentoTipo = new LancamentoTipo(LancamentoTipo.GUIAS_DEVOLUCAO_VALORES_COBRADOS_INDEVIDAMENTE_CANCELADOS);
-						lancamentoItem = new LancamentoItem(LancamentoItem.GRUPO_CONTABIL);
+						lancamentoTipo = new LancamentoTipo(
+								LancamentoTipo.GUIAS_DEVOLUCAO_VALORES_COBRADOS_INDEVIDAMENTE_CANCELADOS);
+						lancamentoItem = new LancamentoItem(
+								LancamentoItem.GRUPO_CONTABIL);
 
-						resumoFaturamentoTemporario = buildResumoFaturamento(valorGuiaDevolucao, anoMesFaturamento, categoria, localidade, lancamentoTipo, 
-								lancamentoItem, lancamentoItemContabilTemp, new Short("560"), lancamentoItemContabilTemp.getSequenciaImpressao());
-						
-						if (resumoFaturamentoTemporario.getValorItemFaturamento().compareTo(BigDecimal.ZERO) != 0) {
-							colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+						resumoFaturamentoTemporario = buildResumoFaturamento(
+								valorGuiaDevolucao, anoMesFaturamento,
+								categoria, localidade, lancamentoTipo,
+								lancamentoItem, lancamentoItemContabilTemp,
+								new Short("560"),
+								lancamentoItemContabilTemp
+										.getSequenciaImpressao());
+
+						if (resumoFaturamentoTemporario
+								.getValorItemFaturamento().compareTo(
+										BigDecimal.ZERO) != 0) {
+							colecaoResumoFaturamento
+									.add(resumoFaturamentoTemporario);
 						}
 					}
 
-					 //Acumula o valor da guia de devolução para situação da guia igual a normal.
+					// Acumula o valor da guia de devolução para situação da
+					// guia igual a normal.
 					colecaoDadosGuiaDevolucao = repositorioFaturamento
 							.acumularValorGuiaDevolucaoPorLancamentoItemContabil(
-									anoMesFaturamento,
-									idLocalidade, DebitoCreditoSituacao.NORMAL,
+									anoMesFaturamento, idLocalidade,
+									DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL,
 									lancamentoItemContabilTemp.getId());
 
-					if (colecaoDadosGuiaDevolucao != null && !colecaoDadosGuiaDevolucao.isEmpty()) {
+					if (colecaoDadosGuiaDevolucao != null
+							&& !colecaoDadosGuiaDevolucao.isEmpty()) {
 						mapValorGuiaDevolucaoPorCategoriaSequencial1050 = obterMapValorGuiaDevolucaoPorCategoria(colecaoDadosGuiaDevolucao);
 					}
 
-					for (Integer idCategoria : mapValorGuiaDevolucaoPorCategoriaSequencial1050.keySet()) {
+					for (Integer idCategoria : mapValorGuiaDevolucaoPorCategoriaSequencial1050
+							.keySet()) {
 
 						Categoria categoria = new Categoria(idCategoria);
-						BigDecimal valorGuiaDevolucao = mapValorGuiaDevolucaoPorCategoriaSequencial1050.get(idCategoria);
+						BigDecimal valorGuiaDevolucao = mapValorGuiaDevolucaoPorCategoriaSequencial1050
+								.get(idCategoria);
 
-						mapAcumularValorPorCategoriaReceitaCancelada = acumularValorPorCategoriaReceitaBruta(mapAcumularValorPorCategoriaReceitaCancelada, idCategoria, valorGuiaDevolucao);
+						mapAcumularValorPorCategoriaReceitaCancelada = acumularValorPorCategoriaReceitaBruta(
+								mapAcumularValorPorCategoriaReceitaCancelada,
+								idCategoria, valorGuiaDevolucao);
 
-						lancamentoTipo = new LancamentoTipo(LancamentoTipo.GUIAS_DEVOLUCAO_VALORES_COBRADOS_INDEVIDAMENTE_INCLUIDOS);
-						lancamentoItem = new LancamentoItem(LancamentoItem.GRUPO_CONTABIL);
+						lancamentoTipo = new LancamentoTipo(
+								LancamentoTipo.GUIAS_DEVOLUCAO_VALORES_COBRADOS_INDEVIDAMENTE_INCLUIDOS);
+						lancamentoItem = new LancamentoItem(
+								LancamentoItem.GRUPO_CONTABIL);
 
-						resumoFaturamentoTemporario = buildResumoFaturamento(valorGuiaDevolucao, anoMesFaturamento, categoria, localidade, lancamentoTipo, 
-								lancamentoItem, lancamentoItemContabilTemp, new Short("1050"), lancamentoItemContabilTemp.getSequenciaImpressao());
-						
-						if (resumoFaturamentoTemporario.getValorItemFaturamento().compareTo(BigDecimal.ZERO) != 0) {
-							colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+						resumoFaturamentoTemporario = buildResumoFaturamento(
+								valorGuiaDevolucao, anoMesFaturamento,
+								categoria, localidade, lancamentoTipo,
+								lancamentoItem, lancamentoItemContabilTemp,
+								new Short("1050"),
+								lancamentoItemContabilTemp
+										.getSequenciaImpressao());
+
+						if (resumoFaturamentoTemporario
+								.getValorItemFaturamento().compareTo(
+										BigDecimal.ZERO) != 0) {
+							colecaoResumoFaturamento
+									.add(resumoFaturamentoTemporario);
 						}
 					}
 				}
@@ -16086,43 +16005,66 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				for (Categoria categoria : colecaoCategorias) {
 
 					// receita bruta
-					lancamentoTipo = new LancamentoTipo(LancamentoTipo.RECEITA_BRUTA);
-					lancamentoItem = new LancamentoItem(LancamentoItem.RECEITA_BRUTA);
-					ResumoFaturamento resumoFaturamentoReceitaBruta = this.buildResumoFaturamento(BigDecimal.ZERO, 
-							anoMesFaturamento, null, null, lancamentoTipo, lancamentoItem, null, new Short("600"), ZERO);
+					lancamentoTipo = new LancamentoTipo(
+							LancamentoTipo.RECEITA_BRUTA);
+					lancamentoItem = new LancamentoItem(
+							LancamentoItem.RECEITA_BRUTA);
+					ResumoFaturamento resumoFaturamentoReceitaBruta = this
+							.buildResumoFaturamento(BigDecimal.ZERO,
+									anoMesFaturamento, null, null,
+									lancamentoTipo, lancamentoItem, null,
+									new Short("600"), ZERO);
 
 					// receita cancelada
-					lancamentoTipo = new LancamentoTipo(LancamentoTipo.TOTAL_RECEITA_CANCELADA);
-					lancamentoItem = new LancamentoItem(LancamentoItem.TOTAL_RECEITA_CANCELADA);
-					ResumoFaturamento resumoFaturamentoReceitaCancelada = this.buildResumoFaturamento(BigDecimal.ZERO, 
-							anoMesFaturamento, null, null, lancamentoTipo, lancamentoItem, null, new Short("1100"), ZERO);
-					
+					lancamentoTipo = new LancamentoTipo(
+							LancamentoTipo.TOTAL_RECEITA_CANCELADA);
+					lancamentoItem = new LancamentoItem(
+							LancamentoItem.TOTAL_RECEITA_CANCELADA);
+					ResumoFaturamento resumoFaturamentoReceitaCancelada = this
+							.buildResumoFaturamento(BigDecimal.ZERO,
+									anoMesFaturamento, null, null,
+									lancamentoTipo, lancamentoItem, null,
+									new Short("1100"), ZERO);
+
 					// total cobrado nas contas
-					lancamentoTipo = new LancamentoTipo(LancamentoTipo.TOTAL_COBRADO_NAS_CONTAS);
-					lancamentoItem = new LancamentoItem(LancamentoItem.TOTAL_COBRADO_CONTAS);
-					ResumoFaturamento resumoFaturamentoTotalCobradoNasContas = this.buildResumoFaturamento(BigDecimal.ZERO, 
-							anoMesFaturamento, null, null, lancamentoTipo, lancamentoItem, null, new Short("2700"), ZERO);
-					
+					lancamentoTipo = new LancamentoTipo(
+							LancamentoTipo.TOTAL_COBRADO_NAS_CONTAS);
+					lancamentoItem = new LancamentoItem(
+							LancamentoItem.TOTAL_COBRADO_CONTAS);
+					ResumoFaturamento resumoFaturamentoTotalCobradoNasContas = this
+							.buildResumoFaturamento(BigDecimal.ZERO,
+									anoMesFaturamento, null, null,
+									lancamentoTipo, lancamentoItem, null,
+									new Short("2700"), ZERO);
+
 					// total valores devolvidos nas contas
-					lancamentoTipo = new LancamentoTipo(LancamentoTipo.TOTAL_VALORES_DEVOLVIDOS_NAS_CONTAS);
-					lancamentoItem = new LancamentoItem(LancamentoItem.TOTAL_VALORES_DEVOLVIDOS_NAS_CONTAS);
-					ResumoFaturamento resumoFaturamentoValoresDevolvidosNasContas = this.buildResumoFaturamento(BigDecimal.ZERO, 
-							anoMesFaturamento, null, null, lancamentoTipo, lancamentoItem, null, new Short("2400"), ZERO);
-					
+					lancamentoTipo = new LancamentoTipo(
+							LancamentoTipo.TOTAL_VALORES_DEVOLVIDOS_NAS_CONTAS);
+					lancamentoItem = new LancamentoItem(
+							LancamentoItem.TOTAL_VALORES_DEVOLVIDOS_NAS_CONTAS);
+					ResumoFaturamento resumoFaturamentoValoresDevolvidosNasContas = this
+							.buildResumoFaturamento(BigDecimal.ZERO,
+									anoMesFaturamento, null, null,
+									lancamentoTipo, lancamentoItem, null,
+									new Short("2400"), ZERO);
+
 					// total débitos cancelados por prescrição
-					lancamentoTipo = new LancamentoTipo(LancamentoTipo.TOTAL_DEBITOS_CANCELADOS_POR_PRESCRICAO);
-					lancamentoItem = new LancamentoItem(LancamentoItem.TOTAL_DEBITOS_CANCELADOS_POR_PRESCRICAO);
-					ResumoFaturamento resumoFaturamentoTotalDebitosCanceladosPrescricao = this.buildResumoFaturamento(BigDecimal.ZERO, 
-							anoMesFaturamento, null, null, lancamentoTipo, lancamentoItem, null, new Short("4200"), ZERO);
-					
-					
+					lancamentoTipo = new LancamentoTipo(
+							LancamentoTipo.TOTAL_DEBITOS_CANCELADOS_POR_PRESCRICAO);
+					lancamentoItem = new LancamentoItem(
+							LancamentoItem.TOTAL_DEBITOS_CANCELADOS_POR_PRESCRICAO);
+					ResumoFaturamento resumoFaturamentoTotalDebitosCanceladosPrescricao = this
+							.buildResumoFaturamento(BigDecimal.ZERO,
+									anoMesFaturamento, null, null,
+									lancamentoTipo, lancamentoItem, null,
+									new Short("4200"), ZERO);
+
 					Integer idCategoria = categoria.getId();
 					arrayValoresAguaEsgoto = null;
 					arrayValoresAguaEsgoto = repositorioFaturamento
 							.acumularValorAguaEsgotoPorSituacaoConta(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									DebitoCreditoSituacao.NORMAL,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL);
 
 					// se a pesquisa não retornar um objeto nulo
@@ -16132,281 +16074,457 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						valorEsgoto = (BigDecimal) arrayValoresAguaEsgoto[1];
 
 						// caso exista valor de água e seja diferente de zero
-						if (valorAgua != null && valorAgua.compareTo(BigDecimal.ZERO) != 0) {
-							lancamentoTipo = new LancamentoTipo(LancamentoTipo.AGUA);
-							lancamentoItem = new LancamentoItem(LancamentoItem.AGUA);
+						if (valorAgua != null
+								&& valorAgua.compareTo(BigDecimal.ZERO) != 0) {
+							lancamentoTipo = new LancamentoTipo(
+									LancamentoTipo.AGUA);
+							lancamentoItem = new LancamentoItem(
+									LancamentoItem.AGUA);
 
-							resumoFaturamentoTemporario = buildResumoFaturamento(valorAgua, anoMesFaturamento, categoria, localidade, lancamentoTipo, 
-									lancamentoItem, null, new Short("100"), ZERO);
-							
-							resumoFaturamentoReceitaBruta = this.acumularValorResumoFaturamento(resumoFaturamentoReceitaBruta, resumoFaturamentoTemporario.getValorItemFaturamento());
-							resumoFaturamentoTotalCobradoNasContas = this.acumularValorResumoFaturamento(resumoFaturamentoTotalCobradoNasContas, resumoFaturamentoTemporario.getValorItemFaturamento());
+							resumoFaturamentoTemporario = buildResumoFaturamento(
+									valorAgua, anoMesFaturamento, categoria,
+									localidade, lancamentoTipo, lancamentoItem,
+									null, new Short("100"), ZERO);
 
-							colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+							resumoFaturamentoReceitaBruta = this
+									.acumularValorResumoFaturamento(
+											resumoFaturamentoReceitaBruta,
+											resumoFaturamentoTemporario
+													.getValorItemFaturamento());
+							resumoFaturamentoTotalCobradoNasContas = this
+									.acumularValorResumoFaturamento(
+											resumoFaturamentoTotalCobradoNasContas,
+											resumoFaturamentoTemporario
+													.getValorItemFaturamento());
+
+							colecaoResumoFaturamento
+									.add(resumoFaturamentoTemporario);
 						}
 
 						// caso exista valor de esgoto e seja diferente de zero
-						if (valorEsgoto != null && valorEsgoto.compareTo(BigDecimal.ZERO) != 0) {
+						if (valorEsgoto != null
+								&& valorEsgoto.compareTo(BigDecimal.ZERO) != 0) {
 
-							lancamentoTipo = new LancamentoTipo(LancamentoTipo.ESGOTO);
-							lancamentoItem = new LancamentoItem(LancamentoItem.ESGOTO);
+							lancamentoTipo = new LancamentoTipo(
+									LancamentoTipo.ESGOTO);
+							lancamentoItem = new LancamentoItem(
+									LancamentoItem.ESGOTO);
 
-							resumoFaturamentoTemporario = buildResumoFaturamento(valorEsgoto, anoMesFaturamento, categoria, localidade, lancamentoTipo, 
-									lancamentoItem, null, new Short("200"), ZERO);
-							
-							resumoFaturamentoReceitaBruta = this.acumularValorResumoFaturamento(resumoFaturamentoReceitaBruta, resumoFaturamentoTemporario.getValorItemFaturamento());
-							resumoFaturamentoTotalCobradoNasContas = this.acumularValorResumoFaturamento(resumoFaturamentoTotalCobradoNasContas, resumoFaturamentoTemporario.getValorItemFaturamento());
-							
-							colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+							resumoFaturamentoTemporario = buildResumoFaturamento(
+									valorEsgoto, anoMesFaturamento, categoria,
+									localidade, lancamentoTipo, lancamentoItem,
+									null, new Short("200"), ZERO);
+
+							resumoFaturamentoReceitaBruta = this
+									.acumularValorResumoFaturamento(
+											resumoFaturamentoReceitaBruta,
+											resumoFaturamentoTemporario
+													.getValorItemFaturamento());
+							resumoFaturamentoTotalCobradoNasContas = this
+									.acumularValorResumoFaturamento(
+											resumoFaturamentoTotalCobradoNasContas,
+											resumoFaturamentoTemporario
+													.getValorItemFaturamento());
+
+							colecaoResumoFaturamento
+									.add(resumoFaturamentoTemporario);
 						}
 					}
 					arrayValoresCurtoLongoPrazo = repositorioFaturamento
 							.pesquisarValorLongoECurtoPrazoDebitoACobrarPorGrupoParcelamento(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									ParcelamentoGrupo.JUROS_COBRADOS,
 									DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL, true);
 
-
 					somaValorCurtoPrazo = (BigDecimal) arrayValoresCurtoLongoPrazo[0];
-					if (somaValorCurtoPrazo != null && somaValorCurtoPrazo.compareTo(BigDecimal.ZERO) != 0) {
+					if (somaValorCurtoPrazo != null
+							&& somaValorCurtoPrazo.compareTo(BigDecimal.ZERO) != 0) {
 
-						lancamentoTipo = new LancamentoTipo(LancamentoTipo.PARCELAMENTOS_REALIZADOS_CURTO_PRAZO);
-						lancamentoItem = new LancamentoItem(LancamentoItem.JUROS_COBRADOS);
+						lancamentoTipo = new LancamentoTipo(
+								LancamentoTipo.PARCELAMENTOS_REALIZADOS_CURTO_PRAZO);
+						lancamentoItem = new LancamentoItem(
+								LancamentoItem.JUROS_COBRADOS);
 
-						ResumoFaturamento resumoFaturamentoDebitoACobrarCurtoPrazo = buildResumoFaturamento(somaValorCurtoPrazo, anoMesFaturamento, categoria, localidade, lancamentoTipo, 
-								lancamentoItem, null, new Short("410"), new Short("0"));
-						
-						resumoFaturamentoReceitaBruta = this.acumularValorResumoFaturamento(resumoFaturamentoReceitaBruta, somaValorCurtoPrazo);
-						colecaoResumoFaturamento.add(resumoFaturamentoDebitoACobrarCurtoPrazo);
+						ResumoFaturamento resumoFaturamentoDebitoACobrarCurtoPrazo = buildResumoFaturamento(
+								somaValorCurtoPrazo, anoMesFaturamento,
+								categoria, localidade, lancamentoTipo,
+								lancamentoItem, null, new Short("410"),
+								new Short("0"));
+
+						resumoFaturamentoReceitaBruta = this
+								.acumularValorResumoFaturamento(
+										resumoFaturamentoReceitaBruta,
+										somaValorCurtoPrazo);
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoDebitoACobrarCurtoPrazo);
 					}
 
 					somaValorLongoPrazo = (BigDecimal) arrayValoresCurtoLongoPrazo[1];
-					if (somaValorLongoPrazo != null && somaValorLongoPrazo.compareTo(BigDecimal.ZERO) != 0) {
+					if (somaValorLongoPrazo != null
+							&& somaValorLongoPrazo.compareTo(BigDecimal.ZERO) != 0) {
 
-						lancamentoTipo = new LancamentoTipo(LancamentoTipo.PARCELAMENTOS_REALIZADOS_LONGO_PRAZO);
-						lancamentoItem = new LancamentoItem(LancamentoItem.JUROS_COBRADOS);
+						lancamentoTipo = new LancamentoTipo(
+								LancamentoTipo.PARCELAMENTOS_REALIZADOS_LONGO_PRAZO);
+						lancamentoItem = new LancamentoItem(
+								LancamentoItem.JUROS_COBRADOS);
 
-						ResumoFaturamento resumoFaturamentoDebitoACobrarLongoPrazo = buildResumoFaturamento(somaValorLongoPrazo, anoMesFaturamento, categoria, localidade, lancamentoTipo, 
-								lancamentoItem, null, new Short("420"), new Short("0"));
-						
-						resumoFaturamentoReceitaBruta = this.acumularValorResumoFaturamento(resumoFaturamentoReceitaBruta, somaValorLongoPrazo);
-						colecaoResumoFaturamento.add(resumoFaturamentoDebitoACobrarLongoPrazo);
+						ResumoFaturamento resumoFaturamentoDebitoACobrarLongoPrazo = buildResumoFaturamento(
+								somaValorLongoPrazo, anoMesFaturamento,
+								categoria, localidade, lancamentoTipo,
+								lancamentoItem, null, new Short("420"),
+								new Short("0"));
+
+						resumoFaturamentoReceitaBruta = this
+								.acumularValorResumoFaturamento(
+										resumoFaturamentoReceitaBruta,
+										somaValorLongoPrazo);
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoDebitoACobrarLongoPrazo);
 					}
 
 					for (LancamentoItemContabil lancamentoItemContabilTemp : colecaoLancamentosItemContabil) {
 
-						// acumular o valor de débito para tipo de financiamento igual a serviço e para situação igual a incluída
+						// acumular o valor de débito para tipo de financiamento
+						// igual a serviço e para situação igual a incluída
 						valorItemFaturamento = repositorioFaturamento
 								.acumularValorDebitoTipoFinanciamentoServicoSituacaoIncluida(
-										anoMesFaturamento,
-										idLocalidade, idCategoria,
+										anoMesFaturamento, idLocalidade,
+										idCategoria,
 										lancamentoItemContabilTemp.getId());
 
-						lancamentoTipo = new LancamentoTipo(LancamentoTipo.INCLUSOES_POR_REFATURAMENTO);
-						lancamentoItem = new LancamentoItem(LancamentoItem.GRUPO_CONTABIL);
+						lancamentoTipo = new LancamentoTipo(
+								LancamentoTipo.INCLUSOES_POR_REFATURAMENTO);
+						lancamentoItem = new LancamentoItem(
+								LancamentoItem.GRUPO_CONTABIL);
 
-						resumoFaturamentoTemporario = buildResumoFaturamento(valorItemFaturamento, anoMesFaturamento, categoria, localidade, lancamentoTipo, 
-								lancamentoItem, lancamentoItemContabilTemp, new Short("510"), lancamentoItemContabilTemp.getSequenciaImpressao());
-						
+						resumoFaturamentoTemporario = buildResumoFaturamento(
+								valorItemFaturamento, anoMesFaturamento,
+								categoria, localidade, lancamentoTipo,
+								lancamentoItem, lancamentoItemContabilTemp,
+								new Short("510"),
+								lancamentoItemContabilTemp
+										.getSequenciaImpressao());
+
 						Collection<Integer> colecaoFinanciamentoTipos = new ArrayList<Integer>();
-						
-						colecaoFinanciamentoTipos.add(FinanciamentoTipo.SERVICO_NORMAL);
-						colecaoFinanciamentoTipos.add(FinanciamentoTipo.PARCELAMENTO_AGUA);
-						colecaoFinanciamentoTipos.add(FinanciamentoTipo.PARCELAMENTO_ESGOTO);
-						colecaoFinanciamentoTipos.add(FinanciamentoTipo.PARCELAMENTO_SERVICO);
-						colecaoFinanciamentoTipos.add(FinanciamentoTipo.ARRASTO_AGUA);
-						colecaoFinanciamentoTipos.add(FinanciamentoTipo.ARRASTO_ESGOTO);
-						colecaoFinanciamentoTipos.add(FinanciamentoTipo.ARRASTO_SERVICO);
-						colecaoFinanciamentoTipos.add(FinanciamentoTipo.JUROS_PARCELAMENTO);
-						colecaoFinanciamentoTipos.add(FinanciamentoTipo.ENTRADA_PARCELAMENTO);
-						
-						// calcula a diferença entre as contas canceladas por retificação e retificadas
+
+						colecaoFinanciamentoTipos
+								.add(FinanciamentoTipo.SERVICO_NORMAL);
+						colecaoFinanciamentoTipos
+								.add(FinanciamentoTipo.PARCELAMENTO_AGUA);
+						colecaoFinanciamentoTipos
+								.add(FinanciamentoTipo.PARCELAMENTO_ESGOTO);
+						colecaoFinanciamentoTipos
+								.add(FinanciamentoTipo.PARCELAMENTO_SERVICO);
+						colecaoFinanciamentoTipos
+								.add(FinanciamentoTipo.ARRASTO_AGUA);
+						colecaoFinanciamentoTipos
+								.add(FinanciamentoTipo.ARRASTO_ESGOTO);
+						colecaoFinanciamentoTipos
+								.add(FinanciamentoTipo.ARRASTO_SERVICO);
+						colecaoFinanciamentoTipos
+								.add(FinanciamentoTipo.JUROS_PARCELAMENTO);
+						colecaoFinanciamentoTipos
+								.add(FinanciamentoTipo.ENTRADA_PARCELAMENTO);
+
+						// calcula a diferença entre as contas canceladas por
+						// retificação e retificadas
 						BigDecimal[] valoresAcumuladosCanceladosEIncluidos = this
 								.obterDiferencaValoresServicoIndiretosContaRetificada(
-										anoMesFaturamento,
-										idLocalidade, idCategoria,
-										colecaoFinanciamentoTipos,
-										resumoFaturamentoTemporario.getLancamentoItemContabil().getId());
+										anoMesFaturamento, idLocalidade,
+										idCategoria, colecaoFinanciamentoTipos,
+										resumoFaturamentoTemporario
+												.getLancamentoItemContabil()
+												.getId());
 
-						resumoFaturamentoTemporario = this.acumularValorResumoFaturamento(resumoFaturamentoTemporario, valoresAcumuladosCanceladosEIncluidos[1]);
-						resumoFaturamentoReceitaBruta = this.acumularValorResumoFaturamento(resumoFaturamentoReceitaBruta, resumoFaturamentoTemporario.getValorItemFaturamento());
-						
-						if (resumoFaturamentoTemporario.getValorItemFaturamento().compareTo(BigDecimal.ZERO) != 0) {
-							colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+						resumoFaturamentoTemporario = this
+								.acumularValorResumoFaturamento(
+										resumoFaturamentoTemporario,
+										valoresAcumuladosCanceladosEIncluidos[1]);
+						resumoFaturamentoReceitaBruta = this
+								.acumularValorResumoFaturamento(
+										resumoFaturamentoReceitaBruta,
+										resumoFaturamentoTemporario
+												.getValorItemFaturamento());
+
+						if (resumoFaturamentoTemporario
+								.getValorItemFaturamento().compareTo(
+										BigDecimal.ZERO) != 0) {
+							colecaoResumoFaturamento
+									.add(resumoFaturamentoTemporario);
 						}
-						
+
 						idsCreditosOrigem = obterIdsCreditosOrigemParaEncerramentoFaturamentoMensal();
 
-						// acumula o valor por categoria do credito realizado com origem do credito igual a devolução de tarifa de água,
-						// devolução de tarifa de esgoto, serviços indiretos pagos indevidamente ou devolução de juros de parcelamento e
-						// com situação atual da conta igual cancelada e com ano/mês de referência contábil da conta igual ao ano/mês do faturamento de sistema parâmetro.
+						// acumula o valor por categoria do credito realizado
+						// com origem do credito igual a devolução de tarifa de
+						// água,
+						// devolução de tarifa de esgoto, serviços indiretos
+						// pagos indevidamente ou devolução de juros de
+						// parcelamento e
+						// com situação atual da conta igual cancelada e com
+						// ano/mês de referência contábil da conta igual ao
+						// ano/mês do faturamento de sistema parâmetro.
 						BigDecimal valorCreditoRealizadoOrigemCreditoSituacaoCancelada = repositorioFaturamento
 								.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoLancamentoItemContabil(
-										anoMesFaturamento,
-										idLocalidade, idCategoria,
-										idsCreditosOrigem,
+										anoMesFaturamento, idLocalidade,
+										idCategoria, idsCreditosOrigem,
 										DebitoCreditoSituacao.CANCELADA,
 										lancamentoItemContabilTemp.getId());
 
 						BigDecimal[] diferencaCreditoOrigemCanceladaPorRetificacaoeERetificada = this
 								.obterDiferencaValoresCreditosRealizadosContaRetificada(
-										anoMesFaturamento,
-										idLocalidade, idCategoria,
-										idsCreditosOrigem,
+										anoMesFaturamento, idLocalidade,
+										idCategoria, idsCreditosOrigem,
 										lancamentoItemContabilTemp.getId());
 
 						/*
-						 * Acumula o valores cancelados, a diferença entre o valor dos créditos realizados com origem do crédito
-						 * igual a devolução de tarifa de água, devolução de tarifa de esgoto, serviços indiretos pagos
-						 * indevidamente ou devolução de juros de parcelamento e situação atual da conta igual a cancelada por
-						 * retificação e o valor do crédito realizado com situação atual ou anterior da conta igual a retificada.
+						 * Acumula o valores cancelados, a diferença entre o
+						 * valor dos créditos realizados com origem do crédito
+						 * igual a devolução de tarifa de água, devolução de
+						 * tarifa de esgoto, serviços indiretos pagos
+						 * indevidamente ou devolução de juros de parcelamento e
+						 * situação atual da conta igual a cancelada por
+						 * retificação e o valor do crédito realizado com
+						 * situação atual ou anterior da conta igual a
+						 * retificada.
 						 */
 						valorCreditoRealizadoOrigemCreditoSituacaoCancelada = valorCreditoRealizadoOrigemCreditoSituacaoCancelada
 								.add(diferencaCreditoOrigemCanceladaPorRetificacaoeERetificada[0]);
 
-						if (valorCreditoRealizadoOrigemCreditoSituacaoCancelada.compareTo(BigDecimal.ZERO) != 0) {
+						if (valorCreditoRealizadoOrigemCreditoSituacaoCancelada
+								.compareTo(BigDecimal.ZERO) != 0) {
 
-							lancamentoTipo = new LancamentoTipo(LancamentoTipo.INCLUSOES_POR_REFATURAMENTO);
-							lancamentoItem = new LancamentoItem(LancamentoItem.CREDITOS_PARA_COBRANCA_INDEVIDA_CANCELADOS);
+							lancamentoTipo = new LancamentoTipo(
+									LancamentoTipo.INCLUSOES_POR_REFATURAMENTO);
+							lancamentoItem = new LancamentoItem(
+									LancamentoItem.CREDITOS_PARA_COBRANCA_INDEVIDA_CANCELADOS);
 
-							resumoFaturamentoTemporario = buildResumoFaturamento(valorCreditoRealizadoOrigemCreditoSituacaoCancelada, anoMesFaturamento, categoria, 
-									localidade, lancamentoTipo, lancamentoItem, lancamentoItemContabilTemp, new Short("520"), lancamentoItemContabilTemp.getSequenciaImpressao());
-							
-							resumoFaturamentoReceitaBruta = this.acumularValorResumoFaturamento(resumoFaturamentoReceitaBruta, resumoFaturamentoTemporario.getValorItemFaturamento());
-							colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+							resumoFaturamentoTemporario = buildResumoFaturamento(
+									valorCreditoRealizadoOrigemCreditoSituacaoCancelada,
+									anoMesFaturamento, categoria, localidade,
+									lancamentoTipo, lancamentoItem,
+									lancamentoItemContabilTemp,
+									new Short("520"),
+									lancamentoItemContabilTemp
+											.getSequenciaImpressao());
+
+							resumoFaturamentoReceitaBruta = this
+									.acumularValorResumoFaturamento(
+											resumoFaturamentoReceitaBruta,
+											resumoFaturamentoTemporario
+													.getValorItemFaturamento());
+							colecaoResumoFaturamento
+									.add(resumoFaturamentoTemporario);
 						}
-						
-						// acumula o valor por categoria do credito realizado com origem do credito igual a devolução de tarifa de água,
-						// devolução de tarifa de esgoto, serviços indiretos pagos indevidamente ou devolução de juros de parcelamento e
-						// com situação atual da conta igual incluída e com ano/mês de referência contábil da conta igual ao ano/mês do 
+
+						// acumula o valor por categoria do credito realizado
+						// com origem do credito igual a devolução de tarifa de
+						// água,
+						// devolução de tarifa de esgoto, serviços indiretos
+						// pagos indevidamente ou devolução de juros de
+						// parcelamento e
+						// com situação atual da conta igual incluída e com
+						// ano/mês de referência contábil da conta igual ao
+						// ano/mês do
 						// faturamento de sistema parâmetro.
 						BigDecimal valorCreditoRealizadoOrigemCreditoSituacaoIncluida = repositorioFaturamento
 								.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoLancamentoItemContabil(
-										anoMesFaturamento,
-										idLocalidade, idCategoria,
-										idsCreditosOrigem,
+										anoMesFaturamento, idLocalidade,
+										idCategoria, idsCreditosOrigem,
 										DebitoCreditoSituacao.INCLUIDA,
 										lancamentoItemContabilTemp.getId());
 
 						/*
-						 * Acumula o valores incluidos, a diferença entre o valor dos créditos realizados com origem do crédito
-						 * igual a devolução de tarifa de água, devolução de tarifa de esgoto, serviços indiretos pagos
-						 * indevidamente ou devolução de juros de parcelamento e situação atual da conta igual a cancelada por
-						 * retificação e o valor do crédito realizado com situação atual ou anterior da conta igual a retificada.
+						 * Acumula o valores incluidos, a diferença entre o
+						 * valor dos créditos realizados com origem do crédito
+						 * igual a devolução de tarifa de água, devolução de
+						 * tarifa de esgoto, serviços indiretos pagos
+						 * indevidamente ou devolução de juros de parcelamento e
+						 * situação atual da conta igual a cancelada por
+						 * retificação e o valor do crédito realizado com
+						 * situação atual ou anterior da conta igual a
+						 * retificada.
 						 */
 						valorCreditoRealizadoOrigemCreditoSituacaoIncluida = valorCreditoRealizadoOrigemCreditoSituacaoIncluida
 								.add(diferencaCreditoOrigemCanceladaPorRetificacaoeERetificada[1]);
 
-						if (valorCreditoRealizadoOrigemCreditoSituacaoIncluida.compareTo(BigDecimal.ZERO) != 0) {
-							lancamentoTipo = new LancamentoTipo(LancamentoTipo.CREDITOS_REALIZADOS_CONTAS_INCLUIDAS);
-							lancamentoItem = new LancamentoItem(LancamentoItem.CREDITOS_PARA_COBRANCA_INDEVIDA_INCLUIDOS);
+						if (valorCreditoRealizadoOrigemCreditoSituacaoIncluida
+								.compareTo(BigDecimal.ZERO) != 0) {
+							lancamentoTipo = new LancamentoTipo(
+									LancamentoTipo.CREDITOS_REALIZADOS_CONTAS_INCLUIDAS);
+							lancamentoItem = new LancamentoItem(
+									LancamentoItem.CREDITOS_PARA_COBRANCA_INDEVIDA_INCLUIDOS);
 
-							resumoFaturamentoTemporario = buildResumoFaturamento(valorCreditoRealizadoOrigemCreditoSituacaoIncluida, anoMesFaturamento, categoria, 
-									localidade, lancamentoTipo, lancamentoItem, lancamentoItemContabilTemp, new Short("1010"), lancamentoItemContabilTemp.getSequenciaImpressao());
-							
-							resumoFaturamentoReceitaCancelada = this.acumularValorResumoFaturamento(resumoFaturamentoReceitaCancelada, resumoFaturamentoTemporario.getValorItemFaturamento());
-							colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+							resumoFaturamentoTemporario = buildResumoFaturamento(
+									valorCreditoRealizadoOrigemCreditoSituacaoIncluida,
+									anoMesFaturamento, categoria, localidade,
+									lancamentoTipo, lancamentoItem,
+									lancamentoItemContabilTemp, new Short(
+											"1010"), lancamentoItemContabilTemp
+											.getSequenciaImpressao());
+
+							resumoFaturamentoReceitaCancelada = this
+									.acumularValorResumoFaturamento(
+											resumoFaturamentoReceitaCancelada,
+											resumoFaturamentoTemporario
+													.getValorItemFaturamento());
+							colecaoResumoFaturamento
+									.add(resumoFaturamentoTemporario);
 						}
-						
-						// acumula os valores do débito para tipo de financiamento igual a serviço e situação igual a cancelada 
+
+						// acumula os valores do débito para tipo de
+						// financiamento igual a serviço e situação igual a
+						// cancelada
 						colecaoFinanciamentoTipos = new ArrayList<Integer>();
-						colecaoFinanciamentoTipos.add(FinanciamentoTipo.SERVICO_NORMAL);
-						colecaoFinanciamentoTipos.add(FinanciamentoTipo.ARRASTO_AGUA);
-						colecaoFinanciamentoTipos.add(FinanciamentoTipo.ARRASTO_ESGOTO);
-						colecaoFinanciamentoTipos.add(FinanciamentoTipo.ARRASTO_SERVICO);
-						colecaoFinanciamentoTipos.add(FinanciamentoTipo.ENTRADA_PARCELAMENTO);
+						colecaoFinanciamentoTipos
+								.add(FinanciamentoTipo.SERVICO_NORMAL);
+						colecaoFinanciamentoTipos
+								.add(FinanciamentoTipo.ARRASTO_AGUA);
+						colecaoFinanciamentoTipos
+								.add(FinanciamentoTipo.ARRASTO_ESGOTO);
+						colecaoFinanciamentoTipos
+								.add(FinanciamentoTipo.ARRASTO_SERVICO);
+						colecaoFinanciamentoTipos
+								.add(FinanciamentoTipo.ENTRADA_PARCELAMENTO);
 
 						valorItemFaturamento = repositorioFaturamento
 								.acumularValorDebitoCobradoPorTipoFinanciamento(
-										anoMesFaturamento,
-										idLocalidade, idCategoria,
+										anoMesFaturamento, idLocalidade,
+										idCategoria,
 										lancamentoItemContabilTemp.getId(),
 										DebitoCreditoSituacao.CANCELADA,
 										colecaoFinanciamentoTipos);
 
-						lancamentoTipo = new LancamentoTipo(LancamentoTipo.CANCELAMENTOS_POR_REFATURAMENTO);
-						lancamentoItem = new LancamentoItem(LancamentoItem.GRUPO_CONTABIL);
+						lancamentoTipo = new LancamentoTipo(
+								LancamentoTipo.CANCELAMENTOS_POR_REFATURAMENTO);
+						lancamentoItem = new LancamentoItem(
+								LancamentoItem.GRUPO_CONTABIL);
 
-						resumoFaturamentoTemporario = buildResumoFaturamento(valorItemFaturamento, anoMesFaturamento, categoria, localidade, lancamentoTipo, lancamentoItem, 
-								lancamentoItemContabilTemp, new Short("900"), lancamentoItemContabilTemp.getSequenciaImpressao());
-						
-						// obtém o valor da guia de pagamento para situação igual a cancelada
+						resumoFaturamentoTemporario = buildResumoFaturamento(
+								valorItemFaturamento, anoMesFaturamento,
+								categoria, localidade, lancamentoTipo,
+								lancamentoItem, lancamentoItemContabilTemp,
+								new Short("900"),
+								lancamentoItemContabilTemp
+										.getSequenciaImpressao());
+
+						// obtém o valor da guia de pagamento para situação
+						// igual a cancelada
 						int[] idFinanciamentoTipo = new int[1];
 						idFinanciamentoTipo[0] = FinanciamentoTipo.SERVICO_NORMAL;
 
 						BigDecimal valorGuiaPagamentoSituacaoCancelada = repositorioFaturamento
 								.acumularValorGuiaPagamentoPorTipoFinanciamento(
-										anoMesFaturamento,
-										idLocalidade, idCategoria,
-										idFinanciamentoTipo,
+										anoMesFaturamento, idLocalidade,
+										idCategoria, idFinanciamentoTipo,
 										lancamentoItemContabilTemp.getId(),
 										DebitoCreditoSituacao.CANCELADA);
 
-						resumoFaturamentoTemporario = this.acumularValorResumoFaturamento(resumoFaturamentoTemporario, valorGuiaPagamentoSituacaoCancelada);
+						resumoFaturamentoTemporario = this
+								.acumularValorResumoFaturamento(
+										resumoFaturamentoTemporario,
+										valorGuiaPagamentoSituacaoCancelada);
 
-						// calcula a diferença entre as contas canceladas por retificação e retificadas
+						// calcula a diferença entre as contas canceladas por
+						// retificação e retificadas
 						colecaoFinanciamentoTipos = new ArrayList<Integer>();
-						colecaoFinanciamentoTipos.add(FinanciamentoTipo.SERVICO_NORMAL);
-						colecaoFinanciamentoTipos.add(FinanciamentoTipo.ARRASTO_AGUA);
-						colecaoFinanciamentoTipos.add(FinanciamentoTipo.ARRASTO_ESGOTO);
-						colecaoFinanciamentoTipos.add(FinanciamentoTipo.ARRASTO_SERVICO);
-						colecaoFinanciamentoTipos.add(FinanciamentoTipo.ENTRADA_PARCELAMENTO);
+						colecaoFinanciamentoTipos
+								.add(FinanciamentoTipo.SERVICO_NORMAL);
+						colecaoFinanciamentoTipos
+								.add(FinanciamentoTipo.ARRASTO_AGUA);
+						colecaoFinanciamentoTipos
+								.add(FinanciamentoTipo.ARRASTO_ESGOTO);
+						colecaoFinanciamentoTipos
+								.add(FinanciamentoTipo.ARRASTO_SERVICO);
+						colecaoFinanciamentoTipos
+								.add(FinanciamentoTipo.ENTRADA_PARCELAMENTO);
 
 						valoresAcumuladosCanceladosEIncluidos = this
 								.obterDiferencaValoresServicoIndiretosContaRetificada(
-										anoMesFaturamento,
-										idLocalidade, idCategoria,
-										colecaoFinanciamentoTipos,
+										anoMesFaturamento, idLocalidade,
+										idCategoria, colecaoFinanciamentoTipos,
 										lancamentoItemContabilTemp.getId());
 
 						// Valor acumuludo canceldo
-						resumoFaturamentoTemporario = this.acumularValorResumoFaturamento(resumoFaturamentoTemporario, valoresAcumuladosCanceladosEIncluidos[0]);
-						resumoFaturamentoReceitaCancelada = this.acumularValorResumoFaturamento(resumoFaturamentoReceitaCancelada, resumoFaturamentoTemporario.getValorItemFaturamento());
-						
-						// caso o valor do item seja diferente de zero adiciona o item a coleção para posterior inserção
-						if (resumoFaturamentoTemporario.getValorItemFaturamento().compareTo(BigDecimal.ZERO) != 0) {
-							colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+						resumoFaturamentoTemporario = this
+								.acumularValorResumoFaturamento(
+										resumoFaturamentoTemporario,
+										valoresAcumuladosCanceladosEIncluidos[0]);
+						resumoFaturamentoReceitaCancelada = this
+								.acumularValorResumoFaturamento(
+										resumoFaturamentoReceitaCancelada,
+										resumoFaturamentoTemporario
+												.getValorItemFaturamento());
+
+						// caso o valor do item seja diferente de zero adiciona
+						// o item a coleção para posterior inserção
+						if (resumoFaturamentoTemporario
+								.getValorItemFaturamento().compareTo(
+										BigDecimal.ZERO) != 0) {
+							colecaoResumoFaturamento
+									.add(resumoFaturamentoTemporario);
 						}
-						
-						// acumular o valor de débito para tipo de financiamento igual a parcelamento de serviço e para situação igual a cancelada
+
+						// acumular o valor de débito para tipo de financiamento
+						// igual a parcelamento de serviço e para situação igual
+						// a cancelada
 
 						colecaoFinanciamentoTipos = new ArrayList<Integer>();
-						colecaoFinanciamentoTipos.add(FinanciamentoTipo.PARCELAMENTO_SERVICO);
+						colecaoFinanciamentoTipos
+								.add(FinanciamentoTipo.PARCELAMENTO_SERVICO);
 
 						valorItemFaturamento = repositorioFaturamento
 								.acumularValorDebitoCobradoPorTipoFinanciamento(
-										anoMesFaturamento,
-										idLocalidade, idCategoria,
+										anoMesFaturamento, idLocalidade,
+										idCategoria,
 										lancamentoItemContabilTemp.getId(),
 										DebitoCreditoSituacao.CANCELADA,
 										colecaoFinanciamentoTipos);
 
-						lancamentoTipo = new LancamentoTipo(LancamentoTipo.PARCELAMENTOS_COBRADOS_SUP_CANCELAMENTOS_POR_REFATURAMENTO);
-						lancamentoItem = new LancamentoItem(LancamentoItem.GRUPO_CONTABIL);
+						lancamentoTipo = new LancamentoTipo(
+								LancamentoTipo.PARCELAMENTOS_COBRADOS_SUP_CANCELAMENTOS_POR_REFATURAMENTO);
+						lancamentoItem = new LancamentoItem(
+								LancamentoItem.GRUPO_CONTABIL);
 
-						resumoFaturamentoTemporario = buildResumoFaturamento(valorItemFaturamento, anoMesFaturamento, categoria, localidade, lancamentoTipo, lancamentoItem, 
-								lancamentoItemContabilTemp, new Short("1000"), lancamentoItemContabilTemp.getSequenciaImpressao());
-						
+						resumoFaturamentoTemporario = buildResumoFaturamento(
+								valorItemFaturamento, anoMesFaturamento,
+								categoria, localidade, lancamentoTipo,
+								lancamentoItem, lancamentoItemContabilTemp,
+								new Short("1000"),
+								lancamentoItemContabilTemp
+										.getSequenciaImpressao());
+
 						colecaoFinanciamentoTipos = new ArrayList<Integer>();
-						colecaoFinanciamentoTipos.add(FinanciamentoTipo.PARCELAMENTO_SERVICO);
+						colecaoFinanciamentoTipos
+								.add(FinanciamentoTipo.PARCELAMENTO_SERVICO);
 
 						valoresAcumuladosCanceladosEIncluidos = this
 								.obterDiferencaValoresServicoIndiretosContaRetificada(
-										anoMesFaturamento,
-										idLocalidade, idCategoria,
-										colecaoFinanciamentoTipos,
+										anoMesFaturamento, idLocalidade,
+										idCategoria, colecaoFinanciamentoTipos,
 										resumoFaturamentoTemporario
 												.getLancamentoItemContabil()
 												.getId());
 
-						resumoFaturamentoTemporario = this.acumularValorResumoFaturamento(resumoFaturamentoTemporario, valoresAcumuladosCanceladosEIncluidos[0]);
-						resumoFaturamentoReceitaCancelada = this.acumularValorResumoFaturamento(resumoFaturamentoReceitaCancelada, resumoFaturamentoTemporario.getValorItemFaturamento());
-						
-						// caso o valor do item seja diferente de zero adiciona o item a coleção para posterior inserção
-						if (resumoFaturamentoTemporario.getValorItemFaturamento().compareTo(BigDecimal.ZERO) != 0) {
-							colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+						resumoFaturamentoTemporario = this
+								.acumularValorResumoFaturamento(
+										resumoFaturamentoTemporario,
+										valoresAcumuladosCanceladosEIncluidos[0]);
+						resumoFaturamentoReceitaCancelada = this
+								.acumularValorResumoFaturamento(
+										resumoFaturamentoReceitaCancelada,
+										resumoFaturamentoTemporario
+												.getValorItemFaturamento());
+
+						// caso o valor do item seja diferente de zero adiciona
+						// o item a coleção para posterior inserção
+						if (resumoFaturamentoTemporario
+								.getValorItemFaturamento().compareTo(
+										BigDecimal.ZERO) != 0) {
+							colecaoResumoFaturamento
+									.add(resumoFaturamentoTemporario);
 						}
 
 					}
@@ -16414,92 +16532,158 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					colecaoDadosDebitoACobrar = null;
 					colecaoDadosDebitoACobrar = repositorioFaturamento
 							.pesquisarValorLongoECurtoPrazoDebitoACobrarPorTipoFinanciamentoAgrupandoPorLancamentoItemContabil(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									FinanciamentoTipo.SERVICO_NORMAL,
 									DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL);
 
-					if (colecaoDadosDebitoACobrar != null && !colecaoDadosDebitoACobrar.isEmpty()) {
+					if (colecaoDadosDebitoACobrar != null
+							&& !colecaoDadosDebitoACobrar.isEmpty()) {
 						for (Object[] arrayDadosDebitoACobrar : colecaoDadosDebitoACobrar) {
 							somaValorCurtoPrazo = (BigDecimal) arrayDadosDebitoACobrar[0];
 							somaValorLongoPrazo = (BigDecimal) arrayDadosDebitoACobrar[1];
 
 							Integer idLancamentoItemContabil = (Integer) arrayDadosDebitoACobrar[2];
 							Short sequencialImpressao = (Short) arrayDadosDebitoACobrar[3];
-							
-							LancamentoItemContabil lancamentoItemContabilTemp = new LancamentoItemContabil(idLancamentoItemContabil);
-							lancamentoItemContabilTemp.setSequenciaImpressao(sequencialImpressao);
 
-							if (somaValorCurtoPrazo != null && somaValorCurtoPrazo.compareTo(BigDecimal.ZERO) != 0) {
-								lancamentoTipo = new LancamentoTipo(LancamentoTipo.FINANCIAMENTOS_INCLUIDOS_CURTO_PRAZO);
-								lancamentoItem = new LancamentoItem(LancamentoItem.GRUPO_CONTABIL);
+							LancamentoItemContabil lancamentoItemContabilTemp = new LancamentoItemContabil(
+									idLancamentoItemContabil);
+							lancamentoItemContabilTemp
+									.setSequenciaImpressao(sequencialImpressao);
 
-								ResumoFaturamento resumoFaturamentoDebitoACobrarCurtoPrazo = buildResumoFaturamento(somaValorCurtoPrazo, anoMesFaturamento, 
-										categoria, localidade, lancamentoTipo, lancamentoItem, lancamentoItemContabilTemp, new Short("300"), lancamentoItemContabilTemp.getSequenciaImpressao());
-								
-								resumoFaturamentoReceitaBruta = this.acumularValorResumoFaturamento(resumoFaturamentoReceitaBruta, somaValorCurtoPrazo);
-								colecaoResumoFaturamento.add(resumoFaturamentoDebitoACobrarCurtoPrazo);
+							if (somaValorCurtoPrazo != null
+									&& somaValorCurtoPrazo
+											.compareTo(BigDecimal.ZERO) != 0) {
+								lancamentoTipo = new LancamentoTipo(
+										LancamentoTipo.FINANCIAMENTOS_INCLUIDOS_CURTO_PRAZO);
+								lancamentoItem = new LancamentoItem(
+										LancamentoItem.GRUPO_CONTABIL);
+
+								ResumoFaturamento resumoFaturamentoDebitoACobrarCurtoPrazo = buildResumoFaturamento(
+										somaValorCurtoPrazo, anoMesFaturamento,
+										categoria, localidade, lancamentoTipo,
+										lancamentoItem,
+										lancamentoItemContabilTemp, new Short(
+												"300"),
+										lancamentoItemContabilTemp
+												.getSequenciaImpressao());
+
+								resumoFaturamentoReceitaBruta = this
+										.acumularValorResumoFaturamento(
+												resumoFaturamentoReceitaBruta,
+												somaValorCurtoPrazo);
+								colecaoResumoFaturamento
+										.add(resumoFaturamentoDebitoACobrarCurtoPrazo);
 							}
 
-							// caso exista valor de longo prazo e seja diferente de zero
-							if (somaValorLongoPrazo != null && somaValorLongoPrazo.compareTo(BigDecimal.ZERO) != 0) {
+							// caso exista valor de longo prazo e seja diferente
+							// de zero
+							if (somaValorLongoPrazo != null
+									&& somaValorLongoPrazo
+											.compareTo(BigDecimal.ZERO) != 0) {
 
-								lancamentoTipo = new LancamentoTipo(LancamentoTipo.FINANCIAMENTOS_INCLUIDOS_LONGO_PRAZO);
-								lancamentoItem = new LancamentoItem(LancamentoItem.GRUPO_CONTABIL);
+								lancamentoTipo = new LancamentoTipo(
+										LancamentoTipo.FINANCIAMENTOS_INCLUIDOS_LONGO_PRAZO);
+								lancamentoItem = new LancamentoItem(
+										LancamentoItem.GRUPO_CONTABIL);
 
-								ResumoFaturamento resumoFaturamentoDebitoACobrarLongoPrazo = buildResumoFaturamento(somaValorLongoPrazo, anoMesFaturamento, 
-										categoria, localidade, lancamentoTipo, lancamentoItem, lancamentoItemContabilTemp, new Short("400"), lancamentoItemContabilTemp.getSequenciaImpressao());
-								
-								resumoFaturamentoReceitaBruta = this.acumularValorResumoFaturamento(resumoFaturamentoReceitaBruta, somaValorLongoPrazo);
-								colecaoResumoFaturamento.add(resumoFaturamentoDebitoACobrarLongoPrazo);
+								ResumoFaturamento resumoFaturamentoDebitoACobrarLongoPrazo = buildResumoFaturamento(
+										somaValorLongoPrazo, anoMesFaturamento,
+										categoria, localidade, lancamentoTipo,
+										lancamentoItem,
+										lancamentoItemContabilTemp, new Short(
+												"400"),
+										lancamentoItemContabilTemp
+												.getSequenciaImpressao());
+
+								resumoFaturamentoReceitaBruta = this
+										.acumularValorResumoFaturamento(
+												resumoFaturamentoReceitaBruta,
+												somaValorLongoPrazo);
+								colecaoResumoFaturamento
+										.add(resumoFaturamentoDebitoACobrarLongoPrazo);
 							}
 						}
 					}
 
-					// pesquisa os valores de curo e longo prazo de débitos a cobrar com situação cancelado e tipo de financiamento igual a serviço
+					// pesquisa os valores de curo e longo prazo de débitos a
+					// cobrar com situação cancelado e tipo de financiamento
+					// igual a serviço
 					colecaoDadosDebitoACobrar = null;
 					colecaoDadosDebitoACobrar = repositorioFaturamento
 							.pesquisarValorLongoECurtoPrazoDebitoACobrarPorTipoFinanciamentoAgrupandoPorLancamentoItemContabil(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									FinanciamentoTipo.SERVICO_NORMAL,
 									DebitoCreditoSituacao.CANCELADA);
 
-					if (colecaoDadosDebitoACobrar != null && !colecaoDadosDebitoACobrar.isEmpty()) {
+					if (colecaoDadosDebitoACobrar != null
+							&& !colecaoDadosDebitoACobrar.isEmpty()) {
 						for (Object[] arrayDadosDebitoACobrar : colecaoDadosDebitoACobrar) {
 							somaValorCurtoPrazo = (BigDecimal) arrayDadosDebitoACobrar[0];
 							somaValorLongoPrazo = (BigDecimal) arrayDadosDebitoACobrar[1];
 
 							Integer idLancamentoItemContabil = (Integer) arrayDadosDebitoACobrar[2];
 							Short sequencialImpressao = (Short) arrayDadosDebitoACobrar[3];
-							
-							LancamentoItemContabil lancamentoItemContabilTemp = new LancamentoItemContabil(idLancamentoItemContabil);
-							lancamentoItemContabilTemp.setSequenciaImpressao(sequencialImpressao);
 
-							if (somaValorCurtoPrazo != null && somaValorCurtoPrazo.compareTo(BigDecimal.ZERO) != 0) {
+							LancamentoItemContabil lancamentoItemContabilTemp = new LancamentoItemContabil(
+									idLancamentoItemContabil);
+							lancamentoItemContabilTemp
+									.setSequenciaImpressao(sequencialImpressao);
 
-								lancamentoTipo = new LancamentoTipo(LancamentoTipo.FINANCIAMENTOS_CANCELADOS_CURTO_PRAZO);
-								lancamentoItem = new LancamentoItem(LancamentoItem.GRUPO_CONTABIL);
+							if (somaValorCurtoPrazo != null
+									&& somaValorCurtoPrazo
+											.compareTo(BigDecimal.ZERO) != 0) {
 
-								ResumoFaturamento resumoFaturamentoDebitoACobrarCurtoPrazo = buildResumoFaturamento(somaValorCurtoPrazo, anoMesFaturamento, 
-										categoria, localidade, lancamentoTipo, lancamentoItem, lancamentoItemContabilTemp, new Short("700"), lancamentoItemContabilTemp.getSequenciaImpressao());
-								
-								resumoFaturamentoReceitaCancelada = this.acumularValorResumoFaturamento(resumoFaturamentoReceitaCancelada, somaValorCurtoPrazo);
-								colecaoResumoFaturamento.add(resumoFaturamentoDebitoACobrarCurtoPrazo);
+								lancamentoTipo = new LancamentoTipo(
+										LancamentoTipo.FINANCIAMENTOS_CANCELADOS_CURTO_PRAZO);
+								lancamentoItem = new LancamentoItem(
+										LancamentoItem.GRUPO_CONTABIL);
+
+								ResumoFaturamento resumoFaturamentoDebitoACobrarCurtoPrazo = buildResumoFaturamento(
+										somaValorCurtoPrazo, anoMesFaturamento,
+										categoria, localidade, lancamentoTipo,
+										lancamentoItem,
+										lancamentoItemContabilTemp, new Short(
+												"700"),
+										lancamentoItemContabilTemp
+												.getSequenciaImpressao());
+
+								resumoFaturamentoReceitaCancelada = this
+										.acumularValorResumoFaturamento(
+												resumoFaturamentoReceitaCancelada,
+												somaValorCurtoPrazo);
+								colecaoResumoFaturamento
+										.add(resumoFaturamentoDebitoACobrarCurtoPrazo);
 							}
 
-							// caso exista valor de longo prazo e seja diferente de zero
-							if (somaValorLongoPrazo != null && somaValorLongoPrazo.compareTo(BigDecimal.ZERO) != 0) {
+							// caso exista valor de longo prazo e seja diferente
+							// de zero
+							if (somaValorLongoPrazo != null
+									&& somaValorLongoPrazo
+											.compareTo(BigDecimal.ZERO) != 0) {
 
-								lancamentoTipo = new LancamentoTipo(LancamentoTipo.FINANCIAMENTOS_CANCELADOS_LONGO_PRAZO);
-								lancamentoItem = new LancamentoItem(LancamentoItem.GRUPO_CONTABIL);
+								lancamentoTipo = new LancamentoTipo(
+										LancamentoTipo.FINANCIAMENTOS_CANCELADOS_LONGO_PRAZO);
+								lancamentoItem = new LancamentoItem(
+										LancamentoItem.GRUPO_CONTABIL);
 
-								ResumoFaturamento resumoFaturamentoDebitoACobrarLongoPrazo = buildResumoFaturamento(somaValorLongoPrazo, anoMesFaturamento, 
-										categoria, localidade, lancamentoTipo, lancamentoItem, lancamentoItemContabilTemp, new Short("800"), lancamentoItemContabilTemp.getSequenciaImpressao());
-								
-								resumoFaturamentoReceitaCancelada = this.acumularValorResumoFaturamento(resumoFaturamentoReceitaCancelada, somaValorLongoPrazo);
-								colecaoResumoFaturamento.add(resumoFaturamentoDebitoACobrarLongoPrazo);
+								ResumoFaturamento resumoFaturamentoDebitoACobrarLongoPrazo = buildResumoFaturamento(
+										somaValorLongoPrazo, anoMesFaturamento,
+										categoria, localidade, lancamentoTipo,
+										lancamentoItem,
+										lancamentoItemContabilTemp, new Short(
+												"800"),
+										lancamentoItemContabilTemp
+												.getSequenciaImpressao());
+
+								resumoFaturamentoReceitaCancelada = this
+										.acumularValorResumoFaturamento(
+												resumoFaturamentoReceitaCancelada,
+												somaValorLongoPrazo);
+								colecaoResumoFaturamento
+										.add(resumoFaturamentoDebitoACobrarLongoPrazo);
 							}
 						}
 					}
@@ -16512,8 +16696,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					colecaoDadosDebitoACobrar = null;
 					colecaoDadosDebitoACobrar = repositorioFaturamento
 							.pesquisarValorLongoECurtoPrazoDebitoACobrarPorTipoFinanciamentoAgrupandoPorLancamentoItemContabil(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									FinanciamentoTipo.PARCELAMENTO_SERVICO,
 									DebitoCreditoSituacao.CANCELADA);
 
@@ -16525,33 +16709,63 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 							Integer idLancamentoItemContabil = (Integer) arrayDadosDebitoACobrar[2];
 							Short sequencialImpressao = (Short) arrayDadosDebitoACobrar[3];
-							
-							LancamentoItemContabil lancamentoItemContabilTemp = new LancamentoItemContabil(idLancamentoItemContabil);
-							lancamentoItemContabilTemp.setSequenciaImpressao(sequencialImpressao);
 
-							if (somaValorCurtoPrazo != null && somaValorCurtoPrazo.compareTo(BigDecimal.ZERO) != 0) {
+							LancamentoItemContabil lancamentoItemContabilTemp = new LancamentoItemContabil(
+									idLancamentoItemContabil);
+							lancamentoItemContabilTemp
+									.setSequenciaImpressao(sequencialImpressao);
 
-								lancamentoTipo = new LancamentoTipo(LancamentoTipo.PARCELAMENTOS_CANCELADOS_CURTO_PRAZO);
-								lancamentoItem = new LancamentoItem(LancamentoItem.GRUPO_CONTABIL);
+							if (somaValorCurtoPrazo != null
+									&& somaValorCurtoPrazo
+											.compareTo(BigDecimal.ZERO) != 0) {
 
-								ResumoFaturamento resumoFaturamentoDebitoACobrarCurtoPrazo = buildResumoFaturamento(somaValorCurtoPrazo, anoMesFaturamento, 
-										categoria, localidade, lancamentoTipo, lancamentoItem, lancamentoItemContabilTemp, new Short("810"), lancamentoItemContabilTemp.getSequenciaImpressao());
-								
-								resumoFaturamentoReceitaCancelada = this.acumularValorResumoFaturamento(resumoFaturamentoReceitaCancelada, somaValorCurtoPrazo);
-								colecaoResumoFaturamento.add(resumoFaturamentoDebitoACobrarCurtoPrazo);
+								lancamentoTipo = new LancamentoTipo(
+										LancamentoTipo.PARCELAMENTOS_CANCELADOS_CURTO_PRAZO);
+								lancamentoItem = new LancamentoItem(
+										LancamentoItem.GRUPO_CONTABIL);
+
+								ResumoFaturamento resumoFaturamentoDebitoACobrarCurtoPrazo = buildResumoFaturamento(
+										somaValorCurtoPrazo, anoMesFaturamento,
+										categoria, localidade, lancamentoTipo,
+										lancamentoItem,
+										lancamentoItemContabilTemp, new Short(
+												"810"),
+										lancamentoItemContabilTemp
+												.getSequenciaImpressao());
+
+								resumoFaturamentoReceitaCancelada = this
+										.acumularValorResumoFaturamento(
+												resumoFaturamentoReceitaCancelada,
+												somaValorCurtoPrazo);
+								colecaoResumoFaturamento
+										.add(resumoFaturamentoDebitoACobrarCurtoPrazo);
 							}
 
-							if (somaValorLongoPrazo != null && somaValorLongoPrazo.compareTo(BigDecimal.ZERO) != 0) {
+							if (somaValorLongoPrazo != null
+									&& somaValorLongoPrazo
+											.compareTo(BigDecimal.ZERO) != 0) {
 
-								lancamentoTipo = new LancamentoTipo(LancamentoTipo.PARCELAMENTOS_CANCELADOS_LONGO_PRAZO);
-								lancamentoItem = new LancamentoItem(LancamentoItem.GRUPO_CONTABIL);
+								lancamentoTipo = new LancamentoTipo(
+										LancamentoTipo.PARCELAMENTOS_CANCELADOS_LONGO_PRAZO);
+								lancamentoItem = new LancamentoItem(
+										LancamentoItem.GRUPO_CONTABIL);
 
-								ResumoFaturamento resumoFaturamentoDebitoACobrarLongoPrazo = buildResumoFaturamento(somaValorLongoPrazo, anoMesFaturamento, 
-										categoria, localidade, lancamentoTipo, lancamentoItem, lancamentoItemContabilTemp, new Short("820"), lancamentoItemContabilTemp.getSequenciaImpressao());
-								
-								resumoFaturamentoReceitaCancelada = this.acumularValorResumoFaturamento(resumoFaturamentoReceitaCancelada, somaValorLongoPrazo);
-								
-								colecaoResumoFaturamento.add(resumoFaturamentoDebitoACobrarLongoPrazo);
+								ResumoFaturamento resumoFaturamentoDebitoACobrarLongoPrazo = buildResumoFaturamento(
+										somaValorLongoPrazo, anoMesFaturamento,
+										categoria, localidade, lancamentoTipo,
+										lancamentoItem,
+										lancamentoItemContabilTemp, new Short(
+												"820"),
+										lancamentoItemContabilTemp
+												.getSequenciaImpressao());
+
+								resumoFaturamentoReceitaCancelada = this
+										.acumularValorResumoFaturamento(
+												resumoFaturamentoReceitaCancelada,
+												somaValorLongoPrazo);
+
+								colecaoResumoFaturamento
+										.add(resumoFaturamentoDebitoACobrarLongoPrazo);
 							}
 						}
 					}
@@ -16566,9 +16780,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					colecaoDadosDebitoCobradoCategoria = null;
 					colecaoDadosDebitoCobradoCategoria = repositorioFaturamento
 							.acumularValorCategoriaDebitoCobradoCategoriaPorTipoFinanciamentoComBaixaContabilPreenchidaAgrupandoPorLancamentoItemContabil(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsTipoFinanciamento,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsTipoFinanciamento,
 									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
 					for (Object[] arrayDadosDebitoCobradoCategoria : colecaoDadosDebitoCobradoCategoria) {
@@ -16576,23 +16789,37 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						BigDecimal valor = (BigDecimal) arrayDadosDebitoCobradoCategoria[0];
 						Short sequenciaImpressao = (Short) arrayDadosDebitoCobradoCategoria[1];
 						Integer idLancamentoItemContabil = (Integer) arrayDadosDebitoCobradoCategoria[2];
-						LancamentoItemContabil lancamentoItemContabilTemp = new LancamentoItemContabil(idLancamentoItemContabil);
+						LancamentoItemContabil lancamentoItemContabilTemp = new LancamentoItemContabil(
+								idLancamentoItemContabil);
 
-						if (valor != null && valor.compareTo(BigDecimal.ZERO) != 0) {
+						if (valor != null
+								&& valor.compareTo(BigDecimal.ZERO) != 0) {
 
-							lancamentoTipo = new LancamentoTipo(LancamentoTipo.CANCELAMENTO_POR_PRESCRICAO_DEB_JA_EXC_INADIMPLENCIA);
-							lancamentoItem = new LancamentoItem(LancamentoItem.GRUPO_CONTABIL);
+							lancamentoTipo = new LancamentoTipo(
+									LancamentoTipo.CANCELAMENTO_POR_PRESCRICAO_DEB_JA_EXC_INADIMPLENCIA);
+							lancamentoItem = new LancamentoItem(
+									LancamentoItem.GRUPO_CONTABIL);
 
-							ResumoFaturamento resumoFaturamento = buildResumoFaturamento(valor, anoMesFaturamento, 
-									categoria, localidade, lancamentoTipo, lancamentoItem, lancamentoItemContabilTemp, new Short("3400"), sequenciaImpressao);
-							
-							resumoFaturamentoTotalDebitosCanceladosPrescricao = this.acumularValorResumoFaturamento(resumoFaturamentoTotalDebitosCanceladosPrescricao, resumoFaturamento.getValorItemFaturamento());
+							ResumoFaturamento resumoFaturamento = buildResumoFaturamento(
+									valor, anoMesFaturamento, categoria,
+									localidade, lancamentoTipo, lancamentoItem,
+									lancamentoItemContabilTemp, new Short(
+											"3400"), sequenciaImpressao);
+
+							resumoFaturamentoTotalDebitosCanceladosPrescricao = this
+									.acumularValorResumoFaturamento(
+											resumoFaturamentoTotalDebitosCanceladosPrescricao,
+											resumoFaturamento
+													.getValorItemFaturamento());
 							colecaoResumoFaturamento.add(resumoFaturamento);
 						}
 					}
 
-					// acumula o valor por categoria do débito cobrado com tipo de financiamento igual a parcelamento de serviço e situação atual da conta
-					// igual a débito prescrito e com ano/mês de referência contábil da conta preenchido.
+					// acumula o valor por categoria do débito cobrado com tipo
+					// de financiamento igual a parcelamento de serviço e
+					// situação atual da conta
+					// igual a débito prescrito e com ano/mês de referência
+					// contábil da conta preenchido.
 					idsTipoFinanciamento = null;
 					idsTipoFinanciamento = new Integer[1];
 					idsTipoFinanciamento[0] = FinanciamentoTipo.PARCELAMENTO_SERVICO;
@@ -16600,9 +16827,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					colecaoDadosDebitoCobradoCategoria = null;
 					colecaoDadosDebitoCobradoCategoria = repositorioFaturamento
 							.acumularValorCategoriaDebitoCobradoCategoriaPorTipoFinanciamentoComBaixaContabilPreenchidaAgrupandoPorLancamentoItemContabil(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsTipoFinanciamento,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsTipoFinanciamento,
 									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
 					for (Object[] arrayDadosDebitoCobradoCategoria : colecaoDadosDebitoCobradoCategoria) {
@@ -16610,36 +16836,54 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						Short sequenciaImpressao = (Short) arrayDadosDebitoCobradoCategoria[1];
 						Integer idLancamentoItemContabil = (Integer) arrayDadosDebitoCobradoCategoria[2];
 
-						LancamentoItemContabil lancamentoItemContabilTemp = new LancamentoItemContabil(idLancamentoItemContabil);
+						LancamentoItemContabil lancamentoItemContabilTemp = new LancamentoItemContabil(
+								idLancamentoItemContabil);
 
-						if (valor != null && valor.compareTo(BigDecimal.ZERO) != 0) {
+						if (valor != null
+								&& valor.compareTo(BigDecimal.ZERO) != 0) {
 
-							lancamentoTipo = new LancamentoTipo(LancamentoTipo.PARCELAMENTOS_COBRADOS_SUP_CANCELAMENTO_POR_PRESCRICAO_DEB_EXC_INADIMPLENCIA);
-							lancamentoItem = new LancamentoItem(LancamentoItem.GRUPO_CONTABIL);
+							lancamentoTipo = new LancamentoTipo(
+									LancamentoTipo.PARCELAMENTOS_COBRADOS_SUP_CANCELAMENTO_POR_PRESCRICAO_DEB_EXC_INADIMPLENCIA);
+							lancamentoItem = new LancamentoItem(
+									LancamentoItem.GRUPO_CONTABIL);
 
 							ResumoFaturamento resumoFaturamento = new ResumoFaturamento();
 							resumoFaturamento.setValorItemFaturamento(valor);
-							resumoFaturamento.setSequenciaItemTipoLancamento(sequenciaImpressao);
-							resumoFaturamento.setGerenciaRegional(localidade.getGerenciaRegional());
-							resumoFaturamento.setUnidadeNegocio(localidade.getUnidadeNegocio());
+							resumoFaturamento
+									.setSequenciaItemTipoLancamento(sequenciaImpressao);
+							resumoFaturamento.setGerenciaRegional(localidade
+									.getGerenciaRegional());
+							resumoFaturamento.setUnidadeNegocio(localidade
+									.getUnidadeNegocio());
 							resumoFaturamento.setLocalidade(localidade);
 							resumoFaturamento.setCategoria(categoria);
-							resumoFaturamento.setAnoMesReferencia(anoMesFaturamento);
-							resumoFaturamento.setLancamentoItemContabil(lancamentoItemContabilTemp);
+							resumoFaturamento
+									.setAnoMesReferencia(anoMesFaturamento);
+							resumoFaturamento
+									.setLancamentoItemContabil(lancamentoItemContabilTemp);
 							resumoFaturamento.setLancamentoTipo(lancamentoTipo);
 							resumoFaturamento.setLancamentoItem(lancamentoItem);
-							resumoFaturamento.setSequenciaTipoLancamento(new Short("3500"));
+							resumoFaturamento
+									.setSequenciaTipoLancamento(new Short(
+											"3500"));
 							resumoFaturamento.setUltimaAlteracao(new Date());
 
-							resumoFaturamentoTotalDebitosCanceladosPrescricao = this.acumularValorResumoFaturamento(resumoFaturamentoTotalDebitosCanceladosPrescricao, resumoFaturamento.getValorItemFaturamento());
+							resumoFaturamentoTotalDebitosCanceladosPrescricao = this
+									.acumularValorResumoFaturamento(
+											resumoFaturamentoTotalDebitosCanceladosPrescricao,
+											resumoFaturamento
+													.getValorItemFaturamento());
 
 							colecaoResumoFaturamento.add(resumoFaturamento);
 						}
 					}
 
-					// acumula o valor por categoria do crédito realizado com origem do crédito igual a
-					// devolução de tarifa de água ou devolução de tarifa de esgoto ou serviços indiretos pagos
-					// indevidamente ou devolução de juros de parcelamento e situação atual da conta igual a débito prescrito
+					// acumula o valor por categoria do crédito realizado com
+					// origem do crédito igual a
+					// devolução de tarifa de água ou devolução de tarifa de
+					// esgoto ou serviços indiretos pagos
+					// indevidamente ou devolução de juros de parcelamento e
+					// situação atual da conta igual a débito prescrito
 					// com ano/mês da baixa contábil da conta preenchido
 					Integer[] idsOrigemCreditos = {
 							CreditoOrigem.DEVOLUCAO_TARIFA_AGUA,
@@ -16650,50 +16894,73 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					colecaoDadosCreditoRealizado = null;
 					colecaoDadosCreditoRealizado = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoComBaixaContabilPreenchidaAgrupandoPorLancamentoItemContabil(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsOrigemCreditos,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsOrigemCreditos,
 									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
-					if (colecaoDadosCreditoRealizado != null && !colecaoDadosCreditoRealizado.isEmpty()) {
+					if (colecaoDadosCreditoRealizado != null
+							&& !colecaoDadosCreditoRealizado.isEmpty()) {
 
 						for (Object[] arrayDadosCreditoRealizado : colecaoDadosCreditoRealizado) {
 
 							BigDecimal valor = (BigDecimal) arrayDadosCreditoRealizado[0];
 							Short sequenciaImpressao = (Short) arrayDadosCreditoRealizado[2];
 							Integer idLancamentoItemContabil = (Integer) arrayDadosCreditoRealizado[1];
-							
-							LancamentoItemContabil lancamentoItemContabilTemp = new LancamentoItemContabil(idLancamentoItemContabil);
 
-							if (valor != null && valor.compareTo(BigDecimal.ZERO) != 0) {
-								lancamentoTipo = new LancamentoTipo(LancamentoTipo.CREDITOS_CONCEDIDOS_SUP_CANCELAMENTO_POR_PRESCRICAO_DEB_JA_EXC_INADIMPLENCIA);
-								lancamentoItem = new LancamentoItem(LancamentoItem.CREDITOS_PARA_COBRANCA_INDEVIDA);
+							LancamentoItemContabil lancamentoItemContabilTemp = new LancamentoItemContabil(
+									idLancamentoItemContabil);
 
-								resumoFaturamentoTemporario.setGerenciaRegional(localidade.getGerenciaRegional());
-								resumoFaturamentoTemporario.setUnidadeNegocio(localidade.getUnidadeNegocio());
-								resumoFaturamentoTemporario.setLocalidade(localidade);
-								resumoFaturamentoTemporario.setCategoria(categoria);
-								resumoFaturamentoTemporario.setAnoMesReferencia(anoMesFaturamento);
-								resumoFaturamentoTemporario.setLancamentoTipo(lancamentoTipo);
-								resumoFaturamentoTemporario.setLancamentoItem(lancamentoItem);
-								resumoFaturamentoTemporario.setLancamentoItemContabil(lancamentoItemContabilTemp);
-								resumoFaturamentoTemporario.setSequenciaTipoLancamento(new Short("3600"));
-								resumoFaturamentoTemporario.setSequenciaItemTipoLancamento(sequenciaImpressao);
-								resumoFaturamentoTemporario.setUltimaAlteracao(new Date());
+							if (valor != null
+									&& valor.compareTo(BigDecimal.ZERO) != 0) {
+								lancamentoTipo = new LancamentoTipo(
+										LancamentoTipo.CREDITOS_CONCEDIDOS_SUP_CANCELAMENTO_POR_PRESCRICAO_DEB_JA_EXC_INADIMPLENCIA);
+								lancamentoItem = new LancamentoItem(
+										LancamentoItem.CREDITOS_PARA_COBRANCA_INDEVIDA);
+
+								resumoFaturamentoTemporario
+										.setGerenciaRegional(localidade
+												.getGerenciaRegional());
+								resumoFaturamentoTemporario
+										.setUnidadeNegocio(localidade
+												.getUnidadeNegocio());
+								resumoFaturamentoTemporario
+										.setLocalidade(localidade);
+								resumoFaturamentoTemporario
+										.setCategoria(categoria);
+								resumoFaturamentoTemporario
+										.setAnoMesReferencia(anoMesFaturamento);
+								resumoFaturamentoTemporario
+										.setLancamentoTipo(lancamentoTipo);
+								resumoFaturamentoTemporario
+										.setLancamentoItem(lancamentoItem);
+								resumoFaturamentoTemporario
+										.setLancamentoItemContabil(lancamentoItemContabilTemp);
+								resumoFaturamentoTemporario
+										.setSequenciaTipoLancamento(new Short(
+												"3600"));
+								resumoFaturamentoTemporario
+										.setSequenciaItemTipoLancamento(sequenciaImpressao);
+								resumoFaturamentoTemporario
+										.setUltimaAlteracao(new Date());
 
 								resumoFaturamentoTotalDebitosCanceladosPrescricao
 										.setValorItemFaturamento(resumoFaturamentoTotalDebitosCanceladosPrescricao
 												.getValorItemFaturamento()
 												.subtract(
-														resumoFaturamentoTemporario.getValorItemFaturamento()));
+														resumoFaturamentoTemporario
+																.getValorItemFaturamento()));
 
-								colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+								colecaoResumoFaturamento
+										.add(resumoFaturamentoTemporario);
 							}
 						}
 					}
 
-					// acumula o valor por categoria do débito cobrado com tipo de financiamento igual a serviço e situação atual da conta igual 
-					// a débito prescrito e com ano/mês de referência contábil da conta não preenchido.
+					// acumula o valor por categoria do débito cobrado com tipo
+					// de financiamento igual a serviço e situação atual da
+					// conta igual
+					// a débito prescrito e com ano/mês de referência contábil
+					// da conta não preenchido.
 					idsTipoFinanciamento = null;
 					idsTipoFinanciamento = new Integer[4];
 					idsTipoFinanciamento[0] = FinanciamentoTipo.SERVICO_NORMAL;
@@ -16704,9 +16971,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					colecaoDadosDebitoCobradoCategoria = null;
 					colecaoDadosDebitoCobradoCategoria = repositorioFaturamento
 							.acumularValorCategoriaDebitoCobradoCategoriaPorTipoFinanciamentoComBaixaContabilNaoPreenchidaAgrupandoPorLancamentoItemContabil(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsTipoFinanciamento,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsTipoFinanciamento,
 									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
 					for (Object[] arrayDadosDebitoCobradoCategoria : colecaoDadosDebitoCobradoCategoria) {
@@ -16715,34 +16981,51 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						Short sequenciaImpressao = (Short) arrayDadosDebitoCobradoCategoria[1];
 						Integer idLancamentoItemContabil = (Integer) arrayDadosDebitoCobradoCategoria[2];
 						LancamentoItemContabil lancamentoItemContabilTemp = new LancamentoItemContabil();
-						lancamentoItemContabilTemp.setId(idLancamentoItemContabil);
+						lancamentoItemContabilTemp
+								.setId(idLancamentoItemContabil);
 
-						if (valor != null && valor.compareTo(BigDecimal.ZERO) != 0) {
+						if (valor != null
+								&& valor.compareTo(BigDecimal.ZERO) != 0) {
 
-							lancamentoTipo = new LancamentoTipo(LancamentoTipo.CANCELAMENTO_POR_PRESCRICAO_DEB_NAO_EXC_INADIMPLENCIA);
-							lancamentoItem = new LancamentoItem(LancamentoItem.GRUPO_CONTABIL);
+							lancamentoTipo = new LancamentoTipo(
+									LancamentoTipo.CANCELAMENTO_POR_PRESCRICAO_DEB_NAO_EXC_INADIMPLENCIA);
+							lancamentoItem = new LancamentoItem(
+									LancamentoItem.GRUPO_CONTABIL);
 
 							ResumoFaturamento resumoFaturamento = new ResumoFaturamento();
 							resumoFaturamento.setValorItemFaturamento(valor);
-							resumoFaturamento.setSequenciaItemTipoLancamento(sequenciaImpressao);
-							resumoFaturamento.setGerenciaRegional(localidade.getGerenciaRegional());
-							resumoFaturamento.setUnidadeNegocio(localidade.getUnidadeNegocio());
+							resumoFaturamento
+									.setSequenciaItemTipoLancamento(sequenciaImpressao);
+							resumoFaturamento.setGerenciaRegional(localidade
+									.getGerenciaRegional());
+							resumoFaturamento.setUnidadeNegocio(localidade
+									.getUnidadeNegocio());
 							resumoFaturamento.setLocalidade(localidade);
 							resumoFaturamento.setCategoria(categoria);
-							resumoFaturamento.setAnoMesReferencia(anoMesFaturamento);
-							resumoFaturamento.setLancamentoItemContabil(lancamentoItemContabilTemp);
+							resumoFaturamento
+									.setAnoMesReferencia(anoMesFaturamento);
+							resumoFaturamento
+									.setLancamentoItemContabil(lancamentoItemContabilTemp);
 							resumoFaturamento.setLancamentoTipo(lancamentoTipo);
 							resumoFaturamento.setLancamentoItem(lancamentoItem);
-							resumoFaturamento.setSequenciaTipoLancamento(new Short("3800"));
+							resumoFaturamento
+									.setSequenciaTipoLancamento(new Short(
+											"3800"));
 							resumoFaturamento.setUltimaAlteracao(new Date());
 
-							resumoFaturamentoTotalDebitosCanceladosPrescricao = this.acumularValorResumoFaturamento(resumoFaturamentoTotalDebitosCanceladosPrescricao, resumoFaturamento.getValorItemFaturamento());
+							resumoFaturamentoTotalDebitosCanceladosPrescricao = this
+									.acumularValorResumoFaturamento(
+											resumoFaturamentoTotalDebitosCanceladosPrescricao,
+											resumoFaturamento
+													.getValorItemFaturamento());
 							colecaoResumoFaturamento.add(resumoFaturamento);
 						}
 					}
 
-					// acumula o valor por categoria do débito cobrado com tipo de financiamento igual a parcelamento de serviço e 
-					// situação atual da conta igual a débito prescrito e com ano/mês de referência contábil da conta não preenchido.
+					// acumula o valor por categoria do débito cobrado com tipo
+					// de financiamento igual a parcelamento de serviço e
+					// situação atual da conta igual a débito prescrito e com
+					// ano/mês de referência contábil da conta não preenchido.
 					idsTipoFinanciamento = null;
 					idsTipoFinanciamento = new Integer[1];
 					idsTipoFinanciamento[0] = FinanciamentoTipo.PARCELAMENTO_SERVICO;
@@ -16750,9 +17033,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					colecaoDadosDebitoCobradoCategoria = null;
 					colecaoDadosDebitoCobradoCategoria = repositorioFaturamento
 							.acumularValorCategoriaDebitoCobradoCategoriaPorTipoFinanciamentoComBaixaContabilNaoPreenchidaAgrupandoPorLancamentoItemContabil(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsTipoFinanciamento,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsTipoFinanciamento,
 									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
 					// laço para inserir todos os resumos retornados
@@ -16770,24 +17052,37 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								&& valor.compareTo(BigDecimal.ZERO) != 0) {
 
 							// cria o resumo de faturamento
-							lancamentoTipo = new LancamentoTipo(LancamentoTipo.PARCELAMENTOS_COBRADOS_SUP_CANCELAMENTO_POR_PRESCRICAO_DEB_NAO_EXC_INADIMPLENCIA);
-							lancamentoItem = new LancamentoItem(LancamentoItem.GRUPO_CONTABIL);
+							lancamentoTipo = new LancamentoTipo(
+									LancamentoTipo.PARCELAMENTOS_COBRADOS_SUP_CANCELAMENTO_POR_PRESCRICAO_DEB_NAO_EXC_INADIMPLENCIA);
+							lancamentoItem = new LancamentoItem(
+									LancamentoItem.GRUPO_CONTABIL);
 
 							ResumoFaturamento resumoFaturamento = new ResumoFaturamento();
 							resumoFaturamento.setValorItemFaturamento(valor);
-							resumoFaturamento.setSequenciaItemTipoLancamento(sequenciaImpressao);
-							resumoFaturamento.setGerenciaRegional(localidade.getGerenciaRegional());
-							resumoFaturamento.setUnidadeNegocio(localidade.getUnidadeNegocio());
+							resumoFaturamento
+									.setSequenciaItemTipoLancamento(sequenciaImpressao);
+							resumoFaturamento.setGerenciaRegional(localidade
+									.getGerenciaRegional());
+							resumoFaturamento.setUnidadeNegocio(localidade
+									.getUnidadeNegocio());
 							resumoFaturamento.setLocalidade(localidade);
 							resumoFaturamento.setCategoria(categoria);
-							resumoFaturamento.setAnoMesReferencia(anoMesFaturamento);
-							resumoFaturamento.setLancamentoItemContabil(lancamentoItemContabilTemp);
+							resumoFaturamento
+									.setAnoMesReferencia(anoMesFaturamento);
+							resumoFaturamento
+									.setLancamentoItemContabil(lancamentoItemContabilTemp);
 							resumoFaturamento.setLancamentoTipo(lancamentoTipo);
 							resumoFaturamento.setLancamentoItem(lancamentoItem);
-							resumoFaturamento.setSequenciaTipoLancamento(new Short("3900"));
+							resumoFaturamento
+									.setSequenciaTipoLancamento(new Short(
+											"3900"));
 							resumoFaturamento.setUltimaAlteracao(new Date());
 
-							resumoFaturamentoTotalDebitosCanceladosPrescricao = this.acumularValorResumoFaturamento(resumoFaturamentoTotalDebitosCanceladosPrescricao, resumoFaturamento.getValorItemFaturamento());
+							resumoFaturamentoTotalDebitosCanceladosPrescricao = this
+									.acumularValorResumoFaturamento(
+											resumoFaturamentoTotalDebitosCanceladosPrescricao,
+											resumoFaturamento
+													.getValorItemFaturamento());
 							colecaoResumoFaturamento.add(resumoFaturamento);
 						}
 					}
@@ -16795,61 +17090,87 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					idsOrigemCreditos = null;
 					idsOrigemCreditos = obterIdsCreditosOrigemParaEncerramentoFaturamentoMensal();
 
-					// acumula o valor por categoria do crédito realizado com origem do crédito igual a devolução de tarifa de água ou devolução de
-					// tarifa de esgoto ou serviços indiretos pagos indevidamente ou devolução de juros de parcelamento 
-					// e situação atual da conta igual a débito prescrito com ano/mês da baixa contábil da conta não preenchido
+					// acumula o valor por categoria do crédito realizado com
+					// origem do crédito igual a devolução de tarifa de água ou
+					// devolução de
+					// tarifa de esgoto ou serviços indiretos pagos
+					// indevidamente ou devolução de juros de parcelamento
+					// e situação atual da conta igual a débito prescrito com
+					// ano/mês da baixa contábil da conta não preenchido
 					colecaoDadosCreditoRealizado = null;
 					colecaoDadosCreditoRealizado = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoComBaixaContabilNaoPreenchidaAgrupandoPorLancamentoItemContabil(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsOrigemCreditos,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsOrigemCreditos,
 									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
-					if (colecaoDadosCreditoRealizado != null && !colecaoDadosCreditoRealizado.isEmpty()) {
+					if (colecaoDadosCreditoRealizado != null
+							&& !colecaoDadosCreditoRealizado.isEmpty()) {
 
 						for (Object[] arrayDadosCreditoRealizado : colecaoDadosCreditoRealizado) {
 
 							BigDecimal valor = (BigDecimal) arrayDadosCreditoRealizado[0];
 							Short sequenciaImpressao = (Short) arrayDadosCreditoRealizado[2];
 							Integer idLancamentoItemContabil = (Integer) arrayDadosCreditoRealizado[1];
-							LancamentoItemContabil lancamentoItemContabilTemp = new LancamentoItemContabil(idLancamentoItemContabil);
+							LancamentoItemContabil lancamentoItemContabilTemp = new LancamentoItemContabil(
+									idLancamentoItemContabil);
 
-							if (valor != null && valor.compareTo(BigDecimal.ZERO) != 0) {
-								lancamentoTipo = new LancamentoTipo(LancamentoTipo.CREDITOS_CONCEDIDOS_SUP_CANCELAMENTO_POR_PRESCRICAO_DEB_NAO_EXC_INADIMPLENCIA);
-								lancamentoItem = new LancamentoItem(LancamentoItem.CREDITOS_PARA_COBRANCA_INDEVIDA);
+							if (valor != null
+									&& valor.compareTo(BigDecimal.ZERO) != 0) {
+								lancamentoTipo = new LancamentoTipo(
+										LancamentoTipo.CREDITOS_CONCEDIDOS_SUP_CANCELAMENTO_POR_PRESCRICAO_DEB_NAO_EXC_INADIMPLENCIA);
+								lancamentoItem = new LancamentoItem(
+										LancamentoItem.CREDITOS_PARA_COBRANCA_INDEVIDA);
 
 								resumoFaturamentoTemporario = new ResumoFaturamento();
-								resumoFaturamentoTemporario.setValorItemFaturamento(valor);
-								resumoFaturamentoTemporario.setGerenciaRegional(localidade.getGerenciaRegional());
-								resumoFaturamentoTemporario.setUnidadeNegocio(localidade.getUnidadeNegocio());
-								resumoFaturamentoTemporario.setLocalidade(localidade);
-								resumoFaturamentoTemporario.setCategoria(categoria);
-								resumoFaturamentoTemporario.setAnoMesReferencia(anoMesFaturamento);
-								resumoFaturamentoTemporario.setLancamentoTipo(lancamentoTipo);
-								resumoFaturamentoTemporario.setLancamentoItem(lancamentoItem);
-								resumoFaturamentoTemporario.setLancamentoItemContabil(lancamentoItemContabilTemp);
-								resumoFaturamentoTemporario.setSequenciaTipoLancamento(new Short("4000"));
-								resumoFaturamentoTemporario.setSequenciaItemTipoLancamento(sequenciaImpressao);
-								resumoFaturamentoTemporario.setUltimaAlteracao(new Date());
+								resumoFaturamentoTemporario
+										.setValorItemFaturamento(valor);
+								resumoFaturamentoTemporario
+										.setGerenciaRegional(localidade
+												.getGerenciaRegional());
+								resumoFaturamentoTemporario
+										.setUnidadeNegocio(localidade
+												.getUnidadeNegocio());
+								resumoFaturamentoTemporario
+										.setLocalidade(localidade);
+								resumoFaturamentoTemporario
+										.setCategoria(categoria);
+								resumoFaturamentoTemporario
+										.setAnoMesReferencia(anoMesFaturamento);
+								resumoFaturamentoTemporario
+										.setLancamentoTipo(lancamentoTipo);
+								resumoFaturamentoTemporario
+										.setLancamentoItem(lancamentoItem);
+								resumoFaturamentoTemporario
+										.setLancamentoItemContabil(lancamentoItemContabilTemp);
+								resumoFaturamentoTemporario
+										.setSequenciaTipoLancamento(new Short(
+												"4000"));
+								resumoFaturamentoTemporario
+										.setSequenciaItemTipoLancamento(sequenciaImpressao);
+								resumoFaturamentoTemporario
+										.setUltimaAlteracao(new Date());
 
 								resumoFaturamentoTotalDebitosCanceladosPrescricao
 										.setValorItemFaturamento(resumoFaturamentoTotalDebitosCanceladosPrescricao
 												.getValorItemFaturamento()
-												.subtract(resumoFaturamentoTemporario.getValorItemFaturamento()));
+												.subtract(
+														resumoFaturamentoTemporario
+																.getValorItemFaturamento()));
 
-								colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+								colecaoResumoFaturamento
+										.add(resumoFaturamentoTemporario);
 							}
 						}
 					}
 
-					// acumular o valor de guia de pagamento para situação normal e tipo de financiamento igual a serviço
+					// acumular o valor de guia de pagamento para situação
+					// normal e tipo de financiamento igual a serviço
 					Collection<Object[]> colecaoDadosGuiaPagamento = null;
 					colecaoDadosGuiaPagamento = repositorioFaturamento
 							.acumularValorGuiaPagamentoPorTipoFinanciamentoAgrupandoPorLancamentoItemContabil(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									DebitoCreditoSituacao.NORMAL,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL,
 									FinanciamentoTipo.SERVICO_NORMAL);
 
@@ -16858,24 +17179,34 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						Short sequenciaImpressao = (Short) arrayDadosGuiaPagamento[1];
 						Integer idItemLancamentoContabil = (Integer) arrayDadosGuiaPagamento[2];
 
-						if (valor != null && valor.compareTo(BigDecimal.ZERO) != 0) {
-							LancamentoItemContabil lancamentoItemContabilTemp = new LancamentoItemContabil(idItemLancamentoContabil);
-							
-							lancamentoTipo = new LancamentoTipo(LancamentoTipo.FATURAMENTO_ADICIONAL_GUIA_PAGAMENTO);
-							lancamentoItem = new LancamentoItem(LancamentoItem.GRUPO_CONTABIL);
+						if (valor != null
+								&& valor.compareTo(BigDecimal.ZERO) != 0) {
+							LancamentoItemContabil lancamentoItemContabilTemp = new LancamentoItemContabil(
+									idItemLancamentoContabil);
+
+							lancamentoTipo = new LancamentoTipo(
+									LancamentoTipo.FATURAMENTO_ADICIONAL_GUIA_PAGAMENTO);
+							lancamentoItem = new LancamentoItem(
+									LancamentoItem.GRUPO_CONTABIL);
 
 							ResumoFaturamento resumoFaturamento = new ResumoFaturamento();
 							resumoFaturamento.setValorItemFaturamento(valor);
-							resumoFaturamento.setSequenciaItemTipoLancamento(sequenciaImpressao);
-							resumoFaturamento.setGerenciaRegional(localidade.getGerenciaRegional());
-							resumoFaturamento.setUnidadeNegocio(localidade.getUnidadeNegocio());
+							resumoFaturamento
+									.setSequenciaItemTipoLancamento(sequenciaImpressao);
+							resumoFaturamento.setGerenciaRegional(localidade
+									.getGerenciaRegional());
+							resumoFaturamento.setUnidadeNegocio(localidade
+									.getUnidadeNegocio());
 							resumoFaturamento.setLocalidade(localidade);
 							resumoFaturamento.setCategoria(categoria);
-							resumoFaturamento.setAnoMesReferencia(anoMesFaturamento);
-							resumoFaturamento.setLancamentoItemContabil(lancamentoItemContabilTemp);
+							resumoFaturamento
+									.setAnoMesReferencia(anoMesFaturamento);
+							resumoFaturamento
+									.setLancamentoItemContabil(lancamentoItemContabilTemp);
 							resumoFaturamento.setLancamentoTipo(lancamentoTipo);
 							resumoFaturamento.setLancamentoItem(lancamentoItem);
-							resumoFaturamento.setSequenciaTipoLancamento(new Short("500"));
+							resumoFaturamento
+									.setSequenciaTipoLancamento(new Short("500"));
 							resumoFaturamento.setUltimaAlteracao(new Date());
 
 							resumoFaturamentoReceitaBruta
@@ -16887,78 +17218,112 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							colecaoResumoFaturamento.add(resumoFaturamento);
 						}
 					}
-					
+
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorAguaPorSituacaoConta(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									DebitoCreditoSituacao.CANCELADA);
 
-					lancamentoTipo = new LancamentoTipo(LancamentoTipo.CANCELAMENTOS_POR_REFATURAMENTO);
+					lancamentoTipo = new LancamentoTipo(
+							LancamentoTipo.CANCELAMENTOS_POR_REFATURAMENTO);
 					lancamentoItem = new LancamentoItem(LancamentoItem.AGUA);
 
 					resumoFaturamentoTemporario = new ResumoFaturamento();
-					resumoFaturamentoTemporario.setAnoMesReferencia(anoMesFaturamento);
-					resumoFaturamentoTemporario.setGerenciaRegional(localidade.getGerenciaRegional());
-					resumoFaturamentoTemporario.setUnidadeNegocio(localidade.getUnidadeNegocio());
+					resumoFaturamentoTemporario
+							.setAnoMesReferencia(anoMesFaturamento);
+					resumoFaturamentoTemporario.setGerenciaRegional(localidade
+							.getGerenciaRegional());
+					resumoFaturamentoTemporario.setUnidadeNegocio(localidade
+							.getUnidadeNegocio());
 					resumoFaturamentoTemporario.setLocalidade(localidade);
 					resumoFaturamentoTemporario.setCategoria(categoria);
-					resumoFaturamentoTemporario.setValorItemFaturamento(valorItemFaturamento);
-					resumoFaturamentoTemporario.setLancamentoTipo(lancamentoTipo);
-					resumoFaturamentoTemporario.setLancamentoItem(lancamentoItem);
+					resumoFaturamentoTemporario
+							.setValorItemFaturamento(valorItemFaturamento);
+					resumoFaturamentoTemporario
+							.setLancamentoTipo(lancamentoTipo);
+					resumoFaturamentoTemporario
+							.setLancamentoItem(lancamentoItem);
 					resumoFaturamentoTemporario.setLancamentoItemContabil(null);
-					resumoFaturamentoTemporario.setSequenciaTipoLancamento(new Short("900"));
-					resumoFaturamentoTemporario.setSequenciaItemTipoLancamento(new Short("10"));
+					resumoFaturamentoTemporario
+							.setSequenciaTipoLancamento(new Short("900"));
+					resumoFaturamentoTemporario
+							.setSequenciaItemTipoLancamento(new Short("10"));
 					resumoFaturamentoTemporario.setUltimaAlteracao(new Date());
 
 					BigDecimal somaValorAguaSituacaoCanceladaPorRetificacao = null;
 					BigDecimal somaValorAguaSituacaoRetificada = null;
 
-					// Acumula todas todas os valores cancelados por retificacao, eh do valor de conta do cancelado por 
-					// retificacao(DebitoCreditoSituacao = 4) - valor de conta retificada (DebitoCreditoSituacao = 1) por conta categoria
+					// Acumula todas todas os valores cancelados por
+					// retificacao, eh do valor de conta do cancelado por
+					// retificacao(DebitoCreditoSituacao = 4) - valor de conta
+					// retificada (DebitoCreditoSituacao = 1) por conta
+					// categoria
 					somaValorAguaSituacaoCanceladaPorRetificacao = repositorioFaturamento
 							.diferencaValorAguaCanceladaRetificacao(
-									anoMesFaturamento,
-									idLocalidade, idCategoria);
+									anoMesFaturamento, idLocalidade,
+									idCategoria);
 
-					// Acumula todas todas os valores retificados que tem contas canceladas por retificacao, eh do valor de conta 
-					// retificado(DebitoCreditoSituacao = 1) - valor de conta cancelada por retificacao (DebitoCreditoSituacao = 4) por conta categoria
+					// Acumula todas todas os valores retificados que tem contas
+					// canceladas por retificacao, eh do valor de conta
+					// retificado(DebitoCreditoSituacao = 1) - valor de conta
+					// cancelada por retificacao (DebitoCreditoSituacao = 4) por
+					// conta categoria
 					somaValorAguaSituacaoRetificada = repositorioFaturamento
-							.diferencaValorAguaRetificada(
-									anoMesFaturamento,
+							.diferencaValorAguaRetificada(anoMesFaturamento,
 									idLocalidade, idCategoria);
 
-					// Guarda todos os valores cancelados por retificacao que tb tiveram cancelamentos por retificacao
-					resumoFaturamentoTemporario = this.acumularValorResumoFaturamento(resumoFaturamentoTemporario, somaValorAguaSituacaoCanceladaPorRetificacao);
-					resumoFaturamentoReceitaCancelada = this.acumularValorResumoFaturamento(resumoFaturamentoReceitaCancelada, resumoFaturamentoTemporario.getValorItemFaturamento());
+					// Guarda todos os valores cancelados por retificacao que tb
+					// tiveram cancelamentos por retificacao
+					resumoFaturamentoTemporario = this
+							.acumularValorResumoFaturamento(
+									resumoFaturamentoTemporario,
+									somaValorAguaSituacaoCanceladaPorRetificacao);
+					resumoFaturamentoReceitaCancelada = this
+							.acumularValorResumoFaturamento(
+									resumoFaturamentoReceitaCancelada,
+									resumoFaturamentoTemporario
+											.getValorItemFaturamento());
 
-					if (resumoFaturamentoTemporario.getValorItemFaturamento().compareTo(BigDecimal.ZERO) != 0) {
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+					if (resumoFaturamentoTemporario.getValorItemFaturamento()
+							.compareTo(BigDecimal.ZERO) != 0) {
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoTemporario);
 					}
-					
-					// acumular o valor de água para situação atual ou anterior igual a incluída
+
+					// acumular o valor de água para situação atual ou anterior
+					// igual a incluída
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorAguaPorSituacaoConta(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									DebitoCreditoSituacao.INCLUIDA,
 									DebitoCreditoSituacao.INCLUIDA);
 
-					lancamentoTipo = new LancamentoTipo(LancamentoTipo.INCLUSOES_POR_REFATURAMENTO);
+					lancamentoTipo = new LancamentoTipo(
+							LancamentoTipo.INCLUSOES_POR_REFATURAMENTO);
 					lancamentoItem = new LancamentoItem(LancamentoItem.AGUA);
 
 					resumoFaturamentoTemporario = new ResumoFaturamento();
-					resumoFaturamentoTemporario.setAnoMesReferencia(anoMesFaturamento);
-					resumoFaturamentoTemporario.setGerenciaRegional(localidade.getGerenciaRegional());
-					resumoFaturamentoTemporario.setUnidadeNegocio(localidade.getUnidadeNegocio());
+					resumoFaturamentoTemporario
+							.setAnoMesReferencia(anoMesFaturamento);
+					resumoFaturamentoTemporario.setGerenciaRegional(localidade
+							.getGerenciaRegional());
+					resumoFaturamentoTemporario.setUnidadeNegocio(localidade
+							.getUnidadeNegocio());
 					resumoFaturamentoTemporario.setLocalidade(localidade);
 					resumoFaturamentoTemporario.setCategoria(categoria);
-					resumoFaturamentoTemporario.setValorItemFaturamento(valorItemFaturamento);
-					resumoFaturamentoTemporario.setLancamentoTipo(lancamentoTipo);
-					resumoFaturamentoTemporario.setLancamentoItem(lancamentoItem);
+					resumoFaturamentoTemporario
+							.setValorItemFaturamento(valorItemFaturamento);
+					resumoFaturamentoTemporario
+							.setLancamentoTipo(lancamentoTipo);
+					resumoFaturamentoTemporario
+							.setLancamentoItem(lancamentoItem);
 					resumoFaturamentoTemporario.setLancamentoItemContabil(null);
-					resumoFaturamentoTemporario.setSequenciaTipoLancamento(new Short("510"));
-					resumoFaturamentoTemporario.setSequenciaItemTipoLancamento(new Short("10"));
+					resumoFaturamentoTemporario
+							.setSequenciaTipoLancamento(new Short("510"));
+					resumoFaturamentoTemporario
+							.setSequenciaItemTipoLancamento(new Short("10"));
 					resumoFaturamentoTemporario.setUltimaAlteracao(new Date());
 					// Guarda todos os valores incluidos por retificacao que tb
 					// tiveram cancelamentos por retificacao
@@ -16979,50 +17344,65 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						colecaoResumoFaturamento
 								.add(resumoFaturamentoTemporario);
 					}
-					
+
 					// acumula os valores de esgoto para situação cancelada
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorEsgotoPorSituacaoConta(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									DebitoCreditoSituacao.CANCELADA);
 
 					// cria o resumo de faturamento
-					lancamentoTipo = new LancamentoTipo(LancamentoTipo.CANCELAMENTOS_POR_REFATURAMENTO);
+					lancamentoTipo = new LancamentoTipo(
+							LancamentoTipo.CANCELAMENTOS_POR_REFATURAMENTO);
 					lancamentoItem = new LancamentoItem(LancamentoItem.ESGOTO);
 
 					resumoFaturamentoTemporario = new ResumoFaturamento();
-					resumoFaturamentoTemporario.setAnoMesReferencia(anoMesFaturamento);
-					resumoFaturamentoTemporario.setGerenciaRegional(localidade.getGerenciaRegional());
-					resumoFaturamentoTemporario.setUnidadeNegocio(localidade.getUnidadeNegocio());
+					resumoFaturamentoTemporario
+							.setAnoMesReferencia(anoMesFaturamento);
+					resumoFaturamentoTemporario.setGerenciaRegional(localidade
+							.getGerenciaRegional());
+					resumoFaturamentoTemporario.setUnidadeNegocio(localidade
+							.getUnidadeNegocio());
 					resumoFaturamentoTemporario.setLocalidade(localidade);
 					resumoFaturamentoTemporario.setCategoria(categoria);
-					resumoFaturamentoTemporario.setValorItemFaturamento(valorItemFaturamento);
-					resumoFaturamentoTemporario.setLancamentoTipo(lancamentoTipo);
-					resumoFaturamentoTemporario.setLancamentoItem(lancamentoItem);
+					resumoFaturamentoTemporario
+							.setValorItemFaturamento(valorItemFaturamento);
+					resumoFaturamentoTemporario
+							.setLancamentoTipo(lancamentoTipo);
+					resumoFaturamentoTemporario
+							.setLancamentoItem(lancamentoItem);
 					resumoFaturamentoTemporario.setLancamentoItemContabil(null);
-					resumoFaturamentoTemporario.setSequenciaTipoLancamento(new Short("900"));
-					resumoFaturamentoTemporario.setSequenciaItemTipoLancamento(new Short("20"));
+					resumoFaturamentoTemporario
+							.setSequenciaTipoLancamento(new Short("900"));
+					resumoFaturamentoTemporario
+							.setSequenciaItemTipoLancamento(new Short("20"));
 					resumoFaturamentoTemporario.setUltimaAlteracao(new Date());
 
 					BigDecimal somaValorEsgotoSituacaoCanceladaPorRetificacao = null;
 					BigDecimal somaValorEsgotoSituacaoRetificada = null;
 
-					// Acumula todas todas os valores cancelados por retificacao, eh do valor de conta do cancelado por
-					// retificacao(DebitoCreditoSituacao = 4) - valor de conta retificada (DebitoCreditoSituacao = 1) por conta categoria
+					// Acumula todas todas os valores cancelados por
+					// retificacao, eh do valor de conta do cancelado por
+					// retificacao(DebitoCreditoSituacao = 4) - valor de conta
+					// retificada (DebitoCreditoSituacao = 1) por conta
+					// categoria
 					somaValorEsgotoSituacaoCanceladaPorRetificacao = repositorioFaturamento
 							.diferencaValorEsgotoCanceladaRetificacao(
-									anoMesFaturamento,
-									idLocalidade, idCategoria);
+									anoMesFaturamento, idLocalidade,
+									idCategoria);
 
-					// Acumula todas todas os valores retificados que tem contas canceladas por retificacao, eh do valor de conta 
-					// retificado(DebitoCreditoSituacao = 1) - valor de conta cancelada por retificacao (DebitoCreditoSituacao = 4) por conta categoria
+					// Acumula todas todas os valores retificados que tem contas
+					// canceladas por retificacao, eh do valor de conta
+					// retificado(DebitoCreditoSituacao = 1) - valor de conta
+					// cancelada por retificacao (DebitoCreditoSituacao = 4) por
+					// conta categoria
 					somaValorEsgotoSituacaoRetificada = repositorioFaturamento
-							.diferencaValorEsgotoRetificada(
-									anoMesFaturamento,
+							.diferencaValorEsgotoRetificada(anoMesFaturamento,
 									idLocalidade, idCategoria);
 
-					// Guarda todos os valores cancelados por retificacao que tb tiveram cancelamentos por retificacao
+					// Guarda todos os valores cancelados por retificacao que tb
+					// tiveram cancelamentos por retificacao
 					resumoFaturamentoTemporario
 							.setValorItemFaturamento(resumoFaturamentoTemporario
 									.getValorItemFaturamento()
@@ -17034,36 +17414,49 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 											resumoFaturamentoTemporario
 													.getValorItemFaturamento()));
 
-					if (resumoFaturamentoTemporario.getValorItemFaturamento().compareTo(BigDecimal.ZERO) != 0) {
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+					if (resumoFaturamentoTemporario.getValorItemFaturamento()
+							.compareTo(BigDecimal.ZERO) != 0) {
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoTemporario);
 					}
-					
-					// acumular o valor de esgoto para situação atual ou anterior igual a incluída
+
+					// acumular o valor de esgoto para situação atual ou
+					// anterior igual a incluída
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorEsgotoPorSituacaoConta(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									DebitoCreditoSituacao.INCLUIDA,
 									DebitoCreditoSituacao.INCLUIDA);
 
-					lancamentoTipo = new LancamentoTipo(LancamentoTipo.INCLUSOES_POR_REFATURAMENTO);
+					lancamentoTipo = new LancamentoTipo(
+							LancamentoTipo.INCLUSOES_POR_REFATURAMENTO);
 					lancamentoItem = new LancamentoItem(LancamentoItem.ESGOTO);
 
 					resumoFaturamentoTemporario = new ResumoFaturamento();
-					resumoFaturamentoTemporario.setAnoMesReferencia(anoMesFaturamento);
-					resumoFaturamentoTemporario.setGerenciaRegional(localidade.getGerenciaRegional());
-					resumoFaturamentoTemporario.setUnidadeNegocio(localidade.getUnidadeNegocio());
+					resumoFaturamentoTemporario
+							.setAnoMesReferencia(anoMesFaturamento);
+					resumoFaturamentoTemporario.setGerenciaRegional(localidade
+							.getGerenciaRegional());
+					resumoFaturamentoTemporario.setUnidadeNegocio(localidade
+							.getUnidadeNegocio());
 					resumoFaturamentoTemporario.setLocalidade(localidade);
 					resumoFaturamentoTemporario.setCategoria(categoria);
-					resumoFaturamentoTemporario.setValorItemFaturamento(valorItemFaturamento);
-					resumoFaturamentoTemporario.setLancamentoTipo(lancamentoTipo);
-					resumoFaturamentoTemporario.setLancamentoItem(lancamentoItem);
+					resumoFaturamentoTemporario
+							.setValorItemFaturamento(valorItemFaturamento);
+					resumoFaturamentoTemporario
+							.setLancamentoTipo(lancamentoTipo);
+					resumoFaturamentoTemporario
+							.setLancamentoItem(lancamentoItem);
 					resumoFaturamentoTemporario.setLancamentoItemContabil(null);
-					resumoFaturamentoTemporario.setSequenciaTipoLancamento(new Short("510"));
-					resumoFaturamentoTemporario.setSequenciaItemTipoLancamento(new Short("20"));
+					resumoFaturamentoTemporario
+							.setSequenciaTipoLancamento(new Short("510"));
+					resumoFaturamentoTemporario
+							.setSequenciaItemTipoLancamento(new Short("20"));
 					resumoFaturamentoTemporario.setUltimaAlteracao(new Date());
 
-					// Guarda todos os valores incluidos por retificacao que tb tiveram cancelamentos por retificacao
+					// Guarda todos os valores incluidos por retificacao que tb
+					// tiveram cancelamentos por retificacao
 					resumoFaturamentoTemporario
 							.setValorItemFaturamento(resumoFaturamentoTemporario
 									.getValorItemFaturamento().add(
@@ -17096,18 +17489,16 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// igual ao ano/mês do faturamento de sistema parâmetro.
 					BigDecimal valorCreditoRealizadoOrigemCreditoDescontosIncondicionais = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCredito(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem,
 									DebitoCreditoSituacao.CANCELADA);
 
 					// [SB0003 - Obter diferenças de valores de créditos
 					// realizados de conta retificada]
 					BigDecimal[] diferencaCreditoOrigemDescontosIncondicionaisCanceladaPorRetificacaoeERetificada = this
 							.obterDiferencaValoresCreditosRealizadosContaRetificada(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem);
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem);
 
 					/*
 					 * Acumula os valores cancelados, a diferença entre o valor
@@ -17172,9 +17563,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// igual ao ano/mês do faturamento de sistema parâmetro.
 					BigDecimal valorCreditoRealizadoOrigemCreditoDescontosIncondicionaisSituacaoIncluida = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCredito(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem,
 									DebitoCreditoSituacao.INCLUIDA);
 
 					/*
@@ -17239,8 +17629,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					arrayValoresCurtoLongoPrazo = null;
 					arrayValoresCurtoLongoPrazo = repositorioFaturamento
 							.pesquisarValorLongoECurtoPrazoDebitoACobrarPorTipoFinanciamento(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									FinanciamentoTipo.PARCELAMENTO_AGUA,
 									DebitoCreditoSituacao.CANCELADA);
 
@@ -17350,8 +17740,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					arrayValoresCurtoLongoPrazo = null;
 					arrayValoresCurtoLongoPrazo = repositorioFaturamento
 							.pesquisarValorLongoECurtoPrazoDebitoACobrarPorTipoFinanciamento(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									FinanciamentoTipo.PARCELAMENTO_ESGOTO,
 									DebitoCreditoSituacao.CANCELADA);
 
@@ -17460,8 +17850,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					arrayValoresCurtoLongoPrazo = null;
 					arrayValoresCurtoLongoPrazo = repositorioFaturamento
 							.pesquisarValorLongoECurtoPrazoDebitoACobrarPorTipoFinanciamento(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									FinanciamentoTipo.JUROS_PARCELAMENTO,
 									DebitoCreditoSituacao.CANCELADA);
 
@@ -17569,8 +17959,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// situação igual a cancelada
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorDebitoCobradoPorTipoFinanciamento(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									DebitoCreditoSituacao.CANCELADA,
 									FinanciamentoTipo.PARCELAMENTO_AGUA);
 
@@ -17583,8 +17973,10 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					resumoFaturamentoTemporario = new ResumoFaturamento();
 					resumoFaturamentoTemporario
 							.setAnoMesReferencia(anoMesFaturamento);
-					resumoFaturamentoTemporario.setGerenciaRegional(localidade.getGerenciaRegional());
-					resumoFaturamentoTemporario.setUnidadeNegocio(localidade.getUnidadeNegocio());
+					resumoFaturamentoTemporario.setGerenciaRegional(localidade
+							.getGerenciaRegional());
+					resumoFaturamentoTemporario.setUnidadeNegocio(localidade
+							.getUnidadeNegocio());
 					resumoFaturamentoTemporario.setLocalidade(localidade);
 					resumoFaturamentoTemporario.setCategoria(categoria);
 					resumoFaturamentoTemporario
@@ -17604,8 +17996,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// canceladas por retificação e retificadas
 					BigDecimal[] valorDebitoAcumuladoCanceladoEIncluido = this
 							.obterDiferencaValoresParcelamentoIndiretosContaRetificada(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									FinanciamentoTipo.PARCELAMENTO_AGUA);
 
 					// Valor Acumulado Cancelado
@@ -17634,8 +18026,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// para situação igual a cancelada
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorDebitoCobradoPorTipoFinanciamento(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									DebitoCreditoSituacao.CANCELADA,
 									FinanciamentoTipo.PARCELAMENTO_ESGOTO);
 
@@ -17649,8 +18041,10 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					resumoFaturamentoTemporario = new ResumoFaturamento();
 					resumoFaturamentoTemporario
 							.setAnoMesReferencia(anoMesFaturamento);
-					resumoFaturamentoTemporario.setGerenciaRegional(localidade.getGerenciaRegional());
-					resumoFaturamentoTemporario.setUnidadeNegocio(localidade.getUnidadeNegocio());
+					resumoFaturamentoTemporario.setGerenciaRegional(localidade
+							.getGerenciaRegional());
+					resumoFaturamentoTemporario.setUnidadeNegocio(localidade
+							.getUnidadeNegocio());
 					resumoFaturamentoTemporario.setLocalidade(localidade);
 					resumoFaturamentoTemporario.setCategoria(categoria);
 					resumoFaturamentoTemporario
@@ -17670,8 +18064,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// canceladas por retificação e retificadas
 					valorDebitoAcumuladoCanceladoEIncluido = this
 							.obterDiferencaValoresParcelamentoIndiretosContaRetificada(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									FinanciamentoTipo.PARCELAMENTO_ESGOTO);
 
 					// Valor Acumulado Cancelado
@@ -17700,8 +18094,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// para situação igual a cancelada
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorDebitoCobradoPorTipoFinanciamento(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									DebitoCreditoSituacao.CANCELADA,
 									FinanciamentoTipo.JUROS_PARCELAMENTO);
 
@@ -17714,8 +18108,10 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					resumoFaturamentoTemporario = new ResumoFaturamento();
 					resumoFaturamentoTemporario
 							.setAnoMesReferencia(anoMesFaturamento);
-					resumoFaturamentoTemporario.setGerenciaRegional(localidade.getGerenciaRegional());
-					resumoFaturamentoTemporario.setUnidadeNegocio(localidade.getUnidadeNegocio());
+					resumoFaturamentoTemporario.setGerenciaRegional(localidade
+							.getGerenciaRegional());
+					resumoFaturamentoTemporario.setUnidadeNegocio(localidade
+							.getUnidadeNegocio());
 					resumoFaturamentoTemporario.setLocalidade(localidade);
 					resumoFaturamentoTemporario.setCategoria(categoria);
 					resumoFaturamentoTemporario
@@ -17735,8 +18131,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// canceladas por retificação e retificadas
 					valorDebitoAcumuladoCanceladoEIncluido = this
 							.obterDiferencaValoresParcelamentoIndiretosContaRetificada(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									FinanciamentoTipo.JUROS_PARCELAMENTO);
 
 					// Valor Acumulado Cancelado
@@ -17767,9 +18163,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorCategoriaDebitoTipoFinanciamentoServicoSituacaoNormalNumeroPrestacoesCobradasMaiorQue11(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									DebitoCreditoSituacao.NORMAL,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL,
 									FinanciamentoTipo.SERVICO_NORMAL);
 
@@ -17787,8 +18182,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								.setValorItemFaturamento(valorItemFaturamento);
 						resumoFaturamentoTemporario
 								.setAnoMesReferencia(anoMesFaturamento);
-						resumoFaturamentoTemporario.setGerenciaRegional(localidade.getGerenciaRegional());
-						resumoFaturamentoTemporario.setUnidadeNegocio(localidade.getUnidadeNegocio());
+						resumoFaturamentoTemporario
+								.setGerenciaRegional(localidade
+										.getGerenciaRegional());
+						resumoFaturamentoTemporario
+								.setUnidadeNegocio(localidade
+										.getUnidadeNegocio());
 						resumoFaturamentoTemporario.setLocalidade(localidade);
 						resumoFaturamentoTemporario.setCategoria(categoria);
 						resumoFaturamentoTemporario
@@ -17817,8 +18216,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// 11(onze)
 					resumoFaturamentoTemporario = repositorioFaturamento
 							.acumularValorCategoriaDebitoCobradoCategoriaTipoFinanciamentoJurosParcelamentoSituacaoNormalDiferencaPrestacoesMaiorQue11(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									FinanciamentoTipo.JUROS_PARCELAMENTO,
 									DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL);
@@ -17835,8 +18234,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 						resumoFaturamentoTemporario
 								.setAnoMesReferencia(anoMesFaturamento);
-						resumoFaturamentoTemporario.setGerenciaRegional(localidade.getGerenciaRegional());
-						resumoFaturamentoTemporario.setUnidadeNegocio(localidade.getUnidadeNegocio());
+						resumoFaturamentoTemporario
+								.setGerenciaRegional(localidade
+										.getGerenciaRegional());
+						resumoFaturamentoTemporario
+								.setUnidadeNegocio(localidade
+										.getUnidadeNegocio());
 						resumoFaturamentoTemporario.setLocalidade(localidade);
 						resumoFaturamentoTemporario.setCategoria(categoria);
 						resumoFaturamentoTemporario
@@ -17865,8 +18268,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					arrayValoresCurtoLongoPrazo = null;
 					arrayValoresCurtoLongoPrazo = repositorioFaturamento
 							.pesquisarValorLongoECurtoPrazoDebitoACobrarPorGrupoParcelamento(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									ParcelamentoGrupo.DOCUMENTOS_EMITIDOS,
 									DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL, true);
@@ -18346,9 +18749,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					arrayValoresCurtoLongoPrazo = null;
 					arrayValoresCurtoLongoPrazo = repositorioFaturamento
 							.pesquisarValorLongoECurtoPrazoCreditoARealizarPorOrigemCredito(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem,
 									DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL);
 
@@ -18428,9 +18830,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					Collection<Object[]> colecaoDadosDebitoCobrado = null;
 					colecaoDadosDebitoCobrado = repositorioFaturamento
 							.acumularValorDebitoCobradoPorTipoFinanciamentoAgrupandoPorLancamentoItemContabil(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									DebitoCreditoSituacao.NORMAL,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL,
 									FinanciamentoTipo.SERVICO_NORMAL);
 
@@ -18456,17 +18857,24 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 									.setId(idItemLancamentoContabil);
 
 							ResumoFaturamento resumoFaturamento = new ResumoFaturamento();
-							resumoFaturamento.setAnoMesReferencia(anoMesFaturamento);
-							resumoFaturamento.setGerenciaRegional(localidade.getGerenciaRegional());
-							resumoFaturamento.setUnidadeNegocio(localidade.getUnidadeNegocio());
+							resumoFaturamento
+									.setAnoMesReferencia(anoMesFaturamento);
+							resumoFaturamento.setGerenciaRegional(localidade
+									.getGerenciaRegional());
+							resumoFaturamento.setUnidadeNegocio(localidade
+									.getUnidadeNegocio());
 							resumoFaturamento.setLocalidade(localidade);
 							resumoFaturamento.setCategoria(categoria);
-							resumoFaturamento.setLancamentoItemContabil(lancamentoItemContabilTemp);
-							resumoFaturamento.setSequenciaItemTipoLancamento(sequenciaImpressao);
+							resumoFaturamento
+									.setLancamentoItemContabil(lancamentoItemContabilTemp);
+							resumoFaturamento
+									.setSequenciaItemTipoLancamento(sequenciaImpressao);
 							resumoFaturamento.setValorItemFaturamento(valor);
 							resumoFaturamento.setLancamentoTipo(lancamentoTipo);
 							resumoFaturamento.setLancamentoItem(lancamentoItem);
-							resumoFaturamento.setSequenciaTipoLancamento(new Short("1700"));
+							resumoFaturamento
+									.setSequenciaTipoLancamento(new Short(
+											"1700"));
 							resumoFaturamento.setUltimaAlteracao(new Date());
 
 							// soma o sequência igual 1700 ao total cobrado nas
@@ -18489,9 +18897,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					colecaoDadosDebitoCobrado = null;
 					colecaoDadosDebitoCobrado = repositorioFaturamento
 							.acumularValorDebitoCobradoPorTipoFinanciamentoAgrupandoPorLancamentoItemContabil(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									DebitoCreditoSituacao.NORMAL,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL,
 									FinanciamentoTipo.DOACOES);
 
@@ -18516,17 +18923,24 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 									.setId(idItemLancamentoContabil);
 
 							ResumoFaturamento resumoFaturamento = new ResumoFaturamento();
-							resumoFaturamento.setAnoMesReferencia(anoMesFaturamento);
-							resumoFaturamento.setGerenciaRegional(localidade.getGerenciaRegional());
-							resumoFaturamento.setUnidadeNegocio(localidade.getUnidadeNegocio());
+							resumoFaturamento
+									.setAnoMesReferencia(anoMesFaturamento);
+							resumoFaturamento.setGerenciaRegional(localidade
+									.getGerenciaRegional());
+							resumoFaturamento.setUnidadeNegocio(localidade
+									.getUnidadeNegocio());
 							resumoFaturamento.setLocalidade(localidade);
 							resumoFaturamento.setCategoria(categoria);
-							resumoFaturamento.setLancamentoItemContabil(lancamentoItemContabilTemp);
-							resumoFaturamento.setSequenciaItemTipoLancamento(sequenciaImpressao);
+							resumoFaturamento
+									.setLancamentoItemContabil(lancamentoItemContabilTemp);
+							resumoFaturamento
+									.setSequenciaItemTipoLancamento(sequenciaImpressao);
 							resumoFaturamento.setValorItemFaturamento(valor);
 							resumoFaturamento.setLancamentoTipo(lancamentoTipo);
 							resumoFaturamento.setLancamentoItem(lancamentoItem);
-							resumoFaturamento.setSequenciaTipoLancamento(new Short("1800"));
+							resumoFaturamento
+									.setSequenciaTipoLancamento(new Short(
+											"1800"));
 							resumoFaturamento.setUltimaAlteracao(new Date());
 
 							colecaoResumoFaturamento.add(resumoFaturamento);
@@ -18549,9 +18963,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					colecaoDadosDebitoCobrado = null;
 					colecaoDadosDebitoCobrado = repositorioFaturamento
 							.acumularValorDebitoCobradoPorTipoFinanciamentoAgrupandoPorLancamentoItemContabil(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									DebitoCreditoSituacao.NORMAL,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL,
 									FinanciamentoTipo.PARCELAMENTO_SERVICO);
 
@@ -18576,17 +18989,24 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 									.setId(idItemLancamentoContabil);
 
 							ResumoFaturamento resumoFaturamento = new ResumoFaturamento();
-							resumoFaturamento.setAnoMesReferencia(anoMesFaturamento);
-							resumoFaturamento.setGerenciaRegional(localidade.getGerenciaRegional());
-							resumoFaturamento.setUnidadeNegocio(localidade.getUnidadeNegocio());
+							resumoFaturamento
+									.setAnoMesReferencia(anoMesFaturamento);
+							resumoFaturamento.setGerenciaRegional(localidade
+									.getGerenciaRegional());
+							resumoFaturamento.setUnidadeNegocio(localidade
+									.getUnidadeNegocio());
 							resumoFaturamento.setLocalidade(localidade);
 							resumoFaturamento.setCategoria(categoria);
-							resumoFaturamento.setLancamentoItemContabil(lancamentoItemContabilTemp);
-							resumoFaturamento.setSequenciaItemTipoLancamento(sequenciaImpressao);
+							resumoFaturamento
+									.setLancamentoItemContabil(lancamentoItemContabilTemp);
+							resumoFaturamento
+									.setSequenciaItemTipoLancamento(sequenciaImpressao);
 							resumoFaturamento.setValorItemFaturamento(valor);
 							resumoFaturamento.setLancamentoTipo(lancamentoTipo);
 							resumoFaturamento.setLancamentoItem(lancamentoItem);
-							resumoFaturamento.setSequenciaTipoLancamento(new Short("1900"));
+							resumoFaturamento
+									.setSequenciaTipoLancamento(new Short(
+											"1900"));
 							resumoFaturamento.setUltimaAlteracao(new Date());
 
 							// soma o sequência igual 1900 ao total cobrado nas
@@ -18611,9 +19031,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					colecaoDadosDebitoCobrado = null;
 					colecaoDadosDebitoCobrado = repositorioFaturamento
 							.acumularValorDebitoCobradoPorTipoFinanciamentoAgrupandoPorLancamentoItemContabil(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									DebitoCreditoSituacao.NORMAL,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL,
 									FinanciamentoTipo.ARRASTO_SERVICO);
 
@@ -18638,17 +19057,24 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 									.setId(idItemLancamentoContabil);
 
 							ResumoFaturamento resumoFaturamento = new ResumoFaturamento();
-							resumoFaturamento.setAnoMesReferencia(anoMesFaturamento);
-							resumoFaturamento.setGerenciaRegional(localidade.getGerenciaRegional());
-							resumoFaturamento.setUnidadeNegocio(localidade.getUnidadeNegocio());
+							resumoFaturamento
+									.setAnoMesReferencia(anoMesFaturamento);
+							resumoFaturamento.setGerenciaRegional(localidade
+									.getGerenciaRegional());
+							resumoFaturamento.setUnidadeNegocio(localidade
+									.getUnidadeNegocio());
 							resumoFaturamento.setLocalidade(localidade);
 							resumoFaturamento.setCategoria(categoria);
-							resumoFaturamento.setLancamentoItemContabil(lancamentoItemContabilTemp);
-							resumoFaturamento.setSequenciaItemTipoLancamento(sequenciaImpressao);
+							resumoFaturamento
+									.setLancamentoItemContabil(lancamentoItemContabilTemp);
+							resumoFaturamento
+									.setSequenciaItemTipoLancamento(sequenciaImpressao);
 							resumoFaturamento.setValorItemFaturamento(valor);
 							resumoFaturamento.setLancamentoTipo(lancamentoTipo);
 							resumoFaturamento.setLancamentoItem(lancamentoItem);
-							resumoFaturamento.setSequenciaTipoLancamento(new Short("2100"));
+							resumoFaturamento
+									.setSequenciaTipoLancamento(new Short(
+											"2100"));
 							resumoFaturamento.setUltimaAlteracao(new Date());
 
 							// soma o sequência igual 2100 ao total cobrado nas
@@ -18673,9 +19099,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorDebitoCobradoPorTipoFinanciamentoPorReferenciaConta(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									DebitoCreditoSituacao.NORMAL,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL,
 									FinanciamentoTipo.PARCELAMENTO_AGUA);
 
@@ -18690,18 +19115,30 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						lancamentoItem.setId(LancamentoItem.AGUA);
 
 						resumoFaturamentoTemporario = new ResumoFaturamento();
-						resumoFaturamentoTemporario.setAnoMesReferencia(anoMesFaturamento);
-						resumoFaturamentoTemporario.setGerenciaRegional(localidade.getGerenciaRegional());
-						resumoFaturamentoTemporario.setUnidadeNegocio(localidade.getUnidadeNegocio());
+						resumoFaturamentoTemporario
+								.setAnoMesReferencia(anoMesFaturamento);
+						resumoFaturamentoTemporario
+								.setGerenciaRegional(localidade
+										.getGerenciaRegional());
+						resumoFaturamentoTemporario
+								.setUnidadeNegocio(localidade
+										.getUnidadeNegocio());
 						resumoFaturamentoTemporario.setLocalidade(localidade);
 						resumoFaturamentoTemporario.setCategoria(categoria);
-						resumoFaturamentoTemporario.setValorItemFaturamento(valorItemFaturamento);
-						resumoFaturamentoTemporario.setLancamentoTipo(lancamentoTipo);
-						resumoFaturamentoTemporario.setLancamentoItem(lancamentoItem);
-						resumoFaturamentoTemporario.setLancamentoItemContabil(null);
-						resumoFaturamentoTemporario.setSequenciaTipoLancamento(new Short("1900"));
-						resumoFaturamentoTemporario.setSequenciaItemTipoLancamento(new Short("10"));
-						resumoFaturamentoTemporario.setUltimaAlteracao(new Date());
+						resumoFaturamentoTemporario
+								.setValorItemFaturamento(valorItemFaturamento);
+						resumoFaturamentoTemporario
+								.setLancamentoTipo(lancamentoTipo);
+						resumoFaturamentoTemporario
+								.setLancamentoItem(lancamentoItem);
+						resumoFaturamentoTemporario
+								.setLancamentoItemContabil(null);
+						resumoFaturamentoTemporario
+								.setSequenciaTipoLancamento(new Short("1900"));
+						resumoFaturamentoTemporario
+								.setSequenciaItemTipoLancamento(new Short("10"));
+						resumoFaturamentoTemporario
+								.setUltimaAlteracao(new Date());
 
 						// soma o sequência igual 1900 ao total cobrado nas
 						// contas
@@ -18723,9 +19160,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorDebitoCobradoPorTipoFinanciamentoPorReferenciaConta(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									DebitoCreditoSituacao.NORMAL,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL,
 									FinanciamentoTipo.PARCELAMENTO_ESGOTO);
 
@@ -18743,8 +19179,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						resumoFaturamentoTemporario = new ResumoFaturamento();
 						resumoFaturamentoTemporario
 								.setAnoMesReferencia(anoMesFaturamento);
-						resumoFaturamentoTemporario.setGerenciaRegional(localidade.getGerenciaRegional());
-						resumoFaturamentoTemporario.setUnidadeNegocio(localidade.getUnidadeNegocio());
+						resumoFaturamentoTemporario
+								.setGerenciaRegional(localidade
+										.getGerenciaRegional());
+						resumoFaturamentoTemporario
+								.setUnidadeNegocio(localidade
+										.getUnidadeNegocio());
 						resumoFaturamentoTemporario.setLocalidade(localidade);
 						resumoFaturamentoTemporario.setCategoria(categoria);
 						resumoFaturamentoTemporario
@@ -18783,9 +19223,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorDebitoCobradoPorTipoFinanciamentoPorReferenciaConta(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									DebitoCreditoSituacao.NORMAL,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL,
 									FinanciamentoTipo.JUROS_PARCELAMENTO);
 
@@ -18803,8 +19242,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						resumoFaturamentoTemporario = new ResumoFaturamento();
 						resumoFaturamentoTemporario
 								.setAnoMesReferencia(anoMesFaturamento);
-						resumoFaturamentoTemporario.setGerenciaRegional(localidade.getGerenciaRegional());
-						resumoFaturamentoTemporario.setUnidadeNegocio(localidade.getUnidadeNegocio());
+						resumoFaturamentoTemporario
+								.setGerenciaRegional(localidade
+										.getGerenciaRegional());
+						resumoFaturamentoTemporario
+								.setUnidadeNegocio(localidade
+										.getUnidadeNegocio());
 						resumoFaturamentoTemporario.setLocalidade(localidade);
 						resumoFaturamentoTemporario.setCategoria(categoria);
 						resumoFaturamentoTemporario
@@ -18842,9 +19285,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorDebitoCobradoPorTipoFinanciamentoPorReferenciaConta(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									DebitoCreditoSituacao.NORMAL,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL,
 									FinanciamentoTipo.ARRASTO_AGUA);
 
@@ -18861,8 +19303,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						resumoFaturamentoTemporario = new ResumoFaturamento();
 						resumoFaturamentoTemporario
 								.setAnoMesReferencia(anoMesFaturamento);
-						resumoFaturamentoTemporario.setGerenciaRegional(localidade.getGerenciaRegional());
-						resumoFaturamentoTemporario.setUnidadeNegocio(localidade.getUnidadeNegocio());
+						resumoFaturamentoTemporario
+								.setGerenciaRegional(localidade
+										.getGerenciaRegional());
+						resumoFaturamentoTemporario
+								.setUnidadeNegocio(localidade
+										.getUnidadeNegocio());
 						resumoFaturamentoTemporario.setLocalidade(localidade);
 						resumoFaturamentoTemporario.setCategoria(categoria);
 						resumoFaturamentoTemporario
@@ -18900,9 +19346,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorDebitoCobradoPorTipoFinanciamentoPorReferenciaConta(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									DebitoCreditoSituacao.NORMAL,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL,
 									FinanciamentoTipo.ARRASTO_ESGOTO);
 
@@ -18919,8 +19364,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						resumoFaturamentoTemporario = new ResumoFaturamento();
 						resumoFaturamentoTemporario
 								.setAnoMesReferencia(anoMesFaturamento);
-						resumoFaturamentoTemporario.setGerenciaRegional(localidade.getGerenciaRegional());
-						resumoFaturamentoTemporario.setUnidadeNegocio(localidade.getUnidadeNegocio());
+						resumoFaturamentoTemporario
+								.setGerenciaRegional(localidade
+										.getGerenciaRegional());
+						resumoFaturamentoTemporario
+								.setUnidadeNegocio(localidade
+										.getUnidadeNegocio());
 						resumoFaturamentoTemporario.setLocalidade(localidade);
 						resumoFaturamentoTemporario.setCategoria(categoria);
 						resumoFaturamentoTemporario
@@ -18954,14 +19403,15 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// Linha 71
 					// acumula o valor do IR(imposto de renda) para situação de
 					// conta atual ou anterior igual a normal
-					/**TODO:COSANPA
-					 * Alteração para obter de forma correta o valor dos impostos persistidos no resumo de faturamento
+					/**
+					 * TODO:COSANPA Alteração para obter de forma correta o
+					 * valor dos impostos persistidos no resumo de faturamento
 					 * */
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorContaCategoriaPorTipoImpostoResumoFaturamento(
-									anoMesFaturamento,
-									idLocalidade, idCategoria, ImpostoTipo.IR,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, ImpostoTipo.IR,
 									DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL);
 
@@ -18976,17 +19426,23 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						lancamentoItem.setId(LancamentoItem.IMPOSTO_RENDA);
 
 						ResumoFaturamento resumoFaturamento = new ResumoFaturamento();
-						resumoFaturamento.setAnoMesReferencia(anoMesFaturamento);
-						resumoFaturamento.setGerenciaRegional(localidade.getGerenciaRegional());
-						resumoFaturamento.setUnidadeNegocio(localidade.getUnidadeNegocio());
+						resumoFaturamento
+								.setAnoMesReferencia(anoMesFaturamento);
+						resumoFaturamento.setGerenciaRegional(localidade
+								.getGerenciaRegional());
+						resumoFaturamento.setUnidadeNegocio(localidade
+								.getUnidadeNegocio());
 						resumoFaturamento.setLocalidade(localidade);
 						resumoFaturamento.setCategoria(categoria);
-						resumoFaturamento.setValorItemFaturamento(valorItemFaturamento);
+						resumoFaturamento
+								.setValorItemFaturamento(valorItemFaturamento);
 						resumoFaturamento.setLancamentoTipo(lancamentoTipo);
 						resumoFaturamento.setLancamentoItem(lancamentoItem);
 						resumoFaturamento.setLancamentoItemContabil(null);
-						resumoFaturamento.setSequenciaTipoLancamento(new Short("2150"));
-						resumoFaturamento.setSequenciaItemTipoLancamento(new Short("10"));
+						resumoFaturamento.setSequenciaTipoLancamento(new Short(
+								"2150"));
+						resumoFaturamento
+								.setSequenciaItemTipoLancamento(new Short("10"));
 						resumoFaturamento.setUltimaAlteracao(new Date());
 
 						// inseri o resumo de faturamento a coleção principal
@@ -19009,9 +19465,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorContaCategoriaPorTipoImpostoResumoFaturamento(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									ImpostoTipo.COFINS,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, ImpostoTipo.COFINS,
 									DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL);
 
@@ -19026,17 +19481,23 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						lancamentoItem.setId(LancamentoItem.COFINS);
 
 						ResumoFaturamento resumoFaturamento = new ResumoFaturamento();
-						resumoFaturamento.setAnoMesReferencia(anoMesFaturamento);
-						resumoFaturamento.setGerenciaRegional(localidade.getGerenciaRegional());
-						resumoFaturamento.setUnidadeNegocio(localidade.getUnidadeNegocio());
+						resumoFaturamento
+								.setAnoMesReferencia(anoMesFaturamento);
+						resumoFaturamento.setGerenciaRegional(localidade
+								.getGerenciaRegional());
+						resumoFaturamento.setUnidadeNegocio(localidade
+								.getUnidadeNegocio());
 						resumoFaturamento.setLocalidade(localidade);
 						resumoFaturamento.setCategoria(categoria);
-						resumoFaturamento.setValorItemFaturamento(valorItemFaturamento);
+						resumoFaturamento
+								.setValorItemFaturamento(valorItemFaturamento);
 						resumoFaturamento.setLancamentoTipo(lancamentoTipo);
 						resumoFaturamento.setLancamentoItem(lancamentoItem);
 						resumoFaturamento.setLancamentoItemContabil(null);
-						resumoFaturamento.setSequenciaTipoLancamento(new Short("2150"));
-						resumoFaturamento.setSequenciaItemTipoLancamento(new Short("20"));
+						resumoFaturamento.setSequenciaTipoLancamento(new Short(
+								"2150"));
+						resumoFaturamento
+								.setSequenciaItemTipoLancamento(new Short("20"));
 						resumoFaturamento.setUltimaAlteracao(new Date());
 
 						// subtrai o sequência igual 2150 ao total cobrado nas
@@ -19060,9 +19521,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorContaCategoriaPorTipoImpostoResumoFaturamento(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									ImpostoTipo.CSLL,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, ImpostoTipo.CSLL,
 									DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL);
 
@@ -19077,17 +19537,23 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						lancamentoItem.setId(LancamentoItem.CSLL);
 
 						ResumoFaturamento resumoFaturamento = new ResumoFaturamento();
-						resumoFaturamento.setAnoMesReferencia(anoMesFaturamento);
-						resumoFaturamento.setGerenciaRegional(localidade.getGerenciaRegional());
-						resumoFaturamento.setUnidadeNegocio(localidade.getUnidadeNegocio());
+						resumoFaturamento
+								.setAnoMesReferencia(anoMesFaturamento);
+						resumoFaturamento.setGerenciaRegional(localidade
+								.getGerenciaRegional());
+						resumoFaturamento.setUnidadeNegocio(localidade
+								.getUnidadeNegocio());
 						resumoFaturamento.setLocalidade(localidade);
 						resumoFaturamento.setCategoria(categoria);
-						resumoFaturamento.setValorItemFaturamento(valorItemFaturamento);
+						resumoFaturamento
+								.setValorItemFaturamento(valorItemFaturamento);
 						resumoFaturamento.setLancamentoTipo(lancamentoTipo);
 						resumoFaturamento.setLancamentoItem(lancamentoItem);
 						resumoFaturamento.setLancamentoItemContabil(null);
-						resumoFaturamento.setSequenciaTipoLancamento(new Short("2150"));
-						resumoFaturamento.setSequenciaItemTipoLancamento(new Short("30"));
+						resumoFaturamento.setSequenciaTipoLancamento(new Short(
+								"2150"));
+						resumoFaturamento
+								.setSequenciaItemTipoLancamento(new Short("30"));
 						resumoFaturamento.setUltimaAlteracao(new Date());
 
 						// subtrai o sequência igual 2150 ao total cobrado nas
@@ -19111,9 +19577,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorContaCategoriaPorTipoImpostoResumoFaturamento(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									ImpostoTipo.PIS_PASEP,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, ImpostoTipo.PIS_PASEP,
 									DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL);
 
@@ -19128,17 +19593,23 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						lancamentoItem.setId(LancamentoItem.PIS_PASEP);
 
 						ResumoFaturamento resumoFaturamento = new ResumoFaturamento();
-						resumoFaturamento.setAnoMesReferencia(anoMesFaturamento);
-						resumoFaturamento.setGerenciaRegional(localidade.getGerenciaRegional());
-						resumoFaturamento.setUnidadeNegocio(localidade.getUnidadeNegocio());
+						resumoFaturamento
+								.setAnoMesReferencia(anoMesFaturamento);
+						resumoFaturamento.setGerenciaRegional(localidade
+								.getGerenciaRegional());
+						resumoFaturamento.setUnidadeNegocio(localidade
+								.getUnidadeNegocio());
 						resumoFaturamento.setLocalidade(localidade);
 						resumoFaturamento.setCategoria(categoria);
-						resumoFaturamento.setValorItemFaturamento(valorItemFaturamento);
+						resumoFaturamento
+								.setValorItemFaturamento(valorItemFaturamento);
 						resumoFaturamento.setLancamentoTipo(lancamentoTipo);
 						resumoFaturamento.setLancamentoItem(lancamentoItem);
 						resumoFaturamento.setLancamentoItemContabil(null);
-						resumoFaturamento.setSequenciaTipoLancamento(new Short("2150"));
-						resumoFaturamento.setSequenciaItemTipoLancamento(new Short("40"));
+						resumoFaturamento.setSequenciaTipoLancamento(new Short(
+								"2150"));
+						resumoFaturamento
+								.setSequenciaItemTipoLancamento(new Short("40"));
 						resumoFaturamento.setUltimaAlteracao(new Date());
 
 						// subtrai o sequência igual 2150 ao total cobrado nas
@@ -19167,40 +19638,55 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoPorReferenciaContaDuplicidade(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem,
 									DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL);
 
 					if (valorItemFaturamento.compareTo(BigDecimal.ZERO) != 0) {
-						lancamentoTipo = new LancamentoTipo(LancamentoTipo.DEVOLUCAO__VALORES_EM_CONTA);
-						lancamentoItem = new LancamentoItem(LancamentoItem.CONTAS_PAGA_EM_DUPLICIDADE_EXCESSO);
+						lancamentoTipo = new LancamentoTipo(
+								LancamentoTipo.DEVOLUCAO__VALORES_EM_CONTA);
+						lancamentoItem = new LancamentoItem(
+								LancamentoItem.CONTAS_PAGA_EM_DUPLICIDADE_EXCESSO);
 
 						ResumoFaturamento resumoFaturamento = new ResumoFaturamento();
-						resumoFaturamento.setAnoMesReferencia(anoMesFaturamento);
-						resumoFaturamento.setGerenciaRegional(localidade.getGerenciaRegional());
-						resumoFaturamento.setUnidadeNegocio(localidade.getUnidadeNegocio());
+						resumoFaturamento
+								.setAnoMesReferencia(anoMesFaturamento);
+						resumoFaturamento.setGerenciaRegional(localidade
+								.getGerenciaRegional());
+						resumoFaturamento.setUnidadeNegocio(localidade
+								.getUnidadeNegocio());
 						resumoFaturamento.setLocalidade(localidade);
 						resumoFaturamento.setCategoria(categoria);
-						resumoFaturamento.setValorItemFaturamento(valorItemFaturamento);
+						resumoFaturamento
+								.setValorItemFaturamento(valorItemFaturamento);
 						resumoFaturamento.setLancamentoTipo(lancamentoTipo);
 						resumoFaturamento.setLancamentoItem(lancamentoItem);
 						resumoFaturamento.setLancamentoItemContabil(null);
-						resumoFaturamento.setSequenciaTipoLancamento(new Short("2200"));
-						resumoFaturamento.setSequenciaItemTipoLancamento(new Short("10"));
+						resumoFaturamento.setSequenciaTipoLancamento(new Short(
+								"2200"));
+						resumoFaturamento
+								.setSequenciaItemTipoLancamento(new Short("10"));
 						resumoFaturamento.setUltimaAlteracao(new Date());
 
-						resumoFaturamentoTotalCobradoNasContas.setValorItemFaturamento(
-								resumoFaturamentoTotalCobradoNasContas.getValorItemFaturamento().subtract(resumoFaturamento.getValorItemFaturamento()));
+						resumoFaturamentoTotalCobradoNasContas
+								.setValorItemFaturamento(resumoFaturamentoTotalCobradoNasContas
+										.getValorItemFaturamento()
+										.subtract(
+												resumoFaturamento
+														.getValorItemFaturamento()));
 
-						// adiciona o sequência igual 2200 ao total devolvidos nas contas
-						resumoFaturamentoValoresDevolvidosNasContas.setValorItemFaturamento(
-								resumoFaturamentoValoresDevolvidosNasContas.getValorItemFaturamento().add(resumoFaturamento.getValorItemFaturamento()));
+						// adiciona o sequência igual 2200 ao total devolvidos
+						// nas contas
+						resumoFaturamentoValoresDevolvidosNasContas
+								.setValorItemFaturamento(resumoFaturamentoValoresDevolvidosNasContas
+										.getValorItemFaturamento()
+										.add(resumoFaturamento
+												.getValorItemFaturamento()));
 
 						colecaoResumoFaturamento.add(resumoFaturamento);
 					}
-					
+
 					// fim Linha 74
 					// System.out.println("Linha 75");
 					// Linha 75
@@ -19213,12 +19699,11 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					idsCreditosOrigem[0] = CreditoOrigem.CONTAS_PAGAS_EM_DUPLICIDADE_EXCESSO;
 
 					valorItemFaturamento = null;
-					//valorItemFaturamento = BigDecimal.ZERO;
+					// valorItemFaturamento = BigDecimal.ZERO;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoPorReferenciaContaDuplicidadeAte122012(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem,
 									DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL);
 
@@ -19233,17 +19718,23 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								.setId(LancamentoItem.CONTAS_PAGA_EM_DUPLICIDADE_EXCESSO);
 
 						ResumoFaturamento resumoFaturamento = new ResumoFaturamento();
-						resumoFaturamento.setAnoMesReferencia(anoMesFaturamento);
-						resumoFaturamento.setGerenciaRegional(localidade.getGerenciaRegional());
-						resumoFaturamento.setUnidadeNegocio(localidade.getUnidadeNegocio());
+						resumoFaturamento
+								.setAnoMesReferencia(anoMesFaturamento);
+						resumoFaturamento.setGerenciaRegional(localidade
+								.getGerenciaRegional());
+						resumoFaturamento.setUnidadeNegocio(localidade
+								.getUnidadeNegocio());
 						resumoFaturamento.setLocalidade(localidade);
 						resumoFaturamento.setCategoria(categoria);
-						resumoFaturamento.setValorItemFaturamento(valorItemFaturamento);
+						resumoFaturamento
+								.setValorItemFaturamento(valorItemFaturamento);
 						resumoFaturamento.setLancamentoTipo(lancamentoTipo);
 						resumoFaturamento.setLancamentoItem(lancamentoItem);
 						resumoFaturamento.setLancamentoItemContabil(null);
-						resumoFaturamento.setSequenciaTipoLancamento(new Short("2225"));
-						resumoFaturamento.setSequenciaItemTipoLancamento(new Short("10"));
+						resumoFaturamento.setSequenciaTipoLancamento(new Short(
+								"2225"));
+						resumoFaturamento
+								.setSequenciaItemTipoLancamento(new Short("10"));
 						resumoFaturamento.setUltimaAlteracao(new Date());
 
 						// subtrai o sequência igual 2200 ao total cobrado nas
@@ -19280,9 +19771,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoPorReferenciaConta(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem,
 									DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL);
 
@@ -19298,17 +19788,23 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								.setId(LancamentoItem.DESCONTOS_CONCEDIDOS);
 
 						ResumoFaturamento resumoFaturamento = new ResumoFaturamento();
-						resumoFaturamento.setAnoMesReferencia(anoMesFaturamento);
-						resumoFaturamento.setGerenciaRegional(localidade.getGerenciaRegional());
-						resumoFaturamento.setUnidadeNegocio(localidade.getUnidadeNegocio());
+						resumoFaturamento
+								.setAnoMesReferencia(anoMesFaturamento);
+						resumoFaturamento.setGerenciaRegional(localidade
+								.getGerenciaRegional());
+						resumoFaturamento.setUnidadeNegocio(localidade
+								.getUnidadeNegocio());
 						resumoFaturamento.setLocalidade(localidade);
 						resumoFaturamento.setCategoria(categoria);
-						resumoFaturamento.setValorItemFaturamento(valorItemFaturamento);
+						resumoFaturamento
+								.setValorItemFaturamento(valorItemFaturamento);
 						resumoFaturamento.setLancamentoTipo(lancamentoTipo);
 						resumoFaturamento.setLancamentoItem(lancamentoItem);
 						resumoFaturamento.setLancamentoItemContabil(null);
-						resumoFaturamento.setSequenciaTipoLancamento(new Short("2200"));
-						resumoFaturamento.setSequenciaItemTipoLancamento(new Short("20"));
+						resumoFaturamento.setSequenciaTipoLancamento(new Short(
+								"2200"));
+						resumoFaturamento
+								.setSequenciaItemTipoLancamento(new Short("20"));
 						resumoFaturamento.setUltimaAlteracao(new Date());
 
 						// subtrai o sequência igual 2200 ao total cobrado nas
@@ -19344,9 +19840,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoPorReferenciaConta(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem,
 									DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL);
 
@@ -19361,17 +19856,23 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								.setId(LancamentoItem.DESCONTOS_CONDICIONAIS);
 
 						ResumoFaturamento resumoFaturamento = new ResumoFaturamento();
-						resumoFaturamento.setAnoMesReferencia(anoMesFaturamento);
-						resumoFaturamento.setGerenciaRegional(localidade.getGerenciaRegional());
-						resumoFaturamento.setUnidadeNegocio(localidade.getUnidadeNegocio());
+						resumoFaturamento
+								.setAnoMesReferencia(anoMesFaturamento);
+						resumoFaturamento.setGerenciaRegional(localidade
+								.getGerenciaRegional());
+						resumoFaturamento.setUnidadeNegocio(localidade
+								.getUnidadeNegocio());
 						resumoFaturamento.setLocalidade(localidade);
 						resumoFaturamento.setCategoria(categoria);
-						resumoFaturamento.setValorItemFaturamento(valorItemFaturamento);
+						resumoFaturamento
+								.setValorItemFaturamento(valorItemFaturamento);
 						resumoFaturamento.setLancamentoTipo(lancamentoTipo);
 						resumoFaturamento.setLancamentoItem(lancamentoItem);
 						resumoFaturamento.setLancamentoItemContabil(null);
-						resumoFaturamento.setSequenciaTipoLancamento(new Short("2200"));
-						resumoFaturamento.setSequenciaItemTipoLancamento(new Short("30"));
+						resumoFaturamento.setSequenciaTipoLancamento(new Short(
+								"2200"));
+						resumoFaturamento
+								.setSequenciaItemTipoLancamento(new Short("30"));
 						resumoFaturamento.setUltimaAlteracao(new Date());
 
 						// subtrai o sequência igual 2200 ao total cobrado nas
@@ -19407,9 +19908,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoPorReferenciaConta(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem,
 									DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL);
 
@@ -19425,17 +19925,23 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								.setId(LancamentoItem.DESCONTOS_INCONDICIONAIS);
 
 						ResumoFaturamento resumoFaturamento = new ResumoFaturamento();
-						resumoFaturamento.setAnoMesReferencia(anoMesFaturamento);
-						resumoFaturamento.setGerenciaRegional(localidade.getGerenciaRegional());
-						resumoFaturamento.setUnidadeNegocio(localidade.getUnidadeNegocio());
+						resumoFaturamento
+								.setAnoMesReferencia(anoMesFaturamento);
+						resumoFaturamento.setGerenciaRegional(localidade
+								.getGerenciaRegional());
+						resumoFaturamento.setUnidadeNegocio(localidade
+								.getUnidadeNegocio());
 						resumoFaturamento.setLocalidade(localidade);
 						resumoFaturamento.setCategoria(categoria);
-						resumoFaturamento.setValorItemFaturamento(valorItemFaturamento);
+						resumoFaturamento
+								.setValorItemFaturamento(valorItemFaturamento);
 						resumoFaturamento.setLancamentoTipo(lancamentoTipo);
 						resumoFaturamento.setLancamentoItem(lancamentoItem);
 						resumoFaturamento.setLancamentoItemContabil(null);
-						resumoFaturamento.setSequenciaTipoLancamento(new Short("2200"));
-						resumoFaturamento.setSequenciaItemTipoLancamento(new Short("40"));
+						resumoFaturamento.setSequenciaTipoLancamento(new Short(
+								"2200"));
+						resumoFaturamento
+								.setSequenciaItemTipoLancamento(new Short("40"));
 						resumoFaturamento.setUltimaAlteracao(new Date());
 
 						// subtrai o sequência igual 2200 ao total cobrado nas
@@ -19471,9 +19977,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoPorReferenciaConta(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem,
 									DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL);
 
@@ -19488,17 +19993,23 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								.setId(LancamentoItem.AJUSTES_PARA_ZERAR_CONTA);
 
 						ResumoFaturamento resumoFaturamento = new ResumoFaturamento();
-						resumoFaturamento.setAnoMesReferencia(anoMesFaturamento);
-						resumoFaturamento.setGerenciaRegional(localidade.getGerenciaRegional());
-						resumoFaturamento.setUnidadeNegocio(localidade.getUnidadeNegocio());
+						resumoFaturamento
+								.setAnoMesReferencia(anoMesFaturamento);
+						resumoFaturamento.setGerenciaRegional(localidade
+								.getGerenciaRegional());
+						resumoFaturamento.setUnidadeNegocio(localidade
+								.getUnidadeNegocio());
 						resumoFaturamento.setLocalidade(localidade);
 						resumoFaturamento.setCategoria(categoria);
-						resumoFaturamento.setValorItemFaturamento(valorItemFaturamento);
+						resumoFaturamento
+								.setValorItemFaturamento(valorItemFaturamento);
 						resumoFaturamento.setLancamentoTipo(lancamentoTipo);
 						resumoFaturamento.setLancamentoItem(lancamentoItem);
 						resumoFaturamento.setLancamentoItemContabil(null);
-						resumoFaturamento.setSequenciaTipoLancamento(new Short("2200"));
-						resumoFaturamento.setSequenciaItemTipoLancamento(new Short("50"));
+						resumoFaturamento.setSequenciaTipoLancamento(new Short(
+								"2200"));
+						resumoFaturamento
+								.setSequenciaItemTipoLancamento(new Short("50"));
 						resumoFaturamento.setUltimaAlteracao(new Date());
 
 						// subtrai o sequência igual 2200 ao total cobrado nas
@@ -19534,9 +20045,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoPorReferenciaConta(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem,
 									DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL);
 
@@ -19550,17 +20060,23 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						lancamentoItem.setId(LancamentoItem.AGUA);
 
 						ResumoFaturamento resumoFaturamento = new ResumoFaturamento();
-						resumoFaturamento.setAnoMesReferencia(anoMesFaturamento);
-						resumoFaturamento.setGerenciaRegional(localidade.getGerenciaRegional());
-						resumoFaturamento.setUnidadeNegocio(localidade.getUnidadeNegocio());
+						resumoFaturamento
+								.setAnoMesReferencia(anoMesFaturamento);
+						resumoFaturamento.setGerenciaRegional(localidade
+								.getGerenciaRegional());
+						resumoFaturamento.setUnidadeNegocio(localidade
+								.getUnidadeNegocio());
 						resumoFaturamento.setLocalidade(localidade);
 						resumoFaturamento.setCategoria(categoria);
-						resumoFaturamento.setValorItemFaturamento(valorItemFaturamento);
+						resumoFaturamento
+								.setValorItemFaturamento(valorItemFaturamento);
 						resumoFaturamento.setLancamentoTipo(lancamentoTipo);
 						resumoFaturamento.setLancamentoItem(lancamentoItem);
 						resumoFaturamento.setLancamentoItemContabil(null);
-						resumoFaturamento.setSequenciaTipoLancamento(new Short("2300"));
-						resumoFaturamento.setSequenciaItemTipoLancamento(new Short("10"));
+						resumoFaturamento.setSequenciaTipoLancamento(new Short(
+								"2300"));
+						resumoFaturamento
+								.setSequenciaItemTipoLancamento(new Short("10"));
 						resumoFaturamento.setUltimaAlteracao(new Date());
 
 						// subtrai o sequência igual 2300 ao total cobrado nas
@@ -19596,9 +20112,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoPorReferenciaConta(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem,
 									DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL);
 
@@ -19612,17 +20127,23 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						lancamentoItem.setId(LancamentoItem.ESGOTO);
 
 						ResumoFaturamento resumoFaturamento = new ResumoFaturamento();
-						resumoFaturamento.setAnoMesReferencia(anoMesFaturamento);
-						resumoFaturamento.setGerenciaRegional(localidade.getGerenciaRegional());
-						resumoFaturamento.setUnidadeNegocio(localidade.getUnidadeNegocio());
+						resumoFaturamento
+								.setAnoMesReferencia(anoMesFaturamento);
+						resumoFaturamento.setGerenciaRegional(localidade
+								.getGerenciaRegional());
+						resumoFaturamento.setUnidadeNegocio(localidade
+								.getUnidadeNegocio());
 						resumoFaturamento.setLocalidade(localidade);
 						resumoFaturamento.setCategoria(categoria);
-						resumoFaturamento.setValorItemFaturamento(valorItemFaturamento);
+						resumoFaturamento
+								.setValorItemFaturamento(valorItemFaturamento);
 						resumoFaturamento.setLancamentoTipo(lancamentoTipo);
 						resumoFaturamento.setLancamentoItem(lancamentoItem);
 						resumoFaturamento.setLancamentoItemContabil(null);
-						resumoFaturamento.setSequenciaTipoLancamento(new Short("2300"));
-						resumoFaturamento.setSequenciaItemTipoLancamento(new Short("20"));
+						resumoFaturamento.setSequenciaTipoLancamento(new Short(
+								"2300"));
+						resumoFaturamento
+								.setSequenciaItemTipoLancamento(new Short("20"));
 						resumoFaturamento.setUltimaAlteracao(new Date());
 
 						// subtrai o sequência igual 2300 ao total cobrado nas
@@ -19659,9 +20180,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					colecaoDadosCreditoRealizado = null;
 					colecaoDadosCreditoRealizado = repositorioFaturamento
 							.acumularValorCreditoRealizadoCategoriaPorOrigemCreditoAgrupandoPorLancamentoItemContabil(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem,
 									DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL);
 
@@ -19688,17 +20208,24 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							lancamentoItem.setId(LancamentoItem.GRUPO_CONTABIL);
 
 							ResumoFaturamento resumoFaturamento = new ResumoFaturamento();
-							resumoFaturamento.setAnoMesReferencia(anoMesFaturamento);
-							resumoFaturamento.setGerenciaRegional(localidade.getGerenciaRegional());
-							resumoFaturamento.setUnidadeNegocio(localidade.getUnidadeNegocio());
+							resumoFaturamento
+									.setAnoMesReferencia(anoMesFaturamento);
+							resumoFaturamento.setGerenciaRegional(localidade
+									.getGerenciaRegional());
+							resumoFaturamento.setUnidadeNegocio(localidade
+									.getUnidadeNegocio());
 							resumoFaturamento.setLocalidade(localidade);
 							resumoFaturamento.setCategoria(categoria);
 							resumoFaturamento.setValorItemFaturamento(valor);
 							resumoFaturamento.setLancamentoTipo(lancamentoTipo);
 							resumoFaturamento.setLancamentoItem(lancamentoItem);
-							resumoFaturamento.setSequenciaTipoLancamento(new Short("2300"));
-							resumoFaturamento.setLancamentoItemContabil(lancamentoItemContabil);
-							resumoFaturamento.setSequenciaItemTipoLancamento(sequenciaImpressao);
+							resumoFaturamento
+									.setSequenciaTipoLancamento(new Short(
+											"2300"));
+							resumoFaturamento
+									.setLancamentoItemContabil(lancamentoItemContabil);
+							resumoFaturamento
+									.setSequenciaItemTipoLancamento(sequenciaImpressao);
 							resumoFaturamento.setUltimaAlteracao(new Date());
 
 							// subtrai o sequência igual 2300 ao total cobrado
@@ -19737,9 +20264,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoPorReferenciaConta(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem,
 									DebitoCreditoSituacao.NORMAL,
 									DebitoCreditoSituacao.NORMAL);
 
@@ -19753,17 +20279,23 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						lancamentoItem.setId(LancamentoItem.JUROS);
 
 						ResumoFaturamento resumoFaturamento = new ResumoFaturamento();
-						resumoFaturamento.setAnoMesReferencia(anoMesFaturamento);
-						resumoFaturamento.setGerenciaRegional(localidade.getGerenciaRegional());
-						resumoFaturamento.setUnidadeNegocio(localidade.getUnidadeNegocio());
+						resumoFaturamento
+								.setAnoMesReferencia(anoMesFaturamento);
+						resumoFaturamento.setGerenciaRegional(localidade
+								.getGerenciaRegional());
+						resumoFaturamento.setUnidadeNegocio(localidade
+								.getUnidadeNegocio());
 						resumoFaturamento.setLocalidade(localidade);
 						resumoFaturamento.setCategoria(categoria);
-						resumoFaturamento.setValorItemFaturamento(valorItemFaturamento);
+						resumoFaturamento
+								.setValorItemFaturamento(valorItemFaturamento);
 						resumoFaturamento.setLancamentoTipo(lancamentoTipo);
 						resumoFaturamento.setLancamentoItem(lancamentoItem);
 						resumoFaturamento.setLancamentoItemContabil(null);
-						resumoFaturamento.setSequenciaTipoLancamento(new Short("2300"));
-						resumoFaturamento.setSequenciaItemTipoLancamento(maxSequencialImpressaoMais10);
+						resumoFaturamento.setSequenciaTipoLancamento(new Short(
+								"2300"));
+						resumoFaturamento
+								.setSequenciaItemTipoLancamento(maxSequencialImpressaoMais10);
 						resumoFaturamento.setUltimaAlteracao(new Date());
 
 						// subtrai o sequência igual 2300 ao total cobrado nas
@@ -19795,8 +20327,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// igual ao ano/mês do faturamento de sistema parâmetro.
 					BigDecimal valorIRSituacaoCancelada = repositorioFaturamento
 							.acumularValorContaCategoriaPorTipoImposto(
-									anoMesFaturamento,
-									idLocalidade, idCategoria, ImpostoTipo.IR,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, ImpostoTipo.IR,
 									DebitoCreditoSituacao.CANCELADA);
 
 					BigDecimal valorIRSituacaoCanceladaPorRetificacao = repositorioFaturamento
@@ -19809,8 +20341,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 					BigDecimal valorIRSituacaoRetificada = repositorioFaturamento
 							.acumularValorContaCategoriaPorTipoImpostoReferenciaContabil(
-									anoMesFaturamento,
-									idLocalidade, idCategoria, ImpostoTipo.IR,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, ImpostoTipo.IR,
 									DebitoCreditoSituacao.RETIFICADA,
 									DebitoCreditoSituacao.RETIFICADA);
 
@@ -19848,16 +20380,25 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								.setAnoMesReferencia(anoMesFaturamento);
 						resumoFaturamentoTemporario.setCategoria(categoria);
 						resumoFaturamentoTemporario.setLocalidade(localidade);
-						resumoFaturamentoTemporario.setUnidadeNegocio(unidadeNegocio);
-						resumoFaturamentoTemporario.setGerenciaRegional(gerenciaRegional);
-						resumoFaturamentoTemporario.setLancamentoTipo(lancamentoTipo);
-						resumoFaturamentoTemporario.setLancamentoItem(lancamentoItem);
-						resumoFaturamentoTemporario.setLancamentoItemContabil(null);
-						resumoFaturamentoTemporario.setSequenciaTipoLancamento(new Short("2800"));
-						resumoFaturamentoTemporario.setSequenciaItemTipoLancamento(new Short("10"));
-						resumoFaturamentoTemporario.setUltimaAlteracao(new Date());
+						resumoFaturamentoTemporario
+								.setUnidadeNegocio(unidadeNegocio);
+						resumoFaturamentoTemporario
+								.setGerenciaRegional(gerenciaRegional);
+						resumoFaturamentoTemporario
+								.setLancamentoTipo(lancamentoTipo);
+						resumoFaturamentoTemporario
+								.setLancamentoItem(lancamentoItem);
+						resumoFaturamentoTemporario
+								.setLancamentoItemContabil(null);
+						resumoFaturamentoTemporario
+								.setSequenciaTipoLancamento(new Short("2800"));
+						resumoFaturamentoTemporario
+								.setSequenciaItemTipoLancamento(new Short("10"));
+						resumoFaturamentoTemporario
+								.setUltimaAlteracao(new Date());
 
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoTemporario);
 					}
 					// fim Linha 86
 					// System.out.println("Linha 90");
@@ -19894,16 +20435,25 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								.setAnoMesReferencia(anoMesFaturamento);
 						resumoFaturamentoTemporario.setCategoria(categoria);
 						resumoFaturamentoTemporario.setLocalidade(localidade);
-						resumoFaturamentoTemporario.setUnidadeNegocio(unidadeNegocio);
-						resumoFaturamentoTemporario.setGerenciaRegional(gerenciaRegional);
-						resumoFaturamentoTemporario.setLancamentoTipo(lancamentoTipo);
-						resumoFaturamentoTemporario.setLancamentoItem(lancamentoItem);
-						resumoFaturamentoTemporario.setLancamentoItemContabil(null);
-						resumoFaturamentoTemporario.setSequenciaTipoLancamento(new Short("2900"));
-						resumoFaturamentoTemporario.setSequenciaItemTipoLancamento(new Short("10"));
-						resumoFaturamentoTemporario.setUltimaAlteracao(new Date());
+						resumoFaturamentoTemporario
+								.setUnidadeNegocio(unidadeNegocio);
+						resumoFaturamentoTemporario
+								.setGerenciaRegional(gerenciaRegional);
+						resumoFaturamentoTemporario
+								.setLancamentoTipo(lancamentoTipo);
+						resumoFaturamentoTemporario
+								.setLancamentoItem(lancamentoItem);
+						resumoFaturamentoTemporario
+								.setLancamentoItemContabil(null);
+						resumoFaturamentoTemporario
+								.setSequenciaTipoLancamento(new Short("2900"));
+						resumoFaturamentoTemporario
+								.setSequenciaItemTipoLancamento(new Short("10"));
+						resumoFaturamentoTemporario
+								.setUltimaAlteracao(new Date());
 
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoTemporario);
 					}
 					// fim Linha 90
 					// System.out.println("Linha 87");
@@ -19916,9 +20466,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 					BigDecimal valorCOFINSSituacaoCancelada = repositorioFaturamento
 							.acumularValorContaCategoriaPorTipoImposto(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									ImpostoTipo.COFINS,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, ImpostoTipo.COFINS,
 									DebitoCreditoSituacao.CANCELADA);
 
 					BigDecimal valorCOFINSSituacaoCanceladaPorRetificacao = repositorioFaturamento
@@ -19931,9 +20480,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 					BigDecimal valorCOFINSSituacaoRetificada = repositorioFaturamento
 							.acumularValorContaCategoriaPorTipoImpostoReferenciaContabil(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									ImpostoTipo.COFINS,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, ImpostoTipo.COFINS,
 									DebitoCreditoSituacao.RETIFICADA,
 									DebitoCreditoSituacao.RETIFICADA);
 
@@ -19965,22 +20513,32 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								.setAnoMesReferencia(anoMesFaturamento);
 						resumoFaturamentoTemporario.setCategoria(categoria);
 						resumoFaturamentoTemporario.setLocalidade(localidade);
-						resumoFaturamentoTemporario.setUnidadeNegocio(unidadeNegocio);
-						resumoFaturamentoTemporario.setGerenciaRegional(gerenciaRegional);
-						
+						resumoFaturamentoTemporario
+								.setUnidadeNegocio(unidadeNegocio);
+						resumoFaturamentoTemporario
+								.setGerenciaRegional(gerenciaRegional);
+
 						lancamentoTipo = new LancamentoTipo();
 						lancamentoItem = new LancamentoItem();
-						lancamentoTipo.setId(LancamentoTipo.IMPOSTOS_CANCELADOS_REFATURAMENTO);
+						lancamentoTipo
+								.setId(LancamentoTipo.IMPOSTOS_CANCELADOS_REFATURAMENTO);
 						lancamentoItem.setId(LancamentoItem.COFINS);
-						
-						resumoFaturamentoTemporario.setLancamentoTipo(lancamentoTipo);
-						resumoFaturamentoTemporario.setLancamentoItem(lancamentoItem);
-						resumoFaturamentoTemporario.setLancamentoItemContabil(null);
-						resumoFaturamentoTemporario.setSequenciaTipoLancamento(new Short("2800"));
-						resumoFaturamentoTemporario.setSequenciaItemTipoLancamento(new Short("20"));
-						resumoFaturamentoTemporario.setUltimaAlteracao(new Date());
 
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+						resumoFaturamentoTemporario
+								.setLancamentoTipo(lancamentoTipo);
+						resumoFaturamentoTemporario
+								.setLancamentoItem(lancamentoItem);
+						resumoFaturamentoTemporario
+								.setLancamentoItemContabil(null);
+						resumoFaturamentoTemporario
+								.setSequenciaTipoLancamento(new Short("2800"));
+						resumoFaturamentoTemporario
+								.setSequenciaItemTipoLancamento(new Short("20"));
+						resumoFaturamentoTemporario
+								.setUltimaAlteracao(new Date());
+
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoTemporario);
 					}
 					// fim Linha 87
 					// System.out.println("Linha 91");
@@ -20017,16 +20575,25 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								.setAnoMesReferencia(anoMesFaturamento);
 						resumoFaturamentoTemporario.setCategoria(categoria);
 						resumoFaturamentoTemporario.setLocalidade(localidade);
-						resumoFaturamentoTemporario.setUnidadeNegocio(unidadeNegocio);
-						resumoFaturamentoTemporario.setGerenciaRegional(gerenciaRegional);
-						resumoFaturamentoTemporario.setLancamentoTipo(lancamentoTipo);
-						resumoFaturamentoTemporario.setLancamentoItem(lancamentoItem);
-						resumoFaturamentoTemporario.setLancamentoItemContabil(null);
-						resumoFaturamentoTemporario.setSequenciaTipoLancamento(new Short("2900"));
-						resumoFaturamentoTemporario.setSequenciaItemTipoLancamento(new Short("20"));
-						resumoFaturamentoTemporario.setUltimaAlteracao(new Date());
+						resumoFaturamentoTemporario
+								.setUnidadeNegocio(unidadeNegocio);
+						resumoFaturamentoTemporario
+								.setGerenciaRegional(gerenciaRegional);
+						resumoFaturamentoTemporario
+								.setLancamentoTipo(lancamentoTipo);
+						resumoFaturamentoTemporario
+								.setLancamentoItem(lancamentoItem);
+						resumoFaturamentoTemporario
+								.setLancamentoItemContabil(null);
+						resumoFaturamentoTemporario
+								.setSequenciaTipoLancamento(new Short("2900"));
+						resumoFaturamentoTemporario
+								.setSequenciaItemTipoLancamento(new Short("20"));
+						resumoFaturamentoTemporario
+								.setUltimaAlteracao(new Date());
 
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoTemporario);
 					}
 					// fim Linha 91
 					// System.out.println("Linha 88");
@@ -20038,9 +20605,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// igual ao ano/mês do faturamento de sistema parâmetro.
 					BigDecimal valorCSLLSituacaoCancelada = repositorioFaturamento
 							.acumularValorContaCategoriaPorTipoImposto(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									ImpostoTipo.CSLL,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, ImpostoTipo.CSLL,
 									DebitoCreditoSituacao.CANCELADA);
 
 					BigDecimal valorCSLLSituacaoCanceladaPorRetificacao = repositorioFaturamento
@@ -20053,9 +20619,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 					BigDecimal valorCSLLSituacaoRetificada = repositorioFaturamento
 							.acumularValorContaCategoriaPorTipoImpostoReferenciaContabil(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									ImpostoTipo.CSLL,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, ImpostoTipo.CSLL,
 									DebitoCreditoSituacao.RETIFICADA,
 									DebitoCreditoSituacao.RETIFICADA);
 
@@ -20093,16 +20658,25 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								.setAnoMesReferencia(anoMesFaturamento);
 						resumoFaturamentoTemporario.setCategoria(categoria);
 						resumoFaturamentoTemporario.setLocalidade(localidade);
-						resumoFaturamentoTemporario.setUnidadeNegocio(unidadeNegocio);
-						resumoFaturamentoTemporario.setGerenciaRegional(gerenciaRegional);
-						resumoFaturamentoTemporario.setLancamentoTipo(lancamentoTipo);
-						resumoFaturamentoTemporario.setLancamentoItem(lancamentoItem);
-						resumoFaturamentoTemporario.setLancamentoItemContabil(null);
-						resumoFaturamentoTemporario.setSequenciaTipoLancamento(new Short("2800"));
-						resumoFaturamentoTemporario.setSequenciaItemTipoLancamento(new Short("30"));
-						resumoFaturamentoTemporario.setUltimaAlteracao(new Date());
+						resumoFaturamentoTemporario
+								.setUnidadeNegocio(unidadeNegocio);
+						resumoFaturamentoTemporario
+								.setGerenciaRegional(gerenciaRegional);
+						resumoFaturamentoTemporario
+								.setLancamentoTipo(lancamentoTipo);
+						resumoFaturamentoTemporario
+								.setLancamentoItem(lancamentoItem);
+						resumoFaturamentoTemporario
+								.setLancamentoItemContabil(null);
+						resumoFaturamentoTemporario
+								.setSequenciaTipoLancamento(new Short("2800"));
+						resumoFaturamentoTemporario
+								.setSequenciaItemTipoLancamento(new Short("30"));
+						resumoFaturamentoTemporario
+								.setUltimaAlteracao(new Date());
 
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoTemporario);
 					}
 					// fim Linha 88
 					// System.out.println("Linha 92");
@@ -20139,16 +20713,25 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								.setAnoMesReferencia(anoMesFaturamento);
 						resumoFaturamentoTemporario.setCategoria(categoria);
 						resumoFaturamentoTemporario.setLocalidade(localidade);
-						resumoFaturamentoTemporario.setUnidadeNegocio(unidadeNegocio);
-						resumoFaturamentoTemporario.setGerenciaRegional(gerenciaRegional);
-						resumoFaturamentoTemporario.setLancamentoTipo(lancamentoTipo);
-						resumoFaturamentoTemporario.setLancamentoItem(lancamentoItem);
-						resumoFaturamentoTemporario.setLancamentoItemContabil(null);
-						resumoFaturamentoTemporario.setSequenciaTipoLancamento(new Short("2900"));
-						resumoFaturamentoTemporario.setSequenciaItemTipoLancamento(new Short("30"));
-						resumoFaturamentoTemporario.setUltimaAlteracao(new Date());
+						resumoFaturamentoTemporario
+								.setUnidadeNegocio(unidadeNegocio);
+						resumoFaturamentoTemporario
+								.setGerenciaRegional(gerenciaRegional);
+						resumoFaturamentoTemporario
+								.setLancamentoTipo(lancamentoTipo);
+						resumoFaturamentoTemporario
+								.setLancamentoItem(lancamentoItem);
+						resumoFaturamentoTemporario
+								.setLancamentoItemContabil(null);
+						resumoFaturamentoTemporario
+								.setSequenciaTipoLancamento(new Short("2900"));
+						resumoFaturamentoTemporario
+								.setSequenciaItemTipoLancamento(new Short("30"));
+						resumoFaturamentoTemporario
+								.setUltimaAlteracao(new Date());
 
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoTemporario);
 					}
 					// fim Linha 92
 					// System.out.println("Linha 89");
@@ -20161,9 +20744,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 					BigDecimal valorPIS_PASEPSituacaoCancelada = repositorioFaturamento
 							.acumularValorContaCategoriaPorTipoImposto(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									ImpostoTipo.PIS_PASEP,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, ImpostoTipo.PIS_PASEP,
 									DebitoCreditoSituacao.CANCELADA);
 
 					BigDecimal valorPIS_PASEPSituacaoCanceladaPorRetificacao = repositorioFaturamento
@@ -20176,9 +20758,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 					BigDecimal valorPIS_PASEPSituacaoRetificada = repositorioFaturamento
 							.acumularValorContaCategoriaPorTipoImpostoReferenciaContabil(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									ImpostoTipo.PIS_PASEP,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, ImpostoTipo.PIS_PASEP,
 									DebitoCreditoSituacao.RETIFICADA,
 									DebitoCreditoSituacao.RETIFICADA);
 
@@ -20216,16 +20797,25 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								.setAnoMesReferencia(anoMesFaturamento);
 						resumoFaturamentoTemporario.setCategoria(categoria);
 						resumoFaturamentoTemporario.setLocalidade(localidade);
-						resumoFaturamentoTemporario.setUnidadeNegocio(unidadeNegocio);
-						resumoFaturamentoTemporario.setGerenciaRegional(gerenciaRegional);
-						resumoFaturamentoTemporario.setLancamentoTipo(lancamentoTipo);
-						resumoFaturamentoTemporario.setLancamentoItem(lancamentoItem);
-						resumoFaturamentoTemporario.setLancamentoItemContabil(null);
-						resumoFaturamentoTemporario.setSequenciaTipoLancamento(new Short("2800"));
-						resumoFaturamentoTemporario.setSequenciaItemTipoLancamento(new Short("40"));
-						resumoFaturamentoTemporario.setUltimaAlteracao(new Date());
+						resumoFaturamentoTemporario
+								.setUnidadeNegocio(unidadeNegocio);
+						resumoFaturamentoTemporario
+								.setGerenciaRegional(gerenciaRegional);
+						resumoFaturamentoTemporario
+								.setLancamentoTipo(lancamentoTipo);
+						resumoFaturamentoTemporario
+								.setLancamentoItem(lancamentoItem);
+						resumoFaturamentoTemporario
+								.setLancamentoItemContabil(null);
+						resumoFaturamentoTemporario
+								.setSequenciaTipoLancamento(new Short("2800"));
+						resumoFaturamentoTemporario
+								.setSequenciaItemTipoLancamento(new Short("40"));
+						resumoFaturamentoTemporario
+								.setUltimaAlteracao(new Date());
 
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoTemporario);
 					}
 					// fim Linha 89
 					// System.out.println("Linha 93");
@@ -20262,16 +20852,25 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								.setAnoMesReferencia(anoMesFaturamento);
 						resumoFaturamentoTemporario.setCategoria(categoria);
 						resumoFaturamentoTemporario.setLocalidade(localidade);
-						resumoFaturamentoTemporario.setUnidadeNegocio(unidadeNegocio);
-						resumoFaturamentoTemporario.setGerenciaRegional(gerenciaRegional);
-						resumoFaturamentoTemporario.setLancamentoTipo(lancamentoTipo);
-						resumoFaturamentoTemporario.setLancamentoItem(lancamentoItem);
-						resumoFaturamentoTemporario.setLancamentoItemContabil(null);
-						resumoFaturamentoTemporario.setSequenciaTipoLancamento(new Short("2900"));
-						resumoFaturamentoTemporario.setSequenciaItemTipoLancamento(new Short("40"));
-						resumoFaturamentoTemporario.setUltimaAlteracao(new Date());
+						resumoFaturamentoTemporario
+								.setUnidadeNegocio(unidadeNegocio);
+						resumoFaturamentoTemporario
+								.setGerenciaRegional(gerenciaRegional);
+						resumoFaturamentoTemporario
+								.setLancamentoTipo(lancamentoTipo);
+						resumoFaturamentoTemporario
+								.setLancamentoItem(lancamentoItem);
+						resumoFaturamentoTemporario
+								.setLancamentoItemContabil(null);
+						resumoFaturamentoTemporario
+								.setSequenciaTipoLancamento(new Short("2900"));
+						resumoFaturamentoTemporario
+								.setSequenciaItemTipoLancamento(new Short("40"));
+						resumoFaturamentoTemporario
+								.setUltimaAlteracao(new Date());
 
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoTemporario);
 					}
 					// fim Linha 93
 					// System.out.println("Linha 94");
@@ -20288,24 +20887,21 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// igual ao ano/mês do faturamento de sistema parâmetro.
 					BigDecimal valorCreditoRealizadoOrigemCreditoContasPagasEmDuplicidadeExcesso = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCredito(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem,
 									DebitoCreditoSituacao.CANCELADA);
 
 					// [SB0003 - Obter diferenças de valores de créditos
 					// realizados de conta retificada]
 					BigDecimal[] diferencaCreditoOrigemCanceladaPorRetificacaoeERetificada = this
 							.obterDiferencaValoresCreditosRealizadosContaRetificadaDuplicidade(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem);
-					
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem);
+
 					BigDecimal[] diferencaCreditoOrigemDuplicidadeAte201212CanceladaPorRetificacaoeERetificada = this
 							.obterDiferencaValoresCreditosRealizadosContaRetificadaDuplicidadeAte201212(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem);
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem);
 
 					/*
 					 * Acumula os valores cancelados, a diferença entre o valor
@@ -20318,7 +20914,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorCreditoRealizadoOrigemCreditoContasPagasEmDuplicidadeExcesso = valorCreditoRealizadoOrigemCreditoContasPagasEmDuplicidadeExcesso
 							.add(diferencaCreditoOrigemCanceladaPorRetificacaoeERetificada[0]);
 					valorCreditoRealizadoOrigemCreditoContasPagasEmDuplicidadeExcesso = valorCreditoRealizadoOrigemCreditoContasPagasEmDuplicidadeExcesso
-						    .add(diferencaCreditoOrigemDuplicidadeAte201212CanceladaPorRetificacaoeERetificada[0]);
+							.add(diferencaCreditoOrigemDuplicidadeAte201212CanceladaPorRetificacaoeERetificada[0]);
 
 					// caso o valor do credito realizado seja diferente de zero
 					if (valorCreditoRealizadoOrigemCreditoContasPagasEmDuplicidadeExcesso
@@ -20337,16 +20933,25 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								.setAnoMesReferencia(anoMesFaturamento);
 						resumoFaturamentoTemporario.setCategoria(categoria);
 						resumoFaturamentoTemporario.setLocalidade(localidade);
-						resumoFaturamentoTemporario.setUnidadeNegocio(unidadeNegocio);
-						resumoFaturamentoTemporario.setGerenciaRegional(gerenciaRegional);
-						resumoFaturamentoTemporario.setLancamentoTipo(lancamentoTipo);
-						resumoFaturamentoTemporario.setLancamentoItem(lancamentoItem);
-						resumoFaturamentoTemporario.setLancamentoItemContabil(null);
-						resumoFaturamentoTemporario.setSequenciaTipoLancamento(new Short("3000"));
-						resumoFaturamentoTemporario.setSequenciaItemTipoLancamento(new Short("10"));
-						resumoFaturamentoTemporario.setUltimaAlteracao(new Date());
+						resumoFaturamentoTemporario
+								.setUnidadeNegocio(unidadeNegocio);
+						resumoFaturamentoTemporario
+								.setGerenciaRegional(gerenciaRegional);
+						resumoFaturamentoTemporario
+								.setLancamentoTipo(lancamentoTipo);
+						resumoFaturamentoTemporario
+								.setLancamentoItem(lancamentoItem);
+						resumoFaturamentoTemporario
+								.setLancamentoItemContabil(null);
+						resumoFaturamentoTemporario
+								.setSequenciaTipoLancamento(new Short("3000"));
+						resumoFaturamentoTemporario
+								.setSequenciaItemTipoLancamento(new Short("10"));
+						resumoFaturamentoTemporario
+								.setUltimaAlteracao(new Date());
 
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoTemporario);
 					}
 					// fim Linha 94
 					// System.out.println("Linha 95");
@@ -20363,18 +20968,16 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// igual ao ano/mês do faturamento de sistema parâmetro.
 					BigDecimal valorCreditoRealizadoOrigemCreditoDescontosConcedidosParcelamento = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCredito(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem,
 									DebitoCreditoSituacao.CANCELADA);
 
 					// [SB0003 - Obter diferenças de valores de créditos
 					// realizados de conta retificada]
 					BigDecimal[] diferencaCreditoOrigemDescontosConcedidosParcelamentoCanceladaPorRetificacaoeERetificada = this
 							.obterDiferencaValoresCreditosRealizadosContaRetificada(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem);
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem);
 
 					/*
 					 * Acumula os valores cancelados, a diferença entre o valor
@@ -20391,9 +20994,11 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					if (valorCreditoRealizadoOrigemCreditoDescontosConcedidosParcelamento
 							.compareTo(BigDecimal.ZERO) != 0) {
 						lancamentoTipo = new LancamentoTipo();
-						lancamentoTipo.setId(LancamentoTipo.OUTROS_CREDITOS_CANCELADOS_POR_REFATURAMENTO);
+						lancamentoTipo
+								.setId(LancamentoTipo.OUTROS_CREDITOS_CANCELADOS_POR_REFATURAMENTO);
 						lancamentoItem = new LancamentoItem();
-						lancamentoItem.setId(LancamentoItem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO);
+						lancamentoItem
+								.setId(LancamentoItem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO);
 
 						resumoFaturamentoTemporario = new ResumoFaturamento();
 						resumoFaturamentoTemporario
@@ -20437,18 +21042,16 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// igual ao ano/mês do faturamento de sistema parâmetro.
 					BigDecimal valorCreditoRealizadoOrigemCreditoDescontosCondicionais = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCredito(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem,
 									DebitoCreditoSituacao.CANCELADA);
 
 					// [SB0003 - Obter diferenças de valores de créditos
 					// realizados de conta retificada]
 					BigDecimal[] diferencaCreditoOrigemDescontosCondicionaisCanceladaPorRetificacaoeERetificada = this
 							.obterDiferencaValoresCreditosRealizadosContaRetificada(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem);
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem);
 
 					/*
 					 * Acumula os valores cancelados, a diferença entre o valor
@@ -20514,18 +21117,16 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// igual ao ano/mês do faturamento de sistema parâmetro.
 					BigDecimal valorCreditoRealizadoOrigemCreditoAjustesParaZerarConta = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCredito(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem,
 									DebitoCreditoSituacao.CANCELADA);
 
 					// [SB0003 - Obter diferenças de valores de créditos
 					// realizados de conta retificada]
 					BigDecimal[] diferencaCreditoOrigemAjustesParaZerarContaCanceladaPorRetificacaoeERetificada = this
 							.obterDiferencaValoresCreditosRealizadosContaRetificada(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem);
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem);
 
 					/*
 					 * Acumula os valores cancelados, a diferença entre o valor
@@ -20591,9 +21192,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// igual ao ano/mês do faturamento de sistema parâmetro.
 					BigDecimal valorCreditoRealizadoOrigemCreditoContasPagasEmDuplicidadeExcessoSituacaoIncluida = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoDuplicidade(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem,
 									DebitoCreditoSituacao.INCLUIDA);
 
 					/*
@@ -20606,7 +21206,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					 */
 					valorCreditoRealizadoOrigemCreditoContasPagasEmDuplicidadeExcessoSituacaoIncluida = valorCreditoRealizadoOrigemCreditoContasPagasEmDuplicidadeExcessoSituacaoIncluida
 							.add(diferencaCreditoOrigemCanceladaPorRetificacaoeERetificada[1]);
-					
 
 					// caso o valor do credito realizado seja diferente de zero
 					if (valorCreditoRealizadoOrigemCreditoContasPagasEmDuplicidadeExcessoSituacaoIncluida
@@ -20646,7 +21245,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						colecaoResumoFaturamento
 								.add(resumoFaturamentoTemporario);
 					}
-					
+
 					idsCreditosOrigem = null;
 					idsCreditosOrigem = new Integer[1];
 					idsCreditosOrigem[0] = CreditoOrigem.CONTAS_PAGAS_EM_DUPLICIDADE_EXCESSO;
@@ -20659,9 +21258,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// igual ao ano/mês do faturamento de sistema parâmetro.
 					BigDecimal valorCreditoRealizadoOrigemCreditoContasPagasEmDuplicidadeAte122012SituacaoIncluida = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoDuplicidadeAte201212(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem,
 									DebitoCreditoSituacao.INCLUIDA);
 
 					/*
@@ -20674,16 +21272,19 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					 */
 					valorCreditoRealizadoOrigemCreditoContasPagasEmDuplicidadeAte122012SituacaoIncluida = valorCreditoRealizadoOrigemCreditoContasPagasEmDuplicidadeAte122012SituacaoIncluida
 							.add(diferencaCreditoOrigemDuplicidadeAte201212CanceladaPorRetificacaoeERetificada[1]);
-					//valorCreditoRealizadoOrigemCreditoContasPagasEmDuplicidadeAte122012SituacaoIncluida = BigDecimal.ZERO;
+					// valorCreditoRealizadoOrigemCreditoContasPagasEmDuplicidadeAte122012SituacaoIncluida
+					// = BigDecimal.ZERO;
 
 					// caso o valor do credito realizado seja diferente de zero
 					if (valorCreditoRealizadoOrigemCreditoContasPagasEmDuplicidadeAte122012SituacaoIncluida
 							.compareTo(BigDecimal.ZERO) != 0) {
 
 						lancamentoTipo = new LancamentoTipo();
-						lancamentoTipo.setId(LancamentoTipo.OUTROS_CREDITOS_CONCEDIDOS_POR_REFATURAMENTO_ATE_31_12_2012);
+						lancamentoTipo
+								.setId(LancamentoTipo.OUTROS_CREDITOS_CONCEDIDOS_POR_REFATURAMENTO_ATE_31_12_2012);
 						lancamentoItem = new LancamentoItem();
-						lancamentoItem.setId(LancamentoItem.CONTAS_PAGA_EM_DUPLICIDADE_EXCESSO);
+						lancamentoItem
+								.setId(LancamentoItem.CONTAS_PAGA_EM_DUPLICIDADE_EXCESSO);
 
 						resumoFaturamentoTemporario = new ResumoFaturamento();
 						resumoFaturamentoTemporario
@@ -20727,9 +21328,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// igual ao ano/mês do faturamento de sistema parâmetro.
 					BigDecimal valorCreditoRealizadoOrigemCreditoDescontosConcedidosParcelamentoSituacaoIncluida = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCredito(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem,
 									DebitoCreditoSituacao.INCLUIDA);
 
 					/*
@@ -20796,9 +21396,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// igual ao ano/mês do faturamento de sistema parâmetro.
 					BigDecimal valorCreditoRealizadoOrigemCreditoDescontosCondicionaisSituacaoIncluida = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCredito(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem,
 									DebitoCreditoSituacao.INCLUIDA);
 
 					/*
@@ -20865,9 +21464,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// igual ao ano/mês do faturamento de sistema parâmetro.
 					BigDecimal valorCreditoRealizadoOrigemCreditoAjustesParaZerarContaSituacaoIncluida = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCredito(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									idsCreditosOrigem,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsCreditosOrigem,
 									DebitoCreditoSituacao.INCLUIDA);
 
 					/*
@@ -20985,8 +21583,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					arrayValoresAguaEsgoto = null;
 					arrayValoresAguaEsgoto = repositorioFaturamento
 							.acumularValorAguaEsgotoPorSituacaoContaComBaixaContabilPreenchida(
-									anoMesFaturamento,
-									idLocalidade, idCategoria, idsSituacaoAtual);
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsSituacaoAtual);
 
 					// recupera valor de água
 					valorAgua = (BigDecimal) arrayValoresAguaEsgoto[indiceValorAgua];
@@ -21014,8 +21612,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorCategoriaDebitoCobradoCategoriaComBaixaContabilPreenchida(
-									anoMesFaturamento,
-									idLocalidade, idCategoria, idsSituacaoAtual);
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsSituacaoAtual);
 
 					// adiciona o valor de água e esgoto ao valor do débito
 					// cobrado
@@ -21071,8 +21669,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 					arrayValoresAguaEsgoto = repositorioFaturamento
 							.acumularValorAguaEsgotoPorSituacaoContaComBaixaContabilPreenchida(
-									anoMesFaturamento,
-									idLocalidade, idCategoria, idsSituacaoAtual);
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsSituacaoAtual);
 
 					// recupera o valor de água
 					valorAgua = (BigDecimal) arrayValoresAguaEsgoto[indiceValorAgua];
@@ -21095,8 +21693,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorCategoriaDebitoCobradoCategoriaComBaixaContabilPreenchida(
-									anoMesFaturamento,
-									idLocalidade, idCategoria, idsSituacaoAtual);
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsSituacaoAtual);
 
 					// adiciona o valor de água e esgoto ao do débito cobrado
 					valorItemFaturamento = valorItemFaturamento.add(valorAgua)
@@ -21148,15 +21746,18 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					idsSituacaoAtual = null;
 					idsSituacaoAtual = new Integer[2];
 					idsSituacaoAtual[0] = DebitoCreditoSituacao.DEBITO_PRESCRITO;
-					/**TODO: Cosanpa
-					 * Inlcuindo contas incluidas canceladas por débito prescrito na contabilização
-					 * @author Wellington Rocha*/
+					/**
+					 * TODO: Cosanpa Inlcuindo contas incluidas canceladas por
+					 * débito prescrito na contabilização
+					 * 
+					 * @author Wellington Rocha
+					 */
 					idsSituacaoAtual[1] = DebitoCreditoSituacao.DEBITO_PRESCRITO_CONTAS_INCLUIDAS;
-					
+
 					arrayValoresAguaEsgoto = repositorioFaturamento
 							.acumularValorAguaEsgotoPorSituacaoContaComBaixaContabilPreenchida(
-									anoMesFaturamento,
-									idLocalidade, idCategoria, idsSituacaoAtual);
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsSituacaoAtual);
 
 					// recupera o valor de água
 					valorAgua = (BigDecimal) arrayValoresAguaEsgoto[indiceValorAgua];
@@ -21273,15 +21874,18 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					idsSituacaoAtual = null;
 					idsSituacaoAtual = new Integer[2];
 					idsSituacaoAtual[0] = DebitoCreditoSituacao.DEBITO_PRESCRITO;
-					/**TODO: Cosanpa
-					 * Inlcuindo contas incluidas canceladas por débito prescrito na contabilização
-					 * @author Wellington Rocha*/
+					/**
+					 * TODO: Cosanpa Inlcuindo contas incluidas canceladas por
+					 * débito prescrito na contabilização
+					 * 
+					 * @author Wellington Rocha
+					 */
 					idsSituacaoAtual[1] = DebitoCreditoSituacao.DEBITO_PRESCRITO_CONTAS_INCLUIDAS;
-					
+
 					arrayValoresAguaEsgoto = repositorioFaturamento
 							.acumularValorAguaEsgotoPorSituacaoContaComBaixaContabilNaoPreenchida(
-									anoMesFaturamento,
-									idLocalidade, idCategoria, idsSituacaoAtual);
+									anoMesFaturamento, idLocalidade,
+									idCategoria, idsSituacaoAtual);
 					// recupera o valor de água
 					valorAgua = (BigDecimal) arrayValoresAguaEsgoto[indiceValorAgua];
 
@@ -21399,8 +22003,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorCategoriaDebitoCobradoCategoriaPorTipoFinanciamentoComBaixaContabilPreenchida(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									FinanciamentoTipo.PARCELAMENTO_AGUA,
 									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
@@ -21459,8 +22063,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorCategoriaDebitoCobradoCategoriaPorTipoFinanciamentoComBaixaContabilPreenchida(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									FinanciamentoTipo.PARCELAMENTO_ESGOTO,
 									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
@@ -21519,8 +22123,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorCategoriaDebitoCobradoCategoriaPorTipoFinanciamentoComBaixaContabilPreenchida(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									FinanciamentoTipo.JUROS_PARCELAMENTO,
 									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
@@ -21630,21 +22234,24 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						colecaoResumoFaturamento
 								.add(resumoFaturamentoTemporario);
 					}
-					
-					/**TODO: COSANPA
-					 * Inclusão dos creditos com credito_origem correspondente a DESCONTOS_CONCEDIDOS
-					 * para fazer a contabilização para os registros com Lançamento Tipo correspondete a
+
+					/**
+					 * TODO: COSANPA Inclusão dos creditos com credito_origem
+					 * correspondente a DESCONTOS_CONCEDIDOS para fazer a
+					 * contabilização para os registros com Lançamento Tipo
+					 * correspondete a
 					 * CREDITOS_CONCEDIDOS_SUP_CANCELAMENTO_POR_PRESCRICAO_DEB_JA_EXC_INADIMPLENCIA
 					 * 
-					 *  @author Wellington Rocha
-					 *  @date 10/01/2012
-					 *  */
-					
+					 * @author Wellington Rocha
+					 * @date 10/01/2012
+					 * */
+
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoComBaixaContabilPreenchida(
 									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									idLocalidade,
+									idCategoria,
 									CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO,
 									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
@@ -21678,7 +22285,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						resumoFaturamentoTemporario
 								.setSequenciaTipoLancamento(new Short("3600"));
 						resumoFaturamentoTemporario
-								.setSequenciaItemTipoLancamento((short)(maxSequencialImpressaoMais10 + 30));
+								.setSequenciaItemTipoLancamento((short) (maxSequencialImpressaoMais10 + 30));
 						resumoFaturamentoTemporario
 								.setUltimaAlteracao(new Date());
 
@@ -21694,7 +22301,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						colecaoResumoFaturamento
 								.add(resumoFaturamentoTemporario);
 					}
-					
+
 					// fim Linha 111
 					// System.out.println("Linha 113");
 					// Linha 113
@@ -21705,8 +22312,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoComBaixaContabilPreenchida(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									CreditoOrigem.DESCONTOS_CONDICIONAIS,
 									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
@@ -21766,8 +22373,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoComBaixaContabilPreenchida(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									CreditoOrigem.DESCONTOS_INCONDICIONAIS,
 									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
@@ -21827,8 +22434,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoComBaixaContabilPreenchida(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									CreditoOrigem.AJUSTES_PARA_ZERAR_CONTA,
 									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
@@ -21888,8 +22495,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorImpostoPorTipoImpostoESituacaoContaComBaixaContabilPreenchida(
-									anoMesFaturamento,
-									idLocalidade, idCategoria, ImpostoTipo.IR,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, ImpostoTipo.IR,
 									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
 					// caso o valor do item seja diferente de zero
@@ -21942,9 +22549,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorImpostoPorTipoImpostoESituacaoContaComBaixaContabilPreenchida(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									ImpostoTipo.COFINS,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, ImpostoTipo.COFINS,
 									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
 					// caso o valor do item seja diferente de zero
@@ -21996,9 +22602,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorImpostoPorTipoImpostoESituacaoContaComBaixaContabilPreenchida(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									ImpostoTipo.CSLL,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, ImpostoTipo.CSLL,
 									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
 					// caso o valor do item seja diferente de zero
@@ -22051,9 +22656,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorImpostoPorTipoImpostoESituacaoContaComBaixaContabilPreenchida(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									ImpostoTipo.PIS_PASEP,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, ImpostoTipo.PIS_PASEP,
 									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
 					// caso o valor do item seja diferente de zero
@@ -22106,8 +22710,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorCategoriaDebitoCobradoCategoriaPorTipoFinanciamentoComBaixaContabilNaoPreenchida(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									FinanciamentoTipo.PARCELAMENTO_AGUA,
 									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
@@ -22166,8 +22770,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorCategoriaDebitoCobradoCategoriaPorTipoFinanciamentoComBaixaContabilNaoPreenchida(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									FinanciamentoTipo.PARCELAMENTO_ESGOTO,
 									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
@@ -22226,8 +22830,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorCategoriaDebitoCobradoCategoriaPorTipoFinanciamentoComBaixaContabilNaoPreenchida(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									FinanciamentoTipo.JUROS_PARCELAMENTO,
 									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
@@ -22334,66 +22938,70 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						colecaoResumoFaturamento
 								.add(resumoFaturamentoTemporario);
 					}
-					
-					/**TODO: COSANPA
-					 * Inclusão dos creditos realizados com credito_origem = DESCONTOS_CONCEDIDOS
-					 * para efetuar a contabilização dos mesmos para o lançamento tipo correspondente a 
+
+					/**
+					 * TODO: COSANPA Inclusão dos creditos realizados com
+					 * credito_origem = DESCONTOS_CONCEDIDOS para efetuar a
+					 * contabilização dos mesmos para o lançamento tipo
+					 * correspondente a
 					 * CREDITOS_CONCEDIDOS_SUP_CANCELAMENTO_POR_PRESCRICAO_DEB_NAO_EXC_INADIMPLENCIA
 					 * 
 					 * @author Wellington Rocha
-					 * @date 10/01/2012*/
-					
+					 * @date 10/01/2012
+					 */
+
 					resumoFaturamentoTemporario = repositorioFaturamento
-					.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoComBaixaContabilNaoPreenchida(
-							anoMesFaturamento,
-							idLocalidade, idCategoria,
-							CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO,
-							DebitoCreditoSituacao.DEBITO_PRESCRITO);
+							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoComBaixaContabilNaoPreenchida(
+									anoMesFaturamento,
+									idLocalidade,
+									idCategoria,
+									CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO,
+									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
 					// se o objeto retornado não for nulo
 					if (resumoFaturamentoTemporario != null) {
 						// cria o resumo de faturamento
 						lancamentoTipo = new LancamentoTipo();
 						lancamentoTipo
-							.setId(LancamentoTipo.CREDITOS_CONCEDIDOS_SUP_CANCELAMENTO_POR_PRESCRICAO_DEB_NAO_EXC_INADIMPLENCIA);
+								.setId(LancamentoTipo.CREDITOS_CONCEDIDOS_SUP_CANCELAMENTO_POR_PRESCRICAO_DEB_NAO_EXC_INADIMPLENCIA);
 						lancamentoItem = new LancamentoItem();
 						lancamentoItem
-							.setId(LancamentoItem.DESCONTOS_CONCEDIDOS);
+								.setId(LancamentoItem.DESCONTOS_CONCEDIDOS);
 
 						resumoFaturamentoTemporario
-							.setAnoMesReferencia(anoMesFaturamento);
+								.setAnoMesReferencia(anoMesFaturamento);
 						resumoFaturamentoTemporario.setCategoria(categoria);
 						resumoFaturamentoTemporario.setLocalidade(localidade);
 						resumoFaturamentoTemporario
-							.setUnidadeNegocio(unidadeNegocio);
+								.setUnidadeNegocio(unidadeNegocio);
 						resumoFaturamentoTemporario
-							.setGerenciaRegional(gerenciaRegional);
+								.setGerenciaRegional(gerenciaRegional);
 						resumoFaturamentoTemporario
-							.setLancamentoTipo(lancamentoTipo);
+								.setLancamentoTipo(lancamentoTipo);
 						resumoFaturamentoTemporario
-							.setLancamentoItem(lancamentoItem);
+								.setLancamentoItem(lancamentoItem);
 						resumoFaturamentoTemporario
-							.setLancamentoItemContabil(null);
+								.setLancamentoItemContabil(null);
 						resumoFaturamentoTemporario
-							.setSequenciaTipoLancamento(new Short("4000"));
+								.setSequenciaTipoLancamento(new Short("4000"));
 						resumoFaturamentoTemporario
-							.setSequenciaItemTipoLancamento((short)(maxSequencialImpressaoMais10 + 30));
+								.setSequenciaItemTipoLancamento((short) (maxSequencialImpressaoMais10 + 30));
 						resumoFaturamentoTemporario
-							.setUltimaAlteracao(new Date());
+								.setUltimaAlteracao(new Date());
 
 						// subtrai o valor do sequencial 4000 ao total de
 						// débitos cancelados por prescrição
 						resumoFaturamentoTotalDebitosCanceladosPrescricao
-							.setValorItemFaturamento(resumoFaturamentoTotalDebitosCanceladosPrescricao
-								.getValorItemFaturamento()
-								.subtract(
-										resumoFaturamentoTemporario
-												.getValorItemFaturamento()));
+								.setValorItemFaturamento(resumoFaturamentoTotalDebitosCanceladosPrescricao
+										.getValorItemFaturamento()
+										.subtract(
+												resumoFaturamentoTemporario
+														.getValorItemFaturamento()));
 
 						colecaoResumoFaturamento
-							.add(resumoFaturamentoTemporario);
+								.add(resumoFaturamentoTemporario);
 					}
-					
+
 					// fim Linha 127
 					// System.out.println("Linha 129");
 					// Linha 129
@@ -22404,8 +23012,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// e com ano/mês da baixa contábil não preenchida.
 					resumoFaturamentoTemporario = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoComBaixaContabilNaoPreenchida(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									CreditoOrigem.DESCONTOS_CONDICIONAIS,
 									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
@@ -22462,8 +23070,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// e com ano/mês da baixa contábil não preenchida.
 					resumoFaturamentoTemporario = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoComBaixaContabilNaoPreenchida(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									CreditoOrigem.DESCONTOS_INCONDICIONAIS,
 									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
@@ -22520,8 +23128,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// e com ano/mês da baixa contábil não preenchida.
 					resumoFaturamentoTemporario = repositorioFaturamento
 							.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoComBaixaContabilNaoPreenchida(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
+									anoMesFaturamento, idLocalidade,
+									idCategoria,
 									CreditoOrigem.AJUSTES_PARA_ZERAR_CONTA,
 									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
@@ -22578,8 +23186,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorImpostoPorTipoImpostoESituacaoContaComBaixaContabilNaoPreenchida(
-									anoMesFaturamento,
-									idLocalidade, idCategoria, ImpostoTipo.IR,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, ImpostoTipo.IR,
 									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
 					// caso o valor do item seja diferente de zero
@@ -22638,9 +23246,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorImpostoPorTipoImpostoESituacaoContaComBaixaContabilNaoPreenchida(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									ImpostoTipo.COFINS,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, ImpostoTipo.COFINS,
 									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
 					// caso o valor do item seja diferente de zero
@@ -22699,9 +23306,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorImpostoPorTipoImpostoESituacaoContaComBaixaContabilNaoPreenchida(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									ImpostoTipo.CSLL,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, ImpostoTipo.CSLL,
 									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
 					// caso o valor do item seja diferente de zero
@@ -22761,9 +23367,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorImpostoPorTipoImpostoESituacaoContaComBaixaContabilNaoPreenchida(
-									anoMesFaturamento,
-									idLocalidade, idCategoria,
-									ImpostoTipo.PIS_PASEP,
+									anoMesFaturamento, idLocalidade,
+									idCategoria, ImpostoTipo.PIS_PASEP,
 									DebitoCreditoSituacao.DEBITO_PRESCRITO);
 
 					// caso o valor do item seja diferente de zero
@@ -22828,8 +23433,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 					colecaoTemporariaCreditoARealizar = repositorioFaturamento
 							.acumularValorCreditoARealizarPorOrigemCredito(
-									anoMesFaturamento,
-									localidade.getId(), idsCreditosOrigem,
+									anoMesFaturamento, localidade.getId(),
+									idsCreditosOrigem,
 									DebitoCreditoSituacao.CANCELADA, categoria);
 
 					// laço para criar todos os resumos de faturamento
@@ -22902,29 +23507,40 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorItemFaturamento = null;
 					valorItemFaturamento = repositorioFaturamento
 							.acumularValorCreditoARealizarPorOrigemCredito(
-									anoMesFaturamento,
-									localidade.getId(),
+									anoMesFaturamento, localidade.getId(),
 									CreditoOrigem.DESCONTOS_INCONDICIONAIS,
 									DebitoCreditoSituacao.CANCELADA, categoria);
 
 					// caso o valor do item seja diferente de zero
 					if (valorItemFaturamento.compareTo(BigDecimal.ZERO) != 0) {
-						lancamentoTipo = new LancamentoTipo(LancamentoTipo.DESCONTOS_INCONDICIONAIS_A_REALIZAR_CANCELADOS);
-						lancamentoItem = new LancamentoItem(LancamentoItem.DESCONTOS_INCONDICIONAIS_CANCELADOS);
+						lancamentoTipo = new LancamentoTipo(
+								LancamentoTipo.DESCONTOS_INCONDICIONAIS_A_REALIZAR_CANCELADOS);
+						lancamentoItem = new LancamentoItem(
+								LancamentoItem.DESCONTOS_INCONDICIONAIS_CANCELADOS);
 
 						resumoFaturamentoTemporario = new ResumoFaturamento();
-						resumoFaturamentoTemporario.setValorItemFaturamento(valorItemFaturamento);
-						resumoFaturamentoTemporario.setAnoMesReferencia(anoMesFaturamento);
+						resumoFaturamentoTemporario
+								.setValorItemFaturamento(valorItemFaturamento);
+						resumoFaturamentoTemporario
+								.setAnoMesReferencia(anoMesFaturamento);
 						resumoFaturamentoTemporario.setCategoria(categoria);
 						resumoFaturamentoTemporario.setLocalidade(localidade);
-						resumoFaturamentoTemporario.setUnidadeNegocio(unidadeNegocio);
-						resumoFaturamentoTemporario.setGerenciaRegional(gerenciaRegional);
-						resumoFaturamentoTemporario.setLancamentoTipo(lancamentoTipo);
-						resumoFaturamentoTemporario.setLancamentoItem(lancamentoItem);
-						resumoFaturamentoTemporario.setLancamentoItemContabil(null);
-						resumoFaturamentoTemporario.setSequenciaTipoLancamento(new Short("550"));
-						resumoFaturamentoTemporario.setSequenciaItemTipoLancamento(new Short("0"));
-						resumoFaturamentoTemporario.setUltimaAlteracao(new Date());
+						resumoFaturamentoTemporario
+								.setUnidadeNegocio(unidadeNegocio);
+						resumoFaturamentoTemporario
+								.setGerenciaRegional(gerenciaRegional);
+						resumoFaturamentoTemporario
+								.setLancamentoTipo(lancamentoTipo);
+						resumoFaturamentoTemporario
+								.setLancamentoItem(lancamentoItem);
+						resumoFaturamentoTemporario
+								.setLancamentoItemContabil(null);
+						resumoFaturamentoTemporario
+								.setSequenciaTipoLancamento(new Short("550"));
+						resumoFaturamentoTemporario
+								.setSequenciaItemTipoLancamento(new Short("0"));
+						resumoFaturamentoTemporario
+								.setUltimaAlteracao(new Date());
 
 						// adiciona o valor do sequencial 550 a receita bruta
 						resumoFaturamentoReceitaBruta
@@ -22937,316 +23553,531 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						colecaoResumoFaturamento
 								.add(resumoFaturamentoTemporario);
 					}
-					
-					idsCreditosOrigem = obterIdsCreditosOrigemParaEncerramentoFaturamentoMensal();
-					colecaoTemporariaCreditoARealizar = repositorioFaturamento.acumularValorCreditoARealizarPorOrigemCredito(anoMesFaturamento,
-									localidade.getId(), idsCreditosOrigem, DebitoCreditoSituacao.NORMAL, DebitoCreditoSituacao.NORMAL, categoria);
 
-					//LANCAMENTO TIPO: CREDITOS_A_REALIZAR_POR_COBRANCA_INDEVIDA_INCLUIDOS - ITEM 1030
+					idsCreditosOrigem = obterIdsCreditosOrigemParaEncerramentoFaturamentoMensal();
+					colecaoTemporariaCreditoARealizar = repositorioFaturamento
+							.acumularValorCreditoARealizarPorOrigemCredito(
+									anoMesFaturamento, localidade.getId(),
+									idsCreditosOrigem,
+									DebitoCreditoSituacao.NORMAL,
+									DebitoCreditoSituacao.NORMAL, categoria);
+
+					// LANCAMENTO TIPO:
+					// CREDITOS_A_REALIZAR_POR_COBRANCA_INDEVIDA_INCLUIDOS -
+					// ITEM 1030
 					for (Object[] arrayDadosCreditoARealizar : colecaoTemporariaCreditoARealizar) {
 						BigDecimal valor = (BigDecimal) arrayDadosCreditoARealizar[0];
 						Integer idLancamentoItemContabil = (Integer) arrayDadosCreditoARealizar[2];
-						LancamentoItemContabil lancamentoItemContabil = new LancamentoItemContabil(idLancamentoItemContabil);
+						LancamentoItemContabil lancamentoItemContabil = new LancamentoItemContabil(
+								idLancamentoItemContabil);
 						Short sequenciaImpressao = (Short) arrayDadosCreditoARealizar[1];
 
-						lancamentoTipo = new LancamentoTipo(LancamentoTipo.CREDITOS_A_REALIZAR_POR_COBRANCA_INDEVIDA_INCLUIDOS);
-						lancamentoItem = new LancamentoItem(LancamentoItem.GRUPO_CONTABIL);
+						lancamentoTipo = new LancamentoTipo(
+								LancamentoTipo.CREDITOS_A_REALIZAR_POR_COBRANCA_INDEVIDA_INCLUIDOS);
+						lancamentoItem = new LancamentoItem(
+								LancamentoItem.GRUPO_CONTABIL);
 
-						if (valor != null && valor.compareTo(BigDecimal.ZERO) != 0) {
-							resumoFaturamentoTemporario = buildResumoFaturamento(valor, anoMesFaturamento, categoria, localidade, lancamentoTipo, 
-									lancamentoItem, lancamentoItemContabil, new Short("1030"), sequenciaImpressao);
-							
-							resumoFaturamentoReceitaCancelada.setValorItemFaturamento(resumoFaturamentoReceitaCancelada
-											.getValorItemFaturamento().add(resumoFaturamentoTemporario.getValorItemFaturamento()));
+						if (valor != null
+								&& valor.compareTo(BigDecimal.ZERO) != 0) {
+							resumoFaturamentoTemporario = buildResumoFaturamento(
+									valor, anoMesFaturamento, categoria,
+									localidade, lancamentoTipo, lancamentoItem,
+									lancamentoItemContabil, new Short("1030"),
+									sequenciaImpressao);
 
-							colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+							resumoFaturamentoReceitaCancelada
+									.setValorItemFaturamento(resumoFaturamentoReceitaCancelada
+											.getValorItemFaturamento()
+											.add(resumoFaturamentoTemporario
+													.getValorItemFaturamento()));
+
+							colecaoResumoFaturamento
+									.add(resumoFaturamentoTemporario);
 						}
 					}
 
-					resumoFaturamentoTemporario = this.contabilizarCreditosRealizadosCanceladosRecuperacaoCredito(anoMesFaturamento, localidade, categoria, 
-							CreditoOrigem.RECUPERACAO_CREDITO_CONTA_CANCELADA, LancamentoItem.RECUPERACAO_CREDITO_CONTA_CANCELADA);
-					
+					resumoFaturamentoTemporario = this
+							.contabilizarCreditosRealizadosCanceladosRecuperacaoCredito(
+									anoMesFaturamento,
+									localidade,
+									categoria,
+									CreditoOrigem.RECUPERACAO_CREDITO_CONTA_CANCELADA,
+									LancamentoItem.RECUPERACAO_CREDITO_CONTA_CANCELADA);
+
 					if (resumoFaturamentoTemporario != null) {
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoTemporario);
 					}
-					
-					resumoFaturamentoTemporario = this.contabilizarCreditosRealizadosCanceladosRecuperacaoCredito(anoMesFaturamento, localidade, categoria, 
-							CreditoOrigem.RECUPERACAO_CREDITO_CONTA_PARCELADA, LancamentoItem.RECUPERACAO_CREDITO_CONTA_PARCELADA);
-					
+
+					resumoFaturamentoTemporario = this
+							.contabilizarCreditosRealizadosCanceladosRecuperacaoCredito(
+									anoMesFaturamento,
+									localidade,
+									categoria,
+									CreditoOrigem.RECUPERACAO_CREDITO_CONTA_PARCELADA,
+									LancamentoItem.RECUPERACAO_CREDITO_CONTA_PARCELADA);
+
 					if (resumoFaturamentoTemporario != null) {
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoTemporario);
 					}
-					
-					resumoFaturamentoTemporario = this.contabilizarCreditosRealizadosRecuperacaoDeCredito(anoMesFaturamento, localidade, categoria, 
-							CreditoOrigem.RECUPERACAO_CREDITO_CONTA_CANCELADA, LancamentoItem.RECUPERACAO_CREDITO_CONTA_CANCELADA);
-					
+
+					resumoFaturamentoTemporario = this
+							.contabilizarCreditosRealizadosRecuperacaoDeCredito(
+									anoMesFaturamento,
+									localidade,
+									categoria,
+									CreditoOrigem.RECUPERACAO_CREDITO_CONTA_CANCELADA,
+									LancamentoItem.RECUPERACAO_CREDITO_CONTA_CANCELADA);
+
 					if (resumoFaturamentoTemporario != null) {
-						resumoFaturamentoTotalCobradoNasContas.setValorItemFaturamento(resumoFaturamentoTotalCobradoNasContas.getValorItemFaturamento().subtract(resumoFaturamentoTemporario.getValorItemFaturamento()));
-						resumoFaturamentoValoresDevolvidosNasContas.setValorItemFaturamento(resumoFaturamentoValoresDevolvidosNasContas.getValorItemFaturamento().add(resumoFaturamentoTemporario.getValorItemFaturamento()));
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+						resumoFaturamentoTotalCobradoNasContas
+								.setValorItemFaturamento(resumoFaturamentoTotalCobradoNasContas
+										.getValorItemFaturamento()
+										.subtract(
+												resumoFaturamentoTemporario
+														.getValorItemFaturamento()));
+						resumoFaturamentoValoresDevolvidosNasContas
+								.setValorItemFaturamento(resumoFaturamentoValoresDevolvidosNasContas
+										.getValorItemFaturamento()
+										.add(resumoFaturamentoTemporario
+												.getValorItemFaturamento()));
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoTemporario);
 					}
-					
-					resumoFaturamentoTemporario = this.contabilizarCreditosRealizadosRecuperacaoDeCredito(anoMesFaturamento, localidade, categoria, 
-							CreditoOrigem.RECUPERACAO_CREDITO_CONTA_PARCELADA, LancamentoItem.RECUPERACAO_CREDITO_CONTA_PARCELADA);
-					
+
+					resumoFaturamentoTemporario = this
+							.contabilizarCreditosRealizadosRecuperacaoDeCredito(
+									anoMesFaturamento,
+									localidade,
+									categoria,
+									CreditoOrigem.RECUPERACAO_CREDITO_CONTA_PARCELADA,
+									LancamentoItem.RECUPERACAO_CREDITO_CONTA_PARCELADA);
+
 					if (resumoFaturamentoTemporario != null) {
-						resumoFaturamentoTotalCobradoNasContas.setValorItemFaturamento(resumoFaturamentoTotalCobradoNasContas.getValorItemFaturamento().subtract(resumoFaturamentoTemporario.getValorItemFaturamento()));
-						resumoFaturamentoValoresDevolvidosNasContas.setValorItemFaturamento(resumoFaturamentoValoresDevolvidosNasContas.getValorItemFaturamento().add(resumoFaturamentoTemporario.getValorItemFaturamento()));
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+						resumoFaturamentoTotalCobradoNasContas
+								.setValorItemFaturamento(resumoFaturamentoTotalCobradoNasContas
+										.getValorItemFaturamento()
+										.subtract(
+												resumoFaturamentoTemporario
+														.getValorItemFaturamento()));
+						resumoFaturamentoValoresDevolvidosNasContas
+								.setValorItemFaturamento(resumoFaturamentoValoresDevolvidosNasContas
+										.getValorItemFaturamento()
+										.add(resumoFaturamentoTemporario
+												.getValorItemFaturamento()));
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoTemporario);
 					}
-					
-					colecaoResumoFaturamento.addAll(this.contabilizarCreditosARealizarRecuperacaoDeCredito(anoMesFaturamento, localidade, categoria, 
-							CreditoOrigem.RECUPERACAO_CREDITO_CONTA_CANCELADA, LancamentoItem.RECUPERACAO_CREDITO_CONTA_CANCELADA));
-					
-					colecaoResumoFaturamento.addAll(this.contabilizarCreditosARealizarRecuperacaoDeCredito(anoMesFaturamento, localidade, categoria, 
-							CreditoOrigem.RECUPERACAO_CREDITO_CONTA_PARCELADA, LancamentoItem.RECUPERACAO_CREDITO_CONTA_PARCELADA));
-					
-					//LANCAMENTO TIPO: DESCONTOS_INCONDICIONAIS_INCLUIDOS - ITEM 1040
-					resumoFaturamentoTemporario = obterResumoValorCreditoARealizarPorOrigemCreditoSituacoesConta(anoMesFaturamento, localidade, 
-							categoria, CreditoOrigem.DESCONTOS_INCONDICIONAIS, DebitoCreditoSituacao.NORMAL, DebitoCreditoSituacao.NORMAL, 
-							LancamentoTipo.DESCONTOS_INCONDICIONAIS_INCLUIDOS, 
-							LancamentoItem.DESCONTOS_INCONDICIONAIS_INCLUIDOS, new Short("1040"), new Short("0"));
-					
+
+					colecaoResumoFaturamento
+							.addAll(this
+									.contabilizarCreditosARealizarRecuperacaoDeCredito(
+											anoMesFaturamento,
+											localidade,
+											categoria,
+											CreditoOrigem.RECUPERACAO_CREDITO_CONTA_CANCELADA,
+											LancamentoItem.RECUPERACAO_CREDITO_CONTA_CANCELADA));
+
+					colecaoResumoFaturamento
+							.addAll(this
+									.contabilizarCreditosARealizarRecuperacaoDeCredito(
+											anoMesFaturamento,
+											localidade,
+											categoria,
+											CreditoOrigem.RECUPERACAO_CREDITO_CONTA_PARCELADA,
+											LancamentoItem.RECUPERACAO_CREDITO_CONTA_PARCELADA));
+
+					// LANCAMENTO TIPO: DESCONTOS_INCONDICIONAIS_INCLUIDOS -
+					// ITEM 1040
+					resumoFaturamentoTemporario = obterResumoValorCreditoARealizarPorOrigemCreditoSituacoesConta(
+							anoMesFaturamento, localidade, categoria,
+							CreditoOrigem.DESCONTOS_INCONDICIONAIS,
+							DebitoCreditoSituacao.NORMAL,
+							DebitoCreditoSituacao.NORMAL,
+							LancamentoTipo.DESCONTOS_INCONDICIONAIS_INCLUIDOS,
+							LancamentoItem.DESCONTOS_INCONDICIONAIS_INCLUIDOS,
+							new Short("1040"), new Short("0"));
+
 					if (resumoFaturamentoTemporario != null) {
-						resumoFaturamentoReceitaCancelada = this.acumularValorResumoFaturamento(resumoFaturamentoReceitaCancelada, resumoFaturamentoTemporario.getValorItemFaturamento());
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+						resumoFaturamentoReceitaCancelada = this
+								.acumularValorResumoFaturamento(
+										resumoFaturamentoReceitaCancelada,
+										resumoFaturamentoTemporario
+												.getValorItemFaturamento());
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoTemporario);
 					}
 
-					if (mapAcumularValorPorCategoriaReceitaBruta.containsKey(categoria.getId())) {
-						resumoFaturamentoReceitaBruta = this.acumularValorResumoFaturamento(resumoFaturamentoReceitaBruta, mapAcumularValorPorCategoriaReceitaBruta.get(categoria.getId()));
+					if (mapAcumularValorPorCategoriaReceitaBruta
+							.containsKey(categoria.getId())) {
+						resumoFaturamentoReceitaBruta = this
+								.acumularValorResumoFaturamento(
+										resumoFaturamentoReceitaBruta,
+										mapAcumularValorPorCategoriaReceitaBruta
+												.get(categoria.getId()));
 					}
 
-					resumoFaturamentoReceitaBruta = preencherDadosLocalizacaoResumoFaturamento(localidade, categoria, resumoFaturamentoReceitaBruta);
-					if (resumoFaturamentoReceitaBruta.getValorItemFaturamento().compareTo(BigDecimal.ZERO) != 0) {
-						colecaoResumoFaturamento.add(resumoFaturamentoReceitaBruta);
+					resumoFaturamentoReceitaBruta = preencherDadosLocalizacaoResumoFaturamento(
+							localidade, categoria,
+							resumoFaturamentoReceitaBruta);
+					if (resumoFaturamentoReceitaBruta.getValorItemFaturamento()
+							.compareTo(BigDecimal.ZERO) != 0) {
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoReceitaBruta);
 					}
 
-					if (mapAcumularValorPorCategoriaReceitaCancelada.containsKey(categoria.getId())) {
-						resumoFaturamentoReceitaCancelada = this.acumularValorResumoFaturamento(resumoFaturamentoReceitaCancelada, mapAcumularValorPorCategoriaReceitaCancelada.get(categoria.getId()));	
+					if (mapAcumularValorPorCategoriaReceitaCancelada
+							.containsKey(categoria.getId())) {
+						resumoFaturamentoReceitaCancelada = this
+								.acumularValorResumoFaturamento(
+										resumoFaturamentoReceitaCancelada,
+										mapAcumularValorPorCategoriaReceitaCancelada
+												.get(categoria.getId()));
 					}
 
-					resumoFaturamentoReceitaCancelada = preencherDadosLocalizacaoResumoFaturamento(localidade, categoria, resumoFaturamentoReceitaCancelada);
-					if (resumoFaturamentoReceitaCancelada.getValorItemFaturamento().compareTo(BigDecimal.ZERO) != 0) {
-						colecaoResumoFaturamento.add(resumoFaturamentoReceitaCancelada);
+					resumoFaturamentoReceitaCancelada = preencherDadosLocalizacaoResumoFaturamento(
+							localidade, categoria,
+							resumoFaturamentoReceitaCancelada);
+					if (resumoFaturamentoReceitaCancelada
+							.getValorItemFaturamento().compareTo(
+									BigDecimal.ZERO) != 0) {
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoReceitaCancelada);
 					}
 
-					resumoFaturamentoValoresDevolvidosNasContas = preencherDadosLocalizacaoResumoFaturamento(localidade, categoria, resumoFaturamentoValoresDevolvidosNasContas);
-					if (resumoFaturamentoValoresDevolvidosNasContas.getValorItemFaturamento().compareTo(BigDecimal.ZERO) != 0) {
-						colecaoResumoFaturamento.add(resumoFaturamentoValoresDevolvidosNasContas);
+					resumoFaturamentoValoresDevolvidosNasContas = preencherDadosLocalizacaoResumoFaturamento(
+							localidade, categoria,
+							resumoFaturamentoValoresDevolvidosNasContas);
+					if (resumoFaturamentoValoresDevolvidosNasContas
+							.getValorItemFaturamento().compareTo(
+									BigDecimal.ZERO) != 0) {
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoValoresDevolvidosNasContas);
 					}
 
-					resumoFaturamentoTotalCobradoNasContas = preencherDadosLocalizacaoResumoFaturamento(localidade, categoria, resumoFaturamentoTotalCobradoNasContas);
-					if (resumoFaturamentoTotalCobradoNasContas.getValorItemFaturamento().compareTo(BigDecimal.ZERO) != 0) {
-						colecaoResumoFaturamento.add(resumoFaturamentoTotalCobradoNasContas);
+					resumoFaturamentoTotalCobradoNasContas = preencherDadosLocalizacaoResumoFaturamento(
+							localidade, categoria,
+							resumoFaturamentoTotalCobradoNasContas);
+					if (resumoFaturamentoTotalCobradoNasContas
+							.getValorItemFaturamento().compareTo(
+									BigDecimal.ZERO) != 0) {
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoTotalCobradoNasContas);
 					}
 
-					resumoFaturamentoTotalDebitosCanceladosPrescricao = preencherDadosLocalizacaoResumoFaturamento(localidade, categoria, resumoFaturamentoTotalDebitosCanceladosPrescricao);
-					if (resumoFaturamentoTotalDebitosCanceladosPrescricao.getValorItemFaturamento().compareTo(BigDecimal.ZERO) != 0) {
-						colecaoResumoFaturamento.add(resumoFaturamentoTotalDebitosCanceladosPrescricao);
+					resumoFaturamentoTotalDebitosCanceladosPrescricao = preencherDadosLocalizacaoResumoFaturamento(
+							localidade, categoria,
+							resumoFaturamentoTotalDebitosCanceladosPrescricao);
+					if (resumoFaturamentoTotalDebitosCanceladosPrescricao
+							.getValorItemFaturamento().compareTo(
+									BigDecimal.ZERO) != 0) {
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoTotalDebitosCanceladosPrescricao);
 					}
-					
-					
-					//LANCAMENTO TIPO: PARCELAMENTOS_REALIZADOS_CURTO_PRAZO - ITEM 1500
-					resumoFaturamentoTemporario = obterResumoDebitoACobrarCategoriaPorTipoFinanciamento(anoMesFaturamento, localidade, categoria);
-					
+
+					// LANCAMENTO TIPO: PARCELAMENTOS_REALIZADOS_CURTO_PRAZO -
+					// ITEM 1500
+					resumoFaturamentoTemporario = obterResumoDebitoACobrarCategoriaPorTipoFinanciamento(
+							anoMesFaturamento, localidade, categoria);
+
 					if (resumoFaturamentoTemporario != null) {
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoTemporario);
 					}
-					
-					
-					//LANCAMENTO TIPO: OUTROS_CREDITOS_A_REALIZAR_CANCELADOS - ITEM 1610
-					resumoFaturamentoTemporario = obterResumoValorCreditoARealizarPorOrigemCreditoDuplicidade(anoMesFaturamento, localidade,  
-							categoria, CreditoOrigem.CONTAS_PAGAS_EM_DUPLICIDADE_EXCESSO, DebitoCreditoSituacao.NORMAL, DebitoCreditoSituacao.NORMAL, 
+
+					// LANCAMENTO TIPO: OUTROS_CREDITOS_A_REALIZAR_CANCELADOS -
+					// ITEM 1610
+					resumoFaturamentoTemporario = obterResumoValorCreditoARealizarPorOrigemCreditoDuplicidade(
+							anoMesFaturamento,
+							localidade,
+							categoria,
+							CreditoOrigem.CONTAS_PAGAS_EM_DUPLICIDADE_EXCESSO,
+							DebitoCreditoSituacao.NORMAL,
+							DebitoCreditoSituacao.NORMAL,
 							LancamentoTipo.OUTROS_CREDITOS_A_REALIZAR_INCLUIDOS,
-							LancamentoItem.CONTAS_PAGA_EM_DUPLICIDADE_EXCESSO, new Short("1610"), new Short("10"));
-					
+							LancamentoItem.CONTAS_PAGA_EM_DUPLICIDADE_EXCESSO,
+							new Short("1610"), new Short("10"));
+
 					if (resumoFaturamentoTemporario != null) {
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
-					}
-					
-					resumoFaturamentoTemporario = obterResumoValorCreditoARealizarPorOrigemCreditoSituacoesConta(anoMesFaturamento, localidade,  
-							categoria, CreditoOrigem.DESCONTOS_CONDICIONAIS, DebitoCreditoSituacao.NORMAL, DebitoCreditoSituacao.NORMAL, 
-							LancamentoTipo.OUTROS_CREDITOS_A_REALIZAR_INCLUIDOS,
-							LancamentoItem.DESCONTOS_CONDICIONAIS, new Short("1610"), new Short("20"));
-					
-					if (resumoFaturamentoTemporario != null) {
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
-					}
-					
-					resumoFaturamentoTemporario = obterResumoValorCreditoARealizarPorOrigemCreditoSituacoesConta(anoMesFaturamento, localidade,  
-							categoria, CreditoOrigem.AJUSTES_PARA_ZERAR_CONTA, DebitoCreditoSituacao.NORMAL, DebitoCreditoSituacao.NORMAL, 
-							LancamentoTipo.OUTROS_CREDITOS_A_REALIZAR_INCLUIDOS,
-							LancamentoItem.AJUSTES_PARA_ZERAR_CONTA, new Short("1610"), new Short("30"));
-					
-					if (resumoFaturamentoTemporario != null) {
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
-					}
-					
-					
-					//LANCAMENTO TIPO: OUTROS_CREDITOS_A_REALIZAR_INCLUIDOS_ATE_31_12_2012 - ITEM 1615
-					resumoFaturamentoTemporario = obterResumoCreditoARealizarPorOrigemCreditoDuplicidadeAte122012(anoMesFaturamento, localidade, categoria);
-					if (resumoFaturamentoTemporario != null) {
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoTemporario);
 					}
 
-					
-					//LANCAMENTO ITEM: OUTROS_CREDITOS_A_REALIZAR_CANCELADOS - ITEM 1620
-					resumoFaturamentoTemporario = obterResumoValorCreditoARealizarPorOrigemCredito(anoMesFaturamento, localidade, 
-							categoria, CreditoOrigem.CONTAS_PAGAS_EM_DUPLICIDADE_EXCESSO, DebitoCreditoSituacao.CANCELADA, 
-							LancamentoTipo.OUTROS_CREDITOS_A_REALIZAR_CANCELADOS,
-							LancamentoItem.CONTAS_PAGA_EM_DUPLICIDADE_EXCESSO, new Short("1620"), new Short("10"));
-					
+					resumoFaturamentoTemporario = obterResumoValorCreditoARealizarPorOrigemCreditoSituacoesConta(
+							anoMesFaturamento,
+							localidade,
+							categoria,
+							CreditoOrigem.DESCONTOS_CONDICIONAIS,
+							DebitoCreditoSituacao.NORMAL,
+							DebitoCreditoSituacao.NORMAL,
+							LancamentoTipo.OUTROS_CREDITOS_A_REALIZAR_INCLUIDOS,
+							LancamentoItem.DESCONTOS_CONDICIONAIS, new Short(
+									"1610"), new Short("20"));
+
 					if (resumoFaturamentoTemporario != null) {
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
-					}
-					
-					resumoFaturamentoTemporario = obterResumoValorCreditoARealizarPorOrigemCredito(anoMesFaturamento, localidade, 
-							categoria, CreditoOrigem.DESCONTOS_CONDICIONAIS, DebitoCreditoSituacao.CANCELADA, 
-							LancamentoTipo.OUTROS_CREDITOS_A_REALIZAR_CANCELADOS,
-							LancamentoItem.DESCONTOS_CONDICIONAIS, new Short("1620"), new Short("20"));
-					
-					if (resumoFaturamentoTemporario != null) {
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
-					}
-					
-					resumoFaturamentoTemporario = obterResumoValorCreditoARealizarPorOrigemCredito(anoMesFaturamento, localidade, 
-							categoria, CreditoOrigem.AJUSTES_PARA_ZERAR_CONTA, DebitoCreditoSituacao.CANCELADA, 
-							LancamentoTipo.OUTROS_CREDITOS_A_REALIZAR_CANCELADOS,
-							LancamentoItem.AJUSTES_PARA_ZERAR_CONTA, new Short("1620"), new Short("30"));
-					
-					if (resumoFaturamentoTemporario != null) {
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoTemporario);
 					}
 
-					resumoFaturamentoTemporario = obterResumoValorCreditoARealizarPorOrigemCredito(anoMesFaturamento, localidade, 
-							categoria, CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO, DebitoCreditoSituacao.CANCELADA,
-							LancamentoTipo.OUTROS_CREDITOS_A_REALIZAR_CANCELADOS,
-							LancamentoItem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO, new Short("1620"), new Short("40"));
-					
+					resumoFaturamentoTemporario = obterResumoValorCreditoARealizarPorOrigemCreditoSituacoesConta(
+							anoMesFaturamento,
+							localidade,
+							categoria,
+							CreditoOrigem.AJUSTES_PARA_ZERAR_CONTA,
+							DebitoCreditoSituacao.NORMAL,
+							DebitoCreditoSituacao.NORMAL,
+							LancamentoTipo.OUTROS_CREDITOS_A_REALIZAR_INCLUIDOS,
+							LancamentoItem.AJUSTES_PARA_ZERAR_CONTA, new Short(
+									"1610"), new Short("30"));
+
 					if (resumoFaturamentoTemporario != null) {
-						colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoTemporario);
 					}
-					
+
+					// LANCAMENTO TIPO:
+					// OUTROS_CREDITOS_A_REALIZAR_INCLUIDOS_ATE_31_12_2012 -
+					// ITEM 1615
+					resumoFaturamentoTemporario = obterResumoCreditoARealizarPorOrigemCreditoDuplicidadeAte122012(
+							anoMesFaturamento, localidade, categoria);
+					if (resumoFaturamentoTemporario != null) {
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoTemporario);
+					}
+
+					// LANCAMENTO ITEM: OUTROS_CREDITOS_A_REALIZAR_CANCELADOS -
+					// ITEM 1620
+					resumoFaturamentoTemporario = obterResumoValorCreditoARealizarPorOrigemCredito(
+							anoMesFaturamento,
+							localidade,
+							categoria,
+							CreditoOrigem.CONTAS_PAGAS_EM_DUPLICIDADE_EXCESSO,
+							DebitoCreditoSituacao.CANCELADA,
+							LancamentoTipo.OUTROS_CREDITOS_A_REALIZAR_CANCELADOS,
+							LancamentoItem.CONTAS_PAGA_EM_DUPLICIDADE_EXCESSO,
+							new Short("1620"), new Short("10"));
+
+					if (resumoFaturamentoTemporario != null) {
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoTemporario);
+					}
+
+					resumoFaturamentoTemporario = obterResumoValorCreditoARealizarPorOrigemCredito(
+							anoMesFaturamento,
+							localidade,
+							categoria,
+							CreditoOrigem.DESCONTOS_CONDICIONAIS,
+							DebitoCreditoSituacao.CANCELADA,
+							LancamentoTipo.OUTROS_CREDITOS_A_REALIZAR_CANCELADOS,
+							LancamentoItem.DESCONTOS_CONDICIONAIS, new Short(
+									"1620"), new Short("20"));
+
+					if (resumoFaturamentoTemporario != null) {
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoTemporario);
+					}
+
+					resumoFaturamentoTemporario = obterResumoValorCreditoARealizarPorOrigemCredito(
+							anoMesFaturamento,
+							localidade,
+							categoria,
+							CreditoOrigem.AJUSTES_PARA_ZERAR_CONTA,
+							DebitoCreditoSituacao.CANCELADA,
+							LancamentoTipo.OUTROS_CREDITOS_A_REALIZAR_CANCELADOS,
+							LancamentoItem.AJUSTES_PARA_ZERAR_CONTA, new Short(
+									"1620"), new Short("30"));
+
+					if (resumoFaturamentoTemporario != null) {
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoTemporario);
+					}
+
+					resumoFaturamentoTemporario = obterResumoValorCreditoARealizarPorOrigemCredito(
+							anoMesFaturamento,
+							localidade,
+							categoria,
+							CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO,
+							DebitoCreditoSituacao.CANCELADA,
+							LancamentoTipo.OUTROS_CREDITOS_A_REALIZAR_CANCELADOS,
+							LancamentoItem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO,
+							new Short("1620"), new Short("40"));
+
+					if (resumoFaturamentoTemporario != null) {
+						colecaoResumoFaturamento
+								.add(resumoFaturamentoTemporario);
+					}
+
 				}
 
-				if (colecaoResumoFaturamento != null && !colecaoResumoFaturamento.isEmpty()) {
-					getControladorBatch().inserirColecaoObjetoParaBatch(colecaoResumoFaturamento);
+				if (colecaoResumoFaturamento != null
+						&& !colecaoResumoFaturamento.isEmpty()) {
+					getControladorBatch().inserirColecaoObjetoParaBatch(
+							colecaoResumoFaturamento);
 				}
 			}
 
-			this.calcularValorReceitaLiquida(anoMesFaturamento, colecaoCategorias, colecaoIdsLocalidades);
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+			this.calcularValorReceitaLiquida(anoMesFaturamento,
+					colecaoCategorias, colecaoIdsLocalidades);
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null,
+					idUnidadeIniciada, false);
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(e,
+					idUnidadeIniciada, true);
 			throw new EJBException(e);
 		}
 	}
-	
-	private ResumoFaturamento contabilizarCreditosRealizadosRecuperacaoDeCredito(int anoMesFaturamento, Localidade localidade, Categoria categoria,
-			Integer idCreditoOrigem, Integer idLancamentoItem) throws ErroRepositorioException, ControladorException {
-		
+
+	private ResumoFaturamento contabilizarCreditosRealizadosRecuperacaoDeCredito(
+			int anoMesFaturamento, Localidade localidade, Categoria categoria,
+			Integer idCreditoOrigem, Integer idLancamentoItem)
+			throws ErroRepositorioException, ControladorException {
+
 		ResumoFaturamento resumoFaturamento = null;
 
-		Integer[] idsCreditosOrigem = new Integer[]{idCreditoOrigem};
-		
+		Integer[] idsCreditosOrigem = new Integer[] { idCreditoOrigem };
+
 		BigDecimal valorItemFaturamento = repositorioFaturamento
 				.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCreditoPorReferenciaConta(
-						anoMesFaturamento, localidade.getId(), categoria.getId(), idsCreditosOrigem, DebitoCreditoSituacao.NORMAL, DebitoCreditoSituacao.NORMAL);
-		
+						anoMesFaturamento, localidade.getId(),
+						categoria.getId(), idsCreditosOrigem,
+						DebitoCreditoSituacao.NORMAL,
+						DebitoCreditoSituacao.NORMAL);
+
 		if (valorItemFaturamento.compareTo(BigDecimal.ZERO) != 0) {
-			resumoFaturamento = buildResumoFaturamento(valorItemFaturamento, anoMesFaturamento, categoria, localidade, 
-					new LancamentoTipo(LancamentoTipo.DEVOLUCAO_VALORES_RECUPERACAO_CREDITO), new LancamentoItem(idLancamentoItem), 
-					null, null, null);
-		} 
-		
+			resumoFaturamento = buildResumoFaturamento(
+					valorItemFaturamento,
+					anoMesFaturamento,
+					categoria,
+					localidade,
+					new LancamentoTipo(
+							LancamentoTipo.DEVOLUCAO_VALORES_RECUPERACAO_CREDITO),
+					new LancamentoItem(idLancamentoItem), null, null, null);
+		}
+
 		return resumoFaturamento;
 	}
-	
-	private ResumoFaturamento contabilizarCreditosRealizadosCanceladosRecuperacaoCredito(int anoMesFaturamento, Localidade localidade, Categoria categoria,
-			Integer idCreditoOrigem, Integer idLancamentoItem) throws ErroRepositorioException, ControladorException {
-		
-		Integer[] idsCreditosOrigem = new Integer[]{idCreditoOrigem};
+
+	private ResumoFaturamento contabilizarCreditosRealizadosCanceladosRecuperacaoCredito(
+			int anoMesFaturamento, Localidade localidade, Categoria categoria,
+			Integer idCreditoOrigem, Integer idLancamentoItem)
+			throws ErroRepositorioException, ControladorException {
+
+		Integer[] idsCreditosOrigem = new Integer[] { idCreditoOrigem };
 		ResumoFaturamento resumoFaturamento = null;
-		
+
 		BigDecimal valorCreditoRealizadoOrigemCredito = repositorioFaturamento
 				.acumularValorCategoriaCreditoRealizadoCategoriaPorOrigemCredito(
-						anoMesFaturamento, localidade.getId(), categoria.getId(), idsCreditosOrigem, DebitoCreditoSituacao.CANCELADA);
+						anoMesFaturamento, localidade.getId(),
+						categoria.getId(), idsCreditosOrigem,
+						DebitoCreditoSituacao.CANCELADA);
 
 		BigDecimal[] diferencaCreditoOrigemDescontosConcedidosParcelamentoCanceladaPorRetificacaoeERetificada = this
-				.obterDiferencaValoresCreditosRealizadosContaRetificada(anoMesFaturamento, localidade.getId(), categoria.getId(), idsCreditosOrigem);
+				.obterDiferencaValoresCreditosRealizadosContaRetificada(
+						anoMesFaturamento, localidade.getId(),
+						categoria.getId(), idsCreditosOrigem);
 
 		valorCreditoRealizadoOrigemCredito = valorCreditoRealizadoOrigemCredito
 				.add(diferencaCreditoOrigemDescontosConcedidosParcelamentoCanceladaPorRetificacaoeERetificada[0]);
 
 		if (valorCreditoRealizadoOrigemCredito.compareTo(BigDecimal.ZERO) != 0) {
-			
-			resumoFaturamento = buildResumoFaturamento(valorCreditoRealizadoOrigemCredito, anoMesFaturamento, categoria, localidade, 
-					new LancamentoTipo(LancamentoTipo.OUTROS_CREDITOS_CANCELADOS_POR_RECUPERACAO_CREDITO), new LancamentoItem(idLancamentoItem), 
-					null, null, null);
+
+			resumoFaturamento = buildResumoFaturamento(
+					valorCreditoRealizadoOrigemCredito,
+					anoMesFaturamento,
+					categoria,
+					localidade,
+					new LancamentoTipo(
+							LancamentoTipo.OUTROS_CREDITOS_CANCELADOS_POR_RECUPERACAO_CREDITO),
+					new LancamentoItem(idLancamentoItem), null, null, null);
 		}
-		
+
 		return resumoFaturamento;
 	}
-	
-	private Collection contabilizarCreditosARealizarRecuperacaoDeCredito(int anoMesFaturamento, Localidade localidade, Categoria categoria,
-			Integer idCreditoOrigem, Integer idLancamentoItem) throws ErroRepositorioException, ControladorException {
-		
+
+	private Collection contabilizarCreditosARealizarRecuperacaoDeCredito(
+			int anoMesFaturamento, Localidade localidade, Categoria categoria,
+			Integer idCreditoOrigem, Integer idLancamentoItem)
+			throws ErroRepositorioException, ControladorException {
+
 		Collection<ResumoFaturamento> colecaoResumoFaturamento = new ArrayList<ResumoFaturamento>();
-		
-		ResumoFaturamento resumoFaturamentoTemporario = obterResumoValorCreditoARealizarPorOrigemCreditoSituacoesConta(anoMesFaturamento, localidade,  
-				categoria, idCreditoOrigem, DebitoCreditoSituacao.NORMAL, DebitoCreditoSituacao.NORMAL, 
+
+		ResumoFaturamento resumoFaturamentoTemporario = obterResumoValorCreditoARealizarPorOrigemCreditoSituacoesConta(
+				anoMesFaturamento,
+				localidade,
+				categoria,
+				idCreditoOrigem,
+				DebitoCreditoSituacao.NORMAL,
+				DebitoCreditoSituacao.NORMAL,
 				LancamentoTipo.OUTROS_CREDITOS_A_REALIZAR_POR_RECUPERACAO_CREDITO_INCLUIDOS,
 				idLancamentoItem, null, null);
-		
+
 		if (resumoFaturamentoTemporario != null) {
 			colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
 		}
-		
-		resumoFaturamentoTemporario = obterResumoValorCreditoARealizarPorOrigemCredito(anoMesFaturamento, localidade, 
-				categoria, idCreditoOrigem, DebitoCreditoSituacao.CANCELADA, 
+
+		resumoFaturamentoTemporario = obterResumoValorCreditoARealizarPorOrigemCredito(
+				anoMesFaturamento,
+				localidade,
+				categoria,
+				idCreditoOrigem,
+				DebitoCreditoSituacao.CANCELADA,
 				LancamentoTipo.OUTROS_CREDITOS_A_REALIZAR_POR_RECUPERACAO_CREDITO_CANCELADOS,
 				idLancamentoItem, null, null);
-		
+
 		if (resumoFaturamentoTemporario != null) {
 			colecaoResumoFaturamento.add(resumoFaturamentoTemporario);
 		}
-		
+
 		return colecaoResumoFaturamento;
 	}
 
-	private BigDecimal obterValorCreditosRealizadosRecuepracaoCredito(Integer idLancamentoTipo, Collection<ResumoFaturamento> colecaoReumo) {
+	private BigDecimal obterValorCreditosRealizadosRecuepracaoCredito(
+			Integer idLancamentoTipo, Collection<ResumoFaturamento> colecaoReumo) {
 		BigDecimal valorCreditos = null;
-		
-		
+
 		return valorCreditos;
 	}
-	private ResumoFaturamento preencherDadosLocalizacaoResumoFaturamento(Localidade localidade, Categoria categoria, ResumoFaturamento resumoFaturamento) {
+
+	private ResumoFaturamento preencherDadosLocalizacaoResumoFaturamento(
+			Localidade localidade, Categoria categoria,
+			ResumoFaturamento resumoFaturamento) {
 		resumoFaturamento.setGerenciaRegional(localidade.getGerenciaRegional());
 		resumoFaturamento.setUnidadeNegocio(localidade.getUnidadeNegocio());
 		resumoFaturamento.setLocalidade(localidade);
 		resumoFaturamento.setCategoria(categoria);
-		
+
 		return resumoFaturamento;
 	}
 
-	private ResumoFaturamento obterResumoDebitoACobrarCategoriaPorTipoFinanciamento(int anoMesFaturamento, 
-			Localidade localidade, Categoria categoria) throws ErroRepositorioException {
-		
+	private ResumoFaturamento obterResumoDebitoACobrarCategoriaPorTipoFinanciamento(
+			int anoMesFaturamento, Localidade localidade, Categoria categoria)
+			throws ErroRepositorioException {
+
 		Integer[] idsTipoFinanciamento = new Integer[3];
 		idsTipoFinanciamento[0] = FinanciamentoTipo.ARRASTO_AGUA;
 		idsTipoFinanciamento[1] = FinanciamentoTipo.ARRASTO_ESGOTO;
 		idsTipoFinanciamento[2] = FinanciamentoTipo.ARRASTO_SERVICO;
 
 		BigDecimal valorItemFaturamento = repositorioFaturamento
-				.acumularValorDebitoACobrarCategoriaPorTipoFinanciamento(anoMesFaturamento, localidade.getId(), categoria.getId(),
-						idsTipoFinanciamento, DebitoCreditoSituacao.NORMAL, DebitoCreditoSituacao.NORMAL);
+				.acumularValorDebitoACobrarCategoriaPorTipoFinanciamento(
+						anoMesFaturamento, localidade.getId(),
+						categoria.getId(), idsTipoFinanciamento,
+						DebitoCreditoSituacao.NORMAL,
+						DebitoCreditoSituacao.NORMAL);
 
 		if (valorItemFaturamento.compareTo(BigDecimal.ZERO) != 0) {
-			ResumoFaturamento resumoFaturamento = buildResumoFaturamento(valorItemFaturamento, anoMesFaturamento, categoria, localidade, 
-					new LancamentoTipo(LancamentoTipo.PARCELAMENTOS_REALIZADOS_CURTO_PRAZO), 
-					new LancamentoItem(LancamentoItem.DEBITOS_ANTERIORES_PARA_RECOBRANCA), 
+			ResumoFaturamento resumoFaturamento = buildResumoFaturamento(
+					valorItemFaturamento,
+					anoMesFaturamento,
+					categoria,
+					localidade,
+					new LancamentoTipo(
+							LancamentoTipo.PARCELAMENTOS_REALIZADOS_CURTO_PRAZO),
+					new LancamentoItem(
+							LancamentoItem.DEBITOS_ANTERIORES_PARA_RECOBRANCA),
 					null, new Short("1500"), new Short("80"));
 
 			return resumoFaturamento;
@@ -23255,17 +24086,28 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		}
 	}
 
-	private ResumoFaturamento obterResumoCreditoARealizarPorOrigemCreditoDuplicidadeAte122012(int anoMesFaturamento,
-			Localidade localidade, Categoria categoria) throws ErroRepositorioException {
-		
-		BigDecimal valorItemFaturamento = repositorioFaturamento.acumularValorCreditoARealizarPorOrigemCreditoDuplicidadeAte122012(
-						anoMesFaturamento, localidade.getId(), categoria.getId(), CreditoOrigem.CONTAS_PAGAS_EM_DUPLICIDADE_EXCESSO,
-						DebitoCreditoSituacao.NORMAL, DebitoCreditoSituacao.NORMAL);
+	private ResumoFaturamento obterResumoCreditoARealizarPorOrigemCreditoDuplicidadeAte122012(
+			int anoMesFaturamento, Localidade localidade, Categoria categoria)
+			throws ErroRepositorioException {
+
+		BigDecimal valorItemFaturamento = repositorioFaturamento
+				.acumularValorCreditoARealizarPorOrigemCreditoDuplicidadeAte122012(
+						anoMesFaturamento, localidade.getId(),
+						categoria.getId(),
+						CreditoOrigem.CONTAS_PAGAS_EM_DUPLICIDADE_EXCESSO,
+						DebitoCreditoSituacao.NORMAL,
+						DebitoCreditoSituacao.NORMAL);
 
 		if (valorItemFaturamento.compareTo(BigDecimal.ZERO) != 0) {
-			ResumoFaturamento resumoFaturamento = buildResumoFaturamento(valorItemFaturamento, anoMesFaturamento, categoria, localidade, 
-					new LancamentoTipo(LancamentoTipo.OUTROS_CREDITOS_A_REALIZAR_INCLUIDOS_ATE_31_12_2012), 
-					new LancamentoItem(LancamentoItem.CONTAS_PAGA_EM_DUPLICIDADE_EXCESSO), 
+			ResumoFaturamento resumoFaturamento = buildResumoFaturamento(
+					valorItemFaturamento,
+					anoMesFaturamento,
+					categoria,
+					localidade,
+					new LancamentoTipo(
+							LancamentoTipo.OUTROS_CREDITOS_A_REALIZAR_INCLUIDOS_ATE_31_12_2012),
+					new LancamentoItem(
+							LancamentoItem.CONTAS_PAGA_EM_DUPLICIDADE_EXCESSO),
 					null, new Short("1615"), new Short("10"));
 
 			return resumoFaturamento;
@@ -23274,61 +24116,90 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		}
 	}
 
-	private ResumoFaturamento obterResumoValorCreditoARealizarPorOrigemCreditoSituacoesConta(int anoMesFaturamento, Localidade localidade, 
-			Categoria categoria, Integer idCreditoOrigem, Integer idSituacaoAtualConta, Integer idSituacaoAnteriorConta,
-			Integer idLancamentoTipo, Integer idLancamentoItem, Short seqTipoLancamento, Short seqItemTipoLancamento) throws ErroRepositorioException {
-		
-		BigDecimal valorItemFaturamento = repositorioFaturamento.acumularValorCreditoARealizarPorOrigemCredito(
-						anoMesFaturamento, localidade.getId(), categoria.getId(), idCreditoOrigem, idSituacaoAtualConta, idSituacaoAnteriorConta);
+	private ResumoFaturamento obterResumoValorCreditoARealizarPorOrigemCreditoSituacoesConta(
+			int anoMesFaturamento, Localidade localidade, Categoria categoria,
+			Integer idCreditoOrigem, Integer idSituacaoAtualConta,
+			Integer idSituacaoAnteriorConta, Integer idLancamentoTipo,
+			Integer idLancamentoItem, Short seqTipoLancamento,
+			Short seqItemTipoLancamento) throws ErroRepositorioException {
+
+		BigDecimal valorItemFaturamento = repositorioFaturamento
+				.acumularValorCreditoARealizarPorOrigemCredito(
+						anoMesFaturamento, localidade.getId(),
+						categoria.getId(), idCreditoOrigem,
+						idSituacaoAtualConta, idSituacaoAnteriorConta);
 
 		if (valorItemFaturamento.compareTo(BigDecimal.ZERO) != 0) {
-			ResumoFaturamento resumoFaturamento = buildResumoFaturamento(valorItemFaturamento, anoMesFaturamento, categoria, localidade, 
-					new LancamentoTipo(idLancamentoTipo), new LancamentoItem(idLancamentoItem), null, seqTipoLancamento, seqItemTipoLancamento);
+			ResumoFaturamento resumoFaturamento = buildResumoFaturamento(
+					valorItemFaturamento, anoMesFaturamento, categoria,
+					localidade, new LancamentoTipo(idLancamentoTipo),
+					new LancamentoItem(idLancamentoItem), null,
+					seqTipoLancamento, seqItemTipoLancamento);
 
 			return resumoFaturamento;
 		} else {
 			return null;
 		}
 	}
-	
-	private ResumoFaturamento obterResumoValorCreditoARealizarPorOrigemCreditoDuplicidade(int anoMesFaturamento, Localidade localidade, 
-			Categoria categoria, Integer idCreditoOrigem, Integer idSituacaoAtualConta, Integer idSituacaoAnteriorConta,
-			Integer idLancamentoTipo, Integer idLancamentoItem, Short seqTipoLancamento, Short seqItemTipoLancamento) throws ErroRepositorioException {
-		
-		BigDecimal valorItemFaturamento = repositorioFaturamento.acumularValorCreditoARealizarPorOrigemCreditoDuplicidade(
-						anoMesFaturamento, localidade.getId(), categoria.getId(), idCreditoOrigem, idSituacaoAtualConta, idSituacaoAnteriorConta);
+
+	private ResumoFaturamento obterResumoValorCreditoARealizarPorOrigemCreditoDuplicidade(
+			int anoMesFaturamento, Localidade localidade, Categoria categoria,
+			Integer idCreditoOrigem, Integer idSituacaoAtualConta,
+			Integer idSituacaoAnteriorConta, Integer idLancamentoTipo,
+			Integer idLancamentoItem, Short seqTipoLancamento,
+			Short seqItemTipoLancamento) throws ErroRepositorioException {
+
+		BigDecimal valorItemFaturamento = repositorioFaturamento
+				.acumularValorCreditoARealizarPorOrigemCreditoDuplicidade(
+						anoMesFaturamento, localidade.getId(),
+						categoria.getId(), idCreditoOrigem,
+						idSituacaoAtualConta, idSituacaoAnteriorConta);
 
 		if (valorItemFaturamento.compareTo(BigDecimal.ZERO) != 0) {
-			ResumoFaturamento resumoFaturamento = buildResumoFaturamento(valorItemFaturamento, anoMesFaturamento, categoria, localidade, 
-					new LancamentoTipo(idLancamentoTipo), new LancamentoItem(idLancamentoItem), null, seqTipoLancamento, seqItemTipoLancamento);
+			ResumoFaturamento resumoFaturamento = buildResumoFaturamento(
+					valorItemFaturamento, anoMesFaturamento, categoria,
+					localidade, new LancamentoTipo(idLancamentoTipo),
+					new LancamentoItem(idLancamentoItem), null,
+					seqTipoLancamento, seqItemTipoLancamento);
 
 			return resumoFaturamento;
 		} else {
 			return null;
 		}
 	}
-	
-	private ResumoFaturamento obterResumoValorCreditoARealizarPorOrigemCredito(int anoMesFaturamento,
-			Localidade localidade, Categoria categoria, Integer idCreditoOrigem, Integer idSituacaoConta,
-			Integer idLancamentoTipo, Integer idLancamentoItem, Short seqTipoLancamento, Short seqItemTipoLancamento) throws ErroRepositorioException {
-		
-		BigDecimal valorItemFaturamento = repositorioFaturamento.acumularValorCreditoARealizarPorOrigemCredito(
-						anoMesFaturamento, localidade.getId(), categoria.getId(), idCreditoOrigem, idSituacaoConta);
+
+	private ResumoFaturamento obterResumoValorCreditoARealizarPorOrigemCredito(
+			int anoMesFaturamento, Localidade localidade, Categoria categoria,
+			Integer idCreditoOrigem, Integer idSituacaoConta,
+			Integer idLancamentoTipo, Integer idLancamentoItem,
+			Short seqTipoLancamento, Short seqItemTipoLancamento)
+			throws ErroRepositorioException {
+
+		BigDecimal valorItemFaturamento = repositorioFaturamento
+				.acumularValorCreditoARealizarPorOrigemCredito(
+						anoMesFaturamento, localidade.getId(),
+						categoria.getId(), idCreditoOrigem, idSituacaoConta);
 
 		if (valorItemFaturamento.compareTo(BigDecimal.ZERO) != 0) {
-			ResumoFaturamento resumoFaturamento = buildResumoFaturamento(valorItemFaturamento, anoMesFaturamento, categoria, localidade, 
-					new LancamentoTipo(idLancamentoTipo), new LancamentoItem(idLancamentoItem), null, seqTipoLancamento, seqItemTipoLancamento);
-					
+			ResumoFaturamento resumoFaturamento = buildResumoFaturamento(
+					valorItemFaturamento, anoMesFaturamento, categoria,
+					localidade, new LancamentoTipo(idLancamentoTipo),
+					new LancamentoItem(idLancamentoItem), null,
+					seqTipoLancamento, seqItemTipoLancamento);
+
 			return resumoFaturamento;
 		} else {
 			return null;
 		}
 	}
-	
-	private ResumoFaturamento buildResumoFaturamento(BigDecimal valorItemFaturamento, int anoMesFaturamento, Categoria categoria, Localidade localidade, 
-			LancamentoTipo lancamentoTipo, LancamentoItem lancamentoItem, LancamentoItemContabil lancamentoItemContabil, Short seqTipoLancamento,
-			Short seqItemTipoLancamento) {
-		
+
+	private ResumoFaturamento buildResumoFaturamento(
+			BigDecimal valorItemFaturamento, int anoMesFaturamento,
+			Categoria categoria, Localidade localidade,
+			LancamentoTipo lancamentoTipo, LancamentoItem lancamentoItem,
+			LancamentoItemContabil lancamentoItemContabil,
+			Short seqTipoLancamento, Short seqItemTipoLancamento) {
+
 		ResumoFaturamento resumoFaturamento = new ResumoFaturamento();
 		resumoFaturamento.setValorItemFaturamento(valorItemFaturamento);
 		resumoFaturamento.setAnoMesReferencia(anoMesFaturamento);
@@ -23339,22 +24210,25 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		resumoFaturamento.setSequenciaTipoLancamento(seqTipoLancamento);
 		resumoFaturamento.setSequenciaItemTipoLancamento(seqItemTipoLancamento);
 		resumoFaturamento.setUltimaAlteracao(new Date());
-		
+
 		if (localidade != null) {
 			resumoFaturamento.setLocalidade(localidade);
 			resumoFaturamento.setUnidadeNegocio(localidade.getUnidadeNegocio());
-			resumoFaturamento.setGerenciaRegional(localidade.getGerenciaRegional());
+			resumoFaturamento.setGerenciaRegional(localidade
+					.getGerenciaRegional());
 		}
 
 		return resumoFaturamento;
 	}
 
-	
-	private ResumoFaturamento acumularValorResumoFaturamento(ResumoFaturamento resumoFaturamento, BigDecimal valor) {
-		resumoFaturamento.setValorItemFaturamento(resumoFaturamento.getValorItemFaturamento().add(valor));
+	private ResumoFaturamento acumularValorResumoFaturamento(
+			ResumoFaturamento resumoFaturamento, BigDecimal valor) {
+		resumoFaturamento.setValorItemFaturamento(resumoFaturamento
+				.getValorItemFaturamento().add(valor));
 		return resumoFaturamento;
 
 	}
+
 	private Integer[] obterIdsCreditosOrigemParaEncerramentoFaturamentoMensal() {
 		Integer[] idsCreditosOrigem;
 		idsCreditosOrigem = new Integer[4];
@@ -23365,43 +24239,53 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		return idsCreditosOrigem;
 	}
 
-	private Map<Integer, BigDecimal> acumularValorPorCategoriaReceitaBruta(Map<Integer, BigDecimal> mapValorPorCategoriaReceitaBruta, Integer idCategoria, BigDecimal valorGuiaDevolucao) {
+	private Map<Integer, BigDecimal> acumularValorPorCategoriaReceitaBruta(
+			Map<Integer, BigDecimal> mapValorPorCategoriaReceitaBruta,
+			Integer idCategoria, BigDecimal valorGuiaDevolucao) {
 		if (mapValorPorCategoriaReceitaBruta.containsKey(idCategoria)) {
-			mapValorPorCategoriaReceitaBruta.put(
-					idCategoria,
-					((BigDecimal) mapValorPorCategoriaReceitaBruta.get(idCategoria)).add(valorGuiaDevolucao));
+			mapValorPorCategoriaReceitaBruta.put(idCategoria,
+					((BigDecimal) mapValorPorCategoriaReceitaBruta
+							.get(idCategoria)).add(valorGuiaDevolucao));
 		} else {
-			mapValorPorCategoriaReceitaBruta.put(idCategoria, valorGuiaDevolucao);
+			mapValorPorCategoriaReceitaBruta.put(idCategoria,
+					valorGuiaDevolucao);
 		}
-		
+
 		return mapValorPorCategoriaReceitaBruta;
 	}
 
-	private Map<Integer, BigDecimal> obterMapValorGuiaDevolucaoPorCategoria(Collection<Object[]> colecaoDadosGuiaDevolucao) throws ControladorException {
-		
+	private Map<Integer, BigDecimal> obterMapValorGuiaDevolucaoPorCategoria(
+			Collection<Object[]> colecaoDadosGuiaDevolucao)
+			throws ControladorException {
+
 		Map<Integer, BigDecimal> mapValorGuiaDevolucao = new HashMap();
-		
+
 		for (Object[] dadosGuiaDevolucao : colecaoDadosGuiaDevolucao) {
 			Integer idImovel = (Integer) dadosGuiaDevolucao[0];
 			BigDecimal valorGuiaDevolucao = (BigDecimal) dadosGuiaDevolucao[1];
 
-			Categoria principalCategoriaImovel = this.getControladorImovel().obterPrincipalCategoriaImovel(idImovel);
+			Categoria principalCategoriaImovel = this.getControladorImovel()
+					.obterPrincipalCategoriaImovel(idImovel);
 
 			Integer idCategoria = principalCategoriaImovel.getId();
 			acumularValorPorCategoriaReceitaBruta(mapValorGuiaDevolucao,
 					idCategoria, valorGuiaDevolucao);
 		}
-		
+
 		return mapValorGuiaDevolucao;
 	}
 
 	private void validarGruposFaturadosParaEncerrarFaturamentoMensal(
 			int anoMesFaturamentoSistemaParametro)
 			throws ErroRepositorioException, ControladorException {
-		Collection<FaturamentoGrupo> colecaoFaturamentoGrupoNaoFaturados = this.repositorioFaturamento.pesquisarFaturamentoGrupoNaoFaturados(anoMesFaturamentoSistemaParametro);
+		Collection<FaturamentoGrupo> colecaoFaturamentoGrupoNaoFaturados = this.repositorioFaturamento
+				.pesquisarFaturamentoGrupoNaoFaturados(anoMesFaturamentoSistemaParametro);
 
-		if (colecaoFaturamentoGrupoNaoFaturados != null && !colecaoFaturamentoGrupoNaoFaturados.isEmpty()) {
-			throw new ControladorException("atencao.existemGruposFaturamentoNaoFaturados", null, "grupo(s)");
+		if (colecaoFaturamentoGrupoNaoFaturados != null
+				&& !colecaoFaturamentoGrupoNaoFaturados.isEmpty()) {
+			throw new ControladorException(
+					"atencao.existemGruposFaturamentoNaoFaturados", null,
+					"grupo(s)");
 		}
 	}
 
@@ -23607,21 +24491,30 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 					if (dadoReceitaLiquidaIndireta != null) {
 
-						LancamentoTipo lancamentoTipoAgua = new LancamentoTipo(LancamentoTipo.RECEITA_LIQUIDA);
-						LancamentoItem lancamentoItemAgua = new LancamentoItem(LancamentoItem.INDIRETA);
+						LancamentoTipo lancamentoTipoAgua = new LancamentoTipo(
+								LancamentoTipo.RECEITA_LIQUIDA);
+						LancamentoItem lancamentoItemAgua = new LancamentoItem(
+								LancamentoItem.INDIRETA);
 
 						ResumoFaturamento resumoFaturamentoAgua = new ResumoFaturamento();
-						resumoFaturamentoAgua.setValorItemFaturamento(dadoReceitaLiquidaIndireta);
-						resumoFaturamentoAgua.setAnoMesReferencia(anoMesFaturamentoSistemaParametro);
+						resumoFaturamentoAgua
+								.setValorItemFaturamento(dadoReceitaLiquidaIndireta);
+						resumoFaturamentoAgua
+								.setAnoMesReferencia(anoMesFaturamentoSistemaParametro);
 						resumoFaturamentoAgua.setCategoria(categoria);
 						resumoFaturamentoAgua.setLocalidade(localidade);
 						resumoFaturamentoAgua.setUnidadeNegocio(unidadeNegocio);
-						resumoFaturamentoAgua.setGerenciaRegional(gerenciaRegional);
-						resumoFaturamentoAgua.setLancamentoTipo(lancamentoTipoAgua);
-						resumoFaturamentoAgua.setLancamentoItem(lancamentoItemAgua);
+						resumoFaturamentoAgua
+								.setGerenciaRegional(gerenciaRegional);
+						resumoFaturamentoAgua
+								.setLancamentoTipo(lancamentoTipoAgua);
+						resumoFaturamentoAgua
+								.setLancamentoItem(lancamentoItemAgua);
 						resumoFaturamentoAgua.setLancamentoItemContabil(null);
-						resumoFaturamentoAgua.setSequenciaTipoLancamento(new Short("1130"));
-						resumoFaturamentoAgua.setSequenciaItemTipoLancamento(new Short("0"));
+						resumoFaturamentoAgua
+								.setSequenciaTipoLancamento(new Short("1130"));
+						resumoFaturamentoAgua
+								.setSequenciaItemTipoLancamento(new Short("0"));
 						resumoFaturamentoAgua.setUltimaAlteracao(new Date());
 
 						colecaoResumoFaturamento.add(resumoFaturamentoAgua);
@@ -24076,7 +24969,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	public Collection obterDebitoACobrarImovel(Integer imovelID,
 			Integer debitoCreditoSituacaoAtualID, int anoMesFaturamento)
 			throws ControladorException {
-		
+
 		SistemaParametro sistemaParametro = getControladorUtil()
 				.pesquisarParametrosDoSistema();
 
@@ -24222,16 +25115,19 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				 * [UC0113] - Faturar Grupo de Faturamento [FS0005] - Verificar
 				 * Débitos a cobrar de parcelamento
 				 */
-				/**TODO:COSANPA
-				 * @autor Adriana Muniz	
+				/**
+				 * TODO:COSANPA
+				 * 
+				 * @autor Adriana Muniz
 				 * @date 25/09/2013
 				 * 
-				 * Troca da referência de faturamento do grupo para a referencia de faturamento do sistema de parametro.
-				 * Mantis 875
+				 *       Troca da referência de faturamento do grupo para a
+				 *       referencia de faturamento do sistema de parametro.
+				 *       Mantis 875
 				 * */
-				if ( !(arrayDebitosACobrar[16] != null  && debitoACobrar.getNumeroPrestacaoCobradas() == 0
-						&& (arrayDebitosACobrar[15] != null && ((Integer) arrayDebitosACobrar[15]).intValue() >= sistemaParametro.getAnoMesFaturamento()))
-						) {
+				if (!(arrayDebitosACobrar[16] != null
+						&& debitoACobrar.getNumeroPrestacaoCobradas() == 0 && (arrayDebitosACobrar[15] != null && ((Integer) arrayDebitosACobrar[15])
+						.intValue() >= sistemaParametro.getAnoMesFaturamento()))) {
 					/*
 					 * [UC0113] - Faturar Grupo de Faturamento [FS0007] -
 					 * Verificar pagamentos para débitos a cobrar
@@ -24320,26 +25216,29 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	public Collection obterCreditoARealizarImovel(Integer imovelID,
 			Integer debitoCreditoSituacaoAtualID, int anoMesFaturamento)
 			throws ControladorException {
-		
+
 		SistemaParametro sistemaParametro = getControladorUtil()
 				.pesquisarParametrosDoSistema();
 
 		// lista de credito a realizar
 		Collection creditosARealizar = null;
 		Collection colecaoCreditosARealizar = null;
-		
-		/**TODO:COSANPA
-		 * @autor Adriana Muniz	
+
+		/**
+		 * TODO:COSANPA
+		 * 
+		 * @autor Adriana Muniz
 		 * @date 25/09/2013
 		 * 
-		 * Troca da referência de faturamento do grupo para a referencia de faturamento do sistema de parametro.
-		 * Mantis 875
+		 *       Troca da referência de faturamento do grupo para a referencia
+		 *       de faturamento do sistema de parametro. Mantis 875
 		 * */
 		// Pesquisa créditos a cobrar
 		try {
 			colecaoCreditosARealizar = repositorioFaturamento
 					.pesquisarCreditoARealizar(imovelID,
-							debitoCreditoSituacaoAtualID, sistemaParametro.getAnoMesFaturamento());
+							debitoCreditoSituacaoAtualID,
+							sistemaParametro.getAnoMesFaturamento());
 
 		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
@@ -24590,21 +25489,22 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		Collection imoveis;
 
 		try {
-		/*
-		 * Caso a rota não esteja com o indicador de rota alternativa ativo; a
-		 * pesquisa dos imóveis será feita a partir de sua quadra.
-		 */
-			if (!rota.getIndicadorRotaAlternativa().equals(ConstantesSistema.SIM)) {
+			/*
+			 * Caso a rota não esteja com o indicador de rota alternativa ativo;
+			 * a pesquisa dos imóveis será feita a partir de sua quadra.
+			 */
+			if (!rota.getIndicadorRotaAlternativa().equals(
+					ConstantesSistema.SIM)) {
 
 				imoveis = repositorioFaturamento.pesquisarImovelFaturarGrupo(
 						rota.getId(), numeroIndice, quantidadeRegistros,
 						preFaturar, resumo);
 
 			}
-		/*
-		 * Caso contrário; a pesquisa dos imóveis será feita a partir da rota
-		 * alternativa que estará associada ao mesmo.
-		 */
+			/*
+			 * Caso contrário; a pesquisa dos imóveis será feita a partir da
+			 * rota alternativa que estará associada ao mesmo.
+			 */
 			else {
 
 				imoveis = repositorioFaturamento
@@ -24612,8 +25512,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								rota.getId(), numeroIndice,
 								quantidadeRegistros, preFaturar, resumo);
 
-			} 
-		}catch (ErroRepositorioException ex) {
+			}
+		} catch (ErroRepositorioException ex) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
@@ -24867,34 +25767,34 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		// Id imóvel condominio
 		if (arrayImovel[31] != null) {
 			try {
-	
-				Imovel imovelCondominio = getControladorImovel().pesquisarImovel((Integer) arrayImovel[31]);
+
+				Imovel imovelCondominio = getControladorImovel()
+						.pesquisarImovel((Integer) arrayImovel[31]);
 
 				imovel.setImovelCondominio(imovelCondominio);
-				
+
 			} catch (ControladorException e) {
 				e.printStackTrace();
 			}
 		}
-		
+
 		// Quantidade de economias
 		if (arrayImovel[32] != null) {
 			imovel.setQuantidadeEconomias((Short) arrayImovel[32]);
 		}
-		
-		/**TODO:COSANPA
-		 * data:08/08/2012
-		 * Adicionando parametros do array ao objeto imovel
-		 * Inclusão para atender as alterações no calculo do condominio
+
+		/**
+		 * TODO:COSANPA data:08/08/2012 Adicionando parametros do array ao
+		 * objeto imovel Inclusão para atender as alterações no calculo do
+		 * condominio
 		 * */
-		if(arrayImovel[33] != null){
+		if (arrayImovel[33] != null) {
 			imovel.setIndicadorImovelCondominio((Short) arrayImovel[33]);
 		}
-		
-		
+
 		return imovel;
 	}
-	
+
 	public void removerFaturamentoCronograma(String[] ids,
 			String pacoteNomeObjeto) throws ControladorException {
 		// se for selecionado alguma unidade executora pelo usuário
@@ -29848,8 +30748,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 												// recuperados
 												// anteriormente
 												obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-														emitirContaHelper,
-														1, tipoLigacao,
+														emitirContaHelper, 1,
+														tipoLigacao,
 														tipoMedicao);
 												contaTxt.append(obterDadosConsumoMedicaoAnterior);
 												// chama o [SB0004]
@@ -29873,8 +30773,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 												// recuperados
 												// anteriormente
 												obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-														emitirContaHelper,
-														4, tipoLigacao,
+														emitirContaHelper, 4,
+														tipoLigacao,
 														tipoMedicao);
 												contaTxt.append(obterDadosConsumoMedicaoAnterior);
 												// completa com espaços
@@ -29912,8 +30812,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 												// recuperados
 												// anteriormente
 												obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-														emitirContaHelper,
-														2, tipoLigacao,
+														emitirContaHelper, 2,
+														tipoLigacao,
 														tipoMedicao);
 												contaTxt.append(obterDadosConsumoMedicaoAnterior);
 												// chama o [SB0004]
@@ -29937,8 +30837,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 												// recuperados
 												// anteriormente
 												obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-														emitirContaHelper,
-														5, tipoLigacao,
+														emitirContaHelper, 5,
+														tipoLigacao,
 														tipoMedicao);
 												contaTxt.append(obterDadosConsumoMedicaoAnterior);
 												// Inicio Chamar
@@ -30127,8 +31027,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 												// recuperados
 												// anteriormente
 												obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-														emitirContaHelper,
-														3, tipoLigacao,
+														emitirContaHelper, 3,
+														tipoLigacao,
 														tipoMedicao);
 												contaTxt.append(obterDadosConsumoMedicaoAnterior);
 												// chama o [SB0004]
@@ -30152,8 +31052,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 												// recuperados
 												// anteriormente
 												obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-														emitirContaHelper,
-														6, tipoLigacao,
+														emitirContaHelper, 6,
+														tipoLigacao,
 														tipoMedicao);
 												contaTxt.append(obterDadosConsumoMedicaoAnterior);
 												// completa com 4
@@ -32464,13 +33364,16 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @param colecaoConta
 	 * @throws ControladorException
 	 */
-	public StringBuilder obterDadosConsumoAnterior(EmitirContaHelper emitirConta, int qtdMeses, Integer tipoLigacao, Integer tipoMedicao)
-			throws ControladorException {
+	public StringBuilder obterDadosConsumoAnterior(
+			EmitirContaHelper emitirConta, int qtdMeses, Integer tipoLigacao,
+			Integer tipoMedicao) throws ControladorException {
 
 		StringBuilder dadosConsumoAnterior = new StringBuilder();
 
-		int anoMesSubtraido = Util.subtrairMesDoAnoMes(emitirConta.getAmReferencia(), qtdMeses);
-		String mesAnoFormatado = Util.formatarAnoMesParaMesAno(anoMesSubtraido)	+ " -";
+		int anoMesSubtraido = Util.subtrairMesDoAnoMes(
+				emitirConta.getAmReferencia(), qtdMeses);
+		String mesAnoFormatado = Util.formatarAnoMesParaMesAno(anoMesSubtraido)
+				+ " -";
 
 		// adiciona o mes/ano formatado com o traço
 		dadosConsumoAnterior.append(Util.completaString(mesAnoFormatado, 9));
@@ -32479,8 +33382,9 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			Object[] parmsConsumoHistorico = null;
 			Integer idLeituraAnormalidade = null;
 			parmsConsumoHistorico = getControladorMicromedicao()
-					.obterConsumoAnteriorAnormalidadeDoImovel(emitirConta.getIdImovel(),
-							anoMesSubtraido, tipoLigacao);
+					.obterConsumoAnteriorAnormalidadeDoImovel(
+							emitirConta.getIdImovel(), anoMesSubtraido,
+							tipoLigacao);
 			Integer numeroConsumoFaturadoMes = null;
 			String descricaoAbreviadaAnormalidadeAnterior = null;
 			if (parmsConsumoHistorico != null) {
@@ -32496,14 +33400,15 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				// caso o tipo de medição seja agua
 				if (tipoLigacao.equals(MedicaoTipo.LIGACAO_AGUA)) {
 					idLeituraAnormalidade = repositorioMicromedicao
-							.pesquisarIdLeituraAnormalidadeTipoAgua(emitirConta.getIdImovel(),
-									anoMesSubtraido);
+							.pesquisarIdLeituraAnormalidadeTipoAgua(
+									emitirConta.getIdImovel(), anoMesSubtraido);
 				} else {
 					// senão caso o tipo de medição seja poco
 					if (tipoMedicao.equals(MedicaoTipo.POCO)) {
 						idLeituraAnormalidade = repositorioMicromedicao
 								.pesquisarIdLeituraAnormalidadeTipoEsgoto(
-										emitirConta.getIdImovel(), anoMesSubtraido);
+										emitirConta.getIdImovel(),
+										anoMesSubtraido);
 					}
 				}
 			} catch (ErroRepositorioException e) {
@@ -36724,7 +37629,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 					conta.setUltimaAlteracao((Date) arrayConta[51]);
 				}
-				
+
 				contas.add(conta);
 			}
 		}
@@ -36899,8 +37804,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 1
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper, 1, tipoLigacao,
-					tipoMedicao);
+					emitirContaHelper, 1, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes1(obterDadosConsumoMedicaoAnterior
 							.toString());
@@ -36908,8 +37812,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 4
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper, 4, tipoLigacao,
-					tipoMedicao);
+					emitirContaHelper, 4, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes4(obterDadosConsumoMedicaoAnterior
 							.toString());
@@ -36920,8 +37823,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 2
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper, 2, tipoLigacao,
-					tipoMedicao);
+					emitirContaHelper, 2, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes2(obterDadosConsumoMedicaoAnterior
 							.toString());
@@ -36929,8 +37831,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 5
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper, 5, tipoLigacao,
-					tipoMedicao);
+					emitirContaHelper, 5, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes5(obterDadosConsumoMedicaoAnterior
 							.toString());
@@ -37022,8 +37923,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 3
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper, 3, tipoLigacao,
-					tipoMedicao);
+					emitirContaHelper, 3, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes3(obterDadosConsumoMedicaoAnterior
 							.toString());
@@ -37031,8 +37931,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 6
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper, 6, tipoLigacao,
-					tipoMedicao);
+					emitirContaHelper, 6, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes6(obterDadosConsumoMedicaoAnterior
 							.toString());
@@ -37451,13 +38350,16 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 	}
 
-	public Short obterQuantidadeEconomiasConta(Integer idConta, boolean contaHistorico) throws ControladorException {
+	public Short obterQuantidadeEconomiasConta(Integer idConta,
+			boolean contaHistorico) throws ControladorException {
 
 		try {
 			if (!contaHistorico) {
-				return repositorioFaturamento.obterQuantidadeEconomiasConta(idConta);
+				return repositorioFaturamento
+						.obterQuantidadeEconomiasConta(idConta);
 			} else {
-				return repositorioFaturamento.obterQuantidadeEconomiasContaHistorico(idConta);
+				return repositorioFaturamento
+						.obterQuantidadeEconomiasContaHistorico(idConta);
 			}
 
 		} catch (ErroRepositorioException e) {
@@ -37781,8 +38683,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		// e medição
 		// recuperados anteriormente
 		obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-				emitirContaHelper, 6, tipoLigacao,
-				tipoMedicao);
+				emitirContaHelper, 6, tipoLigacao, tipoMedicao);
 		linhasArquivoTxtCartas.append(obterDadosConsumoMedicaoAnterior);
 		// chama o [SB0004] -Obter Dados do Consumo e
 		// Medição
@@ -37793,8 +38694,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		// e medição
 		// recuperados anteriormente
 		obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-				emitirContaHelper, 4, tipoLigacao,
-				tipoMedicao);
+				emitirContaHelper, 4, tipoLigacao, tipoMedicao);
 		linhasArquivoTxtCartas.append(obterDadosConsumoMedicaoAnterior);
 		// chama o [SB0004] -Obter Dados do Consumo e
 		// Medição
@@ -37805,8 +38705,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		// e medição
 		// recuperados anteriormente
 		obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-				emitirContaHelper, 2, tipoLigacao,
-				tipoMedicao);
+				emitirContaHelper, 2, tipoLigacao, tipoMedicao);
 		linhasArquivoTxtCartas.append(obterDadosConsumoMedicaoAnterior);
 		linhasArquivoTxtCartas.append(System.getProperty("line.separator"));
 
@@ -37823,8 +38722,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		// e medição
 		// recuperados anteriormente
 		obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-				emitirContaHelper, 5, tipoLigacao,
-				tipoMedicao);
+				emitirContaHelper, 5, tipoLigacao, tipoMedicao);
 		linhasArquivoTxtCartas.append(obterDadosConsumoMedicaoAnterior);
 		// chama o [SB0004] -Obter Dados do Consumo e
 		// Medição
@@ -37835,8 +38733,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		// e medição
 		// recuperados anteriormente
 		obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-				emitirContaHelper, 3, tipoLigacao,
-				tipoMedicao);
+				emitirContaHelper, 3, tipoLigacao, tipoMedicao);
 		linhasArquivoTxtCartas.append(obterDadosConsumoMedicaoAnterior);
 		// chama o [SB0004] -Obter Dados do Consumo e
 		// Medição
@@ -37847,8 +38744,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		// e medição
 		// recuperados anteriormente
 		obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-				emitirContaHelper, 1, tipoLigacao,
-				tipoMedicao);
+				emitirContaHelper, 1, tipoLigacao, tipoMedicao);
 		linhasArquivoTxtCartas.append(obterDadosConsumoMedicaoAnterior);
 		linhasArquivoTxtCartas.append(System.getProperty("line.separator"));
 
@@ -38428,17 +39324,18 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					contaHistoricoTemp.setDataEnvioEmailConta(conta
 							.getDataEnvioEmailConta());
 
-					/**TODO: COSANPA
-					 * Mantis 648 - Enviando para historico os dados referentes a rateio
-					 * de água e esgoto
+					/**
+					 * TODO: COSANPA Mantis 648 - Enviando para historico os
+					 * dados referentes a rateio de água e esgoto
 					 * 
 					 * @author: Wellington Rocha
-					 * @date 09/11/2012*/
+					 * @date 09/11/2012
+					 */
 					contaHistoricoTemp.setValorRateioAgua(conta
 							.getValorRateioAgua());
 					contaHistoricoTemp.setValorRateioEsgoto(conta
 							.getValorRateioEsgoto());
-					
+
 					// System.out.println("TRANSFERINDO CONTAS PARA O
 					// HISTORICO");
 					getControladorUtil().inserir(contaHistoricoTemp);
@@ -39376,10 +40273,10 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		// caso o valor da agua da conta seja maior que zero
 		if (emitirContaHelper.getValorAgua() != null
 				&& (emitirContaHelper.getValorAgua().compareTo(
-						new BigDecimal("0.00")) == 1
-						&& ( emitirContaHelper.getValorRateioAgua() == null
-								|| (emitirContaHelper.getValorAgua().compareTo(
-								emitirContaHelper.getValorRateioAgua()) !=0)))) {
+						new BigDecimal("0.00")) == 1 && (emitirContaHelper
+						.getValorRateioAgua() == null || (emitirContaHelper
+						.getValorAgua().compareTo(
+								emitirContaHelper.getValorRateioAgua()) != 0)))) {
 
 			if (!contaHistorico) {
 				// [SB0011] - Gerar Linhas da Tarifa de Água
@@ -39409,11 +40306,10 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		}
 
 		// // caso o valor de debitos cobrados da conta seja maior que zero
-		if ( (emitirContaHelper.getDebitos() != null
-				&& emitirContaHelper.getDebitos().compareTo(
-						new BigDecimal("0.00")) == 1)
-						|| (emitirContaHelper.getValorRateioAgua() != null 
-								|| emitirContaHelper.getValorRateioEsgoto() != null)) {
+		if ((emitirContaHelper.getDebitos() != null && emitirContaHelper
+				.getDebitos().compareTo(new BigDecimal("0.00")) == 1)
+				|| (emitirContaHelper.getValorRateioAgua() != null || emitirContaHelper
+						.getValorRateioEsgoto() != null)) {
 
 			// [SB0013] - Gerar Linhas de Débitos Cobrados
 			colecaoLinhasDescricaoServicosTarifasTotal = gerarLinhasDebitoCobradosRelatorio(
@@ -39858,15 +40754,16 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 									//
 									// valor4 = valorAguaFaixa;
 
-								contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-								contaLinhasDescricaoServicosTarifasTotalHelper
-										.setDescricaoServicosTarifas(descricaoServicosTarifas4);
-								contaLinhasDescricaoServicosTarifasTotalHelper
-										.setConsumoFaixa(consumoFaixa4.trim());
-								contaLinhasDescricaoServicosTarifasTotalHelper
-										.setValor(valor4);
-								colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-										.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+									contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
+									contaLinhasDescricaoServicosTarifasTotalHelper
+											.setDescricaoServicosTarifas(descricaoServicosTarifas4);
+									contaLinhasDescricaoServicosTarifasTotalHelper
+											.setConsumoFaixa(consumoFaixa4
+													.trim());
+									contaLinhasDescricaoServicosTarifasTotalHelper
+											.setValor(valor4);
+									colecaoContaLinhasDescricaoServicosTarifasTotalHelper
+											.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 								}
 							}
 						}
@@ -39878,17 +40775,22 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						consumoFaixa3 = Util.completaStringComEspacoAEsquerda(
 								"" + contaCategoria.getConsumoAgua(), 6)
 								+ " M3";
-						/**TODO: COSANPA
-						 * Mantis 686 - Segunda via de conta com rateio está somando o valor de água da categoria com
+						/**
+						 * TODO: COSANPA Mantis 686 - Segunda via de conta com
+						 * rateio está somando o valor de água da categoria com
 						 * o valor do rateio.
 						 * 
 						 * @author Wellington Rocha
-						 * @date 21/12/2012*/
-						if(emitirContaHelper.getValorRateioAgua()!= null){
+						 * @date 21/12/2012
+						 */
+						if (emitirContaHelper.getValorRateioAgua() != null) {
 							valor3 = Util.formatarMoedaReal(contaCategoria
-									.getValorAgua().subtract(emitirContaHelper.getValorRateioAgua()));
-						}else{
-							valor3 = Util.formatarMoedaReal(contaCategoria.getValorAgua());
+									.getValorAgua().subtract(
+											emitirContaHelper
+													.getValorRateioAgua()));
+						} else {
+							valor3 = Util.formatarMoedaReal(contaCategoria
+									.getValorAgua());
 						}
 
 						contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
@@ -39962,25 +40864,25 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					.getValorEsgoto());
 			valor1 = valorEsgoto;
 		}
-		
+
 		/**
-		 * TODO : COSANPA
-		 * Pamela Gatinho - 02/08/2012
+		 * TODO : COSANPA Pamela Gatinho - 02/08/2012
 		 * 
-		 * Alteração para exibir somente o valor do esgoto, sem o ralor do rateio,
-		 * que será mostrado separadamente em outra linha do documento.
+		 * Alteração para exibir somente o valor do esgoto, sem o ralor do
+		 * rateio, que será mostrado separadamente em outra linha do documento.
 		 */
 		BigDecimal valorEsgotoSemRateio = new BigDecimal("0.00");
 		if (emitirContaHelper.getValorRateioEsgoto() != null) {
-			valorEsgotoSemRateio = emitirContaHelper.getValorEsgoto().subtract(emitirContaHelper.getValorRateioEsgoto());
+			valorEsgotoSemRateio = emitirContaHelper.getValorEsgoto().subtract(
+					emitirContaHelper.getValorRateioEsgoto());
 		} else {
 			valorEsgotoSemRateio = emitirContaHelper.getValorEsgoto();
 		}
-		
+
 		// Percentual esgoto
 		String valorEsgotoFinal = Util.formatarMoedaReal(valorEsgotoSemRateio);
 		valor1 = valorEsgotoFinal;
-		
+
 		contaLinhasDescricaoServicosTarifasTotalHelper
 				.setDescricaoServicosTarifas(descricaoServicosTarifas1);
 		contaLinhasDescricaoServicosTarifasTotalHelper
@@ -40728,68 +41630,88 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		}
 
 		/**
-		 * TODO : COSANPA
-		 * Pamela Gatinho - 01/06/2012
-		 * Adicionando o calculo do rateio
+		 * TODO : COSANPA Pamela Gatinho - 01/06/2012 Adicionando o calculo do
+		 * rateio
 		 */
-		Imovel imovel = this.getControladorImovel().pesquisarImovel(emitirContaHelper.getIdImovel());
+		Imovel imovel = this.getControladorImovel().pesquisarImovel(
+				emitirContaHelper.getIdImovel());
 
 		if (imovel.isImovelCondominio()) {
 
 			try {
-				
-				FaturamentoGrupo faturamentoGrupo = getControladorImovel().pesquisarGrupoImovel(imovel.getId());
 
-				faturamentoGrupo.setAnoMesReferencia(emitirContaHelper.getAmReferencia());
-				BigDecimal[] valoresRateioAguaEsgotoImovel = this.calcularValorRateioImovel(imovel, faturamentoGrupo);
+				FaturamentoGrupo faturamentoGrupo = getControladorImovel()
+						.pesquisarGrupoImovel(imovel.getId());
+
+				faturamentoGrupo.setAnoMesReferencia(emitirContaHelper
+						.getAmReferencia());
+				BigDecimal[] valoresRateioAguaEsgotoImovel = this
+						.calcularValorRateioImovel(imovel, faturamentoGrupo);
 				// RATEIO DE ÁGUA
-				/*BigDecimal valorRateioAgua = this.calcularValorRateioImovel(imovel, 
-						emitirContaHelper.getAnoMesFaturamentoGrupo(), LigacaoTipo.LIGACAO_AGUA);*/
-				
+				/*
+				 * BigDecimal valorRateioAgua =
+				 * this.calcularValorRateioImovel(imovel,
+				 * emitirContaHelper.getAnoMesFaturamentoGrupo(),
+				 * LigacaoTipo.LIGACAO_AGUA);
+				 */
+
 				String descricaoServicosTarifas1 = "";
-				
+
 				if (emitirContaHelper.getValorRateioAgua() != null) {
 					// -- Descerição do serviço --//
 					descricaoServicosTarifas1 = "RATEIO DE CONSUMO DE ÁGUA";
-					
+
 					contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-					contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas1);
-					contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa("");
-					//contaLinhasDescricaoServicosTarifasTotalHelper.setValor(Util.formatarMoedaReal(valoresRateioAguaEsgotoImovel[0]));
-					contaLinhasDescricaoServicosTarifasTotalHelper.setValor(Util.formatarMoedaReal(emitirContaHelper.getValorRateioAgua()));
-					
-					colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+					contaLinhasDescricaoServicosTarifasTotalHelper
+							.setDescricaoServicosTarifas(descricaoServicosTarifas1);
+					contaLinhasDescricaoServicosTarifasTotalHelper
+							.setConsumoFaixa("");
+					// contaLinhasDescricaoServicosTarifasTotalHelper.setValor(Util.formatarMoedaReal(valoresRateioAguaEsgotoImovel[0]));
+					contaLinhasDescricaoServicosTarifasTotalHelper
+							.setValor(Util.formatarMoedaReal(emitirContaHelper
+									.getValorRateioAgua()));
+
+					colecaoContaLinhasDescricaoServicosTarifasTotalHelper
+							.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 				}
-			
-				
+
 				// RATEIO DE ESGOTO
-				/*BigDecimal valorRateioEsgoto = new BigDecimal(0.00);
-				
-				if (imovel.getImovelCondominio().getLigacaoEsgotoSituacao().getIndicadorFaturamentoSituacao().equals(LigacaoEsgotoSituacao.FATURAMENTO_ATIVO)) {
-					valorRateioEsgoto = this.calcularValorRateioImovel(imovel, 
-							emitirContaHelper.getAnoMesFaturamentoGrupo(), LigacaoTipo.LIGACAO_ESGOTO);
-				}*/
-			
+				/*
+				 * BigDecimal valorRateioEsgoto = new BigDecimal(0.00);
+				 * 
+				 * if (imovel.getImovelCondominio().getLigacaoEsgotoSituacao().
+				 * getIndicadorFaturamentoSituacao
+				 * ().equals(LigacaoEsgotoSituacao.FATURAMENTO_ATIVO)) {
+				 * valorRateioEsgoto = this.calcularValorRateioImovel(imovel,
+				 * emitirContaHelper.getAnoMesFaturamentoGrupo(),
+				 * LigacaoTipo.LIGACAO_ESGOTO); }
+				 */
+
 				String descricaoServicosTarifas2 = "";
-				
+
 				if (emitirContaHelper.getValorRateioEsgoto() != null) {
 					// -- Descerição do serviço --//
 					descricaoServicosTarifas2 = "RATEIO DE CONSUMO DE ESGOTO";
-					
+
 					contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-					contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas2);
-					contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa("");
-					//contaLinhasDescricaoServicosTarifasTotalHelper.setValor(Util.formatarMoedaReal(valoresRateioAguaEsgotoImovel[1]));
-					contaLinhasDescricaoServicosTarifasTotalHelper.setValor(Util.formatarMoedaReal(emitirContaHelper.getValorRateioEsgoto()));
-					
-					colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+					contaLinhasDescricaoServicosTarifasTotalHelper
+							.setDescricaoServicosTarifas(descricaoServicosTarifas2);
+					contaLinhasDescricaoServicosTarifasTotalHelper
+							.setConsumoFaixa("");
+					// contaLinhasDescricaoServicosTarifasTotalHelper.setValor(Util.formatarMoedaReal(valoresRateioAguaEsgotoImovel[1]));
+					contaLinhasDescricaoServicosTarifasTotalHelper
+							.setValor(Util.formatarMoedaReal(emitirContaHelper
+									.getValorRateioEsgoto()));
+
+					colecaoContaLinhasDescricaoServicosTarifasTotalHelper
+							.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 				}
 			} catch (ErroRepositorioException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
-		
+
 		return colecaoContaLinhasDescricaoServicosTarifasTotalHelper;
 	}
 
@@ -41679,18 +42601,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			ApagarDadosFaturamentoHelper helper, int atividade)
 			throws ControladorException {
 
-		/*
-		 * As contas só serão removidas caso a atividade informada seja
-		 * FATURAR_GRUPO Desenvolvedor: Raphael Rossiter em 13/05/2008 Analista:
-		 * Aryed Lins
-		 */
 		if (atividade == FaturamentoAtividade.FATURAR_GRUPO.intValue()) {
 
-			/*
-			 * Retorna a quantidade de contas existentes para uma rota em um
-			 * determinado anoMês de referência e de acordo com a situação atual
-			 * recebida.
-			 */
 			Integer quantidadeContas = null;
 			try {
 
@@ -41712,11 +42624,9 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				 * atual menos 3 dias e a data atual Desenvolvedor: Raphael
 				 * Rossiter em 19/02/2008 Analista: Aryed Lins
 				 */
-				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(
-						DebitoCreditoSituacao.PRE_FATURADA)) {
+				if (!helper.getIdDebitoCreditoSituacaoAtual().equals(DebitoCreditoSituacao.PRE_FATURADA)) {
 
-					helper.setDataEmissaoInicial(Util
-							.subtrairNumeroDiasDeUmaData(new Date(), 3));
+					helper.setDataEmissaoInicial(Util.subtrairNumeroDiasDeUmaData(new Date(), 3));
 					helper.setDataEmissaoFinal(new Date());
 				} else {
 					helper.setDataEmissaoInicial(null);
@@ -41725,55 +42635,20 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 				try {
 
-					// deleta CONTA_IMPRESSAO
 					repositorioFaturamento.apagarContaImpressao(helper);
-
-					// deleta CONTA_CATEGORIA_CONSUMO_FAIXA
-					repositorioFaturamento
-							.apagarContaCategoriaConsumoFaixa(helper);
-
-					// deleta CONTA_CATEGORIA
+					repositorioFaturamento.apagarContaCategoriaConsumoFaixa(helper);
 					repositorioFaturamento.apagarContaCategoria(helper);
-
-					// deleta CLIENTE_CONTA
 					repositorioFaturamento.apagarClienteConta(helper);
-
-					// deleta CONTA_IMPOSTOS_DEDUZIDOS
 					repositorioFaturamento.apagarContaImpostosDeduzidos(helper);
-
-					// deleta DEBITO_AUTOMATICO_MOVIMENTO
-					repositorioFaturamento
-							.apagarDebitoAutomaticoMovimento(helper);
-
-					// deleta DEBITO_COBRADO_CATEGORIA
+					repositorioFaturamento.apagarDebitoAutomaticoMovimento(helper);
 					repositorioFaturamento.apagarDebitoCobradoCategoria(helper);
-
-					// deleta DEBITO_COBRADO
 					repositorioFaturamento.apagarDebitoCobrado(helper);
-
-					// deleta CREDITO_REALIZADO_CATEGORIA
-					repositorioFaturamento
-							.apagarCreditoRealizadoCategoria(helper);
-
-					// deleta CREDITO_REALIZADO
+					repositorioFaturamento.apagarCreditoRealizadoCategoria(helper);
 					repositorioFaturamento.apagarCreditoRealizado(helper);
-
-					// update DEBITO_A_COBRAR
 					repositorioFaturamento.atualizarDebitoACobrar(helper);
-
-					// update CREDITO_A_REALIZAR
 					repositorioFaturamento.atualizarCreditoARealizar(helper);
-
-					// update CONTA_GERAL
 					repositorioFaturamento.atualizarContaGeral(helper);
-
-					/*
-					 * UPDATE COBRANCA_PARCELAMENTO_ITEM DELETE
-					 * COBRANCA_DOCUMENTO_ITEM
-					 */
 					repositorioFaturamento.apagarDadosCobranca(helper);
-
-					// deleta CONTA
 					repositorioFaturamento.apagarConta(helper);
 
 				} catch (ErroRepositorioException e) {
@@ -41856,12 +42731,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 	}
 
-	public Collection<EmitirContaHelper> formatarEmitirContasHelper(Collection colecaoPamsContas, int i) throws ControladorException {
+	public Collection<EmitirContaHelper> formatarEmitirContasHelper(
+			Collection colecaoPamsContas, int i) throws ControladorException {
 		Collection<EmitirContaHelper> colecaoContas = new ArrayList();
-		
+
 		if (colecaoPamsContas != null) {
 			Iterator iteColecaoContas = colecaoPamsContas.iterator();
-			
+
 			while (iteColecaoContas.hasNext()) {
 				Object[] parmsConta = (Object[]) iteColecaoContas.next();
 				if (parmsConta != null) {
@@ -41873,50 +42749,63 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 					if (i == 3 || i == 4 || i == 7 || i == 8) {
 						if (parmsConta[1] != null) {
-							String nomeCliente = this.obterNomeCliente(emitirContaHelper.getIdConta());
+							String nomeCliente = this
+									.obterNomeCliente(emitirContaHelper
+											.getIdConta());
 							emitirContaHelper.setNomeCliente(nomeCliente);
 						}
 
 						if (parmsConta[32] != null) {
-							emitirContaHelper.setNomeImovel((String) parmsConta[32]);
+							emitirContaHelper
+									.setNomeImovel((String) parmsConta[32]);
 						}
 					} else {
-							if (parmsConta[1] != null) {
-								String nomeCliente = this.obterNomeCliente(emitirContaHelper.getIdConta());
-								emitirContaHelper.setNomeCliente(nomeCliente);
-							}
+						if (parmsConta[1] != null) {
+							String nomeCliente = this
+									.obterNomeCliente(emitirContaHelper
+											.getIdConta());
+							emitirContaHelper.setNomeCliente(nomeCliente);
+						}
 					}
 
 					if (parmsConta[2] != null) {
-						emitirContaHelper.setDataVencimentoConta((Date) parmsConta[2]);
+						emitirContaHelper
+								.setDataVencimentoConta((Date) parmsConta[2]);
 					}
 					if (parmsConta[3] != null) {
-						emitirContaHelper.setAmReferencia((Integer) parmsConta[3]);
+						emitirContaHelper
+								.setAmReferencia((Integer) parmsConta[3]);
 					}
 					if (parmsConta[4] != null) {
-						emitirContaHelper.setDigitoVerificadorConta((Short) parmsConta[4]);
+						emitirContaHelper
+								.setDigitoVerificadorConta((Short) parmsConta[4]);
 					}
 					if (parmsConta[5] != null) {
-						emitirContaHelper.setCodigoSetorComercialConta((Integer) parmsConta[5]);
+						emitirContaHelper
+								.setCodigoSetorComercialConta((Integer) parmsConta[5]);
 					}
 					if (parmsConta[6] != null) {
-						emitirContaHelper.setIdQuadraConta((Integer) parmsConta[6]);
+						emitirContaHelper
+								.setIdQuadraConta((Integer) parmsConta[6]);
 					}
 					if (parmsConta[7] != null) {
 						emitirContaHelper.setLoteConta((Short) parmsConta[7]);
 					}
 					if (parmsConta[8] != null) {
-						emitirContaHelper.setSubLoteConta((Short) parmsConta[8]);
+						emitirContaHelper
+								.setSubLoteConta((Short) parmsConta[8]);
 					}
 					if (parmsConta[9] != null) {
-						emitirContaHelper.setConsumoAgua((Integer) parmsConta[9]);
+						emitirContaHelper
+								.setConsumoAgua((Integer) parmsConta[9]);
 					}
 					if (parmsConta[10] != null) {
-						emitirContaHelper.setConsumoEsgoto((Integer) parmsConta[10]);
+						emitirContaHelper
+								.setConsumoEsgoto((Integer) parmsConta[10]);
 					}
-					
+
 					int tam = parmsConta.length;
-					
+
 					if (parmsConta[11] != null) {
 						BigDecimal valorAgua = (BigDecimal) parmsConta[11];
 						if (tam > 42) {
@@ -41942,104 +42831,135 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						emitirContaHelper.setValorEsgoto(valorEsgoto);
 					}
 					if (parmsConta[13] != null) {
-						emitirContaHelper.setDebitos((BigDecimal) parmsConta[13]);
+						emitirContaHelper
+								.setDebitos((BigDecimal) parmsConta[13]);
 					}
 					if (parmsConta[14] != null) {
-						emitirContaHelper.setValorCreditos((BigDecimal) parmsConta[14]);
+						emitirContaHelper
+								.setValorCreditos((BigDecimal) parmsConta[14]);
 					}
 					if (parmsConta[15] != null) {
-						emitirContaHelper.setValorImpostos((BigDecimal) parmsConta[15]);
+						emitirContaHelper
+								.setValorImpostos((BigDecimal) parmsConta[15]);
 					}
 					if (parmsConta[16] != null) {
-						emitirContaHelper.setDataValidadeConta((Date) parmsConta[16]);
+						emitirContaHelper
+								.setDataValidadeConta((Date) parmsConta[16]);
 					}
 					if (parmsConta[17] != null) {
 						emitirContaHelper.setIdImovel((Integer) parmsConta[17]);
 					}
 					if (parmsConta[18] != null) {
-						emitirContaHelper.setIdLocalidade((Integer) parmsConta[18]);
+						emitirContaHelper
+								.setIdLocalidade((Integer) parmsConta[18]);
 					}
 					if (parmsConta[19] != null) {
-						emitirContaHelper.setIdGerenciaRegional((Integer) parmsConta[19]);
+						emitirContaHelper
+								.setIdGerenciaRegional((Integer) parmsConta[19]);
 					}
 					if (parmsConta[20] != null) {
-						emitirContaHelper.setNomeGerenciaRegional((String) parmsConta[20]);
+						emitirContaHelper
+								.setNomeGerenciaRegional((String) parmsConta[20]);
 					}
 					if (parmsConta[21] != null) {
-						emitirContaHelper.setIdLigacaoAguaSituacao((Integer) parmsConta[21]);
+						emitirContaHelper
+								.setIdLigacaoAguaSituacao((Integer) parmsConta[21]);
 					}
 					if (parmsConta[22] != null) {
-						emitirContaHelper.setIdLigacaoEsgotoSituacao((Integer) parmsConta[22]);
+						emitirContaHelper
+								.setIdLigacaoEsgotoSituacao((Integer) parmsConta[22]);
 					}
 					if (parmsConta[23] != null) {
-						emitirContaHelper.setIdImovelPerfil((Integer) parmsConta[23]);
+						emitirContaHelper
+								.setIdImovelPerfil((Integer) parmsConta[23]);
 					}
 					if (parmsConta[24] != null) {
-						emitirContaHelper.setIdSetorComercial((Integer) parmsConta[24]);
+						emitirContaHelper
+								.setIdSetorComercial((Integer) parmsConta[24]);
 					}
 					if (parmsConta[25] != null) {
-						emitirContaHelper.setIdFaturamentoGrupo((Integer) parmsConta[25]);
+						emitirContaHelper
+								.setIdFaturamentoGrupo((Integer) parmsConta[25]);
 					}
 					if (parmsConta[26] != null) {
-						emitirContaHelper.setIdEmpresa((Integer) parmsConta[26]);
+						emitirContaHelper
+								.setIdEmpresa((Integer) parmsConta[26]);
 					}
 					if (parmsConta[27] != null) {
-						emitirContaHelper.setDescricaoLocalidade((String) parmsConta[27]);
+						emitirContaHelper
+								.setDescricaoLocalidade((String) parmsConta[27]);
 					}
 					if (parmsConta[28] != null) {
-						emitirContaHelper.setDescricaoLigacaoAguaSituacao((String) parmsConta[28]);
+						emitirContaHelper
+								.setDescricaoLigacaoAguaSituacao((String) parmsConta[28]);
 					}
 					if (parmsConta[29] != null) {
-						emitirContaHelper.setDescricaoLigacaoEsgotoSituacao((String) parmsConta[29]);
+						emitirContaHelper
+								.setDescricaoLigacaoEsgotoSituacao((String) parmsConta[29]);
 					}
 					if (parmsConta[30] != null) {
-						emitirContaHelper.setPercentualEsgotoConta((BigDecimal) parmsConta[30]);
+						emitirContaHelper
+								.setPercentualEsgotoConta((BigDecimal) parmsConta[30]);
 					}
 					if (parmsConta[31] != null) {
-						emitirContaHelper.setIdClienteResponsavel(""+ (Integer) parmsConta[31]);
+						emitirContaHelper.setIdClienteResponsavel(""
+								+ (Integer) parmsConta[31]);
 					}
 					if (parmsConta[32] != null) {
-						emitirContaHelper.setNomeImovel((String) parmsConta[32]);
-					}			
-					
+						emitirContaHelper
+								.setNomeImovel((String) parmsConta[32]);
+					}
+
 					if (tam > 34) {
 						if (parmsConta[33] != null) {
-							emitirContaHelper.setCodigoRota((Short) parmsConta[33]);
+							emitirContaHelper
+									.setCodigoRota((Short) parmsConta[33]);
 						}
 						if (parmsConta[34] != null) {
-							emitirContaHelper.setNumeroSequencialRota((Integer) parmsConta[34]);
+							emitirContaHelper
+									.setNumeroSequencialRota((Integer) parmsConta[34]);
 						}
 						if (parmsConta[35] != null) {
-							emitirContaHelper.setIdOrigem((Integer) parmsConta[35]);
+							emitirContaHelper
+									.setIdOrigem((Integer) parmsConta[35]);
 						}
 						if (parmsConta[36] != null) {
-							emitirContaHelper.setDebitoCreditoSituacaoAtualConta((Integer) parmsConta[36]);
+							emitirContaHelper
+									.setDebitoCreditoSituacaoAtualConta((Integer) parmsConta[36]);
 						}
 						if (parmsConta[37] != null) {
-							emitirContaHelper.setIdFuncionario((Integer) parmsConta[37]);
+							emitirContaHelper
+									.setIdFuncionario((Integer) parmsConta[37]);
 						}
 						if (parmsConta[38] != null) {
-							emitirContaHelper.setNomeFuncionario((String) parmsConta[38]);
+							emitirContaHelper
+									.setNomeFuncionario((String) parmsConta[38]);
 						}
 						if (parmsConta[39] != null) {
-							emitirContaHelper.setContaTipo((Integer) parmsConta[39]);
+							emitirContaHelper
+									.setContaTipo((Integer) parmsConta[39]);
 						}
 						if (parmsConta[40] != null) {
-							emitirContaHelper.setIdRotaEntrega((Integer) parmsConta[40]);
+							emitirContaHelper
+									.setIdRotaEntrega((Integer) parmsConta[40]);
 						}
 						if (parmsConta[41] != null) {
-							emitirContaHelper.setNumeroSequencialRotaEntrega((Integer) parmsConta[41]);
+							emitirContaHelper
+									.setNumeroSequencialRotaEntrega((Integer) parmsConta[41]);
 						}
-						
+
 						if (tam > 42) {
 							if (parmsConta[42] != null) {
-								emitirContaHelper.setNumeroQuadraEntrega((Integer) parmsConta[42]);
+								emitirContaHelper
+										.setNumeroQuadraEntrega((Integer) parmsConta[42]);
 							}
 							if (parmsConta[43] != null) {
-								emitirContaHelper.setValorRateioAgua((BigDecimal) parmsConta[43]);
+								emitirContaHelper
+										.setValorRateioAgua((BigDecimal) parmsConta[43]);
 							}
 							if (parmsConta[44] != null) {
-								emitirContaHelper.setValorRateioEsgoto((BigDecimal) parmsConta[44]);
+								emitirContaHelper
+										.setValorRateioEsgoto((BigDecimal) parmsConta[44]);
 							}
 						}
 
@@ -42938,13 +43858,17 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 									txt.append("1");
 									// Dados do consumo do mes anterior 1
 									EmitirContaHelper emitirConta = new EmitirContaHelper(
-											emitirConsumoImovelCondominimoHelper.getIdImovel(), new Integer(anoMesFaturamento));
-									txt.append(this.obterDadosConsumoAnterior(emitirConta, 1,
+											emitirConsumoImovelCondominimoHelper
+													.getIdImovel(),
+											new Integer(anoMesFaturamento));
+									txt.append(this.obterDadosConsumoAnterior(
+											emitirConta, 1,
 											LigacaoTipo.LIGACAO_AGUA,
 											MedicaoTipo.LIGACAO_AGUA)
 											.toString());
 									// Dados do consumo do mes anterior 4
-									txt.append(this.obterDadosConsumoAnterior(emitirConta, 4,
+									txt.append(this.obterDadosConsumoAnterior(
+											emitirConta, 4,
 											LigacaoTipo.LIGACAO_AGUA,
 											MedicaoTipo.LIGACAO_AGUA)
 											.toString());
@@ -42972,12 +43896,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 									// Fonte
 									txt.append("1");
 									// Dados do consumo do mes anterior 2
-									txt.append(this.obterDadosConsumoAnterior(emitirConta, 2,
+									txt.append(this.obterDadosConsumoAnterior(
+											emitirConta, 2,
 											LigacaoTipo.LIGACAO_AGUA,
 											MedicaoTipo.LIGACAO_AGUA)
 											.toString());
 									// Dados do consumo do mes anterior 5
-									txt.append(this.obterDadosConsumoAnterior(emitirConta, 5,
+									txt.append(this.obterDadosConsumoAnterior(
+											emitirConta, 5,
 											LigacaoTipo.LIGACAO_AGUA,
 											MedicaoTipo.LIGACAO_AGUA)
 											.toString());
@@ -42991,12 +43917,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 									// Fonte
 									txt.append("1");
 									// Dados do consumo do mes anterior 3
-									txt.append(this.obterDadosConsumoAnterior(emitirConta, 3,
+									txt.append(this.obterDadosConsumoAnterior(
+											emitirConta, 3,
 											LigacaoTipo.LIGACAO_AGUA,
 											MedicaoTipo.LIGACAO_AGUA)
 											.toString());
 									// Dados do consumo do mes anterior 6
-									txt.append(this.obterDadosConsumoAnterior(emitirConta, 6,
+									txt.append(this.obterDadosConsumoAnterior(
+											emitirConta, 6,
 											LigacaoTipo.LIGACAO_AGUA,
 											MedicaoTipo.LIGACAO_AGUA)
 											.toString());
@@ -44781,106 +45709,114 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 					// Situação Atual
 					DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
-					/**TODO: COSANPA
-					 * Caso motivo de retificação seja débito prescrito, alterar a situação da conta 
-					 * para 8.
+					/**
+					 * TODO: COSANPA Caso motivo de retificação seja débito
+					 * prescrito, alterar a situação da conta para 8.
 					 * 
 					 * @author Wellington Rocha
 					 * @date 01/06/2012
 					 * 
 					 * */
 					boolean contaPodeSerPrescrita = true;
-					if(contaMotivoCancelamento.getId().equals(ContaMotivoCancelamento.DEBITO_PRESCRITO)
-							|| contaMotivoCancelamento.getId().equals(ContaMotivoCancelamento.PRESCRICAO)){
-						
-						contaPodeSerPrescrita = this.verificarPossibilidadePrescricaoConta(contaColecao.getId());
-						if (contaPodeSerPrescrita){
+					if (contaMotivoCancelamento.getId().equals(
+							ContaMotivoCancelamento.DEBITO_PRESCRITO)
+							|| contaMotivoCancelamento.getId().equals(
+									ContaMotivoCancelamento.PRESCRICAO)) {
+
+						contaPodeSerPrescrita = this
+								.verificarPossibilidadePrescricaoConta(contaColecao
+										.getId());
+						if (contaPodeSerPrescrita) {
 							debitoCreditoSituacao
-								.setId(DebitoCreditoSituacao.DEBITO_PRESCRITO);
+									.setId(DebitoCreditoSituacao.DEBITO_PRESCRITO);
 						}
-					}else{
+					} else {
 						debitoCreditoSituacao
-						.setId(DebitoCreditoSituacao.CANCELADA);
+								.setId(DebitoCreditoSituacao.CANCELADA);
 					}
-					
-					if(!contaPodeSerPrescrita){
+
+					if (!contaPodeSerPrescrita) {
 						throw new ControladorException(
 								"erro.conta_nao_satisfaz_criterios_para_prescricao",
 								"exibirCancelarContaAction.do?contaID="
-								+ contaColecao.getId() + "&idImovel="
-								+ contaColecao.getImovel().getId(), null);
-					}else{
-					
+										+ contaColecao.getId() + "&idImovel="
+										+ contaColecao.getImovel().getId(),
+								null);
+					} else {
+
 						contaColecao
 								.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
-	
+
 						// Colocado por Raphael Rossiter em 27/02/2008
 						// Ano Mes Referencia Contabil
 						if (contaColecao.getReferencia() <= sistemaParametro
 								.getAnoMesFaturamento().intValue()) {
-	
+
 							contaColecao.setReferenciaContabil(Util
 									.getAnoMesComoInteger(new Date()));
 						}
-	
+
 						// Usuario
 						contaColecao.setUsuario(usuarioLogado);
-	
+
 						// última alteração
 						contaColecao.setUltimaAlteracao(new Date());
-	
+
 						/*
-						 * Alterado por Raphael Rossiter em 30/07/2007 (Analista:
-						 * Rosana Carvalho)
+						 * Alterado por Raphael Rossiter em 30/07/2007
+						 * (Analista: Rosana Carvalho)
 						 * 
-						 * OBJETIVO: Quando o mes/ano de faturamento for maior que o
-						 * mes/ano de faturamento atual, não alterar o mes/ano
-						 * contábil
+						 * OBJETIVO: Quando o mes/ano de faturamento for maior
+						 * que o mes/ano de faturamento atual, não alterar o
+						 * mes/ano contábil
 						 */
-	
+
 						// Ano Mes Referencia Contabil
 						if (contaColecao.getReferencia() <= sistemaParametro
 								.getAnoMesFaturamento().intValue()) {
-	
+
 							contaColecao.setReferenciaContabil(Util
 									.getAnoMesComoInteger(new Date()));
 						}
-	
+
 						/*
 						 * Colocado por Raphael Rossiter em 09/08/2007 OBJETIVO:
-						 * Gravar na tabela de conta o usuário que está logado no
-						 * sistema
+						 * Gravar na tabela de conta o usuário que está logado
+						 * no sistema
 						 */
-	
+
 						// Usuario
 						contaColecao.setUsuario(usuarioLogado);
-	
+
 						// ------------ <REGISTRAR
 						// TRANSAÇÃO>----------------------------
-	
+
 						RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 								Operacao.OPERACAO_CANCELAR_CONTA,
 								contaColecao.getImovel() != null ? contaColecao
-										.getImovel().getId() : contaColecao.getId(),
-								contaColecao.getId(), new UsuarioAcaoUsuarioHelper(
+										.getImovel().getId() : contaColecao
+										.getId(),
+								contaColecao.getId(),
+								new UsuarioAcaoUsuarioHelper(
 										usuarioLogado,
 										UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-	
+
 						registradorOperacao.registrarOperacao(contaColecao);
-	
-						getControladorTransacao().registrarTransacao(contaColecao);
-	
+
+						getControladorTransacao().registrarTransacao(
+								contaColecao);
+
 						// ------------ </REGISTRAR
 						// TRANSAÇÃO>----------------------------
-	
+
 						// UPDATE
 						try {
-	
+
 							if (contaColecao.getDebitoCreditoSituacaoAnterior() == null) {
 								repositorioFaturamento
 										.cancelarContaReferenciaContabilMenorSistemaParametro(
 												contaColecao, null);
-	
+
 							} else {
 								repositorioFaturamento
 										.cancelarContaReferenciaContabilMenorSistemaParametro(
@@ -44889,15 +45825,16 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 														.getDebitoCreditoSituacaoAnterior()
 														.getId());
 							}
-	
-							// CRC2725 - alterado por Vivianne Sousa - 30/03/2010
+
+							// CRC2725 - alterado por Vivianne Sousa -
+							// 30/03/2010
 							// analista:Fátima
 							// 1.1.2.Verificar se há relação do cancelamento com
 							// itens de negativação
 							getControladorSpcSerasa()
 									.verificarRelacaoDoCancelamentoComItensNegativacao(
 											contaColecao, null);
-	
+
 						} catch (ErroRepositorioException ex) {
 							sessionContext.setRollbackOnly();
 							new ControladorException("erro.sistema", ex);
@@ -46916,7 +47853,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		Collection colecaoDebitoCobradoCategoriaRemover = new ArrayList();
 
 		try {
-			Collection<IDebitoCobrado> debitosCobrados = repositorioFaturamento.pesquisarDebitosCobrados(idConta);
+			Collection<IDebitoCobrado> debitosCobrados = repositorioFaturamento
+					.pesquisarDebitosCobrados(idConta);
 
 			// cria o objeto débito cobrado histórico
 			DebitoCobradoHistorico debitoCobradoHistoricoTemp = null;
@@ -47082,7 +48020,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		try {
 
 			// Conta Categoria
-			Collection<IContaCategoria> colecaoContaCategoria = repositorioFaturamento.pesquisarContaCategoria(idConta);
+			Collection<IContaCategoria> colecaoContaCategoria = repositorioFaturamento
+					.pesquisarContaCategoria(idConta);
 			if (colecaoContaCategoria != null
 					&& !colecaoContaCategoria.isEmpty()) {
 
@@ -47091,13 +48030,25 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				for (IContaCategoria contaContaCategoria : colecaoContaCategoria) {
 					contaCategoriaHistoricoTemp = new ContaCategoriaHistorico();
 					ContaCategoriaHistoricoPK contaCategoriaHistoricoPK = new ContaCategoriaHistoricoPK(
-							contaHistoricoTemp, contaContaCategoria.getCategoria());
-					contaCategoriaHistoricoPK.setSubcategoria(contaContaCategoria.getSubcategoria());
-					contaCategoriaHistoricoTemp.setComp_id(contaCategoriaHistoricoPK);
-					contaCategoriaHistoricoTemp.setConsumoAgua(contaContaCategoria.getConsumoAgua());
-					contaCategoriaHistoricoTemp.setConsumoEsgoto(contaContaCategoria.getConsumoEsgoto());
-					contaCategoriaHistoricoTemp.setConsumoMinimoAgua(contaContaCategoria.getConsumoMinimoAgua());
-					contaCategoriaHistoricoTemp.setConsumoMinimoEsgoto(contaContaCategoria.getConsumoMinimoEsgoto());
+							contaHistoricoTemp,
+							contaContaCategoria.getCategoria());
+					contaCategoriaHistoricoPK
+							.setSubcategoria(contaContaCategoria
+									.getSubcategoria());
+					contaCategoriaHistoricoTemp
+							.setComp_id(contaCategoriaHistoricoPK);
+					contaCategoriaHistoricoTemp
+							.setConsumoAgua(contaContaCategoria
+									.getConsumoAgua());
+					contaCategoriaHistoricoTemp
+							.setConsumoEsgoto(contaContaCategoria
+									.getConsumoEsgoto());
+					contaCategoriaHistoricoTemp
+							.setConsumoMinimoAgua(contaContaCategoria
+									.getConsumoMinimoAgua());
+					contaCategoriaHistoricoTemp
+							.setConsumoMinimoEsgoto(contaContaCategoria
+									.getConsumoMinimoEsgoto());
 					contaCategoriaHistoricoTemp
 							.setQuantidadeEconomia(contaContaCategoria
 									.getQuantidadeEconomia());
@@ -47960,7 +48911,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			Collection idsImovel, Integer codigoCliente, Short relacaoTipo,
 			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
 			Integer idGrupoFaturamento, Integer anoMesFinal,
-			String indicadorContaPaga, Integer somenteDebitoAutomatico) throws ControladorException {
+			String indicadorContaPaga, Integer somenteDebitoAutomatico)
+			throws ControladorException {
 
 		Integer quantidadeConta = 0;
 		try {
@@ -47968,7 +48920,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				quantidadeConta = repositorioFaturamento
 						.pesquisarQuantidadeContasGrupoFaturamento(anoMes,
 								idGrupoFaturamento, dataVencimentoContaInicio,
-								dataVencimentoContaFim, anoMesFinal, somenteDebitoAutomatico);
+								dataVencimentoContaFim, anoMesFinal,
+								somenteDebitoAutomatico);
 			} else {
 				quantidadeConta = repositorioFaturamento
 						.pesquisarQuantidadeContasImoveis(anoMes, idsImovel,
@@ -48160,60 +49113,64 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 				// Situação Atual
 				DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
-				
-				/**TODO: COSANPA
-				 * Caso motivo de retificação seja débito prescrito, alterar a situação da conta 
-				 * para 8.
+
+				/**
+				 * TODO: COSANPA Caso motivo de retificação seja débito
+				 * prescrito, alterar a situação da conta para 8.
 				 * 
 				 * @author Wellington Rocha
 				 * @date 01/06/2012
 				 * 
 				 * */
 				boolean contaPodeSerPrescrita = true;
-				if(contaMotivoCancelamento.getId().equals(ContaMotivoCancelamento.DEBITO_PRESCRITO)
-						|| contaMotivoCancelamento.getId().equals(ContaMotivoCancelamento.PRESCRICAO)){
-					
-					contaPodeSerPrescrita = this.verificarPossibilidadePrescricaoConta(contaColecao.getId());
-					if (contaPodeSerPrescrita){
+				if (contaMotivoCancelamento.getId().equals(
+						ContaMotivoCancelamento.DEBITO_PRESCRITO)
+						|| contaMotivoCancelamento.getId().equals(
+								ContaMotivoCancelamento.PRESCRICAO)) {
+
+					contaPodeSerPrescrita = this
+							.verificarPossibilidadePrescricaoConta(contaColecao
+									.getId());
+					if (contaPodeSerPrescrita) {
 						debitoCreditoSituacao
-							.setId(DebitoCreditoSituacao.DEBITO_PRESCRITO);
+								.setId(DebitoCreditoSituacao.DEBITO_PRESCRITO);
 					}
-				}else{
+				} else {
 					debitoCreditoSituacao
-					.setId(DebitoCreditoSituacao.CANCELADA);
+							.setId(DebitoCreditoSituacao.CANCELADA);
 				}
-				
-				if(!contaPodeSerPrescrita){
+
+				if (!contaPodeSerPrescrita) {
 					throw new ControladorException(
 							"erro.conta_nao_satisfaz_criterios_para_prescricao",
 							"exibirCancelarContaAction.do?contaID="
-							+ contaColecao.getId() + "&idImovel="
-							+ contaColecao.getImovel().getId(), null);
-				}else{
-					
-					
-					debitoCreditoSituacao.setId(DebitoCreditoSituacao.CANCELADA);
+									+ contaColecao.getId() + "&idImovel="
+									+ contaColecao.getImovel().getId(), null);
+				} else {
+
+					debitoCreditoSituacao
+							.setId(DebitoCreditoSituacao.CANCELADA);
 					contaColecao
 							.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
-	
+
 					// Colocado por Raphael Rossiter em 27/02/2008
 					// Ano Mes Referencia Contabil
 					if (contaColecao.getReferencia() <= sistemaParametro
 							.getAnoMesFaturamento().intValue()) {
-	
+
 						contaColecao.setReferenciaContabil(Util
 								.getAnoMesComoInteger(new Date()));
 					}
-	
+
 					// Usuario
 					contaColecao.setUsuario(usuarioLogado);
-	
+
 					// última alteração
 					contaColecao.setUltimaAlteracao(new Date());
-	
+
 					// ------------ <REGISTRAR
 					// TRANSAÇÃO>----------------------------
-	
+
 					RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 							Operacao.OPERACAO_CANCELAR_CONTA,
 							contaColecao.getImovel() != null ? contaColecao
@@ -48221,22 +49178,22 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							contaColecao.getId(), new UsuarioAcaoUsuarioHelper(
 									usuarioLogado,
 									UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-	
+
 					registradorOperacao.registrarOperacao(contaColecao);
-	
+
 					getControladorTransacao().registrarTransacao(contaColecao);
-	
+
 					// ------------ </REGISTRAR
 					// TRANSAÇÃO>----------------------------
-	
+
 					// UPDATE
 					try {
-	
+
 						if (contaColecao.getDebitoCreditoSituacaoAnterior() == null) {
 							repositorioFaturamento
 									.cancelarContaReferenciaContabilMenorSistemaParametro(
 											contaColecao, null);
-	
+
 						} else {
 							repositorioFaturamento
 									.cancelarContaReferenciaContabilMenorSistemaParametro(
@@ -48245,15 +49202,16 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 													.getDebitoCreditoSituacaoAnterior()
 													.getId());
 						}
-	
+
 						// CRC2725 - alterado por Vivianne Sousa - 30/03/2010
 						// analista:Fátima
-						// 1.1.2.Verificar se há relação do cancelamento com itens
+						// 1.1.2.Verificar se há relação do cancelamento com
+						// itens
 						// de negativação
 						getControladorSpcSerasa()
 								.verificarRelacaoDoCancelamentoComItensNegativacao(
 										contaColecao, null);
-	
+
 					} catch (ErroRepositorioException ex) {
 						sessionContext.setRollbackOnly();
 						new ControladorException("erro.sistema", ex);
@@ -49250,17 +50208,19 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				}
 
 			}
-			
-			/**TODO: Cosanpa
-			 * Alteração para atender ao Mantis 499
-			 * Emitir faturas agrupadas sem código de barras
+
+			/**
+			 * TODO: Cosanpa Alteração para atender ao Mantis 499 Emitir faturas
+			 * agrupadas sem código de barras
 			 * 
 			 * @author Wellington Rocha
-			 * @date 25/01/2012*/
+			 * @date 25/01/2012
+			 */
 			if (idImovelContaEnvio != null
-					&& idImovelContaEnvio.equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL_FINAL_GRUPO)){
+					&& idImovelContaEnvio
+							.equals(ImovelContaEnvio.ENVIAR_CLIENTE_RESPONSAVEL_FINAL_GRUPO)) {
 				emitirContaHelper.setClienteComFaturaAgrupada(new Short("1"));
-			}else{
+			} else {
 				emitirContaHelper.setClienteComFaturaAgrupada(new Short("2"));
 			}
 			emitirContaHelper.setIdClienteResponsavel(idClienteResponsavel);
@@ -49285,8 +50245,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 1
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper, 1, tipoLigacao,
-					tipoMedicao);
+					emitirContaHelper, 1, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes1(obterDadosConsumoMedicaoAnterior
 							.toString());
@@ -49294,8 +50253,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 4
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper, 4, tipoLigacao,
-					tipoMedicao);
+					emitirContaHelper, 4, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes4(obterDadosConsumoMedicaoAnterior
 							.toString());
@@ -49306,8 +50264,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 2
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper, 2, tipoLigacao,
-					tipoMedicao);
+					emitirContaHelper, 2, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes2(obterDadosConsumoMedicaoAnterior
 							.toString());
@@ -49315,8 +50272,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 5
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper, 5, tipoLigacao,
-					tipoMedicao);
+					emitirContaHelper, 5, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes5(obterDadosConsumoMedicaoAnterior
 							.toString());
@@ -49408,8 +50364,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 3
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper, 3, tipoLigacao,
-					tipoMedicao);
+					emitirContaHelper, 3, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes3(obterDadosConsumoMedicaoAnterior
 							.toString());
@@ -49417,8 +50372,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// passando a quantidade de Meses Igual a 6
 			// e o tipo de ligação e medição recuperados anteriormente
 			obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-					emitirContaHelper, 6, tipoLigacao,
-					tipoMedicao);
+					emitirContaHelper, 6, tipoLigacao, tipoMedicao);
 			emitirContaHelper
 					.setDadosConsumoMes6(obterDadosConsumoMedicaoAnterior
 							.toString());
@@ -49609,30 +50563,36 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					.formatarMoedaReal(valorConta));
 			emitirContaHelper.setValorConta(valorConta);
 
-			/**TODO: COSANPA
+			/**
+			 * TODO: COSANPA
 			 * 
 			 * Mantis 537
 			 * 
 			 * @author Wellington Rocha
-			 * @date 15/03/2012*/
-			PagamentoHistorico pagamento = getControladorArrecadacao().pesquisarPagamentoDeContaEmHistorico(idContaEP);
-			if (pagamento != null && pagamento.getValorPagamento().compareTo(valorConta) >= 0) {
+			 * @date 15/03/2012
+			 */
+			PagamentoHistorico pagamento = getControladorArrecadacao()
+					.pesquisarPagamentoDeContaEmHistorico(idContaEP);
+			if (pagamento != null
+					&& pagamento.getValorPagamento().compareTo(valorConta) >= 0) {
 				emitirContaHelper.setContaPaga("1");
 				SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-				emitirContaHelper.setDataPagamentoConta(sdf.format(pagamento.getDataPagamento()));
-			}else{
+				emitirContaHelper.setDataPagamentoConta(sdf.format(pagamento
+						.getDataPagamento()));
+			} else {
 				emitirContaHelper.setContaPaga("2");
 				emitirContaHelper.setDataPagamentoConta("");
 			}
 
 			if (emitirContaHelper.getContaPaga().equals("1")
 					|| valorConta.compareTo(new BigDecimal("0.00")) == 0
-					|| emitirContaHelper.getClienteComFaturaAgrupada().equals(new Short("1"))) {
-					emitirContaHelper.setContaSemCodigoBarras("1");
+					|| emitirContaHelper.getClienteComFaturaAgrupada().equals(
+							new Short("1"))) {
+				emitirContaHelper.setContaSemCodigoBarras("1");
 			} else {
-			emitirContaHelper.setContaSemCodigoBarras("2");
+				emitirContaHelper.setContaSemCodigoBarras("2");
 			}
-			
+
 			// chama o [SB0016] - Obter Mensagem da Conta em 3 Partes
 			String[] parmsPartesConta = obterMensagemConta3Partes(
 					emitirContaHelper, sistemaParametro);
@@ -49685,13 +50645,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 			// Se valor da conta maior que o valor limite
 			// emite uma Ficha de Compensação(Boleto bancario)
-//			if (valorConta
-//					.compareTo(EmitirContaHelper.VALOR_LIMITE_FICHA_COMPENSACAO) == 1) {
-//				StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao(
-//						"1", emitirContaHelper.getIdConta().toString());
-//				emitirContaHelper.setNossoNumero(nossoNumero.toString());
-//
-//			}
+			// if (valorConta
+			// .compareTo(EmitirContaHelper.VALOR_LIMITE_FICHA_COMPENSACAO) ==
+			// 1) {
+			// StringBuilder nossoNumero = obterNossoNumeroFichaCompensacao(
+			// "1", emitirContaHelper.getIdConta().toString());
+			// emitirContaHelper.setNossoNumero(nossoNumero.toString());
+			//
+			// }
 
 			Integer digitoVerificadorConta = new Integer(""
 					+ emitirContaHelper.getDigitoVerificadorConta());
@@ -49701,13 +50662,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 			String representacaoNumericaCodBarra = "";
 
-
-			/**TODO: Cosanpa
-			 * Alteração para atender ao Mantis 499
-			 * Emitir faturas agrupadas sem código de barras
+			/**
+			 * TODO: Cosanpa Alteração para atender ao Mantis 499 Emitir faturas
+			 * agrupadas sem código de barras
 			 * 
 			 * @author Wellington Rocha
-			 * @date 25/01/2012*/
+			 * @date 25/01/2012
+			 */
 			if (emitirContaHelper.getContaSemCodigoBarras().equals("2")) {
 
 				representacaoNumericaCodBarra = this
@@ -49734,7 +50695,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						+ representacaoNumericaCodBarra.substring(35, 36)
 						+ " "
 						+ representacaoNumericaCodBarra.substring(36, 47)
-						+ "-" + representacaoNumericaCodBarra.substring(47, 48);
+						+ "-"
+						+ representacaoNumericaCodBarra.substring(47, 48);
 				emitirContaHelper
 						.setRepresentacaoNumericaCodBarraFormatada(representacaoNumericaCodBarraFormatada);
 
@@ -49748,72 +50710,84 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						.setRepresentacaoNumericaCodBarraSemDigito(representacaoNumericaCodBarraSemDigito);
 
 			}
-			
-			/**Alterações para atendender mudanças na segunda via da conta*/
+
+			/** Alterações para atendender mudanças na segunda via da conta */
 			String leituraAnteriorInformada = "";
 			String leituraAtualInformada = "";
 			String dataLeituraAnteriorInformada = "";
 			String dataLeituraAtualInformada = "";
-			
+
 			MedicaoHistorico medicaoHistoricoAgua = getControladorMicromedicao()
-			.pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(emitirContaHelper.getIdImovel(),
-					emitirContaHelper.getAmReferencia());
-	MedicaoHistorico medicaoHistoricoAguaMesAnterior = getControladorMicromedicao()
-			.pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(emitirContaHelper.getIdImovel(), Util
-					.subtrairMesDoAnoMes(emitirContaHelper
-							.getAmReferencia(), 1));
-	MedicaoHistorico medicaoHistoricoPocoMesAnterior = getControladorMicromedicao()
-	.pesquisarMedicaoHistoricoTipoPocoLeituraAnormalidade(emitirContaHelper.getIdImovel(), Util
-			.subtrairMesDoAnoMes(emitirContaHelper
-					.getAmReferencia(), 1));
-	MedicaoHistorico medicaoHistoricoPoco = getControladorMicromedicao()
-			.pesquisarMedicaoHistoricoTipoPocoLeituraAnormalidade(emitirContaHelper.getIdImovel(),
-					emitirContaHelper.getAmReferencia());
-			
-	if (medicaoHistoricoAgua != null) {
+					.pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(
+							emitirContaHelper.getIdImovel(),
+							emitirContaHelper.getAmReferencia());
+			MedicaoHistorico medicaoHistoricoAguaMesAnterior = getControladorMicromedicao()
+					.pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(
+							emitirContaHelper.getIdImovel(),
+							Util.subtrairMesDoAnoMes(
+									emitirContaHelper.getAmReferencia(), 1));
+			MedicaoHistorico medicaoHistoricoPocoMesAnterior = getControladorMicromedicao()
+					.pesquisarMedicaoHistoricoTipoPocoLeituraAnormalidade(
+							emitirContaHelper.getIdImovel(),
+							Util.subtrairMesDoAnoMes(
+									emitirContaHelper.getAmReferencia(), 1));
+			MedicaoHistorico medicaoHistoricoPoco = getControladorMicromedicao()
+					.pesquisarMedicaoHistoricoTipoPocoLeituraAnormalidade(
+							emitirContaHelper.getIdImovel(),
+							emitirContaHelper.getAmReferencia());
 
-		if (medicaoHistoricoAgua.getLeituraAnteriorInformada() != null) {
-			leituraAnteriorInformada = medicaoHistoricoAgua
-					.getLeituraAnteriorInformada()
-					+ "";
-		}
-		if(medicaoHistoricoAgua.getLeituraAtualInformada() != null){
-			leituraAtualInformada = medicaoHistoricoAgua.getLeituraAtualInformada()+"";
-		}
-		if(medicaoHistoricoAgua
-				.getDataLeituraAtualInformada() != null){
-			dataLeituraAtualInformada = Util.formatarData(medicaoHistoricoAgua
-					.getDataLeituraAtualInformada());
-		}
-		if (medicaoHistoricoAguaMesAnterior != null){
-			if(medicaoHistoricoAguaMesAnterior.getDataLeituraAtualInformada()!= null){
-				dataLeituraAnteriorInformada = Util.formatarData(medicaoHistoricoAguaMesAnterior.getDataLeituraAtualInformada());
+			if (medicaoHistoricoAgua != null) {
+
+				if (medicaoHistoricoAgua.getLeituraAnteriorInformada() != null) {
+					leituraAnteriorInformada = medicaoHistoricoAgua
+							.getLeituraAnteriorInformada() + "";
+				}
+				if (medicaoHistoricoAgua.getLeituraAtualInformada() != null) {
+					leituraAtualInformada = medicaoHistoricoAgua
+							.getLeituraAtualInformada() + "";
+				}
+				if (medicaoHistoricoAgua.getDataLeituraAtualInformada() != null) {
+					dataLeituraAtualInformada = Util
+							.formatarData(medicaoHistoricoAgua
+									.getDataLeituraAtualInformada());
+				}
+				if (medicaoHistoricoAguaMesAnterior != null) {
+					if (medicaoHistoricoAguaMesAnterior
+							.getDataLeituraAtualInformada() != null) {
+						dataLeituraAnteriorInformada = Util
+								.formatarData(medicaoHistoricoAguaMesAnterior
+										.getDataLeituraAtualInformada());
+					}
+				}
+			} else if (medicaoHistoricoPoco != null) {
+
+				if (medicaoHistoricoPoco.getLeituraAnteriorInformada() != null) {
+					leituraAnteriorInformada = medicaoHistoricoPoco
+							.getLeituraAnteriorInformada() + "";
+				}
+				if (medicaoHistoricoPoco.getLeituraAtualInformada() != null) {
+					leituraAtualInformada = medicaoHistoricoPoco
+							.getLeituraAtualInformada() + "";
+				}
+				if (medicaoHistoricoPoco.getDataLeituraAtualInformada() != null) {
+					dataLeituraAtualInformada = Util
+							.formatarData(medicaoHistoricoPoco
+									.getDataLeituraAtualInformada());
+				}
+				if (medicaoHistoricoPocoMesAnterior
+						.getDataLeituraAtualInformada() != null) {
+					dataLeituraAnteriorInformada = Util
+							.formatarData(medicaoHistoricoPocoMesAnterior
+									.getDataLeituraAtualInformada());
+				}
 			}
-	}
-	}else if (medicaoHistoricoPoco != null) {
-
-		if (medicaoHistoricoPoco.getLeituraAnteriorInformada() != null) {
-			leituraAnteriorInformada = medicaoHistoricoPoco
-					.getLeituraAnteriorInformada()
-					+ "";
-		}
-		if(medicaoHistoricoPoco.getLeituraAtualInformada()!= null){
-			leituraAtualInformada = medicaoHistoricoPoco.getLeituraAtualInformada()+"";
-		}
-		if(medicaoHistoricoPoco
-				.getDataLeituraAtualInformada()!= null){
-			dataLeituraAtualInformada = Util.formatarData(medicaoHistoricoPoco
-					.getDataLeituraAtualInformada());
-		}
-		if(medicaoHistoricoPocoMesAnterior.getDataLeituraAtualInformada() != null){
-			dataLeituraAnteriorInformada = Util.formatarData(medicaoHistoricoPocoMesAnterior.getDataLeituraAtualInformada());
-		}
-	}
-			emitirContaHelper.setLeituraAnteriorInformada(leituraAnteriorInformada);
+			emitirContaHelper
+					.setLeituraAnteriorInformada(leituraAnteriorInformada);
 			emitirContaHelper.setLeituraAtualInformada(leituraAtualInformada);
-			emitirContaHelper.setDataLeituraAnteriorInformada(dataLeituraAnteriorInformada);
-			emitirContaHelper.setDataLeituraAtualInformada(dataLeituraAtualInformada);
-			
+			emitirContaHelper
+					.setDataLeituraAnteriorInformada(dataLeituraAnteriorInformada);
+			emitirContaHelper
+					.setDataLeituraAtualInformada(dataLeituraAtualInformada);
 
 			if (cobrarTaxaEmissaoConta) {
 				this.gerarDebitoACobrarTaxaEmissaoConta(
@@ -49821,47 +50795,50 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						emitirContaHelper.getAmReferencia());
 			}
 
-			Imovel imovelQuadraFace = getControladorImovel()
-			.pesquisarImovel(
-					emitirContaHelper
-							.getIdImovel());
-				String[] qualidadeAgua = this.obterDadosQualidadeAguaCosanpa(emitirContaHelper,imovelQuadraFace.getQuadraFace().getId());
-				
-				//Padrão
-				emitirContaHelper.setPadraoCor(qualidadeAgua[0]);
-				emitirContaHelper.setPadraoTurbidez(qualidadeAgua[1]);
-				emitirContaHelper.setPadraoCloro(qualidadeAgua[3]);
-				emitirContaHelper.setPadraoFluor(qualidadeAgua[2]);
-				emitirContaHelper.setPadraoColiformesTotais(qualidadeAgua[4]);
-				emitirContaHelper.setPadraoColiformesfecais(qualidadeAgua[5]);
-				
-				//Exigido
-				emitirContaHelper.setValorExigidoCor(qualidadeAgua[6]);
-				emitirContaHelper.setValorExigidoTurbidez(qualidadeAgua[7]);
-				emitirContaHelper.setValorExigidoCloro(qualidadeAgua[9]);
-				emitirContaHelper.setValorExigidoFluor(qualidadeAgua[8]);
-				emitirContaHelper.setValorExigidoColiformesTotais(qualidadeAgua[10]);
-				emitirContaHelper.setValorExigidoColiformesTermotolerantes(qualidadeAgua[11]);
-				
-				//Analisado
-				emitirContaHelper.setValorMedioCor(qualidadeAgua[12]);
-				emitirContaHelper.setValorMedioTurbidez(qualidadeAgua[13]);
-				emitirContaHelper.setValorMedioCloro(qualidadeAgua[15]);
-				emitirContaHelper.setValorMedioFluor(qualidadeAgua[14]);
-				emitirContaHelper.setValorMedioColiformesTotais(qualidadeAgua[16]);
-				emitirContaHelper.setValorMedioColiformesfecais(qualidadeAgua[17]);
-				
-				//Conforme
-				emitirContaHelper.setValorConformeCor(qualidadeAgua[18]);
-				emitirContaHelper.setValorConformeTurbidez(qualidadeAgua[19]);
-				emitirContaHelper.setValorConformeCloro(qualidadeAgua[21]);
-				emitirContaHelper.setValorConformeFluor(qualidadeAgua[20]);
-				emitirContaHelper.setValorConformeColiformesTotais(qualidadeAgua[22]);
-				emitirContaHelper.setValorConformeColiformesTermotolerantes(qualidadeAgua[23]);
-				
-				
-				colecaoEmitirContaHelper.add(emitirContaHelper);
-				
+			Imovel imovelQuadraFace = getControladorImovel().pesquisarImovel(
+					emitirContaHelper.getIdImovel());
+			String[] qualidadeAgua = this
+					.obterDadosQualidadeAguaCosanpa(emitirContaHelper,
+							imovelQuadraFace.getQuadraFace().getId());
+
+			// Padrão
+			emitirContaHelper.setPadraoCor(qualidadeAgua[0]);
+			emitirContaHelper.setPadraoTurbidez(qualidadeAgua[1]);
+			emitirContaHelper.setPadraoCloro(qualidadeAgua[3]);
+			emitirContaHelper.setPadraoFluor(qualidadeAgua[2]);
+			emitirContaHelper.setPadraoColiformesTotais(qualidadeAgua[4]);
+			emitirContaHelper.setPadraoColiformesfecais(qualidadeAgua[5]);
+
+			// Exigido
+			emitirContaHelper.setValorExigidoCor(qualidadeAgua[6]);
+			emitirContaHelper.setValorExigidoTurbidez(qualidadeAgua[7]);
+			emitirContaHelper.setValorExigidoCloro(qualidadeAgua[9]);
+			emitirContaHelper.setValorExigidoFluor(qualidadeAgua[8]);
+			emitirContaHelper
+					.setValorExigidoColiformesTotais(qualidadeAgua[10]);
+			emitirContaHelper
+					.setValorExigidoColiformesTermotolerantes(qualidadeAgua[11]);
+
+			// Analisado
+			emitirContaHelper.setValorMedioCor(qualidadeAgua[12]);
+			emitirContaHelper.setValorMedioTurbidez(qualidadeAgua[13]);
+			emitirContaHelper.setValorMedioCloro(qualidadeAgua[15]);
+			emitirContaHelper.setValorMedioFluor(qualidadeAgua[14]);
+			emitirContaHelper.setValorMedioColiformesTotais(qualidadeAgua[16]);
+			emitirContaHelper.setValorMedioColiformesfecais(qualidadeAgua[17]);
+
+			// Conforme
+			emitirContaHelper.setValorConformeCor(qualidadeAgua[18]);
+			emitirContaHelper.setValorConformeTurbidez(qualidadeAgua[19]);
+			emitirContaHelper.setValorConformeCloro(qualidadeAgua[21]);
+			emitirContaHelper.setValorConformeFluor(qualidadeAgua[20]);
+			emitirContaHelper
+					.setValorConformeColiformesTotais(qualidadeAgua[22]);
+			emitirContaHelper
+					.setValorConformeColiformesTermotolerantes(qualidadeAgua[23]);
+
+			colecaoEmitirContaHelper.add(emitirContaHelper);
+
 		}
 
 		return colecaoEmitirContaHelper;
@@ -56156,7 +57133,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								&& tempItemContabel == null
 								|| (itemContabel != null
 										&& tempItemContabel != null && itemContabel
-										.equals(tempItemContabel))) {
+											.equals(tempItemContabel))) {
 
 							switch (((Integer) element[8]).intValue()) {
 							case 1:
@@ -56402,7 +57379,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								&& tempItemContabel == null
 								|| (itemContabel != null
 										&& tempItemContabel != null && itemContabel
-										.equals(tempItemContabel))) {
+											.equals(tempItemContabel))) {
 
 							switch (((Integer) element[8]).intValue()) {
 							case 1:
@@ -58263,81 +59240,86 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 				// Situação Atual
 				DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
-				/**TODO: COSANPA
-				 * Caso motivo de retificação seja débito prescrito, alterar a situação da conta 
-				 * para 8.
+				/**
+				 * TODO: COSANPA Caso motivo de retificação seja débito
+				 * prescrito, alterar a situação da conta para 8.
 				 * 
 				 * @author Wellington Rocha
 				 * @date 01/06/2012
 				 * 
 				 * */
 				boolean contaPodeSerPrescrita = true;
-				if(contaMotivoCancelamento.getId().equals(ContaMotivoCancelamento.DEBITO_PRESCRITO)
-						|| contaMotivoCancelamento.getId().equals(ContaMotivoCancelamento.PRESCRICAO)){
-					
-					contaPodeSerPrescrita = this.verificarPossibilidadePrescricaoConta(contaColecao.getId());
-					if (contaPodeSerPrescrita){
+				if (contaMotivoCancelamento.getId().equals(
+						ContaMotivoCancelamento.DEBITO_PRESCRITO)
+						|| contaMotivoCancelamento.getId().equals(
+								ContaMotivoCancelamento.PRESCRICAO)) {
+
+					contaPodeSerPrescrita = this
+							.verificarPossibilidadePrescricaoConta(contaColecao
+									.getId());
+					if (contaPodeSerPrescrita) {
 						debitoCreditoSituacao
-							.setId(DebitoCreditoSituacao.DEBITO_PRESCRITO);
+								.setId(DebitoCreditoSituacao.DEBITO_PRESCRITO);
 					}
-				}else{
+				} else {
 					debitoCreditoSituacao
-					.setId(DebitoCreditoSituacao.CANCELADA);
+							.setId(DebitoCreditoSituacao.CANCELADA);
 				}
-				
-				if(!contaPodeSerPrescrita){
+
+				if (!contaPodeSerPrescrita) {
 					throw new ControladorException(
 							"erro.conta_nao_satisfaz_criterios_para_prescricao",
 							"exibirCancelarContaAction.do?contaID="
-							+ contaColecao.getId() + "&idImovel="
-							+ contaColecao.getImovel().getId(), null);
-				}
-				else{
+									+ contaColecao.getId() + "&idImovel="
+									+ contaColecao.getImovel().getId(), null);
+				} else {
 					contaColecao
 							.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
-	
+
 					// Colocado por Raphael Rossiter em 27/02/2008
 					// Ano Mes Referencia Contabil
 					if (contaColecao.getReferencia() <= sistemaParametro
 							.getAnoMesFaturamento().intValue()) {
-	
+
 						contaColecao.setReferenciaContabil(Util
 								.getAnoMesComoInteger(new Date()));
 					}
-	
+
 					// Usuario
 					contaColecao.setUsuario(usuarioLogado);
-	
+
 					// última alteração
 					contaColecao.setUltimaAlteracao(new Date());
-	
+
 					/*
-					 * Alterado por Raphael Rossiter em 30/07/2007 (Analista: Rosana
-					 * Carvalho)
+					 * Alterado por Raphael Rossiter em 30/07/2007 (Analista:
+					 * Rosana Carvalho)
 					 * 
 					 * OBJETIVO: Quando o mes/ano de faturamento for maior que o
-					 * mes/ano de faturamento atual, não alterar o mes/ano contábil
+					 * mes/ano de faturamento atual, não alterar o mes/ano
+					 * contábil
 					 */
-	
+
 					// Ano Mes Referencia Contabil
 					if (contaColecao.getReferencia() <= sistemaParametro
 							.getAnoMesFaturamento().intValue()) {
-	
+
 						contaColecao.setReferenciaContabil(Util
 								.getAnoMesComoInteger(new Date()));
 					}
-	
+
 					/*
-					 * Colocado por Raphael Rossiter em 09/08/2007 OBJETIVO: Gravar
-					 * na tabela de conta o usuário que está logado no sistema
+					 * Colocado por Raphael Rossiter em 09/08/2007 OBJETIVO:
+					 * Gravar na tabela de conta o usuário que está logado no
+					 * sistema
 					 */
-	
+
 					// Usuario
 					contaColecao.setUsuario(usuarioLogado);
-	
+
 					// ------------ <REGISTRAR
 					// TRANSAÇÃO>----------------------------
-	
+
 					RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 							Operacao.OPERACAO_CANCELAR_CONTA,
 							contaColecao.getImovel() != null ? contaColecao
@@ -58345,22 +59327,22 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							contaColecao.getId(), new UsuarioAcaoUsuarioHelper(
 									usuarioLogado,
 									UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-	
+
 					registradorOperacao.registrarOperacao(contaColecao);
-	
+
 					getControladorTransacao().registrarTransacao(contaColecao);
-	
+
 					// ------------ </REGISTRAR
 					// TRANSAÇÃO>----------------------------
-	
+
 					// UPDATE
 					try {
-	
+
 						if (contaColecao.getDebitoCreditoSituacaoAnterior() == null) {
 							repositorioFaturamento
 									.cancelarContaReferenciaContabilMenorSistemaParametro(
 											contaColecao, null);
-	
+
 						} else {
 							repositorioFaturamento
 									.cancelarContaReferenciaContabilMenorSistemaParametro(
@@ -58369,15 +59351,16 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 													.getDebitoCreditoSituacaoAnterior()
 													.getId());
 						}
-	
+
 						// CRC2725 - alterado por Vivianne Sousa - 30/03/2010
 						// analista:Fátima
-						// 1.1.2.Verificar se há relação do cancelamento com itens
+						// 1.1.2.Verificar se há relação do cancelamento com
+						// itens
 						// de negativação
 						getControladorSpcSerasa()
 								.verificarRelacaoDoCancelamentoComItensNegativacao(
 										contaColecao, null);
-	
+
 					} catch (ErroRepositorioException ex) {
 						sessionContext.setRollbackOnly();
 						new ControladorException("erro.sistema", ex);
@@ -60708,12 +61691,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					idDocumentoEmitido));
 		}
 
-/*		Integer digito = Util.obterDigitoVerificadorModulo11(nossoNumero
-				.toString());
-
-		nossoNumero.append("-");
-
-		nossoNumero.append(digito);*/
+		/*
+		 * Integer digito = Util.obterDigitoVerificadorModulo11(nossoNumero
+		 * .toString());
+		 * 
+		 * nossoNumero.append("-");
+		 * 
+		 * nossoNumero.append(digito);
+		 */
 
 		return nossoNumero;
 	}
@@ -62826,8 +63811,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							// Igual a 1 e o tipo de ligação e medição
 							// recuperados anteriormente
 							obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-									emitirContaHelper, 1,
-									tipoLigacao, tipoMedicao);
+									emitirContaHelper, 1, tipoLigacao,
+									tipoMedicao);
 							contaTxt.append(Util.completaString(
 									obterDadosConsumoMedicaoAnterior.toString(),
 									19));
@@ -62838,8 +63823,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							// de Meses Igual a 4 e o tipo de ligação e medição
 							// recuperados anteriormente
 							obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-									emitirContaHelper, 4,
-									tipoLigacao, tipoMedicao);
+									emitirContaHelper, 4, tipoLigacao,
+									tipoMedicao);
 							contaTxt.append(Util.completaString(
 									obterDadosConsumoMedicaoAnterior.toString(),
 									19));
@@ -62850,8 +63835,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							// de Meses Igual a 2 e o tipo de ligação e medição
 							// recuperados anteriormente
 							obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-									emitirContaHelper, 2,
-									tipoLigacao, tipoMedicao);
+									emitirContaHelper, 2, tipoLigacao,
+									tipoMedicao);
 							contaTxt.append(Util.completaString(
 									obterDadosConsumoMedicaoAnterior.toString(),
 									19));
@@ -62862,8 +63847,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							// de Meses Igual a 5 e o tipode ligação e medição
 							// recuperados anteriormente
 							obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-									emitirContaHelper, 5,
-									tipoLigacao, tipoMedicao);
+									emitirContaHelper, 5, tipoLigacao,
+									tipoMedicao);
 							contaTxt.append(Util.completaString(
 									obterDadosConsumoMedicaoAnterior.toString(),
 									19));
@@ -62978,8 +63963,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							// Igual a 3 e o tipo de ligação e medição
 							// recuperados anteriormente
 							obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-									emitirContaHelper, 3,
-									tipoLigacao, tipoMedicao);
+									emitirContaHelper, 3, tipoLigacao,
+									tipoMedicao);
 							contaTxt.append(Util.completaString(
 									obterDadosConsumoMedicaoAnterior.toString(),
 									19));
@@ -62990,8 +63975,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							// de Meses Igual a 6 e o tipo de ligação e medição
 							// recuperados anteriormente
 							obterDadosConsumoMedicaoAnterior = obterDadosConsumoAnterior(
-									emitirContaHelper, 6,
-									tipoLigacao, tipoMedicao);
+									emitirContaHelper, 6, tipoLigacao,
+									tipoMedicao);
 							contaTxt.append(Util.completaString(
 									obterDadosConsumoMedicaoAnterior.toString(),
 									19));
@@ -64196,21 +65181,25 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
-	
-	public DebitoACobrar gerarDebitoACobrar(Integer anoMesReferenciaArrecadacao, Integer anoMesReferenciaFaturamento, Imovel imovel, 
-			Short numeroPrestacaoDebito, Short numeroPrestacaoCobradas, Integer anoMesReferenciaDebito, BigDecimal valorDebito, 
+
+	public DebitoACobrar gerarDebitoACobrar(
+			Integer anoMesReferenciaArrecadacao,
+			Integer anoMesReferenciaFaturamento, Imovel imovel,
+			Short numeroPrestacaoDebito, Short numeroPrestacaoCobradas,
+			Integer anoMesReferenciaDebito, BigDecimal valorDebito,
 			DebitoTipo debitoTipo, Usuario usuario) throws ControladorException {
 
 		DebitoACobrar debitoACobrar;
 		DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 		debitoCreditoSituacao.setId(DebitoCreditoSituacao.NORMAL);
-		
+
 		CobrancaForma cobrancaForma = new CobrancaForma();
 		cobrancaForma.setId(CobrancaForma.COBRANCA_EM_CONTA);
-		
+
 		Object[] obterDebitoTipo;
 		try {
-			obterDebitoTipo = repositorioFaturamento.obterDebitoTipo(debitoTipo.getId());
+			obterDebitoTipo = repositorioFaturamento.obterDebitoTipo(debitoTipo
+					.getId());
 
 			FinanciamentoTipo financiamentoTipo = new FinanciamentoTipo();
 			if (obterDebitoTipo[0] != null) {
@@ -64224,17 +65213,20 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 			debitoACobrar = new DebitoACobrar();
 			debitoACobrar.setAnoMesCobrancaDebito(anoMesReferenciaArrecadacao);
-			debitoACobrar.setAnoMesReferenciaContabil(getAnoMesReferenciaContabil());
+			debitoACobrar
+					.setAnoMesReferenciaContabil(getAnoMesReferenciaContabil());
 			debitoACobrar.setNumeroPrestacaoDebito(numeroPrestacaoDebito);
 			debitoACobrar.setNumeroPrestacaoCobradas(numeroPrestacaoCobradas);
 			debitoACobrar.setImovel(imovel);
 			debitoACobrar.setLocalidade(imovel.getLocalidade());
 			debitoACobrar.setQuadra(imovel.getQuadra());
-			if(imovel.getSetorComercial() != null){
-				debitoACobrar.setCodigoSetorComercial(imovel.getSetorComercial().getCodigo());
+			if (imovel.getSetorComercial() != null) {
+				debitoACobrar.setCodigoSetorComercial(imovel
+						.getSetorComercial().getCodigo());
 			}
-			if(imovel.getQuadra() != null){
-				debitoACobrar.setNumeroQuadra(imovel.getQuadra().getNumeroQuadra());
+			if (imovel.getQuadra() != null) {
+				debitoACobrar.setNumeroQuadra(imovel.getQuadra()
+						.getNumeroQuadra());
 			}
 			debitoACobrar.setNumeroLote(imovel.getLote());
 			debitoACobrar.setNumeroSubLote(imovel.getSubLote());
@@ -64257,15 +65249,16 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			DebitoACobrarGeral debitoACobrarGeral = new DebitoACobrarGeral();
 			debitoACobrarGeral.setIndicadorHistorico(ConstantesSistema.NAO);
 			debitoACobrarGeral.setUltimaAlteracao(new Date());
-			
-			Integer idDebitoACobrarGeral = (Integer) getControladorUtil().inserir(debitoACobrarGeral);
+
+			Integer idDebitoACobrarGeral = (Integer) getControladorUtil()
+					.inserir(debitoACobrarGeral);
 			debitoACobrarGeral.setId(idDebitoACobrarGeral);
 
 			debitoACobrar.setId(idDebitoACobrarGeral);
 			debitoACobrar.setDebitoACobrarGeral(debitoACobrarGeral);
-			
+
 			getControladorUtil().inserir(debitoACobrar);
-			
+
 			inserirDebitoACobrarCategoria(debitoACobrar, imovel);
 		} catch (Exception e) {
 			throw new EJBException(e);
@@ -64314,7 +65307,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		Object[] obterDebitoTipo;
 
 		try {
-			obterDebitoTipo = repositorioFaturamento.obterDebitoTipo(debitoTipo.getId());
+			obterDebitoTipo = repositorioFaturamento.obterDebitoTipo(debitoTipo
+					.getId());
 
 			FinanciamentoTipo financiamentoTipo = new FinanciamentoTipo();
 			if (obterDebitoTipo[0] != null) {
@@ -64329,7 +65323,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			debitoACobrar = new DebitoACobrar();
 			debitoACobrar.setImovel(imovel);
 			debitoACobrar.setAnoMesCobrancaDebito(anoMesReferenciaArrecadacao);
-			debitoACobrar.setAnoMesReferenciaContabil(getAnoMesReferenciaContabil());
+			debitoACobrar
+					.setAnoMesReferenciaContabil(getAnoMesReferenciaContabil());
 			debitoACobrar.setNumeroPrestacaoDebito(numeroPrestacaoDebito);
 			debitoACobrar.setNumeroPrestacaoCobradas(numeroPrestacaoCobradas);
 			debitoACobrar.setLocalidade(localidade);
@@ -64357,8 +65352,9 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			DebitoACobrarGeral debitoACobrarGeral = new DebitoACobrarGeral();
 			debitoACobrarGeral.setIndicadorHistorico(ConstantesSistema.NAO);
 			debitoACobrarGeral.setUltimaAlteracao(new Date());
-			
-			Integer idDebitoACobrarGeral = (Integer) getControladorUtil().inserir(debitoACobrarGeral);
+
+			Integer idDebitoACobrarGeral = (Integer) getControladorUtil()
+					.inserir(debitoACobrarGeral);
 			debitoACobrarGeral.setId(idDebitoACobrarGeral);
 
 			debitoACobrar.setId(idDebitoACobrarGeral);
@@ -64372,7 +65368,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	private int getAnoMesReferenciaContabil() throws ControladorException {
-		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
+		SistemaParametro sistemaParametro = getControladorUtil()
+				.pesquisarParametrosDoSistema();
 		int anoMesReferenciaContabil = sistemaParametro.getAnoMesFaturamento();
 		int anoMesCorrente = Util.getAnoMesComoInt(new Date());
 
@@ -64409,7 +65406,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		Collection retorno = new ArrayList();
 
-		String tipoConta = helper.getTipoConta();	
+		String tipoConta = helper.getTipoConta();
 		try {
 			SistemaParametro sistemaParametro;
 			sistemaParametro = getControladorUtil()
@@ -64643,7 +65640,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								.getId().toString());
 
 						contaHelper.setTipoConta(tipoConta);
-						
+
 						retorno.add(contaHelper);
 
 					}
@@ -65661,8 +66658,10 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			Integer anoMesFaturamento, FaturamentoGrupo faturamentoGrupo)
 			throws ControladorException {
 
-		Collection colecaoCategorias = this.getControladorImovel().obterQuantidadeEconomiasCategoria(imovel);
-		Collection colecaoCategoriaOUSubcategoria = getControladorImovel().obterColecaoCategoriaOuSubcategoriaDoImovel(imovel);
+		Collection colecaoCategorias = this.getControladorImovel()
+				.obterQuantidadeEconomiasCategoria(imovel);
+		Collection colecaoCategoriaOUSubcategoria = getControladorImovel()
+				.obterColecaoCategoriaOuSubcategoriaDoImovel(imovel);
 
 		DeterminarValoresFaturamentoAguaEsgotoHelper helperValoresAguaEsgoto = new DeterminarValoresFaturamentoAguaEsgotoHelper();
 
@@ -65851,7 +66850,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				this.atualizarCreditoARealizar(gerarCreditoRealizadoHelper
 						.getColecaoCreditoARealizar());
 
-				
 				// -----------------------------------------------------------------------------------------------------
 
 				// [SF0008] - Gerar Movimento De Débito Automático
@@ -66844,16 +67842,17 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 				}
 
-				/**TODO:COSANPA
-				 * Autor: Adriana Muniz
-				 * Data: 29/06/2011
+				/**
+				 * TODO:COSANPA Autor: Adriana Muniz Data: 29/06/2011
 				 * 
-				 * Alteração para que a referência da prestação do crédito seja sempre atualizada, 
-				 * se um crédito realizado tenha sido gerado a partir desse crédito a realizar
+				 * Alteração para que a referência da prestação do crédito seja
+				 * sempre atualizada, se um crédito realizado tenha sido gerado
+				 * a partir desse crédito a realizar
 				 * */
 				// anoMes da prestação será o anaMes de referência da conta
-				creditoARealizar.setAnoMesReferenciaPrestacao(anoMesFaturamento);
-				
+				creditoARealizar
+						.setAnoMesReferenciaPrestacao(anoMesFaturamento);
+
 				// Valor de credito
 				valorCredito = valorCorrespondenteParcelaMes
 						.add(creditoARealizar.getValorResidualMesAnterior());
@@ -66899,15 +67898,16 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 				} else {
 
-					/**TODO:COSANPA
-					 * autor: Adriana Muniz
-					 * data:29/06/2011
+					/**
+					 * TODO:COSANPA autor: Adriana Muniz data:29/06/2011
 					 * 
-					 * alteração para não lançar para zero o valor residual dos creditos s a realizar,
-					 * caso o imóvel pertença ao impressão simultanea
+					 * alteração para não lançar para zero o valor residual dos
+					 * creditos s a realizar, caso o imóvel pertença ao
+					 * impressão simultanea
 					 * */
 					if (!preFaturamento) {
-						creditoARealizar.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
+						creditoARealizar
+								.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
 					}
 				}
 
@@ -67122,117 +68122,75 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		conta.setIndicadorCobrancaMulta((short) 2);
 
 		if (faturamentoAntecipado) {
-			conta.setDataVencimentoConta(this.determinarVencimentoContaAntecipado(imovel,anoMesFaturamento));
+			conta.setDataVencimentoConta(this.determinarVencimentoContaAntecipado(imovel, anoMesFaturamento));
 		} else {
-
-			conta.setDataVencimentoConta(this.determinarVencimentoConta(imovel,faturamentoAtivCronRota, sistemaParametro, anoMesFaturamento));
+			conta.setDataVencimentoConta(this.determinarVencimentoConta(imovel, faturamentoAtivCronRota, sistemaParametro, anoMesFaturamento));
 		}
 
 		conta.setDataVencimentoOriginal(conta.getDataVencimentoConta());
 
-		// CONSUMO_AGUA
-		if (helperValoresAguaEsgoto.getIndicadorFaturamentoAgua() != null
-				&& helperValoresAguaEsgoto.getIndicadorFaturamentoAgua()
-						.equals(ConsumoHistorico.FATURAR_AGUA)) {
-
-			conta.setConsumoAgua(helperValoresAguaEsgoto
-					.getConsumoFaturadoAgua());
-			conta.setConsumoRateioAgua(helperValoresAguaEsgoto
-					.getConsumoRateioAgua());
+		if (helperValoresAguaEsgoto.getIndicadorFaturamentoAgua() != null && helperValoresAguaEsgoto.getIndicadorFaturamentoAgua().equals(ConsumoHistorico.FATURAR_AGUA)) {
+			conta.setConsumoAgua(helperValoresAguaEsgoto.getConsumoFaturadoAgua());
+			conta.setConsumoRateioAgua(helperValoresAguaEsgoto.getConsumoRateioAgua());
 		} else {
 			conta.setConsumoAgua(0);
 			conta.setConsumoRateioAgua(0);
 		}
 
-		// CONSUMO_ESGOTO
-		if (helperValoresAguaEsgoto.getIndicadorFaturamentoEsgoto() != null
-				&& helperValoresAguaEsgoto.getIndicadorFaturamentoEsgoto()
-						.equals(ConsumoHistorico.FATURAR_ESGOTO)) {
-
-			conta.setConsumoEsgoto(helperValoresAguaEsgoto
-					.getConsumoFaturadoEsgoto());
-			conta.setConsumoRateioEsgoto(helperValoresAguaEsgoto
-					.getConsumoRateioEsgoto());
+		if (helperValoresAguaEsgoto.getIndicadorFaturamentoEsgoto() != null && helperValoresAguaEsgoto.getIndicadorFaturamentoEsgoto().equals(ConsumoHistorico.FATURAR_ESGOTO)) {
+			conta.setConsumoEsgoto(helperValoresAguaEsgoto.getConsumoFaturadoEsgoto());
+			conta.setConsumoRateioEsgoto(helperValoresAguaEsgoto.getConsumoRateioEsgoto());
 		} else {
 			conta.setConsumoEsgoto(0);
 			conta.setConsumoRateioEsgoto(0);
 		}
 
-		/**
-		 * TODO : COSANPA
-		 * Pamela gatinho - 31/05/2012
-		 * Alteracao para salvar o valor do rateio junto com o 
-		 * valor faturado de agua e esgoto.
-		 */
 		try {
-			if ( !preFaturamento && imovel.isImovelCondominio()) {
+			if (!preFaturamento && imovel.isImovelCondominio()) {
+				BigDecimal[] valoresRateioAguaEsgotoImovel = this.calcularValorRateioImovel(imovel, faturamentoGrupo);
 				
-				// Calculando valor de rateio 
-				BigDecimal[] valoresRateioAguaEsgotoImovel = this.calcularValorRateioImovel(imovel,faturamentoGrupo);
 				BigDecimal valorRateioAgua = valoresRateioAguaEsgotoImovel[0];
-				
 				BigDecimal valorFinalAgua = helperValoresAguaEsgoto.getValorTotalAgua().add(valorRateioAgua);
-				
-				helperValoresAguaEsgoto.setValorTotalAgua(valorFinalAgua);
 
+				helperValoresAguaEsgoto.setValorTotalAgua(valorFinalAgua);
 				conta.setValorRateioAgua(valorRateioAgua);
-				
-				//Verifica se o condomínio possui faturamento ativo de esgoto
-				if (imovel.getImovelCondominio().getLigacaoEsgotoSituacao().getIndicadorFaturamentoSituacao().equals(LigacaoEsgotoSituacao.FATURAMENTO_ATIVO)){
+
+				if (imovel.getImovelCondominio().getLigacaoEsgotoSituacao().getIndicadorFaturamentoSituacao().equals(LigacaoEsgotoSituacao.FATURAMENTO_ATIVO)) {
 					BigDecimal valorRateioEsgoto = valoresRateioAguaEsgotoImovel[1];
-					
 					BigDecimal valorFinalEsgoto = helperValoresAguaEsgoto.getValorTotalEsgoto().add(valorRateioEsgoto);
-					
+
 					helperValoresAguaEsgoto.setValorTotalEsgoto(valorFinalEsgoto);
-					
 					conta.setValorRateioEsgoto(valorRateioEsgoto);
 				}
 			}
 		} catch (ErroRepositorioException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		/*
-		 * DATA_VALIDADE
-		 * 
-		 * Último dia do mês correspondente ao mês da data de vencimento da
-		 * conta acrescido do número de meses de validade da conta.
-		 */
-		Date dataValidadeConta = Util.adcionarOuSubtrairMesesAData(
-				conta.getDataVencimentoConta(),
-				sistemaParametro.getNumeroMesesValidadeConta(), 0);
+
+		Date dataValidadeConta = Util.adcionarOuSubtrairMesesAData(conta.getDataVencimentoConta(), sistemaParametro.getNumeroMesesValidadeConta(), 0);
 
 		int mesDataValidadeConta = Util.getMes(dataValidadeConta);
 		int anoDataValidadeConta = Util.getAno(dataValidadeConta);
 
-		dataValidadeConta = Util.criarData(
-				Integer.parseInt(Util.obterUltimoDiaMes(mesDataValidadeConta,
-						anoDataValidadeConta)), mesDataValidadeConta,
-				anoDataValidadeConta);
+		dataValidadeConta = Util.criarData(Integer.parseInt(Util.obterUltimoDiaMes(mesDataValidadeConta, anoDataValidadeConta)), mesDataValidadeConta, anoDataValidadeConta);
 
 		conta.setDataValidadeConta(dataValidadeConta);
 		conta.setReferenciaContabil(anoMesFaturamento);
 		conta.setIndicadorAlteracaoVencimento((short) 2);
 
-		// VALORES DE ÁGUA, ESGOTO, DÉBITOS E CRÉDITOS
 		conta.setValorAgua(helperValoresAguaEsgoto.getValorTotalAgua());
 		conta.setValorEsgoto(helperValoresAguaEsgoto.getValorTotalEsgoto());
 		conta.setValorCreditos(helperCredito.getValorTotalCredito());
 		conta.setDebitos(helperDebito.getValorTotalDebito());
 
-		// VALOR DOS IMPOSTOS
 		if (gerarImpostosDeduzidosContaHelper.getValorTotalImposto() != null) {
-
-			conta.setValorImposto(gerarImpostosDeduzidosContaHelper
-					.getValorTotalImposto());
+			conta.setValorImposto(gerarImpostosDeduzidosContaHelper.getValorTotalImposto());
 		} else {
 			conta.setValorImposto(ConstantesSistema.VALOR_ZERO);
 		}
 
 		conta.setPercentualEsgoto(helperValoresAguaEsgoto.getPercentualEsgoto());
-		conta.setPercentualColeta(helperValoresAguaEsgoto
-				.getPercentualColetaEsgoto());
+		conta.setPercentualColeta(helperValoresAguaEsgoto.getPercentualColetaEsgoto());
 		conta.setDataInclusao(null);
 
 		conta.setContaMotivoCancelamento(null);
@@ -67255,45 +68213,24 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		ContaMotivoRevisao contaMotivoRevisao = null;
 
 		if (preFaturamento) {
-
-			// DEBITO_CREDITO_SITUACAO_ATUAL
 			debitoCreditoSituacao.setId(DebitoCreditoSituacao.PRE_FATURADA);
 		} else {
-
-			// DEBITO_CREDITO_SITUACAO_ATUAL
 			debitoCreditoSituacao.setId(DebitoCreditoSituacao.NORMAL);
-
-			// CONTA_MOTIVO_REVISAO
-			/*
-			 * contaMotivoRevisao = this.determinarContaMotivoRevisao(
-			 * helperValoresAguaEsgoto.getConsumoHistoricoAgua());
-			 */
 		}
 
-		// conta.setContaMotivoRevisao(contaMotivoRevisao);
 		conta.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
 
-		// DATA_REVISAO
 		if (contaMotivoRevisao != null) {
 			conta.setDataRevisao(new Date());
 		}
 
 		conta.setUltimaAlteracao(new Date());
-
 		conta.setContaGeral(contaGeral);
 		conta.setId(contaGeral.getId());
-
-		// GRUPO DE FATURAMENTO
 		conta.setFaturamentoGrupo(faturamentoGrupo);
-
-		// ROTA
 		conta.setRota(faturamentoAtivCronRota.getRota());
 
-		// CRC4202 - adicionado por Vivianne Sousa - 20/09/2010 -
-		// analista:Adriana Ribeiro
-		Object[] leiturasAnteriorEAtual = getControladorMicromedicao()
-				.obterLeituraAnteriorEAtualFaturamentoMedicaoHistorico(
-						imovel.getId(), anoMesFaturamento);
+		Object[] leiturasAnteriorEAtual = getControladorMicromedicao().obterLeituraAnteriorEAtualFaturamentoMedicaoHistorico(imovel.getId(), anoMesFaturamento);
 
 		if (leiturasAnteriorEAtual != null) {
 			Integer leituraAnteriorFaturamento = null;
@@ -67310,11 +68247,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			conta.setNumeroLeituraAtual(leituraAtualFaturamento);
 		}
 
-		// NUMERAÇÃO BOLETO
-		conta.setNumeroBoleto(this.verificarGeracaoBoleto(sistemaParametro,
-				conta));
+		conta.setNumeroBoleto(this.verificarGeracaoBoleto(sistemaParametro, conta));
 
-		// INSERINDO CONTA NA BASE
 		this.getControladorUtil().inserir(conta);
 
 		return conta;
@@ -67493,11 +68427,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		Collection colecaoContaCategoriaConsumoFaixa = null;
 
 		BigDecimal[] valoresAguaEsgotoRateioPorEconomia = new BigDecimal[2];
-		
-		if ( conta.getImovel().isImovelCondominio()) {
-			valoresAguaEsgotoRateioPorEconomia = this.calcularValorRateioPorEconomia(conta.getImovel().getImovelCondominio().getId(), conta.getFaturamentoGrupo());
+
+		if (conta.getImovel().isImovelCondominio()) {
+			valoresAguaEsgotoRateioPorEconomia = this
+					.calcularValorRateioPorEconomia(conta.getImovel()
+							.getImovelCondominio().getId(),
+							conta.getFaturamentoGrupo());
 		}
-		
+
 		if ((colecaoCategorias != null && !colecaoCategorias.isEmpty())
 				&& (colecaoCalcularValoresAguaEsgotoHelper != null && !colecaoCalcularValoresAguaEsgotoHelper
 						.isEmpty())) {
@@ -67535,27 +68472,32 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						.getQuantidadeEconomiasCategoria().shortValue());
 				BigDecimal valorRateioAgua = new BigDecimal("0.00");
 				BigDecimal valorRateioEsgoto = new BigDecimal("0.00");
-				
-				if ( conta.getImovel().isImovelCondominio()) {
-					valorRateioAgua = valoresAguaEsgotoRateioPorEconomia[0].multiply(new BigDecimal(categoria
-							.getQuantidadeEconomiasCategoria()));
 
-					valorRateioEsgoto = valoresAguaEsgotoRateioPorEconomia[1].multiply(new BigDecimal(categoria
-							.getQuantidadeEconomiasCategoria()));
+				if (conta.getImovel().isImovelCondominio()) {
+					valorRateioAgua = valoresAguaEsgotoRateioPorEconomia[0]
+							.multiply(new BigDecimal(categoria
+									.getQuantidadeEconomiasCategoria()));
+
+					valorRateioEsgoto = valoresAguaEsgotoRateioPorEconomia[1]
+							.multiply(new BigDecimal(categoria
+									.getQuantidadeEconomiasCategoria()));
 
 				}
-								
+
 				BigDecimal valorAgua = valorRateioAgua;
-				if(calcularValoresAguaEsgotoHelper.getValorFaturadoAguaCategoria() != null)
-					valorAgua = calcularValoresAguaEsgotoHelper.getValorFaturadoAguaCategoria().add(valorAgua);
-				
-				
+				if (calcularValoresAguaEsgotoHelper
+						.getValorFaturadoAguaCategoria() != null)
+					valorAgua = calcularValoresAguaEsgotoHelper
+							.getValorFaturadoAguaCategoria().add(valorAgua);
+
 				BigDecimal valorEsgoto = valorRateioEsgoto;
-				if(calcularValoresAguaEsgotoHelper.getValorFaturadoEsgotoCategoria() != null)
-					valorEsgoto = calcularValoresAguaEsgotoHelper.getValorFaturadoEsgotoCategoria().add(valorEsgoto);
-				
+				if (calcularValoresAguaEsgotoHelper
+						.getValorFaturadoEsgotoCategoria() != null)
+					valorEsgoto = calcularValoresAguaEsgotoHelper
+							.getValorFaturadoEsgotoCategoria().add(valorEsgoto);
+
 				contaCategoria.setValorAgua(valorAgua);
-				
+
 				contaCategoria.setConsumoAgua(calcularValoresAguaEsgotoHelper
 						.getConsumoFaturadoAguaCategoria());
 				contaCategoria.setValorEsgoto(valorEsgoto);
@@ -67667,12 +68609,15 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		Collection colecaoContaCategoriaConsumoFaixa = null;
 
 		BigDecimal[] valoresAguaEsgotoRateioPorEconomia = new BigDecimal[2];
-		
-		if ( conta.getImovel().isImovelCondominio()) {
-			
-			valoresAguaEsgotoRateioPorEconomia = this.calcularValorRateioPorEconomia(conta.getImovel().getImovelCondominio().getId(), conta.getFaturamentoGrupo());
+
+		if (conta.getImovel().isImovelCondominio()) {
+
+			valoresAguaEsgotoRateioPorEconomia = this
+					.calcularValorRateioPorEconomia(conta.getImovel()
+							.getImovelCondominio().getId(),
+							conta.getFaturamentoGrupo());
 		}
-		
+
 		if ((colecaoSubCategorias != null && !colecaoSubCategorias.isEmpty())
 				&& (colecaoCalcularValoresAguaEsgotoHelper != null && !colecaoCalcularValoresAguaEsgotoHelper
 						.isEmpty())) {
@@ -67711,19 +68656,23 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				contaCategoria.setQuantidadeEconomia(subCategoria
 						.getQuantidadeEconomias().shortValue());
 
-				BigDecimal valorRateioAgua = valoresAguaEsgotoRateioPorEconomia[0].multiply(new BigDecimal(subCategoria
-						.getQuantidadeEconomias()));
-				
-				BigDecimal valorAgua = calcularValoresAguaEsgotoHelper.getValorFaturadoAguaCategoria().add(valorRateioAgua);
-				
-				BigDecimal valorRateioEsgoto = valoresAguaEsgotoRateioPorEconomia[1].multiply(new BigDecimal(subCategoria
-						.getQuantidadeEconomias()));
-				
-				BigDecimal valorEsgoto = calcularValoresAguaEsgotoHelper.getValorFaturadoEsgotoCategoria().add(valorRateioEsgoto);
-				
-				
+				BigDecimal valorRateioAgua = valoresAguaEsgotoRateioPorEconomia[0]
+						.multiply(new BigDecimal(subCategoria
+								.getQuantidadeEconomias()));
+
+				BigDecimal valorAgua = calcularValoresAguaEsgotoHelper
+						.getValorFaturadoAguaCategoria().add(valorRateioAgua);
+
+				BigDecimal valorRateioEsgoto = valoresAguaEsgotoRateioPorEconomia[1]
+						.multiply(new BigDecimal(subCategoria
+								.getQuantidadeEconomias()));
+
+				BigDecimal valorEsgoto = calcularValoresAguaEsgotoHelper
+						.getValorFaturadoEsgotoCategoria().add(
+								valorRateioEsgoto);
+
 				contaCategoria.setValorAgua(valorAgua);
-				
+
 				contaCategoria.setConsumoAgua(calcularValoresAguaEsgotoHelper
 						.getConsumoFaturadoAguaCategoria());
 				contaCategoria.setValorEsgoto(valorEsgoto);
@@ -68423,7 +69372,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 			int tamanhoArquivoDiv = 0;
 
-			List<Integer> imoveisDivididos = new ArrayList<Integer>(); 
+			List<Integer> imoveisDivididos = new ArrayList<Integer>();
 
 			StringBuilder arquivoTexto = null;
 			StringBuilder arquivoTextoDiv = null;
@@ -68662,7 +69611,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 													arquivoTextoDiv = arquivoTextoDiv
 															.append(registroArquivoTexto[0]);
 													int quantidadeRegistroArquivoDiv = (Integer) registroArquivoTexto[1];
-													imoveisDivididos.add(imovel.getId());
+													imoveisDivididos.add(imovel
+															.getId());
 													tamanhoArquivoDiv = tamanhoArquivoDiv
 															+ quantidadeRegistroArquivoDiv;
 												}
@@ -68726,7 +69676,9 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 													if (arquivoTextoDiv != null) {
 														arquivoTextoDiv
 																.append(retornoArquivo[0]);
-														imoveisDivididos.add(imovel.getId());
+														imoveisDivididos
+																.add(imovel
+																		.getId());
 														tamanhoArquivoDiv = tamanhoArquivoDiv
 																+ tamanhoArquivoRetorno;
 													}
@@ -68761,12 +69713,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						// Sempre observando os Critérios da UC0745 no Fluxo 3.2
 						if (rota.getNumeroLimiteImoveis() != null) {
 							/**
-							 * TODO - COSANPA
-							 * Alteracao para corrigir a finalizacao de rotas divididas
-							 * - Salvar a qtd de imoveis com conta PF nas rotas divididas, e não a quantidade de imóveis na rota
-							 * - Finalizar a rota por parte do arquivo e não pelo IMEI do celular
+							 * TODO - COSANPA Alteracao para corrigir a
+							 * finalizacao de rotas divididas - Salvar a qtd de
+							 * imoveis com conta PF nas rotas divididas, e não a
+							 * quantidade de imóveis na rota - Finalizar a rota
+							 * por parte do arquivo e não pelo IMEI do celular
 							 */
-							if(imoveisDivididos.size() >= rota.getNumeroLimiteImoveis().intValue()){
+							if (imoveisDivididos.size() >= rota
+									.getNumeroLimiteImoveis().intValue()) {
 
 								Integer qtdArquivosDividido = colecaoArquivoDivisao
 										.size() + 1;
@@ -68788,21 +69742,27 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								arquivoDivCompleto.append(arquivoTextoDiv);
 								arquivoDivCompleto.append(dadosFinais);
 
-								Integer qtdImoveisDivididos = repositorioFaturamento.
-								obterQtdImoveisRotaDivididaComContaPF(anoMesFaturamento, imoveisDivididos);
-						
-								ArquivoTextoRoteiroEmpresaDivisao arquivoDividido = 
-									gerarArquivoTextoFaturamento.inserirArquivoTextoRoteiroEmpresaDivisao(
-											anoMesFaturamento, faturamentoGrupo, rota, imovel, qtdImoveisDivididos, arquivoDivCompleto); 
-						
-								arquivoDividido.setNumeroSequenciaArquivo(qtdArquivosDividido);
-						
+								Integer qtdImoveisDivididos = repositorioFaturamento
+										.obterQtdImoveisRotaDivididaComContaPF(
+												anoMesFaturamento,
+												imoveisDivididos);
+
+								ArquivoTextoRoteiroEmpresaDivisao arquivoDividido = gerarArquivoTextoFaturamento
+										.inserirArquivoTextoRoteiroEmpresaDivisao(
+												anoMesFaturamento,
+												faturamentoGrupo, rota, imovel,
+												qtdImoveisDivididos,
+												arquivoDivCompleto);
+
+								arquivoDividido
+										.setNumeroSequenciaArquivo(qtdArquivosDividido);
+
 								colecaoArquivoDivisao.add(arquivoDividido);
-						
+
 								qtdImoveisDivididos = 0;
 								imoveisDivididos.clear();
-								
-								//numeroImoveisDiv = 0;
+
+								// numeroImoveisDiv = 0;
 								tamanhoArquivoDiv = 0;
 								arquivoTextoDiv = null;
 								dadosFinais = null;
@@ -68867,21 +69827,23 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				arquivoDivCompleto.append(arquivoTextoDiv);
 				arquivoDivCompleto.append(dadosFinais);
 
-				Integer qtdImoveisDivididos = repositorioFaturamento.
-					obterQtdImoveisRotaDivididaComContaPF(anoMesFaturamento, imoveisDivididos);
-		
-				ArquivoTextoRoteiroEmpresaDivisao arquivoDividido = 
-					gerarArquivoTextoFaturamento.inserirArquivoTextoRoteiroEmpresaDivisao(
-							anoMesFaturamento, faturamentoGrupo, rota, imovel, qtdImoveisDivididos, arquivoDivCompleto); 
-		
+				Integer qtdImoveisDivididos = repositorioFaturamento
+						.obterQtdImoveisRotaDivididaComContaPF(
+								anoMesFaturamento, imoveisDivididos);
+
+				ArquivoTextoRoteiroEmpresaDivisao arquivoDividido = gerarArquivoTextoFaturamento
+						.inserirArquivoTextoRoteiroEmpresaDivisao(
+								anoMesFaturamento, faturamentoGrupo, rota,
+								imovel, qtdImoveisDivididos, arquivoDivCompleto);
+
 				arquivoDividido.setNumeroSequenciaArquivo(qtdArquivosDividido);
-		
+
 				colecaoArquivoDivisao.add(arquivoDividido);
-		
+
 				qtdImoveisDivididos = 0;
 				imoveisDivididos.clear();
-		
-				//numeroImoveisDiv = 0;
+
+				// numeroImoveisDiv = 0;
 				tamanhoArquivoDiv = 0;
 				arquivoTextoDiv = null;
 				dadosFinais = null;
@@ -68998,13 +69960,16 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						Integer idLeituraTipo = rota.getLeituraTipo().getId();
 
 						/**
-						 * TODO : COSANPA
-						 * Alteração feita para corrigir o problema de incluir na tabela
-						 * Movimento Roteiro Empresa os imóveis informativos, e não
-						 * somente os imóveis que geraram conta PF
+						 * TODO : COSANPA Alteração feita para corrigir o
+						 * problema de incluir na tabela Movimento Roteiro
+						 * Empresa os imóveis informativos, e não somente os
+						 * imóveis que geraram conta PF
 						 */
-						Collection<Imovel> colecaoImoveisAGerar = getControladorMicromedicao().verificarImoveisProcessadosEmMovimentoRoteiroEmpresa(
-								imoveisConvertidosComContaPF,faturamentoGrupo.getId(), anoMesFaturamento);							
+						Collection<Imovel> colecaoImoveisAGerar = getControladorMicromedicao()
+								.verificarImoveisProcessadosEmMovimentoRoteiroEmpresa(
+										imoveisConvertidosComContaPF,
+										faturamentoGrupo.getId(),
+										anoMesFaturamento);
 
 						getControladorMicromedicao()
 								.inserirDadosImoveisMovimentoRoteiroEmpresa(
@@ -69076,30 +70041,28 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							anoMesFaturamento, faturamentoGrupo.getId());
 
 			/*
-			 * TODO : COSANPA
-			 * Alteração feita para permitir que todos os imóveis sejam gerados na rota
-			 * de leitura e impressão simultanea
+			 * TODO : COSANPA Alteração feita para permitir que todos os imóveis
+			 * sejam gerados na rota de leitura e impressão simultanea
 			 */
 			if (conta != null) {
 
 				conta.setImovel(imovel);
 			}
-			
+
 			retorno = new Object[2];
 			arquivoRetorno = new StringBuilder();
 
-				// GERAR ARQUIVO TEXTO
-				// --------------------------------------------------------------
+			// GERAR ARQUIVO TEXTO
+			// --------------------------------------------------------------
 
-				Object[] registroArquivoTexto = gerarArquivoTextoFaturamento
-						.gerarArquivoTexto(imovel, conta, anoMesFaturamento,
-								rota, faturamentoGrupo, sistemaParametro,
-								dataComando);
-				arquivoRetorno.append(registroArquivoTexto[0]);
-				int quantidadeRegistroArquivo = (Integer) registroArquivoTexto[1];
+			Object[] registroArquivoTexto = gerarArquivoTextoFaturamento
+					.gerarArquivoTexto(imovel, conta, anoMesFaturamento, rota,
+							faturamentoGrupo, sistemaParametro, dataComando);
+			arquivoRetorno.append(registroArquivoTexto[0]);
+			int quantidadeRegistroArquivo = (Integer) registroArquivoTexto[1];
 
-				retorno[0] = arquivoRetorno;
-				retorno[1] = quantidadeRegistroArquivo;
+			retorno[0] = arquivoRetorno;
+			retorno[1] = quantidadeRegistroArquivo;
 
 		} catch (Exception ex) {
 
@@ -70256,7 +71219,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							.setRepresentacaoNumericaCodBarraFormatada(representacaoNumericaCodBarraFormatada);
 
 					// ID DA FATURA
-					relatorioFaturasAgrupadasBean.setIdFatura(idFatura.toString());
+					relatorioFaturasAgrupadasBean.setIdFatura(idFatura
+							.toString());
 
 					retorno.add(relatorioFaturasAgrupadasBean);
 
@@ -72476,7 +73440,9 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			Integer anoMesReferenciaFinal) throws ControladorException {
 
 		try {
-			Integer idFaturamentoSituacaoComando = this.inserirFaturamentoSituacaoComando(situacaoEspecialFaturamentoHelper, retirar);
+			Integer idFaturamentoSituacaoComando = this
+					.inserirFaturamentoSituacaoComando(
+							situacaoEspecialFaturamentoHelper, retirar);
 
 			FaturamentoSituacaoComando faturamentoSituacaoComando = new FaturamentoSituacaoComando();
 
@@ -72497,11 +73463,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 					Date ultimaAlteracao = (Date) dadosImoveis[1];
 
-					Date ultimaAlteracaoImovel = getControladorImovel().pesquisarUltimaAlteracaoImovel(id);
+					Date ultimaAlteracaoImovel = getControladorImovel()
+							.pesquisarUltimaAlteracaoImovel(id);
 
 					if (ultimaAlteracaoImovel.after(ultimaAlteracao)) {
 						logger.error("Data da ultima alteracao do imovel é maior que a ultima alteracao enviada.");
-						throw new ControladorException("atencao.atualizacao.timestamp");
+						throw new ControladorException(
+								"atencao.atualizacao.timestamp");
 					}
 
 					colecaoImoveis.add(id);
@@ -72511,40 +73479,74 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 					FiltroFaturamentoSituacaoTipo filtroFaturamentoSituacaoTipo = new FiltroFaturamentoSituacaoTipo();
 
-					filtroFaturamentoSituacaoTipo.adicionarParametro(
-							new ParametroSimples(FiltroFaturamentoSituacaoTipo.ID, situacaoEspecialFaturamentoHelper.getIdFaturamentoSituacaoTipo()));
+					filtroFaturamentoSituacaoTipo
+							.adicionarParametro(new ParametroSimples(
+									FiltroFaturamentoSituacaoTipo.ID,
+									situacaoEspecialFaturamentoHelper
+											.getIdFaturamentoSituacaoTipo()));
 
-					Collection colecaoFaturementoTipo = this.getControladorUtil().pesquisar(filtroFaturamentoSituacaoTipo, FaturamentoSituacaoTipo.class.getName());
+					Collection colecaoFaturementoTipo = this
+							.getControladorUtil().pesquisar(
+									filtroFaturamentoSituacaoTipo,
+									FaturamentoSituacaoTipo.class.getName());
 
-					FaturamentoSituacaoTipo faturamentoSituacaoTipo = (FaturamentoSituacaoTipo) colecaoFaturementoTipo.iterator().next();
+					FaturamentoSituacaoTipo faturamentoSituacaoTipo = (FaturamentoSituacaoTipo) colecaoFaturementoTipo
+							.iterator().next();
 
 					FiltroFaturamentoSituacaoMotivo filtroFaturamentoSituacaoMotivo = new FiltroFaturamentoSituacaoMotivo();
 
-					filtroFaturamentoSituacaoMotivo.adicionarParametro(
-							new ParametroSimples(FiltroFaturamentoSituacaoMotivo.ID, situacaoEspecialFaturamentoHelper.getIdFaturamentoSituacaoMotivo()));
+					filtroFaturamentoSituacaoMotivo
+							.adicionarParametro(new ParametroSimples(
+									FiltroFaturamentoSituacaoMotivo.ID,
+									situacaoEspecialFaturamentoHelper
+											.getIdFaturamentoSituacaoMotivo()));
 
-					Collection colecaoFaturementoMotivo = this.getControladorUtil().pesquisar(filtroFaturamentoSituacaoMotivo, FaturamentoSituacaoMotivo.class.getName());
+					Collection colecaoFaturementoMotivo = this
+							.getControladorUtil().pesquisar(
+									filtroFaturamentoSituacaoMotivo,
+									FaturamentoSituacaoMotivo.class.getName());
 
-					FaturamentoSituacaoMotivo faturamentoSituacaoMotivo = (FaturamentoSituacaoMotivo) colecaoFaturementoMotivo.iterator().next();
+					FaturamentoSituacaoMotivo faturamentoSituacaoMotivo = (FaturamentoSituacaoMotivo) colecaoFaturementoMotivo
+							.iterator().next();
 
 					imovel.setId(new Integer(id));
 					faturamentoSituacaoHistorico.setImovel(imovel);
-					faturamentoSituacaoHistorico.setFaturamentoSituacaoMotivo(faturamentoSituacaoMotivo);
-					faturamentoSituacaoHistorico.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
-					faturamentoSituacaoHistorico.setAnoMesFaturamentoSituacaoInicio(anoMesReferenciaInicial);
-					faturamentoSituacaoHistorico.setAnoMesFaturamentoSituacaoFim(anoMesReferenciaFinal);
-					faturamentoSituacaoHistorico.setAnoMesFaturamentoRetirada(null);
-					faturamentoSituacaoHistorico.setFaturamentoSituacaoMotivo(faturamentoSituacaoMotivo);
-					faturamentoSituacaoHistorico.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
-					faturamentoSituacaoHistorico.setObservacaoInforma(situacaoEspecialFaturamentoHelper.getObservacaoInforma());
-					faturamentoSituacaoHistorico.setUltimaAlteracao(Calendar.getInstance().getTime());
-					faturamentoSituacaoHistorico.setNumeroConsumoAguaMedido(situacaoEspecialFaturamentoHelper.getNumeroConsumoAguaMedido());
-					faturamentoSituacaoHistorico.setNumeroConsumoAguaNaoMedido(situacaoEspecialFaturamentoHelper.getNumeroConsumoAguaNaoMedido());
-					faturamentoSituacaoHistorico.setNumeroVolumeEsgotoMedido(situacaoEspecialFaturamentoHelper.getNumeroVolumeEsgotoMedido());
-					faturamentoSituacaoHistorico.setNumeroVolumeEsgotoNaoMedido(situacaoEspecialFaturamentoHelper.getNumeroVolumeEsgotoNaoMedido());
-					faturamentoSituacaoHistorico.setFaturamentoSituacaoComandoInforma(faturamentoSituacaoComando);
+					faturamentoSituacaoHistorico
+							.setFaturamentoSituacaoMotivo(faturamentoSituacaoMotivo);
+					faturamentoSituacaoHistorico
+							.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
+					faturamentoSituacaoHistorico
+							.setAnoMesFaturamentoSituacaoInicio(anoMesReferenciaInicial);
+					faturamentoSituacaoHistorico
+							.setAnoMesFaturamentoSituacaoFim(anoMesReferenciaFinal);
+					faturamentoSituacaoHistorico
+							.setAnoMesFaturamentoRetirada(null);
+					faturamentoSituacaoHistorico
+							.setFaturamentoSituacaoMotivo(faturamentoSituacaoMotivo);
+					faturamentoSituacaoHistorico
+							.setFaturamentoSituacaoTipo(faturamentoSituacaoTipo);
+					faturamentoSituacaoHistorico
+							.setObservacaoInforma(situacaoEspecialFaturamentoHelper
+									.getObservacaoInforma());
+					faturamentoSituacaoHistorico.setUltimaAlteracao(Calendar
+							.getInstance().getTime());
+					faturamentoSituacaoHistorico
+							.setNumeroConsumoAguaMedido(situacaoEspecialFaturamentoHelper
+									.getNumeroConsumoAguaMedido());
+					faturamentoSituacaoHistorico
+							.setNumeroConsumoAguaNaoMedido(situacaoEspecialFaturamentoHelper
+									.getNumeroConsumoAguaNaoMedido());
+					faturamentoSituacaoHistorico
+							.setNumeroVolumeEsgotoMedido(situacaoEspecialFaturamentoHelper
+									.getNumeroVolumeEsgotoMedido());
+					faturamentoSituacaoHistorico
+							.setNumeroVolumeEsgotoNaoMedido(situacaoEspecialFaturamentoHelper
+									.getNumeroVolumeEsgotoNaoMedido());
+					faturamentoSituacaoHistorico
+							.setFaturamentoSituacaoComandoInforma(faturamentoSituacaoComando);
 
-					collectionFaturmentoSituaoHistorico.add(faturamentoSituacaoHistorico);
+					collectionFaturmentoSituaoHistorico
+							.add(faturamentoSituacaoHistorico);
 
 				}
 			}
@@ -72553,20 +73555,27 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// TRANSAÇÃO---------------------FATURAMENTO HISTORICO-----
 			Iterator itera = collectionFaturmentoSituaoHistorico.iterator();
 			while (itera.hasNext()) {
-				FaturamentoSituacaoHistorico fsh = (FaturamentoSituacaoHistorico) itera.next();
+				FaturamentoSituacaoHistorico fsh = (FaturamentoSituacaoHistorico) itera
+						.next();
 
 				RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 						Operacao.OPERACAO_INFORMAR_SITUACAO_ESPECIAL_FATURAMENTO,
 						fsh.getImovel().getId(), fsh.getImovel().getId(),
-						new UsuarioAcaoUsuarioHelper(situacaoEspecialFaturamentoHelper.getUsuarioLogado(), UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+						new UsuarioAcaoUsuarioHelper(
+								situacaoEspecialFaturamentoHelper
+										.getUsuarioLogado(),
+								UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 
 				registradorOperacao.registrarOperacao(fsh);
 			}
 			// ------------------------REGISTRAR
 			// TRANSAÇÃO---------------------FATURAMENTO HISTORICO-----
-			getControladorBatch().inserirColecaoObjetoParaBatch(collectionFaturmentoSituaoHistorico);
+			getControladorBatch().inserirColecaoObjetoParaBatch(
+					collectionFaturmentoSituaoHistorico);
 
-			getControladorImovel().atualizarFaturamentoSituacaoTipo(colecaoImoveis, idFaturamentoSituacaoTipo, situacaoEspecialFaturamentoHelper.getUsuarioLogado());
+			getControladorImovel().atualizarFaturamentoSituacaoTipo(
+					colecaoImoveis, idFaturamentoSituacaoTipo,
+					situacaoEspecialFaturamentoHelper.getUsuarioLogado());
 
 		} catch (ControladorException ex) {
 			logger.error("Erro ao ao inserir situacao especial de faturamento.");
@@ -72797,7 +73806,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 									.equals(ConsumoAnormalidade.BAIXO_CONSUMO)
 									|| idAnormalidadeConsumo
 											.equals(ConsumoAnormalidade.ALTO_CONSUMO) || idAnormalidadeConsumo
-									.equals(ConsumoAnormalidade.ESTOURO_CONSUMO))) {
+										.equals(ConsumoAnormalidade.ESTOURO_CONSUMO))) {
 
 						// Obtém a quantidade de economias por categoria
 						Collection colecaoCategoria = getControladorImovel()
@@ -72975,24 +73984,28 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @return Integer
 	 * @throws ControladorException
 	 */
-	public Integer gerarCreditoARealizar(CreditoARealizar creditoARealizar, Imovel imovel, Usuario usuarioLogado) throws ControladorException {
+	public Integer gerarCreditoARealizar(CreditoARealizar creditoARealizar,
+			Imovel imovel, Usuario usuarioLogado) throws ControladorException {
 
 		CreditoARealizarGeral creditoARealizarGeral = new CreditoARealizarGeral();
 
 		creditoARealizarGeral.setIndicadorHistorico((short) 2);
 		creditoARealizarGeral.setUltimaAlteracao(new Date());
 
-		Integer idGerado = (Integer) this.getControladorUtil().inserir(creditoARealizarGeral);
+		Integer idGerado = (Integer) this.getControladorUtil().inserir(
+				creditoARealizarGeral);
 
 		creditoARealizarGeral.setId(idGerado);
 
 		creditoARealizar.setCreditoARealizarGeral(creditoARealizarGeral);
 		creditoARealizar.setId(idGerado);
 
-		if(usuarioLogado != null){
-			registrarTransacao(creditoARealizar, Operacao.OPERACAO_CREDITO_A_REALIZAR_INSERIR, imovel, usuarioLogado, idGerado);
+		if (usuarioLogado != null) {
+			registrarTransacao(creditoARealizar,
+					Operacao.OPERACAO_CREDITO_A_REALIZAR_INSERIR, imovel,
+					usuarioLogado, idGerado);
 		}
-		
+
 		getControladorUtil().inserir(creditoARealizar);
 
 		inserirCreditoARealizarCategoria(creditoARealizar, imovel);
@@ -73000,31 +74013,45 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		return idGerado;
 	}
 
-	private void registrarTransacao(ObjetoTransacao objetoTransacao, Integer operacao, Imovel imovel, Usuario usuarioLogado, Integer idGerado) {
-		
-		UsuarioAcaoUsuarioHelper usuarioHelper = new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
-		
-		RegistradorOperacao registradorOperacao = new RegistradorOperacao(operacao, imovel.getId(), idGerado, usuarioHelper);
-		
+	private void registrarTransacao(ObjetoTransacao objetoTransacao,
+			Integer operacao, Imovel imovel, Usuario usuarioLogado,
+			Integer idGerado) {
+
+		UsuarioAcaoUsuarioHelper usuarioHelper = new UsuarioAcaoUsuarioHelper(
+				usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
+
+		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
+				operacao, imovel.getId(), idGerado, usuarioHelper);
+
 		registradorOperacao.registrarOperacao(objetoTransacao);
 	}
 
-	private void inserirCreditoARealizarCategoria(CreditoARealizar creditoARealizar, Imovel imovel) throws ControladorException {
-		Collection colecaoCategoriasImovel = this.getControladorImovel().obterQuantidadeEconomiasCategoria(imovel);
+	private void inserirCreditoARealizarCategoria(
+			CreditoARealizar creditoARealizar, Imovel imovel)
+			throws ControladorException {
+		Collection colecaoCategoriasImovel = this.getControladorImovel()
+				.obterQuantidadeEconomiasCategoria(imovel);
 
-		Collection colecaoValoresPorCategoria = getControladorImovel().obterValorPorCategoria(colecaoCategoriasImovel, creditoARealizar.getValorCredito());
+		Collection colecaoValoresPorCategoria = getControladorImovel()
+				.obterValorPorCategoria(colecaoCategoriasImovel,
+						creditoARealizar.getValorCredito());
 
 		Iterator icolecaoCategorias = colecaoCategoriasImovel.iterator();
-		Iterator icolecaoValoresPorCategoria = colecaoValoresPorCategoria.iterator();
-		
-		while (icolecaoValoresPorCategoria.hasNext() && icolecaoCategorias.hasNext()) {
+		Iterator icolecaoValoresPorCategoria = colecaoValoresPorCategoria
+				.iterator();
+
+		while (icolecaoValoresPorCategoria.hasNext()
+				&& icolecaoCategorias.hasNext()) {
 			CreditoARealizarCategoria creditoARealizarCategoria = new CreditoARealizarCategoria();
 
 			Categoria categoria = (Categoria) icolecaoCategorias.next();
 			BigDecimal valor = (BigDecimal) icolecaoValoresPorCategoria.next();
 
-			creditoARealizarCategoria.setComp_id(new CreditoARealizarCategoriaPK(creditoARealizar.getId(), categoria.getId()));
-			creditoARealizarCategoria.setQuantidadeEconomia(categoria.getQuantidadeEconomiasCategoria());
+			creditoARealizarCategoria
+					.setComp_id(new CreditoARealizarCategoriaPK(
+							creditoARealizar.getId(), categoria.getId()));
+			creditoARealizarCategoria.setQuantidadeEconomia(categoria
+					.getQuantidadeEconomiasCategoria());
 			creditoARealizarCategoria.setValorCategoria(valor);
 			creditoARealizarCategoria.setUltimaAlteracao(new Date());
 
@@ -74989,7 +76016,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		return imoveisConvertidos;
 	}
 
-
 	/**
 	 * Recupera a data realizada do faturamento atividade cronograma
 	 * 
@@ -75044,9 +76070,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		}
 	}
 
-
-
-	
 	/**
 	 * @TODO - COSANPA
 	 * 
@@ -75069,12 +76092,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		return colecaoImoveisComContaPF;
 	}
-	
+
 	/**
 	 * TODO - COSANPA
 	 * 
-	 * Método para obter todos os imóveis que já foram processados
-	 * na transmissão do arquivo de retorno do IS
+	 * Método para obter todos os imóveis que já foram processados na
+	 * transmissão do arquivo de retorno do IS
 	 * 
 	 * @author Felipe Santos
 	 * @date 22/08/2011
@@ -75083,25 +76106,26 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @return List<Integer> retorno
 	 * @throws ErroRepositorioException
 	 */
-	public List<Integer> obterImoveisMovimentoContaPF(Integer idRota, Integer anoMesFaturamento)
-			throws ControladorException {
-		
+	public List<Integer> obterImoveisMovimentoContaPF(Integer idRota,
+			Integer anoMesFaturamento) throws ControladorException {
+
 		List<Integer> listaImoveisMovimentoContaPF = null;
 
 		try {
-			listaImoveisMovimentoContaPF = repositorioFaturamento.obterImoveisMovimentoContaPF(idRota, anoMesFaturamento);
+			listaImoveisMovimentoContaPF = repositorioFaturamento
+					.obterImoveisMovimentoContaPF(idRota, anoMesFaturamento);
 		} catch (ErroRepositorioException e) {
 			e.printStackTrace();
 		}
 
 		return listaImoveisMovimentoContaPF;
 	}
-	
+
 	/**
 	 * TODO - COSANPA
 	 * 
-	 * Método para obter todos os imóveis que faltam ser transmitidos
-	 * na transmissão do arquivo de retorno do IS
+	 * Método para obter todos os imóveis que faltam ser transmitidos na
+	 * transmissão do arquivo de retorno do IS
 	 * 
 	 * @author Felipe Santos
 	 * @date 24/08/2011
@@ -75110,44 +76134,47 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @return List<Integer> retorno
 	 * @throws ErroRepositorioException
 	 */
-	public List<Integer> obterImoveisFaltandoTransmitir(Integer idRota, Integer anoMesFaturamento)
-			throws ControladorException {
-		
+	public List<Integer> obterImoveisFaltandoTransmitir(Integer idRota,
+			Integer anoMesFaturamento) throws ControladorException {
+
 		List<Integer> listaImoveisFaltandoTransmitir = null;
 
 		try {
-			listaImoveisFaltandoTransmitir = repositorioFaturamento.obterImoveisFaltandoTransmitir(idRota, anoMesFaturamento);
+			listaImoveisFaltandoTransmitir = repositorioFaturamento
+					.obterImoveisFaltandoTransmitir(idRota, anoMesFaturamento);
 		} catch (ErroRepositorioException e) {
 			e.printStackTrace();
 		}
 
 		return listaImoveisFaltandoTransmitir;
 	}
-	
+
 	/**
 	 * TODO : COSANPA
-	 * @author Pamela Gatinho  
+	 * 
+	 * @author Pamela Gatinho
 	 * @date 04/08/2011
 	 * 
-	 * Metodo que obtem a conta do imóvel, so não retorna
-	 * a conta que estiver com a situacao
-	 * CANCELADA POR RETIFICACAO
+	 *       Metodo que obtem a conta do imóvel, so não retorna a conta que
+	 *       estiver com a situacao CANCELADA POR RETIFICACAO
 	 * 
 	 * @return Conta
 	 * @param anoMesReferencia
 	 * @param idImovel
 	 * @throws ErroRepositorioException
 	 */
-	public Conta obterContaImovel(Integer idImovel, Integer anoMesReferencia) throws ControladorException{
-		try {		
-			return repositorioFaturamento.obterContaImovel(idImovel, anoMesReferencia);
+	public Conta obterContaImovel(Integer idImovel, Integer anoMesReferencia)
+			throws ControladorException {
+		try {
+			return repositorioFaturamento.obterContaImovel(idImovel,
+					anoMesReferencia);
 
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
-	
+
 	/**
 	 * TODO : COSANPA
 	 * 
@@ -75161,56 +76188,69 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 */
 	protected void atualizarMovimentoContaPreFaturada(Conta conta)
 			throws ControladorException {
-		
+
 		FiltroMovimentoContaPrefaturada filtroMovimentoContaPrefaturada = new FiltroMovimentoContaPrefaturada();
-		filtroMovimentoContaPrefaturada.adicionarCaminhoParaCarregamentoEntidade( "imovel.hidrometroInstalacaoHistorico" );
-		filtroMovimentoContaPrefaturada.adicionarCaminhoParaCarregamentoEntidade( "faturamentoGrupo" );
-		filtroMovimentoContaPrefaturada.adicionarCaminhoParaCarregamentoEntidade( "imovel.ligacaoAgua" );
-		filtroMovimentoContaPrefaturada.adicionarCaminhoParaCarregamentoEntidade( "leituraAnormalidadeFaturamento" );
-		filtroMovimentoContaPrefaturada.adicionarCaminhoParaCarregamentoEntidade( "imovel.quadra.rota" );
-		filtroMovimentoContaPrefaturada.adicionarCaminhoParaCarregamentoEntidade( "conta" );
-		filtroMovimentoContaPrefaturada.adicionarCaminhoParaCarregamentoEntidade( "movimentoContaPrefaturadaCategorias" );
-		filtroMovimentoContaPrefaturada.adicionarCaminhoParaCarregamentoEntidade( "conta.ligacaoAguaSituacao" );
-		filtroMovimentoContaPrefaturada.adicionarCaminhoParaCarregamentoEntidade( "conta.ligacaoEsgotoSituacao" );
-									
-		filtroMovimentoContaPrefaturada.adicionarParametro( 
-				new ParametroSimples( 
-						FiltroMovimentoContaPrefaturada.MATRICULA, 
-						conta.getImovel().getId() ) );
-		
-		filtroMovimentoContaPrefaturada.adicionarParametro( 
-				new ParametroSimples( 
-						FiltroMovimentoContaPrefaturada.ANO_MES_REFERENCIA_PRE_FATURAMENTO, 
-						conta.getReferencia() ) );
-		
+		filtroMovimentoContaPrefaturada
+				.adicionarCaminhoParaCarregamentoEntidade("imovel.hidrometroInstalacaoHistorico");
+		filtroMovimentoContaPrefaturada
+				.adicionarCaminhoParaCarregamentoEntidade("faturamentoGrupo");
+		filtroMovimentoContaPrefaturada
+				.adicionarCaminhoParaCarregamentoEntidade("imovel.ligacaoAgua");
+		filtroMovimentoContaPrefaturada
+				.adicionarCaminhoParaCarregamentoEntidade("leituraAnormalidadeFaturamento");
+		filtroMovimentoContaPrefaturada
+				.adicionarCaminhoParaCarregamentoEntidade("imovel.quadra.rota");
+		filtroMovimentoContaPrefaturada
+				.adicionarCaminhoParaCarregamentoEntidade("conta");
+		filtroMovimentoContaPrefaturada
+				.adicionarCaminhoParaCarregamentoEntidade("movimentoContaPrefaturadaCategorias");
+		filtroMovimentoContaPrefaturada
+				.adicionarCaminhoParaCarregamentoEntidade("conta.ligacaoAguaSituacao");
+		filtroMovimentoContaPrefaturada
+				.adicionarCaminhoParaCarregamentoEntidade("conta.ligacaoEsgotoSituacao");
+
+		filtroMovimentoContaPrefaturada
+				.adicionarParametro(new ParametroSimples(
+						FiltroMovimentoContaPrefaturada.MATRICULA, conta
+								.getImovel().getId()));
+
+		filtroMovimentoContaPrefaturada
+				.adicionarParametro(new ParametroSimples(
+						FiltroMovimentoContaPrefaturada.ANO_MES_REFERENCIA_PRE_FATURAMENTO,
+						conta.getReferencia()));
+
 		Collection<MovimentoContaPrefaturada> colMovimentoContaPrefaturada = null;
-		
-		try{
-			colMovimentoContaPrefaturada = ( Collection<MovimentoContaPrefaturada> ) repositorioUtil.pesquisar( 
-							filtroMovimentoContaPrefaturada, MovimentoContaPrefaturada.class.getName() );
-			
-			
+
+		try {
+			colMovimentoContaPrefaturada = (Collection<MovimentoContaPrefaturada>) repositorioUtil
+					.pesquisar(filtroMovimentoContaPrefaturada,
+							MovimentoContaPrefaturada.class.getName());
+
 		} catch (ErroRepositorioException e) {
-			throw new ControladorException( "erro.sistema", e );
+			throw new ControladorException("erro.sistema", e);
 		}
 		if (colMovimentoContaPrefaturada != null
 				&& !colMovimentoContaPrefaturada.isEmpty()) {
 
-			Iterator iteratorColecaoMovimentoContaPreFaturada = colMovimentoContaPrefaturada.iterator();
+			Iterator iteratorColecaoMovimentoContaPreFaturada = colMovimentoContaPrefaturada
+					.iterator();
 
 			MovimentoContaPrefaturada movimentoContaPreFaturada = null;
 
-			if (!movimentoContaPreFaturada.getConta().getId().equals(conta.getId())) {
-				
-				while (iteratorColecaoMovimentoContaPreFaturada.hasNext()) {
-					
-					try {
-					movimentoContaPreFaturada = (MovimentoContaPrefaturada) iteratorColecaoMovimentoContaPreFaturada.next();
+			if (!movimentoContaPreFaturada.getConta().getId()
+					.equals(conta.getId())) {
 
-					movimentoContaPreFaturada.setConta(conta);
-					
-					repositorioFaturamento.atualizarMovimentoContaPrefaturadaProcessoMOBILE(movimentoContaPreFaturada);
-						
+				while (iteratorColecaoMovimentoContaPreFaturada.hasNext()) {
+
+					try {
+						movimentoContaPreFaturada = (MovimentoContaPrefaturada) iteratorColecaoMovimentoContaPreFaturada
+								.next();
+
+						movimentoContaPreFaturada.setConta(conta);
+
+						repositorioFaturamento
+								.atualizarMovimentoContaPrefaturadaProcessoMOBILE(movimentoContaPreFaturada);
+
 					} catch (ErroRepositorioException e) {
 						sessionContext.setRollbackOnly();
 						throw new ControladorException("erro.sistema", e);
@@ -75223,26 +76263,29 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		}
 	}
-	
-	private void atualizarVencimentoContasNaoImpressas(FaturamentoGrupo grupo, Integer anoMesReferencia, Date novaDataVencimento) 
-		throws ControladorException{
-		
-		Collection<Conta> colConta = this.obterContasNaoImpressas(grupo, anoMesReferencia);
-		
-		if (colConta != null
-				&& !colConta.isEmpty()) {
+
+	private void atualizarVencimentoContasNaoImpressas(FaturamentoGrupo grupo,
+			Integer anoMesReferencia, Date novaDataVencimento)
+			throws ControladorException {
+
+		Collection<Conta> colConta = this.obterContasNaoImpressas(grupo,
+				anoMesReferencia);
+
+		if (colConta != null && !colConta.isEmpty()) {
 
 			Iterator iteratorColecaoConta = colConta.iterator();
-			
+
 			while (iteratorColecaoConta.hasNext()) {
-				
+
 				try {
 					Conta conta = (Conta) iteratorColecaoConta.next();
 
-					if (Util.compararData(conta.getDataVencimentoOriginal(), novaDataVencimento) == -1) {
+					if (Util.compararData(conta.getDataVencimentoOriginal(),
+							novaDataVencimento) == -1) {
 						conta.setDataVencimentoConta(novaDataVencimento);
-						
-						repositorioFaturamento.atualizarContaProcessoMOBILE(conta);
+
+						repositorioFaturamento
+								.atualizarContaProcessoMOBILE(conta);
 					}
 				} catch (ErroRepositorioException e) {
 					sessionContext.setRollbackOnly();
@@ -75251,263 +76294,307 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			}
 		}
 	}
-	
+
 	/**
- 	 * TODO : COSANPA
-	 * Data: 25/10/2011
-	 * Autor: Pamela Gatinho
+	 * TODO : COSANPA Data: 25/10/2011 Autor: Pamela Gatinho
 	 * 
-	 * Metodo para pesquisar todas as contas que foram emitidas mas que 
-	 * serao impressas somente no fechamento do faturamento do grupo
+	 * Metodo para pesquisar todas as contas que foram emitidas mas que serao
+	 * impressas somente no fechamento do faturamento do grupo
 	 * 
- 	 * @param grupo
- 	 * @param anoMesReferencia
- 	 * @return
- 	 * @throws ControladorException
- 	 */
-	private Collection obterContasNaoImpressas(FaturamentoGrupo grupo, Integer anoMesReferencia) 
-		throws ControladorException{
-		
+	 * @param grupo
+	 * @param anoMesReferencia
+	 * @return
+	 * @throws ControladorException
+	 */
+	private Collection obterContasNaoImpressas(FaturamentoGrupo grupo,
+			Integer anoMesReferencia) throws ControladorException {
+
 		Collection<Conta> colConta = null;
-		
-		try{
-			colConta = ( Collection<Conta> ) repositorioFaturamento.obterContasNaoImpressas(grupo, anoMesReferencia);
-			
+
+		try {
+			colConta = (Collection<Conta>) repositorioFaturamento
+					.obterContasNaoImpressas(grupo, anoMesReferencia);
+
 		} catch (ErroRepositorioException e) {
-			throw new ControladorException( "erro.sistema", e );
+			throw new ControladorException("erro.sistema", e);
 		}
-		
+
 		return colConta;
 	}
-	
+
 	/**
 	 * TODO : COSANPA
-	 * @author Pamela Gatinho  
+	 * 
+	 * @author Pamela Gatinho
 	 * @date 24/02/2012
 	 * 
-	 * Metodo que obtem o movimento do imóvel
-	 * lido pelo IS
+	 *       Metodo que obtem o movimento do imóvel lido pelo IS
 	 * 
 	 * @return MovimentoContaPreFaturada
 	 * @param anoMesReferencia
 	 * @param idImovel
 	 * @throws ErroRepositorioException
 	 */
-	public MovimentoContaPrefaturada obterMovimentoImovel(Integer idImovel, Integer anoMesReferencia) throws ControladorException{
-		try {		
-			return repositorioFaturamento.obterMovimentoImovel(idImovel, anoMesReferencia);
+	public MovimentoContaPrefaturada obterMovimentoImovel(Integer idImovel,
+			Integer anoMesReferencia) throws ControladorException {
+		try {
+			return repositorioFaturamento.obterMovimentoImovel(idImovel,
+					anoMesReferencia);
 
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
-	
+
 	/**
-	 * TODO : COSANPA 
-	 * Pamela Gatinho - 31/05/2012
+	 * TODO : COSANPA Pamela Gatinho - 31/05/2012
 	 * 
-	 * Metodo que calcula o valor de rateio por  economia 
+	 * Metodo que calcula o valor de rateio por economia
 	 * 
 	 * @param idImovelCondominio
 	 * @param anoMesFaturamento
-	 * @throws ErroRepositorioException 
-	 * @throws ControladorException 
+	 * @throws ErroRepositorioException
+	 * @throws ControladorException
 	 */
-	private BigDecimal[] calcularValorRateioPorEconomia (Integer idImovelCondominio, FaturamentoGrupo faturamentoGrupo) throws  ControladorException {
-		
-		//valor do rateio de agua 
+	private BigDecimal[] calcularValorRateioPorEconomia(
+			Integer idImovelCondominio, FaturamentoGrupo faturamentoGrupo)
+			throws ControladorException {
+
+		// valor do rateio de agua
 		BigDecimal valorAguaRateioPorEconomia = new BigDecimal("0.00");
-		//valor do rateio de esgoto
+		// valor do rateio de esgoto
 		BigDecimal valorEsgotoRateioPorEconomia = new BigDecimal("0.00");
-		
-		//vetor com os valores de rateio de agua e esgoto
+
+		// vetor com os valores de rateio de agua e esgoto
 		BigDecimal[] valoresAguaEsgotoRateioPorEconomia = new BigDecimal[2];
-		
+
 		// Obtem a quantidade de economias vinculadas ao condomínio
-		int qtdEconomiasCondominio = this.getControladorMicromedicao().obterQuantidadeEconomiasCondominio(idImovelCondominio, faturamentoGrupo.getAnoMesReferencia());
+		int qtdEconomiasCondominio = this.getControladorMicromedicao()
+				.obterQuantidadeEconomiasCondominio(idImovelCondominio,
+						faturamentoGrupo.getAnoMesReferencia());
 		System.out.println("Qtd economias: " + qtdEconomiasCondominio);
-		Imovel imovelCondominio = (Imovel)getControladorImovel().pesquisarImovel(idImovelCondominio);
+		Imovel imovelCondominio = (Imovel) getControladorImovel()
+				.pesquisarImovel(idImovelCondominio);
 
 		int consumoAguaASerRateado = 0;
 		int consumoEsgotoASerRateado = 0;
-		
+
 		// Calcula o consumo que deve ser rateado entre os imóveis do condomínio
 		if (imovelCondominio.getLigacaoAgua() != null) {
-			consumoAguaASerRateado = this.getControladorMicromedicao().obterConsumoASerRateado(idImovelCondominio, faturamentoGrupo.getAnoMesReferencia(), LigacaoTipo.LIGACAO_AGUA);
+			consumoAguaASerRateado = this.getControladorMicromedicao()
+					.obterConsumoASerRateado(idImovelCondominio,
+							faturamentoGrupo.getAnoMesReferencia(),
+							LigacaoTipo.LIGACAO_AGUA);
 		}
-		
+
 		if (imovelCondominio.getLigacaoEsgoto() != null) {
-			consumoEsgotoASerRateado = this.getControladorMicromedicao().obterConsumoASerRateado(idImovelCondominio, faturamentoGrupo.getAnoMesReferencia(), LigacaoTipo.LIGACAO_ESGOTO);
+			consumoEsgotoASerRateado = this.getControladorMicromedicao()
+					.obterConsumoASerRateado(idImovelCondominio,
+							faturamentoGrupo.getAnoMesReferencia(),
+							LigacaoTipo.LIGACAO_ESGOTO);
 		}
-		
+
 		if (consumoAguaASerRateado < 0) {
 			consumoAguaASerRateado = 0;
 		}
 		if (consumoEsgotoASerRateado < 0) {
 			consumoEsgotoASerRateado = 0;
 		}
-		
-		
-		// Calcula o valor da conta a ser rateada, baseada no consumo que deve ser rateado
-		BigDecimal[] valoresAguaEsgotoContaRateio = this.calcularValorAguaEsgotoParaRateio(imovelCondominio, consumoAguaASerRateado, consumoEsgotoASerRateado, faturamentoGrupo);
-		
-		if (valoresAguaEsgotoContaRateio[0].compareTo(ConstantesSistema.VALOR_ZERO) > 0){
 
-			
-			valoresAguaEsgotoContaRateio[0] = valoresAguaEsgotoContaRateio[0].add(new BigDecimal(0.005));
-			
-			valorAguaRateioPorEconomia = valoresAguaEsgotoContaRateio[0].divide(new BigDecimal(
-					qtdEconomiasCondominio), BigDecimal.ROUND_FLOOR);
-		}
-		
-		if (valoresAguaEsgotoContaRateio[1].compareTo(ConstantesSistema.VALOR_ZERO) > 0) {
-			valoresAguaEsgotoContaRateio[1] = valoresAguaEsgotoContaRateio[1].add(new BigDecimal(0.005));
+		// Calcula o valor da conta a ser rateada, baseada no consumo que deve
+		// ser rateado
+		BigDecimal[] valoresAguaEsgotoContaRateio = this
+				.calcularValorAguaEsgotoParaRateio(imovelCondominio,
+						consumoAguaASerRateado, consumoEsgotoASerRateado,
+						faturamentoGrupo);
 
-			valorEsgotoRateioPorEconomia = valoresAguaEsgotoContaRateio[1].divide(new BigDecimal(
-					qtdEconomiasCondominio), BigDecimal.ROUND_FLOOR);
-			
+		if (valoresAguaEsgotoContaRateio[0]
+				.compareTo(ConstantesSistema.VALOR_ZERO) > 0) {
+
+			valoresAguaEsgotoContaRateio[0] = valoresAguaEsgotoContaRateio[0]
+					.add(new BigDecimal(0.005));
+
+			valorAguaRateioPorEconomia = valoresAguaEsgotoContaRateio[0]
+					.divide(new BigDecimal(qtdEconomiasCondominio),
+							BigDecimal.ROUND_FLOOR);
 		}
-		
+
+		if (valoresAguaEsgotoContaRateio[1]
+				.compareTo(ConstantesSistema.VALOR_ZERO) > 0) {
+			valoresAguaEsgotoContaRateio[1] = valoresAguaEsgotoContaRateio[1]
+					.add(new BigDecimal(0.005));
+
+			valorEsgotoRateioPorEconomia = valoresAguaEsgotoContaRateio[1]
+					.divide(new BigDecimal(qtdEconomiasCondominio),
+							BigDecimal.ROUND_FLOOR);
+
+		}
+
 		valoresAguaEsgotoRateioPorEconomia[0] = valorAguaRateioPorEconomia;
 		valoresAguaEsgotoRateioPorEconomia[1] = valorEsgotoRateioPorEconomia;
-		
+
 		return valoresAguaEsgotoRateioPorEconomia;
 	}
-	
+
 	/**
 	 * TODO : COSANPA
+	 * 
 	 * @author Pamela Gatinho
 	 * @since 23/04/2012
 	 * 
-	 * Método que calcula o VALOR a ser rateado, baseado no
-	 * CONSUMO de rateio do macro.
+	 *        Método que calcula o VALOR a ser rateado, baseado no CONSUMO de
+	 *        rateio do macro.
 	 * 
 	 * @param imovelCondominio
 	 * @param consumoSerRateado
 	 * @param consumoAguaSerRateado
 	 * @param faturamentoGrupo
 	 * 
-	 * @return valorConta 
+	 * @return valorConta
 	 * 
-	 * @throws ControladorException 
+	 * @throws ControladorException
 	 */
-	private BigDecimal[] calcularValorAguaEsgotoParaRateio(Imovel imovelCondominio, 
-			int consumoAguaASerRateado, int consumoEsgotoASerRateado, FaturamentoGrupo faturamentoGrupo) throws ControladorException {
-		
+	private BigDecimal[] calcularValorAguaEsgotoParaRateio(
+			Imovel imovelCondominio, int consumoAguaASerRateado,
+			int consumoEsgotoASerRateado, FaturamentoGrupo faturamentoGrupo)
+			throws ControladorException {
+
 		LigacaoTipo ligacaoTipo = new LigacaoTipo();
 
-		Collection colecaoCategoriaOUSubcategoria = getControladorImovel().obterQuantidadeEconomiasCategoria(imovelCondominio);
-		
+		Collection colecaoCategoriaOUSubcategoria = getControladorImovel()
+				.obterQuantidadeEconomiasCategoria(imovelCondominio);
+
 		BigDecimal[] valoresContaRateio = new BigDecimal[2];
 		valoresContaRateio[0] = new BigDecimal("0.00");
 		valoresContaRateio[1] = new BigDecimal("0.00");
 
-		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
-		
+		SistemaParametro sistemaParametro = getControladorUtil()
+				.pesquisarParametrosDoSistema();
+
 		DeterminarValoresFaturamentoAguaEsgotoHelper helperValoresAguaEsgoto = new DeterminarValoresFaturamentoAguaEsgotoHelper();
 
-		Collection colecaoCategorias = getControladorImovel().obterColecaoCategoriaOuSubcategoriaDoImovel(imovelCondominio);
-		
-		int consumoMinimoLigacao = this.getControladorMicromedicao().obterConsumoMinimoLigacao(imovelCondominio, null);
-		
-		
-		if (consumoAguaASerRateado > 0 && consumoAguaASerRateado <= consumoMinimoLigacao) {
+		Collection colecaoCategorias = getControladorImovel()
+				.obterColecaoCategoriaOuSubcategoriaDoImovel(imovelCondominio);
+
+		int consumoMinimoLigacao = this.getControladorMicromedicao()
+				.obterConsumoMinimoLigacao(imovelCondominio, null);
+
+		if (consumoAguaASerRateado > 0
+				&& consumoAguaASerRateado <= consumoMinimoLigacao) {
 			consumoAguaASerRateado = consumoMinimoLigacao;
 		}
-		
-		if (consumoEsgotoASerRateado > 0 && consumoEsgotoASerRateado <= consumoMinimoLigacao) {
+
+		if (consumoEsgotoASerRateado > 0
+				&& consumoEsgotoASerRateado <= consumoMinimoLigacao) {
 			consumoEsgotoASerRateado = consumoMinimoLigacao;
 		}
-		
+
 		ConsumoHistorico consumoHistoricoAgua = null;
-		
+
 		if (imovelCondominio.getLigacaoAgua() != null) {
-			//Consultando o consumoHistorico de ÁGUA
+			// Consultando o consumoHistorico de ÁGUA
 			ligacaoTipo.setId(LigacaoTipo.LIGACAO_AGUA);
-			
-			consumoHistoricoAgua = this.getControladorMicromedicao().obterConsumoHistoricoMedicaoIndividualizada(imovelCondominio,
-					ligacaoTipo, faturamentoGrupo.getAnoMesReferencia());
-			
-			consumoHistoricoAgua.setNumeroConsumoFaturadoMes(consumoAguaASerRateado);
-			
+
+			consumoHistoricoAgua = this.getControladorMicromedicao()
+					.obterConsumoHistoricoMedicaoIndividualizada(
+							imovelCondominio, ligacaoTipo,
+							faturamentoGrupo.getAnoMesReferencia());
+
+			consumoHistoricoAgua
+					.setNumeroConsumoFaturadoMes(consumoAguaASerRateado);
+
 		}
-		
+
 		ConsumoHistorico consumoHistoricoEsgoto = null;
-		
+
 		if (imovelCondominio.getLigacaoEsgoto() != null) {
-			//Consultando o consumoHistorico de ESGOTO
+			// Consultando o consumoHistorico de ESGOTO
 			ligacaoTipo.setId(LigacaoTipo.LIGACAO_ESGOTO);
-			
-			consumoHistoricoEsgoto = this.getControladorMicromedicao().obterConsumoHistoricoMedicaoIndividualizada(imovelCondominio,
-					ligacaoTipo, faturamentoGrupo.getAnoMesReferencia());
-			
-			consumoHistoricoEsgoto.setNumeroConsumoFaturadoMes(consumoEsgotoASerRateado);
-			
+
+			consumoHistoricoEsgoto = this.getControladorMicromedicao()
+					.obterConsumoHistoricoMedicaoIndividualizada(
+							imovelCondominio, ligacaoTipo,
+							faturamentoGrupo.getAnoMesReferencia());
+
+			consumoHistoricoEsgoto
+					.setNumeroConsumoFaturadoMes(consumoEsgotoASerRateado);
+
 		}
-		
-		
-		helperValoresAguaEsgoto = this.determinarValoresFaturamentoAguaEsgoto(imovelCondominio,
-				faturamentoGrupo.getAnoMesReferencia(), colecaoCategoriaOUSubcategoria,
-				faturamentoGrupo, consumoHistoricoAgua,
-				consumoHistoricoEsgoto);
-			
-		if (consumoAguaASerRateado > 0 && helperValoresAguaEsgoto.getValorTotalAgua() != null) {
+
+		helperValoresAguaEsgoto = this.determinarValoresFaturamentoAguaEsgoto(
+				imovelCondominio, faturamentoGrupo.getAnoMesReferencia(),
+				colecaoCategoriaOUSubcategoria, faturamentoGrupo,
+				consumoHistoricoAgua, consumoHistoricoEsgoto);
+
+		if (consumoAguaASerRateado > 0
+				&& helperValoresAguaEsgoto.getValorTotalAgua() != null) {
 			valoresContaRateio[0] = helperValoresAguaEsgoto.getValorTotalAgua();
 		}
-			
-		if (consumoEsgotoASerRateado > 0 &&  helperValoresAguaEsgoto.getValorTotalEsgoto() != null) {
-			valoresContaRateio[1] = helperValoresAguaEsgoto.getValorTotalEsgoto();
+
+		if (consumoEsgotoASerRateado > 0
+				&& helperValoresAguaEsgoto.getValorTotalEsgoto() != null) {
+			valoresContaRateio[1] = helperValoresAguaEsgoto
+					.getValorTotalEsgoto();
 		}
-		
-		System.out.println("Valor agua: " + helperValoresAguaEsgoto.getValorTotalAgua());
-		System.out.println("Valor esgoto: " + helperValoresAguaEsgoto.getValorTotalEsgoto());
-		
+
+		System.out.println("Valor agua: "
+				+ helperValoresAguaEsgoto.getValorTotalAgua());
+		System.out.println("Valor esgoto: "
+				+ helperValoresAguaEsgoto.getValorTotalEsgoto());
+
 		return valoresContaRateio;
 	}
-	
+
 	/**
 	 * TODO : COSANPA
 	 * 
 	 * Pamela Gatinho - 04/06/2012
 	 * 
-	 * Método para calcular o consumo de rateio de um imóvel, para o mês
-	 * de faturamento atual.
+	 * Método para calcular o consumo de rateio de um imóvel, para o mês de
+	 * faturamento atual.
 	 * 
 	 * @param imovel
 	 * @param anoMesFaturamento
 	 * 
 	 * @return valorRateioImovel
 	 * 
-	 * @throws ControladorException 
-	 * @throws ErroRepositorioException 
+	 * @throws ControladorException
+	 * @throws ErroRepositorioException
 	 */
-	public BigDecimal[] calcularValorRateioImovel(Imovel imovel, FaturamentoGrupo faturamentoGrupo) 
-		throws ControladorException, ErroRepositorioException {
-		
+	public BigDecimal[] calcularValorRateioImovel(Imovel imovel,
+			FaturamentoGrupo faturamentoGrupo) throws ControladorException,
+			ErroRepositorioException {
+
 		BigDecimal valorRateioImovelAgua = ConstantesSistema.VALOR_ZERO;
 		BigDecimal valorRateioImovelEsgoto = new BigDecimal("0.00");
 		BigDecimal[] valoresRateioImovel = new BigDecimal[2];
-		
+
 		imovel = this.getControladorImovel().pesquisarImovel(imovel.getId());
-		
-		valoresRateioImovel = this.calcularValorRateioPorEconomia(imovel.getImovelCondominio().getId(), faturamentoGrupo);
-			
-		//Se o valor de rateio de ÁGUA for maior que ZERO, multiplica pela quantidade de economias do imóvel
-		if(valoresRateioImovel[0].compareTo(ConstantesSistema.VALOR_ZERO) > 0)
-			valorRateioImovelAgua = valoresRateioImovel[0].multiply(new BigDecimal(imovel.getQuantidadeEconomias()));
-			
-		//Se o valor de rateio de ESGOTO for maior que ZERO, multiplica pela quantidade de economias do imóvel
-		if(valoresRateioImovel[1].compareTo(ConstantesSistema.VALOR_ZERO) > 0)
-			valorRateioImovelEsgoto = valoresRateioImovel[1].multiply(new BigDecimal(imovel.getQuantidadeEconomias()));
-		
+
+		valoresRateioImovel = this.calcularValorRateioPorEconomia(imovel
+				.getImovelCondominio().getId(), faturamentoGrupo);
+
+		// Se o valor de rateio de ÁGUA for maior que ZERO, multiplica pela
+		// quantidade de economias do imóvel
+		if (valoresRateioImovel[0].compareTo(ConstantesSistema.VALOR_ZERO) > 0)
+			valorRateioImovelAgua = valoresRateioImovel[0]
+					.multiply(new BigDecimal(imovel.getQuantidadeEconomias()));
+
+		// Se o valor de rateio de ESGOTO for maior que ZERO, multiplica pela
+		// quantidade de economias do imóvel
+		if (valoresRateioImovel[1].compareTo(ConstantesSistema.VALOR_ZERO) > 0)
+			valorRateioImovelEsgoto = valoresRateioImovel[1]
+					.multiply(new BigDecimal(imovel.getQuantidadeEconomias()));
+
 		valoresRateioImovel[0] = valorRateioImovelAgua;
 		valoresRateioImovel[1] = valorRateioImovelEsgoto;
-		
+
 		return valoresRateioImovel;
 	}
-	
-	public String[] obterDadosQualidadeAguaCosanpa(EmitirContaHelper emitirConta, Integer idQuadraFace)
+
+	public String[] obterDadosQualidadeAguaCosanpa(
+			EmitirContaHelper emitirConta, Integer idQuadraFace)
 			throws ControladorException {
 
 		String[] retornoQualidade = new String[25];
@@ -75603,7 +76690,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							.getSistemaAbastecimento().getId()));
 
 			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(
-					FiltroQualidadeAgua.ANO_MES_REFERENCIA, emitirConta.getAmReferencia()));
+					FiltroQualidadeAgua.ANO_MES_REFERENCIA, emitirConta
+							.getAmReferencia()));
 
 			if (quadraFace.getDistritoOperacional().getSetorAbastecimento()
 					.getSistemaAbastecimento().getFonteCaptacao() != null
@@ -75633,13 +76721,16 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			filtroQualidadeAgua.limparListaParametros();
 
 			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(
-					FiltroQualidadeAgua.LOCALIDADE_ID, emitirConta.getIdLocalidade()));
+					FiltroQualidadeAgua.LOCALIDADE_ID, emitirConta
+							.getIdLocalidade()));
 
 			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(
-					FiltroQualidadeAgua.SETOR_COMERCIAL_ID, emitirConta.getIdSetorComercial()));
+					FiltroQualidadeAgua.SETOR_COMERCIAL_ID, emitirConta
+							.getIdSetorComercial()));
 
 			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(
-					FiltroQualidadeAgua.ANO_MES_REFERENCIA, emitirConta.getAmReferencia()));
+					FiltroQualidadeAgua.ANO_MES_REFERENCIA, emitirConta
+							.getAmReferencia()));
 
 			filtroQualidadeAgua
 					.adicionarCaminhoParaCarregamentoEntidade("fonteCaptacao");
@@ -75657,13 +76748,15 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 			colecaoQualidadeAgua = null;
 			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(
-					FiltroQualidadeAgua.LOCALIDADE_ID, emitirConta.getIdLocalidade()));
+					FiltroQualidadeAgua.LOCALIDADE_ID, emitirConta
+							.getIdLocalidade()));
 
 			filtroQualidadeAgua.adicionarParametro(new ParametroNulo(
 					FiltroQualidadeAgua.SETOR_COMERCIAL_ID));
 
 			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(
-					FiltroQualidadeAgua.ANO_MES_REFERENCIA, emitirConta.getAmReferencia()));
+					FiltroQualidadeAgua.ANO_MES_REFERENCIA, emitirConta
+							.getAmReferencia()));
 
 			filtroQualidadeAgua
 					.adicionarCaminhoParaCarregamentoEntidade("fonteCaptacao");
@@ -75680,7 +76773,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			filtroQualidadeAgua.limparListaParametros();
 
 			filtroQualidadeAgua.adicionarParametro(new ParametroSimples(
-					FiltroQualidadeAgua.ANO_MES_REFERENCIA, emitirConta.getAmReferencia()));
+					FiltroQualidadeAgua.ANO_MES_REFERENCIA, emitirConta
+							.getAmReferencia()));
 
 			filtroQualidadeAgua.adicionarParametro(new ParametroNulo(
 					FiltroQualidadeAgua.LOCALIDADE_ID));
@@ -75722,14 +76816,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 			if (qualidadeAgua.getQuantidadeColiformesTotaisExigidas() != null) {
 				exigidaColiformesTotais = qualidadeAgua
-						.getQuantidadeColiformesTotaisExigidas()
-						+ "";
+						.getQuantidadeColiformesTotaisExigidas() + "";
 			}
 
 			if (qualidadeAgua.getQuantidadeColiformesTermotolerantesExigidas() != null) {
 				exigidaColiformesTermotolerantes = qualidadeAgua
-						.getQuantidadeColiformesTermotolerantesExigidas()
-						+ "";
+						.getQuantidadeColiformesTermotolerantesExigidas() + "";
 			}
 
 			// Analisadas
@@ -75739,8 +76831,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 			if (qualidadeAgua.getQuantidadeTurbidezAnalisadas() != null) {
 				analisadaTurbidez = qualidadeAgua
-						.getQuantidadeTurbidezAnalisadas()
-						+ "";
+						.getQuantidadeTurbidezAnalisadas() + "";
 			}
 
 			if (qualidadeAgua.getQuantidadeFluorAnalisadas() != null) {
@@ -75755,8 +76846,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 			if (qualidadeAgua.getQuantidadeColiformesTotaisAnalisadas() != null) {
 				analisadaColiformesTotais = qualidadeAgua
-						.getQuantidadeColiformesTotaisAnalisadas()
-						+ "";
+						.getQuantidadeColiformesTotaisAnalisadas() + "";
 			}
 
 			if (qualidadeAgua
@@ -75774,32 +76864,27 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 			if (qualidadeAgua.getQuantidadeTurbidezConforme() != null) {
 				emConformidadeTurbidez = qualidadeAgua
-						.getQuantidadeTurbidezConforme()
-						+ "";
+						.getQuantidadeTurbidezConforme() + "";
 			}
 
 			if (qualidadeAgua.getQuantidadeFluorConforme() != null) {
 				emConformidadeFluor = qualidadeAgua
-						.getQuantidadeFluorConforme()
-						+ "";
+						.getQuantidadeFluorConforme() + "";
 			}
 
 			if (qualidadeAgua.getQuantidadeCloroConforme() != null) {
 				emConformidadeCloro = qualidadeAgua
-						.getQuantidadeCloroConforme()
-						+ "";
+						.getQuantidadeCloroConforme() + "";
 			}
 
 			if (qualidadeAgua.getQuantidadeColiformesTotaisConforme() != null) {
 				emConformidadeColiformesTotais = qualidadeAgua
-						.getQuantidadeColiformesTotaisConforme()
-						+ "";
+						.getQuantidadeColiformesTotaisConforme() + "";
 			}
 
 			if (qualidadeAgua.getQuantidadeColiformesTermotolerantesConforme() != null) {
 				emConformidadeColiformesTermotolerantes = qualidadeAgua
-						.getQuantidadeColiformesTermotolerantesConforme()
-						+ "";
+						.getQuantidadeColiformesTermotolerantesConforme() + "";
 			}
 
 			if (qualidadeAgua.getFonteCaptacao() != null
@@ -75845,41 +76930,43 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		return retornoQualidade;
 	}
-	
-	/**TODO: COSANPA
-	 * Mantis 583
-	 * Verificar no momento em que o usuário está fazendo a prescrição
-	 * de uma conta, se a mesma atende as condições necessárias para 
-	 * que haja a prescrição
+
+	/**
+	 * TODO: COSANPA Mantis 583 Verificar no momento em que o usuário está
+	 * fazendo a prescrição de uma conta, se a mesma atende as condições
+	 * necessárias para que haja a prescrição
 	 * 
 	 * @author Wellington Rocha
-	 * @date 01/06/2012*/
-	
-	public boolean verificarPossibilidadePrescricaoConta(Integer idConta){
+	 * @date 01/06/2012
+	 */
+
+	public boolean verificarPossibilidadePrescricaoConta(Integer idConta) {
 		Conta conta = null;
 		try {
-			conta = (Conta) this.repositorioFaturamento.pesquisarContaParaPrescricao(idConta);
-		
+			conta = (Conta) this.repositorioFaturamento
+					.pesquisarContaParaPrescricao(idConta);
+
 			Date dataPrescricao = new Date();
 			int ano = dataPrescricao.getYear();
 			ano = ano - 10;
 			dataPrescricao.setYear(ano);
-		
+
 			Set<ClienteConta> clientesConta = conta.getClienteContas();
-		
-			if(conta.getDataVencimentoConta().before(dataPrescricao)){
+
+			if (conta.getDataVencimentoConta().before(dataPrescricao)) {
 				boolean existeClienteEsferaPoderPublico = false;
 				for (ClienteConta clienteConta : clientesConta) {
-					if(!clienteConta.getCliente().getClienteTipo().getEsferaPoder().equals(EsferaPoder.PARTICULAR)){
+					if (!clienteConta.getCliente().getClienteTipo()
+							.getEsferaPoder().equals(EsferaPoder.PARTICULAR)) {
 						existeClienteEsferaPoderPublico = true;
 					}
 				}
-				if(!existeClienteEsferaPoderPublico){
+				if (!existeClienteEsferaPoderPublico) {
 					return true;
-				}else{
+				} else {
 					return false;
 				}
-			}else{
+			} else {
 				return false;
 			}
 		} catch (ErroRepositorioException e) {
@@ -75888,36 +76975,38 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		}
 		return false;
 	}
-			
 
 	/**
 	 * TODO : COSANPA
-	 * @author Pamela Gatinho  
+	 * 
+	 * @author Pamela Gatinho
 	 * @date 06/03/2013
 	 * 
-	 * Metodo que obtem o extrato de quitação
-	 * de débitos de um imóvel para um determinado
-	 * ano.
+	 *       Metodo que obtem o extrato de quitação de débitos de um imóvel para
+	 *       um determinado ano.
 	 * 
 	 * @return ExtratoQuitacao
 	 * @param anoReferencia
 	 * @param idImovel
 	 * @throws ControladorException
 	 */
-	public ExtratoQuitacao obterExtratoQuitacaoImovel(Integer idImovel, Integer anoReferencia) throws ControladorException{
+	public ExtratoQuitacao obterExtratoQuitacaoImovel(Integer idImovel,
+			Integer anoReferencia) throws ControladorException {
 		try {
-			return repositorioFaturamento.obterExtratoQuitacaoImovel(idImovel, anoReferencia);
+			return repositorioFaturamento.obterExtratoQuitacaoImovel(idImovel,
+					anoReferencia);
 
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
-	
-	
-	/**TODO: COSANPA
+
+	/**
+	 * TODO: COSANPA
 	 * 
-	 * Alteração para contabilizar em contas diferentes valores arrecadados até 31/12/2012
+	 * Alteração para contabilizar em contas diferentes valores arrecadados até
+	 * 31/12/2012
 	 * 
 	 * [UC0155] - Encerrar Faturamento do Mês
 	 * 
@@ -75975,11 +77064,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		return retorno;
 	}
-	
-	
-	/**TODO: COSANPA
+
+	/**
+	 * TODO: COSANPA
 	 * 
-	 * Alteração para contabilizar em contas diferentes valores arrecadados até 31/12/2012
+	 * Alteração para contabilizar em contas diferentes valores arrecadados até
+	 * 31/12/2012
 	 * 
 	 * [UC0155] - Encerrar Faturamento do Mês
 	 * 
@@ -76050,8 +77140,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @throws ControladorException
 	 */
 	public Integer inserirGuiaPagamentoCodigoBarrasPorCliente(
-			GuiaPagamento guiaPagamento, Integer idDebitoTipo, Integer idLocalidade)
-			throws ControladorException {
+			GuiaPagamento guiaPagamento, Integer idDebitoTipo,
+			Integer idLocalidade) throws ControladorException {
 
 		System.out.println("******************************************");
 		System.out.println("INICIO INSERIR GUIA PAGAMENTO");
@@ -76082,7 +77172,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		guiaPagamentoInserir.setId(idGuiaPagamentoGerado);
 
-		if(idLocalidade != null){
+		if (idLocalidade != null) {
 			guiaPagamentoInserir.setLocalidade(new Localidade(idLocalidade));
 		} else {
 			throw new ControladorException("erro.sistema");
@@ -76094,14 +77184,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		guiaPagamentoInserir.setCliente(cliente);
 
 		SistemaParametro sistemaParametro = getControladorUtil()
-					.pesquisarParametrosDoSistema();
+				.pesquisarParametrosDoSistema();
 
 		if (sistemaParametro != null) {
 
 			guiaPagamentoInserir.setAnoMesReferenciaContabil(new Integer(
-						sistemaParametro.getAnoMesFaturamento()));
+					sistemaParametro.getAnoMesFaturamento()));
 		} else {
-				throw new ControladorException("erro.sistema");
+			throw new ControladorException("erro.sistema");
 
 		}
 
@@ -76121,7 +77211,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		guiaPagamentoInserir.setDebitoCreditoSituacaoAnterior(null);
 		guiaPagamentoInserir
-		.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
+				.setDebitoCreditoSituacaoAtual(debitoCreditoSituacao);
 		guiaPagamentoInserir.setDataVencimento(dataVencimentoFormatada);
 		guiaPagamentoInserir.setValorDebito(new BigDecimal(valorDebito));
 		guiaPagamentoInserir.setDataEmissao(new Date());
@@ -76139,17 +77229,23 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		ClienteTipo clienteTipo = cliente.getClienteTipo();
 		FiltroClienteTipo filtroClienteTipo = new FiltroClienteTipo();
-		filtroClienteTipo.adicionarParametro(new ParametroSimples(FiltroClienteTipo.ID, clienteTipo.getId()));
-		filtroClienteTipo.adicionarCaminhoParaCarregamentoEntidade("esferaPoder");
-		clienteTipo = (ClienteTipo)getControladorUtil().pesquisar(filtroClienteTipo, ClienteTipo.class.getName()).iterator().next();
+		filtroClienteTipo.adicionarParametro(new ParametroSimples(
+				FiltroClienteTipo.ID, clienteTipo.getId()));
+		filtroClienteTipo
+				.adicionarCaminhoParaCarregamentoEntidade("esferaPoder");
+		clienteTipo = (ClienteTipo) getControladorUtil()
+				.pesquisar(filtroClienteTipo, ClienteTipo.class.getName())
+				.iterator().next();
 
 		Categoria categoria = null;
-		if(!clienteTipo.getEsferaPoder().getId().equals(EsferaPoder.PARTICULAR)) {
+		if (!clienteTipo.getEsferaPoder().getId()
+				.equals(EsferaPoder.PARTICULAR)) {
 			categoria = new Categoria(Categoria.PUBLICO);
-		}else {
-			if(clienteTipo.getIndicadorPessoaFisicaJuridica().equals(ClienteTipo.INDICADOR_PESSOA_FISICA)){
+		} else {
+			if (clienteTipo.getIndicadorPessoaFisicaJuridica().equals(
+					ClienteTipo.INDICADOR_PESSOA_FISICA)) {
 				categoria = new Categoria(Categoria.RESIDENCIAL);
-			}else {
+			} else {
 				categoria = new Categoria(Categoria.COMERCIAL);
 			}
 		}
@@ -76166,5 +77262,42 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		System.out.println("FIM INSERIR GUIA PAGAMENTO");
 		System.out.println("******************************************");
 		return idGuiaPagamentoGerado;
+	}
+
+	public void prepararFaturamentoImovel(int atividade, Rota rota, Integer idImovel) throws ControladorException {
+		
+		ApagarDadosFaturamentoHelper helper = new ApagarDadosFaturamentoHelper();
+		
+		helper.setRota(rota);
+		helper.setAnoMesFaturamento(rota.getFaturamentoGrupo().getAnoMesReferencia());
+		helper.setIdImovel(idImovel);
+
+		this.atualizarLigacaoEsgotoPorRota(rota, atividade);
+
+		helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.NORMAL);
+
+		this.apagarDadosGeradosFaturarGrupoFaturamento(helper,atividade);
+		this.apagarDadosGeradosResumoFaturamentoSimulacaoDetalhe(rota.getFaturamentoGrupo().getId(), helper);
+		this.apagarDadosGeradosResumoFaturamentoSimulacao(rota.getFaturamentoGrupo().getId(), helper);
+
+		helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.PRE_FATURADA);
+
+		this.apagarDadosGeradosFaturarGrupoFaturamento(helper, atividade);
+
+		// Caso o mês de faturamento corresponda ao mês de novembro, o sistema exclui também os dados do resumo da simulação do faturamento do mês de dezembro.
+		if (Util.obterMes(rota.getFaturamentoGrupo().getAnoMesReferencia()) == ConstantesSistema.NOVEMBRO) {
+
+			helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.NORMAL);
+			helper.setAnoMesFaturamento(Util.somaUmMesAnoMesReferencia(rota.getFaturamentoGrupo().getAnoMesReferencia()));
+
+			this.apagarDadosGeradosFaturarGrupoFaturamento(helper, atividade);
+			this.apagarDadosGeradosResumoFaturamentoSimulacaoDetalhe(rota.getFaturamentoGrupo().getId(), helper);
+			this.apagarDadosGeradosResumoFaturamentoSimulacao(rota.getFaturamentoGrupo().getId(), helper);
+
+			helper.setIdDebitoCreditoSituacaoAtual(DebitoCreditoSituacao.PRE_FATURADA);
+
+			this.apagarDadosGeradosFaturarGrupoFaturamento(helper, atividade);
+
+		}
 	}
 }

@@ -4083,100 +4083,66 @@ public class ControladorBatchSEJB implements SessionBean {
 
 				if (processo.getId().intValue() == Processo.FATURAR_GRUPO_FATURAMENTO) {
 					Collection<Rota> colecaoRota = this.repositorioMicromedicao
-							.pesquisaRotasNaoTransmitidas(faturamentoGrupo
-									.getAnoMesReferencia(), faturamentoGrupo
-									.getId());
+							.pesquisaRotasNaoTransmitidas(faturamentoGrupo.getAnoMesReferencia(), faturamentoGrupo.getId());
 
 					if (colecaoRota != null && !colecaoRota.isEmpty()) {
 						Iterator iteratorRota = colecaoRota.iterator();
 						String mensagemAlerta = null;
 						while (iteratorRota.hasNext()) {
-							Rota rotaNaoTransmitida = (Rota) iteratorRota
-									.next();
+							Rota rotaNaoTransmitida = (Rota) iteratorRota.next();
 							if (mensagemAlerta == null) {
-								mensagemAlerta = rotaNaoTransmitida.getId()
-										.toString();
+								mensagemAlerta = rotaNaoTransmitida.getId().toString();
 							} else {
-								mensagemAlerta += ","
-										+ rotaNaoTransmitida.getId()
-												.toString();
+								mensagemAlerta += ","+ rotaNaoTransmitida.getId().toString();
 							}
 						}
 
-						throw new ControladorException(
-								"atencao.rotas_nao_transmitidas", null,
-								mensagemAlerta);
+						throw new ControladorException("atencao.rotas_nao_transmitidas", null,mensagemAlerta);
 
 					}
 				}
 
-				// Construi um processoIniciado para cada
-				// FaturamentoAtividadeCronograma
+				// Construi um processoIniciado para cada FaturamentoAtividadeCronograma
 				ProcessoIniciado processoIniciado = new ProcessoIniciado();
 				processoIniciado.setUsuario(usuario);
-				processoIniciado.setCodigoGrupoProcesso(faturamentoGrupo
-						.getId());
+				processoIniciado.setCodigoGrupoProcesso(faturamentoGrupo.getId());
 
 				ProcessoSituacao processoSituacao = new ProcessoSituacao();
 				Integer processoSituacaoId = this.verificarAutorizacaoBatch(processo.getId());
 				processoSituacao.setId(processoSituacaoId);
-
-				// isso
 				processoIniciado.setProcessoSituacao(processoSituacao);
-
 				processoIniciado.setProcesso(processo);
 				processoIniciado.setDataHoraAgendamento(new Date());
 				processoIniciado.setDataHoraInicio(new Date());
-				processoIniciado
-						.setDataHoraComando(faturamentoAtividadeCronograma
-								.getComando());
+				processoIniciado.setDataHoraComando(faturamentoAtividadeCronograma.getComando());
 
-				codigoProcessoIniciadoGerado = (Integer) getControladorUtil()
-						.inserir(processoIniciado);
+				codigoProcessoIniciadoGerado = (Integer) getControladorUtil().inserir(processoIniciado);
 
-				// Este trecho pesquisa todos do processoFuncionalidade
-				// relacionados
-				// com o processo do objeto a ser inserido
+				// Este trecho pesquisa todos do processoFuncionalidade relacionados com o processo do objeto a ser inserido
 				FiltroProcessoFuncionalidade filtroProcessoFuncionalidade = new FiltroProcessoFuncionalidade();
-				filtroProcessoFuncionalidade
-						.adicionarParametro(new ParametroSimples(
-								FiltroProcessoFuncionalidade.ID_PROCESSO,
-								processoIniciado.getProcesso().getId()));
+				filtroProcessoFuncionalidade.adicionarParametro(new ParametroSimples(FiltroProcessoFuncionalidade.ID_PROCESSO,processoIniciado.getProcesso().getId()));
+				filtroProcessoFuncionalidade.adicionarParametro(new ParametroSimples(FiltroProcessoFuncionalidade.INDICADOR_USO,ConstantesSistema.INDICADOR_USO_ATIVO));
 
-				filtroProcessoFuncionalidade
-						.adicionarParametro(new ParametroSimples(
-								FiltroProcessoFuncionalidade.INDICADOR_USO,
-								ConstantesSistema.INDICADOR_USO_ATIVO));
-
-				Collection processosFuncionaliadade = getControladorUtil()
-						.pesquisar(filtroProcessoFuncionalidade,
-								ProcessoFuncionalidade.class.getName());
+				Collection processosFuncionaliadade = getControladorUtil().pesquisar(filtroProcessoFuncionalidade,ProcessoFuncionalidade.class.getName());
 
 				Iterator iterator = processosFuncionaliadade.iterator();
 				while (iterator.hasNext()) {
 
-					ProcessoFuncionalidade processoFuncionalidade = (ProcessoFuncionalidade) iterator
-							.next();
-
-					FuncionalidadeIniciada funcionalidadeIniciada = new FuncionalidadeIniciada();
+					ProcessoFuncionalidade processoFuncionalidade = (ProcessoFuncionalidade) iterator.next();
+					
 					FuncionalidadeSituacao funcionalidadeSituacao = new FuncionalidadeSituacao();
-					funcionalidadeSituacao
-							.setId(FuncionalidadeSituacao.EM_ESPERA);
-					funcionalidadeIniciada
-							.setFuncionalidadeSituacao(funcionalidadeSituacao);
-					funcionalidadeIniciada
-							.setProcessoIniciado(processoIniciado);
-					funcionalidadeIniciada
-							.setProcessoFuncionalidade(processoFuncionalidade);
-					funcionalidadeIniciada.setId((Integer) getControladorUtil()
-							.inserir(funcionalidadeIniciada));
+					funcionalidadeSituacao.setId(FuncionalidadeSituacao.EM_ESPERA);
+					
+					FuncionalidadeIniciada funcionalidadeIniciada = new FuncionalidadeIniciada();
+					funcionalidadeIniciada.setFuncionalidadeSituacao(funcionalidadeSituacao);
+					funcionalidadeIniciada.setProcessoIniciado(processoIniciado);
+					funcionalidadeIniciada.setProcessoFuncionalidade(processoFuncionalidade);
+					
+					funcionalidadeIniciada.setId((Integer) getControladorUtil().inserir(funcionalidadeIniciada));
 
-					SistemaParametro sistemaParametro = getControladorUtil()
-							.pesquisarParametrosDoSistema();
+					SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
-					// Seta os parametros da funcionalidadeIniciada
-					switch (funcionalidadeIniciada.getProcessoFuncionalidade()
-							.getFuncionalidade().getId()) {
+					switch (funcionalidadeIniciada.getProcessoFuncionalidade().getFuncionalidade().getId()) {
 
 					case Funcionalidade.GERAR_DADOS_PARA_LEITURA:
 

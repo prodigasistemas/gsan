@@ -28,13 +28,10 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
+import org.jboss.logging.Logger;
 
-public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
-		GcomAction {
+public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends GcomAction {
 
-	/**
-	 * Constantes de Classe.
-	 */
 	private static final char RESPOSTA_ERRO = '#';
 	private static final byte RESPOSTA_OK = '*';
 
@@ -47,18 +44,9 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 	private static final int BAIXAR_NOVA_VERSAO_JAR = 5;
 	public static final int FINALIZAR_LEITURA_ARQUIVO_IMOVEIS_FALTANDO = 7;
 
-	/**
-	 * Método Execute do Action
-	 * 
-	 * @param actionMapping
-	 * @param actionForm
-	 * @param httpServletRequest
-	 * @param httpServletResponse
-	 * @return
-	 */
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest request,
-			HttpServletResponse response) {
+	private Logger logger = Logger.getLogger(ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction.class);
+	
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm, HttpServletRequest request, HttpServletResponse response) {
 
 		InputStream in = null;
 		OutputStream out = null;
@@ -66,7 +54,7 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 		try {
 			out = response.getOutputStream();
 		} catch (IOException e) {
-			System.out.println("Erro: " + e.getMessage());
+			logger.error("Erro: " + e.getMessage());
 		}
 
 		try {
@@ -75,54 +63,53 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 
 			int pacote = din.readByte();
 
-			System.out.println("Solicitacao Mobile : " + pacote);
+			logger.info("Solicitacao Mobile : " + pacote);
+
 			switch (pacote) {
 			case PACOTE_BAIXAR_ARQUIVO:
-				// Baixar Arquivo
 				this.baixarArquivo(din, response, out);
 				break;
+
 			case ATUALIZAR_MOVIMENTO:
-				// Atualizar Movimento
 				this.atualizarMovimentacao(din, response, out);
 				break;
 			case FINALIZAR_LEITURA:
-				// Finalizar Movimento
-				this.finalizarMovimentacao(din, response, out,
-						FINALIZAR_LEITURA);
+				this.finalizarMovimentacao(din, response, out, FINALIZAR_LEITURA);
 				break;
+			
 			case FINALIZAR_LEITURA_INCOMPLETA:
-				// Finalizar Movimento
-				this.finalizarMovimentacao(din, response, out,
-						FINALIZAR_LEITURA_INCOMPLETA);
+				this.finalizarMovimentacao(din, response, out, FINALIZAR_LEITURA_INCOMPLETA);
 				break;
+				
 			case CONFIRMAR_ARQUIVO_RECEBIDO:
-				// Finalizar Movimento
 				this.confirmacaoArquivoRecebido(din, response, out);
 				break;
+
 			case BAIXAR_NOVA_VERSAO_JAD:
-				// Carrega o arquivo jad do banco
 				this.baixarNovaVersaoJad(din, response, out);
 				break;
+
 			case BAIXAR_NOVA_VERSAO_JAR:
-				// Carrega o arquivo jar do banco
 				this.baixarNovaVersaoJar(din, response, out);
 				break;
+
 			case FINALIZAR_LEITURA_ARQUIVO_IMOVEIS_FALTANDO:
-				this.finalizarMovimentacao(din, response, out,
-						FINALIZAR_LEITURA_ARQUIVO_IMOVEIS_FALTANDO);
+				this.finalizarMovimentacao(din, response, out,FINALIZAR_LEITURA_ARQUIVO_IMOVEIS_FALTANDO);
 				break;
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println("Erro: " + e.getMessage());
+			
+			logger.error("Erro: " + e.getMessage());
 			response.setContentLength(1);
 			try {
 				out.write(RESPOSTA_ERRO);
 				out.flush();
 			} catch (IOException e1) {
-				System.out.println("Erro: " + e.getMessage());
+				logger.error("Erro: " + e.getMessage());
 			}
+			
 		} finally {
 			if (in != null) {
 				try {
@@ -147,39 +134,21 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 
 	/**
 	 * [UC0811] Processar Requisições do Dispositivo Móvel Impressao Simultanea.
-	 * 
-	 * Método que baixa o arquivo de entrada do servidor.
-	 * 
-	 * @author Bruno Barros
-	 * @date 13/09/2009
-	 * 
-	 * @param data
-	 * @param response
-	 * @throws IOException
 	 */
-	public void baixarArquivo(DataInputStream data,
-			HttpServletResponse response, OutputStream out) throws IOException {
+	public void baixarArquivo(DataInputStream data, HttpServletResponse response, OutputStream out) throws IOException {
+		
 		Fachada fachada = Fachada.getInstancia();
 		long imei = data.readLong();
-		System.out.println("imei: " + imei);
 
-		// ******************************************************************
-		// 08/01/2009
-		// COMENTADO PARA ENTRAR SÓ NA PROX. VERSÃO
-		// String versao = data.readUTF();
-		// System.out.println("versao: " + versao);
-		// if(versao != null && versao.equals("v0.1")){
-		// *************************************************************
+		logger.info("imei: " + imei);
 
 		try {
-			Object[] retorno = fachada
-					.baixarArquivoTextoParaLeituristaImpressaoSimulanea(imei,
-							ServicoTipoCelular.IMPRESSAO_SIMULTANEA);
+			Object[] retorno = fachada.baixarArquivoTextoParaLeituristaImpressaoSimulanea(imei, ServicoTipoCelular.IMPRESSAO_SIMULTANEA);
 			byte[] arq = (byte[]) retorno[0];
 			String nomeArquivo = (String) retorno[1];
 
 			if (arq != null) {
-				System.out.println("Inicio : Baixando arquivo Mobile");
+				logger.info("Inicio : Baixando arquivo Mobile");
 
 				String tipoArquivo = "";
 
@@ -189,15 +158,9 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 					tipoArquivo = "tipoArquivo=G&";
 				}
 
-				// Parametro que identifica que o tipo de arquivo da rota está
-				// sendo enviado
 				String parametroArquivoBaixarRota = "arquivoRoteiro=";
 
-				// 1 do tipo de resposta ok + tipo do arquivo + parametro
-				// Arquivo baixar rota + tamanho do arquivo da rota
-				response.setContentLength(1 + tipoArquivo.getBytes().length
-						+ parametroArquivoBaixarRota.getBytes().length
-						+ arq.length);
+				response.setContentLength(1 + tipoArquivo.getBytes().length + parametroArquivoBaixarRota.getBytes().length + arq.length);
 
 				out.write(RESPOSTA_OK);
 				out.write(tipoArquivo.getBytes());
@@ -206,71 +169,44 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 
 				out.flush();
 
-				System.out.println("Fim: Baixando arquivo Mobile");
+				logger.info("Fim: Baixando arquivo Mobile");
 			} else {
-				System.out.println("Erro ao Baixar arquivo Mobile");
+				logger.info("Erro ao Baixar arquivo Mobile");
 				response.setContentLength(1);
-				// OutputStream out = response.getOutputStream();
 				out.write(RESPOSTA_ERRO);
 				out.flush();
-				// out.close();
 			}
 
 		} catch (Exception e) {
-
-			System.out.println("Erro ao Baixar arquivo Mobile");
+			logger.error("Erro ao baixar arquivo mobile");
 			response.setContentLength(1);
 			out.write(RESPOSTA_ERRO);
 			out.flush();
 
 		}
-
-		// ******************************************************************
-		// else {
-		// System.out.println("Erro versão Mobile");
-		// response.setContentLength(RESPOSTA_ERRO_VERSAO);
-		// OutputStream out = response.getOutputStream();
-		// out.write(RESPOSTA_ERRO_VERSAO);
-		// out.flush();
-		// out.close();
-		// }
-		// ******************************************************************
 	}
 
 	/**
 	 * [UC0811] Processar Requisições do Dispositivo Móvel.
-	 * 
-	 * Método que atualiza as movimentações dos leituristas.
-	 * 
-	 * @author Bruno Barros
-	 * @date 10/11/2009
-	 * 
-	 * @throws IOException
-	 * 
 	 */
-	public void atualizarMovimentacao(DataInputStream data,
-			HttpServletResponse response, OutputStream out) throws IOException {
+	public void atualizarMovimentacao(DataInputStream data, HttpServletResponse response, OutputStream out) throws IOException {
 		InputStreamReader reader = new InputStreamReader(data);
 		BufferedReader buffer = new BufferedReader(reader);
 
 		try {
 			RetornoAtualizarFaturamentoMovimentoCelularHelper retorno = Fachada
-					.getInstancia().atualizarFaturamentoMovimentoCelular(
-							buffer, false, false, null, null, buffer);
-			// caso tenha gerado relatório de inconsistência,
-			// então retorna que o imóvel não foi processado
+					.getInstancia().atualizarFaturamentoMovimentoCelular(buffer, false, false, null, null, buffer);
+			
 			if (retorno.getRelatorioConsistenciaProcessamento() != null) {
-				System.out
-						.println("Erro ao atualizar faturamento movimento celular");
+			
+				logger.info("Erro ao atualizar faturamento movimento celular");
 				response.setContentLength(1);
 				out.write(RESPOSTA_ERRO);
 				out.flush();
-			} else if (retorno.getMensagemComunicacaoServidorCelular() != null) {
-				System.out
-						.println("Validação encontrada. Retornando para o celular.");
 
-				response.setContentLength(1 + retorno
-						.getMensagemComunicacaoServidorCelular().length());
+			} else if (retorno.getMensagemComunicacaoServidorCelular() != null) {
+				logger.info("Validação encontrada. Retornando para o celular.");
+				response.setContentLength(1 + retorno.getMensagemComunicacaoServidorCelular().length());
 
 				if (retorno.getIndicadorSucessoAtualizacao()) {
 					out.write(RESPOSTA_OK);
@@ -278,20 +214,17 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 					out.write(RESPOSTA_ERRO);
 				}
 
-				out.write(retorno.getMensagemComunicacaoServidorCelular()
-						.getBytes());
+				out.write(retorno.getMensagemComunicacaoServidorCelular().getBytes());
 				out.flush();
 			} else {
 				response.setContentLength(1);
 				out.write(RESPOSTA_OK);
 				out.flush();
-				System.out
-						.println("Fim: atualizar faturamento movimento celular");
+				logger.info("Fim: atualizar faturamento movimento celular");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out
-					.println("Erro ao atualizar faturamento movimento celular");
+			logger.error("Erro ao atualizar faturamento movimento celular");
 			response.setContentLength(1);
 			out.write(RESPOSTA_ERRO);
 			out.flush();
@@ -375,118 +308,62 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 			arquivoRetorno.setTipoFinalizacao(new Short(tipoFinalizacao + ""));
 			arquivoRetorno.setUltimaAlteracao(new Date());
 
-			/**
-			 * TODO - COSANPA Adicionando informacoes da rota para ser mostradas
-			 * no log.
-			 */
-			System.out.println("Finalizando arquivo Mobile [Imei=" + imei
-					+ ", Localidade: " + localidade + ", Setor: "
-					+ setorComercial + ", Rota: " + codRota + "]");
-			// Caso o tipo de finalização seja de arquivo com imóveis faltando,
-			// pesquisamos quais ja chegaram
+			logger.info("Finalizando arquivo Mobile [Imei=" + imei + ", Localidade: " + localidade.getId() + ", Setor: " + setorComercial + ", Rota: " + codRota + "]");
+
 			if (indcFinalizacao == FINALIZAR_LEITURA_ARQUIVO_IMOVEIS_FALTANDO) {
-				buffer = fachada
-						.removerImoveisJaProcessadosBufferImpressaoSimultanea(
-								idRota, buffer);
+				buffer = fachada.removerImoveisJaProcessadosBufferImpressaoSimultanea(idRota, buffer);
 			}
 
 			RetornoAtualizarFaturamentoMovimentoCelularHelper retorno = null;
 
 			if (buffer != null) {
-				retorno = fachada.atualizarFaturamentoMovimentoCelular(buffer,
-						false, true, idRota, arquivoRetorno, bufferOriginal);
+				retorno = fachada.atualizarFaturamentoMovimentoCelular(buffer, false, true, idRota, arquivoRetorno, bufferOriginal);
 			}
 
-			// caso não tenha gerado relatório de inconsistência,
-			// então retorna que o imóvel não foi processado
 			if (retorno != null
-					&& (retorno.getRelatorioConsistenciaProcessamento() != null || retorno
-							.getMensagemComunicacaoServidorCelular() != null)) {
-				/**
-				 * TODO - COSANPA Adicionando informacoes da rota para ser
-				 * mostradas no log.
-				 */
-				System.out.println("Erro ao finalizar rota [Imei=" + imei
-						+ ", Localidade: " + localidade + ", Setor: "
-						+ setorComercial + ", Rota: " + codRota + "]");
+					&& (retorno.getRelatorioConsistenciaProcessamento() != null || retorno.getMensagemComunicacaoServidorCelular() != null)) {
+
+				logger.info("Erro ao finalizar rota [Imei=" + imei + ", Localidade: " + localidade.getId() + ", Setor: " + setorComercial + ", Rota: " + codRota + "]");
+				
 				response.setContentLength(1);
 				out.write(RESPOSTA_ERRO);
 				out.flush();
 			} else {
 
-				// cria uma coleção de situações de transmissões para verificar
-				// se é para finalizar o arquivo princial
-				// (Caso todos arquivos divididos estejam com a situação de
-				// Finalizado ou Finalizado Incompleto então finaliza
-				// o arquivo principal para finalizado ou finalizado
-				// imcompleto).
 				Integer[] idsSituacaoTransmissao = new Integer[1];
 				idsSituacaoTransmissao[0] = SituacaoTransmissaoLeitura.TRANSMITIDO;
 
-				// Atualiza a situação do arquivo texto de em campo para
-				// finalizado
-				// Alteração feita por Sávio Luiz
-				// Data:05/04/2010
-				/**
-				 * TODO - COSANPA Alteracao para finalizar a rota dividida por
-				 * sequencial da rota, e não pelo IMEI
-				 */
-				if (indcFinalizacao == FINALIZAR_LEITURA
-						|| indcFinalizacao == FINALIZAR_LEITURA_ARQUIVO_IMOVEIS_FALTANDO) {
+				if (indcFinalizacao == FINALIZAR_LEITURA || indcFinalizacao == FINALIZAR_LEITURA_ARQUIVO_IMOVEIS_FALTANDO) {
 
-					Integer diferenca = fachada
-							.pesquisarDiferencaQuantidadeMovimentoContaPrefaturadaArquivoTextoRoteiroEmpresa(
-									idRota, anoMesFaturamento);
+					Integer diferenca = fachada.pesquisarDiferencaQuantidadeMovimentoContaPrefaturadaArquivoTextoRoteiroEmpresa(idRota, anoMesFaturamento);
 
 					if (!fachada.isRotaDividida(idRota, anoMesFaturamento)) {
 						if (diferenca != 0) {
-							/**
-							 * TODO - COSANPA Adicionando informacoes da rota
-							 * para ser mostradas no log.
-							 */
 							String msg = "Validação encontrada. Retornando para o celular";
 							msg += "[Diferença de imoveis: " + diferenca;
-							msg += ", Imei=" + imei + ", Localidade: "
-									+ localidade + ", Setor: " + setorComercial
-									+ ", Rota: " + codRota + "]";
+							msg += ", Imei=" + imei + ", Localidade: " + localidade.getId() + ", Setor: " + setorComercial + ", Rota: " + codRota + "]";
 
-							System.out.println(msg);
-
+							logger.info(msg);
+							
 							String mensagem = "mensagem=A quantidade de imóveis enviados não corresponde ao esperado";
 							response.setContentLength(1 + mensagem.getBytes().length);
 							out.write(RESPOSTA_ERRO);
 							out.write(mensagem.getBytes());
 							out.flush();
 						} else {
-							fachada.atualizarArquivoTextoEnviadoPorRota(idRota,
-									SituacaoTransmissaoLeitura.EM_CAMPO,
-									SituacaoTransmissaoLeitura.TRANSMITIDO);
+							fachada.atualizarArquivoTextoEnviadoPorRota(idRota, SituacaoTransmissaoLeitura.EM_CAMPO, SituacaoTransmissaoLeitura.TRANSMITIDO);
 						}
 					} else {
-						// caso exista arquivo dividido, então atualiza o
-						// arquivo dividido pelo imei
-						// fachada.atualizarArquivoTextoEnviado(imei,
-						// SituacaoTransmissaoLeitura.EM_CAMPO,
-						// SituacaoTransmissaoLeitura.TRANSMITIDO);
-						// ALTERAR O METODO PARA FILTRAR POR ROTA/NUMERO ARQUIVO
-						// E N PELO IMEI
-						fachada.atualizarArquivoTextoDividido(idRota,
-								anoMesFaturamento, numeroSequenciaArquivo,
-								SituacaoTransmissaoLeitura.EM_CAMPO,
-								SituacaoTransmissaoLeitura.TRANSMITIDO);
+						fachada.atualizarArquivoTextoDividido(idRota, anoMesFaturamento, numeroSequenciaArquivo, SituacaoTransmissaoLeitura.EM_CAMPO, SituacaoTransmissaoLeitura.TRANSMITIDO);
 
 						if (diferenca != 0) {
-							/**
-							 * TODO - COSANPA Adicionando informacoes da rota
-							 * para ser mostradas no log.
-							 */
 							String msg = "Validação encontrada. Retornando para o celular";
 							msg += "[Diferença de imoveis: " + diferenca;
 							msg += ", Imei=" + imei + ", Localidade: "
 									+ localidade + ", Setor: " + setorComercial
 									+ ", Rota: " + codRota + "]";
 
-							System.out.println(msg);
+							logger.info(msg);
 
 							String mensagem = "mensagem=A quantidade de imóveis enviados não corresponde ao esperado";
 							response.setContentLength(1 + mensagem.getBytes().length);
@@ -494,40 +371,17 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 							out.write(mensagem.getBytes());
 							out.flush();
 						} else {
-							// caso exista arquivo dividido, então atualiza o
-							// arquivo dividido pelo imei
-							fachada.atualizarArquivoTextoEnviado(imei,
-									SituacaoTransmissaoLeitura.EM_CAMPO,
-									SituacaoTransmissaoLeitura.TRANSMITIDO);
-							// verifica se todas as rotas divididas estão com a
-							// situação de FINALIZADO
-							if (!fachada
-									.verificarExistenciaArquivosDivididosSituacaoDiferente(
-											idRota, anoMesFaturamento,
-											idsSituacaoTransmissao)) {
-								// atualiza o arquivo principal para a situação
-								// de finalizado
-								fachada.atualizarArquivoTextoEnviadoPorRota(
-										idRota,
-										SituacaoTransmissaoLeitura.EM_CAMPO,
-										SituacaoTransmissaoLeitura.TRANSMITIDO);
+							fachada.atualizarArquivoTextoEnviado(imei, SituacaoTransmissaoLeitura.EM_CAMPO, SituacaoTransmissaoLeitura.TRANSMITIDO);
+
+							if (!fachada.verificarExistenciaArquivosDivididosSituacaoDiferente(idRota, anoMesFaturamento, idsSituacaoTransmissao)) {
+								fachada.atualizarArquivoTextoEnviadoPorRota(idRota, SituacaoTransmissaoLeitura.EM_CAMPO, SituacaoTransmissaoLeitura.TRANSMITIDO);
 							} else {
-								// verifica se todas as rotas divididas estão
-								// com a situação de FINALIZADO ou finalizado
-								// imcompleto.
 								idsSituacaoTransmissao = new Integer[2];
 								idsSituacaoTransmissao[0] = SituacaoTransmissaoLeitura.TRANSMITIDO;
 								idsSituacaoTransmissao[1] = SituacaoTransmissaoLeitura.FINALIZADO_INCOMPLETO;
-								if (!fachada
-										.verificarExistenciaArquivosDivididosSituacaoDiferente(
-												idRota, anoMesFaturamento,
-												idsSituacaoTransmissao)) {
-									// atualiza o arquivo principal para a
-									// situação de finalizado
-									fachada.atualizarArquivoTextoEnviadoPorRota(
-											idRota,
-											SituacaoTransmissaoLeitura.EM_CAMPO,
-											SituacaoTransmissaoLeitura.FINALIZADO_INCOMPLETO);
+								
+								if (!fachada.verificarExistenciaArquivosDivididosSituacaoDiferente(idRota, anoMesFaturamento, idsSituacaoTransmissao)) {
+									fachada.atualizarArquivoTextoEnviadoPorRota(idRota, SituacaoTransmissaoLeitura.EM_CAMPO, SituacaoTransmissaoLeitura.FINALIZADO_INCOMPLETO);
 								}
 							}
 						}
@@ -538,55 +392,27 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 					out.write(RESPOSTA_OK);
 					out.flush();
 
-					/**
-					 * TODO - COSANPA Adicionando informacoes da rota para ser
-					 * mostradas no log.
-					 */
-					System.out.println("Fim: finalizar rota [Localidade: "
-							+ localidade + ", Setor: " + setorComercial
-							+ ", Rota: " + codRota + "]");
+					logger.info("Fim: finalizar rota [Localidade: " + localidade.getId() + ", Setor: " + setorComercial + ", Rota: " + codRota + "]");
 
 				} else if (indcFinalizacao == FINALIZAR_LEITURA_INCOMPLETA) {
 
 					if (!fachada.isRotaDividida(idRota, anoMesFaturamento)) {
-						fachada.atualizarArquivoTextoEnviadoPorRota(
-								idRota,
-								SituacaoTransmissaoLeitura.EM_CAMPO,
-								SituacaoTransmissaoLeitura.FINALIZADO_INCOMPLETO);
+						fachada.atualizarArquivoTextoEnviadoPorRota(idRota, SituacaoTransmissaoLeitura.EM_CAMPO, SituacaoTransmissaoLeitura.FINALIZADO_INCOMPLETO);
+					
 					} else {
-						// caso exista arquivo dividido, então atualiza o
-						// arquivo dividido pelo imei
-						fachada.atualizarArquivoTextoEnviado(
-								imei,
-								SituacaoTransmissaoLeitura.EM_CAMPO,
-								SituacaoTransmissaoLeitura.FINALIZADO_INCOMPLETO);
-						// verifica se todas as rotas divididas estão com a
-						// situação de FINALIZADO
-						if (!fachada
-								.verificarExistenciaArquivosDivididosSituacaoDiferente(
-										idRota, anoMesFaturamento,
-										idsSituacaoTransmissao)) {
-							// atualiza o arquivo principal para a situação de
-							// finalizado
-							fachada.atualizarArquivoTextoEnviadoPorRota(idRota,
-									SituacaoTransmissaoLeitura.EM_CAMPO,
-									SituacaoTransmissaoLeitura.TRANSMITIDO);
+						fachada.atualizarArquivoTextoEnviado(imei, SituacaoTransmissaoLeitura.EM_CAMPO, SituacaoTransmissaoLeitura.FINALIZADO_INCOMPLETO);
+						
+						if (!fachada.verificarExistenciaArquivosDivididosSituacaoDiferente(idRota, anoMesFaturamento, idsSituacaoTransmissao)) {
+							fachada.atualizarArquivoTextoEnviadoPorRota(idRota, SituacaoTransmissaoLeitura.EM_CAMPO, SituacaoTransmissaoLeitura.TRANSMITIDO);
+						
 						} else {
-							// verifica se todas as rotas divididas estão com a
-							// situação de FINALIZADO ou finalizado imcompleto.
 							idsSituacaoTransmissao = new Integer[2];
 							idsSituacaoTransmissao[0] = SituacaoTransmissaoLeitura.TRANSMITIDO;
 							idsSituacaoTransmissao[1] = SituacaoTransmissaoLeitura.FINALIZADO_INCOMPLETO;
-							if (!fachada
-									.verificarExistenciaArquivosDivididosSituacaoDiferente(
-											idRota, anoMesFaturamento,
-											idsSituacaoTransmissao)) {
-								// atualiza o arquivo principal para a situação
-								// de finalizado
-								fachada.atualizarArquivoTextoEnviadoPorRota(
-										idRota,
-										SituacaoTransmissaoLeitura.EM_CAMPO,
-										SituacaoTransmissaoLeitura.FINALIZADO_INCOMPLETO);
+							
+							if (!fachada.verificarExistenciaArquivosDivididosSituacaoDiferente(idRota, anoMesFaturamento,idsSituacaoTransmissao)) {
+
+								fachada.atualizarArquivoTextoEnviadoPorRota(idRota, SituacaoTransmissaoLeitura.EM_CAMPO, SituacaoTransmissaoLeitura.FINALIZADO_INCOMPLETO);
 							}
 						}
 					}
@@ -594,30 +420,13 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 					out.write(RESPOSTA_OK);
 					out.flush();
 
-					/**
-					 * TODO - COSANPA Adicionando informacoes da rota para ser
-					 * mostradas no log.
-					 */
-					System.out.println("Fim: finalizar rota [Localidade: "
-							+ localidade + ", Setor: " + setorComercial
-							+ ", Rota: " + codRota);
+					logger.info("Fim: finalizar rota [Localidade: " + localidade.getId() + ", Setor: " + setorComercial + ", Rota: " + codRota);
 				}
 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-
-			/**
-			 * TODO - COSANPA Adicionando informacoes da rota para ser mostradas
-			 * no log.
-			 */
-			System.out
-					.println("Erro ao atualizar faturamento movimento celular [Localidade: "
-							+ idLocalidade
-							+ ", Setor: "
-							+ setorComercial
-							+ ", Rota: " + codRota);
-
+			logger.error("Erro ao atualizar faturamento movimento celular [Localidade: " + idLocalidade + ", Setor: " + setorComercial + ", Rota: " + codRota);
 			response.setContentLength(1);
 			out.write(RESPOSTA_ERRO);
 			out.flush();
@@ -632,51 +441,30 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 	 * @param data
 	 * @throws IOException
 	 */
-	public void confirmacaoArquivoRecebido(DataInputStream data,
-			HttpServletResponse response, OutputStream out) throws IOException {
+	public void confirmacaoArquivoRecebido(DataInputStream data, HttpServletResponse response, OutputStream out) throws IOException {
+		
 		Fachada fachada = Fachada.getInstancia();
 		long imei = data.readLong();
 
-		System.out.println("Confirmando Recebimento do arquivo Mobile imei = "
-				+ imei);
+		logger.info("Confirmando Recebimento do arquivo Mobile imei = " + imei);
 
 		try {
 
-			// Atualiza a situação do arquivo texto de "em campo" para
-			// "finalizado e não transmitido"
-			// Alteração feita por Sávio Luiz
-			// Data:05/04/2010
-			fachada.atualizarArquivoTextoEnviado(imei,
-					SituacaoTransmissaoLeitura.EM_CAMPO,
-					SituacaoTransmissaoLeitura.FINALIZADO_NAO_TRANSMITIDO);
+			fachada.atualizarArquivoTextoEnviado(imei, SituacaoTransmissaoLeitura.EM_CAMPO, SituacaoTransmissaoLeitura.FINALIZADO_NAO_TRANSMITIDO);
+			fachada.atualizarArquivoTextoEnviado(imei,SituacaoTransmissaoLeitura.LIBERADO, SituacaoTransmissaoLeitura.EM_CAMPO);
 
-			// Atualiza a situação do arquivo texto de "liberado" para
-			// "em campo"
-			// Alteração feita por Sávio Luiz
-			// Data:05/04/2010
-			fachada.atualizarArquivoTextoEnviado(imei,
-					SituacaoTransmissaoLeitura.LIBERADO,
-					SituacaoTransmissaoLeitura.EM_CAMPO);
-
-			// Atualiza a situação do arquivo texto de "disponível" para
-			// "liberado"
-			// Alteração feita por Sávio Luiz
-			// Data:05/04/2010
 			if (fachada.liberaProximoArquivoImpressaoSimultaneaOnLine()) {
-				fachada.atualizarArquivoTextoMenorSequencialLeitura(imei,
-						SituacaoTransmissaoLeitura.DISPONIVEL,
-						SituacaoTransmissaoLeitura.LIBERADO,
-						ServicoTipoCelular.IMPRESSAO_SIMULTANEA);
+				fachada.atualizarArquivoTextoMenorSequencialLeitura(imei, SituacaoTransmissaoLeitura.DISPONIVEL,
+						SituacaoTransmissaoLeitura.LIBERADO, ServicoTipoCelular.IMPRESSAO_SIMULTANEA);
 			}
 
 			response.setContentLength(1);
 			out.write(RESPOSTA_OK);
 			out.flush();
-			System.out.println("Fim: atualizar faturamento movimento celular");
+			logger.info("Fim: atualizar faturamento movimento celular");
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out
-					.println("Erro ao atualizar faturamento movimento celular");
+			logger.error("Erro ao atualizar faturamento movimento celular");
 			response.setContentLength(1);
 			out.write(RESPOSTA_ERRO);
 			out.flush();
@@ -685,18 +473,9 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 
 	/**
 	 * [UC0811] Processar Requisições do Dispositivo Móvel Impressao Simultanea.
-	 * 
-	 * Método que baixa a nova versão do mobile para o celular
-	 * 
-	 * @author Bruno Barros
-	 * @date 08/06/2010
-	 * 
-	 * @param
-	 * @param response
-	 * @throws IOException
 	 */
-	public void baixarNovaVersaoJad(DataInputStream data,
-			HttpServletResponse response, OutputStream out) throws IOException {
+	public void baixarNovaVersaoJad(DataInputStream data, HttpServletResponse response, OutputStream out) throws IOException {
+	
 		Fachada fachada = Fachada.getInstancia();
 
 		try {
@@ -705,21 +484,18 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 			if (arq != null) {
 				String parametroTipoArquivo = "jad=";
 
-				System.out
-						.println("Inicio : Baixando NOVA VERSÃO, ARQUIVO JAD Mobile");
-				response.setContentLength(arq.length
-						+ parametroTipoArquivo.getBytes().length + 1);
+				logger.info("Inicio : Baixando NOVA VERSÃO, ARQUIVO JAD Mobile");
+				
+				response.setContentLength(arq.length + parametroTipoArquivo.getBytes().length + 1);
 
 				out.write(RESPOSTA_OK);
 				out.write(parametroTipoArquivo.getBytes());
-
 				out.write(arq);
 				out.flush();
 
-				System.out
-						.println("Fim: Baixando NOVA VERSÃO, ARQUIVO JAD Mobile");
+				logger.info("Fim: Baixando NOVA VERSÃO, ARQUIVO JAD Mobile");
 			} else {
-				System.out.println("Erro ao Baixar arquivo Mobile");
+				logger.info("Erro ao Baixar arquivo Mobile");
 				response.setContentLength(1);
 
 				out.write(RESPOSTA_ERRO);
@@ -728,7 +504,7 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 
 		} catch (Exception e) {
 
-			System.out.println("Erro ao Baixar arquivo Mobile");
+			logger.error("Erro ao Baixar arquivo Mobile");
 			response.setContentLength(1);
 			out.write(RESPOSTA_ERRO);
 			out.flush();
@@ -738,18 +514,9 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 
 	/**
 	 * [UC0811] Processar Requisições do Dispositivo Móvel Impressao Simultanea.
-	 * 
-	 * Método que baixa a nova versão do mobile para o celular
-	 * 
-	 * @author Bruno Barros
-	 * @date 08/06/2010
-	 * 
-	 * @param
-	 * @param response
-	 * @throws IOException
 	 */
-	public void baixarNovaVersaoJar(DataInputStream data,
-			HttpServletResponse response, OutputStream out) throws IOException {
+	public void baixarNovaVersaoJar(DataInputStream data, HttpServletResponse response, OutputStream out) throws IOException {
+		
 		Fachada fachada = Fachada.getInstancia();
 
 		try {
@@ -759,10 +526,9 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 
 				String parametroTipoArquivo = "jar=";
 
-				System.out
-						.println("Inicio : Baixando NOVA VERSÃO, ARQUIVO JAR Mobile");
-				response.setContentLength(arq.length
-						+ parametroTipoArquivo.getBytes().length + 1);
+				logger.info("Inicio : Baixando NOVA VERSÃO, ARQUIVO JAR Mobile");
+				
+				response.setContentLength(arq.length+ parametroTipoArquivo.getBytes().length + 1);
 
 				out.write(RESPOSTA_OK);
 				out.write(parametroTipoArquivo.getBytes());
@@ -770,10 +536,9 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 				out.write(arq);
 				out.flush();
 
-				System.out
-						.println("Fim: Baixando NOVA VERSÃO, ARQUIVO JAR Mobile");
+				logger.info("Fim: Baixando NOVA VERSÃO, ARQUIVO JAR Mobile");
 			} else {
-				System.out.println("Erro ao Baixar arquivo Mobile");
+				logger.info("Erro ao Baixar arquivo Mobile");
 				response.setContentLength(1);
 
 				out.write(RESPOSTA_ERRO);
@@ -782,7 +547,7 @@ public class ProcessarRequisicaoDipositivoMovelImpressaoSimultaneaAction extends
 
 		} catch (Exception e) {
 
-			System.out.println("Erro ao Baixar arquivo Mobile");
+			logger.info("Erro ao Baixar arquivo Mobile");
 			response.setContentLength(1);
 			out.write(RESPOSTA_ERRO);
 			out.flush();
