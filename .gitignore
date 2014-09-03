@@ -23,4 +23,4 @@ migrations/comercial/environments/development.properties
 migrations/comercial/environments/stage.properties
 migrations/comercial/environments/production.properties
 migrations/comercial/environments/local.properties
-
+src/gcom/properties/version.properties

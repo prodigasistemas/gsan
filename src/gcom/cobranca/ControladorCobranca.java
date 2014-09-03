@@ -3,7 +3,6 @@ package gcom.cobranca;
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.Arrecadador;
 import gcom.arrecadacao.ArrecadadorContratoTarifa;
-import gcom.arrecadacao.ControladorArrecadacao;
 import gcom.arrecadacao.ControladorArrecadacaoLocal;
 import gcom.arrecadacao.ControladorArrecadacaoLocalHome;
 import gcom.arrecadacao.DeducaoTipo;
@@ -69,7 +68,6 @@ import gcom.cadastro.EnvioEmail;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.RepositorioCadastroHBM;
 import gcom.cadastro.cliente.Cliente;
-import gcom.cadastro.cliente.ClienteConta;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteGuiaPagamento;
 import gcom.cadastro.cliente.ClienteImovel;
@@ -7650,21 +7648,6 @@ public class ControladorCobranca implements SessionBean {
 			imovelNaoGerado.setImovel(imovel);
 			imovelNaoGerado.setUltimaAlteracao(new Date());
 
-			// situação especifica para o usuario Mario Gouveia
-			// Integer idImovelMario = getControladorImovel()
-			// .verificarExistenciaImovelParaCliente(imovel.getId());
-			// if (idImovelMario != null) {
-			// MotivoNaoGeracaoDocCobranca motivoNaoGeracao =
-			// new MotivoNaoGeracaoDocCobranca();
-			// motivoNaoGeracao.setId(MotivoNaoGeracaoDocCobranca.IMOVEL_MARIO);
-			// imovelNaoGerado.setMotivoNaoGeracaoDocCobranca(motivoNaoGeracao);
-			//
-			// getControladorUtil().inserir(imovelNaoGerado);
-			// imovelNaoGerado = null;
-			// // retorna o objeto vazio e passa para o próximo imóvel
-			// return gerarAtividadeAcaoCobrancaHelper;
-			// }
-
 			// Caso o imovel esteja excluido, passar para o proximo imovel
 			Integer idImovel = getControladorImovel().verificarExistenciaImovel(imovel.getId());
 			if (idImovel == null) {
@@ -8158,154 +8141,6 @@ public class ControladorCobranca implements SessionBean {
 		// o critério de cobrança)
 		verificarCriterioCobrancaParaImovelHelper.setFlagCriterioCobrancaImovel(false);
 
-		// pesquisar a colecao de criterios para situacao ligacao agua, esgoto e
-		// cobranca
-		// FiltroCriterioSituacaoLigacaoAgua filtroCritSitAgua = new
-		// FiltroCriterioSituacaoLigacaoAgua();
-		// filtroCritSitAgua.adicionarParametro(new ParametroSimples(
-		// FiltroCriterioSituacaoLigacaoAgua.COBRANCA_CRITERIO_ID,
-		// cobrancaCriterio.getId()));
-		// filtroCritSitAgua.adicionarCaminhoParaCarregamentoEntidade(FiltroCriterioSituacaoLigacaoAgua.LIGACAO_AGUA_SITUACAO);
-		// Collection colecaoSituacoesLigacaoAgua =
-		// getControladorUtil().pesquisar(filtroCritSitAgua,
-		// CriterioSituacaoLigacaoAgua.class.getName());
-
-		// Item 1 - Alterado em 10/06/08 por Ana Breda / Desenvolvedor:
-		// Francisco
-		// Caso a situação da ligação de agua do imovel nao esteja contida no
-		// conjunto
-		// de situacoes de agua do criterio, passar para o proximo imovel
-		// Collection colecaoSituacoesLigacaoAgua =
-		// cobrancaCriterio.getCriteriosSituacaoLigacaoAgua();
-		// boolean situacaoLigacaoAguaValida = false;
-		// if (colecaoSituacoesLigacaoAgua != null &&
-		// !colecaoSituacoesLigacaoAgua.isEmpty()){
-		// for (Iterator iter = colecaoSituacoesLigacaoAgua.iterator(); iter
-		// .hasNext();) {
-		// CriterioSituacaoLigacaoAgua critSitLigAgua =
-		// (CriterioSituacaoLigacaoAgua) iter.next();
-		// if
-		// (critSitLigAgua.getComp_id().getLigacaoAguaSituacao().getId().intValue()
-		// ==
-		// imovel.getLigacaoAguaSituacao().getId().intValue()){
-		// situacaoLigacaoAguaValida = true;
-		// break;
-		// }
-		// }
-		// if (!situacaoLigacaoAguaValida) {
-		//
-		// MotivoNaoGeracaoDocCobranca motivoNaoGeracao =
-		// new MotivoNaoGeracaoDocCobranca();
-		// motivoNaoGeracao.setId(MotivoNaoGeracaoDocCobranca.SITUACAO_LIGACAO_AGUA_INVALIDA);
-		// imovelNaoGerado.setMotivoNaoGeracaoDocCobranca(motivoNaoGeracao);
-		//
-		// getControladorUtil().inserir(imovelNaoGerado);
-		//
-		// imovelNaoGerado = null;
-		// // retorna a verificacao falsa passa para o próximo imóvel
-		// return verificarCriterioCobrancaParaImovelHelper;
-		// }
-		// } else {
-		// if ((acaoCobranca.getLigacaoAguaSituacao() != null)
-		// && (acaoCobranca.getLigacaoAguaSituacao().getId().intValue() !=
-		// imovel
-		// .getLigacaoAguaSituacao().getId().intValue())) {
-		//
-		// MotivoNaoGeracaoDocCobranca motivoNaoGeracao =
-		// new MotivoNaoGeracaoDocCobranca();
-		// motivoNaoGeracao.setId(MotivoNaoGeracaoDocCobranca.SITUACAO_LIGACAO_AGUA_INVALIDA);
-		// imovelNaoGerado.setMotivoNaoGeracaoDocCobranca(motivoNaoGeracao);
-		//
-		// getControladorUtil().inserir(imovelNaoGerado);
-		//
-		// imovelNaoGerado = null;
-		//
-		// return verificarCriterioCobrancaParaImovelHelper;
-		// }
-		// }
-
-		// pesquisar a colecao de criterios para situacao ligacao esgoto
-		// FiltroCriterioSituacaoLigacaoEsgoto filtroCritSitEsgoto = new
-		// FiltroCriterioSituacaoLigacaoEsgoto();
-		// filtroCritSitEsgoto.adicionarParametro(new ParametroSimples(
-		// FiltroCriterioSituacaoLigacaoEsgoto.COBRANCA_CRITERIO_ID,
-		// cobrancaCriterio.getId()));
-		// filtroCritSitEsgoto.adicionarCaminhoParaCarregamentoEntidade(FiltroCriterioSituacaoLigacaoEsgoto.LIGACAO_ESGOTO_SITUACAO);
-		// Collection colecaoSituacoesLigacaoEsgoto =
-		// getControladorUtil().pesquisar(filtroCritSitEsgoto,
-		// CriterioSituacaoLigacaoEsgoto.class.getName());
-
-		// Item 2 - Alterado em 10/06/08 por Ana Breda / Desenvolvedor:
-		// Francisco
-		// Caso a situação da ligação de esgoto do imovel nao esteja contida no
-		// conjunto
-		// de situacoes de esgoto do criterio, passar para o proximo imovel
-		// Collection colecaoSituacoesLigacaoEsgoto =
-		// cobrancaCriterio.getCriteriosSituacaoLigacaoEsgoto();
-		// boolean situacaoLigacaoEsgotoValida = false;
-		// if (colecaoSituacoesLigacaoEsgoto != null &&
-		// !colecaoSituacoesLigacaoEsgoto.isEmpty()){
-		// for (Iterator iter = colecaoSituacoesLigacaoEsgoto.iterator(); iter
-		// .hasNext();) {
-		// CriterioSituacaoLigacaoEsgoto critSitLigEsgoto =
-		// (CriterioSituacaoLigacaoEsgoto) iter.next();
-		// if
-		// (critSitLigEsgoto.getComp_id().getLigacaoEsgotoSituacao().getId().intValue()
-		// ==
-		// imovel.getLigacaoEsgotoSituacao().getId().intValue()){
-		// situacaoLigacaoEsgotoValida = true;
-		// break;
-		// }
-		// }
-		// if (!situacaoLigacaoEsgotoValida) {
-		//
-		// MotivoNaoGeracaoDocCobranca motivoNaoGeracao =
-		// new MotivoNaoGeracaoDocCobranca();
-		// motivoNaoGeracao.setId(MotivoNaoGeracaoDocCobranca.SITUACAO_LIGACAO_ESGOTO_INVALIDA);
-		// imovelNaoGerado.setMotivoNaoGeracaoDocCobranca(motivoNaoGeracao);
-		//
-		// getControladorUtil().inserir(imovelNaoGerado);
-		//
-		// imovelNaoGerado = null;
-		//
-		// // retorna a verificacao falsa passa para o próximo imóvel
-		// return verificarCriterioCobrancaParaImovelHelper;
-		// }
-		// } else {
-		// if ((acaoCobranca.getLigacaoEsgotoSituacao() != null)
-		// && (acaoCobranca.getLigacaoEsgotoSituacao().getId().intValue() !=
-		// imovel
-		// .getLigacaoEsgotoSituacao().getId().intValue())) {
-		//
-		// MotivoNaoGeracaoDocCobranca motivoNaoGeracao =
-		// new MotivoNaoGeracaoDocCobranca();
-		// motivoNaoGeracao.setId(MotivoNaoGeracaoDocCobranca.SITUACAO_LIGACAO_ESGOTO_INVALIDA);
-		// imovelNaoGerado.setMotivoNaoGeracaoDocCobranca(motivoNaoGeracao);
-		//
-		// getControladorUtil().inserir(imovelNaoGerado);
-		//
-		// imovelNaoGerado = null;
-		//
-		// return verificarCriterioCobrancaParaImovelHelper;
-		// }
-		//
-		// }
-
-		// RETIRAR POSTERIORMENTE
-		// RAFAEL CORRÊA LIMA E SILVA
-		// 22/11/2007
-
-		/*
-		 * Cep cep = getControladorImovel().pesquisarCepImovel(imovel);
-		 * 
-		 * if (cep == null || cep.getCepId().equals(new Integer("5"))) { return
-		 * verificarCriterioCobrancaParaImovelHelper; }
-		 */
-
-		// RETIRAR POSTERIORMENTE
-		// RAFAEL CORRÊA LIMA E SILVA
-		// 22/11/2007
-
 		// item 1
 		// se o indicador de emissão da ação de cobrança para imóvel,com
 		// situação especial de cobrança
@@ -8465,6 +8300,21 @@ public class ControladorCobranca implements SessionBean {
 			indicadorConta = 2;
 		}
 
+		try {
+			int totalContas = repositorioCobranca.pesquisarQuantidadeContasVencidasPorImovel(
+					new Integer(matriculaImovel), indicadorPagamento, indicadorConta, 3);
+			
+			if (totalContas > 1) {
+				Date dataAtual = Util.subtrairNumeroDiasDeUmaData(new Date(), 1);
+				SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+				dataVencimentoFinal = formato.parse(formato.format(dataAtual));
+			}
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
 		// obtém o débito do imóvel
 		ObterDebitoImovelOuClienteHelper debitoImovel = this.obterDebitoImovelOuCliente(indicadorDebitoImovel, matriculaImovel,
 				codigoCliente, clienteRelacaoTipo, anoMesReferenciaInicial, anoMesReferenciaFinal, dataVencimentoInicial,

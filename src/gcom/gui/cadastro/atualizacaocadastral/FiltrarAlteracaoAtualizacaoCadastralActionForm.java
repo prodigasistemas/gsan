@@ -63,6 +63,12 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionForm extends ActionForm {
 	
 	private String alteracaoCategoria = "-1";
 
+	
+	
+	public FiltrarAlteracaoAtualizacaoCadastralActionForm() {
+		System.out.println("COnstrutor.");
+	}
+
 	public String getIdRegistrosAutorizados() {
 		return idRegistrosAutorizados;
 	}

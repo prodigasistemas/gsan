@@ -5,6 +5,7 @@
 <%@ taglib uri="/WEB-INF/pager-taglib.tld" prefix="pg"%>
 <%@ taglib uri="/WEB-INF/gsanLib.tld" prefix="gsan" %>
 <%@ taglib uri="/WEB-INF/c.tld" prefix="c"%>
+<%@page import="java.util.Collection" %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 
@@ -136,11 +137,55 @@
 	</table>
 	<p>&nbsp;</p>
 	<table>
-	  <tr>
+ 	<tr>
 		<td width="20%"><strong>Empresa:</strong></td>
 		<td width="80%"><html:text tabindex="10" maxlength="40" property="nomeEmpresa" size="40" disabled="true"/> 
-		</td>
-	  </tr>
+	</td>
+ 	</tr>
+ 	<tr>
+		<td colspan="3"><hr></td>
+	</tr>
+ 	<tr>
+	<tr>
+		<td colspan="3"><strong>Dados da inscrição inicial:</strong></td>
+	</tr>
+ 	<tr>
+		<td width="20%">Localidade Inicial:</td>
+		<td width="80%">
+		<html:text tabindex="10" value="${filtroMovimentoAtualizacaoCadastral.nomeLocalidadeInicial}" property="nomeLocalidadeInicial" size="20" disabled="true"/>
+		</td> 
+	</tr>
+	<tr>
+		<td width="20%">Setor Comercial Inicial:</td>
+		<td width="80%">
+		<html:text tabindex="10" value="${filtroMovimentoAtualizacaoCadastral.cdSetorComercialInicial}" property="cdSetorComercialInicial" size="5" disabled="true"/>
+	</tr>
+	<tr>
+		<td width="20%">Rota Inicial:</td>
+		<td width="80%">
+		<html:text tabindex="10" value="${filtroMovimentoAtualizacaoCadastral.cdRotaInicial}" property="cdRotaInicial" size="5" disabled="true"/>
+ 	</tr>
+ 	<tr>
+		<td colspan="3"><hr></td>
+	</tr>
+ 	<tr>
+	<tr>
+		<td colspan="3"><strong>Dados da inscrição final:</strong></td>
+	</tr>
+	<tr>
+		<td width="20%">Localidade Final:</td>
+		<td width="80%">
+		<html:text tabindex="10" value="${filtroMovimentoAtualizacaoCadastral.nomeLocalidadeFinal}" property="nomeLocalidadeFinal" size="20" disabled="true"/>
+	<tr>
+		<td width="20%">Setor Comercial Final:</td>
+		<td width="80%">
+		<html:text tabindex="10" value="${filtroMovimentoAtualizacaoCadastral.cdSetorComercialFinal}" property="cdSetorComercialFinal" size="5" disabled="true"/>
+	</tr>
+	<tr>	
+		<td width="20%">Rota Final:</td>
+		<td width="80%">
+		<html:text tabindex="10" value="${filtroMovimentoAtualizacaoCadastral.cdRotaFinal}" property="cdRotaFinal" size="5" disabled="true"/>
+    </tr>
 	</table>
 	<p>&nbsp;</p>
 	<table>		
@@ -148,14 +193,17 @@
 		<td colspan="2">
 			<table width="600" cellpadding="0" cellspacing="0">
 				<tr>
-					<td width="50%"><strong>Movimento de Atualização Cadastral:</strong></td>
-					<td width="50%" align="right">
+					<td width="40%"><strong>Movimento de Atualização Cadastral:</strong></td>
+					<td width="20%">
+					Total Im&oacute;veis: <strong><bean:write name="filtroMovimentoAtualizacaoCadastral" property="totalImoveis" /></strong>
+					</td>
+					<td width="40%" align="right">
 		  				<input type="button" name="Button" class="bottonRightCol" value="Gerar Fichas de Fiscalização"
 		  					onclick="window.location.href='/gsan/imprimirFichaFiscalizacaoCadastralAction.do';">  
 					</td>
 				</tr>
 				<tr>
-					<td colspan="2" bgcolor="#000000" height="2"></td>
+					<td colspan="3" bgcolor="#000000" height="2"></td>
 				</tr>
 		
 				<tr>
