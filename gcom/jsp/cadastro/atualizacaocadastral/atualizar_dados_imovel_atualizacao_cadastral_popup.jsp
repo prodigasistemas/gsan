@@ -75,7 +75,7 @@
 		var form = document.forms[0];
 		form.action = 'fiscalizarImovelAtualizacaoCadastralAction.do';
 	  	form.submit();
-	}
+	}	
 </script>
 </head>
 
@@ -147,8 +147,11 @@
 			<table width="100%" border="0">
 				<tr>
 					<td width="100"><strong>Im&oacute;vel:</strong></td>
-					<td align="left"><html:text property="descricaoImovel" readonly="true" size="20"
-						styleClass="texto-exibicao" /></td>
+					<td align="left"><html:text property="descricaoImovel" readonly="true" size="20" styleClass="texto-exibicao" />
+					&nbsp;
+					<a href="javascript: abrirPopup('exibirConsultarImovelAction.do?idImovel=<bean:write name="ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm" property="descricaoImovel"/>&enviarAoCarregar=true', 600, 900)">
+						<span style="font-weight: bold"><font color="#3165CE">Visualizar</font></span>
+					</a></td>
 				</tr>
 				<tr>
 					<td><strong>Localidade:</strong></td>
