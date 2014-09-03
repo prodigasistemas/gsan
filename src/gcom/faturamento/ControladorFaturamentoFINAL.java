@@ -9977,6 +9977,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		try {
 			System.out.println("Retificação da conta do imóvel: " + imovel.getId());
+			logger.info("Retificação da conta do imóvel: " + imovel.getId());
 			
 			validarContaParaRetificacao(contaAtual, imovel, dataVencimentoConta);
 
@@ -10023,9 +10024,10 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 				boolean imovelHidrometrado = repositorioMicromedicao.verificaExistenciaHidrometro(contaAtual.getImovel().getId());
 
-				System.out
-						.println("Motivo da retificação: ALTERAÇÃO DA LEITURA FATURADA");
+				System.out.println("Motivo da retificação: ALTERAÇÃO DA LEITURA FATURADA");
 				System.out.println("Imóvel: " + imovel.getId());
+				logger.info("Motivo da retificação: ALTERAÇÃO DA LEITURA FATURADA");
+				logger.info("Imóvel: " + imovel.getId());
 				
 				if (imovelHidrometrado) {
 
@@ -10131,26 +10133,18 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						repositorioFaturamento.atualizarContaCanceladaOuRetificada(contaAtual, raParaRetificacao);
 					}
 
-					System.out
-							.println("==============================================");
+					System.out.println("==============================================");
 					System.out.println("Antes da Atualização no banco ");
 					System.out.println("Imóvel: " + imovel.getId());
-					System.out.println("Referência da conta: "
-							+ contaAtual.getReferencia());
-					System.out
-							.println("Situação anterior da conta : "
-									+ (contaAtual
-											.getDebitoCreditoSituacaoAnterior() != null ? contaAtual
-											.getDebitoCreditoSituacaoAnterior()
-											.getId() : ""));
-					System.out
-							.println("Situação atual da conta : "
-									+ (contaAtual
-											.getDebitoCreditoSituacaoAtual() != null ? contaAtual
-											.getDebitoCreditoSituacaoAtual()
-											.getId() : ""));
-					System.out
-							.println("==============================================");
+					System.out.println("Referência da conta: " + contaAtual.getReferencia());
+					System.out.println("Situação anterior da conta : " + (contaAtual.getDebitoCreditoSituacaoAnterior() != null ? contaAtual.getDebitoCreditoSituacaoAnterior().getId() : ""));
+					System.out.println("Situação atual da conta : " + (contaAtual.getDebitoCreditoSituacaoAtual() != null ? contaAtual.getDebitoCreditoSituacaoAtual().getId() : ""));
+					System.out.println("==============================================");
+					logger.info("Antes da Atualização no banco ");
+					logger.info("Imóvel: " + imovel.getId());
+					logger.info("Referência da conta: " + contaAtual.getReferencia());
+					logger.info("Situação anterior da conta : " + (contaAtual.getDebitoCreditoSituacaoAnterior() != null ? contaAtual.getDebitoCreditoSituacaoAnterior().getId() : ""));
+					logger.info("Situação atual da conta : " + (contaAtual.getDebitoCreditoSituacaoAtual() != null ? contaAtual.getDebitoCreditoSituacaoAtual().getId() : ""));
 
 					if (contaAtual.getDebitoCreditoSituacaoAnterior() == null) {
 						repositorioFaturamento.retificarContaAtualizarSituacao(contaAtual, null);
