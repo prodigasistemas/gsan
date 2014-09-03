@@ -149,7 +149,7 @@
 					<td width="100"><strong>Im&oacute;vel:</strong></td>
 					<td align="left"><html:text property="descricaoImovel" readonly="true" size="20" styleClass="texto-exibicao" />
 					&nbsp;
-					<a href="javascript: abrirPopup('exibirConsultarImovelAction.do?idImovel=<bean:write name="ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm" property="descricaoImovel"/>&enviarAoCarregar=true', 600, 900)">
+					<a href="javascript: abrirPopup('exibirConsultarImovelAction.do?idImovel=<bean:write name="ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm" property="descricaoImovel"/>&enviarAoCarregar=true&limparForm=S', 600, 900)">
 						<span style="font-weight: bold"><font color="#3165CE">Visualizar</font></span>
 					</a></td>
 				</tr>

@@ -80,11 +80,6 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 		//recupera o código do imóvel
 		String idImovelDebitos = consultarImovelActionForm.getIdImovelDebitos();
 		
-		String idImovel = (String) httpServletRequest.getParameter("idImovel");
-		String enviarAoCarregar = (String) httpServletRequest.getParameter("enviarAoCarregar");
-		if(idImovel != null && enviarAoCarregar != null && enviarAoCarregar.equals("true"))
-			idImovelDebitos = idImovel;
-
 		if (limparForm != null && !limparForm.equals("")) {
 
 			//limpar os dados 
@@ -172,6 +167,13 @@ public class ExibirConsultarImovelDebitosAction extends GcomAction {
 		}
 		
 		Imovel imovel = null;
+		
+		String idImovel = (String) httpServletRequest.getParameter("idImovel");
+		String enviarAoCarregar = (String) httpServletRequest.getParameter("enviarAoCarregar");
+		if(idImovel != null && enviarAoCarregar != null && enviarAoCarregar.equals("true")) {
+			idImovelDebitos = idImovel;
+			idImovel = null;
+		}
 		
 		if ((idImovelDebitos != null && !idImovelDebitos.equalsIgnoreCase("")) || (idImovelPrincipalAba != null && !idImovelPrincipalAba.equalsIgnoreCase(""))) {
 
