@@ -59,6 +59,7 @@ import gcom.faturamento.debito.DebitoTipo;
 import gcom.faturamento.debito.DebitoTipoVigencia;
 import gcom.gui.cobranca.cobrancaporresultado.MovimentarOrdemServicoEmitirOSHelper;
 import gcom.gui.faturamento.FaturamentoImediatoAjusteHelper;
+import gcom.gui.faturamento.ImovelFaturamentoSeletivo;
 import gcom.gui.faturamento.consumotarifa.bean.CategoriaFaixaConsumoTarifaHelper;
 import gcom.gui.portal.ConsultarEstruturaTarifariaPortalHelper;
 import gcom.interceptor.RegistradorOperacao;
@@ -5674,8 +5675,13 @@ public interface IControladorFaturamento {
 	
 	public Integer countFaturasClienteResponsaveis(String anoMesReferencia) throws ControladorException;
 	
+//	public void faturarImoveisSeletivo(Collection<ImovelFaturamentoSeletivo> colecaoImoveis) throws ControladorException;
+
 	public Conta incluirDebitoContaRetificadaPagamentosDiferenca2Reais(Integer idConta, DebitoACobrar debito) throws Exception;
 	
 	public Conta incluirCreditoContaRetificadaPagamentosDiferenca2Reais(Integer idConta, CreditoARealizar credito) throws Exception;
 	
+	public Collection pesquisarClienteContaECliente(Integer idConta, String cnpjEmpresa) throws ControladorException;
+
+	public void faturarImovelSeletivo(ImovelFaturamentoSeletivo imovelFaturamentoSeletivo) throws ControladorException;
 }

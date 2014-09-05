@@ -1525,5 +1525,36 @@ public class RepositorioClienteImovelHBM implements IRepositorioClienteImovel {
 		return null;
 	}
 	
+	/**
+	 * [UC0671] Gerar Movimento de Inclusão de Negativação [SB0005] - Gerar
+	 * Negativação para o Imóvel
+	 */
+	public Short pesquisarIndicadorNegativacaoPeriodoClienteResponsavel(
+			Integer idImovel, Integer idClienteRelacaoTipo) throws ErroRepositorioException {
+
+		Short retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta;
+
+		try {
+			consulta = "select clie.indicadorNegativacaoPeriodo "
+					 + "from ClienteImovel clim "
+					 + "inner join clim.cliente clie "
+					 + "where clim.imovel.id = :idImovel "
+					 + "and clim.clienteRelacaoTipo.id = :idClienteRelacaoTipo "
+					 + "and clim.dataFimRelacao is null ";
+
+			retorno = (Short) session.createQuery(consulta)
+					.setInteger("idImovel", idImovel)
+					.setInteger("idClienteRelacaoTipo", idClienteRelacaoTipo)
+					.setMaxResults(1).uniqueResult();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
 }
 

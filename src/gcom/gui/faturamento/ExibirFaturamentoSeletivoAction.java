@@ -19,6 +19,7 @@ import gcom.util.filtro.ParametroSimples;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 import javax.servlet.http.HttpServletRequest;
@@ -82,7 +83,10 @@ public class ExibirFaturamentoSeletivoAction extends GcomAction {
                 char delimitador = '/';
                 char delimitador2 = ';';
 
+                List<ImovelFaturamentoSeletivo> imoveisFaturamentoSeletivo = new ArrayList<ImovelFaturamentoSeletivo>();
                 for (int i = 0; i < this.qtdRgistrosExibidos && it.hasNext(); i++) {
+                	
+                	ImovelFaturamentoSeletivo imovel = new ImovelFaturamentoSeletivo();
                     DadosMovimentacao dado = it.next();
                     dado.getInscricao();
                     faixas.append(dado.getFaixaLeituraEsperadaInferior());
@@ -92,9 +96,14 @@ public class ExibirFaturamentoSeletivoAction extends GcomAction {
                         faixas.append(delimitador);
                     }
                     dadosExibicao.add(dado);
+                    imovel.setDadoMovimentacao(dado);
+                    imovel.setIdImovel(dado.getMatriculaImovel());
+                    imoveisFaturamentoSeletivo.add(imovel);
                 }
 
-                sessao.setAttribute("colecaoLeituras", dadosExibicao);
+                form.setColecaoImoveisFaturamentoSeletivo(imoveisFaturamentoSeletivo);
+                sessao.setAttribute("colecaoLeituras", form.getColecaoImoveisFaturamentoSeletivo());
+                sessao.setAttribute("form", form);
                 httpServletRequest.setAttribute("qnt", "" + dadosExibicao.size());
 
                 listarAnormalidadesSessao(httpServletRequest, filtro,delimitador, delimitador2);

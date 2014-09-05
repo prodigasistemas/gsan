@@ -1,5 +1,6 @@
 package gcom.micromedicao;
 
+import gcom.atendimentopublico.ligacaoagua.LigacaoAgua;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.Imovel;
@@ -307,7 +308,7 @@ public interface IRepositorioMicromedicao {
 	 * @exception ErroRepositorioException
 	 *                Descrição da exceção
 	 */
-	public Collection pesquisarObterDadosHistoricoMedicao(Imovel imovel,
+	public Collection<MedicaoHistorico> pesquisarObterDadosHistoricoMedicao(Imovel imovel,
 			MedicaoTipo medicaoTipo, FaturamentoGrupo faturamentoGrupo)
 			throws ErroRepositorioException;
 
@@ -4251,4 +4252,5 @@ public interface IRepositorioMicromedicao {
      
      public Collection<ImovelPorRotaHelper> buscarImoveisFaturamentoSeletivo(Integer matriculaImovel, Integer idRota, Integer anoMesFaturamento) throws ErroRepositorioException;
 	
+     public LigacaoAgua obterLigacaoAgua(Integer idLigacao) throws ErroRepositorioException;
 }

@@ -8,35 +8,19 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class FaturamentoGrupo extends ObjetoTransacao {
 
-    /** identifier field */private static final long serialVersionUID = 1L;
-    private Integer id;
+	private static final long serialVersionUID = 1L;
 
-    /** persistent field */
+	private Integer id;
     private String descricao;
-
-    /** persistent field */
     private String descricaoAbreviada;
-
-    /** nullable persistent field */
     private Short indicadorUso;
-
-    /** nullable persistent field */
     private Integer anoMesReferencia;
-
-    /** nullable persistent field */
     private Short diaVencimento;
-
-    /** nullable persistent field */
     private Date ultimaAlteracao;
-    
-    /** nullable persistent field */
     private Short indicadorVencimentoMesFatura;
 
-    /** full constructor */
     public FaturamentoGrupo(String descricao, String descricaoAbreviada, Short indicadorUso, Integer anoMesReferencia, Short diaVencimento, Date ultimaAlteracao) {
         this.descricao = descricao;
         this.descricaoAbreviada = descricaoAbreviada;
@@ -46,11 +30,13 @@ public class FaturamentoGrupo extends ObjetoTransacao {
         this.ultimaAlteracao = ultimaAlteracao;
     }
 
-    /** default constructor */
     public FaturamentoGrupo() {
     }
+    
+    public FaturamentoGrupo(Integer id) {
+    	this.id = id;
+    }
 
-    /** minimal constructor */
     public FaturamentoGrupo(String descricao, String descricaoAbreviada) {
         this.descricao = descricao;
         this.descricaoAbreviada = descricaoAbreviada;
@@ -118,19 +104,12 @@ public class FaturamentoGrupo extends ObjetoTransacao {
             .toString();
     }
     
-	/**
-     * Retorna o valor de mesAno
-     * 
-     * @return O valor de mesAno
-     */
     public String getMesAno() {
         String mesAno = null;
         String mes = null;
         String ano = null;
 
-        if (this.anoMesReferencia != null
-                && !this.anoMesReferencia.toString().trim()
-                        .equalsIgnoreCase("")) {
+        if (this.anoMesReferencia != null && !this.anoMesReferencia.toString().trim().equalsIgnoreCase("")) {
             String anoMes = this.anoMesReferencia.toString();
 
             mes = anoMes.substring(4, 6);
@@ -157,9 +136,8 @@ public class FaturamentoGrupo extends ObjetoTransacao {
 	@Override
 	public Filtro retornaFiltro() {
 		FiltroFaturamentoGrupo filtroFaturamentoGrupo = new FiltroFaturamentoGrupo();
+		filtroFaturamentoGrupo.adicionarParametro(new ParametroSimples(FiltroFaturamentoGrupo.ID,this.getId()));
 
-		filtroFaturamentoGrupo.adicionarParametro(new ParametroSimples(FiltroFaturamentoGrupo.ID,
-				this.getId()));
 		return filtroFaturamentoGrupo;
 	}
 

@@ -863,5 +863,11 @@ public interface ControladorClienteLocal extends javax.ejb.EJBLocalObject {
 	public Collection<ClienteFone> pesquisarClienteFoneDoImovel(Integer idImovel) throws ControladorException;
 
 	public Collection<Cliente> pesquisarClientePorCpfCnpj(String cpfCnpj) throws Exception;
+	
+	public Short pesquisarIndicadorNegativacaoPeriodoClienteResponsavel(Integer idImovel, Integer idClienteRelacaoTipo) throws ControladorException;
+	
+	public boolean existeEnderecoParaCliente(Integer idCliente)throws ControladorException;
+	
+	public Cliente pesquisarDadosClienteParaNegativacao(Integer idCliente, String cnpjEmpresa) throws ControladorException;
 }
 

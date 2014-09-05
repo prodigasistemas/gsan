@@ -60844,4 +60844,26 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		return retorno;
 	}
 
+	public Collection pesquisarClienteContaECliente(Integer idConta, String cnpjEmpresa) throws ErroRepositorioException {
+		Collection retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta;
+
+		try {
+			consulta = "select cliCnt " + "from ClienteConta cliCnt " + "inner join cliCnt.conta cnt "
+					 + "inner join fetch cliCnt.cliente cli " + "where cnt.id = :idConta "
+					 + "and (cli.cnpj is null or cli.cnpj <>:cnpjEmpresa) ";
+
+			retorno = (Collection) session.createQuery(consulta)
+					.setInteger("idConta", idConta)
+					.setString("cnpjEmpresa", cnpjEmpresa)
+					.list();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
 }

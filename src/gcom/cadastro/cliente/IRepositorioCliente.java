@@ -434,17 +434,13 @@ public interface IRepositorioCliente {
 	public Cliente pesquisarDadosCliente(Integer idCliente) 
 		throws ErroRepositorioException;
 	
-	/**
-     * Mantis 494
-     * 
-     * Pesquisar Tipo de Clientes pelo Id
-     * 
-     * @author Wellington Rocha
-     *                
-     */
     public ClienteTipo pesquisarClienteTipo(Integer idClienteTipo) throws ErroRepositorioException;
     
 	public Collection<ClienteFone> pesquisarClienteFoneDoImovel(Integer idImovel) throws ErroRepositorioException;
 	
 	public Collection<Cliente> pesquisarClientePorCpfCnpj(String cpfCnpj) throws ErroRepositorioException;
+	
+	public Integer pesquisarEnderecoClienteParaNegativacao(Integer idCliente) throws ErroRepositorioException;
+	
+	public Cliente pesquisarDadosClienteParaNegativacao(Integer idCliente, String cnpjEmpresa) throws ErroRepositorioException;
 }

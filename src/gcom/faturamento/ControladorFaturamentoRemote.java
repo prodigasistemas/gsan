@@ -15,11 +15,13 @@ import gcom.faturamento.conta.ContaMotivoRetificacao;
 import gcom.faturamento.conta.ContaMotivoRevisao;
 import gcom.faturamento.credito.CreditoRealizado;
 import gcom.faturamento.debito.DebitoCobrado;
+import gcom.gui.faturamento.ImovelFaturamentoSeletivo;
 import gcom.micromedicao.Rota;
 import gcom.relatorio.faturamento.FiltrarRelatorioJurosMultasDebitosCanceladosHelper;
 import gcom.relatorio.faturamento.RelatorioJurosMultasDebitosCanceladosHelper;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
+import gcom.util.FachadaException;
 
 import java.math.BigDecimal;
 import java.rmi.RemoteException;
