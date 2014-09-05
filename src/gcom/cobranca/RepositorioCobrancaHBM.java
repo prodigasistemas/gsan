@@ -1966,6 +1966,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 						CobrancaDocumentoItem item = (CobrancaDocumentoItem) lista.get(0);
 						
 						CobrancaDocumentoItemHistorico cobrancaDocumentoItemHistorico = new CobrancaDocumentoItemHistorico(
+								item.getId(),
 								item.getValorItemCobrado(),
 								item.getUltimaAlteracao(),
 								item.getDebitoACobrarGeral(),
@@ -2145,6 +2146,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 						CobrancaDocumentoItem item = (CobrancaDocumentoItem) lista.get(0);
 						
 						CobrancaDocumentoItemHistorico cobrancaDocumentoItemHistorico = new CobrancaDocumentoItemHistorico(
+								item.getId(),
 								item.getValorItemCobrado(),
 								item.getUltimaAlteracao(),
 								item.getDebitoACobrarGeral(),
@@ -2255,6 +2257,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 						CobrancaDocumentoItem item = (CobrancaDocumentoItem) lista.get(0);
 						
 						CobrancaDocumentoItemHistorico cobrancaDocumentoItemHistorico = new CobrancaDocumentoItemHistorico(
+								item.getId(),
 								item.getValorItemCobrado(),
 								item.getUltimaAlteracao(),
 								item.getDebitoACobrarGeral(),
@@ -27137,13 +27140,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 						item.getEsferaPoder(),
 						item.getFiscalizacaoSituacao(),
 						item.getMotivoEncerramento(),
-						item.getResolucaoDiretoria(),
-						item.getLigacaoAguaSituacao(),
-						item.getLigacaoEsgotoSituacao(),
-						item.getDataEmissaoPredecessor(),
-						item.getNumeroDocumentoFatura(),
-						item.getValorImpostos(),
-						item.getUsuario());
+						item.getResolucaoDiretoria());
 
 				session.save(cobrancaDocumentoHistorico);
 				session.flush();

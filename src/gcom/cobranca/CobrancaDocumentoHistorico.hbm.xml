@@ -17,9 +17,6 @@
 		<property name="sequencialImpressao" type="java.lang.Integer" column="cdhi_nnsequencialimpressao" not-null="false" length="4"/>
 		<property name="indicadorAntesApos" type="java.lang.Short" column="cdhi_icantesapos" not-null="false" length="2"/>
 		<property name="indicadorLimite" type="java.lang.Short" column="cdhi_icacimalimite" not-null="false" length="2"/>
-		<property name="dataEmissaoPredecessor" type="java.sql.Timestamp" column="cdhi_tmemissaopred" length="8"/>
-		<property name="numeroDocumentoFatura" type="java.lang.String" column="cdhi_nndocumentofatura" not-null="false" length="14"/>
-		<property name="valorImpostos" type="java.math.BigDecimal" column="cdhi_vlimpostos" length="13"/>
 		<!-- Associations -->
 		<!-- bi-directional many-to-one association to DocumentoEmissaoForma -->
 		<many-to-one name="documentoEmissaoForma" class="gcom.cobranca.DocumentoEmissaoForma" not-null="true">
@@ -94,17 +91,6 @@
 		<many-to-one name="resolucaoDiretoria" class="gcom.cobranca.ResolucaoDiretoria" not-null="false">
 			<column name="rdir_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to LigacaoAguaSituacao -->
-		<many-to-one name="ligacaoAguaSituacao" class="gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao" not-null="true">
-			<column name="last_id"/>
-		</many-to-one>
-		<!-- bi-directional many-to-one association to LigacaoEsgotoSituacao -->
-		<many-to-one name="ligacaoEsgotoSituacao" class="gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao" not-null="true">
-			<column name="lest_id"/>
-		</many-to-one>
 		
-		<many-to-one name="usuario" class="gcom.seguranca.acesso.usuario.Usuario" not-null="false">
-			<column name="usur_id"/>
-		</many-to-one>
 	</class>
 </hibernate-mapping>
