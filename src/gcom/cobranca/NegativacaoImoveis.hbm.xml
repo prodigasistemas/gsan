@@ -1,35 +1,31 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<!-- 
-
-    Created by the Middlegen Hibernate plugin 2.1
-
-
-
-    http://boss.bekk.no/boss/middlegen/
-
-    http://www.hibernate.org/
-
--->
 	<class name="gcom.cobranca.NegativacaoImoveis" table="cobranca.negativacao_imoveis">
 		<id name="id" type="java.lang.Integer" column="ngim_id">
 			<generator class="sequence">
 				<param name="sequence">cobranca.seq_negativacao_imoveis</param>
 			</generator>
 		</id>
+		
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ngim_tmultimaalteracao" not-null="true" length="8"/>
+		
 		<property name="indicadorExcluido" type="short" column="ngim_icexcluido" not-null="true" length="2"/>
+		
 		<property name="dataExclusao" type="java.sql.Date" column="ngim_dtexclusao" length="4"/>
+		
 		<property name="dataConfirmacao" type="java.sql.Date" column="ngim_dtconfirmacao" length="4"/>
-		<!-- Associations -->
-		<!-- bi-directional many-to-one association to Imovel -->
+		
 		<many-to-one name="imovel" class="gcom.cadastro.imovel.Imovel" not-null="true">
 			<column name="imov_id"/>
 		</many-to-one>
-		<!-- bi-directional many-to-one association to NegativacaoComando -->
+		
 		<many-to-one name="negativacaoComando" class="gcom.cobranca.NegativacaoComando" not-null="true">
 			<column name="ngcm_id"/>
+		</many-to-one>
+		
+		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente">
+			<column name="clie_id"/>
 		</many-to-one>
 	</class>
 </hibernate-mapping>

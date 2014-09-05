@@ -1,12 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<!--
-    Created by the Middlegen Hibernate plugin
-
-    http://boss.bekk.no/boss/middlegen/
-    http://hibernate.sourceforge.net/
--->
 	<class name="gcom.cadastro.cliente.Cliente" table="cadastro.cliente">
 		<id name="id" type="java.lang.Integer" column="clie_id">
 			<generator class="sequence">
@@ -32,6 +26,7 @@
 		<property name="indicadorVencimentoMesSeguinte" type="java.lang.Short" column="clie_icvencimentomesseguinte" not-null="true" length="2"/>
 		<property name="indicadorUsoNomeFantasiaConta" type="java.lang.Short" column="clie_icusonomefantasiaconta" not-null="false" length="2"/>
 		<property name="indicadorPermiteNegativacao" type="java.lang.Short" column="clie_icpermitenegativacao" not-null="false" length="2"/>
+		<property name="indicadorNegativacaoPeriodo" type="java.lang.Short" column="clie_icnegativacaoperiodo" generated="never" lazy="false" length="2"/>  
 		
 		<!-- associations -->
 		<!-- bi-directional many-to-one association to OrgaoExpedidorRg -->

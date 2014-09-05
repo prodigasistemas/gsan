@@ -152,11 +152,13 @@ function restart() {
 function validarForm(tipo){
 	   var total = document.getElementById("qnt").value;
 	   var form = document.forms[0];
-	   var obData = document.forms['FaturamentoSeletivoActionForm'].elements['datas'];
+	 //  var obData = document.forms['FaturamentoSeletivoActionForm'].elements['datas'];
 	   var obLeitura = document.forms['FaturamentoSeletivoActionForm'].elements['leituras'];
-	   var obAnormalidade = document.forms['FaturamentoSeletivoActionForm'].elements['anormalidades'];
+	  // var obAnormalidade = document.forms['FaturamentoSeletivoActionForm'].elements['anormalidades'];
+	  // var dados = document.forms['FaturamentoSeletivoActionForm'].elements['dados'];
 	   var ok = 1;
 	   var temPreenchido = 0;
+	   /*
 	   for(var i =0; i <total && total != 1; i++){
 			if ( obData[i] != undefined ) {
 		   		if(obData[i].value != null && obData[i].value != ""){
@@ -175,7 +177,7 @@ function validarForm(tipo){
 		   		}
 		   	}	
 	   }
-	   
+	   /*
 	   if(total== 1){
 	   		if(obData.value != null && obData.value != ""){
 	   			temPreenchido = 1;
@@ -192,7 +194,7 @@ function validarForm(tipo){
 	   		}
 
 	    }
-	  
+	  */
 	   if(ok ==1 || temPreenchido == 0){
 		   if(tipo == 1){
 		   		form.action = 'faturamentoSeletivo.do?action=avancar&temPreenchido='+temPreenchido;
@@ -369,7 +371,6 @@ function passarComEnter(tecla, nomeCampoForm, posicao) {
 										<td width="16%" bgcolor="#90c7fc">
 											<div align="center"><strong>Leitura Informada</strong></div>
 										</td>
-										
 										<td width="10%" bgcolor="#90c7fc">
 											<div align="center"><strong>Anormalidade</strong></div>
 										</td>
@@ -379,9 +380,9 @@ function passarComEnter(tecla, nomeCampoForm, posicao) {
 										</td>
 									</tr>
 									
-									<logic:present name="colecaoLeituras">
+									<logic:present name="FaturamentoSeletivoActionForm" property="colecaoImoveisFaturamentoSeletivo">
 										<%int cont = 0;%>
-										<logic:iterate name="colecaoLeituras" id="dado">
+										<logic:iterate name="FaturamentoSeletivoActionForm" property="colecaoImoveisFaturamentoSeletivo" id="imovel">
 											<% cont = cont + 1; 
 											   if (cont % 2 == 0) {%>
 												<tr bgcolor="#cbe5fe">
@@ -389,39 +390,43 @@ function passarComEnter(tecla, nomeCampoForm, posicao) {
 												<tr bgcolor="#FFFFFF">
 											<%}%>
 													<td width="1%">
-															<input type="checkbox" name="idImoveisSelecionados" value="<bean:write name="dado" property="matriculaImovel"/>"/>
+															<input type="checkbox" name="idImoveisSelecionados" value="<bean:write name="imovel" property="dadoMovimentacao.matriculaImovel"/>"/>
 													</td>
 													
 													<td width="20%">
-														<bean:write name="dado" property="inscricao" />
+														<bean:write name="imovel" property="dadoMovimentacao.inscricao" />
 													</td>
 		
 													<td width="15%" align="center">
-														<bean:write name="dado" property="matriculaImovel" />
+														<bean:write name="imovel" property="dadoMovimentacao.matriculaImovel" />
 													</td>
 													
 													<td width="7%" align="center">
-														<bean:write name="dado" property="endereco" />
+														<bean:write name="imovel" property="dadoMovimentacao.endereco" />
 													</td>
 												
 													<c:choose >
-														<c:when test='${ (dado.msgImovelSuprimidoOuHidrometroRetirado != null && dado.msgImovelSuprimidoOuHidrometroRetirado != "") }'>
-															<td width="56%" align="center" colspan="3">${dado.msgImovelSuprimidoOuHidrometroRetirado}</td>
+														<c:when test='${ (imovel.dadoMovimentacao.msgImovelSuprimidoOuHidrometroRetirado != null && imovel.dadoMovimentacao.msgImovelSuprimidoOuHidrometroRetirado != "") }'>
+															<td width="56%" align="center" colspan="3">${imovel.dadoMovimentacao.msgImovelSuprimidoOuHidrometroRetirado}</td>
 														</c:when>
 		
 														<c:otherwise>
 															<td width="16%">
 																<div align="center">
 																	<c:choose >		
-																		<c:when test='${dado.naoPermitirAlterar == true}'>
-																			<input type="text" maxlength="6" tabindex="2" name="leituras" size="6" readonly="readonly" style="background-color:#EFEFEF; 
-																				border:0; text-align:left; color: #000000;" value="${dado.leituraHidrometro}" id="leituras_${dado.matriculaImovel}"/>
+																		<c:when test='${imovel.dadoMovimentacao.naoPermitirAlterar == true}'>
+																			<!--  input type="text" maxlength="6" tabindex="2" name="leituras" size="6" readonly="readonly" style="background-color:#EFEFEF; 
+																				border:0; text-align:left; color: #000000;" property="imovel.leitura" value="imovel.leitura" id="leituras_${imovel.dadoMovimentacao.matriculaImovel}"/ -->
 																		</c:when>
 																
 																		<c:otherwise>
-																			<input type="text" maxlength="6" tabindex="2" name="leituras" size="6"  onblur="javascript:ehForaFaixa(this,'<%=cont-1%>');" 
+																			<html:text name="imovel" property="leitura" indexed="true" maxlength="6" tabindex="2" size="6"  onblur="javascript:ehForaFaixa(this,'<%=cont-1%>');" 
+																				onkeypress="passarComEnter(event, 'anormalidades', '<%=cont-1%>');return isCampoNumerico(event);" ></html:text>
+																				
+																			<!--  input type="text" maxlength="6" tabindex="2" size="6"  onblur="javascript:ehForaFaixa(this,'<%=cont-1%>');" 
 																				onkeypress="passarComEnter(event, 'anormalidades', '<%=cont-1%>');return isCampoNumerico(event);" 
-																				value="${dado.leituraHidrometro}" id="leituras_${dado.matriculaImovel}"/>
+																				name="imovel" property="leitura" id="leituras_${imovel.dadoMovimentacao.matriculaImovel}"
+																				value="<bean:write name="imovel" property="leitura"/>"/ -->
 																		</c:otherwise>
 																	</c:choose>
 																
@@ -431,17 +436,21 @@ function passarComEnter(tecla, nomeCampoForm, posicao) {
 															<td width="10%">
 																<div align="center">
 																	<c:choose >		
-																		<c:when test='${dado.naoPermitirAlterar == true}'>
+																		<c:when test='${imovel.dadoMovimentacao.naoPermitirAlterar == true}'>
 																			<input type="text" maxlength="2" tabindex="2"
 																			name="anormalidades" size="2" 
 																			readonly="readonly" style="background-color:#EFEFEF; border:0; text-align:left; color: #000000;" 
-																			value="${dado.codigoAnormalidade}"/>
+																			name="FaturamentoSeletivoActionForm" property="anormalidade"value="${imovel.dadoMovimentacao.codigoAnormalidade}"/>
 																		</c:when>
 																		<c:otherwise>
+																			<html:text name="imovel" property="anormalidade" indexed="true" maxlength="2" tabindex="3" size="2"   onblur="javascript:ehAnormalidadeValida(this, '${imovel.dadoMovimentacao.matriculaImovel}')" 
+																				onkeypress="passarComEnter(event, 'datas', '<%=cont-1%>');return isCampoNumerico(event);"></html:text>
+																			<!--  
 																			<input type="text" maxlength="2" tabindex="2"
-																			name="anormalidades" size="2" onblur="javascript:ehAnormalidadeValida(this, '${dado.matriculaImovel}')" 
+																			name="anormalidades" size="2" onblur="javascript:ehAnormalidadeValida(this, '${imovel.dadoMovimentacao.matriculaImovel}')" 
 																			onkeypress="passarComEnter(event, 'datas', '<%=cont-1%>');return isCampoNumerico(event);" 
-																			value="${dado.codigoAnormalidade}"/>
+																			name="FaturamentoSeletivoActionForm" property="colecaoImoveisFaturamentoSeletivo"value="${imovel.dadoMovimentacao.codigoAnormalidade}"/>
+																			-->
 																		</c:otherwise>
 																	</c:choose>
 																</div>
@@ -452,33 +461,40 @@ function passarComEnter(tecla, nomeCampoForm, posicao) {
 																<%if (cont == 1) {%>
 																
 																	<c:choose >		
-																			<c:when test='${dado.naoPermitirAlterar == true}'>
+																			<c:when test='${imovel.dadoMovimentacao.naoPermitirAlterar == true}'>
 																				<input type="text" maxlength="10" tabindex="2"
 																				name="datas" size="10" 
 																				readonly="readonly" style="background-color:#EFEFEF; border:0; text-align:left; color: #000000;" 
-																				value="<fmt:formatDate pattern="dd/MM/yyyy" value="${dado.dataLeituraCampo}"/>"/>
+																				property="${imovel.dataLeitura}"value="<fmt:formatDate pattern="dd/MM/yyyy" value="${imovel.dadoMovimentacao.dataLeituraCampo}"/>"/>
 																				<img border="0" src="<bean:message key="caminho.imagens"/>calendario.gif"
 																					width="20" border="0" align="absmiddle" alt="Exibir Calendário" />							
 																			</c:when>
 																			<c:otherwise>
-																				<input type="text" maxlength="10" tabindex="2"
-																				name="datas" size="10" onkeyup="mascaraData(this,event);replicarData(this);" 
+																				<html:text name="imovel" property="dataLeitura" indexed="true" maxlength="10" tabindex="4" size="10"></html:text>
+																				
+																				<a href="javascript:abrirCalendarioReplicando('FaturamentoSeletivoActionForm','datas','<%=cont-1%>',1)">
+																				<img border="0" src="<bean:message key="caminho.imagens"/>calendario.gif"
+																					width="20" border="0" align="absmiddle" alt="Exibir Calendário" />
+																				</a>
+																				<!--  
+																				<input type="text" maxlength="10" tabindex="2" name="datas" size="10" onkeyup="mascaraData(this,event);replicarData(this);" 
 																				onkeypress="passarComEnter(event, 'leituras', '<%=cont%>');return isCampoNumerico(event);"
-																				 value="<fmt:formatDate pattern="dd/MM/yyyy" value="${dado.dataLeituraCampo}"/>"
+																				 property="${imovel.dataLeitura}" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${imovel.dadoMovimentacao.dataLeituraCampo}"/>"
 																				onblur="javascript:verificaDataMensagemPersonalizada(this,'Data Inválida.')"/>
 																				<a href="javascript:abrirCalendarioReplicando('FaturamentoSeletivoActionForm','datas','<%=cont-1%>',1)">
 																				<img border="0" src="<bean:message key="caminho.imagens"/>calendario.gif"
 																					width="20" border="0" align="absmiddle" alt="Exibir Calendário" />
 																				</a>
+																				-->
 																			</c:otherwise>
 																	</c:choose>							
 																	<%} else {%>
 																	<c:choose >	
-																			<c:when test='${dado.naoPermitirAlterar == true}'>
+																			<c:when test='${imovel.dadoMovimentacao.naoPermitirAlterar == true}'>
 																				<input type="text" maxlength="10" tabindex="2"
 																				name="datas" size="10" 
 																				readonly="readonly" style="background-color:#EFEFEF; border:0; text-align:left; color: #000000;" 
-																				value="<fmt:formatDate pattern="dd/MM/yyyy" value="${dado.dataLeituraCampo}"/>"/>
+																				property="${imovel.dataLeitura}" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${imovel.dadoMovimentacao.dataLeituraCampo}"/>"/>
 																				<img border="0" src="<bean:message key="caminho.imagens"/>calendario.gif"
 																					width="20" border="0" align="absmiddle" alt="Exibir Calendário" />
 																			</c:when>
@@ -486,7 +502,7 @@ function passarComEnter(tecla, nomeCampoForm, posicao) {
 																				<input type="text" maxlength="10" tabindex="2"
 																				name="datas" size="10" onkeyup="mascaraData(this,event)" 
 																				onkeypress="passarComEnter(event, 'leituras', '<%=cont%>');return isCampoNumerico(event);"
-																				value="<fmt:formatDate pattern="dd/MM/yyyy" value="${dado.dataLeituraCampo}"/>"
+																				property="${imovel.dataLeitura}" value="<fmt:formatDate pattern="dd/MM/yyyy" value="${imovel.dadoMovimentacao.dataLeituraCampo}"/>"
 																				onblur="javascript:verificaDataMensagemPersonalizada(this,'Data Inválida.')"/>
 																				<a href="javascript:abrirCalendario('FaturamentoSeletivoActionForm','datas','<%=cont-1%>')">
 																				<img border="0" src="<bean:message key="caminho.imagens"/>calendario.gif"
@@ -578,7 +594,7 @@ function passarComEnter(tecla, nomeCampoForm, posicao) {
 												</td>
 												<td align="right">
 													<div align="right">
-														<gsan:controleAcessoBotao name="Button" url="faturamentoSeletivo.do" value="Concluir" tabindex="8" onclick="javascript:validarForm(3);"/>
+														<gsan:controleAcessoBotao name="Button" url="faturamentoSeletivo.do" value="Faturar" tabindex="8" onclick="javascript:validarForm(3);"/>
 													</div>
 												</td>
 											</tr>

@@ -40,6 +40,14 @@
     	form.setorComercialDescricao.value = "";
 	}
 
+	function limparDescLocalidade(form) {
+    	form.localidadeDescricao.value = "";
+	}
+	
+	function limparDescSetorComercial(form) {
+    	form.setorComercialDescricao.value = "";
+	}
+	
 	function required() {
 		 this.aj = new Array("idLocalidade", "Informe a localidade.", new Function ("varName", " return this[varName];"));
 		 this.al = new Array("codigoSetorComercial", "Informe o setor comercial.", new Function ("varName", " return this[varName];"));
@@ -57,7 +65,6 @@
 	    var form = document.forms[0];
 	
 	    if (tipoConsulta == 'localidade') {
-	      limparDescLocalidade(form);
 	      form.idLocalidade.value = codigoRegistro;
 	      form.localidadeDescricao.value = descricaoRegistro;
 	      form.localidadeDescricao.style.color = "#000000";
