@@ -10,6 +10,7 @@ import gcom.util.filtro.ParametroSimples;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 
@@ -103,7 +104,11 @@ public class Negativador extends ObjetoTransacao implements Serializable {
         this.negativadorMovimentos = negativadorMovimentos;
     }
 
-    public Integer getId() {
+    public Negativador(Integer id) {
+    	this.id = id;
+	}
+
+	public Integer getId() {
         return this.id;
     }
 
