@@ -139,9 +139,12 @@
 			<tr> 
 				<td height="10" width="155"><strong>Mot. Não Entrega do Documento:</strong></td>
 		        <td>
-					<html:text property="motivoNaoEntregaDocumento" size="25" readonly="true" style="background-color:#EFEFEF; border:0;"/>
+					<html:text property="motivoNaoEntregaDocumento" size="20" readonly="true" style="background-color:#EFEFEF; border:0;"/>
 		        </td>
-		        <td colspan="3" width="380"></td>
+		        <td height="10"><strong>Vl. Acrescimo:</strong></td>
+		        <td>
+					<html:text property="valorAcrescimo" size="10" readonly="true" style="background-color:#EFEFEF; border:0; text-align: right;"/>
+		        </td>
 			</tr>
 			<tr> 
 				<td height="10" width="155"><strong>Qtde. Itens:</strong></td>
@@ -179,12 +182,15 @@
 					        </td>
 						</tr>
 						
-						<tr>
-							<td height="10" width="150"><strong>Usu&aacute;rio:</strong></td>
-					        <td>
-								<html:text property="nomeUsuario" size="50" readonly="true" style="background-color:#EFEFEF; border:0;"/>
-					        </td>
-						</tr>
+						<logic:notEqual value="" name="DocumentoCobrancaItemActionForm" property="nomeUsuario">
+							<tr>
+								<td height="10" width="150"><strong>Usu&aacute;rio:</strong></td>
+						        <td>
+						        	
+									<html:text property="nomeUsuario" size="50" readonly="true" style="background-color:#EFEFEF; border:0;"/>
+						        </td>
+							</tr>
+						</logic:notEqual>
 						</table>
 					</td>
 				</tr>
@@ -752,6 +758,10 @@
             		
             		</table>
 				</td>
+			</tr>
+			
+			<tr>
+				<td colspan="5" height="5"></td>
 			</tr>
 			
 			<tr> 

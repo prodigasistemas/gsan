@@ -10,115 +10,70 @@ import java.util.Date;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class NegativacaoCriterio implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 
-    /** identifier field */
     private Integer id;
 
-    /** persistent field */
     private String descricaoTitulo;
 
-    /** persistent field */
     private String descricaoSolicitacao;
 
-    /** nullable persistent field */
     private Integer codigoSetorComercialInicial;
 
-    /** nullable persistent field */
     private Integer codigoSetorComercialFinal;
 
-    /** nullable persistent field */
     private Integer anoMesReferenciaContaInicial;
 
-    /** nullable persistent field */
     private Integer anoMesReferenciaContaFinal;
 
-    /** nullable persistent field */
     private Date dataVencimentoDebitoInicial;
 
-    /** nullable persistent field */
     private Date dataVencimentoDebitoFinal;
 
-
-    /** nullable persistent field */
     private Integer quantidadeMaximaInclusoes;
 
-    
-    /** persistent field */
     private short indicadorNegativacaoImovelParalisacao;
 
-    /** persistent field */
     private short indicadorNegativacaoImovelSituacaoCobranca;
 
-    /** persistent field */
     private short indicadorNegativacaoContaRevisao;
 
-    /** persistent field */
     private short indicadorNegativacaoGuiaPagamento;
 
-  
-
-    /** persistent field */
     private short indicadorNegativacaoInquilinoDebitoContaMes;
 
-
-
-    /** persistent field */
     private short indicadorNegativacaoRecebimentoCartaParcelamento;
 
-    /** nullable persistent field */
     private Short numeroDiasAtrasoRecebimentoCartaParcelamento;
 
-
-    /** persistent field */
     private short indicadorUso;
 
-    /** persistent field */
     private Date ultimaAlteracao;
 
-    /** persistent field */
     private BigDecimal valorMinimoDebito;
 
-    /** persistent field */
     private int quantidadeMinimaContas;
 
-    /** persistent field */
     private BigDecimal valorMaximoDebito;
 
-
-    /** persistent field */
     private int quantidadeMaximaContas;
 
-
-    /** persistent field */
     private short indicadorParcelamentoAtraso;
 
-    /** nullable persistent field */
     private Integer numeroDiasParcelamentoAtraso;
 
-
-    /** persistent field */
     private Localidade localidadeFinal;
 
-    /** persistent field */
     private Localidade localidadeInicial;
 
-
-
-    /** persistent field */
     private gcom.cobranca.NegativacaoComando negativacaoComando;
 
-    /** persistent field */
     private Cliente cliente;
 
     private Integer numeroDiasRetorno;
 
-
-    /** persistent field */
     private ClienteRelacaoTipo clienteRelacaoTipo;
 
     /** full constructor */
@@ -182,6 +137,10 @@ public class NegativacaoCriterio implements Serializable {
         this.negativacaoComando = negativacaoComando;
         this.cliente = cliente;
         this.clienteRelacaoTipo = clienteRelacaoTipo;
+    }
+    
+    public NegativacaoCriterio(Integer id) {
+    	this.id = id;
     }
 
     public Integer getId() {

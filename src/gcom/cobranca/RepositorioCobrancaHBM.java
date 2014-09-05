@@ -390,6 +390,59 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 
 		return retorno;
 	}
+	
+	@SuppressWarnings("unchecked")
+	public int pesquisarQuantidadeContasVencidasPorImovel(Integer idImovel, int indicadorPagamento,
+			int indicadorConta, int indicadorDividaAtiva) throws ErroRepositorioException {
+
+		List<Integer> retorno = new ArrayList<Integer>();
+
+		Session session = HibernateUtil.getSession();
+		String consulta;
+
+		try {
+
+			consulta = " SELECT conta.cnta_amreferenciaconta as referencia "
+				+ " FROM faturamento.conta conta "
+				+ " LEFT JOIN arrecadacao.pagamento pagto on pagto.cnta_id = conta.cnta_id "
+				+ " WHERE conta.imov_id = :idImovel "
+				+ " and conta.dcst_idatual in (:situacaoNormal, :situacaoRetificada, :situacaoIncluida) "
+				+ " and conta.cnta_dtvencimentoconta < :vencimento "
+				+ " and (coalesce(conta.cnta_vlagua, 0) + coalesce(conta.cnta_vlesgoto, 0) + coalesce(conta.cnta_vldebitos, 0) - coalesce(conta.cnta_vlcreditos, 0) - coalesce(conta.cnta_vlimpostos, 0)) > 0.00 ";
+
+			if (indicadorConta == 2) {
+				consulta += "and conta.cnta_dtrevisao is null ";
+			}
+
+			if (indicadorDividaAtiva == 1) {
+				consulta += "and conta.cnta_amreferenciabaixacontabil is not null ";
+			} else if (indicadorDividaAtiva == 2) {
+				consulta += "and conta.cnta_amreferenciabaixacontabil is null ";
+			}
+
+			consulta += " GROUP BY conta.cnta_amreferenciaconta ";
+
+			if (indicadorPagamento == 1) {
+				consulta += " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) = 0";
+			}
+
+			retorno = (List<Integer>) session.createSQLQuery(consulta)
+					.addScalar("referencia", Hibernate.INTEGER)
+					.setInteger("idImovel", idImovel)
+					.setInteger("situacaoNormal", DebitoCreditoSituacao.NORMAL)
+					.setInteger("situacaoRetificada", DebitoCreditoSituacao.RETIFICADA)
+					.setInteger("situacaoIncluida", DebitoCreditoSituacao.INCLUIDA)
+					.setDate("vencimento", new Date()).list();
+
+		} catch (HibernateException e) {
+			e.printStackTrace();
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno.size();
+	}
 
 	/**
 	 * Faz parte de [UC0067] Obter Débito do Imóvel ou Cliente Obtem os débitos
@@ -1913,6 +1966,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 						CobrancaDocumentoItem item = (CobrancaDocumentoItem) lista.get(0);
 						
 						CobrancaDocumentoItemHistorico cobrancaDocumentoItemHistorico = new CobrancaDocumentoItemHistorico(
+								item.getId(),
 								item.getValorItemCobrado(),
 								item.getUltimaAlteracao(),
 								item.getDebitoACobrarGeral(),
@@ -2092,6 +2146,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 						CobrancaDocumentoItem item = (CobrancaDocumentoItem) lista.get(0);
 						
 						CobrancaDocumentoItemHistorico cobrancaDocumentoItemHistorico = new CobrancaDocumentoItemHistorico(
+								item.getId(),
 								item.getValorItemCobrado(),
 								item.getUltimaAlteracao(),
 								item.getDebitoACobrarGeral(),
@@ -2202,6 +2257,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 						CobrancaDocumentoItem item = (CobrancaDocumentoItem) lista.get(0);
 						
 						CobrancaDocumentoItemHistorico cobrancaDocumentoItemHistorico = new CobrancaDocumentoItemHistorico(
+								item.getId(),
 								item.getValorItemCobrado(),
 								item.getUltimaAlteracao(),
 								item.getDebitoACobrarGeral(),
@@ -27084,13 +27140,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 						item.getEsferaPoder(),
 						item.getFiscalizacaoSituacao(),
 						item.getMotivoEncerramento(),
-						item.getResolucaoDiretoria(),
-						item.getLigacaoAguaSituacao(),
-						item.getLigacaoEsgotoSituacao(),
-						item.getDataEmissaoPredecessor(),
-						item.getNumeroDocumentoFatura(),
-						item.getValorImpostos(),
-						item.getUsuario());
+						item.getResolucaoDiretoria());
 
 				session.save(cobrancaDocumentoHistorico);
 				session.flush();

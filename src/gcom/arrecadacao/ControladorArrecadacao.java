@@ -175,7 +175,6 @@ import gcom.faturamento.bean.CalcularValoresAguaEsgotoHelper;
 import gcom.faturamento.conta.Conta;
 import gcom.faturamento.conta.ContaGeral;
 import gcom.faturamento.conta.ContaHistorico;
-import gcom.faturamento.conta.ContaMotivoRetificacao;
 import gcom.faturamento.conta.Fatura;
 import gcom.faturamento.conta.FiltroConta;
 import gcom.faturamento.conta.FiltroContaHistorico;
@@ -195,7 +194,6 @@ import gcom.faturamento.debito.DebitoTipo;
 import gcom.faturamento.debito.FiltroDebitoACobrar;
 import gcom.faturamento.debito.FiltroDebitoACobrarHistorico;
 import gcom.faturamento.debito.FiltroDebitoTipo;
-import gcom.financeiro.FiltroFinanciamentoTipo;
 import gcom.financeiro.FinanciamentoTipo;
 import gcom.financeiro.lancamento.LancamentoItem;
 import gcom.financeiro.lancamento.LancamentoItemContabil;
@@ -56564,5 +56562,13 @@ public class ControladorArrecadacao implements SessionBean {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
+	}
+	
+	public Collection pesquisarClienteGuiaPagamentoECliente(Integer idGuiaPagamento)throws ControladorException {
+		try{
+		  return repositorioArrecadacao.pesquisarClienteGuiaPagamentoECliente(idGuiaPagamento);
+		} catch (ErroRepositorioException ex) {
+	        throw new ControladorException("erro.sistema", ex);
+	    }
 	}
 }

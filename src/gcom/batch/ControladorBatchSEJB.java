@@ -446,115 +446,72 @@ public class ControladorBatchSEJB implements SessionBean {
 					case Funcionalidade.EXECUTAR_COMANDO_DE_NEGATIVACAO:
 
 						TarefaBatchExecutarComandoNegativacao executarComandoNegativacao = new TarefaBatchExecutarComandoNegativacao(
-								processoIniciado.getUsuario(),
-								funcionalidadeIniciada.getId());
+								processoIniciado.getUsuario(), funcionalidadeIniciada.getId());
 
-						// Vivianne Sousa - 11/02/2010 - analista:Fatima Sampaio
-						// Caso exista movimento de exclusão incompleto,
-						// cancelar o processo e exibir msg
-						// "Há movimento de exclusão incompleto. Reinicie o step
-						// 2 do processo 135 e após a conclusão
-						// com sucesso, pode executar novamente o processo 130"
-						if (getControladorSpcSerasa()
-								.existeOcorrenciaMovimentoExclusaoIncompleto()) {
-							throw new ControladorException(
-									"atencao.movimento_exclusao_incompleto");
+						if (getControladorSpcSerasa().existeOcorrenciaMovimentoExclusaoIncompleto()) {
+							throw new ControladorException("atencao.movimento_exclusao_incompleto");
 						}
 
-						NegativacaoComando nComando = getControladorSpcSerasa()
-								.consultarNegativacaoComandadoParaExecutar();
+						NegativacaoComando negativacaoComando = getControladorSpcSerasa().consultarNegativacaoComandadoParaExecutar();
 
-						if (nComando != null && !nComando.equals("")) {
+						if (negativacaoComando != null && !negativacaoComando.equals("")) {
 
-							// 1.
-							NegativacaoCriterio nCriterio = getControladorSpcSerasa()
-									.pesquisarNegativacaoCriterio(
-											nComando.getId());
+							NegativacaoCriterio negativacaoCriterio = getControladorSpcSerasa().pesquisarNegativacaoCriterio(
+									negativacaoComando.getId());
 
-							// 2.0
-							Negativador neg = nComando.getNegativador();
+							Negativador negativador = negativacaoComando.getNegativador();
+							NegativadorContrato negativadorContrato = getControladorSpcSerasa().consultarNegativadorContratoVigente(negativador.getId());
 
-							// 3.0
-							NegativadorContrato nContrato = getControladorSpcSerasa()
-									.consultarNegativadorContratoVigente(
-											neg.getId());
-
-							Collection colecaoParametroNegCrit = (Collection) getControladorSpcSerasa()
-									.pesquisarParametroNegativacaoCriterio(
-											nCriterio.getId());
+							Collection colecaoParametroNegativacaoCriterio = (Collection) getControladorSpcSerasa()
+									.pesquisarParametroNegativacaoCriterio(negativacaoCriterio.getId());
 
 							Collection rotas = null;
 							Object[] parametroNegCrit = null;
 
-							// if(nCriterio.getQuantidadeMaximaInclusoes() !=
-							// null &&
-							// !nCriterio.getQuantidadeMaximaInclusoes().equals("")){
-							// rotas = null;
-							// }else
-							if (nComando.getComandoSimulacao() != null
-									&& !nComando.getComandoSimulacao().equals(
-											"")) {
-								rotas = getControladorSpcSerasa()
-										.pesquisarRotasImoveisComandoSimulacao(
-												nComando.getComandoSimulacao()
-														.getId());
-							} else if (nCriterio.getCliente() != null) {
-								rotas = getControladorSpcSerasa()
-										.pesquisarRotasImoveis();
+							if (negativacaoComando.getComandoSimulacao() != null
+									&& !negativacaoComando.getComandoSimulacao().equals("")) {
+								
+								rotas = getControladorSpcSerasa().pesquisarRotasImoveisComandoSimulacao(
+										negativacaoComando.getComandoSimulacao().getId());
+								
+							} else if (negativacaoCriterio.getCliente() != null) {
+								rotas = getControladorSpcSerasa().pesquisarRotasImoveis();
 							} else {
+								if (colecaoParametroNegativacaoCriterio != null && !colecaoParametroNegativacaoCriterio.isEmpty()) {
 
-								if (colecaoParametroNegCrit != null
-										&& !colecaoParametroNegCrit.isEmpty()) {
+									for (Iterator iteratorColecaoParametroNegativacaoCriterio = colecaoParametroNegativacaoCriterio.iterator(); iteratorColecaoParametroNegativacaoCriterio.hasNext();) {
 
-									for (Iterator iterColecaoParametroNegCrit = colecaoParametroNegCrit
-											.iterator(); iterColecaoParametroNegCrit
-											.hasNext();) {
-
-										parametroNegCrit = (Object[]) iterColecaoParametroNegCrit
-												.next();
+										parametroNegCrit = (Object[]) iteratorColecaoParametroNegativacaoCriterio.next();
 
 										if (parametroNegCrit[0] != null) {
 											// Condição 1
-											rotas = getControladorSpcSerasa()
-													.pesquisarRotasPorCobrancaGrupoParaNegativacao(
-															nCriterio);
+											rotas = getControladorSpcSerasa().pesquisarRotasPorCobrancaGrupoParaNegativacao(negativacaoCriterio);
 											break;
 										} else if (parametroNegCrit[1] != null) {
 											// Condição 2
-											rotas = getControladorSpcSerasa()
-													.pesquisarRotasPorGerenciaRegionalParaNegativacao(
-															nCriterio);
+											rotas = getControladorSpcSerasa().pesquisarRotasPorGerenciaRegionalParaNegativacao(negativacaoCriterio);
 											break;
 										} else if (parametroNegCrit[2] != null) {
 											// Condição 3
-											rotas = getControladorSpcSerasa()
-													.pesquisarRotasPorUnidadeNegocioParaNegativacao(
-															nCriterio);
+											rotas = getControladorSpcSerasa().pesquisarRotasPorUnidadeNegocioParaNegativacao(negativacaoCriterio);
 											break;
 										} else if (parametroNegCrit[3] != null) {
 											// Condição 4
-											rotas = getControladorSpcSerasa()
-													.pesquisarRotasPorLocalidadeParaNegativacao(
-															nCriterio);
+											rotas = getControladorSpcSerasa().pesquisarRotasPorLocalidadeParaNegativacao(negativacaoCriterio);
 											break;
-										} else if (parametroNegCrit[4] != null
-												&& parametroNegCrit[5] != null) {
+										} else if (parametroNegCrit[4] != null && parametroNegCrit[5] != null) {
 											// Condição 5 ou 6
-											rotas = getControladorSpcSerasa()
-													.pesquisarRotasPorLocalidadesParaNegativacao(
-															nCriterio);
+											rotas = getControladorSpcSerasa().pesquisarRotasPorLocalidadesParaNegativacao(negativacaoCriterio);
 											break;
 										} else {
 											// default
-											rotas = getControladorSpcSerasa()
-													.pesquisarRotasImoveis();
+											rotas = getControladorSpcSerasa().pesquisarRotasImoveis();
 											break;
 										}
 									}
 								} else {
 									// default
-									rotas = getControladorSpcSerasa()
-											.pesquisarRotasImoveis();
+									rotas = getControladorSpcSerasa().pesquisarRotasImoveis();
 								}
 
 							}
@@ -562,56 +519,32 @@ public class ControladorBatchSEJB implements SessionBean {
 							// Eliminando as rotas duplicadas
 							rotas = new HashSet<Integer>(rotas);
 
-							executarComandoNegativacao
-									.addParametro(
-											ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH,
-											rotas);
+							executarComandoNegativacao.addParametro(ConstantesSistema.COLECAO_UNIDADES_PROCESSAMENTO_BATCH, rotas);
+							executarComandoNegativacao.addParametro("nCriterio", negativacaoCriterio);
+							executarComandoNegativacao.addParametro("neg", negativador);
+							executarComandoNegativacao.addParametro("nComando", negativacaoComando);
+							executarComandoNegativacao.addParametro("nContrato", negativadorContrato);
 
-							executarComandoNegativacao.addParametro(
-									"nCriterio", nCriterio);
-
-							executarComandoNegativacao.addParametro("neg", neg);
-
-							executarComandoNegativacao.addParametro("nComando",
-									nComando);
-
-							executarComandoNegativacao.addParametro(
-									"nContrato", nContrato);
-
-							if (nComando.getIndicadorSimulacao() != NegativacaoComando.SIMULACAO) {
-								int saEnvio = nContrato
-										.getNumeroSequencialEnvio() + 1;
-								// 1.2
+							if (negativacaoComando.getIndicadorSimulacao() != NegativacaoComando.SIMULACAO) {
+								int numeroSequencialEnvio = negativadorContrato.getNumeroSequencialEnvio() + 1;
 								// gerando o movimento
-								Integer idNegativacaoMovimento = getControladorSpcSerasa()
-										.geraRegistroNegativadorMovimento(
-												neg.getId(), saEnvio,
-												nComando.getId());
+								Integer idNegativacaoMovimento = getControladorSpcSerasa().gerarNegativadorMovimento(
+										negativador.getId(), numeroSequencialEnvio, negativacaoComando.getId());
 
-								// 1.3
 								// [SB0008] - Gerar Registro do tipo Hearder
-								getControladorSpcSerasa()
-										.gerarRegistroDeInclusaoTipoHeader(
-												ConstantesSistema.TIPO_COMANDO_POR_CRITERIO,
-												1, neg, nContrato, nComando,
-												nCriterio,
-												idNegativacaoMovimento);
+								getControladorSpcSerasa().gerarRegistroDeInclusaoTipoHeader(ConstantesSistema.TIPO_COMANDO_POR_CRITERIO, 1,
+										negativador, negativadorContrato, negativacaoComando, negativacaoCriterio, idNegativacaoMovimento);
 							}
-
 						} else {
-							throw new ControladorException(
-									"atencao.comando.negativacao.vazio.para.executar");
+							throw new ControladorException("atencao.comando.negativacao.vazio.para.executar");
 						}
 
-						funcionalidadeIniciada
-								.setTarefaBatch(IoUtil
-										.transformarObjetoParaBytes(executarComandoNegativacao));
+						funcionalidadeIniciada.setTarefaBatch(IoUtil.transformarObjetoParaBytes(executarComandoNegativacao));
 
 						getControladorUtil().atualizar(funcionalidadeIniciada);
 
 						break;
 
-					/** Yara Taciane* */
 					case Funcionalidade.ATUALIZAR_LIGACAO_AGUA_LIGADO_ANALISE_PARA_LIGADO:
 						TarefaBatchAtualizarLigacaoAguaLigadoAnaliseParaLigado atualizarLigacaoAguaLigadoAnaliseParaLigado = new TarefaBatchAtualizarLigacaoAguaLigadoAnaliseParaLigado(
 								processoIniciado.getUsuario(),
@@ -4083,100 +4016,66 @@ public class ControladorBatchSEJB implements SessionBean {
 
 				if (processo.getId().intValue() == Processo.FATURAR_GRUPO_FATURAMENTO) {
 					Collection<Rota> colecaoRota = this.repositorioMicromedicao
-							.pesquisaRotasNaoTransmitidas(faturamentoGrupo
-									.getAnoMesReferencia(), faturamentoGrupo
-									.getId());
+							.pesquisaRotasNaoTransmitidas(faturamentoGrupo.getAnoMesReferencia(), faturamentoGrupo.getId());
 
 					if (colecaoRota != null && !colecaoRota.isEmpty()) {
 						Iterator iteratorRota = colecaoRota.iterator();
 						String mensagemAlerta = null;
 						while (iteratorRota.hasNext()) {
-							Rota rotaNaoTransmitida = (Rota) iteratorRota
-									.next();
+							Rota rotaNaoTransmitida = (Rota) iteratorRota.next();
 							if (mensagemAlerta == null) {
-								mensagemAlerta = rotaNaoTransmitida.getId()
-										.toString();
+								mensagemAlerta = rotaNaoTransmitida.getId().toString();
 							} else {
-								mensagemAlerta += ","
-										+ rotaNaoTransmitida.getId()
-												.toString();
+								mensagemAlerta += ","+ rotaNaoTransmitida.getId().toString();
 							}
 						}
 
-						throw new ControladorException(
-								"atencao.rotas_nao_transmitidas", null,
-								mensagemAlerta);
+						throw new ControladorException("atencao.rotas_nao_transmitidas", null,mensagemAlerta);
 
 					}
 				}
 
-				// Construi um processoIniciado para cada
-				// FaturamentoAtividadeCronograma
+				// Construi um processoIniciado para cada FaturamentoAtividadeCronograma
 				ProcessoIniciado processoIniciado = new ProcessoIniciado();
 				processoIniciado.setUsuario(usuario);
-				processoIniciado.setCodigoGrupoProcesso(faturamentoGrupo
-						.getId());
+				processoIniciado.setCodigoGrupoProcesso(faturamentoGrupo.getId());
 
 				ProcessoSituacao processoSituacao = new ProcessoSituacao();
 				Integer processoSituacaoId = this.verificarAutorizacaoBatch(processo.getId());
 				processoSituacao.setId(processoSituacaoId);
-
-				// isso
 				processoIniciado.setProcessoSituacao(processoSituacao);
-
 				processoIniciado.setProcesso(processo);
 				processoIniciado.setDataHoraAgendamento(new Date());
 				processoIniciado.setDataHoraInicio(new Date());
-				processoIniciado
-						.setDataHoraComando(faturamentoAtividadeCronograma
-								.getComando());
+				processoIniciado.setDataHoraComando(faturamentoAtividadeCronograma.getComando());
 
-				codigoProcessoIniciadoGerado = (Integer) getControladorUtil()
-						.inserir(processoIniciado);
+				codigoProcessoIniciadoGerado = (Integer) getControladorUtil().inserir(processoIniciado);
 
-				// Este trecho pesquisa todos do processoFuncionalidade
-				// relacionados
-				// com o processo do objeto a ser inserido
+				// Este trecho pesquisa todos do processoFuncionalidade relacionados com o processo do objeto a ser inserido
 				FiltroProcessoFuncionalidade filtroProcessoFuncionalidade = new FiltroProcessoFuncionalidade();
-				filtroProcessoFuncionalidade
-						.adicionarParametro(new ParametroSimples(
-								FiltroProcessoFuncionalidade.ID_PROCESSO,
-								processoIniciado.getProcesso().getId()));
+				filtroProcessoFuncionalidade.adicionarParametro(new ParametroSimples(FiltroProcessoFuncionalidade.ID_PROCESSO,processoIniciado.getProcesso().getId()));
+				filtroProcessoFuncionalidade.adicionarParametro(new ParametroSimples(FiltroProcessoFuncionalidade.INDICADOR_USO,ConstantesSistema.INDICADOR_USO_ATIVO));
 
-				filtroProcessoFuncionalidade
-						.adicionarParametro(new ParametroSimples(
-								FiltroProcessoFuncionalidade.INDICADOR_USO,
-								ConstantesSistema.INDICADOR_USO_ATIVO));
-
-				Collection processosFuncionaliadade = getControladorUtil()
-						.pesquisar(filtroProcessoFuncionalidade,
-								ProcessoFuncionalidade.class.getName());
+				Collection processosFuncionaliadade = getControladorUtil().pesquisar(filtroProcessoFuncionalidade,ProcessoFuncionalidade.class.getName());
 
 				Iterator iterator = processosFuncionaliadade.iterator();
 				while (iterator.hasNext()) {
 
-					ProcessoFuncionalidade processoFuncionalidade = (ProcessoFuncionalidade) iterator
-							.next();
-
-					FuncionalidadeIniciada funcionalidadeIniciada = new FuncionalidadeIniciada();
+					ProcessoFuncionalidade processoFuncionalidade = (ProcessoFuncionalidade) iterator.next();
+					
 					FuncionalidadeSituacao funcionalidadeSituacao = new FuncionalidadeSituacao();
-					funcionalidadeSituacao
-							.setId(FuncionalidadeSituacao.EM_ESPERA);
-					funcionalidadeIniciada
-							.setFuncionalidadeSituacao(funcionalidadeSituacao);
-					funcionalidadeIniciada
-							.setProcessoIniciado(processoIniciado);
-					funcionalidadeIniciada
-							.setProcessoFuncionalidade(processoFuncionalidade);
-					funcionalidadeIniciada.setId((Integer) getControladorUtil()
-							.inserir(funcionalidadeIniciada));
+					funcionalidadeSituacao.setId(FuncionalidadeSituacao.EM_ESPERA);
+					
+					FuncionalidadeIniciada funcionalidadeIniciada = new FuncionalidadeIniciada();
+					funcionalidadeIniciada.setFuncionalidadeSituacao(funcionalidadeSituacao);
+					funcionalidadeIniciada.setProcessoIniciado(processoIniciado);
+					funcionalidadeIniciada.setProcessoFuncionalidade(processoFuncionalidade);
+					
+					funcionalidadeIniciada.setId((Integer) getControladorUtil().inserir(funcionalidadeIniciada));
 
-					SistemaParametro sistemaParametro = getControladorUtil()
-							.pesquisarParametrosDoSistema();
+					SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
-					// Seta os parametros da funcionalidadeIniciada
-					switch (funcionalidadeIniciada.getProcessoFuncionalidade()
-							.getFuncionalidade().getId()) {
+					switch (funcionalidadeIniciada.getProcessoFuncionalidade().getFuncionalidade().getId()) {
 
 					case Funcionalidade.GERAR_DADOS_PARA_LEITURA:
 

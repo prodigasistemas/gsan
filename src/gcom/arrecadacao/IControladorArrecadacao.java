@@ -4362,4 +4362,6 @@ public interface IControladorArrecadacao {
 			throws ControladorException;
 		
 		public void atualizarIndicadorDebitoAutomaticoComDataExclusao(Integer idImovel) throws ControladorException;
+		
+		public Collection pesquisarClienteGuiaPagamentoECliente(Integer idGuiaPagamento)throws ControladorException;
 }

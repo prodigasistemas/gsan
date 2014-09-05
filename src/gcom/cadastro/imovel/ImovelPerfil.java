@@ -19,12 +19,6 @@ public class ImovelPerfil extends ObjetoTransacao{
 	public static final int  OPERACAO_IMOVEL_PERFIL_ATUALIZAR = 1702;
 	public static final int OPERACAO_IMOVEL_PERFIL_REMOVER = 1698;	
 
-	
-	/** TODO : COSANPA
-	 * Anotações retiradas devido o erro de alterar o perfil do imóvel,
-	 * pois o sistema estava pegando essas informações e salvando no
-	 * log como alteração do imóvel.
-	 */
     private Integer id;
 
     private String descricao;
@@ -91,7 +85,11 @@ public class ImovelPerfil extends ObjetoTransacao{
     public ImovelPerfil() {
     }
 
-    public Integer getId() {
+    public ImovelPerfil(Integer id) {
+		this.id = id;
+	}
+
+	public Integer getId() {
         return this.id;
     }
 
@@ -146,11 +144,6 @@ public class ImovelPerfil extends ObjetoTransacao{
 		return filtro;
 	}
 	
-	/**
-	 * @author Pedro Alexandre
-	 * @date 19/09/2007
-	 *
-	 */
 	public String getDescricaoComId() {
 		
 		if(this.getId().compareTo(10) == -1){

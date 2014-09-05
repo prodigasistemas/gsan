@@ -8,6 +8,7 @@ import gcom.util.filtro.Filtro;
 import gcom.util.filtro.ParametroSimples;
 
 import java.util.Date;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 
@@ -106,7 +107,11 @@ public class CobrancaSituacao extends ObjetoTransacao {
     public CobrancaSituacao() {
     }
 
-    public Integer getId() {
+    public CobrancaSituacao(Integer id) {
+		this.id = id;
+	}
+
+	public Integer getId() {
         return this.id;
     }
 

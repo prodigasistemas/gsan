@@ -26,6 +26,7 @@ public class CobrancaDocumentoHistorico implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
+	private Imovel imovel;
 	private int numeroSequenciaDocumento;
 	private Date emissao;
 	private BigDecimal valorDesconto;
@@ -36,7 +37,6 @@ public class CobrancaDocumentoHistorico implements Serializable {
 	private Date ultimaAlteracao;
 	private DocumentoEmissaoForma documentoEmissaoForma;
 	private CobrancaAcaoAtividadeComando cobrancaAcaoAtividadeComando;
-	private Imovel imovel;
 	private Empresa empresa;
 	private DocumentoTipo documentoTipo;
 	private ImovelPerfil imovelPerfil;
@@ -60,12 +60,6 @@ public class CobrancaDocumentoHistorico implements Serializable {
 	private FiscalizacaoSituacao fiscalizacaoSituacao;
 	private AtendimentoMotivoEncerramento motivoEncerramento;
 	private ResolucaoDiretoria resolucaoDiretoria;
-	private LigacaoAguaSituacao ligacaoAguaSituacao;
-	private LigacaoEsgotoSituacao ligacaoEsgotoSituacao;
-	private Date dataEmissaoPredecessor;
-	private String numeroDocumentoFatura;
-	private BigDecimal valorImpostos;
-	private Usuario usuario;
 
 	public final static String INCLUIR_ACRESCIMOS = "1";
 	public final static String NAO_INCLUIR_ACRESCIMOS = "2";
@@ -85,8 +79,7 @@ public class CobrancaDocumentoHistorico implements Serializable {
 			Date dataSituacaoDebito, Integer sequencialImpressao, Short indicadorAntesApos, Short indicadorLimite,
 			CobrancaDebitoSituacao cobrancaDebitoSituacao, CobrancaAcaoSituacao cobrancaAcaoSituacao, Cliente cliente, Categoria categoria,
 			EsferaPoder esferaPoder, FiscalizacaoSituacao fiscalizacaoSituacao, AtendimentoMotivoEncerramento motivoEncerramento,
-			ResolucaoDiretoria resolucaoDiretoria, LigacaoAguaSituacao ligacaoAguaSituacao, LigacaoEsgotoSituacao ligacaoEsgotoSituacao,
-			Date dataEmissaoPredecessor, String numeroDocumentoFatura, BigDecimal valorImpostos, Usuario usuario) {
+			ResolucaoDiretoria resolucaoDiretoria) {
 		super();
 		this.id = id;
 		this.numeroSequenciaDocumento = numeroSequenciaDocumento;
@@ -123,12 +116,6 @@ public class CobrancaDocumentoHistorico implements Serializable {
 		this.fiscalizacaoSituacao = fiscalizacaoSituacao;
 		this.motivoEncerramento = motivoEncerramento;
 		this.resolucaoDiretoria = resolucaoDiretoria;
-		this.ligacaoAguaSituacao = ligacaoAguaSituacao;
-		this.ligacaoEsgotoSituacao = ligacaoEsgotoSituacao;
-		this.dataEmissaoPredecessor = dataEmissaoPredecessor;
-		this.numeroDocumentoFatura = numeroDocumentoFatura;
-		this.valorImpostos = valorImpostos;
-		this.usuario = usuario;
 	}
 	
 	public Integer getId() {
@@ -341,43 +328,6 @@ public class CobrancaDocumentoHistorico implements Serializable {
 	public void setResolucaoDiretoria(ResolucaoDiretoria resolucaoDiretoria) {
 		this.resolucaoDiretoria = resolucaoDiretoria;
 	}
-	public LigacaoAguaSituacao getLigacaoAguaSituacao() {
-		return ligacaoAguaSituacao;
-	}
-	public void setLigacaoAguaSituacao(LigacaoAguaSituacao ligacaoAguaSituacao) {
-		this.ligacaoAguaSituacao = ligacaoAguaSituacao;
-	}
-	public LigacaoEsgotoSituacao getLigacaoEsgotoSituacao() {
-		return ligacaoEsgotoSituacao;
-	}
-	public void setLigacaoEsgotoSituacao(LigacaoEsgotoSituacao ligacaoEsgotoSituacao) {
-		this.ligacaoEsgotoSituacao = ligacaoEsgotoSituacao;
-	}
-	public Date getDataEmissaoPredecessor() {
-		return dataEmissaoPredecessor;
-	}
-	public void setDataEmissaoPredecessor(Date dataEmissaoPredecessor) {
-		this.dataEmissaoPredecessor = dataEmissaoPredecessor;
-	}
-	public String getNumeroDocumentoFatura() {
-		return numeroDocumentoFatura;
-	}
-	public void setNumeroDocumentoFatura(String numeroDocumentoFatura) {
-		this.numeroDocumentoFatura = numeroDocumentoFatura;
-	}
-	public BigDecimal getValorImpostos() {
-		return valorImpostos;
-	}
-	public void setValorImpostos(BigDecimal valorImpostos) {
-		this.valorImpostos = valorImpostos;
-	}
-	public Usuario getUsuario() {
-		return usuario;
-	}
-	public void setUsuario(Usuario usuario) {
-		this.usuario = usuario;
-	}
-	
 	public String toString() {
 		return new ToStringBuilder(this).append("id", getId()).toString();
 	}
