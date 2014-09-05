@@ -1,10 +1,12 @@
 package gcom.cobranca;
 
 import gcom.seguranca.acesso.usuario.Usuario;
+
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.Set;
+
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 
@@ -120,7 +122,11 @@ public class NegativacaoComando implements Serializable {
         this.negativacaoCriterios = negativacaoCriterios;
     }
 
-    public Integer getId() {
+    public NegativacaoComando(Integer id) {
+		this.id = id;
+	}
+
+	public Integer getId() {
         return this.id;
     }
 

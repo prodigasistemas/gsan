@@ -101,6 +101,10 @@ public class NegativadorMovimento extends ObjetoTransacao implements Serializabl
     public NegativadorMovimento() {
     }
 
+    public NegativadorMovimento(Integer id) {
+    	this.id = id;
+    }
+    
     /** minimal constructor */
     public NegativadorMovimento(Integer id, short codigoMovimento, Date dataProcessamentoEnvio, gcom.cobranca.Negativador negativador, gcom.cobranca.NegativacaoComando negativacaoComando, Set negativadorMovimentoReg) {
         this.id = id;

@@ -9,37 +9,25 @@ import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class GuiaPagamentoGeral implements Serializable {
 	private static final long serialVersionUID = 1L;
-    /** identifier field */
+
     private Integer id;
 
-    /** persistent field */
     private short indicadorHistorico;
 
-    /** persistent field */
     private Date ultimaAlteracao;
 
-    /** nullable persistent field */
     private GuiaPagamento guiaPagamento;
 
-    /** persistent field */
     private Set cobrancaDocumentoItems;
 
-    /** persistent field */
     private Set parcelamentoItems;
     
     private GuiaPagamentoHistorico guiaPagamentoHistorico;
     
-    /**
-     * Description of the Field
-     */
-
     public final static short INDICADOR_HISTORICO = 1;
     
-
     /** full constructor */
     public GuiaPagamentoGeral(Integer id, short indicadorHistorico, Date ultimaAlteracao, GuiaPagamento guiaPagamento, Set cobrancaDocumentoItems, Set parcelamentoItems) {
         this.id = id;
@@ -63,8 +51,11 @@ public class GuiaPagamentoGeral implements Serializable {
         this.parcelamentoItems = parcelamentoItems;
     }
 
-   
-    public Set getCobrancaDocumentoItems() {
+    public GuiaPagamentoGeral(Integer id) {
+		this.id = id;
+	}
+
+	public Set getCobrancaDocumentoItems() {
         return this.cobrancaDocumentoItems;
     }
 
@@ -125,7 +116,4 @@ public class GuiaPagamentoGeral implements Serializable {
 	public void setGuiaPagamentoHistorico(GuiaPagamentoHistorico guiaPagamentoHistorico) {
 		this.guiaPagamentoHistorico = guiaPagamentoHistorico;
 	}
-    
-    
-
 }

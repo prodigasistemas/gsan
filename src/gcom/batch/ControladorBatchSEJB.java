@@ -528,7 +528,7 @@ public class ControladorBatchSEJB implements SessionBean {
 							if (negativacaoComando.getIndicadorSimulacao() != NegativacaoComando.SIMULACAO) {
 								int numeroSequencialEnvio = negativadorContrato.getNumeroSequencialEnvio() + 1;
 								// gerando o movimento
-								Integer idNegativacaoMovimento = getControladorSpcSerasa().geraRegistroNegativadorMovimento(
+								Integer idNegativacaoMovimento = getControladorSpcSerasa().gerarNegativadorMovimento(
 										negativador.getId(), numeroSequencialEnvio, negativacaoComando.getId());
 
 								// [SB0008] - Gerar Registro do tipo Hearder
