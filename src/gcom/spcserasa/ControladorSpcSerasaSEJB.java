@@ -10939,7 +10939,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			ZipUtil.adicionarArquivo(zos, leituraTipo);
 			zos.close();
 
-//			ServicosEmail.enviarMensagemArquivoAnexado(emailReceptor, emailRemetente, tituloMensagem, corpoMensagem, compactado);
+			ServicosEmail.enviarMensagemArquivoAnexado(emailReceptor, emailRemetente, tituloMensagem, corpoMensagem, compactado);
 
 			leituraTipo.delete();
 		} catch (IOException ex) {
