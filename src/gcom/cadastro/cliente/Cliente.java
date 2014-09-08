@@ -168,6 +168,7 @@ public class Cliente extends ObjetoTransacao implements ICliente {
 		this.unidadeFederacao = unidadeFederacao;
 		this.clienteTipo = clienteTipo;
 		this.ramoAtividade = ramoAtividade;
+		this.indicadorNegativacaoPeriodo = ConstantesSistema.NAO;
 	}
 
 	public Cliente(String nome, String nomeAbreviado, String cpf, String rg, Date dataEmissaoRg, Date dataNascimento, String cnpj, String email,
@@ -192,7 +193,7 @@ public class Cliente extends ObjetoTransacao implements ICliente {
 		this.clienteTipo = clienteTipo;
 		this.indicadorUsoNomeFantasiaConta = indicadorUsoNomeFantasiaConta;
 		this.ramoAtividade = ramoAtividade;
-
+		this.indicadorNegativacaoPeriodo = ConstantesSistema.NAO;
 	}
 
 	/**
@@ -222,6 +223,7 @@ public class Cliente extends ObjetoTransacao implements ICliente {
 		this.clienteTipo = clienteTipo;
 		this.ramoAtividade = ramoAtividade;
 		this.indicadorUsoNomeFantasiaConta = indicadorUsoNomeFantasiaConta;
+		this.indicadorNegativacaoPeriodo = ConstantesSistema.NAO;
 	}
 
 	/**
@@ -247,10 +249,12 @@ public class Cliente extends ObjetoTransacao implements ICliente {
 		this.indicadorGeraFaturaAntecipada = ConstantesSistema.NAO;
 		this.indicadorPermiteNegativacao = ConstantesSistema.NAO;
 		this.indicadorVencimentoMesSeguinte = ConstantesSistema.NAO;
+		this.indicadorNegativacaoPeriodo = ConstantesSistema.NAO;
 	}
 
 	public Cliente(String nome) {
 		this.nome = nome;
+		this.indicadorNegativacaoPeriodo = ConstantesSistema.NAO;
 
 	}
 
@@ -265,9 +269,11 @@ public class Cliente extends ObjetoTransacao implements ICliente {
 		this.clienteTipo = clienteTipo;
 		this.cpf = cpf;
 		this.cnpj = cnpj;
+		this.indicadorNegativacaoPeriodo = ConstantesSistema.NAO;
 	}
 
-	public Cliente() {}
+	public Cliente() {
+	}
 
 	public Cliente(gcom.cadastro.cliente.OrgaoExpedidorRg orgaoExpedidorRg, gcom.cadastro.cliente.Cliente cliente, gcom.cadastro.cliente.PessoaSexo pessoaSexo,
 			gcom.cadastro.cliente.Profissao profissao, UnidadeFederacao unidadeFederacao, gcom.cadastro.cliente.ClienteTipo clienteTipo,
@@ -279,12 +285,14 @@ public class Cliente extends ObjetoTransacao implements ICliente {
 		this.unidadeFederacao = unidadeFederacao;
 		this.clienteTipo = clienteTipo;
 		this.ramoAtividade = ramoAtividade;
+		this.indicadorNegativacaoPeriodo = ConstantesSistema.NAO;
 	}
 
 	public Cliente(Integer id, String nome, Short dataVencimento) {
 		this.id = id;
 		this.nome = nome;
 		this.dataVencimento = dataVencimento;
+		this.indicadorNegativacaoPeriodo = ConstantesSistema.NAO;
 	}
 
 	public Cliente(Integer id, String nome, Short dataVencimento, Short indicadorVencimentoMesSeguinte) {
@@ -292,10 +300,12 @@ public class Cliente extends ObjetoTransacao implements ICliente {
 		this.nome = nome;
 		this.dataVencimento = dataVencimento;
 		this.indicadorVencimentoMesSeguinte = indicadorVencimentoMesSeguinte;
+		this.indicadorNegativacaoPeriodo = ConstantesSistema.NAO;
 	}
 
 	public Cliente(Integer idCliente) {
 		this.id = idCliente;
+		this.indicadorNegativacaoPeriodo = ConstantesSistema.NAO;
 	}
 
 	public Integer getId() {
