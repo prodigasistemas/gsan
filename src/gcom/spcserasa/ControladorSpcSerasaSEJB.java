@@ -353,73 +353,36 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 		}
 	}
 	
-	private Date obterMaiorMenorVencimento(List contas, List guiasPagamento, int tipo) throws ControladorException {
-		Date dataRetorno = null;
-		Conta contasLista = null;
-		GuiaPagamento guiasPagamentoLista = null;
+	private Date obterMenorVencimento(List contas, List guias) throws ControladorException {
+		Date data = null;
+		Conta contaValoresHelper = null;
+		GuiaPagamento guiaPagamentoValoresHelper = null;
+		
 		try {
-			if (tipo == 1) { // Tipo = 1 Maior Data
-				dataRetorno = Util.criarData(1, 1, 1800);
-				if (contas != null && !contas.isEmpty()) {
-					// varre lista de contas
-					Iterator itContas = contas.iterator();
-					while (itContas.hasNext()) {
-						Object obj = itContas.next();
-						if (obj instanceof ContaValoresHelper) {
-							contasLista = ((ContaValoresHelper) obj).getConta();
-							if (contasLista.getDataVencimentoConta().after(dataRetorno)) {
-								dataRetorno = contasLista.getDataVencimentoConta();
-							}
-						} else if (obj instanceof Conta) {
-
+			data = new Date();
+			
+			if (contas != null && !contas.isEmpty()) {
+				
+				for (int i = 0; i < contas.size(); i++) {
+					Object conta = contas.get(i);
+					
+					if (conta instanceof ContaValoresHelper) {
+						contaValoresHelper = ((ContaValoresHelper) conta).getConta();
+						if (contaValoresHelper.getDataVencimentoConta().before(data)) {
+							data = contaValoresHelper.getDataVencimentoConta();
 						}
 					}
 				}
-				if (guiasPagamento != null && !guiasPagamento.isEmpty()) {
-					// varre lista de Guias
-					Iterator itGuias = guiasPagamento.iterator();
-					while (itGuias.hasNext()) {
-						Object obj = itGuias.next();
-						if (obj instanceof GuiaPagamentoValoresHelper) {
-							guiasPagamentoLista = ((GuiaPagamentoValoresHelper) obj).getGuiaPagamento();
-							if (guiasPagamentoLista.getDataVencimento().after(dataRetorno)) {
-								dataRetorno = guiasPagamentoLista.getDataVencimento();
-							}
-						} else if (obj instanceof Conta) {
+			}
 
-						}
-					}
-				}
-			} else if (tipo == 2) { // Tipo = 2 Menor Data
-				dataRetorno = new Date();
-				if (contas != null && !contas.isEmpty()) {
-					// varre lista de contas
-					Iterator itContas = contas.iterator();
-					while (itContas.hasNext()) {
-						Object obj = itContas.next();
-						if (obj instanceof ContaValoresHelper) {
-							contasLista = ((ContaValoresHelper) obj).getConta();
-							if (contasLista.getDataVencimentoConta().before(dataRetorno)) {
-								dataRetorno = contasLista.getDataVencimentoConta();
-							}
-						} else if (obj instanceof Conta) {
-
-						}
-					}
-				}
-
-				if (guiasPagamento != null && !guiasPagamento.isEmpty()) {
-					// varre lista de Guias
-					Iterator itGuias = guiasPagamento.iterator();
-					while (itGuias.hasNext()) {
-						Object obj = itGuias.next();
-						if (obj instanceof GuiaPagamentoValoresHelper) {
-							guiasPagamentoLista = ((GuiaPagamentoValoresHelper) obj).getGuiaPagamento();
-							if (guiasPagamentoLista.getDataVencimento().before(dataRetorno)) {
-								dataRetorno = guiasPagamentoLista.getDataVencimento();
-							}
-						} else if (obj instanceof Conta) {
-
+			if (guias != null && !guias.isEmpty()) {
+				for (int i = 0; i < guias.size(); i++) {
+					Object guia = guias.get(i);
+					
+					if (guia instanceof GuiaPagamentoValoresHelper) {
+						guiaPagamentoValoresHelper = ((GuiaPagamentoValoresHelper) guia).getGuiaPagamento();
+						if (guiaPagamentoValoresHelper.getDataVencimento().before(data)) {
+							data = guiaPagamentoValoresHelper.getDataVencimento();
 						}
 					}
 				}
@@ -427,9 +390,48 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 		} catch (Exception e) {
 			throw new ControladorException("erro.sistema", e);
 		}
-		return dataRetorno;
+		return data;
 	}
-
+	
+	private Date obterMaiorVencimento(List contas, List guias) throws ControladorException {
+		Date data = null;
+		Conta contaValoresHelper = null;
+		GuiaPagamento guiaPagamentoValoresHelper = null;
+		try {
+			data = Util.criarData(1, 1, 1800);
+			
+			if (contas != null && !contas.isEmpty()) {
+				for (int i = 0; i < contas.size(); i++) {
+					Object conta = contas.get(i);
+					
+					if (conta instanceof ContaValoresHelper) {
+						contaValoresHelper = ((ContaValoresHelper) conta).getConta();
+						if (contaValoresHelper.getDataVencimentoConta().after(data)) {
+							data = contaValoresHelper.getDataVencimentoConta();
+						}
+					}
+				}
+			}
+			
+			if (guias != null && !guias.isEmpty()) {
+				for (int i = 0; i < guias.size(); i++) {
+					Object guia = guias.get(i);
+					
+					if (guia instanceof GuiaPagamentoValoresHelper) {
+						guiaPagamentoValoresHelper = ((GuiaPagamentoValoresHelper) guia).getGuiaPagamento();
+						if (guiaPagamentoValoresHelper.getDataVencimento().after(data)) {
+							data = guiaPagamentoValoresHelper.getDataVencimento();
+						}
+					}
+				}
+			}
+		} catch (Exception e) {
+			throw new ControladorException("erro.sistema", e);
+		}
+		
+		return data;
+	}
+	
 	/**
 	 * [UC 0653] Pesquisar Comando Negativação
 	 * 
@@ -2847,16 +2849,16 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			Date menorData = null;
 			
 			if (tipoComando.equals(ConstantesSistema.TIPO_COMANDO_POR_MATRICULA_IMOVEIS)) {
-				maiorData = this.obterMaiorMenorVencimento(dadosNegativacaoPorImovelHelper.getColecaoConta(),
-						dadosNegativacaoPorImovelHelper.getColecaoGuias(), 1);
-				menorData = this.obterMaiorMenorVencimento(dadosNegativacaoPorImovelHelper.getColecaoConta(),
-						dadosNegativacaoPorImovelHelper.getColecaoGuias(), 2);
+				maiorData = this.obterMaiorVencimento(dadosNegativacaoPorImovelHelper.getColecaoConta(),
+						dadosNegativacaoPorImovelHelper.getColecaoGuias());
+				menorData = this.obterMenorVencimento(dadosNegativacaoPorImovelHelper.getColecaoConta(),
+						dadosNegativacaoPorImovelHelper.getColecaoGuias());
 				
 			} else if (tipoComando.equals(ConstantesSistema.TIPO_COMANDO_POR_CRITERIO)) {
-				maiorData = this.obterMaiorMenorVencimento((List) obterDebitoImovelOuClienteHelper.getColecaoContasValores(),
-						(List) obterDebitoImovelOuClienteHelper.getColecaoGuiasPagamentoValores(), 1);
-				menorData = this.obterMaiorMenorVencimento((List) obterDebitoImovelOuClienteHelper.getColecaoContasValores(),
-						(List) obterDebitoImovelOuClienteHelper.getColecaoGuiasPagamentoValores(), 2);
+				maiorData = this.obterMaiorVencimento((List) obterDebitoImovelOuClienteHelper.getColecaoContasValores(),
+						(List) obterDebitoImovelOuClienteHelper.getColecaoGuiasPagamentoValores());
+				menorData = this.obterMenorVencimento((List) obterDebitoImovelOuClienteHelper.getColecaoContasValores(),
+						(List) obterDebitoImovelOuClienteHelper.getColecaoGuiasPagamentoValores());
 			}
 			
 			if (maiorData != null) {
@@ -3740,14 +3742,14 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 
 			registroDetalheSPC.append("C");
 			// Maior data
-			Date maiorData = this.obterMaiorMenorVencimento(listaDadosImovel.getColecaoConta(),
-					listaDadosImovel.getColecaoGuias(), 1);
+			Date maiorData = this.obterMaiorVencimento(listaDadosImovel.getColecaoConta(),
+					listaDadosImovel.getColecaoGuias());
 
 			String D206 = Util.recuperaDataInvertida(maiorData);
 			registroDetalheSPC.append(D206);
 			// Menor data
-			Date menorData = this.obterMaiorMenorVencimento(listaDadosImovel.getColecaoConta(),
-					listaDadosImovel.getColecaoGuias(), 2);
+			Date menorData = this.obterMenorVencimento(listaDadosImovel.getColecaoConta(),
+					listaDadosImovel.getColecaoGuias());
 			String D207 = Util.recuperaDataInvertida(menorData);
 			registroDetalheSPC.append(D207);
 		} else if (tipoComando.equals(ConstantesSistema.TIPO_COMANDO_POR_CRITERIO)) {
@@ -3762,14 +3764,14 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 
 			registroDetalheSPC.append("C");
 			// Maior data
-			Date maiorData = this.obterMaiorMenorVencimento((List) colecaoDebitoImovel.getColecaoContasValores(),
-					(List) colecaoDebitoImovel.getColecaoGuiasPagamentoValores(), 1);
+			Date maiorData = this.obterMaiorVencimento((List) colecaoDebitoImovel.getColecaoContasValores(),
+					(List) colecaoDebitoImovel.getColecaoGuiasPagamentoValores());
 
 			String D206 = Util.recuperaDataInvertida(maiorData);
 			registroDetalheSPC.append(D206);
 			// Menor data
-			Date menorData = this.obterMaiorMenorVencimento((List) colecaoDebitoImovel.getColecaoContasValores(),
-					(List) colecaoDebitoImovel.getColecaoGuiasPagamentoValores(), 2);
+			Date menorData = this.obterMenorVencimento((List) colecaoDebitoImovel.getColecaoContasValores(),
+					(List) colecaoDebitoImovel.getColecaoGuiasPagamentoValores());
 			String D207 = Util.recuperaDataInvertida(menorData);
 			registroDetalheSPC.append(D207);
 		}
@@ -7238,42 +7240,65 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 	// ********************************************
 	// CAMPOS CONFORME LAYOUT DO UC0671 [SB0008] **
 	// ********************************************
-	public StringBuilder geraRegistroTipoHeaderSERASA(int saEnvio, int quantidadeRegistros) throws ControladorException {
-
-		// 2.1
+	public StringBuilder geraRegistroTipoHeaderSERASA(int numeroSequencialEnvio, int quantidadeRegistros) throws ControladorException {
+		
 		StringBuilder registroHeader = new StringBuilder();
-		// H.01 Zero
-		registroHeader.append("0");
-		// H.02 PARAM_NNCNPJEMPRESA(Sistema Parametro)
 		SistemaParametro sistemaParametro = this.getControladorUtil().pesquisarParametrosDoSistema();
+		
+		// H.01 - Código do Registro Header = 0
+		registroHeader.append("0");
+		
+		// H.02 - CNPJ da Instituição Informante (7 primeiros dígitos)
 		String cnpjEmpresa = sistemaParametro.getCnpjEmpresa();
 		cnpjEmpresa = cnpjEmpresa.substring(0, 8);
 		registroHeader.append(Util.adicionarZerosEsquedaNumero(9, cnpjEmpresa));
-		// H.03 Data Corrente no Formato AAAAMMDD
+		
+		// H.03 - Data do Movimento (Geração do Arquivo)
 		String dataAtualString = Util.recuperaDataInvertida(new Date());
 		registroHeader.append(Util.adicionarZerosEsquedaNumero(8, dataAtualString));
-		// H.04
-		registroHeader.append("0081");
-		// H.05
-		registroHeader.append("34129707");
-		// H.06
-		registroHeader.append("0000");
-		// H.07 TODO - VERIFICAR PORQUE ESTÁ ESSE NOME
+		
+		// H.04 - DDD do Telefone da Instituição Informante
+		// TODO - Criar Parâmetro do Sistema para DDD da Empresa
+		registroHeader.append("0091");
+		
+		// H.05 - Telefone da Instituição Informante
+		registroHeader.append(sistemaParametro.getNumeroTelefone());
+		
+		// H.06 - Ramal da Instituição Informante
+		registroHeader.append(sistemaParametro.getNumeroRamal());
+		
+		// H.07 - Nome do Contato da Instituição Informante
+		// TODO - Criar Parâmetro do Sistema para Responsável pela Negativação
 		registroHeader.append(Util.completaString("FATIMA SAMPAIO", 70));
-		// H.08
+		
+		// H.08 - Identificação do arquivo fixo
 		registroHeader.append("SERASA-CONVEM04");
-		// H.09
-		registroHeader.append(Util.adicionarZerosEsquedaNumero(6, "" + (saEnvio + 1)));
-		// H.010
+		
+		// H.09 - Número da remessa do arquivo
+		numeroSequencialEnvio += 1;
+		registroHeader.append(Util.adicionarZerosEsquedaNumero(6, numeroSequencialEnvio + ""));
+		
+		// H.010 - Código de Envio do Arquivo (E - Entrada / R - Retorno) 
 		registroHeader.append("E");
-		// H.11
-		registroHeader.append("    ");
-		// H.12
-		registroHeader.append(Util.completaString(" ", 403));
-		// H.13
+		
+		// H.11 - Diferencial de remessa
+		registroHeader.append(Util.completaString(" ", 4));
+		
+		// H.12 - Deixar em Branco
+		registroHeader.append(Util.completaString(" ", 3));
+		
+		// H.13 - LOGON
+		registroHeader.append(Util.completaString(" ", 8));
+		
+		// H.14 - Deixar em branco
+		registroHeader.append(Util.completaString(" ", 392));
+		
+		// H.15 - Código de Erros
 		registroHeader.append(Util.completaString(" ", 60));
-		// H.14
+		
+		// H.16 - Sequência do Registro
 		registroHeader.append(Util.adicionarZerosEsquedaNumero(7, "" + quantidadeRegistros));
+		
 		return registroHeader;
 	}
 
@@ -7287,31 +7312,34 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 
 		try {
 			StringBuilder registroDetalheConsumidor = new StringBuilder();
-			// D.01
+			
+			// D.01 - Código do Registro Detalhe = 1
 			registroDetalheConsumidor.append("1");
-			// D.02
+			
+			// D.02 - Código da Operação (I - Inclusão / E - Exclusão
 			registroDetalheConsumidor.append("I");
-			// D.03 CNPJ 06 ultimas posições
+			
+			// D.03 Filial e Dígito do CNPJ da Empresa Contratante (YYYY-ZZ)
 			SistemaParametro sistemaParametro = this.getControladorUtil().pesquisarParametrosDoSistema();
 			String cnpjEmpresa = sistemaParametro.getCnpjEmpresa();
 			registroDetalheConsumidor.append(cnpjEmpresa.substring(8));
 
 			// D.04 - Maior data dos debitos no formato AAAAMMDD
-			// D.05 - D.04
 			Date maiorData = null;
+			// D.05 - Menor data dos debitos no formato AAAAMMDD
 			Date menorData = null;
 
 			if (tipoComando.equals(ConstantesSistema.TIPO_COMANDO_POR_MATRICULA_IMOVEIS)) {
-				maiorData = this.obterMaiorMenorVencimento(dadosNegativacaoPorImovelHelper.getColecaoConta(),
-						dadosNegativacaoPorImovelHelper.getColecaoGuias(), 1);
-				menorData = this.obterMaiorMenorVencimento(dadosNegativacaoPorImovelHelper.getColecaoConta(),
-						dadosNegativacaoPorImovelHelper.getColecaoGuias(), 2);
+				maiorData = this.obterMaiorVencimento(dadosNegativacaoPorImovelHelper.getColecaoConta(),
+						dadosNegativacaoPorImovelHelper.getColecaoGuias());
+				menorData = this.obterMenorVencimento(dadosNegativacaoPorImovelHelper.getColecaoConta(),
+						dadosNegativacaoPorImovelHelper.getColecaoGuias());
 
 			} else if (tipoComando.equals(ConstantesSistema.TIPO_COMANDO_POR_CRITERIO)) {
-				maiorData = this.obterMaiorMenorVencimento((List) obterDebitoImovelOuClienteHelper.getColecaoContasValores(),
-						(List) obterDebitoImovelOuClienteHelper.getColecaoGuiasPagamentoValores(), 1);
-				menorData = this.obterMaiorMenorVencimento((List) obterDebitoImovelOuClienteHelper.getColecaoContasValores(),
-						(List) obterDebitoImovelOuClienteHelper.getColecaoGuiasPagamentoValores(), 2);
+				maiorData = this.obterMaiorVencimento((List) obterDebitoImovelOuClienteHelper.getColecaoContasValores(),
+						(List) obterDebitoImovelOuClienteHelper.getColecaoGuiasPagamentoValores());
+				menorData = this.obterMenorVencimento((List) obterDebitoImovelOuClienteHelper.getColecaoContasValores(),
+						(List) obterDebitoImovelOuClienteHelper.getColecaoGuiasPagamentoValores());
 			}
 
 			if (maiorData != null) {
@@ -7323,36 +7351,37 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 				registroDetalheConsumidor.append("00000000");
 			}
 
-			// D.06
+			// D.06 - Código de natureza da operação
+			// TODO - ??????
 			registroDetalheConsumidor.append("SB ");
-			// D.07
+			// D.07 - Código da praça Embratel
 			registroDetalheConsumidor.append("    ");
 
 			if (cliente.getCnpj() != null && cliente.getCnpj().length() > 0) {
-				// D.08 - Indicador se tem ou não CNPJ ou CPF Preenchido
+				// D.08 - Tipo de Pessoa
 				registroDetalheConsumidor.append("J");
-				// D.09 - Indicador se tem ou não CNPJ ou CPF Preenchido
+				// D.09 - Tipo de Pessoa do primeiro documento (1 - CNPJ / 2 - CPF)
 				registroDetalheConsumidor.append("1");
-				// D.10
+				// D.10 - Número do documento
 				registroDetalheConsumidor.append(Util.adicionarZerosEsquedaNumero(15, "" + cliente.getCnpj()));
 			} else {
-				// D.08 - Indicador se tem ou não CNPJ ou CPF Preenchido
+				// D.08 - Tipo de Pessoa
 				registroDetalheConsumidor.append("F");
-				// D.09 - Indicador se tem ou não CNPJ ou CPF Preenchido
+				// D.09 - Tipo de Pessoa do primeiro documento (1 - CNPJ / 2 - CPF)
 				registroDetalheConsumidor.append("2");
-				// D.10
+				// D.10 - Número do documento
 				registroDetalheConsumidor.append(Util.adicionarZerosEsquedaNumero(15, "" + cliente.getCpf()));
 			}
 
-			// D.11
+			// D.11 - Motivo da Baixa
 			registroDetalheConsumidor.append("  ");
 
 			if (cliente.getCpf() != null && cliente.getCpf().length() > 0 && cliente.getRg() != null && cliente.getRg().length() > 0) {
-				// D.12
+				// D.12 - Tipo do segundo documento (3 - RG)
 				registroDetalheConsumidor.append("3");
-				// D.13
+				// D.13 - Número do segundo documento
 				registroDetalheConsumidor.append(Util.completaStringComEspacoAEsquerda(cliente.getRg(), 15));
-				// D.14
+				// D.14 - UF do segundo documento
 				if (cliente.getUnidadeFederacao() != null && cliente.getUnidadeFederacao().getId() != null) {
 					FiltroUnidadeFederacao filtroUnidadeFederacao = new FiltroUnidadeFederacao();
 					filtroUnidadeFederacao.adicionarParametro(new ParametroSimples(FiltroUnidadeFederacao.ID,
@@ -7369,7 +7398,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 				// D.12
 				registroDetalheConsumidor.append(" ");
 				// D.13
-				registroDetalheConsumidor.append("               ");
+				registroDetalheConsumidor.append(Util.completaString(" ", 15));
 				// D.14
 				registroDetalheConsumidor.append("  ");
 			}
@@ -7377,16 +7406,16 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			// os campo abaixo referentes a: D.15.16.17.18.19.20.21
 			registroDetalheConsumidor.append(" ");
 			registroDetalheConsumidor.append(" ");
-			registroDetalheConsumidor.append("               ");
+			registroDetalheConsumidor.append(Util.completaString(" ", 15));
 			registroDetalheConsumidor.append("  ");
 			registroDetalheConsumidor.append(" ");
-			registroDetalheConsumidor.append("               ");
+			registroDetalheConsumidor.append(Util.completaString(" ", 15));
 			registroDetalheConsumidor.append("  ");
 
-			// D.22 - Nome Cliente
+			// D.22 - Nome cliente devedor
 			registroDetalheConsumidor.append(Util.completaString(cliente.getNome(), 70));
 
-			// D.23 -Idade do cliente
+			// D.23 - Data de nascimento do cliente
 			if (cliente.getCpf() != null && cliente.getCpf().length() > 0) {
 				if (cliente.getDataNascimento() != null && !cliente.getDataNascimento().equals("")) {
 					registroDetalheConsumidor.append(Util.completaString(Util.recuperaDataInvertida(cliente.getDataNascimento()), 8));
@@ -7397,7 +7426,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 				registroDetalheConsumidor.append("00000000");
 			}
 
-			// D.24 - Espaços em Branco
+			// D.24 - Nome do pai
 			registroDetalheConsumidor.append(Util.completaString(" ", 70));
 			// D.25 - Nome da Mãe
 			if (cliente.getNomeMae() != null) {
@@ -7405,13 +7434,13 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			} else {
 				registroDetalheConsumidor.append(Util.completaString(" ", 70));
 			}
-			// D.26 - Endereco
-			String ender = this.getControladorEndereco().pesquisarEnderecoClienteAbreviado(cliente.getId());
+			// D.26 - Endereco completo
+			String endereco = this.getControladorEndereco().pesquisarEnderecoClienteAbreviado(cliente.getId());
 
-			if (ender != null && ender.length() > 45) {
-				registroDetalheConsumidor.append(Util.completaString(ender.substring(0, 45), 45));
+			if (endereco != null && endereco.length() > 45) {
+				registroDetalheConsumidor.append(Util.completaString(endereco.substring(0, 45), 45));
 			} else {
-				registroDetalheConsumidor.append(Util.completaString(ender, 45));
+				registroDetalheConsumidor.append(Util.completaString(endereco, 45));
 			}
 
 			ClienteEndereco clienteEndereco = null;
@@ -7447,14 +7476,14 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			valorString = valorNovo;
 			// D.31 - Valor total dos debitos
 			registroDetalheConsumidor.append(Util.adicionarZerosEsquedaNumero(15, valorString));
-			// D.32 - Imovel Id
+			// D.32 - Código do Imovel
 			registroDetalheConsumidor.append(Util.completaString(imovelNegativado.getId().toString(), 16));
-			// D.33
-			registroDetalheConsumidor.append("         ");// 000000000
+			// D.33 - Nosso número
+			registroDetalheConsumidor.append("         ");
 
 			// D.34
-			if (ender != null && ender.length() > 45) {
-				registroDetalheConsumidor.append(Util.completaString(ender.substring(45), 25));
+			if (endereco != null && endereco.length() > 45) {
+				registroDetalheConsumidor.append(Util.completaString(endereco.substring(45), 25));
 			} else {
 				registroDetalheConsumidor.append(Util.completaString(" ", 25));
 			}
@@ -7464,14 +7493,14 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			if (cliFone != null) {
 				registroDetalheConsumidor.append(Util.adicionarZerosEsquedaNumero(4, cliFone.getDdd()));
 			} else {
-				registroDetalheConsumidor.append("    ");// 0000
+				registroDetalheConsumidor.append("    ");
 			}
 
 			// D.36 - Fone
 			if (cliFone != null) {
 				registroDetalheConsumidor.append(Util.adicionarZerosEsquedaNumero(9, cliFone.getTelefone()));
 			} else {
-				registroDetalheConsumidor.append("         ");// 000000000
+				registroDetalheConsumidor.append("         ");
 			}
 
 			// D.37 - Data do Menor vencimento do débito
@@ -7479,7 +7508,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 				String D207 = Util.recuperaDataInvertida(menorData);
 				registroDetalheConsumidor.append(Util.adicionarZerosEsquedaNumero(8, D207));
 			} else {
-				registroDetalheConsumidor.append("        ");// 00000000
+				registroDetalheConsumidor.append("        ");
 			}
 
 			// D.38

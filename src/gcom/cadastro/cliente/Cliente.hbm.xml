@@ -26,7 +26,7 @@
 		<property name="indicadorVencimentoMesSeguinte" type="java.lang.Short" column="clie_icvencimentomesseguinte" not-null="true" length="2"/>
 		<property name="indicadorUsoNomeFantasiaConta" type="java.lang.Short" column="clie_icusonomefantasiaconta" not-null="false" length="2"/>
 		<property name="indicadorPermiteNegativacao" type="java.lang.Short" column="clie_icpermitenegativacao" not-null="false" length="2"/>
-		<property name="indicadorNegativacaoPeriodo" type="java.lang.Short" column="clie_icnegativacaoperiodo" generated="never" lazy="false" length="2"/>  
+		<property name="indicadorNegativacaoPeriodo" type="java.lang.Short" column="clie_icnegativacaoperiodo" not-null="true" length="2"/>  
 		
 		<!-- associations -->
 		<!-- bi-directional many-to-one association to OrgaoExpedidorRg -->
