@@ -69,7 +69,11 @@ public class NegativadorRegistroTipo extends ObjetoTransacao implements Serializ
         this.negativadorMovimentoReg = negativadorMovimentoReg;
     }
 
-    public Integer getId() {
+    public NegativadorRegistroTipo(Integer id) {
+		this.id = id;
+	}
+
+	public Integer getId() {
         return this.id;
     }
 

@@ -56565,4 +56565,12 @@ public class ControladorArrecadacao implements SessionBean {
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}
+	
+	public Collection pesquisarClienteGuiaPagamentoECliente(Integer idGuiaPagamento)throws ControladorException {
+		try{
+		  return repositorioArrecadacao.pesquisarClienteGuiaPagamentoECliente(idGuiaPagamento);
+		} catch (ErroRepositorioException ex) {
+	        throw new ControladorException("erro.sistema", ex);
+	    }
+	}
 }

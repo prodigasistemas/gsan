@@ -42,38 +42,32 @@ import java.util.Set;
 import javax.ejb.CreateException;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
+import org.jboss.logging.Logger;
 
-/** @author Hibernate CodeGenerator */
 public class FuncionalidadeIniciada implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
 
-	/** identifier field */
+	private static final long serialVersionUID = 1L;
+	
+	private Logger logger = Logger.getLogger(FuncionalidadeIniciada.class);
+
 	private Integer id;
 
-	/** nullable persistent field */
 	private Date dataHoraInicio;
 
-	/** nullable persistent field */
 	private Date dataHoraTermino;
 
-	/** persistent field */
-	private gcom.batch.FuncionalidadeSituacao funcionalidadeSituacao;
+	private FuncionalidadeSituacao funcionalidadeSituacao;
 
-	/** persistent field */
-	private gcom.batch.ProcessoIniciado processoIniciado;
+	private ProcessoIniciado processoIniciado;
 
-	/** persistent field */
-	private gcom.batch.ProcessoFuncionalidade processoFuncionalidade;
+	private ProcessoFuncionalidade processoFuncionalidade;
 
-	/** persistent field */
 	private Set unidadesIniciadas;
 
-	/** persistent field */
 	private Set relatoriosGerados;
 
 	private byte[] tarefaBatch;
-	
+
 	private String descricaoExcecao;
 
 	public String getDescricaoExcecao() {
@@ -85,11 +79,8 @@ public class FuncionalidadeIniciada implements Serializable {
 	}
 
 	/** full constructor */
-	public FuncionalidadeIniciada(Date dataHoraInicio, Date dataHoraTermino,
-			gcom.batch.FuncionalidadeSituacao funcionalidadeSituacao,
-			gcom.batch.ProcessoIniciado processoIniciado,
-			gcom.batch.ProcessoFuncionalidade processoFuncionalidade,
-			Set unidadesIniciadas, Set relatoriosGerados) {
+	public FuncionalidadeIniciada(Date dataHoraInicio, Date dataHoraTermino, gcom.batch.FuncionalidadeSituacao funcionalidadeSituacao,
+			gcom.batch.ProcessoIniciado processoIniciado, gcom.batch.ProcessoFuncionalidade processoFuncionalidade, Set unidadesIniciadas, Set relatoriosGerados) {
 		this.dataHoraInicio = dataHoraInicio;
 		this.dataHoraTermino = dataHoraTermino;
 		this.funcionalidadeSituacao = funcionalidadeSituacao;
@@ -104,11 +95,8 @@ public class FuncionalidadeIniciada implements Serializable {
 	}
 
 	/** minimal constructor */
-	public FuncionalidadeIniciada(
-			gcom.batch.FuncionalidadeSituacao funcionalidadeSituacao,
-			gcom.batch.ProcessoIniciado processoIniciado,
-			gcom.batch.ProcessoFuncionalidade processoFuncionalidade,
-			Set unidadesIniciadas, Set relatoriosGerados) {
+	public FuncionalidadeIniciada(gcom.batch.FuncionalidadeSituacao funcionalidadeSituacao, gcom.batch.ProcessoIniciado processoIniciado,
+			gcom.batch.ProcessoFuncionalidade processoFuncionalidade, Set unidadesIniciadas, Set relatoriosGerados) {
 		this.funcionalidadeSituacao = funcionalidadeSituacao;
 		this.processoIniciado = processoIniciado;
 		this.processoFuncionalidade = processoFuncionalidade;
@@ -144,8 +132,7 @@ public class FuncionalidadeIniciada implements Serializable {
 		return this.funcionalidadeSituacao;
 	}
 
-	public void setFuncionalidadeSituacao(
-			gcom.batch.FuncionalidadeSituacao funcionalidadeSituacao) {
+	public void setFuncionalidadeSituacao(gcom.batch.FuncionalidadeSituacao funcionalidadeSituacao) {
 		this.funcionalidadeSituacao = funcionalidadeSituacao;
 	}
 
@@ -161,8 +148,7 @@ public class FuncionalidadeIniciada implements Serializable {
 		return this.processoFuncionalidade;
 	}
 
-	public void setProcessoFuncionalidade(
-			gcom.batch.ProcessoFuncionalidade processoFuncionalidade) {
+	public void setProcessoFuncionalidade(gcom.batch.ProcessoFuncionalidade processoFuncionalidade) {
 		this.processoFuncionalidade = processoFuncionalidade;
 	}
 
@@ -197,8 +183,7 @@ public class FuncionalidadeIniciada implements Serializable {
 	public String getDiferencaInicioTermino() {
 		String retorno = "";
 		if (this.dataHoraTermino != null) {
-			long diferencaEmMilisegundos = this.dataHoraTermino.getTime()
-					- this.dataHoraInicio.getTime();
+			long diferencaEmMilisegundos = this.dataHoraTermino.getTime() - this.dataHoraInicio.getTime();
 
 			long diferencaEmHoras = diferencaEmMilisegundos / (60 * 60 * 1000);
 
@@ -229,327 +214,269 @@ public class FuncionalidadeIniciada implements Serializable {
 	}
 
 	public void finalizador() {
-		
-          // 29/10/2008 - Yara T. Souza
-		  // Estes prints foram colocados para verificar os casos em que os processos não finalizam.
-		  System.out.println("Entrou no finalizador ");
-		
-		
+		logger.info("Entrou no finalizador do processo");
+
 		try {
-			SistemaParametro sistemaParametros = getControladorUtil()
-					.pesquisarParametrosDoSistema();
+			SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();
 
-			TarefaBatch tarefaBatch = (TarefaBatch) IoUtil
-					.transformarBytesParaObjeto(this.tarefaBatch);
+			TarefaBatch tarefaBatch = (TarefaBatch) IoUtil.transformarBytesParaObjeto(this.tarefaBatch);
 
-			 // 29/10/2008 - Yara T. Souza
-			System.out.println("Entrou na Funcionalidade: " + this.processoFuncionalidade.getFuncionalidade().getId() + "-" + this.processoFuncionalidade.getFuncionalidade().getDescricao());
-			
+			System.out.println("Entrou na Funcionalidade: " + this.processoFuncionalidade.getFuncionalidade().getId() + "-"
+					+ this.processoFuncionalidade.getFuncionalidade().getDescricao());
+
 			switch (this.processoFuncionalidade.getFuncionalidade().getId()) {
 
-				case Funcionalidade.GERAR_DADOS_PARA_LEITURA :
+			case Funcionalidade.GERAR_DADOS_PARA_LEITURA:
 
-					Integer anoMesFaturamentoGrupoLeitura = (Integer) tarefaBatch
-							.getParametro("anoMesFaturamentoGrupo");
+				Integer anoMesFaturamentoGrupoLeitura = (Integer) tarefaBatch.getParametro("anoMesFaturamentoGrupo");
 
-					Integer idFaturamentoGrupo = (Integer) tarefaBatch
-							.getParametro("idFaturamentoGrupo");
+				Integer idFaturamentoGrupo = (Integer) tarefaBatch.getParametro("idFaturamentoGrupo");
 
-					// atualiza a data e a hora da realização da atividade com a
-					// data e
-					// a hora correntes
+				// atualiza a data e a hora da realização da atividade com a
+				// data e
+				// a hora correntes
 
-					getControladorFaturamento()
-							.atualizarDataHoraRealizacaoAtividade(
-									FaturamentoAtividade.GERAR_ARQUIVO_LEITURA,
-									anoMesFaturamentoGrupoLeitura,
-									idFaturamentoGrupo);
+				getControladorFaturamento().atualizarDataHoraRealizacaoAtividade(FaturamentoAtividade.GERAR_ARQUIVO_LEITURA, anoMesFaturamentoGrupoLeitura,
+						idFaturamentoGrupo);
 
-					break;
+				break;
 
-				case Funcionalidade.FATURAR_GRUPO_FATURAMENTO :
+			case Funcionalidade.FATURAR_GRUPO_FATURAMENTO:
 
-					FaturamentoGrupo faturamentoGrupo = (FaturamentoGrupo) tarefaBatch
-							.getParametro("faturamentoGrupo");
-					Integer atividade = (Integer) tarefaBatch
-							.getParametro("atividade");
-					
-					System.out
-							.println("**********************ENTROU PARA ATUALIZAR ANOMES:  "
-									+ faturamentoGrupo.getAnoMesReferencia()
-									+ "  ********************");
-					
-					
+				FaturamentoGrupo faturamentoGrupo = (FaturamentoGrupo) tarefaBatch.getParametro("faturamentoGrupo");
+				Integer atividade = (Integer) tarefaBatch.getParametro("atividade");
 
-					/*
-					 * Caso a atividade que esteja sendo executada, corresponda
-					 * a faturar grupo, atualiza o ano/mês de referência do
-					 * faturamento para o mês seguinte.
-					 */
-					if (atividade == FaturamentoAtividade.FATURAR_GRUPO
-							.intValue()) {
-						getControladorFaturamento()
-								.atualizarAnoMesReferenciaFaturamentoGrupo(
-										faturamentoGrupo,
-										faturamentoGrupo.getAnoMesReferencia(), atividade);
+				System.out.println("**********************ENTROU PARA ATUALIZAR ANOMES:  " + faturamentoGrupo.getAnoMesReferencia() + "  ********************");
+
+				/*
+				 * Caso a atividade que esteja sendo executada, corresponda a
+				 * faturar grupo, atualiza o ano/mês de referência do
+				 * faturamento para o mês seguinte.
+				 */
+				if (atividade == FaturamentoAtividade.FATURAR_GRUPO.intValue()) {
+					getControladorFaturamento().atualizarAnoMesReferenciaFaturamentoGrupo(faturamentoGrupo, faturamentoGrupo.getAnoMesReferencia(), atividade);
+				}
+
+				break;
+
+			case Funcionalidade.CONSISTIR_LEITURAS_E_CALCULAR_CONSUMOS:
+
+				FaturamentoGrupo faturamentoGrupoConsistirLeituras = (FaturamentoGrupo) tarefaBatch.getParametro("faturamentoGrupo");
+
+				System.out.println("**********************ENTROU PARA ATUALIZAR DATAHORA REALIZAÇÃO DA ATIVIDADE:  "
+						+ faturamentoGrupoConsistirLeituras.getId().toString() + "********************");
+
+				getControladorFaturamento().atualizarDataHoraRealizacaoAtividade(FaturamentoAtividade.CONSISTIR_LEITURAS_E_CALCULAR_CONSUMOS,
+						faturamentoGrupoConsistirLeituras.getAnoMesReferencia(), faturamentoGrupoConsistirLeituras.getId());
+
+				break;
+
+			case Funcionalidade.GERAR_HISTORICO_PARA_ENCERRAR_FATURAMENTO_MES:
+
+				/**
+				 * Item 12 do batch de encerrar faturamento do mês.
+				 */
+				// recupera o ano/mês de referência do faturamento
+				int anoMesFaturamentoSistemaParametro = sistemaParametros.getAnoMesFaturamento();
+
+				getControladorFaturamento().atualizarAnoMesFaturamento(anoMesFaturamentoSistemaParametro);
+
+				break;
+
+			case Funcionalidade.GERAR_HISTORICO_PARA_ENCERRAR_ARRECADACAO_MES:
+
+				/**
+				 * Item 11 do batch de encerrar arrecadação do mês.
+				 */
+				// recupera o ano/mês de referência da arrecadação
+				int anoMesArrecadacaoSistemaParametro = sistemaParametros.getAnoMesArrecadacao();
+
+				getControladorArrecadacao().atualizarAnoMesArrecadacao(anoMesArrecadacaoSistemaParametro);
+
+				break;
+
+			case Funcionalidade.GERAR_RESUMO_DEVEDORES_DUVIDOSOS:
+
+				Integer anoMesReferenciaContabil = (Integer) tarefaBatch.getParametro("anoMesReferenciaContabil");
+				ParametrosDevedoresDuvidosos parametrosDevedoresDuvidosos = getControladorFinanceiro().pesquisarParametrosDevedoresDuvidosos(
+						anoMesReferenciaContabil);
+				parametrosDevedoresDuvidosos.setDataProcessamento(new Date());
+				this.getControladorUtil().atualizar(parametrosDevedoresDuvidosos);
+
+				System.out.println("ENTROU PARA ATUALIZAR ANOMES:  " + anoMesReferenciaContabil);
+
+				break;
+
+			case Funcionalidade.GERAR_DADOS_DIARIOS_ARRECADACAO:
+
+				sistemaParametros.setDataHoraDadosDiariosArrecadacao(new Date());
+
+				System.out.println("**********************ENTROU PARA ATUALIZAR DATAHORA DA GERAÇÃO DOS DADOS********************");
+
+				getControladorUtil().atualizar(sistemaParametros);
+
+				break;
+
+			case Funcionalidade.INSERIR_RESUMO_ACOES_COBRANCA_CRONOGRAMA:
+
+				sistemaParametros.setDataHoraResumoAcoesCobranca(new Date());
+
+				System.out.println("**********************ENTROU PARA ATUALIZAR DATAHORA DO RESUMO DE AÇÕES DE COBRANÇA ********************");
+
+				getControladorUtil().atualizar(sistemaParametros);
+
+				break;
+
+			case Funcionalidade.GERAR_RESUMO_DIARIO_NEGATIVACAO:
+
+				// sistemaParametro =
+				// this.getControladorUtil().pesquisarParametrosDoSistema();
+				// Integer numeroExecucao =
+				// sistemaParametro.getNumeroExecucaoResumoNegativacao() + 1;
+				//
+				// // [UC0688] Gerar Resumo Diário da Negativação.
+				// //-------------------------------------------------------------------------------------------
+				// // Alterado por : Yara Taciane - data : 08/07/2008
+				// // Analista : Fátima Sampaio
+				// //-------------------------------------------------------------------------------------------
+				//
+				// //O sistema atualiza o número da execução do resumo da
+				// negativação na tabela SISTEMA_PARAMETROS mais um).
+				// sistemaParametro.setNumeroExecucaoResumoNegativacao(numeroExecucao);
+				// sistemaParametro.setUltimaAlteracao(new Date());
+				// this.getControladorUtil().atualizarSistemaParametro(sistemaParametro);
+				// System.out.println(" Fim --- > altualizado Sistema Parametro = "
+				// + sistemaParametro.getNumeroExecucaoResumoNegativacao());
+				// //-------------------------------------------------------------------------------------------
+				//
+
+				// System.out.println("**********************ENTROU  GERAR MOV. DE EXCLUSÃO NEGATIVADORES********************");
+				// Collection coll =
+				// getControladorSpcSerasa().consultarNegativadoresParaExclusaoMovimento();
+				// Integer[] idNegat = new Integer[coll.size()] ;
+				// Iterator it = coll.iterator();
+				// int i = 0;
+				// while(it.hasNext()){
+				// Negativador negativador = (Negativador)it.next();
+				// idNegat[i]= negativador.getId();
+				// i++;
+				// }
+				// Collection collRetorno =
+				// getControladorSpcSerasa().gerarMovimentoExclusaoNegativacao(idNegat);
+				// if(collRetorno != null){
+				// System.out.println("---> retornou da Exclusão <----");
+				// }
+
+				System.out.println(" Fim do Resumo Diário! ");
+
+				break;
+
+			case Funcionalidade.EXECUTAR_COMANDO_DE_NEGATIVACAO:
+				NegativacaoComando comando = (NegativacaoComando) tarefaBatch.getParametro("nComando");
+				Negativador negativador = (Negativador) tarefaBatch.getParametro("neg");
+
+				Object[] dadosInclusaoNegativacao = null;
+				Integer quantidadeInclusaoItemNegativacao = null;
+
+				if (comando.getIndicadorSimulacao() == NegativacaoComando.NAO_SIMULACAO) {
+					// [SB0012] - Gerar Arquivo TXT para envio ao negativador
+					dadosInclusaoNegativacao = getControladorSpcSerasa().pesquisarQuantidadeInclusaoNegativacao(comando.getId());
+					quantidadeInclusaoItemNegativacao = getControladorSpcSerasa().pesquisarQuantidadeInclusaoItemNegativacao(comando.getId());
+
+					Integer qtdRegistro = (Integer) dadosInclusaoNegativacao[2] + 1;
+
+					FiltroNegativadorMovimento filtroNegativadorMovimento = new FiltroNegativadorMovimento();
+					filtroNegativadorMovimento.adicionarParametro(new ParametroSimples(FiltroNegativadorMovimento.ID, (Integer) dadosInclusaoNegativacao[3]));
+
+					Collection colecaoNegativadorMovimento = getControladorUtil().pesquisar(filtroNegativadorMovimento, NegativadorMovimento.class.getName());
+
+					NegativadorMovimento negativadorMovimento = null;
+
+					if (colecaoNegativadorMovimento != null && !colecaoNegativadorMovimento.isEmpty()) {
+						negativadorMovimento = (NegativadorMovimento) colecaoNegativadorMovimento.iterator().next();
 					}
 
-					break;
+					this.getControladorSpcSerasa().gerarArquivoNegativacao(comando.getId(), (Integer) dadosInclusaoNegativacao[3], negativador.getId(),
+							negativadorMovimento, true);
 
-				case Funcionalidade.CONSISTIR_LEITURAS_E_CALCULAR_CONSUMOS :
+					NegativadorContrato contrato = getControladorSpcSerasa().consultarNegativadorContratoVigente(comando.getNegativador().getId());
+					contrato.setNumeroSequencialEnvio(negativadorMovimento.getNumeroSequencialEnvio());
 
-					FaturamentoGrupo faturamentoGrupoConsistirLeituras = (FaturamentoGrupo) tarefaBatch
-							.getParametro("faturamentoGrupo");
-					
-	
-					System.out
-							.println("**********************ENTROU PARA ATUALIZAR DATAHORA REALIZAÇÃO DA ATIVIDADE:  "
-									+ faturamentoGrupoConsistirLeituras.getId()
-											.toString()
-									+ "********************");
-
-					getControladorFaturamento()
-							.atualizarDataHoraRealizacaoAtividade(
-									FaturamentoAtividade.CONSISTIR_LEITURAS_E_CALCULAR_CONSUMOS,
-									faturamentoGrupoConsistirLeituras.getAnoMesReferencia(),
-									faturamentoGrupoConsistirLeituras.getId());
-
-					break;
-
-				case Funcionalidade.GERAR_HISTORICO_PARA_ENCERRAR_FATURAMENTO_MES :
-
-					/**
-					 * Item 12 do batch de encerrar faturamento do mês.
-					 */
-					// recupera o ano/mês de referência do faturamento
-					int anoMesFaturamentoSistemaParametro = sistemaParametros
-							.getAnoMesFaturamento();
-
-					getControladorFaturamento().atualizarAnoMesFaturamento(
-							anoMesFaturamentoSistemaParametro);
-
-					break;
-
-				case Funcionalidade.GERAR_HISTORICO_PARA_ENCERRAR_ARRECADACAO_MES :
-
-					/**
-					 * Item 11 do batch de encerrar arrecadação do mês.
-					 */
-					// recupera o ano/mês de referência da arrecadação
-					int anoMesArrecadacaoSistemaParametro = sistemaParametros
-							.getAnoMesArrecadacao();
-
-					getControladorArrecadacao().atualizarAnoMesArrecadacao(
-							anoMesArrecadacaoSistemaParametro);
-
-					break;
-					
-					
-				case Funcionalidade.GERAR_RESUMO_DEVEDORES_DUVIDOSOS :
-
-					Integer anoMesReferenciaContabil = (Integer) tarefaBatch.getParametro("anoMesReferenciaContabil");
-					ParametrosDevedoresDuvidosos parametrosDevedoresDuvidosos = getControladorFinanceiro().pesquisarParametrosDevedoresDuvidosos(anoMesReferenciaContabil);
-					parametrosDevedoresDuvidosos.setDataProcessamento(new Date());
-					this.getControladorUtil().atualizar(parametrosDevedoresDuvidosos);
-					
-					System.out.println("ENTROU PARA ATUALIZAR ANOMES:  " + anoMesReferenciaContabil);
-					
-
-					break;
-					
-				case Funcionalidade.GERAR_DADOS_DIARIOS_ARRECADACAO :
-
-					sistemaParametros.setDataHoraDadosDiariosArrecadacao(new Date());
-
-					System.out
-							.println("**********************ENTROU PARA ATUALIZAR DATAHORA DA GERAÇÃO DOS DADOS********************");
-
-					getControladorUtil().atualizar(sistemaParametros);
-
-					break;
-					
-				case Funcionalidade.INSERIR_RESUMO_ACOES_COBRANCA_CRONOGRAMA :
-
-					sistemaParametros.setDataHoraResumoAcoesCobranca(new Date());
-
-					System.out.println("**********************ENTROU PARA ATUALIZAR DATAHORA DO RESUMO DE AÇÕES DE COBRANÇA ********************");
-
-					getControladorUtil().atualizar(sistemaParametros);
-
-					break;
-					
-					
-				case Funcionalidade.GERAR_RESUMO_DIARIO_NEGATIVACAO :					
-					
-//					sistemaParametro = this.getControladorUtil().pesquisarParametrosDoSistema();
-//			     	Integer numeroExecucao = sistemaParametro.getNumeroExecucaoResumoNegativacao() + 1;			     	
-//					
-//					 // [UC0688] Gerar Resumo Diário da Negativação.
-//			        //-------------------------------------------------------------------------------------------
-//					// Alterado por :  Yara Taciane  - data : 08/07/2008 
-//					// Analista :  Fátima Sampaio
-//			        //-------------------------------------------------------------------------------------------
-//					
-//					//O sistema atualiza o número da execução do resumo da negativação na tabela SISTEMA_PARAMETROS mais um).
-//					sistemaParametro.setNumeroExecucaoResumoNegativacao(numeroExecucao);
-//					sistemaParametro.setUltimaAlteracao(new Date());
-//					this.getControladorUtil().atualizarSistemaParametro(sistemaParametro);
-//					System.out.println(" Fim --- > altualizado Sistema Parametro = "  + sistemaParametro.getNumeroExecucaoResumoNegativacao());
-//					//-------------------------------------------------------------------------------------------
-//						
-					
-//					System.out.println("**********************ENTROU  GERAR MOV. DE EXCLUSÃO NEGATIVADORES********************");
-//					Collection coll = getControladorSpcSerasa().consultarNegativadoresParaExclusaoMovimento();
-//					Integer[] idNegat = new  Integer[coll.size()] ; 
-//					Iterator it = coll.iterator();
-//					int i = 0;
-//					while(it.hasNext()){
-//						Negativador negativador = (Negativador)it.next();
-//						idNegat[i]= negativador.getId();
-//						i++;
-//					}
-//				    Collection collRetorno = getControladorSpcSerasa().gerarMovimentoExclusaoNegativacao(idNegat);
-//				    if(collRetorno != null){
-//				    	System.out.println("---> retornou da Exclusão <----");
-//				    }							
-				    
-					System.out.println(" Fim do Resumo Diário! ");
-
-					break;		
-					
-				case Funcionalidade.EXECUTAR_COMANDO_DE_NEGATIVACAO :
-					NegativacaoComando nComando = (NegativacaoComando) tarefaBatch.getParametro("nComando");
-					Negativador neg = (Negativador) tarefaBatch.getParametro("neg");
-									
-					Object[] obj = null;
-					Integer qtd = null;
-					
-					//4.2 Caso o comando não seja uma simulação
-					if (nComando.getIndicadorSimulacao() == NegativacaoComando.NAO_SIMULACAO) { 
-						// 4.2.1 [SB0012] - Gerar Arquivo TXT para envio ao negativador
-
-						obj = getControladorSpcSerasa().pesquisarQuantidadeInclusaoNegativacao(nComando.getId());
-						qtd = getControladorSpcSerasa().pesquisarQuantidadeInclusaoItemNegativacao(nComando.getId());
-						
-						//Soma o registro do trailler
-						Integer qtdRegistro = (Integer)obj[2] + 1;
-						this.getControladorSpcSerasa().gerarArquivoInclusao(nComando.getId(),(Integer)obj[3],neg.getId());
-
-						FiltroNegativadorMovimento fnm = new FiltroNegativadorMovimento();
-						fnm.adicionarParametro(new ParametroSimples(FiltroNegativadorMovimento.ID,(Integer)obj[3]));
-						Collection colecaoNegativadorMovimento  = getControladorUtil().pesquisar(fnm,NegativadorMovimento.class.getName());
-						NegativadorMovimento nm = null;
-						if (colecaoNegativadorMovimento != null && !colecaoNegativadorMovimento.isEmpty()) {
-							nm = (NegativadorMovimento)colecaoNegativadorMovimento.iterator().next();
-						}
-						Negativador n = nComando.getNegativador();
-
-						//4.2.2
-						NegativadorContrato nContrato = getControladorSpcSerasa().consultarNegativadorContratoVigente(n.getId());
-						nContrato.setNumeroSequencialEnvio(nm.getNumeroSequencialEnvio());
-						if(nContrato.getNumeroInclusoesEnviadas() != null){
-						  nContrato.setNumeroInclusoesEnviadas(nContrato.getNumeroInclusoesEnviadas() + (Integer)obj[0]);
-						}else{
-						  nContrato.setNumeroInclusoesEnviadas((Integer)obj[0]);	  
-						}
-						getControladorUtil().atualizar(nContrato);
-
-						//4.2.3
-						nm.setNumeroRegistrosEnvio(qtdRegistro);
-						nm.setValorTotalEnvio((BigDecimal)obj[1]);
-						
-						getControladorUtil().atualizar(nm);
-
-					}else{
-						obj = getControladorSpcSerasa().pesquisarQuantidadeInclusaoNegativacaoSimulacao(nComando.getId());
-						qtd = (Integer)obj[2];
+					if (contrato.getNumeroInclusoesEnviadas() != null) {
+						contrato.setNumeroInclusoesEnviadas(contrato.getNumeroInclusoesEnviadas() + (Integer) dadosInclusaoNegativacao[0]);
+					} else {
+						contrato.setNumeroInclusoesEnviadas((Integer) dadosInclusaoNegativacao[0]);
 					}
-					
-					//4.1 
-					nComando.setDataHoraRealizacao(new Date());
-					nComando.setQuantidadeInclusoes((Integer)obj[0]);
-					nComando.setValorDebito((BigDecimal)obj[1]);
-					nComando.setQuantidadeItensIncluidos(qtd);
-					nComando.setUltimaAlteracao(new Date());
 
-					getControladorUtil().atualizar(nComando);
-					
-					NegativacaoComando.resetQuantidadeImoveisJaIncluidos();
-					NegativadorMovimentoReg.resetNumeroProximoRegistro();
-					
-					System.out.println("**********************SAIU  GERAR MOV. DE INCLUSÃO NEGATIVADORES********************");
+					getControladorUtil().atualizar(contrato);
 
-					break;	
-					
-				case Funcionalidade.GERAR_MOVIMENTO_EXTENSAO_CONTAS_COBRANCA_POR_EMPRESA :
+					negativadorMovimento.setNumeroRegistrosEnvio(qtdRegistro);
+					negativadorMovimento.setValorTotalEnvio((BigDecimal) dadosInclusaoNegativacao[1]);
 
-					Collection colecaoComandoEmpresaCobrancaContaExtensao = (Collection) tarefaBatch
-						.getParametro("colecaoComandoEmpresaCobrancaContaExtensao");
+					getControladorUtil().atualizar(negativadorMovimento);
 
-						if (colecaoComandoEmpresaCobrancaContaExtensao != null
-								&& !colecaoComandoEmpresaCobrancaContaExtensao
-										.isEmpty()) {
-		
-							Iterator it = colecaoComandoEmpresaCobrancaContaExtensao
-									.iterator();
-		
-							while (it.hasNext()) {
-								
-								ComandoEmpresaCobrancaContaExtensao comandoEmpresaCobrancaContaExtensao = 
-									(ComandoEmpresaCobrancaContaExtensao) it.next();
-		
-								comandoEmpresaCobrancaContaExtensao
-										.setDataExecucao(new Date());
-								
-								comandoEmpresaCobrancaContaExtensao
-										.setUltimaAlteracao(new Date());
-		
-								getControladorUtil().atualizar(
-										comandoEmpresaCobrancaContaExtensao);
-							}
-						}
-					break;
+				} else {
+					dadosInclusaoNegativacao = getControladorSpcSerasa().pesquisarQuantidadeInclusaoNegativacaoSimulacao(comando.getId());
+					quantidadeInclusaoItemNegativacao = (Integer) dadosInclusaoNegativacao[2];
+				}
+
+				comando.setDataHoraRealizacao(new Date());
+				comando.setQuantidadeInclusoes((Integer) dadosInclusaoNegativacao[0]);
+				comando.setValorDebito((BigDecimal) dadosInclusaoNegativacao[1]);
+				comando.setQuantidadeItensIncluidos(quantidadeInclusaoItemNegativacao);
+				comando.setUltimaAlteracao(new Date());
+
+				getControladorUtil().atualizar(comando);
+
+				NegativacaoComando.resetQuantidadeImoveisJaIncluidos();
+				NegativadorMovimentoReg.resetNumeroProximoRegistro();
+
+				logger.info("******************** FIM EXECUTAR COMANDO NEGATIVAÇÃO ********************");
+
+				break;
+
+			case Funcionalidade.GERAR_MOVIMENTO_EXTENSAO_CONTAS_COBRANCA_POR_EMPRESA:
+
+				Collection colecaoComandoEmpresaCobrancaContaExtensao = (Collection) tarefaBatch.getParametro("colecaoComandoEmpresaCobrancaContaExtensao");
+
+				if (colecaoComandoEmpresaCobrancaContaExtensao != null && !colecaoComandoEmpresaCobrancaContaExtensao.isEmpty()) {
+
+					Iterator it = colecaoComandoEmpresaCobrancaContaExtensao.iterator();
+
+					while (it.hasNext()) {
+
+						ComandoEmpresaCobrancaContaExtensao comandoEmpresaCobrancaContaExtensao = (ComandoEmpresaCobrancaContaExtensao) it.next();
+
+						comandoEmpresaCobrancaContaExtensao.setDataExecucao(new Date());
+
+						comandoEmpresaCobrancaContaExtensao.setUltimaAlteracao(new Date());
+
+						getControladorUtil().atualizar(comandoEmpresaCobrancaContaExtensao);
+					}
+				}
+				break;
 			}
 
-			 // 29/10/2008 - Yara T. Souza
-			  System.out.println("Saiu do finalizador ");
-			
-			
-			// Se ocorrer algum erro com o finalizador a funcionalidadeIniciada
-			// é marcada como CONCLUIDA_COM_ERRO
-		} catch (ControladorException ex) {
-			this.funcionalidadeSituacao
-					.setId(FuncionalidadeSituacao.CONCLUIDA_COM_ERRO);
-		} catch (IOException ex) {
-			this.funcionalidadeSituacao
-					.setId(FuncionalidadeSituacao.CONCLUIDA_COM_ERRO);
-		} catch (ClassNotFoundException ex) {
-			this.funcionalidadeSituacao
-					.setId(FuncionalidadeSituacao.CONCLUIDA_COM_ERRO);
-		}
+			System.out.println("Saiu do finalizador ");
 
+			// Caso ocorra erro com o finalizador seta a funcionalidadeIniciada para CONCLUIDA_COM_ERRO
+		} catch (ControladorException ex) {
+			this.funcionalidadeSituacao.setId(FuncionalidadeSituacao.CONCLUIDA_COM_ERRO);
+		} catch (IOException ex) {
+			this.funcionalidadeSituacao.setId(FuncionalidadeSituacao.CONCLUIDA_COM_ERRO);
+		} catch (ClassNotFoundException ex) {
+			this.funcionalidadeSituacao.setId(FuncionalidadeSituacao.CONCLUIDA_COM_ERRO);
+		}
 	}
 
-	/**
-	 * Retorna o valor de controladorArrecadacao
-	 * 
-	 * @return O valor de controladorCliente
-	 */
 	private ControladorArrecadacaoLocal getControladorArrecadacao() {
 		ControladorArrecadacaoLocalHome localHome = null;
 		ControladorArrecadacaoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorArrecadacaoLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_ARRECADACAO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorArrecadacaoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_ARRECADACAO_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -563,18 +490,11 @@ public class FuncionalidadeIniciada implements Serializable {
 	private ControladorFaturamentoLocal getControladorFaturamento() {
 		ControladorFaturamentoLocalHome localHome = null;
 		ControladorFaturamentoLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorFaturamentoLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorFaturamentoLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FATURAMENTO_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -586,21 +506,13 @@ public class FuncionalidadeIniciada implements Serializable {
 	}
 
 	private ControladorUtilLocal getControladorUtil() {
-
 		ControladorUtilLocalHome localHome = null;
 		ControladorUtilLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorUtilLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_UTIL_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas à
-			// objetos remotamente
+			localHome = (ControladorUtilLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_UTIL_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -612,26 +524,14 @@ public class FuncionalidadeIniciada implements Serializable {
 
 	}
 
-	/**
-	 * Retorna o valor de controladorFinanceiro
-	 * 
-	 * @return O valor de controladorLocalidade
-	 */
 	private ControladorFinanceiroLocal getControladorFinanceiro() {
 		ControladorFinanceiroLocalHome localHome = null;
 		ControladorFinanceiroLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorFinanceiroLocalHome) locator
-					.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FINANCEIRO_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
+			localHome = (ControladorFinanceiroLocalHome) locator.getLocalHomePorEmpresa(ConstantesJNDI.CONTROLADOR_FINANCEIRO_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -641,23 +541,15 @@ public class FuncionalidadeIniciada implements Serializable {
 			throw new SistemaException(e);
 		}
 	}
-	
-	
+
 	private ControladorSpcSerasaLocal getControladorSpcSerasa() {
 		ControladorSpcSerasaLocalHome localHome = null;
 		ControladorSpcSerasaLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorSpcSerasaLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_SPC_SERASA_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
+			localHome = (ControladorSpcSerasaLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_SPC_SERASA_SEJB);
 			local = localHome.create();
 
 			return local;
@@ -666,11 +558,5 @@ public class FuncionalidadeIniciada implements Serializable {
 		} catch (ServiceLocatorException e) {
 			throw new SistemaException(e);
 		}
-
 	}
-	
-	
-	
-	
-	
 }

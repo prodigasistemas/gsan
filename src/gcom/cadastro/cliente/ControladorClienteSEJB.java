@@ -3190,4 +3190,38 @@ public class ControladorClienteSEJB implements SessionBean {
 	public Collection<Cliente> pesquisarClientePorCpfCnpj(String cpfCnpj) throws Exception{
 		return repositorioCliente.pesquisarClientePorCpfCnpj(cpfCnpj);
 	}
+	
+	/**
+	 * [UC0671] Gerar Movimento de Inclusão de Negativação
+	 * [SB0005] - Gerar Negativação para o Imóvel
+	 */
+	public Short pesquisarIndicadorNegativacaoPeriodoClienteResponsavel(
+			Integer idImovel, Integer idClienteRelacaoTipo) throws ControladorException {
+		try{
+		  return repositorioClienteImovel.pesquisarIndicadorNegativacaoPeriodoClienteResponsavel(idImovel, idClienteRelacaoTipo);
+		} catch (ErroRepositorioException ex) {
+	        throw new ControladorException("erro.sistema", ex);
+	    }
+	}
+	
+	public boolean existeEnderecoParaCliente(Integer idCliente) throws ControladorException {
+		try {
+			boolean retorno = false;
+			Integer idEnderecoCliente = repositorioCliente.pesquisarEnderecoClienteParaNegativacao(idCliente);
+			if (idEnderecoCliente != null) {
+				retorno = true;
+			}
+			return retorno;
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	
+	public Cliente pesquisarDadosClienteParaNegativacao(Integer idCliente, String cnpjEmpresa) throws ControladorException {
+		try {
+			return repositorioCliente.pesquisarDadosClienteParaNegativacao(idCliente, cnpjEmpresa);
+		} catch (ErroRepositorioException ex) {
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
 }

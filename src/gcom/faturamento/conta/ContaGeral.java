@@ -43,6 +43,10 @@ public class ContaGeral implements Serializable {
 		this.debitoAutomaticoMovimentos = debitoAutomaticoMovimentos;
 	}
 
+	public ContaGeral(Integer id) {
+		this.id = id;
+	}
+
 	public ContaImpressao getContaImpressao() {
 		return this.contaImpressao;
 	}
@@ -112,6 +116,4 @@ public class ContaGeral implements Serializable {
 	public void setContaHistorico(ContaHistorico contaHistorico) {
 		this.contaHistorico = contaHistorico;
 	}
-	
-	
 }

@@ -11,6 +11,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
+import org.hibernate.Session;
+
 
 /**
  * Interface para o repositório de financeiro
@@ -1876,7 +1878,7 @@ public interface IRepositorioFinanceiro {
 	 * @throws ErroRepositorioException
 	 */
 	public void removerDocumentosAReceberResumo(
-			int anoMesReferenciaRecebimentos, Integer idLocalidade)
+			int anoMesReferenciaRecebimentos, Integer idLocalidade, Session session)
 			throws ErroRepositorioException ;
 	
 	/**
@@ -1891,7 +1893,7 @@ public interface IRepositorioFinanceiro {
 	 * @throws ErroRepositorioException
 	 */
 	public Collection<Object[]> pesquisarContasAReceberParaResumo(
-			int anoMesReferenciaContabil, Integer idLocalidade) throws ErroRepositorioException ;
+			int anoMesReferenciaContabil, Integer idLocalidade, Session session) throws ErroRepositorioException ;
 	
 	/**
 	 * [UC0989] Gerar Resumo de Documentos a Receber 
@@ -1905,7 +1907,7 @@ public interface IRepositorioFinanceiro {
 	 * @throws ErroRepositorioException
 	 */
 	public Collection<Object[]> pesquisarGuiasPagamentoAReceberParaResumo(
-			int anoMesReferenciaContabil, Integer idLocalidade) throws ErroRepositorioException ;
+			int anoMesReferenciaContabil, Integer idLocalidade, Session session) throws ErroRepositorioException ;
 	
 	/**
 	 * [UC0989] Gerar Resumo de Documentos a Receber 
@@ -1919,7 +1921,7 @@ public interface IRepositorioFinanceiro {
 	 * @throws ErroRepositorioException
 	 */
 	public Collection<Object[]> pesquisarDebitosACobrarAReceberParaResumo(
-			int anoMesReferenciaContabil, Integer idLocalidade) throws ErroRepositorioException ;
+			int anoMesReferenciaContabil, Integer idLocalidade, Session session) throws ErroRepositorioException ;
 	
 	/**
 	 * [UC0989] Gerar Resumo de Documentos a Receber 
@@ -1933,7 +1935,7 @@ public interface IRepositorioFinanceiro {
 	 * @throws ErroRepositorioException
 	 */
 	public Collection<Object[]> pesquisarCreditosARealizarAReceberParaResumo(
-			int anoMesReferenciaContabil, Integer idLocalidade) throws ErroRepositorioException ;
+			int anoMesReferenciaContabil, Integer idLocalidade, Session session) throws ErroRepositorioException ;
 	
 	/**
 	 * 
@@ -2372,7 +2374,7 @@ public interface IRepositorioFinanceiro {
 	 * @param idLocalidade
 	 * @throws ErroRepositorioException
 	 */
-	public void removerDocumentosAReceberFaixaResumo(int anoMesReferenciaRecebimentos, Integer idLocalidade) throws ErroRepositorioException;
+	public void removerDocumentosAReceberFaixaResumo(int anoMesReferenciaRecebimentos, Integer idLocalidade, Session session) throws ErroRepositorioException;
 	
 	/**
 	 * Este metódo é utilizado para pesquisar os registros q serão

@@ -3,7 +3,6 @@ package gcom.cobranca;
 import gcom.arrecadacao.ArrecadacaoForma;
 import gcom.arrecadacao.Arrecadador;
 import gcom.arrecadacao.ArrecadadorContratoTarifa;
-import gcom.arrecadacao.ControladorArrecadacao;
 import gcom.arrecadacao.ControladorArrecadacaoLocal;
 import gcom.arrecadacao.ControladorArrecadacaoLocalHome;
 import gcom.arrecadacao.DeducaoTipo;
@@ -69,7 +68,6 @@ import gcom.cadastro.EnvioEmail;
 import gcom.cadastro.IRepositorioCadastro;
 import gcom.cadastro.RepositorioCadastroHBM;
 import gcom.cadastro.cliente.Cliente;
-import gcom.cadastro.cliente.ClienteConta;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteGuiaPagamento;
 import gcom.cadastro.cliente.ClienteImovel;
@@ -7650,21 +7648,6 @@ public class ControladorCobranca implements SessionBean {
 			imovelNaoGerado.setImovel(imovel);
 			imovelNaoGerado.setUltimaAlteracao(new Date());
 
-			// situação especifica para o usuario Mario Gouveia
-			// Integer idImovelMario = getControladorImovel()
-			// .verificarExistenciaImovelParaCliente(imovel.getId());
-			// if (idImovelMario != null) {
-			// MotivoNaoGeracaoDocCobranca motivoNaoGeracao =
-			// new MotivoNaoGeracaoDocCobranca();
-			// motivoNaoGeracao.setId(MotivoNaoGeracaoDocCobranca.IMOVEL_MARIO);
-			// imovelNaoGerado.setMotivoNaoGeracaoDocCobranca(motivoNaoGeracao);
-			//
-			// getControladorUtil().inserir(imovelNaoGerado);
-			// imovelNaoGerado = null;
-			// // retorna o objeto vazio e passa para o próximo imóvel
-			// return gerarAtividadeAcaoCobrancaHelper;
-			// }
-
 			// Caso o imovel esteja excluido, passar para o proximo imovel
 			Integer idImovel = getControladorImovel().verificarExistenciaImovel(imovel.getId());
 			if (idImovel == null) {
@@ -8158,154 +8141,6 @@ public class ControladorCobranca implements SessionBean {
 		// o critério de cobrança)
 		verificarCriterioCobrancaParaImovelHelper.setFlagCriterioCobrancaImovel(false);
 
-		// pesquisar a colecao de criterios para situacao ligacao agua, esgoto e
-		// cobranca
-		// FiltroCriterioSituacaoLigacaoAgua filtroCritSitAgua = new
-		// FiltroCriterioSituacaoLigacaoAgua();
-		// filtroCritSitAgua.adicionarParametro(new ParametroSimples(
-		// FiltroCriterioSituacaoLigacaoAgua.COBRANCA_CRITERIO_ID,
-		// cobrancaCriterio.getId()));
-		// filtroCritSitAgua.adicionarCaminhoParaCarregamentoEntidade(FiltroCriterioSituacaoLigacaoAgua.LIGACAO_AGUA_SITUACAO);
-		// Collection colecaoSituacoesLigacaoAgua =
-		// getControladorUtil().pesquisar(filtroCritSitAgua,
-		// CriterioSituacaoLigacaoAgua.class.getName());
-
-		// Item 1 - Alterado em 10/06/08 por Ana Breda / Desenvolvedor:
-		// Francisco
-		// Caso a situação da ligação de agua do imovel nao esteja contida no
-		// conjunto
-		// de situacoes de agua do criterio, passar para o proximo imovel
-		// Collection colecaoSituacoesLigacaoAgua =
-		// cobrancaCriterio.getCriteriosSituacaoLigacaoAgua();
-		// boolean situacaoLigacaoAguaValida = false;
-		// if (colecaoSituacoesLigacaoAgua != null &&
-		// !colecaoSituacoesLigacaoAgua.isEmpty()){
-		// for (Iterator iter = colecaoSituacoesLigacaoAgua.iterator(); iter
-		// .hasNext();) {
-		// CriterioSituacaoLigacaoAgua critSitLigAgua =
-		// (CriterioSituacaoLigacaoAgua) iter.next();
-		// if
-		// (critSitLigAgua.getComp_id().getLigacaoAguaSituacao().getId().intValue()
-		// ==
-		// imovel.getLigacaoAguaSituacao().getId().intValue()){
-		// situacaoLigacaoAguaValida = true;
-		// break;
-		// }
-		// }
-		// if (!situacaoLigacaoAguaValida) {
-		//
-		// MotivoNaoGeracaoDocCobranca motivoNaoGeracao =
-		// new MotivoNaoGeracaoDocCobranca();
-		// motivoNaoGeracao.setId(MotivoNaoGeracaoDocCobranca.SITUACAO_LIGACAO_AGUA_INVALIDA);
-		// imovelNaoGerado.setMotivoNaoGeracaoDocCobranca(motivoNaoGeracao);
-		//
-		// getControladorUtil().inserir(imovelNaoGerado);
-		//
-		// imovelNaoGerado = null;
-		// // retorna a verificacao falsa passa para o próximo imóvel
-		// return verificarCriterioCobrancaParaImovelHelper;
-		// }
-		// } else {
-		// if ((acaoCobranca.getLigacaoAguaSituacao() != null)
-		// && (acaoCobranca.getLigacaoAguaSituacao().getId().intValue() !=
-		// imovel
-		// .getLigacaoAguaSituacao().getId().intValue())) {
-		//
-		// MotivoNaoGeracaoDocCobranca motivoNaoGeracao =
-		// new MotivoNaoGeracaoDocCobranca();
-		// motivoNaoGeracao.setId(MotivoNaoGeracaoDocCobranca.SITUACAO_LIGACAO_AGUA_INVALIDA);
-		// imovelNaoGerado.setMotivoNaoGeracaoDocCobranca(motivoNaoGeracao);
-		//
-		// getControladorUtil().inserir(imovelNaoGerado);
-		//
-		// imovelNaoGerado = null;
-		//
-		// return verificarCriterioCobrancaParaImovelHelper;
-		// }
-		// }
-
-		// pesquisar a colecao de criterios para situacao ligacao esgoto
-		// FiltroCriterioSituacaoLigacaoEsgoto filtroCritSitEsgoto = new
-		// FiltroCriterioSituacaoLigacaoEsgoto();
-		// filtroCritSitEsgoto.adicionarParametro(new ParametroSimples(
-		// FiltroCriterioSituacaoLigacaoEsgoto.COBRANCA_CRITERIO_ID,
-		// cobrancaCriterio.getId()));
-		// filtroCritSitEsgoto.adicionarCaminhoParaCarregamentoEntidade(FiltroCriterioSituacaoLigacaoEsgoto.LIGACAO_ESGOTO_SITUACAO);
-		// Collection colecaoSituacoesLigacaoEsgoto =
-		// getControladorUtil().pesquisar(filtroCritSitEsgoto,
-		// CriterioSituacaoLigacaoEsgoto.class.getName());
-
-		// Item 2 - Alterado em 10/06/08 por Ana Breda / Desenvolvedor:
-		// Francisco
-		// Caso a situação da ligação de esgoto do imovel nao esteja contida no
-		// conjunto
-		// de situacoes de esgoto do criterio, passar para o proximo imovel
-		// Collection colecaoSituacoesLigacaoEsgoto =
-		// cobrancaCriterio.getCriteriosSituacaoLigacaoEsgoto();
-		// boolean situacaoLigacaoEsgotoValida = false;
-		// if (colecaoSituacoesLigacaoEsgoto != null &&
-		// !colecaoSituacoesLigacaoEsgoto.isEmpty()){
-		// for (Iterator iter = colecaoSituacoesLigacaoEsgoto.iterator(); iter
-		// .hasNext();) {
-		// CriterioSituacaoLigacaoEsgoto critSitLigEsgoto =
-		// (CriterioSituacaoLigacaoEsgoto) iter.next();
-		// if
-		// (critSitLigEsgoto.getComp_id().getLigacaoEsgotoSituacao().getId().intValue()
-		// ==
-		// imovel.getLigacaoEsgotoSituacao().getId().intValue()){
-		// situacaoLigacaoEsgotoValida = true;
-		// break;
-		// }
-		// }
-		// if (!situacaoLigacaoEsgotoValida) {
-		//
-		// MotivoNaoGeracaoDocCobranca motivoNaoGeracao =
-		// new MotivoNaoGeracaoDocCobranca();
-		// motivoNaoGeracao.setId(MotivoNaoGeracaoDocCobranca.SITUACAO_LIGACAO_ESGOTO_INVALIDA);
-		// imovelNaoGerado.setMotivoNaoGeracaoDocCobranca(motivoNaoGeracao);
-		//
-		// getControladorUtil().inserir(imovelNaoGerado);
-		//
-		// imovelNaoGerado = null;
-		//
-		// // retorna a verificacao falsa passa para o próximo imóvel
-		// return verificarCriterioCobrancaParaImovelHelper;
-		// }
-		// } else {
-		// if ((acaoCobranca.getLigacaoEsgotoSituacao() != null)
-		// && (acaoCobranca.getLigacaoEsgotoSituacao().getId().intValue() !=
-		// imovel
-		// .getLigacaoEsgotoSituacao().getId().intValue())) {
-		//
-		// MotivoNaoGeracaoDocCobranca motivoNaoGeracao =
-		// new MotivoNaoGeracaoDocCobranca();
-		// motivoNaoGeracao.setId(MotivoNaoGeracaoDocCobranca.SITUACAO_LIGACAO_ESGOTO_INVALIDA);
-		// imovelNaoGerado.setMotivoNaoGeracaoDocCobranca(motivoNaoGeracao);
-		//
-		// getControladorUtil().inserir(imovelNaoGerado);
-		//
-		// imovelNaoGerado = null;
-		//
-		// return verificarCriterioCobrancaParaImovelHelper;
-		// }
-		//
-		// }
-
-		// RETIRAR POSTERIORMENTE
-		// RAFAEL CORRÊA LIMA E SILVA
-		// 22/11/2007
-
-		/*
-		 * Cep cep = getControladorImovel().pesquisarCepImovel(imovel);
-		 * 
-		 * if (cep == null || cep.getCepId().equals(new Integer("5"))) { return
-		 * verificarCriterioCobrancaParaImovelHelper; }
-		 */
-
-		// RETIRAR POSTERIORMENTE
-		// RAFAEL CORRÊA LIMA E SILVA
-		// 22/11/2007
-
 		// item 1
 		// se o indicador de emissão da ação de cobrança para imóvel,com
 		// situação especial de cobrança
@@ -8465,6 +8300,21 @@ public class ControladorCobranca implements SessionBean {
 			indicadorConta = 2;
 		}
 
+		try {
+			int totalContas = repositorioCobranca.pesquisarQuantidadeContasVencidasPorImovel(
+					new Integer(matriculaImovel), indicadorPagamento, indicadorConta, 3);
+			
+			if (totalContas > 1) {
+				Date dataAtual = Util.subtrairNumeroDiasDeUmaData(new Date(), 1);
+				SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+				dataVencimentoFinal = formato.parse(formato.format(dataAtual));
+			}
+		} catch (ErroRepositorioException e) {
+			e.printStackTrace();
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
 		// obtém o débito do imóvel
 		ObterDebitoImovelOuClienteHelper debitoImovel = this.obterDebitoImovelOuCliente(indicadorDebitoImovel, matriculaImovel,
 				codigoCliente, clienteRelacaoTipo, anoMesReferenciaInicial, anoMesReferenciaFinal, dataVencimentoInicial,
@@ -18346,7 +18196,7 @@ public class ControladorCobranca implements SessionBean {
 				parcelamentoItem = (ParcelamentoItem) parcelamentoItemIterator.next();
 
 				codigoImovel = parcelamentoItem.getParcelamento().getImovel().getId();
-
+				
 				if (parcelamentoItem.getContaGeral() != null && parcelamentoItem.getContaGeral().getConta() != null) {
 					int situacaoAtual = 0;
 
@@ -18474,6 +18324,8 @@ public class ControladorCobranca implements SessionBean {
 							anoMesReferenciaContabil);
 				}
 			}
+			
+			repositorioCobranca.atualizarDocumentoDeCobrancaHistorico(codigoImovel, codigo);
 
 			if (codigoImovel != null) {
 				FiltroConta filtroConta = new FiltroConta();
@@ -25083,7 +24935,16 @@ public class ControladorCobranca implements SessionBean {
 		SistemaParametro sistemaParametro = this.getControladorUtil().pesquisarParametrosDoSistema();
 
 		BigDecimal valorTaxa = new BigDecimal("0.00");
-		logger.info("[ " + imovel.getId() + "	- gerarDocumentoCobranca ]");
+		
+		if(imovel != null) {
+			logger.info("[ imovel: " + imovel.getId() + "	- gerarDocumentoCobranca]");
+			
+		}
+		
+		if(cliente != null) {
+			logger.info("[ cliente: " + cliente.getId() + "	- gerarDocumentoCobranca]");
+			
+		}
 		
 		/*
 		 * Caso tenha sido passado o parâmetro imovel, bem como esteja indicado que é para gerar a taxa de cobrança (indicador de geração de taxa de
@@ -25236,8 +25097,16 @@ public class ControladorCobranca implements SessionBean {
 		} else {
 			documentoCobranca.setValorAcrescimos(new BigDecimal("0.00"));
 		}
-		logger.info("[ " + imovel.getId() + "	- documentoCobranca.getValorAcrescimos:  " + documentoCobranca.getValorAcrescimos() + "]");
-		logger.info("[ " + imovel.getId() + "	- documentoCobranca.getValorDocumento:  " + documentoCobranca.getValorDocumento() + "]");
+		
+		if(imovel != null) {
+			logger.info("[ " + imovel.getId() + "	- documentoCobranca.getValorAcrescimos:  " + documentoCobranca.getValorAcrescimos() + "]");
+			logger.info("[ " + imovel.getId() + "	- documentoCobranca.getValorDocumento:  " + documentoCobranca.getValorDocumento() + "]");
+		}
+		
+		if(cliente != null) {
+			logger.info("[ " + cliente.getId() + "	- documentoCobranca.getValorAcrescimos:  " + documentoCobranca.getValorAcrescimos() + "]");
+			logger.info("[ " + cliente.getId() + "	- documentoCobranca.getValorDocumento:  " + documentoCobranca.getValorDocumento() + "]");
+		}
 		
 		documentoCobranca.setDocumentoEmissaoForma(documentoEmissaoForma);
 		documentoCobranca.setMotivoNaoEntregaDocumento(null);
@@ -25271,20 +25140,45 @@ public class ControladorCobranca implements SessionBean {
 		
 		if (resolucaoDiretoria != null) {
 			if (resolucaoDiretoria.getId() != null) {
-				logger.info("[ " + imovel.getId() + "	- documentoCobranca.getResolucaoDiretoria:  " + documentoCobranca.getResolucaoDiretoria().getId() + "]");
+				if(imovel != null) {
+					logger.info("[ " + imovel.getId() + "	- documentoCobranca.getResolucaoDiretoria:  " + documentoCobranca.getResolucaoDiretoria().getId() + "]");
+				}
+				
+				if(cliente != null) {
+					logger.info("[ " + cliente.getId() + "	- documentoCobranca.getResolucaoDiretoria:  " + documentoCobranca.getResolucaoDiretoria().getId() + "]");
+				}
 			} else {
-				logger.info("[ " + imovel.getId() + "	- documentoCobranca.getResolucaoDiretoria:  NULL ]");
+				if(imovel != null) {
+					logger.info("[ " + imovel.getId() + "	- documentoCobranca.getResolucaoDiretoria:  NULL ]");
+				}
+				
+				if(cliente != null) {
+					logger.info("[ " + cliente.getId() + "	- documentoCobranca.getResolucaoDiretoria:  NULL ]");
+				}
 			}
 		} else {
-			logger.info("[ " + imovel.getId() + "	- documentoCobranca.getResolucaoDiretoria:  NULL ]");
+			if(imovel != null) {
+				logger.info("[ " + imovel.getId() + "	- documentoCobranca.getResolucaoDiretoria:  NULL ]");
+			}
+			
+			if(cliente != null) {
+				logger.info("[ " + cliente.getId() + "	- documentoCobranca.getResolucaoDiretoria:  NULL ]");
+			}
 		}
 
 		documentoCobranca.setDataEmissaoPredecessor(dataEmissaoPredecessor);
 
 		Integer idDocumentoCobranca = (Integer) getControladorUtil().inserir(documentoCobranca);
 		documentoCobranca.setId(idDocumentoCobranca);
-		logger.info("[ " + imovel.getId() + "	- documentoCobranca.getId:  " + documentoCobranca.getId() + "]");
 
+		if(imovel != null) {
+			logger.info("[ " + imovel.getId() + "	- documentoCobranca.getId:  " + documentoCobranca.getId() + "]");
+		}
+		
+		if(cliente != null) {
+			logger.info("[ " + cliente.getId() + "	- documentoCobranca.getId:  " + documentoCobranca.getId() + "]");
+		}
+		
 		extratoDebitoRelatorioHelper.setDocumentoCobranca(documentoCobranca);
 
 		CobrancaDocumentoItem cobrancaDocumentoItem = new CobrancaDocumentoItem();
@@ -25295,7 +25189,14 @@ public class ControladorCobranca implements SessionBean {
 		BigDecimal valorImpostos = null;
 		if (colecaoContas != null && !colecaoContas.isEmpty()) {
 			
-			logger.info("[ " + imovel.getId() + "	- 	CONTAS:  ]");
+			if(imovel != null) {
+				logger.info("[ " + imovel.getId() + "	- 	CONTAS:  ]");
+			}
+			
+			if(cliente != null) {
+				logger.info("[ " + cliente.getId() + "	- 	CONTAS:  ]");
+			}
+			
 			valorImpostos = new BigDecimal("0.00");
 
 			for (ContaValoresHelper contaValorHelper : colecaoContas) {
@@ -25352,7 +25253,14 @@ public class ControladorCobranca implements SessionBean {
 				cobrancaDocumentoItem.setCobrancaDebitoSituacao(situacaoDebito);
 
 				getControladorUtil().inserir(cobrancaDocumentoItem);
-				logger.info("[ " + imovel.getId() + "	-		ITEM: " + contaValorHelper.getConta().getId() + " , valorItemCobrado:  " + cobrancaDocumentoItem.getValorItemCobrado() + " , valorAcrescimo:  " + cobrancaDocumentoItem.getValorAcrescimos() + "]");
+				
+				if(imovel != null) {
+					logger.info("[ " + imovel.getId() + "	-		ITEM: " + contaValorHelper.getConta().getId() + " , valorItemCobrado:  " + cobrancaDocumentoItem.getValorItemCobrado() + " , valorAcrescimo:  " + cobrancaDocumentoItem.getValorAcrescimos() + "]");
+				}
+				
+				if(cliente != null) {
+					logger.info("[ " + cliente.getId() + "	-		ITEM: " + contaValorHelper.getConta().getId() + " , valorItemCobrado:  " + cobrancaDocumentoItem.getValorItemCobrado() + " , valorAcrescimo:  " + cobrancaDocumentoItem.getValorAcrescimos() + "]");
+				}
 				extratoDebitoRelatorioHelper.getColecaoCobrancaDocumentoItemContas().add(cobrancaDocumentoItem);
 			}
 
@@ -25375,7 +25283,13 @@ public class ControladorCobranca implements SessionBean {
 		documentoTipoDebito.setId(DocumentoTipo.DEBITO_A_COBRAR);
 		if (colecaoDebitosACobrar != null && !colecaoDebitosACobrar.isEmpty()) {
 
-			logger.info("[ " + imovel.getId() + "	- 	DEBITOS A COBRAR:  ]");
+			if(imovel != null) {
+				logger.info("[ " + imovel.getId() + "	- 	DEBITOS A COBRAR:  ]");
+			}
+			
+			if(cliente != null) {
+				logger.info("[ " + cliente.getId() + "	- 	DEBITOS A COBRAR:  ]");
+			}
 			for (DebitoACobrar debitoACobrar : colecaoDebitosACobrar) {
 				cobrancaDocumentoItem = new CobrancaDocumentoItem();
 				valorAcrescimos = new BigDecimal("0.00");
@@ -25405,7 +25319,15 @@ public class ControladorCobranca implements SessionBean {
 
 				// inseri o item de documento de cobrança
 				getControladorUtil().inserir(cobrancaDocumentoItem);
-				logger.info("[ " + imovel.getId() + "	-		ITEM: " + cobrancaDocumentoItem.getDebitoACobrarGeral().getId() + " , valorItemCobrado:  " + cobrancaDocumentoItem.getValorItemCobrado() + " , valorAcrescimo:  " + cobrancaDocumentoItem.getValorAcrescimos() + "]");
+				
+				if(imovel != null) {
+					logger.info("[ " + imovel.getId() + "	-		ITEM: " + cobrancaDocumentoItem.getDebitoACobrarGeral().getId() + " , valorItemCobrado:  " + cobrancaDocumentoItem.getValorItemCobrado() + " , valorAcrescimo:  " + cobrancaDocumentoItem.getValorAcrescimos() + "]");
+				}
+				
+				if(cliente != null) {
+					logger.info("[ " + cliente.getId() + "	-		ITEM: " + cobrancaDocumentoItem.getDebitoACobrarGeral().getId() + " , valorItemCobrado:  " + cobrancaDocumentoItem.getValorItemCobrado() + " , valorAcrescimo:  " + cobrancaDocumentoItem.getValorAcrescimos() + "]");
+				}
+				
 				extratoDebitoRelatorioHelper.getColecaoCobrancaDocumentoItemDebitosACobrar().add(cobrancaDocumentoItem);
 			}
 		}
@@ -25415,7 +25337,15 @@ public class ControladorCobranca implements SessionBean {
 		documentoTipoGuia.setId(DocumentoTipo.GUIA_PAGAMENTO);
 		if (colecaoGuiasPagamento != null && !colecaoGuiasPagamento.isEmpty()) {
 			
-			logger.info("[ " + imovel.getId() + "	- 	GUIAS DE PAGAMENTO:  ]");
+			
+			if(imovel != null) {
+				logger.info("[ " + imovel.getId() + "	- 	GUIAS DE PAGAMENTO:  ]");
+			}
+			
+			if(cliente != null) {
+				logger.info("[ " + cliente.getId() + "	- 	GUIAS DE PAGAMENTO:  ]");
+			}
+			
 			for (GuiaPagamentoValoresHelper guiaPagamentoValorHelper : colecaoGuiasPagamento) {
 				cobrancaDocumentoItem = new CobrancaDocumentoItem();
 				valorAcrescimos = new BigDecimal("0.00");
@@ -25459,7 +25389,15 @@ public class ControladorCobranca implements SessionBean {
 				// inseri o item de documento de cobrança
 				getControladorUtil().inserir(cobrancaDocumentoItem);
 				
-				logger.info("[ " + imovel.getId() + "	-		ITEM: " + cobrancaDocumentoItem.getGuiaPagamentoGeral().getId() + " , valorItemCobrado:  " + cobrancaDocumentoItem.getValorItemCobrado() + " , valorAcrescimo:  " + cobrancaDocumentoItem.getValorAcrescimos() + "]");
+				
+				if(imovel != null) {
+					logger.info("[ " + imovel.getId() + "	-		ITEM: " + cobrancaDocumentoItem.getGuiaPagamentoGeral().getId() + " , valorItemCobrado:  " + cobrancaDocumentoItem.getValorItemCobrado() + " , valorAcrescimo:  " + cobrancaDocumentoItem.getValorAcrescimos() + "]");
+				}
+				
+				if(cliente != null) {
+					logger.info("[ " + cliente.getId() + "	-		ITEM: " + cobrancaDocumentoItem.getGuiaPagamentoGeral().getId() + " , valorItemCobrado:  " + cobrancaDocumentoItem.getValorItemCobrado() + " , valorAcrescimo:  " + cobrancaDocumentoItem.getValorAcrescimos() + "]");
+				}
+				
 				extratoDebitoRelatorioHelper.getColecaoCobrancaDocumentoItemGuiasPagamento().add(cobrancaDocumentoItem);
 			}
 		}
@@ -25744,7 +25682,15 @@ public class ControladorCobranca implements SessionBean {
 			Collection<DebitoCreditoParcelamentoHelper> colecaoAntecipacaoDebitosDeParcelamento,
 			Collection<DebitoCreditoParcelamentoHelper> colecaoAntecipacaoCreditosDeParcelamento) throws ControladorException {
 		
-		logger.info("[ " + imovel.getId() + "	- gerarEmitirExtratoDebito]");
+		if(imovel != null) {
+			logger.info("[ imovel: " + imovel.getId() + "	- gerarEmitirExtratoDebito]");
+			
+		}
+		
+		if(cliente!= null) {
+			logger.info("[ cliente: " + cliente.getId() + "	- gerarEmitirExtratoDebito]");
+			
+		}
 		
 		// [SB0001] - Gerar Documento de Cobrança
 		DocumentoEmissaoForma documentoEmissaoForma = new DocumentoEmissaoForma();
@@ -58069,14 +58015,19 @@ public class ControladorCobranca implements SessionBean {
 			// DADOS PARA AGRUPAR DADOS POR TIPO DOCUMENTO
 			Integer qtDocumentosPubLoc = new Integer(0);
 			BigDecimal valorDocumentosPubLoc = BigDecimal.ZERO;
+			BigDecimal valorDocumentosPubSemParcAtualLoc = BigDecimal.ZERO;
 			Integer qtDocumentosResLoc = new Integer(0);
 			BigDecimal valorDocumentosResLoc = BigDecimal.ZERO;
+			BigDecimal valorDocumentosResSemParcAtualLoc = BigDecimal.ZERO;
 			Integer qtDocumentosComLoc = new Integer(0);
 			BigDecimal valorDocumentosComLoc = BigDecimal.ZERO;
+			BigDecimal valorDocumentosComSemParcAtualLoc = BigDecimal.ZERO;
 			Integer qtDocumentosIndLoc = new Integer(0);
 			BigDecimal valorDocumentosIndLoc = BigDecimal.ZERO;
+			BigDecimal valorDocumentosIndSemParcAtualLoc = BigDecimal.ZERO;
 			Integer qtDocumentosPrivadosLoc = new Integer(0);
 			BigDecimal valorDocumentosPrivadosLoc = BigDecimal.ZERO;
+			BigDecimal valorDocumentosPrivadosSemParcAtualLoc = BigDecimal.ZERO;
 
 			// VARIAVEIS PARA ARMAZERNAR DADOS DA PESQUISA
 			Integer idCategoriaLoc = null;
@@ -58093,6 +58044,7 @@ public class ControladorCobranca implements SessionBean {
 			String faixaLoc = "";
 			Integer qtDocumentosLoc = null;
 			BigDecimal valorDocumentosLoc = null;
+			BigDecimal valorDocumentosSemParcAtualLoc = null;
 
 			// DADOS PARA CONTROLE DE FLUXO UNIDADE
 			Integer idGerenciaFluxoUni = null;
@@ -58110,14 +58062,20 @@ public class ControladorCobranca implements SessionBean {
 			// DADOS PARA AGRUPAR DADOS POR TIPO DOCUMENTO
 			Integer qtDocumentosPubUni = new Integer(0);
 			BigDecimal valorDocumentosPubUni = BigDecimal.ZERO;
+			BigDecimal valorDocumentosPubSemParcAtualUni = BigDecimal.ZERO;
 			Integer qtDocumentosResUni = new Integer(0);
 			BigDecimal valorDocumentosResUni = BigDecimal.ZERO;
+			BigDecimal valorDocumentosResSemParcAtualUni = BigDecimal.ZERO;
 			Integer qtDocumentosComUni = new Integer(0);
 			BigDecimal valorDocumentosComUni = BigDecimal.ZERO;
+			BigDecimal valorDocumentosComSemParcAtualUni = BigDecimal.ZERO;
 			Integer qtDocumentosIndUni = new Integer(0);
 			BigDecimal valorDocumentosIndUni = BigDecimal.ZERO;
+			BigDecimal valorDocumentosIndSemParcAtualUni = BigDecimal.ZERO;
 			Integer qtDocumentosPrivadosUni = new Integer(0);
 			BigDecimal valorDocumentosPrivadosUni = BigDecimal.ZERO;
+			BigDecimal valorDocumentosPrivadosSemParcAtualUni = BigDecimal.ZERO;
+			
 
 			// VARIAVEIS PARA ARMAZERNAR DADOS DA PESQUISA
 			Integer idCategoriaUni = null;
@@ -58132,6 +58090,7 @@ public class ControladorCobranca implements SessionBean {
 			String faixaUni = "";
 			Integer qtDocumentosUni = null;
 			BigDecimal valorDocumentosUni = null;
+			BigDecimal valorDocumentosSemParcAtualUni = null;
 
 			// DADOS PARA CONTROLE DE FLUXO GERENCIA
 			Integer idGerenciaFluxoGer = null;
@@ -58147,14 +58106,19 @@ public class ControladorCobranca implements SessionBean {
 			// DADOS PARA AGRUPAR DADOS POR TIPO DOCUMENTO
 			Integer qtDocumentosPubGer = new Integer(0);
 			BigDecimal valorDocumentosPubGer = BigDecimal.ZERO;
+			BigDecimal valorDocumentosPubSemParcAtualGer = BigDecimal.ZERO;
 			Integer qtDocumentosResGer = new Integer(0);
 			BigDecimal valorDocumentosResGer = BigDecimal.ZERO;
+			BigDecimal valorDocumentosResSemParcAtualGer = BigDecimal.ZERO;
 			Integer qtDocumentosComGer = new Integer(0);
 			BigDecimal valorDocumentosComGer = BigDecimal.ZERO;
+			BigDecimal valorDocumentosComSemParcAtualGer = BigDecimal.ZERO;
 			Integer qtDocumentosIndGer = new Integer(0);
 			BigDecimal valorDocumentosIndGer = BigDecimal.ZERO;
+			BigDecimal valorDocumentosIndSemParcAtualGer = BigDecimal.ZERO;
 			Integer qtDocumentosPrivadosGer = new Integer(0);
 			BigDecimal valorDocumentosPrivadosGer = BigDecimal.ZERO;
+			BigDecimal valorDocumentosPrivadosSemParcAtualGer = BigDecimal.ZERO;
 
 			// VARIAVEIS PARA ARMAZERNAR DADOS DA PESQUISA
 			Integer idCategoriaGer = null;
@@ -58167,6 +58131,7 @@ public class ControladorCobranca implements SessionBean {
 			String faixaGer = "";
 			Integer qtDocumentosGer = null;
 			BigDecimal valorDocumentosGer = null;
+			BigDecimal valorDocumentosSemParcAtualGer = null;
 
 			// DADOS PARA CONTROLE DE FLUXO ESTADO
 			Integer idDocumentoTipoFluxoEst = null;
@@ -58180,14 +58145,19 @@ public class ControladorCobranca implements SessionBean {
 			// DADOS PARA AGRUPAR DADOS POR TIPO DOCUMENTO
 			Integer qtDocumentosPubEst = new Integer(0);
 			BigDecimal valorDocumentosPubEst = BigDecimal.ZERO;
+			BigDecimal valorDocumentosPubSemParcAtualEst = BigDecimal.ZERO;
 			Integer qtDocumentosResEst = new Integer(0);
 			BigDecimal valorDocumentosResEst = BigDecimal.ZERO;
+			BigDecimal valorDocumentosResSemParcAtualEst = BigDecimal.ZERO;
 			Integer qtDocumentosComEst = new Integer(0);
 			BigDecimal valorDocumentosComEst = BigDecimal.ZERO;
+			BigDecimal valorDocumentosComSemParcAtualEst = BigDecimal.ZERO;
 			Integer qtDocumentosIndEst = new Integer(0);
 			BigDecimal valorDocumentosIndEst = BigDecimal.ZERO;
+			BigDecimal valorDocumentosIndSemParcAtualEst = BigDecimal.ZERO;
 			Integer qtDocumentosPrivadosEst = new Integer(0);
 			BigDecimal valorDocumentosPrivadosEst = BigDecimal.ZERO;
+			BigDecimal valorDocumentosPrivadosSemParcAtualEst = BigDecimal.ZERO;
 
 			// VARIAVEIS PARA ARMAZERNAR DADOS DA PESQUISA
 			Integer idCategoriaEst = null;
@@ -58198,6 +58168,7 @@ public class ControladorCobranca implements SessionBean {
 			String faixaEst = "";
 			Integer qtDocumentosEst = null;
 			BigDecimal valorDocumentosEst = null;
+			BigDecimal valorDocumentosSemParcAtualEst = null;
 
 			RelatorioDocumentosAReceberBean bean = null;
 
@@ -58279,17 +58250,22 @@ public class ControladorCobranca implements SessionBean {
 
 						// Dados Pesquisa
 						idCategoriaLoc = (Integer) dados[0];
-						idGerenciaLoc = (Integer) dados[2];
-						nomeGerenciaLoc = (String) dados[3];
-						idUnidadeLoc = (Integer) dados[4];
-						nomeUnidadeLoc = (String) dados[5];
-						idLocalidadeLoc = (Integer) dados[6];
-						nomeLocalidadeLoc = (String) dados[7];
-						idDocumentoTipoLoc = (Integer) dados[8];
-						nomeDocumentoTipoLoc = (String) dados[9];
-						idSituacaoLoc = (Integer) dados[10];
-						descricaoSituacaoLoc = (String) dados[11];
-						faixaLoc = (String) dados[12];
+						idDocumentoTipoLoc = (Integer) dados[2];
+						nomeDocumentoTipoLoc = (String) dados[3];
+						idSituacaoLoc = (Integer) dados[4];
+						descricaoSituacaoLoc = (String) dados[5];
+						faixaLoc = (String) dados[6];
+						qtDocumentosLoc = (Integer) dados[7];
+						valorDocumentosLoc = (BigDecimal) dados[8];
+						valorDocumentosSemParcAtualLoc = (BigDecimal) dados[9];
+						idGerenciaLoc = (Integer) dados[10];
+						nomeGerenciaLoc = (String) dados[11];
+						idUnidadeLoc = (Integer) dados[12];
+						nomeUnidadeLoc = (String) dados[13];
+						idLocalidadeLoc = (Integer) dados[14];
+						nomeLocalidadeLoc = (String) dados[15];
+						
+						
 
 						if (!faixaLoc.equals("0")) {
 							// Verifica se a faixa não existia na base,
@@ -58309,9 +58285,6 @@ public class ControladorCobranca implements SessionBean {
 						} else {
 							faixaLoc = "A VENCER";
 						}
-
-						qtDocumentosLoc = (Integer) dados[13];
-						valorDocumentosLoc = (BigDecimal) dados[14];
 
 						if (primeiraVezLoc) {
 
@@ -58342,24 +58315,31 @@ public class ControladorCobranca implements SessionBean {
 							if (idCategoriaLoc.compareTo(Categoria.RESIDENCIAL) == 0) {
 								qtDocumentosResLoc += qtDocumentosLoc;
 								valorDocumentosResLoc = Util.somaBigDecimal(valorDocumentosResLoc, valorDocumentosLoc);
+								valorDocumentosResSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosResSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 								qtDocumentosPrivadosLoc += qtDocumentosLoc;
 								valorDocumentosPrivadosLoc = Util.somaBigDecimal(valorDocumentosPrivadosLoc, valorDocumentosLoc);
+								valorDocumentosPrivadosSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 							}
 							if (idCategoriaLoc.compareTo(Categoria.COMERCIAL) == 0) {
 								qtDocumentosComLoc += qtDocumentosLoc;
 								valorDocumentosComLoc = Util.somaBigDecimal(valorDocumentosComLoc, valorDocumentosLoc);
+								valorDocumentosComSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosComSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 								qtDocumentosPrivadosLoc += qtDocumentosLoc;
 								valorDocumentosPrivadosLoc = Util.somaBigDecimal(valorDocumentosPrivadosLoc, valorDocumentosLoc);
+								valorDocumentosPrivadosSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 							}
 							if (idCategoriaLoc.compareTo(Categoria.INDUSTRIAL) == 0) {
 								qtDocumentosIndLoc += qtDocumentosLoc;
 								valorDocumentosIndLoc = Util.somaBigDecimal(valorDocumentosIndLoc, valorDocumentosLoc);
+								valorDocumentosIndSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosIndSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 								qtDocumentosPrivadosLoc += qtDocumentosLoc;
 								valorDocumentosPrivadosLoc = Util.somaBigDecimal(valorDocumentosPrivadosLoc, valorDocumentosLoc);
+								valorDocumentosPrivadosSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 							}
 							if (idCategoriaLoc.compareTo(Categoria.PUBLICO) == 0) {
 								qtDocumentosPubLoc += qtDocumentosLoc;
 								valorDocumentosPubLoc = Util.somaBigDecimal(valorDocumentosPubLoc, valorDocumentosLoc);
+								valorDocumentosPubSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosPubSemParcAtualLoc, valorDocumentosSemParcAtualLoc);								
 							}
 
 						} else {
@@ -58372,29 +58352,68 @@ public class ControladorCobranca implements SessionBean {
 
 										if (idDocumentoTipoFluxoLoc.intValue() != idDocumentoTipoLoc.intValue()) {
 
-											bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoLoc, nomeGerenciaFluxoLoc,
-													idUnidadeFluxoLoc, nomeUnidadeFluxoLoc, idLocalidadeFluxoLoc, nomeLocalidadeFluxoLoc,
-													idDocumentoTipoFluxoLoc, nomeDocumentoTipoFluxoLoc, idSituacaoFluxoLoc,
-													descricaoFluxoLoc, qtDocumentosResLoc, valorDocumentosResLoc, qtDocumentosComLoc,
-													valorDocumentosComLoc, qtDocumentosIndLoc, valorDocumentosIndLoc,
-													qtDocumentosPrivadosLoc, valorDocumentosPrivadosLoc, qtDocumentosPubLoc,
-													valorDocumentosPubLoc, "LOCALIDADE - " + nomeLocalidadeFluxoLoc,
-													ConstantesSistema.NAO.toString(), faixaFluxoLoc);
+											if (helper.isExibirDebitoSemParcela() == true
+													&& nomeDocumentoTipoFluxoLoc.equals("DEBITO A COBRAR")) {
+												
+												bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoLoc, nomeGerenciaFluxoLoc,
+														idUnidadeFluxoLoc, nomeUnidadeFluxoLoc, idLocalidadeFluxoLoc,
+														nomeLocalidadeFluxoLoc, idDocumentoTipoFluxoLoc, "DEBITO SEM PARCELA",
+														idSituacaoFluxoLoc, descricaoFluxoLoc, qtDocumentosResLoc,
+														valorDocumentosResSemParcAtualLoc, qtDocumentosComLoc,
+														valorDocumentosComSemParcAtualLoc, qtDocumentosIndLoc,
+														valorDocumentosIndSemParcAtualLoc, qtDocumentosPrivadosLoc,
+														valorDocumentosPrivadosSemParcAtualLoc, qtDocumentosPubLoc,
+														valorDocumentosPubSemParcAtualLoc, "LOCALIDADE - " + nomeLocalidadeFluxoLoc,
+														ConstantesSistema.NAO.toString(), faixaFluxoLoc);
 
-											beansPorLocalidade.add(bean);
+												beansPorLocalidade.add(bean);
+
+											} else if (helper.isExibirCreditoSemParcela() == true
+													&& nomeDocumentoTipoFluxoLoc.equals("CREDITO A REALIZAR")) {
+												
+												bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoLoc, nomeGerenciaFluxoLoc,
+														idUnidadeFluxoLoc, nomeUnidadeFluxoLoc, idLocalidadeFluxoLoc,
+														nomeLocalidadeFluxoLoc, idDocumentoTipoFluxoLoc, "CREDITO SEM PARCELA",
+														idSituacaoFluxoLoc, descricaoFluxoLoc, qtDocumentosResLoc,
+														valorDocumentosResSemParcAtualLoc, qtDocumentosComLoc,
+														valorDocumentosComSemParcAtualLoc, qtDocumentosIndLoc,
+														valorDocumentosIndSemParcAtualLoc, qtDocumentosPrivadosLoc,
+														valorDocumentosPrivadosSemParcAtualLoc, qtDocumentosPubLoc,
+														valorDocumentosPubSemParcAtualLoc, "LOCALIDADE - " + nomeLocalidadeFluxoLoc,
+														ConstantesSistema.NAO.toString(), faixaFluxoLoc);
+
+												beansPorLocalidade.add(bean);
+											} else {
+												bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoLoc, nomeGerenciaFluxoLoc,
+														idUnidadeFluxoLoc, nomeUnidadeFluxoLoc, idLocalidadeFluxoLoc,
+														nomeLocalidadeFluxoLoc, idDocumentoTipoFluxoLoc, nomeDocumentoTipoFluxoLoc,
+														idSituacaoFluxoLoc, descricaoFluxoLoc, qtDocumentosResLoc, valorDocumentosResLoc,
+														qtDocumentosComLoc, valorDocumentosComLoc, qtDocumentosIndLoc,
+														valorDocumentosIndLoc, qtDocumentosPrivadosLoc, valorDocumentosPrivadosLoc,
+														qtDocumentosPubLoc, valorDocumentosPubLoc,
+														"LOCALIDADE - " + nomeLocalidadeFluxoLoc, ConstantesSistema.NAO.toString(),
+														faixaFluxoLoc);
+
+												beansPorLocalidade.add(bean);
+											}
 
 											// Reiniciando valores e mudando
 											// variaveis de controle de fluxo
 											qtDocumentosPubLoc = new Integer(0);
 											valorDocumentosPubLoc = BigDecimal.ZERO;
+											valorDocumentosPubSemParcAtualLoc = BigDecimal.ZERO;
 											qtDocumentosResLoc = new Integer(0);
 											valorDocumentosResLoc = BigDecimal.ZERO;
+											valorDocumentosResSemParcAtualLoc = BigDecimal.ZERO;
 											qtDocumentosComLoc = new Integer(0);
 											valorDocumentosComLoc = BigDecimal.ZERO;
+											valorDocumentosComSemParcAtualLoc = BigDecimal.ZERO;
 											qtDocumentosIndLoc = new Integer(0);
 											valorDocumentosIndLoc = BigDecimal.ZERO;
+											valorDocumentosIndSemParcAtualLoc = BigDecimal.ZERO;
 											qtDocumentosPrivadosLoc = new Integer(0);
 											valorDocumentosPrivadosLoc = BigDecimal.ZERO;
+											valorDocumentosPrivadosSemParcAtualLoc = BigDecimal.ZERO;
 
 											idGerenciaFluxoLoc = idGerenciaLoc;
 											nomeGerenciaFluxoLoc = nomeGerenciaLoc;
@@ -58412,52 +58431,93 @@ public class ControladorCobranca implements SessionBean {
 											if (idCategoriaLoc.compareTo(Categoria.RESIDENCIAL) == 0) {
 												qtDocumentosResLoc += qtDocumentosLoc;
 												valorDocumentosResLoc = Util.somaBigDecimal(valorDocumentosResLoc, valorDocumentosLoc);
+												valorDocumentosResSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosResSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 												qtDocumentosPrivadosLoc += qtDocumentosLoc;
-												valorDocumentosPrivadosLoc = Util.somaBigDecimal(valorDocumentosPrivadosLoc,
-														valorDocumentosLoc);
+												valorDocumentosPrivadosLoc = Util.somaBigDecimal(valorDocumentosPrivadosLoc, valorDocumentosLoc);
+												valorDocumentosPrivadosSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 											}
 											if (idCategoriaLoc.compareTo(Categoria.COMERCIAL) == 0) {
 												qtDocumentosComLoc += qtDocumentosLoc;
 												valorDocumentosComLoc = Util.somaBigDecimal(valorDocumentosComLoc, valorDocumentosLoc);
+												valorDocumentosComSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosComSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 												qtDocumentosPrivadosLoc += qtDocumentosLoc;
-												valorDocumentosPrivadosLoc = Util.somaBigDecimal(valorDocumentosPrivadosLoc,
-														valorDocumentosLoc);
+												valorDocumentosPrivadosLoc = Util.somaBigDecimal(valorDocumentosPrivadosLoc, valorDocumentosLoc);
+												valorDocumentosPrivadosSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 											}
 											if (idCategoriaLoc.compareTo(Categoria.INDUSTRIAL) == 0) {
 												qtDocumentosIndLoc += qtDocumentosLoc;
 												valorDocumentosIndLoc = Util.somaBigDecimal(valorDocumentosIndLoc, valorDocumentosLoc);
+												valorDocumentosIndSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosIndSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 												qtDocumentosPrivadosLoc += qtDocumentosLoc;
-												valorDocumentosPrivadosLoc = Util.somaBigDecimal(valorDocumentosPrivadosLoc,
-														valorDocumentosLoc);
+												valorDocumentosPrivadosLoc = Util.somaBigDecimal(valorDocumentosPrivadosLoc, valorDocumentosLoc);
+												valorDocumentosPrivadosSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 											}
 											if (idCategoriaLoc.compareTo(Categoria.PUBLICO) == 0) {
 												qtDocumentosPubLoc += qtDocumentosLoc;
 												valorDocumentosPubLoc = Util.somaBigDecimal(valorDocumentosPubLoc, valorDocumentosLoc);
+												valorDocumentosPubSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosPubSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 											}
 										}
 									} else {
-										bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoLoc, nomeGerenciaFluxoLoc,
-												idUnidadeFluxoLoc, nomeUnidadeFluxoLoc, idLocalidadeFluxoLoc, nomeLocalidadeFluxoLoc,
-												idDocumentoTipoFluxoLoc, nomeDocumentoTipoFluxoLoc, idSituacaoFluxoLoc, descricaoFluxoLoc,
-												qtDocumentosResLoc, valorDocumentosResLoc, qtDocumentosComLoc, valorDocumentosComLoc,
-												qtDocumentosIndLoc, valorDocumentosIndLoc, qtDocumentosPrivadosLoc,
-												valorDocumentosPrivadosLoc, qtDocumentosPubLoc, valorDocumentosPubLoc, "LOCALIDADE - "
-														+ nomeLocalidadeFluxoLoc, ConstantesSistema.NAO.toString(), faixaFluxoLoc);
+										if (helper.isExibirDebitoSemParcela() == true
+												&& nomeDocumentoTipoFluxoLoc.equals("DEBITO A COBRAR")) {
+											
+											bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoLoc, nomeGerenciaFluxoLoc,
+													idUnidadeFluxoLoc, nomeUnidadeFluxoLoc, idLocalidadeFluxoLoc, nomeLocalidadeFluxoLoc,
+													idDocumentoTipoFluxoLoc, "DEBITO SEM PARCELA", idSituacaoFluxoLoc, descricaoFluxoLoc,
+													qtDocumentosResLoc, valorDocumentosResSemParcAtualLoc, qtDocumentosComLoc,
+													valorDocumentosComSemParcAtualLoc, qtDocumentosIndLoc,
+													valorDocumentosIndSemParcAtualLoc, qtDocumentosPrivadosLoc,
+													valorDocumentosPrivadosSemParcAtualLoc, qtDocumentosPubLoc,
+													valorDocumentosPubSemParcAtualLoc, "LOCALIDADE - " + nomeLocalidadeFluxoLoc,
+													ConstantesSistema.NAO.toString(), faixaFluxoLoc);
 
-										beansPorLocalidade.add(bean);
+											beansPorLocalidade.add(bean);
+
+										} else if (helper.isExibirCreditoSemParcela() == true
+												&& nomeDocumentoTipoFluxoLoc.equals("CREDITO A REALIZAR")) {
+											
+											bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoLoc, nomeGerenciaFluxoLoc,
+													idUnidadeFluxoLoc, nomeUnidadeFluxoLoc, idLocalidadeFluxoLoc, nomeLocalidadeFluxoLoc,
+													idDocumentoTipoFluxoLoc, "CREDITO SEM PARCELA", idSituacaoFluxoLoc, descricaoFluxoLoc,
+													qtDocumentosResLoc, valorDocumentosResSemParcAtualLoc, qtDocumentosComLoc,
+													valorDocumentosComSemParcAtualLoc, qtDocumentosIndLoc,
+													valorDocumentosIndSemParcAtualLoc, qtDocumentosPrivadosLoc,
+													valorDocumentosPrivadosSemParcAtualLoc, qtDocumentosPubLoc,
+													valorDocumentosPubSemParcAtualLoc, "LOCALIDADE - " + nomeLocalidadeFluxoLoc,
+													ConstantesSistema.NAO.toString(), faixaFluxoLoc);
+
+											beansPorLocalidade.add(bean);
+										} else {
+											bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoLoc, nomeGerenciaFluxoLoc,
+													idUnidadeFluxoLoc, nomeUnidadeFluxoLoc, idLocalidadeFluxoLoc, nomeLocalidadeFluxoLoc,
+													idDocumentoTipoFluxoLoc, nomeDocumentoTipoFluxoLoc, idSituacaoFluxoLoc,
+													descricaoFluxoLoc, qtDocumentosResLoc, valorDocumentosResLoc, qtDocumentosComLoc,
+													valorDocumentosComLoc, qtDocumentosIndLoc, valorDocumentosIndLoc,
+													qtDocumentosPrivadosLoc, valorDocumentosPrivadosLoc, qtDocumentosPubLoc,
+													valorDocumentosPubLoc, "LOCALIDADE - " + nomeLocalidadeFluxoLoc,
+													ConstantesSistema.NAO.toString(), faixaFluxoLoc);
+
+											beansPorLocalidade.add(bean);
+										}
 
 										// Reiniciando valores e mudando
 										// variaveis de controle de fluxo
 										qtDocumentosPubLoc = new Integer(0);
 										valorDocumentosPubLoc = BigDecimal.ZERO;
+										valorDocumentosPubSemParcAtualLoc = BigDecimal.ZERO;
 										qtDocumentosResLoc = new Integer(0);
 										valorDocumentosResLoc = BigDecimal.ZERO;
+										valorDocumentosResSemParcAtualLoc = BigDecimal.ZERO;
 										qtDocumentosComLoc = new Integer(0);
 										valorDocumentosComLoc = BigDecimal.ZERO;
+										valorDocumentosComSemParcAtualLoc = BigDecimal.ZERO;
 										qtDocumentosIndLoc = new Integer(0);
 										valorDocumentosIndLoc = BigDecimal.ZERO;
+										valorDocumentosIndSemParcAtualLoc = BigDecimal.ZERO;
 										qtDocumentosPrivadosLoc = new Integer(0);
 										valorDocumentosPrivadosLoc = BigDecimal.ZERO;
+										valorDocumentosPrivadosSemParcAtualLoc = BigDecimal.ZERO;
 
 										idGerenciaFluxoLoc = idGerenciaLoc;
 										nomeGerenciaFluxoLoc = nomeGerenciaLoc;
@@ -58475,53 +58535,90 @@ public class ControladorCobranca implements SessionBean {
 										if (idCategoriaLoc.compareTo(Categoria.RESIDENCIAL) == 0) {
 											qtDocumentosResLoc += qtDocumentosLoc;
 											valorDocumentosResLoc = Util.somaBigDecimal(valorDocumentosResLoc, valorDocumentosLoc);
+											valorDocumentosResSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosResSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 											qtDocumentosPrivadosLoc += qtDocumentosLoc;
-											valorDocumentosPrivadosLoc = Util
-													.somaBigDecimal(valorDocumentosPrivadosLoc, valorDocumentosLoc);
+											valorDocumentosPrivadosLoc = Util.somaBigDecimal(valorDocumentosPrivadosLoc, valorDocumentosLoc);
+											valorDocumentosPrivadosSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 										}
 										if (idCategoriaLoc.compareTo(Categoria.COMERCIAL) == 0) {
 											qtDocumentosComLoc += qtDocumentosLoc;
 											valorDocumentosComLoc = Util.somaBigDecimal(valorDocumentosComLoc, valorDocumentosLoc);
+											valorDocumentosComSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosComSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 											qtDocumentosPrivadosLoc += qtDocumentosLoc;
-											valorDocumentosPrivadosLoc = Util
-													.somaBigDecimal(valorDocumentosPrivadosLoc, valorDocumentosLoc);
+											valorDocumentosPrivadosLoc = Util.somaBigDecimal(valorDocumentosPrivadosLoc, valorDocumentosLoc);
+											valorDocumentosPrivadosSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 										}
 										if (idCategoriaLoc.compareTo(Categoria.INDUSTRIAL) == 0) {
 											qtDocumentosIndLoc += qtDocumentosLoc;
 											valorDocumentosIndLoc = Util.somaBigDecimal(valorDocumentosIndLoc, valorDocumentosLoc);
+											valorDocumentosIndSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosIndSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 											qtDocumentosPrivadosLoc += qtDocumentosLoc;
-											valorDocumentosPrivadosLoc = Util
-													.somaBigDecimal(valorDocumentosPrivadosLoc, valorDocumentosLoc);
+											valorDocumentosPrivadosLoc = Util.somaBigDecimal(valorDocumentosPrivadosLoc, valorDocumentosLoc);
+											valorDocumentosPrivadosSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 										}
 										if (idCategoriaLoc.compareTo(Categoria.PUBLICO) == 0) {
 											qtDocumentosPubLoc += qtDocumentosLoc;
 											valorDocumentosPubLoc = Util.somaBigDecimal(valorDocumentosPubLoc, valorDocumentosLoc);
+											valorDocumentosPubSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosPubSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 										}
 									}
 								} else {
 
-									bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoLoc, nomeGerenciaFluxoLoc,
-											idUnidadeFluxoLoc, nomeUnidadeFluxoLoc, idLocalidadeFluxoLoc, nomeLocalidadeFluxoLoc,
-											idDocumentoTipoFluxoLoc, nomeDocumentoTipoFluxoLoc, idSituacaoFluxoLoc, descricaoFluxoLoc,
-											qtDocumentosResLoc, valorDocumentosResLoc, qtDocumentosComLoc, valorDocumentosComLoc,
-											qtDocumentosIndLoc, valorDocumentosIndLoc, qtDocumentosPrivadosLoc, valorDocumentosPrivadosLoc,
-											qtDocumentosPubLoc, valorDocumentosPubLoc, "LOCALIDADE - " + nomeLocalidadeFluxoLoc,
-											ConstantesSistema.SIM.toString(), faixaFluxoLoc);
+									if (helper.isExibirDebitoSemParcela() == true && nomeDocumentoTipoFluxoLoc.equals("DEBITO A COBRAR")) {
+										
+										bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoLoc, nomeGerenciaFluxoLoc,
+												idUnidadeFluxoLoc, nomeUnidadeFluxoLoc, idLocalidadeFluxoLoc, nomeLocalidadeFluxoLoc,
+												idDocumentoTipoFluxoLoc, "DEBITO SEM PARCELA", idSituacaoFluxoLoc, descricaoFluxoLoc,
+												qtDocumentosResLoc, valorDocumentosResSemParcAtualLoc, qtDocumentosComLoc,
+												valorDocumentosComSemParcAtualLoc, qtDocumentosIndLoc, valorDocumentosIndSemParcAtualLoc,
+												qtDocumentosPrivadosLoc, valorDocumentosPrivadosSemParcAtualLoc, qtDocumentosPubLoc,
+												valorDocumentosPubSemParcAtualLoc, "LOCALIDADE - " + nomeLocalidadeFluxoLoc,
+												ConstantesSistema.NAO.toString(), faixaFluxoLoc);
 
-									beansPorLocalidade.add(bean);
+										beansPorLocalidade.add(bean);
+
+									} else if (helper.isExibirCreditoSemParcela() == true
+											&& nomeDocumentoTipoFluxoLoc.equals("CREDITO A REALIZAR")) {
+										
+										bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoLoc, nomeGerenciaFluxoLoc,
+												idUnidadeFluxoLoc, nomeUnidadeFluxoLoc, idLocalidadeFluxoLoc, nomeLocalidadeFluxoLoc,
+												idDocumentoTipoFluxoLoc, "CREDITO SEM PARCELA", idSituacaoFluxoLoc, descricaoFluxoLoc,
+												qtDocumentosResLoc, valorDocumentosResSemParcAtualLoc, qtDocumentosComLoc,
+												valorDocumentosComSemParcAtualLoc, qtDocumentosIndLoc, valorDocumentosIndSemParcAtualLoc,
+												qtDocumentosPrivadosLoc, valorDocumentosPrivadosSemParcAtualLoc, qtDocumentosPubLoc,
+												valorDocumentosPubSemParcAtualLoc, "LOCALIDADE - " + nomeLocalidadeFluxoLoc,
+												ConstantesSistema.NAO.toString(), faixaFluxoLoc);
+
+										beansPorLocalidade.add(bean);
+									} else {
+										bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoLoc, nomeGerenciaFluxoLoc,
+												idUnidadeFluxoLoc, nomeUnidadeFluxoLoc, idLocalidadeFluxoLoc, nomeLocalidadeFluxoLoc,
+												idDocumentoTipoFluxoLoc, nomeDocumentoTipoFluxoLoc, idSituacaoFluxoLoc, descricaoFluxoLoc,
+												qtDocumentosResLoc, valorDocumentosResLoc, qtDocumentosComLoc, valorDocumentosComLoc,
+												qtDocumentosIndLoc, valorDocumentosIndLoc, qtDocumentosPrivadosLoc,
+												valorDocumentosPrivadosLoc, qtDocumentosPubLoc, valorDocumentosPubLoc, "LOCALIDADE - "
+														+ nomeLocalidadeFluxoLoc, ConstantesSistema.NAO.toString(), faixaFluxoLoc);
+
+										beansPorLocalidade.add(bean);
+									}
 
 									// Reiniciando valores e mudando
 									// variaveis de controle de fluxo
 									qtDocumentosPubLoc = new Integer(0);
 									valorDocumentosPubLoc = BigDecimal.ZERO;
+									valorDocumentosPubSemParcAtualLoc = BigDecimal.ZERO;
 									qtDocumentosResLoc = new Integer(0);
 									valorDocumentosResLoc = BigDecimal.ZERO;
+									valorDocumentosResSemParcAtualLoc = BigDecimal.ZERO;
 									qtDocumentosComLoc = new Integer(0);
 									valorDocumentosComLoc = BigDecimal.ZERO;
+									valorDocumentosComSemParcAtualLoc = BigDecimal.ZERO;
 									qtDocumentosIndLoc = new Integer(0);
 									valorDocumentosIndLoc = BigDecimal.ZERO;
+									valorDocumentosIndSemParcAtualLoc = BigDecimal.ZERO;
 									qtDocumentosPrivadosLoc = new Integer(0);
 									valorDocumentosPrivadosLoc = BigDecimal.ZERO;
+									valorDocumentosPrivadosSemParcAtualLoc = BigDecimal.ZERO;
 
 									idGerenciaFluxoLoc = idGerenciaLoc;
 									nomeGerenciaFluxoLoc = nomeGerenciaLoc;
@@ -58539,51 +58636,91 @@ public class ControladorCobranca implements SessionBean {
 									if (idCategoriaLoc.compareTo(Categoria.RESIDENCIAL) == 0) {
 										qtDocumentosResLoc += qtDocumentosLoc;
 										valorDocumentosResLoc = Util.somaBigDecimal(valorDocumentosResLoc, valorDocumentosLoc);
+										valorDocumentosResSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosResSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 										qtDocumentosPrivadosLoc += qtDocumentosLoc;
 										valorDocumentosPrivadosLoc = Util.somaBigDecimal(valorDocumentosPrivadosLoc, valorDocumentosLoc);
+										valorDocumentosPrivadosSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 									}
 									if (idCategoriaLoc.compareTo(Categoria.COMERCIAL) == 0) {
 										qtDocumentosComLoc += qtDocumentosLoc;
 										valorDocumentosComLoc = Util.somaBigDecimal(valorDocumentosComLoc, valorDocumentosLoc);
+										valorDocumentosComSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosComSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 										qtDocumentosPrivadosLoc += qtDocumentosLoc;
 										valorDocumentosPrivadosLoc = Util.somaBigDecimal(valorDocumentosPrivadosLoc, valorDocumentosLoc);
+										valorDocumentosPrivadosSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 									}
 									if (idCategoriaLoc.compareTo(Categoria.INDUSTRIAL) == 0) {
 										qtDocumentosIndLoc += qtDocumentosLoc;
 										valorDocumentosIndLoc = Util.somaBigDecimal(valorDocumentosIndLoc, valorDocumentosLoc);
+										valorDocumentosIndSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosIndSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 										qtDocumentosPrivadosLoc += qtDocumentosLoc;
 										valorDocumentosPrivadosLoc = Util.somaBigDecimal(valorDocumentosPrivadosLoc, valorDocumentosLoc);
+										valorDocumentosPrivadosSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 									}
 									if (idCategoriaLoc.compareTo(Categoria.PUBLICO) == 0) {
 										qtDocumentosPubLoc += qtDocumentosLoc;
 										valorDocumentosPubLoc = Util.somaBigDecimal(valorDocumentosPubLoc, valorDocumentosLoc);
+										valorDocumentosPubSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosPubSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 									}
 								}
 
 							} else {
 
-								bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoLoc, nomeGerenciaFluxoLoc, idUnidadeFluxoLoc,
-										nomeUnidadeFluxoLoc, idLocalidadeFluxoLoc, nomeLocalidadeFluxoLoc, idDocumentoTipoFluxoLoc,
-										nomeDocumentoTipoFluxoLoc, idSituacaoFluxoLoc, descricaoFluxoLoc, qtDocumentosResLoc,
-										valorDocumentosResLoc, qtDocumentosComLoc, valorDocumentosComLoc, qtDocumentosIndLoc,
-										valorDocumentosIndLoc, qtDocumentosPrivadosLoc, valorDocumentosPrivadosLoc, qtDocumentosPubLoc,
-										valorDocumentosPubLoc, "LOCALIDADE - " + nomeLocalidadeFluxoLoc, ConstantesSistema.NAO.toString(),
-										faixaFluxoLoc);
+								if (helper.isExibirDebitoSemParcela() == true && nomeDocumentoTipoFluxoLoc.equals("DEBITO A COBRAR")) {
 
-								beansPorLocalidade.add(bean);
+									bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoLoc, nomeGerenciaFluxoLoc,
+											idUnidadeFluxoLoc, nomeUnidadeFluxoLoc, idLocalidadeFluxoLoc, nomeLocalidadeFluxoLoc,
+											idDocumentoTipoFluxoLoc, "DEBITO SEM PARCELA", idSituacaoFluxoLoc, descricaoFluxoLoc,
+											qtDocumentosResLoc, valorDocumentosResSemParcAtualLoc, qtDocumentosComLoc,
+											valorDocumentosComSemParcAtualLoc, qtDocumentosIndLoc, valorDocumentosIndSemParcAtualLoc,
+											qtDocumentosPrivadosLoc, valorDocumentosPrivadosSemParcAtualLoc, qtDocumentosPubLoc,
+											valorDocumentosPubSemParcAtualLoc, "LOCALIDADE - " + nomeLocalidadeFluxoLoc,
+											ConstantesSistema.NAO.toString(), faixaFluxoLoc);
+
+									beansPorLocalidade.add(bean);
+
+								} else if (helper.isExibirCreditoSemParcela() == true
+										&& nomeDocumentoTipoFluxoLoc.equals("CREDITO A REALIZAR")) {
+
+									bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoLoc, nomeGerenciaFluxoLoc,
+											idUnidadeFluxoLoc, nomeUnidadeFluxoLoc, idLocalidadeFluxoLoc, nomeLocalidadeFluxoLoc,
+											idDocumentoTipoFluxoLoc, "CREDITO SEM PARCELA", idSituacaoFluxoLoc, descricaoFluxoLoc,
+											qtDocumentosResLoc, valorDocumentosResSemParcAtualLoc, qtDocumentosComLoc,
+											valorDocumentosComSemParcAtualLoc, qtDocumentosIndLoc, valorDocumentosIndSemParcAtualLoc,
+											qtDocumentosPrivadosLoc, valorDocumentosPrivadosSemParcAtualLoc, qtDocumentosPubLoc,
+											valorDocumentosPubSemParcAtualLoc, "LOCALIDADE - " + nomeLocalidadeFluxoLoc,
+											ConstantesSistema.NAO.toString(), faixaFluxoLoc);
+
+									beansPorLocalidade.add(bean);
+								} else {
+									bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoLoc, nomeGerenciaFluxoLoc,
+											idUnidadeFluxoLoc, nomeUnidadeFluxoLoc, idLocalidadeFluxoLoc, nomeLocalidadeFluxoLoc,
+											idDocumentoTipoFluxoLoc, nomeDocumentoTipoFluxoLoc, idSituacaoFluxoLoc, descricaoFluxoLoc,
+											qtDocumentosResLoc, valorDocumentosResLoc, qtDocumentosComLoc, valorDocumentosComLoc,
+											qtDocumentosIndLoc, valorDocumentosIndLoc, qtDocumentosPrivadosLoc, valorDocumentosPrivadosLoc,
+											qtDocumentosPubLoc, valorDocumentosPubLoc, "LOCALIDADE - " + nomeLocalidadeFluxoLoc,
+											ConstantesSistema.NAO.toString(), faixaFluxoLoc);
+
+									beansPorLocalidade.add(bean);
+								}
 
 								// Reiniciando valores e mudando
 								// variaveis de controle de fluxo
 								qtDocumentosPubLoc = new Integer(0);
 								valorDocumentosPubLoc = BigDecimal.ZERO;
+								valorDocumentosPubSemParcAtualLoc = BigDecimal.ZERO;
 								qtDocumentosResLoc = new Integer(0);
 								valorDocumentosResLoc = BigDecimal.ZERO;
+								valorDocumentosResSemParcAtualLoc = BigDecimal.ZERO;
 								qtDocumentosComLoc = new Integer(0);
 								valorDocumentosComLoc = BigDecimal.ZERO;
+								valorDocumentosComSemParcAtualLoc = BigDecimal.ZERO;
 								qtDocumentosIndLoc = new Integer(0);
 								valorDocumentosIndLoc = BigDecimal.ZERO;
+								valorDocumentosIndSemParcAtualLoc = BigDecimal.ZERO;
 								qtDocumentosPrivadosLoc = new Integer(0);
 								valorDocumentosPrivadosLoc = BigDecimal.ZERO;
+								valorDocumentosPrivadosSemParcAtualLoc = BigDecimal.ZERO;
 
 								idGerenciaFluxoLoc = idGerenciaLoc;
 								nomeGerenciaFluxoLoc = nomeGerenciaLoc;
@@ -58601,24 +58738,31 @@ public class ControladorCobranca implements SessionBean {
 								if (idCategoriaLoc.compareTo(Categoria.RESIDENCIAL) == 0) {
 									qtDocumentosResLoc += qtDocumentosLoc;
 									valorDocumentosResLoc = Util.somaBigDecimal(valorDocumentosResLoc, valorDocumentosLoc);
+									valorDocumentosResSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosResSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 									qtDocumentosPrivadosLoc += qtDocumentosLoc;
 									valorDocumentosPrivadosLoc = Util.somaBigDecimal(valorDocumentosPrivadosLoc, valorDocumentosLoc);
+									valorDocumentosPrivadosSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 								}
 								if (idCategoriaLoc.compareTo(Categoria.COMERCIAL) == 0) {
 									qtDocumentosComLoc += qtDocumentosLoc;
 									valorDocumentosComLoc = Util.somaBigDecimal(valorDocumentosComLoc, valorDocumentosLoc);
+									valorDocumentosComSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosComSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 									qtDocumentosPrivadosLoc += qtDocumentosLoc;
 									valorDocumentosPrivadosLoc = Util.somaBigDecimal(valorDocumentosPrivadosLoc, valorDocumentosLoc);
+									valorDocumentosPrivadosSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 								}
 								if (idCategoriaLoc.compareTo(Categoria.INDUSTRIAL) == 0) {
 									qtDocumentosIndLoc += qtDocumentosLoc;
 									valorDocumentosIndLoc = Util.somaBigDecimal(valorDocumentosIndLoc, valorDocumentosLoc);
+									valorDocumentosIndSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosIndSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 									qtDocumentosPrivadosLoc += qtDocumentosLoc;
 									valorDocumentosPrivadosLoc = Util.somaBigDecimal(valorDocumentosPrivadosLoc, valorDocumentosLoc);
+									valorDocumentosPrivadosSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 								}
 								if (idCategoriaLoc.compareTo(Categoria.PUBLICO) == 0) {
 									qtDocumentosPubLoc += qtDocumentosLoc;
 									valorDocumentosPubLoc = Util.somaBigDecimal(valorDocumentosPubLoc, valorDocumentosLoc);
+									valorDocumentosPubSemParcAtualLoc = Util.somaBigDecimal(valorDocumentosPubSemParcAtualLoc, valorDocumentosSemParcAtualLoc);
 								}
 
 							}
@@ -58627,17 +58771,44 @@ public class ControladorCobranca implements SessionBean {
 						if (colecaoDadosLocalidade.size() < quantidadeMaxima) {
 
 							if (!iterator.hasNext()) {
-								bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoLoc, nomeGerenciaFluxoLoc, idUnidadeFluxoLoc,
-										nomeUnidadeFluxoLoc, idLocalidadeFluxoLoc, nomeLocalidadeFluxoLoc, idDocumentoTipoFluxoLoc,
-										nomeDocumentoTipoFluxoLoc, idSituacaoFluxoLoc, descricaoFluxoLoc, qtDocumentosResLoc,
-										valorDocumentosResLoc, qtDocumentosComLoc, valorDocumentosComLoc, qtDocumentosIndLoc,
-										valorDocumentosIndLoc, qtDocumentosPrivadosLoc, valorDocumentosPrivadosLoc, qtDocumentosPubLoc,
-										valorDocumentosPubLoc, "LOCALIDADE - " + nomeLocalidadeFluxoLoc, ConstantesSistema.NAO.toString(),
-										faixaFluxoLoc);
+								if (helper.isExibirDebitoSemParcela() == true && nomeDocumentoTipoFluxoLoc.equals("DEBITO A COBRAR")) {
 
-								beansPorLocalidade.add(bean);
+									bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoLoc, nomeGerenciaFluxoLoc,
+											idUnidadeFluxoLoc, nomeUnidadeFluxoLoc, idLocalidadeFluxoLoc, nomeLocalidadeFluxoLoc,
+											idDocumentoTipoFluxoLoc, "DEBITO SEM PARCELA", idSituacaoFluxoLoc, descricaoFluxoLoc,
+											qtDocumentosResLoc, valorDocumentosResSemParcAtualLoc, qtDocumentosComLoc,
+											valorDocumentosComSemParcAtualLoc, qtDocumentosIndLoc, valorDocumentosIndSemParcAtualLoc,
+											qtDocumentosPrivadosLoc, valorDocumentosPrivadosSemParcAtualLoc, qtDocumentosPubLoc,
+											valorDocumentosPubSemParcAtualLoc, "LOCALIDADE - " + nomeLocalidadeFluxoLoc,
+											ConstantesSistema.NAO.toString(), faixaFluxoLoc);
+
+									beansPorLocalidade.add(bean);
+
+								} else if (helper.isExibirCreditoSemParcela() == true
+										&& nomeDocumentoTipoFluxoLoc.equals("CREDITO A REALIZAR")) {
+
+									bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoLoc, nomeGerenciaFluxoLoc,
+											idUnidadeFluxoLoc, nomeUnidadeFluxoLoc, idLocalidadeFluxoLoc, nomeLocalidadeFluxoLoc,
+											idDocumentoTipoFluxoLoc, "CREDITO SEM PARCELA", idSituacaoFluxoLoc, descricaoFluxoLoc,
+											qtDocumentosResLoc, valorDocumentosResSemParcAtualLoc, qtDocumentosComLoc,
+											valorDocumentosComSemParcAtualLoc, qtDocumentosIndLoc, valorDocumentosIndSemParcAtualLoc,
+											qtDocumentosPrivadosLoc, valorDocumentosPrivadosSemParcAtualLoc, qtDocumentosPubLoc,
+											valorDocumentosPubSemParcAtualLoc, "LOCALIDADE - " + nomeLocalidadeFluxoLoc,
+											ConstantesSistema.NAO.toString(), faixaFluxoLoc);
+
+									beansPorLocalidade.add(bean);
+								} else {
+									bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoLoc, nomeGerenciaFluxoLoc,
+											idUnidadeFluxoLoc, nomeUnidadeFluxoLoc, idLocalidadeFluxoLoc, nomeLocalidadeFluxoLoc,
+											idDocumentoTipoFluxoLoc, nomeDocumentoTipoFluxoLoc, idSituacaoFluxoLoc, descricaoFluxoLoc,
+											qtDocumentosResLoc, valorDocumentosResLoc, qtDocumentosComLoc, valorDocumentosComLoc,
+											qtDocumentosIndLoc, valorDocumentosIndLoc, qtDocumentosPrivadosLoc, valorDocumentosPrivadosLoc,
+											qtDocumentosPubLoc, valorDocumentosPubLoc, "LOCALIDADE - " + nomeLocalidadeFluxoLoc,
+											ConstantesSistema.NAO.toString(), faixaFluxoLoc);
+
+									beansPorLocalidade.add(bean);
+								}
 							}
-
 						}
 					}
 				}
@@ -58654,15 +58825,18 @@ public class ControladorCobranca implements SessionBean {
 
 						// Dados Pesquisa
 						idCategoriaUni = (Integer) dados[0];
-						idGerenciaUni = (Integer) dados[2];
-						nomeGerenciaUni = (String) dados[3];
-						idUnidadeUni = (Integer) dados[4];
-						nomeUnidadeUni = (String) dados[5];
-						idDocumentoTipoUni = (Integer) dados[6];
-						nomeDocumentoTipoUni = (String) dados[7];
-						idSituacaoUni = (Integer) dados[8];
-						descricaoSituacaoUni = (String) dados[9];
-						faixaUni = (String) dados[10];
+						idDocumentoTipoUni = (Integer) dados[2];
+						nomeDocumentoTipoUni = (String) dados[3];
+						idSituacaoUni = (Integer) dados[4];
+						descricaoSituacaoUni = (String) dados[5];
+						faixaUni = (String) dados[6];
+						qtDocumentosUni = (Integer) dados[7];
+						valorDocumentosUni = (BigDecimal) dados[8];
+						valorDocumentosSemParcAtualUni = (BigDecimal) dados[9];
+						idGerenciaUni = (Integer) dados[10];
+						nomeGerenciaUni = (String) dados[11];
+						idUnidadeUni = (Integer) dados[12];
+						nomeUnidadeUni = (String) dados[13];
 
 						if (!faixaUni.equals("0")) {
 							// Verifica se a faixa não existia na base,
@@ -58682,9 +58856,6 @@ public class ControladorCobranca implements SessionBean {
 						} else {
 							faixaUni = "A VENCER";
 						}
-
-						qtDocumentosUni = (Integer) dados[11];
-						valorDocumentosUni = (BigDecimal) dados[12];
 
 						if (primeiraVezUni) {
 
@@ -58713,24 +58884,31 @@ public class ControladorCobranca implements SessionBean {
 							if (idCategoriaUni.compareTo(Categoria.RESIDENCIAL) == 0) {
 								qtDocumentosResUni += qtDocumentosUni;
 								valorDocumentosResUni = Util.somaBigDecimal(valorDocumentosResUni, valorDocumentosUni);
+								valorDocumentosResSemParcAtualUni = Util.somaBigDecimal(valorDocumentosResSemParcAtualUni, valorDocumentosSemParcAtualUni);
 								qtDocumentosPrivadosUni += qtDocumentosUni;
 								valorDocumentosPrivadosUni = Util.somaBigDecimal(valorDocumentosPrivadosUni, valorDocumentosUni);
+								valorDocumentosPrivadosSemParcAtualUni = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualUni, valorDocumentosSemParcAtualUni);
 							}
 							if (idCategoriaUni.compareTo(Categoria.COMERCIAL) == 0) {
 								qtDocumentosComUni += qtDocumentosUni;
 								valorDocumentosComUni = Util.somaBigDecimal(valorDocumentosComUni, valorDocumentosUni);
+								valorDocumentosComSemParcAtualUni = Util.somaBigDecimal(valorDocumentosComSemParcAtualUni, valorDocumentosSemParcAtualUni);
 								qtDocumentosPrivadosUni += qtDocumentosUni;
 								valorDocumentosPrivadosUni = Util.somaBigDecimal(valorDocumentosPrivadosUni, valorDocumentosUni);
+								valorDocumentosPrivadosSemParcAtualUni = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualUni, valorDocumentosSemParcAtualUni);
 							}
 							if (idCategoriaUni.compareTo(Categoria.INDUSTRIAL) == 0) {
 								qtDocumentosIndUni += qtDocumentosUni;
 								valorDocumentosIndUni = Util.somaBigDecimal(valorDocumentosIndUni, valorDocumentosUni);
+								valorDocumentosIndSemParcAtualUni = Util.somaBigDecimal(valorDocumentosIndSemParcAtualUni, valorDocumentosSemParcAtualUni);
 								qtDocumentosPrivadosUni += qtDocumentosUni;
 								valorDocumentosPrivadosUni = Util.somaBigDecimal(valorDocumentosPrivadosUni, valorDocumentosUni);
+								valorDocumentosPrivadosSemParcAtualUni = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualUni, valorDocumentosSemParcAtualUni);
 							}
 							if (idCategoriaUni.compareTo(Categoria.PUBLICO) == 0) {
 								qtDocumentosPubUni += qtDocumentosUni;
 								valorDocumentosPubUni = Util.somaBigDecimal(valorDocumentosPubUni, valorDocumentosUni);
+								valorDocumentosPubSemParcAtualUni = Util.somaBigDecimal(valorDocumentosPubSemParcAtualUni, valorDocumentosSemParcAtualUni);
 							}
 
 						} else {
@@ -58743,28 +58921,64 @@ public class ControladorCobranca implements SessionBean {
 
 										if (idDocumentoTipoFluxoUni.intValue() != idDocumentoTipoUni.intValue()) {
 
-											bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoUni, nomeGerenciaFluxoUni,
-													idUnidadeFluxoUni, nomeUnidadeFluxoUni, null, null, idDocumentoTipoFluxoUni,
-													nomeDocumentoTipoFluxoUni, idSituacaoFluxoUni, descricaoFluxoUni, qtDocumentosResUni,
-													valorDocumentosResUni, qtDocumentosComUni, valorDocumentosComUni, qtDocumentosIndUni,
-													valorDocumentosIndUni, qtDocumentosPrivadosUni, valorDocumentosPrivadosUni,
-													qtDocumentosPubUni, valorDocumentosPubUni, "UNIDADE - " + nomeUnidadeFluxoUni,
-													ConstantesSistema.NAO.toString(), faixaFluxoUni);
+											if (helper.isExibirDebitoSemParcela() == true
+													&& nomeDocumentoTipoFluxoUni.equals("DEBITO A COBRAR")) {
 
-											beansPorUnidade.add(bean);
+												bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoUni, nomeGerenciaFluxoUni,
+														idUnidadeFluxoUni, nomeUnidadeFluxoUni, null, null, idDocumentoTipoFluxoUni,
+														"DEBITO SEM PARCELA", idSituacaoFluxoUni, descricaoFluxoUni, qtDocumentosResUni,
+														valorDocumentosResSemParcAtualUni, qtDocumentosComUni,
+														valorDocumentosComSemParcAtualUni, qtDocumentosIndUni,
+														valorDocumentosIndSemParcAtualUni, qtDocumentosPrivadosUni,
+														valorDocumentosPrivadosSemParcAtualUni, qtDocumentosPubUni,
+														valorDocumentosPubSemParcAtualUni, "UNIDADE - " + nomeUnidadeFluxoUni,
+														ConstantesSistema.NAO.toString(), faixaFluxoUni);
+
+												beansPorUnidade.add(bean);
+											} else if (helper.isExibirCreditoSemParcela() == true
+													&& nomeDocumentoTipoFluxoUni.equals("CREDITO A REALIZAR")) {
+												
+												bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoUni, nomeGerenciaFluxoUni,
+														idUnidadeFluxoUni, nomeUnidadeFluxoUni, null, null, idDocumentoTipoFluxoUni,
+														"CREDITO SEM PARCELA", idSituacaoFluxoUni, descricaoFluxoUni, qtDocumentosResUni,
+														valorDocumentosResSemParcAtualUni, qtDocumentosComUni,
+														valorDocumentosComSemParcAtualUni, qtDocumentosIndUni,
+														valorDocumentosIndSemParcAtualUni, qtDocumentosPrivadosUni,
+														valorDocumentosPrivadosSemParcAtualUni, qtDocumentosPubUni,
+														valorDocumentosPubSemParcAtualUni, "UNIDADE - " + nomeUnidadeFluxoUni,
+														ConstantesSistema.NAO.toString(), faixaFluxoUni);
+
+												beansPorUnidade.add(bean);
+											} else {												
+												bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoUni, nomeGerenciaFluxoUni,
+														idUnidadeFluxoUni, nomeUnidadeFluxoUni, null, null, idDocumentoTipoFluxoUni,
+														nomeDocumentoTipoFluxoUni, idSituacaoFluxoUni, descricaoFluxoUni,
+														qtDocumentosResUni, valorDocumentosResUni, qtDocumentosComUni,
+														valorDocumentosComUni, qtDocumentosIndUni, valorDocumentosIndUni,
+														qtDocumentosPrivadosUni, valorDocumentosPrivadosUni, qtDocumentosPubUni,
+														valorDocumentosPubUni, "UNIDADE - " + nomeUnidadeFluxoUni,
+														ConstantesSistema.NAO.toString(), faixaFluxoUni);
+
+												beansPorUnidade.add(bean);
+											}
 
 											// Reiniciando valores e mudando
 											// variaveis de controle de fluxo
 											qtDocumentosPubUni = new Integer(0);
 											valorDocumentosPubUni = BigDecimal.ZERO;
+											valorDocumentosPubSemParcAtualUni = BigDecimal.ZERO;
 											qtDocumentosResUni = new Integer(0);
 											valorDocumentosResUni = BigDecimal.ZERO;
+											valorDocumentosResSemParcAtualUni = BigDecimal.ZERO;
 											qtDocumentosComUni = new Integer(0);
 											valorDocumentosComUni = BigDecimal.ZERO;
+											valorDocumentosComSemParcAtualUni = BigDecimal.ZERO;
 											qtDocumentosIndUni = new Integer(0);
 											valorDocumentosIndUni = BigDecimal.ZERO;
+											valorDocumentosIndSemParcAtualUni = BigDecimal.ZERO;
 											qtDocumentosPrivadosUni = new Integer(0);
 											valorDocumentosPrivadosUni = BigDecimal.ZERO;
+											valorDocumentosPrivadosSemParcAtualUni = BigDecimal.ZERO;
 
 											idGerenciaFluxoUni = idGerenciaUni;
 											nomeGerenciaFluxoUni = nomeGerenciaUni;
@@ -58780,54 +58994,93 @@ public class ControladorCobranca implements SessionBean {
 											if (idCategoriaUni.compareTo(Categoria.RESIDENCIAL) == 0) {
 												qtDocumentosResUni += qtDocumentosUni;
 												valorDocumentosResUni = Util.somaBigDecimal(valorDocumentosResUni, valorDocumentosUni);
+												valorDocumentosResSemParcAtualUni = Util.somaBigDecimal(valorDocumentosResSemParcAtualUni, valorDocumentosSemParcAtualUni);
 												qtDocumentosPrivadosUni += qtDocumentosUni;
-												valorDocumentosPrivadosUni = Util.somaBigDecimal(valorDocumentosPrivadosUni,
-														valorDocumentosUni);
+												valorDocumentosPrivadosUni = Util.somaBigDecimal(valorDocumentosPrivadosUni, valorDocumentosUni);
+												valorDocumentosPrivadosSemParcAtualUni = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualUni, valorDocumentosSemParcAtualUni);
 											}
 											if (idCategoriaUni.compareTo(Categoria.COMERCIAL) == 0) {
 												qtDocumentosComUni += qtDocumentosUni;
 												valorDocumentosComUni = Util.somaBigDecimal(valorDocumentosComUni, valorDocumentosUni);
+												valorDocumentosComSemParcAtualUni = Util.somaBigDecimal(valorDocumentosComSemParcAtualUni, valorDocumentosSemParcAtualUni);
 												qtDocumentosPrivadosUni += qtDocumentosUni;
-												valorDocumentosPrivadosUni = Util.somaBigDecimal(valorDocumentosPrivadosUni,
-														valorDocumentosUni);
+												valorDocumentosPrivadosUni = Util.somaBigDecimal(valorDocumentosPrivadosUni, valorDocumentosUni);
+												valorDocumentosPrivadosSemParcAtualUni = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualUni, valorDocumentosSemParcAtualUni);
 											}
 											if (idCategoriaUni.compareTo(Categoria.INDUSTRIAL) == 0) {
 												qtDocumentosIndUni += qtDocumentosUni;
 												valorDocumentosIndUni = Util.somaBigDecimal(valorDocumentosIndUni, valorDocumentosUni);
+												valorDocumentosIndSemParcAtualUni = Util.somaBigDecimal(valorDocumentosIndSemParcAtualUni, valorDocumentosSemParcAtualUni);
 												qtDocumentosPrivadosUni += qtDocumentosUni;
-												valorDocumentosPrivadosUni = Util.somaBigDecimal(valorDocumentosPrivadosUni,
-														valorDocumentosUni);
+												valorDocumentosPrivadosUni = Util.somaBigDecimal(valorDocumentosPrivadosUni, valorDocumentosUni);
+												valorDocumentosPrivadosSemParcAtualUni = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualUni, valorDocumentosSemParcAtualUni);
 											}
 											if (idCategoriaUni.compareTo(Categoria.PUBLICO) == 0) {
 												qtDocumentosPubUni += qtDocumentosUni;
 												valorDocumentosPubUni = Util.somaBigDecimal(valorDocumentosPubUni, valorDocumentosUni);
+												valorDocumentosPubSemParcAtualUni = Util.somaBigDecimal(valorDocumentosPubSemParcAtualUni, valorDocumentosSemParcAtualUni);
 											}
 
 										}
 									} else {
 
-										bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoUni, nomeGerenciaFluxoUni,
-												idUnidadeFluxoUni, nomeUnidadeFluxoUni, null, null, idDocumentoTipoFluxoUni,
-												nomeDocumentoTipoFluxoUni, idSituacaoFluxoUni, descricaoFluxoUni, qtDocumentosResUni,
-												valorDocumentosResUni, qtDocumentosComUni, valorDocumentosComUni, qtDocumentosIndUni,
-												valorDocumentosIndUni, qtDocumentosPrivadosUni, valorDocumentosPrivadosUni,
-												qtDocumentosPubUni, valorDocumentosPubUni, "UNIDADE - " + nomeUnidadeFluxoUni, "3",
-												faixaFluxoUni);
+										if (helper.isExibirDebitoSemParcela() == true
+												&& nomeDocumentoTipoFluxoUni.equals("DEBITO A COBRAR")) {
 
-										beansPorUnidade.add(bean);
+											bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoUni, nomeGerenciaFluxoUni,
+													idUnidadeFluxoUni, nomeUnidadeFluxoUni, null, null, idDocumentoTipoFluxoUni,
+													"DEBITO SEM PARCELA", idSituacaoFluxoUni, descricaoFluxoUni, qtDocumentosResUni,
+													valorDocumentosResSemParcAtualUni, qtDocumentosComUni,
+													valorDocumentosComSemParcAtualUni, qtDocumentosIndUni,
+													valorDocumentosIndSemParcAtualUni, qtDocumentosPrivadosUni,
+													valorDocumentosPrivadosSemParcAtualUni, qtDocumentosPubUni,
+													valorDocumentosPubSemParcAtualUni, "UNIDADE - " + nomeUnidadeFluxoUni,
+													ConstantesSistema.NAO.toString(), faixaFluxoUni);
+
+											beansPorUnidade.add(bean);
+										} else if (helper.isExibirCreditoSemParcela() == true
+												&& nomeDocumentoTipoFluxoUni.equals("CREDITO A REALIZAR")) {
+
+											bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoUni, nomeGerenciaFluxoUni,
+													idUnidadeFluxoUni, nomeUnidadeFluxoUni, null, null, idDocumentoTipoFluxoUni,
+													"CREDITO SEM PARCELA", idSituacaoFluxoUni, descricaoFluxoUni, qtDocumentosResUni,
+													valorDocumentosResSemParcAtualUni, qtDocumentosComUni,
+													valorDocumentosComSemParcAtualUni, qtDocumentosIndUni,
+													valorDocumentosIndSemParcAtualUni, qtDocumentosPrivadosUni,
+													valorDocumentosPrivadosSemParcAtualUni, qtDocumentosPubUni,
+													valorDocumentosPubSemParcAtualUni, "UNIDADE - " + nomeUnidadeFluxoUni,
+													ConstantesSistema.NAO.toString(), faixaFluxoUni);
+
+											beansPorUnidade.add(bean);
+										} else {
+											bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoUni, nomeGerenciaFluxoUni,
+													idUnidadeFluxoUni, nomeUnidadeFluxoUni, null, null, idDocumentoTipoFluxoUni,
+													nomeDocumentoTipoFluxoUni, idSituacaoFluxoUni, descricaoFluxoUni, qtDocumentosResUni,
+													valorDocumentosResUni, qtDocumentosComUni, valorDocumentosComUni, qtDocumentosIndUni,
+													valorDocumentosIndUni, qtDocumentosPrivadosUni, valorDocumentosPrivadosUni,
+													qtDocumentosPubUni, valorDocumentosPubUni, "UNIDADE - " + nomeUnidadeFluxoUni,
+													ConstantesSistema.NAO.toString(), faixaFluxoUni);
+
+											beansPorUnidade.add(bean);
+										}
 
 										// Reiniciando valores e mudando
 										// variaveis de controle de fluxo
 										qtDocumentosPubUni = new Integer(0);
 										valorDocumentosPubUni = BigDecimal.ZERO;
+										valorDocumentosPubSemParcAtualUni = BigDecimal.ZERO;
 										qtDocumentosResUni = new Integer(0);
 										valorDocumentosResUni = BigDecimal.ZERO;
+										valorDocumentosResSemParcAtualUni = BigDecimal.ZERO;
 										qtDocumentosComUni = new Integer(0);
 										valorDocumentosComUni = BigDecimal.ZERO;
+										valorDocumentosComSemParcAtualUni = BigDecimal.ZERO;
 										qtDocumentosIndUni = new Integer(0);
 										valorDocumentosIndUni = BigDecimal.ZERO;
+										valorDocumentosIndSemParcAtualUni = BigDecimal.ZERO;
 										qtDocumentosPrivadosUni = new Integer(0);
 										valorDocumentosPrivadosUni = BigDecimal.ZERO;
+										valorDocumentosPrivadosSemParcAtualUni = BigDecimal.ZERO;
 
 										idGerenciaFluxoUni = idGerenciaUni;
 										nomeGerenciaFluxoUni = nomeGerenciaUni;
@@ -58843,53 +59096,90 @@ public class ControladorCobranca implements SessionBean {
 										if (idCategoriaUni.compareTo(Categoria.RESIDENCIAL) == 0) {
 											qtDocumentosResUni += qtDocumentosUni;
 											valorDocumentosResUni = Util.somaBigDecimal(valorDocumentosResUni, valorDocumentosUni);
+											valorDocumentosResSemParcAtualUni = Util.somaBigDecimal(valorDocumentosResSemParcAtualUni, valorDocumentosSemParcAtualUni);
 											qtDocumentosPrivadosUni += qtDocumentosUni;
-											valorDocumentosPrivadosUni = Util
-													.somaBigDecimal(valorDocumentosPrivadosUni, valorDocumentosUni);
+											valorDocumentosPrivadosUni = Util.somaBigDecimal(valorDocumentosPrivadosUni, valorDocumentosUni);
+											valorDocumentosPrivadosSemParcAtualUni = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualUni, valorDocumentosSemParcAtualUni);
 										}
 										if (idCategoriaUni.compareTo(Categoria.COMERCIAL) == 0) {
 											qtDocumentosComUni += qtDocumentosUni;
 											valorDocumentosComUni = Util.somaBigDecimal(valorDocumentosComUni, valorDocumentosUni);
+											valorDocumentosComSemParcAtualUni = Util.somaBigDecimal(valorDocumentosComSemParcAtualUni, valorDocumentosSemParcAtualUni);
 											qtDocumentosPrivadosUni += qtDocumentosUni;
-											valorDocumentosPrivadosUni = Util
-													.somaBigDecimal(valorDocumentosPrivadosUni, valorDocumentosUni);
+											valorDocumentosPrivadosUni = Util.somaBigDecimal(valorDocumentosPrivadosUni, valorDocumentosUni);
+											valorDocumentosPrivadosSemParcAtualUni = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualUni, valorDocumentosSemParcAtualUni);
 										}
 										if (idCategoriaUni.compareTo(Categoria.INDUSTRIAL) == 0) {
 											qtDocumentosIndUni += qtDocumentosUni;
 											valorDocumentosIndUni = Util.somaBigDecimal(valorDocumentosIndUni, valorDocumentosUni);
+											valorDocumentosIndSemParcAtualUni = Util.somaBigDecimal(valorDocumentosIndSemParcAtualUni, valorDocumentosSemParcAtualUni);
 											qtDocumentosPrivadosUni += qtDocumentosUni;
-											valorDocumentosPrivadosUni = Util
-													.somaBigDecimal(valorDocumentosPrivadosUni, valorDocumentosUni);
+											valorDocumentosPrivadosUni = Util.somaBigDecimal(valorDocumentosPrivadosUni, valorDocumentosUni);
+											valorDocumentosPrivadosSemParcAtualUni = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualUni, valorDocumentosSemParcAtualUni);
 										}
 										if (idCategoriaUni.compareTo(Categoria.PUBLICO) == 0) {
 											qtDocumentosPubUni += qtDocumentosUni;
 											valorDocumentosPubUni = Util.somaBigDecimal(valorDocumentosPubUni, valorDocumentosUni);
+											valorDocumentosPubSemParcAtualUni = Util.somaBigDecimal(valorDocumentosPubSemParcAtualUni, valorDocumentosSemParcAtualUni);
 										}
 
 									}
 								} else {
 
-									bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoUni, nomeGerenciaFluxoUni,
-											idUnidadeFluxoUni, nomeUnidadeFluxoUni, null, null, idDocumentoTipoFluxoUni,
-											nomeDocumentoTipoFluxoUni, idSituacaoFluxoUni, descricaoFluxoUni, qtDocumentosResUni,
-											valorDocumentosResUni, qtDocumentosComUni, valorDocumentosComUni, qtDocumentosIndUni,
-											valorDocumentosIndUni, qtDocumentosPrivadosUni, valorDocumentosPrivadosUni, qtDocumentosPubUni,
-											valorDocumentosPubUni, "UNIDADE - " + nomeUnidadeFluxoUni, "3", faixaFluxoUni);
+									if (helper.isExibirDebitoSemParcela() == true && nomeDocumentoTipoFluxoUni.equals("DEBITO A COBRAR")) {
 
-									beansPorUnidade.add(bean);
+										bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoUni, nomeGerenciaFluxoUni,
+												idUnidadeFluxoUni, nomeUnidadeFluxoUni, null, null, idDocumentoTipoFluxoUni,
+												"DEBITO SEM PARCELA", idSituacaoFluxoUni, descricaoFluxoUni, qtDocumentosResUni,
+												valorDocumentosResSemParcAtualUni, qtDocumentosComUni, valorDocumentosComSemParcAtualUni,
+												qtDocumentosIndUni, valorDocumentosIndSemParcAtualUni, qtDocumentosPrivadosUni,
+												valorDocumentosPrivadosSemParcAtualUni, qtDocumentosPubUni,
+												valorDocumentosPubSemParcAtualUni, "UNIDADE - " + nomeUnidadeFluxoUni,
+												ConstantesSistema.NAO.toString(), faixaFluxoUni);
+
+										beansPorUnidade.add(bean);
+									} else if (helper.isExibirCreditoSemParcela() == true
+											&& nomeDocumentoTipoFluxoUni.equals("CREDITO A REALIZAR")) {
+
+										bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoUni, nomeGerenciaFluxoUni,
+												idUnidadeFluxoUni, nomeUnidadeFluxoUni, null, null, idDocumentoTipoFluxoUni,
+												"CREDITO SEM PARCELA", idSituacaoFluxoUni, descricaoFluxoUni, qtDocumentosResUni,
+												valorDocumentosResSemParcAtualUni, qtDocumentosComUni, valorDocumentosComSemParcAtualUni,
+												qtDocumentosIndUni, valorDocumentosIndSemParcAtualUni, qtDocumentosPrivadosUni,
+												valorDocumentosPrivadosSemParcAtualUni, qtDocumentosPubUni,
+												valorDocumentosPubSemParcAtualUni, "UNIDADE - " + nomeUnidadeFluxoUni,
+												ConstantesSistema.NAO.toString(), faixaFluxoUni);
+
+										beansPorUnidade.add(bean);
+									} else {
+										bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoUni, nomeGerenciaFluxoUni,
+												idUnidadeFluxoUni, nomeUnidadeFluxoUni, null, null, idDocumentoTipoFluxoUni,
+												nomeDocumentoTipoFluxoUni, idSituacaoFluxoUni, descricaoFluxoUni, qtDocumentosResUni,
+												valorDocumentosResUni, qtDocumentosComUni, valorDocumentosComUni, qtDocumentosIndUni,
+												valorDocumentosIndUni, qtDocumentosPrivadosUni, valorDocumentosPrivadosUni,
+												qtDocumentosPubUni, valorDocumentosPubUni, "UNIDADE - " + nomeUnidadeFluxoUni,
+												ConstantesSistema.NAO.toString(), faixaFluxoUni);
+
+										beansPorUnidade.add(bean);
+									}
 
 									// Reiniciando valores e mudando
 									// variaveis de controle de fluxo
 									qtDocumentosPubUni = new Integer(0);
 									valorDocumentosPubUni = BigDecimal.ZERO;
+									valorDocumentosPubSemParcAtualUni = BigDecimal.ZERO;
 									qtDocumentosResUni = new Integer(0);
 									valorDocumentosResUni = BigDecimal.ZERO;
+									valorDocumentosResSemParcAtualUni = BigDecimal.ZERO;
 									qtDocumentosComUni = new Integer(0);
 									valorDocumentosComUni = BigDecimal.ZERO;
+									valorDocumentosComSemParcAtualUni = BigDecimal.ZERO;
 									qtDocumentosIndUni = new Integer(0);
 									valorDocumentosIndUni = BigDecimal.ZERO;
+									valorDocumentosIndSemParcAtualUni = BigDecimal.ZERO;
 									qtDocumentosPrivadosUni = new Integer(0);
 									valorDocumentosPrivadosUni = BigDecimal.ZERO;
+									valorDocumentosPrivadosSemParcAtualUni = BigDecimal.ZERO;
 
 									idGerenciaFluxoUni = idGerenciaUni;
 									nomeGerenciaFluxoUni = nomeGerenciaUni;
@@ -58905,50 +59195,88 @@ public class ControladorCobranca implements SessionBean {
 									if (idCategoriaUni.compareTo(Categoria.RESIDENCIAL) == 0) {
 										qtDocumentosResUni += qtDocumentosUni;
 										valorDocumentosResUni = Util.somaBigDecimal(valorDocumentosResUni, valorDocumentosUni);
+										valorDocumentosResSemParcAtualUni = Util.somaBigDecimal(valorDocumentosResSemParcAtualUni, valorDocumentosSemParcAtualUni);
 										qtDocumentosPrivadosUni += qtDocumentosUni;
 										valorDocumentosPrivadosUni = Util.somaBigDecimal(valorDocumentosPrivadosUni, valorDocumentosUni);
+										valorDocumentosPrivadosSemParcAtualUni = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualUni, valorDocumentosSemParcAtualUni);
 									}
 									if (idCategoriaUni.compareTo(Categoria.COMERCIAL) == 0) {
 										qtDocumentosComUni += qtDocumentosUni;
 										valorDocumentosComUni = Util.somaBigDecimal(valorDocumentosComUni, valorDocumentosUni);
+										valorDocumentosComSemParcAtualUni = Util.somaBigDecimal(valorDocumentosComSemParcAtualUni, valorDocumentosSemParcAtualUni);
 										qtDocumentosPrivadosUni += qtDocumentosUni;
 										valorDocumentosPrivadosUni = Util.somaBigDecimal(valorDocumentosPrivadosUni, valorDocumentosUni);
+										valorDocumentosPrivadosSemParcAtualUni = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualUni, valorDocumentosSemParcAtualUni);
 									}
 									if (idCategoriaUni.compareTo(Categoria.INDUSTRIAL) == 0) {
 										qtDocumentosIndUni += qtDocumentosUni;
 										valorDocumentosIndUni = Util.somaBigDecimal(valorDocumentosIndUni, valorDocumentosUni);
+										valorDocumentosIndSemParcAtualUni = Util.somaBigDecimal(valorDocumentosIndSemParcAtualUni, valorDocumentosSemParcAtualUni);
 										qtDocumentosPrivadosUni += qtDocumentosUni;
 										valorDocumentosPrivadosUni = Util.somaBigDecimal(valorDocumentosPrivadosUni, valorDocumentosUni);
+										valorDocumentosPrivadosSemParcAtualUni = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualUni, valorDocumentosSemParcAtualUni);
 									}
 									if (idCategoriaUni.compareTo(Categoria.PUBLICO) == 0) {
 										qtDocumentosPubUni += qtDocumentosUni;
 										valorDocumentosPubUni = Util.somaBigDecimal(valorDocumentosPubUni, valorDocumentosUni);
+										valorDocumentosPubSemParcAtualUni = Util.somaBigDecimal(valorDocumentosPubSemParcAtualUni, valorDocumentosSemParcAtualUni);
 									}
 								}
 
 							} else {
 
-								bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoUni, nomeGerenciaFluxoUni, idUnidadeFluxoUni,
-										nomeUnidadeFluxoUni, null, null, idDocumentoTipoFluxoUni, nomeDocumentoTipoFluxoUni,
-										idSituacaoFluxoUni, descricaoFluxoUni, qtDocumentosResUni, valorDocumentosResUni,
-										qtDocumentosComUni, valorDocumentosComUni, qtDocumentosIndUni, valorDocumentosIndUni,
-										qtDocumentosPrivadosUni, valorDocumentosPrivadosUni, qtDocumentosPubUni, valorDocumentosPubUni,
-										"UNIDADE - " + nomeUnidadeFluxoUni, ConstantesSistema.NAO.toString(), faixaFluxoUni);
+								if (helper.isExibirDebitoSemParcela() == true && nomeDocumentoTipoFluxoUni.equals("DEBITO A COBRAR")) {
 
-								beansPorUnidade.add(bean);
+									bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoUni, nomeGerenciaFluxoUni,
+											idUnidadeFluxoUni, nomeUnidadeFluxoUni, null, null, idDocumentoTipoFluxoUni,
+											"DEBITO SEM PARCELA", idSituacaoFluxoUni, descricaoFluxoUni, qtDocumentosResUni,
+											valorDocumentosResSemParcAtualUni, qtDocumentosComUni, valorDocumentosComSemParcAtualUni,
+											qtDocumentosIndUni, valorDocumentosIndSemParcAtualUni, qtDocumentosPrivadosUni,
+											valorDocumentosPrivadosSemParcAtualUni, qtDocumentosPubUni, valorDocumentosPubSemParcAtualUni,
+											"UNIDADE - " + nomeUnidadeFluxoUni, ConstantesSistema.NAO.toString(), faixaFluxoUni);
+
+									beansPorUnidade.add(bean);
+								} else if (helper.isExibirCreditoSemParcela() == true
+										&& nomeDocumentoTipoFluxoUni.equals("CREDITO A REALIZAR")) {
+
+									bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoUni, nomeGerenciaFluxoUni,
+											idUnidadeFluxoUni, nomeUnidadeFluxoUni, null, null, idDocumentoTipoFluxoUni,
+											"CREDITO SEM PARCELA", idSituacaoFluxoUni, descricaoFluxoUni, qtDocumentosResUni,
+											valorDocumentosResSemParcAtualUni, qtDocumentosComUni, valorDocumentosComSemParcAtualUni,
+											qtDocumentosIndUni, valorDocumentosIndSemParcAtualUni, qtDocumentosPrivadosUni,
+											valorDocumentosPrivadosSemParcAtualUni, qtDocumentosPubUni, valorDocumentosPubSemParcAtualUni,
+											"UNIDADE - " + nomeUnidadeFluxoUni, ConstantesSistema.NAO.toString(), faixaFluxoUni);
+
+									beansPorUnidade.add(bean);
+								} else {
+									bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoUni, nomeGerenciaFluxoUni,
+											idUnidadeFluxoUni, nomeUnidadeFluxoUni, null, null, idDocumentoTipoFluxoUni,
+											nomeDocumentoTipoFluxoUni, idSituacaoFluxoUni, descricaoFluxoUni, qtDocumentosResUni,
+											valorDocumentosResUni, qtDocumentosComUni, valorDocumentosComUni, qtDocumentosIndUni,
+											valorDocumentosIndUni, qtDocumentosPrivadosUni, valorDocumentosPrivadosUni, qtDocumentosPubUni,
+											valorDocumentosPubUni, "UNIDADE - " + nomeUnidadeFluxoUni, ConstantesSistema.NAO.toString(),
+											faixaFluxoUni);
+
+									beansPorUnidade.add(bean);
+								}
 
 								// Reiniciando valores e mudando
 								// variaveis de controle de fluxo
 								qtDocumentosPubUni = new Integer(0);
 								valorDocumentosPubUni = BigDecimal.ZERO;
+								valorDocumentosPubSemParcAtualUni = BigDecimal.ZERO;
 								qtDocumentosResUni = new Integer(0);
 								valorDocumentosResUni = BigDecimal.ZERO;
+								valorDocumentosResSemParcAtualUni = BigDecimal.ZERO;
 								qtDocumentosComUni = new Integer(0);
 								valorDocumentosComUni = BigDecimal.ZERO;
+								valorDocumentosComSemParcAtualUni = BigDecimal.ZERO;
 								qtDocumentosIndUni = new Integer(0);
 								valorDocumentosIndUni = BigDecimal.ZERO;
+								valorDocumentosIndSemParcAtualUni = BigDecimal.ZERO;
 								qtDocumentosPrivadosUni = new Integer(0);
 								valorDocumentosPrivadosUni = BigDecimal.ZERO;
+								valorDocumentosPrivadosSemParcAtualUni = BigDecimal.ZERO;
 
 								idGerenciaFluxoUni = idGerenciaUni;
 								nomeGerenciaFluxoUni = nomeGerenciaUni;
@@ -58964,37 +59292,70 @@ public class ControladorCobranca implements SessionBean {
 								if (idCategoriaUni.compareTo(Categoria.RESIDENCIAL) == 0) {
 									qtDocumentosResUni += qtDocumentosUni;
 									valorDocumentosResUni = Util.somaBigDecimal(valorDocumentosResUni, valorDocumentosUni);
+									valorDocumentosResSemParcAtualUni = Util.somaBigDecimal(valorDocumentosResSemParcAtualUni, valorDocumentosSemParcAtualUni);
 									qtDocumentosPrivadosUni += qtDocumentosUni;
 									valorDocumentosPrivadosUni = Util.somaBigDecimal(valorDocumentosPrivadosUni, valorDocumentosUni);
+									valorDocumentosPrivadosSemParcAtualUni = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualUni, valorDocumentosSemParcAtualUni);
 								}
 								if (idCategoriaUni.compareTo(Categoria.COMERCIAL) == 0) {
 									qtDocumentosComUni += qtDocumentosUni;
 									valorDocumentosComUni = Util.somaBigDecimal(valorDocumentosComUni, valorDocumentosUni);
+									valorDocumentosComSemParcAtualUni = Util.somaBigDecimal(valorDocumentosComSemParcAtualUni, valorDocumentosSemParcAtualUni);
 									qtDocumentosPrivadosUni += qtDocumentosUni;
 									valorDocumentosPrivadosUni = Util.somaBigDecimal(valorDocumentosPrivadosUni, valorDocumentosUni);
+									valorDocumentosPrivadosSemParcAtualUni = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualUni, valorDocumentosSemParcAtualUni);
 								}
 								if (idCategoriaUni.compareTo(Categoria.INDUSTRIAL) == 0) {
 									qtDocumentosIndUni += qtDocumentosUni;
 									valorDocumentosIndUni = Util.somaBigDecimal(valorDocumentosIndUni, valorDocumentosUni);
+									valorDocumentosIndSemParcAtualUni = Util.somaBigDecimal(valorDocumentosIndSemParcAtualUni, valorDocumentosSemParcAtualUni);
 									qtDocumentosPrivadosUni += qtDocumentosUni;
 									valorDocumentosPrivadosUni = Util.somaBigDecimal(valorDocumentosPrivadosUni, valorDocumentosUni);
+									valorDocumentosPrivadosSemParcAtualUni = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualUni, valorDocumentosSemParcAtualUni);
 								}
 								if (idCategoriaUni.compareTo(Categoria.PUBLICO) == 0) {
 									qtDocumentosPubUni += qtDocumentosUni;
 									valorDocumentosPubUni = Util.somaBigDecimal(valorDocumentosPubUni, valorDocumentosUni);
+									valorDocumentosPubSemParcAtualUni = Util.somaBigDecimal(valorDocumentosPubSemParcAtualUni, valorDocumentosSemParcAtualUni);
 								}
 							}
 						}
 						if (colecaoDadosUnidade.size() < quantidadeMaxima) {
 							if (!iterator.hasNext()) {
-								bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoUni, nomeGerenciaFluxoUni, idUnidadeFluxoUni,
-										nomeUnidadeFluxoUni, null, null, idDocumentoTipoFluxoUni, nomeDocumentoTipoFluxoUni,
-										idSituacaoFluxoUni, descricaoFluxoUni, qtDocumentosResUni, valorDocumentosResUni,
-										qtDocumentosComUni, valorDocumentosComUni, qtDocumentosIndUni, valorDocumentosIndUni,
-										qtDocumentosPrivadosUni, valorDocumentosPrivadosUni, qtDocumentosPubUni, valorDocumentosPubUni,
-										"UNIDADE - " + nomeUnidadeFluxoUni, ConstantesSistema.NAO.toString(), faixaFluxoUni);
+								if (helper.isExibirDebitoSemParcela() == true && nomeDocumentoTipoFluxoUni.equals("DEBITO A COBRAR")) {
 
-								beansPorUnidade.add(bean);
+									bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoUni, nomeGerenciaFluxoUni,
+											idUnidadeFluxoUni, nomeUnidadeFluxoUni, null, null, idDocumentoTipoFluxoUni,
+											"DEBITO SEM PARCELA", idSituacaoFluxoUni, descricaoFluxoUni, qtDocumentosResUni,
+											valorDocumentosResSemParcAtualUni, qtDocumentosComUni, valorDocumentosComSemParcAtualUni,
+											qtDocumentosIndUni, valorDocumentosIndSemParcAtualUni, qtDocumentosPrivadosUni,
+											valorDocumentosPrivadosSemParcAtualUni, qtDocumentosPubUni, valorDocumentosPubSemParcAtualUni,
+											"UNIDADE - " + nomeUnidadeFluxoUni, ConstantesSistema.NAO.toString(), faixaFluxoUni);
+
+									beansPorUnidade.add(bean);
+								} else if (helper.isExibirCreditoSemParcela() == true
+										&& nomeDocumentoTipoFluxoUni.equals("CREDITO A REALIZAR")) {
+
+									bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoUni, nomeGerenciaFluxoUni,
+											idUnidadeFluxoUni, nomeUnidadeFluxoUni, null, null, idDocumentoTipoFluxoUni,
+											"CREDITO SEM PARCELA", idSituacaoFluxoUni, descricaoFluxoUni, qtDocumentosResUni,
+											valorDocumentosResSemParcAtualUni, qtDocumentosComUni, valorDocumentosComSemParcAtualUni,
+											qtDocumentosIndUni, valorDocumentosIndSemParcAtualUni, qtDocumentosPrivadosUni,
+											valorDocumentosPrivadosSemParcAtualUni, qtDocumentosPubUni, valorDocumentosPubSemParcAtualUni,
+											"UNIDADE - " + nomeUnidadeFluxoUni, ConstantesSistema.NAO.toString(), faixaFluxoUni);
+
+									beansPorUnidade.add(bean);
+								} else {
+									bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoUni, nomeGerenciaFluxoUni,
+											idUnidadeFluxoUni, nomeUnidadeFluxoUni, null, null, idDocumentoTipoFluxoUni,
+											nomeDocumentoTipoFluxoUni, idSituacaoFluxoUni, descricaoFluxoUni, qtDocumentosResUni,
+											valorDocumentosResUni, qtDocumentosComUni, valorDocumentosComUni, qtDocumentosIndUni,
+											valorDocumentosIndUni, qtDocumentosPrivadosUni, valorDocumentosPrivadosUni, qtDocumentosPubUni,
+											valorDocumentosPubUni, "UNIDADE - " + nomeUnidadeFluxoUni, ConstantesSistema.NAO.toString(),
+											faixaFluxoUni);
+
+									beansPorUnidade.add(bean);
+								}
 							}
 						}
 					}
@@ -59012,13 +59373,16 @@ public class ControladorCobranca implements SessionBean {
 
 						// Dados Pesquisa
 						idCategoriaGer = (Integer) dados[0];
-						idGerenciaGer = (Integer) dados[2];
-						nomeGerenciaGer = (String) dados[3];
-						idDocumentoTipoGer = (Integer) dados[4];
-						nomeDocumentoTipoGer = (String) dados[5];
-						idSituacaoGer = (Integer) dados[6];
-						descricaoSituacaoGer = (String) dados[7];
-						faixaGer = (String) dados[8];
+						idDocumentoTipoGer = (Integer) dados[2];
+						nomeDocumentoTipoGer = (String) dados[3];
+						idSituacaoGer = (Integer) dados[4];
+						descricaoSituacaoGer = (String) dados[5];
+						faixaGer = (String) dados[6];
+						qtDocumentosGer = (Integer) dados[7];
+						valorDocumentosGer = (BigDecimal) dados[8];
+						valorDocumentosSemParcAtualGer = (BigDecimal) dados[9];
+						idGerenciaGer = (Integer) dados[10];
+						nomeGerenciaGer = (String) dados[11];
 
 						if (!faixaGer.equals("0")) {
 							// Verifica se a faixa não existia na base,
@@ -59038,9 +59402,6 @@ public class ControladorCobranca implements SessionBean {
 						} else {
 							faixaGer = "A VENCER";
 						}
-
-						qtDocumentosGer = (Integer) dados[9];
-						valorDocumentosGer = (BigDecimal) dados[10];
 
 						if (primeiraVezGer) {
 
@@ -59065,24 +59426,31 @@ public class ControladorCobranca implements SessionBean {
 							if (idCategoriaGer.compareTo(Categoria.RESIDENCIAL) == 0) {
 								qtDocumentosResGer += qtDocumentosGer;
 								valorDocumentosResGer = Util.somaBigDecimal(valorDocumentosResGer, valorDocumentosGer);
+								valorDocumentosResSemParcAtualGer = Util.somaBigDecimal(valorDocumentosResSemParcAtualGer, valorDocumentosSemParcAtualGer);
 								qtDocumentosPrivadosGer += qtDocumentosGer;
 								valorDocumentosPrivadosGer = Util.somaBigDecimal(valorDocumentosPrivadosGer, valorDocumentosGer);
+								valorDocumentosPrivadosSemParcAtualGer = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualGer, valorDocumentosSemParcAtualGer);
 							}
 							if (idCategoriaGer.compareTo(Categoria.COMERCIAL) == 0) {
 								qtDocumentosComGer += qtDocumentosGer;
 								valorDocumentosComGer = Util.somaBigDecimal(valorDocumentosComGer, valorDocumentosGer);
+								valorDocumentosComSemParcAtualGer = Util.somaBigDecimal(valorDocumentosComSemParcAtualGer, valorDocumentosSemParcAtualGer);
 								qtDocumentosPrivadosGer += qtDocumentosGer;
 								valorDocumentosPrivadosGer = Util.somaBigDecimal(valorDocumentosPrivadosGer, valorDocumentosGer);
+								valorDocumentosPrivadosSemParcAtualGer = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualGer, valorDocumentosSemParcAtualGer);
 							}
 							if (idCategoriaGer.compareTo(Categoria.INDUSTRIAL) == 0) {
 								qtDocumentosIndGer += qtDocumentosGer;
 								valorDocumentosIndGer = Util.somaBigDecimal(valorDocumentosIndGer, valorDocumentosGer);
+								valorDocumentosIndSemParcAtualGer = Util.somaBigDecimal(valorDocumentosIndSemParcAtualGer, valorDocumentosSemParcAtualGer);
 								qtDocumentosPrivadosGer += qtDocumentosGer;
 								valorDocumentosPrivadosGer = Util.somaBigDecimal(valorDocumentosPrivadosGer, valorDocumentosGer);
+								valorDocumentosPrivadosSemParcAtualGer = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualGer, valorDocumentosSemParcAtualGer);
 							}
 							if (idCategoriaGer.compareTo(Categoria.PUBLICO) == 0) {
 								qtDocumentosPubGer += qtDocumentosGer;
 								valorDocumentosPubGer = Util.somaBigDecimal(valorDocumentosPubGer, valorDocumentosGer);
+								valorDocumentosPubSemParcAtualGer = Util.somaBigDecimal(valorDocumentosPubSemParcAtualGer, valorDocumentosSemParcAtualGer);
 							}
 
 						} else {
@@ -59095,28 +59463,64 @@ public class ControladorCobranca implements SessionBean {
 
 										if (idDocumentoTipoFluxoGer.intValue() != idDocumentoTipoGer.intValue()) {
 
-											bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoGer, nomeGerenciaFluxoGer, null,
-													null, null, null, idDocumentoTipoFluxoGer, nomeDocumentoTipoFluxoGer,
-													idSituacaoFluxoGer, descricaoFluxoGer, qtDocumentosResGer, valorDocumentosResGer,
-													qtDocumentosComGer, valorDocumentosComGer, qtDocumentosIndGer, valorDocumentosIndGer,
-													qtDocumentosPrivadosGer, valorDocumentosPrivadosGer, qtDocumentosPubGer,
-													valorDocumentosPubGer, "GERÊNCIA - " + nomeGerenciaFluxoGer,
-													ConstantesSistema.NAO.toString(), faixaFluxoGer);
+											if (helper.isExibirDebitoSemParcela() == true
+													&& nomeDocumentoTipoFluxoGer.equals("DEBITO A COBRAR")) {
 
-											beansPorGerencia.add(bean);
+												bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoGer, nomeGerenciaFluxoGer, null,
+														null, null, null, idDocumentoTipoFluxoGer, "DEBITO SEM PARCELA",
+														idSituacaoFluxoGer, descricaoFluxoGer, qtDocumentosResGer,
+														valorDocumentosResSemParcAtualGer, qtDocumentosComGer,
+														valorDocumentosComSemParcAtualGer, qtDocumentosIndGer,
+														valorDocumentosIndSemParcAtualGer, qtDocumentosPrivadosGer,
+														valorDocumentosPrivadosSemParcAtualGer, qtDocumentosPubGer,
+														valorDocumentosPubSemParcAtualGer, "GERÊNCIA - " + nomeGerenciaFluxoGer,
+														ConstantesSistema.NAO.toString(), faixaFluxoGer);
+
+												beansPorGerencia.add(bean);
+											} else if (helper.isExibirCreditoSemParcela() == true
+													&& nomeDocumentoTipoFluxoGer.equals("CREDITO A REALIZAR")) {
+
+												bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoGer, nomeGerenciaFluxoGer, null,
+														null, null, null, idDocumentoTipoFluxoGer, "CREDITO SEM PARCELA",
+														idSituacaoFluxoGer, descricaoFluxoGer, qtDocumentosResGer,
+														valorDocumentosResSemParcAtualGer, qtDocumentosComGer,
+														valorDocumentosComSemParcAtualGer, qtDocumentosIndGer,
+														valorDocumentosIndSemParcAtualGer, qtDocumentosPrivadosGer,
+														valorDocumentosPrivadosSemParcAtualGer, qtDocumentosPubGer,
+														valorDocumentosPubSemParcAtualGer, "GERÊNCIA - " + nomeGerenciaFluxoGer,
+														ConstantesSistema.NAO.toString(), faixaFluxoGer);
+
+												beansPorGerencia.add(bean);
+											} else {
+												bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoGer, nomeGerenciaFluxoGer, null,
+														null, null, null, idDocumentoTipoFluxoGer, nomeDocumentoTipoFluxoGer,
+														idSituacaoFluxoGer, descricaoFluxoGer, qtDocumentosResGer, valorDocumentosResGer,
+														qtDocumentosComGer, valorDocumentosComGer, qtDocumentosIndGer,
+														valorDocumentosIndGer, qtDocumentosPrivadosGer, valorDocumentosPrivadosGer,
+														qtDocumentosPubGer, valorDocumentosPubGer, "GERÊNCIA - " + nomeGerenciaFluxoGer,
+														ConstantesSistema.NAO.toString(), faixaFluxoGer);
+
+												beansPorGerencia.add(bean);
+											}
+											
 
 											// Reiniciando valores e mudando
 											// variaveis de controle de fluxo
 											qtDocumentosPubGer = new Integer(0);
 											valorDocumentosPubGer = BigDecimal.ZERO;
+											valorDocumentosPubSemParcAtualGer = BigDecimal.ZERO;
 											qtDocumentosResGer = new Integer(0);
 											valorDocumentosResGer = BigDecimal.ZERO;
+											valorDocumentosResSemParcAtualGer = BigDecimal.ZERO;
 											qtDocumentosComGer = new Integer(0);
 											valorDocumentosComGer = BigDecimal.ZERO;
+											valorDocumentosComSemParcAtualGer = BigDecimal.ZERO;
 											qtDocumentosIndGer = new Integer(0);
 											valorDocumentosIndGer = BigDecimal.ZERO;
+											valorDocumentosIndSemParcAtualGer = BigDecimal.ZERO;
 											qtDocumentosPrivadosGer = new Integer(0);
 											valorDocumentosPrivadosGer = BigDecimal.ZERO;
+											valorDocumentosPrivadosSemParcAtualGer = BigDecimal.ZERO;
 
 											idGerenciaFluxoGer = idGerenciaGer;
 											nomeGerenciaFluxoGer = nomeGerenciaGer;
@@ -59130,52 +59534,90 @@ public class ControladorCobranca implements SessionBean {
 											if (idCategoriaGer.compareTo(Categoria.RESIDENCIAL) == 0) {
 												qtDocumentosResGer += qtDocumentosGer;
 												valorDocumentosResGer = Util.somaBigDecimal(valorDocumentosResGer, valorDocumentosGer);
+												valorDocumentosResSemParcAtualGer = Util.somaBigDecimal(valorDocumentosResSemParcAtualGer, valorDocumentosSemParcAtualGer);
 												qtDocumentosPrivadosGer += qtDocumentosGer;
-												valorDocumentosPrivadosGer = Util.somaBigDecimal(valorDocumentosPrivadosGer,
-														valorDocumentosGer);
+												valorDocumentosPrivadosGer = Util.somaBigDecimal(valorDocumentosPrivadosGer, valorDocumentosGer);
+												valorDocumentosPrivadosSemParcAtualGer = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualGer, valorDocumentosSemParcAtualGer);
 											}
 											if (idCategoriaGer.compareTo(Categoria.COMERCIAL) == 0) {
 												qtDocumentosComGer += qtDocumentosGer;
 												valorDocumentosComGer = Util.somaBigDecimal(valorDocumentosComGer, valorDocumentosGer);
+												valorDocumentosComSemParcAtualGer = Util.somaBigDecimal(valorDocumentosComSemParcAtualGer, valorDocumentosSemParcAtualGer);
 												qtDocumentosPrivadosGer += qtDocumentosGer;
-												valorDocumentosPrivadosGer = Util.somaBigDecimal(valorDocumentosPrivadosGer,
-														valorDocumentosGer);
+												valorDocumentosPrivadosGer = Util.somaBigDecimal(valorDocumentosPrivadosGer, valorDocumentosGer);
+												valorDocumentosPrivadosSemParcAtualGer = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualGer, valorDocumentosSemParcAtualGer);
 											}
 											if (idCategoriaGer.compareTo(Categoria.INDUSTRIAL) == 0) {
 												qtDocumentosIndGer += qtDocumentosGer;
 												valorDocumentosIndGer = Util.somaBigDecimal(valorDocumentosIndGer, valorDocumentosGer);
+												valorDocumentosIndSemParcAtualGer = Util.somaBigDecimal(valorDocumentosIndSemParcAtualGer, valorDocumentosSemParcAtualGer);
 												qtDocumentosPrivadosGer += qtDocumentosGer;
-												valorDocumentosPrivadosGer = Util.somaBigDecimal(valorDocumentosPrivadosGer,
-														valorDocumentosGer);
+												valorDocumentosPrivadosGer = Util.somaBigDecimal(valorDocumentosPrivadosGer, valorDocumentosGer);
+												valorDocumentosPrivadosSemParcAtualGer = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualGer, valorDocumentosSemParcAtualGer);
 											}
 											if (idCategoriaGer.compareTo(Categoria.PUBLICO) == 0) {
 												qtDocumentosPubGer += qtDocumentosGer;
 												valorDocumentosPubGer = Util.somaBigDecimal(valorDocumentosPubGer, valorDocumentosGer);
+												valorDocumentosPubSemParcAtualGer = Util.somaBigDecimal(valorDocumentosPubSemParcAtualGer, valorDocumentosSemParcAtualGer);
 											}
 
 										}
 									} else {
-										bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoGer, nomeGerenciaFluxoGer, null, null,
-												null, null, idDocumentoTipoFluxoGer, nomeDocumentoTipoFluxoGer, idSituacaoFluxoGer,
-												descricaoFluxoGer, qtDocumentosResGer, valorDocumentosResGer, qtDocumentosComGer,
-												valorDocumentosComGer, qtDocumentosIndGer, valorDocumentosIndGer, qtDocumentosPrivadosGer,
-												valorDocumentosPrivadosGer, qtDocumentosPubGer, valorDocumentosPubGer, "GERÊNCIA - "
-														+ nomeGerenciaFluxoGer, "3", faixaFluxoGer);
+										if (helper.isExibirDebitoSemParcela() == true
+												&& nomeDocumentoTipoFluxoGer.equals("DEBITO A COBRAR")) {
 
-										beansPorGerencia.add(bean);
+											bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoGer, nomeGerenciaFluxoGer, null,
+													null, null, null, idDocumentoTipoFluxoGer, "DEBITO SEM PARCELA", idSituacaoFluxoGer,
+													descricaoFluxoGer, qtDocumentosResGer, valorDocumentosResSemParcAtualGer,
+													qtDocumentosComGer, valorDocumentosComSemParcAtualGer, qtDocumentosIndGer,
+													valorDocumentosIndSemParcAtualGer, qtDocumentosPrivadosGer,
+													valorDocumentosPrivadosSemParcAtualGer, qtDocumentosPubGer,
+													valorDocumentosPubSemParcAtualGer, "GERÊNCIA - " + nomeGerenciaFluxoGer,
+													ConstantesSistema.NAO.toString(), faixaFluxoGer);
+
+											beansPorGerencia.add(bean);
+										} else if (helper.isExibirCreditoSemParcela() == true
+												&& nomeDocumentoTipoFluxoGer.equals("CREDITO A REALIZAR")) {
+
+											bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoGer, nomeGerenciaFluxoGer, null,
+													null, null, null, idDocumentoTipoFluxoGer, "CREDITO SEM PARCELA", idSituacaoFluxoGer,
+													descricaoFluxoGer, qtDocumentosResGer, valorDocumentosResSemParcAtualGer,
+													qtDocumentosComGer, valorDocumentosComSemParcAtualGer, qtDocumentosIndGer,
+													valorDocumentosIndSemParcAtualGer, qtDocumentosPrivadosGer,
+													valorDocumentosPrivadosSemParcAtualGer, qtDocumentosPubGer,
+													valorDocumentosPubSemParcAtualGer, "GERÊNCIA - " + nomeGerenciaFluxoGer,
+													ConstantesSistema.NAO.toString(), faixaFluxoGer);
+
+											beansPorGerencia.add(bean);
+										} else {
+											bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoGer, nomeGerenciaFluxoGer, null,
+													null, null, null, idDocumentoTipoFluxoGer, nomeDocumentoTipoFluxoGer,
+													idSituacaoFluxoGer, descricaoFluxoGer, qtDocumentosResGer, valorDocumentosResGer,
+													qtDocumentosComGer, valorDocumentosComGer, qtDocumentosIndGer, valorDocumentosIndGer,
+													qtDocumentosPrivadosGer, valorDocumentosPrivadosGer, qtDocumentosPubGer,
+													valorDocumentosPubGer, "GERÊNCIA - " + nomeGerenciaFluxoGer,
+													ConstantesSistema.NAO.toString(), faixaFluxoGer);
+
+											beansPorGerencia.add(bean);
+										}
 
 										// Reiniciando valores e mudando
 										// variaveis de controle de fluxo
 										qtDocumentosPubGer = new Integer(0);
 										valorDocumentosPubGer = BigDecimal.ZERO;
+										valorDocumentosPubSemParcAtualGer = BigDecimal.ZERO;
 										qtDocumentosResGer = new Integer(0);
 										valorDocumentosResGer = BigDecimal.ZERO;
+										valorDocumentosResSemParcAtualGer = BigDecimal.ZERO;
 										qtDocumentosComGer = new Integer(0);
 										valorDocumentosComGer = BigDecimal.ZERO;
+										valorDocumentosComSemParcAtualGer = BigDecimal.ZERO;
 										qtDocumentosIndGer = new Integer(0);
 										valorDocumentosIndGer = BigDecimal.ZERO;
+										valorDocumentosIndSemParcAtualGer = BigDecimal.ZERO;
 										qtDocumentosPrivadosGer = new Integer(0);
 										valorDocumentosPrivadosGer = BigDecimal.ZERO;
+										valorDocumentosPrivadosSemParcAtualGer = BigDecimal.ZERO;
 
 										idGerenciaFluxoGer = idGerenciaGer;
 										nomeGerenciaFluxoGer = nomeGerenciaGer;
@@ -59189,52 +59631,88 @@ public class ControladorCobranca implements SessionBean {
 										if (idCategoriaGer.compareTo(Categoria.RESIDENCIAL) == 0) {
 											qtDocumentosResGer += qtDocumentosGer;
 											valorDocumentosResGer = Util.somaBigDecimal(valorDocumentosResGer, valorDocumentosGer);
+											valorDocumentosResSemParcAtualGer = Util.somaBigDecimal(valorDocumentosResSemParcAtualGer, valorDocumentosSemParcAtualGer);
 											qtDocumentosPrivadosGer += qtDocumentosGer;
-											valorDocumentosPrivadosGer = Util
-													.somaBigDecimal(valorDocumentosPrivadosGer, valorDocumentosGer);
+											valorDocumentosPrivadosGer = Util.somaBigDecimal(valorDocumentosPrivadosGer, valorDocumentosGer);
+											valorDocumentosPrivadosSemParcAtualGer = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualGer, valorDocumentosSemParcAtualGer);
 										}
 										if (idCategoriaGer.compareTo(Categoria.COMERCIAL) == 0) {
 											qtDocumentosComGer += qtDocumentosGer;
 											valorDocumentosComGer = Util.somaBigDecimal(valorDocumentosComGer, valorDocumentosGer);
+											valorDocumentosComSemParcAtualGer = Util.somaBigDecimal(valorDocumentosComSemParcAtualGer, valorDocumentosSemParcAtualGer);
 											qtDocumentosPrivadosGer += qtDocumentosGer;
-											valorDocumentosPrivadosGer = Util
-													.somaBigDecimal(valorDocumentosPrivadosGer, valorDocumentosGer);
+											valorDocumentosPrivadosGer = Util.somaBigDecimal(valorDocumentosPrivadosGer, valorDocumentosGer);
+											valorDocumentosPrivadosSemParcAtualGer = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualGer, valorDocumentosSemParcAtualGer);
 										}
 										if (idCategoriaGer.compareTo(Categoria.INDUSTRIAL) == 0) {
 											qtDocumentosIndGer += qtDocumentosGer;
 											valorDocumentosIndGer = Util.somaBigDecimal(valorDocumentosIndGer, valorDocumentosGer);
+											valorDocumentosIndSemParcAtualGer = Util.somaBigDecimal(valorDocumentosIndSemParcAtualGer, valorDocumentosSemParcAtualGer);
 											qtDocumentosPrivadosGer += qtDocumentosGer;
-											valorDocumentosPrivadosGer = Util
-													.somaBigDecimal(valorDocumentosPrivadosGer, valorDocumentosGer);
+											valorDocumentosPrivadosGer = Util.somaBigDecimal(valorDocumentosPrivadosGer, valorDocumentosGer);
+											valorDocumentosPrivadosSemParcAtualGer = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualGer, valorDocumentosSemParcAtualGer);
 										}
 										if (idCategoriaGer.compareTo(Categoria.PUBLICO) == 0) {
 											qtDocumentosPubGer += qtDocumentosGer;
 											valorDocumentosPubGer = Util.somaBigDecimal(valorDocumentosPubGer, valorDocumentosGer);
+											valorDocumentosPubSemParcAtualGer = Util.somaBigDecimal(valorDocumentosPubSemParcAtualGer, valorDocumentosSemParcAtualGer);
 										}
 									}
 								} else {
 
-									bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoGer, nomeGerenciaFluxoGer, null, null, null,
-											null, idDocumentoTipoFluxoGer, nomeDocumentoTipoFluxoGer, idSituacaoFluxoGer,
-											descricaoFluxoGer, qtDocumentosResGer, valorDocumentosResGer, qtDocumentosComGer,
-											valorDocumentosComGer, qtDocumentosIndGer, valorDocumentosIndGer, qtDocumentosPrivadosGer,
-											valorDocumentosPrivadosGer, qtDocumentosPubGer, valorDocumentosPubGer, "GERÊNCIA - "
-													+ nomeGerenciaFluxoGer, "3", faixaFluxoGer);
+									if (helper.isExibirDebitoSemParcela() == true && nomeDocumentoTipoFluxoGer.equals("DEBITO A COBRAR")) {
 
-									beansPorGerencia.add(bean);
+										bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoGer, nomeGerenciaFluxoGer, null, null,
+												null, null, idDocumentoTipoFluxoGer, "DEBITO SEM PARCELA", idSituacaoFluxoGer,
+												descricaoFluxoGer, qtDocumentosResGer, valorDocumentosResSemParcAtualGer,
+												qtDocumentosComGer, valorDocumentosComSemParcAtualGer, qtDocumentosIndGer,
+												valorDocumentosIndSemParcAtualGer, qtDocumentosPrivadosGer,
+												valorDocumentosPrivadosSemParcAtualGer, qtDocumentosPubGer,
+												valorDocumentosPubSemParcAtualGer, "GERÊNCIA - " + nomeGerenciaFluxoGer,
+												ConstantesSistema.NAO.toString(), faixaFluxoGer);
+
+										beansPorGerencia.add(bean);
+									} else if (helper.isExibirCreditoSemParcela() == true
+											&& nomeDocumentoTipoFluxoGer.equals("CREDITO A REALIZAR")) {
+
+										bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoGer, nomeGerenciaFluxoGer, null, null,
+												null, null, idDocumentoTipoFluxoGer, "CREDITO SEM PARCELA", idSituacaoFluxoGer,
+												descricaoFluxoGer, qtDocumentosResGer, valorDocumentosResSemParcAtualGer,
+												qtDocumentosComGer, valorDocumentosComSemParcAtualGer, qtDocumentosIndGer,
+												valorDocumentosIndSemParcAtualGer, qtDocumentosPrivadosGer,
+												valorDocumentosPrivadosSemParcAtualGer, qtDocumentosPubGer,
+												valorDocumentosPubSemParcAtualGer, "GERÊNCIA - " + nomeGerenciaFluxoGer,
+												ConstantesSistema.NAO.toString(), faixaFluxoGer);
+
+										beansPorGerencia.add(bean);
+									} else {
+										bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoGer, nomeGerenciaFluxoGer, null, null,
+												null, null, idDocumentoTipoFluxoGer, nomeDocumentoTipoFluxoGer, idSituacaoFluxoGer,
+												descricaoFluxoGer, qtDocumentosResGer, valorDocumentosResGer, qtDocumentosComGer,
+												valorDocumentosComGer, qtDocumentosIndGer, valorDocumentosIndGer, qtDocumentosPrivadosGer,
+												valorDocumentosPrivadosGer, qtDocumentosPubGer, valorDocumentosPubGer, "GERÊNCIA - "
+												+ nomeGerenciaFluxoGer, ConstantesSistema.NAO.toString(), faixaFluxoGer);
+
+										beansPorGerencia.add(bean);
+									}
 
 									// Reiniciando valores e mudando
 									// variaveis de controle de fluxo
 									qtDocumentosPubGer = new Integer(0);
 									valorDocumentosPubGer = BigDecimal.ZERO;
+									valorDocumentosPubSemParcAtualGer = BigDecimal.ZERO;
 									qtDocumentosResGer = new Integer(0);
 									valorDocumentosResGer = BigDecimal.ZERO;
+									valorDocumentosResSemParcAtualGer = BigDecimal.ZERO;
 									qtDocumentosComGer = new Integer(0);
 									valorDocumentosComGer = BigDecimal.ZERO;
+									valorDocumentosComSemParcAtualGer = BigDecimal.ZERO;
 									qtDocumentosIndGer = new Integer(0);
 									valorDocumentosIndGer = BigDecimal.ZERO;
+									valorDocumentosIndSemParcAtualGer = BigDecimal.ZERO;
 									qtDocumentosPrivadosGer = new Integer(0);
 									valorDocumentosPrivadosGer = BigDecimal.ZERO;
+									valorDocumentosPrivadosSemParcAtualGer = BigDecimal.ZERO;
 
 									idGerenciaFluxoGer = idGerenciaGer;
 									nomeGerenciaFluxoGer = nomeGerenciaGer;
@@ -59248,50 +59726,87 @@ public class ControladorCobranca implements SessionBean {
 									if (idCategoriaGer.compareTo(Categoria.RESIDENCIAL) == 0) {
 										qtDocumentosResGer += qtDocumentosGer;
 										valorDocumentosResGer = Util.somaBigDecimal(valorDocumentosResGer, valorDocumentosGer);
+										valorDocumentosResSemParcAtualGer = Util.somaBigDecimal(valorDocumentosResSemParcAtualGer, valorDocumentosSemParcAtualGer);
 										qtDocumentosPrivadosGer += qtDocumentosGer;
 										valorDocumentosPrivadosGer = Util.somaBigDecimal(valorDocumentosPrivadosGer, valorDocumentosGer);
+										valorDocumentosPrivadosSemParcAtualGer = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualGer, valorDocumentosSemParcAtualGer);
 									}
 									if (idCategoriaGer.compareTo(Categoria.COMERCIAL) == 0) {
 										qtDocumentosComGer += qtDocumentosGer;
 										valorDocumentosComGer = Util.somaBigDecimal(valorDocumentosComGer, valorDocumentosGer);
+										valorDocumentosComSemParcAtualGer = Util.somaBigDecimal(valorDocumentosComSemParcAtualGer, valorDocumentosSemParcAtualGer);
 										qtDocumentosPrivadosGer += qtDocumentosGer;
 										valorDocumentosPrivadosGer = Util.somaBigDecimal(valorDocumentosPrivadosGer, valorDocumentosGer);
+										valorDocumentosPrivadosSemParcAtualGer = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualGer, valorDocumentosSemParcAtualGer);
 									}
 									if (idCategoriaGer.compareTo(Categoria.INDUSTRIAL) == 0) {
 										qtDocumentosIndGer += qtDocumentosGer;
 										valorDocumentosIndGer = Util.somaBigDecimal(valorDocumentosIndGer, valorDocumentosGer);
+										valorDocumentosIndSemParcAtualGer = Util.somaBigDecimal(valorDocumentosIndSemParcAtualGer, valorDocumentosSemParcAtualGer);
 										qtDocumentosPrivadosGer += qtDocumentosGer;
 										valorDocumentosPrivadosGer = Util.somaBigDecimal(valorDocumentosPrivadosGer, valorDocumentosGer);
+										valorDocumentosPrivadosSemParcAtualGer = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualGer, valorDocumentosSemParcAtualGer);
 									}
 									if (idCategoriaGer.compareTo(Categoria.PUBLICO) == 0) {
 										qtDocumentosPubGer += qtDocumentosGer;
 										valorDocumentosPubGer = Util.somaBigDecimal(valorDocumentosPubGer, valorDocumentosGer);
+										valorDocumentosPubSemParcAtualGer = Util.somaBigDecimal(valorDocumentosPubSemParcAtualGer, valorDocumentosSemParcAtualGer);
 									}
 								}
 
 							} else {
 
-								bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoGer, nomeGerenciaFluxoGer, null, null, null,
-										null, idDocumentoTipoFluxoGer, nomeDocumentoTipoFluxoGer, idSituacaoFluxoGer, descricaoFluxoGer,
-										qtDocumentosResGer, valorDocumentosResGer, qtDocumentosComGer, valorDocumentosComGer,
-										qtDocumentosIndGer, valorDocumentosIndGer, qtDocumentosPrivadosGer, valorDocumentosPrivadosGer,
-										qtDocumentosPubGer, valorDocumentosPubGer, "GERÊNCIA - " + nomeGerenciaFluxoGer,
-										ConstantesSistema.NAO.toString(), faixaFluxoGer);
+								if (helper.isExibirDebitoSemParcela() == true && nomeDocumentoTipoFluxoGer.equals("DEBITO A COBRAR")) {
 
-								beansPorGerencia.add(bean);
+									bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoGer, nomeGerenciaFluxoGer, null, null, null,
+											null, idDocumentoTipoFluxoGer, "DEBITO SEM PARCELA", idSituacaoFluxoGer, descricaoFluxoGer,
+											qtDocumentosResGer, valorDocumentosResSemParcAtualGer, qtDocumentosComGer,
+											valorDocumentosComSemParcAtualGer, qtDocumentosIndGer, valorDocumentosIndSemParcAtualGer,
+											qtDocumentosPrivadosGer, valorDocumentosPrivadosSemParcAtualGer, qtDocumentosPubGer,
+											valorDocumentosPubSemParcAtualGer, "GERÊNCIA - " + nomeGerenciaFluxoGer,
+											ConstantesSistema.NAO.toString(), faixaFluxoGer);
+
+									beansPorGerencia.add(bean);
+								} else if (helper.isExibirCreditoSemParcela() == true
+										&& nomeDocumentoTipoFluxoGer.equals("CREDITO A REALIZAR")) {
+
+									bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoGer, nomeGerenciaFluxoGer, null, null, null,
+											null, idDocumentoTipoFluxoGer, "CREDITO SEM PARCELA", idSituacaoFluxoGer, descricaoFluxoGer,
+											qtDocumentosResGer, valorDocumentosResSemParcAtualGer, qtDocumentosComGer,
+											valorDocumentosComSemParcAtualGer, qtDocumentosIndGer, valorDocumentosIndSemParcAtualGer,
+											qtDocumentosPrivadosGer, valorDocumentosPrivadosSemParcAtualGer, qtDocumentosPubGer,
+											valorDocumentosPubSemParcAtualGer, "GERÊNCIA - " + nomeGerenciaFluxoGer,
+											ConstantesSistema.NAO.toString(), faixaFluxoGer);
+
+									beansPorGerencia.add(bean);
+								} else {
+									bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoGer, nomeGerenciaFluxoGer, null, null, null,
+											null, idDocumentoTipoFluxoGer, nomeDocumentoTipoFluxoGer, idSituacaoFluxoGer,
+											descricaoFluxoGer, qtDocumentosResGer, valorDocumentosResGer, qtDocumentosComGer,
+											valorDocumentosComGer, qtDocumentosIndGer, valorDocumentosIndGer, qtDocumentosPrivadosGer,
+											valorDocumentosPrivadosGer, qtDocumentosPubGer, valorDocumentosPubGer, "GERÊNCIA - "
+													+ nomeGerenciaFluxoGer, ConstantesSistema.NAO.toString(), faixaFluxoGer);
+
+									beansPorGerencia.add(bean);
+								}
 
 								// Reiniciando valores e mudando
 								// variaveis de controle de fluxo
 								qtDocumentosPubGer = new Integer(0);
 								valorDocumentosPubGer = BigDecimal.ZERO;
+								valorDocumentosPubSemParcAtualGer = BigDecimal.ZERO;
 								qtDocumentosResGer = new Integer(0);
 								valorDocumentosResGer = BigDecimal.ZERO;
+								valorDocumentosResSemParcAtualGer = BigDecimal.ZERO;
 								qtDocumentosComGer = new Integer(0);
 								valorDocumentosComGer = BigDecimal.ZERO;
+								valorDocumentosComSemParcAtualGer = BigDecimal.ZERO;
 								qtDocumentosIndGer = new Integer(0);
 								valorDocumentosIndGer = BigDecimal.ZERO;
+								valorDocumentosIndSemParcAtualGer = BigDecimal.ZERO;
 								qtDocumentosPrivadosGer = new Integer(0);
 								valorDocumentosPrivadosGer = BigDecimal.ZERO;
+								valorDocumentosPrivadosSemParcAtualGer = BigDecimal.ZERO;
 
 								idGerenciaFluxoGer = idGerenciaGer;
 								nomeGerenciaFluxoGer = nomeGerenciaGer;
@@ -59305,37 +59820,69 @@ public class ControladorCobranca implements SessionBean {
 								if (idCategoriaGer.compareTo(Categoria.RESIDENCIAL) == 0) {
 									qtDocumentosResGer += qtDocumentosGer;
 									valorDocumentosResGer = Util.somaBigDecimal(valorDocumentosResGer, valorDocumentosGer);
+									valorDocumentosResSemParcAtualGer = Util.somaBigDecimal(valorDocumentosResSemParcAtualGer, valorDocumentosSemParcAtualGer);
 									qtDocumentosPrivadosGer += qtDocumentosGer;
 									valorDocumentosPrivadosGer = Util.somaBigDecimal(valorDocumentosPrivadosGer, valorDocumentosGer);
+									valorDocumentosPrivadosSemParcAtualGer = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualGer, valorDocumentosSemParcAtualGer);
 								}
 								if (idCategoriaGer.compareTo(Categoria.COMERCIAL) == 0) {
 									qtDocumentosComGer += qtDocumentosGer;
 									valorDocumentosComGer = Util.somaBigDecimal(valorDocumentosComGer, valorDocumentosGer);
+									valorDocumentosComSemParcAtualGer = Util.somaBigDecimal(valorDocumentosComSemParcAtualGer, valorDocumentosSemParcAtualGer);
 									qtDocumentosPrivadosGer += qtDocumentosGer;
 									valorDocumentosPrivadosGer = Util.somaBigDecimal(valorDocumentosPrivadosGer, valorDocumentosGer);
+									valorDocumentosPrivadosSemParcAtualGer = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualGer, valorDocumentosSemParcAtualGer);
 								}
 								if (idCategoriaGer.compareTo(Categoria.INDUSTRIAL) == 0) {
 									qtDocumentosIndGer += qtDocumentosGer;
 									valorDocumentosIndGer = Util.somaBigDecimal(valorDocumentosIndGer, valorDocumentosGer);
+									valorDocumentosIndSemParcAtualGer = Util.somaBigDecimal(valorDocumentosIndSemParcAtualGer, valorDocumentosSemParcAtualGer);
 									qtDocumentosPrivadosGer += qtDocumentosGer;
 									valorDocumentosPrivadosGer = Util.somaBigDecimal(valorDocumentosPrivadosGer, valorDocumentosGer);
+									valorDocumentosPrivadosSemParcAtualGer = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualGer, valorDocumentosSemParcAtualGer);
 								}
 								if (idCategoriaGer.compareTo(Categoria.PUBLICO) == 0) {
 									qtDocumentosPubGer += qtDocumentosGer;
 									valorDocumentosPubGer = Util.somaBigDecimal(valorDocumentosPubGer, valorDocumentosGer);
+									valorDocumentosPubSemParcAtualGer = Util.somaBigDecimal(valorDocumentosPubSemParcAtualGer, valorDocumentosSemParcAtualGer);
 								}
 							}
 						}
 						if (colecaoDadosGerencia.size() < quantidadeMaxima) {
 							if (!iterator.hasNext()) {
-								bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoGer, nomeGerenciaFluxoGer, null, null, null,
-										null, idDocumentoTipoFluxoGer, nomeDocumentoTipoFluxoGer, idSituacaoFluxoGer, descricaoFluxoGer,
-										qtDocumentosResGer, valorDocumentosResGer, qtDocumentosComGer, valorDocumentosComGer,
-										qtDocumentosIndGer, valorDocumentosIndGer, qtDocumentosPrivadosGer, valorDocumentosPrivadosGer,
-										qtDocumentosPubGer, valorDocumentosPubGer, "GERÊNCIA - " + nomeGerenciaFluxoGer,
-										ConstantesSistema.NAO.toString(), faixaFluxoGer);
+								if (helper.isExibirDebitoSemParcela() == true && nomeDocumentoTipoFluxoGer.equals("DEBITO A COBRAR")) {
 
-								beansPorGerencia.add(bean);
+									bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoGer, nomeGerenciaFluxoGer, null, null, null,
+											null, idDocumentoTipoFluxoGer, "DEBITO SEM PARCELA", idSituacaoFluxoGer, descricaoFluxoGer,
+											qtDocumentosResGer, valorDocumentosResSemParcAtualGer, qtDocumentosComGer,
+											valorDocumentosComSemParcAtualGer, qtDocumentosIndGer, valorDocumentosIndSemParcAtualGer,
+											qtDocumentosPrivadosGer, valorDocumentosPrivadosSemParcAtualGer, qtDocumentosPubGer,
+											valorDocumentosPubSemParcAtualGer, "GERÊNCIA - " + nomeGerenciaFluxoGer,
+											ConstantesSistema.NAO.toString(), faixaFluxoGer);
+
+									beansPorGerencia.add(bean);
+								} else if (helper.isExibirCreditoSemParcela() == true
+										&& nomeDocumentoTipoFluxoGer.equals("CREDITO A REALIZAR")) {
+
+									bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoGer, nomeGerenciaFluxoGer, null, null, null,
+											null, idDocumentoTipoFluxoGer, "CREDITO SEM PARCELA", idSituacaoFluxoGer, descricaoFluxoGer,
+											qtDocumentosResGer, valorDocumentosResSemParcAtualGer, qtDocumentosComGer,
+											valorDocumentosComSemParcAtualGer, qtDocumentosIndGer, valorDocumentosIndSemParcAtualGer,
+											qtDocumentosPrivadosGer, valorDocumentosPrivadosSemParcAtualGer, qtDocumentosPubGer,
+											valorDocumentosPubSemParcAtualGer, "GERÊNCIA - " + nomeGerenciaFluxoGer,
+											ConstantesSistema.NAO.toString(), faixaFluxoGer);
+
+									beansPorGerencia.add(bean);
+								} else {
+									bean = criarBeanRelatorioDocumentosAReceber(idGerenciaFluxoGer, nomeGerenciaFluxoGer, null, null, null,
+											null, idDocumentoTipoFluxoGer, nomeDocumentoTipoFluxoGer, idSituacaoFluxoGer,
+											descricaoFluxoGer, qtDocumentosResGer, valorDocumentosResGer, qtDocumentosComGer,
+											valorDocumentosComGer, qtDocumentosIndGer, valorDocumentosIndGer, qtDocumentosPrivadosGer,
+											valorDocumentosPrivadosGer, qtDocumentosPubGer, valorDocumentosPubGer, "GERÊNCIA - "
+													+ nomeGerenciaFluxoGer, ConstantesSistema.NAO.toString(), faixaFluxoGer);
+
+									beansPorGerencia.add(bean);
+								}
 							}
 						}
 					}
@@ -59380,6 +59927,7 @@ public class ControladorCobranca implements SessionBean {
 
 						qtDocumentosEst = (Integer) dados[7];
 						valorDocumentosEst = (BigDecimal) dados[8];
+						valorDocumentosSemParcAtualEst = (BigDecimal) dados[9];
 
 						if (primeiraVezEst) {
 
@@ -59401,24 +59949,31 @@ public class ControladorCobranca implements SessionBean {
 							if (idCategoriaEst.compareTo(Categoria.RESIDENCIAL) == 0) {
 								qtDocumentosResEst += qtDocumentosEst;
 								valorDocumentosResEst = Util.somaBigDecimal(valorDocumentosResEst, valorDocumentosEst);
+								valorDocumentosResSemParcAtualEst = Util.somaBigDecimal(valorDocumentosResSemParcAtualEst, valorDocumentosSemParcAtualEst);
 								qtDocumentosPrivadosEst += qtDocumentosEst;
 								valorDocumentosPrivadosEst = Util.somaBigDecimal(valorDocumentosPrivadosEst, valorDocumentosEst);
+								valorDocumentosPrivadosSemParcAtualEst = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualEst, valorDocumentosSemParcAtualEst);
 							}
 							if (idCategoriaEst.compareTo(Categoria.COMERCIAL) == 0) {
 								qtDocumentosComEst += qtDocumentosEst;
 								valorDocumentosComEst = Util.somaBigDecimal(valorDocumentosComEst, valorDocumentosEst);
+								valorDocumentosComSemParcAtualEst = Util.somaBigDecimal(valorDocumentosComSemParcAtualEst, valorDocumentosSemParcAtualEst);
 								qtDocumentosPrivadosEst += qtDocumentosEst;
 								valorDocumentosPrivadosEst = Util.somaBigDecimal(valorDocumentosPrivadosEst, valorDocumentosEst);
+								valorDocumentosPrivadosSemParcAtualEst = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualEst, valorDocumentosSemParcAtualEst);
 							}
 							if (idCategoriaEst.compareTo(Categoria.INDUSTRIAL) == 0) {
 								qtDocumentosIndEst += qtDocumentosEst;
 								valorDocumentosIndEst = Util.somaBigDecimal(valorDocumentosIndEst, valorDocumentosEst);
+								valorDocumentosIndSemParcAtualEst = Util.somaBigDecimal(valorDocumentosIndSemParcAtualEst, valorDocumentosSemParcAtualEst);
 								qtDocumentosPrivadosEst += qtDocumentosEst;
 								valorDocumentosPrivadosEst = Util.somaBigDecimal(valorDocumentosPrivadosEst, valorDocumentosEst);
+								valorDocumentosPrivadosSemParcAtualEst = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualEst, valorDocumentosSemParcAtualEst);
 							}
 							if (idCategoriaEst.compareTo(Categoria.PUBLICO) == 0) {
 								qtDocumentosPubEst += qtDocumentosEst;
 								valorDocumentosPubEst = Util.somaBigDecimal(valorDocumentosPubEst, valorDocumentosEst);
+								valorDocumentosPubSemParcAtualEst = Util.somaBigDecimal(valorDocumentosPubSemParcAtualEst, valorDocumentosSemParcAtualEst);
 							}
 
 						} else {
@@ -59429,27 +59984,62 @@ public class ControladorCobranca implements SessionBean {
 
 									if (idDocumentoTipoFluxoEst.intValue() != idDocumentoTipoEst.intValue()) {
 
-										bean = criarBeanRelatorioDocumentosAReceber(null, null, null, null, null, null,
-												idDocumentoTipoFluxoEst, nomeDocumentoTipoFluxoEst, idSituacaoFluxoEst, descricaoFluxoEst,
-												qtDocumentosResEst, valorDocumentosResEst, qtDocumentosComEst, valorDocumentosComEst,
-												qtDocumentosIndEst, valorDocumentosIndEst, qtDocumentosPrivadosEst,
-												valorDocumentosPrivadosEst, qtDocumentosPubEst, valorDocumentosPubEst,
-												"ESTADO - " + helper.getDescricaoEstado(), ConstantesSistema.NAO.toString(), faixaFluxoEst);
+										if (helper.isExibirDebitoSemParcela() == true
+												&& nomeDocumentoTipoFluxoEst.equals("DEBITO A COBRAR")) {
 
-										beansPorEstado.add(bean);
+											bean = criarBeanRelatorioDocumentosAReceber(null, null, null, null, null, null,
+													idDocumentoTipoFluxoEst, "DEBITO SEM PARCELA", idSituacaoFluxoEst, descricaoFluxoEst,
+													qtDocumentosResEst, valorDocumentosResSemParcAtualEst, qtDocumentosComEst,
+													valorDocumentosComSemParcAtualEst, qtDocumentosIndEst,
+													valorDocumentosIndSemParcAtualEst, qtDocumentosPrivadosEst,
+													valorDocumentosPrivadosSemParcAtualEst, qtDocumentosPubEst,
+													valorDocumentosPubSemParcAtualEst, "ESTADO - " + helper.getDescricaoEstado(),
+													ConstantesSistema.NAO.toString(), faixaFluxoEst);
+
+											beansPorEstado.add(bean);
+										} else if (helper.isExibirCreditoSemParcela() == true
+												&& nomeDocumentoTipoFluxoEst.equals("CREDITO A REALIZAR")) {
+
+											bean = criarBeanRelatorioDocumentosAReceber(null, null, null, null, null, null,
+													idDocumentoTipoFluxoEst, "CREDITO SEM PARCELA", idSituacaoFluxoEst, descricaoFluxoEst,
+													qtDocumentosResEst, valorDocumentosResSemParcAtualEst, qtDocumentosComEst,
+													valorDocumentosComSemParcAtualEst, qtDocumentosIndEst,
+													valorDocumentosIndSemParcAtualEst, qtDocumentosPrivadosEst,
+													valorDocumentosPrivadosSemParcAtualEst, qtDocumentosPubEst,
+													valorDocumentosPubSemParcAtualEst, "ESTADO - " + helper.getDescricaoEstado(),
+													ConstantesSistema.NAO.toString(), faixaFluxoEst);
+
+											beansPorEstado.add(bean);
+										} else {
+											bean = criarBeanRelatorioDocumentosAReceber(null, null, null, null, null, null,
+													idDocumentoTipoFluxoEst, nomeDocumentoTipoFluxoEst, idSituacaoFluxoEst,
+													descricaoFluxoEst, qtDocumentosResEst, valorDocumentosResEst, qtDocumentosComEst,
+													valorDocumentosComEst, qtDocumentosIndEst, valorDocumentosIndEst,
+													qtDocumentosPrivadosEst, valorDocumentosPrivadosEst, qtDocumentosPubEst,
+													valorDocumentosPubEst, "ESTADO - " + helper.getDescricaoEstado(),
+													ConstantesSistema.NAO.toString(), faixaFluxoEst);
+
+											beansPorEstado.add(bean);
+										}
 
 										// Reiniciando valores e mudando
 										// variaveis de controle de fluxo
 										qtDocumentosPubEst = new Integer(0);
 										valorDocumentosPubEst = BigDecimal.ZERO;
+										valorDocumentosPubSemParcAtualEst = BigDecimal.ZERO;
 										qtDocumentosResEst = new Integer(0);
 										valorDocumentosResEst = BigDecimal.ZERO;
+										valorDocumentosResSemParcAtualEst = BigDecimal.ZERO;
 										qtDocumentosComEst = new Integer(0);
 										valorDocumentosComEst = BigDecimal.ZERO;
+										valorDocumentosComSemParcAtualEst = BigDecimal.ZERO;
 										qtDocumentosIndEst = new Integer(0);
 										valorDocumentosIndEst = BigDecimal.ZERO;
+										valorDocumentosIndSemParcAtualEst = BigDecimal.ZERO;
 										qtDocumentosPrivadosEst = new Integer(0);
 										valorDocumentosPrivadosEst = BigDecimal.ZERO;
+										valorDocumentosPrivadosSemParcAtualEst = BigDecimal.ZERO;
+
 
 										idSituacaoFluxoEst = idSituacaoEst;
 										idDocumentoTipoFluxoEst = idDocumentoTipoEst;
@@ -59461,52 +60051,86 @@ public class ControladorCobranca implements SessionBean {
 										if (idCategoriaEst.compareTo(Categoria.RESIDENCIAL) == 0) {
 											qtDocumentosResEst += qtDocumentosEst;
 											valorDocumentosResEst = Util.somaBigDecimal(valorDocumentosResEst, valorDocumentosEst);
+											valorDocumentosResSemParcAtualEst = Util.somaBigDecimal(valorDocumentosResSemParcAtualEst, valorDocumentosSemParcAtualEst);
 											qtDocumentosPrivadosEst += qtDocumentosEst;
-											valorDocumentosPrivadosEst = Util
-													.somaBigDecimal(valorDocumentosPrivadosEst, valorDocumentosEst);
+											valorDocumentosPrivadosEst = Util.somaBigDecimal(valorDocumentosPrivadosEst, valorDocumentosEst);
+											valorDocumentosPrivadosSemParcAtualEst = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualEst, valorDocumentosSemParcAtualEst);
 										}
 										if (idCategoriaEst.compareTo(Categoria.COMERCIAL) == 0) {
 											qtDocumentosComEst += qtDocumentosEst;
 											valorDocumentosComEst = Util.somaBigDecimal(valorDocumentosComEst, valorDocumentosEst);
+											valorDocumentosComSemParcAtualEst = Util.somaBigDecimal(valorDocumentosComSemParcAtualEst, valorDocumentosSemParcAtualEst);
 											qtDocumentosPrivadosEst += qtDocumentosEst;
-											valorDocumentosPrivadosEst = Util
-													.somaBigDecimal(valorDocumentosPrivadosEst, valorDocumentosEst);
+											valorDocumentosPrivadosEst = Util.somaBigDecimal(valorDocumentosPrivadosEst, valorDocumentosEst);
+											valorDocumentosPrivadosSemParcAtualEst = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualEst, valorDocumentosSemParcAtualEst);
 										}
 										if (idCategoriaEst.compareTo(Categoria.INDUSTRIAL) == 0) {
 											qtDocumentosIndEst += qtDocumentosEst;
 											valorDocumentosIndEst = Util.somaBigDecimal(valorDocumentosIndEst, valorDocumentosEst);
+											valorDocumentosIndSemParcAtualEst = Util.somaBigDecimal(valorDocumentosIndSemParcAtualEst, valorDocumentosSemParcAtualEst);
 											qtDocumentosPrivadosEst += qtDocumentosEst;
-											valorDocumentosPrivadosEst = Util
-													.somaBigDecimal(valorDocumentosPrivadosEst, valorDocumentosEst);
+											valorDocumentosPrivadosEst = Util.somaBigDecimal(valorDocumentosPrivadosEst, valorDocumentosEst);
+											valorDocumentosPrivadosSemParcAtualEst = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualEst, valorDocumentosSemParcAtualEst);
 										}
 										if (idCategoriaEst.compareTo(Categoria.PUBLICO) == 0) {
 											qtDocumentosPubEst += qtDocumentosEst;
 											valorDocumentosPubEst = Util.somaBigDecimal(valorDocumentosPubEst, valorDocumentosEst);
+											valorDocumentosPubSemParcAtualEst = Util.somaBigDecimal(valorDocumentosPubSemParcAtualEst, valorDocumentosSemParcAtualEst);
 										}
 
 									}
 								} else {
-									bean = criarBeanRelatorioDocumentosAReceber(null, null, null, null, null, null,
-											idDocumentoTipoFluxoEst, nomeDocumentoTipoFluxoEst, idSituacaoFluxoEst, descricaoFluxoEst,
-											qtDocumentosResEst, valorDocumentosResEst, qtDocumentosComEst, valorDocumentosComEst,
-											qtDocumentosIndEst, valorDocumentosIndEst, qtDocumentosPrivadosEst, valorDocumentosPrivadosEst,
-											qtDocumentosPubEst, valorDocumentosPubEst, "ESTADO - " + helper.getDescricaoEstado(), "3",
-											faixaFluxoEst);
+									if (helper.isExibirDebitoSemParcela() == true && nomeDocumentoTipoFluxoEst.equals("DEBITO A COBRAR")) {
 
-									beansPorEstado.add(bean);
+										bean = criarBeanRelatorioDocumentosAReceber(null, null, null, null, null, null,
+												idDocumentoTipoFluxoEst, "DEBITO SEM PARCELA", idSituacaoFluxoEst, descricaoFluxoEst,
+												qtDocumentosResEst, valorDocumentosResSemParcAtualEst, qtDocumentosComEst,
+												valorDocumentosComSemParcAtualEst, qtDocumentosIndEst, valorDocumentosIndSemParcAtualEst,
+												qtDocumentosPrivadosEst, valorDocumentosPrivadosSemParcAtualEst, qtDocumentosPubEst,
+												valorDocumentosPubSemParcAtualEst, "ESTADO - " + helper.getDescricaoEstado(),
+												ConstantesSistema.NAO.toString(), faixaFluxoEst);
+
+										beansPorEstado.add(bean);
+									} else if (helper.isExibirCreditoSemParcela() == true
+											&& nomeDocumentoTipoFluxoEst.equals("CREDITO A REALIZAR")) {
+
+										bean = criarBeanRelatorioDocumentosAReceber(null, null, null, null, null, null,
+												idDocumentoTipoFluxoEst, "CREDITO SEM PARCELA", idSituacaoFluxoEst, descricaoFluxoEst,
+												qtDocumentosResEst, valorDocumentosResSemParcAtualEst, qtDocumentosComEst,
+												valorDocumentosComSemParcAtualEst, qtDocumentosIndEst, valorDocumentosIndSemParcAtualEst,
+												qtDocumentosPrivadosEst, valorDocumentosPrivadosSemParcAtualEst, qtDocumentosPubEst,
+												valorDocumentosPubSemParcAtualEst, "ESTADO - " + helper.getDescricaoEstado(),
+												ConstantesSistema.NAO.toString(), faixaFluxoEst);
+
+										beansPorEstado.add(bean);
+									} else {
+										bean = criarBeanRelatorioDocumentosAReceber(null, null, null, null, null, null,
+												idDocumentoTipoFluxoEst, nomeDocumentoTipoFluxoEst, idSituacaoFluxoEst, descricaoFluxoEst,
+												qtDocumentosResEst, valorDocumentosResEst, qtDocumentosComEst, valorDocumentosComEst,
+												qtDocumentosIndEst, valorDocumentosIndEst, qtDocumentosPrivadosEst,
+												valorDocumentosPrivadosEst, qtDocumentosPubEst, valorDocumentosPubEst,
+												"ESTADO - " + helper.getDescricaoEstado(), "3", faixaFluxoEst);
+
+										beansPorEstado.add(bean);
+									}
 
 									// Reiniciando valores e mudando
 									// variaveis de controle de fluxo
 									qtDocumentosPubEst = new Integer(0);
 									valorDocumentosPubEst = BigDecimal.ZERO;
+									valorDocumentosPubSemParcAtualEst = BigDecimal.ZERO;
 									qtDocumentosResEst = new Integer(0);
 									valorDocumentosResEst = BigDecimal.ZERO;
+									valorDocumentosResSemParcAtualEst = BigDecimal.ZERO;
 									qtDocumentosComEst = new Integer(0);
 									valorDocumentosComEst = BigDecimal.ZERO;
+									valorDocumentosComSemParcAtualEst = BigDecimal.ZERO;
 									qtDocumentosIndEst = new Integer(0);
 									valorDocumentosIndEst = BigDecimal.ZERO;
+									valorDocumentosIndSemParcAtualEst = BigDecimal.ZERO;
 									qtDocumentosPrivadosEst = new Integer(0);
 									valorDocumentosPrivadosEst = BigDecimal.ZERO;
+									valorDocumentosPrivadosSemParcAtualEst = BigDecimal.ZERO;
 
 									idSituacaoFluxoEst = idSituacaoEst;
 									idDocumentoTipoFluxoEst = idDocumentoTipoEst;
@@ -59518,48 +60142,86 @@ public class ControladorCobranca implements SessionBean {
 									if (idCategoriaEst.compareTo(Categoria.RESIDENCIAL) == 0) {
 										qtDocumentosResEst += qtDocumentosEst;
 										valorDocumentosResEst = Util.somaBigDecimal(valorDocumentosResEst, valorDocumentosEst);
+										valorDocumentosResSemParcAtualEst = Util.somaBigDecimal(valorDocumentosResSemParcAtualEst, valorDocumentosSemParcAtualEst);
 										qtDocumentosPrivadosEst += qtDocumentosEst;
 										valorDocumentosPrivadosEst = Util.somaBigDecimal(valorDocumentosPrivadosEst, valorDocumentosEst);
+										valorDocumentosPrivadosSemParcAtualEst = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualEst, valorDocumentosSemParcAtualEst);
 									}
 									if (idCategoriaEst.compareTo(Categoria.COMERCIAL) == 0) {
 										qtDocumentosComEst += qtDocumentosEst;
 										valorDocumentosComEst = Util.somaBigDecimal(valorDocumentosComEst, valorDocumentosEst);
+										valorDocumentosComSemParcAtualEst = Util.somaBigDecimal(valorDocumentosComSemParcAtualEst, valorDocumentosSemParcAtualEst);
 										qtDocumentosPrivadosEst += qtDocumentosEst;
 										valorDocumentosPrivadosEst = Util.somaBigDecimal(valorDocumentosPrivadosEst, valorDocumentosEst);
+										valorDocumentosPrivadosSemParcAtualEst = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualEst, valorDocumentosSemParcAtualEst);
 									}
 									if (idCategoriaEst.compareTo(Categoria.INDUSTRIAL) == 0) {
 										qtDocumentosIndEst += qtDocumentosEst;
 										valorDocumentosIndEst = Util.somaBigDecimal(valorDocumentosIndEst, valorDocumentosEst);
+										valorDocumentosIndSemParcAtualEst = Util.somaBigDecimal(valorDocumentosIndSemParcAtualEst, valorDocumentosSemParcAtualEst);
 										qtDocumentosPrivadosEst += qtDocumentosEst;
 										valorDocumentosPrivadosEst = Util.somaBigDecimal(valorDocumentosPrivadosEst, valorDocumentosEst);
+										valorDocumentosPrivadosSemParcAtualEst = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualEst, valorDocumentosSemParcAtualEst);
 									}
 									if (idCategoriaEst.compareTo(Categoria.PUBLICO) == 0) {
 										qtDocumentosPubEst += qtDocumentosEst;
 										valorDocumentosPubEst = Util.somaBigDecimal(valorDocumentosPubEst, valorDocumentosEst);
+										valorDocumentosPubSemParcAtualEst = Util.somaBigDecimal(valorDocumentosPubSemParcAtualEst, valorDocumentosSemParcAtualEst);
 									}
 								}
 							} else {
 
-								bean = criarBeanRelatorioDocumentosAReceber(null, null, null, null, null, null, idDocumentoTipoFluxoEst,
-										nomeDocumentoTipoFluxoEst, idSituacaoFluxoEst, descricaoFluxoEst, qtDocumentosResEst,
-										valorDocumentosResEst, qtDocumentosComEst, valorDocumentosComEst, qtDocumentosIndEst,
-										valorDocumentosIndEst, qtDocumentosPrivadosEst, valorDocumentosPrivadosEst, qtDocumentosPubEst,
-										valorDocumentosPubEst, "ESTADO - " + helper.getDescricaoEstado(), "3", faixaFluxoEst);
+								if (helper.isExibirDebitoSemParcela() == true && nomeDocumentoTipoFluxoEst.equals("DEBITO A COBRAR")) {
 
-								beansPorEstado.add(bean);
+									bean = criarBeanRelatorioDocumentosAReceber(null, null, null, null, null, null,
+											idDocumentoTipoFluxoEst, "DEBITO SEM PARCELA", idSituacaoFluxoEst, descricaoFluxoEst,
+											qtDocumentosResEst, valorDocumentosResSemParcAtualEst, qtDocumentosComEst,
+											valorDocumentosComSemParcAtualEst, qtDocumentosIndEst, valorDocumentosIndSemParcAtualEst,
+											qtDocumentosPrivadosEst, valorDocumentosPrivadosSemParcAtualEst, qtDocumentosPubEst,
+											valorDocumentosPubSemParcAtualEst, "ESTADO - " + helper.getDescricaoEstado(),
+											ConstantesSistema.NAO.toString(), faixaFluxoEst);
+
+									beansPorEstado.add(bean);
+								} else if (helper.isExibirCreditoSemParcela() == true
+										&& nomeDocumentoTipoFluxoEst.equals("CREDITO A REALIZAR")) {
+
+									bean = criarBeanRelatorioDocumentosAReceber(null, null, null, null, null, null,
+											idDocumentoTipoFluxoEst, "CREDITO SEM PARCELA", idSituacaoFluxoEst, descricaoFluxoEst,
+											qtDocumentosResEst, valorDocumentosResSemParcAtualEst, qtDocumentosComEst,
+											valorDocumentosComSemParcAtualEst, qtDocumentosIndEst, valorDocumentosIndSemParcAtualEst,
+											qtDocumentosPrivadosEst, valorDocumentosPrivadosSemParcAtualEst, qtDocumentosPubEst,
+											valorDocumentosPubSemParcAtualEst, "ESTADO - " + helper.getDescricaoEstado(),
+											ConstantesSistema.NAO.toString(), faixaFluxoEst);
+
+									beansPorEstado.add(bean);
+								} else {
+									bean = criarBeanRelatorioDocumentosAReceber(null, null, null, null, null, null,
+											idDocumentoTipoFluxoEst, nomeDocumentoTipoFluxoEst, idSituacaoFluxoEst, descricaoFluxoEst,
+											qtDocumentosResEst, valorDocumentosResEst, qtDocumentosComEst, valorDocumentosComEst,
+											qtDocumentosIndEst, valorDocumentosIndEst, qtDocumentosPrivadosEst, valorDocumentosPrivadosEst,
+											qtDocumentosPubEst, valorDocumentosPubEst, "ESTADO - " + helper.getDescricaoEstado(), "3",
+											faixaFluxoEst);
+
+									beansPorEstado.add(bean);
+								}
 
 								// Reiniciando valores e mudando
 								// variaveis de controle de fluxo
 								qtDocumentosPubEst = new Integer(0);
 								valorDocumentosPubEst = BigDecimal.ZERO;
+								valorDocumentosPubSemParcAtualEst = BigDecimal.ZERO;
 								qtDocumentosResEst = new Integer(0);
 								valorDocumentosResEst = BigDecimal.ZERO;
+								valorDocumentosResSemParcAtualEst = BigDecimal.ZERO;
 								qtDocumentosComEst = new Integer(0);
 								valorDocumentosComEst = BigDecimal.ZERO;
+								valorDocumentosComSemParcAtualEst = BigDecimal.ZERO;
 								qtDocumentosIndEst = new Integer(0);
 								valorDocumentosIndEst = BigDecimal.ZERO;
+								valorDocumentosIndSemParcAtualEst = BigDecimal.ZERO;
 								qtDocumentosPrivadosEst = new Integer(0);
 								valorDocumentosPrivadosEst = BigDecimal.ZERO;
+								valorDocumentosPrivadosSemParcAtualEst = BigDecimal.ZERO;
 
 								idSituacaoFluxoEst = idSituacaoEst;
 								idDocumentoTipoFluxoEst = idDocumentoTipoEst;
@@ -59571,24 +60233,31 @@ public class ControladorCobranca implements SessionBean {
 								if (idCategoriaEst.compareTo(Categoria.RESIDENCIAL) == 0) {
 									qtDocumentosResEst += qtDocumentosEst;
 									valorDocumentosResEst = Util.somaBigDecimal(valorDocumentosResEst, valorDocumentosEst);
+									valorDocumentosResSemParcAtualEst = Util.somaBigDecimal(valorDocumentosResSemParcAtualEst, valorDocumentosSemParcAtualEst);
 									qtDocumentosPrivadosEst += qtDocumentosEst;
 									valorDocumentosPrivadosEst = Util.somaBigDecimal(valorDocumentosPrivadosEst, valorDocumentosEst);
+									valorDocumentosPrivadosSemParcAtualEst = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualEst, valorDocumentosSemParcAtualEst);
 								}
 								if (idCategoriaEst.compareTo(Categoria.COMERCIAL) == 0) {
 									qtDocumentosComEst += qtDocumentosEst;
 									valorDocumentosComEst = Util.somaBigDecimal(valorDocumentosComEst, valorDocumentosEst);
+									valorDocumentosComSemParcAtualEst = Util.somaBigDecimal(valorDocumentosComSemParcAtualEst, valorDocumentosSemParcAtualEst);
 									qtDocumentosPrivadosEst += qtDocumentosEst;
 									valorDocumentosPrivadosEst = Util.somaBigDecimal(valorDocumentosPrivadosEst, valorDocumentosEst);
+									valorDocumentosPrivadosSemParcAtualEst = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualEst, valorDocumentosSemParcAtualEst);
 								}
 								if (idCategoriaEst.compareTo(Categoria.INDUSTRIAL) == 0) {
 									qtDocumentosIndEst += qtDocumentosEst;
 									valorDocumentosIndEst = Util.somaBigDecimal(valorDocumentosIndEst, valorDocumentosEst);
+									valorDocumentosIndSemParcAtualEst = Util.somaBigDecimal(valorDocumentosIndSemParcAtualEst, valorDocumentosSemParcAtualEst);
 									qtDocumentosPrivadosEst += qtDocumentosEst;
 									valorDocumentosPrivadosEst = Util.somaBigDecimal(valorDocumentosPrivadosEst, valorDocumentosEst);
+									valorDocumentosPrivadosSemParcAtualEst = Util.somaBigDecimal(valorDocumentosPrivadosSemParcAtualEst, valorDocumentosSemParcAtualEst);
 								}
 								if (idCategoriaEst.compareTo(Categoria.PUBLICO) == 0) {
 									qtDocumentosPubEst += qtDocumentosEst;
 									valorDocumentosPubEst = Util.somaBigDecimal(valorDocumentosPubEst, valorDocumentosEst);
+									valorDocumentosPubSemParcAtualEst = Util.somaBigDecimal(valorDocumentosPubSemParcAtualEst, valorDocumentosSemParcAtualEst);
 								}
 							}
 						}
@@ -59596,14 +60265,39 @@ public class ControladorCobranca implements SessionBean {
 						if (colecaoDadosEstado.size() < quantidadeMaxima) {
 
 							if (!iterator.hasNext()) {
-								bean = criarBeanRelatorioDocumentosAReceber(null, null, null, null, null, null, idDocumentoTipoFluxoEst,
-										nomeDocumentoTipoFluxoEst, idSituacaoFluxoEst, descricaoFluxoEst, qtDocumentosResEst,
-										valorDocumentosResEst, qtDocumentosComEst, valorDocumentosComEst, qtDocumentosIndEst,
-										valorDocumentosIndEst, qtDocumentosPrivadosEst, valorDocumentosPrivadosEst, qtDocumentosPubEst,
-										valorDocumentosPubEst, "ESTADO - " + helper.getDescricaoEstado(), ConstantesSistema.NAO.toString(),
-										faixaFluxoEst);
+								if (helper.isExibirDebitoSemParcela() == true && nomeDocumentoTipoFluxoEst.equals("DEBITO A COBRAR")) {
 
-								beansPorEstado.add(bean);
+									bean = criarBeanRelatorioDocumentosAReceber(null, null, null, null, null, null,
+											idDocumentoTipoFluxoEst, "DEBITO SEM PARCELA", idSituacaoFluxoEst, descricaoFluxoEst,
+											qtDocumentosResEst, valorDocumentosResSemParcAtualEst, qtDocumentosComEst,
+											valorDocumentosComSemParcAtualEst, qtDocumentosIndEst, valorDocumentosIndSemParcAtualEst,
+											qtDocumentosPrivadosEst, valorDocumentosPrivadosSemParcAtualEst, qtDocumentosPubEst,
+											valorDocumentosPubSemParcAtualEst, "ESTADO - " + helper.getDescricaoEstado(),
+											ConstantesSistema.NAO.toString(), faixaFluxoEst);
+
+									beansPorEstado.add(bean);
+								} else if (helper.isExibirCreditoSemParcela() == true
+										&& nomeDocumentoTipoFluxoEst.equals("CREDITO A REALIZAR")) {
+
+									bean = criarBeanRelatorioDocumentosAReceber(null, null, null, null, null, null,
+											idDocumentoTipoFluxoEst, "CREDITO SEM PARCELA", idSituacaoFluxoEst, descricaoFluxoEst,
+											qtDocumentosResEst, valorDocumentosResSemParcAtualEst, qtDocumentosComEst,
+											valorDocumentosComSemParcAtualEst, qtDocumentosIndEst, valorDocumentosIndSemParcAtualEst,
+											qtDocumentosPrivadosEst, valorDocumentosPrivadosSemParcAtualEst, qtDocumentosPubEst,
+											valorDocumentosPubSemParcAtualEst, "ESTADO - " + helper.getDescricaoEstado(),
+											ConstantesSistema.NAO.toString(), faixaFluxoEst);
+
+									beansPorEstado.add(bean);
+								} else {
+									bean = criarBeanRelatorioDocumentosAReceber(null, null, null, null, null, null,
+											idDocumentoTipoFluxoEst, nomeDocumentoTipoFluxoEst, idSituacaoFluxoEst, descricaoFluxoEst,
+											qtDocumentosResEst, valorDocumentosResEst, qtDocumentosComEst, valorDocumentosComEst,
+											qtDocumentosIndEst, valorDocumentosIndEst, qtDocumentosPrivadosEst, valorDocumentosPrivadosEst,
+											qtDocumentosPubEst, valorDocumentosPubEst, "ESTADO - " + helper.getDescricaoEstado(),
+											ConstantesSistema.NAO.toString(), faixaFluxoEst);
+
+									beansPorEstado.add(bean);
+								}
 							}
 						}
 
@@ -59849,14 +60543,15 @@ public class ControladorCobranca implements SessionBean {
 			throw new ControladorException("erro.sistema", e);
 		}
 
-		return inserirTotalDeContasEGuias(retorno);
+		return inserirTotalDeContasEGuias(retorno, helper);
 	}
 
 	/**
 	 * Este método serve unicamente para inserir os subtotais de contas e guias de pagamento vencidas, facilitando a leitura.
 	 * Considerando que o relatório é gerado a partir e uma lista ordenada, foi necessário iterar pela coleção para inserir os subtotais
 	 * corretamente.*/
-	private Collection<RelatorioDocumentosAReceberBean> inserirTotalDeContasEGuias(Collection<RelatorioDocumentosAReceberBean> retorno) {
+	private Collection<RelatorioDocumentosAReceberBean> inserirTotalDeContasEGuias(Collection<RelatorioDocumentosAReceberBean> retorno,
+			FiltroRelatorioDocumentosAReceberHelper helper) {
 		int qntContaRes = 0;
 		int qntContaCom = 0;
 		int qntContaInd = 0;
@@ -59968,17 +60663,17 @@ public class ControladorCobranca implements SessionBean {
 		for (RelatorioDocumentosAReceberBean relatorio : retorno) {
 
 			if (relatorio.getNomeDocumentoTipo().equalsIgnoreCase("GUIA DE PAGAMENTO") && relatorio.getIdSituacao() == 2
-					&& relatorio.getFaixa().equals("> 180"))
+					&& relatorio.getFaixa().equals(helper.getMaiorFaixa()))
 				relatorio.setIndicadorTotal(ConstantesSistema.TODOS.toString());
 
 			retornoComTotalContaEGuia.add(relatorio);
 
 			if (relatorio.getNomeDocumentoTipo().equalsIgnoreCase("CONTA") && relatorio.getIdSituacao() == 2
-					&& relatorio.getFaixa().equals("> 180")) {
+					&& relatorio.getFaixa().equals(helper.getMaiorFaixa())) {
 				retornoComTotalContaEGuia.add(documentoComTotalConta);
 			}
 			if (relatorio.getNomeDocumentoTipo().equalsIgnoreCase("GUIA DE PAGAMENTO") && relatorio.getIdSituacao() == 2
-					&& relatorio.getFaixa().equals("> 180")) {
+					&& relatorio.getFaixa().equals(helper.getMaiorFaixa())) {
 				retornoComTotalContaEGuia.add(documentoComTotalGuia);
 			}
 		}

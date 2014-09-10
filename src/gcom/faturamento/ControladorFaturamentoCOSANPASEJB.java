@@ -2393,11 +2393,11 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			Integer tipoMedicao = parmSituacao[1];
 
 			emitirContaHelper.setDadosConsumoMes1(obterDadosConsumoAnterior(emitirContaHelper, 1, tipoLigacao, tipoMedicao).toString());
-			emitirContaHelper.setDadosConsumoMes1(obterDadosConsumoAnterior(emitirContaHelper, 2, tipoLigacao, tipoMedicao).toString());
-			emitirContaHelper.setDadosConsumoMes1(obterDadosConsumoAnterior(emitirContaHelper, 3, tipoLigacao, tipoMedicao).toString());
-			emitirContaHelper.setDadosConsumoMes1(obterDadosConsumoAnterior(emitirContaHelper, 4, tipoLigacao, tipoMedicao).toString());
-			emitirContaHelper.setDadosConsumoMes1(obterDadosConsumoAnterior(emitirContaHelper, 5, tipoLigacao, tipoMedicao).toString());
-			emitirContaHelper.setDadosConsumoMes1(obterDadosConsumoAnterior(emitirContaHelper, 6, tipoLigacao, tipoMedicao).toString());
+			emitirContaHelper.setDadosConsumoMes2(obterDadosConsumoAnterior(emitirContaHelper, 2, tipoLigacao, tipoMedicao).toString());
+			emitirContaHelper.setDadosConsumoMes3(obterDadosConsumoAnterior(emitirContaHelper, 3, tipoLigacao, tipoMedicao).toString());
+			emitirContaHelper.setDadosConsumoMes4(obterDadosConsumoAnterior(emitirContaHelper, 4, tipoLigacao, tipoMedicao).toString());
+			emitirContaHelper.setDadosConsumoMes5(obterDadosConsumoAnterior(emitirContaHelper, 5, tipoLigacao, tipoMedicao).toString());
+			emitirContaHelper.setDadosConsumoMes6(obterDadosConsumoAnterior(emitirContaHelper, 6, tipoLigacao, tipoMedicao).toString());
 
 			Object[] parmsMedicaoHistorico = obterDadosMedicaoConta(emitirContaHelper, tipoMedicao);
 			

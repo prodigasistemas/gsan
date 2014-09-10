@@ -48,7 +48,6 @@ import gcom.faturamento.debito.DebitoACobrarHistorico;
 import gcom.faturamento.debito.DebitoCreditoSituacao;
 import gcom.faturamento.debito.DebitoTipo;
 import gcom.gui.cobranca.spcserasa.RelatorioAcompanhamentoClientesNegativadosHelper;
-import gcom.micromedicao.medicao.MedicaoTipo;
 import gcom.spcserasa.bean.DadosNegativacaoRetornoHelper;
 import gcom.spcserasa.bean.InserirComandoNegativacaoPorCriterioHelper;
 import gcom.spcserasa.bean.NegativadorMovimentoHelper;
@@ -63,12 +62,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -80,25 +77,14 @@ import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 
-/**
- * @author Administrador
- */
 public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 
 	protected static IRepositorioSpcSerasa instancia;
 
-	/**
-	 * Construtor da classe RepositorioFaturamentoHBM
-	 */
 	protected RepositorioSpcSerasaHBM() {
 
 	}
 
-	/**
-	 * Retorna o valor de instance
-	 * 
-	 * @return O valor de instance
-	 */
 	public static IRepositorioSpcSerasa getInstancia() {
 		
 		String dialect = HibernateUtil.getDialect();
@@ -364,198 +350,6 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 		return retorno;
 	}
 	
-	
-	
-	/**
-	 * Insere RegistroNegativacao
-	 * 
-	 * @author Marcio Roberto
-	 * @date 30/10/2007
-	 * 
-	 * @param 
-	 *        
-	 * @return 
-	 * @throws ErroRepositorioException
-	 */
-	//@Override Metodo sobrescrito na classe RepositorioSpcSerasaPostgresHBM
-	public Integer geraRegistroNegativacao(int idNegativador,
-			int saenvio, int idNegativadorComando) throws ErroRepositorioException {
-
-		Session session = HibernateUtil.getSession();
-		String insert;
-		Connection con = null;
-		Statement stmt = null;
-		int nextValue = 0;
-		try {
-			con = session.connection();
-			stmt = con.createStatement();
-			insert = "insert into cobranca.negativador_movimento ("
-				  + " ngmv_id, "                      // 01
-				  + " ngmv_cdmovimento, "             // 02
-				  + " ngmv_dtenvio, "                 // 03
-				  + " ngmv_dtprocessamentoenvio, "    // 04
-				  + " ngmv_dtretorno, "               // 05
-				  + " ngmv_dtprocessamentoretorno, "  // 06
-				  + " ngmv_nnnsaenvio, "              // 07
-				  + " ngmv_nnnsaretorno, "            // 08
-				  + " ngmv_nnregistrosenvio, "        // 09
-				  + " ngmv_nnregistrosretorno, "      // 10
-				  + " ngmv_vltotalenvio, "            // 11
-				  + " ngmv_tmultimaalteracao, "       // 12
-				  + " negt_id, "                      // 13
-				  + " ngcm_id ) "                     // 14  
-				  + " values ( "
-				  + Util.obterNextValSequence("cobranca.seq_negativador_movimento") + ", " //01
-				  + " 1, "                                                  // 02
-				  + Util.obterSQLDataAtual() + " , "                                              // 03   
-				  + Util.obterSQLDataAtual() + " , "                                              // 04   
-				  + "null,"                                                 // 05   
-				  + "null,"                                                 // 06   
-				  + (saenvio)+", "                                        // 07
-				  + "null,"                                                 // 08   
-				  + "null,"                                                 // 09   
-				  + "null,"                                                 // 10   
-				  + "null,"                                                 // 11   
-				  + Util.obterSQLDataAtual() + " , "                                              // 12
-				  + idNegativador+", "                                      // 13 
-				  + idNegativadorComando+") ";                              // 14
-			stmt.executeUpdate(insert);
-			//System.out.print("1 - INSERINDO RegistroNegativadorMovimento! ");
-			nextValue = this.getNegativadorMovimento();
-		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
-			throw new ErroRepositorioException(e, "Erro no Hibernate RegistroNegativadorMovimento ");
-		} catch (SQLException e) {
-			throw new ErroRepositorioException(e, "Erro no Insert RegistroNegativadorMovimento ");
-		} finally {
-			// fecha a sessão
-			HibernateUtil.closeSession(session);
-
-			try {
-				stmt.close();
-				con.close();
-			} catch (SQLException e) {
-				throw new ErroRepositorioException(e, "Erro ao fechar conexões");
-			}
-		}
-		return nextValue;
-	}	
-	
-
-	/**
-	 * Insere geraRegistroNegativacaoReg
-	 * 
-	 * @author Marcio Roberto, Ivan Sergio
-	 * @date 30/10/2007
-	 * @alteracao: 10/01/2011 - RM3755 - Adicionado LAST_ID e LEST_ID;
-	 * 
-	 * @param 
-	 *        
-	 * @return 
-	 * @throws ErroRepositorioException
-	 */
-	//@Override Metodo sobrescrito na classe RepositorioSpcSerasaPostgresHBM
-	public Integer geraRegistroNegativacaoReg(int idNegativador,
-			int saenvio, int idNegativadorComando, int idNegativacaoMovimento, StringBuilder registroHeader,
-			int quantidadeRegistros, Integer idNegCriterio) throws ErroRepositorioException {
-
-		Session session = HibernateUtil.getSession();
-		String insert;
-		Connection con = null;
-		Statement stmt = null;
-		int nextValId = 0;
-		try {
-			con = session.connection();
-			stmt = con.createStatement();
-
-			Integer idNrTipo = NegativadorRegistroTipo.ID_SERASA_HEADER;    
-			if (new Integer(idNegativador).equals(Negativador.NEGATIVADOR_SPC)){
-				idNrTipo = NegativadorRegistroTipo.ID_SPC_HEADER;
-			}
-			insert = "insert into cobranca.negatd_movimento_reg ("
-				  + " nmrg_id, "                             // 01
-				  + " ngmv_id, "                             // 02
-				  + " nmrg_idreginclusao, "			         // 03
-				  + " nrtp_id, "                             // 04
-				  + " nmrg_cnregistro, "                     // 05
-				  + " nmrg_tmultimaalteracao, "              // 06
-				  + " usur_id, "                             // 07
-				  + " nmrg_cdexclusaotipo, "                 // 08
-				  + " nmrg_icaceito, "                       // 09
-				  + " nmrg_iccorrecao, "                     // 10
-				  + " nmrg_vldebito, "                       // 11
-				  + " cdst_id, "                             // 12
-				  + " nmrg_dtsituacaodebito, "               // 13
-				  + " imov_id, "                             // 14
-				  + " loca_id, "                             // 15
-				  + " qdra_id, "                             // 16
-				  + " nmrg_cdsetorcomercial, "               // 17
-				  + " nmrg_nnquadra, "                       // 18
-				  + " iper_id, "                             // 19
-				  + " ngct_id, "                             // 20
-				  + " clie_id, "                             // 21
-				  + " catg_id, "                             // 22
-				  + " cpft_id, "                             // 23
-				  + " nmrg_nncpf, "                          // 24
-				  + " nmrg_nncnpj, "                         // 25
-				  + " nmrg_icsitdefinitiva, "                // 26
-				  + " nmrg_nnregistro,  "                    // 27
-				  + " cbst_id, "							 // 28
-				  + " last_id, "							 // 29
-				  + " lest_id ) "							 // 30
-				  + " values ( "
-				  + Util.obterNextValSequence("cobranca.seq_negatd_movimento_reg") + ", " //01
-				  + idNegativacaoMovimento+", "                                 // 02
-				  + "null, "                                                    // 03
-				  + idNrTipo+", "                                               // 04
-				  + "'"+registroHeader.toString()+"'"+", "                      // 05
-				  + Util.obterSQLDataAtual() + " , "                                                  // 06   
-				  + "null,"                                                     // 07   
-				  + "null,"                                                     // 08   
-				  + "null,"                                                     // 09   
-				  + "null,"                                                     // 10   
-				  + "null,"                                                     // 11   
-				  + "null,"                                                     // 12   
-				  + "null,"                                                     // 13   
-				  + "null,"                                                     // 14   
-				  + "null,"                                                     // 15   
-				  + "null,"                                                     // 16   
-				  + "null,"                                                     // 17   
-				  + "null,"                                                     // 18
-				  + "null,"                                                     // 19
-				  + idNegCriterio+", "                                          // 20
-				  + "null,"                                                     // 21
-				  + "null,"                                                     // 22
-				  + "null,"                                                     // 23
-				  + "null,"                                                     // 24
-				  + "null,"                                                     // 25
-				  + "2, "                                                       // 26
-				  + (quantidadeRegistros)	                                    // 27   
-				  + ",null "													// 28
-				  + ",null "													// 29
-				  + ",null )";													// 30
-			stmt.executeUpdate(insert);
-			//System.out.print("1 - INSERINDO geraRegistroNegativacaoReg!! ");
-			nextValId = this.getNextNegativadorMovimentoReg();
-		} catch (HibernateException e) {
-			nextValId = 0;
-			// levanta a exceção para a próxima camada
-			throw new ErroRepositorioException(e, "Erro no Hibernate geraRegistroNegativacaoReg ");
-		} catch (SQLException e) {
-			nextValId = 0;
-			throw new ErroRepositorioException(e, "Erro no Insert geraRegistroNegativacaoReg ");
-		} finally {
-			// fecha a sessão
-			HibernateUtil.closeSession(session);
-			try {
-				stmt.close();
-				con.close();
-			} catch (SQLException e) {
-				throw new ErroRepositorioException(e, "Erro ao fechar conexões");
-			}
-		}
-		return nextValId;
-	}	
 	/**
 	 * [UC 0653] Pesquisar Comando Negativação
 	 * 
@@ -1952,67 +1746,49 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 	}
 	
 	
-	/**
-	 *  geraRegistroNegativacaoMovimentoRegItem
-	 * 
-	 * @author Marcio Roberto
-	 * @date 13/11/2007
-	 * 
-	 * @param 
-	 * @return 
-	 * @throws ErroRepositorioException
-	 */	
-	//@Override Metodo sobrescrito na classe RepositorioSpcSerasaPostgresHBM
-	public void geraRegistroNegativacaoMovimentoRegItem(int idDebSit,
-			BigDecimal valorDoc, int idDetalheRegSPC, int idDocTipo, Integer idGuiaPagamento,
-			Integer idConta) throws ErroRepositorioException {
+	public void geraRegistroNegativacaoMovimentoRegItem(int idDebitoSituacao, BigDecimal valorDocumento,
+			int idRegistroDetalhe, int idDocumentoTipo, Integer idGuiaPagamento, Integer idConta) throws ErroRepositorioException {
 
 		Session session = HibernateUtil.getSession();
-		String insert;
 		Connection con = null;
 		Statement stmt = null;
 		try {
 			con = session.connection();
 			stmt = con.createStatement();
-			
-			insert = "insert into cobranca.negatd_mov_reg_item ("
-   				  +" nmri_id , "                                // 01
-				  +" nmrg_id , "                                // 02
-				  +" dotp_id , "                                // 03
-				  +" dbac_id , "                                // 04
-				  +" gpag_id , "                                // 05
-				  +" cnta_id , "                                // 06
-				  +" cdst_id , "                                // 07 
-				  +" nmri_vldebito , "                          // 08
-				  +" nmri_dtsituacaodebito , "                  // 09
-				  +" cdst_idaposexclusao , "                    // 10 
-				  +" nmri_dtsitdebaposexclusao , "              // 11
-				  +" nmri_icsitdefinitiva," 
-				  +" nmri_tmultimaalteracao) "                   // 12 
-				  + " values ( "
-				  + Util.obterNextValSequence("cobranca.seq_negatd_mov_reg_item") + ", "
-				  + idDetalheRegSPC+", "                                             // 02
-				  + idDocTipo+", "                                                   // 03
-				  + "null, "                                                         // 04
-				  + idGuiaPagamento+", "                                             // 05
-				  + idConta+", "                                                     // 06
-				  + idDebSit+", "                                                    // 07
-				  + valorDoc+", "                                                    // 08
-				  + Util.obterSQLDataAtual() + " , "                                                       // 09
-				  + "null, "                                                         // 10
-				  + "null, "                                                         // 11
-				  + "2," 
-				  + Util.obterSQLDataAtual() +" ) ";                                                           // 12
+
+			String insert = "insert into cobranca.negatd_mov_reg_item ("
+					+ " nmri_id , " // 01
+					+ " nmrg_id , " // 02
+					+ " dotp_id , " // 03
+					+ " dbac_id , " // 04
+					+ " gpag_id , " // 05
+					+ " cnta_id , " // 06
+					+ " cdst_id , " // 07
+					+ " nmri_vldebito , " // 08
+					+ " nmri_dtsituacaodebito , " // 09
+					+ " cdst_idaposexclusao , " // 10
+					+ " nmri_dtsitdebaposexclusao , " // 11
+					+ " nmri_icsitdefinitiva," + " nmri_tmultimaalteracao) " // 12
+					+ " values ( "
+					+ Util.obterNextValSequence("cobranca.seq_negatd_mov_reg_item") + ", " // 01
+					+ idRegistroDetalhe + ", " // 02
+					+ idDocumentoTipo + ", " // 03
+					+ "null, " // 04
+					+ idGuiaPagamento + ", " // 05
+					+ idConta + ", " // 06
+					+ idDebitoSituacao + ", " // 07
+					+ valorDocumento + ", " // 08
+					+ Util.obterSQLDataAtual() + " , " // 09
+					+ "null, " // 10
+					+ "null, " // 11
+					+ "2," + Util.obterSQLDataAtual() + " ) "; // 12
 
 			stmt.executeUpdate(insert);
-			//System.out.print("1 - INSERINDO geraRegistroNegativacaoMovimentoRegItem!! ");
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate geraRegistroNegativacaoMovimentoRegItem ");
 		} catch (SQLException e) {
 			throw new ErroRepositorioException(e, "Erro no Insert geraRegistroNegativacaoMovimentoRegItem ");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 
 			try {
@@ -2021,7 +1797,7 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 			} catch (SQLException e) {
 				throw new ErroRepositorioException(e, "Erro ao fechar conexões");
 			}
-			
+
 		}
 	}
 	
@@ -3326,49 +3102,35 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 	 * @return Boolean
 	 * @throws ErroRepositorioException
 	 */
-	public Boolean verificarExistenciaNegativacaoImovel(Integer idImovel)
-		throws ErroRepositorioException {
-		
+	public Boolean verificarExistenciaNegativacaoImovel(Integer idImovel) throws ErroRepositorioException {
 		Integer pesquisar = null;
 		Boolean retorno = false;
 		Session session = HibernateUtil.getSession();
 		String consulta;
-	
-		try {
-			
-			consulta =  " select nmrg.id "
-				 + " from gcom.cobranca.NegativadorMovimentoReg nmrg "
-				 + " inner join nmrg.imovel imov "
-				 + " left join nmrg.negativadorMovimentoRegInclusao nmrgInclusao "
-				 + " where  imov.id = :idImovel " 
-				 + " and nmrg.codigoExclusaoTipo is null " 
-				 + " and nmrgInclusao.id is null " 
-				 + " and (nmrg.indicadorAceito = :indicadorAceito or nmrg.indicadorAceito is null)" ;
 
-			//comentado por Vivianne Sousa - 05/10/2010 - analista: Fatima Sampaio
-//			consulta = "select imov.id " 
-//					 + "from NegativacaoImoveis ngim "
-//					 + "inner join ngim.imovel imov "						
-//					 + "where ngim.indicadorExcluido = 2 " 
-//					 + "and imov.id = :idImovel";
-//				
+		try {
+			consulta = " select nmrg.id "
+					 + " from gcom.cobranca.NegativadorMovimentoReg nmrg "
+					 + " inner join nmrg.imovel imov "
+					 + " left join nmrg.negativadorMovimentoRegInclusao nmrgInclusao "
+					 + " where imov.id = :idImovel "
+					 + " and nmrg.codigoExclusaoTipo is null "
+					 + " and nmrgInclusao.id is null "
+					 + " and (nmrg.indicadorAceito = :indicadorAceito or nmrg.indicadorAceito is null)";
+
 			pesquisar = (Integer) session.createQuery(consulta)
-						.setShort("indicadorAceito",ConstantesSistema.SIM)
-						.setInteger("idImovel", idImovel).setMaxResults(1)
-						.uniqueResult();
-			
-			if(pesquisar != null && !pesquisar.equals("")){
+					.setShort("indicadorAceito", ConstantesSistema.SIM)
+					.setInteger("idImovel", idImovel).setMaxResults(1).uniqueResult();
+
+			if (pesquisar != null && !pesquisar.equals("")) {
 				retorno = true;
 			}
-		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
-		
+
 		return retorno;
 	}
 	
@@ -6115,112 +5877,6 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 		return retorno;
 	}	
 
-	/**
-	 * Obtem geraRegistroNegativacaoRegTrailler
-	 * 
-	 * @author Marcio Roberto
-	 * @date 30/01/2008
-	 * 
-	 * @param int idNegativador, int idNegativacaoMovimento, 
-			StringBuilder registro, int quantidadeRegistros, int idNegCriterio
-	 * @return void
-	 * @throws ErroRepositorioException
-	 */	
-	//@Override Metodo sobrescrito na classe RepositorioSpcSerasaPostgresHBM
-	public void geraRegistroNegativacaoRegTrailler(int idNegativador, int idNegativacaoMovimento, 
-			StringBuilder registro, int quantidadeRegistros, Integer idNegCriterio) throws ErroRepositorioException {
-
-		Session session = HibernateUtil.getSession();
-		String insert;
-		Connection con = null;
-		Statement stmt = null;
-		try {
-			con = session.connection();
-			stmt = con.createStatement();
-			Integer idNrTipo = NegativadorRegistroTipo.ID_SERASA_TRAILLER;    
-			if (new Integer(idNegativador).equals(Negativador.NEGATIVADOR_SPC)){
-				idNrTipo = NegativadorRegistroTipo.ID_SPC_TRAILLER;
-			}
-			insert = "insert into cobranca.negatd_movimento_reg ("
-				  + " nmrg_id, "                             // 01
-				  + " ngmv_id, "                             // 02
-				  + " nmrg_idreginclusao, "			         // 03
-				  + " nrtp_id, "                             // 04
-				  + " nmrg_cnregistro, "                     // 05
-				  + " nmrg_tmultimaalteracao, "              // 06
-				  + " usur_id, "                             // 07
-				  + " nmrg_cdexclusaotipo, "                 // 08
-				  + " nmrg_icaceito, "                       // 09
-				  + " nmrg_iccorrecao, "                     // 10
-				  + " nmrg_vldebito, "                       // 11
-				  + " cdst_id, "                             // 12
-				  + " nmrg_dtsituacaodebito, "               // 13
-				  + " imov_id, "                             // 14
-				  + " loca_id, "                             // 15
-				  + " qdra_id, "                             // 16
-				  + " nmrg_cdsetorcomercial, "               // 17
-				  + " nmrg_nnquadra, "                       // 18
-				  + " iper_id, "                             // 19
-				  + " ngct_id, "                             // 20
-				  + " clie_id, "                             // 21
-				  + " catg_id, "                             // 22
-				  + " cpft_id, "                             // 23
-				  + " nmrg_nncpf, "                          // 24
-				  + " nmrg_nncnpj, "                         // 25
-				  + " nemt_id, "                             // 26
-				  + " nmrg_icsitdefinitiva, "                // 27
-				  + " nmrg_nnregistro, "                     // 28
-				  + " cbst_id ) "							 // 29
-				  + " values ( "
-				  + Util.obterNextValSequence("cobranca.seq_negatd_movimento_reg") + ", "
-				  + idNegativacaoMovimento+", "                                 // 02
-				  + "null, "                                                    // 03
-				  + idNrTipo+", "                                               // 04
-				  + "'"+registro.toString()+"'"+", "                            // 05
-				  + Util.obterSQLDataAtual() + " , "                                                  // 06   
-				  + "null,"                                                     // 07   
-				  + "null,"                                                     // 08   
-				  + "null,"                                                        // 09   
-				  + "null,"                                                        // 10   
-				  + "null,"                                                     // 11   
-				  + "null,"                                                     // 12   
-				  + "null,"                                                     // 13   
-				  + "null,"                                                     // 14   
-				  + "null,"                                                     // 15   
-				  + "null,"                                                     // 16   
-				  + "null,"                                                     // 17   
-				  + "null,"                                                     // 18
-				  + "null,"                                                     // 19
-				  + idNegCriterio+", "                                          // 20
-				  + "null,"                                                     // 21
-				  + "null,"                                                     // 22
-				  + "null,"                                                     // 23
-				  + "null,"                                                     // 24
-				  + "null,"                                                     // 25
-				  + "null,"                                                     // 26
-				  + "2, "                                                       // 27
-				  + quantidadeRegistros+","                                     // 28
-				  + "null )";													// 29
-			stmt.executeUpdate(insert);
-			//System.out.print("1 - INSERINDO geraRegistroNegativacaoRegTrailler!! ");
-		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
-			throw new ErroRepositorioException(e, "Erro no Hibernate geraRegistroNegativacaoRegTrailler ");
-		} catch (SQLException e) {
-			throw new ErroRepositorioException(e, "Erro no Insert geraRegistroNegativacaoRegTrailler ");
-		} finally {
-			// fecha a sessão
-			HibernateUtil.closeSession(session);
-			try {
-				stmt.close();
-				con.close();
-			} catch (SQLException e) {
-				throw new ErroRepositorioException(e, "Erro ao fechar conexões");
-			}
-		}
-	}
-	
-	
 	/**
 	 * Método usado para consulta de movimento do negativador
 	 * usado no caso de uso [UC0682] (com paginação)
@@ -9844,99 +9500,46 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 		Session session = HibernateUtil.getSession();
 		String sql = null;
 		try {
-			sql = " select imov.imov_id as idImovel " 
-			+ " from cadastro.imovel imov " 
-			+ " inner join cadastro.quadra qdra on(imov.qdra_id = qdra.qdra_id)"
-			+ " where imov.iper_id <> 4 " 
-//			+ " and qdra.qdpf_id <> 2 " 
-			+ " and imov.imov_icexclusao = " 
-			+ ConstantesSistema.INDICADOR_IMOVEL_ATIVO 
-			+ " and qdra.rota_id = " + idRota
-			+ " and not exists ( " +
-				" SELECT ngsm.imov_id FROM cobranca.negatd_result_simulacao ngsm " +
-				" WHERE ngcm_id = " + idComando + 
-				" AND ngsm.imov_id = imov.imov_id and ROWNUM <= 1 " +
-				" ) ";
-
-//			switch (tipoCondicao) {
-//			case 1:
-//				
-//				sql = " select imov.imov_id as idImovel " 
-//					+ " from cadastro.imovel as imov " 
-//					+ " inner join cadastro.quadra qdra on(imov.qdra_id = qdra.qdra_id)"
-//					+ " inner join micromedicao.rota rota on(qdra.rota_id = rota.rota_id)"
-//					+ " where imov.iper_id <> 4 and qdra.qdpf_id <> 2 and " 
-//					+ " rota.cbgr_id in (select nccg.cbgr_id "
-//					+ "                  from cobranca.negativacao_criterio as ngct "
-//					+ " 			     inner join cobranca.negativ_crit_cobr_grupo as nccg on(ngct.ngct_id = nccg.ngct_id) "
-//					+ " 			     where ngct.ngct_id  = " + nCriterio.getId() +" ) ";
-//				break;
-//			case 2:
-//				sql = " select imov.imov_id as idImovel "
-//				    + " from cadastro.imovel as imov "
-//				    + " inner join cadastro.quadra qdra on(imov.qdra_id = qdra.qdra_id)"
-//				    + " inner join cadastro.localidade loca on(imov.loca_id = loca.loca_id)"
-//				    + " where imov.iper_id <> 4 and qdra.qdpf_id <> 2 and "
-//				    + " loca.greg_id in (select  ncgr.greg_id"
-//					+ "             	 from cobranca.negativacao_criterio as ngct "
-//					+ "             	 inner join cobranca.negativ_crit_ger_reg as ncgr on(ngct.ngct_id = ncgr.ngct_id)" 		 
-//					+ "					 where ngct.ngct_id  = " + nCriterio.getId() +" ) ";
-//				break;
-//			case 3:
-//				sql = " select imov.imov_id as idImovel "
-//					+ " from cadastro.imovel as imov "
-//					+ " inner join cadastro.quadra qdra on(imov.qdra_id = qdra.qdra_id)"
-//					+ " inner join cadastro.localidade loca on(imov.loca_id = loca.loca_id)"
-//					+ " where imov.iper_id <> 4 and qdra.qdpf_id <> 2 and "
-//					+ " loca.uneg_id  in (select ncun.uneg_id "
-//					+ " 	              from cobranca.negativacao_criterio as ngct "
-//					+ " 	              inner join cobranca.negativ_crit_und_neg as ncun on(ngct.ngct_id = ncun.ngct_id) "
-//					+ " 	              where ngct.ngct_id  =" + nCriterio.getId() +" ) ";
-//				break;				
-//			case 4:
-//				sql = " select imov.imov_id as idImovel "
-//					+ " from cadastro.imovel as imov "
-//					+ " inner join cadastro.quadra qdra on(imov.qdra_id = qdra.qdra_id)"
-//					+ " where imov.iper_id <> 4 and qdra.qdpf_id <> 2 and "
-//					+ " imov.loca_id in (select ncep.loca_id"
-//					+ "                  from cobranca.negativacao_criterio as ngct "
-//					+ "                  inner join cobranca.negativ_crit_elo as ncep on(ngct.ngct_id = ncep.ngct_id) "
-//					+ "                  where ngct.ngct_id  =" + nCriterio.getId() +" ) ";
-//				break;
-//			case 5:
-//				sql = " select imov.imov_id as idImovel " 
-//					+ " from cadastro.imovel as imov "
-//					+ " inner join cadastro.quadra qdra on(imov.qdra_id = qdra.qdra_id)"
-//					+ " inner join cadastro.setor_comercial stcm on(imov.stcm_id = stcm.stcm_id)"	
-//					+ " where imov.iper_id <> 4 and qdra.qdpf_id <> 2 and "
-//					+ " imov.loca_id  between "+nCriterio.getLocalidadeInicial().getId()+" and " +nCriterio.getLocalidadeFinal().getId();					
-//				    if(nCriterio.getCodigoSetorComercialInicial() != null && 
-//				    		nCriterio.getCodigoSetorComercialFinal() != null){
-//				      sql = sql + " and stcm.stcm_cdsetorcomercial  between "+nCriterio.getCodigoSetorComercialInicial()+"" 
-//				      		    + " and "+nCriterio.getCodigoSetorComercialFinal();
-//				    }				   
-//			    break;
-//              default:
-//            	sql = " select i.imov_id as idImovel " 
-//					+ " from cadastro.imovel as i "
-//					+ " inner join cadastro.localidade loca on(i.loca_id = loca.loca_id)"
-//					+ " inner join cadastro.quadra q on(i.qdra_id = q.qdra_id)"				
-//					+ " where i.iper_id <> 4 and q.qdpf_id <> 2"; //i.last_id = 4 and
-//			   		if(nCriterio.getQuantidadeMaximaInclusoes() == null || nCriterio.getQuantidadeMaximaInclusoes().equals("")){
-//			   			sql = sql + " and i.loca_id ="+idLocalidade;
-//			   		} 		
-//
-//			} 
-						
-			retorno = (List) session.createSQLQuery(sql)
-					  .addScalar("idImovel" , Hibernate.INTEGER).list();
 			
+			sql = " select distinct imov_id  as idImovel from ("
+                + "    select imov.imov_id, c.cnta_id as idDocumento,"
+                + "    (coalesce(c.cnta_vlagua, 0) + coalesce(c.cnta_vlesgoto, 0) + coalesce(c.cnta_vldebitos, 0) - coalesce(c.cnta_vlcreditos, 0) - coalesce(c.cnta_vlimpostos, 0)) as vlDocumento,"
+                + "    sum(coalesce(pagto.pgmt_vlpagamento,0)) "
+                + "                 from cadastro.imovel imov "
+                + "                 inner join cadastro.quadra qdra on imov.qdra_id = qdra.qdra_id "
+                + "                 inner join cobranca.negativacao_criterio ngct on ngct.ngcm_id = " + idComando
+                + "                 inner join faturamento.conta c on c.imov_id = imov.imov_id and c.cnta_amreferenciaconta between ngct.ngct_amreferenciacontainicial and ngct.ngct_amreferenciacontafinal and c.cnta_dtvencimentoconta between ngct.ngct_dtvencimentodebitoinicial and ngct.ngct_dtvencimentodebitofinal "
+                + "                 left join arrecadacao.pagamento pagto on pagto.cnta_id = c.cnta_id "
+                + "                 left join cobranca.negatd_result_simulacao ngsm on ngsm.ngcm_id = " + idComando
+                +"               and ngsm.imov_id = imov.imov_id "
+                + "                 where imov.iper_id <> 4 "
+                + "                 and imov.imov_icexclusao = 2 "
+                + "              and qdra.rota_id = " + idRota
+                + "                 and ngsm.ngsm_id is null "
+                + "    group by imov.imov_id, c.cnta_id, (coalesce(c.cnta_vlagua, 0) + coalesce(c.cnta_vlesgoto, 0) + coalesce(c.cnta_vldebitos, 0) - coalesce(c.cnta_vlcreditos, 0) - coalesce(c.cnta_vlimpostos, 0)) having sum(coalesce(pagto.pgmt_vlpagamento,0)) < (coalesce(c.cnta_vlagua, 0) + coalesce(c.cnta_vlesgoto, 0) + coalesce(c.cnta_vldebitos, 0) - coalesce(c.cnta_vlcreditos, 0) - coalesce(c.cnta_vlimpostos, 0)) "
+                + "    union "
+                + "    select imov.imov_id, guiaPagto.gpag_id as idDocumento, coalesce(guiaPagto.gpag_vldebito, 0) as vlDocumento, sum(coalesce(pagto.pgmt_vlpagamento,0)) "
+                + "                 from cadastro.imovel imov "
+                + "                 inner join cadastro.quadra qdra on imov.qdra_id = qdra.qdra_id "
+                + "                 inner join cobranca.negativacao_criterio ngct on ngct.ngcm_id = " + idComando
+                + "                 inner join faturamento.guia_pagamento guiaPagto on guiaPagto.imov_id = imov.imov_id and guiaPagto.dcst_idatual = 0 and guiaPagto.gpag_dtvencimento between ngct.ngct_dtvencimentodebitoinicial and ngct.ngct_dtvencimentodebitofinal "
+                + "                 left join arrecadacao.pagamento pagto on pagto.gpag_id = guiaPagto.gpag_id "
+                + "                 left join cobranca.negatd_result_simulacao ngsm on ngsm.ngcm_id = " + idComando
+                + "and ngsm.imov_id = imov.imov_id "
+                + "                 where imov.iper_id <> 4 "
+                + "                 and imov.imov_icexclusao = 2 "
+                + "              and qdra.rota_id = " + idRota
+                + "                 and ngsm.ngsm_id is null "
+                + "    group by imov.imov_id, guiaPagto.gpag_id, coalesce(guiaPagto.gpag_vldebito, 0) "
+                + "    ) a ";
+			
+			retorno = (List) session.createSQLQuery(sql).addScalar("idImovel" , Hibernate.INTEGER).list();
 		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e,
-					"Erro no Hibernate getImovelCindicao");
+			throw new ErroRepositorioException(e, "Erro no Hibernate getImovelCindicao");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
+		
 		return retorno;
 	}
 	
@@ -10042,8 +9645,6 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 		Session session = HibernateUtil.getSession();
 		String sql = null;
 		
-		/**TODO COSANPA: Correção na coluna de retorno da sub-consulta, alteração de ncgr.uneg_id
-		 *     para ncun.uneg_id Dia: 16/08/2011 */
 		try{
 			sql = " select distinct rota.rota_id as idRota from " 
 				+ " cadastro.quadra qdra "
@@ -17162,5 +16763,39 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 		
 	}
 	
-	
+	public boolean verificarExistenciaNegativacaoImovelECliente(
+			Integer idImovel,Integer idCliente) throws ErroRepositorioException {
+		Integer pesquisar = null;
+		Boolean retorno = false;
+		Session session = HibernateUtil.getSession();
+		String consulta;
+
+		try {
+			consulta = " select nmrg.id "
+					 + " from gcom.cobranca.NegativadorMovimentoReg nmrg "
+					 + " inner join nmrg.imovel imov "
+					 + " left join nmrg.negativadorMovimentoRegInclusao nmrgInclusao "
+					 + " where  imov.id = :idImovel "
+					 + " and nmrg.cliente.id = :idCliente"
+					 + " and nmrg.codigoExclusaoTipo is null "
+					 + " and nmrgInclusao.id is null "
+					 + " and (nmrg.indicadorAceito = :indicadorAceito or nmrg.indicadorAceito is null)";
+
+			pesquisar = (Integer) session.createQuery(consulta)
+					.setShort("indicadorAceito", ConstantesSistema.SIM)
+					.setInteger("idImovel", idImovel)
+					.setInteger("idCliente", idCliente)
+					.setMaxResults(1).uniqueResult();
+
+			if (pesquisar != null && !pesquisar.equals("")) {
+				retorno = true;
+			}
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
 }

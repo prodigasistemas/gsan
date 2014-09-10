@@ -13,208 +13,116 @@ import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/**
- * @author Hibernate CodeGenerator
- * @created 22 de Julho de 2005
- */
 @ControleAlteracao()
 public class Cliente extends ObjetoTransacao implements ICliente {
-	
-	public static final int ATRIBUTOS_CLIENTE_INSERIR = 28; //Operacao.OPERACAO_CLIENTE_INSERIR
-	public static final int ATRIBUTOS_CLIENTE_ATUALIZAR = 38; //Operacao.OPERACAO_CLIENTE_ATUALIZAR
-	public static final int ATRIBUTOS_CLIENTE_REMOVER = 39; //Operacao.OPERACAO_CLIENTE_REMOVER
-	public static final int ATRIBUTOS_ATUALIZAR_DADOS_CLIENTE_PROMAIS = 1662; //Operacao.OPERACAO_ATUALIZAR_DADOS_CLIENTE_PROMAIS
+
+	public static final int ATRIBUTOS_CLIENTE_INSERIR = 28;
+	public static final int ATRIBUTOS_CLIENTE_ATUALIZAR = 38;
+	public static final int ATRIBUTOS_CLIENTE_REMOVER = 39;
+	public static final int ATRIBUTOS_ATUALIZAR_DADOS_CLIENTE_PROMAIS = 1662;
 	public static final int OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL = 1509;
 	public static final Short INDICADOR_NOME_FANTASIA = 1;
 	public static final Short INDICADOR_NOME_RECEITA = 2;
-	
+
 	private static final long serialVersionUID = 1L;
-	/** identifier field */
-    private Integer id;
 
-    /** nullable persistent field */
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR, ATRIBUTOS_ATUALIZAR_DADOS_CLIENTE_PROMAIS,OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL})
-    private String nome;
+	private Integer id;
 
-    /** nullable persistent field */
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR, ATRIBUTOS_ATUALIZAR_DADOS_CLIENTE_PROMAIS, OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL })
+	private String nome;
+
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR })
+	private String nomeAbreviado;
+
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR, ATRIBUTOS_ATUALIZAR_DADOS_CLIENTE_PROMAIS, OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL })
+	private String cpf;
+
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR })
+	private String rg;
+
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR })
+	private Date dataEmissaoRg;
+
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR })
+	private Short dataVencimento;
+
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR })
+	private Date dataNascimento;
+
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR, ATRIBUTOS_ATUALIZAR_DADOS_CLIENTE_PROMAIS, OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL })
+	private String cnpj;
+
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR })
+	private String email;
+
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR })
+	private Short indicadorUso;
+
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR })
+	private Date ultimaAlteracao;
+
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR })
+	private Short indicadorAcaoCobranca;
+
+	@ControleAlteracao(value = FiltroCliente.ORGAO_EXPEDIDOR_RG, funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR })
+	private gcom.cadastro.cliente.OrgaoExpedidorRg orgaoExpedidorRg;
+
+	private gcom.cadastro.cliente.Cliente cliente;
+
+	@ControleAlteracao(value = FiltroCliente.SEXO, funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR, OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL })
+	private gcom.cadastro.cliente.PessoaSexo pessoaSexo;
+
+	@ControleAlteracao(value = FiltroCliente.PROFISSAO, funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR, OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL })
+	private gcom.cadastro.cliente.Profissao profissao;
+
+	@ControleAlteracao(value = FiltroCliente.UNIDADE_FEDERACAO, funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR })
+	private UnidadeFederacao unidadeFederacao;
+
+	@ControleAlteracao(value = FiltroCliente.CLIENTE_TIPO, funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR, OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL })
+	private gcom.cadastro.cliente.ClienteTipo clienteTipo;
+
+	@ControleAlteracao(value = FiltroCliente.RAMO_ATIVIDADE, funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR, OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL })
+	private gcom.cadastro.cliente.RamoAtividade ramoAtividade;
+
+	@ControleAlteracao(value = FiltroCliente.CLIENTE_TELEFONES, funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR, ATRIBUTOS_ATUALIZAR_DADOS_CLIENTE_PROMAIS, OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL })
+	private Set clienteFones;
+
+	private Set clienteImoveis;
+
+	@ControleAlteracao(value = FiltroCliente.CLIENTE_ENDERECOS, funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR })
+	private Set clienteEnderecos;
+
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR })
+	private Short diaVencimento;
+
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR })
+	private String nomeMae;
+
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR })
+	private Short indicadorAcrescimos;
+
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR })
+	private Short indicadorGeraArquivoTexto;
+
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR })
+	private Short indicadorGeraFaturaAntecipada;
+
+	@ControleAlteracao(funcionalidade = { ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR })
+	private Short indicadorVencimentoMesSeguinte;
+
+	private Short indicadorUsoNomeFantasiaConta;
+
+	private Short indicadorPermiteNegativacao;
+	
     @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
-    private String nomeAbreviado;
-
-    /** nullable persistent field */
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR, ATRIBUTOS_ATUALIZAR_DADOS_CLIENTE_PROMAIS,OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL})
-    private String cpf;
-
-    /** nullable persistent field */
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
-    private String rg;
-
-    /** nullable persistent field */
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
-    private Date dataEmissaoRg;
-
-    /** nullable persistent field */
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
-    private Short dataVencimento;
-    
-    /** nullable persistent field */
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
-    private Date dataNascimento;
-
-    /** nullable persistent field */
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR, ATRIBUTOS_ATUALIZAR_DADOS_CLIENTE_PROMAIS,OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL})
-    private String cnpj;
-
-    /** nullable persistent field */
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
-    private String email;
-
-    /** nullable persistent field */
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
-    private Short indicadorUso;
-
-    /** nullable persistent field */
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
-    private Date ultimaAlteracao;
-
-    /** nullable persistent field */
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
-    private Short indicadorAcaoCobranca;
-
-    /** persistent field */
-    @ControleAlteracao(value=FiltroCliente.ORGAO_EXPEDIDOR_RG, 
-    		funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
-    private gcom.cadastro.cliente.OrgaoExpedidorRg orgaoExpedidorRg;
-
-    /** persistent field */
-    private gcom.cadastro.cliente.Cliente cliente;
-
-    /** persistent field */
-    @ControleAlteracao(value=FiltroCliente.SEXO, 
-    		funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR,OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL})
-    private gcom.cadastro.cliente.PessoaSexo pessoaSexo;
-
-    /** persistent field */
-    @ControleAlteracao(value=FiltroCliente.PROFISSAO, 
-    		funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR,OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL})
-    private gcom.cadastro.cliente.Profissao profissao;
-
-    /** persistent field */
-    @ControleAlteracao(value=FiltroCliente.UNIDADE_FEDERACAO, 
-    		funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
-    private UnidadeFederacao unidadeFederacao;
-
-    /** persistent field */
-    @ControleAlteracao(value=FiltroCliente.CLIENTE_TIPO,
-    		funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR,OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL})
-    private gcom.cadastro.cliente.ClienteTipo clienteTipo;
-
-    /** persistent field */
-    @ControleAlteracao(value=FiltroCliente.RAMO_ATIVIDADE, 
-    		funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR,OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL})
-    private gcom.cadastro.cliente.RamoAtividade ramoAtividade;
-
-    /** persistent field */
-    @ControleAlteracao(value=FiltroCliente.CLIENTE_TELEFONES, 
-    		funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR, ATRIBUTOS_ATUALIZAR_DADOS_CLIENTE_PROMAIS,OPERACAO_ATUALIZAR_DADOS_IMOVEL_ATUALIZACAO_CADASTRAL})
-    private Set clienteFones;
-
-    /** persistent field */
-//    @ControleAlteracao(value=FiltroCliente.CLIENTE_RESPONSAVEL, 
-//    		funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
-    private Set clienteImoveis;
-
-    /** persistent field */
-    @ControleAlteracao(value=FiltroCliente.CLIENTE_ENDERECOS, 
-    		funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
-    private Set clienteEnderecos;
-
-	/** nullable persistent field */
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
-    private Short diaVencimento;
-
-    /** nullable persistent field */
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
-    private String nomeMae;
-    
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
-    private Short indicadorAcrescimos;
-    
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
-    private Short indicadorGeraArquivoTexto;
-    
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
-    private Short indicadorGeraFaturaAntecipada;
-    
-    @ControleAlteracao(funcionalidade={ATRIBUTOS_CLIENTE_INSERIR, ATRIBUTOS_CLIENTE_ATUALIZAR})
-    private Short indicadorVencimentoMesSeguinte;
-    
-    
-    private Short indicadorUsoNomeFantasiaConta;
-    
-    private Short indicadorPermiteNegativacao;
-    
-    //public static final Integer CODIGO_CLIENTE_MARIO_GOUVEIA = 6548350;
-    
-    public Short getIndicadorUsoNomeFantasiaConta() {
-		return indicadorUsoNomeFantasiaConta;
-	}
-
-	public void setIndicadorUsoNomeFantasiaConta(Short indicadorUsoNomeFantasiaConta) {
-		this.indicadorUsoNomeFantasiaConta = indicadorUsoNomeFantasiaConta;
-	}
+    private Short indicadorNegativacaoPeriodo;
 
 	public static final Short GERA_ARQUIVO_TEXTO_SIM = 1;
 
-	
-
-	/**
-	 * full constructor
-	 * 
-	 * @param nome
-	 *            Descrição do parâmetro
-	 * @param nomeAbreviado
-	 *            Descrição do parâmetro
-	 * @param cpf
-	 *            Descrição do parâmetro
-	 * @param rg
-	 *            Descrição do parâmetro
-	 * @param dataEmissaoRg
-	 *            Descrição do parâmetro
-	 * @param dataNascimento
-	 *            Descrição do parâmetro
-	 * @param cnpj
-	 *            Descrição do parâmetro
-	 * @param email
-	 *            Descrição do parâmetro
-	 * @param indicadorUso
-	 *            Descrição do parâmetro
-	 * @param ultimaAlteracao
-	 *            Descrição do parâmetro
-	 * @param orgaoExpedidorRg
-	 *            Descrição do parâmetro
-	 * @param cliente
-	 *            Descrição do parâmetro
-	 * @param pessoaSexo
-	 *            Descrição do parâmetro
-	 * @param profissao
-	 *            Descrição do parâmetro
-	 * @param unidadeFederacao
-	 *            Descrição do parâmetro
-	 * @param clienteTipo
-	 *            Descrição do parâmetro
-	 * @param ramoAtividade
-	 *            Descrição do parâmetro
-	 */
-	public Cliente(String nome, String nomeAbreviado, String cpf, String rg,
-			Date dataEmissaoRg, Date dataNascimento, String cnpj, String email,
-			Short indicadorUso, Date ultimaAlteracao,
-			gcom.cadastro.cliente.OrgaoExpedidorRg orgaoExpedidorRg,
-			gcom.cadastro.cliente.Cliente cliente,
-			gcom.cadastro.cliente.PessoaSexo pessoaSexo,
-			gcom.cadastro.cliente.Profissao profissao,
-			UnidadeFederacao unidadeFederacao,
-			gcom.cadastro.cliente.ClienteTipo clienteTipo,
-			gcom.cadastro.cliente.RamoAtividade ramoAtividade, Short diaVencimento) {
+	public Cliente(String nome, String nomeAbreviado, String cpf, String rg, Date dataEmissaoRg, Date dataNascimento, String cnpj, String email,
+			Short indicadorUso, Date ultimaAlteracao, gcom.cadastro.cliente.OrgaoExpedidorRg orgaoExpedidorRg, gcom.cadastro.cliente.Cliente cliente,
+			gcom.cadastro.cliente.PessoaSexo pessoaSexo, gcom.cadastro.cliente.Profissao profissao, UnidadeFederacao unidadeFederacao,
+			gcom.cadastro.cliente.ClienteTipo clienteTipo, gcom.cadastro.cliente.RamoAtividade ramoAtividade, Short diaVencimento) {
 		this.nome = nome;
 		this.nomeAbreviado = nomeAbreviado;
 		this.cpf = cpf;
@@ -233,21 +141,16 @@ public class Cliente extends ObjetoTransacao implements ICliente {
 		this.clienteTipo = clienteTipo;
 		this.ramoAtividade = ramoAtividade;
 		this.diaVencimento = diaVencimento;
+		this.indicadorNegativacaoPeriodo = ConstantesSistema.NAO;
 	}
-	
+
 	/**
 	 * full constructor
 	 */
-	public Cliente(String nome, String nomeAbreviado, String cpf, String rg,
-			Date dataEmissaoRg, Date dataNascimento, String cnpj, String email,
-			Short indicadorUso,  Date ultimaAlteracao,
-			gcom.cadastro.cliente.OrgaoExpedidorRg orgaoExpedidorRg,
-			gcom.cadastro.cliente.Cliente cliente,
-			gcom.cadastro.cliente.PessoaSexo pessoaSexo,
-			gcom.cadastro.cliente.Profissao profissao,
-			UnidadeFederacao unidadeFederacao,
-			gcom.cadastro.cliente.ClienteTipo clienteTipo,
-			gcom.cadastro.cliente.RamoAtividade ramoAtividade) {
+	public Cliente(String nome, String nomeAbreviado, String cpf, String rg, Date dataEmissaoRg, Date dataNascimento, String cnpj, String email,
+			Short indicadorUso, Date ultimaAlteracao, gcom.cadastro.cliente.OrgaoExpedidorRg orgaoExpedidorRg, gcom.cadastro.cliente.Cliente cliente,
+			gcom.cadastro.cliente.PessoaSexo pessoaSexo, gcom.cadastro.cliente.Profissao profissao, UnidadeFederacao unidadeFederacao,
+			gcom.cadastro.cliente.ClienteTipo clienteTipo, gcom.cadastro.cliente.RamoAtividade ramoAtividade) {
 		this.nome = nome;
 		this.nomeAbreviado = nomeAbreviado;
 		this.cpf = cpf;
@@ -265,20 +168,13 @@ public class Cliente extends ObjetoTransacao implements ICliente {
 		this.unidadeFederacao = unidadeFederacao;
 		this.clienteTipo = clienteTipo;
 		this.ramoAtividade = ramoAtividade;
+		this.indicadorNegativacaoPeriodo = ConstantesSistema.NAO;
 	}
-	
-	public Cliente(String nome, String nomeAbreviado, String cpf, String rg,
-			Date dataEmissaoRg, Date dataNascimento, String cnpj, String email,
-			Short indicadorUso,  Date ultimaAlteracao,
-			gcom.cadastro.cliente.OrgaoExpedidorRg orgaoExpedidorRg,
-			gcom.cadastro.cliente.Cliente cliente,
-			gcom.cadastro.cliente.PessoaSexo pessoaSexo,
-			gcom.cadastro.cliente.Profissao profissao,
-			UnidadeFederacao unidadeFederacao,
-			gcom.cadastro.cliente.ClienteTipo clienteTipo,
-			Short indicadorUsoNomeFantasiaConta,
-			gcom.cadastro.cliente.RamoAtividade ramoAtividade
-			) {
+
+	public Cliente(String nome, String nomeAbreviado, String cpf, String rg, Date dataEmissaoRg, Date dataNascimento, String cnpj, String email,
+			Short indicadorUso, Date ultimaAlteracao, gcom.cadastro.cliente.OrgaoExpedidorRg orgaoExpedidorRg, gcom.cadastro.cliente.Cliente cliente,
+			gcom.cadastro.cliente.PessoaSexo pessoaSexo, gcom.cadastro.cliente.Profissao profissao, UnidadeFederacao unidadeFederacao,
+			gcom.cadastro.cliente.ClienteTipo clienteTipo, Short indicadorUsoNomeFantasiaConta, gcom.cadastro.cliente.RamoAtividade ramoAtividade) {
 		this.nome = nome;
 		this.nomeAbreviado = nomeAbreviado;
 		this.cpf = cpf;
@@ -297,22 +193,16 @@ public class Cliente extends ObjetoTransacao implements ICliente {
 		this.clienteTipo = clienteTipo;
 		this.indicadorUsoNomeFantasiaConta = indicadorUsoNomeFantasiaConta;
 		this.ramoAtividade = ramoAtividade;
-		
+		this.indicadorNegativacaoPeriodo = ConstantesSistema.NAO;
 	}
-	
+
 	/**
 	 * full constructor
 	 */
-	public Cliente(String nome, String nomeAbreviado, String cpf, String rg,
-			Date dataEmissaoRg, Date dataNascimento, String cnpj, String email,
-			Short indicadorUso, Short indicadorAcrescimos, Date ultimaAlteracao,
-			gcom.cadastro.cliente.OrgaoExpedidorRg orgaoExpedidorRg,
-			gcom.cadastro.cliente.Cliente cliente,
-			gcom.cadastro.cliente.PessoaSexo pessoaSexo,
-			gcom.cadastro.cliente.Profissao profissao,
-			UnidadeFederacao unidadeFederacao,
-			gcom.cadastro.cliente.ClienteTipo clienteTipo,
-			gcom.cadastro.cliente.RamoAtividade ramoAtividade,
+	public Cliente(String nome, String nomeAbreviado, String cpf, String rg, Date dataEmissaoRg, Date dataNascimento, String cnpj, String email,
+			Short indicadorUso, Short indicadorAcrescimos, Date ultimaAlteracao, gcom.cadastro.cliente.OrgaoExpedidorRg orgaoExpedidorRg,
+			gcom.cadastro.cliente.Cliente cliente, gcom.cadastro.cliente.PessoaSexo pessoaSexo, gcom.cadastro.cliente.Profissao profissao,
+			UnidadeFederacao unidadeFederacao, gcom.cadastro.cliente.ClienteTipo clienteTipo, gcom.cadastro.cliente.RamoAtividade ramoAtividade,
 			Short indicadorUsoNomeFantasiaConta) {
 		this.nome = nome;
 		this.nomeAbreviado = nomeAbreviado;
@@ -333,20 +223,16 @@ public class Cliente extends ObjetoTransacao implements ICliente {
 		this.clienteTipo = clienteTipo;
 		this.ramoAtividade = ramoAtividade;
 		this.indicadorUsoNomeFantasiaConta = indicadorUsoNomeFantasiaConta;
+		this.indicadorNegativacaoPeriodo = ConstantesSistema.NAO;
 	}
-	
+
 	/**
 	 * full constructor para atualização cadastral
 	 */
 	public Cliente(Cliente clienteCadastrado) {
 		this.nome = clienteCadastrado.getNome();
-		//this.nomeAbreviado = clienteCadastrado.getNomeAbreviado();
 		this.cpf = clienteCadastrado.getCpf();
-		//this.rg = clienteCadastrado.getRg();
-		//this.dataEmissaoRg = clienteCadastrado.getDataEmissaoRg();
-		//this.dataNascimento = clienteCadastrado.getDataNascimento();
 		this.cnpj = clienteCadastrado.getCnpj();
-		//this.email = clienteCadastrado.getEmail();
 		this.indicadorUso = clienteCadastrado.getIndicadorUso();
 		this.indicadorAcrescimos = clienteCadastrado.getIndicadorAcrescimos();
 		this.ultimaAlteracao = clienteCadastrado.getUltimaAlteracao();
@@ -363,84 +249,34 @@ public class Cliente extends ObjetoTransacao implements ICliente {
 		this.indicadorGeraFaturaAntecipada = ConstantesSistema.NAO;
 		this.indicadorPermiteNegativacao = ConstantesSistema.NAO;
 		this.indicadorVencimentoMesSeguinte = ConstantesSistema.NAO;
+		this.indicadorNegativacaoPeriodo = ConstantesSistema.NAO;
 	}
 
-	/**
-	 * full constructor
-	 * 
-	 * @param nome
-	 *            Descrição do parâmetro
-	 */
 	public Cliente(String nome) {
 		this.nome = nome;
+		this.indicadorNegativacaoPeriodo = ConstantesSistema.NAO;
 
 	}
 
-	/**
-	 * full constructor
-	 * 
-	 * @param nome
-	 *            Descrição do parâmetro
-	 */
 	public Cliente(String nome, Integer id) {
 		this.nome = nome;
 		this.id = id;
 	}
 
-	/**
-	 * full constructor
-	 * 
-	 * @param id
-	 *            Description of the Parameter
-	 * @param nome
-	 *            Descrição do parâmetro
-	 * @param clienteTipo
-	 *            Description of the Parameter
-	 * @param cpf
-	 *            Description of the Parameter
-	 * @param cnpj
-	 *            Description of the Parameter
-	 */
-	public Cliente(Integer id, String nome,
-			gcom.cadastro.cliente.ClienteTipo clienteTipo, String cpf,
-			String cnpj) {
+	public Cliente(Integer id, String nome, gcom.cadastro.cliente.ClienteTipo clienteTipo, String cpf, String cnpj) {
 		this.id = id;
 		this.nome = nome;
 		this.clienteTipo = clienteTipo;
 		this.cpf = cpf;
 		this.cnpj = cnpj;
+		this.indicadorNegativacaoPeriodo = ConstantesSistema.NAO;
 	}
 
-	/**
-	 * default constructor
-	 */
 	public Cliente() {
 	}
 
-	/**
-	 * minimal constructor
-	 * 
-	 * @param orgaoExpedidorRg
-	 *            Descrição do parâmetro
-	 * @param cliente
-	 *            Descrição do parâmetro
-	 * @param pessoaSexo
-	 *            Descrição do parâmetro
-	 * @param profissao
-	 *            Descrição do parâmetro
-	 * @param unidadeFederacao
-	 *            Descrição do parâmetro
-	 * @param clienteTipo
-	 *            Descrição do parâmetro
-	 * @param ramoAtividade
-	 *            Descrição do parâmetro
-	 */
-	public Cliente(gcom.cadastro.cliente.OrgaoExpedidorRg orgaoExpedidorRg,
-			gcom.cadastro.cliente.Cliente cliente,
-			gcom.cadastro.cliente.PessoaSexo pessoaSexo,
-			gcom.cadastro.cliente.Profissao profissao,
-			UnidadeFederacao unidadeFederacao,
-			gcom.cadastro.cliente.ClienteTipo clienteTipo,
+	public Cliente(gcom.cadastro.cliente.OrgaoExpedidorRg orgaoExpedidorRg, gcom.cadastro.cliente.Cliente cliente, gcom.cadastro.cliente.PessoaSexo pessoaSexo,
+			gcom.cadastro.cliente.Profissao profissao, UnidadeFederacao unidadeFederacao, gcom.cadastro.cliente.ClienteTipo clienteTipo,
 			gcom.cadastro.cliente.RamoAtividade ramoAtividade) {
 		this.orgaoExpedidorRg = orgaoExpedidorRg;
 		this.cliente = cliente;
@@ -449,385 +285,177 @@ public class Cliente extends ObjetoTransacao implements ICliente {
 		this.unidadeFederacao = unidadeFederacao;
 		this.clienteTipo = clienteTipo;
 		this.ramoAtividade = ramoAtividade;
+		this.indicadorNegativacaoPeriodo = ConstantesSistema.NAO;
 	}
-	
+
 	public Cliente(Integer id, String nome, Short dataVencimento) {
 		this.id = id;
 		this.nome = nome;
 		this.dataVencimento = dataVencimento;
+		this.indicadorNegativacaoPeriodo = ConstantesSistema.NAO;
 	}
-	
+
 	public Cliente(Integer id, String nome, Short dataVencimento, Short indicadorVencimentoMesSeguinte) {
 		this.id = id;
 		this.nome = nome;
 		this.dataVencimento = dataVencimento;
 		this.indicadorVencimentoMesSeguinte = indicadorVencimentoMesSeguinte;
+		this.indicadorNegativacaoPeriodo = ConstantesSistema.NAO;
 	}
 
 	public Cliente(Integer idCliente) {
 		this.id = idCliente;
+		this.indicadorNegativacaoPeriodo = ConstantesSistema.NAO;
 	}
 
-	/**
-	 * Retorna o valor de id
-	 * 
-	 * @return O valor de id
-	 */
 	public Integer getId() {
 		return this.id;
 	}
 
-	/**
-	 * Seta o valor de id
-	 * 
-	 * @param id
-	 *            O novo valor de id
-	 */
 	public void setId(Integer id) {
 		this.id = id;
 	}
 
-	/**
-	 * Retorna o valor de nome
-	 * 
-	 * @return O valor de nome
-	 */
 	public String getNome() {
 		return this.nome;
 	}
 
-	/**
-	 * Seta o valor de nome
-	 * 
-	 * @param nome
-	 *            O novo valor de nome
-	 */
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
 
-	/**
-	 * Retorna o valor de nomeAbreviado
-	 * 
-	 * @return O valor de nomeAbreviado
-	 */
 	public String getNomeAbreviado() {
 		return this.nomeAbreviado;
 	}
 
-	/**
-	 * Seta o valor de nomeAbreviado
-	 * 
-	 * @param nomeAbreviado
-	 *            O novo valor de nomeAbreviado
-	 */
 	public void setNomeAbreviado(String nomeAbreviado) {
 		this.nomeAbreviado = nomeAbreviado;
 	}
 
-	/**
-	 * Retorna o valor de cpf
-	 * 
-	 * @return O valor de cpf
-	 */
 	public String getCpf() {
 		return this.cpf;
 	}
 
-	/**
-	 * Seta o valor de cpf
-	 * 
-	 * @param cpf
-	 *            O novo valor de cpf
-	 */
 	public void setCpf(String cpf) {
 		this.cpf = cpf;
 	}
 
-	/**
-	 * Retorna o valor de rg
-	 * 
-	 * @return O valor de rg
-	 */
 	public String getRg() {
 		return this.rg;
 	}
 
-	/**
-	 * Seta o valor de rg
-	 * 
-	 * @param rg
-	 *            O novo valor de rg
-	 */
 	public void setRg(String rg) {
 		this.rg = rg;
 	}
 
-	/**
-	 * Retorna o valor de dataEmissaoRg
-	 * 
-	 * @return O valor de dataEmissaoRg
-	 */
 	public Date getDataEmissaoRg() {
 		return this.dataEmissaoRg;
 	}
 
-	/**
-	 * Seta o valor de dataEmissaoRg
-	 * 
-	 * @param dataEmissaoRg
-	 *            O novo valor de dataEmissaoRg
-	 */
 	public void setDataEmissaoRg(Date dataEmissaoRg) {
 		this.dataEmissaoRg = dataEmissaoRg;
 	}
 
-	/**
-	 * Retorna o valor de dataNascimento
-	 * 
-	 * @return O valor de dataNascimento
-	 */
 	public Date getDataNascimento() {
 		return this.dataNascimento;
 	}
 
-	/**
-	 * Seta o valor de dataNascimento
-	 * 
-	 * @param dataNascimento
-	 *            O novo valor de dataNascimento
-	 */
 	public void setDataNascimento(Date dataNascimento) {
 		this.dataNascimento = dataNascimento;
 	}
 
-	/**
-	 * Retorna o valor de cnpj
-	 * 
-	 * @return O valor de cnpj
-	 */
 	public String getCnpj() {
 		return this.cnpj;
 	}
 
-	/**
-	 * Seta o valor de cnpj
-	 * 
-	 * @param cnpj
-	 *            O novo valor de cnpj
-	 */
 	public void setCnpj(String cnpj) {
 		this.cnpj = cnpj;
 	}
 
-	/**
-	 * Retorna o valor de email
-	 * 
-	 * @return O valor de email
-	 */
 	public String getEmail() {
 		return this.email;
 	}
 
-	/**
-	 * Seta o valor de email
-	 * 
-	 * @param email
-	 *            O novo valor de email
-	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}
 
-	/**
-	 * Retorna o valor de indicadorUso
-	 * 
-	 * @return O valor de indicadorUso
-	 */
 	public Short getIndicadorUso() {
 		return this.indicadorUso;
 	}
 
-	/**
-	 * Seta o valor de indicadorUso
-	 * 
-	 * @param indicadorUso
-	 *            O novo valor de indicadorUso
-	 */
 	public void setIndicadorUso(Short indicadorUso) {
 		this.indicadorUso = indicadorUso;
 	}
 
-	/**
-	 * Retorna o valor de ultimaAlteracao
-	 * 
-	 * @return O valor de ultimaAlteracao
-	 */
 	public Date getUltimaAlteracao() {
 		return this.ultimaAlteracao;
 	}
 
-	/**
-	 * Seta o valor de ultimaAlteracao
-	 * 
-	 * @param ultimaAlteracao
-	 *            O novo valor de ultimaAlteracao
-	 */
 	public void setUltimaAlteracao(Date ultimaAlteracao) {
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
 
-	/**
-	 * Retorna o valor de orgaoExpedidorRg
-	 * 
-	 * @return O valor de orgaoExpedidorRg
-	 */
 	public gcom.cadastro.cliente.OrgaoExpedidorRg getOrgaoExpedidorRg() {
 		return this.orgaoExpedidorRg;
 	}
 
-	/**
-	 * Seta o valor de orgaoExpedidorRg
-	 * 
-	 * @param orgaoExpedidorRg
-	 *            O novo valor de orgaoExpedidorRg
-	 */
-	public void setOrgaoExpedidorRg(
-			gcom.cadastro.cliente.OrgaoExpedidorRg orgaoExpedidorRg) {
+	public void setOrgaoExpedidorRg(gcom.cadastro.cliente.OrgaoExpedidorRg orgaoExpedidorRg) {
 		this.orgaoExpedidorRg = orgaoExpedidorRg;
 	}
 
-	/**
-	 * Retorna o valor de cliente
-	 * 
-	 * @return O valor de cliente
-	 */
 	public gcom.cadastro.cliente.Cliente getCliente() {
 		return this.cliente;
 	}
 
-	/**
-	 * Seta o valor de cliente
-	 * 
-	 * @param cliente
-	 *            O novo valor de cliente
-	 */
 	public void setCliente(gcom.cadastro.cliente.Cliente cliente) {
 		this.cliente = cliente;
 	}
 
-	/**
-	 * Retorna o valor de pessoaSexo
-	 * 
-	 * @return O valor de pessoaSexo
-	 */
 	public gcom.cadastro.cliente.PessoaSexo getPessoaSexo() {
 		return this.pessoaSexo;
 	}
 
-	/**
-	 * Seta o valor de pessoaSexo
-	 * 
-	 * @param pessoaSexo
-	 *            O novo valor de pessoaSexo
-	 */
 	public void setPessoaSexo(gcom.cadastro.cliente.PessoaSexo pessoaSexo) {
 		this.pessoaSexo = pessoaSexo;
 	}
 
-	/**
-	 * Retorna o valor de profissao
-	 * 
-	 * @return O valor de profissao
-	 */
 	public gcom.cadastro.cliente.Profissao getProfissao() {
 		return this.profissao;
 	}
 
-	/**
-	 * Seta o valor de profissao
-	 * 
-	 * @param profissao
-	 *            O novo valor de profissao
-	 */
 	public void setProfissao(gcom.cadastro.cliente.Profissao profissao) {
 		this.profissao = profissao;
 	}
 
-	/**
-	 * Retorna o valor de unidadeFederacao
-	 * 
-	 * @return O valor de unidadeFederacao
-	 */
 	public UnidadeFederacao getUnidadeFederacao() {
 		return this.unidadeFederacao;
 	}
 
-	/**
-	 * Seta o valor de unidadeFederacao
-	 * 
-	 * @param unidadeFederacao
-	 *            O novo valor de unidadeFederacao
-	 */
 	public void setUnidadeFederacao(UnidadeFederacao unidadeFederacao) {
 		this.unidadeFederacao = unidadeFederacao;
 	}
 
-	/**
-	 * Retorna o valor de clienteTipo
-	 * 
-	 * @return O valor de clienteTipo
-	 */
 	public gcom.cadastro.cliente.ClienteTipo getClienteTipo() {
 		return this.clienteTipo;
 	}
 
-	/**
-	 * Seta o valor de clienteTipo
-	 * 
-	 * @param clienteTipo
-	 *            O novo valor de clienteTipo
-	 */
 	public void setClienteTipo(gcom.cadastro.cliente.ClienteTipo clienteTipo) {
 		this.clienteTipo = clienteTipo;
 	}
 
-	/**
-	 * Retorna o valor de ramoAtividade
-	 * 
-	 * @return O valor de ramoAtividade
-	 */
 	public gcom.cadastro.cliente.RamoAtividade getRamoAtividade() {
 		return this.ramoAtividade;
 	}
 
-	/**
-	 * Seta o valor de ramoAtividade
-	 * 
-	 * @param ramoAtividade
-	 *            O novo valor de ramoAtividade
-	 */
-	public void setRamoAtividade(
-			gcom.cadastro.cliente.RamoAtividade ramoAtividade) {
+	public void setRamoAtividade(gcom.cadastro.cliente.RamoAtividade ramoAtividade) {
 		this.ramoAtividade = ramoAtividade;
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @return Descrição do retorno
-	 */
 	public String toString() {
 		return new ToStringBuilder(this).append("id", getId()).toString();
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param other
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
 	public boolean equals(Object other) {
 		if ((this == other)) {
 			return true;
@@ -840,87 +468,49 @@ public class Cliente extends ObjetoTransacao implements ICliente {
 		return (this.getId().equals(castOther.getId()));
 	}
 
-	/**
-	 * Retorna o valor de cpfFormatado
-	 * 
-	 * @return O valor de cpfFormatado
-	 */
 	public String getCpfFormatado() {
 		String cpfFormatado = this.cpf;
 
 		if (cpfFormatado != null && cpfFormatado.length() == 11) {
 
-			cpfFormatado = cpfFormatado.substring(0, 3) + "."
-					+ cpfFormatado.substring(3, 6) + "."
-					+ cpfFormatado.substring(6, 9) + "-"
+			cpfFormatado = cpfFormatado.substring(0, 3) + "." + cpfFormatado.substring(3, 6) + "." + cpfFormatado.substring(6, 9) + "-"
 					+ cpfFormatado.substring(9, 11);
 		}
-		
+
 		return cpfFormatado;
 	}
 
-	/**
-	 * Retorna o valor de cnpjFormatado
-	 * 
-	 * @return O valor de cnpjFormatado
-	 */
 	public String getCnpjFormatado() {
 		String cnpjFormatado = this.cnpj;
 		String zeros = "";
-		
+
 		if (cnpjFormatado != null) {
-			
+
 			for (int a = 0; a < (14 - cnpjFormatado.length()); a++) {
 				zeros = zeros.concat("0");
 			}
-			// concatena os zeros ao numero
-			// caso o numero seja diferente de nulo
+			// concatena os zeros ao numero caso o numero seja diferente de nulo
 			cnpjFormatado = zeros.concat(cnpjFormatado);
 			
-			cnpjFormatado = cnpjFormatado.substring(0, 2) + "."
-					+ cnpjFormatado.substring(2, 5) + "."
-					+ cnpjFormatado.substring(5, 8) + "/"
-					+ cnpjFormatado.substring(8, 12) + "-"
-					+ cnpjFormatado.substring(12, 14);
+			cnpjFormatado = cnpjFormatado.substring(0, 2) + "." + cnpjFormatado.substring(2, 5) + "." + cnpjFormatado.substring(5, 8) + "/"
+					+ cnpjFormatado.substring(8, 12) + "-" + cnpjFormatado.substring(12, 14);
 		}
-		
+
 		return cnpjFormatado;
 	}
 
-	/**
-	 * Retorna o valor de clienteEnderecos
-	 * 
-	 * @return O valor de clienteEnderecos
-	 */
 	public Set getClienteEnderecos() {
 		return clienteEnderecos;
 	}
 
-	/**
-	 * Seta o valor de clienteEnderecos
-	 * 
-	 * @param clienteEnderecos
-	 *            O novo valor de clienteEnderecos
-	 */
 	public void setClienteEnderecos(Set clienteEnderecos) {
 		this.clienteEnderecos = clienteEnderecos;
 	}
 
-	/**
-	 * Retorna o valor de clienteFones
-	 * 
-	 * @return O valor de clienteFones
-	 */
 	public Set getClienteFones() {
 		return clienteFones;
 	}
 
-	/**
-	 * Seta o valor de clienteFones
-	 * 
-	 * @param clienteFones
-	 *            O novo valor de clienteFones
-	 */
 	public void setClienteFones(Set clienteFones) {
 		this.clienteFones = clienteFones;
 	}
@@ -940,24 +530,18 @@ public class Cliente extends ObjetoTransacao implements ICliente {
 	public void setIndicadorAcaoCobranca(Short indicadorAcaoCobranca) {
 		this.indicadorAcaoCobranca = indicadorAcaoCobranca;
 	}
-	
-	/**
-	 * @return Returns the diaVencimento.
-	 */
+
 	public Short getDiaVencimento() {
 		return diaVencimento;
 	}
 
-	/**
-	 * @param diaVencimento The diaVencimento to set.
-	 */
 	public void setDiaVencimento(Short diaVencimento) {
 		this.diaVencimento = diaVencimento;
 	}
 
 	public Filtro retornaFiltro() {
 		FiltroCliente filtroCliente = new FiltroCliente();
-		filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID,this.getId()));
+		filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, this.getId()));
 		filtroCliente.adicionarCaminhoParaCarregamentoEntidade("orgaoExpedidorRg");
 		filtroCliente.adicionarCaminhoParaCarregamentoEntidade("cliente");
 		filtroCliente.adicionarCaminhoParaCarregamentoEntidade("pessoaSexo");
@@ -970,7 +554,7 @@ public class Cliente extends ObjetoTransacao implements ICliente {
 	}
 
 	public String[] retornaCamposChavePrimaria() {
-		String[] retorno = {"id"};
+		String[] retorno = { "id" };
 		return retorno;
 	}
 
@@ -982,15 +566,15 @@ public class Cliente extends ObjetoTransacao implements ICliente {
 		this.dataVencimento = dataVencimento;
 	}
 
-    public String getNomeMae() {
-        return nomeMae;
-    }
+	public String getNomeMae() {
+		return nomeMae;
+	}
 
-    public void setNomeMae(String nomeMae) {
-        this.nomeMae = nomeMae;
-    }
-    
-    public Short getIndicadorAcrescimos() {
+	public void setNomeMae(String nomeMae) {
+		this.nomeMae = nomeMae;
+	}
+
+	public Short getIndicadorAcrescimos() {
 		return indicadorAcrescimos;
 	}
 
@@ -1005,41 +589,28 @@ public class Cliente extends ObjetoTransacao implements ICliente {
 	public void setIndicadorGeraArquivoTexto(Short indicadorGeraArquivoTexto) {
 		this.indicadorGeraArquivoTexto = indicadorGeraArquivoTexto;
 	}
-	
-	public String getDescricao(){
+
+	public String getDescricao() {
 		return this.nome;
 	}
-	
-	/**
-	 * @return Retorna o campo indicadorGeraFaturaAntecipada.
-	 */
+
 	public Short getIndicadorGeraFaturaAntecipada() {
 		return indicadorGeraFaturaAntecipada;
 	}
-	
-	/**
-	 * @param indicadorGeraFaturaAntecipada O indicadorGeraFaturaAntecipada a ser setado.
-	 */
+
 	public void setIndicadorGeraFaturaAntecipada(Short indicadorGeraFaturaAntecipada) {
 		this.indicadorGeraFaturaAntecipada = indicadorGeraFaturaAntecipada;
 	}
-	
-	/**
-	 * @return Retorna o campo indicadorVencimentoMesSeguinte.
-	 */
+
 	public Short getIndicadorVencimentoMesSeguinte() {
 		return indicadorVencimentoMesSeguinte;
 	}
 
-	/**
-	 * @param indicadorVencimentoMesSeguinte O indicadorVencimentoMesSeguinte a ser setado.
-	 */
-	public void setIndicadorVencimentoMesSeguinte(
-			Short indicadorVencimentoMesSeguinte) {
+	public void setIndicadorVencimentoMesSeguinte(Short indicadorVencimentoMesSeguinte) {
 		this.indicadorVencimentoMesSeguinte = indicadorVencimentoMesSeguinte;
 	}
 
-	public String getCodigoNome(){
+	public String getCodigoNome() {
 		return this.id + " - " + this.nome;
 	}
 
@@ -1050,14 +621,14 @@ public class Cliente extends ObjetoTransacao implements ICliente {
 
 	@Override
 	public String[] retornarAtributosInformacoesOperacaoEfetuada() {
-		String []labels = {"cpf","cnpj","nome"};
-		return labels;		
+		String[] labels = { "cpf", "cnpj", "nome" };
+		return labels;
 	}
-	
+
 	@Override
 	public String[] retornarLabelsInformacoesOperacaoEfetuada() {
-		String []labels = {"CPF", "CNPJ", "Nome"};
-		return labels;		
+		String[] labels = { "CPF", "CNPJ", "Nome" };
+		return labels;
 	}
 
 	public Short getIndicadorPermiteNegativacao() {
@@ -1069,35 +640,39 @@ public class Cliente extends ObjetoTransacao implements ICliente {
 	}
 
 	public Integer getIdCliente() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public void setIdCliente(Integer idCliente) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public Integer getIdClienteTipo() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public void setIdClienteTipo(Integer idClienteTipo) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	public Integer getTipoOperacao() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	public void setTipoOperacao(Integer tipoOperacao) {
-		// TODO Auto-generated method stub
-		
+	}
+
+	public Short getIndicadorUsoNomeFantasiaConta() {
+		return indicadorUsoNomeFantasiaConta;
+	}
+
+	public void setIndicadorUsoNomeFantasiaConta(Short indicadorUsoNomeFantasiaConta) {
+		this.indicadorUsoNomeFantasiaConta = indicadorUsoNomeFantasiaConta;
 	}
 	
-	
-	
+	public Short getIndicadorNegativacaoPeriodo() {
+		return indicadorNegativacaoPeriodo;
+	}
+
+	public void setIndicadorNegativacaoPeriodo(Short indicadorNegativacaoPeriodo) {
+		this.indicadorNegativacaoPeriodo = indicadorNegativacaoPeriodo;
+	}
 }

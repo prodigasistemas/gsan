@@ -205,6 +205,8 @@ public interface IRepositorioCobranca {
 				String anoMesFinalReferenciaDebito,
 				Date anoMesInicialVecimentoDebito, Date anoMesFinalVencimentoDebito, int indicadorDividaAtiva)
 				throws ErroRepositorioException;
+	
+	public int pesquisarQuantidadeContasVencidasPorImovel(Integer idImovel, int indicadorPagamento, int indicadorConta, int indicadorDividaAtiva) throws ErroRepositorioException;
 
 	/**
 	 * Faz parte de [UC0067] Obter Débito do Imóvel ou Cliente Obtem o Valor
@@ -6051,5 +6053,9 @@ public interface IRepositorioCobranca {
 			Integer idCobrancaAcaoCronograma, Integer idCobrancaAcaoComando,
 			Date dataEmissao, Integer idCobrancaAcao)
 			throws ErroRepositorioException;
+	
+	public void atualizarDocumentoDeCobrancaHistorico(Integer codigoImovel, Integer codigoParcelamento) throws ErroRepositorioException;
+	
+	
 	
 }

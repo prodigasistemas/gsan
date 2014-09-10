@@ -22,32 +22,24 @@ import javax.jms.Message;
 import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
-public class BatchExecutarComandoNegativacaoMDB
-		implements
-			MessageDrivenBean,
-			MessageListener {
+public class BatchExecutarComandoNegativacaoMDB implements MessageDrivenBean, MessageListener {
+	
 	private static final long serialVersionUID = 1L;
 
 	public BatchExecutarComandoNegativacaoMDB() {
 		super();
 	}
 
-	public void setMessageDrivenContext(MessageDrivenContext ctx)
-			throws EJBException {
+	public void setMessageDrivenContext(MessageDrivenContext ctx) throws EJBException {}
 
-	}
-
-	public void ejbRemove() throws EJBException {
-
-	}
+	public void ejbRemove() throws EJBException {}
 
 	public void onMessage(Message message) {
 		if (message instanceof ObjectMessage) {
-
 			ObjectMessage objectMessage = (ObjectMessage) message;
+			
 			try {
-				this.getControladorSpcSerasa().
-				     gerarMovimentodeInclusaoNegativacaoPorCriterio(				   
+				this.getControladorSpcSerasa().gerarMovimentodeInclusaoNegativacaoPorCriterio(
 						(Integer) ((Object[]) objectMessage.getObject())[0],
 						(NegativacaoCriterio) ((Object[]) objectMessage.getObject())[1],
 						(Negativador) ((Object[]) objectMessage.getObject())[2],
@@ -55,8 +47,6 @@ public class BatchExecutarComandoNegativacaoMDB
 						(NegativadorContrato) ((Object[]) objectMessage.getObject())[4],
 						(NegativadorMovimento) ((Object[]) objectMessage.getObject())[5],
 						(Integer) ((Object[]) objectMessage.getObject())[6]);
-				
-				
 
 			} catch (JMSException e) {
 				System.out.println("Erro no MDB");
@@ -66,31 +56,17 @@ public class BatchExecutarComandoNegativacaoMDB
 				e.printStackTrace();
 			}
 		}
-
 	}
 
-	/**
-	 * Retorna o valor de controladorMicromedicao
-	 * 
-	 * @return O valor de controladorMicromedicao
-	 */
 	private ControladorSpcSerasaLocal getControladorSpcSerasa() {
 		ControladorSpcSerasaLocalHome localHome = null;
 		ControladorSpcSerasaLocal local = null;
-
-		// pega a instância do ServiceLocator.
-
 		ServiceLocator locator = null;
 
 		try {
 			locator = ServiceLocator.getInstancia();
-
-			localHome = (ControladorSpcSerasaLocalHome) locator
-					.getLocalHome(ConstantesJNDI.CONTROLADOR_SPC_SERASA_SEJB);
-			// guarda a referencia de um objeto capaz de fazer chamadas
-			// objetos remotamente
+			localHome = (ControladorSpcSerasaLocalHome) locator.getLocalHome(ConstantesJNDI.CONTROLADOR_SPC_SERASA_SEJB);
 			local = localHome.create();
-
 			return local;
 		} catch (CreateException e) {
 			throw new SistemaException(e);
@@ -99,13 +75,5 @@ public class BatchExecutarComandoNegativacaoMDB
 		}
 	}
 
-
-	/**
-	 * Default create method
-	 * 
-	 * @throws CreateException
-	 */
-	public void ejbCreate() {
-
-	}
+	public void ejbCreate() {}
 }

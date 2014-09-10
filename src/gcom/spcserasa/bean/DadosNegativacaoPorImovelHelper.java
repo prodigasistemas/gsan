@@ -6,12 +6,6 @@ import java.util.List;
 import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 
-/**
- * Classe responsável por ajudar o caso de uso [UC0671] Gerar Movimento de Inclusão Negativação 
- *
- * @author Marcio Roberto
- * @date 21/11/2007
- */
 public class DadosNegativacaoPorImovelHelper {
 
 	private Integer idCliente;
@@ -23,13 +17,9 @@ public class DadosNegativacaoPorImovelHelper {
 	private Integer qtdItensDebitoImovel;
 	private BigDecimal totalDebitosImovel;
 	private Integer idClienteRelacaoTipo;
+	private Integer anoMesReferenciaInicioDebito;
+	private Integer anoMesReferenciaFinalDebito;
 
-	/**
-	 * Construtor  
-	 * @param idCliente
-	 * @param cpfCliente
-	 * @param cnpjCliente
-	 */
 	public DadosNegativacaoPorImovelHelper( 
 			Integer idCliente,
 			String cpfCliente,
@@ -38,24 +28,10 @@ public class DadosNegativacaoPorImovelHelper {
 		this.cpfCliente = cpfCliente;
 		this.cnpjCliente = cnpjCliente;
 	}
-	/**
-	 * Construtor  
-	 * @param idCliente
-	 * @param cpfCliente
-	 * @param cnpjCliente
-	 */
-	public DadosNegativacaoPorImovelHelper(){ 
-	}
-	
-	
-    /**
-     *  Descrição do método>>
-     * 
-     * @param other
-     *            Descrição do parâmetro
-     * @return Descrição do retorno
-     */
-    public boolean equals(Object other) {
+
+	public DadosNegativacaoPorImovelHelper(){}
+
+	public boolean equals(Object other) {
         if ((this == other)) {
             return true;
         }
@@ -68,15 +44,8 @@ public class DadosNegativacaoPorImovelHelper {
                 .isEquals();
     }
 
-   
-   /**
-     * Description of the Method
-     * 
-     * @return Description of the Return Value
-     */
     public int hashCode() {
-        return new HashCodeBuilder().append(getIdImovel())
-                .toHashCode();
+        return new HashCodeBuilder().append(getIdImovel()).toHashCode();
     }
 
 	public String getCnpjCliente() {
@@ -115,27 +84,19 @@ public class DadosNegativacaoPorImovelHelper {
 	public void setIdImovel(Integer idImovel) {
 		this.idImovel = idImovel;
 	}
-	/**
-	 * @return Retorna o campo colecaoConta.
-	 */
+
 	public List getColecaoConta() {
 		return colecaoConta;
 	}
-	/**
-	 * @param colecaoConta O colecaoConta a ser setado.
-	 */
+
 	public void setColecaoConta(List colecaoConta) {
 		this.colecaoConta = colecaoConta;
 	}
-	/**
-	 * @return Retorna o campo colecaoGuias.
-	 */
+
 	public List getColecaoGuias() {
 		return colecaoGuias;
 	}
-	/**
-	 * @param colecaoGuias O colecaoGuias a ser setado.
-	 */
+
 	public void setColecaoGuias(List colecaoGuias) {
 		this.colecaoGuias = colecaoGuias;
 	}
@@ -145,5 +106,20 @@ public class DadosNegativacaoPorImovelHelper {
 	public void setIdClienteRelacaoTipo(Integer idClienteRelacaoTipo) {
 		this.idClienteRelacaoTipo = idClienteRelacaoTipo;
 	}
-	
+
+	public Integer getAnoMesReferenciaInicioDebito() {
+		return anoMesReferenciaInicioDebito;
+	}
+
+	public void setAnoMesReferenciaInicioDebito(Integer anoMesReferenciaInicioDebito) {
+		this.anoMesReferenciaInicioDebito = anoMesReferenciaInicioDebito;
+	}
+
+	public Integer getAnoMesReferenciaFinalDebito() {
+		return anoMesReferenciaFinalDebito;
+	}
+
+	public void setAnoMesReferenciaFinalDebito(Integer anoMesReferenciaFinalDebito) {
+		this.anoMesReferenciaFinalDebito = anoMesReferenciaFinalDebito;
+	}
 }

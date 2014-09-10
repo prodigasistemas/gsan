@@ -1,6 +1,5 @@
 package gcom.util;
 
-
 import gcom.arrecadacao.ArrecadacaoContabilParametros;
 import gcom.arrecadacao.ArrecadacaoDadosDiarios;
 import gcom.arrecadacao.ArrecadacaoDadosDiariosAuxiliar;
@@ -344,9 +343,11 @@ import gcom.cobranca.CobrancaCriterio;
 import gcom.cobranca.CobrancaCriterioLinha;
 import gcom.cobranca.CobrancaDebitoSituacao;
 import gcom.cobranca.CobrancaDocumento;
+import gcom.cobranca.CobrancaDocumentoHistorico;
 import gcom.cobranca.CobrancaDocumentoFisc;
 import gcom.cobranca.CobrancaDocumentoImpressao;
 import gcom.cobranca.CobrancaDocumentoItem;
+import gcom.cobranca.CobrancaDocumentoItemHistorico;
 import gcom.cobranca.CobrancaForma;
 import gcom.cobranca.CobrancaGrupo;
 import gcom.cobranca.CobrancaGrupoCronogramaMes;
@@ -767,216 +768,144 @@ import org.hibernate.mapping.Column;
 import org.hibernate.mapping.PersistentClass;
 import org.hibernate.mapping.Property;
 
-/**
- * Classe responsável pela instanciação do Hibernate e serviços específicos da
- * tecnologia
- * 
- * @author rodrigo
- */
 public class HibernateUtil {
-	private static SessionFactory sessionFactory;
 
+	private static SessionFactory sessionFactory;
 	private static SessionFactory sessionFactoryGerencial;
-	
 	private static SessionFactory sessionFactoryIntegracaoSAM;
 
 	private static Configuration configuration;
-
 	private static Configuration configurationGerencial;
-		
-	private static HashMap<Integer, Long> tempoSession = new HashMap<Integer, Long>();
-	
-	public static Logger log;
-	
-	static { 
-	      log = Logger.getLogger("GSAN_ENTIDADES_CONSULTAS");
 
-	      log.debug(";ClasseChamadaN2;MetodoChamadaN2;ClasseChamadaN1;MetodoChamadaN1;NomeEntidade;QtdEntidadesConsultadas;TempoConsulta;OutrasEntidadesConsultadas");
+	private static HashMap<Integer, Long> tempoSession = new HashMap<Integer, Long>();
+
+	public static Logger log;
+
+	static {
+		log = Logger.getLogger("GSAN_ENTIDADES_CONSULTAS");
+		log.debug(";ClasseChamadaN2;MetodoChamadaN2;ClasseChamadaN1;MetodoChamadaN1;NomeEntidade;QtdEntidadesConsultadas;TempoConsulta;OutrasEntidadesConsultadas");
 	}
 
 	public static void inicializarSessionFactory() {
 
 		try {
 
-			//-------------------Configuração do servidor Gerencial------------------//
 			configurationGerencial = new Configuration();
-			configurationGerencial.setProperty("hibernate.connection.datasource","java:/PostgresGerencialDS");
-//			configurationGerencial.setProperty("hibernate.connection.datasource","java:/OracleDS");
+			configurationGerencial.setProperty("hibernate.connection.datasource", "java:/PostgresGerencialDS");
 
-			configurationGerencial.addClass(UnResumoArrecadacao.class).
-				addClass(UnResumoArrecadacaoAguaEsgoto.class).
-				addClass(UnResumoArrecadacaoCredito.class).
-				addClass(UnResumoArrecadacaoOutro.class).
-				addClass(UnResumoFaturamento.class).
-				addClass(UnResumoColetaEsgoto.class).
-				addClass(UnResumoConsumoAgua.class).
-				addClass(UnResumoLigacaoEconomia.class).
-				addClass(RgResumoLigacaoEconomia.class).
-				addClass(GEsferaPoder.class).
-				addClass(GClienteTipo.class).
-				addClass(GCategoria.class).
-				addClass(GSubcategoria.class).
-				addClass(GRegiao.class).
-				addClass(GMicrorregiao.class).
-				addClass(GMunicipio.class).
-				addClass(GBairro.class).
-				addClass(GEpocaPagamento.class).
-				addClass(GDocumentoTipo.class).
-				addClass(GLocalidade.class).
-				addClass(GLocalidadePorte.class).
-				addClass(GLigacaoAguaPerfil.class).
-				addClass(GLigacaoAguaSituacao.class).
-				addClass(GLigacaoEsgotoPerfil.class).
-				addClass(GLigacaoEsgotoSituacao.class).
-				addClass(GRota.class).
-				addClass(GPagamentoSituacao.class).
-				addClass(GGerenciaRegional.class).
-				addClass(GUnidadeNegocio.class).
-				addClass(GSetorComercial.class).
-				addClass(GQuadra.class).
-				addClass(GImovelPerfil.class).
-				addClass(GConsumoTipo.class).
-				addClass(GLancamentoItem.class).
-				addClass(GLancamentoItemContabil.class).
-				addClass(GCreditoOrigem.class).
-				addClass(GFinanciamentoTipo.class).
-				addClass(UnResumoRegistroAtendimento.class).
-				addClass(UnResumoInstalacaoHidrometro.class).
-				addClass(GMeioSolicitacao.class).
-				addClass(GSolicitacaoTipo.class).
-				addClass(GSolicitacaoTipoEspecificacao.class).
-				addClass(UnResumoParcelamento.class).
-				addClass(UnResumoLeituraAnormalidade.class).
-				addClass(UnResumoHidrometro.class).
-				addClass(GMedicaoTipo.class).
-				addClass(GHidrometroMarca.class).
-				addClass(GHidrometroCapacidade.class).
-				addClass(GHidrometroDiametro.class).
-				addClass(GHidrometroLocalArmazenagem.class).
-				addClass(GHidrometroSituacao.class).
-				addClass(GHidrometroTipo.class).
-				addClass(UnResumoRefaturamento.class).
-				addClass(GEmpresa.class).
-				addClass(GLeituraSituacao.class).
-				addClass(GArrecadacaoForma.class).
-				addClass(GArrecadador.class).
-				addClass(UnResumoMeta.class).
-				addClass(UnResumoMetasAcumulado.class).
-				addClass(GDebitoTipo.class).
-				addClass(GCreditoTipo.class).
-				addClass(GImpostoTipo.class).
-				addClass(Indicador.class).
-				addClass(GConsumoTarifa.class).
-				addClass(GHidrometroClasseMetrologica.class).
-				addClass(GHidrometroMotivoBaixa.class).
-				addClass(GFaturamentoGrupo.class).
-				addClass(GUnidadeOrganizacional.class).
-				addClass(FaixaValor.class).
-				addClass(UnResumoIndicadoresFaturamento.class).
-				addClass(UnResumoIndicadorLigacaoEconomia.class).
-				addClass(UnResumoPendencia.class).
-				addClass(UnResumoPendenciaSemQuadra.class).
-				addClass(UnResumoIndicadorDesempenhoMicromedicao.class).
-				addClass(GDevolucaoSituacao.class).
-				addClass(GAtendimentoMotivoEncerramento.class).
-				addClass(GDistritoOperacional.class).
-				addClass(UnResumoIndicadoresCobranca.class).
-				addClass(UnResumoIndicadorDesempenhoMicromedicaoRef2010.class).
-				addClass(UnResumoArrecadacaoPorAno.class).
-				addClass(UnResumoRegistroAtendimentoPorAno.class).
-				addClass(UnResumoInstalacaoHidrometroPorAno.class).
-				addClass(UnResumoParcelamentoPorAno.class);
-			
-			/*.addClass(GArrecadacaoForma.class).addClass(GArrecadador.class).addClass(UnResumoMeta.class).addClass(UnResumoMetasAcumulado.class)
-			 .addClass(GCreditoTipo.class).addClass(GDebitoTipo.class);*/
+			configurationGerencial.addClass(UnResumoArrecadacao.class).addClass(UnResumoArrecadacaoAguaEsgoto.class).addClass(UnResumoArrecadacaoCredito.class)
+					.addClass(UnResumoArrecadacaoOutro.class).addClass(UnResumoFaturamento.class).addClass(UnResumoColetaEsgoto.class)
+					.addClass(UnResumoConsumoAgua.class).addClass(UnResumoLigacaoEconomia.class).addClass(RgResumoLigacaoEconomia.class)
+					.addClass(GEsferaPoder.class).addClass(GClienteTipo.class).addClass(GCategoria.class).addClass(GSubcategoria.class).addClass(GRegiao.class)
+					.addClass(GMicrorregiao.class).addClass(GMunicipio.class).addClass(GBairro.class).addClass(GEpocaPagamento.class)
+					.addClass(GDocumentoTipo.class).addClass(GLocalidade.class).addClass(GLocalidadePorte.class).addClass(GLigacaoAguaPerfil.class)
+					.addClass(GLigacaoAguaSituacao.class).addClass(GLigacaoEsgotoPerfil.class).addClass(GLigacaoEsgotoSituacao.class).addClass(GRota.class)
+					.addClass(GPagamentoSituacao.class).addClass(GGerenciaRegional.class).addClass(GUnidadeNegocio.class).addClass(GSetorComercial.class)
+					.addClass(GQuadra.class).addClass(GImovelPerfil.class).addClass(GConsumoTipo.class).addClass(GLancamentoItem.class)
+					.addClass(GLancamentoItemContabil.class).addClass(GCreditoOrigem.class).addClass(GFinanciamentoTipo.class)
+					.addClass(UnResumoRegistroAtendimento.class).addClass(UnResumoInstalacaoHidrometro.class).addClass(GMeioSolicitacao.class)
+					.addClass(GSolicitacaoTipo.class).addClass(GSolicitacaoTipoEspecificacao.class).addClass(UnResumoParcelamento.class)
+					.addClass(UnResumoLeituraAnormalidade.class).addClass(UnResumoHidrometro.class).addClass(GMedicaoTipo.class)
+					.addClass(GHidrometroMarca.class).addClass(GHidrometroCapacidade.class).addClass(GHidrometroDiametro.class)
+					.addClass(GHidrometroLocalArmazenagem.class).addClass(GHidrometroSituacao.class).addClass(GHidrometroTipo.class)
+					.addClass(UnResumoRefaturamento.class).addClass(GEmpresa.class).addClass(GLeituraSituacao.class).addClass(GArrecadacaoForma.class)
+					.addClass(GArrecadador.class).addClass(UnResumoMeta.class).addClass(UnResumoMetasAcumulado.class).addClass(GDebitoTipo.class)
+					.addClass(GCreditoTipo.class).addClass(GImpostoTipo.class).addClass(Indicador.class).addClass(GConsumoTarifa.class)
+					.addClass(GHidrometroClasseMetrologica.class).addClass(GHidrometroMotivoBaixa.class).addClass(GFaturamentoGrupo.class)
+					.addClass(GUnidadeOrganizacional.class).addClass(FaixaValor.class).addClass(UnResumoIndicadoresFaturamento.class)
+					.addClass(UnResumoIndicadorLigacaoEconomia.class).addClass(UnResumoPendencia.class).addClass(UnResumoPendenciaSemQuadra.class)
+					.addClass(UnResumoIndicadorDesempenhoMicromedicao.class).addClass(GDevolucaoSituacao.class).addClass(GAtendimentoMotivoEncerramento.class)
+					.addClass(GDistritoOperacional.class).addClass(UnResumoIndicadoresCobranca.class)
+					.addClass(UnResumoIndicadorDesempenhoMicromedicaoRef2010.class).addClass(UnResumoArrecadacaoPorAno.class)
+					.addClass(UnResumoRegistroAtendimentoPorAno.class).addClass(UnResumoInstalacaoHidrometroPorAno.class)
+					.addClass(UnResumoParcelamentoPorAno.class);
 
-			sessionFactoryGerencial = configurationGerencial
-					.buildSessionFactory();
+			sessionFactoryGerencial = configurationGerencial.buildSessionFactory();
 
-			//-------------------Configuração do servidor Gerencial------------------//	
-		
 
 			configuration = new Configuration()
-			// **********************************************/
+					// **********************************************/
 					// CLASSES DO PACOTE gcom.atendimentopublico //
 					// ********************************************//
-					// gcom.atendimentopublico.ligacaoagua
-					.addClass(CorteTipo.class).addClass(
-							EmissaoOrdemCobrancaTipo.class).addClass(
-							LigacaoAgua.class).addClass(
-							LigacaoAguaDiametro.class).addClass(
-							LigacaoAguaMaterial.class).addClass(
-							LigacaoAguaPerfil.class).addClass(
-							LigacaoAguaSituacao.class).addClass(
-							SupressaoTipo.class)
-					// gcom.atendimentopublico.ligacaoesgoto
-					.addClass(LigacaoEsgoto.class).addClass(
-							LigacaoEsgotoDiametro.class).addClass(
-							LigacaoEsgotoMaterial.class).addClass(
-							LigacaoEsgotoPerfil.class).addClass(
-							LigacaoEsgotoSituacao.class)
-					// gcom.atendimentopublico.registroatendimento
-					.addClass(RegistroAtendimento.class).addClass(
-							AgenciaReguladoraMotReclamacao.class).addClass(
-							AgenciaReguladoraMotRetorno.class).addClass(
-							AtendimentoMotivoEncerramento.class).addClass(
-							AtendimentoRelacaoTipo.class).addClass(
-							LocalOcorrencia.class).addClass(
-							MeioSolicitacao.class).addClass(
-							RaDadosAgenciaReguladora.class).addClass(
-							RaDadosAgenciaReguladoraFone.class).addClass(
-							RaEnderecoDescritivo.class).addClass(
-							RaMotivoReativacao.class).addClass(
-							RegistroAtendimentoSolicitante.class).addClass(
-							RegistroAtendimentoUnidade.class).addClass(
-							SolicitacaoTipo.class).addClass(
-							SolicitacaoTipoEspecificacao.class).addClass(
-							SolicitacaoTipoGrupo.class).addClass(
-							SolicitanteFone.class).addClass(Tramite.class)
-					.addClass(EspecificacaoImovelSituacao.class).addClass(
-							EspecificacaoImovSitCriterio.class).addClass(
-							EspecificacaoTipoValidacao.class)
-				    .addClass(RaEncerramentoComando.class)
-				    .addClass(RaEncerramentoComandoEspecificacoes.class)
-				    .addClass(RegistroAtendimentoAnexo.class)
-				    .addClass(SolicitacaoDocumentoObrigatorio.class)
-				    .addClass(LocalidadeEspecificacaoUnidade.class)
-				    .addClass(RegistroAtendimentoConta.class)
-				    .addClass(RegistroAtendimentoPagamentoDuplicidade.class)
-					// gcom.atendimentopublico.ordemservico
-					.addClass(OrdemServicoMovimento.class).addClass(OrdemServicoMovimentoHistorico.class).addClass(OrdemServico.class).addClass(ServicoTipo.class)
-					.addClass(SupressaoMotivo.class).addClass(Atividade.class)
-					.addClass(Equipe.class).addClass(
-							EquipamentosEspeciais.class).addClass(
-							EquipeComponentes.class).addClass(
-							EspecificacaoServicoTipo.class).addClass(
-							FiscalizacaoColetiva.class)
-					.addClass(Material.class).addClass(MaterialUnidade.class)
-					.addClass(OrdemServicoAtividade.class).addClass(
-							OrdemServicoProgramacao.class).addClass(
-							OrdemServicoUnidade.class).addClass(
-							OsAtividadeMaterialExecucao.class).addClass(
-							OsAtividadePeriodoExecucao.class).addClass(
-							OsExecucaoEquipe.class).addClass(
-							OsExecucaoEquipeComponentes.class).addClass(
-							OsProgramNaoEncerMotivo.class).addClass(
-							OsReferidaRetornoTipo.class).addClass(
-							ProgramacaoRoteiro.class).addClass(
-							ServicoCobrancaValor.class).addClass(
-							ServicoNaoCobrancaMotivo.class).addClass(
-							ServicoPerfilTipo.class).addClass(
-							ServicoTipoAtividade.class).addClass(
-							ServicoTipoGrupo.class).addClass(
-							ServicoTipoMaterial.class).addClass(
-							ServicoTipoOperacao.class).addClass(
-							ServicoTipoPrioridade.class).addClass(
-							ServicoTipoReferencia.class).addClass(
-							ServicoTipoSubgrupo.class).addClass(
-							LocalidadeSolicTipoGrupo.class).addClass(
-							FiscalizacaoSituacao.class).addClass(
-							FiscalizacaoSituacaoAgua.class).addClass(
-							FiscalizacaoSituacaoEsgoto.class).addClass(
-							FiscalizacaoSituacaoHidrometroCapacidade.class)
+					.addClass(CorteTipo.class)
+					.addClass(EmissaoOrdemCobrancaTipo.class)
+					.addClass(LigacaoAgua.class)
+					.addClass(LigacaoAguaDiametro.class)
+					.addClass(LigacaoAguaMaterial.class)
+					.addClass(LigacaoAguaPerfil.class)
+					.addClass(LigacaoAguaSituacao.class)
+					.addClass(SupressaoTipo.class)
+					.addClass(LigacaoEsgoto.class)
+					.addClass(LigacaoEsgotoDiametro.class)
+					.addClass(LigacaoEsgotoMaterial.class)
+					.addClass(LigacaoEsgotoPerfil.class)
+					.addClass(LigacaoEsgotoSituacao.class)
+					.addClass(RegistroAtendimento.class)
+					.addClass(AgenciaReguladoraMotReclamacao.class)
+					.addClass(AgenciaReguladoraMotRetorno.class)
+					.addClass(AtendimentoMotivoEncerramento.class)
+					.addClass(AtendimentoRelacaoTipo.class)
+					.addClass(LocalOcorrencia.class)
+					.addClass(MeioSolicitacao.class)
+					.addClass(RaDadosAgenciaReguladora.class)
+					.addClass(RaDadosAgenciaReguladoraFone.class)
+					.addClass(RaEnderecoDescritivo.class)
+					.addClass(RaMotivoReativacao.class)
+					.addClass(RegistroAtendimentoSolicitante.class)
+					.addClass(RegistroAtendimentoUnidade.class)
+					.addClass(SolicitacaoTipo.class)
+					.addClass(SolicitacaoTipoEspecificacao.class)
+					.addClass(SolicitacaoTipoGrupo.class)
+					.addClass(SolicitanteFone.class)
+					.addClass(Tramite.class)
+					.addClass(EspecificacaoImovelSituacao.class)
+					.addClass(EspecificacaoImovSitCriterio.class)
+					.addClass(EspecificacaoTipoValidacao.class)
+					.addClass(RaEncerramentoComando.class)
+					.addClass(RaEncerramentoComandoEspecificacoes.class)
+					.addClass(RegistroAtendimentoAnexo.class)
+					.addClass(SolicitacaoDocumentoObrigatorio.class)
+					.addClass(LocalidadeEspecificacaoUnidade.class)
+					.addClass(RegistroAtendimentoConta.class)
+					.addClass(RegistroAtendimentoPagamentoDuplicidade.class)
+					.addClass(OrdemServicoMovimento.class)
+					.addClass(OrdemServicoMovimentoHistorico.class)
+					.addClass(OrdemServico.class)
+					.addClass(ServicoTipo.class)
+					.addClass(SupressaoMotivo.class)
+					.addClass(Atividade.class)
+					.addClass(Equipe.class)
+					.addClass(EquipamentosEspeciais.class)
+					.addClass(EquipeComponentes.class)
+					.addClass(EspecificacaoServicoTipo.class)
+					.addClass(FiscalizacaoColetiva.class)
+					.addClass(Material.class)
+					.addClass(MaterialUnidade.class)
+					.addClass(OrdemServicoAtividade.class)
+					.addClass(OrdemServicoProgramacao.class)
+					.addClass(OrdemServicoUnidade.class)
+					.addClass(OsAtividadeMaterialExecucao.class)
+					.addClass(OsAtividadePeriodoExecucao.class)
+					.addClass(OsExecucaoEquipe.class)
+					.addClass(OsExecucaoEquipeComponentes.class)
+					.addClass(OsProgramNaoEncerMotivo.class)
+					.addClass(OsReferidaRetornoTipo.class)
+					.addClass(ProgramacaoRoteiro.class)
+					.addClass(ServicoCobrancaValor.class)
+					.addClass(ServicoNaoCobrancaMotivo.class)
+					.addClass(ServicoPerfilTipo.class)
+					.addClass(ServicoTipoAtividade.class)
+					.addClass(ServicoTipoGrupo.class)
+					.addClass(ServicoTipoMaterial.class)
+					.addClass(ServicoTipoOperacao.class)
+					.addClass(ServicoTipoPrioridade.class)
+					.addClass(ServicoTipoReferencia.class)
+					.addClass(ServicoTipoSubgrupo.class)
+					.addClass(LocalidadeSolicTipoGrupo.class)
+					.addClass(FiscalizacaoSituacao.class)
+					.addClass(FiscalizacaoSituacaoAgua.class)
+					.addClass(FiscalizacaoSituacaoEsgoto.class)
+					.addClass(FiscalizacaoSituacaoHidrometroCapacidade.class)
 					.addClass(FiscalizacaoSituacaoServicoACobrar.class)
 					.addClass(OrdemServicoPavimento.class)
 					.addClass(BoletimOsConcluida.class)
@@ -993,7 +922,8 @@ public class HibernateUtil {
 					.addClass(RAReiteracao.class)
 					.addClass(RAReiteracaoFone.class)
 					.addClass(OSProgramacaoCalibragem.class)
-					.addClass(OSPriorizacaoTipo.class).addClass(EquipeEquipamentosEspeciais.class)
+					.addClass(OSPriorizacaoTipo.class)
+					.addClass(EquipeEquipamentosEspeciais.class)
 					.addClass(ArquivoTextoAcompanhamentoServico.class)
 					.addClass(OSAtividadeExecucaoAcompanhamentoServico.class)
 					.addClass(OSAtividadeMaterialProgramacaoAcompanhamentoServico.class)
@@ -1009,118 +939,124 @@ public class HibernateUtil {
 					// CLASSES DO PACOTE gcom.cadastro //
 					// *************************************//
 					.addClass(VersaoMobile.class)
-					// gcom.cadastro.cliente
-					.addClass(CpfTipo.class).addClass(Cliente.class).addClass(ClienteEndereco.class)
-					.addClass(ImovelCadastroOcorrencia.class).addClass(
-							ImovelEloAnormalidade.class).addClass(
-							ClienteFone.class).addClass(ClienteImovel.class)
-							.addClass(
-							ClienteRelacaoTipo.class).addClass(
-							ClienteImovelEconomia.class).addClass(
-							ClienteImovelFimRelacaoMotivo.class).addClass(
-							ClienteTipo.class).addClass(FoneTipo.class)
-					.addClass(ClienteConta.class).addClass(
-							ClienteContaHistorico.class).addClass(
-							OrgaoExpedidorRg.class).addClass(PessoaSexo.class)
-					.addClass(Profissao.class).addClass(RamoAtividade.class)
-					.addClass(EsferaPoder.class).addClass(
-							ClienteGuiaPagamento.class).addClass(
-							ClienteGuiaPagamentoHistorico.class).addClass(
-							SituacaoAtualizacaoCadastral.class)
-							.addClass(ClienteAtualizacaoCadastral.class)
-							.addClass(ClienteFoneAtualizacaoCadastral.class)
-					// gcom.cadastro.dadocensitario
-					.addClass(LocalidadeDadosCensitario.class).addClass(
-							MunicipioDadosCensitario.class).addClass(
-							IbgeSetorCensitarioDado.class).addClass(
-							FonteDadosCensitario.class).addClass(
-							IbgeSetorCensitario.class)
-					// gcom.cadastro.empresa
+					.addClass(CpfTipo.class)
+					.addClass(Cliente.class)
+					.addClass(ClienteEndereco.class)
+					.addClass(ImovelCadastroOcorrencia.class)
+					.addClass(ImovelEloAnormalidade.class)
+					.addClass(ClienteFone.class)
+					.addClass(ClienteImovel.class)
+					.addClass(ClienteRelacaoTipo.class)
+					.addClass(ClienteImovelEconomia.class)
+					.addClass(ClienteImovelFimRelacaoMotivo.class)
+					.addClass(ClienteTipo.class)
+					.addClass(FoneTipo.class)
+					.addClass(ClienteConta.class)
+					.addClass(ClienteContaHistorico.class)
+					.addClass(OrgaoExpedidorRg.class)
+					.addClass(PessoaSexo.class)
+					.addClass(Profissao.class)
+					.addClass(RamoAtividade.class)
+					.addClass(EsferaPoder.class)
+					.addClass(ClienteGuiaPagamento.class)
+					.addClass(ClienteGuiaPagamentoHistorico.class)
+					.addClass(SituacaoAtualizacaoCadastral.class)
+					.addClass(ClienteAtualizacaoCadastral.class)
+					.addClass(ClienteFoneAtualizacaoCadastral.class)
+					.addClass(LocalidadeDadosCensitario.class)
+					.addClass(MunicipioDadosCensitario.class)
+					.addClass(IbgeSetorCensitarioDado.class)
+					.addClass(FonteDadosCensitario.class)
+					.addClass(IbgeSetorCensitario.class)
 					.addClass(Empresa.class)
 					.addClass(EmpresaCobranca.class)
 					.addClass(EmpresaCobrancaFaixa.class)
-					// gcom.cadastro.endereco
-					.addClass(LogradouroCep.class).addClass(Cep.class)
-					.addClass(CepTipo.class).addClass(EnderecoReferencia.class)
-					.addClass(EnderecoTipo.class).addClass(Logradouro.class)
-					.addClass(LogradouroBairro.class).addClass(
-							LogradouroTipo.class).addClass(
-							LogradouroTitulo.class)
-					// gcom.cadastro.funcionario
-					.addClass(Funcionario.class).addClass(FuncionarioCargo.class)
-					// gcom.cadastro.geografico
-					.addClass(Bairro.class).addClass(Microrregiao.class)
-					.addClass(Municipio.class).addClass(MunicipioFeriado.class)
-					.addClass(Regiao.class).addClass(
-							RegiaoDesenvolvimento.class).addClass(
-							UnidadeFederacao.class).addClass(BairroArea.class)
-					// gcom.cadastro.imovel
-					.addClass(AreaConstruidaFaixa.class).addClass(
-							CadastroOcorrencia.class).addClass(
-							CategoriaTipo.class).addClass(Categoria.class)
-					.addClass(Despejo.class).addClass(EloAnormalidade.class)
-					.addClass(FonteAbastecimento.class).addClass(Imovel.class)
-					.addClass(ImovelCobrancaSituacao.class).addClass(
-							ImovelEconomia.class).addClass(
-							ImovelEnderecoAnterior.class).addClass(
-							ImovelPerfil.class).addClass(
-							ImovelSubcategoria.class).addClass(ImovelRamoAtividade.class).addClass(
-							PavimentoRua.class)
-					.addClass(PavimentoCalcada.class).addClass(
-							PiscinaVolumeFaixa.class).addClass(PocoTipo.class)
-					.addClass(ReservatorioVolumeFaixa.class).addClass(
-							Subcategoria.class)
-					.addClass(ImovelContaEnvio.class).addClass(
-							ImovelDoacao.class).addClass(
-							EntidadeBeneficente.class).addClass(
-							ImovelTipoHabitacao.class).addClass(
-							ImovelTipoPropriedade.class).addClass(
-							ImovelTipoConstrucao.class).addClass(
-							ImovelTipoCobertura.class)
-							.addClass(ImovelAtualizacaoCadastral.class)
-							.addClass(ImovelSubcategoriaAtualizacaoCadastral.class)
-							.addClass(ImovelProgramaEspecial.class)
-							.addClass(ImovelSuprimido.class)
-							.addClass(ImovelInscricaoAlterada.class)
-							.addClass(ImovelRamoAtividadeAtualizacaoCadastral.class)
-							.addClass(ImagemRetorno.class)
-							.addClass(ImovelImagem.class)
-					// gcom.cadastro.localidade
+					.addClass(LogradouroCep.class)
+					.addClass(Cep.class)
+					.addClass(CepTipo.class)
+					.addClass(EnderecoReferencia.class)
+					.addClass(EnderecoTipo.class)
+					.addClass(Logradouro.class)
+					.addClass(LogradouroBairro.class)
+					.addClass(LogradouroTipo.class)
+					.addClass(LogradouroTitulo.class)
+					.addClass(Funcionario.class)
+					.addClass(FuncionarioCargo.class)
+					.addClass(Bairro.class)
+					.addClass(Microrregiao.class)
+					.addClass(Municipio.class)
+					.addClass(MunicipioFeriado.class)
+					.addClass(Regiao.class)
+					.addClass(RegiaoDesenvolvimento.class)
+					.addClass(UnidadeFederacao.class)
+					.addClass(BairroArea.class)
+					.addClass(AreaConstruidaFaixa.class)
+					.addClass(CadastroOcorrencia.class)
+					.addClass(CategoriaTipo.class)
+					.addClass(Categoria.class)
+					.addClass(Despejo.class)
+					.addClass(EloAnormalidade.class)
+					.addClass(FonteAbastecimento.class)
+					.addClass(Imovel.class)
+					.addClass(ImovelCobrancaSituacao.class)
+					.addClass(ImovelEconomia.class)
+					.addClass(ImovelEnderecoAnterior.class)
+					.addClass(ImovelPerfil.class)
+					.addClass(ImovelSubcategoria.class)
+					.addClass(ImovelRamoAtividade.class)
+					.addClass(PavimentoRua.class)
+					.addClass(PavimentoCalcada.class)
+					.addClass(PiscinaVolumeFaixa.class)
+					.addClass(PocoTipo.class)
+					.addClass(ReservatorioVolumeFaixa.class)
+					.addClass(Subcategoria.class)
+					.addClass(ImovelContaEnvio.class)
+					.addClass(ImovelDoacao.class)
+					.addClass(EntidadeBeneficente.class)
+					.addClass(ImovelTipoHabitacao.class)
+					.addClass(ImovelTipoPropriedade.class)
+					.addClass(ImovelTipoConstrucao.class)
+					.addClass(ImovelTipoCobertura.class)
+					.addClass(ImovelAtualizacaoCadastral.class)
+					.addClass(ImovelSubcategoriaAtualizacaoCadastral.class)
+					.addClass(ImovelProgramaEspecial.class)
+					.addClass(ImovelSuprimido.class)
+					.addClass(ImovelInscricaoAlterada.class)
+					.addClass(ImovelRamoAtividadeAtualizacaoCadastral.class)
+					.addClass(ImagemRetorno.class)
+					.addClass(ImovelImagem.class)
 					.addClass(GerenciaRegional.class)
-					.addClass(Localidade.class).addClass(LocalidadePorte.class)
-					.addClass(LocalidadeClasse.class).addClass(Quadra.class)
+					.addClass(Localidade.class)
+					.addClass(LocalidadePorte.class)
+					.addClass(LocalidadeClasse.class)
+					.addClass(Quadra.class)
 					.addClass(QuadraPerfil.class)
-					.addClass(SetorComercial.class).addClass(Zeis.class)
-					.addClass(AreaTipo.class).addClass(UnidadeNegocio.class)
+					.addClass(SetorComercial.class)
+					.addClass(Zeis.class)
+					.addClass(AreaTipo.class)
+					.addClass(UnidadeNegocio.class)
 					.addClass(QuadraFace.class)
-					// gcom.cadastro.sistemaparametro
-					.addClass(NacionalFeriado.class).addClass(
-							SistemaParametro.class).addClass(
-							SistemaAlteracaoHistorico.class)
-					// gcom.cadastro.tarifasocial
-					.addClass(RendaTipo.class).addClass(
-							TarifaSocialCartaoTipo.class).addClass(
-							TarifaSocialExclusaoMotivo.class).addClass(
-							TarifaSocialDadoEconomia.class).addClass(
-							TarifaSocialRevisaoMotivo.class)
-					// gcom.cadastro.unidade
-					.addClass(UnidadeOrganizacional.class).addClass(
-							UnidadeTipo.class)
+					.addClass(NacionalFeriado.class)
+					.addClass(SistemaParametro.class)
+					.addClass(SistemaAlteracaoHistorico.class)
+					.addClass(RendaTipo.class)
+					.addClass(TarifaSocialCartaoTipo.class)
+					.addClass(TarifaSocialExclusaoMotivo.class)
+					.addClass(TarifaSocialDadoEconomia.class)
+					.addClass(TarifaSocialRevisaoMotivo.class)
+					.addClass(UnidadeOrganizacional.class)
+					.addClass(UnidadeTipo.class)
 					.addClass(ArquivoTextoAtualizacaoCadastral.class)
-					
 					.addClass(EmpresaContratoCadastro.class)
 					.addClass(EmpresaContratoCadastroAtributo.class)
 					.addClass(UnidadeOrganizacionalMunicipio.class)
-					// gcom.cadastro.atualizacaocadastralsimplificado
 					.addClass(AtualizacaoCadastralSimplificado.class)
 					.addClass(AtualizacaoCadastralSimplificadoCritica.class)
 					.addClass(AtualizacaoCadastralSimplificadoBinario.class)
 					.addClass(AtualizacaoCadastralSimplificadoCriticaTipo.class)
 					.addClass(AtualizacaoCadastralSimplificadoLinha.class)
-					// gcom.cadastro.projeto
 					.addClass(Projeto.class)
 					.addClass(EmpresaContratoCobranca.class)
-					// gcom.cadastro.descricaogenerica
 					.addClass(DescricaoGenerica.class)
 					.addClass(ImovelControleAtualizacaoCadastral.class)
 					.addClass(ImovelRetorno.class)
@@ -1130,178 +1066,174 @@ public class HibernateUtil {
 					.addClass(ClienteRetorno.class)
 					.addClass(ClienteEnderecoRetorno.class)
 					.addClass(ClienteImovelRetorno.class)
-							
+
 					// *************************************//
 					// CLASSES DO PACOTE gcom.cobranca //
 					// *************************************//
-					.addClass(CobrancaGrupo.class).addClass(
-							CobrancaSituacao.class).addClass(
-							CobrancaSituacaoHistorico.class).addClass(
-							CobrancaSituacaoMotivo.class).addClass(
-							CobrancaSituacaoTipo.class).addClass(
-							ParcelamentoGrupo.class).addClass(
-							CobrancaForma.class).addClass(
-							IndicesAcrescimosImpontualidade.class).addClass(
-							ResumoCobrancaSituacaoEspecial.class).addClass(
-							CobrancaAcaoSituacao.class).addClass(
-							CobrancaDebitoSituacao.class).addClass(
-							ResumoCobrancaAcao.class).addClass(
-							ParcelamentoFaixaValor.class).addClass(NegativacaoComando.class)
-							.addClass(NegativacaoCriterio.class).addClass(NegativacaoCriterioClienteTipo.class)
-							.addClass(NegativacaoCriterioCpfTipo.class).addClass(NegativacaoCriterioImovelPerfil.class)
-							.addClass(NegativacaoCriterioSubcategoria.class).addClass(NegativacaoImoveis.class).addClass(Negativador.class).addClass(NegativadorContrato.class)
-							.addClass(NegativadorExclusaoMotivo.class).addClass(NegativadorMovimento.class).addClass(NegativadorMovimentoReg.class)
-							.addClass(NegativadorMovimentoRegItem.class).addClass(NegativadorMovimentoRegRetMot.class).addClass(NegativadorRegistroTipo.class)
-							.addClass(NegativadorRetornoMotivo.class).addClass(NegativCritCobrGrupo.class)
-							.addClass(NegativCritElo.class).addClass(NegativCritGerReg.class)
-							.addClass(NegativCritUndNeg.class)
-							.addClass(ResumoNegativacao.class)
-							.addClass(NegativadorResultadoSimulacao.class).addClass(UnidadeOrganizacionalTestemunha.class)
-							.addClass(CriterioSituacaoCobranca.class)
-							.addClass(CriterioSituacaoLigacaoAgua.class)
-							.addClass(CriterioSituacaoLigacaoEsgoto.class)
-							.addClass(NegativacaoCriterioLigacaoAgua.class)
-							.addClass(NegativacaoCriterioLigacaoEsgoto.class)
-							.addClass(EmpresaCobrancaConta.class)
-							.addClass(EmpresaCobrancaContaPagamentos.class)
-							.addClass(ComandoEmpresaCobrancaConta.class)
-							.addClass(ComandoEmpresaCobrancaContaExtensao.class)
-							.addClass(CobrancaSituacaoComando.class)
-							.addClass(NegativadorMovimentoRegParcelamento.class)
-							.addClass(ParcelamentoPagamentoCartaoCredito.class)
-							.addClass(DocumentosReceberFaixaDiasVencidos.class)
-							.addClass(NegativCritNegRetMot.class)
-							.addClass(ParcDesctoInativVista.class)
-							.addClass(CobrancaAcaoOrdemServicoNaoAceitas.class)
-							.addClass(UnidadeRepavimentadoraCustoPavimentoRua.class)
-							.addClass(UnidadeRepavimentadoraCustoPavimentoCalcada.class)
-							.addClass(CobrancaBoletimMedicao.class)
-							.addClass(CobrancaBoletimDesconto.class)
-							.addClass(CobrancaBoletimExecutado.class)
-							.addClass(CobrancaBoletimSucesso.class)
-							.addClass(ComandoEmpresaCobrancaContaGerencia.class)
-							.addClass(ComandoEmpresaCobrancaContaImovelPerfil.class)
-							.addClass(ComandoEmpresaCobrancaContaUnidadeNegocio.class)
-							.addClass(CmdEmpresaCobrancaContaLigacaoAguaSituacao.class)
-							.addClass(MotivoNaoAceitacaoEncerramentoOS.class)
-							.addClass(ComandoOrdemSeletiva.class)
-							.addClass(LigacaoSitComandoOSS.class)
-							.addClass(AnormalidadeComandoOSS.class)
-							.addClass(CapacidHidrComandoOSS.class)
-							
-							
-							// *************************************//
-							// CLASSES DO PACOTE gcom.cobranca.contratoparcelamento //
-							// *************************************//
-							
-							.addClass(ContratoParcelamentoRD.class)
-							.addClass(QuantidadePrestacoes.class)
-							.addClass(TipoRelacao.class)
-							.addClass(ContratoParcelamento.class)
-							.addClass(ContratoParcelamentoCliente.class)
-							.addClass(PrestacaoContratoParcelamento.class)
-							.addClass(ContratoParcelamentoItem.class)
-							.addClass(PrestacaoItemContratoParcelamento.class)
-							
-							// *************************************//
-							// FIM CLASSES DO PACOTE gcom.cobranca.contratoparcelamento //
-							// *************************************//
+					.addClass(CobrancaGrupo.class)
+					.addClass(CobrancaSituacao.class)
+					.addClass(CobrancaSituacaoHistorico.class)
+					.addClass(CobrancaSituacaoMotivo.class)
+					.addClass(CobrancaSituacaoTipo.class)
+					.addClass(ParcelamentoGrupo.class)
+					.addClass(CobrancaForma.class)
+					.addClass(IndicesAcrescimosImpontualidade.class)
+					.addClass(ResumoCobrancaSituacaoEspecial.class)
+					.addClass(CobrancaAcaoSituacao.class)
+					.addClass(CobrancaDebitoSituacao.class)
+					.addClass(ResumoCobrancaAcao.class)
+					.addClass(ParcelamentoFaixaValor.class)
+					.addClass(NegativacaoComando.class)
+					.addClass(NegativacaoCriterio.class)
+					.addClass(NegativacaoCriterioClienteTipo.class)
+					.addClass(NegativacaoCriterioCpfTipo.class)
+					.addClass(NegativacaoCriterioImovelPerfil.class)
+					.addClass(NegativacaoCriterioSubcategoria.class)
+					.addClass(NegativacaoImoveis.class)
+					.addClass(Negativador.class)
+					.addClass(NegativadorContrato.class)
+					.addClass(NegativadorExclusaoMotivo.class)
+					.addClass(NegativadorMovimento.class)
+					.addClass(NegativadorMovimentoReg.class)
+					.addClass(NegativadorMovimentoRegItem.class)
+					.addClass(NegativadorMovimentoRegRetMot.class)
+					.addClass(NegativadorRegistroTipo.class)
+					.addClass(NegativadorRetornoMotivo.class)
+					.addClass(NegativCritCobrGrupo.class)
+					.addClass(NegativCritElo.class)
+					.addClass(NegativCritGerReg.class)
+					.addClass(NegativCritUndNeg.class)
+					.addClass(ResumoNegativacao.class)
+					.addClass(NegativadorResultadoSimulacao.class)
+					.addClass(UnidadeOrganizacionalTestemunha.class)
+					.addClass(CriterioSituacaoCobranca.class)
+					.addClass(CriterioSituacaoLigacaoAgua.class)
+					.addClass(CriterioSituacaoLigacaoEsgoto.class)
+					.addClass(NegativacaoCriterioLigacaoAgua.class)
+					.addClass(NegativacaoCriterioLigacaoEsgoto.class)
+					.addClass(EmpresaCobrancaConta.class)
+					.addClass(EmpresaCobrancaContaPagamentos.class)
+					.addClass(ComandoEmpresaCobrancaConta.class)
+					.addClass(ComandoEmpresaCobrancaContaExtensao.class)
+					.addClass(CobrancaSituacaoComando.class)
+					.addClass(NegativadorMovimentoRegParcelamento.class)
+					.addClass(ParcelamentoPagamentoCartaoCredito.class)
+					.addClass(DocumentosReceberFaixaDiasVencidos.class)
+					.addClass(NegativCritNegRetMot.class)
+					.addClass(ParcDesctoInativVista.class)
+					.addClass(CobrancaAcaoOrdemServicoNaoAceitas.class)
+					.addClass(UnidadeRepavimentadoraCustoPavimentoRua.class)
+					.addClass(UnidadeRepavimentadoraCustoPavimentoCalcada.class)
+					.addClass(CobrancaBoletimMedicao.class)
+					.addClass(CobrancaBoletimDesconto.class)
+					.addClass(CobrancaBoletimExecutado.class)
+					.addClass(CobrancaBoletimSucesso.class)
+					.addClass(ComandoEmpresaCobrancaContaGerencia.class)
+					.addClass(ComandoEmpresaCobrancaContaImovelPerfil.class)
+					.addClass(ComandoEmpresaCobrancaContaUnidadeNegocio.class)
+					.addClass(CmdEmpresaCobrancaContaLigacaoAguaSituacao.class)
+					.addClass(MotivoNaoAceitacaoEncerramentoOS.class)
+					.addClass(ComandoOrdemSeletiva.class)
+					.addClass(LigacaoSitComandoOSS.class)
+					.addClass(AnormalidadeComandoOSS.class)
+					.addClass(CapacidHidrComandoOSS.class)
 
-//							.addClass(CobrancaBoletimMedicao.class)
-//							.addClass(CobrancaBoletimDesconto.class)
-//							.addClass(CobrancaBoletimExecutado.class)
-//							.addClass(CobrancaBoletimSucesso.class)
-
+					// *************************************//
+					// CLASSES DO PACOTE gcom.cobranca.contratoparcelamento //
+					// *************************************//
+					.addClass(ContratoParcelamentoRD.class)
+					.addClass(QuantidadePrestacoes.class)
+					.addClass(TipoRelacao.class)
+					.addClass(ContratoParcelamento.class)
+					.addClass(ContratoParcelamentoCliente.class)
+					.addClass(PrestacaoContratoParcelamento.class)
+					.addClass(ContratoParcelamentoItem.class)
+					.addClass(PrestacaoItemContratoParcelamento.class)
 
 					// *************************************//
 					// CLASSES DO PACOTE gcom.faturamento //
 					// *************************************//
-					.addClass(QualidadeAgua.class).addClass(ImpostoTipo.class)
-					.addClass(ImpostoTipoAliquota.class).addClass(
-							FaturamentoGrupo.class).addClass(
-							FaturamentoSituacaoTipo.class).addClass(
-							FaturamentoAtividade.class).addClass(
-							FaturamentoAtividadeCronograma.class).addClass(
-							FaturamentoGrupoCronogramaMensal.class).addClass(
-							FaturamentoImediatoAjuste.class).addClass(
-							FaturamentoSituacaoMotivo.class).addClass(
-							FaturamentoSituacaoHistorico.class).addClass(
-							FaturamentoTipo.class).addClass(
-							FaturamentoAtivCronRota.class).addClass(
-							FaturamentoDados.class).addClass(
-							ResumoFaturamentoSimulacao.class)
-							.addClass(ResumoFaturamentoSimulacaoDebito.class)
-							.addClass(ResumoFaturamentoSimulacaoCredito.class)
-							.addClass(VencimentoAlternativo.class).addClass(
-							ResumoFaturamentoSituacaoEspecial.class).addClass(
-							FaturamentoContabilParametros.class).addClass(
-							GuiaPagamentoGeral.class).addClass(
-							DocumentoNaoEntregue.class).addClass(
-							HistogramaAguaEconomia.class).addClass(
-							HistogramaAguaLigacao.class).addClass(
-							HistogramaEsgotoEconomia.class).addClass(
-							HistogramaEsgotoLigacao.class).addClass(
-							QualidadeAguaPadrao.class)
-							.addClass(GuiaPagamentoItem.class)
-							.addClass(FaturamentoSituacaoComando.class)
-							.addClass(TarifaTipoCalculo.class)
-							.addClass(GuiaPagamentoParcelamentoCartao.class)
-							.addClass(MotivoInterferenciaTipo.class)
-							.addClass(ExtratoQuitacao.class)
-							.addClass(ExtratoQuitacaoItem.class)
-							.addClass(Prescricao.class)
-							.addClass(ConsumoMinimoParametro.class)
-
-					// gcom.faturamento.conta ContaMensagem
-					.addClass(ContaCategoriaConsumoFaixa.class).addClass(
-							Conta.class).addClass(ContaCategoria.class)
-					.addClass(MotivoNaoEntregaDocumento.class).addClass(
-							Refaturamento.class).addClass(Fatura.class)
-					.addClass(FaturaItem.class).addClass(ContaHistorico.class)
-					.addClass(ContaImpostosDeduzidos.class).addClass(
-							ContaMotivoCancelamento.class).addClass(
-							ContaMotivoInclusao.class).addClass(
-							ContaMotivoRetificacao.class).addClass(
-							ContaMotivoRevisao.class)
-					.addClass(ContaGeral.class).addClass(ContaImpressao.class)
+					.addClass(QualidadeAgua.class)
+					.addClass(ImpostoTipo.class)
+					.addClass(ImpostoTipoAliquota.class)
+					.addClass(FaturamentoGrupo.class)
+					.addClass(FaturamentoSituacaoTipo.class)
+					.addClass(FaturamentoAtividade.class)
+					.addClass(FaturamentoAtividadeCronograma.class)
+					.addClass(FaturamentoGrupoCronogramaMensal.class)
+					.addClass(FaturamentoImediatoAjuste.class)
+					.addClass(FaturamentoSituacaoMotivo.class)
+					.addClass(FaturamentoSituacaoHistorico.class)
+					.addClass(FaturamentoTipo.class)
+					.addClass(FaturamentoAtivCronRota.class)
+					.addClass(FaturamentoDados.class)
+					.addClass(ResumoFaturamentoSimulacao.class)
+					.addClass(ResumoFaturamentoSimulacaoDebito.class)
+					.addClass(ResumoFaturamentoSimulacaoCredito.class)
+					.addClass(VencimentoAlternativo.class)
+					.addClass(ResumoFaturamentoSituacaoEspecial.class)
+					.addClass(FaturamentoContabilParametros.class)
+					.addClass(GuiaPagamentoGeral.class)
+					.addClass(DocumentoNaoEntregue.class)
+					.addClass(HistogramaAguaEconomia.class)
+					.addClass(HistogramaAguaLigacao.class)
+					.addClass(HistogramaEsgotoEconomia.class)
+					.addClass(HistogramaEsgotoLigacao.class)
+					.addClass(QualidadeAguaPadrao.class)
+					.addClass(GuiaPagamentoItem.class)
+					.addClass(FaturamentoSituacaoComando.class)
+					.addClass(TarifaTipoCalculo.class)
+					.addClass(GuiaPagamentoParcelamentoCartao.class)
+					.addClass(MotivoInterferenciaTipo.class)
+					.addClass(ExtratoQuitacao.class)
+					.addClass(ExtratoQuitacaoItem.class)
+					.addClass(Prescricao.class)
+					.addClass(ConsumoMinimoParametro.class)
+					.addClass(ContaCategoriaConsumoFaixa.class)
+					.addClass(Conta.class)
+					.addClass(ContaCategoria.class)
+					.addClass(MotivoNaoEntregaDocumento.class)
+					.addClass(Refaturamento.class)
+					.addClass(Fatura.class)
+					.addClass(FaturaItem.class)
+					.addClass(ContaHistorico.class)
+					.addClass(ContaImpostosDeduzidos.class)
+					.addClass(ContaMotivoCancelamento.class)
+					.addClass(ContaMotivoInclusao.class)
+					.addClass(ContaMotivoRetificacao.class)
+					.addClass(ContaMotivoRevisao.class)
+					.addClass(ContaGeral.class)
+					.addClass(ContaImpressao.class)
 					.addClass(ContaCategoriaConsumoFaixaHistorico.class)
-					.addClass(ContaCategoriaHistorico.class).addClass(
-							ContaImpostosDeduzidosHistorico.class).addClass(
-							ContaTipo.class).addClass(
-									ContaMotivoRetificacaoColuna.class)
-					// gcom.faturamento.debito
-					.addClass(DebitoCobrado.class).addClass(DebitoTipo.class)
-					.addClass(DebitoACobrar.class).addClass(
-							DebitoACobrarCategoria.class).addClass(
-							DebitoCobradoHistorico.class).addClass(
-							DebitoCobradoCategoria.class).addClass(
-							DebitoACobrarHistorico.class).addClass(
-							DebitoCreditoSituacao.class).addClass(
-							ContaMensagem.class).addClass(
-							DebitoACobrarGeral.class).addClass(
-							DebitoTipoVigencia.class)
-
-					// gcom.faturamento.credito
-					.addClass(CreditoRealizado.class).addClass(
-							CreditoARealizar.class).addClass(
-							CreditoARealizarCategoria.class).addClass(
-							CreditoRealizadoHistorico.class).addClass(
-							CreditoRealizadoCategoria.class).addClass(
-							CreditoTipo.class).addClass(
-							CreditoARealizarHistorico.class).addClass(
-							CreditoOrigem.class).addClass(
-							CreditoARealizarGeral.class)
-
-					// gcom.faturamento.consumotarifa
-					.addClass(ConsumoTarifa.class).addClass(
-							ConsumoTarifaVigencia.class).addClass(
-							ConsumoTarifaCategoria.class).addClass(
-							ConsumoTarifaFaixa.class)
-							
-					// gcom.faturamento.debito
+					.addClass(ContaCategoriaHistorico.class)
+					.addClass(ContaImpostosDeduzidosHistorico.class)
+					.addClass(ContaTipo.class)
+					.addClass(ContaMotivoRetificacaoColuna.class)
+					.addClass(DebitoCobrado.class)
+					.addClass(DebitoTipo.class)
+					.addClass(DebitoACobrar.class)
+					.addClass(DebitoACobrarCategoria.class)
+					.addClass(DebitoCobradoHistorico.class)
+					.addClass(DebitoCobradoCategoria.class)
+					.addClass(DebitoACobrarHistorico.class)
+					.addClass(DebitoCreditoSituacao.class)
+					.addClass(ContaMensagem.class)
+					.addClass(DebitoACobrarGeral.class)
+					.addClass(DebitoTipoVigencia.class)
+					.addClass(CreditoRealizado.class)
+					.addClass(CreditoARealizar.class)
+					.addClass(CreditoARealizarCategoria.class)
+					.addClass(CreditoRealizadoHistorico.class)
+					.addClass(CreditoRealizadoCategoria.class)
+					.addClass(CreditoTipo.class)
+					.addClass(CreditoARealizarHistorico.class)
+					.addClass(CreditoOrigem.class)
+					.addClass(CreditoARealizarGeral.class)
+					.addClass(ConsumoTarifa.class)
+					.addClass(ConsumoTarifaVigencia.class)
+					.addClass(ConsumoTarifaCategoria.class)
+					.addClass(ConsumoTarifaFaixa.class)
 					.addClass(DebitoFaixaValore.class)
-					
-					// gcom.faturamento.autoinfracao
 					.addClass(AutoInfracaoSituacao.class)
 					.addClass(AutosInfracao.class)
 					.addClass(AutosInfracaoDebitoACobrar.class)
@@ -1309,323 +1241,217 @@ public class HibernateUtil {
 					.addClass(HistogramaAguaEconomiaSemQuadra.class)
 					.addClass(HistogramaAguaLigacaoSemQuadra.class)
 					.addClass(HistogramaEsgotoLigacaoSemQuadra.class)
-							
+
 					// *************************************//
 					// CLASSES DO PACOTE gcom.micromedicao //
 					// *************************************//
-					.addClass(Rota.class).addClass(RateioTipo.class).addClass(
-							ImovelTestesMedicaoConsumo.class).addClass(
-							ArquivoTextoRetornoIS.class).addClass(
-							MovimentoArquivoTextoRetornoIS.class)				
-					// gcom.micromedicao.hidrometro
-					.addClass(HidrometroCapacidade.class).addClass(
-							Hidrometro.class).addClass(
-							HidrometroMotivoBaixa.class).addClass(
-							HidrometroClasseMetrologica.class).addClass(
-							HidrometroMarca.class).addClass(
-							HidrometroMovimentacao.class).addClass(
-							HidrometroMotivoMovimentacao.class).addClass(
-							HidrometroLocalArmazenagem.class).addClass(
-							HidrometroSituacao.class).addClass(
-							HidrometroDiametro.class)
-							.addClass(HidrometroRelojoaria.class)
-							.addClass(
-							HidrometroInstalacaoHistorico.class).addClass(
-							HidrometroLocalInstalacao.class).addClass(
-							HidrometroTipo.class).addClass(
-							HidrometroProtecao.class).addClass(
-							HidrometroMovimentado.class).addClass(
-							Leiturista.class).addClass(
-							ArquivoTextoRoteiroEmpresa.class).addClass(
-							RoteiroEmpresa.class).addClass(
-							ServicoTipoCelular.class).addClass(
-							MovimentoRoteiroEmpresa.class)
-							.addClass(ItemServico.class)
-							.addClass(ContratoEmpresaServico.class)
-							.addClass(ItemServicoContrato.class)
-							.addClass(RetornoControleHidrometro.class)
-							.addClass(TelemetriaLog.class)
-							.addClass(TelemetriaMov.class)
-							.addClass(TelemetriaMovReg.class)
-							.addClass(TelemetriaRetMot.class)
-							.addClass(ContratoEmpresaAditivo.class)
-
-					// gcom.micromedicao.leitura
+					.addClass(Rota.class)
+					.addClass(RateioTipo.class)
+					.addClass(ImovelTestesMedicaoConsumo.class)
+					.addClass(ArquivoTextoRetornoIS.class)
+					.addClass(MovimentoArquivoTextoRetornoIS.class)
+					.addClass(HidrometroCapacidade.class)
+					.addClass(Hidrometro.class)
+					.addClass(HidrometroMotivoBaixa.class)
+					.addClass(HidrometroClasseMetrologica.class)
+					.addClass(HidrometroMarca.class)
+					.addClass(HidrometroMovimentacao.class)
+					.addClass(HidrometroMotivoMovimentacao.class)
+					.addClass(HidrometroLocalArmazenagem.class)
+					.addClass(HidrometroSituacao.class)
+					.addClass(HidrometroDiametro.class)
+					.addClass(HidrometroRelojoaria.class)
+					.addClass(HidrometroInstalacaoHistorico.class)
+					.addClass(HidrometroLocalInstalacao.class)
+					.addClass(HidrometroTipo.class)
+					.addClass(HidrometroProtecao.class)
+					.addClass(HidrometroMovimentado.class)
+					.addClass(Leiturista.class)
+					.addClass(ArquivoTextoRoteiroEmpresa.class)
+					.addClass(RoteiroEmpresa.class)
+					.addClass(ServicoTipoCelular.class)
+					.addClass(MovimentoRoteiroEmpresa.class)
+					.addClass(ItemServico.class)
+					.addClass(ContratoEmpresaServico.class)
+					.addClass(ItemServicoContrato.class)
+					.addClass(RetornoControleHidrometro.class)
+					.addClass(TelemetriaLog.class)
+					.addClass(TelemetriaMov.class)
+					.addClass(TelemetriaMovReg.class)
+					.addClass(TelemetriaRetMot.class)
+					.addClass(ContratoEmpresaAditivo.class)
 					.addClass(LeituraTipo.class)
-					.addClass(LeituraSituacao.class).addClass(
-							LeituraFaixaFalsa.class).addClass(
-							LeituraAnormalidadeLeitura.class).addClass(
-							LeituraAnormalidade.class).addClass(
-							LeituraFiscalizacao.class).addClass(
-							LeituraAnormalidadeConsumo.class)
-					// gcom.micromedicao.medicao //
-					.addClass(MedicaoHistorico.class).addClass(
-							MedicaoTipo.class)
-					// gcom.micromedicao.consumo //
-					.addClass(ConsumoHistorico.class).addClass(
-							ConsumoTipo.class).addClass(
-							ConsumoAnormalidade.class).addClass(
-							LigacaoTipo.class).addClass(
-							ResumoAnormalidadeConsumo.class).addClass(
-							ResumoAnormalidadeLeitura.class).addClass(
-							ConsumoHistoricoAnterior.class).addClass(
-							MedicaoHistoricoAnterior.class).addClass(
-							SituacaoTransmissaoLeitura.class).addClass(
-							ConsumoMinimoArea.class).addClass(
-							ConsumoAnormalidadeAcao.class).addClass(
-							RotaAtualizacaoSeq.class )                                    
-							.addClass( ReleituraMobile.class )
-
+					.addClass(LeituraSituacao.class)
+					.addClass(LeituraFaixaFalsa.class)
+					.addClass(LeituraAnormalidadeLeitura.class)
+					.addClass(LeituraAnormalidade.class)
+					.addClass(LeituraFiscalizacao.class)
+					.addClass(LeituraAnormalidadeConsumo.class)
+					.addClass(MedicaoHistorico.class)
+					.addClass(MedicaoTipo.class)
+					.addClass(ConsumoHistorico.class)
+					.addClass(ConsumoTipo.class)
+					.addClass(ConsumoAnormalidade.class)
+					.addClass(LigacaoTipo.class)
+					.addClass(ResumoAnormalidadeConsumo.class)
+					.addClass(ResumoAnormalidadeLeitura.class)
+					.addClass(ConsumoHistoricoAnterior.class)
+					.addClass(MedicaoHistoricoAnterior.class)
+					.addClass(SituacaoTransmissaoLeitura.class)
+					.addClass(ConsumoMinimoArea.class)
+					.addClass(ConsumoAnormalidadeAcao.class)
+					.addClass(RotaAtualizacaoSeq.class)
+					.addClass(ReleituraMobile.class)
 
 					// ************************************//
 					// CLASSES DO PACOTE gcom.financeiro //
 					// ************************************//
-					.addClass(LancamentoContabil.class).addClass(
-							LancamentoResumo.class).addClass(
-							LancamentoResumoValorTipo.class).addClass(
-							LancamentoResumoConta.class).addClass(
-							LancamentoResumoContaHistorico.class).addClass(
-							FinanciamentoTipo.class).addClass(
-							LancamentoContabilItem.class).addClass(
-							ContaContabil.class).addClass(
-							LancamentoOrigem.class).addClass(
-							ResumoFaturamento.class).addClass(
-							LancamentoItem.class).addClass(
-							LancamentoItemContabil.class).addClass(
-							LancamentoTipoItem.class).addClass(
-							LancamentoTipo.class).addClass(
-							DevedoresDuvidososContabilParametro.class).addClass(
-							ContaAReceberContabil.class).addClass(
-							ValorVolumesConsumidosNaoFaturado.class).addClass(
-							DocumentosAReceberResumo.class).addClass(
-							ResumoReceita.class).addClass(
-							FaixaDocumentosAReceber.class).addClass(
-							DocumentosAReceberFaixaResumo.class)
+					.addClass(LancamentoContabil.class)
+					.addClass(LancamentoResumo.class)
+					.addClass(LancamentoResumoValorTipo.class)
+					.addClass(LancamentoResumoConta.class)
+					.addClass(LancamentoResumoContaHistorico.class)
+					.addClass(FinanciamentoTipo.class)
+					.addClass(LancamentoContabilItem.class)
+					.addClass(ContaContabil.class)
+					.addClass(LancamentoOrigem.class)
+					.addClass(ResumoFaturamento.class)
+					.addClass(LancamentoItem.class)
+					.addClass(LancamentoItemContabil.class)
+					.addClass(LancamentoTipoItem.class)
+					.addClass(LancamentoTipo.class)
+					.addClass(DevedoresDuvidososContabilParametro.class)
+					.addClass(ContaAReceberContabil.class)
+					.addClass(ValorVolumesConsumidosNaoFaturado.class)
+					.addClass(DocumentosAReceberResumo.class)
+					.addClass(ResumoReceita.class)
+					.addClass(FaixaDocumentosAReceber.class)
+					.addClass(DocumentosAReceberFaixaResumo.class)
+					
 					// ************************************//
 					// CLASSES DO PACOTE gcom.arrecadacao //
 					// ************************************//
-					// gcom.arrecadacao.banco
-
-					.addClass(ResumoArrecadacao.class).addClass(Banco.class)
+					.addClass(ResumoArrecadacao.class)
+					.addClass(Banco.class)
 					.addClass(Agencia.class)
-					// gcom.arrecadacao.pagamento
 					.addClass(Pagamento.class)
-					.addClass(PagamentoSituacao.class).addClass(
-							GuiaPagamento.class).addClass(
-							GuiaPagamentoHistorico.class).addClass(
-							GuiaPagamentoCategoriaHistorico.class)
+					.addClass(PagamentoSituacao.class)
+					.addClass(GuiaPagamento.class)
+					.addClass(GuiaPagamentoHistorico.class)
+					.addClass(GuiaPagamentoCategoriaHistorico.class)
 					.addClass(PagamentoCartaoDebito.class)
 					.addClass(PagamentoCartaoDebitoItem.class)
 					.addClass(SequenciaCartao.class)
-					// gcom.arrecadacao.debito
-					.addClass(DebitoAutomatico.class).addClass(
-							DebitoAutomaticoRetornoCodigo.class).addClass(
-							DebitoAutomaticoMovimento.class).addClass(
-							GuiaPagamentoCategoria.class).addClass(
-							MetasArrecadacao.class)
-
+					.addClass(DebitoAutomatico.class)
+					.addClass(DebitoAutomaticoRetornoCodigo.class)
+					.addClass(DebitoAutomaticoMovimento.class)
+					.addClass(GuiaPagamentoCategoria.class)
+					.addClass(MetasArrecadacao.class)
 					.addClass(DevolucaoHistorico.class)
 					.addClass(DevolucaoDadosDiarios.class)
 					.addClass(DevolucaoDadosDiariosAuxiliar.class)
 					.addClass(ArrecadacaoDadosDiariosAuxiliar.class)
 					.addClass(BoletimInformacoesGerenciais.class)
+
 					// *************************************//
 					// CLASSES DO PACOTE gcom.operacional //
 					// *************************************//
-					.addClass(Bacia.class).addClass(DistritoOperacional.class)
-					.addClass(DivisaoEsgoto.class).addClass(
-							SistemaAbastecimento.class).addClass(
-							SistemaEsgoto.class).addClass(
-							SistemaEsgotoTratamentoTipo.class).addClass(
-							AbastecimentoProgramacao.class).addClass(
-							ManutencaoProgramacao.class).addClass(
-							SetorAbastecimento.class).addClass(
-							ZonaAbastecimento.class)
-					.addClass(ZonaPressao.class).addClass(ProducaoAgua.class)
+					.addClass(Bacia.class)
+					.addClass(DistritoOperacional.class)
+					.addClass(DivisaoEsgoto.class)
+					.addClass(SistemaAbastecimento.class)
+					.addClass(SistemaEsgoto.class)
+					.addClass(SistemaEsgotoTratamentoTipo.class)
+					.addClass(AbastecimentoProgramacao.class)
+					.addClass(ManutencaoProgramacao.class)
+					.addClass(SetorAbastecimento.class)
+					.addClass(ZonaAbastecimento.class)
+					.addClass(ZonaPressao.class)
+					.addClass(ProducaoAgua.class)
+				
 					// ************************************//
 					// CLASSES DO PACOTE gcom.seguranca //
 					// ************************************//
-					// gcom.seguranca.acesso
-					.addClass(AlteracaoTipo.class).addClass(UsuarioTipo.class)
-					.addClass(TabelaLinhaAlteracao.class).addClass(
-							TabelaLinhaColunaAlteracao.class).addClass(
-							TabelaColuna.class).addClass(Tabela.class)
+					.addClass(AlteracaoTipo.class)
+					.addClass(UsuarioTipo.class)
+					.addClass(TabelaLinhaAlteracao.class)
+					.addClass(TabelaLinhaColunaAlteracao.class)
+					.addClass(TabelaColuna.class)
+					.addClass(Tabela.class)
 					.addClass(UsuarioAcao.class)
 					.addClass(UsuarioFavorito.class)
 					.addClass(GrupoAcesso.class)
 					.addClass(UsuarioSenhaHistorico.class)
-					// gcom.seguranca.transacao
-					.addClass(SgbdTabela.class)
-					.addClass(SgbdTabelaColuna.class).addClass(
-							UsuarioSituacao.class).addClass(
-							UsuarioPermissaoEspecial.class).addClass(
-							UsuarioAlteracao.class).addClass(
-							UsuarioGrupoRestricao.class).addClass(
-							UsuarioGrupo.class).addClass(
-							UsuarioAbrangencia.class).addClass(Usuario.class)
-					.addClass(ResolucaoDiretoria.class).addClass(
-							CreditoRealizadoCategoriaHistorico.class).addClass(
-							CreditoARealizarCategoriaHistorico.class).addClass(
-							DebitoCobradoCategoriaHistorico.class).addClass(
-							DebitoACobrarCategoriaHistorico.class).addClass(
-							PermissaoEspecial.class).addClass(
-							AvisoDeducoes.class).addClass(AvisoBancario.class)
-					.addClass(AvisoAcerto.class).addClass(
-							ArrecadadorMovimentoItem.class).addClass(
-							ArrecadadorMovimento.class).addClass(
-							ArrecadadorContratoTarifa.class).addClass(
-							ParcelamentoTipo.class).addClass(
-							ParcelamentoSituacao.class).addClass(
-							ParcelamentoQuantidadeReparcelamento.class)
-					.addClass(ParcelamentoQuantidadePrestacao.class).addClass(
-							ParcelamentoPerfil.class).addClass(
-							ParcelamentoItem.class).addClass(
-							ParcelamentoDescontoInatividade.class).addClass(
-							ParcelamentoDescontoAntiguidade.class).addClass(
-							Parcelamento.class).addClass(DocumentoTipo.class)
-					.addClass(DocumentoEmissaoForma.class).addClass(
-							DevolucaoSituacao.class).addClass(Devolucao.class)
-					.addClass(DeducaoTipo.class).addClass(GuiaDevolucao.class)
-					.addClass(GrupoFuncionalidadeOperacao.class).addClass(
-							Grupo.class).addClass(
-							FuncionalidadeDependencia.class).addClass(
-							Funcionalidade.class).addClass(
-							ParcelamentoMotivoDesfazer.class).addClass(
-							PagamentoHistorico.class).addClass(
-							OperacaoEfetuada.class).addClass(Operacao.class)
-					.addClass(OperacaoTipo.class)
-					.addClass(OperacaoTabela.class).addClass(
-							RegistroCodigo.class).addClass(
-							ArrecadadorContrato.class).addClass(
-							Arrecadador.class).addClass(ArrecadacaoForma.class)
-					.addClass(CobrancaAcao.class).addClass(
-							RotaAcaoCriterio.class).addClass(
-							CobrancaAcaoAtividadeComando.class).addClass(
-							CobrancaCriterioLinha.class).addClass(
-							CobrancaCriterio.class).addClass(
-							CobrancaAtividadeComandoRota.class).addClass(
-							CobrancaAtividade.class).addClass(
-							CobrancaAcaoCronograma.class).addClass(
-							CobrancaAcaoAtividadeCronograma.class).addClass(
-							Modulo.class).addClass(ContratoDemanda.class)
-					.addClass(ContratoMotivoCancelamento.class).addClass(
-							CobrancaGrupoCronogramaMes.class).addClass(
-							CobrancaDocumentoItem.class).addClass(
-							CobrancaDocumento.class).addClass(
-							ImovelSituacaoTipo.class).addClass(
-							ImovelSituacao.class).addClass(ContaBancaria.class)
-					.addClass(ArrecadacaoDadosDiarios.class).addClass(
-							ResumoPendencia.class).addClass(
-							RecebimentoTipo.class).addClass(
-							ArrecadacaoContabilParametros.class).addClass(
-							MotivoCorte.class).addClass(
-							UnidadeProcessamento.class).addClass(
-							ProcessoIniciado.class).addClass(
-							ProcessoSituacao.class).addClass(
-							ProcessoFuncionalidade.class).addClass(
-							FuncionalidadeIniciada.class).addClass(
-							FuncionalidadeSituacao.class).addClass(
-							Processo.class).addClass(ProcessoTipo.class)
-					.addClass(UnidadeIniciada.class).addClass(
-							RelatorioGerado.class).addClass(Relatorio.class)
-					.addClass(UnidadeSituacao.class).addClass(
-							RamalLocalInstalacao.class).addClass(
-							ParametrosDevedoresDuvidosos.class).addClass(
-							ParametrosDevedoresDuvidososItem.class).addClass(
-							ResumoDevedoresDuvidosos.class).addClass(
-							DbVersaoBase.class).addClass(
-							EnvioEmail.class).addClass(
-							ResumoCobrancaAcaoEventual.class).addClass(
-							ConsumoFaixaLigacao.class).addClass(
-							ConsumoFaixaCategoria.class).addClass(
-							ContaRevisaoFaixaValor.class).addClass(
-                            OperacaoOrdemExibicao.class).addClass(
-                            LigacaoEsgotoDestinoDejetos.class).addClass(
-                            LigacaoEsgotoCaixaInspecao.class).addClass(
-                            LigacaoEsgotoDestinoAguasPluviais.class).addClass(
-                            LigacaoEsgotoEsgotamento.class).
-							addClass(LigacaoAguaSituacaoConsumoTipo.class).
-							addClass(LigacaoEsgotoSituacaoConsumoTipo.class).
-							addClass(FonteCaptacao.class).
- 							addClass(SetorFonteCaptacao.class).
- 							addClass(FuncionalidadeCategoria.class).
- 							addClass(TabelaAtualizacaoCadastral.class).
- 							addClass(TabelaAtualizacaoCadastralSituacao.class).
- 							addClass(TabelaColunaAtualizacaoCadastral.class).
-							addClass(CicloMeta.class).
-							addClass(Atributo.class).
-							addClass(AtributoGrupo.class).
-							addClass(FuncionalidadeAtributo.class).
-							addClass(CicloMetaGrupo.class).
-							addClass(VwImovelPrincipalCategoria.class).
-							addClass(MovimentoContaImpostoDeduzido.class).
-							addClass(MovimentoContaCategoriaConsumoFaixa.class).
-							addClass(MovimentoContaPrefaturadaCategoria.class).
-							addClass(MovimentoContaPrefaturada.class).
-							addClass(MotivoNaoGeracaoDocCobranca.class).
-							addClass(ImovelNaoGerado.class).
-							addClass(TipoCaptacao.class).
-							addClass(CobrancaDocumentoImpressao.class).
-							addClass(CobrancaDocumentoControleGeracao.class).
-							addClass(GrauDificuldadeExecucao.class).
-							addClass(GrauRiscoSegurancaFisica.class).
-							addClass(NivelPressao.class).
-							addClass(GrauIntermitencia.class).
-							addClass(CondicaoAbastecimentoAgua.class).
-							addClass(ArquivoTextoRoteiroEmpresaDivisao.class).
-							addClass(MovimentoCartaoRejeita.class).
-							addClass(EmailClienteAlterado.class).
-							addClass(CobrancaAcaoAtividadeComandoFiscalizacaoSituacao.class).
-							addClass(CobrancaDocumentoFisc.class).
-							addClass(ControleLiberacaoPermissaoEspecial.class).
-							addClass(ConsultaCdl.class).
-							addClass(SolicitacaoAcessoSituacao.class).
-							addClass(SolicitacaoAcessoGrupo.class).
-							addClass(SolicitacaoAcesso.class).
-							addClass(NegativacaoCriterioSituacaoEspecialCobranca.class).
-							addClass(NegativacaoCriterioSituacaoCobranca.class)
-										.addClass(TarifaSocialCarta.class)
-					.addClass(TarifaSocialCartaDebito.class)
-					.addClass(TarifaSocialComandoCarta.class)
-					.addClass(TarifaSocialMotivoCarta.class)
-					
+					.addClass(SgbdTabela.class).addClass(SgbdTabelaColuna.class).addClass(UsuarioSituacao.class).addClass(UsuarioPermissaoEspecial.class)
+					.addClass(UsuarioAlteracao.class).addClass(UsuarioGrupoRestricao.class).addClass(UsuarioGrupo.class).addClass(UsuarioAbrangencia.class)
+					.addClass(Usuario.class).addClass(ResolucaoDiretoria.class).addClass(CreditoRealizadoCategoriaHistorico.class)
+					.addClass(CreditoARealizarCategoriaHistorico.class).addClass(DebitoCobradoCategoriaHistorico.class)
+					.addClass(DebitoACobrarCategoriaHistorico.class).addClass(PermissaoEspecial.class).addClass(AvisoDeducoes.class)
+					.addClass(AvisoBancario.class).addClass(AvisoAcerto.class).addClass(ArrecadadorMovimentoItem.class).addClass(ArrecadadorMovimento.class)
+					.addClass(ArrecadadorContratoTarifa.class).addClass(ParcelamentoTipo.class).addClass(ParcelamentoSituacao.class)
+					.addClass(ParcelamentoQuantidadeReparcelamento.class).addClass(ParcelamentoQuantidadePrestacao.class).addClass(ParcelamentoPerfil.class)
+					.addClass(ParcelamentoItem.class).addClass(ParcelamentoDescontoInatividade.class).addClass(ParcelamentoDescontoAntiguidade.class)
+					.addClass(Parcelamento.class).addClass(DocumentoTipo.class).addClass(DocumentoEmissaoForma.class).addClass(DevolucaoSituacao.class)
+					.addClass(Devolucao.class).addClass(DeducaoTipo.class).addClass(GuiaDevolucao.class).addClass(GrupoFuncionalidadeOperacao.class)
+					.addClass(Grupo.class).addClass(FuncionalidadeDependencia.class).addClass(Funcionalidade.class).addClass(ParcelamentoMotivoDesfazer.class)
+					.addClass(PagamentoHistorico.class).addClass(OperacaoEfetuada.class).addClass(Operacao.class).addClass(OperacaoTipo.class)
+					.addClass(OperacaoTabela.class).addClass(RegistroCodigo.class).addClass(ArrecadadorContrato.class).addClass(Arrecadador.class)
+					.addClass(ArrecadacaoForma.class).addClass(CobrancaAcao.class).addClass(RotaAcaoCriterio.class)
+					.addClass(CobrancaAcaoAtividadeComando.class).addClass(CobrancaCriterioLinha.class).addClass(CobrancaCriterio.class)
+					.addClass(CobrancaAtividadeComandoRota.class).addClass(CobrancaAtividade.class).addClass(CobrancaAcaoCronograma.class)
+					.addClass(CobrancaAcaoAtividadeCronograma.class).addClass(Modulo.class).addClass(ContratoDemanda.class)
+					.addClass(ContratoMotivoCancelamento.class).addClass(CobrancaGrupoCronogramaMes.class).addClass(CobrancaDocumentoItem.class)
+					.addClass(CobrancaDocumentoItemHistorico.class).addClass(CobrancaDocumento.class).addClass(CobrancaDocumentoHistorico.class)
+					.addClass(ImovelSituacaoTipo.class).addClass(ImovelSituacao.class).addClass(ContaBancaria.class).addClass(ArrecadacaoDadosDiarios.class)
+					.addClass(ResumoPendencia.class).addClass(RecebimentoTipo.class).addClass(ArrecadacaoContabilParametros.class).addClass(MotivoCorte.class)
+					.addClass(UnidadeProcessamento.class).addClass(ProcessoIniciado.class).addClass(ProcessoSituacao.class)
+					.addClass(ProcessoFuncionalidade.class).addClass(FuncionalidadeIniciada.class).addClass(FuncionalidadeSituacao.class)
+					.addClass(Processo.class).addClass(ProcessoTipo.class).addClass(UnidadeIniciada.class).addClass(RelatorioGerado.class)
+					.addClass(Relatorio.class).addClass(UnidadeSituacao.class).addClass(RamalLocalInstalacao.class)
+					.addClass(ParametrosDevedoresDuvidosos.class).addClass(ParametrosDevedoresDuvidososItem.class).addClass(ResumoDevedoresDuvidosos.class)
+					.addClass(DbVersaoBase.class).addClass(EnvioEmail.class).addClass(ResumoCobrancaAcaoEventual.class).addClass(ConsumoFaixaLigacao.class)
+					.addClass(ConsumoFaixaCategoria.class).addClass(ContaRevisaoFaixaValor.class).addClass(OperacaoOrdemExibicao.class)
+					.addClass(LigacaoEsgotoDestinoDejetos.class).addClass(LigacaoEsgotoCaixaInspecao.class).addClass(LigacaoEsgotoDestinoAguasPluviais.class)
+					.addClass(LigacaoEsgotoEsgotamento.class).addClass(LigacaoAguaSituacaoConsumoTipo.class).addClass(LigacaoEsgotoSituacaoConsumoTipo.class)
+					.addClass(FonteCaptacao.class).addClass(SetorFonteCaptacao.class).addClass(FuncionalidadeCategoria.class)
+					.addClass(TabelaAtualizacaoCadastral.class).addClass(TabelaAtualizacaoCadastralSituacao.class)
+					.addClass(TabelaColunaAtualizacaoCadastral.class).addClass(CicloMeta.class).addClass(Atributo.class).addClass(AtributoGrupo.class)
+					.addClass(FuncionalidadeAtributo.class).addClass(CicloMetaGrupo.class).addClass(VwImovelPrincipalCategoria.class)
+					.addClass(MovimentoContaImpostoDeduzido.class).addClass(MovimentoContaCategoriaConsumoFaixa.class)
+					.addClass(MovimentoContaPrefaturadaCategoria.class).addClass(MovimentoContaPrefaturada.class).addClass(MotivoNaoGeracaoDocCobranca.class)
+					.addClass(ImovelNaoGerado.class).addClass(TipoCaptacao.class).addClass(CobrancaDocumentoImpressao.class)
+					.addClass(CobrancaDocumentoControleGeracao.class).addClass(GrauDificuldadeExecucao.class).addClass(GrauRiscoSegurancaFisica.class)
+					.addClass(NivelPressao.class).addClass(GrauIntermitencia.class).addClass(CondicaoAbastecimentoAgua.class)
+					.addClass(ArquivoTextoRoteiroEmpresaDivisao.class).addClass(MovimentoCartaoRejeita.class).addClass(EmailClienteAlterado.class)
+					.addClass(CobrancaAcaoAtividadeComandoFiscalizacaoSituacao.class).addClass(CobrancaDocumentoFisc.class)
+					.addClass(ControleLiberacaoPermissaoEspecial.class).addClass(ConsultaCdl.class).addClass(SolicitacaoAcessoSituacao.class)
+					.addClass(SolicitacaoAcessoGrupo.class).addClass(SolicitacaoAcesso.class).addClass(NegativacaoCriterioSituacaoEspecialCobranca.class)
+					.addClass(NegativacaoCriterioSituacaoCobranca.class).addClass(TarifaSocialCarta.class).addClass(TarifaSocialCartaDebito.class)
+					.addClass(TarifaSocialComandoCarta.class).addClass(TarifaSocialMotivoCarta.class)
+
 					// ************************************//
 					// CLASSES DO PACOTE gcom.atendimentopublico.portal //
 					// ************************************//
-					
 					.addClass(QuestionarioSatisfacaoCliente.class)
-					
-					// ************************************//
-					// FIM DAS CLASSES DO PACOTE gcom.atendimentopublico.portal //
-					// ************************************//
-					
+
 					.addClass(ServicoTerceiroAcompanhamentoServico.class)
-					//.addClass(ImovelRetorno.class)
-					;
-							
-							
+			;
+
 			configuration.setInterceptor(Interceptador.getInstancia());
 			sessionFactory = configuration.buildSessionFactory();
-			
+
 		} catch (HibernateException ex) {
 			ex.printStackTrace();
-			throw new SistemaException(
-					"Hibernate - Erro ao criar a SessionFactory");
+			throw new SistemaException("Hibernate - Erro ao criar a SessionFactory");
 		}
 
 	}
 
-	/**
-	 * Retorna o valor de session
-	 * 
-	 * @return O valor de session
-	 */
 	public static Session getSession() {
 		Session retorno = null;
 
 		try {
 			retorno = sessionFactory.openSession();
-			//System.out.println("inicio:"+retorno.hashCode());
 			tempoSession.put(retorno.hashCode(), System.currentTimeMillis());
 		} catch (HibernateException ex) {
 			ex.printStackTrace();
@@ -1635,11 +1461,6 @@ public class HibernateUtil {
 		return retorno;
 	}
 
-	/**
-	 * Retorna o valor de session
-	 * 
-	 * @return O valor de session
-	 */
 	public static StatelessSession getStatelessSession() {
 		StatelessSession retorno = null;
 
@@ -1653,11 +1474,6 @@ public class HibernateUtil {
 		return retorno;
 	}
 
-	/**
-	 * Retorna o valor de session
-	 * 
-	 * @return O valor de session
-	 */
 	public static StatelessSession getStatelessSessionGerencial() {
 		StatelessSession retorno = null;
 
@@ -1671,11 +1487,6 @@ public class HibernateUtil {
 		return retorno;
 	}
 
-	/**
-	 * Retorna o valor de session
-	 * 
-	 * @return O valor de session
-	 */
 	public static Session getSessionGerencial() {
 		Session retorno = null;
 
@@ -1683,139 +1494,93 @@ public class HibernateUtil {
 			retorno = sessionFactoryGerencial.openSession();
 		} catch (HibernateException ex) {
 			ex.printStackTrace();
-			throw new SistemaException(
-					"Hibernate - Erro ao criar a Session Gerencial");
+			throw new SistemaException("Hibernate - Erro ao criar a Session Gerencial");
 		}
 
 		return retorno;
 	}
 
-
-	/**
-	 * Fecha a session
-	 * 
-	 * @param session
-	 *            Descrição do parâmetro
-	 */
 	public static void closeSession(Session session) {
 
 		if (session != null) {
 			try {
 
-				//session.clear();
-
-				
 				Throwable t = new Throwable();
 				StackTraceElement[] elements = t.getStackTrace();
 
-				
-					Long tempoInicialSession = tempoSession.get(session.hashCode());
-					
-					if (tempoInicialSession != null ) {
-					
-						
-						Long tempoTotalSession = System.currentTimeMillis() - tempoInicialSession;
-						
-						String mensagem = loggerEntidadesPorConsulta(session, elements, tempoTotalSession);
-						if (mensagem != null && !mensagem.trim().equals("")) {
-							log.debug(mensagem);
-						}
-						
-				
-				
+				Long tempoInicialSession = tempoSession.get(session.hashCode());
+
+				if (tempoInicialSession != null) {
+
+					Long tempoTotalSession = System.currentTimeMillis() - tempoInicialSession;
+
+					String mensagem = loggerEntidadesPorConsulta(session, elements, tempoTotalSession);
+					if (mensagem != null && !mensagem.trim().equals("")) {
+						log.debug(mensagem);
 					}
+				}
 				session.close();
-				//session = null;
 			} catch (HibernateException ex) {
-				throw new SistemaException(
-						"Hibernate - Erro ao fechar a Session");
+				throw new SistemaException("Hibernate - Erro ao fechar a Session");
 			} catch (NullPointerException ex) {
 				ex.printStackTrace();
-				System.out.println("Nullpointer aqui");
-				
 			}
 
 		}
 	}
 
-
 	private static String loggerEntidadesPorConsulta(Session session, StackTraceElement[] elements, long tempoTotalSession) {
-		
-		//String calleeMethod = elements[0].getMethodName();
+
 		String callerMethodName = elements[1].getMethodName();
 		String callerClassName = elements[1].getClassName();
 		String callerMethodName2Level = elements[2].getMethodName();
 		String callerClassName2Level = elements[2].getClassName();
-		
 
-	
 		String log = "";
 		Map<String, Integer> entidades = new HashMap<String, Integer>();
 
 		for (Object a : session.getStatistics().getEntityKeys()) {
 
-			entidades.put(((EntityKey) a).getEntityName(), session
-					.getStatistics().getEntityCount());
+			entidades.put(((EntityKey) a).getEntityName(), session.getStatistics().getEntityCount());
 
 		}
 
 		Iterator iterator = entidades.keySet().iterator();
 		while (iterator.hasNext()) {
 
-			
-			
 			String nomeEntidade = ((String) iterator.next());
 
-			 
 			if (log.trim().equals("")) {
-				log += ";"+callerClassName2Level + ";" + callerMethodName2Level + ";";
+				log += ";" + callerClassName2Level + ";" + callerMethodName2Level + ";";
 				log += callerClassName + ";" + callerMethodName + ";";
 				log += nomeEntidade + ";";
-				log += entidades.get(nomeEntidade) + ";" + tempoTotalSession+"; ";
+				log += entidades.get(nomeEntidade) + ";" + tempoTotalSession + "; ";
 			} else {
-				log += " "+nomeEntidade + " ";
-				log += entidades.get(nomeEntidade); 
-				
+				log += " " + nomeEntidade + " ";
+				log += entidades.get(nomeEntidade);
+
 			}
-			
-			
-			
 
 		}
-		
+
 		tempoSession.remove(session.hashCode());
-		
+
 		return log;
 	}
 
-	/**
-	 * Fecha a session
-	 * 
-	 * @param session
-	 *            Descrição do parâmetro
-	 */
+
 	public static void closeSession(StatelessSession session) {
 
 		if (session != null) {
 			try {
 				session.close();
 			} catch (HibernateException ex) {
-				throw new SistemaException(
-						"Hibernate - Erro ao fechar a Session");
+				throw new SistemaException("Hibernate - Erro ao fechar a Session");
 			}
 
 		}
 	}
 
-	/**
-	 * Método que obtém o tamanho da propriedade da classe
-	 * 
-	 * @param mappedClass
-	 *            Nome da classe
-	 * @param propertyName
-	 *            Nome da propriedade da classe
-	 * @return O valor de columnSize
-	 */
 	public static int getColumnSize(Class mappedClass, String propertyName) {
 		Configuration cfg = HibernateUtil.getConfig();
 		PersistentClass pClass = cfg.getClassMapping(mappedClass.getName());
@@ -1869,13 +1634,9 @@ public class HibernateUtil {
 			// retorno = col.getComment();
 			// if (retorno == null || "".equals(retorno)) {
 			if (col == null) {
-				retorno = ConstantesDescricaoBanco.get(pClass.getTable()
-						.getName()
-						+ "." + propertyName);
+				retorno = ConstantesDescricaoBanco.get(pClass.getTable().getName() + "." + propertyName);
 			} else {
-				retorno = ConstantesDescricaoBanco.get(pClass.getTable()
-						.getName()
-						+ "." + col.getName());
+				retorno = ConstantesDescricaoBanco.get(pClass.getTable().getName() + "." + col.getName());
 			}
 			if (retorno == null && col != null) {
 
@@ -1905,9 +1666,7 @@ public class HibernateUtil {
 					// retorno = col.getName();
 					// }
 
-					retorno = ConstantesDescricaoBanco.get(pClass.getTable()
-							.getName()
-							+ "." + col.getName());
+					retorno = ConstantesDescricaoBanco.get(pClass.getTable().getName() + "." + col.getName());
 					if (retorno == null) {
 						retorno = col.getName();
 					}
@@ -1943,48 +1702,38 @@ public class HibernateUtil {
 
 		return retorno;
 	}
-	
+
 	/**
-	 * Retorna a que classe está mapeada a tabela passada 
-	 * @param tableName caminho da tabela 
-	 * @return caminho da classe 
+	 * Retorna a que classe está mapeada a tabela passada
+	 * 
+	 * @param tableName
+	 *            caminho da tabela
+	 * @return caminho da classe
 	 */
-	public static String getClassName(String tableName){
-		Configuration cfg = HibernateUtil.getConfig();		
-		if (cfg != null){
+	public static String getClassName(String tableName) {
+		Configuration cfg = HibernateUtil.getConfig();
+		if (cfg != null) {
 			Iterator iter = cfg.getClassMappings();
-			while ( iter.hasNext() ) {
+			while (iter.hasNext()) {
 				PersistentClass classe = (PersistentClass) iter.next();
 				if (classe.getTable().getName().equals(tableName)) {
 					return classe.getClassName();
 				}
-			}			
+			}
 		}
 		return null;
 	}
 
-	/**
-	 * Retorna o valor de config
-	 * 
-	 * @return O valor de config
-	 */
 	public static Configuration getConfig() {
 
 		return configuration;
 	}
 
-	/**
-	 * The main program for the HibernateUtil class
-	 * 
-	 * @param args
-	 *            The command line arguments
-	 */
 	public static void main(String[] args) {
 
 		getSession();
 
 	}
-
 
 	/**
 	 * Retorna o valor de session
@@ -1994,14 +1743,12 @@ public class HibernateUtil {
 	public static StatelessSession getStatelessSessionIntegracaoSAM() {
 		StatelessSession retorno = null;
 
-		
-			try {
-				retorno = sessionFactoryIntegracaoSAM == null ? null : sessionFactoryIntegracaoSAM.openStatelessSession();
-			} catch (HibernateException ex) {
-				ex.printStackTrace();
-				throw new SistemaException("Hibernate - Erro ao criar a Session IntegracaoSAM");
-			}
-		
+		try {
+			retorno = sessionFactoryIntegracaoSAM == null ? null : sessionFactoryIntegracaoSAM.openStatelessSession();
+		} catch (HibernateException ex) {
+			ex.printStackTrace();
+			throw new SistemaException("Hibernate - Erro ao criar a Session IntegracaoSAM");
+		}
 
 		return retorno;
 	}
@@ -2014,21 +1761,19 @@ public class HibernateUtil {
 	public static Session getSessionIntegracaoSAM() {
 		Session retorno = null;
 
-		
-			try {
-				retorno = sessionFactoryIntegracaoSAM == null ? null : sessionFactoryIntegracaoSAM.openSession();
-			} catch (HibernateException ex) {
-				ex.printStackTrace();
-				throw new SistemaException(
-						"Hibernate - Erro ao criar a Session IntegracaoSAM");
-			}
-		
+		try {
+			retorno = sessionFactoryIntegracaoSAM == null ? null : sessionFactoryIntegracaoSAM.openSession();
+		} catch (HibernateException ex) {
+			ex.printStackTrace();
+			throw new SistemaException("Hibernate - Erro ao criar a Session IntegracaoSAM");
+		}
+
 		return retorno;
 	}
-	
-	public static String getDialect(){
+
+	public static String getDialect() {
 		String retorno = "";
-		retorno = configuration.getProperty("hibernate.dialect");		
+		retorno = configuration.getProperty("hibernate.dialect");
 		return retorno;
 	}
 

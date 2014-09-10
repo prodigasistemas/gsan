@@ -860,38 +860,22 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 		return retorno;
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * @param imovel
-	 *            Descrição do parâmetro
-	 * @param medicaoTipo
-	 *            Descrição do parâmetro
-	 * @param sistemaParametro
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 * @exception ErroRepositorioException
-	 *                Descrição da exceção
-	 */
-	public Collection pesquisarObterDadosHistoricoMedicao(Imovel imovel,
-			MedicaoTipo medicaoTipo, FaturamentoGrupo faturamentoGrupo)
-			throws ErroRepositorioException {
+	@SuppressWarnings("unchecked")
+	public Collection<MedicaoHistorico> pesquisarObterDadosHistoricoMedicao(Imovel imovel,MedicaoTipo medicaoTipo, FaturamentoGrupo faturamentoGrupo) throws ErroRepositorioException {
 
-		Collection retorno = null;
+		Collection<MedicaoHistorico> retorno = null;
 
 		Session session = HibernateUtil.getSession();
 		String consulta;
 
 		String composicao = null;
 
-		// Caso seja ligação de água
-		if (medicaoTipo.getId().intValue() == MedicaoTipo.LIGACAO_AGUA
-				.intValue()) {
+		if (medicaoTipo.getId().intValue() == MedicaoTipo.LIGACAO_AGUA.intValue()) {
 			composicao = "where mh.medicaoTipo.id = :medicaoTipoId"
 					+ " and mh.ligacaoAgua.id = :imovelId"
 					+ " and mh.anoMesReferencia = :amReferencia";
-		} else if (medicaoTipo.getId().intValue() == MedicaoTipo.POCO
-				.intValue()) {
+		
+		} else if (medicaoTipo.getId().intValue() == MedicaoTipo.POCO.intValue()) {
 			composicao = "where mh.medicaoTipo.id = :medicaoTipoId"
 					+ " and mh.imovel.id = :imovelId "
 					+ " and mh.anoMesReferencia = :amReferencia";
@@ -907,16 +891,14 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 					+ " LEFT JOIN FETCH mh.hidrometroInstalacaoHistorico hih "
 					+ composicao;
 
-			retorno = session.createQuery(consulta).setInteger("medicaoTipoId",
-					medicaoTipo.getId()).setInteger("imovelId", imovel.getId())
-					.setInteger("amReferencia",
-							faturamentoGrupo.getAnoMesReferencia()).list();
+			retorno = (Collection<MedicaoHistorico>)session.createQuery(consulta)
+					.setInteger("medicaoTipoId",medicaoTipo.getId())
+					.setInteger("imovelId", imovel.getId())
+					.setInteger("amReferencia",faturamentoGrupo.getAnoMesReferencia()).list();
 
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -11426,19 +11408,14 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 
 		try {
 			
-			//Buscando o Sistema de Parametros
 			String hql1 = "FROM SistemaParametro";
 			SistemaParametro sistemaParametro = (SistemaParametro) session.createQuery(hql1).uniqueResult();
 			
-			//Buscando o Movimento roteiro Empresa para o ano Mes de Moviemnto
 			StringBuffer hql = new StringBuffer("FROM MovimentoRoteiroEmpresa m where m.anoMesMovimento =");
-			
-			//IMOVEL
 			hql.append(anoMesReferencia);
 			hql.append(" and m.imovel.id =");
 			hql.append(dado.getMatriculaImovel());
 	
-			//MEDICAO TIPO
 			if (dado.getTipoMedicao() != null && dado.getTipoMedicao() != 0) {
 				hql.append(" and m.medicaoTipo.id = ");
 				hql.append(dado.getTipoMedicao());
@@ -11446,13 +11423,10 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 				hql.append(" and m.medicaoTipo.id is null ");
 			}
 			
-			
-			//PESQUISANDO MOVIMENTO ROTEIRO EMPRESA
 			movimento = (MovimentoRoteiroEmpresa) session.createQuery(hql.toString()).uniqueResult();
 
 			if (movimento != null) {
 				
-				//Atualizando o Movimento Roteiro Empresa
 				if (dado.getLeituraHidrometro() != null && dado.getLeituraHidrometro().intValue() != -1) {
 					movimento.setNumeroLeituraHidrometro(dado.getLeituraHidrometro());
 				} 
@@ -11460,11 +11434,9 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 					movimento.setNumeroLeituraHidrometro(null);
 				}
 	
-				//PESQUISANDO LEITURA ANORMALIDADE
 				hql1 = "FROM LeituraAnormalidade l where l.id =" + dado.getCodigoAnormalidade();
 	
 				movimento.setLeituraAnormalidade((LeituraAnormalidade) session.createQuery(hql1).uniqueResult());
-	
 				movimento.setIndicadorConfirmacaoLeitura(new Short((short) dado.getIndicadorConfirmacaoLeitura()));
 
 				//	 Compara se data de leitura está dentro do intervalo
@@ -11482,9 +11454,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 				if (anoMesFaturamento != null) {
 				
 					Integer anoMesDataLeitura = Util.formataAnoMes(dado.getDataLeituraCampo());
-				
 					Integer anoMesFaturamentoAnterior = Util.subtrairMesDoAnoMes(anoMesFaturamento, 1);
-				
 					Integer anoMesFaturamentoPosterior = Util.somaUmMesAnoMesReferencia(anoMesFaturamento);
 
 					if (anoMesDataLeitura != null && anoMesFaturamentoAnterior != null && anoMesFaturamentoPosterior != null) {
@@ -11496,70 +11466,51 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 							movimento.setTempoLeitura(dado.getDataLeituraCampo());
 						} 
 						else {
-							
 							movimento.setTempoLeitura(new Date());
 						}	
 					}
 				}
 
-				//ULTIMA ALTERAÇÃO
 				movimento.setUltimaAlteracao(new Date());
-				
-				//DATA DE PROCESSAMENTO
 				movimento.setDataHoraProcessamento(new Date());
-				
-				//INDICADOR ATUALIZACAO LEITURA
 				movimento.setIndicadorAtualizacaoLeitura(new Integer(1));
 				
-				//MONTANDO SQL PARA UPDATE
-				String update =
-				"update gcom.micromedicao.MovimentoRoteiroEmpresa set \n";
-			
+				StringBuilder update = new StringBuilder("update gcom.micromedicao.MovimentoRoteiroEmpresa set \n");
 			
 				if ( movimento.getNumeroLeituraHidrometro() != null ){
-					update +=
-					 " numeroLeituraHidrometro = :numeroLeituraHidrometro, \n";
+					update.append(" numeroLeituraHidrometro = :numeroLeituraHidrometro, \n");
 				}else{
-					update +=
-				    " numeroLeituraHidrometro = null, \n";
+					update.append(" numeroLeituraHidrometro = null, \n");
 				}
 			
 				if ( movimento.getLeituraAnormalidade() != null ){
-				update +=
-				" leituraAnormalidade = :leituraAnormalidade, \n";
+					update.append(" leituraAnormalidade = :leituraAnormalidade, \n");
 				} else {
-					update += " leituraAnormalidade = null, \n";
+					update.append(" leituraAnormalidade = null, \n");
 				}
 			
 				if ( movimento.getIndicadorConfirmacaoLeitura() != null ){
-				update +=
-				" indicadorConfirmacaoLeitura = :indicadorConfirmacaoLeitura, \n";
+					update.append(" indicadorConfirmacaoLeitura = :indicadorConfirmacaoLeitura, \n");
 				}
 			
 				if ( movimento.getTempoLeitura() != null ){
-				update +=
-				" tempoLeitura = :tempoLeitura, \n";
+					update.append(" tempoLeitura = :tempoLeitura, \n");
 				}
 				
 				if (isCelular){
-					
-					update +=
-						" indicadorAtualizacaoLeitura = :indicadorAtualizacaoLeitura, \n" +
-						" ultimaAlteracao = :ultimaAlteracao, \n" +
-						" dataHoraProcessamento = :dataHoraProcessamento \n " +
-						"where id = :id ";
+					update.append(" indicadorAtualizacaoLeitura = :indicadorAtualizacaoLeitura, \n");
+					update.append(" ultimaAlteracao = :ultimaAlteracao, \n");
+					update.append(" dataHoraProcessamento = :dataHoraProcessamento \n ");
+					update.append("where id = :id ");
 				}
 				else{
-					
-					update +=
-						" indicadorAtualizacaoLeitura = :indicadorAtualizacaoLeitura, \n" +
-						" ultimaAlteracao = :ultimaAlteracao \n" +
-						"where id = :id ";
+					update.append(" indicadorAtualizacaoLeitura = :indicadorAtualizacaoLeitura, \n");
+					update.append(" ultimaAlteracao = :ultimaAlteracao \n");
+					update.append("where id = :id ");
 				}
 				
-
 				session.clear();
-				Query query = session.createQuery(update);
+				Query query = session.createQuery(update.toString());
 			
 				if ( movimento.getNumeroLeituraHidrometro() != null ){
 					query.setInteger("numeroLeituraHidrometro", movimento.getNumeroLeituraHidrometro() );
@@ -11578,16 +11529,13 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 				}
 
 				if (isCelular){
-					
-					query
-					.setInteger("indicadorAtualizacaoLeitura", movimento.getIndicadorAtualizacaoLeitura() )
-					.setTimestamp("ultimaAlteracao", movimento.getUltimaAlteracao() )
-					.setTimestamp("dataHoraProcessamento", movimento.getDataHoraProcessamento() )
-					.setInteger("id", movimento.getId() )
-					.executeUpdate();
+					query.setInteger("indicadorAtualizacaoLeitura", movimento.getIndicadorAtualizacaoLeitura() )
+						.setTimestamp("ultimaAlteracao", movimento.getUltimaAlteracao() )
+						.setTimestamp("dataHoraProcessamento", movimento.getDataHoraProcessamento() )
+						.setInteger("id", movimento.getId() )
+						.executeUpdate();
 				}
 				else{
-					
 					query
 					.setInteger("indicadorAtualizacaoLeitura", movimento.getIndicadorAtualizacaoLeitura() )
 					.setTimestamp("ultimaAlteracao", movimento.getUltimaAlteracao() )
@@ -11619,17 +11567,23 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 
 		try {
 			
-			StringBuffer hql = new StringBuffer("FROM Rota r inner join fetch r.faturamentoGrupo grupo where r.id = ");
-			hql.append("(select i.rotaAlternativa.id from Imovel i where i.id =");
-			hql.append(matricula);
-			hql.append(")");
+			StringBuffer hql = new StringBuffer("FROM Rota r ");
+			hql.append("inner join fetch r.faturamentoGrupo grupo ");
+			hql.append("inner join fetch r.leituraTipo leituraTipo ");
+			hql.append("where r.id = ");
+				hql.append("(select i.rotaAlternativa.id from Imovel i where i.id =");
+				hql.append(matricula);
+				hql.append(")");
 			rota = (Rota) session.createQuery(hql.toString()).uniqueResult();
 			
 			if (rota == null || rota.getId() == null) {
-				hql = new StringBuffer("FROM Rota r inner join fetch r.faturamentoGrupo grupo where r.id = ");
-				hql.append("(select q.rota.id from Quadra q where q.id = (select i.quadra.id from Imovel i where i.id =");
-				hql.append(matricula);
-				hql.append("))");
+				hql = new StringBuffer("FROM Rota r ");
+				hql.append("inner join fetch r.faturamentoGrupo grupo ");
+				hql.append("inner join fetch r.leituraTipo leituraTipo ");
+				hql.append("where r.id = ");
+					hql.append("(select q.rota.id from Quadra q where q.id = (select i.quadra.id from Imovel i where i.id =");
+					hql.append(matricula);
+					hql.append("))");
 				rota = (Rota) session.createQuery(hql.toString()).uniqueResult();
 			}
 
@@ -23904,4 +23858,27 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 
 		return retorno;
 	}
+     
+     public LigacaoAgua obterLigacaoAgua(Integer idLigacao) throws ErroRepositorioException {
+
+ 		LigacaoAgua retorno = new LigacaoAgua();
+ 		Session session = HibernateUtil.getSession();
+ 		String consulta;
+ 		
+ 		try {
+ 			
+ 			consulta = "select ligacao from LigacaoAgua ligacao "
+ 					+ " where ligacao.id = :idLigacao ";
+ 			
+ 			retorno = (LigacaoAgua) session.createQuery(consulta).setInteger("idLigacao",idLigacao).setMaxResults(1).uniqueResult();
+ 			
+
+ 		} catch (HibernateException e) {
+ 			throw new ErroRepositorioException(e, "Erro no Hibernate");
+ 		} finally {
+ 			HibernateUtil.closeSession(session);
+ 		}
+
+ 		return retorno;
+ 	}
 }

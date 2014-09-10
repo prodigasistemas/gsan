@@ -76,6 +76,20 @@ public class CobrancaDocumentoItemHistorico implements Serializable {
         this.contaGeral = contaGeral;
         this.guiaPagamentoGeral = guiaPagamentoGeral;
     }
+    
+    public CobrancaDocumentoItemHistorico(Integer id, BigDecimal valorItemCobrado, Date ultimaAlteracao, DebitoACobrarGeral debitoACobrarGeral, gcom.cobranca.CobrancaDocumento cobrancaDocumento, gcom.cobranca.DocumentoTipo documentoTipo, ContaGeral contaGeral, GuiaPagamentoGeral guiaPagamentoGeral, CreditoARealizarGeral creditoARealizarGeral, CobrancaDebitoSituacao cobrancaDebitoSituacao, BigDecimal  valorAcrescimos) {
+        this.id =  id;
+    	this.valorItemCobrado = valorItemCobrado;
+        this.ultimaAlteracao = ultimaAlteracao;
+        this.debitoACobrarGeral = debitoACobrarGeral;
+        this.cobrancaDocumento = cobrancaDocumento;
+        this.documentoTipo = documentoTipo;
+        this.contaGeral = contaGeral;
+        this.guiaPagamentoGeral = guiaPagamentoGeral;
+        this.creditoARealizarGeral = creditoARealizarGeral;
+        this.cobrancaDebitoSituacao = cobrancaDebitoSituacao;
+        this.valorAcrescimos = valorAcrescimos;
+    }
 
     public Integer getId() {
         return this.id;

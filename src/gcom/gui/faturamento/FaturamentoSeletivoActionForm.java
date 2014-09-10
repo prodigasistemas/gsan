@@ -2,7 +2,8 @@ package gcom.gui.faturamento;
 
 import gcom.gui.micromedicao.DadosMovimentacao;
 
-import java.util.Vector;
+import java.util.Collection;
+import java.util.List;
 
 import org.apache.struts.action.ActionForm;
 
@@ -11,7 +12,7 @@ public class FaturamentoSeletivoActionForm extends ActionForm  {
 	private static final long serialVersionUID = 7793346732600789615L;
 	private String rota;
 	private String descricaoRota;
-	private Vector<DadosMovimentacao> dados;
+	private Collection<DadosMovimentacao> dados;
 	private Integer indice;
 	private Integer total;
 	private String[] leituras;
@@ -25,6 +26,7 @@ public class FaturamentoSeletivoActionForm extends ActionForm  {
 	private String tipo;
 	private String matriculaImovel;
 	private String[] idImoveisSelecionados;
+	private List<ImovelFaturamentoSeletivo> colecaoImoveisFaturamentoSeletivo;
 	
 	public String getRota() {
 		return rota;
@@ -58,11 +60,11 @@ public class FaturamentoSeletivoActionForm extends ActionForm  {
 		this.leituras = leituras;
 	}
 
-	public Vector<DadosMovimentacao> getDados() {
+	public Collection<DadosMovimentacao> getDados() {
 		return dados;
 	}
 
-	public void setDados(Vector<DadosMovimentacao> dados) {
+	public void setDados(Collection<DadosMovimentacao> dados) {
 		this.dados = dados;
 	}
 
@@ -153,5 +155,16 @@ public class FaturamentoSeletivoActionForm extends ActionForm  {
 	public void setIdImoveisSelecionados(String[] idImoveisSelecionados) {
 		this.idImoveisSelecionados = idImoveisSelecionados;
 	}
+
+	public List<ImovelFaturamentoSeletivo> getColecaoImoveisFaturamentoSeletivo() {
+		return colecaoImoveisFaturamentoSeletivo;
+	}
+
+	public void setColecaoImoveisFaturamentoSeletivo(List<ImovelFaturamentoSeletivo> colecaoImoveisFaturamentoSeletivo) {
+		this.colecaoImoveisFaturamentoSeletivo = colecaoImoveisFaturamentoSeletivo;
+	}
 	
+	public ImovelFaturamentoSeletivo getImovel(int index) {
+	       return (ImovelFaturamentoSeletivo) colecaoImoveisFaturamentoSeletivo.get(index);
+	}
 }

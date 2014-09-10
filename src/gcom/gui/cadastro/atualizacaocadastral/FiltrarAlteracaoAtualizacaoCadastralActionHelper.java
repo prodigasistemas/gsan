@@ -16,12 +16,16 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	private String[] colunaImoveisSelecionados;
 	
 	private String idLocalidadeInicial;	
+	
+	private String nomeLocalidadeInicial;	
 
 	private String cdSetorComercialInicial;	
 	
 	private String cdRotaInicial;
 	
 	private String idLocalidadeFinal;
+	
+	private String nomeLocalidadeFinal;
 	
 	private String cdSetorComercialFinal;
 
@@ -35,6 +39,7 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	
 	private Boolean alteracaoCategoria;
 	
+	private int totalImoveis;
 
 	public FiltrarAlteracaoAtualizacaoCadastralActionHelper() {
 	}
@@ -45,6 +50,8 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 		this.exibirCampos = form.getExibirCampos();
 		this.colunaImoveisSelecionados = form.getColunaImoveisSelecionados();
 		this.idLocalidadeInicial = form.getIdLocalidadeInicial();
+		this.nomeLocalidadeInicial = form.getNomeLocalidadeInicial();
+		this.nomeLocalidadeFinal = form.getNomeLocalidadeFinal();
 		this.cdSetorComercialInicial = form.getCdSetorComercialInicial();
 		this.cdRotaInicial = form.getCdRotaInicial();
 		this.idLocalidadeFinal = form.getIdLocalidadeFinal();
@@ -200,4 +207,29 @@ public class FiltrarAlteracaoAtualizacaoCadastralActionHelper {
 	public boolean isAprovacaoEmLote() {
 		return this.exibirCampos.equals(FiltrarAlteracaoAtualizacaoCadastralActionForm.FILTRO_APROVACAO_EM_LOTE.toString())? true : false;
 	}
+
+	public int getTotalImoveis() {
+		return totalImoveis;
+	}
+
+	public void setTotalImoveis(int totalImoveis) {
+		this.totalImoveis = totalImoveis;
+	}
+
+	public String getNomeLocalidadeInicial() {
+		return nomeLocalidadeInicial;
+	}
+
+	public void setNomeLocalidadeInicial(String nomeLocalidadeInicial) {
+		this.nomeLocalidadeInicial = nomeLocalidadeInicial;
+	}
+
+	public String getNomeLocalidadeFinal() {
+		return nomeLocalidadeFinal;
+	}
+
+	public void setNomeLocalidadeFinal(String nomeLocalidadeFinal) {
+		this.nomeLocalidadeFinal = nomeLocalidadeFinal;
+	}
+	
  }

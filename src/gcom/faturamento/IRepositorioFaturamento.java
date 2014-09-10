@@ -2981,4 +2981,6 @@ public interface IRepositorioFaturamento {
 	public Collection<IContaImpostosDeduzidos> pesquisarContaImpostosDeduzidosHistorico(Integer idConta) throws ErroRepositorioException;
 	
 	public Collection<IClienteConta> pesquisarClienteContaHistorico(Integer idConta) throws ErroRepositorioException;
+	
+	public Collection pesquisarClienteContaECliente(Integer idConta, String cnpjEmpresa) throws ErroRepositorioException;
 }

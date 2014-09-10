@@ -388,4 +388,6 @@ public interface IRepositorioClienteImovel {
 	public ClienteImovel pesquisarClienteImovelOSFiscalizada(Integer idImovel) throws ErroRepositorioException;
 	
 	public Cliente pesquisarClienteImovelTipo(Integer idCliente, Integer idImovel, Integer idTipo) throws ErroRepositorioException;
+	
+	public Short pesquisarIndicadorNegativacaoPeriodoClienteResponsavel(Integer idImovel, Integer idClienteRelacaoTipo) throws ErroRepositorioException;
 }
