@@ -46,6 +46,7 @@ import gcom.cadastro.localidade.Localidade;
 import gcom.cadastro.localidade.Quadra;
 import gcom.cadastro.localidade.SetorComercial;
 import gcom.cadastro.localidade.UnidadeNegocio;
+import gcom.cadastro.sistemaparametro.FiltroSistemaParametro;
 import gcom.cadastro.sistemaparametro.SistemaParametro;
 import gcom.cobranca.CobrancaDebitoSituacao;
 import gcom.cobranca.CobrancaGrupo;
@@ -7243,7 +7244,11 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 	public StringBuilder geraRegistroTipoHeaderSERASA(int numeroSequencialEnvio, int quantidadeRegistros) throws ControladorException {
 		
 		StringBuilder registroHeader = new StringBuilder();
-		SistemaParametro sistemaParametro = this.getControladorUtil().pesquisarParametrosDoSistema();
+		
+		FiltroSistemaParametro filtroSistemaParametro = new FiltroSistemaParametro();
+		filtroSistemaParametro.adicionarCaminhoParaCarregamentoEntidade("clienteResponsavelNegativacao");
+		Collection pesquisaSistemaParametro = getControladorUtil().pesquisar(filtroSistemaParametro, SistemaParametro.class.getName());
+		SistemaParametro sistemaParametro = (SistemaParametro) Util.retonarObjetoDeColecao(pesquisaSistemaParametro);
 		
 		// H.01 - Código do Registro Header = 0
 		registroHeader.append("0");
@@ -7258,8 +7263,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 		registroHeader.append(Util.adicionarZerosEsquedaNumero(8, dataAtualString));
 		
 		// H.04 - DDD do Telefone da Instituição Informante
-		// TODO - Criar Parâmetro do Sistema para DDD da Empresa
-		registroHeader.append("0091");
+		registroHeader.append(Util.completaStringComZeroAEsquerda(sistemaParametro.getDddTelefone(), 4));
 		
 		// H.05 - Telefone da Instituição Informante
 		registroHeader.append(sistemaParametro.getNumeroTelefone());
@@ -7268,8 +7272,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 		registroHeader.append(sistemaParametro.getNumeroRamal());
 		
 		// H.07 - Nome do Contato da Instituição Informante
-		// TODO - Criar Parâmetro do Sistema para Responsável pela Negativação
-		registroHeader.append(Util.completaString("FATIMA SAMPAIO", 70));
+		registroHeader.append(Util.completaString(sistemaParametro.getClienteResponsavelNegativacao().getNome(), 70));
 		
 		// H.08 - Identificação do arquivo fixo
 		registroHeader.append("SERASA-CONVEM04");

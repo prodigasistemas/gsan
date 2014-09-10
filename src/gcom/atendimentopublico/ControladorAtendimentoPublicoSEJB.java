@@ -7572,11 +7572,11 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 				SistemaParametro sistemaParametro = getControladorUtil()
 						.pesquisarParametrosDoSistema();
 
-				if (sistemaParametro.getClientePresidenteCompesa() == null) {
+				if (sistemaParametro.getClientePresidente() == null) {
 					throw new ControladorException("atencao.cliente_sem_dados",
 							null, "Presidente");
 				}
-				if (sistemaParametro.getClienteDiretorComercialCompesa() == null) {
+				if (sistemaParametro.getClienteDiretorComercial() == null) {
 					throw new ControladorException("atencao.cliente_sem_dados",
 							null, "Diretor Financeiro");
 				}
@@ -7584,11 +7584,11 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 				// 3.4.1 Diretor Presidente
 				Cliente clientePresidente = repositorioAtendimentoPublico
 						.pesquisaClienteContrato(sistemaParametro
-								.getClientePresidenteCompesa().getId());
+								.getClientePresidente().getId());
 				// 3.4.2 Diretor Comercial
 				Cliente clienteDiretor = repositorioAtendimentoPublico
 						.pesquisaClienteContrato(sistemaParametro
-								.getClienteDiretorComercialCompesa().getId());
+								.getClienteDiretorComercial().getId());
 
 				// [FS0002]- Identificar informações do presidente e diretor
 				// fincanceiro da empresa

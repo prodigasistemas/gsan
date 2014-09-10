@@ -211,8 +211,9 @@ public class RepositorioUtilHBM implements IRepositorioUtil {
 		Session session = HibernateUtil.getSession();
 
 		try {
-			retorno = new ArrayList(new CopyOnWriteArraySet(GeradorHQLCondicional.gerarCondicionalQuery(filtro, "objeto",
-					"from " + pacoteNomeObjeto + " as objeto", session).list()));
+			Query query = GeradorHQLCondicional.gerarCondicionalQuery(filtro, "objeto", "from " + pacoteNomeObjeto + " as objeto", session);
+			
+			retorno = new ArrayList(new CopyOnWriteArraySet(query.list()));
 
 			if (filtro.isInitializeLazy()) {
 				inicializarPropriedadesLazies(retorno);

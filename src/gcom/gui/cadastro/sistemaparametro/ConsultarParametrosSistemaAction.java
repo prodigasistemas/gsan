@@ -215,7 +215,7 @@ public class ConsultarParametrosSistemaAction extends GcomAction {
 			Cliente cliente = new Cliente();
 			cliente.setId(new Integer(form.getPresidente()));
 
-			sistemaParametro.setClientePresidenteCompesa(cliente);
+			sistemaParametro.setClientePresidente(cliente);
 		}
 
 		// Diretor Comercial
@@ -224,7 +224,7 @@ public class ConsultarParametrosSistemaAction extends GcomAction {
 			Cliente cliente = new Cliente();
 			cliente.setId(new Integer(form.getDiretorComercial()));
 
-			sistemaParametro.setClienteDiretorComercialCompesa(cliente);
+			sistemaParametro.setClienteDiretorComercial(cliente);
 		}
 
 		// Numero
