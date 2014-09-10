@@ -46,13 +46,6 @@
 		this.af = new Array("numeroDiasEncerrarOsFiscalizacaoDecursoPrazo", "Número de dias úteis para que a OS de Fiscalização Seja Encerrada por Decurso de Prazo deve conter apenas números positivos.", new Function ("varName", " return this[varName];"));	
 	}
 
-/*function caracteresespeciais () {
-	this.aa = new Array("nomeEstado", "Nome do Estado possui caracteres especiais.", new Function ("varName", " return this[varName];"));
-	this.ab = new Array("nomeEmpresa", "Nome da Empresa possui caracteres especiais.", new Function ("varName", " return this[varName];"));
-	this.ac = new Array("abreviaturaEmpresa", "Abreviatura da Empresa possui caracteres especiais.", new Function ("varName", " return this[varName];"));
-	this.ad = new Array("cnpj", "CNPJ possui caracteres especiais.", new Function ("varName", " return this[varName];"));
-}*/
-
 	function required () {
 		this.aa = new Array("incrementoMaximoConsumo", "Informe Incremento Máximo de Consumo por economia em Rateio.", new Function ("varName", " return this[varName];"));
 		this.ab = new Array("decrementoMaximoConsumo", "Informe Decremento Máximo de Consumo por economia em Rateio.", new Function ("varName", " return this[varName];"));
@@ -60,7 +53,37 @@
 		this.ad = new Array("numeroDiasValidadeExtrato", "Informe Número de Dias de Validade do Extrato de Débito.", new Function ("varName", " return this[varName];"));		
 	}
 
+	function limparCliente() {
+    	var form = document.forms[0];
+		form.idClienteResponsavelNegativacao.value = "";
+	    form.nomeClienteResponsavelNegativacao.value = "";
+  	}
+	
+	function chamarPopup(url, tipo, objeto, codigoObjeto, altura, largura, msg,objetoRelacionado){
+		if(objetoRelacionado.disabled != true){
+			if (objeto == null || codigoObjeto == null){
+				abrirPopup(url + "?" + "tipo=" + tipo, altura, largura);
+			}
+			else{
+				if (codigoObjeto.length < 1 || isNaN(codigoObjeto)){
+					alert(msg);
+				}
+				else{
+					abrirPopup(url + "?" + "tipo=" + tipo + "&" + objeto + "=" + codigoObjeto + "&caminhoRetornoTelaPesquisaLogradouro=" + tipo, altura, largura);
+				}
+			}
+		}
+	}
+	
+	function recuperarDadosPopup(codigoRegistro, descricaoRegistro, tipoConsulta) {
+		var form = document.forms[0];
 
+		if(tipoConsulta == 'cliente'){
+			form.idClienteResponsavelNegativacao.value = codigoRegistro;
+		    form.nomeClienteResponsavelNegativacao.value = descricaoRegistro;
+		    form.nomeClienteResponsavelNegativacao.style.color = "#000000";
+		}	
+	}
 </script>
 </head>
 
@@ -438,6 +461,50 @@
 							onchange="javascript:verificaNumeroInteiroComAlerta(this, 'Número de dias úteis para que a OS de Fiscalização seja encerrada por Decurso de Prazo');" />
 					</td>
 				</tr>
+				
+				<tr>
+					<td><strong>Respons&aacute;vel pela Negativa&ccedil;&atilde;o de Clientes:</strong></td>
+					
+					<td>
+						
+						<html:text maxlength="9" 
+							tabindex="1"
+							property="idClienteResponsavelNegativacao" 
+							size="9"
+							onkeypress="validaEnterComMensagem(event, 'informarParametrosSistemaWizardAction.do?destino=4&action=informarParametrosSistemaDadosGeraisEmpresaAction&objetoConsulta=8','idClienteResponsavelNegativacao','Responsavel Negativacao');"/>
+							
+							<a href="javascript:chamarPopup('exibirPesquisarClienteAction.do', 'idClienteResponsavelNegativacao', null, null, 275, 480, '', document.forms[0].idClienteResponsavelNegativacao);">
+								<img width="23" 
+									height="21" 
+									border="0"
+									src="<bean:message key="caminho.imagens"/>pesquisa.gif"
+									title="Pesquisar Responsável pela Negativação" /></a> 
+
+							<logic:present name="responsavelNegativacaoEncontrado" scope="request">
+								<html:text property="nomeClienteResponsavelNegativacao" 
+									size="45"
+									maxlength="45" 
+									readonly="true"
+									style="background-color:#EFEFEF; border:0; color: #000000" />
+							</logic:present> 
+
+							<logic:notPresent name="responsavelNegativacaoEncontrado" scope="request">
+								<html:text property="nomeClienteResponsavelNegativacao" 
+									size="45"
+									maxlength="45" 
+									readonly="true"
+									style="background-color:#EFEFEF; border:0; color: red" />
+							</logic:notPresent>
+
+							
+							<a href="javascript:limparCliente();"> 
+								<img src="<bean:message key="caminho.imagens"/>limparcampo.gif"
+									border="0" 
+									title="Apagar" />
+							</a>					
+						</td>
+				</tr>
+				
 			<tr>
 			<td colspan="3"><hr></td>
 			</tr>
