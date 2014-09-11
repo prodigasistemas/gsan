@@ -420,6 +420,6 @@ public class Rota extends ObjetoTransacao {
     }
     
     public boolean isRotaImpressaoSimultanea() {
-    	return leituraTipo.getId() == LeituraTipo.LEITURA_E_ENTRADA_SIMULTANEA;
+    	return leituraTipo.getId().equals(LeituraTipo.LEITURA_E_ENTRADA_SIMULTANEA);
     }
 }
