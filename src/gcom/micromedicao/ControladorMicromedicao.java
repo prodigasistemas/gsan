@@ -41309,20 +41309,6 @@ public class ControladorMicromedicao implements SessionBean {
 		return imovelVinculado;
 	}
 	
-	
-
-	/**
-	 * TODO : COSANPA 
-	 * Pamela Gatinho - 31/05/2012
-	 * 
-	 * Metodo que soma a quantidade de economias de
-	 * todos os imóveis micros do condomínio
-	 * 
-	 * @param idImovelCondominio
-	 * @param anoMesFaturamento
-	 * @return quantidadeEconomias
-	 * @throws ErroRepositorioException 
-	 */
 	public int obterQuantidadeEconomiasCondominio (Integer idImovelCondominio, Integer anoMesFaturamento) {
 		int quantidadeEconomias = 0;
 
@@ -41335,19 +41321,12 @@ public class ControladorMicromedicao implements SessionBean {
 		
 			Iterator iteratorImoveisVinculados = imoveisVinculadosArrayObject.iterator();
 			
-			//Para cada imovel vinculado ao condominio
 			while (iteratorImoveisVinculados.hasNext()) {
 				
-				// Recupera os dados do imóvel vinculado
 				Object[] dadosImovelVinculado = (Object[]) iteratorImoveisVinculados.next();
-				
-				// Obtem o objeto imovel
 				Imovel imovelVinculado = this.converterImovelVinculado(dadosImovelVinculado);
 				
-//				if (getControladorImovel().isFaturamentoAguaAtivo(imovelVinculado)
-//						|| getControladorImovel().isFaturamentoEsgotoAtivo(imovelVinculado)) {
-					quantidadeEconomias = quantidadeEconomias + imovelVinculado.getQuantidadeEconomias();
-//				}
+				quantidadeEconomias = quantidadeEconomias + imovelVinculado.getQuantidadeEconomias();
 			}
 		
 		} catch (ErroRepositorioException e) {

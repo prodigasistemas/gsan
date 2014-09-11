@@ -1028,103 +1028,47 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 * 
-	 * 
-	 * 
-	 * @param imovel
-	 * 
-	 * Descrição do parâmetro
-	 * 
-	 * @return Descrição do retorno
-	 * 
-	 * @exception ErroRepositorioException
-	 * 
-	 * Descrição da exceção
-	 * 
-	 */
-
-	public Collection pesquisarObterQuantidadeEconomiasCategoria(Integer imovel)
-
-	throws ErroRepositorioException {
+	@SuppressWarnings("rawtypes")
+	public Collection pesquisarObterQuantidadeEconomiasCategoria(Integer imovel) throws ErroRepositorioException {
 
 		Collection retorno = null;
-
 		Session session = HibernateUtil.getSession();
-
 		String consulta = null;
 
 		try {
 
 			consulta = "select c.id, c.descricao, c.consumoEstouro, "
-
 					+ "c.vezesMediaEstouro, sum(isb.quantidadeEconomias), "
-
 					+ "isb.comp_id.imovel.id, "
-
 					+ "c.consumoAlto, "
-
 					+ "c.mediaBaixoConsumo, "
-
 					+ "c.vezesMediaAltoConsumo, "
-
 					+ "c.porcentagemMediaBaixoConsumo,"
-
 					+ "c.descricaoAbreviada, "
-
 					+ "c.numeroConsumoMaximoEc, "
-
 					+ "c.indicadorCobrancaAcrescimos, "
-					
 					+ "c.fatorEconomias, "
-					
 					+ "c.categoriaTipo.id, "
-					
 					+ "c.categoriaTipo.descricao, "
-					
 					+ "c.numeroConsumoMaximoEc "
-
 					+ "from ImovelSubcategoria isb "
-
 					+ "inner join isb.comp_id.subcategoria sb "
-
 					+ "inner join sb.categoria c "
-					
 					+ "inner join c.categoriaTipo ct "
-					
 					+ "where isb.comp_id.imovel.id = :imovelId "
-
 					+ "group by c.id, c.descricao, c.consumoEstouro, c.vezesMediaEstouro, "
-							
 					+ "isb.comp_id.imovel.id, c.consumoAlto, c.mediaBaixoConsumo, c.vezesMediaAltoConsumo, "
-							
 					+ "c.porcentagemMediaBaixoConsumo,c.descricaoAbreviada,c.numeroConsumoMaximoEc, " 
-							
 					+ "c.indicadorCobrancaAcrescimos, c.fatorEconomias, c.categoriaTipo.id, c.categoriaTipo.descricao ";
 
-					//+ "having isb.comp_id.imovel.id = :imovelId ";
-
-			retorno = session.createQuery(consulta).setInteger("imovelId",
-
-			imovel.intValue()).list();
+			retorno = session.createQuery(consulta).setInteger("imovelId", imovel.intValue()).list();
 
 		} catch (HibernateException e) {
-
-			// levanta a exceção para a próxima camada
-
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
-
 		} finally {
-
-			// fecha a sessão
-
 			HibernateUtil.closeSession(session);
-
 		}
-
 		return retorno;
-
 	}
 
 	public Collection obterQuantidadeEconomiasCategoria(Integer conta)

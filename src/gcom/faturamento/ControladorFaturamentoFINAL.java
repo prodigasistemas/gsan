@@ -76358,42 +76358,29 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @throws ErroRepositorioException
 	 * @throws ControladorException
 	 */
-	private BigDecimal[] calcularValorRateioPorEconomia(
-			Integer idImovelCondominio, FaturamentoGrupo faturamentoGrupo)
-			throws ControladorException {
+	private BigDecimal[] calcularValorRateioPorEconomia(Integer idImovelCondominio, FaturamentoGrupo faturamentoGrupo) throws ControladorException {
 
-		// valor do rateio de agua
 		BigDecimal valorAguaRateioPorEconomia = new BigDecimal("0.00");
-		// valor do rateio de esgoto
 		BigDecimal valorEsgotoRateioPorEconomia = new BigDecimal("0.00");
 
-		// vetor com os valores de rateio de agua e esgoto
 		BigDecimal[] valoresAguaEsgotoRateioPorEconomia = new BigDecimal[2];
 
-		// Obtem a quantidade de economias vinculadas ao condomínio
-		int qtdEconomiasCondominio = this.getControladorMicromedicao()
-				.obterQuantidadeEconomiasCondominio(idImovelCondominio,
-						faturamentoGrupo.getAnoMesReferencia());
+		int qtdEconomiasCondominio = this.getControladorMicromedicao().obterQuantidadeEconomiasCondominio(idImovelCondominio, faturamentoGrupo.getAnoMesReferencia());
+		
 		System.out.println("Qtd economias: " + qtdEconomiasCondominio);
-		Imovel imovelCondominio = (Imovel) getControladorImovel()
-				.pesquisarImovel(idImovelCondominio);
+		Imovel imovelCondominio = (Imovel) getControladorImovel().pesquisarImovel(idImovelCondominio);
 
 		int consumoAguaASerRateado = 0;
 		int consumoEsgotoASerRateado = 0;
 
-		// Calcula o consumo que deve ser rateado entre os imóveis do condomínio
 		if (imovelCondominio.getLigacaoAgua() != null) {
-			consumoAguaASerRateado = this.getControladorMicromedicao()
-					.obterConsumoASerRateado(idImovelCondominio,
-							faturamentoGrupo.getAnoMesReferencia(),
-							LigacaoTipo.LIGACAO_AGUA);
+			consumoAguaASerRateado = this.getControladorMicromedicao().obterConsumoASerRateado(idImovelCondominio, faturamentoGrupo.getAnoMesReferencia(),
+					LigacaoTipo.LIGACAO_AGUA);
 		}
 
 		if (imovelCondominio.getLigacaoEsgoto() != null) {
-			consumoEsgotoASerRateado = this.getControladorMicromedicao()
-					.obterConsumoASerRateado(idImovelCondominio,
-							faturamentoGrupo.getAnoMesReferencia(),
-							LigacaoTipo.LIGACAO_ESGOTO);
+			consumoEsgotoASerRateado = this.getControladorMicromedicao().obterConsumoASerRateado(idImovelCondominio, faturamentoGrupo.getAnoMesReferencia(),
+					LigacaoTipo.LIGACAO_ESGOTO);
 		}
 
 		if (consumoAguaASerRateado < 0) {
@@ -76403,32 +76390,19 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			consumoEsgotoASerRateado = 0;
 		}
 
-		// Calcula o valor da conta a ser rateada, baseada no consumo que deve
-		// ser rateado
-		BigDecimal[] valoresAguaEsgotoContaRateio = this
-				.calcularValorAguaEsgotoParaRateio(imovelCondominio,
-						consumoAguaASerRateado, consumoEsgotoASerRateado,
-						faturamentoGrupo);
+		BigDecimal[] valoresAguaEsgotoContaRateio = this.calcularValorAguaEsgotoParaRateio(imovelCondominio, consumoAguaASerRateado, consumoEsgotoASerRateado,
+				faturamentoGrupo);
 
-		if (valoresAguaEsgotoContaRateio[0]
-				.compareTo(ConstantesSistema.VALOR_ZERO) > 0) {
+		if (valoresAguaEsgotoContaRateio[0].compareTo(ConstantesSistema.VALOR_ZERO) > 0) {
+			valoresAguaEsgotoContaRateio[0] = valoresAguaEsgotoContaRateio[0].add(new BigDecimal(0.005));
 
-			valoresAguaEsgotoContaRateio[0] = valoresAguaEsgotoContaRateio[0]
-					.add(new BigDecimal(0.005));
-
-			valorAguaRateioPorEconomia = valoresAguaEsgotoContaRateio[0]
-					.divide(new BigDecimal(qtdEconomiasCondominio),
-							BigDecimal.ROUND_FLOOR);
+			valorAguaRateioPorEconomia = valoresAguaEsgotoContaRateio[0].divide(new BigDecimal(qtdEconomiasCondominio), BigDecimal.ROUND_FLOOR);
 		}
 
-		if (valoresAguaEsgotoContaRateio[1]
-				.compareTo(ConstantesSistema.VALOR_ZERO) > 0) {
-			valoresAguaEsgotoContaRateio[1] = valoresAguaEsgotoContaRateio[1]
-					.add(new BigDecimal(0.005));
+		if (valoresAguaEsgotoContaRateio[1].compareTo(ConstantesSistema.VALOR_ZERO) > 0) {
+			valoresAguaEsgotoContaRateio[1] = valoresAguaEsgotoContaRateio[1].add(new BigDecimal(0.005));
 
-			valorEsgotoRateioPorEconomia = valoresAguaEsgotoContaRateio[1]
-					.divide(new BigDecimal(qtdEconomiasCondominio),
-							BigDecimal.ROUND_FLOOR);
+			valorEsgotoRateioPorEconomia = valoresAguaEsgotoContaRateio[1].divide(new BigDecimal(qtdEconomiasCondominio), BigDecimal.ROUND_FLOOR);
 
 		}
 
@@ -76563,9 +76537,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @throws ControladorException
 	 * @throws ErroRepositorioException
 	 */
-	public BigDecimal[] calcularValorRateioImovel(Imovel imovel,
-			FaturamentoGrupo faturamentoGrupo) throws ControladorException,
-			ErroRepositorioException {
+	public BigDecimal[] calcularValorRateioImovel(Imovel imovel, FaturamentoGrupo faturamentoGrupo) throws ControladorException, ErroRepositorioException {
 
 		BigDecimal valorRateioImovelAgua = ConstantesSistema.VALOR_ZERO;
 		BigDecimal valorRateioImovelEsgoto = new BigDecimal("0.00");
@@ -76573,20 +76545,15 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		imovel = this.getControladorImovel().pesquisarImovel(imovel.getId());
 
-		valoresRateioImovel = this.calcularValorRateioPorEconomia(imovel
-				.getImovelCondominio().getId(), faturamentoGrupo);
+		valoresRateioImovel = this.calcularValorRateioPorEconomia(imovel.getImovelCondominio().getId(), faturamentoGrupo);
 
-		// Se o valor de rateio de ÁGUA for maior que ZERO, multiplica pela
-		// quantidade de economias do imóvel
-		if (valoresRateioImovel[0].compareTo(ConstantesSistema.VALOR_ZERO) > 0)
-			valorRateioImovelAgua = valoresRateioImovel[0]
-					.multiply(new BigDecimal(imovel.getQuantidadeEconomias()));
+		if (valoresRateioImovel[0].compareTo(ConstantesSistema.VALOR_ZERO) > 0) {
+			valorRateioImovelAgua = valoresRateioImovel[0].multiply(new BigDecimal(imovel.getQuantidadeEconomias()));
+		}
 
-		// Se o valor de rateio de ESGOTO for maior que ZERO, multiplica pela
-		// quantidade de economias do imóvel
-		if (valoresRateioImovel[1].compareTo(ConstantesSistema.VALOR_ZERO) > 0)
-			valorRateioImovelEsgoto = valoresRateioImovel[1]
-					.multiply(new BigDecimal(imovel.getQuantidadeEconomias()));
+		if (valoresRateioImovel[1].compareTo(ConstantesSistema.VALOR_ZERO) > 0) {
+			valorRateioImovelEsgoto = valoresRateioImovel[1].multiply(new BigDecimal(imovel.getQuantidadeEconomias()));
+		}
 
 		valoresRateioImovel[0] = valorRateioImovelAgua;
 		valoresRateioImovel[1] = valorRateioImovelEsgoto;
