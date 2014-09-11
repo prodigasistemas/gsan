@@ -322,6 +322,17 @@
 				</table>
    			</td>
   	 	</tr>
+  	 							<tr>
+									<td width="25%" align="left">
+										<strong>DDD do Telefone:</strong>
+									</td>
+									<td>
+										<html:text maxlength="9" property="dddTelefone" size="4" 
+											onkeyup="javascript:verificaNumeroInteiro(this);" readonly="true"
+												style="background-color:#EFEFEF; border:0; color: #000000"/>
+									</td>
+								</tr>
+								
      							<tr>
 									<td width="25%" align="left">
 										<strong>Número do Telefone:</strong>
@@ -1740,14 +1751,6 @@
 											<tr>
 												<td colspan="3"><hr></td>
 											</tr>
-												
-											<tr>
-												<td colspan="3"><hr></td>
-											</tr>
-											
-											<tr>
-												<td colspan="3"><hr></td>
-											</tr>
 											
 											<tr>
 												<td width="40%">
@@ -1818,16 +1821,21 @@
 												</td>
 											</tr>
 											
-												
-											<tr>
-												<td></td>
-												<td>
-													<font color="#FF0000">*</font>Campo obrigat&oacute;rio
-												</td>
-											</tr>
-												
 											<tr>
 												<td colspan="3"><hr></td>
+											</tr>
+											
+											<tr>
+											<td>
+												<strong>Respons&aacute;vel pela Negativa&ccedil;&atilde;o de Clientes:</strong>
+											</td>
+											<td>
+												<html:text maxlength="9" tabindex="1" property="idClienteResponsavelNegativacao" size="9" readonly="true"
+													style="background-color:#EFEFEF; border:0; color: #000000"/>
+												&nbsp;&nbsp;	
+												<html:text property="nomeClienteResponsavelNegativacao" size="45" maxlength="45" readonly="true"
+													style="background-color:#EFEFEF; border:0; color: #000000"/>
+											</td>
 											</tr>
 											
 										</table>

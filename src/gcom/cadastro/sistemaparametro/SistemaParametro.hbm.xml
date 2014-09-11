@@ -1,12 +1,6 @@
 <?xml version="1.0"?>
 <!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
 <hibernate-mapping>
-	<!--
-		Created by the Middlegen Hibernate plugin
-		
-		http://boss.bekk.no/boss/middlegen/
-		http://hibernate.sourceforge.net/
-	-->
 	<class name="gcom.cadastro.sistemaparametro.SistemaParametro"
 		table="cadastro.sistema_parametros">
 		<id name="parmId" type="java.lang.Integer" column="parm_id">
@@ -657,10 +651,6 @@
 		<property name="arquivoNormaCM" type="binary"
 			column="parm_arnormacmloja" length="-1" />
 			
-		<!--<property name="qtdeDiasValidadeOSAnormalidadeFiscalizacao"
-			type="java.lang.Integer" 
-			column="parm_qtdiasvalidadeosanormfisc" />	-->
-
 		<property name= "cdDadosDiarios" type="java.lang.Integer"
 			column="parm_cddadosdiarios" length="2" />
 			
@@ -673,6 +663,8 @@
 			type="java.lang.Integer" column="parm_nnmesesleiturasuspensa" length="2" not-null="false" />
 		<property name="numeroMesesReinicioSitEspFaturamento"
 			type="java.lang.Integer" column="parm_nnmesesreiniciositespfatu" length="2" not-null="false" />
+
+		<property name="dddTelefone" type="java.lang.String" column="parm_dddfone" length="2" not-null="false" />
 
 		<!-- associations -->
 		<!-- bi-directional many-to-one association to Logradouro -->
@@ -711,12 +703,12 @@
 			<column name="ctbc_iddevolucao" />
 		</many-to-one>
 
-		<many-to-one name="clientePresidenteCompesa"
+		<many-to-one name="clientePresidente"
 			class="gcom.cadastro.cliente.Cliente" not-null="false">
 			<column name="clie_idpresidente" />
 		</many-to-one>
 
-		<many-to-one name="clienteDiretorComercialCompesa"
+		<many-to-one name="clienteDiretorComercial"
 			class="gcom.cadastro.cliente.Cliente" not-null="false">
 			<column name="clie_iddiretorcom" />
 		</many-to-one>
@@ -772,6 +764,10 @@
 			<column name="clie_iddocnaoidentificado" />
 		</many-to-one>
 		
+		<many-to-one name="clienteResponsavelNegativacao"
+			class="gcom.cadastro.cliente.Cliente" not-null="false">
+			<column name="clie_idresponsavelnegativacao" />
+		</many-to-one>
 	</class>
 </hibernate-mapping>
 

@@ -7,12 +7,6 @@ import java.util.Collection;
 import org.apache.struts.upload.FormFile;
 import org.apache.struts.validator.ValidatorActionForm;
 
-/**
- * Descrição da classe
- * 
- * @author Rômulo Aurélio
- * @date 12/01/2007
- */
 public class InformarSistemaParametrosActionForm extends ValidatorActionForm {
 
 	private static final long serialVersionUID = 1L;
@@ -24,6 +18,7 @@ public class InformarSistemaParametrosActionForm extends ValidatorActionForm {
 	private String cnpj;
 	private String numero;
 	private String complemento;
+	private String dddTelefone;
 	private String numeroTelefone;
 	private String ramal;
 	private String fax;
@@ -36,10 +31,8 @@ public class InformarSistemaParametrosActionForm extends ValidatorActionForm {
 	private String diretorComercial;
 	private String nomeDiretorComercial;
 	private String numeroTelefoneAtendimento;
-	private String quantidadeDigitosQuadra; // Quantidade de dígitos que a
-											// quadra deve ter
-	private String indicadorQuadraFace; // foi retirado da segunda aba para a
-										// primeira a pedido de Rosana
+	private String quantidadeDigitosQuadra;
+	private String indicadorQuadraFace;
 	private String site;
 	private String inscricaoEstadual;
 	private String inscricaoMunicipal;
@@ -72,7 +65,6 @@ public class InformarSistemaParametrosActionForm extends ValidatorActionForm {
 	private String clienteFicticioAssociarPagamentosNaoIdentificados;
 	private String nomeClienteFicticioAssociarPagamentosNaoIdentificados;
 
-
 	// 2ª aba InserirParametrosSistemaFaturamentoTarifaSocial
 	private String mesAnoReferencia;
 	private String menorConsumo;
@@ -101,24 +93,16 @@ public class InformarSistemaParametrosActionForm extends ValidatorActionForm {
 	private String indicadorTransferenciaComDebito;
 	private String indicadorNaoMedidoTarifa;
 	private String numeroDiasVariacaoConsumo;
-
 	private String nnDiasPrazoRecursoAutoInfracao = "0";
 	private String qtdeContasRetificadas;
 	private String percentualBonusSocial;
-
 	private String indicadorBloqueioContaMobile;
-
 	private String indicadorCalculaVencimento;
 	private String valorContaFichaComp;
-	
 	private String numeroMesesRetificarConta;
-
 	private String indicadorNormaRetificacao;
-	
 	private String mensagemContaBraile;
-	
 	private String codigoTipoCalculoNaoMedido;
-	
 	private String valorGuiaFichaComp;
 	private String valorDemonstrativoParcelamentoFichaComp;
 	
@@ -165,8 +149,6 @@ public class InformarSistemaParametrosActionForm extends ValidatorActionForm {
 	private String indicadorControleDividaAtiva;
 	private String numeroDiasVencimentoEntradaParcelamento;
 	private String idResolucaoDiretoria;
-	
-
 	private String indicadorBloqueioContasContratoParcelDebitos;
 	private String indicadorBloqueioContasContratoParcelManterConta;
 	private String indicadorBloqueioGuiasOuAcresContratoParcelDebito;
@@ -175,6 +157,8 @@ public class InformarSistemaParametrosActionForm extends ValidatorActionForm {
 	private String indicadorBloqueioDebitoACobrarContratoParcelManterDebito;	
 	private String numeroMaximoParcelasContratosParcelamento;
 	private String numeroDiasEncerrarOsFiscalizacaoDecursoPrazo;
+	private String idClienteResponsavelNegativacao;
+	private String nomeClienteResponsavelNegativacao;
 
 	// 5 aba InserirParametrosSistemaAtendimentoPublicoSeguranca
 	private String indicadorSugestaoTramite;
@@ -226,851 +210,454 @@ public class InformarSistemaParametrosActionForm extends ValidatorActionForm {
 	private FormFile arquivoNormaCM;
 
 
-	/**
-	 * 
-	 * @author José Guilherme Macedo Vieira
-	 * @date 03/06/2009
-	 * 
-	 * @return String - Retorna a quantidade de contas retificadas
-	 */
 	public String getQtdeContasRetificadas() {
 		return qtdeContasRetificadas;
 	}
 
-	/**
-	 * @author José Guilherme Macedo Vieira
-	 * @date 03/06/2009
-	 * 
-	 * @param String
-	 *            qtdeContasRetificadas - A quantidade de contas retificadas da
-	 *            empresa
-	 */
 	public void setQtdeContasRetificadas(String qtdeContasRetificadas) {
 		this.qtdeContasRetificadas = qtdeContasRetificadas;
 	}
 
-	/**
-	 * @author José Guilherme Macedo Vieira
-	 * @date 02/06/2009
-	 * @return String - Returns quantidadeDigitosQuadra
-	 */
 	public String getQuantidadeDigitosQuadra() {
 		return quantidadeDigitosQuadra;
 	}
 
-	/**
-	 * @author José Guilherme Macedo Vieira
-	 * @date 02/06/2009
-	 * @param quantidadeDigitosQuadra
-	 *            - The quadra (block) max digits number
-	 */
 	public void setQuantidadeDigitosQuadra(String quantidadeDigitosQuadra) {
 		this.quantidadeDigitosQuadra = quantidadeDigitosQuadra;
 	}
 
-	/**
-	 * @return Returns the emailResponsavel.
-	 */
 	public String getEmailResponsavel() {
 		return emailResponsavel;
 	}
 
-	/**
-	 * @param emailResponsavel
-	 *            The emailResponsavel to set.
-	 */
 	public void setEmailResponsavel(String emailResponsavel) {
 		this.emailResponsavel = emailResponsavel;
 	}
 
-	/**
-	 * @return Returns the ipServidorSmtp.
-	 */
 	public String getIpServidorSmtp() {
 		return ipServidorSmtp;
 	}
 
-	/**
-	 * @param ipServidorSmtp
-	 *            The ipServidorSmtp to set.
-	 */
 	public void setIpServidorSmtp(String ipServidorSmtp) {
 		this.ipServidorSmtp = ipServidorSmtp;
 	}
 
-	/**
-	 * @return Retorna o campo abreviaturaEmpresa.
-	 */
 	public String getAbreviaturaEmpresa() {
 		return abreviaturaEmpresa;
 	}
 
-	/**
-	 * @param abreviaturaEmpresa
-	 *            O abreviaturaEmpresa a ser setado.
-	 */
 	public void setAbreviaturaEmpresa(String abreviaturaEmpresa) {
 		this.abreviaturaEmpresa = abreviaturaEmpresa;
 	}
 
-	/**
-	 * @return Retorna o campo areaMaxima.
-	 */
 	public String getAreaMaxima() {
 		return areaMaxima;
 	}
 
-	/**
-	 * @param areaMaxima
-	 *            O areaMaxima a ser setado.
-	 */
 	public void setAreaMaxima(String areaMaxima) {
 		this.areaMaxima = areaMaxima;
 	}
 
-	/**
-	 * @return Retorna o campo cnpj.
-	 */
 	public String getCnpj() {
 		return cnpj;
 	}
 
-	/**
-	 * @param cnpj
-	 *            O cnpj a ser setado.
-	 */
 	public void setCnpj(String cnpj) {
 		this.cnpj = cnpj;
 	}
 
-	/**
-	 * @return Retorna o campo codigoEmpresaFebraban.
-	 */
 	public String getCodigoEmpresaFebraban() {
 		return codigoEmpresaFebraban;
 	}
 
-	/**
-	 * @param codigoEmpresaFebraban
-	 *            O codigoEmpresaFebraban a ser setado.
-	 */
 	public void setCodigoEmpresaFebraban(String codigoEmpresaFebraban) {
 		this.codigoEmpresaFebraban = codigoEmpresaFebraban;
 	}
 
-	/**
-	 * @return Retorna o campo codigoMenorCapacidade.
-	 */
 	public String getCodigoMenorCapacidade() {
 		return codigoMenorCapacidade;
 	}
 
-	/**
-	 * @param codigoMenorCapacidade
-	 *            O codigoMenorCapacidade a ser setado.
-	 */
 	public void setCodigoMenorCapacidade(String codigoMenorCapacidade) {
 		this.codigoMenorCapacidade = codigoMenorCapacidade;
 	}
 
-	/**
-	 * @return Retorna o campo consumoMaximo.
-	 */
 	public String getConsumoMaximo() {
 		return consumoMaximo;
 	}
 
-	/**
-	 * @param consumoMaximo
-	 *            O consumoMaximo a ser setado.
-	 */
 	public void setConsumoMaximo(String consumoMaximo) {
 		this.consumoMaximo = consumoMaximo;
 	}
 
-	/**
-	 * @return Retorna o campo decrementoMaximoConsumo.
-	 */
 	public String getDecrementoMaximoConsumo() {
 		return decrementoMaximoConsumo;
 	}
 
-	/**
-	 * @param decrementoMaximoConsumo
-	 *            O decrementoMaximoConsumo a ser setado.
-	 */
 	public void setDecrementoMaximoConsumo(String decrementoMaximoConsumo) {
 		this.decrementoMaximoConsumo = decrementoMaximoConsumo;
 	}
 
-	/**
-	 * @return Retorna o campo diasMaximoAlterarOS.
-	 */
 	public String getDiasMaximoAlterarOS() {
 		return diasMaximoAlterarOS;
 	}
 
-	/**
-	 * @param diasMaximoAlterarOS
-	 *            O diasMaximoAlterarOS a ser setado.
-	 */
 	public void setDiasMaximoAlterarOS(String diasMaximoAlterarOS) {
 		this.diasMaximoAlterarOS = diasMaximoAlterarOS;
 	}
 
-	/**
-	 * @return Retorna o campo diasMaximoExpirarAcesso.
-	 */
 	public String getDiasMaximoExpirarAcesso() {
 		return diasMaximoExpirarAcesso;
 	}
 
-	/**
-	 * @param diasMaximoExpirarAcesso
-	 *            O diasMaximoExpirarAcesso a ser setado.
-	 */
 	public void setDiasMaximoExpirarAcesso(String diasMaximoExpirarAcesso) {
 		this.diasMaximoExpirarAcesso = diasMaximoExpirarAcesso;
 	}
 
-	/**
-	 * @return Retorna o campo diasMaximoReativarRA.
-	 */
 	public String getDiasMaximoReativarRA() {
 		return diasMaximoReativarRA;
 	}
 
-	/**
-	 * @param diasMaximoReativarRA
-	 *            O diasMaximoReativarRA a ser setado.
-	 */
 	public void setDiasMaximoReativarRA(String diasMaximoReativarRA) {
 		this.diasMaximoReativarRA = diasMaximoReativarRA;
 	}
 
-	/**
-	 * @return Retorna o campo diasMensagemExpiracaoSenha.
-	 */
 	public String getDiasMensagemExpiracaoSenha() {
 		return diasMensagemExpiracaoSenha;
 	}
 
-	/**
-	 * @param diasMensagemExpiracaoSenha
-	 *            O diasMensagemExpiracaoSenha a ser setado.
-	 */
 	public void setDiasMensagemExpiracaoSenha(String diasMensagemExpiracaoSenha) {
 		this.diasMensagemExpiracaoSenha = diasMensagemExpiracaoSenha;
 	}
 
-	/**
-	 * @return Retorna o campo diasMinimoVencimento.
-	 */
 	public String getDiasMinimoVencimento() {
 		return diasMinimoVencimento;
 	}
 
-	/**
-	 * @param diasMinimoVencimento
-	 *            O diasMinimoVencimento a ser setado.
-	 */
 	public void setDiasMinimoVencimento(String diasMinimoVencimento) {
 		this.diasMinimoVencimento = diasMinimoVencimento;
 	}
 
-	/**
-	 * @return Retorna o campo diasMinimoVencimentoCorreio.
-	 */
 	public String getDiasMinimoVencimentoCorreio() {
 		return diasMinimoVencimentoCorreio;
 	}
 
-	/**
-	 * @param diasMinimoVencimentoCorreio
-	 *            O diasMinimoVencimentoCorreio a ser setado.
-	 */
 	public void setDiasMinimoVencimentoCorreio(
 			String diasMinimoVencimentoCorreio) {
 		this.diasMinimoVencimentoCorreio = diasMinimoVencimentoCorreio;
 	}
 
-	/**
-	 * @return Retorna o campo diasVencimentoCobranca.
-	 */
 	public String getDiasVencimentoCobranca() {
 		return diasVencimentoCobranca;
 	}
 
-	/**
-	 * @param diasVencimentoCobranca
-	 *            O diasVencimentoCobranca a ser setado.
-	 */
 	public void setDiasVencimentoCobranca(String diasVencimentoCobranca) {
 		this.diasVencimentoCobranca = diasVencimentoCobranca;
 	}
 
-	/**
-	 * @return Retorna o campo email.
-	 */
 	public String getEmail() {
 		return email;
 	}
 
-	/**
-	 * @param email
-	 *            O email a ser setado.
-	 */
 	public void setEmail(String email) {
 		this.email = email;
 	}
 
-	/**
-	 * @return Retorna o campo fax.
-	 */
 	public String getFax() {
 		return fax;
 	}
 
-	/**
-	 * @param fax
-	 *            O fax a ser setado.
-	 */
 	public void setFax(String fax) {
 		this.fax = fax;
 	}
 
-	/**
-	 * @return Retorna o campo incrementoMaximoConsumo.
-	 */
 	public String getIncrementoMaximoConsumo() {
 		return incrementoMaximoConsumo;
 	}
 
-	/**
-	 * @param incrementoMaximoConsumo
-	 *            O incrementoMaximoConsumo a ser setado.
-	 */
 	public void setIncrementoMaximoConsumo(String incrementoMaximoConsumo) {
 		this.incrementoMaximoConsumo = incrementoMaximoConsumo;
 	}
 
-	/**
-	 * @return Retorna o campo indentificadorContaDevolucao.
-	 */
 	public String getIndentificadorContaDevolucao() {
 		return indentificadorContaDevolucao;
 	}
 
-	/**
-	 * @param indentificadorContaDevolucao
-	 *            O indentificadorContaDevolucao a ser setado.
-	 */
 	public void setIndentificadorContaDevolucao(
 			String indentificadorContaDevolucao) {
 		this.indentificadorContaDevolucao = indentificadorContaDevolucao;
 	}
 
-	/**
-	 * @return Retorna o campo indicadorGeracaoFaixaFalsa.
-	 */
 	public String getIndicadorGeracaoFaixaFalsa() {
 		return indicadorGeracaoFaixaFalsa;
 	}
 
-	/**
-	 * @param indicadorGeracaoFaixaFalsa
-	 *            O indicadorGeracaoFaixaFalsa a ser setado.
-	 */
 	public void setIndicadorGeracaoFaixaFalsa(String indicadorGeracaoFaixaFalsa) {
 		this.indicadorGeracaoFaixaFalsa = indicadorGeracaoFaixaFalsa;
 	}
 
-	/**
-	 * @return Retorna o campo indicadorGeracaoFiscalizacaoLeitura.
-	 */
 	public String getIndicadorGeracaoFiscalizacaoLeitura() {
 		return indicadorGeracaoFiscalizacaoLeitura;
 	}
 
-	/**
-	 * @param indicadorGeracaoFiscalizacaoLeitura
-	 *            O indicadorGeracaoFiscalizacaoLeitura a ser setado.
-	 */
 	public void setIndicadorGeracaoFiscalizacaoLeitura(
 			String indicadorGeracaoFiscalizacaoLeitura) {
 		this.indicadorGeracaoFiscalizacaoLeitura = indicadorGeracaoFiscalizacaoLeitura;
 	}
 
-	/**
-	 * @return Retorna o campo indicadorPercentualGeracaoFaixaFalsa.
-	 */
 	public String getIndicadorPercentualGeracaoFaixaFalsa() {
 		return indicadorPercentualGeracaoFaixaFalsa;
 	}
 
-	/**
-	 * @param indicadorPercentualGeracaoFaixaFalsa
-	 *            O indicadorPercentualGeracaoFaixaFalsa a ser setado.
-	 */
 	public void setIndicadorPercentualGeracaoFaixaFalsa(
 			String indicadorPercentualGeracaoFaixaFalsa) {
 		this.indicadorPercentualGeracaoFaixaFalsa = indicadorPercentualGeracaoFaixaFalsa;
 	}
 
-	/**
-	 * @return Retorna o campo indicadorPercentualGeracaoFiscalizacaoLeitura.
-	 */
 	public String getIndicadorPercentualGeracaoFiscalizacaoLeitura() {
 		return indicadorPercentualGeracaoFiscalizacaoLeitura;
 	}
 
-	/**
-	 * @param indicadorPercentualGeracaoFiscalizacaoLeitura
-	 *            O indicadorPercentualGeracaoFiscalizacaoLeitura a ser setado.
-	 */
 	public void setIndicadorPercentualGeracaoFiscalizacaoLeitura(
 			String indicadorPercentualGeracaoFiscalizacaoLeitura) {
 		this.indicadorPercentualGeracaoFiscalizacaoLeitura = indicadorPercentualGeracaoFiscalizacaoLeitura;
 	}
 
-	/**
-	 * @return Retorna o campo indicadorSugestaoTramite.
-	 */
 	public String getIndicadorSugestaoTramite() {
 		return indicadorSugestaoTramite;
 	}
 
-	/**
-	 * @param indicadorSugestaoTramite
-	 *            O indicadorSugestaoTramite a ser setado.
-	 */
 	public void setIndicadorSugestaoTramite(String indicadorSugestaoTramite) {
 		this.indicadorSugestaoTramite = indicadorSugestaoTramite;
 	}
 
-	/**
-	 * @return Retorna o campo maximoParcelas.
-	 */
 	public String getMaximoParcelas() {
 		return maximoParcelas;
 	}
 
-	/**
-	 * @param maximoParcelas
-	 *            O maximoParcelas a ser setado.
-	 */
 	public void setMaximoParcelas(String maximoParcelas) {
 		this.maximoParcelas = maximoParcelas;
 	}
 
-	/**
-	 * @return Retorna o campo menorConsumo.
-	 */
 	public String getMenorConsumo() {
 		return menorConsumo;
 	}
 
-	/**
-	 * @param menorConsumo
-	 *            O menorConsumo a ser setado.
-	 */
 	public void setMenorConsumo(String menorConsumo) {
 		this.menorConsumo = menorConsumo;
 	}
 
-	/**
-	 * @return Retorna o campo menorValor.
-	 */
 	public String getMenorValor() {
 		return menorValor;
 	}
 
-	/**
-	 * @param menorValor
-	 *            O menorValor a ser setado.
-	 */
 	public void setMenorValor(String menorValor) {
 		this.menorValor = menorValor;
 	}
 
-	/**
-	 * @return Retorna o campo mesAnoReferencia.
-	 */
 	public String getMesAnoReferencia() {
 		return mesAnoReferencia;
 	}
 
-	/**
-	 * @param mesAnoReferencia
-	 *            O mesAnoReferencia a ser setado.
-	 */
 	public void setMesAnoReferencia(String mesAnoReferencia) {
 		this.mesAnoReferencia = mesAnoReferencia;
 	}
 
-	/**
-	 * @return Retorna o campo mesAnoReferenciaArrecadacao.
-	 */
 	public String getMesAnoReferenciaArrecadacao() {
 		return mesAnoReferenciaArrecadacao;
 	}
 
-	/**
-	 * @param mesAnoReferenciaArrecadacao
-	 *            O mesAnoReferenciaArrecadacao a ser setado.
-	 */
 	public void setMesAnoReferenciaArrecadacao(
 			String mesAnoReferenciaArrecadacao) {
 		this.mesAnoReferenciaArrecadacao = mesAnoReferenciaArrecadacao;
 	}
 
-	/**
-	 * @return Retorna o campo mesesCalculoMedio.
-	 */
 	public String getMesesCalculoMedio() {
 		return mesesCalculoMedio;
 	}
 
-	/**
-	 * @param mesesCalculoMedio
-	 *            O mesesCalculoMedio a ser setado.
-	 */
 	public void setMesesCalculoMedio(String mesesCalculoMedio) {
 		this.mesesCalculoMedio = mesesCalculoMedio;
 	}
 
-	/**
-	 * @return Retorna o campo nomeEmpresa.
-	 */
 	public String getNomeEmpresa() {
 		return nomeEmpresa;
 	}
 
-	/**
-	 * @param nomeEmpresa
-	 *            O nomeEmpresa a ser setado.
-	 */
 	public void setNomeEmpresa(String nomeEmpresa) {
 		this.nomeEmpresa = nomeEmpresa;
 	}
 
-	/**
-	 * @return Retorna o campo nomeEstado.
-	 */
 	public String getNomeEstado() {
 		return nomeEstado;
 	}
 
-	/**
-	 * @param nomeEstado
-	 *            O nomeEstado a ser setado.
-	 */
 	public void setNomeEstado(String nomeEstado) {
 		this.nomeEstado = nomeEstado;
 	}
 
-	/**
-	 * @return Retorna o campo numero.
-	 */
 	public String getNumero() {
 		return numero;
 	}
 
-	/**
-	 * @param numero
-	 *            O numero a ser setado.
-	 */
 	public void setNumero(String numero) {
 		this.numero = numero;
 	}
 
-	/**
-	 * @return Retorna o campo numeroLayOut.
-	 */
 	public String getNumeroLayOut() {
 		return numeroLayOut;
 	}
 
-	/**
-	 * @param numeroLayOut
-	 *            O numeroLayOut a ser setado.
-	 */
 	public void setNumeroLayOut(String numeroLayOut) {
 		this.numeroLayOut = numeroLayOut;
 	}
 
-	/**
-	 * @return Retorna o campo numeroMaximoFavoritosMenu.
-	 */
 	public String getNumeroMaximoFavoritosMenu() {
 		return numeroMaximoFavoritosMenu;
 	}
 
-	/**
-	 * @param numeroMaximoFavoritosMenu
-	 *            O numeroMaximoFavoritosMenu a ser setado.
-	 */
 	public void setNumeroMaximoFavoritosMenu(String numeroMaximoFavoritosMenu) {
 		this.numeroMaximoFavoritosMenu = numeroMaximoFavoritosMenu;
 	}
 
-	/**
-	 * @return Retorna o campo numeroMaximoParcelaCredito.
-	 */
 	public String getNumeroMaximoParcelaCredito() {
 		return numeroMaximoParcelaCredito;
 	}
 
-	/**
-	 * @param numeroMaximoParcelaCredito
-	 *            O numeroMaximoParcelaCredito a ser setado.
-	 */
 	public void setNumeroMaximoParcelaCredito(String numeroMaximoParcelaCredito) {
 		this.numeroMaximoParcelaCredito = numeroMaximoParcelaCredito;
 	}
 
-	/**
-	 * @return Retorna o campo numeroMaximoTentativasAcesso.
-	 */
 	public String getNumeroMaximoTentativasAcesso() {
 		return numeroMaximoTentativasAcesso;
 	}
 
-	/**
-	 * @param numeroMaximoTentativasAcesso
-	 *            O numeroMaximoTentativasAcesso a ser setado.
-	 */
 	public void setNumeroMaximoTentativasAcesso(
 			String numeroMaximoTentativasAcesso) {
 		this.numeroMaximoTentativasAcesso = numeroMaximoTentativasAcesso;
 	}
 
-	/**
-	 * @return Retorna o campo numeroMesesAlteracaoVencimento.
-	 */
 	public String getNumeroMesesAlteracaoVencimento() {
 		return numeroMesesAlteracaoVencimento;
 	}
 
-	/**
-	 * @param numeroMesesAlteracaoVencimento
-	 *            O numeroMesesAlteracaoVencimento a ser setado.
-	 */
 	public void setNumeroMesesAlteracaoVencimento(
 			String numeroMesesAlteracaoVencimento) {
 		this.numeroMesesAlteracaoVencimento = numeroMesesAlteracaoVencimento;
 	}
 
-	/**
-	 * @return Retorna o campo numeroMesesValidadeConta.
-	 */
 	public String getNumeroMesesValidadeConta() {
 		return numeroMesesValidadeConta;
 	}
 
-	/**
-	 * @param numeroMesesValidadeConta
-	 *            O numeroMesesValidadeConta a ser setado.
-	 */
 	public void setNumeroMesesValidadeConta(String numeroMesesValidadeConta) {
 		this.numeroMesesValidadeConta = numeroMesesValidadeConta;
 	}
 
-	/**
-	 * @return Retorna o campo numeroTelefone.
-	 */
 	public String getNumeroTelefone() {
 		return numeroTelefone;
 	}
 
-	/**
-	 * @param numeroTelefone
-	 *            O numeroTelefone a ser setado.
-	 */
 	public void setNumeroTelefone(String numeroTelefone) {
 		this.numeroTelefone = numeroTelefone;
 	}
 
-	/**
-	 * @return Retorna o campo percentualCalculoIndice.
-	 */
 	public String getPercentualCalculoIndice() {
 		return percentualCalculoIndice;
 	}
 
-	/**
-	 * @param percentualCalculoIndice
-	 *            O percentualCalculoIndice a ser setado.
-	 */
 	public void setPercentualCalculoIndice(String percentualCalculoIndice) {
 		this.percentualCalculoIndice = percentualCalculoIndice;
 	}
 
-	/**
-	 * @return Retorna o campo percentualEntradaMinima.
-	 */
 	public String getPercentualEntradaMinima() {
 		return percentualEntradaMinima;
 	}
 
-	/**
-	 * @param percentualEntradaMinima
-	 *            O percentualEntradaMinima a ser setado.
-	 */
 	public void setPercentualEntradaMinima(String percentualEntradaMinima) {
 		this.percentualEntradaMinima = percentualEntradaMinima;
 	}
 
-	/**
-	 * @return Retorna o campo percentualGeracaoFaixaFalsa.
-	 */
 	public String getPercentualGeracaoFaixaFalsa() {
 		return percentualGeracaoFaixaFalsa;
 	}
 
-	/**
-	 * @param percentualGeracaoFaixaFalsa
-	 *            O percentualGeracaoFaixaFalsa a ser setado.
-	 */
 	public void setPercentualGeracaoFaixaFalsa(
 			String percentualGeracaoFaixaFalsa) {
 		this.percentualGeracaoFaixaFalsa = percentualGeracaoFaixaFalsa;
 	}
 
-	/**
-	 * @return Retorna o campo percentualGeracaoFiscalizacaoLeitura.
-	 */
 	public String getPercentualGeracaoFiscalizacaoLeitura() {
 		return percentualGeracaoFiscalizacaoLeitura;
 	}
 
-	/**
-	 * @param percentualGeracaoFiscalizacaoLeitura
-	 *            O percentualGeracaoFiscalizacaoLeitura a ser setado.
-	 */
 	public void setPercentualGeracaoFiscalizacaoLeitura(
 			String percentualGeracaoFiscalizacaoLeitura) {
 		this.percentualGeracaoFiscalizacaoLeitura = percentualGeracaoFiscalizacaoLeitura;
 	}
 
-	/**
-	 * @return Retorna o campo percentualMaximoAbatimento.
-	 */
 	public String getPercentualMaximoAbatimento() {
 		return percentualMaximoAbatimento;
 	}
 
-	/**
-	 * @param percentualMaximoAbatimento
-	 *            O percentualMaximoAbatimento a ser setado.
-	 */
 	public void setPercentualMaximoAbatimento(String percentualMaximoAbatimento) {
 		this.percentualMaximoAbatimento = percentualMaximoAbatimento;
 	}
 
-	/**
-	 * @return Retorna o campo percentualTaxaFinanciamento.
-	 */
 	public String getPercentualTaxaFinanciamento() {
 		return percentualTaxaFinanciamento;
 	}
 
-	/**
-	 * @param percentualTaxaFinanciamento
-	 *            O percentualTaxaFinanciamento a ser setado.
-	 */
 	public void setPercentualTaxaFinanciamento(
 			String percentualTaxaFinanciamento) {
 		this.percentualTaxaFinanciamento = percentualTaxaFinanciamento;
 	}
 
-	/**
-	 * @return Retorna o campo percentualToleranciaRateioConsumo.
-	 */
 	public String getPercentualToleranciaRateioConsumo() {
 		return percentualToleranciaRateioConsumo;
 	}
 
-	/**
-	 * @param percentualToleranciaRateioConsumo
-	 *            O percentualToleranciaRateioConsumo a ser setado.
-	 */
 	public void setPercentualToleranciaRateioConsumo(
 			String percentualToleranciaRateioConsumo) {
 		this.percentualToleranciaRateioConsumo = percentualToleranciaRateioConsumo;
 	}
 
-	/**
-	 * @return Retorna o campo qtdeEconomias.
-	 */
 	public String getQtdeEconomias() {
 		return qtdeEconomias;
 	}
 
-	/**
-	 * @param qtdeEconomias
-	 *            O qtdeEconomias a ser setado.
-	 */
 	public void setQtdeEconomias(String qtdeEconomias) {
 		this.qtdeEconomias = qtdeEconomias;
 	}
 
-	/**
-	 * @return Retorna o campo ramal.
-	 */
 	public String getRamal() {
 		return ramal;
 	}
 
-	/**
-	 * @param ramal
-	 *            O ramal a ser setado.
-	 */
 	public void setRamal(String ramal) {
 		this.ramal = ramal;
 	}
 
-	/**
-	 * @return Retorna o campo salarioMinimo.
-	 */
 	public String getSalarioMinimo() {
 		return salarioMinimo;
 	}
 
-	/**
-	 * @param salarioMinimo
-	 *            O salarioMinimo a ser setado.
-	 */
 	public void setSalarioMinimo(String salarioMinimo) {
 		this.salarioMinimo = salarioMinimo;
 	}
 
-	/**
-	 * @return Retorna o campo ultimoIDGeracaoRA.
-	 */
 	public String getUltimoIDGeracaoRA() {
 		return ultimoIDGeracaoRA;
 	}
 
-	/**
-	 * @param ultimoIDGeracaoRA
-	 *            O ultimoIDGeracaoRA a ser setado.
-	 */
 	public void setUltimoIDGeracaoRA(String ultimoIDGeracaoRA) {
 		this.ultimoIDGeracaoRA = ultimoIDGeracaoRA;
 	}
 
-	/**
-	 * @return Retorna o campo titulosRelatorio.
-	 */
 	public String getTitulosRelatorio() {
 		return titulosRelatorio;
 	}
 
-	/**
-	 * @param titulosRelatorio
-	 *            O titulosRelatorio a ser setado.
-	 */
 	public void setTitulosRelatorio(String titulosRelatorio) {
 		this.titulosRelatorio = titulosRelatorio;
 	}
@@ -1604,17 +1191,10 @@ public class InformarSistemaParametrosActionForm extends ValidatorActionForm {
 		this.diasVencimentoAlternativo = diasVencimentoAlternativo;
 	}
 
-	/**
-	 * @return Returns the indicadorValidacaoLocalidadeEncerramentoOS.
-	 */
 	public String getIndicadorValidacaoLocalidadeEncerramentoOS() {
 		return indicadorValidacaoLocalidadeEncerramentoOS;
 	}
 
-	/**
-	 * @param indicadorValidacaoLocalidadeEncerramentoOS
-	 *            The indicadorValidacaoLocalidadeEncerramentoOS to set.
-	 */
 	public void setIndicadorValidacaoLocalidadeEncerramentoOS(
 			String indicadorValidacaoLocalidadeEncerramentoOS) {
 		this.indicadorValidacaoLocalidadeEncerramentoOS = indicadorValidacaoLocalidadeEncerramentoOS;
@@ -1699,17 +1279,10 @@ public class InformarSistemaParametrosActionForm extends ValidatorActionForm {
 		this.nomeUnidadeDestinoGrandeConsumidor = nomeUnidadeDestinoGrandeConsumidor;
 	}
 
-	/**
-	 * @return Returns the versaoCelular.
-	 */
 	public String getVersaoCelular() {
 		return versaoCelular;
 	}
 
-	/**
-	 * @param versaoCelular
-	 *            The versaoCelular to set.
-	 */
 	public void setVersaoCelular(String versaoCelular) {
 		this.versaoCelular = versaoCelular;
 	}
@@ -1792,17 +1365,10 @@ public class InformarSistemaParametrosActionForm extends ValidatorActionForm {
 		this.indicadorBloqueioContaMobile = indicadorBloqueioContaMobile;
 	}
 
-	/**
-	 * @return Returns the percentualConvergenciaRepavimentacao.
-	 */
 	public String getPercentualConvergenciaRepavimentacao() {
 		return percentualConvergenciaRepavimentacao;
 	}
 
-	/**
-	 * @param percentualConvergenciaRepavimentacao
-	 *            The percentualConvergenciaRepavimentacao to set.
-	 */
 	public void setPercentualConvergenciaRepavimentacao(
 			String percentualConvergenciaRepavimentacao) {
 		this.percentualConvergenciaRepavimentacao = percentualConvergenciaRepavimentacao;
@@ -2196,5 +1762,29 @@ public class InformarSistemaParametrosActionForm extends ValidatorActionForm {
 	public void setNomeClienteFicticioAssociarPagamentosNaoIdentificados(
 			String nomeClienteFicticioAssociarPagamentosNaoIdentificados) {
 		this.nomeClienteFicticioAssociarPagamentosNaoIdentificados = nomeClienteFicticioAssociarPagamentosNaoIdentificados;
+	}
+
+	public String getDddTelefone() {
+		return dddTelefone;
+	}
+
+	public void setDddTelefone(String dddTelefone) {
+		this.dddTelefone = dddTelefone;
+	}
+
+	public String getIdClienteResponsavelNegativacao() {
+		return idClienteResponsavelNegativacao;
+	}
+
+	public void setIdClienteResponsavelNegativacao(String idClienteResponsavelNegativacao) {
+		this.idClienteResponsavelNegativacao = idClienteResponsavelNegativacao;
+	}
+
+	public String getNomeClienteResponsavelNegativacao() {
+		return nomeClienteResponsavelNegativacao;
+	}
+
+	public void setNomeClienteResponsavelNegativacao(String nomeClienteResponsavelNegativacao) {
+		this.nomeClienteResponsavelNegativacao = nomeClienteResponsavelNegativacao;
 	}
 }

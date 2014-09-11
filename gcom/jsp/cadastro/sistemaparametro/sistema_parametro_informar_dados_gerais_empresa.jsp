@@ -235,21 +235,9 @@
 	    form.nomeClienteResponsavelProgramaEspecial.value = "";
 	}
 	
-	/*function recuperarDadosPopup(codigoRegistro, descricaoRegistro, tipoConsulta) {
-
-	    var form = document.forms[0];
-
-	    if (tipoConsulta == 'cliente') {
-	      redirecionarSubmit("exibirInformarParametrosSistemaAction.do?pesquisarCliente=sim&codigoCliente="+codigoRegistro);
-	    }
-	}*/    
-	
 	
 	/* 
 	 * Verifica se o campo aceita apenas numeros e pontos
-   	 *	
-   	 * Data: 19/02/2010
-   	 * Author: Hugo Leonardo
 	*/
 	function validaCampoNumericoComPonto() {
 	
@@ -676,6 +664,18 @@
 					</table>
    					</td>
   	 			</tr>
+
+				<tr>
+					<td width="25%" align="left">
+						<strong>DDD do Telefone:</strong>
+					</td>
+					<td>
+						<html:text maxlength="2" 
+							property="dddTelefone" 
+							size="4" 
+							onkeyup="javascript:verificaNumeroInteiro(this);"/>
+					</td>
+				</tr>
 
 				<tr>
 					<td width="25%" align="left">

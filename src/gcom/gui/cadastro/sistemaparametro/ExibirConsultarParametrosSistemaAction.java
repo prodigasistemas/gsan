@@ -35,1214 +35,813 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-/**
- * 
- * @author Vinicius Medeiros
- * @created 30/07/2008
- */
 public class ExibirConsultarParametrosSistemaAction extends GcomAction {
-	/**
-	 * Description of the Method
-	 * 
-	 * @param actionMapping
-	 *            Description of the Parameter
-	 * @param actionForm
-	 *            Description of the Parameter
-	 * @param httpServletRequest
-	 *            Description of the Parameter
-	 * @param httpServletResponse
-	 *            Description of the Parameter
-	 * @return Description of the Return Value
-	 */
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
 
-		// Seta o mapeamento de retorno
-		ActionForward retorno = actionMapping
-				.findForward("consultarParametrosSistema");		
-		
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm,
+			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+
+		ActionForward retorno = actionMapping.findForward("consultarParametrosSistema");
 
 		ConsultarParametrosSistemaActionForm consultarSistemaParametroActionForm = (ConsultarParametrosSistemaActionForm) actionForm;
 
 		FiltroSistemaParametro filtroSistemaParametro = new FiltroSistemaParametro();
 
-		filtroSistemaParametro
-				.adicionarCaminhoParaCarregamentoEntidade("logradouro");
-		filtroSistemaParametro
-				.adicionarCaminhoParaCarregamentoEntidade("bairro");
-		filtroSistemaParametro
-				.adicionarCaminhoParaCarregamentoEntidade("enderecoReferencia");
-		filtroSistemaParametro
-				.adicionarCaminhoParaCarregamentoEntidade("hidrometroCapacidade");
+		filtroSistemaParametro.adicionarCaminhoParaCarregamentoEntidade("logradouro");
+		filtroSistemaParametro.adicionarCaminhoParaCarregamentoEntidade("bairro");
+		filtroSistemaParametro.adicionarCaminhoParaCarregamentoEntidade("enderecoReferencia");
+		filtroSistemaParametro.adicionarCaminhoParaCarregamentoEntidade("hidrometroCapacidade");
 		filtroSistemaParametro.adicionarCaminhoParaCarregamentoEntidade("cep");
-		filtroSistemaParametro
-				.adicionarCaminhoParaCarregamentoEntidade("contaBancaria");
-		filtroSistemaParametro
-				.adicionarCaminhoParaCarregamentoEntidade("clientePresidenteCompesa");
-		filtroSistemaParametro
-				.adicionarCaminhoParaCarregamentoEntidade("unidadeOrganizacionalIdPresidencia");
-		filtroSistemaParametro
-				.adicionarCaminhoParaCarregamentoEntidade("clienteDiretorComercialCompesa");
-		filtroSistemaParametro
-				.adicionarCaminhoParaCarregamentoEntidade("clienteFicticioParaAssociarOsPagamentosNaoIdentificados");
-		
+		filtroSistemaParametro.adicionarCaminhoParaCarregamentoEntidade("contaBancaria");
+		filtroSistemaParametro.adicionarCaminhoParaCarregamentoEntidade("clientePresidente");
+		filtroSistemaParametro.adicionarCaminhoParaCarregamentoEntidade("unidadeOrganizacionalIdPresidencia");
+		filtroSistemaParametro.adicionarCaminhoParaCarregamentoEntidade("clienteDiretorComercial");
+		filtroSistemaParametro.adicionarCaminhoParaCarregamentoEntidade("clienteFicticioParaAssociarOsPagamentosNaoIdentificados");
+		filtroSistemaParametro.adicionarCaminhoParaCarregamentoEntidade("clienteResponsavelNegativacao");
 
-		Collection colecaoSistemaParametro = this.getFachada().pesquisar(
-				filtroSistemaParametro, SistemaParametro.class.getName());
+		Collection colecaoSistemaParametro = this.getFachada().pesquisar(filtroSistemaParametro, SistemaParametro.class.getName());
 
-		SistemaParametro sistemaParametro = (SistemaParametro) colecaoSistemaParametro
-				.iterator().next();
+		SistemaParametro sistemaParametro = (SistemaParametro) colecaoSistemaParametro.iterator().next();
 
 		// 1ª Tabela
-		this.montarSistemaParametro1Tabela(consultarSistemaParametroActionForm,
-				sistemaParametro);
+		this.montarSistemaParametro1Tabela(consultarSistemaParametroActionForm, sistemaParametro);
 
 		// 2ª Tabela
-		this.montarSistemaParametro2Tabela(consultarSistemaParametroActionForm,
-				sistemaParametro);
+		this.montarSistemaParametro2Tabela(consultarSistemaParametroActionForm, sistemaParametro);
 
 		// 3ª Tabela
-		this.montarSistemaParametro3Tabela(consultarSistemaParametroActionForm,
-				sistemaParametro);
+		this.montarSistemaParametro3Tabela(consultarSistemaParametroActionForm, sistemaParametro);
 
 		// 4ª Tabela
-		this.montarSistemaParametro4Tabela(consultarSistemaParametroActionForm,
-				sistemaParametro);
+		this.montarSistemaParametro4Tabela(consultarSistemaParametroActionForm, sistemaParametro);
 
 		// 5ª Tabela
-		this.montarSistemaParametro5Tabela(consultarSistemaParametroActionForm,
-				sistemaParametro);
-		
-		this.setarDownloadsLoja(consultarSistemaParametroActionForm, httpServletRequest );
-		
-		if(httpServletRequest.getParameter("modo") != null && !httpServletRequest.getParameter("modo").equals("")) {
-			//Retorna o arquivo do decreto
-			if(httpServletRequest.getParameter("modo").equals("verDecreto")){
+		this.montarSistemaParametro5Tabela(consultarSistemaParametroActionForm, sistemaParametro);
+
+		this.setarDownloadsLoja(consultarSistemaParametroActionForm, httpServletRequest);
+
+		if (httpServletRequest.getParameter("modo") != null && !httpServletRequest.getParameter("modo").equals("")) {
+			// Retorna o arquivo do decreto
+			if (httpServletRequest.getParameter("modo").equals("verDecreto")) {
 				this.retornaArquivo("decreto", httpServletResponse, sistemaParametro);
 			}
-			//Retorna o arquivo de lei de tarifa
-			if(httpServletRequest.getParameter("modo").equals("verLeiTarifa")){
+			// Retorna o arquivo de lei de tarifa
+			if (httpServletRequest.getParameter("modo").equals("verLeiTarifa")) {
 				this.retornaArquivo("leiTarifa", httpServletResponse, sistemaParametro);
 			}
-			//retorna o arquivo de lei de Normas de Medição
-			if(httpServletRequest.getParameter("modo").equals("verLeiNormaMedicao")){
+			// retorna o arquivo de lei de Normas de Medição
+			if (httpServletRequest.getParameter("modo").equals("verLeiNormaMedicao")) {
 				this.retornaArquivo("leiNormaMedicao", httpServletResponse, sistemaParametro);
 			}
-			//Retorna o arquivo de Norma CO
-			if(httpServletRequest.getParameter("modo").equals("verNormaCO")){
+			// Retorna o arquivo de Norma CO
+			if (httpServletRequest.getParameter("modo").equals("verNormaCO")) {
 				this.retornaArquivo("normaCO", httpServletResponse, sistemaParametro);
 			}
-			//Retorna o arquivo de Norma CM
-			if(httpServletRequest.getParameter("modo").equals("verNormaCM")){
+			// Retorna o arquivo de Norma CM
+			if (httpServletRequest.getParameter("modo").equals("verNormaCM")) {
 				this.retornaArquivo("normaCM", httpServletResponse, sistemaParametro);
 			}
 
 		}
 
 		this.pesquisarEndereco(sistemaParametro, httpServletRequest);
-		this.montarEndereco(consultarSistemaParametroActionForm,
-				httpServletRequest);
-
-		// Verifica se os dados foram informados da tabela existem e joga
-		// numa
-		// colecao
+		this.montarEndereco(consultarSistemaParametroActionForm, httpServletRequest);
 
 		FiltroContaBancaria filtroContaBancaria = new FiltroContaBancaria();
 		filtroContaBancaria.setCampoOrderBy(FiltroContaBancaria.ID);
 
-		Collection<ContaBancaria> colecaoContaBancaria = this.getFachada()
-				.pesquisar(filtroContaBancaria, ContaBancaria.class.getName());
+		Collection<ContaBancaria> colecaoContaBancaria = this.getFachada().pesquisar(filtroContaBancaria, ContaBancaria.class.getName());
 
 		if (colecaoContaBancaria == null || colecaoContaBancaria.isEmpty()) {
-			throw new ActionServletException(
-					"atencao.entidade_sem_dados_para_selecao", null,
-					"Tabela Conta Bancaria");
+			throw new ActionServletException("atencao.entidade_sem_dados_para_selecao", null, "Tabela Conta Bancaria");
 		}
 
-		httpServletRequest.setAttribute("colecaoContaBancaria",
-				colecaoContaBancaria);
+		httpServletRequest.setAttribute("colecaoContaBancaria", colecaoContaBancaria);
 
 		return retorno;
 	}
 
-	private void montarSistemaParametro1Tabela(
-			ConsultarParametrosSistemaActionForm consultarSistemaParametroActionForm,
-			SistemaParametro sistemaParametro) {
+	private void montarSistemaParametro1Tabela(ConsultarParametrosSistemaActionForm form, SistemaParametro sistemaParametro) {
 
 		Fachada fachada = Fachada.getInstancia();
 
-		consultarSistemaParametroActionForm.setNomeEstado(sistemaParametro
-				.getNomeEstado());
-		consultarSistemaParametroActionForm.setNomeEmpresa(sistemaParametro
-				.getNomeEmpresa());
-		consultarSistemaParametroActionForm
-				.setAbreviaturaEmpresa(sistemaParametro
-						.getNomeAbreviadoEmpresa());
-		consultarSistemaParametroActionForm.setCnpj(sistemaParametro
-				.getCnpjEmpresa());
+		form.setNomeEstado(sistemaParametro.getNomeEstado());
+		form.setNomeEmpresa(sistemaParametro.getNomeEmpresa());
+		form.setAbreviaturaEmpresa(sistemaParametro.getNomeAbreviadoEmpresa());
+		form.setCnpj(sistemaParametro.getCnpjEmpresa());
 
 		if (sistemaParametro.getNumeroImovel() != null) {
-			consultarSistemaParametroActionForm.setNumero(sistemaParametro
-					.getNumeroImovel());
+			form.setNumero(sistemaParametro.getNumeroImovel());
 		}
 
 		if (sistemaParametro.getComplementoEndereco() != null) {
-			consultarSistemaParametroActionForm.setComplemento(sistemaParametro
-					.getComplementoEndereco());
+			form.setComplemento(sistemaParametro.getComplementoEndereco());
+		}
+
+		if (sistemaParametro.getDddTelefone() != null) {
+			form.setDddTelefone(sistemaParametro.getDddTelefone());
 		}
 
 		if (sistemaParametro.getNumeroTelefone() != null) {
-			consultarSistemaParametroActionForm
-					.setNumeroTelefone(sistemaParametro.getNumeroTelefone());
+			form.setNumeroTelefone(sistemaParametro.getNumeroTelefone());
 		}
 
 		if (sistemaParametro.getNumeroRamal() != null) {
-			consultarSistemaParametroActionForm.setRamal(sistemaParametro
-					.getNumeroRamal());
+			form.setRamal(sistemaParametro.getNumeroRamal());
 		}
 
 		if (sistemaParametro.getNumeroFax() != null) {
-			consultarSistemaParametroActionForm.setFax(sistemaParametro
-					.getNumeroFax());
+			form.setFax(sistemaParametro.getNumeroFax());
 		}
 
 		if (sistemaParametro.getDescricaoEmail() != null) {
-			consultarSistemaParametroActionForm.setEmail(sistemaParametro
-					.getDescricaoEmail());
+			form.setEmail(sistemaParametro.getDescricaoEmail());
 		}
 
 		if (sistemaParametro.getTituloPagina() != null) {
-			consultarSistemaParametroActionForm
-					.setTitulosRelatorio(sistemaParametro.getTituloPagina());
+			form.setTitulosRelatorio(sistemaParametro.getTituloPagina());
 		}
 
 		if (sistemaParametro.getUnidadeOrganizacionalIdPresidencia() != null) {
-			consultarSistemaParametroActionForm
-					.setUnidadeOrganizacionalPresidencia(sistemaParametro
-							.getUnidadeOrganizacionalIdPresidencia().getId()
-							.toString());
+			form.setUnidadeOrganizacionalPresidencia(sistemaParametro.getUnidadeOrganizacionalIdPresidencia().getId().toString());
 
-			consultarSistemaParametroActionForm
-					.setNomeUnidadeOrganizacionalPresidencia(sistemaParametro
-							.getUnidadeOrganizacionalIdPresidencia()
-							.getDescricao());
+			form.setNomeUnidadeOrganizacionalPresidencia(sistemaParametro.getUnidadeOrganizacionalIdPresidencia().getDescricao());
 		}
 
-		if (sistemaParametro.getClientePresidenteCompesa() != null) {
-			consultarSistemaParametroActionForm.setPresidente(sistemaParametro
-					.getClientePresidenteCompesa().getId().toString());
+		if (sistemaParametro.getClientePresidente() != null) {
+			form.setPresidente(sistemaParametro.getClientePresidente().getId().toString());
 
-			consultarSistemaParametroActionForm
-					.setNomePresidente(sistemaParametro
-							.getClientePresidenteCompesa().getDescricao());
+			form.setNomePresidente(sistemaParametro.getClientePresidente().getDescricao());
 		}
 
-		if (sistemaParametro.getClienteDiretorComercialCompesa() != null) {
-			consultarSistemaParametroActionForm
-					.setDiretorComercial(sistemaParametro
-							.getClienteDiretorComercialCompesa().getId()
-							.toString());
+		if (sistemaParametro.getClienteDiretorComercial() != null) {
+			form.setDiretorComercial(sistemaParametro.getClienteDiretorComercial().getId().toString());
 
-			consultarSistemaParametroActionForm
-					.setNomeDiretorComercial(sistemaParametro
-							.getClienteDiretorComercialCompesa().getDescricao());
+			form.setNomeDiretorComercial(sistemaParametro.getClienteDiretorComercial().getDescricao());
 		}
 
 		if (sistemaParametro.getNumero0800Empresa() != null) {
-			consultarSistemaParametroActionForm
-					.setNumeroTelefoneAtendimento(sistemaParametro
-							.getNumero0800Empresa());
+			form.setNumeroTelefoneAtendimento(sistemaParametro.getNumero0800Empresa());
 		}
 
 		if (sistemaParametro.getNomeSiteEmpresa() != null) {
-			consultarSistemaParametroActionForm.setSite(sistemaParametro
-					.getNomeSiteEmpresa());
+			form.setSite(sistemaParametro.getNomeSiteEmpresa());
 		}
 
 		if (sistemaParametro.getInscricaoEstadual() != null) {
-			consultarSistemaParametroActionForm
-					.setInscricaoEstadual(sistemaParametro
-							.getInscricaoEstadual());
+			form.setInscricaoEstadual(sistemaParametro.getInscricaoEstadual());
 		}
 
 		if (sistemaParametro.getInscricaoMunicipal() != null) {
-			consultarSistemaParametroActionForm
-					.setInscricaoMunicipal(sistemaParametro
-							.getInscricaoMunicipal());
+			form.setInscricaoMunicipal(sistemaParametro.getInscricaoMunicipal());
 		}
 
 		if (sistemaParametro.getNumeroContratoPrestacaoServico() != null) {
-			consultarSistemaParametroActionForm
-					.setNumeroContrato(sistemaParametro
-							.getNumeroContratoPrestacaoServico().toString());
+			form.setNumeroContrato(sistemaParametro.getNumeroContratoPrestacaoServico().toString());
 		}
 
 		if (sistemaParametro.getImagemLogomarca() != null) {
-			consultarSistemaParametroActionForm
-					.setImagemLogomarca(sistemaParametro.getImagemLogomarca());
+			form.setImagemLogomarca(sistemaParametro.getImagemLogomarca());
 		}
 
 		if (sistemaParametro.getImagemRelatorio() != null) {
-			consultarSistemaParametroActionForm
-					.setImagemRelatorio(sistemaParametro.getImagemRelatorio());
+			form.setImagemRelatorio(sistemaParametro.getImagemRelatorio());
 		}
 
 		if (sistemaParametro.getImagemConta() != null) {
-			consultarSistemaParametroActionForm.setImagemConta(sistemaParametro
-					.getImagemConta());
+			form.setImagemConta(sistemaParametro.getImagemConta());
 		}
 
 		if (sistemaParametro.getNumeroExecucaoResumoNegativacao() != null) {
-			consultarSistemaParametroActionForm
-					.setNumeroExecucaoResumoNegativacao(sistemaParametro
-							.getNumeroExecucaoResumoNegativacao().toString());
+			form.setNumeroExecucaoResumoNegativacao(sistemaParametro.getNumeroExecucaoResumoNegativacao().toString());
 		}
 
 		if (sistemaParametro.getIndicadorExibeMensagemNaoReceberPagamento() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorExibirMensagem(sistemaParametro
-							.getIndicadorExibeMensagemNaoReceberPagamento()
-							.toString());
+			form.setIndicadorExibirMensagem(sistemaParametro.getIndicadorExibeMensagemNaoReceberPagamento().toString());
 		}
 		if (sistemaParametro.getClienteResponsavelProgramaEspecial() != null) {
 
 			FiltroCliente filtroCliente = new FiltroCliente();
 
-			filtroCliente.adicionarParametro(new ParametroSimples(
-					FiltroCliente.ID, sistemaParametro
-							.getClienteResponsavelProgramaEspecial().getId()));
+			filtroCliente.adicionarParametro(new ParametroSimples(FiltroCliente.ID, sistemaParametro.getClienteResponsavelProgramaEspecial().getId()));
 
-			Collection<Cliente> colecaoClientes = fachada.pesquisar(
-					filtroCliente, Cliente.class.getName());
+			Collection<Cliente> colecaoClientes = fachada.pesquisar(filtroCliente, Cliente.class.getName());
 
-			Cliente cliente = (Cliente) Util
-					.retonarObjetoDeColecao(colecaoClientes);
+			Cliente cliente = (Cliente) Util.retonarObjetoDeColecao(colecaoClientes);
 
 			if (cliente != null) {
-				consultarSistemaParametroActionForm
-						.setIdClienteResponsavelPrograma(cliente.getId()
-								.toString());
-				consultarSistemaParametroActionForm
-						.setNomeClienteResponsavelPrograma(cliente.getNome());
+				form.setIdClienteResponsavelPrograma(cliente.getId().toString());
+				form.setNomeClienteResponsavelPrograma(cliente.getNome());
 			}
 		}
 		if (sistemaParametro.getPerfilProgramaEspecial() != null) {
 
 			FiltroImovelPerfil filtroImovelPerfil = new FiltroImovelPerfil();
 
-			filtroImovelPerfil.adicionarParametro(new ParametroSimples(
-					FiltroImovelPerfil.ID, sistemaParametro
-							.getPerfilProgramaEspecial().getId()));
+			filtroImovelPerfil.adicionarParametro(new ParametroSimples(FiltroImovelPerfil.ID, sistemaParametro.getPerfilProgramaEspecial().getId()));
 
-			Collection<ImovelPerfil> colecaoImoveisPerfis = this
-					.getFachada()
-					.pesquisar(filtroImovelPerfil, ImovelPerfil.class.getName());
+			Collection<ImovelPerfil> colecaoImoveisPerfis = this.getFachada().pesquisar(filtroImovelPerfil, ImovelPerfil.class.getName());
 
-			ImovelPerfil perfilPrograma = (ImovelPerfil) Util
-					.retonarObjetoDeColecao(colecaoImoveisPerfis);
+			ImovelPerfil perfilPrograma = (ImovelPerfil) Util.retonarObjetoDeColecao(colecaoImoveisPerfis);
 
-			consultarSistemaParametroActionForm
-					.setPerfilProgramaEspecial(perfilPrograma.getDescricao());
+			form.setPerfilProgramaEspecial(perfilPrograma.getDescricao());
 		}
 
 		// Percentual de Convergencia Repavimentacao
 		if (sistemaParametro.getPercentualConvergenciaRepavimentacao() != null) {
-			consultarSistemaParametroActionForm
-					.setPercentualConvergenciaRepavimentacao(Util
-							.formatarBigDecimalParaStringComVirgula(sistemaParametro
-									.getPercentualConvergenciaRepavimentacao()));
+			form.setPercentualConvergenciaRepavimentacao(Util.formatarBigDecimalParaStringComVirgula(sistemaParametro.getPercentualConvergenciaRepavimentacao()));
 		}
 
 		if (sistemaParametro.getIndicadorPopupAtualizacaoCadastral() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorPopupAtualizacaoCadastral(sistemaParametro
-							.getIndicadorPopupAtualizacaoCadastral().toString());
+			form.setIndicadorPopupAtualizacaoCadastral(sistemaParametro.getIndicadorPopupAtualizacaoCadastral().toString());
 		}
 
 		if (sistemaParametro.getValorGuiaFichaComp() != null) {
-			consultarSistemaParametroActionForm
-					.setValorGuiaFichaComp(Util
-							.formatarMoedaReal(sistemaParametro
-									.getValorGuiaFichaComp()));
+			form.setValorGuiaFichaComp(Util.formatarMoedaReal(sistemaParametro.getValorGuiaFichaComp()));
 		}
 
 		if (sistemaParametro.getValorDemonstrativoParcelamentoFichaComp() != null) {
-			consultarSistemaParametroActionForm
-					.setValorDemonstrativoParcelamentoFichaComp(Util
-							.formatarMoedaReal(sistemaParametro
-									.getValorDemonstrativoParcelamentoFichaComp()));
+			form.setValorDemonstrativoParcelamentoFichaComp(Util.formatarMoedaReal(sistemaParametro.getValorDemonstrativoParcelamentoFichaComp()));
 		}
-		
-		if (sistemaParametro.getIndicadorVariaHierarquiaUnidade() != null){
-			consultarSistemaParametroActionForm
-					.setIndicadorVariaHierarquiaUnidade(sistemaParametro
-									.getIndicadorVariaHierarquiaUnidade().toString());
+
+		if (sistemaParametro.getIndicadorVariaHierarquiaUnidade() != null) {
+			form.setIndicadorVariaHierarquiaUnidade(sistemaParametro.getIndicadorVariaHierarquiaUnidade().toString());
 		}
-		
+
 		if (sistemaParametro.getClienteFicticioParaAssociarOsPagamentosNaoIdentificados() != null) {
-			consultarSistemaParametroActionForm
-					.setClienteFicticioAssociarPagamentosNaoIdentificados(sistemaParametro
-							.getClienteFicticioParaAssociarOsPagamentosNaoIdentificados().getId()
-							.toString());
+			form.setClienteFicticioAssociarPagamentosNaoIdentificados(sistemaParametro.getClienteFicticioParaAssociarOsPagamentosNaoIdentificados().getId()
+					.toString());
 
-			consultarSistemaParametroActionForm
-					.setNomeClienteFicticioAssociarPagamentosNaoIdentificados(sistemaParametro
-							.getClienteFicticioParaAssociarOsPagamentosNaoIdentificados().getDescricao());
+			form.setNomeClienteFicticioAssociarPagamentosNaoIdentificados(sistemaParametro.getClienteFicticioParaAssociarOsPagamentosNaoIdentificados()
+					.getDescricao());
 		}
-		
-		
+
 		if (sistemaParametro.getIndicadorUsoNMCliReceitaFantasia() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorUsoNMCliReceitaFantasia(sistemaParametro
-							.getIndicadorUsoNMCliReceitaFantasia().toString());
+			form.setIndicadorUsoNMCliReceitaFantasia(sistemaParametro.getIndicadorUsoNMCliReceitaFantasia().toString());
 		}
 
-		consultarSistemaParametroActionForm.setIndicadorControlaAutoInfracao(""
-				+ sistemaParametro.getIndicadorControlaAutoInfracao());
+		form.setIndicadorControlaAutoInfracao("" + sistemaParametro.getIndicadorControlaAutoInfracao());
 
-		consultarSistemaParametroActionForm.setIndicadorUsaRota(""
-				+ sistemaParametro.getIndicadorUsaRota());
-		consultarSistemaParametroActionForm.setIndicadorDocumentoObrigatorio(""
-				+ sistemaParametro.getIndicadorDocumentoObrigatorio());
-		consultarSistemaParametroActionForm.setIndicadorConsultaSpc("" 
-				+ sistemaParametro.getIndicadorConsultaDocumentoReceita());
+		form.setIndicadorUsaRota("" + sistemaParametro.getIndicadorUsaRota());
+		form.setIndicadorDocumentoObrigatorio("" + sistemaParametro.getIndicadorDocumentoObrigatorio());
+		form.setIndicadorConsultaSpc("" + sistemaParametro.getIndicadorConsultaDocumentoReceita());
 
 		if (sistemaParametro.getValorExtratoFichaComp() != null) {
 
-			String valorAux = Util.formatarMoedaReal(sistemaParametro
-					.getValorExtratoFichaComp());
+			String valorAux = Util.formatarMoedaReal(sistemaParametro.getValorExtratoFichaComp());
 
-			consultarSistemaParametroActionForm
-					.setValorExtratoFichaComp(valorAux);
+			form.setValorExtratoFichaComp(valorAux);
 		}
 
 		if (sistemaParametro.getNumeroDiasBloqueioCelular() != null) {
 
-			consultarSistemaParametroActionForm
-					.setNumeroDiasBloqueioCelular(sistemaParametro
-							.getNumeroDiasBloqueioCelular().toString());
+			form.setNumeroDiasBloqueioCelular(sistemaParametro.getNumeroDiasBloqueioCelular().toString());
 		}
-		
+
 		if (sistemaParametro.getUltimoDiaVencimentoAlternativo() != null) {
 
-			consultarSistemaParametroActionForm
-					.setUltimoDiaVencimentoAlternativo(sistemaParametro
-							.getUltimoDiaVencimentoAlternativo().toString());
+			form.setUltimoDiaVencimentoAlternativo(sistemaParametro.getUltimoDiaVencimentoAlternativo().toString());
 		}
 
 	}
 
-	private void montarSistemaParametro2Tabela(
-			ConsultarParametrosSistemaActionForm consultarSistemaParametroActionForm,
-			SistemaParametro sistemaParametro) {
+	private void montarSistemaParametro2Tabela(ConsultarParametrosSistemaActionForm form, SistemaParametro sistemaParametro) {
 
-		String anoMesFaturamento = Util
-				.formatarAnoMesParaMesAno(sistemaParametro
-						.getAnoMesFaturamento().toString());
+		String anoMesFaturamento = Util.formatarAnoMesParaMesAno(sistemaParametro.getAnoMesFaturamento().toString());
 
-		consultarSistemaParametroActionForm
-				.setMesAnoReferencia(anoMesFaturamento);
-		consultarSistemaParametroActionForm.setMenorConsumo(sistemaParametro
-				.getMenorConsumoGrandeUsuario().toString());
+		form.setMesAnoReferencia(anoMesFaturamento);
+		form.setMenorConsumo(sistemaParametro.getMenorConsumoGrandeUsuario().toString());
 
 		if (sistemaParametro.getValorMinimoEmissaoConta() != null) {
 
-			String valorAux = Util.formatarMoedaReal(sistemaParametro
-					.getValorMinimoEmissaoConta());
+			String valorAux = Util.formatarMoedaReal(sistemaParametro.getValorMinimoEmissaoConta());
 
-			consultarSistemaParametroActionForm.setMenorValor(valorAux);
+			form.setMenorValor(valorAux);
 		}
 
-		consultarSistemaParametroActionForm.setQtdeEconomias(sistemaParametro
-				.getMenorEconomiasGrandeUsuario().toString());
+		form.setQtdeEconomias(sistemaParametro.getMenorEconomiasGrandeUsuario().toString());
 
 		if (sistemaParametro.getMesesMediaConsumo() != null) {
-			consultarSistemaParametroActionForm
-					.setMesesCalculoMedio(sistemaParametro
-							.getMesesMediaConsumo().toString());
+			form.setMesesCalculoMedio(sistemaParametro.getMesesMediaConsumo().toString());
 		}
 
 		if (sistemaParametro.getNumeroMinimoDiasEmissaoVencimento() != null) {
-			consultarSistemaParametroActionForm
-					.setDiasMinimoVencimento(sistemaParametro
-							.getNumeroMinimoDiasEmissaoVencimento().toString());
+			form.setDiasMinimoVencimento(sistemaParametro.getNumeroMinimoDiasEmissaoVencimento().toString());
 		}
 
 		if (sistemaParametro.getNumeroDiasAdicionaisCorreios() != null) {
-			consultarSistemaParametroActionForm
-					.setDiasMinimoVencimentoCorreio(sistemaParametro
-							.getNumeroDiasAdicionaisCorreios().toString());
+			form.setDiasMinimoVencimentoCorreio(sistemaParametro.getNumeroDiasAdicionaisCorreios().toString());
 		}
 
 		if (sistemaParametro.getNumeroMesesValidadeConta() != null) {
-			consultarSistemaParametroActionForm
-					.setNumeroMesesValidadeConta(sistemaParametro
-							.getNumeroMesesValidadeConta().toString());
+			form.setNumeroMesesValidadeConta(sistemaParametro.getNumeroMesesValidadeConta().toString());
 		}
 
 		if (sistemaParametro.getNumeroMesesMinimoAlteracaoVencimento() != null) {
-			consultarSistemaParametroActionForm
-					.setNumeroMesesAlteracaoVencimento(sistemaParametro
-							.getNumeroMesesMinimoAlteracaoVencimento()
-							.toString());
+			form.setNumeroMesesAlteracaoVencimento(sistemaParametro.getNumeroMesesMinimoAlteracaoVencimento().toString());
 		}
 
 		if (sistemaParametro.getNumeroMesesMaximoCalculoMedia() != null) {
-			consultarSistemaParametroActionForm
-					.setNumeroMesesMaximoCalculoMedia(sistemaParametro
-							.getNumeroMesesMaximoCalculoMedia().toString());
+			form.setNumeroMesesMaximoCalculoMedia(sistemaParametro.getNumeroMesesMaximoCalculoMedia().toString());
 		}
 
 		if (sistemaParametro.getNumeroMesesCalculoCorrecao() != null) {
-			consultarSistemaParametroActionForm
-					.setNumeroMesesCalculoCorrecao(sistemaParametro
-							.getNumeroMesesCalculoCorrecao().toString());
+			form.setNumeroMesesCalculoCorrecao(sistemaParametro.getNumeroMesesCalculoCorrecao().toString());
 		}
-		
-		if(sistemaParametro.getNumeroVezesSuspendeLeitura() != null) {
-			consultarSistemaParametroActionForm.setNumeroVezesSuspendeLeitura(sistemaParametro.getNumeroVezesSuspendeLeitura().toString());
+
+		if (sistemaParametro.getNumeroVezesSuspendeLeitura() != null) {
+			form.setNumeroVezesSuspendeLeitura(sistemaParametro.getNumeroVezesSuspendeLeitura().toString());
 		}
-		
-		if(sistemaParametro.getNumeroMesesLeituraSuspensa() != null) {
-			consultarSistemaParametroActionForm.setNumeroMesesLeituraSuspensa(sistemaParametro.getNumeroMesesLeituraSuspensa().toString());
+
+		if (sistemaParametro.getNumeroMesesLeituraSuspensa() != null) {
+			form.setNumeroMesesLeituraSuspensa(sistemaParametro.getNumeroMesesLeituraSuspensa().toString());
 		}
-		
-		if(sistemaParametro.getNumeroMesesReinicioSitEspFaturamento() != null) {
-			consultarSistemaParametroActionForm.setNumeroMesesReinicioSitEspFatu(sistemaParametro.getNumeroMesesReinicioSitEspFaturamento().toString());
+
+		if (sistemaParametro.getNumeroMesesReinicioSitEspFaturamento() != null) {
+			form.setNumeroMesesReinicioSitEspFatu(sistemaParametro.getNumeroMesesReinicioSitEspFaturamento().toString());
 		}
-		
+
 		if (sistemaParametro.getIndicadorRoteiroEmpresa() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorRoteiroEmpresa(sistemaParametro
-							.getIndicadorRoteiroEmpresa().toString());
+			form.setIndicadorRoteiroEmpresa(sistemaParametro.getIndicadorRoteiroEmpresa().toString());
 		}
 
 		if (sistemaParametro.getIndicadorLimiteAlteracaoVencimento() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorLimiteAlteracaoVencimento(sistemaParametro
-							.getIndicadorLimiteAlteracaoVencimento().toString());
+			form.setIndicadorLimiteAlteracaoVencimento(sistemaParametro.getIndicadorLimiteAlteracaoVencimento().toString());
 		}
 
 		if (sistemaParametro.getIndicadorCalculaVencimento() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorCalculoVencimento(sistemaParametro
-							.getIndicadorCalculaVencimento().toString());
+			form.setIndicadorCalculoVencimento(sistemaParametro.getIndicadorCalculaVencimento().toString());
 		}
 
 		if (sistemaParametro.getIndicadorTarifaCategoria() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorTarifaCategoria(sistemaParametro
-							.getIndicadorTarifaCategoria().toString());
+			form.setIndicadorTarifaCategoria(sistemaParametro.getIndicadorTarifaCategoria().toString());
 		}
 
-		consultarSistemaParametroActionForm.setIndicadorAtualizacaoTarifaria(""
-				+ sistemaParametro.getIndicadorAtualizacaoTarifaria());
+		form.setIndicadorAtualizacaoTarifaria("" + sistemaParametro.getIndicadorAtualizacaoTarifaria());
 
 		if (sistemaParametro.getAnoMesAtualizacaoTarifaria() != null) {
 
-			String anoMes = Util.formatarAnoMesParaMesAno(sistemaParametro
-					.getAnoMesAtualizacaoTarifaria().toString());
+			String anoMes = Util.formatarAnoMesParaMesAno(sistemaParametro.getAnoMesAtualizacaoTarifaria().toString());
 
-			consultarSistemaParametroActionForm
-					.setMesAnoAtualizacaoTarifaria(anoMes);
+			form.setMesAnoAtualizacaoTarifaria(anoMes);
 		}
 
 		if (sistemaParametro.getIndicadorFaturamentoAntecipado() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorFaturamentoAntecipado(sistemaParametro
-							.getIndicadorFaturamentoAntecipado().toString());
+			form.setIndicadorFaturamentoAntecipado(sistemaParametro.getIndicadorFaturamentoAntecipado().toString());
 		}
 
 		if (sistemaParametro.getValorSalarioMinimo() != null) {
 
-			String valorAux = Util.formatarMoedaReal(sistemaParametro
-					.getValorSalarioMinimo());
+			String valorAux = Util.formatarMoedaReal(sistemaParametro.getValorSalarioMinimo());
 
-			consultarSistemaParametroActionForm.setSalarioMinimo(valorAux);
+			form.setSalarioMinimo(valorAux);
 		}
 
 		if (sistemaParametro.getAreaMaximaTarifaSocial() != null) {
-			consultarSistemaParametroActionForm.setAreaMaxima(sistemaParametro
-					.getAreaMaximaTarifaSocial().toString());
+			form.setAreaMaxima(sistemaParametro.getAreaMaximaTarifaSocial().toString());
 		}
 
 		if (sistemaParametro.getConsumoEnergiaMaximoTarifaSocial() != null) {
-			consultarSistemaParametroActionForm
-					.setConsumoMaximo(sistemaParametro
-							.getConsumoEnergiaMaximoTarifaSocial().toString());
+			form.setConsumoMaximo(sistemaParametro.getConsumoEnergiaMaximoTarifaSocial().toString());
 		}
 
 		if (sistemaParametro.getIndicadorTarifaCategoria() != null) {
-			consultarSistemaParametroActionForm
-					.setConsumoMaximo(sistemaParametro
-							.getConsumoEnergiaMaximoTarifaSocial().toString());
+			form.setConsumoMaximo(sistemaParametro.getConsumoEnergiaMaximoTarifaSocial().toString());
 		}
 		if (sistemaParametro.getIndicadorRetificacaoValorMenor() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorRetificacaoValorMenor(""
-							+ sistemaParametro
-									.getIndicadorRetificacaoValorMenor());
+			form.setIndicadorRetificacaoValorMenor("" + sistemaParametro.getIndicadorRetificacaoValorMenor());
 		}
 
 		if (sistemaParametro.getIndicadorTransferenciaComDebito() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorTransferenciaComDebito(""
-							+ sistemaParametro
-									.getIndicadorTransferenciaComDebito());
+			form.setIndicadorTransferenciaComDebito("" + sistemaParametro.getIndicadorTransferenciaComDebito());
 		}
 
 		if (sistemaParametro.getIndicadorNaoMedidoTarifa() != null) {
-			consultarSistemaParametroActionForm.setIndicadorNaoMedidoTarifa(""
-					+ sistemaParametro.getIndicadorNaoMedidoTarifa());
+			form.setIndicadorNaoMedidoTarifa("" + sistemaParametro.getIndicadorNaoMedidoTarifa());
 		}
 
 		if (sistemaParametro.getIndicadorQuadraFace() != null) {
-			consultarSistemaParametroActionForm.setIndicadorQuadraFace(""
-					+ sistemaParametro.getIndicadorQuadraFace());
+			form.setIndicadorQuadraFace("" + sistemaParametro.getIndicadorQuadraFace());
 		}
 
 		if (sistemaParametro.getNumeroDiasVariacaoConsumo() != null) {
-			consultarSistemaParametroActionForm
-					.setNumeroDiasVariacaoConsumo(sistemaParametro
-							.getNumeroDiasVariacaoConsumo().toString());
+			form.setNumeroDiasVariacaoConsumo(sistemaParametro.getNumeroDiasVariacaoConsumo().toString());
 		}
 
 		if (sistemaParametro.getNumeroDiasPrazoRecursoAutoInfracao() != null) {
-			consultarSistemaParametroActionForm
-					.setNnDiasPrazoRecursoAutoInfracao(sistemaParametro
-							.getNumeroDiasPrazoRecursoAutoInfracao().toString());
+			form.setNnDiasPrazoRecursoAutoInfracao(sistemaParametro.getNumeroDiasPrazoRecursoAutoInfracao().toString());
 		}
 
 		if (sistemaParametro.getDiasVencimentoAlternativo() != null) {
-			consultarSistemaParametroActionForm
-					.setDiasVencimentoAlternativo(sistemaParametro
-							.getDiasVencimentoAlternativo());
+			form.setDiasVencimentoAlternativo(sistemaParametro.getDiasVencimentoAlternativo());
 		}
 		if (sistemaParametro.getIndicadorBloqueioContaMobile() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorBloqueioContaMobile(sistemaParametro
-							.getIndicadorBloqueioContaMobile().toString());
+			form.setIndicadorBloqueioContaMobile(sistemaParametro.getIndicadorBloqueioContaMobile().toString());
 		}
 
 		if (sistemaParametro.getValorContaFichaComp() != null) {
 
-			String valorAux = Util.formatarMoedaReal(sistemaParametro
-					.getValorContaFichaComp());
+			String valorAux = Util.formatarMoedaReal(sistemaParametro.getValorContaFichaComp());
 
-			consultarSistemaParametroActionForm
-					.setValorContaFichaComp(valorAux);
+			form.setValorContaFichaComp(valorAux);
 		}
 
 		if (sistemaParametro.getNumeroMesesRetificarConta() != null) {
 
-			String valorAux = sistemaParametro
-					.getNumeroMesesRetificarConta().toString();
+			String valorAux = sistemaParametro.getNumeroMesesRetificarConta().toString();
 
-			consultarSistemaParametroActionForm
-					.setNumeroMesesRetificarConta(valorAux);
+			form.setNumeroMesesRetificarConta(valorAux);
 		}
 
 		if (sistemaParametro.getIndicadorNormaRetificacao() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorNormaRetificacao(sistemaParametro
-							.getIndicadorNormaRetificacao().toString());
+			form.setIndicadorNormaRetificacao(sistemaParametro.getIndicadorNormaRetificacao().toString());
 		}
-		
+
 		if (sistemaParametro.getMensagemContaBraile() != null) {
-			consultarSistemaParametroActionForm
-					.setMensagemContaBraile(sistemaParametro.getMensagemContaBraile());
+			form.setMensagemContaBraile(sistemaParametro.getMensagemContaBraile());
 		}
-		
-		if (sistemaParametro.getCodigoTipoCalculoNaoMedido() != null){
-			if (sistemaParametro.getCodigoTipoCalculoNaoMedido().compareTo(new Integer (1)) == 0){
-				consultarSistemaParametroActionForm.setCodigoTipoCalculoNaoMedido("AREA CONSTRUIDA");
-			}else if(sistemaParametro.getCodigoTipoCalculoNaoMedido().compareTo(new Integer (2)) == 0){
-					consultarSistemaParametroActionForm.setCodigoTipoCalculoNaoMedido("PONTOS DE UTILIZAÇÃO");
-				}else if(sistemaParametro.getCodigoTipoCalculoNaoMedido().compareTo(new Integer (3)) == 0){	
-							consultarSistemaParametroActionForm.setCodigoTipoCalculoNaoMedido("NUMERO DE MORADORES");
-					}
-				}
+
+		if (sistemaParametro.getCodigoTipoCalculoNaoMedido() != null) {
+			if (sistemaParametro.getCodigoTipoCalculoNaoMedido().compareTo(new Integer(1)) == 0) {
+				form.setCodigoTipoCalculoNaoMedido("AREA CONSTRUIDA");
+			} else if (sistemaParametro.getCodigoTipoCalculoNaoMedido().compareTo(new Integer(2)) == 0) {
+				form.setCodigoTipoCalculoNaoMedido("PONTOS DE UTILIZAÇÃO");
+			} else if (sistemaParametro.getCodigoTipoCalculoNaoMedido().compareTo(new Integer(3)) == 0) {
+				form.setCodigoTipoCalculoNaoMedido("NUMERO DE MORADORES");
 			}
+		}
+	}
 		
-	private void montarSistemaParametro3Tabela(
-			ConsultarParametrosSistemaActionForm consultarSistemaParametroActionForm,
-			SistemaParametro sistemaParametro) {
+	private void montarSistemaParametro3Tabela(ConsultarParametrosSistemaActionForm form, SistemaParametro sistemaParametro) {
 
-		String anoMesArrecadacao = Util
-				.formatarAnoMesParaMesAno(sistemaParametro
-						.getAnoMesArrecadacao().toString());
+		String anoMesArrecadacao = Util.formatarAnoMesParaMesAno(sistemaParametro.getAnoMesArrecadacao().toString());
 
-		consultarSistemaParametroActionForm.setMesAnoReferenciaArrecadacao(""
-				+ anoMesArrecadacao);
+		form.setMesAnoReferenciaArrecadacao("" + anoMesArrecadacao);
 
 		if (sistemaParametro.getCodigoEmpresaFebraban() != null) {
-			consultarSistemaParametroActionForm
-					.setCodigoEmpresaFebraban(sistemaParametro
-							.getCodigoEmpresaFebraban().toString());
+			form.setCodigoEmpresaFebraban(sistemaParametro.getCodigoEmpresaFebraban().toString());
 		}
 
 		if (sistemaParametro.getNumeroLayoutFebraban() != null) {
-			consultarSistemaParametroActionForm
-					.setNumeroLayOut(sistemaParametro.getNumeroLayoutFebraban()
-							.toString());
+			form.setNumeroLayOut(sistemaParametro.getNumeroLayoutFebraban().toString());
 		}
 
 		if (sistemaParametro.getContaBancaria() != null) {
-			consultarSistemaParametroActionForm
-					.setIndentificadorContaDevolucao(sistemaParametro
-							.getContaBancaria().getId().toString());
+			form.setIndentificadorContaDevolucao(sistemaParametro.getContaBancaria().getId().toString());
 		}
 
 		if (sistemaParametro.getPercentualFinanciamentoEntradaMinima() != null) {
 
-			String valorAux = Util.formatarMoedaReal(sistemaParametro
-					.getPercentualFinanciamentoEntradaMinima());
+			String valorAux = Util.formatarMoedaReal(sistemaParametro.getPercentualFinanciamentoEntradaMinima());
 
-			consultarSistemaParametroActionForm
-					.setPercentualEntradaMinima(valorAux);
+			form.setPercentualEntradaMinima(valorAux);
 		}
 
 		if (sistemaParametro.getNumeroMaximoParcelasFinanciamento() != null) {
-			consultarSistemaParametroActionForm
-					.setMaximoParcelas(sistemaParametro
-							.getNumeroMaximoParcelasFinanciamento().toString());
+			form.setMaximoParcelas(sistemaParametro.getNumeroMaximoParcelasFinanciamento().toString());
 		}
 
 		if (sistemaParametro.getPercentualMaximoAbatimento() != null) {
 
-			String valorAux = Util.formatarMoedaReal(sistemaParametro
-					.getPercentualMaximoAbatimento());
+			String valorAux = Util.formatarMoedaReal(sistemaParametro.getPercentualMaximoAbatimento());
 
-			consultarSistemaParametroActionForm
-					.setPercentualMaximoAbatimento(valorAux);
+			form.setPercentualMaximoAbatimento(valorAux);
 		}
 
 		if (sistemaParametro.getPercentualTaxaJurosFinanciamento() != null) {
 
-			String valorAux = Util.formatarMoedaReal(sistemaParametro
-					.getPercentualTaxaJurosFinanciamento());
+			String valorAux = Util.formatarMoedaReal(sistemaParametro.getPercentualTaxaJurosFinanciamento());
 
-			consultarSistemaParametroActionForm
-					.setPercentualTaxaFinanciamento(valorAux);
+			form.setPercentualTaxaFinanciamento(valorAux);
 		}
 
 		if (sistemaParametro.getNumeroMaximoParcelaCredito() != null) {
-			consultarSistemaParametroActionForm
-					.setNumeroMaximoParcelaCredito(sistemaParametro
-							.getNumeroMaximoParcelaCredito().toString());
+			form.setNumeroMaximoParcelaCredito(sistemaParametro.getNumeroMaximoParcelaCredito().toString());
 		}
 
 		if (sistemaParametro.getPercentualMediaIndice() != null) {
 
-			String valorAux = Util.formatarMoedaReal(sistemaParametro
-					.getPercentualMediaIndice());
+			String valorAux = Util.formatarMoedaReal(sistemaParametro.getPercentualMediaIndice());
 
-			consultarSistemaParametroActionForm
-					.setPercentualCalculoIndice(valorAux);
+			form.setPercentualCalculoIndice(valorAux);
 		}
 		if (sistemaParametro.getNumeroModuloDigitoVerificador() != null) {
-			consultarSistemaParametroActionForm
-					.setNumeroModuloDigitoVerificador(sistemaParametro
-							.getNumeroModuloDigitoVerificador().toString());
+			form.setNumeroModuloDigitoVerificador(sistemaParametro.getNumeroModuloDigitoVerificador().toString());
 		}
 		if (sistemaParametro.getNumeroMesesPesquisaImoveisRamaisSuprimidos() != null) {
-			consultarSistemaParametroActionForm
-					.setNumeroMesesPesquisaImoveisRamaisSuprimidos(sistemaParametro
-							.getNumeroMesesPesquisaImoveisRamaisSuprimidos()
-							.toString());
+			form.setNumeroMesesPesquisaImoveisRamaisSuprimidos(sistemaParametro.getNumeroMesesPesquisaImoveisRamaisSuprimidos().toString());
 		}
 		if (sistemaParametro.getNumeroAnoQuitacao() != null) {
-			consultarSistemaParametroActionForm
-					.setNumeroAnoQuitacao(sistemaParametro
-							.getNumeroAnoQuitacao().toString());
+			form.setNumeroAnoQuitacao(sistemaParametro.getNumeroAnoQuitacao().toString());
 		}
 		if (sistemaParametro.getIndicadorContaParcelada() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorContaParcelada(sistemaParametro
-							.getIndicadorContaParcelada().toString());
+			form.setIndicadorContaParcelada(sistemaParametro.getIndicadorContaParcelada().toString());
 		}
 		if (sistemaParametro.getIndicadorCobrancaJudical() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorCobrancaJudical(sistemaParametro
-							.getIndicadorCobrancaJudical().toString());
+			form.setIndicadorCobrancaJudical(sistemaParametro.getIndicadorCobrancaJudical().toString());
 		}
 		if (sistemaParametro.getIndicadorValorMovimentoArrecadador() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorValorMovimentoArrecadador(String
-							.valueOf(sistemaParametro
-									.getIndicadorValorMovimentoArrecadador()));
+			form.setIndicadorValorMovimentoArrecadador(String.valueOf(sistemaParametro.getIndicadorValorMovimentoArrecadador()));
 		}
 		if (sistemaParametro.getNumeroMesesAnterioresParaDeclaracaoQuitacao() != null) {
-			consultarSistemaParametroActionForm
-					.setNumeroMesesAnterioresParaDeclaracaoQuitacao(sistemaParametro
-							.getNumeroMesesAnterioresParaDeclaracaoQuitacao()
-							.toString());
+			form.setNumeroMesesAnterioresParaDeclaracaoQuitacao(sistemaParametro.getNumeroMesesAnterioresParaDeclaracaoQuitacao().toString());
 		}
 
 	}
 
-	private void montarSistemaParametro4Tabela(
-			ConsultarParametrosSistemaActionForm consultarSistemaParametroActionForm,
-			SistemaParametro sistemaParametro) {
+	private void montarSistemaParametro4Tabela(ConsultarParametrosSistemaActionForm form, SistemaParametro sistemaParametro) {
 
 		if (sistemaParametro.getHidrometroCapacidade() != null) {
-			consultarSistemaParametroActionForm
-					.setDescricaoMenorCapacidade(sistemaParametro
-							.getHidrometroCapacidade().getDescricao());
+			form.setDescricaoMenorCapacidade(sistemaParametro.getHidrometroCapacidade().getDescricao());
 		}
 
 		if (sistemaParametro.getIndicadorFaixaFalsa() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorGeracaoFaixaFalsa(sistemaParametro
-							.getIndicadorFaixaFalsa().toString());
+			form.setIndicadorGeracaoFaixaFalsa(sistemaParametro.getIndicadorFaixaFalsa().toString());
 		}
 
 		if (sistemaParametro.getIndicadorUsoFaixaFalsa() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorPercentualGeracaoFaixaFalsa(sistemaParametro
-							.getIndicadorUsoFaixaFalsa().toString());
+			form.setIndicadorPercentualGeracaoFaixaFalsa(sistemaParametro.getIndicadorUsoFaixaFalsa().toString());
 		}
 
 		if (sistemaParametro.getPercentualFaixaFalsa() != null) {
 
-			String valorAux = Util.formatarMoedaReal(sistemaParametro
-					.getPercentualFaixaFalsa());
+			String valorAux = Util.formatarMoedaReal(sistemaParametro.getPercentualFaixaFalsa());
 
-			consultarSistemaParametroActionForm
-					.setPercentualGeracaoFaixaFalsa(valorAux);
+			form.setPercentualGeracaoFaixaFalsa(valorAux);
 		}
 
 		if (sistemaParametro.getIndicadorPercentualFiscalizacaoLeitura() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorPercentualGeracaoFiscalizacaoLeitura(sistemaParametro
-							.getIndicadorPercentualFiscalizacaoLeitura()
-							.toString());
+			form.setIndicadorPercentualGeracaoFiscalizacaoLeitura(sistemaParametro.getIndicadorPercentualFiscalizacaoLeitura().toString());
 		}
 
 		if (sistemaParametro.getIndicadorUsoFiscalizadorLeitura() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorGeracaoFiscalizacaoLeitura(sistemaParametro
-							.getIndicadorUsoFiscalizadorLeitura().toString());
+			form.setIndicadorGeracaoFiscalizacaoLeitura(sistemaParametro.getIndicadorUsoFiscalizadorLeitura().toString());
 		}
 
 		if (sistemaParametro.getPercentualFiscalizacaoLeitura() != null) {
 
-			String valorAux = Util.formatarMoedaReal(sistemaParametro
-					.getPercentualFiscalizacaoLeitura());
+			String valorAux = Util.formatarMoedaReal(sistemaParametro.getPercentualFiscalizacaoLeitura());
 
-			consultarSistemaParametroActionForm
-					.setPercentualGeracaoFiscalizacaoLeitura(valorAux);
+			form.setPercentualGeracaoFiscalizacaoLeitura(valorAux);
 		}
 
 		if (sistemaParametro.getIndicadorUsoFaixaFalsa() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorPercentualGeracaoFaixaFalsa(sistemaParametro
-							.getIndicadorUsoFaixaFalsa().toString());
+			form.setIndicadorPercentualGeracaoFaixaFalsa(sistemaParametro.getIndicadorUsoFaixaFalsa().toString());
 		}
 
 		if (sistemaParametro.getPercentualFaixaFalsa() != null) {
 
-			String valorAux = Util.formatarMoedaReal(sistemaParametro
-					.getPercentualFaixaFalsa());
+			String valorAux = Util.formatarMoedaReal(sistemaParametro.getPercentualFaixaFalsa());
 
-			consultarSistemaParametroActionForm
-					.setPercentualGeracaoFaixaFalsa(valorAux);
+			form.setPercentualGeracaoFaixaFalsa(valorAux);
 		}
 
 		if (sistemaParametro.getIncrementoMaximoConsumoRateio() != null) {
 
-			consultarSistemaParametroActionForm
-					.setIncrementoMaximoConsumo(sistemaParametro
-							.getIncrementoMaximoConsumoRateio().toString());
+			form.setIncrementoMaximoConsumo(sistemaParametro.getIncrementoMaximoConsumoRateio().toString());
 		}
 
 		if (sistemaParametro.getDecrementoMaximoConsumoRateio() != null) {
-			consultarSistemaParametroActionForm
-					.setDecrementoMaximoConsumo(sistemaParametro
-							.getDecrementoMaximoConsumoRateio().toString());
+			form.setDecrementoMaximoConsumo(sistemaParametro.getDecrementoMaximoConsumoRateio().toString());
 		}
 
 		if (sistemaParametro.getPercentualToleranciaRateio() != null) {
 
-			String valorAux = Util.formataBigDecimal(
-					sistemaParametro.getPercentualToleranciaRateio(), 1, false);
+			String valorAux = Util.formataBigDecimal(sistemaParametro.getPercentualToleranciaRateio(), 1, false);
 
-			consultarSistemaParametroActionForm
-					.setPercentualToleranciaRateioConsumo(valorAux);
+			form.setPercentualToleranciaRateioConsumo(valorAux);
 		}
 
 		if (sistemaParametro.getNumeroDiasVencimentoCobranca() != null) {
-			consultarSistemaParametroActionForm
-					.setDiasVencimentoCobranca(sistemaParametro
-							.getNumeroDiasVencimentoCobranca().toString());
+			form.setDiasVencimentoCobranca(sistemaParametro.getNumeroDiasVencimentoCobranca().toString());
 		}
 
 		if (sistemaParametro.getNumeroMaximoMesesSancoes() != null) {
-			consultarSistemaParametroActionForm
-					.setNumeroMaximoMesesSancoes(sistemaParametro
-							.getNumeroMaximoMesesSancoes().toString());
+			form.setNumeroMaximoMesesSancoes(sistemaParametro.getNumeroMaximoMesesSancoes().toString());
 		}
 
-		consultarSistemaParametroActionForm.setValorSegundaVia(Util
-				.formatarMoedaReal(sistemaParametro.getValorSegundaVia()));
+		form.setValorSegundaVia(Util.formatarMoedaReal(sistemaParametro.getValorSegundaVia()));
 
-		consultarSistemaParametroActionForm.setIndicadorCobrarTaxaExtrato(""
-				+ sistemaParametro.getIndicadorCobrarTaxaExtrato());
+		form.setIndicadorCobrarTaxaExtrato("" + sistemaParametro.getIndicadorCobrarTaxaExtrato());
 
 		if (sistemaParametro.getCodigoPeriodicidadeNegativacao() != null) {
-			consultarSistemaParametroActionForm
-					.setCodigoPeriodicidadeNegativacao(sistemaParametro
-							.getCodigoPeriodicidadeNegativacao().toString());
+			form.setCodigoPeriodicidadeNegativacao(sistemaParametro.getCodigoPeriodicidadeNegativacao().toString());
 		}
 
-		consultarSistemaParametroActionForm.setNumeroDiasCalculoAcrescimos(""
-				+ sistemaParametro.getNumeroDiasCalculoAcrescimos());
+		form.setNumeroDiasCalculoAcrescimos("" + sistemaParametro.getNumeroDiasCalculoAcrescimos());
 
-		consultarSistemaParametroActionForm
-				.setNumeroDiasValidadeExtrato(sistemaParametro
-						.getNumeroDiasValidadeExtrato().toString());
+		form.setNumeroDiasValidadeExtrato(sistemaParametro.getNumeroDiasValidadeExtrato().toString());
 
 		if (sistemaParametro.getNumeroDiasValidadeExtratoPermissaoEspecial() != null) {
-			consultarSistemaParametroActionForm
-					.setNumeroDiasValidadeExtratoPermissaoEspecial(sistemaParametro
-							.getNumeroDiasValidadeExtratoPermissaoEspecial()
-							.toString());
+			form.setNumeroDiasValidadeExtratoPermissaoEspecial(sistemaParametro.getNumeroDiasValidadeExtratoPermissaoEspecial().toString());
 		}
 
-		consultarSistemaParametroActionForm
-				.setIndicadorParcelamentoConfirmado(""
-						+ sistemaParametro.getIndicadorParcelamentoConfirmado());
-		
-		consultarSistemaParametroActionForm
-				.setindicadorTabelaPrice(""
-						+ sistemaParametro.getIndicadorTabelaPrice());
+		form.setIndicadorParcelamentoConfirmado("" + sistemaParametro.getIndicadorParcelamentoConfirmado());
 
-		consultarSistemaParametroActionForm
-				.setNumeroDiasVencimentoEntradaParcelamento(""
-						+ sistemaParametro
-								.getNumeroDiasVencimentoEntradaParcelamento()
-								.toString());
-	
-		if  (sistemaParametro.getNumeroDiasEncerrarOsFiscalizacaoDecursoPrazo() != null){
-			consultarSistemaParametroActionForm.setNumeroDiasEncerrarOsFiscalizacaoDecursoPrazo(sistemaParametro
-					.getNumeroDiasEncerrarOsFiscalizacaoDecursoPrazo().toString());
+		form.setindicadorTabelaPrice("" + sistemaParametro.getIndicadorTabelaPrice());
+
+		form.setNumeroDiasVencimentoEntradaParcelamento("" + sistemaParametro.getNumeroDiasVencimentoEntradaParcelamento().toString());
+
+		if (sistemaParametro.getNumeroDiasEncerrarOsFiscalizacaoDecursoPrazo() != null) {
+			form.setNumeroDiasEncerrarOsFiscalizacaoDecursoPrazo(sistemaParametro.getNumeroDiasEncerrarOsFiscalizacaoDecursoPrazo().toString());
 		}
-		
-		if (sistemaParametro.getResolucaoDiretoria() != null
-				&& sistemaParametro.getResolucaoDiretoria().getId() != null) {
-			consultarSistemaParametroActionForm
-					.setIdResolucaoDiretoria(sistemaParametro
-							.getResolucaoDiretoria().getId().toString());
+
+		if (sistemaParametro.getResolucaoDiretoria() != null && sistemaParametro.getResolucaoDiretoria().getId() != null) {
+			form.setIdResolucaoDiretoria(sistemaParametro.getResolucaoDiretoria().getId().toString());
 		}
 
 		if (sistemaParametro.getIndicadorBloqueioContasContratoParcelDebitos() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorBloqueioContasContratoParcelDebitos(sistemaParametro
-							.getIndicadorBloqueioContasContratoParcelDebitos()
-							+ "");
+			form.setIndicadorBloqueioContasContratoParcelDebitos(sistemaParametro.getIndicadorBloqueioContasContratoParcelDebitos() + "");
 		}
 
-		if (sistemaParametro
-				.getIndicadorBloqueioContasContratoParcelManterConta() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorBloqueioContasContratoParcelManterConta(sistemaParametro
-							.getIndicadorBloqueioContasContratoParcelManterConta()
-							+ "");
+		if (sistemaParametro.getIndicadorBloqueioContasContratoParcelManterConta() != null) {
+			form.setIndicadorBloqueioContasContratoParcelManterConta(sistemaParametro.getIndicadorBloqueioContasContratoParcelManterConta() + "");
 		}
 
-		if (sistemaParametro
-			.getIndicadorBloqueioGuiasOuAcresContratoParcelDebito() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorBloqueioGuiasOuAcresContratoParcelDebito(sistemaParametro
-							.getIndicadorBloqueioGuiasOuAcresContratoParcelDebito()
-							+ "");
+		if (sistemaParametro.getIndicadorBloqueioGuiasOuAcresContratoParcelDebito() != null) {
+			form.setIndicadorBloqueioGuiasOuAcresContratoParcelDebito(sistemaParametro.getIndicadorBloqueioGuiasOuAcresContratoParcelDebito() + "");
 		}
 
-		if (sistemaParametro
-				.getIndicadorBloqueioGuiasOuAcresContratoParcelManterConta() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorBloqueioGuiasOuAcresContratoParcelManterConta(sistemaParametro
-							.getIndicadorBloqueioGuiasOuAcresContratoParcelManterConta()
-							+ "");
+		if (sistemaParametro.getIndicadorBloqueioGuiasOuAcresContratoParcelManterConta() != null) {
+			form.setIndicadorBloqueioGuiasOuAcresContratoParcelManterConta(sistemaParametro.getIndicadorBloqueioGuiasOuAcresContratoParcelManterConta() + "");
 		}
 
 		if (sistemaParametro.getNumeroMaximoParcelasContratosParcelamento() != null) {
-			consultarSistemaParametroActionForm
-					.setNumeroMaximoParcelasContratosParcelamento(sistemaParametro
-							.getNumeroMaximoParcelasContratosParcelamento().toString());
+			form.setNumeroMaximoParcelasContratosParcelamento(sistemaParametro.getNumeroMaximoParcelasContratosParcelamento().toString());
 		}
-	
+
+		if (sistemaParametro.getClienteResponsavelNegativacao() != null) {
+			form.setIdClienteResponsavelNegativacao(sistemaParametro.getClienteResponsavelNegativacao().getId().toString());
+			form.setNomeClienteResponsavelNegativacao(sistemaParametro.getClienteResponsavelNegativacao().getNome());
+		}
 	}
 	
-	private void montarSistemaParametro5Tabela(
-			ConsultarParametrosSistemaActionForm consultarSistemaParametroActionForm,
-			SistemaParametro sistemaParametro) {
+	private void montarSistemaParametro5Tabela(ConsultarParametrosSistemaActionForm form, SistemaParametro sistemaParametro) {
 
 		Fachada fachada = Fachada.getInstancia();
 
 		if (sistemaParametro.getIndicadorSugestaoTramite() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorSugestaoTramite(sistemaParametro
-							.getIndicadorSugestaoTramite().toString());
+			form.setIndicadorSugestaoTramite(sistemaParametro.getIndicadorSugestaoTramite().toString());
 		}
 
 		if (sistemaParametro.getDiasReativacao() != null) {
-			consultarSistemaParametroActionForm
-					.setDiasMaximoReativarRA(sistemaParametro
-							.getDiasReativacao().toString());
+			form.setDiasMaximoReativarRA(sistemaParametro.getDiasReativacao().toString());
 		}
 
 		if (sistemaParametro.getDiasMaximoAlterarOS() != null) {
-			consultarSistemaParametroActionForm
-					.setDiasMaximoAlterarOS(sistemaParametro
-							.getDiasMaximoAlterarOS().toString());
+			form.setDiasMaximoAlterarOS(sistemaParametro.getDiasMaximoAlterarOS().toString());
 		}
 
 		if (sistemaParametro.getNumeroDiasEncerramentoOrdemServico() != null) {
-			consultarSistemaParametroActionForm
-					.setNumeroDiasEncerramentoOrdemServico(sistemaParametro
-							.getNumeroDiasEncerramentoOrdemServico().toString());
+			form.setNumeroDiasEncerramentoOrdemServico(sistemaParametro.getNumeroDiasEncerramentoOrdemServico().toString());
 		}
 
 		if (sistemaParametro.getNumeroDiasEncerramentoOSSeletiva() != null) {
-			consultarSistemaParametroActionForm
-					.setNumeroDiasEncerramentoOSSeletiva(sistemaParametro
-							.getNumeroDiasEncerramentoOSSeletiva().toString());
+			form.setNumeroDiasEncerramentoOSSeletiva(sistemaParametro.getNumeroDiasEncerramentoOSSeletiva().toString());
 		}
 
 		if (sistemaParametro.getNumeroDiasAlteracaoVencimentoPosterior() != null) {
-			consultarSistemaParametroActionForm
-					.setNumeroDiasAlteracaoVencimentoPosterior(sistemaParametro
-							.getNumeroDiasAlteracaoVencimentoPosterior()
-							.toString());
+			form.setNumeroDiasAlteracaoVencimentoPosterior(sistemaParametro.getNumeroDiasAlteracaoVencimentoPosterior().toString());
 		}
 
 		if (sistemaParametro.getUltimoRAManual() != null) {
-			consultarSistemaParametroActionForm
-					.setUltimoIDGeracaoRA(sistemaParametro.getUltimoRAManual()
-							.toString());
+			form.setUltimoIDGeracaoRA(sistemaParametro.getUltimoRAManual().toString());
 		}
 
 		if (sistemaParametro.getNumeroDiasExpiracaoAcesso() != null) {
-			consultarSistemaParametroActionForm
-					.setDiasMaximoExpirarAcesso(sistemaParametro
-							.getNumeroDiasExpiracaoAcesso().toString());
+			form.setDiasMaximoExpirarAcesso(sistemaParametro.getNumeroDiasExpiracaoAcesso().toString());
 		}
 
 		if (sistemaParametro.getNumeroDiasMensagemExpiracao() != null) {
-			consultarSistemaParametroActionForm
-					.setDiasMensagemExpiracaoSenha(sistemaParametro
-							.getNumeroDiasMensagemExpiracao().toString());
+			form.setDiasMensagemExpiracaoSenha(sistemaParametro.getNumeroDiasMensagemExpiracao().toString());
 		}
 
 		if (sistemaParametro.getNumeroMaximoLoginFalho() != null) {
-			consultarSistemaParametroActionForm
-					.setNumeroMaximoTentativasAcesso(sistemaParametro
-							.getNumeroMaximoLoginFalho().toString());
+			form.setNumeroMaximoTentativasAcesso(sistemaParametro.getNumeroMaximoLoginFalho().toString());
 		}
 
 		if (sistemaParametro.getIndicadorControleTramitacaoRA() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorControleTramitacaoRA(""
-							+ sistemaParametro
-									.getIndicadorControleTramitacaoRA());
+			form.setIndicadorControleTramitacaoRA("" + sistemaParametro.getIndicadorControleTramitacaoRA());
 		}
 
 		if (sistemaParametro.getNumeroMaximoFavorito() != null) {
-			consultarSistemaParametroActionForm
-					.setNumeroMaximoFavoritosMenu(sistemaParametro
-							.getNumeroMaximoFavorito().toString());
+			form.setNumeroMaximoFavoritosMenu(sistemaParametro.getNumeroMaximoFavorito().toString());
 		}
 
 		if (sistemaParametro.getIpServidorSmtp() != null) {
-			consultarSistemaParametroActionForm
-					.setIpServidorSmtp(sistemaParametro.getIpServidorSmtp());
+			form.setIpServidorSmtp(sistemaParametro.getIpServidorSmtp());
 		}
 
 		if (sistemaParametro.getIpServidorModuloGerencial() != null) {
-			consultarSistemaParametroActionForm
-					.setIpServidorGerencial(sistemaParametro
-							.getIpServidorModuloGerencial());
+			form.setIpServidorGerencial(sistemaParametro.getIpServidorModuloGerencial());
 		}
 
 		if (sistemaParametro.getDsEmailResponsavel() != null) {
-			consultarSistemaParametroActionForm
-					.setEmailResponsavel(sistemaParametro
-							.getDsEmailResponsavel());
+			form.setEmailResponsavel(sistemaParametro.getDsEmailResponsavel());
 		}
 
 		if (sistemaParametro.getMensagemSistema() != null) {
-			consultarSistemaParametroActionForm
-					.setMensagemSistema(sistemaParametro.getMensagemSistema());
+			form.setMensagemSistema(sistemaParametro.getMensagemSistema());
 		}
 
-		if (sistemaParametro
-				.getNumeroDiasVencimentoDebitoGeracaoCertidaoNegativaDebitos() != null) {
-			consultarSistemaParametroActionForm
-					.setDiasVencimentoCertidaoNegativa(""
-							+ sistemaParametro
-									.getNumeroDiasVencimentoDebitoGeracaoCertidaoNegativaDebitos());
+		if (sistemaParametro.getNumeroDiasVencimentoDebitoGeracaoCertidaoNegativaDebitos() != null) {
+			form.setDiasVencimentoCertidaoNegativa("" + sistemaParametro.getNumeroDiasVencimentoDebitoGeracaoCertidaoNegativaDebitos());
 		}
 
 		if (sistemaParametro.getIndicadorDocumentoValido() != null) {
-			consultarSistemaParametroActionForm.setIndicadorDocumentoValido(""
-					+ sistemaParametro.getIndicadorDocumentoValido());
+			form.setIndicadorDocumentoValido("" + sistemaParametro.getIndicadorDocumentoValido());
 		}
 
 		if (sistemaParametro.getIndicadorValidarLocalizacaoEncerramentoOS() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorValidacaoLocalidadeEncerramentoOS(""
-							+ sistemaParametro
-									.getIndicadorValidarLocalizacaoEncerramentoOS());
+			form.setIndicadorValidacaoLocalidadeEncerramentoOS("" + sistemaParametro.getIndicadorValidarLocalizacaoEncerramentoOS());
 		} else {
-			consultarSistemaParametroActionForm
-					.setIndicadorValidacaoLocalidadeEncerramentoOS(""
-							+ ConstantesSistema.NAO);
+			form.setIndicadorValidacaoLocalidadeEncerramentoOS("" + ConstantesSistema.NAO);
 		}
 
-		consultarSistemaParametroActionForm
-				.setIndicadorDebitoACobrarValidoCertidaoNegativa(""
-						+ sistemaParametro
-								.getIndicadorDebitoACobrarValidoCertidaoNegativa());
+		form.setIndicadorDebitoACobrarValidoCertidaoNegativa("" + sistemaParametro.getIndicadorDebitoACobrarValidoCertidaoNegativa());
 
-		consultarSistemaParametroActionForm.setIndicadorLoginUnico(""
-				+ sistemaParametro.getIndicadorLoginUnico());
+		form.setIndicadorLoginUnico("" + sistemaParametro.getIndicadorLoginUnico());
 
-		consultarSistemaParametroActionForm
-				.setIndicadorDebitoACobrarValidoCertidaoNegativa(""
-						+ sistemaParametro
-								.getIndicadorDebitoACobrarValidoCertidaoNegativa());
+		form.setIndicadorDebitoACobrarValidoCertidaoNegativa("" + sistemaParametro.getIndicadorDebitoACobrarValidoCertidaoNegativa());
 
-		consultarSistemaParametroActionForm
-				.setIndicadorCertidaoNegativaEfeitoPositivo(""
-						+ sistemaParametro
-								.getIndicadorCertidaoNegativaEfeitoPositivo());
+		form.setIndicadorCertidaoNegativaEfeitoPositivo("" + sistemaParametro.getIndicadorCertidaoNegativaEfeitoPositivo());
 
 		if (sistemaParametro.getIndicadorControleExpiracaoSenhaPorGrupo() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicarControleExpiracaoSenhaPorGrupo(sistemaParametro
-							.getIndicadorControleExpiracaoSenhaPorGrupo()
-							.toString());
+			form.setIndicarControleExpiracaoSenhaPorGrupo(sistemaParametro.getIndicadorControleExpiracaoSenhaPorGrupo().toString());
 		}
 		if (sistemaParametro.getIndicadorControleBloqueioSenhaAnterior() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicarControleBloqueioSenha(sistemaParametro
-							.getIndicadorControleBloqueioSenhaAnterior()
-							.toString());
+			form.setIndicarControleBloqueioSenha(sistemaParametro.getIndicadorControleBloqueioSenhaAnterior().toString());
 		}
 		if (sistemaParametro.getIndicadorSenhaForte() != null) {
-			consultarSistemaParametroActionForm
-					.setIndicadorSenhaForte(sistemaParametro
-							.getIndicadorSenhaForte().toString());
+			form.setIndicadorSenhaForte(sistemaParametro.getIndicadorSenhaForte().toString());
 		}
 		if (sistemaParametro.getDescricaoDecreto() != null) {
-			consultarSistemaParametroActionForm
-					.setDescricaoDecreto(sistemaParametro.getDescricaoDecreto()
-							.toString());
+			form.setDescricaoDecreto(sistemaParametro.getDescricaoDecreto().toString());
 		}
 		if (sistemaParametro.getDescricaoLeiEstTarif() != null) {
-			consultarSistemaParametroActionForm
-					.setDescricaoLeiEstTarif(sistemaParametro.getDescricaoLeiEstTarif()
-							.toString());
+			form.setDescricaoLeiEstTarif(sistemaParametro.getDescricaoLeiEstTarif().toString());
 		}
 		if (sistemaParametro.getDescricaoLeiIndividualizacao() != null) {
-			consultarSistemaParametroActionForm
-					.setDescricaoLeiIndividualizacao(sistemaParametro.getDescricaoLeiIndividualizacao()
-							.toString());
+			form.setDescricaoLeiIndividualizacao(sistemaParametro.getDescricaoLeiIndividualizacao().toString());
 		}
 		if (sistemaParametro.getDescricaoNormaCM() != null) {
-			consultarSistemaParametroActionForm
-					.setDescricaoNormaCM(sistemaParametro.getDescricaoNormaCM()
-							.toString());
+			form.setDescricaoNormaCM(sistemaParametro.getDescricaoNormaCM().toString());
 		}
 		if (sistemaParametro.getDescricaoNormaCO() != null) {
-			consultarSistemaParametroActionForm
-					.setDescricaoNormaCO(sistemaParametro.getDescricaoNormaCO()
-							.toString());
+			form.setDescricaoNormaCO(sistemaParametro.getDescricaoNormaCO().toString());
 		}
-		
+
 		if (sistemaParametro.getArquivoDecreto() != null && sistemaParametro.getArquivoDecreto().length != 0) {
-			consultarSistemaParametroActionForm
-					.setArquivoDecreto(sistemaParametro.getArquivoDecreto());
+			form.setArquivoDecreto(sistemaParametro.getArquivoDecreto());
 		}
-		
+
 		if (sistemaParametro.getArquivoLeiEstTarif() != null && sistemaParametro.getArquivoLeiEstTarif().length != 0) {
-			consultarSistemaParametroActionForm
-					.setArquivoLeiEstTarif(sistemaParametro.getArquivoLeiEstTarif());
+			form.setArquivoLeiEstTarif(sistemaParametro.getArquivoLeiEstTarif());
 		}
-		
+
 		if (sistemaParametro.getArquivoLeiIndividualizacao() != null && sistemaParametro.getArquivoLeiIndividualizacao().length != 0) {
-			consultarSistemaParametroActionForm
-					.setArquivoLeiIndividualizacao(sistemaParametro.getArquivoLeiIndividualizacao());
+			form.setArquivoLeiIndividualizacao(sistemaParametro.getArquivoLeiIndividualizacao());
 		}
-		
+
 		if (sistemaParametro.getArquivoNormaCM() != null && sistemaParametro.getArquivoNormaCM().length != 0) {
-			consultarSistemaParametroActionForm
-					.setArquivoNormaCM(sistemaParametro.getArquivoNormaCM());
+			form.setArquivoNormaCM(sistemaParametro.getArquivoNormaCM());
 		}
-		
+
 		if (sistemaParametro.getArquivoNormaCO() != null && sistemaParametro.getArquivoNormaCO().length != 0) {
-			consultarSistemaParametroActionForm
-					.setArquivoNormaCO(sistemaParametro.getArquivoNormaCO());
+			form.setArquivoNormaCO(sistemaParametro.getArquivoNormaCO());
 		}
-		
+
 		if (sistemaParametro.getUnidadeOrganizacionalTramiteGrandeConsumidor() != null) {
 			FiltroUnidadeOrganizacional filtroUnidadeOrganizacional = new FiltroUnidadeOrganizacional();
-			filtroUnidadeOrganizacional
-					.adicionarParametro(new ParametroSimples(
-							FiltroUnidadeOrganizacional.ID,
-							sistemaParametro
-									.getUnidadeOrganizacionalTramiteGrandeConsumidor()
-									.getId()));
+			filtroUnidadeOrganizacional.adicionarParametro(new ParametroSimples(FiltroUnidadeOrganizacional.ID, sistemaParametro
+					.getUnidadeOrganizacionalTramiteGrandeConsumidor().getId()));
 
-			Collection<UnidadeOrganizacional> colecao = fachada.pesquisar(
-					filtroUnidadeOrganizacional,
-					UnidadeOrganizacional.class.getName());
+			Collection<UnidadeOrganizacional> colecao = fachada.pesquisar(filtroUnidadeOrganizacional, UnidadeOrganizacional.class.getName());
 
-			UnidadeOrganizacional unidade = (UnidadeOrganizacional) Util
-					.retonarObjetoDeColecao(colecao);
+			UnidadeOrganizacional unidade = (UnidadeOrganizacional) Util.retonarObjetoDeColecao(colecao);
 
-			consultarSistemaParametroActionForm
-					.setIdUnidadeDestinoGrandeConsumidor(unidade.getId()
-							.toString());
-			consultarSistemaParametroActionForm
-					.setNomeUnidadeDestinoGrandeConsumidor(unidade
-							.getDescricao());
+			form.setIdUnidadeDestinoGrandeConsumidor(unidade.getId().toString());
+			form.setNomeUnidadeDestinoGrandeConsumidor(unidade.getDescricao());
 
 		}
 
 		if (sistemaParametro.getNumeroDiasRevisaoComPermEspecial() != null) {
-			consultarSistemaParametroActionForm
-					.setNumeroDiasRevisaoConta(sistemaParametro
-							.getNumeroDiasRevisaoComPermEspecial().toString());
+			form.setNumeroDiasRevisaoConta(sistemaParametro.getNumeroDiasRevisaoComPermEspecial().toString());
 		}
-				
-		if(sistemaParametro.getQtdeDiasValidadeOSFiscalizacao() != null){
-			consultarSistemaParametroActionForm
-					.setQtdeDiasValidadeOSFiscalizacao(sistemaParametro
-							.getQtdeDiasValidadeOSFiscalizacao().toString());
+
+		if (sistemaParametro.getQtdeDiasValidadeOSFiscalizacao() != null) {
+			form.setQtdeDiasValidadeOSFiscalizacao(sistemaParametro.getQtdeDiasValidadeOSFiscalizacao().toString());
 		}
-		
-		if(sistemaParametro.getQtdeDiasEncerraOSFiscalizacao() != null){
-			consultarSistemaParametroActionForm
-					.setQtdeDiasEncerraOSFiscalizacao(sistemaParametro
-							.getQtdeDiasEncerraOSFiscalizacao().toString());
+
+		if (sistemaParametro.getQtdeDiasEncerraOSFiscalizacao() != null) {
+			form.setQtdeDiasEncerraOSFiscalizacao(sistemaParametro.getQtdeDiasEncerraOSFiscalizacao().toString());
 		}
-		
-		if(sistemaParametro.getQtdeDiasEnvioEmailConta() != null){
-			consultarSistemaParametroActionForm
-					.setQtdeDiasEnvioEmailConta(sistemaParametro
-							.getQtdeDiasEnvioEmailConta().toString());
+
+		if (sistemaParametro.getQtdeDiasEnvioEmailConta() != null) {
+			form.setQtdeDiasEnvioEmailConta(sistemaParametro.getQtdeDiasEnvioEmailConta().toString());
 		}
 	}
 
-	/**
-	 * Pesquisa Endereco
-	 * 
-	 */
-	private void pesquisarEndereco(SistemaParametro sistemaParametro,
-			HttpServletRequest httpServletRequest) {
+	private void pesquisarEndereco(SistemaParametro sistemaParametro, HttpServletRequest httpServletRequest) {
 
 		if (this.getSessao(httpServletRequest).getAttribute("colecaoEnderecos") == null) {
 
@@ -1251,22 +850,15 @@ public class ExibirConsultarParametrosSistemaAction extends GcomAction {
 			// Pesquisa o Logradouro Cep
 			if (sistemaParametro.getLogradouroCep() != null) {
 				FiltroLogradouroCep filtroLogradouroCep = new FiltroLogradouroCep();
-				filtroLogradouroCep.adicionarParametro(new ParametroSimples(
-						FiltroLogradouroCep.ID, sistemaParametro
-								.getLogradouroCep().getId()));
+				filtroLogradouroCep.adicionarParametro(new ParametroSimples(FiltroLogradouroCep.ID, sistemaParametro.getLogradouroCep().getId()));
 
-				filtroLogradouroCep
-						.adicionarCaminhoParaCarregamentoEntidade("logradouro.logradouroTipo");
-				filtroLogradouroCep
-						.adicionarCaminhoParaCarregamentoEntidade("logradouro.logradouroTitulo");
-				filtroLogradouroCep
-						.adicionarCaminhoParaCarregamentoEntidade("cep");
+				filtroLogradouroCep.adicionarCaminhoParaCarregamentoEntidade("logradouro.logradouroTipo");
+				filtroLogradouroCep.adicionarCaminhoParaCarregamentoEntidade("logradouro.logradouroTitulo");
+				filtroLogradouroCep.adicionarCaminhoParaCarregamentoEntidade("cep");
 
-				Collection colecaoLogradouroCep = this.getFachada().pesquisar(
-						filtroLogradouroCep, LogradouroCep.class.getName());
+				Collection colecaoLogradouroCep = this.getFachada().pesquisar(filtroLogradouroCep, LogradouroCep.class.getName());
 
-				LogradouroCep logradouroCep = (LogradouroCep) Util
-						.retonarObjetoDeColecao(colecaoLogradouroCep);
+				LogradouroCep logradouroCep = (LogradouroCep) Util.retonarObjetoDeColecao(colecaoLogradouroCep);
 
 				imovel.setLogradouroCep(logradouroCep);
 
@@ -1275,58 +867,39 @@ public class ExibirConsultarParametrosSistemaAction extends GcomAction {
 			// Pesquisa o Logradouro Bairro
 			if (sistemaParametro.getLogradouroBairro() != null) {
 				FiltroLogradouroBairro filtroLogradouroBairro = new FiltroLogradouroBairro();
-				filtroLogradouroBairro.adicionarParametro(new ParametroSimples(
-						FiltroLogradouroBairro.ID, sistemaParametro
-								.getLogradouroBairro().getId()));
+				filtroLogradouroBairro.adicionarParametro(new ParametroSimples(FiltroLogradouroBairro.ID, sistemaParametro.getLogradouroBairro().getId()));
 
-				filtroLogradouroBairro
-						.adicionarCaminhoParaCarregamentoEntidade("bairro.municipio.unidadeFederacao");
+				filtroLogradouroBairro.adicionarCaminhoParaCarregamentoEntidade("bairro.municipio.unidadeFederacao");
 
-				Collection colecaoLogradouroBairro = this.getFachada()
-						.pesquisar(filtroLogradouroBairro,
-								LogradouroBairro.class.getName());
+				Collection colecaoLogradouroBairro = this.getFachada().pesquisar(filtroLogradouroBairro, LogradouroBairro.class.getName());
 
-				LogradouroBairro logradouroBairro = (LogradouroBairro) Util
-						.retonarObjetoDeColecao(colecaoLogradouroBairro);
+				LogradouroBairro logradouroBairro = (LogradouroBairro) Util.retonarObjetoDeColecao(colecaoLogradouroBairro);
 
 				imovel.setLogradouroBairro(logradouroBairro);
 			}
 
-			imovel.setEnderecoReferencia(sistemaParametro
-					.getEnderecoReferencia());
+			imovel.setEnderecoReferencia(sistemaParametro.getEnderecoReferencia());
 			imovel.setNumeroImovel(sistemaParametro.getNumeroImovel());
-			imovel.setComplementoEndereco(sistemaParametro
-					.getComplementoEndereco());
+			imovel.setComplementoEndereco(sistemaParametro.getComplementoEndereco());
 
 			Collection colecaoEndereco = new ArrayList();
 			colecaoEndereco.add(imovel);
 
-			this.getSessao(httpServletRequest).setAttribute("colecaoEnderecos",
-					colecaoEndereco);
-			
+			this.getSessao(httpServletRequest).setAttribute("colecaoEnderecos", colecaoEndereco);
+
 		}
 	}
 
-	/**
-	 * Monta o Endereco
-	 * 
-	 */
-	private void montarEndereco(
-			ConsultarParametrosSistemaActionForm consultarSistemaParametroActionForm,
-			HttpServletRequest httpServletRequest) {
-
+	private void montarEndereco(ConsultarParametrosSistemaActionForm form, HttpServletRequest httpServletRequest) {
 		// Removendo endereço
-		String removerEndereco = httpServletRequest
-				.getParameter("removerEndereco");
+		String removerEndereco = httpServletRequest.getParameter("removerEndereco");
 		HttpSession sessao = this.getSessao(httpServletRequest);
 
-		if (removerEndereco != null
-				&& !removerEndereco.trim().equalsIgnoreCase("")) {
+		if (removerEndereco != null && !removerEndereco.trim().equalsIgnoreCase("")) {
 
 			if (sessao.getAttribute("colecaoEnderecos") != null) {
 
-				Collection enderecos = (Collection) sessao
-						.getAttribute("colecaoEnderecos");
+				Collection enderecos = (Collection) sessao.getAttribute("colecaoEnderecos");
 
 				if (!enderecos.isEmpty()) {
 					sessao.removeAttribute("colecaoEnderecos");
@@ -1338,112 +911,93 @@ public class ExibirConsultarParametrosSistemaAction extends GcomAction {
 		// municipio e bairro
 		if (sessao.getAttribute("colecaoEnderecos") != null) {
 
-			Collection colecaoEnderecos = (Collection) sessao
-					.getAttribute("colecaoEnderecos");
+			Collection colecaoEnderecos = (Collection) sessao.getAttribute("colecaoEnderecos");
 
 			if (!colecaoEnderecos.isEmpty()) {
 
-				Imovel imovel = (Imovel) Util
-						.retonarObjetoDeColecao(colecaoEnderecos);
+				Imovel imovel = (Imovel) Util.retonarObjetoDeColecao(colecaoEnderecos);
 
 				if (imovel.getLogradouroBairro() != null) {
-					consultarSistemaParametroActionForm
-							.setLogradouroBairro(imovel.getLogradouroBairro()
-									.getId().toString());
+					form.setLogradouroBairro(imovel.getLogradouroBairro().getId().toString());
 				}
 
 				if (imovel.getLogradouroCep() != null) {
-					consultarSistemaParametroActionForm.setLogradouroCep(imovel
-							.getLogradouroCep().getId().toString());
+					form.setLogradouroCep(imovel.getLogradouroCep().getId().toString());
 				}
 				if (imovel.getEnderecoReferencia() != null) {
-					consultarSistemaParametroActionForm
-							.setEnderecoReferencia(imovel
-									.getEnderecoReferencia().getId().toString());
+					form.setEnderecoReferencia(imovel.getEnderecoReferencia().getId().toString());
 				} else {
-					consultarSistemaParametroActionForm
-							.setEnderecoReferencia("");
+					form.setEnderecoReferencia("");
 				}
-				consultarSistemaParametroActionForm.setNumero(imovel
-						.getNumeroImovel());
-				consultarSistemaParametroActionForm.setComplemento(imovel
-						.getComplementoEndereco());
+				form.setNumero(imovel.getNumeroImovel());
+				form.setComplemento(imovel.getComplementoEndereco());
 			}
 		}
 	}
 	
-	private void retornaArquivo(String arquivo, HttpServletResponse httpServletResponse,
-			SistemaParametro sistemaParametro){
-		
+	private void retornaArquivo(String arquivo, HttpServletResponse httpServletResponse, SistemaParametro sistemaParametro) {
 		String mimeType = ConstantesSistema.CONTENT_TYPE_PDF;
 		OutputStream out = null;
 		byte[] file = null;
-		
-		if(arquivo.equalsIgnoreCase("decreto")){
+
+		if (arquivo.equalsIgnoreCase("decreto")) {
 			file = sistemaParametro.getArquivoDecreto();
 		}
-		if(arquivo.equalsIgnoreCase("leiTarifa")){
+		if (arquivo.equalsIgnoreCase("leiTarifa")) {
 			file = sistemaParametro.getArquivoLeiEstTarif();
 		}
-		if(arquivo.equalsIgnoreCase("leiNormaMedicao")){
+		if (arquivo.equalsIgnoreCase("leiNormaMedicao")) {
 			file = sistemaParametro.getArquivoLeiIndividualizacao();
 		}
-		if(arquivo.equalsIgnoreCase("normaCO")){
+		if (arquivo.equalsIgnoreCase("normaCO")) {
 			file = sistemaParametro.getArquivoNormaCO();
 		}
-		if(arquivo.equalsIgnoreCase("normaCM")){
+		if (arquivo.equalsIgnoreCase("normaCM")) {
 			file = sistemaParametro.getArquivoNormaCM();
 		}
-		
-		
+
 		try {
 			httpServletResponse.setContentType(mimeType);
 			out = httpServletResponse.getOutputStream();
-			
+
 			out.write(file);
 			out.flush();
 			out.close();
-		} 
-		catch (IOException e) {
+		} catch (IOException e) {
 			throw new ActionServletException("erro.sistema", e);
 		}
-		
-	}
-	private void setarDownloadsLoja(ConsultarParametrosSistemaActionForm consultarSistemaParametroActionForm, HttpServletRequest httpServletRequest ){
-		if(consultarSistemaParametroActionForm.getArquivoDecreto() != null &&
-				consultarSistemaParametroActionForm.getArquivoDecreto().length != 0){
-			httpServletRequest.setAttribute("arquivoDecreto", true);
-		}else{
-			httpServletRequest.removeAttribute("arquivoDecreto");
-		}
-		
-		if(consultarSistemaParametroActionForm.getArquivoLeiEstTarif() != null &&
-				consultarSistemaParametroActionForm.getArquivoLeiEstTarif().length != 0){
-			httpServletRequest.setAttribute("arquivoLeiTarifa", true);
-		}else{
-			httpServletRequest.removeAttribute("arquivoLeiTarifa");
-		}
-		
-		if(consultarSistemaParametroActionForm.getArquivoLeiIndividualizacao() != null &&
-				consultarSistemaParametroActionForm.getArquivoLeiIndividualizacao().length != 0){
-			httpServletRequest.setAttribute("arquivoLeiNormaMedicao", true);
-		}else{
-			httpServletRequest.removeAttribute("arquivoLeiNormaMedicao");
-		}
-		
-		if(consultarSistemaParametroActionForm.getArquivoNormaCM() != null &&
-				consultarSistemaParametroActionForm.getArquivoNormaCM().length != 0){
-			httpServletRequest.setAttribute("arquivoNormaCM", true);
-		}else{
-			httpServletRequest.removeAttribute("arquivoNormaCM");
-		}
-		
-		if(consultarSistemaParametroActionForm.getArquivoNormaCO() != null &&
-				consultarSistemaParametroActionForm.getArquivoNormaCO().length != 0){
-			httpServletRequest.setAttribute("arquivoNormaCO", true);
-		}else{
-			httpServletRequest.removeAttribute("arquivoNormaCO");
-		}
+
 	}
 
+	private void setarDownloadsLoja(ConsultarParametrosSistemaActionForm form, HttpServletRequest request) {
+		if (form.getArquivoDecreto() != null && form.getArquivoDecreto().length != 0) {
+			request.setAttribute("arquivoDecreto", true);
+		} else {
+			request.removeAttribute("arquivoDecreto");
+		}
+
+		if (form.getArquivoLeiEstTarif() != null && form.getArquivoLeiEstTarif().length != 0) {
+			request.setAttribute("arquivoLeiTarifa", true);
+		} else {
+			request.removeAttribute("arquivoLeiTarifa");
+		}
+
+		if (form.getArquivoLeiIndividualizacao() != null && form.getArquivoLeiIndividualizacao().length != 0) {
+			request.setAttribute("arquivoLeiNormaMedicao", true);
+		} else {
+			request.removeAttribute("arquivoLeiNormaMedicao");
+		}
+
+		if (form.getArquivoNormaCM() != null && form.getArquivoNormaCM().length != 0) {
+			request.setAttribute("arquivoNormaCM", true);
+		} else {
+			request.removeAttribute("arquivoNormaCM");
+		}
+
+		if (form.getArquivoNormaCO() != null && form.getArquivoNormaCO().length != 0) {
+			request.setAttribute("arquivoNormaCO", true);
+		} else {
+			request.removeAttribute("arquivoNormaCO");
+		}
+	}
 }

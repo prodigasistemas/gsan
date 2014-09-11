@@ -24,194 +24,134 @@ import org.apache.commons.lang.builder.EqualsBuilder;
 import org.apache.commons.lang.builder.HashCodeBuilder;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-/** @author Hibernate CodeGenerator */
 public class SistemaParametro extends ObjetoTransacao {
 
 	private static final long serialVersionUID = 1L;
 
 	public static SistemaParametro instancia;
 
-	/** identifier field */
 	private Integer parmId;
 
-	/** nullable persistent field */
 	private Integer anoMesFaturamento;
 
-	/** nullable persistent field */
 	private Integer anoMesArrecadacao;
 
-	/** nullable persistent field */
 	private String nomeEstado;
 
-	/** nullable persistent field */
 	private String nomeEmpresa;
 
-	/** nullable persistent field */
 	private String nomeAbreviadoEmpresa;
 
-	/** nullable persistent field */
 	private String cnpjEmpresa;
 
-	/** nullable persistent field */
 	private String numeroImovel;
 
-	/** nullable persistent field */
 	private String complementoEndereco;
 
-	/** nullable persistent field */
 	private String numeroTelefone;
 
-	/** nullable persistent field */
 	private String numeroRamal;
 
-	/** nullable persistent field */
 	private String nomeSiteEmpresa;
 
-	/** nullable persistent field */
 	private String numero0800Empresa;
 
-	/** nullable persistent field */
 	private String numeroFax;
 
-	/** nullable persistent field */
 	private String descricaoEmail;
 
-	/** nullable persistent field */
 	private Integer menorConsumoGrandeUsuario;
 
-	/** nullable persistent field */
 	private Integer areaMaximaTarifaSocial;
 
-	/** nullable persistent field */
 	private Integer consumoEnergiaMaximoTarifaSocial;
 
-	/** nullable persistent field */
 	private BigDecimal valorMinimoEmissaoConta;
 
-	/** nullable persistent field */
 	private BigDecimal valorSalarioMinimo;
 
-	/** nullable persistent field */
 	private Short menorEconomiasGrandeUsuario;
 
-	/** nullable persistent field */
 	private Short mesesMediaConsumo;
 
-	/** nullable persistent field */
 	private Short indicadorFaixaFalsa;
 
-	/** nullable persistent field */
 	private BigDecimal percentualFaixaFalsa;
 
-	/** nullable persistent field */
 	private Short indicadorUsoFaixaFalsa;
 
-	/** nullable persistent field */
 	private Short indicadorUsoFiscalizadorLeitura;
 
-	/** nullable persistent field */
 	private BigDecimal percentualFiscalizacaoLeitura;
 
-	/** nullable persistent field */
 	private Short indicadorPercentualFiscalizacaoLeitura;
 
-	/** nullable persistent field */
 	private Integer incrementoMaximoConsumoRateio;
 
-	/** nullable persistent field */
 	private Integer decrementoMaximoConsumoRateio;
 
-	/** nullable persistent field */
 	private Short numeroMinimoDiasEmissaoVencimento;
 
-	/** nullable persistent field */
 	private Short numeroDiasAdicionaisCorreios;
 
-	/** nullable persistent field */
 	private Short numeroMesesValidadeConta;
 
-	/** nullable persistent field */
 	private Date ultimaAlteracao;
 
-	/** nullable persistent field */
 	private Short numeroMaximoParcelasFinanciamento;
 
-	/** nullable persistent field */
 	private Short numeroMaximoParcelaCredito;
 
-	/** nullable persistent field */
 	private BigDecimal percentualTaxaJurosFinanciamento;
 
-	/** nullable persistent field */
 	private BigDecimal percentualMaximoAbatimento;
 
-	/** nullable persistent field */
 	private BigDecimal percentualFinanciamentoEntradaMinima;
 
-	/** nullable persistent field */
 	private Short numeroMesesMinimoAlteracaoVencimento;
 
-	/** nullable persistent field */
 	private Short numeroDiasExpiracaoAcesso;
 
-	/** nullable persistent field */
 	private Short numeroDiasMensagemExpiracao;
 
-	/** nullable persistent field */
 	private Short numeroMaximoLoginFalho;
 
-	/** nullable persistent field */
 	private Short numeroLayoutFebraban;
 
-	/** nullable persistent field */
 	private Short numeroDiasVencimentoCobranca;
 
 	private Integer numeroMaximoFavorito;
 
-	/** persistent field */
 	private Logradouro logradouro;
 
-	/** persistent field */
 	private Bairro bairro;
 
-	/** persistent field */
 	private EnderecoReferencia enderecoReferencia;
 
-	/** persistent field */
 	private HidrometroCapacidade hidrometroCapacidade;
 
-	/** persistent field */
 	private Short indicadorSugestaoTramite;
 
 	private Integer diasMaximoAlterarOS;
 
 	private Short diasReativacao;
 
-	/** persistent field */
 	private Cep cep;
 
-	/** nullable persistent field */
 	private Short codigoEmpresaFebraban;
 
-	/** persistent field */
 	private String imagemLogomarca;
 
-	/** persistent field */
 	private String imagemRelatorio;
 
-	/** persistent field */
 	private String imagemConta;
 
-	/** nullable persistent field */
 	private Integer ultimoRAManual;
 
-	/** nullable persistent field */
 	private String tituloPagina;
 
-	/** nullable persistent field */
 	private String mensagemSistema;
 
-	/** nullable persistent field */
 	private BigDecimal percentualToleranciaRateio;
 
 	private ContaBancaria contaBancaria;
@@ -230,11 +170,11 @@ public class SistemaParametro extends ObjetoTransacao {
 
 	private Integer numeroDiasBloqueioCelular;
 
-	private Cliente clientePresidenteCompesa;
+	private Cliente clientePresidente;
 
 	private UnidadeOrganizacional unidadeOrganizacionalIdPresidencia;
 
-	private Cliente clienteDiretorComercialCompesa;
+	private Cliente clienteDiretorComercial;
 
 	private short indicadorCobrarTaxaExtrato;
 
@@ -257,7 +197,7 @@ public class SistemaParametro extends ObjetoTransacao {
 	private short numeroDiasCalculoAcrescimos;
 
 	private Short numeroMesesCalculoCorrecao;
-	
+
 	private String inscricaoEstadual;
 
 	private String inscricaoMunicipal;
@@ -289,7 +229,7 @@ public class SistemaParametro extends ObjetoTransacao {
 	private LogradouroCep logradouroCep;
 
 	private short indicadorParcelamentoConfirmado;
-	
+
 	private short indicadorCertidaoNegativaEfeitoPositivo;
 
 	private short indicadorControlaAutoInfracao;
@@ -393,7 +333,7 @@ public class SistemaParametro extends ObjetoTransacao {
 	private BigDecimal percentualConvergenciaRepavimentacao;
 
 	private Short indicadorDocumentoObrigatorio;
-	
+
 	private Short indicadorDocumentoObrigatorioManterCliente;
 
 	private Short indicadorConsultaDocumentoReceita;
@@ -427,31 +367,30 @@ public class SistemaParametro extends ObjetoTransacao {
 	private BigDecimal valorDemonstrativoParcelamentoFichaComp;
 
 	private Integer qtdeDiasEncerraOSFiscalizacao;
-	
+
 	private Integer qtdeDiasValidadeOSFiscalizacao;
 
 	private Integer codigoTipoCalculoNaoMedido;
 
 	private Short indicadorBloqueioContasContratoParcelDebitos;
-	
-	private Short indicadorBloqueioContasContratoParcelManterConta;	
-	
-	private Short indicadorBloqueioDebitoACobrarContratoParcelDebito;	 
+
+	private Short indicadorBloqueioContasContratoParcelManterConta;
+
+	private Short indicadorBloqueioDebitoACobrarContratoParcelDebito;
 
 	private Short indicadorBloqueioGuiasOuAcresContratoParcelDebito;
 
 	private Short indicadorBloqueioGuiasOuAcresContratoParcelManterConta;
 
-	private Short indicadorBloqueioDebitoACobrarContratoParcelManterDebito;	
-	
+	private Short indicadorBloqueioDebitoACobrarContratoParcelManterDebito;
+
 	public String ipServidorModuloOperacional;
-	
+
 	private Integer numeroMaximoParcelasContratosParcelamento;
 
 	private Integer qtdeDiasEnvioEmailConta;
 
-	public static Short INDICADOR_USO_FAIXA_FALSA_SISTEMA_PARAMETRO = new Short(
-			"1");
+	public static Short INDICADOR_USO_FAIXA_FALSA_SISTEMA_PARAMETRO = new Short("1");
 
 	public static Short INDICADOR_USO_FAIXA_FALSA_ROTA = new Short("2");
 
@@ -459,11 +398,9 @@ public class SistemaParametro extends ObjetoTransacao {
 
 	public static Short INDICADOR_FAIXA_FALSA_ROTA = new Short("3");
 
-	public static Short INDICADOR_PERCENTUAL_FISCALIZACAO_LEITURA_ROTA = new Short(
-			"2");
+	public static Short INDICADOR_PERCENTUAL_FISCALIZACAO_LEITURA_ROTA = new Short("2");
 
-	public static Short INDICADOR_USO_FISCALIZADOR_LEITURA_SISTEMA_PARAMETRO = new Short(
-			"2");
+	public static Short INDICADOR_USO_FISCALIZADOR_LEITURA_SISTEMA_PARAMETRO = new Short("2");
 
 	public static Short INDICADOR_USO_FISCALIZADOR_LEITURA_ROTA = new Short("3");
 
@@ -493,11 +430,9 @@ public class SistemaParametro extends ObjetoTransacao {
 
 	public static Short CODIGO_PERIODICIDADE_NEGATIVACAO_DIARIA = new Short("0");
 
-	public static Short CODIGO_PERIODICIDADE_NEGATIVACAO_SEMANAL = new Short(
-			"1");
+	public static Short CODIGO_PERIODICIDADE_NEGATIVACAO_SEMANAL = new Short("1");
 
-	public static Short CODIGO_PERIODICIDADE_NEGATIVACAO_QUINZENAL = new Short(
-			"2");
+	public static Short CODIGO_PERIODICIDADE_NEGATIVACAO_QUINZENAL = new Short("2");
 
 	public static Short CODIGO_PERIODICIDADE_NEGATIVACAO_MENSAL = new Short("3");
 
@@ -507,8 +442,6 @@ public class SistemaParametro extends ObjetoTransacao {
 
 	public static Short INDICADOR_AUTORIZACAO_RELATORIO;
 
-	// VALOR DEFAULT PARA QUANTIDADE MÁXIMA DE DÍGITOS QUE IRÃO COMPOR O NÚMERO
-	// DA QUADRA
 	public static short NUMERO_DIGITOS_QUADRA = 3;
 
 	public String url2ViaConta;
@@ -520,52 +453,55 @@ public class SistemaParametro extends ObjetoTransacao {
 	private Short indicadorUsoNMCliReceitaFantasia;
 
 	public String mensagemContaBraile;
-	
+
 	private Short indicadorTabelaPrice;
-	
+
 	private Short indicadorVariaHierarquiaUnidade;
-	
+
 	private String descricaoDecreto;
-	
+
 	private byte[] arquivoDecreto;
-	
+
 	private Integer qtdeDiasValidadeOSAnormalidadeFiscalizacao;
-	
+
 	private String descricaoLeiEstTarif;
-	
+
 	private byte[] arquivoLeiEstTarif;
-	
+
 	private String descricaoLeiIndividualizacao;
-	
+
 	private byte[] arquivoLeiIndividualizacao;
-	
+
 	private String descricaoNormaCO;
-	
+
 	private byte[] arquivoNormaCO;
-	
+
 	private String descricaoNormaCM;
-	
+
 	private byte[] arquivoNormaCM;
-	
+
 	private Integer cdDadosDiarios;
-		
+
 	private Short numeroDiasEncerrarOsFiscalizacaoDecursoPrazo;
-	
+
 	private Cliente clienteFicticioParaAssociarOsPagamentosNaoIdentificados;
-	
+
 	private Integer numeroVezesSuspendeLeitura;
 	private Integer numeroMesesLeituraSuspensa;
 	private Integer numeroMesesReinicioSitEspFaturamento;
+	
+	private String dddTelefone;
+	
+	private Cliente clienteResponsavelNegativacao;
 
 	public Short getNumeroDiasEncerrarOsFiscalizacaoDecursoPrazo() {
 		return numeroDiasEncerrarOsFiscalizacaoDecursoPrazo;
 	}
 
-	public void setNumeroDiasEncerrarOsFiscalizacaoDecursoPrazo(
-			Short numeroDiasEncerrarOsFiscalizacaoDecursoPrazo) {
+	public void setNumeroDiasEncerrarOsFiscalizacaoDecursoPrazo(Short numeroDiasEncerrarOsFiscalizacaoDecursoPrazo) {
 		this.numeroDiasEncerrarOsFiscalizacaoDecursoPrazo = numeroDiasEncerrarOsFiscalizacaoDecursoPrazo;
 	}
-	
+
 	public Integer getCdDadosDiarios() {
 		return cdDadosDiarios;
 	}
@@ -586,8 +522,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return indicadorUsoNMCliReceitaFantasia;
 	}
 
-	public void setIndicadorUsoNMCliReceitaFantasia(
-			Short indicadorUsoNMCliReceitaFantasia) {
+	public void setIndicadorUsoNMCliReceitaFantasia(Short indicadorUsoNMCliReceitaFantasia) {
 		this.indicadorUsoNMCliReceitaFantasia = indicadorUsoNMCliReceitaFantasia;
 	}
 
@@ -615,70 +550,34 @@ public class SistemaParametro extends ObjetoTransacao {
 		this.url2ViaConta = url2ViaConta;
 	}
 
-	/***************************************************************************
-	 * 
-	 * @author José Guilherme Macedo Vieira
-	 * @date 03/06/2009
-	 * 
-	 * @return int - Retornar a quantidade máxima de contas retificadas
-	 */
 	public int getQtdMaxContasRetificadas() {
 		return qtdMaxContasRetificadas;
 	}
 
-	/**
-	 * 
-	 * @author José Guilherme Macedo Vieira
-	 * @date 03/06/2009
-	 * 
-	 * @param qtdMaxContasRetificadas -
-	 *            A quantidade máxima de contasa retificadas
-	 */
 	public void setQtdMaxContasRetificadas(int qtdMaxContasRetificadas) {
 		this.qtdMaxContasRetificadas = qtdMaxContasRetificadas;
 	}
 
-	/**
-	 * @return Retorna o campo imagemConta.
-	 */
 	public String getImagemConta() {
 		return imagemConta;
 	}
 
-	/**
-	 * @param imagemConta
-	 *            O imagemConta a ser setado.
-	 */
 	public void setImagemConta(String imagemConta) {
 		this.imagemConta = imagemConta;
 	}
 
-	/**
-	 * @return Retorna o campo imagemLogomarca.
-	 */
 	public String getImagemLogomarca() {
 		return imagemLogomarca;
 	}
 
-	/**
-	 * @param imagemLogomarca
-	 *            O imagemLogomarca a ser setado.
-	 */
 	public void setImagemLogomarca(String imagemLogomarca) {
 		this.imagemLogomarca = imagemLogomarca;
 	}
 
-	/**
-	 * @return Retorna o campo imagemRelatorio.
-	 */
 	public String getImagemRelatorio() {
 		return imagemRelatorio;
 	}
 
-	/**
-	 * @param imagemRelatorio
-	 *            O imagemRelatorio a ser setado.
-	 */
 	public void setImagemRelatorio(String imagemRelatorio) {
 		this.imagemRelatorio = imagemRelatorio;
 	}
@@ -689,9 +588,7 @@ public class SistemaParametro extends ObjetoTransacao {
 	}
 
 	/** minimal constructor */
-	public SistemaParametro(Logradouro logradouro, Bairro bairro,
-			EnderecoReferencia enderecoReferencia,
-			HidrometroCapacidade hidrometroCapacidade, Cep cep) {
+	public SistemaParametro(Logradouro logradouro, Bairro bairro, EnderecoReferencia enderecoReferencia, HidrometroCapacidade hidrometroCapacidade, Cep cep) {
 		this.logradouro = logradouro;
 		this.bairro = bairro;
 		this.enderecoReferencia = enderecoReferencia;
@@ -847,8 +744,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return this.consumoEnergiaMaximoTarifaSocial;
 	}
 
-	public void setConsumoEnergiaMaximoTarifaSocial(
-			Integer consumoEnergiaMaximoTarifaSocial) {
+	public void setConsumoEnergiaMaximoTarifaSocial(Integer consumoEnergiaMaximoTarifaSocial) {
 		this.consumoEnergiaMaximoTarifaSocial = consumoEnergiaMaximoTarifaSocial;
 	}
 
@@ -912,8 +808,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return this.indicadorUsoFiscalizadorLeitura;
 	}
 
-	public void setIndicadorUsoFiscalizadorLeitura(
-			Short indicadorUsoFiscalizadorLeitura) {
+	public void setIndicadorUsoFiscalizadorLeitura(Short indicadorUsoFiscalizadorLeitura) {
 		this.indicadorUsoFiscalizadorLeitura = indicadorUsoFiscalizadorLeitura;
 	}
 
@@ -921,8 +816,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return this.percentualFiscalizacaoLeitura;
 	}
 
-	public void setPercentualFiscalizacaoLeitura(
-			BigDecimal percentualFiscalizacaoLeitura) {
+	public void setPercentualFiscalizacaoLeitura(BigDecimal percentualFiscalizacaoLeitura) {
 		this.percentualFiscalizacaoLeitura = percentualFiscalizacaoLeitura;
 	}
 
@@ -930,8 +824,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return this.indicadorPercentualFiscalizacaoLeitura;
 	}
 
-	public void setIndicadorPercentualFiscalizacaoLeitura(
-			Short indicadorPercentualFiscalizacaoLeitura) {
+	public void setIndicadorPercentualFiscalizacaoLeitura(Short indicadorPercentualFiscalizacaoLeitura) {
 		this.indicadorPercentualFiscalizacaoLeitura = indicadorPercentualFiscalizacaoLeitura;
 	}
 
@@ -939,8 +832,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return this.incrementoMaximoConsumoRateio;
 	}
 
-	public void setIncrementoMaximoConsumoRateio(
-			Integer incrementoMaximoConsumoRateio) {
+	public void setIncrementoMaximoConsumoRateio(Integer incrementoMaximoConsumoRateio) {
 		this.incrementoMaximoConsumoRateio = incrementoMaximoConsumoRateio;
 	}
 
@@ -948,8 +840,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return this.decrementoMaximoConsumoRateio;
 	}
 
-	public void setDecrementoMaximoConsumoRateio(
-			Integer decrementoMaximoConsumoRateio) {
+	public void setDecrementoMaximoConsumoRateio(Integer decrementoMaximoConsumoRateio) {
 		this.decrementoMaximoConsumoRateio = decrementoMaximoConsumoRateio;
 	}
 
@@ -957,8 +848,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return this.numeroMinimoDiasEmissaoVencimento;
 	}
 
-	public void setNumeroMinimoDiasEmissaoVencimento(
-			Short numeroMinimoDiasEmissaoVencimento) {
+	public void setNumeroMinimoDiasEmissaoVencimento(Short numeroMinimoDiasEmissaoVencimento) {
 		this.numeroMinimoDiasEmissaoVencimento = numeroMinimoDiasEmissaoVencimento;
 	}
 
@@ -966,8 +856,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return this.numeroDiasAdicionaisCorreios;
 	}
 
-	public void setNumeroDiasAdicionaisCorreios(
-			Short numeroDiasAdicionaisCorreios) {
+	public void setNumeroDiasAdicionaisCorreios(Short numeroDiasAdicionaisCorreios) {
 		this.numeroDiasAdicionaisCorreios = numeroDiasAdicionaisCorreios;
 	}
 
@@ -991,8 +880,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return this.numeroMaximoParcelasFinanciamento;
 	}
 
-	public void setNumeroMaximoParcelasFinanciamento(
-			Short numeroMaximoParcelasFinanciamento) {
+	public void setNumeroMaximoParcelasFinanciamento(Short numeroMaximoParcelasFinanciamento) {
 		this.numeroMaximoParcelasFinanciamento = numeroMaximoParcelasFinanciamento;
 	}
 
@@ -1000,8 +888,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return this.percentualTaxaJurosFinanciamento;
 	}
 
-	public void setPercentualTaxaJurosFinanciamento(
-			BigDecimal percentualTaxaJurosFinanciamento) {
+	public void setPercentualTaxaJurosFinanciamento(BigDecimal percentualTaxaJurosFinanciamento) {
 		this.percentualTaxaJurosFinanciamento = percentualTaxaJurosFinanciamento;
 	}
 
@@ -1009,8 +896,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return this.percentualMaximoAbatimento;
 	}
 
-	public void setPercentualMaximoAbatimento(
-			BigDecimal percentualMaximoAbatimento) {
+	public void setPercentualMaximoAbatimento(BigDecimal percentualMaximoAbatimento) {
 		this.percentualMaximoAbatimento = percentualMaximoAbatimento;
 	}
 
@@ -1018,8 +904,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return this.percentualFinanciamentoEntradaMinima;
 	}
 
-	public void setPercentualFinanciamentoEntradaMinima(
-			BigDecimal percentualFinanciamentoEntradaMinima) {
+	public void setPercentualFinanciamentoEntradaMinima(BigDecimal percentualFinanciamentoEntradaMinima) {
 		this.percentualFinanciamentoEntradaMinima = percentualFinanciamentoEntradaMinima;
 	}
 
@@ -1027,8 +912,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return this.numeroMesesMinimoAlteracaoVencimento;
 	}
 
-	public void setNumeroMesesMinimoAlteracaoVencimento(
-			Short numeroMesesMinimoAlteracaoVencimento) {
+	public void setNumeroMesesMinimoAlteracaoVencimento(Short numeroMesesMinimoAlteracaoVencimento) {
 		this.numeroMesesMinimoAlteracaoVencimento = numeroMesesMinimoAlteracaoVencimento;
 	}
 
@@ -1068,8 +952,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return this.numeroDiasVencimentoCobranca;
 	}
 
-	public void setNumeroDiasVencimentoCobranca(
-			Short numeroDiasVencimentoCobranca) {
+	public void setNumeroDiasVencimentoCobranca(Short numeroDiasVencimentoCobranca) {
 		this.numeroDiasVencimentoCobranca = numeroDiasVencimentoCobranca;
 	}
 
@@ -1101,8 +984,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return this.hidrometroCapacidade;
 	}
 
-	public void setHidrometroCapacidade(
-			HidrometroCapacidade hidrometroCapacidade) {
+	public void setHidrometroCapacidade(HidrometroCapacidade hidrometroCapacidade) {
 		this.hidrometroCapacidade = hidrometroCapacidade;
 	}
 
@@ -1114,33 +996,18 @@ public class SistemaParametro extends ObjetoTransacao {
 		this.cep = cep;
 	}
 
-	/**
-	 * @return Returns the codigoEmpresaFebraban.
-	 */
 	public Short getCodigoEmpresaFebraban() {
 		return codigoEmpresaFebraban;
 	}
 
-	/**
-	 * @param codigoEmpresaFebraban
-	 *            The codigoEmpresaFebraban to set.
-	 */
 	public void setCodigoEmpresaFebraban(Short codigoEmpresaFebraban) {
 		this.codigoEmpresaFebraban = codigoEmpresaFebraban;
 	}
 
 	public String toString() {
-		return new ToStringBuilder(this).append("parmId", getParmId())
-				.toString();
+		return new ToStringBuilder(this).append("parmId", getParmId()).toString();
 	}
 
-	/**
-	 * Descrição do método>>
-	 * 
-	 * @param other
-	 *            Descrição do parâmetro
-	 * @return Descrição do retorno
-	 */
 	public boolean equals(Object other) {
 		if ((this == other)) {
 			return true;
@@ -1151,132 +1018,95 @@ public class SistemaParametro extends ObjetoTransacao {
 		SistemaParametro castOther = (SistemaParametro) other;
 
 		return new EqualsBuilder()
-				.append(this.getAnoMesFaturamento(),
-						castOther.getAnoMesFaturamento())
-				.append(this.getAnoMesArrecadacao(),
-						castOther.getAnoMesArrecadacao())
+				.append(this.getAnoMesFaturamento(), castOther.getAnoMesFaturamento())
+				.append(this.getAnoMesArrecadacao(), castOther.getAnoMesArrecadacao())
 				.append(this.getNomeEstado(), castOther.getNomeEstado())
 				.append(this.getNomeEmpresa(), castOther.getNomeEmpresa())
-				.append(this.getNomeAbreviadoEmpresa(),
-						castOther.getNomeAbreviadoEmpresa())
+				.append(this.getNomeAbreviadoEmpresa(), castOther.getNomeAbreviadoEmpresa())
 				.append(this.getCnpjEmpresa(), castOther.getCnpjEmpresa())
 				.append(this.getNumeroImovel(), castOther.getNumeroImovel())
-				.append(this.getComplementoEndereco(),
-						castOther.getComplementoEndereco())
+				.append(this.getComplementoEndereco(), castOther.getComplementoEndereco())
+				.append(this.getDddTelefone(), castOther.getDddTelefone())
 				.append(this.getNumeroTelefone(), castOther.getNumeroTelefone())
 				.append(this.getNumeroRamal(), castOther.getNumeroRamal())
 				.append(this.getNumeroFax(), castOther.getNumeroFax())
 				.append(this.getDescricaoEmail(), castOther.getDescricaoEmail())
-				.append(this.getMenorConsumoGrandeUsuario(),
-						castOther.getMenorConsumoGrandeUsuario()).append(
-						this.getValorMinimoEmissaoConta(),
-						castOther.getValorMinimoEmissaoConta()).append(
-						this.getMenorEconomiasGrandeUsuario(),
-						castOther.getMenorEconomiasGrandeUsuario()).append(
-						this.getMesesMediaConsumo(),
-						castOther.getMesesMediaConsumo()).append(
-						this.getIndicadorFaixaFalsa(),
-						castOther.getIndicadorFaixaFalsa()).append(
-						this.getPercentualFaixaFalsa(),
-						castOther.getPercentualFaixaFalsa()).append(
-						this.getIndicadorUsoFaixaFalsa(),
-						castOther.getIndicadorUsoFaixaFalsa()).append(
-						this.getIndicadorUsoFiscalizadorLeitura(),
-						castOther.getIndicadorUsoFiscalizadorLeitura()).append(
-						this.getPercentualFiscalizacaoLeitura(),
-						castOther.getPercentualFiscalizacaoLeitura()).append(
-						this.getIndicadorPercentualFiscalizacaoLeitura(),
-						castOther.getIndicadorPercentualFiscalizacaoLeitura())
-				.append(this.getIncrementoMaximoConsumoRateio(),
-						castOther.getIncrementoMaximoConsumoRateio()).append(
-						this.getDecrementoMaximoConsumoRateio(),
-						castOther.getDecrementoMaximoConsumoRateio()).append(
-						this.getPercentualToleranciaRateio(),
-						castOther.getPercentualToleranciaRateio()).append(
-						this.getNumeroMinimoDiasEmissaoVencimento(),
-						castOther.getNumeroMinimoDiasEmissaoVencimento())
-				.append(this.getNumeroDiasAdicionaisCorreios(),
-						castOther.getNumeroDiasAdicionaisCorreios()).append(
-						this.getNumeroMesesValidadeConta(),
-						castOther.getNumeroMesesValidadeConta()).append(
-						this.getUltimaAlteracao(),
-						castOther.getUltimaAlteracao()).append(
-						this.getNumeroMaximoParcelasFinanciamento(),
-						castOther.numeroMaximoParcelasFinanciamento).append(
-						this.getPercentualTaxaJurosFinanciamento(),
-						castOther.percentualTaxaJurosFinanciamento).append(
-						this.getPercentualMaximoAbatimento(),
-						castOther.percentualMaximoAbatimento).append(
-						this.getPercentualFinanciamentoEntradaMinima(),
-						castOther.percentualFinanciamentoEntradaMinima).append(
-						this.getDiasVencimentoAlternativo(),
-						castOther.getDiasVencimentoAlternativo())
-
+				.append(this.getMenorConsumoGrandeUsuario(), castOther.getMenorConsumoGrandeUsuario())
+				.append(this.getValorMinimoEmissaoConta(), castOther.getValorMinimoEmissaoConta())
+				.append(this.getMenorEconomiasGrandeUsuario(), castOther.getMenorEconomiasGrandeUsuario())
+				.append(this.getMesesMediaConsumo(), castOther.getMesesMediaConsumo())
+				.append(this.getIndicadorFaixaFalsa(), castOther.getIndicadorFaixaFalsa())
+				.append(this.getPercentualFaixaFalsa(), castOther.getPercentualFaixaFalsa())
+				.append(this.getIndicadorUsoFaixaFalsa(), castOther.getIndicadorUsoFaixaFalsa())
+				.append(this.getIndicadorUsoFiscalizadorLeitura(), castOther.getIndicadorUsoFiscalizadorLeitura())
+				.append(this.getPercentualFiscalizacaoLeitura(), castOther.getPercentualFiscalizacaoLeitura())
+				.append(this.getIndicadorPercentualFiscalizacaoLeitura(), castOther.getIndicadorPercentualFiscalizacaoLeitura())
+				.append(this.getIncrementoMaximoConsumoRateio(), castOther.getIncrementoMaximoConsumoRateio())
+				.append(this.getDecrementoMaximoConsumoRateio(), castOther.getDecrementoMaximoConsumoRateio())
+				.append(this.getPercentualToleranciaRateio(), castOther.getPercentualToleranciaRateio())
+				.append(this.getNumeroMinimoDiasEmissaoVencimento(), castOther.getNumeroMinimoDiasEmissaoVencimento())
+				.append(this.getNumeroDiasAdicionaisCorreios(), castOther.getNumeroDiasAdicionaisCorreios())
+				.append(this.getNumeroMesesValidadeConta(), castOther.getNumeroMesesValidadeConta())
+				.append(this.getUltimaAlteracao(), castOther.getUltimaAlteracao())
+				.append(this.getNumeroMaximoParcelasFinanciamento(), castOther.numeroMaximoParcelasFinanciamento)
+				.append(this.getPercentualTaxaJurosFinanciamento(), castOther.percentualTaxaJurosFinanciamento)
+				.append(this.getPercentualMaximoAbatimento(), castOther.percentualMaximoAbatimento)
+				.append(this.getPercentualFinanciamentoEntradaMinima(), castOther.percentualFinanciamentoEntradaMinima)
+				.append(this.getDiasVencimentoAlternativo(), castOther.getDiasVencimentoAlternativo())
 				.isEquals();
 	}
 
-	/**
-	 * Descrição do método>>
-	 * 
-	 * @return Descrição do retorno
-	 */
 	public int hashCode() {
-		return new HashCodeBuilder().append(getAnoMesFaturamento()).append(
-				getAnoMesArrecadacao()).append(getNomeEstado()).append(
-				getNomeEmpresa()).append(getNomeAbreviadoEmpresa()).append(
-				getCnpjEmpresa()).append(getNumeroImovel()).append(
-				getComplementoEndereco()).append(getNumeroTelefone()).append(
-				getNumeroRamal()).append(getNumeroFax()).append(
-				getDescricaoEmail()).append(getMenorConsumoGrandeUsuario())
-				.append(getValorMinimoEmissaoConta()).append(
-						getMenorEconomiasGrandeUsuario()).append(
-						getMesesMediaConsumo())
-				.append(getIndicadorFaixaFalsa()).append(
-						getPercentualFaixaFalsa()).append(
-						getIndicadorUsoFaixaFalsa()).append(
-						getIndicadorUsoFiscalizadorLeitura()).append(
-						getPercentualFiscalizacaoLeitura()).append(
-						getIndicadorPercentualFiscalizacaoLeitura()).append(
-						getIncrementoMaximoConsumoRateio()).append(
-						getDecrementoMaximoConsumoRateio()).append(
-						getPercentualToleranciaRateio()).append(
-						getNumeroMinimoDiasEmissaoVencimento()).append(
-						getNumeroDiasAdicionaisCorreios()).append(
-						getNumeroMesesValidadeConta()).append(
-						getUltimaAlteracao()).append(
-						getNumeroMaximoParcelasFinanciamento()).append(
-						getPercentualTaxaJurosFinanciamento()).append(
-						getPercentualMaximoAbatimento()).append(
-						getPercentualFinanciamentoEntradaMinima()).append(
-						getDiasVencimentoAlternativo()).toHashCode();
+		return new HashCodeBuilder()
+				.append(getAnoMesFaturamento())
+				.append(getAnoMesArrecadacao())
+				.append(getNomeEstado())
+				.append(getNomeEmpresa())
+				.append(getNomeAbreviadoEmpresa())
+				.append(getCnpjEmpresa())
+				.append(getNumeroImovel())
+				.append(getComplementoEndereco())
+				.append(getDddTelefone())
+				.append(getNumeroTelefone())
+				.append(getNumeroRamal())
+				.append(getNumeroFax())
+				.append(getDescricaoEmail())
+				.append(getMenorConsumoGrandeUsuario())
+				.append(getValorMinimoEmissaoConta())
+				.append(getMenorEconomiasGrandeUsuario())
+				.append(getMesesMediaConsumo())
+				.append(getIndicadorFaixaFalsa())
+				.append(getPercentualFaixaFalsa())
+				.append(getIndicadorUsoFaixaFalsa())
+				.append(getIndicadorUsoFiscalizadorLeitura())
+				.append(getPercentualFiscalizacaoLeitura())
+				.append(getIndicadorPercentualFiscalizacaoLeitura())
+				.append(getIncrementoMaximoConsumoRateio())
+				.append(getDecrementoMaximoConsumoRateio())
+				.append(getPercentualToleranciaRateio())
+				.append(getNumeroMinimoDiasEmissaoVencimento())
+				.append(getNumeroDiasAdicionaisCorreios())
+				.append(getNumeroMesesValidadeConta())
+				.append(getUltimaAlteracao())
+				.append(getNumeroMaximoParcelasFinanciamento())
+				.append(getPercentualTaxaJurosFinanciamento())
+				.append(getPercentualMaximoAbatimento())
+				.append(getPercentualFinanciamentoEntradaMinima())
+				.append(getDiasVencimentoAlternativo()).toHashCode();
 	}
 
-	/**
-	 * @return Retorna o campo numeroMaximoFavorito.
-	 */
 	public Integer getNumeroMaximoFavorito() {
 		return numeroMaximoFavorito;
 	}
 
-	/**
-	 * @param numeroMaximoFavorito
-	 *            O numeroMaximoFavorito a ser setado.
-	 */
 	public void setNumeroMaximoFavorito(Integer numeroMaximoFavorito) {
 		this.numeroMaximoFavorito = numeroMaximoFavorito;
 	}
 
-	/**
-	 * @return Retorna o campo contaBancaria.
-	 */
 	public ContaBancaria getContaBancaria() {
 		return contaBancaria;
 	}
 
-	/**
-	 * @param contaBancaria
-	 *            O contaBancaria a ser setado.
-	 */
 	public void setContaBancaria(ContaBancaria contaBancaria) {
 		this.contaBancaria = contaBancaria;
 	}
@@ -1305,17 +1135,10 @@ public class SistemaParametro extends ObjetoTransacao {
 		this.tituloPagina = tituloPagina;
 	}
 
-	/**
-	 * @return Retorna o campo numeroMaximoParcelaCredito.
-	 */
 	public Short getNumeroMaximoParcelaCredito() {
 		return numeroMaximoParcelaCredito;
 	}
 
-	/**
-	 * @param numeroMaximoParcelaCredito
-	 *            O numeroMaximoParcelaCredito a ser setado.
-	 */
 	public void setNumeroMaximoParcelaCredito(Short numeroMaximoParcelaCredito) {
 		this.numeroMaximoParcelaCredito = numeroMaximoParcelaCredito;
 	}
@@ -1328,20 +1151,15 @@ public class SistemaParametro extends ObjetoTransacao {
 	public Filtro retornaFiltro() {
 		FiltroSistemaParametro filtroSistemaParametro = new FiltroSistemaParametro();
 
-		filtroSistemaParametro.adicionarParametro(new ParametroSimples(
-				FiltroSistemaParametro.Parm_Id, this.getParmId()));
+		filtroSistemaParametro.adicionarParametro(new ParametroSimples(FiltroSistemaParametro.Parm_Id, this.getParmId()));
 
-		filtroSistemaParametro
-				.adicionarCaminhoParaCarregamentoEntidade("logradouro");
+		filtroSistemaParametro.adicionarCaminhoParaCarregamentoEntidade("logradouro");
 
-		filtroSistemaParametro
-				.adicionarCaminhoParaCarregamentoEntidade("bairro");
+		filtroSistemaParametro.adicionarCaminhoParaCarregamentoEntidade("bairro");
 
-		filtroSistemaParametro
-				.adicionarCaminhoParaCarregamentoEntidade("enderecoReferencia");
+		filtroSistemaParametro.adicionarCaminhoParaCarregamentoEntidade("enderecoReferencia");
 
-		filtroSistemaParametro
-				.adicionarCaminhoParaCarregamentoEntidade("hidrometroCapacidade");
+		filtroSistemaParametro.adicionarCaminhoParaCarregamentoEntidade("hidrometroCapacidade");
 
 		filtroSistemaParametro.adicionarCaminhoParaCarregamentoEntidade("cep");
 
@@ -1380,29 +1198,27 @@ public class SistemaParametro extends ObjetoTransacao {
 		this.ipServidorSmtp = ipServidorSmtp;
 	}
 
-	public Cliente getClienteDiretorComercialCompesa() {
-		return clienteDiretorComercialCompesa;
+	public Cliente getClienteDiretorComercial() {
+		return clienteDiretorComercial;
 	}
 
-	public void setClienteDiretorComercialCompesa(
-			Cliente clienteDiretorComercialCompesa) {
-		this.clienteDiretorComercialCompesa = clienteDiretorComercialCompesa;
+	public void setClienteDiretorComercial(Cliente clienteDiretorComercial) {
+		this.clienteDiretorComercial = clienteDiretorComercial;
 	}
 
-	public Cliente getClientePresidenteCompesa() {
-		return clientePresidenteCompesa;
+	public Cliente getClientePresidente() {
+		return clientePresidente;
 	}
 
-	public void setClientePresidenteCompesa(Cliente clientePresidenteCompesa) {
-		this.clientePresidenteCompesa = clientePresidenteCompesa;
+	public void setClientePresidente(Cliente clientePresidente) {
+		this.clientePresidente = clientePresidente;
 	}
 
 	public BigDecimal getPercentualToleranciaRateio() {
 		return percentualToleranciaRateio;
 	}
 
-	public void setPercentualToleranciaRateio(
-			BigDecimal percentualToleranciaRateio) {
+	public void setPercentualToleranciaRateio(BigDecimal percentualToleranciaRateio) {
 		this.percentualToleranciaRateio = percentualToleranciaRateio;
 	}
 
@@ -1410,8 +1226,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return numeroContratoPrestacaoServico;
 	}
 
-	public void setNumeroContratoPrestacaoServico(
-			String numeroContratoPrestacaoServico) {
+	public void setNumeroContratoPrestacaoServico(String numeroContratoPrestacaoServico) {
 		this.numeroContratoPrestacaoServico = numeroContratoPrestacaoServico;
 	}
 
@@ -1419,8 +1234,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return indicadorAtualizacaoTarifaria;
 	}
 
-	public void setIndicadorAtualizacaoTarifaria(
-			short indicadorAtualizacaoTarifaria) {
+	public void setIndicadorAtualizacaoTarifaria(short indicadorAtualizacaoTarifaria) {
 		this.indicadorAtualizacaoTarifaria = indicadorAtualizacaoTarifaria;
 	}
 
@@ -1452,8 +1266,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return indicadorFaturamentoAntecipado;
 	}
 
-	public void setIndicadorFaturamentoAntecipado(
-			Short indicadorFaturamentoAntecipado) {
+	public void setIndicadorFaturamentoAntecipado(Short indicadorFaturamentoAntecipado) {
 		this.indicadorFaturamentoAntecipado = indicadorFaturamentoAntecipado;
 	}
 
@@ -1461,8 +1274,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return dataHoraDadosDiariosArrecadacao;
 	}
 
-	public void setDataHoraDadosDiariosArrecadacao(
-			Date dataHoraDadosDiariosArrecadacao) {
+	public void setDataHoraDadosDiariosArrecadacao(Date dataHoraDadosDiariosArrecadacao) {
 		this.dataHoraDadosDiariosArrecadacao = dataHoraDadosDiariosArrecadacao;
 	}
 
@@ -1470,8 +1282,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return codigoPeriodicidadeNegativacao;
 	}
 
-	public void setCodigoPeriodicidadeNegativacao(
-			Short codigoPeriodicidadeNegativacao) {
+	public void setCodigoPeriodicidadeNegativacao(Short codigoPeriodicidadeNegativacao) {
 		this.codigoPeriodicidadeNegativacao = codigoPeriodicidadeNegativacao;
 	}
 
@@ -1479,8 +1290,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return unidadeOrganizacionalIdPresidencia;
 	}
 
-	public void setUnidadeOrganizacionalIdPresidencia(
-			UnidadeOrganizacional unidadeOrganizacionalIdPresidencia) {
+	public void setUnidadeOrganizacionalIdPresidencia(UnidadeOrganizacional unidadeOrganizacionalIdPresidencia) {
 		this.unidadeOrganizacionalIdPresidencia = unidadeOrganizacionalIdPresidencia;
 	}
 
@@ -1540,17 +1350,10 @@ public class SistemaParametro extends ObjetoTransacao {
 		this.ipServidorModuloGerencial = ipServidorModuloGerencial;
 	}
 
-	/**
-	 * @return Retorna o campo indicadorTarifaCategoria.
-	 */
 	public Short getIndicadorTarifaCategoria() {
 		return indicadorTarifaCategoria;
 	}
 
-	/**
-	 * @param indicadorTarifaCategoria
-	 *            O indicadorTarifaCategoria a ser setado.
-	 */
 	public void setIndicadorTarifaCategoria(Short indicadorTarifaCategoria) {
 		this.indicadorTarifaCategoria = indicadorTarifaCategoria;
 	}
@@ -1567,56 +1370,31 @@ public class SistemaParametro extends ObjetoTransacao {
 		return numeroMesesMaximoCalculoMedia;
 	}
 
-	public void setNumeroMesesMaximoCalculoMedia(
-			Short numeroMesesMaximoCalculoMedia) {
+	public void setNumeroMesesMaximoCalculoMedia(Short numeroMesesMaximoCalculoMedia) {
 		this.numeroMesesMaximoCalculoMedia = numeroMesesMaximoCalculoMedia;
 	}
 
-	/**
-	 * @return Retorna o campo numeroDiasEncerramentoOrdemServico.
-	 */
 	public Short getNumeroDiasEncerramentoOrdemServico() {
 		return numeroDiasEncerramentoOrdemServico;
 	}
 
-	/**
-	 * @param numeroDiasEncerramentoOrdemServico
-	 *            O numeroDiasEncerramentoOrdemServico a ser setado.
-	 */
-	public void setNumeroDiasEncerramentoOrdemServico(
-			Short numeroDiasEncerramentoOrdemServico) {
+	public void setNumeroDiasEncerramentoOrdemServico(Short numeroDiasEncerramentoOrdemServico) {
 		this.numeroDiasEncerramentoOrdemServico = numeroDiasEncerramentoOrdemServico;
 	}
 
-	/**
-	 * @return Retorna o campo numeroDiasEncerramentoOSSeletiva.
-	 */
 	public Short getNumeroDiasEncerramentoOSSeletiva() {
 		return numeroDiasEncerramentoOSSeletiva;
 	}
 
-	/**
-	 * @param numeroDiasEncerramentoOSSeletiva
-	 *            O numeroDiasEncerramentoOSSeletiva a ser setado.
-	 */
-	public void setNumeroDiasEncerramentoOSSeletiva(
-			Short numeroDiasEncerramentoOSSeletiva) {
+	public void setNumeroDiasEncerramentoOSSeletiva(Short numeroDiasEncerramentoOSSeletiva) {
 		this.numeroDiasEncerramentoOSSeletiva = numeroDiasEncerramentoOSSeletiva;
 	}
 
-	/**
-	 * @return Retorna o campo numeroDiasAlteracaoVencimentoPosterior.
-	 */
 	public Short getNumeroDiasAlteracaoVencimentoPosterior() {
 		return numeroDiasAlteracaoVencimentoPosterior;
 	}
 
-	/**
-	 * @param numeroDiasAlteracaoVencimentoPosterior
-	 *            O numeroDiasAlteracaoVencimentoPosterior a ser setado.
-	 */
-	public void setNumeroDiasAlteracaoVencimentoPosterior(
-			Short numeroDiasAlteracaoVencimentoPosterior) {
+	public void setNumeroDiasAlteracaoVencimentoPosterior(Short numeroDiasAlteracaoVencimentoPosterior) {
 		this.numeroDiasAlteracaoVencimentoPosterior = numeroDiasAlteracaoVencimentoPosterior;
 	}
 
@@ -1640,44 +1418,23 @@ public class SistemaParametro extends ObjetoTransacao {
 		this.indicadorCalculaVencimento = indicadorCalculaVencimento;
 	}
 
-	/**
-	 * @return Retorna o campo indicadorLimiteAlteracaoVencimento.
-	 */
 	public Short getIndicadorLimiteAlteracaoVencimento() {
 		return indicadorLimiteAlteracaoVencimento;
 	}
 
-	/**
-	 * @param indicadorLimiteAlteracaoVencimento
-	 *            O indicadorLimiteAlteracaoVencimento a ser setado.
-	 */
-	public void setIndicadorLimiteAlteracaoVencimento(
-			Short indicadorLimiteAlteracaoVencimento) {
+	public void setIndicadorLimiteAlteracaoVencimento(Short indicadorLimiteAlteracaoVencimento) {
 		this.indicadorLimiteAlteracaoVencimento = indicadorLimiteAlteracaoVencimento;
 	}
 
-	/**
-	 * @param indicadorRetificacaoValorMenor
-	 *            O indicadorRetificacaoValorMenor a ser setado.
-	 */
-	public void setIndicadorRetificacaoValorMenor(
-			Short indicadorRetificacaoValorMenor) {
+	public void setIndicadorRetificacaoValorMenor(Short indicadorRetificacaoValorMenor) {
 		this.indicadorRetificacaoValorMenor = indicadorRetificacaoValorMenor;
 	}
 
-	/**
-	 * @return Retorna o campo numeroExecucaoResumoNegativacao.
-	 */
 	public Integer getNumeroExecucaoResumoNegativacao() {
 		return numeroExecucaoResumoNegativacao;
 	}
 
-	/**
-	 * @param numeroExecucaoResumoNegativacao
-	 *            O numeroExecucaoResumoNegativacao a ser setado.
-	 */
-	public void setNumeroExecucaoResumoNegativacao(
-			Integer numeroExecucaoResumoNegativacao) {
+	public void setNumeroExecucaoResumoNegativacao(Integer numeroExecucaoResumoNegativacao) {
 		this.numeroExecucaoResumoNegativacao = numeroExecucaoResumoNegativacao;
 	}
 
@@ -1701,24 +1458,15 @@ public class SistemaParametro extends ObjetoTransacao {
 		return indicadorParcelamentoConfirmado;
 	}
 
-	public void setIndicadorParcelamentoConfirmado(
-			short indicadorParcelamentoConfirmado) {
+	public void setIndicadorParcelamentoConfirmado(short indicadorParcelamentoConfirmado) {
 		this.indicadorParcelamentoConfirmado = indicadorParcelamentoConfirmado;
 	}
-	
-	/**
-	 * @return Retorna o campo indicadorTransferenciaComDebito.
-	 */
+
 	public Short getIndicadorTransferenciaComDebito() {
 		return indicadorTransferenciaComDebito;
 	}
 
-	/**
-	 * @param indicadorTransferenciaComDebito
-	 *            O indicadorTransferenciaComDebito a ser setado.
-	 */
-	public void setIndicadorTransferenciaComDebito(
-			Short indicadorTransferenciaComDebito) {
+	public void setIndicadorTransferenciaComDebito(Short indicadorTransferenciaComDebito) {
 		this.indicadorTransferenciaComDebito = indicadorTransferenciaComDebito;
 	}
 
@@ -1726,8 +1474,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return indicadorControlaAutoInfracao;
 	}
 
-	public void setIndicadorControlaAutoInfracao(
-			short indicadorControlaAutoInfracao) {
+	public void setIndicadorControlaAutoInfracao(short indicadorControlaAutoInfracao) {
 		this.indicadorControlaAutoInfracao = indicadorControlaAutoInfracao;
 	}
 
@@ -1743,8 +1490,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return numeroDiasValidadeExtratoPermissaoEspecial;
 	}
 
-	public void setNumeroDiasValidadeExtratoPermissaoEspecial(
-			Short numeroDiasValidadeExtratoPermissaoEspecial) {
+	public void setNumeroDiasValidadeExtratoPermissaoEspecial(Short numeroDiasValidadeExtratoPermissaoEspecial) {
 		this.numeroDiasValidadeExtratoPermissaoEspecial = numeroDiasValidadeExtratoPermissaoEspecial;
 	}
 
@@ -1756,37 +1502,19 @@ public class SistemaParametro extends ObjetoTransacao {
 		this.valorSegundaVia = valorSegundaVia;
 	}
 
-	/**
-	 * @return Retorna o campo
-	 *         numeroDiasVencimentoDebitoGeracaoCertidaoNegativaDebitos.
-	 */
 	public Short getNumeroDiasVencimentoDebitoGeracaoCertidaoNegativaDebitos() {
 		return numeroDiasVencimentoDebitoGeracaoCertidaoNegativaDebitos;
 	}
 
-	/**
-	 * @param numeroDiasVencimentoDebitoGeracaoCertidaoNegativaDebitos
-	 *            O numeroDiasVencimentoDebitoGeracaoCertidaoNegativaDebitos a
-	 *            ser setado.
-	 */
-	public void setNumeroDiasVencimentoDebitoGeracaoCertidaoNegativaDebitos(
-			Short numeroDiasVencimentoDebitoGeracaoCertidaoNegativaDebitos) {
+	public void setNumeroDiasVencimentoDebitoGeracaoCertidaoNegativaDebitos(Short numeroDiasVencimentoDebitoGeracaoCertidaoNegativaDebitos) {
 		this.numeroDiasVencimentoDebitoGeracaoCertidaoNegativaDebitos = numeroDiasVencimentoDebitoGeracaoCertidaoNegativaDebitos;
 	}
 
-	/**
-	 * @return Retorna o campo indicadorExibeMensagemNaoReceberPagamento.
-	 */
 	public Short getIndicadorExibeMensagemNaoReceberPagamento() {
 		return indicadorExibeMensagemNaoReceberPagamento;
 	}
 
-	/**
-	 * @param indicadorExibeMensagemNaoReceberPagamento
-	 *            O indicadorExibeMensagemNaoReceberPagamento a ser setado.
-	 */
-	public void setIndicadorExibeMensagemNaoReceberPagamento(
-			Short indicadorExibeMensagemNaoReceberPagamento) {
+	public void setIndicadorExibeMensagemNaoReceberPagamento(Short indicadorExibeMensagemNaoReceberPagamento) {
 		this.indicadorExibeMensagemNaoReceberPagamento = indicadorExibeMensagemNaoReceberPagamento;
 	}
 
@@ -1802,24 +1530,15 @@ public class SistemaParametro extends ObjetoTransacao {
 		return indicadorCertidaoNegativaEfeitoPositivo;
 	}
 
-	public void setIndicadorCertidaoNegativaEfeitoPositivo(
-			short indicadorCertidaoNegativaEfeitoPositivo) {
+	public void setIndicadorCertidaoNegativaEfeitoPositivo(short indicadorCertidaoNegativaEfeitoPositivo) {
 		this.indicadorCertidaoNegativaEfeitoPositivo = indicadorCertidaoNegativaEfeitoPositivo;
 	}
 
-	/**
-	 * @return Retorna o campo indicadorControleTramitacaoRA.
-	 */
 	public Short getIndicadorControleTramitacaoRA() {
 		return indicadorControleTramitacaoRA;
 	}
 
-	/**
-	 * @param indicadorControleTramitacaoRA
-	 *            O indicadorControleTramitacaoRA a ser setado.
-	 */
-	public void setIndicadorControleTramitacaoRA(
-			Short indicadorControleTramitacaoRA) {
+	public void setIndicadorControleTramitacaoRA(Short indicadorControleTramitacaoRA) {
 		this.indicadorControleTramitacaoRA = indicadorControleTramitacaoRA;
 	}
 
@@ -1831,33 +1550,18 @@ public class SistemaParametro extends ObjetoTransacao {
 		this.indicadorDocumentoValido = indicadorDocumentoValido;
 	}
 
-	/**
-	 * @return Retorna o campo indicadorDebitoACobrarValidoCertidaoNegativa.
-	 */
 	public Short getIndicadorDebitoACobrarValidoCertidaoNegativa() {
 		return indicadorDebitoACobrarValidoCertidaoNegativa;
 	}
 
-	/**
-	 * @param indicadorDebitoACobrarValidoCertidaoNegativa
-	 *            O indicadorDebitoACobrarValidoCertidaoNegativa a ser setado.
-	 */
-	public void setIndicadorDebitoACobrarValidoCertidaoNegativa(
-			Short indicadorDebitoACobrarValidoCertidaoNegativa) {
+	public void setIndicadorDebitoACobrarValidoCertidaoNegativa(Short indicadorDebitoACobrarValidoCertidaoNegativa) {
 		this.indicadorDebitoACobrarValidoCertidaoNegativa = indicadorDebitoACobrarValidoCertidaoNegativa;
 	}
 
-	/**
-	 * @return Retorna o campo indicadorUsaRota.
-	 */
 	public Short getIndicadorUsaRota() {
 		return indicadorUsaRota;
 	}
 
-	/**
-	 * @param indicadorUsaRota
-	 *            O indicadorUsaRota a ser setado.
-	 */
 	public void setIndicadorUsaRota(Short indicadorUsaRota) {
 		this.indicadorUsaRota = indicadorUsaRota;
 	}
@@ -1866,8 +1570,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return indicadorCalculoPrevisaoRADiasUteis;
 	}
 
-	public void setIndicadorCalculoPrevisaoRADiasUteis(
-			Short indicadorCalculoPrevisaoRADiasUteis) {
+	public void setIndicadorCalculoPrevisaoRADiasUteis(Short indicadorCalculoPrevisaoRADiasUteis) {
 		this.indicadorCalculoPrevisaoRADiasUteis = indicadorCalculoPrevisaoRADiasUteis;
 	}
 
@@ -1899,8 +1602,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return indicadorEmissaoExtratoNaConsulta;
 	}
 
-	public void setIndicadorEmissaoExtratoNaConsulta(
-			Short indicadorEmissaoExtratoNaConsulta) {
+	public void setIndicadorEmissaoExtratoNaConsulta(Short indicadorEmissaoExtratoNaConsulta) {
 		this.indicadorEmissaoExtratoNaConsulta = indicadorEmissaoExtratoNaConsulta;
 	}
 
@@ -1908,24 +1610,15 @@ public class SistemaParametro extends ObjetoTransacao {
 		return numeroDiasPrazoRecursoAutoInfracao;
 	}
 
-	public void setNumeroDiasPrazoRecursoAutoInfracao(
-			Integer numeroDiasPrazoRecursoAutoInfracao) {
+	public void setNumeroDiasPrazoRecursoAutoInfracao(Integer numeroDiasPrazoRecursoAutoInfracao) {
 		this.numeroDiasPrazoRecursoAutoInfracao = numeroDiasPrazoRecursoAutoInfracao;
 	}
 
-	/**
-	 * @return Retorna o campo indicadorImprimeUsuarioSegundaVia.
-	 */
 	public Short getIndicadorImprimeUsuarioSegundaVia() {
 		return indicadorImprimeUsuarioSegundaVia;
 	}
 
-	/**
-	 * @param indicadorImprimeUsuarioSegundaVia
-	 *            O indicadorImprimeUsuarioSegundaVia a ser setado.
-	 */
-	public void setIndicadorImprimeUsuarioSegundaVia(
-			Short indicadorImprimeUsuarioSegundaVia) {
+	public void setIndicadorImprimeUsuarioSegundaVia(Short indicadorImprimeUsuarioSegundaVia) {
 		this.indicadorImprimeUsuarioSegundaVia = indicadorImprimeUsuarioSegundaVia;
 	}
 
@@ -1939,8 +1632,7 @@ public class SistemaParametro extends ObjetoTransacao {
 
 	public void setarConstantes() {
 		NUMERO_DIGITOS_QUADRA = this.getNumeroDigitosQuadra();
-		INDICADOR_AUTORIZACAO_RELATORIO = this
-				.getIndicadorAutorizacaoRelatorio();
+		INDICADOR_AUTORIZACAO_RELATORIO = this.getIndicadorAutorizacaoRelatorio();
 	}
 
 	public String getUrlhelp() {
@@ -1951,35 +1643,19 @@ public class SistemaParametro extends ObjetoTransacao {
 		this.urlhelp = urlhelp;
 	}
 
-	/**
-	 * @return Retorna o campo numeroMaximoMesesCalculoConsumoAutoInfracao.
-	 */
 	public Integer getNumeroMaximoMesesCalculoConsumoAutoInfracao() {
 		return numeroMaximoMesesCalculoConsumoAutoInfracao;
 	}
 
-	/**
-	 * @param numeroMaximoMesesCalculoConsumoAutoInfracao
-	 *            O numeroMaximoMesesCalculoConsumoAutoInfracao a ser setado.
-	 */
-	public void setNumeroMaximoMesesCalculoConsumoAutoInfracao(
-			Integer numeroMaximoMesesCalculoConsumoAutoInfracao) {
+	public void setNumeroMaximoMesesCalculoConsumoAutoInfracao(Integer numeroMaximoMesesCalculoConsumoAutoInfracao) {
 		this.numeroMaximoMesesCalculoConsumoAutoInfracao = numeroMaximoMesesCalculoConsumoAutoInfracao;
 	}
 
-	/**
-	 * @return Retorna o campo numeroMaximoParcelasAutoInfracao.
-	 */
 	public Integer getNumeroMaximoParcelasAutoInfracao() {
 		return numeroMaximoParcelasAutoInfracao;
 	}
 
-	/**
-	 * @param numeroMaximoParcelasAutoInfracao
-	 *            O numeroMaximoParcelasAutoInfracao a ser setado.
-	 */
-	public void setNumeroMaximoParcelasAutoInfracao(
-			Integer numeroMaximoParcelasAutoInfracao) {
+	public void setNumeroMaximoParcelasAutoInfracao(Integer numeroMaximoParcelasAutoInfracao) {
 		this.numeroMaximoParcelasAutoInfracao = numeroMaximoParcelasAutoInfracao;
 	}
 
@@ -1987,8 +1663,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return indicadorAutorizacaoRelatorio;
 	}
 
-	public void setIndicadorAutorizacaoRelatorio(
-			short indicadorAutorizacaoRelatorio) {
+	public void setIndicadorAutorizacaoRelatorio(short indicadorAutorizacaoRelatorio) {
 		this.indicadorAutorizacaoRelatorio = indicadorAutorizacaoRelatorio;
 	}
 
@@ -2024,8 +1699,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return contaMotivoRetificacaoPagamentoAntecipado;
 	}
 
-	public void setContaMotivoRetificacaoPagamentoAntecipado(
-			ContaMotivoRetificacao contaMotivoRetificacaoPagamentoAntecipado) {
+	public void setContaMotivoRetificacaoPagamentoAntecipado(ContaMotivoRetificacao contaMotivoRetificacaoPagamentoAntecipado) {
 		this.contaMotivoRetificacaoPagamentoAntecipado = contaMotivoRetificacaoPagamentoAntecipado;
 	}
 
@@ -2033,120 +1707,68 @@ public class SistemaParametro extends ObjetoTransacao {
 		this.diasVencimentoAlternativo = diasVencimentoAlternativo;
 	}
 
-	/**
-	 * @return Returns the indicadorValidarLocalizacaoEncerramentoOS.
-	 */
 	public Short getIndicadorValidarLocalizacaoEncerramentoOS() {
 		return indicadorValidarLocalizacaoEncerramentoOS;
 	}
 
-	/**
-	 * @param indicadorValidarLocalizacaoEncerramentoOS
-	 *            The indicadorValidarLocalizacaoEncerramentoOS to set.
-	 */
-	public void setIndicadorValidarLocalizacaoEncerramentoOS(
-			Short indicadorValidarLocalizacaoEncerramentoOS) {
+	public void setIndicadorValidarLocalizacaoEncerramentoOS(Short indicadorValidarLocalizacaoEncerramentoOS) {
 		this.indicadorValidarLocalizacaoEncerramentoOS = indicadorValidarLocalizacaoEncerramentoOS;
 	}
 
-	/**
-	 * Gets the endereco attribute of the Imovel object
-	 * 
-	 * @return The endereco value
-	 */
 	public String getEnderecoFormatado() {
 		String endereco = null;
 
 		// verifica se o logradouro do imovel é diferente de null
-		if (this.getLogradouroCep() != null
-				&& this.getLogradouroCep().getLogradouro() != null
-				&& !this.getLogradouroCep().getLogradouro().getId().equals(
-						new Integer("0"))) {
+		if (this.getLogradouroCep() != null && this.getLogradouroCep().getLogradouro() != null
+				&& !this.getLogradouroCep().getLogradouro().getId().equals(new Integer("0"))) {
 
 			// verifica se o logradouro tipo do imovel é diferente de null
-			if (this.getLogradouroCep().getLogradouro().getLogradouroTipo() != null
-					&& !this.getLogradouroCep().getLogradouro()
-							.getLogradouroTipo().equals("")) {
+			if (this.getLogradouroCep().getLogradouro().getLogradouroTipo() != null && !this.getLogradouroCep().getLogradouro().getLogradouroTipo().equals("")) {
 				// concatena o logradouro tipo do imovel
-				endereco = this.getLogradouroCep().getLogradouro()
-						.getLogradouroTipo().getDescricao().trim();
+				endereco = this.getLogradouroCep().getLogradouro().getLogradouroTipo().getDescricao().trim();
 			}
 			// verifica se o logradouro titulo do imovel é diferente de null
 			if (this.getLogradouroCep().getLogradouro().getLogradouroTitulo() != null
-					&& !this.getLogradouroCep().getLogradouro()
-							.getLogradouroTitulo().equals("")) {
+					&& !this.getLogradouroCep().getLogradouro().getLogradouroTitulo().equals("")) {
 				// concatena o logradouro titulo do imovel
-				endereco = endereco
-						+ " "
-						+ this.getLogradouroCep().getLogradouro()
-								.getLogradouroTitulo().getDescricao().trim();
+				endereco = endereco + " " + this.getLogradouroCep().getLogradouro().getLogradouroTitulo().getDescricao().trim();
 			}
 
 			// concatena o logradouro do imovel
-			endereco = endereco + " "
-					+ this.getLogradouroCep().getLogradouro().getNome().trim();
+			endereco = endereco + " " + this.getLogradouroCep().getLogradouro().getNome().trim();
 
-			if (this.getEnderecoReferencia() != null
-					&& !this.getEnderecoReferencia().equals("")) {
-				if (this.getEnderecoReferencia().getDescricao() != null
-						&& !this.getEnderecoReferencia().getDescricao().equals(
-								"")) {
-					endereco = endereco
-							+ " - "
-							+ this.getEnderecoReferencia().getDescricao()
-									.trim();
+			if (this.getEnderecoReferencia() != null && !this.getEnderecoReferencia().equals("")) {
+				if (this.getEnderecoReferencia().getDescricao() != null && !this.getEnderecoReferencia().getDescricao().equals("")) {
+					endereco = endereco + " - " + this.getEnderecoReferencia().getDescricao().trim();
 				}
 			}
-			if (this.getNumeroImovel() != null
-					&& !this.getNumeroImovel().equals("")) {
+			if (this.getNumeroImovel() != null && !this.getNumeroImovel().equals("")) {
 				// concate o numero do imovel
 				endereco = endereco + " - " + this.getNumeroImovel().trim();
 			}
 
-			if (this.getComplementoEndereco() != null
-					&& !this.getComplementoEndereco().equalsIgnoreCase("")) {
-				endereco = endereco + " - "
-						+ this.getComplementoEndereco().trim();
+			if (this.getComplementoEndereco() != null && !this.getComplementoEndereco().equalsIgnoreCase("")) {
+				endereco = endereco + " - " + this.getComplementoEndereco().trim();
 			}
 
-			if (this.getLogradouroBairro() != null
-					&& this.getLogradouroBairro().getBairro() != null
-					&& this.getLogradouroBairro().getBairro().getId()
-							.intValue() != 0) {
-				endereco = endereco
-						+ " - "
-						+ this.getLogradouroBairro().getBairro().getNome()
-								.trim();
+			if (this.getLogradouroBairro() != null && this.getLogradouroBairro().getBairro() != null
+					&& this.getLogradouroBairro().getBairro().getId().intValue() != 0) {
+				endereco = endereco + " - " + this.getLogradouroBairro().getBairro().getNome().trim();
 
 				if (this.getLogradouroBairro().getBairro().getMunicipio() != null
-						&& this.getLogradouroBairro().getBairro()
-								.getMunicipio().getId().intValue() != 0) {
-					endereco = endereco
-							+ " "
-							+ this.getLogradouroBairro().getBairro()
-									.getMunicipio().getNome().trim();
+						&& this.getLogradouroBairro().getBairro().getMunicipio().getId().intValue() != 0) {
+					endereco = endereco + " " + this.getLogradouroBairro().getBairro().getMunicipio().getNome().trim();
 				}
 
-				if (this.getLogradouroBairro().getBairro().getMunicipio()
-						.getUnidadeFederacao() != null
-						&& this.getLogradouroBairro().getBairro()
-								.getMunicipio().getUnidadeFederacao().getId()
-								.intValue() != 0) {
-					endereco = endereco
-							+ " "
-							+ this.getLogradouroBairro().getBairro()
-									.getMunicipio().getUnidadeFederacao()
-									.getSigla().trim();
+				if (this.getLogradouroBairro().getBairro().getMunicipio().getUnidadeFederacao() != null
+						&& this.getLogradouroBairro().getBairro().getMunicipio().getUnidadeFederacao().getId().intValue() != 0) {
+					endereco = endereco + " " + this.getLogradouroBairro().getBairro().getMunicipio().getUnidadeFederacao().getSigla().trim();
 				}
 			}
 
-			if (this.getLogradouroCep() != null
-					&& this.getLogradouroCep().getCep() != null) {
+			if (this.getLogradouroCep() != null && this.getLogradouroCep().getCep() != null) {
 				// concatena o cep formatado do imóvel
-				endereco = endereco
-						+ " "
-						+ this.getLogradouroCep().getCep().getCepFormatado()
-								.trim();
+				endereco = endereco + " " + this.getLogradouroCep().getCep().getCepFormatado().trim();
 			}
 
 		}
@@ -2158,106 +1780,61 @@ public class SistemaParametro extends ObjetoTransacao {
 		String endereco = null;
 
 		// verifica se o logradouro é diferente de null
-		if (this.getLogradouroCep() != null
-				&& this.getLogradouroCep().getLogradouro() != null
-				&& !this.getLogradouroCep().getLogradouro().getId().equals(
-						new Integer("0"))) {
+		if (this.getLogradouroCep() != null && this.getLogradouroCep().getLogradouro() != null
+				&& !this.getLogradouroCep().getLogradouro().getId().equals(new Integer("0"))) {
 
 			// verifica se o logradouro tipo é diferente de null
-			if (this.getLogradouroCep().getLogradouro().getLogradouroTipo() != null
-					&& !this.getLogradouroCep().getLogradouro()
-							.getLogradouroTipo().equals("")) {
-				if (this.getLogradouroCep().getLogradouro().getLogradouroTipo()
-						.getDescricaoAbreviada() != null
-						&& !this.getLogradouroCep().getLogradouro()
-								.getLogradouroTipo().getDescricaoAbreviada()
-								.equals("")) {
+			if (this.getLogradouroCep().getLogradouro().getLogradouroTipo() != null && !this.getLogradouroCep().getLogradouro().getLogradouroTipo().equals("")) {
+				if (this.getLogradouroCep().getLogradouro().getLogradouroTipo().getDescricaoAbreviada() != null
+						&& !this.getLogradouroCep().getLogradouro().getLogradouroTipo().getDescricaoAbreviada().equals("")) {
 					// concatena o logradouro tipo
-					endereco = this.getLogradouroCep().getLogradouro()
-							.getLogradouroTipo().getDescricaoAbreviada().trim();
+					endereco = this.getLogradouroCep().getLogradouro().getLogradouroTipo().getDescricaoAbreviada().trim();
 				}
 			}
 			// verifica se o logradouro titulo é diferente de null
 			if (this.getLogradouroCep().getLogradouro().getLogradouroTitulo() != null
-					&& !this.getLogradouroCep().getLogradouro()
-							.getLogradouroTitulo().equals("")) {
-				if (this.getLogradouroCep().getLogradouro()
-						.getLogradouroTitulo().getDescricaoAbreviada() != null
-						&& !this.getLogradouroCep().getLogradouro()
-								.getLogradouroTitulo().getDescricaoAbreviada()
-								.equals("")) {
+					&& !this.getLogradouroCep().getLogradouro().getLogradouroTitulo().equals("")) {
+				if (this.getLogradouroCep().getLogradouro().getLogradouroTitulo().getDescricaoAbreviada() != null
+						&& !this.getLogradouroCep().getLogradouro().getLogradouroTitulo().getDescricaoAbreviada().equals("")) {
 					// concatena o logradouro titulo
-					endereco = endereco
-							+ " "
-							+ this.getLogradouroCep().getLogradouro()
-									.getLogradouroTitulo()
-									.getDescricaoAbreviada().trim();
+					endereco = endereco + " " + this.getLogradouroCep().getLogradouro().getLogradouroTitulo().getDescricaoAbreviada().trim();
 				}
 			}
 
 			// concatena o logradouro
-			endereco = endereco + " "
-					+ this.getLogradouroCep().getLogradouro().getNome().trim();
+			endereco = endereco + " " + this.getLogradouroCep().getLogradouro().getNome().trim();
 
-			if (this.getEnderecoReferencia() != null
-					&& !this.getEnderecoReferencia().equals("")) {
-				if (this.getEnderecoReferencia().getDescricaoAbreviada() != null
-						&& !this.getEnderecoReferencia()
-								.getDescricaoAbreviada().equals("")) {
-					endereco = endereco
-							+ ", "
-							+ this.getEnderecoReferencia()
-									.getDescricaoAbreviada().trim();
+			if (this.getEnderecoReferencia() != null && !this.getEnderecoReferencia().equals("")) {
+				if (this.getEnderecoReferencia().getDescricaoAbreviada() != null && !this.getEnderecoReferencia().getDescricaoAbreviada().equals("")) {
+					endereco = endereco + ", " + this.getEnderecoReferencia().getDescricaoAbreviada().trim();
 				}
 			}
 
 			// concate o numero
 			endereco = endereco + " " + this.getNumeroImovel().trim();
 
-			if (this.getComplementoEndereco() != null
-					&& !this.getComplementoEndereco().equalsIgnoreCase("")) {
-				endereco = endereco + " - "
-						+ this.getComplementoEndereco().trim();
+			if (this.getComplementoEndereco() != null && !this.getComplementoEndereco().equalsIgnoreCase("")) {
+				endereco = endereco + " - " + this.getComplementoEndereco().trim();
 			}
 
-			if (this.getLogradouroBairro() != null
-					&& this.getLogradouroBairro().getBairro() != null
-					&& this.getLogradouroBairro().getBairro().getId()
-							.intValue() != 0) {
-				endereco = endereco
-						+ " - "
-						+ this.getLogradouroBairro().getBairro().getNome()
-								.trim();
+			if (this.getLogradouroBairro() != null && this.getLogradouroBairro().getBairro() != null
+					&& this.getLogradouroBairro().getBairro().getId().intValue() != 0) {
+				endereco = endereco + " - " + this.getLogradouroBairro().getBairro().getNome().trim();
 
 				if (this.getLogradouroBairro().getBairro().getMunicipio() != null
-						&& this.getLogradouroBairro().getBairro()
-								.getMunicipio().getId().intValue() != 0) {
-					endereco = endereco
-							+ " "
-							+ this.getLogradouroBairro().getBairro()
-									.getMunicipio().getNome().trim();
+						&& this.getLogradouroBairro().getBairro().getMunicipio().getId().intValue() != 0) {
+					endereco = endereco + " " + this.getLogradouroBairro().getBairro().getMunicipio().getNome().trim();
 				}
 
-				if (this.getLogradouroBairro().getBairro().getMunicipio()
-						.getUnidadeFederacao() != null
-						&& this.getLogradouroBairro().getBairro()
-								.getMunicipio().getUnidadeFederacao().getId()
-								.intValue() != 0) {
-					endereco = endereco
-							+ " "
-							+ this.getLogradouroBairro().getBairro()
-									.getMunicipio().getUnidadeFederacao()
-									.getSigla().trim();
+				if (this.getLogradouroBairro().getBairro().getMunicipio().getUnidadeFederacao() != null
+						&& this.getLogradouroBairro().getBairro().getMunicipio().getUnidadeFederacao().getId().intValue() != 0) {
+					endereco = endereco + " " + this.getLogradouroBairro().getBairro().getMunicipio().getUnidadeFederacao().getSigla().trim();
 				}
 			}
 
-			if (this.getLogradouroCep() != null
-					&& this.getLogradouroCep().getCep() != null) {
+			if (this.getLogradouroCep() != null && this.getLogradouroCep().getCep() != null) {
 				// concatena o cep formatado
-				endereco = endereco
-						+ " "
-						+ this.getLogradouroCep().getCep().getCepFormatado()
-								.trim();
+				endereco = endereco + " " + this.getLogradouroCep().getCep().getCepFormatado().trim();
 			}
 
 		}
@@ -2265,230 +1842,136 @@ public class SistemaParametro extends ObjetoTransacao {
 		return endereco;
 	}
 
-	/**
-	 * Gets the endereco attribute of the Imovel object
-	 * 
-	 * @return The endereco value
-	 */
 	public String getEnderecoFormatadoParte01() {
 		String endereco = null;
 
 		// verifica se o logradouro do imovel é diferente de null
-		if (this.getLogradouroCep() != null
-				&& this.getLogradouroCep().getLogradouro() != null
-				&& !this.getLogradouroCep().getLogradouro().getId()
-						.equals(new Integer("0"))) {
+		if (this.getLogradouroCep() != null && this.getLogradouroCep().getLogradouro() != null
+				&& !this.getLogradouroCep().getLogradouro().getId().equals(new Integer("0"))) {
 
 			// verifica se o logradouro tipo do imovel é diferente de null
-			if (this.getLogradouroCep().getLogradouro().getLogradouroTipo() != null
-					&& !this.getLogradouroCep().getLogradouro()
-							.getLogradouroTipo().equals("")) {
+			if (this.getLogradouroCep().getLogradouro().getLogradouroTipo() != null && !this.getLogradouroCep().getLogradouro().getLogradouroTipo().equals("")) {
 				// concatena o logradouro tipo do imovel
-				endereco = this.getLogradouroCep().getLogradouro()
-						.getLogradouroTipo().getDescricao().trim();
+				endereco = this.getLogradouroCep().getLogradouro().getLogradouroTipo().getDescricao().trim();
 			}
 			// verifica se o logradouro titulo do imovel é diferente de null
 			if (this.getLogradouroCep().getLogradouro().getLogradouroTitulo() != null
-					&& !this.getLogradouroCep().getLogradouro()
-							.getLogradouroTitulo().equals("")) {
+					&& !this.getLogradouroCep().getLogradouro().getLogradouroTitulo().equals("")) {
 				// concatena o logradouro titulo do imovel
-				endereco = endereco
-						+ " "
-						+ this.getLogradouroCep().getLogradouro()
-								.getLogradouroTitulo().getDescricao().trim();
+				endereco = endereco + " " + this.getLogradouroCep().getLogradouro().getLogradouroTitulo().getDescricao().trim();
 			}
 
 			// concatena o logradouro do imovel
-			endereco = endereco + " "
-					+ this.getLogradouroCep().getLogradouro().getNome().trim();
+			endereco = endereco + " " + this.getLogradouroCep().getLogradouro().getNome().trim();
 
-			if (this.getEnderecoReferencia() != null
-					&& !this.getEnderecoReferencia().equals("")) {
-				if (this.getEnderecoReferencia().getDescricao() != null
-						&& !this.getEnderecoReferencia().getDescricao()
-								.equals("")) {
-					endereco = endereco
-							+ " - "
-							+ this.getEnderecoReferencia().getDescricao()
-									.trim();
+			if (this.getEnderecoReferencia() != null && !this.getEnderecoReferencia().equals("")) {
+				if (this.getEnderecoReferencia().getDescricao() != null && !this.getEnderecoReferencia().getDescricao().equals("")) {
+					endereco = endereco + " - " + this.getEnderecoReferencia().getDescricao().trim();
 				}
 			}
-			if (this.getNumeroImovel() != null
-					&& !this.getNumeroImovel().equals("")) {
+			if (this.getNumeroImovel() != null && !this.getNumeroImovel().equals("")) {
 				// concate o numero do imovel
 				endereco = endereco + " - " + this.getNumeroImovel().trim();
 			}
 
-			if (this.getComplementoEndereco() != null
-					&& !this.getComplementoEndereco().equalsIgnoreCase("")) {
-				endereco = endereco + " - "
-						+ this.getComplementoEndereco().trim();
+			if (this.getComplementoEndereco() != null && !this.getComplementoEndereco().equalsIgnoreCase("")) {
+				endereco = endereco + " - " + this.getComplementoEndereco().trim();
 			}
 
 		}
 
 		return endereco;
 	}
-	
-	
 
-	/**
-	 * Gets the endereco attribute of the Imovel object
-	 * 
-	 * @return The endereco value
-	 */
 	public String getEnderecoFormatadoParte02() {
 		String endereco = null;
 
 		// verifica se o logradouro do imovel é diferente de null
-		if (this.getLogradouroCep() != null
-				&& this.getLogradouroCep().getLogradouro() != null
-				&& !this.getLogradouroCep().getLogradouro().getId()
-						.equals(new Integer("0"))) {
+		if (this.getLogradouroCep() != null && this.getLogradouroCep().getLogradouro() != null
+				&& !this.getLogradouroCep().getLogradouro().getId().equals(new Integer("0"))) {
 
-			if (this.getLogradouroBairro() != null
-					&& this.getLogradouroBairro().getBairro() != null
-					&& this.getLogradouroBairro().getBairro().getId()
-							.intValue() != 0) {
-				endereco = this.getLogradouroBairro().getBairro().getNome()
-								.trim();
+			if (this.getLogradouroBairro() != null && this.getLogradouroBairro().getBairro() != null
+					&& this.getLogradouroBairro().getBairro().getId().intValue() != 0) {
+				endereco = this.getLogradouroBairro().getBairro().getNome().trim();
 
 				if (this.getLogradouroBairro().getBairro().getMunicipio() != null
-						&& this.getLogradouroBairro().getBairro()
-								.getMunicipio().getId().intValue() != 0) {
-					endereco = endereco
-							+ " "
-							+ this.getLogradouroBairro().getBairro()
-									.getMunicipio().getNome().trim();
+						&& this.getLogradouroBairro().getBairro().getMunicipio().getId().intValue() != 0) {
+					endereco = endereco + " " + this.getLogradouroBairro().getBairro().getMunicipio().getNome().trim();
 				}
 
-				if (this.getLogradouroBairro().getBairro().getMunicipio()
-						.getUnidadeFederacao() != null
-						&& this.getLogradouroBairro().getBairro()
-								.getMunicipio().getUnidadeFederacao().getId()
-								.intValue() != 0) {
-					endereco = endereco
-							+ " "
-							+ this.getLogradouroBairro().getBairro()
-									.getMunicipio().getUnidadeFederacao()
-									.getSigla().trim();
+				if (this.getLogradouroBairro().getBairro().getMunicipio().getUnidadeFederacao() != null
+						&& this.getLogradouroBairro().getBairro().getMunicipio().getUnidadeFederacao().getId().intValue() != 0) {
+					endereco = endereco + " " + this.getLogradouroBairro().getBairro().getMunicipio().getUnidadeFederacao().getSigla().trim();
 				}
 			}
 
-			if (this.getLogradouroCep() != null
-					&& this.getLogradouroCep().getCep() != null) {
+			if (this.getLogradouroCep() != null && this.getLogradouroCep().getCep() != null) {
 				// concatena o cep formatado do imóvel
-				endereco = endereco
-						+ " "
-						+ this.getLogradouroCep().getCep().getCepFormatado()
-								.trim();
+				endereco = endereco + " " + this.getLogradouroCep().getCep().getCepFormatado().trim();
 			}
 
 		}
 
 		return endereco;
 	}
-	
 
-	/**
-	 * Gets the endereco attribute of the Imovel object
-	 * 
-	 * @return The endereco value
-	 */
 	public String getEnderecoFormatadoSemComplemento() {
 		String endereco = null;
 
 		// verifica se o logradouro do imovel é diferente de null
-		if (this.getLogradouroCep() != null
-				&& this.getLogradouroCep().getLogradouro() != null
-				&& !this.getLogradouroCep().getLogradouro().getId()
-						.equals(new Integer("0"))) {
+		if (this.getLogradouroCep() != null && this.getLogradouroCep().getLogradouro() != null
+				&& !this.getLogradouroCep().getLogradouro().getId().equals(new Integer("0"))) {
 
 			// verifica se o logradouro tipo do imovel é diferente de null
-			if (this.getLogradouroCep().getLogradouro().getLogradouroTipo() != null
-					&& !this.getLogradouroCep().getLogradouro()
-							.getLogradouroTipo().equals("")) {
+			if (this.getLogradouroCep().getLogradouro().getLogradouroTipo() != null && !this.getLogradouroCep().getLogradouro().getLogradouroTipo().equals("")) {
 				// concatena o logradouro tipo do imovel
-				endereco = this.getLogradouroCep().getLogradouro()
-						.getLogradouroTipo().getDescricao().trim();
+				endereco = this.getLogradouroCep().getLogradouro().getLogradouroTipo().getDescricao().trim();
 			}
 			// verifica se o logradouro titulo do imovel é diferente de null
 			if (this.getLogradouroCep().getLogradouro().getLogradouroTitulo() != null
-					&& !this.getLogradouroCep().getLogradouro()
-							.getLogradouroTitulo().equals("")) {
+					&& !this.getLogradouroCep().getLogradouro().getLogradouroTitulo().equals("")) {
 				// concatena o logradouro titulo do imovel
-				endereco = endereco
-						+ " "
-						+ this.getLogradouroCep().getLogradouro()
-								.getLogradouroTitulo().getDescricao().trim();
+				endereco = endereco + " " + this.getLogradouroCep().getLogradouro().getLogradouroTitulo().getDescricao().trim();
 			}
 
 			// concatena o logradouro do imovel
-			endereco = endereco + " "
-					+ this.getLogradouroCep().getLogradouro().getNome().trim();
+			endereco = endereco + " " + this.getLogradouroCep().getLogradouro().getNome().trim();
 
-			if (this.getEnderecoReferencia() != null
-					&& !this.getEnderecoReferencia().equals("")) {
-				if (this.getEnderecoReferencia().getDescricao() != null
-						&& !this.getEnderecoReferencia().getDescricao()
-								.equals("")) {
-					endereco = endereco
-							+ " - "
-							+ this.getEnderecoReferencia().getDescricao()
-									.trim();
+			if (this.getEnderecoReferencia() != null && !this.getEnderecoReferencia().equals("")) {
+				if (this.getEnderecoReferencia().getDescricao() != null && !this.getEnderecoReferencia().getDescricao().equals("")) {
+					endereco = endereco + " - " + this.getEnderecoReferencia().getDescricao().trim();
 				}
 			}
-			if (this.getNumeroImovel() != null
-					&& !this.getNumeroImovel().equals("")) {
+			if (this.getNumeroImovel() != null && !this.getNumeroImovel().equals("")) {
 				// concate o numero do imovel
 				endereco = endereco + " - " + this.getNumeroImovel().trim();
 			}
 
-			if (this.getLogradouroBairro() != null
-					&& this.getLogradouroBairro().getBairro() != null
-					&& this.getLogradouroBairro().getBairro().getId()
-							.intValue() != 0) {
-				endereco = endereco
-						+ " - "
-						+ this.getLogradouroBairro().getBairro().getNome()
-								.trim();
+			if (this.getLogradouroBairro() != null && this.getLogradouroBairro().getBairro() != null
+					&& this.getLogradouroBairro().getBairro().getId().intValue() != 0) {
+				endereco = endereco + " - " + this.getLogradouroBairro().getBairro().getNome().trim();
 
 				if (this.getLogradouroBairro().getBairro().getMunicipio() != null
-						&& this.getLogradouroBairro().getBairro()
-								.getMunicipio().getId().intValue() != 0) {
-					endereco = endereco
-							+ " "
-							+ this.getLogradouroBairro().getBairro()
-									.getMunicipio().getNome().trim();
+						&& this.getLogradouroBairro().getBairro().getMunicipio().getId().intValue() != 0) {
+					endereco = endereco + " " + this.getLogradouroBairro().getBairro().getMunicipio().getNome().trim();
 				}
 
-				if (this.getLogradouroBairro().getBairro().getMunicipio()
-						.getUnidadeFederacao() != null
-						&& this.getLogradouroBairro().getBairro()
-								.getMunicipio().getUnidadeFederacao().getId()
-								.intValue() != 0) {
-					endereco = endereco
-							+ " "
-							+ this.getLogradouroBairro().getBairro()
-									.getMunicipio().getUnidadeFederacao()
-									.getSigla().trim();
+				if (this.getLogradouroBairro().getBairro().getMunicipio().getUnidadeFederacao() != null
+						&& this.getLogradouroBairro().getBairro().getMunicipio().getUnidadeFederacao().getId().intValue() != 0) {
+					endereco = endereco + " " + this.getLogradouroBairro().getBairro().getMunicipio().getUnidadeFederacao().getSigla().trim();
 				}
 			}
 
-			if (this.getLogradouroCep() != null
-					&& this.getLogradouroCep().getCep() != null) {
+			if (this.getLogradouroCep() != null && this.getLogradouroCep().getCep() != null) {
 				// concatena o cep formatado do imóvel
-				endereco = endereco
-						+ " "
-						+ this.getLogradouroCep().getCep().getCepFormatado()
-								.trim();
+				endereco = endereco + " " + this.getLogradouroCep().getCep().getCepFormatado().trim();
 			}
 
 		}
 
 		return endereco;
 	}
-	
+
 	public Integer getIntervaloHorasProcesso() {
 		return intervaloHorasProcesso;
 	}
@@ -2501,8 +1984,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return indicadorControleExpiracaoSenhaPorGrupo;
 	}
 
-	public void setIndicadorControleExpiracaoSenhaPorGrupo(
-			Integer indicarControleExpiracaoSenhaPorGrupo) {
+	public void setIndicadorControleExpiracaoSenhaPorGrupo(Integer indicarControleExpiracaoSenhaPorGrupo) {
 		this.indicadorControleExpiracaoSenhaPorGrupo = indicarControleExpiracaoSenhaPorGrupo;
 	}
 
@@ -2518,8 +2000,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		this.horaInicioProcesso = horaInicioProcesso;
 	}
 
-	public void setIndicadorControleBloqueioSenhaAnterior(
-			Integer indicarControleBloqueioSenha) {
+	public void setIndicadorControleBloqueioSenhaAnterior(Integer indicarControleBloqueioSenha) {
 		this.indicadorControleBloqueioSenhaAnterior = indicarControleBloqueioSenha;
 	}
 
@@ -2535,8 +2016,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return clienteResponsavelProgramaEspecial;
 	}
 
-	public void setClienteResponsavelProgramaEspecial(
-			Cliente clienteResponsavelProgramaEspecial) {
+	public void setClienteResponsavelProgramaEspecial(Cliente clienteResponsavelProgramaEspecial) {
 		this.clienteResponsavelProgramaEspecial = clienteResponsavelProgramaEspecial;
 	}
 
@@ -2552,8 +2032,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return unidadeOrganizacionalTramiteGrandeConsumidor;
 	}
 
-	public void setUnidadeOrganizacionalTramiteGrandeConsumidor(
-			UnidadeOrganizacional unidadeOrganizacionalTramiteGrandeConsumidor) {
+	public void setUnidadeOrganizacionalTramiteGrandeConsumidor(UnidadeOrganizacional unidadeOrganizacionalTramiteGrandeConsumidor) {
 		this.unidadeOrganizacionalTramiteGrandeConsumidor = unidadeOrganizacionalTramiteGrandeConsumidor;
 	}
 
@@ -2569,8 +2048,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return numeroModuloDigitoVerificador;
 	}
 
-	public void setNumeroModuloDigitoVerificador(
-			Short numeroModuloDigitoVerificador) {
+	public void setNumeroModuloDigitoVerificador(Short numeroModuloDigitoVerificador) {
 		this.numeroModuloDigitoVerificador = numeroModuloDigitoVerificador;
 	}
 
@@ -2578,8 +2056,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return numeroMesesPesquisaImoveisRamaisSuprimidos;
 	}
 
-	public void setNumeroMesesPesquisaImoveisRamaisSuprimidos(
-			Integer numeroMesesPesquisaImoveisRamaisSuprimidos) {
+	public void setNumeroMesesPesquisaImoveisRamaisSuprimidos(Integer numeroMesesPesquisaImoveisRamaisSuprimidos) {
 		this.numeroMesesPesquisaImoveisRamaisSuprimidos = numeroMesesPesquisaImoveisRamaisSuprimidos;
 	}
 
@@ -2611,8 +2088,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return numeroMesesAnterioresParaDeclaracaoQuitacao;
 	}
 
-	public void setNumeroMesesAnterioresParaDeclaracaoQuitacao(
-			Integer numeroMesesAnterioresParaDeclaracaoQuitacao) {
+	public void setNumeroMesesAnterioresParaDeclaracaoQuitacao(Integer numeroMesesAnterioresParaDeclaracaoQuitacao) {
 		this.numeroMesesAnterioresParaDeclaracaoQuitacao = numeroMesesAnterioresParaDeclaracaoQuitacao;
 	}
 
@@ -2620,8 +2096,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return indicadorValorMovimentoArrecadador;
 	}
 
-	public void setIndicadorValorMovimentoArrecadador(
-			Integer indicadorValorMovimentoArrecadador) {
+	public void setIndicadorValorMovimentoArrecadador(Integer indicadorValorMovimentoArrecadador) {
 		this.indicadorValorMovimentoArrecadador = indicadorValorMovimentoArrecadador;
 
 	}
@@ -2630,8 +2105,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return indicadorBloqueioContaMobile;
 	}
 
-	public void setIndicadorBloqueioContaMobile(
-			Short indicadorBloqueioContaMobile) {
+	public void setIndicadorBloqueioContaMobile(Short indicadorBloqueioContaMobile) {
 		this.indicadorBloqueioContaMobile = indicadorBloqueioContaMobile;
 
 	}
@@ -2640,8 +2114,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return numeroDiasVencimentoEntradaParcelamento;
 	}
 
-	public void setNumeroDiasVencimentoEntradaParcelamento(
-			Short numeroDiasVencimentoEntradaParcelamento) {
+	public void setNumeroDiasVencimentoEntradaParcelamento(Short numeroDiasVencimentoEntradaParcelamento) {
 		this.numeroDiasVencimentoEntradaParcelamento = numeroDiasVencimentoEntradaParcelamento;
 	}
 
@@ -2653,19 +2126,11 @@ public class SistemaParametro extends ObjetoTransacao {
 		this.dataImplantacaoSistema = dataImplantacaoSistema;
 	}
 
-	/**
-	 * @return Returns the percentualConvergenciaRepavimentacao.
-	 */
 	public BigDecimal getPercentualConvergenciaRepavimentacao() {
 		return percentualConvergenciaRepavimentacao;
 	}
 
-	/**
-	 * @param percentualConvergenciaRepavimentacao
-	 *            The percentualConvergenciaRepavimentacao to set.
-	 */
-	public void setPercentualConvergenciaRepavimentacao(
-			BigDecimal percentualConvergenciaRepavimentacao) {
+	public void setPercentualConvergenciaRepavimentacao(BigDecimal percentualConvergenciaRepavimentacao) {
 		this.percentualConvergenciaRepavimentacao = percentualConvergenciaRepavimentacao;
 	}
 
@@ -2673,8 +2138,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return numeroDiasRevisaoComPermEspecial;
 	}
 
-	public void setNumeroDiasRevisaoComPermEspecial(
-			Integer numeroDiasRevisaoComPermEspecial) {
+	public void setNumeroDiasRevisaoComPermEspecial(Integer numeroDiasRevisaoComPermEspecial) {
 		this.numeroDiasRevisaoComPermEspecial = numeroDiasRevisaoComPermEspecial;
 	}
 
@@ -2682,17 +2146,15 @@ public class SistemaParametro extends ObjetoTransacao {
 		return indicadorDocumentoObrigatorio;
 	}
 
-	public void setIndicadorDocumentoObrigatorio(
-			Short indicadorDocumentoObrigatorio) {
+	public void setIndicadorDocumentoObrigatorio(Short indicadorDocumentoObrigatorio) {
 		this.indicadorDocumentoObrigatorio = indicadorDocumentoObrigatorio;
 	}
-	
+
 	public Short getIndicadorDocumentoObrigatorioManterCliente() {
 		return indicadorDocumentoObrigatorioManterCliente;
 	}
 
-	public void setIndicadorDocumentoObrigatorioManterCliente(
-			Short indicadorDocumentoObrigatorioManterCliente) {
+	public void setIndicadorDocumentoObrigatorioManterCliente(Short indicadorDocumentoObrigatorioManterCliente) {
 		this.indicadorDocumentoObrigatorioManterCliente = indicadorDocumentoObrigatorioManterCliente;
 	}
 
@@ -2700,8 +2162,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return numeroLimiteAlteracaoVencimento;
 	}
 
-	public void setNumeroLimiteAlteracaoVencimento(
-			Integer numeroLimiteAlteracaoVencimento) {
+	public void setNumeroLimiteAlteracaoVencimento(Integer numeroLimiteAlteracaoVencimento) {
 		this.numeroLimiteAlteracaoVencimento = numeroLimiteAlteracaoVencimento;
 	}
 
@@ -2717,8 +2178,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return indicadorPopupAtualizacaoCadastral;
 	}
 
-	public void setIndicadorPopupAtualizacaoCadastral(
-			Short indicadorPopupAtualizacaoCadastral) {
+	public void setIndicadorPopupAtualizacaoCadastral(Short indicadorPopupAtualizacaoCadastral) {
 		this.indicadorPopupAtualizacaoCadastral = indicadorPopupAtualizacaoCadastral;
 	}
 
@@ -2726,8 +2186,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return indicadorConsultaDocumentoReceita;
 	}
 
-	public void setIndicadorConsultaDocumentoReceita(
-			Short indicadorConsultaDocumentoReceita) {
+	public void setIndicadorConsultaDocumentoReceita(Short indicadorConsultaDocumentoReceita) {
 		this.indicadorConsultaDocumentoReceita = indicadorConsultaDocumentoReceita;
 	}
 
@@ -2757,7 +2216,7 @@ public class SistemaParametro extends ObjetoTransacao {
 
 	public String getIpServidorModuloOperacional() {
 		return ipServidorModuloOperacional;
-    }
+	}
 
 	public void setIpServidorModuloOperacional(String ipServidorModuloOperacional) {
 		this.ipServidorModuloOperacional = ipServidorModuloOperacional;
@@ -2775,8 +2234,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return ultimoDiaVencimentoAlternativo;
 	}
 
-	public void setUltimoDiaVencimentoAlternativo(
-			Short ultimoDiaVencimentoAlternativo) {
+	public void setUltimoDiaVencimentoAlternativo(Short ultimoDiaVencimentoAlternativo) {
 		this.ultimoDiaVencimentoAlternativo = ultimoDiaVencimentoAlternativo;
 	}
 
@@ -2792,8 +2250,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return indicadorNomeClienteGenerico;
 	}
 
-	public void setIndicadorNomeClienteGenerico(
-			Short indicadorNomeClienteGenerico) {
+	public void setIndicadorNomeClienteGenerico(Short indicadorNomeClienteGenerico) {
 		this.indicadorNomeClienteGenerico = indicadorNomeClienteGenerico;
 	}
 
@@ -2825,8 +2282,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return indicadorAlteracaoInscricaoImovel;
 	}
 
-	public void setIndicadorAlteracaoInscricaoImovel(
-			Short indicadorAlteracaoInscricaoImovel) {
+	public void setIndicadorAlteracaoInscricaoImovel(Short indicadorAlteracaoInscricaoImovel) {
 		this.indicadorAlteracaoInscricaoImovel = indicadorAlteracaoInscricaoImovel;
 	}
 
@@ -2842,8 +2298,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return valorDemonstrativoParcelamentoFichaComp;
 	}
 
-	public void setValorDemonstrativoParcelamentoFichaComp(
-			BigDecimal valorDemonstrativoParcelamentoFichaComp) {
+	public void setValorDemonstrativoParcelamentoFichaComp(BigDecimal valorDemonstrativoParcelamentoFichaComp) {
 		this.valorDemonstrativoParcelamentoFichaComp = valorDemonstrativoParcelamentoFichaComp;
 	}
 
@@ -2851,8 +2306,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return indicadorBloqueioContasContratoParcelDebitos;
 	}
 
-	public void setIndicadorBloqueioContasContratoParcelDebitos(
-			Short indicadorBloqueioContasContratoParcelDebitos) {
+	public void setIndicadorBloqueioContasContratoParcelDebitos(Short indicadorBloqueioContasContratoParcelDebitos) {
 		this.indicadorBloqueioContasContratoParcelDebitos = indicadorBloqueioContasContratoParcelDebitos;
 	}
 
@@ -2860,8 +2314,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return indicadorBloqueioContasContratoParcelManterConta;
 	}
 
-	public void setIndicadorBloqueioContasContratoParcelManterConta(
-			Short indicadorBloqueioContasContratoParcelManterConta) {
+	public void setIndicadorBloqueioContasContratoParcelManterConta(Short indicadorBloqueioContasContratoParcelManterConta) {
 		this.indicadorBloqueioContasContratoParcelManterConta = indicadorBloqueioContasContratoParcelManterConta;
 	}
 
@@ -2869,8 +2322,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return indicadorBloqueioGuiasOuAcresContratoParcelManterConta;
 	}
 
-	public void setIndicadorBloqueioGuiasOuAcresContratoParcelManterConta(
-			Short indicadorBloqueioGuiasOuAcresContratoParcelManterConta) {
+	public void setIndicadorBloqueioGuiasOuAcresContratoParcelManterConta(Short indicadorBloqueioGuiasOuAcresContratoParcelManterConta) {
 		this.indicadorBloqueioGuiasOuAcresContratoParcelManterConta = indicadorBloqueioGuiasOuAcresContratoParcelManterConta;
 	}
 
@@ -2878,8 +2330,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return numeroMaximoParcelasContratosParcelamento;
 	}
 
-	public void setNumeroMaximoParcelasContratosParcelamento(
-			Integer numeroMaximoParcelasContratosParcelamento) {
+	public void setNumeroMaximoParcelasContratosParcelamento(Integer numeroMaximoParcelasContratosParcelamento) {
 		this.numeroMaximoParcelasContratosParcelamento = numeroMaximoParcelasContratosParcelamento;
 	}
 
@@ -2887,17 +2338,15 @@ public class SistemaParametro extends ObjetoTransacao {
 		return indicadorBloqueioGuiasOuAcresContratoParcelDebito;
 	}
 
-	public void setIndicadorBloqueioGuiasOuAcresContratoParcelDebito(
-			Short indicadorBloqueioGuiasOuAcresContratoParcelDebito) {
+	public void setIndicadorBloqueioGuiasOuAcresContratoParcelDebito(Short indicadorBloqueioGuiasOuAcresContratoParcelDebito) {
 		this.indicadorBloqueioGuiasOuAcresContratoParcelDebito = indicadorBloqueioGuiasOuAcresContratoParcelDebito;
 	}
-	
+
 	public Short getIndicadorBloqueioDebitoACobrarContratoParcelDebito() {
 		return indicadorBloqueioDebitoACobrarContratoParcelDebito;
 	}
 
-	public void setIndicadorBloqueioDebitoACobrarContratoParcelDebito(
-			Short indicadorBloqueioDebitoACobrarContratoParcelDebito) {
+	public void setIndicadorBloqueioDebitoACobrarContratoParcelDebito(Short indicadorBloqueioDebitoACobrarContratoParcelDebito) {
 		this.indicadorBloqueioDebitoACobrarContratoParcelDebito = indicadorBloqueioDebitoACobrarContratoParcelDebito;
 	}
 
@@ -2905,8 +2354,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return indicadorBloqueioDebitoACobrarContratoParcelManterDebito;
 	}
 
-	public void setIndicadorBloqueioDebitoACobrarContratoParcelManterDebito(
-			Short indicadorBloqueioDebitoACobrarContratoParcelManterDebito) {
+	public void setIndicadorBloqueioDebitoACobrarContratoParcelManterDebito(Short indicadorBloqueioDebitoACobrarContratoParcelManterDebito) {
 		this.indicadorBloqueioDebitoACobrarContratoParcelManterDebito = indicadorBloqueioDebitoACobrarContratoParcelManterDebito;
 	}
 
@@ -2914,8 +2362,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return indicadorVariaHierarquiaUnidade;
 	}
 
-	public void setIndicadorVariaHierarquiaUnidade(
-			Short indicadorVariaHierarquiaUnidade) {
+	public void setIndicadorVariaHierarquiaUnidade(Short indicadorVariaHierarquiaUnidade) {
 		this.indicadorVariaHierarquiaUnidade = indicadorVariaHierarquiaUnidade;
 	}
 
@@ -2923,8 +2370,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return qtdeDiasEncerraOSFiscalizacao;
 	}
 
-	public void setQtdeDiasEncerraOSFiscalizacao(
-			Integer qtdeDiasEncerraOSFiscalizacao) {
+	public void setQtdeDiasEncerraOSFiscalizacao(Integer qtdeDiasEncerraOSFiscalizacao) {
 		this.qtdeDiasEncerraOSFiscalizacao = qtdeDiasEncerraOSFiscalizacao;
 	}
 
@@ -2940,8 +2386,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return qtdeDiasValidadeOSFiscalizacao;
 	}
 
-	public void setQtdeDiasValidadeOSFiscalizacao(
-			Integer qtdeDiasValidadeOSFiscalizacao) {
+	public void setQtdeDiasValidadeOSFiscalizacao(Integer qtdeDiasValidadeOSFiscalizacao) {
 		this.qtdeDiasValidadeOSFiscalizacao = qtdeDiasValidadeOSFiscalizacao;
 	}
 
@@ -2952,7 +2397,7 @@ public class SistemaParametro extends ObjetoTransacao {
 	public void setQtdeDiasEnvioEmailConta(Integer qtdeDiasEnvioEmailConta) {
 		this.qtdeDiasEnvioEmailConta = qtdeDiasEnvioEmailConta;
 	}
-	
+
 	public byte[] getArquivoDecreto() {
 		return arquivoDecreto;
 	}
@@ -2973,11 +2418,10 @@ public class SistemaParametro extends ObjetoTransacao {
 		return qtdeDiasValidadeOSAnormalidadeFiscalizacao;
 	}
 
-	public void setQtdeDiasValidadeOSAnormalidadeFiscalizacao(
-			Integer qtdeDiasValidadeOSAnormalidadeFiscalizacao) {
+	public void setQtdeDiasValidadeOSAnormalidadeFiscalizacao(Integer qtdeDiasValidadeOSAnormalidadeFiscalizacao) {
 		this.qtdeDiasValidadeOSAnormalidadeFiscalizacao = qtdeDiasValidadeOSAnormalidadeFiscalizacao;
 	}
-	
+
 	public byte[] getArquivoLeiEstTarif() {
 		return arquivoLeiEstTarif;
 	}
@@ -3046,8 +2490,7 @@ public class SistemaParametro extends ObjetoTransacao {
 		return clienteFicticioParaAssociarOsPagamentosNaoIdentificados;
 	}
 
-	public void setClienteFicticioParaAssociarOsPagamentosNaoIdentificados(
-			Cliente clienteFicticioParaAssociarOsPagamentosNaoIdentificados) {
+	public void setClienteFicticioParaAssociarOsPagamentosNaoIdentificados(Cliente clienteFicticioParaAssociarOsPagamentosNaoIdentificados) {
 		this.clienteFicticioParaAssociarOsPagamentosNaoIdentificados = clienteFicticioParaAssociarOsPagamentosNaoIdentificados;
 	}
 
@@ -3074,5 +2517,20 @@ public class SistemaParametro extends ObjetoTransacao {
 	public void setNumeroVezesSuspendeLeitura(Integer numeroVezesSuspendeLeitura) {
 		this.numeroVezesSuspendeLeitura = numeroVezesSuspendeLeitura;
 	}
-	
+
+	public String getDddTelefone() {
+		return dddTelefone;
+	}
+
+	public void setDddTelefone(String dddTelefone) {
+		this.dddTelefone = dddTelefone;
+	}
+
+	public Cliente getClienteResponsavelNegativacao() {
+		return clienteResponsavelNegativacao;
+	}
+
+	public void setClienteResponsavelNegativacao(Cliente clienteResponsavelNegativacao) {
+		this.clienteResponsavelNegativacao = clienteResponsavelNegativacao;
+	}
 }

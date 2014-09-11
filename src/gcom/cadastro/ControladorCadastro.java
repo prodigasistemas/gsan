@@ -932,159 +932,79 @@ public class ControladorCadastro implements SessionBean {
 		}
 	}
 
-	
-	/**
-	 * Informar Parametros do Sistema
-	 * 
-	 * @author Rômulo Aurélio
-	 * @date 09/01/2007
-	 * 
-	 */
-
-	public void informarParametrosSistema(SistemaParametro sistemaParametro,
-			Usuario usuarioLogado) throws ControladorException {
-
-		/*
-		 * Validação de Campos Obrigatórios
-		 */
+	public void informarParametrosSistema(SistemaParametro sistemaParametro, Usuario usuarioLogado) throws ControladorException {
 
 		if (sistemaParametro.getNomeEstado().equals("")) {
-			// O Nome do Estado é obrigatório
-			throw new ControladorException("atencao.informe_campo", null,
-					"Nome do Estado");
+			throw new ControladorException("atencao.informe_campo", null, "Nome do Estado");
 		}
 
 		if (sistemaParametro.getNomeEmpresa().equals("")) {
-			// O Nome da Empresa é obrigatório
-			throw new ControladorException("atencao.informe_campo", null,
-					"Nome da Empresa");
+			throw new ControladorException("atencao.informe_campo", null, "Nome da Empresa");
 		}
 
 		if (sistemaParametro.getNomeAbreviadoEmpresa().equals("")) {
-			// O Abreviatura da Empresa é obrigatório
-			throw new ControladorException("atencao.informe_campo", null,
-					"Abreviatura da Empresa");
+			throw new ControladorException("atencao.informe_campo", null, "Abreviatura da Empresa");
 		}
 
 		if (sistemaParametro.getCnpjEmpresa().equals("")) {
-			// CNPJ é obrigatório
-			throw new ControladorException("atencao.informe_campo", null,
-					"CNPJ");
+			throw new ControladorException("atencao.informe_campo", null, "CNPJ");
 		}
 
 		if (sistemaParametro.getLogradouro().equals("")) {
-			// O Logradouro é obrigatório
-			throw new ControladorException("atencao.informe_campo", null,
-					"Logradouro");
+			throw new ControladorException("atencao.informe_campo", null, "Logradouro");
 		}
 
-		if (sistemaParametro.getAnoMesFaturamento() == null
-				|| sistemaParametro.getAnoMesFaturamento().equals("")) {
-			// O Mês e Ano de Referência é obrigatório
-			throw new ControladorException("atencao.informe_campo", null,
-					"Mês e Ano de Referência");
+		if (sistemaParametro.getAnoMesFaturamento() == null || sistemaParametro.getAnoMesFaturamento().equals("")) {
+			throw new ControladorException("atencao.informe_campo", null, "Mês e Ano de Referência");
 		}
 
-		if (sistemaParametro.getAnoMesArrecadacao() == null
-				|| sistemaParametro.getAnoMesArrecadacao().equals("")) {
-			// O Mês e Ano de Referência é obrigatório
-			throw new ControladorException("atencao.informe_campo", null,
-					"Mês e Ano de Referência");
+		if (sistemaParametro.getAnoMesArrecadacao() == null || sistemaParametro.getAnoMesArrecadacao().equals("")) {
+			throw new ControladorException("atencao.informe_campo", null, "Mês e Ano de Referência");
 		}
 
-		if (sistemaParametro.getMenorConsumoGrandeUsuario() == null
-				|| sistemaParametro.getMenorConsumoGrandeUsuario().equals("")) {
-			// O Menor Consumo para ser Grande Usuário é obrigatório
-			throw new ControladorException("atencao.informe_campo", null,
-					"Menor Consumo para ser Grande Usuário");
+		if (sistemaParametro.getMenorConsumoGrandeUsuario() == null || sistemaParametro.getMenorConsumoGrandeUsuario().equals("")) {
+			throw new ControladorException("atencao.informe_campo", null, "Menor Consumo para ser Grande Usuário");
 		}
 
-		if (sistemaParametro.getValorMinimoEmissaoConta() == null
-				|| sistemaParametro.getValorMinimoEmissaoConta().equals("")) {
-			// O Menor Valor para Emissão de Contas é obrigatório
-			throw new ControladorException("atencao.informe_campo", null,
-					"Menor Valor para Emissão de Contas");
+		if (sistemaParametro.getValorMinimoEmissaoConta() == null || sistemaParametro.getValorMinimoEmissaoConta().equals("")) {
+			throw new ControladorException("atencao.informe_campo", null, "Menor Valor para Emissão de Contas");
 		}
 
-		if (sistemaParametro.getMenorEconomiasGrandeUsuario() == null
-				|| sistemaParametro.getMenorEconomiasGrandeUsuario().equals("")) {
-			// O Qtde de Economias para ser Grande Usuário é obrigatório
-			throw new ControladorException("atencao.informe_campo", null,
-					"Qtde de Economias para ser Grande Usuário");
+		if (sistemaParametro.getMenorEconomiasGrandeUsuario() == null || sistemaParametro.getMenorEconomiasGrandeUsuario().equals("")) {
+			throw new ControladorException("atencao.informe_campo", null, "Qtde de Economias para ser Grande Usuário");
 		}
 
-		if (sistemaParametro.getMesesMediaConsumo() == null
-				|| sistemaParametro.getMesesMediaConsumo().equals("")) {
-			// O Menor Valor para Emissão de Contas é obrigatório
-			throw new ControladorException("atencao.informe_campo", null,
-					"Meses para Cálculo de Média de Consumo");
+		if (sistemaParametro.getMesesMediaConsumo() == null || sistemaParametro.getMesesMediaConsumo().equals("")) {
+			throw new ControladorException("atencao.informe_campo", null, "Meses para Cálculo de Média de Consumo");
 		}
 
-		if (sistemaParametro.getNumeroMinimoDiasEmissaoVencimento() == null
-				|| sistemaParametro.getNumeroMinimoDiasEmissaoVencimento()
-						.equals("")) {
-			throw new ControladorException("atencao.informe_campo", null,
-					"Número de Dias entre o Vencimento e o Início da Cobrança");
+		if (sistemaParametro.getNumeroMinimoDiasEmissaoVencimento() == null || sistemaParametro.getNumeroMinimoDiasEmissaoVencimento().equals("")) {
+			throw new ControladorException("atencao.informe_campo", null, "Número de Dias entre o Vencimento e o Início da Cobrança");
 		}
 
-		if (sistemaParametro.getIncrementoMaximoConsumoRateio() == null
-				|| sistemaParametro.getIncrementoMaximoConsumoRateio().equals(
-						"")) {
-			throw new ControladorException("atencao.informe_campo", null,
-					"Incremento Máximo de Consumo por economia em Rateio");
+		if (sistemaParametro.getIncrementoMaximoConsumoRateio() == null || sistemaParametro.getIncrementoMaximoConsumoRateio().equals("")) {
+			throw new ControladorException("atencao.informe_campo", null, "Incremento Máximo de Consumo por economia em Rateio");
 		}
 
-		if (sistemaParametro.getDecrementoMaximoConsumoRateio() == null
-				|| sistemaParametro.getDecrementoMaximoConsumoRateio().equals(
-						"")) {
-			throw new ControladorException("atencao.informe_campo", null,
-					"Decremento Máximo de Consumo por economia em Rateio");
+		if (sistemaParametro.getDecrementoMaximoConsumoRateio() == null || sistemaParametro.getDecrementoMaximoConsumoRateio().equals("")) {
+			throw new ControladorException("atencao.informe_campo", null, "Decremento Máximo de Consumo por economia em Rateio");
 		}
 
-		if (sistemaParametro.getDiasMaximoAlterarOS() == null
-				|| sistemaParametro.getDiasMaximoAlterarOS().equals("")) {
-			throw new ControladorException("atencao.informe_campo", null,
-					"Dias Máximo para Alterar Dados da OS");
-
+		if (sistemaParametro.getDiasMaximoAlterarOS() == null || sistemaParametro.getDiasMaximoAlterarOS().equals("")) {
+			throw new ControladorException("atencao.informe_campo", null, "Dias Máximo para Alterar Dados da OS");
 		}
 
-		if (sistemaParametro.getUltimoRAManual() == null
-				|| sistemaParametro.getUltimoRAManual().equals("")) {
-			throw new ControladorException("atencao.informe_campo", null,
-					"Último ID Utilizado para Geração do RA Manual");
-
+		if (sistemaParametro.getUltimoRAManual() == null || sistemaParametro.getUltimoRAManual().equals("")) {
+			throw new ControladorException("atencao.informe_campo", null, "Último ID Utilizado para Geração do RA Manual");
 		}
 
-		if (sistemaParametro.getTituloPagina() == null
-				|| sistemaParametro.getTituloPagina().equals("")) {
-			throw new ControladorException("atencao.informe_campo", null,
-					"Títulos de Relatório");
-
+		if (sistemaParametro.getTituloPagina() == null || sistemaParametro.getTituloPagina().equals("")) {
+			throw new ControladorException("atencao.informe_campo", null, "Títulos de Relatório");
 		}
+		
 		sistemaParametro.setUltimaAlteracao(new Date());
 
-		// ------------ REGISTRAR TRANSAÇÃO----------------------------
-
-		// RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-		// Operacao.OPERACAO_SISTEMA_PARAMETROS_INSERIR,
-		// new UsuarioAcaoUsuarioHelper(usuario,
-		// UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-		//
-		// Operacao operacao = new Operacao();
-		// operacao.setId(Operacao.OPERACAO_SISTEMA_PARAMETROS_INSERIR);
-		//
-		// OperacaoEfetuada operacaoEfetuada = new OperacaoEfetuada();
-		// operacaoEfetuada.setOperacao(operacao);
-		//
-		// sistemaParametro.setOperacaoEfetuada(operacaoEfetuada);
-		// sistemaParametro.adicionarUsuario(Usuario.USUARIO_TESTE,
-		// UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
-		// registradorOperacao.registrarOperacao(sistemaParametro);
-
-		// ------------ REGISTRAR TRANSAÇÃO----------------------------
-
 		getControladorUtil().atualizar(sistemaParametro);
-
 	}
 
 	/**

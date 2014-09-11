@@ -2571,8 +2571,7 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 		
 		this.getControladorMicromedicao().validarImovelEmCampo(imovel.getId());
 
-		validacaoInstalacaoHidrometro(hidrometroInstalacaoHistorico
-				.getHidrometro().getNumero());
+		validacaoInstalacaoHidrometro(hidrometroInstalacaoHistorico.getHidrometro().getNumero());
 
 		/*
 		 * [UC0107] Registrar Transação
@@ -3506,244 +3505,138 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 
 	/**
 	 * [UC0364] Efetuar Substituição de hidrômetro
-	 * 
 	 * [SB0001] Atualizar o histórico da instalação do hidrômetro substituido
 	 * [SB0002] Gerar Histórico de instalação do hidrômetro [SB0003] Atualizar
 	 * Imóvel/Ligação de Água [SB0004] Atualizar situação de hidrômetro na
 	 * tabela HIDROMETRO [SB0005] Atualizar situação do hidrômetro substituido
 	 * na tabela HIDROMETRO
-	 * 
-	 * @author Ana Maria, Ivan Sérgio
-	 * @date 24/07/2006, 19/03/2008
-	 * @alteracao: [SB0002] - Retirar os dois indicadores:
-	 *             indicadorTrocaProtecao e indicadorTrocaRegistro; Gerar
-	 *             Boletim de Ordens de Servico Concluidas;
-	 * 
-	 * @param hidrometroInstalacaoHistorico
-	 * @param materialImovel
-	 * @param hidrometroSubstituicaoHistorico
-	 * 
-	 * @throws ControladorException
-	 * @throws ErroRepositorioException
 	 */
-	public void efetuarSubstituicaoHidrometro(
-			IntegracaoComercialHelper integracaoComercialHelper)
-			throws ControladorException {
+	@SuppressWarnings("rawtypes")
+	public void efetuarSubstituicaoHidrometro(IntegracaoComercialHelper integracaoComercialHelper) throws ControladorException {
 
-		HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico = integracaoComercialHelper
-				.getHidrometroInstalacaoHistorico();
+		HidrometroInstalacaoHistorico hidrometroInstalacaoHistorico = integracaoComercialHelper.getHidrometroInstalacaoHistorico();
 		String matriculaImovel = integracaoComercialHelper.getMatriculaImovel();
-		HidrometroInstalacaoHistorico hidrometroSubstituicaoHistorico = integracaoComercialHelper
-				.getHidrometroSubstituicaoHistorico();
-		String situacaoHidrometroSubstituido = integracaoComercialHelper
-				.getSituacaoHidrometroSubstituido();
+		
+		HidrometroInstalacaoHistorico hidrometroSubstituicaoHistorico = integracaoComercialHelper.getHidrometroSubstituicaoHistorico();
+		String situacaoHidrometroSubstituido = integracaoComercialHelper.getSituacaoHidrometroSubstituido();
+		
 		Integer localArmazenagemHidrometro = null;
-		if(integracaoComercialHelper != null && integracaoComercialHelper
-				.getLocalArmazenagemHidrometro() != null){
-		 localArmazenagemHidrometro = integracaoComercialHelper
-				.getLocalArmazenagemHidrometro();
+		
+		if(integracaoComercialHelper != null && integracaoComercialHelper.getLocalArmazenagemHidrometro() != null){
+		 localArmazenagemHidrometro = integracaoComercialHelper.getLocalArmazenagemHidrometro();
 		}
 		OrdemServico ordemServico = integracaoComercialHelper.getOrdemServico();
 
 		Integer id = null;
 
-		this.getControladorMicromedicao().validarImovelEmCampo(new Integer(matriculaImovel));
-		
-		validacaoSubstituicaoHidrometro(matriculaImovel,
-				hidrometroInstalacaoHistorico.getHidrometro().getNumero(),
-				situacaoHidrometroSubstituido);
+		validacaoSubstituicaoHidrometro(matriculaImovel, hidrometroInstalacaoHistorico.getHidrometro().getNumero(), situacaoHidrometroSubstituido);
 		
 		if ( integracaoComercialHelper.getUsuarioLogado() != null ){
-			
 			hidrometroSubstituicaoHistorico.setUsuarioRetirada( integracaoComercialHelper.getUsuarioLogado() );
-			
 		}else{
-			
 			hidrometroSubstituicaoHistorico.setUsuarioRetirada(null);
-			
 		}
 		
-		/*
-		 * [UC0107] Registrar Transação
-		 */
 		RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-				Operacao.OPERACAO_SUBSTITUICAO_HIDROMETRO_EFETUAR, Integer
-						.parseInt(matriculaImovel), Integer
-						.parseInt(matriculaImovel),
-				new UsuarioAcaoUsuarioHelper(integracaoComercialHelper
-						.getUsuarioLogado(),
-						UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+				Operacao.OPERACAO_SUBSTITUICAO_HIDROMETRO_EFETUAR, 
+				Integer.parseInt(matriculaImovel), 
+				Integer.parseInt(matriculaImovel),
+				new UsuarioAcaoUsuarioHelper(integracaoComercialHelper.getUsuarioLogado(), UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 		
-		// [UC0107] -Fim- Registrar Transação
-
 		try {
+			registradorOperacao.registrarOperacao(hidrometroInstalacaoHistorico);
 
-			// regitrando operacao
-			registradorOperacao
-					.registrarOperacao(hidrometroInstalacaoHistorico);
-
-//			getControladorTransacao().registrarTransacao(
-//					hidrometroSubstituicaoHistorico);
-
-			// [SB0001] Atualizar o histórico da instalação do hidrômetro
-			// substituido
 			if ( integracaoComercialHelper.getUsuarioLogado() != null ){
-				
 				hidrometroSubstituicaoHistorico.setUsuarioRetirada(integracaoComercialHelper.getUsuarioLogado());
-				
 			}else{
-				
 				hidrometroSubstituicaoHistorico.setUsuarioRetirada(null);
-				
 			}
 			
-			repositorioAtendimentoPublico
-					.atualizarHidrometroInstalacoHistorico(hidrometroSubstituicaoHistorico);
+			repositorioAtendimentoPublico.atualizarHidrometroInstalacoHistorico(hidrometroSubstituicaoHistorico);
 
-			// [SB0002] Gerar Histórico de instalação do hidrômetro
-			// Retirar os dois indicadores: indicadorTrocaProtecao e
-			// indicadorTrocaRegistro
-			Short indicadorTrocaProtecao = hidrometroInstalacaoHistorico
-					.getIndicadorTrocaProtecao();
-			hidrometroInstalacaoHistorico
-					.setIndicadorTrocaProtecao(ConstantesSistema.NAO);
-			Short indicadorTrocaRegistro = hidrometroInstalacaoHistorico
-					.getIndicadorTrocaRegistro();
-			hidrometroInstalacaoHistorico
-					.setIndicadorTrocaRegistro(ConstantesSistema.NAO);
+			Short indicadorTrocaProtecao = hidrometroInstalacaoHistorico.getIndicadorTrocaProtecao();
+			hidrometroInstalacaoHistorico.setIndicadorTrocaProtecao(ConstantesSistema.NAO);
+			
+			Short indicadorTrocaRegistro = hidrometroInstalacaoHistorico.getIndicadorTrocaRegistro();
+			hidrometroInstalacaoHistorico.setIndicadorTrocaRegistro(ConstantesSistema.NAO);
 
-			hidrometroInstalacaoHistorico
-					.setIndicadorInstalcaoSubstituicao(new Short("2"));
+			hidrometroInstalacaoHistorico.setIndicadorInstalcaoSubstituicao(ConstantesSistema.NAO);
 			
 			if ( integracaoComercialHelper.getUsuarioLogado() != null ){
-			
 				hidrometroInstalacaoHistorico.setUsuarioInstalacao(integracaoComercialHelper.getUsuarioLogado());
-			
 			}else{
-				
 				hidrometroInstalacaoHistorico.setUsuarioInstalacao(null);
-				
 			}
 			
 			hidrometroInstalacaoHistorico.setUsuarioRetirada(null);
 			
-			id = (Integer) getControladorUtil().inserir(
-					hidrometroInstalacaoHistorico);
+			id = (Integer) getControladorUtil().inserir(hidrometroInstalacaoHistorico);
 
 			// [SB0003]Atualizar Imóvel/Ligação de Água
+			if (hidrometroInstalacaoHistorico.getMedicaoTipo().getId().equals(MedicaoTipo.LIGACAO_AGUA)) {
+				repositorioAtendimentoPublico.atualizarHidrometroInstalacaoHistoricoLigacaoAgua(hidrometroInstalacaoHistorico.getLigacaoAgua().getId(), id);
 
-			// Caso o tipo de medição seja igual a Ligação de Água, atualiza as
-			// colunas da tabela LIGACAO_AGUA
-			if (hidrometroInstalacaoHistorico.getMedicaoTipo().getId().equals(
-					MedicaoTipo.LIGACAO_AGUA)) {
-				repositorioAtendimentoPublico
-						.atualizarHidrometroInstalacaoHistoricoLigacaoAgua(
-								hidrometroInstalacaoHistorico.getLigacaoAgua()
-										.getId(), id);
-				// Caso o tipo de medição seja igual a Poço, atualiza as colunas
-				// da tabela POCO
-			} else if (hidrometroInstalacaoHistorico.getMedicaoTipo().getId()
-					.equals(MedicaoTipo.POCO)) {
-				repositorioAtendimentoPublico
-						.atualizarHidrometroIntalacaoHistoricoImovel(
-								hidrometroInstalacaoHistorico.getImovel()
-										.getId(), id, null);
+			} else if (hidrometroInstalacaoHistorico.getMedicaoTipo().getId().equals(MedicaoTipo.POCO)) {
+				repositorioAtendimentoPublico.atualizarHidrometroIntalacaoHistoricoImovel(hidrometroInstalacaoHistorico.getImovel().getId(), id, null);
 			}
 
 			// [SB004]Atualizar situação de hidrômetro na tabela HIDROMETRO
 			Integer situacaoHidrometro = HidrometroSituacao.INSTALADO;
-			repositorioAtendimentoPublico.atualizarSituacaoHidrometro(
-					hidrometroInstalacaoHistorico.getHidrometro().getId(),
-					situacaoHidrometro);
+			repositorioAtendimentoPublico.atualizarSituacaoHidrometro(hidrometroInstalacaoHistorico.getHidrometro().getId(),situacaoHidrometro);
 
-			// [SB005]Atualizar situação do hidrômetro substituido na tabela
-			// HIDROMETRO
 			situacaoHidrometro = new Integer(situacaoHidrometroSubstituido);
-			repositorioAtendimentoPublico.atualizarSituacaoHidrometro(
-					hidrometroSubstituicaoHistorico.getHidrometro().getId(),
-					situacaoHidrometro);
+			repositorioAtendimentoPublico.atualizarSituacaoHidrometro(hidrometroSubstituicaoHistorico.getHidrometro().getId(), situacaoHidrometro);
 
 			if(localArmazenagemHidrometro != null){
-			repositorioAtendimentoPublico.atualizarLocalArmazanagemHidrometro(
-					hidrometroSubstituicaoHistorico.getHidrometro().getId(),
-					localArmazenagemHidrometro);
+			repositorioAtendimentoPublico.atualizarLocalArmazanagemHidrometro(hidrometroSubstituicaoHistorico.getHidrometro().getId(), localArmazenagemHidrometro);
 			}
 
-			// [SB006]Atualizar Ordem de Serviço
 			if (!integracaoComercialHelper.isVeioEncerrarOS()) {
-				this
-						.getControladorOrdemServico()
-						.verificarOrdemServicoControleConcorrencia(ordemServico);
+				this.getControladorOrdemServico().verificarOrdemServicoControleConcorrencia(ordemServico);
 				getControladorOrdemServico().atualizaOSGeral(ordemServico);
 			}
 
-			// Gerar Boletim Ordens de Servico Concluida
-			// Caso a Ordem de Servico nao esteja Associada a Documento de
-			// Cobranca
-			// nem a Registro de Atendimento
-
-			boolean osAssociadaDOC = getControladorOrdemServico()
-					.verificarOSAssociadaDocumentoCobranca(ordemServico.getId());
-			boolean osAssociadaRA = getControladorOrdemServico()
-					.verificarOSAssociadaRA(ordemServico.getId());
+			boolean osAssociadaDOC = getControladorOrdemServico().verificarOSAssociadaDocumentoCobranca(ordemServico.getId());
+			boolean osAssociadaRA = getControladorOrdemServico().verificarOSAssociadaRA(ordemServico.getId());
 
 			if (!osAssociadaDOC && !osAssociadaRA) {
-				// Recupera a data de Encerramento da OS
 				FiltroOrdemServico filtroOs = new FiltroOrdemServico();
-				filtroOs.adicionarParametro(new ParametroSimples(
-						FiltroOrdemServico.ID, ordemServico.getId()));
+				filtroOs.adicionarParametro(new ParametroSimples(FiltroOrdemServico.ID, ordemServico.getId()));
 
-				Collection colecaoDados = getControladorUtil().pesquisar(
-						filtroOs, OrdemServico.class.getName());
+				Collection colecaoDados = getControladorUtil().pesquisar(filtroOs, OrdemServico.class.getName());
 				Iterator iColecaoDados = colecaoDados.iterator();
 				OrdemServico os = (OrdemServico) iColecaoDados.next();
 
 				Date dataEncerramentoOs = os.getDataEncerramento();
 
-				// **************************************************************
-				// Alterado por: Ivan Sergio
-				// Data: 12/02/2009
-				// CRC1222 - Seta a data de encerramento com o valor do Helper
-				// de
-				// integracao.
-				// **************************************************************
 				if (dataEncerramentoOs == null)
 					dataEncerramentoOs = ordemServico.getDataEncerramento();
-				// **************************************************************
 
 				BoletimOsConcluida boletim = new BoletimOsConcluida();
 				boletim.setId(ordemServico.getId());
 				boletim.setOrdemServico(ordemServico);
 				boletim.setLocalidade(ordemServico.getImovel().getLocalidade());
-				boletim.setAnoMesReferenciaBoletim(Util
-						.getAnoMesComoInt(dataEncerramentoOs));
+				boletim.setAnoMesReferenciaBoletim(Util.getAnoMesComoInt(dataEncerramentoOs));
 				boletim.setCodigoFiscalizacao(new Short("0"));
 				boletim.setUsuario(null);
 				boletim.setDataFiscalizacao(null);
 				boletim.setDataEncerramentoBoletim(null);
-				boletim
-						.setIndicadorTrocaProtecaoHidrometro(indicadorTrocaProtecao);
-				boletim
-						.setIndicadorTrocaRegistroHidrometro(indicadorTrocaRegistro);
-				boletim
-						.setHidrometroLocalInstalacao(hidrometroInstalacaoHistorico
-								.getHidrometroLocalInstalacao());
+				boletim.setIndicadorTrocaProtecaoHidrometro(indicadorTrocaProtecao);
+				boletim.setIndicadorTrocaRegistroHidrometro(indicadorTrocaRegistro);
+				boletim.setHidrometroLocalInstalacao(hidrometroInstalacaoHistorico.getHidrometroLocalInstalacao());
 				boletim.setUltimaAlteracao(new Date());
 				getControladorUtil().inserir(boletim);
 			}
 
 			if (ordemServico.getServicoTipo().getDebitoTipo() != null
 					&& ordemServico.getServicoNaoCobrancaMotivo() == null) {
-				getControladorOrdemServico()
-						.gerarDebitoOrdemServico(
-								ordemServico.getId(),
-								ordemServico.getServicoTipo().getDebitoTipo()
-										.getId(),
-								ordemServico.getValorAtual(),
-								new Integer(integracaoComercialHelper
-										.getQtdParcelas()),
-								ordemServico.getPercentualCobranca().toString(),
-								integracaoComercialHelper.getUsuarioLogado());
+				getControladorOrdemServico().gerarDebitoOrdemServico(
+						ordemServico.getId(),
+						ordemServico.getServicoTipo().getDebitoTipo().getId(),
+						ordemServico.getValorAtual(),
+						new Integer(integracaoComercialHelper.getQtdParcelas()),
+						ordemServico.getPercentualCobranca().toString(),
+						integracaoComercialHelper.getUsuarioLogado());
 			}
 
 		} catch (ErroRepositorioException e) {
@@ -3767,64 +3660,51 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 	 * return void
 	 * @throws ControladorException
 	 */
-	public void validacaoSubstituicaoHidrometro(String matriculaImovel,
-			String numeroHidrometro, String situacaoHidrometroSubstituido)
-			throws ControladorException {
+	@SuppressWarnings("rawtypes")
+	public void validacaoSubstituicaoHidrometro(String matriculaImovel, String numeroHidrometro, String situacaoHidrometroSubstituido) throws ControladorException {
 
+		this.getControladorMicromedicao().validarImovelEmCampo(new Integer(matriculaImovel));
+		
 		// Caso o hidrômetro substituido esteja com situacao igual a DISPONÍVEL
-		if (situacaoHidrometroSubstituido.equals(-1)
-				|| situacaoHidrometroSubstituido
-						.equals(HidrometroSituacao.INSTALADO.toString())) {
+		if (situacaoHidrometroSubstituido.equals(-1) || situacaoHidrometroSubstituido.equals(HidrometroSituacao.INSTALADO.toString())) {
 			sessionContext.setRollbackOnly();
-			throw new ControladorException(
-					"atencao.hidrometro_situacao_disponivel");
+			throw new ControladorException("atencao.hidrometro_situacao_disponivel");
 		}
 
 		FiltroHidrometro filtroHidrometro = new FiltroHidrometro();
 
-		filtroHidrometro
-				.adicionarCaminhoParaCarregamentoEntidade("hidrometroSituacao");
-		filtroHidrometro.adicionarParametro(new ParametroSimples(
-				FiltroHidrometro.NUMERO_HIDROMETRO, numeroHidrometro));
+		filtroHidrometro.adicionarCaminhoParaCarregamentoEntidade("hidrometroSituacao");
+		filtroHidrometro.adicionarParametro(new ParametroSimples(FiltroHidrometro.NUMERO_HIDROMETRO, numeroHidrometro));
 
 		Collection colecaoHidrometro = null;
 
-		colecaoHidrometro = getControladorUtil().pesquisar(filtroHidrometro,
-				Hidrometro.class.getName());
+		colecaoHidrometro = getControladorUtil().pesquisar(filtroHidrometro,Hidrometro.class.getName());
 
-		// [FS002]Caso o hidrômetro informado esteja com a situação diferente de
-		// DISPONÍVEL
+		// [FS002]Caso o hidrômetro informado esteja com a situação diferente de DISPONÍVEL
 		Iterator iteratorHidrometro = colecaoHidrometro.iterator();
 		while (iteratorHidrometro.hasNext()) {
 			Hidrometro hidrometro = (Hidrometro) iteratorHidrometro.next();
-			Integer idSituacaoHidrometro = hidrometro.getHidrometroSituacao()
-					.getId();
+			Integer idSituacaoHidrometro = hidrometro.getHidrometroSituacao().getId();
+			
 			if (!(idSituacaoHidrometro.equals(HidrometroSituacao.DISPONIVEL))) {
 				sessionContext.setRollbackOnly();
-				throw new ControladorException(
-						"atencao.hidrometro_situacao_indisponivel", null,
-						hidrometro.getHidrometroSituacao().getDescricao());
+				throw new ControladorException("atencao.hidrometro_situacao_indisponivel", null,hidrometro.getHidrometroSituacao().getDescricao());
 			}
 		}
 
 		FiltroImovel filtroImovel = new FiltroImovel();
-		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID,
-				matriculaImovel));
+		filtroImovel.adicionarParametro(new ParametroSimples(FiltroImovel.ID,matriculaImovel));
 
 		Collection colecaoImoveis = null;
 
-		colecaoImoveis = getControladorUtil().pesquisar(filtroImovel,
-				Imovel.class.getName());
+		colecaoImoveis = getControladorUtil().pesquisar(filtroImovel,Imovel.class.getName());
 		Iterator iteratorImovel = colecaoImoveis.iterator();
 		Imovel imovel = (Imovel) iteratorImovel.next();
 
-		// [FS008]Caso situção do Imóvel não seja ativo(IMOV_ICEXCLUSAO da
-		// tabela IMOVEL correspondete a "não")
+		// [FS008]Caso situção do Imóvel não seja ativo(IMOV_ICEXCLUSAO da tabela IMOVEL correspondete a "não")
 		if (imovel.getIndicadorExclusao() != ConstantesSistema.INDICADOR_IMOVEL_ATIVO) {
 			sessionContext.setRollbackOnly();
-			throw new ControladorException(
-					"atencao.situacao_imovel_indicador_exclusao", null, imovel
-							.getId().toString());
+			throw new ControladorException("atencao.situacao_imovel_indicador_exclusao", null, imovel.getId().toString());
 		}
 	}
 
@@ -7572,11 +7452,11 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 				SistemaParametro sistemaParametro = getControladorUtil()
 						.pesquisarParametrosDoSistema();
 
-				if (sistemaParametro.getClientePresidenteCompesa() == null) {
+				if (sistemaParametro.getClientePresidente() == null) {
 					throw new ControladorException("atencao.cliente_sem_dados",
 							null, "Presidente");
 				}
-				if (sistemaParametro.getClienteDiretorComercialCompesa() == null) {
+				if (sistemaParametro.getClienteDiretorComercial() == null) {
 					throw new ControladorException("atencao.cliente_sem_dados",
 							null, "Diretor Financeiro");
 				}
@@ -7584,11 +7464,11 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 				// 3.4.1 Diretor Presidente
 				Cliente clientePresidente = repositorioAtendimentoPublico
 						.pesquisaClienteContrato(sistemaParametro
-								.getClientePresidenteCompesa().getId());
+								.getClientePresidente().getId());
 				// 3.4.2 Diretor Comercial
 				Cliente clienteDiretor = repositorioAtendimentoPublico
 						.pesquisaClienteContrato(sistemaParametro
-								.getClienteDiretorComercialCompesa().getId());
+								.getClienteDiretorComercial().getId());
 
 				// [FS0002]- Identificar informações do presidente e diretor
 				// fincanceiro da empresa

@@ -4206,12 +4206,15 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		int mesDataVencimentoRota = Util.getMes(faturamentoAtivCronRota.getDataContaVencimento());
 		int anoDataVencimentoRota = Util.getAno(faturamentoAtivCronRota.getDataContaVencimento());
 
-		if (imovel.getDiaVencimento() != null && imovel.getDiaVencimento().intValue() != 0
+		logger.info("Imovel: " + imovel.getId() + " - " + imovel.getDiaVencimento() + " - " + imovel.getIndicadorEmissaoExtratoFaturamento() + " - " + imovel.getIndicadorVencimentoMesSeguinte());
+		
+		if (imovel.getDiaVencimento() != null
+				&& imovel.getDiaVencimento().intValue() != 0
 				&& (imovel.getIndicadorEmissaoExtratoFaturamento() == null || imovel.getIndicadorEmissaoExtratoFaturamento().equals(ConstantesSistema.NAO))) {
 
 			diaVencimentoAlternativo = imovel.getDiaVencimento();
-			indicadorVencimentoMesSeguinte = imovel
-					.getIndicadorVencimentoMesSeguinte();
+			indicadorVencimentoMesSeguinte = imovel.getIndicadorVencimentoMesSeguinte();
+			logger.info("Entrou v. alternativo");
 		} else {
 			try {
 				clienteResponsavel = repositorioFaturamento.pesquisarClienteImovelGrupoFaturamento(imovel.getId(), ClienteRelacaoTipo.RESPONSAVEL);
@@ -4232,17 +4235,23 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		if (diaVencimentoAlternativo == null || diaVencimentoAlternativo.intValue() == 0) {
 			dataVencimentoConta = faturamentoAtivCronRota.getDataContaVencimento();
+			logger.info("sem Vencimento alternativo");
 		} else {
 			if (indicadorVencimentoMesSeguinte.equals(ConstantesSistema.NAO)) {
-
+				logger.info("Vencimento mes seguinte nao");
 				if (diaDataVencimentoRota <= diaVencimentoAlternativo.intValue()) {
 					ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(mesDataVencimentoRota, anoDataVencimentoRota));
+
+					logger.info("diaDataVencimentoRota <= diaVencimentoAlternativo.intValue()" );
+
 					if (diaVencimentoAlternativo.intValue() > ultimoDiaMes.intValue()) {
 						diaVencimentoAlternativo = ultimoDiaMes;
 					}
 
 					dataVencimentoConta = Util.criarData(diaVencimentoAlternativo.intValue(), mesDataVencimentoRota, anoDataVencimentoRota);
 				} else {
+					logger.info("altrnativo > rota");
+
 					diaVencimentoAlternativo = new Integer(diaDataVencimentoRota).shortValue();
 
 					ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(mesDataVencimentoRota, anoDataVencimentoRota));
@@ -4258,6 +4267,10 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							.adicionarNumeroDiasDeUmaData(new Date(), sistemaParametro.getNumeroMinimoDiasEmissaoVencimento());
 
 					if (dataVencimentoAlternativo.compareTo(dataAtualMaisDiasMinimoEmissao) <= 0) {
+						logger.info("Vencimento alternativo menor que mínimo");
+						/* A Data de Vencimento da Conta será igual ao dia do vencimento alternativo mais o mês e ano seguinte ao
+						 * da Data de Vencimento da Rota.
+						 */
 						Date dataVencimentoRotaMesSeguinte = Util.adcionarOuSubtrairMesesAData(faturamentoAtivCronRota.getDataContaVencimento(), 1, 0);
 
 						ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(Util.getMes(dataVencimentoRotaMesSeguinte),
@@ -9976,7 +9989,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			BigDecimal percentualColeta) throws ControladorException {
 
 		try {
-			System.out.println("Retificação da conta do imóvel: " + imovel.getId());
 			logger.info("Retificação da conta do imóvel: " + imovel.getId());
 			
 			validarContaParaRetificacao(contaAtual, imovel, dataVencimentoConta);
@@ -10024,8 +10036,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 				boolean imovelHidrometrado = repositorioMicromedicao.verificaExistenciaHidrometro(contaAtual.getImovel().getId());
 
-				System.out.println("Motivo da retificação: ALTERAÇÃO DA LEITURA FATURADA");
-				System.out.println("Imóvel: " + imovel.getId());
 				logger.info("Motivo da retificação: ALTERAÇÃO DA LEITURA FATURADA");
 				logger.info("Imóvel: " + imovel.getId());
 				
@@ -10053,7 +10063,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								leituraAlterada = getControladorMicromedicao().verificarLeituraAtualFaturadaImovel(leituraAtual, contaAtual.getReferencia(),imovel.getId());
 
 								if (leituraAlterada) {
-
 									FaturamentoGrupo grupo = repositorioImovel.pesquisarGrupoImovel(imovel.getId());
 									boolean arquivoProximaReferenciaGerado = getControladorMicromedicao()
 											.pesquisaArquivoRotaPorGrupoEReferencia(grupo.getId(), contaAtual.getReferencia());
@@ -10082,7 +10091,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						"exibirRetificarContaAction.do?contaID=" + contaAtual.getId() + "&idImovel=" + imovel.getId(), null);
 			}
 
-			
 			RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_CONTA_RETIFICAR, contaAtual.getImovel()
 							.getId(), contaAtual.getId(), new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 
@@ -10324,7 +10332,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				contaInserir.setContaCategorias(new HashSet(colecaoContaCategoria));
 				contaInserir.setDebitoCobrados(new HashSet(colecaoDebitoCobrado));
 				contaInserir.setCreditoRealizados(new HashSet(colecaoCreditoRealizado));
-
 				contaInserir.setNumeroBoleto(this.verificarGeracaoBoleto(sistemaParametro, contaInserir));
 
 				Integer idContaGerado = (Integer) this.getControladorUtil().inserir(contaInserir);

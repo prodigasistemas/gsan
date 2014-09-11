@@ -11567,17 +11567,23 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 
 		try {
 			
-			StringBuffer hql = new StringBuffer("FROM Rota r inner join fetch r.faturamentoGrupo grupo where r.id = ");
-			hql.append("(select i.rotaAlternativa.id from Imovel i where i.id =");
-			hql.append(matricula);
-			hql.append(")");
+			StringBuffer hql = new StringBuffer("FROM Rota r ");
+			hql.append("inner join fetch r.faturamentoGrupo grupo ");
+			hql.append("inner join fetch r.leituraTipo leituraTipo ");
+			hql.append("where r.id = ");
+				hql.append("(select i.rotaAlternativa.id from Imovel i where i.id =");
+				hql.append(matricula);
+				hql.append(")");
 			rota = (Rota) session.createQuery(hql.toString()).uniqueResult();
 			
 			if (rota == null || rota.getId() == null) {
-				hql = new StringBuffer("FROM Rota r inner join fetch r.faturamentoGrupo grupo where r.id = ");
-				hql.append("(select q.rota.id from Quadra q where q.id = (select i.quadra.id from Imovel i where i.id =");
-				hql.append(matricula);
-				hql.append("))");
+				hql = new StringBuffer("FROM Rota r ");
+				hql.append("inner join fetch r.faturamentoGrupo grupo ");
+				hql.append("inner join fetch r.leituraTipo leituraTipo ");
+				hql.append("where r.id = ");
+					hql.append("(select q.rota.id from Quadra q where q.id = (select i.quadra.id from Imovel i where i.id =");
+					hql.append(matricula);
+					hql.append("))");
 				rota = (Rota) session.createQuery(hql.toString()).uniqueResult();
 			}
 
