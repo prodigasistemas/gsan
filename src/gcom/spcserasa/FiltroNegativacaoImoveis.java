@@ -4,28 +4,13 @@ import gcom.util.filtro.Filtro;
 
 import java.io.Serializable;
 
-/**
- * FiltroNegativador
- *
- * @author Thiago Toscano 
- * @date 26/12/2007
- */
 public class FiltroNegativacaoImoveis extends Filtro implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	/**
-     * Constructor for the FiltroNegativador object
-     */
     public FiltroNegativacaoImoveis() {
     }
 
-    /**
-     * Constructor for the FiltroNegativador object
-     * 
-     * @param campoOrderBy
-     *            Description of the Parameter
-     */
     public FiltroNegativacaoImoveis(String campoOrderBy) {
         this.campoOrderBy = campoOrderBy;
     }
@@ -45,4 +30,6 @@ public class FiltroNegativacaoImoveis extends Filtro implements Serializable {
     public final static String NEGATIVADOR = "negativacaoComando.negativador";
 
     public final static String INDICADOR_EXCLUIDO = "indicadorExcluido";
+    
+    public final static String ID_CLIENTE = "cliente.id";
 }
