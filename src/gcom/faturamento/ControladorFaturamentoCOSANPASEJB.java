@@ -2534,22 +2534,6 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 			StringBuilder mesagemConsumo = obterMensagemRateioConsumo(emitirContaHelper, consumoRateio, parmsMedicaoHistorico,tipoMedicao);
 			emitirContaHelper.setMensagemConsumoString(mesagemConsumo.toString());
 
-			try {
-				Imovel imovelPesquisa = this.getControladorImovel().pesquisarImovel(emitirContaHelper.getIdImovel());
-
-				FaturamentoGrupo faturamentoGrupo = getControladorImovel().pesquisarGrupoImovel(imovelPesquisa.getId());
-				faturamentoGrupo.setAnoMesReferencia(emitirContaHelper.getAmReferencia());
-
-				if (imovelPesquisa.isImovelCondominio()) {
-
-					BigDecimal[] valoresRateioAguaEsgotoImovel = this.calcularValorRateioImovel(imovelPesquisa,faturamentoGrupo);
-					emitirContaHelper.setValorRateioAgua(valoresRateioAguaEsgotoImovel[0]);
-					emitirContaHelper.setValorRateioEsgoto(valoresRateioAguaEsgotoImovel[1]);
-				}
-			} catch (ErroRepositorioException e) {
-				logger.error(e);
-			}
-
 			Collection colecaoContaLinhasDescricaoServicosTarifasTotalHelper = gerarLinhasDescricaoServicoTarifasRelatorio(
 					emitirContaHelper, consumoRateio, parmsMedicaoHistorico,tipoMedicao, false);
 			emitirContaHelper.setColecaoContaLinhasDescricaoServicosTarifasTotalHelper(colecaoContaLinhasDescricaoServicosTarifasTotalHelper);

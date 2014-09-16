@@ -775,14 +775,6 @@ public class ContaHistorico implements IConta {
 			valorTotalConta = valorTotalConta.subtract(this.getValorImposto());
 		}
 		
-		if (this.getValorRateioAgua() != null) {
-			valorTotalConta = valorTotalConta.add(this.getValorRateioAgua());
-		}
-		
-		if (this.getValorRateioEsgoto() != null) {
-			valorTotalConta = valorTotalConta.add(this.getValorRateioEsgoto());
-		}
-		
 		valorTotalConta = valorTotalConta.setScale(2, BigDecimal.ROUND_HALF_UP);
 		
 		return valorTotalConta;	

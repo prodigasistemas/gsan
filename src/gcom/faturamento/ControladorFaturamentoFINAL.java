@@ -33575,48 +33575,30 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @param colecaoConta
 	 * @throws ControladorException
 	 */
-	public StringBuilder obterMensagemRateioConsumo(
-			EmitirContaHelper emitirContaHelper, String consumoRateio,
-			Object[] parmsMedicaoHistorico, Integer tipoMedicao)
-			throws ControladorException {
+	public StringBuilder obterMensagemRateioConsumo(EmitirContaHelper emitirContaHelper, String consumoRateio, Object[] parmsMedicaoHistorico, 
+			Integer tipoMedicao) throws ControladorException {
+		
 		StringBuilder mensagemConsumo = new StringBuilder();
-		// caso o consumo de rateio seja diferente de vazio
+
 		if (!consumoRateio.equals("") && !consumoRateio.equals("0")) {
 			mensagemConsumo.append("CONSUMO DO RATEIO - ");
-			mensagemConsumo.append(Util.completaStringComEspacoAEsquerda(
-					consumoRateio, 6));
+			mensagemConsumo.append(Util.completaStringComEspacoAEsquerda(consumoRateio, 6));
 			mensagemConsumo.append("M3");
-			// senão completa com espaços em branco
 			mensagemConsumo.append(Util.completaString("", 4));
 		} else {
-			// senão caso o tipo de medição seja diferente de nulo e seja poço e
-			// não existam dados para a medição
-			if (tipoMedicao != null && tipoMedicao.equals(MedicaoTipo.POCO)
-					&& parmsMedicaoHistorico == null) {
+			if (tipoMedicao != null && tipoMedicao.equals(MedicaoTipo.POCO) && parmsMedicaoHistorico == null) {
 				mensagemConsumo.append("VOLUME FIXO DE ESGOTO - ");
-				mensagemConsumo.append(Util.completaStringComEspacoAEsquerda(""
-						+ emitirContaHelper.getConsumoEsgoto(), 6));
+				mensagemConsumo.append(Util.completaStringComEspacoAEsquerda("" + emitirContaHelper.getConsumoEsgoto(), 6));
 				mensagemConsumo.append("M3");
-
 			} else {
-				// caso o tipo de medição seja diferente de nulo e seja ligação
-				// de agua e
-				// o consumo de esgoto seja diferente de nulo d maior que o
-				// consumo de agua
-				if (tipoMedicao != null
-						&& tipoMedicao.equals(MedicaoTipo.LIGACAO_AGUA)
-						&& emitirContaHelper.getConsumoEsgoto() != null
-						&& emitirContaHelper.getConsumoEsgoto() > emitirContaHelper
-								.getConsumoAgua()) {
+				if (tipoMedicao != null && tipoMedicao.equals(MedicaoTipo.LIGACAO_AGUA) && emitirContaHelper.getConsumoEsgoto() != null
+						&& emitirContaHelper.getConsumoEsgoto() > emitirContaHelper.getConsumoAgua()) {
 
 					mensagemConsumo.append("VOLUME FIXO DE ESGOTO - ");
-					mensagemConsumo.append(Util
-							.completaStringComEspacoAEsquerda(""
-									+ emitirContaHelper.getConsumoEsgoto(), 6));
+					mensagemConsumo.append(Util.completaStringComEspacoAEsquerda("" + emitirContaHelper.getConsumoEsgoto(), 6));
 					mensagemConsumo.append("M3");
 
 				} else {
-					// senão completa com espaços em branco
 					mensagemConsumo.append(Util.completaString("", 32));
 				}
 			}
@@ -40264,81 +40246,43 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @param colecaoConta
 	 * @throws ControladorException
 	 */
-	public Collection gerarLinhasDescricaoServicoTarifasRelatorio(
-			EmitirContaHelper emitirContaHelper, String consumoRateio,
-			Object[] parmsMedicaoHistorico, Integer tipoMedicao,
-			boolean contaHistorico) throws ControladorException {
+	public Collection gerarLinhasDescricaoServicoTarifasRelatorio(EmitirContaHelper emitirContaHelper, String consumoRateio, Object[] parmsMedicaoHistorico, 
+			Integer tipoMedicao, boolean contaHistorico) throws ControladorException {
 
 		Collection<ContaLinhasDescricaoServicosTarifasTotalHelper> colecaoLinhasDescricaoServicosTarifasTotal = new ArrayList<ContaLinhasDescricaoServicosTarifasTotalHelper>();
 
-		// caso o valor da agua da conta seja maior que zero
 		if (emitirContaHelper.getValorAgua() != null
-				&& (emitirContaHelper.getValorAgua().compareTo(
-						new BigDecimal("0.00")) == 1 && (emitirContaHelper
-						.getValorRateioAgua() == null || (emitirContaHelper
-						.getValorAgua().compareTo(
-								emitirContaHelper.getValorRateioAgua()) != 0)))) {
+				&& (emitirContaHelper.getValorAgua().compareTo(new BigDecimal("0.00")) == 1 && (emitirContaHelper.getValorRateioAgua() == null || (emitirContaHelper
+						.getValorAgua().compareTo(emitirContaHelper.getValorRateioAgua()) != 0)))) {
 
 			if (!contaHistorico) {
-				// [SB0011] - Gerar Linhas da Tarifa de Água
-				colecaoLinhasDescricaoServicosTarifasTotal = gerarLinhasTarifaAguaRelatorio(
-						emitirContaHelper, consumoRateio,
-						parmsMedicaoHistorico, tipoMedicao,
-						colecaoLinhasDescricaoServicosTarifasTotal);
+				colecaoLinhasDescricaoServicosTarifasTotal = gerarLinhasTarifaAguaRelatorio(emitirContaHelper, consumoRateio, parmsMedicaoHistorico,
+						tipoMedicao, colecaoLinhasDescricaoServicosTarifasTotal);
 			} else {
-				colecaoLinhasDescricaoServicosTarifasTotal = gerarLinhasTarifaAguaRelatorioContaHistorico(
-						emitirContaHelper, consumoRateio,
-						parmsMedicaoHistorico, tipoMedicao,
-						colecaoLinhasDescricaoServicosTarifasTotal);
+				colecaoLinhasDescricaoServicosTarifasTotal = gerarLinhasTarifaAguaRelatorioContaHistorico(emitirContaHelper, consumoRateio,
+						parmsMedicaoHistorico, tipoMedicao, colecaoLinhasDescricaoServicosTarifasTotal);
 			}
-
 		}
 
-		// caso o valor de água de esgoto seja maior que zero
-		if (emitirContaHelper.getValorEsgoto() != null
-				&& emitirContaHelper.getValorEsgoto().compareTo(
-						new BigDecimal("0.00")) == 1) {
-
-			// [SB0012] - Gerar Linhas da tarifa de Esgoto
-			colecaoLinhasDescricaoServicosTarifasTotal = gerarLinhasTarifaEsgotoRelatorio(
-					emitirContaHelper,
-					colecaoLinhasDescricaoServicosTarifasTotal);
-
+		if (emitirContaHelper.getValorEsgoto() != null && emitirContaHelper.getValorEsgoto().compareTo(new BigDecimal("0.00")) == 1) {
+			colecaoLinhasDescricaoServicosTarifasTotal = gerarLinhasTarifaEsgotoRelatorio(emitirContaHelper, colecaoLinhasDescricaoServicosTarifasTotal);
 		}
 
-		// // caso o valor de debitos cobrados da conta seja maior que zero
-		if ((emitirContaHelper.getDebitos() != null && emitirContaHelper
-				.getDebitos().compareTo(new BigDecimal("0.00")) == 1)
-				|| (emitirContaHelper.getValorRateioAgua() != null || emitirContaHelper
-						.getValorRateioEsgoto() != null)) {
+		if ((emitirContaHelper.getDebitos() != null && emitirContaHelper.getDebitos().compareTo(new BigDecimal("0.00")) == 1)
+				|| (emitirContaHelper.getValorRateioAgua() != null || emitirContaHelper.getValorRateioEsgoto() != null)) {
 
-			// [SB0013] - Gerar Linhas de Débitos Cobrados
-			colecaoLinhasDescricaoServicosTarifasTotal = gerarLinhasDebitoCobradosRelatorio(
-					emitirContaHelper,
-					colecaoLinhasDescricaoServicosTarifasTotal, contaHistorico);
-
+			colecaoLinhasDescricaoServicosTarifasTotal = gerarLinhasDebitoCobradosRelatorio(emitirContaHelper, colecaoLinhasDescricaoServicosTarifasTotal,
+					contaHistorico);
 		}
 
-		// caso o valor de créditos realizados seja maior que zero
-		if (emitirContaHelper.getValorCreditos() != null
-				&& emitirContaHelper.getValorCreditos().compareTo(
-						new BigDecimal("0.00")) == 1) {
-			// [SB0014] - Gerar Linhas de Crédito Realizado
-			colecaoLinhasDescricaoServicosTarifasTotal = gerarLinhasCreditosRealizadosRelatorio(
-					emitirContaHelper,
-					colecaoLinhasDescricaoServicosTarifasTotal, contaHistorico);
-
+		if (emitirContaHelper.getValorCreditos() != null && emitirContaHelper.getValorCreditos().compareTo(new BigDecimal("0.00")) == 1) {
+			colecaoLinhasDescricaoServicosTarifasTotal = gerarLinhasCreditosRealizadosRelatorio(emitirContaHelper, colecaoLinhasDescricaoServicosTarifasTotal,
+					contaHistorico);
 		}
 
-		// caso o valor dos impostos retidos seja maior que zero
-		if (emitirContaHelper.getValorImpostos() != null
-				&& emitirContaHelper.getValorImpostos().compareTo(
-						new BigDecimal("0.00")) == 1) {
-			// [SB0015] - Gerar Linhas dos Impostos Retidos
-			colecaoLinhasDescricaoServicosTarifasTotal = gerarLinhasImpostosRetidosRelatorio(
-					emitirContaHelper,
-					colecaoLinhasDescricaoServicosTarifasTotal, contaHistorico);
-
+		if (emitirContaHelper.getValorImpostos() != null && emitirContaHelper.getValorImpostos().compareTo(new BigDecimal("0.00")) == 1) {
+			colecaoLinhasDescricaoServicosTarifasTotal = gerarLinhasImpostosRetidosRelatorio(emitirContaHelper, colecaoLinhasDescricaoServicosTarifasTotal,
+					contaHistorico);
 		}
 
 		return colecaoLinhasDescricaoServicosTarifasTotal;
@@ -41029,13 +40973,9 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		// try {
 
 		if (!contaHistorico) {
-			collectionParmsDebitoAutomatico = this
-					.pesquisarParmsDebitoAutomatico(emitirContaHelper
-							.getIdConta());
+			collectionParmsDebitoAutomatico = this.pesquisarParmsDebitoAutomatico(emitirContaHelper.getIdConta());
 		} else {
-			collectionParmsDebitoAutomatico = this
-					.pesquisarParmsDebitoAutomaticoHistorico(emitirContaHelper
-							.getIdConta());
+			collectionParmsDebitoAutomatico = this.pesquisarParmsDebitoAutomaticoHistorico(emitirContaHelper.getIdConta());
 		}
 
 		// } catch (ErroRepositorioException e) {
@@ -41059,13 +40999,11 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					String totalPrestacaoMenosBonus = "";
 					// valor acumulado dos debitos cobrados
 					if (parmsDebitoAutomatico[0] != null) {
-						valorDebitosCobrados = Util
-								.formatarMoedaReal((BigDecimal) parmsDebitoAutomatico[0]);
+						valorDebitosCobrados = Util.formatarMoedaReal((BigDecimal) parmsDebitoAutomatico[0]);
 					}
 					// numero de prestação do débito
 					if (parmsDebitoAutomatico[1] != null) {
-						numeroPrestacao = ""
-								+ ((Short) parmsDebitoAutomatico[1]);
+						numeroPrestacao = "" + ((Short) parmsDebitoAutomatico[1]);
 					}
 					// valor acumulado dos debitos cobrados
 					if (parmsDebitoAutomatico[2] != null) {
@@ -41081,35 +41019,24 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					if (parmsDebitoAutomatico[3] != null) {
 						numeroParcelaBonus = (Short) parmsDebitoAutomatico[3];
 					}
-					totalPrestacaoMenosBonus = ""
-							+ (numeroTotalPrestacao.intValue() - numeroParcelaBonus
-									.intValue());
+					totalPrestacaoMenosBonus = "" + (numeroTotalPrestacao.intValue() - numeroParcelaBonus.intValue());
 
 					if (!valorDebitosCobrados.equals("0,00")) {
 						String descricaoServicosTarifas1 = "";
 						String valor1 = "";
 						// -- Linha 1 --//
-						descricaoServicosTarifas1 = "PARCELAMENTO DE DÉBITOS"
-								+ Util.completaString("", 2) + "PARCELA ";
+						descricaoServicosTarifas1 = "PARCELAMENTO DE DÉBITOS" + Util.completaString("", 2) + "PARCELA ";
 						// numero da prestação do débito
-						descricaoServicosTarifas1 = descricaoServicosTarifas1
-								+ Util.completaStringComEspacoAEsquerda(
-										numeroPrestacao, 3) + "/";
+						descricaoServicosTarifas1 = descricaoServicosTarifas1 + Util.completaStringComEspacoAEsquerda(numeroPrestacao, 3) + "/";
 						// numero total da prestação do débito
-						descricaoServicosTarifas1 = descricaoServicosTarifas1
-								+ Util.completaString(totalPrestacaoMenosBonus,
-										3);
+						descricaoServicosTarifas1 = descricaoServicosTarifas1 + Util.completaString(totalPrestacaoMenosBonus, 3);
 						valor1 = valorDebitosCobrados;
 
 						contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-						contaLinhasDescricaoServicosTarifasTotalHelper
-								.setDescricaoServicosTarifas(descricaoServicosTarifas1);
-						contaLinhasDescricaoServicosTarifasTotalHelper
-								.setConsumoFaixa("");
-						contaLinhasDescricaoServicosTarifasTotalHelper
-								.setValor(valor1);
-						colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-								.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+						contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas1);
+						contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa("");
+						contaLinhasDescricaoServicosTarifasTotalHelper.setValor(valor1);
+						colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 					}
 				}
 
@@ -41118,25 +41045,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		// CRC4428 - Vivianne Sousa - 14/06/2010
 		List colecaoDebitoCobradoPorTipo = null;
-		// try {
-
 		if (!contaHistorico) {
-			colecaoDebitoCobradoPorTipo = this
-					.pesquisarParmsDebitoCobradoPorTipo(emitirContaHelper
-							.getIdConta());
+			colecaoDebitoCobradoPorTipo = this.pesquisarParmsDebitoCobradoPorTipo(emitirContaHelper.getIdConta());
 		} else {
-			colecaoDebitoCobradoPorTipo = this
-					.pesquisarParmsDebitoCobradoHistoricoPorTipo(emitirContaHelper
-							.getIdConta());
+			colecaoDebitoCobradoPorTipo = this.pesquisarParmsDebitoCobradoHistoricoPorTipo(emitirContaHelper.getIdConta());
 		}
-		// } catch (ErroRepositorioException e) {
-		// sessionContext.setRollbackOnly();
-		// throw new ControladorException("erro.sistema", e);
-		// }
-		if (colecaoDebitoCobradoPorTipo != null
-				&& !colecaoDebitoCobradoPorTipo.isEmpty()) {
-			ListIterator iteratorDebitoCobradoPorTipo = (ListIterator) colecaoDebitoCobradoPorTipo
-					.listIterator();
+		if (colecaoDebitoCobradoPorTipo != null && !colecaoDebitoCobradoPorTipo.isEmpty()) {
+			ListIterator iteratorDebitoCobradoPorTipo = (ListIterator) colecaoDebitoCobradoPorTipo.listIterator();
 			// variável responsável para controle de mudança do tipo de débito
 			boolean mudou = true;
 			// variavel que verifica se é a primeira vez,de cada tipo do
@@ -41163,8 +41078,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			String valor2 = "";
 
 			while (iteratorDebitoCobradoPorTipo.hasNext()) {
-				Object[] parmsDebitoCobradoPorTipo = (Object[]) iteratorDebitoCobradoPorTipo
-						.next();
+				Object[] parmsDebitoCobradoPorTipo = (Object[]) iteratorDebitoCobradoPorTipo.next();
 
 				// recupera os parametros da coleção valor da pretação
 				if (parmsDebitoCobradoPorTipo[0] != null) {
@@ -41172,13 +41086,11 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				}
 				// numero da pretação atual
 				if (parmsDebitoCobradoPorTipo[1] != null) {
-					numeroPrestacaoDebito = new Integer(""
-							+ (Short) parmsDebitoCobradoPorTipo[1]);
+					numeroPrestacaoDebito = new Integer("" + (Short) parmsDebitoCobradoPorTipo[1]);
 				}
 				// numero total de prestações
 				if (parmsDebitoCobradoPorTipo[2] != null) {
-					numeroPrestacaoTotal = new Integer(""
-							+ (Short) parmsDebitoCobradoPorTipo[2]);
+					numeroPrestacaoTotal = new Integer("" + (Short) parmsDebitoCobradoPorTipo[2]);
 				}
 				// ano Mes Referência do débito
 				Integer anoMesReferencia = null;
@@ -41205,9 +41117,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				if (parmsDebitoCobradoPorTipo[6] != null) {
 					numeroParcelaBonus = (Short) parmsDebitoCobradoPorTipo[6];
 				}
-				totalPrestacaoMenosBonus = ""
-						+ (numeroPrestacaoTotal.intValue() - numeroParcelaBonus
-								.intValue());
+				totalPrestacaoMenosBonus = "" + (numeroPrestacaoTotal.intValue() - numeroParcelaBonus.intValue());
 
 				// muda o estado do boolean e o valor do débito tipo
 				// verificador na primeira vez ou quando mudar o tipo
@@ -41221,115 +41131,57 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					if (primeiraVez) {
 						// -- Linha 2 --//
 						// descrição do tipo de débito
-						descricaoServicosTarifas2 = Util.completaString(
-								descricaoDebitoTipo, 30);
+						descricaoServicosTarifas2 = Util.completaString(descricaoDebitoTipo, 30);
 						primeiraVez = false;
 					}
 					// adiciona o valor da prestação ao total
-					valorTotalPrestacoes = valorTotalPrestacoes
-							.add(valorPrestacao);
+					valorTotalPrestacoes = valorTotalPrestacoes.add(valorPrestacao);
 					// adiciona o ano/mes referencia na coleção
 					if (anoMesReferencia != null) {
 						colecaoAnoMesReferenciaDebito.add(anoMesReferencia);
 					} else {
-						descricaoServicosTarifas2 = descricaoServicosTarifas2
-								+ "PARCELA ";
-						descricaoServicosTarifas2 = descricaoServicosTarifas2
-								+ Util.completaStringComEspacoAEsquerda(""
-										+ numeroPrestacaoDebito, 3);
-						descricaoServicosTarifas2 = descricaoServicosTarifas2
-								+ "/"
-								+ Util.completaString(totalPrestacaoMenosBonus,
-										3);
+						descricaoServicosTarifas2 = descricaoServicosTarifas2 + "PARCELA ";
+						descricaoServicosTarifas2 = descricaoServicosTarifas2 + Util.completaStringComEspacoAEsquerda("" + numeroPrestacaoDebito, 3);
+						descricaoServicosTarifas2 = descricaoServicosTarifas2 + "/" + Util.completaString(totalPrestacaoMenosBonus, 3);
 
 						// Valor da pretação
-						String valorPrestacaoString = Util
-								.formatarMoedaReal(valorTotalPrestacoes);
+						String valorPrestacaoString = Util.formatarMoedaReal(valorTotalPrestacoes);
 						valor2 = valorPrestacaoString;
 
 						contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-						contaLinhasDescricaoServicosTarifasTotalHelper
-								.setDescricaoServicosTarifas(descricaoServicosTarifas2);
-						contaLinhasDescricaoServicosTarifasTotalHelper
-								.setConsumoFaixa("");
-						contaLinhasDescricaoServicosTarifasTotalHelper
-								.setValor(valor2);
-						colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-								.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+						contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas2);
+						contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa("");
+						contaLinhasDescricaoServicosTarifasTotalHelper.setValor(valor2);
+						colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 					}
 
 				} else {
 					// 4.1.2. caso a coleção dos meses de referência do
 					// grupo do tipo de débito esteja preenchida
-					if (colecaoAnoMesReferenciaDebito != null
-							&& !colecaoAnoMesReferenciaDebito.isEmpty()) {
-						Iterator iteratorAnoMesReferenciaDebito = colecaoAnoMesReferenciaDebito
-								.iterator();
+					if (colecaoAnoMesReferenciaDebito != null && !colecaoAnoMesReferenciaDebito.isEmpty()) {
+						Iterator iteratorAnoMesReferenciaDebito = colecaoAnoMesReferenciaDebito.iterator();
 						int i = 1;
 						while (iteratorAnoMesReferenciaDebito.hasNext()) {
-							Integer anoMesReferenciaDebito = (Integer) iteratorAnoMesReferenciaDebito
-									.next();
+							Integer anoMesReferenciaDebito = (Integer) iteratorAnoMesReferenciaDebito.next();
 							String anoMesReferenciaDebitoString = null;
 							if (i == 1) {
 								// mes/ano referencia do débito
-								anoMesReferenciaDebitoString = Util
-										.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
-								descricaoServicosTarifas2 = descricaoServicosTarifas2
-										+ " " + anoMesReferenciaDebitoString;
+								anoMesReferenciaDebitoString = Util.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
+								descricaoServicosTarifas2 = descricaoServicosTarifas2 + " " + anoMesReferenciaDebitoString;
 								// caso exita somente um mes/ano de
 								// referencia na lista
 								if (colecaoAnoMesReferenciaDebito.size() == 1) {
 									// valor acumulado do tipo do débito
-									String valorAcumulado = Util
-											.formatarMoedaReal(valorTotalPrestacoes);
+									String valorAcumulado = Util.formatarMoedaReal(valorTotalPrestacoes);
 									valor2 = valorAcumulado;
-									// descricaoServicosTarifas2 =
-									// descricaoServicosTarifas2
-									// + " " + anoMesReferenciaDebitoString;
 
 									contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-									contaLinhasDescricaoServicosTarifasTotalHelper
-											.setDescricaoServicosTarifas(descricaoServicosTarifas2);
-									contaLinhasDescricaoServicosTarifasTotalHelper
-											.setConsumoFaixa("");
-									contaLinhasDescricaoServicosTarifasTotalHelper
-											.setValor(valor2);
-									colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-											.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+									contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas2);
+									contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa("");
+									contaLinhasDescricaoServicosTarifasTotalHelper.setValor(valor2);
+									colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 
-								} // else {
-									// completa espaços em brancos
-									// contaLinhasDescricaoServicosTarifasTotalHelper
-									// = new
-									// ContaLinhasDescricaoServicosTarifasTotalHelper();
-								// contaLinhasDescricaoServicosTarifasTotalHelper
-								// .setDescricaoServicosTarifas(descricaoServicosTarifas2);
-								// contaLinhasDescricaoServicosTarifasTotalHelper
-								// .setConsumoFaixa("");
-								// contaLinhasDescricaoServicosTarifasTotalHelper
-								// .setValor("");
-								// colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-								// .add(contaLinhasDescricaoServicosTarifasTotalHelper);
-								//
-								// descricaoServicosTarifas2 = "";
-								// String valorAcumulado = Util
-								// .formatarMoedaReal(valorTotalPrestacoes);
-								// valor2 = valorAcumulado;
-								//
-								// contaLinhasDescricaoServicosTarifasTotalHelper
-								// = new
-								// ContaLinhasDescricaoServicosTarifasTotalHelper();
-								// contaLinhasDescricaoServicosTarifasTotalHelper
-								// .setDescricaoServicosTarifas(descricaoServicosTarifas2);
-								// contaLinhasDescricaoServicosTarifasTotalHelper
-								// .setConsumoFaixa("");
-								// contaLinhasDescricaoServicosTarifasTotalHelper
-								// .setValor(valor2);
-								// colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-								// .add(contaLinhasDescricaoServicosTarifasTotalHelper);
-								// break;
-								// }
-
+								} 
 							} else {
 								// caso i seja igual a 2 então começa a
 								// linha 3 do subFluxo
@@ -41338,34 +41190,25 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 									// completa espaços em brancos
 									descricaoServicosTarifas2 = " ";
 									// mes/ano referencia do debito
-									anoMesReferenciaDebitoString = Util
-											.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
-									descricaoServicosTarifas2 = descricaoServicosTarifas2
-											+ " "
-											+ anoMesReferenciaDebitoString;
+									anoMesReferenciaDebitoString = Util.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
+									descricaoServicosTarifas2 = descricaoServicosTarifas2 + " " + anoMesReferenciaDebitoString;
 
 									// caso exita somente um mes/ano de
 									// referencia na lista
 									if (colecaoAnoMesReferenciaDebito.size() == 2) {
 										// valor acumulado do tipo do débito
-										String valorAcumulado = Util
-												.formatarMoedaReal(valorTotalPrestacoes);
+										String valorAcumulado = Util.formatarMoedaReal(valorTotalPrestacoes);
 										valor2 = valorAcumulado;
 
 										contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-										contaLinhasDescricaoServicosTarifasTotalHelper
-												.setDescricaoServicosTarifas(descricaoServicosTarifas2);
-										contaLinhasDescricaoServicosTarifasTotalHelper
-												.setConsumoFaixa("");
-										contaLinhasDescricaoServicosTarifasTotalHelper
-												.setValor(valor2);
-										colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-												.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+										contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas2);
+										contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa("");
+										contaLinhasDescricaoServicosTarifasTotalHelper.setValor(valor2);
+										colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 
 									} else {
 										// completa espaços em brancos
-										descricaoServicosTarifas2 = descricaoServicosTarifas2
-												+ " ";
+										descricaoServicosTarifas2 = descricaoServicosTarifas2 + " ";
 									}
 
 								} else {
@@ -41376,31 +41219,22 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 									if ((colecaoAnoMesReferenciaDebito.size() - 1) <= 2) {
 
 										// mes/ano referencia do credito
-										anoMesReferenciaDebitoString = Util
-												.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
-										descricaoServicosTarifas2 = descricaoServicosTarifas2
-												+ " "
-												+ anoMesReferenciaDebitoString;
+										anoMesReferenciaDebitoString = Util.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
+										descricaoServicosTarifas2 = descricaoServicosTarifas2 + " " + anoMesReferenciaDebitoString;
 										// caso não tenha outro ano mes na
 										// coleção então completa a linha
 										// com o valor
-										if (!iteratorAnoMesReferenciaDebito
-												.hasNext()) {
+										if (!iteratorAnoMesReferenciaDebito.hasNext()) {
 											// valor acumulado do tipo do
 											// débito
-											String valorAcumulado = Util
-													.formatarMoedaReal(valorTotalPrestacoes);
+											String valorAcumulado = Util.formatarMoedaReal(valorTotalPrestacoes);
 											valor2 = valorAcumulado;
 
 											contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-											contaLinhasDescricaoServicosTarifasTotalHelper
-													.setDescricaoServicosTarifas(descricaoServicosTarifas2);
-											contaLinhasDescricaoServicosTarifasTotalHelper
-													.setConsumoFaixa("");
-											contaLinhasDescricaoServicosTarifasTotalHelper
-													.setValor(valor2);
-											colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-													.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+											contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas2);
+											contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa("");
+											contaLinhasDescricaoServicosTarifasTotalHelper.setValor(valor2);
+											colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 										}
 
 									} else {
@@ -41409,30 +41243,21 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 										// então só mostra as 5 maiores
 										if (i < 3) {
 											// mes/ano referencia do débito
-											anoMesReferenciaDebitoString = Util
-													.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
-											descricaoServicosTarifas2 = descricaoServicosTarifas2
-													+ anoMesReferenciaDebitoString
-													+ " ";
+											anoMesReferenciaDebitoString = Util.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
+											descricaoServicosTarifas2 = descricaoServicosTarifas2 + anoMesReferenciaDebitoString + " ";
 										} else {
 											// completa espaços em brancos
-											descricaoServicosTarifas2 = descricaoServicosTarifas2
-													+ " E OUTRAS";
+											descricaoServicosTarifas2 = descricaoServicosTarifas2 + " E OUTRAS";
 											// valor acumulado do tipo do
 											// débito
-											String valorAcumulado = Util
-													.formatarMoedaReal(valorTotalPrestacoes);
+											String valorAcumulado = Util.formatarMoedaReal(valorTotalPrestacoes);
 											valor2 = valorAcumulado;
 
 											contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-											contaLinhasDescricaoServicosTarifasTotalHelper
-													.setDescricaoServicosTarifas(descricaoServicosTarifas2);
-											contaLinhasDescricaoServicosTarifasTotalHelper
-													.setConsumoFaixa("");
-											contaLinhasDescricaoServicosTarifasTotalHelper
-													.setValor(valor2);
-											colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-													.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+											contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas2);
+											contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa("");
+											contaLinhasDescricaoServicosTarifasTotalHelper.setValor(valor2);
+											colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 											break;
 										}
 									}
@@ -41456,103 +41281,47 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 			// caso a coleção dos meses de referência do grupo do
 			// tipo de débito esteja preenchida
-			if (colecaoAnoMesReferenciaDebito != null
-					&& !colecaoAnoMesReferenciaDebito.isEmpty()) {
-				Iterator iteratorAnoMesReferenciaDebito = colecaoAnoMesReferenciaDebito
-						.iterator();
+			if (colecaoAnoMesReferenciaDebito != null && !colecaoAnoMesReferenciaDebito.isEmpty()) {
+				Iterator iteratorAnoMesReferenciaDebito = colecaoAnoMesReferenciaDebito.iterator();
 				int i = 1;
 				while (iteratorAnoMesReferenciaDebito.hasNext()) {
-					Integer anoMesReferenciaDebito = (Integer) iteratorAnoMesReferenciaDebito
-							.next();
+					Integer anoMesReferenciaDebito = (Integer) iteratorAnoMesReferenciaDebito.next();
 					String anoMesReferenciaDebitoString = null;
 					if (i == 1) {
 						// mes/ano referencia do débito
-						anoMesReferenciaDebitoString = Util
-								.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
-						descricaoServicosTarifas2 = descricaoServicosTarifas2
-								+ " " + anoMesReferenciaDebitoString;
+						anoMesReferenciaDebitoString = Util.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
+						descricaoServicosTarifas2 = descricaoServicosTarifas2 + " " + anoMesReferenciaDebitoString;
 
-						// caso exita somente um mes/ano de referencia na
-						// lista
 						if (colecaoAnoMesReferenciaDebito.size() == 1) {
 							// valor acumulado do tipo do débito
-							String valorAcumulado = Util
-									.formatarMoedaReal(valorTotalPrestacoes);
+							String valorAcumulado = Util.formatarMoedaReal(valorTotalPrestacoes);
 							valor2 = valorAcumulado;
 
-							// descricaoServicosTarifas2 =
-							// descricaoServicosTarifas2
-							// + " " + anoMesReferenciaDebitoString;
-
 							contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-							contaLinhasDescricaoServicosTarifasTotalHelper
-									.setDescricaoServicosTarifas(descricaoServicosTarifas2);
-							contaLinhasDescricaoServicosTarifasTotalHelper
-									.setConsumoFaixa("");
-							contaLinhasDescricaoServicosTarifasTotalHelper
-									.setValor(valor2);
-							colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-									.add(contaLinhasDescricaoServicosTarifasTotalHelper);
-						} // else {
-							// completa com espaçoes em branco
-							// contaLinhasDescricaoServicosTarifasTotalHelper =
-							// new
-							// ContaLinhasDescricaoServicosTarifasTotalHelper();
-						// contaLinhasDescricaoServicosTarifasTotalHelper
-						// .setDescricaoServicosTarifas(descricaoServicosTarifas2);
-						// contaLinhasDescricaoServicosTarifasTotalHelper
-						// .setConsumoFaixa("");
-						// contaLinhasDescricaoServicosTarifasTotalHelper
-						// .setValor("");
-						// colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-						// .add(contaLinhasDescricaoServicosTarifasTotalHelper);
-						//
-						// descricaoServicosTarifas2 = "";
-						// String valorAcumulado = Util
-						// .formatarMoedaReal(valorTotalPrestacoes);
-						// valor2 = valorAcumulado;
-						//
-						// contaLinhasDescricaoServicosTarifasTotalHelper = new
-						// ContaLinhasDescricaoServicosTarifasTotalHelper();
-						// contaLinhasDescricaoServicosTarifasTotalHelper
-						// .setDescricaoServicosTarifas(descricaoServicosTarifas2);
-						// contaLinhasDescricaoServicosTarifasTotalHelper
-						// .setConsumoFaixa("");
-						// contaLinhasDescricaoServicosTarifasTotalHelper
-						// .setValor(valor2);
-						// colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-						// .add(contaLinhasDescricaoServicosTarifasTotalHelper);
-						// break;
-						// }
+							contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas2);
+							contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa("");
+							contaLinhasDescricaoServicosTarifasTotalHelper.setValor(valor2);
+							colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+						} 
 					} else {
-						// caso i seja igual a 2 então começa a linha 3 do
-						// subFluxo
 						if (i == 2) {
 							// -- Linha 3 --//
-							// mes/ano referencia do debito
-							anoMesReferenciaDebitoString = Util
-									.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
-							descricaoServicosTarifas2 = descricaoServicosTarifas2
-									+ " " + anoMesReferenciaDebitoString;
+							anoMesReferenciaDebitoString = Util.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
+							descricaoServicosTarifas2 = descricaoServicosTarifas2 + " " + anoMesReferenciaDebitoString;
 
 							// caso exita somente um mes/ano de referencia
 							// na lista
 							if (colecaoAnoMesReferenciaDebito.size() == 2) {
 
 								// valor acumulado do tipo do débito
-								String valorAcumulado = Util
-										.formatarMoedaReal(valorTotalPrestacoes);
+								String valorAcumulado = Util.formatarMoedaReal(valorTotalPrestacoes);
 								valor2 = valorAcumulado;
 
 								contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-								contaLinhasDescricaoServicosTarifasTotalHelper
-										.setDescricaoServicosTarifas(descricaoServicosTarifas2);
-								contaLinhasDescricaoServicosTarifasTotalHelper
-										.setConsumoFaixa("");
-								contaLinhasDescricaoServicosTarifasTotalHelper
-										.setValor(valor2);
-								colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-										.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+								contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas2);
+								contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa("");
+								contaLinhasDescricaoServicosTarifasTotalHelper.setValor(valor2);
+								colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 							}
 						} else {
 							// caso exista até mais 6 ocorrências na lista
@@ -41562,10 +41331,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							if ((colecaoAnoMesReferenciaDebito.size() - 1) <= 2) {
 
 								// mes/ano referencia do credito
-								anoMesReferenciaDebitoString = Util
-										.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
-								descricaoServicosTarifas2 = descricaoServicosTarifas2
-										+ " " + anoMesReferenciaDebitoString;
+								anoMesReferenciaDebitoString = Util.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
+								descricaoServicosTarifas2 = descricaoServicosTarifas2 + " " + anoMesReferenciaDebitoString;
 
 								// caso não tenha outro ano mes na
 								// coleção então completa a linha com o
@@ -41573,19 +41340,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								if (!iteratorAnoMesReferenciaDebito.hasNext()) {
 									// valor acumulado do tipo do
 									// débito
-									String valorAcumulado = Util
-											.formatarMoedaReal(valorTotalPrestacoes);
+									String valorAcumulado = Util.formatarMoedaReal(valorTotalPrestacoes);
 									valor2 = valorAcumulado;
 
 									contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-									contaLinhasDescricaoServicosTarifasTotalHelper
-											.setDescricaoServicosTarifas(descricaoServicosTarifas2);
-									contaLinhasDescricaoServicosTarifasTotalHelper
-											.setConsumoFaixa("");
-									contaLinhasDescricaoServicosTarifasTotalHelper
-											.setValor(valor2);
-									colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-											.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+									contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas2);
+									contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa("");
+									contaLinhasDescricaoServicosTarifasTotalHelper.setValor(valor2);
+									colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 								}
 
 							} else {
@@ -41594,30 +41356,21 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								// então só mostra as 5 maiores
 								if (i < 3) {
 									// mes/ano referencia do débito
-									anoMesReferenciaDebitoString = Util
-											.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
-									descricaoServicosTarifas2 = descricaoServicosTarifas2
-											+ anoMesReferenciaDebitoString
-											+ " ";
+									anoMesReferenciaDebitoString = Util.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
+									descricaoServicosTarifas2 = descricaoServicosTarifas2 + anoMesReferenciaDebitoString + " ";
 								} else {
-									descricaoServicosTarifas2 = descricaoServicosTarifas2
-											+ " E OUTRAS";
+									descricaoServicosTarifas2 = descricaoServicosTarifas2 + " E OUTRAS";
 
 									// valor acumulado do tipo do
 									// débito
-									String valorAcumulado = Util
-											.formatarMoedaReal(valorTotalPrestacoes);
+									String valorAcumulado = Util.formatarMoedaReal(valorTotalPrestacoes);
 									valor2 = valorAcumulado;
 
 									contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-									contaLinhasDescricaoServicosTarifasTotalHelper
-											.setDescricaoServicosTarifas(descricaoServicosTarifas2);
-									contaLinhasDescricaoServicosTarifasTotalHelper
-											.setConsumoFaixa("");
-									contaLinhasDescricaoServicosTarifasTotalHelper
-											.setValor(valor2);
-									colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-											.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+									contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas2);
+									contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa("");
+									contaLinhasDescricaoServicosTarifasTotalHelper.setValor(valor2);
+									colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 									break;
 								}
 							}
@@ -41630,87 +41383,47 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		}
 
-		/**
-		 * TODO : COSANPA Pamela Gatinho - 01/06/2012 Adicionando o calculo do
-		 * rateio
-		 */
-		Imovel imovel = this.getControladorImovel().pesquisarImovel(
-				emitirContaHelper.getIdImovel());
+		Imovel imovel = this.getControladorImovel().pesquisarImovel(emitirContaHelper.getIdImovel());
 
 		if (imovel.isImovelCondominio()) {
 
-			try {
+//			try {
 
-				FaturamentoGrupo faturamentoGrupo = getControladorImovel()
-						.pesquisarGrupoImovel(imovel.getId());
+				FaturamentoGrupo faturamentoGrupo = getControladorImovel().pesquisarGrupoImovel(imovel.getId());
 
-				faturamentoGrupo.setAnoMesReferencia(emitirContaHelper
-						.getAmReferencia());
-				BigDecimal[] valoresRateioAguaEsgotoImovel = this
-						.calcularValorRateioImovel(imovel, faturamentoGrupo);
+				faturamentoGrupo.setAnoMesReferencia(emitirContaHelper.getAmReferencia());
+				//BigDecimal[] valoresRateioAguaEsgotoImovel = this.calcularValorRateioImovel(imovel, faturamentoGrupo);
+
 				// RATEIO DE ÁGUA
-				/*
-				 * BigDecimal valorRateioAgua =
-				 * this.calcularValorRateioImovel(imovel,
-				 * emitirContaHelper.getAnoMesFaturamentoGrupo(),
-				 * LigacaoTipo.LIGACAO_AGUA);
-				 */
-
 				String descricaoServicosTarifas1 = "";
 
 				if (emitirContaHelper.getValorRateioAgua() != null) {
-					// -- Descerição do serviço --//
 					descricaoServicosTarifas1 = "RATEIO DE CONSUMO DE ÁGUA";
 
 					contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-					contaLinhasDescricaoServicosTarifasTotalHelper
-							.setDescricaoServicosTarifas(descricaoServicosTarifas1);
-					contaLinhasDescricaoServicosTarifasTotalHelper
-							.setConsumoFaixa("");
-					// contaLinhasDescricaoServicosTarifasTotalHelper.setValor(Util.formatarMoedaReal(valoresRateioAguaEsgotoImovel[0]));
-					contaLinhasDescricaoServicosTarifasTotalHelper
-							.setValor(Util.formatarMoedaReal(emitirContaHelper
-									.getValorRateioAgua()));
+					contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas1);
+					contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa("");
+					contaLinhasDescricaoServicosTarifasTotalHelper.setValor(Util.formatarMoedaReal(emitirContaHelper.getValorRateioAgua()));
 
-					colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-							.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+					colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 				}
 
 				// RATEIO DE ESGOTO
-				/*
-				 * BigDecimal valorRateioEsgoto = new BigDecimal(0.00);
-				 * 
-				 * if (imovel.getImovelCondominio().getLigacaoEsgotoSituacao().
-				 * getIndicadorFaturamentoSituacao
-				 * ().equals(LigacaoEsgotoSituacao.FATURAMENTO_ATIVO)) {
-				 * valorRateioEsgoto = this.calcularValorRateioImovel(imovel,
-				 * emitirContaHelper.getAnoMesFaturamentoGrupo(),
-				 * LigacaoTipo.LIGACAO_ESGOTO); }
-				 */
-
 				String descricaoServicosTarifas2 = "";
 
 				if (emitirContaHelper.getValorRateioEsgoto() != null) {
-					// -- Descerição do serviço --//
 					descricaoServicosTarifas2 = "RATEIO DE CONSUMO DE ESGOTO";
 
 					contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-					contaLinhasDescricaoServicosTarifasTotalHelper
-							.setDescricaoServicosTarifas(descricaoServicosTarifas2);
-					contaLinhasDescricaoServicosTarifasTotalHelper
-							.setConsumoFaixa("");
-					// contaLinhasDescricaoServicosTarifasTotalHelper.setValor(Util.formatarMoedaReal(valoresRateioAguaEsgotoImovel[1]));
-					contaLinhasDescricaoServicosTarifasTotalHelper
-							.setValor(Util.formatarMoedaReal(emitirContaHelper
-									.getValorRateioEsgoto()));
+					contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas2);
+					contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa("");
+					contaLinhasDescricaoServicosTarifasTotalHelper.setValor(Util.formatarMoedaReal(emitirContaHelper.getValorRateioEsgoto()));
 
-					colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-							.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+					colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 				}
-			} catch (ErroRepositorioException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			} catch (ErroRepositorioException e) {
+//				e.printStackTrace();
+//			}
 		}
 
 		return colecaoContaLinhasDescricaoServicosTarifasTotalHelper;
@@ -76406,6 +76119,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		}
 
+		System.out.println("Valor rateio água: " + valoresAguaEsgotoContaRateio[0]);
+		System.out.println("Valor rateio esgoto: " + valoresAguaEsgotoContaRateio[1]);
 		valoresAguaEsgotoRateioPorEconomia[0] = valorAguaRateioPorEconomia;
 		valoresAguaEsgotoRateioPorEconomia[1] = valorEsgotoRateioPorEconomia;
 
@@ -76430,38 +76145,30 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * 
 	 * @throws ControladorException
 	 */
-	private BigDecimal[] calcularValorAguaEsgotoParaRateio(
-			Imovel imovelCondominio, int consumoAguaASerRateado,
-			int consumoEsgotoASerRateado, FaturamentoGrupo faturamentoGrupo)
-			throws ControladorException {
+	private BigDecimal[] calcularValorAguaEsgotoParaRateio(Imovel imovelCondominio, int consumoAguaASerRateado, int consumoEsgotoASerRateado, 
+			FaturamentoGrupo faturamentoGrupo) throws ControladorException {
 
 		LigacaoTipo ligacaoTipo = new LigacaoTipo();
 
-		Collection colecaoCategoriaOUSubcategoria = getControladorImovel()
-				.obterQuantidadeEconomiasCategoria(imovelCondominio);
+		Collection colecaoCategoriaOUSubcategoria = getControladorImovel().obterQuantidadeEconomiasCategoria(imovelCondominio);
 
 		BigDecimal[] valoresContaRateio = new BigDecimal[2];
 		valoresContaRateio[0] = new BigDecimal("0.00");
 		valoresContaRateio[1] = new BigDecimal("0.00");
 
-		SistemaParametro sistemaParametro = getControladorUtil()
-				.pesquisarParametrosDoSistema();
+		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
 		DeterminarValoresFaturamentoAguaEsgotoHelper helperValoresAguaEsgoto = new DeterminarValoresFaturamentoAguaEsgotoHelper();
 
-		Collection colecaoCategorias = getControladorImovel()
-				.obterColecaoCategoriaOuSubcategoriaDoImovel(imovelCondominio);
+		Collection colecaoCategorias = getControladorImovel().obterColecaoCategoriaOuSubcategoriaDoImovel(imovelCondominio);
 
-		int consumoMinimoLigacao = this.getControladorMicromedicao()
-				.obterConsumoMinimoLigacao(imovelCondominio, null);
+		int consumoMinimoLigacao = this.getControladorMicromedicao().obterConsumoMinimoLigacao(imovelCondominio, null);
 
-		if (consumoAguaASerRateado > 0
-				&& consumoAguaASerRateado <= consumoMinimoLigacao) {
+		if (consumoAguaASerRateado > 0 && consumoAguaASerRateado <= consumoMinimoLigacao) {
 			consumoAguaASerRateado = consumoMinimoLigacao;
 		}
 
-		if (consumoEsgotoASerRateado > 0
-				&& consumoEsgotoASerRateado <= consumoMinimoLigacao) {
+		if (consumoEsgotoASerRateado > 0 && consumoEsgotoASerRateado <= consumoMinimoLigacao) {
 			consumoEsgotoASerRateado = consumoMinimoLigacao;
 		}
 
@@ -76471,13 +76178,10 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// Consultando o consumoHistorico de ÁGUA
 			ligacaoTipo.setId(LigacaoTipo.LIGACAO_AGUA);
 
-			consumoHistoricoAgua = this.getControladorMicromedicao()
-					.obterConsumoHistoricoMedicaoIndividualizada(
-							imovelCondominio, ligacaoTipo,
-							faturamentoGrupo.getAnoMesReferencia());
+			consumoHistoricoAgua = this.getControladorMicromedicao().obterConsumoHistoricoMedicaoIndividualizada(imovelCondominio, ligacaoTipo,
+					faturamentoGrupo.getAnoMesReferencia());
 
-			consumoHistoricoAgua
-					.setNumeroConsumoFaturadoMes(consumoAguaASerRateado);
+			consumoHistoricoAgua.setNumeroConsumoFaturadoMes(consumoAguaASerRateado);
 
 		}
 
@@ -76487,56 +76191,30 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// Consultando o consumoHistorico de ESGOTO
 			ligacaoTipo.setId(LigacaoTipo.LIGACAO_ESGOTO);
 
-			consumoHistoricoEsgoto = this.getControladorMicromedicao()
-					.obterConsumoHistoricoMedicaoIndividualizada(
-							imovelCondominio, ligacaoTipo,
-							faturamentoGrupo.getAnoMesReferencia());
+			consumoHistoricoEsgoto = this.getControladorMicromedicao().obterConsumoHistoricoMedicaoIndividualizada(imovelCondominio, ligacaoTipo,
+					faturamentoGrupo.getAnoMesReferencia());
 
-			consumoHistoricoEsgoto
-					.setNumeroConsumoFaturadoMes(consumoEsgotoASerRateado);
+			consumoHistoricoEsgoto.setNumeroConsumoFaturadoMes(consumoEsgotoASerRateado);
 
 		}
 
-		helperValoresAguaEsgoto = this.determinarValoresFaturamentoAguaEsgoto(
-				imovelCondominio, faturamentoGrupo.getAnoMesReferencia(),
-				colecaoCategoriaOUSubcategoria, faturamentoGrupo,
-				consumoHistoricoAgua, consumoHistoricoEsgoto);
+		helperValoresAguaEsgoto = this.determinarValoresFaturamentoAguaEsgoto(imovelCondominio, faturamentoGrupo.getAnoMesReferencia(),
+				colecaoCategoriaOUSubcategoria, faturamentoGrupo, consumoHistoricoAgua, consumoHistoricoEsgoto);
 
-		if (consumoAguaASerRateado > 0
-				&& helperValoresAguaEsgoto.getValorTotalAgua() != null) {
+		if (consumoAguaASerRateado > 0 && helperValoresAguaEsgoto.getValorTotalAgua() != null) {
 			valoresContaRateio[0] = helperValoresAguaEsgoto.getValorTotalAgua();
 		}
 
-		if (consumoEsgotoASerRateado > 0
-				&& helperValoresAguaEsgoto.getValorTotalEsgoto() != null) {
-			valoresContaRateio[1] = helperValoresAguaEsgoto
-					.getValorTotalEsgoto();
+		if (consumoEsgotoASerRateado > 0 && helperValoresAguaEsgoto.getValorTotalEsgoto() != null) {
+			valoresContaRateio[1] = helperValoresAguaEsgoto.getValorTotalEsgoto();
 		}
 
-		System.out.println("Valor agua: "
-				+ helperValoresAguaEsgoto.getValorTotalAgua());
-		System.out.println("Valor esgoto: "
-				+ helperValoresAguaEsgoto.getValorTotalEsgoto());
+		System.out.println("Valor agua: " + helperValoresAguaEsgoto.getValorTotalAgua());
+		System.out.println("Valor esgoto: " + helperValoresAguaEsgoto.getValorTotalEsgoto());
 
 		return valoresContaRateio;
 	}
 
-	/**
-	 * TODO : COSANPA
-	 * 
-	 * Pamela Gatinho - 04/06/2012
-	 * 
-	 * Método para calcular o consumo de rateio de um imóvel, para o mês de
-	 * faturamento atual.
-	 * 
-	 * @param imovel
-	 * @param anoMesFaturamento
-	 * 
-	 * @return valorRateioImovel
-	 * 
-	 * @throws ControladorException
-	 * @throws ErroRepositorioException
-	 */
 	public BigDecimal[] calcularValorRateioImovel(Imovel imovel, FaturamentoGrupo faturamentoGrupo) throws ControladorException, ErroRepositorioException {
 
 		BigDecimal valorRateioImovelAgua = ConstantesSistema.VALOR_ZERO;
