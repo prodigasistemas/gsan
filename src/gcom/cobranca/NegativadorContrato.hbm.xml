@@ -34,6 +34,7 @@
 		<property name="numeroTamanhoRegistroMovimento" type="int" column="ngcn_nntamregmovimento" not-null="true" length="4"/>
 		<property name="numeroPrazoInclusao" type="short" column="ngcn_nnprazoinclusao" not-null="true" length="2"/>
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="ngcn_tmultimaalteracao" not-null="true" length="8"/>
+		<property name="indicadorControleNsaRetorno" type="short" column="ngcn_iccontrolensaretorno" length="2"  not-null="true" />
 		<!-- Associations -->
 		<!-- bi-directional many-to-one association to Negativador -->
 		<many-to-one name="negativador" class="gcom.cobranca.Negativador" not-null="true">
