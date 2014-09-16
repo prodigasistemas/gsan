@@ -954,6 +954,17 @@ public interface IRepositorioFaturamento {
 			Collection idsImovel, Date dataVencimentoContaInicio,
 			Date dataVencimentoContaFim, Integer anoMesFim,
 			String indicadorContaPaga) throws ErroRepositorioException;
+	
+	@SuppressWarnings("rawtypes")
+	public Collection pesquisarContasImoveis(Collection idsImovel, Integer anoMes, Date dataVencimentoContaInicio,
+			Date dataVencimentoContaFim, Integer anoMesFim, String indicadorContaPaga, Date dataVencimentoInformada,
+			boolean isDebitoEmConta) throws ErroRepositorioException;
+	
+	@SuppressWarnings("rawtypes")
+	public Collection pesquisarContasImoveis(Collection idsImovel,
+			Integer anoMes, Date dataVencimentoContaInicio,
+			Date dataVencimentoContaFim, Integer anoMesFim,
+			String indicadorContaPaga, Date dataVencimentoInformada) throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection obterContasImoveis(Integer anoMes, Collection idsImovel,
@@ -1051,6 +1062,13 @@ public interface IRepositorioFaturamento {
 			Short relacaoTipo, Integer anoMes, Date dataVencimentoContaInicio,
 			Date dataVencimentoContaFim, Integer anoMesFim,
 			Integer codigoClienteSuperior) throws ErroRepositorioException;
+	
+	@SuppressWarnings("rawtypes")
+	public Collection pesquisarContasCliente(Integer codigoCliente,
+			Short relacaoTipo, Integer anoMes, Date dataVencimentoContaInicio,
+			Date dataVencimentoContaFim, Integer anoMesFim,
+			Integer codigoClienteSuperior, Date dataVencimentoInformada,
+			boolean isDebitoAutomatico) throws ErroRepositorioException;
 
 	@SuppressWarnings("rawtypes")
 	public Collection obterContasCliente(Integer codigoCliente,

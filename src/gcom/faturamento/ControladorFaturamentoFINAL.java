@@ -11774,13 +11774,11 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						contaColecao.setDataVencimentoConta(dataVencimento);
 
 						// Data de validade
-						Date dataValidadeConta = this
-								.retornaDataValidadeConta(dataVencimento);
+						Date dataValidadeConta = this.retornaDataValidadeConta(dataVencimento);
 						contaColecao.setDataValidadeConta(dataValidadeConta);
 
 						// Indicador de alteração de vencimento da conta
-						contaColecao
-								.setIndicadorAlteracaoVencimento(Conta.INDICADOR_ALTERACAO_VENCIMENTO_ATIVO);
+						contaColecao.setIndicadorAlteracaoVencimento(Conta.INDICADOR_ALTERACAO_VENCIMENTO_ATIVO);
 
 						// Última alteraçao
 						contaColecao.setUltimaAlteracao(new Date());
@@ -11796,9 +11794,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						Integer numeroAlteracoesVencimento = 0;
 						try {
 
-							numeroAlteracoesVencimento = this.repositorioFaturamento
-									.obterQuantidadeAlteracoesVencimentoConta(contaColecao
-											.getId());
+							numeroAlteracoesVencimento = this.repositorioFaturamento.obterQuantidadeAlteracoesVencimentoConta(contaColecao.getId());
 						} catch (ErroRepositorioException ex) {
 							sessionContext.setRollbackOnly();
 							new ControladorException("erro.sistema", ex);
@@ -11809,20 +11805,16 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						}
 						numeroAlteracoesVencimento = numeroAlteracoesVencimento + 1;
 
-						contaColecao
-								.setNumeroAlteracoesVencimento(numeroAlteracoesVencimento);
+						contaColecao.setNumeroAlteracoesVencimento(numeroAlteracoesVencimento);
 						// ----------------------------------------------------------------------------------------
 
 						// Verificar atualização realizada por outro usuário
-						if ((contaNaBase.getUltimaAlteracao()
-								.after(contaColecao.getUltimaAlteracao()))) {
+						if ((contaNaBase.getUltimaAlteracao().after(contaColecao.getUltimaAlteracao()))) {
 							sessionContext.setRollbackOnly();
-							throw new ControladorException(
-									"erro.atualizacao.timestamp");
+							throw new ControladorException("erro.atualizacao.timestamp");
 						}
 
-						atualizarColecaoComRegistrarTransacao(contaColecao,
-								usuarioLogado);
+						atualizarColecaoComRegistrarTransacao(contaColecao, usuarioLogado);
 
 					}
 				}
@@ -11841,9 +11833,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				Integer numeroAlteracoesVencimento = 0;
 				try {
 
-					numeroAlteracoesVencimento = this.repositorioFaturamento
-							.obterQuantidadeAlteracoesVencimentoConta(contaColecao
-									.getId());
+					numeroAlteracoesVencimento = this.repositorioFaturamento.obterQuantidadeAlteracoesVencimentoConta(contaColecao.getId());
 				} catch (ErroRepositorioException ex) {
 					sessionContext.setRollbackOnly();
 					new ControladorException("erro.sistema", ex);
@@ -11854,49 +11844,39 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				}
 				numeroAlteracoesVencimento = numeroAlteracoesVencimento + 1;
 
-				contaColecao
-						.setNumeroAlteracoesVencimento(numeroAlteracoesVencimento);
+				contaColecao.setNumeroAlteracoesVencimento(numeroAlteracoesVencimento);
 				// ----------------------------------------------------------------------------------------
 
 				// Data de validade
-				Date dataValidadeConta = this
-						.retornaDataValidadeConta(dataVencimento);
+				Date dataValidadeConta = this.retornaDataValidadeConta(dataVencimento);
 				contaColecao.setDataValidadeConta(dataValidadeConta);
 
 				// Indicador de alteração de vencimento da conta
-				contaColecao
-						.setIndicadorAlteracaoVencimento(Conta.INDICADOR_ALTERACAO_VENCIMENTO_ATIVO);
+				contaColecao.setIndicadorAlteracaoVencimento(Conta.INDICADOR_ALTERACAO_VENCIMENTO_ATIVO);
 
 				// Última alteraçao
 				contaColecao.setUltimaAlteracao(new Date());
 
 				// Verificar atualização realizada por outro usuário
-				if ((contaNaBase.getUltimaAlteracao().after(contaColecao
-						.getUltimaAlteracao()))) {
+				if ((contaNaBase.getUltimaAlteracao().after(contaColecao.getUltimaAlteracao()))) {
 					sessionContext.setRollbackOnly();
 					throw new ControladorException("erro.atualizacao.timestamp");
 				}
 
-				atualizarColecaoComRegistrarTransacao(contaColecao,
-						usuarioLogado);
+				atualizarColecaoComRegistrarTransacao(contaColecao, usuarioLogado);
 
 			}
 		}
 	}
 
-	public void atualizarColecaoComRegistrarTransacao(Conta contaColecao,
-			Usuario usuarioLogado) throws ControladorException {
+	public void atualizarColecaoComRegistrarTransacao(Conta contaColecao, Usuario usuarioLogado) throws ControladorException {
 		// ------------ <REGISTRAR TRANSAÇÃO>----------------------------
 
 		RegistradorOperacao registradorOperacao = null;
 		if (usuarioLogado != null) {
-			registradorOperacao = new RegistradorOperacao(
-					Operacao.OPERACAO_ALTERAR_VENCIMENTO_CONTA,
-					contaColecao.getImovel() != null ? contaColecao.getImovel()
-							.getId() : contaColecao.getId(),
-					contaColecao.getId(), new UsuarioAcaoUsuarioHelper(
-							usuarioLogado,
-							UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+			registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_ALTERAR_VENCIMENTO_CONTA,
+					contaColecao.getImovel() != null ? contaColecao.getImovel().getId() : contaColecao.getId(), contaColecao.getId(),
+					new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 
 			registradorOperacao.registrarOperacao(contaColecao);
 
@@ -46059,6 +46039,17 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		}
 	}
+	
+	public void alterarVencimentoConjuntoConta(Collection colecaoImovel,
+			Date dataVencimentoInformada, Integer anoMes,
+			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
+			Integer anoMesFim, Usuario usuario, String indicadorContaPaga,
+			String[] bancos) throws ControladorException {
+		
+		alterarVencimentoConjuntoConta(colecaoImovel, dataVencimentoInformada, anoMes, dataVencimentoContaInicio, dataVencimentoContaFim,
+				anoMesFim, usuario, indicadorContaPaga, bancos, false);
+		
+	}
 
 	/**
 	 * Alterar Vencimento do Conjunto de Conta
@@ -46074,7 +46065,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			Date dataVencimentoInformada, Integer anoMes,
 			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
 			Integer anoMesFim, Usuario usuario, String indicadorContaPaga,
-			String[] bancos) throws ControladorException {
+			String[] bancos, boolean isDebitoAutomatico) throws ControladorException {
 
 		Collection colecaoContasManutencao = new ArrayList();
 		Collection colecaoConta = new ArrayList();
@@ -46111,12 +46102,9 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 				i = i + cont;
 				try {
-					colecaoContasManutencao = repositorioFaturamento
-							.pesquisarContasImoveis(anoMes, colecao,
-									dataVencimentoContaInicio,
-									dataVencimentoContaFim, anoMesFim,
-									indicadorContaPaga);
-
+					colecaoContasManutencao = repositorioFaturamento.pesquisarContasImoveis(colecao, anoMes, dataVencimentoContaInicio,
+							dataVencimentoContaFim, anoMesFim, indicadorContaPaga, dataVencimentoInformada, isDebitoAutomatico);
+					
 					/**
 					 * [UC0407] Filtrar Imóveis para Inserir ou Manter Conta 3.
 					 * Caso o indicador de bloqueio de contas vinculadas a
@@ -46128,13 +46116,9 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					 * por: Mariana Victor Data: 15/07/2011
 					 * 
 					 * */
-					if (sistemaParametro
-							.getIndicadorBloqueioContasContratoParcelManterConta() != null
-							&& sistemaParametro
-									.getIndicadorBloqueioContasContratoParcelManterConta()
-									.equals(ConstantesSistema.SIM)) {
-						colecaoContasManutencao = this
-								.obterColecaoSemContasEmContratoParcelamentoRetificarConjuntoContasIds(colecaoContasManutencao);
+					if (sistemaParametro.getIndicadorBloqueioContasContratoParcelManterConta() != null
+							&& sistemaParametro.getIndicadorBloqueioContasContratoParcelManterConta().equals(ConstantesSistema.SIM)) {
+						colecaoContasManutencao = this.obterColecaoSemContasEmContratoParcelamentoRetificarConjuntoContasIds(colecaoContasManutencao);
 					}
 					/**
 					 * FIM DA ALTERAÇÂO
@@ -49412,25 +49396,21 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @param dataVencimento
 	 * @throws ControladorException
 	 */
-	public void alterarVencimentoConjuntoContaCliente(Integer codigoCliente,
-			Short relacaoTipo, Date dataVencimentoInformada, Integer anoMes,
-			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
-			Integer anoMesFim, Usuario usuario, Integer codigoClienteSuperior)
-			throws ControladorException {
+	public void alterarVencimentoConjuntoContaCliente(Integer codigoCliente, Short relacaoTipo, Date dataVencimentoInformada,
+			Integer anoMes, Date dataVencimentoContaInicio, Date dataVencimentoContaFim, Integer anoMesFim, Usuario usuario,
+			Integer codigoClienteSuperior, boolean isDebitoAutomatico) throws ControladorException {
 
 		Collection colecaoConta = new ArrayList();
 		Collection colecaoContasManutencao = new ArrayList();
 
 		// PARÂMETROS DO SISTEMA
-		SistemaParametro sistemaParametro = this.getControladorUtil()
-				.pesquisarParametrosDoSistema();
+		SistemaParametro sistemaParametro = this.getControladorUtil().pesquisarParametrosDoSistema();
 
 		try {
-			colecaoContasManutencao = repositorioFaturamento
-					.pesquisarContasCliente(codigoCliente, relacaoTipo, anoMes,
-							dataVencimentoContaInicio, dataVencimentoContaFim,
-							anoMesFim, codigoClienteSuperior);
-
+			colecaoContasManutencao = repositorioFaturamento.pesquisarContasCliente(codigoCliente, relacaoTipo, anoMes,
+					dataVencimentoContaInicio, dataVencimentoContaFim, anoMesFim, codigoClienteSuperior, dataVencimentoInformada,
+					isDebitoAutomatico);
+			
 			/**
 			 * [UC0407] Filtrar Imóveis para Inserir ou Manter Conta 3. Caso o
 			 * indicador de bloqueio de contas vinculadas a contrato de
@@ -59589,9 +59569,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		try {
 
-			Date dataValidade = this
-					.retornaDataValidadeConta(dataVencimentoInformada);
-
+			Date dataValidade = this.retornaDataValidadeConta(dataVencimentoInformada);
+			
 			repositorioFaturamento.alterarVencimentoContaGrupoFaturamento(
 					dataVencimentoInformada, dataValidade,
 					Conta.INDICADOR_ALTERACAO_VENCIMENTO_ATIVO,
@@ -75239,15 +75218,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		try {
 
-			if (colecaoContasManutencao != null
-					&& !colecaoContasManutencao.isEmpty()) {
+			if (colecaoContasManutencao != null && !colecaoContasManutencao.isEmpty()) {
 				Iterator iterator = colecaoContasManutencao.iterator();
 
 				while (iterator.hasNext()) {
 					Object[] contaArray = (Object[]) iterator.next();
 
-					if (!repositorioCobranca
-							.verificaContaVinculadaAContratoParcelAtivo((Integer) contaArray[0])) {
+					if (!repositorioCobranca.verificaContaVinculadaAContratoParcelAtivo((Integer) contaArray[0])) {
 						retorno.add(contaArray);
 					}
 				}

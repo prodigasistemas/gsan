@@ -21420,10 +21420,18 @@ public class Fachada {
 	@SuppressWarnings("rawtypes")
 	public void alterarVencimentoConjuntoConta(Collection colecaoImovel, Date dataVencimento, Integer anoMes, Date dataVencimentoContaInicio,
 			Date dataVencimentoContaFim, Integer anoMesFim, Usuario usuario, String indicadorContaPaga, String[] bancos) {
+		
+		this.alterarVencimentoConjuntoConta(colecaoImovel, dataVencimento, anoMes, dataVencimentoContaInicio, dataVencimentoContaFim,
+				anoMesFim, usuario, indicadorContaPaga, bancos, false);
+	}
+	
+	public void alterarVencimentoConjuntoConta(Collection colecaoImovel, Date dataVencimento, Integer anoMes, Date dataVencimentoContaInicio,
+			Date dataVencimentoContaFim, Integer anoMesFim, Usuario usuario, String indicadorContaPaga, String[] bancos,
+			boolean isDebitoAutomatico ) {
 
 		this.enviarMensagemControladorBatch(MetodosBatch.ALTERAR_VENCIMENTO_CONJUNTO_CONTA_COLECAO, ConstantesJNDI.QUEUE_CONTROLADOR_FATURAMENTO_MDB,
 				new Object[] { colecaoImovel, dataVencimento, anoMes, dataVencimentoContaInicio, dataVencimentoContaFim, anoMesFim, usuario,
-						indicadorContaPaga, bancos });
+						indicadorContaPaga, bancos, isDebitoAutomatico });
 	}
 
 	/**
@@ -22204,11 +22212,12 @@ public class Fachada {
 	 * @throws ControladorException
 	 */
 	public void alterarVencimentoConjuntoContaCliente(Integer codigoCliente, Short relacaoTipo, Date dataVencimento, Integer anoMes,
-			Date dataVencimentoContaInicio, Date dataVencimentoContaFim, Integer anoMesFim, Usuario usuario, Integer codigoClienteSuperior) {
+			Date dataVencimentoContaInicio, Date dataVencimentoContaFim, Integer anoMesFim, Usuario usuario, Integer codigoClienteSuperior,
+			boolean isDebitoAutomatico) {
 
-		this.enviarMensagemControladorBatch(MetodosBatch.ALTERAR_VENCIMENTO_CONJUNTO_CONTA_CLIENTE, ConstantesJNDI.QUEUE_CONTROLADOR_FATURAMENTO_MDB,
-				new Object[] { codigoCliente, relacaoTipo, dataVencimento, anoMes, dataVencimentoContaInicio, dataVencimentoContaFim, anoMesFim, usuario,
-						codigoClienteSuperior });
+		this.enviarMensagemControladorBatch(MetodosBatch.ALTERAR_VENCIMENTO_CONJUNTO_CONTA_CLIENTE,
+				ConstantesJNDI.QUEUE_CONTROLADOR_FATURAMENTO_MDB, new Object[] { codigoCliente, relacaoTipo, dataVencimento, anoMes,
+						dataVencimentoContaInicio, dataVencimentoContaFim, anoMesFim, usuario, codigoClienteSuperior, isDebitoAutomatico });
 
 	}
 
