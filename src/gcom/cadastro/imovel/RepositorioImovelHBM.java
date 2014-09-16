@@ -31343,6 +31343,26 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
         } finally {
                 HibernateUtil.closeSession(session);
         }
-        
-}
+	}
+	
+	public ImovelCobrancaSituacao obterImovelCobrancaSituacao(Integer idImovelSituacaoCobranca) throws ErroRepositorioException {
+		ImovelCobrancaSituacao retorno = null;
+		Session session = HibernateUtil.getSession();
+		String consulta;
+
+		try {
+			consulta = "select iscb "
+					+ "from ImovelCobrancaSituacao iscb "
+					+ "where iscb.id = :idImovelSituacaoCobranca ";
+
+			retorno = (ImovelCobrancaSituacao) session.createQuery(consulta)
+					.setInteger("idImovelSituacaoCobranca", idImovelSituacaoCobranca)
+					.setMaxResults(1).uniqueResult();
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+		return retorno;
+	}
 }

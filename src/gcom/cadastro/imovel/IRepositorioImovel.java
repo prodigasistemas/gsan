@@ -5,7 +5,6 @@ import gcom.arrecadacao.pagamento.PagamentoHistorico;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
-import gcom.atualizacaocadastral.ImovelRetorno;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.FiltroClienteImovel;
@@ -40,12 +39,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-/**
- * < <Descrição da Interface>>
- * 
- * @author Administrador
- * @created 16 de Junho de 2004
- */
 public interface IRepositorioImovel {
 
 	/**
@@ -3211,4 +3204,6 @@ public interface IRepositorioImovel {
 	public Logradouro pesquisarLogradouro(Integer codigoLogradouro) throws ErroRepositorioException;
 	
 	public Integer pesquisarLogradouroImovelAtualizacaoCadastral(Integer matriculaImovel) throws ErroRepositorioException;
+	
+	public ImovelCobrancaSituacao obterImovelCobrancaSituacao(Integer idImovelSituacaoCobranca) throws ErroRepositorioException;
 }

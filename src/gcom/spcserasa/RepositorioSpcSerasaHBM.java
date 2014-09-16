@@ -2838,42 +2838,31 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 		return retorno;
 	}
 
-	/**
-	 * Consulta todos os contratos em vigencia de um negativador
-	 *
-	 * @author Thiago Toscano
-	 * @date 26/12/2007
-	 *
-	 * @param negativador
-	 * @return
-	 * @throws ErroRepositorioException
-	 */	
 	public NegativadorContrato consultarNegativadorContratoVigente(Integer negativador) throws ErroRepositorioException {
-		NegativadorContrato retorno;
+		NegativadorContrato retorno = null;
 		Session session = HibernateUtil.getSession();
-		String hql = null;
+		
 		try {
+			String consulta = " select nc"
+					+ " from gcom.cobranca.NegativadorContrato nc"
+					+ " inner join fetch nc.negativador negativador"
+					+ " where(nc.dataContratoEncerramento is null or "
+					+ "	nc.dataContratoFim >= :data) and "
+					+ "	negativador.id = :negativador ";
 
-			//String data1 = Util.recuperaDataInvertida(new Date());
+			List colecao = session.createQuery(consulta)
+					.setDate("data", new Date())
+					.setInteger("negativador", negativador)
+					.setMaxResults(1).list();
 
-				hql =  " select nc" 
-					 + " from gcom.cobranca.NegativadorContrato nc" 
-					 + " inner join fetch nc.negativador negativador" 
-					 + " where(nc.dataContratoEncerramento is null or "
-					 + "	nc.dataContratoFim >= :data) and "
-					 + "	negativador.id = :negativador ";
-
-			List coll = session.createQuery(hql).setDate("data", new Date()).setInteger("negativador", negativador).setMaxResults(1).list();
-			
-			retorno = (NegativadorContrato) coll.iterator().next();
-
+			if (colecao != null && !colecao.isEmpty())
+				retorno = (NegativadorContrato) colecao.iterator().next();
 		} catch (HibernateException e) {
-			throw new ErroRepositorioException(e,
-					"Erro no Hibernate getImovelCindicao");
+			throw new ErroRepositorioException(e, "Erro no Hibernate getImovelCindicao");
 		} finally {
 			HibernateUtil.closeSession(session);
 		}
-		return retorno;		
+		return retorno;
 	}
 
 	/**
@@ -9092,38 +9081,31 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 	 * @author Yara Taciane
 	 * @date 17/03/2008
 	 */
-	public ImovelCobrancaSituacao getImovelCobrancaSituacao(Imovel imovel, CobrancaSituacao cobrancaSituacao) throws ErroRepositorioException {
+	public ImovelCobrancaSituacao getImovelCobrancaSituacao(Imovel imovel,
+			CobrancaSituacao cobrancaSituacao, Integer idCliente) throws ErroRepositorioException {
 
 		ImovelCobrancaSituacao retorno = null;
 		Session session = HibernateUtil.getSession();
-		
+
 		try {
-			
 			String hql = " select ics"
-				 + " from gcom.cadastro.imovel.ImovelCobrancaSituacao ics"
-				 + " inner join fetch ics.imovel as imov " 
-				 + " inner join fetch ics.cobrancaSituacao as cbst " 
-				 + " where ics.imovel.id = " + imovel.getId()	
-				 + " and ics.dataRetiradaCobranca is null "
-				 + " and ics.cobrancaSituacao.id = " + cobrancaSituacao.getId()
-				 + " ";
-			
-			
-			retorno = (ImovelCobrancaSituacao) session.createQuery(hql).uniqueResult();
-		
+					+ " from gcom.cadastro.imovel.ImovelCobrancaSituacao ics" 
+					+ " inner join fetch ics.imovel as imov "
+					+ " inner join fetch ics.cobrancaSituacao as cbst " 
+					+ " where ics.imovel.id = " + imovel.getId() 
+					+ " and ics.dataRetiradaCobranca is null "
+					+ " and ics.cobrancaSituacao.id = " + cobrancaSituacao.getId() 
+					+ " and ics.cliente.id = :idCliente";
+
+			retorno = (ImovelCobrancaSituacao) session.createQuery(hql).setInteger("idCliente", idCliente).uniqueResult();
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
 		return retorno;
 	}
-
-	
-	
 	
 	/**
 	 *
@@ -16789,6 +16771,33 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 
 			if (pesquisar != null && !pesquisar.equals("")) {
 				retorno = true;
+			}
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+	
+	public List consultarImovelCobrancaSituacaoAtual(Integer codigoImovel, Integer codigoCobrancaSituacao, Integer idCliente) throws ErroRepositorioException {
+
+		List retorno = new ArrayList();
+		Session session = HibernateUtil.getSession();
+
+		try {
+			String hql = " select ics.id "
+					+ " from gcom.cadastro.imovel.ImovelCobrancaSituacao ics"
+					+ " where ics.imovel.id = " + codigoImovel
+					+ " and ics.dataRetiradaCobranca is null "
+					+ " and ics.cobrancaSituacao.id = " + codigoCobrancaSituacao + " ";
+
+			if (idCliente != null) {
+				hql = hql + " and ics.cliente.id = :idCliente ";
+				retorno = (List) session.createQuery(hql).setInteger("idCliente", idCliente).list();
+			} else {
+				retorno = (List) session.createQuery(hql).list();
 			}
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
