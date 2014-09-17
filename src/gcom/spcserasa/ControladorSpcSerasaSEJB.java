@@ -9730,7 +9730,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 		return registroTrailler;
 	}
 
-	public StringBuilder geraRegistroTipoTraillerSERASA(int quantidadeRegistros) throws ControladorException,
+	public StringBuilder geraRegistroTipoTraillerSERASA(Integer numeroRegistro) throws ControladorException,
 			ErroRepositorioException {
 
 		StringBuilder registroTrailler = new StringBuilder();
@@ -9741,8 +9741,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 		// T.04
 		registroTrailler.append(Util.completaString(" ", 60));
 		// T.05
-		quantidadeRegistros += 1;
-		registroTrailler.append(Util.adicionarZerosEsquedaNumero(7, "" + quantidadeRegistros));
+		registroTrailler.append(Util.adicionarZerosEsquedaNumero(7, numeroRegistro.toString()));
 
 		return registroTrailler;
 	}
@@ -10589,13 +10588,10 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 	public void gerarArquivoNegativacao(Integer idComando, Integer idMovimento, Integer idNegativador,
 			NegativadorMovimento negativadorMovimento, boolean trailler) throws ControladorException {
 		
-		StringBuffer registroLinha = new StringBuffer();
-
 		try {
-			Integer numeroRegistro = 1;
-			
-			registroLinha = this.gerarRegistroHeaderArquivoNegativacao(idMovimento, registroLinha);
+			StringBuffer registroLinha = this.gerarRegistroHeaderArquivoNegativacao(idMovimento);
 
+			Integer numeroRegistro = 1;
 			Object[] dados = this.gerarRegistroDetalheArquivoNegativacao(idMovimento, registroLinha, numeroRegistro);
 			numeroRegistro = (Integer) dados[0] + 1;
 			registroLinha = (StringBuffer) dados[1];
@@ -10707,10 +10703,12 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 		return dados;
 	}
 
-	private StringBuffer gerarRegistroHeaderArquivoNegativacao(Integer idMovimento, StringBuffer registroLinha) throws ErroRepositorioException {
+	private StringBuffer gerarRegistroHeaderArquivoNegativacao(Integer idMovimento) throws ErroRepositorioException {
 		Collection colecaoRegistroHeader = repositorioSpcSerasa.consultarNegativadorMovimentoRegistroParaGerarArquivo(
 				idMovimento, NegativadorRegistroTipo.TIPO_HEADER);
 
+		StringBuffer registroLinha = new StringBuffer();
+		
 		if (colecaoRegistroHeader != null && !colecaoRegistroHeader.isEmpty()) {
 			NegativadorMovimentoReg negativadorMovimentoReg = (NegativadorMovimentoReg) colecaoRegistroHeader.iterator().next();
 
