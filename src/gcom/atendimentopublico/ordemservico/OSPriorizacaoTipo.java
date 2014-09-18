@@ -56,19 +56,19 @@ public class OSPriorizacaoTipo extends ObjetoTransacao {
 
 	@Override
 	public Date getUltimaAlteracao() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public void setUltimaAlteracao(Date ultimaAlteracao) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	@Override
 	public Filtro retornaFiltro() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

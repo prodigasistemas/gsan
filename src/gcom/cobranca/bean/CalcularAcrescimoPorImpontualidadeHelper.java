@@ -51,7 +51,7 @@ public class CalcularAcrescimoPorImpontualidadeHelper {
 	 */
 	public CalcularAcrescimoPorImpontualidadeHelper(BigDecimal valorMulta, BigDecimal valorJurosMora, BigDecimal valorAtualizacaoMonetaria) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.valorMulta = valorMulta;
 		this.valorJurosMora = valorJurosMora;
 		this.valorAtualizacaoMonetaria = valorAtualizacaoMonetaria;

@@ -3032,7 +3032,7 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	throws ControladorException ;
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * 
 	 * Metodo para verificar se a rota que o imovel pertence
 	 * ja foi gerada para o mes de faturamento do grupo 
@@ -3043,7 +3043,7 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	 */
 	public boolean verificaGeracaoDadosLeituraRota(FaturamentoGrupo faturamentoGrupo, Rota rota) throws ControladorException;
 	
-	/**TODO:COSANPA
+	/**
 	 * @author Adriana Muniz
 	 * @date 06/12/2011
 	 * 
@@ -3058,7 +3058,7 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 			Integer idImovel) throws ControladorException ;
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Pamela e Adriana - 21/08/2012
 	 * 
 	 * Método que verifica se um determinado imóvel
@@ -3070,7 +3070,7 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	public boolean isFaturamentoAguaAtivo(Imovel imovel);
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Pamela e Adriana - 21/08/2012
 	 * 
 	 * Método que verifica se um determinado imóvel
@@ -3082,7 +3082,7 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	public boolean isFaturamentoEsgotoAtivo(Imovel imovel);
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Pamela Gatinho e Adriana Muniz
 	 * 21/08/2012
 	 * 
@@ -3486,9 +3486,7 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	
 	public void atualizarImovel(Imovel imovel) throws ControladorException;
 
-	/**TODO: COSANPA
-	 * Mantis 494
-	 * 
+	/**
 	 * Geração da Rota para recadastramento.
 	 * 
 	 * @author Wellington

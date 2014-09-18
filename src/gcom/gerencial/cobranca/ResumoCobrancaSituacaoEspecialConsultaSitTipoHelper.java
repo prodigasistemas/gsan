@@ -23,7 +23,7 @@ public class ResumoCobrancaSituacaoEspecialConsultaSitTipoHelper {
 	
 	public ResumoCobrancaSituacaoEspecialConsultaSitTipoHelper(Integer idSituacaoTipo, String situacaoTipoDescricao, Integer totalSituacaoTipo) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idSituacaoTipo = idSituacaoTipo;
 		this.situacaoTipoDescricao = situacaoTipoDescricao;
 		this.totalSituacaoTipo = totalSituacaoTipo;

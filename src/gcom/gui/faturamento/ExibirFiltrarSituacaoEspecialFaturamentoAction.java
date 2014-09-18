@@ -234,7 +234,7 @@ public class ExibirFiltrarSituacaoEspecialFaturamentoAction extends GcomAction {
 			}
 		} 
 //		else {
-//			//TODO é realmente necessário isso?
+//			
 //			sessao.removeAttribute("situacaoEspecialFaturamentoActionForm");
 //		}
 	}

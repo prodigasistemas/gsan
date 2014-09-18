@@ -18,7 +18,7 @@ public class DescricaoGenerica extends ObjetoTransacao {
 
 	@Override
 	public Filtro retornaFiltro() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

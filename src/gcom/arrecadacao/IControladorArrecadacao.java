@@ -4222,7 +4222,7 @@ public interface IControladorArrecadacao {
 	            String valorPagamentoInicial,
 	            String valorPagamentoFinal) throws ControladorException;
 		
-		/*TODO: COSANPA
+		/*
 		 * Criado para a consulta, de manter conta por conjunto de imóveis, pelo id do banco
 		 * e pelo grupo de faturamento
 		 * 
@@ -4239,7 +4239,7 @@ public interface IControladorArrecadacao {
 		public Collection pesquisarImoveisBancoDebitoAutomaticoEPorGrupoFaturamento(String[] bancos, Integer idGrupoFaturamento)
 			throws ControladorException;
 		
-		/* TODO: COSANPA
+		/*
 		 * autor: Adriana Muniz
 		 * 
 		 * Alteração para a conta considerar como filtro grupo de faturamento, quando o mesmo estiver preenchido
@@ -4263,10 +4263,6 @@ public interface IControladorArrecadacao {
 		
 
 		/**
-		 * TODO: COSANPA
-		 * 
-		 * Mantis 537
-		 * 
 		 * @author Wellington Rocha
 		 * @data 15/03/2012
 		 * 
@@ -4277,7 +4273,7 @@ public interface IControladorArrecadacao {
 				throws ControladorException;
 		
 
-		/**TODO:COSANPA
+		/**
 		 * @date:03/10/2012
 		 * @autor Adriana Muniz
 		 * 
@@ -4292,7 +4288,7 @@ public interface IControladorArrecadacao {
 			FiltroConsultarDadosDiariosArrecadacao filtro) throws ControladorException;
 		
 
-		/**TODO:COSANPA
+		/**
 		 * @author Adriana Muniz
 		 * @date 10/12/2012
 		 * 
@@ -4309,7 +4305,7 @@ public interface IControladorArrecadacao {
 		public boolean verificarExistenciaDadosDiariosArrecadacaoAuxiliar(int anoMesInicial, int anoMesFinal,
 			FiltroConsultarDadosDiariosArrecadacaoAuxiliar filtro) throws ControladorException;
 		
-		/**TODO:COSANPA
+		/**
 		 * data: 11/12/2012
 		 * 
 		 * Recupera os dados diarios da arrecadação auxiliar
@@ -4325,7 +4321,7 @@ public interface IControladorArrecadacao {
 					FiltroConsultarDadosDiariosArrecadacaoAuxiliar filtro) throws ControladorException;
 		
 		/**
-		 * TODO:COSANPA
+		 *
 		 * @author Adriana Muniz 
 		 * @data: 19/12/2012
 		 * 

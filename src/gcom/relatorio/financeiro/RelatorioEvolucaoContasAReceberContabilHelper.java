@@ -26,7 +26,7 @@ public class RelatorioEvolucaoContasAReceberContabilHelper {
 
 	public RelatorioEvolucaoContasAReceberContabilHelper(String tipoGrupo, String descricaoGrupo, int ordemGrupo, String descricaoElementoGrupo, int sequenciaTipoLancamento, String descricaoLancamento, String idCategoriaTipo, BigDecimal valorItem) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.tipoGrupo = tipoGrupo;
 		this.descricaoGrupo = descricaoGrupo;
 		this.ordemGrupo = ordemGrupo;

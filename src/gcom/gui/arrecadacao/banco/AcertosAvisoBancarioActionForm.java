@@ -10,7 +10,7 @@ public class AcertosAvisoBancarioActionForm  extends ActionForm {
 	private static final long serialVersionUID = 1L;
 
 	public void reset(ActionMapping arg0, HttpServletRequest arg1) {
-		// TODO Auto-generated method stub
+		
 		super.reset(arg0, arg1);
 
 	}

@@ -53,13 +53,13 @@ public class TarefaBatchAlterarInscricaoImovel extends TarefaBatch {
 
 	@Override
 	protected Collection<Object> pesquisarTodasUnidadeProcessamentoBatch() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	protected Collection<Object> pesquisarTodasUnidadeProcessamentoReinicioBatch() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

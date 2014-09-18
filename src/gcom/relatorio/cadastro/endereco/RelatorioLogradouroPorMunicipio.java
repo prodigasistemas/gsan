@@ -30,7 +30,7 @@ public class RelatorioLogradouroPorMunicipio extends TarefaRelatorio{
 
 	public RelatorioLogradouroPorMunicipio(Usuario usuario) {
 		super(usuario, ConstantesRelatorios.RELATORIO_LOGRADOURO_POR_MUNICIPIO);
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	@Deprecated

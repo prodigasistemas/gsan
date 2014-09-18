@@ -75,7 +75,7 @@ public class GerarDadosParaLeituraAction extends GcomAction {
 //			Collection gerarDados = fachada.gerarDadosPorLeituraConvencional(rotas,
 //					anoMesCorrente, idLeituraTipo);
 //		} catch (ControladorException e) {
-//			// TODO Auto-generated catch block
+//			
 //			e.printStackTrace();
 //		}
         
@@ -103,7 +103,7 @@ public class GerarDadosParaLeituraAction extends GcomAction {
 //			try {
 //				leituraAnterior = fachada.pesquisarLeituraAnteriorTipoLigacaoAgua(imovel.getId());
 //			} catch (ControladorException e1) {
-//				// TODO Auto-generated catch block
+//				
 //				e1.printStackTrace();
 //			}
 //
@@ -127,7 +127,7 @@ public class GerarDadosParaLeituraAction extends GcomAction {
 //        try {
 //			consumoMinino = fachada.calcularFaixaLeituraFalsa(imovel,mediaConsumoHidrometro,leituraAnterior,medicaoHistorico,hidrometroSelecionado,hidrometro);
 //		} catch (ControladorException e) {
-//			// TODO Auto-generated catch block
+//			
 //			e.printStackTrace();
 //		}
 //		Object[] consumoMinino1 = consumoMinino;

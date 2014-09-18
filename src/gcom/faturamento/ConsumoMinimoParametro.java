@@ -126,7 +126,7 @@ public class ConsumoMinimoParametro extends ObjetoTransacao {
             .toString();
     }
     
-    public Filtro retornaFiltro() { //TODO
+    public Filtro retornaFiltro() { 
 		FiltroConsumoMinimoArea filtroConsumoMinimoArea = new FiltroConsumoMinimoArea();
 		filtroConsumoMinimoArea.adicionarParametro(new ParametroSimples(FiltroConsumoMinimoArea.ID,this.getId()));
 		return filtroConsumoMinimoArea;

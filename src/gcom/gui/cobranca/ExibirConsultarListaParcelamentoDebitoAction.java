@@ -191,10 +191,10 @@ public class ExibirConsultarListaParcelamentoDebitoAction extends
 				try {
 					enderecoFormatado = fachada.pesquisarEnderecoFormatado(new Integer(codigoImovel));
 				} catch (NumberFormatException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				} catch (ControladorException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 				

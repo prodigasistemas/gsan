@@ -154,7 +154,7 @@ public class RelatorioManterPerfilParcelamento extends TarefaRelatorio {
 												.getDescricao(),
 
 												/*
-												 * TODO - COSANPA
+												 *
 												 */
 												// Percentual Desconto Multa
 												Util.formatarMoedaReal(parcelamentoPerfil
@@ -295,7 +295,7 @@ public class RelatorioManterPerfilParcelamento extends TarefaRelatorio {
 												.getDescricao(),
 
 												/*
-												 * TODO - COSANPA
+												 *
 												 */
 												// Percentual Desconto Multa
 												Util.formatarMoedaReal(parcelamentoPerfil
@@ -426,7 +426,7 @@ public class RelatorioManterPerfilParcelamento extends TarefaRelatorio {
 												.getDescricao(),
 
 												/*
-												 * TODO - COSANPA
+												 *
 												 */
 												// Percentual Desconto Multa
 												Util.formatarMoedaReal(parcelamentoPerfil

@@ -376,8 +376,8 @@ public class RelatorioDocumentoVisitaCobranca extends TarefaRelatorio {
 							sistemaParametro.getResolucaoDiretoria().getId(), 
 							imovel.getId(), 
 							new BigDecimal("0.00"), 
-							new Integer("3"),//TODO new Integer(consultarDebitoImovelActionForm.getLigacaoAguaId()), 
-							new Integer("1"),//TODO new Integer(consultarDebitoImovelActionForm.getLigacaoEsgotoId()), 
+							new Integer("3"),
+							new Integer("1"),
 							imovelPerfil.getId(), 
 							"01/0001", 
 							new Integer("2"),//indicador de restabelecimento 

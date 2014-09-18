@@ -99,7 +99,7 @@ public class UsuarioTipo extends ObjetoTransacao implements Serializable {
 
 	@Override
 	public Filtro retornaFiltro() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 	public Filtro retornaFiltroRegistroOperacao() {

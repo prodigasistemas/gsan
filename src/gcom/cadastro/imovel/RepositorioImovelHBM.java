@@ -8263,8 +8263,6 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		}
 
-		// TODO REVER SQL
-
 		// intervalo Media Minima Imovel Inicial e Final
 
 		if ((intervaloMediaMinimaImovelInicial != null
@@ -14207,32 +14205,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 	}
 
-	/**
-	 * 
-	 * Consutlar as contas do Imovel [UC0473] Consultar Imóvel
-	 * 
-	 * 
-	 * 
-	 * @author Rafael Santos
-	 * 
-	 * @date 13/09/2006
-	 * 
-	 * 
-	 * 
-	 * @param idImovel
-	 * 
-	 * @return Collection
-	 * 
-	 * @throws ControladorException
-	 * 
-	 */
-
-	/*
-	 * TODO Cosanpa
-	 * Mantis 225: Alteração para não carregar contas 
-	 * na situação ERRO_PROCESSAMENTO
-	 * 
-	 */
+	// Alteração para não carregar contas na situação ERRO_PROCESSAMENTO
 	public Collection consultarContasImovel(Integer idImovel)
 
 	throws ErroRepositorioException {
@@ -16339,7 +16312,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 			}
 
-			/**TODO:COSANPA
+			/**
 			* autor: Adriana Muniz
 			* data: 17/09/2012
 			* tratamento de exceção, caso seja exceção devido a conversão de alfanumerico para numerico */
@@ -19981,7 +19954,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		
 		Boolean verificarImovelPerfilBloqueado = filtro.getVerificarImovelPerfilBloqueado();
 		
-		/**TODO:COSANPA*/
+		/***/
 		Integer[] esferasPoder = filtro.getEsferasPoder();
 
 		/*
@@ -20010,7 +19983,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 		Session session = HibernateUtil.getSession();
 		
-		/**TODO:COSANPA
+		/**
 		 * @autor: Adriana Muniz
 		 * @date: 24/11/2011
 		 * Acréscimo de atributo esfera de poder na consulta
@@ -23465,12 +23438,12 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 
 					+ "left join micromedicao.hidrometro_local_inst hidrometro_local_inst_es on hidrometro_instalacao_historic.hili_id = hidrometro_local_inst.hili_id "
 					
-					/**TODO:COSANPA
+					/**
 					 * @autor Adriana Muniz
 					 * @date 06/08/2013
 					 * 
-					 * Mantis 827: Correção da nomenclatura do hidrometro_instalacao_historic (anterior hidrometro_instalacao_historico_esgoto) 
-					 * */
+					 * Correção da nomenclatura do hidrometro_instalacao_historic (anterior hidrometro_instalacao_historico_esgoto) 
+					 */
 					+ "left join micromedicao.hidrometro_protecao as hidrometro_protecao_esgoto on hidrometro_instalacao_historic.hipr_id = hidrometro_protecao_esgoto.hipr_id ";
 
 			consulta = consulta
@@ -29074,7 +29047,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		return retorno;
 	}
 	
-	/**TODO: COSANPA
+	/**
 	 * autor: Adriana Muniz
 	 * Data: 12/05/2011
 	 * Pesquisa o id da quadra pelo id do imóvel - Gerar
@@ -29101,7 +29074,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * 
 	 * Metodo para verificar se a rota que o imovel pertence
 	 * ja foi gerada para o mes de faturamento do grupo 
@@ -29150,7 +29123,7 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 		
 	}
 	
-	/**TODO:COSANPA
+	/**
 	 * @author Adriana Muniz
 	 * @date 06/12/2011
 	 * 
@@ -31227,10 +31200,6 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 * TODO: COSANPA
-	 * 
-	 * Mantis 494
-	 * 
 	 * @param idImovel
 	 * 
 	 * @author Wellington Rocha

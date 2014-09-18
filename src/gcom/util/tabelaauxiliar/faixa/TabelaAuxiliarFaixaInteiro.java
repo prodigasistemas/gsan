@@ -81,7 +81,7 @@ public class TabelaAuxiliarFaixaInteiro extends TabelaAuxiliarAbstrata {
 
 //	@Override
 //	public Filtro retornaFiltro() {
-//		// TODO Auto-generated method stub
+//		
 //		return null;
 //	}
 

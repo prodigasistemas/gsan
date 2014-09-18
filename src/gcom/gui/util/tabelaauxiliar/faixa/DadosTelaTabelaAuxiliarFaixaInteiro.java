@@ -22,7 +22,7 @@ public class DadosTelaTabelaAuxiliarFaixaInteiro extends DadosTelaTabelaAuxiliar
 	// nomeParametroFuncionalidade) {
 	// super(titulo, tabela, funcionalidadeTabelaAux,
 	// nomeParametroFuncionalidade);
-	// // TODO Auto-generated constructor stub
+	// 
 	// }
 
 	private String titulo;

@@ -194,7 +194,7 @@ public class ExibirGerarRelatorioRelacaoParcelamentoAction extends
 		
 		this.pesquisarPerfilImovel(httpServletRequest);
 		/*
-		 * TODO - COSANPA - Mantis 854 - Felipe Santos
+		 * Felipe Santos
 		 * 
 		 * Não há nenhuma localidade associada a um municipio (muni_idprincipal != null)
 		 */

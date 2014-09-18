@@ -74,7 +74,7 @@ public class ComandoOrdemSeletiva implements Serializable {
 	
 	public ComandoOrdemSeletiva(Integer id, Short situacaoComando, String descricaoComando, Date dataGeracao, Date dataEncerramento, Integer quantidadeOrdemServico, Integer quantidadeMaximaOrdemServico, Integer sequencialRotaInicial, Integer sequencialRotaFinal, Integer quantidadeConsecutivaAnormalidade, Integer anoMesHidrometroInstInicial, Integer anoMesHidrometroInstFinal, Integer quantidadeEconomiaInicial, Integer quantidadeEconomiaFinal, Integer quantidadeDocumentoInicial, Integer quantidadeDocumentoFinal, Integer quantidadeMoradoresInicial, Integer quantidadeMoradoresFinal, BigDecimal areaConstruidaInicial, BigDecimal areaConstruidaFinal, Short indicadorImovelCondominio, Integer mediaConsumo, Integer consumoEconomiaInicial, Integer consumoEconomiaFinal, Date ultimaAlteracao, ServicoTipo servicoTipo, ImovelPerfil imovelPerfil, Localidade localidadeInicial, Localidade localidadeFinal, Quadra quadraInicial, Quadra quadraFinal, SetorComercial setorComercialInicial, SetorComercial setorComercialFinal, Rota rotaInicial, Rota rotaFinal, Imovel imovel, GerenciaRegional gerenciaRegional, UnidadeNegocio unidadeNegocio, Empresa empresa, Localidade localidadePolo, Logradouro logradouro, HidrometroLocalInstalacao hidrometroLocalInstalacao, HidrometroMarca hidrometroMarca, Categoria categoria, Subcategoria subcategoria) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.situacaoComando = situacaoComando;
 		this.descricaoComando = descricaoComando;
@@ -123,7 +123,7 @@ public class ComandoOrdemSeletiva implements Serializable {
 	}
 	public ComandoOrdemSeletiva() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	public Integer getAnoMesHidrometroInstFinal() {
 		return anoMesHidrometroInstFinal;

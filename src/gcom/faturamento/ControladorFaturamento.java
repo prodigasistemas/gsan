@@ -623,11 +623,6 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        								 helper.getAnoMesReferenciaPreFaturamento(),
 	        								 DebitoCreditoSituacao.PRE_FATURADA);
 	        					 
-	        					 /*
-	        					  * TODO	: COSANPA
-	        					  * Alteração feita para corrigir problema emergencial de imovel
-	        					  * suprimido com emissao de conta
-	        					  */
 	        					 if (contaAtualizacao == null || contaAtualizacao.getId() == null){
 	        						 System.out.println("Imovel sem conta: " + helper.getImovel().getId());
 	        						 continue;
@@ -1024,7 +1019,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        				 DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 	        			
 	        				 
-	        				 /**TODO: COSANPA
+	        				 /**
 	        				  * @Date: 02/08/2013
 	        				  * 
 	        				  * Se imóvel não for retido, a situação da conta será normal
@@ -1091,7 +1086,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        				 valorTotalContaSemCreditos = valorTotalContaSemCreditos.add(contaAtualizacao.getDebitos());
 	        				 valorTotalContaSemCreditos = valorTotalContaSemCreditos.subtract(valorImposto);
 	        				 
-	        				 /** TODO:COSANPA
+	        				 /**
 	        				  * Bônus social 
 	        				  * 
 	        				  * Verifica se foi concedido ao imovel credito de bonus social
@@ -1146,7 +1141,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        							 contaAtualizacao.getId(), helper.getFaturamentoGrupo().getAnoMesReferencia(),
 	        							 valorTotalContaSemCreditos);
 	        					 contaAtualizacao.setValorCreditos(valorTotalCreditos);
-	        					 /**TODO: COSANPA
+	        					 /**
 	        					  * Autor: Wellington Rocha
 	        					  * Data: 30/08/2011
 	        					  * 
@@ -1158,7 +1153,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	        						 && (valorCreditos.compareTo(valorTotalContaSemCreditos)==0 
 	        						 || valorCreditos.compareTo(valorTotalContaSemCreditos)== -1 )){
 
-					            	/**TODO:COSANPA
+					            	/**
 					            	 * Autor: Adriana Muniz
 					            	 * Data: 09/08/2011
 					            	 * 
@@ -1996,7 +1991,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				AtualizarContaPreFaturadaHelper.REGISTRO_TIPO_1)) {
 
 			/*
-        	 * TODO: COSANPA
+        	 *
         	 * Alteração para verificar se o codigo de anormalida e igual a 0 (zero), ou seja,
         	 * se não existe anormalidade, pois caso seja 0, a consulta de anormalidades não
         	 * vai achar a anormalidade e vai indicar erro de anormalidade inexistente, só
@@ -2683,7 +2678,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							}
 							
 							/**
-							 * TODO : COSANPA
+							 * 
 							 * Pamela gatinho - 28/05/2012
 							 * Alteracao para salvar o valor do rateio junto com o 
 							 * valor faturado de agua.
@@ -3249,7 +3244,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									continue;
 								}
 								
-								/**TODO: COSANPA
+								/**
 								 * Data: 22/01/2011
 								 * 
 								 * 
@@ -3263,7 +3258,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								if(!subcategoriaImovel.equals(Subcategoria.SUBCATEGORIA_R1))
 									continue;
 
-								/* TODO: COSANPA
+								/*
 								 * autor: Adriana Muniz
 								 * data: 02/05/2011
 								 * Verificar se o imóvel está com a situação da ligação de agua como Ligado, 
@@ -3299,7 +3294,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								Date dataVencimento = (Date) conta[1];
 
 								
-								/**TODO: COSANPA
+								/**
 								 * autor: Adriana Muniz
 								 * data: 17/06/2011
 								 * 
@@ -3309,7 +3304,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									if(!repositorioFaturamento.verificaContaCancelada(idConta)){
 										
 									
-									/**TODO: COSANPA
+									/**
 									 * Data: 22/01/2011
 									 * 
 									 * 
@@ -3323,7 +3318,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 											continue;
 									}
 									
-									/**TODO: COSANPA
+									/**
 									 * Data: 22/01/2011
 									 * 
 									 * Primeira condição
@@ -5322,7 +5317,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			if (rota == null || rota.equals("")) {
 				
 				/*
-				 * TODO : COSANPA
+				 * 
 				 * Alteracao para, quando for rota alternativa, bucar a rota 
 				 * pela rota alternativa do imóvel, e não pelo setor comercial 
 				 */
@@ -6815,7 +6810,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		
 	//	System.out.println("Atualizar valor residual. Id imóvel: " + imovel != null ? imovel.getId():"");
 		
-		/**TODO:COSANPA
+		/**
 		 * Autor: Adriana Muniz
 		 * Data: 20/07/2011
 		 * 
@@ -6885,7 +6880,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 									BigDecimal valorConta = ConstantesSistema.VALOR_ZERO;
 
 									/**
-									 * TODO:COSANPA 
+									 * 
 									 * Data: 01/07/2011
 									 * autor: Adriana Muniz
 									 * 
@@ -6919,7 +6914,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 												valorCreditoConcedido = valorResidual.subtract(creditoARealizar
 																.getValorResidualMesAnterior());
 
-												/**TODO:COSANPA
+												/**
 												 * @author Adriana Muniz e Wellington Rocha
 												 * @date 30/08/2012
 												 * Atualização da data da ultima alteração do credito realizado
@@ -6965,7 +6960,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 												// Acumula o valor do crédito
 												valorTotalCreditos = valorTotalCreditos.add(valorConcedido);
 												
-												/**TODO:COSANPA
+												/**
 												 * @author Adriana Muniz e Wellington Rocha
 												 * @date 30/08/2012
 												 * Atualização da data da ultima alteração do credito realizado
@@ -7058,7 +7053,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 											repositorioFaturamento
 													.atualizarCreditoARealizar(creditoARealizar);
 											
-											/**TODO:COSANPA
+											/**
 											 * @author Adriana Muniz e Wellington Rocha
 											 * @date 30/08/2012
 											 * Atualização da data da ultima alteração do credito realizado
@@ -7088,7 +7083,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								} else {
 									// atualiza o credito a realizar
 
-									/**TODO:COSANPA
+									/**
 									 * 
 									 * Para não subtrair a prestação do crédito, caso o credito seja apenas de uma parcela
 									 * */
@@ -7169,7 +7164,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
                 Object[] arrayCreditosACobrar = (Object[]) iteratorColecaoCreditosARealizar.next();
                 
-                /**TODO: COSANPA
+                /**
                  * Autor: Adriana Muniz
                  * Data: 01/09/2011
                  * 
@@ -9302,7 +9297,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 			retorno.setExtratoQuitacaoItens(colecaoItemHelperParaOrdenar);
 
 		} catch (ErroRepositorioException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 			throw new ControladorException("erro.sistema", e);
 		}
@@ -9469,9 +9464,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								boolean enderecoAlternativo = false;
 								short endAlternativo = 0;
 								
-								/*TODO COSANPA: Incluída verificação de endereço de entrega alternativa
+								/*Incluída verificação de endereço de entrega alternativa
 								 * e em caso afirmativo preenchimento do campo endereço de entrega pelo
-								 * endereço do cliente responsável para atender ao Mantis 201*/
+								 * endereço do cliente responsável*/
 								try {
 									Integer idQuadraImovel = repositorioImovel.pesquisaIdQuadraImovel(idImovel);
 									Integer idRotaQuadra = repositorioCadastro.pesquisarIdRotaQuadra(idQuadraImovel);
@@ -9532,9 +9527,9 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 								helper.setCodigoRota(codigoRota.toString());
 								helper.setSeguencialRota(sequencialRota
 										.toString());
-								/*TODO COSANPA : Setando valor ao atributo 
+								/* Setando valor ao atributo 
 								 * que informa se o imóvel tem ou não
-								 * endereço de entrega alternativo MANTIS 201.*/
+								 * endereço de entrega alternativo*/
 								helper.setEnderecoAlternativo(endAlternativo);
 								
 								Collection<ExtratoQuitacaoItem> colecaoExtratosItens = this.repositorioFaturamento
@@ -9658,7 +9653,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		linha.append(Util
 				.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
 						helper.getFirma(), 10));
-		/** TODO:COSANPA
+		/**
 		 * autor: Adriana Muniz
 		 * Data: 26/04/2011
 		 * Alteração de 2 para 3 o tamanho do campo do id do grupo
@@ -9692,7 +9687,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 							helper.getCep(), 10));
 		}
 
-		/**TODO: COSANPA
+		/**
 		 * autor: Adriana Muniz
 		 * Data:30/03/2011
 		 * 
@@ -9723,7 +9718,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 
 		}
 
-		/** TODO: COSANPA
+		/**
 		 * autor: Adriana Muniz
 		 * Data: 30/03/2011
 		 * Se houve conta com pagamentos duplicados, o valor duplicado será subtraído,
@@ -9747,7 +9742,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				.completaStringComEspacoADireitaCondicaoTamanhoMaximoTruncando(
 						helper.getSeguencialRota().toString(), 5));
 
-		/**TODO: COSANPA
+		/**
 		 * autor: Adriana Muniz
 		 * Data: 12/05/2011
 		 * Verifica se o imovel possui outro endereço de entrega(endereço alternativo)
@@ -15455,7 +15450,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 	
 	/*
-	 * TODO : COSANPA
+	 * 
 	 * Método criado para obter os imóveis de uma rota que possuem conta
 	 */
 	
@@ -15480,7 +15475,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Pamela Gatinho - 15/09/2011
 	 * 
 	 * Gerar dados para o relatorio de contas retidas
@@ -15539,7 +15534,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Pamela Gatinho - 16/09/2011
 	 * 
 	 * Gerar dados para o relatorio de medicao do faturamento
@@ -15620,7 +15615,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		return retorno;
 	}
 	
-	/**TODO:COSANPA
+	/**
 	 * @author Adriana Muniz e Wellington Rocha
 	 * @date 30/08/2012
 	 * 
@@ -15682,7 +15677,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 		}
 	}
 	
-	/**TODO:COSANPA
+	/**
 	 * @author Adriana Muniz e Wellington Rocha
 	 * @date 30/08/2012
 	 * 
@@ -15824,7 +15819,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 	
 	/*
-     * TODO : COSANPA
+     * 
      * 02/05/2011 - Pamela Gatinho
      * Adicionando o ID da rota como informacao para finalizar o arquivo de rota.
      */
@@ -15941,7 +15936,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
     }
     
 	/**
-	* TODO : COSANPA
+	* 
 	* @author Pamela Gatinho
 	* @date 24/02/2012
 	*
@@ -15964,7 +15959,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 	}
 
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * @author Pamela Gatinho
 	 * @date 15/03/2013
 	 * 
@@ -16043,7 +16038,7 @@ public class ControladorFaturamento extends ControladorFaturamentoFINAL {
 				diferencaDatas = rota.getNumeroDiasConsumoAjuste();
 			}
 		} catch (ParseException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		return diferencaDatas;

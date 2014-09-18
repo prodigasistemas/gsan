@@ -31,7 +31,7 @@ public class OSExecutadasRelatorioHelper {
 	
 	public OSExecutadasRelatorioHelper(Integer idLocalidade, String nomeLocalidade, Integer qtdeServicosOSExecutadas, String codigoServicosOSExecutadas, String descServicosOSExecutadas) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idLocalidade = idLocalidade;
 		this.nomeLocalidade = nomeLocalidade;
 		this.qtdeServicosOSExecutadas = qtdeServicosOSExecutadas;
@@ -41,7 +41,7 @@ public class OSExecutadasRelatorioHelper {
 
 	public OSExecutadasRelatorioHelper(String numeroOS, String codigoServico, String descServico, String descTipoPavimento, String materialrede, String diametroRede, Date dataConclusao, String codigoExcedente, String codigoMaterial, String descMaterial, String qtdeExcedente, String profundRede, String dimenBuraco, Integer idLocalidade, String nomeLocalidade, String enderecoRA, String nomeUnidade, String nomeGerencia) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.numeroOS = numeroOS;
 		this.codigoServico = codigoServico;
 		this.descServico = descServico;
@@ -64,7 +64,7 @@ public class OSExecutadasRelatorioHelper {
 	
 	public OSExecutadasRelatorioHelper(Integer qtdeServicosOSExecutadas, String codigoServicosOSExecutadas, String descServicosOSExecutadas) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.qtdeServicosOSExecutadas = qtdeServicosOSExecutadas;
 		this.codigoServicosOSExecutadas = codigoServicosOSExecutadas;
 		this.descServicosOSExecutadas = descServicosOSExecutadas;
@@ -74,7 +74,7 @@ public class OSExecutadasRelatorioHelper {
 
 	public OSExecutadasRelatorioHelper() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	public String getCodigoExcedente() {
 		return codigoExcedente;

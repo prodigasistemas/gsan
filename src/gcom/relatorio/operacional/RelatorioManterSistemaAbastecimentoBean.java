@@ -32,7 +32,7 @@ public class RelatorioManterSistemaAbastecimentoBean implements RelatorioBean {
 
 	public RelatorioManterSistemaAbastecimentoBean(String codigo, String descricao, String indicadorUso, String fonteCaptacaoDescricao) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.codigo = codigo;
 		this.descricao = descricao;
 		this.indicadorUso = indicadorUso;

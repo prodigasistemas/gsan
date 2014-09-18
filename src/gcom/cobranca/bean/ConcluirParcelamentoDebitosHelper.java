@@ -149,7 +149,7 @@ public class ConcluirParcelamentoDebitosHelper implements Serializable {
 			BigDecimal descontoTarifaSocialRDEspecial,
 			Collection colecaoContasEmAntiguidade) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.colecaoContaValores = colecaoContaValores;
 		this.colecaoGuiaPagamentoValores = colecaoGuiaPagamentoValores;
 		this.colecaoDebitoACobrar = colecaoDebitoACobrar;

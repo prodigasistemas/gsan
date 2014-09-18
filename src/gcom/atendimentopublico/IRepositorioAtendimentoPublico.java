@@ -1161,7 +1161,7 @@ public interface IRepositorioAtendimentoPublico {
 	public Integer pesquisarQuantidadeConsumidoresRelatorioBIG(Integer idLocalidade,
 			Integer situacao) throws ErroRepositorioException;
 	
-	/**TODO: COSANPA
+	/**
 	 * @author Wellington Rocha
 	 * Data: 03/07/2012
 	 * 

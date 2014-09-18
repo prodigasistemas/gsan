@@ -948,7 +948,7 @@ public class RepositorioGerencialMicromedicaoHBM implements
 					+ "inner join micromedicao.hidrometro hidro on hidro.hidr_id = hidrometro.hidr_id "
 					+"where " 
 					+ " setor.stcm_id=:idSetorComercial "
-					/**TODO:COSANPA
+					/**
 					 * Data: 11/10/2011
 					 * Autor: Adriana Muniz
 					 * 
@@ -1183,7 +1183,7 @@ public class RepositorioGerencialMicromedicaoHBM implements
 
 		Session session = HibernateUtil.getSession();
 
-	    /**TODO:COSANPA
+	    /**
 		 * Data: 13/10/2011
 		 * Autor: Adriana Muniz
 		 * 
@@ -1643,7 +1643,7 @@ public class RepositorioGerencialMicromedicaoHBM implements
 
 	// public List getHidrometrosResumoHidrometro(int hidrometroMotivoBaixa, int
 	// anoMesArrecadacao) throws ErroRepositorioException {
-	// // TODO Auto-generated method stub
+	// 
 	// return null;
 	// }
 

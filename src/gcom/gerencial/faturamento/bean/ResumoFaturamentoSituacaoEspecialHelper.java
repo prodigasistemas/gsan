@@ -481,7 +481,7 @@ public class ResumoFaturamentoSituacaoEspecialHelper {
 
 	public ResumoFaturamentoSituacaoEspecialHelper(Integer idImovel, Integer idGerenciaRegional, Integer idLocalidade, Integer idSetorComercial, Integer idRota, Integer idQuadra, Integer codigoSetorComercial, Integer numeroQuadra, Integer idPerfilImovel, Integer idSituacaoLigacaoAgua, Integer idSituacaoLigacaoEsgoto, Integer idCategoria, Integer idEsfera, Integer idEspecialFaturamento, Integer idMotivoSituacaoEspecialFatauramento, Integer anoMesInicioSituacaoEspecial, Integer anoMesFinalSituacaoEspecial) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idImovel = idImovel;
 		this.idGerenciaRegional = idGerenciaRegional;
 		this.idLocalidade = idLocalidade;
@@ -508,7 +508,7 @@ public class ResumoFaturamentoSituacaoEspecialHelper {
 			Integer idEspecialFaturamento, Integer idMotivoSituacaoEspecialFatauramento, 
 			Integer anoMesInicioSituacaoEspecial, Integer anoMesFinalSituacaoEspecial) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idImovel = idImovel;
 		this.idGerenciaRegional = idGerenciaRegional;
 		this.idLocalidade = idLocalidade;

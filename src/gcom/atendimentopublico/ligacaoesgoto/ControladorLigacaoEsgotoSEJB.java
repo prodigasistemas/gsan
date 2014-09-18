@@ -645,7 +645,7 @@ public class ControladorLigacaoEsgotoSEJB implements SessionBean {
 	}
 
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * @autor: Wellington Rocha
 	 * @date: 21/03/2012

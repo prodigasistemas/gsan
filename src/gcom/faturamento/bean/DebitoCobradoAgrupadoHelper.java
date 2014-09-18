@@ -22,7 +22,7 @@ public class DebitoCobradoAgrupadoHelper implements Serializable {
 	
 	public DebitoCobradoAgrupadoHelper(Integer idDebitoTipo, String descricaoDebitoTipo, Integer numeroPrestacao, Integer numeroPrestacaoDebito, BigDecimal valorDebito) {
 		
-		// TODO Auto-generated constructor stub
+		
 		this.idDebitoTipo = idDebitoTipo;
 		this.descricaoDebitoTipo = descricaoDebitoTipo;
 		this.numeroPrestacao = numeroPrestacao;

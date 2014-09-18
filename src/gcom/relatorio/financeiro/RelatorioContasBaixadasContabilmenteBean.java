@@ -41,7 +41,7 @@ public class RelatorioContasBaixadasContabilmenteBean implements RelatorioBean {
     
     public RelatorioContasBaixadasContabilmenteBean(BigDecimal valorTotalFaixaUm, BigDecimal valorTotalFaixaDois, BigDecimal valorTotalFaixaTres, BigDecimal valorTotal) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.valorTotalFaixaUm = valorTotalFaixaUm;
 		this.valorTotalFaixaDois = valorTotalFaixaDois;
 		this.valorTotalFaixaTres = valorTotalFaixaTres;

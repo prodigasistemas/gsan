@@ -24,7 +24,7 @@ public class RelatorioMedicaoFaturamento extends TarefaRelatorio {
 
 	public RelatorioMedicaoFaturamento(Usuario usuario) {
 		super(usuario, ConstantesRelatorios.RELATORIO_MEDICAO_FATURAMENTO);
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	@Override
@@ -140,7 +140,7 @@ public class RelatorioMedicaoFaturamento extends TarefaRelatorio {
 	
 	@Override
 	public int calcularTotalRegistrosRelatorio() {
-		// TODO Auto-generated method stub
+		
 		return 1;
 	}
 	

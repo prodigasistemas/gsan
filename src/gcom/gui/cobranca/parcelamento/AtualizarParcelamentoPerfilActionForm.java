@@ -9,15 +9,11 @@ import org.apache.struts.action.ActionMapping;
 public class AtualizarParcelamentoPerfilActionForm extends ActionForm {
 	private static final long serialVersionUID = 1L;
 	
-	/*
-	 * TODO - COSANPA
-	 */
     private String percentualDescontoAcrescimoMulta;
     
     private String percentualDescontoAcrescimoJurosMora;
     
     private String percentualDescontoAcrescimoAtualizacaoMonetaria;
-    // fim alteração
     
     private String percentualTarifaMinimaPrestacao;
 

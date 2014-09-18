@@ -36,7 +36,7 @@ public class FiltrarImovelInserirManterContaHelper {
 	
 	private Boolean verificarImovelPerfilBloqueado = false; 
 	
-	/**TODO:COSANPA
+	/**
 	 * @autor: Adriana Muniz
 	 * @date: 24/11/2011
 	 * Acréscimo de atributo esfera de poder no filtro da consulta

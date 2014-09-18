@@ -1290,7 +1290,7 @@ public String criarCondicionaisResumoAnaliseFaturamento(InformarDadosGeracaoRela
 			 * Data: 11/09/2008
 			 * Alteracao: Otimização da consulta. Reduzio o tempo da consulta de +- 70s para 1s.
 			 */
-			/*TODO: Cosanpa - alteração para corrigir o valor gerado dos créditos no gerencial
+			/* - alteração para corrigir o valor gerado dos créditos no gerencial
 			 * comentada linha "with creditorealizado.quadra.id = quadra.id " em 22/08/2011*/
 			String hql =
 				"select " +
@@ -1592,7 +1592,7 @@ public String criarCondicionaisResumoAnaliseFaturamento(InformarDadosGeracaoRela
 			 		+ "  quadra.setorComercial.id, quadra.id, quadra.numeroQuadra";
 			*/
 			
-			/*TODO: COSANPA
+			/*
 			 * Alteração para corrigir a diferença do resumo do faturamento na base gerencial
 			 * Autor: Wellington Vernech Rocha
 			 * Data: 12/09/2011*/
@@ -1843,7 +1843,7 @@ public String criarCondicionaisResumoAnaliseFaturamento(InformarDadosGeracaoRela
 				+" where "
 				+"  debitoacobrar.anoMesReferenciaContabil = :anoMes  and "
 				+"  debitoacobrar.quadra.setorComercial.id = :idSetor and "
-				/**TODO:COSANPA
+				/**
 				 * Data:12/10/2011
 				 * Autor Adriana Muniz
 				 * 
@@ -7448,7 +7448,7 @@ public String criarCondicionaisResumoAnaliseFaturamento(InformarDadosGeracaoRela
 		return retorno;
 	}
 
-	 /**TODO: Cosanpa - Nova pesquisa de Créditos para gerar Resumo de Faturamento
+	 /** - Nova pesquisa de Créditos para gerar Resumo de Faturamento
      * do gerencial para corrigir problema de créditos persistidos na categoria errada
      * 
      * @author Wellington Rocha
@@ -7486,7 +7486,7 @@ public String criarCondicionaisResumoAnaliseFaturamento(InformarDadosGeracaoRela
 		return retorno;
     }
 	
-    /**TODO: Cosanpa - Pesquisa de Guias de pagamento para gerar resumo do faturamento, 
+    /** - Pesquisa de Guias de pagamento para gerar resumo do faturamento, 
      * excluindo as guias de entrada de parcelamento pagas.
      * 
      * @author Wellington Rocha

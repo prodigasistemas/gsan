@@ -46,7 +46,7 @@ public class ImovelEloAnormalidade extends ObjetoTransacao {
 	}
 
 	public ImovelEloAnormalidade(Integer id, Date dataAnormalidade, byte[] fotoAnormalidade, Date ultimaAlteracao, EloAnormalidade eloAnormalidade, Imovel imovel) {
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.dataAnormalidade = dataAnormalidade;
 		this.fotoAnormalidade = fotoAnormalidade;

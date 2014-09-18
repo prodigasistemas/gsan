@@ -3054,8 +3054,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					+ "cnta.valorCreditos, " 
 					+ "cnta.valorImposto, "
 					+ "cnta.referenciaContabil, "
-					/**TODO: COSANPA
-					 * Mantis 615 - Classificar detalhadamente documentos inexistentes por débito prescrito,
+					/**
+					 * Classificar detalhadamente documentos inexistentes por débito prescrito,
 					 * conta parcelada, conta cancelada ou erro de processamento
 					 * @author Wellington Rocha
 					 * @date 02/08/2012*/
@@ -3075,8 +3075,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.setMaxResults(1).uniqueResult();
 			
 
-			/**TODO: COSANPA
-			 * Mantis 615 - Classificar detalhadamente documentos inexistentes por débito prescrito,
+			/**
+			 * Classificar detalhadamente documentos inexistentes por débito prescrito,
 			 * conta parcelada, conta cancelada ou erro de processamento
 			 * @author Wellington Rocha
 			 * @date 02/08/2012*/
@@ -3272,7 +3272,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 
 		// cria a variável que vai conter o hql
 		String consulta = "";
-		/*TODO: COSANPA
+		/*
 		* Acréscimo do atributo idAvisobancário, para permitir a consulta pelo mesmo
 		*/
 		Integer idAvisoBancario = avisoBancarioHelper.getIdAvisoBancario();
@@ -3321,7 +3321,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 				&& (anoMesReferenciaArrecadacaoInicial == 0 || anoMesReferenciaArrecadacaoFinal == 0)
 				&& (valorPrevistoInicial == null || valorPrevistoFinal == null)
 				&& (valorRealizadoInicial == null || valorRealizadoFinal == null)
-				/*TODO: COSANPA
+				/*
 				 * Acréscimo do atributo idAvisobancário
 				*/
 				&& idAvisoBancario == null) {
@@ -3337,7 +3337,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			consulta = select + " where ";
 		}
 		
-		/*TODO: COSANPA
+		/*
 		 * Acréscimo do filtro idAvisobancário, para que a consulta possa ser efetuada pelo id
 		 * */
 		if(idAvisoBancario != null) {
@@ -7228,8 +7228,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		idsCreditoOrigem.add(CreditoOrigem.CONTAS_PAGAS_EM_DUPLICIDADE_EXCESSO);
 		idsCreditoOrigem.add(CreditoOrigem.VALORES_COBRADOS_INDEVIDAMENTE);
 		idsCreditoOrigem.add(CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO);
-		/**TODO: COSANPA
-		 * Mantis 615 - Contabilizar créditos com crédito origem correspondente 
+		/**
+		 * Contabilizar créditos com crédito origem correspondente 
 		 * a Contas Pagas em Excesso
 		 * 
 		 * @author Wellington Rocha
@@ -18425,8 +18425,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		// Cria a variável que vai conter o hql
 		String consulta = "";
 		
-		/**TODO: COSANPA
-		 * Mantis 632 - Alguns pagamentos foram para histórico indevidamente
+		/**
+		 * Alguns pagamentos foram para histórico indevidamente
 		 * Alterado clausula where de <= para < no anoMesReferenciaArrecadacao
 		 * 
 		 * @author Wellington Rocha
@@ -18548,8 +18548,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		// Cria a variável que vai conter o hql
 		String consulta = "";
 		
-		/**TODO: COSANPA
-		 * Mantis 632 - Alguns pagamentos foram para histórico indevidamente
+		/**
+		 * Alguns pagamentos foram para histórico indevidamente
 		 * Alterada a clausula where do anoMesArrecadacao de <= para <
 		 * 
 		 * @author Wellington Rocha
@@ -19847,8 +19847,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		// Cria a variável que vai conter o hql
 		String consulta = "";
 		
-		/**TODO: COSANPA
-		 * Mantis 632 - Algumas guias de devolução foram jogadas para histórico indevidamente
+		/**
+		 * Algumas guias de devolução foram jogadas para histórico indevidamente
 		 * Alterado valor da clausula where de anoMesReferenciaArrecadacao de <= para <
 		 * 
 		 * @author Wellington Rocha
@@ -20093,8 +20093,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		// Cria a variável que vai conter o hql
 		String consulta = "";
 
-		/**TODO: COSANPA
-		 * Mantis 632 - Algumas guias de pagamento foram indevidamente jogados para histórico
+		/**
+		 * Algumas guias de pagamento foram indevidamente jogados para histórico
 		 * Alterada a clausula where do anoMesReferenciaArrecadacao de <= para <
 		 * 
 		 * @author Wellington Rocha
@@ -22222,8 +22222,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					+ "cnhi.valorCreditos, " 
 					+ "cnhi.valorImposto, "
 					+ "cnhi.anoMesReferenciaContabil, "
-					/**TODO: COSANPA
-					 * Mantis 615 - Classificar detalhadamente documentos inexistentes por débito prescrito,
+					/**
+					 * Classificar detalhadamente documentos inexistentes por débito prescrito,
 					 * conta parcelada, conta cancelada ou erro de processamento
 					 * @author Wellington Rocha
 					 * @date 02/08/2012*/
@@ -22244,8 +22244,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.setMaxResults(1).uniqueResult();
 			
 
-			/**TODO: COSANPA
-			 * Mantis 615 - Classificar detalhadamente documentos inexistentes por débito prescrito,
+			/**
+			 * Classificar detalhadamente documentos inexistentes por débito prescrito,
 			 * conta parcelada, conta cancelada ou erro de processamento
 			 * @author Wellington Rocha
 			 * @date 02/08/2012*/
@@ -23931,8 +23931,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		// Cria a variável que vai conter o hql
 		String consulta = "";
 		
-		/**TODO: Cosanpa
-		 * Mantis 632 - Algumas guias de pagamento e guias de devolução foram jogados para histórico indevidamente
+		/**
+		 * Algumas guias de pagamento e guias de devolução foram jogados para histórico indevidamente
 		 * Alterado clausula where do anoMesReferenciaArrecadacao de <= para <
 		 * 
 		 * @author Wellington Rocha
@@ -26943,7 +26943,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					+ " LEFT JOIN cadastro.funcionario funcionario on funcionario.func_id = leiturista.func_id "
 					+ condicionais
 					/**
-					 * TODO : COSANPA
+					 * 
 					 * 03/05/2011 - Pamela Gatinho
 					 * Adicionando campos (localidade, setor e rota) para 
 					 * ordenacao da consulta de arquivos de rota
@@ -29117,7 +29117,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		return retorno;
 	}
 	
-	/*TODO: COSANPA
+	/*
 	 * Criado para a consulta, de manter conta por conjunto de imóveis, pelo id do banco
 	 * e pelo grupo de faturamento
 	 * 
@@ -29165,7 +29165,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 	
 	/*
-	 * TODO: COSANPA autor: Adriana Muniz
+	 * autor: Adriana Muniz
 	 * 
 	 * Alteração para a conta considerar como filtro grupo de faturamento,
 	 * quando o mesmo estiver preenchido
@@ -29267,10 +29267,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 	
 	/**
-	 * TODO: COSANPA
-	 * 
-	 * Mantis 537
-	 * 
 	 * @author Wellington Rocha
 	 * @data 15/04/2012
 	 * 
@@ -29300,7 +29296,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		return retorno;
 	}
 
-	/**TODO:COSANPA
+	/**
 	 * 
 	 * Relatório Analitico dos valores diários da arrecadação
 	 * 
@@ -29372,7 +29368,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 	
 
-	/**TODO:COSANPA
+	/**
      * DATA:02/10/2012
      * @author Adriana Muniz
      *
@@ -29417,7 +29413,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
     }
 
 
-/**TODO:COSANPA
+/**
      *
      * Relatório Analitico dos valores diários da arrecadação
      *
@@ -29494,7 +29490,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
         return retorno;
     }
     
-    /**TODO:COSANPA
+    /**
 	 * @autor Adriana MUniz
 	 * @date 10/12/2012
 	 * 
@@ -29589,7 +29585,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		
 	}
 	
-	/**TODO: COSANPA
+	/**
 	 * @author Adriana Muniz
 	 * @date 10/12/2012
 	 * 
@@ -29656,7 +29652,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 	
     
-	/**TODO:COSANPA
+	/**
 	 * @author Adriana Muniz
 	 * @date 11/12/2012
 	 * 
@@ -29822,7 +29818,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 
 	}
 	
-	/**TODO:COSANPA
+	/**
 	 * @author Adriana Muniz
 	 * @date 05/12/2012
 	 * 
@@ -29868,7 +29864,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		}
 	}
 
-	/**TODO:COSANPA
+	/**
 	 * @author Adriana Muniz
 	 * @date 12/12/2012
 	 * 
@@ -29912,7 +29908,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		}
 	}
 	
-	/**TODO:COSANPA
+	/**
 	 * @author Adriana Muniz
 	 * @date 05/12/2012
 	 * 
@@ -29972,7 +29968,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		return retorno;
 	}
 
-	/**TODO:COSANPA
+	/**
 	 * @author Adriana Muniz
 	 * @date 05/12/2012
 	 * 
@@ -30032,7 +30028,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 
 	}
 	
-	/** TODO:COSANPA
+	/**
 	 * @author Adriana Muniz
 	 * @date 12/12/2012
 	 * 
@@ -30092,7 +30088,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		return retorno;
 	}
 
-	/** TODO:COSANPA
+	/**
 	 * @author Adriana Muniz
 	 * @date 12/12/2012
 	 * 
@@ -30153,7 +30149,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 
 	}
 	
-	/**TODO:COSANPA
+	/**
     *
     * Relatório Analitico dos valores diários da arrecadação com tarifa
     *
@@ -30231,10 +30227,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
    }
    
    /**
-	 * TODO: COSANPA
-	 * 
-	 * Mantis: ***
-	 * 
 	 * Mudança de conta contábil de recebimentos até 12/2012 classificados no mês atual;
 	 * 
 	 * @author Wellington Rocha
@@ -30305,10 +30297,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 	
 	/**
-	 * TODO: COSANPA
-	 * 
-	 * Mantis *** 
-	 * 
 	 * Contabilizar valores arrecadados até dezembro de 2012 em contas diferentes.
 	 * 
 	 * @author Wellington Rocha
@@ -30377,8 +30365,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	
 	
 	/**
-	 * Mantis ***
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Contabilizar valores arrecadados até 31/12/2012 em contas diferentes
@@ -30459,8 +30445,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 
 	/**
-	 * Mantis ***
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Alteração na contabilização de contas arrecadadas até 31/12/2012
@@ -30543,11 +30527,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	
 	
 	/**
-	 * TODO: COSANPA
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
-	 * 
-	 * Mantis ***
 	 * 
 	 * Contabilizar em contas diferentes os valores arrecadados até 31/12/2012
 	 * 
@@ -30626,8 +30606,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 
 	
 	/**
-	 * Mantis ***
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Contabilizar em contas diferentes valores arrecadados até 31/12/2012
@@ -30714,8 +30692,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 
 	/**
-	 * Mantis ***
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Contabilizar em contas separadas valores arrecadados até 31/12/2012
@@ -30800,8 +30776,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 
 	
 	/**
-	 * Mantis ****
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Contabilizar em contas separadas valores arrecadados até 31/12/2012
@@ -30891,8 +30865,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 	
 	/**
-	 * Mantis ****
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Contabilizar em contas separadas valores arrecadados até 31/12/2012
@@ -30977,8 +30949,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 	
 	/**
-	 * Mantis ****
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Contabilizar em contas separadas valores arrecadados até 31/12/2012
@@ -31055,7 +31025,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 22/10/2013
+	 * Felipe Santos - 22/10/2013
 	 * 
 	 * Retorna o total de Arrecadação por referência e localidade
 	 * 
@@ -31120,7 +31090,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 	
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 22/10/2013
+	 * Felipe Santos - 22/10/2013
 	 * 
 	 * Retorna diferença de datas e quantidade de pagamentos para
 	 * Prazo Medio de Recebimento de Contas
@@ -31179,7 +31149,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 	
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 08/11/2013
+	 * Felipe Santos - 08/11/2013
 	 * 
 	 * Retorna os dados para o Relatorio BIG
 	 * 

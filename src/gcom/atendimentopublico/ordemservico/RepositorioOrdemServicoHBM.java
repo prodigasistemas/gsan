@@ -1085,7 +1085,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					+ "pgrCali.peso, "// 222
 					+ "pgrCali.fator, "// 223
                     /**
-					 * TODO - COSANPA - Mantis 662 - Felipe Santos
+					 * Felipe Santos
 					 * 
 					 * Inclusão do atributo servicoTipoReferencia para 
 					 * não retornar objeto com o campo nulo.
@@ -1104,7 +1104,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					+ "LEFT JOIN os.osReferencia osReferencia "
 
 					/**
-					 * TODO - COSANPA - Mantis 662 - Felipe Santos
+					 * Felipe Santos
 					 * 
 					 * Inclusão do atributo servicoTipoReferencia para 
 					 * não retornar objeto com o campo nulo.
@@ -1704,7 +1704,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 				}
 
 				/**
-				 * TODO - COSANPA - Mantis 662 - Felipe Santos
+				 * Felipe Santos
 				 * 
 				 * Inclusão do atributo servicoTipoReferencia para 
 				 * não retornar objeto com o campo nulo.
@@ -7954,7 +7954,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 		String consulta = "";
 
 		/*
-		 * TODO: COSANPA
+		 *
 		 * Acréscimo dos alias para todas as colunas selecionadas na consulta
 		 */		
 		try {
@@ -11421,8 +11421,8 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	 * @throws ErroRepositorioException
 	 */
 
-	/**TODO: Cosanpa
-	 * Mantis 486 - Inclusão da Origem da OS na busca para encerrar as mesmas quando vencidas.
+	/**
+	 * Inclusão da Origem da OS na busca para encerrar as mesmas quando vencidas.
 	 * @author Wellington Rocha
 	 * @date 18/01/2012*/
 	public List pesquisarOrdemServicoVencida(Integer idServicoTipo, String dataVencimento)
@@ -11444,8 +11444,8 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 							"	and os.servicoTipo.id = :idServicoTipo " +
 							"	and substring(os.dataGeracao, 1, 10) <= :dataVencimento ";
 
-			/**TODO: Cosanpa
-			 * Mantis 486 - Inclusão da Origem da OS na busca para encerrar as mesmas quando vencidas.
+			/**
+			 * Inclusão da Origem da OS na busca para encerrar as mesmas quando vencidas.
 			 * @author Wellington Rocha
 			 * @date 18/01/2012*/
 			/*Alterações em testes.
@@ -17214,7 +17214,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	public Collection pesquisarEquipeEquipamentosEspeciais(
 			Integer indicadorEquipamentosEspeciais)
 					throws ErroRepositorioException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

@@ -43,7 +43,7 @@ public class RotaAcaoCriterio extends ObjetoTransacao {
 
 	public RotaAcaoCriterio(RotaAcaoCriterioPK comp_id, Rota rota, CobrancaAcao cobrancaAcao, CobrancaCriterio cobrancaCriterio) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.comp_id = comp_id;
 		this.rota = rota;
 		this.cobrancaAcao = cobrancaAcao;

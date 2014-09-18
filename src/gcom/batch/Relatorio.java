@@ -449,25 +449,25 @@ public class Relatorio implements Serializable {
 	public static final int RELATORIO_DOCUMENTO_VISITA_COBRANCA = 210;
 	
  /**
-     * TODO : COSANPA
+     * 
      * Pamela Gatinho - 08/09/2011
      */
     public static final int RELATORIO_LEITURAS_REALIZADAS = 1001;
     
     /**
-     * TODO : COSANPA
+     * 
      * Pamela Gatinho - 15/09/2011
      */
     public static final int RELATORIO_CONTAS_RETIDAS = 1000;
     
     /**
-     * TODO : COSANPA
+     * 
      * Pamela Gatinho - 22/09/2011
      */
     public static final int RELATORIO_MEDICAO_FATURAMENTO = 1002;
     
     /**
-     * TODO : COSANPA
+     * 
      * @autor Adriana Muniz - 22/12/2011
      */
     public static final int SIMULADOR_DEBITO = 1003;

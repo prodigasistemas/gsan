@@ -12,14 +12,14 @@ public class CapacidHidrComandoOSSPK extends ObjetoGcom {
 
 	public CapacidHidrComandoOSSPK(Integer comandoOrdemSeletivaId, Integer hidrometroCapacidadeId) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.comandoOrdemSeletivaId = comandoOrdemSeletivaId;
 		this.hidrometroCapacidadeId = hidrometroCapacidadeId;
 	}
 
 	public CapacidHidrComandoOSSPK() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public Integer getComandoOrdemSeletivaId() {

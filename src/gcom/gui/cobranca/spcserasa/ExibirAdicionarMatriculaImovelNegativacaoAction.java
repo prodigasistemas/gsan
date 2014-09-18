@@ -322,7 +322,7 @@ public class ExibirAdicionarMatriculaImovelNegativacaoAction extends
 					      clienteParcelamento.setClienteRelacaoTipo(relacaoCliente);
 					      
 					      /*
-					       * TODO - COSANPA - Felipe Santos - 06/12/2011
+					       * Felipe Santos - 06/12/2011
 					       * 
 					       * Seta o id 0 e o imóvel para ser recuperado por atributo de sessão
 					       */
@@ -331,7 +331,7 @@ public class ExibirAdicionarMatriculaImovelNegativacaoAction extends
 					      clientesImovel.add(clienteParcelamento);
 					      
 					      /*
-					       * TODO - COSANPA - Felipe Santos - 06/12/2011
+					       * Felipe Santos - 06/12/2011
 					       * 
 					       * Seta o objeto como atributo de sessão
 					       */

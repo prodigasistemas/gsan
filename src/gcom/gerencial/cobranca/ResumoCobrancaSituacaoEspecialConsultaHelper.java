@@ -89,7 +89,7 @@ public class ResumoCobrancaSituacaoEspecialConsultaHelper {
 
 	public ResumoCobrancaSituacaoEspecialConsultaHelper(Integer idGerenciaRegional, String gerenciaRegional, Integer idLocalidade, String localidadeDescricao, Integer idSituacao, String situacaoDescricao, Integer idMotivo, String motivoDescricao, Integer periodoInicio, Integer periodoFinal, Integer qtParalisada) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idGerenciaRegional = idGerenciaRegional;
 		this.gerenciaRegional = gerenciaRegional;
 		this.idLocalidade = idLocalidade;

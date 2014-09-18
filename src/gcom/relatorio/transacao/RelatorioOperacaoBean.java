@@ -22,7 +22,7 @@ public class RelatorioOperacaoBean implements RelatorioBean {
 		String conteudoAtual , String dataHora ) {
 		
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.identificadorLinha1 = identificadorLinha1;
 		this.identificadorLinha2 = identificadorLinha2;
 		this.nomeTabela = nomeTabela;

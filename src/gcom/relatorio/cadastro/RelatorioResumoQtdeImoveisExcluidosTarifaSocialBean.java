@@ -26,7 +26,7 @@ public class RelatorioResumoQtdeImoveisExcluidosTarifaSocialBean implements Rela
 
 	public RelatorioResumoQtdeImoveisExcluidosTarifaSocialBean(String descricaoGerencia, String idGerencia, String descricaoLocalidade, String idLocalidade, String descricaoUnidadeNegocio, String idUnidadeNegocio, Integer qtdeExcluidos) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.descricaoGerencia = descricaoGerencia;
 		this.idGerencia = idGerencia;
 		this.descricaoLocalidade = descricaoLocalidade;
@@ -38,12 +38,12 @@ public class RelatorioResumoQtdeImoveisExcluidosTarifaSocialBean implements Rela
 
 	public RelatorioResumoQtdeImoveisExcluidosTarifaSocialBean() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public RelatorioResumoQtdeImoveisExcluidosTarifaSocialBean(String descricaoGerencia, String idGerencia, String descricaoLocalidade, String idLocalidade, String descricaoUnidadeNegocio, String idUnidadeNegocio, String motivoExclusao, Integer qtdeCartas, Integer qtdeExcluidos, String descricaoMotivoExclusao) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.descricaoGerencia = descricaoGerencia;
 		this.idGerencia = idGerencia;
 		this.descricaoLocalidade = descricaoLocalidade;

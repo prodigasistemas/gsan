@@ -57,11 +57,8 @@ public class InserirConsumoTarifaSubCategoriaAction extends GcomAction {
 		consumoTarifa
 				.setIndicadorUso(ConstantesSistema.INDICADOR_USO_ATIVO);
 		consumoTarifa.setUltimaAlteracao(new Date());
-		// TODO Carrega objeto consumoTarifaVigencia
-		// Carregando o objeto consumoTarifaVigencia
 
 		// Data de vigência da tarifa
-		// Para auxiliar na formatação de uma data
 		SimpleDateFormat formatoData = new SimpleDateFormat("dd/MM/yyyy");
 
 		Date dataVencimentoTarifa;

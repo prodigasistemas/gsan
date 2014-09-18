@@ -151,7 +151,7 @@ public class ExibirResultadoConsultarComparativoResumoArrecadacaoFaturamentoPend
 		
 		
 		//Pesquisa na base de dados os resumos do faturamento, arrecadação e pendência para 
-		//todos os filtros selecionados na página.
+		
 		List resultadoConsultaResumoFaturamento = fachada.consultarResumoFaturamento(informarDadosGeracaoRelatorioConsultaHelper);
 		List resultadoConsultaResumoArrecadacao = fachada.consultarResumoArrecadacao(informarDadosGeracaoRelatorioConsultaHelper);
 		List resultadoConsultaResumoPendencia = fachada.consultarResumoComparativoPendencia(informarDadosGeracaoRelatorioConsultaHelper);

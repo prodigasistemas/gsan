@@ -30,7 +30,7 @@ public class RelatorioManterRamoAtividadeBean implements RelatorioBean {
 
 	public RelatorioManterRamoAtividadeBean(String codigo, String descricao, String indicadorUso) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.codigo = codigo;
 		this.descricao = descricao;
 		this.indicadorUso = indicadorUso;

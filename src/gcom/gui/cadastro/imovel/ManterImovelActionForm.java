@@ -134,8 +134,8 @@ public class ManterImovelActionForm extends ValidatorForm {
 	private String indicadorImovelSubcategoriaNaoPodeSerAtualizado;
 	
 
-	/**TODO: COSANPA
-	 * Mantis 647 - Disponibilizar o campo nome do Imóvel no cadastro do Imóvel
+	/**
+	 * Disponibilizar o campo nome do Imóvel no cadastro do Imóvel
 	 * 
 	 * @author Wellington Rocha
 	 * @date 14/11/2012*/

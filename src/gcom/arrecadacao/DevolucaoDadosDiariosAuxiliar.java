@@ -73,7 +73,7 @@ public class DevolucaoDadosDiariosAuxiliar implements Serializable {
 
     public DevolucaoDadosDiariosAuxiliar() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public DevolucaoDadosDiariosAuxiliar(Integer id, int anoMesReferencia,

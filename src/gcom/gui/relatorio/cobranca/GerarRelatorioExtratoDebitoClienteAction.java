@@ -250,7 +250,7 @@ public class GerarRelatorioExtratoDebitoClienteAction extends
 	       
 		}
 		
-		/**TODO: COSANPA
+		/**
 		 * Data: 14/02/2011
 		 * Gerar codigo de barra para a opção de extrato de debito total(com acrescimo de impontualidade)
 		 * Mudança de posição da condição a seguir, antes essa operação era realizada apenas quando o tipo era conta,

@@ -21,14 +21,14 @@ public class ArrecadacaoDadosDiariosValoresDiariosHelper implements Serializable
 
 	public ArrecadacaoDadosDiariosValoresDiariosHelper(ArrecadacaoDadosDiarios arrecadacaoDadosDiarios, DevolucaoDadosDiarios devolucaoDadosDiarios) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.arrecadacaoDadosDiarios = arrecadacaoDadosDiarios;
 		this.devolucaoDadosDiarios = devolucaoDadosDiarios;
 	}
 
 	public ArrecadacaoDadosDiariosValoresDiariosHelper() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public ArrecadacaoDadosDiarios getArrecadacaoDadosDiarios() {

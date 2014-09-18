@@ -40,7 +40,7 @@ public class FiltrarImovelContaActionForm extends ActionForm {
 	
 	private String idFaturamentoGrupo;
 	private String[] banco;
-	/**TODO:COSANPA
+	/**
 	 * @autor: Adriana Muniz
 	 * @date: 24/11/2011
 	 * Acréscimo de atributo esfera de poder no filtro da consulta

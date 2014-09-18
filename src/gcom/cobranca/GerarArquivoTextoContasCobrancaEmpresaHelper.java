@@ -205,7 +205,7 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements
 			String nomeUnidadeNegocio, Integer qtdeTotalContasCobranca,
 			BigDecimal valorTotalContasCobranca, Date ultimaAlteracao) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idComandoEmpresaCobrancaConta = idComandoEmpresaCobrancaConta;
 		this.idEmpresa = idEmpresa;
 		this.nomeEmpresa = nomeEmpresa;
@@ -268,7 +268,7 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements
 			Integer qtdeContasCriterioComando,
 			BigDecimal valorContasCriterioComando, Date ultimaAlteracao) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idComandoEmpresaCobrancaConta = idComandoEmpresaCobrancaConta;
 		this.idEmpresa = idEmpresa;
 		this.nomeEmpresa = nomeEmpresa;
@@ -296,7 +296,7 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements
 	}
 
 	public GerarArquivoTextoContasCobrancaEmpresaHelper() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public Integer getCodigoSetorComercialFinal() {
@@ -836,7 +836,7 @@ public class GerarArquivoTextoContasCobrancaEmpresaHelper implements
 			Integer idLocalidadeFinal, Integer idUnidadeNegocio,
 			String nomeUnidadeNegocio,  Date ultimaAlteracao) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idComandoEmpresaCobrancaConta = idComandoEmpresaCobrancaConta;
 		this.idEmpresa = idEmpresa;
 		this.nomeEmpresa = nomeEmpresa;

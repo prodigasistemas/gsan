@@ -356,7 +356,7 @@ public class EfetuarParcelamentoDebitosActionForm extends ActionForm {
 	}
 	
 	public void reset(ActionMapping arg0, HttpServletRequest arg1) {
-		// TODO Auto-generated method stub
+		
 		super.reset(arg0, arg1);
 		
 		this.matriculaImovel = "";

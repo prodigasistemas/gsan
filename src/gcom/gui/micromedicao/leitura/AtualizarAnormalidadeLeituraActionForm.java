@@ -68,7 +68,7 @@ public class AtualizarAnormalidadeLeituraActionForm extends ValidatorActionForm 
 	private String numeroMesesLeituraSuspensa;
 
 	/**
-	 * TODO : COSANPA Pamela Gatinho - 13/03/2012 Campo que identifica se a
+	 *  Pamela Gatinho - 13/03/2012 Campo que identifica se a
 	 * anormalidade será usada ou não no sistema de leitura e impressão
 	 * simultanea.
 	 */

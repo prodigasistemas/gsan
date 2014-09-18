@@ -583,7 +583,7 @@ public class RelatorioDadosTarifaSocial extends TarefaRelatorio {
 
 	@Override
 	public int calcularTotalRegistrosRelatorio() {
-		// TODO Auto-generated method stub
+		
 		return 0;
 	}
 

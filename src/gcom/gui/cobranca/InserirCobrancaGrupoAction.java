@@ -93,7 +93,7 @@ public class InserirCobrancaGrupoAction extends GcomAction {
 		while (iterator.hasNext()) {
 			helper = (InformarItensContratoServicoHelper) iterator.next();
 			contratoEmpresaServico = helper.getContratoEmpresaServico();
-			//TODO
+			
 		}*/
 		ContratoEmpresaServico contratoEmpresaServico = null;
 		if (form.getIdNumeroContrato() != null && !form.getIdNumeroContrato().equals("")) {

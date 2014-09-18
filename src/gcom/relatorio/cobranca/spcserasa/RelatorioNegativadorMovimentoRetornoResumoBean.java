@@ -39,7 +39,7 @@ public class RelatorioNegativadorMovimentoRetornoResumoBean implements Relatorio
 
 		public RelatorioNegativadorMovimentoRetornoResumoBean(String nomeNegativador, String dataProcessamento, String horaProcessamento, String numeroSequencialArquivo, String numeroRegistros) {
 			super();
-			// TODO Auto-generated constructor stub
+			
 			this.nomeNegativador = nomeNegativador;
 			this.dataProcessamento = dataProcessamento;
 			this.horaProcessamento = horaProcessamento;

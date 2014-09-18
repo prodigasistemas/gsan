@@ -47,7 +47,7 @@ public class RelatorioDadosDiariosArrecadacaoPerfilBean implements RelatorioBean
 
 	public RelatorioDadosDiariosArrecadacaoPerfilBean(String tipoProcessamento, String processamentoProvisorio, String mesAno, String faturamentoCobradoEmConta, String valor, String percentual, String perfil, String debitos, String descontos, String valorArrecadado, String devolucao, String arrecadacaoLiquida, String percentualMes, String valorTotalPeriodo) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.tipoProcessamento = tipoProcessamento;
 		this.processamentoProvisorio = processamentoProvisorio;
 		this.mesAno = mesAno;

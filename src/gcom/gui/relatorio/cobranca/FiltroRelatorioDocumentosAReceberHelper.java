@@ -23,7 +23,7 @@ public class FiltroRelatorioDocumentosAReceberHelper implements Serializable {
 	private String descricaoEstado;
 	private String maiorFaixa;
 	
-	/**TODO:COSANPA
+	/**
 	 * @author Adriana Muniz
 	 * @date 29/03/2012
 	 * 

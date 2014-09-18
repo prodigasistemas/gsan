@@ -7355,7 +7355,6 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			}
 
 			// D.06 - Código de natureza da operação
-			// TODO - ??????
 			registroDetalheConsumidor.append("SB ");
 			// D.07 - Código da praça Embratel
 			registroDetalheConsumidor.append("    ");

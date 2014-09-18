@@ -371,7 +371,7 @@ public class AtualizarDadosTarifaSocialAction extends ControladorAlteracaoGcomAc
 	        	Iterator it = coll.iterator();
 	        	while (it.hasNext()) {
 	        		//TarifaSocialDadoEconomia tarifaSocialDadoEconomia = (TarifaSocialDadoEconomia) it.next();
-	        		//TODO comentado devido a remoção de Tarifa Social Dado
+	        		
 					//if (!f.getIdRegistroAtualizacao().equals(tarifaSocialDadoEconomia.getTarifaSocialDado().getImovel().getId() + "")) {
 			        //	throw new ActionServletException("atencao.duplicidade_cartao_programa_social",null,tarifaSocialDadoEconomia.getTarifaSocialDado().getImovel().getId().toString());
 					//}

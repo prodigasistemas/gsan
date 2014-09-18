@@ -18,7 +18,7 @@ public class GuiaPagamentoParcelamentoCartaoPK implements Serializable {
 
 	public GuiaPagamentoParcelamentoCartaoPK(Integer parcelamentoId, Integer guiaPagamentoId) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.parcelamentoId = parcelamentoId;
 		this.guiaPagamentoId = guiaPagamentoId;
 	}
