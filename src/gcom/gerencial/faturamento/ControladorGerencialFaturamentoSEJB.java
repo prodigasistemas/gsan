@@ -1277,7 +1277,7 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
 				this.gerarResumoFaturamentoImpostos(idSetor, anoMes, indice, qtRegistros, resumo);
 				
 				// Resumo Faturamento Creditos
-				/*TODO: COSANPA
+				/*
 				 * Alteração para corrigir problema de créditos persistidos na categoria errada
 				 * Autor: Wellington Rocha
 				 * Data: 12/09/2011*/
@@ -3307,7 +3307,7 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
 	
 					ResumoFaturamentoCreditosSetores listaSetores = new ResumoFaturamentoCreditosSetores(idSetor); 
 											
-						/*TODO: Cosanpa
+						/*
 						 * Alteração para corrigir o erro no resumo do faturamento na base gerencial
 						 * onde os créditos eram persistidos na categoria errada
 						 * autor: Wellington Rocha 
@@ -4620,7 +4620,7 @@ public class ControladorGerencialFaturamentoSEJB implements SessionBean {
 			List<ResumoFaturamentoGuiaPagamentoHelper> listaSimplificadaFaturamentoGuiaPagamento = new ArrayList();
 			UnResumoFaturamento resumoFaturamentoAguaEsgotoGrava = null;
 			
-			/*TODO: COSANPA 
+			/* 
 			 * Alteraçãopara pesquisa que não considera as guias de pagamento de entrada de parcelamento
 			 * Autor: Wellington Rocha
 			 * Data: 14/09/2011*/

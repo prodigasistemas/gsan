@@ -41,7 +41,7 @@ public class ReiterarRegistroAtendimentoActionForm extends ValidatorActionForm {
 	
 	public ReiterarRegistroAtendimentoActionForm(String numeroRA, String dataPrevista, String idTipoSolicitacao, String descTipoSolicitacao, String idEspecificacao, String descEspecificacao, String idUnidadeAtual, String descUnidadeAtual, String nomeSolicitante, String idClienteSolicitante, String idUnidadeSolicitante, String pontoReferencia, String observacao, String clienteEnderecoSelected, String clienteFoneSelected) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.numeroRA = numeroRA;
 		this.dataPrevista = dataPrevista;
 		this.idTipoSolicitacao = idTipoSolicitacao;
@@ -66,7 +66,7 @@ public class ReiterarRegistroAtendimentoActionForm extends ValidatorActionForm {
 	}
 	public ReiterarRegistroAtendimentoActionForm() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	public String getDataPrevista() {
 		return dataPrevista;

@@ -9055,7 +9055,7 @@ public class RepositorioRegistroAtendimentoHBM implements
 	}
 	
 	/**
-     * TODO: COSANPA
+     *
      * 
      * Mantis 652 - Gerar Relatório de Registro de Atendimento Por Unidade Por Usuário
      * 
@@ -9077,7 +9077,7 @@ public class RepositorioRegistroAtendimentoHBM implements
        	if (filtro.getDataAtendimentoInicial() != null && filtro.getDataAtendimentoFinal() != null) {
        		where += " AND ra.rgat_tmregistroatendimento BETWEEN :dataAtendimentoInicial AND :dataAtendimentoFinal ";
        	}
-     	/**TODO: COSANPA
+     	/**
        	 * @author Adriana Muniz
        	 * @date 07/08/2013
        	 * 
@@ -9131,7 +9131,7 @@ public class RepositorioRegistroAtendimentoHBM implements
            		q.setTimestamp("dataAtendimentoInicial", filtro.getDataAtendimentoInicial());
            		q.setTimestamp("dataAtendimentoFinal", filtro.getDataAtendimentoFinal());
            	}
-           	/**TODO: COSANPA
+           	/**
            	 * @author Adriana Muniz
            	 * @date 07/08/2013
            	 * 

@@ -43,7 +43,7 @@ public class FaturamentoContabilParametros {
 
 	public FaturamentoContabilParametros(Integer id, String descricaoHistoricoCredito, String descricaoHistoricoDebito, Date ultimaAlteracao, LancamentoTipo lancamentoTipo, LancamentoItem lancamentoItem, LancamentoItemContabil lancamentoItemContabil, Categoria categoria, ContaContabil contaContabilDebito, ContaContabil contaContabilCredito) {
 
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.descricaoHistoricoCredito = descricaoHistoricoCredito;
 		this.descricaoHistoricoDebito = descricaoHistoricoDebito;

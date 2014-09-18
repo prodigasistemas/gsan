@@ -31,7 +31,7 @@ public class RelatorioContasCanceladasBean implements RelatorioBean {
 	private String gerenciaRegional;
 	private String idGrupo;
 	private String grupo;
-	/**TODO: COSANPA
+	/**
 	 * Mantis 581: Incluir opção de contas prescritas no relatório de contas
 	 * canceladas/retificadas.
 	 * @author Wellington Rocha

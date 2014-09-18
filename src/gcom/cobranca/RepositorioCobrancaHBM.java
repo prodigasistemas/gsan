@@ -348,7 +348,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 				// " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) < ((coalesce(conta.cnta_vlagua, 0) + coalesce(conta.cnta_vlesgoto, 0) + coalesce(conta.cnta_vldebitos, 0) - coalesce(conta.cnta_vlcreditos, 0) - coalesce(conta.cnta_vlimpostos, 0)))";
 
 				/*
-				 * TODO - COSANPA - 24/07/2012 - Mantis 610 - Felipe Santos e
+				 * 24/07/2012 - Mantis 610 - Felipe Santos e
 				 * Wellington Rocha
 				 * 
 				 * Alteração para ser emitidos Documentos de Cobrança apenas
@@ -496,7 +496,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ "and conta.cnta_dtvencimentoconta between :inicialVencimento and :finalVencimento "
 					+ "and (coalesce(conta.cnta_vlagua, 0) + coalesce(conta.cnta_vlesgoto, 0) + coalesce(conta.cnta_vldebitos, 0) - coalesce(conta.cnta_vlcreditos, 0) - coalesce(conta.cnta_vlimpostos, 0)) > 0.00 "
 					/*
-					 * TODO - COSANPA - Mantis 774 - Felipe Santos
+					 * Mantis 774 - Felipe Santos
 					 * 
 					 * Consultar Débitos por Cliente indicado na conta
 					 */
@@ -2455,7 +2455,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 			// Verifica se já tem débito automático
 			consulta = "SELECT cd.valorAcrescimos,cd.valorDesconto,cd.emissao,cd.id,cd.valorTaxa,loca.id, documentoTipo.id, "
 			/**
-			 * TODO : COSANPA Adicionando no retorno da consulta o valor do
+			 *  Adicionando no retorno da consulta o valor do
 			 * documento de cobrança, para comparar com o valor do pagamento
 			 */
 			+ "cd.valorDocumento " + "FROM CobrancaDocumento cd " + "LEFT JOIN cd.imovel imovel "
@@ -5590,7 +5590,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ "cobrancaDocumentoItem.debitoACobrarGeral.id, " + "cobrancaDocumentoItem.id,"
 					+ "cobrancaDocumentoItem.valorItemCobrado, "
 					/**
-					 * TODO:COSANPA
+					 *
 					 * 
 					 * @data 23/10/2013
 					 * @author Adriana Muniz e Wellington Rocha Adição do
@@ -21235,7 +21235,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ " WHERE drrs_amreferenciarecebimentos = :anoMes and ";
 
 			/**
-			 * TODO:COSANPA
+			 *
 			 * 
 			 * @author Adriana Muniz
 			 * @date 29/03/2012
@@ -22316,7 +22316,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @throws ErroRepositorioException
 	 */
 	/**
-	 * TODO: COSANPA Alterações para atender ao Mantis 490 Considerar a data de
+	 * Alterações para atender ao Mantis 490 Considerar a data de
 	 * vencimento da conta ao invés de considerar o anoMes referencia da mesma.
 	 * 
 	 * @author Wellington Rocha
@@ -22335,7 +22335,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 			// declara o tipo de conexao
 			Connection jdbcCon = session.connection();
 			/**
-			 * TODO: Cosanpa Alterações para colocar em funcionamento processo
+			 * Alterações para colocar em funcionamento processo
 			 * de prescrição de contas
 			 * 
 			 * @author Wellington Rocha
@@ -22353,14 +22353,14 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ anoMesFaturamento.intValue()
 
 					/**
-					 * TODO: Cosanpa Retirada da situação de incluída do método,
+					 * Retirada da situação de incluída do método,
 					 * pois a mesma causava problemas por causa da restrição da
 					 * chave xak1_conta
 					 */
 					+ " and   c.dcst_idatual in ( " + DebitoCreditoSituacao.NORMAL + ", " + DebitoCreditoSituacao.RETIFICADA + ")"
 
 					/**
-					 * TODO: Cosanpa Alterações para não pegar histórico de
+					 * Alterações para não pegar histórico de
 					 * conta mas sim o cliente atual do imóvel
 					 * 
 					 * @date 31/07/2012
@@ -22396,7 +22396,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	}
 
 	/**
-	 * TODO: COSANPA Mantis 490: Método criado para prescrever débitos de
+	 * Mantis 490: Método criado para prescrever débitos de
 	 * imóveis com contas incluídas
 	 * 
 	 * @author Wellington Rocha
@@ -22425,7 +22425,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ DebitoCreditoSituacao.INCLUIDA
 
 					/**
-					 * TODO: Cosanpa Alterações para não pegar histórico de
+					 * Alterações para não pegar histórico de
 					 * conta mas sim o cliente atual do imóvel
 					 * 
 					 * @date 31/07/2012

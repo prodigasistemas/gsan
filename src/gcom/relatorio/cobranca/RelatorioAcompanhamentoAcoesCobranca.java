@@ -427,13 +427,13 @@ public class RelatorioAcompanhamentoAcoesCobranca extends TarefaRelatorio {
 	
 	@Override
 	public int calcularTotalRegistrosRelatorio() {
-		// TODO Auto-generated method stub
+		
 		return 0;
 	}
 
 	@Override
 	public void agendarTarefaBatch() {
-		// TODO Auto-generated method stub
+		
 
 	}
 }

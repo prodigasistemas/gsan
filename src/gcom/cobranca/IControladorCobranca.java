@@ -4040,7 +4040,7 @@ public interface IControladorCobranca {
 	public IndicesAcrescimosImpontualidade pesquisarIndiceAcrescimoImpontualidade(
 			int anoMesReferenciaDebito) throws ControladorException;
 	
-	/**TODO: COSANPA - Alterações para atender Mantis 595
+	/** - Alterações para atender Mantis 595
 	 * Enviar documentos de cobrança para endereço de correspondência
 	 * 
 	 * @author Wellington Rocha
@@ -4847,7 +4847,7 @@ public interface IControladorCobranca {
 	 * @date 07/07/2010
 	 * 
 	 */
-	/**TODO: COSANPA
+	/**
 	 * Alterações para atender ao Mantis 490
      * Considerar a data de vencimento da conta ao invés de considerar o anoMes referencia
      * da mesma

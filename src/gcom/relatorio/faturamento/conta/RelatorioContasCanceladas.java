@@ -121,7 +121,7 @@ public class RelatorioContasCanceladas extends TarefaRelatorio {
 							localidade != null ? localidade.getDescricao() : null,
 						    rel.getMatricula() );
 			
-			/**TODO: COSANPA
+			/**
 			 * Mantis 581: Incluir opção de contas prescritas no relatório de contas
 			 * canceladas/retificadas.
 			 * @author Wellington Rocha

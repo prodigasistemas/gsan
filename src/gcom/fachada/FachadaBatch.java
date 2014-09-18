@@ -807,7 +807,7 @@ public class FachadaBatch {
 			try {
 				this.getControladorArrecadacao().classificarPagamentosDevolucoes(localidade,0);
 			} catch (ControladorException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 	}
@@ -1149,7 +1149,7 @@ public class FachadaBatch {
 			Integer anomes = 200703;
 			this.getControladorFaturamento().gerarHistoricoParaEncerrarFaturamento(anomes,localidade,0);
 		} catch (ControladorException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
@@ -1160,7 +1160,7 @@ public class FachadaBatch {
 			localidade.add(60);
 			this.getControladorArrecadacao().encerrarArrecadacaoMes(localidade,0);
 		} catch (ControladorException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
@@ -1176,7 +1176,7 @@ public class FachadaBatch {
 			faturas = getControladorUtil().pesquisar(filtroFatura, Fatura.class.getName());
 			this.getControladorFaturamento().emitirFaturaClienteResponsavel(faturas, 200703);
 		} catch (ControladorException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
@@ -1192,7 +1192,7 @@ public class FachadaBatch {
 			
 			System.out.println("Fim " + new Date());
 		} catch (ControladorException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
@@ -1208,7 +1208,7 @@ public class FachadaBatch {
 			
 			System.out.println("Fim " + new Date());
 		} catch (ControladorException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
@@ -1221,7 +1221,7 @@ public class FachadaBatch {
 			this.getControladorMicromedicao().efetuarRateioDeConsumo(rotas,200705,0);
 			
 		} catch (ControladorException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}

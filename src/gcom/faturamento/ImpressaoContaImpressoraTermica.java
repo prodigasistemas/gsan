@@ -541,7 +541,7 @@ public class ImpressaoContaImpressoraTermica {
 		   
 		}
 		} catch (ErroRepositorioException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		Vector retornar = new Vector();
@@ -581,7 +581,7 @@ public class ImpressaoContaImpressoraTermica {
 					dados = new String[3];
 					dados[0] = "DEBITOS";
 					dados[2] = Util.formatarMoedaReal(soma);
-					/**TODO: COSANPA
+					/**
 					 * Mantis 756 - Contas de rotas do interior que não possuiam a descrição dos débitos
 					 * 
 					 * @author Wellington Rocha
@@ -1409,7 +1409,7 @@ public class ImpressaoContaImpressoraTermica {
 				
 				String msgConta = "";
 				
-				/**TODO: COSANPA
+				/**
 				 * 
 				 * Mantis 775 - Alteração na emissão do extrato de quitação anual de débitos
 				 * como mensagem nas contas impressas via impressão térmica
@@ -1539,7 +1539,7 @@ public class ImpressaoContaImpressoraTermica {
 				
 				retorno.append(formarLinha(5, 0, 352, 1661, "4", 0, 0));
 				
-				/**TODO: COSANPA
+				/**
 				 * Mantis 680 - Incluir informação de sequencial de conta a ser impressa.
 				 * 
 				 * @author Wellington Rocha

@@ -37,7 +37,7 @@ public class DeclaracaoQuitacaoAnualDebitosHelper implements Serializable {
 	private String codigoRota;
 	private String seguencialRota;
 	
-	/*TODO : COSANPA
+	/*
 	 * inclus�o de novo atributo e respectivos get e set
 	 * para atender ao mantis 201
 	 * entrega em endere�o altivo	 *  */
@@ -61,7 +61,7 @@ public class DeclaracaoQuitacaoAnualDebitosHelper implements Serializable {
 	}
 
 	public DeclaracaoQuitacaoAnualDebitosHelper() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public Integer getIdImovel() {

@@ -108,7 +108,7 @@ public class RelatorioSaldoContasAReceberContabilBean implements RelatorioBean {
 			String descricaoLancamentoTipo, String descricaoLancamentoItem, String descricaoLancamentoItemContabil,
 			BigDecimal totalGeralSemPerdasParticular, BigDecimal totalGeralSemPerdasPublico, BigDecimal totalGeralSemPerdas) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idGerenciaRegional = idGerenciaRegional;
 		this.nomeGerenciaRegional = nomeGerenciaRegional;
 		this.idUnidadeNegocio = idUnidadeNegocio;
@@ -132,7 +132,7 @@ public class RelatorioSaldoContasAReceberContabilBean implements RelatorioBean {
 
 //	public RelatorioSaldoContasAReceberContabilBean(String codigoCentroCusto, String tipoGrupo, Integer idGrupo, String descricaoGrupo, String descricaoLancamentoTipo, String descricaoLancamentoItem) {
 //		super();
-//		// TODO Auto-generated constructor stub
+//		
 //		this.codigoCentroCusto = codigoCentroCusto == null ? "" : codigoCentroCusto;
 //		this.tipoGrupo = tipoGrupo;
 //		this.idGrupo = idGrupo;

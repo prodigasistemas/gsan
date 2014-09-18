@@ -131,7 +131,7 @@ public class RelatorioAcompanhamentoClientesNegativadosBean implements Relatorio
 			BigDecimal valorParceladoCanceladoTotalLoc
 			) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.nomeCliente = nomeCliente;
 		this.matricula = matricula;
 		this.cpfCnpj = cpfCnpj;

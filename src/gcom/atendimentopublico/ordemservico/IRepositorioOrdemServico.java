@@ -1888,7 +1888,7 @@ public interface IRepositorioOrdemServico {
 	 * @throws ErroRepositorioException
 	 */
 	
-	/**TODO: Cosanpa
+	/**
 	 * Mantis 486 - Inclusão da Origem da OS na busca para encerrar as mesmas quando vencidas.
 	 * @author Wellington Rocha
 	 * @date 18/01/2012*/

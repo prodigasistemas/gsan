@@ -1947,7 +1947,7 @@ public class ControladorLocalidadeSEJB implements SessionBean {
             FiltroRota.CODIGO_ROTA, helper.getRotaCD()));
             
             /*
-             * TODO - COSANPA - Mantis 536 - Felipe Santos - 08/03/2012
+             * Mantis 536 - Felipe Santos - 08/03/2012
              * 
              * Adição do id da rota no filtro para pesquisa
              */

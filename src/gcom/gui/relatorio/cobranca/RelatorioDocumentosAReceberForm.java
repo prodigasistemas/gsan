@@ -42,7 +42,7 @@ public class RelatorioDocumentosAReceberForm extends ActionForm {
 	private String idLocalidade;
 	private String nomeLocalidade;
 	
-	/**TODO:COSANPA
+	/**
 	 * @author Adriana Muniz
 	 * @date 29/03/2012
 	 * 

@@ -36,7 +36,7 @@ public class CobrancaDocumentoControleGeracao implements Serializable {
 
 	public CobrancaDocumentoControleGeracao(Integer quantidadeCobrancaDocumento, Integer quantidadeCobrancaDocumentoItem, BigDecimal valorTotalCobrancaDocumentos, Date ultimaAlteracao, ProcessoIniciado processoIniciado, CobrancaAcaoAtividadeCronograma cobrancaAcaoAtividadeCronograma, CobrancaAcaoAtividadeComando cobrancaAcaoAtividadeComando) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.quantidadeCobrancaDocumento = quantidadeCobrancaDocumento;
 		this.quantidadeCobrancaDocumentoItem = quantidadeCobrancaDocumentoItem;
 		this.valorTotalCobrancaDocumentos = valorTotalCobrancaDocumentos;

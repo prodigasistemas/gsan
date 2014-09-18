@@ -123,7 +123,7 @@ public class ExibirConsultarHistoricoInstalacaoHidrometroInformarAction extends
 					.adicionarCaminhoParaCarregamentoEntidade("logradouroBairro.bairro.municipio.unidadeFederacao");
 
 			/*
-			 * TODO - COSANPA Adição dos filtros para perimetro inicial e
+			 * Adição dos filtros para perimetro inicial e
 			 * perimetro final do endereço do imóvel Correção para o Mantis 206
 			 */
 			filtroImovel

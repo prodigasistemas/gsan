@@ -61,7 +61,7 @@ public class RelatorioAutoInfracaoBean implements RelatorioBean {
 	}
 
 	public RelatorioAutoInfracaoBean() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	/**

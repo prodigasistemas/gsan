@@ -42,7 +42,7 @@ public class EmpresaCobrancaContaPagamentos extends ObjetoTransacao {
 			DebitoTipo debitoTipo,
 			Date ultimaAlteracao,BigDecimal valorPagamentoMes) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.empresaCobrancaConta = empresaCobrancaConta;
 		this.anoMesPagamentoArrecadacao = anoMesPagamentoArrecadacao;

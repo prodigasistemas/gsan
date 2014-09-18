@@ -101,7 +101,7 @@ public class RelatorioMovimentacaoHidrometroBean implements RelatorioBean {
 
 	public RelatorioMovimentacaoHidrometroBean() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public String getHidrometros() {
@@ -166,7 +166,7 @@ public class RelatorioMovimentacaoHidrometroBean implements RelatorioBean {
 
 	public RelatorioMovimentacaoHidrometroBean(String localOrigem, String motivo, String data, String localDestino, String hora, String hidrometros) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.localOrigem = localOrigem;
 		this.motivo = motivo;
 		this.data = data;

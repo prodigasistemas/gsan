@@ -290,7 +290,7 @@ public class HistogramaAguaEconomiaSemQuadra implements Serializable {
 
 	public HistogramaAguaEconomiaSemQuadra(Integer id, int anoMesReferencia, int codigoSetorComercial, int indicadorConsumoReal, int indicadorHidrometro, int indicadorPoco, int indicadorVolFixadoAgua, int quantidadeConsumo, int quantidadeEconomia, BigDecimal valorFaturadoEconomia, int volumeFaturadoEconomia, int quantidadeLigacao, Date ultimaAlteracao, Categoria categoria, LigacaoAguaSituacao ligacaoAguaSituacao, CategoriaTipo categoriaTipo, Subcategoria subcategoria, Localidade localidadeElo, Localidade localidade, EsferaPoder esferaPoder, UnidadeNegocio unidadeNegocio, SetorComercial setorComercial, ConsumoTarifa consumoTarifa, GerenciaRegional gerenciaRegional) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.anoMesReferencia = anoMesReferencia;
 		this.codigoSetorComercial = codigoSetorComercial;

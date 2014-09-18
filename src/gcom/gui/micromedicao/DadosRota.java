@@ -16,7 +16,7 @@ public class DadosRota implements Serializable {
 	 */
 	public DadosRota(Integer id, String descricao) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.descricao = descricao;
 	}

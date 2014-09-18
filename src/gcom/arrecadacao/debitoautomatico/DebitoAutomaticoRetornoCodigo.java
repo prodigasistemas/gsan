@@ -11,7 +11,7 @@ public class DebitoAutomaticoRetornoCodigo implements Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	
-	/**TODO: COSANPA
+	/**
 	 * Mantis 500
 	 * Inclusão de constantes a serem consideradas na inclusão dos pagamentos para contas
 	 * com débito automático.

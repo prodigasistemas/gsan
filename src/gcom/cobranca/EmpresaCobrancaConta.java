@@ -61,7 +61,7 @@ public class EmpresaCobrancaConta extends ObjetoTransacao {
 			ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta, BigDecimal valorOriginalConta, 
 			BigDecimal percentualEmpresaConta, Short indicadorPagamentoValido, Date ultimaAlteracao) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.empresa = empresa;
 		this.contaGeral = contaGeral;

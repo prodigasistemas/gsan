@@ -77,7 +77,7 @@ public class EquipeEquipamentosEspeciais extends ObjetoTransacao {
 
 	@Override
 	public String[] retornaCamposChavePrimaria() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

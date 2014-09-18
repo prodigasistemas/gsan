@@ -96,10 +96,10 @@ public class ExibirConsultarCreditoARealizarAction extends GcomAction {
 				enderecoFormatado = fachada
 						.pesquisarEnderecoFormatado(new Integer(idImovel));
 			} catch (NumberFormatException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			} catch (ControladorException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 

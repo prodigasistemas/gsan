@@ -49,7 +49,7 @@ public class FiltrarOrdemServicoAction extends GcomAction {
 		
 		boolean parametroInformado = false;
 		
-		/**TODO:COSANPA
+		/**
 		 * @Date 15/05/2013
 		 * @autor Adriana Muniz
 		 * 

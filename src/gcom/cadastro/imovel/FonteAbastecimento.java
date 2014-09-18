@@ -40,7 +40,7 @@ public class FonteAbastecimento extends ObjetoTransacao {
     
     public final static Short INDICADOR_CALCULAR_VOLUME_FIXO = new Short("1");
     
-    /**TODO: COSANPA
+    /**
      * 
      * Mantis 494 - geração da rota para recadastramento
      * @author Wellington Rocha*/

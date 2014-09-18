@@ -592,42 +592,42 @@ public class ClienteAtualizacaoCadastral extends ObjetoTransacao implements ICli
 	}
 
 	public LogradouroCep getLogradouroCep() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	public void setLogradouroCep(LogradouroCep logradouroCep) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	public LogradouroBairro getLogradouroBairro() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	public void setLogradouroBairro(LogradouroBairro logradouroBairro) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	public Logradouro getPerimetroInicial() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	public void getPerimetroInicial(Logradouro perimetroInicial) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 
 	public Logradouro getPerimetroFinal() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	public void setPerimetroFinal(Logradouro perimetroFinal) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	

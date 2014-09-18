@@ -136,7 +136,7 @@ public class RelatorioRegistroAtendimentoPorUnidadePorUsuario extends TarefaRela
 		}*/
 
 		Collection<Integer> idsUnidadeAtual = new ArrayList<Integer>();
-		/**TODO:COSANPA
+		/**
 		 * @author Adriana Muniz
 		 * @Date 07/08/2013
 		 * Verificação se o atributo é nulo antes de adicioná-lo ao array

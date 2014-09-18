@@ -1379,7 +1379,7 @@ public class ControladorArrecadacao implements SessionBean {
     
                                         
                                         if (!registroHelperCodigoF.getAnoMesReferenciaConta().equals("")){
-                                        	/**TODO: COSANPA
+                                        	/**
                                         	 * Mantis 500
                                         	 * As contas em débito automático que retornavam com o código 31
                                         	 * não tinham o seu pagamento efetuado
@@ -2505,7 +2505,7 @@ public class ControladorArrecadacao implements SessionBean {
                                             if (!achou) {
                                             	
                                             							
-                                            /**TODO:COSANPA
+                                            /**
                                              * @date 24/10/2013
                                              * @author Adriana Muniz e Wellington Rocha
                                              * Correção da passagem de paramêtros
@@ -9292,7 +9292,7 @@ public class ControladorArrecadacao implements SessionBean {
 		if(indicadorDeAceitacaoDoMovimento==2){
 			avisoBancario.setValorRealizado(valorArrecadacaoCalc);
 			avisoBancario.setValorArrecadacaoCalculado(new BigDecimal("0.00"));
-			/**TODO:COSANPA
+			/**
 			 * @autor Adriana Muniz e Wellington Rocha
 			 * @data 04/11/2013
 			 * Correção do valor inserido no valor informado
@@ -12169,17 +12169,13 @@ public class ControladorArrecadacao implements SessionBean {
 						}
 					}
 
-					// TODO remover aviso bancario
 					getControladorUtil().removerUm(id.intValue(),
 							AvisoBancario.class.getSimpleName(),
 							operacaoEfetuada, acaoUsuarioHelper);
 
-					// } catch (CallbackException e) {
-					// sessionContext.setRollbackOnly();
-					// throw new ControladorException(e.getMessage());
 				} catch (ControladorException e) {
 					sessionContext.setRollbackOnly();
-					/* Throwable troable = */e.getCause();
+					e.getCause();
 					if (e != null
 							&& e.getMessage() != null
 							&& "atencao.dependencias.existentes"
@@ -14252,7 +14248,7 @@ public class ControladorArrecadacao implements SessionBean {
 						int numeroIndice = 0;
 
 						/**
-						 * TODO: COSANPA Mantis 615 - Detalhar classificação de
+						 * Mantis 615 - Detalhar classificação de
 						 * documentos inexistentes
 						 * 
 						 * @author Wellington Rocha
@@ -14422,7 +14418,7 @@ public class ControladorArrecadacao implements SessionBean {
 									}
 
 									/**
-									 * TODO: COSANPA Mantis 615 - Detalhar
+									 * Mantis 615 - Detalhar
 									 * classificação de documentos inexistentes
 									 * 
 									 * @author Wellington Rocha
@@ -19809,8 +19805,6 @@ public class ControladorArrecadacao implements SessionBean {
 					 * cada categoria retornada obtém o valor por categoria.
 					 */
 					/**
-					 * TODO: COSANPA
-					 * 
 					 * Mantis 615 - Detalhar contabilização de documentos inexistentes
 					 * 
 					 * Situação atual
@@ -19900,7 +19894,7 @@ public class ControladorArrecadacao implements SessionBean {
 					// ****************************************************************
 
 					/**
-					 * TODO: COSANPA
+					 *
 					 * 
 					 * Mantis 615 - Detalhar contabilização de documentos inexistentes
 					 * 
@@ -21280,7 +21274,7 @@ public class ControladorArrecadacao implements SessionBean {
 						}
 					}
 
-					/**TODO: COSANPA
+					/**
 					 * Mantis *** - Alterar na geração do resumo separando contas de meses anteriores a 12-2012
 					 * dos demais
 					 * 
@@ -21777,7 +21771,7 @@ public class ControladorArrecadacao implements SessionBean {
 					 * retornada obtém o valor por categoria.
 					 */
 					/**
-					 * TODO: COSANPA
+					 *
 					 * 
 					 * Mantis 615 - Detalhar contabilização de documentos inexistentes
 					 * 
@@ -22187,7 +22181,7 @@ public class ControladorArrecadacao implements SessionBean {
 					 * por categoria.
 					 */
 					/**
-					 * TODO: COSANPA
+					 *
 					 * 
 					 * Mantis 615 - Detalhar contabilização de documentos inexistentes
 					 * 
@@ -22991,7 +22985,7 @@ public class ControladorArrecadacao implements SessionBean {
 						}
 
 						
-						/**TODO: COSANPA
+						/**
 						 * Mantis 615 - Contabilizar créditos com crédito origem correspondente 
 						 * a Contas Pagas em Excesso
 						 * 
@@ -23493,7 +23487,7 @@ public class ControladorArrecadacao implements SessionBean {
 						}
 
 						
-						/**TODO: COSANPA
+						/**
 						 * Mantis *** - Alteração para contabilar em contas diferentes valores arrecadados até 31/12/2012
 						 * 
 						 * @author Wellington Rocha*/
@@ -23876,7 +23870,7 @@ public class ControladorArrecadacao implements SessionBean {
 						}
 
 						
-				/**TODO: COSANPA
+				/**
 				* Mantis 615 - Contabilizar créditos com crédito origem correspondente 
 				* a Contas Pagas em Excesso
 				* 
@@ -24234,7 +24228,7 @@ public class ControladorArrecadacao implements SessionBean {
 							colecaoResumoArrecadacao.add(resumoArrecadacaoTemp);
 						}
 
-						/**TODO: COSANPA
+						/**
 						 * Mantis ***
 						 * 
 						 * Contabilizar em contas diferentes o valor arrecadado até 31/12/2012
@@ -24467,7 +24461,7 @@ public class ControladorArrecadacao implements SessionBean {
 						}
 
 						
-				/**TODO: COSANPA
+				/**
 				* Mantis 615 - Contabilizar créditos com crédito origem correspondente 
 				* a Contas Pagas em Excesso
 				* 
@@ -25695,7 +25689,7 @@ public class ControladorArrecadacao implements SessionBean {
 										.add(resumoArrecadacaoTemp);
 							}
 							
-							/**TODO: COSANPA
+							/**
 							 * 
 							 * Mantis *** 
 							 * 
@@ -26499,7 +26493,7 @@ public class ControladorArrecadacao implements SessionBean {
 						 * valor.
 						 */
 						/**
-						 * TODO: COSANPA 
+						 * 
 						 * 
 						 * Mantis 615 - Detalhar contabilização de documentos inexistentes
 						 * 
@@ -26522,7 +26516,7 @@ public class ControladorArrecadacao implements SessionBean {
 												.get(idCategoria));
 
 								/**
-								 * TODO: COSANPA 
+								 * 
 								 * 			
 								 * Retorna o resumo arrecadacao
 								 * 
@@ -27218,7 +27212,7 @@ public class ControladorArrecadacao implements SessionBean {
 						}
 
 						
-						/**TODO: COSANPA
+						/**
 						 * 
 						 * Contabilizar em contas diferentes valores arrecadados até 31/12/2012
 						 * 
@@ -27578,7 +27572,7 @@ public class ControladorArrecadacao implements SessionBean {
 						 * pelo imóvel com seu respectivo valor.
 						 */
 						/**
-						 * TODO: COSANPA 
+						 * 
 						 * 
 						 * Mantis 615 - Detalhar contabilização de documentos inexistentes
 						 * 
@@ -28064,7 +28058,7 @@ public class ControladorArrecadacao implements SessionBean {
 						 * valor.
 						 */
 						/**
-						 * TODO: COSANPA 
+						 * 
 						 * 
 						 * Mantis 615 - Detalhar contabilização de documentos inexistentes
 						 * 
@@ -29124,7 +29118,7 @@ public class ControladorArrecadacao implements SessionBean {
 							valorAcumuladoSequenciaTipoLancamentoEntre3500e4199Subtraindo4500eEntre4600e4999SomandoSequenciaEntre5100e5399 = BigDecimal.ZERO;
 						}
 						
-						/**TODO: COSANPA
+						/**
 						 * 
 						 * Mantis *** 
 						 * 
@@ -29524,7 +29518,7 @@ public class ControladorArrecadacao implements SessionBean {
 								.put(categoria.getId(), BigDecimal.ZERO);
 						
 						/**
-						 * TODO: COSANPA
+						 *
 						 * 
 						 * Mantis 615 - Detalhar contabilização de documentos inexistentes
 						 * 
@@ -29601,7 +29595,7 @@ public class ControladorArrecadacao implements SessionBean {
 								.put(categoria.getId(), BigDecimal.ZERO);
 						
 						/**
-						 * TODO: COSANPA
+						 *
 						 * 
 						 * Mantis 615 - Detalhar contabilização de documentos inexistentes
 						 * 
@@ -29638,7 +29632,7 @@ public class ControladorArrecadacao implements SessionBean {
 								.put(categoria.getId(), BigDecimal.ZERO);
 						
 						/**
-						 * TODO: COSANPA
+						 *
 						 * 
 						 * Mantis 615 - Detalhar contabilização de documentos inexistentes
 						 * 
@@ -33832,7 +33826,7 @@ public class ControladorArrecadacao implements SessionBean {
 						
 						valorTotal = valorTotal.add(helper.getValorArrecadacaoLiquida());
 						
-						/**TODO:COSANPA
+						/**
 						 * Relatório Analitico dos valores diários da arrecadação
 						 * 
 						 * @author Adriana Muniz
@@ -49175,7 +49169,7 @@ public class ControladorArrecadacao implements SessionBean {
 		Integer idLocalidade = null;
 		Integer idCliente = null;
 		
-		/**TODO: COSANPA
+		/**
 		 * Mantis 653 - Guia de pagamento não vinha sendo preenchida no momento do processamento
 		 * do pagamento
 		 * 
@@ -49367,7 +49361,7 @@ public class ControladorArrecadacao implements SessionBean {
 				pagamento.setCliente(cliente);
 				
 
-				/**TODO: COSANPA
+				/**
 				 * Mantis 653 - Guia de pagamento não vinha sendo preenchida no momento do processamento
 				 * do pagamento
 				 * 
@@ -54223,7 +54217,7 @@ public class ControladorArrecadacao implements SessionBean {
 		return colecaoPagamento;
 	}
 	
-	/*TODO: COSANPA
+	/*
 	 * Criado para a consulta, de manter conta por conjunto de imóveis, pelo id do banco
 	 * e pelo grupo de faturamento
 	 * 
@@ -54246,14 +54240,14 @@ public class ControladorArrecadacao implements SessionBean {
 			retorno = repositorioArrecadacao.pesquisarImoveisBancoDebitoAutomaticoEPorGrupoFaturamento(bancos, idGrupoFaturamento);
 			
 		} catch (ErroRepositorioException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		
 		return retorno;
 	}
 		
-	/* TODO: COSANPA
+	/*
 	 * autor: Adriana Muniz
 	 * 
 	 * Alteração para a conta considerar como filtro grupo de faturamento, quando o mesmo estiver preenchido
@@ -54285,7 +54279,7 @@ public class ControladorArrecadacao implements SessionBean {
 					anoMesInicial, anoMesFinal, dataVencimentoInicial, dataVencimentoFinal, indicadorContaPaga, idGrupoFaturamento, somenteDebitoAutomatico);
 			
 		} catch (ErroRepositorioException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		
@@ -54293,7 +54287,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 			
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * Mantis 537
 	 * 
@@ -54340,7 +54334,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 			
 	/**
-	 * TODO: COSANPA Mantis 615 - Detalhar contabilização de documentos
+	 * Mantis 615 - Detalhar contabilização de documentos
 	 * inexistentes
 	 * 
 	 * Retorna os pagamentos nao classificados por situacao atual
@@ -54413,7 +54407,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 
 	/**
-	 * TODO: COSANPA Mantis 615 - Detalhar contabilização de documentos
+	 * Mantis 615 - Detalhar contabilização de documentos
 	 * inexistentes
 	 * 
 	 * Retorna os pagamentos nao classificados por situacao anterior
@@ -54488,7 +54482,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * Mantis 615 - Detalhar contabilização de documentos inexistentes
 	 * 
@@ -54531,7 +54525,7 @@ public class ControladorArrecadacao implements SessionBean {
 		return resumoArrecadacao;
 	}
 		
-	/**TODO:COSANPA
+	/**
 	 * Relatório Analitico dos valores diários da arrecadação
 	 * 
 	 * @author Adriana Muniz
@@ -54583,7 +54577,7 @@ public class ControladorArrecadacao implements SessionBean {
 		return colecaoFormasArrecadacaoHelper;
 	}
 			
-	/**TODO:COSANPA
+	/**
 	 * data: 02/10/2012
 	 * 
 	 * @param anoMesInicial
@@ -54692,7 +54686,7 @@ public class ControladorArrecadacao implements SessionBean {
 		
 	}
 			
-	/**TODO:COSANPA
+	/**
 	 * 
 	 * @author Adriana Muniz
 	 * data: 02/10/2012
@@ -54751,7 +54745,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 			
 
-	/**TODO:COSANPA
+	/**
 	 * @Data: 05/12/2012
 	 * @author Adriana Muniz
 	 * 
@@ -55109,7 +55103,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 			
 
-	/**TODO:COSANPA
+	/**
 	 * data: 11/12/2012
 	 * 
 	 * Recupera os dados diarios da arrecadação auxiliar
@@ -55354,7 +55348,7 @@ public class ControladorArrecadacao implements SessionBean {
 		return itemAgrupado;
 	}
 			
-	/**TODO:COSANPA
+	/**
 	 * @author Adriana Muniz
 	 * @date 10/12/2012
 	 * 
@@ -55399,7 +55393,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 			
 	/**
-	 * TODO:COSANPA
+	 *
 	 * @author Adriana Muniz 
 	 * @data: 19/12/2012
 	 * 
@@ -55523,7 +55517,7 @@ public class ControladorArrecadacao implements SessionBean {
 
 	}
 			
-	/**TODO:COSANPA
+	/**
 	 * 
 	 * @author Adriana Muniz
 	 * data: 19/12/2012

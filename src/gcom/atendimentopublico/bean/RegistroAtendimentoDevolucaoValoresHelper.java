@@ -27,11 +27,11 @@ public class RegistroAtendimentoDevolucaoValoresHelper implements Serializable {
 	}
 	public RegistroAtendimentoDevolucaoValoresHelper() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	public RegistroAtendimentoDevolucaoValoresHelper(Integer idImovel, String[] idPerfilImovel, Date dataAtendimentoInicioFormatada, Date dataAtendimentoFimFormatada, Integer numeroRA) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idImovel = idImovel;
 		this.idPerfilImovel = idPerfilImovel;
 		this.dataAtendimentoInicioFormatada = dataAtendimentoInicioFormatada;
@@ -41,7 +41,7 @@ public class RegistroAtendimentoDevolucaoValoresHelper implements Serializable {
 	
 	public RegistroAtendimentoDevolucaoValoresHelper(Integer idImovel, Integer numeroRA,String nomeClienteUsuario) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idImovel = idImovel;
 		this.numeroRA = numeroRA;
 		this.nomeClienteUsuario = nomeClienteUsuario;

@@ -30,7 +30,7 @@ public class GerarCurvaAbcDebitosImovelHelper {
 			String descricaoCategoria, 
 			String descricaoSubCategoria) {
 		
-		// TODO Auto-generated constructor stub
+		
 		this.idImovel = idimovel;
 		this.idGerenciaRegional = idGerenciaRegional;
 		this.gerenciaRegional = gerenciaRegional;

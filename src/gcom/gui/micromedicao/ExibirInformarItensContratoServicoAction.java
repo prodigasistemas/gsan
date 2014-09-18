@@ -122,7 +122,7 @@ public class ExibirInformarItensContratoServicoAction extends GcomAction {
 			}
 			
 			
-			//TODO Verifica se o usuário adicionou um novo aditivo
+			
 			if(httpServletRequest.getParameter("acao") != null && 
 		        	httpServletRequest.getParameter("acao").equals("adicionarAditivo") &&
 		        	form.getIdEmpresa() != null &&

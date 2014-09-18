@@ -2500,7 +2500,7 @@ public class RepositorioClienteHBM implements IRepositorioCliente {
 		
 	}
 	
-	/**TODO: Cosanpa
+	/**
 	 * 
 	 * Mantis 494
 	 * 

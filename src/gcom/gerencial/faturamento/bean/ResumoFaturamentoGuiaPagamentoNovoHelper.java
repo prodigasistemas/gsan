@@ -279,7 +279,7 @@ public class ResumoFaturamentoGuiaPagamentoNovoHelper {
 			Integer idPerfilImovel, Integer idSituacaoLigacaoAgua,
 			Integer idSituacaoLigacaoEsgoto, Integer idPerfilLigacaoAgua, Integer idPerfilLigacaoEsgoto			) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		
 		this.idImovel = idImovel;
 		this.idGerenciaRegional = idGerenciaRegional;
@@ -302,7 +302,7 @@ public class ResumoFaturamentoGuiaPagamentoNovoHelper {
 			Integer idPerfilImovel, Integer idSituacaoLigacaoAgua,
 			Integer idSituacaoLigacaoEsgoto, Integer idPerfilLigacaoAgua, Integer idPerfilLigacaoEsgoto, 			Integer anoMesReferencia) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		
 		this.idImovel = idImovel;
 		this.idGerenciaRegional = idGerenciaRegional;
@@ -322,7 +322,7 @@ public class ResumoFaturamentoGuiaPagamentoNovoHelper {
 	
 	public ResumoFaturamentoGuiaPagamentoNovoHelper(Integer idImovel, 			Integer idGerenciaRegional, Integer idLocalidade, Integer idSetorComercial, 			Integer codigoSetorComercial, Integer idPerfilImovel, 			Integer idSituacaoLigacaoAgua, Integer idSituacaoLigacaoEsgoto, Integer idEsfera) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idImovel = idImovel;
 		this.idGerenciaRegional = idGerenciaRegional;
 		this.idLocalidade = idLocalidade;

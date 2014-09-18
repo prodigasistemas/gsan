@@ -146,7 +146,7 @@ public class ArrecadacaoDadosDiariosItemAcumuladorHelper implements Serializable
 
 	public ArrecadacaoDadosDiariosItemAcumuladorHelper(int anoMesReferencia, Integer codigoSetorComercial, Integer numeroQuadra, Short indicadorHidrometro, Date data, GerenciaRegional gerenciaRegional, Localidade localidade, Quadra quadra, DocumentoTipo documentoTipoAgregador, DocumentoTipo documentoTipo, LigacaoEsgotoSituacao ligacaoEsgotoSituacao, ImovelPerfil imovelPerfil, Rota rota, Arrecadador arrecadador, ArrecadacaoForma arrecadacaoForma, SetorComercial setorComercial, LigacaoAguaSituacao ligacaoAguaSituacao, UnidadeNegocio unidadeNegocio, EsferaPoder esferaPoder, CobrancaDocumento cobrancaDocumento, Categoria categoria, int quantidadeDocumentos, Integer quantidadePagamentos, BigDecimal valorArrecadadoBruto, BigDecimal valorDescontos, BigDecimal valorDevolucoes, BigDecimal valorArrecadadoLiquido) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.anoMesReferencia = anoMesReferencia;
 		this.codigoSetorComercial = codigoSetorComercial;
 		this.numeroQuadra = numeroQuadra;
@@ -178,7 +178,7 @@ public class ArrecadacaoDadosDiariosItemAcumuladorHelper implements Serializable
 
 	public ArrecadacaoDadosDiariosItemAcumuladorHelper(int anoMesReferencia, Integer codigoSetorComercial, Integer numeroQuadra, Short indicadorHidrometro, Date data, GerenciaRegional gerenciaRegional, Localidade localidade, Quadra quadra, DocumentoTipo documentoTipoAgregador, DocumentoTipo documentoTipo, LigacaoEsgotoSituacao ligacaoEsgotoSituacao, ImovelPerfil imovelPerfil, Rota rota, Arrecadador arrecadador, ArrecadacaoForma arrecadacaoForma, SetorComercial setorComercial, LigacaoAguaSituacao ligacaoAguaSituacao, UnidadeNegocio unidadeNegocio, EsferaPoder esferaPoder, CobrancaDocumento cobrancaDocumento, Categoria categoria) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.anoMesReferencia = anoMesReferencia;
 		this.codigoSetorComercial = codigoSetorComercial;
 		this.numeroQuadra = numeroQuadra;
@@ -203,7 +203,7 @@ public class ArrecadacaoDadosDiariosItemAcumuladorHelper implements Serializable
 	}
 
 	public ArrecadacaoDadosDiariosItemAcumuladorHelper() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public int getAnoMesReferencia() {

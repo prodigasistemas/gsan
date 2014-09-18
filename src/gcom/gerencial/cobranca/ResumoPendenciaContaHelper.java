@@ -507,7 +507,7 @@ public class ResumoPendenciaContaHelper {
 			Integer idSetorComercial, Integer codigoSetorComercial, Integer idRota, Integer idQuadra, 
 			Integer numeroQuadra, Integer idPerfilImovel, Integer idSituacaoLigacaoAgua, 
 			Integer idSituacaoLigacaoEsgoto, Integer idEsferaPoder, Integer idDocumentoTipo ) {
-		// TODO Auto-generated constructor stub
+		
 		this.idImovel = idImovel;
 		this.idConta = idConta;
 		this.idGerenciaRegional = idGerenciaRegional;

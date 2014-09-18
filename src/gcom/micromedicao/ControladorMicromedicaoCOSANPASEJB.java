@@ -1080,7 +1080,7 @@ public class ControladorMicromedicaoCOSANPASEJB extends ControladorMicromedicao 
 		}
 		
 		/*
-		 * TODO : COSANPA
+		 * 
 		 * Alteração feita para corrigir o problema de não gerar
 		 * rotas para leitura normal, somente para leitura e impressão simultanea
 		 */

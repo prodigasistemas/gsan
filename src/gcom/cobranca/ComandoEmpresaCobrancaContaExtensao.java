@@ -92,7 +92,7 @@ public class ComandoEmpresaCobrancaContaExtensao extends ObjetoTransacao {
 	 */
 	public ComandoEmpresaCobrancaContaExtensao(Integer id, Integer referenciaContaInicial, Integer referenciaContaFinal, Date dataExecucao, Date ultimaAlteracao, Usuario usuario,ComandoEmpresaCobrancaConta comandoEmpresaCobrancaConta) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.referenciaContaInicial = referenciaContaInicial;
 		this.referenciaContaFinal = referenciaContaFinal;
@@ -135,7 +135,7 @@ public class ComandoEmpresaCobrancaContaExtensao extends ObjetoTransacao {
 	 */
 	public ComandoEmpresaCobrancaContaExtensao() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 }

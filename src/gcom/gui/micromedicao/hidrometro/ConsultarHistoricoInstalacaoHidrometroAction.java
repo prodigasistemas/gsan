@@ -115,7 +115,7 @@ public class ConsultarHistoricoInstalacaoHidrometroAction extends GcomAction {
 			filtroImovel.adicionarCaminhoParaCarregamentoEntidade("ligacaoEsgotoSituacao");
 			filtroImovel.adicionarCaminhoParaCarregamentoEntidade("logradouroBairro.bairro.municipio.unidadeFederacao");
 			
-			/**TODO: COSANPA
+			/**
 			 * @author Adriana Muniz
 			 * @data 17/07/2013
 			 * 

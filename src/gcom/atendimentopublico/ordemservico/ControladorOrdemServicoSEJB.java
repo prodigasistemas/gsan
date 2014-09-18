@@ -2784,7 +2784,7 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 			ordemServicoProgramacao.setSituacaoFechamento(ConstantesSistema.NAO);
 
 			/*
-			 * TODO - COSANPA - Mantis 851 - Felipe Santos - 04/09/2013
+			 * Mantis 851 - Felipe Santos - 04/09/2013
 			 * 
 			 * Alteração para setar o campo indicadorAcompanhamentoServico que
 			 * não pode ser nulo
@@ -3139,7 +3139,7 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 				SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
 				/*
-				 * TODO - COSANPA - Mantis 637 - Felipe Santos
+				 * Mantis 637 - Felipe Santos
 				 * 
 				 * Não permitir encerramento de OS com data inferior a data
 				 * corrente menos os dias retroativos.
@@ -4027,7 +4027,7 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 					try {
 						hidrometroExistente = repositorioMicromedicao.verificaExistenciaHidrometro(idImovel);
 					} catch (ErroRepositorioException e) {
-						// TODO Auto-generated catch block
+						
 						e.printStackTrace();
 					}
 
@@ -4075,7 +4075,7 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 			try {
 				idOSReferenciaRejeitada = repositorioOrdemServico.pesquisarOSReferencia(numeroOS);
 			} catch (ErroRepositorioException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 				throw new ControladorException("erro.sistema", e);
 			}
@@ -4500,7 +4500,7 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 						filtroServicoTipo.adicionarCaminhoParaCarregamentoEntidade("servicoTipoPrioridade");
 
 						/*
-						 * TODO - COSANPA - Mantis 402 - Felipe Santos -
+						 * Mantis 402 - Felipe Santos -
 						 * 15/03/2012
 						 * 
 						 * Adição do objeto ServicoTipoReferencia no filtro de
@@ -4627,7 +4627,6 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 				}
 			}
 
-			// TODO Alteração (Falar com lira)
 			/*
 			 * Alterado por Diogo Peixoto em 30/08/2011 [SB0009]- Verificar
 			 * Situação Especial de Faturamento
@@ -9170,7 +9169,7 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 		// ===============================================
 
 		/**
-		 * TODO : COSANPA Refatoração...
+		 *  Refatoração...
 		 */
 		Collection colecaoQuantidadeEconomias = getControladorImovel().obterColecaoCategoriaOuSubcategoriaDoImovel(imovel);
 
@@ -10972,7 +10971,7 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 	 * @throws ControladorException
 	 */
 	/**
-	 * TODO: Cosanpa Mantis 486 - Inclusão da Origem da OS e do UsuarioLogado na
+	 * Mantis 486 - Inclusão da Origem da OS e do UsuarioLogado na
 	 * busca para encerrar as mesmas quando vencidas.
 	 * 
 	 * @author Wellington Rocha
@@ -11004,7 +11003,7 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 		}
 
 		/**
-		 * TODO: Cosanpa Mantis 486 - Inclusão da Origem da OS na busca para
+		 * Mantis 486 - Inclusão da Origem da OS na busca para
 		 * encerrar as mesmas quando vencidas.
 		 * 
 		 * @author Wellington Rocha
@@ -11075,7 +11074,7 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 
 						ordemServicoUnidade.setUnidadeOrganizacional(unidadeOrganizacional); // unid_id
 						/**
-						 * TODO: Cosanpa Mantis 664 - Correção de erro na
+						 * Mantis 664 - Correção de erro na
 						 * execução da funcionalidade
 						 * 
 						 * @author Wellington Rocha

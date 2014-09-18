@@ -322,7 +322,7 @@ public class ExibirAtualizarRotaAction extends GcomAction {
 	        	if(rota.getNumeroLimiteImoveis() != null){
 	        		inserirRotaActionForm.setNumeroLimiteImoveis(""+ rota.getNumeroLimiteImoveis());
 	        	}else {
-	        		/* TODO: COSANPA
+	        		/*
 	        		 * Data: 24/01/2011
 	        		 * 
 	        		 * Setar como vazio, quando o valor do atributo for igual nulo.

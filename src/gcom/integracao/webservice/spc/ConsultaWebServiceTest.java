@@ -421,9 +421,6 @@ public class ConsultaWebServiceTest {
 		
 		// 11F24970360472
 		filtro15.setFiltro(filtroConsulta);
-		// TODO : Fill in the filtro15 here
-
-		// assertNotNull();
 		try {
 		
 			Resultado resultado = stub2.consultar(filtro15);
@@ -432,7 +429,7 @@ public class ConsultaWebServiceTest {
 				.getConsumidorPessoaFisica().getNome());
 
 		} catch (AxisFault e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		
@@ -476,7 +473,7 @@ public class ConsultaWebServiceTest {
 		try {
 			new ConsultaWebServiceTest().testconsultar();
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}

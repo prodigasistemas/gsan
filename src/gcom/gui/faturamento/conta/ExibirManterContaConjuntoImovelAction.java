@@ -128,7 +128,7 @@ public class ExibirManterContaConjuntoImovelAction extends GcomAction {
 			if (sessao.getAttribute("bancos") != null) {
 				String[] bancos = (String[]) sessao.getAttribute("bancos");
 				/*
-				 * TODO: COSANPA autor: Adriana Muniz
+				 * autor: Adriana Muniz
 				 * 
 				 * Alteração para a conta considerar como filtro grupo de
 				 * faturamento, quando o mesmo estiver preenchido

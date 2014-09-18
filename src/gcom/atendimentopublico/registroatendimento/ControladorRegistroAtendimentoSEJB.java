@@ -5712,7 +5712,7 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 		
 		Cliente retorno = null;
 		
-		/*TODO: COSANPA
+		/*
 		 * 
 		 * Data: 24/01/2011
 		 * 
@@ -6111,7 +6111,7 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 				this.verificarExistenciaClienteSolicitante(
 						idRegistroAtendimento, idCliente);
 			}
-			/* TODO: COSANPA
+			/*
 			 * 
 			 * Data: 24/01/2011
 			 * 
@@ -8029,7 +8029,7 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 					ServicoTipoReferencia.INDICADOR_DIAGNOSTICO_ATIVO));
 			
 			/*
-			 * TODO - COSANPA - Mantis 402 - Felipe Santos - 13/03/2012
+			 * Mantis 402 - Felipe Santos - 13/03/2012
 			 * 
 			 * Verifica se o tipo de serviço informado possui referência.
 			 * Caso SIM, adiciona no filtro de pesquisa o servico_tipo
@@ -9506,7 +9506,7 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 						idRegistroAtendimento, idCliente, idRASolicitante);
 			}
 			
-			/* TODO: COSANPA
+			/*
 			 * 
 			 * Manter RA
 			 * Retirada a condição do solicitante está vinculado ao imóvel. Um cliente não ligado ao imovel,
@@ -13607,7 +13607,7 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 			throw new ControladorException("atencao.arquivo_invalido");
 		}
 		
-		/**TODO: COSANPA
+		/**
 		 * 
 		 * Mantis 607 - Aumentar o limite máximo do anexos em RAs
 		 * @author Wellington Rocha
@@ -16108,7 +16108,7 @@ public class ControladorRegistroAtendimentoSEJB implements SessionBean {
 	}
 	
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * Mantis 652 - Gerar relatório de RA por Unidade por Usuário
 	 * 

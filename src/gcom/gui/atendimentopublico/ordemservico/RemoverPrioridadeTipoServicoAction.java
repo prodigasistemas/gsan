@@ -58,7 +58,7 @@ public class RemoverPrioridadeTipoServicoAction extends GcomAction {
 		try {
 			fachada.removerPrioridadeTipoServico(ids,usuarioLogado);
 		} catch (ControladorException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 

@@ -653,7 +653,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 	
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * Mantis 494
 	 * 
@@ -8365,7 +8365,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO:Cosanpa Gerar Arquivo Texto para Atualização Cadastral
+	 * Gerar Arquivo Texto para Atualização Cadastral
 	 * 
 	 * Registro Tipo 02 - Dados do(s) cliente(s)
 	 * 
@@ -9138,7 +9138,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO:Cosanpa Gerar Arquivo Texto para Atualização Cadastral
+	 * Gerar Arquivo Texto para Atualização Cadastral
 	 * 
 	 * Registro Tipo 04 - Dados Serviços
 	 * 
@@ -9266,7 +9266,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO:Cosanpa Gerar Arquivo Texto para Atualização Cadastral
+	 * Gerar Arquivo Texto para Atualização Cadastral
 	 * 
 	 * Registro Tipo 05 - Dados Medidor
 	 * 
@@ -9374,7 +9374,7 @@ public class ControladorCadastro implements SessionBean {
 
 	
 	/**
-	 * TODO: Cosanpa
+	 *
 	 * 
 	 * Mantis 494
 	 * 
@@ -9475,7 +9475,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO: Cosanpa
+	 *
 	 * 
 	 * Mantis 494
 	 * 
@@ -9504,7 +9504,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO: Cosanpa
+	 *
 	 * 
 	 * Mantis 494
 	 * 
@@ -9533,7 +9533,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO: Cosanpa
+	 *
 	 * 
 	 * Mantis 494
 	 * 
@@ -9563,7 +9563,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO: Cosanpa
+	 *
 	 * 
 	 * Mantis 494
 	 * 
@@ -9593,7 +9593,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO: Cosanpa
+	 *
 	 * 
 	 * Mantis 494
 	 * 
@@ -9622,7 +9622,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO: Cosanpa
+	 *
 	 * 
 	 * Mantis 494
 	 * 
@@ -9652,7 +9652,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 	
 	/**
-	 * TODO: Cosanpa
+	 *
 	 * 
 	 * Mantis 494
 	 * 
@@ -9682,7 +9682,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 	
 	/**
-	 * TODO: Cosanpa
+	 *
 	 * 
 	 * Mantis 494
 	 * 
@@ -9712,7 +9712,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 	
 	/**
-	 * TODO: Cosanpa
+	 *
 	 * 
 	 * Mantis 494
 	 * 
@@ -9742,7 +9742,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO: Cosanpa
+	 *
 	 * 
 	 * Mantis 494
 	 * 
@@ -14279,7 +14279,7 @@ public class ControladorCadastro implements SessionBean {
 
 	}
 	
-	/**TODO: COSANPA
+	/**
 	 * @autor: Adriana Muniz
 	 * @date: 23/11/2011
 	 * 
@@ -15853,7 +15853,7 @@ public class ControladorCadastro implements SessionBean {
 
 
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * @autor: Wellington Rocha
 	 * @date: 21/03/2012
@@ -15891,7 +15891,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * @autor: Wellington Rocha
 	 * @date: 21/03/2012
@@ -15928,7 +15928,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * @autor: Wellington Rocha
 	 * @date: 21/03/2012
@@ -15966,7 +15966,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * Método para atualizar situação (siac_id) de ImovelAtualizacaoCadastral
 	 * 
@@ -15990,7 +15990,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * @author Matheus Souza
 	 * @param Id do imovel

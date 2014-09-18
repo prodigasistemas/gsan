@@ -24,7 +24,7 @@ public class RelatorioEvolucaoContasAReceberContabilBean implements RelatorioBea
 
 	public RelatorioEvolucaoContasAReceberContabilBean(BigDecimal[] valorItem, String descricaoItemContabil) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.valorItem = valorItem;
 		this.descricaoItemContabil = descricaoItemContabil;
 	}

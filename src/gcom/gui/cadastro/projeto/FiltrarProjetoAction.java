@@ -72,7 +72,7 @@ public class FiltrarProjetoAction extends GcomAction {
 		if(situacao!=null && !situacao.equals("")){
 			Integer tipo = new Integer(situacao);
 			switch (tipo) {
-			//Todos
+			
 			case 1:
 
 				break;

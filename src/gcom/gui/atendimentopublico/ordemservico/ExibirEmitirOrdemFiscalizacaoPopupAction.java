@@ -135,7 +135,7 @@ public class ExibirEmitirOrdemFiscalizacaoPopupAction extends GcomAction {
 		}
 		
 		/**
-		 * TODO : COSANPA Alterando o cálculo da média
+		 *  Alterando o cálculo da média
 		 */
 			MedicaoTipo medicao = new MedicaoTipo();
 			medicao.setId(new Integer(MedicaoTipo.LIGACAO_AGUA));
@@ -144,7 +144,7 @@ public class ExibirEmitirOrdemFiscalizacaoPopupAction extends GcomAction {
 			try {
 				houveIntslacaoHidrometro = fachada.verificarInstalacaoSubstituicaoHidrometro(imovel.getId(), medicao);
 			} catch (ControladorException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		

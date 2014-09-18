@@ -315,7 +315,7 @@ public class ExibirEncerrarOrdemServicoAction extends GcomAction {
 							if (ordemServico.getServicoTipo().getServicoTipoReferencia() != null
 									&& !ordemServico.getServicoTipo().getServicoTipoReferencia().equals("")) {
 								/*
-								 * TODO - COSANPA - Mantis 402 - Felipe Santos - 19/03/2012
+								 * Mantis 402 - Felipe Santos - 19/03/2012
 								 * 
 								 * Seta o ServicoTipoReferencia no form caso seja Diagnostico (1)
 								 * ou Fiscalizacao (2)

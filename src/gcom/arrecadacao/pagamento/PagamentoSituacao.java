@@ -34,7 +34,7 @@ public class PagamentoSituacao extends ObjetoGcom {
     
 	public final static Integer DOCUMENTO_A_CONTABILIZAR = new Integer(10);
     
-	/**TODO: COSANPA
+	/**
 	 * Mantis 615 - Detalhar contabilização de documentos inexistentes
 	 * 
 	 * @author Wellington Rocha

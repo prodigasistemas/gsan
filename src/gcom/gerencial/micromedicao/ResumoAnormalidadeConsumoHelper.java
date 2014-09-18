@@ -403,7 +403,7 @@ public class ResumoAnormalidadeConsumoHelper {
 
 	public ResumoAnormalidadeConsumoHelper(Integer idImovel, Integer idGerenciaRegional, Integer idLocalidade, Integer idSetorComercial, Integer idRota, Integer idQuadra, Integer codigoSetorComercial, Integer numeroQuadra, Integer idPerfilImovel, Integer idSituacaoLigacaoAgua, Integer idSituacaoLigacaoEsgoto, Integer idEsfera, Integer idConsumoAnormalidade, Integer idLigacaoTipo) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idImovel = idImovel;
 		this.idGerenciaRegional = idGerenciaRegional;
 		this.idLocalidade = idLocalidade;
@@ -422,7 +422,7 @@ public class ResumoAnormalidadeConsumoHelper {
 
 	public ResumoAnormalidadeConsumoHelper(Integer idImovel, Integer idGerenciaRegional, Integer idLocalidade, Integer idSetorComercial, Integer idRota, Integer idQuadra, Integer codigoSetorComercial, Integer numeroQuadra, Integer idPerfilImovel, Integer idSituacaoLigacaoAgua, Integer idSituacaoLigacaoEsgoto, Integer idEsfera) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idImovel = idImovel;
 		this.idGerenciaRegional = idGerenciaRegional;
 		this.idLocalidade = idLocalidade;

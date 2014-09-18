@@ -24,12 +24,12 @@ public class ServicoTipoBoletim implements Serializable {
     
 	public ServicoTipoBoletim() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public ServicoTipoBoletim(Short indicadorPavimento, Short indicadorReposicaoAsfalto, Short indicadorReposicaoParalelo, Short indicadorReposicaoCalcada, Date ultimaAlteracao, ServicoTipo servicoTipo) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.indicadorPavimento = indicadorPavimento;
 		this.indicadorReposicaoAsfalto = indicadorReposicaoAsfalto;
 		this.indicadorReposicaoParalelo = indicadorReposicaoParalelo;

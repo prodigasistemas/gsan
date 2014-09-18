@@ -1007,7 +1007,7 @@ public class RelatorioDadosEconomiaImovel extends TarefaRelatorio {
 
 	@Override
 	public int calcularTotalRegistrosRelatorio() {
-		// TODO Auto-generated method stub
+		
 		// id da genrencia regional
 		String gerenciaRegional = (String) getParametro("gerenciaRegional");
 		// id da genrencia regional

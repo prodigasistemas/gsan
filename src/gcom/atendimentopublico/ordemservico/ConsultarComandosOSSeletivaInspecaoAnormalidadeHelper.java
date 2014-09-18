@@ -30,7 +30,7 @@ public class ConsultarComandosOSSeletivaInspecaoAnormalidadeHelper implements
 
 	public ConsultarComandosOSSeletivaInspecaoAnormalidadeHelper(Integer idComando, String descComando, Date dataExecucao, Date dataEncerramento, String situacao, Date dataEncerramentoPrevista) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idComando = idComando;
 		this.descComando = descComando;
 		this.dataExecucao = dataExecucao;
@@ -41,7 +41,7 @@ public class ConsultarComandosOSSeletivaInspecaoAnormalidadeHelper implements
 
 	public ConsultarComandosOSSeletivaInspecaoAnormalidadeHelper() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public Date getDataEncerramento() {

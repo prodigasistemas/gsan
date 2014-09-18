@@ -80,7 +80,7 @@ public class UsuarioPermissaoEspecialPK extends ObjetoTransacao {
 
 	@Override
 	public Date getUltimaAlteracao() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
@@ -91,7 +91,7 @@ public class UsuarioPermissaoEspecialPK extends ObjetoTransacao {
 
 	@Override
 	public Filtro retornaFiltro() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 	

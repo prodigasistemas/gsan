@@ -9811,7 +9811,7 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 				}
 				
 				/**
-				 * TODO : COSANPA Alterando o cálculo da média
+				 *  Alterando o cálculo da média
 				 */
 				MedicaoTipo medicao = new MedicaoTipo();
 				medicao.setId(1);
@@ -12812,7 +12812,7 @@ public class ControladorAtendimentoPublicoSEJB implements SessionBean {
 	}
 	
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * @autor: Wellington Rocha
 	 * @date: 03/07/2012

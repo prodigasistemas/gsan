@@ -177,7 +177,7 @@ public class RelatorioClientesEspeciais extends TarefaRelatorio {
 				}
 				
 				/**
-				 * TODO : COSANPA Alterando o cálculo da média
+				 *  Alterando o cálculo da média
 				 */
 				Fachada fachada = Fachada.getInstancia();
 				Imovel imovel = new Imovel(imovelClientesEspeciaisRelatorioHelper.getIdImovel());
@@ -188,7 +188,7 @@ public class RelatorioClientesEspeciais extends TarefaRelatorio {
 				try {
 					houveIntslacaoHidrometro = fachada.verificarInstalacaoSubstituicaoHidrometro(imovel.getId(), medicao);
 				} catch (ControladorException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 					

@@ -86,7 +86,7 @@ public class Relatorio2ViaContaBean implements RelatorioBean {
 	private String numeroIndiceTurbidez;
 	private String numeroCloroResidual;
 	
-	/**TODO: Cosanpa
+	/**
 	 * Alteração segunda via conta
 	 * Mantis: 230*/
 	private String valorMedioTurbidez;
@@ -163,14 +163,14 @@ public class Relatorio2ViaContaBean implements RelatorioBean {
 	private String leituraAtualInformada;
 	private String dataLeituraAnteriorInformada;
 	private String dataLeituraAtualInformada;
-	/**TODO: Cosanpa
+	/**
 	 * Mantis 499 - Não imprimir o código de barras na segunda via das contas agrupadas
 	 * 
 	 * @author Wellington Rocha
 	 * @date 25/01/2012*/
 	private String icClienteFaturaAgrupada;
 	
-	/**TODO: COSANPA
+	/**
 	 * Mantis 537 - Informar data de pagamento e agente arrecadador em caso de conta paga
 	 * 
 	 * @author Wellington Rocha

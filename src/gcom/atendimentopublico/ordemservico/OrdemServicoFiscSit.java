@@ -29,12 +29,12 @@ public class OrdemServicoFiscSit implements Serializable {
 
 	public OrdemServicoFiscSit() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public OrdemServicoFiscSit(Integer id, Date ultimaAlteracao, Date dataFiscalizacaoSituacao, OrdemServico ordemServico, FiscalizacaoSituacao fiscalizacaoSituacao) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.ultimaAlteracao = ultimaAlteracao;
 		this.dataFiscalizacaoSituacao = dataFiscalizacaoSituacao;

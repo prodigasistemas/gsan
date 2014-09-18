@@ -2112,7 +2112,7 @@ public interface IRepositorioRegistroAtendimento {
 			throws ErroRepositorioException;
 	
 	 /**
-     * TODO: COSANPA
+     *
      * 
      * Mantis 652 - Gerar relatório de Registro de Atendimento por unidade por usuário
      * 

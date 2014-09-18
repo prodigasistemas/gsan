@@ -76,7 +76,7 @@ public class FiltrarAvisoBancarioAction extends GcomAction {
 		String intervaloValorRealizadoInicio = filtrarAvisoBancarioActionForm.getIntervaloValorRealizadoInicio();
 		String intervaloValorRealizadoFim = filtrarAvisoBancarioActionForm.getIntervaloValorRealizadoFim();
 		String avisoAbertoFechado = filtrarAvisoBancarioActionForm.getAviso();
-		/*TODO : COSANPA
+		/*
 		 * Acréscimo desse campo para ser usado na pesquisa, na ação manter aviso bancário
 		 */
 		String idAvisoBancario = filtrarAvisoBancarioActionForm.getIdAvisoBancario();
@@ -88,7 +88,7 @@ public class FiltrarAvisoBancarioAction extends GcomAction {
 		
 		AvisoBancarioHelper avisoBancarioHelper = new AvisoBancarioHelper();
 		
-		/*TODO : COSANPA
+		/*
 		 * Acréscimo desse campo para ser usado na pesquisa, na ação manter aviso bancário
 		 */
 		if ((idAvisoBancario != null)

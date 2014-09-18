@@ -18,7 +18,7 @@ public class RelatorioExtratoDebitoClienteServicosDetailBean implements Relatori
 	public RelatorioExtratoDebitoClienteServicosDetailBean(String descricaoServico, 
 			String referenciaServico, String parcelasServico, String valorServico,String vencimentoServico) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.descricaoServico = descricaoServico;
 		this.referenciaServico = referenciaServico;
 		this.parcelasServico = parcelasServico;

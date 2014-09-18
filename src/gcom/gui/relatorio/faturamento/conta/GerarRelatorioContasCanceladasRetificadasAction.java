@@ -212,7 +212,7 @@ public class GerarRelatorioContasCanceladasRetificadasAction extends ExibidorPro
         if(parametroInformado){
         	//chamar metodo de filtragem
         	try {
-        		/**TODO: COSANPA
+        		/**
         		 * Mantis 581
         		 * 
         		 * Inlcuir Opção de Contas Prescritas no relatório de Contas Canceladas/Retidas

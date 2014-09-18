@@ -186,12 +186,12 @@ public class ClienteFoneAtualizacaoCadastral  extends ObjetoTransacao implements
 	}
 
 	public Short getIndicadorTelefonePadrao() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	public void setIndicadorTelefonePadrao(Short indicadorTelefonePadrao) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 }

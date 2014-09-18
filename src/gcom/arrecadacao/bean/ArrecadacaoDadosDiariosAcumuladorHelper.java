@@ -47,7 +47,7 @@ public class ArrecadacaoDadosDiariosAcumuladorHelper {
 	
 	public ArrecadacaoDadosDiariosAcumuladorHelper(int tipoAgrupamento) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.tipoAgrupamento = tipoAgrupamento;
 	}
 
