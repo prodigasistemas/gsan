@@ -49,13 +49,6 @@ public class FiltrarOrdemServicoAction extends GcomAction {
 		
 		boolean parametroInformado = false;
 		
-		/**
-		 * @Date 15/05/2013
-		 * @autor Adriana Muniz
-		 * 
-		 * Validação de campos obrigatórios - Mantis 793
-		 * 
-		 * */
 		Integer[] tiposServicosSelecionados = filtrarOrdemServicoActionForm.getTipoServicoSelecionados();
 		
 		if(filtrarOrdemServicoActionForm.getNumeroOS().equals("") && 

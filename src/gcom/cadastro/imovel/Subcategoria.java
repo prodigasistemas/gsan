@@ -53,9 +53,6 @@ public class Subcategoria extends ObjetoTransacao {
     public static final Integer SUBCATEGORIA_R1 = new Integer(1);
 
     /**
-     * 
-     * Mantis 494
-     * 
      * Criação de constantes a serem utilizadas na geração 
      * da rota para recadastramento
      * 

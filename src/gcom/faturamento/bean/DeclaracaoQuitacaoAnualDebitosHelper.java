@@ -36,11 +36,6 @@ public class DeclaracaoQuitacaoAnualDebitosHelper implements Serializable {
 	private ExtratoQuitacao extratoQuitacaoParaAtualizacao;
 	private String codigoRota;
 	private String seguencialRota;
-	
-	/*
-	 * inclus�o de novo atributo e respectivos get e set
-	 * para atender ao mantis 201
-	 * entrega em endere�o altivo	 *  */
 	private short enderecoAlternativo;
 	
 	public DeclaracaoQuitacaoAnualDebitosHelper(

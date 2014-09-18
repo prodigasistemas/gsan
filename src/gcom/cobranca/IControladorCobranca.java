@@ -4040,11 +4040,6 @@ public interface IControladorCobranca {
 	public IndicesAcrescimosImpontualidade pesquisarIndiceAcrescimoImpontualidade(
 			int anoMesReferenciaDebito) throws ControladorException;
 	
-	/** - Alterações para atender Mantis 595
-	 * Enviar documentos de cobrança para endereço de correspondência
-	 * 
-	 * @author Wellington Rocha
-	 * @date 21/06/2013*/
 	public Collection<RelatorioNotificacaoDebitoBean> gerarRelatorioNotificacaoDebito(
 			Integer idCobrancaAcaoCronograma, Integer idCobrancaAcaoComando, int tamanhoMaximoDebito, String quantidadeRelatorios, String tipoEnderecoRelatorio) throws ControladorException;
 	
@@ -4847,12 +4842,6 @@ public interface IControladorCobranca {
 	 * @date 07/07/2010
 	 * 
 	 */
-	/**
-	 * Alterações para atender ao Mantis 490
-     * Considerar a data de vencimento da conta ao invés de considerar o anoMes referencia
-     * da mesma
-     * @author Wellington Rocha
-     * @date 25/01/2012*/
 	public void gerarPrescreverDebitosDeImoveis( Integer idFuncionalidadeIniciada, 
 			Integer anoMesFaturamento, Date dataPrescricao, Integer usuario, String idsCobrancaSituacao) 
 		throws ControladorException ;

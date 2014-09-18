@@ -6573,10 +6573,6 @@ public interface IRepositorioArrecadacao {
 	
 
 	/**
-	 *
-	 * 
-	 * Mantis 537
-	 * 
 	 * @author Wellington Rocha
 	 * @data 15/04/2012
 	 * 
@@ -6734,10 +6730,6 @@ public interface IRepositorioArrecadacao {
            Object helper, FiltroConsultarDadosDiariosArrecadacaoAuxiliar filtro) throws ErroRepositorioException;
 
    /**
-	 *
-	 * 
-	 * Mantis: ***
-	 * 
 	 * Mudança de conta contábil de recebimentos até 12/2012 classificados no mês atual;
 	 * 
 	 * @author Wellington Rocha
@@ -6754,10 +6746,6 @@ public interface IRepositorioArrecadacao {
 			Integer idImpostoTipo) throws ErroRepositorioException;
 	
 	/**
-	 *
-	 * 
-	 * Mantis *** 
-	 * 
 	 * Contabilizar valores arrecadados até dezembro de 2012 em contas diferentes.
 	 * 
 	 * @author Wellington Rocha
@@ -6774,8 +6762,6 @@ public interface IRepositorioArrecadacao {
 			Integer idCategoria) throws ErroRepositorioException;
 	
 	/**
-	 * Mantis ***
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Contabilizar valores arrecadados até 31/12/2012 em contas diferentes
@@ -6797,8 +6783,6 @@ public interface IRepositorioArrecadacao {
 			throws ErroRepositorioException;
 	
 	/**
-	 * Mantis ***
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Alteração na contabilização de contas arrecadadas até 31/12/2012
@@ -6820,11 +6804,7 @@ public interface IRepositorioArrecadacao {
 			throws ErroRepositorioException;
 	
 	/**
-	 *
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
-	 * 
-	 * Mantis ***
 	 * 
 	 * Contabilizar em contas diferentes os valores arrecadados até 31/12/2012
 	 * 
@@ -6843,8 +6823,6 @@ public interface IRepositorioArrecadacao {
 	
 	
 	/**
-	 * Mantis ***
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Contabilizar em contas diferentes valores arrecadados até 31/12/2012
@@ -6868,8 +6846,6 @@ public interface IRepositorioArrecadacao {
 			throws ErroRepositorioException;
 	
 	/**
-	 * Mantis ***
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Contabilizar em contas separadas valores arrecadados até 31/12/2012
@@ -6891,8 +6867,6 @@ public interface IRepositorioArrecadacao {
 			throws ErroRepositorioException;
 	
 	/**
-	 * Mantis ****
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Contabilizar em contas separadas valores arrecadados até 31/12/2012
@@ -6914,8 +6888,6 @@ public interface IRepositorioArrecadacao {
 			throws ErroRepositorioException;
 	
 	/**
-	 * Mantis ****
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Contabilizar em contas separadas valores arrecadados até 31/12/2012
@@ -6938,8 +6910,6 @@ public interface IRepositorioArrecadacao {
 	
 	
 	/**
-	 * Mantis ****
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Contabilizar em contas separadas valores arrecadados até 31/12/2012

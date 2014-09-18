@@ -3055,7 +3055,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					+ "cnta.valorImposto, "
 					+ "cnta.referenciaContabil, "
 					/**
-					 * Mantis 615 - Classificar detalhadamente documentos inexistentes por débito prescrito,
+					 * Classificar detalhadamente documentos inexistentes por débito prescrito,
 					 * conta parcelada, conta cancelada ou erro de processamento
 					 * @author Wellington Rocha
 					 * @date 02/08/2012*/
@@ -3076,7 +3076,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			
 
 			/**
-			 * Mantis 615 - Classificar detalhadamente documentos inexistentes por débito prescrito,
+			 * Classificar detalhadamente documentos inexistentes por débito prescrito,
 			 * conta parcelada, conta cancelada ou erro de processamento
 			 * @author Wellington Rocha
 			 * @date 02/08/2012*/
@@ -7229,7 +7229,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		idsCreditoOrigem.add(CreditoOrigem.VALORES_COBRADOS_INDEVIDAMENTE);
 		idsCreditoOrigem.add(CreditoOrigem.DESCONTOS_CONCEDIDOS_NO_PARCELAMENTO);
 		/**
-		 * Mantis 615 - Contabilizar créditos com crédito origem correspondente 
+		 * Contabilizar créditos com crédito origem correspondente 
 		 * a Contas Pagas em Excesso
 		 * 
 		 * @author Wellington Rocha
@@ -18426,7 +18426,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		String consulta = "";
 		
 		/**
-		 * Mantis 632 - Alguns pagamentos foram para histórico indevidamente
+		 * Alguns pagamentos foram para histórico indevidamente
 		 * Alterado clausula where de <= para < no anoMesReferenciaArrecadacao
 		 * 
 		 * @author Wellington Rocha
@@ -18549,7 +18549,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		String consulta = "";
 		
 		/**
-		 * Mantis 632 - Alguns pagamentos foram para histórico indevidamente
+		 * Alguns pagamentos foram para histórico indevidamente
 		 * Alterada a clausula where do anoMesArrecadacao de <= para <
 		 * 
 		 * @author Wellington Rocha
@@ -19848,7 +19848,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		String consulta = "";
 		
 		/**
-		 * Mantis 632 - Algumas guias de devolução foram jogadas para histórico indevidamente
+		 * Algumas guias de devolução foram jogadas para histórico indevidamente
 		 * Alterado valor da clausula where de anoMesReferenciaArrecadacao de <= para <
 		 * 
 		 * @author Wellington Rocha
@@ -20094,7 +20094,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		String consulta = "";
 
 		/**
-		 * Mantis 632 - Algumas guias de pagamento foram indevidamente jogados para histórico
+		 * Algumas guias de pagamento foram indevidamente jogados para histórico
 		 * Alterada a clausula where do anoMesReferenciaArrecadacao de <= para <
 		 * 
 		 * @author Wellington Rocha
@@ -22223,7 +22223,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					+ "cnhi.valorImposto, "
 					+ "cnhi.anoMesReferenciaContabil, "
 					/**
-					 * Mantis 615 - Classificar detalhadamente documentos inexistentes por débito prescrito,
+					 * Classificar detalhadamente documentos inexistentes por débito prescrito,
 					 * conta parcelada, conta cancelada ou erro de processamento
 					 * @author Wellington Rocha
 					 * @date 02/08/2012*/
@@ -22245,7 +22245,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			
 
 			/**
-			 * Mantis 615 - Classificar detalhadamente documentos inexistentes por débito prescrito,
+			 * Classificar detalhadamente documentos inexistentes por débito prescrito,
 			 * conta parcelada, conta cancelada ou erro de processamento
 			 * @author Wellington Rocha
 			 * @date 02/08/2012*/
@@ -23932,7 +23932,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 		String consulta = "";
 		
 		/**
-		 * Mantis 632 - Algumas guias de pagamento e guias de devolução foram jogados para histórico indevidamente
+		 * Algumas guias de pagamento e guias de devolução foram jogados para histórico indevidamente
 		 * Alterado clausula where do anoMesReferenciaArrecadacao de <= para <
 		 * 
 		 * @author Wellington Rocha
@@ -29267,10 +29267,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 	
 	/**
-	 *
-	 * 
-	 * Mantis 537
-	 * 
 	 * @author Wellington Rocha
 	 * @data 15/04/2012
 	 * 
@@ -30231,10 +30227,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
    }
    
    /**
-	 *
-	 * 
-	 * Mantis: ***
-	 * 
 	 * Mudança de conta contábil de recebimentos até 12/2012 classificados no mês atual;
 	 * 
 	 * @author Wellington Rocha
@@ -30305,10 +30297,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 	
 	/**
-	 *
-	 * 
-	 * Mantis *** 
-	 * 
 	 * Contabilizar valores arrecadados até dezembro de 2012 em contas diferentes.
 	 * 
 	 * @author Wellington Rocha
@@ -30377,8 +30365,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	
 	
 	/**
-	 * Mantis ***
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Contabilizar valores arrecadados até 31/12/2012 em contas diferentes
@@ -30459,8 +30445,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 
 	/**
-	 * Mantis ***
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Alteração na contabilização de contas arrecadadas até 31/12/2012
@@ -30543,11 +30527,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	
 	
 	/**
-	 *
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
-	 * 
-	 * Mantis ***
 	 * 
 	 * Contabilizar em contas diferentes os valores arrecadados até 31/12/2012
 	 * 
@@ -30626,8 +30606,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 
 	
 	/**
-	 * Mantis ***
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Contabilizar em contas diferentes valores arrecadados até 31/12/2012
@@ -30714,8 +30692,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 
 	/**
-	 * Mantis ***
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Contabilizar em contas separadas valores arrecadados até 31/12/2012
@@ -30800,8 +30776,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 
 	
 	/**
-	 * Mantis ****
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Contabilizar em contas separadas valores arrecadados até 31/12/2012
@@ -30891,8 +30865,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 	
 	/**
-	 * Mantis ****
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Contabilizar em contas separadas valores arrecadados até 31/12/2012
@@ -30977,8 +30949,6 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 	
 	/**
-	 * Mantis ****
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Contabilizar em contas separadas valores arrecadados até 31/12/2012
@@ -31055,7 +31025,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 22/10/2013
+	 * Felipe Santos - 22/10/2013
 	 * 
 	 * Retorna o total de Arrecadação por referência e localidade
 	 * 
@@ -31120,7 +31090,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 	
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 22/10/2013
+	 * Felipe Santos - 22/10/2013
 	 * 
 	 * Retorna diferença de datas e quantidade de pagamentos para
 	 * Prazo Medio de Recebimento de Contas
@@ -31179,7 +31149,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	}
 	
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 08/11/2013
+	 * Felipe Santos - 08/11/2013
 	 * 
 	 * Retorna os dados para o Relatorio BIG
 	 * 

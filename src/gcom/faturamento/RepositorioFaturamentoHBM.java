@@ -37976,7 +37976,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			
 			}else{
 				/**
-				 * Mantis 581 - Incluir opção de contas prescritas no relatório de contas canceladas/retificadas
+				 * Incluir opção de contas prescritas no relatório de contas canceladas/retificadas
 				 * 
 				 * @author Wellington Rocha
 				 * @date 04/06/2012
@@ -38086,7 +38086,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			
 			}else{
 				/**
-				 * Mantis 581 - Incluir opção de contas prescritas no relatório de contas canceladas/retificadas
+				 * Incluir opção de contas prescritas no relatório de contas canceladas/retificadas
 				 * 
 				 * @author Wellington Rocha
 				 * @date 04/06/2012
@@ -38189,7 +38189,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			
 			}else{
 				/**
-				 * Mantis 581 - Incluir opção de contas prescritas no relatório de contas canceladas/retificadas
+				 * Incluir opção de contas prescritas no relatório de contas canceladas/retificadas
 				 * 
 				 * @author Wellington Rocha
 				 * @date 04/06/2012
@@ -39624,7 +39624,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ " contageral.cntg_ichistorico as indicadorContaHist, " // 19
 					+ " faturaItem.fitm_id as idFaturaItem, " // 20
 					/**
-					 * Mantis 647 - Nome do Imovel no lugar do nome do cliente usuário no relatório de faturas agrupadas
+					 * Nome do Imovel no lugar do nome do cliente usuário no relatório de faturas agrupadas
 					 * 
 					 * @author Wellington Rocha
 					 * @date 22/11/2012*/
@@ -59231,7 +59231,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
  	
  	/**
 	 *
-	 * Mantis 583 - Confirmar Prescrição de Conta
+	 * Confirmar Prescrição de Conta
 	 * 
 	 * @author Wellington Rocha
 	 * @date 01/06/2012
@@ -60194,7 +60194,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 22/10/2013
+	 * Felipe Santos - 22/10/2013
 	 * 
 	 * Retorna quantidadeContas e valorFaturamento por referência e localidade
 	 * 
@@ -60255,7 +60255,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 22/10/2013
+	 * Felipe Santos - 22/10/2013
 	 * 
 	 * Retorna a quantidade e valor total de Erros em Contas Retificadas e Emitidas
 	 * 
@@ -60350,7 +60350,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 23/10/2013
+	 * Felipe Santos - 23/10/2013
 	 * 
 	 * Retorna a quantidade e valor total de Inadimplencia para Contas Vencidas
 	 * 
@@ -60429,7 +60429,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 23/10/2013
+	 * Felipe Santos - 23/10/2013
 	 * 
 	 * Retorna a quantidade e valor total de Inadimplencia para Contas Emitidas
 	 * 
@@ -60492,7 +60492,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 23/10/2013
+	 * Felipe Santos - 23/10/2013
 	 * 
 	 * Retorna a quantidade e valor total de Inadimplencia para Contas Vencidas
 	 * maior que 90 dias
@@ -60571,7 +60571,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 23/10/2013
+	 * Felipe Santos - 23/10/2013
 	 * 
 	 * Retorna a quantidade e valor total de Inadimplencia para Contas Emitidas
 	 * 

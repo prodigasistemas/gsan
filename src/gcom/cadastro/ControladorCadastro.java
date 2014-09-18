@@ -653,10 +653,6 @@ public class ControladorCadastro implements SessionBean {
 	}
 	
 	/**
-	 *
-	 * 
-	 * Mantis 494
-	 * 
 	 * Necessário para a geracao de rota para recadastramento
 	 * 
 	 * @author Wellington Rocha
@@ -9374,10 +9370,6 @@ public class ControladorCadastro implements SessionBean {
 
 	
 	/**
-	 *
-	 * 
-	 * Mantis 494
-	 * 
 	 * Geração da rota para recadastramento
 	 * 
 	 * @author Wellington Rocha
@@ -9474,15 +9466,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoGeral;
 	}
 
-	/**
-	 *
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoAnormalidades(
 			CadastroOcorrencia cadastroOcorrencia) throws ControladorException {
 
@@ -9503,15 +9486,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoAnormalidades;
 	}
 
-	/**
-	 *
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoRamoAtividade(
 			RamoAtividade ramoAtividade) throws ControladorException {
 
@@ -9532,15 +9506,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoRamoAtividade;
 	}
 
-	/**
-	 *
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoLigacaoAguaSituacao(
 			LigacaoAguaSituacao ligacaoAguaSituacao)
 			throws ControladorException {
@@ -9562,15 +9527,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoLigacaoAguaSituacao;
 	}
 
-	/**
-	 *
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoLigacaoEsgotoSituacao(
 			LigacaoEsgotoSituacao ligacaoEsgotoSituacao)
 			throws ControladorException {
@@ -9592,15 +9548,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoLigacaoEsgotoSituacao;
 	}
 
-	/**
-	 *
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoHidrometroProtecao(
 			HidrometroProtecao hidrometroProtecao) throws ControladorException {
 
@@ -9621,15 +9568,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoHidrometroProtecao;
 	}
 
-	/**
-	 *
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoFonteAbastecimento(
 			FonteAbastecimento fonteAbastecimento)
 			throws ControladorException {
@@ -9651,15 +9589,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoFonteAbastecimento;
 	}
 	
-	/**
-	 *
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoHidrometroMarca(
 			HidrometroMarca hidrometroMarca)
 			throws ControladorException {
@@ -9681,15 +9610,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoHidrometroMarca;
 	}
 	
-	/**
-	 *
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoRamalLocalInstalacao(
 			RamalLocalInstalacao ramalLocalInstalacao)
 			throws ControladorException {
@@ -9711,15 +9631,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoRamalLocalInstalacao;
 	}
 	
-	/**
-	 *
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoHidrometroCapacidade(
 			HidrometroCapacidade hidrometroCapacidade)
 			throws ControladorException {
@@ -9741,15 +9652,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoHidrometroCapacidade;
 	}
 
-	/**
-	 *
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoLogradouroTipo(
 			LogradouroTipo logradouroTipo, Boolean possuiMaisRegistros)
 			throws ControladorException {

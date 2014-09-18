@@ -2009,7 +2009,7 @@ public class ControladorCobranca implements SessionBean {
 		// 2. O sistema deverá calcular o valor dos descontos por antiguidade
 		BigDecimal valorDescontoAntiguidade = new BigDecimal("0.00");
 		/*
-		 * Mantis 658 - Felipe Santos
+		 * Felipe Santos
 		 * 
 		 * Desconto sobre os Acrescimos por Impotualidade calculado
 		 * individualmente por item.
@@ -2029,7 +2029,7 @@ public class ControladorCobranca implements SessionBean {
 		valorDescontoAntiguidade = descontoAntiguidadeDebito.getValorDescontoAntiguidade();
 
 		/*
-		 * Mantis 658 - Felipe Santos
+		 * Felipe Santos
 		 * 
 		 * Desconto sobre os Acrescimos por Impotualidade calculado
 		 * individualmente por item.
@@ -2052,7 +2052,7 @@ public class ControladorCobranca implements SessionBean {
 
 		// GUIA PAGAMENTO
 		/*
-		 * Mantis 658 - Felipe Santos
+		 * Felipe Santos
 		 * 
 		 * Desconto sobre os Acrescimos por Impotualidade calculado
 		 * individualmente por item.
@@ -3145,13 +3145,6 @@ public class ControladorCobranca implements SessionBean {
 	 * @date 07/07/2010
 	 * 
 	 */
-	/**
-	 * Alterações para atender ao Mantis 490 Considerar a data de
-	 * vencimento da conta ao invés de considerar o anoMes referencia da mesma
-	 * 
-	 * @author Wellington Rocha
-	 * @date 25/01/2012
-	 */
 	public void gerarPrescreverDebitosDeImoveis(Integer idFuncionalidadeIniciada, Integer anoMesFaturamento, Date dataPrescricao,
 			Integer usuario, String idsCobrancaSituacao) throws ControladorException {
 
@@ -3165,26 +3158,11 @@ public class ControladorCobranca implements SessionBean {
 				UnidadeProcessamento.FUNCIONALIDADE, 0);
 
 		try {
-			/**
-			 * Alterações para atender ao Mantis 490 Considerar a
-			 * data de vencimento da conta ao invés de considerar o anoMes
-			 * referencia da mesma
-			 * 
-			 * @author Wellington Rocha
-			 * @date 25/01/2012
-			 */
 			SimpleDateFormat formater = new SimpleDateFormat("yyyy-MM-dd");
 			String dataFormatada = formater.format(dataPrescricao);
 
 			this.repositorioCobranca.prescreverDebitosDeImoveis(anoMesFaturamento, dataFormatada, usuario);
 
-			/**
-			 * Mantis 490: Método criado para prescrever débitos
-			 * de imóveis com contas incluídas
-			 * 
-			 * @author Wellington Rocha
-			 * @date 02/02/2012
-			 */
 			this.repositorioCobranca.prescreverDebitosDeImoveisContasInlcuidas(anoMesFaturamento, dataFormatada, usuario);
 
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
@@ -4783,7 +4761,7 @@ public class ControladorCobranca implements SessionBean {
 					/**
 					 *
 					 * 
-					 * Mantis 665 - Considerar mêsAno anterior ao de vencimento
+					 * Considerar mêsAno anterior ao de vencimento
 					 * da conta no calculo de atualização monetária
 					 */
 					mesAnoDataReferenciaConta = Util.subtrairMesDoAnoMes(mesAnoDataReferenciaConta, 1);
@@ -6796,7 +6774,7 @@ public class ControladorCobranca implements SessionBean {
 				colecaoImoveis = getControladorImovel().pesquisarImoveisClientesRelacao(cliente, relacaoClienteImovel, numeroInicial);
 
 				/*
-				 * - Mantis 634 - Felipe Santos - 24/06/2013
+				 * Felipe Santos - 24/06/2013
 				 * 
 				 * Remove os imóveis da coleção caso o cliente não seja o atual
 				 * responsável pela conta
@@ -8327,8 +8305,7 @@ public class ControladorCobranca implements SessionBean {
 		Collection<ContaValoresHelper> colecaoContasValores = debitoImovel.getColecaoContasValores();
 
 		/*
-		 * - Mantis 634 - Felipe Santos e Wellington Rocha -
-		 * 24/06/2013
+		 * Felipe Santos e Wellington Rocha - 24/06/2013
 		 * 
 		 * Na geração do documento de cobrança não serão consideradas as contas
 		 * cujo titular seja diferente ao responsável do imóvel.
@@ -9831,7 +9808,7 @@ public class ControladorCobranca implements SessionBean {
 		BigDecimal valorDescontoAntiguidade = new BigDecimal("0.00");
 
 		/*
-		 * Mantis 658 - Felipe Santos
+		 * Felipe Santos
 		 * 
 		 * Desconto sobre os Acrescimos por Impotualidade calculado
 		 * individualmente por item.
@@ -9867,7 +9844,7 @@ public class ControladorCobranca implements SessionBean {
 
 		// GUIA PAGAMENTO
 		/*
-		 * Mantis 658 - Felipe Santos
+		 * Felipe Santos
 		 * 
 		 * Desconto sobre os Acrescimos por Impotualidade calculado
 		 * individualmente por item.
@@ -11414,7 +11391,7 @@ public class ControladorCobranca implements SessionBean {
 		BigDecimal valorDescontoAntiguidade = new BigDecimal("0.00");
 
 		/*
-		 * Mantis 658 - Felipe Santos
+		 * Felipe Santos
 		 * 
 		 * Desconto sobre os Acrescimos por Impotualidade calculado
 		 * individualmente por item.
@@ -11598,7 +11575,7 @@ public class ControladorCobranca implements SessionBean {
 
 		// 3. Recalcula o valor total dos acrescimos por impontualidade
 		/*
-		 * Mantis 658 - Felipe Santos
+		 * Felipe Santos
 		 * 
 		 * Desconto sobre os Acrescimos por Impotualidade calculado
 		 * individualmente por item.
@@ -34389,8 +34366,7 @@ public class ControladorCobranca implements SessionBean {
 			throws ControladorException {
 
 		/**
-		 * - Alterações para atender Mantis 595 Enviar documentos
-		 * de cobrança para endereço de correspondência
+		 * Enviar documentos de cobrança para endereço de correspondência
 		 * 
 		 * @author Wellington Rocha
 		 * @date 21/06/2013
@@ -67089,9 +67065,8 @@ public class ControladorCobranca implements SessionBean {
 	}
 
 	/**
-	 * - Mantis 634 - Na geração do documento de cobrança não
-	 * serão consideradas as contas cujo titular seja diferente ao responsável
-	 * do imóvel.
+	 * Na geração do documento de cobrança não serão consideradas as contas cujo
+	 * titular seja diferente ao responsável do imóvel.
 	 * 
 	 * @author Felipe Santos e Wellington Rocha
 	 * @date 24/06/2013

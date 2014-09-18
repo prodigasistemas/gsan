@@ -7439,7 +7439,7 @@ public void gerarResumoDevedoresDuvidosos(int anoMesReferenciaContabil, Integer 
 
 					// Cria o objeto com os valores passados
 					/**
-					 * Mantis 872 - Alterar o lancamento tipo dos impostos deduzidos
+					 * Alterar o lancamento tipo dos impostos deduzidos
 					 * 
 					 * @author Wellington Rocha
 					 * @date 18/09/2013*/

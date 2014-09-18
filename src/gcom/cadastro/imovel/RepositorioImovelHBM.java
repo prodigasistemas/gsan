@@ -23442,8 +23442,8 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 					 * @autor Adriana Muniz
 					 * @date 06/08/2013
 					 * 
-					 * Mantis 827: Correção da nomenclatura do hidrometro_instalacao_historic (anterior hidrometro_instalacao_historico_esgoto) 
-					 * */
+					 * Correção da nomenclatura do hidrometro_instalacao_historic (anterior hidrometro_instalacao_historico_esgoto) 
+					 */
 					+ "left join micromedicao.hidrometro_protecao as hidrometro_protecao_esgoto on hidrometro_instalacao_historic.hipr_id = hidrometro_protecao_esgoto.hipr_id ";
 
 			consulta = consulta
@@ -31200,10 +31200,6 @@ public class RepositorioImovelHBM implements IRepositorioImovel {
 	}
 	
 	/**
-	 *
-	 * 
-	 * Mantis 494
-	 * 
 	 * @param idImovel
 	 * 
 	 * @author Wellington Rocha

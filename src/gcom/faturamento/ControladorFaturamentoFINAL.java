@@ -25116,16 +25116,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				 * [UC0113] - Faturar Grupo de Faturamento [FS0005] - Verificar
 				 * Débitos a cobrar de parcelamento
 				 */
-				/**
-				 *
-				 * 
-				 * @autor Adriana Muniz
-				 * @date 25/09/2013
-				 * 
-				 *       Troca da referência de faturamento do grupo para a
-				 *       referencia de faturamento do sistema de parametro.
-				 *       Mantis 875
-				 * */
 				if (!(arrayDebitosACobrar[16] != null
 						&& debitoACobrar.getNumeroPrestacaoCobradas() == 0 && (arrayDebitosACobrar[15] != null && ((Integer) arrayDebitosACobrar[15])
 						.intValue() >= sistemaParametro.getAnoMesFaturamento()))) {
@@ -25226,14 +25216,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		Collection colecaoCreditosARealizar = null;
 
 		/**
-		 *
-		 * 
 		 * @autor Adriana Muniz
 		 * @date 25/09/2013
 		 * 
-		 *       Troca da referência de faturamento do grupo para a referencia
-		 *       de faturamento do sistema de parametro. Mantis 875
-		 * */
+		 * Troca da referência de faturamento do grupo para a referencia
+		 * de faturamento do sistema de parametro.
+		 */
 		// Pesquisa créditos a cobrar
 		try {
 			colecaoCreditosARealizar = repositorioFaturamento
@@ -39308,7 +39296,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							.getDataEnvioEmailConta());
 
 					/**
-					 * Mantis 648 - Enviando para historico os
+					 * Enviando para historico os
 					 * dados referentes a rateio de água e esgoto
 					 * 
 					 * @author: Wellington Rocha
@@ -40721,7 +40709,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								"" + contaCategoria.getConsumoAgua(), 6)
 								+ " M3";
 						/**
-						 * Mantis 686 - Segunda via de conta com
+						 * Segunda via de conta com
 						 * rateio está somando o valor de água da categoria com
 						 * o valor do rateio.
 						 * 
@@ -49924,8 +49912,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			}
 
 			/**
-			 * Alteração para atender ao Mantis 499 Emitir faturas
-			 * agrupadas sem código de barras
+			 * Emitir faturas agrupadas sem código de barras
 			 * 
 			 * @author Wellington Rocha
 			 * @date 25/01/2012
@@ -50277,14 +50264,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					.formatarMoedaReal(valorConta));
 			emitirContaHelper.setValorConta(valorConta);
 
-			/**
-			 *
-			 * 
-			 * Mantis 537
-			 * 
-			 * @author Wellington Rocha
-			 * @date 15/03/2012
-			 */
 			PagamentoHistorico pagamento = getControladorArrecadacao()
 					.pesquisarPagamentoDeContaEmHistorico(idContaEP);
 			if (pagamento != null
@@ -50376,13 +50355,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 			String representacaoNumericaCodBarra = "";
 
-			/**
-			 * Alteração para atender ao Mantis 499 Emitir faturas
-			 * agrupadas sem código de barras
-			 * 
-			 * @author Wellington Rocha
-			 * @date 25/01/2012
-			 */
 			if (emitirContaHelper.getContaSemCodigoBarras().equals("2")) {
 
 				representacaoNumericaCodBarra = this
@@ -69054,10 +69026,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			Date dataComando, Boolean regerar) throws ControladorException,
 			ErroRepositorioException {
 
-		/*
-		 *  Alteração para atender ao mantis 188 Inclusao de
-		 * variável para atender ao mantis
-		 */
 		boolean rotaSoComImoveisInformativos = true;
 
 		UC0745GerarArquivoTextoFaturamento gerarArquivoTextoFaturamento = UC0745GerarArquivoTextoFaturamento
@@ -69612,7 +69580,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					}
 
 					/*
-					 *  Alteração para atender ao mantis 188
 					 * Verificar se todos os imóveis da rota são apenas
 					 * informativos, se forem, gerar o arquivo já finalizado
 					 */
@@ -70755,8 +70722,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// Nome do Cliente Usuário
 
 					/**
-					 * Alteração Mantis 647 - Nome do imóvel no
-					 * relatório de faturas agrupadas.
+					 * Nome do imóvel no relatório de faturas agrupadas.
 					 * 
 					 * @author Wellington Rocha
 					 * @date 26/11/2012
@@ -76578,14 +76544,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * Mantis 583 Verificar no momento em que o usuário está
-	 * fazendo a prescrição de uma conta, se a mesma atende as condições
-	 * necessárias para que haja a prescrição
+	 * Verificar no momento em que o usuário está fazendo a prescrição de uma conta,
+	 * se a mesma atende as condições necessárias para que haja a prescrição
 	 * 
 	 * @author Wellington Rocha
 	 * @date 01/06/2012
 	 */
-
 	public boolean verificarPossibilidadePrescricaoConta(Integer idConta) {
 		Conta conta = null;
 		try {

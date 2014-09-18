@@ -344,12 +344,8 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ "conta.dcst_idatual, conta.cnta_dgverificadorconta, conta.cmrv_id, conta.cnta_tmultimaalteracao, conta.imov_id, conta.cnta_nnconsumoagua, conta.cnta_vlimpostos, conta.cnta_nnconsumoesgoto, conta.parc_id ";
 
 			if (indicadorPagamento == 1) {
-				// consulta +=
-				// " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) < ((coalesce(conta.cnta_vlagua, 0) + coalesce(conta.cnta_vlesgoto, 0) + coalesce(conta.cnta_vldebitos, 0) - coalesce(conta.cnta_vlcreditos, 0) - coalesce(conta.cnta_vlimpostos, 0)))";
-
 				/*
-				 * 24/07/2012 - Mantis 610 - Felipe Santos e
-				 * Wellington Rocha
+				 * 24/07/2012 Felipe Santos e Wellington Rocha
 				 * 
 				 * Alteração para ser emitidos Documentos de Cobrança apenas
 				 * para pagamentos igual a 0
@@ -496,7 +492,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ "and conta.cnta_dtvencimentoconta between :inicialVencimento and :finalVencimento "
 					+ "and (coalesce(conta.cnta_vlagua, 0) + coalesce(conta.cnta_vlesgoto, 0) + coalesce(conta.cnta_vldebitos, 0) - coalesce(conta.cnta_vlcreditos, 0) - coalesce(conta.cnta_vlimpostos, 0)) > 0.00 "
 					/*
-					 * Mantis 774 - Felipe Santos
+					 * Felipe Santos
 					 * 
 					 * Consultar Débitos por Cliente indicado na conta
 					 */
@@ -22315,13 +22311,6 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @param anoMesFaturamento
 	 * @throws ErroRepositorioException
 	 */
-	/**
-	 * Alterações para atender ao Mantis 490 Considerar a data de
-	 * vencimento da conta ao invés de considerar o anoMes referencia da mesma.
-	 * 
-	 * @author Wellington Rocha
-	 * @date 25/01/2012
-	 */
 	public void prescreverDebitosDeImoveis(Integer anoMesFaturamento, String dataFormatada, Integer usuario)
 			throws ErroRepositorioException {
 
@@ -22395,13 +22384,6 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 		}
 	}
 
-	/**
-	 * Mantis 490: Método criado para prescrever débitos de
-	 * imóveis com contas incluídas
-	 * 
-	 * @author Wellington Rocha
-	 * @date 02/02/2012
-	 */
 	public void prescreverDebitosDeImoveisContasInlcuidas(Integer anoMesFaturamento, String dataFormatada, Integer usuario)
 			throws ErroRepositorioException {
 

@@ -23682,7 +23682,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 	}
 	
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 23/10/2013
+	 * Felipe Santos - 23/10/2013
 	 * 
 	 * Retorna quantidade de Hidrometros
 	 * 

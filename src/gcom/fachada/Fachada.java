@@ -26796,7 +26796,7 @@ public class Fachada {
 	public Integer encerrarOrdemServicoVencida(Integer idServicoTipo, Integer quantidadeDias, Usuario usuarioLogado) {
 		try {
 			/**
-			 * Mantis 664 - Correção de erro na execução da
+			 * Correção de erro na execução da
 			 * funcionalidade
 			 * 
 			 * @author Wellington Rocha
@@ -32421,13 +32421,6 @@ public class Fachada {
 	 * 
 	 * @return
 	 * @throws ErroRepositorioException
-	 */
-	/**
-	 * - Alterações para atender Mantis 595 Enviar documentos de
-	 * cobrança para endereço de correspondência
-	 * 
-	 * @author Wellington Rocha
-	 * @date 21/06/2013
 	 */
 	public Collection<RelatorioNotificacaoDebitoBean> gerarRelatorioNotificacaoDebito(Integer idCobrancaAcaoCronograma, Integer idCobrancaAcaoComando,
 			int tamanhoMaximoDebito, String quantidadeRelatorios, String tipoEnderecoRelatorio) {
@@ -43531,7 +43524,7 @@ public class Fachada {
 	}
 
 	/**
-	 * Mantis 652 - Relaotio de RAs por Unidade Por Usuário
+	 * Relaotio de RAs por Unidade Por Usuário
 	 * 
 	 * @author Wellington Rocha
 	 * @date 18/12/2012

@@ -3487,8 +3487,6 @@ public interface ControladorImovelLocal extends javax.ejb.EJBLocalObject {
 	public void atualizarImovel(Imovel imovel) throws ControladorException;
 
 	/**
-	 * Mantis 494
-	 * 
 	 * Geração da Rota para recadastramento.
 	 * 
 	 * @author Wellington

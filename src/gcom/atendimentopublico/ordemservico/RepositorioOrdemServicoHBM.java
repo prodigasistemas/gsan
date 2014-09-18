@@ -1085,7 +1085,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					+ "pgrCali.peso, "// 222
 					+ "pgrCali.fator, "// 223
                     /**
-					 * Mantis 662 - Felipe Santos
+					 * Felipe Santos
 					 * 
 					 * Inclusão do atributo servicoTipoReferencia para 
 					 * não retornar objeto com o campo nulo.
@@ -1104,7 +1104,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 					+ "LEFT JOIN os.osReferencia osReferencia "
 
 					/**
-					 * Mantis 662 - Felipe Santos
+					 * Felipe Santos
 					 * 
 					 * Inclusão do atributo servicoTipoReferencia para 
 					 * não retornar objeto com o campo nulo.
@@ -1704,7 +1704,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 				}
 
 				/**
-				 * Mantis 662 - Felipe Santos
+				 * Felipe Santos
 				 * 
 				 * Inclusão do atributo servicoTipoReferencia para 
 				 * não retornar objeto com o campo nulo.
@@ -11422,7 +11422,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 	 */
 
 	/**
-	 * Mantis 486 - Inclusão da Origem da OS na busca para encerrar as mesmas quando vencidas.
+	 * Inclusão da Origem da OS na busca para encerrar as mesmas quando vencidas.
 	 * @author Wellington Rocha
 	 * @date 18/01/2012*/
 	public List pesquisarOrdemServicoVencida(Integer idServicoTipo, String dataVencimento)
@@ -11445,7 +11445,7 @@ public class RepositorioOrdemServicoHBM implements IRepositorioOrdemServico {
 							"	and substring(os.dataGeracao, 1, 10) <= :dataVencimento ";
 
 			/**
-			 * Mantis 486 - Inclusão da Origem da OS na busca para encerrar as mesmas quando vencidas.
+			 * Inclusão da Origem da OS na busca para encerrar as mesmas quando vencidas.
 			 * @author Wellington Rocha
 			 * @date 18/01/2012*/
 			/*Alterações em testes.

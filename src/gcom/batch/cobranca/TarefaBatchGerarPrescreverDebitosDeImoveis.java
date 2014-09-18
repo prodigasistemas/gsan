@@ -55,7 +55,6 @@ public class TarefaBatchGerarPrescreverDebitosDeImoveis extends TarefaBatch {
 	    Integer anoMesFaturamento = (Integer) getParametro("anoMesFaturamento");
 	    
 	    /**
-	     * Alterações para atender ao Mantis 490
 	     * Considerar a data de vencimento da conta ao invés de considerar o anoMes referencia
 	     * da mesma
 	     * @author Wellington Rocha

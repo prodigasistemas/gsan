@@ -5281,7 +5281,7 @@ public class  RepositorioGerencialCadastroHBM implements
 	}
 	
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 24/10/2013
+	 * Felipe Santos - 24/10/2013
 	 * 
 	 * Retorna a Quantidade de Ligacoes Totais e Hidrometricas
 	 * 

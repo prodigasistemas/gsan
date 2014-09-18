@@ -213,8 +213,6 @@ public class GerarRelatorioContasCanceladasRetificadasAction extends ExibidorPro
         	//chamar metodo de filtragem
         	try {
         		/**
-        		 * Mantis 581
-        		 * 
         		 * Inlcuir Opção de Contas Prescritas no relatório de Contas Canceladas/Retidas
         		 * 
         		 * @author Wellington Rocha

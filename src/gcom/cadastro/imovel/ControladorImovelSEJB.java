@@ -16626,8 +16626,6 @@ public class ControladorImovelSEJB implements SessionBean {
 	}
 	
 	/**
-	 * MANTIS 494 
-	 * 
 	 *  Necessário para a geração do registro Tipo 3
 	 * 
 	 * @author Wellington Vernech Rocha

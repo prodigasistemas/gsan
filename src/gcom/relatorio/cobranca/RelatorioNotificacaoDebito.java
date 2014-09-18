@@ -60,7 +60,7 @@ public class RelatorioNotificacaoDebito extends TarefaRelatorio {
 		Integer idCobrancaAcaoComando = (Integer) getParametro("idCobrancaAcaoComando");
 		int tipoFormatoRelatorio = (Integer) getParametro("tipoFormatoRelatorio");
 		
-		/** - Alterações para atender Mantis 595
+		/**
 		 * Enviar documentos de cobrança para endereço de correspondência
 		 * 
 		 * @author Wellington Rocha

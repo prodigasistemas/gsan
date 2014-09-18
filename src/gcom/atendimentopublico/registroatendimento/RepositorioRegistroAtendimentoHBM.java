@@ -9057,7 +9057,7 @@ public class RepositorioRegistroAtendimentoHBM implements
 	/**
      *
      * 
-     * Mantis 652 - Gerar Relatório de Registro de Atendimento Por Unidade Por Usuário
+     * Gerar Relatório de Registro de Atendimento Por Unidade Por Usuário
      * 
      * @author Wellington Rocha
      * @date 18/12/2012

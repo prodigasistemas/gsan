@@ -3170,8 +3170,6 @@ public class ControladorClienteSEJB implements SessionBean {
 	}
 	
 	/**
-	 * Mantis 494
-	 * 
 	 * @param idClienteTipo
 	 *            
 	 * @exception ErroRepositorioException

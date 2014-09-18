@@ -50,7 +50,6 @@ public class BatchGerarPrescreverDebitosDeImoveisMDB
 			try {
 
 				/**
-				 * Alteração para atender ao Mantis 490
 				 * Prescrever o débito com base na data de vencimento da conta
 				 * e não mais do anoMes referencia da conta
 				 * 

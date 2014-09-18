@@ -58,7 +58,7 @@ public class EncerrarOrdemServicoVencidaAction extends GcomAction {
 		//Integer totalOrdemServicoEncerradas = fachada.encerrarOrdemServicoVencida(usuarioLogado,idServicoTipo, codigoOrigemOS, quantidadeDias);
 		
 		/**
-		 * Mantis 664 - Correção de erro na execução da funcionalidade
+		 * Correção de erro na execução da funcionalidade
 		 * @author Wellington Rocha
 		 * @date 19/11/2012*/
 		Integer totalOrdemServicoEncerradas = fachada.encerrarOrdemServicoVencida(idServicoTipo, quantidadeDias, usuarioLogado);

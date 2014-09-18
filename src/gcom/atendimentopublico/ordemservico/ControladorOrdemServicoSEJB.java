@@ -2784,7 +2784,7 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 			ordemServicoProgramacao.setSituacaoFechamento(ConstantesSistema.NAO);
 
 			/*
-			 * Mantis 851 - Felipe Santos - 04/09/2013
+			 * 04/09/2013
 			 * 
 			 * Alteração para setar o campo indicadorAcompanhamentoServico que
 			 * não pode ser nulo
@@ -3139,7 +3139,7 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 				SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
 				/*
-				 * Mantis 637 - Felipe Santos
+				 * Felipe Santos
 				 * 
 				 * Não permitir encerramento de OS com data inferior a data
 				 * corrente menos os dias retroativos.
@@ -4500,7 +4500,7 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 						filtroServicoTipo.adicionarCaminhoParaCarregamentoEntidade("servicoTipoPrioridade");
 
 						/*
-						 * Mantis 402 - Felipe Santos -
+						 * Felipe Santos -
 						 * 15/03/2012
 						 * 
 						 * Adição do objeto ServicoTipoReferencia no filtro de
@@ -10971,7 +10971,7 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 	 * @throws ControladorException
 	 */
 	/**
-	 * Mantis 486 - Inclusão da Origem da OS e do UsuarioLogado na
+	 * Inclusão da Origem da OS e do UsuarioLogado na
 	 * busca para encerrar as mesmas quando vencidas.
 	 * 
 	 * @author Wellington Rocha
@@ -11003,7 +11003,7 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 		}
 
 		/**
-		 * Mantis 486 - Inclusão da Origem da OS na busca para
+		 * Inclusão da Origem da OS na busca para
 		 * encerrar as mesmas quando vencidas.
 		 * 
 		 * @author Wellington Rocha
@@ -11074,7 +11074,7 @@ public class ControladorOrdemServicoSEJB implements SessionBean {
 
 						ordemServicoUnidade.setUnidadeOrganizacional(unidadeOrganizacional); // unid_id
 						/**
-						 * Mantis 664 - Correção de erro na
+						 * Correção de erro na
 						 * execução da funcionalidade
 						 * 
 						 * @author Wellington Rocha

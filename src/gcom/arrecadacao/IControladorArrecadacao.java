@@ -4263,10 +4263,6 @@ public interface IControladorArrecadacao {
 		
 
 		/**
-		 *
-		 * 
-		 * Mantis 537
-		 * 
 		 * @author Wellington Rocha
 		 * @data 15/03/2012
 		 * 

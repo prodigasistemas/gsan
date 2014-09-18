@@ -582,7 +582,7 @@ public class ImpressaoContaImpressoraTermica {
 					dados[0] = "DEBITOS";
 					dados[2] = Util.formatarMoedaReal(soma);
 					/**
-					 * Mantis 756 - Contas de rotas do interior que não possuiam a descrição dos débitos
+					 * Contas de rotas do interior que não possuiam a descrição dos débitos
 					 * 
 					 * @author Wellington Rocha
 					 * @date 11/03/2013
@@ -1411,7 +1411,7 @@ public class ImpressaoContaImpressoraTermica {
 				
 				/**
 				 * 
-				 * Mantis 775 - Alteração na emissão do extrato de quitação anual de débitos
+				 * Alteração na emissão do extrato de quitação anual de débitos
 				 * como mensagem nas contas impressas via impressão térmica
 				 * 
 				 * @author Wellington Rocha
@@ -1540,7 +1540,7 @@ public class ImpressaoContaImpressoraTermica {
 				retorno.append(formarLinha(5, 0, 352, 1661, "4", 0, 0));
 				
 				/**
-				 * Mantis 680 - Incluir informação de sequencial de conta a ser impressa.
+				 * Incluir informação de sequencial de conta a ser impressa.
 				 * 
 				 * @author Wellington Rocha
 				 * @date 06/12/2012*/

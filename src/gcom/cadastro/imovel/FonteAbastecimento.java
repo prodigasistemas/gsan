@@ -42,7 +42,7 @@ public class FonteAbastecimento extends ObjetoTransacao {
     
     /**
      * 
-     * Mantis 494 - geração da rota para recadastramento
+     * geração da rota para recadastramento
      * @author Wellington Rocha*/
     public final static Integer NAO_INFORMADO = new Integer (0);
     

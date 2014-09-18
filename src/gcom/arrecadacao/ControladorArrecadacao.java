@@ -1380,7 +1380,7 @@ public class ControladorArrecadacao implements SessionBean {
                                         
                                         if (!registroHelperCodigoF.getAnoMesReferenciaConta().equals("")){
                                         	/**
-                                        	 * Mantis 500
+                                        	 *
                                         	 * As contas em débito automático que retornavam com o código 31
                                         	 * não tinham o seu pagamento efetuado
                                         	 * 
@@ -14248,7 +14248,7 @@ public class ControladorArrecadacao implements SessionBean {
 						int numeroIndice = 0;
 
 						/**
-						 * Mantis 615 - Detalhar classificação de
+						 * Detalhar classificação de
 						 * documentos inexistentes
 						 * 
 						 * @author Wellington Rocha
@@ -14418,7 +14418,7 @@ public class ControladorArrecadacao implements SessionBean {
 									}
 
 									/**
-									 * Mantis 615 - Detalhar
+									 * Detalhar
 									 * classificação de documentos inexistentes
 									 * 
 									 * @author Wellington Rocha
@@ -14591,7 +14591,6 @@ public class ControladorArrecadacao implements SessionBean {
 								pagamento.setValorExcedente(valorPagamento);
 								colecaoGuiaPagamentoAtualizarSituacaoEValorExcedentePagamento.add(pagamento);
 							}
-							// Mantis 615
 							if (colecaoGuiaPagamentoAtualizarSituacaoEValorExcedentePagamento != null
 									&& !colecaoGuiaPagamentoAtualizarSituacaoEValorExcedentePagamento.isEmpty()) {
 								repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(colecaoGuiaPagamentoAtualizarSituacaoEValorExcedentePagamento,
@@ -14680,7 +14679,6 @@ public class ControladorArrecadacao implements SessionBean {
 
 								colecaoDebitoACobrarAtualizarSituacaoEValorExcedentePagamento.add(pagamento);
 							}
-							// Mantis 615
 							if (colecaoDebitoACobrarAtualizarSituacaoEValorExcedentePagamento != null
 									&& !colecaoDebitoACobrarAtualizarSituacaoEValorExcedentePagamento.isEmpty()) {
 								repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(colecaoDebitoACobrarAtualizarSituacaoEValorExcedentePagamento,
@@ -19805,7 +19803,7 @@ public class ControladorArrecadacao implements SessionBean {
 					 * cada categoria retornada obtém o valor por categoria.
 					 */
 					/**
-					 * Mantis 615 - Detalhar contabilização de documentos inexistentes
+					 * Detalhar contabilização de documentos inexistentes
 					 * 
 					 * Situação atual
 					 * 
@@ -19896,7 +19894,7 @@ public class ControladorArrecadacao implements SessionBean {
 					/**
 					 *
 					 * 
-					 * Mantis 615 - Detalhar contabilização de documentos inexistentes
+					 * Detalhar contabilização de documentos inexistentes
 					 * 
 					 * Situação anterior
 					 * 
@@ -21275,7 +21273,7 @@ public class ControladorArrecadacao implements SessionBean {
 					}
 
 					/**
-					 * Mantis *** - Alterar na geração do resumo separando contas de meses anteriores a 12-2012
+					 * Alterar na geração do resumo separando contas de meses anteriores a 12-2012
 					 * dos demais
 					 * 
 					 * @author Wellington Rocha
@@ -21773,7 +21771,7 @@ public class ControladorArrecadacao implements SessionBean {
 					/**
 					 *
 					 * 
-					 * Mantis 615 - Detalhar contabilização de documentos inexistentes
+					 * Detalhar contabilização de documentos inexistentes
 					 * 
 					 * @author Wellington Rocha
 					 * @author Felipe Santos
@@ -22183,7 +22181,7 @@ public class ControladorArrecadacao implements SessionBean {
 					/**
 					 *
 					 * 
-					 * Mantis 615 - Detalhar contabilização de documentos inexistentes
+					 * Detalhar contabilização de documentos inexistentes
 					 * 
 					 * @author Wellington Rocha
 					 * @author Felipe Santos
@@ -22986,7 +22984,7 @@ public class ControladorArrecadacao implements SessionBean {
 
 						
 						/**
-						 * Mantis 615 - Contabilizar créditos com crédito origem correspondente 
+						 * Contabilizar créditos com crédito origem correspondente 
 						 * a Contas Pagas em Excesso
 						 * 
 						 * @author Wellington Rocha
@@ -23488,7 +23486,7 @@ public class ControladorArrecadacao implements SessionBean {
 
 						
 						/**
-						 * Mantis *** - Alteração para contabilar em contas diferentes valores arrecadados até 31/12/2012
+						 * Alteração para contabilar em contas diferentes valores arrecadados até 31/12/2012
 						 * 
 						 * @author Wellington Rocha*/
 
@@ -23871,7 +23869,7 @@ public class ControladorArrecadacao implements SessionBean {
 
 						
 				/**
-				* Mantis 615 - Contabilizar créditos com crédito origem correspondente 
+				* Contabilizar créditos com crédito origem correspondente 
 				* a Contas Pagas em Excesso
 				* 
 				* @author Wellington Rocha
@@ -24229,8 +24227,6 @@ public class ControladorArrecadacao implements SessionBean {
 						}
 
 						/**
-						 * Mantis ***
-						 * 
 						 * Contabilizar em contas diferentes o valor arrecadado até 31/12/2012
 						 * 
 						 * @author Wellington Rocha*/
@@ -24462,7 +24458,7 @@ public class ControladorArrecadacao implements SessionBean {
 
 						
 				/**
-				* Mantis 615 - Contabilizar créditos com crédito origem correspondente 
+				* Contabilizar créditos com crédito origem correspondente 
 				* a Contas Pagas em Excesso
 				* 
 				* @author Wellington Rocha
@@ -25690,9 +25686,6 @@ public class ControladorArrecadacao implements SessionBean {
 							}
 							
 							/**
-							 * 
-							 * Mantis *** 
-							 * 
 							 * Alterações para contabilizar em contas diferentes valores arrecadados até 31/12/2012
 							 * 
 							 * @author: Wellington Rocha*/
@@ -26495,7 +26488,7 @@ public class ControladorArrecadacao implements SessionBean {
 						/**
 						 * 
 						 * 
-						 * Mantis 615 - Detalhar contabilização de documentos inexistentes
+						 * Detalhar contabilização de documentos inexistentes
 						 * 
 						 * Retorna o resumo arrecadacao por RecebimentoTipo,
 						 * LancamentoTipo, LancamentoItem e Sequência.
@@ -27574,7 +27567,7 @@ public class ControladorArrecadacao implements SessionBean {
 						/**
 						 * 
 						 * 
-						 * Mantis 615 - Detalhar contabilização de documentos inexistentes
+						 * Detalhar contabilização de documentos inexistentes
 						 * 
 						 * Retorna o resumo arrecadacao por RecebimentoTipo,
 						 * LancamentoTipo, LancamentoItem e Sequência.
@@ -28060,7 +28053,7 @@ public class ControladorArrecadacao implements SessionBean {
 						/**
 						 * 
 						 * 
-						 * Mantis 615 - Detalhar contabilização de documentos inexistentes
+						 * Detalhar contabilização de documentos inexistentes
 						 * 
 						 * Retorna o resumo arrecadacao por RecebimentoTipo,
 						 * LancamentoTipo, LancamentoItem e Sequência.
@@ -29119,9 +29112,6 @@ public class ControladorArrecadacao implements SessionBean {
 						}
 						
 						/**
-						 * 
-						 * Mantis *** 
-						 * 
 						 * Alterações para contabilizar em contas diferentes valores arrecadados até 31/12/12
 						 * 
 						 * @author Wellington Rocha*/
@@ -29520,7 +29510,7 @@ public class ControladorArrecadacao implements SessionBean {
 						/**
 						 *
 						 * 
-						 * Mantis 615 - Detalhar contabilização de documentos inexistentes
+						 * Detalhar contabilização de documentos inexistentes
 						 * 
 						 * @author Wellington Rocha
 						 * @author Felipe Santos
@@ -29597,7 +29587,7 @@ public class ControladorArrecadacao implements SessionBean {
 						/**
 						 *
 						 * 
-						 * Mantis 615 - Detalhar contabilização de documentos inexistentes
+						 * Detalhar contabilização de documentos inexistentes
 						 * 
 						 * @author Wellington Rocha
 						 * @author Felipe Santos
@@ -29634,7 +29624,7 @@ public class ControladorArrecadacao implements SessionBean {
 						/**
 						 *
 						 * 
-						 * Mantis 615 - Detalhar contabilização de documentos inexistentes
+						 * Detalhar contabilização de documentos inexistentes
 						 * 
 						 * @author Wellington Rocha
 						 * @author Felipe Santos
@@ -49170,7 +49160,7 @@ public class ControladorArrecadacao implements SessionBean {
 		Integer idCliente = null;
 		
 		/**
-		 * Mantis 653 - Guia de pagamento não vinha sendo preenchida no momento do processamento
+		 * Guia de pagamento não vinha sendo preenchida no momento do processamento
 		 * do pagamento
 		 * 
 		 * @author Wellington Rocha
@@ -49362,7 +49352,7 @@ public class ControladorArrecadacao implements SessionBean {
 				
 
 				/**
-				 * Mantis 653 - Guia de pagamento não vinha sendo preenchida no momento do processamento
+				 * Guia de pagamento não vinha sendo preenchida no momento do processamento
 				 * do pagamento
 				 * 
 				 * @author Wellington Rocha
@@ -54287,10 +54277,6 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 			
 	/**
-	 *
-	 * 
-	 * Mantis 537
-	 * 
 	 * @author Wellington Rocha
 	 * @data 15/03/2012
 	 * 
@@ -54334,7 +54320,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 			
 	/**
-	 * Mantis 615 - Detalhar contabilização de documentos
+	 * Detalhar contabilização de documentos
 	 * inexistentes
 	 * 
 	 * Retorna os pagamentos nao classificados por situacao atual
@@ -54407,7 +54393,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 
 	/**
-	 * Mantis 615 - Detalhar contabilização de documentos
+	 * Detalhar contabilização de documentos
 	 * inexistentes
 	 * 
 	 * Retorna os pagamentos nao classificados por situacao anterior
@@ -54484,7 +54470,7 @@ public class ControladorArrecadacao implements SessionBean {
 	/**
 	 *
 	 * 
-	 * Mantis 615 - Detalhar contabilização de documentos inexistentes
+	 * Detalhar contabilização de documentos inexistentes
 	 * 
 	 * Refatoração de parte do método @encerrarArrecadacaoMes()
 	 * 
@@ -55576,7 +55562,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 	
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 25/10/2013
+	 * Felipe Santos - 25/10/2013
 	 * 
 	 * Método que gera os dados para o Relatório BIG
 	 * 
@@ -55696,7 +55682,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 29/10/2013
+	 * Felipe Santos - 29/10/2013
 	 * 
 	 * @param big
 	 * @param quantidadeConsumidoresFactiveis
@@ -55721,7 +55707,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 	
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 29/10/2013
+	 * Felipe Santos - 29/10/2013
 	 * 
 	 * @param big
 	 * @param quantidadeConsumidoresSuprimidos
@@ -55746,7 +55732,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 	
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 29/10/2013
+	 * Felipe Santos - 29/10/2013
 	 * 
 	 * @param big
 	 * @param quantidadeConsumidoresCortados
@@ -55771,7 +55757,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 29/10/2013
+	 * Felipe Santos - 29/10/2013
 	 * 
 	 * @param big
 	 * @param inadimplenciaAte30
@@ -55798,7 +55784,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 29/10/2013
+	 * Felipe Santos - 29/10/2013
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -55823,7 +55809,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 29/10/2013
+	 * Felipe Santos - 29/10/2013
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -55848,7 +55834,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 29/10/2013
+	 * Felipe Santos - 29/10/2013
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -55882,7 +55868,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 29/10/2013
+	 * Felipe Santos - 29/10/2013
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -55907,7 +55893,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 	
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 29/10/2013
+	 * Felipe Santos - 29/10/2013
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -55931,7 +55917,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 29/10/2013
+	 * Felipe Santos - 29/10/2013
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -55956,7 +55942,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 29/10/2013
+	 * Felipe Santos - 29/10/2013
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -55982,7 +55968,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 29/10/2013
+	 * Felipe Santos - 29/10/2013
 	 * 
 	 * @param idLocalidade
 	 * @param dataReferenciaInicial
@@ -56013,7 +55999,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 29/10/2013
+	 * Felipe Santos - 29/10/2013
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -56041,7 +56027,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 29/10/2013
+	 * Felipe Santos - 29/10/2013
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -56075,7 +56061,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 29/10/2013
+	 * Felipe Santos - 29/10/2013
 	 * 
 	 * @param big
 	 * @return BoletimInformacoesGerenciais
@@ -56095,7 +56081,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 29/10/2013
+	 * Felipe Santos - 29/10/2013
 	 * 
 	 * @param big
 	 * @return BoletimInformacoesGerenciais
@@ -56114,7 +56100,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 29/10/2013
+	 * Felipe Santos - 29/10/2013
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -56134,7 +56120,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 29/10/2013
+	 * Felipe Santos - 29/10/2013
 	 * 
 	 * @param anoMesReferencia
 	 * @param idLocalidade
@@ -56155,7 +56141,7 @@ public class ControladorArrecadacao implements SessionBean {
 	}
 	
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 29/10/2013
+	 * Felipe Santos - 29/10/2013
 	 * 
 	 * Retorna dados para Relatorio BIG
 	 * 

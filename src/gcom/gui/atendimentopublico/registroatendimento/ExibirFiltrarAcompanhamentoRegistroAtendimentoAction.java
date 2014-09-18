@@ -77,7 +77,7 @@ public class ExibirFiltrarAcompanhamentoRegistroAtendimentoAction extends GcomAc
 		}
 		
 		/*
-		 * Mantis 854 - Felipe Santos
+		 * Felipe Santos
 		 * 
 		 * Não há nenhuma localidade associada a um municipio (muni_idprincipal != null)
 		 */

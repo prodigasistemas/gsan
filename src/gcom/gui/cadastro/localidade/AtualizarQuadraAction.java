@@ -103,7 +103,7 @@ public class AtualizarQuadraAction extends GcomAction {
 		helper.setZeisID(atualizarQuadraActionForm.getZeisID());
 		helper.setRotaCD(atualizarQuadraActionForm.getCodigoRota());
 		/*
-         * Mantis 536 - Felipe Santos - 08/03/2012
+         * 08/03/2012
          * 
          * Adição do id da rota no helper para pesquisa
          */

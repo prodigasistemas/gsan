@@ -19,7 +19,7 @@ import javax.jms.MessageListener;
 import javax.jms.ObjectMessage;
 
 /**
- * @author COSANPA - Felipe Santos - Mantis 414
+ * @author COSANPA - Felipe Santos
  * @date 25/10/2013
  */
 public class BatchGerarDadosRelatorioBIGMDB implements MessageDrivenBean, MessageListener {

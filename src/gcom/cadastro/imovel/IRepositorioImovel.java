@@ -3183,10 +3183,6 @@ public interface IRepositorioImovel {
 	public Imovel pesquisarImovelSituacaoEspecialFaturamento(Integer idImovel) throws ErroRepositorioException;
 	
 	/**
-	 *
-	 * 
-	 * Mantis 494
-	 * 
 	 * @param idImovel
 	 * 
 	 * @author Wellington Rocha

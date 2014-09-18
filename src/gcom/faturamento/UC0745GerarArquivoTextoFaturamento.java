@@ -1424,7 +1424,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 						.getClienteRelacaoTipo();
 				/**
 				 * 
-				 * Mantis 879 - Clientes que saíram com o nome em branco 
+				 * Clientes que saíram com o nome em branco 
 				 * nas contas.
 				 * 
 				 * @author Wellington Rocha
@@ -1459,7 +1459,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 		}
 
 		/**
-		 * Mantis 681 - Imóveis com nomeImovel diferente de nulo
+		 * Imóveis com nomeImovel diferente de nulo
 		 * porém com valor vazio tiveram suas contas impressas com o nome do
 		 * cliente em branco. Para corrigir o problema não é mais testado o nome
 		 * do imóvel, passando a considerar sempre o nome do cliente usuário.

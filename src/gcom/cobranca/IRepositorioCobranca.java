@@ -4859,20 +4859,9 @@ public interface IRepositorioCobranca {
 	 * @param anoMesFaturamento
 	 * @throws ErroRepositorioException
 	 */
-	/**
-	 * Alterações para atender ao Mantis 490
-     * Considerar a data de vencimento da conta ao invés de considerar o anoMes referencia
-     * da mesma
-     * @author Wellington Rocha
-     * @date 25/01/2012*/
 	public void prescreverDebitosDeImoveis(Integer anoMesFaturamento, String dataFormatada, 
 			Integer usuario) throws ErroRepositorioException;
 	
-	/**
-	 * Mantis 490: Método criado para prescrever débitos de imóveis com contas incluídas
-	 * 
-	 * @author Wellington Rocha
-	 * @date 02/02/2012*/
 	public void prescreverDebitosDeImoveisContasInlcuidas(Integer anoMesFaturamento, String dataFormatada, 
 			Integer usuario) throws ErroRepositorioException;
 	
