@@ -53,7 +53,7 @@ public class RelatorioManterNegativadorExclusaoMotivoBean implements RelatorioBe
 			String id, String descricao,
 			String codigoMotivo, String negativador,String indicadorUso) {
 			super();
-			// TODO Auto-generated constructor stub
+			
 			this.id = id;
 			this.descricao = descricao;
 			this.codigoMotivo = codigoMotivo;

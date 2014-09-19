@@ -22,7 +22,7 @@ public class ImovelDadosGeraisHelper {
 
 	public ImovelDadosGeraisHelper(Integer idImovel, String matriculaImovel, String enderecoImovel, String situacaoAgua, String situacaoEsgoto) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idImovel = idImovel;
 		this.matriculaImovel = matriculaImovel;
 		this.enderecoImovel = enderecoImovel;

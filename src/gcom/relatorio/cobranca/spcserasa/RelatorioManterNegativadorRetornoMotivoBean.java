@@ -56,7 +56,7 @@ public class RelatorioManterNegativadorRetornoMotivoBean implements RelatorioBea
 			String id, String descricao,
 			String codigoMotivo, String negativador,String indicadorRegistroAceito,String indicadorUso) {
 			super();
-			// TODO Auto-generated constructor stub
+			
 			this.id = id;
 			this.descricao = descricao;
 			this.codigoMotivo = codigoMotivo;

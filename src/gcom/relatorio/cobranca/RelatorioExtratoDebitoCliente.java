@@ -369,7 +369,7 @@ public class RelatorioExtratoDebitoCliente extends TarefaRelatorio {
 					descricaoServico = "";
 				}
 				
-				/**TODO:COSANPÁ
+				/**
 				 * @autor Wellington Rocha
 				 * @date 01/02/2012
 				 * 

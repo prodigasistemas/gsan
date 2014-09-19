@@ -14,14 +14,14 @@ public class RelatorioImpostosPorClienteResponsavelHelper {
 	//o nome do cliente responsavel
 	private String nomeCliente;	
 	
-	//todos os imoveis do cliente
+	
 	private String imovel;
 
 	private String idFatura;
 	//valor da fatura do cliente
 	private String valorFatura;
 	
-	//todos os impostos deduzidos pelo cliente	
+	
     private Collection<ImpostoDeduzidoHelper> impostosDeduzidos;  
     
 

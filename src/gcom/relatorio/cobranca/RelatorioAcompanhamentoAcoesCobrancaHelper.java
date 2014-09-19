@@ -41,7 +41,7 @@ public class RelatorioAcompanhamentoAcoesCobrancaHelper implements RelatorioBean
 			String chkLocalidade, String idLocalidade, 
 			String idEmpresa) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idCobrancaAcao = idCobrancaAcao;
 		this.dataInicial = dataInicial;
 		this.dataFinal = dataFinal;

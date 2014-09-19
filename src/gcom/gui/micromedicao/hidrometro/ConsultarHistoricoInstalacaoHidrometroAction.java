@@ -115,13 +115,12 @@ public class ConsultarHistoricoInstalacaoHidrometroAction extends GcomAction {
 			filtroImovel.adicionarCaminhoParaCarregamentoEntidade("ligacaoEsgotoSituacao");
 			filtroImovel.adicionarCaminhoParaCarregamentoEntidade("logradouroBairro.bairro.municipio.unidadeFederacao");
 			
-			/**TODO: COSANPA
+			/**
 			 * @author Adriana Muniz
 			 * @data 17/07/2013
 			 * 
 			 * Adição dos filtros para perimetro inicial e perimetro final do endereço do imóvel
-			 * Mantis 816
-			 * */
+			 */
 			filtroImovel.adicionarCaminhoParaCarregamentoEntidade("perimetroInicial.logradouroTipo");
 			filtroImovel.adicionarCaminhoParaCarregamentoEntidade("perimetroInicial.logradouroTitulo");
 			filtroImovel.adicionarCaminhoParaCarregamentoEntidade("perimetroFinal.logradouroTipo");

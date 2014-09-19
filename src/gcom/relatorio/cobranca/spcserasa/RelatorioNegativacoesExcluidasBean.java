@@ -72,7 +72,7 @@ public class RelatorioNegativacoesExcluidasBean implements RelatorioBean {
 			BigDecimal valorParcelado, BigDecimal valorPago,
 			BigDecimal valorParceladoPago, BigDecimal valorParceladoEntradaPago) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.nomeCliente = nomeCliente;
 		this.matricula = matricula;
 		this.cpfCnpj = cpfCnpj;

@@ -138,7 +138,7 @@ public class CobrancaAcaoOrdemServicoNaoAceitas extends ObjetoTransacao {
 	
 	@Override
 	public Filtro retornaFiltro() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 	

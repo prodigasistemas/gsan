@@ -33,7 +33,7 @@ public class AtualizarOrdemProcessoRepavimentacaoPopUpActionForm extends ActionF
 	private String dataAtual;
 	
 	public void reset(ActionMapping arg0, ServletRequest arg1) {
-		// TODO Auto-generated method stub
+		
 		super.reset(arg0, arg1);
 		this.idOrdemServico = "";	
 		this.idOrdemServicoPavimento = "";	

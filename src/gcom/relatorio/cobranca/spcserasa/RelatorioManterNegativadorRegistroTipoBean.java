@@ -50,7 +50,7 @@ public class RelatorioManterNegativadorRegistroTipoBean implements RelatorioBean
 			String id, String descricao,
 			String codigoRegistro, String negativador) {
 			super();
-			// TODO Auto-generated constructor stub
+			
 			this.id = id;
 			this.descricao = descricao;
 			this.codigoRegistro = codigoRegistro;

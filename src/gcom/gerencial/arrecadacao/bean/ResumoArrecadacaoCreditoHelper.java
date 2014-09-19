@@ -16,7 +16,7 @@ public class ResumoArrecadacaoCreditoHelper {
 	private BigDecimal valorCredito = new BigDecimal(0);
 	
 	public ResumoArrecadacaoCreditoHelper(Integer idCreditoOrigem, Integer idLancamentoItemContabil) {
-		// TODO Auto-generated constructor stub
+		
 		this.idCreditoOrigem = idCreditoOrigem;
 		this.idLancamentoItemContabil = idLancamentoItemContabil;
 	}

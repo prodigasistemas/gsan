@@ -71,7 +71,7 @@ public class RelatorioEmitirOrdemServicoSeletivaAnaliticoBean implements
 	}
 
 	public RelatorioEmitirOrdemServicoSeletivaAnaliticoBean() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 

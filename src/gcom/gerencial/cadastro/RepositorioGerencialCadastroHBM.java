@@ -224,7 +224,7 @@ public class  RepositorioGerencialCadastroHBM implements
 					+ "    c.debitoCreditoSituacaoAnterior = 0 ) and "
 					+ "  q.setorComercial.id = :idSetor and " 
 					
-					/**TODO:COSANPA
+					/**
 					 * Data:13/10/2011
 					 * Autor Adriana Muniz
 					 * 
@@ -478,7 +478,7 @@ public class  RepositorioGerencialCadastroHBM implements
 				+" left join quacon.setorComercial setcomcon "
 				+" where "
 				+" imovel.setorComercial.id = :idSetor and "
-				/**TODO:COSANPA
+				/**
 				 * Data:13/10/2011
 				 * Autor Adriana Muniz
 				 * 
@@ -2714,7 +2714,7 @@ public class  RepositorioGerencialCadastroHBM implements
 				"  ch.indicadorImovelCondominio <> 1 and \n" +
 				"  ch.referenciaFaturamento = :anoMesFaturamento and " +
 				
-				/**TODO:COSANPA
+				/**
 				 * Data:13/10/2011
 				 * Autor Adriana Muniz
 				 * 
@@ -5281,7 +5281,7 @@ public class  RepositorioGerencialCadastroHBM implements
 	}
 	
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 24/10/2013
+	 * Felipe Santos - 24/10/2013
 	 * 
 	 * Retorna a Quantidade de Ligacoes Totais e Hidrometricas
 	 * 

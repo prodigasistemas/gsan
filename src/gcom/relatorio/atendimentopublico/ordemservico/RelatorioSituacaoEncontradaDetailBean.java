@@ -20,12 +20,12 @@ public class RelatorioSituacaoEncontradaDetailBean implements RelatorioBean {
 
 	public RelatorioSituacaoEncontradaDetailBean() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public RelatorioSituacaoEncontradaDetailBean(String descricaoSituacaoEncontrada) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.descricaoSituacaoEncontrada = descricaoSituacaoEncontrada;
 	} 
 	

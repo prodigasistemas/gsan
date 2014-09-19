@@ -49,7 +49,7 @@ public class RelatorioDadosDiariosAgenteBean implements RelatorioBean {
 
 	public RelatorioDadosDiariosAgenteBean(String processamentoDefinitivo, String mesAno, String ultimoProcessamentoAtual, String faturamentoCobradoEmConta, String nomeGerencia, String valor, String banco, String quantidadeDocumentos, String quantidadePagamentos, String debitos, String descontos, String valorArrecadado, String devolucao, String arrecadacaoLiquida, String percentualMes) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.processamentoDefinitivo = processamentoDefinitivo;
 		this.mesAno = mesAno;
 		this.ultimoProcessamentoAtual = ultimoProcessamentoAtual;

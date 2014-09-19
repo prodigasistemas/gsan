@@ -150,7 +150,7 @@ public class RetornarArquivoZipLeituraImoveisPFAction extends GcomAction {
 							List<Integer> listaImoveisFaltandoTransmitir = fachada.obterImoveisNaoEnviadosMovimentoContaPreFaturada(idRota, anoMesFaturamento);
 							
 							/*
-							 * TODO - COSANPA
+							 *
 							 * 
 							 * Verifica se a rota é dividida para adicionar ao zip os
 							 * arquivos divididos. Caso contrário, adiciona o arquivo

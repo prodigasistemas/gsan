@@ -1308,7 +1308,7 @@ public interface IRepositorioSpcSerasa {
 	 * @author Yara Taciane
 	 * @date 17/03/2008
 	 */
-	public ImovelCobrancaSituacao getImovelCobrancaSituacao(Imovel imovel, CobrancaSituacao cobrancaSituacao) throws ErroRepositorioException;
+	public ImovelCobrancaSituacao getImovelCobrancaSituacao(Imovel imovel, CobrancaSituacao cobrancaSituacao, Integer idCliente) throws ErroRepositorioException;
 
 	/**
 	 * [UC0672] Registrar Moviemento Retorno dos Negativadores
@@ -2671,4 +2671,6 @@ public interface IRepositorioSpcSerasa {
 	public void atualizarDataRetiradaSituacaoCartaEnviada(Date dataExlusao, Integer idImovel) throws ErroRepositorioException;
 
 	public boolean verificarExistenciaNegativacaoImovelECliente(Integer idImovel, Integer idCliente) throws ErroRepositorioException;
+	
+	public List consultarImovelCobrancaSituacaoAtual(Integer codigoImovel, Integer codigoCobrancaSituacao, Integer idCliente) throws ErroRepositorioException;
 }

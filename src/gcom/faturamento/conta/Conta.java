@@ -882,6 +882,40 @@ public class Conta extends ObjetoTransacao implements IConta {
 		return valorTotalConta;
 	}
 	
+	public BigDecimal getValorTotalContaComRateioBigDecimal() {
+		BigDecimal valorTotalConta = new BigDecimal("0.00");
+
+		if (this.getValorAgua() != null) {
+			valorTotalConta = valorTotalConta.add(this.getValorAgua());
+		}
+
+		if (this.getValorEsgoto() != null) {
+			valorTotalConta = valorTotalConta.add(this.getValorEsgoto());
+		}
+
+		if (this.getDebitos() != null) {
+			valorTotalConta = valorTotalConta.add(this.getDebitos());
+		}
+
+		if (this.getValorCreditos() != null) {
+			valorTotalConta = valorTotalConta.subtract(this.getValorCreditos());
+		}
+
+		if (this.getValorImposto() != null) {
+			valorTotalConta = valorTotalConta.subtract(this.getValorImposto());
+		}
+
+		if (this.getValorRateioAgua() != null) {
+			valorTotalConta = valorTotalConta.add(this.getValorRateioAgua());
+		}
+		
+		if (this.getValorRateioEsgoto() != null) {
+			valorTotalConta = valorTotalConta.add(this.getValorRateioEsgoto());
+		}
+		
+		return valorTotalConta;
+	}
+	
 	public BigDecimal getValorTotal() {
 		return getValorTotalContaBigDecimal().setScale(2, BigDecimal.ROUND_HALF_UP);	
 	}

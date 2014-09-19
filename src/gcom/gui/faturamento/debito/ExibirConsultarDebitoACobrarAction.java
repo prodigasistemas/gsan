@@ -75,10 +75,10 @@ public class ExibirConsultarDebitoACobrarAction extends GcomAction {
 			try {
 				enderecoFormatado = fachada.pesquisarEnderecoFormatado(new Integer(idImovel));
 			} catch (NumberFormatException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			} catch (ControladorException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 

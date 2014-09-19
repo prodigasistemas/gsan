@@ -344,12 +344,8 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ "conta.dcst_idatual, conta.cnta_dgverificadorconta, conta.cmrv_id, conta.cnta_tmultimaalteracao, conta.imov_id, conta.cnta_nnconsumoagua, conta.cnta_vlimpostos, conta.cnta_nnconsumoesgoto, conta.parc_id ";
 
 			if (indicadorPagamento == 1) {
-				// consulta +=
-				// " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) < ((coalesce(conta.cnta_vlagua, 0) + coalesce(conta.cnta_vlesgoto, 0) + coalesce(conta.cnta_vldebitos, 0) - coalesce(conta.cnta_vlcreditos, 0) - coalesce(conta.cnta_vlimpostos, 0)))";
-
 				/*
-				 * TODO - COSANPA - 24/07/2012 - Mantis 610 - Felipe Santos e
-				 * Wellington Rocha
+				 * 24/07/2012 Felipe Santos e Wellington Rocha
 				 * 
 				 * Alteração para ser emitidos Documentos de Cobrança apenas
 				 * para pagamentos igual a 0
@@ -496,7 +492,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ "and conta.cnta_dtvencimentoconta between :inicialVencimento and :finalVencimento "
 					+ "and (coalesce(conta.cnta_vlagua, 0) + coalesce(conta.cnta_vlesgoto, 0) + coalesce(conta.cnta_vldebitos, 0) - coalesce(conta.cnta_vlcreditos, 0) - coalesce(conta.cnta_vlimpostos, 0)) > 0.00 "
 					/*
-					 * TODO - COSANPA - Mantis 774 - Felipe Santos
+					 * Felipe Santos
 					 * 
 					 * Consultar Débitos por Cliente indicado na conta
 					 */
@@ -2455,7 +2451,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 			// Verifica se já tem débito automático
 			consulta = "SELECT cd.valorAcrescimos,cd.valorDesconto,cd.emissao,cd.id,cd.valorTaxa,loca.id, documentoTipo.id, "
 			/**
-			 * TODO : COSANPA Adicionando no retorno da consulta o valor do
+			 *  Adicionando no retorno da consulta o valor do
 			 * documento de cobrança, para comparar com o valor do pagamento
 			 */
 			+ "cd.valorDocumento " + "FROM CobrancaDocumento cd " + "LEFT JOIN cd.imovel imovel "
@@ -5018,7 +5014,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ "inner join imov.localidade localidade " + "inner join imov.setorComercial setor "
 					+ "left join imov.clienteImoveis ci with ( ci.clienteRelacaoTipo.id = 2 and ci.dataFimRelacao is null ) "
 					+ "left join ci.cliente devedor " + "left join ci.cliente " + "left join devedor.clienteTipo ct,"
-					+ "SistemaParametro sp " + "left join sp.clienteDiretorComercialCompesa cliDir " + "where parc.id = :idParcelamento";
+					+ "SistemaParametro sp " + "left join sp.clienteDiretorComercial cliDir " + "where parc.id = :idParcelamento";
 
 			retorno = session.createQuery(consulta).setInteger("idParcelamento", idParcelamento.intValue()).list();
 
@@ -5590,7 +5586,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ "cobrancaDocumentoItem.debitoACobrarGeral.id, " + "cobrancaDocumentoItem.id,"
 					+ "cobrancaDocumentoItem.valorItemCobrado, "
 					/**
-					 * TODO:COSANPA
+					 *
 					 * 
 					 * @data 23/10/2013
 					 * @author Adriana Muniz e Wellington Rocha Adição do
@@ -21235,7 +21231,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ " WHERE drrs_amreferenciarecebimentos = :anoMes and ";
 
 			/**
-			 * TODO:COSANPA
+			 *
 			 * 
 			 * @author Adriana Muniz
 			 * @date 29/03/2012
@@ -22315,13 +22311,6 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 	 * @param anoMesFaturamento
 	 * @throws ErroRepositorioException
 	 */
-	/**
-	 * TODO: COSANPA Alterações para atender ao Mantis 490 Considerar a data de
-	 * vencimento da conta ao invés de considerar o anoMes referencia da mesma.
-	 * 
-	 * @author Wellington Rocha
-	 * @date 25/01/2012
-	 */
 	public void prescreverDebitosDeImoveis(Integer anoMesFaturamento, String dataFormatada, Integer usuario)
 			throws ErroRepositorioException {
 
@@ -22335,7 +22324,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 			// declara o tipo de conexao
 			Connection jdbcCon = session.connection();
 			/**
-			 * TODO: Cosanpa Alterações para colocar em funcionamento processo
+			 * Alterações para colocar em funcionamento processo
 			 * de prescrição de contas
 			 * 
 			 * @author Wellington Rocha
@@ -22353,14 +22342,14 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ anoMesFaturamento.intValue()
 
 					/**
-					 * TODO: Cosanpa Retirada da situação de incluída do método,
+					 * Retirada da situação de incluída do método,
 					 * pois a mesma causava problemas por causa da restrição da
 					 * chave xak1_conta
 					 */
 					+ " and   c.dcst_idatual in ( " + DebitoCreditoSituacao.NORMAL + ", " + DebitoCreditoSituacao.RETIFICADA + ")"
 
 					/**
-					 * TODO: Cosanpa Alterações para não pegar histórico de
+					 * Alterações para não pegar histórico de
 					 * conta mas sim o cliente atual do imóvel
 					 * 
 					 * @date 31/07/2012
@@ -22395,13 +22384,6 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 		}
 	}
 
-	/**
-	 * TODO: COSANPA Mantis 490: Método criado para prescrever débitos de
-	 * imóveis com contas incluídas
-	 * 
-	 * @author Wellington Rocha
-	 * @date 02/02/2012
-	 */
 	public void prescreverDebitosDeImoveisContasInlcuidas(Integer anoMesFaturamento, String dataFormatada, Integer usuario)
 			throws ErroRepositorioException {
 
@@ -22425,7 +22407,7 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 					+ DebitoCreditoSituacao.INCLUIDA
 
 					/**
-					 * TODO: Cosanpa Alterações para não pegar histórico de
+					 * Alterações para não pegar histórico de
 					 * conta mas sim o cliente atual do imóvel
 					 * 
 					 * @date 31/07/2012

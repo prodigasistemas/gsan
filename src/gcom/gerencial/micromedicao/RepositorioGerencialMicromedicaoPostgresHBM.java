@@ -46,7 +46,7 @@ public class RepositorioGerencialMicromedicaoPostgresHBM extends
 
 			con = session.connection();
 			stmt = con.createStatement();
-			/**TODO:COSANPA
+			/**
 			 * @author Adriana Muniz
 			 * @date 18/10/2013
 			 * Alteração do nextval para o formatto aceito pelo postgres */

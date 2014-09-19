@@ -34,7 +34,7 @@ public class CriterioSituacaoLigacaoAgua extends ObjetoTransacao {
 	
 	public CriterioSituacaoLigacaoAgua(CriterioSituacaoLigacaoAguaPK comp_id) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.comp_id = comp_id;
 	}
 	

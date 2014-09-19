@@ -29,7 +29,7 @@ public class TelemetriaLog implements Serializable {
 
 	public TelemetriaLog(Integer id, String conteudoStringEnviada, Date recepcao, Date ultimaAlteracao, TelemetriaRetMot telemetriaRetMot) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.conteudoStringEnviada = conteudoStringEnviada;
 		this.recepcao = recepcao;

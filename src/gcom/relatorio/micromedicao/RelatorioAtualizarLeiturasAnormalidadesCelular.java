@@ -100,7 +100,7 @@ public class RelatorioAtualizarLeiturasAnormalidadesCelular extends TarefaRelato
 
 	@Override
 	public void agendarTarefaBatch() {
-		//TODO Ver se precisa disso mesmo
+		
 		AgendadorTarefas.agendarTarefa("RelatorioAtualizarLeiturasAnormalidadesCelular", this);
 		
 	}

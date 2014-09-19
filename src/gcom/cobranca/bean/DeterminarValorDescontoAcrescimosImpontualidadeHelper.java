@@ -10,7 +10,7 @@ public class DeterminarValorDescontoAcrescimosImpontualidadeHelper implements Se
 	private ParcelamentoPerfil parcelamentoPerfil;
 	
 	/*
-	 * TODO - COSANPA
+	 *
 	 */
 	private BigDecimal valorTotalAcrescimosImpontualidadePorAntiguidadeMulta;
 	
@@ -107,7 +107,7 @@ public class DeterminarValorDescontoAcrescimosImpontualidadeHelper implements Se
 			BigDecimal valorAcrescimosImpontualidadeGuiaPagamentoAtualizacaoMonetaria, 
 			BigDecimal valorDescontoAcrescimosImpontualidadeRDEspecial) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.parcelamentoPerfil = parcelamentoPerfil;
 		this.valorTotalAcrescimosImpontualidadePorAntiguidadeMulta = valorTotalAcrescimosImpontualidadePorAntiguidadeMulta;
 		this.valorTotalAcrescimosImpontualidadePorAntiguidadeJurosMora = valorTotalAcrescimosImpontualidadePorAntiguidadeJurosMora;

@@ -4444,7 +4444,7 @@ public interface IControladorFaturamento {
 	 throws ControladorException; 
 	
 	/**
-	 * TODO:COSANPA
+	 *
 	 * 
 	 * Método para retornar uma coleção de debitos cobrados do parcelamento
 	 * */
@@ -5572,7 +5572,7 @@ public interface IControladorFaturamento {
 			Integer anoMesReferencia) throws ControladorException;
 	
 	/*
-	 * TODO : COSANPA
+	 * 
 	 * Método criado para obter os imóveis de uma rota que possuem conta
 	 */
 	
@@ -5588,7 +5588,7 @@ public interface IControladorFaturamento {
 			Rota rota) throws ControladorException;
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * @author Pamela Gatinho  
 	 * @date 04/08/2011
 	 * 
@@ -5604,7 +5604,7 @@ public interface IControladorFaturamento {
 	public Conta obterContaImovel(Integer idImovel, Integer anoMesReferencia) throws ControladorException;
 	
 	/**
-	 * TODO - COSANPA
+	 *
 	 * 
 	 * Método para obter todos os imóveis que já foram processados
 	 * na transmissão do arquivo de retorno do IS
@@ -5621,7 +5621,7 @@ public interface IControladorFaturamento {
 	
 	
 	/**
-	 * TODO - COSANPA
+	 *
 	 * 
 	 * Método para obter todos os imóveis que faltam ser transmitidos
 	 * na transmissão do arquivo de retorno do IS
@@ -5681,8 +5681,6 @@ public interface IControladorFaturamento {
 	
 	public Integer countFaturasClienteResponsaveis(String anoMesReferencia) throws ControladorException;
 	
-//	public void faturarImoveisSeletivo(Collection<ImovelFaturamentoSeletivo> colecaoImoveis) throws ControladorException;
-
 	public Conta incluirDebitoContaRetificadaPagamentosDiferenca2Reais(Integer idConta, DebitoACobrar debito) throws Exception;
 	
 	public Conta incluirCreditoContaRetificadaPagamentosDiferenca2Reais(Integer idConta, CreditoARealizar credito) throws Exception;

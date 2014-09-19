@@ -35,7 +35,7 @@ public class TelemetriaMov implements Serializable {
 
 	public TelemetriaMov(Integer id, Integer quantidadeConsumidores, Date envio, Integer codigoEmpresa, Short indicadorConsistenciaLeit, Date ultimaAlteracao, TelemetriaLog telemetriaLog) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.quantidadeConsumidores = quantidadeConsumidores;
 		this.envio = envio;

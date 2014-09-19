@@ -2892,7 +2892,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 							DebitoCreditoSituacao.PARCELADA).setInteger(
 							"situacaoDebitoPrescrito",
 							DebitoCreditoSituacao.DEBITO_PRESCRITO)
-							/**TODO: COSANPA
+							/**
 							 * Inclusao das contas incluidas canceladas por prescrição
 							 *  de débito na geração do resumo*/
 							.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -2975,7 +2975,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 							DebitoCreditoSituacao.PARCELADA).setInteger(
 							"situacaoDebitoPrescrito",
 							DebitoCreditoSituacao.DEBITO_PRESCRITO)
-							/**TODO: COSANPA
+							/**
 							 * Inclusao das contas incluidas canceladas por prescrição
 							 *  de débito na geração do resumo*/
 							.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -3064,7 +3064,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 							DebitoCreditoSituacao.PARCELADA).setInteger(
 							"situacaoDebitoPrescrito",
 							DebitoCreditoSituacao.DEBITO_PRESCRITO)
-					/**TODO: COSANPA
+					/**
 			 		* Inclusao das contas incluidas canceladas por prescrição
 			 		*  de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -3156,7 +3156,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
                             DebitoCreditoSituacao.PARCELADA).setInteger(
                             "situacaoDebitoPrescrito",
                             DebitoCreditoSituacao.DEBITO_PRESCRITO)
-                    /**TODO: COSANPA
+                    /**
 			 		* Inclusao das contas incluidas canceladas por prescrição
 			 		*  de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -3253,7 +3253,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
                             DebitoCreditoSituacao.PARCELADA).setInteger(
                             "situacaoDebitoPrescrito",
                             DebitoCreditoSituacao.DEBITO_PRESCRITO)
-                    /**TODO: COSANPA
+                    /**
 			 		* Inclusao das contas incluidas canceladas por prescrição
 			 		*  de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -3341,7 +3341,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
                             DebitoCreditoSituacao.PARCELADA).setInteger(
                             "situacaoDebitoPrescrito",
                             DebitoCreditoSituacao.DEBITO_PRESCRITO)
-                    /**TODO: COSANPA
+                    /**
 			 		* Inclusao das contas incluidas canceladas por prescrição
 			 		*  de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -3428,7 +3428,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
                             DebitoCreditoSituacao.PARCELADA).setInteger(
                             "situacaoDebitoPrescrito",
                             DebitoCreditoSituacao.DEBITO_PRESCRITO)
-                    /**TODO: COSANPA
+                    /**
 			 		* Inclusao das contas incluidas canceladas por prescrição
 			 		*  de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -3519,7 +3519,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
                             DebitoCreditoSituacao.PARCELADA).setInteger(
                             "situacaoDebitoPrescrito",
                             DebitoCreditoSituacao.DEBITO_PRESCRITO)
-                             /**TODO: COSANPA
+                             /**
 			 		* Inclusao das contas incluidas canceladas por prescrição
 			 		*  de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -3608,7 +3608,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
                             DebitoCreditoSituacao.PARCELADA).setInteger(
                             "situacaoDebitoPrescrito",
                             DebitoCreditoSituacao.DEBITO_PRESCRITO)
-                            /**TODO: COSANPA
+                            /**
 			 		* Inclusao das contas incluidas canceladas por prescrição
 			 		*  de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -3696,7 +3696,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
                             DebitoCreditoSituacao.PARCELADA).setInteger(
                             "situacaoDebitoPrescrito",
                             DebitoCreditoSituacao.DEBITO_PRESCRITO)
-                            /**TODO: COSANPA
+                            /**
 			 		* Inclusao das contas incluidas canceladas por prescrição
 			 		*  de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -3784,7 +3784,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
                             DebitoCreditoSituacao.PARCELADA).setInteger(
                             "situacaoDebitoPrescrito",
                             DebitoCreditoSituacao.DEBITO_PRESCRITO)
-                            /**TODO: COSANPA
+                            /**
 			 		* Inclusao das contas incluidas canceladas por prescrição
 			 		*  de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -3877,7 +3877,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
                             DebitoCreditoSituacao.PARCELADA)
                     .setInteger("situacaoDebitoPrescrito",
                             DebitoCreditoSituacao.DEBITO_PRESCRITO)
-                    /**TODO: COSANPA
+                    /**
 			 		* Inclusao das contas incluidas canceladas por prescrição
 			 		*  de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -4005,7 +4005,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
                             DebitoCreditoSituacao.PARCELADA).setInteger(
                             "situacaoDebitoPrescrito",
                             DebitoCreditoSituacao.DEBITO_PRESCRITO)
-                     /**TODO: COSANPA
+                     /**
 			 		* Inclusao das contas incluidas canceladas por prescrição
 			 		*  de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -4124,7 +4124,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
                             DebitoCreditoSituacao.PARCELADA).setInteger(
                             "situacaoDebitoPrescrito",
                             DebitoCreditoSituacao.DEBITO_PRESCRITO)
-                    /**TODO: COSANPA
+                    /**
 			 		* Inclusao das contas incluidas canceladas por prescrição
 			 		*  de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -4247,7 +4247,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
                             DebitoCreditoSituacao.PARCELADA)
                     .setInteger("situacaoDebitoPrescrito",
                             DebitoCreditoSituacao.DEBITO_PRESCRITO)
-                     /**TODO: COSANPA
+                     /**
 			 		* Inclusao das contas incluidas canceladas por prescrição
 			 		*  de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -4372,7 +4372,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
                             DebitoCreditoSituacao.PARCELADA)
                     .setInteger("situacaoDebitoPrescrito",
                             DebitoCreditoSituacao.DEBITO_PRESCRITO)
-                    /**TODO: COSANPA
+                    /**
 			 		* Inclusao das contas incluidas canceladas por prescrição
 			 		*  de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -4497,7 +4497,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
                             DebitoCreditoSituacao.PARCELADA)
                     .setInteger("situacaoDebitoPrescrito",
                             DebitoCreditoSituacao.DEBITO_PRESCRITO)
-                    /**TODO: COSANPA
+                    /**
 			 		* Inclusao das contas incluidas canceladas por prescrição
 			 		*  de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -4622,7 +4622,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
                             DebitoCreditoSituacao.PARCELADA)
                     .setInteger("situacaoDebitoPrescrito",
                             DebitoCreditoSituacao.DEBITO_PRESCRITO)
-                    /**TODO: COSANPA
+                    /**
 			 		* Inclusao das contas incluidas canceladas por prescrição
 			 		*  de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -4747,7 +4747,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
                             DebitoCreditoSituacao.PARCELADA)
                     .setInteger("situacaoDebitoPrescrito",
                             DebitoCreditoSituacao.DEBITO_PRESCRITO)
-                    /**TODO: COSANPA
+                    /**
 			 		* Inclusao das contas incluidas canceladas por prescrição
 			 		*  de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -4835,7 +4835,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
                             DebitoCreditoSituacao.PARCELADA).setInteger(
                             "situacaoDebitoPrescrito",
                             DebitoCreditoSituacao.DEBITO_PRESCRITO)
-                    /**TODO: COSANPA
+                    /**
 			 		* Inclusao das contas incluidas canceladas por prescrição
 			 		*  de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -4958,7 +4958,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
                             DebitoCreditoSituacao.PARCELADA).setInteger(
                             "situacaoDebitoPrescrito",
                             DebitoCreditoSituacao.DEBITO_PRESCRITO)
-                            /**TODO: COSANPA
+                            /**
 							 * Inclusao das contas incluidas canceladas por prescrição
 							 *  de débito na geração do resumo*/
 							.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -5045,7 +5045,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 							DebitoCreditoSituacao.PARCELADA).setInteger(
 							"situacaoDebitoPrescrito",
 							DebitoCreditoSituacao.DEBITO_PRESCRITO)
-					/**TODO: COSANPA
+					/**
 			 		* Inclusao das contas incluidas canceladas por prescrição
 			 		*  de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -5143,7 +5143,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
                             DebitoCreditoSituacao.PARCELADA)
                     .setInteger("situacaoDebitoPrescrito",
                             DebitoCreditoSituacao.DEBITO_PRESCRITO)
-                    /**TODO: COSANPA
+                    /**
 							 * Inclusao das contas incluidas canceladas por prescrição
 							 *  de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -5238,7 +5238,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 							DebitoCreditoSituacao.PARCELADA).setInteger(
 							"situacaoDebitoPrescrito",
 							DebitoCreditoSituacao.DEBITO_PRESCRITO)
-					/**TODO: COSANPA
+					/**
 			 		* Inclusao das contas incluidas canceladas por prescrição
 			 		*  de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -5337,7 +5337,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
                             DebitoCreditoSituacao.PARCELADA).setInteger(
                             "situacaoDebitoPrescrito",
                             DebitoCreditoSituacao.DEBITO_PRESCRITO)
-                             /**TODO: COSANPA
+                             /**
 							 * Inclusao das contas incluidas canceladas por prescrição
 							 *  de débito na geração do resumo*/
 							.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -5424,7 +5424,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 							DebitoCreditoSituacao.PARCELADA).setInteger(
 							"situacaoDebitoPrescrito",
 							DebitoCreditoSituacao.DEBITO_PRESCRITO)
-					/**TODO: COSANPA
+					/**
 			 		* Inclusao das contas incluidas canceladas por prescrição
 			 		*  de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -5517,7 +5517,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
                             DebitoCreditoSituacao.PARCELADA).setInteger(
                             "situacaoDebitoPrescrito",
 							DebitoCreditoSituacao.DEBITO_PRESCRITO)
-                            /**TODO: COSANPA
+                            /**
 							 * Inclusao das contas incluidas canceladas por prescrição
 							 *  de débito na geração do resumo*/
 							.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -5600,7 +5600,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 					.setInteger("situacaoCanceladaPorRetificacao",DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)
 					.setInteger("situacaoParcelada",DebitoCreditoSituacao.PARCELADA)
 					.setInteger("situacaoDebitoPrescrito",DebitoCreditoSituacao.DEBITO_PRESCRITO)
-					/**TODO: COSANPA
+					/**
 			 		* Inclusao das contas incluidas canceladas por prescrição
 			 		*  de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",DebitoCreditoSituacao.DEBITO_PRESCRITO_CONTAS_INCLUIDAS)
@@ -5691,7 +5691,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
                             DebitoCreditoSituacao.PARCELADA).setInteger(
                             "situacaoDebitoPrescrito",
                             DebitoCreditoSituacao.DEBITO_PRESCRITO)
-                            /**TODO: COSANPA
+                            /**
 							 * Inclusao das contas incluidas canceladas por prescrição
 							 *  de débito na geração do resumo*/
 							.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -5777,7 +5777,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 							DebitoCreditoSituacao.PARCELADA).setInteger(
 							"situacaoDebitoPrescrito",
 							DebitoCreditoSituacao.DEBITO_PRESCRITO)
-					/**TODO: COSANPA
+					/**
 			 		* Inclusao das contas incluidas canceladas por prescrição
 			 		*  de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -5870,7 +5870,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
                             DebitoCreditoSituacao.PARCELADA).setInteger(
                             "situacaoDebitoPrescrito",
                             DebitoCreditoSituacao.DEBITO_PRESCRITO)
-                            /**TODO: COSANPA
+                            /**
 							 * Inclusao das contas incluidas canceladas por prescrição
 							 *  de débito na geração do resumo*/
 							.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -5956,7 +5956,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 							DebitoCreditoSituacao.PARCELADA).setInteger(
 							"situacaoDebitoPrescrito",
 							DebitoCreditoSituacao.DEBITO_PRESCRITO)
-					/**TODO: COSANPA
+					/**
 			 		* Inclusao das contas incluidas canceladas por prescrição
 			 		*  de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -8797,7 +8797,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 					+ " :situacaoParcelada, :situacaoDebitoPrescrito, :situacaoDebitoPrescritoContasIncluidas ) "
 					/*+ " and ( conta.dcst_idanterior is null "
 					+ " or ( conta.cnta_amreferenciaconta <= :anoMesReferenciaContabil and conta.dcst_idanterior <> :situacaoIncluida ) ) ) ) "*/
-					/**TODO:COSANPA
+					/**
 					 * @Date 02/08/2013
 					 * 
 					 * Alteração na geração do resumo de documentos a receber
@@ -8840,7 +8840,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 					.setInteger("situacaoCanceladaPorRetificacao", DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)
 					.setInteger("situacaoParcelada", DebitoCreditoSituacao.PARCELADA)
 					.setInteger("situacaoDebitoPrescrito", DebitoCreditoSituacao.DEBITO_PRESCRITO)
-					/**TODO: COSANPA
+					/**
 					 * Inclusao das contas incluidas canceladas por prescrição de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas", DebitoCreditoSituacao.DEBITO_PRESCRITO_CONTAS_INCLUIDAS).list();
 
@@ -8948,7 +8948,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 					.setInteger("situacaoCanceladaPorRetificacao", DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)
 					.setInteger("situacaoParcelada", DebitoCreditoSituacao.PARCELADA)
 					.setInteger("situacaoDebitoPrescrito", DebitoCreditoSituacao.DEBITO_PRESCRITO)
-					/**TODO: COSANPA
+					/**
 			 		* Inclusao das contas incluidas canceladas por prescrição
 			 		*  de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -9067,7 +9067,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 					.setInteger("situacaoCanceladaPorRetificacao", DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)
 					.setInteger("situacaoParcelada", DebitoCreditoSituacao.PARCELADA)
 					.setInteger("situacaoDebitoPrescrito", DebitoCreditoSituacao.DEBITO_PRESCRITO)
-					/**TODO: COSANPA
+					/**
 			 		* Inclusao das contas incluidas canceladas por prescrição
 			 		*  de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -9184,7 +9184,7 @@ public class RepositorioFinanceiroHBM implements IRepositorioFinanceiro {
 					.setInteger("situacaoCanceladaPorRetificacao", DebitoCreditoSituacao.CANCELADA_POR_RETIFICACAO)
 					.setInteger("situacaoParcelada", DebitoCreditoSituacao.PARCELADA)
 					.setInteger("situacaoDebitoPrescrito", DebitoCreditoSituacao.DEBITO_PRESCRITO)
-					/**TODO: COSANPA
+					/**
 					 * Inclusao das contas incluidas canceladas por prescrição de débito na geração do resumo*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas", DebitoCreditoSituacao.DEBITO_PRESCRITO_CONTAS_INCLUIDAS).list();
 

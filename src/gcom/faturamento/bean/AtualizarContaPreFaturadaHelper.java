@@ -192,7 +192,7 @@ public class AtualizarContaPreFaturadaHelper {
 			}
 
 			/**
-			 * TODO : COSANPA Pamela Gatinho - 20/03/2012 Alterações para salvar
+			 *  Pamela Gatinho - 20/03/2012 Alterações para salvar
 			 * o arquivo de retorno do IS
 			 */
 			if (Integer.parseInt(this.tipoRegistro) == REGISTRO_TIPO_1) {
@@ -924,7 +924,7 @@ public class AtualizarContaPreFaturadaHelper {
 	}
 
 	/**
-	 * TODO : COSANPA Método criado para fazer o parser de inscrições com 16 e
+	 *  Método criado para fazer o parser de inscrições com 16 e
 	 * 17 caracteres.
 	 */
 

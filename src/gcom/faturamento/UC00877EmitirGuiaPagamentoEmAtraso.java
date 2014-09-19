@@ -216,11 +216,11 @@ public class UC00877EmitirGuiaPagamentoEmAtraso {
 				
 			}
 		} catch (ErroRepositorioException e) {
-			// TODO Auto-generated catch block
+			
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);
 		} catch (ControladorException e) {
-			// TODO Auto-generated catch block
+			
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);
 		}

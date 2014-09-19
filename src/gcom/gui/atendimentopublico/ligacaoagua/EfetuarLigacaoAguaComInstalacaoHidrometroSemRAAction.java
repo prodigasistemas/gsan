@@ -378,7 +378,7 @@ public class EfetuarLigacaoAguaComInstalacaoHidrometroSemRAAction extends
 		hidrometroInstalacaoHistorico.setUltimaAlteracao(new Date());
 		
 		/*
-		 * TODO - COSANPA
+		 *
 		 * Adição dos sets para os atributos indicadorTrocaProtecao e indicadorTrocaRegistro.
 		 */
 		// indicador troca proteção

@@ -131,7 +131,7 @@ public class RelatorioDeclaracaoAnualQuitacaoDebitos extends TarefaRelatorio {
 		String sequencial = "";
 		
 		/*
-		 * TODO - COSANPA
+		 *
 		 * Criação das variáveis localidade, setor, rota e sequencialRota
 		 */
 		
@@ -141,7 +141,7 @@ public class RelatorioDeclaracaoAnualQuitacaoDebitos extends TarefaRelatorio {
 		String sequencialRota = "";
 		
 		/*
-		 * TODO - COSANPA
+		 *
 		 * Adição da verificação OU para nomeEmpresa.equalsIgnoreCase("COSANPA") no IF abaixo
 		 */
 		

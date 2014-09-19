@@ -66,7 +66,7 @@ public class AdicionarMatriculaImovelNegativacaoAction extends
 		ClienteImovel clienteImovel = null;
 		
 		/*
-		 * TODO - COSANPA - Felipe Santos - 06/12/2011
+		 * Felipe Santos - 06/12/2011
 		 * 
 		 * Verifica se ClienteImovel tem relação RESPONSÁVEL PELO PARCELAMENTO
 		 */

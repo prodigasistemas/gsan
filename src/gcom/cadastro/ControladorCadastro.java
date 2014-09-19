@@ -653,10 +653,6 @@ public class ControladorCadastro implements SessionBean {
 	}
 	
 	/**
-	 * TODO: COSANPA
-	 * 
-	 * Mantis 494
-	 * 
 	 * Necessário para a geracao de rota para recadastramento
 	 * 
 	 * @author Wellington Rocha
@@ -932,159 +928,79 @@ public class ControladorCadastro implements SessionBean {
 		}
 	}
 
-	
-	/**
-	 * Informar Parametros do Sistema
-	 * 
-	 * @author Rômulo Aurélio
-	 * @date 09/01/2007
-	 * 
-	 */
-
-	public void informarParametrosSistema(SistemaParametro sistemaParametro,
-			Usuario usuarioLogado) throws ControladorException {
-
-		/*
-		 * Validação de Campos Obrigatórios
-		 */
+	public void informarParametrosSistema(SistemaParametro sistemaParametro, Usuario usuarioLogado) throws ControladorException {
 
 		if (sistemaParametro.getNomeEstado().equals("")) {
-			// O Nome do Estado é obrigatório
-			throw new ControladorException("atencao.informe_campo", null,
-					"Nome do Estado");
+			throw new ControladorException("atencao.informe_campo", null, "Nome do Estado");
 		}
 
 		if (sistemaParametro.getNomeEmpresa().equals("")) {
-			// O Nome da Empresa é obrigatório
-			throw new ControladorException("atencao.informe_campo", null,
-					"Nome da Empresa");
+			throw new ControladorException("atencao.informe_campo", null, "Nome da Empresa");
 		}
 
 		if (sistemaParametro.getNomeAbreviadoEmpresa().equals("")) {
-			// O Abreviatura da Empresa é obrigatório
-			throw new ControladorException("atencao.informe_campo", null,
-					"Abreviatura da Empresa");
+			throw new ControladorException("atencao.informe_campo", null, "Abreviatura da Empresa");
 		}
 
 		if (sistemaParametro.getCnpjEmpresa().equals("")) {
-			// CNPJ é obrigatório
-			throw new ControladorException("atencao.informe_campo", null,
-					"CNPJ");
+			throw new ControladorException("atencao.informe_campo", null, "CNPJ");
 		}
 
 		if (sistemaParametro.getLogradouro().equals("")) {
-			// O Logradouro é obrigatório
-			throw new ControladorException("atencao.informe_campo", null,
-					"Logradouro");
+			throw new ControladorException("atencao.informe_campo", null, "Logradouro");
 		}
 
-		if (sistemaParametro.getAnoMesFaturamento() == null
-				|| sistemaParametro.getAnoMesFaturamento().equals("")) {
-			// O Mês e Ano de Referência é obrigatório
-			throw new ControladorException("atencao.informe_campo", null,
-					"Mês e Ano de Referência");
+		if (sistemaParametro.getAnoMesFaturamento() == null || sistemaParametro.getAnoMesFaturamento().equals("")) {
+			throw new ControladorException("atencao.informe_campo", null, "Mês e Ano de Referência");
 		}
 
-		if (sistemaParametro.getAnoMesArrecadacao() == null
-				|| sistemaParametro.getAnoMesArrecadacao().equals("")) {
-			// O Mês e Ano de Referência é obrigatório
-			throw new ControladorException("atencao.informe_campo", null,
-					"Mês e Ano de Referência");
+		if (sistemaParametro.getAnoMesArrecadacao() == null || sistemaParametro.getAnoMesArrecadacao().equals("")) {
+			throw new ControladorException("atencao.informe_campo", null, "Mês e Ano de Referência");
 		}
 
-		if (sistemaParametro.getMenorConsumoGrandeUsuario() == null
-				|| sistemaParametro.getMenorConsumoGrandeUsuario().equals("")) {
-			// O Menor Consumo para ser Grande Usuário é obrigatório
-			throw new ControladorException("atencao.informe_campo", null,
-					"Menor Consumo para ser Grande Usuário");
+		if (sistemaParametro.getMenorConsumoGrandeUsuario() == null || sistemaParametro.getMenorConsumoGrandeUsuario().equals("")) {
+			throw new ControladorException("atencao.informe_campo", null, "Menor Consumo para ser Grande Usuário");
 		}
 
-		if (sistemaParametro.getValorMinimoEmissaoConta() == null
-				|| sistemaParametro.getValorMinimoEmissaoConta().equals("")) {
-			// O Menor Valor para Emissão de Contas é obrigatório
-			throw new ControladorException("atencao.informe_campo", null,
-					"Menor Valor para Emissão de Contas");
+		if (sistemaParametro.getValorMinimoEmissaoConta() == null || sistemaParametro.getValorMinimoEmissaoConta().equals("")) {
+			throw new ControladorException("atencao.informe_campo", null, "Menor Valor para Emissão de Contas");
 		}
 
-		if (sistemaParametro.getMenorEconomiasGrandeUsuario() == null
-				|| sistemaParametro.getMenorEconomiasGrandeUsuario().equals("")) {
-			// O Qtde de Economias para ser Grande Usuário é obrigatório
-			throw new ControladorException("atencao.informe_campo", null,
-					"Qtde de Economias para ser Grande Usuário");
+		if (sistemaParametro.getMenorEconomiasGrandeUsuario() == null || sistemaParametro.getMenorEconomiasGrandeUsuario().equals("")) {
+			throw new ControladorException("atencao.informe_campo", null, "Qtde de Economias para ser Grande Usuário");
 		}
 
-		if (sistemaParametro.getMesesMediaConsumo() == null
-				|| sistemaParametro.getMesesMediaConsumo().equals("")) {
-			// O Menor Valor para Emissão de Contas é obrigatório
-			throw new ControladorException("atencao.informe_campo", null,
-					"Meses para Cálculo de Média de Consumo");
+		if (sistemaParametro.getMesesMediaConsumo() == null || sistemaParametro.getMesesMediaConsumo().equals("")) {
+			throw new ControladorException("atencao.informe_campo", null, "Meses para Cálculo de Média de Consumo");
 		}
 
-		if (sistemaParametro.getNumeroMinimoDiasEmissaoVencimento() == null
-				|| sistemaParametro.getNumeroMinimoDiasEmissaoVencimento()
-						.equals("")) {
-			throw new ControladorException("atencao.informe_campo", null,
-					"Número de Dias entre o Vencimento e o Início da Cobrança");
+		if (sistemaParametro.getNumeroMinimoDiasEmissaoVencimento() == null || sistemaParametro.getNumeroMinimoDiasEmissaoVencimento().equals("")) {
+			throw new ControladorException("atencao.informe_campo", null, "Número de Dias entre o Vencimento e o Início da Cobrança");
 		}
 
-		if (sistemaParametro.getIncrementoMaximoConsumoRateio() == null
-				|| sistemaParametro.getIncrementoMaximoConsumoRateio().equals(
-						"")) {
-			throw new ControladorException("atencao.informe_campo", null,
-					"Incremento Máximo de Consumo por economia em Rateio");
+		if (sistemaParametro.getIncrementoMaximoConsumoRateio() == null || sistemaParametro.getIncrementoMaximoConsumoRateio().equals("")) {
+			throw new ControladorException("atencao.informe_campo", null, "Incremento Máximo de Consumo por economia em Rateio");
 		}
 
-		if (sistemaParametro.getDecrementoMaximoConsumoRateio() == null
-				|| sistemaParametro.getDecrementoMaximoConsumoRateio().equals(
-						"")) {
-			throw new ControladorException("atencao.informe_campo", null,
-					"Decremento Máximo de Consumo por economia em Rateio");
+		if (sistemaParametro.getDecrementoMaximoConsumoRateio() == null || sistemaParametro.getDecrementoMaximoConsumoRateio().equals("")) {
+			throw new ControladorException("atencao.informe_campo", null, "Decremento Máximo de Consumo por economia em Rateio");
 		}
 
-		if (sistemaParametro.getDiasMaximoAlterarOS() == null
-				|| sistemaParametro.getDiasMaximoAlterarOS().equals("")) {
-			throw new ControladorException("atencao.informe_campo", null,
-					"Dias Máximo para Alterar Dados da OS");
-
+		if (sistemaParametro.getDiasMaximoAlterarOS() == null || sistemaParametro.getDiasMaximoAlterarOS().equals("")) {
+			throw new ControladorException("atencao.informe_campo", null, "Dias Máximo para Alterar Dados da OS");
 		}
 
-		if (sistemaParametro.getUltimoRAManual() == null
-				|| sistemaParametro.getUltimoRAManual().equals("")) {
-			throw new ControladorException("atencao.informe_campo", null,
-					"Último ID Utilizado para Geração do RA Manual");
-
+		if (sistemaParametro.getUltimoRAManual() == null || sistemaParametro.getUltimoRAManual().equals("")) {
+			throw new ControladorException("atencao.informe_campo", null, "Último ID Utilizado para Geração do RA Manual");
 		}
 
-		if (sistemaParametro.getTituloPagina() == null
-				|| sistemaParametro.getTituloPagina().equals("")) {
-			throw new ControladorException("atencao.informe_campo", null,
-					"Títulos de Relatório");
-
+		if (sistemaParametro.getTituloPagina() == null || sistemaParametro.getTituloPagina().equals("")) {
+			throw new ControladorException("atencao.informe_campo", null, "Títulos de Relatório");
 		}
+		
 		sistemaParametro.setUltimaAlteracao(new Date());
 
-		// ------------ REGISTRAR TRANSAÇÃO----------------------------
-
-		// RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-		// Operacao.OPERACAO_SISTEMA_PARAMETROS_INSERIR,
-		// new UsuarioAcaoUsuarioHelper(usuario,
-		// UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-		//
-		// Operacao operacao = new Operacao();
-		// operacao.setId(Operacao.OPERACAO_SISTEMA_PARAMETROS_INSERIR);
-		//
-		// OperacaoEfetuada operacaoEfetuada = new OperacaoEfetuada();
-		// operacaoEfetuada.setOperacao(operacao);
-		//
-		// sistemaParametro.setOperacaoEfetuada(operacaoEfetuada);
-		// sistemaParametro.adicionarUsuario(Usuario.USUARIO_TESTE,
-		// UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
-		// registradorOperacao.registrarOperacao(sistemaParametro);
-
-		// ------------ REGISTRAR TRANSAÇÃO----------------------------
-
 		getControladorUtil().atualizar(sistemaParametro);
-
 	}
 
 	/**
@@ -8445,7 +8361,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO:Cosanpa Gerar Arquivo Texto para Atualização Cadastral
+	 * Gerar Arquivo Texto para Atualização Cadastral
 	 * 
 	 * Registro Tipo 02 - Dados do(s) cliente(s)
 	 * 
@@ -9218,7 +9134,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO:Cosanpa Gerar Arquivo Texto para Atualização Cadastral
+	 * Gerar Arquivo Texto para Atualização Cadastral
 	 * 
 	 * Registro Tipo 04 - Dados Serviços
 	 * 
@@ -9346,7 +9262,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO:Cosanpa Gerar Arquivo Texto para Atualização Cadastral
+	 * Gerar Arquivo Texto para Atualização Cadastral
 	 * 
 	 * Registro Tipo 05 - Dados Medidor
 	 * 
@@ -9454,10 +9370,6 @@ public class ControladorCadastro implements SessionBean {
 
 	
 	/**
-	 * TODO: Cosanpa
-	 * 
-	 * Mantis 494
-	 * 
 	 * Geração da rota para recadastramento
 	 * 
 	 * @author Wellington Rocha
@@ -9554,15 +9466,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoGeral;
 	}
 
-	/**
-	 * TODO: Cosanpa
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoAnormalidades(
 			CadastroOcorrencia cadastroOcorrencia) throws ControladorException {
 
@@ -9583,15 +9486,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoAnormalidades;
 	}
 
-	/**
-	 * TODO: Cosanpa
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoRamoAtividade(
 			RamoAtividade ramoAtividade) throws ControladorException {
 
@@ -9612,15 +9506,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoRamoAtividade;
 	}
 
-	/**
-	 * TODO: Cosanpa
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoLigacaoAguaSituacao(
 			LigacaoAguaSituacao ligacaoAguaSituacao)
 			throws ControladorException {
@@ -9642,15 +9527,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoLigacaoAguaSituacao;
 	}
 
-	/**
-	 * TODO: Cosanpa
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoLigacaoEsgotoSituacao(
 			LigacaoEsgotoSituacao ligacaoEsgotoSituacao)
 			throws ControladorException {
@@ -9672,15 +9548,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoLigacaoEsgotoSituacao;
 	}
 
-	/**
-	 * TODO: Cosanpa
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoHidrometroProtecao(
 			HidrometroProtecao hidrometroProtecao) throws ControladorException {
 
@@ -9701,15 +9568,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoHidrometroProtecao;
 	}
 
-	/**
-	 * TODO: Cosanpa
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoFonteAbastecimento(
 			FonteAbastecimento fonteAbastecimento)
 			throws ControladorException {
@@ -9731,15 +9589,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoFonteAbastecimento;
 	}
 	
-	/**
-	 * TODO: Cosanpa
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoHidrometroMarca(
 			HidrometroMarca hidrometroMarca)
 			throws ControladorException {
@@ -9761,15 +9610,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoHidrometroMarca;
 	}
 	
-	/**
-	 * TODO: Cosanpa
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoRamalLocalInstalacao(
 			RamalLocalInstalacao ramalLocalInstalacao)
 			throws ControladorException {
@@ -9791,15 +9631,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoRamalLocalInstalacao;
 	}
 	
-	/**
-	 * TODO: Cosanpa
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoHidrometroCapacidade(
 			HidrometroCapacidade hidrometroCapacidade)
 			throws ControladorException {
@@ -9821,15 +9652,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoHidrometroCapacidade;
 	}
 
-	/**
-	 * TODO: Cosanpa
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoLogradouroTipo(
 			LogradouroTipo logradouroTipo, Boolean possuiMaisRegistros)
 			throws ControladorException {
@@ -14359,7 +14181,7 @@ public class ControladorCadastro implements SessionBean {
 
 	}
 	
-	/**TODO: COSANPA
+	/**
 	 * @autor: Adriana Muniz
 	 * @date: 23/11/2011
 	 * 
@@ -15933,7 +15755,7 @@ public class ControladorCadastro implements SessionBean {
 
 
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * @autor: Wellington Rocha
 	 * @date: 21/03/2012
@@ -15971,7 +15793,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * @autor: Wellington Rocha
 	 * @date: 21/03/2012
@@ -16008,7 +15830,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * @autor: Wellington Rocha
 	 * @date: 21/03/2012
@@ -16046,7 +15868,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * Método para atualizar situação (siac_id) de ImovelAtualizacaoCadastral
 	 * 
@@ -16070,7 +15892,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * @author Matheus Souza
 	 * @param Id do imovel

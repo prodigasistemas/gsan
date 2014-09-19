@@ -6532,7 +6532,7 @@ public interface IRepositorioArrecadacao {
 			throws ErroRepositorioException;
 	
 
-	/* TODO: COSANPA
+	/*
 	 * Criado para a consulta, de manter conta por conjunto de imóveis, pelo id do banco
 	 * e pelo grupo de faturamento
 	 * 
@@ -6549,7 +6549,7 @@ public interface IRepositorioArrecadacao {
 	public Collection pesquisarImoveisBancoDebitoAutomaticoEPorGrupoFaturamento(String[] bancos, 
 			Integer idGrupoFaturamento) throws ErroRepositorioException;
 	
-	/* TODO: COSANPA
+	/*
 	 * autor: Adriana Muniz
 	 * 
 	 * Alteração para a conta considerar como filtro grupo de faturamento, quando o mesmo estiver preenchido
@@ -6573,10 +6573,6 @@ public interface IRepositorioArrecadacao {
 	
 
 	/**
-	 * TODO: COSANPA
-	 * 
-	 * Mantis 537
-	 * 
 	 * @author Wellington Rocha
 	 * @data 15/04/2012
 	 * 
@@ -6587,7 +6583,7 @@ public interface IRepositorioArrecadacao {
 			throws ErroRepositorioException;
 	
 
-	/**TODO:COSANPA
+	/**
 	 * 
 	 * @author Adriana Muniz
 	 * data: 05/09/2012
@@ -6600,7 +6596,7 @@ public interface IRepositorioArrecadacao {
 			Object helper, FiltroConsultarDadosDiariosArrecadacao filtro) throws ErroRepositorioException;
 	
 
-	/**TODO:COSANPA
+	/**
 	 * 
 	 * Relatório Analitico dos valores diários da arrecadação
 	 * 
@@ -6616,7 +6612,7 @@ public interface IRepositorioArrecadacao {
 			Object helper, FiltroConsultarDadosDiariosArrecadacao filtro) throws ErroRepositorioException;
 	
 
-	/**TODO:COSANPA
+	/**
 	 * @author Adriana Muniz
 	 * @date 05/12/2012
 	 * 
@@ -6634,7 +6630,7 @@ public interface IRepositorioArrecadacao {
 			int anoMesReferenciaArrecadacao, Integer idLocalidade)
 			throws ErroRepositorioException;
 	
-	/**TODO:COSANPA
+	/**
 	 * @author Adriana Muniz
 	 * @date 05/12/2012
 	 * 
@@ -6653,7 +6649,7 @@ public interface IRepositorioArrecadacao {
 			int anoMesReferenciaArrecadacao, Integer idLocalidade)
 			throws ErroRepositorioException;
 	
-	/**TODO: COSANPA
+	/**
 	 * @author Adriana Muniz
 	 * @date 10/12/2012
 	 * 
@@ -6670,7 +6666,7 @@ public interface IRepositorioArrecadacao {
 	public boolean verificarExistenciaDadosDiariosArrecadacaoAuxiliar(FiltroConsultarDadosDiariosArrecadacaoAuxiliar filtro)
 		throws ErroRepositorioException;
 	
-	/**TODO:COSANPA
+	/**
 	 * @author Adriana Muniz
 	 * @date 11/12/2012
 	 * 
@@ -6682,7 +6678,7 @@ public interface IRepositorioArrecadacao {
 	 */
 	public Collection filtrarDadosDiariosArrecadacaoAuxiliar(FiltroConsultarDadosDiariosArrecadacaoAuxiliar filtro) throws ErroRepositorioException;
 	
-	/**TODO:COSANPA
+	/**
 	 * @author Adriana Muniz
 	 * @date 11/12/2012
 	 * 
@@ -6699,7 +6695,7 @@ public interface IRepositorioArrecadacao {
 			int anoMesReferenciaArrecadacao, Integer idLocalidade)
 			throws ErroRepositorioException;
 	
-	/** TODO:COSANPA
+	/**
 	 * @author Adriana Muniz
 	 * @date 12/12/2012
 	 * 
@@ -6718,7 +6714,7 @@ public interface IRepositorioArrecadacao {
 			int anoMesReferenciaArrecadacao, Integer idLocalidade)
 			throws ErroRepositorioException;
 	
-	/**TODO:COSANPA
+	/**
     *
     * Relatório Analitico dos valores diários da arrecadação com tarifa
     *
@@ -6734,10 +6730,6 @@ public interface IRepositorioArrecadacao {
            Object helper, FiltroConsultarDadosDiariosArrecadacaoAuxiliar filtro) throws ErroRepositorioException;
 
    /**
-	 * TODO: COSANPA
-	 * 
-	 * Mantis: ***
-	 * 
 	 * Mudança de conta contábil de recebimentos até 12/2012 classificados no mês atual;
 	 * 
 	 * @author Wellington Rocha
@@ -6754,10 +6746,6 @@ public interface IRepositorioArrecadacao {
 			Integer idImpostoTipo) throws ErroRepositorioException;
 	
 	/**
-	 * TODO: COSANPA
-	 * 
-	 * Mantis *** 
-	 * 
 	 * Contabilizar valores arrecadados até dezembro de 2012 em contas diferentes.
 	 * 
 	 * @author Wellington Rocha
@@ -6774,8 +6762,6 @@ public interface IRepositorioArrecadacao {
 			Integer idCategoria) throws ErroRepositorioException;
 	
 	/**
-	 * Mantis ***
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Contabilizar valores arrecadados até 31/12/2012 em contas diferentes
@@ -6797,8 +6783,6 @@ public interface IRepositorioArrecadacao {
 			throws ErroRepositorioException;
 	
 	/**
-	 * Mantis ***
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Alteração na contabilização de contas arrecadadas até 31/12/2012
@@ -6820,11 +6804,7 @@ public interface IRepositorioArrecadacao {
 			throws ErroRepositorioException;
 	
 	/**
-	 * TODO: COSANPA
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
-	 * 
-	 * Mantis ***
 	 * 
 	 * Contabilizar em contas diferentes os valores arrecadados até 31/12/2012
 	 * 
@@ -6843,8 +6823,6 @@ public interface IRepositorioArrecadacao {
 	
 	
 	/**
-	 * Mantis ***
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Contabilizar em contas diferentes valores arrecadados até 31/12/2012
@@ -6868,8 +6846,6 @@ public interface IRepositorioArrecadacao {
 			throws ErroRepositorioException;
 	
 	/**
-	 * Mantis ***
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Contabilizar em contas separadas valores arrecadados até 31/12/2012
@@ -6891,8 +6867,6 @@ public interface IRepositorioArrecadacao {
 			throws ErroRepositorioException;
 	
 	/**
-	 * Mantis ****
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Contabilizar em contas separadas valores arrecadados até 31/12/2012
@@ -6914,8 +6888,6 @@ public interface IRepositorioArrecadacao {
 			throws ErroRepositorioException;
 	
 	/**
-	 * Mantis ****
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Contabilizar em contas separadas valores arrecadados até 31/12/2012
@@ -6938,8 +6910,6 @@ public interface IRepositorioArrecadacao {
 	
 	
 	/**
-	 * Mantis ****
-	 * 
 	 * [UC0276] - Encerrar Arrecadação do Mês
 	 * 
 	 * Contabilizar em contas separadas valores arrecadados até 31/12/2012

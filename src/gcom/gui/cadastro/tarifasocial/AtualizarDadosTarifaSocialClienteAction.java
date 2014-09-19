@@ -524,12 +524,12 @@ public class AtualizarDadosTarifaSocialClienteAction extends ControladorInclusao
 	
 
 	public Object gerarObject(ControladorGcomActionForm actionForm, HttpServletRequest request) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	public void inserirObjeto(Object obj, HttpServletRequest request, ControladorGcomActionForm actionForm) throws Exception {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	

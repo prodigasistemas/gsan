@@ -2471,9 +2471,9 @@ public interface ControladorRegistroAtendimentoLocal extends
 			throws ControladorException;
 	
 	/**
-     * TODO: COSANPA
+     *
      * 
-     * Mantis 652 - Gerar relatorio de RA por Unidade por Usuário
+     * Gerar relatorio de RA por Unidade por Usuário
      * 
      * @author Wellington Rocha
      * @date 18/12/2012

@@ -86,7 +86,7 @@ public class RotaAtualizacaoSeq implements Serializable {
 
     public RotaAtualizacaoSeq(Integer id, Imovel imovel, Rota rota, int amFaturamento, int sequencialRota, Date dtUltimaAlteracao) {
         super();
-        // TODO Auto-generated constructor stub
+        
         this.id = id;
         this.imovel = imovel;
         this.rota = rota;

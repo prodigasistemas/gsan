@@ -26820,7 +26820,7 @@ public class Fachada {
 	public Integer encerrarOrdemServicoVencida(Integer idServicoTipo, Integer quantidadeDias, Usuario usuarioLogado) {
 		try {
 			/**
-			 * TODO: Cosanpa Mantis 664 - Correção de erro na execução da
+			 * Correção de erro na execução da
 			 * funcionalidade
 			 * 
 			 * @author Wellington Rocha
@@ -32446,13 +32446,6 @@ public class Fachada {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
-	/**
-	 * TODO: COSANPA - Alterações para atender Mantis 595 Enviar documentos de
-	 * cobrança para endereço de correspondência
-	 * 
-	 * @author Wellington Rocha
-	 * @date 21/06/2013
-	 */
 	public Collection<RelatorioNotificacaoDebitoBean> gerarRelatorioNotificacaoDebito(Integer idCobrancaAcaoCronograma, Integer idCobrancaAcaoComando,
 			int tamanhoMaximoDebito, String quantidadeRelatorios, String tipoEnderecoRelatorio) {
 		try {
@@ -34111,7 +34104,7 @@ public class Fachada {
 				retorno.setConsumo6(consumo6 != null ? consumo6.toString() : "0");
 
 				/**
-				 * TODO : COSANPA Alterando o cálculo da média
+				 *  Alterando o cálculo da média
 				 */
 				MedicaoTipo medicao = new MedicaoTipo();
 				medicao.setId(1);
@@ -43470,7 +43463,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO : COSANPA Gerar um ralatorio de leituras realizadas
+	 *  Gerar um ralatorio de leituras realizadas
 	 * 
 	 * @author Pamela Gatinho
 	 * @date 08/09/2011
@@ -43492,7 +43485,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO:COSANPA
+	 *
 	 * 
 	 * @author Adriana Muniz
 	 * @date 06/12/2011
@@ -43511,7 +43504,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO : COSANPA Gerar um ralatorio de medicao do faturamento
+	 *  Gerar um ralatorio de medicao do faturamento
 	 * 
 	 * @author Pamela Gatinho
 	 * @date 16/09/2011
@@ -43534,7 +43527,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO : COSANPA Gerar um ralatorio de contas retidas
+	 *  Gerar um ralatorio de contas retidas
 	 * 
 	 * @author Pamela Gatinho
 	 * @date 15/09/2011
@@ -43555,7 +43548,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO: COSANPA Mantis 652 - Relaotio de RAs por Unidade Por Usuário
+	 * Relaotio de RAs por Unidade Por Usuário
 	 * 
 	 * @author Wellington Rocha
 	 * @date 18/12/2012
@@ -43570,7 +43563,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO:COSANPA
+	 *
 	 * 
 	 * @author Pamela Gatinho
 	 * 
@@ -43590,7 +43583,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO : COSANPA Pamela Gatinho - 06/06/2011 Adicionando o método para
+	 *  Pamela Gatinho - 06/06/2011 Adicionando o método para
 	 * verificar se houve substituicao de hidrometro no período da leitura
 	 * anterior faturada até a data atual
 	 */
@@ -43603,7 +43596,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * 
 	 * @author Pamela Gatinho
 	 * 
@@ -43623,7 +43616,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO : Cosanpa Alteracao feita para a rota dividida não finalizar os
+	 *  Alteracao feita para a rota dividida não finalizar os
 	 * imoveis por IMEI, e sim, pelo numero do arquivo dividido.
 	 */
 	/**
@@ -43666,7 +43659,7 @@ public class Fachada {
 	}
 
 	/*
-	 * TODO: COSANPA autor: Adriana Muniz
+	 * autor: Adriana Muniz
 	 * 
 	 * Alteração para a conta considerar como filtro grupo de faturamento,
 	 * quando o mesmo estiver preenchido
@@ -43690,7 +43683,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * @autor: Adriana Muniz
 	 * @date: 23/11/2011
@@ -43709,7 +43702,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO - COSANPA
+	 *
 	 * 
 	 * Método para obter todos os imóveis que já foram processados na
 	 * transmissão do arquivo de retorno do IS
@@ -43775,7 +43768,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * 
 	 * @author Pamela Gatinho
 	 * @date 04/08/2011
@@ -43798,7 +43791,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * 
 	 * @author Pamela Gatinho
 	 * @date 24/02/2012
@@ -43820,7 +43813,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO : COSANPA Pesquisa uma rota pelo id da localidade e do setor
+	 *  Pesquisa uma rota pelo id da localidade e do setor
 	 * comercial
 	 * 
 	 * @author Pamela Gatinho
@@ -43857,7 +43850,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO - COSANPA
+	 *
 	 * 
 	 * Método para obter todos os imóveis que faltam ser processados na
 	 * transmissão offline do arquivo de retorno do IS
@@ -43879,7 +43872,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO:COSANPA
+	 *
 	 * 
 	 * @author Adriana Muniz
 	 * @date 10/12/2012

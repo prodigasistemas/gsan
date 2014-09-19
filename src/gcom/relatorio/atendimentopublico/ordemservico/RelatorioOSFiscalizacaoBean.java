@@ -80,13 +80,13 @@ public class RelatorioOSFiscalizacaoBean implements RelatorioBean {
 	
 	public RelatorioOSFiscalizacaoBean() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	public RelatorioOSFiscalizacaoBean(String inscricao, String nomeClienteUsuario, String grupo, String matricula, String dataEmissao, String categoriaRES, String categoriaPUB, String categoriaIND, String categoriaCOM, String situacaoLigacaoAgua, String situacaoLigacaoEsgoto, String sequencial, String ordemServico, String dataValidade, String rota, String sequencialRota, String mesAno, String enderecoImovel, String numeroOrdemExecutada, String tipoServico, String dataExecucao, String motivoEncerramento, String tipoPavimento, String qtdeRecomposta, String numeroHidrometro, String leituraHidrometro, JRBeanCollectionDataSource arrayJRDetail, ArrayList arrayRelatorioSituacaoEncontradaDetailBean, JRBeanCollectionDataSource arrayJRDetail2, ArrayList arrayRelatorioSituacaoEncontradaDetailBean2, String inscricao2, String nomeClienteUsuario2, String grupo2, String matricula2, String dataEmissao2, String categoriaRES2, String categoriaPUB2, String categoriaIND2, String categoriaCOM2, String situacaoLigacaoAgua2, String situacaoLigacaoEsgoto2, String sequencial2, String ordemServico2, String dataValidade2, String rota2, String sequencialRota2, String mesAno2, String enderecoImovel2, String numeroOrdemExecutada2, String tipoServico2, String dataExecucao2, String motivoEncerramento2, String tipoPavimento2, String qtdeRecomposta2, String numeroHidrometro2, String leituraHidrometro2,
 			Collection colecaoDetail, Collection colecaoDetail2) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.inscricao = inscricao;
 		this.nomeClienteUsuario = nomeClienteUsuario;
 		this.grupo = grupo;
@@ -156,7 +156,7 @@ public class RelatorioOSFiscalizacaoBean implements RelatorioBean {
 	public RelatorioOSFiscalizacaoBean(RelatorioOSFiscalizacaoHelper helper,
 			RelatorioOSFiscalizacaoHelper helper2,Collection colecaoDetailBean) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.inscricao = helper.getInscricao();
 		this.nomeClienteUsuario = helper.getNomeClienteUsuario();
 		this.grupo = helper.getGrupo();

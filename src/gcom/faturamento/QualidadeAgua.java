@@ -115,7 +115,7 @@ public class QualidadeAgua extends ObjetoTransacao{
 
 	public QualidadeAgua(Integer id, Date ultimaAlteracao, Integer anoMesReferencia, BigDecimal numeroIndiceTurbidez, BigDecimal numeroCloroResidual, Localidade localidade) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.ultimaAlteracao = ultimaAlteracao;
 		this.anoMesReferencia = anoMesReferencia;

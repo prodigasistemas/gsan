@@ -32,7 +32,7 @@ public class ConsultarTransferenciasDebitoHelper {
 	 */
 	public ConsultarTransferenciasDebitoHelper(Integer idImovelOrigem, Integer idImovelDestino, Date dataInicial, Date dataFinal, Integer idUsuario) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idImovelOrigem = idImovelOrigem;
 		this.idImovelDestino = idImovelDestino;
 		this.dataInicial = dataInicial;

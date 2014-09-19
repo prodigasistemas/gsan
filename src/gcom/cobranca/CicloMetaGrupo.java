@@ -46,7 +46,7 @@ public class CicloMetaGrupo implements Serializable {
 
     public CicloMetaGrupo(Integer id, Integer quantidadeImoveisSituacaoAgua, Integer metaCalculada, Integer metaAjustada, Integer quantidadeRealizada, Date ultimaAlteracao, CicloMeta cicloMeta, Localidade localidade, CobrancaGrupo cobrancaGrupo) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.quantidadeImoveisSituacaoAgua = quantidadeImoveisSituacaoAgua;
 		this.metaCalculada = metaCalculada;

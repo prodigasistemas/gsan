@@ -9,7 +9,6 @@ import java.io.Serializable;
  * @author Magno Gouveia
  * @date 03/06/2011
  */
-// TODO verificado com FiltrarRelatorioAcessoSPCHelper
 public class FiltrarRelatorioImoveisComLeiturasHelper implements Serializable {
 
 	private static final long serialVersionUID = 1L;

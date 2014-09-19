@@ -28,6 +28,8 @@ public class ConsultarParametrosSistemaActionForm extends ActionForm {
 
 	private String enderecoReferencia;
 
+	private String dddTelefone;
+	
 	private String numeroTelefone;
 
 	private String ramal;
@@ -264,6 +266,10 @@ public class ConsultarParametrosSistemaActionForm extends ActionForm {
 	private String idResolucaoDiretoria;
 
 	private String numeroDiasEncerrarOsFiscalizacaoDecursoPrazo;
+	
+	private String idClienteResponsavelNegativacao;
+	
+	private String nomeClienteResponsavelNegativacao;
 	
 	// Seguranca
 	private String indicadorSugestaoTramite;
@@ -1868,8 +1874,27 @@ public class ConsultarParametrosSistemaActionForm extends ActionForm {
 		this.nomeClienteFicticioAssociarPagamentosNaoIdentificados = nomeClienteFicticioAssociarPagamentosNaoIdentificados;
 	}
 
-	
-	
-	
+	public String getDddTelefone() {
+		return dddTelefone;
+	}
 
+	public void setDddTelefone(String dddTelefone) {
+		this.dddTelefone = dddTelefone;
+	}
+
+	public String getIdClienteResponsavelNegativacao() {
+		return idClienteResponsavelNegativacao;
+	}
+
+	public void setIdClienteResponsavelNegativacao(String idClienteResponsavelNegativacao) {
+		this.idClienteResponsavelNegativacao = idClienteResponsavelNegativacao;
+	}
+
+	public String getNomeClienteResponsavelNegativacao() {
+		return nomeClienteResponsavelNegativacao;
+	}
+
+	public void setNomeClienteResponsavelNegativacao(String nomeClienteResponsavelNegativacao) {
+		this.nomeClienteResponsavelNegativacao = nomeClienteResponsavelNegativacao;
+	}
 }

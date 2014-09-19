@@ -25,7 +25,7 @@ public class OrdemServicoBoletim implements Serializable {
     
 	public OrdemServicoBoletim() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public Integer getId() {
@@ -87,7 +87,7 @@ public class OrdemServicoBoletim implements Serializable {
 
 	public OrdemServicoBoletim(Integer id, Short indicadorPavimento, BigDecimal numeroReposicaoAsfalto, BigDecimal numeroReposicaoParalelo, BigDecimal numeroReposicaoCalcada, Date ultimaAlteracao, OrdemServico ordemServico) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.indicadorPavimento = indicadorPavimento;
 		this.numeroReposicaoAsfalto = numeroReposicaoAsfalto;

@@ -36,7 +36,7 @@ public class TelemetriaMovReg implements Serializable {
 
 	public TelemetriaMovReg(Integer id, Date dataLeitura, String inscricao, Integer leitura, Integer numeroHidrometro, Short indicadorProcessado, TelemetriaMov telemetriaMov, Imovel imovel, MedicaoTipo medicaoTipo, Date ultimaAlteracao) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.dataLeitura = dataLeitura;
 		this.inscricao = inscricao;

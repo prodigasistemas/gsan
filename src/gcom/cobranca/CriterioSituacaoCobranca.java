@@ -33,7 +33,7 @@ public class CriterioSituacaoCobranca extends ObjetoTransacao {
 
 	public CriterioSituacaoCobranca(CriterioSituacaoCobrancaPK comp_id) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.comp_id = comp_id;
 	}
 	

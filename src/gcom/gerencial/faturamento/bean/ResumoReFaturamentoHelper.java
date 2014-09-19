@@ -524,7 +524,7 @@ public class ResumoReFaturamentoHelper {
 			Integer idPerfilImovel, Integer idSituacaoLigacaoAgua,
 			Integer idSituacaoLigacaoEsgoto, Integer idPerfilLigacaoAgua, Integer idPerfilLigacaoEsgoto) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		
 		this.idGerenciaRegional = idGerenciaRegional;
 		this.idUnidadeNegocio = idUnidadeNegocio;
@@ -544,7 +544,7 @@ public class ResumoReFaturamentoHelper {
 
 	public ResumoReFaturamentoHelper(Integer idGerenciaRegional, Integer idLocalidade, Integer idSetorComercial, Integer idRota, Integer idQuadra, Integer codigoSetorComercial, Integer numeroQuadra, Integer idPerfilImovel, Integer idSituacaoLigacaoAgua, Integer idSituacaoLigacaoEsgoto, Integer idEsfera) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idGerenciaRegional = idGerenciaRegional;
 		this.idLocalidade = idLocalidade;
 		this.idSetorComercial = idSetorComercial;

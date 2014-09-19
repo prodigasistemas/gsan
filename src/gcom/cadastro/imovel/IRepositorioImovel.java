@@ -5,7 +5,6 @@ import gcom.arrecadacao.pagamento.PagamentoHistorico;
 import gcom.atendimentopublico.ligacaoagua.LigacaoAguaSituacao;
 import gcom.atendimentopublico.ligacaoesgoto.LigacaoEsgotoSituacao;
 import gcom.atualizacaocadastral.ImovelControleAtualizacaoCadastral;
-import gcom.atualizacaocadastral.ImovelRetorno;
 import gcom.cadastro.cliente.Cliente;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
 import gcom.cadastro.cliente.FiltroClienteImovel;
@@ -40,12 +39,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
-/**
- * < <Descrição da Interface>>
- * 
- * @author Administrador
- * @created 16 de Junho de 2004
- */
 public interface IRepositorioImovel {
 
 	/**
@@ -2686,7 +2679,7 @@ public interface IRepositorioImovel {
 	public Short consultarNumeroReparcelamentoConsecutivosImovel(Integer idImovel)
 		throws ErroRepositorioException;
 
-	/**TODO: COSANPA
+	/**
 	 * autor: Adriana Muniz
 	 * Data: 12/05/2011
 	 * Pesquisa o id da quadra pelo id do imóvel - Gerar
@@ -2696,7 +2689,7 @@ public interface IRepositorioImovel {
 	
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * 
 	 * Metodo para verificar se a rota que o imovel pertence
 	 * ja foi gerada para o mes de faturamento do grupo 
@@ -2707,7 +2700,7 @@ public interface IRepositorioImovel {
 	 */
 	public boolean verificaGeracaoDadosLeituraRota(FaturamentoGrupo faturamentoGrupo, Rota rota) throws ErroRepositorioException;
 	
-	/**TODO:COSANPA
+	/**
 	 * @author Adriana Muniz
 	 * @date 06/12/2011
 	 * 
@@ -3190,10 +3183,6 @@ public interface IRepositorioImovel {
 	public Imovel pesquisarImovelSituacaoEspecialFaturamento(Integer idImovel) throws ErroRepositorioException;
 	
 	/**
-	 * TODO: COSANPA
-	 * 
-	 * Mantis 494
-	 * 
 	 * @param idImovel
 	 * 
 	 * @author Wellington Rocha
@@ -3211,4 +3200,6 @@ public interface IRepositorioImovel {
 	public Logradouro pesquisarLogradouro(Integer codigoLogradouro) throws ErroRepositorioException;
 	
 	public Integer pesquisarLogradouroImovelAtualizacaoCadastral(Integer matriculaImovel) throws ErroRepositorioException;
+	
+	public ImovelCobrancaSituacao obterImovelCobrancaSituacao(Integer idImovelSituacaoCobranca) throws ErroRepositorioException;
 }

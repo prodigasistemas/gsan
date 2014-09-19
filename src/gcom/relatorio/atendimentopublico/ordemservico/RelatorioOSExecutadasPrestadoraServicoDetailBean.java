@@ -16,11 +16,11 @@ public class RelatorioOSExecutadasPrestadoraServicoDetailBean implements Relator
 	
 	public RelatorioOSExecutadasPrestadoraServicoDetailBean() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	public RelatorioOSExecutadasPrestadoraServicoDetailBean(OSExecutadasRelatorioHelper helper) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.descricaoServicos = helper.getDescServicosOSExecutadas();
 		this.idServicos = helper.getCodigoServicosOSExecutadas();
 		this.qtdeOs = helper.getQtdeServicosOSExecutadas().toString();

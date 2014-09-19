@@ -77,9 +77,6 @@ public class ControladorCobrancaCAEMASEJB extends ControladorCobranca implements
 			Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO), ConstantesSistema.CEM);
 			
 			//TOTALIZANDO O VALOR DOS ACRÉSCIMOS POR IMPONTUALIDADE (ANTIGUIDADE + GUIA_PAGAMENTO)
-			/*
-			 * TODO - COSANPA
-			 */
 			valorTotalAcrescimosImpontualidade = 
 			valorDescontoAcrescimos.getValorTotalAcrescimosImpontualidadePorAntiguidadeMulta().setScale(
 			Parcelamento.CASAS_DECIMAIS, Parcelamento.TIPO_ARREDONDAMENTO)

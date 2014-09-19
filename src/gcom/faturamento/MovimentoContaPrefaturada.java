@@ -117,7 +117,7 @@ public class MovimentoContaPrefaturada implements Serializable {
     /** nullable persistent field */
     private Integer leituraHidrometroAnterior;
     
-	/**TODO:COSANPA
+	/**
 	 * Data: 11/10/2011
 	 * Autor: Adriana Muniz
 	 * 

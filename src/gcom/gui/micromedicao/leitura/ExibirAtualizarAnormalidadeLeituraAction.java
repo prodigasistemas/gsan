@@ -300,7 +300,7 @@ public class ExibirAtualizarAnormalidadeLeituraAction extends GcomAction {
 				}
 
 				/**
-				 * TODO : COSANPA
+				 * 
 				 * Pamela Gatinho - 13/03/2012
 				 * Campo que identifica se a anormalidade será usada ou
 				 * não no sistema de leitura e impressão simultanea.
@@ -465,7 +465,7 @@ public class ExibirAtualizarAnormalidadeLeituraAction extends GcomAction {
 						idLeituraAnormalidade);
 				
 				/**
-				 * TODO : COSANPA
+				 * 
 				 * Pamela Gatinho - 13/03/2012
 				 * Campo que identifica se a anormalidade será usada ou
 				 * não no sistema de leitura e impressão simultanea.

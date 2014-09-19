@@ -10,7 +10,7 @@ public class ConsultarOperacaoEfetuadaActionForm  extends ActionForm {
 	private String idOperacaoEfetuada = "";
 
 	public void reset(ActionMapping arg0, HttpServletRequest arg1) {
-		// TODO Auto-generated method stub
+		
 		super.reset(arg0, arg1);
 	}
 

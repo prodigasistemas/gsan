@@ -43,7 +43,7 @@ public class BatchGerarResumoReceitaMDB implements MessageDrivenBean,
 						(Integer) ((Object[]) objectMessage.getObject())[0]);
 
 			} catch (JMSException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 
 			} catch (ControladorException e) {

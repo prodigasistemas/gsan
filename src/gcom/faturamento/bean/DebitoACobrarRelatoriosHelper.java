@@ -47,7 +47,7 @@ public class DebitoACobrarRelatoriosHelper {
 
 	public String getAnoMesReferenciaDebito(){
 		
-		/**TODO:COSANPA
+		/**
 		 * @author Adriana Muniz
 		 * @date 21/12/2011
 		 * 

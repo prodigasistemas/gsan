@@ -61,7 +61,7 @@ public class ResumoAnormalidadeConsumo {
 
 	public ResumoAnormalidadeConsumo(Integer id, Integer anoMesReferencia, Integer codigoSetorComercial, Integer numeroQuadra, Integer quantidadeLigacoes, GerenciaRegional gerenciaRegional, Localidade localidade, SetorComercial setorComercial, Rota rota, Quadra quadra, ImovelPerfil imovelPerfil, LigacaoAguaSituacao ligacaoAguaSituacao, LigacaoEsgotoSituacao ligacaoEsgotoSituacao, Categoria categoria, EsferaPoder esferaPoder, ConsumoAnormalidade consumoAnormalidade, LigacaoTipo ligacaoTipo) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.anoMesReferencia = anoMesReferencia;
 		this.codigoSetorComercial = codigoSetorComercial;

@@ -55,7 +55,7 @@ public class ResumoFaturamentoCreditosSetores {
 	
 	public ResumoFaturamentoCreditosSetores(Integer idSetorComercial) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		
 		this.idSetorComercial = idSetorComercial;
 	}

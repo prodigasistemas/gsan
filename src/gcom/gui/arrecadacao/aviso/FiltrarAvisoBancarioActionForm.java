@@ -203,7 +203,7 @@ public class FiltrarAvisoBancarioActionForm extends ValidatorActionForm  {
 		this.idContaBancaria = idContaBancaria;
 	}
 	/*
-	 * TODO: COSANPA
+	 *
 	 * Acréscimo desse campo para ser usado na pesquisa, na ação manter aviso bancário
 	*/
 	public String getIdAvisoBancario() {

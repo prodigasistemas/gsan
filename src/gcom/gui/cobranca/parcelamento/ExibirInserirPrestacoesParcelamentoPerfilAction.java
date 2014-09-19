@@ -670,7 +670,7 @@ public class ExibirInserirPrestacoesParcelamentoPerfilAction  extends GcomAction
     		parcelamentoPerfilActionForm.setCategoria(httpServletRequest.getParameter("categoria"));
     		
     		/*
-    		 * TODO - COSANPA
+    		 *
     		 */
     		parcelamentoPerfilActionForm.setPercentualDescontoAcrescimoMulta(httpServletRequest.getParameter("percentualDescontoAcrescimoMulta"));
     		parcelamentoPerfilActionForm.setPercentualDescontoAcrescimoJurosMora(httpServletRequest.getParameter("percentualDescontoAcrescimoJurosMora"));
@@ -706,7 +706,7 @@ public class ExibirInserirPrestacoesParcelamentoPerfilAction  extends GcomAction
     		AtualizarParcelamentoPerfilActionForm atualizarParcelamentoPerfilActionForm = (AtualizarParcelamentoPerfilActionForm)sessao.getAttribute("AtualizarParcelamentoPerfilActionForm");
     		
     		/*
-    		 * TODO - COSANPA
+    		 *
     		 */
     		atualizarParcelamentoPerfilActionForm.setPercentualDescontoAcrescimoMulta(httpServletRequest.getParameter("percentualDescontoAcrescimoMulta"));
     		atualizarParcelamentoPerfilActionForm.setPercentualDescontoAcrescimoJurosMora(httpServletRequest.getParameter("percentualDescontoAcrescimoJurosMora"));

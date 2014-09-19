@@ -93,7 +93,7 @@ public class ExibidorProcessamentoTarefaRelatorioAtualizacaoMovimentoCelular
 				montarPaginaSucesso(httpServletRequest, mensagem, "Voltar", "/exibirAtualizarFaturamentoMovimentoCelularAction.do");
 				
 				/*
-				 * TODO - COSANPA
+				 *
 				 * 
 				 * Verificação da flag de atualização para montar tela ao
 				 * atualizar Faturamento Movimento Celular. Caso seja verdadeiro,

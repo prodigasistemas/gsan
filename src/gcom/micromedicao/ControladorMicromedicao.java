@@ -1770,7 +1770,7 @@ public class ControladorMicromedicao implements SessionBean {
 				 * ligação e água e esgoto do imóvel.
 				 */
 				/**
-				 * TODO : COSANPA
+				 * 
 				 */
 				if (rota.getLeituraTipo().getId().equals(LeituraTipo.LEITURA_E_ENTRADA_SIMULTANEA)) {
 					colecaoImoveis = getControladorFaturamento().obterImoveisComConta(faturamentoGrupo.getAnoMesReferencia(), rota);
@@ -1987,7 +1987,7 @@ public class ControladorMicromedicao implements SessionBean {
 										.removerColecaoObjetoParaBatch(
 												colContaImpressao);
 
-								/**TODO:COSANPA
+								/**
 						    	 * @author Adriana Muniz
 						    	 * @date 26/02/2013
 						    	 * Alteração para evitar que imoveis que passaram por analise sejam reprocessados com
@@ -3629,7 +3629,7 @@ public class ControladorMicromedicao implements SessionBean {
 			consumoHistorico.setConsumoTipo(consumoTipo);
 
 			/**
-			 * TODO : COSANPA 12/04/2011 Pamela Gatinho Adicionando o calculo de
+			 *  12/04/2011 Pamela Gatinho Adicionando o calculo de
 			 * ajuste
 			 */
 			determinarAjusteMensal(medicaoHistorico, consumoHistorico, imovel,
@@ -3679,7 +3679,7 @@ public class ControladorMicromedicao implements SessionBean {
 					consumoMedioHidrometro[0]));
 
 			/**
-			 * TODO : COSANPA Ajuste da leitura faturada = leitura anterior
+			 *  Ajuste da leitura faturada = leitura anterior
 			 * faturada + media
 			 */
 			medicaoHistorico.setLeituraAtualFaturamento(medicaoHistorico
@@ -3714,7 +3714,7 @@ public class ControladorMicromedicao implements SessionBean {
 			consumoHistorico.setConsumoAnormalidade(consumoAnormalidade);
 
 			/**
-			 * TODO : COSANPA 12/04/2011 Pamela Gatinho Adicionando o calculo de
+			 *  12/04/2011 Pamela Gatinho Adicionando o calculo de
 			 * ajuste
 			 */
 			determinarAjusteMensal(medicaoHistorico, consumoHistorico, imovel,
@@ -3814,7 +3814,7 @@ public class ControladorMicromedicao implements SessionBean {
 			consumoTipo.setId(ConsumoTipo.MEDIA_HIDROMETRO);
 
 			/**
-			 * TODO : COSANPA Ajuste da leitura faturada = leitura anterior
+			 *  Ajuste da leitura faturada = leitura anterior
 			 * faturada + media
 			 */
 			medicaoHistorico.setLeituraAtualFaturamento(medicaoHistorico
@@ -3845,7 +3845,7 @@ public class ControladorMicromedicao implements SessionBean {
 			consumoTipo.setId(ConsumoTipo.CONSUMO_MEDIO_AJUSTADO);
 
 			/**
-			 * TODO : COSANPA Ajuste da leitura faturada = leitura anterior
+			 *  Ajuste da leitura faturada = leitura anterior
 			 * faturada + consumo
 			 */
 			medicaoHistorico.setLeituraAtualFaturamento(medicaoHistorico
@@ -3918,7 +3918,7 @@ public class ControladorMicromedicao implements SessionBean {
 		consumoHistoricoEsgoto.setConsumoTipo(consumoTipo);
 
 		/**
-		 * TODO : COSANPA 12/04/2011 Pamela Gatinho Adicionando o calculo de
+		 *  12/04/2011 Pamela Gatinho Adicionando o calculo de
 		 * ajuste
 		 */
 		determinarAjusteMensal(medicaoHistorico, consumoHistoricoEsgoto,
@@ -5325,7 +5325,7 @@ public class ControladorMicromedicao implements SessionBean {
 						consumoTipo.setId(ConsumoTipo.MEDIA_HIDROMETRO);
 						
 						/**
-						 * TODO : COSANPA Ajuste da leitura faturada = leitura
+						 *  Ajuste da leitura faturada = leitura
 						 * anterior faturada + media
 						 */
 						medicaoHistorico
@@ -5407,7 +5407,7 @@ public class ControladorMicromedicao implements SessionBean {
 							consumoTipo.setId(ConsumoTipo.MEDIA_HIDROMETRO);
 							
 							/**
-							 * TODO : COSANPA Ajuste da leitura faturada =
+							 *  Ajuste da leitura faturada =
 							 * leitura anterior faturada + media
 							 */
 							medicaoHistorico
@@ -5439,7 +5439,7 @@ public class ControladorMicromedicao implements SessionBean {
 							consumoTipo.setId(ConsumoTipo.MEDIA_HIDROMETRO);
 							
 							/**
-							 * TODO : COSANPA Ajuste da leitura faturada =
+							 *  Ajuste da leitura faturada =
 							 * leitura anterior faturada + media
 							 */
 							medicaoHistorico
@@ -5523,7 +5523,7 @@ public class ControladorMicromedicao implements SessionBean {
 								.setId(ConsumoAnormalidade.ESTOURO_CONSUMO_COBRANCA_MEDIA);
 						
 						/**
-						 * TODO : COSANPA ESTOURO DE CONSUMO e ALTO CONSUMO
+						 *  ESTOURO DE CONSUMO e ALTO CONSUMO
 						 * devem calcular pela média
 						 */
 						// Seta o consumo a ser cobrado no mês
@@ -5733,7 +5733,7 @@ public class ControladorMicromedicao implements SessionBean {
 				consumoHistorico.setConsumoTipo(consumoTipo);
 
 				/**
-				 * TODO : COSANPA Ajuste da leitura faturada = leitura anterior
+				 *  Ajuste da leitura faturada = leitura anterior
 				 * faturada + media
 				 */
 				medicaoHistorico.setLeituraAtualFaturamento(medicaoHistorico
@@ -5819,7 +5819,7 @@ public class ControladorMicromedicao implements SessionBean {
 	 * Alto Consumo
 	 */
 	/**
-	 * TODO : COSANPA 29/04/2011 - Pamela Gatinho Retirando o parametro
+	 *  29/04/2011 - Pamela Gatinho Retirando o parametro
 	 * consumoMedioImovel, pois não é utilizado no método.
 	 */
 	protected boolean verificarAltoConsumo(ConsumoHistorico consumoHistorico,
@@ -6027,7 +6027,7 @@ public class ControladorMicromedicao implements SessionBean {
 						consumoTipo.setId(ConsumoTipo.MEDIA_HIDROMETRO);
 						
 						/**
-						 * TODO : COSANPA Ajuste da leitura faturada = leitura
+						 *  Ajuste da leitura faturada = leitura
 						 * anterior faturada + media
 						 */
 						medicaoHistorico
@@ -6075,7 +6075,7 @@ public class ControladorMicromedicao implements SessionBean {
 										.setNumeroConsumoFaturadoMes(consumofaturadoMes
 												.intValue());
 								/**
-								 * TODO : COSANPA Ajuste da leitura faturada = leitura
+								 *  Ajuste da leitura faturada = leitura
 								 * anterior faturada + media
 								 */
 								medicaoHistorico
@@ -6093,7 +6093,7 @@ public class ControladorMicromedicao implements SessionBean {
 									.setNumeroConsumoFaturadoMes(consumofaturadoMes
 											.intValue());
 							/**
-							 * TODO : COSANPA Ajuste da leitura faturada = leitura
+							 *  Ajuste da leitura faturada = leitura
 							 * anterior faturada + media
 							 */
 							medicaoHistorico
@@ -6126,7 +6126,7 @@ public class ControladorMicromedicao implements SessionBean {
 							consumoTipo.setId(ConsumoTipo.MEDIA_HIDROMETRO);
 							
 							/**
-							 * TODO : COSANPA Ajuste da leitura faturada =
+							 *  Ajuste da leitura faturada =
 							 * leitura anterior faturada + media
 							 */
 							medicaoHistorico
@@ -6158,7 +6158,7 @@ public class ControladorMicromedicao implements SessionBean {
 							consumoTipo.setId(ConsumoTipo.MEDIA_HIDROMETRO);
 							
 							/**
-							 * TODO : COSANPA Ajuste da leitura faturada =
+							 *  Ajuste da leitura faturada =
 							 * leitura anterior faturada + media
 							 */
 							medicaoHistorico
@@ -6442,7 +6442,7 @@ public class ControladorMicromedicao implements SessionBean {
 						consumoTipo.setId(ConsumoTipo.MEDIA_HIDROMETRO);
 
 						/**
-						 * TODO : COSANPA Ajuste da leitura faturada = leitura
+						 *  Ajuste da leitura faturada = leitura
 						 * anterior faturada + media
 						 */
 						medicaoHistorico
@@ -6469,7 +6469,7 @@ public class ControladorMicromedicao implements SessionBean {
 										consumoMedioHidrometro[0]));
 
 						/**
-						 * TODO : COSANPA Ajuste da leitura faturada = leitura
+						 *  Ajuste da leitura faturada = leitura
 						 * anterior faturada + media
 						 */
 						medicaoHistorico
@@ -6502,7 +6502,7 @@ public class ControladorMicromedicao implements SessionBean {
 							consumoTipo.setId(ConsumoTipo.MEDIA_HIDROMETRO);
 
 							/**
-							 * TODO : COSANPA Ajuste da leitura faturada =
+							 *  Ajuste da leitura faturada =
 							 * leitura anterior faturada + media
 							 */
 							medicaoHistorico
@@ -6534,7 +6534,7 @@ public class ControladorMicromedicao implements SessionBean {
 							consumoTipo.setId(ConsumoTipo.MEDIA_HIDROMETRO);
 
 							/**
-							 * TODO : COSANPA Ajuste da leitura faturada =
+							 *  Ajuste da leitura faturada =
 							 * leitura anterior faturada + media
 							 */
 							medicaoHistorico
@@ -6586,7 +6586,7 @@ public class ControladorMicromedicao implements SessionBean {
 					// consumoTipo.setId(ConsumoTipo.MEDIA_HIDROMETRO);
 					//
 					// /**
-					// * TODO : COSANPA
+					// * 
 					// * Ajuste da leitura faturada = leitura anterior faturada
 					// + media
 					// */
@@ -6651,7 +6651,7 @@ public class ControladorMicromedicao implements SessionBean {
 
 			if (quantidadeDiasConsumo > 0) {
 				/**
-				 * TODO : COSANPA Hidrometro novo em imóvel sem histórico de
+				 *  Hidrometro novo em imóvel sem histórico de
 				 * hidrometro, não reajusta data. Para hidrometros novos, a data
 				 * da leitura anterior é igual a data da instalação do
 				 * hidrometro
@@ -6953,7 +6953,7 @@ public class ControladorMicromedicao implements SessionBean {
 				}
 			}
 		} catch (ControladorException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 	}
@@ -8725,7 +8725,7 @@ public class ControladorMicromedicao implements SessionBean {
 					medicaoTipo.setId(MedicaoTipo.LIGACAO_AGUA);
 					
 					/**
-					 * TODO : COSANPA
+					 * 
 					 * Alterando o cálculo da média
 					 */
 					boolean houveIntslacaoHidrometro = this.verificarInstalacaoSubstituicaoHidrometro(imovel.getId(), medicaoTipo);
@@ -11241,7 +11241,7 @@ public class ControladorMicromedicao implements SessionBean {
 			hidrometro.setNumeroDigitosLeitura(numeroDigitosHidrometro);
 
 			/**
-			 * TODO : COSANPA Alterando o cálculo da média
+			 *  Alterando o cálculo da média
 			 */
 			boolean houveIntslacaoHidrometro = this.verificarInstalacaoSubstituicaoHidrometro(
 					imovelParaSerGerado.getId(), medicaoTipo);
@@ -14392,7 +14392,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 
 	/**
-	 * TODO: COSANPA método utilizado na impressao via impressora termica
+	 * método utilizado na impressao via impressora termica
 	 */
 	public MedicaoHistorico pesquisarMedicaoHistoricoTipoAguaLeituraAnormalidade(
 			Integer imovel, Integer anoMes) throws ControladorException {
@@ -14439,7 +14439,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 
 	/**
-	 * TODO: Cosanpa Método utilizado na impressao da conta via impressora
+	 * Método utilizado na impressao da conta via impressora
 	 * Termica
 	 */
 	public MedicaoHistorico pesquisarMedicaoHistoricoTipoPocoLeituraAnormalidade(
@@ -15217,7 +15217,7 @@ public class ControladorMicromedicao implements SessionBean {
 		}
 
 		/**
-		 * TODO : COSANPA Pamela Gatinho - 23/04/2012
+		 *  Pamela Gatinho - 23/04/2012
 		 * 
 		 * Alteração para não definir rateio com valor negativo. Ou seja, se for
 		 * negativo, não haverá rateio.
@@ -15571,7 +15571,7 @@ public class ControladorMicromedicao implements SessionBean {
 						.getNumeroConsumoFaturadoMes();
 				Integer numeroConsumoFaturadoMes = numeroConsumoFaturadoMesAtual;
 				/**
-				 * TODO : COSANPA Pamela gatinho - 28/05/2012 Alteracao para
+				 *  Pamela gatinho - 28/05/2012 Alteracao para
 				 * salvar o valor do rateio junto com o valor faturado de agua.
 				 */
 				// + consumoHistorico.getConsumoRateio();
@@ -15651,7 +15651,7 @@ public class ControladorMicromedicao implements SessionBean {
 		}
 
 		/**
-		 * TODO : COSANPA Pamela Gatinho - 23/04/2012
+		 *  Pamela Gatinho - 23/04/2012
 		 * 
 		 * Alteração para não definir rateio com valor negativo. Ou seja, se for
 		 * negativo, não haverá rateio.
@@ -16396,7 +16396,7 @@ public class ControladorMicromedicao implements SessionBean {
 //					consumoAnormalidade = new ConsumoAnormalidade();
 //					
 //					/**
-//					 * TODO : COSANPA
+//					 * 
 //					 * Alteracao para enviar o ID da anormalidade de consumo
 //					 */
 //					if (ligacaoAgua) {
@@ -16467,7 +16467,7 @@ public class ControladorMicromedicao implements SessionBean {
 						}
 						
 						/**
-						 * TODO : COSANPA
+						 * 
 						 * Alteracao para enviar o ID da anormalidade de consumo
 						 */
 						if (objetoConsumo[16] != null) {
@@ -26654,14 +26654,14 @@ public class ControladorMicromedicao implements SessionBean {
 								dadosHidrometro[5] = dadosMedicaoHistorico[2];
 								// Consumo médio do Hidrômetro
 								dadosHidrometro[6] = dadosMedicaoHistorico[3];
-								/*TODO Cosanpa: Alteração para enviar na rota a data da Leitura 
+								/* Alteração para enviar na rota a data da Leitura 
 								  * Anterior Faturada*/
 								// Data leitura atual informada
 								if(dadosMedicaoHistorico[5] != null){
 								 	dadosHidrometro[10] = dadosMedicaoHistorico[5];
 								 }
 								//Leitura Atual Informada
-								 /*TODO Cosanpa: Alteração para enviar na rota a Leitura 
+								 /* Alteração para enviar na rota a Leitura 
 								  * Anterior Faturada*/
 								 if(dadosMedicaoHistorico[4] != null){
 									 	dadosHidrometro[12] = dadosMedicaoHistorico[4];
@@ -26684,13 +26684,13 @@ public class ControladorMicromedicao implements SessionBean {
 									// Consumo médio do Hidrômetro
 									dadosHidrometro[6] = dadosMedicaoHistorico[3];
 									// Data leitura atual informada
-									/*TODO Cosanpa: Alteração para enviar na rota a data da Leitura 
+									/* Alteração para enviar na rota a data da Leitura 
 									  * Anterior Faturada*/
 									 if(dadosMedicaoHistorico[5] != null){
 									 	dadosHidrometro[10] = dadosMedicaoHistorico[5];
 									 }
 									//Leitura Atual Informada
-									 /*TODO Cosanpa: Alteração para enviar na rota a Leitura 
+									 /* Alteração para enviar na rota a Leitura 
 									  * Anterior Faturada*/
 									 if(dadosMedicaoHistorico[4] != null){
 										 	dadosHidrometro[12] = dadosMedicaoHistorico[4];
@@ -26715,13 +26715,13 @@ public class ControladorMicromedicao implements SessionBean {
 								// Consumo médio do Hidrômetro
 								dadosHidrometro[6] = dadosMedicaoHistorico[3];
 								// Data leitura atual informada
-								/*TODO Cosanpa: Alteração para enviar na rota a data da Leitura 
+								/* Alteração para enviar na rota a data da Leitura 
 								  * Anterior Faturada*/
 								if(dadosMedicaoHistorico[5] != null){
 									dadosHidrometro[10] = dadosMedicaoHistorico[5];
 								}
 								//Leitura Atual Informada
-								 /*TODO Cosanpa: Alteração para enviar na rota a Leitura 
+								 /* Alteração para enviar na rota a Leitura 
 								  * Anterior Faturada*/
 								 if(dadosMedicaoHistorico[4] != null){
 									 	dadosHidrometro[12] = dadosMedicaoHistorico[4];
@@ -26745,13 +26745,13 @@ public class ControladorMicromedicao implements SessionBean {
 									// Consumo médio do Hidrômetro
 									dadosHidrometro[6] = dadosMedicaoHistorico[3];
 									// Data leitura atual informada
-									/*TODO Cosanpa: Alteração para enviar na rota a data da Leitura 
+									/* Alteração para enviar na rota a data da Leitura 
 									  * Anterior Faturada*/
 									 if(dadosMedicaoHistorico[5] != null){
 									 	dadosHidrometro[10] = dadosMedicaoHistorico[5];
 									 }
 									//Leitura Atual Informada
-									 /*TODO Cosanpa: Alteração para enviar na rota a Leitura 
+									 /* Alteração para enviar na rota a Leitura 
 									  * Anterior Faturada*/
 									 if(dadosMedicaoHistorico[4] != null){
 										 	dadosHidrometro[12] = dadosMedicaoHistorico[4];
@@ -39397,7 +39397,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 	
 	/**
-	 * TODO - COSANPA
+	 *
 	 * Adição do médoto pesquisarImovelHidrometroInstaladoMaiorDataInstalacao()
 	 * 
 	 * Pesquisa o imóvel no qual o hidrômetro está instalado por maior data de instalação
@@ -39434,7 +39434,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 	
 	/**
-	 * TODO : Cosanpa
+	 * 
 	 * Alteracao feita para a rota dividida não finalizar os imoveis por IMEI, 
 	 * e sim, pelo numero do arquivo dividido.
 	 */
@@ -39464,7 +39464,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Criação do método para obter uma rota. 
 	 */
 	/**
@@ -39486,7 +39486,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Pamela Gatinho - 06/06/2011
 	 * Adicionando o método para verificar se houve
 	 * substituicao de hidrometro no período da leitura
@@ -39515,7 +39515,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Pamela Gatinho - 06/06/2011
 	 * Método para consultar a leitura anterior 
 	 * faturada do imóvel 
@@ -39580,7 +39580,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Pamela Gatinho - 06/06/2011
 	 * Método para consultar a leitura anterior 
 	 * faturada do imóvel 
@@ -39689,7 +39689,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Pamela Gatinho - 15/06/2011
 	 * Metodo para verificar se o imovel era fixo e virou hidrometrado
 	 * @param imovel
@@ -39718,7 +39718,7 @@ public class ControladorMicromedicao implements SessionBean {
 				
 			}
 		} catch (ControladorException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		return false;
@@ -39726,7 +39726,7 @@ public class ControladorMicromedicao implements SessionBean {
 	
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Pamela Gatinho - 15/06/2011
 	 * Metodo para verificar se o imovel possui uma nova ligacao de agua
 	 * @param imovel
@@ -39754,7 +39754,7 @@ public class ControladorMicromedicao implements SessionBean {
 				}
 			}
 		} catch (ControladorException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 
@@ -39762,7 +39762,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Metodo para determinar se o tipo de consumo foi real ou estimado
 	 * 
 	 * @param medicaoHistorico
@@ -39793,7 +39793,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * 20/06/2011 - Pamela Gatinho
 	 * Metodo para obter o número máximo de leitura do hidrômetro
 	 * @param imovel
@@ -39820,7 +39820,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * 20/06/2011 - Pamela Gatinho
 	 * 
 	 * Verifica se o imóvel possui situação especial de faturamento
@@ -39874,7 +39874,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Essa consulta se transformou em método, para ser acessado
 	 * por outros controladores.
 	 * 
@@ -39913,7 +39913,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * 20/06/2011 - Pamela Gatinho
 	 * 
 	 * Verifica se o consumo a ser cobrado no mês é menor que o consumo
@@ -39955,7 +39955,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * 20/06/2011 - Pamela Gatinho
 	 * Verificar se o consumo está fora de faixa
 	 * 
@@ -40045,7 +40045,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * 27/06/2011 - Pamela Gatinho
 	 * Metodo para salvar no banco as informacoes que foram 
 	 * processadas pelo IS, sem refazer os cálculos já feitos no IS.
@@ -40303,7 +40303,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 	
 	/**
-	 * TODO : COSANPA 
+	 *  
 	 * 27/06/2011 - Pamela Gatinho
 	 * 
 	 * @param medicaoHistorico
@@ -40689,7 +40689,7 @@ public class ControladorMicromedicao implements SessionBean {
 		}
 	}
 	
-	/*TODO:COSANPA
+	/*
 	 * 
 	 * Atualizar campos em Medição Histórico e Consumo Histórico na retificação da conta
 	 * 
@@ -40717,7 +40717,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 	
 	/**
-	 * TODO : COSANPA 
+	 *  
 	 * relatório de extrato de debito
 	 * 
 	 * Pesquisa uma rota pelo id da localidade e do setor comercial
@@ -40743,7 +40743,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Retornar Arquivo Texto Roteiro Empresa completo
 	 * 
 	 * @author Felipe Santos
@@ -40811,7 +40811,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Pamela Gatinho - 08/09/2011
 	 * 
 	 * Gerar dados para o relatorio de leituras realizadas
@@ -40900,7 +40900,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 	
 	
-	/**TODO: COSANPA
+	/**
 	 * Autor: Adriana Muniz
 	 * Data: 22/07/2011
 	 * 
@@ -40941,7 +40941,7 @@ public class ControladorMicromedicao implements SessionBean {
 		return leituraAlterada;
 	}
 	
-	/**TODO: COSANPA
+	/**
 	 * Autor: Adriana Muniz
 	 * Data: 22/07/2011
 	 * 
@@ -40971,7 +40971,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 	
 	/**
-	 * TODO - COSANPA
+	 *
 	 * 
 	 * Método para obter todos os imóveis que faltam ser processados
 	 * na transmissão offline do arquivo de retorno do IS 
@@ -40992,7 +40992,7 @@ public class ControladorMicromedicao implements SessionBean {
 			listaImoveisNaoTransmitidos = repositorioFaturamento.obterImoveisFaltandoTransmitir(idRota, anoMesFaturamento);
 			
 			/*
-			 * TODO - COSANPA - Felipe Santos - 26/01/2012
+			 * Felipe Santos - 26/01/2012
 			 * 
 			 * Verificação para rotas com imóveis condomínio a
 			 * serem incluídos no arquivo parcial da rota CASO
@@ -41087,7 +41087,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * @author Pamela Gatinho
 	 * @since 23/04/2012
 	 * 
@@ -41148,7 +41148,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Pamela Gatinho - 31/05/2012
 	 * 
 	 * Metodo que calcula o consumo do a ser rateado de agua e 
@@ -41197,7 +41197,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Pamela Gatinho - 31/05/2012
 	 * 
 	 * Metodo que calcula a soma do consumo de todos os micros, de acordo
@@ -41249,7 +41249,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Pamela Gatinho - 31/05/2012
 	 * Refatoracao do metodo efetuarRateioDeConsumo
 	 * 
@@ -41309,20 +41309,6 @@ public class ControladorMicromedicao implements SessionBean {
 		return imovelVinculado;
 	}
 	
-	
-
-	/**
-	 * TODO : COSANPA 
-	 * Pamela Gatinho - 31/05/2012
-	 * 
-	 * Metodo que soma a quantidade de economias de
-	 * todos os imóveis micros do condomínio
-	 * 
-	 * @param idImovelCondominio
-	 * @param anoMesFaturamento
-	 * @return quantidadeEconomias
-	 * @throws ErroRepositorioException 
-	 */
 	public int obterQuantidadeEconomiasCondominio (Integer idImovelCondominio, Integer anoMesFaturamento) {
 		int quantidadeEconomias = 0;
 
@@ -41335,19 +41321,12 @@ public class ControladorMicromedicao implements SessionBean {
 		
 			Iterator iteratorImoveisVinculados = imoveisVinculadosArrayObject.iterator();
 			
-			//Para cada imovel vinculado ao condominio
 			while (iteratorImoveisVinculados.hasNext()) {
 				
-				// Recupera os dados do imóvel vinculado
 				Object[] dadosImovelVinculado = (Object[]) iteratorImoveisVinculados.next();
-				
-				// Obtem o objeto imovel
 				Imovel imovelVinculado = this.converterImovelVinculado(dadosImovelVinculado);
 				
-//				if (getControladorImovel().isFaturamentoAguaAtivo(imovelVinculado)
-//						|| getControladorImovel().isFaturamentoEsgotoAtivo(imovelVinculado)) {
-					quantidadeEconomias = quantidadeEconomias + imovelVinculado.getQuantidadeEconomias();
-//				}
+				quantidadeEconomias = quantidadeEconomias + imovelVinculado.getQuantidadeEconomias();
 			}
 		
 		} catch (ErroRepositorioException e) {
@@ -41530,7 +41509,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Verificar se o imóvel está com o arquivo de leitura em campo.
 	 * 
 	 * @author Pamela Gatinho
@@ -41564,7 +41543,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 	
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * @autor: Wellington Rocha
 	 * @date: 03/07/2012
@@ -41599,7 +41578,7 @@ public class ControladorMicromedicao implements SessionBean {
 	}
 	
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * @autor: Wellington Rocha
 	 * @date: 03/07/2012

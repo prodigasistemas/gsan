@@ -1267,7 +1267,7 @@ public class ControladorClienteSEJB implements SessionBean {
 						.setIndicadorPessoaFisicaJuridica((Short) objetoCliente[4]);
 				cliente.setClienteTipo(clienteTipo);
 			}
-			/**TODO:COSANPA
+			/**
 			 * @Data 23/10/2013
 			 * @author adriana Muniz e Wellington Rocha
 			 * Adição do id do cliente tipo no objeto
@@ -3170,8 +3170,6 @@ public class ControladorClienteSEJB implements SessionBean {
 	}
 	
 	/**
-	 * Mantis 494
-	 * 
 	 * @param idClienteTipo
 	 *            
 	 * @exception ErroRepositorioException

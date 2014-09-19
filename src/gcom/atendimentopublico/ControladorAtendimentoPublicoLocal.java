@@ -1876,7 +1876,7 @@ public interface ControladorAtendimentoPublicoLocal extends
 	public Collection<OrdemServicoFoto> pesquisarFotosOrdemServico(Integer id, boolean idOS) throws ControladorException;
 	
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * @autor: Wellington Rocha
 	 * @date: 03/07/2012

@@ -24,7 +24,7 @@ public class CobrancaDocumentoFisc implements Serializable {
     
 	public CobrancaDocumentoFisc() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public CobrancaDocumentoFisc(Integer id, Date ultimaAlteracao, 
@@ -32,7 +32,7 @@ public class CobrancaDocumentoFisc implements Serializable {
 			OrdemServico ordemServico,
 			CobrancaDocumento cobrancaDocumento) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.ultimaAlteracao = ultimaAlteracao;
 		this.fiscalizacaoSituacao = fiscalizacaoSituacao;

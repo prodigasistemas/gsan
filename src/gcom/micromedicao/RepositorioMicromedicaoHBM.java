@@ -628,7 +628,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 					+ " ch.consumoAnormalidade.id,"
 					+ " ch.numeroConsumoCalculoMedia, "
 					+ " ch.consumoTipo.indicadorCalculoMedia, "
-					/** TODO : COSANPA Adicionando informacao da data de instalacao do hidrometro */
+					/**  Adicionando informacao da data de instalacao do hidrometro */
 					+ " la.hidrometroInstalacaoHistorico.dataInstalacao, "
 					+ " mh.dataLeituraAtualInformada "
 					+ " FROM Imovel im, LigacaoAgua la, MedicaoHistorico  mh, ConsumoHistorico ch"
@@ -692,7 +692,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 					+ " ch.consumoTipo.indicadorCalculoMedia, "
 					+ " ch.percentualColeta, "
 					+ " ch.consumoTipo.indicadorCalculoMedia, "
-					/** TODO : COSANPA 
+					/**  
 					 * @date 04/10/2012
 					 * Adriana Muniz / Pamela Gatinho
 					 * Adicionando informacao da data de instalacao do hidrometro */
@@ -2101,7 +2101,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 					+ // 2
 					"leituraSituacaoAtual.id, "// 3
 					/**
-					 * TODO : COSANPA
+					 * 
 					 * Alteracao para retornar a anormalidade
 					 */
 					+ "leituraAnormalidadeInformada.id, "// 4
@@ -3870,7 +3870,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 			ligadoPorAguaOuHidrometro = " medicaoHistorico.imov_id = imovel.imov_id ";
 		}
 
-		/**TODO:COSANPA
+		/**
 		 * Autor:Adriana Muniz
 		 * Data: 14/09/2011
 		 * 
@@ -4183,7 +4183,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 			boolean ligacaoAgua) throws ErroRepositorioException {
 
 		/**
-		 * TODO : COSANPA
+		 * 
 		 * Alteracao para enviar o ID da anormalidade de consumo
 		 */
 		
@@ -4966,8 +4966,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
-	/**TODO Cosanpa:
-	 * Inclusao de uma coluna no retorno, para atender melhoria da segunda via da conta*/
+	// Inclusao de uma coluna no retorno, para atender melhoria da segunda via da conta
 	public Object[] obterDadosMedicaoContaTipoAgua(Integer idImovel,
 			Integer anoMes) throws ErroRepositorioException {
 		Object[] retorno = null;
@@ -5034,8 +5033,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 	 * @throws ErroRepositorioException
 	 */
 
-	/**TODO Cosanpa:
-	 * Inclusao de uma coluna no retorno, para atender melhoria da segunda via da conta*/
+	// Inclusao de uma coluna no retorno, para atender melhoria da segunda via da conta
 	public Object[] obterDadosMedicaoContaTipoPoco(Integer idImovel,
 			Integer anoMes) throws ErroRepositorioException {
 		Object[] retorno = null;
@@ -9284,7 +9282,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 					+ "hia.numeroLeituraInstalacao," // 32
 					+ "hie.numeroLeituraInstalacao, " // 33
 					/**
-					 * TODO : COSANPA Adicionando parametros da ligacao de agua
+					 *  Adicionando parametros da ligacao de agua
 					 */
 					+ "li.dataLigacao, " // 34
 					+ "le.dataLigacao, " // 35
@@ -11353,7 +11351,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 					+ "hia.numeroLeituraInstalacao," // 32
 					+ "hie.numeroLeituraInstalacao, " // 33
 					/**
-					 * TODO : COSANPA Adicionando parametros da ligacao de agua
+					 *  Adicionando parametros da ligacao de agua
 					 */
 					+ "li.dataLigacao, " // 34
 					+ "le.dataLigacao " // 35
@@ -11567,17 +11565,23 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 
 		try {
 			
-			StringBuffer hql = new StringBuffer("FROM Rota r inner join fetch r.faturamentoGrupo grupo where r.id = ");
-			hql.append("(select i.rotaAlternativa.id from Imovel i where i.id =");
-			hql.append(matricula);
-			hql.append(")");
+			StringBuffer hql = new StringBuffer("FROM Rota r ");
+			hql.append("inner join fetch r.faturamentoGrupo grupo ");
+			hql.append("inner join fetch r.leituraTipo leituraTipo ");
+			hql.append("where r.id = ");
+				hql.append("(select i.rotaAlternativa.id from Imovel i where i.id =");
+				hql.append(matricula);
+				hql.append(")");
 			rota = (Rota) session.createQuery(hql.toString()).uniqueResult();
 			
 			if (rota == null || rota.getId() == null) {
-				hql = new StringBuffer("FROM Rota r inner join fetch r.faturamentoGrupo grupo where r.id = ");
-				hql.append("(select q.rota.id from Quadra q where q.id = (select i.quadra.id from Imovel i where i.id =");
-				hql.append(matricula);
-				hql.append("))");
+				hql = new StringBuffer("FROM Rota r ");
+				hql.append("inner join fetch r.faturamentoGrupo grupo ");
+				hql.append("inner join fetch r.leituraTipo leituraTipo ");
+				hql.append("where r.id = ");
+					hql.append("(select q.rota.id from Quadra q where q.id = (select i.quadra.id from Imovel i where i.id =");
+					hql.append(matricula);
+					hql.append("))");
 				rota = (Rota) session.createQuery(hql.toString()).uniqueResult();
 			}
 
@@ -11911,8 +11915,10 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 
 		Session session = HibernateUtil.getSession();
 		String consulta;
-		/*TODO COSANPA - Adicionada a coluna de data da Leitura Atual Informada no select para que possa ser
-		 * incluída a informação no registro do Tipo 08 para o IS*/
+		/* 
+		 * Adicionada a coluna de data da Leitura Atual Informada no select para que possa ser
+		 * incluída a informação no registro do Tipo 08 para o IS
+		 */
 		try {
 			consulta = "SELECT mdhi.leituraAtualFaturamento, mdhi.dataLeituraAtualFaturamento, "// 0,1
 					+ "ltst.id, mdhi.consumoMedioHidrometro, "// 2,3
@@ -12105,7 +12111,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 				hql.append(" and m.anoMesMovimento = ");
 				hql.append(anoMes);
 				/**
-                 * TODO : COSANPA
+                 * 
                  * Pamela Gatinho - 12/08/2011
                  * Adiconando essa validacao para contabilizar somente
                  * imoveis que possuirem conta
@@ -12129,7 +12135,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 						.uniqueResult();
 				
 				/**
-                 * TODO : COSANPA
+                 * 
                  * Pamela Gatinho - 12/08/2011
                  * Adiconando essa validacao para contabilizar somente
                  * imoveis que possuirem conta
@@ -15825,7 +15831,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 					+ "hia.numeroLeituraInstalacao, " // 32
 					+ "hia.numeroLeituraInstalacao, " // 33
 					/**
-					 * TODO : COSANPA Adicionando parametros da ligacao de agua
+					 *  Adicionando parametros da ligacao de agua
 					 */
 					+ "li.dataLigacao, " // 34
 					+ "le.dataLigacao, " // 35
@@ -16132,7 +16138,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 					+ "WHERE lagu.id = :idImovel "
 					+ "AND hidi.dataRetirada is null "
 					/**
-					 * TODO : COSANPA
+					 * 
 					 * Adicionando relacionamento da tabela ligacao de agua com 
 					 * hidrometro instalacao historico, para não retornar mais
 					 * de um hidrometro sem data de retirada
@@ -16300,7 +16306,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
     }
 	
 	/*
-	 * TODO : COSANPA
+	 * 
 	 * Alteração do objeto de consulta de 
 	 * ArquivoTextoRoteiroEmpresaDivisao para ArquivoTextoRoteiroEmpresa 
 	 */
@@ -20482,7 +20488,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 				"				WHEN ( ( sp.parm_nmabreviadoempresa = 'COMPESA' and ( imo.icte_id is null or imo.icte_id in ( 1, 3 ) ) ) or " +
 				"		       				 ( sp.parm_nmabreviadoempresa = 'CAERN' and ( imo.icte_id is null or imo.icte_id = 9 ) ) or " +
 				/*
-				 * TODO : COSANPA
+				 * 
 				 * 
 				 * Acréscimo de uma condição para empresa COSANPA
 				 * Igual ao da CAERN
@@ -20533,7 +20539,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 					"  mre.mrem_nnsubloteimovel ";				
 			} else {
 				/*
-				 * TODO : COSANPA
+				 * 
 				 * 
 				 * Acréscimo desses campos de retorno para empresas que seja diferente da CAERN e COMPESA
 				 * Igual ao da CAERN
@@ -20667,7 +20673,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 					retorno = ( Collection<Object[]>)query.list();  
 			} else {
 				/*
-				 * TODO : COSANPA
+				 * 
 				 * 
 				 * Acréscimo de uma condição para empresas que seja diferente da CAERN e COMPESA
 				 * Igual ao da CAERN
@@ -23130,7 +23136,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
     }
 	
 	/*
-	 * TODO - COSANPA
+	 *
 	 * Adição do método pesquisarImovelHidrometroInstaladoMaiorDataInstalacao()
 	 * 
 	 * Pesquisa o imóvel no qual o hidrômetro está instalado por maior data de instalação
@@ -23167,7 +23173,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 	}
 	
 	/**
-	 * TODO : Cosanpa
+	 * 
 	 * Alteracao feita para a rota dividida não finalizar os imoveis por IMEI, 
 	 * e sim, pelo numero do arquivo dividido.
 	 */
@@ -23244,7 +23250,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 	
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Método para buscar uma rota pelo id
 	 * 
 	 * @author Pamela Gatinho
@@ -23294,7 +23300,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 		return rota;
 	}
 
-	/*TODO:COSANPA
+	/*
 	 * 
 	 * Atualizar campos em Medição Histórico e Consumo Histórico na retificação da conta
 	 * */
@@ -23339,7 +23345,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 	}
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Método para buscar uma rota pelo id
 	 * da localidade e do setor comercial.
 	 * 
@@ -23393,7 +23399,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 	}
 
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Retornar Arquivo Texto Roteiro Empresa completo
 	 * 
 	 * @author Felipe Santos
@@ -23503,7 +23509,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 	}
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Pamela Gatinho - 08/09/2011
 	 * 
 	 * Gerar dados para o relatorio de leituras realizadas
@@ -23591,7 +23597,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 		return retorno;
 	}
 	
-	/**TODO:COSANPA
+	/**
 	 * 
 	 * Utilizado na retificação de conta
 	 * 
@@ -23638,7 +23644,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 		return retorno;
 	}	
 	
-	/**TODO:COSANPA
+	/**
 	 * @author Adriana Muniz
 	 * @date 26/02/2013
 	 * 
@@ -23676,7 +23682,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 	}
 	
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 23/10/2013
+	 * Felipe Santos - 23/10/2013
 	 * 
 	 * Retorna quantidade de Hidrometros
 	 * 
@@ -23723,7 +23729,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 		return retorno;
 	}
 	
-	/**TODO: COSANPA
+	/**
      * @author Wellington Rocha
      * Data: 21/03/2012
      * 
@@ -23760,7 +23766,7 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
      }
      
      
-     /**TODO: COSANPA
+     /**
      * @author Wellington Rocha
      * Data: 30/04/2012
      * 

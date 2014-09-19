@@ -22,7 +22,7 @@ public class ParcelamentoPerfil extends ObjetoTransacao {
     private Integer id;
 
     /*
-     * TODO - COSANPA - Felipe Santos
+     * Felipe Santos
      * 
      */
     private BigDecimal percentualDescontoAcrescimoMulta;

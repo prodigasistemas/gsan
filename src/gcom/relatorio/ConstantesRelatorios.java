@@ -146,7 +146,7 @@ public class ConstantesRelatorios {
 
 	public static final String RELATORIO_EXTRATO_DEBITO = "/relatorioExtratoDebito.jasper";
 	
-	/**TODO: COSANPA
+	/**
 	 * @author Adriana Muniz
 	 * @date 02/12/2011
 	 * 
@@ -786,7 +786,7 @@ public class ConstantesRelatorios {
 	public static final String RELATORIO_DOCUMENTOS_PARCELAMENTO_LOJA_VIRTUAL = "/relatorioDocumentosParcelamentoLojaVirtual.jasper";
 	
     /**
-	 * TODO : COSANPA
+	 * 
 	 * Pamela Gatinho - 08/09/2011
 	 */
 	public static final String RELATORIO_LEITURAS_REALIZADAS = "/relatorioLeiturasRealizadas.jasper";
@@ -796,13 +796,13 @@ public class ConstantesRelatorios {
 	public static final String RELATORIO_MULTAS_AUTOS_INFRACAO_PENTENTES = "/relatorioMultasAutosInfracaoPendentes.jasper";
 
     /**
-	 * TODO : COSANPA
+	 * 
 	 * Pamela Gatinho - 15/09/2011
 	 */
 	public static final String RELATORIO_CONTAS_RETIDAS = "/relatorioContasRetidas.jasper";
 
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Pamela Gatinho - 22/09/2011
 	 */
 	public static final String RELATORIO_MEDICAO_FATURAMENTO = "/relatorioMedicaoFaturamento.jasper";
