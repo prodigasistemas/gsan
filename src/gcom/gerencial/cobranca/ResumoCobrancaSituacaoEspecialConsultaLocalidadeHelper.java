@@ -52,7 +52,7 @@ public class ResumoCobrancaSituacaoEspecialConsultaLocalidadeHelper {
 			Integer idLocalidade, String localidadeDescricao,
 			Integer totalLocalidade) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idLocalidade = idLocalidade;
 		this.localidadeDescricao = localidadeDescricao;
 		this.totalLocalidade = totalLocalidade;

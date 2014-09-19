@@ -9,7 +9,7 @@ public class CalcularValorDescontoAntiguidadeDebitoHelper implements Serializabl
 	private BigDecimal valorDescontoAntiguidade;
 	
 	/*
-     * TODO - COSANPA - Felipe Santos
+     * Felipe Santos
      * 
      */
 	private BigDecimal valorTotalAcrescimosImpontualidadeMulta;

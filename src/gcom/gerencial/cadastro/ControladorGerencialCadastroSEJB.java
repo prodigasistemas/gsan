@@ -4550,7 +4550,7 @@ public class ControladorGerencialCadastroSEJB implements SessionBean {
 					&& (anoMesResumoIndicadorLigacaoEconomia == null || anoMesResumoLigacaoEconomia
 							.intValue() > anoMesResumoIndicadorLigacaoEconomia
 							.intValue())) {
-				/**TODO:COSANPA
+				/**
 				 * @autor Adriana Muniz
 				 * @date 14/02/2012
 				 * 

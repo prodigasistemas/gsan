@@ -53,12 +53,12 @@ public class PagamentosFaturasEspeciaisActionForm extends ActionForm {
 	
 	public PagamentosFaturasEspeciaisActionForm() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public PagamentosFaturasEspeciaisActionForm(String idAvisoBancario, String codigoAgenteArrecadador, String dataLancamentoAviso, String numeroSequencialAviso, String dataPagamento, String idFormaArrecadacao, String descricaoFormaArrecadacao, String tipoLeitura, String valorPagamento, String idTipoDocumento, String codigoBarraPorLeituraOtica, String codigoBarraDigitadoCampo1, String codigoBarraDigitadoDigitoVerificadorCampo1, String codigoBarraDigitadoCampo2, String codigoBarraDigitadoDigitoVerificadorCampo2, String codigoBarraDigitadoCampo3, String codigoBarraDigitadoDigitoVerificadorCampo3, String codigoBarraDigitadoCampo4, String codigoBarraDigitadoDigitoVerificadorCampo4) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idAvisoBancario = idAvisoBancario;
 		this.codigoAgenteArrecadador = codigoAgenteArrecadador;
 		this.dataLancamentoAviso = dataLancamentoAviso;

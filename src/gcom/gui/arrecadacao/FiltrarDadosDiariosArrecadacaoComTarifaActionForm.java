@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 import org.apache.struts.validator.ValidatorActionForm;
 
-/**TODO:COSANPA
+/**
  * @author Adriana Muniz
  * @date 10/12/2012
  * 

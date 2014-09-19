@@ -88,7 +88,7 @@ public class ProcessarRequisicaoTelemetriaAction extends GcomAction {
 			dataEnvio = formatacaoData.parse(dados[1]);
 			System.out.println("dataEnvio = " + Util.formatarData(dataEnvio));
 		} catch (ParseException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 

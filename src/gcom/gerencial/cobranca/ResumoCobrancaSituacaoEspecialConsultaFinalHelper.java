@@ -18,7 +18,7 @@ public class ResumoCobrancaSituacaoEspecialConsultaFinalHelper {
 	
 	public ResumoCobrancaSituacaoEspecialConsultaFinalHelper(Collection<ResumoCobrancaSituacaoEspecialConsultaGerenciaRegHelper> resumoCobrancaSituacaoEspecialConsultaGerenciaRegHelper, Integer totalGeral, BigDecimal totalPercentualGeral, BigDecimal totalFatEstimadoGeral, Integer totalQtLigacoesGeral) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.resumoCobrancaSituacaoEspecialConsultaGerenciaRegHelper = resumoCobrancaSituacaoEspecialConsultaGerenciaRegHelper;
 		this.totalGeral = totalGeral;
 		this.totalPercentualGeral = totalPercentualGeral;

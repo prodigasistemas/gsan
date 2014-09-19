@@ -16,14 +16,14 @@ public class RelatorioResumoQtdeImoveisExcluidosTarifaSocialHelper {
     
 	public RelatorioResumoQtdeImoveisExcluidosTarifaSocialHelper() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	
 
 	public RelatorioResumoQtdeImoveisExcluidosTarifaSocialHelper(String descricaoGerencia, Integer idGerencia, String descricaoLocalidade, Integer idLocalidade, String descricaoUnidadeNegocio, Integer idUnidadeNegocio, Integer motivoExclusao, Integer qtdeCartas, Integer qtdeExcluidos, String descricaoMotivoExclusao) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.descricaoGerencia = descricaoGerencia;
 		this.idGerencia = idGerencia;
 		this.descricaoLocalidade = descricaoLocalidade;

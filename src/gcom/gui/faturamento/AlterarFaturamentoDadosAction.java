@@ -325,15 +325,11 @@ public class AlterarFaturamentoDadosAction extends GcomAction {
 							consumoMedioMes =  new Integer(alterarFaturamentoDadosActionForm.getConsumoMedido());	
 						}						
 						
-						//SistemaParametro sistemaParametro = fachada.pesquisarParametrosDoSistema();
 						imovel.setId(new Integer(idImovel));
 						
 						int qtdeEconomias = fachada
 								.obterQuantidadeEconomias(imovel);
 						
-						/**
-						 * TODO : COSANPA Alterando o cálculo da média
-						 */
 						MedicaoTipo medicao = new MedicaoTipo();
 						medicao.setId(new Integer(tipoMedicao));
 							
@@ -341,7 +337,6 @@ public class AlterarFaturamentoDadosAction extends GcomAction {
 						try {
 							houveIntslacaoHidrometro = fachada.verificarInstalacaoSubstituicaoHidrometro(imovel.getId(), medicao);
 						} catch (ControladorException e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 						

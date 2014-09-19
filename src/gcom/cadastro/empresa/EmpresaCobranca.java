@@ -97,7 +97,7 @@ public class EmpresaCobranca extends ObjetoTransacao {
 			BigDecimal percentualContratoCobranca, Date dataInicioContrato,
 			Date ultimaAlteracao, Date dataFinalContrato) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.empresa = empresa;
 		this.percentualContratoCobranca = percentualContratoCobranca;

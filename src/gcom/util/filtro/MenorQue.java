@@ -76,7 +76,7 @@ public class MenorQue extends FiltroParametro {
 
 	@Override
 	public Object getValor() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

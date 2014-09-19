@@ -26,7 +26,7 @@ public class RelatorioLeiturasRealizadas extends TarefaRelatorio {
 
 	public RelatorioLeiturasRealizadas(Usuario usuario) {
 		super(usuario, ConstantesRelatorios.RELATORIO_LEITURAS_REALIZADAS);
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	@Override
@@ -157,7 +157,7 @@ public class RelatorioLeiturasRealizadas extends TarefaRelatorio {
 	
 	@Override
 	public int calcularTotalRegistrosRelatorio() {
-		// TODO Auto-generated method stub
+		
 		return 1;
 	}
 	

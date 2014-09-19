@@ -2679,7 +2679,7 @@ public interface IRepositorioImovel {
 	public Short consultarNumeroReparcelamentoConsecutivosImovel(Integer idImovel)
 		throws ErroRepositorioException;
 
-	/**TODO: COSANPA
+	/**
 	 * autor: Adriana Muniz
 	 * Data: 12/05/2011
 	 * Pesquisa o id da quadra pelo id do imóvel - Gerar
@@ -2689,7 +2689,7 @@ public interface IRepositorioImovel {
 	
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * 
 	 * Metodo para verificar se a rota que o imovel pertence
 	 * ja foi gerada para o mes de faturamento do grupo 
@@ -2700,7 +2700,7 @@ public interface IRepositorioImovel {
 	 */
 	public boolean verificaGeracaoDadosLeituraRota(FaturamentoGrupo faturamentoGrupo, Rota rota) throws ErroRepositorioException;
 	
-	/**TODO:COSANPA
+	/**
 	 * @author Adriana Muniz
 	 * @date 06/12/2011
 	 * 
@@ -3183,10 +3183,6 @@ public interface IRepositorioImovel {
 	public Imovel pesquisarImovelSituacaoEspecialFaturamento(Integer idImovel) throws ErroRepositorioException;
 	
 	/**
-	 * TODO: COSANPA
-	 * 
-	 * Mantis 494
-	 * 
 	 * @param idImovel
 	 * 
 	 * @author Wellington Rocha

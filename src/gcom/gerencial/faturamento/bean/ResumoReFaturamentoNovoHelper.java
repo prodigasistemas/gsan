@@ -345,7 +345,7 @@ public class ResumoReFaturamentoNovoHelper {	private Integer idGerenciaRegiona
 			Integer idPerfilImovel, Integer idSituacaoLigacaoAgua,
 			Integer idSituacaoLigacaoEsgoto, Integer idPerfilLigacaoAgua, Integer idPerfilLigacaoEsgoto) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		
 		this.idGerenciaRegional = idGerenciaRegional;
 		this.idUnidadeNegocio = idUnidadeNegocio;
@@ -362,7 +362,7 @@ public class ResumoReFaturamentoNovoHelper {	private Integer idGerenciaRegiona
 
 	public ResumoReFaturamentoNovoHelper(Integer idGerenciaRegional, Integer idLocalidade, Integer idSetorComercial, Integer codigoSetorComercial, Integer idPerfilImovel, Integer idSituacaoLigacaoAgua, Integer idSituacaoLigacaoEsgoto, Integer idEsfera) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idGerenciaRegional = idGerenciaRegional;
 		this.idLocalidade = idLocalidade;
 		this.idSetorComercial = idSetorComercial;

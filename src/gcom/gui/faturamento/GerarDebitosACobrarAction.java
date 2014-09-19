@@ -70,7 +70,7 @@ public class GerarDebitosACobrarAction extends GcomAction {
 			Collection gerarDados = fachada.gerarDebitosACobrarDeAcrescimosPorImpontualidade(rotas,
 					indicadorGeracaoMulta, indicadorGeracaoJuros, indicadorGeracaoAtualizacao);
         } catch (ControladorException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
         */

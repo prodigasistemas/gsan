@@ -32,7 +32,7 @@ public class GerarExtensaoComandoContasCobrancaEmpresaHelper implements
 	 */
 	public GerarExtensaoComandoContasCobrancaEmpresaHelper() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public Collection<ExtensaoComandoContasCobrancaEmpresaHelper> getColecaoExtensaoComandoContasCobrancaEmpresaHelper() {

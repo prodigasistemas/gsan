@@ -39,7 +39,7 @@ public class LogradorouRelatorioHelper {
 	 * @param tipoPesquisaPopular
 	 */
 	public LogradorouRelatorioHelper(String idMunicipio, String idBairro, String nomeLogradouro, String nomePopularLogradouro, String idTipoLogradouro, String idTituloLogradouro, String codigoCep, String idLogradouro, String indicadorUso, String tipoPesquisa, String tipoPesquisaPopular) {
-		// TODO Auto-generated constructor stub
+		
 		this.idMunicipio = idMunicipio;
 		this.idBairro = idBairro;
 		this.nomeLogradouro = nomeLogradouro;
@@ -54,7 +54,7 @@ public class LogradorouRelatorioHelper {
 	}
 
 	public LogradorouRelatorioHelper() {
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public String getCodigoCep() {

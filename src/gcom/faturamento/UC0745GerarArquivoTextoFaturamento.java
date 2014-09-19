@@ -1373,7 +1373,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 		}
 
 		/**
-		 * TODO:COSANPA autor: Adriana Muniz Data: 04/05/2011 Preenche o id da
+		 * autor: Adriana Muniz Data: 04/05/2011 Preenche o id da
 		 * quadraFace - Utilizado na pesquisa da qualidade da agua
 		 * */
 		if (imovel.getQuadraFace() != null) {
@@ -1409,7 +1409,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 			if (clienteImovelOUConta instanceof ClienteImovel) {
 
 				/**
-				 * TODO : COSANPA
+				 * 
 				 * 
 				 * Pamela Gatinho - 27/09/2011
 				 * 
@@ -1422,9 +1422,9 @@ public class UC0745GerarArquivoTextoFaturamento {
 
 				clienteRelacaoTipo = ((ClienteImovel) clienteImovelOUConta)
 						.getClienteRelacaoTipo();
-				/**TODO: COSANPA
+				/**
 				 * 
-				 * Mantis 879 - Clientes que saíram com o nome em branco 
+				 * Clientes que saíram com o nome em branco 
 				 * nas contas.
 				 * 
 				 * @author Wellington Rocha
@@ -1459,7 +1459,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 		}
 
 		/**
-		 * TODO: COSANPA Mantis 681 - Imóveis com nomeImovel diferente de nulo
+		 * Imóveis com nomeImovel diferente de nulo
 		 * porém com valor vazio tiveram suas contas impressas com o nome do
 		 * cliente em branco. Para corrigir o problema não é mais testado o nome
 		 * do imóvel, passando a considerar sempre o nome do cliente usuário.
@@ -1519,7 +1519,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 		}
 
 		/**
-		 * TODO : COSANPA Pamela Gatinho - 27/09/2011
+		 *  Pamela Gatinho - 27/09/2011
 		 * 
 		 * Alteracao para enviar a conta para o endereco do imóvel ou do
 		 * responsável, de acordo com a opção selecionada no cadastro do imóvel
@@ -1612,7 +1612,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 
 		// IMOVEL_PERFIL
 		/*
-		 * TODO: COSANPA Acréscimo de uma caracter, para casos em que o id do
+		 * Acréscimo de uma caracter, para casos em que o id do
 		 * perfil do imovel tem dois carateres. Com essa alteração, a linha do
 		 * tipo 1 foi acrescida de uma caracter
 		 */
@@ -1620,7 +1620,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 				idImovelPerfil));
 
 		/**
-		 * TODO : COSANPA Alterando o cálculo da média
+		 *  Alterando o cálculo da média
 		 */
 		MedicaoTipo medicao = new MedicaoTipo();
 		medicao.setId(MedicaoTipo.LIGACAO_AGUA);
@@ -1653,7 +1653,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 		Short indicadorEmissaoConta = new Short("1");
 
 		/**
-		 * TODO - COSANPA Alteração feita para corrigir o problema de emitir
+		 * Alteração feita para corrigir o problema de emitir
 		 * conta de imóveis que possuem faturas agrupadas
 		 */
 		boolean naoEmitir = false;
@@ -1730,7 +1730,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 
 		// PERCENTUAL_ESGOTO_COBRANCA
 		/**
-		 * TODO : COSANPA Pamela Gatinho - 19/07/2012 Alteração para informar o
+		 *  Pamela Gatinho - 19/07/2012 Alteração para informar o
 		 * percentual de esgoto para imóvel condomínio
 		 */
 //		BigDecimal percentualEsgoto = this.getControladorFaturamento().obterPercentualColetaEsgotoImovel(imovel.getId());
@@ -2052,7 +2052,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 					.getAnoMesReferencia();
 		}
 		/**
-		 * TODO:COSANPA autor: Adriana Muniz Data: 04/05/2011 Como o critério de
+		 * autor: Adriana Muniz Data: 04/05/2011 Como o critério de
 		 * preenchimento da qualidade da agua da cosanpa não é usa os campos
 		 * usados como filtros na consulta da qualidade da agua, foi necessário
 		 * acrescentar mais um parametro na assinatura no método, idQuadraFace,
@@ -2683,7 +2683,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 			// CRC4428 - Vivianne Sousa - 14/06/2010
 
 			/**
-			 * TODO:COSANPA Data: 13/05/2011
+			 * Data: 13/05/2011
 			 * 
 			 * Alteração para que no caso do imóvel ter um ou mais parcelamento
 			 * ativos, todos sejam passados para o arquivo de rota
@@ -2718,7 +2718,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 
 					// DESCRICAO_SERVICO_PARCELAMENTO
 					/*
-					 * TODO: COSANPA Troca de 2 para 3 o tamanho da string, logo
+					 * Troca de 2 para 3 o tamanho da string, logo
 					 * se o numero de parcelas for 12 e for a prestação 4,
 					 * ficará 004/012. Com isso padroniza o tamanho da cadeia,
 					 * atendendo os casos que o parcelamento possua 3 caracter
@@ -2999,7 +2999,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 				// Caso contrário formata o número da parcela do débito.
 				// DESCRICAO_SERVICO_PARCELAMENTO
 				/**
-				 * TODO: COSANPA Data: 08/02/2011
+				 * Data: 08/02/2011
 				 * 
 				 * Alteração do numero de prestações de 2 para 3 caracteres. E
 				 * mudança da string de 90 para 60, para correção do
@@ -3294,7 +3294,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 								+ "", 6));
 			}
 			/*
-			 * TODO: COSANPA Adição de uma condição para que o id do crédito
+			 * Adição de uma condição para que o id do crédito
 			 * seja repassado para o arquivo txt
 			 */
 			else if (creditoRealizado.getCreditoTipo() != null) {
@@ -3342,7 +3342,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 								+ "", 6));
 			}
 			/*
-			 * TODO: COSANPA Adição de uma condição para que o id do crédito
+			 * Adição de uma condição para que o id do crédito
 			 * seja repassado para o arquivo txt
 			 */
 			else if (creditoRealizado.getCreditoTipo() != null) {
@@ -3682,7 +3682,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 				}
 
 				/**
-				 * TODO : COSANPA Adicionando campos da data de ligacao
+				 *  Adicionando campos da data de ligacao
 				 */
 				if (medicaoTipo.getId().intValue() == MedicaoTipo.LIGACAO_AGUA
 						.intValue()) {
@@ -3776,7 +3776,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 				sistemaParametro.setAnoMesFaturamento(anoMesReferencia);
 
 				/**
-				 * TODO : COSANPA Alterando o cálculo da média
+				 *  Alterando o cálculo da média
 				 */
 				boolean houveIntslacaoHidrometro = this
 						.getControladorMicromedicao()
@@ -3829,7 +3829,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 
 				// DATA DA LEITURA ANTERIOR INFORMADA
 				/**
-				 * TODO : COSANPA Alteração para enviar na rota a data da
+				 *  Alteração para enviar na rota a data da
 				 * leitura anterior informada
 				 * */
 				if (dataLeituraAnteriorInformada != null
@@ -3849,7 +3849,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 				}
 
 				/**
-				 * TODO: COSANPA Adicionando a data da ligacao de agua do imovel
+				 * Adicionando a data da ligacao de agua do imovel
 				 */
 				arquivoTextoRegistroTipo08.append(Util.formatarDataAAAAMMDD(dataLigacao));
 
@@ -4268,7 +4268,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 
 			// MENOR E MAIOR NÚMERO DA QUADRA PARA ROTA
 			/**
-		 	 * TODO : COSANPA
+		 	 * 
 		 	 * Alteracao para inserir numero da quadra zero quando for 
 		  	 * rota alternativa (pois rota alternativa não tem referencia 
 		 	 * para quadra)
@@ -4324,7 +4324,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 				}
 			}
 
-			/*TODO : COSANPA 
+			/* 
 		 * Caso rota contenha apenas imóveis informativos, insere com situação TRANSMITIDO
 		 * */
 		SituacaoTransmissaoLeitura situacaoTransmissaoLeitura = new SituacaoTransmissaoLeitura();
@@ -5060,7 +5060,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 		Collection colecaoQualidadeAgua = null;
 
 		/**
-		 * TODO: COSANPA Adição da consulta quando a empresa utiliza o sistema
+		 * Adição da consulta quando a empresa utiliza o sistema
 		 * de abastecimento para registro da qualidade da água
 		 * */
 		FiltroQuadraFace filtroQuadraFace = new FiltroQuadraFace();
@@ -5644,7 +5644,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 				.formatarDataAAAAMMDD(dataReferenciaArrecadacao));
 
 		/**
-		 * TODO : COSANPA Adicionando informação da referência do faturamento
+		 *  Adicionando informação da referência do faturamento
 		 */
 		arquivoTextoRegistroTipo11.append(anoMesFaturamento);
 
@@ -5853,7 +5853,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 				.formatarDataAAAAMMDD(dataFimBloqueio));
 
 		/*
-		 * TODO - COSANPA Alteracao para enviar o codigo da rota, pois ao essa
+		 * Alteracao para enviar o codigo da rota, pois ao essa
 		 * informacao é necessaria ao finalizar rotas alternativas, pois não é
 		 * possivel localizar as rotas pelo setor original, somente pelo setor
 		 * alternativo e essa informação não é gerada na rota.
@@ -5863,7 +5863,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 				"" + rota.getId()));
 		// CAMPO QUE INDICA SE A ROTA É DIVIDIDA
 		/**
-		 * TODO - COSANPA Adicionando o numero sequencial da rota, caso seja uma
+		 * Adicionando o numero sequencial da rota, caso seja uma
 		 * rota dividida
 		 */
 		if (sequenciaRota != null) {
@@ -5875,7 +5875,7 @@ public class UC0745GerarArquivoTextoFaturamento {
 		}
 
 		/**
-		 * TODO - COSANPA Pamela Gatinho - 24/01/2013 Adicionando o indicador
+		 * Pamela Gatinho - 24/01/2013 Adicionando o indicador
 		 * para calcular a rota pela media
 		 */
 		// if (rota.getIndicadorCalculoMedia() != null) {

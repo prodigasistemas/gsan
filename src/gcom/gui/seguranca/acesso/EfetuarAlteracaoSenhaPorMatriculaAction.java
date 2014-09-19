@@ -83,7 +83,7 @@ public class EfetuarAlteracaoSenhaPorMatriculaAction extends GcomAction {
 					// null, form.getLogin());
 					//					}
 				} catch (ErroCriptografiaException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 //				//------------ REGISTRAR TRANSAÇÃO ----------------

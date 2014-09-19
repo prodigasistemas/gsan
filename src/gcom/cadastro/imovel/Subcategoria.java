@@ -46,16 +46,13 @@ public class Subcategoria extends ObjetoTransacao {
 
     public static final Subcategoria SUBCATEGORIA_ZERO;
     
-    /** TODO:COSANPA
+    /**
      * Data: 01/03/2011
      * criação da constante da subcategoria R1, para ser usada na verificação 
      * da subcategoria do imovel, na geração do bonus social */
     public static final Integer SUBCATEGORIA_R1 = new Integer(1);
 
-    /**TODO: COSANPA
-     * 
-     * Mantis 494
-     * 
+    /**
      * Criação de constantes a serem utilizadas na geração 
      * da rota para recadastramento
      * 

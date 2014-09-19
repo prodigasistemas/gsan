@@ -4050,7 +4050,7 @@ public class Util {
 	}
 
 	/**
-	 * TODO COSANPA: Método utilizado para emitir contas em impressora térmica
+	 * Método utilizado para emitir contas em impressora térmica
 	 * Data: 22/12/2011
 	 */
 	public static String retornaDescricaoAnoMesCompleto(String anoMes) {
@@ -5957,7 +5957,7 @@ public class Util {
 	}
 
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * @author Adriana Muniz
 	 * @Date: 22/01/2011
@@ -6144,7 +6144,7 @@ public class Util {
 	}
 
 	/**
-	 * TODO - COSANPA
+	 *
 	 * 
 	 * Retorna data com a hora 00:00:00
 	 * 

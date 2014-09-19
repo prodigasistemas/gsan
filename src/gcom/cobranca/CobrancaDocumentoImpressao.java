@@ -25,7 +25,7 @@ public class CobrancaDocumentoImpressao implements Serializable {
 
 	public CobrancaDocumentoImpressao(Integer id, String linhaTxt, Date ultimaAlteracao, Integer sequencialImpressao, CobrancaAcaoAtividadeComando cobrancaAcaoAtividadeComando, CobrancaAcaoAtividadeCronograma cobrancaAcaoAtividadeCronograma) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.linhaTxt = linhaTxt;
 		this.ultimaAlteracao = ultimaAlteracao;

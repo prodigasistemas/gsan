@@ -294,7 +294,7 @@ public class ExibirAtualizarSituacaoEspecialFaturamentoAction extends GcomAction
 	 */
 	private String obterIdRegistroASerAtualizado(HttpServletRequest httpServletRequest, HttpSession sessao) {
 		
-		//TODO verificar o comportamento de todos esses atributos e parametros
+		
 		
 		String id = null;
 		

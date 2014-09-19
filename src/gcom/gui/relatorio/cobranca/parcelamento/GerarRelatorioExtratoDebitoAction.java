@@ -128,7 +128,7 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 			return gerarRelatorio(actionMapping, request, response, fachada,
 					sistemaParametro, extratoDebitoRelatorioHelper, documentoCobranca);
 		} catch (ControladorException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} finally {
 			limparSessao(request);

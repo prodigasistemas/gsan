@@ -77,7 +77,7 @@ public class RelatorioAcompanhamentoClientesNegativadosDadosParcelamentoBean imp
 			BigDecimal valorParceladoCanceladoTotalParc
 			) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 
 		this.valorParceladoEntrada = valorParceladoEntrada;
 		this.valorParcelado = valorParcelado;

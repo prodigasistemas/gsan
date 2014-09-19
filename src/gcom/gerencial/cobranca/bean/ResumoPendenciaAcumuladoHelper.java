@@ -59,7 +59,7 @@ public class ResumoPendenciaAcumuladoHelper implements Serializable{
 	 */
 	public ResumoPendenciaAcumuladoHelper() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	/**
@@ -160,7 +160,7 @@ public class ResumoPendenciaAcumuladoHelper implements Serializable{
 	 */
 	public ResumoPendenciaAcumuladoHelper(String estado, String tipoCategoria, String categoria, String tipoSituacaoAguaEsgoto, Integer anoMesReferencia, Integer quantidadeLigacoes, Integer quantidadeDocumento, BigDecimal valorPendente) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.estado = estado;
 		this.tipoCategoria = tipoCategoria;
 		this.categoria = categoria;

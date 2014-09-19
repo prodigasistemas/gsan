@@ -45,7 +45,7 @@ public class ServicoTipoReferencia extends ObjetoTransacao implements
 	private short indicadorFiscalizacao;
 	
 	/*
-	 * TODO - COSANPA - Mantis 402 - Felipe Santos - 16/03/2012
+	 * 16/03/2012
 	 * 
 	 * Adição dos códigos de Diagnóstico e Fiscalização
 	 */

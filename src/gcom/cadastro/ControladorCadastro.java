@@ -653,10 +653,6 @@ public class ControladorCadastro implements SessionBean {
 	}
 	
 	/**
-	 * TODO: COSANPA
-	 * 
-	 * Mantis 494
-	 * 
 	 * Necessário para a geracao de rota para recadastramento
 	 * 
 	 * @author Wellington Rocha
@@ -8365,7 +8361,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO:Cosanpa Gerar Arquivo Texto para Atualização Cadastral
+	 * Gerar Arquivo Texto para Atualização Cadastral
 	 * 
 	 * Registro Tipo 02 - Dados do(s) cliente(s)
 	 * 
@@ -9138,7 +9134,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO:Cosanpa Gerar Arquivo Texto para Atualização Cadastral
+	 * Gerar Arquivo Texto para Atualização Cadastral
 	 * 
 	 * Registro Tipo 04 - Dados Serviços
 	 * 
@@ -9266,7 +9262,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO:Cosanpa Gerar Arquivo Texto para Atualização Cadastral
+	 * Gerar Arquivo Texto para Atualização Cadastral
 	 * 
 	 * Registro Tipo 05 - Dados Medidor
 	 * 
@@ -9374,10 +9370,6 @@ public class ControladorCadastro implements SessionBean {
 
 	
 	/**
-	 * TODO: Cosanpa
-	 * 
-	 * Mantis 494
-	 * 
 	 * Geração da rota para recadastramento
 	 * 
 	 * @author Wellington Rocha
@@ -9474,15 +9466,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoGeral;
 	}
 
-	/**
-	 * TODO: Cosanpa
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoAnormalidades(
 			CadastroOcorrencia cadastroOcorrencia) throws ControladorException {
 
@@ -9503,15 +9486,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoAnormalidades;
 	}
 
-	/**
-	 * TODO: Cosanpa
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoRamoAtividade(
 			RamoAtividade ramoAtividade) throws ControladorException {
 
@@ -9532,15 +9506,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoRamoAtividade;
 	}
 
-	/**
-	 * TODO: Cosanpa
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoLigacaoAguaSituacao(
 			LigacaoAguaSituacao ligacaoAguaSituacao)
 			throws ControladorException {
@@ -9562,15 +9527,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoLigacaoAguaSituacao;
 	}
 
-	/**
-	 * TODO: Cosanpa
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoLigacaoEsgotoSituacao(
 			LigacaoEsgotoSituacao ligacaoEsgotoSituacao)
 			throws ControladorException {
@@ -9592,15 +9548,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoLigacaoEsgotoSituacao;
 	}
 
-	/**
-	 * TODO: Cosanpa
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoHidrometroProtecao(
 			HidrometroProtecao hidrometroProtecao) throws ControladorException {
 
@@ -9621,15 +9568,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoHidrometroProtecao;
 	}
 
-	/**
-	 * TODO: Cosanpa
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoFonteAbastecimento(
 			FonteAbastecimento fonteAbastecimento)
 			throws ControladorException {
@@ -9651,15 +9589,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoFonteAbastecimento;
 	}
 	
-	/**
-	 * TODO: Cosanpa
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoHidrometroMarca(
 			HidrometroMarca hidrometroMarca)
 			throws ControladorException {
@@ -9681,15 +9610,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoHidrometroMarca;
 	}
 	
-	/**
-	 * TODO: Cosanpa
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoRamalLocalInstalacao(
 			RamalLocalInstalacao ramalLocalInstalacao)
 			throws ControladorException {
@@ -9711,15 +9631,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoRamalLocalInstalacao;
 	}
 	
-	/**
-	 * TODO: Cosanpa
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoHidrometroCapacidade(
 			HidrometroCapacidade hidrometroCapacidade)
 			throws ControladorException {
@@ -9741,15 +9652,6 @@ public class ControladorCadastro implements SessionBean {
 		return arquivoTextoRegistroTipoHidrometroCapacidade;
 	}
 
-	/**
-	 * TODO: Cosanpa
-	 * 
-	 * Mantis 494
-	 * 
-	 * Geração da rota para recadastramento
-	 * 
-	 * @author Wellington Rocha
-	 */
 	public StringBuilder gerarArquivoTextoRegistroTipoLogradouroTipo(
 			LogradouroTipo logradouroTipo, Boolean possuiMaisRegistros)
 			throws ControladorException {
@@ -14279,7 +14181,7 @@ public class ControladorCadastro implements SessionBean {
 
 	}
 	
-	/**TODO: COSANPA
+	/**
 	 * @autor: Adriana Muniz
 	 * @date: 23/11/2011
 	 * 
@@ -15853,7 +15755,7 @@ public class ControladorCadastro implements SessionBean {
 
 
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * @autor: Wellington Rocha
 	 * @date: 21/03/2012
@@ -15891,7 +15793,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * @autor: Wellington Rocha
 	 * @date: 21/03/2012
@@ -15928,7 +15830,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * @autor: Wellington Rocha
 	 * @date: 21/03/2012
@@ -15966,7 +15868,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * Método para atualizar situação (siac_id) de ImovelAtualizacaoCadastral
 	 * 
@@ -15990,7 +15892,7 @@ public class ControladorCadastro implements SessionBean {
 	}
 
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * @author Matheus Souza
 	 * @param Id do imovel

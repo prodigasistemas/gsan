@@ -93,7 +93,7 @@ public class GerarRelatorioDocumentosAReceberAction extends
 					form.getColecaoFaixas()!=null ? 
 						form.getColecaoFaixas():null,
 					sistemaParametro.getNomeEstado(),
-					/**TODO:COSANPA
+					/**
 					 * @author Adriana Muniz
 					 * @date 29/03/2012
 					 * 
@@ -116,7 +116,7 @@ public class GerarRelatorioDocumentosAReceberAction extends
 		// como parâmetro
 		
 		/*
-		 * TODO - COSANPA - Felipe Santos - 28/03/2012
+		 * Felipe Santos - 28/03/2012
 		 * 
 		 * Alteração para pegar o tipo de relatório retornado através da
 		 * página conforme selecionado pelo usuário

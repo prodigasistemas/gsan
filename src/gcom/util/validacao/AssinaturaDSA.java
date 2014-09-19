@@ -103,10 +103,10 @@ public class AssinaturaDSA {
 		} catch (NoSuchAlgorithmException e) {
 			e.printStackTrace();
 		} catch (InvalidKeyException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (SignatureException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		
@@ -139,7 +139,6 @@ public class AssinaturaDSA {
 		}
 		
 		catch(Exception ex){
-			// String msg = ex.getMessage();
 		}
 		return chave;
 		

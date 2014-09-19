@@ -43,7 +43,7 @@ public class RelatorioManterNegativadorBean implements RelatorioBean {
 
 		public RelatorioManterNegativadorBean(String id, String codigoAgente, String cliente,String nome, String imovel, String numeroInscricaoEstadual, String indicadorUso) {
 			super();
-			// TODO Auto-generated constructor stub
+			
 			this.id = id;
 			this.codigoAgente = codigoAgente;
 			this.cliente = cliente;

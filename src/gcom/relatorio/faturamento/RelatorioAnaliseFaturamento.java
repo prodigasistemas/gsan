@@ -476,7 +476,7 @@ public class RelatorioAnaliseFaturamento extends TarefaRelatorio {
 
 	@Override
 	public int calcularTotalRegistrosRelatorio() {
-		// TODO Auto-generated method stub
+		
 		return 0;
 	}
 

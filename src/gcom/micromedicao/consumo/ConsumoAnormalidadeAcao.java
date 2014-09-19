@@ -67,7 +67,7 @@ public class ConsumoAnormalidadeAcao implements Serializable {
 
 	public ConsumoAnormalidadeAcao(Integer id, BigDecimal numerofatorConsumoMes1, BigDecimal numerofatorConsumoMes2, BigDecimal numerofatorConsumoMes3, Short indicadorGeracaoCartaMes1, Short indicadorGeracaoCartaMes2, Short indicadorGeracaoCartaMes3, Short indicadorUso, Date ultimaAlteracao, ConsumoAnormalidade consumoAnormalidade, Categoria categoria, ImovelPerfil imovelPerfil, LeituraAnormalidadeConsumo leituraAnormalidadeConsumoMes1, LeituraAnormalidadeConsumo leituraAnormalidadeConsumoMes2, LeituraAnormalidadeConsumo leituraAnormalidadeConsumoMes3, ServicoTipo servicoTipoMes1, ServicoTipo servicoTipoMes2, ServicoTipo servicoTipoMes3, SolicitacaoTipoEspecificacao solicitacaoTipoEspecificacaoMes1, SolicitacaoTipoEspecificacao solicitacaoTipoEspecificacaoMes2, SolicitacaoTipoEspecificacao solicitacaoTipoEspecificacaoMes3) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.numerofatorConsumoMes1 = numerofatorConsumoMes1;
 		this.numerofatorConsumoMes2 = numerofatorConsumoMes2;

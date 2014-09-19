@@ -31,7 +31,7 @@ public class LigacaoSitComandoOSSPK extends ObjetoGcom {
 
 	public LigacaoSitComandoOSSPK(Integer comandoOrdemSeletivaId, Integer ligacaoAguaSituacaoId) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.comandoOrdemSeletivaId = comandoOrdemSeletivaId;
 		this.ligacaoAguaSituacaoId = ligacaoAguaSituacaoId;
 	}

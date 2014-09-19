@@ -36,7 +36,7 @@ public class RelatorioManterPerfilParcelamentoBean implements RelatorioBean {
 	private String subcategoria;
 
 	/*
-	 * TODO - COSANPA
+	 *
 	 */
 	private String percentualDescontoImpontualidadeMulta;
 	

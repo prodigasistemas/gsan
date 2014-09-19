@@ -31,7 +31,7 @@ public class AnormalidadeComandoOSSPK extends ObjetoGcom {
 	
 	public AnormalidadeComandoOSSPK(Integer comandoOrdemSeletivaId, Integer leituraAnormalidadeId) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.comandoOrdemSeletivaId = comandoOrdemSeletivaId;
 		this.leituraAnormalidadeId = leituraAnormalidadeId;
 	}

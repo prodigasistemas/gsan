@@ -100,7 +100,7 @@ public class TarifaTipoCalculo {
 
 	public TarifaTipoCalculo(Integer id, String descricaoTarifaTipoCalculo, String descricaoAbreviada, Short indicadorUso, Date ultimaAlteracao) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.descricaoTarifaTipoCalculo = descricaoTarifaTipoCalculo;
 		this.descricaoAbreviada = descricaoAbreviada;

@@ -1657,8 +1657,8 @@ public interface ControladorOrdemServicoLocal extends javax.ejb.EJBLocalObject {
 	 * @return totalOrdemServicoEncerradas
 	 * @throws ControladorException
 	 */
-	/**TODO: Cosanpa
-	 * Mantis 664 - Correção de erro na execução da funcionalidade
+	/**
+	 * Correção de erro na execução da funcionalidade
 	 * @author Wellington Rocha
 	 * @date 19/11/2012*/
 	public Integer encerrarOrdemServicoVencida(Integer idServicoTipo, Integer quantidadeDias, Usuario usuarioLogado)

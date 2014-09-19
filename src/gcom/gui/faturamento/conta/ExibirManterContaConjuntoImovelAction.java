@@ -120,6 +120,13 @@ public class ExibirManterContaConjuntoImovelAction extends GcomAction {
 
 		Integer somenteDebitoAutomatico = Integer.parseInt(manterContaConjuntoImovelActionForm.getSomenteDebitoAutomatico());
 		if (httpServletRequest.getParameter("quantidadeConta") != null) {
+			boolean isDebitoAutomatico;
+			if(somenteDebitoAutomatico == 1) 
+				isDebitoAutomatico = true;
+			else
+				isDebitoAutomatico = false;
+			
+			sessao.setAttribute("debitoAutomatico", isDebitoAutomatico);
 
 			Integer anoMes = Util.formatarMesAnoComBarraParaAnoMes(manterContaConjuntoImovelActionForm.getMesAnoConta());
 			Integer anoMesFinal = Util.formatarMesAnoComBarraParaAnoMes(manterContaConjuntoImovelActionForm.getMesAnoContaFinal());
@@ -128,14 +135,15 @@ public class ExibirManterContaConjuntoImovelAction extends GcomAction {
 			if (sessao.getAttribute("bancos") != null) {
 				String[] bancos = (String[]) sessao.getAttribute("bancos");
 				/*
-				 * TODO: COSANPA autor: Adriana Muniz
+				 * autor: Adriana Muniz
 				 * 
 				 * Alteração para a conta considerar como filtro grupo de
 				 * faturamento, quando o mesmo estiver preenchido
 				 */
 				if (idGrupoFaturamento != null) {
 					quantidadeConta = fachada.countImoveisBancoDebitoAutomaticoPorGrupoFaturamento(bancos, anoMes, anoMesFinal,
-							dataVencimentoContaInicio, dataVencimentoContaFim, indicadorContaPaga, idGrupoFaturamento, somenteDebitoAutomatico);
+							dataVencimentoContaInicio, dataVencimentoContaFim, indicadorContaPaga, idGrupoFaturamento,
+							somenteDebitoAutomatico);
 				} else {
 					quantidadeConta = fachada.countImoveisBancoDebitoAutomatico(bancos, anoMes, anoMesFinal, dataVencimentoContaInicio,
 							dataVencimentoContaFim, indicadorContaPaga, somenteDebitoAutomatico);
@@ -149,7 +157,8 @@ public class ExibirManterContaConjuntoImovelAction extends GcomAction {
 
 			} else {
 				quantidadeConta = fachada.obterContasConjuntoImoveis(anoMes, colecaoImovel, codigoCliente, relacaoTipo,
-						dataVencimentoContaInicio, dataVencimentoContaFim, idGrupoFaturamento, anoMesFinal, indicadorContaPaga, somenteDebitoAutomatico);
+						dataVencimentoContaInicio, dataVencimentoContaFim, idGrupoFaturamento, anoMesFinal, indicadorContaPaga,
+						somenteDebitoAutomatico);
 
 				quantidadeContaRevisao = fachada.obterContasRevisaoConjuntoImoveis(anoMes, colecaoImovel, codigoCliente, relacaoTipo,
 						dataVencimentoContaInicio, dataVencimentoContaFim, idGrupoFaturamento, anoMesFinal, indicadorContaPaga);

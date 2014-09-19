@@ -45,7 +45,7 @@ public class TelemetriaRetMot implements Serializable {
     
     public TelemetriaRetMot(Integer id, String descricaoRetorno, Short indicadorUso, Short indicadorMovAceito, Date ultimaAlteracao) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.descricaoRetorno = descricaoRetorno;
 		this.indicadorUso = indicadorUso;

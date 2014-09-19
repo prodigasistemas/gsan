@@ -98,10 +98,10 @@ public class RelatorioColetaMedidorEnergia extends TarefaRelatorio {
 					relatorioColetaMedidorEnergiaBean.setEndereco(
 							fachada.pesquisarEnderecoFormatado(new Integer(helper.getMatriculaImovel())));
 				} catch (NumberFormatException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				} catch (ControladorException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 			

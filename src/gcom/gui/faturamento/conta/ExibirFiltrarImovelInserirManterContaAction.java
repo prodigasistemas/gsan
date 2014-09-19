@@ -71,7 +71,7 @@ public class ExibirFiltrarImovelInserirManterContaAction extends GcomAction {
 		sessao.setAttribute("colecaoBancos", colecaoBancos);
 
 		/**
-		 * TODO:COSANPA
+		 *
 		 * 
 		 * @author Adriana Muniz
 		 * @date: 23/11/2011 Pesquisa a esfera de poder

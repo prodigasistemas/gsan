@@ -73,7 +73,7 @@ public interface IRepositorioLigacaoEsgoto {
 	public LigacaoEsgotoSituacaoConsumoTipo pesquisarLigacaoEsgotoSituacaoConsumoTipo(Integer idLigacaoEsgotoSituacao,
 			Integer idConsumoTipo) throws ErroRepositorioException;
 	
-	/**TODO: COSANPA
+	/**
 	 * @author Wellington Rocha
 	 * Data: 21/03/2012
 	 * 

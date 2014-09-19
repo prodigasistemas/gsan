@@ -105,7 +105,7 @@ public class OSProgramacaoCalibragem extends ObjetoTransacao {
 
 	@Override
 	public Filtro retornaFiltro() {
-		// TODO Auto-generated method stub
+		
 		FiltroOSProgramaCalibragem filtroOSProgramacaoCalibragem = new FiltroOSProgramaCalibragem();
 		
 		filtroOSProgramacaoCalibragem.adicionarCaminhoParaCarregamentoEntidade("priorizacaoTipo");

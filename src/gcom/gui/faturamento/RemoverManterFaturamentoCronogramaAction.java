@@ -52,7 +52,7 @@ public class RemoverManterFaturamentoCronogramaAction extends GcomAction {
         try {
 			fachada.removerFaturamentoCronograma(ids, FaturamentoGrupoCronogramaMensal.class.getName());
 		} catch (ControladorException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 

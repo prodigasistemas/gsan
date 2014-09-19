@@ -188,18 +188,18 @@ public class UsuarioAbrangencia extends ObjetoTransacao implements Lifecycle {
 
 	public boolean onUpdate(org.hibernate.Session arg0)
 			throws CallbackException {
-		// TODO Auto-generated method stub
+		
 		return false;
 	}
 
 	public boolean onDelete(org.hibernate.Session arg0)
 			throws CallbackException {
-		// TODO Auto-generated method stub
+		
 		return false;
 	}
 
 	public void onLoad(org.hibernate.Session arg0, Serializable arg1) {
-		// TODO Auto-generated method stub
+		
 
 	}
 	
@@ -213,7 +213,7 @@ public class UsuarioAbrangencia extends ObjetoTransacao implements Lifecycle {
 	
 	@Override
 	public Filtro retornaFiltro() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

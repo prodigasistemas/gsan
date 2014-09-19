@@ -77,7 +77,7 @@ public class EfetuarAlteracaoSenhaSimplificadaAction extends GcomAction {
 		            		"atencao.senha.invalida", null, "Senha Inexistente");
 			}
 		} catch (ErroCriptografiaException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		

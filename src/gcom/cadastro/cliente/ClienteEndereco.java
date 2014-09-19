@@ -423,7 +423,7 @@ public class ClienteEndereco extends ObjetoTransacao implements IClienteEndereco
 	}
 
 	public void setNomeMunicipio(String nomeMunicipio) {
-		// TODO Auto-generated method stub
+		
 	}
 
 	public String getNomeBairro() {
@@ -435,7 +435,7 @@ public class ClienteEndereco extends ObjetoTransacao implements IClienteEndereco
 	}
 
 	public void setNomeBairro(String nomeBairro) {
-		// TODO Auto-generated method stub
+		
 	}
 
 	public String getDescricaoLogradouro() {
@@ -447,7 +447,7 @@ public class ClienteEndereco extends ObjetoTransacao implements IClienteEndereco
 	}
 
 	public void setDescricaoLogradouro(String descricaoLogradouro) {
-		// TODO Auto-generated method stub
+		
 	}
 	
 	public Integer getCodigoCep(){
@@ -455,11 +455,11 @@ public class ClienteEndereco extends ObjetoTransacao implements IClienteEndereco
 	}
 	
 	public void setCodigoCep(Integer codigoCep){
-		// TODO Auto-generated method stub
+		
 	}
 
 	public void getPerimetroInicial(Logradouro perimetroInicial) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 }

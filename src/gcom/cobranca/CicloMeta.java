@@ -30,7 +30,7 @@ public class CicloMeta implements Serializable {
 
     public CicloMeta(Integer id, int anoMesReferencia, CobrancaAcao cobrancaAcao, int metaTotal, BigDecimal valorLimite, Date ultimaAlteracao) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.anoMesReferencia = anoMesReferencia;
 		this.cobrancaAcao = cobrancaAcao;

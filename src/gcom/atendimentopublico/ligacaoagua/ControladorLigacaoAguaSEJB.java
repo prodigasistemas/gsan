@@ -739,7 +739,7 @@ public class ControladorLigacaoAguaSEJB implements SessionBean {
 			retorno = repositorioLigacaoAgua.verificaExistenciaLigacaoAgua(idImovel);
 
 		} catch (ErroRepositorioException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 				
@@ -831,7 +831,7 @@ public class ControladorLigacaoAguaSEJB implements SessionBean {
 	}
 
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * @autor: Wellington Rocha
 	 * @date: 21/03/2012

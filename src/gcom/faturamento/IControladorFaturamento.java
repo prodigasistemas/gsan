@@ -2125,6 +2125,11 @@ public interface IControladorFaturamento {
 			String indicadorContaPaga, String[] bancos)
 			throws ControladorException;
 
+	public void alterarVencimentoConjuntoConta(Collection colecaoImovel, Date dataVencimento, Integer anoMes,
+			Date dataVencimentoContaInicio, Date dataVencimentoContaFim, Integer anoMesFim, Usuario usuario,
+			String indicadorContaPaga, String[] bancos, boolean isDebitoAutomatico)
+			throws ControladorException;
+	
 	/**
 	 * Retificar Conjunto de Conta
 	 * 
@@ -2384,6 +2389,7 @@ public interface IControladorFaturamento {
 	 * Alterar Vencimento do Conjunto de Conta
 	 * 
 	 * @author Ana Maria
+	 * @param isDebitoAutomatico 
 	 * @date 20/01/2007
 	 * 
 	 * @param colecaoContas
@@ -2392,7 +2398,7 @@ public interface IControladorFaturamento {
 	 */
 	public void alterarVencimentoConjuntoContaCliente(Integer codigoCliente, Short relacaoTipo,
 			Date dataVencimentoInformada, Integer anoMes, Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
-			Integer anoMesFim, Usuario usuario, Integer codigoClienteSuperior)
+			Integer anoMesFim, Usuario usuario, Integer codigoClienteSuperior, boolean isDebitoAutomatico)
 			throws ControladorException;
 
 	/**
@@ -4438,7 +4444,7 @@ public interface IControladorFaturamento {
 	 throws ControladorException; 
 	
 	/**
-	 * TODO:COSANPA
+	 *
 	 * 
 	 * Método para retornar uma coleção de debitos cobrados do parcelamento
 	 * */
@@ -5566,7 +5572,7 @@ public interface IControladorFaturamento {
 			Integer anoMesReferencia) throws ControladorException;
 	
 	/*
-	 * TODO : COSANPA
+	 * 
 	 * Método criado para obter os imóveis de uma rota que possuem conta
 	 */
 	
@@ -5582,7 +5588,7 @@ public interface IControladorFaturamento {
 			Rota rota) throws ControladorException;
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * @author Pamela Gatinho  
 	 * @date 04/08/2011
 	 * 
@@ -5598,7 +5604,7 @@ public interface IControladorFaturamento {
 	public Conta obterContaImovel(Integer idImovel, Integer anoMesReferencia) throws ControladorException;
 	
 	/**
-	 * TODO - COSANPA
+	 *
 	 * 
 	 * Método para obter todos os imóveis que já foram processados
 	 * na transmissão do arquivo de retorno do IS
@@ -5615,7 +5621,7 @@ public interface IControladorFaturamento {
 	
 	
 	/**
-	 * TODO - COSANPA
+	 *
 	 * 
 	 * Método para obter todos os imóveis que faltam ser transmitidos
 	 * na transmissão do arquivo de retorno do IS

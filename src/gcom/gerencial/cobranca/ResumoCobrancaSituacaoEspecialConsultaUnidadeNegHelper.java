@@ -39,7 +39,7 @@ public class ResumoCobrancaSituacaoEspecialConsultaUnidadeNegHelper {
 	
 	public ResumoCobrancaSituacaoEspecialConsultaUnidadeNegHelper(Integer idUnidadeNegocio, String unidadeNegocioDescricaoAbreviada, String unidadeNegocioDescricao, Integer totalUnidadeNegocio) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idUnidadeNegocio = idUnidadeNegocio;
 		this.unidadeNegocioDescricaoAbreviada = unidadeNegocioDescricaoAbreviada;
 		this.unidadeNegocioDescricao = unidadeNegocioDescricao;

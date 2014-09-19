@@ -37,7 +37,7 @@ public class ExecutarBatch extends GcomAction {
 			getControladorOrdemServico().atualizarOrdemServicoAcompanhamentoServico(dataAtual,null,1);
 			
 		} catch (ControladorException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		

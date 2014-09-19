@@ -51,7 +51,7 @@ public class NegativacaoHelper {
 	}
 	public NegativacaoHelper() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	// [UC676 - SB0002]
 	public NegativacaoHelper(Integer idSituacaoCobranca, String descricao, Integer somatorioQuantidadeInclusoes,

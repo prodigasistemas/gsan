@@ -769,7 +769,7 @@ public class ExibirDadosFaturamentoAction extends GcomAction {
 
 							if (idTipoMedicao.equals(MedicaoTipo.LIGACAO_AGUA
 									.toString())) {
-								//TODO
+								
 								/*if (imovel.getHidrometroInstalacaoHistorico() == null) {
 									alterarFaturamentoDadosActionForm
 											.setIdAnormalidade(imovel
@@ -925,7 +925,7 @@ public class ExibirDadosFaturamentoAction extends GcomAction {
 						}
 
 						/**
-						 * TODO : COSANPA Alterando o cálculo da média
+						 *  Alterando o cálculo da média
 						 */
 						MedicaoTipo medicao = new MedicaoTipo();
 						medicao.setId(new Integer(MedicaoTipo.LIGACAO_AGUA));
@@ -934,7 +934,7 @@ public class ExibirDadosFaturamentoAction extends GcomAction {
 						try {
 							houveIntslacaoHidrometro = fachada.verificarInstalacaoSubstituicaoHidrometro(imovel.getId(), medicao);
 						} catch (ControladorException e) {
-							// TODO Auto-generated catch block
+							
 							e.printStackTrace();
 						}
 						// Alterado por Rômulo Aurélio

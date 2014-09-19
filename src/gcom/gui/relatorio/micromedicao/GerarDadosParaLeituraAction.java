@@ -179,7 +179,7 @@ public class GerarDadosParaLeituraAction extends
 														.formatarData(dataPrevista));
 
 									} catch (NumberFormatException e) {
-										// TODO Auto-generated catch block
+										
 										e.printStackTrace();
 									}
 

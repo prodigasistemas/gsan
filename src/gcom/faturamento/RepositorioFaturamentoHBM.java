@@ -353,7 +353,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		Session session = HibernateUtil.getSession();
 		String consulta;
 
-		/**TODO: COSANPA
+		/**
 		 * 
 		 * Mudança na ordenação das atividades de faturamento a serem exibidas na tela. 
 		 * Ordenando por dataDeComando em ordem decrescente
@@ -2054,34 +2054,59 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		String update;
 		Session session = HibernateUtil.getSession();
+		
+		PreparedStatement st = null;
 
-		try {
+//		try {
 			// Atualiza apenas os dados (dataRevisao, motivoRevisao) da
 			// conta
-			update = "UPDATE gcom.faturamento.conta.Conta SET "
-					+ "cnta_dtvencimentoconta = :dataVencimento, cnta_dtvalidadeconta = :dataValidade, "
-					+ "cnta_icalteracaovencimento = :indicadorAlteracaoVencimento, "
-					+ "cnta_tmultimaalteracao = :dataUltimaAlteracao, "
-					+ "cnta_nnalteracoesvencimento = :numeroAltVencimento "
-					+ "WHERE cnta_id = :idConta ";
+		try {	
+			Connection jdbcCon = session.connection();
+			
+			update = "UPDATE faturamento.conta SET "
+					+ "cnta_dtvencimentoconta = ?, cnta_dtvalidadeconta = ?, "
+					+ "cnta_icalteracaovencimento = ?, "
+					+ "cnta_tmultimaalteracao = ?, "
+					+ "cnta_nnalteracoesvencimento = ? "
+					+ "WHERE cnta_id = ? ";
+			
+			
+				st = jdbcCon.prepareStatement(update);
+				
+				st.setDate(1, Util.getSQLDate(conta.getDataVencimentoConta()));
+				st.setDate(2, Util.getSQLDate(conta.getDataValidadeConta()));
+				st.setShort(3, conta.getIndicadorAlteracaoVencimento());
+				st.setTimestamp(4, Util.getSQLTimesTemp(conta.getUltimaAlteracao()));
+				st.setInt(5, conta.getNumeroAlteracoesVencimento());
+				st.setInt(6, conta.getId());
+				
+				st.executeUpdate();
+			} catch (SQLException e) {
+				throw new ErroRepositorioException(e, "Erro no Hibernate");
+			} finally {
+				if (null != st)
+					try {
+						st.close();
+					} catch (SQLException e) {
+						throw new ErroRepositorioException(e, "Erro no Hibernate");
+					}
+				HibernateUtil.closeSession(session);
+			}
 
-			session.createQuery(update).setDate("dataVencimento",
-					conta.getDataVencimentoConta()).setDate("dataValidade",
-					conta.getDataValidadeConta()).setShort(
-					"indicadorAlteracaoVencimento",
-					conta.getIndicadorAlteracaoVencimento()).
-					setInteger("numeroAltVencimento", conta.getNumeroAlteracoesVencimento()).setTimestamp(
-					"dataUltimaAlteracao", conta.getUltimaAlteracao())
-					.setInteger("idConta", conta.getId()).executeUpdate();
+//			session.createQuery(update).setDate("dataVencimento", conta.getDataVencimentoConta())
+//					.setDate("dataValidade", conta.getDataValidadeConta())
+//					.setShort("indicadorAlteracaoVencimento", conta.getIndicadorAlteracaoVencimento())
+//					.setInteger("numeroAltVencimento", conta.getNumeroAlteracoesVencimento())
+//					.setTimestamp("dataUltimaAlteracao", conta.getUltimaAlteracao()).setInteger("idConta", conta.getId()).executeUpdate();
 
 			// erro no hibernate
-		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			// fecha a sessão
-			HibernateUtil.closeSession(session);
-		}
+//		} catch (HibernateException e) {
+//			// levanta a exceção para a próxima camada
+//			throw new ErroRepositorioException(e, "Erro no Hibernate");
+//		} finally {
+//			// fecha a sessão
+//			HibernateUtil.closeSession(session);
+//		}
 	}
 
 	public Collection<Integer> pesquisarQuadras(Integer rotaId)
@@ -6871,7 +6896,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "hihAgua.id, "//29
 					+ "hihPoco.id, "//30
 					/** 
-					 * TODO : COSANPA
+					 * 
 					 * Adicionando parametro para verificar se o imóvel
 					 * faz parte de um condomínio
 					 */
@@ -13489,7 +13514,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "usuario.nomeUsuario, "// 49
 					+ "cnta.valorImposto, " // 50
 					/**
-					 * TODO : COSANPA
+					 * 
 					 * Adicionando campo na consulta
 					 */
 					+ "cnta.ultimaAlteracao " // 51
@@ -13752,7 +13777,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 //					+ "AND crt.id = :usuario "
 					
 					/*
-					 * TODO - COSANPA - Felipe Santos
+					 * Felipe Santos
 					 * 
 					 * Imprimir segunda via de conta com o cliente responsável pela conta
 					 */
@@ -15375,7 +15400,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -15402,7 +15427,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -15452,7 +15477,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -15536,7 +15561,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -15563,7 +15588,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -15612,7 +15637,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -15697,7 +15722,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -15724,7 +15749,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -15773,7 +15798,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -15857,7 +15882,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -15884,7 +15909,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -15935,7 +15960,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -16019,7 +16044,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -16046,7 +16071,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -16096,7 +16121,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -16182,7 +16207,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -16209,7 +16234,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -16259,7 +16284,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -16344,7 +16369,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -16369,7 +16394,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " inner join micromedicao.rota rota on ( rota.rota_id = imov.rota_idalternativa ) "
 							+ " left join faturamento.mov_conta_prefaturada mcpf on ( mcpf.cnta_id = cnta.cnta_id  ) "
 							
-							/**TODO:COSANPA
+							/**
 							 * @autor Adriana Muniz
 							 * 19/07/2012
 							 * 
@@ -16378,7 +16403,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -16429,7 +16454,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -16513,7 +16538,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -16540,7 +16565,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -16590,7 +16615,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -16677,7 +16702,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -16705,7 +16730,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -16756,7 +16781,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -16840,7 +16865,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -16867,7 +16892,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -16916,7 +16941,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -17001,7 +17026,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -17028,7 +17053,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -17079,7 +17104,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -17176,7 +17201,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -17203,7 +17228,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -17280,7 +17305,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -17398,7 +17423,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -17425,7 +17450,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -17475,7 +17500,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -17560,7 +17585,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -17587,7 +17612,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -17636,7 +17661,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -17690,7 +17715,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ?  ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -17717,7 +17742,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -17766,7 +17791,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 						+ " where cnta.imov_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -20278,6 +20303,88 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		return retorno;
 	}
+	public Collection pesquisarContasImoveis(Collection idsImovel, Integer anoMes, Date dataVencimentoContaInicio,
+			Date dataVencimentoContaFim, Integer anoMesFim, String indicadorContaPaga, Date dataVencimentoInformada,
+			boolean isDebitoEmConta) throws ErroRepositorioException {
+		Collection retorno = null;
+
+		Session session = HibernateUtil.getSession();
+		String consulta;
+
+		try {
+			consulta = "select cnta.id, cnta.referencia, cnta.dataVencimentoConta, cnta.valorAgua, cnta.valorEsgoto, "
+					+ "cnta.debitos, cnta.valorCreditos, cnta.consumoAgua, cnta.consumoEsgoto, "
+					+ "cnta.dataValidadeConta, cnta.dataRevisao, cnta.debitoCreditoSituacaoAtual, cnta.referenciaContabil, "
+					+ "cnta.ultimaAlteracao, imov, dcsan "
+					+ "from Conta cnta "
+					+ "inner join cnta.imovel imov "
+					+ "inner join cnta.debitoCreditoSituacaoAtual dcst "
+					+ "left join cnta.debitoCreditoSituacaoAnterior dcsan "
+					+ "where cnta.referencia BETWEEN :anoMes AND :anoMesFim "
+					+ "and imov.id in (:idsImovel) "
+					+ "and cnta.debitoCreditoSituacaoAtual in(:normal, :incluida, :retificada) "
+					+ "and cnta.dataVencimentoConta < :dataVencimentoInformada";
+
+			if (dataVencimentoContaInicio != null) {
+				if (dataVencimentoContaFim != null) {
+					consulta += " and cnta.dataVencimentoConta BETWEEN :dataVencimentoContaInicio AND :dataVencimentoContaFim ";
+				} else {
+					consulta += " and cnta.dataVencimentoConta BETWEEN :dataVencimentoContaInicio AND :dataVencimentoContaInicio ";
+				}
+			}
+			
+			if(isDebitoEmConta)
+				consulta += " and cnta.indicadorDebitoConta = 1 ";
+
+			if (!indicadorContaPaga.equals("3")) {
+				if (indicadorContaPaga.equals("1")) {
+					consulta += "and exists ";
+				} else {
+					consulta += "and not exists ";
+				}
+				consulta += "(select conta.id " + "from Pagamento pgmt "
+						+ "inner join pgmt.contaGeral contaGeral "
+						+ "inner join contaGeral.conta conta "
+						+ "where conta.id = cnta.id) ";
+			}
+
+			if (dataVencimentoContaInicio != null) {
+				retorno = session.createQuery(consulta).setInteger("anoMes", anoMes).setInteger("anoMesFim", anoMesFim)
+						.setParameterList("idsImovel", idsImovel).setInteger("normal", DebitoCreditoSituacao.NORMAL)
+						.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA).setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
+						.setDate("dataVencimentoContaInicio", dataVencimentoContaInicio)
+						.setDate("dataVencimentoContaFim", dataVencimentoContaFim)
+						.setDate("dataVencimentoInformada", dataVencimentoInformada).list();
+
+			} else {
+
+				retorno = session.createQuery(consulta).setInteger("anoMes", anoMes).setInteger("anoMesFim", anoMesFim)
+						.setParameterList("idsImovel", idsImovel).setInteger("normal", DebitoCreditoSituacao.NORMAL)
+						.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA).setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
+						.setDate("dataVencimentoInformada", dataVencimentoInformada).list();
+			}
+
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	
+	}
+	
+	public Collection pesquisarContasImoveis(Collection idsImovel, Integer anoMes, Date dataVencimentoContaInicio,
+			Date dataVencimentoContaFim, Integer anoMesFim, String indicadorContaPaga, Date dataVencimentoInformada)
+					throws ErroRepositorioException {
+		
+		Collection retorno = this.pesquisarContasImoveis(idsImovel, anoMes, dataVencimentoContaInicio, dataVencimentoContaFim, anoMesFim,
+				indicadorContaPaga, dataVencimentoInformada, false);
+		
+		return retorno;
+	}
 
 	/**
 	 * 
@@ -20804,7 +20911,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							DebitoCreditoSituacao.PARCELADA).setInteger(
 							"situacaoDebitoPrescrito",
 							DebitoCreditoSituacao.DEBITO_PRESCRITO)
-					/**TODO: COSANPA
+					/**
 					 * Alteração necessária para as contas incluidas canceladas 
 					 * por débito prescrito também possm ir pra histórico*/
 					.setInteger("situacaoDebitoPrescritoContasIncluidas",
@@ -22203,6 +22310,132 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 									DebitoCreditoSituacao.INCLUIDA).setInteger(
 									"retificada",
 									DebitoCreditoSituacao.RETIFICADA).list();
+				}
+			}
+
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+
+	}
+	
+	public Collection pesquisarContasCliente(Integer codigoCliente, Short relacaoTipo, Integer anoMes, Date dataVencimentoContaInicio,
+			Date dataVencimentoContaFim, Integer anoMesFim, Integer codigoClienteSuperior, Date dataVencimentoInformada,
+			boolean isDebitoAutomatico) throws ErroRepositorioException {
+
+		Collection retorno = null;
+
+		Session session = HibernateUtil.getSession();
+		String consulta;
+
+		try {
+
+			consulta = "select conta.id, conta.referencia, conta.dataVencimentoConta, conta.valorAgua, conta.valorEsgoto, "
+					+ "conta.debitos, conta.valorCreditos, conta.consumoAgua, conta.consumoEsgoto, "
+					+ "conta.dataValidadeConta, conta.dataRevisao, conta.debitoCreditoSituacaoAtual, conta.referenciaContabil, "
+					+ "conta.ultimaAlteracao, imov, dcsan " + "from ClienteConta clienteConta "
+					+ "inner join clienteConta.cliente cliente " + "inner join clienteConta.conta conta " + "inner join conta.imovel imov "
+					+ "inner join conta.debitoCreditoSituacaoAtual dcst " + "left join conta.debitoCreditoSituacaoAnterior dcsan ";
+
+			if (relacaoTipo != null) {
+				consulta = consulta + " inner join clienteConta.clienteRelacaoTipo clienteRelacaoTipo ";
+			}
+
+			consulta = consulta + "where " + "conta.referencia BETWEEN :anoMes AND :anoMesFim "
+					+ "and dcst.id in(:normal, :incluida, :retificada) " + "and conta.dataVencimentoConta < :dataVencimentoInformada ";
+			
+			if(isDebitoAutomatico)
+				consulta += " and cnta.indicadorDebitoConta = 1 ";
+
+			Integer codigo = null;
+
+			if (codigoClienteSuperior != null) {
+				consulta += " and cliente.cliente.id = :codigo ";
+				codigo = codigoClienteSuperior;
+			} else {
+				consulta += " and cliente.id = :codigo ";
+				codigo = codigoCliente;
+			}
+
+			if (relacaoTipo != null) {
+				consulta = consulta + " and clienteRelacaoTipo = :relacao ";
+
+				if (dataVencimentoContaInicio != null) {
+					consulta += " and conta.dataVencimentoConta BETWEEN :dataVencimentoContaInicio AND :dataVencimentoContaFim ";
+
+					if (dataVencimentoContaFim != null) {
+
+						retorno = (Collection) session.createQuery(consulta).setInteger("codigo", codigo).setInteger("anoMes", anoMes)
+								.setInteger("anoMesFim", anoMesFim).setInteger("normal", DebitoCreditoSituacao.NORMAL)
+								.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA)
+								.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
+								.setShort("relacao", new Short(relacaoTipo).shortValue())
+								.setDate("dataVencimentoContaInicio", dataVencimentoContaInicio)
+								.setDate("dataVencimentoContaFim", dataVencimentoContaFim)
+								.setDate("dataVencimentoInformada", dataVencimentoInformada).list();
+					} else {
+
+						retorno = (Collection) session.createQuery(consulta).setInteger("codigo", codigo).setInteger("anoMes", anoMes)
+								.setInteger("anoMesFim", anoMesFim).setInteger("normal", DebitoCreditoSituacao.NORMAL)
+								.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA)
+								.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
+								.setShort("relacao", new Short(relacaoTipo).shortValue())
+								.setDate("dataVencimentoContaInicio", dataVencimentoContaInicio)
+								.setDate("dataVencimentoContaFim", dataVencimentoContaInicio)
+								.setDate("dataVencimentoInformada", dataVencimentoInformada).list();
+					}
+				} else {
+
+					retorno = (Collection) session.createQuery(consulta).setInteger("codigo", codigo).setInteger("anoMes", anoMes)
+							.setInteger("anoMesFim", anoMesFim).setInteger("normal", DebitoCreditoSituacao.NORMAL)
+							.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA)
+							.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
+							.setShort("relacao", new Short(relacaoTipo).shortValue())
+							.setDate("dataVencimentoInformada", dataVencimentoInformada).list();
+				}
+
+			}
+
+			if (relacaoTipo == null) {
+
+				if (dataVencimentoContaInicio != null) {
+					consulta += " and conta.dataVencimentoConta BETWEEN :dataVencimentoContaInicio AND :dataVencimentoContaFim ";
+
+					if (dataVencimentoContaFim != null) {
+
+						retorno = (Collection) session.createQuery(consulta).setInteger("codigo", codigo).setInteger("anoMes", anoMes)
+								.setInteger("anoMesFim", anoMesFim).setInteger("normal", DebitoCreditoSituacao.NORMAL)
+								.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA)
+								.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
+								.setDate("dataVencimentoContaInicio", dataVencimentoContaInicio)
+								.setDate("dataVencimentoContaFim", dataVencimentoContaFim)
+								.setDate("dataVencimentoInformada", dataVencimentoInformada).list();
+
+					}
+
+					else {
+
+						retorno = (Collection) session.createQuery(consulta).setInteger("codigo", codigo).setInteger("anoMes", anoMes)
+								.setInteger("anoMesFim", anoMesFim).setInteger("normal", DebitoCreditoSituacao.NORMAL)
+								.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA)
+								.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
+								.setDate("dataVencimentoContaInicio", dataVencimentoContaInicio)
+								.setDate("dataVencimentoContaFim", dataVencimentoContaInicio)
+								.setDate("dataVencimentoInformada", dataVencimentoInformada).list();
+					}
+				} else {
+
+					retorno = (Collection) session.createQuery(consulta).setInteger("codigo", codigo).setInteger("anoMes", anoMes)
+							.setInteger("anoMesFim", anoMesFim).setInteger("normal", DebitoCreditoSituacao.NORMAL)
+							.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA)
+							.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
+							.setDate("dataVencimentoInformada", dataVencimentoInformada).list();
 				}
 			}
 
@@ -26936,8 +27169,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		try {
 			RepositorioUtilHBM repositorioUtilHBM = RepositorioUtilHBM.getInstancia();
-			SistemaParametro sistemaParametro = 
-				repositorioUtilHBM.pesquisarParametrosDoSistema();
+			SistemaParametro sistemaParametro = repositorioUtilHBM.pesquisarParametrosDoSistema();
 
 			/**
 			 * [UC0407] Filtrar Imóveis para Inserir ou Manter Conta
@@ -26957,8 +27189,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			Connection jdbcCon = session.connection();
 
 			update = "UPDATE faturamento.conta SET "
-					+ "cnta_dtvencimentoconta = ?, cnta_dtvalidadeconta = ?, "
-					+ "cnta_icalteracaovencimento = ?, cnta_tmultimaalteracao = ? "
+					+ "cnta_dtvencimentoconta = ?, cnta_dtvalidadeconta = ?, "//1, 2
+					+ "cnta_icalteracaovencimento = ?, cnta_tmultimaalteracao = ? "//3, 4
 					+ "WHERE cnta_id IN( "
 					+ "SELECT cnta.cnta_id "
 					+ "FROM faturamento.conta cnta "
@@ -26967,14 +27199,15 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "INNER JOIN micromedicao.rota rota on qdra.rota_id = rota.rota_id "
 					+ "INNER JOIN faturamento.faturamento_grupo ftgr on rota.ftgr_id = ftgr.ftgr_id "
 					+ "INNER JOIN faturamento.debito_credito_situacao dcst on cnta.dcst_idatual = dcst.dcst_id "
-					+ "WHERE cnta.cnta_amreferenciaconta BETWEEN ? AND ? "
-					+ "AND ftgr.ftgr_id = ? " + "AND dcst.dcst_id IN(?, ?, ?) ";
+					+ "WHERE cnta.cnta_amreferenciaconta BETWEEN ? AND ? "//5, 6
+					+ "AND ftgr.ftgr_id = ? " + "AND dcst.dcst_id IN(?, ?, ?) "//7, 8, 9, 10
+					+ "AND cnta_dtvencimentoconta < ? ";//11
 
 			if (dataVencimentoContaInicio != null) {
-				update += " AND cnta.cnta_dtvencimentoconta BETWEEN ? AND ? ";
+				update += " AND cnta.cnta_dtvencimentoconta BETWEEN ? AND ? ";//12, 13
 
 				if (indicadorBloqueioContasContratoParcelManterConta) {
-					update += " AND (cnta.cmrv_id is null or cnta.cmrv_id <> ? ) ";
+					update += " AND (cnta.cmrv_id is null or cnta.cmrv_id <> ? ) ";//14
 				}
 
 				update += ")";
@@ -26993,12 +27226,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					st.setInt(8, DebitoCreditoSituacao.NORMAL.intValue());
 					st.setInt(9, DebitoCreditoSituacao.INCLUIDA.intValue());
 					st.setInt(10, DebitoCreditoSituacao.RETIFICADA.intValue());
-					st.setDate(11, Util.getSQLDate(dataVencimentoContaInicio));
-					st.setDate(12, Util.getSQLDate(dataVencimentoContaFim));
+					st.setDate(11, Util.getSQLDate(dataVencimento));
+					st.setDate(12, Util.getSQLDate(dataVencimentoContaInicio));
+					st.setDate(13, Util.getSQLDate(dataVencimentoContaFim));
 					
 					if (indicadorBloqueioContasContratoParcelManterConta) {
-						st.setInt(13, 
-								ContaMotivoRevisao.CONTA_EM_CONTRATO_PARCELAMENTO.intValue());
+						st.setInt(14, ContaMotivoRevisao.CONTA_EM_CONTRATO_PARCELAMENTO.intValue());
 					}
 				
 				} else {
@@ -27015,12 +27248,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					st.setInt(8, DebitoCreditoSituacao.NORMAL.intValue());
 					st.setInt(9, DebitoCreditoSituacao.INCLUIDA.intValue());
 					st.setInt(10, DebitoCreditoSituacao.RETIFICADA.intValue());
-					st.setDate(11, Util.getSQLDate(dataVencimentoContaInicio));
+					st.setDate(11, Util.getSQLDate(dataVencimento));
 					st.setDate(12, Util.getSQLDate(dataVencimentoContaInicio));
+					st.setDate(13, Util.getSQLDate(dataVencimentoContaInicio));
 					
 					if (indicadorBloqueioContasContratoParcelManterConta) {
-						st.setInt(13, 
-								ContaMotivoRevisao.CONTA_EM_CONTRATO_PARCELAMENTO.intValue());
+						st.setInt(14, ContaMotivoRevisao.CONTA_EM_CONTRATO_PARCELAMENTO.intValue());
 					}
 					
 					st.executeUpdate();
@@ -27046,10 +27279,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				st.setInt(8, DebitoCreditoSituacao.NORMAL.intValue());
 				st.setInt(9, DebitoCreditoSituacao.INCLUIDA.intValue());
 				st.setInt(10, DebitoCreditoSituacao.RETIFICADA.intValue());
+				st.setDate(11, Util.getSQLDate(dataVencimento));
 
 				if (indicadorBloqueioContasContratoParcelManterConta) {
-					st.setInt(11, 
-							ContaMotivoRevisao.CONTA_EM_CONTRATO_PARCELAMENTO.intValue());
+					st.setInt(12, ContaMotivoRevisao.CONTA_EM_CONTRATO_PARCELAMENTO.intValue());
 				}
 				
 				st.executeUpdate();
@@ -35827,7 +36060,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ " where "
 					+ "  cnta.cnta_amreferenciacontabil= :anoMesReferencia "
 					+ "  and dbcb.loca_id= :idLocalidade  ";
-			/**TODO: Cosanpa
+			/**
 			 * Inlcuindo contas incluidas canceladas por débito prescrito na contabilização
 			 * @author Wellington Rocha*/
 			if (idSituacaoAtual.equals(DebitoCreditoSituacao.DEBITO_PRESCRITO)){
@@ -35906,7 +36139,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "   cnta.cnta_amreferenciaconta=:anoMesReferencia "
 					+ "   and crrz.loca_id=:idLocalidade  "
 					+ "   and crcg.catg_id=:idCategoria  ";
-			/**TODO: Cosanpa
+			/**
 			 * Inlcuindo contas incluidas canceladas por débito prescrito na contabilização
 			 * @author Wellington Rocha*/
 			if (idSituacaoAtual.equals(DebitoCreditoSituacao.DEBITO_PRESCRITO)){
@@ -35988,7 +36221,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "   and catg.catg_id= :idCategoria "
 					+ "   and cnta.cnta_amreferenciacontabil= :anoMesReferencia "
 					+ "   and cnid.imtp_id= :idTipoImposto ";
-			/**TODO: Cosanpa
+			/**
 			 * Inlcuindo contas incluidas canceladas por débito prescrito na contabilização
 			 * @author Wellington Rocha*/
 			if (idSituacaoAtual.equals(DebitoCreditoSituacao.DEBITO_PRESCRITO)){
@@ -36066,7 +36299,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "  cnta.cnta_amreferenciacontabil= :anoMesReferencia "
 					+ "  and dbcb.loca_id= :idLocalidade  "
 					+ "  and dccg .catg_id= :idCategoria  ";
-			/**TODO: Cosanpa
+			/**
 			 * Inlcuindo contas incluidas canceladas por débito prescrito na contabilização
 			 * @author Wellington Rocha*/
 			if (idSituacaoAtual.equals(DebitoCreditoSituacao.DEBITO_PRESCRITO)){
@@ -36144,7 +36377,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "   cnta.cnta_amreferenciacontabil=:anoMesReferencia "
 					+ "   and crrz.loca_id=:idLocalidade  "
 					+ "   and crcg.catg_id=:idCategoria  ";
-			/**TODO: Cosanpa
+			/**
 			 * Inlcuindo contas incluidas canceladas por débito prescrito na contabilização
 			 * @author Wellington Rocha*/
 			if (idSituacaoAtual.equals(DebitoCreditoSituacao.DEBITO_PRESCRITO)){
@@ -36226,7 +36459,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "   and catg.catg_id= :idCategoria "
 					+ "   and cnta.cnta_amreferenciacontabil= :anoMesReferencia "
 					+ "   and cnid.imtp_id= :idTipoImposto ";
-			/**TODO: Cosanpa
+			/**
 			 * Inlcuindo contas incluidas canceladas por débito prescrito na contabilização
 			 * @author Wellington Rocha*/
 			if (idSituacaoAtual.equals(DebitoCreditoSituacao.DEBITO_PRESCRITO)){
@@ -37106,7 +37339,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ " where "
 					+ "  cnta.cnta_amreferenciacontabil= :anoMesReferencia "
 					+ "  and dbcb.loca_id= :idLocalidade  ";
-			/**TODO: Cosanpa
+			/**
 			 * Inlcuindo contas incluidas canceladas por débito prescrito na contabilização
 			 * @author Wellington Rocha*/
 			if (idSituacaoAtual.equals(DebitoCreditoSituacao.DEBITO_PRESCRITO)){
@@ -37192,7 +37425,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "  cnta.cnta_amreferenciacontabil= :anoMesReferencia "
 					+ "  and dbcb.loca_id= :idLocalidade  "
 					+ "  and dccg .catg_id= :idCategoria  ";
-			/**TODO: Cosanpa
+			/**
 			 * Inlcuindo contas incluidas canceladas por débito prescrito na contabilização
 			 * @author Wellington Rocha*/
 			if (idSituacaoAtual.equals(DebitoCreditoSituacao.DEBITO_PRESCRITO)){
@@ -37256,7 +37489,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria a variável que vai conter o hql
 		String consulta;
 
-		/**TODO: COSANPA
+		/**
 		 * Troca da coluna cnta_amreferenciaconta por cnta_amreferenciacontabil no where
 		 * para corrigir contabilização.
 		 * @author: Wellington Rocha
@@ -37276,7 +37509,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "   cnta.cnta_amreferenciacontabil=:anoMesReferencia "
 					+ "   and crrz.loca_id=:idLocalidade "
 					+ "   and crcg.catg_id=:idCategoria ";
-			/**TODO: Cosanpa
+			/**
 			 * Inlcuindo contas incluidas canceladas por débito prescrito na contabilização
 			 * @author Wellington Rocha*/
 			if (idSituacaoAtual.equals(DebitoCreditoSituacao.DEBITO_PRESCRITO)){
@@ -37343,7 +37576,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		try {
 
-			/**TODO: COSANPA
+			/**
 			 * Correção da consulta, troca da coluna cnta_amreferenciaconta por cnta_amreferenciacontabil
 			 * para correta contabilização.
 			 * 
@@ -37362,7 +37595,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "   cnta.cnta_amreferenciacontabil=:anoMesReferencia "
 					+ "   and crrz.loca_id=:idLocalidade  ";
 			
-					/**TODO: Cosanpa
+					/**
 					 * Inlcuindo contas incluidas canceladas por débito prescrito na contabilização
 					 * @author Wellington Rocha*/
 					if (idSituacaoAtual.equals(DebitoCreditoSituacao.DEBITO_PRESCRITO)){
@@ -37975,8 +38208,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.formatarMesAnoComBarraParaAnoMes(helper.getMesAno()));
 			
 			}else{
-				/**TODO: COSANPA
-				 * Mantis 581 - Incluir opção de contas prescritas no relatório de contas canceladas/retificadas
+				/**
+				 * Incluir opção de contas prescritas no relatório de contas canceladas/retificadas
 				 * 
 				 * @author Wellington Rocha
 				 * @date 04/06/2012
@@ -38085,8 +38318,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.formatarMesAnoComBarraParaAnoMes(helper.getMesAno()));
 			
 			}else{
-				/**TODO: COSANPA
-				 * Mantis 581 - Incluir opção de contas prescritas no relatório de contas canceladas/retificadas
+				/**
+				 * Incluir opção de contas prescritas no relatório de contas canceladas/retificadas
 				 * 
 				 * @author Wellington Rocha
 				 * @date 04/06/2012
@@ -38188,8 +38421,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					.formatarMesAnoComBarraParaAnoMes(helper.getMesAno()));
 			
 			}else{
-				/**TODO: COSANPA
-				 * Mantis 581 - Incluir opção de contas prescritas no relatório de contas canceladas/retificadas
+				/**
+				 * Incluir opção de contas prescritas no relatório de contas canceladas/retificadas
 				 * 
 				 * @author Wellington Rocha
 				 * @date 04/06/2012
@@ -38863,7 +39096,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	 * @throws ErroRepositorioException
 	 */
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Alteracao para enviar informacao se a rota é alternativa ou nao, para 
 	 * corrigir o problema da geracao da rota do IS para os grupos 101 e 401
 	 */
@@ -38936,10 +39169,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "ligacaoAguaSituacao.numeroDiasCorte, "// 67
 					+ "ligacaoAgua.dataCorte, "// 68
 					+ "imovel.indicadorImovelAreaComum, "// 69
-					/* TODO : COSANPA Adicionando campos para enviar na rota */
+					/*  Adicionando campos para enviar na rota */
 					+ "ligacaoAgua.dataLigacao, " //70 
 					+ "ligacaoEsgoto.dataLigacao, " //71
-					/* TODO : COSANPA Adicionando informacao do nome da conta */
+					/*  Adicionando informacao do nome da conta */
 					+ "clienteImoveisReposanvel.cliente.id, " //72
 					+ "clienteImoveisReposanvel.indicadorNomeConta, " //73
 					+ "clienteImoveisUsuario.cliente.id, " //74
@@ -39012,7 +39245,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				consulta = consulta
 						//+ " ORDER BY imovel.indicadorImovelCondominio,imovel.numeroSequencialRota,imovel.lote,imovel.subLote ";
 				/*
-				 * TODO : COSANPA
+				 * 
 				 * Alteração feita para gerar a rota ordenada pela inscrição.
 				 */
 						+ " ORDER BY imovel.indicadorImovelCondominio,localidade.id, setorComercial.codigo,quadra.numeroQuadra,imovel.lote,imovel.subLote ";
@@ -39623,8 +39856,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ " faturaItem.fitm_vlconta as valor, " // 18
 					+ " contageral.cntg_ichistorico as indicadorContaHist, " // 19
 					+ " faturaItem.fitm_id as idFaturaItem, " // 20
-					/**TODO: COSANPA
-					 * Mantis 647 - Nome do Imovel no lugar do nome do cliente usuário no relatório de faturas agrupadas
+					/**
+					 * Nome do Imovel no lugar do nome do cliente usuário no relatório de faturas agrupadas
 					 * 
 					 * @author Wellington Rocha
 					 * @date 22/11/2012*/
@@ -43372,7 +43605,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -43399,7 +43632,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 							+ " where rota.rota_id = ? and cnta.cnta_amreferenciaconta = ? and cnta.dcst_idatual = ? ";
 						
 				    /**
-				     * TODO : COSANPA
+				     * 
 				     * Pamela Gatinho - 29/08/2011
 				     * Alteracao para regerar todas as contas PF
 				     * ao faturar o grupo
@@ -43642,7 +43875,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "hihAgua.id, "//29
 					+ "hihPoco.id, "//30
 					/** 
-					 * TODO : COSANPA
+					 * 
 					 * Adicionando parametro para verificar se o imóvel
 					 * faz parte de um condomínio
 					 */
@@ -44449,7 +44682,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		String consulta;
 
 		try {
-			/**TODO: COSANPA
+			/**
 			 * Autor: Adriana Muniz
 			 * data: 05/09/2011
 			 * 
@@ -45301,7 +45534,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		Session session = HibernateUtil.getSession();
 		String consulta = null;
 
-		/**TODO:COSANPA
+		/**
 		 * Data: 30/01/2011
 		 * 
 		 * retirada de um criterio da select que impedia que o credito a realizar de determinado credito 
@@ -45396,7 +45629,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		Session session = HibernateUtil.getSession();
 		String consulta = null;
 
-		/**TODO:COSANPA
+		/**
 		 * Data: 30/01/2011
 		 * 
 		 * retirada de um criterio da select que impedia que o credito a realizar de determinado credito 
@@ -46585,7 +46818,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		String consulta;
 		Collection retorno = null;
 		
-		/*TODO: COSANPA
+		/*
 		 * autor: Adriana Muniz
 		 * data: 21/03/2011
 		 * Ordenação dos imoveis por Localidade, Setor, Quadra e Sequencial da Rota,
@@ -46960,7 +47193,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				update = update + " ,cnta_vlrateioesgoto= " + conta.getValorRateioEsgoto();
 			}
 			/**
-			 * TODO : COSANPA
+			 * 
 			 * Alteracao para atualizar a data de vencimento
 			 * das contas não impressas
 			 * Data: 25/10/2011
@@ -49317,7 +49550,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
                 "where " +
                 "  mcpf.rota_id = :idRota and mcpf.mcpf_ammovimento = :anoMesFaturamento " +
                 /**
-                 * TODO : COSANPA
+                 * 
                  * Pamela Gatinho - 12/08/2011
                  * Adiconando essa validacao para contabilizar somente
                  * imoveis que possuirem conta
@@ -51033,7 +51266,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/*
-	 * TODO : COSANPA
+	 * 
 	 * Método criado para não salvar na tabela de geração da rota
 	 * todos os imóveis da rota, e sim, somente os que possuem conta pre-faturada
 	 * 
@@ -51716,10 +51949,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "ligacaoAguaSituacao.numeroDiasCorte, "// 67
 					+ "ligacaoAgua.dataCorte, "// 68
                     + "imovel.indicadorImovelAreaComum, " // 69
-                    /* TODO : COSANPA Adicionando campos para enviar na rota */
+                    /*  Adicionando campos para enviar na rota */
 					+ "ligacaoAgua.dataLigacao, " // 70
 					+ "ligacaoEsgoto.dataLigacao, " // 71
-					/* TODO : COSANPA Adicionando informacao do nome da conta */
+					/*  Adicionando informacao do nome da conta */
 					+ "clienteImoveisReposanvel.cliente.id, " //72
 					+ "clienteImoveisReposanvel.indicadorNomeConta, " //73
 					+ "clienteImoveisUsuario.cliente.id, " //74
@@ -57840,7 +58073,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
  	
 	
-	/**TODO:COSANPA
+	/**
 	 * autor: Adriana Muniz
 	 * Data: 16/05/2011
 	 * Método para retornar uma coleção de debitos cobrados do parcelamento
@@ -57899,7 +58132,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 		/*
-	 * TODO : COSANPA
+	 * 
 	 * Método criado para não salvar na tabela de geração da rota
 	 * todos os imóveis da rota, e sim, somente os que possuem conta pre-faturada
 	 * 
@@ -58042,7 +58275,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/*
-	 * TODO : COSANPA
+	 * 
 	 * Método criado para não salvar na tabela de geração da rota dividida
 	 * todos os imóveis da rota, e sim, somente os que possuem conta pre-faturada
 	 * 
@@ -58092,7 +58325,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/*
-	 * TODO : COSANPA
+	 * 
 	 * Data: 22/02/2011
 	 * 
 	 * Dois métodos foram acrescentados:
@@ -58190,7 +58423,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		return retorno;
 	}
 	
-	/*TODO:COSANPA
+	/*
 	 * Ultizado no retorno das informações enviadas pelo IS, 
 	 * para deletar os creditos realizados e a realizar, caso não tenha sido concedido, por consumo acima de 10 metros cúbicos
 	 * */
@@ -58350,7 +58583,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		}
 	}
 	
-	/*TODO: COSANPA
+	/*
 	 * autor: Adriana Muniz
 	 * Data: 12/05/2011
 	 * Utilizado na geração do arquivo da declaração de quitação anual débitos 
@@ -58464,7 +58697,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/*
-	 * TODO : COSANPA
+	 * 
 	 * Método criado para obter os imóveis de uma rota que possuem conta
 	 */
 	
@@ -58520,7 +58753,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				+ "hih.numeroLeituraInstalacao," // 32
 				+ "hie.numeroLeituraInstalacao, " // 33
 									/**
-									 * TODO : COSANPA Adicionando parametros da ligacao de agua
+									 *  Adicionando parametros da ligacao de agua
 									 */
 				+ "ligacaoagua.dataLigacao, " // 34
 				+ "ligacaoesgoto.dataLigacao, " // 35
@@ -58564,7 +58797,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * @author Pamela Gatinho  
 	 * @date 04/08/2011
 	 * 
@@ -58621,7 +58854,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 
-	/*TODO:COSANPA
+	/*
 	 * Método chamado para buscar creditos do imovel que tenha valor residual diferente de zero, 
 	 * caso esse valor seja menor que o valor da conta no processamento de retorno do IS */
 	/**
@@ -58659,7 +58892,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		return retorno;
 	}
 
-	/*TODO: COSANPA
+	/*
 	 * Alteração para calcular corretamente o valor do imposto no resumo do faturamento
 	 * */
 	/**
@@ -58736,7 +58969,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * TODO - COSANPA
+	 *
 	 * 
 	 * Método para obter todos os imóveis que já foram processados
 	 * na transmissão do arquivo de retorno do IS
@@ -58781,7 +59014,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * TODO - COSANPA
+	 *
 	 * 
 	 * Método para obter todos os imóveis que faltam ser transmitidos
 	 * na transmissão do arquivo de retorno do IS
@@ -58828,7 +59061,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		return retorno;
 	}
 	
-	/*TODO: COSANPA
+	/*
 	 * autor: Adriana Muniz
 	 * Data: 17/06/2011
 	 * Utilizado na geração do bonus social
@@ -58873,7 +59106,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Pamela Gatinho - 15/09/2011
 	 * 
 	 * Gerar dados para o relatorio de contas retidas
@@ -58933,7 +59166,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Pamela Gatinho - 16/09/2011
 	 * 
 	 * Gerar dados para o relatorio de medicao do faturamento
@@ -59072,7 +59305,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		return retorno;
 	}
 		
-	/**TODO:COSANPA
+	/**
 	 * Data: 11/10/2011
 	 * Autor: Adriana Muniz
 	 * 
@@ -59112,7 +59345,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
  		return retorno;
  	}
  	
- 	/**TODO:COSANPA
+ 	/**
 	 * Data: 11/10/2011
 	 * Autor: Adriana Muniz
 	 * 
@@ -59153,7 +59386,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
  	}
  	
  	/**
-	 * TODO - COSANPA
+	 *
 	 * 
 	 * Método para pesquisar imóveis macro de condominios por rota
 	 * 
@@ -59195,7 +59428,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
  	}
  	
  	/**
-	 * TODO - COSANPA
+	 *
 	 * 
 	 * Método para pesquisar os imóveis micro pelo imóvel condominio
 	 * 
@@ -59230,8 +59463,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
  	}
  	
  	/**
-	 * TODO: COSANPA
-	 * Mantis 583 - Confirmar Prescrição de Conta
+	 *
+	 * Confirmar Prescrição de Conta
 	 * 
 	 * @author Wellington Rocha
 	 * @date 01/06/2012
@@ -59266,7 +59499,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
- 	 * TODO : COSANPA
+ 	 * 
 	 * Data: 25/10/2011
 	 * Autor: Pamela Gatinho
 	 * 
@@ -59308,7 +59541,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
  	}
  	
  	/**
-	 * TODO : COSANPA
+	 * 
 	 * @author Pamela Gatinho  
 	 * @date 24/02/2012
 	 * 
@@ -59353,7 +59586,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * @author Pamela Gatinho  
 	 * @date 06/03/2013
 	 * 
@@ -59399,7 +59632,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	
-	/**TODO: Cosanpa
+	/**
 	 * 
 	 * [UC0155] - 
 	 * 
@@ -59475,7 +59708,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	
-	/**TODO: COSANPA
+	/**
 	 * 
 	 * 
 	 * [UC0155] - Encerrar Faturamento do Mês Retorna o valor de crédito a
@@ -59556,7 +59789,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	
-	/**TODO: COSANPA
+	/**
 	 * 
 	 * Alteração para contabilizar em contas diferentes valores arrecadados até 31/12/2012
 	 * 
@@ -59586,7 +59819,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria a variável que vai conter o hql
 		String consulta;
 
-		/*TODO: COSANPA - Alteração para corrigir o valor dos créditos
+		/* - Alteração para corrigir o valor dos créditos
 		 *  no resumo do gerencial em 22/08/2011*/
 		try {
 			
@@ -59643,7 +59876,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	
-	/**TODO: COSANPA
+	/**
 	 * 
 	 * Alteração para contabilizar em contas diferentes valores arrecadados até 31/12/2012
 	 * 
@@ -59673,7 +59906,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		// cria a variável que vai conter o hql
 		String consulta;
 
-		/*TODO: COSANPA - Alteração para corrigir o valor dos créditos
+		/* - Alteração para corrigir o valor dos créditos
 		 *  no resumo do gerencial em 22/08/2011*/
 		try {
 			
@@ -59731,7 +59964,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	
-	/**TODO: COSANPA
+	/**
 	 * 
 	 * Alteração para contabilizar em contas diferentes valores arrecadados até 31/12/2012
 	 * 
@@ -59806,7 +60039,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		return retorno;
 	}
 	
-	/**TODO: COSANPA
+	/**
 	 * 
 	 * Alteração para contabilizar em contas diferentes valores arrecadados até 31/12/2012
 	 * 
@@ -59882,7 +60115,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	
-	/**TODO: COSANPA
+	/**
 	 * 
 	 * Alteração para contabilizar em contas diferentes valores arrecadados até 31/12/2012
 	 * 
@@ -59960,7 +60193,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	
-	/**TODO: COSANPA
+	/**
 	 * 
 	 * Alteração para contabilizar em contas diferentes valores arrecadados até 31/12/2012
 	 * 
@@ -60038,7 +60271,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	
-	/**TODO: COSANPA
+	/**
 	 * 
 	 * Alteração para contabilizar em contas diferentes valores arrecadados até 31/12/2012
 	 * 
@@ -60115,7 +60348,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 		return retorno;
 	}
 	
-	/**TODO: COSANPA
+	/**
 	 * 
 	 * Alteração para contabilizar em contas diferentes valores arrecadados até 31/12/2012
 	 * 
@@ -60194,7 +60427,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 	
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 22/10/2013
+	 * Felipe Santos - 22/10/2013
 	 * 
 	 * Retorna quantidadeContas e valorFaturamento por referência e localidade
 	 * 
@@ -60255,7 +60488,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 22/10/2013
+	 * Felipe Santos - 22/10/2013
 	 * 
 	 * Retorna a quantidade e valor total de Erros em Contas Retificadas e Emitidas
 	 * 
@@ -60350,7 +60583,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 23/10/2013
+	 * Felipe Santos - 23/10/2013
 	 * 
 	 * Retorna a quantidade e valor total de Inadimplencia para Contas Vencidas
 	 * 
@@ -60429,7 +60662,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 23/10/2013
+	 * Felipe Santos - 23/10/2013
 	 * 
 	 * Retorna a quantidade e valor total de Inadimplencia para Contas Emitidas
 	 * 
@@ -60492,7 +60725,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 23/10/2013
+	 * Felipe Santos - 23/10/2013
 	 * 
 	 * Retorna a quantidade e valor total de Inadimplencia para Contas Vencidas
 	 * maior que 90 dias
@@ -60571,7 +60804,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 	}
 	
 	/**
-	 * COSANPA - Mantis 414 - Felipe Santos - 23/10/2013
+	 * Felipe Santos - 23/10/2013
 	 * 
 	 * Retorna a quantidade e valor total de Inadimplencia para Contas Emitidas
 	 * 

@@ -146,7 +146,7 @@ public interface IRepositorioLigacaoAgua {
 	 */
 	public void atualizarTipoCorte(IntegracaoComercialHelper integracaoComercialHelper) throws ErroRepositorioException;
 	
-	/**TODO: COSANPA
+	/**
 	 * @author Wellington Rocha
 	 * Data: 21/03/2012
 	 * 

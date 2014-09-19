@@ -72,7 +72,7 @@ public class LogradouroCep extends ObjetoTransacao {
 
 	public LogradouroCep(Integer id, Logradouro logradouro, Cep cep, Short indicadorUso, Date ultimaAlteracao) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.logradouro = logradouro;
 		this.cep = cep;

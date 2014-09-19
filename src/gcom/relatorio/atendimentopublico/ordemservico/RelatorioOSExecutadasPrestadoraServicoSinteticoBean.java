@@ -26,12 +26,12 @@ public class RelatorioOSExecutadasPrestadoraServicoSinteticoBean implements Rela
 
 	public RelatorioOSExecutadasPrestadoraServicoSinteticoBean() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	public RelatorioOSExecutadasPrestadoraServicoSinteticoBean(String descricaoServicos, String idServicos, Integer qtdeOs, String idLocalidade, String descricaoLocalidade, String qtdeOsLocalidade) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.descricaoServicos = descricaoServicos;
 		this.idServicos = idServicos;
 		this.qtdeOs = qtdeOs;

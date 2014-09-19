@@ -4040,11 +4040,6 @@ public interface IControladorCobranca {
 	public IndicesAcrescimosImpontualidade pesquisarIndiceAcrescimoImpontualidade(
 			int anoMesReferenciaDebito) throws ControladorException;
 	
-	/**TODO: COSANPA - Alterações para atender Mantis 595
-	 * Enviar documentos de cobrança para endereço de correspondência
-	 * 
-	 * @author Wellington Rocha
-	 * @date 21/06/2013*/
 	public Collection<RelatorioNotificacaoDebitoBean> gerarRelatorioNotificacaoDebito(
 			Integer idCobrancaAcaoCronograma, Integer idCobrancaAcaoComando, int tamanhoMaximoDebito, String quantidadeRelatorios, String tipoEnderecoRelatorio) throws ControladorException;
 	
@@ -4847,12 +4842,6 @@ public interface IControladorCobranca {
 	 * @date 07/07/2010
 	 * 
 	 */
-	/**TODO: COSANPA
-	 * Alterações para atender ao Mantis 490
-     * Considerar a data de vencimento da conta ao invés de considerar o anoMes referencia
-     * da mesma
-     * @author Wellington Rocha
-     * @date 25/01/2012*/
 	public void gerarPrescreverDebitosDeImoveis( Integer idFuncionalidadeIniciada, 
 			Integer anoMesFaturamento, Date dataPrescricao, Integer usuario, String idsCobrancaSituacao) 
 		throws ControladorException ;
@@ -5441,4 +5430,17 @@ public interface IControladorCobranca {
 	 */
 	
 	public Collection pesquisarDadosPopupExtensaoComandoAguaSituacao(Integer idComando) throws ControladorException;
+	
+	public ObterDebitoImovelOuClienteHelper obterDebitoImovelOuCliente(int indicadorDebito, String idImovel, String codigoCliente,
+			Short clienteRelacaoTipo, String anoMesInicialReferenciaDebito, String anoMesFinalReferenciaDebito,
+			Date anoMesInicialVencimentoDebito, Date anoMesFinalVencimentoDebito, int indicadorPagamento, int indicadorConta,
+			int indicadorDebitoACobrar, int indicadorCreditoARealizar, int indicadorNotasPromissorias, int indicadorGuiasPagamento,
+			int indicadorCalcularAcrescimoImpontualidade, Boolean indicadorContas, int indicadorDividaAtiva,
+			boolean incluirGrupoFaturamentoNaoFaturado) throws ControladorException;
+	
+	public Collection<ContaValoresHelper> pesquisarContasDebito(Integer idCliente, Short relacaoTipo, Integer idImovel,
+			Collection idImoveis, Collection idImoveisAtuais, int indicadorDebito, int indicadorPagamento, int indicadorConta,
+			int indicadorCalcularAcrescimoImpontualidade, String anoMesInicialReferenciaDebito, String anoMesFinalReferenciaDebito,
+			Date anoMesInicialVencimentoDebito, Date anoMesFinalVencimentoDebito, String anoMesArrecadacao, int indicadorDividaAtiva,
+			boolean incluirGrupoFaturamentoNaoFaturado) throws ControladorException;
 }

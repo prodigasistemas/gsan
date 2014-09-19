@@ -3958,7 +3958,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		boolean segundaCondicaoNaoGerarConta = false;
 
 		/*
-		 * TODO : COSANPA Alteração para gerar a rota com imóveis ativos ou
+		 *  Alteração para gerar a rota com imóveis ativos ou
 		 * inativos com débitos
 		 */
 		// 1.1 Caso o valor total da água e o valor total do esgoto seja igual a
@@ -3991,7 +3991,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			segundaCondicaoNaoGerarConta = true;
 		}
 		/**
-		 * TODO:COSANPA
+		 *
 		 * 
 		 * @author Adriana Muniz date: 28/06/2012
 		 * 
@@ -10877,7 +10877,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 						// Situação Atual
 						/**
-						 * TODO: COSANPA Caso motivo de retificação seja débito
+						 * Caso motivo de retificação seja débito
 						 * prescrito, alterar a situação da conta para 8.
 						 * 
 						 * @author Wellington Rocha
@@ -11781,13 +11781,11 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						contaColecao.setDataVencimentoConta(dataVencimento);
 
 						// Data de validade
-						Date dataValidadeConta = this
-								.retornaDataValidadeConta(dataVencimento);
+						Date dataValidadeConta = this.retornaDataValidadeConta(dataVencimento);
 						contaColecao.setDataValidadeConta(dataValidadeConta);
 
 						// Indicador de alteração de vencimento da conta
-						contaColecao
-								.setIndicadorAlteracaoVencimento(Conta.INDICADOR_ALTERACAO_VENCIMENTO_ATIVO);
+						contaColecao.setIndicadorAlteracaoVencimento(Conta.INDICADOR_ALTERACAO_VENCIMENTO_ATIVO);
 
 						// Última alteraçao
 						contaColecao.setUltimaAlteracao(new Date());
@@ -11803,9 +11801,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						Integer numeroAlteracoesVencimento = 0;
 						try {
 
-							numeroAlteracoesVencimento = this.repositorioFaturamento
-									.obterQuantidadeAlteracoesVencimentoConta(contaColecao
-											.getId());
+							numeroAlteracoesVencimento = this.repositorioFaturamento.obterQuantidadeAlteracoesVencimentoConta(contaColecao.getId());
 						} catch (ErroRepositorioException ex) {
 							sessionContext.setRollbackOnly();
 							new ControladorException("erro.sistema", ex);
@@ -11816,20 +11812,16 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						}
 						numeroAlteracoesVencimento = numeroAlteracoesVencimento + 1;
 
-						contaColecao
-								.setNumeroAlteracoesVencimento(numeroAlteracoesVencimento);
+						contaColecao.setNumeroAlteracoesVencimento(numeroAlteracoesVencimento);
 						// ----------------------------------------------------------------------------------------
 
 						// Verificar atualização realizada por outro usuário
-						if ((contaNaBase.getUltimaAlteracao()
-								.after(contaColecao.getUltimaAlteracao()))) {
+						if ((contaNaBase.getUltimaAlteracao().after(contaColecao.getUltimaAlteracao()))) {
 							sessionContext.setRollbackOnly();
-							throw new ControladorException(
-									"erro.atualizacao.timestamp");
+							throw new ControladorException("erro.atualizacao.timestamp");
 						}
 
-						atualizarColecaoComRegistrarTransacao(contaColecao,
-								usuarioLogado);
+						atualizarColecaoComRegistrarTransacao(contaColecao, usuarioLogado);
 
 					}
 				}
@@ -11848,9 +11840,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				Integer numeroAlteracoesVencimento = 0;
 				try {
 
-					numeroAlteracoesVencimento = this.repositorioFaturamento
-							.obterQuantidadeAlteracoesVencimentoConta(contaColecao
-									.getId());
+					numeroAlteracoesVencimento = this.repositorioFaturamento.obterQuantidadeAlteracoesVencimentoConta(contaColecao.getId());
 				} catch (ErroRepositorioException ex) {
 					sessionContext.setRollbackOnly();
 					new ControladorException("erro.sistema", ex);
@@ -11861,49 +11851,39 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				}
 				numeroAlteracoesVencimento = numeroAlteracoesVencimento + 1;
 
-				contaColecao
-						.setNumeroAlteracoesVencimento(numeroAlteracoesVencimento);
+				contaColecao.setNumeroAlteracoesVencimento(numeroAlteracoesVencimento);
 				// ----------------------------------------------------------------------------------------
 
 				// Data de validade
-				Date dataValidadeConta = this
-						.retornaDataValidadeConta(dataVencimento);
+				Date dataValidadeConta = this.retornaDataValidadeConta(dataVencimento);
 				contaColecao.setDataValidadeConta(dataValidadeConta);
 
 				// Indicador de alteração de vencimento da conta
-				contaColecao
-						.setIndicadorAlteracaoVencimento(Conta.INDICADOR_ALTERACAO_VENCIMENTO_ATIVO);
+				contaColecao.setIndicadorAlteracaoVencimento(Conta.INDICADOR_ALTERACAO_VENCIMENTO_ATIVO);
 
 				// Última alteraçao
 				contaColecao.setUltimaAlteracao(new Date());
 
 				// Verificar atualização realizada por outro usuário
-				if ((contaNaBase.getUltimaAlteracao().after(contaColecao
-						.getUltimaAlteracao()))) {
+				if ((contaNaBase.getUltimaAlteracao().after(contaColecao.getUltimaAlteracao()))) {
 					sessionContext.setRollbackOnly();
 					throw new ControladorException("erro.atualizacao.timestamp");
 				}
 
-				atualizarColecaoComRegistrarTransacao(contaColecao,
-						usuarioLogado);
+				atualizarColecaoComRegistrarTransacao(contaColecao, usuarioLogado);
 
 			}
 		}
 	}
 
-	public void atualizarColecaoComRegistrarTransacao(Conta contaColecao,
-			Usuario usuarioLogado) throws ControladorException {
+	public void atualizarColecaoComRegistrarTransacao(Conta contaColecao, Usuario usuarioLogado) throws ControladorException {
 		// ------------ <REGISTRAR TRANSAÇÃO>----------------------------
 
 		RegistradorOperacao registradorOperacao = null;
 		if (usuarioLogado != null) {
-			registradorOperacao = new RegistradorOperacao(
-					Operacao.OPERACAO_ALTERAR_VENCIMENTO_CONTA,
-					contaColecao.getImovel() != null ? contaColecao.getImovel()
-							.getId() : contaColecao.getId(),
-					contaColecao.getId(), new UsuarioAcaoUsuarioHelper(
-							usuarioLogado,
-							UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+			registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_ALTERAR_VENCIMENTO_CONTA,
+					contaColecao.getImovel() != null ? contaColecao.getImovel().getId() : contaColecao.getId(), contaColecao.getId(),
+					new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 
 			registradorOperacao.registrarOperacao(contaColecao);
 
@@ -19405,7 +19385,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// acumula o valor do IR(imposto de renda) para situação de
 					// conta atual ou anterior igual a normal
 					/**
-					 * TODO:COSANPA Alteração para obter de forma correta o
+					 * Alteração para obter de forma correta o
 					 * valor dos impostos persistidos no resumo de faturamento
 					 * */
 					valorItemFaturamento = null;
@@ -21748,7 +21728,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					idsSituacaoAtual = new Integer[2];
 					idsSituacaoAtual[0] = DebitoCreditoSituacao.DEBITO_PRESCRITO;
 					/**
-					 * TODO: Cosanpa Inlcuindo contas incluidas canceladas por
+					 * Inlcuindo contas incluidas canceladas por
 					 * débito prescrito na contabilização
 					 * 
 					 * @author Wellington Rocha
@@ -21876,7 +21856,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					idsSituacaoAtual = new Integer[2];
 					idsSituacaoAtual[0] = DebitoCreditoSituacao.DEBITO_PRESCRITO;
 					/**
-					 * TODO: Cosanpa Inlcuindo contas incluidas canceladas por
+					 * Inlcuindo contas incluidas canceladas por
 					 * débito prescrito na contabilização
 					 * 
 					 * @author Wellington Rocha
@@ -22237,7 +22217,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					}
 
 					/**
-					 * TODO: COSANPA Inclusão dos creditos com credito_origem
+					 * Inclusão dos creditos com credito_origem
 					 * correspondente a DESCONTOS_CONCEDIDOS para fazer a
 					 * contabilização para os registros com Lançamento Tipo
 					 * correspondete a
@@ -22941,7 +22921,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					}
 
 					/**
-					 * TODO: COSANPA Inclusão dos creditos realizados com
+					 * Inclusão dos creditos realizados com
 					 * credito_origem = DESCONTOS_CONCEDIDOS para efetuar a
 					 * contabilização dos mesmos para o lançamento tipo
 					 * correspondente a
@@ -25116,16 +25096,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				 * [UC0113] - Faturar Grupo de Faturamento [FS0005] - Verificar
 				 * Débitos a cobrar de parcelamento
 				 */
-				/**
-				 * TODO:COSANPA
-				 * 
-				 * @autor Adriana Muniz
-				 * @date 25/09/2013
-				 * 
-				 *       Troca da referência de faturamento do grupo para a
-				 *       referencia de faturamento do sistema de parametro.
-				 *       Mantis 875
-				 * */
 				if (!(arrayDebitosACobrar[16] != null
 						&& debitoACobrar.getNumeroPrestacaoCobradas() == 0 && (arrayDebitosACobrar[15] != null && ((Integer) arrayDebitosACobrar[15])
 						.intValue() >= sistemaParametro.getAnoMesFaturamento()))) {
@@ -25226,14 +25196,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		Collection colecaoCreditosARealizar = null;
 
 		/**
-		 * TODO:COSANPA
-		 * 
 		 * @autor Adriana Muniz
 		 * @date 25/09/2013
 		 * 
-		 *       Troca da referência de faturamento do grupo para a referencia
-		 *       de faturamento do sistema de parametro. Mantis 875
-		 * */
+		 * Troca da referência de faturamento do grupo para a referencia
+		 * de faturamento do sistema de parametro.
+		 */
 		// Pesquisa créditos a cobrar
 		try {
 			colecaoCreditosARealizar = repositorioFaturamento
@@ -25543,7 +25511,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/*
-	 * TODO : COSANPA Refatoração feita pela cosanpa, para melhorar a leitura do
+	 *  Refatoração feita pela cosanpa, para melhorar a leitura do
 	 * código.
 	 */
 	/**
@@ -25785,7 +25753,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		}
 
 		/**
-		 * TODO:COSANPA data:08/08/2012 Adicionando parametros do array ao
+		 * data:08/08/2012 Adicionando parametros do array ao
 		 * objeto imovel Inclusão para atender as alterações no calculo do
 		 * condominio
 		 * */
@@ -33463,7 +33431,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		try {
 
 			/**
-			 * TODO: COSANPA Inclusao de um campo no retorno do método.
+			 * Inclusao de um campo no retorno do método.
 			 * Melhorias na 2 via da conta impressa.
 			 */
 			// caso o tipo de medição seja agua
@@ -39308,7 +39276,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							.getDataEnvioEmailConta());
 
 					/**
-					 * TODO: COSANPA Mantis 648 - Enviando para historico os
+					 * Enviando para historico os
 					 * dados referentes a rateio de água e esgoto
 					 * 
 					 * @author: Wellington Rocha
@@ -40721,7 +40689,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								"" + contaCategoria.getConsumoAgua(), 6)
 								+ " M3";
 						/**
-						 * TODO: COSANPA Mantis 686 - Segunda via de conta com
+						 * Segunda via de conta com
 						 * rateio está somando o valor de água da categoria com
 						 * o valor do rateio.
 						 * 
@@ -40811,7 +40779,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		}
 
 		/**
-		 * TODO : COSANPA Pamela Gatinho - 02/08/2012
+		 *  Pamela Gatinho - 02/08/2012
 		 * 
 		 * Alteração para exibir somente o valor do esgoto, sem o ralor do
 		 * rateio, que será mostrado separadamente em outra linha do documento.
@@ -45424,7 +45392,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// Situação Atual
 					DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 					/**
-					 * TODO: COSANPA Caso motivo de retificação seja débito
+					 * Caso motivo de retificação seja débito
 					 * prescrito, alterar a situação da conta para 8.
 					 * 
 					 * @author Wellington Rocha
@@ -45779,6 +45747,17 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		}
 	}
+	
+	public void alterarVencimentoConjuntoConta(Collection colecaoImovel,
+			Date dataVencimentoInformada, Integer anoMes,
+			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
+			Integer anoMesFim, Usuario usuario, String indicadorContaPaga,
+			String[] bancos) throws ControladorException {
+		
+		alterarVencimentoConjuntoConta(colecaoImovel, dataVencimentoInformada, anoMes, dataVencimentoContaInicio, dataVencimentoContaFim,
+				anoMesFim, usuario, indicadorContaPaga, bancos, false);
+		
+	}
 
 	/**
 	 * Alterar Vencimento do Conjunto de Conta
@@ -45794,7 +45773,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			Date dataVencimentoInformada, Integer anoMes,
 			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
 			Integer anoMesFim, Usuario usuario, String indicadorContaPaga,
-			String[] bancos) throws ControladorException {
+			String[] bancos, boolean isDebitoAutomatico) throws ControladorException {
 
 		Collection colecaoContasManutencao = new ArrayList();
 		Collection colecaoConta = new ArrayList();
@@ -45831,12 +45810,9 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 				i = i + cont;
 				try {
-					colecaoContasManutencao = repositorioFaturamento
-							.pesquisarContasImoveis(anoMes, colecao,
-									dataVencimentoContaInicio,
-									dataVencimentoContaFim, anoMesFim,
-									indicadorContaPaga);
-
+					colecaoContasManutencao = repositorioFaturamento.pesquisarContasImoveis(colecao, anoMes, dataVencimentoContaInicio,
+							dataVencimentoContaFim, anoMesFim, indicadorContaPaga, dataVencimentoInformada, isDebitoAutomatico);
+					
 					/**
 					 * [UC0407] Filtrar Imóveis para Inserir ou Manter Conta 3.
 					 * Caso o indicador de bloqueio de contas vinculadas a
@@ -45848,13 +45824,9 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					 * por: Mariana Victor Data: 15/07/2011
 					 * 
 					 * */
-					if (sistemaParametro
-							.getIndicadorBloqueioContasContratoParcelManterConta() != null
-							&& sistemaParametro
-									.getIndicadorBloqueioContasContratoParcelManterConta()
-									.equals(ConstantesSistema.SIM)) {
-						colecaoContasManutencao = this
-								.obterColecaoSemContasEmContratoParcelamentoRetificarConjuntoContasIds(colecaoContasManutencao);
+					if (sistemaParametro.getIndicadorBloqueioContasContratoParcelManterConta() != null
+							&& sistemaParametro.getIndicadorBloqueioContasContratoParcelManterConta().equals(ConstantesSistema.SIM)) {
+						colecaoContasManutencao = this.obterColecaoSemContasEmContratoParcelamentoRetificarConjuntoContasIds(colecaoContasManutencao);
 					}
 					/**
 					 * FIM DA ALTERAÇÂO
@@ -48829,7 +48801,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 
 				/**
-				 * TODO: COSANPA Caso motivo de retificação seja débito
+				 * Caso motivo de retificação seja débito
 				 * prescrito, alterar a situação da conta para 8.
 				 * 
 				 * @author Wellington Rocha
@@ -49132,25 +49104,21 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @param dataVencimento
 	 * @throws ControladorException
 	 */
-	public void alterarVencimentoConjuntoContaCliente(Integer codigoCliente,
-			Short relacaoTipo, Date dataVencimentoInformada, Integer anoMes,
-			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
-			Integer anoMesFim, Usuario usuario, Integer codigoClienteSuperior)
-			throws ControladorException {
+	public void alterarVencimentoConjuntoContaCliente(Integer codigoCliente, Short relacaoTipo, Date dataVencimentoInformada,
+			Integer anoMes, Date dataVencimentoContaInicio, Date dataVencimentoContaFim, Integer anoMesFim, Usuario usuario,
+			Integer codigoClienteSuperior, boolean isDebitoAutomatico) throws ControladorException {
 
 		Collection colecaoConta = new ArrayList();
 		Collection colecaoContasManutencao = new ArrayList();
 
 		// PARÂMETROS DO SISTEMA
-		SistemaParametro sistemaParametro = this.getControladorUtil()
-				.pesquisarParametrosDoSistema();
+		SistemaParametro sistemaParametro = this.getControladorUtil().pesquisarParametrosDoSistema();
 
 		try {
-			colecaoContasManutencao = repositorioFaturamento
-					.pesquisarContasCliente(codigoCliente, relacaoTipo, anoMes,
-							dataVencimentoContaInicio, dataVencimentoContaFim,
-							anoMesFim, codigoClienteSuperior);
-
+			colecaoContasManutencao = repositorioFaturamento.pesquisarContasCliente(codigoCliente, relacaoTipo, anoMes,
+					dataVencimentoContaInicio, dataVencimentoContaFim, anoMesFim, codigoClienteSuperior, dataVencimentoInformada,
+					isDebitoAutomatico);
+			
 			/**
 			 * [UC0407] Filtrar Imóveis para Inserir ou Manter Conta 3. Caso o
 			 * indicador de bloqueio de contas vinculadas a contrato de
@@ -49924,8 +49892,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			}
 
 			/**
-			 * TODO: Cosanpa Alteração para atender ao Mantis 499 Emitir faturas
-			 * agrupadas sem código de barras
+			 * Emitir faturas agrupadas sem código de barras
 			 * 
 			 * @author Wellington Rocha
 			 * @date 25/01/2012
@@ -50277,14 +50244,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					.formatarMoedaReal(valorConta));
 			emitirContaHelper.setValorConta(valorConta);
 
-			/**
-			 * TODO: COSANPA
-			 * 
-			 * Mantis 537
-			 * 
-			 * @author Wellington Rocha
-			 * @date 15/03/2012
-			 */
 			PagamentoHistorico pagamento = getControladorArrecadacao()
 					.pesquisarPagamentoDeContaEmHistorico(idContaEP);
 			if (pagamento != null
@@ -50376,13 +50335,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 			String representacaoNumericaCodBarra = "";
 
-			/**
-			 * TODO: Cosanpa Alteração para atender ao Mantis 499 Emitir faturas
-			 * agrupadas sem código de barras
-			 * 
-			 * @author Wellington Rocha
-			 * @date 25/01/2012
-			 */
 			if (emitirContaHelper.getContaSemCodigoBarras().equals("2")) {
 
 				representacaoNumericaCodBarra = this
@@ -58955,7 +58907,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				// Situação Atual
 				DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 				/**
-				 * TODO: COSANPA Caso motivo de retificação seja débito
+				 * Caso motivo de retificação seja débito
 				 * prescrito, alterar a situação da conta para 8.
 				 * 
 				 * @author Wellington Rocha
@@ -59309,9 +59261,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		try {
 
-			Date dataValidade = this
-					.retornaDataValidadeConta(dataVencimentoInformada);
-
+			Date dataValidade = this.retornaDataValidadeConta(dataVencimentoInformada);
+			
 			repositorioFaturamento.alterarVencimentoContaGrupoFaturamento(
 					dataVencimentoInformada, dataValidade,
 					Conta.INDICADOR_ALTERACAO_VENCIMENTO_ATIVO,
@@ -67557,7 +67508,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				}
 
 				/**
-				 * TODO:COSANPA Autor: Adriana Muniz Data: 29/06/2011
+				 * Autor: Adriana Muniz Data: 29/06/2011
 				 * 
 				 * Alteração para que a referência da prestação do crédito seja
 				 * sempre atualizada, se um crédito realizado tenha sido gerado
@@ -67613,7 +67564,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				} else {
 
 					/**
-					 * TODO:COSANPA autor: Adriana Muniz data:29/06/2011
+					 * autor: Adriana Muniz data:29/06/2011
 					 * 
 					 * alteração para não lançar para zero o valor residual dos
 					 * creditos s a realizar, caso o imóvel pertença ao
@@ -69054,10 +69005,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			Date dataComando, Boolean regerar) throws ControladorException,
 			ErroRepositorioException {
 
-		/*
-		 * TODO : COSANPA Alteração para atender ao mantis 188 Inclusao de
-		 * variável para atender ao mantis
-		 */
 		boolean rotaSoComImoveisInformativos = true;
 
 		UC0745GerarArquivoTextoFaturamento gerarArquivoTextoFaturamento = UC0745GerarArquivoTextoFaturamento
@@ -69427,7 +69374,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						// Sempre observando os Critérios da UC0745 no Fluxo 3.2
 						if (rota.getNumeroLimiteImoveis() != null) {
 							/**
-							 * TODO - COSANPA Alteracao para corrigir a
+							 * Alteracao para corrigir a
 							 * finalizacao de rotas divididas - Salvar a qtd de
 							 * imoveis com conta PF nas rotas divididas, e não a
 							 * quantidade de imóveis na rota - Finalizar a rota
@@ -69590,7 +69537,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				if (colecaoImoveis != null && colecaoImoveis.size() > 0) {
 
 					/*
-					 * TODO : COSANPA Alteração feita para salvar no arquivo
+					 *  Alteração feita para salvar no arquivo
 					 * texto somente a quantidade de imóveis que possuem conta
 					 * pré-faturada, e não a quantidade de imóveis total da
 					 * rota.
@@ -69612,7 +69559,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					}
 
 					/*
-					 * TODO : COSANPA Alteração para atender ao mantis 188
 					 * Verificar se todos os imóveis da rota são apenas
 					 * informativos, se forem, gerar o arquivo já finalizado
 					 */
@@ -69674,7 +69620,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						Integer idLeituraTipo = rota.getLeituraTipo().getId();
 
 						/**
-						 * TODO : COSANPA Alteração feita para corrigir o
+						 *  Alteração feita para corrigir o
 						 * problema de incluir na tabela Movimento Roteiro
 						 * Empresa os imóveis informativos, e não somente os
 						 * imóveis que geraram conta PF
@@ -69755,7 +69701,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							anoMesFaturamento, faturamentoGrupo.getId());
 
 			/*
-			 * TODO : COSANPA Alteração feita para permitir que todos os imóveis
+			 *  Alteração feita para permitir que todos os imóveis
 			 * sejam gerados na rota de leitura e impressão simultanea
 			 */
 			if (conta != null) {
@@ -70755,8 +70701,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// Nome do Cliente Usuário
 
 					/**
-					 * TODO: COSANPA Alteração Mantis 647 - Nome do imóvel no
-					 * relatório de faturas agrupadas.
+					 * Nome do imóvel no relatório de faturas agrupadas.
 					 * 
 					 * @author Wellington Rocha
 					 * @date 26/11/2012
@@ -74959,15 +74904,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		try {
 
-			if (colecaoContasManutencao != null
-					&& !colecaoContasManutencao.isEmpty()) {
+			if (colecaoContasManutencao != null && !colecaoContasManutencao.isEmpty()) {
 				Iterator iterator = colecaoContasManutencao.iterator();
 
 				while (iterator.hasNext()) {
 					Object[] contaArray = (Object[]) iterator.next();
 
-					if (!repositorioCobranca
-							.verificaContaVinculadaAContratoParcelAtivo((Integer) contaArray[0])) {
+					if (!repositorioCobranca.verificaContaVinculadaAContratoParcelAtivo((Integer) contaArray[0])) {
 						retorno.add(contaArray);
 					}
 				}
@@ -75285,7 +75228,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * TODO : COSANPA Criação do método para converter um array com informações
+	 *  Criação do método para converter um array com informações
 	 * de imóveis em uma lista de objetos imóveis.
 	 */
 	/**
@@ -75757,7 +75700,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * TODO:COSANPA
+	 *
 	 * 
 	 * Método para retornar uma coleção de debitos cobrados do parcelamento
 	 * */
@@ -75808,7 +75751,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * TODO - COSANPA
+	 *
 	 * 
 	 * Método para obter todos os imóveis que já foram processados na
 	 * transmissão do arquivo de retorno do IS
@@ -75836,7 +75779,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * TODO - COSANPA
+	 *
 	 * 
 	 * Método para obter todos os imóveis que faltam ser transmitidos na
 	 * transmissão do arquivo de retorno do IS
@@ -75864,7 +75807,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * 
 	 * @author Pamela Gatinho
 	 * @date 04/08/2011
@@ -75890,7 +75833,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * 
 	 * Atualizar movimento conta pre-faturada
 	 * 
@@ -76010,7 +75953,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * TODO : COSANPA Data: 25/10/2011 Autor: Pamela Gatinho
+	 *  Data: 25/10/2011 Autor: Pamela Gatinho
 	 * 
 	 * Metodo para pesquisar todas as contas que foram emitidas mas que serao
 	 * impressas somente no fechamento do faturamento do grupo
@@ -76037,7 +75980,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * 
 	 * @author Pamela Gatinho
 	 * @date 24/02/2012
@@ -76062,7 +76005,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * TODO : COSANPA Pamela Gatinho - 31/05/2012
+	 *  Pamela Gatinho - 31/05/2012
 	 * 
 	 * Metodo que calcula o valor de rateio por economia
 	 * 
@@ -76128,7 +76071,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * 
 	 * @author Pamela Gatinho
 	 * @since 23/04/2012
@@ -76578,14 +76521,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * TODO: COSANPA Mantis 583 Verificar no momento em que o usuário está
-	 * fazendo a prescrição de uma conta, se a mesma atende as condições
-	 * necessárias para que haja a prescrição
+	 * Verificar no momento em que o usuário está fazendo a prescrição de uma conta,
+	 * se a mesma atende as condições necessárias para que haja a prescrição
 	 * 
 	 * @author Wellington Rocha
 	 * @date 01/06/2012
 	 */
-
 	public boolean verificarPossibilidadePrescricaoConta(Integer idConta) {
 		Conta conta = null;
 		try {
@@ -76616,14 +76557,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				return false;
 			}
 		} catch (ErroRepositorioException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		return false;
 	}
 
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * 
 	 * @author Pamela Gatinho
 	 * @date 06/03/2013
@@ -76649,7 +76590,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * Alteração para contabilizar em contas diferentes valores arrecadados até
 	 * 31/12/2012
@@ -76712,7 +76653,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * Alteração para contabilizar em contas diferentes valores arrecadados até
 	 * 31/12/2012

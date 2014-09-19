@@ -27,7 +27,7 @@ public class ImpostoTipoAliquota {
 
 	public ImpostoTipoAliquota(Integer id, Integer anoMesReferencia, BigDecimal percentualAliquota, Date ultimaAlteracao, ImpostoTipoAliquota impostoTipoAliquota) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.anoMesReferencia = anoMesReferencia;
 		this.percentualAliquota = percentualAliquota;

@@ -592,7 +592,7 @@ public class GerenciadorExecucaoTarefaRelatorio {
             
             retornoCodigoProcesso = Processo.GERAR_RELATORIO_DOCUMENTO_VISITA_COBRANCA;
             
-    	} /**TODO: COSANPA
+    	} /**
 		 * @author Adriana Muniz
 		 * @date 02/12/2011
 		 * 
@@ -603,7 +603,7 @@ public class GerenciadorExecucaoTarefaRelatorio {
     			retornoCodigoProcesso = Processo.GERAR_RELATORIO_DEBITO;
     	}
 		
-		/**TODO: COSANPA
+		/**
 		 * @author Wellington Rocha	
 		 * @date 27/12/2012
 		 * 

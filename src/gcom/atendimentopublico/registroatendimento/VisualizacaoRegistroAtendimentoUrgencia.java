@@ -46,7 +46,7 @@ public class VisualizacaoRegistroAtendimentoUrgencia extends ObjetoTransacao imp
     
     public VisualizacaoRegistroAtendimentoUrgencia(Integer id, RegistroAtendimento registroAtendimento, Usuario usuario, Integer indicadorVisualizacao, Integer indicadorTramite, Date ultimaAlteracao, Short indicadorReiteracao) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.registroAtendimento = registroAtendimento;
 		this.usuario = usuario;

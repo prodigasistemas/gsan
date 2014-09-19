@@ -117,7 +117,7 @@ public class InserirQuadraAction extends GcomAction {
 		helper.setZeisID(inserirQuadraActionForm.getZeisID());
 		helper.setRotaCD(inserirQuadraActionForm.getCodigoRota());
 		/*
-         * TODO - COSANPA - Mantis 536 - Felipe Santos - 14/03/2012
+         * 14/03/2012
          * 
          * Adição do id da rota no helper para pesquisa
          */

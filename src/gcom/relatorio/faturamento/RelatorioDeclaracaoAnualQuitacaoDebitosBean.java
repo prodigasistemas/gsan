@@ -27,7 +27,7 @@ public class RelatorioDeclaracaoAnualQuitacaoDebitosBean implements
 		this.valor = valor;
 	}
 	public RelatorioDeclaracaoAnualQuitacaoDebitosBean() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	public String getAnoBase() {
 		return anoBase;

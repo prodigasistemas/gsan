@@ -143,7 +143,7 @@ public class RetornarArquivoZipLeituraAction extends GcomAction {
 						idsSituacaoTransmissao[0] = SituacaoTransmissaoLeitura.EM_CAMPO;
 
 						/*
-						 * TODO - COSANPA
+						 *
 						 * 
 						 * Verifica se a rota é dividida para adicionar ao zip
 						 * os arquivos divididos.
@@ -260,7 +260,7 @@ public class RetornarArquivoZipLeituraAction extends GcomAction {
 									arquivoOriginal.getAbsolutePath());
 
 							/*
-							 * TODO - COSANPA Parâmetro do método out.write()
+							 * Parâmetro do método out.write()
 							 * modificado. Adiciona diretamente o array de bytes
 							 * -> arquivoTextoRoteiroEmpresa.getArquivoTexto()
 							 */
