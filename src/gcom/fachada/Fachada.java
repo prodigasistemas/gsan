@@ -3378,21 +3378,36 @@ public class Fachada {
 	 * @return
 	 * @throws ControladorException
 	 */
-	public ObterDebitoImovelOuClienteHelper obterDebitoImovelOuCliente(int indicadorDebito, String idImovel, String codigoCliente, Short clienteRelacaoTipo,
-			String anoMesInicialReferenciaDebito, String anoMesFinalReferenciaDebito, Date anoMesInicialVencimentoDebito, Date anoMesFinalVencimentoDebito,
-			int indicadorPagamento, int indicadorConta, int indicadorDebitoACobrar, int indicadorCreditoARealizar, int indicadorNotasPromissorias,
-			int indicadorGuiasPagamento, int indicadorCalcularAcrescimoImpontualidade, Boolean indicadorContas, int indicadorDividaAtiva) {
+	public ObterDebitoImovelOuClienteHelper obterDebitoImovelOuCliente(int indicadorDebito, String idImovel, String codigoCliente,
+			Short clienteRelacaoTipo, String anoMesInicialReferenciaDebito, String anoMesFinalReferenciaDebito,
+			Date anoMesInicialVencimentoDebito, Date anoMesFinalVencimentoDebito, int indicadorPagamento, int indicadorConta,
+			int indicadorDebitoACobrar, int indicadorCreditoARealizar, int indicadorNotasPromissorias, int indicadorGuiasPagamento,
+			int indicadorCalcularAcrescimoImpontualidade, Boolean indicadorContas, int indicadorDividaAtiva) {
+
+			return this.obterDebitoImovelOuCliente(indicadorDebito, idImovel, codigoCliente, clienteRelacaoTipo, anoMesInicialReferenciaDebito,
+					anoMesFinalReferenciaDebito, anoMesInicialVencimentoDebito, anoMesFinalVencimentoDebito, indicadorPagamento,
+					indicadorConta, indicadorDebitoACobrar, indicadorCreditoARealizar, indicadorNotasPromissorias, indicadorGuiasPagamento,
+					indicadorCalcularAcrescimoImpontualidade, indicadorContas, indicadorDividaAtiva, false);
+
+	}
+
+	public ObterDebitoImovelOuClienteHelper obterDebitoImovelOuCliente(int indicadorDebito, String idImovel, String codigoCliente,
+			Short clienteRelacaoTipo, String anoMesInicialReferenciaDebito, String anoMesFinalReferenciaDebito,
+			Date anoMesInicialVencimentoDebito, Date anoMesFinalVencimentoDebito, int indicadorPagamento, int indicadorConta,
+			int indicadorDebitoACobrar, int indicadorCreditoARealizar, int indicadorNotasPromissorias, int indicadorGuiasPagamento,
+			int indicadorCalcularAcrescimoImpontualidade, Boolean indicadorContas, int indicadorDividaAtiva,
+			boolean incluirGrupoFaturamentoNaoFaturado) {
 
 		try {
 			return getControladorCobranca().obterDebitoImovelOuCliente(indicadorDebito, idImovel, codigoCliente, clienteRelacaoTipo,
-					anoMesInicialReferenciaDebito, anoMesFinalReferenciaDebito, anoMesInicialVencimentoDebito, anoMesFinalVencimentoDebito, indicadorPagamento,
-					indicadorConta, indicadorDebitoACobrar, indicadorCreditoARealizar, indicadorNotasPromissorias, indicadorGuiasPagamento,
-					indicadorCalcularAcrescimoImpontualidade, indicadorContas, indicadorDividaAtiva);
+					anoMesInicialReferenciaDebito, anoMesFinalReferenciaDebito, anoMesInicialVencimentoDebito, anoMesFinalVencimentoDebito,
+					indicadorPagamento, indicadorConta, indicadorDebitoACobrar, indicadorCreditoARealizar, indicadorNotasPromissorias,
+					indicadorGuiasPagamento, indicadorCalcularAcrescimoImpontualidade, indicadorContas, indicadorDividaAtiva,
+					incluirGrupoFaturamentoNaoFaturado);
 
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
-
 	}
 
 	public Collection<Cliente> pesquisarClienteEnderecoClienteImovel(FiltroClienteEndereco filtroClienteEndereco) {

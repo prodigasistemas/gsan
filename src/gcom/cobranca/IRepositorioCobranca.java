@@ -6056,6 +6056,9 @@ public interface IRepositorioCobranca {
 	
 	public void atualizarDocumentoDeCobrancaHistorico(Integer codigoImovel, Integer codigoParcelamento) throws ErroRepositorioException;
 	
-	
+	public Collection pesquisarContasImovelSemGrupoNaoFaturado(Integer idImovel, int indicadorPagamento, int indicadorConta, String contaSituacaoNormal,
+			String contaSituacaoRetificada, String contaSituacaoIncluida, String contaSituacaoParcelada,
+			String anoMesInicialReferenciaDebito, String anoMesFinalReferenciaDebito, Date anoMesInicialVecimentoDebito,
+			Date anoMesFinalVencimentoDebito, int indicadorDividaAtiva) throws ErroRepositorioException;
 	
 }

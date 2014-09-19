@@ -27154,5 +27154,98 @@ public class RepositorioCobrancaHBM implements IRepositorioCobranca {
 			HibernateUtil.closeSession(session);
 		}
 	}
+	
+	public Collection pesquisarContasImovelSemGrupoNaoFaturado(Integer idImovel, int indicadorPagamento, int indicadorConta, String contaSituacaoNormal,
+			String contaSituacaoRetificada, String contaSituacaoIncluida, String contaSituacaoParcelada,
+			String anoMesInicialReferenciaDebito, String anoMesFinalReferenciaDebito, Date anoMesInicialVecimentoDebito,
+			Date anoMesFinalVencimentoDebito, int indicadorDividaAtiva) throws ErroRepositorioException {
 
+		Collection retorno = new ArrayList();
+
+		Session session = HibernateUtil.getSession();
+		String consulta;
+
+		try {
+
+			consulta = "SELECT conta.cnta_id as idConta, conta.cnta_vlagua as valorAgua, conta.cnta_vlesgoto as valorEsgoto, "
+					+ "conta.cnta_vldebitos as valorDebitos, conta.cnta_vlcreditos as valorCreditos, conta.cnta_dtrevisao as dataRevisao, "
+					+ "conta.cnta_amreferenciaconta as referencia, conta.cnta_dtvencimentoconta as dataVencimento, "
+					+ "conta.cnta_iccobrancamulta as indicadorCobrancaMulta, conta.dcst_idatual as idSituacaoAtual, "
+					+ "conta.cnta_dgverificadorconta as digitoVerificador, conta.cmrv_id as idMotivoRevisao, "
+					+ "conta.cnta_tmultimaalteracao as ultimaAlteracao, conta.imov_id as idImovel, "
+					+ "conta.cnta_nnconsumoagua as consumoAgua, conta.cnta_vlimpostos as valorImpostos, conta.cnta_nnconsumoesgoto as consumoEsgoto, "
+					+ "sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) as valorPagamento, "
+					+ "min(pagto.pgmt_dtpagamento) as dataPagamento, conta.parc_id as idParcelamento "
+					+ "FROM faturamento.conta conta "
+					+ "LEFT JOIN arrecadacao.pagamento pagto on pagto.cnta_id = conta.cnta_id "
+					+ "INNER JOIN faturamento.fatur_grupo_crg_mensal ftcm on ftcm.ftgr_id = conta.ftgr_id "
+					+ "AND ftcm.ftcm_amreferencia = conta.cnta_amreferenciaconta "
+					+ "INNER JOIN faturamento.fatur_ativ_cronograma ftac on ftac.ftcm_id = ftcm.ftcm_id AND ftac.ftat_id = 5 " 
+					+ "AND ftac.ftac_tmrealizacao is not null "
+					+ "WHERE conta.imov_id = :idImovel "
+					+ "and conta.dcst_idatual in (:situacaoNormal, :situacaoRetificada, :situacaoIncluida, :situacaoParcelada) "
+					+ "and conta.cnta_amreferenciaconta between :inicialReferencia and :finalReferencia "
+					+ "and conta.cnta_dtvencimentoconta between :inicialVencimento and :finalVencimento "
+					+ "and (coalesce(conta.cnta_vlagua, 0) + coalesce(conta.cnta_vlesgoto, 0) + coalesce(conta.cnta_vldebitos, 0) - coalesce(conta.cnta_vlcreditos, 0) - coalesce(conta.cnta_vlimpostos, 0)) > 0.00 ";
+
+			if (indicadorConta == 2) {
+				consulta += "and conta.cnta_dtrevisao is null ";
+			}
+
+			if (indicadorDividaAtiva == 1) {
+				consulta += "and conta.cnta_amreferenciabaixacontabil is not null ";
+			} else if (indicadorDividaAtiva == 2) {
+				consulta += "and conta.cnta_amreferenciabaixacontabil is null ";
+			}
+
+			consulta += " GROUP BY conta.cnta_id, conta.cnta_vlagua, conta.cnta_vlesgoto, conta.cnta_vldebitos, conta.cnta_vlcreditos, conta.cnta_dtrevisao, conta.cnta_amreferenciaconta, conta.cnta_dtvencimentoconta, conta.cnta_iccobrancamulta, "
+					+ "conta.dcst_idatual, conta.cnta_dgverificadorconta, conta.cmrv_id, conta.cnta_tmultimaalteracao, conta.imov_id, conta.cnta_nnconsumoagua, conta.cnta_vlimpostos, conta.cnta_nnconsumoesgoto, conta.parc_id ";
+
+			if (indicadorPagamento == 1) {
+				// consulta +=
+				// " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) < ((coalesce(conta.cnta_vlagua, 0) + coalesce(conta.cnta_vlesgoto, 0) + coalesce(conta.cnta_vldebitos, 0) - coalesce(conta.cnta_vlcreditos, 0) - coalesce(conta.cnta_vlimpostos, 0)))";
+
+				/*
+				 * TODO - COSANPA - 24/07/2012 - Mantis 610 - Felipe Santos e
+				 * Wellington Rocha
+				 * 
+				 * Alteração para ser emitidos Documentos de Cobrança apenas
+				 * para pagamentos igual a 0
+				 */
+				consulta += " HAVING sum(coalesce(pagto.pgmt_vlpagamento, 0.00)) = 0";
+			}
+
+			consulta += " ORDER BY idImovel, referencia ";
+
+			retorno = session.createSQLQuery(consulta).addScalar("idConta", Hibernate.INTEGER)
+					.addScalar("valorAgua", Hibernate.BIG_DECIMAL).addScalar("valorEsgoto", Hibernate.BIG_DECIMAL)
+					.addScalar("valorDebitos", Hibernate.BIG_DECIMAL).addScalar("valorCreditos", Hibernate.BIG_DECIMAL)
+					.addScalar("dataRevisao", Hibernate.DATE).addScalar("referencia", Hibernate.INTEGER)
+					.addScalar("dataVencimento", Hibernate.DATE).addScalar("indicadorCobrancaMulta", Hibernate.SHORT)
+					.addScalar("idSituacaoAtual", Hibernate.INTEGER).addScalar("digitoVerificador", Hibernate.SHORT)
+					.addScalar("idMotivoRevisao", Hibernate.INTEGER).addScalar("ultimaAlteracao", Hibernate.DATE)
+					.addScalar("idImovel", Hibernate.INTEGER).addScalar("consumoAgua", Hibernate.INTEGER)
+					.addScalar("valorImpostos", Hibernate.BIG_DECIMAL).addScalar("consumoEsgoto", Hibernate.INTEGER)
+					.addScalar("valorPagamento", Hibernate.BIG_DECIMAL).addScalar("dataPagamento", Hibernate.DATE)
+					.addScalar("idParcelamento", Hibernate.INTEGER).setInteger("idImovel", idImovel)
+					.setInteger("situacaoNormal", new Integer(contaSituacaoNormal))
+					.setInteger("situacaoRetificada", new Integer(contaSituacaoRetificada))
+					.setInteger("situacaoIncluida", new Integer(contaSituacaoIncluida))
+					.setInteger("situacaoParcelada", new Integer(contaSituacaoParcelada))
+					.setInteger("inicialReferencia", new Integer(anoMesInicialReferenciaDebito))
+					.setInteger("finalReferencia", new Integer(anoMesFinalReferenciaDebito))
+					.setDate("inicialVencimento", anoMesInicialVecimentoDebito).setDate("finalVencimento", anoMesFinalVencimentoDebito)
+					.list();
+
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			e.printStackTrace();
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
 }
