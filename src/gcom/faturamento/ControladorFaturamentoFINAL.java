@@ -67352,9 +67352,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		// tipo
 		Map<CreditoTipo, BigDecimal> mapValoresPorTipoCredito = null;
 
-		/*
-		 * Caso a coleção de creditos a realizar não esteja vazia
-		 */
 		if (colecaoCreditosARealizar != null && !colecaoCreditosARealizar.isEmpty()) {
 
 			mapCreditoRealizado = new HashMap();
@@ -67364,12 +67361,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 			CreditoARealizar creditoARealizar = null;
 
-			/*
-			 * Para cada crédito a realizar selecionado e até que o valor total
-			 * a cobrar seja igual a zero.
-			 * 
-			 * LAÇO PARA GERAR OS CREDITOS REALIZADOS
-			 */
 			while (iteratorColecaoCreditosARealizar.hasNext() && valorTotalACobrar.compareTo(ConstantesSistema.VALOR_ZERO) == 1) {
 
 				creditoARealizar = (CreditoARealizar) iteratorColecaoCreditosARealizar.next();
@@ -67377,20 +67368,11 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				BigDecimal valorCorrespondenteParcelaMes = ConstantesSistema.VALOR_ZERO;
 				BigDecimal valorCredito = ConstantesSistema.VALOR_ZERO;
 
-				/*
-				 * Alterado por Vivianne Sousa em 20/12/2007 - Analista: Adriano
-				 * criação do bonus para parcelamento com RD especial
-				 */
 				Short numeroParcelaBonus = 0;
 				if (creditoARealizar.getNumeroParcelaBonus() != null) {
 					numeroParcelaBonus = creditoARealizar.getNumeroParcelaBonus();
 				}
 
-				/*
-				 * Caso o nº de prestações realizadas seja menor que o nº de
-				 * prestação dos créditos calcula o valor correspondente da
-				 * parcela do mês.
-				 */
 				if (creditoARealizar.getNumeroPrestacaoRealizada().intValue() < (creditoARealizar.getNumeroPrestacaoCredito().intValue() - numeroParcelaBonus
 						.intValue())) {
 
@@ -67401,14 +67383,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					valorCorrespondenteParcelaMes = creditoARealizar.getValorCredito().divide(new BigDecimal(creditoARealizar.getNumeroPrestacaoCredito()), 2,
 							BigDecimal.ROUND_DOWN);
 
-					/*
-					 * Caso seja a última pretação o valor do crédito
-					 * correspondente a parcela do mês = valor do crédito
-					 * correspondente a parcela do mês + valor do crédito -
-					 * (valor do crédito correspondente a parcela do mês * (o nº
-					 * de prestação dos créditos menos o numero de parcela
-					 * bonus))
-					 */
 					if (creditoARealizar.getNumeroPrestacaoRealizada().intValue() == ((creditoARealizar.getNumeroPrestacaoCredito().intValue() - numeroParcelaBonus
 							.intValue()) - 1)) {
 
