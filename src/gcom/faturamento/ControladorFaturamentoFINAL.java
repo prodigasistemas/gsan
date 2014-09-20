@@ -383,7 +383,7 @@ import br.com.danhil.BarCode.Interleaved2of5;
 public class ControladorFaturamentoFINAL implements SessionBean {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	SessionContext sessionContext;
 
 	protected IRepositorioFaturamento repositorioFaturamento;
@@ -396,7 +396,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	protected IRepositorioCadastro repositorioCadastro;
 	protected IRepositorioImovel repositorioImovel;
 
-	private Logger logger = Logger.getLogger(ControladorFaturamentoFINAL.class);
+	private static Logger logger = Logger.getLogger(ControladorFaturamentoFINAL.class);
 
 	public void ejbCreate() throws CreateException {
 		repositorioFaturamento = RepositorioFaturamentoHBM.getInstancia();
@@ -4185,8 +4185,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		int diaDataVencimentoRota = Util.getDiaMes(faturamentoAtivCronRota.getDataContaVencimento());
 		int mesDataVencimentoRota = Util.getMes(faturamentoAtivCronRota.getDataContaVencimento());
 		int anoDataVencimentoRota = Util.getAno(faturamentoAtivCronRota.getDataContaVencimento());
-
-		logger.info("Imovel: " + imovel.getId() + " - " + imovel.getDiaVencimento() + " - " + imovel.getIndicadorEmissaoExtratoFaturamento() + " - " + imovel.getIndicadorVencimentoMesSeguinte());
 		
 		if (imovel.getDiaVencimento() != null
 				&& imovel.getDiaVencimento().intValue() != 0
@@ -4194,7 +4192,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 			diaVencimentoAlternativo = imovel.getDiaVencimento();
 			indicadorVencimentoMesSeguinte = imovel.getIndicadorVencimentoMesSeguinte();
-			logger.info("Entrou v. alternativo");
 		} else {
 			try {
 				clienteResponsavel = repositorioFaturamento.pesquisarClienteImovelGrupoFaturamento(imovel.getId(), ClienteRelacaoTipo.RESPONSAVEL);
@@ -4215,14 +4212,11 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		if (diaVencimentoAlternativo == null || diaVencimentoAlternativo.intValue() == 0) {
 			dataVencimentoConta = faturamentoAtivCronRota.getDataContaVencimento();
-			logger.info("sem Vencimento alternativo");
 		} else {
 			if (indicadorVencimentoMesSeguinte.equals(ConstantesSistema.NAO)) {
-				logger.info("Vencimento mes seguinte nao");
 				if (diaDataVencimentoRota <= diaVencimentoAlternativo.intValue()) {
 					ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(mesDataVencimentoRota, anoDataVencimentoRota));
 
-					logger.info("diaDataVencimentoRota <= diaVencimentoAlternativo.intValue()" );
 
 					if (diaVencimentoAlternativo.intValue() > ultimoDiaMes.intValue()) {
 						diaVencimentoAlternativo = ultimoDiaMes;
@@ -4230,8 +4224,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 					dataVencimentoConta = Util.criarData(diaVencimentoAlternativo.intValue(), mesDataVencimentoRota, anoDataVencimentoRota);
 				} else {
-					logger.info("altrnativo > rota");
-
 					diaVencimentoAlternativo = new Integer(diaDataVencimentoRota).shortValue();
 
 					ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(mesDataVencimentoRota, anoDataVencimentoRota));
@@ -4247,10 +4239,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							.adicionarNumeroDiasDeUmaData(new Date(), sistemaParametro.getNumeroMinimoDiasEmissaoVencimento());
 
 					if (dataVencimentoAlternativo.compareTo(dataAtualMaisDiasMinimoEmissao) <= 0) {
-						logger.info("Vencimento alternativo menor que mínimo");
-						/* A Data de Vencimento da Conta será igual ao dia do vencimento alternativo mais o mês e ano seguinte ao
-						 * da Data de Vencimento da Rota.
-						 */
 						Date dataVencimentoRotaMesSeguinte = Util.adcionarOuSubtrairMesesAData(faturamentoAtivCronRota.getDataContaVencimento(), 1, 0);
 
 						ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(Util.getMes(dataVencimentoRotaMesSeguinte),
@@ -9821,7 +9809,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			debitoCobradoCategoriaInserir.setQuantidadeEconomia(categoriaColecao.getQuantidadeEconomiasCategoria());
 			debitoCobradoCategoriaInserir.setUltimaAlteracao(new Date());
 			debitoCobradoCategoriaInserir.setValorCategoria((BigDecimal) colecaoValorPorCategoriaIt.next());
-			logger.info("		Debito cobrado categoria : [cag: " + debitoCobradoCategoriaInserir.getComp_id().getCategoriaId() + " / deb: " + debitoCobradoCategoriaInserir.getComp_id().getDebitoCobradoId() + "]");
 			this.getControladorUtil().inserir(debitoCobradoCategoriaInserir);
 		}
 	}
@@ -9969,7 +9956,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			BigDecimal percentualColeta) throws ControladorException {
 
 		try {
-			logger.info("Retificação da conta do imóvel: " + imovel.getId());
+			logger.info("Retificacao da conta do imovel: " + imovel.getId());
 			
 			validarContaParaRetificacao(contaAtual, imovel, dataVencimentoConta);
 
