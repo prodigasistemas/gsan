@@ -383,7 +383,7 @@ import br.com.danhil.BarCode.Interleaved2of5;
 public class ControladorFaturamentoFINAL implements SessionBean {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	SessionContext sessionContext;
 
 	protected IRepositorioFaturamento repositorioFaturamento;
@@ -396,7 +396,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	protected IRepositorioCadastro repositorioCadastro;
 	protected IRepositorioImovel repositorioImovel;
 
-	private Logger logger = Logger.getLogger(ControladorFaturamentoFINAL.class);
+	private static Logger logger = Logger.getLogger(ControladorFaturamentoFINAL.class);
 
 	public void ejbCreate() throws CreateException {
 		repositorioFaturamento = RepositorioFaturamentoHBM.getInstancia();
@@ -475,34 +475,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		return qtd;
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 */
-
-	/**
-	 * Método chamado no momento que o bean é removido do contexto do container
-	 */
 	public void ejbRemove() {
 	}
 
-	/**
-	 * Método chamado no momento que o bean é ativado no container
-	 */
 	public void ejbActivate() {
 	}
 
-	/**
-	 * Método chamado no momento que o bean é passivado no container
-	 */
 	public void ejbPassivate() {
 	}
-
-	/**
-	 * * Seta o valor de sessionContext
-	 * 
-	 * @param sessionContext
-	 *            O novo valor de sessionContext
-	 */
 
 	public void setSessionContext(SessionContext sessionContext) {
 		this.sessionContext = sessionContext;
@@ -4205,8 +4185,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		int diaDataVencimentoRota = Util.getDiaMes(faturamentoAtivCronRota.getDataContaVencimento());
 		int mesDataVencimentoRota = Util.getMes(faturamentoAtivCronRota.getDataContaVencimento());
 		int anoDataVencimentoRota = Util.getAno(faturamentoAtivCronRota.getDataContaVencimento());
-
-		logger.info("Imovel: " + imovel.getId() + " - " + imovel.getDiaVencimento() + " - " + imovel.getIndicadorEmissaoExtratoFaturamento() + " - " + imovel.getIndicadorVencimentoMesSeguinte());
 		
 		if (imovel.getDiaVencimento() != null
 				&& imovel.getDiaVencimento().intValue() != 0
@@ -4214,7 +4192,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 			diaVencimentoAlternativo = imovel.getDiaVencimento();
 			indicadorVencimentoMesSeguinte = imovel.getIndicadorVencimentoMesSeguinte();
-			logger.info("Entrou v. alternativo");
 		} else {
 			try {
 				clienteResponsavel = repositorioFaturamento.pesquisarClienteImovelGrupoFaturamento(imovel.getId(), ClienteRelacaoTipo.RESPONSAVEL);
@@ -4235,14 +4212,11 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		if (diaVencimentoAlternativo == null || diaVencimentoAlternativo.intValue() == 0) {
 			dataVencimentoConta = faturamentoAtivCronRota.getDataContaVencimento();
-			logger.info("sem Vencimento alternativo");
 		} else {
 			if (indicadorVencimentoMesSeguinte.equals(ConstantesSistema.NAO)) {
-				logger.info("Vencimento mes seguinte nao");
 				if (diaDataVencimentoRota <= diaVencimentoAlternativo.intValue()) {
 					ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(mesDataVencimentoRota, anoDataVencimentoRota));
 
-					logger.info("diaDataVencimentoRota <= diaVencimentoAlternativo.intValue()" );
 
 					if (diaVencimentoAlternativo.intValue() > ultimoDiaMes.intValue()) {
 						diaVencimentoAlternativo = ultimoDiaMes;
@@ -4250,8 +4224,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 					dataVencimentoConta = Util.criarData(diaVencimentoAlternativo.intValue(), mesDataVencimentoRota, anoDataVencimentoRota);
 				} else {
-					logger.info("altrnativo > rota");
-
 					diaVencimentoAlternativo = new Integer(diaDataVencimentoRota).shortValue();
 
 					ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(mesDataVencimentoRota, anoDataVencimentoRota));
@@ -4267,10 +4239,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							.adicionarNumeroDiasDeUmaData(new Date(), sistemaParametro.getNumeroMinimoDiasEmissaoVencimento());
 
 					if (dataVencimentoAlternativo.compareTo(dataAtualMaisDiasMinimoEmissao) <= 0) {
-						logger.info("Vencimento alternativo menor que mínimo");
-						/* A Data de Vencimento da Conta será igual ao dia do vencimento alternativo mais o mês e ano seguinte ao
-						 * da Data de Vencimento da Rota.
-						 */
 						Date dataVencimentoRotaMesSeguinte = Util.adcionarOuSubtrairMesesAData(faturamentoAtivCronRota.getDataContaVencimento(), 1, 0);
 
 						ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(Util.getMes(dataVencimentoRotaMesSeguinte),
@@ -9841,7 +9809,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			debitoCobradoCategoriaInserir.setQuantidadeEconomia(categoriaColecao.getQuantidadeEconomiasCategoria());
 			debitoCobradoCategoriaInserir.setUltimaAlteracao(new Date());
 			debitoCobradoCategoriaInserir.setValorCategoria((BigDecimal) colecaoValorPorCategoriaIt.next());
-			logger.info("		Debito cobrado categoria : [cag: " + debitoCobradoCategoriaInserir.getComp_id().getCategoriaId() + " / deb: " + debitoCobradoCategoriaInserir.getComp_id().getDebitoCobradoId() + "]");
 			this.getControladorUtil().inserir(debitoCobradoCategoriaInserir);
 		}
 	}
@@ -9989,7 +9956,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			BigDecimal percentualColeta) throws ControladorException {
 
 		try {
-			logger.info("Retificação da conta do imóvel: " + imovel.getId());
+			logger.info("Retificacao da conta do imovel: " + imovel.getId());
 			
 			validarContaParaRetificacao(contaAtual, imovel, dataVencimentoConta);
 
@@ -11781,13 +11748,11 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						contaColecao.setDataVencimentoConta(dataVencimento);
 
 						// Data de validade
-						Date dataValidadeConta = this
-								.retornaDataValidadeConta(dataVencimento);
+						Date dataValidadeConta = this.retornaDataValidadeConta(dataVencimento);
 						contaColecao.setDataValidadeConta(dataValidadeConta);
 
 						// Indicador de alteração de vencimento da conta
-						contaColecao
-								.setIndicadorAlteracaoVencimento(Conta.INDICADOR_ALTERACAO_VENCIMENTO_ATIVO);
+						contaColecao.setIndicadorAlteracaoVencimento(Conta.INDICADOR_ALTERACAO_VENCIMENTO_ATIVO);
 
 						// Última alteraçao
 						contaColecao.setUltimaAlteracao(new Date());
@@ -11803,9 +11768,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						Integer numeroAlteracoesVencimento = 0;
 						try {
 
-							numeroAlteracoesVencimento = this.repositorioFaturamento
-									.obterQuantidadeAlteracoesVencimentoConta(contaColecao
-											.getId());
+							numeroAlteracoesVencimento = this.repositorioFaturamento.obterQuantidadeAlteracoesVencimentoConta(contaColecao.getId());
 						} catch (ErroRepositorioException ex) {
 							sessionContext.setRollbackOnly();
 							new ControladorException("erro.sistema", ex);
@@ -11816,20 +11779,16 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						}
 						numeroAlteracoesVencimento = numeroAlteracoesVencimento + 1;
 
-						contaColecao
-								.setNumeroAlteracoesVencimento(numeroAlteracoesVencimento);
+						contaColecao.setNumeroAlteracoesVencimento(numeroAlteracoesVencimento);
 						// ----------------------------------------------------------------------------------------
 
 						// Verificar atualização realizada por outro usuário
-						if ((contaNaBase.getUltimaAlteracao()
-								.after(contaColecao.getUltimaAlteracao()))) {
+						if ((contaNaBase.getUltimaAlteracao().after(contaColecao.getUltimaAlteracao()))) {
 							sessionContext.setRollbackOnly();
-							throw new ControladorException(
-									"erro.atualizacao.timestamp");
+							throw new ControladorException("erro.atualizacao.timestamp");
 						}
 
-						atualizarColecaoComRegistrarTransacao(contaColecao,
-								usuarioLogado);
+						atualizarColecaoComRegistrarTransacao(contaColecao, usuarioLogado);
 
 					}
 				}
@@ -11848,9 +11807,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				Integer numeroAlteracoesVencimento = 0;
 				try {
 
-					numeroAlteracoesVencimento = this.repositorioFaturamento
-							.obterQuantidadeAlteracoesVencimentoConta(contaColecao
-									.getId());
+					numeroAlteracoesVencimento = this.repositorioFaturamento.obterQuantidadeAlteracoesVencimentoConta(contaColecao.getId());
 				} catch (ErroRepositorioException ex) {
 					sessionContext.setRollbackOnly();
 					new ControladorException("erro.sistema", ex);
@@ -11861,49 +11818,39 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				}
 				numeroAlteracoesVencimento = numeroAlteracoesVencimento + 1;
 
-				contaColecao
-						.setNumeroAlteracoesVencimento(numeroAlteracoesVencimento);
+				contaColecao.setNumeroAlteracoesVencimento(numeroAlteracoesVencimento);
 				// ----------------------------------------------------------------------------------------
 
 				// Data de validade
-				Date dataValidadeConta = this
-						.retornaDataValidadeConta(dataVencimento);
+				Date dataValidadeConta = this.retornaDataValidadeConta(dataVencimento);
 				contaColecao.setDataValidadeConta(dataValidadeConta);
 
 				// Indicador de alteração de vencimento da conta
-				contaColecao
-						.setIndicadorAlteracaoVencimento(Conta.INDICADOR_ALTERACAO_VENCIMENTO_ATIVO);
+				contaColecao.setIndicadorAlteracaoVencimento(Conta.INDICADOR_ALTERACAO_VENCIMENTO_ATIVO);
 
 				// Última alteraçao
 				contaColecao.setUltimaAlteracao(new Date());
 
 				// Verificar atualização realizada por outro usuário
-				if ((contaNaBase.getUltimaAlteracao().after(contaColecao
-						.getUltimaAlteracao()))) {
+				if ((contaNaBase.getUltimaAlteracao().after(contaColecao.getUltimaAlteracao()))) {
 					sessionContext.setRollbackOnly();
 					throw new ControladorException("erro.atualizacao.timestamp");
 				}
 
-				atualizarColecaoComRegistrarTransacao(contaColecao,
-						usuarioLogado);
+				atualizarColecaoComRegistrarTransacao(contaColecao, usuarioLogado);
 
 			}
 		}
 	}
 
-	public void atualizarColecaoComRegistrarTransacao(Conta contaColecao,
-			Usuario usuarioLogado) throws ControladorException {
+	public void atualizarColecaoComRegistrarTransacao(Conta contaColecao, Usuario usuarioLogado) throws ControladorException {
 		// ------------ <REGISTRAR TRANSAÇÃO>----------------------------
 
 		RegistradorOperacao registradorOperacao = null;
 		if (usuarioLogado != null) {
-			registradorOperacao = new RegistradorOperacao(
-					Operacao.OPERACAO_ALTERAR_VENCIMENTO_CONTA,
-					contaColecao.getImovel() != null ? contaColecao.getImovel()
-							.getId() : contaColecao.getId(),
-					contaColecao.getId(), new UsuarioAcaoUsuarioHelper(
-							usuarioLogado,
-							UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+			registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_ALTERAR_VENCIMENTO_CONTA,
+					contaColecao.getImovel() != null ? contaColecao.getImovel().getId() : contaColecao.getId(), contaColecao.getId(),
+					new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 
 			registradorOperacao.registrarOperacao(contaColecao);
 
@@ -45767,6 +45714,17 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		}
 	}
+	
+	public void alterarVencimentoConjuntoConta(Collection colecaoImovel,
+			Date dataVencimentoInformada, Integer anoMes,
+			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
+			Integer anoMesFim, Usuario usuario, String indicadorContaPaga,
+			String[] bancos) throws ControladorException {
+		
+		alterarVencimentoConjuntoConta(colecaoImovel, dataVencimentoInformada, anoMes, dataVencimentoContaInicio, dataVencimentoContaFim,
+				anoMesFim, usuario, indicadorContaPaga, bancos, false);
+		
+	}
 
 	/**
 	 * Alterar Vencimento do Conjunto de Conta
@@ -45782,7 +45740,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			Date dataVencimentoInformada, Integer anoMes,
 			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
 			Integer anoMesFim, Usuario usuario, String indicadorContaPaga,
-			String[] bancos) throws ControladorException {
+			String[] bancos, boolean isDebitoAutomatico) throws ControladorException {
 
 		Collection colecaoContasManutencao = new ArrayList();
 		Collection colecaoConta = new ArrayList();
@@ -45819,12 +45777,9 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 				i = i + cont;
 				try {
-					colecaoContasManutencao = repositorioFaturamento
-							.pesquisarContasImoveis(anoMes, colecao,
-									dataVencimentoContaInicio,
-									dataVencimentoContaFim, anoMesFim,
-									indicadorContaPaga);
-
+					colecaoContasManutencao = repositorioFaturamento.pesquisarContasImoveis(colecao, anoMes, dataVencimentoContaInicio,
+							dataVencimentoContaFim, anoMesFim, indicadorContaPaga, dataVencimentoInformada, isDebitoAutomatico);
+					
 					/**
 					 * [UC0407] Filtrar Imóveis para Inserir ou Manter Conta 3.
 					 * Caso o indicador de bloqueio de contas vinculadas a
@@ -45836,13 +45791,9 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					 * por: Mariana Victor Data: 15/07/2011
 					 * 
 					 * */
-					if (sistemaParametro
-							.getIndicadorBloqueioContasContratoParcelManterConta() != null
-							&& sistemaParametro
-									.getIndicadorBloqueioContasContratoParcelManterConta()
-									.equals(ConstantesSistema.SIM)) {
-						colecaoContasManutencao = this
-								.obterColecaoSemContasEmContratoParcelamentoRetificarConjuntoContasIds(colecaoContasManutencao);
+					if (sistemaParametro.getIndicadorBloqueioContasContratoParcelManterConta() != null
+							&& sistemaParametro.getIndicadorBloqueioContasContratoParcelManterConta().equals(ConstantesSistema.SIM)) {
+						colecaoContasManutencao = this.obterColecaoSemContasEmContratoParcelamentoRetificarConjuntoContasIds(colecaoContasManutencao);
 					}
 					/**
 					 * FIM DA ALTERAÇÂO
@@ -49120,25 +49071,21 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @param dataVencimento
 	 * @throws ControladorException
 	 */
-	public void alterarVencimentoConjuntoContaCliente(Integer codigoCliente,
-			Short relacaoTipo, Date dataVencimentoInformada, Integer anoMes,
-			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
-			Integer anoMesFim, Usuario usuario, Integer codigoClienteSuperior)
-			throws ControladorException {
+	public void alterarVencimentoConjuntoContaCliente(Integer codigoCliente, Short relacaoTipo, Date dataVencimentoInformada,
+			Integer anoMes, Date dataVencimentoContaInicio, Date dataVencimentoContaFim, Integer anoMesFim, Usuario usuario,
+			Integer codigoClienteSuperior, boolean isDebitoAutomatico) throws ControladorException {
 
 		Collection colecaoConta = new ArrayList();
 		Collection colecaoContasManutencao = new ArrayList();
 
 		// PARÂMETROS DO SISTEMA
-		SistemaParametro sistemaParametro = this.getControladorUtil()
-				.pesquisarParametrosDoSistema();
+		SistemaParametro sistemaParametro = this.getControladorUtil().pesquisarParametrosDoSistema();
 
 		try {
-			colecaoContasManutencao = repositorioFaturamento
-					.pesquisarContasCliente(codigoCliente, relacaoTipo, anoMes,
-							dataVencimentoContaInicio, dataVencimentoContaFim,
-							anoMesFim, codigoClienteSuperior);
-
+			colecaoContasManutencao = repositorioFaturamento.pesquisarContasCliente(codigoCliente, relacaoTipo, anoMes,
+					dataVencimentoContaInicio, dataVencimentoContaFim, anoMesFim, codigoClienteSuperior, dataVencimentoInformada,
+					isDebitoAutomatico);
+			
 			/**
 			 * [UC0407] Filtrar Imóveis para Inserir ou Manter Conta 3. Caso o
 			 * indicador de bloqueio de contas vinculadas a contrato de
@@ -59281,9 +59228,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		try {
 
-			Date dataValidade = this
-					.retornaDataValidadeConta(dataVencimentoInformada);
-
+			Date dataValidade = this.retornaDataValidadeConta(dataVencimentoInformada);
+			
 			repositorioFaturamento.alterarVencimentoContaGrupoFaturamento(
 					dataVencimentoInformada, dataValidade,
 					Conta.INDICADOR_ALTERACAO_VENCIMENTO_ATIVO,
@@ -67351,20 +67297,16 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @return GerarCreditoRealizadoHelper
 	 * @throws ControladorException
 	 */
-	public GerarCreditoRealizadoHelper gerarCreditoRealizado(
-			Imovel imovel,
+	public GerarCreditoRealizadoHelper gerarCreditoRealizado(Imovel imovel,
 			Integer anoMesFaturamento,
 			DeterminarValoresFaturamentoAguaEsgotoHelper helperValoresAguaEsgoto,
 			BigDecimal valorTotalDebitos,
-			boolean gerarAtividadeGrupoFaturamento, boolean preFaturamento)
-			throws ControladorException {
+			boolean gerarAtividadeGrupoFaturamento, boolean preFaturamento) throws ControladorException {
 
 		GerarCreditoRealizadoHelper helper = new GerarCreditoRealizadoHelper();
 
 		// Pesquisa os créditos a realizar do imóvel
-		Collection colecaoCreditosARealizar = this
-				.obterCreditoARealizarImovel(imovel.getId(),
-						DebitoCreditoSituacao.NORMAL, anoMesFaturamento);
+		Collection colecaoCreditosARealizar = this.obterCreditoARealizarImovel(imovel.getId(), DebitoCreditoSituacao.NORMAL, anoMesFaturamento);
 
 		// caso seja por pré-faturar, Impressão Simultânea, pesquisar os
 		// créditos de Nitrato
@@ -67372,30 +67314,23 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		if (preFaturamento) {
 			// Pesquisa os créditos a realizar do imóvel
 			Collection colecaoCreditosARealizarNitrato = this
-					.obterCreditoARealizarImovel(imovel.getId(),
-							DebitoCreditoSituacao.PRE_FATURADA,
-							anoMesFaturamento);
+					.obterCreditoARealizarImovel(imovel.getId(), DebitoCreditoSituacao.PRE_FATURADA, anoMesFaturamento);
 
-			if (colecaoCreditosARealizarNitrato != null
-					&& !colecaoCreditosARealizarNitrato.isEmpty()) {
+			if (colecaoCreditosARealizarNitrato != null && !colecaoCreditosARealizarNitrato.isEmpty()) {
 
 				if (colecaoCreditosARealizar == null) {
 					colecaoCreditosARealizar = new ArrayList();
 				}
 
-				colecaoCreditosARealizar
-						.addAll(colecaoCreditosARealizarNitrato);
+				colecaoCreditosARealizar.addAll(colecaoCreditosARealizarNitrato);
 			}
-
 		}
 
 		BigDecimal valorTotalCreditos = ConstantesSistema.VALOR_ZERO;
 		BigDecimal valorTotalACobrar = ConstantesSistema.VALOR_ZERO;
 
-		BigDecimal parte1 = valorTotalACobrar.add(helperValoresAguaEsgoto
-				.getValorTotalAgua());
-		BigDecimal parte2 = parte1.add(helperValoresAguaEsgoto
-				.getValorTotalEsgoto());
+		BigDecimal parte1 = valorTotalACobrar.add(helperValoresAguaEsgoto.getValorTotalAgua());
+		BigDecimal parte2 = parte1.add(helperValoresAguaEsgoto.getValorTotalEsgoto());
 		valorTotalACobrar = parte2.add(valorTotalDebitos);
 
 		/*
@@ -67417,77 +67352,38 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		// tipo
 		Map<CreditoTipo, BigDecimal> mapValoresPorTipoCredito = null;
 
-		/*
-		 * Caso a coleção de creditos a realizar não esteja vazia
-		 */
-		if (colecaoCreditosARealizar != null
-				&& !colecaoCreditosARealizar.isEmpty()) {
+		if (colecaoCreditosARealizar != null && !colecaoCreditosARealizar.isEmpty()) {
 
 			mapCreditoRealizado = new HashMap();
 			mapValoresPorTipoCredito = new HashMap<CreditoTipo, BigDecimal>();
 
-			Iterator iteratorColecaoCreditosARealizar = colecaoCreditosARealizar
-					.iterator();
+			Iterator iteratorColecaoCreditosARealizar = colecaoCreditosARealizar.iterator();
 
 			CreditoARealizar creditoARealizar = null;
 
-			/*
-			 * Para cada crédito a realizar selecionado e até que o valor total
-			 * a cobrar seja igual a zero.
-			 * 
-			 * LAÇO PARA GERAR OS CREDITOS REALIZADOS
-			 */
-			while (iteratorColecaoCreditosARealizar.hasNext()
-					&& valorTotalACobrar
-							.compareTo(ConstantesSistema.VALOR_ZERO) == 1) {
+			while (iteratorColecaoCreditosARealizar.hasNext() && valorTotalACobrar.compareTo(ConstantesSistema.VALOR_ZERO) == 1) {
 
-				creditoARealizar = (CreditoARealizar) iteratorColecaoCreditosARealizar
-						.next();
+				creditoARealizar = (CreditoARealizar) iteratorColecaoCreditosARealizar.next();
 
 				BigDecimal valorCorrespondenteParcelaMes = ConstantesSistema.VALOR_ZERO;
 				BigDecimal valorCredito = ConstantesSistema.VALOR_ZERO;
 
-				/*
-				 * Alterado por Vivianne Sousa em 20/12/2007 - Analista: Adriano
-				 * criação do bonus para parcelamento com RD especial
-				 */
 				Short numeroParcelaBonus = 0;
 				if (creditoARealizar.getNumeroParcelaBonus() != null) {
-					numeroParcelaBonus = creditoARealizar
-							.getNumeroParcelaBonus();
+					numeroParcelaBonus = creditoARealizar.getNumeroParcelaBonus();
 				}
 
-				/*
-				 * Caso o nº de prestações realizadas seja menor que o nº de
-				 * prestação dos créditos calcula o valor correspondente da
-				 * parcela do mês.
-				 */
-				if (creditoARealizar.getNumeroPrestacaoRealizada().intValue() < (creditoARealizar
-						.getNumeroPrestacaoCredito().intValue() - numeroParcelaBonus
+				if (creditoARealizar.getNumeroPrestacaoRealizada().intValue() < (creditoARealizar.getNumeroPrestacaoCredito().intValue() - numeroParcelaBonus
 						.intValue())) {
 
 					/*
 					 * Valor correspondente da parcela do mês = valor do crédito
 					 * / nº de pestações do crédito.
 					 */
-					valorCorrespondenteParcelaMes = creditoARealizar
-							.getValorCredito()
-							.divide(new BigDecimal(
-									creditoARealizar
-											.getNumeroPrestacaoCredito()), 2,
-									BigDecimal.ROUND_DOWN);
+					valorCorrespondenteParcelaMes = creditoARealizar.getValorCredito().divide(new BigDecimal(creditoARealizar.getNumeroPrestacaoCredito()), 2,
+							BigDecimal.ROUND_DOWN);
 
-					/*
-					 * Caso seja a última pretação o valor do crédito
-					 * correspondente a parcela do mês = valor do crédito
-					 * correspondente a parcela do mês + valor do crédito -
-					 * (valor do crédito correspondente a parcela do mês * (o nº
-					 * de prestação dos créditos menos o numero de parcela
-					 * bonus))
-					 */
-					if (creditoARealizar.getNumeroPrestacaoRealizada()
-							.intValue() == ((creditoARealizar
-							.getNumeroPrestacaoCredito().intValue() - numeroParcelaBonus
+					if (creditoARealizar.getNumeroPrestacaoRealizada().intValue() == ((creditoARealizar.getNumeroPrestacaoCredito().intValue() - numeroParcelaBonus
 							.intValue()) - 1)) {
 
 						/*
@@ -67496,35 +67392,27 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						 * de parcela bonus)
 						 */
 
-						BigDecimal valorMesVezesPrestacaoCredito = valorCorrespondenteParcelaMes
-								.multiply(
-										new BigDecimal(creditoARealizar
-												.getNumeroPrestacaoCredito()))
-								.setScale(2);
+						BigDecimal valorMesVezesPrestacaoCredito = valorCorrespondenteParcelaMes.multiply(
+								new BigDecimal(creditoARealizar.getNumeroPrestacaoCredito())).setScale(2);
 
 						/*
 						 * PARTE 02 valor do crédito correspondente a parcela do
 						 * mês + valor do crédito
 						 */
-						BigDecimal parte11 = valorCorrespondenteParcelaMes
-								.add(creditoARealizar.getValorCredito());
+						BigDecimal parte11 = valorCorrespondenteParcelaMes.add(creditoARealizar.getValorCredito());
 
 						// valor do crédito correspondente a parcela do mês
 						// = PARTE 02 - PARTE 01
-						BigDecimal parte22 = parte11
-								.subtract(valorMesVezesPrestacaoCredito);
+						BigDecimal parte22 = parte11.subtract(valorMesVezesPrestacaoCredito);
 
 						valorCorrespondenteParcelaMes = parte22;
 					}
 
 					// Atualiza o nº de prestações realizadas
-					creditoARealizar.setNumeroPrestacaoRealizada(new Short(
-							(creditoARealizar.getNumeroPrestacaoRealizada()
-									.intValue() + 1) + ""));
+					creditoARealizar.setNumeroPrestacaoRealizada(new Short((creditoARealizar.getNumeroPrestacaoRealizada().intValue() + 1) + ""));
 
 					// anoMes da prestação será o anaMes de referência da conta
-					creditoARealizar
-							.setAnoMesReferenciaPrestacao(anoMesFaturamento);
+					creditoARealizar.setAnoMesReferenciaPrestacao(anoMesFaturamento);
 
 				}
 
@@ -67536,17 +67424,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				 * a partir desse crédito a realizar
 				 * */
 				// anoMes da prestação será o anaMes de referência da conta
-				creditoARealizar
-						.setAnoMesReferenciaPrestacao(anoMesFaturamento);
+				creditoARealizar.setAnoMesReferenciaPrestacao(anoMesFaturamento);
 
 				// Valor de credito
-				valorCredito = valorCorrespondenteParcelaMes
-						.add(creditoARealizar.getValorResidualMesAnterior());
+				valorCredito = valorCorrespondenteParcelaMes.add(creditoARealizar.getValorResidualMesAnterior());
 
 				// Armazena o valor residual concedido no mês
 				// (CRAR_VLRESIDUALCONCEDIDOMES = CRAR_VLRESIDUALMESANTERIOR).
-				creditoARealizar.setValorResidualConcedidoMes(creditoARealizar
-						.getValorResidualMesAnterior());
+				creditoARealizar.setValorResidualConcedidoMes(creditoARealizar.getValorResidualMesAnterior());
 
 				/*
 				 * Para o pré-faturamento todos os créditos a realizar serão
@@ -67556,8 +67441,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				if (!preFaturamento) {
 
 					// Retira o valor de credito do valor total a cobrar
-					valorTotalACobrar = valorTotalACobrar
-							.subtract(valorCredito);
+					valorTotalACobrar = valorTotalACobrar.subtract(valorCredito);
 				}
 
 				/*
@@ -67573,12 +67457,9 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				 */
 				if (valorTotalACobrar.compareTo(ConstantesSistema.VALOR_ZERO) == -1) {
 
-					creditoARealizar
-							.setValorResidualMesAnterior(valorTotalACobrar
-									.multiply(new BigDecimal("-1")));
+					creditoARealizar.setValorResidualMesAnterior(valorTotalACobrar.multiply(new BigDecimal("-1")));
 
-					valorCredito = valorCredito.subtract(creditoARealizar
-							.getValorResidualMesAnterior());
+					valorCredito = valorCredito.subtract(creditoARealizar.getValorResidualMesAnterior());
 
 					valorTotalACobrar = ConstantesSistema.VALOR_ZERO;
 
@@ -67592,8 +67473,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					 * impressão simultanea
 					 * */
 					if (!preFaturamento) {
-						creditoARealizar
-								.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
+						creditoARealizar.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
 					}
 				}
 
@@ -67605,52 +67485,34 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 					// Cria o crédito realizado
 					CreditoRealizado creditoRealizado = new CreditoRealizado();
-					creditoRealizado.setCreditoTipo(creditoARealizar
-							.getCreditoTipo());
-					creditoRealizado.setCreditoRealizado(creditoARealizar
-							.getGeracaoCredito());
-					creditoRealizado.setLancamentoItemContabil(creditoARealizar
-							.getLancamentoItemContabil());
-					creditoRealizado.setLocalidade(creditoARealizar
-							.getLocalidade());
+					creditoRealizado.setCreditoTipo(creditoARealizar.getCreditoTipo());
+					creditoRealizado.setCreditoRealizado(creditoARealizar.getGeracaoCredito());
+					creditoRealizado.setLancamentoItemContabil(creditoARealizar.getLancamentoItemContabil());
+					creditoRealizado.setLocalidade(creditoARealizar.getLocalidade());
 					creditoRealizado.setQuadra(creditoARealizar.getQuadra());
-					creditoRealizado.setCodigoSetorComercial(creditoARealizar
-							.getCodigoSetorComercial());
-					creditoRealizado.setNumeroQuadra(creditoARealizar
-							.getNumeroQuadra());
-					creditoRealizado.setNumeroLote(creditoARealizar
-							.getNumeroLote());
-					creditoRealizado.setNumeroSubLote(creditoARealizar
-							.getNumeroSubLote());
-					creditoRealizado
-							.setAnoMesReferenciaCredito(creditoARealizar
-									.getAnoMesReferenciaCredito());
-					creditoRealizado.setAnoMesCobrancaCredito(creditoARealizar
-							.getAnoMesCobrancaCredito());
+					creditoRealizado.setCodigoSetorComercial(creditoARealizar.getCodigoSetorComercial());
+					creditoRealizado.setNumeroQuadra(creditoARealizar.getNumeroQuadra());
+					creditoRealizado.setNumeroLote(creditoARealizar.getNumeroLote());
+					creditoRealizado.setNumeroSubLote(creditoARealizar.getNumeroSubLote());
+					creditoRealizado.setAnoMesReferenciaCredito(creditoARealizar.getAnoMesReferenciaCredito());
+					creditoRealizado.setAnoMesCobrancaCredito(creditoARealizar.getAnoMesCobrancaCredito());
 					creditoRealizado.setValorCredito(valorCredito);
-					creditoRealizado.setCreditoOrigem(creditoARealizar
-							.getCreditoOrigem());
-					creditoRealizado.setNumeroPrestacao(creditoARealizar
-							.getNumeroPrestacaoCredito());
+					creditoRealizado.setCreditoOrigem(creditoARealizar.getCreditoOrigem());
+					creditoRealizado.setNumeroPrestacao(creditoARealizar.getNumeroPrestacaoCredito());
 
 					creditoRealizado.setNumeroParcelaBonus(numeroParcelaBonus);
 
-					creditoRealizado.setNumeroPrestacaoCredito(creditoARealizar
-							.getNumeroPrestacaoRealizada());
+					creditoRealizado.setNumeroPrestacaoCredito(creditoARealizar.getNumeroPrestacaoRealizada());
 
-					creditoRealizado.setCreditoARealizarGeral(creditoARealizar
-							.getCreditoARealizarGeral());
+					creditoRealizado.setCreditoARealizarGeral(creditoARealizar.getCreditoARealizarGeral());
 
 					// Adiciona o crédito realizado na sessão
 					colecaoCreditosRealizado.add(creditoRealizado);
 
 					// Pesquisa os créditos a realizar categoria
-					Collection colecaoCreditoARealizarCategoria = this
-							.obterCreditoRealizarCategoria(creditoARealizar
-									.getId());
+					Collection colecaoCreditoARealizarCategoria = this.obterCreditoRealizarCategoria(creditoARealizar.getId());
 
-					Iterator colecaoCreditoARealizarCategoriaIterator = colecaoCreditoARealizarCategoria
-							.iterator();
+					Iterator colecaoCreditoARealizarCategoriaIterator = colecaoCreditoARealizarCategoria.iterator();
 
 					// Crédito a realizar categoria
 					CreditoARealizarCategoria creditoARealizarCategoria = null;
@@ -67660,60 +67522,42 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// Laço para recuperar as categorias do crédito a
 					// realizar
 					while (colecaoCreditoARealizarCategoriaIterator.hasNext()) {
-						creditoARealizarCategoria = (CreditoARealizarCategoria) colecaoCreditoARealizarCategoriaIterator
-								.next();
+						creditoARealizarCategoria = (CreditoARealizarCategoria) colecaoCreditoARealizarCategoriaIterator.next();
 						Categoria categoria = new Categoria();
-						categoria.setId(creditoARealizarCategoria
-								.getCategoria().getId());
-						categoria
-								.setQuantidadeEconomiasCategoria(creditoARealizarCategoria
-										.getQuantidadeEconomia());
+						categoria.setId(creditoARealizarCategoria.getCategoria().getId());
+						categoria.setQuantidadeEconomiasCategoria(creditoARealizarCategoria.getQuantidadeEconomia());
 						colecaoCategoriasObterValor.add(categoria);
 					}
 
 					// Obter os valores das categorias por categoria do
 					// credito a realizar categoria
-					Collection colecaoCategoriasCalculadasValor = getControladorImovel()
-							.obterValorPorCategoria(
-									colecaoCategoriasObterValor, valorCredito);
+					Collection colecaoCategoriasCalculadasValor = getControladorImovel().obterValorPorCategoria(colecaoCategoriasObterValor, valorCredito);
 
-					Iterator colecaoCategoriasCalculadasValorIterator = colecaoCategoriasCalculadasValor
-							.iterator();
-					Iterator colecaoCategoriasObterValorIterator = colecaoCategoriasObterValor
-							.iterator();
+					Iterator colecaoCategoriasCalculadasValorIterator = colecaoCategoriasCalculadasValor.iterator();
+					Iterator colecaoCategoriasObterValorIterator = colecaoCategoriasObterValor.iterator();
 
 					// Cria os créditos a realizar por categoria
 					CreditoRealizadoCategoria creditoRealizadoCategoria = null;
 					Collection colecaoCreditosRealizadoCategoria = new ArrayList();
 
-					while (colecaoCategoriasCalculadasValorIterator.hasNext()
-							&& colecaoCategoriasObterValorIterator.hasNext()) {
+					while (colecaoCategoriasCalculadasValorIterator.hasNext() && colecaoCategoriasObterValorIterator.hasNext()) {
 						// Obtém o valor por categoria
-						BigDecimal valorPorCategoria = (BigDecimal) colecaoCategoriasCalculadasValorIterator
-								.next();
+						BigDecimal valorPorCategoria = (BigDecimal) colecaoCategoriasCalculadasValorIterator.next();
 
 						// Obtém a categoria
-						Categoria categoria = (Categoria) colecaoCategoriasObterValorIterator
-								.next();
+						Categoria categoria = (Categoria) colecaoCategoriasObterValorIterator.next();
 
 						// Cria o crédito a ralizar por categoria
 						creditoRealizadoCategoria = new CreditoRealizadoCategoria();
 						CreditoRealizadoCategoriaPK creditoRealizadoCategoriaPk = new CreditoRealizadoCategoriaPK();
 						creditoRealizadoCategoriaPk.setCategoria(categoria);
-						creditoRealizadoCategoriaPk
-								.setCreditoRealizado(creditoRealizado);
-						creditoRealizadoCategoria
-								.setComp_id(creditoRealizadoCategoriaPk);
-						creditoRealizadoCategoria
-								.setValorCategoria(valorPorCategoria);
-						creditoRealizadoCategoria
-								.setCreditoRealizado(creditoRealizado);
+						creditoRealizadoCategoriaPk.setCreditoRealizado(creditoRealizado);
+						creditoRealizadoCategoria.setComp_id(creditoRealizadoCategoriaPk);
+						creditoRealizadoCategoria.setValorCategoria(valorPorCategoria);
+						creditoRealizadoCategoria.setCreditoRealizado(creditoRealizado);
 						creditoRealizadoCategoria.setCategoria(categoria);
-						creditoRealizadoCategoria
-								.setQuantidadeEconomia(categoria
-										.getQuantidadeEconomiasCategoria());
-						colecaoCreditosRealizadoCategoria
-								.add(creditoRealizadoCategoria);
+						creditoRealizadoCategoria.setQuantidadeEconomia(categoria.getQuantidadeEconomiasCategoria());
+						colecaoCreditosRealizadoCategoria.add(creditoRealizadoCategoria);
 					}
 
 					if (colecaoCategoriasCalculadasValor != null) {
@@ -67724,8 +67568,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 					// Armazena o credito realizado junto com os créditos
 					// realizados por categoria
-					mapCreditoRealizado.put(creditoRealizado,
-							colecaoCreditosRealizadoCategoria);
+					mapCreditoRealizado.put(creditoRealizado, colecaoCreditosRealizadoCategoria);
 
 					// Adiciona o crédito a realizar para ser atualizado
 					colecaoCreditosARealizarUpdate.add(creditoARealizar);
@@ -67743,19 +67586,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				 */
 				// Verifica se debito a cobrar já foi inserido, caso sim
 				// acumala os valores.
-				if (mapValoresPorTipoCredito.containsKey(creditoARealizar
-						.getCreditoTipo())) {
-					BigDecimal valor = mapValoresPorTipoCredito
-							.get(creditoARealizar.getCreditoTipo());
-					mapValoresPorTipoCredito.put(
-							creditoARealizar.getCreditoTipo(),
-							Util.somaBigDecimal(valor, valorCredito));
+				if (mapValoresPorTipoCredito.containsKey(creditoARealizar.getCreditoTipo())) {
+					BigDecimal valor = mapValoresPorTipoCredito.get(creditoARealizar.getCreditoTipo());
+					mapValoresPorTipoCredito.put(creditoARealizar.getCreditoTipo(), Util.somaBigDecimal(valor, valorCredito));
 				}
 				// Caso contrario inseri na coleção
 				// primeiro registro do tipo.
 				else {
-					mapValoresPorTipoCredito.put(
-							creditoARealizar.getCreditoTipo(), valorCredito);
+					mapValoresPorTipoCredito.put(creditoARealizar.getCreditoTipo(), valorCredito);
 				}
 
 			}// fim laço de credito a realizar
@@ -74925,15 +74763,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		try {
 
-			if (colecaoContasManutencao != null
-					&& !colecaoContasManutencao.isEmpty()) {
+			if (colecaoContasManutencao != null && !colecaoContasManutencao.isEmpty()) {
 				Iterator iterator = colecaoContasManutencao.iterator();
 
 				while (iterator.hasNext()) {
 					Object[] contaArray = (Object[]) iterator.next();
 
-					if (!repositorioCobranca
-							.verificaContaVinculadaAContratoParcelAtivo((Integer) contaArray[0])) {
+					if (!repositorioCobranca.verificaContaVinculadaAContratoParcelAtivo((Integer) contaArray[0])) {
 						retorno.add(contaArray);
 					}
 				}

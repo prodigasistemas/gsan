@@ -3569,6 +3569,19 @@ public class ControladorCobranca implements SessionBean {
 			int indicadorDebitoACobrar, int indicadorCreditoARealizar, int indicadorNotasPromissorias, int indicadorGuiasPagamento,
 			int indicadorCalcularAcrescimoImpontualidade, Boolean indicadorContas, int indicadorDividaAtiva) throws ControladorException {
 
+		return this.obterDebitoImovelOuCliente(indicadorDebito, idImovel, codigoCliente, clienteRelacaoTipo, anoMesInicialReferenciaDebito,
+				anoMesFinalReferenciaDebito, anoMesInicialVencimentoDebito, anoMesFinalVencimentoDebito, indicadorPagamento,
+				indicadorConta, indicadorDebitoACobrar, indicadorCreditoARealizar, indicadorNotasPromissorias, indicadorGuiasPagamento,
+				indicadorCalcularAcrescimoImpontualidade, indicadorContas, indicadorDividaAtiva, false);
+	}
+	
+	public ObterDebitoImovelOuClienteHelper obterDebitoImovelOuCliente(int indicadorDebito, String idImovel, String codigoCliente,
+			Short clienteRelacaoTipo, String anoMesInicialReferenciaDebito, String anoMesFinalReferenciaDebito,
+			Date anoMesInicialVencimentoDebito, Date anoMesFinalVencimentoDebito, int indicadorPagamento, int indicadorConta,
+			int indicadorDebitoACobrar, int indicadorCreditoARealizar, int indicadorNotasPromissorias, int indicadorGuiasPagamento,
+			int indicadorCalcularAcrescimoImpontualidade, Boolean indicadorContas, int indicadorDividaAtiva,
+			boolean incluirGrupoFaturamentoNaoFaturado) throws ControladorException {
+
 		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 		String anoMesArrecadacao = getControladorUtil().pesquisarParametrosDoSistema().getAnoMesArrecadacao() + "";
 
@@ -3629,7 +3642,8 @@ public class ControladorCobranca implements SessionBean {
 			Collection<ContaValoresHelper> colecaoContasValores = this.pesquisarContasDebito(idCliente, clienteRelacaoTipo,
 					idImovelFormatado, idImoveis, idImoveisAtuais, indicadorDebito, indicadorPagamento, indicadorConta,
 					indicadorCalcularAcrescimoImpontualidade, anoMesInicialReferenciaDebito, anoMesFinalReferenciaDebito,
-					anoMesInicialVencimentoDebito, anoMesFinalVencimentoDebito, anoMesArrecadacao, indicadorDividaAtiva);
+					anoMesInicialVencimentoDebito, anoMesFinalVencimentoDebito, anoMesArrecadacao, indicadorDividaAtiva,
+					incluirGrupoFaturamentoNaoFaturado);
 
 			// adcionando a colecao de contas de valores
 			if (colecaoContasValores != null) {
@@ -3784,6 +3798,19 @@ public class ControladorCobranca implements SessionBean {
 			Date anoMesInicialVencimentoDebito, Date anoMesFinalVencimentoDebito, String anoMesArrecadacao, int indicadorDividaAtiva)
 			throws ControladorException {
 
+		return this.pesquisarContasDebito(idCliente, relacaoTipo, idImovel, idImoveis, idImoveisAtuais, indicadorDebito,
+				indicadorPagamento, indicadorConta, indicadorCalcularAcrescimoImpontualidade, anoMesInicialReferenciaDebito,
+				anoMesFinalReferenciaDebito, anoMesInicialVencimentoDebito, anoMesFinalVencimentoDebito, anoMesArrecadacao,
+				indicadorDividaAtiva, false);
+
+	}
+
+	public Collection<ContaValoresHelper> pesquisarContasDebito(Integer idCliente, Short relacaoTipo, Integer idImovel,
+			Collection idImoveis, Collection idImoveisAtuais, int indicadorDebito, int indicadorPagamento, int indicadorConta,
+			int indicadorCalcularAcrescimoImpontualidade, String anoMesInicialReferenciaDebito, String anoMesFinalReferenciaDebito,
+			Date anoMesInicialVencimentoDebito, Date anoMesFinalVencimentoDebito, String anoMesArrecadacao, int indicadorDividaAtiva,
+			boolean incluirGrupoFaturamentoNaoFaturado) throws ControladorException {
+
 		Collection<ContaValoresHelper> retorno = new ArrayList<ContaValoresHelper>();
 
 		Collection contas = null;
@@ -3793,11 +3820,19 @@ public class ControladorCobranca implements SessionBean {
 			// contas do imovel
 
 			try {
-				contas = repositorioCobranca.pesquisarContasImovel(idImovel, indicadorPagamento, indicadorConta,
-						DebitoCreditoSituacao.NORMAL.toString(), DebitoCreditoSituacao.RETIFICADA.toString(),
-						DebitoCreditoSituacao.INCLUIDA.toString(), DebitoCreditoSituacao.PARCELADA.toString(),
-						anoMesInicialReferenciaDebito, anoMesFinalReferenciaDebito, anoMesInicialVencimentoDebito,
-						anoMesFinalVencimentoDebito, indicadorDividaAtiva);
+				if (incluirGrupoFaturamentoNaoFaturado) {
+					contas = repositorioCobranca.pesquisarContasImovelSemGrupoNaoFaturado(idImovel, indicadorPagamento, indicadorConta,
+							DebitoCreditoSituacao.NORMAL.toString(), DebitoCreditoSituacao.RETIFICADA.toString(),
+							DebitoCreditoSituacao.INCLUIDA.toString(), DebitoCreditoSituacao.PARCELADA.toString(),
+							anoMesInicialReferenciaDebito, anoMesFinalReferenciaDebito, anoMesInicialVencimentoDebito,
+							anoMesFinalVencimentoDebito, indicadorDividaAtiva);
+				} else {
+					contas = repositorioCobranca.pesquisarContasImovel(idImovel, indicadorPagamento, indicadorConta,
+							DebitoCreditoSituacao.NORMAL.toString(), DebitoCreditoSituacao.RETIFICADA.toString(),
+							DebitoCreditoSituacao.INCLUIDA.toString(), DebitoCreditoSituacao.PARCELADA.toString(),
+							anoMesInicialReferenciaDebito, anoMesFinalReferenciaDebito, anoMesInicialVencimentoDebito,
+							anoMesFinalVencimentoDebito, indicadorDividaAtiva);
+				}
 
 				indicadorAcrescimosCliente = this.obterIndicadorAcrescimosClienteResponsavel(idImovel);
 

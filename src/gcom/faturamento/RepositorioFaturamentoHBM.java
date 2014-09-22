@@ -2054,34 +2054,59 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		String update;
 		Session session = HibernateUtil.getSession();
+		
+		PreparedStatement st = null;
 
-		try {
+//		try {
 			// Atualiza apenas os dados (dataRevisao, motivoRevisao) da
 			// conta
-			update = "UPDATE gcom.faturamento.conta.Conta SET "
-					+ "cnta_dtvencimentoconta = :dataVencimento, cnta_dtvalidadeconta = :dataValidade, "
-					+ "cnta_icalteracaovencimento = :indicadorAlteracaoVencimento, "
-					+ "cnta_tmultimaalteracao = :dataUltimaAlteracao, "
-					+ "cnta_nnalteracoesvencimento = :numeroAltVencimento "
-					+ "WHERE cnta_id = :idConta ";
+		try {	
+			Connection jdbcCon = session.connection();
+			
+			update = "UPDATE faturamento.conta SET "
+					+ "cnta_dtvencimentoconta = ?, cnta_dtvalidadeconta = ?, "
+					+ "cnta_icalteracaovencimento = ?, "
+					+ "cnta_tmultimaalteracao = ?, "
+					+ "cnta_nnalteracoesvencimento = ? "
+					+ "WHERE cnta_id = ? ";
+			
+			
+				st = jdbcCon.prepareStatement(update);
+				
+				st.setDate(1, Util.getSQLDate(conta.getDataVencimentoConta()));
+				st.setDate(2, Util.getSQLDate(conta.getDataValidadeConta()));
+				st.setShort(3, conta.getIndicadorAlteracaoVencimento());
+				st.setTimestamp(4, Util.getSQLTimesTemp(conta.getUltimaAlteracao()));
+				st.setInt(5, conta.getNumeroAlteracoesVencimento());
+				st.setInt(6, conta.getId());
+				
+				st.executeUpdate();
+			} catch (SQLException e) {
+				throw new ErroRepositorioException(e, "Erro no Hibernate");
+			} finally {
+				if (null != st)
+					try {
+						st.close();
+					} catch (SQLException e) {
+						throw new ErroRepositorioException(e, "Erro no Hibernate");
+					}
+				HibernateUtil.closeSession(session);
+			}
 
-			session.createQuery(update).setDate("dataVencimento",
-					conta.getDataVencimentoConta()).setDate("dataValidade",
-					conta.getDataValidadeConta()).setShort(
-					"indicadorAlteracaoVencimento",
-					conta.getIndicadorAlteracaoVencimento()).
-					setInteger("numeroAltVencimento", conta.getNumeroAlteracoesVencimento()).setTimestamp(
-					"dataUltimaAlteracao", conta.getUltimaAlteracao())
-					.setInteger("idConta", conta.getId()).executeUpdate();
+//			session.createQuery(update).setDate("dataVencimento", conta.getDataVencimentoConta())
+//					.setDate("dataValidade", conta.getDataValidadeConta())
+//					.setShort("indicadorAlteracaoVencimento", conta.getIndicadorAlteracaoVencimento())
+//					.setInteger("numeroAltVencimento", conta.getNumeroAlteracoesVencimento())
+//					.setTimestamp("dataUltimaAlteracao", conta.getUltimaAlteracao()).setInteger("idConta", conta.getId()).executeUpdate();
 
 			// erro no hibernate
-		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
-			throw new ErroRepositorioException(e, "Erro no Hibernate");
-		} finally {
-			// fecha a sessão
-			HibernateUtil.closeSession(session);
-		}
+//		} catch (HibernateException e) {
+//			// levanta a exceção para a próxima camada
+//			throw new ErroRepositorioException(e, "Erro no Hibernate");
+//		} finally {
+//			// fecha a sessão
+//			HibernateUtil.closeSession(session);
+//		}
 	}
 
 	public Collection<Integer> pesquisarQuadras(Integer rotaId)
@@ -20278,6 +20303,88 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		return retorno;
 	}
+	public Collection pesquisarContasImoveis(Collection idsImovel, Integer anoMes, Date dataVencimentoContaInicio,
+			Date dataVencimentoContaFim, Integer anoMesFim, String indicadorContaPaga, Date dataVencimentoInformada,
+			boolean isDebitoEmConta) throws ErroRepositorioException {
+		Collection retorno = null;
+
+		Session session = HibernateUtil.getSession();
+		String consulta;
+
+		try {
+			consulta = "select cnta.id, cnta.referencia, cnta.dataVencimentoConta, cnta.valorAgua, cnta.valorEsgoto, "
+					+ "cnta.debitos, cnta.valorCreditos, cnta.consumoAgua, cnta.consumoEsgoto, "
+					+ "cnta.dataValidadeConta, cnta.dataRevisao, cnta.debitoCreditoSituacaoAtual, cnta.referenciaContabil, "
+					+ "cnta.ultimaAlteracao, imov, dcsan "
+					+ "from Conta cnta "
+					+ "inner join cnta.imovel imov "
+					+ "inner join cnta.debitoCreditoSituacaoAtual dcst "
+					+ "left join cnta.debitoCreditoSituacaoAnterior dcsan "
+					+ "where cnta.referencia BETWEEN :anoMes AND :anoMesFim "
+					+ "and imov.id in (:idsImovel) "
+					+ "and cnta.debitoCreditoSituacaoAtual in(:normal, :incluida, :retificada) "
+					+ "and cnta.dataVencimentoConta < :dataVencimentoInformada";
+
+			if (dataVencimentoContaInicio != null) {
+				if (dataVencimentoContaFim != null) {
+					consulta += " and cnta.dataVencimentoConta BETWEEN :dataVencimentoContaInicio AND :dataVencimentoContaFim ";
+				} else {
+					consulta += " and cnta.dataVencimentoConta BETWEEN :dataVencimentoContaInicio AND :dataVencimentoContaInicio ";
+				}
+			}
+			
+			if(isDebitoEmConta)
+				consulta += " and cnta.indicadorDebitoConta = 1 ";
+
+			if (!indicadorContaPaga.equals("3")) {
+				if (indicadorContaPaga.equals("1")) {
+					consulta += "and exists ";
+				} else {
+					consulta += "and not exists ";
+				}
+				consulta += "(select conta.id " + "from Pagamento pgmt "
+						+ "inner join pgmt.contaGeral contaGeral "
+						+ "inner join contaGeral.conta conta "
+						+ "where conta.id = cnta.id) ";
+			}
+
+			if (dataVencimentoContaInicio != null) {
+				retorno = session.createQuery(consulta).setInteger("anoMes", anoMes).setInteger("anoMesFim", anoMesFim)
+						.setParameterList("idsImovel", idsImovel).setInteger("normal", DebitoCreditoSituacao.NORMAL)
+						.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA).setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
+						.setDate("dataVencimentoContaInicio", dataVencimentoContaInicio)
+						.setDate("dataVencimentoContaFim", dataVencimentoContaFim)
+						.setDate("dataVencimentoInformada", dataVencimentoInformada).list();
+
+			} else {
+
+				retorno = session.createQuery(consulta).setInteger("anoMes", anoMes).setInteger("anoMesFim", anoMesFim)
+						.setParameterList("idsImovel", idsImovel).setInteger("normal", DebitoCreditoSituacao.NORMAL)
+						.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA).setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
+						.setDate("dataVencimentoInformada", dataVencimentoInformada).list();
+			}
+
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	
+	}
+	
+	public Collection pesquisarContasImoveis(Collection idsImovel, Integer anoMes, Date dataVencimentoContaInicio,
+			Date dataVencimentoContaFim, Integer anoMesFim, String indicadorContaPaga, Date dataVencimentoInformada)
+					throws ErroRepositorioException {
+		
+		Collection retorno = this.pesquisarContasImoveis(idsImovel, anoMes, dataVencimentoContaInicio, dataVencimentoContaFim, anoMesFim,
+				indicadorContaPaga, dataVencimentoInformada, false);
+		
+		return retorno;
+	}
 
 	/**
 	 * 
@@ -22203,6 +22310,132 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 									DebitoCreditoSituacao.INCLUIDA).setInteger(
 									"retificada",
 									DebitoCreditoSituacao.RETIFICADA).list();
+				}
+			}
+
+		} catch (HibernateException e) {
+			// levanta a exceção para a próxima camada
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			// fecha a sessão
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+
+	}
+	
+	public Collection pesquisarContasCliente(Integer codigoCliente, Short relacaoTipo, Integer anoMes, Date dataVencimentoContaInicio,
+			Date dataVencimentoContaFim, Integer anoMesFim, Integer codigoClienteSuperior, Date dataVencimentoInformada,
+			boolean isDebitoAutomatico) throws ErroRepositorioException {
+
+		Collection retorno = null;
+
+		Session session = HibernateUtil.getSession();
+		String consulta;
+
+		try {
+
+			consulta = "select conta.id, conta.referencia, conta.dataVencimentoConta, conta.valorAgua, conta.valorEsgoto, "
+					+ "conta.debitos, conta.valorCreditos, conta.consumoAgua, conta.consumoEsgoto, "
+					+ "conta.dataValidadeConta, conta.dataRevisao, conta.debitoCreditoSituacaoAtual, conta.referenciaContabil, "
+					+ "conta.ultimaAlteracao, imov, dcsan " + "from ClienteConta clienteConta "
+					+ "inner join clienteConta.cliente cliente " + "inner join clienteConta.conta conta " + "inner join conta.imovel imov "
+					+ "inner join conta.debitoCreditoSituacaoAtual dcst " + "left join conta.debitoCreditoSituacaoAnterior dcsan ";
+
+			if (relacaoTipo != null) {
+				consulta = consulta + " inner join clienteConta.clienteRelacaoTipo clienteRelacaoTipo ";
+			}
+
+			consulta = consulta + "where " + "conta.referencia BETWEEN :anoMes AND :anoMesFim "
+					+ "and dcst.id in(:normal, :incluida, :retificada) " + "and conta.dataVencimentoConta < :dataVencimentoInformada ";
+			
+			if(isDebitoAutomatico)
+				consulta += " and cnta.indicadorDebitoConta = 1 ";
+
+			Integer codigo = null;
+
+			if (codigoClienteSuperior != null) {
+				consulta += " and cliente.cliente.id = :codigo ";
+				codigo = codigoClienteSuperior;
+			} else {
+				consulta += " and cliente.id = :codigo ";
+				codigo = codigoCliente;
+			}
+
+			if (relacaoTipo != null) {
+				consulta = consulta + " and clienteRelacaoTipo = :relacao ";
+
+				if (dataVencimentoContaInicio != null) {
+					consulta += " and conta.dataVencimentoConta BETWEEN :dataVencimentoContaInicio AND :dataVencimentoContaFim ";
+
+					if (dataVencimentoContaFim != null) {
+
+						retorno = (Collection) session.createQuery(consulta).setInteger("codigo", codigo).setInteger("anoMes", anoMes)
+								.setInteger("anoMesFim", anoMesFim).setInteger("normal", DebitoCreditoSituacao.NORMAL)
+								.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA)
+								.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
+								.setShort("relacao", new Short(relacaoTipo).shortValue())
+								.setDate("dataVencimentoContaInicio", dataVencimentoContaInicio)
+								.setDate("dataVencimentoContaFim", dataVencimentoContaFim)
+								.setDate("dataVencimentoInformada", dataVencimentoInformada).list();
+					} else {
+
+						retorno = (Collection) session.createQuery(consulta).setInteger("codigo", codigo).setInteger("anoMes", anoMes)
+								.setInteger("anoMesFim", anoMesFim).setInteger("normal", DebitoCreditoSituacao.NORMAL)
+								.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA)
+								.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
+								.setShort("relacao", new Short(relacaoTipo).shortValue())
+								.setDate("dataVencimentoContaInicio", dataVencimentoContaInicio)
+								.setDate("dataVencimentoContaFim", dataVencimentoContaInicio)
+								.setDate("dataVencimentoInformada", dataVencimentoInformada).list();
+					}
+				} else {
+
+					retorno = (Collection) session.createQuery(consulta).setInteger("codigo", codigo).setInteger("anoMes", anoMes)
+							.setInteger("anoMesFim", anoMesFim).setInteger("normal", DebitoCreditoSituacao.NORMAL)
+							.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA)
+							.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
+							.setShort("relacao", new Short(relacaoTipo).shortValue())
+							.setDate("dataVencimentoInformada", dataVencimentoInformada).list();
+				}
+
+			}
+
+			if (relacaoTipo == null) {
+
+				if (dataVencimentoContaInicio != null) {
+					consulta += " and conta.dataVencimentoConta BETWEEN :dataVencimentoContaInicio AND :dataVencimentoContaFim ";
+
+					if (dataVencimentoContaFim != null) {
+
+						retorno = (Collection) session.createQuery(consulta).setInteger("codigo", codigo).setInteger("anoMes", anoMes)
+								.setInteger("anoMesFim", anoMesFim).setInteger("normal", DebitoCreditoSituacao.NORMAL)
+								.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA)
+								.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
+								.setDate("dataVencimentoContaInicio", dataVencimentoContaInicio)
+								.setDate("dataVencimentoContaFim", dataVencimentoContaFim)
+								.setDate("dataVencimentoInformada", dataVencimentoInformada).list();
+
+					}
+
+					else {
+
+						retorno = (Collection) session.createQuery(consulta).setInteger("codigo", codigo).setInteger("anoMes", anoMes)
+								.setInteger("anoMesFim", anoMesFim).setInteger("normal", DebitoCreditoSituacao.NORMAL)
+								.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA)
+								.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
+								.setDate("dataVencimentoContaInicio", dataVencimentoContaInicio)
+								.setDate("dataVencimentoContaFim", dataVencimentoContaInicio)
+								.setDate("dataVencimentoInformada", dataVencimentoInformada).list();
+					}
+				} else {
+
+					retorno = (Collection) session.createQuery(consulta).setInteger("codigo", codigo).setInteger("anoMes", anoMes)
+							.setInteger("anoMesFim", anoMesFim).setInteger("normal", DebitoCreditoSituacao.NORMAL)
+							.setInteger("incluida", DebitoCreditoSituacao.INCLUIDA)
+							.setInteger("retificada", DebitoCreditoSituacao.RETIFICADA)
+							.setDate("dataVencimentoInformada", dataVencimentoInformada).list();
 				}
 			}
 
@@ -26936,8 +27169,7 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 
 		try {
 			RepositorioUtilHBM repositorioUtilHBM = RepositorioUtilHBM.getInstancia();
-			SistemaParametro sistemaParametro = 
-				repositorioUtilHBM.pesquisarParametrosDoSistema();
+			SistemaParametro sistemaParametro = repositorioUtilHBM.pesquisarParametrosDoSistema();
 
 			/**
 			 * [UC0407] Filtrar Imóveis para Inserir ou Manter Conta
@@ -26957,8 +27189,8 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 			Connection jdbcCon = session.connection();
 
 			update = "UPDATE faturamento.conta SET "
-					+ "cnta_dtvencimentoconta = ?, cnta_dtvalidadeconta = ?, "
-					+ "cnta_icalteracaovencimento = ?, cnta_tmultimaalteracao = ? "
+					+ "cnta_dtvencimentoconta = ?, cnta_dtvalidadeconta = ?, "//1, 2
+					+ "cnta_icalteracaovencimento = ?, cnta_tmultimaalteracao = ? "//3, 4
 					+ "WHERE cnta_id IN( "
 					+ "SELECT cnta.cnta_id "
 					+ "FROM faturamento.conta cnta "
@@ -26967,14 +27199,15 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					+ "INNER JOIN micromedicao.rota rota on qdra.rota_id = rota.rota_id "
 					+ "INNER JOIN faturamento.faturamento_grupo ftgr on rota.ftgr_id = ftgr.ftgr_id "
 					+ "INNER JOIN faturamento.debito_credito_situacao dcst on cnta.dcst_idatual = dcst.dcst_id "
-					+ "WHERE cnta.cnta_amreferenciaconta BETWEEN ? AND ? "
-					+ "AND ftgr.ftgr_id = ? " + "AND dcst.dcst_id IN(?, ?, ?) ";
+					+ "WHERE cnta.cnta_amreferenciaconta BETWEEN ? AND ? "//5, 6
+					+ "AND ftgr.ftgr_id = ? " + "AND dcst.dcst_id IN(?, ?, ?) "//7, 8, 9, 10
+					+ "AND cnta_dtvencimentoconta < ? ";//11
 
 			if (dataVencimentoContaInicio != null) {
-				update += " AND cnta.cnta_dtvencimentoconta BETWEEN ? AND ? ";
+				update += " AND cnta.cnta_dtvencimentoconta BETWEEN ? AND ? ";//12, 13
 
 				if (indicadorBloqueioContasContratoParcelManterConta) {
-					update += " AND (cnta.cmrv_id is null or cnta.cmrv_id <> ? ) ";
+					update += " AND (cnta.cmrv_id is null or cnta.cmrv_id <> ? ) ";//14
 				}
 
 				update += ")";
@@ -26993,12 +27226,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					st.setInt(8, DebitoCreditoSituacao.NORMAL.intValue());
 					st.setInt(9, DebitoCreditoSituacao.INCLUIDA.intValue());
 					st.setInt(10, DebitoCreditoSituacao.RETIFICADA.intValue());
-					st.setDate(11, Util.getSQLDate(dataVencimentoContaInicio));
-					st.setDate(12, Util.getSQLDate(dataVencimentoContaFim));
+					st.setDate(11, Util.getSQLDate(dataVencimento));
+					st.setDate(12, Util.getSQLDate(dataVencimentoContaInicio));
+					st.setDate(13, Util.getSQLDate(dataVencimentoContaFim));
 					
 					if (indicadorBloqueioContasContratoParcelManterConta) {
-						st.setInt(13, 
-								ContaMotivoRevisao.CONTA_EM_CONTRATO_PARCELAMENTO.intValue());
+						st.setInt(14, ContaMotivoRevisao.CONTA_EM_CONTRATO_PARCELAMENTO.intValue());
 					}
 				
 				} else {
@@ -27015,12 +27248,12 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 					st.setInt(8, DebitoCreditoSituacao.NORMAL.intValue());
 					st.setInt(9, DebitoCreditoSituacao.INCLUIDA.intValue());
 					st.setInt(10, DebitoCreditoSituacao.RETIFICADA.intValue());
-					st.setDate(11, Util.getSQLDate(dataVencimentoContaInicio));
+					st.setDate(11, Util.getSQLDate(dataVencimento));
 					st.setDate(12, Util.getSQLDate(dataVencimentoContaInicio));
+					st.setDate(13, Util.getSQLDate(dataVencimentoContaInicio));
 					
 					if (indicadorBloqueioContasContratoParcelManterConta) {
-						st.setInt(13, 
-								ContaMotivoRevisao.CONTA_EM_CONTRATO_PARCELAMENTO.intValue());
+						st.setInt(14, ContaMotivoRevisao.CONTA_EM_CONTRATO_PARCELAMENTO.intValue());
 					}
 					
 					st.executeUpdate();
@@ -27046,10 +27279,10 @@ public class RepositorioFaturamentoHBM implements IRepositorioFaturamento {
 				st.setInt(8, DebitoCreditoSituacao.NORMAL.intValue());
 				st.setInt(9, DebitoCreditoSituacao.INCLUIDA.intValue());
 				st.setInt(10, DebitoCreditoSituacao.RETIFICADA.intValue());
+				st.setDate(11, Util.getSQLDate(dataVencimento));
 
 				if (indicadorBloqueioContasContratoParcelManterConta) {
-					st.setInt(11, 
-							ContaMotivoRevisao.CONTA_EM_CONTRATO_PARCELAMENTO.intValue());
+					st.setInt(12, ContaMotivoRevisao.CONTA_EM_CONTRATO_PARCELAMENTO.intValue());
 				}
 				
 				st.executeUpdate();

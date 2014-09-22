@@ -3378,21 +3378,36 @@ public class Fachada {
 	 * @return
 	 * @throws ControladorException
 	 */
-	public ObterDebitoImovelOuClienteHelper obterDebitoImovelOuCliente(int indicadorDebito, String idImovel, String codigoCliente, Short clienteRelacaoTipo,
-			String anoMesInicialReferenciaDebito, String anoMesFinalReferenciaDebito, Date anoMesInicialVencimentoDebito, Date anoMesFinalVencimentoDebito,
-			int indicadorPagamento, int indicadorConta, int indicadorDebitoACobrar, int indicadorCreditoARealizar, int indicadorNotasPromissorias,
-			int indicadorGuiasPagamento, int indicadorCalcularAcrescimoImpontualidade, Boolean indicadorContas, int indicadorDividaAtiva) {
+	public ObterDebitoImovelOuClienteHelper obterDebitoImovelOuCliente(int indicadorDebito, String idImovel, String codigoCliente,
+			Short clienteRelacaoTipo, String anoMesInicialReferenciaDebito, String anoMesFinalReferenciaDebito,
+			Date anoMesInicialVencimentoDebito, Date anoMesFinalVencimentoDebito, int indicadorPagamento, int indicadorConta,
+			int indicadorDebitoACobrar, int indicadorCreditoARealizar, int indicadorNotasPromissorias, int indicadorGuiasPagamento,
+			int indicadorCalcularAcrescimoImpontualidade, Boolean indicadorContas, int indicadorDividaAtiva) {
+
+			return this.obterDebitoImovelOuCliente(indicadorDebito, idImovel, codigoCliente, clienteRelacaoTipo, anoMesInicialReferenciaDebito,
+					anoMesFinalReferenciaDebito, anoMesInicialVencimentoDebito, anoMesFinalVencimentoDebito, indicadorPagamento,
+					indicadorConta, indicadorDebitoACobrar, indicadorCreditoARealizar, indicadorNotasPromissorias, indicadorGuiasPagamento,
+					indicadorCalcularAcrescimoImpontualidade, indicadorContas, indicadorDividaAtiva, false);
+
+	}
+
+	public ObterDebitoImovelOuClienteHelper obterDebitoImovelOuCliente(int indicadorDebito, String idImovel, String codigoCliente,
+			Short clienteRelacaoTipo, String anoMesInicialReferenciaDebito, String anoMesFinalReferenciaDebito,
+			Date anoMesInicialVencimentoDebito, Date anoMesFinalVencimentoDebito, int indicadorPagamento, int indicadorConta,
+			int indicadorDebitoACobrar, int indicadorCreditoARealizar, int indicadorNotasPromissorias, int indicadorGuiasPagamento,
+			int indicadorCalcularAcrescimoImpontualidade, Boolean indicadorContas, int indicadorDividaAtiva,
+			boolean incluirGrupoFaturamentoNaoFaturado) {
 
 		try {
 			return getControladorCobranca().obterDebitoImovelOuCliente(indicadorDebito, idImovel, codigoCliente, clienteRelacaoTipo,
-					anoMesInicialReferenciaDebito, anoMesFinalReferenciaDebito, anoMesInicialVencimentoDebito, anoMesFinalVencimentoDebito, indicadorPagamento,
-					indicadorConta, indicadorDebitoACobrar, indicadorCreditoARealizar, indicadorNotasPromissorias, indicadorGuiasPagamento,
-					indicadorCalcularAcrescimoImpontualidade, indicadorContas, indicadorDividaAtiva);
+					anoMesInicialReferenciaDebito, anoMesFinalReferenciaDebito, anoMesInicialVencimentoDebito, anoMesFinalVencimentoDebito,
+					indicadorPagamento, indicadorConta, indicadorDebitoACobrar, indicadorCreditoARealizar, indicadorNotasPromissorias,
+					indicadorGuiasPagamento, indicadorCalcularAcrescimoImpontualidade, indicadorContas, indicadorDividaAtiva,
+					incluirGrupoFaturamentoNaoFaturado);
 
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
-
 	}
 
 	public Collection<Cliente> pesquisarClienteEnderecoClienteImovel(FiltroClienteEndereco filtroClienteEndereco) {
@@ -21420,10 +21435,18 @@ public class Fachada {
 	@SuppressWarnings("rawtypes")
 	public void alterarVencimentoConjuntoConta(Collection colecaoImovel, Date dataVencimento, Integer anoMes, Date dataVencimentoContaInicio,
 			Date dataVencimentoContaFim, Integer anoMesFim, Usuario usuario, String indicadorContaPaga, String[] bancos) {
+		
+		this.alterarVencimentoConjuntoConta(colecaoImovel, dataVencimento, anoMes, dataVencimentoContaInicio, dataVencimentoContaFim,
+				anoMesFim, usuario, indicadorContaPaga, bancos, false);
+	}
+	
+	public void alterarVencimentoConjuntoConta(Collection colecaoImovel, Date dataVencimento, Integer anoMes, Date dataVencimentoContaInicio,
+			Date dataVencimentoContaFim, Integer anoMesFim, Usuario usuario, String indicadorContaPaga, String[] bancos,
+			boolean isDebitoAutomatico ) {
 
 		this.enviarMensagemControladorBatch(MetodosBatch.ALTERAR_VENCIMENTO_CONJUNTO_CONTA_COLECAO, ConstantesJNDI.QUEUE_CONTROLADOR_FATURAMENTO_MDB,
 				new Object[] { colecaoImovel, dataVencimento, anoMes, dataVencimentoContaInicio, dataVencimentoContaFim, anoMesFim, usuario,
-						indicadorContaPaga, bancos });
+						indicadorContaPaga, bancos, isDebitoAutomatico });
 	}
 
 	/**
@@ -22204,11 +22227,12 @@ public class Fachada {
 	 * @throws ControladorException
 	 */
 	public void alterarVencimentoConjuntoContaCliente(Integer codigoCliente, Short relacaoTipo, Date dataVencimento, Integer anoMes,
-			Date dataVencimentoContaInicio, Date dataVencimentoContaFim, Integer anoMesFim, Usuario usuario, Integer codigoClienteSuperior) {
+			Date dataVencimentoContaInicio, Date dataVencimentoContaFim, Integer anoMesFim, Usuario usuario, Integer codigoClienteSuperior,
+			boolean isDebitoAutomatico) {
 
-		this.enviarMensagemControladorBatch(MetodosBatch.ALTERAR_VENCIMENTO_CONJUNTO_CONTA_CLIENTE, ConstantesJNDI.QUEUE_CONTROLADOR_FATURAMENTO_MDB,
-				new Object[] { codigoCliente, relacaoTipo, dataVencimento, anoMes, dataVencimentoContaInicio, dataVencimentoContaFim, anoMesFim, usuario,
-						codigoClienteSuperior });
+		this.enviarMensagemControladorBatch(MetodosBatch.ALTERAR_VENCIMENTO_CONJUNTO_CONTA_CLIENTE,
+				ConstantesJNDI.QUEUE_CONTROLADOR_FATURAMENTO_MDB, new Object[] { codigoCliente, relacaoTipo, dataVencimento, anoMes,
+						dataVencimentoContaInicio, dataVencimentoContaFim, anoMesFim, usuario, codigoClienteSuperior, isDebitoAutomatico });
 
 	}
 

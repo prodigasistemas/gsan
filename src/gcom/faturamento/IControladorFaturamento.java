@@ -2125,6 +2125,11 @@ public interface IControladorFaturamento {
 			String indicadorContaPaga, String[] bancos)
 			throws ControladorException;
 
+	public void alterarVencimentoConjuntoConta(Collection colecaoImovel, Date dataVencimento, Integer anoMes,
+			Date dataVencimentoContaInicio, Date dataVencimentoContaFim, Integer anoMesFim, Usuario usuario,
+			String indicadorContaPaga, String[] bancos, boolean isDebitoAutomatico)
+			throws ControladorException;
+	
 	/**
 	 * Retificar Conjunto de Conta
 	 * 
@@ -2384,6 +2389,7 @@ public interface IControladorFaturamento {
 	 * Alterar Vencimento do Conjunto de Conta
 	 * 
 	 * @author Ana Maria
+	 * @param isDebitoAutomatico 
 	 * @date 20/01/2007
 	 * 
 	 * @param colecaoContas
@@ -2392,7 +2398,7 @@ public interface IControladorFaturamento {
 	 */
 	public void alterarVencimentoConjuntoContaCliente(Integer codigoCliente, Short relacaoTipo,
 			Date dataVencimentoInformada, Integer anoMes, Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
-			Integer anoMesFim, Usuario usuario, Integer codigoClienteSuperior)
+			Integer anoMesFim, Usuario usuario, Integer codigoClienteSuperior, boolean isDebitoAutomatico)
 			throws ControladorException;
 
 	/**
