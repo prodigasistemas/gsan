@@ -12,32 +12,18 @@ import org.apache.struts.action.ActionForm;
 import org.apache.struts.action.ActionForward;
 import org.apache.struts.action.ActionMapping;
 
-/**
-/**
- * Esta classe tem por finalidade exibir para o usuário a tela que receberá os
- * parâmetros para realização da Geração da Movimentacao da Negativacao 
- * 
- * 
- * @author Thiago Silva Toscano de Brito
- * @date 18/12/2007
- */
-public class ExibirGerarMovimentoExclusaoNegativacaoAction extends
-		GcomAction {
+public class ExibirGerarMovimentoExclusaoNegativacaoAction extends GcomAction {
 
-	public ActionForward execute(ActionMapping actionMapping,
-			ActionForm actionForm, HttpServletRequest httpServletRequest,
-			HttpServletResponse httpServletResponse) {
+	public ActionForward execute(ActionMapping actionMapping, ActionForm actionForm,
+			HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
 
-		ActionForward retorno = actionMapping
-				.findForward("exibirGerarMovimentoExclusaoNegativacao");
+		ActionForward retorno = actionMapping.findForward("exibirGerarMovimentoExclusaoNegativacao");
 
-		GerarMovimentoExclusaoNegativacaoActionForm egmenActionForm = (GerarMovimentoExclusaoNegativacaoActionForm) actionForm;
+		GerarMovimentoExclusaoNegativacaoActionForm form = (GerarMovimentoExclusaoNegativacaoActionForm) actionForm;
 
-		
-		if (egmenActionForm.getOpcao() != null && egmenActionForm.getOpcao().equals("1")) {
-
-			Collection coll = Fachada.getInstancia().consultarNegativadoresParaExclusaoMovimento();
-			egmenActionForm.setCollNegativadores(coll);
+		if (form.getOpcao() != null && form.getOpcao().equals("1")) {
+			Collection colecaoNegativadores = Fachada.getInstancia().consultarNegativadoresParaExclusaoMovimento();
+			form.setCollNegativadores(colecaoNegativadores);
 		}
 
 		return retorno;

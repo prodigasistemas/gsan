@@ -66,7 +66,7 @@ public class TarefaBatchExecutarComandoNegativacao extends TarefaBatch {
 			if (comando.getIndicadorSimulacao() == 2) {
 				// Inserindo o HEADER
 				FiltroNegativadorMovimento fnm = new FiltroNegativadorMovimento();
-				fnm.adicionarParametro(new ParametroSimples(FiltroNegativadorMovimento.NEGATIVACAO_COMANDO, comando.getId()));
+				fnm.adicionarParametro(new ParametroSimples(FiltroNegativadorMovimento.NEGATIVACAO_COMANDO_ID, comando.getId()));
 				Collection colecaoNegativadorMovimento = RepositorioUtilHBM.getInstancia().pesquisar(fnm, NegativadorMovimento.class.getName());
 
 				if (colecaoNegativadorMovimento != null && !colecaoNegativadorMovimento.isEmpty()) {

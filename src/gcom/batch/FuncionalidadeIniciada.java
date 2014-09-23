@@ -387,6 +387,8 @@ public class FuncionalidadeIniciada implements Serializable {
 
 					FiltroNegativadorMovimento filtroNegativadorMovimento = new FiltroNegativadorMovimento();
 					filtroNegativadorMovimento.adicionarParametro(new ParametroSimples(FiltroNegativadorMovimento.ID, (Integer) dadosInclusaoNegativacao[3]));
+					filtroNegativadorMovimento.adicionarCaminhoParaCarregamentoEntidade(FiltroNegativadorMovimento.NEGATIVADOR);
+					filtroNegativadorMovimento.adicionarCaminhoParaCarregamentoEntidade(FiltroNegativadorMovimento.NEGATIVACAO_COMANDO);
 
 					Collection colecaoNegativadorMovimento = getControladorUtil().pesquisar(filtroNegativadorMovimento, NegativadorMovimento.class.getName());
 
@@ -396,8 +398,7 @@ public class FuncionalidadeIniciada implements Serializable {
 						negativadorMovimento = (NegativadorMovimento) colecaoNegativadorMovimento.iterator().next();
 					}
 
-					this.getControladorSpcSerasa().gerarArquivoNegativacao(comando.getId(), (Integer) dadosInclusaoNegativacao[3], negativador.getId(),
-							negativadorMovimento, true);
+					this.getControladorSpcSerasa().gerarArquivoNegativacao(negativadorMovimento, true);
 
 					NegativadorContrato contrato = getControladorSpcSerasa().consultarNegativadorContratoVigente(comando.getNegativador().getId());
 					contrato.setNumeroSequencialEnvio(negativadorMovimento.getNumeroSequencialEnvio());

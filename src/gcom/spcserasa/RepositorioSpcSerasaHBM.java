@@ -2813,7 +2813,8 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 			   			+ " left join fetch ngmv.negativador negt "
 			   			+ " left join fetch negt.cliente clie "
 			   			+ " left join fetch nmrg.imovel imov "  
-			   			+ " left join fetch imov.cobrancaSituacao cbst "  
+			   			+ " left join fetch imov.cobrancaSituacao cbst "
+			   			+ " left join fetch nmrg.cobrancaDebitoSituacao cdst "
 			   			+ " where nmrg.codigoExclusaoTipo is null and "
 			   			+ " nmrg.indicadorAceito = 1 and "
 			   			+ " nmrg.cobrancaDebitoSituacao.id is not null and "
@@ -9147,71 +9148,55 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 	 *
 	 * Retorna o  ImovelCobrancaSituacao pelo imovel do NegativadorMovimentoReg
 	 * [UC0693] Gerar Relatório Acompanhamaneto de Clientes Negativados
-	 * @author Yara Taciane
-	 * @date 17/03/2008
 	 */
-	public Collection consultarImovelCobrancaSituacaoPorNegativador(Imovel imovel,Integer codigoNegativador) throws ErroRepositorioException {
+	public Collection consultarImovelCobrancaSituacaoPorNegativador(Imovel imovel, 
+			Integer idNegativador, Integer idCliente) throws ErroRepositorioException {
 
 		Collection retorno = new ArrayList();
 		Session session = HibernateUtil.getSession();
-		
+
 		try {
 			String restricao = "";
-			String hql = " select ics"
-				 + " from gcom.cadastro.imovel.ImovelCobrancaSituacao ics"
-				 + " inner join fetch ics.imovel as imov " 
-				 + " inner join fetch ics.cobrancaSituacao as cbst " 
-				 + " where ics.imovel.id = " + imovel.getId()	
-				 + " and ics.dataRetiradaCobranca is null ";
-				 
-				 if(codigoNegativador.equals(Negativador.NEGATIVADOR_SPC)){
-//					 restricao = restricao 				
-//					 + " and ics.cobrancaSituacao.id in (11,13,15)" 
-//					 + " ";
-					 restricao = restricao 				
-					 + " and ics.cobrancaSituacao.id in (" 
-					 + CobrancaSituacao.NEGATIVADO_AUTOMATICAMENTE_NO_SPC + "," 
-					 + CobrancaSituacao.CARTA_ENVIADA_AO_SPC + "," 
-					 + CobrancaSituacao.EM_ANALISE_PARA_NEGATIVACAO_SPC  
-					 + ") " ;
-					 
-				 }else if(codigoNegativador.equals(Negativador.NEGATIVADOR_SERASA)){
-//					 restricao = restricao 
-//					 + " and ics.cobrancaSituacao.id in (12,14,15)" 
-//					 + " ";
-					 restricao = restricao 				
-					 + " and ics.cobrancaSituacao.id in (" 
-					 + CobrancaSituacao.NEGATIVADO_AUTOMATICAMENTE_NA_SERASA + "," 
-					 + CobrancaSituacao.CARTA_ENVIADA_A_SERASA + "," 
-					 + CobrancaSituacao.EM_ANALISE_PARA_NEGATIVACAO_SERASA  
-					 + ") " ;
+			String consulta = " select ics"
+					+ " from gcom.cadastro.imovel.ImovelCobrancaSituacao ics"
+					+ " inner join fetch ics.imovel as imov "
+					+ " inner join fetch ics.cobrancaSituacao as cbst "
+					+ " where ics.imovel.id = :idImovel "
+					+ " and ics.dataRetiradaCobranca is null "
+					+ " and ics.cliente.id = :idCliente ";
 
-				 }
-				
-				 hql = hql + restricao;
-			
-			retorno = (List) session.createQuery(hql).list();
-		
+			if (idNegativador.equals(Negativador.NEGATIVADOR_SPC)) {
+				restricao += " and ics.cobrancaSituacao.id in ("
+						+ CobrancaSituacao.NEGATIVADO_AUTOMATICAMENTE_NO_SPC
+						+ "," + CobrancaSituacao.CARTA_ENVIADA_AO_SPC
+						+ "," + CobrancaSituacao.EM_ANALISE_PARA_NEGATIVACAO_SPC
+						+ ") ";
+			} else if (idNegativador.equals(Negativador.NEGATIVADOR_SERASA)) {
+				restricao += " and ics.cobrancaSituacao.id in ("
+						+ CobrancaSituacao.NEGATIVADO_AUTOMATICAMENTE_NA_SERASA
+						+ "," + CobrancaSituacao.CARTA_ENVIADA_A_SERASA
+						+ "," + CobrancaSituacao.EM_ANALISE_PARA_NEGATIVACAO_SERASA
+						+ ") ";
+			}
+
+			consulta += restricao;
+
+			retorno = (List) session.createQuery(consulta)
+					.setInteger("idImovel", imovel.getId())
+					.setInteger("idCliente", idCliente).list();
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
 		return retorno;
 	}
 
-	
-	
-	
 	/**
 	 *
 	 * Retorna o  ImovelCobrancaSituacao pelo imovel do NegativadorMovimentoReg
 	 * [UC0693] Gerar Relatório Acompanhamaneto de Clientes Negativados
-	 * @author Yara Taciane
-	 * @date 17/03/2008
 	 */
 	public Collection pesquisarImovelCobrancaSituacao(Imovel imovel,CobrancaSituacao cobrancaSituacao) throws ErroRepositorioException {
 
@@ -9231,10 +9216,8 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 			retorno = (List) query.list();
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -9246,9 +9229,6 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 	 *
 	 * Pesquisar se a negativação do imóvel .
 	 * [UC0675] Excluir Negativação Online.	
-	 *
-	 * @author Yara Taciane
-	 * @date 22/01/2008
 	 */
 
 	public Collection  pesquisarImovelNegativado(Imovel imovel,Negativador negativador)
@@ -9269,26 +9249,18 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 		
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 		
 		return retorno;
 	}
 	
-	
-	
-	
-	
 	/**
 	 *
 	 * Retorna o  NegativadorMovimentoReg
 	 * [UC0673] Excluir Negativação Online
-	 * @author Yara Taciane
-	 * @date 27/03/2008
 	 */
 	public NegativadorMovimentoReg pesquisarNegativadorMovimentoRegInclusao(Imovel imovel,Negativador negativador) throws ErroRepositorioException {
 
@@ -9315,19 +9287,14 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 			retorno = (NegativadorMovimentoReg) session.createQuery(hql).uniqueResult();
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
 		return retorno;
 	}
 	
-	
-	
-
 	public Object[] pesquisarDadosImovelParaNegativacao(Integer idImovel)
 		  throws ErroRepositorioException {
 		 
@@ -9351,33 +9318,18 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 		                 .setMaxResults(1).uniqueResult();
 		 
 		  } catch (HibernateException e) {
-		 
-		   // levanta a exceção para a próxima camada
-		 
-		   throw new ErroRepositorioException(e, "Erro no Hibernate");
-		 
+			  throw new ErroRepositorioException(e, "Erro no Hibernate");
 		  } finally {
-		 
-		   // fecha a sessão
-		 
 		   HibernateUtil.closeSession(session);
-		 
 		  }
 		 
 		  return retorno;
-	 
 	 }
 	
-	
-	
-	
-
 	/**
 	 *
 	 * Retorna o  ResumoNegativacao
 	 * [UC0688] Gerar Resumo Diário da Negativação
-	 * @author Yara Taciane
-	 * @date 09/04/2008
 	 */
 	public ResumoNegativacao pesquisarResumoNegativacao(ResumoNegativacaoHelper resumoNegativacaoHelper) throws ErroRepositorioException {
 
@@ -9413,10 +9365,8 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 		
 		
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 
@@ -13372,65 +13322,57 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 	 * @date 10/02/2010
 	 */
 	
-	public void atualizarNegativacaoImoveis(
-			Integer idNegativadorMovimento) throws ErroRepositorioException {
+	public void atualizarNegativacaoImoveis(Integer idNegativadorMovimento) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 		PreparedStatement st = null;
-	
-			try {
-				
-				Connection jdbcCon = session.connection();
-				
-				String update =  "	update cobranca.negativacao_imoveis ngim "
-				   	+ " set ngim_icexcluido = 2, "
-				    + " ngim_dtexclusao = null "
-				 	+ " where ngim.ngim_id in "
-					+ "		( select ngim.ngim_id "
+
+		try {
+
+			Connection jdbcCon = session.connection();
+
+			String update = "	update cobranca.negativacao_imoveis ngim "
+					+ " set ngim_icexcluido = 2, "
+					+ " ngim_dtexclusao = null "
+					+ " where ngim.ngim_id in " 
+					+ "		( select ngim.ngim_id " 
 					+ "		from cobranca.negatd_movimento_reg nmrg1 "
 					+ "		inner join cobranca.negativador_movimento ngmv on ngmv.ngmv_id=nmrg1.ngmv_id "
-					+ "		inner join cobranca.negativacao_imoveis ngim on ngim.imov_id=nmrg1.imov_id and ngim.ngcm_id=ngmv.ngcm_id "
+					+ "		inner join cobranca.negativacao_imoveis ngim on ngim.imov_id=nmrg1.imov_id and ngim.ngcm_id=ngmv.ngcm_id " 
 					+ "		where "
-					+ "		nmrg1.nmrg_id in "
-					+ "			(select nmrg2.nmrg_idreginclusao "
-					+ "			from cobranca.negatd_movimento_reg nmrg2 "
+					+ "		nmrg1.nmrg_id in " 
+					+ "			(select nmrg2.nmrg_idreginclusao " 
+					+ "			from cobranca.negatd_movimento_reg nmrg2 " 
 					+ "			where "
-					+ "			nmrg2.ngmv_id = ? and nmrg2.nmrg_idreginclusao is not null "
-					+ "			)"
-					+ "		)" ;
+					+ "			nmrg2.ngmv_id = ? and nmrg2.nmrg_idreginclusao is not null " 
+					+ "			)" 
+					+ "		)";
 
-				st = jdbcCon.prepareStatement(update);
-				st.setInt(1, idNegativadorMovimento);
-		
-				st.executeUpdate();
-	
-			} catch (SQLException e) {
-				e.printStackTrace();
-				throw new ErroRepositorioException(e, "Erro no Hibernate");
-			} finally {
-				if (null != st)
-					try {
-						st.close();
-					} catch (SQLException e) {
-						throw new ErroRepositorioException(e, "Erro no Hibernate");
-					}
-				HibernateUtil.closeSession(session);
-			}
+			st = jdbcCon.prepareStatement(update);
+			st.setInt(1, idNegativadorMovimento);
+			st.executeUpdate();
+		} catch (SQLException e) {
+			e.printStackTrace();
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			if (null != st)
+				try {
+					st.close();
+				} catch (SQLException e) {
+					throw new ErroRepositorioException(e, "Erro no Hibernate");
+				}
+			HibernateUtil.closeSession(session);
 		}
+	}
 
 	/**
 	 * [UC0688] Gerar Resumo Diário da Negativação
-	 *
-	 * @author Vivianne Sousa
-	 * @date 10/02/2010
 	 */
-	public void atualizarCodigoExclusaoTipoNegativadorMovimentoReg(
-			Integer idNegativadorMovimento) throws ErroRepositorioException {
+	public void atualizarCodigoExclusaoTipoNegativadorMovimentoReg(Integer idNegativadorMovimento) throws ErroRepositorioException {
 		
 		Session session = HibernateUtil.getSession();
 		String update = null;
 
 		try {
-			
 			update =  "	update gcom.cobranca.NegativadorMovimentoReg nmrg1 "
 					  + "	set codigoExclusaoTipo = null "
 					  + "	where nmrg1.id  IN "
@@ -13438,10 +13380,7 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 					  + "	         from gcom.cobranca.NegativadorMovimentoReg nmrg2 "
 					  + "	        where nmrg2.negativadorMovimento.id = :idNegativadorMovimento )" ;
 
-			session.createQuery(update)
-			.setInteger("idNegativadorMovimento", idNegativadorMovimento)
-			.executeUpdate();
-			
+			session.createQuery(update).setInteger("idNegativadorMovimento", idNegativadorMovimento).executeUpdate();
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
@@ -13451,9 +13390,6 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 	
 	/**
 	 * [UC0688] Gerar Resumo Diário da Negativação
-	 *
-	 * @author Vivianne Sousa
-	 * @date 10/02/2010
 	 */
 	public void  apagarNegativadorMovimentoReg(Integer idNegativadorMovimento)
 		throws ErroRepositorioException {
@@ -13465,28 +13401,18 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 					 + " from gcom.cobranca.NegativadorMovimentoReg " 
 					 + " where ngmv_id = :idNegativadorMovimento " ;
 
-			session.createQuery(sql)
-			.setInteger("idNegativadorMovimento", idNegativadorMovimento)
-			.executeUpdate();
-		
+			session.createQuery(sql).setInteger("idNegativadorMovimento", idNegativadorMovimento).executeUpdate();
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 	}
 	
 	/**
 	 * [UC0688] Gerar Resumo Diário da Negativação
-	 *
-	 * @author Vivianne Sousa
-	 * @date 10/02/2010
 	 */
-	public void  apagarNegativadorMovimento(Integer idNegativadorMovimento)
-		throws ErroRepositorioException {
-
+	public void  apagarNegativadorMovimento(Integer idNegativadorMovimento) throws ErroRepositorioException {
 		Session session = HibernateUtil.getSession();
 
 		try {
@@ -13494,15 +13420,10 @@ public class RepositorioSpcSerasaHBM implements IRepositorioSpcSerasa {
 					 + " from gcom.cobranca.NegativadorMovimento " 
 					 + " where id = :idNegativadorMovimento " ;
 
-			session.createQuery(sql)
-			.setInteger("idNegativadorMovimento", idNegativadorMovimento)
-			.executeUpdate();
-		
+			session.createQuery(sql).setInteger("idNegativadorMovimento", idNegativadorMovimento).executeUpdate();
 		} catch (HibernateException e) {
-			// levanta a exceção para a próxima camada
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
 		} finally {
-			// fecha a sessão
 			HibernateUtil.closeSession(session);
 		}
 	}	
