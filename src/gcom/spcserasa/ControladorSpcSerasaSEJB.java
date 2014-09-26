@@ -4359,7 +4359,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 
 		retorno[0] = new Integer((Integer) retorno[0]) + 1;
 
-		NegativadorExclusaoMotivo exclusaoMotivo = this.obterNegativadorExclusaoMotivo(negativadorMovimentoReg, negativador);
+		NegativadorExclusaoMotivo exclusaoMotivo = this.obterNegativadorExclusaoMotivoSERASA(negativadorMovimentoReg, negativador);
 
 		char[] registroInclusao = new char[600];
 		for (int i = 0; i < registroInclusao.length; i++) {
@@ -4500,7 +4500,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 				}
 			}
 
-			NegativadorExclusaoMotivo exclusaoMovivo = obterNegativadorExclusaoMotivo(negativadorMovimentoReg, negativador);
+			NegativadorExclusaoMotivo exclusaoMovivo = obterNegativadorExclusaoMotivoSPC(negativadorMovimentoReg, negativador);
 
 			char[] registro = new char[340];
 			for (int i = 0; i < registro.length; i++) {
@@ -4774,17 +4774,17 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			registro[i] = ' ';
 		}
 
-		String sNumeroRegistro = retorno[0].toString();
-		if (sNumeroRegistro.length() < 7) {
-			while (sNumeroRegistro.length() != 7) {
-				sNumeroRegistro = "0" + sNumeroRegistro;
+		String numeroRegistro = retorno[0].toString();
+		if (numeroRegistro.length() < 7) {
+			while (numeroRegistro.length() != 7) {
+				numeroRegistro = "0" + numeroRegistro;
 			}
 		}
 
 		// h.01
 		colocarConteudo("9", 1, registro);
 		// h.02 -> h.04
-		colocarConteudo(sNumeroRegistro, 594, registro);
+		colocarConteudo(numeroRegistro, 594, registro);
 		return registro;
 	}
 
@@ -4821,20 +4821,41 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 		return registro;
 	}
 
-	private NegativadorExclusaoMotivo obterNegativadorExclusaoMotivo(NegativadorMovimentoReg negativadorMovimentoReg,
+	private NegativadorExclusaoMotivo obterNegativadorExclusaoMotivoSERASA(NegativadorMovimentoReg negativadorMovimentoReg,
+			Negativador negativador) throws ErroRepositorioException {
+		
+		NegativadorExclusaoMotivo exclusaoMotivo = null;
+		
+		short idExclusaoMovimento = 0;
+		
+		if (negativadorMovimentoReg.getCobrancaDebitoSituacao().getId().equals(CobrancaDebitoSituacao.PAGO)) {
+			idExclusaoMovimento = NegativadorExclusaoMotivo.SERASA_PAGAMENTO_DIVIDA;
+		} else if (negativadorMovimentoReg.getCobrancaDebitoSituacao().getId().equals(CobrancaDebitoSituacao.PARCELADO)) {
+			idExclusaoMovimento = NegativadorExclusaoMotivo.SERASA_RENEGOCIACAO_DIVIDA;
+		} else if (negativadorMovimentoReg.getCobrancaDebitoSituacao().getId().equals(CobrancaDebitoSituacao.CANCELADO)) {
+			idExclusaoMovimento = NegativadorExclusaoMotivo.SERASA_MOTIVO_NAO_IDENTIFICADO;
+		}
+
+		exclusaoMotivo = repositorioSpcSerasa.pesquisarCodigoMotivoExclusaoSERASA(
+				CobrancaDebitoSituacao.PAGO, negativador.getId(), idExclusaoMovimento);
+		
+		return exclusaoMotivo;
+	}
+	
+	private NegativadorExclusaoMotivo obterNegativadorExclusaoMotivoSPC(NegativadorMovimentoReg negativadorMovimentoReg,
 			Negativador negativador) throws ErroRepositorioException {
 		
 		NegativadorExclusaoMotivo exclusaoMotivo = null;
 		
 		if (negativadorMovimentoReg.getCobrancaDebitoSituacao().getId().equals(CobrancaDebitoSituacao.PAGO)) {
 			exclusaoMotivo = repositorioSpcSerasa.pesquisarCodigoMotivoExclusao(CobrancaDebitoSituacao.PAGO, negativador.getId(),
-					NegativadorExclusaoMotivo.PAGAMENTO_DA_DIVIDA);
+					NegativadorExclusaoMotivo.SPC_PAGAMENTO_DA_DIVIDA);
 		} else if (negativadorMovimentoReg.getCobrancaDebitoSituacao().getId().equals(CobrancaDebitoSituacao.PARCELADO)) {
 			exclusaoMotivo = repositorioSpcSerasa.pesquisarCodigoMotivoExclusao(CobrancaDebitoSituacao.PARCELADO, negativador.getId(),
-					NegativadorExclusaoMotivo.RENEGOCIACAO_DA_DIVIDA);
+					NegativadorExclusaoMotivo.SPC_RENEGOCIACAO_DA_DIVIDA);
 		} else if (negativadorMovimentoReg.getCobrancaDebitoSituacao().getId().equals(CobrancaDebitoSituacao.CANCELADO)) {
 			exclusaoMotivo = repositorioSpcSerasa.pesquisarCodigoMotivoExclusao(CobrancaDebitoSituacao.CANCELADO, negativador.getId(),
-					NegativadorExclusaoMotivo.MOTIVO_NAO_IDENTIFICADO);
+					NegativadorExclusaoMotivo.SPC_MOTIVO_NAO_IDENTIFICADO);
 		}
 
 		return exclusaoMotivo;
@@ -7820,31 +7841,18 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 	}
 
 	/**
-	 * 
-	 * Registrar Movimento de Retorno dos Negativadores [UC0672] Registrar
-	 * Movimento de Retorno dos Negativadores
-	 * 
+	 * Registrar Movimento de Retorno dos Negativadores
+	 * [UC0672] Registrar Movimento de Retorno dos Negativadores
 	 * [SB0004] - Atualizar Movimento de Envio SERASA
-	 * 
-	 * @author Yara Taciane
-	 * @date 10/01/2008
-	 * 
 	 */
 	private void atualizarMovimentoEnvioSERASA(String registro, Negativador negativador,
 			NegativadorMovimento negativadorMovimento) throws ControladorException {
 
-		// ----------------------------------------------------------------------------
-		// [SB0004] - Atualizar Movimento de Envio SERASA
-		// ----------------------------------------------------------------------------
-
 		String numeroRegistro = "";
-		// 7.
 
 		try {
-			// ---------------------------------------------------------------
 			numeroRegistro = getConteudo(594, 7, registro.toCharArray()).trim();
 			Integer numRegistro = Util.converterStringParaInteger(numeroRegistro);
-			// ------------------------------------------------------------
 
 			if (!numeroRegistro.equalsIgnoreCase("")) {
 
@@ -7854,17 +7862,13 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 					throw new ControladorException("atencao.arquivo_movimento_sem_registros");
 				}
 
-				// ---------------------------------------------------------------------------------
 				// [SB0005] - Atualizar Registro Envio
-				// -------------------------------------------------------------------------------
 				this.atualizarRegistroEnvio(negativador, registro, negativadorMovimentoReg);
-
 			}
 		} catch (ErroRepositorioException e) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);
 		}
-
 	}
 
 	/**
@@ -8582,10 +8586,8 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			campoCodigoRetorno = getConteudo(534, 60, registro.toCharArray()).trim();
 			
 			if (campoCodigoRetorno.equals("")) {
-				String codigoRetorno = "0";
-
 				indicadorRegistroAceito = this.inserirNegativadorMovimentoRegistroRetornoMotivo(
-						negativadorMovimentoReg, indicadorRegistroAceito, codigoRetorno);
+						negativadorMovimentoReg, indicadorRegistroAceito, NegativadorRetornoMotivo.SEM_OCORRENCIAS);
 				
 			} else {
 				for (int j = 0; j <= campoCodigoRetorno.length() - 3; j = j + 3) {
@@ -8593,7 +8595,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 
 					if (!codigoRetorno.equals("")) {
 						indicadorRegistroAceito = this.inserirNegativadorMovimentoRegistroRetornoMotivo(
-								negativadorMovimentoReg, indicadorRegistroAceito, codigoRetorno);
+								negativadorMovimentoReg, indicadorRegistroAceito, Short.parseShort(codigoRetorno));
 					}
 				}
 			}
@@ -8703,8 +8705,9 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 		}
 	}
 
-	private short inserirNegativadorMovimentoRegistroRetornoMotivo(NegativadorMovimentoReg negativadorMovimentoReg, short indicadorRegistroAceito,
-			String codigoRetorno) throws ErroRepositorioException, ControladorException {
+	private short inserirNegativadorMovimentoRegistroRetornoMotivo(NegativadorMovimentoReg negativadorMovimentoReg,
+			short indicadorRegistroAceito, short codigoRetorno) throws ErroRepositorioException, ControladorException {
+		
 		NegativadorMovimentoRegRetMot negativadorMovimentoRegRetMot = new NegativadorMovimentoRegRetMot();
 		negativadorMovimentoRegRetMot.setNegativadorMovimentoReg(negativadorMovimentoReg);
 
@@ -8722,9 +8725,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			negativadorMovimentoRegRetMot.setNegativadorRetornoMotivo(negativadorRetornoMotivo);
 			negativadorMovimentoRegRetMot.setUltimaAlteracao(new Date());
 
-			if (negativadorRetornoMotivo.getIndicadorRegistroAceito() != 1) {
-				indicadorRegistroAceito = 2;
-			}
+			indicadorRegistroAceito = negativadorRetornoMotivo.getIndicadorRegistroAceito();
 
 			this.inserirNegativadorMovimentoRegRetMot(negativadorMovimentoRegRetMot);
 		} else {

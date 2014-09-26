@@ -869,9 +869,6 @@ public class ControladorAtualizacaoCadastral implements IControladorAtualizacaoC
 				
 				idImovel = clienteImovelRetorno.getImovel().getId();
 				
-				if (idImovel == new Integer("4136691")) {
-					System.out.println("cheguei!!");
-				}
 				if (!isImovelEmCampo(clienteImovelRetorno.getImovel().getId())) {
 					
 					if (existeRelacaoClienteImovel(clienteImovelRetorno)) {

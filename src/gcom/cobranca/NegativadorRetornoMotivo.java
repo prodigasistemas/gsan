@@ -11,155 +11,143 @@ import java.util.Set;
 
 import org.apache.commons.lang.builder.ToStringBuilder;
 
-
-/** @author Hibernate CodeGenerator */
 public class NegativadorRetornoMotivo extends ObjetoTransacao implements Serializable {
-	
+
 	private static final long serialVersionUID = 1L;
-    /** identifier field */
-    private Integer id;
+	
+	public static final short SEM_OCORRENCIAS = 0;
 
-    /** nullable persistent field */
-    private String descricaoRetornocodigo;
+	private Integer id;
 
-    /** persistent field */
-    private Short indicadorUso;
+	private String descricaoRetornocodigo;
 
-    /** persistent field */
-    private Short indicadorRegistroAceito;
+	private Short indicadorUso;
 
-    /** persistent field */
-    private Date ultimaAlteracao;
+	private Short indicadorRegistroAceito;
 
-    /** persistent field */
-    private gcom.cobranca.Negativador negativador;
+	private Date ultimaAlteracao;
 
-    /** persistent field */
-    private Set negativadorMovimentoRegRetMot;
-    
-    private Short codigoRetornoMotivo;
+	private gcom.cobranca.Negativador negativador;
 
-	/** full constructor */
-    public NegativadorRetornoMotivo(Integer id, String descricaoRetornocodigo, Short indicadorUso, Short indicadorRegistroAceito, Date ultimaAlteracao, gcom.cobranca.Negativador negativador, Set negativadorMovimentoRegRetMot, Short codigoRetornoMotivo) {
-        this.id = id;
-        this.descricaoRetornocodigo = descricaoRetornocodigo;
-        this.indicadorUso = indicadorUso;
-        this.indicadorRegistroAceito = indicadorRegistroAceito;
-        this.ultimaAlteracao = ultimaAlteracao;
-        this.negativador = negativador;
-        this.negativadorMovimentoRegRetMot = negativadorMovimentoRegRetMot;
-        this.codigoRetornoMotivo = codigoRetornoMotivo;
-    }
+	private Set negativadorMovimentoRegRetMot;
 
-    public NegativadorRetornoMotivo(Integer id, String descricaoRetornocodigo, Short indicadorUso, Short indicadorRegistroAceito, Date ultimaAlteracao, gcom.cobranca.Negativador negativador, Set negativadorMovimentoRegRetMot) {
-        this.id = id;
-        this.descricaoRetornocodigo = descricaoRetornocodigo;
-        this.indicadorUso = indicadorUso;
-        this.indicadorRegistroAceito = indicadorRegistroAceito;
-        this.ultimaAlteracao = ultimaAlteracao;
-        this.negativador = negativador;
-        this.negativadorMovimentoRegRetMot = negativadorMovimentoRegRetMot;
-    }
-    
-    /** default constructor */
-    public NegativadorRetornoMotivo() {
-    }
+	private Short codigoRetornoMotivo;
 
-    /** minimal constructor */
-    public NegativadorRetornoMotivo(Integer id, Short indicadorUso, Short indicadorRegistroAceito, Date ultimaAlteracao, gcom.cobranca.Negativador negativador, Set negativadorMovimentoRegRetMot) {
-        this.id = id;
-        this.indicadorUso = indicadorUso;
-        this.indicadorRegistroAceito = indicadorRegistroAceito;
-        this.ultimaAlteracao = ultimaAlteracao;
-        this.negativador = negativador;
-        this.negativadorMovimentoRegRetMot = negativadorMovimentoRegRetMot;
-    }
+	public NegativadorRetornoMotivo(Integer id, String descricaoRetornocodigo, Short indicadorUso, Short indicadorRegistroAceito, Date ultimaAlteracao,
+			gcom.cobranca.Negativador negativador, Set negativadorMovimentoRegRetMot, Short codigoRetornoMotivo) {
+		this.id = id;
+		this.descricaoRetornocodigo = descricaoRetornocodigo;
+		this.indicadorUso = indicadorUso;
+		this.indicadorRegistroAceito = indicadorRegistroAceito;
+		this.ultimaAlteracao = ultimaAlteracao;
+		this.negativador = negativador;
+		this.negativadorMovimentoRegRetMot = negativadorMovimentoRegRetMot;
+		this.codigoRetornoMotivo = codigoRetornoMotivo;
+	}
 
-    public Integer getId() {
-        return this.id;
-    }
+	public NegativadorRetornoMotivo(Integer id, String descricaoRetornocodigo, Short indicadorUso, Short indicadorRegistroAceito, Date ultimaAlteracao,
+			gcom.cobranca.Negativador negativador, Set negativadorMovimentoRegRetMot) {
+		this.id = id;
+		this.descricaoRetornocodigo = descricaoRetornocodigo;
+		this.indicadorUso = indicadorUso;
+		this.indicadorRegistroAceito = indicadorRegistroAceito;
+		this.ultimaAlteracao = ultimaAlteracao;
+		this.negativador = negativador;
+		this.negativadorMovimentoRegRetMot = negativadorMovimentoRegRetMot;
+	}
 
-    public void setId(Integer id) {
-        this.id = id;
-    }
+	/** default constructor */
+	public NegativadorRetornoMotivo() {
+	}
 
-    public String getDescricaoRetornocodigo() {
-        return this.descricaoRetornocodigo;
-    }
+	/** minimal constructor */
+	public NegativadorRetornoMotivo(Integer id, Short indicadorUso, Short indicadorRegistroAceito, Date ultimaAlteracao, gcom.cobranca.Negativador negativador,
+			Set negativadorMovimentoRegRetMot) {
+		this.id = id;
+		this.indicadorUso = indicadorUso;
+		this.indicadorRegistroAceito = indicadorRegistroAceito;
+		this.ultimaAlteracao = ultimaAlteracao;
+		this.negativador = negativador;
+		this.negativadorMovimentoRegRetMot = negativadorMovimentoRegRetMot;
+	}
 
-    public void setDescricaoRetornocodigo(String descricaoRetornocodigo) {
-        this.descricaoRetornocodigo = descricaoRetornocodigo;
-    }
+	public Integer getId() {
+		return this.id;
+	}
 
-    public Short getIndicadorUso() {
-        return this.indicadorUso;
-    }
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
-    public void setIndicadorUso(Short indicadorUso) {
-        this.indicadorUso = indicadorUso;
-    }
+	public String getDescricaoRetornocodigo() {
+		return this.descricaoRetornocodigo;
+	}
 
-    public Short getIndicadorRegistroAceito() {
-        return this.indicadorRegistroAceito;
-    }
+	public void setDescricaoRetornocodigo(String descricaoRetornocodigo) {
+		this.descricaoRetornocodigo = descricaoRetornocodigo;
+	}
 
-    public void setIndicadorRegistroAceito(Short indicadorRegistroAceito) {
-        this.indicadorRegistroAceito = indicadorRegistroAceito;
-    }
+	public Short getIndicadorUso() {
+		return this.indicadorUso;
+	}
 
-    public Date getUltimaAlteracao() {
-        return this.ultimaAlteracao;
-    }
+	public void setIndicadorUso(Short indicadorUso) {
+		this.indicadorUso = indicadorUso;
+	}
 
-    public void setUltimaAlteracao(Date ultimaAlteracao) {
-        this.ultimaAlteracao = ultimaAlteracao;
-    }
+	public Short getIndicadorRegistroAceito() {
+		return this.indicadorRegistroAceito;
+	}
 
-    public gcom.cobranca.Negativador getNegativador() {
-        return this.negativador;
-    }
+	public void setIndicadorRegistroAceito(Short indicadorRegistroAceito) {
+		this.indicadorRegistroAceito = indicadorRegistroAceito;
+	}
 
-    public void setNegativador(gcom.cobranca.Negativador negativador) {
-        this.negativador = negativador;
-    }
+	public Date getUltimaAlteracao() {
+		return this.ultimaAlteracao;
+	}
 
-    public Set getNegativadorMovimentoRegRetMot() {
-        return this.negativadorMovimentoRegRetMot;
-    }
+	public void setUltimaAlteracao(Date ultimaAlteracao) {
+		this.ultimaAlteracao = ultimaAlteracao;
+	}
 
-    public void setNegativadorMovimentoRegRetMot(Set negativadorMovimentoRegRetMot) {
-        this.negativadorMovimentoRegRetMot = negativadorMovimentoRegRetMot;
-    }
+	public gcom.cobranca.Negativador getNegativador() {
+		return this.negativador;
+	}
 
-    public String toString() {
-        return new ToStringBuilder(this)
-            .append("id", getId())
-            .toString();
-    }
-    
-    /**
-	 * @return Retorna o campo codigoRetornoMotivo.
-	 */
+	public void setNegativador(gcom.cobranca.Negativador negativador) {
+		this.negativador = negativador;
+	}
+
+	public Set getNegativadorMovimentoRegRetMot() {
+		return this.negativadorMovimentoRegRetMot;
+	}
+
+	public void setNegativadorMovimentoRegRetMot(Set negativadorMovimentoRegRetMot) {
+		this.negativadorMovimentoRegRetMot = negativadorMovimentoRegRetMot;
+	}
+
+	public String toString() {
+		return new ToStringBuilder(this).append("id", getId()).toString();
+	}
+
 	public Short getCodigoRetornoMotivo() {
 		return codigoRetornoMotivo;
 	}
 
-	/**
-	 * @param codigoRetornoMotivo O codigoRetornoMotivo a ser setado.
-	 */
 	public void setCodigoRetornoMotivo(Short codigoRetornoMotivo) {
 		this.codigoRetornoMotivo = codigoRetornoMotivo;
 	}
 
 	public Filtro retornaFiltro() {
 		FiltroNegativadorRetornoMotivo filtroNegativadorRetornoMotivo = new FiltroNegativadorRetornoMotivo();
-		filtroNegativadorRetornoMotivo.adicionarParametro(new ParametroSimples(FiltroNegativadorRetornoMotivo.ID,this.getId()));
+		filtroNegativadorRetornoMotivo.adicionarParametro(new ParametroSimples(FiltroNegativadorRetornoMotivo.ID, this.getId()));
 
 		return filtroNegativadorRetornoMotivo;
 	}
 
 	public String[] retornaCamposChavePrimaria() {
-		String[] retorno = {"id"};
+		String[] retorno = { "id" };
 		return retorno;
 	}
 }

@@ -1,7 +1,9 @@
 package gcom.atendimentopublico.registroatendimento;
 
+import gcom.atendimentopublico.ligacaoagua.RamalLocalInstalacao;
 import gcom.atualizacaocadastral.ICliente;
 import gcom.atualizacaocadastral.IClienteImovel;
+import gcom.atualizacaocadastral.ImovelRetorno;
 import gcom.cadastro.ContaBraile;
 import gcom.cadastro.cliente.ClienteFone;
 import gcom.cadastro.cliente.ClienteRelacaoTipo;
@@ -537,6 +539,7 @@ public class RABuilder {
 		observacao.append("INCLUSÃO DE IMÓVEL - RECADASTRAMENTO. ");
 		observacao.append(getDescricaoEnderecoImovel(imovelRetorno));
 		observacao.append(getObservacaoCliente(imovelRetorno, mapClienteImovel));
+		observacao.append(getDadosImovel(imovelRetorno));
 
 		return observacao.toString();
 	}
@@ -547,7 +550,21 @@ public class RABuilder {
 		if (alteracaoTipo.equals(AlteracaoTipo.EXCLUSAO)) {
 			observacao.append("EXCLUSÃO DE IMÓVEL - RECADASTRAMENTO. ");
 			observacao.append(getDescricaoEnderecoImovel(imovelRetorno));
+			observacao.append(getDadosImovel(imovelRetorno));
 		}
+		return observacao.toString();
+	}
+	
+	private static String getDadosImovel(IImovel imovelRetorno) {
+		StringBuilder observacao = new StringBuilder();
+		
+		observacao.append("Quadra: ");
+		observacao.append(imovelRetorno.getNumeroQuadra() + ". ");
+		observacao.append("Setor Comercial: ");
+		observacao.append(imovelRetorno.getCodigoSetorComercial() + ". ");
+		observacao.append("Local de Instalacao de Ramal: ");
+		String descricaoRamalLocalInstalacao = ((ImovelRetorno) imovelRetorno).getRamalLocalInstalacao().getDescricao();
+		observacao.append(descricaoRamalLocalInstalacao + ". ");
 		
 		return observacao.toString();
 	}
