@@ -69,7 +69,13 @@
 	    }
   	}
 
-	
+	function limparForm() {
+
+		var form = document.InformarLeituraFiscalizacaoActionForm;
+
+		form.matricula.value = "";
+		form.inscricaoImovel.value = "";
+	}
 
 </script>
 

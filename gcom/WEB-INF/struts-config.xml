@@ -3571,6 +3571,16 @@
 
 
 		<!-- INICIO FILTRAR IMOVEL OUTROS CRITERIOS -->
+		<!-- Julian Fernando -->
+		<action name="ImovelOutrosCriteriosActionForm"
+			type="gcom.gui.cadastro.imovel.ExibirFiltrarImovelOutrosCriterios"
+			validate="false" parameter="action" scope="session"
+			path="/exibirFiltrarImovelOutrosCriterios">
+	
+			<forward name="exibirFiltrarImovelOutrosCriterios"
+				path="/filtrarImovelOutrosCriteriosWizardAction.do?action=exibirFiltrarImovelOutrosCriteriosLocalizarImoveis" />
+		</action>
+			
 		<action name="ImovelOutrosCriteriosActionForm"
 			type="gcom.gui.cadastro.imovel.ExibirFiltrarImovelOutrosCriterios"
 			validate="false" parameter="action" scope="session"

@@ -24,7 +24,7 @@
 	<property name="MenuTagLib.home" value="lib/MenuTagLib" />
 	<property name="Axis2.home" value="lib/Axis2" />
 	<property name="Apache-Ant-1.6.2.home" value="lib/apache-ant-1.6.2" />
-	<property name="JasperReports-3.1.2.home" value="lib/JasperReports-3.1.2" />
+	<property name="JasperReports.home" value="lib/JasperReports 1.2.2" />
 	<property name="JAF.home" value="lib/JAF" />
 	<property name="JavaMail.home" value="lib/Javamail" />
 	<property name="PostGreSQL9.3.home" value="lib/DriverPostGres/9.3" />
@@ -83,7 +83,7 @@
 		<pathelement location="${Servlet.home}/servlet-api.jar" />
 		<pathelement location="${Servlet.home}/servlets-common.jar" />
 		<pathelement location="${JasperReports.home}/itext-1.01.jar" />
-		<pathelement location="${JasperReports-3.1.2.home}/jasperreports-3.1.2.jar" />
+		<pathelement location="${JasperReports.home}/jasperreports-1.2.2.jar" />
 		<pathelement location="${Properties.home}/properties" />
 		<pathelement location="${PagerTagLib.home}/pager-taglib.jar" />
 		<pathelement location="${JAF.home}/activation.jar" />
@@ -169,7 +169,7 @@
 			<fileset dir="${PagerTagLib.home}">
 				<include name="pager-taglib.jar" />
 			</fileset>
-			<fileset dir="${JasperReports-3.1.2.home}">
+			<fileset dir="${JasperReports.home}">
 				<include name="*.jar" />
 			</fileset>
 			<fileset dir="${JSTL.home}">
@@ -191,15 +191,15 @@
 	<target name="jasperReports" description="Compilar os Relatórios">
 		<taskdef name="jrc" classname="net.sf.jasperreports.ant.JRAntCompileTask">
 			<classpath>
-				<fileset dir="${JasperReports-3.1.2.home}">
+				<fileset dir="${JasperReports.home}">
 					<include name="*.jar" />
 				</fileset>
 			</classpath>
 		</taskdef>
 
-		<jrc srcdir="${CaminhoReports}" destdir="${CaminhoReports}" tempdir="${CaminhoReports}" keepjava="false" xmlvalidation="false">
+		<jrc srcdir="${CaminhoReports}" destdir="${CaminhoReports}" tempdir="${CaminhoReports}" keepjava="false" xmlvalidation="true">
 			<classpath>
-				<fileset dir="${JasperReports-3.1.2.home}">
+				<fileset dir="${JasperReports.home}">
 					<include name="*.jar" />
 				</fileset>
 			</classpath>

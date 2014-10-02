@@ -170,7 +170,7 @@
 						scope="request">
 						<html:text property="inscricaoImovel" size="20" readonly="true"
 							style="background-color:#EFEFEF; border:0; color: #000000" />
-					</logic:notPresent> <a href="javascript:limparForm();"> <img
+					</logic:notPresent> <a href="javascript:limparIncricaoImovel();"> <img
 						src="<bean:message key="caminho.imagens"/>limparcampo.gif"
 						border="0" title="Apagar" /></a></td>
 				</tr>
