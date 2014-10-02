@@ -103,9 +103,6 @@ public class AtualizarPerfilParcelamentoAction extends GcomAction {
 			idCategoria = parcelamentoPerfilNaBase.getCategoria().getId();
 		}
 
-		/*
-		 * TODO COSANPA
-		 */
 		String percentualDescontoAcrescimoMulta = null;
 		if (atualizarParcelamentoPerfilActionForm.getPercentualDescontoAcrescimoMulta() != null) {
 			percentualDescontoAcrescimoMulta = atualizarParcelamentoPerfilActionForm
@@ -123,7 +120,6 @@ public class AtualizarPerfilParcelamentoAction extends GcomAction {
 			percentualDescontoAcrescimoAtualizacaoMonetaria = atualizarParcelamentoPerfilActionForm
 					.getPercentualDescontoAcrescimoAtualizacaoMonetaria().toString().replace(",", ".");
 		}
-		// fim alteração
 
 		String percentualDescontoAcrescimoPagamentoAVista = null;
 		if (atualizarParcelamentoPerfilActionForm
@@ -263,9 +259,6 @@ public class AtualizarPerfilParcelamentoAction extends GcomAction {
 			parcelamentoPerfil.setCategoria(categoria);
 		}
 
-		/*
-		 * TODO - COSANPA
-		 */
 		if (percentualDescontoAcrescimoMulta != null
 				&& !percentualDescontoAcrescimoMulta.equals("")) {
 
@@ -301,8 +294,6 @@ public class AtualizarPerfilParcelamentoAction extends GcomAction {
 		} else {
 			parcelamentoPerfil.setPercentualDescontoAcrescimoAtualizacaoMonetaria(new BigDecimal(0));
 		}
-		// fim alteração
-
 
 		if (percentualDescontoAcrescimoPagamentoAVista != null
 				&& !percentualDescontoAcrescimoPagamentoAVista.equals("")) {
@@ -569,18 +560,6 @@ public class AtualizarPerfilParcelamentoAction extends GcomAction {
 			String idPerfilParcelamento, Fachada fachada,
 			Collection collectionParcelamentoDescontoInatividadeAVista) {
 
-		/*
-		 * if (percentualDescontoAcrescimo == null &&
-		 * percentualDescontoAcrescimo.equalsIgnoreCase("")){
-		 * httpServletRequest.setAttribute("nomeCampo","percentualDescontoAcrescimo");
-		 * //Informe Percentual de Desconto sobre os Acréscimos por
-		 * Impontualidade throw new ActionServletException(
-		 * "atencao.percentual_desconto_nao_informado"); }
-		 */
-
-		/*
-		 * TODO - COSANPA
-		 */
 		 if (percentualDescontoAcrescimoMulta == null ||
 				 percentualDescontoAcrescimoMulta.equalsIgnoreCase("")){
 		 httpServletRequest.setAttribute("nomeCampo","percentualDescontoAcrescimoMulta");
@@ -612,7 +591,6 @@ public class AtualizarPerfilParcelamentoAction extends GcomAction {
 		 //Informe Percentual de Desconto sobre os Acréscimos por Impontualidade para pagamento à vista
 		 throw new ActionServletException("atencao.required", null, " Percentual de Desconto sobre os Acréscimos por Impontualidade para pagamento à vista");
 		 }
-		 // fim alteração
 
 		
 		if (percentualTarifaMinimaPrestacao == null

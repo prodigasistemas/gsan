@@ -28,7 +28,7 @@ public class ResumoFaturamentoSituacaoEspecialConsultaSetorComercialHelper {
 			Integer codigoSetorComercial, String setorComercialDescricao,
 			Integer totalSetorComercial) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.codigoSetorComercial = codigoSetorComercial;
 		this.setorComercialDescricao = setorComercialDescricao;
 		this.totalSetorComercial = totalSetorComercial;

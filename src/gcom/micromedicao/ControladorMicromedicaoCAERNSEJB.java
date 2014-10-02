@@ -111,7 +111,7 @@ public class ControladorMicromedicaoCAERNSEJB extends ControladorMicromedicao
 			filtroImovelSubCategoria = null;
 			iteSub = colSub.iterator();
 		} catch (ErroRepositorioException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 
@@ -153,7 +153,7 @@ public class ControladorMicromedicaoCAERNSEJB extends ControladorMicromedicao
 					}
 				}
 			} catch (ErroRepositorioException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 
@@ -213,7 +213,7 @@ public class ControladorMicromedicaoCAERNSEJB extends ControladorMicromedicao
 				}
 
 			} catch (ErroRepositorioException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		}
@@ -1320,7 +1320,7 @@ public class ControladorMicromedicaoCAERNSEJB extends ControladorMicromedicao
 								sistemaParametro.getNomeAbreviadoEmpresa());
 
 			} catch (ErroRepositorioException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 

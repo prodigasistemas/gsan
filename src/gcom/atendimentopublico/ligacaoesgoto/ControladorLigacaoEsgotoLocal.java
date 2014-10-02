@@ -158,7 +158,7 @@ public interface ControladorLigacaoEsgotoLocal extends
 			Integer idConsumoTipo) throws ControladorException;
 	
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * @autor: Wellington Rocha
 	 * @date: 21/03/2012

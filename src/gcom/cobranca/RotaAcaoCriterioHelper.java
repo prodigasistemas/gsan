@@ -60,7 +60,7 @@ public class RotaAcaoCriterioHelper extends ObjetoTransacao {
 								  SetorComercial setorComercialFinal, 
 			                     Rota rotaInicial, Rota rotaFinal ) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.cobrancaAcao = cobrancaAcao;
 		this.cobrancaCriterio = cobrancaCriterio;
 		this.cobrancaGrupo = cobrancaGrupo;
@@ -76,18 +76,18 @@ public class RotaAcaoCriterioHelper extends ObjetoTransacao {
 	
 	@Override
 	public Date getUltimaAlteracao() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 	@Override
 	public void setUltimaAlteracao(Date ultimaAlteracao) {
-		// TODO Auto-generated method stub
+		
 		
 	}
 	
 	@Override
 	public String[] retornaCamposChavePrimaria() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

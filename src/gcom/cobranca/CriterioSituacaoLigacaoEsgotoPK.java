@@ -28,7 +28,7 @@ public class CriterioSituacaoLigacaoEsgotoPK extends ObjetoGcom {
 
 	public CriterioSituacaoLigacaoEsgotoPK(CobrancaCriterio cobrancaCriterio, LigacaoEsgotoSituacao ligacaoEsgotoSituacao) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.cobrancaCriterio = cobrancaCriterio;
 		this.ligacaoEsgotoSituacao = ligacaoEsgotoSituacao;
 	}

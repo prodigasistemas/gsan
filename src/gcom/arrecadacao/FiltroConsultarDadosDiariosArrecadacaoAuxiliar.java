@@ -1,6 +1,6 @@
 package gcom.arrecadacao;
 
-/**TODO:COSANPA
+/**
  * @author Adriana Muniz
  * @created 10 de dezembro de 2012
  * 

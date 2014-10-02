@@ -4859,20 +4859,9 @@ public interface IRepositorioCobranca {
 	 * @param anoMesFaturamento
 	 * @throws ErroRepositorioException
 	 */
-	/**TODO: COSANPA
-	 * Alterações para atender ao Mantis 490
-     * Considerar a data de vencimento da conta ao invés de considerar o anoMes referencia
-     * da mesma
-     * @author Wellington Rocha
-     * @date 25/01/2012*/
 	public void prescreverDebitosDeImoveis(Integer anoMesFaturamento, String dataFormatada, 
 			Integer usuario) throws ErroRepositorioException;
 	
-	/**TODO: COSANPA
-	 * Mantis 490: Método criado para prescrever débitos de imóveis com contas incluídas
-	 * 
-	 * @author Wellington Rocha
-	 * @date 02/02/2012*/
 	public void prescreverDebitosDeImoveisContasInlcuidas(Integer anoMesFaturamento, String dataFormatada, 
 			Integer usuario) throws ErroRepositorioException;
 	
@@ -6056,6 +6045,9 @@ public interface IRepositorioCobranca {
 	
 	public void atualizarDocumentoDeCobrancaHistorico(Integer codigoImovel, Integer codigoParcelamento) throws ErroRepositorioException;
 	
-	
+	public Collection pesquisarContasImovelSemGrupoNaoFaturado(Integer idImovel, int indicadorPagamento, int indicadorConta, String contaSituacaoNormal,
+			String contaSituacaoRetificada, String contaSituacaoIncluida, String contaSituacaoParcelada,
+			String anoMesInicialReferenciaDebito, String anoMesFinalReferenciaDebito, Date anoMesInicialVecimentoDebito,
+			Date anoMesFinalVencimentoDebito, int indicadorDividaAtiva) throws ErroRepositorioException;
 	
 }

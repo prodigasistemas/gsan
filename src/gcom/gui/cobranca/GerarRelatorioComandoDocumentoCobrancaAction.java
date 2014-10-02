@@ -106,7 +106,7 @@ public class GerarRelatorioComandoDocumentoCobrancaAction extends
 				.parseInt(tipoRelatorio));
 		
 		/*
-		 * TODO : COSANPA
+		 * 
 		 * Alteração feita para gerar avisos de corte. Não estavam 
 		 * sendo gerados pois faltava esse parâmetro, que indica a qtd de documentos
 		 * que vão ser gerados por página.

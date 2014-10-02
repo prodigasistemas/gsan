@@ -128,7 +128,7 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 			return gerarRelatorio(actionMapping, request, response, fachada,
 					sistemaParametro, extratoDebitoRelatorioHelper, documentoCobranca);
 		} catch (ControladorException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} finally {
 			limparSessao(request);
@@ -567,5 +567,26 @@ public class GerarRelatorioExtratoDebitoAction extends ExibidorProcessamentoTare
 		request.removeAttribute("consultarDebito");
 		request.removeAttribute("RD");
 		request.removeAttribute("parcelamentoPortal");
+		
+		inscricao = "";    	
+		matricula = "";
+		nomeUsuario = "";
+		cpfCnpj = "";
+		enderecoImovel = "";
+		imovel = null;
+		colecaoContas =  null;
+		colecaoGuiasPagamento = null;
+		colecaoDebitosACobrar = null;
+		colecaoCreditoARealizar = null;
+		colecaoAntecipacaoDebitosDeParcelamento = null;
+		colecaoAntecipacaoCreditosDeParcelamento = null;
+		valorAcrescimosImpontualidade = BigDecimal.ZERO;
+		valorDocumento = BigDecimal.ZERO;
+		valorDesconto =  BigDecimal.ZERO;
+		valorDescontoCredito =  BigDecimal.ZERO;
+		indicadorGeracaoTaxaCobranca = new Short("2") ;
+		parcelamentoValorDebitoACobrarServico = null;
+		parcelamentoValorDebitoACobrarParcelamento = null;
+		resolucaoDiretoria = null;
 	}
 }

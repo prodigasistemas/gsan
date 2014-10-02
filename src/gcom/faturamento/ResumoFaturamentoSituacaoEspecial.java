@@ -46,7 +46,7 @@ public class ResumoFaturamentoSituacaoEspecial {
 
 	public ResumoFaturamentoSituacaoEspecial(Integer codigoSetorComercial, Integer numeroQuadra, Integer anoMesInicioSituacaoEspecial, Integer anoMesFinalSituacaoEspecial, Integer quantidadeImovel, GerenciaRegional gerenciaRegional, Localidade localidade, SetorComercial setorComercial, Rota rota, Quadra quadra, ImovelPerfil imovelPerfil, LigacaoAguaSituacao ligacaoAguaSituacao, LigacaoEsgotoSituacao ligacaoEsgotoSituacao, Categoria categoria, EsferaPoder esferaPoder, FaturamentoSituacaoTipo faturamentoSituacaoTipo, FaturamentoSituacaoMotivo faturamentoSituacaoMotivo) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.codigoSetorComercial = codigoSetorComercial;
 		this.numeroQuadra = numeroQuadra;
 		this.anoMesInicioSituacaoEspecial = anoMesInicioSituacaoEspecial;
@@ -68,7 +68,7 @@ public class ResumoFaturamentoSituacaoEspecial {
 
 	public ResumoFaturamentoSituacaoEspecial(Integer codigoSetorComercial, Integer numeroQuadra, Integer anoMesInicioSituacaoEspecial, Integer anoMesFinalSituacaoEspecial, Integer quantidadeImovel, Date ultimaAlteracao , GerenciaRegional gerenciaRegional, Localidade localidade, SetorComercial setorComercial, Rota rota, Quadra quadra, ImovelPerfil imovelPerfil, LigacaoAguaSituacao ligacaoAguaSituacao, LigacaoEsgotoSituacao ligacaoEsgotoSituacao, Categoria categoria, EsferaPoder esferaPoder, FaturamentoSituacaoTipo faturamentoSituacaoTipo, FaturamentoSituacaoMotivo faturamentoSituacaoMotivo) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.codigoSetorComercial = codigoSetorComercial;
 		this.numeroQuadra = numeroQuadra;
 		this.anoMesInicioSituacaoEspecial = anoMesInicioSituacaoEspecial;
@@ -92,7 +92,7 @@ public class ResumoFaturamentoSituacaoEspecial {
 	public ResumoFaturamentoSituacaoEspecial(Integer id, Integer codigoSetorComercial, Integer numeroQuadra, Integer anoMesInicioSituacaoEspecial, Integer anoMesFinalSituacaoEspecial, Integer quantidadeImovel, GerenciaRegional gerenciaRegional, Localidade localidade, SetorComercial setorComercial, Rota rota, Quadra quadra, ImovelPerfil perfilImovel, LigacaoAguaSituacao ligacaoAguaSituacao, LigacaoEsgotoSituacao ligacaoEsgotoSituacao, Categoria categoria, EsferaPoder esferaPoder, FaturamentoSituacaoTipo faturamentoSituacaoTipo, FaturamentoSituacaoMotivo faturamentoSituacaoMotivo) {
 		
 		this.id = id;
-		// TODO Auto-generated constructor stub
+		
 		this.codigoSetorComercial = codigoSetorComercial;
 		this.numeroQuadra = numeroQuadra;
 		this.anoMesInicioSituacaoEspecial = anoMesInicioSituacaoEspecial;

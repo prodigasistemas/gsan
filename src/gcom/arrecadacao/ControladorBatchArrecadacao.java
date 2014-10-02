@@ -28,17 +28,17 @@ public class ControladorBatchArrecadacao implements MessageDrivenBean,
 
 	public ControladorBatchArrecadacao() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public void setMessageDrivenContext(MessageDrivenContext ctx)
 			throws EJBException {
-		// TODO Auto-generated method stub
+		
 
 	}
 
 	public void ejbRemove() throws EJBException {
-		// TODO Auto-generated method stub
+		
 
 	}
 
@@ -155,6 +155,6 @@ public void onMessage(Message message) {
 	 * @throws CreateException
 	 */
 	public void ejbCreate() {
-		// TODO Auto-generated method stub
+		
 	}
 }

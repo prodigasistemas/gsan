@@ -22,7 +22,7 @@ public class GuiaPagamentoParcelamentoCartao implements Serializable {
 
 	public GuiaPagamentoParcelamentoCartao(GuiaPagamentoParcelamentoCartaoPK comp_id, GuiaPagamentoGeral guiaPagamentoGeral, Parcelamento parcelamento, Date ultimaAlteracao) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.comp_id = comp_id;
 		this.guiaPagamentoGeral = guiaPagamentoGeral;
 		this.parcelamento = parcelamento;

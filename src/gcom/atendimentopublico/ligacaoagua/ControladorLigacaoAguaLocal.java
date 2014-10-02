@@ -194,7 +194,7 @@ public interface ControladorLigacaoAguaLocal extends
 	public void atualizarTipoCorte(IntegracaoComercialHelper integracaoComercialHelper) throws ControladorException;
 	
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * @autor: Wellington Rocha
 	 * @date: 21/03/2012

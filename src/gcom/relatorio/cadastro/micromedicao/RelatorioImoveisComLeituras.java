@@ -27,7 +27,6 @@ public class RelatorioImoveisComLeituras extends TarefaRelatorio {
 		super(usuario, constanteRelatorio);
 	}
 	
-	// TODO verificar com Lira se relamente
 	public Object executar() throws TarefaException {
 
 		Collection<? extends Object> beans = null;

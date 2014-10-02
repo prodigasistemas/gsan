@@ -52,10 +52,10 @@ public class ExibirSubstituirConsumoAnteriorAction extends GcomAction {
 							enderecoFormatadoImovel);
 				
 			} catch (NumberFormatException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			} catch (ControladorException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		}
@@ -165,7 +165,7 @@ public class ExibirSubstituirConsumoAnteriorAction extends GcomAction {
 							}
 					}
 				} catch (ControladorException e) {
-					// TODO Auto-generated catch block
+					
 					e.printStackTrace();
 				}
 				

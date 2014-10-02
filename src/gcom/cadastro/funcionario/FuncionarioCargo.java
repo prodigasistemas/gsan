@@ -22,7 +22,7 @@ public class FuncionarioCargo extends ObjetoTransacao {
 	 * @param ultimaAlteracao
 	 */
 	public FuncionarioCargo(Integer id, String descricao, Integer codigo, String descricaoAbreviada, Short indicadorUso, Date ultimaAlteracao) {
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.descricao = descricao;
 		this.descricaoAbreviada = descricaoAbreviada;
@@ -127,7 +127,7 @@ public class FuncionarioCargo extends ObjetoTransacao {
 
 	@Override
 	public Filtro retornaFiltro() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

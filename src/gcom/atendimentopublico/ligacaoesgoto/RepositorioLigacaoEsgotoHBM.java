@@ -195,7 +195,7 @@ public class RepositorioLigacaoEsgotoHBM implements IRepositorioLigacaoEsgoto {
 		return retorno;
 	}
 	
-	/**TODO: COSANPA
+	/**
 	 * @author Wellington Rocha
 	 * Data: 21/03/2012
 	 * 

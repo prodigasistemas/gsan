@@ -133,9 +133,6 @@ public class EmitirContaHelper implements Serializable {
 	private String valorMedioFerro;
 	private String valorMedioColiformesTotais;
 	private String valorMedioColiformesfecais;
-	/**TODO: Cosanpa
-	 * Mantis 230: Inclusao de campos que serão utilizados na nova segunda via da conta
-	 * Data: 22/12/2011*/
 	private String padraoPh;
 	private String padraoCor;
 	private String padraoCloro;
@@ -162,18 +159,7 @@ public class EmitirContaHelper implements Serializable {
 	private String dataLeituraAtualInformada;
 	private String dataLeituraAnteriorInformada;
 	private String descricaoAbreviadaLeituraAnormalidade;
-	
-	/**TODO: COSANPA
-	 * Inclusão de campos para atender ao mantis 537
-	 * @author Wellington Rocha
-	 * @date 14/03/2012*/
 	private String dataPagamentoConta;
-	
-	
-
-	/**TODO: COSANPA
-	 * Alteração para atender ao Mantis 499
-	 * Verificar se a fatura do cliente deve ou não possuir código de barras no momento da impressão*/
 	private Short clienteComFaturaAgrupada;
 	
 	public Short getClienteComFaturaAgrupada() {

@@ -24,7 +24,7 @@ public class NegativCritNegRetMot implements Serializable {
 
 	public NegativCritNegRetMot(Integer id, Date ultimaAlteracao, NegativacaoCriterio negativacaoCriterio, NegativadorRetornoMotivo negativadorRetornoMotivo) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.ultimaAlteracao = ultimaAlteracao;
 		this.negativacaoCriterio = negativacaoCriterio;
@@ -33,7 +33,7 @@ public class NegativCritNegRetMot implements Serializable {
 
 	public NegativCritNegRetMot() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public Integer getId() {

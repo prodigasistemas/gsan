@@ -52,7 +52,7 @@ public class RelatorioNegativadorResultadoSimulacaoBean implements RelatorioBean
 		public RelatorioNegativadorResultadoSimulacaoBean(String idComando,
 			String descricaoTitulo,String sequencial,String idImovel,BigDecimal valorDebito,String numeroCpf,String numeroCnpj  ) {
 			super();
-			// TODO Auto-generated constructor stub
+			
 			this.idComando=idComando;
 			this.descricaoTitulo=descricaoTitulo;
 		    this.sequencial=sequencial;

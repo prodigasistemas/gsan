@@ -143,7 +143,7 @@ public class RelatorioContasBaixadasContabilmente extends TarefaRelatorio {
                         periodicidade);
 			
 		} catch (ControladorException e1) {
-			// TODO Auto-generated catch block
+			
 			e1.printStackTrace();
 		}
 

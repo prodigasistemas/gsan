@@ -150,8 +150,8 @@ public class AtualizarImovelAction extends GcomAction {
 		String informacoesComplementares = (String) inserirImovelActionForm.get("informacoesComplementares");
 		
 
-		/**TODO: COSANPA
-		 * Mantis 647 - Disponibilizar o campo nome do Imóvel no cadastro do Imóvel
+		/**
+		 * Disponibilizar o campo nome do Imóvel no cadastro do Imóvel
 		 * 
 		 * @author Wellington Rocha
 		 * @date 14/11/2012*/
@@ -1065,7 +1065,7 @@ public class AtualizarImovelAction extends GcomAction {
 		faturamentoGrupoDestino = faturamentoGrupos[1];
 
 		/**
-		 * TODO : COSANPA
+		 * 
 		 * 
 		 * Pamela Gatinho - 02/08/2011
 		 * 
@@ -1107,7 +1107,7 @@ public class AtualizarImovelAction extends GcomAction {
 
 				}
 				/**
-				 * TODO : COSANPA Alteracao para não permitir alterar a rota se
+				 *  Alteracao para não permitir alterar a rota se
 				 * ela estiver sigo gerada
 				 */
 //				else if (rotaSemAtualizacao != null && fachada.verificaGeracaoDadosLeituraRota(
@@ -1141,7 +1141,7 @@ public class AtualizarImovelAction extends GcomAction {
 									faturamentoGrupoDestino.getId().toString());
 
 						}/**
-						 * TODO : COSANPA Alteracao para não permitir alterar a
+						 *  Alteracao para não permitir alterar a
 						 * rota se ela estiver sigo gerada
 						 */
 //						else if (rotaSemAtualizacao != null && fachada.verificaGeracaoDadosLeituraRota(
@@ -1180,7 +1180,7 @@ public class AtualizarImovelAction extends GcomAction {
 							// [SB0005 – Preparar Alteração Inscrição no
 							// Encerramento Faturamento]
 						}/**
-						 * TODO : COSANPA Alteracao para não permitir alterar a
+						 *  Alteracao para não permitir alterar a
 						 * rota se ela estiver sigo gerada
 						 */
 //						else if (rotaSemAtualizacao != null &&  fachada.verificaGeracaoDadosLeituraRota(
@@ -1215,7 +1215,7 @@ public class AtualizarImovelAction extends GcomAction {
 							faturamentoGrupoDestino.getId().toString(),
 							faturamentoGrupoOrigem.getId().toString());
 				}/**
-				 * TODO : COSANPA Alteracao para não permitir alterar a rota se
+				 *  Alteracao para não permitir alterar a rota se
 				 * ela estiver sigo gerada
 				 */
 //				else if (rotaSemAtualizacao != null && fachada.verificaGeracaoDadosLeituraRota(
@@ -1257,7 +1257,7 @@ public class AtualizarImovelAction extends GcomAction {
 									imovelSemAtualizacao.getId().toString(),
 									faturamentoGrupoDestino.getId().toString());
 						}/**
-						 * TODO : COSANPA Alteracao para não permitir alterar a
+						 *  Alteracao para não permitir alterar a
 						 * rota se ela estiver sigo gerada
 						 */
 //						else if (rotaSemAtualizacao != null &&  fachada.verificaGeracaoDadosLeituraRota(

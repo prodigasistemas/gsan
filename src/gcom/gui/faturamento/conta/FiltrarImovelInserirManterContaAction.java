@@ -68,7 +68,7 @@ public class FiltrarImovelInserirManterContaAction extends GcomAction {
 		}
 
 		/**
-		 * TODO:COSANPA
+		 *
 		 * 
 		 * @autor: Adriana Muniz
 		 * @date: 24/11/2011 Acréscimo de atributo esfera de poder no filtro da
@@ -454,7 +454,7 @@ public class FiltrarImovelInserirManterContaAction extends GcomAction {
 			filtro.setSequencialRotaDestino(sequencialRotaDestino);
 
 			/**
-			 * TODO:COSANPA
+			 *
 			 * 
 			 * @author: Adriana Muniz
 			 * @date:24/11/2011
@@ -494,7 +494,7 @@ public class FiltrarImovelInserirManterContaAction extends GcomAction {
 			}
 
 			/**
-			 * TODO:COSANPA Data: 08/04/2011
+			 * Data: 08/04/2011
 			 * 
 			 * Condição acrescentada para permitir consulta por banco e pelo
 			 * grupo de faturamento

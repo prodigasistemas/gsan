@@ -23,14 +23,14 @@ public class ImovelInscricaoAlteradaHelper implements Serializable {
 	
 	public ImovelInscricaoAlteradaHelper() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 
 	
 	public ImovelInscricaoAlteradaHelper(Integer indicadorAutorizar, Integer totalImoveis, Integer idQuadra) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.indicadorAutorizar = indicadorAutorizar;
 		this.totalImoveis = totalImoveis;
 		this.idQuadra = idQuadra;

@@ -92,7 +92,7 @@ public class RelatorioPagamentosContasCobrancaEmpresaHelper implements
 	 */
 	public RelatorioPagamentosContasCobrancaEmpresaHelper(Empresa empresa, int referenciaPagamentoInicial, int referenciaPagamentoFinal,  String opcaoTotalizacao, Integer codigoLocalidade, Integer codigoGerencia, Integer unidadeNegocio) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.empresa = empresa;
 		this.referenciaPagamentoInicial = referenciaPagamentoInicial;
 		this.referenciaPagamentoFinal = referenciaPagamentoFinal;

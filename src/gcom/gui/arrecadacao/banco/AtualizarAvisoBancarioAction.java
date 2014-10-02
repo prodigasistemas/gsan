@@ -64,7 +64,7 @@ public class AtualizarAvisoBancarioAction  extends GcomAction {
         Usuario usuarioLogado = (Usuario) sessao.getAttribute("usuarioLogado");
         
         // ------------ REGISTRAR TRANSAÇÃO ----------------
-        //TODO
+        
 //        RegistradorOperacao registradorOperacao = new RegistradorOperacao(
 //				Operacao.OPERACAO_AVISO_BANCARIO_ATUALIZAR,
 //				new UsuarioAcaoUsuarioHelper(usuarioLogado,
@@ -79,9 +79,9 @@ public class AtualizarAvisoBancarioAction  extends GcomAction {
         
 
     	AvisoBancario avisoBancario = (AvisoBancario) sessao.getAttribute("avisoBancario");
-    	//TODO avisoBancario.setOperacaoEfetuada(operacaoEfetuada);
+    	
     	avisoBancario.adicionarUsuario(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO);
-    	//TODO registradorOperacao.registrarOperacao(avisoBancario);
+    	
     	Map<String, String[]> requestMap = request.getParameterMap();
 
     	//avisoBancario.setUltimaAlteracao(new Date(System.currentTimeMillis()));
@@ -206,7 +206,7 @@ public class AtualizarAvisoBancarioAction  extends GcomAction {
     	
     	avisoBancario.setValorRealizado(valorRealizado);
 
-    	//TODO
+    	
     	Fachada.getInstancia().atualizarAvisoBancario(avisoBancario, collAvisoDeducoes, collAvisoDeducoesRemover, collAvisoAcerto, collAvisoAcertoRemover, usuarioLogado);
 
     	sessao.removeAttribute("avisoDeducoes");

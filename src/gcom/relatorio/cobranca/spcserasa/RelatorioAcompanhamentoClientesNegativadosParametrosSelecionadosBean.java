@@ -69,7 +69,7 @@ public class RelatorioAcompanhamentoClientesNegativadosParametrosSelecionadosBea
 
 			) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 
 		this.negativador = negativador;
 		this.periodoEnvioNegativacao = periodoEnvioNegativacao;

@@ -73,7 +73,7 @@ public class RelatorioRelacaoServicosAcompanhamentoRepavimentacaoBean implements
 				String tipoPvtoRua, BigDecimal metragem, String dataConclusao, String tipoPvtoRuaRetorno, 
 				BigDecimal metragemRetorno, Collection colecaoTipoPavimentoRua,Collection colecaoTipoPavimentoRuaRet) {
 			super();
-			// TODO Auto-generated constructor stub
+			
 			
 			this.arrayRelatorioRelacaoServicosAcompanhamentoRepavimentacaoSubBean = new ArrayList();
 			this.arrayRelatorioRelacaoServicosAcompanhamentoRepavimentacaoSubBean.addAll(
@@ -99,7 +99,7 @@ public class RelatorioRelacaoServicosAcompanhamentoRepavimentacaoBean implements
 				BigDecimal metragemRetorno, Collection colecaoTipoPavimentoRua,Collection colecaoTipoPavimentoRuaRet,
 				String motivo) {
 			super();
-			// TODO Auto-generated constructor stub
+			
 			
 			this.arrayRelatorioRelacaoServicosAcompanhamentoRepavimentacaoSubBean = new ArrayList();
 			this.arrayRelatorioRelacaoServicosAcompanhamentoRepavimentacaoSubBean.addAll(

@@ -34,7 +34,7 @@ public class RelatorioManterItemServicoBean implements RelatorioBean {
 
 	public RelatorioManterItemServicoBean(String descricao, String descricaoAbreviada, String indicadorUso, String codigoConstanteCalculo, String codigoItem) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.descricao = descricao;
 		this.descricaoAbreviada = descricaoAbreviada;
 		this.indicadorUso = indicadorUso;

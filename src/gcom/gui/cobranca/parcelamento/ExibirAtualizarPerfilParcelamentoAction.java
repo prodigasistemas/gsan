@@ -315,7 +315,7 @@ public class ExibirAtualizarPerfilParcelamentoAction extends GcomAction {
         		    		   || httpServletRequest.getParameter("reload").equalsIgnoreCase("")){
         		
         		/*
-        		 * TODO - COSANPA
+        		 *
         		 */
         		if (parcelamentoPerfil.getPercentualDescontoAcrescimoMulta() != null){
         			atualizarParcelamentoPerfilActionForm.setPercentualDescontoAcrescimoMulta("" +
@@ -532,14 +532,11 @@ public class ExibirAtualizarPerfilParcelamentoAction extends GcomAction {
 					parcelamentoQtdeReparcelamentoHelper.setQuantidadeMaximaReparcelamento(parcelamentoQtdeReparcelamento.getQuantidadeMaximaReparcelamento());
 					parcelamentoQtdeReparcelamentoHelper.setPercentualEntradaSugerida(
 							parcelamentoQtdeReparcelamento.getPercentualEntradaSugerida());
-//					TODO ver ValorMinimoPrestacao
-					//parcelamentoQtdeReparcelamentoHelper.setValorMinimoPrestacao(parcelamentoQtdeReparcelamento.getValorMinimoPrestacao());
 					parcelamentoQtdeReparcelamentoHelper.setInformacaoParcelamentoQtdeReparcelamento("INFORMADAS");
 					parcelamentoQtdeReparcelamentoHelper.setUltimaAlteracao(parcelamentoQtdeReparcelamento.getUltimaAlteracao());
 					collectionParcelamentoQuantidadeReparcelamentoHelper.add(parcelamentoQtdeReparcelamentoHelper);
 
 				}
-				//httpServletRequest.setAttribute("collectionParcelamentoQuantidadeReparcelamentoHelper",collectionParcelamentoQuantidadeReparcelamentoHelper);
 				sessao.setAttribute("collectionParcelamentoQuantidadeReparcelamentoHelper",collectionParcelamentoQuantidadeReparcelamentoHelper);
 	
 			}

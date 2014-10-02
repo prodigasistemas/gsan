@@ -48,7 +48,7 @@ public class RelatorioDadosDiariosArrecadacaoFormaBean implements RelatorioBean 
 
 	public RelatorioDadosDiariosArrecadacaoFormaBean(String processamentoDefinitivo, String mesAno, String ultimoProcessamentoAtual, String faturamentoCobradoEmConta, String agente, String valor, String formaArrecadacao, String quantidadeDocumentos, String quantidadePagamentos, String debitos, String descontos, String valorArrecadado, String devolucao, String arrecadacaoLiquida, String percentualMes) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.processamentoDefinitivo = processamentoDefinitivo;
 		this.mesAno = mesAno;
 		this.ultimoProcessamentoAtual = ultimoProcessamentoAtual;

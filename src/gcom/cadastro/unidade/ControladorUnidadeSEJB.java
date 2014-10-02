@@ -1053,7 +1053,7 @@ public class ControladorUnidadeSEJB implements SessionBean {
 				}
 			}
 		} catch (ErroRepositorioException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 			throw new ControladorException("erro.sistema", e);
 		}

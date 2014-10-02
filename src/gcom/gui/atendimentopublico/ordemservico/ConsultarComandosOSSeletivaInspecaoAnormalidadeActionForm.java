@@ -57,7 +57,7 @@ public class ConsultarComandosOSSeletivaInspecaoAnormalidadeActionForm  extends 
 
 	public ConsultarComandosOSSeletivaInspecaoAnormalidadeActionForm(String idEmpresa, String nomeEmpresa, String periodoExecucaoInicial, String periodoExecucaoFinal) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idEmpresa = idEmpresa;
 		this.nomeEmpresa = nomeEmpresa;
 		this.periodoExecucaoInicial = periodoExecucaoInicial;
@@ -66,7 +66,7 @@ public class ConsultarComandosOSSeletivaInspecaoAnormalidadeActionForm  extends 
 
 	public ConsultarComandosOSSeletivaInspecaoAnormalidadeActionForm() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public String getIdRegistro() {

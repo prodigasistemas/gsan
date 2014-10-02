@@ -43,7 +43,7 @@ public class ContaMensagem extends ObjetoTransacao {
 
 	public ContaMensagem(Integer id, Integer anoMesRreferenciaFaturamento, String descricaoContaMensagem, Date ultimaAlteracao, FaturamentoGrupo faturamentoGrupo, GerenciaRegional gerenciaRegional, Localidade localidade, SetorComercial setorComercial) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.anoMesRreferenciaFaturamento = anoMesRreferenciaFaturamento;
 		this.descricaoContaMensagem01 = descricaoContaMensagem;
@@ -56,7 +56,7 @@ public class ContaMensagem extends ObjetoTransacao {
 
 	public ContaMensagem(Integer id, Integer anoMesRreferenciaFaturamento, String descricaoContaMensagem, Date ultimaAlteracao, FaturamentoGrupo faturamentoGrupo, GerenciaRegional gerenciaRegional, Localidade localidade, SetorComercial setorComercial, String descricaoContaMensagem02, String descricaoContaMensagem03 ) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.anoMesRreferenciaFaturamento = anoMesRreferenciaFaturamento;
 		this.descricaoContaMensagem01 = descricaoContaMensagem;

@@ -13,7 +13,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 /**
- * @author COSANPA - Felipe Santos - Mantis 414
+ * @author COSANPA - Felipe Santos
  * @date 25/10/2013
  */
 public class TarefaBatchGerarDadosRelatorioBIG extends TarefaBatch {

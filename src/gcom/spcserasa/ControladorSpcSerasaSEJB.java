@@ -2400,7 +2400,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 		if (movimento == null) {
 			FiltroNegativadorMovimento filtroNegativadorMovimento = new FiltroNegativadorMovimento();
 			filtroNegativadorMovimento.adicionarParametro(new ParametroSimples(
-					FiltroNegativadorMovimento.NEGATIVACAO_COMANDO, comando.getId()));
+					FiltroNegativadorMovimento.NEGATIVACAO_COMANDO_ID, comando.getId()));
 			
 			Collection colecaoNegativadorMovimento = RepositorioUtilHBM.getInstancia().pesquisar(
 					filtroNegativadorMovimento, NegativadorMovimento.class.getName());
@@ -2452,20 +2452,20 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 	 * [UC0671] Gerar Movimento de Inclusao de Negativação
 	 * [SB0008] Gerar Registro de tipo header
 	 */
-	public Integer gerarRegistroDeInclusaoTipoHeader(Short tipoComando, Integer quantidadeRegistro,
+	public Integer gerarRegistroDeInclusaoTipoHeader(Short tipoComando, Integer numeroRegistro,
 			Negativador negativador, NegativadorContrato contrato, NegativacaoComando comando,
 			NegativacaoCriterio criterio, Integer idNegativacaoMovimento) throws ControladorException {
 
-		quantidadeRegistro = NegativadorMovimentoReg.getNumeroProximoRegistro();
+		numeroRegistro = NegativadorMovimentoReg.getNumeroProximoRegistro();
 
 		StringBuilder registroTipoHeader = null;
 		try {
 			if (negativador.getId().equals(Negativador.NEGATIVADOR_SPC)) {
 				// 1. Gerar Registro tipo Header SPC
-				registroTipoHeader = this.geraRegistroTipoHeaderSPC(contrato.getNumeroSequencialEnvio(), quantidadeRegistro);
+				registroTipoHeader = this.geraRegistroTipoHeaderSPC(contrato.getNumeroSequencialEnvio(), numeroRegistro);
 			} else {
 				// 2. Gerar Registro tipo Header SERASA
-				registroTipoHeader = this.geraRegistroTipoHeaderSERASA(contrato.getNumeroSequencialEnvio(), quantidadeRegistro);
+				registroTipoHeader = this.geraRegistroTipoHeaderSERASA(contrato.getNumeroSequencialEnvio(), numeroRegistro);
 			}
 
 			// 3. Gerar o registro do movimento da negativação correspondente ao registro tipo Hearder
@@ -2476,26 +2476,26 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 				idNegativadorRegistroTipo = NegativadorRegistroTipo.ID_SERASA_HEADER;
 			}
 			
-			this.gerarNegativadorMovimentoRegistro(negativador.getId(), idNegativacaoMovimento, registroTipoHeader,
-					quantidadeRegistro, criterio, idNegativadorRegistroTipo);
+			this.gerarNegativadorMovimentoRegistro(idNegativacaoMovimento, registroTipoHeader, numeroRegistro,
+					criterio, idNegativadorRegistroTipo);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
-		return quantidadeRegistro;
+		return numeroRegistro;
 
 	}
 
-	private void gerarNegativadorMovimentoRegistro(Integer idNegativador, Integer idNMovimento, StringBuilder registroHeader,
-			Integer quantidadeRegistros, NegativacaoCriterio criterio, Integer idRegistroTipo) throws ControladorException {
+	private void gerarNegativadorMovimentoRegistro(Integer idNegativadorMovimento, StringBuilder registroHeader,
+			Integer numeroRegistro, NegativacaoCriterio criterio, Integer idRegistroTipo) throws ControladorException {
 		
 		NegativadorMovimentoReg negativadorMovimentoReg = new NegativadorMovimentoReg();
-		negativadorMovimentoReg.setNegativadorMovimento(new NegativadorMovimento(idNMovimento));
+		negativadorMovimentoReg.setNegativadorMovimento(new NegativadorMovimento(idNegativadorMovimento));
 		negativadorMovimentoReg.setNegativadorRegistroTipo(new NegativadorRegistroTipo(idRegistroTipo));
 		if (criterio != null)
 			negativadorMovimentoReg.setNegativacaoCriterio(criterio);
 		negativadorMovimentoReg.setConteudoRegistro(registroHeader.toString());
 		negativadorMovimentoReg.setIndicadorSituacaoDefinitiva(ConstantesSistema.NAO);
-		negativadorMovimentoReg.setNumeroRegistro(quantidadeRegistros);
+		negativadorMovimentoReg.setNumeroRegistro(numeroRegistro);
 		negativadorMovimentoReg.setIndicadorItemAtualizado(ConstantesSistema.NAO);
 		negativadorMovimentoReg.setUltimaAlteracao(new Date());
 		
@@ -2563,7 +2563,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			} else if (new Integer(negativador.getId()).equals(Negativador.NEGATIVADOR_SERASA)) {
 				quantidadeRegistro = NegativadorMovimentoReg.getNumeroProximoRegistro();
 
-				NegativadorMovimentoReg negativadorMovimentoRegistro = this.inserirNegativadorMovimentoRegistroSERASA(
+				NegativadorMovimentoReg negativadorMovimentoRegistro = this.inserirNegativadorMovimentoRegistroDetalheSERASA(
 						tipoComando,
 						quantidadeRegistro,
 						criterio,
@@ -2597,7 +2597,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 		return quantidadeRegistro;
 	}
 
-	private NegativadorMovimentoReg inserirNegativadorMovimentoRegistroSERASA(Short tipoComando, Integer quantidadeRegistro,
+	private NegativadorMovimentoReg inserirNegativadorMovimentoRegistroDetalheSERASA(Short tipoComando, Integer quantidadeRegistro,
 			NegativacaoCriterio criterio, BigDecimal valorTotalImovel, ObterDebitoImovelOuClienteHelper obterDebitoImovelOuClienteHelper,
 			DadosNegativacaoPorImovelHelper dadosNegativacaoPorImovelHelper, Cliente cliente, NegativadorMovimento movimento, Imovel imovel)
 			throws ControladorException, ErroRepositorioException {
@@ -3291,7 +3291,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 	/*****************************************************************************************/
 
 	public void geraRegistroNegativacao(Imovel imovelNegativado, int idNegativador, int idUsuarioResponsaval,
-			int idNegativadorComando, int quantidadeRegistros, int primeiraVez, NegativacaoCriterio negCriterio,
+			int idNegativadorComando, int numeroRegistros, int primeiraVez, NegativacaoCriterio negCriterio,
 			BigDecimal valorTotalDebitosImovel, NegativacaoMovimentoHelper negativacaoMovimentoHelper,
 			ObterDebitoImovelOuClienteHelper colecaoDebitoImovel, Short tipoComando,
 			DadosNegativacaoPorImovelHelper listaDadosImovel) throws ControladorException, ErroRepositorioException {
@@ -3316,10 +3316,10 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 
 			if (new Integer(idNegativador).equals(Negativador.NEGATIVADOR_SPC)) {
 				// [SB0008] - Gerar Registro tipo Header SPC
-				registroTipoHeader = this.geraRegistroTipoHeaderSPC(saEnvio, quantidadeRegistros);
+				registroTipoHeader = this.geraRegistroTipoHeaderSPC(saEnvio, numeroRegistros);
 			} else {
 				// [SB0008] - Gerar Registro tipo Header SERASA
-				registroTipoHeader = this.geraRegistroTipoHeaderSERASA(saEnvio, quantidadeRegistros);
+				registroTipoHeader = this.geraRegistroTipoHeaderSERASA(saEnvio, numeroRegistros);
 			}
 
 			// [SB0008] - 2.
@@ -3330,14 +3330,14 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 				idNegativadorRegistroTipo = NegativadorRegistroTipo.ID_SERASA_HEADER;
 			}
 			
-			this.gerarNegativadorMovimentoRegistro(idNegativador, idNegativadorMovimento, registroTipoHeader,
-					quantidadeRegistros, negCriterio, idNegativadorRegistroTipo);
+			this.gerarNegativadorMovimentoRegistro(idNegativadorMovimento, registroTipoHeader, numeroRegistros,
+					negCriterio, idNegativadorRegistroTipo);
 		}
 
 		StringBuilder registroDetalheConsumidor = null;
 		if (new Integer(idNegativador).equals(Negativador.NEGATIVADOR_SPC)) {
 			// [SB0009]
-			registroDetalheConsumidor = this.geraRegistroTipoDetalheConsumidorSPC(quantidadeRegistros,
+			registroDetalheConsumidor = this.geraRegistroTipoDetalheConsumidorSPC(numeroRegistros,
 					negCriterio.getCliente(), imovelNegativado.getId());
 
 			// Gera registro do movimento da negativação correspondente ao
@@ -3345,7 +3345,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			idDetalheReg = this.repositorioSpcSerasa.geraRegistroNegativacaoRegDetalhe(idNegativador,
 					idUsuarioResponsaval, saEnvio, idNegativadorComando,
 					negativacaoMovimentoHelper.getIdNegativacaoMovimento(), registroDetalheConsumidor,
-					quantidadeRegistros, negCriterio.getId());
+					numeroRegistros, negCriterio.getId());
 		} else {
 			// [SB0009]
 
@@ -3386,7 +3386,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			//
 			// }
 
-			registroDetalheConsumidor = this.geraRegistroTipoDetalheSERASA(quantidadeRegistros,
+			registroDetalheConsumidor = this.geraRegistroTipoDetalheSERASA(numeroRegistros,
 					valorTotalDebitosImovel, colecaoDebitoImovel, imovelNegativado, listaDadosImovel, tipoComando,
 					cliente);
 		}
@@ -3431,19 +3431,19 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			// Gera registro movimento da negativação correspondente
 			// ao registro tipo detail-SPC.
 			if (new Integer(idNegativador).equals(Negativador.NEGATIVADOR_SPC)) {
-				StringBuilder registroDetalheSPC = this.geraRegistroTipoDetalheSPC(quantidadeRegistros,
+				StringBuilder registroDetalheSPC = this.geraRegistroTipoDetalheSPC(numeroRegistros,
 						colecaoDebitoImovel, negCriterio, imovelNegativado, valorTotalDebitosImovel, listaDadosImovel,
 						tipoComando);
 
 				idDetalheReg = this.repositorioSpcSerasa.geraRegistroNegativacaoRegDetalheSPC(idNegativador,
 						negativacaoMovimentoHelper.getIdNegativacaoMovimento(), registroDetalheSPC,
-						quantidadeRegistros, valorTotalDebitosImovel, idDebitoSituacao, idImovel, idLocalidade,
+						numeroRegistros, valorTotalDebitosImovel, idDebitoSituacao, idImovel, idLocalidade,
 						idQuadra, stComercialCD, numeroQuadra, iper_id, idCliente, idCategoria, cpfCliente,
 						cnpjCliente, null);
 			} else {
 				idDetalheReg = this.repositorioSpcSerasa.geraRegistroNegativacaoRegDetalheSPC(idNegativador,
 						negativacaoMovimentoHelper.getIdNegativacaoMovimento(), registroDetalheConsumidor,
-						quantidadeRegistros, valorTotalDebitosImovel, idDebitoSituacao, idImovel, idLocalidade,
+						numeroRegistros, valorTotalDebitosImovel, idDebitoSituacao, idImovel, idLocalidade,
 						idQuadra, stComercialCD, numeroQuadra, iper_id, idCliente, idCategoria, cpfCliente,
 						cnpjCliente, null);
 			}
@@ -3492,19 +3492,19 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			// Gera registro movimento da negativação correspondente
 			// ao registro tipo detail-SPC.
 			if (new Integer(idNegativador).equals(Negativador.NEGATIVADOR_SPC)) {
-				StringBuilder registroDetalheSPC = this.geraRegistroTipoDetalheSPC(quantidadeRegistros,
+				StringBuilder registroDetalheSPC = this.geraRegistroTipoDetalheSPC(numeroRegistros,
 						colecaoDebitoImovel, negCriterio, imovelNegativado, valorTotalDebitosImovel, listaDadosImovel,
 						tipoComando);
 
 				idDetalheReg = this.repositorioSpcSerasa.geraRegistroNegativacaoRegDetalheSPC(idNegativador,
 						negativacaoMovimentoHelper.getIdNegativacaoMovimento(), registroDetalheSPC,
-						quantidadeRegistros, valorTotalDebitosImovel, idDebitoSituacao, idImovel, idLocalidade,
+						numeroRegistros, valorTotalDebitosImovel, idDebitoSituacao, idImovel, idLocalidade,
 						idQuadra, stComercialCD, numeroQuadra, iper_id, idCliente, idCategoria, cpfCliente,
 						cnpjCliente, negCriterio.getId());
 			} else {
 				idDetalheReg = this.repositorioSpcSerasa.geraRegistroNegativacaoRegDetalheSPC(idNegativador,
 						negativacaoMovimentoHelper.getIdNegativacaoMovimento(), registroDetalheConsumidor,
-						quantidadeRegistros, valorTotalDebitosImovel, idDebitoSituacao, idImovel, idLocalidade,
+						numeroRegistros, valorTotalDebitosImovel, idDebitoSituacao, idImovel, idLocalidade,
 						idQuadra, stComercialCD, numeroQuadra, iper_id, idCliente, idCategoria, cpfCliente,
 						cnpjCliente, negCriterio.getId());
 			}
@@ -3799,51 +3799,19 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 	}
 
 	/**
-	 * Método que Exclui a negativacao de um imovel [UC0675] Excluir Negativação
-	 * InLine [Fluxo principal] 8.0
-	 * 
-	 * @author Thiago Toscano
-	 * @date 24/01/2008
-	 *
-	 * @throws ControladorException
+	 * Método que Exclui a negativacao de um imovel
+	 * [UC0675] Excluir Negativação OnLine
 	 */
 	public void excluirNegativacaoOnLine(Imovel imovel, NegativadorMovimentoReg negativadorMovimentoReg,
 			Collection itensConta, Collection itensGuiaPagamento, NegativadorExclusaoMotivo negativadorExclusaoMotivo,
 			Date dataExclusao, Usuario usuarioSelecionado, Usuario usuarioLogado) throws ControladorException {
+		
 		try {
+			NegativadorExclusaoMotivo negatExclusaoMotivo = repositorioSpcSerasa.pesquisarMotivoExclusao(negativadorExclusaoMotivo.getId());
 
-			// ------------ REGISTRAR TRANSAÇÃO ----------------
-			// RegistradorOperacao registradorOperacao = new
-			// RegistradorOperacao(
-			// Operacao.EXCLUIR_NEGATIVACAO_ON_LINE,
-			// new UsuarioAcaoUsuarioHelper(usuarioLogado,
-			// UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-			//
-			// Operacao operacao = new Operacao();
-			// operacao.setId(Operacao.EXCLUIR_NEGATIVACAO_ON_LINE);
-			//
-			// OperacaoEfetuada operacaoEfetuada = new OperacaoEfetuada();
-			// operacaoEfetuada.setOperacao(operacao);
-			// ------------ REGISTRAR TRANSAÇÃO ----------------
-
-			// ------------------------------------------------------------------
-			// Alterado por: Yara Taciane
-			// Data : 22/07/2008
-			// Solicitação : Fátima Sampio
-			// ------------------------------------------------------------------
-
-			// 6.1
-			NegativadorExclusaoMotivo negatExclusaoMotivo = repositorioSpcSerasa
-					.pesquisarMotivoExclusao(negativadorExclusaoMotivo.getId());
-
-			// Caso a situação de cobrança do débito associada ao motivo da
-			// exclusão selecionado
-			// corresponda a "Pago" ou "Parcelado", verificar a situação do
-			// débito do Item.
-			if (negatExclusaoMotivo != null
-					&& negatExclusaoMotivo.getCobrancaDebitoSituacao() != null
-					&& (negatExclusaoMotivo.getCobrancaDebitoSituacao().getId().equals(CobrancaDebitoSituacao.PAGO) || negatExclusaoMotivo
-							.getCobrancaDebitoSituacao().getId().equals(CobrancaDebitoSituacao.PARCELADO))) {
+			if (negatExclusaoMotivo != null && negatExclusaoMotivo.getCobrancaDebitoSituacao() != null
+					&& (negatExclusaoMotivo.getCobrancaDebitoSituacao().getId().equals(CobrancaDebitoSituacao.PAGO) 
+							|| negatExclusaoMotivo.getCobrancaDebitoSituacao().getId().equals(CobrancaDebitoSituacao.PARCELADO))) {
 
 				Object[] obj = new Object[9];
 				Integer quantidadeItensNegativacao = 0;
@@ -3867,9 +3835,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 				obj[7] = valorItensNegativacaoParcelado;
 				obj[8] = valorItensNegativacaoCancelado;
 
-				// [SB001] - Verificar Situação Débito dos Itens da Negativação.
-				Collection collNegativadorMovimentoRegItem = verificarSituacaoDebitoItensNegativacao(
-						negativadorMovimentoReg, obj);
+				Collection collNegativadorMovimentoRegItem = verificarSituacaoDebitoItensNegativacao(negativadorMovimentoReg, obj);
 
 				quantidadeItensNegativacao = (Integer) obj[0];
 				quantidadeItensNegativacaoPendente = (Integer) obj[1];
@@ -3881,63 +3847,34 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 				valorItensNegativacaoParcelado = (BigDecimal) obj[7];
 				valorItensNegativacaoCancelado = (BigDecimal) obj[8];
 
-				// 1.4 Situação Predominante do Débito da Negativação.
 				CobrancaDebitoSituacao cds = negativadorMovimentoReg.getCobrancaDebitoSituacao();
 
-				// 1.5 Caso a situação da negativacao não seja definitiva.
 				if (negativadorMovimentoReg.getIndicadorSituacaoDefinitiva() == 2) {
 
-					// [SB0003] - Determinar Situação Predominante do Débito da
-					// Negativação.
-					Object[] rspdn = determinarSituacaoPredominanteDebitoNegativacao(negativadorMovimentoReg,
-							collNegativadorMovimentoRegItem, obj);
-					// Situação Predominante do Débito da Negativação.
+					Object[] rspdn = determinarSituacaoPredominanteDebitoNegativacao(negativadorMovimentoReg, collNegativadorMovimentoRegItem, obj);
 					cds = (CobrancaDebitoSituacao) rspdn[0];
 				}
 
-				// 1.6 Caso a situação de cobrança do débito associado ao motivo
-				// da exclusão selecionado
-				// corresponda a "Pago" e a Situação Predominante do Débito da
-				// Negativação não corresponda a
-				// débito "Pago".
 				if (negatExclusaoMotivo.getCobrancaDebitoSituacao().getId().equals(CobrancaDebitoSituacao.PAGO)) {
 					if (!cds.getId().equals(CobrancaDebitoSituacao.PAGO)) {
-						// 1.6.1 , 1.6.2
 						throw new ControladorException("atencao.debito_negativado_nao_pago", null);
 					}
 				}
 
-				// 1.7 Caso a situação de cobrança do débito associado ao motivo
-				// da exclusão selecionado
-				// corresponda a "Parcelado" e a Situação Predominante do Débito
-				// da Negativação não corresponda a
-				// débito "Parcelado".
 				if (negatExclusaoMotivo.getCobrancaDebitoSituacao().getId().equals(CobrancaDebitoSituacao.PARCELADO)) {
 					if (!cds.getId().equals(CobrancaDebitoSituacao.PARCELADO)) {
-						// 1.7.1 , 1.7.2
 						throw new ControladorException("atencao.debito_negativado_nao_parcelado", null);
 					}
 				}
-
 			}
 
-			// -------------------------------------------------------------------
+			RegistradorOperacao registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_EXCLUIR_NEGATIVACAO_ONLINE,
+					negativadorMovimentoReg.getImovel().getId(), negativadorMovimentoReg.getImovel().getId(),
+					new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 
-			// 8.1
-			FiltroNegativacaoImoveis fni = new FiltroNegativacaoImoveis();
-			fni.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.IMOVEL_ID, imovel.getId()));
-			fni.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.NEGATIVACAO_COMANDO_ID,
-					negativadorMovimentoReg.getNegativadorMovimento().getNegativacaoComando().getId()));
+			Collection collNegativacaoImoveis = this.obterColecaoNegativacaoImoveis(negativadorMovimentoReg.getNegativadorMovimento(), imovel,
+					negativadorMovimentoReg.getCliente());
 
-			// ------------ REGISTRAR TRANSAÇÃO ----------------
-			RegistradorOperacao registradorOperacao = new RegistradorOperacao(
-					Operacao.OPERACAO_EXCLUIR_NEGATIVACAO_ONLINE, negativadorMovimentoReg.getId(),
-					negativadorMovimentoReg.getId(), new UsuarioAcaoUsuarioHelper(usuarioLogado,
-							UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
-			// ------------ REGISTRAR TRANSAÇÃO ----------------
-
-			Collection collNegativacaoImoveis = RepositorioUtilHBM.getInstancia().pesquisar(fni,
-					NegativacaoImoveis.class.getName());
 			if (collNegativacaoImoveis != null) {
 				Iterator it = collNegativacaoImoveis.iterator();
 				if (it.hasNext()) {
@@ -3945,26 +3882,16 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 					ni.setIndicadorExcluido((short) 1);
 					ni.setDataExclusao(dataExclusao);
 					ni.setUltimaAlteracao(new Date());
-					// // ------------ REGISTRAR TRANSAÇÃO ----------------
-					// registradorOperacao.registrarOperacao(ni);
-					// // ------------ REGISTRAR TRANSAÇÃO ----------------
-
 					RepositorioUtilHBM.getInstancia().atualizar(ni);
 				}
 			}
 
-			// consultando o NegativadorExclusaoMotivo selecionado pelo usuario
-			// para carregar
-			// o CobrancaDebitoSituacao
 			FiltroNegativadorExclusaoMotivo fnem = new FiltroNegativadorExclusaoMotivo();
-			fnem.adicionarParametro(new ParametroSimples(FiltroNegativadorExclusaoMotivo.ID, negativadorExclusaoMotivo
-					.getId()));
+			fnem.adicionarParametro(new ParametroSimples(FiltroNegativadorExclusaoMotivo.ID, negativadorExclusaoMotivo.getId()));
 			fnem.adicionarCaminhoParaCarregamentoEntidade(FiltroNegativadorExclusaoMotivo.COBRANCA_DEBITO_SITUACAO);
-			Collection coll = RepositorioUtilHBM.getInstancia().pesquisar(fnem,
-					NegativadorExclusaoMotivo.class.getName());
+			Collection coll = RepositorioUtilHBM.getInstancia().pesquisar(fnem, NegativadorExclusaoMotivo.class.getName());
 			NegativadorExclusaoMotivo nEMCadastrado = (NegativadorExclusaoMotivo) Util.retonarObjetoDeColecao(coll);
 
-			// 8.2
 			negativadorMovimentoReg.setUsuario(usuarioSelecionado);
 			negativadorMovimentoReg.setCobrancaDebitoSituacao(nEMCadastrado.getCobrancaDebitoSituacao());
 			negativadorMovimentoReg.setDataSituacaoDebito(dataExclusao);
@@ -3972,16 +3899,12 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			negativadorMovimentoReg.setIndicadorSituacaoDefinitiva((short) 1);
 			negativadorMovimentoReg.setNegativadorExclusaoMotivo(negativadorExclusaoMotivo);
 			negativadorMovimentoReg.setUltimaAlteracao(new Date());
-			// adicionado por Vivianne Sousa - 21/08/2009 - analista:Fatima
 			negativadorMovimentoReg.setCobrancaSituacao(null);
 
-			// ------------ REGISTRAR TRANSAÇÃO----------------------------
 			registradorOperacao.registrarOperacao(negativadorMovimentoReg);
-			// ------------ REGISTRAR TRANSAÇÃO----------------------------
 
 			RepositorioUtilHBM.getInstancia().atualizar(negativadorMovimentoReg);
 
-			// 8.3
 			if (itensConta != null) {
 				Iterator it = itensConta.iterator();
 				while (it.hasNext()) {
@@ -3989,13 +3912,10 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 					nmri.setCobrancaDebitoSituacaoAposExclusao(nmri.getCobrancaDebitoSituacao());
 					nmri.setDataSituacaoDebitoAposExclusao(nmri.getDataSituacaoDebito());
 					nmri.setUltimaAlteracao(new Date());
-					// // ------------ REGISTRAR TRANSAÇÃO ----------------
-					// registradorOperacao.registrarOperacao(nmri);
-					// // ------------ REGISTRAR TRANSAÇÃO ----------------
 					RepositorioUtilHBM.getInstancia().atualizar(nmri);
 				}
 			}
-			// 8.3
+
 			if (itensGuiaPagamento != null) {
 				Iterator it = itensGuiaPagamento.iterator();
 				while (it.hasNext()) {
@@ -4003,134 +3923,26 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 					nmri.setCobrancaDebitoSituacaoAposExclusao(nmri.getCobrancaDebitoSituacao());
 					nmri.setDataSituacaoDebitoAposExclusao(nmri.getDataSituacaoDebito());
 					nmri.setUltimaAlteracao(new Date());
-					// // ------------ REGISTRAR TRANSAÇÃO ----------------
-					// registradorOperacao.registrarOperacao(nmri);
-					// // ------------ REGISTRAR TRANSAÇÃO ----------------
 					RepositorioUtilHBM.getInstancia().atualizar(nmri);
 				}
 			}
 
-			// -----------------------------------------------------------------------------------------------------------------
-			// Alterado em 27/03/2008
-
-			// 8.5
-			// FiltroImovelCobrancaSituacao fics = new
-			// FiltroImovelCobrancaSituacao();
-			// fics.adicionarParametro(new
-			// ParametroSimples(FiltroImovelCobrancaSituacao.IMOVEL_ID,imovel.getId()));
-			// fics.adicionarParametro(new
-			// ParametroNulo("dataRetiradaCobranca"));
-			//
-			// if
-			// (negativadorMovimentoReg.getNegativadorMovimento().getNegativador().getId().equals(Negativador.NEGATIVADOR_SPC))
-			// {
-			// fics.adicionarParametro(new
-			// ParametroSimples("cobrancaSituacao.id",CobrancaSituacao.EM_ANALISE_PARA_NEGATIVACAO,ConectorOr.CONECTOR_OR,3));
-			// fics.adicionarParametro(new
-			// ParametroSimples("cobrancaSituacao.id",CobrancaSituacao.CARTA_ENVIADA_AO_SPC,ConectorOr.CONECTOR_OR,3));
-			// fics.adicionarParametro(new
-			// ParametroSimples("cobrancaSituacao.id",CobrancaSituacao.NEGATIVADO_AUTOMATICAMENTE_NO_SPC,ConectorOr.CONECTOR_OR,3));
-			// } else
-			// if(negativadorMovimentoReg.getNegativadorMovimento().getNegativador().getId().equals(Negativador.NEGATIVADOR_SERASA)){
-			// fics.adicionarParametro(new
-			// ParametroSimples("cobrancaSituacao.id",CobrancaSituacao.EM_ANALISE_PARA_NEGATIVACAO,ConectorOr.CONECTOR_OR,3));
-			// fics.adicionarParametro(new
-			// ParametroSimples("cobrancaSituacao.id",CobrancaSituacao.CARTA_ENVIADA_A_SERASA,ConectorOr.CONECTOR_OR,3));
-			// fics.adicionarParametro(new
-			// ParametroSimples("cobrancaSituacao.id",CobrancaSituacao.NEGATIVADO_AUTOMATICAMENTE_NA_SERASA,ConectorOr.CONECTOR_OR,3));
-			// }
-			//
-			// Collection collImovelCobrancaSituacao =
-			// RepositorioUtilHBM.getInstancia().pesquisar(fics,
-			// ImovelCobrancaSituacao.class.getName());
-			//
-			//
-			//
-			// if (collImovelCobrancaSituacao != null) {
-			// Iterator it = collImovelCobrancaSituacao.iterator();
-			// while(it.hasNext()) {
-			// ImovelCobrancaSituacao ics = (ImovelCobrancaSituacao) it.next();
-			// ics.setDataRetiradaCobranca(new Date());
-			// ics.setUltimaAlteracao(new Date());
-			// // ------------ REGISTRAR TRANSAÇÃO ----------------
-			// registradorOperacao.registrarOperacao(ics);
-			// // ------------ REGISTRAR TRANSAÇÃO ----------------
-			// RepositorioUtilHBM.getInstancia().atualizar(ics);
-			// }
-			// }
-
-			// 8.5
-			Collection imoveisCobrancaSituacao = this.repositorioSpcSerasa
-					.consultarImovelCobrancaSituacaoPorNegativador(imovel, negativadorMovimentoReg
-							.getNegativadorMovimento().getNegativador().getId());
+			Collection imoveisCobrancaSituacao = this.repositorioSpcSerasa.consultarImovelCobrancaSituacaoPorNegativador(imovel,
+					negativadorMovimentoReg.getNegativadorMovimento().getNegativador().getId(), negativadorMovimentoReg.getCliente().getId());
 
 			if (imoveisCobrancaSituacao != null) {
-
 				Iterator iter = imoveisCobrancaSituacao.iterator();
 
 				while (iter.hasNext()) {
 					ImovelCobrancaSituacao imovelCobrancaSituacao = (ImovelCobrancaSituacao) iter.next();
 					imovelCobrancaSituacao.setDataRetiradaCobranca(new Date());
 					imovelCobrancaSituacao.setUltimaAlteracao(new Date());
-
-					// ------------ REGISTRAR TRANSAÇÃO ----------------
-					// registradorOperacao.registrarOperacao(imovelCobrancaSituacao);
-					// ------------ REGISTRAR TRANSAÇÃO ----------------
-
 					RepositorioUtilHBM.getInstancia().atualizar(imovelCobrancaSituacao);
 				}
-
 			}
-
-			// CRC3323 - comentado por Vivianne Sousa - analista:Fatima Sampaio
-			// - 10/05/2010
-			// 8.6
-			// if(imovel.getCobrancaSituacao()!= null){
-			//
-			// if (
-			// imovel.getCobrancaSituacao().getId().equals(CobrancaSituacao.EM_ANALISE_PARA_NEGATIVACAO)||
-			// imovel.getCobrancaSituacao().getId().equals(CobrancaSituacao.CARTA_ENVIADA_AO_SPC)
-			// ||
-			// imovel.getCobrancaSituacao().getId().equals(CobrancaSituacao.CARTA_ENVIADA_A_SERASA)
-			// ||
-			// imovel.getCobrancaSituacao().getId().equals(CobrancaSituacao.NEGATIVADO_AUTOMATICAMENTE_NO_SPC)
-			// ||
-			// imovel.getCobrancaSituacao().getId().equals(CobrancaSituacao.NEGATIVADO_AUTOMATICAMENTE_NA_SERASA)
-			// ) {
-			//
-			// fni = new FiltroNegativacaoImoveis();
-			// fni.adicionarParametro(new
-			// ParametroSimples(FiltroNegativacaoImoveis.IMOVEL_ID,
-			// imovel.getId()));
-			// fni.adicionarParametro(new
-			// ParametroSimplesDiferenteDe(FiltroNegativacaoImoveis.NEGATIVACAO_COMANDO_ID,
-			// negativadorMovimentoReg.getNegativadorMovimento().getNegativacaoComando().getId()));
-			// fni.adicionarParametro(new
-			// ParametroSimples(FiltroNegativacaoImoveis.INDICADOR_EXCLUIDO,
-			// "2"));
-			//
-			// //8.6.1
-			// collNegativacaoImoveis =
-			// RepositorioUtilHBM.getInstancia().pesquisar(fni,
-			// NegativacaoImoveis.class.getName());
-			// if (collNegativacaoImoveis.isEmpty()) {
-			// imovel.setCobrancaSituacao(null);
-			// imovel.setUltimaAlteracao(new Date());
-			// // ------------ REGISTRAR TRANSAÇÃO ----------------
-			// registradorOperacao.registrarOperacao(imovel);
-			// // ------------ REGISTRAR TRANSAÇÃO ----------------
-			// RepositorioUtilHBM.getInstancia().atualizar(imovel);
-			// }
-			// }
-			//
-			//
-			// }
-
-			// -----------------------------------------------------------------------------------------------------------------
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
-
 	}
 
 	/**
@@ -4171,369 +3983,325 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 	 * 
 	 */
 	public Collection gerarMovimentoExclusaoNegativacao(Integer[] idNegativador) throws ControladorException {
-
-		System.out.println(".................entrou em gerarMovimentoExclusaoNegativacao...............");
-
-		// todas as movimentacoes
-		Collection coll = new ArrayList();
-
-		try {
-			// consultar as negativacoes para excluir
-			Collection collNegativadoresParaExclusao = repositorioSpcSerasa
-					.consultarNegativacoesParaExclusaoMovimento(idNegativador);
-
-			// gerando um map dos navegadores com os NegativadorMovimentoReg
-			Map mapNegativadorCOMNegativadorMovimentoReg = new HashMap();
-			Iterator it = collNegativadoresParaExclusao.iterator();
-			while (it.hasNext()) {
-				NegativadorMovimentoReg negativadorMovimentoReg = (NegativadorMovimentoReg) it.next();
-
-				if (mapNegativadorCOMNegativadorMovimentoReg.containsKey(negativadorMovimentoReg
-						.getNegativadorMovimento().getNegativador())) {
-					ArrayList al = (ArrayList) mapNegativadorCOMNegativadorMovimentoReg.get(negativadorMovimentoReg
-							.getNegativadorMovimento().getNegativador());
-					al.add(negativadorMovimentoReg);
-				} else {
-					ArrayList al = new ArrayList();
-					al.add(negativadorMovimentoReg);
-					mapNegativadorCOMNegativadorMovimentoReg.put(negativadorMovimentoReg.getNegativadorMovimento()
-							.getNegativador(), al);
-				}
-			}
-
-			// 7.0
-			it = mapNegativadorCOMNegativadorMovimentoReg.keySet().iterator();
-			// Map mapNegativadorNegativadorMovimento = new HashMap();
-			while (it.hasNext()) {
-				Negativador n = (Negativador) it.next();
-
-				Collection collv = (ArrayList) mapNegativadorCOMNegativadorMovimentoReg.get(n);
-				NegativadorContrato nc = repositorioSpcSerasa.consultarNegativadorContratoVigente(n.getId());
-
-				// NegativacaoComando ncom = new NegativacaoComando();
-				// ncom.setId(1);
-
-				NegativadorMovimento nm = new NegativadorMovimento();
-				nm.setCodigoMovimento(new Short("2"));
-				nm.setDataEnvio(new Date());
-				nm.setDataProcessamentoEnvio(new Date());
-				nm.setNumeroSequencialEnvio(nc.getNumeroSequencialEnvio() + 1);
-				nm.setUltimaAlteracao(new Date());
-				nm.setNegativador(n);
-				// nm.setNegativacaoComando(ncom);
-				//
-				// OperacaoEfetuada operacaoEfetuada, Usuario usuarioLogado,
-				// RegistradorOperacao registradorOperacao
-
-				RepositorioUtilHBM.getInstancia().inserir(nm);
-
-				// Object[0] Integer numeroRegistro = new Integer(0);
-				// Object[1] BigDecimal valor = new BigDecimal(0);
-				// Object[2] Integer quantidadeExclusao = new Integer(0);
-
-				Object[] header = this.gerarRegistroTipoHeader(new Integer(0), new BigDecimal(0), new Integer(0), n,
-						nm, nc, collv);
-				header = this.gerarRegistroTipoDetalhe((Integer) header[0], (BigDecimal) header[1],
-						(Integer) header[2], n, nm, nc, collv);
-				header = this.gerarRegistroTipoTrailler((Integer) header[0], (BigDecimal) header[1],
-						(Integer) header[2], n, nm, nc, collv);
-
-				// NegativadorMovimentoGeradosExclusaoHelper helper = new
-				// NegativadorMovimentoGeradosExclusaoHelper();
-				// helper.setDescricaoNegativador(n.getCliente().getNome());
-				// helper.setDataProcessamento(nm.getUltimaAlteracao());
-				// helper.setHoraProcessamento(nm.getUltimaAlteracao());
-				// helper.setNsa(nm.getNumeroSequencialEnvio() + "");
-				// helper.setQuantidadeRegistros((Integer)header[0] + "");
-				// helper.setValorDebito( gcom.util.Util.formataBigDecimal(
-				// (BigDecimal)header[1],2,true) + "");
-				// coll.add(helper);
-
-				this.gerarArquivo(nm.getId(), false, nm.getNegativador().getId());
-
-				Integer numeroExclusoesJaEnviadas = nc.getNumeroExclusoesEnviadas();
-				if (numeroExclusoesJaEnviadas == null) {
-					numeroExclusoesJaEnviadas = 0;
-				}
-
-				nc.setNumeroSequencialEnvio(nm.getNumeroSequencialEnvio());
-				nc.setNumeroExclusoesEnviadas(numeroExclusoesJaEnviadas + ((Integer) header[2]));
-				nc.setUltimaAlteracao(new Date());
-
-				RepositorioUtilHBM.getInstancia().atualizar(nc);
-
-				nm.setNumeroRegistrosEnvio((Integer) header[0]);
-				nm.setValorTotalEnvio((BigDecimal) header[1]);
-				nm.setUltimaAlteracao(new Date());
-
-				RepositorioUtilHBM.getInstancia().atualizar(nm);
-
-				// coll.add(nm);
-			}
-
-		} catch (ErroRepositorioException e) {
-			throw new ControladorException("erro.sistema", e);
-		}
-
-		return coll;
-	}
-
-	/**
-	 * Método consuta os Negativadores que tenham movimento de Exclusão BATCH
-	 * 
-	 * [UC0673] - Gerar Movimento da Exclusão de Negativação [SB0001] - Gerar
-	 * Movimento da Exclusão de Negativação
-	 * 
-	 * @author Yara T. Souza
-	 * @date 26/12/2007
-	 * 
-	 */
-	public Collection gerarMovimentoExclusaoNegativacao(Integer idFuncionalidadeIniciada, Integer[] idNegativador)
-			throws ControladorException {
-
-		// -------------------------
-		//
-		// Registrar o início do processamento da Unidade de
-		// Processamento
-		// do Batch
-		//
-		// -------------------------
-		int idUnidadeIniciada = 0;
-		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
-				UnidadeProcessamento.FUNCIONALIDADE, 0);
-
-		// todas as movimentacoes
-		Collection coll = new ArrayList();
+		
+		logger.info("GERANDO Movimento de Exclusão de Negativação...");
+		
+		Collection colecaoMovimento = new ArrayList();
 
 		try {
-			// adicionado por Vivianne Sousa - 11/02/2010
-			// Desfaz movimento de inclusão incompleto, no caso de reiniciar
-			// batch.
 			this.desfazerMovimentoExclusaoIncompleto();
 
-			// consultar as negativacoes para excluir
-			Collection collNegativadoresParaExclusao = repositorioSpcSerasa
-					.consultarNegativacoesParaExclusaoMovimento(idNegativador);
+			Map mapNegativadorMovimentoRegistro = this.gerarMapNegativadorMovimentoRegParaExclusao(idNegativador);
 
-			// gerando um map dos navegadores com os NegativadorMovimentoReg
-			Map mapNegativadorCOMNegativadorMovimentoReg = new HashMap();
-			Iterator it = collNegativadoresParaExclusao.iterator();
-			while (it.hasNext()) {
-				NegativadorMovimentoReg negativadorMovimentoReg = (NegativadorMovimentoReg) it.next();
+			Iterator iteratorColecaoNegativadoresParaExclusao = mapNegativadorMovimentoRegistro.keySet().iterator();
 
-				if (mapNegativadorCOMNegativadorMovimentoReg.containsKey(negativadorMovimentoReg
-						.getNegativadorMovimento().getNegativador())) {
-					ArrayList al = (ArrayList) mapNegativadorCOMNegativadorMovimentoReg.get(negativadorMovimentoReg
-							.getNegativadorMovimento().getNegativador());
-					al.add(negativadorMovimentoReg);
-				} else {
-					ArrayList al = new ArrayList();
-					al.add(negativadorMovimentoReg);
-					mapNegativadorCOMNegativadorMovimentoReg.put(negativadorMovimentoReg.getNegativadorMovimento()
-							.getNegativador(), al);
+			while (iteratorColecaoNegativadoresParaExclusao.hasNext()) {
+				Negativador negativador = (Negativador) iteratorColecaoNegativadoresParaExclusao.next();
+				NegativadorContrato negativadorContrato = repositorioSpcSerasa.consultarNegativadorContratoVigente(negativador.getId());
+				NegativadorMovimento negativadorMovimento = this.inserirNegativadorMovimentoExclusao(negativador, negativadorContrato);
+
+				Collection colecaoNegativadores = (ArrayList) mapNegativadorMovimentoRegistro.get(negativador);
+				
+				this.gerarRegistroTipoHeaderExclusao(negativador, negativadorMovimento, negativadorContrato);
+				Object[] registro = this.gerarRegistroTipoDetalheExclusao(negativador,
+						negativadorMovimento, negativadorContrato, colecaoNegativadores);
+				registro = this.gerarRegistroTipoTraillerExclusao((Integer) registro[0], (BigDecimal) registro[1],
+						(Integer) registro[2], negativador, negativadorMovimento, negativadorContrato, colecaoNegativadores);
+
+				this.gerarArquivoNegativacao(negativadorMovimento, false);
+
+				Integer numeroRegistrosEnvio = null;
+				colecaoMovimento = repositorioSpcSerasa.consultarNegativadorMovimentoRegistroParaGerarArquivo(negativadorMovimento.getId(), "T");
+
+				if (colecaoMovimento != null && !colecaoMovimento.isEmpty()) {
+					if (negativador.getId().equals(Negativador.NEGATIVADOR_SPC)) {
+						NegativadorMovimentoReg movimentoRegistro = (NegativadorMovimentoReg) colecaoMovimento.iterator().next();
+						numeroRegistrosEnvio = movimentoRegistro.getNumeroRegistro();
+					} else if (negativador.getId().equals(Negativador.NEGATIVADOR_SERASA)) {
+						numeroRegistrosEnvio = (Integer) registro[0];
+					}
 				}
-			}
 
-			// 7.0
-			it = mapNegativadorCOMNegativadorMovimentoReg.keySet().iterator();
-
-			while (it.hasNext()) {
-				Negativador n = (Negativador) it.next();
-
-				Collection collv = (ArrayList) mapNegativadorCOMNegativadorMovimentoReg.get(n);
-				NegativadorContrato nc = repositorioSpcSerasa.consultarNegativadorContratoVigente(n.getId());
-
-				NegativadorMovimento nm = new NegativadorMovimento();
-				nm.setCodigoMovimento(new Short("2"));
-				nm.setDataEnvio(new Date());
-				nm.setDataProcessamentoEnvio(new Date());
-				nm.setNumeroSequencialEnvio(nc.getNumeroSequencialEnvio() + 1);
-				nm.setUltimaAlteracao(new Date());
-				nm.setNegativador(n);
-
-				this.getControladorBatch().inserirObjetoParaBatch(nm);
-
-				Object[] header = this.gerarRegistroTipoHeader(new Integer(0), new BigDecimal(0), new Integer(0), n,
-						nm, nc, collv);
-				header = this.gerarRegistroTipoDetalhe((Integer) header[0], (BigDecimal) header[1],
-						(Integer) header[2], n, nm, nc, collv);
-				header = this.gerarRegistroTipoTrailler((Integer) header[0], (BigDecimal) header[1],
-						(Integer) header[2], n, nm, nc, collv);
-
-				this.gerarArquivo(nm.getId(), false, nm.getNegativador().getId());
-
-				Integer numeroExclusoesJaEnviadas = nc.getNumeroExclusoesEnviadas();
+				Integer numeroExclusoesJaEnviadas = negativadorContrato.getNumeroExclusoesEnviadas();
 				if (numeroExclusoesJaEnviadas == null) {
 					numeroExclusoesJaEnviadas = 0;
 				}
 
-				nc.setNumeroSequencialEnvio(nm.getNumeroSequencialEnvio());
-				nc.setNumeroExclusoesEnviadas(numeroExclusoesJaEnviadas + ((Integer) header[2]));
-				nc.setUltimaAlteracao(new Date());
+				negativadorContrato.setNumeroSequencialEnvio(negativadorMovimento.getNumeroSequencialEnvio());
+				negativadorContrato.setNumeroExclusoesEnviadas(numeroExclusoesJaEnviadas + ((Integer) registro[2]));
+				negativadorContrato.setUltimaAlteracao(new Date());
+				this.getControladorBatch().atualizarObjetoParaBatch(negativadorContrato);
 
-				this.getControladorBatch().atualizarObjetoParaBatch(nc);
-
-				nm.setNumeroRegistrosEnvio((Integer) header[0]);
-				nm.setValorTotalEnvio((BigDecimal) header[1]);
-				nm.setUltimaAlteracao(new Date());
-
-				this.getControladorBatch().atualizarObjetoParaBatch(nm);
-
+				negativadorMovimento.setNumeroRegistrosEnvio(numeroRegistrosEnvio);
+				negativadorMovimento.setValorTotalEnvio((BigDecimal) registro[1]);
+				negativadorMovimento.setUltimaAlteracao(new Date());
+				this.getControladorBatch().atualizarObjetoParaBatch(negativadorMovimento);
 			}
 
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
-
 		} catch (Exception ex) {
-			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
-			// sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
 
-		return coll;
+		return colecaoMovimento;
 	}
 
 	/**
-	 * Método que gera o Header a ser enviado [UC0673] - Gerar Movimento de
-	 * Exclusao de Negativacao [SB0004] - Gerar Registro Tipo Header
-	 *
-	 * @author Thiago Toscano
-	 * @date 26/12/2007
-	 *
-	 * @param n
-	 *            - negativador
-	 * @param nm
-	 *            -negativaromovimento
-	 * @param nc
-	 *            - negativadorContrato
-	 * @param collNegativadorMovimentoReg
-	 * @return Object[] Object[0] Integer numeroRegistro = new Integer(0);
-	 *         Object[1] BigDecimal valor = new BigDecimal(0); Object[2] Integer
-	 *         quantidadeExclusao = new Integer(0);
-	 * @throws ErroRepositorioException
-	 * 
+	 * [UC0673] - Gerar Movimento da Exclusão de Negativação
+	 * [SB0001] - Gerar Movimento da Exclusão de Negativação
 	 */
-	private Object[] gerarRegistroTipoHeader(Integer numeroRegistro, BigDecimal valor, Integer quantidadeExclusao,
-			Negativador n, NegativadorMovimento nm, NegativadorContrato nc, Collection collNegativadorMovimentoReg)
-			throws ControladorException, ErroRepositorioException {
-		Object[] retorno = new Object[3];
-		retorno[0] = numeroRegistro + 1;
-		retorno[1] = valor;
-		retorno[2] = quantidadeExclusao;
+	public Collection gerarMovimentoExclusaoNegativacao(Integer idFuncionalidadeIniciada,
+			Integer[] idNegativador) throws ControladorException {
+		
+		logger.info("Movimento de Exclusão de Negativação EM PROCESSAMENTO...");
+		
+		int idUnidadeIniciada = 0;
+		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(
+				idFuncionalidadeIniciada, UnidadeProcessamento.FUNCIONALIDADE, 0);
 
-		char[] registro = new char[340];
+		Collection colecaoMovimento = new ArrayList();
+
+		try {
+			this.desfazerMovimentoExclusaoIncompleto();
+
+			Map mapNegativadorMovimentoRegistro = this.gerarMapNegativadorMovimentoRegParaExclusao(idNegativador);
+
+			Iterator iteratorColecaoNegativadoresParaExclusao = mapNegativadorMovimentoRegistro.keySet().iterator();
+
+			while (iteratorColecaoNegativadoresParaExclusao.hasNext()) {
+				Negativador negativador = (Negativador) iteratorColecaoNegativadoresParaExclusao.next();
+				NegativadorContrato negativadorContrato = repositorioSpcSerasa.consultarNegativadorContratoVigente(negativador.getId());
+				NegativadorMovimento negativadorMovimento = this.inserirNegativadorMovimentoExclusao(negativador, negativadorContrato);
+
+				Collection colecaoNegativadores = (ArrayList) mapNegativadorMovimentoRegistro.get(negativador);
+				
+				this.gerarRegistroTipoHeaderExclusao(negativador, negativadorMovimento, negativadorContrato);
+				Object[] registro = this.gerarRegistroTipoDetalheExclusao(negativador,
+						negativadorMovimento, negativadorContrato, colecaoNegativadores);
+				registro = this.gerarRegistroTipoTraillerExclusao((Integer) registro[0], (BigDecimal) registro[1],
+						(Integer) registro[2], negativador, negativadorMovimento, negativadorContrato, colecaoNegativadores);
+
+				this.gerarArquivoNegativacao(negativadorMovimento, false);
+
+				Integer numeroRegistrosEnvio = null;
+				colecaoMovimento = repositorioSpcSerasa.consultarNegativadorMovimentoRegistroParaGerarArquivo(negativadorMovimento.getId(), "T");
+
+				if (colecaoMovimento != null && !colecaoMovimento.isEmpty()) {
+					if (negativador.getId().equals(Negativador.NEGATIVADOR_SPC)) {
+						NegativadorMovimentoReg movimentoRegistro = (NegativadorMovimentoReg) colecaoMovimento.iterator().next();
+						numeroRegistrosEnvio = movimentoRegistro.getNumeroRegistro();
+					} else if (negativador.getId().equals(Negativador.NEGATIVADOR_SERASA)) {
+						numeroRegistrosEnvio = (Integer) registro[0];
+					}
+				}
+
+				Integer numeroExclusoesJaEnviadas = negativadorContrato.getNumeroExclusoesEnviadas();
+				if (numeroExclusoesJaEnviadas == null) {
+					numeroExclusoesJaEnviadas = 0;
+				}
+
+				negativadorContrato.setNumeroSequencialEnvio(negativadorMovimento.getNumeroSequencialEnvio());
+				negativadorContrato.setNumeroExclusoesEnviadas(numeroExclusoesJaEnviadas + ((Integer) registro[2]));
+				negativadorContrato.setUltimaAlteracao(new Date());
+				this.getControladorBatch().atualizarObjetoParaBatch(negativadorContrato);
+
+				negativadorMovimento.setNumeroRegistrosEnvio(numeroRegistrosEnvio);
+				negativadorMovimento.setValorTotalEnvio((BigDecimal) registro[1]);
+				negativadorMovimento.setUltimaAlteracao(new Date());
+				this.getControladorBatch().atualizarObjetoParaBatch(negativadorMovimento);
+			}
+
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
+		} catch (Exception ex) {
+			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
+			throw new ControladorException("erro.sistema", ex);
+		}
+
+		return colecaoMovimento;
+	}
+
+	private NegativadorMovimento inserirNegativadorMovimentoExclusao(Negativador negativador, NegativadorContrato negativadorContrato)
+			throws ControladorException {
+		NegativadorMovimento negativadorMovimento = new NegativadorMovimento();
+		negativadorMovimento.setCodigoMovimento(NegativadorMovimento.CODIGO_MOVIMENTO_EXCLUSAO);
+		negativadorMovimento.setDataEnvio(new Date());
+		negativadorMovimento.setDataProcessamentoEnvio(new Date());
+		negativadorMovimento.setNumeroSequencialEnvio(negativadorContrato.getNumeroSequencialEnvio() + 1);
+		negativadorMovimento.setUltimaAlteracao(new Date());
+		negativadorMovimento.setNegativador(negativador);
+
+		this.getControladorBatch().inserirObjetoParaBatch(negativadorMovimento);
+		return negativadorMovimento;
+	}
+
+	private Map gerarMapNegativadorMovimentoRegParaExclusao(Integer[] idNegativador) throws ErroRepositorioException {
+		Map mapNegativadorMovimentoRegistro = new HashMap();
+
+		Collection colecaoNegativadoresParaExclusao = repositorioSpcSerasa.consultarNegativacoesParaExclusaoMovimento(idNegativador);
+		Iterator iteratorColecaoNegativadoresParaExclusao = colecaoNegativadoresParaExclusao.iterator();
+		while (iteratorColecaoNegativadoresParaExclusao.hasNext()) {
+			NegativadorMovimentoReg negativadorMovimentoReg = (NegativadorMovimentoReg) iteratorColecaoNegativadoresParaExclusao.next();
+
+			if (mapNegativadorMovimentoRegistro.containsKey(negativadorMovimentoReg.getNegativadorMovimento().getNegativador())) {
+				ArrayList listaNegativadorMovimentoReg = (ArrayList) mapNegativadorMovimentoRegistro.get(negativadorMovimentoReg.getNegativadorMovimento().getNegativador());
+				listaNegativadorMovimentoReg.add(negativadorMovimentoReg);
+			} else {
+				ArrayList listaNegativadorMovimentoReg = new ArrayList();
+				listaNegativadorMovimentoReg.add(negativadorMovimentoReg);
+				mapNegativadorMovimentoRegistro.put(negativadorMovimentoReg.getNegativadorMovimento().getNegativador(),
+						listaNegativadorMovimentoReg);
+			}
+		}
+		
+		return mapNegativadorMovimentoRegistro;
+	}
+
+	/**
+	 * Método que gera o Header a ser enviado
+	 * [UC0673] - Gerar Movimento de Exclusao de Negativacao
+	 * [SB0004] - Gerar Registro Tipo Header
+	 */
+	private void gerarRegistroTipoHeaderExclusao(Negativador negativador, NegativadorMovimento negativadorMovimento,
+			NegativadorContrato negativadorContrato) throws ControladorException, ErroRepositorioException {
+		
+		char[] registro = null;
+		if (negativador.getId().equals(Negativador.NEGATIVADOR_SPC)) {
+			registro = this.gerarRegistroTipoHeaderExclusaoSPC(negativadorContrato);
+		} else if (negativador.getId().equals(Negativador.NEGATIVADOR_SERASA)) {
+			registro = gerarRegistroTipoHeaderExclusaoSERASA(negativadorContrato);
+
+		}
+
+		this.inserirNegativadorMovimentoRegistroExclusao(negativador, negativadorMovimento, registro);
+	}
+
+	private void inserirNegativadorMovimentoRegistroExclusao(Negativador negativador,
+			NegativadorMovimento negativadorMovimento, char[] registro) throws ErroRepositorioException {
+		
+		NegativadorMovimentoReg negativadorMovimentoRegistro = new NegativadorMovimentoReg();
+		negativadorMovimentoRegistro.setNegativadorMovimento(negativadorMovimento);
+		
+		FiltroNegativadorRegistroTipo filtroNegativadorRegistroTipo = new FiltroNegativadorRegistroTipo();
+		filtroNegativadorRegistroTipo.adicionarParametro(new ParametroSimples(FiltroNegativadorRegistroTipo.NEGATIVADOR_ID, negativador.getId()));
+		filtroNegativadorRegistroTipo.adicionarParametro(new ParametroSimples(FiltroNegativadorRegistroTipo.CODIGO_REGISTRO,
+				NegativadorRegistroTipo.TIPO_HEADER));
+		
+		NegativadorRegistroTipo negativadorRegistroTipo = (NegativadorRegistroTipo) Util.retonarObjetoDeColecao(
+				RepositorioUtilHBM.getInstancia().pesquisar(filtroNegativadorRegistroTipo, NegativadorRegistroTipo.class.getName()));
+		negativadorMovimentoRegistro.setNegativadorRegistroTipo(negativadorRegistroTipo);
+		
+		negativadorMovimentoRegistro.setConteudoRegistro(new String(registro));
+		negativadorMovimentoRegistro.setIndicadorSituacaoDefinitiva(new Short((short) 1));
+		negativadorMovimentoRegistro.setNumeroRegistro(new Integer(1));
+		negativadorMovimentoRegistro.setUltimaAlteracao(new Date());
+		negativadorMovimentoRegistro.setIndicadorItemAtualizado(ConstantesSistema.NAO_ACEITO);
+		RepositorioUtilHBM.getInstancia().inserir(negativadorMovimentoRegistro);
+	}
+
+	private char[] gerarRegistroTipoHeaderExclusaoSERASA(NegativadorContrato negativadorContrato) throws ControladorException {
+		char[] registro;
+		registro = new char[600];
 		for (int i = 0; i < registro.length; i++) {
 			registro[i] = ' ';
 		}
 
-		String ddmmaaaa = Util.formatarDataSemBarraDDMMAAAA(new Date());
-		String aaaammdd = Util.formatarDataSemBarra(new Date());
-
-		if (n.getId().equals(Negativador.NEGATIVADOR_SPC)) {
-			String numeroContrato = (nc.getNumeroSequencialEnvio() + 1) + "";
-			if (numeroContrato.length() < 8) {
-				while (numeroContrato.length() != 8) {
-					numeroContrato = "0" + numeroContrato;
-				}
+		FiltroSistemaParametro filtroSistemaParametro = new FiltroSistemaParametro();
+		filtroSistemaParametro.adicionarCaminhoParaCarregamentoEntidade("clienteResponsavelNegativacao");
+		Collection pesquisaSistemaParametro = getControladorUtil().pesquisar(filtroSistemaParametro, SistemaParametro.class.getName());
+		SistemaParametro sistemaParametro = (SistemaParametro) Util.retonarObjetoDeColecao(pesquisaSistemaParametro);
+		
+		// H.01 - Código do Registro Header = 0
+		colocarConteudo("0", 1, registro);
+		
+		// H.02 - CNPJ da Instituição Informante (7 primeiros dígitos)
+		String cnpjEmpresa = sistemaParametro.getCnpjEmpresa();
+		cnpjEmpresa = cnpjEmpresa.substring(0, 8);
+		colocarConteudo(Util.adicionarZerosEsquedaNumero(9, cnpjEmpresa), 2, registro);
+		
+		// H.03 - Data do Movimento (Geração do Arquivo)
+		colocarConteudo(Util.formatarDataSemBarra(new Date()), 11, registro);
+		
+		// H.04 - DDD do Telefone da Instituição Informante
+		colocarConteudo(Util.completaStringComZeroAEsquerda(sistemaParametro.getDddTelefone(), 4), 19, registro);
+		
+		// H.05 - Telefone da Instituição Informante
+		colocarConteudo(sistemaParametro.getNumeroTelefone(), 23, registro);
+		
+		// H.06 - Ramal da Instituição Informante
+		colocarConteudo(sistemaParametro.getNumeroRamal(), 31, registro);
+		
+		// H.07 - Nome do Contato da Instituição Informante
+		colocarConteudo(sistemaParametro.getClienteResponsavelNegativacao().getNome(), 35, registro);
+		
+		// H.08 - Identificação do arquivo fixo
+		colocarConteudo("SERASA-CONVEM04", 105, registro);
+		
+		// H.09 - Número da remessa do arquivo
+		String numeroContrato = (negativadorContrato.getNumeroSequencialEnvio() + 1) + "";
+		if (numeroContrato.length() < 6) {
+			while (numeroContrato.length() != 6) {
+				numeroContrato = "0" + numeroContrato;
 			}
+		}
+		colocarConteudo(numeroContrato, 120, registro);
+		
+		// H.010 - Código de Envio do Arquivo (E - Entrada / R - Retorno) 
+		colocarConteudo("E", 126, registro);
+		
+		// H.11 - Diferencial de remessa
+		// H.12 - Deixar em Branco
+		// H.13 - LOGON
+		// H.14 - Deixar em branco
+		// H.15 - Código de Erros
+		// H.16 - Sequência do Registro
+		colocarConteudo("0000001", 594, registro);
+		
+		return registro;
+	}
 
-			String tamanho271 = "";
-			while (tamanho271.length() != 271) {
-				tamanho271 = " " + tamanho271;
+	private char[] gerarRegistroTipoHeaderExclusaoSPC(NegativadorContrato negativadorContrato) {
+		char[] registro = new char[340];
+		for (int i = 0; i < registro.length; i++) {
+			registro[i] = ' ';
+		}
+		
+		String numeroContrato = (negativadorContrato.getNumeroSequencialEnvio() + 1) + "";
+		if (numeroContrato.length() < 8) {
+			while (numeroContrato.length() != 8) {
+				numeroContrato = "0" + numeroContrato;
 			}
-
-			// h.01
-			colocarConteudo("00", 1, registro);
-			// h.02
-			colocarConteudo("REMESSA", 3, registro);
-			// h.03
-			colocarConteudo(ddmmaaaa, 10, registro);
-			// h.04
-			colocarConteudo(numeroContrato, 18, registro);
-			// h.05
-			colocarConteudo("01101", 26, registro);
-			// h.06
-			colocarConteudo("00102779", 31, registro);
-			// h.07
-			colocarConteudo(aaaammdd, 39, registro);
-			// h.08
-			colocarConteudo(tamanho271, 47, registro);
-			// h.09
-			colocarConteudo("SPC  ", 318, registro);
-			// h.10
-			colocarConteudo("07", 323, registro);
-			// h.011
-			colocarConteudo("          ", 325, registro);
-			// h.012
-			colocarConteudo("000001", 335, registro);
-
-		} else if (n.getId().equals(Negativador.NEGATIVADOR_SERASA)) {
-			registro = new char[600];
-			for (int i = 0; i < registro.length; i++) {
-				registro[i] = ' ';
-			}
-
-			String numeroContrato = (nc.getNumeroSequencialEnvio() + 1) + "";
-			if (numeroContrato.length() < 6) {
-				while (numeroContrato.length() != 6) {
-					numeroContrato = "0" + numeroContrato;
-				}
-			}
-
-			// h.01
-			colocarConteudo("0", 1, registro);
-			// h.02 PARAM_NNCNPJEMPRESA(Sistema Parametro)
-			SistemaParametro sistemaParametro = this.getControladorUtil().pesquisarParametrosDoSistema();
-			String cnpjEmpresa = sistemaParametro.getCnpjEmpresa();
-			cnpjEmpresa = cnpjEmpresa.substring(0, 8);
-			// registroHeader.append(Util.adicionarZerosEsquedaNumero(9,
-			// cnpjEmpresa));
-			colocarConteudo(Util.adicionarZerosEsquedaNumero(9, cnpjEmpresa), 2, registro);
-			// h.03
-			colocarConteudo(aaaammdd, 11, registro);
-			// h.04
-			colocarConteudo("0081", 19, registro);
-			// h.05
-			colocarConteudo("34129707", 23, registro);
-			// h.06
-			colocarConteudo("0000", 31, registro);
-			// h.07
-			colocarConteudo("FATIMA SAMPAIO", 35, registro);
-			// h.08
-			colocarConteudo("SERASA-CONVEM04", 105, registro);
-			// h.09
-			colocarConteudo(numeroContrato, 120, registro);
-			// h.10
-			colocarConteudo("E", 126, registro);
-			// h.11
-			// colocarConteudo("    ", 127, registro);
-			// h.12
-			// colocarConteudo("    ", 127, registro);
-			// h.13
-			// colocarConteudo("    ", 127, registro);
-			// h.14
-			colocarConteudo("0000001", 594, registro);
-
 		}
 
-		FiltroNegativadorRegistroTipo fnrt = new FiltroNegativadorRegistroTipo();
-		fnrt.adicionarParametro(new ParametroSimples(FiltroNegativadorRegistroTipo.NEGATIVADOR_ID, n.getId()));
-		fnrt.adicionarParametro(new ParametroSimples(FiltroNegativadorRegistroTipo.CODIGO_REGISTRO,
-				NegativadorRegistroTipo.TIPO_HEADER));
+		String tamanho271 = "";
+		while (tamanho271.length() != 271) {
+			tamanho271 = " " + tamanho271;
+		}
 
-		NegativadorRegistroTipo nrt = (NegativadorRegistroTipo) Util.retonarObjetoDeColecao(RepositorioUtilHBM
-				.getInstancia().pesquisar(fnrt, NegativadorRegistroTipo.class.getName()));
-
-		NegativadorMovimentoReg nmr = new NegativadorMovimentoReg();
-		nmr.setNegativadorMovimento(nm);
-		nmr.setNegativadorRegistroTipo(nrt);
-		nmr.setConteudoRegistro(new String(registro));
-		nmr.setIndicadorSituacaoDefinitiva(new Short((short) 1));
-		nmr.setNumeroRegistro(new Integer(1));
-		nmr.setUltimaAlteracao(new Date());
-		nmr.setIndicadorItemAtualizado(ConstantesSistema.NAO_ACEITO);
-		RepositorioUtilHBM.getInstancia().inserir(nmr);
-
-		return retorno;
+		// h.01
+		colocarConteudo("00", 1, registro);
+		// h.02
+		colocarConteudo("REMESSA", 3, registro);
+		// h.03
+		colocarConteudo(Util.formatarDataSemBarraDDMMAAAA(new Date()), 10, registro);
+		// h.04
+		colocarConteudo(numeroContrato, 18, registro);
+		// h.05
+		colocarConteudo("01101", 26, registro);
+		// h.06
+		colocarConteudo("00102779", 31, registro);
+		// h.07
+		colocarConteudo(Util.formatarDataSemBarra(new Date()), 39, registro);
+		// h.08
+		colocarConteudo(tamanho271, 47, registro);
+		// h.09
+		colocarConteudo("SPC  ", 318, registro);
+		// h.10
+		colocarConteudo("07", 323, registro);
+		// h.011
+		colocarConteudo("          ", 325, registro);
+		// h.012
+		colocarConteudo("000001", 335, registro);
+		
+		return registro;
 	}
 
 	private String getConteudo(int posicaoInicial, int tamanho, char[] registro) {
@@ -4553,383 +4321,29 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 	}
 
 	/**
-	 * Método que gera o Detalhe a ser enviado [UC0673] - Gerar Movimento de
-	 * Exclusao de Negativacao [SB0005] - Gerar Registro Tipo Detalhe
-	 *
-	 * @author Thiago Toscano
-	 * @date 26/12/2007
-	 *
-	 * @param n
-	 *            - negativador
-	 * @param nm
-	 *            -negativaromovimento
-	 * @param nc
-	 *            - negativadorContrato
-	 * @param collNegativadorMovimentoReg
-	 *            Object[0] Integer numeroRegistro = new Integer(0); Object[1]
-	 *            BigDecimal valor = new BigDecimal(0); Object[2] Integer
-	 *            quantidadeExclusao = new Integer(0);
-	 * @throws ErroRepositorioException
-	 * 
+	 * Método que gera o Detalhe a ser enviado
+	 * [UC0673] - Gerar Movimento de Exclusao de Negativacao
+	 * [SB0005] - Gerar Registro Tipo Detalhe
 	 */
-	private Object[] gerarRegistroTipoDetalhe(Integer numeroRegistro, BigDecimal valor, Integer quantidadeExclusao,
-			Negativador n, NegativadorMovimento nm, NegativadorContrato nc, Collection collNegativadorMovimentoReg)
-			throws ControladorException {
+	private Object[] gerarRegistroTipoDetalheExclusao(Negativador negativador, NegativadorMovimento negativadorMovimento,
+			NegativadorContrato negativadorContrato, Collection colecaoNegativadorMovimento) throws ControladorException {
 
 		try {
-
 			Object[] retorno = new Object[3];
-			retorno[0] = numeroRegistro;
-			retorno[1] = valor;
-			retorno[2] = quantidadeExclusao;
+			retorno[0] = new Integer(0);
+			retorno[1] = new BigDecimal(0);
+			retorno[2] = new Integer(0);
 
-			if (collNegativadorMovimentoReg != null && !collNegativadorMovimentoReg.isEmpty()) {
-				Iterator it = collNegativadorMovimentoReg.iterator();
-				while (it.hasNext()) {
-					NegativadorMovimentoReg nmr = (NegativadorMovimentoReg) it.next();
+			if (colecaoNegativadorMovimento != null && !colecaoNegativadorMovimento.isEmpty()) {
+				Iterator iteratorColecaoNegativadorMovimento = colecaoNegativadorMovimento.iterator();
+				while (iteratorColecaoNegativadorMovimento.hasNext()) {
+					NegativadorMovimentoReg negativadorMovimentoReg = (NegativadorMovimentoReg) iteratorColecaoNegativadorMovimento.next();
 
-					if (n.getId().equals(Negativador.NEGATIVADOR_SPC)) {
-
-						retorno[0] = new Integer((Integer) retorno[0]) + 1;
-
-						// geradno 6 digitos do numero de registro
-						String sNumeroRegistro = ((Integer) retorno[0]).toString();
-						if (sNumeroRegistro.length() < 6) {
-							while (sNumeroRegistro.length() != 6) {
-								sNumeroRegistro = "0" + sNumeroRegistro;
-							}
-						}
-
-						if (nmr.getNegativadorRegistroTipo().getId().equals(NegativadorRegistroTipo.ID_SPC_DETALHE_SPC)) {
-
-							// Gerar Registro de Exclusão Tipo
-							// Detalhe-Consumidor
-							this.gerarNegMovRegDetalheConsumidor(nmr, nm, sNumeroRegistro);
-
-							retorno[0] = new Integer((Integer) retorno[0]) + 1;
-
-							// geradno 6 digitos do numero de registro
-							sNumeroRegistro = ((Integer) retorno[0]).toString();
-							if (sNumeroRegistro.length() < 6) {
-								while (sNumeroRegistro.length() != 6) {
-									sNumeroRegistro = "0" + sNumeroRegistro;
-								}
-							}
-
-							NegativadorExclusaoMotivo nem = obterNegativadorExclusaoMotivo(nmr, n);
-
-							char[] registro = new char[340];
-							for (int i = 0; i < registro.length; i++) {
-								registro[i] = ' ';
-							}
-
-							char[] registroInclusao = new char[340];
-							for (int i = 0; i < registroInclusao.length; i++) {
-								registroInclusao[i] = ' ';
-							}
-							if (nmr.getConteudoRegistro() != null) {
-								for (int i = 0; i < nmr.getConteudoRegistro().length(); i++) {
-									if (i <= registroInclusao.length) {
-										registroInclusao[i] = nmr.getConteudoRegistro().toCharArray()[i];
-									}
-								}
-							}
-
-							// h.01
-							if (registroInclusao != null && registroInclusao.length > 3)
-								colocarConteudo(getConteudo(1, 2, registroInclusao), 1, registro);
-							// h.02
-							if (registroInclusao != null && registroInclusao.length > 4)
-								colocarConteudo(getConteudo(3, 1, registroInclusao), 3, registro);
-							// h.03
-							if (registroInclusao != null && registroInclusao.length > 19)
-								colocarConteudo(getConteudo(4, 15, registroInclusao), 4, registro);
-							// h.04
-							colocarConteudo("E", 19, registro);
-							// h.05
-							if (registroInclusao != null && registroInclusao.length > 21)
-								colocarConteudo(getConteudo(20, 1, registroInclusao), 20, registro);
-							// h.06
-							if (registroInclusao != null && registroInclusao.length > 29)
-								colocarConteudo(getConteudo(21, 8, registroInclusao), 21, registro);
-							// h.07
-							if (registroInclusao != null && registroInclusao.length > 27)
-								colocarConteudo(getConteudo(29, 8, registroInclusao), 29, registro);
-							// h.08
-							if (registroInclusao != null && registroInclusao.length > 49)
-								colocarConteudo(getConteudo(37, 13, registroInclusao), 37, registro);
-							// h.09
-							if (registroInclusao != null && registroInclusao.length > 80)
-								colocarConteudo(getConteudo(50, 30, registroInclusao), 50, registro);
-							// h.10
-							if (registroInclusao != null && registroInclusao.length > 88)
-								colocarConteudo(getConteudo(80, 8, registroInclusao), 80, registro);
-							// h.11
-							if (registroInclusao != null && registroInclusao.length > 90)
-								colocarConteudo(getConteudo(88, 2, registroInclusao), 88, registro);
-
-							// h.12
-							String codigoExclusaoMotivo = "";
-							if (nem.getCodigoExclusaoMotivo() != null) {
-								codigoExclusaoMotivo = nem.getCodigoExclusaoMotivo() + "";
-							}
-
-							if (codigoExclusaoMotivo.length() < 3) {
-								while (codigoExclusaoMotivo.length() != 3) {
-									codigoExclusaoMotivo = "0" + codigoExclusaoMotivo;
-								}
-							}
-
-							colocarConteudo(codigoExclusaoMotivo, 90, registro);
-							// h.13
-							if (registroInclusao != null && registroInclusao.length > 2)
-								colocarConteudo(getConteudo(93, 232, registroInclusao), 325, registro);
-							// h.14
-							if (registroInclusao != null && registroInclusao.length > 335)
-								colocarConteudo(getConteudo(325, 10, registroInclusao), 325, registro);
-							// h.15
-							colocarConteudo(sNumeroRegistro, 335, registro);
-
-							NegativadorMovimentoReg nmrExclusao = new NegativadorMovimentoReg();
-							nmrExclusao.setNegativadorMovimento(nm);
-							nmrExclusao.setNegativadorMovimentoRegInclusao(nmr);
-							nmrExclusao.setNegativadorRegistroTipo(nmr.getNegativadorRegistroTipo());
-							nmrExclusao.setConteudoRegistro(new String(registro));
-							nmrExclusao.setUltimaAlteracao(new Date());
-							nmrExclusao.setUsuario(nmr.getUsuario());
-							nmrExclusao.setCodigoExclusaoTipo(nmr.getCodigoExclusaoTipo());
-							nmrExclusao.setValorDebito(nmr.getValorDebito());
-							nmrExclusao.setCobrancaDebitoSituacao(nmr.getCobrancaDebitoSituacao());
-							nmrExclusao.setDataSituacaoDebito(nmr.getDataSituacaoDebito());
-							nmrExclusao.setImovel(nmr.getImovel());
-							nmrExclusao.setLocalidade(nmr.getLocalidade());
-							nmrExclusao.setQuadra(nmr.getQuadra());
-							nmrExclusao.setCodigoSetorComercial(nmr.getCodigoSetorComercial());
-							nmrExclusao.setNumeroQuadra(nmr.getNumeroQuadra());
-							nmrExclusao.setImovelPerfil(nmr.getImovelPerfil());
-							nmrExclusao.setCliente(nmr.getCliente());
-							nmrExclusao.setCategoria(nmr.getCategoria());
-							nmrExclusao.setNumeroCpf(nmr.getNumeroCpf());
-							nmrExclusao.setNumeroCnpj(nmr.getNumeroCnpj());
-							nmrExclusao.setCpfTipo(nmr.getCpfTipo());
-							nmrExclusao.setIndicadorSituacaoDefinitiva(new Short((short) 1));
-							nmrExclusao.setNumeroRegistro(((Integer) retorno[0]));
-							nmrExclusao.setIndicadorItemAtualizado(ConstantesSistema.NAO_ACEITO);
-
-							// **************************************************************************
-							// RM3755
-							// Autor: Ivan Sergio
-							// Data: 11/01/2011
-							// **************************************************************************
-
-							nmrExclusao.setLigacaoAguaSituacao(nmr.getLigacaoAguaSituacao());
-							nmrExclusao.setLigacaoEsgotoSituacao(nmr.getLigacaoEsgotoSituacao());
-
-							// **************************************************************************
-
-							// Inserir nmrExclusao
-							getControladorUtil().inserir(nmrExclusao);
-							// inicio do 7
-
-							retorno[1] = new BigDecimal(((BigDecimal) retorno[1]).doubleValue()
-									+ nmr.getValorDebito().doubleValue());
-							retorno[2] = new Integer((Integer) retorno[2]) + 1;
-
-							atualizarNegativacao(n.getId(), nmr, nem);
-
-						}
-					} else if (n.getId().equals(Negativador.NEGATIVADOR_SERASA)) {
-
-						retorno[0] = new Integer((Integer) retorno[0]) + 1;
-
-						NegativadorExclusaoMotivo nem = obterNegativadorExclusaoMotivo(nmr, n);
-
-						char[] registro = new char[600];
-						for (int i = 0; i < registro.length; i++) {
-							registro[i] = ' ';
-						}
-
-						char[] registroInclusao = new char[600];
-						for (int i = 0; i < registroInclusao.length; i++) {
-							registroInclusao[i] = ' ';
-						}
-
-						if (nmr.getConteudoRegistro() != null) {
-							for (int i = 0; i < nmr.getConteudoRegistro().length(); i++) {
-								if (i <= registroInclusao.length) {
-									registroInclusao[i] = nmr.getConteudoRegistro().toCharArray()[i];
-								}
-							}
-						}
-
-						String codigoIdExclusaoMotivo = nem.getCodigoExclusaoMotivo() + "";
-						if (codigoIdExclusaoMotivo.length() < 2) {
-							while (codigoIdExclusaoMotivo.length() != 2) {
-								codigoIdExclusaoMotivo = "0" + codigoIdExclusaoMotivo;
-							}
-						}
-
-						String sNumeroRegistro = ((Integer) retorno[0]).toString();
-						if (sNumeroRegistro.length() < 7) {
-							while (sNumeroRegistro.length() != 7) {
-								sNumeroRegistro = "0" + sNumeroRegistro;
-							}
-						}
-						// D.01
-						colocarConteudo("1", 1, registro);
-						// D.02
-						colocarConteudo("E", 2, registro);
-						// D.03
-						// colocarConteudo(getConteudo(3, 1, registroInclusao),
-						// 3, registro);
-						// //D.04
-						// colocarConteudo(getConteudo(9, 1, registroInclusao),
-						// 9, registro);
-						// //D.05
-						// colocarConteudo(getConteudo(17, 1, registroInclusao),
-						// 17, registro);
-						// //D.06
-						// colocarConteudo(getConteudo(25, 1, registroInclusao),
-						// 25, registro);
-						// //D.07
-						// colocarConteudo(getConteudo(28, 1, registroInclusao),
-						// 28, registro);
-						// D.08
-						colocarConteudo(getConteudo(32, 1, registroInclusao), 32, registro);
-						// D.09
-						colocarConteudo(getConteudo(33, 1, registroInclusao), 33, registro);
-						// D.10
-						colocarConteudo(getConteudo(34, 15, registroInclusao), 34, registro);
-						// D.11
-						colocarConteudo(codigoIdExclusaoMotivo, 49, registro);
-						// D.12
-						colocarConteudo(getConteudo(51, 1, registroInclusao), 51, registro);
-						// D.13
-						colocarConteudo(getConteudo(52, 15, registroInclusao), 52, registro);
-						// D.14
-						colocarConteudo(getConteudo(67, 2, registroInclusao), 67, registro);
-						// //D.15
-						// colocarConteudo(getConteudo(69, 1, registroInclusao),
-						// 69, registro);
-						// //D.16
-						// colocarConteudo(getConteudo(70, 1, registroInclusao),
-						// 70, registro);
-						// //D.17
-						// colocarConteudo(getConteudo(71, 1, registroInclusao),
-						// 71, registro);
-						// //D.18
-						// colocarConteudo(getConteudo(86, 1, registroInclusao),
-						// 86, registro);
-						// //D.19
-						// colocarConteudo(getConteudo(88, 1, registroInclusao),
-						// 88, registro);
-						// //D.20
-						// colocarConteudo(getConteudo(89, 1, registroInclusao),
-						// 89, registro);
-						// //D.21
-						// colocarConteudo(getConteudo(104, 1,
-						// registroInclusao), 104, registro);
-						// D.22
-						colocarConteudo(getConteudo(106, 70, registroInclusao), 106, registro);
-						// D.23
-						colocarConteudo(getConteudo(176, 8, registroInclusao), 176, registro);
-						// D.24
-						// colocarConteudo(getConteudo(184, 1,
-						// registroInclusao), 184, registro);
-						// D.25
-						colocarConteudo(getConteudo(254, 70, registroInclusao), 254, registro);
-						// D.26
-						// colocarConteudo(getConteudo(324, 1,
-						// registroInclusao), 324, registro);
-						// //D.27
-						// colocarConteudo(getConteudo(369, 1,
-						// registroInclusao), 369, registro);
-						// //D.28
-						// colocarConteudo(getConteudo(389, 1,
-						// registroInclusao), 389, registro);
-						// //D.29
-						// colocarConteudo(getConteudo(414, 1,
-						// registroInclusao), 414, registro);
-						// //D.30
-						// colocarConteudo(getConteudo(416, 1,
-						// registroInclusao), 416, registro);
-						// //D.31
-						// colocarConteudo(getConteudo(424, 1,
-						// registroInclusao), 424, registro);
-						// D.32
-						colocarConteudo(getConteudo(439, 16, registroInclusao), 439, registro);
-						// D.33
-						// colocarConteudo(getConteudo(455, 1,
-						// registroInclusao), 455, registro);
-						// //D.34
-						// colocarConteudo(getConteudo(464, 1,
-						// registroInclusao), 464, registro);
-						// //D.35
-						// colocarConteudo(getConteudo(489, 1,
-						// registroInclusao), 489, registro);
-						// //D.36
-						// colocarConteudo(getConteudo(493, 1,
-						// registroInclusao), 493, registro);
-						// //D.37
-						// colocarConteudo(getConteudo(502, 1,
-						// registroInclusao), 502, registro);
-						// //D.38
-						// colocarConteudo(getConteudo(510, 1,
-						// registroInclusao), 510, registro);
-						// //D.39
-						// colocarConteudo(getConteudo(525, 1,
-						// registroInclusao), 525, registro);
-						// //D.40
-						// colocarConteudo(getConteudo(534, 1,
-						// registroInclusao), 534, registro);
-						// D.41
-						colocarConteudo(sNumeroRegistro, 594, registro);
-
-						NegativadorMovimentoReg nmrExclusao = new NegativadorMovimentoReg();
-						nmrExclusao.setNegativadorMovimento(nm);
-						nmrExclusao.setNegativadorMovimentoRegInclusao(nmr);
-						nmrExclusao.setNegativadorRegistroTipo(nmr.getNegativadorRegistroTipo());
-						nmrExclusao.setConteudoRegistro(new String(registro));
-						nmrExclusao.setUltimaAlteracao(new Date());
-						nmrExclusao.setUsuario(nmr.getUsuario());
-						nmrExclusao.setCodigoExclusaoTipo(nmr.getCodigoExclusaoTipo());
-						nmrExclusao.setValorDebito(nmr.getValorDebito());
-						nmrExclusao.setCobrancaDebitoSituacao(nmr.getCobrancaDebitoSituacao());
-						nmrExclusao.setDataSituacaoDebito(nmr.getDataSituacaoDebito());
-						nmrExclusao.setImovel(nmr.getImovel());
-						nmrExclusao.setLocalidade(nmr.getLocalidade());
-						nmrExclusao.setQuadra(nmr.getQuadra());
-						nmrExclusao.setCodigoSetorComercial(nmr.getCodigoSetorComercial());
-						nmrExclusao.setNumeroQuadra(nmr.getNumeroQuadra());
-						nmrExclusao.setImovelPerfil(nmr.getImovelPerfil());
-						nmrExclusao.setCliente(nmr.getCliente());
-						nmrExclusao.setCategoria(nmr.getCategoria());
-						nmrExclusao.setNumeroCpf(nmr.getNumeroCpf());
-						nmrExclusao.setNumeroCnpj(nmr.getNumeroCnpj());
-						nmrExclusao.setCpfTipo(nmr.getCpfTipo());
-						nmrExclusao.setIndicadorSituacaoDefinitiva(new Short((short) 1));
-						nmrExclusao.setNumeroRegistro(((Integer) retorno[0]));
-						nmrExclusao.setIndicadorItemAtualizado(ConstantesSistema.NAO_ACEITO);
-
-						// **************************************************************************
-						// RM3755
-						// Autor: Ivan Sergio
-						// Data: 10/01/2011
-						// **************************************************************************
-
-						nmrExclusao.setLigacaoAguaSituacao(nmr.getLigacaoAguaSituacao());
-						nmrExclusao.setLigacaoEsgotoSituacao(nmr.getLigacaoEsgotoSituacao());
-
-						// **************************************************************************
-
-						RepositorioUtilHBM.getInstancia().inserir(nmrExclusao);
-
-						retorno[1] = new BigDecimal(((BigDecimal) retorno[1]).doubleValue()
-								+ nmr.getValorDebito().doubleValue());
-						retorno[2] = new Integer((Integer) retorno[2]) + 1;
-
-						atualizarNegativacao(n.getId(), nmr, nem);
-
+					if (negativador.getId().equals(Negativador.NEGATIVADOR_SPC)) {
+						retorno = this.gerarRegistroTipoDetalheExclusaoSPC(negativador, negativadorMovimento, retorno, negativadorMovimentoReg);
+						
+					} else if (negativador.getId().equals(Negativador.NEGATIVADOR_SERASA)) {
+						retorno = this.gerarRegistroTipoDetalheExclusaoSERASA(negativador, negativadorMovimento, retorno, negativadorMovimentoReg);
 					}
 				}
 			}
@@ -4940,10 +4354,242 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 		}
 	}
 
-	private void gerarNegMovRegDetalheConsumidor(NegativadorMovimentoReg nmr, NegativadorMovimento nm,
-			String sNumeroRegistro) throws ErroRepositorioException {
+	private Object[] gerarRegistroTipoDetalheExclusaoSERASA(Negativador negativador, NegativadorMovimento negativadorMovimento,
+			Object[] retorno, NegativadorMovimentoReg negativadorMovimentoReg) throws ControladorException, ErroRepositorioException {
+
+		retorno[0] = new Integer((Integer) retorno[0]) + 1;
+
+		NegativadorExclusaoMotivo exclusaoMotivo = this.obterNegativadorExclusaoMotivoSERASA(negativadorMovimentoReg, negativador);
+
+		char[] registroInclusao = new char[600];
+		for (int i = 0; i < registroInclusao.length; i++) {
+			registroInclusao[i] = ' ';
+		}
+
+		if (negativadorMovimentoReg.getConteudoRegistro() != null) {
+			for (int i = 0; i < negativadorMovimentoReg.getConteudoRegistro().length(); i++) {
+				if (i <= registroInclusao.length) {
+					registroInclusao[i] = negativadorMovimentoReg.getConteudoRegistro().toCharArray()[i];
+				}
+			}
+		}
+
+		String numeroRegistro = ((Integer) retorno[0]).toString();
+		if (numeroRegistro.length() < 7) {
+			while (numeroRegistro.length() != 7) {
+				numeroRegistro = "0" + numeroRegistro;
+			}
+		}
+		
+		char[] registro = new char[600];
+		for (int i = 0; i < registro.length; i++) {
+			registro[i] = ' ';
+		}
+		
+		// D.01
+		colocarConteudo("1", 1, registro);
+		
+		// D.02
+		colocarConteudo("E", 2, registro);
+		
+		// D.03 -> D.08
+		colocarConteudo(getConteudo(32, 1, registroInclusao), 32, registro);
+		
+		// D.09
+		colocarConteudo(getConteudo(33, 1, registroInclusao), 33, registro);
+		
+		// D.10
+		colocarConteudo(getConteudo(34, 15, registroInclusao), 34, registro);
+		
+		// D.11
+		String codigoIdExclusaoMotivo = exclusaoMotivo.getCodigoExclusaoMotivo().toString();
+		if (codigoIdExclusaoMotivo.length() < 2) {
+			while (codigoIdExclusaoMotivo.length() != 2) {
+				codigoIdExclusaoMotivo = "0" + codigoIdExclusaoMotivo;
+			}
+		}
+		colocarConteudo(codigoIdExclusaoMotivo, 49, registro);
+		
+		// D.12
+		colocarConteudo(getConteudo(51, 1, registroInclusao), 51, registro);
+		
+		// D.13
+		colocarConteudo(getConteudo(52, 15, registroInclusao), 52, registro);
+		
+		// D.14
+		colocarConteudo(getConteudo(67, 2, registroInclusao), 67, registro);
+		
+		// D.15 -> D.22
+		colocarConteudo(getConteudo(106, 70, registroInclusao), 106, registro);
+		
+		// D.23
+		colocarConteudo(getConteudo(176, 8, registroInclusao), 176, registro);
+		
+		// D.24 -> D.25
+		colocarConteudo(getConteudo(254, 70, registroInclusao), 254, registro);
+		
+		// D.26 -> D.32
+		colocarConteudo(getConteudo(439, 16, registroInclusao), 439, registro);
+		
+		// D.33 -> D.41
+		colocarConteudo(numeroRegistro, 594, registro);
+
+		this.inserirMovimentoRegistroExclusao(negativadorMovimento, retorno, negativadorMovimentoReg, registro);
+
+		retorno[1] = new BigDecimal(((BigDecimal) retorno[1]).doubleValue() + negativadorMovimentoReg.getValorDebito().doubleValue());
+		retorno[2] = new Integer((Integer) retorno[2]) + 1;
+
+		atualizarNegativacao(negativador.getId(), negativadorMovimentoReg, exclusaoMotivo);
+
+		return retorno;
+	}
+
+	private void inserirMovimentoRegistroExclusao(NegativadorMovimento negativadorMovimento, Object[] retorno, NegativadorMovimentoReg negativadorMovimentoReg,
+			char[] registro) throws ControladorException {
+		NegativadorMovimentoReg movimentoRegistroExclusao = new NegativadorMovimentoReg();
+		movimentoRegistroExclusao.setNegativadorMovimento(negativadorMovimento);
+		movimentoRegistroExclusao.setNegativadorMovimentoRegInclusao(negativadorMovimentoReg);
+		movimentoRegistroExclusao.setNegativadorRegistroTipo(negativadorMovimentoReg.getNegativadorRegistroTipo());
+		movimentoRegistroExclusao.setConteudoRegistro(new String(registro));
+		movimentoRegistroExclusao.setUltimaAlteracao(new Date());
+		movimentoRegistroExclusao.setUsuario(negativadorMovimentoReg.getUsuario());
+		movimentoRegistroExclusao.setCodigoExclusaoTipo(negativadorMovimentoReg.getCodigoExclusaoTipo());
+		movimentoRegistroExclusao.setValorDebito(negativadorMovimentoReg.getValorDebito());
+		movimentoRegistroExclusao.setCobrancaDebitoSituacao(negativadorMovimentoReg.getCobrancaDebitoSituacao());
+		movimentoRegistroExclusao.setDataSituacaoDebito(negativadorMovimentoReg.getDataSituacaoDebito());
+		movimentoRegistroExclusao.setImovel(negativadorMovimentoReg.getImovel());
+		movimentoRegistroExclusao.setLocalidade(negativadorMovimentoReg.getLocalidade());
+		movimentoRegistroExclusao.setQuadra(negativadorMovimentoReg.getQuadra());
+		movimentoRegistroExclusao.setCodigoSetorComercial(negativadorMovimentoReg.getCodigoSetorComercial());
+		movimentoRegistroExclusao.setNumeroQuadra(negativadorMovimentoReg.getNumeroQuadra());
+		movimentoRegistroExclusao.setImovelPerfil(negativadorMovimentoReg.getImovelPerfil());
+		movimentoRegistroExclusao.setCliente(negativadorMovimentoReg.getCliente());
+		movimentoRegistroExclusao.setCategoria(negativadorMovimentoReg.getCategoria());
+		movimentoRegistroExclusao.setNumeroCpf(negativadorMovimentoReg.getNumeroCpf());
+		movimentoRegistroExclusao.setNumeroCnpj(negativadorMovimentoReg.getNumeroCnpj());
+		movimentoRegistroExclusao.setCpfTipo(negativadorMovimentoReg.getCpfTipo());
+		movimentoRegistroExclusao.setIndicadorSituacaoDefinitiva(new Short((short) 1));
+		movimentoRegistroExclusao.setNumeroRegistro(((Integer) retorno[0]));
+		movimentoRegistroExclusao.setIndicadorItemAtualizado(ConstantesSistema.NAO_ACEITO);
+		movimentoRegistroExclusao.setLigacaoAguaSituacao(negativadorMovimentoReg.getLigacaoAguaSituacao());
+		movimentoRegistroExclusao.setLigacaoEsgotoSituacao(negativadorMovimentoReg.getLigacaoEsgotoSituacao());
+		getControladorUtil().inserir(movimentoRegistroExclusao);
+	}
+
+	private Object[] gerarRegistroTipoDetalheExclusaoSPC(Negativador negativador, NegativadorMovimento negativadorMovimento, Object[] retorno,
+			NegativadorMovimentoReg negativadorMovimentoReg) throws ErroRepositorioException, ControladorException {
+		
+		retorno[0] = new Integer((Integer) retorno[0]) + 1;
+
+		String quantidadeRegistro = ((Integer) retorno[0]).toString();
+		if (quantidadeRegistro.length() < 6) {
+			while (quantidadeRegistro.length() != 6) {
+				quantidadeRegistro = "0" + quantidadeRegistro;
+			}
+		}
+
+		if (negativadorMovimentoReg.getNegativadorRegistroTipo().getId().equals(NegativadorRegistroTipo.ID_SPC_DETALHE_SPC)) {
+			this.gerarNegMovRegDetalheConsumidor(negativadorMovimentoReg, negativadorMovimento, quantidadeRegistro);
+
+			retorno[0] = new Integer((Integer) retorno[0]) + 1;
+
+			quantidadeRegistro = ((Integer) retorno[0]).toString();
+			if (quantidadeRegistro.length() < 6) {
+				while (quantidadeRegistro.length() != 6) {
+					quantidadeRegistro = "0" + quantidadeRegistro;
+				}
+			}
+
+			NegativadorExclusaoMotivo exclusaoMovivo = obterNegativadorExclusaoMotivoSPC(negativadorMovimentoReg, negativador);
+
+			char[] registro = new char[340];
+			for (int i = 0; i < registro.length; i++) {
+				registro[i] = ' ';
+			}
+
+			char[] registroInclusao = new char[340];
+			for (int i = 0; i < registroInclusao.length; i++) {
+				registroInclusao[i] = ' ';
+			}
+			if (negativadorMovimentoReg.getConteudoRegistro() != null) {
+				for (int i = 0; i < negativadorMovimentoReg.getConteudoRegistro().length(); i++) {
+					if (i <= registroInclusao.length) {
+						registroInclusao[i] = negativadorMovimentoReg.getConteudoRegistro().toCharArray()[i];
+					}
+				}
+			}
+
+			// h.01
+			if (registroInclusao != null && registroInclusao.length > 3)
+				colocarConteudo(getConteudo(1, 2, registroInclusao), 1, registro);
+			// h.02
+			if (registroInclusao != null && registroInclusao.length > 4)
+				colocarConteudo(getConteudo(3, 1, registroInclusao), 3, registro);
+			// h.03
+			if (registroInclusao != null && registroInclusao.length > 19)
+				colocarConteudo(getConteudo(4, 15, registroInclusao), 4, registro);
+			// h.04
+			colocarConteudo("E", 19, registro);
+			// h.05
+			if (registroInclusao != null && registroInclusao.length > 21)
+				colocarConteudo(getConteudo(20, 1, registroInclusao), 20, registro);
+			// h.06
+			if (registroInclusao != null && registroInclusao.length > 29)
+				colocarConteudo(getConteudo(21, 8, registroInclusao), 21, registro);
+			// h.07
+			if (registroInclusao != null && registroInclusao.length > 27)
+				colocarConteudo(getConteudo(29, 8, registroInclusao), 29, registro);
+			// h.08
+			if (registroInclusao != null && registroInclusao.length > 49)
+				colocarConteudo(getConteudo(37, 13, registroInclusao), 37, registro);
+			// h.09
+			if (registroInclusao != null && registroInclusao.length > 80)
+				colocarConteudo(getConteudo(50, 30, registroInclusao), 50, registro);
+			// h.10
+			if (registroInclusao != null && registroInclusao.length > 88)
+				colocarConteudo(getConteudo(80, 8, registroInclusao), 80, registro);
+			// h.11
+			if (registroInclusao != null && registroInclusao.length > 90)
+				colocarConteudo(getConteudo(88, 2, registroInclusao), 88, registro);
+
+			// h.12
+			String codigoExclusaoMotivo = "";
+			if (exclusaoMovivo.getCodigoExclusaoMotivo() != null) {
+				codigoExclusaoMotivo = exclusaoMovivo.getCodigoExclusaoMotivo() + "";
+			}
+
+			if (codigoExclusaoMotivo.length() < 3) {
+				while (codigoExclusaoMotivo.length() != 3) {
+					codigoExclusaoMotivo = "0" + codigoExclusaoMotivo;
+				}
+			}
+
+			colocarConteudo(codigoExclusaoMotivo, 90, registro);
+			// h.13
+			if (registroInclusao != null && registroInclusao.length > 2)
+				colocarConteudo(getConteudo(93, 232, registroInclusao), 325, registro);
+			// h.14
+			if (registroInclusao != null && registroInclusao.length > 335)
+				colocarConteudo(getConteudo(325, 10, registroInclusao), 325, registro);
+			// h.15
+			colocarConteudo(quantidadeRegistro, 335, registro);
+
+			this.inserirMovimentoRegistroExclusao(negativadorMovimento, retorno, negativadorMovimentoReg, registro);
+
+			retorno[1] = new BigDecimal(((BigDecimal) retorno[1]).doubleValue()
+					+ negativadorMovimentoReg.getValorDebito().doubleValue());
+			retorno[2] = new Integer((Integer) retorno[2]) + 1;
+
+			atualizarNegativacao(negativador.getId(), negativadorMovimentoReg, exclusaoMovivo);
+		}
+		
+		return retorno;
+	}
+
+	private void gerarNegMovRegDetalheConsumidor(NegativadorMovimentoReg negativadorMovimentoReg, NegativadorMovimento negativadorMovimento,
+			String sNumeroRegistro) throws ControladorException, ErroRepositorioException {
 		NegativadorMovimentoReg nmrDetalheConsumidor = repositorioSpcSerasa.pesquisarRegistroTipoConsumidor(
-				nmr.getNumeroRegistro() - 1, nmr.getNegativadorMovimento().getId());
+				negativadorMovimentoReg.getNumeroRegistro() - 1, negativadorMovimentoReg.getNegativadorMovimento().getId());
 
 		char[] registro = new char[340];
 		for (int i = 0; i < registro.length; i++) {
@@ -4960,45 +4606,34 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 		// h.15
 		colocarConteudo(sNumeroRegistro, 335, registro);
 
-		NegativadorMovimentoReg nmrExclusao = new NegativadorMovimentoReg();
-		nmrExclusao.setNegativadorMovimento(nm);
-		nmrExclusao.setNegativadorMovimentoRegInclusao(nmrDetalheConsumidor);
-		nmrExclusao.setNegativadorRegistroTipo(nmrDetalheConsumidor.getNegativadorRegistroTipo());
-		nmrExclusao.setConteudoRegistro(new String(registro));
-		nmrExclusao.setUltimaAlteracao(new Date());
-		nmrExclusao.setUsuario(nmrDetalheConsumidor.getUsuario());
-		nmrExclusao.setCodigoExclusaoTipo(nmrDetalheConsumidor.getCodigoExclusaoTipo());
-		nmrExclusao.setValorDebito(nmrDetalheConsumidor.getValorDebito());
-		nmrExclusao.setCobrancaDebitoSituacao(nmrDetalheConsumidor.getCobrancaDebitoSituacao());
-		nmrExclusao.setDataSituacaoDebito(nmrDetalheConsumidor.getDataSituacaoDebito());
-		nmrExclusao.setImovel(nmrDetalheConsumidor.getImovel());
-		nmrExclusao.setLocalidade(nmrDetalheConsumidor.getLocalidade());
-		nmrExclusao.setQuadra(nmrDetalheConsumidor.getQuadra());
-		nmrExclusao.setCodigoSetorComercial(nmrDetalheConsumidor.getCodigoSetorComercial());
-		nmrExclusao.setNumeroQuadra(nmrDetalheConsumidor.getNumeroQuadra());
-		nmrExclusao.setImovelPerfil(nmrDetalheConsumidor.getImovelPerfil());
-		nmrExclusao.setCliente(nmrDetalheConsumidor.getCliente());
-		nmrExclusao.setCategoria(nmrDetalheConsumidor.getCategoria());
-		nmrExclusao.setNumeroCpf(nmrDetalheConsumidor.getNumeroCpf());
-		nmrExclusao.setNumeroCnpj(nmrDetalheConsumidor.getNumeroCnpj());
-		nmrExclusao.setCpfTipo(nmrDetalheConsumidor.getCpfTipo());
-		nmrExclusao.setIndicadorSituacaoDefinitiva(new Short((short) 1));
-		nmrExclusao.setNumeroRegistro(new Integer(sNumeroRegistro));
-		nmrExclusao.setIndicadorItemAtualizado(ConstantesSistema.NAO_ACEITO);
-
-		// **************************************************************************
-		// RM3755
-		// Autor: Ivan Sergio
-		// Data: 10/01/2011
-		// **************************************************************************
-
-		nmrExclusao.setLigacaoAguaSituacao(nmrDetalheConsumidor.getLigacaoAguaSituacao());
-		nmrExclusao.setLigacaoEsgotoSituacao(nmrDetalheConsumidor.getLigacaoEsgotoSituacao());
-
-		// **************************************************************************
-
-		// Inserir registro de exclusão do tipo Detalhe-Consumidor
-		RepositorioUtilHBM.getInstancia().inserir(nmrExclusao);
+		NegativadorMovimentoReg movimentoRegistroExclusao = new NegativadorMovimentoReg();
+		movimentoRegistroExclusao.setNegativadorMovimento(negativadorMovimento);
+		movimentoRegistroExclusao.setNegativadorMovimentoRegInclusao(nmrDetalheConsumidor);
+		movimentoRegistroExclusao.setNegativadorRegistroTipo(nmrDetalheConsumidor.getNegativadorRegistroTipo());
+		movimentoRegistroExclusao.setConteudoRegistro(new String(registro));
+		movimentoRegistroExclusao.setUltimaAlteracao(new Date());
+		movimentoRegistroExclusao.setUsuario(nmrDetalheConsumidor.getUsuario());
+		movimentoRegistroExclusao.setCodigoExclusaoTipo(nmrDetalheConsumidor.getCodigoExclusaoTipo());
+		movimentoRegistroExclusao.setValorDebito(nmrDetalheConsumidor.getValorDebito());
+		movimentoRegistroExclusao.setCobrancaDebitoSituacao(nmrDetalheConsumidor.getCobrancaDebitoSituacao());
+		movimentoRegistroExclusao.setDataSituacaoDebito(nmrDetalheConsumidor.getDataSituacaoDebito());
+		movimentoRegistroExclusao.setImovel(nmrDetalheConsumidor.getImovel());
+		movimentoRegistroExclusao.setLocalidade(nmrDetalheConsumidor.getLocalidade());
+		movimentoRegistroExclusao.setQuadra(nmrDetalheConsumidor.getQuadra());
+		movimentoRegistroExclusao.setCodigoSetorComercial(nmrDetalheConsumidor.getCodigoSetorComercial());
+		movimentoRegistroExclusao.setNumeroQuadra(nmrDetalheConsumidor.getNumeroQuadra());
+		movimentoRegistroExclusao.setImovelPerfil(nmrDetalheConsumidor.getImovelPerfil());
+		movimentoRegistroExclusao.setCliente(nmrDetalheConsumidor.getCliente());
+		movimentoRegistroExclusao.setCategoria(nmrDetalheConsumidor.getCategoria());
+		movimentoRegistroExclusao.setNumeroCpf(nmrDetalheConsumidor.getNumeroCpf());
+		movimentoRegistroExclusao.setNumeroCnpj(nmrDetalheConsumidor.getNumeroCnpj());
+		movimentoRegistroExclusao.setCpfTipo(nmrDetalheConsumidor.getCpfTipo());
+		movimentoRegistroExclusao.setIndicadorSituacaoDefinitiva(new Short((short) 1));
+		movimentoRegistroExclusao.setNumeroRegistro(new Integer(sNumeroRegistro));
+		movimentoRegistroExclusao.setIndicadorItemAtualizado(ConstantesSistema.NAO_ACEITO);
+		movimentoRegistroExclusao.setLigacaoAguaSituacao(nmrDetalheConsumidor.getLigacaoAguaSituacao());
+		movimentoRegistroExclusao.setLigacaoEsgotoSituacao(nmrDetalheConsumidor.getLigacaoEsgotoSituacao());
+		getControladorUtil().inserir(movimentoRegistroExclusao);
 
 		// Atualiza a exclusão do registro Tipo Detalhe-Consumidor
 		nmrDetalheConsumidor.setCodigoExclusaoTipo(1);
@@ -5008,298 +4643,255 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 	}
 
 	/**
-	 * Método que atualiza a negativacao
-	 * 
-	 * [UC0673] - Gerar Movimento de Exclusao de Negativacao [SB0007] -
-	 * Atualizar Negativacao
-	 * 
-	 * @author Thiago Toscano
-	 * @date 04/01/2008
-	 *
-	 * @param tipoNegativador
-	 *            (1 para spc; 2 para serasa)
-	 * @param nmr
-	 * @param nem
-	 * @throws ErroRepositorioException
+	 * [UC0673] - Gerar Movimento de Exclusao de Negativacao
+	 * [SB0007] - Atualizar Negativacao
 	 */
-	private void atualizarNegativacao(Integer codigoNegativador, NegativadorMovimentoReg nmr,
-			NegativadorExclusaoMotivo nem) throws ErroRepositorioException {
-		nmr.setCodigoExclusaoTipo(new Integer(1));
-		nmr.setIndicadorSituacaoDefinitiva(new Short((short) 1));
-		nmr.setNegativadorExclusaoMotivo(nem);
-		nmr.setUltimaAlteracao(new Date());
-		// adicionado por Vivianne Sousa - 21/08/2009 - analista:Fatima
-		nmr.setCobrancaSituacao(null);
+	private void atualizarNegativacao(Integer idNegativador, NegativadorMovimentoReg negativadorMovimentoReg,
+			NegativadorExclusaoMotivo exclusaoMotivo) throws ErroRepositorioException, ControladorException {
 
-		RepositorioUtilHBM.getInstancia().atualizar(nmr);
+		try {
+			negativadorMovimentoReg.setCodigoExclusaoTipo(new Integer(1));
+			negativadorMovimentoReg.setIndicadorSituacaoDefinitiva(new Short((short) 1));
+			negativadorMovimentoReg.setNegativadorExclusaoMotivo(exclusaoMotivo);
+			negativadorMovimentoReg.setUltimaAlteracao(new Date());
+			negativadorMovimentoReg.setCobrancaSituacao(null);
+			RepositorioUtilHBM.getInstancia().atualizar(negativadorMovimentoReg);
 
-		// sb7.4 atualizar os negativador movimento reg item
-		FiltroNegativadorMovimentoRegItem fnmri = new FiltroNegativadorMovimentoRegItem();
-		fnmri.adicionarParametro(new ParametroSimples(FiltroNegativadorMovimentoRegItem.NEGATIVADOR_MOVIMENTO_REG_ID,
-				nmr.getId()));
-		// fnmri.adicionarParametro(new
-		// ParametroSimples(FiltroNegativadorMovimentoRegItem.NEGATIVADOR_MOVIMENTO_REG_ID,nmr.getId()));
-		Collection coll = RepositorioUtilHBM.getInstancia().pesquisar(fnmri,
-				NegativadorMovimentoRegItem.class.getName());
-		if (coll != null && !coll.isEmpty()) {
-			Iterator itt = coll.iterator();
-			while (itt.hasNext()) {
-				NegativadorMovimentoRegItem nmri = (NegativadorMovimentoRegItem) itt.next();
-				nmri.setCobrancaDebitoSituacaoAposExclusao(nmri.getCobrancaDebitoSituacao());
-				nmri.setDataSituacaoDebitoAposExclusao(nmri.getDataSituacaoDebito());
-				nmri.setUltimaAlteracao(new Date());
-				RepositorioUtilHBM.getInstancia().atualizar(nmri);
-			}
-		}
+			FiltroNegativadorMovimentoRegItem filtroMovimentoItem = new FiltroNegativadorMovimentoRegItem();
+			filtroMovimentoItem.adicionarParametro(new ParametroSimples(FiltroNegativadorMovimentoRegItem.NEGATIVADOR_MOVIMENTO_REG_ID,
+					negativadorMovimentoReg.getId()));
 
-		// sb 7.5
-		FiltroNegativacaoImoveis fni = new FiltroNegativacaoImoveis();
-		fni.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.IMOVEL_ID, nmr.getImovel().getId()));
-		fni.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.NEGATIVACAO_COMANDO_ID, nmr
-				.getNegativadorMovimento().getNegativacaoComando().getId()));
-		fni.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.INDICADOR_EXCLUIDO, new Integer(2)));
-		coll = RepositorioUtilHBM.getInstancia().pesquisar(fni, NegativacaoImoveis.class.getName());
-		if (coll != null && !coll.isEmpty()) {
-			Iterator itt = coll.iterator();
-			while (itt.hasNext()) {
-				NegativacaoImoveis ni = (NegativacaoImoveis) itt.next();
-				ni.setIndicadorExcluido(new Short((short) 1));
-				ni.setDataExclusao(new Date());
-				ni.setUltimaAlteracao(new Date());
-				RepositorioUtilHBM.getInstancia().atualizar(ni);
-
-				// sb7.7
-				if (nmr.getImovel() != null) {
-
-					Collection imoveisCobrancaSituacao = this.repositorioSpcSerasa
-							.consultarImovelCobrancaSituacaoPorNegativador(nmr.getImovel(), codigoNegativador);
-
-					if (imoveisCobrancaSituacao != null) {
-
-						Iterator iter = imoveisCobrancaSituacao.iterator();
-
-						while (iter.hasNext()) {
-							ImovelCobrancaSituacao imovelCobrancaSituacao = (ImovelCobrancaSituacao) iter.next();
-							imovelCobrancaSituacao.setDataRetiradaCobranca(new Date());
-							imovelCobrancaSituacao.setUltimaAlteracao(new Date());
-
-							RepositorioUtilHBM.getInstancia().atualizar(imovelCobrancaSituacao);
-						}
-
-					}
-
+			Collection colecaoMovimentoItens = RepositorioUtilHBM.getInstancia().pesquisar(filtroMovimentoItem,
+					NegativadorMovimentoRegItem.class.getName());
+			
+			if (colecaoMovimentoItens != null && !colecaoMovimentoItens.isEmpty()) {
+				Iterator iteratorColecaoMovimentoItens = colecaoMovimentoItens.iterator();
+				
+				while (iteratorColecaoMovimentoItens.hasNext()) {
+					NegativadorMovimentoRegItem movimentoItem = (NegativadorMovimentoRegItem) iteratorColecaoMovimentoItens.next();
+					movimentoItem.setCobrancaDebitoSituacaoAposExclusao(movimentoItem.getCobrancaDebitoSituacao());
+					movimentoItem.setDataSituacaoDebitoAposExclusao(movimentoItem.getDataSituacaoDebito());
+					movimentoItem.setUltimaAlteracao(new Date());
+					RepositorioUtilHBM.getInstancia().atualizar(movimentoItem);
 				}
-
-				// CRC3323 - comentado por Vivianne Sousa - analista:Fatima
-				// Sampaio - 10/05/2010
-				// if (nmr.getImovel() != null &&
-				// nmr.getImovel().getCobrancaSituacao() != null) {
-				// // sb8
-				// if (
-				// nmr.getImovel().getCobrancaSituacao().getId().equals(CobrancaSituacao.EM_ANALISE_PARA_NEGATIVACAO)
-				// ||
-				// nmr.getImovel().getCobrancaSituacao().getId().equals(CobrancaSituacao.CARTA_ENVIADA_AO_SPC)
-				// ||
-				// nmr.getImovel().getCobrancaSituacao().getId().equals(CobrancaSituacao.NEGATIVADO_AUTOMATICAMENTE_NO_SPC)
-				// ||
-				// nmr.getImovel().getCobrancaSituacao().getId().equals(CobrancaSituacao.CARTA_ENVIADA_A_SERASA)
-				// ||
-				// nmr.getImovel().getCobrancaSituacao().getId().equals(CobrancaSituacao.NEGATIVADO_AUTOMATICAMENTE_NA_SERASA)
-				// ) {
-				//
-				// //sb8.1
-				// if (coll.size() == 1) {
-				// nmr.getImovel().setCobrancaSituacao(null);
-				// nmr.getImovel().setUltimaAlteracao(new Date());
-				//
-				// RepositorioUtilHBM.getInstancia().atualizar(nmr.getImovel());
-				// }
-				//
-				// }
-				// }
-
 			}
 
+			Collection colecaoNegativacaoImoveis = this.obterColecaoNegativacaoImoveis(negativadorMovimentoReg.getNegativadorMovimento(), negativadorMovimentoReg.getImovel(), negativadorMovimentoReg.getCliente());
+
+			if (colecaoNegativacaoImoveis != null && !colecaoNegativacaoImoveis.isEmpty()) {
+				Iterator iteratorColecaoNegativacaoImoveis = colecaoNegativacaoImoveis.iterator();
+				while (iteratorColecaoNegativacaoImoveis.hasNext()) {
+					NegativacaoImoveis negativacaoImoveis = (NegativacaoImoveis) iteratorColecaoNegativacaoImoveis.next();
+					negativacaoImoveis.setIndicadorExcluido(new Short((short) 1));
+					negativacaoImoveis.setDataExclusao(new Date());
+					negativacaoImoveis.setUltimaAlteracao(new Date());
+					RepositorioUtilHBM.getInstancia().atualizar(negativacaoImoveis);
+
+					if (negativadorMovimentoReg.getImovel() != null) {
+						Collection colecaoImoveisCobrancaSituacao = this.repositorioSpcSerasa.consultarImovelCobrancaSituacaoPorNegativador(
+								negativadorMovimentoReg.getImovel(), idNegativador, negativadorMovimentoReg.getCliente().getId());
+
+						if (colecaoImoveisCobrancaSituacao != null) {
+							Iterator iteratorColecaoImoveisCobrancaSituacao = colecaoImoveisCobrancaSituacao.iterator();
+
+							while (iteratorColecaoImoveisCobrancaSituacao.hasNext()) {
+								ImovelCobrancaSituacao imovelCobrancaSituacao = (ImovelCobrancaSituacao) iteratorColecaoImoveisCobrancaSituacao.next();
+								imovelCobrancaSituacao.setDataRetiradaCobranca(new Date());
+								imovelCobrancaSituacao.setUltimaAlteracao(new Date());
+								RepositorioUtilHBM.getInstancia().atualizar(imovelCobrancaSituacao);
+							}
+						}
+					}
+				}
+			}
+		} catch (ErroRepositorioException ex) {
+			sessionContext.setRollbackOnly();
+			ex.printStackTrace();
+			throw new ControladorException("erro.sistema", ex);
 		}
 	}
 
 	/**
-	 * Método que gera o trailler a ser enviado [UC0673] - Gerar Movimento de
-	 * Exclusao de Negativacao [SB0008] - Gerar Registro Tipo trailler
-	 * 
-	 * @author Thiago Toscano
-	 * @date 26/12/2007
-	 *
-	 * @param n
-	 *            - negativador
-	 * @param nm
-	 *            -negativaromovimento
-	 * @param nc
-	 *            - negativadorContrato
-	 * @param collNegativadorMovimentoReg
-	 *            Object[0] Integer numeroRegistro = new Integer(0); Object[1]
-	 *            BigDecimal valor = new BigDecimal(0); Object[2] Integer
-	 *            quantidadeExclusao = new Integer(0);
-	 * @throws ErroRepositorioException
-	 * 
+	 * Método que gera o trailler a ser enviado
+	 * [UC0673] - Gerar Movimento de Exclusao de Negativacao
+	 * [SB0008] - Gerar Registro Tipo trailler
 	 */
-	private Object[] gerarRegistroTipoTrailler(Integer numeroRegistro, BigDecimal valor, Integer quantidadeExclusao,
-			Negativador n, NegativadorMovimento nm, NegativadorContrato nc, Collection collNegativadorMovimentoReg)
-			throws ErroRepositorioException {
+	private Object[] gerarRegistroTipoTraillerExclusao(Integer numeroRegistro, BigDecimal valor,
+			Integer quantidadeExclusao, Negativador negativador, NegativadorMovimento movimento,
+			NegativadorContrato contrato, Collection colecaoNegativadorMovimentoReg) throws ErroRepositorioException {
+		
 		Object[] retorno = new Object[3];
 		retorno[0] = numeroRegistro + 1;
 		retorno[1] = valor;
 		retorno[2] = quantidadeExclusao;
 
-		char[] registro = new char[340];
-		for (int i = 0; i < registro.length; i++) {
-			registro[i] = ' ';
-		}
 
-		// String ddmmaaaa = Util.formatarDataSemBarra(new Date());
-		// String aaaammdd = ddmmaaaa.substring(0,2) + ddmmaaaa.substring(2,4) +
-		// ddmmaaaa.substring(4,8) ;
-
-		String numeroContrato = (nc.getNumeroSequencialEnvio() + 1) + "";
+		String numeroContrato = (contrato.getNumeroSequencialEnvio() + 1) + "";
 		if (numeroContrato.length() < 8) {
 			while (numeroContrato.length() != 8) {
 				numeroContrato = "0" + numeroContrato;
 			}
 		}
-		if (n.getId().equals(Negativador.NEGATIVADOR_SPC)) {
-
-			String tamanho316 = "";
-			while (tamanho316.length() != 316) {
-				tamanho316 = " " + tamanho316;
-			}
-
-			String sNumeroRegistro = retorno[0].toString();
-			if (sNumeroRegistro.length() < 6) {
-				while (sNumeroRegistro.length() != 6) {
-					sNumeroRegistro = "0" + sNumeroRegistro;
-				}
-			}
-
-			// h.01
-			colocarConteudo("99", 1, registro);
-			// h.02
-			colocarConteudo(sNumeroRegistro, 3, registro);
-			// h.03
-			colocarConteudo(tamanho316, 9, registro);
-			// h.04
-			colocarConteudo("          ", 325, registro);
-			// h.05
-			colocarConteudo(sNumeroRegistro, 335, registro);
-		} else if (n.getId().equals(Negativador.NEGATIVADOR_SERASA)) {
-			registro = new char[600];
-			for (int i = 0; i < registro.length; i++) {
-				registro[i] = ' ';
-			}
-
-			String sNumeroRegistro = retorno[0].toString();
-			if (sNumeroRegistro.length() < 7) {
-				while (sNumeroRegistro.length() != 7) {
-					sNumeroRegistro = "0" + sNumeroRegistro;
-				}
-			}
-
-			// h.01
-			colocarConteudo("9", 1, registro);
-			// h.02
-			// colocarConteudo(sNumeroRegistro, 2, registro);
-			// h.03
-			// colocarConteudo(tamanho316, 534, registro);
-			// h.04
-			colocarConteudo(sNumeroRegistro, 594, registro);
+		
+		char[] registro = null;
+		
+		if (negativador.getId().equals(Negativador.NEGATIVADOR_SPC)) {
+			registro = this.gerarRegistroTipoTraillerExclusaoSPC(retorno);
+		} else if (negativador.getId().equals(Negativador.NEGATIVADOR_SERASA)) {
+			registro = this.gerarRegistroTipoTraillerExclusaoSERASA(retorno);
 		}
 
-		FiltroNegativadorRegistroTipo fnrt = new FiltroNegativadorRegistroTipo();
-		fnrt.adicionarParametro(new ParametroSimples(FiltroNegativadorRegistroTipo.NEGATIVADOR_ID, n.getId()));
-		fnrt.adicionarParametro(new ParametroSimples(FiltroNegativadorRegistroTipo.CODIGO_REGISTRO,
-				NegativadorRegistroTipo.TIPO_TRAILLER));
-
-		NegativadorRegistroTipo nrt = (NegativadorRegistroTipo) Util.retonarObjetoDeColecao(RepositorioUtilHBM
-				.getInstancia().pesquisar(fnrt, NegativadorRegistroTipo.class.getName()));
-
-		NegativadorMovimentoReg nmr = new NegativadorMovimentoReg();
-		nmr.setNegativadorMovimento(nm);
-		nmr.setNegativadorRegistroTipo(nrt);
-		nmr.setConteudoRegistro(new String(registro));
-		nmr.setIndicadorSituacaoDefinitiva(new Short((short) 1));
-		nmr.setNumeroRegistro((Integer) retorno[0]);
-		nmr.setUltimaAlteracao(new Date());
-		nmr.setIndicadorItemAtualizado(ConstantesSistema.NAO_ACEITO);
-
-		RepositorioUtilHBM.getInstancia().inserir(nmr);
+		this.inserirNegativadorMovimentoRegistroTraillerExclusaoSERASA(negativador, movimento, retorno, registro);
 
 		return retorno;
 	}
 
-	/**
-	 * Método que retorna o motivo da Exclusao
-	 *
-	 * @author Thiago Toscano
-	 * @throws ErroRepositorioException
-	 * @date 26/12/2007
-	 *
-	 */
-	private NegativadorExclusaoMotivo obterNegativadorExclusaoMotivo(NegativadorMovimentoReg nmr, Negativador n)
-			throws ErroRepositorioException {
-		NegativadorExclusaoMotivo nemt = null;
-		if (nmr.getCobrancaDebitoSituacao().getId().equals(CobrancaDebitoSituacao.PAGO)) {
-			nemt = repositorioSpcSerasa.pesquisarCodigoMotivoExclusao(CobrancaDebitoSituacao.PAGO, n.getId(),
-					NegativadorExclusaoMotivo.PAGAMENTO_DA_DIVIDA);
-		} else if (nmr.getCobrancaDebitoSituacao().getId().equals(CobrancaDebitoSituacao.PARCELADO)) {
-			nemt = repositorioSpcSerasa.pesquisarCodigoMotivoExclusao(CobrancaDebitoSituacao.PARCELADO, n.getId(),
-					NegativadorExclusaoMotivo.RENEGOCIACAO_DA_DIVIDA);
-		} else if (nmr.getCobrancaDebitoSituacao().getId().equals(CobrancaDebitoSituacao.CANCELADO)) {
-			nemt = repositorioSpcSerasa.pesquisarCodigoMotivoExclusao(CobrancaDebitoSituacao.CANCELADO, n.getId(),
-					NegativadorExclusaoMotivo.MOTIVO_NAO_IDENTIFICADO);
+	private void inserirNegativadorMovimentoRegistroTraillerExclusaoSERASA(Negativador negativador, NegativadorMovimento movimento, Object[] retorno,
+			char[] registro) throws ErroRepositorioException {
+		FiltroNegativadorRegistroTipo filtroRegistroTipo = new FiltroNegativadorRegistroTipo();
+		filtroRegistroTipo.adicionarParametro(new ParametroSimples(FiltroNegativadorRegistroTipo.NEGATIVADOR_ID, negativador.getId()));
+		filtroRegistroTipo.adicionarParametro(new ParametroSimples(FiltroNegativadorRegistroTipo.CODIGO_REGISTRO,
+				NegativadorRegistroTipo.TIPO_TRAILLER));
+
+		NegativadorRegistroTipo negativadorRegistroTipo = (NegativadorRegistroTipo) Util.retonarObjetoDeColecao(
+				RepositorioUtilHBM.getInstancia().pesquisar(filtroRegistroTipo, NegativadorRegistroTipo.class.getName()));
+
+		NegativadorMovimentoReg negativadorMovimentoReg = new NegativadorMovimentoReg();
+		negativadorMovimentoReg.setNegativadorMovimento(movimento);
+		negativadorMovimentoReg.setNegativadorRegistroTipo(negativadorRegistroTipo);
+		negativadorMovimentoReg.setConteudoRegistro(new String(registro));
+		negativadorMovimentoReg.setIndicadorSituacaoDefinitiva(new Short((short) 1));
+		negativadorMovimentoReg.setNumeroRegistro((Integer) retorno[0]);
+		negativadorMovimentoReg.setUltimaAlteracao(new Date());
+		negativadorMovimentoReg.setIndicadorItemAtualizado(ConstantesSistema.NAO_ACEITO);
+		RepositorioUtilHBM.getInstancia().inserir(negativadorMovimentoReg);
+	}
+
+	private char[] gerarRegistroTipoTraillerExclusaoSERASA(Object[] retorno) {
+		char[] registro;
+		registro = new char[600];
+		for (int i = 0; i < registro.length; i++) {
+			registro[i] = ' ';
 		}
 
-		return nemt;
+		String numeroRegistro = retorno[0].toString();
+		if (numeroRegistro.length() < 7) {
+			while (numeroRegistro.length() != 7) {
+				numeroRegistro = "0" + numeroRegistro;
+			}
+		}
+
+		// h.01
+		colocarConteudo("9", 1, registro);
+		// h.02 -> h.04
+		colocarConteudo(numeroRegistro, 594, registro);
+		return registro;
+	}
+
+	private char[] gerarRegistroTipoTraillerExclusaoSPC(Object[] retorno) {
+		char[] registro;
+		registro = new char[340];
+		for (int i = 0; i < registro.length; i++) {
+			registro[i] = ' ';
+		}
+		// h.01
+		colocarConteudo("99", 1, registro);
+		
+		// h.02
+		String sNumeroRegistro = retorno[0].toString();
+		if (sNumeroRegistro.length() < 6) {
+			while (sNumeroRegistro.length() != 6) {
+				sNumeroRegistro = "0" + sNumeroRegistro;
+			}
+		}
+		colocarConteudo(sNumeroRegistro, 3, registro);
+		
+		// h.03
+		String tamanho316 = "";
+		while (tamanho316.length() != 316) {
+			tamanho316 = " " + tamanho316;
+		}
+		colocarConteudo(tamanho316, 9, registro);
+		
+		// h.04
+		colocarConteudo("          ", 325, registro);
+		
+		// h.05
+		colocarConteudo(sNumeroRegistro, 335, registro);
+		return registro;
+	}
+
+	private NegativadorExclusaoMotivo obterNegativadorExclusaoMotivoSERASA(NegativadorMovimentoReg negativadorMovimentoReg,
+			Negativador negativador) throws ErroRepositorioException {
+		
+		NegativadorExclusaoMotivo exclusaoMotivo = null;
+		
+		short idExclusaoMovimento = 0;
+		
+		if (negativadorMovimentoReg.getCobrancaDebitoSituacao().getId().equals(CobrancaDebitoSituacao.PAGO)) {
+			idExclusaoMovimento = NegativadorExclusaoMotivo.SERASA_PAGAMENTO_DIVIDA;
+		} else if (negativadorMovimentoReg.getCobrancaDebitoSituacao().getId().equals(CobrancaDebitoSituacao.PARCELADO)) {
+			idExclusaoMovimento = NegativadorExclusaoMotivo.SERASA_RENEGOCIACAO_DIVIDA;
+		} else if (negativadorMovimentoReg.getCobrancaDebitoSituacao().getId().equals(CobrancaDebitoSituacao.CANCELADO)) {
+			idExclusaoMovimento = NegativadorExclusaoMotivo.SERASA_MOTIVO_NAO_IDENTIFICADO;
+		}
+
+		exclusaoMotivo = repositorioSpcSerasa.pesquisarCodigoMotivoExclusaoSERASA(
+				CobrancaDebitoSituacao.PAGO, negativador.getId(), idExclusaoMovimento);
+		
+		return exclusaoMotivo;
+	}
+	
+	private NegativadorExclusaoMotivo obterNegativadorExclusaoMotivoSPC(NegativadorMovimentoReg negativadorMovimentoReg,
+			Negativador negativador) throws ErroRepositorioException {
+		
+		NegativadorExclusaoMotivo exclusaoMotivo = null;
+		
+		if (negativadorMovimentoReg.getCobrancaDebitoSituacao().getId().equals(CobrancaDebitoSituacao.PAGO)) {
+			exclusaoMotivo = repositorioSpcSerasa.pesquisarCodigoMotivoExclusao(CobrancaDebitoSituacao.PAGO, negativador.getId(),
+					NegativadorExclusaoMotivo.SPC_PAGAMENTO_DA_DIVIDA);
+		} else if (negativadorMovimentoReg.getCobrancaDebitoSituacao().getId().equals(CobrancaDebitoSituacao.PARCELADO)) {
+			exclusaoMotivo = repositorioSpcSerasa.pesquisarCodigoMotivoExclusao(CobrancaDebitoSituacao.PARCELADO, negativador.getId(),
+					NegativadorExclusaoMotivo.SPC_RENEGOCIACAO_DA_DIVIDA);
+		} else if (negativadorMovimentoReg.getCobrancaDebitoSituacao().getId().equals(CobrancaDebitoSituacao.CANCELADO)) {
+			exclusaoMotivo = repositorioSpcSerasa.pesquisarCodigoMotivoExclusao(CobrancaDebitoSituacao.CANCELADO, negativador.getId(),
+					NegativadorExclusaoMotivo.SPC_MOTIVO_NAO_IDENTIFICADO);
+		}
+
+		return exclusaoMotivo;
 	}
 
 	/**
-	 * Método consuta os Negativadores que tenham movimento de Exclusão do spc
-	 * ou serasa
-	 * 
-	 * [UC0673] - Gerar Movimento da Exclusão de Negativação [SB0002] - Gerar
-	 * TxT de Movimento de Exclusão de Negativacao
-	 * 
-	 * @author Thiago Toscano
-	 * @date 26/12/2007
-	 * 
+	 * Método consuta os Negativadores que tenham movimento de Exclusão do spc ou serasa
+	 * [UC0673] - Gerar Movimento da Exclusão de Negativação
+	 * [SB0002] - Gerar TXT de Movimento de Exclusão de Negativacao
 	 */
 	public Collection gerarArquivoTXTMovimentoExclusaoNegativacao(Integer idMovimento) throws ControladorException {
-
-		Integer idNegativador = null;
 		try {
 			Collection retorno = new ArrayList();
 
-			FiltroNegativadorMovimento fnm = new FiltroNegativadorMovimento();
-			fnm.adicionarParametro(new ParametroSimples(FiltroNegativadorMovimento.ID, idMovimento));
-			fnm.adicionarCaminhoParaCarregamentoEntidade("negativador.cliente");
-			Collection coll = RepositorioUtilHBM.getInstancia().pesquisar(fnm, NegativadorMovimento.class.getName());
-			if (coll != null && !coll.isEmpty()) {
-				NegativadorMovimento nm = (NegativadorMovimento) coll.iterator().next();
+			FiltroNegativadorMovimento filtroMovimento = new FiltroNegativadorMovimento();
+			filtroMovimento.adicionarParametro(new ParametroSimples(FiltroNegativadorMovimento.ID, idMovimento));
+			filtroMovimento.adicionarCaminhoParaCarregamentoEntidade(FiltroNegativadorMovimento.NEGATIVADOR_CLIENTE);
+			
+			Collection colecaoMovimento = RepositorioUtilHBM.getInstancia().pesquisar(filtroMovimento, NegativadorMovimento.class.getName());
+			
+			if (colecaoMovimento != null && !colecaoMovimento.isEmpty()) {
+				NegativadorMovimento movimento = (NegativadorMovimento) colecaoMovimento.iterator().next();
 
 				NegativadorMovimentoGeradosExclusaoHelper helper = new NegativadorMovimentoGeradosExclusaoHelper();
-				helper.setDescricaoNegativador(nm.getNegativador().getCliente().getNome());
-				helper.setDataProcessamento(nm.getUltimaAlteracao());
-				helper.setHoraProcessamento(nm.getUltimaAlteracao());
-				helper.setNsa(nm.getNumeroSequencialEnvio() + "");
-				helper.setQuantidadeRegistros(nm.getNumeroRegistrosEnvio() + "");
-				helper.setValorDebito(gcom.util.Util.formataBigDecimal(nm.getValorTotalEnvio(), 2, true) + "");
+				helper.setDescricaoNegativador(movimento.getNegativador().getCliente().getNome());
+				helper.setDataProcessamento(movimento.getUltimaAlteracao());
+				helper.setHoraProcessamento(movimento.getUltimaAlteracao());
+				helper.setNsa(movimento.getNumeroSequencialEnvio() + "");
+				helper.setQuantidadeRegistros(movimento.getNumeroRegistrosEnvio() + "");
+				helper.setValorDebito(gcom.util.Util.formataBigDecimal(movimento.getValorTotalEnvio(), 2, true) + "");
 				retorno.add(helper);
-
-				idNegativador = nm.getNegativador().getId();
+				
+				if (movimento.getNegativador() != null) {
+					this.gerarArquivoNegativacao(movimento, false);
+				}
 			}
-
-			if (idNegativador != null) {
-				this.gerarArquivo(idMovimento, false, idNegativador);
-			}
-
 			return retorno;
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
@@ -5370,8 +4962,8 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 						idNegativadorRegistroTipo = NegativadorRegistroTipo.ID_SERASA_TRAILLER;
 					}
 					
-					this.gerarNegativadorMovimentoRegistro(nm.getNegativador().getId(), nm.getId(), registroTrailler,
-							(numeroRegistro + 1), negCriterio, idNegativadorRegistroTipo);
+					this.gerarNegativadorMovimentoRegistro(nm.getId(), registroTrailler, (numeroRegistro + 1),
+							negCriterio, idNegativadorRegistroTipo);
 					
 					sb.append(registroTrailler.toString());
 					sb.append("\n");
@@ -7355,7 +6947,6 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			}
 
 			// D.06 - Código de natureza da operação
-			// TODO - ??????
 			registroDetalheConsumidor.append("SB ");
 			// D.07 - Código da praça Embratel
 			registroDetalheConsumidor.append("    ");
@@ -7583,23 +7174,15 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 	}
 
 	/**
-	 * [UC0672] Registrar Movimento de Retorno dos Negativadores Insere Processo
-	 * Batch para Registrar Movimento de Retorno do Negativadaor.
-	 * 
-	 * @author Yara T. Souza
-	 * @date 09/12/2008
-	 * 
-	 * @return void
-	 * @throws ControladorException
+	 * [UC0672] Registrar Movimento de Retorno dos Negativadores
+	 * Insere Processo Batch para Registrar Movimento de Retorno do Negativador.
 	 */
 	public void inserirProcessoRegistrarNegativadorMovimentoRetorno(Usuario usuario) throws ControladorException {
-
 		Fachada fachada = Fachada.getInstancia();
 
 		int idProcesso = Processo.GERAR_MOVIMENTO_RETORNO_NEGATIVACAO;
 
 		ProcessoIniciado processoIniciado = new ProcessoIniciado();
-
 		Processo processo = new Processo();
 		processo.setId(idProcesso);
 		processoIniciado.setUsuario(usuario);
@@ -7608,38 +7191,23 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 		processoIniciado.setProcesso(processo);
 		processoIniciado.setProcessoSituacao(processoSituacao);
 
-		// 3 - Insere Processo Batch.
 		Integer codigoProcessoIniciadoGerado = (Integer) fachada.inserirProcessoIniciado(processoIniciado);
-		System.out.println("codigoProcessoIniciadoGerado = " + codigoProcessoIniciadoGerado);
-
 	}
 
 	/**
-	 * [UC0672] Registrar Movimento de Retorno dos Negativadores Busca o Arquivo
-	 * salvo na pasta bin , para processar Movimento de Retorno da Negativação.
+	 * [UC0672] Registrar Movimento de Retorno dos Negativadores
 	 * 
-	 * @author Yara T. Souza
-	 * @date 09/12/2008
-	 * 
-	 * @return Object[]
-	 * @throws ControladorException
+	 * Busca o Arquivo salvo na pasta bin, para processar Movimento
+	 * de Retorno da Negativação.
 	 */
 	private Object[] getArquivoNegativadorMovimentoRetorno() throws ControladorException {
-
-		// cria uma string builder que recupera o txt e joga para o
-		// controlador para o processamento
 		StringBuilder stringBuilderTxt = new StringBuilder();
 		Integer idNegativador = null;
 		Object[] retorno = new Object[4];
 
-		// cria um contador para saber quantas linhas terá o txt
 		int quantidadeRegistros = 0;
 
-		Date data = new Date();
-		String AAAAMMDD = Util.formatarDataAAAAMMDD(data);
-		// String HHMM = Util.formatarDataHHMM(data);
-		String formatodatahora = AAAAMMDD;
-		String nomeArquivo = "REG_SPC_SERASA" + formatodatahora;
+		String nomeArquivo = "REG_SPC_SERASA_" + Util.formatarDataAAAAMMDD(new Date());
 
 		File file = new File(nomeArquivo);
 		FileInputStream fin = null;
@@ -7649,12 +7217,11 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			fin = new FileInputStream(file);
 			reader = new InputStreamReader(fin);
 			buffer = new BufferedReader(reader);
-			// cria uma variavel do tipo boolean
+			
 			boolean eof = false;
 			boolean primeiraLinha = true;
-			// enquanto a variavel for false
+
 			while (!eof) {
-				// pega a linha do arquivo
 				String linhaLida = buffer.readLine();
 
 				if (primeiraLinha) {
@@ -7675,7 +7242,6 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 					primeiraLinha = false;
 				}
 
-				// se for a ultima linha do arquivo
 				if (linhaLida != null && linhaLida.length() > 0) {
 					stringBuilderTxt.append(linhaLida);
 					stringBuilderTxt.append("\n");
@@ -7684,12 +7250,9 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 					break;
 				}
 			}
-
 		} catch (FileNotFoundException e1) {
-
 			e1.printStackTrace();
 		} catch (IOException e) {
-
 			e.printStackTrace();
 		} finally {
 			IoUtil.fecharStream(buffer);
@@ -7703,148 +7266,118 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 		retorno[3] = nomeArquivo;
 
 		return retorno;
-
 	}
 
 	/**
-	 * 
-	 * Ponto inicial do caso de uso de Registrar Movimento de Retorno dos
-	 * Negativadores
-	 * 
+	 * Ponto inicial do caso de uso de Registrar Movimento de Retorno dos Negativadores
 	 * [UC0672] Registrar Movimento de Retorno dos Negativadores
-	 * 
-	 * @author Yara Taciane
-	 * @throws ErroRepositorioException
-	 * @date 10/01/2008
 	 */
-	public Collection registrarNegativadorMovimentoRetorno(Integer idFuncionalidadeIniciada)
-			throws ControladorException {
-
-		// --------------------------------------------------------
-		//
-		// Registrar o início do processamento da Unidade de
-		// Processamento
-		// do Batch
-		//
-		// -------------------------------------------------------
+	public Collection registrarNegativadorMovimentoRetorno(Integer idFuncionalidadeIniciada) throws ControladorException {
+		
 		int idUnidadeIniciada = 0;
-		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(idFuncionalidadeIniciada,
-				UnidadeProcessamento.FUNCIONALIDADE, 0);
+		idUnidadeIniciada = getControladorBatch().iniciarUnidadeProcessamentoBatch(
+				idFuncionalidadeIniciada, UnidadeProcessamento.FUNCIONALIDADE, 0);
 
-		System.out.println(" [UC0672] Registrar Movimento de Retorno dos Negativadores ");
+		logger.info(" [UC0672] Registrar Movimento de Retorno dos Negativadores ");
 
-		Integer countRegistro = 0;
 		Collection collRegistrosLidos = new ArrayList();
-		String numeroSequencialRetorno = "";
-		NegativadorMovimento negativadorMovimento = null;
+		String nomeArquivo = null;
 
-		Object[] retornoArquivo = getArquivoNegativadorMovimentoRetorno();
-		Integer idNegativador = (Integer) retornoArquivo[0];
-		StringBuilder stringBuilderTxt = (StringBuilder) retornoArquivo[1];
-		Integer quantidadeRegistros = (Integer) retornoArquivo[2];
-		String nomeArquivo = (String) retornoArquivo[3];
+		try {
+			Integer countRegistro = 0;
+			String numeroSequencialRetorno = "";
+			NegativadorMovimento negativadorMovimento = null;
 
-		Negativador negativador = new Negativador();
-		negativador.setId(idNegativador);
+			Object[] retornoArquivo = getArquivoNegativadorMovimentoRetorno();
+			Integer idNegativador = (Integer) retornoArquivo[0];
+			StringBuilder stringBuilderTxt = (StringBuilder) retornoArquivo[1];
+			Integer quantidadeRegistros = (Integer) retornoArquivo[2];
+			nomeArquivo = (String) retornoArquivo[3];
 
-		String[] reg = new String[2];
+			Negativador negativador = new Negativador();
+			negativador.setId(idNegativador);
 
-		if (idNegativador.equals(Negativador.NEGATIVADOR_SPC)) {
+			String[] reg = new String[2];
 
-			Object[] retorno = validarArquivoMovimentoRetornoSPC(stringBuilderTxt, negativador);
+			if (idNegativador.equals(Negativador.NEGATIVADOR_SPC)) {
 
-			collRegistrosLidos = (Collection) retorno[0];
-			negativadorMovimento = (NegativadorMovimento) retorno[1];
+				Object[] retorno = validarArquivoMovimentoRetornoSPC(stringBuilderTxt, negativador);
 
-			Object[] registrosLidos = collRegistrosLidos.toArray();
+				collRegistrosLidos = (Collection) retorno[0];
+				negativadorMovimento = (NegativadorMovimento) retorno[1];
 
-			for (int i = 0; i < registrosLidos.length; i = i + 1) {
+				Object[] registrosLidos = collRegistrosLidos.toArray();
 
-				if (i % 501 == 0) {
-					System.out.println("Retorno " + negativadorMovimento.getNumeroSequencialEnvio() + ": Processados "
-							+ i + " / " + registrosLidos.length);
-				}
-				if (i > 0) {
-					try {
+				for (int i = 0; i < registrosLidos.length; i = i + 1) {
 
+					if (i % 501 == 0) {
+						logger.info("Retorno " + negativadorMovimento.getNumeroSequencialEnvio() + ": Processados " + i + " / " + registrosLidos.length);
+					}
+
+					if (i > 0) {
 						reg[0] = (String) registrosLidos[i];
+
 						if (i + 1 < registrosLidos.length) {
 							reg[1] = (String) registrosLidos[i + 1];
 						} else {
 							reg[1] = null;
 						}
-						i = i + 1;
-						this.atualizarMovimentoEnvioSPC(reg, negativador, negativadorMovimento);
-					} catch (ControladorException e) {
 
-						getControladorBatch().encerrarUnidadeProcessamentoBatch(e, idUnidadeIniciada, true);
-						envioEmailErroMovimentoRetorno(e, nomeArquivo);
-						sessionContext.setRollbackOnly();
-						throw new ControladorException("erro.sistema", e);
+						i = i + 1;
+
+						this.atualizarMovimentoEnvioSPC(reg, negativador, negativadorMovimento);
+
+					} else {
+						numeroSequencialRetorno = getConteudo(18, 8, registrosLidos[i].toString().toCharArray());
 					}
 
-				} else {
-					// H.04
-					numeroSequencialRetorno = getConteudo(18, 8, registrosLidos[i].toString().toCharArray());
 				}
+			} else if (idNegativador.equals(Negativador.NEGATIVADOR_SERASA)) {
+				Object[] retorno = validarArquivoMovimentoRetornoSERASA(stringBuilderTxt, negativador);
+				collRegistrosLidos = (Collection) retorno[0];
+				Iterator it = collRegistrosLidos.iterator();
+				negativadorMovimento = (NegativadorMovimento) retorno[1];
 
+				while (it.hasNext()) {
+
+					String registro = (String) it.next();
+					countRegistro = countRegistro + 1;
+
+					if (countRegistro > 1) {
+
+						this.atualizarMovimentoEnvioSERASA(registro, negativador, negativadorMovimento);
+
+					} else {
+						numeroSequencialRetorno = getConteudo(120, 6, registro.toCharArray());
+					}
+
+				}
 			}
 
-		} else if (idNegativador.equals(Negativador.NEGATIVADOR_SERASA)) {
-			System.out.println("################################# " + Negativador.NEGATIVADOR_SERASA);
+			NegativadorContrato negativadorContrato = new NegativadorContrato();
 
-			Object[] retorno = validarArquivoMovimentoRetornoSERASA(stringBuilderTxt, negativador);
-			collRegistrosLidos = (Collection) retorno[0];
-			Iterator it = collRegistrosLidos.iterator();
-			negativadorMovimento = (NegativadorMovimento) retorno[1];
-			while (it.hasNext()) {
-				String registro = (String) it.next();
-				countRegistro = countRegistro + 1;
-				if (countRegistro > 1) {
-					this.atualizarMovimentoEnvioSERASA(registro, negativador, negativadorMovimento);
-				} else {
-					// H.09
-					numeroSequencialRetorno = getConteudo(120, 6, registro.toCharArray());
-				}
-
-			}
-		}
-
-		// -----------------------------------------------------------------------------------------------------
-		NegativadorContrato negativadorContrato = new NegativadorContrato();
-		try {
 			negativadorContrato = this.repositorioSpcSerasa.consultarNegativadorContratoVigente(negativador.getId());
 
 			negativadorContrato.setNumeroSequencialRetorno(Util.converterStringParaInteger(numeroSequencialRetorno));
 
-			System.out.println("################################# " + numeroSequencialRetorno);
-
-			// -------------------------------------------------------------
 			RepositorioUtilHBM.getInstancia().atualizar(negativadorContrato);
-			// -------------------------------------------------------------
 
-			// 7.
 			negativadorMovimento.setDataRetorno(new Date());
 			negativadorMovimento.setDataProcessamentoRetorno(new Date());
 			negativadorMovimento.setNumeroSequencialRetorno(Util.converterStringParaInteger(numeroSequencialRetorno));
 			negativadorMovimento.setNumeroRegistrosRetorno(quantidadeRegistros);
 			negativadorMovimento.setUltimaAlteracao(new Date());
 
-			// --------------------------------------------------------------
 			RepositorioUtilHBM.getInstancia().atualizar(negativadorMovimento);
-			// --------------------------------------------------------------
 
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(null, idUnidadeIniciada, false);
-
 		} catch (Exception ex) {
 			getControladorBatch().encerrarUnidadeProcessamentoBatch(ex, idUnidadeIniciada, true);
 			envioEmailErroMovimentoRetorno(ex, nomeArquivo);
-			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", ex);
 		}
 
 		return collRegistrosLidos;
-
 	}
 
 	private void envioEmailErroMovimentoRetorno(Exception excecao, String nomeArquivo) {
@@ -7868,17 +7401,13 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			System.out.println("email destinatário:" + emailReceptor);
 
 			ServicosEmail.enviarMensagem(emailRemetente, emailReceptor, tituloMensagem, corpoMensagem);
-
 		} catch (ControladorException e1) {
-
 			e1.printStackTrace();
 		} catch (ErroEmailException e) {
-
 			e.printStackTrace();
 		} finally {
 			IoUtil.fecharStream(baos);
 		}
-
 	}
 
 	/**
@@ -8152,60 +7681,38 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 
 	/**
 	 * 
-	 * Registrar Movimento de Retorno dos Negativadores [UC0672] Registrar
-	 * Movimento de Retorno dos Negativadores
+	 * Registrar Movimento de Retorno dos Negativadores
+	 * [UC0672] Registrar Movimento de Retorno dos Negativadores
 	 * 
 	 * [SB0003] - Validar Arquivo de Movimento de Retorno do SERASA
-	 * 
-	 * @author Yara Taciane
-	 * @date 10/01/2008
-	 * 
-	 * @param negativadorMovimentoRegRetMot
-	 * @throws ControladorException
 	 */
+	private Object[] validarArquivoMovimentoRetornoSERASA(StringBuilder texto, Negativador negativador) throws ControladorException {
 
-	private Object[] validarArquivoMovimentoRetornoSERASA(StringBuilder stringBuilderTxt, Negativador negativador)
-			throws ControladorException {
-
-		// ----------------------------------------------------------------
-		// [SB0003] - Validar Arquivo de Movimento de Retorno do SERASA
-		// ----------------------------------------------------------------
-
-		Object[] retorno = new Object[2];
-		String numeroSequencialArquivo = "";
-		String numeroRegistro = "";
-		int countRegistro = 0;
+		int contadorRegistro = 0;
 		NegativadorMovimento negativadorMovimento = null;
 
-		Collection collRegistrosLidos = new ArrayList();
+		Collection colecaoRegistrosLidos = new ArrayList();
 
-		StringTokenizer stk = new StringTokenizer(stringBuilderTxt.toString(), "\n");
+		StringTokenizer stk = new StringTokenizer(texto.toString(), "\n");
 
 		while (stk.hasMoreTokens()) {
 
-			countRegistro = countRegistro + 1;
+			contadorRegistro = contadorRegistro + 1;
 
 			String registro = stk.nextToken();
 
 			// H.01
 			String tipoRegistro = getConteudo(1, 1, registro.toCharArray());
 
-			// --------------------------------------------------------------------------------------
-			// Verifica Header (Primeira Linha)
-			// ---------------------------------------------------------------------------------------
-			if (countRegistro == 1) {
-
-				// 2.
+			if (contadorRegistro == 1) {
 				if (!tipoRegistro.toUpperCase().equals("0")) {
 					throw new ControladorException("atencao.arquivo.movimento.sem.header");
 				}
 
 				// H.02
 				String cnpj = getConteudo(2, 9, registro.toCharArray());
-				// 3.
-				// Pega as informações de Sistema Parâmetros
-				SistemaParametro sistemaParametros = null;
-				sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();
+
+				SistemaParametro sistemaParametros = getControladorUtil().pesquisarParametrosDoSistema();
 
 				String cnpjEmpresa = null;
 				if (sistemaParametros != null && sistemaParametros.getCnpjEmpresa() != null) {
@@ -8218,76 +7725,79 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 
 				// H.03
 				String dataMovimento = getConteudo(11, 8, registro.toCharArray());
-				// 4.
 				if (!Util.validarDiaMesAno(dataMovimento)) {
 					throw new ControladorException("atencao.data_movimento_invalida", null, dataMovimento);
 				}
 
 				// H.08
-				// 9.
 				String identificacaoArquivoFixo = getConteudo(105, 15, registro.toCharArray());
 				if (!identificacaoArquivoFixo.toUpperCase().equals("SERASA-CONVEM04")) {
-					throw new ControladorException("atencao.identificacao_arquivo_invalida", null,
-							identificacaoArquivoFixo);
+					throw new ControladorException("atencao.identificacao_arquivo_invalida", null, identificacaoArquivoFixo);
 				}
 
 				// H.10
-				// 10.
 				String codigoEnvioArquivo = getConteudo(126, 1, registro.toCharArray());
 				if (!codigoEnvioArquivo.toUpperCase().equals("R")) {
 					throw new ControladorException("atencao.codigo_envio_arquivo_invalido", null, codigoEnvioArquivo);
 				}
 
-				// 12.
-				NegativadorContrato negativadorContrato = new NegativadorContrato();
-
 				try {
-					negativadorContrato = this.repositorioSpcSerasa.consultarNegativadorContratoVigente(negativador
-							.getId());
+					NegativadorContrato negativadorContrato = this.repositorioSpcSerasa.consultarNegativadorContratoVigente(negativador.getId());
 
-					String numeroSequencialEnvioBD = negativadorContrato.getNumeroSequencialEnvio() + "";
+					String numeroSequencialEnvioBase = negativadorContrato.getNumeroSequencialEnvio() + "";
 
-					String qtdZeros = "";
+					String quantidadeZeros = "";
 
-					int tamanho = 6 - numeroSequencialEnvioBD.length();
+					int tamanho = 6 - numeroSequencialEnvioBase.length();
 
 					for (int i = 0; i < tamanho; i++) {
-						qtdZeros = qtdZeros + "0";
+						quantidadeZeros = quantidadeZeros + "0";
 					}
 
-					numeroSequencialEnvioBD = qtdZeros + numeroSequencialEnvioBD;
+					numeroSequencialEnvioBase = quantidadeZeros + numeroSequencialEnvioBase;
 
 					// H.09
-					numeroSequencialArquivo = getConteudo(120, 6, registro.toCharArray());
+					String numeroSequencialArquivo = getConteudo(120, 6, registro.toCharArray());
 
-					// 6.
-					if (Util.converterStringParaInteger(numeroSequencialArquivo) > Util
-							.converterStringParaInteger(numeroSequencialEnvioBD)) {
+					if (Util.converterStringParaInteger(numeroSequencialArquivo) > Util.converterStringParaInteger(numeroSequencialEnvioBase)) {
 						throw new ControladorException("atencao.movimento_fora_sequencia");
 					}
 
-					// 13.
-					negativadorMovimento = this.repositorioSpcSerasa.getNegativadorMovimento(negativador,
+					if (negativadorContrato.getIndicadorControleNsaRetorno().equals(ConstantesSistema.SIM)) {
+						String numeroSequencialRetornoBase = (negativadorContrato.getNumeroSequencialRetorno() + 1) + "";
+
+						String quantidadeZerosRetorno = "";
+
+						int tamanhoretorno = 8 - numeroSequencialRetornoBase.length();
+
+						for (int i = 0; i < tamanhoretorno; i++) {
+							quantidadeZerosRetorno = quantidadeZerosRetorno + "0";
+						}
+
+						numeroSequencialRetornoBase = quantidadeZerosRetorno + numeroSequencialRetornoBase;
+
+						if (Util.converterStringParaInteger(numeroSequencialArquivo).compareTo(Util.converterStringParaInteger(numeroSequencialRetornoBase)) != 0) {
+							throw new ControladorException("atencao.movimento_fora_sequencia");
+						}
+					}
+
+					negativadorMovimento = repositorioSpcSerasa.getNegativadorMovimento(negativador,
 							Util.converterStringParaInteger(numeroSequencialArquivo));
 					if (negativadorMovimento != null && negativadorMovimento.getDataRetorno() != null) {
 						throw new ControladorException("atencao.movimento_retorno_ja_processado");
 					}
-					// ----------------------------------------------------------------------------------
 
-					// 8.
 					// H.14
-					numeroRegistro = getConteudo(594, 7, registro.toCharArray());
-					Integer numRegistro = Util.converterStringParaInteger(numeroRegistro);
+					Integer numeroRegistro = Util.converterStringParaInteger(getConteudo(594, 7, registro.toCharArray()));
 
-					NegativadorMovimentoReg negativadorMovimentoReg = this.repositorioSpcSerasa
-							.getNegativadorMovimentoReg(negativadorMovimento, numRegistro);
+					NegativadorMovimentoReg negativadorMovimentoReg = this.repositorioSpcSerasa.getNegativadorMovimentoReg(
+							negativadorMovimento, numeroRegistro);
 
 					if (negativadorMovimentoReg.getConteudoRegistro() == null) {
 						throw new ControladorException("atencao.arquivo_movimento_sem_registros");
 					}
-					// 15.
-					this.atualizarRegistroEnvio(negativador, registro, negativadorMovimentoReg);
 
+					this.atualizarRegistroEnvio(negativador, registro, negativadorMovimentoReg);
 				} catch (ErroRepositorioException e) {
 					sessionContext.setRollbackOnly();
 					throw new ControladorException("erro.sistema", e);
@@ -8295,40 +7805,33 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 
 			}
 
-			// ----------------------------------------------------------------------------------------
-
-			if (tipoRegistro.equals("9")) {
-
-			} else if (stk.hasMoreTokens() == false && !tipoRegistro.equals("9")) {
+			if (stk.hasMoreTokens() == false && !tipoRegistro.equals("9")) {
 				throw new ControladorException("atencao.arquivo_movimento_nao_possui_trailler");
 			}
 
-			if (!tipoRegistro.equals("9") && !tipoRegistro.equals("1") && !tipoRegistro.equals("0")
-					&& countRegistro > 1) {
+			if (!tipoRegistro.equals("9") && !tipoRegistro.equals("1") && !tipoRegistro.equals("0") && contadorRegistro > 1) {
 				throw new ControladorException("atencao.arquivo_movimento_contem_registros_com_tipos_invalidos");
 			}
 
-			String numeroSequencia = getConteudo(594, 7, registro.toCharArray()).trim();
-
 			try {
-				int numSequencia = Util.converterStringParaInteger(numeroSequencia.trim());
+				int numeroSequencia = Util.converterStringParaInteger(getConteudo(594, 7, registro.toCharArray()).trim());
 
-				if (numSequencia != countRegistro) {
+				if (numeroSequencia != contadorRegistro) {
 					throw new ControladorException("atencao.arquivo_movimento_contem_registros_com_sequencia_invalida");
 				}
 			} catch (Exception e) {
 
 			}
 
-			collRegistrosLidos.add(registro);
-
+			colecaoRegistrosLidos.add(registro);
 		}
 
-		if (negativadorMovimento.getNumeroRegistrosEnvio() != countRegistro) {
+		if (negativadorMovimento.getNumeroRegistrosEnvio() != contadorRegistro) {
 			throw new ControladorException("atencao.total_registro_do_arquivo_invalido");
 		}
 
-		retorno[0] = collRegistrosLidos;
+		Object[] retorno = new Object[2];
+		retorno[0] = colecaoRegistrosLidos;
 		retorno[1] = negativadorMovimento;
 
 		return retorno;
@@ -8338,31 +7841,18 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 	}
 
 	/**
-	 * 
-	 * Registrar Movimento de Retorno dos Negativadores [UC0672] Registrar
-	 * Movimento de Retorno dos Negativadores
-	 * 
+	 * Registrar Movimento de Retorno dos Negativadores
+	 * [UC0672] Registrar Movimento de Retorno dos Negativadores
 	 * [SB0004] - Atualizar Movimento de Envio SERASA
-	 * 
-	 * @author Yara Taciane
-	 * @date 10/01/2008
-	 * 
 	 */
 	private void atualizarMovimentoEnvioSERASA(String registro, Negativador negativador,
 			NegativadorMovimento negativadorMovimento) throws ControladorException {
 
-		// ----------------------------------------------------------------------------
-		// [SB0004] - Atualizar Movimento de Envio SERASA
-		// ----------------------------------------------------------------------------
-
 		String numeroRegistro = "";
-		// 7.
 
 		try {
-			// ---------------------------------------------------------------
 			numeroRegistro = getConteudo(594, 7, registro.toCharArray()).trim();
 			Integer numRegistro = Util.converterStringParaInteger(numeroRegistro);
-			// ------------------------------------------------------------
 
 			if (!numeroRegistro.equalsIgnoreCase("")) {
 
@@ -8372,17 +7862,13 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 					throw new ControladorException("atencao.arquivo_movimento_sem_registros");
 				}
 
-				// ---------------------------------------------------------------------------------
 				// [SB0005] - Atualizar Registro Envio
-				// -------------------------------------------------------------------------------
 				this.atualizarRegistroEnvio(negativador, registro, negativadorMovimentoReg);
-
 			}
 		} catch (ErroRepositorioException e) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);
 		}
-
 	}
 
 	/**
@@ -8481,7 +7967,8 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 	 * @throws ErroRepositorioException
 	 */
 	private void verificarRegistroSPC_01(Object[] registro, Negativador negativador,
-			NegativadorMovimentoReg negativadorMovimentoReg) throws ControladorException, ErroRepositorioException {
+ NegativadorMovimentoReg negativadorMovimentoReg)
+			throws ControladorException, ErroRepositorioException {
 
 		short indicadorRegistroAceito = -1;
 		String codigoRetorno = "-1";
@@ -8541,15 +8028,19 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 				negativadorMovimentoRegRetMot.setNegativadorMovimentoReg(negativadorMovimentoReg);
 
 				FiltroNegativadorRetornoMotivo fnrm = new FiltroNegativadorRetornoMotivo();
-				fnrm.adicionarParametro(new ParametroSimples(FiltroNegativadorRetornoMotivo.CODIGO_RETORNO_MOTIVO,
-						codRetorno.shortValue()));
-				fnrm.adicionarParametro(new ParametroSimples(
-						FiltroNegativadorRetornoMotivo.NEGATIVADOR_RETORNO_MOTIVO_NEGATIVADOR,
-						Negativador.NEGATIVADOR_SPC));
+				fnrm.adicionarParametro(new ParametroSimples(FiltroNegativadorRetornoMotivo.CODIGO_RETORNO_MOTIVO, codRetorno.shortValue()));
+				fnrm.adicionarParametro(new ParametroSimples(FiltroNegativadorRetornoMotivo.NEGATIVADOR_RETORNO_MOTIVO_NEGATIVADOR, Negativador.NEGATIVADOR_SPC));
 
-				NegativadorRetornoMotivo negativadorRetornoMot = (NegativadorRetornoMotivo) Util
-						.retonarObjetoDeColecao(RepositorioUtilHBM.getInstancia().pesquisar(fnrm,
-								NegativadorRetornoMotivo.class.getName()));
+				NegativadorRetornoMotivo negativadorRetornoMot = null;
+
+				try {
+
+					negativadorRetornoMot = (NegativadorRetornoMotivo) Util.retonarObjetoDeColecao(RepositorioUtilHBM.getInstancia().pesquisar(fnrm,
+							NegativadorRetornoMotivo.class.getName()));
+
+				} catch (ErroRepositorioException e) {
+					throw new ControladorException("erro.sistema", e);
+				}
 
 				// [FS007] - Verifica a exixtência do motivo de
 				if (negativadorRetornoMot != null) {
@@ -8595,18 +8086,22 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			try {
 
 				if (indicadorRegistroAceito == ConstantesSistema.NAO_ACEITO) {
-					FiltroNegativacaoImoveis filtroNegativacaoImoveis = new FiltroNegativacaoImoveis();
-					filtroNegativacaoImoveis.adicionarParametro(new ParametroSimples(
-							FiltroNegativacaoImoveis.IMOVEL_ID, imovel.getId()));
-					filtroNegativacaoImoveis.adicionarParametro(new ParametroSimples(
-							FiltroNegativacaoImoveis.NEGATIVADOR_ID, negativador.getId()));
-					filtroNegativacaoImoveis.adicionarParametro(new ParametroSimples(
-							FiltroNegativacaoImoveis.NEGATIVACAO_COMANDO_ID, negativadorMovimento
-									.getNegativacaoComando().getId()));
-
-					NegativacaoImoveis negativacaoImoveis = (NegativacaoImoveis) Util
-							.retonarObjetoDeColecao(RepositorioUtilHBM.getInstancia().pesquisar(
-									filtroNegativacaoImoveis, NegativacaoImoveis.class.getName()));
+					// FiltroNegativacaoImoveis filtroNegativacaoImoveis = new
+					// FiltroNegativacaoImoveis();
+					// filtroNegativacaoImoveis.adicionarParametro(new
+					// ParametroSimples(FiltroNegativacaoImoveis.IMOVEL_ID,imovel.getId()));
+					// filtroNegativacaoImoveis.adicionarParametro(new
+					// ParametroSimples(FiltroNegativacaoImoveis.NEGATIVADOR_ID,negativador.getId()));
+					// filtroNegativacaoImoveis.adicionarParametro(new
+					// ParametroSimples(FiltroNegativacaoImoveis.NEGATIVACAO_COMANDO_ID,
+					// negativadorMovimento.getNegativacaoComando().getId()));
+					//
+					// NegativacaoImovei negativacaoImoveis =
+					// (NegativacaoImovei)
+					// Util.retonarObjetoDeColecao(RepositorioUtilHBM.getInstancia().
+					// pesquisar(filtroNegativacaoImoveis,NegativacaoImovei.class.getName()));
+					NegativacaoImoveis negativacaoImoveis = obterNegativacaoImoveis(negativador, negativadorMovimento, imovel,
+							negativadorMovimentoReg.getCliente());
 
 					if (negativacaoImoveis != null) {
 						// 5.1
@@ -8647,8 +8142,8 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 						CobrancaSituacao cobrancaSituacao = new CobrancaSituacao();
 						cobrancaSituacao.setId(CobrancaSituacao.EM_ANALISE_PARA_NEGATIVACAO_SPC);
 
-						ImovelCobrancaSituacao imovelCobrancaSituacao = repositorioSpcSerasa.getImovelCobrancaSituacao(
-								imovel, cobrancaSituacao);
+						ImovelCobrancaSituacao imovelCobrancaSituacao = repositorioSpcSerasa.getImovelCobrancaSituacao(imovel, cobrancaSituacao,
+								negativadorMovimentoReg.getCliente().getId());
 
 						if (imovelCobrancaSituacao != null) {
 							imovelCobrancaSituacao.setDataRetiradaCobranca(new Date());
@@ -8669,29 +8164,28 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 					// Sampaio - 10/05/2010
 					// getControladorImovel().atualizarSituacaoCobrancaImovel(idCobrancaSituacaoImovel,
 					// CobrancaSituacao.EM_ANALISE_PARA_NEGATIVACAO,imovel.getId());
-
+					ImovelCobrancaSituacao imovelCobrancaSituacao = null;
 					// CRC3323 - alterado por Vivianne Sousa - analista:Fatima
 					// Sampaio - 10/05/2010
 					// 6.2.2. Atualizar a situação de cobrança do imóvel na
 					// tabela IMOVEL_COBRANCA_SITUACAO
-					List collImovelCobrancaSituacao = this.repositorioSpcSerasa.consultarImovelCobrancaSituacao(
-							imovel.getId(), CobrancaSituacao.EM_ANALISE_PARA_NEGATIVACAO_SPC);
+					List collImovelCobrancaSituacao = this.repositorioSpcSerasa.consultarImovelCobrancaSituacaoAtual(imovel.getId(),
+							CobrancaSituacao.EM_ANALISE_PARA_NEGATIVACAO_SPC, negativadorMovimentoReg.getCliente().getId());
 					if (collImovelCobrancaSituacao != null && !collImovelCobrancaSituacao.isEmpty()) {
 						Iterator iter = collImovelCobrancaSituacao.iterator();
 						while (iter.hasNext()) {
 							Integer idImovelCobrancaSituacao = (Integer) iter.next();
-							getControladorImovel().atualizarDataRetiradaImovelSituacaoCobranca(
-									idImovelCobrancaSituacao, new Date());
+							getControladorImovel().atualizarDataRetiradaImovelSituacaoCobranca(idImovelCobrancaSituacao, new Date());
+							imovelCobrancaSituacao = getControladorImovel().obterImovelCobrancaSituacao(idImovelCobrancaSituacao);
 						}
 					}
 
 					// 6.2.3. Incluir a nova situação de cobrança do imóvel na
 					// tabela IMOVEL_COBRANCA_SITUACAO
-					List idImovelCobrancaSituacaoNegativadoAutomaticamente = this.repositorioSpcSerasa
-							.consultarImovelCobrancaSituacao(imovel.getId(), idCobrancaSituacaoImovel);
+					List idImovelCobrancaSituacaoNegativadoAutomaticamente = this.repositorioSpcSerasa.consultarImovelCobrancaSituacaoAtual(imovel.getId(),
+							idCobrancaSituacaoImovel, negativadorMovimentoReg.getCliente().getId());
 					// verificação adicionada para permitir reiniciar o batch
-					if (idImovelCobrancaSituacaoNegativadoAutomaticamente == null
-							|| idImovelCobrancaSituacaoNegativadoAutomaticamente.isEmpty()) {
+					if (idImovelCobrancaSituacaoNegativadoAutomaticamente == null || idImovelCobrancaSituacaoNegativadoAutomaticamente.isEmpty()) {
 						ImovelCobrancaSituacao ics = new ImovelCobrancaSituacao();
 						CobrancaSituacao cobrancaSituacao = new CobrancaSituacao();
 						cobrancaSituacao.setId(idCobrancaSituacaoImovel);
@@ -8701,6 +8195,17 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 						ics.setCobrancaSituacao(cobrancaSituacao);
 						ics.setCliente(negativadorMovimentoReg.getCliente());
 						ics.setUltimaAlteracao(new Date());
+
+						// RM6364 - Alteração para negativação por período
+						// alterado por Vivianne Sousa - 12/12/2011
+						if (imovelCobrancaSituacao != null) {
+							if (imovelCobrancaSituacao.getAnoMesReferenciaInicio() != null) {
+								ics.setAnoMesReferenciaInicio(imovelCobrancaSituacao.getAnoMesReferenciaInicio());
+							}
+							if (imovelCobrancaSituacao.getAnoMesReferenciaFinal() != null) {
+								ics.setAnoMesReferenciaFinal(imovelCobrancaSituacao.getAnoMesReferenciaFinal());
+							}
+						}
 						RepositorioUtilHBM.getInstancia().inserir(ics);
 					}
 
@@ -8732,7 +8237,6 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);
 		}
-
 	}
 
 	/**
@@ -8751,7 +8255,8 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 	 * @throws ErroRepositorioException
 	 */
 	private void verificarRegistroSPC_02(Object[] registro, Negativador negativador,
-			NegativadorMovimentoReg negativadorMovimentoReg) throws ControladorException, ErroRepositorioException {
+ NegativadorMovimentoReg negativadorMovimentoReg)
+			throws ControladorException, ErroRepositorioException {
 
 		short indicadorRegistroAceito = -1;
 		String codigoRetorno = "-1";
@@ -8808,15 +8313,20 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 					negativadorMovimentoRegRetMot.setNegativadorMovimentoReg(negativadorMovimentoReg);
 
 					FiltroNegativadorRetornoMotivo fnrm = new FiltroNegativadorRetornoMotivo();
-					fnrm.adicionarParametro(new ParametroSimples(FiltroNegativadorRetornoMotivo.CODIGO_RETORNO_MOTIVO,
-							codRetorno.shortValue()));
-					fnrm.adicionarParametro(new ParametroSimples(
-							FiltroNegativadorRetornoMotivo.NEGATIVADOR_RETORNO_MOTIVO_NEGATIVADOR,
+					fnrm.adicionarParametro(new ParametroSimples(FiltroNegativadorRetornoMotivo.CODIGO_RETORNO_MOTIVO, codRetorno.shortValue()));
+					fnrm.adicionarParametro(new ParametroSimples(FiltroNegativadorRetornoMotivo.NEGATIVADOR_RETORNO_MOTIVO_NEGATIVADOR,
 							Negativador.NEGATIVADOR_SPC));
 
-					NegativadorRetornoMotivo negativadorRetornoMot = (NegativadorRetornoMotivo) Util
-							.retonarObjetoDeColecao(RepositorioUtilHBM.getInstancia().pesquisar(fnrm,
-									NegativadorRetornoMotivo.class.getName()));
+					NegativadorRetornoMotivo negativadorRetornoMot = null;
+
+					try {
+
+						negativadorRetornoMot = (NegativadorRetornoMotivo) Util.retonarObjetoDeColecao(RepositorioUtilHBM.getInstancia().pesquisar(fnrm,
+								NegativadorRetornoMotivo.class.getName()));
+
+					} catch (ErroRepositorioException e) {
+						throw new ControladorException("erro.sistema", e);
+					}
 
 					// [FS007] - Verifica a exixtência do motivo de
 					if (negativadorRetornoMot != null) {
@@ -8867,18 +8377,23 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			try {
 
 				if (indicadorRegistroAceito == ConstantesSistema.NAO_ACEITO) {
-					FiltroNegativacaoImoveis filtroNegativacaoImoveis = new FiltroNegativacaoImoveis();
-					filtroNegativacaoImoveis.adicionarParametro(new ParametroSimples(
-							FiltroNegativacaoImoveis.IMOVEL_ID, imovel.getId()));
-					filtroNegativacaoImoveis.adicionarParametro(new ParametroSimples(
-							FiltroNegativacaoImoveis.NEGATIVADOR_ID, negativador.getId()));
-					filtroNegativacaoImoveis.adicionarParametro(new ParametroSimples(
-							FiltroNegativacaoImoveis.NEGATIVACAO_COMANDO_ID, negativadorMovimento
-									.getNegativacaoComando().getId()));
+					// FiltroNegativacaoImoveis filtroNegativacaoImoveis = new
+					// FiltroNegativacaoImoveis();
+					// filtroNegativacaoImoveis.adicionarParametro(new
+					// ParametroSimples(FiltroNegativacaoImoveis.IMOVEL_ID,imovel.getId()));
+					// filtroNegativacaoImoveis.adicionarParametro(new
+					// ParametroSimples(FiltroNegativacaoImoveis.NEGATIVADOR_ID,negativador.getId()));
+					// filtroNegativacaoImoveis.adicionarParametro(new
+					// ParametroSimples(FiltroNegativacaoImoveis.NEGATIVACAO_COMANDO_ID,
+					// negativadorMovimento.getNegativacaoComando().getId()));
+					//
+					// NegativacaoImovei negativacaoImoveis =
+					// (NegativacaoImovei)
+					// Util.retonarObjetoDeColecao(RepositorioUtilHBM.getInstancia().
+					// pesquisar(filtroNegativacaoImoveis,NegativacaoImovei.class.getName()));
 
-					NegativacaoImoveis negativacaoImoveis = (NegativacaoImoveis) Util
-							.retonarObjetoDeColecao(RepositorioUtilHBM.getInstancia().pesquisar(
-									filtroNegativacaoImoveis, NegativacaoImoveis.class.getName()));
+					NegativacaoImoveis negativacaoImoveis = obterNegativacaoImoveis(negativador, negativadorMovimento, imovel,
+							negativadorMovimentoReg.getCliente());
 
 					if (negativacaoImoveis != null) {
 						// 5.1
@@ -8919,8 +8434,8 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 						CobrancaSituacao cobrancaSituacao = new CobrancaSituacao();
 						cobrancaSituacao.setId(CobrancaSituacao.EM_ANALISE_PARA_NEGATIVACAO_SPC);
 
-						ImovelCobrancaSituacao imovelCobrancaSituacao = repositorioSpcSerasa.getImovelCobrancaSituacao(
-								imovel, cobrancaSituacao);
+						ImovelCobrancaSituacao imovelCobrancaSituacao = repositorioSpcSerasa.getImovelCobrancaSituacao(imovel, cobrancaSituacao,
+								negativadorMovimentoReg.getCliente().getId());
 
 						if (imovelCobrancaSituacao != null) {
 							imovelCobrancaSituacao.setDataRetiradaCobranca(new Date());
@@ -8940,27 +8455,27 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 					Integer idCobrancaSituacaoImovel = CobrancaSituacao.CARTA_ENVIADA_AO_SPC;
 					// getControladorImovel().atualizarSituacaoCobrancaImovel(idCobrancaSituacaoImovel,
 					// CobrancaSituacao.EM_ANALISE_PARA_NEGATIVACAO,imovel.getId());
+					ImovelCobrancaSituacao imovelCobrancaSituacao = null;
 
 					// 6.2.2. Atualizar a situação de cobrança do imóvel na
 					// tabela IMOVEL_COBRANCA_SITUACAO
-					List collImovelCobrancaSituacao = this.repositorioSpcSerasa.consultarImovelCobrancaSituacao(
-							imovel.getId(), CobrancaSituacao.EM_ANALISE_PARA_NEGATIVACAO_SPC);
+					List collImovelCobrancaSituacao = this.repositorioSpcSerasa.consultarImovelCobrancaSituacaoAtual(imovel.getId(),
+							CobrancaSituacao.EM_ANALISE_PARA_NEGATIVACAO_SPC, negativadorMovimentoReg.getCliente().getId());
 					if (collImovelCobrancaSituacao != null && !collImovelCobrancaSituacao.isEmpty()) {
 						Iterator iter = collImovelCobrancaSituacao.iterator();
 						while (iter.hasNext()) {
 							Integer idImovelCobrancaSituacao = (Integer) iter.next();
-							getControladorImovel().atualizarDataRetiradaImovelSituacaoCobranca(
-									idImovelCobrancaSituacao, new Date());
+							getControladorImovel().atualizarDataRetiradaImovelSituacaoCobranca(idImovelCobrancaSituacao, new Date());
+							imovelCobrancaSituacao = getControladorImovel().obterImovelCobrancaSituacao(idImovelCobrancaSituacao);
 						}
 					}
 
 					// 6.2.3. Incluir a nova situação de cobrança do imóvel na
 					// tabela IMOVEL_COBRANCA_SITUACAO
-					List idImovelCobrancaSituacaoNegativadoAutomaticamente = this.repositorioSpcSerasa
-							.consultarImovelCobrancaSituacao(imovel.getId(), idCobrancaSituacaoImovel);
+					List idImovelCobrancaSituacaoNegativadoAutomaticamente = this.repositorioSpcSerasa.consultarImovelCobrancaSituacaoAtual(imovel.getId(),
+							idCobrancaSituacaoImovel, negativadorMovimentoReg.getCliente().getId());
 					// verificação adicionada para permitir reiniciar o batch
-					if (idImovelCobrancaSituacaoNegativadoAutomaticamente == null
-							|| idImovelCobrancaSituacaoNegativadoAutomaticamente.isEmpty()) {
+					if (idImovelCobrancaSituacaoNegativadoAutomaticamente == null || idImovelCobrancaSituacaoNegativadoAutomaticamente.isEmpty()) {
 						ImovelCobrancaSituacao ics = new ImovelCobrancaSituacao();
 						CobrancaSituacao cobrancaSituacao = new CobrancaSituacao();
 						cobrancaSituacao.setId(idCobrancaSituacaoImovel);
@@ -8970,6 +8485,18 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 						ics.setCobrancaSituacao(cobrancaSituacao);
 						ics.setCliente(negativadorMovimentoReg.getCliente());
 						ics.setUltimaAlteracao(new Date());
+
+						// RM6364 - Alteração para negativação por período
+						// alterado por Vivianne Sousa - 12/12/2011
+						if (imovelCobrancaSituacao != null) {
+							if (imovelCobrancaSituacao.getAnoMesReferenciaInicio() != null) {
+								ics.setAnoMesReferenciaInicio(imovelCobrancaSituacao.getAnoMesReferenciaInicio());
+							}
+							if (imovelCobrancaSituacao.getAnoMesReferenciaFinal() != null) {
+								ics.setAnoMesReferenciaFinal(imovelCobrancaSituacao.getAnoMesReferenciaFinal());
+							}
+						}
+
 						RepositorioUtilHBM.getInstancia().inserir(ics);
 					}
 
@@ -9001,37 +8528,16 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);
 		}
-
 	}
-
-	/**
-	 * 
-	 * Registrar Movimento de Retorno dos Negativadores [UC0672] Verifica o
-	 * negativadorMovimentoRegRetMot do Registro 02 do SPC e atualiza o
-	 * negativadorMovimentoReg com o indicador de Aceito com valor 1 ou 2
-	 * 
-	 * [inserir Negativador Movimento Reg Ret Mot]
-	 * 
-	 * @author Yara Taciane
-	 * @date 04/12/2008
-	 * 
-	 * @param negativadorMovimentoRegRetMot
-	 * @throws ControladorException
-	 * @throws ErroRepositorioException
-	 */
 
 	private void inserirNegativadorMovimentoRegRetMot(NegativadorMovimentoRegRetMot negativadorMovimentoRegRetMot)
 			throws ControladorException {
-		/*
-		 * Método que verifica se já foi inserido Motivo de Retorno para o
-		 * registro do negativador.
-		 */
+		
 		if (negativadorMovimentoRegRetMot != null) {
 			try {
-				Integer idNegativadorMovimentoRegRetMot = this.repositorioSpcSerasa
-						.pesquisarNegativadorMovimentoRegRetMot(negativadorMovimentoRegRetMot
-								.getNegativadorMovimentoReg().getId(), negativadorMovimentoRegRetMot
-								.getNegativadorRetornoMotivo().getId());
+				Integer idNegativadorMovimentoRegRetMot = this.repositorioSpcSerasa.pesquisarNegativadorMovimentoRegRetMot(
+						negativadorMovimentoRegRetMot.getNegativadorMovimentoReg().getId(),
+						negativadorMovimentoRegRetMot.getNegativadorRetornoMotivo().getId());
 
 				if (idNegativadorMovimentoRegRetMot == null) {
 					RepositorioUtilHBM.getInstancia().inserir(negativadorMovimentoRegRetMot);
@@ -9044,60 +8550,21 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 	}
 
 	/**
-	 * 
-	 * Registrar Movimento de Retorno dos Negativadores [UC0672] Registrar
-	 * Movimento de Retorno dos Negativadores
-	 * 
+	 * Registrar Movimento de Retorno dos Negativadores
+	 * [UC0672] Registrar Movimento de Retorno dos Negativadores
 	 * [SB0005] - Atualizar Registro de Envio
-	 * 
-	 * @author Yara Taciane
-	 * @date 10/01/2008
-	 * 
-	 * @param negativadorMovimentoRegRetMot
-	 * @throws ControladorException
-	 * @throws ErroRepositorioException
 	 */
-	private void atualizarRegistroEnvio(Negativador negativador, String registro,
-			NegativadorMovimentoReg negativadorMovimentoReg) throws ControladorException, ErroRepositorioException {
+	private void atualizarRegistroEnvio(Negativador negativador, String registro, NegativadorMovimentoReg negativadorMovimentoReg)
+			throws ControladorException, ErroRepositorioException {
 
 		short indicadorRegistroAceito = -1;
 		String tipoRegistro = "";
-		String codigoRetorno = "-1";
 		String sequencialArquivo = "";
 		String sequencialRegistro = "";
 		String campoCodigoRetorno = "";
 
 		if (Negativador.NEGATIVADOR_SERASA.equals(negativador.getId())) {
-
-			// --------------------------------------------------------------------------------------
-			// [SB005] - Atualizar Registro de Envio para SERASA
-			// --------------------------------------------------------------------------------------
-
-			// conteudoRegistroArquivo = getConteudo(1, 533,
-			// registro.toCharArray());
-			// sequencial = getConteudo(594, 7, registro.toCharArray());
-			// // -------------------------------------------------------
-			// tipoRegistro = getConteudo(1, 1, registro.toCharArray());
-			//
-			// String conteudoReg =
-			// negativadorMovimentoReg.getConteudoRegistro();
-			// String conteudoRegistroBanco = getConteudo(1, 533,
-			// conteudoReg.toCharArray());
-			//
-			// if (!tipoRegistro.equals("0") && !tipoRegistro.equals("9")) {
-			//
-			// if (!conteudoRegistroArquivo.equals(conteudoRegistroBanco)) {
-			// throw new
-			// ControladorException("atencao.conteudo_registro_nao_corresponde_ao_enviado",
-			// null, sequencial);
-			// }
-			// }
-			// 1.0 09/05/2008 - Alteração
-			// -------------------------------------------------------------------------------------
-			// Comparar apenas o sequencial do Arquivo, pois a SERASA altera o
-			// conteúdo do registro.
-			// --------------------------------------------------------------------------------------
-			String qtdZeros = "";
+			String quantidadeZeros = "";
 			sequencialArquivo = getConteudo(594, 7, registro.toCharArray());
 
 			sequencialRegistro = negativadorMovimentoReg.getNumeroRegistro() + "";
@@ -9105,192 +8572,52 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			int tamanho = 7 - sequencialRegistro.length();
 
 			for (int i = 0; i < tamanho; i++) {
-				qtdZeros = qtdZeros + "0";
+				quantidadeZeros = quantidadeZeros + "0";
 			}
 
-			sequencialRegistro = qtdZeros + sequencialRegistro;
+			sequencialRegistro = quantidadeZeros + sequencialRegistro;
 			if (!tipoRegistro.equals("0") && !tipoRegistro.equals("9")) {
-
 				if (!sequencialArquivo.equals(sequencialRegistro)) {
-					throw new ControladorException("atencao.conteudo_registro_nao_corresponde_ao_enviado", null,
-							sequencialArquivo);
+					throw new ControladorException("atencao.conteudo_registro_nao_corresponde_ao_enviado", null, sequencialArquivo);
 				}
 			}
 
-			// 2.0
-			// --------------------------------------------------------------------------------
-			// atribuir o valor um ao campo indicador registro aceito
 			indicadorRegistroAceito = 1;
-			// -------------------------------------------------------------------------------
-
-			// Para cada ocorrência do código de retorno
-			// Caso o registro seja do SERASA
-			// -------------------------------------------------------------------------------
-			// 3.0
 			campoCodigoRetorno = getConteudo(534, 60, registro.toCharArray()).trim();
-			if ("".equals(campoCodigoRetorno)) {
-
-				codigoRetorno = "0";
-				Integer codRetorno = Util.converterStringParaInteger(codigoRetorno);
-
-				NegativadorMovimentoRegRetMot negativadorMovimentoRegRetMot = new NegativadorMovimentoRegRetMot();
-				negativadorMovimentoRegRetMot.setNegativadorMovimentoReg(negativadorMovimentoReg);
-
-				FiltroNegativadorRetornoMotivo fnrm = new FiltroNegativadorRetornoMotivo();
-				fnrm.adicionarParametro(new ParametroSimples(FiltroNegativadorRetornoMotivo.CODIGO_RETORNO_MOTIVO,
-						codRetorno.shortValue()));
-				fnrm.adicionarParametro(new ParametroSimples(
-						FiltroNegativadorRetornoMotivo.NEGATIVADOR_RETORNO_MOTIVO_NEGATIVADOR,
-						Negativador.NEGATIVADOR_SERASA));
-
-				NegativadorRetornoMotivo negativadorRetornoMot = (NegativadorRetornoMotivo) Util
-						.retonarObjetoDeColecao(RepositorioUtilHBM.getInstancia().pesquisar(fnrm,
-								NegativadorRetornoMotivo.class.getName()));
-
-				// [FS007] - Verifica a exixtência do motivo de retorno
-				if (negativadorRetornoMot != null) {
-
-					negativadorMovimentoRegRetMot.setNegativadorMovimentoReg(negativadorMovimentoReg);
-					negativadorMovimentoRegRetMot.setNegativadorRetornoMotivo(negativadorRetornoMot);
-					negativadorMovimentoRegRetMot.setUltimaAlteracao(new Date());
-
-					// [FS008] -Verifica a indicação de registro aceito
-					// Caso não corresponda a aceito
-					if (negativadorRetornoMot.getIndicadorRegistroAceito() != 1) {
-						indicadorRegistroAceito = 2;
-						negativadorRetornoMot.setIndicadorRegistroAceito(indicadorRegistroAceito);
-					}
-
-					// RepositorioUtilHBM.getInstancia().inserir(negativadorMovimentoRegRetMot);
-					// ****************************************************************************
-					this.inserirNegativadorMovimentoRegRetMot(negativadorMovimentoRegRetMot);
-					// ****************************************************************************
-
-				} else {
-					throw new ControladorException("atencao.arquivo_movimento_codigo_retorno_invalido");
-				}
-
-			} else if (!"".equals(campoCodigoRetorno)) {
-
-				// int cont = 0;
+			
+			if (campoCodigoRetorno.equals("")) {
+				indicadorRegistroAceito = this.inserirNegativadorMovimentoRegistroRetornoMotivo(
+						negativadorMovimentoReg, indicadorRegistroAceito, NegativadorRetornoMotivo.SEM_OCORRENCIAS);
+				
+			} else {
 				for (int j = 0; j <= campoCodigoRetorno.length() - 3; j = j + 3) {
-
-					codigoRetorno = campoCodigoRetorno.substring(j, j + 3);
+					String codigoRetorno = campoCodigoRetorno.substring(j, j + 3);
 
 					if (!codigoRetorno.equals("")) {
-						Integer codRetorno = Util.converterStringParaInteger(codigoRetorno);
-
-						NegativadorMovimentoRegRetMot negativadorMovimentoRegRetMot = new NegativadorMovimentoRegRetMot();
-						negativadorMovimentoRegRetMot.setNegativadorMovimentoReg(negativadorMovimentoReg);
-
-						FiltroNegativadorRetornoMotivo fnrm = new FiltroNegativadorRetornoMotivo();
-						fnrm.adicionarParametro(new ParametroSimples(
-								FiltroNegativadorRetornoMotivo.CODIGO_RETORNO_MOTIVO, codRetorno.shortValue()));
-						fnrm.adicionarParametro(new ParametroSimples(
-								FiltroNegativadorRetornoMotivo.NEGATIVADOR_RETORNO_MOTIVO_NEGATIVADOR,
-								Negativador.NEGATIVADOR_SERASA));
-
-						NegativadorRetornoMotivo negativadorRetornoMot = (NegativadorRetornoMotivo) Util
-								.retonarObjetoDeColecao(RepositorioUtilHBM.getInstancia().pesquisar(fnrm,
-										NegativadorRetornoMotivo.class.getName()));
-
-						// [FS007] - Verifica a exixtência do motivo de retorno
-						if (negativadorRetornoMot != null) {
-
-							negativadorMovimentoRegRetMot.setNegativadorMovimentoReg(negativadorMovimentoReg);
-							negativadorMovimentoRegRetMot.setNegativadorRetornoMotivo(negativadorRetornoMot);
-							negativadorMovimentoRegRetMot.setUltimaAlteracao(new Date());
-
-							// [FS008] -Verifica a indicação de registro aceito
-							// Caso não corresponda a aceito
-							if (negativadorRetornoMot.getIndicadorRegistroAceito() != 1) {
-								indicadorRegistroAceito = 2;
-								negativadorRetornoMot.setIndicadorRegistroAceito(indicadorRegistroAceito);
-							}
-
-							// RepositorioUtilHBM.getInstancia().inserir(negativadorMovimentoRegRetMot);
-							// ****************************************************************************
-							this.inserirNegativadorMovimentoRegRetMot(negativadorMovimentoRegRetMot);
-							// ****************************************************************************
-
-						} else {
-							throw new ControladorException("atencao.arquivo_movimento_codigo_retorno_invalido");
-						}
+						indicadorRegistroAceito = this.inserirNegativadorMovimentoRegistroRetornoMotivo(
+								negativadorMovimentoReg, indicadorRegistroAceito, Short.parseShort(codigoRetorno));
 					}
-
 				}
-
-				// *****
 			}
-			// *****
-
 		}
-		// 4.0
-		// ------------------------------------------------------------------------------------------------
+		
 		negativadorMovimentoReg.setIndicadorAceito(indicadorRegistroAceito);
-		// -------------------------------------------------------------------------------------------------
-		// [início] - Alteração 05/05/2008 - Indicar Exclusão do imóvel caso a
-		// inclusão da negativação não seja aceita.
-		// -------------------------------------------------------------------------------------------------
 		NegativadorMovimento negativadorMovimento = negativadorMovimentoReg.getNegativadorMovimento();
 
 		Imovel imovel = negativadorMovimentoReg.getImovel();
 
-		// 6.0
 		if (negativadorMovimento.getCodigoMovimento() == 1 && imovel != null) {
 			try {
-				// 6.1
 				if (indicadorRegistroAceito == ConstantesSistema.NAO_ACEITO) {
-
-					FiltroNegativacaoImoveis filtroNegativacaoImoveis = new FiltroNegativacaoImoveis();
-					filtroNegativacaoImoveis.adicionarParametro(new ParametroSimples(
-							FiltroNegativacaoImoveis.IMOVEL_ID, imovel.getId()));
-					filtroNegativacaoImoveis.adicionarParametro(new ParametroSimples(
-							FiltroNegativacaoImoveis.NEGATIVADOR_ID, negativador.getId()));
-					filtroNegativacaoImoveis.adicionarParametro(new ParametroSimples(
-							FiltroNegativacaoImoveis.NEGATIVACAO_COMANDO_ID, negativadorMovimento
-									.getNegativacaoComando().getId()));
-
-					NegativacaoImoveis negativacaoImoveis = (NegativacaoImoveis) Util
-							.retonarObjetoDeColecao(RepositorioUtilHBM.getInstancia().pesquisar(
-									filtroNegativacaoImoveis, NegativacaoImoveis.class.getName()));
+					NegativacaoImoveis negativacaoImoveis = obterNegativacaoImoveis(negativador,
+							negativadorMovimento, imovel, negativadorMovimentoReg.getCliente());
 
 					if (negativacaoImoveis != null) {
-						// 5.1
-						short indicadorExcluido = 1;
-						negativacaoImoveis.setIndicadorExcluido(indicadorExcluido);
-
-						Date dataExclusao = new Date();
-						negativacaoImoveis.setDataExclusao(dataExclusao);
-
-						Date ultimaAlteracao = new Date();
-						negativacaoImoveis.setUltimaAlteracao(ultimaAlteracao);
-
-						// indicar a exclusão do imóvel.
+						negativacaoImoveis.setIndicadorExcluido(ConstantesSistema.SIM);
+						negativacaoImoveis.setDataExclusao(new Date());
+						negativacaoImoveis.setUltimaAlteracao(new Date());
 						RepositorioUtilHBM.getInstancia().atualizar(negativacaoImoveis);
 
-						// CRC3323 - comentado por Vivianne Sousa -
-						// analista:Fatima Sampaio - 07/05/2010
-						// 5.2
-						// FiltroImovel filtroImovel = new FiltroImovel();
-						// filtroImovel.adicionarParametro(new
-						// ParametroSimples(FiltroImovel.ID,imovel.getId()));
-						// filtroImovel.adicionarParametro(new
-						// ParametroSimples(FiltroImovel.COBRANCA_SITUACAO_ID,CobrancaSituacao.EM_ANALISE_PARA_NEGATIVACAO));
-						//
-						// Imovel imovelRetorno = (Imovel)
-						// Util.retonarObjetoDeColecao(RepositorioUtilHBM.getInstancia().
-						// pesquisar(filtroImovel,Imovel.class.getName()));
-						//
-						// if(imovelRetorno!= null){
-						// imovelRetorno.setCobrancaSituacao(null);
-						// imovelRetorno.setUltimaAlteracao(new Date());
-						// RepositorioUtilHBM.getInstancia().atualizar(imovelRetorno);
-						// }
-
-						// CRC3323 - alterado por Vivianne Sousa -
-						// analista:Fatima Sampaio - 07/05/2010
-						// 5.3
 						CobrancaSituacao cobrancaSituacao = new CobrancaSituacao();
 						if (Negativador.NEGATIVADOR_SERASA.equals(negativador.getId())) {
 							cobrancaSituacao.setId(CobrancaSituacao.EM_ANALISE_PARA_NEGATIVACAO_SERASA);
@@ -9299,7 +8626,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 						}
 
 						ImovelCobrancaSituacao imovelCobrancaSituacao = repositorioSpcSerasa.getImovelCobrancaSituacao(
-								imovel, cobrancaSituacao);
+								imovel, cobrancaSituacao, negativadorMovimentoReg.getCliente().getId());
 
 						if (imovelCobrancaSituacao != null) {
 							imovelCobrancaSituacao.setDataRetiradaCobranca(new Date());
@@ -9307,100 +8634,137 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 							RepositorioUtilHBM.getInstancia().atualizar(imovelCobrancaSituacao);
 						}
 
-						// adicionado por Vivianne Sousa - 21/08/2009 -
-						// analista: Fatima Sampaio
-						// 6.4.Atualizar a situação de cobrança do imóvel na
-						// tabela NEGATIVADOR_MOVIMENTO_REG
 						negativadorMovimentoReg.setCobrancaSituacao(cobrancaSituacao);
 						negativadorMovimentoReg.setUltimaAlteracao(new Date());
 						RepositorioUtilHBM.getInstancia().atualizar(negativadorMovimentoReg);
 					}
-
-					// 6.2
 				} else if (indicadorRegistroAceito == ConstantesSistema.ACEITO) {
-					// adicionado por Vivianne Sousa - 12/03/2010 - analista:
-					// Fátima Sampaio
-
-					// 6.2.1. Atualizar a situação de cobrança do imóvel na
-					// tabela IMOVEL
 					Integer idCobrancaSituacaoImovel = null;
-					Integer emAnaliseNegativacao = null;
+					Integer indicadorAnaliseNegativacao = null;
+					
 					if (negativador.getId().equals(Negativador.NEGATIVADOR_SPC)) {
 						idCobrancaSituacaoImovel = CobrancaSituacao.CARTA_ENVIADA_AO_SPC;
-						emAnaliseNegativacao = CobrancaSituacao.EM_ANALISE_PARA_NEGATIVACAO_SPC;
+						indicadorAnaliseNegativacao = CobrancaSituacao.EM_ANALISE_PARA_NEGATIVACAO_SPC;
 					} else if (negativador.getId().equals(Negativador.NEGATIVADOR_SERASA)) {
 						idCobrancaSituacaoImovel = CobrancaSituacao.CARTA_ENVIADA_A_SERASA;
-						emAnaliseNegativacao = CobrancaSituacao.EM_ANALISE_PARA_NEGATIVACAO_SERASA;
+						indicadorAnaliseNegativacao = CobrancaSituacao.EM_ANALISE_PARA_NEGATIVACAO_SERASA;
 					}
-					// CRC3323 - comentado por Vivianne Sousa - analista:Fatima
-					// Sampaio - 07/05/2010
-					// getControladorImovel().atualizarSituacaoCobrancaImovel(idCobrancaSituacaoImovel,
-					// CobrancaSituacao.EM_ANALISE_PARA_NEGATIVACAO,imovel.getId());
 
-					// 6.2.2. Atualizar a situação de cobrança do imóvel na
-					// tabela IMOVEL_COBRANCA_SITUACAO
-					List collImovelCobrancaSituacao = this.repositorioSpcSerasa.consultarImovelCobrancaSituacao(
-							imovel.getId(), emAnaliseNegativacao);
-					if (collImovelCobrancaSituacao != null && !collImovelCobrancaSituacao.isEmpty()) {
-						Iterator iter = collImovelCobrancaSituacao.iterator();
-						while (iter.hasNext()) {
-							Integer idImovelCobrancaSituacao = (Integer) iter.next();
-							getControladorImovel().atualizarDataRetiradaImovelSituacaoCobranca(
-									idImovelCobrancaSituacao, new Date());
+					ImovelCobrancaSituacao imovelCobrancaSituacao = null;
+
+					List colecaoImovelCobrancaSituacao = this.repositorioSpcSerasa.consultarImovelCobrancaSituacaoAtual(
+							imovel.getId(), indicadorAnaliseNegativacao, negativadorMovimentoReg.getCliente().getId());
+					
+					for (int i = 0; i < colecaoImovelCobrancaSituacao.size(); i++) {
+						Integer idImovelCobrancaSituacao = (Integer) colecaoImovelCobrancaSituacao.get(i);
+						getControladorImovel().atualizarDataRetiradaImovelSituacaoCobranca(idImovelCobrancaSituacao, new Date());
+						imovelCobrancaSituacao = getControladorImovel().obterImovelCobrancaSituacao(idImovelCobrancaSituacao);
+					}
+
+					List idImovelCobrancaSituacaoNegativadoAutomaticamente = this.repositorioSpcSerasa.consultarImovelCobrancaSituacaoAtual(
+							imovel.getId(), idCobrancaSituacaoImovel, negativadorMovimentoReg.getCliente().getId());
+
+					if (idImovelCobrancaSituacaoNegativadoAutomaticamente == null || idImovelCobrancaSituacaoNegativadoAutomaticamente.isEmpty()) {
+						ImovelCobrancaSituacao imovelCobrancaSituacaoAtual = new ImovelCobrancaSituacao();
+						imovelCobrancaSituacaoAtual.setImovel(imovel);
+						imovelCobrancaSituacaoAtual.setDataImplantacaoCobranca(new Date());
+						imovelCobrancaSituacaoAtual.setDataRetiradaCobranca(null);
+						imovelCobrancaSituacaoAtual.setCobrancaSituacao(new CobrancaSituacao(idCobrancaSituacaoImovel));
+						imovelCobrancaSituacaoAtual.setCliente(negativadorMovimentoReg.getCliente());
+						imovelCobrancaSituacaoAtual.setUltimaAlteracao(new Date());
+
+						if (imovelCobrancaSituacao != null) {
+							if (imovelCobrancaSituacao.getAnoMesReferenciaInicio() != null) {
+								imovelCobrancaSituacaoAtual.setAnoMesReferenciaInicio(imovelCobrancaSituacao.getAnoMesReferenciaInicio());
+							}
+							if (imovelCobrancaSituacao.getAnoMesReferenciaFinal() != null) {
+								imovelCobrancaSituacaoAtual.setAnoMesReferenciaFinal(imovelCobrancaSituacao.getAnoMesReferenciaFinal());
+							}
 						}
+						RepositorioUtilHBM.getInstancia().inserir(imovelCobrancaSituacaoAtual);
 					}
 
-					// 6.2.3. Incluir a nova situação de cobrança do imóvel na
-					// tabela IMOVEL_COBRANCA_SITUACAO
-					List idImovelCobrancaSituacaoNegativadoAutomaticamente = this.repositorioSpcSerasa
-							.consultarImovelCobrancaSituacao(imovel.getId(), idCobrancaSituacaoImovel);
-					// verificação adicionada para permitir reiniciar o batch
-					if (idImovelCobrancaSituacaoNegativadoAutomaticamente == null
-							|| idImovelCobrancaSituacaoNegativadoAutomaticamente.isEmpty()) {
-						ImovelCobrancaSituacao ics = new ImovelCobrancaSituacao();
-						CobrancaSituacao cobrancaSituacao = new CobrancaSituacao();
-						cobrancaSituacao.setId(idCobrancaSituacaoImovel);
-						ics.setImovel(imovel);
-						ics.setDataImplantacaoCobranca(new Date());
-						ics.setDataRetiradaCobranca(null);
-						ics.setCobrancaSituacao(cobrancaSituacao);
-						ics.setCliente(negativadorMovimentoReg.getCliente());
-						ics.setUltimaAlteracao(new Date());
-						RepositorioUtilHBM.getInstancia().inserir(ics);
-					}
-
-					// 6.2.4. Atualizar a situação de cobrança do imóvel na
-					// tabela NEGATIVADOR_MOVIMENTO_REG
-					// repositorioSpcSerasa.atualizarSituacaoCobrancaNegativadorMovimentoReg(
-					// idCobrancaSituacaoImovel,negativadorMovimentoReg.getId());
 					CobrancaSituacao cobrancaSituacao = new CobrancaSituacao();
 					cobrancaSituacao.setId(idCobrancaSituacaoImovel);
 					negativadorMovimentoReg.setCobrancaSituacao(cobrancaSituacao);
-
 				}
-
 			} catch (ErroRepositorioException e) {
 				sessionContext.setRollbackOnly();
 				throw new ControladorException("erro.sistema", e);
 			}
 		}
 
-		// -------------------------------------------------------------------------------------------------
-		// [fim] - Alteração 05/05/2008 - Indicar Exclusão do imóvel caso a
-		// inclusão da negativação não seja aceita.
-		// -------------------------------------------------------------------------------------------------
-
 		try {
 			negativadorMovimentoReg.setIndicadorAceito(indicadorRegistroAceito);
 			negativadorMovimentoReg.setUltimaAlteracao(new Date());
-			System.out.println("Atualiza nmrg = " + negativadorMovimentoReg.getId());
-
 			RepositorioUtilHBM.getInstancia().atualizar(negativadorMovimentoReg);
+			logger.info("Negativador Movimento Registro [" + negativadorMovimentoReg.getId() + "] Atualizado");
 		} catch (ErroRepositorioException e) {
 			sessionContext.setRollbackOnly();
 			throw new ControladorException("erro.sistema", e);
 		}
+	}
 
+	private short inserirNegativadorMovimentoRegistroRetornoMotivo(NegativadorMovimentoReg negativadorMovimentoReg,
+			short indicadorRegistroAceito, short codigoRetorno) throws ErroRepositorioException, ControladorException {
+		
+		NegativadorMovimentoRegRetMot negativadorMovimentoRegRetMot = new NegativadorMovimentoRegRetMot();
+		negativadorMovimentoRegRetMot.setNegativadorMovimentoReg(negativadorMovimentoReg);
+
+		FiltroNegativadorRetornoMotivo filtroRetornoMotivo = new FiltroNegativadorRetornoMotivo();
+		filtroRetornoMotivo.adicionarParametro(new ParametroSimples(FiltroNegativadorRetornoMotivo.CODIGO_RETORNO_MOTIVO, codigoRetorno));
+		filtroRetornoMotivo.adicionarParametro(new ParametroSimples(FiltroNegativadorRetornoMotivo.NEGATIVADOR_RETORNO_MOTIVO_NEGATIVADOR,
+				Negativador.NEGATIVADOR_SERASA));
+
+		NegativadorRetornoMotivo negativadorRetornoMotivo = (NegativadorRetornoMotivo) Util.retonarObjetoDeColecao(
+				RepositorioUtilHBM.getInstancia().pesquisar(filtroRetornoMotivo, NegativadorRetornoMotivo.class.getName()));
+
+		if (negativadorRetornoMotivo != null) {
+
+			negativadorMovimentoRegRetMot.setNegativadorMovimentoReg(negativadorMovimentoReg);
+			negativadorMovimentoRegRetMot.setNegativadorRetornoMotivo(negativadorRetornoMotivo);
+			negativadorMovimentoRegRetMot.setUltimaAlteracao(new Date());
+
+			indicadorRegistroAceito = negativadorRetornoMotivo.getIndicadorRegistroAceito();
+
+			this.inserirNegativadorMovimentoRegRetMot(negativadorMovimentoRegRetMot);
+		} else {
+			throw new ControladorException("atencao.arquivo_movimento_codigo_retorno_invalido");
+		}
+		return indicadorRegistroAceito;
+	}
+
+	public NegativacaoImoveis obterNegativacaoImoveis(Negativador negativador, NegativadorMovimento negativadorMovimento,
+			Imovel imovel, Cliente cliente) throws ControladorException {
+
+		try {
+			FiltroNegativacaoImoveis filtro = new FiltroNegativacaoImoveis();
+			filtro.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.IMOVEL_ID, imovel.getId()));
+			filtro.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.NEGATIVADOR_ID, negativador.getId()));
+			filtro.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.NEGATIVACAO_COMANDO_ID,
+					negativadorMovimento.getNegativacaoComando().getId()));
+			filtro.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.ID_CLIENTE, cliente.getId()));
+
+			NegativacaoImoveis negativacaoImoveis = (NegativacaoImoveis) Util.retonarObjetoDeColecao(RepositorioUtilHBM.getInstancia().pesquisar(
+					filtro, NegativacaoImoveis.class.getName()));
+
+			if (negativacaoImoveis == null) {
+				filtro = new FiltroNegativacaoImoveis();
+				filtro.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.IMOVEL_ID, imovel.getId()));
+				filtro.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.NEGATIVADOR_ID, negativador.getId()));
+				filtro.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.NEGATIVACAO_COMANDO_ID, negativadorMovimento
+						.getNegativacaoComando().getId()));
+
+				negativacaoImoveis = (NegativacaoImoveis) Util.retonarObjetoDeColecao(RepositorioUtilHBM.getInstancia().pesquisar(filtro,
+						NegativacaoImoveis.class.getName()));
+			}
+
+			return negativacaoImoveis;
+		} catch (ErroRepositorioException ex) {
+			sessionContext.setRollbackOnly();
+			ex.printStackTrace();
+			throw new ControladorException("erro.sistema", ex);
+		}
 	}
 
 	/**
@@ -9937,7 +9301,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 		return registroTrailler;
 	}
 
-	public StringBuilder geraRegistroTipoTraillerSERASA(int quantidadeRegistros) throws ControladorException,
+	public StringBuilder geraRegistroTipoTraillerSERASA(Integer numeroRegistro) throws ControladorException,
 			ErroRepositorioException {
 
 		StringBuilder registroTrailler = new StringBuilder();
@@ -9948,8 +9312,7 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 		// T.04
 		registroTrailler.append(Util.completaString(" ", 60));
 		// T.05
-		quantidadeRegistros += 1;
-		registroTrailler.append(Util.adicionarZerosEsquedaNumero(7, "" + quantidadeRegistros));
+		registroTrailler.append(Util.adicionarZerosEsquedaNumero(7, numeroRegistro.toString()));
 
 		return registroTrailler;
 	}
@@ -10793,27 +10156,23 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 		}
 	}
 
-	public void gerarArquivoNegativacao(Integer idComando, Integer idMovimento, Integer idNegativador,
-			NegativadorMovimento negativadorMovimento, boolean trailler) throws ControladorException {
+	public void gerarArquivoNegativacao(NegativadorMovimento negativadorMovimento, boolean trailler) throws ControladorException {
 		
-		StringBuffer registroLinha = new StringBuffer();
-
 		try {
-			Integer numeroRegistro = 1;
-			
-			registroLinha = this.gerarRegistroHeaderArquivoNegativacao(idMovimento, registroLinha);
+			StringBuffer registroLinha = this.gerarRegistroHeaderArquivoNegativacao(negativadorMovimento.getId());
 
-			Object[] dados = this.gerarRegistroDetalheArquivoNegativacao(idMovimento, registroLinha, numeroRegistro);
+			Integer numeroRegistro = 1;
+			Object[] dados = this.gerarRegistroDetalheArquivoNegativacao(negativadorMovimento.getId(), registroLinha, numeroRegistro);
 			numeroRegistro = (Integer) dados[0] + 1;
 			registroLinha = (StringBuffer) dados[1];
 
 			if (trailler) {
-				registroLinha = this.gerarRegistroTraillerArquivoNegativacao(idComando, negativadorMovimento, registroLinha, numeroRegistro);
+				registroLinha = this.gerarRegistroTraillerArquivoNegativacao(negativadorMovimento, registroLinha, numeroRegistro);
 			} else if (negativadorMovimento.getNegativador().getId().equals(Negativador.NEGATIVADOR_SERASA)) {
-				registroLinha = this.atualizarRegistroTraillerArquivoNegativacaoSERASA(idMovimento, registroLinha, numeroRegistro);
+				registroLinha = this.atualizarRegistroTraillerArquivoNegativacaoSERASA(negativadorMovimento.getId(), registroLinha, numeroRegistro);
 			}
 			
-			enviarEmailArquivoNegativacao(idNegativador, registroLinha);
+			enviarEmailArquivoNegativacao(negativadorMovimento.getNegativador().getId(), registroLinha);
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
@@ -10843,18 +10202,9 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 		return registroLinha;
 	}
 
-	private StringBuffer gerarRegistroTraillerArquivoNegativacao(Integer idComando, NegativadorMovimento negativadorMovimento,
+	private StringBuffer gerarRegistroTraillerArquivoNegativacao(NegativadorMovimento negativadorMovimento,
 			StringBuffer registroLinha, Integer numeroRegistro) throws ErroRepositorioException, ControladorException {
 		
-		NegativacaoCriterio criterio = null;
-
-		if (idComando != null) {
-			criterio = repositorioSpcSerasa.pesquisarNegativacaoCriterio(idComando);
-		} else {
-			criterio = (NegativacaoCriterio) Util.retonarObjetoDeColecao(repositorioSpcSerasa.getNegativacaoCriterio(
-					negativadorMovimento.getNegativacaoComando().getId()));
-		}
-
 		StringBuilder registroTrailler = new StringBuilder();
 		if (negativadorMovimento.getNegativador().getId().equals(Negativador.NEGATIVADOR_SPC)) {
 			registroTrailler = this.geraRegistroTipoTraillerSPC(numeroRegistro);
@@ -10869,8 +10219,13 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			idRegistroTipo = NegativadorRegistroTipo.ID_SERASA_TRAILLER;
 		}
 		
-		this.gerarNegativadorMovimentoRegistro(negativadorMovimento.getNegativador().getId(), negativadorMovimento.getId(),
-				registroTrailler, numeroRegistro, criterio, idRegistroTipo);
+		NegativacaoCriterio criterio = null;
+		if (negativadorMovimento.getNegativacaoComando() != null) {
+			criterio = (NegativacaoCriterio) Util.retonarObjetoDeColecao(repositorioSpcSerasa.getNegativacaoCriterio(
+					negativadorMovimento.getNegativacaoComando().getId()));
+		}
+		
+		this.gerarNegativadorMovimentoRegistro(negativadorMovimento.getId(), registroTrailler, numeroRegistro, criterio, idRegistroTipo);
 
 		registroLinha.append(registroTrailler.toString());
 		
@@ -10914,10 +10269,12 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 		return dados;
 	}
 
-	private StringBuffer gerarRegistroHeaderArquivoNegativacao(Integer idMovimento, StringBuffer registroLinha) throws ErroRepositorioException {
+	private StringBuffer gerarRegistroHeaderArquivoNegativacao(Integer idMovimento) throws ErroRepositorioException {
 		Collection colecaoRegistroHeader = repositorioSpcSerasa.consultarNegativadorMovimentoRegistroParaGerarArquivo(
 				idMovimento, NegativadorRegistroTipo.TIPO_HEADER);
 
+		StringBuffer registroLinha = new StringBuffer();
+		
 		if (colecaoRegistroHeader != null && !colecaoRegistroHeader.isEmpty()) {
 			NegativadorMovimentoReg negativadorMovimentoReg = (NegativadorMovimentoReg) colecaoRegistroHeader.iterator().next();
 
@@ -13366,32 +12723,20 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 
 	/**
 	 * [UC0688] Gerar Resumo Diário da Negativação
-	 *
-	 * @author Vivianne Sousa
-	 * @date 10/02/2010
 	 */
 	private void desfazerMovimentoExclusaoIncompleto() throws ControladorException {
 		try {
-
 			Integer idMovimentoIncompleto = repositorioSpcSerasa.verificarOcorrenciaMovimentoExclusaoIncompleto();
 
-			// Caso exista movimento de exclusão incompleto
 			if (idMovimentoIncompleto != null) {
-
 				repositorioSpcSerasa.atualizarNegativacaoImoveis(idMovimentoIncompleto);
-
 				repositorioSpcSerasa.atualizarCodigoExclusaoTipoNegativadorMovimentoReg(idMovimentoIncompleto);
-
 				repositorioSpcSerasa.apagarNegativadorMovimentoReg(idMovimentoIncompleto);
-
 				repositorioSpcSerasa.apagarNegativadorMovimento(idMovimentoIncompleto);
-
 			}
-
 		} catch (ErroRepositorioException e) {
 			throw new ControladorException("erro.sistema", e);
 		}
-
 	}
 
 	/**
@@ -14638,5 +13983,35 @@ public class ControladorSpcSerasaSEJB implements SessionBean {
 			}
 		}
 		return retorno;
+	}
+	
+	private Collection obterColecaoNegativacaoImoveis(NegativadorMovimento negativadorMovimento,
+			Imovel imovel, Cliente cliente) throws ControladorException {
+		try {
+			FiltroNegativacaoImoveis filtro = new FiltroNegativacaoImoveis();
+			filtro.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.IMOVEL_ID, imovel.getId()));
+			filtro.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.NEGATIVACAO_COMANDO_ID,
+					negativadorMovimento.getNegativacaoComando().getId()));
+			filtro.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.INDICADOR_EXCLUIDO, new Integer(2)));
+			filtro.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.ID_CLIENTE, cliente.getId()));
+
+			Collection negativacaoImoveis = RepositorioUtilHBM.getInstancia().pesquisar(filtro, NegativacaoImoveis.class.getName());
+
+			if (negativacaoImoveis == null || negativacaoImoveis.isEmpty()) {
+				filtro = new FiltroNegativacaoImoveis();
+				filtro.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.IMOVEL_ID, imovel.getId()));
+				filtro.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.INDICADOR_EXCLUIDO, new Integer(2)));
+				filtro.adicionarParametro(new ParametroSimples(FiltroNegativacaoImoveis.NEGATIVACAO_COMANDO_ID,
+						negativadorMovimento.getNegativacaoComando().getId()));
+
+				negativacaoImoveis = RepositorioUtilHBM.getInstancia().pesquisar(filtro, NegativacaoImoveis.class.getName());
+			}
+
+			return negativacaoImoveis;
+		} catch (ErroRepositorioException ex) {
+			sessionContext.setRollbackOnly();
+			ex.printStackTrace();
+			throw new ControladorException("erro.sistema", ex);
+		}
 	}
 }

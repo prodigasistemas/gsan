@@ -43,7 +43,7 @@ public class RelatorioDebitoCobradoConta extends TarefaRelatorio {
 
 	@Override
 	public int calcularTotalRegistrosRelatorio() {
-		// TODO Auto-generated method stub
+		
 		return 0;
 	}
 
@@ -61,7 +61,7 @@ public class RelatorioDebitoCobradoConta extends TarefaRelatorio {
 			if(tipo == 1){
 				debitoCobrado = (DebitoCobrado) iter.next();	 			
 				bean.setTipoDebito(debitoCobrado.getDebitoTipo().getDescricao());
-				/**TODO:COSANPA
+				/**
 				 * DATA: 05/07/2011
 				 * autor: Adriana Muniz
 				 * Alteração para atender a debitos que não possuam ano mês referência
@@ -88,7 +88,7 @@ public class RelatorioDebitoCobradoConta extends TarefaRelatorio {
 	}
 	@Override
 	public Object executar() throws TarefaException {
-		// TODO Auto-generated method stub
+		
 		
 //		 ------------------------------------
 		Integer idFuncionalidadeIniciada = this.getIdFuncionalidadeIniciada();
@@ -147,7 +147,7 @@ public class RelatorioDebitoCobradoConta extends TarefaRelatorio {
 
 	@Override
 	public void agendarTarefaBatch() {
-		// TODO Auto-generated method stub
+		
 
 	}
 

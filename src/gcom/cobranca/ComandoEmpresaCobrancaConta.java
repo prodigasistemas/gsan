@@ -120,7 +120,7 @@ public class ComandoEmpresaCobrancaConta extends ObjetoTransacao {
 
 	public ComandoEmpresaCobrancaConta(Integer id, Integer codigoSetorComercialInicial, Integer codigoSetorComercialFinal, BigDecimal valorMinimoConta, BigDecimal valorMaximoConta, Integer referenciaContaInicial, Integer referenciaContaFinal, Date dataVencimentoContaInicial, Date dataVencimentoContaFinal, Date dataExecucao, Imovel imovel, Cliente cliente, Localidade localidadeInicial, Localidade localidadeFinal, UnidadeNegocio unidadeNegocio, Empresa empresa, Date ultimaAlteracao) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.codigoSetorComercialInicial = codigoSetorComercialInicial;
 		this.codigoSetorComercialFinal = codigoSetorComercialFinal;

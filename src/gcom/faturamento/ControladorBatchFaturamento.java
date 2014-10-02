@@ -99,7 +99,8 @@ public class ControladorBatchFaturamento implements MessageDrivenBean,
 									(Date) ((Object[]) objectMessage.getObject())[5],
 									(Integer) ((Object[]) objectMessage.getObject())[6],
 									(Usuario) ((Object[]) objectMessage.getObject())[7],
-                                    (Integer) ((Object[]) objectMessage .getObject())[8]);
+                                    (Integer) ((Object[]) objectMessage .getObject())[8],
+									(Boolean) ((Object[]) objectMessage.getObject())[9]);
 					usuarioLogado = (Usuario) ((Object[]) objectMessage.getObject())[7];
 					assuntoEmail = 	"ALTERAR VENCIMENTO DE CONJUNTO DE CONTAS";			
 					break;
@@ -129,7 +130,9 @@ public class ControladorBatchFaturamento implements MessageDrivenBean,
 									(Integer) ((Object[]) objectMessage.getObject())[5],
 									(Usuario) ((Object[]) objectMessage.getObject())[6],
 									(String) ((Object[]) objectMessage.getObject())[7],
-									(String[]) ((Object[]) objectMessage.getObject())[8]);
+									(String[]) ((Object[]) objectMessage.getObject())[8],
+									(Boolean) ((Object[]) objectMessage.getObject())[9]);
+											
 					usuarioLogado = (Usuario) ((Object[]) objectMessage.getObject())[6];
 					assuntoEmail = 	"ALTERAR VENCIMENTO DE CONJUNTO DE CONTAS";	
 					break;

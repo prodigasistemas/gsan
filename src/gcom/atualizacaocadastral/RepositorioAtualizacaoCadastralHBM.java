@@ -47,8 +47,9 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		try {
 			
 			consulta = " select imovelRetorno "
-					+ "from ImovelRetorno imovelRetorno"
-					+ " where imovelRetorno.tipoOperacao = :tipoOperacao"
+					+ " from ImovelRetorno imovelRetorno "
+					+ " left join fetch imovelRetorno.ramalLocalInstalacao "
+					+ " where imovelRetorno.tipoOperacao = :tipoOperacao "
 					+ " and imovelRetorno.id in "
 						+ " ( select imovelControle.imovelRetorno.id from ImovelControleAtualizacaoCadastral imovelControle "
 						+ " where imovelControle.situacaoAtualizacaoCadastral.id = " + SituacaoAtualizacaoCadastral.APROVADO  

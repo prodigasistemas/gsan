@@ -113,7 +113,7 @@ public class SubstituirConsumosAnterioresAction extends GcomAction {
 			medicaoTipo.setId(MedicaoTipo.LIGACAO_AGUA);
 
 			/**
-			 * TODO : COSANPA Alterando o cálculo da média
+			 *  Alterando o cálculo da média
 			 */
 			try {
 				boolean houveIntslacaoHidrometro = fachada
@@ -126,7 +126,7 @@ public class SubstituirConsumosAnterioresAction extends GcomAction {
 								medicaoTipo.getId(), houveIntslacaoHidrometro);
 
 				/**
-				 * TODO : COSANPA Alterando o cálculo da média
+				 *  Alterando o cálculo da média
 				 */
 				medicaoTipo.setId(MedicaoTipo.POCO);
 				houveIntslacaoHidrometro = fachada
@@ -144,7 +144,7 @@ public class SubstituirConsumosAnterioresAction extends GcomAction {
 						consumoMedioHidrometroEsgoto[0]);
 
 			} catch (ControladorException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 		}

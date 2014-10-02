@@ -32,7 +32,7 @@ public class RelatorioResumoReceitaAnalitico extends TarefaRelatorio {
 	
 	public RelatorioResumoReceitaAnalitico(Usuario usuario, String nomeRelatorio) {
 		super(usuario, nomeRelatorio);
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	private static final long serialVersionUID = 1L;

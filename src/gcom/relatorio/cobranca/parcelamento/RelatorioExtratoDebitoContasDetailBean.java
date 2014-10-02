@@ -25,7 +25,7 @@ public class RelatorioExtratoDebitoContasDetailBean implements RelatorioBean {
 	public RelatorioExtratoDebitoContasDetailBean(String faturaAtrasada1, 
 			String vencimentoFatura1, String valorFatura1, String faturaAtrasada2, String vencimentoFatura2, String valorFatura2) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.faturaAtrasada1 = faturaAtrasada1;
 		this.vencimentoFatura1 = vencimentoFatura1;
 		this.valorFatura1 = valorFatura1;

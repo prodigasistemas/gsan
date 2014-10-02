@@ -1209,7 +1209,7 @@ public class RepositorioClienteImovelHBM implements IRepositorioClienteImovel {
 	 * 
 	 * Data: 29/10/2008
 	 */
-	/**TODO: COSANPA
+	/**
 	 * autor: Adriana Muniz
 	 * Data: 24/05/2011
 	 * Adição da condição que limita o retorno apenas de cliente que ainda tenham vinculo com o imóvel.*/

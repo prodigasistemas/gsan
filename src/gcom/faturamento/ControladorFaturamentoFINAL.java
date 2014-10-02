@@ -383,7 +383,7 @@ import br.com.danhil.BarCode.Interleaved2of5;
 public class ControladorFaturamentoFINAL implements SessionBean {
 
 	private static final long serialVersionUID = 1L;
-
+	
 	SessionContext sessionContext;
 
 	protected IRepositorioFaturamento repositorioFaturamento;
@@ -396,7 +396,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	protected IRepositorioCadastro repositorioCadastro;
 	protected IRepositorioImovel repositorioImovel;
 
-	private Logger logger = Logger.getLogger(ControladorFaturamentoFINAL.class);
+	private static Logger logger = Logger.getLogger(ControladorFaturamentoFINAL.class);
 
 	public void ejbCreate() throws CreateException {
 		repositorioFaturamento = RepositorioFaturamentoHBM.getInstancia();
@@ -475,34 +475,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		return qtd;
 	}
 
-	/**
-	 * < <Descrição do método>>
-	 */
-
-	/**
-	 * Método chamado no momento que o bean é removido do contexto do container
-	 */
 	public void ejbRemove() {
 	}
 
-	/**
-	 * Método chamado no momento que o bean é ativado no container
-	 */
 	public void ejbActivate() {
 	}
 
-	/**
-	 * Método chamado no momento que o bean é passivado no container
-	 */
 	public void ejbPassivate() {
 	}
-
-	/**
-	 * * Seta o valor de sessionContext
-	 * 
-	 * @param sessionContext
-	 *            O novo valor de sessionContext
-	 */
 
 	public void setSessionContext(SessionContext sessionContext) {
 		this.sessionContext = sessionContext;
@@ -3958,7 +3938,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		boolean segundaCondicaoNaoGerarConta = false;
 
 		/*
-		 * TODO : COSANPA Alteração para gerar a rota com imóveis ativos ou
+		 *  Alteração para gerar a rota com imóveis ativos ou
 		 * inativos com débitos
 		 */
 		// 1.1 Caso o valor total da água e o valor total do esgoto seja igual a
@@ -3991,7 +3971,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			segundaCondicaoNaoGerarConta = true;
 		}
 		/**
-		 * TODO:COSANPA
+		 *
 		 * 
 		 * @author Adriana Muniz date: 28/06/2012
 		 * 
@@ -4205,8 +4185,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		int diaDataVencimentoRota = Util.getDiaMes(faturamentoAtivCronRota.getDataContaVencimento());
 		int mesDataVencimentoRota = Util.getMes(faturamentoAtivCronRota.getDataContaVencimento());
 		int anoDataVencimentoRota = Util.getAno(faturamentoAtivCronRota.getDataContaVencimento());
-
-		logger.info("Imovel: " + imovel.getId() + " - " + imovel.getDiaVencimento() + " - " + imovel.getIndicadorEmissaoExtratoFaturamento() + " - " + imovel.getIndicadorVencimentoMesSeguinte());
 		
 		if (imovel.getDiaVencimento() != null
 				&& imovel.getDiaVencimento().intValue() != 0
@@ -4214,7 +4192,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 			diaVencimentoAlternativo = imovel.getDiaVencimento();
 			indicadorVencimentoMesSeguinte = imovel.getIndicadorVencimentoMesSeguinte();
-			logger.info("Entrou v. alternativo");
 		} else {
 			try {
 				clienteResponsavel = repositorioFaturamento.pesquisarClienteImovelGrupoFaturamento(imovel.getId(), ClienteRelacaoTipo.RESPONSAVEL);
@@ -4235,14 +4212,11 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		if (diaVencimentoAlternativo == null || diaVencimentoAlternativo.intValue() == 0) {
 			dataVencimentoConta = faturamentoAtivCronRota.getDataContaVencimento();
-			logger.info("sem Vencimento alternativo");
 		} else {
 			if (indicadorVencimentoMesSeguinte.equals(ConstantesSistema.NAO)) {
-				logger.info("Vencimento mes seguinte nao");
 				if (diaDataVencimentoRota <= diaVencimentoAlternativo.intValue()) {
 					ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(mesDataVencimentoRota, anoDataVencimentoRota));
 
-					logger.info("diaDataVencimentoRota <= diaVencimentoAlternativo.intValue()" );
 
 					if (diaVencimentoAlternativo.intValue() > ultimoDiaMes.intValue()) {
 						diaVencimentoAlternativo = ultimoDiaMes;
@@ -4250,8 +4224,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 					dataVencimentoConta = Util.criarData(diaVencimentoAlternativo.intValue(), mesDataVencimentoRota, anoDataVencimentoRota);
 				} else {
-					logger.info("altrnativo > rota");
-
 					diaVencimentoAlternativo = new Integer(diaDataVencimentoRota).shortValue();
 
 					ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(mesDataVencimentoRota, anoDataVencimentoRota));
@@ -4267,10 +4239,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							.adicionarNumeroDiasDeUmaData(new Date(), sistemaParametro.getNumeroMinimoDiasEmissaoVencimento());
 
 					if (dataVencimentoAlternativo.compareTo(dataAtualMaisDiasMinimoEmissao) <= 0) {
-						logger.info("Vencimento alternativo menor que mínimo");
-						/* A Data de Vencimento da Conta será igual ao dia do vencimento alternativo mais o mês e ano seguinte ao
-						 * da Data de Vencimento da Rota.
-						 */
 						Date dataVencimentoRotaMesSeguinte = Util.adcionarOuSubtrairMesesAData(faturamentoAtivCronRota.getDataContaVencimento(), 1, 0);
 
 						ultimoDiaMes = Short.valueOf(Util.obterUltimoDiaMes(Util.getMes(dataVencimentoRotaMesSeguinte),
@@ -9841,7 +9809,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			debitoCobradoCategoriaInserir.setQuantidadeEconomia(categoriaColecao.getQuantidadeEconomiasCategoria());
 			debitoCobradoCategoriaInserir.setUltimaAlteracao(new Date());
 			debitoCobradoCategoriaInserir.setValorCategoria((BigDecimal) colecaoValorPorCategoriaIt.next());
-			logger.info("		Debito cobrado categoria : [cag: " + debitoCobradoCategoriaInserir.getComp_id().getCategoriaId() + " / deb: " + debitoCobradoCategoriaInserir.getComp_id().getDebitoCobradoId() + "]");
 			this.getControladorUtil().inserir(debitoCobradoCategoriaInserir);
 		}
 	}
@@ -9989,7 +9956,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			BigDecimal percentualColeta) throws ControladorException {
 
 		try {
-			logger.info("Retificação da conta do imóvel: " + imovel.getId());
+			logger.info("Retificacao da conta do imovel: " + imovel.getId());
 			
 			validarContaParaRetificacao(contaAtual, imovel, dataVencimentoConta);
 
@@ -10877,7 +10844,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 						// Situação Atual
 						/**
-						 * TODO: COSANPA Caso motivo de retificação seja débito
+						 * Caso motivo de retificação seja débito
 						 * prescrito, alterar a situação da conta para 8.
 						 * 
 						 * @author Wellington Rocha
@@ -11781,13 +11748,11 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						contaColecao.setDataVencimentoConta(dataVencimento);
 
 						// Data de validade
-						Date dataValidadeConta = this
-								.retornaDataValidadeConta(dataVencimento);
+						Date dataValidadeConta = this.retornaDataValidadeConta(dataVencimento);
 						contaColecao.setDataValidadeConta(dataValidadeConta);
 
 						// Indicador de alteração de vencimento da conta
-						contaColecao
-								.setIndicadorAlteracaoVencimento(Conta.INDICADOR_ALTERACAO_VENCIMENTO_ATIVO);
+						contaColecao.setIndicadorAlteracaoVencimento(Conta.INDICADOR_ALTERACAO_VENCIMENTO_ATIVO);
 
 						// Última alteraçao
 						contaColecao.setUltimaAlteracao(new Date());
@@ -11803,9 +11768,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						Integer numeroAlteracoesVencimento = 0;
 						try {
 
-							numeroAlteracoesVencimento = this.repositorioFaturamento
-									.obterQuantidadeAlteracoesVencimentoConta(contaColecao
-											.getId());
+							numeroAlteracoesVencimento = this.repositorioFaturamento.obterQuantidadeAlteracoesVencimentoConta(contaColecao.getId());
 						} catch (ErroRepositorioException ex) {
 							sessionContext.setRollbackOnly();
 							new ControladorException("erro.sistema", ex);
@@ -11816,20 +11779,16 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						}
 						numeroAlteracoesVencimento = numeroAlteracoesVencimento + 1;
 
-						contaColecao
-								.setNumeroAlteracoesVencimento(numeroAlteracoesVencimento);
+						contaColecao.setNumeroAlteracoesVencimento(numeroAlteracoesVencimento);
 						// ----------------------------------------------------------------------------------------
 
 						// Verificar atualização realizada por outro usuário
-						if ((contaNaBase.getUltimaAlteracao()
-								.after(contaColecao.getUltimaAlteracao()))) {
+						if ((contaNaBase.getUltimaAlteracao().after(contaColecao.getUltimaAlteracao()))) {
 							sessionContext.setRollbackOnly();
-							throw new ControladorException(
-									"erro.atualizacao.timestamp");
+							throw new ControladorException("erro.atualizacao.timestamp");
 						}
 
-						atualizarColecaoComRegistrarTransacao(contaColecao,
-								usuarioLogado);
+						atualizarColecaoComRegistrarTransacao(contaColecao, usuarioLogado);
 
 					}
 				}
@@ -11848,9 +11807,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				Integer numeroAlteracoesVencimento = 0;
 				try {
 
-					numeroAlteracoesVencimento = this.repositorioFaturamento
-							.obterQuantidadeAlteracoesVencimentoConta(contaColecao
-									.getId());
+					numeroAlteracoesVencimento = this.repositorioFaturamento.obterQuantidadeAlteracoesVencimentoConta(contaColecao.getId());
 				} catch (ErroRepositorioException ex) {
 					sessionContext.setRollbackOnly();
 					new ControladorException("erro.sistema", ex);
@@ -11861,49 +11818,39 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				}
 				numeroAlteracoesVencimento = numeroAlteracoesVencimento + 1;
 
-				contaColecao
-						.setNumeroAlteracoesVencimento(numeroAlteracoesVencimento);
+				contaColecao.setNumeroAlteracoesVencimento(numeroAlteracoesVencimento);
 				// ----------------------------------------------------------------------------------------
 
 				// Data de validade
-				Date dataValidadeConta = this
-						.retornaDataValidadeConta(dataVencimento);
+				Date dataValidadeConta = this.retornaDataValidadeConta(dataVencimento);
 				contaColecao.setDataValidadeConta(dataValidadeConta);
 
 				// Indicador de alteração de vencimento da conta
-				contaColecao
-						.setIndicadorAlteracaoVencimento(Conta.INDICADOR_ALTERACAO_VENCIMENTO_ATIVO);
+				contaColecao.setIndicadorAlteracaoVencimento(Conta.INDICADOR_ALTERACAO_VENCIMENTO_ATIVO);
 
 				// Última alteraçao
 				contaColecao.setUltimaAlteracao(new Date());
 
 				// Verificar atualização realizada por outro usuário
-				if ((contaNaBase.getUltimaAlteracao().after(contaColecao
-						.getUltimaAlteracao()))) {
+				if ((contaNaBase.getUltimaAlteracao().after(contaColecao.getUltimaAlteracao()))) {
 					sessionContext.setRollbackOnly();
 					throw new ControladorException("erro.atualizacao.timestamp");
 				}
 
-				atualizarColecaoComRegistrarTransacao(contaColecao,
-						usuarioLogado);
+				atualizarColecaoComRegistrarTransacao(contaColecao, usuarioLogado);
 
 			}
 		}
 	}
 
-	public void atualizarColecaoComRegistrarTransacao(Conta contaColecao,
-			Usuario usuarioLogado) throws ControladorException {
+	public void atualizarColecaoComRegistrarTransacao(Conta contaColecao, Usuario usuarioLogado) throws ControladorException {
 		// ------------ <REGISTRAR TRANSAÇÃO>----------------------------
 
 		RegistradorOperacao registradorOperacao = null;
 		if (usuarioLogado != null) {
-			registradorOperacao = new RegistradorOperacao(
-					Operacao.OPERACAO_ALTERAR_VENCIMENTO_CONTA,
-					contaColecao.getImovel() != null ? contaColecao.getImovel()
-							.getId() : contaColecao.getId(),
-					contaColecao.getId(), new UsuarioAcaoUsuarioHelper(
-							usuarioLogado,
-							UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
+			registradorOperacao = new RegistradorOperacao(Operacao.OPERACAO_ALTERAR_VENCIMENTO_CONTA,
+					contaColecao.getImovel() != null ? contaColecao.getImovel().getId() : contaColecao.getId(), contaColecao.getId(),
+					new UsuarioAcaoUsuarioHelper(usuarioLogado, UsuarioAcao.USUARIO_ACAO_EFETUOU_OPERACAO));
 
 			registradorOperacao.registrarOperacao(contaColecao);
 
@@ -19405,7 +19352,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// acumula o valor do IR(imposto de renda) para situação de
 					// conta atual ou anterior igual a normal
 					/**
-					 * TODO:COSANPA Alteração para obter de forma correta o
+					 * Alteração para obter de forma correta o
 					 * valor dos impostos persistidos no resumo de faturamento
 					 * */
 					valorItemFaturamento = null;
@@ -21748,7 +21695,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					idsSituacaoAtual = new Integer[2];
 					idsSituacaoAtual[0] = DebitoCreditoSituacao.DEBITO_PRESCRITO;
 					/**
-					 * TODO: Cosanpa Inlcuindo contas incluidas canceladas por
+					 * Inlcuindo contas incluidas canceladas por
 					 * débito prescrito na contabilização
 					 * 
 					 * @author Wellington Rocha
@@ -21876,7 +21823,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					idsSituacaoAtual = new Integer[2];
 					idsSituacaoAtual[0] = DebitoCreditoSituacao.DEBITO_PRESCRITO;
 					/**
-					 * TODO: Cosanpa Inlcuindo contas incluidas canceladas por
+					 * Inlcuindo contas incluidas canceladas por
 					 * débito prescrito na contabilização
 					 * 
 					 * @author Wellington Rocha
@@ -22237,7 +22184,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					}
 
 					/**
-					 * TODO: COSANPA Inclusão dos creditos com credito_origem
+					 * Inclusão dos creditos com credito_origem
 					 * correspondente a DESCONTOS_CONCEDIDOS para fazer a
 					 * contabilização para os registros com Lançamento Tipo
 					 * correspondete a
@@ -22941,7 +22888,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					}
 
 					/**
-					 * TODO: COSANPA Inclusão dos creditos realizados com
+					 * Inclusão dos creditos realizados com
 					 * credito_origem = DESCONTOS_CONCEDIDOS para efetuar a
 					 * contabilização dos mesmos para o lançamento tipo
 					 * correspondente a
@@ -25116,16 +25063,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				 * [UC0113] - Faturar Grupo de Faturamento [FS0005] - Verificar
 				 * Débitos a cobrar de parcelamento
 				 */
-				/**
-				 * TODO:COSANPA
-				 * 
-				 * @autor Adriana Muniz
-				 * @date 25/09/2013
-				 * 
-				 *       Troca da referência de faturamento do grupo para a
-				 *       referencia de faturamento do sistema de parametro.
-				 *       Mantis 875
-				 * */
 				if (!(arrayDebitosACobrar[16] != null
 						&& debitoACobrar.getNumeroPrestacaoCobradas() == 0 && (arrayDebitosACobrar[15] != null && ((Integer) arrayDebitosACobrar[15])
 						.intValue() >= sistemaParametro.getAnoMesFaturamento()))) {
@@ -25226,14 +25163,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		Collection colecaoCreditosARealizar = null;
 
 		/**
-		 * TODO:COSANPA
-		 * 
 		 * @autor Adriana Muniz
 		 * @date 25/09/2013
 		 * 
-		 *       Troca da referência de faturamento do grupo para a referencia
-		 *       de faturamento do sistema de parametro. Mantis 875
-		 * */
+		 * Troca da referência de faturamento do grupo para a referencia
+		 * de faturamento do sistema de parametro.
+		 */
 		// Pesquisa créditos a cobrar
 		try {
 			colecaoCreditosARealizar = repositorioFaturamento
@@ -25543,7 +25478,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/*
-	 * TODO : COSANPA Refatoração feita pela cosanpa, para melhorar a leitura do
+	 *  Refatoração feita pela cosanpa, para melhorar a leitura do
 	 * código.
 	 */
 	/**
@@ -25785,7 +25720,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		}
 
 		/**
-		 * TODO:COSANPA data:08/08/2012 Adicionando parametros do array ao
+		 * data:08/08/2012 Adicionando parametros do array ao
 		 * objeto imovel Inclusão para atender as alterações no calculo do
 		 * condominio
 		 * */
@@ -33463,7 +33398,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		try {
 
 			/**
-			 * TODO: COSANPA Inclusao de um campo no retorno do método.
+			 * Inclusao de um campo no retorno do método.
 			 * Melhorias na 2 via da conta impressa.
 			 */
 			// caso o tipo de medição seja agua
@@ -33575,48 +33510,30 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @param colecaoConta
 	 * @throws ControladorException
 	 */
-	public StringBuilder obterMensagemRateioConsumo(
-			EmitirContaHelper emitirContaHelper, String consumoRateio,
-			Object[] parmsMedicaoHistorico, Integer tipoMedicao)
-			throws ControladorException {
+	public StringBuilder obterMensagemRateioConsumo(EmitirContaHelper emitirContaHelper, String consumoRateio, Object[] parmsMedicaoHistorico, 
+			Integer tipoMedicao) throws ControladorException {
+		
 		StringBuilder mensagemConsumo = new StringBuilder();
-		// caso o consumo de rateio seja diferente de vazio
+
 		if (!consumoRateio.equals("") && !consumoRateio.equals("0")) {
 			mensagemConsumo.append("CONSUMO DO RATEIO - ");
-			mensagemConsumo.append(Util.completaStringComEspacoAEsquerda(
-					consumoRateio, 6));
+			mensagemConsumo.append(Util.completaStringComEspacoAEsquerda(consumoRateio, 6));
 			mensagemConsumo.append("M3");
-			// senão completa com espaços em branco
 			mensagemConsumo.append(Util.completaString("", 4));
 		} else {
-			// senão caso o tipo de medição seja diferente de nulo e seja poço e
-			// não existam dados para a medição
-			if (tipoMedicao != null && tipoMedicao.equals(MedicaoTipo.POCO)
-					&& parmsMedicaoHistorico == null) {
+			if (tipoMedicao != null && tipoMedicao.equals(MedicaoTipo.POCO) && parmsMedicaoHistorico == null) {
 				mensagemConsumo.append("VOLUME FIXO DE ESGOTO - ");
-				mensagemConsumo.append(Util.completaStringComEspacoAEsquerda(""
-						+ emitirContaHelper.getConsumoEsgoto(), 6));
+				mensagemConsumo.append(Util.completaStringComEspacoAEsquerda("" + emitirContaHelper.getConsumoEsgoto(), 6));
 				mensagemConsumo.append("M3");
-
 			} else {
-				// caso o tipo de medição seja diferente de nulo e seja ligação
-				// de agua e
-				// o consumo de esgoto seja diferente de nulo d maior que o
-				// consumo de agua
-				if (tipoMedicao != null
-						&& tipoMedicao.equals(MedicaoTipo.LIGACAO_AGUA)
-						&& emitirContaHelper.getConsumoEsgoto() != null
-						&& emitirContaHelper.getConsumoEsgoto() > emitirContaHelper
-								.getConsumoAgua()) {
+				if (tipoMedicao != null && tipoMedicao.equals(MedicaoTipo.LIGACAO_AGUA) && emitirContaHelper.getConsumoEsgoto() != null
+						&& emitirContaHelper.getConsumoEsgoto() > emitirContaHelper.getConsumoAgua()) {
 
 					mensagemConsumo.append("VOLUME FIXO DE ESGOTO - ");
-					mensagemConsumo.append(Util
-							.completaStringComEspacoAEsquerda(""
-									+ emitirContaHelper.getConsumoEsgoto(), 6));
+					mensagemConsumo.append(Util.completaStringComEspacoAEsquerda("" + emitirContaHelper.getConsumoEsgoto(), 6));
 					mensagemConsumo.append("M3");
 
 				} else {
-					// senão completa com espaços em branco
 					mensagemConsumo.append(Util.completaString("", 32));
 				}
 			}
@@ -39326,7 +39243,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							.getDataEnvioEmailConta());
 
 					/**
-					 * TODO: COSANPA Mantis 648 - Enviando para historico os
+					 * Enviando para historico os
 					 * dados referentes a rateio de água e esgoto
 					 * 
 					 * @author: Wellington Rocha
@@ -40264,81 +40181,43 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @param colecaoConta
 	 * @throws ControladorException
 	 */
-	public Collection gerarLinhasDescricaoServicoTarifasRelatorio(
-			EmitirContaHelper emitirContaHelper, String consumoRateio,
-			Object[] parmsMedicaoHistorico, Integer tipoMedicao,
-			boolean contaHistorico) throws ControladorException {
+	public Collection gerarLinhasDescricaoServicoTarifasRelatorio(EmitirContaHelper emitirContaHelper, String consumoRateio, Object[] parmsMedicaoHistorico, 
+			Integer tipoMedicao, boolean contaHistorico) throws ControladorException {
 
 		Collection<ContaLinhasDescricaoServicosTarifasTotalHelper> colecaoLinhasDescricaoServicosTarifasTotal = new ArrayList<ContaLinhasDescricaoServicosTarifasTotalHelper>();
 
-		// caso o valor da agua da conta seja maior que zero
 		if (emitirContaHelper.getValorAgua() != null
-				&& (emitirContaHelper.getValorAgua().compareTo(
-						new BigDecimal("0.00")) == 1 && (emitirContaHelper
-						.getValorRateioAgua() == null || (emitirContaHelper
-						.getValorAgua().compareTo(
-								emitirContaHelper.getValorRateioAgua()) != 0)))) {
+				&& (emitirContaHelper.getValorAgua().compareTo(new BigDecimal("0.00")) == 1 && (emitirContaHelper.getValorRateioAgua() == null || (emitirContaHelper
+						.getValorAgua().compareTo(emitirContaHelper.getValorRateioAgua()) != 0)))) {
 
 			if (!contaHistorico) {
-				// [SB0011] - Gerar Linhas da Tarifa de Água
-				colecaoLinhasDescricaoServicosTarifasTotal = gerarLinhasTarifaAguaRelatorio(
-						emitirContaHelper, consumoRateio,
-						parmsMedicaoHistorico, tipoMedicao,
-						colecaoLinhasDescricaoServicosTarifasTotal);
+				colecaoLinhasDescricaoServicosTarifasTotal = gerarLinhasTarifaAguaRelatorio(emitirContaHelper, consumoRateio, parmsMedicaoHistorico,
+						tipoMedicao, colecaoLinhasDescricaoServicosTarifasTotal);
 			} else {
-				colecaoLinhasDescricaoServicosTarifasTotal = gerarLinhasTarifaAguaRelatorioContaHistorico(
-						emitirContaHelper, consumoRateio,
-						parmsMedicaoHistorico, tipoMedicao,
-						colecaoLinhasDescricaoServicosTarifasTotal);
+				colecaoLinhasDescricaoServicosTarifasTotal = gerarLinhasTarifaAguaRelatorioContaHistorico(emitirContaHelper, consumoRateio,
+						parmsMedicaoHistorico, tipoMedicao, colecaoLinhasDescricaoServicosTarifasTotal);
 			}
-
 		}
 
-		// caso o valor de água de esgoto seja maior que zero
-		if (emitirContaHelper.getValorEsgoto() != null
-				&& emitirContaHelper.getValorEsgoto().compareTo(
-						new BigDecimal("0.00")) == 1) {
-
-			// [SB0012] - Gerar Linhas da tarifa de Esgoto
-			colecaoLinhasDescricaoServicosTarifasTotal = gerarLinhasTarifaEsgotoRelatorio(
-					emitirContaHelper,
-					colecaoLinhasDescricaoServicosTarifasTotal);
-
+		if (emitirContaHelper.getValorEsgoto() != null && emitirContaHelper.getValorEsgoto().compareTo(new BigDecimal("0.00")) == 1) {
+			colecaoLinhasDescricaoServicosTarifasTotal = gerarLinhasTarifaEsgotoRelatorio(emitirContaHelper, colecaoLinhasDescricaoServicosTarifasTotal);
 		}
 
-		// // caso o valor de debitos cobrados da conta seja maior que zero
-		if ((emitirContaHelper.getDebitos() != null && emitirContaHelper
-				.getDebitos().compareTo(new BigDecimal("0.00")) == 1)
-				|| (emitirContaHelper.getValorRateioAgua() != null || emitirContaHelper
-						.getValorRateioEsgoto() != null)) {
+		if ((emitirContaHelper.getDebitos() != null && emitirContaHelper.getDebitos().compareTo(new BigDecimal("0.00")) == 1)
+				|| (emitirContaHelper.getValorRateioAgua() != null || emitirContaHelper.getValorRateioEsgoto() != null)) {
 
-			// [SB0013] - Gerar Linhas de Débitos Cobrados
-			colecaoLinhasDescricaoServicosTarifasTotal = gerarLinhasDebitoCobradosRelatorio(
-					emitirContaHelper,
-					colecaoLinhasDescricaoServicosTarifasTotal, contaHistorico);
-
+			colecaoLinhasDescricaoServicosTarifasTotal = gerarLinhasDebitoCobradosRelatorio(emitirContaHelper, colecaoLinhasDescricaoServicosTarifasTotal,
+					contaHistorico);
 		}
 
-		// caso o valor de créditos realizados seja maior que zero
-		if (emitirContaHelper.getValorCreditos() != null
-				&& emitirContaHelper.getValorCreditos().compareTo(
-						new BigDecimal("0.00")) == 1) {
-			// [SB0014] - Gerar Linhas de Crédito Realizado
-			colecaoLinhasDescricaoServicosTarifasTotal = gerarLinhasCreditosRealizadosRelatorio(
-					emitirContaHelper,
-					colecaoLinhasDescricaoServicosTarifasTotal, contaHistorico);
-
+		if (emitirContaHelper.getValorCreditos() != null && emitirContaHelper.getValorCreditos().compareTo(new BigDecimal("0.00")) == 1) {
+			colecaoLinhasDescricaoServicosTarifasTotal = gerarLinhasCreditosRealizadosRelatorio(emitirContaHelper, colecaoLinhasDescricaoServicosTarifasTotal,
+					contaHistorico);
 		}
 
-		// caso o valor dos impostos retidos seja maior que zero
-		if (emitirContaHelper.getValorImpostos() != null
-				&& emitirContaHelper.getValorImpostos().compareTo(
-						new BigDecimal("0.00")) == 1) {
-			// [SB0015] - Gerar Linhas dos Impostos Retidos
-			colecaoLinhasDescricaoServicosTarifasTotal = gerarLinhasImpostosRetidosRelatorio(
-					emitirContaHelper,
-					colecaoLinhasDescricaoServicosTarifasTotal, contaHistorico);
-
+		if (emitirContaHelper.getValorImpostos() != null && emitirContaHelper.getValorImpostos().compareTo(new BigDecimal("0.00")) == 1) {
+			colecaoLinhasDescricaoServicosTarifasTotal = gerarLinhasImpostosRetidosRelatorio(emitirContaHelper, colecaoLinhasDescricaoServicosTarifasTotal,
+					contaHistorico);
 		}
 
 		return colecaoLinhasDescricaoServicosTarifasTotal;
@@ -40777,7 +40656,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								"" + contaCategoria.getConsumoAgua(), 6)
 								+ " M3";
 						/**
-						 * TODO: COSANPA Mantis 686 - Segunda via de conta com
+						 * Segunda via de conta com
 						 * rateio está somando o valor de água da categoria com
 						 * o valor do rateio.
 						 * 
@@ -40867,7 +40746,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		}
 
 		/**
-		 * TODO : COSANPA Pamela Gatinho - 02/08/2012
+		 *  Pamela Gatinho - 02/08/2012
 		 * 
 		 * Alteração para exibir somente o valor do esgoto, sem o ralor do
 		 * rateio, que será mostrado separadamente em outra linha do documento.
@@ -41029,13 +40908,9 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		// try {
 
 		if (!contaHistorico) {
-			collectionParmsDebitoAutomatico = this
-					.pesquisarParmsDebitoAutomatico(emitirContaHelper
-							.getIdConta());
+			collectionParmsDebitoAutomatico = this.pesquisarParmsDebitoAutomatico(emitirContaHelper.getIdConta());
 		} else {
-			collectionParmsDebitoAutomatico = this
-					.pesquisarParmsDebitoAutomaticoHistorico(emitirContaHelper
-							.getIdConta());
+			collectionParmsDebitoAutomatico = this.pesquisarParmsDebitoAutomaticoHistorico(emitirContaHelper.getIdConta());
 		}
 
 		// } catch (ErroRepositorioException e) {
@@ -41059,13 +40934,11 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					String totalPrestacaoMenosBonus = "";
 					// valor acumulado dos debitos cobrados
 					if (parmsDebitoAutomatico[0] != null) {
-						valorDebitosCobrados = Util
-								.formatarMoedaReal((BigDecimal) parmsDebitoAutomatico[0]);
+						valorDebitosCobrados = Util.formatarMoedaReal((BigDecimal) parmsDebitoAutomatico[0]);
 					}
 					// numero de prestação do débito
 					if (parmsDebitoAutomatico[1] != null) {
-						numeroPrestacao = ""
-								+ ((Short) parmsDebitoAutomatico[1]);
+						numeroPrestacao = "" + ((Short) parmsDebitoAutomatico[1]);
 					}
 					// valor acumulado dos debitos cobrados
 					if (parmsDebitoAutomatico[2] != null) {
@@ -41081,35 +40954,24 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					if (parmsDebitoAutomatico[3] != null) {
 						numeroParcelaBonus = (Short) parmsDebitoAutomatico[3];
 					}
-					totalPrestacaoMenosBonus = ""
-							+ (numeroTotalPrestacao.intValue() - numeroParcelaBonus
-									.intValue());
+					totalPrestacaoMenosBonus = "" + (numeroTotalPrestacao.intValue() - numeroParcelaBonus.intValue());
 
 					if (!valorDebitosCobrados.equals("0,00")) {
 						String descricaoServicosTarifas1 = "";
 						String valor1 = "";
 						// -- Linha 1 --//
-						descricaoServicosTarifas1 = "PARCELAMENTO DE DÉBITOS"
-								+ Util.completaString("", 2) + "PARCELA ";
+						descricaoServicosTarifas1 = "PARCELAMENTO DE DÉBITOS" + Util.completaString("", 2) + "PARCELA ";
 						// numero da prestação do débito
-						descricaoServicosTarifas1 = descricaoServicosTarifas1
-								+ Util.completaStringComEspacoAEsquerda(
-										numeroPrestacao, 3) + "/";
+						descricaoServicosTarifas1 = descricaoServicosTarifas1 + Util.completaStringComEspacoAEsquerda(numeroPrestacao, 3) + "/";
 						// numero total da prestação do débito
-						descricaoServicosTarifas1 = descricaoServicosTarifas1
-								+ Util.completaString(totalPrestacaoMenosBonus,
-										3);
+						descricaoServicosTarifas1 = descricaoServicosTarifas1 + Util.completaString(totalPrestacaoMenosBonus, 3);
 						valor1 = valorDebitosCobrados;
 
 						contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-						contaLinhasDescricaoServicosTarifasTotalHelper
-								.setDescricaoServicosTarifas(descricaoServicosTarifas1);
-						contaLinhasDescricaoServicosTarifasTotalHelper
-								.setConsumoFaixa("");
-						contaLinhasDescricaoServicosTarifasTotalHelper
-								.setValor(valor1);
-						colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-								.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+						contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas1);
+						contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa("");
+						contaLinhasDescricaoServicosTarifasTotalHelper.setValor(valor1);
+						colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 					}
 				}
 
@@ -41118,25 +40980,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		// CRC4428 - Vivianne Sousa - 14/06/2010
 		List colecaoDebitoCobradoPorTipo = null;
-		// try {
-
 		if (!contaHistorico) {
-			colecaoDebitoCobradoPorTipo = this
-					.pesquisarParmsDebitoCobradoPorTipo(emitirContaHelper
-							.getIdConta());
+			colecaoDebitoCobradoPorTipo = this.pesquisarParmsDebitoCobradoPorTipo(emitirContaHelper.getIdConta());
 		} else {
-			colecaoDebitoCobradoPorTipo = this
-					.pesquisarParmsDebitoCobradoHistoricoPorTipo(emitirContaHelper
-							.getIdConta());
+			colecaoDebitoCobradoPorTipo = this.pesquisarParmsDebitoCobradoHistoricoPorTipo(emitirContaHelper.getIdConta());
 		}
-		// } catch (ErroRepositorioException e) {
-		// sessionContext.setRollbackOnly();
-		// throw new ControladorException("erro.sistema", e);
-		// }
-		if (colecaoDebitoCobradoPorTipo != null
-				&& !colecaoDebitoCobradoPorTipo.isEmpty()) {
-			ListIterator iteratorDebitoCobradoPorTipo = (ListIterator) colecaoDebitoCobradoPorTipo
-					.listIterator();
+		if (colecaoDebitoCobradoPorTipo != null && !colecaoDebitoCobradoPorTipo.isEmpty()) {
+			ListIterator iteratorDebitoCobradoPorTipo = (ListIterator) colecaoDebitoCobradoPorTipo.listIterator();
 			// variável responsável para controle de mudança do tipo de débito
 			boolean mudou = true;
 			// variavel que verifica se é a primeira vez,de cada tipo do
@@ -41163,8 +41013,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			String valor2 = "";
 
 			while (iteratorDebitoCobradoPorTipo.hasNext()) {
-				Object[] parmsDebitoCobradoPorTipo = (Object[]) iteratorDebitoCobradoPorTipo
-						.next();
+				Object[] parmsDebitoCobradoPorTipo = (Object[]) iteratorDebitoCobradoPorTipo.next();
 
 				// recupera os parametros da coleção valor da pretação
 				if (parmsDebitoCobradoPorTipo[0] != null) {
@@ -41172,13 +41021,11 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				}
 				// numero da pretação atual
 				if (parmsDebitoCobradoPorTipo[1] != null) {
-					numeroPrestacaoDebito = new Integer(""
-							+ (Short) parmsDebitoCobradoPorTipo[1]);
+					numeroPrestacaoDebito = new Integer("" + (Short) parmsDebitoCobradoPorTipo[1]);
 				}
 				// numero total de prestações
 				if (parmsDebitoCobradoPorTipo[2] != null) {
-					numeroPrestacaoTotal = new Integer(""
-							+ (Short) parmsDebitoCobradoPorTipo[2]);
+					numeroPrestacaoTotal = new Integer("" + (Short) parmsDebitoCobradoPorTipo[2]);
 				}
 				// ano Mes Referência do débito
 				Integer anoMesReferencia = null;
@@ -41205,9 +41052,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				if (parmsDebitoCobradoPorTipo[6] != null) {
 					numeroParcelaBonus = (Short) parmsDebitoCobradoPorTipo[6];
 				}
-				totalPrestacaoMenosBonus = ""
-						+ (numeroPrestacaoTotal.intValue() - numeroParcelaBonus
-								.intValue());
+				totalPrestacaoMenosBonus = "" + (numeroPrestacaoTotal.intValue() - numeroParcelaBonus.intValue());
 
 				// muda o estado do boolean e o valor do débito tipo
 				// verificador na primeira vez ou quando mudar o tipo
@@ -41221,115 +41066,57 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					if (primeiraVez) {
 						// -- Linha 2 --//
 						// descrição do tipo de débito
-						descricaoServicosTarifas2 = Util.completaString(
-								descricaoDebitoTipo, 30);
+						descricaoServicosTarifas2 = Util.completaString(descricaoDebitoTipo, 30);
 						primeiraVez = false;
 					}
 					// adiciona o valor da prestação ao total
-					valorTotalPrestacoes = valorTotalPrestacoes
-							.add(valorPrestacao);
+					valorTotalPrestacoes = valorTotalPrestacoes.add(valorPrestacao);
 					// adiciona o ano/mes referencia na coleção
 					if (anoMesReferencia != null) {
 						colecaoAnoMesReferenciaDebito.add(anoMesReferencia);
 					} else {
-						descricaoServicosTarifas2 = descricaoServicosTarifas2
-								+ "PARCELA ";
-						descricaoServicosTarifas2 = descricaoServicosTarifas2
-								+ Util.completaStringComEspacoAEsquerda(""
-										+ numeroPrestacaoDebito, 3);
-						descricaoServicosTarifas2 = descricaoServicosTarifas2
-								+ "/"
-								+ Util.completaString(totalPrestacaoMenosBonus,
-										3);
+						descricaoServicosTarifas2 = descricaoServicosTarifas2 + "PARCELA ";
+						descricaoServicosTarifas2 = descricaoServicosTarifas2 + Util.completaStringComEspacoAEsquerda("" + numeroPrestacaoDebito, 3);
+						descricaoServicosTarifas2 = descricaoServicosTarifas2 + "/" + Util.completaString(totalPrestacaoMenosBonus, 3);
 
 						// Valor da pretação
-						String valorPrestacaoString = Util
-								.formatarMoedaReal(valorTotalPrestacoes);
+						String valorPrestacaoString = Util.formatarMoedaReal(valorTotalPrestacoes);
 						valor2 = valorPrestacaoString;
 
 						contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-						contaLinhasDescricaoServicosTarifasTotalHelper
-								.setDescricaoServicosTarifas(descricaoServicosTarifas2);
-						contaLinhasDescricaoServicosTarifasTotalHelper
-								.setConsumoFaixa("");
-						contaLinhasDescricaoServicosTarifasTotalHelper
-								.setValor(valor2);
-						colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-								.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+						contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas2);
+						contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa("");
+						contaLinhasDescricaoServicosTarifasTotalHelper.setValor(valor2);
+						colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 					}
 
 				} else {
 					// 4.1.2. caso a coleção dos meses de referência do
 					// grupo do tipo de débito esteja preenchida
-					if (colecaoAnoMesReferenciaDebito != null
-							&& !colecaoAnoMesReferenciaDebito.isEmpty()) {
-						Iterator iteratorAnoMesReferenciaDebito = colecaoAnoMesReferenciaDebito
-								.iterator();
+					if (colecaoAnoMesReferenciaDebito != null && !colecaoAnoMesReferenciaDebito.isEmpty()) {
+						Iterator iteratorAnoMesReferenciaDebito = colecaoAnoMesReferenciaDebito.iterator();
 						int i = 1;
 						while (iteratorAnoMesReferenciaDebito.hasNext()) {
-							Integer anoMesReferenciaDebito = (Integer) iteratorAnoMesReferenciaDebito
-									.next();
+							Integer anoMesReferenciaDebito = (Integer) iteratorAnoMesReferenciaDebito.next();
 							String anoMesReferenciaDebitoString = null;
 							if (i == 1) {
 								// mes/ano referencia do débito
-								anoMesReferenciaDebitoString = Util
-										.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
-								descricaoServicosTarifas2 = descricaoServicosTarifas2
-										+ " " + anoMesReferenciaDebitoString;
+								anoMesReferenciaDebitoString = Util.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
+								descricaoServicosTarifas2 = descricaoServicosTarifas2 + " " + anoMesReferenciaDebitoString;
 								// caso exita somente um mes/ano de
 								// referencia na lista
 								if (colecaoAnoMesReferenciaDebito.size() == 1) {
 									// valor acumulado do tipo do débito
-									String valorAcumulado = Util
-											.formatarMoedaReal(valorTotalPrestacoes);
+									String valorAcumulado = Util.formatarMoedaReal(valorTotalPrestacoes);
 									valor2 = valorAcumulado;
-									// descricaoServicosTarifas2 =
-									// descricaoServicosTarifas2
-									// + " " + anoMesReferenciaDebitoString;
 
 									contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-									contaLinhasDescricaoServicosTarifasTotalHelper
-											.setDescricaoServicosTarifas(descricaoServicosTarifas2);
-									contaLinhasDescricaoServicosTarifasTotalHelper
-											.setConsumoFaixa("");
-									contaLinhasDescricaoServicosTarifasTotalHelper
-											.setValor(valor2);
-									colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-											.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+									contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas2);
+									contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa("");
+									contaLinhasDescricaoServicosTarifasTotalHelper.setValor(valor2);
+									colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 
-								} // else {
-									// completa espaços em brancos
-									// contaLinhasDescricaoServicosTarifasTotalHelper
-									// = new
-									// ContaLinhasDescricaoServicosTarifasTotalHelper();
-								// contaLinhasDescricaoServicosTarifasTotalHelper
-								// .setDescricaoServicosTarifas(descricaoServicosTarifas2);
-								// contaLinhasDescricaoServicosTarifasTotalHelper
-								// .setConsumoFaixa("");
-								// contaLinhasDescricaoServicosTarifasTotalHelper
-								// .setValor("");
-								// colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-								// .add(contaLinhasDescricaoServicosTarifasTotalHelper);
-								//
-								// descricaoServicosTarifas2 = "";
-								// String valorAcumulado = Util
-								// .formatarMoedaReal(valorTotalPrestacoes);
-								// valor2 = valorAcumulado;
-								//
-								// contaLinhasDescricaoServicosTarifasTotalHelper
-								// = new
-								// ContaLinhasDescricaoServicosTarifasTotalHelper();
-								// contaLinhasDescricaoServicosTarifasTotalHelper
-								// .setDescricaoServicosTarifas(descricaoServicosTarifas2);
-								// contaLinhasDescricaoServicosTarifasTotalHelper
-								// .setConsumoFaixa("");
-								// contaLinhasDescricaoServicosTarifasTotalHelper
-								// .setValor(valor2);
-								// colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-								// .add(contaLinhasDescricaoServicosTarifasTotalHelper);
-								// break;
-								// }
-
+								} 
 							} else {
 								// caso i seja igual a 2 então começa a
 								// linha 3 do subFluxo
@@ -41338,34 +41125,25 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 									// completa espaços em brancos
 									descricaoServicosTarifas2 = " ";
 									// mes/ano referencia do debito
-									anoMesReferenciaDebitoString = Util
-											.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
-									descricaoServicosTarifas2 = descricaoServicosTarifas2
-											+ " "
-											+ anoMesReferenciaDebitoString;
+									anoMesReferenciaDebitoString = Util.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
+									descricaoServicosTarifas2 = descricaoServicosTarifas2 + " " + anoMesReferenciaDebitoString;
 
 									// caso exita somente um mes/ano de
 									// referencia na lista
 									if (colecaoAnoMesReferenciaDebito.size() == 2) {
 										// valor acumulado do tipo do débito
-										String valorAcumulado = Util
-												.formatarMoedaReal(valorTotalPrestacoes);
+										String valorAcumulado = Util.formatarMoedaReal(valorTotalPrestacoes);
 										valor2 = valorAcumulado;
 
 										contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-										contaLinhasDescricaoServicosTarifasTotalHelper
-												.setDescricaoServicosTarifas(descricaoServicosTarifas2);
-										contaLinhasDescricaoServicosTarifasTotalHelper
-												.setConsumoFaixa("");
-										contaLinhasDescricaoServicosTarifasTotalHelper
-												.setValor(valor2);
-										colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-												.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+										contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas2);
+										contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa("");
+										contaLinhasDescricaoServicosTarifasTotalHelper.setValor(valor2);
+										colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 
 									} else {
 										// completa espaços em brancos
-										descricaoServicosTarifas2 = descricaoServicosTarifas2
-												+ " ";
+										descricaoServicosTarifas2 = descricaoServicosTarifas2 + " ";
 									}
 
 								} else {
@@ -41376,31 +41154,22 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 									if ((colecaoAnoMesReferenciaDebito.size() - 1) <= 2) {
 
 										// mes/ano referencia do credito
-										anoMesReferenciaDebitoString = Util
-												.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
-										descricaoServicosTarifas2 = descricaoServicosTarifas2
-												+ " "
-												+ anoMesReferenciaDebitoString;
+										anoMesReferenciaDebitoString = Util.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
+										descricaoServicosTarifas2 = descricaoServicosTarifas2 + " " + anoMesReferenciaDebitoString;
 										// caso não tenha outro ano mes na
 										// coleção então completa a linha
 										// com o valor
-										if (!iteratorAnoMesReferenciaDebito
-												.hasNext()) {
+										if (!iteratorAnoMesReferenciaDebito.hasNext()) {
 											// valor acumulado do tipo do
 											// débito
-											String valorAcumulado = Util
-													.formatarMoedaReal(valorTotalPrestacoes);
+											String valorAcumulado = Util.formatarMoedaReal(valorTotalPrestacoes);
 											valor2 = valorAcumulado;
 
 											contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-											contaLinhasDescricaoServicosTarifasTotalHelper
-													.setDescricaoServicosTarifas(descricaoServicosTarifas2);
-											contaLinhasDescricaoServicosTarifasTotalHelper
-													.setConsumoFaixa("");
-											contaLinhasDescricaoServicosTarifasTotalHelper
-													.setValor(valor2);
-											colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-													.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+											contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas2);
+											contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa("");
+											contaLinhasDescricaoServicosTarifasTotalHelper.setValor(valor2);
+											colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 										}
 
 									} else {
@@ -41409,30 +41178,21 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 										// então só mostra as 5 maiores
 										if (i < 3) {
 											// mes/ano referencia do débito
-											anoMesReferenciaDebitoString = Util
-													.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
-											descricaoServicosTarifas2 = descricaoServicosTarifas2
-													+ anoMesReferenciaDebitoString
-													+ " ";
+											anoMesReferenciaDebitoString = Util.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
+											descricaoServicosTarifas2 = descricaoServicosTarifas2 + anoMesReferenciaDebitoString + " ";
 										} else {
 											// completa espaços em brancos
-											descricaoServicosTarifas2 = descricaoServicosTarifas2
-													+ " E OUTRAS";
+											descricaoServicosTarifas2 = descricaoServicosTarifas2 + " E OUTRAS";
 											// valor acumulado do tipo do
 											// débito
-											String valorAcumulado = Util
-													.formatarMoedaReal(valorTotalPrestacoes);
+											String valorAcumulado = Util.formatarMoedaReal(valorTotalPrestacoes);
 											valor2 = valorAcumulado;
 
 											contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-											contaLinhasDescricaoServicosTarifasTotalHelper
-													.setDescricaoServicosTarifas(descricaoServicosTarifas2);
-											contaLinhasDescricaoServicosTarifasTotalHelper
-													.setConsumoFaixa("");
-											contaLinhasDescricaoServicosTarifasTotalHelper
-													.setValor(valor2);
-											colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-													.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+											contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas2);
+											contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa("");
+											contaLinhasDescricaoServicosTarifasTotalHelper.setValor(valor2);
+											colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 											break;
 										}
 									}
@@ -41456,103 +41216,47 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 			// caso a coleção dos meses de referência do grupo do
 			// tipo de débito esteja preenchida
-			if (colecaoAnoMesReferenciaDebito != null
-					&& !colecaoAnoMesReferenciaDebito.isEmpty()) {
-				Iterator iteratorAnoMesReferenciaDebito = colecaoAnoMesReferenciaDebito
-						.iterator();
+			if (colecaoAnoMesReferenciaDebito != null && !colecaoAnoMesReferenciaDebito.isEmpty()) {
+				Iterator iteratorAnoMesReferenciaDebito = colecaoAnoMesReferenciaDebito.iterator();
 				int i = 1;
 				while (iteratorAnoMesReferenciaDebito.hasNext()) {
-					Integer anoMesReferenciaDebito = (Integer) iteratorAnoMesReferenciaDebito
-							.next();
+					Integer anoMesReferenciaDebito = (Integer) iteratorAnoMesReferenciaDebito.next();
 					String anoMesReferenciaDebitoString = null;
 					if (i == 1) {
 						// mes/ano referencia do débito
-						anoMesReferenciaDebitoString = Util
-								.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
-						descricaoServicosTarifas2 = descricaoServicosTarifas2
-								+ " " + anoMesReferenciaDebitoString;
+						anoMesReferenciaDebitoString = Util.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
+						descricaoServicosTarifas2 = descricaoServicosTarifas2 + " " + anoMesReferenciaDebitoString;
 
-						// caso exita somente um mes/ano de referencia na
-						// lista
 						if (colecaoAnoMesReferenciaDebito.size() == 1) {
 							// valor acumulado do tipo do débito
-							String valorAcumulado = Util
-									.formatarMoedaReal(valorTotalPrestacoes);
+							String valorAcumulado = Util.formatarMoedaReal(valorTotalPrestacoes);
 							valor2 = valorAcumulado;
 
-							// descricaoServicosTarifas2 =
-							// descricaoServicosTarifas2
-							// + " " + anoMesReferenciaDebitoString;
-
 							contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-							contaLinhasDescricaoServicosTarifasTotalHelper
-									.setDescricaoServicosTarifas(descricaoServicosTarifas2);
-							contaLinhasDescricaoServicosTarifasTotalHelper
-									.setConsumoFaixa("");
-							contaLinhasDescricaoServicosTarifasTotalHelper
-									.setValor(valor2);
-							colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-									.add(contaLinhasDescricaoServicosTarifasTotalHelper);
-						} // else {
-							// completa com espaçoes em branco
-							// contaLinhasDescricaoServicosTarifasTotalHelper =
-							// new
-							// ContaLinhasDescricaoServicosTarifasTotalHelper();
-						// contaLinhasDescricaoServicosTarifasTotalHelper
-						// .setDescricaoServicosTarifas(descricaoServicosTarifas2);
-						// contaLinhasDescricaoServicosTarifasTotalHelper
-						// .setConsumoFaixa("");
-						// contaLinhasDescricaoServicosTarifasTotalHelper
-						// .setValor("");
-						// colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-						// .add(contaLinhasDescricaoServicosTarifasTotalHelper);
-						//
-						// descricaoServicosTarifas2 = "";
-						// String valorAcumulado = Util
-						// .formatarMoedaReal(valorTotalPrestacoes);
-						// valor2 = valorAcumulado;
-						//
-						// contaLinhasDescricaoServicosTarifasTotalHelper = new
-						// ContaLinhasDescricaoServicosTarifasTotalHelper();
-						// contaLinhasDescricaoServicosTarifasTotalHelper
-						// .setDescricaoServicosTarifas(descricaoServicosTarifas2);
-						// contaLinhasDescricaoServicosTarifasTotalHelper
-						// .setConsumoFaixa("");
-						// contaLinhasDescricaoServicosTarifasTotalHelper
-						// .setValor(valor2);
-						// colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-						// .add(contaLinhasDescricaoServicosTarifasTotalHelper);
-						// break;
-						// }
+							contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas2);
+							contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa("");
+							contaLinhasDescricaoServicosTarifasTotalHelper.setValor(valor2);
+							colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+						} 
 					} else {
-						// caso i seja igual a 2 então começa a linha 3 do
-						// subFluxo
 						if (i == 2) {
 							// -- Linha 3 --//
-							// mes/ano referencia do debito
-							anoMesReferenciaDebitoString = Util
-									.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
-							descricaoServicosTarifas2 = descricaoServicosTarifas2
-									+ " " + anoMesReferenciaDebitoString;
+							anoMesReferenciaDebitoString = Util.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
+							descricaoServicosTarifas2 = descricaoServicosTarifas2 + " " + anoMesReferenciaDebitoString;
 
 							// caso exita somente um mes/ano de referencia
 							// na lista
 							if (colecaoAnoMesReferenciaDebito.size() == 2) {
 
 								// valor acumulado do tipo do débito
-								String valorAcumulado = Util
-										.formatarMoedaReal(valorTotalPrestacoes);
+								String valorAcumulado = Util.formatarMoedaReal(valorTotalPrestacoes);
 								valor2 = valorAcumulado;
 
 								contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-								contaLinhasDescricaoServicosTarifasTotalHelper
-										.setDescricaoServicosTarifas(descricaoServicosTarifas2);
-								contaLinhasDescricaoServicosTarifasTotalHelper
-										.setConsumoFaixa("");
-								contaLinhasDescricaoServicosTarifasTotalHelper
-										.setValor(valor2);
-								colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-										.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+								contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas2);
+								contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa("");
+								contaLinhasDescricaoServicosTarifasTotalHelper.setValor(valor2);
+								colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 							}
 						} else {
 							// caso exista até mais 6 ocorrências na lista
@@ -41562,10 +41266,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							if ((colecaoAnoMesReferenciaDebito.size() - 1) <= 2) {
 
 								// mes/ano referencia do credito
-								anoMesReferenciaDebitoString = Util
-										.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
-								descricaoServicosTarifas2 = descricaoServicosTarifas2
-										+ " " + anoMesReferenciaDebitoString;
+								anoMesReferenciaDebitoString = Util.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
+								descricaoServicosTarifas2 = descricaoServicosTarifas2 + " " + anoMesReferenciaDebitoString;
 
 								// caso não tenha outro ano mes na
 								// coleção então completa a linha com o
@@ -41573,19 +41275,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								if (!iteratorAnoMesReferenciaDebito.hasNext()) {
 									// valor acumulado do tipo do
 									// débito
-									String valorAcumulado = Util
-											.formatarMoedaReal(valorTotalPrestacoes);
+									String valorAcumulado = Util.formatarMoedaReal(valorTotalPrestacoes);
 									valor2 = valorAcumulado;
 
 									contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-									contaLinhasDescricaoServicosTarifasTotalHelper
-											.setDescricaoServicosTarifas(descricaoServicosTarifas2);
-									contaLinhasDescricaoServicosTarifasTotalHelper
-											.setConsumoFaixa("");
-									contaLinhasDescricaoServicosTarifasTotalHelper
-											.setValor(valor2);
-									colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-											.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+									contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas2);
+									contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa("");
+									contaLinhasDescricaoServicosTarifasTotalHelper.setValor(valor2);
+									colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 								}
 
 							} else {
@@ -41594,30 +41291,21 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 								// então só mostra as 5 maiores
 								if (i < 3) {
 									// mes/ano referencia do débito
-									anoMesReferenciaDebitoString = Util
-											.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
-									descricaoServicosTarifas2 = descricaoServicosTarifas2
-											+ anoMesReferenciaDebitoString
-											+ " ";
+									anoMesReferenciaDebitoString = Util.formatarAnoMesParaMesAno(anoMesReferenciaDebito);
+									descricaoServicosTarifas2 = descricaoServicosTarifas2 + anoMesReferenciaDebitoString + " ";
 								} else {
-									descricaoServicosTarifas2 = descricaoServicosTarifas2
-											+ " E OUTRAS";
+									descricaoServicosTarifas2 = descricaoServicosTarifas2 + " E OUTRAS";
 
 									// valor acumulado do tipo do
 									// débito
-									String valorAcumulado = Util
-											.formatarMoedaReal(valorTotalPrestacoes);
+									String valorAcumulado = Util.formatarMoedaReal(valorTotalPrestacoes);
 									valor2 = valorAcumulado;
 
 									contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-									contaLinhasDescricaoServicosTarifasTotalHelper
-											.setDescricaoServicosTarifas(descricaoServicosTarifas2);
-									contaLinhasDescricaoServicosTarifasTotalHelper
-											.setConsumoFaixa("");
-									contaLinhasDescricaoServicosTarifasTotalHelper
-											.setValor(valor2);
-									colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-											.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+									contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas2);
+									contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa("");
+									contaLinhasDescricaoServicosTarifasTotalHelper.setValor(valor2);
+									colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 									break;
 								}
 							}
@@ -41630,87 +41318,47 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		}
 
-		/**
-		 * TODO : COSANPA Pamela Gatinho - 01/06/2012 Adicionando o calculo do
-		 * rateio
-		 */
-		Imovel imovel = this.getControladorImovel().pesquisarImovel(
-				emitirContaHelper.getIdImovel());
+		Imovel imovel = this.getControladorImovel().pesquisarImovel(emitirContaHelper.getIdImovel());
 
 		if (imovel.isImovelCondominio()) {
 
-			try {
+//			try {
 
-				FaturamentoGrupo faturamentoGrupo = getControladorImovel()
-						.pesquisarGrupoImovel(imovel.getId());
+				FaturamentoGrupo faturamentoGrupo = getControladorImovel().pesquisarGrupoImovel(imovel.getId());
 
-				faturamentoGrupo.setAnoMesReferencia(emitirContaHelper
-						.getAmReferencia());
-				BigDecimal[] valoresRateioAguaEsgotoImovel = this
-						.calcularValorRateioImovel(imovel, faturamentoGrupo);
+				faturamentoGrupo.setAnoMesReferencia(emitirContaHelper.getAmReferencia());
+				//BigDecimal[] valoresRateioAguaEsgotoImovel = this.calcularValorRateioImovel(imovel, faturamentoGrupo);
+
 				// RATEIO DE ÁGUA
-				/*
-				 * BigDecimal valorRateioAgua =
-				 * this.calcularValorRateioImovel(imovel,
-				 * emitirContaHelper.getAnoMesFaturamentoGrupo(),
-				 * LigacaoTipo.LIGACAO_AGUA);
-				 */
-
 				String descricaoServicosTarifas1 = "";
 
 				if (emitirContaHelper.getValorRateioAgua() != null) {
-					// -- Descerição do serviço --//
 					descricaoServicosTarifas1 = "RATEIO DE CONSUMO DE ÁGUA";
 
 					contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-					contaLinhasDescricaoServicosTarifasTotalHelper
-							.setDescricaoServicosTarifas(descricaoServicosTarifas1);
-					contaLinhasDescricaoServicosTarifasTotalHelper
-							.setConsumoFaixa("");
-					// contaLinhasDescricaoServicosTarifasTotalHelper.setValor(Util.formatarMoedaReal(valoresRateioAguaEsgotoImovel[0]));
-					contaLinhasDescricaoServicosTarifasTotalHelper
-							.setValor(Util.formatarMoedaReal(emitirContaHelper
-									.getValorRateioAgua()));
+					contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas1);
+					contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa("");
+					contaLinhasDescricaoServicosTarifasTotalHelper.setValor(Util.formatarMoedaReal(emitirContaHelper.getValorRateioAgua()));
 
-					colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-							.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+					colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 				}
 
 				// RATEIO DE ESGOTO
-				/*
-				 * BigDecimal valorRateioEsgoto = new BigDecimal(0.00);
-				 * 
-				 * if (imovel.getImovelCondominio().getLigacaoEsgotoSituacao().
-				 * getIndicadorFaturamentoSituacao
-				 * ().equals(LigacaoEsgotoSituacao.FATURAMENTO_ATIVO)) {
-				 * valorRateioEsgoto = this.calcularValorRateioImovel(imovel,
-				 * emitirContaHelper.getAnoMesFaturamentoGrupo(),
-				 * LigacaoTipo.LIGACAO_ESGOTO); }
-				 */
-
 				String descricaoServicosTarifas2 = "";
 
 				if (emitirContaHelper.getValorRateioEsgoto() != null) {
-					// -- Descerição do serviço --//
 					descricaoServicosTarifas2 = "RATEIO DE CONSUMO DE ESGOTO";
 
 					contaLinhasDescricaoServicosTarifasTotalHelper = new ContaLinhasDescricaoServicosTarifasTotalHelper();
-					contaLinhasDescricaoServicosTarifasTotalHelper
-							.setDescricaoServicosTarifas(descricaoServicosTarifas2);
-					contaLinhasDescricaoServicosTarifasTotalHelper
-							.setConsumoFaixa("");
-					// contaLinhasDescricaoServicosTarifasTotalHelper.setValor(Util.formatarMoedaReal(valoresRateioAguaEsgotoImovel[1]));
-					contaLinhasDescricaoServicosTarifasTotalHelper
-							.setValor(Util.formatarMoedaReal(emitirContaHelper
-									.getValorRateioEsgoto()));
+					contaLinhasDescricaoServicosTarifasTotalHelper.setDescricaoServicosTarifas(descricaoServicosTarifas2);
+					contaLinhasDescricaoServicosTarifasTotalHelper.setConsumoFaixa("");
+					contaLinhasDescricaoServicosTarifasTotalHelper.setValor(Util.formatarMoedaReal(emitirContaHelper.getValorRateioEsgoto()));
 
-					colecaoContaLinhasDescricaoServicosTarifasTotalHelper
-							.add(contaLinhasDescricaoServicosTarifasTotalHelper);
+					colecaoContaLinhasDescricaoServicosTarifasTotalHelper.add(contaLinhasDescricaoServicosTarifasTotalHelper);
 				}
-			} catch (ErroRepositorioException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
+//			} catch (ErroRepositorioException e) {
+//				e.printStackTrace();
+//			}
 		}
 
 		return colecaoContaLinhasDescricaoServicosTarifasTotalHelper;
@@ -45711,7 +45359,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// Situação Atual
 					DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 					/**
-					 * TODO: COSANPA Caso motivo de retificação seja débito
+					 * Caso motivo de retificação seja débito
 					 * prescrito, alterar a situação da conta para 8.
 					 * 
 					 * @author Wellington Rocha
@@ -46066,6 +45714,17 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		}
 	}
+	
+	public void alterarVencimentoConjuntoConta(Collection colecaoImovel,
+			Date dataVencimentoInformada, Integer anoMes,
+			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
+			Integer anoMesFim, Usuario usuario, String indicadorContaPaga,
+			String[] bancos) throws ControladorException {
+		
+		alterarVencimentoConjuntoConta(colecaoImovel, dataVencimentoInformada, anoMes, dataVencimentoContaInicio, dataVencimentoContaFim,
+				anoMesFim, usuario, indicadorContaPaga, bancos, false);
+		
+	}
 
 	/**
 	 * Alterar Vencimento do Conjunto de Conta
@@ -46081,7 +45740,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			Date dataVencimentoInformada, Integer anoMes,
 			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
 			Integer anoMesFim, Usuario usuario, String indicadorContaPaga,
-			String[] bancos) throws ControladorException {
+			String[] bancos, boolean isDebitoAutomatico) throws ControladorException {
 
 		Collection colecaoContasManutencao = new ArrayList();
 		Collection colecaoConta = new ArrayList();
@@ -46118,12 +45777,9 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 				i = i + cont;
 				try {
-					colecaoContasManutencao = repositorioFaturamento
-							.pesquisarContasImoveis(anoMes, colecao,
-									dataVencimentoContaInicio,
-									dataVencimentoContaFim, anoMesFim,
-									indicadorContaPaga);
-
+					colecaoContasManutencao = repositorioFaturamento.pesquisarContasImoveis(colecao, anoMes, dataVencimentoContaInicio,
+							dataVencimentoContaFim, anoMesFim, indicadorContaPaga, dataVencimentoInformada, isDebitoAutomatico);
+					
 					/**
 					 * [UC0407] Filtrar Imóveis para Inserir ou Manter Conta 3.
 					 * Caso o indicador de bloqueio de contas vinculadas a
@@ -46135,13 +45791,9 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					 * por: Mariana Victor Data: 15/07/2011
 					 * 
 					 * */
-					if (sistemaParametro
-							.getIndicadorBloqueioContasContratoParcelManterConta() != null
-							&& sistemaParametro
-									.getIndicadorBloqueioContasContratoParcelManterConta()
-									.equals(ConstantesSistema.SIM)) {
-						colecaoContasManutencao = this
-								.obterColecaoSemContasEmContratoParcelamentoRetificarConjuntoContasIds(colecaoContasManutencao);
+					if (sistemaParametro.getIndicadorBloqueioContasContratoParcelManterConta() != null
+							&& sistemaParametro.getIndicadorBloqueioContasContratoParcelManterConta().equals(ConstantesSistema.SIM)) {
+						colecaoContasManutencao = this.obterColecaoSemContasEmContratoParcelamentoRetificarConjuntoContasIds(colecaoContasManutencao);
 					}
 					/**
 					 * FIM DA ALTERAÇÂO
@@ -49116,7 +48768,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 
 				/**
-				 * TODO: COSANPA Caso motivo de retificação seja débito
+				 * Caso motivo de retificação seja débito
 				 * prescrito, alterar a situação da conta para 8.
 				 * 
 				 * @author Wellington Rocha
@@ -49419,25 +49071,21 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @param dataVencimento
 	 * @throws ControladorException
 	 */
-	public void alterarVencimentoConjuntoContaCliente(Integer codigoCliente,
-			Short relacaoTipo, Date dataVencimentoInformada, Integer anoMes,
-			Date dataVencimentoContaInicio, Date dataVencimentoContaFim,
-			Integer anoMesFim, Usuario usuario, Integer codigoClienteSuperior)
-			throws ControladorException {
+	public void alterarVencimentoConjuntoContaCliente(Integer codigoCliente, Short relacaoTipo, Date dataVencimentoInformada,
+			Integer anoMes, Date dataVencimentoContaInicio, Date dataVencimentoContaFim, Integer anoMesFim, Usuario usuario,
+			Integer codigoClienteSuperior, boolean isDebitoAutomatico) throws ControladorException {
 
 		Collection colecaoConta = new ArrayList();
 		Collection colecaoContasManutencao = new ArrayList();
 
 		// PARÂMETROS DO SISTEMA
-		SistemaParametro sistemaParametro = this.getControladorUtil()
-				.pesquisarParametrosDoSistema();
+		SistemaParametro sistemaParametro = this.getControladorUtil().pesquisarParametrosDoSistema();
 
 		try {
-			colecaoContasManutencao = repositorioFaturamento
-					.pesquisarContasCliente(codigoCliente, relacaoTipo, anoMes,
-							dataVencimentoContaInicio, dataVencimentoContaFim,
-							anoMesFim, codigoClienteSuperior);
-
+			colecaoContasManutencao = repositorioFaturamento.pesquisarContasCliente(codigoCliente, relacaoTipo, anoMes,
+					dataVencimentoContaInicio, dataVencimentoContaFim, anoMesFim, codigoClienteSuperior, dataVencimentoInformada,
+					isDebitoAutomatico);
+			
 			/**
 			 * [UC0407] Filtrar Imóveis para Inserir ou Manter Conta 3. Caso o
 			 * indicador de bloqueio de contas vinculadas a contrato de
@@ -50211,8 +49859,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			}
 
 			/**
-			 * TODO: Cosanpa Alteração para atender ao Mantis 499 Emitir faturas
-			 * agrupadas sem código de barras
+			 * Emitir faturas agrupadas sem código de barras
 			 * 
 			 * @author Wellington Rocha
 			 * @date 25/01/2012
@@ -50564,14 +50211,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					.formatarMoedaReal(valorConta));
 			emitirContaHelper.setValorConta(valorConta);
 
-			/**
-			 * TODO: COSANPA
-			 * 
-			 * Mantis 537
-			 * 
-			 * @author Wellington Rocha
-			 * @date 15/03/2012
-			 */
 			PagamentoHistorico pagamento = getControladorArrecadacao()
 					.pesquisarPagamentoDeContaEmHistorico(idContaEP);
 			if (pagamento != null
@@ -50663,13 +50302,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 			String representacaoNumericaCodBarra = "";
 
-			/**
-			 * TODO: Cosanpa Alteração para atender ao Mantis 499 Emitir faturas
-			 * agrupadas sem código de barras
-			 * 
-			 * @author Wellington Rocha
-			 * @date 25/01/2012
-			 */
 			if (emitirContaHelper.getContaSemCodigoBarras().equals("2")) {
 
 				representacaoNumericaCodBarra = this
@@ -59242,7 +58874,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				// Situação Atual
 				DebitoCreditoSituacao debitoCreditoSituacao = new DebitoCreditoSituacao();
 				/**
-				 * TODO: COSANPA Caso motivo de retificação seja débito
+				 * Caso motivo de retificação seja débito
 				 * prescrito, alterar a situação da conta para 8.
 				 * 
 				 * @author Wellington Rocha
@@ -59596,9 +59228,8 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		try {
 
-			Date dataValidade = this
-					.retornaDataValidadeConta(dataVencimentoInformada);
-
+			Date dataValidade = this.retornaDataValidadeConta(dataVencimentoInformada);
+			
 			repositorioFaturamento.alterarVencimentoContaGrupoFaturamento(
 					dataVencimentoInformada, dataValidade,
 					Conta.INDICADOR_ALTERACAO_VENCIMENTO_ATIVO,
@@ -67666,20 +67297,16 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @return GerarCreditoRealizadoHelper
 	 * @throws ControladorException
 	 */
-	public GerarCreditoRealizadoHelper gerarCreditoRealizado(
-			Imovel imovel,
+	public GerarCreditoRealizadoHelper gerarCreditoRealizado(Imovel imovel,
 			Integer anoMesFaturamento,
 			DeterminarValoresFaturamentoAguaEsgotoHelper helperValoresAguaEsgoto,
 			BigDecimal valorTotalDebitos,
-			boolean gerarAtividadeGrupoFaturamento, boolean preFaturamento)
-			throws ControladorException {
+			boolean gerarAtividadeGrupoFaturamento, boolean preFaturamento) throws ControladorException {
 
 		GerarCreditoRealizadoHelper helper = new GerarCreditoRealizadoHelper();
 
 		// Pesquisa os créditos a realizar do imóvel
-		Collection colecaoCreditosARealizar = this
-				.obterCreditoARealizarImovel(imovel.getId(),
-						DebitoCreditoSituacao.NORMAL, anoMesFaturamento);
+		Collection colecaoCreditosARealizar = this.obterCreditoARealizarImovel(imovel.getId(), DebitoCreditoSituacao.NORMAL, anoMesFaturamento);
 
 		// caso seja por pré-faturar, Impressão Simultânea, pesquisar os
 		// créditos de Nitrato
@@ -67687,30 +67314,23 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		if (preFaturamento) {
 			// Pesquisa os créditos a realizar do imóvel
 			Collection colecaoCreditosARealizarNitrato = this
-					.obterCreditoARealizarImovel(imovel.getId(),
-							DebitoCreditoSituacao.PRE_FATURADA,
-							anoMesFaturamento);
+					.obterCreditoARealizarImovel(imovel.getId(), DebitoCreditoSituacao.PRE_FATURADA, anoMesFaturamento);
 
-			if (colecaoCreditosARealizarNitrato != null
-					&& !colecaoCreditosARealizarNitrato.isEmpty()) {
+			if (colecaoCreditosARealizarNitrato != null && !colecaoCreditosARealizarNitrato.isEmpty()) {
 
 				if (colecaoCreditosARealizar == null) {
 					colecaoCreditosARealizar = new ArrayList();
 				}
 
-				colecaoCreditosARealizar
-						.addAll(colecaoCreditosARealizarNitrato);
+				colecaoCreditosARealizar.addAll(colecaoCreditosARealizarNitrato);
 			}
-
 		}
 
 		BigDecimal valorTotalCreditos = ConstantesSistema.VALOR_ZERO;
 		BigDecimal valorTotalACobrar = ConstantesSistema.VALOR_ZERO;
 
-		BigDecimal parte1 = valorTotalACobrar.add(helperValoresAguaEsgoto
-				.getValorTotalAgua());
-		BigDecimal parte2 = parte1.add(helperValoresAguaEsgoto
-				.getValorTotalEsgoto());
+		BigDecimal parte1 = valorTotalACobrar.add(helperValoresAguaEsgoto.getValorTotalAgua());
+		BigDecimal parte2 = parte1.add(helperValoresAguaEsgoto.getValorTotalEsgoto());
 		valorTotalACobrar = parte2.add(valorTotalDebitos);
 
 		/*
@@ -67732,77 +67352,38 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 		// tipo
 		Map<CreditoTipo, BigDecimal> mapValoresPorTipoCredito = null;
 
-		/*
-		 * Caso a coleção de creditos a realizar não esteja vazia
-		 */
-		if (colecaoCreditosARealizar != null
-				&& !colecaoCreditosARealizar.isEmpty()) {
+		if (colecaoCreditosARealizar != null && !colecaoCreditosARealizar.isEmpty()) {
 
 			mapCreditoRealizado = new HashMap();
 			mapValoresPorTipoCredito = new HashMap<CreditoTipo, BigDecimal>();
 
-			Iterator iteratorColecaoCreditosARealizar = colecaoCreditosARealizar
-					.iterator();
+			Iterator iteratorColecaoCreditosARealizar = colecaoCreditosARealizar.iterator();
 
 			CreditoARealizar creditoARealizar = null;
 
-			/*
-			 * Para cada crédito a realizar selecionado e até que o valor total
-			 * a cobrar seja igual a zero.
-			 * 
-			 * LAÇO PARA GERAR OS CREDITOS REALIZADOS
-			 */
-			while (iteratorColecaoCreditosARealizar.hasNext()
-					&& valorTotalACobrar
-							.compareTo(ConstantesSistema.VALOR_ZERO) == 1) {
+			while (iteratorColecaoCreditosARealizar.hasNext() && valorTotalACobrar.compareTo(ConstantesSistema.VALOR_ZERO) == 1) {
 
-				creditoARealizar = (CreditoARealizar) iteratorColecaoCreditosARealizar
-						.next();
+				creditoARealizar = (CreditoARealizar) iteratorColecaoCreditosARealizar.next();
 
 				BigDecimal valorCorrespondenteParcelaMes = ConstantesSistema.VALOR_ZERO;
 				BigDecimal valorCredito = ConstantesSistema.VALOR_ZERO;
 
-				/*
-				 * Alterado por Vivianne Sousa em 20/12/2007 - Analista: Adriano
-				 * criação do bonus para parcelamento com RD especial
-				 */
 				Short numeroParcelaBonus = 0;
 				if (creditoARealizar.getNumeroParcelaBonus() != null) {
-					numeroParcelaBonus = creditoARealizar
-							.getNumeroParcelaBonus();
+					numeroParcelaBonus = creditoARealizar.getNumeroParcelaBonus();
 				}
 
-				/*
-				 * Caso o nº de prestações realizadas seja menor que o nº de
-				 * prestação dos créditos calcula o valor correspondente da
-				 * parcela do mês.
-				 */
-				if (creditoARealizar.getNumeroPrestacaoRealizada().intValue() < (creditoARealizar
-						.getNumeroPrestacaoCredito().intValue() - numeroParcelaBonus
+				if (creditoARealizar.getNumeroPrestacaoRealizada().intValue() < (creditoARealizar.getNumeroPrestacaoCredito().intValue() - numeroParcelaBonus
 						.intValue())) {
 
 					/*
 					 * Valor correspondente da parcela do mês = valor do crédito
 					 * / nº de pestações do crédito.
 					 */
-					valorCorrespondenteParcelaMes = creditoARealizar
-							.getValorCredito()
-							.divide(new BigDecimal(
-									creditoARealizar
-											.getNumeroPrestacaoCredito()), 2,
-									BigDecimal.ROUND_DOWN);
+					valorCorrespondenteParcelaMes = creditoARealizar.getValorCredito().divide(new BigDecimal(creditoARealizar.getNumeroPrestacaoCredito()), 2,
+							BigDecimal.ROUND_DOWN);
 
-					/*
-					 * Caso seja a última pretação o valor do crédito
-					 * correspondente a parcela do mês = valor do crédito
-					 * correspondente a parcela do mês + valor do crédito -
-					 * (valor do crédito correspondente a parcela do mês * (o nº
-					 * de prestação dos créditos menos o numero de parcela
-					 * bonus))
-					 */
-					if (creditoARealizar.getNumeroPrestacaoRealizada()
-							.intValue() == ((creditoARealizar
-							.getNumeroPrestacaoCredito().intValue() - numeroParcelaBonus
+					if (creditoARealizar.getNumeroPrestacaoRealizada().intValue() == ((creditoARealizar.getNumeroPrestacaoCredito().intValue() - numeroParcelaBonus
 							.intValue()) - 1)) {
 
 						/*
@@ -67811,57 +67392,46 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						 * de parcela bonus)
 						 */
 
-						BigDecimal valorMesVezesPrestacaoCredito = valorCorrespondenteParcelaMes
-								.multiply(
-										new BigDecimal(creditoARealizar
-												.getNumeroPrestacaoCredito()))
-								.setScale(2);
+						BigDecimal valorMesVezesPrestacaoCredito = valorCorrespondenteParcelaMes.multiply(
+								new BigDecimal(creditoARealizar.getNumeroPrestacaoCredito())).setScale(2);
 
 						/*
 						 * PARTE 02 valor do crédito correspondente a parcela do
 						 * mês + valor do crédito
 						 */
-						BigDecimal parte11 = valorCorrespondenteParcelaMes
-								.add(creditoARealizar.getValorCredito());
+						BigDecimal parte11 = valorCorrespondenteParcelaMes.add(creditoARealizar.getValorCredito());
 
 						// valor do crédito correspondente a parcela do mês
 						// = PARTE 02 - PARTE 01
-						BigDecimal parte22 = parte11
-								.subtract(valorMesVezesPrestacaoCredito);
+						BigDecimal parte22 = parte11.subtract(valorMesVezesPrestacaoCredito);
 
 						valorCorrespondenteParcelaMes = parte22;
 					}
 
 					// Atualiza o nº de prestações realizadas
-					creditoARealizar.setNumeroPrestacaoRealizada(new Short(
-							(creditoARealizar.getNumeroPrestacaoRealizada()
-									.intValue() + 1) + ""));
+					creditoARealizar.setNumeroPrestacaoRealizada(new Short((creditoARealizar.getNumeroPrestacaoRealizada().intValue() + 1) + ""));
 
 					// anoMes da prestação será o anaMes de referência da conta
-					creditoARealizar
-							.setAnoMesReferenciaPrestacao(anoMesFaturamento);
+					creditoARealizar.setAnoMesReferenciaPrestacao(anoMesFaturamento);
 
 				}
 
 				/**
-				 * TODO:COSANPA Autor: Adriana Muniz Data: 29/06/2011
+				 * Autor: Adriana Muniz Data: 29/06/2011
 				 * 
 				 * Alteração para que a referência da prestação do crédito seja
 				 * sempre atualizada, se um crédito realizado tenha sido gerado
 				 * a partir desse crédito a realizar
 				 * */
 				// anoMes da prestação será o anaMes de referência da conta
-				creditoARealizar
-						.setAnoMesReferenciaPrestacao(anoMesFaturamento);
+				creditoARealizar.setAnoMesReferenciaPrestacao(anoMesFaturamento);
 
 				// Valor de credito
-				valorCredito = valorCorrespondenteParcelaMes
-						.add(creditoARealizar.getValorResidualMesAnterior());
+				valorCredito = valorCorrespondenteParcelaMes.add(creditoARealizar.getValorResidualMesAnterior());
 
 				// Armazena o valor residual concedido no mês
 				// (CRAR_VLRESIDUALCONCEDIDOMES = CRAR_VLRESIDUALMESANTERIOR).
-				creditoARealizar.setValorResidualConcedidoMes(creditoARealizar
-						.getValorResidualMesAnterior());
+				creditoARealizar.setValorResidualConcedidoMes(creditoARealizar.getValorResidualMesAnterior());
 
 				/*
 				 * Para o pré-faturamento todos os créditos a realizar serão
@@ -67871,8 +67441,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				if (!preFaturamento) {
 
 					// Retira o valor de credito do valor total a cobrar
-					valorTotalACobrar = valorTotalACobrar
-							.subtract(valorCredito);
+					valorTotalACobrar = valorTotalACobrar.subtract(valorCredito);
 				}
 
 				/*
@@ -67888,27 +67457,23 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				 */
 				if (valorTotalACobrar.compareTo(ConstantesSistema.VALOR_ZERO) == -1) {
 
-					creditoARealizar
-							.setValorResidualMesAnterior(valorTotalACobrar
-									.multiply(new BigDecimal("-1")));
+					creditoARealizar.setValorResidualMesAnterior(valorTotalACobrar.multiply(new BigDecimal("-1")));
 
-					valorCredito = valorCredito.subtract(creditoARealizar
-							.getValorResidualMesAnterior());
+					valorCredito = valorCredito.subtract(creditoARealizar.getValorResidualMesAnterior());
 
 					valorTotalACobrar = ConstantesSistema.VALOR_ZERO;
 
 				} else {
 
 					/**
-					 * TODO:COSANPA autor: Adriana Muniz data:29/06/2011
+					 * autor: Adriana Muniz data:29/06/2011
 					 * 
 					 * alteração para não lançar para zero o valor residual dos
 					 * creditos s a realizar, caso o imóvel pertença ao
 					 * impressão simultanea
 					 * */
 					if (!preFaturamento) {
-						creditoARealizar
-								.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
+						creditoARealizar.setValorResidualMesAnterior(ConstantesSistema.VALOR_ZERO);
 					}
 				}
 
@@ -67920,52 +67485,34 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 					// Cria o crédito realizado
 					CreditoRealizado creditoRealizado = new CreditoRealizado();
-					creditoRealizado.setCreditoTipo(creditoARealizar
-							.getCreditoTipo());
-					creditoRealizado.setCreditoRealizado(creditoARealizar
-							.getGeracaoCredito());
-					creditoRealizado.setLancamentoItemContabil(creditoARealizar
-							.getLancamentoItemContabil());
-					creditoRealizado.setLocalidade(creditoARealizar
-							.getLocalidade());
+					creditoRealizado.setCreditoTipo(creditoARealizar.getCreditoTipo());
+					creditoRealizado.setCreditoRealizado(creditoARealizar.getGeracaoCredito());
+					creditoRealizado.setLancamentoItemContabil(creditoARealizar.getLancamentoItemContabil());
+					creditoRealizado.setLocalidade(creditoARealizar.getLocalidade());
 					creditoRealizado.setQuadra(creditoARealizar.getQuadra());
-					creditoRealizado.setCodigoSetorComercial(creditoARealizar
-							.getCodigoSetorComercial());
-					creditoRealizado.setNumeroQuadra(creditoARealizar
-							.getNumeroQuadra());
-					creditoRealizado.setNumeroLote(creditoARealizar
-							.getNumeroLote());
-					creditoRealizado.setNumeroSubLote(creditoARealizar
-							.getNumeroSubLote());
-					creditoRealizado
-							.setAnoMesReferenciaCredito(creditoARealizar
-									.getAnoMesReferenciaCredito());
-					creditoRealizado.setAnoMesCobrancaCredito(creditoARealizar
-							.getAnoMesCobrancaCredito());
+					creditoRealizado.setCodigoSetorComercial(creditoARealizar.getCodigoSetorComercial());
+					creditoRealizado.setNumeroQuadra(creditoARealizar.getNumeroQuadra());
+					creditoRealizado.setNumeroLote(creditoARealizar.getNumeroLote());
+					creditoRealizado.setNumeroSubLote(creditoARealizar.getNumeroSubLote());
+					creditoRealizado.setAnoMesReferenciaCredito(creditoARealizar.getAnoMesReferenciaCredito());
+					creditoRealizado.setAnoMesCobrancaCredito(creditoARealizar.getAnoMesCobrancaCredito());
 					creditoRealizado.setValorCredito(valorCredito);
-					creditoRealizado.setCreditoOrigem(creditoARealizar
-							.getCreditoOrigem());
-					creditoRealizado.setNumeroPrestacao(creditoARealizar
-							.getNumeroPrestacaoCredito());
+					creditoRealizado.setCreditoOrigem(creditoARealizar.getCreditoOrigem());
+					creditoRealizado.setNumeroPrestacao(creditoARealizar.getNumeroPrestacaoCredito());
 
 					creditoRealizado.setNumeroParcelaBonus(numeroParcelaBonus);
 
-					creditoRealizado.setNumeroPrestacaoCredito(creditoARealizar
-							.getNumeroPrestacaoRealizada());
+					creditoRealizado.setNumeroPrestacaoCredito(creditoARealizar.getNumeroPrestacaoRealizada());
 
-					creditoRealizado.setCreditoARealizarGeral(creditoARealizar
-							.getCreditoARealizarGeral());
+					creditoRealizado.setCreditoARealizarGeral(creditoARealizar.getCreditoARealizarGeral());
 
 					// Adiciona o crédito realizado na sessão
 					colecaoCreditosRealizado.add(creditoRealizado);
 
 					// Pesquisa os créditos a realizar categoria
-					Collection colecaoCreditoARealizarCategoria = this
-							.obterCreditoRealizarCategoria(creditoARealizar
-									.getId());
+					Collection colecaoCreditoARealizarCategoria = this.obterCreditoRealizarCategoria(creditoARealizar.getId());
 
-					Iterator colecaoCreditoARealizarCategoriaIterator = colecaoCreditoARealizarCategoria
-							.iterator();
+					Iterator colecaoCreditoARealizarCategoriaIterator = colecaoCreditoARealizarCategoria.iterator();
 
 					// Crédito a realizar categoria
 					CreditoARealizarCategoria creditoARealizarCategoria = null;
@@ -67975,60 +67522,42 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// Laço para recuperar as categorias do crédito a
 					// realizar
 					while (colecaoCreditoARealizarCategoriaIterator.hasNext()) {
-						creditoARealizarCategoria = (CreditoARealizarCategoria) colecaoCreditoARealizarCategoriaIterator
-								.next();
+						creditoARealizarCategoria = (CreditoARealizarCategoria) colecaoCreditoARealizarCategoriaIterator.next();
 						Categoria categoria = new Categoria();
-						categoria.setId(creditoARealizarCategoria
-								.getCategoria().getId());
-						categoria
-								.setQuantidadeEconomiasCategoria(creditoARealizarCategoria
-										.getQuantidadeEconomia());
+						categoria.setId(creditoARealizarCategoria.getCategoria().getId());
+						categoria.setQuantidadeEconomiasCategoria(creditoARealizarCategoria.getQuantidadeEconomia());
 						colecaoCategoriasObterValor.add(categoria);
 					}
 
 					// Obter os valores das categorias por categoria do
 					// credito a realizar categoria
-					Collection colecaoCategoriasCalculadasValor = getControladorImovel()
-							.obterValorPorCategoria(
-									colecaoCategoriasObterValor, valorCredito);
+					Collection colecaoCategoriasCalculadasValor = getControladorImovel().obterValorPorCategoria(colecaoCategoriasObterValor, valorCredito);
 
-					Iterator colecaoCategoriasCalculadasValorIterator = colecaoCategoriasCalculadasValor
-							.iterator();
-					Iterator colecaoCategoriasObterValorIterator = colecaoCategoriasObterValor
-							.iterator();
+					Iterator colecaoCategoriasCalculadasValorIterator = colecaoCategoriasCalculadasValor.iterator();
+					Iterator colecaoCategoriasObterValorIterator = colecaoCategoriasObterValor.iterator();
 
 					// Cria os créditos a realizar por categoria
 					CreditoRealizadoCategoria creditoRealizadoCategoria = null;
 					Collection colecaoCreditosRealizadoCategoria = new ArrayList();
 
-					while (colecaoCategoriasCalculadasValorIterator.hasNext()
-							&& colecaoCategoriasObterValorIterator.hasNext()) {
+					while (colecaoCategoriasCalculadasValorIterator.hasNext() && colecaoCategoriasObterValorIterator.hasNext()) {
 						// Obtém o valor por categoria
-						BigDecimal valorPorCategoria = (BigDecimal) colecaoCategoriasCalculadasValorIterator
-								.next();
+						BigDecimal valorPorCategoria = (BigDecimal) colecaoCategoriasCalculadasValorIterator.next();
 
 						// Obtém a categoria
-						Categoria categoria = (Categoria) colecaoCategoriasObterValorIterator
-								.next();
+						Categoria categoria = (Categoria) colecaoCategoriasObterValorIterator.next();
 
 						// Cria o crédito a ralizar por categoria
 						creditoRealizadoCategoria = new CreditoRealizadoCategoria();
 						CreditoRealizadoCategoriaPK creditoRealizadoCategoriaPk = new CreditoRealizadoCategoriaPK();
 						creditoRealizadoCategoriaPk.setCategoria(categoria);
-						creditoRealizadoCategoriaPk
-								.setCreditoRealizado(creditoRealizado);
-						creditoRealizadoCategoria
-								.setComp_id(creditoRealizadoCategoriaPk);
-						creditoRealizadoCategoria
-								.setValorCategoria(valorPorCategoria);
-						creditoRealizadoCategoria
-								.setCreditoRealizado(creditoRealizado);
+						creditoRealizadoCategoriaPk.setCreditoRealizado(creditoRealizado);
+						creditoRealizadoCategoria.setComp_id(creditoRealizadoCategoriaPk);
+						creditoRealizadoCategoria.setValorCategoria(valorPorCategoria);
+						creditoRealizadoCategoria.setCreditoRealizado(creditoRealizado);
 						creditoRealizadoCategoria.setCategoria(categoria);
-						creditoRealizadoCategoria
-								.setQuantidadeEconomia(categoria
-										.getQuantidadeEconomiasCategoria());
-						colecaoCreditosRealizadoCategoria
-								.add(creditoRealizadoCategoria);
+						creditoRealizadoCategoria.setQuantidadeEconomia(categoria.getQuantidadeEconomiasCategoria());
+						colecaoCreditosRealizadoCategoria.add(creditoRealizadoCategoria);
 					}
 
 					if (colecaoCategoriasCalculadasValor != null) {
@@ -68039,8 +67568,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 					// Armazena o credito realizado junto com os créditos
 					// realizados por categoria
-					mapCreditoRealizado.put(creditoRealizado,
-							colecaoCreditosRealizadoCategoria);
+					mapCreditoRealizado.put(creditoRealizado, colecaoCreditosRealizadoCategoria);
 
 					// Adiciona o crédito a realizar para ser atualizado
 					colecaoCreditosARealizarUpdate.add(creditoARealizar);
@@ -68058,19 +67586,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				 */
 				// Verifica se debito a cobrar já foi inserido, caso sim
 				// acumala os valores.
-				if (mapValoresPorTipoCredito.containsKey(creditoARealizar
-						.getCreditoTipo())) {
-					BigDecimal valor = mapValoresPorTipoCredito
-							.get(creditoARealizar.getCreditoTipo());
-					mapValoresPorTipoCredito.put(
-							creditoARealizar.getCreditoTipo(),
-							Util.somaBigDecimal(valor, valorCredito));
+				if (mapValoresPorTipoCredito.containsKey(creditoARealizar.getCreditoTipo())) {
+					BigDecimal valor = mapValoresPorTipoCredito.get(creditoARealizar.getCreditoTipo());
+					mapValoresPorTipoCredito.put(creditoARealizar.getCreditoTipo(), Util.somaBigDecimal(valor, valorCredito));
 				}
 				// Caso contrario inseri na coleção
 				// primeiro registro do tipo.
 				else {
-					mapValoresPorTipoCredito.put(
-							creditoARealizar.getCreditoTipo(), valorCredito);
+					mapValoresPorTipoCredito.put(creditoARealizar.getCreditoTipo(), valorCredito);
 				}
 
 			}// fim laço de credito a realizar
@@ -69341,10 +68864,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			Date dataComando, Boolean regerar) throws ControladorException,
 			ErroRepositorioException {
 
-		/*
-		 * TODO : COSANPA Alteração para atender ao mantis 188 Inclusao de
-		 * variável para atender ao mantis
-		 */
 		boolean rotaSoComImoveisInformativos = true;
 
 		UC0745GerarArquivoTextoFaturamento gerarArquivoTextoFaturamento = UC0745GerarArquivoTextoFaturamento
@@ -69714,7 +69233,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						// Sempre observando os Critérios da UC0745 no Fluxo 3.2
 						if (rota.getNumeroLimiteImoveis() != null) {
 							/**
-							 * TODO - COSANPA Alteracao para corrigir a
+							 * Alteracao para corrigir a
 							 * finalizacao de rotas divididas - Salvar a qtd de
 							 * imoveis com conta PF nas rotas divididas, e não a
 							 * quantidade de imóveis na rota - Finalizar a rota
@@ -69877,7 +69396,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				if (colecaoImoveis != null && colecaoImoveis.size() > 0) {
 
 					/*
-					 * TODO : COSANPA Alteração feita para salvar no arquivo
+					 *  Alteração feita para salvar no arquivo
 					 * texto somente a quantidade de imóveis que possuem conta
 					 * pré-faturada, e não a quantidade de imóveis total da
 					 * rota.
@@ -69899,7 +69418,6 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					}
 
 					/*
-					 * TODO : COSANPA Alteração para atender ao mantis 188
 					 * Verificar se todos os imóveis da rota são apenas
 					 * informativos, se forem, gerar o arquivo já finalizado
 					 */
@@ -69961,7 +69479,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 						Integer idLeituraTipo = rota.getLeituraTipo().getId();
 
 						/**
-						 * TODO : COSANPA Alteração feita para corrigir o
+						 *  Alteração feita para corrigir o
 						 * problema de incluir na tabela Movimento Roteiro
 						 * Empresa os imóveis informativos, e não somente os
 						 * imóveis que geraram conta PF
@@ -70042,7 +69560,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 							anoMesFaturamento, faturamentoGrupo.getId());
 
 			/*
-			 * TODO : COSANPA Alteração feita para permitir que todos os imóveis
+			 *  Alteração feita para permitir que todos os imóveis
 			 * sejam gerados na rota de leitura e impressão simultanea
 			 */
 			if (conta != null) {
@@ -71042,8 +70560,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 					// Nome do Cliente Usuário
 
 					/**
-					 * TODO: COSANPA Alteração Mantis 647 - Nome do imóvel no
-					 * relatório de faturas agrupadas.
+					 * Nome do imóvel no relatório de faturas agrupadas.
 					 * 
 					 * @author Wellington Rocha
 					 * @date 26/11/2012
@@ -75246,15 +74763,13 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		try {
 
-			if (colecaoContasManutencao != null
-					&& !colecaoContasManutencao.isEmpty()) {
+			if (colecaoContasManutencao != null && !colecaoContasManutencao.isEmpty()) {
 				Iterator iterator = colecaoContasManutencao.iterator();
 
 				while (iterator.hasNext()) {
 					Object[] contaArray = (Object[]) iterator.next();
 
-					if (!repositorioCobranca
-							.verificaContaVinculadaAContratoParcelAtivo((Integer) contaArray[0])) {
+					if (!repositorioCobranca.verificaContaVinculadaAContratoParcelAtivo((Integer) contaArray[0])) {
 						retorno.add(contaArray);
 					}
 				}
@@ -75572,7 +75087,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * TODO : COSANPA Criação do método para converter um array com informações
+	 *  Criação do método para converter um array com informações
 	 * de imóveis em uma lista de objetos imóveis.
 	 */
 	/**
@@ -76044,7 +75559,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * TODO:COSANPA
+	 *
 	 * 
 	 * Método para retornar uma coleção de debitos cobrados do parcelamento
 	 * */
@@ -76095,7 +75610,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * TODO - COSANPA
+	 *
 	 * 
 	 * Método para obter todos os imóveis que já foram processados na
 	 * transmissão do arquivo de retorno do IS
@@ -76123,7 +75638,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * TODO - COSANPA
+	 *
 	 * 
 	 * Método para obter todos os imóveis que faltam ser transmitidos na
 	 * transmissão do arquivo de retorno do IS
@@ -76151,7 +75666,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * 
 	 * @author Pamela Gatinho
 	 * @date 04/08/2011
@@ -76177,7 +75692,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * 
 	 * Atualizar movimento conta pre-faturada
 	 * 
@@ -76297,7 +75812,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * TODO : COSANPA Data: 25/10/2011 Autor: Pamela Gatinho
+	 *  Data: 25/10/2011 Autor: Pamela Gatinho
 	 * 
 	 * Metodo para pesquisar todas as contas que foram emitidas mas que serao
 	 * impressas somente no fechamento do faturamento do grupo
@@ -76324,7 +75839,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * 
 	 * @author Pamela Gatinho
 	 * @date 24/02/2012
@@ -76349,7 +75864,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * TODO : COSANPA Pamela Gatinho - 31/05/2012
+	 *  Pamela Gatinho - 31/05/2012
 	 * 
 	 * Metodo que calcula o valor de rateio por economia
 	 * 
@@ -76358,42 +75873,29 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * @throws ErroRepositorioException
 	 * @throws ControladorException
 	 */
-	private BigDecimal[] calcularValorRateioPorEconomia(
-			Integer idImovelCondominio, FaturamentoGrupo faturamentoGrupo)
-			throws ControladorException {
+	private BigDecimal[] calcularValorRateioPorEconomia(Integer idImovelCondominio, FaturamentoGrupo faturamentoGrupo) throws ControladorException {
 
-		// valor do rateio de agua
 		BigDecimal valorAguaRateioPorEconomia = new BigDecimal("0.00");
-		// valor do rateio de esgoto
 		BigDecimal valorEsgotoRateioPorEconomia = new BigDecimal("0.00");
 
-		// vetor com os valores de rateio de agua e esgoto
 		BigDecimal[] valoresAguaEsgotoRateioPorEconomia = new BigDecimal[2];
 
-		// Obtem a quantidade de economias vinculadas ao condomínio
-		int qtdEconomiasCondominio = this.getControladorMicromedicao()
-				.obterQuantidadeEconomiasCondominio(idImovelCondominio,
-						faturamentoGrupo.getAnoMesReferencia());
+		int qtdEconomiasCondominio = this.getControladorMicromedicao().obterQuantidadeEconomiasCondominio(idImovelCondominio, faturamentoGrupo.getAnoMesReferencia());
+		
 		System.out.println("Qtd economias: " + qtdEconomiasCondominio);
-		Imovel imovelCondominio = (Imovel) getControladorImovel()
-				.pesquisarImovel(idImovelCondominio);
+		Imovel imovelCondominio = (Imovel) getControladorImovel().pesquisarImovel(idImovelCondominio);
 
 		int consumoAguaASerRateado = 0;
 		int consumoEsgotoASerRateado = 0;
 
-		// Calcula o consumo que deve ser rateado entre os imóveis do condomínio
 		if (imovelCondominio.getLigacaoAgua() != null) {
-			consumoAguaASerRateado = this.getControladorMicromedicao()
-					.obterConsumoASerRateado(idImovelCondominio,
-							faturamentoGrupo.getAnoMesReferencia(),
-							LigacaoTipo.LIGACAO_AGUA);
+			consumoAguaASerRateado = this.getControladorMicromedicao().obterConsumoASerRateado(idImovelCondominio, faturamentoGrupo.getAnoMesReferencia(),
+					LigacaoTipo.LIGACAO_AGUA);
 		}
 
 		if (imovelCondominio.getLigacaoEsgoto() != null) {
-			consumoEsgotoASerRateado = this.getControladorMicromedicao()
-					.obterConsumoASerRateado(idImovelCondominio,
-							faturamentoGrupo.getAnoMesReferencia(),
-							LigacaoTipo.LIGACAO_ESGOTO);
+			consumoEsgotoASerRateado = this.getControladorMicromedicao().obterConsumoASerRateado(idImovelCondominio, faturamentoGrupo.getAnoMesReferencia(),
+					LigacaoTipo.LIGACAO_ESGOTO);
 		}
 
 		if (consumoAguaASerRateado < 0) {
@@ -76403,35 +75905,24 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			consumoEsgotoASerRateado = 0;
 		}
 
-		// Calcula o valor da conta a ser rateada, baseada no consumo que deve
-		// ser rateado
-		BigDecimal[] valoresAguaEsgotoContaRateio = this
-				.calcularValorAguaEsgotoParaRateio(imovelCondominio,
-						consumoAguaASerRateado, consumoEsgotoASerRateado,
-						faturamentoGrupo);
+		BigDecimal[] valoresAguaEsgotoContaRateio = this.calcularValorAguaEsgotoParaRateio(imovelCondominio, consumoAguaASerRateado, consumoEsgotoASerRateado,
+				faturamentoGrupo);
 
-		if (valoresAguaEsgotoContaRateio[0]
-				.compareTo(ConstantesSistema.VALOR_ZERO) > 0) {
+		if (valoresAguaEsgotoContaRateio[0].compareTo(ConstantesSistema.VALOR_ZERO) > 0) {
+			valoresAguaEsgotoContaRateio[0] = valoresAguaEsgotoContaRateio[0].add(new BigDecimal(0.005));
 
-			valoresAguaEsgotoContaRateio[0] = valoresAguaEsgotoContaRateio[0]
-					.add(new BigDecimal(0.005));
-
-			valorAguaRateioPorEconomia = valoresAguaEsgotoContaRateio[0]
-					.divide(new BigDecimal(qtdEconomiasCondominio),
-							BigDecimal.ROUND_FLOOR);
+			valorAguaRateioPorEconomia = valoresAguaEsgotoContaRateio[0].divide(new BigDecimal(qtdEconomiasCondominio), BigDecimal.ROUND_FLOOR);
 		}
 
-		if (valoresAguaEsgotoContaRateio[1]
-				.compareTo(ConstantesSistema.VALOR_ZERO) > 0) {
-			valoresAguaEsgotoContaRateio[1] = valoresAguaEsgotoContaRateio[1]
-					.add(new BigDecimal(0.005));
+		if (valoresAguaEsgotoContaRateio[1].compareTo(ConstantesSistema.VALOR_ZERO) > 0) {
+			valoresAguaEsgotoContaRateio[1] = valoresAguaEsgotoContaRateio[1].add(new BigDecimal(0.005));
 
-			valorEsgotoRateioPorEconomia = valoresAguaEsgotoContaRateio[1]
-					.divide(new BigDecimal(qtdEconomiasCondominio),
-							BigDecimal.ROUND_FLOOR);
+			valorEsgotoRateioPorEconomia = valoresAguaEsgotoContaRateio[1].divide(new BigDecimal(qtdEconomiasCondominio), BigDecimal.ROUND_FLOOR);
 
 		}
 
+		System.out.println("Valor rateio água: " + valoresAguaEsgotoContaRateio[0]);
+		System.out.println("Valor rateio esgoto: " + valoresAguaEsgotoContaRateio[1]);
 		valoresAguaEsgotoRateioPorEconomia[0] = valorAguaRateioPorEconomia;
 		valoresAguaEsgotoRateioPorEconomia[1] = valorEsgotoRateioPorEconomia;
 
@@ -76439,7 +75930,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * 
 	 * @author Pamela Gatinho
 	 * @since 23/04/2012
@@ -76456,38 +75947,30 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	 * 
 	 * @throws ControladorException
 	 */
-	private BigDecimal[] calcularValorAguaEsgotoParaRateio(
-			Imovel imovelCondominio, int consumoAguaASerRateado,
-			int consumoEsgotoASerRateado, FaturamentoGrupo faturamentoGrupo)
-			throws ControladorException {
+	private BigDecimal[] calcularValorAguaEsgotoParaRateio(Imovel imovelCondominio, int consumoAguaASerRateado, int consumoEsgotoASerRateado, 
+			FaturamentoGrupo faturamentoGrupo) throws ControladorException {
 
 		LigacaoTipo ligacaoTipo = new LigacaoTipo();
 
-		Collection colecaoCategoriaOUSubcategoria = getControladorImovel()
-				.obterQuantidadeEconomiasCategoria(imovelCondominio);
+		Collection colecaoCategoriaOUSubcategoria = getControladorImovel().obterQuantidadeEconomiasCategoria(imovelCondominio);
 
 		BigDecimal[] valoresContaRateio = new BigDecimal[2];
 		valoresContaRateio[0] = new BigDecimal("0.00");
 		valoresContaRateio[1] = new BigDecimal("0.00");
 
-		SistemaParametro sistemaParametro = getControladorUtil()
-				.pesquisarParametrosDoSistema();
+		SistemaParametro sistemaParametro = getControladorUtil().pesquisarParametrosDoSistema();
 
 		DeterminarValoresFaturamentoAguaEsgotoHelper helperValoresAguaEsgoto = new DeterminarValoresFaturamentoAguaEsgotoHelper();
 
-		Collection colecaoCategorias = getControladorImovel()
-				.obterColecaoCategoriaOuSubcategoriaDoImovel(imovelCondominio);
+		Collection colecaoCategorias = getControladorImovel().obterColecaoCategoriaOuSubcategoriaDoImovel(imovelCondominio);
 
-		int consumoMinimoLigacao = this.getControladorMicromedicao()
-				.obterConsumoMinimoLigacao(imovelCondominio, null);
+		int consumoMinimoLigacao = this.getControladorMicromedicao().obterConsumoMinimoLigacao(imovelCondominio, null);
 
-		if (consumoAguaASerRateado > 0
-				&& consumoAguaASerRateado <= consumoMinimoLigacao) {
+		if (consumoAguaASerRateado > 0 && consumoAguaASerRateado <= consumoMinimoLigacao) {
 			consumoAguaASerRateado = consumoMinimoLigacao;
 		}
 
-		if (consumoEsgotoASerRateado > 0
-				&& consumoEsgotoASerRateado <= consumoMinimoLigacao) {
+		if (consumoEsgotoASerRateado > 0 && consumoEsgotoASerRateado <= consumoMinimoLigacao) {
 			consumoEsgotoASerRateado = consumoMinimoLigacao;
 		}
 
@@ -76497,13 +75980,10 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// Consultando o consumoHistorico de ÁGUA
 			ligacaoTipo.setId(LigacaoTipo.LIGACAO_AGUA);
 
-			consumoHistoricoAgua = this.getControladorMicromedicao()
-					.obterConsumoHistoricoMedicaoIndividualizada(
-							imovelCondominio, ligacaoTipo,
-							faturamentoGrupo.getAnoMesReferencia());
+			consumoHistoricoAgua = this.getControladorMicromedicao().obterConsumoHistoricoMedicaoIndividualizada(imovelCondominio, ligacaoTipo,
+					faturamentoGrupo.getAnoMesReferencia());
 
-			consumoHistoricoAgua
-					.setNumeroConsumoFaturadoMes(consumoAguaASerRateado);
+			consumoHistoricoAgua.setNumeroConsumoFaturadoMes(consumoAguaASerRateado);
 
 		}
 
@@ -76513,59 +75993,31 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 			// Consultando o consumoHistorico de ESGOTO
 			ligacaoTipo.setId(LigacaoTipo.LIGACAO_ESGOTO);
 
-			consumoHistoricoEsgoto = this.getControladorMicromedicao()
-					.obterConsumoHistoricoMedicaoIndividualizada(
-							imovelCondominio, ligacaoTipo,
-							faturamentoGrupo.getAnoMesReferencia());
+			consumoHistoricoEsgoto = this.getControladorMicromedicao().obterConsumoHistoricoMedicaoIndividualizada(imovelCondominio, ligacaoTipo,
+					faturamentoGrupo.getAnoMesReferencia());
 
-			consumoHistoricoEsgoto
-					.setNumeroConsumoFaturadoMes(consumoEsgotoASerRateado);
+			consumoHistoricoEsgoto.setNumeroConsumoFaturadoMes(consumoEsgotoASerRateado);
 
 		}
 
-		helperValoresAguaEsgoto = this.determinarValoresFaturamentoAguaEsgoto(
-				imovelCondominio, faturamentoGrupo.getAnoMesReferencia(),
-				colecaoCategoriaOUSubcategoria, faturamentoGrupo,
-				consumoHistoricoAgua, consumoHistoricoEsgoto);
+		helperValoresAguaEsgoto = this.determinarValoresFaturamentoAguaEsgoto(imovelCondominio, faturamentoGrupo.getAnoMesReferencia(),
+				colecaoCategoriaOUSubcategoria, faturamentoGrupo, consumoHistoricoAgua, consumoHistoricoEsgoto);
 
-		if (consumoAguaASerRateado > 0
-				&& helperValoresAguaEsgoto.getValorTotalAgua() != null) {
+		if (consumoAguaASerRateado > 0 && helperValoresAguaEsgoto.getValorTotalAgua() != null) {
 			valoresContaRateio[0] = helperValoresAguaEsgoto.getValorTotalAgua();
 		}
 
-		if (consumoEsgotoASerRateado > 0
-				&& helperValoresAguaEsgoto.getValorTotalEsgoto() != null) {
-			valoresContaRateio[1] = helperValoresAguaEsgoto
-					.getValorTotalEsgoto();
+		if (consumoEsgotoASerRateado > 0 && helperValoresAguaEsgoto.getValorTotalEsgoto() != null) {
+			valoresContaRateio[1] = helperValoresAguaEsgoto.getValorTotalEsgoto();
 		}
 
-		System.out.println("Valor agua: "
-				+ helperValoresAguaEsgoto.getValorTotalAgua());
-		System.out.println("Valor esgoto: "
-				+ helperValoresAguaEsgoto.getValorTotalEsgoto());
+		System.out.println("Valor agua: " + helperValoresAguaEsgoto.getValorTotalAgua());
+		System.out.println("Valor esgoto: " + helperValoresAguaEsgoto.getValorTotalEsgoto());
 
 		return valoresContaRateio;
 	}
 
-	/**
-	 * TODO : COSANPA
-	 * 
-	 * Pamela Gatinho - 04/06/2012
-	 * 
-	 * Método para calcular o consumo de rateio de um imóvel, para o mês de
-	 * faturamento atual.
-	 * 
-	 * @param imovel
-	 * @param anoMesFaturamento
-	 * 
-	 * @return valorRateioImovel
-	 * 
-	 * @throws ControladorException
-	 * @throws ErroRepositorioException
-	 */
-	public BigDecimal[] calcularValorRateioImovel(Imovel imovel,
-			FaturamentoGrupo faturamentoGrupo) throws ControladorException,
-			ErroRepositorioException {
+	public BigDecimal[] calcularValorRateioImovel(Imovel imovel, FaturamentoGrupo faturamentoGrupo) throws ControladorException, ErroRepositorioException {
 
 		BigDecimal valorRateioImovelAgua = ConstantesSistema.VALOR_ZERO;
 		BigDecimal valorRateioImovelEsgoto = new BigDecimal("0.00");
@@ -76573,20 +76025,15 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 
 		imovel = this.getControladorImovel().pesquisarImovel(imovel.getId());
 
-		valoresRateioImovel = this.calcularValorRateioPorEconomia(imovel
-				.getImovelCondominio().getId(), faturamentoGrupo);
+		valoresRateioImovel = this.calcularValorRateioPorEconomia(imovel.getImovelCondominio().getId(), faturamentoGrupo);
 
-		// Se o valor de rateio de ÁGUA for maior que ZERO, multiplica pela
-		// quantidade de economias do imóvel
-		if (valoresRateioImovel[0].compareTo(ConstantesSistema.VALOR_ZERO) > 0)
-			valorRateioImovelAgua = valoresRateioImovel[0]
-					.multiply(new BigDecimal(imovel.getQuantidadeEconomias()));
+		if (valoresRateioImovel[0].compareTo(ConstantesSistema.VALOR_ZERO) > 0) {
+			valorRateioImovelAgua = valoresRateioImovel[0].multiply(new BigDecimal(imovel.getQuantidadeEconomias()));
+		}
 
-		// Se o valor de rateio de ESGOTO for maior que ZERO, multiplica pela
-		// quantidade de economias do imóvel
-		if (valoresRateioImovel[1].compareTo(ConstantesSistema.VALOR_ZERO) > 0)
-			valorRateioImovelEsgoto = valoresRateioImovel[1]
-					.multiply(new BigDecimal(imovel.getQuantidadeEconomias()));
+		if (valoresRateioImovel[1].compareTo(ConstantesSistema.VALOR_ZERO) > 0) {
+			valorRateioImovelEsgoto = valoresRateioImovel[1].multiply(new BigDecimal(imovel.getQuantidadeEconomias()));
+		}
 
 		valoresRateioImovel[0] = valorRateioImovelAgua;
 		valoresRateioImovel[1] = valorRateioImovelEsgoto;
@@ -76933,14 +76380,12 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * TODO: COSANPA Mantis 583 Verificar no momento em que o usuário está
-	 * fazendo a prescrição de uma conta, se a mesma atende as condições
-	 * necessárias para que haja a prescrição
+	 * Verificar no momento em que o usuário está fazendo a prescrição de uma conta,
+	 * se a mesma atende as condições necessárias para que haja a prescrição
 	 * 
 	 * @author Wellington Rocha
 	 * @date 01/06/2012
 	 */
-
 	public boolean verificarPossibilidadePrescricaoConta(Integer idConta) {
 		Conta conta = null;
 		try {
@@ -76971,14 +76416,14 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 				return false;
 			}
 		} catch (ErroRepositorioException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		return false;
 	}
 
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * 
 	 * @author Pamela Gatinho
 	 * @date 06/03/2013
@@ -77004,7 +76449,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * Alteração para contabilizar em contas diferentes valores arrecadados até
 	 * 31/12/2012
@@ -77067,7 +76512,7 @@ public class ControladorFaturamentoFINAL implements SessionBean {
 	}
 
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * Alteração para contabilizar em contas diferentes valores arrecadados até
 	 * 31/12/2012

@@ -34,7 +34,7 @@ public class FiltrarDadosDiariosArrecadacaoHelper {
 	
 	private String faturamentoCobradoEmConta;
 	
-	/**TODO:COSANPA
+	/**
 	 * Relatório Analitico dos valores diários da arrecadação
 	 * 
 	 * Coleção de formas de arrecadação.

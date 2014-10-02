@@ -84,13 +84,7 @@ public class ConstantesDescricaoBanco {
         	try {
 				new File(NOME_ARQUIVO_PROPRIEDADES).createNewFile();
 			} catch (Exception ee) {
-				// TODO: handle exception
 			}
-//            e.printStackTrace();
-//            System.err.println("Nao foi possivel localizar o arquivo de propriedades. Certifique-se "
-//                            + "de que o arquivo "
-//                            + NOME_ARQUIVO_PROPRIEDADES
-//                            + " esteja na raiz do CLASSPATH");
 
         }
     }

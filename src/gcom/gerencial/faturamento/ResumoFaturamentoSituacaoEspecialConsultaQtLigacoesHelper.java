@@ -20,7 +20,7 @@ public class ResumoFaturamentoSituacaoEspecialConsultaQtLigacoesHelper {
 
 	public ResumoFaturamentoSituacaoEspecialConsultaQtLigacoesHelper(Integer qtLigacoes) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.qtLigacoes = qtLigacoes;
 	}
 	

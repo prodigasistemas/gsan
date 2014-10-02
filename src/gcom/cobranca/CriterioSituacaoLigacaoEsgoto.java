@@ -34,7 +34,7 @@ public class CriterioSituacaoLigacaoEsgoto extends ObjetoTransacao {
 	
 	public CriterioSituacaoLigacaoEsgoto(CriterioSituacaoLigacaoEsgotoPK comp_id) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.comp_id = comp_id;
 	}
 	

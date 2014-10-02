@@ -834,15 +834,16 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 	}
 
 	private StringBuilder preencherCodigoBarrasConta(EmitirContaHelper emitirContaHelper, StringBuilder contaTxt) throws ControladorException {
-		Conta conta = new Conta(emitirContaHelper.getValorAgua(), emitirContaHelper.getValorEsgoto(), emitirContaHelper.getValorCreditos(), emitirContaHelper.getDebitos(), emitirContaHelper.getValorImpostos());
-		
+		Conta conta = new Conta(emitirContaHelper.getValorAgua(), emitirContaHelper.getValorEsgoto(), emitirContaHelper.getValorCreditos(),
+				emitirContaHelper.getDebitos(), emitirContaHelper.getValorImpostos());
+
 		if (emitirContaHelper.getValorRateioAgua() != null)
 			conta.setValorRateioAgua(emitirContaHelper.getValorRateioAgua());
 		if (emitirContaHelper.getValorRateioEsgoto() != null)
-			conta.setValorRateioEsgoto(emitirContaHelper.getValorRateioEsgoto());		
-		
-		BigDecimal valorConta = conta.getValorTotalContaBigDecimal();
-		
+			conta.setValorRateioEsgoto(emitirContaHelper.getValorRateioEsgoto());
+
+		BigDecimal valorConta = conta.getValorTotalContaComRateioBigDecimal();
+
 		emitirContaHelper.setValorConta(valorConta);
 
 		String anoMesString = "" + emitirContaHelper.getAmReferencia();
@@ -850,8 +851,8 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 		Integer digitoVerificadorConta = new Integer("" + emitirContaHelper.getDigitoVerificadorConta());
 
 		String representacaoNumericaCodBarra = this.getControladorArrecadacao().obterRepresentacaoNumericaCodigoBarra(3, valorConta,
-				emitirContaHelper.getIdLocalidade(), emitirContaHelper.getIdImovel(), mesAnoFormatado, digitoVerificadorConta, null,
-				null, null, null, null, null, null);
+				emitirContaHelper.getIdLocalidade(), emitirContaHelper.getIdImovel(), mesAnoFormatado, digitoVerificadorConta, null, null, null, null, null,
+				null, null);
 
 		contaTxt.append(Util.completaString(representacaoNumericaCodBarra, 50));
 		return contaTxt;
@@ -2532,22 +2533,6 @@ public class ControladorFaturamentoCOSANPASEJB extends ControladorFaturamento
 
 			StringBuilder mesagemConsumo = obterMensagemRateioConsumo(emitirContaHelper, consumoRateio, parmsMedicaoHistorico,tipoMedicao);
 			emitirContaHelper.setMensagemConsumoString(mesagemConsumo.toString());
-
-			try {
-				Imovel imovelPesquisa = this.getControladorImovel().pesquisarImovel(emitirContaHelper.getIdImovel());
-
-				FaturamentoGrupo faturamentoGrupo = getControladorImovel().pesquisarGrupoImovel(imovelPesquisa.getId());
-				faturamentoGrupo.setAnoMesReferencia(emitirContaHelper.getAmReferencia());
-
-				if (imovelPesquisa.isImovelCondominio()) {
-
-					BigDecimal[] valoresRateioAguaEsgotoImovel = this.calcularValorRateioImovel(imovelPesquisa,faturamentoGrupo);
-					emitirContaHelper.setValorRateioAgua(valoresRateioAguaEsgotoImovel[0]);
-					emitirContaHelper.setValorRateioEsgoto(valoresRateioAguaEsgotoImovel[1]);
-				}
-			} catch (ErroRepositorioException e) {
-				logger.error(e);
-			}
 
 			Collection colecaoContaLinhasDescricaoServicosTarifasTotalHelper = gerarLinhasDescricaoServicoTarifasRelatorio(
 					emitirContaHelper, consumoRateio, parmsMedicaoHistorico,tipoMedicao, false);

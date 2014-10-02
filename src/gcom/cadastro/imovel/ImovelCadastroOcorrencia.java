@@ -38,7 +38,7 @@ public class ImovelCadastroOcorrencia extends ObjetoTransacao {
 
 	public ImovelCadastroOcorrencia() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public ImovelCadastroOcorrencia(Integer id, Date dataOcorrencia, byte[] fotoOcorrencia, Date ultimaAlteracao, Imovel imovel, CadastroOcorrencia cadastroOcorrencia) {

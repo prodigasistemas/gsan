@@ -59,14 +59,14 @@ public class GrupoLocalidadeImovelHelper {
 
 	public GrupoLocalidadeImovelHelper(int idGrupo, int idLocalidade, int quantidadeImoveis) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idGrupo = idGrupo;
 		this.idLocalidade = idLocalidade;
 		this.quantidadeImoveis = quantidadeImoveis;
 	}
 
 	public GrupoLocalidadeImovelHelper() {
-		// TODO Auto-generated constructor stub
+		
 	}
 	
 	

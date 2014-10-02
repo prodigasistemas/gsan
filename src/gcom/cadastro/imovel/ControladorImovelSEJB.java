@@ -14541,7 +14541,7 @@ public class ControladorImovelSEJB implements SessionBean {
 				}
 			
 			} catch (ErroRepositorioException e) {
-				// TODO Auto-generated catch block
+				
 				e.printStackTrace();
 			}
 			
@@ -15619,7 +15619,7 @@ public class ControladorImovelSEJB implements SessionBean {
 	
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * 
 	 * Metodo para verificar se a rota que o imovel pertence
 	 * ja foi gerada para o mes de faturamento do grupo 
@@ -15644,7 +15644,7 @@ public class ControladorImovelSEJB implements SessionBean {
 		return retorno; 
 	}
 	
-	/**TODO:COSANPA
+	/**
 	 * @author Adriana Muniz
 	 * @date 06/12/2011
 	 * 
@@ -15668,7 +15668,7 @@ public class ControladorImovelSEJB implements SessionBean {
 	}
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Pamela Gatinho e Adriana Muniz
 	 * 21/08/2012
 	 * 
@@ -15686,7 +15686,7 @@ public class ControladorImovelSEJB implements SessionBean {
 	}
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Pamela Gatinho e Adriana Muniz
 	 * 21/08/2012
 	 * 
@@ -15704,7 +15704,7 @@ public class ControladorImovelSEJB implements SessionBean {
 	}
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Pamela Gatinho e Adriana Muniz
 	 * 21/08/2012
 	 * 
@@ -16625,9 +16625,7 @@ public class ControladorImovelSEJB implements SessionBean {
 			this.getControladorUtil().atualizar(imovel);
 	}
 	
-	/**TODO:COSANPA
-	 * MANTIS 494 
-	 * 
+	/**
 	 *  Necessário para a geração do registro Tipo 3
 	 * 
 	 * @author Wellington Vernech Rocha
@@ -16666,6 +16664,14 @@ public class ControladorImovelSEJB implements SessionBean {
 		} catch (ErroRepositorioException ex) {
 			ex.printStackTrace();
 			sessionContext.setRollbackOnly();
+			throw new ControladorException("erro.sistema", ex);
+		}
+	}
+	
+	public ImovelCobrancaSituacao obterImovelCobrancaSituacao(Integer idImovelSituacaoCobranca) throws ControladorException {
+		try {
+			return repositorioImovel.obterImovelCobrancaSituacao(idImovelSituacaoCobranca);
+		} catch (ErroRepositorioException ex) {
 			throw new ControladorException("erro.sistema", ex);
 		}
 	}

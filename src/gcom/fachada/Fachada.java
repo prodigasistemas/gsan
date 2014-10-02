@@ -3378,21 +3378,36 @@ public class Fachada {
 	 * @return
 	 * @throws ControladorException
 	 */
-	public ObterDebitoImovelOuClienteHelper obterDebitoImovelOuCliente(int indicadorDebito, String idImovel, String codigoCliente, Short clienteRelacaoTipo,
-			String anoMesInicialReferenciaDebito, String anoMesFinalReferenciaDebito, Date anoMesInicialVencimentoDebito, Date anoMesFinalVencimentoDebito,
-			int indicadorPagamento, int indicadorConta, int indicadorDebitoACobrar, int indicadorCreditoARealizar, int indicadorNotasPromissorias,
-			int indicadorGuiasPagamento, int indicadorCalcularAcrescimoImpontualidade, Boolean indicadorContas, int indicadorDividaAtiva) {
+	public ObterDebitoImovelOuClienteHelper obterDebitoImovelOuCliente(int indicadorDebito, String idImovel, String codigoCliente,
+			Short clienteRelacaoTipo, String anoMesInicialReferenciaDebito, String anoMesFinalReferenciaDebito,
+			Date anoMesInicialVencimentoDebito, Date anoMesFinalVencimentoDebito, int indicadorPagamento, int indicadorConta,
+			int indicadorDebitoACobrar, int indicadorCreditoARealizar, int indicadorNotasPromissorias, int indicadorGuiasPagamento,
+			int indicadorCalcularAcrescimoImpontualidade, Boolean indicadorContas, int indicadorDividaAtiva) {
+
+			return this.obterDebitoImovelOuCliente(indicadorDebito, idImovel, codigoCliente, clienteRelacaoTipo, anoMesInicialReferenciaDebito,
+					anoMesFinalReferenciaDebito, anoMesInicialVencimentoDebito, anoMesFinalVencimentoDebito, indicadorPagamento,
+					indicadorConta, indicadorDebitoACobrar, indicadorCreditoARealizar, indicadorNotasPromissorias, indicadorGuiasPagamento,
+					indicadorCalcularAcrescimoImpontualidade, indicadorContas, indicadorDividaAtiva, false);
+
+	}
+
+	public ObterDebitoImovelOuClienteHelper obterDebitoImovelOuCliente(int indicadorDebito, String idImovel, String codigoCliente,
+			Short clienteRelacaoTipo, String anoMesInicialReferenciaDebito, String anoMesFinalReferenciaDebito,
+			Date anoMesInicialVencimentoDebito, Date anoMesFinalVencimentoDebito, int indicadorPagamento, int indicadorConta,
+			int indicadorDebitoACobrar, int indicadorCreditoARealizar, int indicadorNotasPromissorias, int indicadorGuiasPagamento,
+			int indicadorCalcularAcrescimoImpontualidade, Boolean indicadorContas, int indicadorDividaAtiva,
+			boolean incluirGrupoFaturamentoNaoFaturado) {
 
 		try {
 			return getControladorCobranca().obterDebitoImovelOuCliente(indicadorDebito, idImovel, codigoCliente, clienteRelacaoTipo,
-					anoMesInicialReferenciaDebito, anoMesFinalReferenciaDebito, anoMesInicialVencimentoDebito, anoMesFinalVencimentoDebito, indicadorPagamento,
-					indicadorConta, indicadorDebitoACobrar, indicadorCreditoARealizar, indicadorNotasPromissorias, indicadorGuiasPagamento,
-					indicadorCalcularAcrescimoImpontualidade, indicadorContas, indicadorDividaAtiva);
+					anoMesInicialReferenciaDebito, anoMesFinalReferenciaDebito, anoMesInicialVencimentoDebito, anoMesFinalVencimentoDebito,
+					indicadorPagamento, indicadorConta, indicadorDebitoACobrar, indicadorCreditoARealizar, indicadorNotasPromissorias,
+					indicadorGuiasPagamento, indicadorCalcularAcrescimoImpontualidade, indicadorContas, indicadorDividaAtiva,
+					incluirGrupoFaturamentoNaoFaturado);
 
 		} catch (ControladorException ex) {
 			throw new FachadaException(ex.getMessage(), ex, ex.getParametroMensagem());
 		}
-
 	}
 
 	public Collection<Cliente> pesquisarClienteEnderecoClienteImovel(FiltroClienteEndereco filtroClienteEndereco) {
@@ -21420,10 +21435,18 @@ public class Fachada {
 	@SuppressWarnings("rawtypes")
 	public void alterarVencimentoConjuntoConta(Collection colecaoImovel, Date dataVencimento, Integer anoMes, Date dataVencimentoContaInicio,
 			Date dataVencimentoContaFim, Integer anoMesFim, Usuario usuario, String indicadorContaPaga, String[] bancos) {
+		
+		this.alterarVencimentoConjuntoConta(colecaoImovel, dataVencimento, anoMes, dataVencimentoContaInicio, dataVencimentoContaFim,
+				anoMesFim, usuario, indicadorContaPaga, bancos, false);
+	}
+	
+	public void alterarVencimentoConjuntoConta(Collection colecaoImovel, Date dataVencimento, Integer anoMes, Date dataVencimentoContaInicio,
+			Date dataVencimentoContaFim, Integer anoMesFim, Usuario usuario, String indicadorContaPaga, String[] bancos,
+			boolean isDebitoAutomatico ) {
 
 		this.enviarMensagemControladorBatch(MetodosBatch.ALTERAR_VENCIMENTO_CONJUNTO_CONTA_COLECAO, ConstantesJNDI.QUEUE_CONTROLADOR_FATURAMENTO_MDB,
 				new Object[] { colecaoImovel, dataVencimento, anoMes, dataVencimentoContaInicio, dataVencimentoContaFim, anoMesFim, usuario,
-						indicadorContaPaga, bancos });
+						indicadorContaPaga, bancos, isDebitoAutomatico });
 	}
 
 	/**
@@ -22204,11 +22227,12 @@ public class Fachada {
 	 * @throws ControladorException
 	 */
 	public void alterarVencimentoConjuntoContaCliente(Integer codigoCliente, Short relacaoTipo, Date dataVencimento, Integer anoMes,
-			Date dataVencimentoContaInicio, Date dataVencimentoContaFim, Integer anoMesFim, Usuario usuario, Integer codigoClienteSuperior) {
+			Date dataVencimentoContaInicio, Date dataVencimentoContaFim, Integer anoMesFim, Usuario usuario, Integer codigoClienteSuperior,
+			boolean isDebitoAutomatico) {
 
-		this.enviarMensagemControladorBatch(MetodosBatch.ALTERAR_VENCIMENTO_CONJUNTO_CONTA_CLIENTE, ConstantesJNDI.QUEUE_CONTROLADOR_FATURAMENTO_MDB,
-				new Object[] { codigoCliente, relacaoTipo, dataVencimento, anoMes, dataVencimentoContaInicio, dataVencimentoContaFim, anoMesFim, usuario,
-						codigoClienteSuperior });
+		this.enviarMensagemControladorBatch(MetodosBatch.ALTERAR_VENCIMENTO_CONJUNTO_CONTA_CLIENTE,
+				ConstantesJNDI.QUEUE_CONTROLADOR_FATURAMENTO_MDB, new Object[] { codigoCliente, relacaoTipo, dataVencimento, anoMes,
+						dataVencimentoContaInicio, dataVencimentoContaFim, anoMesFim, usuario, codigoClienteSuperior, isDebitoAutomatico });
 
 	}
 
@@ -26796,7 +26820,7 @@ public class Fachada {
 	public Integer encerrarOrdemServicoVencida(Integer idServicoTipo, Integer quantidadeDias, Usuario usuarioLogado) {
 		try {
 			/**
-			 * TODO: Cosanpa Mantis 664 - Correção de erro na execução da
+			 * Correção de erro na execução da
 			 * funcionalidade
 			 * 
 			 * @author Wellington Rocha
@@ -32422,13 +32446,6 @@ public class Fachada {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
-	/**
-	 * TODO: COSANPA - Alterações para atender Mantis 595 Enviar documentos de
-	 * cobrança para endereço de correspondência
-	 * 
-	 * @author Wellington Rocha
-	 * @date 21/06/2013
-	 */
 	public Collection<RelatorioNotificacaoDebitoBean> gerarRelatorioNotificacaoDebito(Integer idCobrancaAcaoCronograma, Integer idCobrancaAcaoComando,
 			int tamanhoMaximoDebito, String quantidadeRelatorios, String tipoEnderecoRelatorio) {
 		try {
@@ -34087,7 +34104,7 @@ public class Fachada {
 				retorno.setConsumo6(consumo6 != null ? consumo6.toString() : "0");
 
 				/**
-				 * TODO : COSANPA Alterando o cálculo da média
+				 *  Alterando o cálculo da média
 				 */
 				MedicaoTipo medicao = new MedicaoTipo();
 				medicao.setId(1);
@@ -43446,7 +43463,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO : COSANPA Gerar um ralatorio de leituras realizadas
+	 *  Gerar um ralatorio de leituras realizadas
 	 * 
 	 * @author Pamela Gatinho
 	 * @date 08/09/2011
@@ -43468,7 +43485,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO:COSANPA
+	 *
 	 * 
 	 * @author Adriana Muniz
 	 * @date 06/12/2011
@@ -43487,7 +43504,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO : COSANPA Gerar um ralatorio de medicao do faturamento
+	 *  Gerar um ralatorio de medicao do faturamento
 	 * 
 	 * @author Pamela Gatinho
 	 * @date 16/09/2011
@@ -43510,7 +43527,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO : COSANPA Gerar um ralatorio de contas retidas
+	 *  Gerar um ralatorio de contas retidas
 	 * 
 	 * @author Pamela Gatinho
 	 * @date 15/09/2011
@@ -43531,7 +43548,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO: COSANPA Mantis 652 - Relaotio de RAs por Unidade Por Usuário
+	 * Relaotio de RAs por Unidade Por Usuário
 	 * 
 	 * @author Wellington Rocha
 	 * @date 18/12/2012
@@ -43546,7 +43563,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO:COSANPA
+	 *
 	 * 
 	 * @author Pamela Gatinho
 	 * 
@@ -43566,7 +43583,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO : COSANPA Pamela Gatinho - 06/06/2011 Adicionando o método para
+	 *  Pamela Gatinho - 06/06/2011 Adicionando o método para
 	 * verificar se houve substituicao de hidrometro no período da leitura
 	 * anterior faturada até a data atual
 	 */
@@ -43579,7 +43596,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * 
 	 * @author Pamela Gatinho
 	 * 
@@ -43599,7 +43616,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO : Cosanpa Alteracao feita para a rota dividida não finalizar os
+	 *  Alteracao feita para a rota dividida não finalizar os
 	 * imoveis por IMEI, e sim, pelo numero do arquivo dividido.
 	 */
 	/**
@@ -43642,7 +43659,7 @@ public class Fachada {
 	}
 
 	/*
-	 * TODO: COSANPA autor: Adriana Muniz
+	 * autor: Adriana Muniz
 	 * 
 	 * Alteração para a conta considerar como filtro grupo de faturamento,
 	 * quando o mesmo estiver preenchido
@@ -43666,7 +43683,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO: COSANPA
+	 *
 	 * 
 	 * @autor: Adriana Muniz
 	 * @date: 23/11/2011
@@ -43685,7 +43702,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO - COSANPA
+	 *
 	 * 
 	 * Método para obter todos os imóveis que já foram processados na
 	 * transmissão do arquivo de retorno do IS
@@ -43751,7 +43768,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * 
 	 * @author Pamela Gatinho
 	 * @date 04/08/2011
@@ -43774,7 +43791,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * 
 	 * @author Pamela Gatinho
 	 * @date 24/02/2012
@@ -43796,7 +43813,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO : COSANPA Pesquisa uma rota pelo id da localidade e do setor
+	 *  Pesquisa uma rota pelo id da localidade e do setor
 	 * comercial
 	 * 
 	 * @author Pamela Gatinho
@@ -43833,7 +43850,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO - COSANPA
+	 *
 	 * 
 	 * Método para obter todos os imóveis que faltam ser processados na
 	 * transmissão offline do arquivo de retorno do IS
@@ -43855,7 +43872,7 @@ public class Fachada {
 	}
 
 	/**
-	 * TODO:COSANPA
+	 *
 	 * 
 	 * @author Adriana Muniz
 	 * @date 10/12/2012

@@ -92,7 +92,7 @@ public class RelatorioManterImovel extends TarefaRelatorio {
 		filtroClienteImovelPesquisa.setConsultaSemLimites(true);
 
 		/*
-		 * TODO - COSANPA
+		 *
 		 *  
 		 * Adição dos filtros para os atributos: perimetroInicial e perimetroFinal
 		 * Correção para o método getEnderecoFormatado()

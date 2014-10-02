@@ -93,7 +93,7 @@ public class InserirPerfilParcelamentoAction extends GcomAction {
         }
 		
         /*
-         * TODO - COSANPA
+         *
          */
 		String percentualDescontoAcrescimoMulta = null ;
 		if (parcelamentoPerfilActionForm.getPercentualDescontoAcrescimoMulta() != null
@@ -204,7 +204,7 @@ public class InserirPerfilParcelamentoAction extends GcomAction {
         parcelamentoPerfilNova.setSubcategoria(subcategoria);
         
         /*
-         * TODO - COSANPA
+         *
          */
         if (parcelamentoPerfilActionForm.getPercentualDescontoAcrescimoMulta() != null
 				&& !parcelamentoPerfilActionForm.getPercentualDescontoAcrescimoMulta().equalsIgnoreCase("")){
@@ -630,7 +630,7 @@ public class InserirPerfilParcelamentoAction extends GcomAction {
     	*/
 		
 		/*
-		 * TODO - COSANPA
+		 *
 		 */
     	if (percentualDescontoAcrescimoMulta == null ||
     			percentualDescontoAcrescimoMulta.equalsIgnoreCase("")){

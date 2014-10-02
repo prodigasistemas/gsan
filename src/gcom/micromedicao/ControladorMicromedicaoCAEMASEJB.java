@@ -2324,7 +2324,7 @@ public class ControladorMicromedicaoCAEMASEJB extends ControladorMicromedicao
 							sistemaParametro.getNomeAbreviadoEmpresa());
 
 		} catch (ErroRepositorioException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 		return imoveisPorRota;

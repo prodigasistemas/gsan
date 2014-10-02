@@ -91,7 +91,7 @@ public class DadosPesquisaCobrancaDocumentoHelper implements Serializable {
 
 	public DadosPesquisaCobrancaDocumentoHelper(Integer idDocumento, Date dataEmissao, Integer idImovel, BigDecimal valorDocumento, Integer idCobrancaCriterio, Integer idSituacaoAcao) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idDocumento = idDocumento;
 		this.dataEmissao = dataEmissao;
 		this.idImovel = idImovel;
@@ -217,7 +217,7 @@ public class DadosPesquisaCobrancaDocumentoHelper implements Serializable {
 	
 	public DadosPesquisaCobrancaDocumentoHelper(Integer idDocumento, Date dataEmissao, Integer idImovel, BigDecimal valorDocumento, Integer idCobrancaCriterio) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idDocumento = idDocumento;
 		this.dataEmissao = dataEmissao;
 		this.idImovel = idImovel;

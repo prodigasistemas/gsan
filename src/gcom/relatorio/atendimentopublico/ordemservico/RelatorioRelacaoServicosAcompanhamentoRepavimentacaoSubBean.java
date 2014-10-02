@@ -18,7 +18,7 @@ public class RelatorioRelacaoServicosAcompanhamentoRepavimentacaoSubBean impleme
 																	   String descricao, 
 																	   String valor) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.tipoPavimento = tipoPavimento;
 		this.descricao = descricao;
 		this.valor = valor;

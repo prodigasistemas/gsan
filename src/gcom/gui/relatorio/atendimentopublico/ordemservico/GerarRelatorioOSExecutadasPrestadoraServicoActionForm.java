@@ -27,7 +27,7 @@ public class GerarRelatorioOSExecutadasPrestadoraServicoActionForm extends Valid
 	
 	public GerarRelatorioOSExecutadasPrestadoraServicoActionForm(String periodoEncerramentoInicial, String periodoEncerramentoFinal, String empresa, String idGerencia, String idUnidadeNegocio, String codigoLocalidade, String descricaoLocalidade, String[] colecaoRegiao, String[] colecaoMicrorregiao, String[] colecaoMunicipio, String opcaoRelatorio) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.periodoEncerramentoInicial = periodoEncerramentoInicial;
 		this.periodoEncerramentoFinal = periodoEncerramentoFinal;
 		this.empresa = empresa;
@@ -42,7 +42,7 @@ public class GerarRelatorioOSExecutadasPrestadoraServicoActionForm extends Valid
 	}
 	public GerarRelatorioOSExecutadasPrestadoraServicoActionForm() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	public String getCodigoLocalidade() {
 		return codigoLocalidade;

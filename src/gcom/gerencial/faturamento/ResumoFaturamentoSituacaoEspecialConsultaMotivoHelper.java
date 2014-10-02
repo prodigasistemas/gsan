@@ -73,7 +73,7 @@ public class ResumoFaturamentoSituacaoEspecialConsultaMotivoHelper {
 	
 	public ResumoFaturamentoSituacaoEspecialConsultaMotivoHelper(Integer idMotivo, String motivoDescricao, Integer anoMesInicio, Integer anoMesFim, Integer qtParalisada) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idMotivo = idMotivo;
 		this.motivoDescricao = motivoDescricao;
 		this.anoMesInicio = anoMesInicio;

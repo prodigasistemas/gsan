@@ -587,7 +587,7 @@ public class IoUtil {
 	}	
 	
 	/**
-	 * TODO - COSANPA
+	 *
 	 * 
 	 * Retorna a quantidade de imóveis que já foram
 	 * transmitidos contidos no arquivo
@@ -750,7 +750,7 @@ public class IoUtil {
 	}
 	
 	/**
-	 * TODO - COSANPA
+	 *
 	 * 
 	 * Retorna a quantidade de imóveis do arquivo
 	 * 

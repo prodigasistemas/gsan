@@ -62,7 +62,7 @@ public class QuadraFace extends ObjetoTransacao implements Serializable {
 	
 	public QuadraFace(Integer id, Integer numeroQuadraFace, Short indicadorRedeAgua, Short indicadorRedeEsgoto, Short indicadorUso, Date ultimaAlteracao, DistritoOperacional distritoOperacional, Bacia bacia) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.id = id;
 		this.numeroQuadraFace = numeroQuadraFace;
 		this.indicadorRedeAgua = indicadorRedeAgua;

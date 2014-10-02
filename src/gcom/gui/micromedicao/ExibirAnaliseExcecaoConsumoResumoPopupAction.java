@@ -97,10 +97,10 @@ public class ExibirAnaliseExcecaoConsumoResumoPopupAction extends GcomAction {
 			imovelEndereco = fachada.pesquisarEnderecoFormatado(new Integer(idImovel));
 	        sessao.setAttribute("imovelEndereco", imovelEndereco);
 		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (ControladorException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
         

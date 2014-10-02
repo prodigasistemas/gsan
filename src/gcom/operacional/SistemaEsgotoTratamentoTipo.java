@@ -71,7 +71,7 @@ public class SistemaEsgotoTratamentoTipo extends TabelaAuxiliar {
 
 	@Override
 	public String[] retornaCamposChavePrimaria() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

@@ -558,7 +558,7 @@ public class ResumoPendenciaGuiaPagamentoHelper {
 			Integer idSituacaoLigacaoEsgoto, Integer idEsferaPoder, Integer indicadorExistenciaHidrometro, 
 			Integer idDocumentoTipo, Integer idFinanciamentoTipo ) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idImovel = idImovel;
 		this.idGuiaPagamento = idGuiaPagamento;
 		this.idGerenciaRegional = idGerenciaRegional;

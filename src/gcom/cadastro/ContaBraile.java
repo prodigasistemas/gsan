@@ -77,25 +77,25 @@ public class ContaBraile extends ObjetoTransacao {
 
 	@Override
 	public Date getUltimaAlteracao() {
-		// TODO Auto-generated method stub
+		
 		return this.ultimaAlteracao;
 	}
 
 	@Override
 	public void setUltimaAlteracao(Date ultimaAlteracao) {
-		// TODO Auto-generated method stub
+		
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
 
 	@Override
 	public Filtro retornaFiltro() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public String[] retornaCamposChavePrimaria() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 

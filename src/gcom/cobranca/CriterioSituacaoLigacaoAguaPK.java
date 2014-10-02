@@ -28,7 +28,7 @@ public class CriterioSituacaoLigacaoAguaPK extends ObjetoGcom {
 
 	public CriterioSituacaoLigacaoAguaPK(CobrancaCriterio cobrancaCriterio, LigacaoAguaSituacao ligacaoAguaSituacao) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.cobrancaCriterio = cobrancaCriterio;
 		this.ligacaoAguaSituacao = ligacaoAguaSituacao;
 	}

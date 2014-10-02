@@ -30,12 +30,12 @@ public class CobrancaBoletimExecutado extends ObjetoTransacao {
 
 	public CobrancaBoletimExecutado() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 
 	public CobrancaBoletimExecutado(CobrancaBoletimExecutadoPK comp_id, Date ultimaAlteracao, BigDecimal valorServico, CobrancaBoletimMedicao cobrancaBoletimMedicao, OrdemServico ordemServico) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.comp_id = comp_id;
 		this.ultimaAlteracao = ultimaAlteracao;
 		this.valorServico = valorServico;

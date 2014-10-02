@@ -78,7 +78,7 @@ public class RelatorioDocumentoNaoAceitos extends TarefaRelatorio{
 
 	@Override
 	public void agendarTarefaBatch() {
-		// TODO Auto-generated method stub
+		
 		
 	}
 

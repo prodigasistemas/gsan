@@ -30,7 +30,7 @@ public class ServicoTipo extends ObjetoTransacao {
 
 	public final static int TIPO_LIGACAO_AGUA = 619;
 	
-	/**TODO: Cosanpa
+	/**
 	 * Inclusão de constante de Corte de água por débito
 	 * a ser utilizada na action encerrarOrdemServiçoVencidaAction
 	 * @author Wellington Rocha

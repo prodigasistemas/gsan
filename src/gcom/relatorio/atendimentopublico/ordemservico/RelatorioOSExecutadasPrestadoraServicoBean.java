@@ -36,7 +36,7 @@ public class RelatorioOSExecutadasPrestadoraServicoBean implements RelatorioBean
 	
 	public RelatorioOSExecutadasPrestadoraServicoBean(String numeroOS, String codigoServico, String descServico, String descTipoPavimento, String materialrede, String diametroRede, String dataConclusao, String codigoExcedente, String descMaterial, String qtdeExcedente, String profundRede, String dimenBuraco, String idLocalidade, String descricaoLocalidade, String enderecoRA, String descricaoGerencia, String idGerencia, String descricaoUnidadeNegocio, String idUnidadeNegocio, Collection colecaoSubrelatorio) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.numeroOS = numeroOS;
 		this.codigoServico = codigoServico;
 		this.descServico = descServico;
@@ -66,7 +66,7 @@ public class RelatorioOSExecutadasPrestadoraServicoBean implements RelatorioBean
 	}
 	public RelatorioOSExecutadasPrestadoraServicoBean() {
 		super();
-		// TODO Auto-generated constructor stub
+		
 	}
 	public String getCodigoExcedente() {
 		return codigoExcedente;

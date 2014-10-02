@@ -48,7 +48,7 @@ public class ExibirExcecaoTelemetriaIniciadaAction extends GcomAction {
 			httpServletRequest.setAttribute("excecao", 
 					IoUtil.transformarBytesParaObjeto(telemetriaMovReg.getDescricaoErro()).toString());
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		} catch (ClassNotFoundException e) {
 			throw new ActionServletException("erro.sistema");

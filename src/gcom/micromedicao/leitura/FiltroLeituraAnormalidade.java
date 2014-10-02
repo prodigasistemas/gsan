@@ -52,7 +52,7 @@ public class FiltroLeituraAnormalidade extends Filtro implements Serializable {
 	public final static String NUMERO_MESES_LEITURA_SUSPENSA = "numeroMesesLeituraSuspensa";
 	
 	/**
-	 * TODO : COSANPA
+	 * 
 	 * Pamela Gatinho - 13/03/2012
 	 * Campo que identifica se a anormalidade será usada ou
 	 * não no sistema de leitura e impressão simultanea.

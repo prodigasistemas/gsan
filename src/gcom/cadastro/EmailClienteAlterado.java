@@ -48,7 +48,7 @@ public class EmailClienteAlterado extends ObjetoTransacao {
 			String nomeSolicitante, String cpfSolicitante, String nomeClienteAtual, 
 			String cpfAtual, String cnpjAtual, String emailAtual, Date solicitacaoOnline) {
 		super();
-		// TODO Auto-generated constructor stub
+		
 		this.idCliente = idCliente;
 		this.nomeClienteAnterior = nomeClienteAnterior;
 		this.cpfAnterior = cpfAnterior;
@@ -178,25 +178,25 @@ public class EmailClienteAlterado extends ObjetoTransacao {
 
 	@Override
 	public Date getUltimaAlteracao() {
-		// TODO Auto-generated method stub
+		
 		return this.ultimaAlteracao;
 	}
 
 	@Override
 	public void setUltimaAlteracao(Date ultimaAlteracao) {
-		// TODO Auto-generated method stub
+		
 		this.ultimaAlteracao = ultimaAlteracao;
 	}
 
 	@Override
 	public Filtro retornaFiltro() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
 	@Override
 	public String[] retornaCamposChavePrimaria() {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
