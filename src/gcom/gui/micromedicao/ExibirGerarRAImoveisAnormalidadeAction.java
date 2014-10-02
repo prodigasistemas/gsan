@@ -133,10 +133,6 @@ public class ExibirGerarRAImoveisAnormalidadeAction extends GcomAction {
 						FiltroSolicitacaoTipo.INDICADOR_USO,
 						ConstantesSistema.INDICADOR_USO_ATIVO));
 
-				filtroSolicitacaoTipo.adicionarParametro(new ParametroSimples(
-						FiltroSolicitacaoTipo.INDICADOR_USO_SISTEMA,
-						SolicitacaoTipo.INDICADOR_USO_SISTEMA_SIM));
-
 				colecaoSolicitacaoTipo = fachada.pesquisar(
 						filtroSolicitacaoTipo, SolicitacaoTipo.class.getName());
 
