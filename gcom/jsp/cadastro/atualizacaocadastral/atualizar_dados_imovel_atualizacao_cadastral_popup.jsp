@@ -175,10 +175,12 @@
 				</tr>
 				
 				<logic:equal name="fiscalizado" value="false" scope="session">
-					<tr>
-						<td>&nbsp;</td>
-						<td align="right"><input name="Button" type="button" class="bottonRightCol" value="Fiscalizar" onClick="fiscalizar();"></td>
-					</tr>
+					<logic:notEqual name="ExibirAtualizarDadosImovelAtualizacaoCadastralPopupActionForm" property="descricaoImovel" value="NOVO">
+						<tr>
+							<td>&nbsp;</td>
+							<td align="right"><input name="Button" type="button" class="bottonRightCol" value="Fiscalizar" onClick="fiscalizar();"></td>
+						</tr>
+					</logic:notEqual>
 				</logic:equal>
 			</table>
 			

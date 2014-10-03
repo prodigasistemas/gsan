@@ -927,12 +927,12 @@ public class RepositorioMicromedicaoHBM implements IRepositorioMicromedicao {
 		// Caso seja ligação de água
 		if (medicaoTipo.getId().intValue() == MedicaoTipo.LIGACAO_AGUA
 				.intValue()) {
-			composicao = "where mt.id = :medicaoTipoId"
-					+ " and la.id = :imovelId";
+			composicao = "where mh.medicaoTipo.id = :medicaoTipoId"
+					+ " and mh.ligacaoAgua.id = :imovelId";
 		} else if (medicaoTipo.getId().intValue() == MedicaoTipo.POCO
 				.intValue()) {
-			composicao = "where mt.id = :medicaoTipoId"
-					+ " and im.id = :imovelId";
+			composicao = "where mh.medicaoTipo.id = :medicaoTipoId"
+					+ " and mh.imovel.id = :imovelId";
 		}
 
 		try {

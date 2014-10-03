@@ -280,7 +280,7 @@ public class ProcessarRequisicaoGisAction extends GcomAction {
 			// Seta o tempo máximo que o usuário tem para expirar sua
 			// sessão
 			// caso nenhuma requisição seja feita em 1000(mil) segundos
-			sessao.setMaxInactiveInterval(900);
+			sessao.setMaxInactiveInterval(86400);
 	
 			/*
 			 * Recupera a data do último acesso do usuário caso seja a

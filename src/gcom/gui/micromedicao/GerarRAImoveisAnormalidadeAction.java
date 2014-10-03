@@ -154,6 +154,7 @@ public class GerarRAImoveisAnormalidadeAction extends GcomAction {
 							solicitacaoTipoEspecificacao.getSolicitacaoTipo().getId(), unidadeAtendimento.getId(), usuarioLogado.getId(), observacao);
 
 					RASolicitanteHelper raSolicitante = RABuilder.buildRASolicitante(false, unidadeAtendimento);
+					raSolicitante.setIdServicoTipo(solicitacaoTipoEspecificacao.getId());
 
 					if(unidadeDestino == null){
 						
