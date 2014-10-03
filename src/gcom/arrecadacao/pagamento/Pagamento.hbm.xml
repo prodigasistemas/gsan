@@ -21,6 +21,11 @@
 		<property name="ultimaAlteracao" type="java.sql.Timestamp" column="pgmt_tmultimaalteracao" length="8"/>
 		<property name="indicadorExpurgado" type="java.lang.Short" column="pgmt_icexpurgado" not-null="false" length="2"/>
 		<property name="dataProcessamento" type="java.sql.Timestamp" column="pgmt_tmprocessamento" length="8"/>
+		
+		<property name="indicadorClassificadoRecuperacaoCredito" type="java.lang.Short" length="1">
+			<column name="pgmt_icclassrecupcredito" default="2" />
+		</property> 
+		
 		<!-- Associations -->
 		<!-- bi-directional many-to-one association to Cliente -->
 		<many-to-one name="cliente" class="gcom.cadastro.cliente.Cliente" not-null="false">

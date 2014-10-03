@@ -2403,6 +2403,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 	 * @return
 	 * @throws ErroRepositorioException
 	 */
+	@SuppressWarnings("unchecked")
 	public Collection<Object[]> pesquisarPagamentosPorConta(
 			Integer anoMesReferencia, Integer idLocalidade, Integer idImovel,
 			Integer anoMesReferenciaPagamento) throws ErroRepositorioException {
@@ -2420,6 +2421,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					+ "WHERE pgmt.anoMesReferenciaArrecadacao <= :anoMesReferencia AND imov.id = :idImovel "
 					+ "AND pgmt.anoMesReferenciaPagamento = :anoMesReferenciaPagamento "
 					+ "AND (pgst.id is null or pgst.id <> :idValorABaixar) "
+					+ "AND pgmt.indicadorClassificadoRecuperacaoCredito = :indicadorClassificacao "
 					+ "ORDER BY imov.id, pgmt.anoMesReferenciaPagamento, pgmt.dataPagamento ";
 
 			retorno = session.createQuery(consulta)
@@ -2427,6 +2429,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.setInteger("idImovel", idImovel)
 					.setInteger("anoMesReferenciaPagamento", anoMesReferenciaPagamento)
 					.setInteger("idValorABaixar", PagamentoSituacao.VALOR_A_BAIXAR)
+					.setShort("indicadorClassificacao", ConstantesSistema.NAO)
 					.list();
 
 		} catch (HibernateException e) {
@@ -2635,12 +2638,14 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					+ " dotp.id in (:guiaPagamento, :entradaParcelamento ) "
 					+ "AND pgmt.guiaPagamento IS NULL "
 					+ "AND loca.id = :idLocalidade "
+					+ "AND pgmt.indicadorClassificadoRecuperacaoCredito = :indicadorClassificacao "
 					+ "ORDER BY loca.id, imov.id, clie.id, dbtp.id, pgmt.dataPagamento ";
 
 			retorno = session.createQuery(consulta).setInteger(
 					"anoMesReferencia", anoMesReferencia)
 					.setInteger("guiaPagamento", DocumentoTipo.GUIA_PAGAMENTO)
 					.setInteger("entradaParcelamento", DocumentoTipo.ENTRADA_DE_PARCELAMENTO)
+					.setShort("indicadorClassificacao", ConstantesSistema.NAO)
 					.setInteger("idLocalidade", idLocalidade).list();
 
 		} catch (HibernateException e) {
@@ -2805,12 +2810,14 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					+ "WHERE pgmt.anoMesReferenciaArrecadacao <= :anoMesReferencia AND dotp.id = :debitoACobrar "
 					+ "AND pgmt.debitoACobrarGeral IS NULL "
 					+ "AND loca.id= :idLocalidade "
+					+ "AND pgmt.indicadorClassificadoRecuperacaoCredito = :indicadorClassificacao "
 					+ "ORDER BY loca.id, imov.id, dbtp.id, pgmt.dataPagamento ";
 
 			retorno = session.createQuery(consulta)
 					.setInteger("anoMesReferencia", anoMesReferencia)
 					.setInteger("debitoACobrar", DocumentoTipo.DEBITO_A_COBRAR)
 					.setInteger("idLocalidade", idLocalidade)
+					.setShort("indicadorClassificacao", ConstantesSistema.NAO)
 					.list();
 
 		} catch (HibernateException e) {
@@ -15379,11 +15386,13 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					+ "inner join imov.localidade loca "
 					+ "left join pgmt.pagamentoSituacaoAtual pgstIdAtual "
 					+ "where loca.id = :idLocalidade and (pgstIdAtual.id is null or pgstIdAtual.id <> :idValorABaixar) "
+					+ " and pgmt.indicadorClassificadoRecuperacaoCredito = :indicadorClassificacao " 
 					+ "order by imov.id";
 
 			retorno = session.createQuery(consulta)
 					.setInteger("idLocalidade", idLocalidade)
 					.setInteger("idValorABaixar", PagamentoSituacao.VALOR_A_BAIXAR)
+					.setShort("indicadorClassificacao", ConstantesSistema.NAO)
 					.setMaxResults(quantidadeRegistros).setFirstResult(numeroIndice).list();
 
 		} catch (HibernateException e) {
@@ -15919,7 +15928,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 						+ "SET pgmt.pagamentoSituacaoAtual.id = :pagamentoSituacao, "
 						+ "pgmt.valorExcedente = :valorExcedente, "
 						+ "pgmt.ultimaAlteracao = :dataAlteracao, "
-						+ "pgmt.contaGeral.id = :idConta "
+						+ "pgmt.contaGeral.id = :idConta, "
+						+ "pgmt.indicadorClassificadoRecuperacaoCredito = :indicadorClassificacao "
 						+ "WHERE pgmt.id = :idPagamento ";
 
 					session.createQuery(atualizarValorExcedente)
@@ -15928,6 +15938,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 						.setInteger("pagamentoSituacao", pagamentoSituacao)
 						.setInteger("idPagamento", pagamento.getId())
 						.setInteger("idConta", pagamento.getContaGeral().getId())
+						.setShort("indicadorClassificacao", pagamento.getIndicadorClassificadoRecuperacaoCredito())
 						.executeUpdate();
 					
 					//Guia de Pagamento
@@ -15937,7 +15948,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 						+ "SET pgmt.pagamentoSituacaoAtual.id = :pagamentoSituacao, "
 						+ "pgmt.valorExcedente = :valorExcedente, "
 						+ "pgmt.ultimaAlteracao = :dataAlteracao, "
-						+ "pgmt.guiaPagamento.id = :idGuiaPagamento "
+						+ "pgmt.guiaPagamento.id = :idGuiaPagamento, "
+						+ "pgmt.indicadorClassificadoRecuperacaoCredito = :indicadorClassificacao "
 						+ "WHERE pgmt.id = :idPagamento ";
 
 					session.createQuery(atualizarValorExcedente)
@@ -15946,6 +15958,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 						.setInteger("pagamentoSituacao", pagamentoSituacao)
 						.setInteger("idPagamento", pagamento.getId())
 						.setInteger("idGuiaPagamento", pagamento.getGuiaPagamento().getId())
+						.setShort("indicadorClassificacao", pagamento.getIndicadorClassificadoRecuperacaoCredito())
 						.executeUpdate();
 					
 					//Débito a Cobrar 
@@ -15955,7 +15968,8 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 						+ "SET pgmt.pagamentoSituacaoAtual.id = :pagamentoSituacao, "
 						+ "pgmt.valorExcedente = :valorExcedente, "
 						+ "pgmt.ultimaAlteracao = :dataAlteracao, "
-						+ "pgmt.debitoACobrarGeral.id = :idDebitoACobrar "
+						+ "pgmt.debitoACobrarGeral.id = :idDebitoACobrar, "
+						+ "pgmt.indicadorClassificadoRecuperacaoCredito = :indicadorClassificacao "
 						+ "WHERE pgmt.id = :idPagamento ";
 
 					session.createQuery(atualizarValorExcedente)
@@ -15964,13 +15978,15 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 						.setInteger("pagamentoSituacao", pagamentoSituacao)
 						.setInteger("idPagamento", pagamento.getId())
 						.setInteger("idDebitoACobrar", pagamento.getDebitoACobrarGeral().getId())
+						.setShort("indicadorClassificacao", pagamento.getIndicadorClassificadoRecuperacaoCredito())
 						.executeUpdate();
 					
 				}else{
 					atualizarValorExcedente = "UPDATE Pagamento pgmt "
 						+ "SET pgmt.pagamentoSituacaoAtual.id = :pagamentoSituacao, "
 						+ "pgmt.valorExcedente = :valorExcedente, "
-						+ "pgmt.ultimaAlteracao = :dataAlteracao "
+						+ "pgmt.ultimaAlteracao = :dataAlteracao, "
+						+ "pgmt.indicadorClassificadoRecuperacaoCredito = :indicadorClassificacao "
 						+ "WHERE pgmt.id = :idPagamento ";
 
 					session.createQuery(atualizarValorExcedente)
@@ -15978,6 +15994,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 						.setTimestamp("dataAlteracao", new Date())
 						.setInteger("pagamentoSituacao", pagamentoSituacao)
 						.setInteger("idPagamento", pagamento.getId())
+						.setShort("indicadorClassificacao", pagamento.getIndicadorClassificadoRecuperacaoCredito())
 						.executeUpdate();
 				}
 				
@@ -20689,12 +20706,14 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			consulta = " select distinct(anoMesReferenciaPagamento) from Pagamento pagamento "
 					+ " where pagamento.anoMesReferenciaArrecadacao <= :anoMesArrecadacaoAtual "
 					+ "and pagamento.imovel.id = :idImovel and pagamento.anoMesReferenciaPagamento is not null "
-					+ "and (pagamento.pagamentoSituacaoAtual.id is null or pagamento.pagamentoSituacaoAtual.id <> :idValorABaixar) ";
+					+ "and (pagamento.pagamentoSituacaoAtual.id is null or pagamento.pagamentoSituacaoAtual.id <> :idValorABaixar) "
+					+ "and pagamento.indicadorClassificadoRecuperacaoCredito = :indicadorClassificacao";
 
 			retorno = session.createQuery(consulta)
 					.setInteger("anoMesArrecadacaoAtual", anoMesArrecadacaoAtual)
 					.setInteger("idImovel", idImovel)
-					.setInteger("idValorABaixar", PagamentoSituacao.VALOR_A_BAIXAR).list();
+					.setInteger("idValorABaixar", PagamentoSituacao.VALOR_A_BAIXAR)
+					.setShort("indicadorClassificacao", ConstantesSistema.NAO).list();
 
 		} catch (HibernateException e) {
 			throw new ErroRepositorioException(e, "Erro no Hibernate");
@@ -24286,6 +24305,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					+ " dotp.id in (:guiaPagamento, :entradaParcelamento ) "
 					+ "AND pgmt.guiaPagamento IS NOT NULL AND loca.id = :idLocalidade "
 					+ "AND gpag.anoMesReferenciaContabil > :referenciafaturamento "
+					+ "AND pgmt.indicadorClassificadoRecuperacaoCredito = :indicadorClassificacao "
 					+ "ORDER BY gpag.id, pgmt.dataPagamento ";
 
 			retorno = session.createQuery(consulta)
@@ -24294,6 +24314,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			.setInteger("idLocalidade", idLocalidade)
 			.setInteger("entradaParcelamento", DocumentoTipo.ENTRADA_DE_PARCELAMENTO)
 			.setInteger("referenciafaturamento", referenciafaturamento)
+			.setShort("indicadorClassificacao", ConstantesSistema.NAO)
 			.list();
 
 		} catch (HibernateException e) {
@@ -24347,6 +24368,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					+ "AND pgmt.guiaPagamento IS NOT NULL "
 					+ "AND loca.id = :idLocalidade "
 					+ "AND gpag.anoMesReferenciaContabil <= :referenciafaturamento "
+					+ "AND pgmt.indicadorClassificadoRecuperacaoCredito = :indicadorClassificacao "
 					+ "ORDER BY gpag.id, pgmt.dataPagamento ";
 
 			retorno = session.createQuery(consulta)
@@ -24355,6 +24377,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 			.setInteger("idLocalidade", idLocalidade)
 			.setInteger("entradaParcelamento", DocumentoTipo.ENTRADA_DE_PARCELAMENTO)
 			.setInteger("referenciafaturamento", referenciafaturamento)
+			.setShort("indicadorClassificacao", ConstantesSistema.NAO)
 			.list();
 
 		} catch (HibernateException e) {
@@ -24418,6 +24441,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 				+ "AND dotp.id = :debitoACobrar "
 				+ "AND loca.id = :idLocalidade "
 				+ "AND dbac.anoMesReferenciaContabil < :referenciafaturamento "
+				+ "AND pgmt.indicadorClassificadoRecuperacaoCredito = :indicadorClassificacao "
 				+ "ORDER BY dbac.id, pgmt.dataPagamento ";
 
 			retorno = session.createQuery(consulta)
@@ -24425,6 +24449,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 					.setInteger("debitoACobrar", DocumentoTipo.DEBITO_A_COBRAR)
 					.setInteger("idLocalidade", idLocalidade)
 					.setInteger("referenciafaturamento", referenciafaturamento)
+					.setShort("indicadorClassificacao", ConstantesSistema.NAO)
 					.list();
 
 		} catch (HibernateException e) {
@@ -24480,6 +24505,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 				+ "AND dotp.id = :debitoACobrar "
 				+ "AND loca.id = :idLocalidade "
 				+ "AND dbac.anoMesReferenciaContabil >= :referenciafaturamento "
+				+ "AND pgmt.indicadorClassificadoRecuperacaoCredito = :indicadorClassificacao "
 				+ "ORDER BY dbac.id, pgmt.dataPagamento ";
 
 			retorno = session.createQuery(consulta)
@@ -24487,6 +24513,7 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
 							.setInteger("debitoACobrar", DocumentoTipo.DEBITO_A_COBRAR)
 							.setInteger("idLocalidade", idLocalidade)
 							.setInteger("referenciafaturamento", referenciafaturamento)
+							.setShort("indicadorClassificacao", ConstantesSistema.NAO)
 							.list();
 
 		} catch (HibernateException e) {
@@ -24542,12 +24569,14 @@ public class RepositorioArrecadacaoHBM implements IRepositorioArrecadacao {
                 + "WHERE pgmt.anoMesReferenciaArrecadacao <= :anoMesReferencia " 
                 + "AND dotp.id = :debitoACobrar "
                 + "AND loca.id = :idLocalidade "
+                + "AND pgmt.indicadorClassificadoRecuperacaoCredito = :indicadorClassificacao "
                 + "ORDER BY dbach.id, pgmt.dataPagamento ";
 
             retorno = session.createQuery(consulta)
             		.setInteger("anoMesReferencia", anoMesReferencia)
             		.setInteger("debitoACobrar", DocumentoTipo.DEBITO_A_COBRAR)
             		.setInteger("idLocalidade", idLocalidade)
+            		.setShort("indicadorClassificacao", ConstantesSistema.NAO)
             		.list();
 
         } catch (HibernateException e) {
