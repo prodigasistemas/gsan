@@ -91,4 +91,8 @@ public interface IRepositorioAtualizacaoCadastral {
 	public Integer obterquantidadeImoveisComAnormalidadeArquivo(Integer idArquivoAtualizacaoCadastral) throws ErroRepositorioException;
 	
 	public Collection pesquisarDadosFichaFiscalizacaoCadastral(List<Integer> listaIdImoveis) throws ErroRepositorioException;
+	
+	public Collection pesquisarDadosRelacaoImoveisRetornoPorRota(String localidade, String setorComercial, String rota) throws ErroRepositorioException;
+	
+	public Collection pesquisarDadosRelacaoImoveisPorRota(String idLocalidade, String cdSetorComercial, String cdRota) throws ErroRepositorioException;
 }
