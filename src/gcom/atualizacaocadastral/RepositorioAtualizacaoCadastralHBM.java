@@ -993,4 +993,113 @@ public class RepositorioAtualizacaoCadastralHBM implements IRepositorioAtualizac
 		
 		return retorno;
 	}
+	
+	public Collection pesquisarDadosRelacaoImoveisRetornoPorRota(String idLocalidade, String cdSetorComercial, String cdRota)
+			throws ErroRepositorioException {
+		
+		Collection retorno = null;
+
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
+		
+		try {
+			consulta = " SELECT ir.loca_id as idLocalidade, "
+					+ " imre_cdsetorcomercial as codigoSetorComercial, "
+					+ " imre_nnquadra as numQuadra, "
+					+ " i.imov_nnlote as numLote, "
+					+ " i.imov_nnsublote as numSubLote, "
+					+ " ir.imov_id as idImovel, "
+					+ " la.last_dsligacaoaguasituacao as descSituacaoLigacaoAgua, "
+					+ " sac.siac_dssituacao as descSituacaoImovelRecadastramento, "
+					+ " l.loca_nmlocalidade as nomeLocalidade, "
+					+ " ir.imac_tipooperacao as tipoOperacao "
+					+ " FROM atualizacaocadastral.imovel_retorno ir "
+					+ " INNER JOIN cadastro.imovel i on ir.imov_id = i.imov_id "
+					+ " INNER JOIN atendimentopublico.ligacao_agua_situacao la on ir.last_id = la.last_id "
+					+ " INNER JOIN atualizacaocadastral.imovel_controle_atlz_cad icac on ir.imov_id = icac.imov_id "
+					+ " INNER JOIN cadastro.situacao_atlz_cadastral sac on icac.siac_id = sac.siac_id "
+					+ " INNER JOIN micromedicao.rota r on ir.rota_id = r.rota_id "
+					+ " INNER JOIN cadastro.localidade l on ir.loca_id = l.loca_id "
+					+ " WHERE ir.loca_id = :idLocalidade AND ir.imre_cdsetorcomercial = :cdSetorComercial AND r.rota_cdRota = :cdRota "
+					+ " ORDER BY ir.imov_id ";
+
+			retorno = (Collection) session.createSQLQuery(consulta)
+					.addScalar("idLocalidade", Hibernate.INTEGER)
+					.addScalar("codigoSetorComercial", Hibernate.INTEGER)
+					.addScalar("numQuadra", Hibernate.INTEGER)
+					.addScalar("numLote", Hibernate.INTEGER)
+					.addScalar("numSubLote", Hibernate.INTEGER)
+					.addScalar("idImovel", Hibernate.INTEGER)
+					.addScalar("descSituacaoLigacaoAgua", Hibernate.STRING)
+					.addScalar("descSituacaoImovelRecadastramento", Hibernate.STRING)
+					.addScalar("nomeLocalidade", Hibernate.STRING)
+					.addScalar("tipoOperacao", Hibernate.INTEGER)
+					.setInteger("idLocalidade", Integer.parseInt(idLocalidade))
+					.setInteger("cdSetorComercial", Integer.parseInt(cdSetorComercial))
+					.setInteger("cdRota", Integer.parseInt(cdRota))
+					.list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
+	
+	public Collection pesquisarDadosRelacaoImoveisPorRota(String idLocalidade, String cdSetorComercial, String cdRota)
+			throws ErroRepositorioException {
+		
+		Collection retorno = null;
+
+		Session session = HibernateUtil.getSession();
+		String consulta = "";
+		
+		try {
+			consulta = "SELECT i.loca_id as idLocalidade, "
+					+ " st.stcm_cdsetorcomercial as codigoSetorComercial, "
+					+ " q.qdra_nnquadra as numQuadra, "
+					+ " i.imov_nnlote as numLote, "
+					+ " i.imov_nnsublote as numSubLote, "
+					+ " i.imov_id as idImovel, "
+					+ " la.last_dsligacaoaguasituacao as descSituacaoLigacaoAgua, "
+					+ " 'NÃO ESTÁ EM RECADASTRAMENTO' as descSituacaoImovelRecadastramento, "
+					+ " l.loca_nmlocalidade as nomeLocalidade "
+					+ " FROM cadastro.imovel i "
+					+ " INNER JOIN atendimentopublico.ligacao_agua_situacao la on i.last_id = la.last_id "
+					+ " INNER JOIN cadastro.localidade l on i.loca_id = l.loca_id "
+					+ " INNER JOIN cadastro.setor_comercial st on st.stcm_id = i.stcm_id "
+					+ " INNER JOIN cadastro.quadra q on q.qdra_id = i.qdra_id "
+					+ " INNER JOIN micromedicao.rota r on r.rota_id = q.rota_id "
+					+ " WHERE i.loca_id = :idLocalidade AND st.stcm_cdsetorcomercial = :cdSetorComercial AND r.rota_cdRota = :cdRota "
+					+ " AND imov_icexclusao = 2 "
+					+ " AND imov_id NOT IN (SELECT imov_id FROM atualizacaocadastral.imovel_retorno ir "
+					+ " 					INNER JOIN micromedicao.rota r on ir.rota_id = r.rota_id "
+					+ " 					WHERE ir.loca_id = :idLocalidade AND ir.imre_cdsetorcomercial = :cdSetorComercial AND r.rota_cdRota = :cdRota) "
+					+ " ORDER BY i.imov_id";
+
+			retorno = (Collection) session.createSQLQuery(consulta)
+					.addScalar("idLocalidade", Hibernate.INTEGER)
+					.addScalar("codigoSetorComercial", Hibernate.INTEGER)
+					.addScalar("numQuadra", Hibernate.INTEGER)
+					.addScalar("numLote", Hibernate.INTEGER)
+					.addScalar("numSubLote", Hibernate.INTEGER)
+					.addScalar("idImovel", Hibernate.INTEGER)
+					.addScalar("descSituacaoLigacaoAgua", Hibernate.STRING)
+					.addScalar("descSituacaoImovelRecadastramento", Hibernate.STRING)
+					.addScalar("nomeLocalidade", Hibernate.STRING)
+					.setInteger("idLocalidade", Integer.parseInt(idLocalidade))
+					.setInteger("cdSetorComercial", Integer.parseInt(cdSetorComercial))
+					.setInteger("cdRota", Integer.parseInt(cdRota))
+					.list();
+
+		} catch (HibernateException e) {
+			throw new ErroRepositorioException(e, "Erro no Hibernate");
+		} finally {
+			HibernateUtil.closeSession(session);
+		}
+
+		return retorno;
+	}
 }
