@@ -74,6 +74,7 @@ public class FiltrarCategoriaAction extends GcomAction {
             filtroCategoria.adicionarParametro(new ParametroSimples(
                     FiltroCategoria.CODIGO, new Integer(id)));
         }
+        
         if(tipoCategoria != null && !tipoCategoria.trim().equalsIgnoreCase("" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
             peloMenosUmParametroInformado = true;
             
