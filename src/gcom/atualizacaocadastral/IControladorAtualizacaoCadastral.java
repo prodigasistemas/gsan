@@ -4,6 +4,7 @@ import gcom.cadastro.atualizacaocadastral.bean.ConsultarMovimentoAtualizacaoCada
 import gcom.cadastro.imovel.ImovelAtualizacaoCadastral;
 import gcom.cadastro.imovel.ImovelSubcategoria;
 import gcom.cadastro.imovel.ImovelSubcategoriaAtualizacaoCadastral;
+import gcom.gui.relatorio.cadastro.atualizacaocadastral.RelatorioRelacaoImoveisRotaActionForm;
 import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.util.ControladorException;
 import gcom.util.ErroRepositorioException;
@@ -46,4 +47,6 @@ public interface IControladorAtualizacaoCadastral {
 	public ImovelControleAtualizacaoCadastral pesquisarImovelControleAtualizacao(Integer idImovel) throws ControladorException;
 	
 	public Collection<ImagemRetorno> pesquisarImagensRetornoPorIdImovel(Integer idImovel) throws ControladorException;
+	
+	public Collection pesquisarDadosRelatorioRelacaoImoveisRota(String localidade, String setorComercial, String rota) throws ControladorException;
 }
