@@ -79,9 +79,7 @@ public class FiltrarCategoriaAction extends GcomAction {
             
             filtroCategoria.adicionarParametro(new ParametroSimples(
             		FiltroCategoria.TIPO_CATEGORIA, tipoCategoria));
-            
-           /* filtroCategoria.adicionarParametro(new ComparacaoTexto(
-                    FiltroCategoria.TIPO_CATEGORIA, tipoCategoria));*/
+           
         }
         if(descricao != null && !descricao.trim().equalsIgnoreCase("")) {
             peloMenosUmParametroInformado = true;
