@@ -122,7 +122,7 @@ function limparForm() {
 				<tr>
 					<td><strong>Código: </strong></td>
 					<td colspan="2"><span class="style2"> <html:text
-						property="codigo" size="5" maxlength="5" /> </span></td>
+						property="codigo" size="5" maxlength="5" readonly="true" /> </span></td>
 				</tr>
 				
 				
