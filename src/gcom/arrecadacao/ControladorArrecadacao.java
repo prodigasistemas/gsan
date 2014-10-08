@@ -14302,59 +14302,34 @@ public class ControladorArrecadacao implements SessionBean {
 										Collection<Integer> colecaoAnoMesPagamento = null;
 
 										/**
-										 * Pesquisa o ano/mês de referêcia de
-										 * pagamento para o imóvel para o
-										 * ano/mês da arrecadação e tipo de
-										 * documento igual a conta.
+										 * Pesquisa o ano/mês de ref. de pag para o imóvel para o ano/mês da arrecadação e tipo de documento = conta.
 										 */
-										colecaoAnoMesPagamento = repositorioArrecadacao.pesquisarAnoMesReferenciaPagamentoParaImovel(anoMesArrecadacao,
-												idImovel);
+										colecaoAnoMesPagamento = repositorioArrecadacao.pesquisarAnoMesReferenciaPagamentoParaImovel(anoMesArrecadacao, idImovel);
 
 										if (colecaoAnoMesPagamento != null && !colecaoAnoMesPagamento.isEmpty()) {
 
 											for (Integer anoMesReferenciaPagamento : colecaoAnoMesPagamento) {
 
 												/*
-												 * O sistema seleciona os
-												 * pagamentos com ano/mês de
-												 * referência da arrecadação
-												 * igual o ano/mês de referência
-												 * da arrecadação corrente
-												 * (seleciona a partir da tabela
-												 * PAGAMENTO para
-												 * PGMT_AMREFERENCIAARRECADACAO
-												 * igual ou menor ao
-												 * PARM_AMREFERENCIAARRECADACAO)
+												 * O sistema seleciona os pagamentos com ano/mês de referência da arrecadação igual o ano/mês de referência
+												 * da arrecadação corrente (seleciona a partir da tabela PAGAMENTO para PGMT_AMREFERENCIAARRECADACAO
+												 * igual ou menor ao PARM_AMREFERENCIAARRECADACAO)
 												 */
 												colecaoPagamentosConta = repositorioArrecadacao.pesquisarPagamentosPorConta(anoMesArrecadacao, idLocalidade,
 														idImovel, anoMesReferenciaPagamento);
 
 												/**
-												 * Caso a pesquisa de pagamentos
-												 * para conta do imóvel
-												 * informado e com o ano/mês de
-												 * arrecadação do pagamento não
-												 * esteja nula Classifica os
-												 * pagamentos selecionados.
+												 * Caso a pesquisa de pagamentos para conta do imóvel informado e com o ano/mês de arrecadação do pagamento 
+												 * não esteja nula Classifica os pagamentos selecionados.
 												 */
 												if (colecaoPagamentosConta != null && !colecaoPagamentosConta.isEmpty()) {
 
 													/**
-													 * Chama o metódo para
-													 * classificar os pagamentos
-													 * do imóvel para o tipo
-													 * conta, retornando um
-													 * array com os pagamentos
-													 * classificados. 0 -
-													 * Coleção de pagamentos
-													 * para atualizar a situação
-													 * e o valor excedente. 1 -
-													 * Map com os pagamentos
-													 * para ser processados
-													 * junto com a respectiva
-													 * conta. 2 - Array com 4
-													 * coleções de pagamentos
-													 * para atualizar.
+													 * Chama o metódo para classificar os pagamentos do imóvel para o tipo conta, retornando um
+													 * array com os pagamentos classificados. 
+													 * 0 - Coleção de pagamentos para atualizar a situação e o valor excedente. 
+													 * 1 - Map com os pagamentos para ser processados junto com a respectiva conta. 
+													 * 2 - Array com 4 coleções de pagamentos para atualizar.
 													 */
 													Object[] arrayDadosProcessarContas = this.classificarPagamentosConta(colecaoPagamentosConta, imovel,
 															anoMesArrecadacao, anoMesFaturamento);
@@ -56453,6 +56428,8 @@ public class ControladorArrecadacao implements SessionBean {
 				refaturarContaParaClassificarPagamentos(pagamentos, usuarioLogado);
 			}
 			
+			pagamentos = atualizarIndicacaoClassificacaoReuperacaoCredito(pagamentos);
+			
 			repositorioArrecadacao.atualizarSituacaoEValorExcedentePagamento(pagamentos, PagamentoSituacao.PAGAMENTO_CLASSIFICADO);
 			
 		} catch(Exception e) {
@@ -56460,6 +56437,16 @@ public class ControladorArrecadacao implements SessionBean {
 		}
 	}
 	
+	private Collection<Pagamento> atualizarIndicacaoClassificacaoReuperacaoCredito(Collection<Pagamento> pagamentos) {
+		Collection<Pagamento> pagamentosAtualizados = new ArrayList<Pagamento>();
+		
+		for (Pagamento pagamento : pagamentos) {
+			pagamento.setIndicadorClassificadoRecuperacaoCredito(ConstantesSistema.SIM);
+			pagamentosAtualizados.add(pagamento);
+		}
+		
+		return pagamentosAtualizados;
+	}
 	private void refaturarContaParaClassificarPagamentos(Collection<Pagamento> pagamentos, Usuario usuarioLogado) 
 		throws ControladorException {
 		

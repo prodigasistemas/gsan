@@ -12,6 +12,7 @@ import gcom.seguranca.acesso.usuario.Usuario;
 import gcom.seguranca.acesso.usuario.UsuarioAcao;
 import gcom.seguranca.acesso.usuario.UsuarioAcaoUsuarioHelper;
 import gcom.spcserasa.FiltroNegativadorContrato;
+import gcom.util.ConstantesSistema;
 import gcom.util.Util;
 import gcom.util.filtro.ParametroSimples;
 
@@ -227,7 +228,7 @@ public class InserirContratoNegativadorAction extends GcomAction {
 					"numero  do contrato");
 		}
 		
-		
+		negativadorContrato.setIndicadorControleNsaRetorno(ConstantesSistema.SIM);
 		
 		 // Verificar existência de contrato vigente para o negativador		
 		 filtroNegativadorContrato.limparListaParametros();
