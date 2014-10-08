@@ -51,6 +51,8 @@ public class FiltroSolicitacaoTipoEspecificacao extends Filtro implements Serial
     
     public final static String SERVICO_TIPO = "servicoTipo";
     
+    public final static String SERVICO_TIPO_INDICADOR_USO = "servicoTipo.indicadorUso";
+    
     public final static String INDICADOR_DOCUMENTO_OBRIGATORIEDADE = "indicadorDocumentoObrigatorio";
     
     public final static String INDICADOR_ENCERRAMENTO_AUTOMATICO = "indicadorEncerramentoAutomatico";
