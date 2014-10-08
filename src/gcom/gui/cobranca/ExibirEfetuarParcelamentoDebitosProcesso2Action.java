@@ -212,7 +212,7 @@ public class ExibirEfetuarParcelamentoDebitosProcesso2Action extends GcomAction 
 								1, // Indicador de notas promissórias
 								new Integer(indicadorGuiasPagamento), //guias pagamento
 								new Integer(indicadorAcrescimosImpotualidade), // acréscimos impontualidade
-								indicadorContas, new Integer(indicadorDividaAtiva), true);
+								indicadorContas, new Integer(indicadorDividaAtiva));
 				// Para o cálculo do Débito Total Atualizado
 				BigDecimal valorTotalContas = 
 					new BigDecimal("0.00");

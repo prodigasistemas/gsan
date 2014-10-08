@@ -3,7 +3,6 @@
 
 alter table arrecadacao.pagamento add column pgmt_icclassrecupcredito smallint DEFAULT 2;
 
-
 -- //@UNDO
 -- SQL to undo the change goes here.
 
