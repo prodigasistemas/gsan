@@ -2,6 +2,7 @@ package gcom.gui.cadastro.imovel;
 
 import gcom.cadastro.imovel.Categoria;
 import gcom.cadastro.imovel.FiltroCategoria;
+import gcom.cadastro.imovel.FiltroSubCategoria;
 import gcom.fachada.Fachada;
 import gcom.gui.ActionServletException;
 import gcom.gui.GcomAction;
@@ -63,6 +64,8 @@ public class FiltrarCategoriaAction extends GcomAction {
 
         FiltroCategoria filtroCategoria  = new FiltroCategoria (FiltroCategoria.DESCRICAO);
 
+        filtroCategoria.adicionarCaminhoParaCarregamentoEntidade("categoriaTipo");
+        
         boolean peloMenosUmParametroInformado = false;
 
         //Insere os parâmetros informados no filtro
@@ -73,8 +76,9 @@ public class FiltrarCategoriaAction extends GcomAction {
         }
         if(tipoCategoria != null && !tipoCategoria.trim().equalsIgnoreCase("" + ConstantesSistema.NUMERO_NAO_INFORMADO)) {
             peloMenosUmParametroInformado = true;
-            filtroCategoria.adicionarParametro(new ComparacaoTexto(
-                    FiltroCategoria.TIPO_CATEGORIA, tipoCategoria));
+            
+            filtroCategoria.adicionarParametro(new ParametroSimples(FiltroCategoria.TIPO_CATEGORIA, tipoCategoria));
+            //filtroCategoria.adicionarParametro(new ComparacaoTexto(FiltroCategoria.TIPO_CATEGORIA, tipoCategoria));
         }
         if(descricao != null && !descricao.trim().equalsIgnoreCase("")) {
             peloMenosUmParametroInformado = true;
